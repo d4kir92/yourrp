@@ -1,4 +1,11 @@
 
+function updateGroupTable()
+  local _tmpGroups = dbSelect( "yrp_groups", "*", nil )
+  net.Start( "updateGroups" )
+    net.WriteTable( _tmpGroups )
+  net.Broadcast()
+end
+
 function setRoleValues( ply )
   local tmpTablePly = dbSelect( "yrp_players", "*", "steamID = '" .. ply:SteamID() .. "'" )
   if tmpTablePly != false and tmpTablePly != nil then
@@ -21,12 +28,15 @@ function setRoleValues( ply )
         ply:SetJumpPower( tonumber( tmpTableRole[1].powerjump ) * modelsize )
 
         ply:SetNWInt( "money", tmpTablePly[1].money )
+        ply:SetNWInt( "moneybank", tmpTablePly[1].moneybank )
         ply:SetNWInt( "capital", tmpTableRole[1].capital )
         ply:SetNWString( "SurName", tmpTablePly[1].nameSur )
         ply:SetNWString( "FirstName", tmpTablePly[1].nameFirst )
 
-        ply:SetNWString( "roleID", tmpTableRole[1].roleID )
-        ply:SetNWString( "groupID", tmpTableGroup[1].groupID )
+        ply:SetNWString( "roleName", tmpTableRole[1].roleID )
+        ply:SetNWString( "roleUniqueID", tmpTableRole[1].uniqueID )
+        ply:SetNWString( "groupName", tmpTableGroup[1].groupID )
+        ply:SetNWString( "groupUniqueID", tmpTableGroup[1].uniqueID )
 
         //sweps
         local tmpSWEPTable = string.Explode( ",", tmpTableRole[1].sweps )

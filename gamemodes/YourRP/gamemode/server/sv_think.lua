@@ -1,3 +1,4 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local time = 0
 timer.Create( "ServerThink", 1, 0, function()
@@ -87,97 +88,99 @@ function isChatCommand( string, command )
 end
 
 function GM:PlayerSay( sender, text, teamChat )
-  local _allPlayers = player.GetAll()
-  local _local = 0
-  local _tmp = {}
-  if !sender:Alive() then
-    table.insert( _tmp, Color( 255, 255, 255 ) )
-    table.insert( _tmp, "[" )
+  if text != "" then
+    local _allPlayers = player.GetAll()
+    local _local = 0
+    local _tmp = {}
+    if !sender:Alive() then
+      table.insert( _tmp, Color( 255, 255, 255 ) )
+      table.insert( _tmp, "[" )
 
-    table.insert( _tmp, Color( 255, 0, 0 ) )
-    table.insert( _tmp, "DEAD" )
+      table.insert( _tmp, Color( 255, 0, 0 ) )
+      table.insert( _tmp, "DEAD" )
 
-    table.insert( _tmp, Color( 255, 255, 255 ) )
-    table.insert( _tmp, "] " )
-  end
-
-  if isChatCommand( text, "ooc" ) then
-    table.insert( _tmp, Color( 255, 165, 0 ) )
-    table.insert( _tmp, "[OOC] " )
-  elseif isChatCommand( text, "looc" ) then
-    _local = 1
-    table.insert( _tmp, Color( 255, 50, 0 ) )
-    table.insert( _tmp, "[LOOC] " )
-  elseif isChatCommand( text, "advert" ) or isChatCommand( text, _advertname ) then
-    table.insert( _tmp, Color( 255, 255, 0 ) )
-    table.insert( _tmp, "[" .. string.upper( _advertname ) .. "] " )
-  end
-
-  if isChatCommand( text, "me" ) then
-    //Group
-    table.insert( _tmp, Color( 255, 165, 0 ) )
-    table.insert( _tmp, string.upper( sender:GetNWString("groupID") ) .. " " )
-
-    //Role
-    table.insert( _tmp, Color( 0, 255, 0 ) )
-    table.insert( _tmp, string.upper( sender:GetNWString("roleID") ) .. " " )
-
-    //Nickname
-    table.insert( _tmp, Color( 0, 255, 0 ) )
-    table.insert( _tmp, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
-  elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) then
-    //UserGroup
-    table.insert( _tmp, Color( 100, 100, 255 ) )
-    table.insert( _tmp, string.upper( sender:GetUserGroup() ) .. " " )
-
-    //Nick
-    table.insert( _tmp, Color( 200, 200, 255 ) )
-    table.insert( _tmp, sender:Nick() .. ": " )
-  else
-    //Group
-    table.insert( _tmp, Color( 255, 165, 0 ) )
-    table.insert( _tmp, string.upper( sender:GetNWString("groupID") ) .. " " )
-
-    //Role
-    table.insert( _tmp, Color( 0, 255, 0 ) )
-    table.insert( _tmp, string.upper( sender:GetNWString("roleID") ) .. " " )
-
-    //Nickname
-    table.insert( _tmp, Color( 0, 255, 0 ) )
-    table.insert( _tmp, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. ": " )
-  end
-
-  //Text
-  table.insert( _tmp, Color( 255, 255, 255 ) )
-  if isChatCommand( text, "me" ) then
-    table.insert( _tmp, Color( 0, 255, 0 ) )
-    table.insert( _tmp, string.sub( text, 4 ) )
-  elseif isChatCommand( text, "ooc" ) then
-    table.insert( _tmp, string.sub( text, 5+1 ) )
-  elseif isChatCommand( text, "looc" ) then
-    table.insert( _tmp, string.sub( text, 6+1 ) )
-  elseif isChatCommand( text, "advert" ) then
-    table.insert( _tmp, Color( 255, 255, 0 ) )
-    table.insert( _tmp, string.sub( text, 8+1 ) )
-  elseif isChatCommand( text, _advertname ) then
-    table.insert( _tmp, Color( 255, 255, 0 ) )
-    table.insert( _tmp, string.sub( text, 1+string.len(_advertname)+1+1 ) )
-  else
-    table.insert( _tmp, text )
-  end
-
-  if _local == 1 then
-    for k, receiver in pairs( _allPlayers ) do
-      if sender:GetPos():Distance( receiver:GetPos() ) < 2000 then
-        net.Start( "yrp_player_say" )
-          net.WriteTable( _tmp )
-        net.Send( receiver )
-      end
+      table.insert( _tmp, Color( 255, 255, 255 ) )
+      table.insert( _tmp, "] " )
     end
-  else
-    net.Start( "yrp_player_say" )
-      net.WriteTable( _tmp )
-    net.Broadcast()
+
+    if isChatCommand( text, "ooc" ) then
+      table.insert( _tmp, Color( 255, 165, 0 ) )
+      table.insert( _tmp, "[OOC] " )
+    elseif isChatCommand( text, "looc" ) then
+      _local = 1
+      table.insert( _tmp, Color( 255, 50, 0 ) )
+      table.insert( _tmp, "[LOOC] " )
+    elseif isChatCommand( text, "advert" ) or isChatCommand( text, _advertname ) then
+      table.insert( _tmp, Color( 255, 255, 0 ) )
+      table.insert( _tmp, "[" .. string.upper( _advertname ) .. "] " )
+    end
+
+    if isChatCommand( text, "me" ) then
+      //Group
+      table.insert( _tmp, Color( 255, 165, 0 ) )
+      table.insert( _tmp, string.upper( sender:GetNWString("groupName") ) .. " " )
+
+      //Role
+      table.insert( _tmp, Color( 0, 255, 0 ) )
+      table.insert( _tmp, string.upper( sender:GetNWString("roleName") ) .. " " )
+
+      //Nickname
+      table.insert( _tmp, Color( 0, 255, 0 ) )
+      table.insert( _tmp, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
+    elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) then
+      //UserGroup
+      table.insert( _tmp, Color( 100, 100, 255 ) )
+      table.insert( _tmp, string.upper( sender:GetUserGroup() ) .. " " )
+
+      //Nick
+      table.insert( _tmp, Color( 200, 200, 255 ) )
+      table.insert( _tmp, sender:Nick() .. ": " )
+    else
+      //Group
+      table.insert( _tmp, Color( 0, 255, 0 ) )
+      table.insert( _tmp, string.upper( sender:GetNWString("groupName") ) .. " " )
+
+      //Role
+      table.insert( _tmp, Color( 0, 255, 0 ) )
+      table.insert( _tmp, string.upper( sender:GetNWString("roleName") ) .. " " )
+
+      //Nickname
+      table.insert( _tmp, Color( 0, 255, 0 ) )
+      table.insert( _tmp, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. ": " )
+    end
+
+    //Text
+    table.insert( _tmp, Color( 255, 255, 255 ) )
+    if isChatCommand( text, "me" ) then
+      table.insert( _tmp, Color( 0, 255, 0 ) )
+      table.insert( _tmp, string.sub( text, 4 ) )
+    elseif isChatCommand( text, "ooc" ) then
+      table.insert( _tmp, string.sub( text, 5+1 ) )
+    elseif isChatCommand( text, "looc" ) then
+      table.insert( _tmp, string.sub( text, 6+1 ) )
+    elseif isChatCommand( text, "advert" ) then
+      table.insert( _tmp, Color( 255, 255, 0 ) )
+      table.insert( _tmp, string.sub( text, 8+1 ) )
+    elseif isChatCommand( text, _advertname ) then
+      table.insert( _tmp, Color( 255, 255, 0 ) )
+      table.insert( _tmp, string.sub( text, 1+string.len(_advertname)+1+1 ) )
+    else
+      table.insert( _tmp, text )
+    end
+
+    if _local == 1 then
+      for k, receiver in pairs( _allPlayers ) do
+        if sender:GetPos():Distance( receiver:GetPos() ) < 2000 then
+          net.Start( "yrp_player_say" )
+            net.WriteTable( _tmp )
+          net.Send( receiver )
+        end
+      end
+    else
+      net.Start( "yrp_player_say" )
+        net.WriteTable( _tmp )
+      net.Broadcast()
+    end
   end
   return ""
 end

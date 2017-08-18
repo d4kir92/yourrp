@@ -24,7 +24,7 @@ local hide = {
 	CHudBattery = true,
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
-	CHudCrosshair = false
+	CHudCrosshair = true
 }
 
 playerready = 0
@@ -41,11 +41,12 @@ end )
 include( "hud/cl_hud_map.lua" )
 include( "hud/cl_hud_player.lua" )
 include( "hud/cl_hud_view.lua" )
+include( "hud/cl_hud_crosshair.lua" )
 //##############################################################################
 
 //##############################################################################
 function hudVersion()
-	draw.SimpleText( "CLOSED ALPHA V.: " .. GAMEMODE.Version, "HudDefault", ScrW() - calculateToResu( 70 ), calculateToResu( 60 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+	draw.SimpleText( "YourRP OPEN ALPHA V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - calculateToResu( 70 ), calculateToResu( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 end
 //##############################################################################
 
@@ -56,8 +57,10 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 
 	if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
 		HudPlayer()
+		HudCrosshair()
+
+		HudView()
 	end
-	HudView()
 
 	hudVersion()
 end)

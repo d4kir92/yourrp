@@ -91,7 +91,7 @@ function tabClientHud( sheet )
     //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrpsettings.color.panel )
   end
 
-  local changeHudButton = createDerma( "DButton", cl_hudPanel, 400, 50, 0, 0 )
+  local changeHudButton = createDerma( "DButton", cl_hudPanel, 470, 50, 0, 0 )
   changeHudButton:SetText( "change HUD" )
   function changeHudButton:DoClick()
     settingsWindow:Close()
@@ -139,6 +139,9 @@ function tabClientHud( sheet )
     changeHudElement( changeHudWindow, "mmx", "mmy", "mmw", "mmh", "mmt", "Minimap" )
     changeHudElement( changeHudWindow, "hpx", "hpy", "hpw", "hph", "hpt", "Health" )
     changeHudElement( changeHudWindow, "arx", "ary", "arw", "arh", "art", "Armor" )
+    changeHudElement( changeHudWindow, "wnx", "wny", "wnw", "wnh", "wnt", "Weapon Name" )
+    changeHudElement( changeHudWindow, "wpx", "wpy", "wpw", "wph", "wpt", "Weapon Primary" )
+    changeHudElement( changeHudWindow, "wsx", "wsy", "wsw", "wsh", "wst", "Weapon Secondary" )
     changeHudElement( changeHudWindow, "rix", "riy", "riw", "rih", "rit", "RoleID" )
     changeHudElement( changeHudWindow, "ttx", "tty", "ttw", "tth", "ttt", "Tooltip" )
     changeHudElement( changeHudWindow, "mox", "moy", "mow", "moh", "mot", "Money" )
@@ -146,8 +149,36 @@ function tabClientHud( sheet )
     changeHudWindow:MakePopup()
   end
 
-  local resetHudButton = createDerma( "DButton", cl_hudPanel, 400, 50, 0, 50 + 10 )
-  resetHudButton:SetText( "Reset HUD" )
+  function testIf( question, atrue, afalse )
+    if question == 1 then
+      return atrue
+    else
+      return afalse
+    end
+  end
+
+  local toggleHud = createVGUI( "DButton", cl_hudPanel, 230, 50, 0, 50 + 10 )
+  toggleHud:SetText( "Toggle HUD (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), "On", "Off" ) .. ")" )
+  function toggleHud:DoClick()
+    if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
+      GetConVar( "yrp_cl_hud" ):SetInt( 0 )
+    elseif GetConVar( "yrp_cl_hud" ):GetInt() == 0 then
+      GetConVar( "yrp_cl_hud" ):SetInt( 1 )
+    end
+    toggleHud:SetText( "Toggle HUD (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), "On", "Off" ) .. ")" )
+  end
+
+  local resetHudButton = createDerma( "DColorButton", cl_hudPanel, 230, 50, 230 + 10, 50 + 10 )
+  resetHudButton:SetText( "" )
+  function resetHudButton:Paint( pw, ph )
+    if resetHudButton:IsHovered() then
+      draw.RoundedBox( 0, 0,0, pw, ph, Color( 255, 255, 0 ) )
+    else
+      draw.RoundedBox( 0, 0,0, pw, ph, Color( 255, 0, 0 ) )
+    end
+
+    draw.SimpleText( "Reset Hud", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
   function resetHudButton:DoClick()
     local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
     _window:Center()
@@ -167,5 +198,117 @@ function tabClientHud( sheet )
     end
 
     _window:MakePopup()
+  end
+
+  local _colorBackgroundPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 0, 50+10+50+10 )
+  function _colorBackgroundPanel:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+
+    draw.SimpleText( "HUD Background", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+  end
+
+  local _colorBackground = createVGUI( "DColorMixer", _colorBackgroundPanel, 450, 450, 10, 50 )
+  _colorBackground:SetPalette( true )
+  _colorBackground:SetAlphaBar( true )
+  _colorBackground:SetWangs( true )
+  _colorBackground:SetColor( Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )	--Set the default color
+  function _colorBackground:ValueChanged( newColor )
+    updateDBHud( "colbgr", newColor.r )
+    updateDBHud( "colbgg", newColor.g )
+    updateDBHud( "colbgb", newColor.b )
+    updateDBHud( "colbga", newColor.a )
+  end
+
+  local _colorBorderPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 470+10, 50+10+50+10 )
+  function _colorBorderPanel:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+
+    draw.SimpleText( "HUD Border", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+  end
+
+  local _colorBorder = createVGUI( "DColorMixer", _colorBorderPanel, 450, 450, 10, 50 )
+  _colorBorder:SetPalette( true )
+  _colorBorder:SetAlphaBar( true )
+  _colorBorder:SetWangs( true )
+  _colorBorder:SetColor( Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ) )	--Set the default color
+  function _colorBorder:ValueChanged( newColor )
+    updateDBHud( "colbrr", newColor.r )
+    updateDBHud( "colbrg", newColor.g )
+    updateDBHud( "colbrb", newColor.b )
+    updateDBHud( "colbra", newColor.a )
+  end
+
+  local _colorCrosshairPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 0, 50+10+50+10+510+10 )
+  function _colorCrosshairPanel:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+
+    draw.SimpleText( "Crosshair", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+  end
+
+  local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )
+  _colorCrosshair:SetPalette( true )
+  _colorCrosshair:SetAlphaBar( true )
+  _colorCrosshair:SetWangs( true )
+  _colorCrosshair:SetColor( Color( cl_db["colchr"], cl_db["colchg"], cl_db["colchb"], cl_db["colcha"] ) )	--Set the default color
+  function _colorCrosshair:ValueChanged( newColor )
+    updateDBHud( "colchr", newColor.r )
+    updateDBHud( "colchg", newColor.g )
+    updateDBHud( "colchb", newColor.b )
+    updateDBHud( "colcha", newColor.a )
+  end
+
+  local _colorCrosshairBorderPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 470+10, 50+10+50+10+510+10 )
+  function _colorCrosshairBorderPanel:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+
+    draw.SimpleText( "Crosshair Border", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+  end
+
+  local _colorCrosshairBorder = createVGUI( "DColorMixer", _colorCrosshairBorderPanel, 450, 450, 10, 50 )
+  _colorCrosshairBorder:SetPalette( true )
+  _colorCrosshairBorder:SetAlphaBar( true )
+  _colorCrosshairBorder:SetWangs( true )
+  _colorCrosshairBorder:SetColor( Color( cl_db["colchbrr"], cl_db["colchbrg"], cl_db["colchbrb"], cl_db["colchbra"] ) )	--Set the default color
+  function _colorCrosshairBorder:ValueChanged( newColor )
+    updateDBHud( "colchbrr", newColor.r )
+    updateDBHud( "colchbrg", newColor.g )
+    updateDBHud( "colchbrb", newColor.b )
+    updateDBHud( "colchbra", newColor.a )
+  end
+
+  local _settingCrosshairPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 470+10+470+10, 50+10+50+10+510+10 )
+  function _settingCrosshairPanel:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+
+    draw.SimpleText( "Crosshair Settings", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+
+    draw.SimpleText( "Length:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 60 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( "Gap:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 150 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( "Thickness:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( "Border:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 330 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+  end
+
+  local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90 )
+  _settingCrosshairLength:SetValue( cl_db["chl"] )
+  function _settingCrosshairLength:OnValueChanged( val )
+    updateDBHud( "chl", val )
+  end
+
+  local _settingCrosshairGap = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90+90 )
+  _settingCrosshairGap:SetValue( cl_db["chg"] )
+  function _settingCrosshairGap:OnValueChanged( val )
+    updateDBHud( "chg", val )
+  end
+
+  local _settingCrosshairThickness = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90+180 )
+  _settingCrosshairThickness:SetValue( cl_db["chh"] )
+  function _settingCrosshairThickness:OnValueChanged( val )
+    updateDBHud( "chh", val )
+  end
+
+  local _settingCrosshairBorder = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90+270 )
+  _settingCrosshairBorder:SetValue( cl_db["chbr"] )
+  function _settingCrosshairBorder:OnValueChanged( val )
+    updateDBHud( "chbr", val )
   end
 end

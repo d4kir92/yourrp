@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //shared_pres.lua
 
 GM.Name = 				"YourRP"
@@ -6,7 +8,7 @@ GM.Author =				"D4KiR"
 GM.Email =				""
 GM.Website =			"youtube.com/c/D4KiR"
 GM.Twitter =			"twitter.com/D4KIR"
-GM.Version =			"0.11"
+GM.Version =			"0.3.5"
 GM.VersionSort = 	""
 GM.Help =					""
 
@@ -27,6 +29,19 @@ yrp.errorPos = "!"
 deb = {}
 deb.pre = yrp.pre .. "##DEBUG## "
 deb.size = deb.pre .. "#SIZE "
+
+colors = {}
+function addColor( string, r, g, b, a )
+	colors[string] = {}
+	colors[string].r = r
+	colors[string].g = g
+	colors[string].b = b
+	colors[string].a = a
+end
+
+addColor( "epicBlue", 23, 113, 240, 100 )
+addColor( "darkBG", 0, 0, 0, 200 )
+addColor( "epicOrange", 255, 140, 0, 200 )
 
 function Logo()
 	printGM( nil, "#############################" )
@@ -79,12 +94,6 @@ if CLIENT then
   end)
 end
 
-function printError( tmpText )
-	print( yrp.spacePre )
-	MsgC( Color( 255, 0, 0 ), yrp.pre .. yrp.errorPre .. tmpText .. yrp.errorPos .. "\n" )
-	print( yrp.spacePos )
-end
-
 function printGM( channel, string )
 	if string != nil then
 		local _tmpText = string.Explode( "\n", string )
@@ -120,6 +129,9 @@ function printGM( channel, string )
 		elseif channel == "instructor" then
 			_color2 = Color( 255, 255, 0 )
 			_channelName = "INSTRUCTOR"
+		elseif channel == "error" then
+			_color2 = Color( 255, 0, 0 )
+			_channelName = "ERROR"
 		end
 		for k, v in pairs(_tmpText) do
 			if _channelName != "" then
@@ -129,4 +141,8 @@ function printGM( channel, string )
 			end
 		end
 	end
+end
+
+function printError( string )
+	printGM( "error", string )
 end

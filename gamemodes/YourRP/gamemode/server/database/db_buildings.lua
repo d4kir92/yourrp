@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //db_map.lua
 
 include( "buildings/db_net.lua" )
@@ -20,14 +22,16 @@ function dbBuildingsInit()
   //sql.Query( "DROP TABLE yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
 
   if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" ) then
-    printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_buildings exists" )
+    printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors exists" )
   else
+    printGM( "db", "CREATING yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
     local query = ""
     query = query .. "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_doors ( "
     query = query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     query = query .. " )"
     sql.Query( query )
 		if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" ) then
+      printGM( "db", "CREATED yrp_" .. string.lower( game.GetMap() ) .. "_doors SUCCESSFULL" )
       dbDoorsAddValues( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
 		else
 			printError( "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_doors fail" )
@@ -39,12 +43,14 @@ function dbBuildingsInit()
   if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" ) then
     printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_buildings exists" )
   else
+    printGM( "db", "CREATING yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
     local query = ""
     query = query .. "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_buildings ( "
     query = query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     query = query .. " )"
     sql.Query( query )
 		if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" ) then
+      printGM( "db", "CREATED yrp_" .. string.lower( game.GetMap() ) .. "_buildings SUCCESSFULL" )
       dbBuildingsAddValues( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
 		else
 			printError( "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_buildings fail" )

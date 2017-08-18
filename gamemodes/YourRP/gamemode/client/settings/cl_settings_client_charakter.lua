@@ -7,7 +7,9 @@ net.Receive( "getCharakterList", function()
   cl_firstName:SetText( _charList[1].nameFirst )
   function cl_firstName:OnChange()
     net.Start( "updateFirstName" )
-      net.WriteString( cl_firstName:GetText() )
+      local _tmp = string.Replace( cl_firstName:GetText(), " ", "" )
+      local _newString = _tmp
+      net.WriteString( _newString )
     net.SendToServer()
   end
 

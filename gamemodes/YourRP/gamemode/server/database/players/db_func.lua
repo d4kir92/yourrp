@@ -1,18 +1,76 @@
 
 local metaPly = FindMetaTable( "Player" )
-function metaPly:addMoney( money )
-  if isnumber( money ) then
-    self:SetNWInt( "money", self:GetNWInt( "money" ) + math.Round( money, 2 ) )
-  end
+
+function metaPly:SteamName()
+  return self:GetName()
+end
+
+function metaPly:RPName()
+  local rpName = self:GetNWString( "SurName", "" ) .. ", " .. self:GetNWString( "FirstName", "" )
+  return rpName
+end
+
+function metaPly:Nick()
+  return self:SteamName() .. " [" .. self:RPName() .. "]"
+end
+
+function metaPly:isCP()
+  print("FAKE Function")
+  return false
+end
+
+function metaPly:updateMoney( money )
+  dbUpdate( "yrp_players", "money = " .. money, "steamID = '" .. self:SteamID().. "'")
+end
+
+function metaPly:updateMoneyBank( money )
+  dbUpdate( "yrp_players", "moneybank = " .. money, "steamID = '" .. self:SteamID().. "'")
 end
 
 function metaPly:canAfford( money )
   local _tmpMoney = tonumber( money )
   if isnumber( _tmpMoney ) then
-    if tonumber( self:GetNWInt( "money" ) ) >= _tmpMoney then
+    if _tmpMoney > 0 then
+      return true
+    elseif tonumber( self:GetNWInt( "money" ) ) >= math.abs( _tmpMoney ) then
       return true
     else
       return false
+    end
+  end
+end
+
+function metaPly:addMoney( money )
+  if isnumber( money ) then
+    if self:canAfford( money ) then
+      self:SetNWInt( "money", self:GetNWInt( "money" ) + math.Round( money, 2 ) )
+      self:updateMoney( self:GetNWInt( "money" ) )
+    else
+      printGM( "note", self:Nick() .. " cant afford this" )
+    end
+  end
+end
+
+function metaPly:canAffordBank( money )
+  local _tmpMoney = tonumber( money )
+  if isnumber( _tmpMoney ) then
+    if _tmpMoney > 0 then
+      return true
+    elseif tonumber( self:GetNWInt( "moneybank" ) ) >= math.abs( _tmpMoney ) then
+      return true
+    else
+      return false
+    end
+  end
+end
+
+function metaPly:addMoneyBank( money )
+  if isnumber( money ) then
+    if self:canAffordBank( money ) then
+      self:SetNWInt( "moneybank", self:GetNWInt( "moneybank" ) + math.Round( money, 2 ) )
+      self:updateMoneyBank( self:GetNWInt( "moneybank" ) )
+    else
+      printGM( "note", self:Nick() .. " cant afford this, BANK" )
     end
   end
 end
@@ -67,7 +125,7 @@ function updateUses()
   local tmpTableRoles = sql.Query( "SELECT * FROM yrp_roles" )
   if tmpTableRoles != false then
     local tmpTablePlayers = sql.Query( "SELECT * FROM yrp_players" )
-    if tmpTablePlayers != false then
+    if tmpTablePlayers != false and tmpTablePlayers != nil then
       for k, v in pairs( tmpTableRoles ) do
         v.uses = 0
       end
@@ -136,6 +194,7 @@ function updateHud( ply )
   local plyValues = sql.Query( q3 )
   if plyValues != nil and plyValues != false then
     ply:SetNWInt( "money", plyValues[1].money )
+    ply:SetNWInt( "moneybank", plyValues[1].moneybank )
     ply:SetNWInt( "capital", plyValues[1].capital )
     ply:SetNWString( "SurName", plyValues[1].nameSur )
     ply:SetNWString( "FirstName", plyValues[1].nameFirst )
@@ -146,20 +205,31 @@ function updateHud( ply )
     else
       tmpRoleID = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = 1" )
       if tmpRoleID != nil then
-        ply:SetNWString( "roleID", tmpRoleID[1].roleID )
+        ply:SetNWString( "roleName", tmpRoleID[1].roleID )
+        ply:SetNWString( "roleUniqueID", tmpRoleID[1].uniqueID )
       end
     end
     if tmpRoleID != nil then
       local tmpGroupID = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpRoleID[1].groupID )
-      ply:SetNWString( "groupID", tmpGroupID[1].groupID )
+      ply:SetNWString( "groupName", tmpGroupID[1].groupID )
+      ply:SetNWString( "groupUniqueID", tmpGroupID[1].uniqueID )
     end
   else
     //
   end
+
+  local _moneyTable = dbSelect( "yrp_money", "*", nil )
+  for k, v in pairs( _moneyTable ) do
+    if v.name == "moneypre" then
+      ply:SetNWString( "moneyPre", v.value )
+    elseif v.name == "moneypost" then
+      ply:SetNWString( "moneypost", v.value )
+    end
+  end
 end
 
 function checkClient( ply )
-  printGM( "db", "checkClient: " .. ply:Nick() .. " (" .. ply:SteamID() .. ")" )
+  printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
   awayFor( ply )
 
   local query = ""
@@ -167,18 +237,27 @@ function checkClient( ply )
   local result = sql.Query( query )
 
   if !result then
-    printGM( "db", ply:Nick() .. " is not in db: yrp_players, creating " .. ply:Nick() )
+    printGM( "db", ply:SteamName() .. " is not in db: yrp_players, creating " .. ply:SteamName() )
 
     local q2 = ""
-    q2 = q2 .. "INSERT INTO yrp_players ( steamID, nick, money, roleID, map ) "
+    q2 = q2 .. "INSERT INTO yrp_players ( steamID, nick, roleID, map ) "
     q2 = q2 .. "VALUES ( "
     q2 = q2 .. "'" .. tostring( ply:SteamID() ) .. "', "
     q2 = q2 .. "'" .. tostring( ply:Nick() ) .. "', "
-    q2 = q2 .. "0, "
     q2 = q2 .. "1, "
     q2 = q2 .. "'" .. string.lower( game.GetMap() ) .. "' "
     q2 = q2 .. " )"
     sql.Query( q2 )
+
+    printGM( "db", "Give new player " .. ply:SteamName() .. " the StartMoney." )
+    local _moneyTable = dbSelect( "yrp_money", "*", nil )
+    for k, v in pairs( _moneyTable ) do
+      if v.name == "moneystart" then
+        ply:SetNWInt( "money", v.value )
+        dbUpdate( "yrp_players", "money = " .. v.value, "steamID = '" .. ply:SteamID() .. "'" )
+        break
+      end
+    end
 
     net.Start( "openCharakterMenu" )
     net.Send( ply )
@@ -195,6 +274,8 @@ function checkClient( ply )
   end
 
   updateHud( ply )
+
+  updateGroupTable()
 
   saveClients( "Check Client" )
 end

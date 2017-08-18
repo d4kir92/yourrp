@@ -1,7 +1,22 @@
 
-local _filterENTS = ents.GetAll()
+_filterENTS = ents.GetAll()
 local _filterTime = CurTime()
-local CamData = {}
+local CamDataMinimap = {}
+
+local plyHealth = 100
+local plyArmor = 100
+
+local reload = {}
+
+reload.nextP = 0
+reload.nextPC = 0
+reload.maxP = 0
+reload.statusP = 0
+
+reload.nextS = 0
+reload.nextSC = 0
+reload.maxS = 0
+reload.statusS = 0
 
 local _showVoice = false
 function GM:PlayerStartVoice( ply )
@@ -30,6 +45,7 @@ end
 local _tmp3P = 0
 function HudPlayer()
   local ply = LocalPlayer()
+  local weapon = ply:GetActiveWeapon()
   if cl_db["_load"] == 1 then
     local minimap = {}
     local br = 2
@@ -42,77 +58,154 @@ function HudPlayer()
 
       //Health
       if tonumber( cl_db["hpt"] ) == 1 then
+        plyHealth = Lerp( 10 * FrameTime(), plyHealth, ply:Health() )
         drawRBox( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( 0, 0, 0, 200 ) )
-        drawRBox( 0, cl_db["hpx"], cl_db["hpy"], ( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() ) * (cl_db["hpw"]), cl_db["hph"], Color( 255, 0, 0, 200 ) )
-        drawText( LocalPlayer():Health() .. "/" .. LocalPlayer():GetMaxHealth() .. " | " .. (LocalPlayer():Health()/LocalPlayer():GetMaxHealth())*100 .. " %", "HudBars", cl_db["hpx"] + (cl_db["hpw"]/2), cl_db["hpy"] + (cl_db["hph"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        drawRBox( 0, cl_db["hpx"], cl_db["hpy"], ( plyHealth / ply:GetMaxHealth() ) * (cl_db["hpw"]), cl_db["hph"], Color( 255, 0, 0, 200 ) )
+        drawText( math.Round( plyHealth, 0 ) .. "/" .. ply:GetMaxHealth() .. " | " .. math.Round( ( math.Round( plyHealth, 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. " %", "HudBars", cl_db["hpx"] + (cl_db["hpw"]/2), cl_db["hpy"] + (cl_db["hph"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
       //Armor
       if tonumber( cl_db["art"] ) == 1 then
+        plyArmor = Lerp( 10 * FrameTime(), plyArmor, ply:Armor() )
         drawRBox( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( 0, 0, 0, 200 ) )
-        drawRBox( 0, cl_db["arx"], cl_db["ary"], ( LocalPlayer():Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 0, 0, 255, 200 ) )
-        drawText( LocalPlayer():Armor() .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. " | " .. (LocalPlayer():Armor()/100)*100 .. " %", "HudBars", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        drawRBox( 0, cl_db["arx"], cl_db["ary"], ( ply:Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 0, 0, 255, 200 ) )
+        drawText( math.Round( plyArmor, 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. " | " .. math.Round( ( math.Round( plyArmor, 0 ) / ply:GetNWInt( "GetMaxArmor", 100 ) ) * 100, 0 ) .. " %", "HudBars", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      end
+
+      //Weapon Primary
+      if tonumber( cl_db["wpt"] ) == 1 then
+        local wpx = calculateToResu( cl_db["wpx"] )
+        local wpy = calculateToResu( cl_db["wpy"] )
+        local wpw = calculateToResu( cl_db["wpw"] )
+        local wph = calculateToResu( cl_db["wph"] )
+        if weapon != NULL then
+      		if weapon:GetMaxClip1() > -1 or ply:GetAmmoCount( weapon:GetPrimaryAmmoType() ) > -1 then
+            draw.RoundedBox( 0, wpx, wpy, wpw, wph, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+
+            draw.RoundedBox( 0, wpx, wpy, wpw * weapon:Clip1() / weapon:GetMaxClip1(), wph, Color( 255, 255, 0 ) )
+      			//Primary
+      			reload.nextP = weapon:GetNextPrimaryFire()
+      			reload.nextPC = reload.nextP - CurTime()
+      			if reload.nextP > CurTime() and reload.statusP == 0 and ( reload.nextPC ) > 0.6 then
+      				reload.statusP = 1
+      				reload.maxP = reload.nextP - CurTime()
+      			elseif reload.nextP < CurTime() and reload.statusP == 1 then
+      				reload.statusP = 0
+      			end
+      			if reload.nextPC > reload.maxP then
+      				reload.maxP = reload.nextPC
+      			end
+
+      			if reload.statusP == 1 then
+      				draw.RoundedBox( 0, wpx, wpy, wpw * ( 1 - ( ( 1 / reload.maxP ) * reload.nextPC )), wph, Color( 255, 0, 0, 200 ) )
+      				draw.SimpleText( math.Round( 100 * ( 1 - ( ( 1 / reload.maxP ) * reload.nextPC ) ) ) .. "%", "HudBars", wpx + ( wpw / 2 ), wpy + ( wph / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      			elseif weapon:GetMaxClip1() > -1 then
+      				draw.SimpleText( weapon:Clip1() .. "/" .. weapon:GetMaxClip1()  .. "|" .. ply:GetAmmoCount(weapon:GetPrimaryAmmoType()), "HudBars", wpx + ( wpw / 2 ), wpy + ( wph / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      		  elseif ply:GetAmmoCount(weapon:GetPrimaryAmmoType()) > -1 then
+              draw.SimpleText( ply:GetAmmoCount( weapon:GetPrimaryAmmoType() ), "HudBars", wpx + ( wpw / 2 ), wpy + ( wph / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            end
+          end
+        end
+      end
+
+      //Weapon Secondary
+      if tonumber( cl_db["wst"] ) == 1 then
+        local wsx = calculateToResu( cl_db["wsx"] )
+        local wsy = calculateToResu( cl_db["wsy"] )
+        local wsw = calculateToResu( cl_db["wsw"] )
+        local wsh = calculateToResu( cl_db["wsh"] )
+
+        if weapon != NULL then
+      		if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
+            draw.RoundedBox( 0, wsx, wsy, wsw, wsh, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+      			//Secondary
+      			draw.RoundedBox( 0, wsx, wsy, wsw, wsh, Color( 255, 255, 0, 255 ) )
+
+      			reload.nextS = weapon:GetNextSecondaryFire()
+      			reload.nextSC = reload.nextS - CurTime()
+      			if reload.nextS > CurTime() and reload.statusS == 0 and ( reload.nextSC ) > 0.3 then
+      				reload.statusS = 1
+      				reload.maxS = reload.nextS - CurTime()
+      			elseif reload.nextS < CurTime() and reload.statusS == 1 then
+      				reload.statusS = 0
+      			end
+      			if reload.nextSC > reload.maxS then
+      				reload.maxS = reload.nextSC
+      			end
+
+      			if reload.statusS == 1 then
+      				draw.RoundedBox( 0, wsx, wsy, wsw * ( 1 - ( ( 1 / reload.maxS ) * reload.nextSC ) ), wsh, Color( 255, 0, 0, 200 ) )
+      				draw.SimpleText( math.Round( 100 * ( 1 - ( ( 1 / reload.maxS ) * reload.nextSC ) ) ) .. "%", "HudBars", wsx + ( wsw / 2 ), wsy + ( wsh / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      			else
+      				draw.SimpleText( ply:GetAmmoCount(weapon:GetSecondaryAmmoType()), "HudBars", wsx + ( wsw / 2 ), wsy + ( wsh / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+      			end
+          end
+    		end
+      end
+
+      //Weapon Name
+      if tonumber( cl_db["wnt"] ) == 1 then
+        if weapon != NULL then
+          drawRBox( 0, cl_db["wnx"], cl_db["wny"], cl_db["wnw"], cl_db["wnh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+          drawText( weapon:GetPrintName(), "HudBars", cl_db["wnx"] + (cl_db["wnw"]/2), cl_db["wny"] + (cl_db["wnh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
       end
 
       //RoleID
       if tonumber( cl_db["rit"] ) == 1 then
-        drawRBox( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( 0, 0, 0, 200 ) )
-        drawText( LocalPlayer():GetNWString("groupID") .. " " .. LocalPlayer():GetNWString("roleID"), "HudBars", cl_db["rix"] + (cl_db["riw"]/2), cl_db["riy"] + (cl_db["rih"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        drawRBox( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        drawText( ply:GetNWString("groupName") .. " " .. ply:GetNWString("roleName"), "HudBars", cl_db["rix"] + (cl_db["riw"]/2), cl_db["riy"] + (cl_db["rih"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
       //Minimap
       if tonumber( cl_db["mmt"] ) == 1 then
-        if _filterTime + 10 < CurTime() then//alle 10 sekunden ents reinladen
+        if _filterTime + 20 < CurTime() then//alle 10 sekunden ents reinladen
           _filterTime = CurTime()
           _filterENTS = ents.GetAll()
         end
         local tr = util.TraceLine( {
-        	start = LocalPlayer():GetPos() + Vector( 0, 0, 16 ),
-          endpos = LocalPlayer():GetPos() + Vector( 0, 0, 4000 ),
+        	start = ply:GetPos() + Vector( 0, 0, 16 ),
+          endpos = ply:GetPos() + Vector( 0, 0, 4000 ),
         	filter = _filterENTS
         } )
 
-      	CamData.angles = Angle( 90, LocalPlayer():EyeAngles().yaw, 0 )
-        local _inBuilding = 0
+      	CamDataMinimap.angles = Angle( 90, ply:EyeAngles().yaw, 0 )
         if tr.Hit then
-          if tr.HitPos.z - LocalPlayer():GetPos().z < 4000 and !tr.Entity:IsPlayer() and !tr.Entity:IsNPC() then
-            _inBuilding = 1
+          if tr.HitPos.z - ply:GetPos().z < 4000 and !tr.Entity:IsPlayer() and !tr.Entity:IsNPC() then
             local dist = 1400
-        	  CamData.origin = LocalPlayer():GetPos() + Vector( 0, 0, tr.HitPos.z-LocalPlayer():GetPos().z - 4 )
-            CamData.ortholeft = -dist * cl_db["mmw"] / 1000
-          	CamData.orthoright = dist * cl_db["mmw"] / 1000
-          	CamData.orthotop = -dist * cl_db["mmh"] / 1000
-          	CamData.orthobottom = dist * cl_db["mmh"] / 1000
+        	  CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, tr.HitPos.z-ply:GetPos().z - 4 )
+            CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
+          	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
+          	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
+          	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
           end
+        else
+          local dist = 6000
+          CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, ply:GetPos().z + 4000 - ply:GetPos().z - 4 ) //+ Vector( 0, 0, 20000 )
+          CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
+        	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
+        	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
+        	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
         end
-        if _inBuilding == 0 then
-          local tr2 = util.TraceLine( {
-          	start = LocalPlayer():GetPos(),
-            endpos = LocalPlayer():GetPos() + Vector( 0, 0, 99999999999999999 ),
-          	filter = LocalPlayer()
-          } )
-          local dist = 3000
-          CamData.origin = LocalPlayer():GetPos() + Vector( 0, 0, tr2.HitPos.z-LocalPlayer():GetPos().z - 4 ) //+ Vector( 0, 0, 20000 )
-          CamData.ortholeft = -dist * cl_db["mmw"] / 1000
-        	CamData.orthoright = dist * cl_db["mmw"] / 1000
-        	CamData.orthotop = -dist * cl_db["mmh"] / 1000
-        	CamData.orthobottom = dist * cl_db["mmh"] / 1000
-        end
-      	CamData.x = calculateToResu( cl_db["mmx"] )
-      	CamData.y = calculateToResu( cl_db["mmy"] )
-      	CamData.w = calculateToResu( cl_db["mmw"] )
-      	CamData.h = calculateToResu( cl_db["mmh"] )
-        CamData.ortho = true
-        CamData.drawviewmodel = false
-      	render.RenderView( CamData )
+      	CamDataMinimap.x = calculateToResu( cl_db["mmx"] )
+      	CamDataMinimap.y = calculateToResu( cl_db["mmy"] )
+      	CamDataMinimap.w = calculateToResu( cl_db["mmw"] )
+      	CamDataMinimap.h = calculateToResu( cl_db["mmh"] )
+        CamDataMinimap.ortho = true
+        CamDataMinimap.drawviewmodel = false
+      	render.RenderView( CamDataMinimap )
 
         minimap.point = 8
         drawRBoxCr( cl_db["mmx"] + (cl_db["mmw"]/2) - (minimap.point/2), cl_db["mmy"] + (cl_db["mmh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
+
+        //Coords
+        draw.SimpleText( math.Round( ply:GetPos().x, -1 ), "HudMinimap", calculateToResu( cl_db["mmx"] ) + ( calculateToResu( cl_db["mmw"] ) / 2 ), calculateToResu( cl_db["mmy"] ) + calculateToResu( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, -1 ), "HudMinimap", calculateToResu( cl_db["mmx"] ) + ( calculateToResu( cl_db["mmw"] ) / 2 ), calculateToResu( cl_db["mmy"] ) + calculateToResu( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
 
       //Tooltip
       if tonumber( cl_db["ttt"] ) == 1 then
-        drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( 0, 0, 0, 200 ) )
+        drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawText( "Tooltip:", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 16 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "F2 - Role Menu", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 80 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "F4 - Buy Menu", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 144 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -123,12 +216,12 @@ function HudPlayer()
 
       //Money
       if tonumber( cl_db["mot"] ) == 1 then
-        drawRBox( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( 0, 0, 0, 200 ) )
-        local _money = tonumber( LocalPlayer():GetNWInt( "money" ) )
-        local _moneystring = roundMoney( _money, 1 ) .. " €"
-        local _capital = tonumber( LocalPlayer():GetNWInt( "capital" ) )
+        drawRBox( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        local _money = tonumber( ply:GetNWInt( "money" ) )
+        local _moneystring = ply:GetNWString( "moneyPre" ) .. roundMoney( _money, 1 ) .. ply:GetNWString( "moneyPost" )
+        local _capital = tonumber( ply:GetNWInt( "capital" ) )
         if _capital > 0 then
-          _moneystring = _moneystring .. " (+" .. roundMoney( _capital, 1 ) .. " €)"
+          _moneystring = _moneystring .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
         end
         drawText( _moneystring, "HudBars", cl_db["mox"] + (cl_db["mow"]/2), cl_db["moy"] + (cl_db["moh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
@@ -155,22 +248,41 @@ function HudPlayer()
 
       //Borders
       if tonumber( cl_db["hpt"] ) == 1 then
-        drawRBoxBr( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( 255, 255, 0, 200 ), br )
+        drawRBoxBr( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
       if tonumber( cl_db["art"] ) == 1 then
-        drawRBoxBr( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( 255, 255, 0, 200 ), br )
+        drawRBoxBr( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+      if tonumber( cl_db["wst"] ) == 1 then
+        if weapon != NULL then
+          if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
+            drawRBoxBr( 0, cl_db["wsx"], cl_db["wsy"], cl_db["wsw"], cl_db["wsh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+          end
+        end
+      end
+      if tonumber( cl_db["wpt"] ) == 1 then
+        if weapon != NULL then
+          if weapon:GetMaxClip1() > -1 or ply:GetAmmoCount(weapon:GetPrimaryAmmoType()) > -1 then
+            drawRBoxBr( 0, cl_db["wpx"], cl_db["wpy"], cl_db["wpw"], cl_db["wph"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+          end
+        end
+      end
+      if tonumber( cl_db["wnt"] ) == 1 then
+        if weapon != NULL then
+          drawRBoxBr( 0, cl_db["wnx"], cl_db["wny"], cl_db["wnw"], cl_db["wnh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+        end
       end
       if tonumber( cl_db["rit"] ) == 1 then
-      drawRBoxBr( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( 255, 255, 0, 200 ), br )
+      drawRBoxBr( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
       if tonumber( cl_db["ttt"] ) == 1 then
-        drawRBoxBr( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( 255, 255, 0, 200 ), br )
+        drawRBoxBr( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
       if tonumber( cl_db["mot"] ) == 1 then
-        drawRBoxBr( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( 255, 255, 0, 200 ), br )
+        drawRBoxBr( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
       if tonumber( cl_db["mmt"] ) == 1 then
-        drawRBoxBr( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( 255, 255, 0, 200 ), br )
+        drawRBoxBr( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
     else
       drawRBox( 0, 0, 0, 3840, 2160, Color( 255, 0, 0, 100 ) )

@@ -19,6 +19,6 @@ function tabContact( sheet )
   button:SetPos( calculateToResu( 5 ), calculateToResu( 5 ) )
   button:SetText( "Live Support Click me! (Discord)" )
   function button:DoClick()
-    gui.OpenURL( "https://discord.gg/7cADpmC" )
+    gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end
 end

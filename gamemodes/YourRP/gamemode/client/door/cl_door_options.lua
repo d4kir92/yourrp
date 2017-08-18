@@ -1,27 +1,31 @@
 
 net.Receive( "getBuildingInfo", function( len )
-  local _door = net.ReadEntity()
-  local _building = net.ReadInt( 16 )
-  local _tmpBuilding = net.ReadTable()
+  if net.ReadBool() then
+    local _door = net.ReadEntity()
+    local _building = net.ReadInt( 16 )
+    local _tmpBuilding = net.ReadTable()
 
-  local ply = LocalPlayer()
-  if _building != nil and _tmpBuilding != nil then
-    if _tmpBuilding[1] != nil then
-      if _tmpBuilding[1].ownerSteamID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
-        buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
-      elseif _tmpBuilding[1].ownerSteamID == ply:SteamID() or _tmpBuilding[1].groupID != -1 then
-        optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
+    local ply = LocalPlayer()
+    if _building != nil and _tmpBuilding != nil then
+      if _tmpBuilding[1] != nil then
+        if _tmpBuilding[1].ownerSteamID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
+          buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
+        elseif _tmpBuilding[1].ownerSteamID == ply:SteamID() or _tmpBuilding[1].groupID != -1 then
+          optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
+        else
+          printGM( "note", "fail" )
+          _menuIsOpen = 0
+        end
       else
-        printGM( "note", "fail" )
         _menuIsOpen = 0
+        printGM( "note", "getDoorInfo Table empty" )
       end
     else
       _menuIsOpen = 0
-      printGM( "note", "getDoorInfo Table empty" )
+      printGM( "note", "getDoorInfo Receive: NIL" )
     end
   else
     _menuIsOpen = 0
-    printGM( "note", "getDoorInfo Receive: NIL" )
   end
 end)
 
@@ -39,7 +43,7 @@ function buyWindow( buildingID, name, price, door )
     end
   end
 
-  local _doorWindow = createVGUI( "DFrame", nil, 800, 210, 0, 0 )
+  _doorWindow = createVGUI( "DFrame", nil, 800, 210, 0, 0 )
   _doorWindow:Center()
   _doorWindow:SetTitle( "" )
   function _doorWindow:Close()
@@ -52,7 +56,7 @@ function buyWindow( buildingID, name, price, door )
     draw.SimpleText( "Buy Menu", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.SimpleText( "Name: " .. _name, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( "Price: " .. _price .. "€", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( "Price: " .. ply:GetNWString( "moneyPre" ) .. _price .. ply:GetNWString( "moneyPost" ), "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     draw.SimpleText( "Doors: " .. _doors, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.RoundedBox( 0, 0, calculateToResu( 210 ), pw, ph, Color( 255, 255, 0, 200 ) )
@@ -173,7 +177,7 @@ function optionWindow( buildingID, name, price, door )
     draw.SimpleText( "Option Menu", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.SimpleText( "Name: " .. _name, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( "Group/Owner: " .. "€", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( "Group/Owner: ", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     draw.SimpleText( "Door-Level: " .. door:GetNWInt( "level", -1 ), "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.RoundedBox( 0, 0, calculateToResu( 270 ), pw, ph, Color( 255, 255, 0, 200 ) )
@@ -181,7 +185,7 @@ function optionWindow( buildingID, name, price, door )
   end
 
   local _ButtonUpgrade = createVGUI( "DButton", _doorWindow, 400, 50, 10, 150 )
-  _ButtonUpgrade:SetText( "Upgrade Door (-100€) NOT AVAILABLE" )
+  _ButtonUpgrade:SetText( "Upgrade Door (-" .. ply:GetNWString( "moneyPre" ) .. "100" .. ply:GetNWString( "moneyPost" ) .. ") NOT AVAILABLE" )
   function _ButtonUpgrade:DoClick()
     /*net.Start( "wantHouse" )
       net.WriteInt( _buildingID, 16 )
@@ -191,7 +195,7 @@ function optionWindow( buildingID, name, price, door )
 
   if door:GetNWString( "ownerGroup" ) == "" then
     local _ButtonSell = createVGUI( "DButton", _doorWindow, 400, 50, 10, 210 )
-    _ButtonSell:SetText( "Sell Apartment (+" .. _price/2 .. "€)" )
+    _ButtonSell:SetText( "Sell Apartment (+" .. ply:GetNWString( "moneyPre" ) .. _price/2 .. ply:GetNWString( "moneyPost" ) .. ")" )
     function _ButtonSell:DoClick()
       net.Start( "sellBuilding" )
         net.WriteInt( _buildingID, 16 )
@@ -201,20 +205,22 @@ function optionWindow( buildingID, name, price, door )
   end
 
   local _ButtonKeyCreate = createVGUI( "DButton", _doorWindow, 400, 50, 420, 150 )
-  _ButtonKeyCreate:SetText( "Create Key (-15€)" )
+  _ButtonKeyCreate:SetText( "Create Key (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
   function _ButtonKeyCreate:DoClick()
     net.Start( "createKey" )
+      net.WriteEntity( door )
       net.WriteInt( _buildingID, 16 )
     net.SendToServer()
     _doorWindow:Close()
   end
 
   local _ButtonKeyReset = createVGUI( "DButton", _doorWindow, 400, 50, 420, 210 )
-  _ButtonKeyReset:SetText( "Reset Key (-15€)" )
+  _ButtonKeyReset:SetText( "Reset Key (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
   function _ButtonKeyReset:DoClick()
-    /*net.Start( "upgradeDoor" )
+    net.Start( "resetKey" )
+      net.WriteEntity( door )
       net.WriteInt( _buildingID, 16 )
-    net.SendToServer()*/
+    net.SendToServer()
     _doorWindow:Close()
   end
 
@@ -248,7 +254,6 @@ function optionWindow( buildingID, name, price, door )
 end
 
 function openDoorOptions( door, buildingID )
-  _menuIsOpen = 1
   net.Start( "getBuildingInfo" )
     net.WriteEntity( door )
     net.WriteInt( buildingID, 16 )

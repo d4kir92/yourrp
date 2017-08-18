@@ -148,7 +148,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
     draw.SimpleText( "Salary", "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, calculateToResu( 48 ), w, h - calculateToResu( 48 ), yrp_rmColors.background )
-    draw.SimpleText( capital .. " €", "roleInfoText", calculateToResu( 10 ), calculateToResu( 48 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( ply:GetNWString( "moneyPre" ) .. capital .. ply:GetNWString( "moneyPost" ), "roleInfoText", calculateToResu( 10 ), calculateToResu( 48 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
 
   tmpY = tmpY + tmpH + 3*tmpBr
@@ -273,7 +273,6 @@ end
 function isInWhitelist( id )
   for k, v in pairs( Whitelist ) do
     if tonumber( id ) == tonumber( v.roleID ) then
-      print("is in whitelist")
       return true
     end
   end
@@ -286,7 +285,6 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newX = x + calculateToResu( 60 )
     local newY = y
     for k, v in pairs( tmpTable ) do
-      print(v.roleID)
       if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
         newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodel, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ) )
       end
@@ -348,7 +346,6 @@ function addGroups( uppergroupname, parent, uppergroup, x, y )
 end
 
 function openRoleMenu()
-  _menuIsOpen = 1
   cl_rolesMenuOpen = 1
 
   roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, ScrW() - 2160/2, 0 )

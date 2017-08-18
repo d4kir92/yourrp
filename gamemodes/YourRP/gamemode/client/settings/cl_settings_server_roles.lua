@@ -204,17 +204,16 @@ function tabServerRoles( sheet )
             combobox:ChooseOption( nilValue, -1 )
           end
         end
-
-        function combobox:OnSelect( index, value, data )
-          if data != nil then
-            net.Start( util )
-              net.WriteInt( sv_rolesRoles.table[rowIndex].uniqueID, 16 )
-              net.WriteInt( data, 16 )
-            net.SendToServer()
-            sv_rolesRoles.table[rowIndex][tableValue] = data
-          end
-        end
       end)
+      function combobox:OnSelect( index, value, data )
+        if data != nil then
+          net.Start( util )
+            net.WriteInt( sv_rolesRoles.table[rowIndex].uniqueID, 16 )
+            net.WriteInt( data, 16 )
+          net.SendToServer()
+          sv_rolesRoles.table[rowIndex][tableValue] = data
+        end
+      end
     end
   end
   //############################################################################
@@ -742,9 +741,13 @@ function tabServerRoles( sheet )
 
       local roleSwepScrollBar = createVGUI( "DScrollPanel", swepMenu, 2000-60, 2000-60, swepList.x, swepList.y )
       for k, weapon in pairs ( weapons.GetList() ) do
-        if weapon.WorldModel != nil and !string.find( string.lower( weapon.ClassName ), "npc") and !string.find( string.lower( weapon.ClassName ), "base") and !string.find( string.lower( weapon.ClassName ), "ttt") then
+        if !string.find( string.lower( weapon.ClassName ), "npc") and !string.find( string.lower( weapon.ClassName ), "base") and !string.find( string.lower( weapon.ClassName ), "ttt") then
           local model3D = createVGUI( "DModelPanel", roleSwepScrollBar, 256, 256, swepList.x, swepList.y )
-          model3D:SetModel( weapon.WorldModel )
+          if weapon.WorldModel != nil then
+            model3D:SetModel( weapon.WorldModel )
+            model3D:SetLookAt( Vector( 0, 0, 0 ) )
+            model3D:SetCamPos( Vector( 0, 0, 0 ) + Vector( -30, 0, 20 ) )
+          end
           if weapon.PrintName != nil then
             model3D.PrintName = weapon.PrintName
           end
@@ -753,9 +756,6 @@ function tabServerRoles( sheet )
           else
             model3D.ClassName = ""
           end
-
-          model3D:SetLookAt( Vector( 0, 0, 0 ) )
-          model3D:SetCamPos( Vector( 0, 0, 0 ) + Vector( -30, 0, 20 ) )
 
           model3D.button = vgui.Create( "DButton", model3D )
           model3D.button:SetSize( model3D:GetSize() )

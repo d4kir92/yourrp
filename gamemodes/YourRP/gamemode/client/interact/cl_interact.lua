@@ -8,7 +8,6 @@ function openInteractMenu( steamID )
 end
 
 net.Receive( "openInteractMenu", function ()
-  _menuIsOpen = 1
   local isInstructor = net.ReadBool()
 
   local promoteable = net.ReadBool()

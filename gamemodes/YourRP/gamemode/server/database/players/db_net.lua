@@ -11,34 +11,37 @@ util.AddNetworkString( "updateFirstName" )
 util.AddNetworkString( "updateSurName" )
 
 net.Receive( "updateSurName", function( len, ply )
-  local _surName = string.Explode( " ", net.ReadString() )
-  local _result = dbUpdate( "yrp_players", "nameSur = '" .. _surName[1] .. "'", "steamID = '" .. ply:SteamID() .. "'" )
-  ply:SetNWString( "SurName", _surName[1] )
+  local _surName = string.Replace( net.ReadString(), " ", "" )
+  local _result = dbUpdate( "yrp_players", "nameSur = '" .. _surName .. "'", "steamID = '" .. ply:SteamID() .. "'" )
+  ply:SetNWString( "SurName", _surName )
 end)
 
 net.Receive( "updateFirstName", function( len, ply )
-  local _firstName = string.Explode( " ", net.ReadString() )
-  local _result = dbUpdate( "yrp_players", "nameFirst = '" .. _firstName[1] .. "'", "steamID = '" .. ply:SteamID() .. "'" )
-  ply:SetNWString( "FirstName", _firstName[1] )
+  local _firstName = string.Replace( net.ReadString(), " ", "" )
+  local _result = dbUpdate( "yrp_players", "nameFirst = '" .. _firstName .. "'", "steamID = '" .. ply:SteamID() .. "'" )
+  ply:SetNWString( "FirstName", _firstName )
 end)
 
 net.Receive( "getCharakterList", function( len, ply )
   local _tmpPlyList = dbSelect( "yrp_players", "*", "steamID = '" .. ply:SteamID() .. "'" )
-
-  net.Start( "getCharakterList" )
-    net.WriteTable( _tmpPlyList )
-  net.Send( ply )
+  if _tmpPlyList != nil then
+    net.Start( "getCharakterList" )
+      net.WriteTable( _tmpPlyList )
+    net.Send( ply )
+  end
 end)
 
 net.Receive( "getPlyList", function( len, ply )
   local _tmpPlyList = dbSelect( "yrp_players", "*", nil )
   local _tmpRoleList = dbSelect( "yrp_roles", "*", nil )
   local _tmpGroupList = dbSelect( "yrp_groups", "*", nil )
-  net.Start( "getPlyList" )
-    net.WriteTable( _tmpPlyList )
-    net.WriteTable( _tmpRoleList )
-    net.WriteTable( _tmpGroupList )
-  net.Send( ply )
+  if _tmpPlyList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
+    net.Start( "getPlyList" )
+      net.WriteTable( _tmpPlyList )
+      net.WriteTable( _tmpRoleList )
+      net.WriteTable( _tmpGroupList )
+    net.Send( ply )
+  end
 end)
 
 net.Receive( "giveRole", function( len, ply )
@@ -135,16 +138,16 @@ net.Receive( "wantRole", function( len, ply )
 end)
 
 net.Receive( "setPlayerValues", function( len, ply )
-  local tmpSurname = net.ReadString()
-  local tmpFirstname = net.ReadString()
-  local tmpGender = net.ReadString()
+  local tmpSurname = string.Replace( net.ReadString(), " ", "" )
+  local tmpFirstname = string.Replace( net.ReadString(), " ", "" )
+  local tmpGender = string.Replace( net.ReadString(), " ", "" )
 
   local _result = sql.Query( "SELECT * FROM yrp_players WHERE steamID = '" .. ply:SteamID() .. "'" )
   if _result != nil then
     if tmpSurname != "" and tmpFirstname != "" and tmpGender != "" then
       local query = ""
       query = query .. "UPDATE yrp_players "
-      query = query .. "SET nameFirst = ' " .. tmpFirstname .. "', "
+      query = query .. "SET nameFirst = '" .. tmpFirstname .. "', "
       query = query .. "nameSur = '" .. tmpSurname .. "', "
       query = query .. "gender = '" .. tmpGender .. "' "
       query = query .. "WHERE steamID = '" .. ply:SteamID() .. "'"

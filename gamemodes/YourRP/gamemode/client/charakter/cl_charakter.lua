@@ -12,6 +12,7 @@ local sendFirstname = ""
 local sendGender = "male"
 
 function openCharakterMenu()
+  _menuIsOpen = 1
   local w = 800
   local h = 680
   local window = createVGUI( "DFrame", nil, w, h, 3840/2 - w/2, 2160/2 - h/2 )
@@ -80,6 +81,7 @@ function openCharakterMenu()
       net.WriteString( sendFirstname )
       net.WriteString( sendGender )
     net.SendToServer()
+    _menuIsOpen = 0
     window:Close()
   end
 

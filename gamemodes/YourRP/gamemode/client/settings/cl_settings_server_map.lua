@@ -24,18 +24,27 @@ net.Receive( "getMapList", function( len )
   end
 end)
 
-function tabServerMap( sheet )
-  local ply = LocalPlayer()
-
-  sv_mapPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( "Map", sv_mapPanel, "icon16/map.png" )
-  function sv_mapPanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrpsettings.color.background )
-  end
-
-  local _mapPanel = createVGUI( "DPanel", sv_mapPanel, 256, 256, 10, 10 )
+function getMapPNG()
   local _mapName = string.lower( game.GetMap() )
   local _mapPicturePath = "maps/" .. _mapName .. ".png"
+  local _mapPictureDesti = _mapPicturePath
+
+  local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
+  if file.Exists( _mapPicturePath, "GAME" ) then
+    _mapPNG =  Material( "../" .. _mapPicturePath, "noclamp smooth" )
+  else
+    _mapPicturePath = "maps/thumb/" .. _mapName .. ".png"
+    if file.Exists( _mapPicturePath, "GAME" ) then
+      _mapPNG = Material( "../" .. _mapPicturePath, "noclamp smooth" )
+    end
+  end
+  return _mapPNG
+end
+
+function getCopyMapPNG()
+  local _mapName = string.lower( game.GetMap() )
+  local _mapPicturePath = "maps/" .. _mapName .. ".png"
+  local _mapPictureDesti = _mapPicturePath
 
   local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
   if file.Exists( _mapPicturePath, "GAME" ) then
@@ -44,9 +53,33 @@ function tabServerMap( sheet )
     end
     file.Write( _mapPicturePath, file.Read( _mapPicturePath, "GAME" ) )
     if file.Exists( _mapPicturePath, "DATA" ) then
-  		_mapPNG = Material( "../data/" .. _mapPicturePath, "noclamp smooth" )
+  		_mapPNG =  Material( "../data/" .. _mapPicturePath, "noclamp smooth" )
+    end
+  else
+    _mapPicturePath = "maps/thumb/" .. _mapName .. ".png"
+    if file.Exists( _mapPicturePath, "GAME" ) then
+      if !file.Exists( "maps", "DATA" ) then
+        file.CreateDir( "maps" )
+      end
+      file.Write( _mapPictureDesti, file.Read( _mapPicturePath, "GAME" ) )
+      if file.Exists( _mapPictureDesti, "DATA" ) then
+    		_mapPNG = Material( "../data/" .. _mapPictureDesti, "noclamp smooth" )
+      end
     end
   end
+  return _mapPNG
+end
+
+function tabServerMap( sheet )
+  local ply = LocalPlayer()
+
+  sv_mapPanel = vgui.Create( "DPanel", sheet )
+  sheet:AddSheet( "Map", sv_mapPanel, "icon16/map.png" )
+  function sv_mapPanel:Paint( pw, ph )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrpsettings.color.background )
+  end
+  local _mapPanel = createVGUI( "DPanel", sv_mapPanel, 256, 256, 10, 10 )
+  local _mapPNG = getMapPNG()
   function _mapPanel:Paint( pw, ph )
     surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( _mapPNG	)

@@ -48,10 +48,16 @@ util.AddNetworkString( "promotePlayer" )
 util.AddNetworkString( "demotePlayer" )
 
 util.AddNetworkString( "getAllRoles" )
+
+util.AddNetworkString( "updateGroups" )
 //##############################################################################
 
 //##############################################################################
 //net.Receives
+net.Receive( "updateGroups", function( len, ply )
+  updateGroupTable()
+end)
+
 net.Receive( "getAllRoles", function( len, ply )
   local _allRoles = dbSelect( "yrp_roles", "*", nil )
   net.Start( "getAllRoles" )
@@ -250,7 +256,7 @@ net.Receive( "updateRolePreRole", function( len, ply )
   local tmpUniqueID = net.ReadInt( 16 )
   local tmpPreRole = net.ReadInt( 16 )
 
-  sql.Query( "UPDATE yrp_roles SET prerole = " .. tmpPreRole .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
+  local _result = sql.Query( "UPDATE yrp_roles SET prerole = " .. tmpPreRole .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
 end)
 
 net.Receive( "updateRolePowerJump", function( len, ply )
@@ -428,6 +434,7 @@ net.Receive( "updateUpperGroup", function( len, ply )
   local tmpUpperGroupUniqueID = net.ReadInt( 16 )
 
   local result = sql.Query( "UPDATE yrp_groups SET uppergroup = " .. tmpUpperGroupUniqueID .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
+  updateGroupTable()
 end)
 
 net.Receive( "updateGroupColor", function( len, ply )
@@ -445,6 +452,7 @@ net.Receive( "updateGroupName", function( len, ply )
   for k, v in pairs(player.GetAll()) do
     updateHud( v )
   end
+  updateGroupTable()
 end)
 
 net.Receive( "newGroup", function( len, ply )
@@ -458,6 +466,7 @@ net.Receive( "newGroup", function( len, ply )
   net.Start( "getGroups" )
     net.WriteTable( sql.Query( "SELECT * FROM yrp_groups" ) )
   net.Send( ply )
+  updateGroupTable()
 end)
 
 net.Receive( "removeGroup", function( len, ply )
@@ -477,6 +486,7 @@ net.Receive( "removeGroup", function( len, ply )
     printGM( "db", ply:Nick() .. " tried to delete an unremoveable Group: " .. tmpSelect[1].groupID .. " (ID: " .. tmpSelect[1].uniqueID .. ")" )
     ply:PrintMessage( HUD_PRINTCENTER, "You cant delete this!" )
   end
+  updateGroupTable()
 end)
 
 net.Receive( "getGroups", function( len, ply )

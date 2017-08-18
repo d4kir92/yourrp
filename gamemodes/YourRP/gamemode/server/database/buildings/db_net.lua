@@ -14,6 +14,7 @@ util.AddNetworkString( "removeOwner" )
 util.AddNetworkString( "sellBuilding" )
 
 util.AddNetworkString( "createKey" )
+util.AddNetworkString( "resetKey" )
 
 util.AddNetworkString( "lockDoor" )
 
@@ -43,26 +44,36 @@ function lockDoor( ent, nr )
   end
 end
 
-function createKey( id )
+function createKey( ent, id )
   local _tmp = id
   _tmp = _tmp .. math.Round( math.Rand( 100000, 999999 ), 0 )
+  ent.keynr = _tmp
+  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = " .. _tmp, "buildingID = " .. id )
   return _tmp
 end
 
 function getNumber( ent, id )
   if ent.keynr == nil then
-    ent.keynr = createKey( id )
+    ent.keynr = createKey( ent, id )
   end
   return ent.keynr
 end
 
+net.Receive( "resetKey", function( len, ply )
+  local _door = net.ReadEntity()
+  local _tmpBuildingID = net.ReadInt( 16 )
+
+  createKey( _door, _tmpBuildingID )
+end)
+
 net.Receive( "createKey", function( len, ply )
+  local _door = net.ReadEntity()
   local _tmpBuildingID = net.ReadInt( 16 )
 
   local _keynr = -1
   for k, v in pairs( ply:GetWeapons() ) do
     if v.ClassName == "yrp_key" then
-      _keynr = getNumber( v, _tmpBuildingID )
+      _keynr = getNumber( _door, _tmpBuildingID )
       local _oldkeynrs = dbSelect( "yrp_players", "keynrs", "SteamID = '" .. ply:SteamID() .. "'" )
       local _tmpTable = string.Explode( ",", _oldkeynrs[1].keynrs )
       if !table.HasValue( _tmpTable, _keynr ) then
@@ -78,12 +89,11 @@ net.Receive( "createKey", function( len, ply )
         _newkeynrs = _newkeynrs .. _keynr
         dbUpdate( "yrp_players", "keynrs = '" .. _newkeynrs .. "'", "SteamID = '" .. ply:SteamID() .. "'" )
       else
-        //printGM( "note", "Key already exists")
+        printGM( "note", "Key already exists")
       end
       break
     end
   end
-  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = " .. _keynr, "buildingID = " .. _tmpBuildingID )
 end)
 
 net.Receive( "removeOwner", function( len, ply )
@@ -91,12 +101,13 @@ net.Receive( "removeOwner", function( len, ply )
   local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
   dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerSteamID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
-  local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
 
+  local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _tmpDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
       v:SetNWString( "owner", "" )
       v:SetNWString( "ownerGroup", "" )
+      createKey( v, _tmpBuildingID )
     end
   end
 end)
@@ -112,6 +123,7 @@ net.Receive( "sellBuilding", function( len, ply )
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
       v:SetNWString( "owner", "" )
       v:SetNWString( "ownerGroup", "" )
+      createKey( v, _tmpBuildingID )
       v:Fire("Unlock","",0)
       dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
     end
@@ -169,12 +181,35 @@ net.Receive( "changeBuildingPrice", function( len, ply )
   dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "price = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
 end)
 
+
+function hasDoors( id )
+  local _allDoors = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  for k, v in pairs( _allDoors ) do
+    if tonumber( v.buildingID ) == tonumber( id ) then
+      return true
+    end
+  end
+  return false
+end
+
+function lookForEmptyBuildings()
+  local _allBuildings = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+
+  for k, v in pairs( _allBuildings ) do
+    if !hasDoors( v.uniqueID ) then
+      dbDeleteFrom( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "uniqueID = " .. tonumber( v.uniqueID ) )
+    end
+  end
+end
+
 net.Receive( "changeBuildingID", function( len, ply )
   local _tmpDoor = net.ReadEntity()
   local _tmpBuildingID = net.ReadInt( 16 )
 
   _tmpDoor:SetNWInt( "buildingID", tonumber( _tmpBuildingID ) )
   dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID = " .. tonumber( _tmpBuildingID ) , "uniqueID = " .. _tmpDoor:GetNWInt( "uniqueID" ) )
+
+  lookForEmptyBuildings()
 end)
 
 net.Receive( "changeBuildingName", function( len, ply )
@@ -199,13 +234,20 @@ net.Receive( "getBuildingInfo", function( len, ply )
   local _tmpDoorID = net.ReadInt( 16 )
   local _tmpBuildingID = net.ReadInt( 16 )
   if _tmpBuildingID != nil then
-    local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-    if allowedToUseDoor( _tmpBuildingID, ply ) then
+    local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+    if _tmpTable != nil then
+      if allowedToUseDoor( _tmpBuildingID, ply ) then
+        net.Start( "getBuildingInfo" )
+          net.WriteBool( true )
+          net.WriteInt( _tmpDoorID, 16 )
+          net.WriteInt( _tmpBuildingID, 16 )
+          net.WriteTable( _tmpTable )
+        net.Send( ply )
+      end
+    else
       net.Start( "getBuildingInfo" )
-        net.WriteInt( _tmpDoorID, 16 )
-        net.WriteInt( _tmpBuildingID, 16 )
-        net.WriteTable( _tmpTable )
+        net.WriteBool( false )
       net.Send( ply )
     end
   end

@@ -1,3 +1,4 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 //db_general.lua
 
 include( "general/db_net.lua")
@@ -28,10 +29,6 @@ function dbGeneralInit()
 
   if dbSelect( "yrp_general", "name", "name = 'gamemodename'" ) == nil then
     dbInsertInto( "yrp_general", "name, value", "'gamemodename', 'YourRP'" )
-  end
-
-  if dbSelect( "yrp_general", "name", "name = 'startmoney'" ) == nil then
-    dbInsertInto( "yrp_general", "name, value", "'startmoney', '100'" )
   end
 
   if dbSelect( "yrp_general", "name", "name = 'restart_time'" ) == nil then

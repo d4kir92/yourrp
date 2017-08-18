@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //db_database.lua
 
 //##############################################################################
@@ -21,20 +23,25 @@ function dbTableExists( dbTable )
 end
 
 function dbSelect( dbTable, dbColumns, dbWhere )
-  local q = "SELECT "
-  q = q .. dbColumns
-  q = q .. " FROM "
-  q = q .. dbTable
-  if dbWhere != nil then
-    q = q .. " WHERE "
-    q = q .. dbWhere
-  end
-  local _result = sql.Query( q )
-  if _result == nil or _result == false then
-    printGM( "note", dbTable .. " is empty or Select Failed.")
-    return nil
-  else
-    return _result
+  if dbTableExists( dbTable ) then
+    local q = "SELECT "
+    q = q .. dbColumns
+    q = q .. " FROM "
+    q = q .. dbTable
+    if dbWhere != nil then
+      q = q .. " WHERE "
+      q = q .. dbWhere
+    end
+    local _result = sql.Query( q )
+    if _result == nil then
+      printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
+      return _result
+    elseif _result == false then
+      printERROR( dbTable .. ": " .. q )
+      return _result
+    else
+      return _result
+    end
   end
 end
 
@@ -120,8 +127,10 @@ include( "database/db_questions.lua" )
 include( "database/db_players.lua" )
 include( "database/db_roles.lua" )
 include( "database/db_map.lua" )
+include( "database/db_money.lua" )
 include( "database/db_buildings.lua" )
 include( "database/db_role_whitelist.lua" )
+include( "database/db_buy.lua" )
 //##############################################################################
 
 //##############################################################################
@@ -129,9 +138,11 @@ function dbInitDatabase()
   dbGeneralInit()
   dbQuestionsInit()
   dbRolesInit()
+  dbMoneyInit()
   dbMapInit()
   dbBuildingsInit()
   dbRoleWhitelistInit()
+  dbBuyInit()
 
   dbPlayersInit()
 end

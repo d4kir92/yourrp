@@ -22,7 +22,6 @@ function drawBackground( x, y, w, h, br )
 end
 
 function openSettings()
-  _menuIsOpen = 1
   settingsOpen = 1
 
   settingsWindow = vgui.Create( "DFrame" )
@@ -32,7 +31,6 @@ function openSettings()
   settingsWindow:ShowCloseButton( true )
   function settingsWindow:OnClose()
     gui.EnableScreenClicker( false )
-    settingsOpen = 0
     if modelSelector != nil then
       modelSelector:Remove()
     end
@@ -69,5 +67,4 @@ function openSettings()
   end
 
   settingsWindow:MakePopup()
-  gui.EnableScreenClicker( true )
 end

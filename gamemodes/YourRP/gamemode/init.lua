@@ -1,3 +1,20 @@
+/*
+Copyright (C) 2017 Arno Zura
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see < http://www.gnu.org/licenses/ >.
+*/
+
 //init.lua
 //##############################################################################
 //AddCSLuaFiles
@@ -6,9 +23,14 @@ AddCSLuaFile( "shared_pres.lua" )
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
-AddCSLuaFile( "client/db_database.lua" )
+AddCSLuaFile( "darkrp.lua" )
+
+AddCSLuaFile( "client/database/db_database.lua" )
+
+AddCSLuaFile( "client/cl_player.lua" )
 
 AddCSLuaFile( "client/cl_fonts.lua" )
+AddCSLuaFile( "client/cl_scoreboard.lua" )
 AddCSLuaFile( "client/cl_think.lua" )
 AddCSLuaFile( "client/cl_chat.lua" )
 
@@ -32,6 +54,7 @@ AddCSLuaFile( "client/settings/cl_settings_server_questions.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_roles.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_give.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_map.lua" )
+AddCSLuaFile( "client/settings/cl_settings_server_money.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_whitelist.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_buysystem.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_moneysystem.lua" )
@@ -41,6 +64,7 @@ AddCSLuaFile( "client/settings/cl_settings_server_jailsystem.lua" )
 AddCSLuaFile( "client/cl_hud.lua" )
 AddCSLuaFile( "client/hud/cl_hud_map.lua" )
 AddCSLuaFile( "client/hud/cl_hud_player.lua" )
+AddCSLuaFile( "client/hud/cl_hud_crosshair.lua" )
 AddCSLuaFile( "client/hud/cl_hud_view.lua" )
 
 AddCSLuaFile( "client/charakter/cl_charakter.lua" )
@@ -57,6 +81,8 @@ AddCSLuaFile( "client/door/cl_door_options.lua" )
 //##############################################################################
 //Includes
 include( "shared_pres.lua" )
+
+include( "darkrp.lua" )
 
 include( "server/sv_sizer.lua" )
 
@@ -84,9 +110,9 @@ net.Receive( "restartServer", function( len, ply )
 
   local countdown = net.ReadInt( 16 )
   timer.Create( "timerRestartServer", 1, 0, function()
-		local message = "Restarting Server in " .. countdown .. " seconds"
+		local message = "Updating Server in " .. countdown .. " seconds"
 		if countdown == 0 then
-			message = "Server is restarting."
+			message = "Server is updating."
 		end
     if countdown > 10 then
       if (countdown%10) == 0 then
@@ -100,7 +126,7 @@ net.Receive( "restartServer", function( len, ply )
     countdown = countdown - 1
     if countdown == -1 then
       timer.Remove( "timerRestartServer" )
-      game.ConsoleCommand( "map " .. string.lower( game.GetMap() ) .. "\n" )
+      game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
     end
   end)
 end)
@@ -135,13 +161,22 @@ function GM:ShutDown()
 end
 
 function GM:GetFallDamage( ply, speed )
-	return ( speed / 8 )
+  local _damage = speed / 8
+  if speed > ply:GetModelScale()*120 then
+    return _damage
+  else
+    return 0
+  end
 end
 
-function GM:Initialize()
-  timer.Simple( 1, function()
-    addMapDoors()
+function GM:InitPostEntity()
+  printGM( "note", "InitPostEntity()" )
+  timer.Simple( 2, function()
+    checkMapDoors()
+  end)
 
+  timer.Simple( 4, function()
     getMapCoords()
   end)
+
 end

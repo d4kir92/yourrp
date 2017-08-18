@@ -33,10 +33,12 @@ function addKeys( ply )
     for k, v in pairs( ply:GetWeapons() ) do
       if v.ClassName == "yrp_key" then
         local _tmpTable = dbSelect( "yrp_players", "keynrs", "SteamID = '" .. ply:SteamID() .. "'" )
-        _tmpTable = string.Explode( ",", _tmpTable[1].keynrs )
-        for l, w in pairs( _tmpTable ) do
-          if w != nil and w != "" then
-            v:AddKeyNr( w )
+        if _tmpTable != nil then
+          _tmpTable = string.Explode( ",", _tmpTable[1].keynrs )
+          for l, w in pairs( _tmpTable ) do
+            if w != nil and w != "" then
+              v:AddKeyNr( w )
+            end
           end
         end
       end
@@ -45,13 +47,36 @@ function addKeys( ply )
   end
 end
 
+function searchForDoors()
+  printGM( "db", "Search Map for Doors/Buildings" )
+  local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
+  for k, v in pairs( _allPropDoors ) do
+    dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+
+    local _tmpBuildingTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+    dbInsertInto( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
+
+    local _tmpDoorsTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  end
+  printGM( "db", "Done finding them (" .. #_allPropDoors .. " found)" )
+  return #_allPropDoors
+end
+
 function loadDoors()
   printGM( "note", "loadDoors start!")
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   local _tmpDoors = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
-  for k, v in pairs( _allPropDoors ) do
-    v:SetNWInt( "buildingID", tonumber( _tmpDoors[k].buildingID ) )
-    v:SetNWInt( "uniqueID", k )
+  if _tmpDoors != nil then
+    for k, v in pairs( _allPropDoors ) do
+      if _tmpDoors[k] != nil then
+        v:SetNWInt( "buildingID", tonumber( _tmpDoors[k].buildingID ) )
+        v:SetNWInt( "uniqueID", k )
+      else
+        printGM( "note", "more doors, then in list!" )
+      end
+    end
+  else
+    printGM( "note", "_doors empty!" )
   end
 
   local _tmpBuildings = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
@@ -78,29 +103,16 @@ function loadDoors()
   printGM( "note", "loadDoors complete!")
 end
 
-function addMapDoors()
+function checkMapDoors()
+  printGM( "db", "checkMapDoors()" )
   local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
   local _tmpTable2 = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
-  if _tmpTable != nil and _tmpTable2 != nil then
-    if #_tmpTable == 0 or #_tmpTable2 == 0 then
-      printGM( "db", "NO doors found! Looking for them" )
-      local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
-      for k, v in pairs( _allPropDoors ) do
-        dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
-
-        local _tmpBuildingTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
-        dbInsertInto( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
-
-        local _tmpDoorsTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
-      end
-      printGM( "db", "Done finding them (" .. #_allPropDoors .. " found)" )
-    else
-      printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: found Doors" )
-    end
+  local amountDoors = 0
+  if _tmpTable == nil or _tmpTable2 == nil then
+    amountDoors = searchForDoors()
   else
-    printGM( "note", "doors or building nil" )
+    printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: found Doors" )
   end
 
-  //load Doors
   loadDoors()
 end

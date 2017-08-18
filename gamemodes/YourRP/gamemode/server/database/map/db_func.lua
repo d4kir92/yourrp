@@ -1,7 +1,7 @@
 
 function teleportToSpawnpoint( ply )
   local _tmpTable = dbSelect( "yrp_players", "roleID", "steamID = '" .. ply:SteamID() .. "'" )
-  if _tmpTable != false then
+  if _tmpTable != false and _tmpTable != nil then
     local _tmpRoleID = _tmpTable[1].roleID
 
     _tmpTable = dbSelect( "yrp_roles", "groupID", "uniqueID = " .. _tmpRoleID )

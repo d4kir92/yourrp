@@ -1,3 +1,4 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 //db_players.lua
 
 include( "players/db_net.lua" )
@@ -9,6 +10,7 @@ function dbPlayersAddValues( dbTable )
   sqlAddColumn( dbTable, "nameFirst", "TEXT    DEFAULT 'ID_FIRSTNAME'" )
   sqlAddColumn( dbTable, "nameSur", "TEXT    DEFAULT 'ID_SURNAME'" )
   sqlAddColumn( dbTable, "money", "INT     DEFAULT 0" )
+  sqlAddColumn( dbTable, "moneybank", "INT     DEFAULT 500" )
   sqlAddColumn( dbTable, "position", "TEXT" )
   sqlAddColumn( dbTable, "angle", "TEXT" )
   sqlAddColumn( dbTable, "gender", "TEXT    DEFAULT 'male'" )
