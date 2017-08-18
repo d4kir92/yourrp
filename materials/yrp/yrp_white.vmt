@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "yrp/yrp_white"
+	"$translucent"   "1"
+	"$translucency" "1"
+}
