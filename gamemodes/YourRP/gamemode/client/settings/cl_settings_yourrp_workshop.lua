@@ -12,5 +12,5 @@ function tabWorkshop( sheet )
   local form = vgui.Create( "HTML", clientPanel )
   form:SetSize( calculateToResu( 2070 ), calculateToResu( 2070 ) )
   form:SetPos( calculateToResu( 5 ), calculateToResu( 5 ) )
-  form:OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/?id=917939673" )
+  form:OpenURL( "http:/steamcommunity.com/sharedfiles/filedetails/?id=1114204152" )
 end
