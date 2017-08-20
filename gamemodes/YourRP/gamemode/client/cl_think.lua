@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //cl_think.lua
 
 local chatisopen = 0
@@ -95,7 +97,7 @@ function useFunction( string )
 				end*/
 			end
 		elseif string == "openDoorOptions" then
-			if eyeTrace.Entity:GetClass() == "prop_door_rotating" then
+			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" then
 				if _doorWindow != nil and keys["_hold"] == 0 then
 					keys["_hold"] = 1
 					_doorWindow:Remove()

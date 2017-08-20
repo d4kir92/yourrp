@@ -1,4 +1,5 @@
 //Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //db_role_whitelist.lua
 
 include( "whitelist/db_net.lua" )
@@ -12,20 +13,26 @@ function dbWhitelistAddValues( dbTable )
 end
 
 function dbRoleWhitelistInit()
-  //sql.Query( "DROP TABLE yrp_role_whitelist" )
+  local dbName = "yrp_role_whitelist"
 
-  if sql.TableExists( "yrp_role_whitelist" ) then
-    printGM( "db", "yrp_role_whitelist exists" )
+
+  printGMPre( "db", yrp.loaddb .. dbName )
+  if sql.TableExists( dbName ) then
+    printGM( "db", dbName .. " exists" )
   else
+    printGM( "note", dbName .. " not exists" )
     local query = ""
-    query = query .. "CREATE TABLE yrp_role_whitelist ( "
+    query = query .. "CREATE TABLE " .. dbName .. " ( "
     query = query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     query = query .. " )"
     sql.Query( query )
-		if sql.TableExists( "yrp_role_whitelist" ) then
-      dbWhitelistAddValues( "yrp_role_whitelist" )
+		if sql.TableExists( dbName ) then
+      printGM( "db", dbName .. yrp.successdb )
+      dbWhitelistAddValues( dbName )
 		else
-			printError( "CREATE TABLE yrp_role_whitelist fail" )
+			printError( "CREATE TABLE " .. dbName .. " fail" )
+      retryLoadDatabase()
 		end
   end
+  printGMPos()
 end

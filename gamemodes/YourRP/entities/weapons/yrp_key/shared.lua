@@ -55,20 +55,3 @@ SWEP.numbers = {}
 function SWEP:AddKeyNr( nr )
   table.insert( self.numbers, nr )
 end
-
-//Throw an office chair on primary attack
-function SWEP:PrimaryAttack()
-	//Call the throw attack function, with the office chair model
-  for k, v in pairs( self.numbers ) do
-    unlockDoor( self.Owner:GetEyeTrace().Entity, v )
-  end
-end
-
-//Throw a wooden chair on secondary attack
-function SWEP:SecondaryAttack()
-
-	//Call the throw attack function, this time with the wooden chair model
-  for k, v in pairs( self.numbers ) do
-    lockDoor( self.Owner:GetEyeTrace().Entity, v )
-  end
-end

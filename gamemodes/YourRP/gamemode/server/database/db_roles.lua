@@ -1,4 +1,5 @@
 //Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //db_roles.lua
 
 include( "roles/db_net.lua" )
@@ -33,14 +34,16 @@ function dbRolesAddValues()
 end
 
 function dbRolesInit()
-  //sql.Query( "DROP TABLE yrp_roles")
-  //sql.Query( "DROP TABLE yrp_groups")
+  local dbName = "yrp_groups"
 
-  if sql.TableExists( "yrp_groups" ) then
-    printGM( "db", "yrp_groups exists" )
+
+  printGMPre( "db", yrp.loaddb .. dbName )
+  if sql.TableExists( dbName ) then
+    printGM( "db", dbName .. " exists" )
   else
+    printGM( "note", dbName .. " not exists" )
     local query = "CREATE TABLE "
-    query = query .. "yrp_groups ("
+    query = query .. dbName .. " ("
     query = query .. "uniqueID        INTEGER         PRIMARY KEY autoincrement"
     query = query .. ", groupID       TEXT            UNIQUE"
     query = query .. ", color         TEXT            DEFAULT '0,0,0'"
@@ -50,32 +53,49 @@ function dbRolesInit()
     query = query .. ", FOREIGN KEY(uppergroup) REFERENCES yrp_groups(uniqueID)"
     query = query .. ")"
     sql.Query( query )
-    if sql.TableExists( "yrp_groups" ) then
-			printGM( "db", "CREATE TABLE yrp_groups success" )
-      sql.Query( "INSERT INTO yrp_groups( uniqueID, groupID, color, uppergroup, friendlyfire, removeable ) VALUES ( 1, 'Civilians', '0,0,255', -1, 1, 0 )" )
+    if sql.TableExists( dbName ) then
+			printGM( "db", dbName .. yrp.successdb )
+      sql.Query( "INSERT INTO " .. dbName .. "( uniqueID, groupID, color, uppergroup, friendlyfire, removeable ) VALUES ( 1, 'Civilians', '0,0,255', -1, 1, 0 )" )
 		else
-			printError( "CREATE TABLE yrp_groups fail" )
+			printError( "CREATE TABLE " .. dbName .. " fail" )
+      retryLoadDatabase()
 		end
   end
+  if dbSelect( dbName, "*", "uniqueID = 1" ) == nil then
+    printGM( "note", dbName .. " has not the default group" )
+    sql.Query( "INSERT INTO " .. dbName .. "( uniqueID, groupID, color, uppergroup, friendlyfire, removeable ) VALUES ( 1, 'Civilians', '0,0,255', -1, 1, 0 )" )
+  end
+  printGMPos()
 
-  if sql.TableExists( "yrp_roles" ) then
-    printGM( "db", "yrp_roles exists" )
+  local dbName2 = "yrp_roles"
+
+  printGMPre( "db", yrp.loaddb .. dbName2 )
+  if sql.TableExists( dbName2 ) then
+    printGM( "db", dbName2 .. " exists" )
   else
+    printGM( "note", dbName2 .. " not exists" )
     local query = "CREATE TABLE "
-    query = query .. "yrp_roles ("
+    query = query .. dbName2 .. " ("
     query = query .. "uniqueID        INTEGER         PRIMARY KEY autoincrement )"
     sql.Query( query )
 
     dbRolesAddValues()
 
-		if sql.TableExists( "yrp_roles" ) then
-			printGM( "db", "CREATE TABLE yrp_roles success" )
-      local result = sql.Query( "INSERT INTO yrp_roles( uniqueID, roleID, color, removeable ) VALUES ( 1, 'Civilians', '0,0,0', 0 )" )
+		if sql.TableExists( dbName2 ) then
+			printGM( "db", dbName .. yrp.successdb )
+      local result = sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, removeable ) VALUES ( 1, 'Civilians', '0,0,0', 0 )" )
 		else
-			printError( "CREATE TABLE yrp_roles fail" )
+			printError( "CREATE TABLE " .. dbName2 .. " fail" )
+      retryLoadDatabase()
 		end
   end
 
+  if dbSelect( dbName2, "*", "uniqueID = 1" ) == nil then
+    printGM( "note", dbName2 .. " has not the default role" )
+    sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, removeable ) VALUES ( 1, 'Civilians', '0,0,0', 0 )" )
+  end
+
   dbRolesAddValues()
+  printGMPos()
 end
 //##############################################################################

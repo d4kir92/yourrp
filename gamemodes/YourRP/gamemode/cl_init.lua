@@ -111,6 +111,9 @@ end)
 function GM:InitPostEntity()
   printGM( "note", "All entities are loaded.")
   playerready = 1
+
+  loadCompleteHud()
+  
 	//net.Start( "clientFinished" )
   //net.SendToServer()
 end

@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //cl_settings_server_general.lua
 
 local _advertname = "NULL"
@@ -119,5 +121,61 @@ function tabServerGeneral( sheet )
     net.Start( "cancelRestartServer" )
     net.SendToServer()
     settingsWindow:Close()
+  end
+
+  local sv_generalHardReset = vgui.Create( "DButton", sv_generalPanel )
+  sv_generalHardReset:SetSize( calculateToResu( 260 ), calculateToResu( 50 ) )
+  sv_generalHardReset:SetPos( calculateToResu( 5 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalHardReset:SetText( "Hard Reset Database")
+  function sv_generalHardReset:Paint( pw, ph )
+    local color = Color( 255, 0, 0, 200 )
+    if sv_generalHardReset:IsHovered() then
+      color = Color( 255, 255, 0, 200 )
+    end
+    draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+  end
+  function sv_generalHardReset:DoClick()
+    local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+    _tmpFrame:Center()
+    _tmpFrame:SetTitle( "ARE YOU SURE???" )
+    function _tmpFrame:Paint( pw, ph )
+      local color = Color( 0, 0, 0, 200 )
+      draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+    end
+
+    local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
+    sv_generalHardResetSure:SetSize( calculateToResu( 300 ), calculateToResu( 50 ) )
+    sv_generalHardResetSure:SetPos( calculateToResu( 10 ), calculateToResu( 50 ) )
+    sv_generalHardResetSure:SetText( "Yes: DELETE DATABASE" )
+    function sv_generalHardResetSure:DoClick()
+      net.Start( "hardresetdatabase" )
+      net.SendToServer()
+      _tmpFrame:Close()
+    end
+    function sv_generalHardResetSure:Paint( pw, ph )
+      local color = Color( 255, 0, 0, 200 )
+      if sv_generalHardResetSure:IsHovered() then
+        color = Color( 255, 255, 0, 200 )
+      end
+      draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+    end
+
+    local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
+    sv_generalHardResetNot:SetSize( calculateToResu( 300 ), calculateToResu( 50 ) )
+    sv_generalHardResetNot:SetPos( calculateToResu( 10 + 300 + 10 ), calculateToResu( 50 ) )
+    sv_generalHardResetNot:SetText( "No: do nothing" )
+    function sv_generalHardResetNot:DoClick()
+      _tmpFrame:Close()
+    end
+    function sv_generalHardResetNot:Paint( pw, ph )
+      local color = Color( 0, 255, 0, 200 )
+      if sv_generalHardResetNot:IsHovered() then
+        color = Color( 255, 255, 0, 200 )
+      end
+      draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+    end
+
+    settingsWindow:Close()
+    _tmpFrame:MakePopup()
   end
 end

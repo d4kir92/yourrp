@@ -1,4 +1,5 @@
 //Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //db_players.lua
 
 include( "players/db_net.lua" )
@@ -22,21 +23,27 @@ function dbPlayersAddValues( dbTable )
 end
 
 function dbPlayersInit()
-  //sql.Query( "DROP TABLE yrp_players")
+  local dbName = "yrp_players"
 
-  if sql.TableExists( "yrp_players" ) then
-    printGM( "db", "yrp_players exists" )
+
+  printGMPre( "db", yrp.loaddb .. dbName )
+  if sql.TableExists( dbName ) then
+    printGM( "db", dbName .. " exists" )
   else
+    printGM( "note", dbName .. " not exists" )
     local query = ""
-    query = query .. "CREATE TABLE yrp_players ( "
+    query = query .. "CREATE TABLE " .. dbName .. " ( "
     query = query .. "uniqueID  INTEGER PRIMARY KEY autoincrement"
     query = query .. " )"
     sql.Query( query )
-		if sql.TableExists( "yrp_players" ) then
-			printGM( "db", "CREATE TABLE yrp_players success" )
+		if sql.TableExists( dbName ) then
+			printGM( "db", dbName .. yrp.successdb )
 		else
-			printError( "CREATE TABLE yrp_players fail" )
+			printError( "CREATE TABLE " .. dbName .. " fail" )
+      retryLoadDatabase()
 		end
   end
-  dbPlayersAddValues( "yrp_players" )
+  dbPlayersAddValues( dbName )
+
+  printGMPos()
 end

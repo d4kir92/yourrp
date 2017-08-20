@@ -1,4 +1,4 @@
-
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function allowedToUseDoor( id, ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
@@ -49,6 +49,7 @@ end
 
 function searchForDoors()
   printGM( "db", "Search Map for Doors/Buildings" )
+
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _allPropDoors ) do
     dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
@@ -58,6 +59,17 @@ function searchForDoors()
 
     local _tmpDoorsTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
   end
+
+  local _allFuncDoors = ents.FindByClass( "func_door" )
+  for k, v in pairs( _allFuncDoors ) do
+    dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+
+    local _tmpBuildingTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+    dbInsertInto( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
+
+    local _tmpDoorsTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  end
+
   printGM( "db", "Done finding them (" .. #_allPropDoors .. " found)" )
   return #_allPropDoors
 end
@@ -65,12 +77,23 @@ end
 function loadDoors()
   printGM( "note", "loadDoors start!")
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
+  local _allFuncDoors = ents.FindByClass( "func_door" )
   local _tmpDoors = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  local _count = 0
   if _tmpDoors != nil then
     for k, v in pairs( _allPropDoors ) do
       if _tmpDoors[k] != nil then
         v:SetNWInt( "buildingID", tonumber( _tmpDoors[k].buildingID ) )
         v:SetNWInt( "uniqueID", k )
+      else
+        printGM( "note", "more doors, then in list!" )
+      end
+      _count = k
+    end
+    for k, v in pairs( _allFuncDoors ) do
+      if _tmpDoors[k+_count] != nil then
+        v:SetNWInt( "buildingID", tonumber( _tmpDoors[k+_count].buildingID ) )
+        v:SetNWInt( "uniqueID", k+_count )
       else
         printGM( "note", "more doors, then in list!" )
       end
@@ -112,6 +135,14 @@ function checkMapDoors()
     amountDoors = searchForDoors()
   else
     printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: found Doors" )
+    local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
+    local _allFuncDoors = ents.FindByClass( "func_door" )
+    print("_allPropDoors " .. #_allPropDoors)
+    print("_allFuncDoors " .. #_allFuncDoors)
+    if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors ) then
+      printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: new doors found!" )
+      amountDoors = searchForDoors()
+    end
   end
 
   loadDoors()

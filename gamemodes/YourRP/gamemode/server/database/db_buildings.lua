@@ -19,41 +19,48 @@ function dbBuildingsAddValues( dbTable )
 end
 
 function dbBuildingsInit()
-  //sql.Query( "DROP TABLE yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
+  local dbName = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
 
-  if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" ) then
-    printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors exists" )
+
+  printGMPre( "db", yrp.loaddb .. dbName )
+  if sql.TableExists( dbName ) then
+    printGM( "db", dbName .. " exists" )
   else
-    printGM( "db", "CREATING yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
+    printGM( "note", dbName .. " not exists" )
     local query = ""
-    query = query .. "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_doors ( "
+    query = query .. "CREATE TABLE " .. dbName .. " ( "
     query = query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     query = query .. " )"
     sql.Query( query )
-		if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" ) then
-      printGM( "db", "CREATED yrp_" .. string.lower( game.GetMap() ) .. "_doors SUCCESSFULL" )
-      dbDoorsAddValues( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
+		if sql.TableExists( dbName ) then
+      printGM( "db", dbName .. yrp.successdb )
+      dbDoorsAddValues( dbName )
 		else
-			printError( "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_doors fail" )
+			printError( "CREATE TABLE " .. dbName .. " fail" )
+      retryLoadDatabase()
 		end
   end
+  printGMPos()
 
-  //sql.Query( "DROP TABLE yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+  local dbName2 = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
 
-  if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" ) then
-    printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_buildings exists" )
+  printGMPre( "db", yrp.loaddb .. dbName2 )
+  if sql.TableExists( dbName2 ) then
+    printGM( "db", dbName2 .. " exists" )
   else
-    printGM( "db", "CREATING yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    printGM( "note", dbName2 .. " not exists" )
     local query = ""
-    query = query .. "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_buildings ( "
+    query = query .. "CREATE TABLE " .. dbName2 .. " ( "
     query = query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     query = query .. " )"
     sql.Query( query )
-		if sql.TableExists( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" ) then
-      printGM( "db", "CREATED yrp_" .. string.lower( game.GetMap() ) .. "_buildings SUCCESSFULL" )
-      dbBuildingsAddValues( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+		if sql.TableExists( dbName2 ) then
+      printGM( "db", dbName .. yrp.successdb )
+      dbBuildingsAddValues( dbName2 )
 		else
-			printError( "CREATE TABLE yrp_" .. string.lower( game.GetMap() ) .. "_buildings fail" )
+			printError( "CREATE TABLE " .. dbName2 .. " fail" )
+      retryLoadDatabase()
 		end
   end
+  printGMPos()
 end

@@ -8,7 +8,7 @@ GM.Author =				"D4KiR"
 GM.Email =				""
 GM.Website =			"youtube.com/c/D4KiR"
 GM.Twitter =			"twitter.com/D4KIR"
-GM.Version =			"0.3.6"
+GM.Version =			"0.3.7"
 GM.VersionSort = 	""
 GM.Help =					""
 
@@ -22,6 +22,8 @@ yrp.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 yrp.langfound = 0
 yrp.errorPre = "ERROR! PLEASE, tell the [" .. GM.Name .. "] DEVS: "
 yrp.errorPos = "!"
+yrp.loaddb = "LOAD DB: "
+yrp.successdb = " created successfully."
 
 //Pre's
 //yrp.file = yrp.pre .. "#FILE "
@@ -92,6 +94,21 @@ if CLIENT then
   net.Receive( "getGamemodename", function( len, ply )
     GAMEMODE.Name = net.ReadString()
   end)
+end
+
+function printGMPre( channel, string )
+	print( yrp.spacePre )
+	printGM( channel, string )
+end
+
+function printGMPos( )
+	print( yrp.spacePos )
+end
+
+function printGMImp( channel, string )
+	print(yrp.spacePre)
+	printGM( channel, string )
+	print(yrp.spacePos)
 end
 
 function printGM( channel, string )

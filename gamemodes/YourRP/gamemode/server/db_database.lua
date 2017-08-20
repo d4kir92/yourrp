@@ -6,11 +6,73 @@
 //utils
 util.AddNetworkString( "dbGetGeneral" )
 util.AddNetworkString( "dbGetQuestions" )
+util.AddNetworkString( "hardresetdatabase")
 //##############################################################################
 
 //##############################################################################
-database = {}
-database.version = 1
+yrp_database = {}
+yrp_database.version = 1
+//##############################################################################
+
+//##############################################################################
+function retryLoadDatabase()
+  printGMImp( "db", "retry Load Database in 5sec" )
+  if timer.Exists( "retryLoadDatabase" ) then
+    timer.Remove( "retryLoadDatabase" )
+  end
+  timer.Create( "retryLoadDatabase", 5, 1, function()
+    dbInitDatabase()
+    timer.Remove( "retryLoadDatabase" )
+  end)
+end
+//##############################################################################
+
+//##############################################################################
+function resetDatabase()
+  printGMImp( "db", "reset Database" )
+  local _dbs = {}
+  table.insert( _dbs, "yrp_general" )
+  table.insert( _dbs, "yrp_questions" )
+  table.insert( _dbs, "yrp_roles" )
+  table.insert( _dbs, "yrp_groups" )
+  table.insert( _dbs, "yrp_money" )
+  table.insert( _dbs, "yrp_" .. string.lower( game.GetMap() ) )
+  table.insert( _dbs, "yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
+  table.insert( _dbs, "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+  table.insert( _dbs, "yrp_role_whitelist" )
+  table.insert( _dbs, "yrp_buy" )
+
+  for k, v in pairs( _dbs ) do
+    sql.Query( "DROP TABLE " .. v )
+  end
+  printGMImp( "db", "DONE reset Database" )
+end
+
+net.Receive( "hardresetdatabase", function( len, ply )
+  if ply:IsSuperAdmin() or ply:IsAdmin() then
+    printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
+    printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
+    printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
+    printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
+
+    PrintMessage( HUD_PRINTCENTER, "Hard RESET by " .. ply:Nick() .. " in 10sec changelevel")
+
+    resetDatabase()
+
+    timer.Simple( 1, function()
+      dbInitDatabase()
+    end)
+
+    timer.Simple( 5, function()
+      PrintMessage( HUD_PRINTCENTER, "Hard RESET by " .. ply:Nick() .. " in 5sec changelevel")
+    end)
+
+    timer.Simple( 10, function()
+      PrintMessage( HUD_PRINTCENTER, "Hard RESET by " .. ply:Nick())
+      game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
+    end)
+  end
+end)
 //##############################################################################
 
 function dbTableExists( dbTable )
@@ -37,7 +99,8 @@ function dbSelect( dbTable, dbColumns, dbWhere )
       printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
       return _result
     elseif _result == false then
-      printERROR( dbTable .. ": " .. q )
+      printERROR( dbTable .. ": " .. q .. " FALSE" )
+      retryLoadDatabase()
       return _result
     else
       return _result
@@ -135,6 +198,8 @@ include( "database/db_buy.lua" )
 
 //##############################################################################
 function dbInitDatabase()
+  printGMImp( "db", "LOAD DATABASES" )
+
   dbGeneralInit()
   dbQuestionsInit()
   dbRolesInit()
@@ -145,6 +210,8 @@ function dbInitDatabase()
   dbBuyInit()
 
   dbPlayersInit()
+
+  printGMImp( "db", "DONE Loading DATABASES" )
 end
 dbInitDatabase()
 //##############################################################################

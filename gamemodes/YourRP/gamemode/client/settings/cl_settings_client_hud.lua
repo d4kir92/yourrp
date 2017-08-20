@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //cl_settings_client_hud.lua
 
 function createDerma( art, parent, w, h, x, y )
@@ -211,7 +213,9 @@ function tabClientHud( sheet )
   _colorBackground:SetPalette( true )
   _colorBackground:SetAlphaBar( true )
   _colorBackground:SetWangs( true )
-  _colorBackground:SetColor( Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )	--Set the default color
+  if cl_db["colbgr"] != nil then
+    _colorBackground:SetColor( Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )	--Set the default color
+  end
   function _colorBackground:ValueChanged( newColor )
     updateDBHud( "colbgr", newColor.r )
     updateDBHud( "colbgg", newColor.g )

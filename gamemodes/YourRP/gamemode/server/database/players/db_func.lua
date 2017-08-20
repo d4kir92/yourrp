@@ -1,3 +1,4 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local metaPly = FindMetaTable( "Player" )
 
@@ -44,6 +45,17 @@ function metaPly:addMoney( money )
   if isnumber( money ) then
     if self:canAfford( money ) then
       self:SetNWInt( "money", self:GetNWInt( "money" ) + math.Round( money, 2 ) )
+      self:updateMoney( self:GetNWInt( "money" ) )
+    else
+      printGM( "note", self:Nick() .. " cant afford this" )
+    end
+  end
+end
+
+function metaPly:setMoney( money )
+  if isnumber( money ) then
+    if self:canAfford( money ) then
+      self:SetNWInt( "money", math.Round( money, 2 ) )
       self:updateMoney( self:GetNWInt( "money" ) )
     else
       printGM( "note", self:Nick() .. " cant afford this" )
@@ -211,8 +223,10 @@ function updateHud( ply )
     end
     if tmpRoleID != nil then
       local tmpGroupID = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpRoleID[1].groupID )
-      ply:SetNWString( "groupName", tmpGroupID[1].groupID )
-      ply:SetNWString( "groupUniqueID", tmpGroupID[1].uniqueID )
+      if tmpGroupID != nil then
+        ply:SetNWString( "groupName", tmpGroupID[1].groupID )
+        ply:SetNWString( "groupUniqueID", tmpGroupID[1].uniqueID )
+      end
     end
   else
     //

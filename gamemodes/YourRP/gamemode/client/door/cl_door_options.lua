@@ -1,3 +1,4 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 net.Receive( "getBuildingInfo", function( len )
   if net.ReadBool() then
@@ -38,6 +39,12 @@ function buyWindow( buildingID, name, price, door )
   local _doors = 0
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _tmpDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _buildingID ) then
+      _doors = _doors + 1
+    end
+  end
+  local _tmpFDoors = ents.FindByClass( "func_door" )
+  for k, v in pairs( _tmpFDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _buildingID ) then
       _doors = _doors + 1
     end

@@ -1,3 +1,5 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //cl_settings_server.lua
 
 include( "cl_settings_yourrp_workshop.lua" )

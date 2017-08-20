@@ -1,9 +1,12 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function updateGroupTable()
   local _tmpGroups = dbSelect( "yrp_groups", "*", nil )
-  net.Start( "updateGroups" )
-    net.WriteTable( _tmpGroups )
-  net.Broadcast()
+  if _tmpGroups != nil then
+    net.Start( "updateGroups" )
+      net.WriteTable( _tmpGroups )
+    net.Broadcast()
+  end
 end
 
 function setRoleValues( ply )

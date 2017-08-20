@@ -1,3 +1,4 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local winW = 2160
 local winH = winW

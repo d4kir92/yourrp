@@ -1,4 +1,7 @@
+//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
 //db_net.lua
+
 util.AddNetworkString( "getBuildingInfo")
 util.AddNetworkString( "getBuildings" )
 util.AddNetworkString( "changeBuildingName" )
@@ -34,14 +37,18 @@ end
 
 function unlockDoor( ent, nr )
   if canLock( ent, nr ) then
-    ent:Fire( "Unlock", "", 0 )
+    ent:Fire( "Unlock" )
+    return true
   end
+  return false
 end
 
 function lockDoor( ent, nr )
   if canLock( ent, nr ) then
     ent:Fire( "Lock", "", 0 )
+    return true
   end
+  return false
 end
 
 function createKey( ent, id )
@@ -110,6 +117,14 @@ net.Receive( "removeOwner", function( len, ply )
       createKey( v, _tmpBuildingID )
     end
   end
+  local _tmpFDoors = ents.FindByClass( "func_door" )
+  for k, v in pairs( _tmpFDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerGroup", "" )
+      createKey( v, _tmpBuildingID )
+    end
+  end
 end)
 
 net.Receive( "sellBuilding", function( len, ply )
@@ -124,10 +139,23 @@ net.Receive( "sellBuilding", function( len, ply )
       v:SetNWString( "owner", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
-      v:Fire("Unlock","",0)
+      v:Fire("Unlock")
       dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
     end
   end
+
+  local _tmpFDoors = ents.FindByClass( "func_door" )
+
+  for k, v in pairs( _tmpFDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerGroup", "" )
+      createKey( v, _tmpBuildingID )
+      v:Fire("Unlock")
+      dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
+    end
+  end
+
   ply:addMoney( ( _tmpTable[1].price / 2 ) )
 end)
 
@@ -145,6 +173,13 @@ net.Receive( "buyBuilding", function( len, ply )
         v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
       end
     end
+    local _tmpFDoors = ents.FindByClass( "func_door" )
+    for k, v in pairs( _tmpFDoors ) do
+      if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+        v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
+      end
+    end
+
     printGM( "user", ply:Nick() .. " has buyed a door")
   else
     printGM( "user", ply:Nick() .. " has not enough money to buy door")
@@ -160,6 +195,12 @@ net.Receive( "setBuildingOwnerGroup", function( len, ply )
   local _tmpGroupName = dbSelect( "yrp_groups", "groupID", "uniqueID = " .. _tmpGroupID )
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _tmpDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+      v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
+    end
+  end
+  local _tmpFDoors = ents.FindByClass( "func_door" )
+  for k, v in pairs( _tmpFDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
       v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
     end
