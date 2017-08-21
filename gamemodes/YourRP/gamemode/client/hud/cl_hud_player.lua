@@ -75,10 +75,10 @@ function HudPlayer()
 
       //Weapon Primary
       if tonumber( cl_db["wpt"] ) == 1 then
-        local wpx = calculateToResu( cl_db["wpx"] )
-        local wpy = calculateToResu( cl_db["wpy"] )
-        local wpw = calculateToResu( cl_db["wpw"] )
-        local wph = calculateToResu( cl_db["wph"] )
+        local wpx = ctrW( cl_db["wpx"] )
+        local wpy = ctrW( cl_db["wpy"] )
+        local wpw = ctrW( cl_db["wpw"] )
+        local wph = ctrW( cl_db["wph"] )
         if weapon != NULL then
       		if weapon:GetMaxClip1() > -1 or ply:GetAmmoCount( weapon:GetPrimaryAmmoType() ) > -1 then
             draw.RoundedBox( 0, wpx, wpy, wpw, wph, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
@@ -111,10 +111,10 @@ function HudPlayer()
 
       //Weapon Secondary
       if tonumber( cl_db["wst"] ) == 1 then
-        local wsx = calculateToResu( cl_db["wsx"] )
-        local wsy = calculateToResu( cl_db["wsy"] )
-        local wsw = calculateToResu( cl_db["wsw"] )
-        local wsh = calculateToResu( cl_db["wsh"] )
+        local wsx = ctrW( cl_db["wsx"] )
+        local wsy = ctrW( cl_db["wsy"] )
+        local wsw = ctrW( cl_db["wsw"] )
+        local wsh = ctrW( cl_db["wsh"] )
 
         if weapon != NULL then
       		if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
@@ -188,10 +188,10 @@ function HudPlayer()
         	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
         	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
         end
-      	CamDataMinimap.x = calculateToResu( cl_db["mmx"] )
-      	CamDataMinimap.y = calculateToResu( cl_db["mmy"] )
-      	CamDataMinimap.w = calculateToResu( cl_db["mmw"] )
-      	CamDataMinimap.h = calculateToResu( cl_db["mmh"] )
+      	CamDataMinimap.x = ctrW( cl_db["mmx"] )
+      	CamDataMinimap.y = ctrW( cl_db["mmy"] )
+      	CamDataMinimap.w = ctrW( cl_db["mmw"] )
+      	CamDataMinimap.h = ctrW( cl_db["mmh"] )
         CamDataMinimap.ortho = true
         CamDataMinimap.drawviewmodel = false
       	render.RenderView( CamDataMinimap )
@@ -200,19 +200,19 @@ function HudPlayer()
         drawRBoxCr( cl_db["mmx"] + (cl_db["mmw"]/2) - (minimap.point/2), cl_db["mmy"] + (cl_db["mmh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
 
         //Coords
-        draw.SimpleText( math.Round( ply:GetPos().x, -1 ), "HudMinimap", calculateToResu( cl_db["mmx"] ) + ( calculateToResu( cl_db["mmw"] ) / 2 ), calculateToResu( cl_db["mmy"] ) + calculateToResu( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, -1 ), "HudMinimap", calculateToResu( cl_db["mmx"] ) + ( calculateToResu( cl_db["mmw"] ) / 2 ), calculateToResu( cl_db["mmy"] ) + calculateToResu( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( math.Round( ply:GetPos().x, -1 ), "HudMinimap", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, -1 ), "HudMinimap", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
 
       //Tooltip
       if tonumber( cl_db["ttt"] ) == 1 then
         drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-        drawText( lang.tooltip .. ":", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 16 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F2 - " .. lang.rolemenu, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 80 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F4 - " .. lang.buymenu, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 144 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F7 - " .. lang.settings, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 208 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 272 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 336 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( lang.tooltip .. ":", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F2 - " .. lang.rolemenu, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 40, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F4 - " .. lang.buymenu, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 70, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F7 - " .. lang.settings, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 100, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 130, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 160, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       end
 
       //Money
@@ -244,7 +244,7 @@ function HudPlayer()
         elseif _thirdperson == 2 then
           _3PText = lang.tpp
         end
-        draw.SimpleText( _3PText, "DermaDefault", calculateToResu( 3840/2 ), calculateToResu( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText( _3PText, "SettingsNormal", ctrW( 3840/2 ), ctrW( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
       end
 
       //Borders

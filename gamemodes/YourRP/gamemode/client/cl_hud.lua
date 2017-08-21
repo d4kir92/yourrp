@@ -48,7 +48,7 @@ include( "hud/cl_hud_crosshair.lua" )
 
 //##############################################################################
 function hudVersion()
-	draw.SimpleText( "YourRP OPEN ALPHA V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - calculateToResu( 70 ), calculateToResu( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+	draw.SimpleText( "YourRP OPEN ALPHA V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 end
 //##############################################################################
 

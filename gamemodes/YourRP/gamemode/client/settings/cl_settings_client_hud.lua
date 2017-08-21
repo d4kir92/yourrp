@@ -4,8 +4,8 @@
 
 function createDerma( art, parent, w, h, x, y )
   tmpDerma = vgui.Create( art, parent )
-  tmpDerma:SetSize( calculateToResu(w), calculateToResu(h) )
-  tmpDerma:SetPos( calculateToResu(x), calculateToResu(y) )
+  tmpDerma:SetSize( ctrW(w), ctrW(h) )
+  tmpDerma:SetPos( ctrW(x), ctrW(y) )
   return tmpDerma
 end
 
@@ -15,30 +15,30 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
   frame:SetTitle( "" )
   frame:ShowCloseButton( false )
   frame:SetSizable( true )
-  frame:SetMinHeight( calculateToResu( 40 ) )
-  frame:SetMinWidth( calculateToResu( 200 ) )
+  frame:SetMinHeight( ctrW( 40 ) )
+  frame:SetMinWidth( ctrW( 200 ) )
 
   function frame:Paint( pw, ph )
-    drawRBox( 0, 0, 0, pw*2, ph*2, Color( 0, 0, 0, 120 ) )
-    drawRBox( 0, 0, 0, pw*2, 50, Color( 0, 0, 255, 200 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 120 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ctrH( 50 ), Color( 0, 0, 255, 200 ) )
 
-    drawRBox( 0, pw*2 - 20, ph*2 - 20, 20, 20, Color( 0, 255, 0, 200 ) )
+    draw.RoundedBox( 0, pw - ctrW( 20 ), ph - ctrH( 20 ), ctrW( 20 ), ctrH( 20 ), Color( 0, 255, 0, 200 ) )
 
     drawText( textPre, "HudBars", pw, ph, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
     if frame:IsHovered() then
 
       local tw, th = frame:GetSize()
-      if tw != calculateToResu( cl_db[tmpw] ) or th != calculateToResu( cl_db[tmph] ) then
-        cl_db[tmpw] = (tw*2) - (tw*2)%20
-        cl_db[tmph] = (th*2) - (th*2)%20
-        frame:SetSize( calculateToResu( cl_db[tmpw] ), calculateToResu( cl_db[tmph] ) )
+      if tw != ctrW( cl_db[tmpw] ) or th != ctrW( cl_db[tmph] ) then
+        cl_db[tmpw] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%ctrW( 40 )
+        cl_db[tmph] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%ctrH( 40 )
+        frame:SetSize( ctrW( cl_db[tmpw] ), ctrW( cl_db[tmph] ) )
         updateDBHud( tmpw, cl_db[tmpw] )
         updateDBHud( tmph, cl_db[tmph] )
       end
 
       local x, y = frame:GetPos()
-      if x != calculateToResu( cl_db[tmpx] ) or y != calculateToResu( cl_db[tmpy] ) then
+      if x != ctrW( cl_db[tmpx] ) or y != ctrW( cl_db[tmpy] ) then
         local w, h = frame:GetSize()
         local outside = false
         if x+w > ScrW() then
@@ -55,9 +55,9 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
           outside = true
         end
         if !outside then
-          cl_db[tmpx] = (x*2) - (x*2)%20
-          cl_db[tmpy] = (y*2) - (y*2)%20
-          frame:SetPos( calculateToResu( cl_db[tmpx] ), calculateToResu( cl_db[tmpy] ) )
+          cl_db[tmpx] = (x*ctrF( ScrH() )) - (x*ctrF( ScrH() ))%ctrW( 40 )
+          cl_db[tmpy] = (y*ctrF( ScrH() )) - (y*ctrF( ScrH() ))%ctrH( 40 )
+          frame:SetPos( ctrW( cl_db[tmpx] ), ctrW( cl_db[tmpy] ) )
           updateDBHud( tmpx, cl_db[tmpx] )
           updateDBHud( tmpy, cl_db[tmpy] )
         end
@@ -103,30 +103,30 @@ function tabClientHud( sheet )
     changeHudWindow:SetTitle( "" )
     changeHudWindow:ShowCloseButton( false )
     function changeHudWindow:Paint( w, h )
-      local gridSize = 20
-      drawRBox( 0, 0, 0, ScrW()*2, ScrH()*2, Color( 0, 0, 0, 120 ) )
-      for i=1, 3840/gridSize do
-        if i%(3840/gridSize/2) == 0 then
-          drawRBox( 0, (i*gridSize)-2, 0, 4, 2160, Color( 255, 255, 0, 60 ) )
+      local gridSize = ctrW( 20 )
+      draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 120 ) )
+      for i=1, ScrW()/gridSize do
+        if i%(ScrW()/gridSize/2) == 0 then
+          draw.RoundedBox( 0, (i*gridSize)-ctrW( 2 ), 0, ctrW( 4 ), ScrH(), Color( 255, 255, 0, 60 ) )
         elseif i%10 == 1 then
-            drawRBox( 0, (i*gridSize)-2, 0, 4, 2160, Color( 0, 0, 255, 50 ) )
+            draw.RoundedBox( 0, (i*gridSize)-ctrW( 2 ), 0, ctrW( 4 ), ScrH(), Color( 0, 0, 255, 50 ) )
         else
-          drawRBox( 0, (i*gridSize)-2, 0, 4, 2160, Color( 255, 255, 255, 20 ) )
+          draw.RoundedBox( 0, (i*gridSize)-ctrW( 2 ), 0, ctrW( 4 ), ScrH(), Color( 255, 255, 255, 20 ) )
         end
       end
 
-      for i=1, 2160/gridSize do
-        if i%(2160/gridSize/2) == 0 then
-          drawRBox( 0, 0, (i*gridSize)-2, 3840, 4, Color( 255, 255, 0, 60 ) )
+      for i=1, ScrH()/gridSize do
+        if i%(ScrH()/gridSize/2) == 0 then
+          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctrW( 4 ), Color( 255, 255, 0, 60 ) )
         elseif i%10 == 9 then
-          drawRBox( 0, 0, (i*gridSize)-2, 3840, 4, Color( 0, 0, 255, 50 ) )
+          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctrW( 4 ), Color( 0, 0, 255, 50 ) )
         else
-          drawRBox( 0, 0, (i*gridSize)-2, 3840, 4, Color( 255, 255, 255, 20 ) )
+          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctrW( 4 ), Color( 255, 255, 255, 20 ) )
         end
       end
     end
 
-    local changeHudWindowCloseButton = createDerma( "DButton", changeHudWindow, 3840, 2160, 0, 0 )
+    local changeHudWindowCloseButton = createDerma( "DButton", changeHudWindow, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), 0, 0 )
     changeHudWindowCloseButton:SetText( "" )
     function changeHudWindowCloseButton:DoClick()
       changeHudWindow:Close()
@@ -206,7 +206,7 @@ function tabClientHud( sheet )
   function _colorBackgroundPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.hudbackground, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.hudbackground, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorBackground = createVGUI( "DColorMixer", _colorBackgroundPanel, 450, 450, 10, 50 )
@@ -227,7 +227,7 @@ function tabClientHud( sheet )
   function _colorBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.hudborder, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.hudborder, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorBorder = createVGUI( "DColorMixer", _colorBorderPanel, 450, 450, 10, 50 )
@@ -246,7 +246,7 @@ function tabClientHud( sheet )
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshair, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshair, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )
@@ -265,7 +265,7 @@ function tabClientHud( sheet )
   function _colorCrosshairBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshairborder, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshairborder, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorCrosshairBorder = createVGUI( "DColorMixer", _colorCrosshairBorderPanel, 450, 450, 10, 50 )
@@ -284,12 +284,12 @@ function tabClientHud( sheet )
   function _settingCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshairsettings, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshairsettings, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( lang.length .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 60 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.gap .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 150 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.thickness .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.border .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 330 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.length .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.gap .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.thickness .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 240 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.border .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90 )

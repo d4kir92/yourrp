@@ -10,14 +10,14 @@ function tabClient( sheet )
   clientPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
   sheet:AddSheet( lang.client, clientPanel, "icon16/user.png" )
   function clientPanel:Paint()
-    draw.RoundedBox( 0, calculateToResu( 0 ), calculateToResu( 40 ), clientPanel:GetWide(), clientPanel:GetTall(), yrpsettings.color.background )
+    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), clientPanel:GetWide(), clientPanel:GetTall(), yrpsettings.color.background )
   end
 
   //Server Sheet
   local clientSheet = vgui.Create( "DPropertySheet", clientPanel )
   clientSheet:Dock( FILL )
   function clientSheet:Paint()
-    //drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), calculateToResu( 10 ) )
+    //drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), ctrW( 10 ) )
   end
 
   tabClientChar( clientSheet )

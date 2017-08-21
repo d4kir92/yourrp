@@ -14,7 +14,7 @@ function addNewItem( parent, item )
   _itemPanel.uniqueID = item.uniqueID
   function _itemPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-    draw.SimpleText( item.PrintName, "weaponT", pw/2, calculateToResu( 256 - 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( item.PrintName, "weaponT", pw/2, ctrW( 256 - 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   local _itemModelPanel = createVGUI( "DModelPanel", _itemPanel, 256, 256, 0, 0 )
@@ -59,7 +59,7 @@ function addNewItem( parent, item )
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
     panH = 256+10+50+10+50+10+50+10
-    _itemPanel:SetSize( calculateToResu( 256 ), calculateToResu( panH ) )
+    _itemPanel:SetSize( ctrW( 256 ), ctrW( panH ) )
 
     local _removeButton = createVGUI( "DButton", _itemPanel, 240, 50, 8, 256+10+50+10+50+10 )
     _removeButton:SetText( "" )
@@ -100,8 +100,8 @@ function addNewItem( parent, item )
   end
 
   swepList.x = swepList.x + 256 + 8
-  if calculateToResu( swepList.x ) > calculateToResu( 1888 ) then
-    swepList.y = swepList.y + calculateToResu( 10 ) + panH
+  if ctrW( swepList.x ) > ctrW( 1888 ) then
+    swepList.y = swepList.y + ctrW( 10 ) + panH
     swepList.x = 0
   end
 end
@@ -134,8 +134,8 @@ net.Receive( "getBuyList", function( len )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 255 ) )
       end
-      draw.RoundedBox( 0, pw/2 - calculateToResu( 16 ), ph/2 - calculateToResu( 128-32 ), calculateToResu( 32 ), calculateToResu( 256-64 ), Color( 0, 0, 0, 255 ) )
-      draw.RoundedBox( 0, pw/2 - calculateToResu( 128-32 ), ph/2 - calculateToResu( 16 ), calculateToResu( 256-64 ), calculateToResu( 32 ), Color( 0, 0, 0, 255 ) )
+      draw.RoundedBox( 0, pw/2 - ctrW( 16 ), ph/2 - ctrW( 128-32 ), ctrW( 32 ), ctrW( 256-64 ), Color( 0, 0, 0, 255 ) )
+      draw.RoundedBox( 0, pw/2 - ctrW( 128-32 ), ph/2 - ctrW( 16 ), ctrW( 256-64 ), ctrW( 32 ), Color( 0, 0, 0, 255 ) )
     end
     function _addItemButton:DoClick()
       local addSwep = {}
@@ -147,14 +147,14 @@ net.Receive( "getBuyList", function( len )
       function _windowAddItem:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
 
-        draw.SimpleText( lang.price .. ":", "weaponT", calculateToResu( 8 ), ph - calculateToResu( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.price .. ":", "weaponT", ctrW( 8 ), ph - ctrW( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
 
       local _AddItemPanel = createVGUI( "DPanel", _windowAddItem, 500, 500, 6, 50 )
       function _AddItemPanel:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
 
-        draw.SimpleText( addSwep.PrintName, "weaponT", pw/2, ph - calculateToResu( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( addSwep.PrintName, "weaponT", pw/2, ph - ctrW( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
       local _AddItemModelPanel = createVGUI( "SpawnIcon", _AddItemPanel, 500, 500, 0, 0 )
@@ -172,28 +172,28 @@ net.Receive( "getBuyList", function( len )
       end
       function _AddItemSWEP:DoClick()
         local itemSelector = vgui.Create( "DFrame" )
-        itemSelector:SetSize( calculateToResu( 2000 ), calculateToResu( 2000 ) )
-        itemSelector:SetPos( ScrW2() - calculateToResu( 2000/2 ), ScrH2() - calculateToResu( 2000/2 ) )
+        itemSelector:SetSize( ctrW( 2000 ), ctrW( 2000 ) )
+        itemSelector:SetPos( ScrW2() - ctrW( 2000/2 ), ScrH2() - ctrW( 2000/2 ) )
         itemSelector:SetTitle( lang.itemMenu )
         function itemSelector:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
         end
 
         local PanelSelect = vgui.Create( "DPanelSelect", itemSelector )
-        PanelSelect:SetSize( calculateToResu( 2000 ), calculateToResu( 2000 - 45 ) )
-        PanelSelect:SetPos( calculateToResu( 0 ), calculateToResu( 45 ) )
+        PanelSelect:SetSize( ctrW( 2000 ), ctrW( 2000 - 45 ) )
+        PanelSelect:SetPos( ctrW( 0 ), ctrW( 45 ) )
         PanelSelect:SetText( "" )
 
         for k, swep in pairs( weapons.GetList() ) do
     			local icon = vgui.Create( "SpawnIcon" )
           icon:SetText( "" )
     			icon:SetModel( swep.WorldModel )
-    			icon:SetSize( calculateToResu( 256 ), calculateToResu( 256 ) )
+    			icon:SetSize( ctrW( 256 ), ctrW( 256 ) )
     			icon:SetTooltip( swep.PrintName )
           local _tmpName = createVGUI( "DButton", icon, 256, 256, 0, 0 )
           _tmpName:SetText( "" )
           function _tmpName:Paint( pw, ph )
-            draw.SimpleText( swep.PrintName, "pmT", pw/2, ph-calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( swep.PrintName, "pmT", pw/2, ph-ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           end
           function _tmpName:DoClick()
             _AddItemModelPanel:SetModel( swep.WorldModel )

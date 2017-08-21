@@ -28,8 +28,8 @@ function openSettings()
   settingsOpen = 1
 
   settingsWindow = vgui.Create( "DFrame" )
-  settingsWindow:SetSize( calculateToResu( 2160 ), calculateToResu( 2160 ) )
-  settingsWindow:SetPos( ScrW2() - calculateToResu( 2160/2 ), 0 )
+  settingsWindow:SetSize( ctrW( 2160 ), ctrW( 2160 ) )
+  settingsWindow:SetPos( ScrW2() - ctrW( 2160/2 ), 0 )
   settingsWindow:SetTitle( "" )
   settingsWindow:ShowCloseButton( true )
   function settingsWindow:OnClose()
@@ -40,13 +40,13 @@ function openSettings()
     _menuIsOpen = 0
   end
   function settingsWindow:Paint()
-    draw.RoundedBox( 0, calculateToResu( 0 ), calculateToResu( 98 ), settingsWindow:GetWide(), settingsWindow:GetTall(), yrpsettings.color.background )
+    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 98 ), settingsWindow:GetWide(), settingsWindow:GetTall(), yrpsettings.color.background )
   end
 
   local settingsSheet = vgui.Create( "DPropertySheet", settingsWindow )
   settingsSheet:Dock( FILL )
   function settingsSheet:Paint()
-    //drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), calculateToResu( 0 ) )
+    //drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), ctrW( 0 ) )
   end
 
   local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1400, 0 )

@@ -21,14 +21,14 @@ function tabServer( sheet )
     serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
     sheet:AddSheet( lang.server, serverPanel, "icon16/server.png" )
     function serverPanel:Paint()
-      draw.RoundedBox( 0, calculateToResu( 0 ), calculateToResu( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
+      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
     end
 
     //Server Sheet
     local serverSheet = vgui.Create( "DPropertySheet", serverPanel )
     serverSheet:Dock( FILL )
     function serverSheet:Paint()
-      //drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), calculateToResu( 10 ) )
+      //drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), ctrW( 10 ) )
     end
     tabServerGeneral( serverSheet )
     tabServerQuestions( serverSheet )

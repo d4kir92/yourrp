@@ -16,15 +16,15 @@ function tabServerGeneral( sheet )
   local oldGamemodename = ""
   function sv_generalPanel:Paint()
     //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrpsettings.color.panel )
-    draw.SimpleText( lang.gamemodename .. ":", "SettingsNormal", calculateToResu( 300 - 10 ), calculateToResu( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.gamemodename .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     if oldGamemodename != sv_generalName:GetText() then
-      draw.SimpleText( "you need to update Server!", "SettingsNormal", calculateToResu( 300 + 400 + 10 ), calculateToResu( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( "you need to update Server!", "SettingsNormal", ctrW( 300 + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
-    draw.SimpleText( lang.advertname .. ":", "SettingsNormal", calculateToResu( 300 - 10 ), calculateToResu( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.advertname .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
-  sv_generalName:SetPos( calculateToResu( 300 ), calculateToResu( 5 ) )
-  sv_generalName:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
+  sv_generalName:SetPos( ctrW( 300 ), ctrW( 5 ) )
+  sv_generalName:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalName:SetText( GAMEMODE.Name )
 
   net.Start("dbGetGeneral")
@@ -48,8 +48,8 @@ function tabServerGeneral( sheet )
     end
   end)
 
-  sv_generalAdvert:SetPos( calculateToResu( 300 ), calculateToResu( 5 + 50 + 10 + 50 + 10 ) )
-  sv_generalAdvert:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
+  sv_generalAdvert:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 + 50 + 10 ) )
+  sv_generalAdvert:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalAdvert:SetText( _advertname )
   function sv_generalAdvert:OnChange()
     net.Start( "updateAdvert" )
@@ -58,8 +58,8 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalRestartTime = vgui.Create( "DNumSlider", sv_generalPanel )
-  sv_generalRestartTime:SetPos( calculateToResu( 10 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartTime:SetSize( calculateToResu( 1800 ), calculateToResu( 50 ) )
+  sv_generalRestartTime:SetPos( ctrW( 10 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartTime:SetSize( ctrW( 1800 ), ctrW( 50 ) )
   sv_generalRestartTime:SetText( lang.updatecountdown )
   sv_generalRestartTime:SetMin( 3 )
   sv_generalRestartTime:SetMax( 60 )
@@ -86,15 +86,15 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalRestartServer = vgui.Create( "DButton", sv_generalPanel )
-  sv_generalRestartServer:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
-  sv_generalRestartServer:SetPos( calculateToResu( 5 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartServer:SetSize( ctrW( 400 ), ctrW( 50 ) )
+  sv_generalRestartServer:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServer:SetText( lang.updateserver )
   function sv_generalRestartServer:Paint()
     local color = Color( 255, 0, 0, 200 )
     if sv_generalRestartServer:IsHovered() then
       color = Color( 255, 255, 0, 200 )
     end
-    draw.RoundedBox( calculateToResu( 10 ), 0, 0, sv_generalRestartServer:GetWide(), sv_generalRestartServer:GetTall(), color )
+    draw.RoundedBox( ctrW( 10 ), 0, 0, sv_generalRestartServer:GetWide(), sv_generalRestartServer:GetTall(), color )
   end
   function sv_generalRestartServer:DoClick()
     if sv_generalName != nil then
@@ -108,15 +108,15 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalRestartServerCancel = vgui.Create( "DButton", sv_generalPanel )
-  sv_generalRestartServerCancel:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
-  sv_generalRestartServerCancel:SetPos( calculateToResu( 5 + 400 + 10 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartServerCancel:SetSize( ctrW( 400 ), ctrW( 50 ) )
+  sv_generalRestartServerCancel:SetPos( ctrW( 5 + 400 + 10 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServerCancel:SetText( lang.cancelupdateserver )
   function sv_generalRestartServerCancel:Paint()
     local color = Color( 0, 255, 0, 200 )
     if sv_generalRestartServerCancel:IsHovered() then
       color = Color( 255, 255, 0, 200 )
     end
-    draw.RoundedBox( calculateToResu( 10 ), 0, 0, sv_generalRestartServerCancel:GetWide(), sv_generalRestartServerCancel:GetTall(), color )
+    draw.RoundedBox( ctrW( 10 ), 0, 0, sv_generalRestartServerCancel:GetWide(), sv_generalRestartServerCancel:GetTall(), color )
   end
   function sv_generalRestartServerCancel:DoClick()
     net.Start( "cancelRestartServer" )
@@ -125,15 +125,15 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalHardReset = vgui.Create( "DButton", sv_generalPanel )
-  sv_generalHardReset:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
-  sv_generalHardReset:SetPos( calculateToResu( 5 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalHardReset:SetSize( ctrW( 400 ), ctrW( 50 ) )
+  sv_generalHardReset:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalHardReset:SetText( lang.hardresetdatabase )
   function sv_generalHardReset:Paint( pw, ph )
     local color = Color( 255, 0, 0, 200 )
     if sv_generalHardReset:IsHovered() then
       color = Color( 255, 255, 0, 200 )
     end
-    draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+    draw.RoundedBox( ctrW( 10 ), 0, 0, pw, ph, color )
   end
   function sv_generalHardReset:DoClick()
     local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
@@ -141,12 +141,12 @@ function tabServerGeneral( sheet )
     _tmpFrame:SetTitle( lang.areyousure )
     function _tmpFrame:Paint( pw, ph )
       local color = Color( 0, 0, 0, 200 )
-      draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+      draw.RoundedBox( ctrW( 10 ), 0, 0, pw, ph, color )
     end
 
     local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
-    sv_generalHardResetSure:SetSize( calculateToResu( 300 ), calculateToResu( 50 ) )
-    sv_generalHardResetSure:SetPos( calculateToResu( 10 ), calculateToResu( 50 ) )
+    sv_generalHardResetSure:SetSize( ctrW( 300 ), ctrW( 50 ) )
+    sv_generalHardResetSure:SetPos( ctrW( 10 ), ctrW( 50 ) )
     sv_generalHardResetSure:SetText( lang.yes .. ": DELETE DATABASE" )
     function sv_generalHardResetSure:DoClick()
       net.Start( "hardresetdatabase" )
@@ -158,12 +158,12 @@ function tabServerGeneral( sheet )
       if sv_generalHardResetSure:IsHovered() then
         color = Color( 255, 255, 0, 200 )
       end
-      draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+      draw.RoundedBox( ctrW( 10 ), 0, 0, pw, ph, color )
     end
 
     local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
-    sv_generalHardResetNot:SetSize( calculateToResu( 300 ), calculateToResu( 50 ) )
-    sv_generalHardResetNot:SetPos( calculateToResu( 10 + 300 + 10 ), calculateToResu( 50 ) )
+    sv_generalHardResetNot:SetSize( ctrW( 300 ), ctrW( 50 ) )
+    sv_generalHardResetNot:SetPos( ctrW( 10 + 300 + 10 ), ctrW( 50 ) )
     sv_generalHardResetNot:SetText( lang.no .. ": do nothing" )
     function sv_generalHardResetNot:DoClick()
       _tmpFrame:Close()
@@ -173,7 +173,7 @@ function tabServerGeneral( sheet )
       if sv_generalHardResetNot:IsHovered() then
         color = Color( 255, 255, 0, 200 )
       end
-      draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
+      draw.RoundedBox( ctrW( 10 ), 0, 0, pw, ph, color )
     end
 
     settingsWindow:Close()

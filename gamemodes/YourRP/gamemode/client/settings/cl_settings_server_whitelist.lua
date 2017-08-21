@@ -9,7 +9,7 @@ net.Receive( "getRoleWhitelist", function( len )
 
   local _whitelistListView = createVGUI( "DListView", sv_whitelistPanel, 1500, 1800, 10, 10 )
   _whitelistListView:AddColumn( "uniqueID" ):SetFixedWidth( 0 )
-  _whitelistListView:AddColumn( "steamID" ):SetFixedWidth( 120 )
+  _whitelistListView:AddColumn( "steamID" ):SetFixedWidth( ctrW( 120 ) )
   _whitelistListView:AddColumn( lang.nick )
   _whitelistListView:AddColumn( lang.group )
   _whitelistListView:AddColumn( lang.role )
@@ -75,9 +75,9 @@ net.Receive( "getRoleWhitelist", function( len )
     function _whitelistFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
 
-      draw.SimpleText( lang.player .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.group .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.role .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 185+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.player .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.group .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.role .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 185+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     end
 
     _whitelistFrame:MakePopup()

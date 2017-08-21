@@ -85,19 +85,19 @@ function tabServerMap( sheet )
   function _mapPanel:Paint( pw, ph )
     surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( _mapPNG	)
-  	surface.DrawTexturedRect( 0, 0, calculateToResu( 256 ), calculateToResu( 256 ) )
+  	surface.DrawTexturedRect( 0, 0, ctrW( 256 ), ctrW( 256 ) )
   end
 
   local _mapName = createVGUI( "DPanel", sv_mapPanel, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
     draw.RoundedBox( 0, 0,0, pw, ph, yrpsettings.color.panel )
-    draw.SimpleText( lang.map .. ": " .. string.lower( game.GetMap() ), "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.map .. ": " .. string.lower( game.GetMap() ), "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   _mapListView = createVGUI( "DListView", sv_mapPanel, 1600, 1600, 10, 10 + 256 + 10 )
-  _mapListView:AddColumn( "uniqueID" ):SetFixedWidth( 100 )
-  _mapListView:AddColumn( lang.position ):SetFixedWidth( 200 )
-  _mapListView:AddColumn( lang.angle ):SetFixedWidth( 200 )
+  _mapListView:AddColumn( "uniqueID" ):SetFixedWidth( ctrW( 100 ) )
+  _mapListView:AddColumn( lang.position ):SetFixedWidth( ctrW( 200 ) )
+  _mapListView:AddColumn( lang.angle ):SetFixedWidth( ctrW( 200 ) )
   _mapListView:AddColumn( lang.type )
   _mapListView:AddColumn( lang.group )
 
@@ -120,9 +120,9 @@ function tabServerMap( sheet )
     tmpFrame:SetTitle( "" )
     function tmpFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0,0, pw, ph, yrpsettings.color.background )
-      draw.SimpleText( lang.spawnpointcreator, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.createspawnpointonyou, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.selectgroup .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.spawnpointcreator, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.createspawnpointonyou, "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.selectgroup .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     end
 
     local tmpGroup = createVGUI( "DComboBox", tmpFrame, 200, 50, 10, 50 + 10 + 50 + 10 )

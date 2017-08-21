@@ -66,17 +66,17 @@ function buyWindow( buildingID, name, price, door )
   function _doorWindow:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
 
-    draw.SimpleText( lang.buymenu, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.buymenu, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( lang.name .. ": " .. _name, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.price .. ": " .. ply:GetNWString( "moneyPre" ) .. _price .. ply:GetNWString( "moneyPost" ), "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.doors .. ": " .. _doors, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.name .. ": " .. _name, "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.price .. ": " .. ply:GetNWString( "moneyPre" ) .. _price .. ply:GetNWString( "moneyPost" ), "SettingsNormal", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.doors .. ": " .. _doors, "SettingsNormal", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.RoundedBox( 0, 0, calculateToResu( 210 ), pw, ph, Color( 255, 255, 0, 200 ) )
-    draw.SimpleText( lang.name .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 220 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.building .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 320 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.group .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 420 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.price .. ":", "DermaDefault", calculateToResu( 420 ), calculateToResu( 420 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.RoundedBox( 0, 0, ctrW( 210 ), pw, ph, Color( 255, 255, 0, 200 ) )
+    draw.SimpleText( lang.name .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 220 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.building .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 320 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.group .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 420 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.price .. ":", "SettingsNormal", ctrW( 420 ), ctrW( 420 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _buyButton = createVGUI( "DButton", _doorWindow, 400, 50, 10, 150 )
@@ -164,7 +164,7 @@ function buyWindow( buildingID, name, price, door )
       end
     end
 
-    _doorWindow:SetSize( calculateToResu( 830 ), calculateToResu( 510 ) )
+    _doorWindow:SetSize( ctrW( 830 ), ctrW( 510 ) )
     _doorWindow:Center()
   end
 
@@ -187,14 +187,14 @@ function optionWindow( buildingID, name, price, door )
   function _doorWindow:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
 
-    draw.SimpleText( lang.settings, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.settings, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( lang.name .. ": " .. _name, "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.group .. "/" ..lang.owner .. ": INWORK", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.doorlevel .. ": " .. door:GetNWInt( "level", -1 ), "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.name .. ": " .. _name, "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.group .. "/" ..lang.owner .. ": INWORK", "SettingsNormal", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.doorlevel .. ": " .. door:GetNWInt( "level", -1 ), "SettingsNormal", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.RoundedBox( 0, 0, calculateToResu( 270 ), pw, ph, Color( 255, 255, 0, 200 ) )
-    draw.SimpleText( lang.name .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 280 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.RoundedBox( 0, 0, ctrW( 270 ), pw, ph, Color( 255, 255, 0, 200 ) )
+    draw.SimpleText( lang.name .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 280 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _ButtonUpgrade = createVGUI( "DButton", _doorWindow, 400, 50, 10, 150 )
@@ -259,7 +259,7 @@ function optionWindow( buildingID, name, price, door )
     end
 
 
-    _doorWindow:SetSize( calculateToResu( 830 ), calculateToResu( 370 ) )
+    _doorWindow:SetSize( ctrW( 830 ), ctrW( 370 ) )
     _doorWindow:Center()
   end
 

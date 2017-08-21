@@ -43,6 +43,11 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "none"
 SWEP.Secondary.Ammo = "none"
 
+SWEP.HoldType = "none"
+function SWEP:Initialize()
+	self:SetWeaponHoldType( self.HoldType )
+end
+
 function SWEP:Reload()
 
 end

@@ -23,15 +23,15 @@ function openSpawnMenu()
         draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )           //mapWindow of Map
 
         local win = {}
-        win.x = ( ( ScrW() / 2 ) - calculateToResu( 1050 ) / map.facX )
-        win.y = ( ( ScrH() / 2 ) - calculateToResu( 1050-25 ) / map.facY )
-        win.w = calculateToResu(2100) / map.facX
-        win.h = calculateToResu(2100) / map.facY
-        draw.RoundedBox( 0, win.x - calculateToResu(2), win.y - calculateToResu(2), win.w + calculateToResu( 4 ), win.h + calculateToResu( 4 ), Color( 255, 255, 0, 240 ) )
+        win.x = ( ( ScrW() / 2 ) - ctrW( 1050 ) / map.facX )
+        win.y = ( ( ScrH() / 2 ) - ctrW( 1050-25 ) / map.facY )
+        win.w = ctrW(2100) / map.facX
+        win.h = ctrW(2100) / map.facY
+        draw.RoundedBox( 0, win.x - ctrW(2), win.y - ctrW(2), win.w + ctrW( 4 ), win.h + ctrW( 4 ), Color( 255, 255, 0, 240 ) )
         draw.RoundedBox( 0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255 ) )
 
         local _mapName = string.Replace( string.upper( game.GetMap() ), "_", " " )
-        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", win.x + win.w/2, win.y - calculateToResu( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", win.x + win.w/2, win.y - ctrW( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         local tr = util.TraceLine( {
           start = ply:GetPos() + Vector( 0, 0, 1400 ),
@@ -108,13 +108,13 @@ function openSpawnMenu()
         plyPos.y = win.y + win.h - win.h * ( plyPos.ytmp / plyPos.yMax )
 
         //You
-        draw.RoundedBox( calculateToResu(8), plyPos.x-calculateToResu(8), plyPos.y-calculateToResu(8), calculateToResu(16), calculateToResu(16), Color(40,40,40))
-        draw.RoundedBox( calculateToResu(8), plyPos.x-calculateToResu(6), plyPos.y-calculateToResu(6), calculateToResu(12), calculateToResu(12), Color(255,10,10))
-        draw.SimpleText( lang.you, "DermaDefault", plyPos.x, plyPos.y-calculateToResu(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.RoundedBox( ctrW(8), plyPos.x-ctrW(8), plyPos.y-ctrW(8), ctrW(16), ctrW(16), Color(40,40,40))
+        draw.RoundedBox( ctrW(8), plyPos.x-ctrW(6), plyPos.y-ctrW(6), ctrW(12), ctrW(12), Color(255,10,10))
+        draw.SimpleText( lang.you, "SettingsNormal", plyPos.x, plyPos.y-ctrW(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         //Coords
-        draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "DermaDefault", ScrW()/2, ScrH() - calculateToResu( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "DermaDefault", ScrW()/2, ScrH() - calculateToResu( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "SettingsNormal", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "SettingsNormal", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
         if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
           for k, plys in pairs( player.GetAll() ) do
@@ -137,9 +137,9 @@ function openSpawnMenu()
               tmpPly.y = win.y + win.h - win.h * ( tmpPly.ytmp / tmpPly.yMax )
 
               //Draw
-              draw.RoundedBox( calculateToResu(8), tmpPly.x-calculateToResu(8), tmpPly.y-calculateToResu(8), calculateToResu(16), calculateToResu(16), Color( 40, 40, 40, 200 ))
-              draw.RoundedBox( calculateToResu(8), tmpPly.x-calculateToResu(6), tmpPly.y-calculateToResu(6), calculateToResu(12), calculateToResu(12), Color( 40, 40, 255, 200 ))
-              draw.SimpleText( plys:Nick(), "DermaDefault", tmpPly.x, tmpPly.y-calculateToResu(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+              draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(8), tmpPly.y-ctrW(8), ctrW(16), ctrW(16), Color( 40, 40, 40, 200 ))
+              draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(6), tmpPly.y-ctrW(6), ctrW(12), ctrW(12), Color( 40, 40, 255, 200 ))
+              draw.SimpleText( plys:Nick(), "SettingsNormal", tmpPly.x, tmpPly.y-ctrW(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
             end
           end
         end

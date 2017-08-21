@@ -21,12 +21,17 @@ include( "shared.lua" )
 
 //##############################################################################
 //Resolutions
-function calculateToResu( tmpNumber )
+function ctrF( tmpNumber )
+  tmpNumber = 2160/tmpNumber
+  return tmpNumber
+end
+
+function ctrW( tmpNumber )
   tmpNumber = 2160/tmpNumber
   return math.Round( ScrH()/tmpNumber )
 end
 
-function ctr( tmpNumber )
+function ctrH( tmpNumber )
   tmpNumber = 2160/tmpNumber
   return math.Round( ScrH()/tmpNumber )
 end
@@ -40,31 +45,31 @@ function ScrH2()
 end
 
 function drawRBox( r, x, y, w, h, col )
-	draw.RoundedBox( calculateToResu(r), calculateToResu(x), calculateToResu(y), calculateToResu(w), calculateToResu(h), col )
+	draw.RoundedBox( ctrW(r), ctrW(x), ctrW(y), ctrW(w), ctrW(h), col )
 end
 
 function drawRBoxBr( r, x, y, w, h, col, br )
-	draw.RoundedBox( calculateToResu(r), calculateToResu(x-br), calculateToResu(y-br), calculateToResu(w+2*br), calculateToResu(2*br), col )
-  draw.RoundedBox( calculateToResu(r), calculateToResu(x-br), calculateToResu(y+h-br), calculateToResu(w+2*br), calculateToResu(2*br), col )
-  draw.RoundedBox( calculateToResu(r), calculateToResu(x-br), calculateToResu(y), calculateToResu(2*br), calculateToResu(h), col )
-  draw.RoundedBox( calculateToResu(r), calculateToResu(x+w-br), calculateToResu(y), calculateToResu(2*br), calculateToResu(h), col )
+	draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y-br), ctrW(w+2*br), ctrW(2*br), col )
+  draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y+h-br), ctrW(w+2*br), ctrW(2*br), col )
+  draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y), ctrW(2*br), ctrW(h), col )
+  draw.RoundedBox( ctrW(r), ctrW(x+w-br), ctrW(y), ctrW(2*br), ctrW(h), col )
 end
 
 function drawRBoxCr( x, y, size, col )
-	draw.RoundedBox( calculateToResu(size/2), calculateToResu(x), calculateToResu(y), calculateToResu(size), calculateToResu(size), col )
+	draw.RoundedBox( ctrW(size/2), ctrW(x), ctrW(y), ctrW(size), ctrW(size), col )
 end
 
 function drawText( text, font, x, y, col, ax, ay )
-	draw.SimpleText( text, font, calculateToResu(x), calculateToResu(y), col, ax, ay)
+	draw.SimpleText( text, font, ctrW(x), ctrW(y), col, ax, ay)
 end
 
 function createVGUI( art, parent, w, h, x, y )
   local tmp = vgui.Create( art, parent, nil )
   if w != nil and h != nil then
-    tmp:SetSize( calculateToResu(w), calculateToResu(h) )
+    tmp:SetSize( ctrW(w), ctrW(h) )
   end
   if x != nil and y != nil then
-    tmp:SetPos( calculateToResu(x), calculateToResu(y) )
+    tmp:SetPos( ctrW(x), ctrW(y) )
   end
   return tmp
 end
@@ -96,7 +101,7 @@ net.Receive( "yrpInfoBox", function( len )
   local _text = net.ReadString()
   function _tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
-    draw.SimpleText( _text, "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( _text, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   local closeButton = createVGUI( "DButton", _tmp, 200, 50, 400 - 100, 400 - 50 )

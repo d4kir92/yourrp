@@ -15,14 +15,14 @@ function tabYourRP( sheet )
     serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
     sheet:AddSheet( "YourRP", serverPanel, "icon16/controller.png" )
     function serverPanel:Paint()
-      draw.RoundedBox( 0, calculateToResu( 0 ), calculateToResu( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
+      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
     end
 
     //Server Sheet
     local yourrpSheet = vgui.Create( "DPropertySheet", serverPanel )
     yourrpSheet:Dock( FILL )
     function yourrpSheet:Paint()
-      //drawBackground( 0, 0, yourrpSheet:GetWide(), yourrpSheet:GetTall(), calculateToResu( 10 ) )
+      //drawBackground( 0, 0, yourrpSheet:GetWide(), yourrpSheet:GetTall(), ctrW( 10 ) )
     end
     tabWorkshop( yourrpSheet )
     tabWiki( yourrpSheet )
