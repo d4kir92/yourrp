@@ -19,7 +19,7 @@ function tabServer( sheet )
     //Server Panel
     local serverPanel = vgui.Create( "DPanel", sheet )
     serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
-    sheet:AddSheet( "Server", serverPanel, "icon16/server.png" )
+    sheet:AddSheet( lang.server, serverPanel, "icon16/server.png" )
     function serverPanel:Paint()
       draw.RoundedBox( 0, calculateToResu( 0 ), calculateToResu( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
     end

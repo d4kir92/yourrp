@@ -9,13 +9,13 @@ net.Receive( "getPlyList", function( len )
 
   local _giveListView = createVGUI( "DListView", sv_givePanel, 1800, 1800, 10, 10 )
   _giveListView:AddColumn( "steamID" ):SetFixedWidth( 120 )
-  _giveListView:AddColumn( "Nick" )
-  _giveListView:AddColumn( "Surname" )
-  _giveListView:AddColumn( "Firstname" )
-  _giveListView:AddColumn( "Gender" )
-  _giveListView:AddColumn( "Group" )
-  _giveListView:AddColumn( "Role" )
-  _giveListView:AddColumn( "Money" )
+  _giveListView:AddColumn( lang.nick )
+  _giveListView:AddColumn( lang.surname )
+  _giveListView:AddColumn( lang.firstname )
+  _giveListView:AddColumn( lang.gender )
+  _giveListView:AddColumn( lang.group )
+  _giveListView:AddColumn( lang.role )
+  _giveListView:AddColumn( lang.money )
 
   for k, v in pairs( _tmpPlyList ) do
     for l, w in pairs( _tmpRoleList ) do
@@ -44,13 +44,13 @@ net.Receive( "getPlyList", function( len )
     end)
 
     local _buttonRole = createVGUI( "DButton", _tmpPanel, 400, 50, 10, 10 )
-    _buttonRole:SetText( "Give Role" )
+    _buttonRole:SetText( lang.giverole )
     function _buttonRole:DoClick()
       local _giveFrame = createVGUI( "DFrame", nil, 400, 305, 0, 0 )
       _giveFrame:Center()
       _giveFrame:ShowCloseButton( true )
       _giveFrame:SetDraggable( true )
-      _giveFrame:SetTitle( "Role Giver" )
+      _giveFrame:SetTitle( lang.rolegiver )
 
       local _giveComboBox = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 85 )
       for k, v in pairs( _tmpGroupList ) do
@@ -71,7 +71,7 @@ net.Receive( "getPlyList", function( len )
       end
 
       local _giveButton = createVGUI( "DButton", _giveFrame, 380, 50, 10, 185+10+50 )
-      _giveButton:SetText( "Give" )
+      _giveButton:SetText( lang.give )
       function _giveButton:DoClick()
         net.Start( "giveRole" )
           net.WriteString( _tmpSteamID )
@@ -83,8 +83,8 @@ net.Receive( "getPlyList", function( len )
       function _giveFrame:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
 
-        draw.SimpleText( "Group:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        draw.SimpleText( "Role:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        draw.SimpleText( lang.group .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        draw.SimpleText( lang.role .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       end
 
       _giveFrame:MakePopup()
@@ -104,7 +104,7 @@ function tabServerGive( sheet )
   local ply = LocalPlayer()
 
   sv_givePanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( "Give", sv_givePanel, "icon16/user_go.png" )
+  sheet:AddSheet( lang.give, sv_givePanel, "icon16/user_go.png" )
   function sv_givePanel:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, yrpsettings.color.background )
   end

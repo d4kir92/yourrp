@@ -5,6 +5,7 @@
 include( "cl_settings_yourrp_workshop.lua" )
 include( "cl_settings_yourrp_wiki.lua" )
 include( "cl_settings_yourrp_contact.lua" )
+include( "cl_settings_yourrp_add_langu.lua" )
 
 function tabYourRP( sheet )
   local ply = LocalPlayer()
@@ -26,6 +27,7 @@ function tabYourRP( sheet )
     tabWorkshop( yourrpSheet )
     tabWiki( yourrpSheet )
     tabContact( yourrpSheet )
+    tabLanguage( yourrpSheet )
 
     for k, v in pairs(yourrpSheet.Items) do
     	if (!v.Tab) then continue end

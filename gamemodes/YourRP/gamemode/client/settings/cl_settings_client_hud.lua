@@ -88,13 +88,13 @@ function tabClientHud( sheet )
   local ply = LocalPlayer()
 
   local cl_hudPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( "Hud", cl_hudPanel, "icon16/photo.png" )
+  sheet:AddSheet( lang.hud, cl_hudPanel, "icon16/photo.png" )
   function cl_hudPanel:Paint( w, h )
     //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrpsettings.color.panel )
   end
 
   local changeHudButton = createDerma( "DButton", cl_hudPanel, 470, 50, 0, 0 )
-  changeHudButton:SetText( "change HUD" )
+  changeHudButton:SetText( lang.changehud )
   function changeHudButton:DoClick()
     settingsWindow:Close()
 
@@ -132,21 +132,21 @@ function tabClientHud( sheet )
       changeHudWindow:Close()
     end
     function changeHudWindowCloseButton:Paint( pw, ph )
-      draw.SimpleText( "Click on empty space to Close", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.helpclose, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
-      draw.SimpleText( "Want to move a hud element? Drag with mouse the blue boxes", "DermaDefault", pw/2, ph/2+20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      draw.SimpleText( "Want to resize a hud element? go with mouse over the green box, then hold click and move mouse", "DermaDefault", pw/2, ph/2+40, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.helpmove, "HudBars", pw/2, ph/2+20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.helpresize, "HudBars", pw/2, ph/2+40, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
 
-    changeHudElement( changeHudWindow, "mmx", "mmy", "mmw", "mmh", "mmt", "Minimap" )
-    changeHudElement( changeHudWindow, "hpx", "hpy", "hpw", "hph", "hpt", "Health" )
-    changeHudElement( changeHudWindow, "arx", "ary", "arw", "arh", "art", "Armor" )
-    changeHudElement( changeHudWindow, "wnx", "wny", "wnw", "wnh", "wnt", "Weapon Name" )
-    changeHudElement( changeHudWindow, "wpx", "wpy", "wpw", "wph", "wpt", "Weapon Primary" )
-    changeHudElement( changeHudWindow, "wsx", "wsy", "wsw", "wsh", "wst", "Weapon Secondary" )
-    changeHudElement( changeHudWindow, "rix", "riy", "riw", "rih", "rit", "RoleID" )
-    changeHudElement( changeHudWindow, "ttx", "tty", "ttw", "tth", "ttt", "Tooltip" )
-    changeHudElement( changeHudWindow, "mox", "moy", "mow", "moh", "mot", "Money" )
+    changeHudElement( changeHudWindow, "mmx", "mmy", "mmw", "mmh", "mmt", lang.minimap )
+    changeHudElement( changeHudWindow, "hpx", "hpy", "hpw", "hph", "hpt", lang.health )
+    changeHudElement( changeHudWindow, "arx", "ary", "arw", "arh", "art", lang.armor )
+    changeHudElement( changeHudWindow, "wnx", "wny", "wnw", "wnh", "wnt", lang.wname )
+    changeHudElement( changeHudWindow, "wpx", "wpy", "wpw", "wph", "wpt", lang.wprimary )
+    changeHudElement( changeHudWindow, "wsx", "wsy", "wsw", "wsh", "wst", lang.wsecondary )
+    changeHudElement( changeHudWindow, "rix", "riy", "riw", "rih", "rit", lang.role )
+    changeHudElement( changeHudWindow, "ttx", "tty", "ttw", "tth", "ttt", lang.tooltip )
+    changeHudElement( changeHudWindow, "mox", "moy", "mow", "moh", "mot", lang.money )
 
     changeHudWindow:MakePopup()
   end
@@ -159,18 +159,18 @@ function tabClientHud( sheet )
     end
   end
 
-  local toggleHud = createVGUI( "DButton", cl_hudPanel, 230, 50, 0, 50 + 10 )
-  toggleHud:SetText( "Toggle HUD (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), "On", "Off" ) .. ")" )
+  local toggleHud = createVGUI( "DButton", cl_hudPanel, 470, 50, 0, 50 + 10 )
+  toggleHud:SetText( lang.togglehud .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang.on, lang.off ) .. ")" )
   function toggleHud:DoClick()
     if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
       GetConVar( "yrp_cl_hud" ):SetInt( 0 )
     elseif GetConVar( "yrp_cl_hud" ):GetInt() == 0 then
       GetConVar( "yrp_cl_hud" ):SetInt( 1 )
     end
-    toggleHud:SetText( "Toggle HUD (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), "On", "Off" ) .. ")" )
+    toggleHud:SetText( lang.togglehud .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang.on, lang.off ) .. ")" )
   end
 
-  local resetHudButton = createDerma( "DColorButton", cl_hudPanel, 230, 50, 230 + 10, 50 + 10 )
+  local resetHudButton = createDerma( "DColorButton", cl_hudPanel, 470, 50, 470 + 10, 50 + 10 )
   resetHudButton:SetText( "" )
   function resetHudButton:Paint( pw, ph )
     if resetHudButton:IsHovered() then
@@ -179,22 +179,22 @@ function tabClientHud( sheet )
       draw.RoundedBox( 0, 0,0, pw, ph, Color( 255, 0, 0 ) )
     end
 
-    draw.SimpleText( "Reset Hud", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.resethud, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function resetHudButton:DoClick()
     local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
     _window:Center()
-    _window:SetTitle( "Are you sure?" )
+    _window:SetTitle( lang.areyousure )
 
     local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60 )
-    _yesButton:SetText( "Yes" )
+    _yesButton:SetText( lang.yes )
     function _yesButton:DoClick()
       resetHud()
       _window:Close()
     end
 
     local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-    _noButton:SetText( "No" )
+    _noButton:SetText( lang.no )
     function _noButton:DoClick()
       _window:Close()
     end
@@ -206,7 +206,7 @@ function tabClientHud( sheet )
   function _colorBackgroundPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( "HUD Background", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.hudbackground, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorBackground = createVGUI( "DColorMixer", _colorBackgroundPanel, 450, 450, 10, 50 )
@@ -227,7 +227,7 @@ function tabClientHud( sheet )
   function _colorBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( "HUD Border", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.hudborder, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorBorder = createVGUI( "DColorMixer", _colorBorderPanel, 450, 450, 10, 50 )
@@ -246,7 +246,7 @@ function tabClientHud( sheet )
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( "Crosshair", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshair, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )
@@ -265,7 +265,7 @@ function tabClientHud( sheet )
   function _colorCrosshairBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( "Crosshair Border", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshairborder, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _colorCrosshairBorder = createVGUI( "DColorMixer", _colorCrosshairBorderPanel, 450, 450, 10, 50 )
@@ -284,12 +284,12 @@ function tabClientHud( sheet )
   function _settingCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( "Crosshair Settings", "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshairsettings, "DermaDefault", calculateToResu( 10 ), calculateToResu( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( "Length:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 60 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( "Gap:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 150 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( "Thickness:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( "Border:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 330 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.length .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 60 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.gap .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 150 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.thickness .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.border .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 330 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90 )

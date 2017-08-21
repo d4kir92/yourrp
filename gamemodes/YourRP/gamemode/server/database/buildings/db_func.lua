@@ -70,14 +70,25 @@ function searchForDoors()
     local _tmpDoorsTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
   end
 
-  printGM( "db", "Done finding them (" .. #_allPropDoors .. " found)" )
-  return #_allPropDoors
+  local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
+  for k, v in pairs( _allFuncRDoors ) do
+    dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+
+    local _tmpBuildingTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+    dbInsertInto( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
+
+    local _tmpDoorsTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  end
+
+  printGM( "db", "Done finding them (" .. #_allPropDoors+#_allFuncDoors+#_allFuncRDoors .. " found)" )
+  return #_allPropDoors+#_allFuncDoors+#_allFuncRDoors
 end
 
 function loadDoors()
   printGM( "note", "loadDoors start!")
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   local _allFuncDoors = ents.FindByClass( "func_door" )
+  local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   local _tmpDoors = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
   local _count = 0
   if _tmpDoors != nil then
@@ -91,6 +102,14 @@ function loadDoors()
       _count = k
     end
     for k, v in pairs( _allFuncDoors ) do
+      if _tmpDoors[k+_count] != nil then
+        v:SetNWInt( "buildingID", tonumber( _tmpDoors[k+_count].buildingID ) )
+        v:SetNWInt( "uniqueID", k+_count )
+      else
+        printGM( "note", "more doors, then in list!" )
+      end
+    end
+    for k, v in pairs( _allFuncRDoors ) do
       if _tmpDoors[k+_count] != nil then
         v:SetNWInt( "buildingID", tonumber( _tmpDoors[k+_count].buildingID ) )
         v:SetNWInt( "uniqueID", k+_count )
@@ -137,9 +156,11 @@ function checkMapDoors()
     printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: found Doors" )
     local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
     local _allFuncDoors = ents.FindByClass( "func_door" )
+    local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
     print("_allPropDoors " .. #_allPropDoors)
     print("_allFuncDoors " .. #_allFuncDoors)
-    if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors ) then
+    print("_allFuncDoors " .. #_allFuncRDoors)
+    if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors + #_allFuncRDoors ) then
       printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: new doors found!" )
       amountDoors = searchForDoors()
     end

@@ -6,7 +6,7 @@ function tabServerQuestions( sheet )
   local ply = LocalPlayer()
 
   local sv_questionPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( "Questions", sv_questionPanel, "icon16/user_comment.png" )
+  sheet:AddSheet( lang.questions, sv_questionPanel, "icon16/user_comment.png" )
   function sv_questionPanel:Paint()
     //draw.RoundedBox( 4, 0, 0, sv_questionPanel:GetWide(), sv_questionPanel:GetTall(), yrpsettings.color.panel )
     draw.SimpleText( "Questions (NOT AVAILABLE AT THE MOMENT: Is in work)", "SettingsNormal", calculateToResu( 5 + 30 + 10 ), calculateToResu( 10 + 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )

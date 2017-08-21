@@ -8,7 +8,7 @@ GM.Author =				"D4KiR"
 GM.Email =				""
 GM.Website =			"youtube.com/c/D4KiR"
 GM.Twitter =			"twitter.com/D4KIR"
-GM.Version =			"0.3.7"
+GM.Version =			"0.4.0"
 GM.VersionSort = 	""
 GM.Help =					""
 
@@ -111,8 +111,9 @@ function printGMImp( channel, string )
 	print(yrp.spacePos)
 end
 
-function printGM( channel, string )
-	if string != nil then
+function printGM( channel, _string )
+	local string = tostring( _string )
+	if string != "nil" then
 		local _tmpText = string.Explode( "\n", string )
 		local _color = Color( 255, 0, 0 )
 		local _color2 = Color( 255, 0, 0 )
@@ -149,6 +150,9 @@ function printGM( channel, string )
 		elseif channel == "error" then
 			_color2 = Color( 255, 0, 0 )
 			_channelName = "ERROR"
+		elseif channel == "lang" then
+			_color2 = Color( 255, 255, 0 )
+			_channelName = "LANGUAGE"
 		end
 		for k, v in pairs(_tmpText) do
 			if _channelName != "" then

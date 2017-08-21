@@ -113,7 +113,7 @@ function GM:InitPostEntity()
   playerready = 1
 
   loadCompleteHud()
-  
+
 	//net.Start( "clientFinished" )
   //net.SendToServer()
 end

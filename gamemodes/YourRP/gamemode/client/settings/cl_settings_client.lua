@@ -8,7 +8,7 @@ include( "cl_settings_client_hud.lua" )
 function tabClient( sheet )
   local clientPanel = vgui.Create( "DPanel", sheet )
   clientPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
-  sheet:AddSheet( "Client", clientPanel, "icon16/user.png" )
+  sheet:AddSheet( lang.client, clientPanel, "icon16/user.png" )
   function clientPanel:Paint()
     draw.RoundedBox( 0, calculateToResu( 0 ), calculateToResu( 40 ), clientPanel:GetWide(), clientPanel:GetTall(), yrpsettings.color.background )
   end

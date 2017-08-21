@@ -3,11 +3,12 @@
 //cl_settings_server_general.lua
 
 local _advertname = "NULL"
+local _restartTime = 0
 function tabServerGeneral( sheet )
   local ply = LocalPlayer()
 
   local sv_generalPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( "General", sv_generalPanel, "icon16/server_database.png" )
+  sheet:AddSheet( lang.general, sv_generalPanel, "icon16/server_database.png" )
 
   local sv_generalName = vgui.Create( "DTextEntry", sv_generalPanel )
   local sv_generalAdvert = vgui.Create( "DTextEntry", sv_generalPanel )
@@ -15,11 +16,11 @@ function tabServerGeneral( sheet )
   local oldGamemodename = ""
   function sv_generalPanel:Paint()
     //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrpsettings.color.panel )
-    draw.SimpleText( "Gamemode Name:", "SettingsNormal", calculateToResu( 300 - 10 ), calculateToResu( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.gamemodename .. ":", "SettingsNormal", calculateToResu( 300 - 10 ), calculateToResu( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleText( "you need to update Server!", "SettingsNormal", calculateToResu( 300 + 400 + 10 ), calculateToResu( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
-    draw.SimpleText( "Advert Channelname:", "SettingsNormal", calculateToResu( 300 - 10 ), calculateToResu( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.advertname .. ":", "SettingsNormal", calculateToResu( 300 - 10 ), calculateToResu( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
   sv_generalName:SetPos( calculateToResu( 300 ), calculateToResu( 5 ) )
@@ -40,7 +41,7 @@ function tabServerGeneral( sheet )
         end
       elseif v.name == "advert" then
         _advertname = v.value
-        if sv_generalAdvert != nil then
+        if sv_generalAdvert != nil and _advertname != nil then
           sv_generalAdvert:SetText( tostring( _advertname ) )
         end
       end
@@ -59,7 +60,7 @@ function tabServerGeneral( sheet )
   local sv_generalRestartTime = vgui.Create( "DNumSlider", sv_generalPanel )
   sv_generalRestartTime:SetPos( calculateToResu( 10 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartTime:SetSize( calculateToResu( 1800 ), calculateToResu( 50 ) )
-  sv_generalRestartTime:SetText( "Update Countdown" )
+  sv_generalRestartTime:SetText( lang.updatecountdown )
   sv_generalRestartTime:SetMin( 3 )
   sv_generalRestartTime:SetMax( 60 )
   sv_generalRestartTime:SetDecimals( 0 )
@@ -85,9 +86,9 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalRestartServer = vgui.Create( "DButton", sv_generalPanel )
-  sv_generalRestartServer:SetSize( calculateToResu( 200 ), calculateToResu( 50 ) )
+  sv_generalRestartServer:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
   sv_generalRestartServer:SetPos( calculateToResu( 5 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartServer:SetText( "Update Server")
+  sv_generalRestartServer:SetText( lang.updateserver )
   function sv_generalRestartServer:Paint()
     local color = Color( 255, 0, 0, 200 )
     if sv_generalRestartServer:IsHovered() then
@@ -107,9 +108,9 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalRestartServerCancel = vgui.Create( "DButton", sv_generalPanel )
-  sv_generalRestartServerCancel:SetSize( calculateToResu( 260 ), calculateToResu( 50 ) )
-  sv_generalRestartServerCancel:SetPos( calculateToResu( 5 + 200 + 10 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartServerCancel:SetText( "Cancel Update Server")
+  sv_generalRestartServerCancel:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
+  sv_generalRestartServerCancel:SetPos( calculateToResu( 5 + 400 + 10 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartServerCancel:SetText( lang.cancelupdateserver )
   function sv_generalRestartServerCancel:Paint()
     local color = Color( 0, 255, 0, 200 )
     if sv_generalRestartServerCancel:IsHovered() then
@@ -124,9 +125,9 @@ function tabServerGeneral( sheet )
   end
 
   local sv_generalHardReset = vgui.Create( "DButton", sv_generalPanel )
-  sv_generalHardReset:SetSize( calculateToResu( 260 ), calculateToResu( 50 ) )
+  sv_generalHardReset:SetSize( calculateToResu( 400 ), calculateToResu( 50 ) )
   sv_generalHardReset:SetPos( calculateToResu( 5 ), calculateToResu( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalHardReset:SetText( "Hard Reset Database")
+  sv_generalHardReset:SetText( lang.hardresetdatabase )
   function sv_generalHardReset:Paint( pw, ph )
     local color = Color( 255, 0, 0, 200 )
     if sv_generalHardReset:IsHovered() then
@@ -137,7 +138,7 @@ function tabServerGeneral( sheet )
   function sv_generalHardReset:DoClick()
     local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
     _tmpFrame:Center()
-    _tmpFrame:SetTitle( "ARE YOU SURE???" )
+    _tmpFrame:SetTitle( lang.areyousure )
     function _tmpFrame:Paint( pw, ph )
       local color = Color( 0, 0, 0, 200 )
       draw.RoundedBox( calculateToResu( 10 ), 0, 0, pw, ph, color )
@@ -146,7 +147,7 @@ function tabServerGeneral( sheet )
     local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
     sv_generalHardResetSure:SetSize( calculateToResu( 300 ), calculateToResu( 50 ) )
     sv_generalHardResetSure:SetPos( calculateToResu( 10 ), calculateToResu( 50 ) )
-    sv_generalHardResetSure:SetText( "Yes: DELETE DATABASE" )
+    sv_generalHardResetSure:SetText( lang.yes .. ": DELETE DATABASE" )
     function sv_generalHardResetSure:DoClick()
       net.Start( "hardresetdatabase" )
       net.SendToServer()
@@ -163,7 +164,7 @@ function tabServerGeneral( sheet )
     local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
     sv_generalHardResetNot:SetSize( calculateToResu( 300 ), calculateToResu( 50 ) )
     sv_generalHardResetNot:SetPos( calculateToResu( 10 + 300 + 10 ), calculateToResu( 50 ) )
-    sv_generalHardResetNot:SetText( "No: do nothing" )
+    sv_generalHardResetNot:SetText( lang.no .. ": do nothing" )
     function sv_generalHardResetNot:DoClick()
       _tmpFrame:Close()
     end

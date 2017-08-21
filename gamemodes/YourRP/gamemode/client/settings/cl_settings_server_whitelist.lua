@@ -10,9 +10,9 @@ net.Receive( "getRoleWhitelist", function( len )
   local _whitelistListView = createVGUI( "DListView", sv_whitelistPanel, 1500, 1800, 10, 10 )
   _whitelistListView:AddColumn( "uniqueID" ):SetFixedWidth( 0 )
   _whitelistListView:AddColumn( "steamID" ):SetFixedWidth( 120 )
-  _whitelistListView:AddColumn( "Nick" )
-  _whitelistListView:AddColumn( "Group" )
-  _whitelistListView:AddColumn( "Role" )
+  _whitelistListView:AddColumn( lang.nick )
+  _whitelistListView:AddColumn( lang.group )
+  _whitelistListView:AddColumn( lang.role )
 
   for k, v in pairs( _tmpWhiteList ) do
     for l, w in pairs( _tmpRoleList ) do
@@ -30,7 +30,7 @@ net.Receive( "getRoleWhitelist", function( len )
 
 
   local _buttonAdd = createVGUI( "DButton", sv_whitelistPanel, 300, 50, 10 + 1500 + 10, 10 )
-  _buttonAdd:SetText( "Add Entry" )
+  _buttonAdd:SetText( lang.addentry )
   function _buttonAdd:DoClick()
     local _whitelistFrame = createVGUI( "DFrame", nil, 400, 405, 0, 0 )
     _whitelistFrame:Center()
@@ -62,7 +62,7 @@ net.Receive( "getRoleWhitelist", function( len )
     end
 
     local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 285+10+50 )
-    _whitelistButton:SetText( "Whitelist Player" )
+    _whitelistButton:SetText( lang.whitelistplayer )
     function _whitelistButton:DoClick()
       net.Start( "whitelistPlayer" )
         net.WriteString( _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) )
@@ -75,16 +75,16 @@ net.Receive( "getRoleWhitelist", function( len )
     function _whitelistFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
 
-      draw.SimpleText( "Player:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( "Group:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( "Role:", "DermaDefault", calculateToResu( 10 ), calculateToResu( 185+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.player .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.group .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.role .. ":", "DermaDefault", calculateToResu( 10 ), calculateToResu( 185+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     end
 
     _whitelistFrame:MakePopup()
   end
 
   local _buttonRem = createVGUI( "DButton", sv_whitelistPanel, 300, 50, 10 + 1500 + 10, 10 + 50 + 10 )
-  _buttonRem:SetText( "Remove Entry" )
+  _buttonRem:SetText( lang.removeentry )
   function _buttonRem:DoClick()
     if _whitelistListView:GetSelectedLine() != "" then
       net.Start( "whitelistPlayerRemove" )
@@ -104,7 +104,7 @@ function tabServerWhitelist( sheet )
   local ply = LocalPlayer()
 
   sv_whitelistPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( "Whitelist", sv_whitelistPanel, "icon16/page_white_key.png" )
+  sheet:AddSheet( lang.whitelist, sv_whitelistPanel, "icon16/page_white_key.png" )
   function sv_whitelistPanel:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, yrpsettings.color.background )
   end

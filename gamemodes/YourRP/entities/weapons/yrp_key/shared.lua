@@ -9,7 +9,7 @@ SWEP.Instructions = "Left Click - Unlock door\nRight Click - Lock door"
 SWEP.Category = "YourRP"
 
 //The name of the SWep, as appears in the weapons tab in the spawn menu(Q Menu)
-SWEP.PrintName = "Key"
+SWEP.PrintName = lang.key
 
 //Sets the position of the weapon in the switching menu
 //(appears when you use the scroll wheel or keys 1-6 by default)
@@ -54,4 +54,28 @@ end
 SWEP.numbers = {}
 function SWEP:AddKeyNr( nr )
   table.insert( self.numbers, nr )
+end
+
+function SWEP:PrimaryAttack()
+  for k, v in pairs( self.numbers ) do
+    if self.Owner:GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
+      if unlockDoor( self.Owner:GetEyeTrace().Entity, v ) then
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.unlockeddoor )
+      else
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+      end
+    end
+  end
+end
+
+function SWEP:SecondaryAttack()
+  for k, v in pairs( self.numbers ) do
+    if self.Owner:GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
+      if lockDoor( self.Owner:GetEyeTrace().Entity, v ) then
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.lockeddoor )
+      else
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+      end
+    end
+  end
 end

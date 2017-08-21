@@ -125,6 +125,14 @@ net.Receive( "removeOwner", function( len, ply )
       createKey( v, _tmpBuildingID )
     end
   end
+  local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
+  for k, v in pairs( _tmpFRDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerGroup", "" )
+      createKey( v, _tmpBuildingID )
+    end
+  end
 end)
 
 net.Receive( "sellBuilding", function( len, ply )
@@ -147,6 +155,18 @@ net.Receive( "sellBuilding", function( len, ply )
   local _tmpFDoors = ents.FindByClass( "func_door" )
 
   for k, v in pairs( _tmpFDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerGroup", "" )
+      createKey( v, _tmpBuildingID )
+      v:Fire("Unlock")
+      dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
+    end
+  end
+
+  local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
+
+  for k, v in pairs( _tmpFRDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
       v:SetNWString( "owner", "" )
       v:SetNWString( "ownerGroup", "" )
@@ -179,6 +199,12 @@ net.Receive( "buyBuilding", function( len, ply )
         v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
       end
     end
+    local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
+    for k, v in pairs( _tmpFRDoors ) do
+      if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+        v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
+      end
+    end
 
     printGM( "user", ply:Nick() .. " has buyed a door")
   else
@@ -201,6 +227,12 @@ net.Receive( "setBuildingOwnerGroup", function( len, ply )
   end
   local _tmpFDoors = ents.FindByClass( "func_door" )
   for k, v in pairs( _tmpFDoors ) do
+    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+      v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
+    end
+  end
+  local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
+  for k, v in pairs( _tmpFRDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
       v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
     end

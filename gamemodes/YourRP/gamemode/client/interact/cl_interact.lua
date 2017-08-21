@@ -28,7 +28,7 @@ net.Receive( "openInteractMenu", function ()
       tmpSurName = v:GetNWString( "SurName" )
     end
   end
-  _windowInteract:SetTitle( "Interact Menu" )
+  _windowInteract:SetTitle( lang.interactmenu )
   function _windowInteract:OnClose()
     gui.EnableScreenClicker( false )
     _windowInteract = nil
@@ -36,12 +36,12 @@ net.Receive( "openInteractMenu", function ()
   end
   function _windowInteract:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 160 ) )
-    draw.SimpleText( "Nick: " .. tmpTargetName .. " ( SteamID: " .. tmpTargetSteamID .. " )", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( "Name: " .. tmpSurName .. ", " .. tmpFirstName, "DermaDefault", calculateToResu( 10 ), calculateToResu( 80 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.nick .. ": " .. tmpTargetName .. " ( SteamID: " .. tmpTargetSteamID .. " )", "DermaDefault", calculateToResu( 10 ), calculateToResu( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.name .. ": " .. tmpSurName .. ", " .. tmpFirstName, "DermaDefault", calculateToResu( 10 ), calculateToResu( 80 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   local buttonTrade = createVGUI( "DButton", _windowInteract, 400, 50, 10, 120 )
-  buttonTrade:SetText( "Trade (NOT AVAILABLE: InWork)" )
+  buttonTrade:SetText( lang.trade .. " (NOT AVAILABLE: InWork)" )
 
   if isInstructor then
     _windowInteract:SetSize( calculateToResu( 830 ), calculateToResu( 400 ) )
@@ -49,7 +49,7 @@ net.Receive( "openInteractMenu", function ()
 
     if promoteable then
       local buttonPromote = createVGUI( "DButton", _windowInteract, 400, 50, 420, 120 )
-      buttonPromote:SetText( "Promote: " .. promoteName )
+      buttonPromote:SetText( lang.promote .. ": " .. promoteName )
       function buttonPromote:DoClick()
         net.Start( "promotePlayer" )
           net.WriteString( tmpTargetSteamID )
@@ -60,7 +60,7 @@ net.Receive( "openInteractMenu", function ()
 
     if demoteable then
       local buttonDemote = createVGUI( "DButton", _windowInteract, 400, 50, 420, 120 + 10 + 50 )
-      buttonDemote:SetText( "Demote: " .. demoteName )
+      buttonDemote:SetText( lang.demote .. ": " .. demoteName )
       function buttonDemote:DoClick()
         net.Start( "demotePlayer" )
           net.WriteString( tmpTargetSteamID )

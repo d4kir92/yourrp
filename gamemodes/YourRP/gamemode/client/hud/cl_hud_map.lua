@@ -31,7 +31,7 @@ function openSpawnMenu()
         draw.RoundedBox( 0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255 ) )
 
         local _mapName = string.Replace( string.upper( game.GetMap() ), "_", " " )
-        draw.SimpleText( "[M] - Map: " .. _mapName, "HudBars", win.x + win.w/2, win.y - calculateToResu( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", win.x + win.w/2, win.y - calculateToResu( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         local tr = util.TraceLine( {
           start = ply:GetPos() + Vector( 0, 0, 1400 ),
@@ -110,7 +110,7 @@ function openSpawnMenu()
         //You
         draw.RoundedBox( calculateToResu(8), plyPos.x-calculateToResu(8), plyPos.y-calculateToResu(8), calculateToResu(16), calculateToResu(16), Color(40,40,40))
         draw.RoundedBox( calculateToResu(8), plyPos.x-calculateToResu(6), plyPos.y-calculateToResu(6), calculateToResu(12), calculateToResu(12), Color(255,10,10))
-        draw.SimpleText( "YOU", "DermaDefault", plyPos.x, plyPos.y-calculateToResu(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.you, "DermaDefault", plyPos.x, plyPos.y-calculateToResu(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         //Coords
         draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "DermaDefault", ScrW()/2, ScrH() - calculateToResu( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )

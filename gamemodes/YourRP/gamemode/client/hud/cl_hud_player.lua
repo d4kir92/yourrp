@@ -207,12 +207,12 @@ function HudPlayer()
       //Tooltip
       if tonumber( cl_db["ttt"] ) == 1 then
         drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-        drawText( "Tooltip:", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 16 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F2 - Role Menu", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 80 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F4 - Buy Menu", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 144 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F7 - Settings", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 208 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "B  - Change View", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 272 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "M  - Map", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 336 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( lang.tooltip .. ":", "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 16 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F2 - " .. lang.rolemenu, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 80 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F4 - " .. lang.buymenu, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 144 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F7 - " .. lang.settings, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 208 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 272 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + calculateToResu( 32 ), cl_db["tty"] + calculateToResu( 336 ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       end
 
       //Money
@@ -238,11 +238,11 @@ function HudPlayer()
       if show3PInfo == 1 then
         local _3PText = ""
         if _thirdperson == 0 then
-          _3PText = "View: Firstperson"
+          _3PText = lang.fpp
         elseif _thirdperson == 1 then
-          _3PText = "View: Firstperson Realistic"
+          _3PText = lang.fppr
         elseif _thirdperson == 2 then
-          _3PText = "View: Thirdperson"
+          _3PText = lang.tpp
         end
         draw.SimpleText( _3PText, "DermaDefault", calculateToResu( 3840/2 ), calculateToResu( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
       end
@@ -287,7 +287,7 @@ function HudPlayer()
       end
     else
       drawRBox( 0, 0, 0, 3840, 2160, Color( 255, 0, 0, 100 ) )
-      drawText( "Dead! Respawning ...", "HudBars", 3840/2, 2160/2, Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      drawText( lang.dead .. "! " .. lang.respawning .. "...", "HudBars", 3840/2, 2160/2, Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
 end

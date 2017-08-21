@@ -97,7 +97,7 @@ function useFunction( string )
 				end*/
 			end
 		elseif string == "openDoorOptions" then
-			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" then
+			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 				if _doorWindow != nil and keys["_hold"] == 0 then
 					keys["_hold"] = 1
 					_doorWindow:Remove()

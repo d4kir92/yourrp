@@ -47,7 +47,7 @@ function addNewItem( parent, item )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
     end
-    draw.SimpleText( "Buy", "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.buy, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function _itemBuyButton:DoClick()
     net.Start( "buyItem" )
@@ -69,16 +69,20 @@ function addNewItem( parent, item )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
       end
-      draw.SimpleText( "Remove Item", "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.removeitem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
     function _removeButton:DoClick()
       local frame = createVGUI( "DFrame", nil, 630, 120, 0, 0 )
       frame:Center()
+      frame:SetTitle( lang.areyousure )
+      function frame:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
+      end
 
       frame:MakePopup()
 
       local yes = createVGUI( "DButton", frame, 300, 50, 10, 60 )
-      yes:SetText( "Yes" )
+      yes:SetText( lang.yes )
       function yes:DoClick()
         net.Start( "removeBuyItem" )
           net.WriteString( _itemPanel.uniqueID )
@@ -88,7 +92,7 @@ function addNewItem( parent, item )
       end
 
       local no = createVGUI( "DButton", frame, 300, 50, 10 + 300 + 10, 60 )
-      no:SetText( "No" )
+      no:SetText( lang.no )
       function no:DoClick()
         frame:Close()
       end
@@ -135,15 +139,15 @@ net.Receive( "getBuyList", function( len )
     end
     function _addItemButton:DoClick()
       local addSwep = {}
-      addSwep.PrintName = "No Item Selected!"
+      addSwep.PrintName = lang.noitemselected .. "!"
       local _windowAddItem = createVGUI( "DFrame", nil, 512, 50+500+10+50+10+50+10+30+50+10, 0, 0 )
-      _windowAddItem:SetTitle( "Add Item" )
+      _windowAddItem:SetTitle( lang.additem )
       _windowAddItem:ShowCloseButton( true )
       _windowAddItem:SetDraggable( true )
       function _windowAddItem:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
 
-        draw.SimpleText( "Price:", "weaponT", calculateToResu( 8 ), ph - calculateToResu( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.price .. ":", "weaponT", calculateToResu( 8 ), ph - calculateToResu( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
 
       local _AddItemPanel = createVGUI( "DPanel", _windowAddItem, 500, 500, 6, 50 )
@@ -164,24 +168,30 @@ net.Receive( "getBuyList", function( len )
         else
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
         end
-        draw.SimpleText( "Select Item", "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.selectitem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
       function _AddItemSWEP:DoClick()
         local itemSelector = vgui.Create( "DFrame" )
         itemSelector:SetSize( calculateToResu( 2000 ), calculateToResu( 2000 ) )
         itemSelector:SetPos( ScrW2() - calculateToResu( 2000/2 ), ScrH2() - calculateToResu( 2000/2 ) )
-        itemSelector:SetTitle( "Item Selector" )
+        itemSelector:SetTitle( lang.itemMenu )
+        function itemSelector:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
+        end
 
         local PanelSelect = vgui.Create( "DPanelSelect", itemSelector )
         PanelSelect:SetSize( calculateToResu( 2000 ), calculateToResu( 2000 - 45 ) )
         PanelSelect:SetPos( calculateToResu( 0 ), calculateToResu( 45 ) )
+        PanelSelect:SetText( "" )
 
         for k, swep in pairs( weapons.GetList() ) do
     			local icon = vgui.Create( "SpawnIcon" )
+          icon:SetText( "" )
     			icon:SetModel( swep.WorldModel )
     			icon:SetSize( calculateToResu( 256 ), calculateToResu( 256 ) )
     			icon:SetTooltip( swep.PrintName )
           local _tmpName = createVGUI( "DButton", icon, 256, 256, 0, 0 )
+          _tmpName:SetText( "" )
           function _tmpName:Paint( pw, ph )
             draw.SimpleText( swep.PrintName, "pmT", pw/2, ph-calculateToResu( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           end
@@ -214,7 +224,7 @@ net.Receive( "getBuyList", function( len )
         else
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
         end
-        draw.SimpleText( "Add Item", "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.additem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
       function _AddItemAdd:DoClick()
         net.Start( "addNewBuyItem" )
@@ -236,23 +246,41 @@ end)
 function openBuyMenu()
   _menuIsOpen = 1
   _buyWindow = createVGUI( "DFrame", nil, winW, winH, 0, 0 )
-  _buyWindow:SetTitle( "Buy Menu" )
+  _buyWindow:SetTitle( lang.buymenu )
   _buyWindow:Center()
   function _buyWindow:OnClose()
     _menuIsOpen = 0
     _buyWindow:Remove()
   end
+  function _buyWindow:Paint( pw, ph )
+
+  end
 
   local _buyTabs = createVGUI( "DPropertySheet", _buyWindow, winW, winH, 0, 0 )
   _buyTabs:Dock( FILL )
+  function _buyTabs:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
+  end
 
   _tabWeapon = vgui.Create( "DPanel", sheet )
   _tabWeapon.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, 200 ) ) end
-  _buyTabs:AddSheet( "Weapon", _tabWeapon, "icon16/cart.png" )
+  _buyTabs:AddSheet( lang.weapons, _tabWeapon, "icon16/cart.png" )
 
   net.Start( "getBuyList" )
     net.WriteString( "weapons" )
   net.SendToServer()
+
+  for k, v in pairs(_buyTabs.Items) do
+  	if (!v.Tab) then continue end
+
+    v.Tab.Paint = function(self,w,h)
+      if v.Tab == _buyTabs:GetActiveTab() then
+		    draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.background )
+      else
+        draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.buttonInActive )
+      end
+    end
+  end
 
   _buyWindow:MakePopup()
 end

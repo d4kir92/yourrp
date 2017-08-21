@@ -45,7 +45,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   local roleName = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleName:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, calculateToResu( 48 ), yrp_rmColors.header )
-    draw.SimpleText( "Role", "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.role, "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, calculateToResu( 48 ), w, h - calculateToResu( 48 ), yrp_rmColors.background )
     draw.SimpleText( name, "roleInfoText", calculateToResu( 10 ), calculateToResu( 48 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
@@ -57,7 +57,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   local roleDescription = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleDescription:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, calculateToResu( 48 ), yrp_rmColors.header )
-    draw.SimpleText( "Description", "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.description, "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, calculateToResu( 48 ), w, h - calculateToResu( 48 ), yrp_rmColors.background )
     local descTable = string.Split( desc, " " )
@@ -101,7 +101,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   local roleSWEPs = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleSWEPs:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, calculateToResu( 48 ), yrp_rmColors.header )
-    draw.SimpleText( "SWEPs", "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.sweps, "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, calculateToResu( 48 ), w, h - calculateToResu( 48 ), yrp_rmColors.background )
     local swepTable = string.Split( sweps, "," )
@@ -147,7 +147,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   local roleSalary = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleSalary:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, calculateToResu( 48 ), yrp_rmColors.header )
-    draw.SimpleText( "Salary", "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.salary, "roleInfoHeader", calculateToResu( 10 ), calculateToResu( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, calculateToResu( 48 ), w, h - calculateToResu( 48 ), yrp_rmColors.background )
     draw.SimpleText( ply:GetNWString( "moneyPre" ) .. capital .. ply:GetNWString( "moneyPost" ), "roleInfoText", calculateToResu( 10 ), calculateToResu( 48 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
@@ -159,14 +159,14 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   if maxamount == -1 or uses < maxamount then
     local roleGetRole = createVGUI( "DButton", roleInfoPanel, 2160 - 1600 - 10, 120, 0, tmpY )
     if adminonly == 1 and !ply:IsAdmin() and !ply:IsSuperAdmin() then
-      roleGetRole:SetText( "Admin only" )
+      roleGetRole:SetText( lang.adminonly )
     elseif ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
       if ply:IsSuperAdmin() or ply:IsAdmin() then
-        roleGetRole:SetText( "Get Role: " .. name )
+        roleGetRole:SetText( lang.getrole .. ": " .. name )
       elseif whitelist == 1 and allowed == 1 or whitelist == 0 then
-        roleGetRole:SetText( "Get Role: " .. name )
+        roleGetRole:SetText( lang.getrole .. ": " .. name )
       elseif whitelist == 1 then
-        roleGetRole:SetText( "You need to get whitelisted" )
+        roleGetRole:SetText( lang.needwhitelist )
       end
     end
     function roleGetRole:DoClick()
@@ -245,11 +245,10 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   function tmpButtonSelect:Paint( pw, ph )
     if tmpButtonSelect:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-      draw.SimpleText( "More Info", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-      draw.SimpleText( "More Info", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
+    draw.SimpleText( lang.moreinfo, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function tmpButtonSelect:DoClick()
     local tmpAllowed = 0
@@ -353,7 +352,7 @@ function openRoleMenu()
   roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, ScrW() - 2160/2, 0 )
   roleMenuWindow:ShowCloseButton( true )
   roleMenuWindow:SetDraggable( true )
-  roleMenuWindow:SetTitle( "Roles Menu" )
+  roleMenuWindow:SetTitle( lang.rolemenu )
   function roleMenuWindow:OnClose()
     cl_rolesMenuOpen = 0
     _menuIsOpen = 0

@@ -91,7 +91,7 @@ end
 
 function searchCoords( ent )
   local size = 1000000
-	local space = 32
+	local space = 8
 
   if ent:GetPos().z - 64 > mapSize.spawnPointsH then
     mapSize.spawnPointsH = ent:GetPos().z - 64

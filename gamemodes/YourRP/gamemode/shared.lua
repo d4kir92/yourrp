@@ -37,6 +37,9 @@ gamemode ->
             init.lua
 */
 
+AddCSLuaFile( "database/db_lang.lua" )
+include( "database/db_lang.lua" )
+
 //##############################################################################
 //Convars
 concommand.Add( "yrp__help", function( ply, cmd, args )

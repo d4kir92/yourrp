@@ -11,6 +11,7 @@ yrpsettings = {}
 yrpsettings.color = {}
 yrpsettings.color.black = Color( 0, 0, 0, 255 )
 yrpsettings.color.background = Color( 0, 0, 0, 160 )
+yrpsettings.color.background2 = Color( 0, 0, 0, 254 )
 yrpsettings.color.panel = Color( 0, 143, 255, 120 )
 yrpsettings.color.buttonInActive = Color( 100, 100, 100, 160 )
 
@@ -46,6 +47,18 @@ function openSettings()
   settingsSheet:Dock( FILL )
   function settingsSheet:Paint()
     //drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), calculateToResu( 0 ) )
+  end
+
+  local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1400, 0 )
+  Langu:SetValue( lang.lang )
+  Langu:AddChoice("[AUTOMATIC]", "auto")
+  Langu:AddChoice("English", "en")
+  Langu:AddChoice("German/Deutsch", "de")
+  Langu:AddChoice("Russian/Русский", "ru")
+  Langu:AddChoice("Turkish/Turkey", "tr")
+  Langu:AddChoice("French/Français", "fr")
+  Langu.OnSelect = function( panel, index, value, data )
+    changeLang(data)
   end
 
   tabClient( settingsSheet )
