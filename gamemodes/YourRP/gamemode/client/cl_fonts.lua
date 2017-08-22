@@ -2,356 +2,62 @@
 
 //cl_fonts.lua
 
+function createFont( _name, _font, _size, _weight, _outline )
+	printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
+	local _antialaising = false
+	if _size > 72 then
+		_antialaising = true
+	end
+	surface.CreateFont( _name, {
+		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+		extended = true,
+		size = _size,
+		weight = _weight,
+		blursize = 0,
+		scanlines = 0,
+		antialias = _antialaising,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = _outline,
+	} )
+end
 //##############################################################################
 //Change Fonts
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
-	local faktor = ctrF( ScrH() )
-	faktor = faktor
-	print( faktor )
+	local tmpFont = "Roboto-Thin"
+	createFont( "HudDefault", tmpFont, 80, 500, false )
 
-	surface.CreateFont( "HudDefault", {
-		font = "BankGothic_Bold", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 80-faktor,
-		weight = 2000,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = false,
-	} )
+	createFont( "SettingsNormal", tmpFont, 14, 500, true )
+	createFont( "SettingsHeader", tmpFont, 18, 500, false )
 
-	surface.CreateFont( "SettingsNormal", {
-		font = "BankGothic_Bold", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 60-faktor,
-		weight = 2000,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = false,
-	} )
+	createFont( "HudBars", tmpFont, 16, 500, true )
 
-	surface.CreateFont( "SettingsHeader", {
-		font = "BankGothic_Bold", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 100-faktor,
-		weight = 2000,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = false,
-	} )
+	createFont( "roleInfoHeader", tmpFont, 14, 500, true )
+	createFont( "roleInfoText", tmpFont, 12, 500, true )
 
-	surface.CreateFont( "HudBars", {
-		font = "BankGothic_Bold", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 16-faktor,
-		weight = 3000,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
+	createFont( "charTitle", tmpFont, 14, 500, false )
+	createFont( "charHeader", tmpFont, 14, 500, false )
+	createFont( "charText", tmpFont, 14, 500, false )
 
-	surface.CreateFont( "roleInfoHeader", {
-		font = "Arial", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 64-faktor,
-		weight = 2,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
+	createFont( "pmT", tmpFont, 14, 500, true )
+	createFont( "weaponT", tmpFont, 12, 500, true )
 
-	surface.CreateFont( "roleInfoText", {
-		font = "Arial", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 60-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
+	createFont( "HudVersion", tmpFont, 30, 700, true )
+	createFont( "HudMinimap", tmpFont, 14, 500, true )
 
-	surface.CreateFont( "charTitle", {
-		font = "Arial", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 60-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = false,
-	} )
+	createFont( "ScoreBoardTitle", tmpFont, 24, 500, true )
+	createFont( "ScoreBoardNormal", tmpFont, 15, 500, true )
 
-	surface.CreateFont( "charHeader", {
-		font = "Arial", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 52-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = false,
-	} )
-
-	surface.CreateFont( "charText", {
-		font = "Arial", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 60-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = false,
-	} )
-
-	surface.CreateFont( "pmT", {
-		font = "Arial", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 52-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "weaponT", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 48-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "HudVersion", {
-		font = "Roboto-Bold", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 30-faktor,
-		weight = 600,
-		blursize = 0,
-		scanlines = 0,
-		antialias = true,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "HudMinimap", {
-		font = "Roboto-Bold", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 14-faktor,
-		weight = 200,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "SettingsNormal", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 15-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "ScoreBoardTitle", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 120-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "ScoreBoardNormal", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 60-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "ATM_Header", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 80-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "ATM_Normal", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 60-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
-
-	surface.CreateFont( "ATM_Name", {
-		font = "Roboto-Thin", -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = false,
-		size = 40-faktor,
-		weight = 1,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = true,
-	} )
+	createFont( "ATM_Header", tmpFont, 80, 500, true )
+	createFont( "ATM_Normal", tmpFont, 60, 500, true )
+	createFont( "ATM_Name", tmpFont, 40, 500, true )
 end
 changeFontSize()
 //##############################################################################

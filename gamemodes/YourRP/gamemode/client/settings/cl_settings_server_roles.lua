@@ -732,7 +732,7 @@ function tabServerRoles( sheet )
     end
 
     function sv_rolesRoles.DButtonSWEPS:DoClick()
-      swepMenu = createVGUI( "DFrame", nil, 2000, 2000, 3840/2 - 2000/2, 2160/2 - 2000/2 )
+      swepMenu = createVGUI( "DFrame", nil, 2000, 2000, ScrW()/2 * ctrF( ScrH() ) - 2000/2, 2160/2 - 2000/2 )
       swepMenu:SetTitle( lang.swepmenu )
 
       //PrintTable( weapons.GetList() )

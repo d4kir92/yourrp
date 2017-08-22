@@ -244,7 +244,7 @@ function HudPlayer()
         elseif _thirdperson == 2 then
           _3PText = lang.tpp
         end
-        draw.SimpleText( _3PText, "SettingsNormal", ctrW( 3840/2 ), ctrW( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText( _3PText, "SettingsNormal", ScrW()/2, ctrW( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
       end
 
       //Borders
@@ -286,8 +286,8 @@ function HudPlayer()
         drawRBoxBr( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
     else
-      drawRBox( 0, 0, 0, 3840, 2160, Color( 255, 0, 0, 100 ) )
-      drawText( lang.dead .. "! " .. lang.respawning .. "...", "HudBars", 3840/2, 2160/2, Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )
+      drawText( lang.dead .. "! " .. lang.respawning .. "...", "HudBars", ScrW()/2 * ctrF( ScrH() ), ScrH()/2 * ctrF( ScrH() ), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
 end

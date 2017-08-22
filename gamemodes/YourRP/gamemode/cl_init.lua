@@ -23,7 +23,7 @@ include( "shared.lua" )
 //Resolutions
 function ctrF( tmpNumber )
   tmpNumber = 2160/tmpNumber
-  return tmpNumber
+  return math.Round( tmpNumber, 8 )
 end
 
 function ctrW( tmpNumber )

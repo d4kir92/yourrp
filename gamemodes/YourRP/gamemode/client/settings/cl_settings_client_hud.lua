@@ -32,6 +32,8 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
       if tw != ctrW( cl_db[tmpw] ) or th != ctrW( cl_db[tmph] ) then
         cl_db[tmpw] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%ctrW( 40 )
         cl_db[tmph] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%ctrH( 40 )
+        print(cl_db[tmpw])
+        print(cl_db[tmph])
         frame:SetSize( ctrW( cl_db[tmpw] ), ctrW( cl_db[tmph] ) )
         updateDBHud( tmpw, cl_db[tmpw] )
         updateDBHud( tmph, cl_db[tmph] )
@@ -55,8 +57,12 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
           outside = true
         end
         if !outside then
-          cl_db[tmpx] = (x*ctrF( ScrH() )) - (x*ctrF( ScrH() ))%ctrW( 40 )
-          cl_db[tmpy] = (y*ctrF( ScrH() )) - (y*ctrF( ScrH() ))%ctrH( 40 )
+          cl_db[tmpx] = ( x*ctrF( ScrH() ) ) - ( ( x*ctrF( ScrH() ) )%ctrW( 40 ) )
+          cl_db[tmpy] = ( y*ctrF( ScrH() ) ) - ( ( y*ctrF( ScrH() ) )%ctrH( 40 ) )
+
+          print("x, y")
+          print(cl_db[tmpx])
+          print(cl_db[tmpy])
           frame:SetPos( ctrW( cl_db[tmpx] ), ctrW( cl_db[tmpy] ) )
           updateDBHud( tmpx, cl_db[tmpx] )
           updateDBHud( tmpy, cl_db[tmpy] )
@@ -98,7 +104,7 @@ function tabClientHud( sheet )
   function changeHudButton:DoClick()
     settingsWindow:Close()
 
-    local changeHudWindow = createDerma( "DFrame", nil, 3840, 2160, 0, 0 )
+    local changeHudWindow = createDerma( "DFrame", nil, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), 0, 0 )
     changeHudWindow:SetDraggable( false )
     changeHudWindow:SetTitle( "" )
     changeHudWindow:ShowCloseButton( false )
