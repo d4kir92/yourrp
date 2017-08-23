@@ -30,7 +30,7 @@ function dbMapInit()
       printGM( "db", dbName .. yrp.successdb )
       dbMapAddValues( dbName )
 		else
-			printError( "CREATE TABLE " .. dbName .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
 		end
   end

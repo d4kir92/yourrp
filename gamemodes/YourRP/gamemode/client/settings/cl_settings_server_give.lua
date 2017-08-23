@@ -81,7 +81,7 @@ net.Receive( "getPlyList", function( len )
       end
 
       function _giveFrame:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
 
         draw.SimpleText( lang.group .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         draw.SimpleText( lang.role .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -91,7 +91,7 @@ net.Receive( "getPlyList", function( len )
     end
 
     function _tmpPanel:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, dstColors.color.panel )
+      draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.panel )
       if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and _tmpPanel.ready == true then
         _tmpPanel:Remove()
       end
@@ -106,7 +106,7 @@ function tabServerGive( sheet )
   sv_givePanel = vgui.Create( "DPanel", sheet )
   sheet:AddSheet( lang.give, sv_givePanel, "icon16/user_go.png" )
   function sv_givePanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrpsettings.color.background )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
   end
 
   net.Start( "getPlyList" )

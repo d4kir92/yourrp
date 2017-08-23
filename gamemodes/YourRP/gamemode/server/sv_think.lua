@@ -122,6 +122,11 @@ function GM:PlayerSay( sender, text, teamChat )
       return ""
     end
 
+    if isChatCommand( text, "kill" ) then
+      sender:Kill()
+      return ""
+    end
+
     if isChatCommand( text, "setmoney" ) then
       local _table = string.Explode( " ", text, false )
       local _name = _table[2]
@@ -148,6 +153,11 @@ function GM:PlayerSay( sender, text, teamChat )
 
     if !sender:Alive() then
       boxString( "DEAD", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
+    end
+
+    if isChatCommand( text, "roll" ) then
+      _local = 1
+      boxString( "ROLL", Color( 0, 165, 255 ), Color( 255, 255, 255 ) )
     end
 
     if isChatCommand( text, "ooc" ) then
@@ -179,6 +189,18 @@ function GM:PlayerSay( sender, text, teamChat )
       //Nick
       table.insert( _playersay, Color( 200, 200, 255 ) )
       table.insert( _playersay, sender:Nick() .. ": " )
+    elseif isChatCommand( text, "roll" ) then
+      //Group
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
+
+      //Role
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
+
+      //Nickname
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. " rolled " )
     else
       //Group
       table.insert( _playersay, Color( 0, 255, 0 ) )
@@ -198,6 +220,9 @@ function GM:PlayerSay( sender, text, teamChat )
     if isChatCommand( text, "me" ) then
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.sub( text, 4 ) )
+    elseif isChatCommand( text, "roll" ) then
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, tostring( math.Round( math.Rand( 0, 100 ) ) ) )
     elseif isChatCommand( text, "ooc" ) then
       table.insert( _playersay, string.sub( text, 5+1 ) )
     elseif isChatCommand( text, "looc" ) then

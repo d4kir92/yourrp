@@ -2,15 +2,15 @@
 
 //shared_pres.lua
 
-GM.Name = 				"YourRP"
-GM.ShortName =		"YRP"	//Not longer then 4!
-GM.Author =				"D4KiR"
-GM.Email =				""
-GM.Website =			"youtube.com/c/D4KiR"
-GM.Twitter =			"twitter.com/D4KIR"
-GM.Version =			"0.4.2"
-GM.VersionSort = 	""
-GM.Help =					""
+GM.Name = "YourRP"
+GM.ShortName = "YRP"	//Not longer then 4!
+GM.Author = "D4KiR"
+GM.Email = ""
+GM.Website = "youtube.com/c/D4KiR"
+GM.Twitter = "twitter.com/D4KIR"
+GM.Version = "0.4.3"
+GM.VersionSort = ""
+GM.Help = ""
 
 DeriveGamemode( "sandbox" )
 
@@ -25,20 +25,13 @@ yrp.errorPos = "!"
 yrp.loaddb = "LOAD DB: "
 yrp.successdb = " created successfully."
 
-//Pre's
-//yrp.file = yrp.pre .. "#FILE "
-
-deb = {}
-deb.pre = yrp.pre .. "##DEBUG## "
-deb.size = deb.pre .. "#SIZE "
-
-colors = {}
+yrp.colors = {}
 function addColor( string, r, g, b, a )
-	colors[string] = {}
-	colors[string].r = r
-	colors[string].g = g
-	colors[string].b = b
-	colors[string].a = a
+	yrp.colors[string] = {}
+	yrp.colors[string].r = r
+	yrp.colors[string].g = g
+	yrp.colors[string].b = b
+	yrp.colors[string].a = a
 end
 
 addColor( "epicBlue", 23, 113, 240, 100 )
@@ -106,9 +99,9 @@ function printGMPos( )
 end
 
 function printGMImp( channel, string )
-	print(yrp.spacePre)
+	print( yrp.spacePre )
 	printGM( channel, string )
-	print(yrp.spacePos)
+	print( yrp.spacePos )
 end
 
 function printGM( channel, _string )
@@ -164,6 +157,6 @@ function printGM( channel, _string )
 	end
 end
 
-function printError( string )
+function printERROR( string )
 	printGM( "error", string )
 end

@@ -76,6 +76,14 @@ net.Receive( "hardresetdatabase", function( len, ply )
 end)
 //##############################################################################
 
+function dbSQLStr( string )
+  if sql.SQLStr( string, false ) == nil then
+    return false
+  else
+    return true
+  end
+end
+
 function dbTableExists( dbTable )
   if sql.TableExists( dbTable ) then
     return true
@@ -117,7 +125,7 @@ function dbInsertIntoDEFAULTVALUES( dbTable )
     q = q .. " DEFAULT VALUES"
     local result = sql.Query( q )
     if result != nil then
-      printError( "dbInsertIntoDEFAULTVALUES: " .. q .. " has failed!")
+      printERROR( "dbInsertIntoDEFAULTVALUES: " .. q .. " has failed!")
     end
   end
 end
@@ -133,7 +141,7 @@ function dbInsertInto( dbTable, dbColumns, dbValues )
     q = q .. " )"
     local result = sql.Query( q )
     if result != nil then
-      printError( "dbInsertInto: has failed!")
+      printERROR( "dbInsertInto: has failed!")
     end
   end
 end
@@ -151,6 +159,15 @@ function dbDeleteFrom( dbTable, dbWhere )
 end
 
 function dbUpdate( dbTable, dbSets, dbWhere )
+  local _tmp = string.Explode( " = ", dbSets )
+  for k, v in pairs( _tmp ) do
+    if k%2 == 0 then
+      if !dbSQLStr( v ) then
+        printGM( "note", "dbUpdate FALSE" )
+        return false
+      end
+    end
+  end
   if dbTableExists( dbTable ) then
     local q = "UPDATE "
     q = q .. dbTable
@@ -184,6 +201,26 @@ function sqlAddColumn( tableName, columnName, datatype )
   end
 end
 
+function initDatabase( dbName )
+  printGMPre( "db", yrp.loaddb .. dbName )
+  if sql.TableExists( dbName ) then
+    printGM( "db", dbName .. " exists" )
+  else
+    printGM( "note", dbName .. " not exists" )
+    local query = ""
+    query = query .. "CREATE TABLE " .. dbName .. " ( "
+    query = query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
+    query = query .. " )"
+    sql.Query( query )
+		if sql.TableExists( dbName ) then
+      printGM( "db", dbName .. yrp.successdb )
+		else
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
+      retryLoadDatabase()
+		end
+  end
+  printGMPos()
+end
 //##############################################################################
 //includes
 include( "database/db_general.lua" )
@@ -195,6 +232,7 @@ include( "database/db_money.lua" )
 include( "database/db_buildings.lua" )
 include( "database/db_role_whitelist.lua" )
 include( "database/db_buy.lua" )
+include( "database/db_restriction.lua" )
 //##############################################################################
 
 //##############################################################################
@@ -209,6 +247,7 @@ function dbInitDatabase()
   dbBuildingsInit()
   dbRoleWhitelistInit()
   dbBuyInit()
+  initDatabase( "yrp_restrictions" )
 
   dbPlayersInit()
 

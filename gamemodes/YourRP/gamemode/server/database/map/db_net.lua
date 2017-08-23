@@ -37,6 +37,6 @@ net.Receive( "dbInsertInto", function()
   if sql.TableExists( _tmpDBTable ) then
     dbInsertInto( _tmpDBTable, _tmpDBCol, _tmpDBVal )
   else
-    printError( "dbInsertInto: " .. _tmpDBTable .. " is not existing" )
+    printERROR( "dbInsertInto: " .. _tmpDBTable .. " is not existing" )
   end
 end)

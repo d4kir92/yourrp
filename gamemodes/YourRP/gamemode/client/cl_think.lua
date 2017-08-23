@@ -123,8 +123,14 @@ function useFunction( string )
 	end
 end
 
-function keyDown( key, string, string2 )
+function keyDown( key, string, string2, distance )
 	local ply = LocalPlayer()
+	local plyTrace = ply:GetEyeTrace()
+	if distance != nil then
+		if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
+			return
+		end
+	end
 	if keys[tostring(key)] == nil then
 		keys[tostring(key)] = false
 	end
@@ -145,7 +151,14 @@ function keyDown( key, string, string2 )
 	end
 end
 
-function keyPressed( key, string, string2 )
+function keyPressed( key, string, string2, distance )
+	local ply = LocalPlayer()
+	local plyTrace = ply:GetEyeTrace()
+	if distance != nil then
+		if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
+			return
+		end
+	end
 	if keys[tostring(key)] == nil then
 		keys[tostring(key)] = false
 	end
@@ -167,19 +180,19 @@ function keyPressed( key, string, string2 )
 end
 
 function KeyPress()
-	keyDown( IN_ATTACK2, "scoreboard", nil )
+	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 
-	keyPressed( KEY_F2, "openRoleMenu", nil )
-	keyPressed( KEY_F4, "openBuyMenu", nil )
-	keyPressed( KEY_F7, "openSettings", nil )
+	keyPressed( KEY_F2, "openRoleMenu", nil, nil )
+	keyPressed( KEY_F4, "openBuyMenu", nil, nil )
+	keyPressed( KEY_F7, "openSettings", nil, nil )
 
-	keyPressed( KEY_F3, "F3Toggle", nil )
+	keyPressed( KEY_F3, "F3Toggle", nil, nil )
 
-	keyPressed( KEY_B, "ViewChange", nil )
+	keyPressed( KEY_B, "ViewChange", nil, nil )
 
-	keyPressed( KEY_M, "openMap", nil )
+	keyPressed( KEY_M, "openMap", nil, nil )
 
-	keyPressed( KEY_E, "openInteractMenu", "openDoorOptions" )
+	keyPressed( KEY_E, "openInteractMenu", "openDoorOptions", 100 )
 end
 hook.Add( "Think", "Thinker", KeyPress)
 

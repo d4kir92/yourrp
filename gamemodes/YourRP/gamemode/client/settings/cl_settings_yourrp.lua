@@ -12,10 +12,10 @@ function tabYourRP( sheet )
   if ply:IsAdmin() or ply:IsSuperAdmin() then
     //Server Panel
     local serverPanel = vgui.Create( "DPanel", sheet )
-    serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
+    serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrp.colors.background ) end
     sheet:AddSheet( "YourRP", serverPanel, "icon16/controller.png" )
     function serverPanel:Paint()
-      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
+      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrp.colors.background )
     end
 
     //Server Sheet
@@ -34,9 +34,9 @@ function tabYourRP( sheet )
 
       v.Tab.Paint = function(self,w,h)
         if v.Tab == yourrpSheet:GetActiveTab() then
-  		    draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.background )
+  		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
         else
-          draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.buttonInActive )
+          draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
         end
       end
     end

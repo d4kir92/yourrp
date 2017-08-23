@@ -39,7 +39,7 @@ function dbPlayersInit()
 		if sql.TableExists( dbName ) then
 			printGM( "db", dbName .. yrp.successdb )
 		else
-			printError( "CREATE TABLE " .. dbName .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
 		end
   end

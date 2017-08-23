@@ -30,7 +30,7 @@ function dbRoleWhitelistInit()
       printGM( "db", dbName .. yrp.successdb )
       dbWhitelistAddValues( dbName )
 		else
-			printError( "CREATE TABLE " .. dbName .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
 		end
   end

@@ -60,6 +60,7 @@ AddCSLuaFile( "client/settings/cl_settings_server_whitelist.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_buysystem.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_moneysystem.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_jailsystem.lua" )
+AddCSLuaFile( "client/settings/cl_settings_server_restriction.lua" )
 
 //Hud
 AddCSLuaFile( "client/cl_hud.lua" )

@@ -11,7 +11,7 @@ function tabServerRoles( sheet )
   sv_rolesPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
   sheet:AddSheet( lang.roles, sv_rolesPanel, "icon16/group_gear.png" )
   function sv_rolesPanel:Paint()
-    //draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), yrpsettings.color.panel )
+    //draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), yrp.colors.panel )
   end
 
   //############################################################################
@@ -742,7 +742,19 @@ function tabServerRoles( sheet )
       swepList.y = 50
 
       local roleSwepScrollBar = createVGUI( "DScrollPanel", swepMenu, 2000-60, 2000-60, swepList.x, swepList.y )
-      for k, weapon in pairs ( weapons.GetList() ) do
+      local _sweplist = weapons.GetList()
+      local tmp2 = {}
+      tmp2.WorldModel = "models/weapons/w_physics.mdl"
+      tmp2.ClassName = "weapon_physcannon"
+      tmp2.PrintName = "Gravity Gun"
+      table.insert( _sweplist, tmp2 )
+      local tmp3 = {}
+      tmp3.WorldModel = "models/weapons/w_Physics.mdl"
+      tmp3.ClassName = "weapon_physgun"
+      tmp3.PrintName = "PHYSICS GUN"
+      table.insert( _sweplist, tmp3 )
+
+      for k, weapon in pairs ( _sweplist ) do
         if !string.find( string.lower( weapon.ClassName ), "npc") and !string.find( string.lower( weapon.ClassName ), "base") and !string.find( string.lower( weapon.ClassName ), "ttt") then
           local model3D = createVGUI( "DModelPanel", roleSwepScrollBar, 256, 256, swepList.x, swepList.y )
           if weapon.WorldModel != nil then

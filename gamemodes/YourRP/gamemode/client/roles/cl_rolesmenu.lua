@@ -1,11 +1,9 @@
 //Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //cl_rolesmenu.lua
-
-yrp_rmColors = {}
-yrp_rmColors.background = Color( 0, 0, 0, 160 )
-yrp_rmColors.header = Color( 0, 255, 0, 200 )
-yrp_rmColors.font = Color( 255, 255, 255, 255 )
+yrp.colors.background = Color( 0, 0, 0, 160 )
+yrp.colors.header = Color( 0, 255, 0, 200 )
+yrp.colors.font = Color( 255, 255, 255, 255 )
 
 local AllGroups = {}
 local tmpGroupsTable = {}
@@ -32,7 +30,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
 
   local rolePMPanel = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function rolePMPanel:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, yrp_rmColors.background )
+    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
   end
 
   local rolePM = createVGUI( "DModelPanel", roleInfoPanel, 550, 550, 0, 0 )
@@ -44,11 +42,11 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
 
   local roleName = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleName:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp_rmColors.header )
-    draw.SimpleText( lang.role, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp.colors.header )
+    draw.SimpleText( lang.role, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp_rmColors.background )
-    draw.SimpleText( name, "roleInfoText", ctrW( 10 ), ctrW( 48 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp.colors.background )
+    draw.SimpleText( name, "roleInfoText", ctrW( 10 ), ctrW( 48 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
 
   tmpY = tmpY + tmpH + tmpBr
@@ -56,10 +54,10 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
 
   local roleDescription = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleDescription:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp_rmColors.header )
-    draw.SimpleText( lang.description, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp.colors.header )
+    draw.SimpleText( lang.description, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp_rmColors.background )
+    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp.colors.background )
     local descTable = string.Split( desc, " " )
     local tmpTable = {}
     local stringL = 0
@@ -87,12 +85,12 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
       end
     end
 
-    draw.SimpleText( tmpTable[1], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[2], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[3], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[4], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[5], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[6], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[1], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[2], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[3], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[4], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[5], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[6], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   tmpY = tmpY + tmpH + tmpBr
@@ -100,10 +98,10 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
 
   local roleSWEPs = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleSWEPs:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp_rmColors.header )
-    draw.SimpleText( lang.sweps, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp.colors.header )
+    draw.SimpleText( lang.sweps, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp_rmColors.background )
+    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp.colors.background )
     local swepTable = string.Split( sweps, "," )
     local tmpTable = {}
     local stringL = 0
@@ -133,12 +131,12 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
       end
     end
 
-    draw.SimpleText( tmpTable[1], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[2], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[3], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[4], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[5], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[6], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[1], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[2], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[3], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[4], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[5], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpTable[6], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   tmpY = tmpY + tmpH + tmpBr
@@ -146,11 +144,11 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
 
   local roleSalary = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
   function roleSalary:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp_rmColors.header )
-    draw.SimpleText( lang.salary, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp.colors.header )
+    draw.SimpleText( lang.salary, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp_rmColors.background )
-    draw.SimpleText( ply:GetNWString( "moneyPre" ) .. capital .. ply:GetNWString( "moneyPost" ), "roleInfoText", ctrW( 10 ), ctrW( 48 + 24 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp.colors.background )
+    draw.SimpleText( ply:GetNWString( "moneyPre" ) .. capital .. ply:GetNWString( "moneyPost" ), "roleInfoText", ctrW( 10 ), ctrW( 48 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
 
   tmpY = tmpY + tmpH + 3*tmpBr
@@ -211,7 +209,7 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   local tmpRole = createVGUI( "DPanel", parent, w - x - 2 * h - scrollbar, h, x + h, y )
   function tmpRole:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 160 ) )
-    draw.SimpleText( name, "roleInfoText", ctrW( 25 ), ctrW( 25 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( name, "roleInfoText", ctrW( 25 ), ctrW( 25 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     if maxamount > 0 then
       local maxbr = 4
@@ -223,7 +221,7 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
       end
       draw.RoundedBox( ctrW( maxbbr ), ctrW( 10 + maxbr ), ctrW( 100 + maxbr ), ( pw - ctrW( maxbr*2 + maxbbr*2 ) ) / maxamount * uses, ph - ctrW( 100 + maxbr*2 ), maxcolor )
 
-      draw.SimpleText( uses .. "/" .. maxamount, "roleInfoText", pw/2, ctrW( 100 + 25 ), yrp_rmColors.font, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( uses .. "/" .. maxamount, "roleInfoText", pw/2, ctrW( 100 + 25 ), yrp.colors.font, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
 
@@ -326,7 +324,7 @@ function addGroup( name, parent, uppergroup, x, y, color )
 
   function tmpGroup:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, h, gColor )
-    draw.SimpleText( name, "roleInfoHeader", ctrW( 25 ), ctrW( 25 ), yrp_rmColors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( name, "roleInfoHeader", ctrW( 25 ), ctrW( 25 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
 
   parent:AddItem( tmpGroup )
@@ -363,7 +361,7 @@ function openRoleMenu()
 
   local roleDPanelList = createVGUI( "DScrollPanel", roleMenuWindow, 1600, 2100, 0, 60 )
   function roleDPanelList:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, yrp_rmColors.background )
+    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
   end
 
   net.Start( "getAllGroups" )

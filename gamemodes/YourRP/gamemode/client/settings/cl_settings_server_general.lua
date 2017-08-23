@@ -15,7 +15,7 @@ function tabServerGeneral( sheet )
 
   local oldGamemodename = ""
   function sv_generalPanel:Paint()
-    //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrpsettings.color.panel )
+    //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
     draw.SimpleText( lang.gamemodename .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleText( "you need to update Server!", "SettingsNormal", ctrW( 300 + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )

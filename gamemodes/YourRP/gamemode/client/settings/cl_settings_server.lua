@@ -9,19 +9,19 @@ include( "cl_settings_server_give.lua" )
 include( "cl_settings_server_map.lua" )
 include( "cl_settings_server_money.lua" )
 include( "cl_settings_server_whitelist.lua" )
-include( "cl_settings_server_buysystem.lua" )
 include( "cl_settings_server_moneysystem.lua" )
-include( "cl_settings_server_jailsystem.lua" )
+include( "cl_settings_server_restriction.lua" )
+//include( "cl_settings_server_jailsystem.lua" )
 
 function tabServer( sheet )
   local ply = LocalPlayer()
   if ply:IsAdmin() or ply:IsSuperAdmin() then
     //Server Panel
     local serverPanel = vgui.Create( "DPanel", sheet )
-    serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrpsettings.color.background ) end
+    serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrp.colors.background ) end
     sheet:AddSheet( lang.server, serverPanel, "icon16/server.png" )
     function serverPanel:Paint()
-      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrpsettings.color.background )
+      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrp.colors.background )
     end
 
     //Server Sheet
@@ -37,8 +37,7 @@ function tabServer( sheet )
     tabServerGive( serverSheet )
     tabServerMap( serverSheet )
     tabServerWhitelist( serverSheet )
-    //tabServerBuySystem( serverSheet )
-    //tabServerMoneySystem( serverSheet )
+    tabServerRestriction( serverSheet )
     //tabServerJailSystem( serverSheet )
 
     //##############################################################################
@@ -55,9 +54,9 @@ function tabServer( sheet )
 
       v.Tab.Paint = function(self,w,h)
         if v.Tab == serverSheet:GetActiveTab() then
-  		    draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.background )
+  		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
         else
-          draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.buttonInActive )
+          draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
         end
       end
     end

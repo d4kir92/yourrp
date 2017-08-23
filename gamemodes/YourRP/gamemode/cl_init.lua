@@ -114,7 +114,7 @@ net.Receive( "yrpInfoBox", function( len )
 end)
 
 function GM:InitPostEntity()
-  printGM( "note", "All entities are loaded.")
+  printGM( "note", "All entities are loaded." )
   playerready = 1
 
   loadCompleteHud()

@@ -36,7 +36,7 @@ function dbBuildingsInit()
       printGM( "db", dbName .. yrp.successdb )
       dbDoorsAddValues( dbName )
 		else
-			printError( "CREATE TABLE " .. dbName .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
 		end
   end
@@ -58,7 +58,7 @@ function dbBuildingsInit()
       printGM( "db", dbName .. yrp.successdb )
       dbBuildingsAddValues( dbName2 )
 		else
-			printError( "CREATE TABLE " .. dbName2 .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName2 .. " fail" )
       retryLoadDatabase()
 		end
   end

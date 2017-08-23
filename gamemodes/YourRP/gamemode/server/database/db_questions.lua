@@ -25,7 +25,7 @@ function dbQuestionsInit()
       sql.Query( "INSERT INTO yrp_questions( nr, toggle, question, a_true, a_false ) VALUES ( 5, 1, 'Are you crazy?', 'Yes', 'No')" )
       sql.Query( "INSERT INTO yrp_questions( nr, toggle, question, a_true, a_false ) VALUES ( 6, 1, 'Are you crazy?', 'Yes', 'No')" )
 		else
-			printError( "CREATE TABLE " .. dbName .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
 		end
   end

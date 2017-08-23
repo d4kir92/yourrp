@@ -83,7 +83,7 @@ net.Receive( "demotePlayer", function( len, ply )
     printGM( "instructor", ply:SteamID() .. " demoted " .. tmpTargetSteamID .. " to " .. tmpTableTargetDemoteRole[1].roleID )
     updateUses()
   else
-    printError( "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
+    printERROR( "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
   end
 end)
 
@@ -126,7 +126,7 @@ net.Receive( "promotePlayer", function( len, ply )
     printGM( "instructor", ply:SteamID() .. " promoted " .. tmpTargetSteamID .. " to " .. tmpTableTargetPromoteRole[1].roleID )
     updateUses()
   else
-    printError( "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
+    printERROR( "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
   end
 end)
 
@@ -172,7 +172,7 @@ net.Receive( "openInteractMenu", function( len, ply )
           tmpSearch = false
         end
         if tmpCounter >= 100 then
-          printError( "counter" )
+          printERROR( "counter" )
           tmpSearch = false
         end
         tmpCounter = tmpCounter + 1

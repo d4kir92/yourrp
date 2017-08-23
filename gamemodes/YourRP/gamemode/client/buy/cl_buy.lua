@@ -76,7 +76,7 @@ function addNewItem( parent, item )
       frame:Center()
       frame:SetTitle( lang.areyousure )
       function frame:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
       end
 
       frame:MakePopup()
@@ -145,7 +145,7 @@ net.Receive( "getBuyList", function( len )
       _windowAddItem:ShowCloseButton( true )
       _windowAddItem:SetDraggable( true )
       function _windowAddItem:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
 
         draw.SimpleText( lang.price .. ":", "weaponT", ctrW( 8 ), ph - ctrW( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
@@ -176,7 +176,7 @@ net.Receive( "getBuyList", function( len )
         itemSelector:SetPos( ScrW2() - ctrW( 2000/2 ), ScrH2() - ctrW( 2000/2 ) )
         itemSelector:SetTitle( lang.itemMenu )
         function itemSelector:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background2 )
+          draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
         end
 
         local PanelSelect = vgui.Create( "DPanelSelect", itemSelector )
@@ -259,7 +259,7 @@ function openBuyMenu()
   local _buyTabs = createVGUI( "DPropertySheet", _buyWindow, winW, winH, 0, 0 )
   _buyTabs:Dock( FILL )
   function _buyTabs:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
   end
 
   _tabWeapon = vgui.Create( "DPanel", sheet )
@@ -275,9 +275,9 @@ function openBuyMenu()
 
     v.Tab.Paint = function(self,w,h)
       if v.Tab == _buyTabs:GetActiveTab() then
-		    draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.background )
+		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
       else
-        draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.buttonInActive )
+        draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
       end
     end
   end

@@ -73,7 +73,7 @@ net.Receive( "getRoleWhitelist", function( len )
     end
 
     function _whitelistFrame:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, yrpsettings.color.background )
+      draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
 
       draw.SimpleText( lang.player .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       draw.SimpleText( lang.group .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -106,7 +106,7 @@ function tabServerWhitelist( sheet )
   sv_whitelistPanel = vgui.Create( "DPanel", sheet )
   sheet:AddSheet( lang.whitelist, sv_whitelistPanel, "icon16/page_white_key.png" )
   function sv_whitelistPanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrpsettings.color.background )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
   end
 
   net.Start( "getRoleWhitelist" )

@@ -3,7 +3,7 @@
 //cl_fonts.lua
 
 function createFont( _name, _font, _size, _weight, _outline )
-	printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
+	//printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
 	local _antialaising = false
 	if _size > 72 then
 		_antialaising = true

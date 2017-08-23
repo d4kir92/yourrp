@@ -30,7 +30,7 @@ function tabClientChar( sheet )
   cl_charPanel = vgui.Create( "DPanel", sheet )
   sheet:AddSheet( lang.character, cl_charPanel, "icon16/user_edit.png" )
   function cl_charPanel:Paint( w, h )
-    //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrpsettings.color.panel )
+    //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
     draw.SimpleText( lang.firstname .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     draw.SimpleText( lang.surname .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
   end

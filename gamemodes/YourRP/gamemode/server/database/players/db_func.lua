@@ -253,6 +253,8 @@ function checkClient( ply )
   if !result then
     printGM( "db", ply:SteamName() .. " is not in db: yrp_players, creating " .. ply:SteamName() )
 
+    ply:KillSilent()
+    
     local q2 = ""
     q2 = q2 .. "INSERT INTO yrp_players ( steamID, nick, roleID, map ) "
     q2 = q2 .. "VALUES ( "

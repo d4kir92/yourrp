@@ -7,21 +7,19 @@ include( "cl_settings_server.lua" )
 include( "cl_settings_yourrp.lua")
 include( "cl_settings_settings.lua" )
 
-yrpsettings = {}
-yrpsettings.color = {}
-yrpsettings.color.black = Color( 0, 0, 0, 255 )
-yrpsettings.color.background = Color( 0, 0, 0, 160 )
-yrpsettings.color.background2 = Color( 0, 0, 0, 254 )
-yrpsettings.color.panel = Color( 0, 143, 255, 120 )
-yrpsettings.color.buttonInActive = Color( 100, 100, 100, 160 )
+yrp.colors.black = Color( 0, 0, 0, 255 )
+yrp.colors.background = Color( 0, 0, 0, 160 )
+yrp.colors.background2 = Color( 0, 0, 0, 254 )
+yrp.colors.panel = Color( 0, 143, 255, 120 )
+yrp.colors.buttonInActive = Color( 100, 100, 100, 160 )
 
 function drawBackground( x, y, w, h, br )
-  draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.background )
+  draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
 
-  draw.RoundedBox( 0,   x,      y,      w,  br, yrpsettings.color.black )
-  draw.RoundedBox( 0,   x,      y+h-br, w,  br, yrpsettings.color.black )
-  draw.RoundedBox( 0,   x,      y,      br, h,  yrpsettings.color.black )
-  draw.RoundedBox( 0,   x+w-br, y,      br, h,  yrpsettings.color.black )
+  draw.RoundedBox( 0,   x,      y,      w,  br, yrp.colors.black )
+  draw.RoundedBox( 0,   x,      y+h-br, w,  br, yrp.colors.black )
+  draw.RoundedBox( 0,   x,      y,      br, h,  yrp.colors.black )
+  draw.RoundedBox( 0,   x+w-br, y,      br, h,  yrp.colors.black )
 end
 
 function openSettings()
@@ -40,7 +38,7 @@ function openSettings()
     _menuIsOpen = 0
   end
   function settingsWindow:Paint()
-    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 98 ), settingsWindow:GetWide(), settingsWindow:GetTall(), yrpsettings.color.background )
+    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 98 ), settingsWindow:GetWide(), settingsWindow:GetTall(), yrp.colors.background )
   end
 
   local settingsSheet = vgui.Create( "DPropertySheet", settingsWindow )
@@ -52,11 +50,9 @@ function openSettings()
   local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1400, 0 )
   Langu:SetValue( lang.lang )
   Langu:AddChoice("[AUTOMATIC]", "auto")
-  Langu:AddChoice("English", "en")
-  Langu:AddChoice("German/Deutsch", "de")
-  Langu:AddChoice("Russian/Русский", "ru")
-  Langu:AddChoice("Turkish/Turkey", "tr")
-  Langu:AddChoice("French/Français", "fr")
+  for k, v in pairs( lang.all ) do
+    Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
+  end
   Langu.OnSelect = function( panel, index, value, data )
     changeLang(data)
   end
@@ -74,9 +70,9 @@ function openSettings()
 
     v.Tab.Paint = function(self,w,h)
       if v.Tab == settingsSheet:GetActiveTab() then
-		    draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.background )
+		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
       else
-        draw.RoundedBox( 0, 0, 0, w, h, yrpsettings.color.buttonInActive )
+        draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
       end
     end
   end

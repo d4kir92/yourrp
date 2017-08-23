@@ -80,7 +80,7 @@ net.Receive( "giveRole", function( len, ply )
       printGM( "admin", ply:Nick() .. " can't give " .. _steamNick .. " the Role: " .. tmpTable[1].roleID .. ", because max amount reached")
     end
   else
-    printError( "Role " .. uniqueIDRole .. " is not available" )
+    printERROR( "Role " .. uniqueIDRole .. " is not available" )
   end
 end)
 
@@ -134,7 +134,7 @@ net.Receive( "wantRole", function( len, ply )
       printGM( "user", ply:Nick() .. " want the role: " .. tmpTableRole[1].roleID .. ", FAILED: Max amount reached" )
     end
   else
-    printError( "Role " .. uniqueIDRole .. " is not available" )
+    printERROR( "Role " .. uniqueIDRole .. " is not available" )
   end
 end)
 
@@ -153,6 +153,7 @@ net.Receive( "setPlayerValues", function( len, ply )
       query = query .. "gender = '" .. tmpGender .. "' "
       query = query .. "WHERE steamID = '" .. ply:SteamID() .. "'"
       sql.Query( query )
+      ply:Spawn()
     else
       net.Start( "openCharakterMenu" )
       net.Send( ply )

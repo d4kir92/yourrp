@@ -57,7 +57,7 @@ function dbRolesInit()
 			printGM( "db", dbName .. yrp.successdb )
       sql.Query( "INSERT INTO " .. dbName .. "( uniqueID, groupID, color, uppergroup, friendlyfire, removeable ) VALUES ( 1, 'Civilians', '0,0,255', -1, 1, 0 )" )
 		else
-			printError( "CREATE TABLE " .. dbName .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
 		end
   end
@@ -85,7 +85,7 @@ function dbRolesInit()
 			printGM( "db", dbName .. yrp.successdb )
       local result = sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, removeable ) VALUES ( 1, 'Civilians', '0,0,0', 0 )" )
 		else
-			printError( "CREATE TABLE " .. dbName2 .. " fail" )
+			printERROR( "CREATE TABLE " .. dbName2 .. " fail" )
       retryLoadDatabase()
 		end
   end
