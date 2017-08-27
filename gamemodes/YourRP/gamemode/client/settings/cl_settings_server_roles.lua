@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //cl_settings_server_roles.lua
 
@@ -404,8 +404,10 @@ function tabServerRoles( sheet )
   net.SendToServer()*/
 
   net.Receive( "getRoles", function()
-    for k, v in pairs( sv_rolesRoles:GetLines() ) do
-      sv_rolesRoles:RemoveLine( k )
+    if sv_rolesRoles:GetLines() != nil then
+      for k, v in pairs( sv_rolesRoles:GetLines() ) do
+        sv_rolesRoles:RemoveLine( k )
+      end
     end
 
     sv_rolesRoles.table = net.ReadTable()
@@ -434,8 +436,8 @@ function tabServerRoles( sheet )
 
   sv_rolesRoles.DSP:SetSize( widee, ctrW( 1950 ) )
   sv_rolesRoles.DSP:SetPos( ctrW( 5 + 300 + 10 ), ctrW( 0 ) )
-  function sv_rolesRoles.DSP:Paint()
-    draw.RoundedBox( 0, 0, 0, sv_rolesRoles.DSP:GetWide(), sv_rolesRoles.DSP:GetTall(), Color( 100, 100, 255, 10 ) )
+  function sv_rolesRoles.DSP:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 10 ) )
   end
 
   sv_rolesRoles.DRGBPicker:SetSize( ctrW( 50 ), ctrW( 400 ) )
@@ -828,6 +830,11 @@ function tabServerRoles( sheet )
     changePanel( sv_rolesRoles.panelWhitelist, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2850 ), lang.rolewhitelist )
     changeCheckBox( sv_rolesRoles.DCheckBoxWhitelist, ctrW( 30 ), ctrW( 0 ), ctrW( 2900 ), "whitelist", "updateRoleWhitelist")
     //##########################################################################
+
+    local _spacer = createVGUI( "DPanel", sv_rolesRoles.DSP, 2000, 50, 0, 3100 )
+    function _spacer:Paint( pw, ph )
+      //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0 ) )
+    end
   end
   //############################################################################
 

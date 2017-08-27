@@ -1,15 +1,15 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //cl_hud_map.lua
 
 map = {}
 function getCoords()
   net.Start( "askCoords" )
-    net.WriteEntity( LocalPlayer() )
   net.SendToServer()
 end
 
 function openSpawnMenu()
+  map.open = true
   mapWindow = vgui.Create( "DFrame" )
   mapWindow:SetTitle("")
   mapWindow:SetPos( 0, 0 )
@@ -148,6 +148,11 @@ function openSpawnMenu()
   end
   function mapWindow:OnClose()
     _menuIsOpen = 0
+    map.open = false
+  end
+  function mapWindow:OnRemove()
+    _menuIsOpen = 0
+    map.open = false
   end
 end
 

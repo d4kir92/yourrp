@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 _filterENTS = ents.GetAll()
 local _filterTime = CurTime()
@@ -54,7 +54,7 @@ function HudPlayer()
     if ply:Alive() then
       //Voice
       if _showVoice then
-        drawText( "You are speaking", "HudBars", cl_db["vox"], cl_db["voy"], Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        drawText( lang.youarespeaking, "HudBars", cl_db["vox"], cl_db["voy"], Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
       //Health
@@ -209,10 +209,11 @@ function HudPlayer()
         drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawText( lang.tooltip .. ":", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "F2 - " .. lang.rolemenu, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 40, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F4 - " .. lang.buymenu, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 70, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F7 - " .. lang.settings, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 100, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 130, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 160, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F3 - " .. lang.guimouse, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 70, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F4 - " .. lang.buymenu, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 100, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F7  - " .. lang.settings, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 130, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 160, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 190, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       end
 
       //Money

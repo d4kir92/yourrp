@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //cl_settings_server_give.lua
 
@@ -8,7 +8,7 @@ net.Receive( "getPlyList", function( len )
   local _tmpGroupList = net.ReadTable()
 
   local _giveListView = createVGUI( "DListView", sv_givePanel, 1800, 1800, 10, 10 )
-  _giveListView:AddColumn( "steamID" ):SetFixedWidth( ctrW( 120 ) )
+  _giveListView:AddColumn( "steamID" )
   _giveListView:AddColumn( lang.nick )
   _giveListView:AddColumn( lang.surname )
   _giveListView:AddColumn( lang.firstname )

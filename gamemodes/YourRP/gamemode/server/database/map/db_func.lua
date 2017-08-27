@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function teleportToSpawnpoint( ply )
   local _tmpTable = dbSelect( "yrp_players", "roleID", "steamID = '" .. ply:SteamID() .. "'" )

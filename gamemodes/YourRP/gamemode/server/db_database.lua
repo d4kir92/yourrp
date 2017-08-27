@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //db_database.lua
 
@@ -42,6 +42,7 @@ function resetDatabase()
   table.insert( _dbs, "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
   table.insert( _dbs, "yrp_role_whitelist" )
   table.insert( _dbs, "yrp_buy" )
+  table.insert( _dbs, "yrp_restrictions" )
 
   for k, v in pairs( _dbs ) do
     sql.Query( "DROP TABLE " .. v )

@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function allowedToUseDoor( id, ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
@@ -134,7 +134,9 @@ function loadDoors()
         else
           if tonumber( w.groupID ) != -1 then
             local _tmpGroupName = dbSelect( "yrp_groups", "groupID", "uniqueID = " .. w.groupID )
-            v:SetNWString( "ownerGroup", tostring( _tmpGroupName[1].groupID ) )
+            if _tmpGroupName != nil then
+              v:SetNWString( "ownerGroup", tostring( _tmpGroupName[1].groupID ) )
+            end
           end
         end
         break
@@ -157,9 +159,6 @@ function checkMapDoors()
     local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
     local _allFuncDoors = ents.FindByClass( "func_door" )
     local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
-    print("_allPropDoors " .. #_allPropDoors)
-    print("_allFuncDoors " .. #_allFuncDoors)
-    print("_allFuncDoors " .. #_allFuncRDoors)
     if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors + #_allFuncRDoors ) then
       printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: new doors found!" )
       amountDoors = searchForDoors()

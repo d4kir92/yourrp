@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local time = 0
 timer.Create( "ServerThink", 1, 0, function()
@@ -157,12 +157,10 @@ function GM:PlayerSay( sender, text, teamChat )
 
     if isChatCommand( text, "roll" ) then
       _local = 1
-      boxString( "ROLL", Color( 0, 165, 255 ), Color( 255, 255, 255 ) )
-    end
-
-    if isChatCommand( text, "ooc" ) then
+      boxString( "ROLL", Color( 0, 165, 255 ), Color( 0, 165, 255 ) )
+    elseif isChatCommand( text, "ooc" ) or isChatCommand( text, "/" ) then
       boxString( "OOC", Color( 255, 165, 0 ), Color( 255, 165, 0 ) )
-    elseif isChatCommand( text, "looc" ) then
+    elseif isChatCommand( text, "looc" ) or isChatCommand( text, "." ) then
       _local = 1
       boxString( "LOOC", Color( 255, 50, 0 ), Color( 255, 50, 0 ) )
     elseif isChatCommand( text, "advert" ) or isChatCommand( text, _advertname ) then
@@ -170,6 +168,7 @@ function GM:PlayerSay( sender, text, teamChat )
     end
 
     if isChatCommand( text, "me" ) then
+      _local = 1
       //Group
       table.insert( _playersay, Color( 255, 165, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
@@ -181,7 +180,20 @@ function GM:PlayerSay( sender, text, teamChat )
       //Nickname
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
-    elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) then
+    elseif isChatCommand( text, "yell" ) then
+      _local = 1
+      //Group
+      table.insert( _playersay, Color( 255, 0, 0 ) )
+      table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
+
+      //Role
+      table.insert( _playersay, Color( 255, 0, 0 ) )
+      table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
+
+      //Nickname
+      table.insert( _playersay, Color( 255, 0, 0 ) )
+      table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
+    elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) or isChatCommand( text, "/" ) or isChatCommand( text, "." ) then
       //UserGroup
       table.insert( _playersay, Color( 100, 100, 255 ) )
       table.insert( _playersay, string.upper( sender:GetUserGroup() ) .. " " )
@@ -191,15 +203,15 @@ function GM:PlayerSay( sender, text, teamChat )
       table.insert( _playersay, sender:Nick() .. ": " )
     elseif isChatCommand( text, "roll" ) then
       //Group
-      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
 
       //Role
-      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
 
       //Nickname
-      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. " rolled " )
     else
       //Group
@@ -220,9 +232,16 @@ function GM:PlayerSay( sender, text, teamChat )
     if isChatCommand( text, "me" ) then
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.sub( text, 4 ) )
+    elseif isChatCommand( text, "yell" ) then
+      table.insert( _playersay, Color( 255, 0, 0 ) )
+      table.insert( _playersay, string.sub( text, 6 ) )
     elseif isChatCommand( text, "roll" ) then
-      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, tostring( math.Round( math.Rand( 0, 100 ) ) ) )
+    elseif isChatCommand( text, "/" ) then
+      table.insert( _playersay, string.sub( text, 3+1 ) )
+    elseif isChatCommand( text, "." ) then
+      table.insert( _playersay, string.sub( text, 3+1 ) )
     elseif isChatCommand( text, "ooc" ) then
       table.insert( _playersay, string.sub( text, 5+1 ) )
     elseif isChatCommand( text, "looc" ) then

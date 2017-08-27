@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //shared_pres.lua
 
@@ -8,7 +8,7 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.4.3"
+GM.Version = "0.5.0"
 GM.VersionSort = ""
 GM.Help = ""
 

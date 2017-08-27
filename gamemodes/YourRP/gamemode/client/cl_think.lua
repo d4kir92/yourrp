@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //cl_think.lua
 
@@ -155,8 +155,10 @@ function keyPressed( key, string, string2, distance )
 	local ply = LocalPlayer()
 	local plyTrace = ply:GetEyeTrace()
 	if distance != nil then
-		if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
-			return
+		if plyTrace.Entity != nil and plyTrace.Entity != NULL then
+			if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
+				return
+			end
 		end
 	end
 	if keys[tostring(key)] == nil then

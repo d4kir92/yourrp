@@ -1,4 +1,4 @@
-//Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 //cl_hud.lua
 
@@ -28,6 +28,10 @@ local hide = {
 	CHudSecondaryAmmo = true,
 	CHudCrosshair = true
 }
+
+function GM:DrawDeathNotice( x, y )
+	--No Kill Feed
+end
 
 playerready = 0
 hook.Add( "HUDShouldDraw", "HideHUD", function( name )
