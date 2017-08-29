@@ -6,6 +6,9 @@ local CamDataMinimap = {}
 
 local plyHealth = 100
 local plyArmor = 100
+local plyHunger = 100
+local plyThirst = 100
+local plyStamina = 100
 
 local reload = {}
 
@@ -69,7 +72,7 @@ function HudPlayer()
       if tonumber( cl_db["art"] ) == 1 then
         plyArmor = Lerp( 10 * FrameTime(), plyArmor, ply:Armor() )
         drawRBox( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( 0, 0, 0, 200 ) )
-        drawRBox( 0, cl_db["arx"], cl_db["ary"], ( ply:Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 0, 0, 255, 200 ) )
+        drawRBox( 0, cl_db["arx"], cl_db["ary"], ( ply:Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 0, 255, 0, 200 ) )
         drawText( math.Round( plyArmor, 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. " | " .. math.Round( ( math.Round( plyArmor, 0 ) / ply:GetNWInt( "GetMaxArmor", 100 ) ) * 100, 0 ) .. " %", "HudBars", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
@@ -170,16 +173,24 @@ function HudPlayer()
         	filter = _filterENTS
         } )
 
+        local rendering_map = false
+        local map_RT = GetRenderTarget( "YRP_Minimap", ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ), true )
+        local map_RT_mat = CreateMaterial( "YRP_Minimap", "UnlitGeneric", { ["$basetexture"] = "YRP_Minimap" } )
+        local old_RT = render.GetRenderTarget()
+        local old_w, old_h = ScrW(), ScrH()
+        render.SetRenderTarget( map_RT )
+        render.SetViewPort( ctrW( cl_db["mmx"] ), ctrW( cl_db["mmy"] ), ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ) )
+
+        render.Clear( 0, 0, 0, 0 )
+
       	CamDataMinimap.angles = Angle( 90, ply:EyeAngles().yaw, 0 )
-        if tr.Hit then
-          if tr.HitPos.z - ply:GetPos().z < 4000 and !tr.Entity:IsPlayer() and !tr.Entity:IsNPC() then
-            local dist = 1400
-        	  CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, tr.HitPos.z-ply:GetPos().z - 4 )
-            CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
-          	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
-          	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
-          	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
-          end
+        if tr.Hit and !tr.Entity:IsPlayer() and !tr.Entity:IsNPC() then
+          local dist = 1400
+      	  CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, tr.HitPos.z-ply:GetPos().z - 4 )
+          CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
+        	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
+        	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
+        	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
         else
           local dist = 6000
           CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, ply:GetPos().z + 4000 - ply:GetPos().z - 4 ) //+ Vector( 0, 0, 20000 )
@@ -188,13 +199,23 @@ function HudPlayer()
         	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
         	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
         end
-      	CamDataMinimap.x = ctrW( cl_db["mmx"] )
-      	CamDataMinimap.y = ctrW( cl_db["mmy"] )
-      	CamDataMinimap.w = ctrW( cl_db["mmw"] )
-      	CamDataMinimap.h = ctrW( cl_db["mmh"] )
+      	CamDataMinimap.x = 0
+      	CamDataMinimap.y = 0
+      	CamDataMinimap.w = cl_db["mmw"]
+      	CamDataMinimap.h = cl_db["mmh"]
         CamDataMinimap.ortho = true
         CamDataMinimap.drawviewmodel = false
-      	render.RenderView( CamDataMinimap )
+
+        cam.Start2D()
+        	rendering_map = true
+          render.RenderView( CamDataMinimap )
+          rendering_map = false
+        cam.End2D()
+
+        render.SetViewPort( 0, 0, old_w, old_h )
+        render.SetRenderTarget( old_RT )
+        surface.SetMaterial( map_RT_mat )
+        surface.DrawTexturedRect( ctrW( cl_db["mmx"] ), ctrW( cl_db["mmy"] ), ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ) )
 
         minimap.point = 8
         drawRBoxCr( cl_db["mmx"] + (cl_db["mmw"]/2) - (minimap.point/2), cl_db["mmy"] + (cl_db["mmh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
@@ -214,6 +235,8 @@ function HudPlayer()
         drawText( "F7  - " .. lang.settings, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 130, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 160, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 190, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        --drawText( "H  - " .. "Eat Food", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 220, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        --drawText( "T  - " .. "Drink Water", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 250, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       end
 
       //Money
@@ -227,7 +250,31 @@ function HudPlayer()
         end
         drawText( _moneystring, "HudBars", cl_db["mox"] + (cl_db["mow"]/2), cl_db["moy"] + (cl_db["moh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
+/*
+      //Hunger
+      if tonumber( cl_db["mht"] ) == 1 then
+        plyHunger = Lerp( 10 * FrameTime(), plyHunger, ply:GetNWInt( "hunger", 0 ) )
+        drawRBox( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( 0, 0, 0, 200 ) )
+        drawRBox( 0, cl_db["mhx"], cl_db["mhy"], ( plyHunger / 100 ) * (cl_db["mhw"]), cl_db["mhh"], Color( 255, 165, 0, 200 ) )
+        drawText( math.Round( ( math.Round( plyHunger, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["mhx"] + (cl_db["mhw"]/2), cl_db["mhy"] + (cl_db["mhh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      end
 
+      //Thirst
+      if tonumber( cl_db["mtt"] ) == 1 then
+        plyThirst = Lerp( 10 * FrameTime(), plyThirst, ply:GetNWInt( "thirst", 0 ) )
+        drawRBox( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( 0, 0, 0, 200 ) )
+        drawRBox( 0, cl_db["mtx"], cl_db["mty"], ( plyThirst / 100 ) * cl_db["mtw"], cl_db["mth"], Color( 0, 0, 255, 200 ) )
+        drawText( math.Round( ( math.Round( plyThirst, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["mtx"] + (cl_db["mtw"]/2), cl_db["mty"] + (cl_db["mth"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      end
+
+      //Stamina
+      if tonumber( cl_db["mst"] ) == 1 then
+        plyStamina = Lerp( 10 * FrameTime(), plyStamina, ply:GetNWInt( "stamina", 0 ) )
+        drawRBox( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( 0, 0, 0, 200 ) )
+        drawRBox( 0, cl_db["msx"], cl_db["msy"], ( plyStamina / 100 ) * cl_db["msw"], cl_db["msh"], Color( 255, 255, 0, 200 ) )
+        drawText( math.Round( ( math.Round( plyStamina, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["msx"] + (cl_db["msw"]/2), cl_db["msy"] + (cl_db["msh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      end
+*/
       //Thirdperson
       if _thirdperson != _tmp3P then
         _tmp3P = _thirdperson
@@ -285,6 +332,15 @@ function HudPlayer()
       end
       if tonumber( cl_db["mmt"] ) == 1 then
         drawRBoxBr( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+      if tonumber( cl_db["mht"] ) == 1 then
+        drawRBoxBr( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+      if tonumber( cl_db["mtt"] ) == 1 then
+        drawRBoxBr( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+      if tonumber( cl_db["mst"] ) == 1 then
+        drawRBoxBr( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
     else
       drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )

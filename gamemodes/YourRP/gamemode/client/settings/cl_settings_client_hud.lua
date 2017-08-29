@@ -148,6 +148,9 @@ function tabClientHud( sheet )
     changeHudElement( changeHudWindow, "rix", "riy", "riw", "rih", "rit", lang.role )
     changeHudElement( changeHudWindow, "ttx", "tty", "ttw", "tth", "ttt", lang.tooltip )
     changeHudElement( changeHudWindow, "mox", "moy", "mow", "moh", "mot", lang.money )
+    --changeHudElement( changeHudWindow, "mhx", "mhy", "mhw", "mhh", "mht", "Hunger" )
+    --changeHudElement( changeHudWindow, "mtx", "mty", "mtw", "mth", "mtt", "Durst" )
+    --changeHudElement( changeHudWindow, "msx", "msy", "msw", "msh", "mst", "Stamina" )
 
     changeHudWindow:MakePopup()
   end

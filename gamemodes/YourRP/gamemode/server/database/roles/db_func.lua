@@ -17,8 +17,11 @@ function setRoleValues( ply )
       local tmpTableGroup = dbSelect( "yrp_groups", "*", "uniqueID = " .. tmpTableRole[1].groupID )
       if tmpTableGroup != false and tmpTableGroup != nil then
         local modelsize = tmpTableRole[1].playermodelsize
-        ply:SetWalkSpeed( tmpTableRole[1].speedwalk*modelsize )
-        ply:SetRunSpeed( tmpTableRole[1].speedrun*modelsize )
+        ply:SetNWInt( "speedwalk", tmpTableRole[1].speedwalk*modelsize )
+        ply:SetNWInt( "speedrun", tmpTableRole[1].speedrun*modelsize )
+
+        ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
+        ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
 
         ply:SetMaxHealth( tonumber( tmpTableRole[1].hpmax ) )
         ply:SetHealth( tonumber( tmpTableRole[1].hp ) )

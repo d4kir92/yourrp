@@ -53,6 +53,7 @@ AddCSLuaFile( "client/settings/cl_settings_server.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_general.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_questions.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_roles.lua" )
+AddCSLuaFile( "client/settings/cl_settings_server_roles2.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_give.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_map.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_money.lua" )
@@ -94,6 +95,8 @@ include( "shared.lua" )
 
 include( "server/sv_func.lua" )
 include( "server/sv_think.lua" )
+
+include( "server/sv_convars.lua" )
 //##############################################################################
 
 //##############################################################################

@@ -31,24 +31,20 @@ end
 function metaPly:canAfford( money )
   local _tmpMoney = tonumber( money )
   if isnumber( _tmpMoney ) then
-    if _tmpMoney > 0 then
-      return true
-    elseif tonumber( self:GetNWInt( "money" ) ) >= math.abs( _tmpMoney ) then
+    if tonumber( self:GetNWInt( "money" ) ) >= math.abs( _tmpMoney ) then
       return true
     else
       return false
     end
+  else
+    return false
   end
 end
 
 function metaPly:addMoney( money )
   if isnumber( money ) then
-    if self:canAfford( money ) then
-      self:SetNWInt( "money", self:GetNWInt( "money" ) + math.Round( money, 2 ) )
-      self:updateMoney( self:GetNWInt( "money" ) )
-    else
-      printGM( "note", self:Nick() .. " cant afford this" )
-    end
+    self:SetNWInt( "money", self:GetNWInt( "money" ) + math.Round( money, 2 ) )
+    self:updateMoney( self:GetNWInt( "money" ) )
   end
 end
 
@@ -66,9 +62,7 @@ end
 function metaPly:canAffordBank( money )
   local _tmpMoney = tonumber( money )
   if isnumber( _tmpMoney ) then
-    if _tmpMoney > 0 then
-      return true
-    elseif tonumber( self:GetNWInt( "moneybank" ) ) >= math.abs( _tmpMoney ) then
+    if tonumber( self:GetNWInt( "moneybank" ) ) >= math.abs( _tmpMoney ) then
       return true
     else
       return false
@@ -78,12 +72,8 @@ end
 
 function metaPly:addMoneyBank( money )
   if isnumber( money ) then
-    if self:canAffordBank( money ) then
-      self:SetNWInt( "moneybank", self:GetNWInt( "moneybank" ) + math.Round( money, 2 ) )
-      self:updateMoneyBank( self:GetNWInt( "moneybank" ) )
-    else
-      printGM( "note", self:Nick() .. " cant afford this, BANK" )
-    end
+    self:SetNWInt( "moneybank", self:GetNWInt( "moneybank" ) + math.Round( money, 2 ) )
+    self:updateMoneyBank( self:GetNWInt( "moneybank" ) )
   end
 end
 
@@ -244,6 +234,11 @@ end
 
 function checkClient( ply )
   printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
+
+  if ply:IPAddress() == "loopback" then
+    ply:SetUserGroup( "superadmin" )
+  end
+
   awayFor( ply )
 
   local query = ""
@@ -254,7 +249,7 @@ function checkClient( ply )
     printGM( "db", ply:SteamName() .. " is not in db: yrp_players, creating " .. ply:SteamName() )
 
     ply:KillSilent()
-    
+
     local q2 = ""
     q2 = q2 .. "INSERT INTO yrp_players ( steamID, nick, roleID, map ) "
     q2 = q2 .. "VALUES ( "

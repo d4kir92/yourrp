@@ -12,6 +12,7 @@ function tabServerGeneral( sheet )
 
   local sv_generalName = vgui.Create( "DTextEntry", sv_generalPanel )
   local sv_generalAdvert = vgui.Create( "DTextEntry", sv_generalPanel )
+  local sv_generalMetabolism = createVGUI( "DCheckBox", sv_generalPanel, 30, 30, 300, 315 )
 
   local oldGamemodename = ""
   function sv_generalPanel:Paint()
@@ -20,7 +21,9 @@ function tabServerGeneral( sheet )
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleText( "you need to update Server!", "SettingsNormal", ctrW( 300 + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
-    draw.SimpleText( lang.advertname .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.advertname .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.updatecountdown .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "Metabolism" .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
   sv_generalName:SetPos( ctrW( 300 ), ctrW( 5 ) )
@@ -44,11 +47,13 @@ function tabServerGeneral( sheet )
         if sv_generalAdvert != nil and _advertname != nil then
           sv_generalAdvert:SetText( tostring( _advertname ) )
         end
+      elseif v.name == "metabolism" then
+        sv_generalMetabolism:SetChecked( tobool( v.value ) )
       end
     end
   end)
 
-  sv_generalAdvert:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 + 50 + 10 ) )
+  sv_generalAdvert:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 ) )
   sv_generalAdvert:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalAdvert:SetText( _advertname )
   function sv_generalAdvert:OnChange()
@@ -57,12 +62,11 @@ function tabServerGeneral( sheet )
     net.SendToServer()
   end
 
-  local sv_generalRestartTime = vgui.Create( "DNumSlider", sv_generalPanel )
-  sv_generalRestartTime:SetPos( ctrW( 10 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartTime:SetSize( ctrW( 1800 ), ctrW( 50 ) )
-  sv_generalRestartTime:SetText( lang.updatecountdown )
+  local sv_generalRestartTime = vgui.Create( "DNumberWang", sv_generalPanel )
+  sv_generalRestartTime:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartTime:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalRestartTime:SetMin( 3 )
-  sv_generalRestartTime:SetMax( 60 )
+  sv_generalRestartTime:SetMax( 240 )
   sv_generalRestartTime:SetDecimals( 0 )
   net.Start( "selectGeneral" )
     net.WriteString( "restart_time" )
@@ -87,7 +91,7 @@ function tabServerGeneral( sheet )
 
   local sv_generalRestartServer = vgui.Create( "DButton", sv_generalPanel )
   sv_generalRestartServer:SetSize( ctrW( 400 ), ctrW( 50 ) )
-  sv_generalRestartServer:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartServer:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServer:SetText( lang.updateserver )
   function sv_generalRestartServer:Paint()
     local color = Color( 255, 0, 0, 200 )
@@ -109,7 +113,7 @@ function tabServerGeneral( sheet )
 
   local sv_generalRestartServerCancel = vgui.Create( "DButton", sv_generalPanel )
   sv_generalRestartServerCancel:SetSize( ctrW( 400 ), ctrW( 50 ) )
-  sv_generalRestartServerCancel:SetPos( ctrW( 5 + 400 + 10 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartServerCancel:SetPos( ctrW( 5 + 400 + 10 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServerCancel:SetText( lang.cancelupdateserver )
   function sv_generalRestartServerCancel:Paint()
     local color = Color( 0, 255, 0, 200 )
@@ -126,7 +130,7 @@ function tabServerGeneral( sheet )
 
   local sv_generalHardReset = vgui.Create( "DButton", sv_generalPanel )
   sv_generalHardReset:SetSize( ctrW( 400 ), ctrW( 50 ) )
-  sv_generalHardReset:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+  sv_generalHardReset:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalHardReset:SetText( lang.hardresetdatabase )
   function sv_generalHardReset:Paint( pw, ph )
     local color = Color( 255, 0, 0, 200 )
@@ -178,5 +182,17 @@ function tabServerGeneral( sheet )
 
     settingsWindow:Close()
     _tmpFrame:MakePopup()
+  end
+
+  function sv_generalMetabolism:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "dbUpdate" )
+      net.WriteString( "yrp_general" )
+      net.WriteString( "value = '" .. _tonumber .. "'" )
+      net.WriteString( "name = '" .. "metabolism" .. "'" )
+    net.SendToServer()
   end
 end

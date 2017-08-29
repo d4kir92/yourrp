@@ -40,13 +40,6 @@ gamemode ->
 AddCSLuaFile( "database/db_lang.lua" )
 include( "database/db_lang.lua" )
 
-//##############################################################################
-//Convars
-concommand.Add( "yrp__help", function( ply, cmd, args )
-
-end )
-//##############################################################################
-
 //include("database/db_lang.lua")
 
 function GM:Initialize()

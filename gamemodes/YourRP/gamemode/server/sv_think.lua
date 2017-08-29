@@ -1,20 +1,43 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+util.AddNetworkString( "yrp_eat" )
+util.AddNetworkString( "yrp_drink" )
+
+net.Receive( "yrp_eat", function( len, ply )
+  ply:SetNWInt( "hunger", ply:GetNWInt( "hunger", 0 ) + 20 )
+  if ply:GetNWInt( "hunger", 0 ) > 100 then
+    ply:SetNWInt( "hunger", 100 )
+  end
+end)
+
+net.Receive( "yrp_drink", function( len, ply )
+  ply:SetNWInt( "thirst", ply:GetNWInt( "thirst", 0 ) + 20 )
+  if ply:GetNWInt( "thirst", 0 ) > 100 then
+    ply:SetNWInt( "thirst", 100 )
+  end
+end)
+
 local time = 0
 timer.Create( "ServerThink", 1, 0, function()
   local _allPlayers = player.GetAll()
 
   for k, ply in pairs( _allPlayers ) do
     if !ply:GetNWBool( "inCombat" ) then
-      //HealthReg
+      --HealthReg
       if ply:GetNWInt( "GetHealthReg" ) != nil then
         ply:SetHealth( ply:Health() + ply:GetNWInt( "GetHealthReg" ) )
         if ply:Health() > ply:GetMaxHealth() then
           ply:SetHealth( ply:GetMaxHealth() )
         end
       end
+      if ply:GetNWInt( "hunger", 0 ) > 20 and time%4 == 0 then
+        ply:SetHealth( ply:Health() + 1 )
+        if ply:Health() > ply:GetMaxHealth() then
+          ply:SetHealth( ply:GetMaxHealth() )
+        end
+      end
 
-      //ArmorReg
+      --ArmorReg
       if ply:GetNWInt( "GetArmorReg" ) != nil then
         ply:SetArmor( ply:Armor() + ply:GetNWInt( "GetArmorReg" ) )
         if ply:Armor() > ply:GetNWInt( "GetMaxArmor" ) then
@@ -22,6 +45,42 @@ timer.Create( "ServerThink", 1, 0, function()
         end
       end
     end
+
+    /*--Hunger
+    ply:SetNWInt( "hunger", ply:GetNWInt( "hunger", 0 ) - 0.1 )
+    if ply:GetNWInt( "hunger", 0 ) < 0 then
+      ply:SetNWInt( "hunger", 0 )
+    end
+    if ply:GetNWInt( "hunger", 0 ) < 20 then
+      ply:TakeDamage( ply:GetMaxHealth() / 100 )
+    end
+
+    --Thirst
+    ply:SetNWInt( "thirst", ply:GetNWInt( "thirst", 0 ) - 0.2 )
+    if ply:GetNWInt( "thirst", 0 ) < 0 then
+      ply:SetNWInt( "thirst", 0 )
+    end
+
+    --Stamina
+    if !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) then
+      ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) - 2 )
+      if ply:GetNWInt( "stamina", 0 ) < 0 then
+        ply:SetNWInt( "stamina", 0 )
+      end
+    elseif ply:GetNWInt( "thirst", 0 ) > 20 then
+      ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) + 1 )
+      if ply:GetNWInt( "stamina", 0 ) > 100 then
+        ply:SetNWInt( "stamina", 100 )
+      end
+    end
+    if ply:GetNWInt( "stamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
+      ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
+      ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
+    else
+      ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
+      ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+    end
+    */
   end
 
   if time % 60 == 0 then
@@ -77,14 +136,17 @@ end
 util.AddNetworkString( "yrp_player_say" )
 
 function isChatCommand( string, command )
-  local size = string.len( string.lower( command ) )
-  local slash = string.sub( string.lower( string ), 1, 1+size ) == "/" .. string.lower( command )
-  local call = string.sub( string.lower( string ), 1, 1+size ) == "!" .. string.lower( command )
-  if slash or call then
-    return true
-  else
-    return false
+  if string != nil and command != nil then
+    local size = string.len( string.lower( command ) )
+    local slash = string.sub( string.lower( string ), 1, 1+size ) == "/" .. string.lower( command )
+    local call = string.sub( string.lower( string ), 1, 1+size ) == "!" .. string.lower( command )
+    if slash or call then
+      return true
+    else
+      return false
+    end
   end
+  return false
 end
 
 function getPlayer( string )
@@ -93,6 +155,15 @@ function getPlayer( string )
       return ply
     end
   end
+end
+
+function printWarning( string )
+  local table = {}
+  table[1] = Color( 255, 0, 0 )
+  table[2] = string
+  net.Start( "yrp_player_say" )
+    net.WriteTable( table )
+  net.Broadcast()
 end
 
 function boxString( string, color, colorBox )
@@ -114,12 +185,55 @@ function GM:PlayerSay( sender, text, teamChat )
     local _local = 0
     _playersay = {}
 
-    if isChatCommand( text, "drop" ) then
+    if isChatCommand( text, "dropweapon" ) then
       local _weapon = sender:GetActiveWeapon()
       if _weapon != nil then
         sender:DropWeapon( _weapon )
       end
       return ""
+    end
+
+    if isChatCommand( text, "dropmoney" ) then
+      local _table = string.Explode( " ", text )
+      local _moneyAmount = tonumber( _table[2] )
+      if isnumber( _moneyAmount ) then
+        if sender:canAfford( -_moneyAmount ) then
+          local _money = ents.Create( "yrp_money" )
+          sender:addMoney( -_moneyAmount )
+          local tr = util.TraceHull( {
+          	start = sender:GetPos() + sender:GetUp() * 74,
+            endpos = sender:GetPos() + sender:GetUp() * 74 + sender:GetForward() * 64,
+          	filter = sender,
+          	mins = Vector( -10, -10, -10 ),
+          	maxs = Vector( 10, 10, 10 ),
+          	mask = MASK_SHOT_HULL
+          } )
+          if tr.Hit then
+            local tr2 = util.TraceHull( {
+            	start = sender:GetPos() + sender:GetUp() * 74,
+              endpos = sender:GetPos() + sender:GetUp() * 74 - sender:GetForward() * 64,
+            	filter = sender,
+            	mins = Vector( -10, -10, -10 ),
+            	maxs = Vector( 10, 10, 10 ),
+            	mask = MASK_SHOT_HULL
+            } )
+            if tr2.Hit then
+              _money:SetPos( sender:GetPos() + sender:GetUp() * 74 )
+            else
+              _money:SetPos( sender:GetPos() + sender:GetUp() * 74 - sender:GetForward() * 64 )
+            end
+          else
+            _money:SetPos( sender:GetPos() + sender:GetUp() * 74 + sender:GetForward() * 64 )
+          end
+          _money:Spawn()
+          _money:SetMoney( _moneyAmount )
+          return ""
+        else
+          //printGM( "note", "can't afford" )
+        end
+      else
+        printGM( "note", "Failed dropmoney" )
+      end
     end
 
     if isChatCommand( text, "kill" ) then

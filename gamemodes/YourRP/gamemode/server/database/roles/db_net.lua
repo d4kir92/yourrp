@@ -51,10 +51,32 @@ util.AddNetworkString( "demotePlayer" )
 util.AddNetworkString( "getAllRoles" )
 
 util.AddNetworkString( "updateGroups" )
+
+//NEW
+util.AddNetworkString( "yrp_groups" )
+util.AddNetworkString( "yrp_roles" )
 //##############################################################################
 
 //##############################################################################
 //net.Receives
+net.Receive( "yrp_roles", function( len, ply )
+  local _tmpGroupID = net.ReadString()
+  local tmp = dbSelect( "yrp_roles", "*", "groupID = '" .. _tmpGroupID .. "'" )
+  if tmp == nil then
+    tmp = {}
+  end
+  net.Start( "yrp_roles" )
+    net.WriteTable( tmp )
+  net.Send( ply )
+end)
+
+net.Receive( "yrp_groups", function( len, ply )
+  local tmp = dbSelect( "yrp_groups", "*", nil )
+  net.Start( "yrp_groups" )
+    net.WriteTable( tmp )
+  net.Send( ply )
+end)
+
 net.Receive( "updateGroups", function( len, ply )
   updateGroupTable()
 end)

@@ -2,49 +2,23 @@
 
 //db_general.lua
 
-include( "general/db_net.lua")
+include( "general/db_net.lua" )
+include( "general/db_func.lua" )
 
-//##############################################################################
-function dbGeneralInit()
-  local dbName = "yrp_general"
+local dbName = "yrp_general"
 
+sqlAddColumn( dbName, "name", "TEXT DEFAULT ''" )
+sqlAddColumn( dbName, "value", "TEXT DEFAULT ''" )
 
-  printGMPre( "db", yrp.loaddb .. dbName )
-  if sql.TableExists( dbName ) then
-    printGM( "db", dbName .. " exists" )
-  else
-    printGM( "note", dbName .. " not exists" )
-    local q = "CREATE TABLE "
-    q = q .. "yrp_general ( "
-    q = q .. "name TEXT, "
-    q = q .. "value TEXT"
-    q = q .. " )"
-    sql.Query( q )
-		if sql.TableExists( dbName ) then
-			printGM( "db", dbName .. yrp.successdb )
-		else
-			printERROR( "CREATE TABLE " .. dbName .. " fail" )
-      retryLoadDatabase()
-		end
-  end
-
-  if dbSelect( dbName, "name", "name = 'advert'" ) == nil then
-    dbInsertInto( dbName, "name, value", "'advert', 'ADVERT'" )
-  end
-
-  if dbSelect( dbName, "name", "name = 'gamemodename'" ) == nil then
-    dbInsertInto( dbName, "name, value", "'gamemodename', 'YourRP'" )
-  end
-
-  if dbSelect( dbName, "name", "name = 'restart_time'" ) == nil then
-    dbInsertInto( dbName, "name, value", "'restart_time', '10'" )
-  end
-
-  local _tmpAdvert = sql.Query( "SELECT * FROM " .. dbName .. " WHERE name = 'advert'")
-  if _tmpAdvert != nil then
-    _advertname = _tmpAdvert[1].value
-  end
-
-  printGMPos()
+if dbSelect( dbName, "*", "name = 'gamemodename'" ) == nil then
+  dbInsertInto( dbName, "name, value", "'gamemodename', 'YourRP'" )
 end
-//##############################################################################
+if dbSelect( dbName, "*", "name = 'advert'" ) == nil then
+  dbInsertInto( dbName, "name, value", "'advert', 'Advert'" )
+end
+if dbSelect( dbName, "*", "name = 'restart_time'" ) == nil then
+  dbInsertInto( dbName, "name, value", "'restart_time', '10'" )
+end
+if dbSelect( dbName, "*", "name = 'metabolism'" ) == nil then
+  dbInsertInto( dbName, "name, value", "'metabolism', '1'" )
+end

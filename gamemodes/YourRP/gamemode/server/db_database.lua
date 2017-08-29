@@ -51,7 +51,7 @@ function resetDatabase()
 end
 
 net.Receive( "hardresetdatabase", function( len, ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
+  if ply:IsSuperAdmin() then
     printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
     printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
     printGMImp( "note", ply:Nick() .. " hard reseted the DATABASE!" )
@@ -106,7 +106,7 @@ function dbSelect( dbTable, dbColumns, dbWhere )
     end
     local _result = sql.Query( q )
     if _result == nil then
-      printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
+      //printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
       return _result
     elseif _result == false then
       printERROR( dbTable .. ": " .. q .. " FALSE" )
@@ -224,6 +224,8 @@ function initDatabase( dbName )
 end
 //##############################################################################
 //includes
+include( "database/db_resources.lua" )
+
 include( "database/db_general.lua" )
 include( "database/db_questions.lua" )
 include( "database/db_players.lua" )
@@ -240,7 +242,8 @@ include( "database/db_restriction.lua" )
 function dbInitDatabase()
   printGMImp( "db", "LOAD DATABASES" )
 
-  dbGeneralInit()
+  initDatabase( "yrp_general" )
+  //dbGeneralInit()
   dbQuestionsInit()
   dbRolesInit()
   dbMoneyInit()

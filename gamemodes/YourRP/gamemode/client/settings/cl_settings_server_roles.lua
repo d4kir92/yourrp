@@ -348,8 +348,8 @@ function tabServerRoles( sheet )
 
   sv_rolesGroups.panelFriendlyFire:SetSize( widee, ctrW( 50 ) )
   sv_rolesGroups.panelFriendlyFire:SetPos( ctrW( 0 ), ctrW( 0 + 750 + 50 ) )
-  function sv_rolesGroups.panelFriendlyFire:Paint()
-    draw.RoundedBox( 0, 0, 0, sv_rolesGroups.panelFriendlyFire:GetWide(), sv_rolesGroups.panelFriendlyFire:GetTall(), Color( 100, 100, 255, 100 ) )
+  function sv_rolesGroups.panelFriendlyFire:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 100 ) )
     draw.SimpleText( lang.friendlyfire, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
 

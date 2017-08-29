@@ -119,6 +119,12 @@ function useFunction( string )
 			GUIToggled = not GUIToggled
 			gui.EnableScreenClicker( GUIToggled )
 			_menuIsOpen = 0
+		elseif string == "eat" then
+			net.Start( "yrp_eat" )
+			net.SendToServer()
+		elseif string == "drink" then
+			net.Start( "yrp_drink" )
+			net.SendToServer()
 		end
 	end
 end
@@ -193,6 +199,9 @@ function KeyPress()
 	keyPressed( KEY_B, "ViewChange", nil, nil )
 
 	keyPressed( KEY_M, "openMap", nil, nil )
+
+	keyPressed( KEY_H, "eat", "eat", nil )
+	keyPressed( KEY_T, "drink", "drink", nil )
 
 	keyPressed( KEY_E, "openInteractMenu", "openDoorOptions", 100 )
 end

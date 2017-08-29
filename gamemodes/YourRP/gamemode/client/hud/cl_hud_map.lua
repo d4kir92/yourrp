@@ -42,8 +42,8 @@ function openSpawnMenu()
         local CamDataMap = {}
         CamDataMap.angles = Angle( 90, 90, 0 )
         CamDataMap.origin = Vector( 0, 0, tr.HitPos.z )
-        CamDataMap.x = win.x
-        CamDataMap.y = win.y
+        CamDataMap.x = 0
+        CamDataMap.y = 0
         CamDataMap.w = win.w
         CamDataMap.h = win.h
         CamDataMap.ortho = true
@@ -54,8 +54,8 @@ function openSpawnMenu()
         if false then
           CamDataMap.angles = Angle( 90, 90, 0 )
           CamDataMap.origin = Vector( 0, 0, map.sizeUp-64 )
-          CamDataMap.x = win.x
-          CamDataMap.y = win.y
+          CamDataMap.x = 0
+          CamDataMap.y = 0
           CamDataMap.w = win.w
           CamDataMap.h = win.h
           CamDataMap.ortho = true
@@ -65,31 +65,26 @@ function openSpawnMenu()
           CamDataMap.orthobottom = map.sizeN
         end
 
-        render.ClearStencil()
-        render.SetStencilEnable(true)
-          render.SetStencilWriteMask(255)
-          render.SetStencilTestMask(255)
-          render.SetStencilReferenceValue(15)
-          render.SetStencilFailOperation(STENCILOPERATION_REPLACE)
-          render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
-          render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
-          render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
+        local rendering_map = false
+        local map_RT = GetRenderTarget( "YRP_Map", win.w, win.h, true )
+        local map_RT_mat = CreateMaterial( "YRP_Map", "UnlitGeneric", { ["$basetexture"] = "YRP_Map" } )
+        local old_RT = render.GetRenderTarget()
+        local old_w, old_h = ScrW(), ScrH()
+        render.SetRenderTarget( map_RT )
+        render.SetViewPort( win.x, win.y, win.w, win.h )
 
-            render.SuppressEngineLighting( true )
-            render.SetColorModulation( 0, 1, 0 )
-            render.SetBlend( 0.5 )
+        render.Clear( 0, 0, 0, 0 )
 
-            render.RenderView( CamDataMap )
+        cam.Start2D()
+          rendering_map = true
+          render.RenderView( CamDataMap )
+          rendering_map = false
+        cam.End2D()
 
-            render.SuppressEngineLighting( false )
-    				render.SetColorModulation( 1, 1, 1 )
-    				render.SetBlend( 1 )
-
-            render.SuppressEngineLighting( true )
-
-          render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
-
-        render.SetStencilEnable(false)
+        render.SetViewPort( 0, 0, old_w, old_h )
+        render.SetRenderTarget( old_RT )
+        surface.SetMaterial( map_RT_mat )
+        surface.DrawTexturedRect( win.x, win.y, win.w, win.h )
 
         local plyPos = {}
         plyPos.xMax = map.sizeX

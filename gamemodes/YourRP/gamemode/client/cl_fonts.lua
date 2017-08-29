@@ -5,6 +5,7 @@
 function createFont( _name, _font, _size, _weight, _outline )
 	//printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
 	local _antialaising = false
+	local _size = ctrW( _size*2 )
 	if _size > 72 then
 		_antialaising = true
 	end
@@ -34,8 +35,8 @@ function changeFontSize()
 	local tmpFont = "Roboto-Thin"
 	createFont( "HudDefault", tmpFont, 80, 500, false )
 
-	createFont( "SettingsNormal", tmpFont, 14, 500, true )
-	createFont( "SettingsHeader", tmpFont, 18, 500, false )
+	createFont( "SettingsNormal", tmpFont, 16, 500, true )
+	createFont( "SettingsHeader", tmpFont, 20, 500, false )
 
 	createFont( "HudBars", tmpFont, 16, 500, true )
 

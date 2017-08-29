@@ -184,7 +184,19 @@ net.Receive( "getBuyList", function( len )
         PanelSelect:SetPos( ctrW( 0 ), ctrW( 45 ) )
         PanelSelect:SetText( "" )
 
-        for k, swep in pairs( weapons.GetList() ) do
+        local _sweplist = weapons.GetList()
+        local tmp2 = {}
+        tmp2.WorldModel = "models/weapons/w_physics.mdl"
+        tmp2.ClassName = "weapon_physcannon"
+        tmp2.PrintName = "Gravity Gun"
+        table.insert( _sweplist, tmp2 )
+        local tmp3 = {}
+        tmp3.WorldModel = "models/weapons/w_Physics.mdl"
+        tmp3.ClassName = "weapon_physgun"
+        tmp3.PrintName = "PHYSICS GUN"
+        table.insert( _sweplist, tmp3 )
+
+        for k, swep in pairs( _sweplist ) do
     			local icon = vgui.Create( "SpawnIcon" )
           icon:SetText( "" )
     			icon:SetModel( swep.WorldModel )
