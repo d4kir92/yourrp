@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_server_general.lua
+--cl_settings_server_general.lua
 
 local _advertname = "NULL"
 local _restartTime = 0
@@ -16,14 +16,14 @@ function tabServerGeneral( sheet )
 
   local oldGamemodename = ""
   function sv_generalPanel:Paint()
-    //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
+    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
     draw.SimpleText( lang.gamemodename .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleText( "you need to update Server!", "SettingsNormal", ctrW( 300 + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
     draw.SimpleText( lang.advertname .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     draw.SimpleText( lang.updatecountdown .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( "Metabolism" .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.metabolism .. ":", "SettingsNormal", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
   sv_generalName:SetPos( ctrW( 300 ), ctrW( 5 ) )
@@ -189,10 +189,12 @@ function tabServerGeneral( sheet )
     if bVal then
       _tonumber = 1
     end
-    net.Start( "dbUpdate" )
+    net.Start( "dbUpdateNWBool" )
       net.WriteString( "yrp_general" )
       net.WriteString( "value = '" .. _tonumber .. "'" )
       net.WriteString( "name = '" .. "metabolism" .. "'" )
+      net.WriteBool( bVal )
     net.SendToServer()
+    RunConsoleCommand( "yrp_metabolism", math.Round( _tonumber, 0 ) )
   end
 end

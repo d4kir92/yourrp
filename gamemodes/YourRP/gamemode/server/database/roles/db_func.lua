@@ -1,14 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function updateGroupTable()
-  local _tmpGroups = dbSelect( "yrp_groups", "*", nil )
-  if _tmpGroups != nil then
-    net.Start( "updateGroups" )
-      net.WriteTable( _tmpGroups )
-    net.Broadcast()
-  end
-end
-
 function setRoleValues( ply )
   local tmpTablePly = dbSelect( "yrp_players", "*", "steamID = '" .. ply:SteamID() .. "'" )
   if tmpTablePly != false and tmpTablePly != nil then
@@ -44,7 +35,11 @@ function setRoleValues( ply )
         ply:SetNWString( "groupName", tmpTableGroup[1].groupID )
         ply:SetNWString( "groupUniqueID", tmpTableGroup[1].uniqueID )
 
-        //sweps
+        ply:SetNWInt( "hunger", 100 )
+        ply:SetNWInt( "thirst", 100 )
+        ply:SetNWInt( "stamina", 100 )
+
+        --sweps
         local tmpSWEPTable = string.Explode( ",", tmpTableRole[1].sweps )
         for k, swep in pairs( tmpSWEPTable ) do
           if swep != nil and swep != NULL and swep != "" then
@@ -52,13 +47,13 @@ function setRoleValues( ply )
           end
         end
       else
-        //
+        --
       end
     else
-      //
+      --
     end
   else
-    //
+    --
   end
 end
 
@@ -71,7 +66,9 @@ function setRole( steamID, id )
     if ply:SteamID() == steamID then
       ply:StripWeapons()
 
-      ply:SetModel( tmpTableRole[1].playermodel )
+      local randModel = string.Explode( ",", tmpTableRole[1].playermodel )
+      local randNumb = math.Round( math.Rand( 1, #randModel ) )
+      ply:SetModel( randModel[randNumb] )
       local modelsize = tonumber( tmpTableRole[1].playermodelsize )
       yrpSetModelScale( ply, modelsize )
 
@@ -83,13 +80,13 @@ function setRole( steamID, id )
   end
 end
 
-//##############################################################################
+--##############################################################################
 function roleCheck( string )
   printGM( "db", "RoleCheck (" .. string .. ")" )
 
-  //1 hour = 3600
-  //1 day = 86400
-  //1 week = 604800
+  --1 hour = 3600
+  --1 day = 86400
+  --1 week = 604800
   local tmpAfk = 604800
   local tmpCounter = 0
 
@@ -114,4 +111,4 @@ function roleCheck( string )
   updateUses()
 end
 roleCheck( "Init" )
-//##############################################################################
+--##############################################################################

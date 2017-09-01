@@ -1,842 +1,1060 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_server_roles.lua
+--cl_settings_server_roles.lua
+
+local _w = 400
+local _br = 10
+local _lbr = 5
+
+local groupID = ""
+local groupUniqueID = -1
+
+function addButton( w, h, x, y, parent )
+  local tmp = createVGUI( "DButton", parent, w, h, x, y )
+  tmp:SetText( "" )
+  return tmp
+end
+
+function addDPanel( parent, w, h, x, y, string, dbTable )
+  local color = Color( 100, 100, 255, 200 )
+  if dbTable == "yrp_roles" then
+    color = Color( 100, 255, 100, 200 )
+  end
+  local tmp = createVGUI( "DPanel", parent, w, h, x, y )
+  function tmp:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, color )
+    draw.SimpleText( string, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  return tmp
+end
+
+function addDTextEntry( parent, w, h, x, y, string )
+  local tmp = createVGUI( "DTextEntry", parent, w, h, x, y )
+  if string != nil then
+    tmp:SetText( string )
+  else
+    tmp:SetText( "failed")
+  end
+  return tmp
+end
+
+function addDBTextEntry( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = addDPanel( parent, w, h/2, x, y, stringPanel, dbTable )
+
+  local tmp2 = addDTextEntry( parent, w, h/2, x, y + h/2, stringTextEntry )
+  function tmp2:OnChange()
+    tmpTable[dbSets] = tmp2:GetText()
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbSets .. " = '" .. tmpTable[dbSets] .. "'" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+function addDTextEntryBig( parent, w, h, x, y, string )
+  local tmp = createVGUI( "DTextEntry", parent, w, h, x, y )
+  if string != nil then
+    tmp:SetText( string )
+  else
+    tmp:SetText( "failed")
+  end
+  return tmp
+end
+
+function addDBTextEntryBig( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = addDPanel( parent, w, 40, x, y, stringPanel, dbTable )
+
+  local tmp2 = addDTextEntryBig( parent, w, h-40, x, y + 40, stringTextEntry )
+  tmp2:SetMultiline( true )
+  function tmp2:OnChange()
+    local tmp = string.Replace( tmp2:GetText(), "\n", " " )
+    tmpTable[dbSets] = tmp
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbSets .. " = '" .. tmp .. "'" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+function addDCheckBox( parent, w, h, x, y, checked )
+  local tmp = createVGUI( "DCheckBox", parent, w, h, x, y )
+  local tmpBool = false
+  if tonumber( checked ) == 1 then
+    tmpBool = true
+  end
+  tmp:SetValue( tmpBool )
+  return tmp
+end
+
+function addDBCheckBox( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = addDPanel( parent, w - h, h, x+h, y, stringPanel, dbTable )
+
+  local tmp2 = addDCheckBox( parent, h, h, x, y, checked )
+  function tmp2:OnChange( bVal )
+    local tmpNumb = 0
+    if bVal then
+      tmpNumb = 1
+    end
+    tmpTable[dbSets] = tmpNumb
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbSets .. " = " .. tmpTable[dbSets] .. "" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+function toColor( string )
+  local colorTable = string.Explode( ",", string )
+  return Color( colorTable[1], colorTable[2], colorTable[3] )
+end
+
+function addDColorMixer( parent, w, h, x, y, color )
+  local tmp = createVGUI( "DColorMixer", parent, w, h, x, y )
+  tmp:SetPalette( true )
+  tmp:SetAlphaBar( true )
+  tmp:SetWangs( true )
+  tmp:SetColor( toColor( color ) )
+  return tmp
+end
+
+function addDBColorMixer( parent, w, h, x, y, color, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = addDColorMixer( parent, w, h, x, y, color )
+  function tmp:ValueChanged()
+    local tmpColor = tmp:GetColor()
+    tmpTable[dbSets] = tostring( tmpColor.r ) .. "," .. tostring( tmpColor.g ) .. "," .. tostring( tmpColor.b )
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbSets .. " = '" .. tmpTable[dbSets] .. "'" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+function addDComboBox( parent, w, h, x, y, table, value1, value2, uniqueID, string, _select )
+  local tmp = createVGUI( "DComboBox", parent, w, h/2, x, y + h/2 )
+  tmp:AddChoice( lang.no .. " " .. string, -1, false )
+  local tmpFound = false
+  for k, v in pairs( table ) do
+    local tmpBool = false
+    if _select == v[value2] then
+      tmpBool = true
+      tmpFound = true
+    end
+    tmp:AddChoice( v[value1], v[value2], tmpBool )
+  end
+  if !tmpFound then
+    tmp:ChooseOptionID( 1 )
+  end
+  return tmp
+end
+
+function addDBComboBox( parent, w, h, x, y, string, table, value1, value2, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable )
+
+  local tmp2 = addDComboBox( parent, w, h, x, y, table, value1, value2, tmpTable.uniqueID, string, tmpTable[dbSets] )
+  function tmp2.OnSelect( test, index, value, data )
+    tmpTable[dbSets] = data
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbSets .. " = " .. tmpTable[dbSets] .. "" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+function addDNumberWang( parent, w, h, x, y, table )
+  local tmp = createVGUI( "DNumberWang", parent, w, h, x, y )
+  tmp:SetMax( 999999999999 )
+  tmp:SetMin( 0 )
+
+  tmp:SetValue( table )
+
+  return tmp
+end
+
+function addDBNumberWang( parent, w, h, x, y, string, table, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable )
+
+  local tmp2 = addDNumberWang( parent, w, h/2, x, y + h/2, table )
+
+  function tmp2:OnValueChanged( val )
+    tmpTable[dbSets] = val
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbSets .. " = " .. tmpTable[dbSets] .. "" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+function pmIsFromRole( id, playermodel )
+  local tmpTable = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
+  for k, v in pairs( tmpTable ) do
+    if string.lower( tostring( v ) ) == string.lower( tostring( playermodel ) ) then
+      return true
+    end
+  end
+
+  return false
+end
+
+function updatePlayermodels( table, id, uniqueID )
+  local tmpString = ""
+  for k, v in pairs( table ) do
+    if v.selected then
+      if tmpString == "" then
+        tmpString = v.model
+      else
+        tmpString = tmpString .. "," .. v.model
+      end
+    end
+  end
+  yrp_roles_dbTable[id].playermodel = tmpString
+  net.Start( "dbUpdate" )
+    net.WriteString( "yrp_roles" )
+    net.WriteString( "playermodel = '" .. tmpString .. "'" )
+    net.WriteString( "uniqueID = " .. uniqueID )
+  net.SendToServer()
+end
+
+function addDBPlayermodel( parent, id, uniqueID, size )
+  local pms = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
+  local changepm = 1
+
+  local background = createVGUI( "DPanel", parent, 800, 800, 0, 90 )
+  function background:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
+    draw.SimpleText( string.upper( player_manager.TranslateToPlayerModelName( pms[changepm] ) ), "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    if #pms > 1 then
+      draw.SimpleText( changepm .. "/" .. #pms, "SettingsNormal", pw/2, ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+  end
+
+  local modelpanel = createVGUI( "DModelPanel", parent, 800, 800, 0, 90 )
+  modelpanel:SetModel( pms[changepm] )
+  modelpanel.Entity:SetModelScale( size, 0 )
+
+  local buttonback = createVGUI( "DButton", parent, 80, 800, 0, 90 )
+  buttonback:SetText( "" )
+  function buttonback:Paint( pw, ph )
+    if changepm > 1 then
+      if buttonback:IsHovered() then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      end
+      draw.SimpleText( "<", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+  end
+  function buttonback:DoClick()
+    if changepm > 1 then
+      changepm = changepm - 1
+      modelpanel:SetModel( pms[changepm] )
+    end
+  end
+
+  local buttonforward = createVGUI( "DButton", parent, 80, 800, 800-80, 90 )
+  buttonforward:SetText( "" )
+  function buttonforward:Paint( pw, ph )
+    if changepm < #pms then
+      if buttonforward:IsHovered() then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      end
+      draw.SimpleText( ">", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+  end
+  function buttonforward:DoClick()
+    if #pms > changepm then
+      changepm = changepm + 1
+      modelpanel:SetModel( pms[changepm] )
+    end
+  end
+
+  local buttonchange = createVGUI( "DButton", parent, 200, 40, 400-100, 90 + 800 - 40 )
+  buttonchange:SetText( "" )
+  function buttonchange:Paint( pw, ph )
+    if modelpanel.Entity != nil then
+      if yrp_roles_dbTable[id] != nil then
+        modelpanel.Entity:SetModelScale( yrp_roles_dbTable[id].playermodelsize, 0 )
+      end
+    end
+    if buttonchange:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+    end
+    draw.SimpleText( lang.change, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function buttonchange:DoClick()
+    local pmframe = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
+    pmframe:Center()
+    pmframe:SetTitle( "" )
+    function pmframe:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
+    end
+
+    local pmsearch = createVGUI( "DTextEntry", pmframe, 2000 - 20, 40, 10, 50 )
+
+    local playermodels = player_manager.AllValidModels()
+
+    local scrollpanel = createVGUI( "DScrollPanel", pmframe, 2000 - 20, 2000 - 50 - 40 - 10 - 10, 10, 50+40+10 )
+    function scrollpanel:Paint( pw, ph )
+      //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
+    end
+
+    local tmpCache = {}
+    local tmpSelected = {}
+    function showPlayermodels()
+      for k, v in pairs( tmpCache ) do
+        v:Remove()
+      end
+
+      local tmpBr = 25
+      local tmpX = 0
+      local tmpY = 0
+      for k, v in pairs( playermodels ) do
+        if string.find( v, pmsearch:GetText() ) then
+          tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
+          tmpSelected[k] = {}
+          tmpSelected[k].model = v
+          if pmIsFromRole( id, v ) then
+            tmpSelected[k].selected = true
+          else
+            tmpSelected[k].selected = false
+          end
+          local tmpPointer = tmpCache[k]
+          function tmpPointer:Paint( pw, ph )
+            if tmpSelected[k].selected then
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
+            else
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+            end
+          end
+
+          local tmpModel = createVGUI( "DModelPanel", tmpPointer, 256, 256, 0, 0 )
+          tmpModel:SetModel( v )
+
+          local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
+          tmpButton:SetText( "" )
+          function tmpButton:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+            local text = lang.notadded
+            if tmpSelected[k].selected then
+              text = lang.added
+            end
+            draw.SimpleText( text, "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( player_manager.TranslateToPlayerModelName( v ), "SettingsNormal", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+          function tmpButton:DoClick()
+            if tmpSelected[k].selected then
+              tmpSelected[k].selected = false
+            else
+              tmpSelected[k].selected = true
+            end
+            updatePlayermodels( tmpSelected, id, uniqueID )
+            pms = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
+            changepm = 1
+            modelpanel:SetModel( pms[changepm] )
+          end
+
+          tmpX = tmpX + 256 + tmpBr
+          if tmpX > 2000 - 256 - tmpBr then
+            tmpX = 0
+            tmpY = tmpY + 256 + tmpBr
+          end
+        end
+      end
+    end
+    function pmsearch:OnChange()
+      showPlayermodels()
+    end
+    showPlayermodels()
+
+    pmframe:MakePopup()
+  end
+  return modelpanel
+end
+
+function updateSweps( table, id, uniqueID )
+  local tmpString = ""
+  for k, v in pairs( table ) do
+    if v.selected then
+      if tmpString == "" then
+        tmpString = v.ClassName
+      else
+        tmpString = tmpString .. "," .. v.ClassName
+      end
+    end
+  end
+  yrp_roles_dbTable[id].sweps = tmpString
+  net.Start( "dbUpdate" )
+    net.WriteString( "yrp_roles" )
+    net.WriteString( "sweps = '" .. tmpString .. "'" )
+    net.WriteString( "uniqueID = " .. uniqueID )
+  net.SendToServer()
+end
+
+function swIsFromRole( id, swep )
+  local tmpTable = string.Explode( ",", yrp_roles_dbTable[id].sweps )
+  for k, v in pairs( tmpTable ) do
+    if string.lower( tostring( v ) ) == string.lower( tostring( swep.ClassName ) ) then
+      return true
+    end
+  end
+
+  return false
+end
+
+function getWorldModel( ClassName )
+  local sweps = weapons.GetList()
+  local tmp2 = {}
+  tmp2.WorldModel = "models/weapons/w_physics.mdl"
+  tmp2.ClassName = "weapon_physcannon"
+  tmp2.PrintName = "Gravity Gun"
+  table.insert( sweps, tmp2 )
+  local tmp3 = {}
+  tmp3.WorldModel = "models/weapons/w_Physics.mdl"
+  tmp3.ClassName = "weapon_physgun"
+  tmp3.PrintName = "PHYSICS GUN"
+  table.insert( sweps, tmp3 )
+
+  for k, v in pairs( sweps ) do
+    if tostring( v.ClassName ) == tostring( ClassName ) then
+      if v.WorldModel != nil then
+        return v.WorldModel
+      end
+    end
+  end
+  return ""
+end
+
+function addDBSwep( parent, id, uniqueID )
+  local sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
+  local changesw = 1
+
+  local background = createVGUI( "DPanel", parent, 800, 800, 810, 90 )
+  function background:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
+    draw.SimpleText( sws[changesw], "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    if #sws > 1 then
+      draw.SimpleText( changesw .. "/" .. #sws, "SettingsNormal", pw/2, ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+  end
+
+  local modelpanel = createVGUI( "DModelPanel", background, 800, 800, 0, 0 )
+  local worldmodel = getWorldModel( sws[changesw] )
+  modelpanel:SetModel( worldmodel )
+  if worldmodel != "" then
+    modelpanel.Entity:SetModelScale( 1, 0 )
+    modelpanel:SetLookAt( Vector(0,0,0) )
+    modelpanel:SetCamPos( Vector(0,-30,15))
+  end
+
+  local buttonback = createVGUI( "DButton", background, 80, 800, 0, 0 )
+  buttonback:SetText( "" )
+  function buttonback:Paint( pw, ph )
+    if changesw > 1 then
+      if buttonback:IsHovered() then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      end
+      draw.SimpleText( "<", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+  end
+  function buttonback:DoClick()
+    if changesw > 1 then
+      changesw = changesw - 1
+      local worldmodel = getWorldModel( sws[changesw] )
+      modelpanel:SetModel( worldmodel )
+      if worldmodel != "" then
+        modelpanel.Entity:SetModelScale( 1, 0 )
+        modelpanel:SetLookAt( Vector(0,0,0) )
+        modelpanel:SetCamPos( Vector(0,-30,15))
+      end
+    end
+  end
+
+  local buttonforward = createVGUI( "DButton", background, 80, 800, 800-80, 0 )
+  buttonforward:SetText( "" )
+  function buttonforward:Paint( pw, ph )
+    if changesw < #sws then
+      if buttonforward:IsHovered() then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      end
+      draw.SimpleText( ">", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+  end
+  function buttonforward:DoClick()
+    if #sws > changesw then
+      changesw = changesw + 1
+      local worldmodel = getWorldModel( sws[changesw] )
+      modelpanel:SetModel( worldmodel )
+      if worldmodel != "" then
+        modelpanel.Entity:SetModelScale( 1, 0 )
+        modelpanel:SetLookAt( Vector(0,0,0) )
+        modelpanel:SetCamPos( Vector(0,-30,15))
+      end
+    end
+  end
+
+  local buttonchange = createVGUI( "DButton", background, 200, 40, 400-100, 800 - 40 )
+  buttonchange:SetText( "" )
+  function buttonchange:Paint( pw, ph )
+    if buttonchange:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+    end
+    draw.SimpleText( lang.change, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function buttonchange:DoClick()
+    local swframe = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
+    swframe:Center()
+    swframe:SetTitle( "" )
+    function swframe:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
+    end
+
+    local swsearch = createVGUI( "DTextEntry", swframe, 2000 - 20, 40, 10, 50 )
+
+    local sweps = weapons.GetList()
+    local tmp2 = {}
+    tmp2.WorldModel = "models/weapons/w_physics.mdl"
+    tmp2.ClassName = "weapon_physcannon"
+    tmp2.PrintName = "Gravity Gun"
+    table.insert( sweps, tmp2 )
+    local tmp3 = {}
+    tmp3.WorldModel = "models/weapons/w_Physics.mdl"
+    tmp3.ClassName = "weapon_physgun"
+    tmp3.PrintName = "PHYSICS GUN"
+    table.insert( sweps, tmp3 )
+
+    local scrollpanel = createVGUI( "DScrollPanel", swframe, 2000 - 20, 2000 - 50 - 40 - 10 - 10, 10, 50+40+10 )
+    function scrollpanel:Paint( pw, ph )
+      //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
+    end
+
+    local tmpCache = {}
+    local tmpSelected = {}
+    function showSweps()
+      for k, v in pairs( tmpCache ) do
+        v:Remove()
+      end
+
+      local tmpBr = 25
+      local tmpX = 0
+      local tmpY = 0
+      for k, v in pairs( sweps ) do
+        if v.WorldModel != nil then
+          if string.find( v.WorldModel, swsearch:GetText() ) then
+            tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
+            tmpSelected[k] = {}
+            tmpSelected[k].ClassName = v.ClassName
+            if swIsFromRole( id, v ) then
+              tmpSelected[k].selected = true
+            else
+              tmpSelected[k].selected = false
+            end
+            local tmpPointer = tmpCache[k]
+            function tmpPointer:Paint( pw, ph )
+              if tmpSelected[k].selected then
+                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
+              else
+                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+              end
+            end
+
+            local tmpModel = createVGUI( "DModelPanel", tmpPointer, 256, 256, 0, 0 )
+            tmpModel:SetModel( v.WorldModel )
+
+            local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
+            tmpButton:SetText( "" )
+            function tmpButton:Paint( pw, ph )
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+              local text = lang.notadded
+              if tmpSelected[k].selected then
+                text = lang.added
+              end
+              draw.SimpleText( text, "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+              draw.SimpleText( v.PrintName, "SettingsNormal", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            end
+            function tmpButton:DoClick()
+              if tmpSelected[k].selected then
+                tmpSelected[k].selected = false
+              else
+                tmpSelected[k].selected = true
+              end
+              updateSweps( tmpSelected, id, uniqueID )
+              sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
+              changesw = 1
+
+              local worldmodel = getWorldModel( sws[changesw] )
+              modelpanel:SetModel( worldmodel )
+              if worldmodel != "" then
+                modelpanel.Entity:SetModelScale( 1, 0 )
+                modelpanel:SetLookAt( Vector(0,0,0) )
+                modelpanel:SetCamPos( Vector(0,-30,15))
+              end
+            end
+
+            tmpX = tmpX + 256 + tmpBr
+            if tmpX > 2000 - 256 - tmpBr then
+              tmpX = 0
+              tmpY = tmpY + 256 + tmpBr
+            end
+          end
+        else
+          printERROR( v.ClassName .. " has no WorldModel!!!" )
+        end
+      end
+    end
+    function swsearch:OnChange()
+      showSweps()
+    end
+    showSweps()
+
+    swframe:MakePopup()
+  end
+  return modelpanel
+end
+
+function unselectAll()
+  if yrp_roles_dbTable != nil then
+    for k, v in pairs( yrp_roles_dbTable ) do
+      v.selected = false
+    end
+  end
+  if yrp_groups_dbTable != nil then
+    for k, v in pairs( yrp_groups_dbTable ) do
+      v.selected = false
+    end
+  end
+end
+
+function getCurrentRole()
+  local id = -1
+  if yrp_roles_dbTable != nil then
+    for k, v in pairs( yrp_roles_dbTable ) do
+      if v.selected then
+        id = v.uniqueID
+      end
+    end
+  end
+  return id
+end
+
+function getCurrentGroup()
+  local id = -1
+  if yrp_groups_dbTable != nil then
+    for k, v in pairs( yrp_groups_dbTable ) do
+      if v.selected then
+        id = v.uniqueID
+      end
+    end
+  end
+  return id
+end
+
+function deleteDBGroup()
+  local tmp = -1
+  for k, v in pairs( yrp_groups_dbTable ) do
+    if v.selected and tonumber( v.removeable ) == 1 then
+      tmp = k
+      net.Start( "removeDBGroup" )
+        net.WriteString( v.uniqueID )
+      net.SendToServer()
+      break
+    end
+  end
+  local count = 0
+  for k, v in pairs( yrp_groups ) do
+    v:SetPos( 0, (count) * ctrW( 40 ) )
+    if k == tmp then
+      v:Remove()
+    else
+      count = count + 1
+    end
+  end
+end
+
+function deleteDBRole()
+  local tmp = -1
+  for k, v in pairs( yrp_roles_dbTable ) do
+    if v.selected and tonumber( v.removeable ) == 1 then
+      tmp = k
+      net.Start( "removeDBRole" )
+        net.WriteString( v.uniqueID )
+        net.WriteString( groupUniqueID )
+      net.SendToServer()
+      break
+    end
+  end
+  local count = 0
+  for k, v in pairs( yrp_roles ) do
+    v:SetPos( 0, (count) * ctrW( 40 ) )
+    if k == tmp then
+      v:Remove()
+    else
+      count = count + 1
+    end
+  end
+end
+
+function dupDBGroup( uniqueID )
+  if uniqueID != -1 then
+    net.Start( "dupDBGroup" )
+      net.WriteString( uniqueID )
+    net.SendToServer()
+  else
+    printGM( "note", "no role selected!" )
+  end
+end
+
+function dupDBRole( groupID, uniqueID )
+  if uniqueID != -1 then
+    net.Start( "dupDBRole" )
+      net.WriteString( groupID )
+      net.WriteString( uniqueID )
+    net.SendToServer()
+  else
+    printGM( "note", "no role selected!" )
+  end
+end
+
+function addDBRole( groupID )
+  if tonumber( groupID ) != -1 then
+    net.Start( "addDBRole" )
+      net.WriteString( groupID )
+    net.SendToServer()
+  else
+    printGM( "note", "no group selected!" )
+  end
+end
+
+function addDBGroup()
+  net.Start( "addDBGroup" )
+  net.SendToServer()
+end
+
+function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile )
+  local _color1 = Color( color.r, color.g, color.b, 125 )
+  local _color2 = Color( color.r, color.g, color.b, 255 )
+  local tmp = createVGUI( "DPanel", parent, w, 2*(h/3), x, y )
+  local reg = 0
+  local tmpSec = 0
+  function tmp:Paint( pw, ph )
+    if CurTime() > tmpSec then
+      tmpSec = CurTime() + 1
+      reg = reg + 1
+      if reg * tmpreg > tonumber( tmpmax ) then
+        reg = 0
+      end
+    end
+
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
+
+    draw.RoundedBox( 0, 0, 0, pw * ( tmpmin / tmpmax ), ph, _color1 )
+
+    draw.RoundedBox( 0, 0, ph-ph/4, pw * ( reg*tmpreg / tmpmax ), ph/4, _color2 )
+
+    draw.SimpleText( string, "SettingsNormal", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( tmpmin .. "/" .. tmpmax .. "(" .. tmpreg .. ")", "SettingsNormal", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+
+  local tmp2 = addDNumberWang( parent, w/3, h/3, x, y + h - (h/3), tmpmin )
+  local tmp3 = addDNumberWang( parent, w/3, h/3, x + w/3, y + h - (h/3), tmpmax )
+
+  function tmp2:OnValueChanged( val )
+    tmpmin = val
+    if tonumber( tmpmin ) > tonumber( tmpmax ) then
+      tmpmax = tmpmin
+      tmp3:SetValue( tmpmax )
+    end
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbMin .. " = " .. tmpmin .. "" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+
+  function tmp3:OnValueChanged( val )
+    tmpmax = val
+    if tonumber( tmpmax ) < tonumber( tmpmin ) then
+      tmpmin = tmpmax
+      tmp2:SetValue( tmpmin )
+    end
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbMax .. " = " .. tmpmax .. "" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+
+  local tmp4 = addDNumberWang( parent, w/3, h/3, x + 2*(w/3), y + h - (h/3), tmpreg )
+  function tmp4:OnValueChanged( val )
+    tmpreg = val
+
+    net.Start( "dbUpdate" )
+      net.WriteString( dbTable )
+      net.WriteString( dbReg .. " = " .. tmpreg .. "" )
+      net.WriteString( dbWhile )
+    net.SendToServer()
+  end
+end
+
+net.Receive( "yrp_roles", function( len )
+  if yrp_roles != nil then
+    for k, v in pairs( yrp_roles ) do
+      v:Remove()
+    end
+  end
+  yrp_roles = {}
+  yrp_roles_dbTable = net.ReadTable()
+  for k, v in pairs( yrp_roles_dbTable ) do
+    v.selected = false
+    yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, sv_roles )
+    local tmp = yrp_roles[k]
+    tmp.uniqueID = v.uniqueID
+    tmp.groupID = v.groupID
+    tmp.id = k
+    function tmp:Paint( pw, ph )
+      if tmp:IsHovered() then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 165, 0, 200 ) )
+      elseif yrp_roles_dbTable[self.id].selected then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+      end
+      draw.SimpleText( yrp_roles_dbTable[k].roleID, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+    tmp.uniqueID = v.uniqueID
+    function tmp:DoClick()
+      unselectAll()
+      yrp_roles_dbTable[self.id].selected = true
+
+      if groupsInfo != nil then
+        groupsInfo:Remove()
+        groupsInfo = nil
+      end
+      if rolesInfo != nil then
+        rolesInfo:Remove()
+        rolesInfo = nil
+      end
+
+      rolesInfo = createVGUI( "DPanel", sv_roles, 1700, 1700, _lbr + _w + _br, 5 )
+      function rolesInfo:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
+      end
+
+      --1.Spalte
+      addDBTextEntry( rolesInfo, 800, 80, 0, 0, lang.rolename, v.roleID, yrp_roles_dbTable[k], "yrp_roles", "roleID", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBPlayermodel( rolesInfo, self.id, tmp.uniqueID, v.playermodelsize )
+      addDBNumberWang( rolesInfo, 800, 80, 0, 900, lang.roleplayermodelsize, v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBBar( rolesInfo, 800, 120, 0, 990, lang.rolehealth, Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBBar( rolesInfo, 800, 120, 0, 1120, lang.rolearmor, Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBNumberWang( rolesInfo, 800, 80, 0, 1250, lang.rolewalkspeed, v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBNumberWang( rolesInfo, 800, 80, 0, 1340, lang.rolerunspeed, v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBNumberWang( rolesInfo, 800, 80, 0, 1430, lang.rolejumppower, v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "" )
+
+      --2.Spalte
+      addDBTextEntry( rolesInfo, 800, 80, 810, 0, lang.rolemaxamount, v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBSwep( rolesInfo, self.id, tmp.uniqueID )
+      addDBNumberWang( rolesInfo, 800, 80, 810, 900, lang.rolesalary, v.capital, yrp_roles_dbTable[k], "yrp_roles", "capital", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBTextEntryBig( rolesInfo, 800, 250, 810, 990, lang.roledescription, v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1250, lang.roleinstructor, v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1300, lang.roleadminonly, v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1350, lang.rolewhitelist, v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBComboBox( rolesInfo, 800, 80, 810, 1400, lang.roleprerole, yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
+
+      addDBComboBox( rolesInfo, 1610, 80, 0, 1520, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+    end
+    rolesList:AddItem( tmp )
+  end
+end)
+
+net.Receive( "yrp_groups", function( len )
+  if yrp_groups != nil then
+    for k, v in pairs( yrp_groups ) do
+      v:Remove()
+    end
+  end
+  yrp_groups = {}
+  yrp_groups_dbTable = net.ReadTable()
+  for k, v in pairs( yrp_groups_dbTable ) do
+    v.selected = false
+    yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, sv_roles )
+    local tmp = yrp_groups[k]
+    tmp.uniqueID = v.uniqueID
+    tmp.groupID = v.groupID
+    tmp.id = k
+    function tmp:Paint( pw, ph )
+      if self:IsHovered() then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 165, 0, 200 ) )
+      elseif yrp_groups_dbTable[self.id].selected then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+      end
+      draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
+      draw.SimpleText( yrp_groups_dbTable[k].groupID, "SettingsNormal", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    end
+    function tmp:DoClick()
+      groupUniqueID = v.uniqueID
+      unselectAll()
+      yrp_groups_dbTable[self.id].selected = true
+      net.Start( "yrp_roles" )
+        net.WriteString( tmp.uniqueID )
+      net.SendToServer()
+
+      groupID = yrp_groups_dbTable[tmp.id].groupID
+
+      if groupsInfo != nil then
+        groupsInfo:Remove()
+        groupsInfo = nil
+      end
+      if rolesInfo != nil then
+        rolesInfo:Remove()
+        rolesInfo = nil
+      end
+
+      groupsInfo = createVGUI( "DPanel", sv_roles, 1700, 1700, _lbr + _w + _br, 5 )
+      function groupsInfo:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
+      end
+
+      addDBTextEntry( groupsInfo, 800, 80, 0, 0, lang.groupname, v.groupID, yrp_groups_dbTable[k], "yrp_groups", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+
+      addDBColorMixer( groupsInfo, 800, 800, 0, 80 + _br, v.color, yrp_groups_dbTable[k], "yrp_groups", "color", "uniqueID = " .. tmp.uniqueID .. "" )
+
+      addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang.uppergroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "" )
+    end
+    groupsList:AddItem( tmp )
+  end
+
+  -- First Group View
+  yrp_groups[1]:DoClick()
+end)
 
 function tabServerRoles( sheet )
   local ply = LocalPlayer()
 
-  local widee = ctrW( 1760 )
-
-  local sv_rolesPanel = vgui.Create( "DPanel", sheet )
-  sv_rolesPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
-  sheet:AddSheet( lang.roles, sv_rolesPanel, "icon16/group_gear.png" )
-  function sv_rolesPanel:Paint()
-    //draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), yrp.colors.panel )
+  sv_roles = vgui.Create( "DPanel", sheet )
+  sv_roles.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
+  sheet:AddSheet( lang.roles, sv_roles, "icon16/group_gear.png" )
+  function sv_roles:Paint()
+    --draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), yrp.colors.panel )
   end
 
-  //############################################################################
-  //Groups
-  local sv_rolesGroups = vgui.Create( "DListView", sv_rolesPanel )
-
-  sv_rolesGroups.DSP = vgui.Create( "DScrollPanel", sv_rolesPanel )
-
-  sv_rolesGroups.panelName = vgui.Create( "DPanel", sv_rolesGroups.DSP )
-  sv_rolesGroups.TextEntryName = vgui.Create( "DTextEntry", sv_rolesGroups.DSP )
-
-  sv_rolesGroups.panelFarbe = vgui.Create( "DPanel", sv_rolesGroups.DSP )
-  sv_rolesGroups.DRGBPicker = vgui.Create( "DRGBPicker", sv_rolesGroups.DSP )
-  sv_rolesGroups.DColorCube = vgui.Create( "DColorCube", sv_rolesGroups.DSP )
-
-  sv_rolesGroups.panelOberGruppe = vgui.Create( "DPanel", sv_rolesGroups.DSP )
-  sv_rolesGroups.DComboBox = vgui.Create( "DComboBox", sv_rolesGroups.DSP )
-
-  sv_rolesGroups.panelFriendlyFire = vgui.Create( "DPanel", sv_rolesGroups.DSP )
-  sv_rolesGroups.DCheckBox = vgui.Create( "DCheckBox", sv_rolesGroups.DSP )
-
-  sv_rolesGroups.table = {}
-  sv_rolesGroups.tableLines = {}
-  //############################################################################
-
-  //############################################################################
-  //Roles
-  local sv_rolesRoles = vgui.Create( "DListView", sv_rolesPanel )
-  sv_rolesRoles.buttonAddRole = vgui.Create( "DButton", sv_rolesPanel )
-  sv_rolesRoles.buttonRemoveRole = vgui.Create( "DButton", sv_rolesPanel )
-
-  sv_rolesRoles.DSP = vgui.Create( "DScrollPanel", sv_rolesPanel )
-
-  sv_rolesRoles.panelName = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryName = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelFarbe = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DRGBPicker = vgui.Create( "DRGBPicker", sv_rolesRoles.DSP )
-  sv_rolesRoles.DColorCube = vgui.Create( "DColorCube", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelPlayermodel = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DButtonPlayermodel = vgui.Create( "DButton", sv_rolesRoles.DSP )
-  sv_rolesRoles.DModelPanelPlayermodel = vgui.Create( "DModelPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryPlayermodelsize = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelDescription = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryDescription = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelCapital = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryCapital = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelAmountMax = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryAmountMax = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelHP = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryHP = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-  sv_rolesRoles.panelHPmax = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryHPmax = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-  sv_rolesRoles.panelHPreg = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryHPreg = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelAR = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryAR = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-  sv_rolesRoles.panelARmax = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryARmax = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-  sv_rolesRoles.panelARreg = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryARreg = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelSpeedWalk = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntrySpeedWalk = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelSpeedRun = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntrySpeedRun = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelJumpPower = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.TextEntryJumpPower = vgui.Create( "DTextEntry", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelPreRole = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DComboBoxPreRole = vgui.Create( "DComboBox", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelInstructor = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DCheckBoxInstructor = vgui.Create( "DCheckBox", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelGroup = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DComboBoxGroup = vgui.Create( "DComboBox", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelSWEPS = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DButtonSWEPS = vgui.Create( "DButton", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelAdminOnly = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DCheckBoxAdminOnly = vgui.Create( "DCheckBox", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.panelWhitelist = vgui.Create( "DPanel", sv_rolesRoles.DSP )
-  sv_rolesRoles.DCheckBoxWhitelist = vgui.Create( "DCheckBox", sv_rolesRoles.DSP )
-
-  sv_rolesRoles.table = {}
-  sv_rolesRoles.tableLines = {}
-  //############################################################################
-
-  //############################################################################
-  //changer
-  function changePanel( tmpPanel, w, h, x, y, header )
-    tmpPanel:SetSize( w, h )
-    tmpPanel:SetPos( x, y )
-    function tmpPanel:Paint()
-      draw.RoundedBox( 0, 0, 0, tmpPanel:GetWide(), tmpPanel:GetTall(), Color( 100, 255, 100, 100 ) )
-      draw.SimpleText( header, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+  -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS
+  local groupsAdd = addButton( 50, 50, _lbr, _lbr, sv_roles )
+  function groupsAdd:Paint( pw, ph )
+    if groupsAdd:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
+    draw.SimpleText( "+", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function groupsAdd:DoClick()
+    addDBGroup()
   end
 
-  function changeTextEntry( tmpTextEntry, w, h, x, y, rowIndex, text, util )
-    tmpTextEntry:SetSize( w, h )
-    tmpTextEntry:SetPos( x, y + ctrW( 50 ) )
-    function tmpTextEntry:OnChange()
-      sv_rolesRoles.table[rowIndex][text] = tmpTextEntry:GetText()
-      net.Start( util )
-        net.WriteInt( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].uniqueID, 16 )
-        net.WriteString( sv_rolesRoles.table[rowIndex][text] )
-      net.SendToServer()
+  local groupsDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _lbr, sv_roles )
+  function groupsDup:Paint( pw, ph )
+    if groupsDup:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    tmpTextEntry:SetText( sv_rolesRoles.table[rowIndex][text] )
+    draw.SimpleText( lang.duplicate, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function groupsDup:DoClick()
+    dupDBGroup( getCurrentGroup() )
   end
 
-  function changeCheckBox( checkbox, size, x, y, tableValue, util )
-    checkbox:SetSize( size, size )
-    checkbox:SetPos( x, y )
-    checkbox:SetChecked( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()][tableValue] )
-    function checkbox:OnChange( bVal )
-      local tmpVal = 0
-      if ( bVal ) then
-        tmpVal = 1
-      else
-        tmpVal = 0
-      end
-      net.Start( util )
-        net.WriteInt( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].uniqueID, 16 )
-        net.WriteInt( tmpVal, 4 )
-      net.SendToServer()
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()][tableValue] = tmpVal
+  local groupsRem = addButton( 50, 50, _lbr + _w - 50, _lbr, sv_roles )
+  function groupsRem:Paint( pw, ph )
+    if groupsRem:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
+    draw.SimpleText( "-", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function groupsRem:DoClick()
+    deleteDBGroup()
   end
 
-  function changeComboBox( combobox, w, h, x, y, nilValue, rowIndex, tableValue, util )
-    combobox:SetSize( w, h )
-    combobox:SetPos( x, y )
-
-    combobox:Clear()
-    combobox:AddChoice( nilValue, -1 )
-
-    if tableValue == "groupID" then
-      for k, v in pairs ( sv_rolesGroups.table ) do
-        combobox:AddChoice( v[tableValue], v.uniqueID )
-      end
-      for k, v in pairs( sv_rolesGroups.table ) do
-        if v.uniqueID == sv_rolesRoles.table[rowIndex][tableValue] then
-          combobox:ChooseOption( v[tableValue], v.uniqueID )
-          break
-        end
-      end
-
-      function combobox:OnSelect( index, value, data )
-        if data != nil then
-          net.Start( util )
-            net.WriteInt( sv_rolesRoles.table[rowIndex].uniqueID, 16 )
-            net.WriteInt( data, 16 )
-          net.SendToServer()
-          sv_rolesRoles.table[rowIndex][tableValue] = data
-        end
-      end
-    elseif tableValue == "prerole" then
-      net.Start( "getAllRoles" )
-      net.SendToServer()
-
-      net.Receive( "getAllRoles", function()
-        local _allRoles = net.ReadTable()
-        for k, v in pairs ( _allRoles ) do
-          for l, w in pairs ( sv_rolesGroups.table ) do
-            if tonumber( v.groupID ) == tonumber( w.uniqueID ) then
-              combobox:AddChoice( w.groupID .. " " .. v.roleID, v.uniqueID )
-            end
-          end
-        end
-        for k, v in pairs( _allRoles ) do
-          if tonumber( v.uniqueID ) == tonumber( sv_rolesRoles.table[rowIndex][tableValue] ) then
-            for l, w in pairs ( sv_rolesGroups.table ) do
-              if tonumber( v.groupID ) == tonumber( w.uniqueID ) then
-                combobox:ChooseOption( w.groupID .. " " .. v.roleID, v.uniqueID )
-                return
-              end
-            end
-          else
-            combobox:ChooseOption( nilValue, -1 )
-          end
-        end
-      end)
-      function combobox:OnSelect( index, value, data )
-        if data != nil then
-          net.Start( util )
-            net.WriteInt( sv_rolesRoles.table[rowIndex].uniqueID, 16 )
-            net.WriteInt( data, 16 )
-          net.SendToServer()
-          sv_rolesRoles.table[rowIndex][tableValue] = data
-        end
-      end
-    end
-  end
-  //############################################################################
-
-  local sv_rolesGroupsButtonAdd = vgui.Create( "DButton", sv_rolesPanel )
-  local sv_rolesGroupsButtonRemove = vgui.Create( "DButton", sv_rolesPanel )
-
-  sv_rolesGroupsButtonAdd:SetSize( ctrW( 240 ), ctrW( 50 ) )
-  sv_rolesGroupsButtonAdd:SetPos( ctrW( 5 ), ctrW( 0 ) )
-  sv_rolesGroupsButtonAdd:SetText( "+ " .. lang.newgroup )
-  function sv_rolesGroupsButtonAdd:DoClick()
-    net.Start( "newGroup" )
-    net.SendToServer()
+  local groupsHeader = createVGUI( "DPanel", sv_roles, _w, 40, 5, 65 )
+  function groupsHeader:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
+    draw.SimpleText( lang.groups, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  sv_rolesGroupsButtonRemove:SetSize( ctrW( 50 ), ctrW( 50 ) )
-  sv_rolesGroupsButtonRemove:SetPos( ctrW( 5 + 240 + 10 ), ctrW( 0 ) )
-  sv_rolesGroupsButtonRemove:SetText("-")
-  function sv_rolesGroupsButtonRemove:DoClick()
-    if sv_rolesGroups:GetSelectedLine() != nil then
-      net.Start( "removeGroup" )
-        net.WriteInt( sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uniqueID, 16 )
-      net.SendToServer()
-    end
+  groupsList = createVGUI( "DScrollPanel", sv_roles, _w, 400-40, 5, 65+40 )
+  function groupsList:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
 
-  sv_rolesGroups:SetSize( ctrW( 300 ), ctrW( 550 ) )
-  sv_rolesGroups:SetPos( ctrW( 5 ), ctrW( 50 + 10 ) )
-  sv_rolesGroups:SetMultiSelect( false )
-
-  sv_rolesGroups:AddColumn( lang.groups )
-
-  net.Start( "getGroups" )
+  net.Start( "yrp_groups" )
   net.SendToServer()
 
-  net.Receive( "getGroups", function()
-    if sv_rolesGroups:GetLines() != nil then
-      for k, v in pairs( sv_rolesGroups:GetLines() ) do
-        sv_rolesGroups:RemoveLine( k )
-      end
-      sv_rolesGroups.table = net.ReadTable()
-      for k, v in pairs( sv_rolesGroups.table ) do
-        if v.removeable == "0" then
-          sv_rolesGroups.tableLines[k] = sv_rolesGroups:AddLine( "(" .. lang.startgroup .. ") " .. v.groupID )
-        else
-          sv_rolesGroups.tableLines[k] = sv_rolesGroups:AddLine( v.groupID )
-        end
-
-        local tmpColor = string.Explode( ",", sv_rolesGroups.table[k].color )
-        sv_rolesGroups.table[k].color = {}
-        sv_rolesGroups.table[k].color.r = tmpColor[1]
-        sv_rolesGroups.table[k].color.g = tmpColor[2]
-        sv_rolesGroups.table[k].color.b = tmpColor[3]
-
-        sv_rolesGroups.DColorCube:SetColor( Color( sv_rolesGroups.table[k].color.r, sv_rolesGroups.table[k].color.g, sv_rolesGroups.table[k].color.b ) )
-
-        if k == #sv_rolesGroups.table then
-          sv_rolesGroups:SelectItem( sv_rolesGroups:GetLine( k ) )
-        end
-      end
-    end
-  end)
-
-  sv_rolesGroups.DSP:SetSize( ctrW( 2000 ), ctrW( 2000 ) )
-  sv_rolesGroups.DSP:SetPos( ctrW( 5 + 300 + 10 ), ctrW( 0 ) )
-  function sv_rolesGroups.DSP:Paint()
-    draw.RoundedBox( 0, 0, 0, 4000, 4000, Color( 0, 0, 255, 10 ) )
-  end
-
-  sv_rolesGroups.TextEntryName:SetSize( widee, ctrW( 50 ) )
-  sv_rolesGroups.TextEntryName:SetPos( ctrW( 0 ), ctrW( 50 ) )
-  function sv_rolesGroups.TextEntryName:OnChange()
-    net.Start( "updateGroupName" )
-      net.WriteInt( sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uniqueID, 16 )
-      net.WriteString( sv_rolesGroups.TextEntryName:GetText() )
-    net.SendToServer()
-
-    local newText = sv_rolesGroups.TextEntryName:GetText()
-    for id, pnl in pairs( sv_rolesGroups.tableLines[sv_rolesGroups:GetSelectedLine()].Columns ) do
-      if sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].removeable == "0" then
-        pnl:SetText( "(" .. lang.startgroup .. ") " .. newText )
-        sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].groupID = newText
-      else
-        pnl:SetText( newText )
-        sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].groupID = newText
-      end
-    end
-  end
-
-  sv_rolesGroups.DRGBPicker:SetSize( ctrW( 0 ), ctrW( 400 ) )
-  sv_rolesGroups.DRGBPicker:SetPos( ctrW( 800 + 10 ), ctrW( 150 + 50 ) )
-
-  function sv_rolesGroups.DRGBPicker:OnChange( col )
-    local h = ColorToHSV( col )
-    local _, s, v = ColorToHSV( sv_rolesGroups.DColorCube:GetRGB() )
-    col = HSVToColor( h, s, v )
-    sv_rolesGroups.DColorCube:SetColor( col )
-    net.Start( "updateGroupColor" )
-      net.WriteInt( sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uniqueID, 16 )
-      net.WriteString( col.r .. "," .. col.g .. "," .. col.b )
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].color.r = col.r
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].color.g = col.g
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].color.b = col.b
-    net.SendToServer()
-  end
-
-  sv_rolesGroups.DColorCube:SetSize( ctrW( 800 ), ctrW( 400 ) )
-  sv_rolesGroups.DColorCube:SetPos( ctrW( 0 ), ctrW( 150 + 50 ) )
-  function sv_rolesGroups.DColorCube:OnUserChanged( col )
-    net.Start( "updateGroupColor" )
-      net.WriteInt( sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uniqueID, 16 )
-      net.WriteString( col.r .. "," .. col.g .. "," .. col.b )
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].color.r = col.r
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].color.g = col.g
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].color.b = col.b
-    net.SendToServer()
-  end
-
-  sv_rolesGroups.DComboBox:SetSize( ctrW( 400 ), ctrW( 50 ) )
-  sv_rolesGroups.DComboBox:SetPos( ctrW( 0 ), ctrW( 0 + 200 + 450 + 50 ) )
-  function sv_rolesGroups.DComboBox:OnSelect( index, value, data )
-    if data != nil then
-      net.Start("updateUpperGroup")
-        net.WriteInt( sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uniqueID, 16 )
-        net.WriteInt( data, 16 )
-      net.SendToServer()
-      sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uppergroup = data
-    end
-  end
-
-  sv_rolesGroups.panelFriendlyFire:SetSize( widee, ctrW( 50 ) )
-  sv_rolesGroups.panelFriendlyFire:SetPos( ctrW( 0 ), ctrW( 0 + 750 + 50 ) )
-  function sv_rolesGroups.panelFriendlyFire:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 100 ) )
-    draw.SimpleText( lang.friendlyfire, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-  end
-
-  sv_rolesGroups.DCheckBox:SetSize( ctrW( 30 ), ctrW( 30 ) )
-  sv_rolesGroups.DCheckBox:SetPos( ctrW( 0 ), ctrW( 800 + 50 ) )
-  function sv_rolesGroups.DCheckBox:OnChange( bVal )
-    local tmpVal = 0
-    if ( bVal ) then
-      tmpVal = 1
+  -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
+  local rolesAdd = addButton( 50, 50, _lbr, 500, sv_roles )
+  function rolesAdd:Paint( pw, ph )
+    if rolesAdd:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
     else
-      tmpVal = 0
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    net.Start("updateFriendlyFire")
-      net.WriteInt( sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].uniqueID, 16 )
-      net.WriteInt( tmpVal, 4 )
-    net.SendToServer()
-    sv_rolesGroups.table[sv_rolesGroups:GetSelectedLine()].friendlyfire = tmpVal
+    draw.SimpleText( "+", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
-  //############################################################################
-
-  //############################################################################
-  //ROLES
-  sv_rolesRoles:SetSize( ctrW( 300 ), ctrW( 1240 ) )
-  sv_rolesRoles:SetPos( ctrW( 5 ), ctrW( 700 + 10 ) )
-  sv_rolesRoles:SetMultiSelect( false )
-
-  sv_rolesRoles:AddColumn( lang.roles )
-
-  sv_rolesRoles.buttonAddRole:SetSize( ctrW( 240 ), ctrW( 50 ) )
-  sv_rolesRoles.buttonAddRole:SetPos( ctrW( 5 ), ctrW( 700 - 50 ) )
-  sv_rolesRoles.buttonAddRole:SetText( "+ " .. lang.newrole )
-  function sv_rolesRoles.buttonAddRole:DoClick()
-    net.Start( "newRole" )
-      net.WriteInt( _SelectedGroupID, 16 )
-    net.SendToServer()
+  function rolesAdd:DoClick()
+    addDBRole( groupUniqueID )
   end
 
-  sv_rolesRoles.buttonRemoveRole:SetSize( ctrW( 50 ), ctrW( 50 ) )
-  sv_rolesRoles.buttonRemoveRole:SetPos( ctrW( 5 + 240 + 10 ), ctrW( 700 - 50 ) )
-  sv_rolesRoles.buttonRemoveRole:SetText("-")
-  function sv_rolesRoles.buttonRemoveRole:DoClick()
-    if sv_rolesRoles:GetSelectedLine() != nil then
-      net.Start( "removeRole" )
-        net.WriteInt( _SelectedGroupID, 16 )
-        net.WriteInt( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].uniqueID, 16 )
-      net.SendToServer()
+  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, 500, sv_roles )
+  function rolesDup:Paint( pw, ph )
+    if rolesDup:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
+    draw.SimpleText( lang.duplicate, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function rolesDup:DoClick()
+    dupDBRole( groupUniqueID, getCurrentRole() )
   end
 
-  /*net.Start( "getRoles" )
-    net.WriteInt( -1, 16 )
-  net.SendToServer()*/
-
-  net.Receive( "getRoles", function()
-    if sv_rolesRoles:GetLines() != nil then
-      for k, v in pairs( sv_rolesRoles:GetLines() ) do
-        sv_rolesRoles:RemoveLine( k )
-      end
+  local rolesRem = addButton( 50, 50, _lbr + _w - 50, 500, sv_roles )
+  function rolesRem:Paint( pw, ph )
+    if rolesRem:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-
-    sv_rolesRoles.table = net.ReadTable()
-    if sv_rolesRoles.table != nil then
-      for k, v in pairs( sv_rolesRoles.table ) do
-        if v.removeable == "0" then
-          sv_rolesRoles.tableLines[k] = sv_rolesRoles:AddLine( "(" .. lang.startrole .. ") " .. v.roleID )
-        else
-          sv_rolesRoles.tableLines[k] = sv_rolesRoles:AddLine( v.roleID )
-        end
-
-        local tmpColor = string.Explode( ",", sv_rolesRoles.table[k].color )
-        sv_rolesRoles.table[k].color = {}
-        sv_rolesRoles.table[k].color.r = tmpColor[1]
-        sv_rolesRoles.table[k].color.g = tmpColor[2]
-        sv_rolesRoles.table[k].color.b = tmpColor[3]
-
-        sv_rolesRoles.DColorCube:SetColor( Color( sv_rolesRoles.table[k].color.r, sv_rolesRoles.table[k].color.g, sv_rolesRoles.table[k].color.b ) )
-
-        /*if k == #sv_rolesRoles.table then
-          sv_rolesRoles:SelectItem( sv_rolesRoles:GetLine( k ) )
-        end*/
-      end
-    end
-  end)
-
-  sv_rolesRoles.DSP:SetSize( widee, ctrW( 1950 ) )
-  sv_rolesRoles.DSP:SetPos( ctrW( 5 + 300 + 10 ), ctrW( 0 ) )
-  function sv_rolesRoles.DSP:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 10 ) )
+    draw.SimpleText( "-", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function rolesRem:DoClick()
+    deleteDBRole()
   end
 
-  sv_rolesRoles.DRGBPicker:SetSize( ctrW( 50 ), ctrW( 400 ) )
-  sv_rolesRoles.DRGBPicker:SetPos( ctrW( 800 + 10 ), ctrW( 150 + 50 ) )
-
-  function sv_rolesRoles.DRGBPicker:OnChange( col )
-    local h = ColorToHSV( col )
-    local _, s, v = ColorToHSV( sv_rolesRoles.DColorCube:GetRGB() )
-    col = HSVToColor( h, s, v )
-    sv_rolesRoles.DColorCube:SetColor( col )
-    net.Start( "updateRoleColor" )
-      net.WriteInt( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].uniqueID, 16 )
-      net.WriteString( col.r .. "," .. col.g .. "," .. col.b )
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].color.r = col.r
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].color.g = col.g
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].color.b = col.b
-    net.SendToServer()
+  local rolesHeader = createVGUI( "DPanel", sv_roles, _w, 40, 5, 560 )
+  function rolesHeader:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
+    draw.SimpleText( groupID .. " - " .. lang.roles, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  sv_rolesRoles.DColorCube:SetSize( ctrW( 800 ), ctrW( 400 ) )
-  sv_rolesRoles.DColorCube:SetPos( ctrW( 0 ), ctrW( 150 + 50 ) )
-  function sv_rolesRoles.DColorCube:OnUserChanged( col )
-    net.Start( "updateRoleColor" )
-      net.WriteInt( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].uniqueID, 16 )
-      net.WriteString( col.r .. "," .. col.g .. "," .. col.b )
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].color.r = col.r
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].color.g = col.g
-      sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].color.b = col.b
-    net.SendToServer()
+  rolesList = createVGUI( "DScrollPanel", sv_roles, _w, 1200-40, 5, 560+40 )
+  function rolesList:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
-
-  function sv_rolesGroups:OnRowSelected( rowIndex, row )
-    _SelectedGroupID = sv_rolesGroups.table[rowIndex].uniqueID
-    net.Start( "getRoles" )
-      net.WriteInt( sv_rolesGroups.table[rowIndex].uniqueID, 16 )
-    net.SendToServer()
-
-    sv_rolesGroups.DSP:SetVisible( true )
-
-    sv_rolesRoles.DSP:SetVisible( false )
-
-    sv_rolesRoles:ClearSelection()
-
-    sv_rolesGroups.panelName:SetSize( widee, ctrW( 50 ) )
-    sv_rolesGroups.panelName:SetPos( ctrW( 0 ), ctrW( 0 ) )
-    function sv_rolesGroups.panelName:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesGroups.panelName:GetWide(), sv_rolesGroups.panelName:GetTall(), Color( 100, 100, 255, 100 ) )
-      draw.SimpleText( lang.groupname, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    end
-    sv_rolesGroups.TextEntryName:SetText( sv_rolesGroups.table[rowIndex].groupID )
-
-    sv_rolesGroups.panelFarbe:SetSize( widee, ctrW( 50 ) )
-    sv_rolesGroups.panelFarbe:SetPos( ctrW( 0 ), ctrW( 150 ) )
-    function sv_rolesGroups.panelFarbe:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesGroups.panelFarbe:GetWide(), sv_rolesGroups.panelFarbe:GetTall(), Color( 100, 100, 255, 100 ) )
-      draw.SimpleText( lang.groupcolor, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    end
-    sv_rolesGroups.DColorCube:SetColor( Color( sv_rolesGroups.table[rowIndex].color.r, sv_rolesGroups.table[rowIndex].color.g, sv_rolesGroups.table[rowIndex].color.b ) )
-
-    sv_rolesGroups.panelOberGruppe:SetSize( widee, ctrW( 50 ) )
-    sv_rolesGroups.panelOberGruppe:SetPos( ctrW( 0 ), ctrW( 650 ) )
-    function sv_rolesGroups.panelOberGruppe:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesGroups.panelOberGruppe:GetWide(), sv_rolesGroups.panelOberGruppe:GetTall(), Color( 100, 100, 255, 100 ) )
-      draw.SimpleText( lang.uppergroup, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    end
-    sv_rolesGroups.DComboBox:Clear()
-    sv_rolesGroups.DComboBox:AddChoice( "No Group", -1 )
-    for k, v in pairs( sv_rolesGroups.table ) do
-      if v.uniqueID != sv_rolesGroups.table[rowIndex].uniqueID then
-        sv_rolesGroups.DComboBox:AddChoice( v.groupID, v.uniqueID )
-      end
-    end
-    for k, v in pairs( sv_rolesGroups.table ) do
-      if v.uniqueID == sv_rolesGroups.table[rowIndex].uppergroup then
-        sv_rolesGroups.DComboBox:ChooseOption( v.groupID, v.uniqueID )
-      end
-    end
-  end
-
-  function sv_rolesRoles:OnRowSelected( rowIndex, row )
-    sv_rolesGroups.DSP:SetVisible( false )
-
-    sv_rolesRoles.DSP:SetVisible( true )
-
-    sv_rolesGroups:ClearSelection()
-
-    //##########################################################################
-    //Name
-    changePanel( sv_rolesRoles.panelName, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 0 ), lang.rolename )
-    changeTextEntry( sv_rolesRoles.TextEntryName, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 0 ), rowIndex, "roleID", "updateRoleName" )
-    function sv_rolesRoles.TextEntryName:OnChange()
-      net.Start( "updateRoleName" )
-        net.WriteInt( sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].uniqueID, 16 )
-        net.WriteString( sv_rolesRoles.TextEntryName:GetText() )
-      net.SendToServer()
-
-      local newText = sv_rolesRoles.TextEntryName:GetText()
-      for id, pnl in pairs( sv_rolesRoles.tableLines[sv_rolesRoles:GetSelectedLine()].Columns ) do
-        if sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].removeable == "0" then
-          pnl:SetText( "(" .. lang.startrole .. ") " .. newText )
-          sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].roleID = newText
-        else
-          pnl:SetText( newText )
-          sv_rolesRoles.table[sv_rolesRoles:GetSelectedLine()].roleID = newText
-        end
-      end
-    end
-    //##########################################################################
-
-    sv_rolesRoles.panelFarbe:SetSize( widee, ctrW( 50 ) )
-    sv_rolesRoles.panelFarbe:SetPos( ctrW( 0 ), ctrW( 150 ) )
-    function sv_rolesRoles.panelFarbe:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesRoles.panelFarbe:GetWide(), sv_rolesRoles.panelFarbe:GetTall(), Color( 100, 255, 100, 100 ) )
-      draw.SimpleText( lang.rolecolor, "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    end
-    sv_rolesRoles.DColorCube:SetColor( Color( sv_rolesRoles.table[rowIndex].color.r, sv_rolesRoles.table[rowIndex].color.g, sv_rolesRoles.table[rowIndex].color.b ) )
-
-    sv_rolesRoles.panelPlayermodel:SetSize( widee, ctrW( 50 ) )
-    sv_rolesRoles.panelPlayermodel:SetPos( ctrW( 0 ), ctrW( 650 ) )
-    function sv_rolesRoles.panelPlayermodel:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesRoles.panelPlayermodel:GetWide(), sv_rolesRoles.panelPlayermodel:GetTall(), Color( 100, 255, 100, 100 ) )
-      draw.SimpleText( lang.roleplayermodel .. " | " .. lang.roleplayermodelsize .. " (" .. lang.default .. ": 1)", "SettingsNormal", ctrW( 25 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    end
-
-    sv_rolesRoles.DModelPanelPlayermodel:SetSize( ctrW( 128 ), ctrW( 128 ) )
-    sv_rolesRoles.DModelPanelPlayermodel:SetPos( ctrW( 0 ), ctrW( 700 ) )
-
-    sv_rolesRoles.DButtonPlayermodel:SetSize( ctrW( 128 ), ctrW( 128 ) )
-    sv_rolesRoles.DButtonPlayermodel:SetPos( ctrW( 128 ), ctrW( 700 ) )
-    sv_rolesRoles.DButtonPlayermodel:SetText( "" )
-    function sv_rolesRoles.DButtonPlayermodel:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesRoles.DButtonPlayermodel:GetWide(), sv_rolesRoles.DButtonPlayermodel:GetTall(), Color( 255, 255, 255, 100 ) )
-      draw.SimpleText( lang.change, "SettingsNormal", sv_rolesRoles.DButtonPlayermodel:GetWide()/2, sv_rolesRoles.DButtonPlayermodel:GetTall()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    end
-    function sv_rolesRoles.DButtonPlayermodel:DoClick()
-      modelSelector = vgui.Create( "DFrame" )
-      modelSelector:SetSize( ctrW( 2000 ), ctrW( 2000 ) )
-      modelSelector:SetPos( ScrW2() - ctrW( 2000/2 ), ScrH2() - ctrW( 2000/2 ) )
-      modelSelector:SetTitle( lang.modelchange )
-
-      local PanelSelect = vgui.Create( "DPanelSelect", modelSelector )
-      PanelSelect:SetSize( ctrW( 2000 ), ctrW( 2000 - 45 ) )
-      PanelSelect:SetPos( ctrW( 0 ), ctrW( 45 ) )
-
-      for name, model in SortedPairs( player_manager.AllValidModels() ) do
-  			local icon = vgui.Create( "SpawnIcon" )
-  			icon:SetModel( model )
-  			icon:SetSize( ctrW( 128 ), ctrW( 128 ) )
-  			icon:SetTooltip( name )
-  			icon.playermodel = name
-        local _tmpName = createVGUI( "DPanel", icon, 128, 22, 0, 128-22 )
-        function _tmpName:Paint( pw, ph )
-          draw.SimpleText( icon.playermodel, "pmT", ctrW( 5 ), ph-ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        end
-  			PanelSelect:AddPanel( icon, { cl_playermodel = name } )
-  		end
-      modelSelector:MakePopup()
-      function PanelSelect:OnActivePanelChanged( old, new )
-        timer.Simple( 0.1, function()
-          local model = LocalPlayer():GetInfo( "cl_playermodel" )
-    			local modelname = player_manager.TranslatePlayerModel( model )
-          sv_rolesRoles.DModelPanelPlayermodel:SetModel(modelname)
-          if sv_rolesRoles.DModelPanelPlayermodel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
-            local headpos = sv_rolesRoles.DModelPanelPlayermodel.Entity:GetBonePosition( sv_rolesRoles.DModelPanelPlayermodel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-            sv_rolesRoles.DModelPanelPlayermodel:SetLookAt( headpos )
-            sv_rolesRoles.DModelPanelPlayermodel:SetCamPos( headpos-Vector( -26, 0, 0 ) )
-          else
-            sv_rolesRoles.DModelPanelPlayermodel:SetLookAt( Vector(0,0,64) )
-            sv_rolesRoles.DModelPanelPlayermodel:SetCamPos( Vector(0,0,64)-Vector( -26, 0, 0 ) )
-          end
-          net.Start( "updateRolePlayermodel" )
-            net.WriteInt(  sv_rolesRoles.table[rowIndex].uniqueID, 16 )
-            sv_rolesRoles.table[rowIndex].playermodel = modelname
-            net.WriteString( modelname )
-          net.SendToServer()
-        end)
-        modelSelector:Close()
-      end
-      sv_rolesRoles.DModelPanelPlayermodel:SetModel(sv_rolesRoles.table[rowIndex].playermodel)
-      if sv_rolesRoles.DModelPanelPlayermodel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
-        local headpos = sv_rolesRoles.DModelPanelPlayermodel.Entity:GetBonePosition( sv_rolesRoles.DModelPanelPlayermodel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-        sv_rolesRoles.DModelPanelPlayermodel:SetLookAt( headpos )
-        sv_rolesRoles.DModelPanelPlayermodel:SetCamPos( headpos-Vector( -26, 0, 0 ) )
-      else
-        sv_rolesRoles.DModelPanelPlayermodel:SetLookAt( Vector(0,0,64) )
-        sv_rolesRoles.DModelPanelPlayermodel:SetCamPos( Vector(0,0,64)-Vector( -26, 0, 0 ) )
-      end
-    end
-
-    function sv_rolesRoles.DModelPanelPlayermodel:LayoutEntity( Entity ) return end
-
-    if sv_rolesRoles.table[rowIndex].playermodel != nil then
-      sv_rolesRoles.DModelPanelPlayermodel:SetModel( sv_rolesRoles.table[rowIndex].playermodel )
-      if sv_rolesRoles.DModelPanelPlayermodel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
-        local headpos = sv_rolesRoles.DModelPanelPlayermodel.Entity:GetBonePosition( sv_rolesRoles.DModelPanelPlayermodel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-        sv_rolesRoles.DModelPanelPlayermodel:SetLookAt( headpos )
-        sv_rolesRoles.DModelPanelPlayermodel:SetCamPos( headpos-Vector( -26, 0, 0 ) )
-      else
-        sv_rolesRoles.DModelPanelPlayermodel:SetLookAt( Vector(0,0,64) )
-        sv_rolesRoles.DModelPanelPlayermodel:SetCamPos( Vector(0,0,64)-Vector( -26, 0, 0 ) )
-      end
-    end
-
-    changeTextEntry( sv_rolesRoles.TextEntryPlayermodelsize, widee - ctrW( 256 + 32 ), ctrW( 50 ), ctrW( 256 ), ctrW( 650 ), rowIndex, "playermodelsize", "updateRolePlayermodelsize" )
-    //##########################################################################
-
-    //##########################################################################
-    //Description
-    changePanel( sv_rolesRoles.panelDescription, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 900 ), lang.roledescription )
-    changeTextEntry( sv_rolesRoles.TextEntryDescription, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 900 ), rowIndex, "description", "updateRoleDescription" )
-    //##########################################################################
-
-    //##########################################################################
-    //Capital
-    changePanel( sv_rolesRoles.panelCapital, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1050 ), lang.rolesalary )
-    changeTextEntry( sv_rolesRoles.TextEntryCapital, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1050 ), rowIndex, "capital", "updateRoleCapital" )
-    //##########################################################################
-
-    //##########################################################################
-    //MaxAmount
-    changePanel( sv_rolesRoles.panelAmountMax, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1200 ), lang.rolemaxamount .. " (" .. lang.default .. ": -1 (" .. lang.disabled .. "))" )
-    changeTextEntry( sv_rolesRoles.TextEntryAmountMax, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1200 ), rowIndex, "maxamount", "updateRoleMaxAmount" )
-    //##########################################################################
-
-    //##########################################################################
-    //HP
-    changePanel( sv_rolesRoles.panelHP, ctrW( 400 ), ctrW( 50 ), ctrW( 0 ), ctrW( 1350 ), lang.rolehealth )
-    changeTextEntry( sv_rolesRoles.TextEntryHP, ctrW( 400 ), ctrW( 50 ), ctrW( 0 ), ctrW( 1350 ), rowIndex, "hp", "updateRoleHp" )
-
-    changePanel( sv_rolesRoles.panelHPmax, ctrW( 400 ), ctrW( 50 ), ctrW( 400+10 ), ctrW( 1350 ), lang.rolemaxhealth )
-    changeTextEntry( sv_rolesRoles.TextEntryHPmax, ctrW( 400 ), ctrW( 50 ), ctrW( 400+10 ), ctrW( 1350 ), rowIndex, "hpmax", "updateRoleHpMax" )
-
-    changePanel( sv_rolesRoles.panelHPreg, ctrW( 400 ), ctrW( 50 ), ctrW( 800+20 ), ctrW( 1350 ), lang.rolehealthreg )
-    changeTextEntry( sv_rolesRoles.TextEntryHPreg, ctrW( 400 ), ctrW( 50 ), ctrW( 800+20 ), ctrW( 1350 ), rowIndex, "hpreg", "updateRoleHpReg" )
-    //##########################################################################
-
-    //##########################################################################
-    //AR
-    changePanel( sv_rolesRoles.panelAR, ctrW( 400 ), ctrW( 50 ), ctrW( 0 ), ctrW( 1500 ), lang.rolearmor )
-    changeTextEntry( sv_rolesRoles.TextEntryAR, ctrW( 400 ), ctrW( 50 ), ctrW( 0 ), ctrW( 1500 ), rowIndex, "ar", "updateRoleAr" )
-
-    changePanel( sv_rolesRoles.panelARmax, ctrW( 400 ), ctrW( 50 ), ctrW( 400+10 ), ctrW( 1500 ), lang.rolemaxarmor )
-    changeTextEntry( sv_rolesRoles.TextEntryARmax, ctrW( 400 ), ctrW( 50 ), ctrW( 400+10 ), ctrW( 1500 ), rowIndex, "armax", "updateRoleArMax" )
-
-    changePanel( sv_rolesRoles.panelARreg, ctrW( 400 ), ctrW( 50 ), ctrW( 800+20 ), ctrW( 1500 ), lang.rolearmorreg )
-    changeTextEntry( sv_rolesRoles.TextEntryARreg, ctrW( 400 ), ctrW( 50 ), ctrW( 800+20 ), ctrW( 1500 ), rowIndex, "arreg", "updateRoleArReg" )
-    //##########################################################################
-
-    //##########################################################################
-    //Walk
-    changePanel( sv_rolesRoles.panelSpeedWalk, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1650 ), lang.rolewalkspeed .. " (" .. lang.roleplayshort .. "-" .. lang.default .. ": 150)" )
-    changeTextEntry( sv_rolesRoles.TextEntrySpeedWalk, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1650 ), rowIndex, "speedwalk", "updateRoleSpeedWalk" )
-    //##########################################################################
-
-    //##########################################################################
-    //Run
-    changePanel( sv_rolesRoles.panelSpeedRun, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1800 ), lang.rolerunspeed .. " (" .. lang.roleplayshort .. "-" .. lang.default .. ": 240)" )
-    changeTextEntry( sv_rolesRoles.TextEntrySpeedRun, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1800 ), rowIndex, "speedrun", "updateRoleSpeedRun" )
-    //##########################################################################
-
-    //##########################################################################
-    //JumpPower
-    changePanel( sv_rolesRoles.panelJumpPower, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1950 ), lang.rolejumppower .. " (" .. lang.roleplayshort .. "-" .. lang.default .. ": 200)" )
-    changeTextEntry( sv_rolesRoles.TextEntryJumpPower, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 1950 ), rowIndex, "powerjump", "updateRolePowerJump" )
-    //##########################################################################
-
-    //##########################################################################
-    //prerole
-    changePanel( sv_rolesRoles.panelPreRole, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2100 ), lang.roleprerole )
-    changeComboBox( sv_rolesRoles.DComboBoxPreRole, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2100+50 ), "No Pre Role", rowIndex, "prerole", "updateRolePreRole" )
-    //##########################################################################
-
-    //##########################################################################
-    //instructor
-    changePanel( sv_rolesRoles.panelInstructor, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2250 ), lang.roleinstructor )
-    changeCheckBox( sv_rolesRoles.DCheckBoxInstructor, ctrW( 30 ), ctrW( 0 ), ctrW( 2300 ), "instructor", "updateRoleInstructor")
-    //##########################################################################
-
-    //##########################################################################
-    //Role Group
-    changePanel( sv_rolesRoles.panelGroup, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2400 ), lang.rolegroup )
-    changeComboBox( sv_rolesRoles.DComboBoxGroup, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2400+50 ), "", rowIndex, "groupID", "updateRoleGroup" )
-    //##########################################################################
-
-    //##########################################################################
-    //Role SWEPS
-    changePanel( sv_rolesRoles.panelSWEPS, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2550 ), lang.rolesweps )
-    sv_rolesRoles.DButtonSWEPS:SetSize( ctrW( 300 ), ctrW( 50 ) )
-    sv_rolesRoles.DButtonSWEPS:SetPos( ctrW( 0 ), ctrW( 2600 ) )
-    sv_rolesRoles.DButtonSWEPS:SetText( "" )
-    function sv_rolesRoles.DButtonSWEPS:Paint()
-      draw.RoundedBox( 0, 0, 0, sv_rolesRoles.DButtonSWEPS:GetWide(), sv_rolesRoles.DButtonSWEPS:GetTall(), Color( 255, 255, 255, 100 ) )
-      draw.SimpleText( lang.openswepmenu, "SettingsNormal", sv_rolesRoles.DButtonSWEPS:GetWide()/2, sv_rolesRoles.DButtonSWEPS:GetTall()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    end
-
-    function sv_rolesRoles.DButtonSWEPS:DoClick()
-      swepMenu = createVGUI( "DFrame", nil, 2000, 2000, ScrW()/2 * ctrF( ScrH() ) - 2000/2, 2160/2 - 2000/2 )
-      swepMenu:SetTitle( lang.swepmenu )
-
-      //PrintTable( weapons.GetList() )
-      local roleSwepList = string.Explode( ",", sv_rolesRoles.table[rowIndex].sweps )
-      local swepList = {}
-      swepList.x = 0
-      swepList.y = 50
-
-      local roleSwepScrollBar = createVGUI( "DScrollPanel", swepMenu, 2000-60, 2000-60, swepList.x, swepList.y )
-      local _sweplist = weapons.GetList()
-      local tmp2 = {}
-      tmp2.WorldModel = "models/weapons/w_physics.mdl"
-      tmp2.ClassName = "weapon_physcannon"
-      tmp2.PrintName = "Gravity Gun"
-      table.insert( _sweplist, tmp2 )
-      local tmp3 = {}
-      tmp3.WorldModel = "models/weapons/w_Physics.mdl"
-      tmp3.ClassName = "weapon_physgun"
-      tmp3.PrintName = "PHYSICS GUN"
-      table.insert( _sweplist, tmp3 )
-
-      for k, weapon in pairs ( _sweplist ) do
-        if !string.find( string.lower( weapon.ClassName ), "npc") and !string.find( string.lower( weapon.ClassName ), "base") and !string.find( string.lower( weapon.ClassName ), "ttt") then
-          local model3D = createVGUI( "DModelPanel", roleSwepScrollBar, 256, 256, swepList.x, swepList.y )
-          if weapon.WorldModel != nil then
-            model3D:SetModel( weapon.WorldModel )
-            model3D:SetLookAt( Vector( 0, 0, 0 ) )
-            model3D:SetCamPos( Vector( 0, 0, 0 ) + Vector( -30, 0, 20 ) )
-          end
-          if weapon.PrintName != nil then
-            model3D.PrintName = weapon.PrintName
-          end
-          if weapon.ClassName != nil then
-            model3D.ClassName = weapon.ClassName
-          else
-            model3D.ClassName = ""
-          end
-
-          model3D.button = vgui.Create( "DButton", model3D )
-          model3D.button:SetSize( model3D:GetSize() )
-          model3D.button:SetPos( 0, 0 )
-          model3D.button:SetText( "" )
-          function model3D.button:Paint( w, h )
-            if table.HasValue( roleSwepList, weapon.ClassName ) then
-              draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 255, 0, 60 ) )
-              draw.SimpleText( lang.added, "SettingsNormal", w/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            else
-              draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 60 ) )
-              draw.SimpleText( lang.notadded, "SettingsNormal", w/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            end
-            draw.SimpleText( model3D.ClassName, "weaponT", w/2, h - ctrW( 18 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            draw.SimpleText( model3D.PrintName, "weaponT", w/2, h - ctrW( 36+6 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          end
-          function model3D.button:DoClick()
-            if table.HasValue( roleSwepList, model3D.ClassName ) then
-              table.RemoveByValue( roleSwepList, model3D.ClassName )
-            else
-              table.insert( roleSwepList, model3D.ClassName )
-            end
-
-            sv_rolesRoles.table[rowIndex].sweps = ""
-            for k, v in pairs( roleSwepList ) do
-              if v != "" and v != nil then
-                sv_rolesRoles.table[rowIndex].sweps = sv_rolesRoles.table[rowIndex].sweps .. v .. ","
-              end
-            end
-            net.Start( "updateRoleSweps" )
-              net.WriteInt(  sv_rolesRoles.table[rowIndex].uniqueID, 16 )
-              net.WriteString( sv_rolesRoles.table[rowIndex].sweps )
-            net.SendToServer()
-          end
-
-          swepList.x = swepList.x + 256 + 16
-
-          if ctrW( swepList.x ) > ctrW( 1888 ) then
-            swepList.y = swepList.y + 256 + 16
-            swepList.x = 0
-          end
-        end
-      end
-      swepMenu:MakePopup()
-    end
-    //##########################################################################
-
-    //##########################################################################
-    //adminonly
-    changePanel( sv_rolesRoles.panelAdminOnly, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2700 ), lang.roleadminonly )
-    changeCheckBox( sv_rolesRoles.DCheckBoxAdminOnly, ctrW( 30 ), ctrW( 0 ), ctrW( 2750 ), "adminonly", "updateRoleAdminonly")
-    //##########################################################################
-
-    //##########################################################################
-    //whitelist
-    changePanel( sv_rolesRoles.panelWhitelist, widee, ctrW( 50 ), ctrW( 0 ), ctrW( 2850 ), lang.rolewhitelist )
-    changeCheckBox( sv_rolesRoles.DCheckBoxWhitelist, ctrW( 30 ), ctrW( 0 ), ctrW( 2900 ), "whitelist", "updateRoleWhitelist")
-    //##########################################################################
-
-    local _spacer = createVGUI( "DPanel", sv_rolesRoles.DSP, 2000, 50, 0, 3100 )
-    function _spacer:Paint( pw, ph )
-      //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0 ) )
-    end
-  end
-  //############################################################################
-
-  sv_rolesRoles:SelectFirstItem()
 end

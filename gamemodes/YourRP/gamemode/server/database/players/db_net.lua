@@ -45,11 +45,16 @@ net.Receive( "getPlyList", function( len, ply )
   end
 end)
 
-net.Receive( "giveRole", function( len, ply )
-  local _tmpSteamID = net.ReadString()
-  local uniqueIDRole = net.ReadInt( 16 )
-  local tmpTable = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. uniqueIDRole )
-  local _steamNick = _tmpSteamID
+function giveRole( ply, steamID, uniqueID )
+  local tmpTable = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. uniqueID )
+  local _steamNick = steamID
+
+  for k, v in pairs( player.GetAll() ) do
+    if steamID == v:SteamID() then
+      v:KillSilent()
+      break
+    end
+  end
 
   if tmpTable != nil then
     if tmpTable[1].uses < tmpTable[1].maxamount or tonumber( tmpTable[1].maxamount ) == -1 then
@@ -57,13 +62,13 @@ net.Receive( "giveRole", function( len, ply )
       query = query .. "UPDATE yrp_players "
       query = query .. "SET roleID = " .. tonumber( tmpTable[1].uniqueID ) .. ", "
       query = query .. "capital = " .. tonumber( tmpTable[1].capital ) .. " "
-      query = query .. "WHERE steamID = '" .. _tmpSteamID .. "'"
+      query = query .. "WHERE steamID = '" .. steamID .. "'"
       local result = sql.Query( query )
-      setRole( _tmpSteamID, uniqueIDRole )
+      setRole( steamID, uniqueID )
 
       updateUses()
       for k, v in pairs( player.GetAll() ) do
-        if _tmpSteamID == v:SteamID() then
+        if steamID == v:SteamID() then
           _steamNick = v:Nick()
           updateHud( v )
           break
@@ -72,7 +77,7 @@ net.Receive( "giveRole", function( len, ply )
       printGM( "admin", ply:Nick() .. " gives " .. _steamNick .. " the Role: " .. tmpTable[1].roleID )
     else
       for k, v in pairs( player.GetAll() ) do
-        if _tmpSteamID == v:SteamID() then
+        if steamID == v:SteamID() then
           _steamNick = v:Nick()
           break
         end
@@ -80,8 +85,14 @@ net.Receive( "giveRole", function( len, ply )
       printGM( "admin", ply:Nick() .. " can't give " .. _steamNick .. " the Role: " .. tmpTable[1].roleID .. ", because max amount reached")
     end
   else
-    printERROR( "Role " .. uniqueIDRole .. " is not available" )
+    printERROR( "Role " .. uniqueID .. " is not available" )
   end
+end
+
+net.Receive( "giveRole", function( len, ply )
+  local _tmpSteamID = net.ReadString()
+  local uniqueIDRole = net.ReadInt( 16 )
+  giveRole( ply, _tmpSteamID, uniqueIDRole )
 end)
 
 function isWhitelisted( ply, id )
@@ -90,6 +101,59 @@ function isWhitelisted( ply, id )
     return true
   else
     return false
+  end
+end
+
+util.AddNetworkString( "voteNo" )
+net.Receive( "voteNo", function( len, ply )
+  ply:SetNWString( "voteStatus", "no" )
+end)
+
+util.AddNetworkString( "voteYes" )
+net.Receive( "voteYes", function( len, ply )
+  ply:SetNWString( "voteStatus", "yes" )
+end)
+
+local voting = false
+local votePly = nil
+local voteCount = 30
+function startVote( ply, table )
+  if !voting then
+    voting = true
+    for k, v in pairs( player.GetAll() ) do
+      v:SetNWString( "voteStatus", "not voted" )
+      v:SetNWBool( "voting", true )
+      v:SetNWString( "voteQuestion", ply:RPName() .. " want the role: " .. table[1].roleID )
+    end
+    votePly = ply
+    voteCount = 30
+    timer.Create( "voteRunning", 1, 0, function()
+      for k, v in pairs( player.GetAll() ) do
+        v:SetNWInt( "voteCD", voteCount )
+      end
+      if voteCount <= 0 then
+        voting = false
+        local _yes = 0
+        local _no = 0
+        for k, v in pairs( player.GetAll() ) do
+          v:SetNWBool( "voting", false )
+          if v:GetNWString( "voteStatus", "not voted" ) == "yes" then
+            _yes = _yes + 1
+          elseif v:GetNWString( "voteStatus", "not voted" ) == "no" then
+            _no = _no + 1
+          end
+        end
+        if _yes > _no and ( _yes + _no ) > 1 then
+          setRole( votePly:SteamID(), table[1].uniqueID )
+        else
+          printGM( "note", "VOTE: not enough yes" )
+        end
+        timer.Remove( "voteRunning" )
+      end
+      voteCount = voteCount - 1
+    end)
+  else
+    printGM( "note", "a vote is currently running" )
   end
 end
 
@@ -107,10 +171,8 @@ net.Receive( "wantRole", function( len, ply )
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 then
         if !isWhitelisted( ply, uniqueIDRole ) then
-          printGM( "user", ply:Nick() .. " is not in the whitelist for this role")
-          net.Start( "yrpInfoBox" )
-            net.WriteString( "You need to get whitelisted for this Role" )
-          net.Send( ply )
+          //printGM( "user", ply:Nick() .. " is not in the whitelist for this role")
+          startVote( ply, tmpTableRole )
           return
         end
       end

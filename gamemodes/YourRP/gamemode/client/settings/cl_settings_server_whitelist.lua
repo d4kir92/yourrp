@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_server_whitelist.lua
+--cl_settings_server_whitelist.lua
 
 net.Receive( "getRoleWhitelist", function( len )
   local _tmpWhiteList = net.ReadTable()

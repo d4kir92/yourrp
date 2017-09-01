@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//db_map.lua
+--db_map.lua
 
 include( "map/db_net.lua" )
 include( "map/db_func.lua" )

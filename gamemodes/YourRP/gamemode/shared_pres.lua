@@ -1,14 +1,14 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//shared_pres.lua
+--shared_pres.lua
 
 GM.Name = "YourRP"
-GM.ShortName = "YRP"	//Not longer then 4!
+GM.ShortName = "YRP"	--Not longer then 4!
 GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.5.3"
+GM.Version = "0.6.0"
 GM.VersionSort = ""
 GM.Help = ""
 
@@ -148,17 +148,9 @@ function printGM( channel, _string )
 			_channelName = "LANGUAGE"
 		end
 		for k, v in pairs(_tmpText) do
-
 			if _channelName != "" then
 				MsgC( _color, "[", Color( 255, 255, 0 ), yrp.gmname, _color, "] [", _color2, _channelName, _color, "] " .. v )
 				MsgC( "\n" )
-				if SERVER and _channelName == "NOTIFICATION" or _channelName == "ERROR" or _channelName == "ADMIN" or _channelName == "INSTRUCTOR" then
-					for l, w in pairs( player.GetAll() ) do
-						if w:IsSuperAdmin() then
-							w:ChatPrint( "[" .. yrp.gmname .. "] [" .. _channelName .. "] " .. v )
-						end
-					end
-				end
 			else
 				MsgC( _color, "[", Color( 255, 255, 0 ), yrp.gmname, _color, "] " .. v )
 				MsgC( "\n" )

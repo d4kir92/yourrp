@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings.lua
+--cl_settings.lua
 
 include( "cl_settings_client.lua" )
 include( "cl_settings_server.lua" )
@@ -44,7 +44,7 @@ function openSettings()
   local settingsSheet = vgui.Create( "DPropertySheet", settingsWindow )
   settingsSheet:Dock( FILL )
   function settingsSheet:Paint()
-    //drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), ctrW( 0 ) )
+    --drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), ctrW( 0 ) )
   end
 
   local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1400, 0 )

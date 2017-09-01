@@ -1,4 +1,4 @@
-/*
+--[[
 Copyright (C) 2017 Arno Zura
 
 This program is free software: you can redistribute it and/or modify
@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http://www.gnu.org/licenses/ >.
-*/
+]]--
 
-//init.lua
-//##############################################################################
-//AddCSLuaFiles
+--init.lua
+--##############################################################################
+--AddCSLuaFiles
 AddCSLuaFile( "shared_pres.lua" )
 
 AddCSLuaFile( "shared.lua" )
@@ -34,26 +34,25 @@ AddCSLuaFile( "client/cl_scoreboard.lua" )
 AddCSLuaFile( "client/cl_think.lua" )
 AddCSLuaFile( "client/cl_chat.lua" )
 
-//Settings
+--Settings
 AddCSLuaFile( "client/settings/cl_settings.lua" )
-//Settings Client
+--Settings Client
 AddCSLuaFile( "client/settings/cl_settings_client.lua" )
 AddCSLuaFile( "client/settings/cl_settings_client_charakter.lua" )
 AddCSLuaFile( "client/settings/cl_settings_client_hud.lua" )
 
 AddCSLuaFile( "client/settings/cl_settings_yourrp.lua" )
 AddCSLuaFile( "client/settings/cl_settings_settings.lua" )
-//YourRP
+--YourRP
 AddCSLuaFile( "client/settings/cl_settings_yourrp_workshop.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_wiki.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_contact.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_add_langu.lua" )
-//Settings Server
+--Settings Server
 AddCSLuaFile( "client/settings/cl_settings_server.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_general.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_questions.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_roles.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_roles2.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_give.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_map.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_money.lua" )
@@ -63,7 +62,7 @@ AddCSLuaFile( "client/settings/cl_settings_server_moneysystem.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_jailsystem.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_restriction.lua" )
 
-//Hud
+--Hud
 AddCSLuaFile( "client/cl_hud.lua" )
 AddCSLuaFile( "client/hud/cl_hud_map.lua" )
 AddCSLuaFile( "client/hud/cl_hud_player.lua" )
@@ -79,10 +78,10 @@ AddCSLuaFile( "client/interact/cl_interact.lua" )
 AddCSLuaFile( "client/buy/cl_buy.lua" )
 
 AddCSLuaFile( "client/door/cl_door_options.lua" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//Includes
+--##############################################################################
+--Includes
 include( "shared_pres.lua" )
 
 include( "darkrp.lua" )
@@ -97,21 +96,19 @@ include( "server/sv_func.lua" )
 include( "server/sv_think.lua" )
 
 include( "server/sv_convars.lua" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//utils
+--##############################################################################
+--utils
 util.AddNetworkString( "restartServer" )
 util.AddNetworkString( "cancelRestartServer" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//Restart Server
+--##############################################################################
+--Restart Server
 net.Receive( "restartServer", function( len, ply )
   local tmpString = net.ReadString()
   sql.Query( "UPDATE yrp_general SET value = '" .. tmpString .. "' WHERE name = 'gamemodename'" )
-	local tmpInt = net.ReadInt( 16 )
-	sql.Query( "UPDATE yrp_general SET value = '" .. tmpInt .. "' WHERE name = 'startmoney'" )
 
   local countdown = net.ReadInt( 16 )
   timer.Create( "timerRestartServer", 1, 0, function()
@@ -142,7 +139,7 @@ net.Receive( "cancelRestartServer", function( len, ply )
   PrintMessage( HUD_PRINTCENTER, message )
   printGM( "server", message )
 end)
-//##############################################################################
+--##############################################################################
 function yrpSetModelScale( ply, size )
   ply:SetModelScale( size, 0 )
 

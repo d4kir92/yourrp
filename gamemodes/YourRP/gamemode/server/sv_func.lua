@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//Drehung
+--Drehung
 function yrp_tp_test( ply, pos )
   local tr = {
   	start = pos,
@@ -17,7 +17,7 @@ function yrp_tp_test( ply, pos )
   end
 end
 
-//Auf Boden
+--Auf Boden
 function yrp_tp_test2( ply, pos )
   local tr = {
   	start = pos,

@@ -1,13 +1,13 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//##############################################################################
-//utils
+--##############################################################################
+--utils
 util.AddNetworkString( "setQuestionToggle" )
 util.AddNetworkString( "updateQuestions" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//net.Receives
+--##############################################################################
+--net.Receives
 net.Receive( "dbGetQuestions", function( len, ply )
   local tmpTable = sql.Query( "SELECT * FROM yrp_questions" )
   net.Start( "dbGetQuestions" )
@@ -27,4 +27,4 @@ net.Receive( "updateQuestions", function( len, ply )
   local tmpInt = net.ReadString()
   sql.Query( "UPDATE yrp_questions SET " .. tmpTextArt .. " = '" .. tmpString .. "' WHERE nr = '" .. tmpInt .. "'" )
 end)
-//##############################################################################
+--##############################################################################

@@ -1,11 +1,11 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//db_roles.lua
+--db_roles.lua
 
 include( "roles/db_net.lua" )
 include( "roles/db_func.lua" )
 
-//##############################################################################
+--##############################################################################
 function dbRolesAddValues()
   sqlAddColumn( "yrp_roles", "roleID", "TEXT DEFAULT ''" )
   sqlAddColumn( "yrp_roles", "description", "TEXT DEFAULT '-'" )
@@ -45,7 +45,7 @@ function dbRolesInit()
     local query = "CREATE TABLE "
     query = query .. dbName .. " ("
     query = query .. "uniqueID        INTEGER         PRIMARY KEY autoincrement"
-    query = query .. ", groupID       TEXT            UNIQUE"
+    query = query .. ", groupID       TEXT            DEFAULT 'new Group'"
     query = query .. ", color         TEXT            DEFAULT '0,0,0'"
     query = query .. ", uppergroup    INTEGER         DEFAULT -1"
     query = query .. ", friendlyfire  INTEGER         DEFAULT 1"
@@ -98,4 +98,4 @@ function dbRolesInit()
   dbRolesAddValues()
   printGMPos()
 end
-//##############################################################################
+--##############################################################################

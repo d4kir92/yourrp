@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//db_role_whitelist.lua
+--db_role_whitelist.lua
 
 include( "whitelist/db_net.lua" )
 include( "whitelist/db_func.lua" )

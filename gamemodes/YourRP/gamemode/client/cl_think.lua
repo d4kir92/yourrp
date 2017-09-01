@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_think.lua
+--cl_think.lua
 
 local chatisopen = 0
 _menuIsOpen = 0
@@ -82,11 +82,12 @@ function useFunction( string )
 					_windowInteract:Remove()
 					_windowInteract = nil
 					_menuIsOpen = 0
+					gui.EnableScreenClicker( false )
 				elseif _menuIsOpen == 0 then
 					_menuIsOpen = 1
 					openInteractMenu( eyeTrace.Entity:SteamID() )
 				end
-			/*else
+			--[[else
 				if _windowInteract != nil then
 					_windowInteract:Close()
 					_windowInteract = nil
@@ -94,7 +95,7 @@ function useFunction( string )
 				else
 					_menuIsOpen = 1
 					openInteractMenu( "STEAM_0:1:20900349" )
-				end*/
+				end]]--
 			end
 		elseif string == "openDoorOptions" then
 			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
@@ -124,6 +125,12 @@ function useFunction( string )
 			net.SendToServer()
 		elseif string == "drink" then
 			net.Start( "yrp_drink" )
+			net.SendToServer()
+		elseif string == "vyes" then
+			net.Start( "voteYes" )
+			net.SendToServer()
+		elseif string == "vno" then
+			net.Start( "voteNo" )
 			net.SendToServer()
 		end
 	end
@@ -203,6 +210,9 @@ function KeyPress()
 	keyPressed( KEY_H, "eat", "eat", nil )
 	keyPressed( KEY_T, "drink", "drink", nil )
 
+	keyPressed( KEY_PAGEUP, "vyes", nil )
+	keyPressed( KEY_PAGEDOWN, "vno", nil )
+
 	keyPressed( KEY_E, "openInteractMenu", "openDoorOptions", 100 )
 end
 hook.Add( "Think", "Thinker", KeyPress)
@@ -261,7 +271,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 									return view
 								end
 							elseif _thirdperson == 0 then
-								//Disabled
+								--Disabled
 							elseif _thirdperson == 1 then
 								if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 									pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 10 * ply:GetModelScale() )
@@ -275,10 +285,10 @@ local function yrpCalcView( ply, pos, angles, fov )
 								end
 							end
 						else
-							//Disabled
+							--Disabled
 						end
 					else
-						//LocalPlayer():PrintMessage( HUD_PRINTTALK, _weaponName )
+						--LocalPlayer():PrintMessage( HUD_PRINTTALK, _weaponName )
 					end
 				end
 			end
@@ -295,4 +305,4 @@ function showPlayermodel()
 	end
 end
 hook.Add( "ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel )
-//PrintTable( hook.GetTable() )
+--PrintTable( hook.GetTable() )

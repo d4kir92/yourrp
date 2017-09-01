@@ -30,12 +30,6 @@ timer.Create( "ServerThink", 1, 0, function()
           ply:SetHealth( ply:GetMaxHealth() )
         end
       end
-      if ply:GetNWInt( "hunger", 0 ) > 20 and time%4 == 0 then
-        ply:SetHealth( ply:Health() + 1 )
-        if ply:Health() > ply:GetMaxHealth() then
-          ply:SetHealth( ply:GetMaxHealth() )
-        end
-      end
 
       --ArmorReg
       if ply:GetNWInt( "GetArmorReg" ) != nil then
@@ -44,43 +38,53 @@ timer.Create( "ServerThink", 1, 0, function()
           ply:SetArmor( ply:GetNWInt( "GetMaxArmor" ) )
         end
       end
-    end
 
-    /*--Hunger
-    ply:SetNWInt( "hunger", ply:GetNWInt( "hunger", 0 ) - 0.1 )
-    if ply:GetNWInt( "hunger", 0 ) < 0 then
-      ply:SetNWInt( "hunger", 0 )
-    end
-    if ply:GetNWInt( "hunger", 0 ) < 20 then
-      ply:TakeDamage( ply:GetMaxHealth() / 100 )
-    end
-
-    --Thirst
-    ply:SetNWInt( "thirst", ply:GetNWInt( "thirst", 0 ) - 0.2 )
-    if ply:GetNWInt( "thirst", 0 ) < 0 then
-      ply:SetNWInt( "thirst", 0 )
-    end
-
-    --Stamina
-    if !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) then
-      ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) - 2 )
-      if ply:GetNWInt( "stamina", 0 ) < 0 then
-        ply:SetNWInt( "stamina", 0 )
-      end
-    elseif ply:GetNWInt( "thirst", 0 ) > 20 then
-      ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) + 1 )
-      if ply:GetNWInt( "stamina", 0 ) > 100 then
-        ply:SetNWInt( "stamina", 100 )
+      if ply:GetNWBool( "metabolism", false ) then
+        if ply:GetNWInt( "hunger", 0 ) > 20 and time%4 == 0 then
+          ply:SetHealth( ply:Health() + 1 )
+          if ply:Health() > ply:GetMaxHealth() then
+            ply:SetHealth( ply:GetMaxHealth() )
+          end
+        end
       end
     end
-    if ply:GetNWInt( "stamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
-      ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
-      ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
-    else
-      ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
-      ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+
+    if ply:GetNWBool( "metabolism", false ) then
+      --Hunger
+      ply:SetNWInt( "hunger", ply:GetNWInt( "hunger", 0 ) - 0.1 )
+      if ply:GetNWInt( "hunger", 0 ) < 0 then
+        ply:SetNWInt( "hunger", 0 )
+      end
+      if ply:GetNWInt( "hunger", 0 ) < 20 then
+        ply:TakeDamage( ply:GetMaxHealth() / 100 )
+      end
+
+      --Thirst
+      ply:SetNWInt( "thirst", ply:GetNWInt( "thirst", 0 ) - 0.2 )
+      if ply:GetNWInt( "thirst", 0 ) < 0 then
+        ply:SetNWInt( "thirst", 0 )
+      end
+
+      --Stamina
+      if !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) then
+        ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) - 2 )
+        if ply:GetNWInt( "stamina", 0 ) < 0 then
+          ply:SetNWInt( "stamina", 0 )
+        end
+      elseif ply:GetNWInt( "thirst", 0 ) > 20 then
+        ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) + 1 )
+        if ply:GetNWInt( "stamina", 0 ) > 100 then
+          ply:SetNWInt( "stamina", 100 )
+        end
+      end
+      if ply:GetNWInt( "stamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
+        ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
+        ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
+      else
+        ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
+        ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+      end
     end
-    */
   end
 
   if time % 60 == 0 then
@@ -126,11 +130,11 @@ end
 
 function GM:PlayerCanHearPlayersVoice( listener, talker )
   return true, true
-  /*if listener:GetPos():Distance( talker:GetPos()) < 1000 then
+  --[[if listener:GetPos():Distance( talker:GetPos()) < 1000 then
     return true, true
   else
     return false, false
-  end*/
+  end]]--
 end
 
 util.AddNetworkString( "yrp_player_say" )
@@ -229,7 +233,7 @@ function GM:PlayerSay( sender, text, teamChat )
           _money:SetMoney( _moneyAmount )
           return ""
         else
-          //printGM( "note", "can't afford" )
+          --printGM( "note", "can't afford" )
         end
       else
         printGM( "note", "Failed dropmoney" )
@@ -238,6 +242,15 @@ function GM:PlayerSay( sender, text, teamChat )
 
     if isChatCommand( text, "kill" ) then
       sender:Kill()
+      return ""
+    end
+
+    if isChatCommand( text, "tag" ) then
+      if !sender:GetNWBool( "tag", false ) then
+        sender:SetNWBool( "tag", true )
+      else
+        sender:SetNWBool( "tag", false )
+      end
       return ""
     end
 
@@ -283,65 +296,65 @@ function GM:PlayerSay( sender, text, teamChat )
 
     if isChatCommand( text, "me" ) then
       _local = 1
-      //Group
+      --Group
       table.insert( _playersay, Color( 255, 165, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
 
-      //Role
+      --Role
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
 
-      //Nickname
+      --Nickname
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
     elseif isChatCommand( text, "yell" ) then
       _local = 1
-      //Group
+      --Group
       table.insert( _playersay, Color( 255, 0, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
 
-      //Role
+      --Role
       table.insert( _playersay, Color( 255, 0, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
 
-      //Nickname
+      --Nickname
       table.insert( _playersay, Color( 255, 0, 0 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
     elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) or isChatCommand( text, "/" ) or isChatCommand( text, "." ) then
-      //UserGroup
+      --UserGroup
       table.insert( _playersay, Color( 100, 100, 255 ) )
       table.insert( _playersay, string.upper( sender:GetUserGroup() ) .. " " )
 
-      //Nick
+      --Nick
       table.insert( _playersay, Color( 200, 200, 255 ) )
       table.insert( _playersay, sender:Nick() .. ": " )
     elseif isChatCommand( text, "roll" ) then
-      //Group
+      --Group
       table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
 
-      //Role
+      --Role
       table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
 
-      //Nickname
+      --Nickname
       table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. " rolled " )
     else
-      //Group
+      --Group
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
 
-      //Role
+      --Role
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
 
-      //Nickname
+      --Nickname
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. ": " )
     end
 
-    //Text
+    --Text
     table.insert( _playersay, Color( 255, 255, 255 ) )
     if isChatCommand( text, "me" ) then
       table.insert( _playersay, Color( 0, 255, 0 ) )

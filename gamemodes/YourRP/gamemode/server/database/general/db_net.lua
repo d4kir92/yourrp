@@ -1,14 +1,14 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//##############################################################################
-//utils
+--##############################################################################
+--utils
 util.AddNetworkString( "selectGeneral" )
 util.AddNetworkString( "updateGeneral" )
 util.AddNetworkString( "updateAdvert" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//net.Receives
+--##############################################################################
+--net.Receives
 net.Receive( "updateAdvert", function( len, ply )
   _advertname = net.ReadString()
   dbUpdate( "yrp_general", "value = '" .. _advertname .. "'", "name = 'advert'" )
@@ -42,4 +42,4 @@ net.Receive( "updateGeneral", function( len, ply )
   local tmpString2 = net.ReadString()
   sql.Query( "UPDATE yrp_general SET value = '" .. tmpString .. "' WHERE name = '" .. tmpString2 .. "'" )
 end)
-//##############################################################################
+--##############################################################################

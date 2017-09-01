@@ -1,91 +1,164 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//##############################################################################
-//utils
+--##############################################################################
+--utils
 util.AddNetworkString( "getAllGroups" )
-
-util.AddNetworkString( "newGroup" )
-util.AddNetworkString( "getGroups" )
-util.AddNetworkString( "getGroupLine" )
-util.AddNetworkString( "removeGroup" )
-
-util.AddNetworkString( "updateGroupName" )
-util.AddNetworkString( "updateGroupColor" )
-util.AddNetworkString( "updateUpperGroup" )
-util.AddNetworkString( "updateFriendlyFire" )
-
-util.AddNetworkString( "newRole" )
-util.AddNetworkString( "getRoles" )
-util.AddNetworkString( "getRoleLine" )
-util.AddNetworkString( "removeRole" )
-
-util.AddNetworkString( "updateRoleName" )
-util.AddNetworkString( "updateRoleColor" )
-util.AddNetworkString( "updateRolePlayermodel" )
-util.AddNetworkString( "updateRolePlayermodelsize" )
-util.AddNetworkString( "updateRoleDescription" )
-util.AddNetworkString( "updateRoleCapital" )
-util.AddNetworkString( "updateRoleMaxAmount" )
-util.AddNetworkString( "updateRoleHp" )
-util.AddNetworkString( "updateRoleHpMax" )
-util.AddNetworkString( "updateRoleHpReg" )
-util.AddNetworkString( "updateRoleAr" )
-util.AddNetworkString( "updateRoleArMax" )
-util.AddNetworkString( "updateRoleArReg" )
-util.AddNetworkString( "updateRoleSpeedWalk" )
-util.AddNetworkString( "updateRoleSpeedRun" )
-util.AddNetworkString( "updateRolePowerJump" )
-util.AddNetworkString( "updateRolePreRole" )
-util.AddNetworkString( "updateRoleInstructor" )
-util.AddNetworkString( "updateRoleGroup" )
-util.AddNetworkString( "updateRoleSweps" )
-util.AddNetworkString( "updateRoleAdminonly" )
-util.AddNetworkString( "updateRoleWhitelist" )
 
 util.AddNetworkString( "wantRole" )
 
 util.AddNetworkString( "openInteractMenu" )
 util.AddNetworkString( "promotePlayer" )
 util.AddNetworkString( "demotePlayer" )
-
-util.AddNetworkString( "getAllRoles" )
-
-util.AddNetworkString( "updateGroups" )
-
-//NEW
+--NEW
 util.AddNetworkString( "yrp_groups" )
 util.AddNetworkString( "yrp_roles" )
-//##############################################################################
 
-//##############################################################################
-//net.Receives
-net.Receive( "yrp_roles", function( len, ply )
-  local _tmpGroupID = net.ReadString()
-  local tmp = dbSelect( "yrp_roles", "*", "groupID = '" .. _tmpGroupID .. "'" )
+util.AddNetworkString( "removeDBGroup" )
+util.AddNetworkString( "removeDBRole" )
+
+util.AddNetworkString( "addDBGroup" )
+util.AddNetworkString( "addDBRole" )
+
+util.AddNetworkString( "dupDBGroup" )
+util.AddNetworkString( "dupDBRole" )
+
+util.AddNetworkString( "getScoreboardGroups" )
+--##############################################################################
+
+function sendDBGroups( ply )
+  local tmp = dbSelect( "yrp_groups", "*", nil )
+  net.Start( "yrp_groups" )
+    net.WriteTable( tmp )
+  net.Send( ply )
+end
+
+function sendDBRoles( ply, groupID )
+  local tmp = dbSelect( "yrp_roles", "*", "groupID = " .. groupID .. "" )
   if tmp == nil then
     tmp = {}
   end
   net.Start( "yrp_roles" )
     net.WriteTable( tmp )
   net.Send( ply )
+end
+
+--##############################################################################
+--net.Receives
+--NEW
+net.Receive( "getScoreboardGroups", function( len, ply )
+  local _tmpGroups = dbSelect( "yrp_groups", "*", nil )
+  if _tmpGroups != nil then
+    net.Start( "getScoreboardGroups" )
+      net.WriteTable( _tmpGroups )
+    net.Broadcast()
+  end
+end)
+
+function duplicateRole( ply, uniqueID, newGroupID )
+  if newGroupID != nil then
+  end
+  local _dR = dbSelect( "yrp_roles", "*", "uniqueID = " .. uniqueID )
+  _dR = _dR[1]
+  if newGroupID != nil then
+    _dR.groupID = newGroupID
+  end
+  if tonumber( _dR.removeable ) == 1 then
+    local _dbColumns = "adminonly, ar, armax, arreg, capital, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodel, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
+    local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.capital .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
+    _dbValues = _dbValues .. _dR.groupID .. ", " .. _dR.hp .. ", " .. _dR.hpmax .. ", " .. _dR.hpreg .. ", " .. _dR.instructor .. ", " .. _dR.maxamount .. ", "
+    _dbValues = _dbValues .. "'" .. _dR.playermodel .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
+    _dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. _dR.sweps .. "', " .. _dR.whitelist
+    dbInsertInto( "yrp_roles", _dbColumns, _dbValues )
+  else
+    printGM( "note", "not duplicateable!" )
+  end
+end
+
+net.Receive( "dupDBRole", function( len, ply )
+  local _tmpGroupID = net.ReadString()
+  local _tmpUniqueID = net.ReadString()
+  duplicateRole( ply, _tmpUniqueID, nil )
+  sendDBRoles( ply, _tmpGroupID )
+end)
+
+function duplicateGroup( uniqueID )
+  local _dR = dbSelect( "yrp_groups", "*", "uniqueID = " .. uniqueID )
+  _dR = _dR[1]
+  if tonumber( _dR.removeable ) == 1 then
+    local _dbColumns = "groupID, color, uppergroup"
+    local _dbValues = "'" .. _dR.groupID .. "', '" .. _dR.color .. "' , " .. _dR.uppergroup
+
+    dbInsertInto( "yrp_groups", _dbColumns, _dbValues )
+
+    local _lastGroup = dbSelect( "yrp_groups", "uniqueID", nil )
+
+    local _allRolesFromGroup = dbSelect( "yrp_roles", "*", "groupID = " .. uniqueID )
+    if _allRolesFromGroup != nil then
+      for k, v in pairs( _allRolesFromGroup ) do
+        duplicateRole( ply, v.uniqueID, _lastGroup[#_lastGroup].uniqueID )
+      end
+    end
+  else
+    printGM( "note", "not duplicateable!" )
+  end
+end
+
+net.Receive( "dupDBGroup", function( len, ply )
+  local _tmpUniqueID = net.ReadString()
+
+  duplicateGroup( _tmpUniqueID )
+  sendDBGroups( ply )
+end)
+
+net.Receive( "addDBRole", function( len, ply )
+  local _tmpUniqueID = net.ReadString()
+  sql.Query( "INSERT INTO yrp_roles ( roleID, groupID ) VALUES ( 'new Role', " .. _tmpUniqueID .. " )" )
+
+  sendDBRoles( ply, _tmpUniqueID )
+end)
+
+net.Receive( "addDBGroup", function( len, ply )
+  sql.Query( "INSERT INTO yrp_groups ( groupID, uppergroup, removeable ) VALUES ( 'new Group', -1, 1 )" )
+
+  sendDBGroups( ply )
+end)
+
+net.Receive( "removeDBRole", function( len, ply )
+  local dbSelect = dbSelect( "yrp_roles", "*", nil )
+  local tmp = net.ReadString()
+  local _tmpUniqueID = net.ReadString()
+  for k, v in pairs( dbSelect ) do
+    if tonumber( v.uniqueID ) == tonumber( tmp ) then
+      if tonumber( v.removeable ) == 1 then
+        dbDeleteFrom( "yrp_roles", "uniqueID = " .. tmp )
+      end
+    end
+  end
+
+  sendDBRoles( ply, _tmpUniqueID )
+end)
+
+net.Receive( "removeDBGroup", function( len, ply )
+  local dbSelect = dbSelect( "yrp_groups", "*", nil )
+  local tmp = net.ReadString()
+  for k, v in pairs( dbSelect ) do
+    if tonumber( v.uniqueID ) == tonumber( tmp ) then
+      if tonumber( v.removeable ) == 1 then
+        dbDeleteFrom( "yrp_groups", "uniqueID = " .. tmp )
+      end
+    end
+  end
+
+  sendDBGroups( ply )
+end)
+
+net.Receive( "yrp_roles", function( len, ply )
+  local _tmpGroupID = net.ReadString()
+  sendDBRoles( ply, _tmpGroupID )
 end)
 
 net.Receive( "yrp_groups", function( len, ply )
-  local tmp = dbSelect( "yrp_groups", "*", nil )
-  net.Start( "yrp_groups" )
-    net.WriteTable( tmp )
-  net.Send( ply )
-end)
-
-net.Receive( "updateGroups", function( len, ply )
-  updateGroupTable()
-end)
-
-net.Receive( "getAllRoles", function( len, ply )
-  local _allRoles = dbSelect( "yrp_roles", "*", nil )
-  net.Start( "getAllRoles" )
-    net.WriteTable( _allRoles )
-  net.Send( ply )
+  sendDBGroups( ply )
 end)
 
 net.Receive( "demotePlayer", function( len, ply )
@@ -172,7 +245,7 @@ net.Receive( "openInteractMenu", function( len, ply )
   if tonumber( tmpTable[1].instructor ) == 1 then
     tmpBool = true
 
-    local tmpSearch = true  //tmpTargetSteamID
+    local tmpSearch = true  --tmpTargetSteamID
     local tmpTableSearch = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTable[1].prerole )
     if tmpTableSearch != nil then
       local tmpSearchUniqueID = tmpTableSearch[1].prerole
@@ -232,295 +305,4 @@ net.Receive( "getAllGroups", function( len, ply )
     net.Send( ply )
   end
 end)
-
-net.Receive( "updateRolePlayermodelsize", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpPlayermodelsize = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET playermodelsize = " .. tonumber( tmpPlayermodelsize ) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleWhitelist", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpWhitelist = net.ReadInt( 4 )
-
-  sql.Query( "UPDATE yrp_roles SET whitelist = " .. tmpWhitelist .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleAdminonly", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpAdminonly = net.ReadInt( 4 )
-
-  sql.Query( "UPDATE yrp_roles SET adminonly = " .. tmpAdminonly .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleSweps", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpSweps = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET sweps = '" .. tmpSweps .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleGroup", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpGroupID = net.ReadInt( 16 )
-
-  sql.Query( "UPDATE yrp_roles SET groupID = " .. tmpGroupID .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleInstructor", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpInstructor = net.ReadInt( 4 )
-
-  sql.Query( "UPDATE yrp_roles SET instructor = " .. tmpInstructor .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRolePreRole", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpPreRole = net.ReadInt( 16 )
-
-  local _result = sql.Query( "UPDATE yrp_roles SET prerole = " .. tmpPreRole .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRolePowerJump", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpJump = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET powerjump = " .. tonumber(tmpJump) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleSpeedRun", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpRun = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET speedrun = " .. tonumber(tmpRun) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleSpeedWalk", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpWalk = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET speedwalk = " .. tonumber(tmpWalk) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleAr", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpAr = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET ar = " .. tonumber(tmpAr) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleArMax", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpAr = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET armax = " .. tonumber(tmpAr) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleArReg", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpAr = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET arreg = " .. tonumber(tmpAr) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleHp", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpHp = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET hp = " .. tonumber(tmpHp) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleHpMax", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpHp = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET hpmax = " .. tonumber(tmpHp) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleHpReg", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpHp = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET hpreg = " .. tonumber(tmpHp) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleMaxAmount", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpMaxAmount = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET maxamount = " .. tonumber(tmpMaxAmount) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleCapital", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpCapital = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET capital = " .. tonumber(tmpCapital) .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleDescription", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpDescription = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET description = '" .. tmpDescription .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRolePlayermodel", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpPlayermodel = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET playermodel = '" .. tmpPlayermodel .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleColor", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpColor = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET color = '" .. tmpColor .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateRoleName", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpGroupID = net.ReadString()
-
-  sql.Query( "UPDATE yrp_roles SET roleID = '" .. tmpGroupID .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-  for k, v in pairs(player.GetAll()) do
-    updateHud( v )
-  end
-end)
-
-net.Receive( "newRole", function( len, ply )
-  local _tmpGroup = net.ReadInt( 16 )
-  sql.Query( "INSERT INTO yrp_roles ( roleID, color, removeable, groupID ) VALUES ( 'new Role', '0,0,0', 1," .. _tmpGroup .. " )" )
-
-  local tmpLast = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = (SELECT MAX(uniqueID) FROM yrp_roles)")
-
-  printGM( "db", ply:Nick() .. " created new Role: " .. tmpLast[1].roleID .. " (ID: " .. tmpLast[1].uniqueID .. ")" )
-  sql.Query( "UPDATE yrp_roles SET roleID = '" .. tmpLast[1].roleID .. " (" .. tmpLast[1].uniqueID .. ")' WHERE uniqueID = " .. tmpLast[1].uniqueID .. "")
-
-  net.Start( "getRoles" )
-    net.WriteTable( sql.Query( "SELECT * FROM yrp_roles WHERE groupID = " .. _tmpGroup) )
-  net.Send( ply )
-end)
-
-net.Receive( "removeRole", function( len, ply )
-  local _tmpGroup = net.ReadInt( 16 )
-  local tmpUniqueID = net.ReadInt( 16 )
-
-  local tmpSelect = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpUniqueID .. "" )
-
-  if tmpSelect[1].removeable == "1" then
-    printGM( "db", ply:Nick() .. " deleted Role: " .. tmpSelect[1].roleID .. " (ID: " .. tmpSelect[1].uniqueID .. ")" )
-    sql.Query( "DELETE FROM yrp_roles WHERE uniqueID = " .. tmpUniqueID .. "" )
-
-    local _tmpRoleList = sql.Query( "SELECT * FROM yrp_roles WHERE groupID = " .. _tmpGroup )
-    net.Start( "getRoles" )
-      if _tmpRoleList != nil then
-        net.WriteTable( _tmpRoleList )
-      else
-        net.WriteTable( {} )
-      end
-    net.Send( ply )
-  elseif tmpSelect[1].removeable == "0" then
-    PrintMessage( HUD_PRINTCENTER, "You cant delete this!" )
-  end
-end)
-
-net.Receive( "getRoles", function( len, ply )
-  local _tmpGroup = net.ReadInt( 16 )
-  local _tmpGroupList = sql.Query( "SELECT * FROM yrp_roles WHERE groupID = " .. _tmpGroup )
-  net.Start( "getRoles" )
-    if _tmpGroupList != nil then
-      net.WriteTable( _tmpGroupList )
-    else
-      net.WriteTable( {} )
-    end
-  net.Send( ply )
-end)
-
-net.Receive( "getRoleLine", function( len, ply )
-  net.Start( "getRoles" )
-    net.WriteTable( sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = '" .. net.ReadString() .. "'" ) )
-  net.Send( ply )
-end)
-
-net.Receive( "updateFriendlyFire", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpFriendlyFire = net.ReadInt(4)
-
-  sql.Query( "UPDATE yrp_groups SET friendlyfire = '" .. tmpFriendlyFire .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateUpperGroup", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpUpperGroupUniqueID = net.ReadInt( 16 )
-
-  local result = sql.Query( "UPDATE yrp_groups SET uppergroup = " .. tmpUpperGroupUniqueID .. " WHERE uniqueID = " .. tmpUniqueID .. "" )
-  updateGroupTable()
-end)
-
-net.Receive( "updateGroupColor", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpColor = net.ReadString()
-
-  sql.Query( "UPDATE yrp_groups SET color = '" .. tmpColor .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-end)
-
-net.Receive( "updateGroupName", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-  local tmpGroupID = net.ReadString()
-
-  sql.Query( "UPDATE yrp_groups SET groupID = '" .. tmpGroupID .. "' WHERE uniqueID = " .. tmpUniqueID .. "" )
-  for k, v in pairs(player.GetAll()) do
-    updateHud( v )
-  end
-  updateGroupTable()
-end)
-
-net.Receive( "newGroup", function( len, ply )
-  sql.Query( "INSERT INTO yrp_groups ( groupID, color, uppergroup, friendlyfire, removeable ) VALUES ( 'new Group', '0,0,0', -1, 1, 1 )" )
-
-  local tmpLast = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = (SELECT MAX(uniqueID) FROM yrp_groups)")
-
-  sql.Query( "UPDATE yrp_groups SET groupID = '" .. tmpLast[1].groupID .. " (" .. tmpLast[1].uniqueID .. ")' WHERE uniqueID = " .. tmpLast[1].uniqueID .. "")
-
-  printGM( "db", ply:Nick() .. " created new Group: " .. tmpLast[1].groupID .. " (ID: " .. tmpLast[1].uniqueID .. ")" )
-  net.Start( "getGroups" )
-    net.WriteTable( sql.Query( "SELECT * FROM yrp_groups" ) )
-  net.Send( ply )
-  updateGroupTable()
-end)
-
-net.Receive( "removeGroup", function( len, ply )
-  local tmpUniqueID = net.ReadInt( 16 )
-
-  local tmpSelect = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpUniqueID .. "" )
-
-  if tmpSelect[1].removeable == "1" then
-    printGM( "db", ply:Nick() .. " deleted Group: " .. tmpSelect[1].groupID .. " (ID: " .. tmpSelect[1].uniqueID .. ")" )
-    sql.Query( "DELETE FROM yrp_groups WHERE uniqueID = " .. tmpUniqueID .. "" )
-
-    sql.Query( "DELETE FROM yrp_roles WHERE groupID = " .. tmpUniqueID )
-    net.Start( "getGroups" )
-      net.WriteTable( sql.Query( "SELECT * FROM yrp_groups" ) )
-    net.Send( ply )
-  elseif tmpSelect[1].removeable == "0" then
-    printGM( "db", ply:Nick() .. " tried to delete an unremoveable Group: " .. tmpSelect[1].groupID .. " (ID: " .. tmpSelect[1].uniqueID .. ")" )
-    ply:PrintMessage( HUD_PRINTCENTER, "You cant delete this!" )
-  end
-  updateGroupTable()
-end)
-
-net.Receive( "getGroups", function( len, ply )
-  net.Start( "getGroups" )
-    net.WriteTable( sql.Query( "SELECT * FROM yrp_groups" ) )
-  net.Send( ply )
-end)
-
-net.Receive( "getGroupLine", function( len, ply )
-  net.Start( "getGroups" )
-    net.WriteTable( sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = '" .. net.ReadString() .. "'" ) )
-  net.Send( ply )
-end)
-//##############################################################################
+--##############################################################################

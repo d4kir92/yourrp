@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_server_give.lua
+--cl_settings_server_give.lua
 
 net.Receive( "getPlyList", function( len )
   local _tmpPlyList = net.ReadTable()

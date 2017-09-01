@@ -200,9 +200,9 @@ function optionWindow( buildingID, name, price, door )
   local _ButtonUpgrade = createVGUI( "DButton", _doorWindow, 400, 50, 10, 150 )
   _ButtonUpgrade:SetText( lang.upgradedoor .. " (-" .. ply:GetNWString( "moneyPre" ) .. "100" .. ply:GetNWString( "moneyPost" ) .. ") NOT AVAILABLE" )
   function _ButtonUpgrade:DoClick()
-    /*net.Start( "wantHouse" )
+    --[[net.Start( "wantHouse" )
       net.WriteInt( _buildingID, 16 )
-    net.SendToServer()*/
+    net.SendToServer()]]--
     _doorWindow:Close()
   end
 

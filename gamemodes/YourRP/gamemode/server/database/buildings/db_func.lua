@@ -5,7 +5,7 @@ function allowedToUseDoor( id, ply )
     return true
   else
     local _tmpBuildingTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
-    //PrintTable(_tmpBuildingTable)
+    --PrintTable(_tmpBuildingTable)
     if _tmpBuildingTable[1] != nil then
 
       if tostring( _tmpBuildingTable[1].ownerSteamID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
@@ -15,7 +15,7 @@ function allowedToUseDoor( id, ply )
         local _tmpRoleTable = dbSelect( "yrp_roles", "*", "uniqueID = " .. _tmpPlyTable[1].roleID )
         local _tmpGroupTable = dbSelect( "yrp_groups", "*", "uniqueID = " .. _tmpRoleTable[1].groupID )
 
-        //PrintTable(_tmpGroupTable)
+        --PrintTable(_tmpGroupTable)
         if tostring( _tmpBuildingTable[1].ownerSteamID ) == tostring( ply:SteamID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
           return true
         else

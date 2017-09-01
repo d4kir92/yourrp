@@ -1,4 +1,4 @@
-/*
+--[[
 Copyright (C) 2017 Arno Zura
 
 This program is free software: you can redistribute it and/or modify
@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http://www.gnu.org/licenses/ >.
-*/
+]]--
 
-//shared.lua
+--shared.lua
 
-/*
+--[[
 content ->
            data -- Put data files in here
            materials -- Put all your materials here.
@@ -35,16 +35,16 @@ gamemode ->
             shared.lua
             cl_init.lua
             init.lua
-*/
+]]--
 
 AddCSLuaFile( "database/db_lang.lua" )
 include( "database/db_lang.lua" )
 
-//include("database/db_lang.lua")
+--include("database/db_lang.lua")
 
 function GM:Initialize()
 	self.BaseClass.Initialize(self)
-	//initLang()
+	--initLang()
 end
 
 team.SetUp( 1, "Players", Color( 40, 40, 40 ), false )
@@ -59,7 +59,7 @@ function util.QuickTrace( origin, dir, filter )
 	return util.TraceLine( trace )
 end
 
-//GetGameDescription returns the name for the Server Browser
+--GetGameDescription returns the name for the Server Browser
 function GM:GetGameDescription()
 	return GAMEMODE.Name
 end

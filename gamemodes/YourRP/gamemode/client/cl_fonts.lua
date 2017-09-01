@@ -1,9 +1,9 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_fonts.lua
+--cl_fonts.lua
 
 function createFont( _name, _font, _size, _weight, _outline )
-	//printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
+	--printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
 	local _antialaising = false
 	local _size = ctrW( _size*2 )
 	if _size > 72 then
@@ -27,8 +27,8 @@ function createFont( _name, _font, _size, _weight, _outline )
 		outline = _outline,
 	} )
 end
-//##############################################################################
-//Change Fonts
+--##############################################################################
+--Change Fonts
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
@@ -43,9 +43,9 @@ function changeFontSize()
 	createFont( "roleInfoHeader", tmpFont, 14, 500, true )
 	createFont( "roleInfoText", tmpFont, 12, 500, true )
 
-	createFont( "charTitle", tmpFont, 14, 500, false )
-	createFont( "charHeader", tmpFont, 14, 500, false )
-	createFont( "charText", tmpFont, 14, 500, false )
+	createFont( "charTitle", tmpFont, 14, 500, true )
+	createFont( "charHeader", tmpFont, 14, 500, true )
+	createFont( "charText", tmpFont, 14, 500, true )
 
 	createFont( "pmT", tmpFont, 14, 500, true )
 	createFont( "weaponT", tmpFont, 12, 500, true )
@@ -61,4 +61,4 @@ function changeFontSize()
 	createFont( "ATM_Name", tmpFont, 40, 500, true )
 end
 changeFontSize()
-//##############################################################################
+--##############################################################################

@@ -46,6 +46,20 @@ function roundMoney( money, round )
   end
 end
 
+local food = Material( "icon16/cookie.png" )
+local drink = Material( "icon16/drink.png" )
+local health = Material( "icon16/heart.png" )
+local armor = Material( "icon16/shield.png" )
+local stamina = Material( "icon16/lightning.png" )
+local money = Material( "icon16/money.png" )
+local role = Material( "icon16/user.png" )
+
+function showIcon( string, material )
+  surface.SetDrawColor( 255, 255, 255, 255 )
+  surface.SetMaterial( material	)
+  surface.DrawTexturedRect( ctrW( cl_db[string .. "x"] ) + ctrW( cl_db[string .. "h"]/2 ) - ctrW( 16 ), ctrW( cl_db[string .. "y"] ) + ctrW( cl_db[string .. "h"]/2 ) - ctrW( 16 ), ctrW( 32 ), ctrW( 32 ) )
+end
+
 local _tmp3P = 0
 function HudPlayer()
   local ply = LocalPlayer()
@@ -55,28 +69,32 @@ function HudPlayer()
     local br = 2
 
     if ply:Alive() then
-      //Voice
+      --Voice
       if _showVoice then
         drawText( lang.youarespeaking, "HudBars", cl_db["vox"], cl_db["voy"], Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
-      //Health
+      --Health
       if tonumber( cl_db["hpt"] ) == 1 then
         plyHealth = Lerp( 10 * FrameTime(), plyHealth, ply:Health() )
-        drawRBox( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( 0, 0, 0, 200 ) )
+        drawRBox( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawRBox( 0, cl_db["hpx"], cl_db["hpy"], ( plyHealth / ply:GetMaxHealth() ) * (cl_db["hpw"]), cl_db["hph"], Color( 255, 0, 0, 200 ) )
         drawText( math.Round( plyHealth, 0 ) .. "/" .. ply:GetMaxHealth() .. " | " .. math.Round( ( math.Round( plyHealth, 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. " %", "HudBars", cl_db["hpx"] + (cl_db["hpw"]/2), cl_db["hpy"] + (cl_db["hph"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        showIcon( "hp", health )
       end
 
-      //Armor
+      --Armor
       if tonumber( cl_db["art"] ) == 1 then
         plyArmor = Lerp( 10 * FrameTime(), plyArmor, ply:Armor() )
-        drawRBox( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( 0, 0, 0, 200 ) )
+        drawRBox( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawRBox( 0, cl_db["arx"], cl_db["ary"], ( ply:Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 0, 255, 0, 200 ) )
         drawText( math.Round( plyArmor, 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. " | " .. math.Round( ( math.Round( plyArmor, 0 ) / ply:GetNWInt( "GetMaxArmor", 100 ) ) * 100, 0 ) .. " %", "HudBars", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        showIcon( "ar", armor )
       end
 
-      //Weapon Primary
+      --Weapon Primary
       if tonumber( cl_db["wpt"] ) == 1 then
         local wpx = ctrW( cl_db["wpx"] )
         local wpy = ctrW( cl_db["wpy"] )
@@ -87,7 +105,7 @@ function HudPlayer()
             draw.RoundedBox( 0, wpx, wpy, wpw, wph, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
 
             draw.RoundedBox( 0, wpx, wpy, wpw * weapon:Clip1() / weapon:GetMaxClip1(), wph, Color( 255, 255, 0 ) )
-      			//Primary
+      			--Primary
       			reload.nextP = weapon:GetNextPrimaryFire()
       			reload.nextPC = reload.nextP - CurTime()
       			if reload.nextP > CurTime() and reload.statusP == 0 and ( reload.nextPC ) > 0.6 then
@@ -112,7 +130,7 @@ function HudPlayer()
         end
       end
 
-      //Weapon Secondary
+      --Weapon Secondary
       if tonumber( cl_db["wst"] ) == 1 then
         local wsx = ctrW( cl_db["wsx"] )
         local wsy = ctrW( cl_db["wsy"] )
@@ -122,7 +140,7 @@ function HudPlayer()
         if weapon != NULL then
       		if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
             draw.RoundedBox( 0, wsx, wsy, wsw, wsh, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-      			//Secondary
+      			--Secondary
       			draw.RoundedBox( 0, wsx, wsy, wsw, wsh, Color( 255, 255, 0, 255 ) )
 
       			reload.nextS = weapon:GetNextSecondaryFire()
@@ -147,7 +165,7 @@ function HudPlayer()
     		end
       end
 
-      //Weapon Name
+      --Weapon Name
       if tonumber( cl_db["wnt"] ) == 1 then
         if weapon != NULL then
           drawRBox( 0, cl_db["wnx"], cl_db["wny"], cl_db["wnw"], cl_db["wnh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
@@ -155,15 +173,18 @@ function HudPlayer()
         end
       end
 
-      //RoleID
+      --RoleID
       if tonumber( cl_db["rit"] ) == 1 then
         drawRBox( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawText( ply:GetNWString("groupName") .. " " .. ply:GetNWString("roleName"), "HudBars", cl_db["rix"] + (cl_db["riw"]/2), cl_db["riy"] + (cl_db["rih"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        showIcon( "ri", role )
       end
 
-      //Minimap
+      --Minimap
       if tonumber( cl_db["mmt"] ) == 1 then
-        if _filterTime + 20 < CurTime() then//alle 10 sekunden ents reinladen
+        drawRBox( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        if _filterTime + 20 < CurTime() then--alle 10 sekunden ents reinladen
           _filterTime = CurTime()
           _filterENTS = ents.GetAll()
         end
@@ -193,7 +214,7 @@ function HudPlayer()
         	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
         else
           local dist = 6000
-          CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, ply:GetPos().z + 4000 - ply:GetPos().z - 4 ) //+ Vector( 0, 0, 20000 )
+          CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, ply:GetPos().z + 4000 - ply:GetPos().z - 4 ) --+ Vector( 0, 0, 20000 )
           CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
         	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
         	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
@@ -220,12 +241,12 @@ function HudPlayer()
         minimap.point = 8
         drawRBoxCr( cl_db["mmx"] + (cl_db["mmw"]/2) - (minimap.point/2), cl_db["mmy"] + (cl_db["mmh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
 
-        //Coords
-        draw.SimpleText( math.Round( ply:GetPos().x, -1 ), "HudMinimap", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, -1 ), "HudMinimap", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        --Coords
+        draw.SimpleText( math.Round( ply:GetPos().x, -1 ) .. ",", "HudMinimap", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( " " .. math.Round( ply:GetPos().y, -1 ), "HudMinimap", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
 
-      //Tooltip
+      --Tooltip
       if tonumber( cl_db["ttt"] ) == 1 then
         drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawText( lang.tooltip .. ":", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -235,11 +256,11 @@ function HudPlayer()
         drawText( "F7  - " .. lang.settings, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 130, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "B  - " .. lang.changeview, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 160, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "M  - " .. lang.map, "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 190, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        --drawText( "H  - " .. "Eat Food", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 220, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        --drawText( "T  - " .. "Drink Water", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 250, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "H  - " .. "Eat Food", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 220, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "T  - " .. "Drink Water", "HudBars", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 250, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       end
 
-      //Money
+      --Money
       if tonumber( cl_db["mot"] ) == 1 then
         drawRBox( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         local _money = tonumber( ply:GetNWInt( "money" ) )
@@ -249,33 +270,57 @@ function HudPlayer()
           _moneystring = _moneystring .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
         end
         drawText( _moneystring, "HudBars", cl_db["mox"] + (cl_db["mow"]/2), cl_db["moy"] + (cl_db["moh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      end
-/*
-      //Hunger
-      if tonumber( cl_db["mht"] ) == 1 then
-        plyHunger = Lerp( 10 * FrameTime(), plyHunger, ply:GetNWInt( "hunger", 0 ) )
-        drawRBox( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( 0, 0, 0, 200 ) )
-        drawRBox( 0, cl_db["mhx"], cl_db["mhy"], ( plyHunger / 100 ) * (cl_db["mhw"]), cl_db["mhh"], Color( 255, 165, 0, 200 ) )
-        drawText( math.Round( ( math.Round( plyHunger, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["mhx"] + (cl_db["mhw"]/2), cl_db["mhy"] + (cl_db["mhh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        showIcon( "mo", money )
       end
 
-      //Thirst
-      if tonumber( cl_db["mtt"] ) == 1 then
-        plyThirst = Lerp( 10 * FrameTime(), plyThirst, ply:GetNWInt( "thirst", 0 ) )
-        drawRBox( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( 0, 0, 0, 200 ) )
-        drawRBox( 0, cl_db["mtx"], cl_db["mty"], ( plyThirst / 100 ) * cl_db["mtw"], cl_db["mth"], Color( 0, 0, 255, 200 ) )
-        drawText( math.Round( ( math.Round( plyThirst, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["mtx"] + (cl_db["mtw"]/2), cl_db["mty"] + (cl_db["mth"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      if ply:GetNWBool( "metabolism", false ) then
+        --Hunger
+        if tonumber( cl_db["mht"] ) == 1 then
+          plyHunger = Lerp( 10 * FrameTime(), plyHunger, ply:GetNWInt( "hunger", 0 ) )
+          drawRBox( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+          drawRBox( 0, cl_db["mhx"], cl_db["mhy"], ( plyHunger / 100 ) * (cl_db["mhw"]), cl_db["mhh"], Color( 255, 69, 0, 200 ) )
+          drawText( math.Round( ( math.Round( plyHunger, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["mhx"] + (cl_db["mhw"]/2), cl_db["mhy"] + (cl_db["mhh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        	showIcon( "mh", food )
+        end
+
+        --Thirst
+        if tonumber( cl_db["mtt"] ) == 1 then
+          plyThirst = Lerp( 10 * FrameTime(), plyThirst, ply:GetNWInt( "thirst", 0 ) )
+          drawRBox( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+          drawRBox( 0, cl_db["mtx"], cl_db["mty"], ( plyThirst / 100 ) * cl_db["mtw"], cl_db["mth"], Color( 0, 0, 255, 200 ) )
+          drawText( math.Round( ( math.Round( plyThirst, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["mtx"] + (cl_db["mtw"]/2), cl_db["mty"] + (cl_db["mth"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+          showIcon( "mt", drink )
+        end
+
+        --Stamina
+        if tonumber( cl_db["mst"] ) == 1 then
+          plyStamina = Lerp( 10 * FrameTime(), plyStamina, ply:GetNWInt( "stamina", 0 ) )
+          drawRBox( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+          drawRBox( 0, cl_db["msx"], cl_db["msy"], ( plyStamina / 100 ) * cl_db["msw"], cl_db["msh"], Color( 255, 255, 0, 200 ) )
+          drawText( math.Round( ( math.Round( plyStamina, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["msx"] + (cl_db["msw"]/2), cl_db["msy"] + (cl_db["msh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+          showIcon( "ms", stamina )
+        end
+      end
+      --Voting
+      if tonumber( cl_db["vtt"] ) == 1 and ply:GetNWBool( "voting", false ) then
+        drawRBox( 0, cl_db["vtx"], cl_db["vty"], cl_db["vtw"], cl_db["vth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+
+        drawText( ply:GetNWString( "voteQuestion", "" ), "HudBars", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + cl_db["vth"]/4, Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        if ply:GetNWString( "voteStatus" ) != "yes" and ply:GetNWString( "voteStatus" ) != "no" then
+          drawText( lang.yes .. " - [Picture Up] | " .. lang.no .. " - [Picture Down]", "HudBars", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 2*(cl_db["vth"]/4), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        elseif ply:GetNWString( "voteStatus" ) == "yes" then
+          drawText( lang.yes, "HudBars", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 2*(cl_db["vth"]/4), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        elseif ply:GetNWString( "voteStatus" ) == "no" then
+          drawText( lang.no, "HudBars", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 2*(cl_db["vth"]/4), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+        drawText( ply:GetNWInt( "voteCD", "" ), "HudBars", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 3*(cl_db["vth"]/4), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
-      //Stamina
-      if tonumber( cl_db["mst"] ) == 1 then
-        plyStamina = Lerp( 10 * FrameTime(), plyStamina, ply:GetNWInt( "stamina", 0 ) )
-        drawRBox( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( 0, 0, 0, 200 ) )
-        drawRBox( 0, cl_db["msx"], cl_db["msy"], ( plyStamina / 100 ) * cl_db["msw"], cl_db["msh"], Color( 255, 255, 0, 200 ) )
-        drawText( math.Round( ( math.Round( plyStamina, 0 ) / 100 ) * 100, 0 ) .. " %", "HudBars", cl_db["msx"] + (cl_db["msw"]/2), cl_db["msy"] + (cl_db["msh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      end
-*/
-      //Thirdperson
+      --Thirdperson
       if _thirdperson != _tmp3P then
         _tmp3P = _thirdperson
         show3PInfo = 1
@@ -295,7 +340,7 @@ function HudPlayer()
         draw.SimpleText( _3PText, "SettingsNormal", ScrW()/2, ctrW( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
       end
 
-      //Borders
+      --Borders
       if tonumber( cl_db["hpt"] ) == 1 then
         drawRBoxBr( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
@@ -333,14 +378,16 @@ function HudPlayer()
       if tonumber( cl_db["mmt"] ) == 1 then
         drawRBoxBr( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
-      if tonumber( cl_db["mht"] ) == 1 then
-        drawRBoxBr( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-      end
-      if tonumber( cl_db["mtt"] ) == 1 then
-        drawRBoxBr( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-      end
-      if tonumber( cl_db["mst"] ) == 1 then
-        drawRBoxBr( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      if ply:GetNWBool( "metabolism", false ) then
+        if tonumber( cl_db["mht"] ) == 1 then
+          drawRBoxBr( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+        end
+        if tonumber( cl_db["mtt"] ) == 1 then
+          drawRBoxBr( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+        end
+        if tonumber( cl_db["mst"] ) == 1 then
+          drawRBoxBr( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+        end
       end
     else
       drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )

@@ -99,7 +99,7 @@ function awayFor( ply )
 
     return tmpAway
   else
-    //Table Empty
+    --Table Empty
   end
 end
 
@@ -152,7 +152,9 @@ function GM:PlayerSetModel( ply )
   if tmpRoleID != nil then
     local tmpRolePlayermodel = sql.Query( "SELECT playermodel, playermodelsize FROM yrp_roles WHERE uniqueID = '" .. tmpRoleID[1].roleID .. "'" )
     if tmpRolePlayermodel != nil and tmpRolePlayermodel != false then
-    	ply:SetModel( tmpRolePlayermodel[1].playermodel )
+      local randModel = string.Explode( ",", tmpRolePlayermodel[1].playermodel )
+      local randNumb = math.Round( math.Rand( 1, #randModel ) )
+    	ply:SetModel( randModel[randNumb] )
       local modelsize = tonumber( tmpRolePlayermodel[1].playermodelsize )
       yrpSetModelScale( ply, modelsize )
     end
@@ -167,9 +169,9 @@ function GM:PlayerLoadout( ply )
   setRoleValues( ply )
   teleportToSpawnpoint( ply )
   timer.Simple( 1,function()
-    //local hullMins = ply:OBBMins()/2
-    //local hullMaxs = ply:OBBMaxs()/2
-    //ply:SetHull( hullMins, hullMaxs )
+    --local hullMins = ply:OBBMins()/2
+    --local hullMaxs = ply:OBBMaxs()/2
+    --ply:SetHull( hullMins, hullMaxs )
   end)
 end
 
@@ -200,6 +202,7 @@ function updateHud( ply )
     ply:SetNWInt( "capital", plyValues[1].capital )
     ply:SetNWString( "SurName", plyValues[1].nameSur )
     ply:SetNWString( "FirstName", plyValues[1].nameFirst )
+    ply:SetNWString( "Gender", plyValues[1].gender )
 
     local tmpRoleID = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. plyValues[1].roleID )
     if tmpRoleID != nil then
@@ -219,7 +222,15 @@ function updateHud( ply )
       end
     end
   else
-    //
+    --
+  end
+
+  local _generalTable = dbSelect( "yrp_general", "*", nil )
+  for k, v in pairs( _generalTable ) do
+    if v.name == "metabolism" then
+      ply:SetNWBool( "metabolism", tobool( v.value ) )
+      break
+    end
   end
 
   local _moneyTable = dbSelect( "yrp_money", "*", nil )
@@ -272,6 +283,10 @@ function checkClient( ply )
 
     net.Start( "openCharakterMenu" )
     net.Send( ply )
+
+    ply:SetNWInt( "hunger", 100 )
+    ply:SetNWInt( "thirst", 100 )
+    ply:SetNWInt( "stamina", 100 )
   else
     if result[1].nameSur == "ID_SURNAME" or result[1].nameFirst == "ID_FIRSTNAME" then
       net.Start( "openCharakterMenu" )
@@ -285,8 +300,6 @@ function checkClient( ply )
   end
 
   updateHud( ply )
-
-  updateGroupTable()
 
   saveClients( "Check Client" )
 end

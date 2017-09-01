@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_hud_map.lua
+--cl_hud_map.lua
 
 map = {}
 function getCoords()
@@ -20,7 +20,7 @@ function openSpawnMenu()
     if map != nil then
       if map.facX != nil and map.facY != nil then
         local ply = LocalPlayer()
-        draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )           //mapWindow of Map
+        draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )           --mapWindow of Map
 
         local win = {}
         win.x = ( ( ScrW() / 2 ) - ctrW( 1050 ) / map.facX )
@@ -102,19 +102,19 @@ function openSpawnMenu()
         plyPos.x = win.x + win.w * ( plyPos.xtmp / plyPos.xMax )
         plyPos.y = win.y + win.h - win.h * ( plyPos.ytmp / plyPos.yMax )
 
-        //You
+        --You
         draw.RoundedBox( ctrW(8), plyPos.x-ctrW(8), plyPos.y-ctrW(8), ctrW(16), ctrW(16), Color(40,40,40))
         draw.RoundedBox( ctrW(8), plyPos.x-ctrW(6), plyPos.y-ctrW(6), ctrW(12), ctrW(12), Color(255,10,10))
         draw.SimpleText( lang.you, "SettingsNormal", plyPos.x, plyPos.y-ctrW(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
-        //Coords
+        --Coords
         draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "SettingsNormal", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
         draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "SettingsNormal", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
         if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
           for k, plys in pairs( player.GetAll() ) do
             if plys != LocalPlayer() then
-              //Other players
+              --Other players
               local tmpPly = {}
               tmpPly.xMax = map.sizeX
               tmpPly.yMax = map.sizeY
@@ -131,7 +131,7 @@ function openSpawnMenu()
               tmpPly.x = win.x + win.w * ( tmpPly.xtmp / tmpPly.xMax )
               tmpPly.y = win.y + win.h - win.h * ( tmpPly.ytmp / tmpPly.yMax )
 
-              //Draw
+              --Draw
               draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(8), tmpPly.y-ctrW(8), ctrW(16), ctrW(16), Color( 40, 40, 40, 200 ))
               draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(6), tmpPly.y-ctrW(6), ctrW(12), ctrW(12), Color( 40, 40, 255, 200 ))
               draw.SimpleText( plys:Nick(), "SettingsNormal", tmpPly.x, tmpPly.y-ctrW(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )

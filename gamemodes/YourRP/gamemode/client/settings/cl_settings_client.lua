@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_client.lua
+--cl_settings_client.lua
 
 include( "cl_settings_client_charakter.lua" )
 include( "cl_settings_client_hud.lua" )
@@ -13,11 +13,11 @@ function tabClient( sheet )
     draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), clientPanel:GetWide(), clientPanel:GetTall(), yrp.colors.background )
   end
 
-  //Server Sheet
+  --Server Sheet
   local clientSheet = vgui.Create( "DPropertySheet", clientPanel )
   clientSheet:Dock( FILL )
   function clientSheet:Paint()
-    //drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), ctrW( 10 ) )
+    --drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), ctrW( 10 ) )
   end
 
   tabClientChar( clientSheet )

@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_client_hud.lua
+--cl_settings_client_hud.lua
 
 function createDerma( art, parent, w, h, x, y )
   tmpDerma = vgui.Create( art, parent )
@@ -22,7 +22,9 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 120 ) )
     draw.RoundedBox( 0, 0, 0, pw, ctrH( 50 ), Color( 0, 0, 255, 200 ) )
 
-    draw.RoundedBox( 0, pw - ctrW( 20 ), ph - ctrH( 20 ), ctrW( 20 ), ctrH( 20 ), Color( 0, 255, 0, 200 ) )
+    if frame:GetSizable() then
+      draw.RoundedBox( 0, pw - ctrW( 20 ), ph - ctrH( 20 ), ctrW( 20 ), ctrH( 20 ), Color( 0, 255, 0, 200 ) )
+    end
 
     drawText( textPre, "HudBars", pw, ph, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
@@ -83,6 +85,8 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
   		updateDBHud( tmpt, cl_db[tmpt] )
   	end
   end
+
+  return frame
 end
 
 function tabClientHud( sheet )
@@ -91,7 +95,7 @@ function tabClientHud( sheet )
   local cl_hudPanel = vgui.Create( "DPanel", sheet )
   sheet:AddSheet( lang.hud, cl_hudPanel, "icon16/photo.png" )
   function cl_hudPanel:Paint( w, h )
-    //draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
+    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
   end
 
   local changeHudButton = createDerma( "DButton", cl_hudPanel, 470, 50, 0, 0 )
@@ -148,9 +152,11 @@ function tabClientHud( sheet )
     changeHudElement( changeHudWindow, "rix", "riy", "riw", "rih", "rit", lang.role )
     changeHudElement( changeHudWindow, "ttx", "tty", "ttw", "tth", "ttt", lang.tooltip )
     changeHudElement( changeHudWindow, "mox", "moy", "mow", "moh", "mot", lang.money )
-    --changeHudElement( changeHudWindow, "mhx", "mhy", "mhw", "mhh", "mht", "Hunger" )
-    --changeHudElement( changeHudWindow, "mtx", "mty", "mtw", "mth", "mtt", "Durst" )
-    --changeHudElement( changeHudWindow, "msx", "msy", "msw", "msh", "mst", "Stamina" )
+    changeHudElement( changeHudWindow, "mhx", "mhy", "mhw", "mhh", "mht", lang.hunger )
+    changeHudElement( changeHudWindow, "mtx", "mty", "mtw", "mth", "mtt", lang.thirst )
+    changeHudElement( changeHudWindow, "msx", "msy", "msw", "msh", "mst", lang.stamina )
+    local votes = changeHudElement( changeHudWindow, "vtx", "vty", "vtw", "vth", "vtt", lang.votes )
+    votes:SetSizable( false )
 
     changeHudWindow:MakePopup()
   end

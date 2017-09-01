@@ -1,4 +1,4 @@
-/*
+--[[
 Copyright (C) 2017 Arno Zura
 
 This program is free software: you can redistribute it and/or modify
@@ -13,14 +13,14 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http://www.gnu.org/licenses/ >.
-*/
+]]--
 
 include( "shared_pres.lua" )
 
 include( "shared.lua" )
 
-//##############################################################################
-//Resolutions
+--##############################################################################
+--Resolutions
 function ctrF( tmpNumber )
   tmpNumber = 2160/tmpNumber
   return math.Round( tmpNumber, 8 )
@@ -73,10 +73,10 @@ function createVGUI( art, parent, w, h, x, y )
   end
   return tmp
 end
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//Includes
+--##############################################################################
+--Includes
 include( "darkrp.lua" )
 
 include( "client/database/db_database.lua" )
@@ -93,7 +93,7 @@ include( "client/charakter/cl_charakter.lua" )
 include( "client/buy/cl_buy.lua" )
 include( "client/interact/cl_interact.lua" )
 include( "client/door/cl_door_options.lua" )
-//##############################################################################
+--##############################################################################
 
 net.Receive( "yrpInfoBox", function( len )
   local _tmp = createVGUI( "DFrame", nil, 800, 400, 0, 0 )
@@ -119,11 +119,11 @@ function GM:InitPostEntity()
 
   loadCompleteHud()
 
-	//net.Start( "clientFinished" )
-  //net.SendToServer()
+	--net.Start( "clientFinished" )
+  --net.SendToServer()
 end
 
-//Remove Ragdolls after 60 sec
+--Remove Ragdolls after 60 sec
 function RemoveDeadRag( ent )
 	if (ent == NULL) or (ent == nil) then return end
 	if (ent:GetClass() == "class C_ClientRagdoll") then
@@ -135,5 +135,21 @@ end
 hook.Add("OnEntityCreated", "RemoveDeadRag", RemoveDeadRag)
 
 function GM:HUDDrawTargetID()
-  //Nothing
+  return false
 end
+
+function drawPlates()
+  for k, v in pairs( player.GetAll() ) do
+    if tostring( v:SteamID() ) == "STEAM_0:1:20900349" and v:GetNWBool( "tag", false ) then
+      if v:Alive() then
+        if v:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+          cam.Start3D2D( v:GetBonePosition( v:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, v:GetModelScale() * 20 ), Angle( 0, v:GetAngles().y-90, 90 ), v:GetModelScale()/4 )
+    	      draw.RoundedBox( 0, -40, 0, 80, 20, Color( 0, 0, 0, 200 ) )
+            draw.SimpleText( "DEVELOPER", "HudBars", 0, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    	    cam.End3D2D()
+        end
+      end
+    end
+  end
+end
+hook.Add( "PostPlayerDraw", "DrawName", drawPlates )

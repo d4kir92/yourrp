@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//db_players.lua
+--db_players.lua
 
 include( "players/db_net.lua" )
 include( "players/db_func.lua" )

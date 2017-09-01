@@ -1,9 +1,9 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//sv_sizer.lua
+--sv_sizer.lua
 
-//##############################################################################
-//Map vars
+--##############################################################################
+--Map vars
 mapSize = {}
 mapSize.size = 9999999999
 
@@ -27,20 +27,20 @@ mapSize.error = 1
 mapSize.facX = 1
 mapSize.facY = 1
 
-//Ohne Problem durchgelaufen
+--Ohne Problem durchgelaufen
 mapSize.error = 0
-//##############################################################################
+--##############################################################################
 
 local skyCamera = nil
 
-//##############################################################################
-//util
+--##############################################################################
+--util
 util.AddNetworkString( "askCoords" )
 util.AddNetworkString( "sendCoords" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//net.Receive
+--##############################################################################
+--net.Receive
 net.Receive( "askCoords", function( len, ply )
   if mapSize.sizeN == -9999999999 or mapSize.sizeS == 9999999999 or mapSize.sizeW == 9999999999 or mapSize.sizeE == -9999999999 then
     net.Start( "sendCoords" )
@@ -56,10 +56,10 @@ net.Receive( "askCoords", function( len, ply )
     net.Send( ply )
   end
 end)
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
-//tryNewPos
+--##############################################################################
+--tryNewPos
 function tryNewPos( dir, size, space, tmpX, tmpY, tmpZ )
   local fails = 1
   local tmpEnd = 0
@@ -87,7 +87,7 @@ function tryNewPos( dir, size, space, tmpX, tmpY, tmpZ )
   end
   return result
 end
-//##############################################################################
+--##############################################################################
 
 function searchCoords( ent )
   local size = 1000000
@@ -166,7 +166,7 @@ function getCoords()
     end
 	end
 
-  //RoundDown
+  --RoundDown
 	mapSize.sizeN = math.Round(mapSize.sizeN)
 	mapSize.sizeE = math.Round(mapSize.sizeE)
 	mapSize.sizeS = math.Round(mapSize.sizeS)
@@ -193,13 +193,13 @@ function getCoords()
 
   if mapSize.sizeX >= mapSize.sizeY then
     mapSize.facX = 1
-    mapSize.facY = (mapSize.sizeX/mapSize.sizeY) //X: 30000 / 10000 = 3
+    mapSize.facY = (mapSize.sizeX/mapSize.sizeY) --X: 30000 / 10000 = 3
   else
-    mapSize.facX = (mapSize.sizeY/mapSize.sizeX) //Y: 30000 / 10000 = 3
+    mapSize.facX = (mapSize.sizeY/mapSize.sizeX) --Y: 30000 / 10000 = 3
     mapSize.facY = 1
   end
 
-  //Ohne Problem durchgelaufen
+  --Ohne Problem durchgelaufen
 	mapSize.error = 0
 
   if mapSize.sizeN == -9999999999 or mapSize.sizeS == 9999999999 or mapSize.sizeW == 9999999999 or mapSize.sizeE == -9999999999 then
@@ -210,9 +210,9 @@ function getCoords()
   end
 end
 
-//##############################################################################
-//getMapCoords
+--##############################################################################
+--getMapCoords
 function getMapCoords()
   getCoords()
 end
-//##############################################################################
+--##############################################################################

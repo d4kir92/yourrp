@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_yourrp_wiki.lua
+--cl_settings_yourrp_wiki.lua
 
 function tabWorkshop( sheet )
   local clientPanel = vgui.Create( "DPanel", sheet )
@@ -8,7 +8,7 @@ function tabWorkshop( sheet )
   sheet:AddSheet( lang.workshop, clientPanel, "icon16/layout_content.png" )
   function clientPanel:Paint()
     draw.SimpleText( "Site is loading", "HudDefault", clientPanel:GetWide()/2, clientPanel:GetTall()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    //drawBackground( 0, 0, clientPanel:GetWide(), clientPanel:GetTall(), ctrW( 0 ) )
+    --drawBackground( 0, 0, clientPanel:GetWide(), clientPanel:GetTall(), ctrW( 0 ) )
   end
 
   local form = vgui.Create( "HTML", clientPanel )

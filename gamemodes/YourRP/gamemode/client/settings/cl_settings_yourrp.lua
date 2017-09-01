@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_settings_server.lua
+--cl_settings_server.lua
 
 include( "cl_settings_yourrp_workshop.lua" )
 include( "cl_settings_yourrp_wiki.lua" )
@@ -10,7 +10,7 @@ include( "cl_settings_yourrp_add_langu.lua" )
 function tabYourRP( sheet )
   local ply = LocalPlayer()
   if ply:IsAdmin() or ply:IsSuperAdmin() then
-    //Server Panel
+    --Server Panel
     local serverPanel = vgui.Create( "DPanel", sheet )
     serverPanel.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrp.colors.background ) end
     sheet:AddSheet( "YourRP", serverPanel, "icon16/controller.png" )
@@ -18,11 +18,11 @@ function tabYourRP( sheet )
       draw.RoundedBox( 0, ctrW( 0 ), ctrW( 40 ), serverPanel:GetWide(), serverPanel:GetTall(), yrp.colors.background )
     end
 
-    //Server Sheet
+    --Server Sheet
     local yourrpSheet = vgui.Create( "DPropertySheet", serverPanel )
     yourrpSheet:Dock( FILL )
     function yourrpSheet:Paint()
-      //drawBackground( 0, 0, yourrpSheet:GetWide(), yourrpSheet:GetTall(), ctrW( 10 ) )
+      --drawBackground( 0, 0, yourrpSheet:GetWide(), yourrpSheet:GetTall(), ctrW( 10 ) )
     end
     tabWorkshop( yourrpSheet )
     tabWiki( yourrpSheet )

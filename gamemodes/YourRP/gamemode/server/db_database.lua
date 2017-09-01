@@ -1,20 +1,20 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//db_database.lua
+--db_database.lua
 
-//##############################################################################
-//utils
+--##############################################################################
+--utils
 util.AddNetworkString( "dbGetGeneral" )
 util.AddNetworkString( "dbGetQuestions" )
 util.AddNetworkString( "hardresetdatabase")
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
+--##############################################################################
 yrp_database = {}
 yrp_database.version = 1
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
+--##############################################################################
 function retryLoadDatabase()
   printGMImp( "db", "retry Load Database in 5sec" )
   if timer.Exists( "retryLoadDatabase" ) then
@@ -25,9 +25,9 @@ function retryLoadDatabase()
     timer.Remove( "retryLoadDatabase" )
   end)
 end
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
+--##############################################################################
 function resetDatabase()
   printGMImp( "db", "reset Database" )
   local _dbs = {}
@@ -75,7 +75,7 @@ net.Receive( "hardresetdatabase", function( len, ply )
     end)
   end
 end)
-//##############################################################################
+--##############################################################################
 
 function dbSQLStr( string )
   if sql.SQLStr( string, false ) == nil then
@@ -106,7 +106,7 @@ function dbSelect( dbTable, dbColumns, dbWhere )
     end
     local _result = sql.Query( q )
     if _result == nil then
-      //printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
+      --printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
       return _result
     elseif _result == false then
       printERROR( dbTable .. ": " .. q .. " FALSE" )
@@ -143,6 +143,7 @@ function dbInsertInto( dbTable, dbColumns, dbValues )
     local result = sql.Query( q )
     if result != nil then
       printERROR( "dbInsertInto: has failed!")
+      print( sql.LastError() )
     end
   end
 end
@@ -198,7 +199,7 @@ function sqlAddColumn( tableName, columnName, datatype )
     local q = "ALTER TABLE " .. tableName .. " ADD " .. columnName .. " " .. datatype .. ""
     local _result = sql.Query( q )
   else
-    //printGM( "db", columnName .. " vorhanden" )
+    --printGM( "db", columnName .. " vorhanden" )
   end
 end
 
@@ -222,8 +223,8 @@ function initDatabase( dbName )
   end
   printGMPos()
 end
-//##############################################################################
-//includes
+--##############################################################################
+--includes
 include( "database/db_resources.lua" )
 
 include( "database/db_general.lua" )
@@ -236,14 +237,14 @@ include( "database/db_buildings.lua" )
 include( "database/db_role_whitelist.lua" )
 include( "database/db_buy.lua" )
 include( "database/db_restriction.lua" )
-//##############################################################################
+--##############################################################################
 
-//##############################################################################
+--##############################################################################
 function dbInitDatabase()
   printGMImp( "db", "LOAD DATABASES" )
 
   initDatabase( "yrp_general" )
-  //dbGeneralInit()
+  --dbGeneralInit()
   dbQuestionsInit()
   dbRolesInit()
   dbMoneyInit()
@@ -258,4 +259,4 @@ function dbInitDatabase()
   printGMImp( "db", "DONE Loading DATABASES" )
 end
 dbInitDatabase()
-//##############################################################################
+--##############################################################################

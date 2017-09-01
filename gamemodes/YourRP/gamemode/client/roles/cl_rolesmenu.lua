@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-//cl_rolesmenu.lua
+--cl_rolesmenu.lua
 yrp.colors.background = Color( 0, 0, 0, 160 )
 yrp.colors.header = Color( 0, 255, 0, 200 )
 yrp.colors.font = Color( 255, 255, 255, 255 )
@@ -21,7 +21,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   end
   roleInfoPanel = createVGUI( "DPanel", roleMenuWindow, 2160 - 1600 - 10, 2160-60, 1600 + 10, 60 )
   function roleInfoPanel:Paint( w, h )
-    //draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 255, 120 ) )
+    --draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 255, 120 ) )
   end
 
   local tmpY = 0
@@ -164,17 +164,17 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
       elseif whitelist == 1 and allowed == 1 or whitelist == 0 then
         roleGetRole:SetText( lang.getrole .. ": " .. name )
       elseif whitelist == 1 then
-        roleGetRole:SetText( lang.needwhitelist )
+        roleGetRole:SetText( "start Vote" .. ": " .. name )
       end
     end
     function roleGetRole:DoClick()
       if ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
-        if ply:IsSuperAdmin() or ply:IsAdmin() or whitelist == 1 and allowed == 1 or whitelist == 0 then
+        --if ply:IsSuperAdmin() or ply:IsAdmin() or whitelist == 1 and allowed == 1 or whitelist == 0 then
           net.Start( "wantRole" )
             net.WriteInt( uniqueID, 16 )
           net.SendToServer()
           roleMenuWindow:Close()
-        end
+        --end
       end
     end
   end
@@ -206,7 +206,7 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   local h = 150
   local scrollbar = 32
 
-  local tmpRole = createVGUI( "DPanel", parent, w - x - 2 * h - scrollbar, h, x + h, y )
+  local tmpRole = createVGUI( "DPanel", parent, w - x - 1 * h - scrollbar, h, x + h, y )
   function tmpRole:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 160 ) )
     draw.SimpleText( name, "roleInfoText", ctrW( 25 ), ctrW( 25 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
@@ -231,7 +231,9 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   end
 
   local tmpRoleModel = createVGUI( "DModelPanel", parent, h, h, x, y )
-  tmpRoleModel:SetModel( model )
+  local randModel = string.Explode( ",", model )
+  local randNumb = math.Round( math.Rand( 1, #randModel ) )
+  tmpRoleModel:SetModel( randModel[randNumb] )
   tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
   if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
     local eyepos = tmpRoleModel.Entity:GetBonePosition( tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
@@ -239,14 +241,19 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
     tmpRoleModel:SetCamPos( eyepos - Vector( -25 * modelsize, 0, 0 ) )	-- Move cam in front of eyes
   end
 
-  local tmpButtonSelect = createVGUI( "DColorButton", parent, h, h, w - h - scrollbar, y )
+  local tmpButtonSelect = createVGUI( "DButton", parent, w-x-scrollbar, h, x, y )
+  tmpButtonSelect:SetText( "" )
   function tmpButtonSelect:Paint( pw, ph )
     if tmpButtonSelect:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+      if maxamount > 0 and uses >= maxamount then
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 100 ) )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 100 ) )
+      end
     else
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+
     end
-    draw.SimpleText( lang.moreinfo, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    --draw.SimpleText( lang.moreinfo, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function tmpButtonSelect:DoClick()
     local tmpAllowed = 0
@@ -256,14 +263,14 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
         break
       end
     end
-    getRoleInfos( name, roleID, desc, sweps, capital, model, modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed )
+    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed )
   end
 
-  //Init on Start UP First Role
+  --Init on Start UP First Role
   if tonumber( roleID ) == 1 then
-    getRoleInfos( name, roleID, desc, sweps, capital, model, modelsize, uses, maxamount, adminonly, whitelist, 1 )
+    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, 1 )
   end
-  //---------------------------------------
+  -----------------------------------------
 
   y = y + h - 50 + 10
   return y
@@ -284,7 +291,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newX = x + ctrW( 60 )
     local newY = y
     for k, v in pairs( tmpTable ) do
-      if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
+      if tonumber( v.prerole ) == -1 then
         newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodel, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ) )
       end
     end
@@ -356,7 +363,7 @@ function openRoleMenu()
     _menuIsOpen = 0
   end
   function roleMenuWindow:Paint( w, h )
-    //nothing
+    --nothing
   end
 
   local roleDPanelList = createVGUI( "DScrollPanel", roleMenuWindow, 1600, 2100, 0, 60 )
