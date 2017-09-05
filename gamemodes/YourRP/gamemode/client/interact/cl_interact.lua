@@ -79,9 +79,6 @@ net.Receive( "openInteractMenu", function ()
   buttonTrade:SetText( lang.trade .. " (NOT AVAILABLE: InWork)" )
 
   if isInstructor then
-    _windowInteract:SetSize( ctrW( 830 ), ctrW( 400 ) )
-    _windowInteract:SetPos( ScrW()/2 - ctrW( 415 ), ScrH()/2 - ctrW( 200 ) )
-
     if promoteable then
       local buttonPromote = createVGUI( "DButton", _windowInteract, 400, 50, 420, 410 )
       buttonPromote:SetText( lang.promote .. ": " .. promoteName )

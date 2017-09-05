@@ -48,14 +48,10 @@ function metaPly:addMoney( money )
   end
 end
 
-function metaPly:setMoney( money )
+function metaPly:SetMoney( money )
   if isnumber( money ) then
-    if self:canAfford( money ) then
-      self:SetNWInt( "money", math.Round( money, 2 ) )
-      self:updateMoney( self:GetNWInt( "money" ) )
-    else
-      printGM( "note", self:Nick() .. " cant afford this" )
-    end
+    self:SetNWInt( "money", math.Round( money, 2 ) )
+    self:updateMoney( self:GetNWInt( "money" ) )
   end
 end
 
@@ -154,9 +150,16 @@ function GM:PlayerSetModel( ply )
     if tmpRolePlayermodel != nil and tmpRolePlayermodel != false then
       local randModel = string.Explode( ",", tmpRolePlayermodel[1].playermodel )
       local randNumb = math.Round( math.Rand( 1, #randModel ) )
-    	ply:SetModel( randModel[randNumb] )
-      local modelsize = tonumber( tmpRolePlayermodel[1].playermodelsize )
-      yrpSetModelScale( ply, modelsize )
+      if randModel[randNumb] != nil and randModel[randNumb] != "" then
+      	ply:SetModel( randModel[randNumb] )
+        local modelsize = tonumber( tmpRolePlayermodel[1].playermodelsize )
+        yrpSetModelScale( ply, modelsize )
+      else
+
+        ply:SetModel( "models/player/skeleton.mdl" )
+        local modelsize = tonumber( tmpRolePlayermodel[1].playermodelsize )
+        yrpSetModelScale( ply, modelsize )
+      end
     end
   end
 end

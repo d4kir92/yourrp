@@ -8,6 +8,7 @@ function getCoords()
   net.SendToServer()
 end
 
+local CamDataMap = {}
 function openSpawnMenu()
   map.open = true
   mapWindow = vgui.Create( "DFrame" )
@@ -16,54 +17,46 @@ function openSpawnMenu()
   mapWindow:SetSize( ScrW(), ScrH() )
   mapWindow:ShowCloseButton( false )
   mapWindow:SetDraggable( false )
-  function mapWindow:Paint()
+  function mapWindow:Paint( pw, ph )
     if map != nil then
       if map.facX != nil and map.facY != nil then
         local ply = LocalPlayer()
         draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )           --mapWindow of Map
 
         local win = {}
-        win.x = ( ( ScrW() / 2 ) - ctrW( 1050 ) / map.facX )
-        win.y = ( ( ScrH() / 2 ) - ctrW( 1050-25 ) / map.facY )
-        win.w = ctrW(2100) / map.facX
-        win.h = ctrW(2100) / map.facY
+        win.w, win.h = lowerToScreen( map.sizeX, map.sizeY )
+        win.x = ( ScrW() / 2 ) - ( win.w / 2 )
+        win.y = ( ScrH() / 2 ) - ( win.h / 2 )
+
         draw.RoundedBox( 0, win.x - ctrW(2), win.y - ctrW(2), win.w + ctrW( 4 ), win.h + ctrW( 4 ), Color( 255, 255, 0, 240 ) )
         draw.RoundedBox( 0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255 ) )
 
         local _mapName = string.Replace( string.upper( game.GetMap() ), "_", " " )
-        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", win.x + win.w/2, win.y - ctrW( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
+        local _testHeight = 4000
         local tr = util.TraceLine( {
-          start = ply:GetPos() + Vector( 0, 0, 1400 ),
-          endpos = ply:GetPos() + Vector( 0, 0, 4000 ),
+          start = ply:GetPos() + Vector( 0, 0, 16 ),
+          endpos = ply:GetPos() + Vector( 0, 0, _testHeight ),
           filter = _filterENTS
         } )
-
-        local CamDataMap = {}
+        local _height = 0
+        if tr.Hit then
+          _height = tr.HitPos.z
+        else
+          _height = _testHeight
+        end
         CamDataMap.angles = Angle( 90, 90, 0 )
-        CamDataMap.origin = Vector( 0, 0, tr.HitPos.z )
+        CamDataMap.origin = Vector( 0, 0, _height - 16 )
         CamDataMap.x = 0
         CamDataMap.y = 0
-        CamDataMap.w = win.w
-        CamDataMap.h = win.h
+        CamDataMap.w = ScrW()
+        CamDataMap.h = ScrH()
         CamDataMap.ortho = true
         CamDataMap.ortholeft = map.sizeW
         CamDataMap.orthoright = map.sizeE
         CamDataMap.orthotop = map.sizeS
         CamDataMap.orthobottom = map.sizeN
-        if false then
-          CamDataMap.angles = Angle( 90, 90, 0 )
-          CamDataMap.origin = Vector( 0, 0, map.sizeUp-64 )
-          CamDataMap.x = 0
-          CamDataMap.y = 0
-          CamDataMap.w = win.w
-          CamDataMap.h = win.h
-          CamDataMap.ortho = true
-          CamDataMap.ortholeft = map.sizeW
-          CamDataMap.orthoright = map.sizeE
-          CamDataMap.orthotop = map.sizeS
-          CamDataMap.orthobottom = map.sizeN
-        end
 
         local rendering_map = false
         local map_RT = GetRenderTarget( "YRP_Map", win.w, win.h, true )
@@ -105,11 +98,11 @@ function openSpawnMenu()
         --You
         draw.RoundedBox( ctrW(8), plyPos.x-ctrW(8), plyPos.y-ctrW(8), ctrW(16), ctrW(16), Color(40,40,40))
         draw.RoundedBox( ctrW(8), plyPos.x-ctrW(6), plyPos.y-ctrW(6), ctrW(12), ctrW(12), Color(255,10,10))
-        draw.SimpleText( lang.you, "SettingsNormal", plyPos.x, plyPos.y-ctrW(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.you, "sef", plyPos.x, plyPos.y-ctrW(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         --Coords
-        draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "SettingsNormal", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "SettingsNormal", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
         if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
           for k, plys in pairs( player.GetAll() ) do
@@ -134,7 +127,7 @@ function openSpawnMenu()
               --Draw
               draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(8), tmpPly.y-ctrW(8), ctrW(16), ctrW(16), Color( 40, 40, 40, 200 ))
               draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(6), tmpPly.y-ctrW(6), ctrW(12), ctrW(12), Color( 40, 40, 255, 200 ))
-              draw.SimpleText( plys:Nick(), "SettingsNormal", tmpPly.x, tmpPly.y-ctrW(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+              draw.SimpleText( plys:Nick(), "sef", tmpPly.x, tmpPly.y-ctrW(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
             end
           end
         end

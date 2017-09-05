@@ -23,7 +23,7 @@ function addDPanel( parent, w, h, x, y, string, dbTable )
   local tmp = createVGUI( "DPanel", parent, w, h, x, y )
   function tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleText( string, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( string, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   return tmp
 end
@@ -69,6 +69,8 @@ function addDBTextEntryBig( parent, w, h, x, y, stringPanel, stringTextEntry, tm
   tmp2:SetMultiline( true )
   function tmp2:OnChange()
     local tmp = string.Replace( tmp2:GetText(), "\n", " " )
+    tmp = string.Replace( tmp, "\'", "´" )
+    tmp = string.Replace( tmp, "\"", "´´" )
     tmpTable[dbSets] = tmp
     net.Start( "dbUpdate" )
       net.WriteString( dbTable )
@@ -227,15 +229,19 @@ function addDBPlayermodel( parent, id, uniqueID, size )
   local background = createVGUI( "DPanel", parent, 800, 800, 0, 90 )
   function background:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
-    draw.SimpleText( string.upper( player_manager.TranslateToPlayerModelName( pms[changepm] ) ), "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    if pms[changepm] != "" and pms[changepm] != nil then
+      draw.SimpleText( string.upper( player_manager.TranslateToPlayerModelName( pms[changepm] ) ), "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
     if #pms > 1 then
-      draw.SimpleText( changepm .. "/" .. #pms, "SettingsNormal", pw/2, ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( changepm .. "/" .. #pms, "sef", pw/2, ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
 
   local modelpanel = createVGUI( "DModelPanel", parent, 800, 800, 0, 90 )
-  modelpanel:SetModel( pms[changepm] )
-  modelpanel.Entity:SetModelScale( size, 0 )
+  if pms[changepm] != "" and pms[changepm] != nil then
+    modelpanel:SetModel( pms[changepm] )
+    modelpanel.Entity:SetModelScale( size, 0 )
+  end
 
   local buttonback = createVGUI( "DButton", parent, 80, 800, 0, 90 )
   buttonback:SetText( "" )
@@ -246,7 +252,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( "<", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( "<", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
   function buttonback:DoClick()
@@ -265,7 +271,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( ">", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( ">", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
   function buttonforward:DoClick()
@@ -288,7 +294,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
-    draw.SimpleText( lang.change, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.change, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function buttonchange:DoClick()
     local pmframe = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
@@ -318,7 +324,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       local tmpX = 0
       local tmpY = 0
       for k, v in pairs( playermodels ) do
-        if string.find( v, pmsearch:GetText() ) then
+        if string.find( string.lower( v ), pmsearch:GetText() ) or string.find( string.lower( player_manager.TranslateToPlayerModelName( string.lower( v ) ) ), pmsearch:GetText() ) then
           tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
           tmpSelected[k] = {}
           tmpSelected[k].model = v
@@ -347,8 +353,8 @@ function addDBPlayermodel( parent, id, uniqueID, size )
             if tmpSelected[k].selected then
               text = lang.added
             end
-            draw.SimpleText( text, "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            draw.SimpleText( player_manager.TranslateToPlayerModelName( v ), "SettingsNormal", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( player_manager.TranslateToPlayerModelName( v ), "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           end
           function tmpButton:DoClick()
             if tmpSelected[k].selected then
@@ -440,9 +446,9 @@ function addDBSwep( parent, id, uniqueID )
   local background = createVGUI( "DPanel", parent, 800, 800, 810, 90 )
   function background:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
-    draw.SimpleText( sws[changesw], "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( sws[changesw], "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     if #sws > 1 then
-      draw.SimpleText( changesw .. "/" .. #sws, "SettingsNormal", pw/2, ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( changesw .. "/" .. #sws, "sef", pw/2, ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
 
@@ -464,7 +470,7 @@ function addDBSwep( parent, id, uniqueID )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( "<", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( "<", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
   function buttonback:DoClick()
@@ -489,7 +495,7 @@ function addDBSwep( parent, id, uniqueID )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( ">", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( ">", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
   end
   function buttonforward:DoClick()
@@ -513,7 +519,7 @@ function addDBSwep( parent, id, uniqueID )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
-    draw.SimpleText( lang.change, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.change, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function buttonchange:DoClick()
     local swframe = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
@@ -552,9 +558,10 @@ function addDBSwep( parent, id, uniqueID )
       local tmpBr = 25
       local tmpX = 0
       local tmpY = 0
+
       for k, v in pairs( sweps ) do
-        if v.WorldModel != nil then
-          if string.find( v.WorldModel, swsearch:GetText() ) then
+        if v.WorldModel != nil and v.WorldModel != "" then
+          if string.find( string.lower( v.WorldModel ), swsearch:GetText() ) or string.find( string.lower( v.PrintName ), swsearch:GetText() ) or string.find( string.lower( v.ClassName ), swsearch:GetText() ) then
             tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
             tmpSelected[k] = {}
             tmpSelected[k].ClassName = v.ClassName
@@ -574,6 +581,11 @@ function addDBSwep( parent, id, uniqueID )
 
             local tmpModel = createVGUI( "DModelPanel", tmpPointer, 256, 256, 0, 0 )
             tmpModel:SetModel( v.WorldModel )
+            if tmpModel.Entity != nil then
+              tmpModel.Entity:SetModelScale( 1, 0 )
+              tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
+              tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
+            end
 
             local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
             tmpButton:SetText( "" )
@@ -583,8 +595,8 @@ function addDBSwep( parent, id, uniqueID )
               if tmpSelected[k].selected then
                 text = lang.added
               end
-              draw.SimpleText( text, "SettingsNormal", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-              draw.SimpleText( v.PrintName, "SettingsNormal", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+              draw.SimpleText( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+              draw.SimpleText( v.PrintName, "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
             end
             function tmpButton:DoClick()
               if tmpSelected[k].selected then
@@ -600,8 +612,8 @@ function addDBSwep( parent, id, uniqueID )
               modelpanel:SetModel( worldmodel )
               if worldmodel != "" then
                 modelpanel.Entity:SetModelScale( 1, 0 )
-                modelpanel:SetLookAt( Vector(0,0,0) )
-                modelpanel:SetCamPos( Vector(0,-30,15))
+                modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
+                modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
               end
             end
 
@@ -611,8 +623,6 @@ function addDBSwep( parent, id, uniqueID )
               tmpY = tmpY + 256 + tmpBr
             end
           end
-        else
-          printERROR( v.ClassName .. " has no WorldModel!!!" )
         end
       end
     end
@@ -765,8 +775,8 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
 
     draw.RoundedBox( 0, 0, ph-ph/4, pw * ( reg*tmpreg / tmpmax ), ph/4, _color2 )
 
-    draw.SimpleText( string, "SettingsNormal", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    draw.SimpleText( tmpmin .. "/" .. tmpmax .. "(" .. tmpreg .. ")", "SettingsNormal", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( string, "sef", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( tmpmin .. "/" .. tmpmax .. "(" .. tmpreg .. ")", "sef", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   local tmp2 = addDNumberWang( parent, w/3, h/3, x, y + h - (h/3), tmpmin )
@@ -833,7 +843,7 @@ net.Receive( "yrp_roles", function( len )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
       end
-      draw.SimpleText( yrp_roles_dbTable[k].roleID, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
     tmp.uniqueID = v.uniqueID
     function tmp:DoClick()
@@ -869,14 +879,17 @@ net.Receive( "yrp_roles", function( len )
       addDBSwep( rolesInfo, self.id, tmp.uniqueID )
       addDBNumberWang( rolesInfo, 800, 80, 810, 900, lang.rolesalary, v.capital, yrp_roles_dbTable[k], "yrp_roles", "capital", "uniqueID = " .. tmp.uniqueID .. "" )
       addDBTextEntryBig( rolesInfo, 800, 250, 810, 990, lang.roledescription, v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "" )
-      addDBCheckBox( rolesInfo, 800, 40, 810, 1250, lang.roleinstructor, v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
-      addDBCheckBox( rolesInfo, 800, 40, 810, 1300, lang.roleadminonly, v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "" )
-      addDBCheckBox( rolesInfo, 800, 40, 810, 1350, lang.rolewhitelist, v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
-      addDBComboBox( rolesInfo, 800, 80, 810, 1400, lang.roleprerole, yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1250, lang.voteable, v.voteable, yrp_roles_dbTable[k], "yrp_roles", "voteable", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1300, lang.roleinstructor, v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1350, lang.roleadminonly, v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBCheckBox( rolesInfo, 800, 40, 810, 1400, lang.rolewhitelist, v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBComboBox( rolesInfo, 800, 80, 810, 1450, lang.roleprerole, yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
 
-      addDBComboBox( rolesInfo, 1610, 80, 0, 1520, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBComboBox( rolesInfo, 1610, 80, 0, 1540, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
     end
-    rolesList:AddItem( tmp )
+    if tmp != nil then
+      rolesList:AddItem( tmp )
+    end
   end
 end)
 
@@ -904,7 +917,7 @@ net.Receive( "yrp_groups", function( len )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
       end
       draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
-      draw.SimpleText( yrp_groups_dbTable[k].groupID, "SettingsNormal", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
     function tmp:DoClick()
       groupUniqueID = v.uniqueID
@@ -961,7 +974,7 @@ function tabServerRoles( sheet )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "+", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function groupsAdd:DoClick()
     addDBGroup()
@@ -974,7 +987,7 @@ function tabServerRoles( sheet )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( lang.duplicate, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.duplicate, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function groupsDup:DoClick()
     dupDBGroup( getCurrentGroup() )
@@ -987,7 +1000,7 @@ function tabServerRoles( sheet )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "-", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function groupsRem:DoClick()
     deleteDBGroup()
@@ -996,7 +1009,7 @@ function tabServerRoles( sheet )
   local groupsHeader = createVGUI( "DPanel", sv_roles, _w, 40, 5, 65 )
   function groupsHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
-    draw.SimpleText( lang.groups, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.groups, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   groupsList = createVGUI( "DScrollPanel", sv_roles, _w, 400-40, 5, 65+40 )
@@ -1015,7 +1028,7 @@ function tabServerRoles( sheet )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "+", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function rolesAdd:DoClick()
     addDBRole( groupUniqueID )
@@ -1028,7 +1041,7 @@ function tabServerRoles( sheet )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( lang.duplicate, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.duplicate, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function rolesDup:DoClick()
     dupDBRole( groupUniqueID, getCurrentRole() )
@@ -1041,7 +1054,7 @@ function tabServerRoles( sheet )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "-", "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function rolesRem:DoClick()
     deleteDBRole()
@@ -1050,7 +1063,7 @@ function tabServerRoles( sheet )
   local rolesHeader = createVGUI( "DPanel", sv_roles, _w, 40, 5, 560 )
   function rolesHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
-    draw.SimpleText( groupID .. " - " .. lang.roles, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( groupID .. " - " .. lang.roles, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   rolesList = createVGUI( "DScrollPanel", sv_roles, _w, 1200-40, 5, 560+40 )

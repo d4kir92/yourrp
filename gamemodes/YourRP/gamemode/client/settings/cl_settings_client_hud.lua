@@ -32,8 +32,8 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
 
       local tw, th = frame:GetSize()
       if tw != ctrW( cl_db[tmpw] ) or th != ctrW( cl_db[tmph] ) then
-        cl_db[tmpw] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%ctrW( 40 )
-        cl_db[tmph] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%ctrH( 40 )
+        cl_db[tmpw] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%20
+        cl_db[tmph] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%20
         frame:SetSize( ctrW( cl_db[tmpw] ), ctrW( cl_db[tmph] ) )
         updateDBHud( tmpw, cl_db[tmpw] )
         updateDBHud( tmph, cl_db[tmph] )
@@ -57,8 +57,8 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
           outside = true
         end
         if !outside then
-          cl_db[tmpx] = ( x*ctrF( ScrH() ) ) - ( ( x*ctrF( ScrH() ) )%ctrW( 40 ) )
-          cl_db[tmpy] = ( y*ctrF( ScrH() ) ) - ( ( y*ctrF( ScrH() ) )%ctrH( 40 ) )
+          cl_db[tmpx] = ( x*ctrF( ScrH() ) ) - ( ( x*ctrF( ScrH() ) )%20 )
+          cl_db[tmpy] = ( y*ctrF( ScrH() ) ) - ( ( y*ctrF( ScrH() ) )%20 )
 
           frame:SetPos( ctrW( cl_db[tmpx] ), ctrW( cl_db[tmpy] ) )
           updateDBHud( tmpx, cl_db[tmpx] )
@@ -87,6 +87,31 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
   end
 
   return frame
+end
+
+function changeFont( string, _settingsFontSizes, w, h, x, y )
+  local _tmp = createVGUI( "DNumberWang", _settingsFontSizes, w, h, x, y )
+  _tmp:SetValue( cl_db[string] )
+  _tmp:SetMin( 6 )
+  _tmp:SetMax( 72 )
+  function _tmp:OnValueChanged( val )
+    if tonumber( val ) >= _tmp:GetMin() then
+      if tonumber( val ) <= _tmp:GetMax() then
+        updateDBHud( string, val )
+        loadDBHud( "yrp_cl_hud", string )
+        createFont( string, tmpFont, cl_db[string], 500, true )
+      else
+        updateDBHud( string, _tmp:GetMax() )
+        loadDBHud( "yrp_cl_hud", string )
+        createFont( string, tmpFont, cl_db[string], 500, true )
+      end
+    else
+      updateDBHud( string, _tmp:GetMin() )
+      loadDBHud( "yrp_cl_hud", string )
+      createFont( string, tmpFont, cl_db[string], 500, true )
+    end
+  end
+  return _tmp
 end
 
 function tabClientHud( sheet )
@@ -158,6 +183,8 @@ function tabClientHud( sheet )
     local votes = changeHudElement( changeHudWindow, "vtx", "vty", "vtw", "vth", "vtt", lang.votes )
     votes:SetSizable( false )
 
+    changeHudElement( changeHudWindow, "cbx", "cby", "cbw", "cbh", "cbt", "ChatBox" )
+
     changeHudWindow:MakePopup()
   end
 
@@ -189,7 +216,7 @@ function tabClientHud( sheet )
       draw.RoundedBox( 0, 0,0, pw, ph, Color( 255, 0, 0 ) )
     end
 
-    draw.SimpleText( lang.resethud, "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.resethud, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
   function resetHudButton:DoClick()
     local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
@@ -216,7 +243,7 @@ function tabClientHud( sheet )
   function _colorBackgroundPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.hudbackground, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.hudbackground, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
   local _colorBackground = createVGUI( "DColorMixer", _colorBackgroundPanel, 450, 450, 10, 50 )
@@ -237,7 +264,7 @@ function tabClientHud( sheet )
   function _colorBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.hudborder, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.hudborder, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
   local _colorBorder = createVGUI( "DColorMixer", _colorBorderPanel, 450, 450, 10, 50 )
@@ -256,7 +283,7 @@ function tabClientHud( sheet )
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshair, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshair, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
   local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )
@@ -275,7 +302,7 @@ function tabClientHud( sheet )
   function _colorCrosshairBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshairborder, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshairborder, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
   local _colorCrosshairBorder = createVGUI( "DColorMixer", _colorCrosshairBorderPanel, 450, 450, 10, 50 )
@@ -294,35 +321,82 @@ function tabClientHud( sheet )
   function _settingCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshairsettings, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.crosshairsettings, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
 
-    draw.SimpleText( lang.length .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.gap .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.thickness .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 240 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.border .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.length .. ":", "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.gap .. ":", "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.thickness .. ":", "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.border .. ":", "sef", ctrW( 10 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
-  local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90 )
+  local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 100 )
   _settingCrosshairLength:SetValue( cl_db["chl"] )
   function _settingCrosshairLength:OnValueChanged( val )
     updateDBHud( "chl", val )
   end
 
-  local _settingCrosshairGap = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90+90 )
+  local _settingCrosshairGap = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 200 )
   _settingCrosshairGap:SetValue( cl_db["chg"] )
   function _settingCrosshairGap:OnValueChanged( val )
     updateDBHud( "chg", val )
   end
 
-  local _settingCrosshairThickness = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90+180 )
+  local _settingCrosshairThickness = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 300 )
   _settingCrosshairThickness:SetValue( cl_db["chh"] )
   function _settingCrosshairThickness:OnValueChanged( val )
     updateDBHud( "chh", val )
   end
 
-  local _settingCrosshairBorder = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 90+270 )
+  local _settingCrosshairBorder = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 400 )
   _settingCrosshairBorder:SetValue( cl_db["chbr"] )
   function _settingCrosshairBorder:OnValueChanged( val )
     updateDBHud( "chbr", val )
   end
+
+  local _settingsFontSizes = createVGUI( "DPanel", cl_hudPanel, 1910, 510, 0, 50+10+50+10+510+10+510+10 )
+  function _settingsFontSizes:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+
+    draw.SimpleText( "Change FontSizes", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+
+    draw.SimpleText( lang.health .. ":", "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.armor .. ":", "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.hunger .. ":", "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.thirst .. ":", "sef", ctrW( 10 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+
+    draw.SimpleText( lang.stamina .. ":", "sef", ctrW( 480 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.money .. ":", "sef", ctrW( 480 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.role .. ":", "sef", ctrW( 480 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.minimap .. ":", "sef", ctrW( 480 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+
+    draw.SimpleText( lang.wprimary .. ":", "sef", ctrW( 960 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.wsecondary .. ":", "sef", ctrW( 960 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.wname .. ":", "sef", ctrW( 960 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.votes .. ":", "sef", ctrW( 960 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+
+    draw.SimpleText( "Chat" .. ":", "sef", ctrW( 1440 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( "Voice" .. ":", "sef", ctrW( 1440 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.tooltip .. ":", "sef", ctrW( 1440 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.settings .. ":", "sef", ctrW( 1440 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+  end
+
+  local _settingsHPF = changeFont( "hpf", _settingsFontSizes, 450, 40, 10, 100 )
+  local _settingsARF = changeFont( "arf", _settingsFontSizes, 450, 40, 10, 200 )
+  local _settingsMHF = changeFont( "mhf", _settingsFontSizes, 450, 40, 10, 300 )
+  local _settingsMTF = changeFont( "mtf", _settingsFontSizes, 450, 40, 10, 400 )
+
+  local _settingsMSF = changeFont( "msf", _settingsFontSizes, 450, 40, 480, 100 )
+  local _settingsMOF = changeFont( "mof", _settingsFontSizes, 450, 40, 480, 200 )
+  local _settingsRIF = changeFont( "rif", _settingsFontSizes, 450, 40, 480, 300 )
+  local _settingsRIF = changeFont( "mmf", _settingsFontSizes, 450, 40, 480, 400 )
+
+  local _settingsMSF = changeFont( "wpf", _settingsFontSizes, 450, 40, 960, 100 )
+  local _settingsMOF = changeFont( "wsf", _settingsFontSizes, 450, 40, 960, 200 )
+  local _settingsRIF = changeFont( "wnf", _settingsFontSizes, 450, 40, 960, 300 )
+  local _settingsRIF = changeFont( "vtf", _settingsFontSizes, 450, 40, 960, 400 )
+
+  local _settingsMSF = changeFont( "cbf", _settingsFontSizes, 450, 40, 1440, 100 )
+  local _settingsMOF = changeFont( "vof", _settingsFontSizes, 450, 40, 1440, 200 )
+  local _settingsMOF = changeFont( "ttf", _settingsFontSizes, 450, 40, 1440, 300 )
+  local _settingsSEF = changeFont( "sef", _settingsFontSizes, 450, 40, 1440, 400 )
 end

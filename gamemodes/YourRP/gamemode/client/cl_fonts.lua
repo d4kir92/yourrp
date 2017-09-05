@@ -6,7 +6,7 @@ function createFont( _name, _font, _size, _weight, _outline )
 	--printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
 	local _antialaising = false
 	local _size = ctrW( _size*2 )
-	if _size > 72 then
+	if _size >= 72 then
 		_antialaising = true
 	end
 	surface.CreateFont( _name, {
@@ -35,26 +35,50 @@ function changeFontSize()
 	local tmpFont = "Roboto-Thin"
 	createFont( "HudDefault", tmpFont, 80, 500, false )
 
-	createFont( "SettingsNormal", tmpFont, 16, 500, true )
-	createFont( "SettingsHeader", tmpFont, 20, 500, false )
+	createFont( "SettingsNormal", tmpFont, 26, 500, true )
+	createFont( "SettingsHeader", tmpFont, 30, 500, false )
 
-	createFont( "HudBars", tmpFont, 16, 500, true )
-
-	createFont( "roleInfoHeader", tmpFont, 14, 500, true )
-	createFont( "roleInfoText", tmpFont, 12, 500, true )
+	createFont( "roleInfoHeader", tmpFont, 24, 500, true )
+	createFont( "roleInfoText", tmpFont, 20, 500, true )
 
 	createFont( "charTitle", tmpFont, 14, 500, true )
 	createFont( "charHeader", tmpFont, 14, 500, true )
 	createFont( "charText", tmpFont, 14, 500, true )
 
-	createFont( "pmT", tmpFont, 14, 500, true )
-	createFont( "weaponT", tmpFont, 12, 500, true )
+	createFont( "pmT", tmpFont, 18, 500, true )
+	createFont( "weaponT", tmpFont, 16, 500, true )
 
+	createFont( "HudBars", tmpFont, 22, 500, true )
 	createFont( "HudVersion", tmpFont, 30, 700, true )
-	createFont( "HudMinimap", tmpFont, 14, 500, true )
+
+	timer.Create( "createFontDB", 0.1, 0, function()
+		if cl_db["_load"] == 1 then
+			createFont( "mmf", tmpFont, cl_db["mmf"], 500, true )
+			createFont( "hpf", tmpFont, cl_db["hpf"], 500, true )
+			createFont( "arf", tmpFont, cl_db["arf"], 500, true )
+			createFont( "wpf", tmpFont, cl_db["wpf"], 500, true )
+			createFont( "wsf", tmpFont, cl_db["wsf"], 500, true )
+			createFont( "wnf", tmpFont, cl_db["wnf"], 500, true )
+			createFont( "rif", tmpFont, cl_db["rif"], 500, true )
+			createFont( "ttf", tmpFont, cl_db["ttf"], 500, true )
+			createFont( "mof", tmpFont, cl_db["mof"], 500, true )
+			createFont( "mhf", tmpFont, cl_db["mhf"], 500, true )
+			createFont( "mtf", tmpFont, cl_db["mtf"], 500, true )
+			createFont( "msf", tmpFont, cl_db["msf"], 500, true )
+			createFont( "vtf", tmpFont, cl_db["vtf"], 500, true )
+			createFont( "cbf", tmpFont, cl_db["cbf"], 500, true )
+			createFont( "vof", tmpFont, cl_db["vof"], 500, true )
+
+			createFont( "sef", tmpFont, cl_db["vof"], 500, true )
+
+			printGM( "db", "HUD Fonts loaded." )
+
+			timer.Remove( "createFontDB" )
+		end
+	end)
 
 	createFont( "ScoreBoardTitle", tmpFont, 24, 500, true )
-	createFont( "ScoreBoardNormal", tmpFont, 15, 500, true )
+	createFont( "ScoreBoardNormal", tmpFont, 20, 500, true )
 
 	createFont( "ATM_Header", tmpFont, 80, 500, true )
 	createFont( "ATM_Normal", tmpFont, 60, 500, true )

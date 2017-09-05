@@ -61,7 +61,7 @@ end)
 --##############################################################################
 --tryNewPos
 function tryNewPos( dir, size, space, tmpX, tmpY, tmpZ )
-  local fails = 1
+  local fails = 3
   local tmpEnd = 0
   local result = dir
 
@@ -162,6 +162,12 @@ function getCoords()
     end
 
     if v:GetClass() == "prop_door_rotating" then
+      searchCoords( v )
+    end
+    if v:GetClass() == "func_door" then
+      searchCoords( v )
+    end
+    if v:GetClass() == "func_door_rotating" then
       searchCoords( v )
     end
 	end

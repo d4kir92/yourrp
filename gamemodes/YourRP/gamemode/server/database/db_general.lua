@@ -2,6 +2,8 @@
 
 --db_general.lua
 
+util.AddNetworkString( "dbUpdateNWBool" )
+
 include( "general/db_net.lua" )
 include( "general/db_func.lua" )
 
@@ -32,8 +34,6 @@ function getAdvertName()
   end
 end
 getAdvertName()
-
-util.AddNetworkString( "dbUpdateNWBool" )
 
 net.Receive( "dbUpdateNWBool", function( len, ply )
   local _dbTable = net.ReadString()

@@ -112,7 +112,7 @@ end)
 
 net.Receive( "addDBRole", function( len, ply )
   local _tmpUniqueID = net.ReadString()
-  sql.Query( "INSERT INTO yrp_roles ( roleID, groupID ) VALUES ( 'new Role', " .. _tmpUniqueID .. " )" )
+  sql.Query( "INSERT INTO yrp_roles ( roleID, groupID, playermodel ) VALUES ( 'new Role', " .. _tmpUniqueID .. ", '' )" )
 
   sendDBRoles( ply, _tmpUniqueID )
 end)

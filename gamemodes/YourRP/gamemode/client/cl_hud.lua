@@ -15,7 +15,8 @@ hook.Add( "Initialize", "Resolution Change", function()
 end )
 
 hook.Add( "ResolutionChanged", "Resolution Change", function( w, h )
-	printGM( "user", "Changed Resolution to " .. w .. "x" .. h )
+	local rw, rh = getResolutionRatio()
+	printGM( "user", "Changed Resolution to " .. w .. "x" .. h .. " (" .. rw .. ":" .. rh .. ")" )
 	changeFontSize()
 end )
 --##############################################################################

@@ -201,7 +201,7 @@ function GM:PlayerSay( sender, text, teamChat )
       local _table = string.Explode( " ", text )
       local _moneyAmount = tonumber( _table[2] )
       if isnumber( _moneyAmount ) then
-        if sender:canAfford( -_moneyAmount ) then
+        if sender:canAfford( _moneyAmount ) then
           local _money = ents.Create( "yrp_money" )
           sender:addMoney( -_moneyAmount )
           local tr = util.TraceHull( {
@@ -231,13 +231,15 @@ function GM:PlayerSay( sender, text, teamChat )
           end
           _money:Spawn()
           _money:SetMoney( _moneyAmount )
+          printGM( "note", sender:Nick() .. " dropped " .. _moneyAmount .. " money" )
           return ""
         else
-          --printGM( "note", "can't afford" )
+          printGM( "note", sender:Nick() .. " can't afford to dropmoney (" .. _moneyAmount .. ")" )
         end
       else
         printGM( "note", "Failed dropmoney" )
       end
+      boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
     end
 
     if isChatCommand( text, "kill" ) then
@@ -260,7 +262,8 @@ function GM:PlayerSay( sender, text, teamChat )
       local _money = tonumber( _table[3] )
       if isnumber( _money ) then
         local ply = getPlayer( _name )
-        ply:setMoney( _money )
+        ply:SetMoney( _money )
+        printGM( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money )
         return ""
       end
       boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
@@ -320,6 +323,7 @@ function GM:PlayerSay( sender, text, teamChat )
       --Nickname
       table.insert( _playersay, Color( 255, 0, 0 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
+      table.insert( _playersay, ":\n" )
     elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) or isChatCommand( text, "/" ) or isChatCommand( text, "." ) then
       --UserGroup
       table.insert( _playersay, Color( 100, 100, 255 ) )
@@ -328,6 +332,7 @@ function GM:PlayerSay( sender, text, teamChat )
       --Nick
       table.insert( _playersay, Color( 200, 200, 255 ) )
       table.insert( _playersay, sender:Nick() .. ": " )
+      table.insert( _playersay, "\n" )
     elseif isChatCommand( text, "roll" ) then
       --Group
       table.insert( _playersay, Color( 0, 165, 255 ) )
@@ -352,6 +357,7 @@ function GM:PlayerSay( sender, text, teamChat )
       --Nickname
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. ": " )
+      table.insert( _playersay, "\n" )
     end
 
     --Text
@@ -361,7 +367,7 @@ function GM:PlayerSay( sender, text, teamChat )
       table.insert( _playersay, string.sub( text, 4 ) )
     elseif isChatCommand( text, "yell" ) then
       table.insert( _playersay, Color( 255, 0, 0 ) )
-      table.insert( _playersay, string.sub( text, 6 ) )
+      table.insert( _playersay, string.sub( text, 7 ) )
     elseif isChatCommand( text, "roll" ) then
       table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, tostring( math.Round( math.Rand( 0, 100 ) ) ) )

@@ -91,7 +91,7 @@ function tabServerMap( sheet )
   local _mapName = createVGUI( "DPanel", sv_mapPanel, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
     draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.panel )
-    draw.SimpleText( lang.map .. ": " .. string.lower( game.GetMap() ), "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.map .. ": " .. string.lower( game.GetMap() ), "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   _mapListView = createVGUI( "DListView", sv_mapPanel, 1600, 1600, 10, 10 + 256 + 10 )
@@ -120,9 +120,9 @@ function tabServerMap( sheet )
     tmpFrame:SetTitle( "" )
     function tmpFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.background )
-      draw.SimpleText( lang.spawnpointcreator, "SettingsNormal", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.createspawnpointonyou, "SettingsNormal", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.selectgroup .. ":", "SettingsNormal", ctrW( 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.spawnpointcreator, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.createspawnpointonyou, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleText( lang.selectgroup .. ":", "sef", ctrW( 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     end
 
     local tmpGroup = createVGUI( "DComboBox", tmpFrame, 200, 50, 10, 50 + 10 + 50 + 10 )

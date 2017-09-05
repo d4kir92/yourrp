@@ -13,7 +13,7 @@ local tmpRolesTable = {}
 
 local Whitelist = {}
 
-function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, uses, maxamount, adminonly, whitelist, allowed )
+function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, uses, maxamount, adminonly, whitelist, allowed, voteable )
   local ply = LocalPlayer()
 
   if roleInfoPanel != nil then
@@ -34,9 +34,10 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   end
 
   local rolePM = createVGUI( "DModelPanel", roleInfoPanel, 550, 550, 0, 0 )
-  rolePM:SetModel( model )
-  rolePM.Entity:SetModelScale( modelsize, 0 )
-
+  if model != nil and model != "" then
+    rolePM:SetModel( model )
+    rolePM.Entity:SetModelScale( modelsize, 0 )
+  end
   tmpY = tmpY + tmpH + tmpBr
   tmpH = 48+48
 
@@ -163,9 +164,15 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
         roleGetRole:SetText( lang.getrole .. ": " .. name )
       elseif whitelist == 1 and allowed == 1 or whitelist == 0 then
         roleGetRole:SetText( lang.getrole .. ": " .. name )
-      elseif whitelist == 1 then
+      elseif whitelist == 1 and adminonly != 1 and voteable == 1 then
         roleGetRole:SetText( "start Vote" .. ": " .. name )
+      elseif whitelist == 1 and adminonly != 1 and voteable == 0 then
+        roleGetRole:SetText( lang.needwhitelist )
+      else
+        print("getrole else2")
       end
+    else
+      print("getrole else")
     end
     function roleGetRole:DoClick()
       if ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
@@ -200,7 +207,7 @@ function findChildGroups( id )
   tmpGroupsTable = tmpTable
 end
 
-function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, capital, model, modelsize, maxamount, uses, whitelist, adminonly )
+function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, capital, model, modelsize, maxamount, uses, whitelist, adminonly, voteable )
   y = y + 50
   local w = 1600
   local h = 150
@@ -233,12 +240,14 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   local tmpRoleModel = createVGUI( "DModelPanel", parent, h, h, x, y )
   local randModel = string.Explode( ",", model )
   local randNumb = math.Round( math.Rand( 1, #randModel ) )
-  tmpRoleModel:SetModel( randModel[randNumb] )
-  tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
-  if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-    local eyepos = tmpRoleModel.Entity:GetBonePosition( tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-    tmpRoleModel:SetLookAt( eyepos )
-    tmpRoleModel:SetCamPos( eyepos - Vector( -25 * modelsize, 0, 0 ) )	-- Move cam in front of eyes
+  if randModel[randNumb] != nil and randModel[randNumb] != "" then
+    tmpRoleModel:SetModel( randModel[randNumb] )
+    tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
+    if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+      local eyepos = tmpRoleModel.Entity:GetBonePosition( tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+      tmpRoleModel:SetLookAt( eyepos )
+      tmpRoleModel:SetCamPos( eyepos - Vector( -25 * modelsize, 0, 0 ) )	-- Move cam in front of eyes
+    end
   end
 
   local tmpButtonSelect = createVGUI( "DButton", parent, w-x-scrollbar, h, x, y )
@@ -263,12 +272,12 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
         break
       end
     end
-    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed )
+    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed, voteable )
   end
 
   --Init on Start UP First Role
   if tonumber( roleID ) == 1 then
-    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, 1 )
+    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, 1, 1 )
   end
   -----------------------------------------
 
@@ -292,7 +301,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newY = y
     for k, v in pairs( tmpTable ) do
       if tonumber( v.prerole ) == -1 then
-        newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodel, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ) )
+        newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodel, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
       end
     end
     return newY
@@ -354,7 +363,8 @@ end
 function openRoleMenu()
   cl_rolesMenuOpen = 1
 
-  roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, ScrW() - 2160/2, 0 )
+  roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, 0, 0 )
+  roleMenuWindow:Center()
   roleMenuWindow:ShowCloseButton( true )
   roleMenuWindow:SetDraggable( true )
   roleMenuWindow:SetTitle( lang.rolemenu )
