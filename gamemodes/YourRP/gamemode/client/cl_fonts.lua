@@ -51,8 +51,28 @@ function changeFontSize()
 	createFont( "HudBars", tmpFont, 22, 500, true )
 	createFont( "HudVersion", tmpFont, 30, 700, true )
 
+	--Creating
+	createFont( "mmf", tmpFont, 22, 500, true )
+	createFont( "hpf", tmpFont, 22, 500, true )
+	createFont( "arf", tmpFont, 22, 500, true )
+	createFont( "wpf", tmpFont, 22, 500, true )
+	createFont( "wsf", tmpFont, 22, 500, true )
+	createFont( "wnf", tmpFont, 22, 500, true )
+	createFont( "rif", tmpFont, 22, 500, true )
+	createFont( "ttf", tmpFont, 22, 500, true )
+	createFont( "mof", tmpFont, 22, 500, true )
+	createFont( "mhf", tmpFont, 22, 500, true )
+	createFont( "mtf", tmpFont, 22, 500, true )
+	createFont( "msf", tmpFont, 22, 500, true )
+	createFont( "vtf", tmpFont, 22, 500, true )
+	createFont( "cbf", tmpFont, 22, 500, true )
+	createFont( "vof", tmpFont, 22, 500, true )
+
+	createFont( "sef", tmpFont, 22, 500, true )
+
 	timer.Create( "createFontDB", 0.1, 0, function()
 		if cl_db["_load"] == 1 then
+			--Changing to right values
 			createFont( "mmf", tmpFont, cl_db["mmf"], 500, true )
 			createFont( "hpf", tmpFont, cl_db["hpf"], 500, true )
 			createFont( "arf", tmpFont, cl_db["arf"], 500, true )
