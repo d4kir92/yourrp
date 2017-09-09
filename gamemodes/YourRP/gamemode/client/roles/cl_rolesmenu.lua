@@ -344,7 +344,7 @@ function addGroup( name, parent, uppergroup, x, y, color )
   end
 
   parent:AddItem( tmpGroup )
-  return y + ctrW( 20 )
+  return y + 20
 end
 
 function addGroups( uppergroupname, parent, uppergroup, x, y )

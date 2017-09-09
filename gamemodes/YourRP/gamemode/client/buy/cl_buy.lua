@@ -3,22 +3,29 @@
 local winW = 2160
 local winH = winW
 
-local panH = 256+10+50+10+50+10
+local itemW = 400
+local panH = itemW+60+60+10
 
 local swepList = {}
 
-function addNewItem( parent, item )
+function addNewItem( parent, item, tab )
   local ply = LocalPlayer()
 
-  local _itemPanel = createVGUI( "DPanel", parent, 256, panH, swepList.x, swepList.y )
+  itemW = 400
+  panH = itemW+60+60+10
+
+  local _itemPanel = createVGUI( "DPanel", parent, itemW, panH, swepList.x, swepList.y )
   _itemPanel.uniqueID = item.uniqueID
   function _itemPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-    draw.SimpleText( item.PrintName, "weaponT", pw/2, ctrW( 256 - 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( item.PrintName, "weaponT", pw/2, ctrW( itemW - 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  local _itemModelPanel = createVGUI( "DModelPanel", _itemPanel, 256, 256, 0, 0 )
-  _itemModelPanel:SetModel( item.WorldModel )
+  local _itemModelPanel = {}
+  if item.WorldModel != "" then
+    _itemModelPanel = createVGUI( "SpawnIcon", _itemPanel, itemW-40, itemW-40, 20, 0 )
+    _itemModelPanel:SetModel( item.WorldModel )
+  end
   if item.PrintName != nil then
     _itemPanel.PrintName = item.PrintName
   end
@@ -27,19 +34,19 @@ function addNewItem( parent, item )
   else
     _itemPanel.ClassName = ""
   end
-  _itemModelPanel:SetLookAt( Vector( 0, 0, 0 ) )
-  _itemModelPanel:SetCamPos( Vector( 0, 0, 0 ) + Vector( -20, 0, 15 ) )
+  --_itemModelPanel:SetLookAt( Vector( 0, 0, 0 ) )
+  --_itemModelPanel:SetCamPos( Vector( 0, 0, 0 ) + Vector( -20, 0, 15 ) )
 
-  local _pricePanel = createVGUI( "DPanel", _itemPanel, 240, 50, 8, 256+10 )
+  local _pricePanel = createVGUI( "DPanel", _itemPanel, itemW-2*8, 50, 8, itemW+10 )
   function _pricePanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
     draw.SimpleText( ply:GetNWString( "moneyPre" ) .. item.price .. ply:GetNWString( "moneyPost" ), "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  local _itemAmountNumberWang = createVGUI( "DNumberWang", _itemPanel, 120, 50, 8, 256+10+50+10 )
+  local _itemAmountNumberWang = createVGUI( "DNumberWang", _itemPanel, (itemW/3)-8, 50, 8, itemW+10+50+10 )
   _itemAmountNumberWang:SetValue( 1 )
 
-  local _itemBuyButton = createVGUI( "DButton", _itemPanel, 120, 50, 8+120, 256+10+50+10 )
+  local _itemBuyButton = createVGUI( "DButton", _itemPanel, 2*(itemW/3)-8, 50, itemW/3, itemW+10+50+10 )
   _itemBuyButton:SetText( "" )
   function _itemBuyButton:Paint( pw, ph )
     if _itemBuyButton:IsHovered() then
@@ -47,21 +54,21 @@ function addNewItem( parent, item )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
     end
-    draw.SimpleText( lang.buy, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "x " .. lang.buy, "weaponT", 5, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
   function _itemBuyButton:DoClick()
     net.Start( "buyItem" )
-      net.WriteString( "weapons" )
+      net.WriteString( tab )
       net.WriteString( _itemPanel.uniqueID )
     net.SendToServer()
-    _buyWindow:Close()
+    --_buyWindow:Close()
   end
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
-    panH = 256+10+50+10+50+10+50+10
-    _itemPanel:SetSize( ctrW( 256 ), ctrW( panH ) )
+    panH = itemW+10+50+10+50+10+50+10
+    _itemPanel:SetSize( ctrW( itemW ), ctrW( panH ) )
 
-    local _removeButton = createVGUI( "DButton", _itemPanel, 240, 50, 8, 256+10+50+10+50+10 )
+    local _removeButton = createVGUI( "DButton", _itemPanel, itemW - 2*8, 50, 8, itemW+10+50+10+50+10 )
     _removeButton:SetText( "" )
     function _removeButton:Paint( pw, ph )
       if _removeButton:IsHovered() then
@@ -99,34 +106,45 @@ function addNewItem( parent, item )
     end
   end
 
-  swepList.x = swepList.x + 256 + 8
+  swepList.x = swepList.x + itemW + 8
   if ctrW( swepList.x ) > ctrW( 1888 ) then
     swepList.y = swepList.y + ctrW( 10 ) + panH
     swepList.x = 0
   end
+
+  return _itemPanel
 end
 
 net.Receive( "getBuyList", function( len )
-  if _weaponScrollPanel != nil then
-    _weaponScrollPanel:Remove()
-    if _addItemButton != nil then
-      _addItemButton:Remove()
-    end
+  if _buyScrollPanel != nil then
+    _buyScrollPanel:Remove()
   end
   local ply = LocalPlayer()
   local _tab = net.ReadString()
   local _list = net.ReadTable()
 
+  local _parent = _tabWeapon
+  if _tab == "weapon" then
+    _parent = _tabWeapon
+  elseif _tab == "entities" then
+    _parent = _tabEntities
+  elseif _tab == "vehicles" then
+    _parent = _tabVehicles
+  end
+
   swepList.x = 0
   swepList.y = 0
-  _weaponScrollPanel = createVGUI( "DScrollPanel", _tabWeapon, winW-60, winH-60-50-30, swepList.x, swepList.y )
-  for k, weapon in pairs ( _list ) do
-    if weapon.PrintName != nil and !string.find( string.lower( weapon.PrintName ), "npc") and !string.find( string.lower( weapon.PrintName ), "base") and !string.find( string.lower( weapon.PrintName ), "ttt") then
-      addNewItem( _weaponScrollPanel, weapon )
+
+  local _buyScrollPanel = createVGUI( "DScrollPanel", _parent, winW-60, winH-60-50-30, swepList.x, swepList.y )
+  _buyScrollPanel:Clear()
+
+  for k, item in SortedPairsByMemberValue( _list, "PrintName", false ) do
+    if item.PrintName != nil and !string.find( string.lower( item.PrintName ), "npc") and !string.find( string.lower( item.PrintName ), "base") and !string.find( string.lower( item.PrintName ), "ttt") then
+      addNewItem( _buyScrollPanel, item, _tab )
     end
   end
   if ply:IsAdmin() or ply:IsSuperAdmin() then
-    _addItemButton = createVGUI( "DButton", _tabWeapon, 256, panH, swepList.x, swepList.y )
+    _addItemButton = createVGUI( "DButton", _buyScrollPanel, itemW, panH, swepList.x, swepList.y )
     _addItemButton:SetText( "" )
     function _addItemButton:Paint( pw, ph )
       if _addItemButton:IsHovered() then
@@ -181,41 +199,88 @@ net.Receive( "getBuyList", function( len )
 
         local PanelSelect = vgui.Create( "DPanelSelect", itemSelector )
         PanelSelect:SetSize( ctrW( 2000 ), ctrW( 2000 - 45 ) )
-        PanelSelect:SetPos( ctrW( 0 ), ctrW( 45 ) )
+        PanelSelect:SetPos( ctrW( 10 ), ctrW( 100 ) )
         PanelSelect:SetText( "" )
 
-        local _sweplist = weapons.GetList()
-        local tmp2 = {}
-        tmp2.WorldModel = "models/weapons/w_physics.mdl"
-        tmp2.ClassName = "weapon_physcannon"
-        tmp2.PrintName = "Gravity Gun"
-        table.insert( _sweplist, tmp2 )
-        local tmp3 = {}
-        tmp3.WorldModel = "models/weapons/w_Physics.mdl"
-        tmp3.ClassName = "weapon_physgun"
-        tmp3.PrintName = "PHYSICS GUN"
-        table.insert( _sweplist, tmp3 )
+        local _itemlist = {}
+        if _tab == "weapons" then
+          local _sweplist = weapons.GetList()
+          local tmp2 = {}
+          tmp2.WorldModel = "models/weapons/w_physics.mdl"
+          tmp2.ClassName = "weapon_physcannon"
+          tmp2.PrintName = "Gravity Gun"
+          table.insert( _sweplist, tmp2 )
+          local tmp3 = {}
+          tmp3.WorldModel = "models/weapons/w_Physics.mdl"
+          tmp3.ClassName = "weapon_physgun"
+          tmp3.PrintName = "PHYSICS GUN"
+          table.insert( _sweplist, tmp3 )
+          _itemlist = _sweplist
+        elseif _tab == "entities" then
+          local _sentlist = list.Get( "SpawnableEntities" )
+          _itemlist = _sentlist
+        elseif _tab == "vehicles" then
+          local _vehicleslist = list.Get( "Vehicles" )
+          _itemlist = _vehicleslist
+        end
 
-        for k, swep in pairs( _sweplist ) do
-    			local icon = vgui.Create( "SpawnIcon" )
-          icon:SetText( "" )
-    			icon:SetModel( swep.WorldModel )
-    			icon:SetSize( ctrW( 256 ), ctrW( 256 ) )
-    			icon:SetTooltip( swep.PrintName )
-          local _tmpName = createVGUI( "DButton", icon, 256, 256, 0, 0 )
-          _tmpName:SetText( "" )
-          function _tmpName:Paint( pw, ph )
-            draw.SimpleText( swep.PrintName, "pmT", pw/2, ph-ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        local itemsearch = createVGUI( "DTextEntry", itemSelector, 2000 - 20, 40, 10, 50 )
+        function showResult()
+          PanelSelect:Clear()
+          local _cat = nil
+          if tab == "vehicles" then
+            _cat = "Category"
           end
-          function _tmpName:DoClick()
-            _AddItemModelPanel:SetModel( swep.WorldModel )
-            addSwep.ClassName = swep.ClassName
-            addSwep.PrintName = swep.PrintName
-            addSwep.WorldModel = swep.WorldModel
-            itemSelector:Close()
-          end
-    			PanelSelect:AddPanel( icon )
-    		end
+
+          local _count = 0
+          for k, item in SortedPairsByMemberValue( _itemlist, _cat, false ) do
+            if _tab == "vehicles" then
+              item.PrintName = item.Name or ""
+              item.ClassName = item.Class or ""
+              item.WorldModel = item.Model or ""
+            end
+            if string.find( string.lower( item.WorldModel or "XXXXXXXXX" ), itemsearch:GetText() ) or string.find( string.lower( item.PrintName or "XXXXXXXXX" ), itemsearch:GetText() ) or string.find( string.lower( item.ClassName or "XXXXXXXXX" ), itemsearch:GetText() ) then
+              timer.Simple( _count/1000, function()
+                if item.WorldModel == nil then
+                  item.WorldModel = item.Model or ""
+                end
+                if item.ClassName == nil then
+                  item.ClassName = item.Class or ""
+                end
+                if item.PrintName == nil then
+                  item.PrintName = item.Name or ""
+                end
+                local icon = vgui.Create( "SpawnIcon" )
+                icon:SetText( "" )
+                --if itemsearch:GetText() != "" then
+                  icon:SetModel( item.WorldModel )
+                --end
+                icon:SetSize( ctrW( 256 ), ctrW( 256 ) )
+                icon:SetTooltip( item.PrintName )
+                local _tmpName = createVGUI( "DButton", icon, 256, 256, 10, 10 )
+                _tmpName:SetText( "" )
+                function _tmpName:Paint( pw, ph )
+                  draw.SimpleText( item.PrintName, "pmT", pw/2, ph-ctrW( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+                end
+                function _tmpName:DoClick()
+                  _AddItemModelPanel:SetModel( item.WorldModel or "" )
+                  addSwep.ClassName = item.ClassName
+                  addSwep.PrintName = item.PrintName
+                  addSwep.WorldModel = item.WorldModel or ""
+                  itemSelector:Close()
+                end
+          			PanelSelect:AddPanel( icon )
+              end)
+            end
+            _count = _count + 1
+      		end
+        end
+
+        function itemsearch:OnChange()
+          showResult()
+        end
+        showResult()
+
         itemSelector:MakePopup()
       end
 
@@ -240,7 +305,7 @@ net.Receive( "getBuyList", function( len )
       end
       function _AddItemAdd:DoClick()
         net.Start( "addNewBuyItem" )
-          net.WriteString( "weapons" )
+          net.WriteString( _tab )
           net.WriteString( addSwep.ClassName )
           net.WriteString( addSwep.PrintName )
           net.WriteString( addSwep.WorldModel )
@@ -265,29 +330,66 @@ function openBuyMenu()
     _buyWindow:Remove()
   end
   function _buyWindow:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+  end
 
+  local Langu = createVGUI( "DComboBox", _buyWindow, 400, 50, 1400, 0 )
+  Langu:SetValue( lang.lang )
+  Langu:AddChoice( "[AUTOMATIC]", "auto" )
+  for k, v in pairs( lang.all ) do
+    Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
+  end
+  Langu.OnSelect = function( panel, index, value, data )
+    changeLang(data)
   end
 
   local _buyTabs = createVGUI( "DPropertySheet", _buyWindow, winW, winH, 0, 0 )
   _buyTabs:Dock( FILL )
   function _buyTabs:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+
   end
 
   _tabWeapon = vgui.Create( "DPanel", sheet )
   _tabWeapon.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, 200 ) ) end
   _buyTabs:AddSheet( lang.weapons, _tabWeapon, "icon16/cart.png" )
 
-  net.Start( "getBuyList" )
-    net.WriteString( "weapons" )
-  net.SendToServer()
+  _tabEntities = vgui.Create( "DPanel", sheet )
+  _tabEntities.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, 200 ) ) end
+  _buyTabs:AddSheet( lang.entities, _tabEntities, "icon16/cart.png" )
 
-  for k, v in pairs(_buyTabs.Items) do
+  _tabVehicles = vgui.Create( "DPanel", sheet )
+  _tabVehicles.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, 200 ) ) end
+  _buyTabs:AddSheet( lang.vehicles, _tabVehicles, "icon16/cart.png" )
+
+  for k, v in pairs( _buyTabs.Items ) do
   	if (!v.Tab) then continue end
+    if k == 1 then
+      v[k] = "weapons"
+    elseif k == 2 then
+      v[k] = "entities"
+    elseif k == 3 then
+      v[k] = "vehicles"
+    end
 
     v.Tab.Paint = function(self,w,h)
       if v.Tab == _buyTabs:GetActiveTab() then
 		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
+        if v.selected != v[k] then
+          v.selected = v[k]
+          if v[k] == "weapons" then
+            net.Start( "getBuyList" )
+              net.WriteString( "weapons" )
+            net.SendToServer()
+          elseif v[k] == "entities" then
+            net.Start( "getBuyList" )
+              net.WriteString( "entities" )
+            net.SendToServer()
+          elseif v[k] == "vehicles" then
+            net.Start( "getBuyList" )
+              net.WriteString( "vehicles" )
+            net.SendToServer()
+          end
+        end
       else
         draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
       end

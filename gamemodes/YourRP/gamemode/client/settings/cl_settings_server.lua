@@ -31,7 +31,7 @@ function tabServer( sheet )
       --drawBackground( 0, 0, serverSheet:GetWide(), serverSheet:GetTall(), ctrW( 10 ) )
     end
     tabServerGeneral( serverSheet )
-    tabServerQuestions( serverSheet )
+    --tabServerQuestions( serverSheet )
     tabServerRoles( serverSheet )
     tabServerMoney( serverSheet )
     tabServerGive( serverSheet )

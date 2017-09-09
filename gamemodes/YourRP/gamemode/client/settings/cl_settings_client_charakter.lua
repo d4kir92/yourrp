@@ -31,8 +31,8 @@ function tabClientChar( sheet )
   sheet:AddSheet( lang.character, cl_charPanel, "icon16/user_edit.png" )
   function cl_charPanel:Paint( w, h )
     --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
-    draw.SimpleText( lang.firstname .. ":", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.surname .. ":", "sef", ctrW( 10 ), ctrW( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.firstname .. ":", "sef", ctrW( 10 ), ctrW( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleText( lang.surname .. ":", "sef", ctrW( 10 ), ctrW( 145 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
   net.Start( "getCharakterList" )

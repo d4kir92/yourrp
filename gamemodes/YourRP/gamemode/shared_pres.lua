@@ -8,7 +8,7 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.6.4"
+GM.Version = "0.7.0"
 GM.VersionSort = ""
 GM.Help = ""
 

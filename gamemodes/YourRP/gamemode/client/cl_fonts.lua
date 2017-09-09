@@ -89,7 +89,7 @@ function changeFontSize()
 			createFont( "cbf", tmpFont, cl_db["cbf"], 500, true )
 			createFont( "vof", tmpFont, cl_db["vof"], 500, true )
 
-			createFont( "sef", tmpFont, cl_db["vof"], 500, true )
+			createFont( "sef", tmpFont, cl_db["sef"], 500, true )
 
 			printGM( "db", "HUD Fonts loaded." )
 
@@ -103,6 +103,24 @@ function changeFontSize()
 	createFont( "ATM_Header", tmpFont, 80, 500, true )
 	createFont( "ATM_Normal", tmpFont, 60, 500, true )
 	createFont( "ATM_Name", tmpFont, 40, 500, true )
+
+	--DarkRP Fonts
+	createFont( "DarkRPHUD1", tmpFont, 16, 600, true )
+	createFont( "DarkRPHUD2", tmpFont, 23, 400, true )
+	createFont( "Trebuchet18", tmpFont, 18, 500, true )
+	createFont( "Trebuchet20", tmpFont, 20, 500, true )
+	createFont( "Trebuchet24", tmpFont, 24, 500, true )
+	createFont( "Trebuchet48", tmpFont, 48, 500, true )
+	createFont( "TabLarge", tmpFont, 15, 700, true )
+	createFont( "UiBold", tmpFont, 16, 800, true )
+	createFont( "HUDNumber5", tmpFont, 30, 800, true )
+	createFont( "ScoreboardHeader", tmpFont, 32, 500, true )
+	createFont( "ScoreboardSubtitle", tmpFont, 22, 500, true )
+	createFont( "ScoreboardPlayerName", tmpFont, 19, 500, true )
+	createFont( "ScoreboardPlayerName2", tmpFont, 15, 500, true )
+	createFont( "ScoreboardPlayerNameBig", tmpFont, 22, 500, true )
+	createFont( "AckBarWriting", tmpFont, 20, 500, true )
+	createFont( "DarkRP_tipjar", tmpFont, 100, 500, true )
 end
 changeFontSize()
 --##############################################################################
