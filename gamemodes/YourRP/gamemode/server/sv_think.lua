@@ -257,28 +257,36 @@ function GM:PlayerSay( sender, text, teamChat )
     end
 
     if isChatCommand( text, "setmoney" ) then
-      local _table = string.Explode( " ", text, false )
-      local _name = _table[2]
-      local _money = tonumber( _table[3] )
-      if isnumber( _money ) then
-        local ply = getPlayer( _name )
-        ply:SetMoney( _money )
-        printGM( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money )
-        return ""
+      if sender:IsAdmin() or sender:IsSuperAdmin() then
+        local _table = string.Explode( " ", text, false )
+        local _name = _table[2]
+        local _money = tonumber( _table[3] )
+        if isnumber( _money ) then
+          local ply = getPlayer( _name )
+          ply:SetMoney( _money )
+          printGM( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money )
+          return ""
+        end
+        boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
+      else
+        printGM( "note", sender:Nick() .. " tried to use setmoney!" )
       end
-      boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
     end
 
     if isChatCommand( text, "addmoney" ) then
-      local _table = string.Explode( " ", text, false )
-      local _name = _table[2]
-      local _money = tonumber( _table[3] )
-      if isnumber( _money ) then
-        local ply = getPlayer( _name )
-        ply:addMoney( _money )
-        return ""
+      if sender:IsAdmin() or sender:IsSuperAdmin() then
+        local _table = string.Explode( " ", text, false )
+        local _name = _table[2]
+        local _money = tonumber( _table[3] )
+        if isnumber( _money ) then
+          local ply = getPlayer( _name )
+          ply:addMoney( _money )
+          return ""
+        end
+        boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
+      else
+        printGM( "note", sender:Nick() .. " tried to use addmoney!" )
       end
-      boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
     end
 
     if !sender:Alive() then
