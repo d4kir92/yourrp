@@ -20,11 +20,15 @@ function teleportToSpawnpoint( ply )
         ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
       else
         local tmpGroup = dbSelect( "yrp_groups", "*", "uniqueID = '" .. _tmpGroupID .. "'" )
-        printGM( "note", "There is no spawnpoint for: " .. tmpGroup[1].groupID )
+        if tmpGroup != nil then
+          printGM( "note", "There is no spawnpoint for: " .. tmpGroup[1].groupID )
 
-        local _infoPlayerStart = ents.FindByClass( "info_player_start" )
-        local _spawnpoints = table.Random( _infoPlayerStart )
-        yrp_tp( ply, _spawnpoints:GetPos() )
+          local _infoPlayerStart = ents.FindByClass( "info_player_start" )
+          local _spawnpoints = table.Random( _infoPlayerStart )
+          yrp_tp( ply, _spawnpoints:GetPos() )
+        else
+          printGM( "note", "There is no group" )
+        end
       end
     end
   end
