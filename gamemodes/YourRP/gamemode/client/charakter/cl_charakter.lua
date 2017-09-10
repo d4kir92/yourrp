@@ -21,6 +21,12 @@ function openCharakterMenu()
   window:ShowCloseButton( false )
   window:SetDraggable( false )
   window:SetTitle( "" )
+  function window:OnRemove()
+    window = nil
+  end
+  function window:OnClose()
+    window:Remove()
+  end
   function window:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
 
@@ -92,12 +98,26 @@ function openCharakterMenu()
 
   local tmpAvatar = createVGUI( "AvatarImage", window, 256, 256, 25+10, 310 )
   timer.Simple( 1, function()
-    tmpAvatar:SetPlayer( LocalPlayer(), ctrW( 256 ) )
+    if window != nil then
+      if LocalPlayer() != nil then
+        tmpAvatar:SetPlayer( LocalPlayer(), ctrW( 256 ) )
+      end
+    end
+  end)
+
+  timer.Simple( 2, function()
+    if window != nil then
+      if LocalPlayer() != nil then
+        tmpAvatar:SetPlayer( LocalPlayer(), ctrW( 256 ) )
+      end
+    end
   end)
 
   timer.Simple( 10, function()
-    if tmpAvatar != nil then
-      tmpAvatar:SetPlayer( LocalPlayer(), ctrW( 256 ) )
+    if window != nil then
+      if LocalPlayer() != nil then
+        tmpAvatar:SetPlayer( LocalPlayer(), ctrW( 256 ) )
+      end
     end
   end)
 

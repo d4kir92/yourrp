@@ -843,7 +843,11 @@ net.Receive( "yrp_roles", function( len )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
       end
-      draw.SimpleText( yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      local _pre = ""
+      if tonumber( yrp_roles_dbTable[k].removeable ) == 0 then
+        _pre = "(" .. lang.startrole .. ") "
+      end
+      draw.SimpleText( _pre .. yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
     tmp.uniqueID = v.uniqueID
     function tmp:DoClick()
@@ -885,7 +889,9 @@ net.Receive( "yrp_roles", function( len )
       addDBCheckBox( rolesInfo, 800, 40, 810, 1400, lang.rolewhitelist, v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
       addDBComboBox( rolesInfo, 800, 80, 810, 1450, lang.roleprerole, yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
 
-      addDBComboBox( rolesInfo, 1610, 80, 0, 1540, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+      if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
+        addDBComboBox( rolesInfo, 1610, 80, 0, 1540, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+      end
     end
     if tmp != nil then
       rolesList:AddItem( tmp )
@@ -916,8 +922,12 @@ net.Receive( "yrp_groups", function( len )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
       end
+      local _pre = ""
+      if tonumber( yrp_groups_dbTable[k].removeable ) == 0 then
+        _pre = "(" .. lang.startgroup .. ") "
+      end
       draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
-      draw.SimpleText( yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
     function tmp:DoClick()
       groupUniqueID = v.uniqueID
@@ -947,7 +957,9 @@ net.Receive( "yrp_groups", function( len )
 
       addDBColorMixer( groupsInfo, 800, 800, 0, 80 + _br, v.color, yrp_groups_dbTable[k], "yrp_groups", "color", "uniqueID = " .. tmp.uniqueID .. "" )
 
-      addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang.uppergroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "" )
+      if tonumber( yrp_groups_dbTable[k].removeable ) == 1 then
+        addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang.uppergroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "" )
+      end
     end
     groupsList:AddItem( tmp )
   end
