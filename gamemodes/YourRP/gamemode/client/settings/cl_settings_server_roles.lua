@@ -237,10 +237,12 @@ function addDBPlayermodel( parent, id, uniqueID, size )
     end
   end
 
-  local modelpanel = createVGUI( "DModelPanel", parent, 800, 800, 0, 90 )
+  local modelpanel = createVGUI( "SpawnIcon", parent, 720, 720, 40, 90+80 )
   if pms[changepm] != "" and pms[changepm] != nil then
     modelpanel:SetModel( pms[changepm] )
-    modelpanel.Entity:SetModelScale( size, 0 )
+    if modelpanel.Entity != nil then
+      modelpanel.Entity:SetModelScale( size, 0 )
+    end
   end
 
   local buttonback = createVGUI( "DButton", parent, 80, 800, 0, 90 )
@@ -342,7 +344,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
             end
           end
 
-          local tmpModel = createVGUI( "DModelPanel", tmpPointer, 256, 256, 0, 0 )
+          local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
           tmpModel:SetModel( v )
 
           local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
@@ -452,10 +454,10 @@ function addDBSwep( parent, id, uniqueID )
     end
   end
 
-  local modelpanel = createVGUI( "DModelPanel", background, 800, 800, 0, 0 )
+  local modelpanel = createVGUI( "SpawnIcon", background, 720, 720, 40, 80 )
   local worldmodel = getWorldModel( sws[changesw] )
   modelpanel:SetModel( worldmodel )
-  if worldmodel != "" then
+  if worldmodel != "" and modelpanel.Entity != nil then
     modelpanel.Entity:SetModelScale( 1, 0 )
     modelpanel:SetLookAt( Vector(0,0,0) )
     modelpanel:SetCamPos( Vector(0,-30,15))
@@ -478,7 +480,7 @@ function addDBSwep( parent, id, uniqueID )
       changesw = changesw - 1
       local worldmodel = getWorldModel( sws[changesw] )
       modelpanel:SetModel( worldmodel )
-      if worldmodel != "" then
+      if worldmodel != "" and modelpanel.Entity != nil then
         modelpanel.Entity:SetModelScale( 1, 0 )
         modelpanel:SetLookAt( Vector(0,0,0) )
         modelpanel:SetCamPos( Vector(0,-30,15))
@@ -503,7 +505,7 @@ function addDBSwep( parent, id, uniqueID )
       changesw = changesw + 1
       local worldmodel = getWorldModel( sws[changesw] )
       modelpanel:SetModel( worldmodel )
-      if worldmodel != "" then
+      if worldmodel != "" and modelpanel.Entity != nil then
         modelpanel.Entity:SetModelScale( 1, 0 )
         modelpanel:SetLookAt( Vector(0,0,0) )
         modelpanel:SetCamPos( Vector(0,-30,15))
@@ -579,7 +581,7 @@ function addDBSwep( parent, id, uniqueID )
               end
             end
 
-            local tmpModel = createVGUI( "DModelPanel", tmpPointer, 256, 256, 0, 0 )
+            local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
             if v.WorldModel != nil and v.WorldModel != "" then
               tmpModel:SetModel( v.WorldModel )
               if tmpModel.Entity != nil then
@@ -612,7 +614,7 @@ function addDBSwep( parent, id, uniqueID )
 
               local worldmodel = getWorldModel( sws[changesw] )
               modelpanel:SetModel( worldmodel )
-              if worldmodel != "" then
+              if worldmodel != "" and modelpanel.Entity != nil then
                 modelpanel.Entity:SetModelScale( 1, 0 )
                 modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
                 modelpanel:SetCamPos( Vector( 0, -30, 15 ) )

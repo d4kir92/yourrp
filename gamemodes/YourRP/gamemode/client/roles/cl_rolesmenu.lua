@@ -33,10 +33,12 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
     draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
   end
 
-  local rolePM = createVGUI( "DModelPanel", roleInfoPanel, 550, 550, 0, 0 )
+  local rolePM = createVGUI( "SpawnIcon", roleInfoPanel, 550, 550, 0, 0 )
   if model != nil and model != "" then
     rolePM:SetModel( model )
-    rolePM.Entity:SetModelScale( modelsize, 0 )
+    if rolePM.Entity != nil then
+      rolePM.Entity:SetModelScale( modelsize, 0 )
+    end
   end
   tmpY = tmpY + tmpH + tmpBr
   tmpH = 48+48
@@ -237,16 +239,18 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
 
-  local tmpRoleModel = createVGUI( "DModelPanel", parent, h, h, x, y )
+  local tmpRoleModel = createVGUI( "SpawnIcon", parent, h, h, x, y )
   local randModel = string.Explode( ",", model )
   local randNumb = math.Round( math.Rand( 1, #randModel ) )
   if randModel[randNumb] != nil and randModel[randNumb] != "" then
     tmpRoleModel:SetModel( randModel[randNumb] )
-    tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
-    if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-      local eyepos = tmpRoleModel.Entity:GetBonePosition( tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-      tmpRoleModel:SetLookAt( eyepos )
-      tmpRoleModel:SetCamPos( eyepos - Vector( -25 * modelsize, 0, 0 ) )	-- Move cam in front of eyes
+    if tmpRoleModel.Entity != nil then
+      tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
+      if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+        local eyepos = tmpRoleModel.Entity:GetBonePosition( tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+        tmpRoleModel:SetLookAt( eyepos )
+        tmpRoleModel:SetCamPos( eyepos - Vector( -25 * modelsize, 0, 0 ) )	-- Move cam in front of eyes
+      end
     end
   end
 
