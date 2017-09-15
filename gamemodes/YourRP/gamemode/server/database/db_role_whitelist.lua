@@ -15,7 +15,6 @@ end
 function dbRoleWhitelistInit()
   local dbName = "yrp_role_whitelist"
 
-
   printGMPre( "db", yrp.loaddb .. dbName )
   if sql.TableExists( dbName ) then
     printGM( "db", dbName .. " exists" )

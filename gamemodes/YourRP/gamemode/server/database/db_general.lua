@@ -24,6 +24,9 @@ end
 if dbSelect( dbName, "*", "name = 'metabolism'" ) == nil then
   dbInsertInto( dbName, "name, value", "'metabolism', '1'" )
 end
+if dbSelect( dbName, "*", "name = 'jailaccess'" ) == nil then
+  dbInsertInto( dbName, "name, value", "'jailaccess', '-1'" )
+end
 
 function getAdvertName()
   local tmpTable = dbSelect( dbName, "*", nil )

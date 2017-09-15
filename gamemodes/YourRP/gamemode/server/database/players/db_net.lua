@@ -169,15 +169,22 @@ net.Receive( "wantRole", function( len, ply )
         else
           return
         end
-      elseif tonumber( tmpTableRole[1].whitelist ) == 1 and tonumber( tmpTableRole[1].voteable ) == 1 then
-        if !isWhitelisted( ply, uniqueIDRole ) then
-          //printGM( "user", ply:Nick() .. " is not in the whitelist for this role")
-          startVote( ply, tmpTableRole )
-          return
+      elseif tonumber( tmpTableRole[1].whitelist ) == 1 then
+        if tonumber( tmpTableRole[1].voteable ) == 1 then
+          if !isWhitelisted( ply, uniqueIDRole ) then
+            startVote( ply, tmpTableRole )
+            return
+          end
+        else
+          if !isWhitelisted( ply, uniqueIDRole ) then
+            return
+          end
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 and tonumber( tmpTableRole[1].voteable ) == 0 then
-        printGM( "note", "whitelist 1, voteable 0" )
-        return
+        if !isWhitelisted( ply, uniqueIDRole ) then
+          printGM( "note", "whitelist 1, voteable 0 -> Player is not whitelisted" )
+          return
+        end
       end
       local query = ""
       query = query .. "UPDATE yrp_players "

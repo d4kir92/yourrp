@@ -171,6 +171,13 @@ function GM:GetFallDamage( ply, speed )
   end
 end
 
+function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
+  if ply:GetNWBool( "cuffed" ) then
+    return true
+  end
+  return false
+end
+
 function GM:InitPostEntity()
   printGM( "note", "InitPostEntity()" )
   timer.Simple( 2, function()

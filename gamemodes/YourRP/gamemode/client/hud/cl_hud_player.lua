@@ -9,6 +9,8 @@ local plyArmor = 100
 local plyHunger = 100
 local plyThirst = 100
 local plyStamina = 100
+local plyMana = 100
+local plyCast = 0
 
 local reload = {}
 
@@ -79,7 +81,7 @@ function HudPlayer()
         plyHealth = Lerp( 10 * FrameTime(), plyHealth, ply:Health() )
         drawRBox( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawRBox( 0, cl_db["hpx"], cl_db["hpy"], ( plyHealth / ply:GetMaxHealth() ) * (cl_db["hpw"]), cl_db["hph"], Color( 255, 0, 0, 200 ) )
-        drawText( math.Round( plyHealth, 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( plyHealth, 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. " %", "hpf", cl_db["hpx"] + (cl_db["hpw"]/2), cl_db["hpy"] + (cl_db["hph"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        drawText( math.Round( plyHealth, 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( plyHealth, 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. "%", "hpf", cl_db["hpx"] + (cl_db["hpw"]/2), cl_db["hpy"] + (cl_db["hph"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         showIcon( "hp", health )
       end
@@ -89,7 +91,7 @@ function HudPlayer()
         plyArmor = Lerp( 10 * FrameTime(), plyArmor, ply:Armor() )
         drawRBox( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawRBox( 0, cl_db["arx"], cl_db["ary"], ( ply:Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 0, 255, 0, 200 ) )
-        drawText( math.Round( plyArmor, 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. "|" .. math.Round( ( math.Round( plyArmor, 0 ) / ply:GetNWInt( "GetMaxArmor", 100 ) ) * 100, 0 ) .. " %", "arf", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        drawText( math.Round( plyArmor, 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. "|" .. math.Round( ( math.Round( plyArmor, 0 ) / ply:GetNWInt( "GetMaxArmor", 100 ) ) * 100, 0 ) .. "%", "arf", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         showIcon( "ar", armor )
       end
@@ -281,7 +283,7 @@ function HudPlayer()
           plyHunger = Lerp( 10 * FrameTime(), plyHunger, ply:GetNWInt( "hunger", 0 ) )
           drawRBox( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
           drawRBox( 0, cl_db["mhx"], cl_db["mhy"], ( plyHunger / 100 ) * (cl_db["mhw"]), cl_db["mhh"], Color( 255, 69, 0, 200 ) )
-          drawText( math.Round( ( math.Round( plyHunger, 0 ) / 100 ) * 100, 0 ) .. " %", "mhf", cl_db["mhx"] + (cl_db["mhw"]/2), cl_db["mhy"] + (cl_db["mhh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          drawText( math.Round( ( math.Round( plyHunger, 0 ) / 100 ) * 100, 0 ) .. "%", "mhf", cl_db["mhx"] + (cl_db["mhw"]/2), cl_db["mhy"] + (cl_db["mhh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
         	showIcon( "mh", food )
         end
@@ -291,7 +293,7 @@ function HudPlayer()
           plyThirst = Lerp( 10 * FrameTime(), plyThirst, ply:GetNWInt( "thirst", 0 ) )
           drawRBox( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
           drawRBox( 0, cl_db["mtx"], cl_db["mty"], ( plyThirst / 100 ) * cl_db["mtw"], cl_db["mth"], Color( 0, 0, 255, 200 ) )
-          drawText( math.Round( ( math.Round( plyThirst, 0 ) / 100 ) * 100, 0 ) .. " %", "mtf", cl_db["mtx"] + (cl_db["mtw"]/2), cl_db["mty"] + (cl_db["mth"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          drawText( math.Round( ( math.Round( plyThirst, 0 ) / 100 ) * 100, 0 ) .. "%", "mtf", cl_db["mtx"] + (cl_db["mtw"]/2), cl_db["mty"] + (cl_db["mth"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
           showIcon( "mt", drink )
         end
@@ -301,10 +303,71 @@ function HudPlayer()
           plyStamina = Lerp( 10 * FrameTime(), plyStamina, ply:GetNWInt( "stamina", 0 ) )
           drawRBox( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
           drawRBox( 0, cl_db["msx"], cl_db["msy"], ( plyStamina / 100 ) * cl_db["msw"], cl_db["msh"], Color( 255, 255, 0, 200 ) )
-          drawText( math.Round( ( math.Round( plyStamina, 0 ) / 100 ) * 100, 0 ) .. " %", "msf", cl_db["msx"] + (cl_db["msw"]/2), cl_db["msy"] + (cl_db["msh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          drawText( math.Round( ( math.Round( plyStamina, 0 ) / 100 ) * 100, 0 ) .. "%", "msf", cl_db["msx"] + (cl_db["msw"]/2), cl_db["msy"] + (cl_db["msh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
           showIcon( "ms", stamina )
         end
+      end
+
+      --Mana
+      if tonumber( cl_db["mat"] ) == 1 then
+        plyMana = Lerp( 10 * FrameTime(), plyMana, ply:GetNWInt( "mana", 0 ) )
+        drawRBox( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        drawRBox( 0, cl_db["max"], cl_db["may"], ( plyMana / ply:GetNWInt( "mana", 0 ) ) * cl_db["maw"], cl_db["mah"], Color( 255, 255, 0, 200 ) )
+        drawText( math.Round( ( math.Round( plyMana, 0 ) / ply:GetNWInt( "mana", 1 ) ) * 100, 0 ) .. "%", "maf", cl_db["max"] + (cl_db["maw"]/2), cl_db["may"] + (cl_db["mah"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        --showIcon( "ma", stamina )
+      end
+
+      --Cast
+      if tonumber( cl_db["cat"] ) == 1 and ply:GetNWBool( "casting", false ) then
+        plyCast = Lerp( 10 * FrameTime(), plyCast, ply:GetNWInt( "castCur", 0 ) )
+        drawRBox( 0, cl_db["cax"], cl_db["cay"], cl_db["caw"], cl_db["cah"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        drawRBox( 0, cl_db["cax"], cl_db["cay"], ( plyCast / ply:GetNWInt( "castMax", 0 ) ) * cl_db["caw"], cl_db["cah"], Color( 255, 255, 0, 200 ) )
+        drawText( ply:GetNWString( "castName", "" ) .. " (" .. math.Round( ( math.Round( plyCast, 0 ) / ply:GetNWInt( "castMax", 0 ) ) * 100, 0 ) .. "%)", "caf", cl_db["cax"] + (cl_db["caw"]/2), cl_db["cay"] + (cl_db["cah"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        --showIcon( "ca", stamina )
+      else
+        ply:SetNWInt( "castCur", 0 )
+        plyCast = 0
+      end
+
+      --Status
+      local _status = ""
+      local _showStatus = false
+      if ply:GetNWBool( "cuffed" ) then
+        if _status != "" then
+          _status = _status .. ", "
+        end
+        _status = _status .. "Cuffed"
+        _showStatus = true
+      end
+      if ply:GetNWInt( "hunger", 100 ) < 20 then
+        if _status != "" then
+          _status = _status .. ", "
+        end
+        _status = _status .. "Hungry"
+        _showStatus = true
+      end
+      if ply:GetNWInt( "thirst", 100 ) < 20 then
+        if _status != "" then
+          _status = _status .. ", "
+        end
+        _status = _status .. "Thirsty"
+        _showStatus = true
+      end
+      if ply:GetNWBool( "inJail", false ) then
+        if _status != "" then
+          _status = _status .. ", "
+        end
+        _status = _status .. lang.jail .. ": " .. ply:GetNWInt( "jailtime", 0 )
+        _showStatus = true
+      end
+      if tonumber( cl_db["stt"] ) == 1 and _status != "" then
+        drawRBox( 0, cl_db["stx"], cl_db["sty"], cl_db["stw"], cl_db["sth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        drawText( _status, "stf", cl_db["stx"] + (cl_db["stw"]/2), cl_db["sty"] + (cl_db["sth"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+        --showIcon( "st", stamina )
       end
 
       --Voting
@@ -393,6 +456,16 @@ function HudPlayer()
       end
       if tonumber( cl_db["cbt"] ) == 1 and _showChat then
         drawRBoxBr( 0, cl_db["cbx"], cl_db["cby"], cl_db["cbw"], cl_db["cbh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+
+      if tonumber( cl_db["mat"] ) == 1 then
+        drawRBoxBr( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+      if tonumber( cl_db["cat"] ) == 1 and ply:GetNWBool( "casting", false ) then
+        drawRBoxBr( 0, cl_db["cax"], cl_db["cay"], cl_db["caw"], cl_db["cah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+      end
+      if tonumber( cl_db["stt"] ) == 1 and _showStatus then
+        drawRBoxBr( 0, cl_db["stx"], cl_db["sty"], cl_db["stw"], cl_db["sth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
       end
     else
       drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )

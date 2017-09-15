@@ -227,6 +227,7 @@ end )
 
 local _savePos = Vector( 0, 0, 0 )
 _lookAtEnt = nil
+_drawViewmodel = false
 local function yrpCalcView( ply, pos, angles, fov )
 	if ply:Alive() then
 		if ply:GetActiveWeapon() != nil then
@@ -241,45 +242,54 @@ local function yrpCalcView( ply, pos, angles, fov )
 								pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 12 * ply:GetModelScale() )
 							end
 							if _thirdperson == 2 then
-								local dist = 150 * ply:GetModelScale()
+								local dist = 170 * ply:GetModelScale()
 
-								local _tmpThick = 12
+								local _tmpThick = 4
+								local _minDistFor = 8
+								local _minDistBac = 40
 								local tr = util.TraceHull( {
-									start = pos - ( angles:Forward() * 1 ),
-									endpos = pos - ( angles:Forward() * dist ),
+									start = pos + angles:Forward() * _minDistFor,
+									endpos = pos - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale()),
 									filter = {LocalPlayer(),LocalPlayer():GetActiveWeapon()},
 									mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
 									maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
 									mask = MASK_SHOT_HULL
 								} )
-								if( tr.HitPos:Distance( pos ) < dist - 1 ) and !tr.HitNonWorld then
-									dist = tr.HitPos:Distance( pos )
+
+								if tr.HitPos:Distance( pos ) < dist and !tr.HitNonWorld then
+									dist = tr.HitPos:Distance( pos ) -- _tmpThick
 								end
-								if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-									view.origin = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale() )
+								--print(tr.HitPos:Distance( pos ))
+								if tr.Hit and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil and tr.HitPos:Distance( pos ) > _minDistBac then
+									view.origin = tr.HitPos -- ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale() )
 									_savePos = view.origin
 									view.angles = angles
 									view.fov = fov
-									view.drawviewer = true
+									_drawViewmodel = true
+									return view
+								elseif tr.Hit and tr.HitPos:Distance( pos ) <= _minDistBac then
+									view.origin = pos
+									view.angles = angles
+									view.fov = fov
+									_drawViewmodel = false
 									return view
 								else
-									view.origin = ply:GetPos() - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale() )
-									_savePos = view.origin
+									view.origin = pos - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale())
 									view.angles = angles
 									view.fov = fov
-									view.drawviewer = true
+									_drawViewmodel = true
 									return view
 								end
 							elseif _thirdperson == 0 then
 								--Disabled
 							elseif _thirdperson == 1 then
 								if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-									pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 10 * ply:GetModelScale() )
+									pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 16 * ply:GetModelScale() )
 									view.origin = pos2
 									_savePos = pos2
 									view.angles = angles
 									view.fov = fov
-									view.drawviewer = true
+									_drawViewmodel = true
 
 									return view
 								end
@@ -298,7 +308,7 @@ end
 hook.Add( "CalcView", "MyCalcView", yrpCalcView )
 
 function showPlayermodel()
-	if _thirdperson == 0 then
+	if _thirdperson == 0 or _drawViewmodel == false then
 		return false
 	else
 		return true

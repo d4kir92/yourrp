@@ -152,6 +152,23 @@ function tabServerMap( sheet )
     tmpFrame:MakePopup()
   end
 
+  local _buttonAddJailPoint = createVGUI( "DButton", sv_mapPanel, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 + 50 + 10 )
+  _buttonAddJailPoint:SetText( lang.addjailpoint )
+  function _buttonAddJailPoint:DoClick()
+    net.Start( "dbInsertInto" )
+      net.WriteString( "yrp_" .. string.lower( game.GetMap() ) )
+      net.WriteString( "position, angle, type" )
+      local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
+      local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
+      local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'Jailpoint'"
+      net.WriteString( tmpString )
+    net.SendToServer()
+
+    _mapListView:Clear()
+    net.Start( "getMapList" )
+    net.SendToServer()
+  end
+
   net.Start( "getMapList" )
   net.SendToServer()
 end

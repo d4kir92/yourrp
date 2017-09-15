@@ -560,7 +560,7 @@ function addDBSwep( parent, id, uniqueID )
       local tmpY = 0
 
       for k, v in pairs( sweps ) do
-        if v.WorldModel != nil and v.WorldModel != "" then
+        if v.WorldModel != nil then--and v.WorldModel != "" then
           if string.find( string.lower( v.WorldModel ), swsearch:GetText() ) or string.find( string.lower( v.PrintName ), swsearch:GetText() ) or string.find( string.lower( v.ClassName ), swsearch:GetText() ) then
             tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
             tmpSelected[k] = {}
@@ -580,11 +580,13 @@ function addDBSwep( parent, id, uniqueID )
             end
 
             local tmpModel = createVGUI( "DModelPanel", tmpPointer, 256, 256, 0, 0 )
-            tmpModel:SetModel( v.WorldModel )
-            if tmpModel.Entity != nil then
-              tmpModel.Entity:SetModelScale( 1, 0 )
-              tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
-              tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
+            if v.WorldModel != nil and v.WorldModel != "" then
+              tmpModel:SetModel( v.WorldModel )
+              if tmpModel.Entity != nil then
+                tmpModel.Entity:SetModelScale( 1, 0 )
+                tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
+                tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
+              end
             end
 
             local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )

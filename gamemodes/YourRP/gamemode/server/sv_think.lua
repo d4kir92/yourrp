@@ -17,6 +17,14 @@ net.Receive( "yrp_drink", function( len, ply )
   end
 end)
 
+function GM:CanPlayerSuicide( ply )
+  if ply:IsSuperAdmin() or ply:IsAdmin() then
+    return true
+  else
+    return false
+  end
+end
+
 local time = 0
 timer.Create( "ServerThink", 1, 0, function()
   local _allPlayers = player.GetAll()
@@ -83,6 +91,14 @@ timer.Create( "ServerThink", 1, 0, function()
       else
         ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
         ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+      end
+    end
+
+    --Jail
+    if ply:GetNWBool( "inJail", false ) then
+      ply:SetNWInt( "jailtime", ply:GetNWInt( "jailtime", 0 ) - 1 )
+      if ply:GetNWInt( "jailtime", 0 ) <= 0 then
+        cleanUpJail( ply )
       end
     end
   end

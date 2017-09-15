@@ -165,7 +165,10 @@ function GM:PlayerSetModel( ply )
 end
 
 function GM:PlayerLoadout( ply )
+  ply:SetNWBool( "cuffed", false )
+
   ply:Give( "yrp_key" )
+  ply:Give( "yrp_unarmed" )
 
   addKeys( ply )
 
@@ -243,6 +246,12 @@ function updateHud( ply )
     elseif v.name == "moneypost" then
       ply:SetNWString( "moneypost", v.value )
     end
+  end
+
+  local _generalTable = dbSelect( "yrp_jail", "*", "steamID = '" .. ply:SteamID() .. "'" )
+  if _generalTable != nil then
+    ply:SetNWBool( "inJail", true )
+    ply:SetNWInt( "jailtime", _generalTable[1].time )
   end
 end
 

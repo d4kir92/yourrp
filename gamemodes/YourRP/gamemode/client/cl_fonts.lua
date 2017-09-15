@@ -67,6 +67,9 @@ function changeFontSize()
 	createFont( "vtf", tmpFont, 22, 500, true )
 	createFont( "cbf", tmpFont, 22, 500, true )
 	createFont( "vof", tmpFont, 22, 500, true )
+	createFont( "maf", tmpFont, 22, 500, true )
+	createFont( "caf", tmpFont, 22, 500, true )
+	createFont( "stf", tmpFont, 22, 500, true )
 
 	createFont( "sef", tmpFont, 22, 500, true )
 
@@ -88,6 +91,9 @@ function changeFontSize()
 			createFont( "vtf", tmpFont, cl_db["vtf"], 500, true )
 			createFont( "cbf", tmpFont, cl_db["cbf"], 500, true )
 			createFont( "vof", tmpFont, cl_db["vof"], 500, true )
+			createFont( "maf", tmpFont, cl_db["maf"], 500, true )
+			createFont( "caf", tmpFont, cl_db["caf"], 500, true )
+			createFont( "stf", tmpFont, cl_db["stf"], 500, true )
 
 			createFont( "sef", tmpFont, cl_db["sef"], 500, true )
 

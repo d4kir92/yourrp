@@ -237,6 +237,8 @@ include( "database/db_buildings.lua" )
 include( "database/db_role_whitelist.lua" )
 include( "database/db_buy.lua" )
 include( "database/db_restriction.lua" )
+
+include( "database/db_jail.lua" )
 --##############################################################################
 
 --##############################################################################
@@ -253,6 +255,7 @@ function dbInitDatabase()
   dbRoleWhitelistInit()
   dbBuyInit()
   initDatabase( "yrp_restrictions" )
+  initDatabase( "yrp_jail" )
 
   dbPlayersInit()
 
