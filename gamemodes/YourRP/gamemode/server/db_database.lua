@@ -78,11 +78,10 @@ end)
 --##############################################################################
 
 function dbSQLStr( string )
-  if sql.SQLStr( string, false ) == nil then
-    return false
-  else
-    return true
-  end
+  local _newString = sql.SQLStr( string, true )
+  _newString = string.Replace( _newString, "'", " " )
+  _newString = string.Replace( _newString, "\"", " " )
+  return _newString
 end
 
 function dbTableExists( dbTable )

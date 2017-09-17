@@ -277,9 +277,9 @@ function checkClient( ply )
     q2 = q2 .. "INSERT INTO yrp_players ( steamID, nick, roleID, map ) "
     q2 = q2 .. "VALUES ( "
     q2 = q2 .. "'" .. tostring( ply:SteamID() ) .. "', "
-    q2 = q2 .. "'" .. tostring( ply:Nick() ) .. "', "
+    q2 = q2 .. "'" .. tostring( dbSQLStr( ply:Nick() ) ) .. "', "
     q2 = q2 .. "1, "
-    q2 = q2 .. "'" .. string.lower( game.GetMap() ) .. "' "
+    q2 = q2 .. "'" .. string.lower( dbSQLStr( game.GetMap() ) ) .. "' "
     q2 = q2 .. " )"
     sql.Query( q2 )
 

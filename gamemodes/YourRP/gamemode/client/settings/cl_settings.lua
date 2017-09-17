@@ -37,8 +37,8 @@ function openSettings()
     end
     _menuIsOpen = 0
   end
-  function settingsWindow:Paint()
-    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 98 ), settingsWindow:GetWide(), settingsWindow:GetTall(), yrp.colors.background )
+  function settingsWindow:Paint( pw, ph )
+    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.background )
   end
 
   local settingsSheet = vgui.Create( "DPropertySheet", settingsWindow )
@@ -47,7 +47,7 @@ function openSettings()
     --drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), ctrW( 0 ) )
   end
 
-  local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1400, 0 )
+  local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1500, 0 )
   Langu:SetValue( lang.lang )
   Langu:AddChoice("[AUTOMATIC]", "auto")
   for k, v in pairs( lang.all ) do
@@ -64,6 +64,37 @@ function openSettings()
   tabYourRP( settingsSheet )
 
   tabSettings( settingsSheet )
+
+  local bs = 600
+  local button = vgui.Create( "DButton", settingsWindow )
+  button:SetSize( ctrW( bs ), ctrW( 50 ) )
+  button:SetPos( ctrW( 15 ), ctrW( 5 ) )
+  button:SetText( "" )
+  function button:DoClick()
+    gui.OpenURL( "https://discord.gg/CXXDCMJ" )
+  end
+  function button:Paint( pw, ph )
+    if button:IsHovered() then
+      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
+    end
+    draw.SimpleText( "Live Support Click me! (Discord)", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+
+  local versionInfo = createVGUI( "DPanel", settingsWindow, 300, 50, 15 + bs + 10, 5 )
+  function versionInfo:Paint( pw, ph )
+    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
+    draw.SimpleText( "Current: " .. GAMEMODE.Version, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+
+  local versionInfoOnlinePanel = createVGUI( "DPanel", settingsWindow, 300, 50, 15 + bs + 10 + 300 + 10, 5 )
+  function versionInfoOnlinePanel:Paint( pw, ph )
+    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
+  end
+
+  local versionInfoOnline = createVGUI( "HTML", versionInfoOnlinePanel, bs, bs, 20, -85 )
+  versionInfoOnline:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vQ9arSoujn5cs5g1YrJuhw6jpWmn0tdtBInHBp9uSLQdYvl-eft4LPEfXujyF-HHex9hwU1GNA3d_eI/pub" )
 
   for k, v in pairs(settingsSheet.Items) do
   	if (!v.Tab) then continue end

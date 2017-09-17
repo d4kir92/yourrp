@@ -179,16 +179,20 @@ function GM:HUDDrawTargetID()
   return false
 end
 
+function drawPlate( ply, string )
+  if ply:Alive() and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+    cam.Start3D2D( ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, ply:GetModelScale() * 20 ), Angle( 0, ply:GetAngles().y-90, 90 ), ply:GetModelScale()/4 )
+      draw.RoundedBox( 0, -55, 0, 110, 20, Color( 0, 0, 0, 200 ) )
+      draw.SimpleText( string, "HudBars", 0, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    cam.End3D2D()
+  end
+end
+
 function drawPlates()
   for k, v in pairs( player.GetAll() ) do
-    if tostring( v:SteamID() ) == "STEAM_0:1:20900349" and v:GetNWBool( "tag", false ) then
-      if v:Alive() then
-        if v:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-          cam.Start3D2D( v:GetBonePosition( v:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, v:GetModelScale() * 20 ), Angle( 0, v:GetAngles().y-90, 90 ), v:GetModelScale()/4 )
-    	      draw.RoundedBox( 0, -40, 0, 80, 20, Color( 0, 0, 0, 200 ) )
-            draw.SimpleText( "DEVELOPER", "HudBars", 0, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    	    cam.End3D2D()
-        end
+    if v:GetNWBool( "tag", false ) then
+      if tostring( v:SteamID() ) == "STEAM_0:1:20900349" then
+        drawPlate( v, "DEVELOPER" )
       end
     end
   end

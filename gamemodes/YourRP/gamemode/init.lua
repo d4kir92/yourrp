@@ -45,7 +45,6 @@ AddCSLuaFile( "client/settings/cl_settings_yourrp.lua" )
 AddCSLuaFile( "client/settings/cl_settings_settings.lua" )
 --YourRP
 AddCSLuaFile( "client/settings/cl_settings_yourrp_workshop.lua" )
-AddCSLuaFile( "client/settings/cl_settings_yourrp_wiki.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_contact.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_add_langu.lua" )
 --Settings Server

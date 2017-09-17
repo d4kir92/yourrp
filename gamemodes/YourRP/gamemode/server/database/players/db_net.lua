@@ -165,25 +165,32 @@ net.Receive( "wantRole", function( len, ply )
     local tmpTableGroup = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpTableRole[1].groupID )
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
       if tmpTableRole[1].adminonly == 1 then
+        printGM( "user", "Adminonly-Role" )
         if ply:IsAdmin() or ply:IsSuperAdmin() then
+          -- continue
         else
+          printGM( "user", "ADMIN-ONLY Role: " .. ply:Nick() .. " is not admin or superadmin" )
           return
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 then
+        printGM( "user", "Whitelist-Role" )
         if tonumber( tmpTableRole[1].voteable ) == 1 then
+          printGM( "user", "Voteable-Role" )
           if !isWhitelisted( ply, uniqueIDRole ) then
+            printGM( "user", "Start-Whitelist Vote" )
             startVote( ply, tmpTableRole )
             return
+          else
+            printGM( "user", ply:Nick() .. " already whitelisted" )
           end
         else
+          printGM( "user", "No Voteable-Role" )
           if !isWhitelisted( ply, uniqueIDRole ) then
+            printGM( "user", ply:Nick() .. " is not whitelisted" )
             return
+          else
+            printGM( "user", ply:Nick() .. " is whitelisted" )
           end
-        end
-      elseif tonumber( tmpTableRole[1].whitelist ) == 1 and tonumber( tmpTableRole[1].voteable ) == 0 then
-        if !isWhitelisted( ply, uniqueIDRole ) then
-          printGM( "note", "whitelist 1, voteable 0 -> Player is not whitelisted" )
-          return
         end
       end
       local query = ""
@@ -211,9 +218,9 @@ net.Receive( "wantRole", function( len, ply )
 end)
 
 net.Receive( "setPlayerValues", function( len, ply )
-  local tmpSurname = string.Replace( net.ReadString(), " ", "" )
-  local tmpFirstname = string.Replace( net.ReadString(), " ", "" )
-  local tmpGender = string.Replace( net.ReadString(), " ", "" )
+  local tmpSurname = dbSQLStr( net.ReadString() )
+  local tmpFirstname = dbSQLStr( net.ReadString() )
+  local tmpGender = net.ReadString()
 
   local _result = sql.Query( "SELECT * FROM yrp_players WHERE steamID = '" .. ply:SteamID() .. "'" )
   if _result != nil then
@@ -230,5 +237,7 @@ net.Receive( "setPlayerValues", function( len, ply )
       net.Start( "openCharakterMenu" )
       net.Send( ply )
     end
+  else
+    printGM( "note", "PLAYER NOT FOUND, please tell DEVs!" )
   end
 end)

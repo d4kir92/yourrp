@@ -8,7 +8,7 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.8.1"
+GM.Version = "0.8.2"
 GM.VersionSort = ""
 GM.Help = ""
 
@@ -146,6 +146,9 @@ function printGM( channel, _string )
 		elseif channel == "lang" then
 			_color2 = Color( 255, 255, 0 )
 			_channelName = "LANGUAGE"
+		elseif channel == "darkrp" then
+			_color2 = Color( 255, 0, 0 )
+			_channelName = "DarkRP-Integration"
 		end
 		for k, v in pairs(_tmpText) do
 			if _channelName != "" then
@@ -157,6 +160,10 @@ function printGM( channel, _string )
 			end
 		end
 	end
+end
+
+function printDRP( string )
+	printGM( "darkrp", string )
 end
 
 function printERROR( string )

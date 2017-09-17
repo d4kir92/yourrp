@@ -3,7 +3,6 @@
 --cl_settings_server.lua
 
 include( "cl_settings_yourrp_workshop.lua" )
-include( "cl_settings_yourrp_wiki.lua" )
 include( "cl_settings_yourrp_contact.lua" )
 include( "cl_settings_yourrp_add_langu.lua" )
 
@@ -25,7 +24,6 @@ function tabYourRP( sheet )
       --drawBackground( 0, 0, yourrpSheet:GetWide(), yourrpSheet:GetTall(), ctrW( 10 ) )
     end
     tabWorkshop( yourrpSheet )
-    tabWiki( yourrpSheet )
     tabContact( yourrpSheet )
     tabLanguage( yourrpSheet )
 

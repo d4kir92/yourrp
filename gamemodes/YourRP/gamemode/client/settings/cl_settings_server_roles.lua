@@ -563,6 +563,12 @@ function addDBSwep( parent, id, uniqueID )
 
       for k, v in pairs( sweps ) do
         if v.WorldModel != nil then--and v.WorldModel != "" then
+          if v.PrintName == nil then
+            v.PrintName = ""
+          end
+          if v.ClassName == nil then
+            v.ClassName = ""
+          end
           if string.find( string.lower( v.WorldModel ), swsearch:GetText() ) or string.find( string.lower( v.PrintName ), swsearch:GetText() ) or string.find( string.lower( v.ClassName ), swsearch:GetText() ) then
             tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
             tmpSelected[k] = {}
