@@ -237,7 +237,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
     end
   end
 
-  local modelpanel = createVGUI( "SpawnIcon", parent, 720, 720, 40, 90+80 )
+  local modelpanel = createVGUI( "DModelPanel", parent, 720, 720, 40, 90+80 )
   if pms[changepm] != "" and pms[changepm] != nil then
     modelpanel:SetModel( pms[changepm] )
     if modelpanel.Entity != nil then
@@ -343,9 +343,11 @@ function addDBPlayermodel( parent, id, uniqueID, size )
               draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
             end
           end
-
-          local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
-          tmpModel:SetModel( v )
+          
+          if v != nil and v != "" then
+            local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
+            tmpModel:SetModel( v )
+          end
 
           local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
           tmpButton:SetText( "" )
@@ -420,18 +422,22 @@ end
 
 function getWorldModel( ClassName )
   local sweps = weapons.GetList()
-  local tmp2 = {}
-  tmp2.WorldModel = "models/weapons/w_physics.mdl"
-  tmp2.ClassName = "weapon_physcannon"
-  tmp2.PrintName = "Gravity Gun"
-  table.insert( sweps, tmp2 )
-  local tmp3 = {}
-  tmp3.WorldModel = "models/weapons/w_Physics.mdl"
-  tmp3.ClassName = "weapon_physgun"
-  tmp3.PrintName = "PHYSICS GUN"
-  table.insert( sweps, tmp3 )
 
+  local _weaplist = list.Get( "Weapon" )
+  for k, v in pairs( _weaplist ) do
+    table.insert( sweps, v )
+  end
   for k, v in pairs( sweps ) do
+    if v.WorldModel == nil then
+      v.WorldModel = v.Model or ""
+    end
+    if v.PrintName == nil then
+      v.PrintName = v.Name or ""
+    end
+    if v.ClassName == nil then
+      v.ClassName = v.Class or ""
+    end
+
     if tostring( v.ClassName ) == tostring( ClassName ) then
       if v.WorldModel != nil then
         return v.WorldModel
@@ -454,7 +460,7 @@ function addDBSwep( parent, id, uniqueID )
     end
   end
 
-  local modelpanel = createVGUI( "SpawnIcon", background, 720, 720, 40, 80 )
+  local modelpanel = createVGUI( "DModelPanel", background, 720, 720, 40, 80 )
   local worldmodel = getWorldModel( sws[changesw] )
   modelpanel:SetModel( worldmodel )
   if worldmodel != "" and modelpanel.Entity != nil then
@@ -533,18 +539,11 @@ function addDBSwep( parent, id, uniqueID )
 
     local swsearch = createVGUI( "DTextEntry", swframe, 2000 - 20, 40, 10, 50 )
 
-    local sweps = weapons.GetList()
-    local tmp2 = {}
-    tmp2.WorldModel = "models/weapons/w_physics.mdl"
-    tmp2.ClassName = "weapon_physcannon"
-    tmp2.PrintName = "Gravity Gun"
-    table.insert( sweps, tmp2 )
-    local tmp3 = {}
-    tmp3.WorldModel = "models/weapons/w_Physics.mdl"
-    tmp3.ClassName = "weapon_physgun"
-    tmp3.PrintName = "PHYSICS GUN"
-    table.insert( sweps, tmp3 )
-
+    local swepsL = weapons.GetList()
+    local _weaplist = list.Get( "Weapon" )
+    for k, v in pairs( _weaplist ) do
+      table.insert( swepsL, v )
+    end
     local scrollpanel = createVGUI( "DScrollPanel", swframe, 2000 - 20, 2000 - 50 - 40 - 10 - 10, 10, 50+40+10 )
     function scrollpanel:Paint( pw, ph )
       //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
@@ -561,77 +560,78 @@ function addDBSwep( parent, id, uniqueID )
       local tmpX = 0
       local tmpY = 0
 
-      for k, v in pairs( sweps ) do
-        if v.WorldModel != nil then--and v.WorldModel != "" then
-          if v.PrintName == nil then
-            v.PrintName = ""
+      for k, v in pairs( swepsL ) do
+        if v.WorldModel == nil then
+          v.WorldModel = v.Model or ""
+        end
+        if v.PrintName == nil then
+          v.PrintName = v.Name or ""
+        end
+        if v.ClassName == nil then
+          v.ClassName = v.Class or ""
+        end
+        if string.find( string.lower( v.WorldModel ), swsearch:GetText() ) or string.find( string.lower( v.PrintName ), swsearch:GetText() ) or string.find( string.lower( v.ClassName ), swsearch:GetText() ) then
+          tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
+          tmpSelected[k] = {}
+          tmpSelected[k].ClassName = v.ClassName
+          if swIsFromRole( id, v ) then
+            tmpSelected[k].selected = true
+          else
+            tmpSelected[k].selected = false
           end
-          if v.ClassName == nil then
-            v.ClassName = ""
-          end
-          if string.find( string.lower( v.WorldModel ), swsearch:GetText() ) or string.find( string.lower( v.PrintName ), swsearch:GetText() ) or string.find( string.lower( v.ClassName ), swsearch:GetText() ) then
-            tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
-            tmpSelected[k] = {}
-            tmpSelected[k].ClassName = v.ClassName
-            if swIsFromRole( id, v ) then
-              tmpSelected[k].selected = true
+          local tmpPointer = tmpCache[k]
+          function tmpPointer:Paint( pw, ph )
+            if tmpSelected[k].selected then
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
             else
-              tmpSelected[k].selected = false
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
             end
-            local tmpPointer = tmpCache[k]
-            function tmpPointer:Paint( pw, ph )
-              if tmpSelected[k].selected then
-                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
-              else
-                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-              end
-            end
+          end
 
+          if v.WorldModel != nil and v.WorldModel != "" then
             local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
-            if v.WorldModel != nil and v.WorldModel != "" then
-              tmpModel:SetModel( v.WorldModel )
-              if tmpModel.Entity != nil then
-                tmpModel.Entity:SetModelScale( 1, 0 )
-                tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
-                tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
-              end
+            tmpModel:SetModel( v.WorldModel )
+            if tmpModel.Entity != nil then
+              tmpModel.Entity:SetModelScale( 1, 0 )
+              tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
+              tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
             end
+          end
 
-            local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
-            tmpButton:SetText( "" )
-            function tmpButton:Paint( pw, ph )
-              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-              local text = lang.notadded
-              if tmpSelected[k].selected then
-                text = lang.added
-              end
-              draw.SimpleText( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-              draw.SimpleText( v.PrintName, "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
+          tmpButton:SetText( "" )
+          function tmpButton:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+            local text = lang.notadded
+            if tmpSelected[k].selected then
+              text = lang.added
             end
-            function tmpButton:DoClick()
-              if tmpSelected[k].selected then
-                tmpSelected[k].selected = false
-              else
-                tmpSelected[k].selected = true
-              end
-              updateSweps( tmpSelected, id, uniqueID )
-              sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
-              changesw = 1
+            draw.SimpleText( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( v.PrintName, "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+          function tmpButton:DoClick()
+            if tmpSelected[k].selected then
+              tmpSelected[k].selected = false
+            else
+              tmpSelected[k].selected = true
+            end
+            updateSweps( tmpSelected, id, uniqueID )
+            sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
+            changesw = 1
 
-              local worldmodel = getWorldModel( sws[changesw] )
-              modelpanel:SetModel( worldmodel )
-              if worldmodel != "" and modelpanel.Entity != nil then
-                modelpanel.Entity:SetModelScale( 1, 0 )
-                modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
-                modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
-              end
+            local worldmodel = getWorldModel( sws[changesw] )
+            modelpanel:SetModel( worldmodel )
+            if worldmodel != "" and modelpanel.Entity != nil then
+              modelpanel.Entity:SetModelScale( 1, 0 )
+              modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
+              modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
             end
+          end
 
-            tmpX = tmpX + 256 + tmpBr
-            if tmpX > 2000 - 256 - tmpBr then
-              tmpX = 0
-              tmpY = tmpY + 256 + tmpBr
-            end
+          tmpX = tmpX + 256 + tmpBr
+          if tmpX > 2000 - 256 - tmpBr then
+            tmpX = 0
+            tmpY = tmpY + 256 + tmpBr
           end
         end
       end

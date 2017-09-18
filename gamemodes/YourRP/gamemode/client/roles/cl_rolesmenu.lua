@@ -33,8 +33,8 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
     draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
   end
 
-  local rolePM = createVGUI( "SpawnIcon", roleInfoPanel, 550, 550, 0, 0 )
   if model != nil and model != "" then
+    local rolePM = createVGUI( "SpawnIcon", roleInfoPanel, 550, 550, 0, 0 )
     rolePM:SetModel( model )
     if rolePM.Entity != nil then
       rolePM.Entity:SetModelScale( modelsize, 0 )
@@ -56,90 +56,94 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   tmpH = 48 + 12 + 6*24 + 12
 
   local roleDescription = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
+
+  local descTable = string.Split( desc, " " )
+  local descTpl = {}
+  local stringL = 0
+  local nextT = 1
+
+  for i = 1, 6 do
+    if descTpl[i] == nil then
+      descTpl[i] = ""
+    end
+  end
+
+  for k, v in pairs( descTable ) do
+    local addSize = surface.GetTextSize( v ) + surface.GetTextSize( "," )
+    if (stringL + addSize) > ctrW( 550 - 20 ) then
+      stringL = addSize
+      nextT = nextT + 1
+    else
+      stringL = stringL + addSize
+    end
+    if nextT <= 6 then
+      descTpl[nextT] = descTpl[nextT] .. v
+    else
+      break
+    end
+  end
+
   function roleDescription:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp.colors.header )
     draw.SimpleText( lang.description, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp.colors.background )
-    local descTable = string.Split( desc, " " )
-    local tmpTable = {}
-    local stringL = 0
-    local nextT = 1
 
-    for i = 1, 6 do
-      if tmpTable[i] == nil then
-        tmpTable[i] = ""
-      end
-    end
-
-    for k, v in pairs( descTable ) do
-      if nextT <= 6 then
-        if stringL == 0 then
-          stringL = stringL + surface.GetTextSize( v )
-        else
-          stringL = stringL + surface.GetTextSize( v ) + surface.GetTextSize( " " )
-        end
-        if stringL < ctrW( 550 - 20 - 20 ) then
-          tmpTable[nextT] = tmpTable[nextT] .. " " .. v
-        else
-          stringL = 0
-          nextT = nextT + 1
-        end
-      end
-    end
-
-    draw.SimpleText( tmpTable[1], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[2], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[3], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[4], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[5], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[6], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( descTpl[1], "roleInfoText", ctrW( 10 ), ctrW( 50 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( descTpl[2], "roleInfoText", ctrW( 10 ), ctrW( 75 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( descTpl[3], "roleInfoText", ctrW( 10 ), ctrW( 100 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( descTpl[4], "roleInfoText", ctrW( 10 ), ctrW( 125 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( descTpl[5], "roleInfoText", ctrW( 10 ), ctrW( 150 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( descTpl[6], "roleInfoText", ctrW( 10 ), ctrW( 175 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   tmpY = tmpY + tmpH + tmpBr
   tmpH = 48 + 12 + 6*24 + 12
 
   local roleSWEPs = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
+
+  local swepTable = string.Split( sweps, "," )
+  local swepList = {}
+  local stringL = 0
+  local nextT = 1
+
+  for i = 1, 6 do
+    if swepList[i] == nil then
+      swepList[i] = ""
+    end
+  end
+
+  for k, v in pairs( swepTable ) do
+    local addSize = surface.GetTextSize( v ) + surface.GetTextSize( "," )
+    if (stringL + addSize) > ctrW( 550 - 20 ) then
+      stringL = addSize
+      nextT = nextT + 1
+    else
+      stringL = stringL + addSize
+    end
+    if nextT <= 6 then
+      if swepList[1] == "" then
+        swepList[nextT] = swepList[nextT] .. v
+      else
+        swepList[nextT] = swepList[nextT] .. ", " .. v
+      end
+    else
+      break
+    end
+  end
+
   function roleSWEPs:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, ctrW( 48 ), yrp.colors.header )
     draw.SimpleText( lang.sweps, "roleInfoHeader", ctrW( 10 ), ctrW( 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
     draw.RoundedBox( 0, 0, ctrW( 48 ), w, h - ctrW( 48 ), yrp.colors.background )
-    local swepTable = string.Split( sweps, "," )
-    local tmpTable = {}
-    local stringL = 0
-    local nextT = 1
 
-    for i = 1, 6 do
-      if tmpTable[i] == nil then
-        tmpTable[i] = ""
-      end
-    end
-
-    for k, v in pairs( swepTable ) do
-      if stringL == 0 then
-        stringL = stringL + surface.GetTextSize( v )
-      else
-        stringL = stringL + surface.GetTextSize( v ) + surface.GetTextSize( "," )
-      end
-      if stringL < ctrW( 550 - 20 - 20 ) then
-        if tmpTable[1] == "" then
-          tmpTable[nextT] = tmpTable[nextT] .. v
-        else
-          tmpTable[nextT] = tmpTable[nextT] .. ", " .. v
-        end
-      else
-        stringL = 0
-        nextT = nextT + 1
-      end
-    end
-
-    draw.SimpleText( tmpTable[1], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[2], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[3], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[4], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[5], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( tmpTable[6], "roleInfoText", ctrW( 10 ), ctrW( 48 + 12 + 24 + 24 + 24 + 24 + 24 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( swepList[1], "roleInfoText", ctrW( 10 ), ctrW( 50 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( swepList[2], "roleInfoText", ctrW( 10 ), ctrW( 75 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( swepList[3], "roleInfoText", ctrW( 10 ), ctrW( 100 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( swepList[4], "roleInfoText", ctrW( 10 ), ctrW( 125 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( swepList[5], "roleInfoText", ctrW( 10 ), ctrW( 150 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( swepList[6], "roleInfoText", ctrW( 10 ), ctrW( 175 ), yrp.colors.font, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
   tmpY = tmpY + tmpH + tmpBr
@@ -239,10 +243,10 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
 
-  local tmpRoleModel = createVGUI( "SpawnIcon", parent, h, h, x, y )
   local randModel = string.Explode( ",", model )
   local randNumb = math.Round( math.Rand( 1, #randModel ) )
   if randModel[randNumb] != nil and randModel[randNumb] != "" then
+    local tmpRoleModel = createVGUI( "SpawnIcon", parent, h, h, x, y )
     tmpRoleModel:SetModel( randModel[randNumb] )
     if tmpRoleModel.Entity != nil then
       tmpRoleModel.Entity:SetModelScale( modelsize, 0 )

@@ -205,16 +205,10 @@ net.Receive( "getBuyList", function( len )
         local _itemlist = {}
         if _tab == "weapons" then
           local _sweplist = weapons.GetList()
-          local tmp2 = {}
-          tmp2.WorldModel = "models/weapons/w_physics.mdl"
-          tmp2.ClassName = "weapon_physcannon"
-          tmp2.PrintName = "Gravity Gun"
-          table.insert( _sweplist, tmp2 )
-          local tmp3 = {}
-          tmp3.WorldModel = "models/weapons/w_Physics.mdl"
-          tmp3.ClassName = "weapon_physgun"
-          tmp3.PrintName = "PHYSICS GUN"
-          table.insert( _sweplist, tmp3 )
+          local _weaplist = list.Get( "Weapon" )
+          for k, v in pairs( _weaplist ) do
+            table.insert( _sweplist, v )
+          end
           _itemlist = _sweplist
         elseif _tab == "entities" then
           local _sentlist = list.Get( "SpawnableEntities" )
@@ -250,11 +244,10 @@ net.Receive( "getBuyList", function( len )
                 if item.PrintName == nil then
                   item.PrintName = item.Name or ""
                 end
+
                 local icon = vgui.Create( "SpawnIcon" )
                 icon:SetText( "" )
-                --if itemsearch:GetText() != "" then
-                  icon:SetModel( item.WorldModel )
-                --end
+                icon:SetModel( item.WorldModel )
                 icon:SetSize( ctrW( 256 ), ctrW( 256 ) )
                 icon:SetTooltip( item.PrintName )
                 local _tmpName = createVGUI( "DButton", icon, 256, 256, 10, 10 )
@@ -263,7 +256,7 @@ net.Receive( "getBuyList", function( len )
                   draw.SimpleText( item.PrintName, "pmT", pw/2, ph-ctrW( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
                 end
                 function _tmpName:DoClick()
-                  _AddItemModelPanel:SetModel( item.WorldModel or "" )
+                  _AddItemModelPanel:SetModel( item.WorldModel )
                   addSwep.ClassName = item.ClassName
                   addSwep.PrintName = item.PrintName
                   addSwep.WorldModel = item.WorldModel or ""

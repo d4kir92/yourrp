@@ -2,19 +2,6 @@
 
 local metaPly = FindMetaTable( "Player" )
 
-function metaPly:SteamName()
-  return self:GetName()
-end
-
-function metaPly:RPName()
-  local rpName = self:GetNWString( "SurName", "" ) .. ", " .. self:GetNWString( "FirstName", "" )
-  return rpName
-end
-
-function metaPly:Nick()
-  return self:SteamName() .. " [" .. self:RPName() .. "]"
-end
-
 function metaPly:isCP()
   print("FAKE Function")
   return false

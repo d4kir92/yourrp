@@ -40,7 +40,8 @@ gamemode ->
 AddCSLuaFile( "database/db_lang.lua" )
 include( "database/db_lang.lua" )
 
---include("database/db_lang.lua")
+AddCSLuaFile( "yourrp.lua" )
+include( "yourrp.lua" )
 
 function GM:Initialize()
 	self.BaseClass.Initialize(self)

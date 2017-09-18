@@ -5,9 +5,14 @@
 function createFont( _name, _font, _size, _weight, _outline )
 	--printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
 	local _antialaising = false
+	local _shadow = false
 	local _size = ctrW( _size*2 )
 	if _size >= 72 then
 		_antialaising = true
+	end
+	if _size <= 20 then
+		_outline = false
+		_shadow = true
 	end
 	surface.CreateFont( _name, {
 		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
@@ -22,7 +27,7 @@ function createFont( _name, _font, _size, _weight, _outline )
 		strikeout = false,
 		symbol = false,
 		rotary = false,
-		shadow = false,
+		shadow = _shadow,
 		additive = false,
 		outline = _outline,
 	} )

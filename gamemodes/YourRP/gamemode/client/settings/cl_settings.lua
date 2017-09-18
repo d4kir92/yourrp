@@ -89,12 +89,22 @@ function openSettings()
   end
 
   local versionInfoOnlinePanel = createVGUI( "DPanel", settingsWindow, 300, 50, 15 + bs + 10 + 300 + 10, 5 )
+  local versionOnline = ""
   function versionInfoOnlinePanel:Paint( pw, ph )
     draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
+    draw.SimpleText( "Newest: " .. versionOnline, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  local versionInfoOnline = createVGUI( "HTML", versionInfoOnlinePanel, bs, bs, 20, -85 )
-  versionInfoOnline:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vQ9arSoujn5cs5g1YrJuhw6jpWmn0tdtBInHBp9uSLQdYvl-eft4LPEfXujyF-HHex9hwU1GNA3d_eI/pub" )
+  http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
+  	function( body, len, headers, code )
+      local StartPos = string.find( body, "#", 1, false )
+      local EndPos = string.find( body, "*", 1, false )
+      versionOnline = string.sub( body, StartPos+1, EndPos-1 )
+  	end,
+  	function( error )
+  		-- We failed. =(
+  	end
+   )
 
   for k, v in pairs(settingsSheet.Items) do
   	if (!v.Tab) then continue end

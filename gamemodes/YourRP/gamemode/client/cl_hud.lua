@@ -53,7 +53,11 @@ include( "hud/cl_hud_crosshair.lua" )
 
 --##############################################################################
 function hudVersion()
-	draw.SimpleText( "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+	local versionCol = Color( 0, 255, 0, 255 )
+	if yrp.outdated then
+		versionCol = Color( 255, 0, 0, 255 )
+	end
+	draw.SimpleText( "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), versionCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 end
 --##############################################################################
 

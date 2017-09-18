@@ -160,6 +160,54 @@ function GM:InitPostEntity()
 
   loadCompleteHud()
 
+  http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
+    function( body, len, headers, code )
+      local StartPos = string.find( body, "#", 1, false )
+      local EndPos = string.find( body, "*", 1, false )
+      local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
+
+      local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
+      local new2num = string.Replace( versionOnline, ".", "" )
+      local verart = "Up-To-Date"
+      if cur2num < new2num then
+        verart = "NEW"
+      elseif cur2num > new2num then
+        verart = "OLDER"
+      end
+      if versionOnline != GAMEMODE.Version then
+        yrp.outdated = true
+        local frame = createVGUI( "DFrame", nil, 700, 320, 0, 0 )
+        frame:Center()
+        frame:SetTitle( "" )
+
+        function frame:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          draw.SimpleText( verart .. " YOURRP VERSION AVAILABLE!", "HudBars", pw/2, ph/2 - ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( "Current YOURRP Version: " .. GAMEMODE.Version, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( "Workshop Version: " .. versionOnline, "HudBars", pw/2, ph/2 + ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+
+        local showChanges = createVGUI( "DButton", frame, 400, 50, 350-200, 260 )
+        showChanges:SetText( "" )
+        function showChanges:DoClick()
+          gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
+        end
+        function showChanges:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          draw.SimpleText( "Show Changes", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+
+        frame:MakePopup()
+      else
+        yrp.outdated = false
+        printGM( "note", "YourRP is on the newest version (unstable)")
+      end
+    end,
+    function( error )
+      -- We failed. =(
+    end
+   )
+
 	--net.Start( "clientFinished" )
   --net.SendToServer()
 end
