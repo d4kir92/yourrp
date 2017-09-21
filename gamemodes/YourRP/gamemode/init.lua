@@ -23,7 +23,7 @@ AddCSLuaFile( "shared_pres.lua" )
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
-AddCSLuaFile( "darkrp.lua" )
+AddCSLuaFile( "integration/darkrp.lua" )
 
 AddCSLuaFile( "client/database/db_database.lua" )
 
@@ -83,7 +83,7 @@ AddCSLuaFile( "client/door/cl_door_options.lua" )
 --Includes
 include( "shared_pres.lua" )
 
-include( "darkrp.lua" )
+include( "integration/darkrp.lua" )
 
 include( "server/sv_sizer.lua" )
 

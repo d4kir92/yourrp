@@ -116,9 +116,189 @@ function createVGUI( art, parent, w, h, x, y )
 end
 --##############################################################################
 
+function isInTable( table, item )
+  for k, v in pairs( table ) do
+    if string.lower( tostring( v ) ) == string.lower( tostring( item.ClassName ) ) then
+      return true
+    end
+  end
+  return false
+end
+
+function openSelector( table, dbTable, dbSets, dbWhile, closeF )
+  local table2 = string.Explode( ",", LocalPlayer():GetNWString( "workingString", "" ) )
+  local frame = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
+  frame:Center()
+  frame:SetTitle( "" )
+  function frame:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
+  end
+  function frame:OnClose()
+    hook.Call( closeF )
+  end
+
+  local search = createVGUI( "DTextEntry", frame, 2000 - 20, 40, 10, 50 )
+
+  local site = {}
+  site.cur = 1
+  site.max = 1
+  site.count = #table
+  function getMaxSite()
+    local tmpMax = math.Round( site.count/42, 2 )
+    site.max = math.Round( site.count/42, 0 )
+    if tmpMax > site.max then
+      site.max = site.max + 1
+    end
+  end
+  getMaxSite()
+
+  local scrollpanel = createVGUI( "DPanel", frame, 2000 - 20, 2000 - 50 - 40 - 10 - 10, 10, 50+40+10 )
+  function scrollpanel:Paint( pw, ph )
+    //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
+    draw.SimpleText( site.cur .. "/" .. site.max, "sef", pw/2, ph - 50, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+
+  local tmpCache = {}
+  local tmpSelected = {}
+
+  function showList()
+    for k, v in pairs( tmpCache ) do
+      v:Remove()
+    end
+
+    local tmpBr = 25
+    local tmpX = 0
+    local tmpY = 0
+
+    site.count = 0
+    for k, v in pairs( table ) do
+      if v.WorldModel == nil then
+        v.WorldModel = v.Model or ""
+      end
+      if v.PrintName == nil then
+        v.PrintName = v.Name or ""
+      end
+      if v.ClassName == nil then
+        v.ClassName = v.Class or ""
+      end
+
+      tmpSelected[k] = {}
+      tmpSelected[k].ClassName = v.ClassName
+      if isInTable( table2, v ) then
+        tmpSelected[k].selected = true
+      else
+        tmpSelected[k].selected = false
+      end
+
+      if string.find( string.lower( v.WorldModel ), search:GetText() ) or string.find( string.lower( v.PrintName ), search:GetText() ) or string.find( string.lower( v.ClassName ), search:GetText() ) then
+        site.count = site.count + 1
+        if ( site.count - 1 ) >= ( site.cur - 1 ) * 42 and ( site.count - 1 ) < ( site.cur ) * 42 then
+          tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
+
+          local tmpPointer = tmpCache[k]
+          function tmpPointer:Paint( pw, ph )
+            if tmpSelected[k].selected then
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
+            else
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+            end
+          end
+
+          if v.WorldModel != nil and v.WorldModel != "" then
+            local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
+            tmpModel:SetModel( v.WorldModel )
+            if tmpModel.Entity != nil then
+              tmpModel.Entity:SetModelScale( 1, 0 )
+              tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
+              tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
+            end
+          end
+
+          local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
+          tmpButton:SetText( "" )
+          function tmpButton:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+            local text = lang.notadded
+            if tmpSelected[k].selected then
+              text = lang.added
+            end
+            draw.SimpleText( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( v.PrintName, "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+          function tmpButton:DoClick()
+            if tmpSelected[k].selected then
+              tmpSelected[k].selected = false
+            else
+              tmpSelected[k].selected = true
+            end
+            local tmpString = ""
+            for k, v in pairs( tmpSelected ) do
+              if v.selected then
+                if tmpString == "" then
+                  tmpString = v.ClassName
+                else
+                  tmpString = tmpString .. "," .. v.ClassName
+                end
+              end
+            end
+            net.Start( "dbUpdate" )
+              net.WriteString( dbTable )
+              net.WriteString( dbSets .. " = '" .. tmpString .. "'" )
+              net.WriteString( dbWhile )
+            net.SendToServer()
+            LocalPlayer():SetNWString( "workingString", tmpString )
+          end
+
+          tmpX = tmpX + 256 + tmpBr
+          if tmpX > 2000 - 256 - tmpBr then
+            tmpX = 0
+            tmpY = tmpY + 256 + tmpBr
+          end
+        end
+      end
+    end
+  end
+
+  local nextB = createVGUI( "DButton", frame, 200, 50, 2000 - 10 - 200, 1800 )
+  nextB:SetText( "" )
+  function nextB:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+    draw.SimpleText( lang.nextsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function nextB:DoClick()
+    if site.max > site.cur then
+      site.cur = site.cur + 1
+      showList()
+    end
+  end
+
+  local prevB = createVGUI( "DButton", frame, 200, 50, 10, 1800 )
+  prevB:SetText( "" )
+  function prevB:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+    draw.SimpleText( lang.prevsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function prevB:DoClick()
+    site.cur = site.cur - 1
+    if site.cur < 1 then
+      site.cur = 1
+    end
+    showList()
+  end
+
+  function search:OnChange()
+    site.cur = 1
+    showList()
+    getMaxSite()
+  end
+  showList()
+
+  frame:MakePopup()
+end
+
 --##############################################################################
 --Includes
-include( "darkrp.lua" )
+include( "integration/darkrp.lua" )
 
 include( "client/database/db_database.lua" )
 include( "client/cl_player.lua" )
@@ -154,62 +334,67 @@ net.Receive( "yrpInfoBox", function( len )
   _tmp:MakePopup()
 end)
 
+local testingversion = false
+function testVersion()
+  if !testingversion then
+    testingversion = true
+    http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
+      function( body, len, headers, code )
+        local StartPos = string.find( body, "#", 1, false )
+        local EndPos = string.find( body, "*", 1, false )
+        local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
+
+        local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
+        local new2num = string.Replace( versionOnline, ".", "" )
+        local verart = "Up-To-Date"
+        if cur2num < new2num then
+          verart = "NEW"
+        elseif cur2num > new2num then
+          verart = "OLDER"
+        end
+        if versionOnline != GAMEMODE.Version then
+          yrp.outdated = true
+          local frame = createVGUI( "DFrame", nil, 700, 320, 0, 0 )
+          frame:Center()
+          frame:SetTitle( "" )
+
+          function frame:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+            draw.SimpleText( verart .. " YOURRP VERSION AVAILABLE!", "HudBars", pw/2, ph/2 - ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( "Current YOURRP Version: " .. GAMEMODE.Version, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleText( "Workshop Version: " .. versionOnline, "HudBars", pw/2, ph/2 + ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+
+          local showChanges = createVGUI( "DButton", frame, 400, 50, 350-200, 260 )
+          showChanges:SetText( "" )
+          function showChanges:DoClick()
+            gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
+          end
+          function showChanges:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+            draw.SimpleText( "Show Changes", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+
+          frame:MakePopup()
+        else
+          yrp.outdated = false
+          printGM( "note", "YourRP is on the newest version (unstable)")
+        end
+        testingversion = false
+      end,
+      function( error )
+        -- We failed. =(
+      end
+     )
+   end
+end
+
 function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )
   playerready = 1
 
   loadCompleteHud()
-
-  http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
-    function( body, len, headers, code )
-      local StartPos = string.find( body, "#", 1, false )
-      local EndPos = string.find( body, "*", 1, false )
-      local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
-
-      local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
-      local new2num = string.Replace( versionOnline, ".", "" )
-      local verart = "Up-To-Date"
-      if cur2num < new2num then
-        verart = "NEW"
-      elseif cur2num > new2num then
-        verart = "OLDER"
-      end
-      if versionOnline != GAMEMODE.Version then
-        yrp.outdated = true
-        local frame = createVGUI( "DFrame", nil, 700, 320, 0, 0 )
-        frame:Center()
-        frame:SetTitle( "" )
-
-        function frame:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleText( verart .. " YOURRP VERSION AVAILABLE!", "HudBars", pw/2, ph/2 - ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( "Current YOURRP Version: " .. GAMEMODE.Version, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( "Workshop Version: " .. versionOnline, "HudBars", pw/2, ph/2 + ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        end
-
-        local showChanges = createVGUI( "DButton", frame, 400, 50, 350-200, 260 )
-        showChanges:SetText( "" )
-        function showChanges:DoClick()
-          gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
-        end
-        function showChanges:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleText( "Show Changes", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        end
-
-        frame:MakePopup()
-      else
-        yrp.outdated = false
-        printGM( "note", "YourRP is on the newest version (unstable)")
-      end
-    end,
-    function( error )
-      -- We failed. =(
-    end
-   )
-
-	--net.Start( "clientFinished" )
-  --net.SendToServer()
+  testVersion()
 end
 
 --Remove Ragdolls after 60 sec

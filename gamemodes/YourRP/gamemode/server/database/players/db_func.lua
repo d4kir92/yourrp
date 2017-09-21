@@ -2,11 +2,6 @@
 
 local metaPly = FindMetaTable( "Player" )
 
-function metaPly:isCP()
-  print("FAKE Function")
-  return false
-end
-
 function metaPly:updateMoney( money )
   dbUpdate( "yrp_players", "money = " .. money, "steamID = '" .. self:SteamID().. "'")
 end
