@@ -19,16 +19,16 @@ function ENT:Initialize()
 	end
 end
 
-function ENT:GetMoney()
+function ENT:Getamount()
 	return self:GetNWInt( "money" )
 end
 
-function ENT:SetMoney( money )
+function ENT:Setamount( money )
 	self:SetNWInt( "money", tonumber( money ) )
 end
 
 function ENT:Use( activator, caller )
-	activator:addMoney( self:GetMoney() )
+	caller:addMoney( self:Getamount() )
   self:Remove()
 end
 

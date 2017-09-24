@@ -2,9 +2,15 @@
 
 yrp._not = "not needed."
 
+AddCSLuaFile( "darkrp/fn.lua" )
+AddCSLuaFile( "darkrp/config.lua" )
+
 AddCSLuaFile( "darkrp/gamemode/shared.lua" )
 AddCSLuaFile( "darkrp/player/shared.lua" )
 AddCSLuaFile( "darkrp/entity/shared.lua" )
+
+include( "darkrp/fn.lua" )
+include( "darkrp/config.lua" )
 
 include( "darkrp/gamemode/shared.lua" )
 include( "darkrp/player/shared.lua" )

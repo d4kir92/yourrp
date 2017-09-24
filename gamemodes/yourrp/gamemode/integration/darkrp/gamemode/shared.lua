@@ -290,8 +290,8 @@ end
 
 function DarkRP.getPhrase( key, parameters )
   --Description: Get a phrase from the selected language.
-  printDRP( "getMissingPhrases( " .. key .. ", parameters )" )
-  printDRP( yrp._not )
+  --printDRP( "getMissingPhrases( " .. key .. ", parameters )" )
+  --printDRP( yrp._not )
   return "Old getPhrase"
 end
 

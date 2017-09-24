@@ -30,6 +30,7 @@ function Player:arrest( time, Arrester )
   --Description: Arrest a player.
   printDRP( "arrest( " .. tostring( time ) .. ", " .. Arrester:Nick() .. " )" )
   printDRP( yrp._not )
+  -- Need implementation: Teleport PLAYER to Jail
 end
 
 function Player:canKeysLock( door )
