@@ -214,25 +214,17 @@ net.Receive( "getBuyList", function( len )
           local tmpTable = {}
           local count = 0
           for k, v in pairs( _sentlist ) do
-            count = count + 1
-            tmpTable[count] = {}
-            tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
-            tmpTable[count].ClassName = v.ClassName or v.Class or ""
-            tmpTable[count].PrintName = v.PrintName or v.Name or ""
+            if !string.find( v.ClassName or v.Class or "", "base" ) then
+              count = count + 1
+              tmpTable[count] = {}
+              tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
+              tmpTable[count].ClassName = v.ClassName or v.Class or ""
+              tmpTable[count].PrintName = v.PrintName or v.Name or ""
+            end
           end
           _itemlist = tmpTable
         elseif _tab == "vehicles" then
-          local _vehicleslist = list.Get( "Vehicles" )
-
-          local tmpTable = {}
-          local count = 0
-          for k, v in pairs( _vehicleslist ) do
-            count = count + 1
-            tmpTable[count] = {}
-            tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
-            tmpTable[count].ClassName = v.ClassName or v.Class or ""
-            tmpTable[count].PrintName = v.PrintName or v.Name or ""
-          end
+          local tmpTable = getAllVehicles()
           _itemlist = tmpTable
         end
 

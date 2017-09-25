@@ -9,16 +9,25 @@ util.AddNetworkString( "removeBuyItem" )
 
 util.AddNetworkString( "buyItem" )
 
-function SpawnVehicle( class )
+function SpawnVehicle( item )
+  local vehicles = getAllVehicles()
   local vehicle = {}
-  for k, v in pairs( list.Get("Vehicles") ) do
-    if v.Class == class then
+  for k, v in pairs( vehicles ) do
+    if v.ClassName == item.ClassName then
       vehicle = v
+      if v.Custom == "simfphys" then
+        local spawnname = item.ClassName
+        local vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
+
+        local car = simfphys.SpawnVehicle( ply, Vector( 0, 0, 0 ), Angle( 0, 0, 0 ), item.WorldModel, v.ClassName, spawnname, vehicle, true )
+        return car
+      end
     end
   end
-  local car = ents.Create( vehicle.Class )
+
+  local car = ents.Create( vehicle.ClassName )
   if not car then return end
-  car:SetModel( vehicle.Model )
+  car:SetModel( vehicle.WorldModel )
   if vehicle.KeyValues then
     for k, v in pairs( vehicle.KeyValues ) do
       car:SetKeyValue( k, v )
@@ -31,20 +40,20 @@ function SpawnVehicle( class )
   return car
 end
 
-function spawnItem( ply, ClassName, tab )
+function spawnItem( ply, item, tab )
   local _distSpace = 8
   local _distMax = 2000
   local _angle = ply:EyeAngles()
   local ent = {}
   if tab == "vehicles" then
-    ent = SpawnVehicle( ClassName )
+    ent = SpawnVehicle( item )
   else
     ent = ents.Create( ClassName )
     if ent == NULL then return end
-    ent:Spawn()
+    --ent:Spawn()
   end
 
-  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 32 ) )
+  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 64 ) )
   for dist = 0, _distMax, _distSpace do
     for ang = 0, 360, 45 do
       if ang != 0 then
@@ -61,6 +70,7 @@ function spawnItem( ply, ClassName, tab )
       local _result = util.TraceHull( tr )
       if !_result.Hit then
         ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
+        ent:Spawn()
         return true
       end
     end
@@ -76,7 +86,7 @@ net.Receive( "buyItem", function( len, ply )
   if ply:canAfford( -tonumber( _item[1].price ) ) then
     printGM( "note", ply:Nick() .. " can afford " .. tostring( _item[1].ClassName ) )
     ply:addMoney( -tonumber( _item[1].price ) )
-    spawnItem( ply, _item[1].ClassName, _tab )
+    spawnItem( ply, _item[1], _tab )
   else
     printGM( "note", ply:Nick() .. " can not afford " .. tostring( _item[1].ClassName ) )
   end

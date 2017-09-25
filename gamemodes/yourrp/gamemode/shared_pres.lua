@@ -8,7 +8,7 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.8.6"
+GM.Version = "0.8.7"
 GM.VersionSort = ""
 GM.Help = ""
 
@@ -168,4 +168,50 @@ end
 
 function printERROR( string )
 	printGM( "error", string )
+end
+
+function getAllVehicles()
+  local _getVehicles = list.Get( "Vehicles" )
+  local _simfphys = list.Get( "simfphys_vehicles" )
+	for k, v in pairs( _simfphys ) do
+		v.Custom = "simfphys"
+		v.WorldModel = v.WorldModel or v.Model or ""
+    v.ClassName = v.ClassName or v.Class or ""
+    v.PrintName = v.PrintName or v.Name or ""
+		if k != nil then
+			v.ClassName = k
+		end
+    table.insert( _getVehicles, v )
+  end
+
+	local _scars = list.Get( "SCarVehicles" )
+	for k, v in pairs( _scars ) do
+		v.Custom = "scars"
+		v.WorldModel = v.WorldModel or v.Model or ""
+    v.ClassName = v.ClassName or v.Class or ""
+    v.PrintName = v.PrintName or v.Name or ""
+    table.insert( _getVehicles, v )
+  end
+
+	local _swvehicles = list.Get( "SWVehicles" )
+	for k, v in pairs( _swvehicles ) do
+		v.Custom = "swvehicles"
+		v.WorldModel = v.WorldModel or v.Model or v.EntModel .. ""
+    v.ClassName = v.ClassName or v.Class or ""
+    v.PrintName = v.PrintName or v.Name or ""
+    table.insert( _getVehicles, v )
+  end
+
+  local vehicles = {}
+  local count = 0
+  for k, v in pairs( _getVehicles ) do
+    count = count + 1
+    vehicles[count] = {}
+    vehicles[count].WorldModel = v.WorldModel or v.Model or ""
+    vehicles[count].ClassName = v.ClassName or v.Class or ""
+    vehicles[count].PrintName = v.PrintName or v.Name or ""
+		vehicles[count].Custom = v.Custom or ""
+		vehicles[count].KeyValues = v.KeyValues or {}
+  end
+  return vehicles
 end
