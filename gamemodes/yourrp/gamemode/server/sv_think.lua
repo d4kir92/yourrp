@@ -205,6 +205,22 @@ function GM:PlayerSay( sender, text, teamChat )
     local _local = 0
     _playersay = {}
 
+    if isChatCommand( text, "help" ) then
+      sender:ChatPrint( "\n" )
+      sender:ChatPrint( "[HELP]" )
+      sender:ChatPrint( "me - Emote chat" )
+      sender:ChatPrint( "yell - Yell locally" )
+      sender:ChatPrint( "ooc or / - Out of character chat" )
+      sender:ChatPrint( "looc or . - Local out of character chat" )
+      sender:ChatPrint( "advert - Advert chat" )
+      sender:ChatPrint( "dropweapon - Drops the current weapon" )
+      sender:ChatPrint( "dropmoney AMOUNT - drop money to ground" )
+      sender:ChatPrint( "roll - roll a number between 0 and 100" )
+      sender:ChatPrint( "kill - suicide" )
+      sender:ChatPrint( "" )
+      return ""
+    end
+
     if isChatCommand( text, "dropweapon" ) then
       local _weapon = sender:GetActiveWeapon()
       if _weapon != nil then

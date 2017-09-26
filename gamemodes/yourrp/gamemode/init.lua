@@ -100,12 +100,18 @@ include( "server/sv_convars.lua" )
 --##############################################################################
 --utils
 util.AddNetworkString( "restartServer" )
+util.AddNetworkString( "updateServer" )
 util.AddNetworkString( "cancelRestartServer" )
 --##############################################################################
 
 --##############################################################################
 --Restart Server
 net.Receive( "restartServer", function( len, ply )
+  print("RunConsoleCommand(_restart)")
+  RunConsoleCommand( "_restart" )
+end)
+
+net.Receive( "updateServer", function( len, ply )
   local tmpString = net.ReadString()
   sql.Query( "UPDATE yrp_general SET value = '" .. tmpString .. "' WHERE name = 'gamemodename'" )
 

@@ -311,12 +311,14 @@ function HudPlayer()
 
       --Mana
       if tonumber( cl_db["mat"] ) == 1 then
-        plyMana = Lerp( 10 * FrameTime(), plyMana, ply:GetNWInt( "mana", 0 ) )
-        drawRBox( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-        drawRBox( 0, cl_db["max"], cl_db["may"], ( plyMana / ply:GetNWInt( "mana", 0 ) ) * cl_db["maw"], cl_db["mah"], Color( 255, 255, 0, 200 ) )
-        drawText( math.Round( ( math.Round( plyMana, 0 ) / ply:GetNWInt( "mana", 1 ) ) * 100, 0 ) .. "%", "maf", cl_db["max"] + (cl_db["maw"]/2), cl_db["may"] + (cl_db["mah"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        if plyMana > 0 then
+          plyMana = Lerp( 10 * FrameTime(), plyMana, ply:GetNWInt( "mana", 0 ) )
+          drawRBox( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+          drawRBox( 0, cl_db["max"], cl_db["may"], ( plyMana / ply:GetNWInt( "mana", 0 ) ) * cl_db["maw"], cl_db["mah"], Color( 255, 255, 0, 200 ) )
+          drawText( math.Round( ( math.Round( plyMana, 0 ) / ply:GetNWInt( "mana", 1 ) ) * 100, 0 ) .. "%", "maf", cl_db["max"] + (cl_db["maw"]/2), cl_db["may"] + (cl_db["mah"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
-        --showIcon( "ma", stamina )
+          --showIcon( "ma", stamina )
+        end
       end
 
       --Cast
@@ -459,7 +461,9 @@ function HudPlayer()
       end
 
       if tonumber( cl_db["mat"] ) == 1 then
-        drawRBoxBr( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+        if plyMana > 0 then
+          drawRBoxBr( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+        end
       end
       if tonumber( cl_db["cat"] ) == 1 and ply:GetNWBool( "casting", false ) then
         drawRBoxBr( 0, cl_db["cax"], cl_db["cay"], cl_db["caw"], cl_db["cah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )

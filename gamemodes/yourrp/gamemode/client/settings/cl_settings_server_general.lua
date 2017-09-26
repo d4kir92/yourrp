@@ -102,7 +102,7 @@ function tabServerGeneral( sheet )
   end
   function sv_generalRestartServer:DoClick()
     if sv_generalName != nil then
-      net.Start( "restartServer" )
+      net.Start( "updateServer" )
         GAMEMODE.Name = sv_generalName:GetText()
         net.WriteString( GAMEMODE.Name )
         net.WriteInt( math.Round( sv_generalRestartTime:GetValue() ), 16 )

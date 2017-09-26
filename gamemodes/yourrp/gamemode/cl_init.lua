@@ -456,59 +456,131 @@ net.Receive( "yrpInfoBox", function( len )
 end)
 
 local testingversion = false
+local serverVersion = "-1.-1.-1"
 function testVersion()
   if !testingversion then
     testingversion = true
-    http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
-      function( body, len, headers, code )
-        local StartPos = string.find( body, "#", 1, false )
-        local EndPos = string.find( body, "*", 1, false )
-        local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
-
-        local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
-        local new2num = string.Replace( versionOnline, ".", "" )
-        local verart = "Up-To-Date"
-        if cur2num < new2num then
-          verart = "NEW"
-        elseif cur2num > new2num then
-          verart = "OLDER"
-        end
-        if versionOnline != GAMEMODE.Version then
-          yrp.outdated = true
-          local frame = createVGUI( "DFrame", nil, 700, 320, 0, 0 )
-          frame:Center()
-          frame:SetTitle( "" )
-
-          function frame:Paint( pw, ph )
-            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-            draw.SimpleText( verart .. " YOURRP VERSION AVAILABLE!", "HudBars", pw/2, ph/2 - ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            draw.SimpleText( "Current YOURRP Version: " .. GAMEMODE.Version, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            draw.SimpleText( "Workshop Version: " .. versionOnline, "HudBars", pw/2, ph/2 + ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          end
-
-          local showChanges = createVGUI( "DButton", frame, 400, 50, 350-200, 260 )
-          showChanges:SetText( "" )
-          function showChanges:DoClick()
-            gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
-          end
-          function showChanges:Paint( pw, ph )
-            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-            draw.SimpleText( "Show Changes", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          end
-
-          frame:MakePopup()
-        else
-          yrp.outdated = false
-          printGM( "note", "YourRP is on the newest version (unstable)")
-        end
-        testingversion = false
-      end,
-      function( error )
-        -- We failed. =(
-      end
-     )
-   end
+    net.Start( "getServerVersion" )
+    net.SendToServer()
+  end
 end
+
+function showVersion()
+  local ply = LocalPlayer()
+
+  http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
+    function( body, len, headers, code )
+      local StartPos = string.find( body, "#", 1, false )
+      local EndPos = string.find( body, "*", 1, false )
+      local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
+
+      --Client
+      local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
+      local new2num = string.Replace( versionOnline, ".", "" )
+      local verart = "Up-To-Date"
+      local outcol = Color( 0, 255, 0, 255 )
+      if cur2num < new2num then
+        verart = "NEW"
+        yrp.versionCol = Color( 255, 0, 0, 255 )
+      elseif cur2num > new2num then
+        verart = "OLDER"
+        yrp.versionCol = Color( 100, 100, 255, 255 )
+      end
+
+      --Server
+      local cur2num2 = string.Replace( GAMEMODE.Version, ".", "" )
+      local new2num2 = string.Replace( versionOnline, ".", "" )
+      local verart2 = "Up-To-Date"
+      local outcol2 = Color( 0, 255, 0, 255 )
+      if cur2num2 < new2num2 then
+        verart2 = "NEW"
+        outcol2 = Color( 255, 0, 0, 255 )
+      elseif cur2num2 > new2num2 then
+        verart2 = "OLDER"
+        outcol2 = Color( 100, 100, 255, 255 )
+      end
+      if game.IsDedicated() then
+        GAMEMODE.dedicated = "Dedicated"
+      else
+        GAMEMODE.dedicated = "Local"
+      end
+
+      if versionOnline != GAMEMODE.Version then
+        yrp.outdated = true
+        local frame = createVGUI( "DFrame", nil, 1000, 500, 0, 0 )
+        frame:Center()
+        frame:SetTitle( "" )
+        function frame:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          draw.SimpleText( "Language:", "HudBars", ctrW( 300 ), ctrW( 25 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( verart .. " YOURRP VERSION AVAILABLE!" .. " (" .. GAMEMODE.VersionSort .. ")", "HudBars", pw/2, ctrW( 100 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( "Current YOURRP Version", "HudBars", pw/2, ctrW( 175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+          draw.SimpleText( lang.client .. ": ", "HudBars", pw/2, ctrW( 225 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( GAMEMODE.Version, "HudBars", pw/2, ctrW( 225 ), yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+          draw.SimpleText( "(" .. GAMEMODE.dedicated .. ") " .. lang.server .. ": ", "HudBars", pw/2, ctrW( 275 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( serverVersion, "HudBars", pw/2, ctrW( 275 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+          draw.SimpleText( lang.workshop .. " Version: ", "HudBars", pw/2, ctrW( 375 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( versionOnline .. " (" .. GAMEMODE.VersionSort .. ")", "HudBars", pw/2, ctrW( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        end
+
+        local Langu = createVGUI( "DComboBox", frame, 400, 50, 10 + 300, 10 )
+        Langu:SetValue( lang.lang )
+        Langu:AddChoice( "[AUTOMATIC]", "auto" )
+        for k, v in pairs( lang.all ) do
+          Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
+        end
+        Langu.OnSelect = function( panel, index, value, data )
+          changeLang(data)
+        end
+
+        local showChanges = createVGUI( "DButton", frame, 400, 50, 0, 0 )
+        showChanges:SetText( "" )
+        function showChanges:DoClick()
+          gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
+        end
+        function showChanges:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          draw.SimpleText( "Show Changes", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+
+        if ply:IsAdmin() or ply:IsSuperAdmin() then
+          local restartServer = createVGUI( "DButton", frame, 400, 50, 0, 0 )
+          restartServer:SetText( "" )
+          function restartServer:DoClick()
+            net.Start( "restartServer" )
+            net.SendToServer()
+          end
+          function restartServer:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+            draw.SimpleText( lang.updateserver, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+
+          showChanges:SetPos( ctrW( 500-400-10 ), ctrW( 425 ) )
+          restartServer:SetPos( ctrW( 500+10 ), ctrW( 425 ) )
+        else
+          showChanges:SetPos( ctrW( 500-200 ), ctrW( 425 ) )
+        end
+
+        frame:MakePopup()
+      else
+        yrp.outdated = false
+        printGM( "note", "YourRP is on the newest version (unstable)")
+      end
+      testingversion = false
+    end,
+    function( error )
+      -- We failed. =(
+    end
+   )
+end
+
+net.Receive( "getServerVersion", function( len )
+  serverVersion = net.ReadString()
+  showVersion()
+end)
 
 function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )

@@ -8,9 +8,19 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.8.7"
-GM.VersionSort = ""
+GM.Version = "0.8.8"
+GM.VersionSort = "unstable"
+GM.dedicated = "-"
 GM.Help = ""
+
+if SERVER then
+	util.AddNetworkString( "getServerVersion" )
+	net.Receive( "getServerVersion", function( len, ply )
+		net.Start( "getServerVersion" )
+			net.WriteString( GAMEMODE.Version )
+		net.Send( ply )
+	end)
+end
 
 DeriveGamemode( "sandbox" )
 

@@ -214,10 +214,12 @@ function updateHud( ply )
   end
 
   local _generalTable = dbSelect( "yrp_general", "*", nil )
-  for k, v in pairs( _generalTable ) do
-    if v.name == "metabolism" then
-      ply:SetNWBool( "metabolism", tobool( v.value ) )
-      break
+  if _generalTable != nil then
+    for k, v in pairs( _generalTable ) do
+      if v.name == "metabolism" then
+        ply:SetNWBool( "metabolism", tobool( v.value ) )
+        break
+      end
     end
   end
 

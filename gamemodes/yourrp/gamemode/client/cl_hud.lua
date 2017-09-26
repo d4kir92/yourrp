@@ -52,18 +52,16 @@ include( "hud/cl_hud_crosshair.lua" )
 --##############################################################################
 
 --##############################################################################
+yrp.versionCol = Color( 255, 255, 255, 255 )
 function hudVersion()
-	local versionCol = Color( 255, 255, 255, 255 )
-	if yrp.outdated != nil then
-		if yrp.outdated then
-			versionCol = Color( 255, 0, 0, 255 )
-		elseif !yrp.outdated then
-			versionCol = Color( 0, 255, 0, 255 )
-		end
-	else
+	if yrp.outdated == nil then
 		testVersion()
 	end
-	draw.SimpleText( "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), versionCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+	local _singleplayer = ""
+	if game.SinglePlayer() then
+		_singleplayer = "Singleplayer"
+	end
+	draw.SimpleText( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), yrp.versionCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 end
 --##############################################################################
 

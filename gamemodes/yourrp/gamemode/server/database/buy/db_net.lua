@@ -24,20 +24,24 @@ function SpawnVehicle( item )
       end
     end
   end
-
-  local car = ents.Create( vehicle.ClassName )
-  if not car then return end
-  car:SetModel( vehicle.WorldModel )
-  if vehicle.KeyValues then
-    for k, v in pairs( vehicle.KeyValues ) do
-      car:SetKeyValue( k, v )
+  if vehicle.ClassName != nil then
+    local car = ents.Create( vehicle.ClassName )
+    if not car then return end
+    car:SetModel( vehicle.WorldModel )
+    if vehicle.KeyValues then
+      for k, v in pairs( vehicle.KeyValues ) do
+        car:SetKeyValue( k, v )
+      end
     end
+    car:Spawn()
+    car:Activate()
+    car.ClassOverride = Class
+    --car:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+    return car
+  else
+    printGM( "note", "vehicle not available anymore" )
+    return NULL
   end
-  car:Spawn()
-  car:Activate()
-  car.ClassOverride = Class
-  --car:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-  return car
 end
 
 function spawnItem( ply, item, tab )
@@ -47,6 +51,7 @@ function spawnItem( ply, item, tab )
   local ent = {}
   if tab == "vehicles" then
     ent = SpawnVehicle( item )
+    if ent == NULL then return end
   else
     ent = ents.Create( ClassName )
     if ent == NULL then return end
