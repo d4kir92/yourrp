@@ -499,7 +499,7 @@ function showVersion()
         verart2 = "OLDER"
         outcol2 = Color( 100, 100, 255, 255 )
       end
-      if game.IsDedicated() then
+      if serverIsDedicated then
         GAMEMODE.dedicated = "Dedicated"
       else
         GAMEMODE.dedicated = "Local"
@@ -579,6 +579,7 @@ end
 
 net.Receive( "getServerVersion", function( len )
   serverVersion = net.ReadString()
+  serverIsDedicated = net.ReadBool()
   showVersion()
 end)
 
