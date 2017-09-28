@@ -478,7 +478,7 @@ function showVersion()
       local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
       local new2num = string.Replace( versionOnline, ".", "" )
       local verart = "Up-To-Date"
-      local outcol = Color( 0, 255, 0, 255 )
+      yrp.versionCol = Color( 0, 255, 0, 255 )
       if cur2num < new2num then
         verart = "NEW"
         yrp.versionCol = Color( 255, 0, 0, 255 )

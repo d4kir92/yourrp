@@ -53,7 +53,7 @@ function spawnItem( ply, item, tab )
     ent = SpawnVehicle( item )
     if ent == NULL then return end
   else
-    ent = ents.Create( ClassName )
+    ent = ents.Create( item.ClassName )
     if ent == NULL then return end
     --ent:Spawn()
   end
