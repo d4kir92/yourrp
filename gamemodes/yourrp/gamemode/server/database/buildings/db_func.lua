@@ -41,8 +41,8 @@ function addKeys( ply )
             end
           end
         end
+        break
       end
-      break
     end
   end
 end

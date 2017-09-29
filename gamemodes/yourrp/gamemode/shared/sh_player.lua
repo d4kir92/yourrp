@@ -69,6 +69,9 @@ function Player:CharID()
       self.charid = char.uniqueID
     end
   end
+  if self.charid == nil then
+    self.charid = -1
+  end
   return self.charid
 end
 

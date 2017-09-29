@@ -265,7 +265,9 @@ function openCharacterCreation()
   function turnR:Paint( pw, ph )
     if self:IsHovered() then
       if self:IsDown() then
-        characterPlayermodel.Entity:SetAngles( characterPlayermodel.Entity:GetAngles() + Angle( 0, 1, 0 ) )
+        if characterPlayermodel.Entity != nil then
+          characterPlayermodel.Entity:SetAngles( characterPlayermodel.Entity:GetAngles() + Angle( 0, 1, 0 ) )
+        end
       end
       paintMD( pw, ph, "->", colors.secondaryH )
     else
@@ -278,7 +280,9 @@ function openCharacterCreation()
   function turnL:Paint( pw, ph )
     if self:IsHovered() then
       if self:IsDown() then
-        characterPlayermodel.Entity:SetAngles( characterPlayermodel.Entity:GetAngles() - Angle( 0, 1, 0 ) )
+        if characterPlayermodel.Entity != nil then
+          characterPlayermodel.Entity:SetAngles( characterPlayermodel.Entity:GetAngles() - Angle( 0, 1, 0 ) )
+        end
       end
       paintMD( pw, ph, "<-", colors.secondaryH )
     else
@@ -428,7 +432,7 @@ function openCharacterCreation()
   charactersNameText:MakePopup()
 end
 
-local curChar = nil
+local curChar = "-1"
 function openCharacterSelection()
   _menuIsOpen = 1
   local ply = LocalPlayer()
@@ -462,7 +466,9 @@ function openCharacterSelection()
   function turnR:Paint( pw, ph )
     if self:IsHovered() then
       if self:IsDown() then
-        charplayermodel.Entity:SetAngles( charplayermodel.Entity:GetAngles() + Angle( 0, 1, 0 ) )
+        if charplayermodel.Entity != nil then
+          charplayermodel.Entity:SetAngles( charplayermodel.Entity:GetAngles() + Angle( 0, 1, 0 ) )
+        end
       end
       paintMD( pw, ph, "->", colors.secondaryH )
     else
@@ -475,7 +481,9 @@ function openCharacterSelection()
   function turnL:Paint( pw, ph )
     if self:IsHovered() then
       if self:IsDown() then
-        charplayermodel.Entity:SetAngles( charplayermodel.Entity:GetAngles() - Angle( 0, 1, 0 ) )
+        if charplayermodel.Entity != nil then
+          charplayermodel.Entity:SetAngles( charplayermodel.Entity:GetAngles() - Angle( 0, 1, 0 ) )
+        end
       end
       paintMD( pw, ph, "<-", colors.secondaryH )
     else
@@ -584,8 +592,10 @@ function openCharacterSelection()
     end
   end
   function backB:DoClick()
-    _menuIsOpen = 0
-    frame:Close()
+    if curChar != "-1" then
+      _menuIsOpen = 0
+      frame:Close()
+    end
   end
 
   local button = {}
@@ -607,11 +617,13 @@ function openCharacterSelection()
   local charactersEnter = createMDButton( frame, button.w, button.h, button.x, button.y, ctr( 5 ), lang.enterworld )
   charactersEnter:SetText( "" )
   function charactersEnter:DoClick()
-    net.Start( "EnterWorld" )
-      net.WriteString( curChar )
-    net.SendToServer()
-    _menuIsOpen = 0
-    frame:Close()
+    if curChar != "-1" then
+      net.Start( "EnterWorld" )
+        net.WriteString( curChar )
+      net.SendToServer()
+      _menuIsOpen = 0
+      frame:Close()
+    end
   end
 
   charactersCreate:MakePopup()
