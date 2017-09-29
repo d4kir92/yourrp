@@ -23,11 +23,11 @@ AddCSLuaFile( "shared_pres.lua" )
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
+AddCSLuaFile( "shared/sh_player.lua" )
+
 AddCSLuaFile( "integration/darkrp.lua" )
 
 AddCSLuaFile( "client/database/db_database.lua" )
-
-AddCSLuaFile( "client/cl_player.lua" )
 
 AddCSLuaFile( "client/cl_fonts.lua" )
 AddCSLuaFile( "client/cl_scoreboard.lua" )
@@ -82,6 +82,8 @@ AddCSLuaFile( "client/door/cl_door_options.lua" )
 --##############################################################################
 --Includes
 include( "shared_pres.lua" )
+
+include( "shared/sh_player.lua" )
 
 include( "integration/darkrp.lua" )
 
@@ -155,7 +157,7 @@ function yrpSetModelScale( ply, size )
   end
 end
 
-function GM:PlayerAuthed( ply, steamid, uniqueid )
+function GM:PlayerAuthed( ply, SteamID, uniqueid )
   checkClient( ply )
 end
 

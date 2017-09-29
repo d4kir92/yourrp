@@ -10,7 +10,7 @@ end)
 ent = ENT
 
 ENT.name = {}
-ENT.steamID = {}
+ENT.SteamID = {}
 
 function ENT:Draw()
   local ply = LocalPlayer()
@@ -112,12 +112,12 @@ function ENT:Draw()
         if self.ent:GetNWString( "name1" ) != "nil" then
           draw.RoundedBox( 0, 0, 300, 400, 100, Color( 255, 255, 255 ) )
           draw.SimpleText( self.ent:GetNWString( "name1", "EMPTY" ), "ATM_Name", 200, 300+50-20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( self.ent:GetNWString( "steamID1", "EMPTY" ), "ATM_Name", 200, 300+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( self.ent:GetNWString( "SteamID1", "EMPTY" ), "ATM_Name", 200, 300+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         if self.ent:GetNWString( "name2" ) != "nil" then
           draw.RoundedBox( 0, 0, 450, 400, 100, Color( 255, 255, 255 ) )
           draw.SimpleText( self.ent:GetNWString( "name2", "EMPTY" ), "ATM_Name", 200, 450+50-20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( self.ent:GetNWString( "steamID2", "EMPTY" ), "ATM_Name", 200, 450+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( self.ent:GetNWString( "SteamID2", "EMPTY" ), "ATM_Name", 200, 450+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         draw.RoundedBox( 0, 0, 600, 400, 100, Color( 255, 255, 255 ) )
@@ -129,12 +129,12 @@ function ENT:Draw()
         if self.ent:GetNWString( "name3" ) != "nil" then
           draw.RoundedBox( 0, pw-400, 300, 400, 100, Color( 255, 255, 255 ) )
           draw.SimpleText( self.ent:GetNWString( "name3", "EMPTY" ), "ATM_Name", pw-200, 300+50-20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( self.ent:GetNWString( "steamID3", "EMPTY" ), "ATM_Name", pw-200, 300+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( self.ent:GetNWString( "SteamID3", "EMPTY" ), "ATM_Name", pw-200, 300+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         if self.ent:GetNWString( "name4" ) != "nil" then
           draw.RoundedBox( 0, pw-400, 450, 400, 100, Color( 255, 255, 255 ) )
           draw.SimpleText( self.ent:GetNWString( "name4", "EMPTY" ), "ATM_Name", pw-200, 450+50-20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( self.ent:GetNWString( "steamID4", "EMPTY" ), "ATM_Name", pw-200, 450+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( self.ent:GetNWString( "SteamID4", "EMPTY" ), "ATM_Name", pw-200, 450+50+20, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         draw.RoundedBox( 0, pw-400, 600, 400, 100, Color( 255, 255, 255 ) )

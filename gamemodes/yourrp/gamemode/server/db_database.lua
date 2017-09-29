@@ -43,6 +43,7 @@ function resetDatabase()
   table.insert( _dbs, "yrp_role_whitelist" )
   table.insert( _dbs, "yrp_buy" )
   table.insert( _dbs, "yrp_restrictions" )
+  table.insert( _dbs, "yrp_characters" )
 
   for k, v in pairs( _dbs ) do
     sql.Query( "DROP TABLE " .. v )
@@ -236,6 +237,7 @@ include( "database/db_buildings.lua" )
 include( "database/db_role_whitelist.lua" )
 include( "database/db_buy.lua" )
 include( "database/db_restriction.lua" )
+include( "database/db_characters.lua" )
 
 include( "database/db_jail.lua" )
 --##############################################################################
@@ -255,8 +257,9 @@ function dbInitDatabase()
   dbBuyInit()
   initDatabase( "yrp_restrictions" )
   initDatabase( "yrp_jail" )
+  initDatabase( "yrp_characters" )
 
-  dbPlayersInit()
+  initDatabase( "yrp_players" )
 
   printGMImp( "db", "DONE Loading DATABASES" )
 end

@@ -7,7 +7,7 @@ include( "jail/db_func.lua" )
 
 local dbName = "yrp_jail"
 
-sqlAddColumn( dbName, "steamID", "TEXT DEFAULT ''" )
+sqlAddColumn( dbName, "SteamID", "TEXT DEFAULT ''" )
 sqlAddColumn( dbName, "nick", "TEXT DEFAULT ''" )
 sqlAddColumn( dbName, "reason", "TEXT DEFAULT '-'" )
 sqlAddColumn( dbName, "time", "TEXT INT 1" )

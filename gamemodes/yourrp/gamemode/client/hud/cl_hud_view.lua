@@ -14,8 +14,8 @@ function HudView()
       draw.SimpleText( lang.presse, "sef", ScrW()/2, ScrH()/2 + 30, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       draw.SimpleText( lang.holde, "sef", ScrW()/2, ScrH()/2 + 45, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
-      if _eyeTrace.Entity:GetNWString( "owner" ) != "" or _eyeTrace.Entity:GetNWString( "ownerGroup" ) != "" then
-        draw.SimpleText( lang.owner .. ": " ..  _eyeTrace.Entity:GetNWString( "owner" ) .. _eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH()/2 + 60, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      if _eyeTrace.Entity:GetNWString( "ownerRPName" ) != "" or _eyeTrace.Entity:GetNWString( "ownerGroup" ) != "" then
+        draw.SimpleText( lang.owner .. ": " ..  _eyeTrace.Entity:GetNWString( "ownerRPName" ) .. _eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH()/2 + 60, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
 
 

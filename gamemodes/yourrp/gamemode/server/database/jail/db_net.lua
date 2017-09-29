@@ -12,10 +12,10 @@ net.Receive( "dbAddJail", function( len, ply )
     printERROR( "dbInsertInto: " .. _tmpDBTable .. " is not existing" )
   end
 
-  local _steamID = net.ReadString()
-  local _tmpTable = dbSelect( "yrp_jail", "*", "steamID = '" .. _steamID .. "'" )
+  local _SteamID = net.ReadString()
+  local _tmpTable = dbSelect( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
   for k, v in pairs( player.GetAll() ) do
-    if v:SteamID() == _steamID then
+    if v:SteamID() == _SteamID then
       ply:SetNWBool( "inJail", true )
       ply:SetNWInt( "jailtime", _tmpTable[1].time )
     end

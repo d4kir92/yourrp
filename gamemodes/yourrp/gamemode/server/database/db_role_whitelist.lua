@@ -6,7 +6,7 @@ include( "whitelist/db_net.lua" )
 include( "whitelist/db_func.lua" )
 
 function dbWhitelistAddValues( dbTable )
-  sqlAddColumn( dbTable, "steamID", "TEXT DEFAULT ''" )
+  sqlAddColumn( dbTable, "SteamID", "TEXT DEFAULT ''" )
   sqlAddColumn( dbTable, "nick", "TEXT DEFAULT ''" )
   sqlAddColumn( dbTable, "groupID", "INTEGER DEFAULT -1" )
   sqlAddColumn( dbTable, "roleID", "INTEGER DEFAULT -1" )

@@ -9,7 +9,7 @@ function PLAYER:SteamName()
 end
 
 function PLAYER:RPName()
-  return self:GetNWString( "SurName", "" ) .. ", " .. self:GetNWString( "FirstName", "" )
+  return self:GetNWString( "rpname", "" )
 end
 
 function PLAYER:Nick()

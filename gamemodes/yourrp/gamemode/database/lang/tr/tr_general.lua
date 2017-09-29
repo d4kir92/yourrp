@@ -109,5 +109,12 @@ function TR_General()
   lang.female = "Kadın"
 
   lang.duplicate = "Kopyala"
+
+  lang.enteraname = "Isim Girin"
+  lang.nameistolong = "Isim çok uzun"
+  lang.nameistoshort = "Isim Çok kısa"
+  lang.enterworld = "Dünya girin"
+  lang.deletecharacter = "Karakteri silin"
+  lang.opencharacterselection = "Karakter seçmeyi aç"
 end
 --##############################################################################

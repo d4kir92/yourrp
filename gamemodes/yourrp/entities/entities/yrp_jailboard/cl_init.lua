@@ -106,7 +106,7 @@ net.Receive( "openLawBoard", function( len )
       end
       scrollpanel:AddItem( addButton )
       function addButton:DoClick()
-        local _steamID = nil
+        local _SteamID = nil
         local _nick = ""
         local addWindow = createVGUI( "DFrame", nil, 400, 420, 0, 0 )
         addWindow:SetTitle( "" )
@@ -128,7 +128,7 @@ net.Receive( "openLawBoard", function( len )
           _player:AddChoice( v:RPName(), v:SteamID() )
         end
         function _player:OnSelect( index, value, data )
-          _steamID = data
+          _SteamID = data
           _nick = value
         end
 
@@ -143,14 +143,14 @@ net.Receive( "openLawBoard", function( len )
           draw.SimpleText( lang.add, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         function _add:DoClick()
-          if _steamID != nil then
-            local _insert = "'" .. _steamID .. "', '" .. _reason:GetText() .. "', " .. _time:GetValue() .. ", '" .. _nick .. "'"
+          if _SteamID != nil then
+            local _insert = "'" .. _SteamID .. "', '" .. _reason:GetText() .. "', " .. _time:GetValue() .. ", '" .. _nick .. "'"
             net.Start( "dbAddJail" )
               net.WriteString( "yrp_jail" )
-              net.WriteString( "steamID, reason, time, nick" )
+              net.WriteString( "SteamID, reason, time, nick" )
               net.WriteString( _insert )
 
-              net.WriteString( _steamID )
+              net.WriteString( _SteamID )
             net.SendToServer()
           end
         end

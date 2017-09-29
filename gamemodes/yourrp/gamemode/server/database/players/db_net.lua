@@ -1,30 +1,15 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-util.AddNetworkString( "openCharakterMenu" )
+util.AddNetworkString( "openCharacterMenu" )
 util.AddNetworkString( "setPlayerValues" )
 util.AddNetworkString( "setRoleValues" )
 
 util.AddNetworkString( "getPlyList" )
-util.AddNetworkString( "giveRole" )
 
 util.AddNetworkString( "getCharakterList" )
-util.AddNetworkString( "updateFirstName" )
-util.AddNetworkString( "updateSurName" )
-
-net.Receive( "updateSurName", function( len, ply )
-  local _surName = string.Replace( net.ReadString(), " ", "" )
-  local _result = dbUpdate( "yrp_players", "nameSur = '" .. _surName .. "'", "steamID = '" .. ply:SteamID() .. "'" )
-  ply:SetNWString( "SurName", _surName )
-end)
-
-net.Receive( "updateFirstName", function( len, ply )
-  local _firstName = string.Replace( net.ReadString(), " ", "" )
-  local _result = dbUpdate( "yrp_players", "nameFirst = '" .. _firstName .. "'", "steamID = '" .. ply:SteamID() .. "'" )
-  ply:SetNWString( "FirstName", _firstName )
-end)
 
 net.Receive( "getCharakterList", function( len, ply )
-  local _tmpPlyList = dbSelect( "yrp_players", "*", "steamID = '" .. ply:SteamID() .. "'" )
+  local _tmpPlyList = ply:GetChaTab()
   if _tmpPlyList != nil then
     net.Start( "getCharakterList" )
       net.WriteTable( _tmpPlyList )
@@ -45,12 +30,12 @@ net.Receive( "getPlyList", function( len, ply )
   end
 end)
 
-function giveRole( ply, steamID, uniqueID )
+function giveRole( ply, SteamID, uniqueID )
   local tmpTable = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. uniqueID )
-  local _steamNick = steamID
+  local _steamNick = SteamID
 
   for k, v in pairs( player.GetAll() ) do
-    if steamID == v:SteamID() then
+    if SteamID == v:SteamID() then
       v:KillSilent()
       break
     end
@@ -62,22 +47,22 @@ function giveRole( ply, steamID, uniqueID )
       query = query .. "UPDATE yrp_players "
       query = query .. "SET roleID = " .. tonumber( tmpTable[1].uniqueID ) .. ", "
       query = query .. "capital = " .. tonumber( tmpTable[1].capital ) .. " "
-      query = query .. "WHERE steamID = '" .. steamID .. "'"
+      query = query .. "WHERE SteamID = '" .. SteamID .. "'"
       local result = sql.Query( query )
-      setRole( steamID, uniqueID )
+      setRole( SteamID, uniqueID )
 
       updateUses()
       for k, v in pairs( player.GetAll() ) do
-        if steamID == v:SteamID() then
+        if SteamID == v:SteamID() then
           _steamNick = v:Nick()
-          updateHud( v )
+          --updateHud( v )
           break
         end
       end
       printGM( "admin", ply:Nick() .. " gives " .. _steamNick .. " the Role: " .. tmpTable[1].roleID )
     else
       for k, v in pairs( player.GetAll() ) do
-        if steamID == v:SteamID() then
+        if SteamID == v:SteamID() then
           _steamNick = v:Nick()
           break
         end
@@ -96,7 +81,7 @@ net.Receive( "giveRole", function( len, ply )
 end)
 
 function isWhitelisted( ply, id )
-  local _plyAllowed = dbSelect( "yrp_role_whitelist", "*", "steamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
+  local _plyAllowed = dbSelect( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
   if _plyAllowed != nil and _plyAllowed != false then
     return true
   else
@@ -197,13 +182,13 @@ net.Receive( "wantRole", function( len, ply )
       query = query .. "UPDATE yrp_players "
       query = query .. "SET roleID = " .. tonumber( tmpTableRole[1].uniqueID ) .. ", "
       query = query .. "capital = " .. tonumber( tmpTableRole[1].capital ) .. " "
-      query = query .. "WHERE steamID = '" .. ply:SteamID() .. "'"
+      query = query .. "WHERE SteamID = '" .. ply:SteamID() .. "'"
       local result = sql.Query( query )
       setRole( ply:SteamID(), uniqueIDRole )
 
       ply:KillSilent()
 
-      updateHud( ply )
+      --updateHud( ply )
 
       printGM( "user", ply:Nick() .. " is now the Role: " .. tmpTableGroup[1].groupID .. " " .. tmpTableRole[1].roleID )
 
@@ -214,30 +199,5 @@ net.Receive( "wantRole", function( len, ply )
     end
   else
     printERROR( "Role " .. uniqueIDRole .. " is not available" )
-  end
-end)
-
-net.Receive( "setPlayerValues", function( len, ply )
-  local tmpSurname = dbSQLStr( net.ReadString() )
-  local tmpFirstname = dbSQLStr( net.ReadString() )
-  local tmpGender = net.ReadString()
-
-  local _result = sql.Query( "SELECT * FROM yrp_players WHERE steamID = '" .. ply:SteamID() .. "'" )
-  if _result != nil then
-    if tmpSurname != "" and tmpFirstname != "" and tmpGender != "" then
-      local query = ""
-      query = query .. "UPDATE yrp_players "
-      query = query .. "SET nameFirst = '" .. tmpFirstname .. "', "
-      query = query .. "nameSur = '" .. tmpSurname .. "', "
-      query = query .. "gender = '" .. tmpGender .. "' "
-      query = query .. "WHERE steamID = '" .. ply:SteamID() .. "'"
-      sql.Query( query )
-      ply:Spawn()
-    else
-      net.Start( "openCharakterMenu" )
-      net.Send( ply )
-    end
-  else
-    printGM( "note", "PLAYER NOT FOUND, please tell DEVs!" )
   end
 end)

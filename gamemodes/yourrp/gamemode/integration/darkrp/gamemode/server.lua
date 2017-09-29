@@ -168,7 +168,7 @@ function DarkRP.notifyAll( msgType, time, message)
   printDRP( yrp._not )
 end
 
-function DarkRP.offlinePlayerData( steamid, callback, failure )
+function DarkRP.offlinePlayerData( SteamID, callback, failure )
   --Description: Get a player's information from the database using a SteamID for use when the player is offline.
   printDRP( "notifyAll( msgType, time, " .. message .. " )" )
   printDRP( yrp._not )

@@ -106,15 +106,12 @@ timer.Create( "ServerThink", 1, 0, function()
   if time % 60 == 0 then
     for k, ply in pairs( _allPlayers ) do
       ply:SetNWInt( "money", ply:GetNWInt( "money" ) + ply:GetNWInt( "capital" ) )
+      ply:UpdateMoney()
     end
   end
 
   if time % 300 == 0 then
     saveClients( "Auto-Save ( 5 min )" )
-  end
-
-  if time % 1800 == 0 then
-    roleCheck( "Auto-Check ( 30 min )" )
   end
 
   if time >= 21600-30 then
@@ -349,7 +346,7 @@ function GM:PlayerSay( sender, text, teamChat )
 
       --Nickname
       table.insert( _playersay, Color( 0, 255, 0 ) )
-      table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
+      table.insert( _playersay, sender:GetNWString( "rpname" ) )
     elseif isChatCommand( text, "yell" ) then
       _local = 1
       --Group
@@ -362,7 +359,7 @@ function GM:PlayerSay( sender, text, teamChat )
 
       --Nickname
       table.insert( _playersay, Color( 255, 0, 0 ) )
-      table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) )
+      table.insert( _playersay, sender:GetNWString( "rpname" ) )
       table.insert( _playersay, ":\n" )
     elseif isChatCommand( text, "looc" ) or isChatCommand( text, "ooc" ) or isChatCommand( text, "/" ) or isChatCommand( text, "." ) then
       --UserGroup
@@ -384,7 +381,7 @@ function GM:PlayerSay( sender, text, teamChat )
 
       --Nickname
       table.insert( _playersay, Color( 0, 165, 255 ) )
-      table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. " rolled " )
+      table.insert( _playersay, sender:GetNWString( "rpname" ) .. " rolled " )
     else
       --Group
       table.insert( _playersay, Color( 0, 255, 0 ) )
@@ -396,7 +393,7 @@ function GM:PlayerSay( sender, text, teamChat )
 
       --Nickname
       table.insert( _playersay, Color( 0, 255, 0 ) )
-      table.insert( _playersay, sender:GetNWString( "FirstName" ) .. " " .. sender:GetNWString( "SurName" ) .. ": " )
+      table.insert( _playersay, sender:GetNWString( "rpname" ) .. ": " )
       table.insert( _playersay, "\n" )
     end
 

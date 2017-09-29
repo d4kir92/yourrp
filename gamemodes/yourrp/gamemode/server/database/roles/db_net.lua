@@ -164,11 +164,11 @@ end)
 net.Receive( "demotePlayer", function( len, ply )
   local tmpTargetSteamID = net.ReadString()
 
-  local tmpTableInstructor = sql.Query( "SELECT * FROM yrp_players WHERE steamID = '" .. ply:SteamID() .. "'" )
+  local tmpTableInstructor = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. ply:SteamID() .. "'" )
   local tmpTableInstructorRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableInstructor[1].roleID )
 
   if tonumber( tmpTableInstructorRole[1].instructor ) == 1 then
-    local tmpTableTarget = sql.Query( "SELECT * FROM yrp_players WHERE steamID = '" .. tmpTargetSteamID .. "'" )
+    local tmpTableTarget = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. tmpTargetSteamID .. "'" )
     local tmpTableTargetRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableTarget[1].roleID )
     local tmpTableTargetDemoteRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableTargetRole[1].prerole )
     setRole( tmpTargetSteamID, tmpTableTargetDemoteRole[1].uniqueID )
@@ -182,16 +182,16 @@ net.Receive( "demotePlayer", function( len, ply )
   end
 end)
 
-function removeFromWhitelist( steamID, roleID )
-  local _result = dbSelect( "yrp_role_whitelist", "*", "steamID = '" .. steamID .. "' AND roleID = " .. roleID )
+function removeFromWhitelist( SteamID, roleID )
+  local _result = dbSelect( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID )
   if _result != nil then
     dbDeleteFrom( "yrp_role_whitelist", "uniqueID = " .. _result[1].uniqueID )
   end
 end
 
-function addToWhitelist( steamID, roleID, groupID, nick )
-  if dbSelect( "yrp_role_whitelist", "*", "steamID = '" .. steamID .. "' AND roleID = " .. roleID ) == nil then
-    dbInsertInto( "yrp_role_whitelist", "steamID, nick, groupID, roleID", "'" .. steamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID )
+function addToWhitelist( SteamID, roleID, groupID, nick )
+  if dbSelect( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
+    dbInsertInto( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID )
   else
     printGM( "note", "is already in whitelist")
   end
@@ -200,11 +200,11 @@ end
 net.Receive( "promotePlayer", function( len, ply )
   local tmpTargetSteamID = net.ReadString()
 
-  local tmpTableInstructor = dbSelect( "yrp_players", "roleID", "steamID = '" .. ply:SteamID() .. "'" )
+  local tmpTableInstructor = dbSelect( "yrp_players", "roleID", "SteamID = '" .. ply:SteamID() .. "'" )
   local tmpTableInstructorRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor[1].roleID )
 
   if tonumber( tmpTableInstructorRole[1].instructor ) == 1 then
-    local tmpTableTarget = dbSelect( "yrp_players", "roleID", "steamID = '" .. tmpTargetSteamID .. "'" )
+    local tmpTableTarget = dbSelect( "yrp_players", "roleID", "SteamID = '" .. tmpTargetSteamID .. "'" )
     local tmpTableTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableTarget[1].roleID )
     local tmpTableTargetPromoteRole = dbSelect( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID )
 
@@ -228,10 +228,10 @@ end)
 net.Receive( "openInteractMenu", function( len, ply )
   local tmpTargetSteamID = net.ReadString()
 
-  local tmpTargetRoleID = dbSelect( "yrp_players", "*", "steamID = '" .. tmpTargetSteamID .. "'" )
+  local tmpTargetRoleID = dbSelect( "yrp_players", "*", "SteamID = '" .. tmpTargetSteamID .. "'" )
   local tmpTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTargetRoleID[1].roleID )
 
-  local tmpT = sql.Query( "SELECT * FROM yrp_players WHERE steamID = '" .. ply:SteamID() .. "'" )
+  local tmpT = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. ply:SteamID() .. "'" )
   local tmpTable = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpT[1].roleID )
 
   local tmpBool = false
@@ -293,7 +293,7 @@ net.Receive( "getAllGroups", function( len, ply )
 
   local tmpTable = sql.Query( "SELECT * FROM yrp_groups" )
   local tmpTable2 = sql.Query( "SELECT * FROM yrp_roles" )
-  local tmpTable3 = dbSelect( "yrp_role_whitelist", "*", "steamID = '" .. ply:SteamID() .. "'" )
+  local tmpTable3 = dbSelect( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if tmpTable3 == nil then
     tmpTable3 = {}
   end

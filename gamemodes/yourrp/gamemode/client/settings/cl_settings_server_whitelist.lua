@@ -9,7 +9,7 @@ net.Receive( "getRoleWhitelist", function( len )
 
   local _whitelistListView = createVGUI( "DListView", sv_whitelistPanel, 1500, 1800, 10, 10 )
   _whitelistListView:AddColumn( "uniqueID" ):SetFixedWidth( 0 )
-  _whitelistListView:AddColumn( "steamID" ):SetFixedWidth( ctrW( 120 ) )
+  _whitelistListView:AddColumn( "SteamID" ):SetFixedWidth( ctrW( 120 ) )
   _whitelistListView:AddColumn( lang.nick )
   _whitelistListView:AddColumn( lang.group )
   _whitelistListView:AddColumn( lang.role )
@@ -19,7 +19,7 @@ net.Receive( "getRoleWhitelist", function( len )
       if ( w.uniqueID == v.roleID ) then
         for m, x in pairs( _tmpGroupList ) do
           if ( x.uniqueID == w.groupID ) then
-            _whitelistListView:AddLine( v.uniqueID, v.steamID, v.nick, x.groupID, w.roleID )
+            _whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.groupID, w.roleID )
             break
           end
         end

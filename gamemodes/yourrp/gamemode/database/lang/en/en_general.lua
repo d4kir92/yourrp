@@ -109,5 +109,12 @@ function EN_General()
   lang.female = "Female"
 
   lang.duplicate = "Duplicate"
+
+  lang.enteraname = "Enter a name"
+  lang.nameistolong = "Name is to long"
+  lang.nameistoshort = "Name is to short"
+  lang.enterworld = "Enter world"
+  lang.deletecharacter = "Delete character"
+  lang.opencharacterselection = "Character selection"
 end
 --##############################################################################

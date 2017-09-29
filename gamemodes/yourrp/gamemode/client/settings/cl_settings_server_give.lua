@@ -8,10 +8,9 @@ net.Receive( "getPlyList", function( len )
   local _tmpGroupList = net.ReadTable()
 
   local _giveListView = createVGUI( "DListView", sv_givePanel, 1800, 1800, 10, 10 )
-  _giveListView:AddColumn( "steamID" )
+  _giveListView:AddColumn( "SteamID" )
   _giveListView:AddColumn( lang.nick )
-  _giveListView:AddColumn( lang.surname )
-  _giveListView:AddColumn( lang.firstname )
+  _giveListView:AddColumn( lang.name )
   _giveListView:AddColumn( lang.gender )
   _giveListView:AddColumn( lang.group )
   _giveListView:AddColumn( lang.role )
@@ -22,7 +21,7 @@ net.Receive( "getPlyList", function( len )
       if ( w.uniqueID == v.roleID ) then
         for m, x in pairs( _tmpGroupList ) do
           if ( x.uniqueID == w.groupID ) then
-            _giveListView:AddLine( v.steamID, v.nick, v.nameSur, v.nameFirst, v.gender, x.groupID, w.roleID, v.money )
+            _giveListView:AddLine( v.SteamID, v.nick, v.rpname, v.gender, x.groupID, w.roleID, v.money )
             break
           end
         end

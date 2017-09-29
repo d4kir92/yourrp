@@ -41,7 +41,7 @@ function DE_Settings()
   lang.rolehealth = "Gesundheit"
   lang.rolemaxhealth = "Maximale"
   lang.rolehealthreg = "Regeneration"
-  lang.rolearmor = "Rollen Rüstung"
+  lang.rolearmor = "Rollen-Rüstung"
   lang.rolemaxarmor = "Maximale Rollen Rüstung"
   lang.rolearmorreg = "Rollen Rüstungsregeneration"
   lang.rolewalkspeed = "Rollen-Gehgeschwindigkeit"

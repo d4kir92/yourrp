@@ -5,22 +5,19 @@
 include( "buildings/db_net.lua" )
 include( "buildings/db_func.lua" )
 
-function dbDoorsAddValues( dbTable )
-  sqlAddColumn( dbTable, "buildingID", "INTEGER DEFAULT -1" )
-  sqlAddColumn( dbTable, "level", "INTEGER DEFAULT 1" )
-  sqlAddColumn( dbTable, "keynr", "INTEGER DEFAULT -1" )
-end
+local dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
+sqlAddColumn( dbTable, "buildingID", "INTEGER DEFAULT -1" )
+sqlAddColumn( dbTable, "level", "INTEGER DEFAULT 1" )
+sqlAddColumn( dbTable, "keynr", "INTEGER DEFAULT -1" )
 
-function dbBuildingsAddValues( dbTable )
-  sqlAddColumn( dbTable, "groupID", "INTEGER DEFAULT -1" )
-  sqlAddColumn( dbTable, "price", "INTEGER DEFAULT 100" )
-  sqlAddColumn( dbTable, "ownerSteamID", "TEXT DEFAULT ''" )
-  sqlAddColumn( dbTable, "name", "TEXT DEFAULT 'Building'" )
-end
+dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
+sqlAddColumn( dbTable, "groupID", "INTEGER DEFAULT -1" )
+sqlAddColumn( dbTable, "price", "INTEGER DEFAULT 100" )
+sqlAddColumn( dbTable, "ownerCharID", "TEXT DEFAULT ''" )
+sqlAddColumn( dbTable, "name", "TEXT DEFAULT 'Building'" )
 
 function dbBuildingsInit()
   local dbName = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
-
 
   printGMPre( "db", yrp.loaddb .. dbName )
   if sql.TableExists( dbName ) then

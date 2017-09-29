@@ -109,5 +109,12 @@ function DE_General()
   lang.female = "Weiblich"
 
   lang.duplicate = "Duplizieren"
+
+  lang.enteraname = "Gib einen Namen ein"
+  lang.nameistolong = "Name ist zu lang"
+  lang.nameistoshort = "Name ist zu kurz"
+  lang.enterworld = "Welt beitreten"
+  lang.deletecharacter = "Charakter löschen"
+  lang.opencharacterselection = "Charakterauswahl"
 end
 --##############################################################################

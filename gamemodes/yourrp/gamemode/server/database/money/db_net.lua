@@ -10,7 +10,7 @@ net.Receive( "updateMoney", function( len, ply )
   local _value = net.ReadString()
 
   dbUpdate( "yrp_money", "value = '" .. _value .. "'", "name = '" .. _name .. "'" )
-  updateHud( ply )
+  --updateHud( ply )
 end)
 
 net.Receive( "getMoneyTab", function( len, ply )

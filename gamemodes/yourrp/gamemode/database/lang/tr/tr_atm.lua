@@ -4,21 +4,21 @@
 
 --##############################################################################
 function TR_Atm()
-  lang.loading = "Loading"
-  lang.welcome = "Welcome"
+  lang.loading = "Yükleniyor"
+  lang.welcome = "Hoş Geldiniz"
 
-  lang.home = "Home"
+  lang.home = "Ev"
 
-  lang.withdraw = "Withdraw"
-  lang.deposit = "Deposit"
+  lang.withdraw = "Para Çekme"
+  lang.deposit = "Para Yatırma"
   lang.transfer = "Transfer"
 
-  lang.other = "Other"
+  lang.other = "Diğer"
 
-  lang.back = "Back"
+  lang.back = "Geri"
 
-  lang.nextsite = "Next"
-  lang.prevsite = "Prev"
-  lang.errorsite = "ERROR"
+  lang.nextsite = "İleri"
+  lang.prevsite = "Bir Önceki"
+  lang.errorsite = "Hata"
 end
 --##############################################################################

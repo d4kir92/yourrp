@@ -12,10 +12,10 @@ end)
 
 net.Receive( "whitelistPlayer", function( len, ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
-    local _steamID = net.ReadString()
+    local _SteamID = net.ReadString()
     local _nick = ""
     for k, v in pairs( player.GetAll() ) do
-      if v:SteamID() == _steamID then
+      if v:SteamID() == _SteamID then
         _nick = v:Nick()
       end
     end
@@ -23,7 +23,7 @@ net.Receive( "whitelistPlayer", function( len, ply )
     local _dbRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. _roleID )
     local _groupID = _dbRole[1].groupID
 
-    dbInsertInto( "yrp_role_whitelist", "steamID, nick, groupID, roleID", "'" .. _steamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. _roleID )
+    dbInsertInto( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. _roleID )
   end
   sendRoleWhitelist( ply )
 end)

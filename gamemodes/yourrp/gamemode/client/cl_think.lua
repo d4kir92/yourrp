@@ -27,12 +27,13 @@ function useFunction( string )
 			gui.EnableScreenClicker( true )
 		elseif string == "openRoleMenu" then
 			if roleMenuWindow != nil then
-				roleMenuWindow:Remove()
-				roleMenuWindow = nil
-				_menuIsOpen = 0
+				--roleMenuWindow:Remove()
+				--roleMenuWindow = nil
+				--_menuIsOpen = 0
 			elseif _menuIsOpen == 0 then
-				_menuIsOpen = 1
-				openRoleMenu()
+				--_menuIsOpen = 1
+				openCharacterSelection()
+				--openRoleMenu()
 			end
 		elseif string == "openBuyMenu" then
 			if _buyWindow != nil then

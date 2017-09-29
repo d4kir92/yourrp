@@ -1,10 +1,10 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local tmpTargetSteamID = ""
-function openInteractMenu( steamID )
-  tmpTargetSteamID = steamID
+local tmpTargetSteamID64 = ""
+function openInteractMenu( SteamID64 )
+  tmpTargetSteamID64 = SteamID64
   net.Start( "openInteractMenu" )
-    net.WriteString( tmpTargetSteamID )
+    net.WriteString( tmpTargetSteamID64 )
   net.SendToServer()
 end
 
@@ -19,14 +19,12 @@ net.Receive( "openInteractMenu", function ()
 
   _windowInteract = createVGUI( "DFrame", nil, 830, 470 + 50 + 10, ScrW() - 160, ScrH() - 200 )
   local tmpTargetName = ""
-  local tmpFirstName = ""
-  local tmpSurName = ""
+  local tmpRPName = ""
   for k, v in pairs ( player.GetAll() ) do
-    if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
+    if tostring( v:SteamID64() ) == tostring( tmpTargetSteamID64 ) then
       tmpPly = v
       tmpTargetName = v:Nick()
-      tmpFirstName = v:GetNWString( "FirstName" )
-      tmpSurName = v:GetNWString( "SurName" )
+      tmpRPName = v:RPName()
       tmpGender = v:GetNWString( "Gender" )
     end
   end
@@ -43,14 +41,11 @@ net.Receive( "openInteractMenu", function ()
 
     draw.SimpleText( lang.identifycard, "charTitle", ctrW( 10 + 10 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     draw.SimpleText( GetHostName(), "charTitle", ctrW( 10 + 10 ), ctrW( 60+35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( LocalPlayer():SteamID(), "charTitle", ctrW( 745 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+    draw.SimpleText( LocalPlayer():SteamID64(), "charTitle", ctrW( 745 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( lang.surname .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 70 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.firstname .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 140 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( "RPName" .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 70 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( tmpSurName, "charText", ctrW( 280 ), ctrW( 60 + 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-
-    draw.SimpleText( tmpFirstName, "charText", ctrW( 280 ), ctrW( 60 + 170 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( tmpRPName, "charText", ctrW( 280 ), ctrW( 60 + 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.SimpleText( lang.gender .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 210 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     local gender = lang.other
@@ -84,7 +79,7 @@ net.Receive( "openInteractMenu", function ()
       buttonPromote:SetText( lang.promote .. ": " .. promoteName )
       function buttonPromote:DoClick()
         net.Start( "promotePlayer" )
-          net.WriteString( tmpTargetSteamID )
+          net.WriteString( tmpTargetSteamID64 )
         net.SendToServer()
         _windowInteract:Close()
       end
@@ -95,7 +90,7 @@ net.Receive( "openInteractMenu", function ()
       buttonDemote:SetText( lang.demote .. ": " .. demoteName )
       function buttonDemote:DoClick()
         net.Start( "demotePlayer" )
-          net.WriteString( tmpTargetSteamID )
+          net.WriteString( tmpTargetSteamID64 )
         net.SendToServer()
         _windowInteract:Close()
       end

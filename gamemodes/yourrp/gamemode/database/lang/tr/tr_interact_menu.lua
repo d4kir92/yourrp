@@ -4,10 +4,10 @@
 
 --##############################################################################
 function TR_Interact_Menu()
-  lang.interactmenu = "Interact Menu"
+  lang.interactmenu = "Ektileşim Menüsü"
 
-  lang.trade = "Trade"
-  lang.promote = "Promote"
-  lang.demote = "Demote"
+  lang.trade = "Takas"
+  lang.promote = "Terfi Et"
+  lang.demote = "Atılma"
 end
 --##############################################################################

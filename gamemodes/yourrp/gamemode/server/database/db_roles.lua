@@ -84,7 +84,7 @@ function dbRolesInit()
 
 		if sql.TableExists( dbName2 ) then
 			printGM( "db", dbName .. yrp.successdb )
-      local result = sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, removeable ) VALUES ( 1, 'Civilian', '0,0,0', 0 )" )
+      local result = sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, playermodel, removeable ) VALUES ( 1, 'Civilian', '0,0,0', 'models/player/skeleton.mdl', 0 )" )
 		else
 			printERROR( "CREATE TABLE " .. dbName2 .. " fail" )
       retryLoadDatabase()
@@ -93,7 +93,7 @@ function dbRolesInit()
 
   if dbSelect( dbName2, "*", "uniqueID = 1" ) == nil then
     printGM( "note", dbName2 .. " has not the default role" )
-    sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, removeable ) VALUES ( 1, 'Civilian', '0,0,0', 0 )" )
+    sql.Query( "INSERT INTO " .. dbName2 .. "( uniqueID, roleID, color, playermodel, removeable ) VALUES ( 1, 'Civilian', '0,0,0', 'models/player/skeleton.mdl', 0 )" )
   end
 
   dbRolesAddValues()

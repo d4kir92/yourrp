@@ -14,9 +14,9 @@ end
 
 
 function cleanUpJail( ply )
-  local _tmpTable = dbSelect( "yrp_jail", "*", "steamID = '" .. ply:SteamID() .. "'" )
+  local _tmpTable = dbSelect( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if _tmpTable != nil then
-    dbDeleteFrom( "yrp_jail", "steamID = '" .. ply:SteamID() .. "'" )
+    dbDeleteFrom( "yrp_jail", "SteamID = '" .. ply:SteamID() .. "'" )
     ply:SetNWBool( "inJail", false )
     ply:SetNWInt( "jailtime", 0 )
 

@@ -63,6 +63,15 @@ function ctrF( tmpNumber )
   return math.Round( tmpNumber, 8 )
 end
 
+function ctr( tmpNumber )
+  if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
+    tmpNumber = 2160/tmpNumber
+    return math.Round( ScrH()/tmpNumber )
+  else
+    return -1
+  end
+end
+
 function ctrW( tmpNumber )
   if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
     tmpNumber = 2160/tmpNumber
@@ -111,6 +120,19 @@ function createVGUI( art, parent, w, h, x, y )
   end
   if x != nil and y != nil then
     tmp:SetPos( ctrW(x), ctrW(y) )
+  end
+  return tmp
+end
+
+function ChangeLanguage( parent, w, h, x, y )
+  local tmp = createD( "DComboBox", parent, w, h, x, y )
+  tmp:SetValue( lang.lang )
+  tmp:AddChoice( "[AUTOMATIC]", "auto" )
+  for k, v in pairs( lang.all ) do
+    tmp:AddChoice( v.ineng .. "/" .. v.lang, v.short )
+  end
+  tmp.OnSelect = function( panel, index, value, data )
+    changeLang( data )
   end
   return tmp
 end
@@ -310,22 +332,23 @@ function openSingleSelector( table )
   end
   getMaxSite()
 
+  local shopsize = ScrH()
   local frame = vgui.Create( "DFrame" )
-  frame:SetSize( ctrW( 2000 ), ctrW( 2000 ) )
-  frame:SetPos( ScrW2() - ctrW( 2000/2 ), ScrH2() - ctrW( 2000/2 ) )
+  frame:SetSize( shopsize, shopsize )
+  frame:SetPos( ScrW2() - shopsize/2, ScrH2() - shopsize/2 )
   frame:SetTitle( lang.itemMenu )
   function frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
   end
 
-  local PanelSelect = createVGUI( "DPanel", frame, 2000, 2000 - 45, 10, 100 )
+  local PanelSelect = createD( "DPanel", frame, shopsize - ctr( 20 ), shopsize - ctr( 100 ), ctr( 10 ), ctr( 100 ) )
   PanelSelect:SetText( "" )
   function PanelSelect:Paint( pw, ph )
     //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-    draw.SimpleText( site.cur .. "/" .. site.max, "sef", pw/2, ph - 50, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  local search = createVGUI( "DTextEntry", frame, 2000 - 20, 40, 10, 50 )
+  local search = createD( "DTextEntry", frame, shopsize - ctr( 20 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
   function showList()
     local tmpBr = 25
     local tmpX = 0
@@ -338,13 +361,18 @@ function openSingleSelector( table )
     end
 
     site.count = 0
+    local count = 0
+    local iconsize = 384
+    local amount = 20
     for k, item in SortedPairsByMemberValue( table, _cat, false ) do
       item.PrintName = item.PrintName or item.Name or ""
       item.ClassName = item.ClassName or item.Class or ""
       item.WorldModel = item.WorldModel or item.Model or ""
       if string.find( string.lower( item.WorldModel or "XXXXXXXXX" ), search:GetText() ) or string.find( string.lower( item.PrintName or "XXXXXXXXX" ), search:GetText() ) or string.find( string.lower( item.ClassName or "XXXXXXXXX" ), search:GetText() ) then
         site.count = site.count + 1
-        if ( site.count - 1 ) >= ( site.cur - 1 ) * 42 and ( site.count - 1 ) < ( site.cur ) * 42 then
+        if ( site.count - 1 ) >= ( site.cur - 1 ) * amount and ( site.count - 1 ) < ( site.cur ) * amount then
+          count = count + 1
+
           if item.WorldModel == nil then
             item.WorldModel = item.Model or ""
           end
@@ -355,11 +383,16 @@ function openSingleSelector( table )
             item.PrintName = item.Name or ""
           end
 
-          local icon = createVGUI( "SpawnIcon", PanelSelect, 256, 256, tmpX, tmpY )
+          local icon = createD( "SpawnIcon", PanelSelect, ctr( iconsize ), ctr( iconsize ), ctr( tmpX ), ctr( tmpY ) )
+          icon.item = item
           icon:SetText( "" )
-          icon:SetModel( item.WorldModel )
+          timer.Create( "shop" .. count, 0.6*count, 1, function()
+            if icon != nil and icon != NULL and icon.item != nil then
+              icon:SetModel( icon.item.WorldModel )
+            end
+          end)
           icon:SetTooltip( item.PrintName )
-          local _tmpName = createVGUI( "DButton", icon, 256, 256, 10, 10 )
+          local _tmpName = createVGUI( "DButton", icon, iconsize, iconsize, 10, 10 )
           _tmpName:SetText( "" )
           function _tmpName:Paint( pw, ph )
             draw.SimpleText( item.PrintName, "pmT", pw/2, ph-ctrW( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -370,17 +403,17 @@ function openSingleSelector( table )
             LocalPlayer():SetNWString( "PrintName", item.PrintName )
             frame:Close()
           end
-          tmpX = tmpX + 256 + tmpBr
-          if tmpX > 2000 - 256 - tmpBr then
+          tmpX = tmpX + iconsize + tmpBr
+          if ctr( tmpX ) > shopsize - ctr( iconsize ) - tmpBr then
             tmpX = 0
-            tmpY = tmpY + 256 + tmpBr
+            tmpY = tmpY + iconsize + tmpBr
           end
         end
       end
     end
   end
 
-  local nextB = createVGUI( "DButton", frame, 200, 50, 2000 - 10 - 200, 1800 )
+  local nextB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), shopsize - ctr( 10 ) - ctr( 200 ), ctr( 1800 ) )
   nextB:SetText( "" )
   function nextB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -393,7 +426,7 @@ function openSingleSelector( table )
     end
   end
 
-  local prevB = createVGUI( "DButton", frame, 200, 50, 10, 1800 )
+  local prevB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1800 ) )
   prevB:SetText( "" )
   function prevB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -419,10 +452,11 @@ end
 
 --##############################################################################
 --Includes
+include( "shared/sh_player.lua" )
+
 include( "integration/darkrp.lua" )
 
 include( "client/database/db_database.lua" )
-include( "client/cl_player.lua" )
 
 include( "client/cl_fonts.lua" )
 include( "client/cl_scoreboard.lua" )

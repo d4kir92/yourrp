@@ -81,7 +81,7 @@ net.Receive( "createKey", function( len, ply )
   for k, v in pairs( ply:GetWeapons() ) do
     if v.ClassName == "yrp_key" then
       _keynr = getNumber( _door, _tmpBuildingID )
-      local _oldkeynrs = dbSelect( "yrp_players", "keynrs", "SteamID = '" .. ply:SteamID() .. "'" )
+      local _oldkeynrs = dbSelect( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
       local _tmpTable = string.Explode( ",", _oldkeynrs[1].keynrs )
       if !table.HasValue( _tmpTable, _keynr ) then
         v:AddKeyNr( _keynr )
@@ -94,7 +94,7 @@ net.Receive( "createKey", function( len, ply )
           end
         end
         _newkeynrs = _newkeynrs .. _keynr
-        dbUpdate( "yrp_players", "keynrs = '" .. _newkeynrs .. "'", "SteamID = '" .. ply:SteamID() .. "'" )
+        dbUpdate( "yrp_characters", "keynrs = '" .. _newkeynrs .. "'", "uniqueID = " .. ply:CharID() )
       else
         printGM( "note", "Key already exists")
       end
@@ -107,12 +107,12 @@ net.Receive( "removeOwner", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerSteamID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
+  local result = dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _tmpDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerRPName", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
     end
@@ -120,7 +120,7 @@ net.Receive( "removeOwner", function( len, ply )
   local _tmpFDoors = ents.FindByClass( "func_door" )
   for k, v in pairs( _tmpFDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerRPName", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
     end
@@ -128,7 +128,7 @@ net.Receive( "removeOwner", function( len, ply )
   local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
   for k, v in pairs( _tmpFRDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerRPName", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
     end
@@ -139,12 +139,12 @@ net.Receive( "sellBuilding", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerSteamID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
+  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
 
   for k, v in pairs( _tmpDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerRPName", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
       v:Fire("Unlock")
@@ -156,7 +156,7 @@ net.Receive( "sellBuilding", function( len, ply )
 
   for k, v in pairs( _tmpFDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerRPName", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
       v:Fire("Unlock")
@@ -168,7 +168,7 @@ net.Receive( "sellBuilding", function( len, ply )
 
   for k, v in pairs( _tmpFRDoors ) do
     if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-      v:SetNWString( "owner", "" )
+      v:SetNWString( "ownerRPName", "" )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
       v:Fire("Unlock")
@@ -183,32 +183,32 @@ net.Receive( "buyBuilding", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-  if ply:canAfford( _tmpTable[1].price ) and _tmpTable[1].ownerSteamID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
+  if ply:canAfford( _tmpTable[1].price ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
     ply:addMoney( - ( _tmpTable[1].price ) )
-    dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerSteamID = '" .. ply:SteamID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
+    dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
     local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
-    local _tmpPlys = dbSelect( "yrp_players", "nameSur, nameFirst", "steamID = '" .. ply:SteamID() .. "'" )
+    local _tmpPlys = dbSelect( "yrp_characters", "rpname", "uniqueID = " .. ply:CharID() )
     for k, v in pairs( _tmpDoors ) do
       if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-        v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
+        v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
       end
     end
     local _tmpFDoors = ents.FindByClass( "func_door" )
     for k, v in pairs( _tmpFDoors ) do
       if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-        v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
+        v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
       end
     end
     local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
     for k, v in pairs( _tmpFRDoors ) do
       if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-        v:SetNWString( "owner", _tmpPlys[1].nameSur .. ", " .. _tmpPlys[1].nameFirst )
+        v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
       end
     end
 
-    printGM( "user", ply:Nick() .. " has buyed a door")
+    printGM( "user", ply:RPName() .. " has buyed a door")
   else
-    printGM( "user", ply:Nick() .. " has not enough money to buy door")
+    printGM( "user", ply:RPName() .. " has not enough money to buy door")
   end
 end)
 
@@ -309,6 +309,20 @@ net.Receive( "getBuildingInfo", function( len, ply )
   if _tmpBuildingID != nil then
 
     local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+
+    local owner = ""
+    if _tmpTable[1].ownerCharID != "" then
+      local tmpChaTab = dbSelect( "yrp_characters", "*", "uniqueID = " .. _tmpTable[1].ownerCharID )
+      if tmpChaTab != nil then
+        owner = tmpChaTab[1].rpname
+      end
+    elseif _tmpTable[1].groupID != "" then
+      local tmpGroTab = dbSelect( "yrp_groups", "*", "uniqueID = " .. _tmpTable[1].groupID )
+      if tmpGroTab != nil then
+        owner = tmpGroTab[1].groupID
+      end
+    end
+
     if _tmpTable != nil then
       if allowedToUseDoor( _tmpBuildingID, ply ) then
         net.Start( "getBuildingInfo" )
@@ -316,6 +330,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
           net.WriteInt( _tmpDoorID, 16 )
           net.WriteInt( _tmpBuildingID, 16 )
           net.WriteTable( _tmpTable )
+          net.WriteString( owner )
         net.Send( ply )
       end
     else

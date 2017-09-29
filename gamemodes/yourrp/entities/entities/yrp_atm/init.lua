@@ -73,24 +73,24 @@ function ENT:ChangeMenu()
 end
 
 function ENT:ATMPressPrev( ply )
-	local _tmpPlayers = dbSelect( "yrp_players", "*", nil )
+	local _tmpPlayers = dbSelect( "yrp_characters", "*", nil )
 	self.namePos = self.namePos - 4
 	if self.namePos < 1 then
 		self.namePos = 1
 	end
 	local names = {}
-	local steamIDs = {}
+	local SteamIDs = {}
 	local i = 1
 	self.names = {}
-	self.steamIDs = {}
+	self.SteamIDs = {}
 	for k, v in pairs( _tmpPlayers ) do
 		if k >= self.namePos then
-			if v.nick != nil and v.nick != NULL then
-				names[i] = v.nick
-				steamIDs[i] = v.steamID
+			if v.rpname != nil and v.rpname != NULL then
+				names[i] = v.rpname
+				SteamIDs[i] = v.uniqueID
 			else
 				names[i] = ""
-				steamIDs[i] = ""
+				SteamIDs[i] = ""
 			end
 			i = i + 1
 			if self.namePos > self.namePos+4 then
@@ -99,31 +99,31 @@ function ENT:ATMPressPrev( ply )
 		end
 	end
 	self:SetNWString( "name1", tostring(names[1]) )
-	self:SetNWString( "steamID1", tostring(steamIDs[1]) )
+	self:SetNWString( "SteamID1", tostring(SteamIDs[1]) )
 	self:SetNWString( "name2", tostring(names[2]) )
-	self:SetNWString( "steamID2", tostring(steamIDs[2]) )
+	self:SetNWString( "SteamID2", tostring(SteamIDs[2]) )
 	self:SetNWString( "name3", tostring(names[3]) )
-	self:SetNWString( "steamID3", tostring(steamIDs[3]) )
+	self:SetNWString( "SteamID3", tostring(SteamIDs[3]) )
 	self:SetNWString( "name4", tostring(names[4]) )
-	self:SetNWString( "steamID4", tostring(steamIDs[4]) )
+	self:SetNWString( "SteamID4", tostring(SteamIDs[4]) )
 end
 
 function ENT:ATMPressNext( ply )
 	local _tmpPlayers = dbSelect( "yrp_players", "*", nil )
 	self.namePos = self.namePos + 4
 	local names = {}
-	local steamIDs = {}
+	local SteamIDs = {}
 	local i = 1
 	self.names = {}
-	self.steamIDs = {}
+	self.SteamIDs = {}
 	for k, v in pairs( _tmpPlayers ) do
 		if k >= self.namePos then
-			if v.nick != nil and v.nick != NULL then
-				names[i] = v.nick
-				steamIDs[i] = v.steamID
+			if v.rpname != nil and v.rpname != NULL then
+				names[i] = v.rpname
+				SteamIDs[i] = v.uniqueID
 			else
 				names[i] = ""
-				steamIDs[i] = ""
+				SteamIDs[i] = ""
 			end
 			i = i + 1
 			if self.namePos > self.namePos+4 then
@@ -132,13 +132,13 @@ function ENT:ATMPressNext( ply )
 		end
 	end
 	self:SetNWString( "name1", tostring(names[1]) )
-	self:SetNWString( "steamID1", tostring(steamIDs[1]) )
+	self:SetNWString( "SteamID1", tostring(SteamIDs[1]) )
 	self:SetNWString( "name2", tostring(names[2]) )
-	self:SetNWString( "steamID2", tostring(steamIDs[2]) )
+	self:SetNWString( "SteamID2", tostring(SteamIDs[2]) )
 	self:SetNWString( "name3", tostring(names[3]) )
-	self:SetNWString( "steamID3", tostring(steamIDs[3]) )
+	self:SetNWString( "SteamID3", tostring(SteamIDs[3]) )
 	self:SetNWString( "name4", tostring(names[4]) )
-	self:SetNWString( "steamID4", tostring(steamIDs[4]) )
+	self:SetNWString( "SteamID4", tostring(SteamIDs[4]) )
 end
 
 function ENT:createButtonNumber( parent, up, forward, right, add )
@@ -191,16 +191,16 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 					self.parent:ATMPressPrev( activator )
 				elseif func == "ATMPressPlayer1" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name1" ))
-					self.parent:SetNWString( "steamID", self.parent:GetNWString( "steamID1" ) )
+					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID1" ) )
 				elseif func == "ATMPressPlayer2" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name2" ))
-					self.parent:SetNWString( "steamID", self.parent:GetNWString( "steamID2" ) )
+					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID2" ) )
 				elseif func == "ATMPressPlayer3" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name3" ))
-					self.parent:SetNWString( "steamID", self.parent:GetNWString( "steamID3" ) )
+					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID3" ) )
 				elseif func == "ATMPressPlayer4" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name4" ))
-					self.parent:SetNWString( "steamID", self.parent:GetNWString( "steamID4" ) )
+					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID4" ) )
 				elseif func == "confirm" then
 					if self.parent:GetNWString( "prevstatus" ) == "withdraw" then
 						self.money = -tonumber( self.parent:GetNWString( "othermoney", "0" ) )
@@ -212,23 +212,23 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 						if self.money != nil and isnumber( self.money ) then
 							if self.money > 0 then
 								if activator:canAffordBank( self.money ) then
-									local dbSelectActivator = dbSelect( "yrp_players", "*", "steamID = '" .. activator:SteamID() .. "'" )
+									local dbSelectActivator = dbSelect( "yrp_characters", "*", "uniqueID = " .. activator:CharID() )
 									dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
-									dbUpdate( "yrp_players", "moneybank = " .. dbSelectActivator[1].moneybank, "steamID = '" .. activator:SteamID() .. "'")
+									dbUpdate( "yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID() )
 
-									local dbSelectTarget = dbSelect( "yrp_players", "*", "steamID = '" .. tostring( self.parent:GetNWString( "steamID") ) .. "'" )
+									local dbSelectTarget = dbSelect( "yrp_characters", "*", "uniqueID = " .. tostring( self.parent:GetNWString( "SteamID64" ) ) )
 									if dbSelectTarget != nil then
 										dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
-										dbUpdate( "yrp_players", "moneybank = " .. dbSelectTarget[1].moneybank, "steamID = '" .. self.parent:GetNWString( "steamID") .. "'")
+										dbUpdate( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID64" ) .. "'")
 
 										activator:SetNWInt( "moneybank", dbSelectActivator[1].moneybank )
 										for k, v in pairs( player.GetAll() ) do
-											if v:SteamID() == dbSelectTarget[1].steamID then
+											if v:SteamID64() == dbSelectTarget[1].SteamID64 then
 												v:SetNWInt( "moneybank", dbSelectTarget[1].moneybank )
 												break
 											end
 										end
-										printGM( "note", activator:Nick() .. " transfered " .. activator:GetNWString( "moneyPre" ) .. self.money .. activator:GetNWString( "moneyPost" ) .. " to " .. dbSelectTarget[1].nick )
+										printGM( "note", activator:RPName() .. " transfered " .. activator:GetNWString( "moneyPre" ) .. self.money .. activator:GetNWString( "moneyPost" ) .. " to " .. dbSelectTarget[1].rpname )
 									end
 								end
 							end

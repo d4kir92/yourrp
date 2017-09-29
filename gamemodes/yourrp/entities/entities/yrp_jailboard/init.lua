@@ -28,8 +28,8 @@ function ENT:Use( activator, caller )
 	local tmpTable = dbSelect( "yrp_jail", "*", nil )
 	local tmpGroups = dbSelect( "yrp_groups", "*", nil )
 	local tmpGeneral = dbSelect( "yrp_general", "*", nil )
-	local tmpPlayers = dbSelect( "yrp_players", "roleID", "steamID = '" .. caller:SteamID() .. "'")
-	local tmpRoles = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpPlayers[1].roleID .. "")
+	local chaTab = caller:GetChaTab()
+	local tmpRoles = dbSelect( "yrp_roles", "*", "uniqueID = " .. chaTab.roleID .. "")
 
 	if tmpTable == nil or tmpTable == false then
 		tmpTable = {}

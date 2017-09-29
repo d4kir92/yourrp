@@ -8,15 +8,15 @@ function allowedToUseDoor( id, ply )
     --PrintTable(_tmpBuildingTable)
     if _tmpBuildingTable[1] != nil then
 
-      if tostring( _tmpBuildingTable[1].ownerSteamID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
+      --PrintTable( _tmpBuildingTable )
+      if tostring( _tmpBuildingTable[1].ownerCharID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
         return true
       else
-        local _tmpPlyTable = dbSelect( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'" )
-        local _tmpRoleTable = dbSelect( "yrp_roles", "*", "uniqueID = " .. _tmpPlyTable[1].roleID )
-        local _tmpGroupTable = dbSelect( "yrp_groups", "*", "uniqueID = " .. _tmpRoleTable[1].groupID )
+        local _tmpChaTab = dbSelect( "yrp_characters", "*", "uniqueID = " .. _tmpBuildingTable[1].ownerCharID )
+        local _tmpGroupTable = dbSelect( "yrp_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID )
 
         --PrintTable(_tmpGroupTable)
-        if tostring( _tmpBuildingTable[1].ownerSteamID ) == tostring( ply:SteamID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
+        if tostring( _tmpBuildingTable[1].ownerCharID ) == tostring( ply:CharID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
           return true
         else
           return false
@@ -32,7 +32,7 @@ function addKeys( ply )
   if ply:IsPlayer() then
     for k, v in pairs( ply:GetWeapons() ) do
       if v.ClassName == "yrp_key" then
-        local _tmpTable = dbSelect( "yrp_players", "keynrs", "SteamID = '" .. ply:SteamID() .. "'" )
+        local _tmpTable = dbSelect( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
         if _tmpTable != nil then
           _tmpTable = string.Explode( ",", _tmpTable[1].keynrs )
           for l, w in pairs( _tmpTable ) do
@@ -125,11 +125,11 @@ function loadDoors()
   for k, v in pairs( _allPropDoors ) do
     for l, w in pairs( _tmpBuildings ) do
       if tonumber( w.uniqueID ) == tonumber( v:GetNWInt( "buildingID" ) ) then
-        if w.ownerSteamID != "" then
+        if w.ownerCharID != "" then
 
-          local _tmpRPName = dbSelect( "yrp_players", "*", "SteamID = '" .. w.ownerSteamID .. "'" )
-          if _tmpRPName[1].nameSur != nil then
-            v:SetNWString( "owner", _tmpRPName[1].nameSur .. ", " .. _tmpRPName[1].nameFirst )
+          local _tmpRPName = dbSelect( "yrp_characters", "*", "uniqueID = " .. w.ownerCharID )
+          if _tmpRPName[1].rpname != nil then
+            v:SetNWString( "ownerRPName", _tmpRPName[1].rpname )
           end
         else
           if tonumber( w.groupID ) != -1 then

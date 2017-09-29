@@ -183,8 +183,8 @@ function tabClientHud( sheet )
     changeHudElement( changeHudWindow, "max", "may", "maw", "mah", "mat", "Mana" )
     changeHudElement( changeHudWindow, "cax", "cay", "caw", "cah", "cat", "Cast" )
     changeHudElement( changeHudWindow, "stx", "sty", "stw", "sth", "stt", "Status" )
-    local votes = changeHudElement( changeHudWindow, "vtx", "vty", "vtw", "vth", "vtt", lang.votes )
-    votes:SetSizable( false )
+    --local votes = changeHudElement( changeHudWindow, "vtx", "vty", "vtw", "vth", "vtt", lang.votes )
+    --votes:SetSizable( false )
 
     changeHudElement( changeHudWindow, "cbx", "cby", "cbw", "cbh", "cbt", "ChatBox" )
 

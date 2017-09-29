@@ -5,14 +5,15 @@ net.Receive( "getBuildingInfo", function( len )
     local _door = net.ReadEntity()
     local _building = net.ReadInt( 16 )
     local _tmpBuilding = net.ReadTable()
+    local owner = net.ReadString()
 
     local ply = LocalPlayer()
     if _building != nil and _tmpBuilding != nil then
       if _tmpBuilding[1] != nil then
-        if _tmpBuilding[1].ownerSteamID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
+        if _tmpBuilding[1].ownerCharID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
           buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
-        elseif _tmpBuilding[1].ownerSteamID == ply:SteamID() or _tmpBuilding[1].groupID != -1 then
-          optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
+        elseif _tmpBuilding[1].ownerCharID == ply:CharID() or _tmpBuilding[1].groupID != -1 then
+          optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door, owner )
         else
           printGM( "note", "fail" )
           _menuIsOpen = 0
@@ -171,7 +172,7 @@ function buyWindow( buildingID, name, price, door )
   _doorWindow:MakePopup()
 end
 
-function optionWindow( buildingID, name, price, door )
+function optionWindow( buildingID, name, price, door, owner )
   local ply = LocalPlayer()
   local _buildingID = buildingID
   local _name = name
@@ -190,7 +191,7 @@ function optionWindow( buildingID, name, price, door )
     draw.SimpleText( lang.settings, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.SimpleText( lang.name .. ": " .. _name, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.group .. "/" ..lang.owner .. ": INWORK", "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleText( lang.owner .. ": " .. owner, "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     draw.SimpleText( lang.doorlevel .. ": " .. door:GetNWInt( "level", -1 ), "sef", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
     draw.RoundedBox( 0, 0, ctrW( 270 ), pw, ph, Color( 255, 255, 0, 200 ) )
