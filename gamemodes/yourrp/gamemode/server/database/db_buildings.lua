@@ -5,17 +5,6 @@
 include( "buildings/db_net.lua" )
 include( "buildings/db_func.lua" )
 
-local dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
-sqlAddColumn( dbTable, "buildingID", "INTEGER DEFAULT -1" )
-sqlAddColumn( dbTable, "level", "INTEGER DEFAULT 1" )
-sqlAddColumn( dbTable, "keynr", "INTEGER DEFAULT -1" )
-
-dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
-sqlAddColumn( dbTable, "groupID", "INTEGER DEFAULT -1" )
-sqlAddColumn( dbTable, "price", "INTEGER DEFAULT 100" )
-sqlAddColumn( dbTable, "ownerCharID", "TEXT DEFAULT ''" )
-sqlAddColumn( dbTable, "name", "TEXT DEFAULT 'Building'" )
-
 function dbBuildingsInit()
   local dbName = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
 
@@ -31,7 +20,6 @@ function dbBuildingsInit()
     sql.Query( query )
 		if sql.TableExists( dbName ) then
       printGM( "db", dbName .. yrp.successdb )
-      dbDoorsAddValues( dbName )
 		else
 			printERROR( "CREATE TABLE " .. dbName .. " fail" )
       retryLoadDatabase()
@@ -53,7 +41,6 @@ function dbBuildingsInit()
     sql.Query( query )
 		if sql.TableExists( dbName2 ) then
       printGM( "db", dbName .. yrp.successdb )
-      dbBuildingsAddValues( dbName2 )
 		else
 			printERROR( "CREATE TABLE " .. dbName2 .. " fail" )
       retryLoadDatabase()
@@ -61,3 +48,14 @@ function dbBuildingsInit()
   end
   printGMPos()
 end
+
+local dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
+sqlAddColumn( dbTable, "buildingID", "INTEGER DEFAULT -1" )
+sqlAddColumn( dbTable, "level", "INTEGER DEFAULT 1" )
+sqlAddColumn( dbTable, "keynr", "INTEGER DEFAULT -1" )
+
+dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
+sqlAddColumn( dbTable, "groupID", "INTEGER DEFAULT -1" )
+sqlAddColumn( dbTable, "price", "INTEGER DEFAULT 100" )
+sqlAddColumn( dbTable, "ownerCharID", "TEXT DEFAULT ''" )
+sqlAddColumn( dbTable, "name", "TEXT DEFAULT 'Building'" )

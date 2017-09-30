@@ -310,10 +310,10 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName( v )
     end
 
-    LocalPlayer():SetNWString( "workingString", yrp_roles_dbTable[id].playermodel )
+    _globalWorking = yrp_roles_dbTable[id].playermodel
 
     hook.Add( "closeRolePlayermodels", "crs", function()
-      yrp_roles_dbTable[id].playermodel = LocalPlayer():GetNWString( "workingString" )
+      yrp_roles_dbTable[id].playermodel = _globalWorking
       pms = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
       changepm = 1
       if _menuIsOpen == 1 then
@@ -444,10 +444,10 @@ function addDBSwep( parent, id, uniqueID )
         table.insert( swepsL, v )
       end
     end
-    LocalPlayer():SetNWString( "workingString", yrp_roles_dbTable[id].sweps )
+    _globalWorking = yrp_roles_dbTable[id].sweps
 
     hook.Add( "closeRoleSweps", "crs", function()
-      yrp_roles_dbTable[id].sweps = LocalPlayer():GetNWString( "workingString" )
+      yrp_roles_dbTable[id].sweps = _globalWorking
       sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
       changesw = 1
 

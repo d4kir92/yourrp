@@ -253,7 +253,7 @@ function HudPlayer()
         local _abstand = 40
         drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
         drawText( lang.tooltip .. ":", "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        drawText( "F2 - " .. lang.opencharacterselection, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 1*_abstand, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        drawText( "F2 - " .. lang.characterselection, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 1*_abstand, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "F3 - " .. lang.guimouse, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 2*_abstand, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "F4 - " .. lang.buymenu, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 3*_abstand, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         drawText( "F7  - " .. lang.settings, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 4*_abstand, Color( 255, 255, 255, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )

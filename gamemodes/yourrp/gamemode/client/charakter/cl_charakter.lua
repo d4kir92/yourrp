@@ -18,9 +18,9 @@ end
 
 colors = {}
 colors.primary = Color( 27, 27, 27, 255 )
-colors.primaryH = Color( 27+25, 27+25, 27+25, 255 )
+colors.primaryH = Color( 27+50, 27+50, 27+50, 255 )
 colors.secondary = Color( 0, 33, 113, 255 )
-colors.secondaryH = Color( 0+25, 33+25, 113+25, 255 )
+colors.secondaryH = Color( 0+50, 33+50, 113+50, 255 )
 colors.background = Color( 225, 225, 225, 255 )
 colors.selected = Color( 225, 225, 0, 255 )
 colors.hovered = Color( 0, 255, 0, 255 )
@@ -131,6 +131,8 @@ function openCharacterCreation()
   function frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
+
+    draw.SimpleText( lang.charactercreation, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   local identification = createD( "DPanel", frame, ctr( 800 ), ctr( 360 ), ScrW() - ctr( 800 ) - ctr( 100 ), ScrH() - ctr( 400 ) - ctr( 100 ) )
@@ -447,6 +449,8 @@ function openCharacterSelection()
   function frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
+
+    draw.SimpleText( lang.characterselection, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   ChangeLanguage( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
@@ -530,9 +534,9 @@ function openCharacterSelection()
         else
           paintMD( pw, ph, nil, colors.secondary )
         end
-        draw.SimpleText( self.rpname, "HudBars", ctr( 20 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( self.groupID .. " " .. self.roleID, "HudBars", ctr( 20 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( self.map, "HudBars", ctr( 20 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.name .. ": " .. self.rpname, "HudBars", ctr( 20 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.role .. ": " .. self.groupID .. " " .. self.roleID, "HudBars", ctr( 20 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.map .. ": " .. self.map, "HudBars", ctr( 20 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
       function tmpChar:DoClick()
         curChar = self.charid

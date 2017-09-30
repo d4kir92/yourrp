@@ -115,6 +115,7 @@ function DE_General()
   lang.nameistoshort = "Name ist zu kurz"
   lang.enterworld = "Welt beitreten"
   lang.deletecharacter = "Charakter löschen"
-  lang.opencharacterselection = "Charakterauswahl"
+  lang.characterselection = "Charakterauswahl"
+  lang.charactercreation = "Charaktererstellung"
 end
 --##############################################################################

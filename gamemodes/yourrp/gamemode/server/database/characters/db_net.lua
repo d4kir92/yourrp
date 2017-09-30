@@ -11,6 +11,11 @@ util.AddNetworkString( "CreateCharacter" )
 
 util.AddNetworkString( "EnterWorld" )
 
+function GM:PlayerInitialSpawn( ply )
+  ply:KillSilent()
+  return false
+end
+
 net.Receive( "charGetGroups", function( len, ply )
   local tmpTable = dbSelect( "yrp_groups", "*", nil )
   if tmpTable == nil then
@@ -75,10 +80,10 @@ end)
 net.Receive( "charGetCharacters", function( len, ply )
   local netTable = {}
 
-  local tmpTable = dbSelect( "yrp_characters", "*", "SteamID64 = '" .. ply:SteamID64() .. "'" )
+  local chaTab = dbSelect( "yrp_characters", "*", "SteamID64 = '" .. ply:SteamID64() .. "'")
 
-  if tmpTable != nil then
-    for k, v in pairs( tmpTable ) do
+  if chaTab != nil then
+    for k, v in pairs( chaTab ) do
       netTable[k] = {}
       netTable[k].char = v
       local tmp = dbSelect( "yrp_roles", "*", "uniqueID = " .. v.roleID )
@@ -124,10 +129,15 @@ net.Receive( "CreateCharacter", function( len, ply )
   vals = vals .. 500 .. ", "
   vals = vals .. "'" .. game.GetMap() .. "'"
   dbInsertInto( "yrp_characters", cols, vals )
+
+  local chars = dbSelect( "yrp_characters", "*", nil )
+
+
+  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID .. ", SteamID64 = '" .. ply:SteamID64() .. "'" )
 end)
 
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
-  local result = dbUpdate( "yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID64 = '" .. ply:SteamID64() .. "'" )
+  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. char .. ", SteamID64 = '" .. ply:SteamID64() .. "'" )
   ply:Spawn()
 end)

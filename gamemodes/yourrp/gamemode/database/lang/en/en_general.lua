@@ -115,6 +115,7 @@ function EN_General()
   lang.nameistoshort = "Name is to short"
   lang.enterworld = "Enter world"
   lang.deletecharacter = "Delete character"
-  lang.opencharacterselection = "Character selection"
+  lang.characterselection = "Character selection"
+  lang.charactercreation = "Character creation"
 end
 --##############################################################################

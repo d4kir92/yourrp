@@ -33,10 +33,10 @@ function addKeys( ply )
     for k, v in pairs( ply:GetWeapons() ) do
       if v.ClassName == "yrp_key" then
         local _tmpTable = dbSelect( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
-        if _tmpTable != nil then
+        if worked( _tmpTable ) then
           _tmpTable = string.Explode( ",", _tmpTable[1].keynrs )
           for l, w in pairs( _tmpTable ) do
-            if w != nil and w != "" then
+            if worked( w ) and w != "" then
               v:AddKeyNr( w )
             end
           end
@@ -91,9 +91,9 @@ function loadDoors()
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   local _tmpDoors = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
   local _count = 0
-  if _tmpDoors != nil then
+  if worked( _tmpDoors ) then
     for k, v in pairs( _allPropDoors ) do
-      if _tmpDoors[k] != nil then
+      if worked( _tmpDoors[k] ) then
         v:SetNWInt( "buildingID", tonumber( _tmpDoors[k].buildingID ) )
         v:SetNWInt( "uniqueID", k )
       else

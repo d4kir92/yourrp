@@ -107,53 +107,61 @@ function GM:PlayerLoadout( ply )
   local rolTab = ply:GetRolTab()
   local groTab = ply:GetGroTab()
 
-  ply:SetModelScale( rolTab.playermodelsize, 0 )
+  if rolTab != nil then
+    ply:SetModelScale( rolTab.playermodelsize, 0 )
+    ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
+    ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+    ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
+    ply:SetHealth( tonumber( rolTab.hp ) )
+    ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+    ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
+    ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
+    ply:SetArmor( tonumber( rolTab.ar ) )
+    ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
+    ply:SetNWInt( "capital", rolTab.capital )
+    ply:SetNWString( "roleName", rolTab.roleID )
+    ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
 
-  ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
-  ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
-  ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
-  ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+    --sweps
+    local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
+    for k, swep in pairs( tmpSWEPTable ) do
+      if swep != nil and swep != NULL and swep != "" then
+        ply:Give( swep )
+      end
+    end
+  else
+    printGM( "note", "give role failed" )
+    ply:KillSilent()
+  end
 
-  ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
-  ply:SetHealth( tonumber( rolTab.hp ) )
-  ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+  if chaTab != nil then
+    ply:SetNWInt( "money", chaTab.money )
+    ply:SetNWInt( "moneybank", chaTab.moneybank )
+    ply:SetNWString( "rpname", chaTab.rpname )
+  else
+    printGM( "note", "give char failed" )
+    ply:KillSilent()
+  end
 
-  ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
-  ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
-  ply:SetArmor( tonumber( rolTab.ar ) )
-
-  ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
-
-  ply:SetNWInt( "money", chaTab.money )
-  ply:SetNWInt( "moneybank", chaTab.moneybank )
-  ply:SetNWInt( "capital", rolTab.capital )
-  ply:SetNWString( "rpname", chaTab.rpname )
-
-  ply:SetNWString( "roleName", rolTab.roleID )
-  ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
-
-  ply:SetNWString( "groupName", groTab.groupID )
-  ply:SetNWString( "groupUniqueID", groTab.uniqueID )
+  if groTab != nil then
+    ply:SetNWString( "groupName", groTab.groupID )
+    ply:SetNWString( "groupUniqueID", groTab.uniqueID )
+  else
+    printGM( "note", "give group failed" )
+    ply:KillSilent()
+  end
 
   ply:SetNWInt( "hunger", 100 )
   ply:SetNWInt( "thirst", 100 )
   ply:SetNWInt( "stamina", 100 )
-
-  ply:SetNWString( "rpname", chaTab.rpname )
 
   local monTab = dbSelect( "yrp_money", "*", nil )
   local monPre = monTab[1].value
   local monPos = monTab[2].value
   ply:SetNWString( "moneyPre", monPre )
   ply:SetNWString( "moneyPost", monPos )
-
-  --sweps
-  local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
-  for k, swep in pairs( tmpSWEPTable ) do
-    if swep != nil and swep != NULL and swep != "" then
-      ply:Give( swep )
-    end
-  end
 
   local yrp_general = dbSelect( "yrp_general", "*", nil )
   for k, v in pairs( yrp_general ) do

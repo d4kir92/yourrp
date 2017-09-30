@@ -115,6 +115,7 @@ function TR_General()
   lang.nameistoshort = "Isim Çok kısa"
   lang.enterworld = "Dünya girin"
   lang.deletecharacter = "Karakteri silin"
-  lang.opencharacterselection = "Karakter seçmeyi aç"
+  lang.characterselection = "Karakter seçmeyi aç"
+  lang.charactercreation = "Charaktererstellung"
 end
 --##############################################################################

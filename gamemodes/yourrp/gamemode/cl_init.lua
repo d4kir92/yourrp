@@ -148,7 +148,7 @@ function isInTable( table, item )
 end
 
 function openSelector( table, dbTable, dbSets, dbWhile, closeF )
-  local table2 = string.Explode( ",", LocalPlayer():GetNWString( "workingString", "" ) )
+  local table2 = string.Explode( ",", _globalWorking )
   local frame = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
   frame:Center()
   frame:SetTitle( "" )
@@ -255,7 +255,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             end
             local tmpString = ""
             for k, v in pairs( tmpSelected ) do
-              if v.selected then
+              if v.selected and v.ClassName != nil then
                 if tmpString == "" then
                   tmpString = v.ClassName
                 else
@@ -268,7 +268,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
               net.WriteString( dbSets .. " = '" .. tmpString .. "'" )
               net.WriteString( dbWhile )
             net.SendToServer()
-            LocalPlayer():SetNWString( "workingString", tmpString )
+            _globalWorking = tmpString
           end
 
           tmpX = tmpX + 256 + tmpBr

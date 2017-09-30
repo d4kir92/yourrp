@@ -56,6 +56,7 @@ function changeFontSize()
 	createFont( "weaponT", tmpFont, 16, weight, true )
 
 	createFont( "HudBars", tmpFont, 22, weight, true )
+	createFont( "HudHeader", tmpFont, 40, weight, true )
 	createFont( "HudVersion", tmpFont, 30, 700, true )
 
 	--Creating

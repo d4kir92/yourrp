@@ -8,7 +8,7 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.8.9.1"
+GM.Version = "0.8.9.2"
 GM.VersionSort = "unstable"
 GM.dedicated = "-"
 GM.Help = ""
@@ -98,6 +98,15 @@ if CLIENT then
   net.Receive( "getGamemodename", function( len, ply )
     GAMEMODE.Name = net.ReadString()
   end)
+end
+
+function worked( obj )
+  if obj != nil and obj != false then
+    return true
+  else
+    printGM( "note", "!worked: " .. tostring( obj ) )
+    return false
+  end
 end
 
 function printGMPre( channel, string )
