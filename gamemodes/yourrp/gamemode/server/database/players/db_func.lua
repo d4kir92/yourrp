@@ -94,6 +94,39 @@ function GM:PlayerSetModel( ply )
   end
 end
 
+function SetRolVals( ply, rolTab, groTab )
+  ply:SetModelScale( rolTab.playermodelsize, 0 )
+  ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
+  ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
+  ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
+  ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+  ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
+  ply:SetHealth( tonumber( rolTab.hp ) )
+  ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+  ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
+  ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
+  ply:SetArmor( tonumber( rolTab.ar ) )
+  ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
+  ply:SetNWInt( "capital", rolTab.capital )
+  ply:SetNWString( "roleName", rolTab.roleID )
+  ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
+
+  --sweps
+  local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
+  for k, swep in pairs( tmpSWEPTable ) do
+    if swep != nil and swep != NULL and swep != "" then
+      ply:Give( swep )
+    end
+  end
+
+  if groTab != nil then
+    ply:SetNWString( "groupName", groTab.groupID )
+    ply:SetNWString( "groupUniqueID", groTab.uniqueID )
+  else
+    printGM( "note", "give group failed" )
+  end
+end
+
 function GM:PlayerLoadout( ply )
   ply:SetNWBool( "cuffed", false )
 
@@ -107,30 +140,8 @@ function GM:PlayerLoadout( ply )
   local rolTab = ply:GetRolTab()
   local groTab = ply:GetGroTab()
 
-  if rolTab != nil then
-    ply:SetModelScale( rolTab.playermodelsize, 0 )
-    ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
-    ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
-    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
-    ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
-    ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
-    ply:SetHealth( tonumber( rolTab.hp ) )
-    ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
-    ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
-    ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
-    ply:SetArmor( tonumber( rolTab.ar ) )
-    ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
-    ply:SetNWInt( "capital", rolTab.capital )
-    ply:SetNWString( "roleName", rolTab.roleID )
-    ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
-
-    --sweps
-    local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
-    for k, swep in pairs( tmpSWEPTable ) do
-      if swep != nil and swep != NULL and swep != "" then
-        ply:Give( swep )
-      end
-    end
+  if worked( rolTab ) and worked( groTab ) then
+    SetRolVals( ply, rolTab, groTab )
   else
     printGM( "note", "give role failed" )
     ply:KillSilent()
@@ -142,14 +153,6 @@ function GM:PlayerLoadout( ply )
     ply:SetNWString( "rpname", chaTab.rpname )
   else
     printGM( "note", "give char failed" )
-    ply:KillSilent()
-  end
-
-  if groTab != nil then
-    ply:SetNWString( "groupName", groTab.groupID )
-    ply:SetNWString( "groupUniqueID", groTab.uniqueID )
-  else
-    printGM( "note", "give group failed" )
     ply:KillSilent()
   end
 
@@ -193,7 +196,7 @@ end
 
 function openCharacterSelection( ply )
   printGM( "db", "openCharacterSelection(ply)")
-  local tmpTable = dbSelect( "yrp_characters", "*", "SteamID64 = '" .. ply:SteamID64() .. "'" )
+  local tmpTable = dbSelect( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if tmpTable == nil then
     tmpTable = {}
   end
@@ -203,14 +206,14 @@ function openCharacterSelection( ply )
 end
 
 function checkClient( ply )
-  printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID64() .. ")" )
+  printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
 
   if ply:IPAddress() == "loopback" then
     ply:SetUserGroup( "superadmin" )
   end
 
   local query = ""
-  query = query .. "SELECT * FROM yrp_players WHERE SteamID64 = '" .. ply:SteamID64() .. "'"
+  query = query .. "SELECT * FROM yrp_players WHERE SteamID = '" .. ply:SteamID() .. "'"
   local result = sql.Query( query )
 
   if !result then
@@ -221,7 +224,9 @@ function checkClient( ply )
     local q2 = ""
     q2 = q2 .. "INSERT INTO yrp_players ( SteamID64, SteamID, SteamName, Timestamp ) "
     q2 = q2 .. "VALUES ( "
-    q2 = q2 .. "'" .. tostring( ply:SteamID64() ) .. "', "
+    if !game.SinglePlayer() then
+      q2 = q2 .. "'" .. tostring( ply:SteamID64() ) .. "', "
+    end
     q2 = q2 .. "'" .. tostring( ply:SteamID() ) .. "', "
     q2 = q2 .. "'" .. tostring( dbSQLStr( ply:SteamName() ) ) .. "', "
     q2 = q2 .. "'" .. os.time() .. "'"

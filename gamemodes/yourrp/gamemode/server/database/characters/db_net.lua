@@ -80,9 +80,9 @@ end)
 net.Receive( "charGetCharacters", function( len, ply )
   local netTable = {}
 
-  local chaTab = dbSelect( "yrp_characters", "*", "SteamID64 = '" .. ply:SteamID64() .. "'")
+  local chaTab = dbSelect( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
-  if chaTab != nil then
+  if worked( chaTab ) then
     for k, v in pairs( chaTab ) do
       netTable[k] = {}
       netTable[k].char = v
@@ -91,8 +91,6 @@ net.Receive( "charGetCharacters", function( len, ply )
       netTable[k].role = tmp[1]
       netTable[k].group = tmp2[1]
     end
-  else
-    tmpTable = {}
   end
 
   net.Start( "charGetCharacters" )
@@ -116,9 +114,15 @@ net.Receive( "CreateCharacter", function( len, ply )
 
   local role = dbSelect( "yrp_roles", "*", "uniqueID = " .. ch.roleID )
 
-  local cols = "SteamID, SteamID64, rpname, gender, capital, roleID, groupID, playermodel, money, moneybank, map"
+  local cols = "SteamID, "
+  if !game.SinglePlayer() then
+    cols = cols .. "SteamID64, "
+  end
+  cols = cols .. "rpname, gender, capital, roleID, groupID, playermodel, money, moneybank, map"
   local vals = "'" .. ply:SteamID() .. "', "
-  vals = vals .. "'" .. ply:SteamID64() .. "', "
+  if !game.SinglePlayer() then
+    vals = vals .. "'" .. ply:SteamID64() .. "', "
+  end
   vals = vals .. "'" .. ch.rpname .. "', "
   vals = vals .. "'" .. ch.gender .. "', "
   vals = vals .. role[1].capital .. ", "
@@ -133,11 +137,11 @@ net.Receive( "CreateCharacter", function( len, ply )
   local chars = dbSelect( "yrp_characters", "*", nil )
 
 
-  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID .. ", SteamID64 = '" .. ply:SteamID64() .. "'" )
+  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID .. ", SteamID = '" .. ply:SteamID() .. "'" )
 end)
 
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
-  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. char .. ", SteamID64 = '" .. ply:SteamID64() .. "'" )
+  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. char .. ", SteamID = '" .. ply:SteamID() .. "'" )
   ply:Spawn()
 end)

@@ -142,7 +142,7 @@ function openCharacterCreation()
     draw.SimpleText( lang.identifycard, "charText", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     draw.SimpleText( GetHostName(), "charText", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
-    draw.SimpleText( ply:SteamID64(), "charText", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+    draw.SimpleText( ply:SteamID(), "charText", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 
     draw.SimpleText( lang.name, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
     draw.SimpleText( character.rpname, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -390,7 +390,7 @@ function openCharacterCreation()
   end
 
   local button = {}
-  button.w = ctr( 400 )
+  button.w = ctr( 500 )
   button.h = ctr( 100 )
   button.x = ScrW2() + ctr( 300+50 )
   button.y = ScrH() - ctr( 100+50 )

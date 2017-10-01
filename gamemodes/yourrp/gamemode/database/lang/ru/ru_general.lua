@@ -109,5 +109,13 @@ function RU_General()
   lang.female = "женщина"
 
   lang.duplicate = "Повтор"
+
+  lang.enteraname = "Введите имя"
+  lang.nameistolong = "Имя слишком длинное"
+  lang.nameistoshort = "Имя слишком короткое"
+  lang.enterworld = "Войти в мир"
+  lang.deletecharacter = "Удалить персонажа"
+  lang.characterselection = "Выбор персонажа"
+  lang.charactercreation = "Создание персонажа"
 end
 --##############################################################################

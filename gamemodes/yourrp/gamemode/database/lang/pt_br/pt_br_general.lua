@@ -109,5 +109,13 @@ function PT_BR_General()
   lang.female = "Feminino"
 
   lang.duplicate = "Duplicar"
+
+  lang.enteraname = "Digite um nome"
+  lang.nameistolong = "Esse nome é muito longo"
+  lang.nameistoshort = "Esse nome é muito curto"
+  lang.enterworld = "Entrar no mundo"
+  lang.deletecharacter = "Excluir personagem"
+  lang.characterselection = "Seleção de personagem"
+  lang.charactercreation = "Criação de personagem"
 end
 --##############################################################################

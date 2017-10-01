@@ -21,7 +21,7 @@ net.Receive( "openInteractMenu", function ()
   local tmpTargetName = ""
   local tmpRPName = ""
   for k, v in pairs ( player.GetAll() ) do
-    if tostring( v:SteamID64() ) == tostring( tmpTargetSteamID64 ) then
+    if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
       tmpPly = v
       tmpTargetName = v:Nick()
       tmpRPName = v:RPName()
@@ -41,7 +41,7 @@ net.Receive( "openInteractMenu", function ()
 
     draw.SimpleText( lang.identifycard, "charTitle", ctrW( 10 + 10 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
     draw.SimpleText( GetHostName(), "charTitle", ctrW( 10 + 10 ), ctrW( 60+35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( LocalPlayer():SteamID64(), "charTitle", ctrW( 745 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+    draw.SimpleText( LocalPlayer():SteamID(), "charTitle", ctrW( 745 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
 
     draw.SimpleText( "RPName" .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 70 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 

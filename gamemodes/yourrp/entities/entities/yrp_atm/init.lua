@@ -223,7 +223,7 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 
 										activator:SetNWInt( "moneybank", dbSelectActivator[1].moneybank )
 										for k, v in pairs( player.GetAll() ) do
-											if v:SteamID64() == dbSelectTarget[1].SteamID64 then
+											if v:SteamID() == dbSelectTarget[1].SteamID then
 												v:SetNWInt( "moneybank", dbSelectTarget[1].moneybank )
 												break
 											end

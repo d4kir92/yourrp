@@ -82,10 +82,14 @@ end)
 
 function isWhitelisted( ply, id )
   local _plyAllowed = dbSelect( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
-  if _plyAllowed != nil and _plyAllowed != false then
+  if ply:IsSuperAdmin() or ply:IsAdmin() then
     return true
   else
-    return false
+    if worked( _plyAllowed ) then
+      return true
+    else
+      return false
+    end
   end
 end
 
@@ -142,11 +146,10 @@ function startVote( ply, table )
   end
 end
 
-net.Receive( "wantRole", function( len, ply )
-  local uniqueIDRole = net.ReadInt( 16 )
-  local tmpTableRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. uniqueIDRole )
+function canGetRole( ply, roleID )
+  local tmpTableRole = dbSelect( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
-  if tmpTableRole != nil then
+  if worked( tmpTableRole ) then
     local tmpTableGroup = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpTableRole[1].groupID )
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
       if tmpTableRole[1].adminonly == 1 then
@@ -155,49 +158,56 @@ net.Receive( "wantRole", function( len, ply )
           -- continue
         else
           printGM( "user", "ADMIN-ONLY Role: " .. ply:Nick() .. " is not admin or superadmin" )
-          return
+          return false
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 then
         printGM( "user", "Whitelist-Role" )
         if tonumber( tmpTableRole[1].voteable ) == 1 then
           printGM( "user", "Voteable-Role" )
-          if !isWhitelisted( ply, uniqueIDRole ) then
+          if !isWhitelisted( ply, roleID ) then
             printGM( "user", "Start-Whitelist Vote" )
             startVote( ply, tmpTableRole )
-            return
+            return false
           else
             printGM( "user", ply:Nick() .. " already whitelisted" )
           end
         else
           printGM( "user", "No Voteable-Role" )
-          if !isWhitelisted( ply, uniqueIDRole ) then
+          if !isWhitelisted( ply, roleID ) then
             printGM( "user", ply:Nick() .. " is not whitelisted" )
-            return
+            return false
           else
             printGM( "user", ply:Nick() .. " is whitelisted" )
           end
         end
       end
-      local query = ""
-      query = query .. "UPDATE yrp_players "
-      query = query .. "SET roleID = " .. tonumber( tmpTableRole[1].uniqueID ) .. ", "
-      query = query .. "capital = " .. tonumber( tmpTableRole[1].capital ) .. " "
-      query = query .. "WHERE SteamID = '" .. ply:SteamID() .. "'"
-      local result = sql.Query( query )
-      setRole( ply:SteamID(), uniqueIDRole )
-
-      ply:KillSilent()
-
-      --updateHud( ply )
-
-      printGM( "user", ply:Nick() .. " is now the Role: " .. tmpTableGroup[1].groupID .. " " .. tmpTableRole[1].roleID )
-
-      updateUses()
-
-    else
-      printGM( "user", ply:Nick() .. " want the role: " .. tmpTableRole[1].roleID .. ", FAILED: Max amount reached" )
     end
-  else
-    printERROR( "Role " .. uniqueIDRole .. " is not available" )
+    return true
+  end
+  return false
+end
+
+function SetRole( ply, id )
+  local result = dbUpdate( "yrp_characters", "roleID = " .. id, "uniqueID = " .. ply:CharID() )
+  print(result)
+
+  local rolTab = ply:GetRolTab()
+
+  local groTab = dbSelect( "yrp_groups", "*", "uniqueID = " .. rolTab.groupID )
+  groTab = groTab[1]
+  local result = dbUpdate( "yrp_characters", "groupID = " .. groTab.uniqueID, "uniqueID = " .. ply:CharID() )
+  print(result)
+end
+
+net.Receive( "wantRole", function( len, ply )
+  local uniqueIDRole = net.ReadInt( 16 )
+
+  if canGetRole( ply, uniqueIDRole ) then
+
+    SetRole( ply, uniqueIDRole )
+
+    local rolTab = ply:GetRolTab()
+    local groTab = ply:GetGroTab()
+    SetRolVals( ply, rolTab, groTab )
   end
 end)

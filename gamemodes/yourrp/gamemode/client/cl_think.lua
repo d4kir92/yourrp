@@ -25,15 +25,18 @@ function useFunction( string )
 	if chatisopen == 0 then
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
+		elseif string == "openCharMenu" then
+			if _menuIsOpen == 0 then
+				openCharacterSelection()
+			end
 		elseif string == "openRoleMenu" then
 			if roleMenuWindow != nil then
-				--roleMenuWindow:Remove()
-				--roleMenuWindow = nil
-				--_menuIsOpen = 0
+				roleMenuWindow:Remove()
+				roleMenuWindow = nil
+				_menuIsOpen = 0
 			elseif _menuIsOpen == 0 then
-				--_menuIsOpen = 1
-				openCharacterSelection()
-				--openRoleMenu()
+				_menuIsOpen = 1
+				openRoleMenu()
 			end
 		elseif string == "openBuyMenu" then
 			if _buyWindow != nil then
@@ -117,7 +120,7 @@ function useFunction( string )
 					end)
 				end
 			end
-		elseif string == "F3Toggle" then
+		elseif string == "F11Toggle" then
 			GUIToggled = not GUIToggled
 			gui.EnableScreenClicker( GUIToggled )
 			_menuIsOpen = 0
@@ -198,11 +201,12 @@ end
 function KeyPress()
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 
-	keyPressed( KEY_F2, "openRoleMenu", nil, nil )
+	keyPressed( KEY_F2, "openCharMenu", nil, nil )
+	keyPressed( KEY_F3, "openRoleMenu", nil, nil )
 	keyPressed( KEY_F4, "openBuyMenu", nil, nil )
 	keyPressed( KEY_F7, "openSettings", nil, nil )
 
-	keyPressed( KEY_F3, "F3Toggle", nil, nil )
+	keyPressed( KEY_F11, "F11Toggle", nil, nil )
 
 	keyPressed( KEY_B, "ViewChange", nil, nil )
 
