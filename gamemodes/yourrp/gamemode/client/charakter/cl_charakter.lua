@@ -115,8 +115,7 @@ function openCharacterCreation()
   character.armax = 0
   character.capital = 0
   character.playermodels = {}
-  character.playermodel = "models/player/skeleton.mdl"
-  character.pmid = 1
+  character.playermodelID = 1
 
   character.description = {}
   for i = 1, 6 do
@@ -259,7 +258,9 @@ function openCharacterCreation()
   end
 
   local characterPlayermodel = createMD( "DModelPanel", frame, ctr( 1600 ), ctr( 2160 ), ScrW2() - ctr( 1600/2 ), ScrH2() - ctr( 2160/2 ), ctr( 5 ) )
-  characterPlayermodel:SetModel( character.playermodel )
+  if character.playermodels[tonumber( character.playermodelID )] != nil then
+    characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+  end
   function characterPlayermodel:LayoutEntity( Entity ) return end
 
   local turnR = createD( "DButton", frame, ctr( 100 ), ctr( 100 ), ScrW()/2 + ctr( -50 + 150 ), ScrH() - ctr( 300 ) )
@@ -295,7 +296,7 @@ function openCharacterCreation()
   local prevPM = createD( "DButton", frame, ctr( 100 ), ctr( 1200 ), ScrW()/2 - ctr( 50 + 800 ), ScrH() - ctr( 1800 ) )
   prevPM:SetText( "" )
   function prevPM:Paint( pw, ph )
-    if character.pmid > 1 then
+    if tonumber( character.playermodelID ) > 1 then
       if self:IsHovered() then
         paintMD( pw, ph, "<", colors.secondaryH )
       else
@@ -304,18 +305,17 @@ function openCharacterCreation()
     end
   end
   function prevPM:DoClick()
-    character.pmid = character.pmid - 1
-    if character.pmid < 1 then
-      character.pmid = 1
+    character.playermodelID = character.playermodelID - 1
+    if tonumber( character.playermodelID ) < 1 then
+      character.playermodelID = 1
     end
-    character.playermodel = character.playermodels[character.pmid]
-    characterPlayermodel:SetModel( character.playermodel )
+    characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
   end
 
   local nextPM = createD( "DButton", frame, ctr( 100 ), ctr( 1200 ), ScrW()/2 + ctr( -50 + 800 ), ScrH() - ctr( 1800 ) )
   nextPM:SetText( "" )
   function nextPM:Paint( pw, ph )
-    if character.pmid < #character.playermodels then
+    if tonumber( character.playermodelID ) < #character.playermodels then
       if self:IsHovered() then
         paintMD( pw, ph, ">", colors.secondaryH )
       else
@@ -324,12 +324,11 @@ function openCharacterCreation()
     end
   end
   function nextPM:DoClick()
-    character.pmid = character.pmid + 1
-    if character.pmid > #character.playermodels then
-      character.pmid = #character.playermodels
+    character.playermodelID = character.playermodelID + 1
+    if tonumber( character.playermodelID ) > #character.playermodels then
+      character.playermodelID = #character.playermodels
     end
-    character.playermodel = character.playermodels[character.pmid]
-    characterPlayermodel:SetModel( character.playermodel )
+    characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
   end
 
   local charactersRoleCB = createMD( "DComboBox", charactersRole, ctr( 600 ), ctr( 50 ), ctr( (760-600)/2 ), ctr( 70 ), ctr( 5 ) )
@@ -357,10 +356,11 @@ function openCharacterCreation()
       character.ar = tmpTable[1].ar
       character.armax = tmpTable[1].armax
       character.capital = tmpTable[1].capital
-      character.playermodels = string.Explode( ",", tmpTable[1].playermodel )
-      character.pmid = 1
-      character.playermodel = character.playermodels[character.pmid]
-      characterPlayermodel:SetModel( character.playermodel )
+      character.playermodels = string.Explode( ",", tmpTable[1].playermodels )
+      character.playermodelID = 1
+      if character.playermodels[tonumber( character.playermodelID )] != nil then
+        characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+      end
     end)
   end
 
@@ -526,7 +526,9 @@ function openCharacterSelection()
       tmpChar.roleID = tmpTable[i].role.roleID
       tmpChar.groupID = tmpTable[i].group.groupID
       tmpChar.map = tmpTable[i].char.map
-      tmpChar.playermodel = tmpTable[i].char.playermodel
+      tmpChar.playermodelID = tmpTable[i].char.playermodelID
+      local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
+      tmpChar.playermodels = tmp
 
       function tmpChar:Paint( pw, ph )
         if tmpChar:IsHovered() or curChar == self.charid then
@@ -540,7 +542,7 @@ function openCharacterSelection()
       end
       function tmpChar:DoClick()
         curChar = self.charid
-        charplayermodel:SetModel( self.playermodel )
+        charplayermodel:SetModel( self.playermodels[tonumber( self.playermodelID )] )
       end
       if i == 1 then
         curChar = tmpChar.charid

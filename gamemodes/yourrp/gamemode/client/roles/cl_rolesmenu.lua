@@ -309,7 +309,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newY = y
     for k, v in pairs( tmpTable ) do
       if tonumber( v.prerole ) == -1 then
-        newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodel, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
+        newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
       end
     end
     return newY

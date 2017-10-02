@@ -49,7 +49,6 @@ function giveRole( ply, SteamID, uniqueID )
       query = query .. "capital = " .. tonumber( tmpTable[1].capital ) .. " "
       query = query .. "WHERE SteamID = '" .. SteamID .. "'"
       local result = sql.Query( query )
-      setRole( SteamID, uniqueID )
 
       updateUses()
       for k, v in pairs( player.GetAll() ) do
@@ -133,7 +132,7 @@ function startVote( ply, table )
           end
         end
         if _yes > _no and ( _yes + _no ) > 1 then
-          setRole( votePly:SteamID(), table[1].uniqueID )
+          --setRole( votePly:SteamID(), table[1].uniqueID )
         else
           printGM( "note", "VOTE: not enough yes" )
         end
@@ -187,27 +186,15 @@ function canGetRole( ply, roleID )
   return false
 end
 
-function SetRole( ply, id )
-  local result = dbUpdate( "yrp_characters", "roleID = " .. id, "uniqueID = " .. ply:CharID() )
-  print(result)
-
-  local rolTab = ply:GetRolTab()
-
-  local groTab = dbSelect( "yrp_groups", "*", "uniqueID = " .. rolTab.groupID )
-  groTab = groTab[1]
-  local result = dbUpdate( "yrp_characters", "groupID = " .. groTab.uniqueID, "uniqueID = " .. ply:CharID() )
-  print(result)
-end
-
 net.Receive( "wantRole", function( len, ply )
   local uniqueIDRole = net.ReadInt( 16 )
 
   if canGetRole( ply, uniqueIDRole ) then
-
-    SetRole( ply, uniqueIDRole )
+    local result = dbUpdate( "yrp_characters", "roleID = " .. uniqueIDRole, "uniqueID = " .. ply:CharID() )
 
     local rolTab = ply:GetRolTab()
     local groTab = ply:GetGroTab()
+    local result2 = dbUpdate( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
     SetRolVals( ply, rolTab, groTab )
   end
 end)

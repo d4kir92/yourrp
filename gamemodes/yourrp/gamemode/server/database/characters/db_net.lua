@@ -82,14 +82,16 @@ net.Receive( "charGetCharacters", function( len, ply )
 
   local chaTab = dbSelect( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
-  if worked( chaTab ) then
+  if worked( chaTab, "charGetCharacters" ) then
     for k, v in pairs( chaTab ) do
       netTable[k] = {}
       netTable[k].char = v
       local tmp = dbSelect( "yrp_roles", "*", "uniqueID = " .. v.roleID )
-      local tmp2 = dbSelect( "yrp_groups", "*", "uniqueID = " .. v.groupID )
       netTable[k].role = tmp[1]
-      netTable[k].group = tmp2[1]
+      local tmp2 = dbSelect( "yrp_groups", "*", "uniqueID = " .. v.groupID )
+      if worked( tmp2, "charGetCharacters groups" ) then
+        netTable[k].group = tmp2[1]
+      end
     end
   end
 
@@ -118,26 +120,25 @@ net.Receive( "CreateCharacter", function( len, ply )
   if !game.SinglePlayer() then
     cols = cols .. "SteamID64, "
   end
-  cols = cols .. "rpname, gender, capital, roleID, groupID, playermodel, money, moneybank, map"
+  cols = cols .. "rpname, gender, roleID, groupID, playermodelID, money, moneybank, map"
   local vals = "'" .. ply:SteamID() .. "', "
   if !game.SinglePlayer() then
     vals = vals .. "'" .. ply:SteamID64() .. "', "
   end
   vals = vals .. "'" .. ch.rpname .. "', "
   vals = vals .. "'" .. ch.gender .. "', "
-  vals = vals .. role[1].capital .. ", "
   vals = vals .. role[1].uniqueID .. ", "
   vals = vals .. role[1].groupID .. ", "
-  vals = vals .. "'" .. ch.playermodel .. "', "
-  vals = vals .. 0 .. ", "
+  vals = vals .. "'" .. ch.playermodelID .. "', "
+  vals = vals .. 250 .. ", "
   vals = vals .. 500 .. ", "
   vals = vals .. "'" .. game.GetMap() .. "'"
   dbInsertInto( "yrp_characters", cols, vals )
 
   local chars = dbSelect( "yrp_characters", "*", nil )
-
-
-  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID .. ", SteamID = '" .. ply:SteamID() .. "'" )
+  if worked( chars ) then
+    local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID .. ", SteamID = '" .. ply:SteamID() .. "'" )
+  end
 end)
 
 net.Receive( "EnterWorld", function( len, ply )

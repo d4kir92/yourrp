@@ -193,7 +193,7 @@ function addDBNumberWang( parent, w, h, x, y, string, table, tmpTable, dbTable, 
 end
 
 function pmIsFromRole( id, playermodel )
-  local tmpTable = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
+  local tmpTable = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
   for k, v in pairs( tmpTable ) do
     if string.lower( tostring( v ) ) == string.lower( tostring( playermodel ) ) then
       return true
@@ -214,16 +214,16 @@ function updatePlayermodels( table, id, uniqueID )
       end
     end
   end
-  yrp_roles_dbTable[id].playermodel = tmpString
+  yrp_roles_dbTable[id].playermodels = tmpString
   net.Start( "dbUpdate" )
     net.WriteString( "yrp_roles" )
-    net.WriteString( "playermodel = '" .. tmpString .. "'" )
+    net.WriteString( "playermodels = '" .. tmpString .. "'" )
     net.WriteString( "uniqueID = " .. uniqueID )
   net.SendToServer()
 end
 
 function addDBPlayermodel( parent, id, uniqueID, size )
-  local pms = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
+  local pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
   local changepm = 1
 
   local background = createVGUI( "DPanel", parent, 800, 800, 0, 90 )
@@ -310,18 +310,18 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName( v )
     end
 
-    _globalWorking = yrp_roles_dbTable[id].playermodel
+    _globalWorking = yrp_roles_dbTable[id].playermodels
 
     hook.Add( "closeRolePlayermodels", "crs", function()
-      yrp_roles_dbTable[id].playermodel = _globalWorking
-      pms = string.Explode( ",", yrp_roles_dbTable[id].playermodel )
+      yrp_roles_dbTable[id].playermodels = _globalWorking
+      pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
       changepm = 1
       if _menuIsOpen == 1 then
         modelpanel:SetModel( pms[changepm] )
       end
     end)
 
-    openSelector( tmpTable, "yrp_roles", "playermodel", "uniqueID = " .. uniqueID, "closeRolePlayermodels" )
+    openSelector( tmpTable, "yrp_roles", "playermodels", "uniqueID = " .. uniqueID, "closeRolePlayermodels" )
   end
   return modelpanel
 end

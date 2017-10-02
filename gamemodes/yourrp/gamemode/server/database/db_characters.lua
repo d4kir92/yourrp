@@ -9,14 +9,16 @@ include( "characters/db_net.lua" )
 
 sqlAddColumn( dbTable, "SteamID", "TEXT" )
 sqlAddColumn( dbTable, "SteamID64", "TEXT" )
-sqlAddColumn( dbTable, "rpname", "TEXT    DEFAULT 'ID_RPNAME'" )
-sqlAddColumn( dbTable, "gender", "TEXT    DEFAULT 'male'" )
-sqlAddColumn( dbTable, "capital", "INT     DEFAULT 0" )
+
 sqlAddColumn( dbTable, "roleID", "INT     DEFAULT 1" )
 sqlAddColumn( dbTable, "groupID", "INT     DEFAULT 1" )
-sqlAddColumn( dbTable, "playermodel", "INT     DEFAULT 1" )
+
+sqlAddColumn( dbTable, "playermodelID", "INT     DEFAULT 1" )
+
 sqlAddColumn( dbTable, "keynrs", "TEXT    DEFAULT ''" )
-sqlAddColumn( dbTable, "money", "INT     DEFAULT 0" )
+sqlAddColumn( dbTable, "rpname", "TEXT    DEFAULT 'ID_RPNAME'" )
+sqlAddColumn( dbTable, "gender", "TEXT    DEFAULT 'male'" )
+sqlAddColumn( dbTable, "money", "INT     DEFAULT 250" )
 sqlAddColumn( dbTable, "moneybank", "INT     DEFAULT 500" )
 sqlAddColumn( dbTable, "position", "TEXT" )
 sqlAddColumn( dbTable, "angle", "TEXT" )

@@ -223,6 +223,30 @@ function initDatabase( dbName )
   end
   printGMPos()
 end
+
+--##############################################################################
+function dbInitDatabase()
+  printGMImp( "db", "LOAD DATABASES" )
+
+  initDatabase( "yrp_general" )
+  initDatabase( "yrp_roles" )
+  initDatabase( "yrp_groups" )
+  initDatabase( "yrp_money" )
+  initDatabase( "yrp_" .. string.lower( game.GetMap() ) )
+  initDatabase( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+  initDatabase( "yrp_" .. string.lower( game.GetMap() ) .. "_doors" )
+  initDatabase( "yrp_role_whitelist" )
+  initDatabase( "yrp_buy" )
+  initDatabase( "yrp_restrictions" )
+  initDatabase( "yrp_jail" )
+  initDatabase( "yrp_characters" )
+  initDatabase( "yrp_players" )
+
+  printGMImp( "db", "DONE Loading DATABASES" )
+end
+dbInitDatabase()
+--##############################################################################
+
 --##############################################################################
 --includes
 include( "database/db_resources.lua" )
@@ -230,6 +254,7 @@ include( "database/db_resources.lua" )
 include( "database/db_general.lua" )
 include( "database/db_questions.lua" )
 include( "database/db_players.lua" )
+include( "database/db_groups.lua" )
 include( "database/db_roles.lua" )
 include( "database/db_map.lua" )
 include( "database/db_money.lua" )
@@ -240,28 +265,4 @@ include( "database/db_restriction.lua" )
 include( "database/db_characters.lua" )
 
 include( "database/db_jail.lua" )
---##############################################################################
-
---##############################################################################
-function dbInitDatabase()
-  printGMImp( "db", "LOAD DATABASES" )
-
-  initDatabase( "yrp_general" )
-  --dbGeneralInit()
-  dbQuestionsInit()
-  dbRolesInit()
-  dbMoneyInit()
-  dbMapInit()
-  dbBuildingsInit()
-  dbRoleWhitelistInit()
-  dbBuyInit()
-  initDatabase( "yrp_restrictions" )
-  initDatabase( "yrp_jail" )
-  initDatabase( "yrp_characters" )
-
-  initDatabase( "yrp_players" )
-
-  printGMImp( "db", "DONE Loading DATABASES" )
-end
-dbInitDatabase()
 --##############################################################################

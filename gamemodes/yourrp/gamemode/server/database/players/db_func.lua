@@ -95,6 +95,14 @@ function GM:PlayerSetModel( ply )
 end
 
 function SetRolVals( ply, rolTab, groTab )
+  local ChaTab = ply:GetChaTab()
+  if worked( ChaTab, "SetRolVals ChaTab" ) then
+    local tmpID = tonumber( ChaTab.playermodelID )
+    local tmp = string.Explode( ",", rolTab.playermodels )
+    if worked( tmp[tmpID], "SetRolVals playermodel" ) then
+      ply:SetModel( tmp[tmpID] )
+    end
+  end
   ply:SetModelScale( rolTab.playermodelsize, 0 )
   ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
   ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
@@ -212,9 +220,7 @@ function checkClient( ply )
     ply:SetUserGroup( "superadmin" )
   end
 
-  local query = ""
-  query = query .. "SELECT * FROM yrp_players WHERE SteamID = '" .. ply:SteamID() .. "'"
-  local result = sql.Query( query )
+  local result = dbSelect( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
   if !result then
     printGM( "db", ply:SteamName() .. " is not in db: yrp_players, creating " .. ply:SteamName() )
@@ -222,7 +228,11 @@ function checkClient( ply )
     ply:KillSilent()
 
     local q2 = ""
-    q2 = q2 .. "INSERT INTO yrp_players ( SteamID64, SteamID, SteamName, Timestamp ) "
+    q2 = q2 .. "INSERT INTO yrp_players ( "
+    if !game.SinglePlayer() then
+      q2 = q2 .. "SteamID64, "
+    end
+    q2 = q2 .. "SteamID, SteamName, Timestamp ) "
     q2 = q2 .. "VALUES ( "
     if !game.SinglePlayer() then
       q2 = q2 .. "'" .. tostring( ply:SteamID64() ) .. "', "

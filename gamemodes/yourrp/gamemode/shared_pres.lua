@@ -8,7 +8,7 @@ GM.Author = "D4KiR"
 GM.Email = ""
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.8.9.4"
+GM.Version = "0.8.9.5"
 GM.VersionSort = "unstable"
 GM.dedicated = "-"
 GM.Help = ""
@@ -100,11 +100,11 @@ if CLIENT then
   end)
 end
 
-function worked( obj )
+function worked( obj, name )
   if obj != nil and obj != false then
     return true
   else
-    printGM( "note", "!worked: " .. tostring( obj ) )
+    printGM( "note", "not worked: " .. tostring( obj ) .. " " .. tostring( name ) )
     return false
   end
 end

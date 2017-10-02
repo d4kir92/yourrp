@@ -63,10 +63,10 @@ function duplicateRole( ply, uniqueID, newGroupID )
     _dR.groupID = newGroupID
   end
   if tonumber( _dR.removeable ) == 1 then
-    local _dbColumns = "adminonly, ar, armax, arreg, capital, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodel, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
+    local _dbColumns = "adminonly, ar, armax, arreg, capital, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodels, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
     local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.capital .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
     _dbValues = _dbValues .. _dR.groupID .. ", " .. _dR.hp .. ", " .. _dR.hpmax .. ", " .. _dR.hpreg .. ", " .. _dR.instructor .. ", " .. _dR.maxamount .. ", "
-    _dbValues = _dbValues .. "'" .. _dR.playermodel .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
+    _dbValues = _dbValues .. "'" .. _dR.playermodels .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
     _dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. _dR.sweps .. "', " .. _dR.whitelist
     dbInsertInto( "yrp_roles", _dbColumns, _dbValues )
   else
@@ -111,8 +111,10 @@ net.Receive( "dupDBGroup", function( len, ply )
 end)
 
 net.Receive( "addDBRole", function( len, ply )
+  printGM( "db", "addDBRole" )
   local _tmpUniqueID = net.ReadString()
-  sql.Query( "INSERT INTO yrp_roles ( roleID, groupID, playermodel ) VALUES ( 'new Role', " .. _tmpUniqueID .. ", '' )" )
+  local result = dbInsertInto( "yrp_roles", "roleID, groupID", "'new Role', " .. _tmpUniqueID )
+  printGM( "db", result)
 
   sendDBRoles( ply, _tmpUniqueID )
 end)
@@ -171,7 +173,7 @@ net.Receive( "demotePlayer", function( len, ply )
     local tmpTableTarget = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. tmpTargetSteamID .. "'" )
     local tmpTableTargetRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableTarget[1].roleID )
     local tmpTableTargetDemoteRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableTargetRole[1].prerole )
-    setRole( tmpTargetSteamID, tmpTableTargetDemoteRole[1].uniqueID )
+    --setRole( tmpTargetSteamID, tmpTableTargetDemoteRole[1].uniqueID )
 
     removeFromWhitelist( tmpTargetSteamID, tmpTableTargetRole[1].uniqueID )
 
@@ -208,7 +210,7 @@ net.Receive( "promotePlayer", function( len, ply )
     local tmpTableTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableTarget[1].roleID )
     local tmpTableTargetPromoteRole = dbSelect( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID )
 
-    setRole( tmpTargetSteamID, tmpTableTargetPromoteRole[1].uniqueID )
+    --setRole( tmpTargetSteamID, tmpTableTargetPromoteRole[1].uniqueID )
 
     for k, v in pairs(player.GetAll()) do
       if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
