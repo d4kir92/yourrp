@@ -176,8 +176,8 @@ function GM:PlayerLoadout( ply )
 
   local yrp_general = dbSelect( "yrp_general", "*", nil )
   for k, v in pairs( yrp_general ) do
-    if v.name == "metabolism" then
-      ply:SetNWBool( "metabolism", v.value )
+    if tostring( v.name ) == "metabolism" then
+      ply:SetNWBool( "metabolism", tobool( v.value ) )
       break
     end
   end

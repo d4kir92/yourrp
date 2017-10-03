@@ -2,7 +2,7 @@
 
 --cl_settings_server_roles.lua
 
-local _w = 400
+local _w = 500
 local _br = 10
 local _lbr = 5
 
@@ -861,7 +861,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     draw.SimpleText( lang.groups, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  groupsList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 400-40, 5, 65+40 )
+  groupsList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 500-40, 5, 65+40 )
   function groupsList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
@@ -870,7 +870,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   net.SendToServer()
 
   -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
-  local rolesAdd = addButton( 50, 50, _lbr, 500, settingsWindow.site )
+  local rolesAdd = addButton( 50, 50, _lbr, 600, settingsWindow.site )
   function rolesAdd:Paint( pw, ph )
     if rolesAdd:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -883,7 +883,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     addDBRole( groupUniqueID )
   end
 
-  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, 500, settingsWindow.site )
+  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, 600, settingsWindow.site )
   function rolesDup:Paint( pw, ph )
     if rolesDup:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -896,7 +896,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     dupDBRole( groupUniqueID, getCurrentRole() )
   end
 
-  local rolesRem = addButton( 50, 50, _lbr + _w - 50, 500, settingsWindow.site )
+  local rolesRem = addButton( 50, 50, _lbr + _w - 50, 600, settingsWindow.site )
   function rolesRem:Paint( pw, ph )
     if rolesRem:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -909,13 +909,13 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     deleteDBRole()
   end
 
-  local rolesHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 560 )
+  local rolesHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 660 )
   function rolesHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
     draw.SimpleText( groupID .. " - " .. lang.roles, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  rolesList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 1200-40, 5, 560+40 )
+  rolesList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 1200-40, 5, 660+40 )
   function rolesList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end

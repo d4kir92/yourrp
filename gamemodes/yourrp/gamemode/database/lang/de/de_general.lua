@@ -121,5 +121,8 @@ function DE_General()
   lang.color = "Farbe"
   lang.dark = "Dunkel"
   lang.light = "Hell"
+
+  lang.localchat = "lokal"
+  lang.globalchat = "global"
 end
 --##############################################################################

@@ -12,23 +12,25 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
 
+  local _center = 600
+
   local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.site )
   local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.site )
-  local sv_generalMetabolism = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, 300, 315 )
+  local sv_generalMetabolism = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 315 )
 
   local oldGamemodename = ""
   function settingsWindow.site:Paint()
     --draw.RoundedBox( 0, 0, 0, settingsWindow.site:GetWide(), settingsWindow.site:GetTall(), yrp.colors.panel )
-    draw.SimpleText( lang.gamemodename .. ":", "sef", ctrW( 300 - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.gamemodename .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     if oldGamemodename != sv_generalName:GetText() then
-      draw.SimpleText( "you need to update Server!", "sef", ctrW( 300 + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( "you need to update Server!", "sef", ctrW( _center + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
-    draw.SimpleText( lang.advertname .. ":", "sef", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.updatecountdown .. ":", "sef", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.metabolism .. ":", "sef", ctrW( 300 - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.advertname .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.updatecountdown .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleText( lang.metabolism .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
-  sv_generalName:SetPos( ctrW( 300 ), ctrW( 5 ) )
+  sv_generalName:SetPos( ctrW( _center ), ctrW( 5 ) )
   sv_generalName:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalName:SetText( GAMEMODE.Name )
 
@@ -55,7 +57,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     end
   end)
 
-  sv_generalAdvert:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 ) )
+  sv_generalAdvert:SetPos( ctrW( _center ), ctrW( 5 + 50 + 10 ) )
   sv_generalAdvert:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalAdvert:SetText( _advertname )
   function sv_generalAdvert:OnChange()
@@ -65,7 +67,7 @@ hook.Add( "open_server_general", "open_server_general", function()
   end
 
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
-  sv_generalRestartTime:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 + 50 + 10 ) )
+  sv_generalRestartTime:SetPos( ctrW( _center ), ctrW( 5 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartTime:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalRestartTime:SetMin( 3 )
   sv_generalRestartTime:SetMax( 240 )
@@ -168,7 +170,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     end
 
     local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
-    sv_generalHardResetNot:SetSize( ctrW( 300 ), ctrW( 50 ) )
+    sv_generalHardResetNot:SetSize( ctrW( _center ), ctrW( 50 ) )
     sv_generalHardResetNot:SetPos( ctrW( 10 + 300 + 10 ), ctrW( 50 ) )
     sv_generalHardResetNot:SetText( lang.no .. ": do nothing" )
     function sv_generalHardResetNot:DoClick()

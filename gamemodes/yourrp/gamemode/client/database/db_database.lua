@@ -434,9 +434,9 @@ function setDefaultHud()
   dbUpdate( dbName, "value = 255", "name = 'mdpa'" )
   dbUpdate( dbName, "value = 0", "name = 'mdpm'" )
 
-  dbUpdate( dbName, "value = 66", "name = 'mdsr'" )
-  dbUpdate( dbName, "value = 66", "name = 'mdsg'" )
-  dbUpdate( dbName, "value = 66", "name = 'mdsb'" )
+  dbUpdate( dbName, "value = 30", "name = 'mdsr'" )
+  dbUpdate( dbName, "value = 136", "name = 'mdsg'" )
+  dbUpdate( dbName, "value = 229", "name = 'mdsb'" )
   dbUpdate( dbName, "value = 255", "name = 'mdsa'" )
 
   loadCompleteHud()
@@ -730,7 +730,7 @@ function loadDatabaseHud()
     dbInsertInto( dbName, "name, value", "'mdpm', 0" )
   end
 
-  if !dbSelect( dbName, "name, value", "name = 'mdsm'" ) then
+  if !dbSelect( dbName, "name, value", "name = 'mdsa'" ) then
     dbInsertInto( dbName, "name, value", "'mdsr', 13" )
     dbInsertInto( dbName, "name, value", "'mdsg', 71" )
     dbInsertInto( dbName, "name, value", "'mdsb', 161" )

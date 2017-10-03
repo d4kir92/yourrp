@@ -34,7 +34,7 @@ function EN_Settings()
   lang.rolename = "Role-name"
   lang.rolecolor = "Role-color"
   lang.roleplayermodel = "Role-playermodel"
-  lang.roleplayermodelsize = "Role-playermodelsize"
+  lang.roleplayermodelsize = "Role-playermodel-size"
   lang.roledescription = "Role-description"
   lang.rolesalary = "Role-salary"
   lang.rolemaxamount = "Role-max amount"

@@ -130,7 +130,7 @@ function openSettings()
 
     --primary
     colorP = {}
-    colorP[1] = Color( 40, 40, 40, 255 )
+    colorP[1] = Color( 66, 66, 66, 255 )
     colorP[2] = Color( 21, 101, 192, 255 )
     colorP[3] = Color( 46, 125, 50, 255 )
     colorP[4] = Color( 239, 108, 0, 255 )

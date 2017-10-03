@@ -57,7 +57,7 @@ function createMDMenu( parent, w, h, x, y )
     self.sites[cat][tmpNr].material = material
   end
 
-	tmp.sitepanel = createD( "DPanel", tmp, ScrH() - ctr( 100 ), ScrH() - ctr( 100 ), ScrW2() - (ScrH() - ctr( 100 ))/2, ctr( 100 ) )
+	tmp.sitepanel = createD( "DPanel", tmp, (ScrH()/3)*4, ScrH() - ctr( 100 ), ScrW2() - ( (ScrH()/3)*4 )/2, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dprimaryBG )
 	end

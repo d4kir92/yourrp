@@ -121,5 +121,8 @@ function EN_General()
   lang.color = "Color"
   lang.dark = "dark"
   lang.light = "light"
+
+  lang.localchat = "local"
+  lang.globalchat = "global"
 end
 --##############################################################################

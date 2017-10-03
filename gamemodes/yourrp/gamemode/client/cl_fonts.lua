@@ -6,11 +6,14 @@ function createFont( _name, _font, _size, _weight, _outline )
 	--printGM( "db", "createFont: " .. _name .. ", " .. _font .. ", " .. _size )
 	local _antialaising = false
 	local _shadow = false
-	local _size = ctrW( _size*2 )
+	if _size < 18 then
+		_size = 18
+	end
+	_size = ctrW( _size*2 )
 	if _size >= 72 then
 		_antialaising = true
 	end
-	if _size < 18 then
+	if _size < 4 then
 		_outline = false
 		_shadow = true
 	end
@@ -37,7 +40,7 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
-	local weight = 600
+	local weight = 700
 
 	local tmpFont = "Roboto-Thin"
 	createFont( "HudDefault", tmpFont, 80, weight, false )
@@ -119,8 +122,8 @@ function changeFontSize()
 	createFont( "ATM_Name", tmpFont, 40, weight, true )
 
 	--DarkRP Fonts
-	createFont( "DarkRPHUD1", tmpFont, 16, 600, true )
-	createFont( "DarkRPHUD2", tmpFont, 23, 400, true )
+	createFont( "DarkRPHUD1", tmpFont, 16, weight, true )
+	createFont( "DarkRPHUD2", tmpFont, 23, weight, true )
 	createFont( "Trebuchet18", tmpFont, 18, weight, true )
 	createFont( "Trebuchet20", tmpFont, 20, weight, true )
 	createFont( "Trebuchet24", tmpFont, 24, weight, true )

@@ -199,7 +199,7 @@ end
 function GM:PlayerSay( sender, text, teamChat )
   if text != "" then
     local _allPlayers = player.GetAll()
-    local _local = 0
+    local _local = 1
     _playersay = {}
 
     if isChatCommand( text, "help" ) then
@@ -324,20 +324,25 @@ function GM:PlayerSay( sender, text, teamChat )
 
     if isChatCommand( text, "roll" ) then
       _local = 1
+      boxString( string.upper( lang.localchat ), Color( 0, 165, 255 ), Color( 0, 165, 255 ) )
       boxString( "ROLL", Color( 0, 165, 255 ), Color( 0, 165, 255 ) )
     elseif isChatCommand( text, "ooc" ) or isChatCommand( text, "/" ) then
-      boxString( "OOC", Color( 255, 165, 0 ), Color( 255, 165, 0 ) )
+      _local = 0
+      boxString( string.upper( lang.globalchat ), Color( 255, 165, 0 ), Color( 255, 165, 0 ) )
     elseif isChatCommand( text, "looc" ) or isChatCommand( text, "." ) then
       _local = 1
-      boxString( "LOOC", Color( 255, 50, 0 ), Color( 255, 50, 0 ) )
+      boxString( string.upper( lang.localchat ), Color( 255, 50, 0 ), Color( 255, 50, 0 ) )
     elseif isChatCommand( text, "advert" ) or isChatCommand( text, _advertname ) then
+      _local = 0
+      boxString( string.upper( lang.globalchat ), Color( 255, 255, 0 ), Color( 255, 255, 0 ) )
       boxString( string.upper( _advertname ), Color( 255, 255, 0 ), Color( 255, 50, 0 ) )
     end
 
     if isChatCommand( text, "me" ) then
       _local = 1
+      boxString( string.upper( lang.localchat ), Color( 255, 165, 0 ), Color( 255, 165, 0 ) )
       --Group
-      table.insert( _playersay, Color( 255, 165, 0 ) )
+      table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
 
       --Role
@@ -349,6 +354,7 @@ function GM:PlayerSay( sender, text, teamChat )
       table.insert( _playersay, sender:GetNWString( "rpname" ) )
     elseif isChatCommand( text, "yell" ) then
       _local = 1
+      boxString( string.upper( lang.localchat ), Color( 255, 0, 0 ), Color( 255, 0, 0 ) )
       --Group
       table.insert( _playersay, Color( 255, 0, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
@@ -371,6 +377,7 @@ function GM:PlayerSay( sender, text, teamChat )
       table.insert( _playersay, sender:Nick() .. ": " )
       table.insert( _playersay, "\n" )
     elseif isChatCommand( text, "roll" ) then
+      _local = 1
       --Group
       table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
@@ -382,7 +389,23 @@ function GM:PlayerSay( sender, text, teamChat )
       --Nickname
       table.insert( _playersay, Color( 0, 165, 255 ) )
       table.insert( _playersay, sender:GetNWString( "rpname" ) .. " rolled " )
+    elseif isChatCommand( text, "advert" ) then
+      _local = 0
+      --Group
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
+
+      --Role
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, string.upper( sender:GetNWString("roleName") ) .. " " )
+
+      --Nickname
+      table.insert( _playersay, Color( 0, 255, 0 ) )
+      table.insert( _playersay, sender:GetNWString( "rpname" ) .. ": " )
+      table.insert( _playersay, "\n" )
     else
+      _local = 1
+      boxString( string.upper( lang.localchat ), Color( 0, 255, 0 ), Color( 0, 255, 0 ) )
       --Group
       table.insert( _playersay, Color( 0, 255, 0 ) )
       table.insert( _playersay, string.upper( sender:GetNWString("groupName") ) .. " " )
