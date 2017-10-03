@@ -249,9 +249,9 @@ end)
 
 net.Receive( "changeBuildingPrice", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
-  local _tmpNewPrice = net.ReadInt( 16 )
+  local _tmpNewPrice = net.ReadString()
 
-  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "price = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
+  dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
 end)
 
 

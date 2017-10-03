@@ -6,7 +6,7 @@ net.Receive( "getCharakterList", function()
   local ply = LocalPlayer()
   local _charTab = net.ReadTable()
 
-  local cl_rpName = createVGUI( "DTextEntry", cl_charPanel, 400, 50, 10, 40 )
+  local cl_rpName = createVGUI( "DTextEntry", settingsWindow.site, 400, 50, 10, 40 )
   cl_rpName:SetText( _charTab.rpname )
   function cl_rpName:OnChange()
     net.Start( "dbUpdate" )
@@ -18,16 +18,19 @@ net.Receive( "getCharakterList", function()
 
 end)
 
-function tabClientChar( sheet )
+hook.Add( "open_client_character", "open_client_character", function()
   local ply = LocalPlayer()
 
-  cl_charPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.character, cl_charPanel, "icon16/user_edit.png" )
-  function cl_charPanel:Paint( w, h )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  --sheet:AddSheet( lang.character, cl_charPanel, "icon16/user_edit.png" )
+  function settingsWindow.site:Paint( w, h )
     --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
     draw.SimpleText( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
   end
 
   net.Start( "getCharakterList" )
   net.SendToServer()
-end
+end)

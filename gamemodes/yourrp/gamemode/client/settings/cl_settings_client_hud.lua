@@ -114,16 +114,19 @@ function changeFont( string, _settingsFontSizes, w, h, x, y )
   return _tmp
 end
 
-function tabClientHud( sheet )
+hook.Add( "open_client_hud", "open_client_hud", function()
   local ply = LocalPlayer()
 
-  local cl_hudPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.hud, cl_hudPanel, "icon16/photo.png" )
-  function cl_hudPanel:Paint( w, h )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  --sheet:AddSheet( lang.hud, cl_hudPanel, "icon16/photo.png" )
+  function settingsWindow.site:Paint( w, h )
     --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
   end
 
-  local changeHudButton = createDerma( "DButton", cl_hudPanel, 470, 50, 0, 0 )
+  local changeHudButton = createDerma( "DButton", settingsWindow.site, 470, 50, 0, 0 )
   changeHudButton:SetText( lang.changehud )
   function changeHudButton:DoClick()
     settingsWindow:Close()
@@ -199,7 +202,7 @@ function tabClientHud( sheet )
     end
   end
 
-  local toggleHud = createVGUI( "DButton", cl_hudPanel, 470, 50, 0, 50 + 10 )
+  local toggleHud = createVGUI( "DButton", settingsWindow.site, 470, 50, 0, 50 + 10 )
   toggleHud:SetText( lang.togglehud .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang.on, lang.off ) .. ")" )
   function toggleHud:DoClick()
     if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
@@ -210,7 +213,7 @@ function tabClientHud( sheet )
     toggleHud:SetText( lang.togglehud .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang.on, lang.off ) .. ")" )
   end
 
-  local resetHudButton = createDerma( "DColorButton", cl_hudPanel, 470, 50, 470 + 10, 50 + 10 )
+  local resetHudButton = createDerma( "DColorButton", settingsWindow.site, 470, 50, 470 + 10, 50 + 10 )
   resetHudButton:SetText( "" )
   function resetHudButton:Paint( pw, ph )
     if resetHudButton:IsHovered() then
@@ -242,7 +245,7 @@ function tabClientHud( sheet )
     _window:MakePopup()
   end
 
-  local _colorBackgroundPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 0, 50+10+50+10 )
+  local _colorBackgroundPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 0, 50+10+50+10 )
   function _colorBackgroundPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -263,7 +266,7 @@ function tabClientHud( sheet )
     updateDBHud( "colbga", newColor.a )
   end
 
-  local _colorBorderPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 470+10, 50+10+50+10 )
+  local _colorBorderPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10, 50+10+50+10 )
   function _colorBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -282,7 +285,7 @@ function tabClientHud( sheet )
     updateDBHud( "colbra", newColor.a )
   end
 
-  local _colorCrosshairPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 0, 50+10+50+10+510+10 )
+  local _colorCrosshairPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 0, 50+10+50+10+510+10 )
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -301,7 +304,7 @@ function tabClientHud( sheet )
     updateDBHud( "colcha", newColor.a )
   end
 
-  local _colorCrosshairBorderPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 470+10, 50+10+50+10+510+10 )
+  local _colorCrosshairBorderPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10, 50+10+50+10+510+10 )
   function _colorCrosshairBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -320,7 +323,7 @@ function tabClientHud( sheet )
     updateDBHud( "colchbra", newColor.a )
   end
 
-  local _settingCrosshairPanel = createVGUI( "DPanel", cl_hudPanel, 470, 510, 470+10+470+10, 50+10+50+10+510+10 )
+  local _settingCrosshairPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10+470+10, 50+10+50+10+510+10 )
   function _settingCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -356,7 +359,7 @@ function tabClientHud( sheet )
     updateDBHud( "chbr", val )
   end
 
-  local _settingsFontSizes = createVGUI( "DPanel", cl_hudPanel, 1910, 510, 0, 50+10+50+10+510+10+510+10 )
+  local _settingsFontSizes = createVGUI( "DPanel", settingsWindow.site, 1910, 510, 0, 50+10+50+10+510+10+510+10 )
   function _settingsFontSizes:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -402,4 +405,4 @@ function tabClientHud( sheet )
   local _settingsMOF = changeFont( "vof", _settingsFontSizes, 450, 40, 1440, 200 )
   local _settingsMOF = changeFont( "ttf", _settingsFontSizes, 450, 40, 1440, 300 )
   local _settingsSEF = changeFont( "sef", _settingsFontSizes, 450, 40, 1440, 400 )
-end
+end)

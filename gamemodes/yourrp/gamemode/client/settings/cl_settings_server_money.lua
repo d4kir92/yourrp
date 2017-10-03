@@ -5,7 +5,7 @@
 net.Receive( "getMoneyTab", function()
   local _tmpTable = net.ReadTable()
 
-  local _moneyPre = createVGUI( "DTextEntry", sv_moneyPanel, 100, 50, 10, 40 )
+  local _moneyPre = createVGUI( "DTextEntry", settingsWindow.site, 100, 50, 10, 40 )
   function _moneyPre:OnChange()
     net.Start( "updateMoney" )
       net.WriteString( "moneypre" )
@@ -13,7 +13,7 @@ net.Receive( "getMoneyTab", function()
     net.SendToServer()
   end
 
-  local _moneyPost = createVGUI( "DTextEntry", sv_moneyPanel, 100, 50, 10, 40 + 50 + 50 )
+  local _moneyPost = createVGUI( "DTextEntry", settingsWindow.site, 100, 50, 10, 40 + 50 + 50 )
   function _moneyPost:OnChange()
     net.Start( "updateMoney" )
       net.WriteString( "moneypost" )
@@ -21,7 +21,7 @@ net.Receive( "getMoneyTab", function()
     net.SendToServer()
   end
 
-  local _moneyStart = createVGUI( "DTextEntry", sv_moneyPanel, 100, 50, 10, 40 + 50 + 50 + 50 + 50 )
+  local _moneyStart = createVGUI( "DTextEntry", settingsWindow.site, 100, 50, 10, 40 + 50 + 50 + 50 + 50 )
   function _moneyStart:OnChange()
     net.Start( "updateMoney" )
       net.WriteString( "moneystart" )
@@ -40,13 +40,16 @@ net.Receive( "getMoneyTab", function()
   end
 end)
 
-function tabServerMoney( sheet )
+hook.Add( "open_server_money", "open_server_money", function()
   local ply = LocalPlayer()
 
-  sv_moneyPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.money, sv_moneyPanel, "icon16/money.png" )
-  function sv_moneyPanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+
+  function settingsWindow.site:Paint( pw, ph )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
 
     draw.SimpleText( lang.moneypre, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
 
@@ -57,4 +60,4 @@ function tabServerMoney( sheet )
 
   net.Start( "getMoneyTab" )
   net.SendToServer()
-end
+end)

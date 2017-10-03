@@ -12,6 +12,6 @@ sqlAddColumn( dbTable, "keynr", "INTEGER DEFAULT -1" )
 
 dbTable = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
 sqlAddColumn( dbTable, "groupID", "INTEGER DEFAULT -1" )
-sqlAddColumn( dbTable, "price", "INTEGER DEFAULT 100" )
+sqlAddColumn( dbTable, "buildingprice", "TEXT DEFAULT 100" )
 sqlAddColumn( dbTable, "ownerCharID", "TEXT DEFAULT ''" )
 sqlAddColumn( dbTable, "name", "TEXT DEFAULT 'Building'" )

@@ -19,110 +19,11 @@ include( "shared_pres.lua" )
 
 include( "shared.lua" )
 
+include( "api/color.lua" )
+include( "api/derma.lua" )
+include( "api/math.lua" )
+
 --##############################################################################
---Resolutions
-function ggT( _num1, _num2 )
-  local _ggt = _num1 % _num2
-  while ( _ggt != 0 ) do
-    _num1 = _num2
-    _num2 = _ggt
-
-    _ggt = _num1 % _num2
-  end
-  return _num2
-end
-
-function getResolutionRatio()
-  local _ggt = ggT( ScrW(), ScrH() )
-  return ScrW()/_ggt, ScrH()/_ggt
-end
-
-function getPictureRatio( w, h )
-  local _ggt = ggT( w, h )
-  return w/_ggt, h/_ggt
-end
-
-function lowerToScreen( w, h )
-  local tmpW = w
-  local tmpH = h
-  if w > ScrW() then
-    local per = tmpW / ScrW()
-    tmpW = tmpW / per
-    tmpH = tmpH / per
-  end
-  if tmpH > ScrH() then
-    local per = tmpH / ScrH()
-    tmpW = tmpW / per
-    tmpH = tmpH / per
-  end
-  return tmpW, tmpH
-end
-
-function ctrF( tmpNumber )
-  tmpNumber = 2160/tmpNumber
-  return math.Round( tmpNumber, 8 )
-end
-
-function ctr( tmpNumber )
-  if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
-    tmpNumber = 2160/tmpNumber
-    return math.Round( ScrH()/tmpNumber )
-  else
-    return -1
-  end
-end
-
-function ctrW( tmpNumber )
-  if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
-    tmpNumber = 2160/tmpNumber
-    return math.Round( ScrH()/tmpNumber )
-  else
-    return -1
-  end
-end
-
-function ctrH( tmpNumber )
-  tmpNumber = 2160/tmpNumber
-  return math.Round( ScrH()/tmpNumber )
-end
-
-function ScrW2()
-  return ( ScrW() / 2 )
-end
-
-function ScrH2()
-  return ( ScrH() / 2 )
-end
-
-function drawRBox( r, x, y, w, h, col )
-	draw.RoundedBox( ctrW(r), ctrW(x), ctrW(y), ctrW(w), ctrW(h), col )
-end
-
-function drawRBoxBr( r, x, y, w, h, col, br )
-	draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y-br), ctrW(w+2*br-1), ctrW(2*br), col )
-  draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y+h-br), ctrW(w+2*br-1), ctrW(2*br), col )
-  draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y), ctrW(2*br), ctrW(h), col )
-  draw.RoundedBox( ctrW(r), ctrW(x+w-br), ctrW(y), ctrW(2*br), ctrW(h), col )
-end
-
-function drawRBoxCr( x, y, size, col )
-	draw.RoundedBox( ctrW(size/2), ctrW(x), ctrW(y), ctrW(size), ctrW(size), col )
-end
-
-function drawText( text, font, x, y, col, ax, ay )
-	draw.SimpleText( text, font, ctrW(x), ctrW(y), col, ax, ay)
-end
-
-function createVGUI( art, parent, w, h, x, y )
-  local tmp = vgui.Create( art, parent, nil )
-  if w != nil and h != nil then
-    tmp:SetSize( ctrW(w), ctrW(h) )
-  end
-  if x != nil and y != nil then
-    tmp:SetPos( ctrW(x), ctrW(y) )
-  end
-  return tmp
-end
 
 function ChangeLanguage( parent, w, h, x, y )
   local tmp = createD( "DComboBox", parent, w, h, x, y )
@@ -338,7 +239,7 @@ function openSingleSelector( table )
   frame:SetPos( ScrW2() - shopsize/2, ScrH2() - shopsize/2 )
   frame:SetTitle( lang.itemMenu )
   function frame:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
   local PanelSelect = createD( "DPanel", frame, shopsize - ctr( 20 ), shopsize - ctr( 100 ), ctr( 10 ), ctr( 100 ) )

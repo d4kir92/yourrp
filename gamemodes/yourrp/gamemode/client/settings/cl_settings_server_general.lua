@@ -4,19 +4,21 @@
 
 local _advertname = "NULL"
 local _restartTime = 0
-function tabServerGeneral( sheet )
+hook.Add( "open_server_general", "open_server_general", function()
   local ply = LocalPlayer()
 
-  local sv_generalPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.general, sv_generalPanel, "icon16/server_database.png" )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
 
-  local sv_generalName = vgui.Create( "DTextEntry", sv_generalPanel )
-  local sv_generalAdvert = vgui.Create( "DTextEntry", sv_generalPanel )
-  local sv_generalMetabolism = createVGUI( "DCheckBox", sv_generalPanel, 30, 30, 300, 315 )
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+
+  local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.site )
+  local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.site )
+  local sv_generalMetabolism = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, 300, 315 )
 
   local oldGamemodename = ""
-  function sv_generalPanel:Paint()
-    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
+  function settingsWindow.site:Paint()
+    --draw.RoundedBox( 0, 0, 0, settingsWindow.site:GetWide(), settingsWindow.site:GetTall(), yrp.colors.panel )
     draw.SimpleText( lang.gamemodename .. ":", "sef", ctrW( 300 - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleText( "you need to update Server!", "sef", ctrW( 300 + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
@@ -62,7 +64,7 @@ function tabServerGeneral( sheet )
     net.SendToServer()
   end
 
-  local sv_generalRestartTime = vgui.Create( "DNumberWang", sv_generalPanel )
+  local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
   sv_generalRestartTime:SetPos( ctrW( 300 ), ctrW( 5 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartTime:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalRestartTime:SetMin( 3 )
@@ -89,7 +91,7 @@ function tabServerGeneral( sheet )
     net.SendToServer()
   end
 
-  local sv_generalRestartServer = vgui.Create( "DButton", sv_generalPanel )
+  local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.site )
   sv_generalRestartServer:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalRestartServer:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServer:SetText( lang.updateserver )
@@ -111,7 +113,7 @@ function tabServerGeneral( sheet )
     settingsWindow:Close()
   end
 
-  local sv_generalRestartServerCancel = vgui.Create( "DButton", sv_generalPanel )
+  local sv_generalRestartServerCancel = vgui.Create( "DButton", settingsWindow.site )
   sv_generalRestartServerCancel:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalRestartServerCancel:SetPos( ctrW( 5 + 400 + 10 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServerCancel:SetText( lang.cancelupdateserver )
@@ -128,7 +130,7 @@ function tabServerGeneral( sheet )
     settingsWindow:Close()
   end
 
-  local sv_generalHardReset = vgui.Create( "DButton", sv_generalPanel )
+  local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.site )
   sv_generalHardReset:SetSize( ctrW( 400 ), ctrW( 50 ) )
   sv_generalHardReset:SetPos( ctrW( 5 ), ctrW( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalHardReset:SetText( lang.hardresetdatabase )
@@ -197,4 +199,4 @@ function tabServerGeneral( sheet )
     net.SendToServer()
     RunConsoleCommand( "yrp_metabolism", math.Round( _tonumber, 0 ) )
   end
-end
+end)

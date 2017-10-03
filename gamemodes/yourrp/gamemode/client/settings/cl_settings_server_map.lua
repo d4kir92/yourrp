@@ -72,15 +72,18 @@ function getCopyMapPNG()
   return _mapPNG
 end
 
-function tabServerMap( sheet )
+hook.Add( "open_server_map", "open_server_map", function()
   local ply = LocalPlayer()
 
-  sv_mapPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.map, sv_mapPanel, "icon16/map.png" )
-  function sv_mapPanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+
+  function settingsWindow.site:Paint( pw, ph )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
   end
-  local _mapPanel = createVGUI( "DPanel", sv_mapPanel, 256, 256, 10, 10 )
+  local _mapPanel = createVGUI( "DPanel", settingsWindow.site, 256, 256, 10, 10 )
   local _mapPNG = getMapPNG()
   function _mapPanel:Paint( pw, ph )
     surface.SetDrawColor( 255, 255, 255, 255 )
@@ -88,20 +91,20 @@ function tabServerMap( sheet )
   	surface.DrawTexturedRect( 0, 0, ctrW( 256 ), ctrW( 256 ) )
   end
 
-  local _mapName = createVGUI( "DPanel", sv_mapPanel, 2000 - 10 - 256, 256, 10 + 256, 10 )
+  local _mapName = createVGUI( "DPanel", settingsWindow.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
-    draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.panel )
+    draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.dprimary )
     draw.SimpleText( lang.map .. ": " .. string.lower( game.GetMap() ), "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
   end
 
-  _mapListView = createVGUI( "DListView", sv_mapPanel, 1600, 1600, 10, 10 + 256 + 10 )
+  _mapListView = createVGUI( "DListView", settingsWindow.site, 1600, 1600, 10, 10 + 256 + 10 )
   _mapListView:AddColumn( "uniqueID" ):SetFixedWidth( ctrW( 100 ) )
   _mapListView:AddColumn( lang.position ):SetFixedWidth( ctrW( 200 ) )
   _mapListView:AddColumn( lang.angle ):SetFixedWidth( ctrW( 200 ) )
   _mapListView:AddColumn( lang.type )
   _mapListView:AddColumn( lang.group )
 
-  local _buttonDelete = createVGUI( "DButton", sv_mapPanel, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 )
+  local _buttonDelete = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 )
   _buttonDelete:SetText( lang.deleteentry )
   function _buttonDelete:DoClick()
     if _mapListView:GetSelectedLine() != nil then
@@ -112,14 +115,14 @@ function tabServerMap( sheet )
     end
   end
 
-  local _buttonAddSpawnPoint = createVGUI( "DButton", sv_mapPanel, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 )
+  local _buttonAddSpawnPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 )
   _buttonAddSpawnPoint:SetText( lang.addspawnpoint )
   function _buttonAddSpawnPoint:DoClick()
     local tmpFrame = createVGUI( "DFrame", nil, 500, 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10, 0, 0 )
     tmpFrame:Center()
     tmpFrame:SetTitle( "" )
     function tmpFrame:Paint( pw, ph )
-      draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.background )
+      draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.dbackground )
       draw.SimpleText( lang.spawnpointcreator, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       draw.SimpleText( lang.createspawnpointonyou, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       draw.SimpleText( lang.selectgroup .. ":", "sef", ctrW( 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -152,7 +155,7 @@ function tabServerMap( sheet )
     tmpFrame:MakePopup()
   end
 
-  local _buttonAddJailPoint = createVGUI( "DButton", sv_mapPanel, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 + 50 + 10 )
+  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 + 50 + 10 )
   _buttonAddJailPoint:SetText( lang.addjailpoint )
   function _buttonAddJailPoint:DoClick()
     net.Start( "dbInsertInto" )
@@ -171,4 +174,4 @@ function tabServerMap( sheet )
 
   net.Start( "getMapList" )
   net.SendToServer()
-end
+end)

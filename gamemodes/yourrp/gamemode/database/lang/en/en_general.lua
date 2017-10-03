@@ -117,5 +117,9 @@ function EN_General()
   lang.deletecharacter = "Delete character"
   lang.characterselection = "Character selection"
   lang.charactercreation = "Character creation"
+
+  lang.color = "Color"
+  lang.dark = "dark"
+  lang.light = "light"
 end
 --##############################################################################

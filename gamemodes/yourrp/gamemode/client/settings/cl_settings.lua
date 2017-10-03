@@ -2,120 +2,193 @@
 
 --cl_settings.lua
 
-include( "cl_settings_client.lua" )
-include( "cl_settings_server.lua" )
-include( "cl_settings_yourrp.lua")
-include( "cl_settings_settings.lua" )
+include( "cl_settings_client_hud.lua" )
+include( "cl_settings_client_charakter.lua" )
 
-yrp.colors.black = Color( 0, 0, 0, 255 )
-yrp.colors.background = Color( 0, 0, 0, 160 )
-yrp.colors.background2 = Color( 0, 0, 0, 254 )
-yrp.colors.panel = Color( 0, 143, 255, 120 )
-yrp.colors.buttonInActive = Color( 100, 100, 100, 160 )
+include( "cl_settings_server_general.lua" )
+include( "cl_settings_server_roles.lua" )
+include( "cl_settings_server_money.lua" )
+include( "cl_settings_server_map.lua" )
+include( "cl_settings_server_whitelist.lua" )
+include( "cl_settings_server_restriction.lua" )
 
-function drawBackground( x, y, w, h, br )
-  draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
+include( "cl_settings_yourrp_add_langu.lua")
+include( "cl_settings_yourrp_contact.lua")
+include( "cl_settings_yourrp_workshop.lua")
 
-  draw.RoundedBox( 0,   x,      y,      w,  br, yrp.colors.black )
-  draw.RoundedBox( 0,   x,      y+h-br, w,  br, yrp.colors.black )
-  draw.RoundedBox( 0,   x,      y,      br, h,  yrp.colors.black )
-  draw.RoundedBox( 0,   x+w-br, y,      br, h,  yrp.colors.black )
-end
+yrp.design = {}
+yrp.design.mode = "dark"
+yrp.materials = {}
+yrp.materials.logo100 = Material( "vgui/yrp/logo100.png" )
+yrp.materials.dark = {}
+yrp.materials.dark.close = Material( "vgui/yrp/dark_close.png" )
+yrp.materials.dark.settings = Material( "vgui/yrp/dark_settings.png" )
+yrp.materials.dark.burger = Material( "vgui/yrp/dark_burger.png" )
+
+yrp.materials.light = {}
+yrp.materials.light.close = Material( "vgui/yrp/light_close.png" )
+yrp.materials.light.settings = Material( "vgui/yrp/light_settings.png" )
+yrp.materials.light.burger = Material( "vgui/yrp/light_burger.png" )
 
 function openSettings()
-  settingsOpen = 1
+  addMDColor( "dprimary", getMDPColor() )
+  addMDColor( "dprimaryBG", colorBG( getMDPColor() ) )
 
-  settingsWindow = vgui.Create( "DFrame" )
-  settingsWindow:SetSize( ctrW( 2160 ), ctrW( 2160 ) )
-  settingsWindow:SetPos( ScrW2() - ctrW( 2160/2 ), 0 )
-  settingsWindow:SetTitle( "" )
-  settingsWindow:ShowCloseButton( true )
-  function settingsWindow:OnClose()
-    gui.EnableScreenClicker( false )
-    if modelSelector != nil then
-      modelSelector:Remove()
-    end
-    _menuIsOpen = 0
-  end
+  addMDColor( "dsecondary", getMDSColor() )
+  addMDColor( "dsecondaryH", colorH( getMDSColor() ) )
+
+  local ply = LocalPlayer()
+  _menuIsOpen = 1
+
+  --Frame
+  settingsWindow = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
   function settingsWindow:Paint( pw, ph )
-    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.background )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
-  local settingsSheet = vgui.Create( "DPropertySheet", settingsWindow )
-  settingsSheet:Dock( FILL )
-  function settingsSheet:Paint()
-    --drawBackground( 0, 0, settingsSheet:GetWide(), settingsSheet:GetTall(), ctrW( 0 ) )
+  --Sites
+  settingsWindow:AddCategory( lang.client )
+  settingsWindow:AddSite( "open_client_character", lang.character, lang.client, "icon16/user_edit.png" )
+  settingsWindow:AddSite( "open_client_hud", lang.hud, lang.client, "icon16/photo.png" )
+
+  if ply:IsAdmin() or ply:IsSuperAdmin() then
+    settingsWindow:AddCategory( lang.server )
+    settingsWindow:AddSite( "open_server_general", lang.general, lang.server, "icon16/server_database.png" )
+    settingsWindow:AddSite( "open_server_roles", lang.roles, lang.server, "icon16/group_gear.png" )
+    settingsWindow:AddSite( "open_server_money", lang.money, lang.server, "icon16/money.png" )
+    settingsWindow:AddSite( "open_server_map", lang.map, lang.server, "icon16/map.png" )
+    settingsWindow:AddSite( "open_server_whitelist", lang.whitelist, lang.server, "icon16/page_white_key.png" )
+    settingsWindow:AddSite( "open_server_restrictions", lang.restriction, lang.server, "icon16/group_go.png" )
   end
 
-  local Langu = createVGUI( "DComboBox", settingsWindow, 400, 50, 1500, 0 )
-  Langu:SetValue( lang.lang )
-  Langu:AddChoice("[AUTOMATIC]", "auto")
-  for k, v in pairs( lang.all ) do
-    Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
+  settingsWindow:AddCategory( "yourrp" )
+  settingsWindow:AddSite( "open_yourp_workshop", lang.workshop, "yourrp", "icon16/layout_content.png" )
+  settingsWindow:AddSite( "open_yourp_contact", lang.contact, "yourrp", "icon16/user_comment.png" )
+  settingsWindow:AddSite( "open_yourp_add_langu", "Add Language", "yourrp", "icon16/comment_add.png" )
+
+  settingsWindow:AddCategory( lang.settings )
+  settingsWindow:AddSite( "open_menu_settings", lang.settings, lang.settings, "vgui/yrp/dark_settings.png" )
+
+  --Mainbar
+  local mainBar = createD( "DPanel", settingsWindow, ScrW(), ctr( 100 ), 0, 0 )
+  function mainBar:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dprimary )
+
+    surface.SetDrawColor( 255, 255, 255, 255 )
+    surface.SetMaterial( yrp.materials.logo100	)
+    surface.DrawTexturedRect( ctr( 100 + 10 ), ctr( 10 ), ctr( 378*0.8 ), ctr( 100*0.8 ) )
+
+    if yrp.outdated == nil then
+  		testVersion()
+  	end
+  	local _singleplayer = ""
+  	if game.SinglePlayer() then
+  		_singleplayer = "Singleplayer"
+  	end
+  	draw.SimpleText( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version,"HudBars", ctr( 420 ), ph/2, yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
-  Langu.OnSelect = function( panel, index, value, data )
-    changeLang(data)
-  end
 
-  tabClient( settingsSheet )
-
-  tabServer( settingsSheet )
-
-  tabYourRP( settingsSheet )
-
-  tabSettings( settingsSheet )
-
-  local bs = 600
-  local button = vgui.Create( "DButton", settingsWindow )
-  button:SetSize( ctrW( bs ), ctrW( 50 ) )
-  button:SetPos( ctrW( 15 ), ctrW( 5 ) )
-  button:SetText( "" )
-  function button:DoClick()
+  local liveSupport = createD( "DButton", settingsWindow, ctr( 600 ), ctr( 80 ), ScrW() - ctr( 1450 ), ctr( 10 ) )
+  liveSupport:SetText( "" )
+  function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end
-  function button:Paint( pw, ph )
-    if button:IsHovered() then
-      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, Color( 255, 255, 0, 200 ) )
-    else
-      draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
-    end
+  function liveSupport:Paint( pw, ph )
+    paintMDBackground( self, pw, ph )
     draw.SimpleText( "Live Support Click me! (Discord)", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  local versionInfo = createVGUI( "DPanel", settingsWindow, 300, 50, 15 + bs + 10, 5 )
-  function versionInfo:Paint( pw, ph )
-    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
-    draw.SimpleText( "Current: " .. GAMEMODE.Version, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  local language = createD( "DPanel", settingsWindow, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
+  function language:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondary )
+    draw.SimpleText( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+  end
+  ChangeLanguage( language, ctr( 400 ), ctr( 80 ), ctr( 250 ), ctr( 0 ) )
+
+  local settingsButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 180 ), ctr( 10 ) )
+  settingsButton:SetText( "" )
+  function settingsButton:Paint( pw, ph )
+    paintMDBackground( self, pw, ph )
+
+  	surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( yrp.materials[yrp.design.mode].settings	)
+  	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
 
-  local versionInfoOnlinePanel = createVGUI( "DPanel", settingsWindow, 300, 50, 15 + bs + 10 + 300 + 10, 5 )
-  local versionOnline = ""
-  function versionInfoOnlinePanel:Paint( pw, ph )
-    draw.RoundedBox( 0, ctrW( 0 ), ctrW( 0 ), pw, ph, yrp.colors.panel )
-    draw.SimpleText( "Newest: " .. versionOnline, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-  end
+  hook.Add( "open_menu_settings", "open_menu_settings", function()
+    local ply = LocalPlayer()
 
-  http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
-  	function( body, len, headers, code )
-      local StartPos = string.find( body, "#", 1, false )
-      local EndPos = string.find( body, "*", 1, false )
-      versionOnline = string.sub( body, StartPos+1, EndPos-1 )
-  	end,
-  	function( error )
-  		-- We failed. =(
-  	end
-   )
+    local w = settingsWindow.sitepanel:GetWide()
+    local h = settingsWindow.sitepanel:GetTall()
 
-  for k, v in pairs(settingsSheet.Items) do
-  	if (!v.Tab) then continue end
-
-    v.Tab.Paint = function(self,w,h)
-      if v.Tab == settingsSheet:GetActiveTab() then
-		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
-      else
-        draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
-      end
+    settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+    function settingsWindow.site:Paint( pw, ph )
+      draw.SimpleText( lang.color, "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
     end
+
+    local switchMode = createMDSwitch( settingsWindow.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
+
+    --primary
+    colorP = {}
+    colorP[1] = Color( 40, 40, 40, 255 )
+    colorP[2] = Color( 21, 101, 192, 255 )
+    colorP[3] = Color( 46, 125, 50, 255 )
+    colorP[4] = Color( 239, 108, 0, 255 )
+    colorP[5] = Color( 249, 168, 37, 255 )
+    colorP[6] = Color( 78, 52, 46, 255 )
+
+    local primarybg = createD( "DPanel", settingsWindow.site, ctr( 400 ), ctr( 200 ), ctr( 10 ), ctr( 200 ) )
+
+    for k, v in pairs( colorP ) do
+      addPColorField( primarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
+    end
+
+    --secondary
+    colorS = {}
+    colorS[1] = Color( 117, 117, 117, 255 )
+    colorS[2] = Color( 30, 136, 229, 255 )
+    colorS[3] = Color( 67, 160, 71, 255 )
+    colorS[4] = Color( 251, 140, 0, 255 )
+    colorS[5] = Color( 253, 216, 53, 255 )
+    colorS[6] = Color( 109, 76, 65, 255 )
+
+    local secondarybg = createD( "DPanel", settingsWindow.site, ctr( 400 ), ctr( 200 ), ctr( 500 ), ctr( 200 ) )
+
+    for k, v in pairs( colorS ) do
+      addSColorField( secondarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
+    end
+  end)
+
+  function settingsButton:DoClick()
+    settingsWindow:SwitchToSite( "open_menu_settings" )
+  end
+
+  local exitButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 80 + 10 ), ctr( 10 ) )
+  exitButton:SetText( "" )
+  function exitButton:Paint( pw, ph )
+    paintMDBackground( self, pw, ph )
+
+  	surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( yrp.materials[yrp.design.mode].close	)
+  	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
+  end
+  function exitButton:DoClick()
+    settingsWindow:Remove()
+    settingsWindow = nil
+    _menuIsOpen = 0
+  end
+
+  local burgerMenu = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
+  burgerMenu:SetText( "" )
+  function burgerMenu:Paint( pw, ph )
+    paintMDBackground( self, pw, ph )
+
+  	surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( yrp.materials[yrp.design.mode].burger	)
+  	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
+  end
+  function burgerMenu:DoClick()
+    settingsWindow:openMenu()
   end
 
   settingsWindow:MakePopup()

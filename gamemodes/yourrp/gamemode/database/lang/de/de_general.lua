@@ -117,5 +117,9 @@ function DE_General()
   lang.deletecharacter = "Charakter löschen"
   lang.characterselection = "Charakterauswahl"
   lang.charactercreation = "Charaktererstellung"
+
+  lang.color = "Farbe"
+  lang.dark = "Dunkel"
+  lang.light = "Hell"
 end
 --##############################################################################

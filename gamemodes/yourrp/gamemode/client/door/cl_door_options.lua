@@ -11,9 +11,9 @@ net.Receive( "getBuildingInfo", function( len )
     if _building != nil and _tmpBuilding != nil then
       if _tmpBuilding[1] != nil then
         if _tmpBuilding[1].ownerCharID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
-          buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door )
+          buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door )
         elseif _tmpBuilding[1].ownerCharID == ply:CharID() or _tmpBuilding[1].groupID != -1 then
-          optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].price, _door, owner )
+          optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door, owner )
         else
           printGM( "note", "fail" )
           _menuIsOpen = 0
@@ -65,7 +65,7 @@ function buyWindow( buildingID, name, price, door )
     _doorWindow:Remove()
   end
   function _doorWindow:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
     draw.SimpleText( lang.buymenu, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
@@ -160,7 +160,7 @@ function buyWindow( buildingID, name, price, door )
       if _price != nil then
         net.Start( "changeBuildingPrice" )
           net.WriteInt( _buildingID, 16 )
-          net.WriteInt( _price, 16 )
+          net.WriteString( _price )
         net.SendToServer()
       end
     end
@@ -186,7 +186,7 @@ function optionWindow( buildingID, name, price, door, owner )
     _doorWindow:Remove()
   end
   function _doorWindow:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
     draw.SimpleText( lang.settings, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 

@@ -80,7 +80,7 @@ net.Receive( "getPlyList", function( len )
       end
 
       function _giveFrame:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
         draw.SimpleText( lang.group .. ":", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
         draw.SimpleText( lang.role .. ":", "sef", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -105,7 +105,7 @@ function tabServerGive( sheet )
   sv_givePanel = vgui.Create( "DPanel", sheet )
   sheet:AddSheet( lang.give, sv_givePanel, "icon16/user_go.png" )
   function sv_givePanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
   net.Start( "getPlyList" )

@@ -664,7 +664,7 @@ net.Receive( "yrp_roles", function( len )
 
   for k, v in pairs( yrp_roles_dbTable ) do
     v.selected = false
-    yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, sv_roles )
+    yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.site )
     local tmp = yrp_roles[k]
     tmp.uniqueID = v.uniqueID
     tmp.groupID = v.groupID
@@ -697,7 +697,7 @@ net.Receive( "yrp_roles", function( len )
         rolesInfo = nil
       end
 
-      rolesInfo = createVGUI( "DPanel", sv_roles, 1700, 1700, _lbr + _w + _br, 5 )
+      rolesInfo = createVGUI( "DPanel", settingsWindow.site, 1700, 1700, _lbr + _w + _br, 5 )
       function rolesInfo:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
       end
@@ -743,7 +743,7 @@ net.Receive( "yrp_groups", function( len )
   yrp_groups_dbTable = net.ReadTable()
   for k, v in pairs( yrp_groups_dbTable ) do
     v.selected = false
-    yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, sv_roles )
+    yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.site )
     local tmp = yrp_groups[k]
     tmp.uniqueID = v.uniqueID
     tmp.groupID = v.groupID
@@ -782,7 +782,7 @@ net.Receive( "yrp_groups", function( len )
         rolesInfo = nil
       end
 
-      groupsInfo = createVGUI( "DPanel", sv_roles, 1700, 1700, _lbr + _w + _br, 5 )
+      groupsInfo = createVGUI( "DPanel", settingsWindow.site, 1700, 1700, _lbr + _w + _br, 5 )
       function groupsInfo:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
       end
@@ -802,18 +802,21 @@ net.Receive( "yrp_groups", function( len )
   yrp_groups[1]:DoClick()
 end)
 
-function tabServerRoles( sheet )
+hook.Add( "open_server_roles", "open_server_roles", function()
   local ply = LocalPlayer()
 
-  sv_roles = vgui.Create( "DPanel", sheet )
-  sv_roles.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
-  sheet:AddSheet( lang.roles, sv_roles, "icon16/group_gear.png" )
-  function sv_roles:Paint()
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
+
+  function settingsWindow.site:Paint()
     --draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), yrp.colors.panel )
   end
 
   -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS
-  local groupsAdd = addButton( 50, 50, _lbr, _lbr, sv_roles )
+  local groupsAdd = addButton( 50, 50, _lbr, _lbr, settingsWindow.site )
   function groupsAdd:Paint( pw, ph )
     if groupsAdd:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -826,7 +829,7 @@ function tabServerRoles( sheet )
     addDBGroup()
   end
 
-  local groupsDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _lbr, sv_roles )
+  local groupsDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _lbr, settingsWindow.site )
   function groupsDup:Paint( pw, ph )
     if groupsDup:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -839,7 +842,7 @@ function tabServerRoles( sheet )
     dupDBGroup( getCurrentGroup() )
   end
 
-  local groupsRem = addButton( 50, 50, _lbr + _w - 50, _lbr, sv_roles )
+  local groupsRem = addButton( 50, 50, _lbr + _w - 50, _lbr, settingsWindow.site )
   function groupsRem:Paint( pw, ph )
     if groupsRem:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -852,13 +855,13 @@ function tabServerRoles( sheet )
     deleteDBGroup()
   end
 
-  local groupsHeader = createVGUI( "DPanel", sv_roles, _w, 40, 5, 65 )
+  local groupsHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 65 )
   function groupsHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
     draw.SimpleText( lang.groups, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  groupsList = createVGUI( "DScrollPanel", sv_roles, _w, 400-40, 5, 65+40 )
+  groupsList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 400-40, 5, 65+40 )
   function groupsList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
@@ -867,7 +870,7 @@ function tabServerRoles( sheet )
   net.SendToServer()
 
   -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
-  local rolesAdd = addButton( 50, 50, _lbr, 500, sv_roles )
+  local rolesAdd = addButton( 50, 50, _lbr, 500, settingsWindow.site )
   function rolesAdd:Paint( pw, ph )
     if rolesAdd:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -880,7 +883,7 @@ function tabServerRoles( sheet )
     addDBRole( groupUniqueID )
   end
 
-  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, 500, sv_roles )
+  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, 500, settingsWindow.site )
   function rolesDup:Paint( pw, ph )
     if rolesDup:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -893,7 +896,7 @@ function tabServerRoles( sheet )
     dupDBRole( groupUniqueID, getCurrentRole() )
   end
 
-  local rolesRem = addButton( 50, 50, _lbr + _w - 50, 500, sv_roles )
+  local rolesRem = addButton( 50, 50, _lbr + _w - 50, 500, settingsWindow.site )
   function rolesRem:Paint( pw, ph )
     if rolesRem:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -906,14 +909,14 @@ function tabServerRoles( sheet )
     deleteDBRole()
   end
 
-  local rolesHeader = createVGUI( "DPanel", sv_roles, _w, 40, 5, 560 )
+  local rolesHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 560 )
   function rolesHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
     draw.SimpleText( groupID .. " - " .. lang.roles, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
-  rolesList = createVGUI( "DScrollPanel", sv_roles, _w, 1200-40, 5, 560+40 )
+  rolesList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 1200-40, 5, 560+40 )
   function rolesList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
-end
+end)

@@ -15,7 +15,7 @@ end
 function Player:GetChaTab()
   if SERVER then
     local yrp_players = self:GetPlyTab()
-    if worked( yrp_players, "yrp_players GetChaTab" ) then
+    if worked( yrp_players, "GetPlyTab in GetChaTab" ) then
       local yrp_characters = dbSelect( "yrp_characters", "*", "uniqueID = " .. yrp_players.CurrentCharacter )
       if worked( yrp_characters, "yrp_characters GetChaTab" ) then
         self.chatab = yrp_characters[1]

@@ -18,6 +18,10 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 --init.lua
 --##############################################################################
 --AddCSLuaFiles
+AddCSLuaFile( "api/color.lua" )
+AddCSLuaFile( "api/derma.lua" )
+AddCSLuaFile( "api/math.lua" )
+
 AddCSLuaFile( "shared_pres.lua" )
 
 AddCSLuaFile( "shared.lua" )

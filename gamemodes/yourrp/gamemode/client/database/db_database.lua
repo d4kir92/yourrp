@@ -252,6 +252,17 @@ function loadCompleteHud()
 
   loadDBHud( dbName, "sef" )
 
+  loadDBHud( dbName, "mdpr" )
+  loadDBHud( dbName, "mdpg" )
+  loadDBHud( dbName, "mdpb" )
+  loadDBHud( dbName, "mdpa" )
+  loadDBHud( dbName, "mdpm" )
+
+  loadDBHud( dbName, "mdsr" )
+  loadDBHud( dbName, "mdsg" )
+  loadDBHud( dbName, "mdsb" )
+  loadDBHud( dbName, "mdsa" )
+
   timer.Simple( 0.1, function ()
     cl_db["_load"] = 1
   end)
@@ -416,6 +427,17 @@ function setDefaultHud()
   dbUpdate( dbName, "value = " .. defaultFS, "name = 'stf'" )
 
   dbUpdate( dbName, "value = 18", "name = 'sef'" )
+
+  dbUpdate( dbName, "value = 66", "name = 'mdpr'" )
+  dbUpdate( dbName, "value = 66", "name = 'mdpg'" )
+  dbUpdate( dbName, "value = 66", "name = 'mdpb'" )
+  dbUpdate( dbName, "value = 255", "name = 'mdpa'" )
+  dbUpdate( dbName, "value = 0", "name = 'mdpm'" )
+
+  dbUpdate( dbName, "value = 66", "name = 'mdsr'" )
+  dbUpdate( dbName, "value = 66", "name = 'mdsg'" )
+  dbUpdate( dbName, "value = 66", "name = 'mdsb'" )
+  dbUpdate( dbName, "value = 255", "name = 'mdsa'" )
 
   loadCompleteHud()
 end
@@ -698,6 +720,21 @@ function loadDatabaseHud()
 
   if !dbSelect( dbName, "name, value", "name = 'stf'" ) then
     dbInsertInto( dbName, "name, value", "'stf', 16" )
+  end
+
+  if !dbSelect( dbName, "name, value", "name = 'mdpm'" ) then
+    dbInsertInto( dbName, "name, value", "'mdpr', 66" )
+    dbInsertInto( dbName, "name, value", "'mdpg', 66" )
+    dbInsertInto( dbName, "name, value", "'mdpb', 66" )
+    dbInsertInto( dbName, "name, value", "'mdpa', 255" )
+    dbInsertInto( dbName, "name, value", "'mdpm', 0" )
+  end
+
+  if !dbSelect( dbName, "name, value", "name = 'mdsm'" ) then
+    dbInsertInto( dbName, "name, value", "'mdsr', 13" )
+    dbInsertInto( dbName, "name, value", "'mdsg', 71" )
+    dbInsertInto( dbName, "name, value", "'mdsb', 161" )
+    dbInsertInto( dbName, "name, value", "'mdsa', 255" )
   end
 
   loadCompleteHud()

@@ -227,8 +227,7 @@ function checkClient( ply )
 
     ply:KillSilent()
 
-    local q2 = ""
-    q2 = q2 .. "INSERT INTO yrp_players ( "
+    local q2 = "INSERT INTO yrp_players ( "
     if !game.SinglePlayer() then
       q2 = q2 .. "SteamID64, "
     end
@@ -241,7 +240,15 @@ function checkClient( ply )
     q2 = q2 .. "'" .. tostring( dbSQLStr( ply:SteamName() ) ) .. "', "
     q2 = q2 .. "'" .. os.time() .. "'"
     q2 = q2 .. " )"
-    sql.Query( q2 )
+    local result = sql.Query( q2 )
+  else
+    if #result > 1 then
+      for k, v in pairs( result ) do
+        if k > 1 then
+          dbDeleteFrom( "yrp_players", "uniqueID = " .. v.uniqueID )
+        end
+      end
+    end
   end
   openCharacterSelection( ply )
 

@@ -83,7 +83,7 @@ function addNewItem( parent, item, tab )
       frame:Center()
       frame:SetTitle( lang.areyousure )
       function frame:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
       end
 
       frame:MakePopup()
@@ -163,7 +163,7 @@ net.Receive( "getBuyList", function( len )
       _windowAddItem:ShowCloseButton( true )
       _windowAddItem:SetDraggable( true )
       function _windowAddItem:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background2 )
+        draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
         draw.SimpleText( lang.price .. ":", "weaponT", ctrW( 8 ), ph - ctrW( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
       end
@@ -277,7 +277,7 @@ function openBuyMenu()
     _buyWindow:Remove()
   end
   function _buyWindow:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
   local Langu = createVGUI( "DComboBox", _buyWindow, 400, 50, 1400, 0 )
@@ -320,7 +320,7 @@ function openBuyMenu()
 
     v.Tab.Paint = function(self,w,h)
       if v.Tab == _buyTabs:GetActiveTab() then
-		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.background )
+		    draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.dbackground )
         if v.selected != v[k] then
           v.selected = v[k]
           if v[k] == "weapons" then
@@ -338,7 +338,7 @@ function openBuyMenu()
           end
         end
       else
-        draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.buttonInActive )
+        draw.RoundedBox( 0, 0, 0, w, h, yrp.colors.dprimary )
       end
     end
   end

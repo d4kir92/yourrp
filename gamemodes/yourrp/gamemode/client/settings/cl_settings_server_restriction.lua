@@ -11,14 +11,14 @@ function dbUpdateNet( dbName, dbSets, dbWhile )
 end
 
 function createCheckBox( _string, _x, _y, _nr, _value, _usergroup )
-  _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", sv_ristrictionPanel, 400, 50, _x, _y )
+  _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", settingsWindow.site, 400, 50, _x, _y )
   local _tmp = _tmpRes[_value .. "tmp"]
   function _tmp:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.panel )
+    draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondary )
     draw.SimpleText( _string, "sef", ctrW( 5 + 40 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
 
-  _tmpRes[_value .. "tmpCB"] = createVGUI( "DCheckBox", sv_ristrictionPanel, 40, 40, _x + 5, _y + 5 )
+  _tmpRes[_value .. "tmpCB"] = createVGUI( "DCheckBox", settingsWindow.site, 40, 40, _x + 5, _y + 5 )
   local _tmpCB = _tmpRes[_value .. "tmpCB"]
   _tmpCB:SetValue( tobool( _tmpRestriction[_nr][_value] ) )
   function _tmpCB:OnChange( bVal )
@@ -35,7 +35,7 @@ end
 net.Receive( "getRistrictions", function( len )
   _tmpRestriction = net.ReadTable()
 
-  local _restrictionListView = createVGUI( "DListView", sv_ristrictionPanel, 400, 1800, 10, 10 )
+  local _restrictionListView = createD( "DListView", settingsWindow.site, ctr( 400 ), ctr( 1800 ), ctr( 10 ), ctr( 10 ) )
   _restrictionListView:AddColumn( "uniqueID" ):SetFixedWidth( ctrW( 0 ) )
   _restrictionListView:AddColumn( lang.usergroup ):SetFixedWidth( ctrW( 400 ) )
 
@@ -62,15 +62,18 @@ net.Receive( "getRistrictions", function( len )
   end
 end)
 
-function tabServerRestriction( sheet )
+hook.Add( "open_server_restrictions", "open_server_restrictions", function()
   local ply = LocalPlayer()
 
-  sv_ristrictionPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.restriction, sv_ristrictionPanel, "icon16/group_go.png" )
-  function sv_ristrictionPanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+
+  function settingsWindow.site:Paint( pw, ph )
+    --draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
   net.Start( "getRistrictions" )
   net.SendToServer()
-end
+end)

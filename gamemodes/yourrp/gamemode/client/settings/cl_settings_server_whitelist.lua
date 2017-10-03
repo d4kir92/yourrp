@@ -7,7 +7,7 @@ net.Receive( "getRoleWhitelist", function( len )
   local _tmpRoleList = net.ReadTable()
   local _tmpGroupList = net.ReadTable()
 
-  local _whitelistListView = createVGUI( "DListView", sv_whitelistPanel, 1500, 1800, 10, 10 )
+  local _whitelistListView = createVGUI( "DListView", settingsWindow.site, 1500, 1800, 10, 10 )
   _whitelistListView:AddColumn( "uniqueID" ):SetFixedWidth( 0 )
   _whitelistListView:AddColumn( "SteamID" ):SetFixedWidth( ctrW( 120 ) )
   _whitelistListView:AddColumn( lang.nick )
@@ -29,7 +29,7 @@ net.Receive( "getRoleWhitelist", function( len )
   end
 
 
-  local _buttonAdd = createVGUI( "DButton", sv_whitelistPanel, 300, 50, 10 + 1500 + 10, 10 )
+  local _buttonAdd = createVGUI( "DButton", settingsWindow.site, 300, 50, 10 + 1500 + 10, 10 )
   _buttonAdd:SetText( lang.addentry )
   function _buttonAdd:DoClick()
     local _whitelistFrame = createVGUI( "DFrame", nil, 400, 405, 0, 0 )
@@ -73,7 +73,7 @@ net.Receive( "getRoleWhitelist", function( len )
     end
 
     function _whitelistFrame:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.background )
+      draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
       draw.SimpleText( lang.player .. ":", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
       draw.SimpleText( lang.group .. ":", "sef", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
@@ -83,7 +83,7 @@ net.Receive( "getRoleWhitelist", function( len )
     _whitelistFrame:MakePopup()
   end
 
-  local _buttonRem = createVGUI( "DButton", sv_whitelistPanel, 300, 50, 10 + 1500 + 10, 10 + 50 + 10 )
+  local _buttonRem = createVGUI( "DButton", settingsWindow.site, 300, 50, 10 + 1500 + 10, 10 + 50 + 10 )
   _buttonRem:SetText( lang.removeentry )
   function _buttonRem:DoClick()
     if _whitelistListView:GetSelectedLine() != "" then
@@ -100,15 +100,18 @@ net.Receive( "getRoleWhitelist", function( len )
   end
 end)
 
-function tabServerWhitelist( sheet )
+hook.Add( "open_server_whitelist", "open_server_whitelist", function()
   local ply = LocalPlayer()
 
-  sv_whitelistPanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.whitelist, sv_whitelistPanel, "icon16/page_white_key.png" )
-  function sv_whitelistPanel:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.background )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+
+  function settingsWindow.site:Paint( pw, ph )
+    draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
   net.Start( "getRoleWhitelist" )
   net.SendToServer()
-end
+end)
