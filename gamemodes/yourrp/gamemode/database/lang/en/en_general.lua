@@ -124,5 +124,8 @@ function EN_General()
 
   lang.localchat = "local"
   lang.globalchat = "global"
+
+  lang.appearance = "Appearance"
+  lang.skin = "Variants"
 end
 --##############################################################################

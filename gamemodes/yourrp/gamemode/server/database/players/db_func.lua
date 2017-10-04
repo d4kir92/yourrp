@@ -159,6 +159,12 @@ function GM:PlayerLoadout( ply )
     ply:SetNWInt( "money", chaTab.money )
     ply:SetNWInt( "moneybank", chaTab.moneybank )
     ply:SetNWString( "rpname", chaTab.rpname )
+
+    ply:SetSkin( chaTab.skin )
+    ply:SetBodygroup( 1, chaTab.bg1 )
+    ply:SetBodygroup( 2, chaTab.bg2 )
+    ply:SetBodygroup( 3, chaTab.bg3 )
+    ply:SetBodygroup( 4, chaTab.bg4 )
   else
     printGM( "note", "give char failed" )
     ply:KillSilent()

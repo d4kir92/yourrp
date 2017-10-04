@@ -120,7 +120,7 @@ net.Receive( "CreateCharacter", function( len, ply )
   if !game.SinglePlayer() then
     cols = cols .. "SteamID64, "
   end
-  cols = cols .. "rpname, gender, roleID, groupID, playermodelID, money, moneybank, map"
+  cols = cols .. "rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg1, bg2, bg3, bg4"
   local vals = "'" .. ply:SteamID() .. "', "
   if !game.SinglePlayer() then
     vals = vals .. "'" .. ply:SteamID64() .. "', "
@@ -132,7 +132,12 @@ net.Receive( "CreateCharacter", function( len, ply )
   vals = vals .. "'" .. ch.playermodelID .. "', "
   vals = vals .. 250 .. ", "
   vals = vals .. 500 .. ", "
-  vals = vals .. "'" .. game.GetMap() .. "'"
+  vals = vals .. "'" .. game.GetMap() .. "', "
+  vals = vals .. ch.skin .. ", "
+  vals = vals .. ch.bg[2] .. ", "
+  vals = vals .. ch.bg[3] .. ", "
+  vals = vals .. ch.bg[4] .. ", "
+  vals = vals .. ch.bg[5]
   dbInsertInto( "yrp_characters", cols, vals )
 
   local chars = dbSelect( "yrp_characters", "*", nil )

@@ -111,6 +111,7 @@ function openCharacterCreation()
   character.capital = 0
   character.playermodels = {}
   character.playermodelID = 1
+  character.skin = 1
 
   character.description = {}
   for i = 1, 6 do
@@ -253,8 +254,88 @@ function openCharacterCreation()
   end
 
   local characterPlayermodel = createMD( "DModelPanel", frame, ctr( 1600 ), ctr( 2160 ), ScrW2() - ctr( 1600/2 ), ScrH2() - ctr( 2160/2 ), ctr( 5 ) )
+  characterPlayermodel.bodygroups = {}
+  characterPlayermodel.cache = {}
+
+  data.x = border
+  data.y = data.y + data.h + border
+  data.w = ctr( 800 ) - 2*border
+  data.h = ctr( 740 )
+  local charactersBodygroups = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
+  function charactersBodygroups:Paint( pw, ph )
+    paintMD( pw, ph, nil, yrp.colors.dsecondary )
+    draw.SimpleText( lang.appearance, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    if characterPlayermodel.skin != nil then
+      draw.SimpleText( lang.skin .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr( 80 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    end
+  end
+
+  character.bg = {}
+  for i=1, 6 do
+    character.bg[i] = 0
+  end
+
+  function characterPlayermodel:UpdateBodyGroups()
+    self.skin = 0
+    self.skinmax = characterPlayermodel.Entity:SkinCount() - 1
+    self.bodygroups = characterPlayermodel.Entity:GetBodyGroups()
+
+    for k, v in pairs( self.cache ) do
+      v:Remove()
+    end
+    for k, v in pairs( self.bodygroups ) do
+      if k > 1 then
+        self.cache[k] = createD( "DPanel", charactersBodygroups, ctr( 600 ), ctr( 100 ), ctr( 10 ), ctr( 200 + (k-2)*110 ) )
+        local tmp = self.cache[k]
+        tmp.count = 0
+        tmp.countmax = v.num
+        function tmp:Paint( pw, ph )
+          draw.SimpleText( v.name .. ": " .. self.count+1 .. "/" .. self.countmax, "HudBars", ctr( 80 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        end
+        local tmpUp = createD( "DButton", tmp, ctr( 50 ), ctr( 50 ), ctr( 0 ), ctr( 0 ) )
+        tmpUp:SetText( "" )
+        function tmpUp:Paint( pw, ph )
+          local color = Color( 100, 100, 100, 100 )
+          if tmp.count < tmp.countmax-1 then
+            color = Color( 255, 255, 255, 255 )
+          end
+          draw.RoundedBox( 0, 0, 0, pw, ph, color )
+          draw.SimpleText( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+        function tmpUp:DoClick()
+          if tmp.count < tmp.countmax-1 then
+            tmp.count = tmp.count + 1
+          end
+          v.value = tmp.count
+          characterPlayermodel.bodygroups[v.id] = v.value
+          character.bg[k] = v.value
+          characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
+        end
+        local tmpDown = createD( "DButton", tmp, ctr( 50 ), ctr( 50 ), ctr( 0 ), ctr( 50 ) )
+        tmpDown:SetText( "" )
+        function tmpDown:Paint( pw, ph )
+          local color = Color( 100, 100, 100, 100 )
+          if tmp.count > 0 then
+            color = Color( 255, 255, 255, 255 )
+          end
+          draw.RoundedBox( 0, 0, 0, pw, ph, color )
+          draw.SimpleText( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
+        function tmpDown:DoClick()
+          if tmp.count > 0 then
+            tmp.count = tmp.count - 1
+          end
+          v.value = tmp.count
+          characterPlayermodel.bodygroups[v.id] = v.value
+          character.bg[k] = v.value
+          characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
+        end
+      end
+    end
+  end
   if character.playermodels[tonumber( character.playermodelID )] != nil then
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+    characterPlayermodel:UpdateBodyGroups()
   end
   function characterPlayermodel:LayoutEntity( Entity ) return end
 
@@ -305,6 +386,7 @@ function openCharacterCreation()
       character.playermodelID = 1
     end
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+    characterPlayermodel:UpdateBodyGroups()
   end
 
   local nextPM = createD( "DButton", frame, ctr( 100 ), ctr( 1200 ), ScrW()/2 + ctr( -50 + 800 ), ScrH() - ctr( 1800 ) )
@@ -324,6 +406,7 @@ function openCharacterCreation()
       character.playermodelID = #character.playermodels
     end
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+    characterPlayermodel:UpdateBodyGroups()
   end
 
   local charactersRoleCB = createMD( "DComboBox", charactersRole, ctr( 600 ), ctr( 50 ), ctr( (760-600)/2 ), ctr( 70 ), ctr( 5 ) )
@@ -355,8 +438,49 @@ function openCharacterCreation()
       character.playermodelID = 1
       if character.playermodels[tonumber( character.playermodelID )] != nil then
         characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+        characterPlayermodel:UpdateBodyGroups()
       end
     end)
+  end
+
+  local skinUp = createD( "DButton", charactersBodygroups, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 60 ) )
+  skinUp:SetText( "↑" )
+  function skinUp:Paint( pw, ph )
+    local color = Color( 100, 100, 100, 100 )
+    if characterPlayermodel.Entity != nil then
+      if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() then
+        color = Color( 255, 255, 255, 255 )
+      end
+    end
+    draw.RoundedBox( 0, 0, 0, pw, ph, color )
+    draw.SimpleText( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function skinUp:DoClick()
+    if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() then
+      characterPlayermodel.skin = characterPlayermodel.skin + 1
+    end
+    character.skin = characterPlayermodel.skin
+    characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
+  end
+
+  local skinDo = createD( "DButton", charactersBodygroups, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 110 ) )
+  skinDo:SetText( "↓" )
+  function skinDo:Paint( pw, ph )
+    local color = Color( 100, 100, 100, 100 )
+    if characterPlayermodel.Entity != nil then
+      if characterPlayermodel.Entity:GetSkin() > 0 then
+        color = Color( 255, 255, 255, 255 )
+      end
+    end
+    draw.RoundedBox( 0, 0, 0, pw, ph, color )
+    draw.SimpleText( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+  function skinDo:DoClick()
+    if characterPlayermodel.Entity:GetSkin() > 0 then
+      characterPlayermodel.skin = characterPlayermodel.skin - 1
+    end
+    character.skin = characterPlayermodel.skin
+    characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
   end
 
   local charactersNameText = createMD( "DTextEntry", frame, ctr( 600 ), ctr( 100 ), ScrW2() - ctr( 600/2 ), ScrH() - ctr( 100+50 ), ctr( 5 ) )
@@ -524,6 +648,11 @@ function openCharacterSelection()
       tmpChar.playermodelID = tmpTable[i].char.playermodelID
       local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
       tmpChar.playermodels = tmp
+      tmpChar.skin = tmpTable[i].char.skin
+      tmpChar.bg1 = tmpTable[i].char.bg1
+      tmpChar.bg2 = tmpTable[i].char.bg2
+      tmpChar.bg3 = tmpTable[i].char.bg3
+      tmpChar.bg4 = tmpTable[i].char.bg4
 
       function tmpChar:Paint( pw, ph )
         if tmpChar:IsHovered() or curChar == self.charid then
@@ -538,6 +667,11 @@ function openCharacterSelection()
       function tmpChar:DoClick()
         curChar = self.charid
         charplayermodel:SetModel( self.playermodels[tonumber( self.playermodelID )] )
+        charplayermodel.Entity:SetSkin( self.skin )
+        charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
+        charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
+        charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
+        charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
       end
       if i == 1 then
         curChar = tmpChar.charid

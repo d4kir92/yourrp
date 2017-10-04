@@ -32,7 +32,6 @@ function openSpawnMenu()
         draw.RoundedBox( 0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255 ) )
 
         local _mapName = string.Replace( string.upper( game.GetMap() ), "_", " " )
-        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
         local _testHeight = 4000
         local tr = util.TraceLine( {
@@ -103,6 +102,8 @@ function openSpawnMenu()
         --Coords
         draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
         draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 
         if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
           for k, plys in pairs( player.GetAll() ) do

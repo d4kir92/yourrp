@@ -122,7 +122,10 @@ function DE_General()
   lang.dark = "Dunkel"
   lang.light = "Hell"
 
-  lang.localchat = "lokal"
-  lang.globalchat = "global"
+  lang.localchat = "Lokal"
+  lang.globalchat = "Global"
+
+  lang.appearance = "Aussehen"
+  lang.skin = "Varianten"
 end
 --##############################################################################

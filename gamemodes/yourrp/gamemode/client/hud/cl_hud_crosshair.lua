@@ -32,84 +32,86 @@ local aimdownsights = 0
 function HudCrosshair()
   local ply = LocalPlayer()
   if ply:Alive() and !ply:InVehicle() then
-    local weapon = ply:GetActiveWeapon()
-    if weapon != NULL then
-      if weapon.DrawCrosshair or isHl2Weapon( weapon ) then
-        local nextPrimary = weapon:GetNextPrimaryFire()
+    if !contextMenuOpen then
+      local weapon = ply:GetActiveWeapon()
+      if weapon != NULL then
+        if weapon.DrawCrosshair or isHl2Weapon( weapon ) then
+          local nextPrimary = weapon:GetNextPrimaryFire()
 
-    		if nextPrimary <= CurTime()+0.1 and ply:KeyDown( IN_ATTACK ) then
-    			ch_attack1 = ch_attack1 + 2
-    		else
-    			ch_attack1 = ch_attack1 - 1
-    		end
-    		if ch_attack1 < 0 then
-    			ch_attack1 = 0
-    		elseif ch_attack1 > 6 then
-    			ch_attack1 = 6
-    		end
+      		if nextPrimary <= CurTime()+0.1 and ply:KeyDown( IN_ATTACK ) then
+      			ch_attack1 = ch_attack1 + 2
+      		else
+      			ch_attack1 = ch_attack1 - 1
+      		end
+      		if ch_attack1 < 0 then
+      			ch_attack1 = 0
+      		elseif ch_attack1 > 6 then
+      			ch_attack1 = 6
+      		end
 
-        if ply:KeyDown( IN_RELOAD ) and aimdownsights == 0 then
-          alphaFade = 0
-          aimdownsights = 1
-          timer.Simple( weapon:GetNextPrimaryFire() - CurTime(), function()
-            aimdownsights = 0
-          end)
-        end
-        if ply:KeyDown( IN_ATTACK2 ) and reloading == 0 then
-          alphaFade = 0
-          reloading = 1
-          timer.Simple( weapon:GetNextPrimaryFire() - CurTime(), function()
-            reloading = 0
-          end)
-        end
-        if ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) and reloading == 0 then
-          alphaFade = alphaFade - 0.05
-          if alphaFade < 0 then
+          if ply:KeyDown( IN_RELOAD ) and aimdownsights == 0 then
             alphaFade = 0
+            aimdownsights = 1
+            timer.Simple( weapon:GetNextPrimaryFire() - CurTime(), function()
+              aimdownsights = 0
+            end)
           end
-        elseif reloading == 0 then
-          alphaFade = alphaFade + 0.1
-          if alphaFade > 1 then
-            alphaFade = 1
+          if ply:KeyDown( IN_ATTACK2 ) and reloading == 0 then
+            alphaFade = 0
+            reloading = 1
+            timer.Simple( weapon:GetNextPrimaryFire() - CurTime(), function()
+              reloading = 0
+            end)
           end
-        end
+          if ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) and reloading == 0 then
+            alphaFade = alphaFade - 0.05
+            if alphaFade < 0 then
+              alphaFade = 0
+            end
+          elseif reloading == 0 then
+            alphaFade = alphaFade + 0.1
+            if alphaFade > 1 then
+              alphaFade = 1
+            end
+          end
 
-        if cl_db["_load"] == 1 then
-          if ply:Alive() then
-            if tonumber( cl_db["cht"] ) == 1 then
+          if cl_db["_load"] == 1 then
+            if ply:Alive() then
+              if tonumber( cl_db["cht"] ) == 1 then
 
-              if weapon:GetNetworkedBool( "Ironsights" ) then
-                alphaFade = 0
-                return
+                if weapon:GetNetworkedBool( "Ironsights" ) then
+                  alphaFade = 0
+                  return
+                end
+                local p = ply:GetEyeTrace().HitPos:ToScreen()
+              	local x,y = p.x, p.y
+
+              	local gap = (cl_db["chg"]/2)
+                if ch_attack1 >= 1 then
+                  gap = gap * ch_attack1
+                end
+              	local length = gap + cl_db["chl"]
+
+                local w = cl_db["chl"]
+                local h = cl_db["chh"]
+
+                surface.SetDrawColor( cl_db["colchbrr"], cl_db["colchbrg"], cl_db["colchbrb"], cl_db["colchbra"] * alphaFade )
+
+                local br = cl_db["chbr"]
+                surface.DrawRect( x-w-gap-br, y-h/2-br, w+2*br, h+2*br )
+                surface.DrawRect( x+gap-br, y-h/2-br, w+2*br, h+2*br )
+
+                surface.DrawRect( x-h/2-br, y-w-gap-br, h+2*br, w+2*br )
+                surface.DrawRect( x-h/2-br, y+gap-br, h+2*br, w+2*br )
+
+                surface.SetDrawColor( cl_db["colchr"], cl_db["colchg"], cl_db["colchb"], cl_db["colcha"] * alphaFade )
+
+                surface.DrawRect( x-w-gap, y-h/2, w, h )
+                surface.DrawRect( x+gap, y-h/2, w, h )
+
+                surface.DrawRect( x-h/2, y-w-gap, h, w )
+                surface.DrawRect( x-h/2, y+gap, h, w )
               end
-              local p = ply:GetEyeTrace().HitPos:ToScreen()
-            	local x,y = p.x, p.y
-
-            	local gap = (cl_db["chg"]/2)
-              if ch_attack1 >= 1 then
-                gap = gap * ch_attack1
-              end
-            	local length = gap + cl_db["chl"]
-
-              local w = cl_db["chl"]
-              local h = cl_db["chh"]
-
-              surface.SetDrawColor( cl_db["colchbrr"], cl_db["colchbrg"], cl_db["colchbrb"], cl_db["colchbra"] * alphaFade )
-
-              local br = cl_db["chbr"]
-              surface.DrawRect( x-w-gap-br, y-h/2-br, w+2*br, h+2*br )
-              surface.DrawRect( x+gap-br, y-h/2-br, w+2*br, h+2*br )
-
-              surface.DrawRect( x-h/2-br, y-w-gap-br, h+2*br, w+2*br )
-              surface.DrawRect( x-h/2-br, y+gap-br, h+2*br, w+2*br )
-
-              surface.SetDrawColor( cl_db["colchr"], cl_db["colchg"], cl_db["colchb"], cl_db["colcha"] * alphaFade )
-
-              surface.DrawRect( x-w-gap, y-h/2, w, h )
-              surface.DrawRect( x+gap, y-h/2, w, h )
-
-              surface.DrawRect( x-h/2, y-w-gap, h, w )
-              surface.DrawRect( x-h/2, y+gap, h, w )
             end
           end
         end

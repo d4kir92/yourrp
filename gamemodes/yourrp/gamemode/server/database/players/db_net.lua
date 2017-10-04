@@ -195,6 +195,13 @@ net.Receive( "wantRole", function( len, ply )
     local rolTab = ply:GetRolTab()
     local groTab = ply:GetGroTab()
     local result2 = dbUpdate( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+
+    dbUpdate( "yrp_characters", "skin = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0", "uniqueID = " .. ply:CharID() )
+    ply:SetSkin( 0 )
+    for i=1, 4 do
+      ply:SetBodygroup( i, 0 )
+    end
+    
     SetRolVals( ply, rolTab, groTab )
   end
 end)
