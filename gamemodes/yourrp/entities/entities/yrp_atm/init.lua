@@ -191,16 +191,16 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 					self.parent:ATMPressPrev( activator )
 				elseif func == "ATMPressPlayer1" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name1" ))
-					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID1" ) )
+					self.parent:SetNWString( "SteamID", self.parent:GetNWString( "SteamID1" ) )
 				elseif func == "ATMPressPlayer2" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name2" ))
-					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID2" ) )
+					self.parent:SetNWString( "SteamID", self.parent:GetNWString( "SteamID2" ) )
 				elseif func == "ATMPressPlayer3" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name3" ))
-					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID3" ) )
+					self.parent:SetNWString( "SteamID", self.parent:GetNWString( "SteamID3" ) )
 				elseif func == "ATMPressPlayer4" then
 					self.parent:SetNWString( "name", self.parent:GetNWString( "name4" ))
-					self.parent:SetNWString( "SteamID64", self.parent:GetNWString( "SteamID4" ) )
+					self.parent:SetNWString( "SteamID", self.parent:GetNWString( "SteamID4" ) )
 				elseif func == "confirm" then
 					if self.parent:GetNWString( "prevstatus" ) == "withdraw" then
 						self.money = -tonumber( self.parent:GetNWString( "othermoney", "0" ) )
@@ -216,15 +216,15 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 									dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
 									dbUpdate( "yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID() )
 
-									local dbSelectTarget = dbSelect( "yrp_characters", "*", "uniqueID = " .. tostring( self.parent:GetNWString( "SteamID64" ) ) )
+									local dbSelectTarget = dbSelect( "yrp_characters", "*", "uniqueID = " .. tostring( self.parent:GetNWString( "SteamID" ) ) )
 									if dbSelectTarget != nil then
 										dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
-										dbUpdate( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID64" ) .. "'")
+										dbUpdate( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID" ) .. "'")
 
-										activator:SetNWInt( "moneybank", dbSelectActivator[1].moneybank )
+										activator:SetNWString( "moneybank", dbSelectActivator[1].moneybank )
 										for k, v in pairs( player.GetAll() ) do
 											if v:SteamID() == dbSelectTarget[1].SteamID then
-												v:SetNWInt( "moneybank", dbSelectTarget[1].moneybank )
+												v:SetNWString( "moneybank", dbSelectTarget[1].moneybank )
 												break
 											end
 										end

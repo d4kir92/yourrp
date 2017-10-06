@@ -170,7 +170,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     end
 
     local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
-    sv_generalHardResetNot:SetSize( ctrW( _center ), ctrW( 50 ) )
+    sv_generalHardResetNot:SetSize( ctrW( 300 ), ctrW( 50 ) )
     sv_generalHardResetNot:SetPos( ctrW( 10 + 300 + 10 ), ctrW( 50 ) )
     sv_generalHardResetNot:SetText( lang.no .. ": do nothing" )
     function sv_generalHardResetNot:DoClick()

@@ -166,19 +166,34 @@ end)
 net.Receive( "demotePlayer", function( len, ply )
   local tmpTargetSteamID = net.ReadString()
 
-  local tmpTableInstructor = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. ply:SteamID() .. "'" )
-  local tmpTableInstructorRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableInstructor[1].roleID )
+  local tmpTarget = nil
+  for k, v in pairs( player.GetAll() ) do
+    if v:SteamID() == tmpTargetSteamID then
+      tmpTarget = v
+    end
+  end
+
+  local tmpTableInstructor = ply:GetChaTab()
+  local tmpTableInstructorRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+
+  local tmpTargetChaTab = tmpTarget:GetChaTab()
 
   if tonumber( tmpTableInstructorRole[1].instructor ) == 1 then
-    local tmpTableTarget = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. tmpTargetSteamID .. "'" )
-    local tmpTableTargetRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableTarget[1].roleID )
-    local tmpTableTargetDemoteRole = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTableTargetRole[1].prerole )
-    --setRole( tmpTargetSteamID, tmpTableTargetDemoteRole[1].uniqueID )
 
-    removeFromWhitelist( tmpTargetSteamID, tmpTableTargetRole[1].uniqueID )
 
-    printGM( "instructor", ply:SteamID() .. " demoted " .. tmpTargetSteamID .. " to " .. tmpTableTargetDemoteRole[1].roleID )
-    updateUses()
+    local tmpTableTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+    local tmpTableTargetDemoteRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].prerole )
+    local tmpTableTargetGroup = dbSelect( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].groupID )
+
+    tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
+    tmpTableTargetGroup = tmpTableTargetGroup[1]
+
+    SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
+    SetRolVals( tmpTarget )
+
+    removeFromWhitelist( tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID )
+
+    printGM( "instructor", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.roleID )
   else
     printERROR( "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
   end
@@ -202,26 +217,37 @@ end
 net.Receive( "promotePlayer", function( len, ply )
   local tmpTargetSteamID = net.ReadString()
 
-  local tmpTableInstructor = dbSelect( "yrp_players", "roleID", "SteamID = '" .. ply:SteamID() .. "'" )
-  local tmpTableInstructorRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor[1].roleID )
+  local tmpTarget = nil
+  for k, v in pairs( player.GetAll() ) do
+    if v:SteamID() == tmpTargetSteamID then
+      tmpTarget = v
+    end
+  end
+
+  local tmpTableInstructor = ply:GetChaTab()
+  local tmpTableInstructorRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+
+  local tmpTargetChaTab = tmpTarget:GetChaTab()
 
   if tonumber( tmpTableInstructorRole[1].instructor ) == 1 then
-    local tmpTableTarget = dbSelect( "yrp_players", "roleID", "SteamID = '" .. tmpTargetSteamID .. "'" )
-    local tmpTableTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTableTarget[1].roleID )
+    local tmpTableTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
     local tmpTableTargetPromoteRole = dbSelect( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID )
+    local tmpTableTargetGroup = dbSelect( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].groupID )
 
-    --setRole( tmpTargetSteamID, tmpTableTargetPromoteRole[1].uniqueID )
+    tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
+    tmpTableTargetGroup = tmpTableTargetGroup[1]
+
+    SetRole( tmpTarget, tmpTableTargetPromoteRole.uniqueID )
+    SetRolVals( tmpTarget )
 
     for k, v in pairs(player.GetAll()) do
       if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
-        local tmpTableTargetGroup = dbSelect( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetRole[1].groupID )
-        addToWhitelist( tmpTargetSteamID, tmpTableTargetPromoteRole[1].uniqueID, tmpTableTargetGroup[1].uniqueID, v:Nick() )
+        addToWhitelist( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick() )
         break
       end
     end
 
-    printGM( "instructor", ply:SteamID() .. " promoted " .. tmpTargetSteamID .. " to " .. tmpTableTargetPromoteRole[1].roleID )
-    updateUses()
+    printGM( "instructor", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.roleID )
   else
     printERROR( "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
   end
@@ -230,11 +256,17 @@ end)
 net.Receive( "openInteractMenu", function( len, ply )
   local tmpTargetSteamID = net.ReadString()
 
-  local tmpTargetRoleID = dbSelect( "yrp_players", "*", "SteamID = '" .. tmpTargetSteamID .. "'" )
-  local tmpTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTargetRoleID[1].roleID )
+  local tmpTarget = nil
+  for k, v in pairs( player.GetAll() ) do
+    if v:SteamID() == tmpTargetSteamID then
+      tmpTarget = v
+    end
+  end
+  local tmpTargetChaTab = tmpTarget:GetChaTab()
+  local tmpTargetRole = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 
-  local tmpT = sql.Query( "SELECT * FROM yrp_players WHERE SteamID = '" .. ply:SteamID() .. "'" )
-  local tmpTable = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpT[1].roleID )
+  local tmpT = ply:GetChaTab()
+  local tmpTable = dbSelect( "yrp_roles", "*", "uniqueID = " .. tmpT.roleID )
 
   local tmpBool = false
 

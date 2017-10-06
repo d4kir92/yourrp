@@ -13,7 +13,7 @@ end
 function metaPly:canAfford( money )
   local _tmpMoney = tonumber( money )
   if isnumber( _tmpMoney ) then
-    if tonumber( self:GetNWInt( "money" ) ) >= math.abs( _tmpMoney ) then
+    if tonumber( self:GetNWString( "money" ) ) >= math.abs( _tmpMoney ) then
       return true
     else
       return false
@@ -25,14 +25,14 @@ end
 
 function metaPly:addMoney( money )
   if isnumber( money ) then
-    self:SetNWInt( "money", self:GetNWInt( "money" ) + math.Round( money, 2 ) )
+    self:SetNWString( "money", tonumber( self:GetNWString( "money" ) ) + math.Round( money, 2 ) )
     self:UpdateMoney()
   end
 end
 
 function metaPly:SetMoney( money )
   if isnumber( money ) then
-    self:SetNWInt( "money", math.Round( money, 2 ) )
+    self:SetNWString( "money", math.Round( money, 2 ) )
     self:UpdateMoney()
   end
 end
@@ -40,7 +40,7 @@ end
 function metaPly:canAffordBank( money )
   local _tmpMoney = tonumber( money )
   if isnumber( _tmpMoney ) then
-    if tonumber( self:GetNWInt( "moneybank" ) ) >= math.abs( _tmpMoney ) then
+    if tonumber( self:GetNWString( "moneybank" ) ) >= math.abs( _tmpMoney ) then
       return true
     else
       return false
@@ -50,7 +50,7 @@ end
 
 function metaPly:addMoneyBank( money )
   if isnumber( money ) then
-    self:SetNWInt( "moneybank", self:GetNWInt( "moneybank" ) + math.Round( money, 2 ) )
+    self:SetNWString( "moneybank", tonumber( self:GetNWString( "moneybank" ) ) + math.Round( money, 2 ) )
     self:UpdateMoney()
   end
 end
@@ -64,25 +64,36 @@ function getYear()
 end
 
 function saveClients( string )
+  printGM( "db", "saveClients start." )
   for k, ply in pairs( player.GetAll() ) do
     local q = ""
     q = q .. "UPDATE yrp_players "
     q = q .. "SET "
     q = q .. "timestamp = " .. os.time() .. " "
     q = q .. "WHERE "
-    q = q .. "SteamID = '" .. ply:SteamID() .. "'"  --no SteamID64, why? -> on disconnect not available
+    q = q .. "SteamID = '" .. ply:SteamID() .. "'"
     sql.Query( q )
 
     if ply:Alive() then
-      local pos = tostring( ply:GetPos() )
-      local ang = tostring( ply:EyeAngles() )
-      local money = ply:GetNWInt( "money" )
-      local map = string.lower( game.GetMap() )
-      local result = dbUpdate( "yrp_characters", "position = '" .. pos .. "', angle = '" .. ang .. "', money = " .. money .. ", map = '" .. map .. "'", "uniqueID = " .. ply:CharID() )
+      local CharID = ply:CharID()
+      local pos = "position = '" .. tostring( ply:GetPos() ) .. "'"
+      dbUpdate( "yrp_characters", pos, "uniqueID = " .. CharID )
+
+      local ang = "angle = '" .. tostring( ply:EyeAngles() ) .. "'"
+      dbUpdate( "yrp_characters", ang, "uniqueID = " .. CharID )
+
+      local money = "money = '" .. ply:GetNWString( "money" ) .. "'"
+      dbUpdate( "yrp_characters", money, "uniqueID = " .. CharID )
+
+      local moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
+      dbUpdate( "yrp_characters", moneybank, "uniqueID = " .. CharID )
+
+      local map = "map = '" .. string.lower( game.GetMap() ) .. "'"
+      dbUpdate( "yrp_characters", map, "uniqueID = " .. CharID )
     end
 
   end
-  printGM( "db", "Saved " .. player.GetCount() .. " Clients." )
+  printGM( "db", "saveClients done: Saved " .. player.GetCount() .. " Client(s)." )
 end
 
 function GM:PlayerSetModel( ply )
@@ -94,36 +105,53 @@ function GM:PlayerSetModel( ply )
   end
 end
 
-function SetRolVals( ply, rolTab, groTab )
+function SetRole( ply, rid )
+  local result = dbUpdate( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
+  local gid = dbSelect( "yrp_roles", "*", "uniqueID = " .. rid )
+  gid = gid[1].groupID
+  local result2 = dbUpdate( "yrp_characters", "groupID = " .. gid, "uniqueID = " .. ply:CharID() )
+  local result3 = dbUpdate( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+  local result4 = dbUpdate( "yrp_characters", "skin = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0", "uniqueID = " .. ply:CharID() )
+  ply:SetSkin( 0 )
+  for i=1, 4 do
+    ply:SetBodygroup( i, 0 )
+  end
+end
+
+function SetRolVals( ply )
+  local rolTab = ply:GetRolTab()
+  local groTab = ply:GetGroTab()
   local ChaTab = ply:GetChaTab()
-  if worked( ChaTab, "SetRolVals ChaTab" ) then
+  if worked( rolTab, "SetRolVals rolTab" ) and worked( ChaTab, "SetRolVals ChaTab" ) then
     local tmpID = tonumber( ChaTab.playermodelID )
     local tmp = string.Explode( ",", rolTab.playermodels )
     if worked( tmp[tmpID], "SetRolVals playermodel" ) then
       ply:SetModel( tmp[tmpID] )
     end
   end
-  ply:SetModelScale( rolTab.playermodelsize, 0 )
-  ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
-  ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
-  ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
-  ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
-  ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
-  ply:SetHealth( tonumber( rolTab.hp ) )
-  ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
-  ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
-  ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
-  ply:SetArmor( tonumber( rolTab.ar ) )
-  ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
-  ply:SetNWInt( "capital", rolTab.capital )
-  ply:SetNWString( "roleName", rolTab.roleID )
-  ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
+  if worked( rolTab, "SetRolVals rolTab" ) then
+    ply:SetModelScale( rolTab.playermodelsize, 0 )
+    ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
+    ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+    ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
+    ply:SetHealth( tonumber( rolTab.hp ) )
+    ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+    ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
+    ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
+    ply:SetArmor( tonumber( rolTab.ar ) )
+    ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
+    ply:SetNWInt( "capital", rolTab.capital )
+    ply:SetNWString( "roleName", rolTab.roleID )
+    ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
 
-  --sweps
-  local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
-  for k, swep in pairs( tmpSWEPTable ) do
-    if swep != nil and swep != NULL and swep != "" then
-      ply:Give( swep )
+    --sweps
+    local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
+    for k, swep in pairs( tmpSWEPTable ) do
+      if swep != nil and swep != NULL and swep != "" then
+        ply:Give( swep )
+      end
     end
   end
 
@@ -145,19 +173,12 @@ function GM:PlayerLoadout( ply )
 
   local plyTab = ply:GetPlyTab()
   local chaTab = ply:GetChaTab()
-  local rolTab = ply:GetRolTab()
-  local groTab = ply:GetGroTab()
 
-  if worked( rolTab ) and worked( groTab ) then
-    SetRolVals( ply, rolTab, groTab )
-  else
-    printGM( "note", "give role failed" )
-    ply:KillSilent()
-  end
+  SetRolVals( ply )
 
   if chaTab != nil then
-    ply:SetNWInt( "money", chaTab.money )
-    ply:SetNWInt( "moneybank", chaTab.moneybank )
+    ply:SetNWString( "money", chaTab.money )
+    ply:SetNWString( "moneybank", chaTab.moneybank )
     ply:SetNWString( "rpname", chaTab.rpname )
 
     ply:SetSkin( chaTab.skin )
@@ -186,6 +207,10 @@ function GM:PlayerLoadout( ply )
       ply:SetNWBool( "metabolism", tobool( v.value ) )
       break
     end
+  end
+
+  if ply:IsAdmin() or ply:IsSuperAdmin() then
+    ply:Give( "yrp_arrest_stick" )
   end
 
   teleportToSpawnpoint( ply )
@@ -219,35 +244,32 @@ function openCharacterSelection( ply )
   net.Send( ply )
 end
 
-function checkClient( ply )
-  printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
-
-  if ply:IPAddress() == "loopback" then
-    ply:SetUserGroup( "superadmin" )
-  end
-
+function checkYRPPlayers( ply )
   local result = dbSelect( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
-  if !result then
+  if result == nil then
     printGM( "db", ply:SteamName() .. " is not in db: yrp_players, creating " .. ply:SteamName() )
 
     ply:KillSilent()
 
-    local q2 = "INSERT INTO yrp_players ( "
-    if !game.SinglePlayer() then
-      q2 = q2 .. "SteamID64, "
+    local _SteamID = ply:SteamID()
+    if !worked( _SteamID ) then
+      checkYRPPlayers( ply )
+      return
     end
-    q2 = q2 .. "SteamID, SteamName, Timestamp ) "
-    q2 = q2 .. "VALUES ( "
-    if !game.SinglePlayer() then
-      q2 = q2 .. "'" .. tostring( ply:SteamID64() ) .. "', "
+    local _SteamName = tostring( dbSQLStr( ply:SteamName() ) )
+    if !worked( _SteamName ) then
+      checkYRPPlayers( ply )
+      return
     end
-    q2 = q2 .. "'" .. tostring( ply:SteamID() ) .. "', "
-    q2 = q2 .. "'" .. tostring( dbSQLStr( ply:SteamName() ) ) .. "', "
-    q2 = q2 .. "'" .. os.time() .. "'"
-    q2 = q2 .. " )"
-    local result = sql.Query( q2 )
-  else
+    local _ostime = os.time()
+    if !worked( _ostime ) then
+      checkYRPPlayers( ply )
+      return
+    end
+
+    local _insert = dbInsertInto( "yrp_players", "SteamID, SteamName, Timestamp", "'" .. _SteamID .. "', '" .. _SteamName .. "', '" .. _ostime .. "'" )
+  elseif result != nil then
     if #result > 1 then
       for k, v in pairs( result ) do
         if k > 1 then
@@ -256,6 +278,17 @@ function checkClient( ply )
       end
     end
   end
+end
+
+function checkClient( ply )
+  printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
+
+  if ply:IPAddress() == "loopback" then
+    ply:SetUserGroup( "superadmin" )
+  end
+
+  checkYRPPlayers( ply )
+
   openCharacterSelection( ply )
 
   saveClients( "Check Client" )

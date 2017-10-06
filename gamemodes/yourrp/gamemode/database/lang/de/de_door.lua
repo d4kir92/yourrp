@@ -17,5 +17,7 @@ function DE_Door()
   lang.lockeddoor = "Tür abgeschlossen"
   lang.unlockeddoor = "Tür aufgeschlossen"
   lang.youdonthaveakey = "Du besitzt keinen Schlüssel der passt"
+  lang.lockedvehicle = "Fahrzeug abgeschlossen"
+  lang.unlockedvehicle = "Fahrzeug aufgeschlossen"
 end
 --##############################################################################

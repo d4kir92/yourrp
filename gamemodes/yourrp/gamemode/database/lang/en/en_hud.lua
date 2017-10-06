@@ -13,6 +13,9 @@ function EN_Hud()
   lang.presse = "Press [E] to open/close door"
   lang.holde = "Hold [E] to open settings"
 
+  lang.presseveh = "Press [E] to enter/exit vehicle"
+  lang.holdeveh = lang.holde
+
   lang.dead = "Dead"
   lang.respawning = "Respawning"
 

@@ -2,8 +2,20 @@
 
 --db_func.lua
 
+function teleportToReleasepoint( ply )
+  local _tmpTele = dbSelect( "yrp_" .. string.lower( game.GetMap() ), "*", "type = '" .. "releasepoint" .. "'" )
+
+  if _tmpTele != nil then
+    local _tmp = string.Explode( ",", _tmpTele[1].position )
+    yrp_tp( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
+    _tmp = string.Explode( ",", _tmpTele[1].angle )
+    ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+  end
+end
+
 function teleportToJailpoint( ply )
-  local _tmpTele = dbSelect( "yrp_" .. string.lower( game.GetMap() ), "*", nil )
+  local _tmpTele = dbSelect( "yrp_" .. string.lower( game.GetMap() ), "*", "type = '" .. "jailpoint" .. "'" )
+
   if _tmpTele != nil then
     local _tmp = string.Explode( ",", _tmpTele[1].position )
     yrp_tp( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
@@ -20,6 +32,6 @@ function cleanUpJail( ply )
     ply:SetNWBool( "inJail", false )
     ply:SetNWInt( "jailtime", 0 )
 
-    teleportToJailpoint( ply )
+    teleportToReleasepoint( ply )
   end
 end

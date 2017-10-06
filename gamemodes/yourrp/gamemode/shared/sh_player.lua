@@ -4,9 +4,11 @@ local Player = FindMetaTable( "Player" )
 
 function Player:GetPlyTab()
   if SERVER then
-    local yrp_players = dbSelect( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
-    if worked( yrp_players, "GetPlyTab" ) then
-      self.plytab = yrp_players[1]
+    if worked( self:SteamID(), "SteamID fail" ) then
+      local yrp_players = dbSelect( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
+      if worked( yrp_players, "GetPlyTab fail" ) then
+        self.plytab = yrp_players[1]
+      end
     end
   end
   return self.plytab
@@ -66,13 +68,13 @@ end
 
 function Player:UpdateMoney()
   if SERVER then
-    local money = self:GetNWInt( "money" )
+    local money = tonumber( self:GetNWString( "money" ) )
     if worked( money, "money UpdateMoney" ) then
-      dbUpdate( "yrp_characters", "money = " .. money, "uniqueID = " .. self:CharID() )
+      dbUpdate( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
     end
-    local moneybank = self:GetNWInt( "moneybank" )
+    local moneybank = tonumber( self:GetNWString( "moneybank" ) )
     if worked( moneybank, "moneybank UpdateMoney" ) then
-      dbUpdate( "yrp_characters", "moneybank = " .. moneybank, "uniqueID = " .. self:CharID() )
+      dbUpdate( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. self:CharID() )
     end
   end
 end

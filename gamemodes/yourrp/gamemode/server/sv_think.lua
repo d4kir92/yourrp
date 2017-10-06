@@ -105,8 +105,14 @@ timer.Create( "ServerThink", 1, 0, function()
 
   if time % 60 == 0 then
     for k, ply in pairs( _allPlayers ) do
-      ply:SetNWInt( "money", ply:GetNWInt( "money" ) + ply:GetNWInt( "capital" ) )
-      ply:UpdateMoney()
+      if ply:GetNWString( "money" ) != nil and ply:GetNWInt( "capital" ) != nil then
+        local _money = tonumber( ply:GetNWString( "money" ) )
+        local _capital = tonumber( ply:GetNWInt( "capital" ) )
+        if worked( _money, "updatemoney money fail" ) and worked( _capital, "updatemoney capital fail" ) then
+          ply:SetNWString( "money", _money + _capital )
+          ply:UpdateMoney()
+        end
+      end
     end
   end
 

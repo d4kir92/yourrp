@@ -17,5 +17,7 @@ function EN_Door()
   lang.lockeddoor = "Door locked"
   lang.unlockeddoor = "Door unlocked"
   lang.youdonthaveakey = "You dont have a key for that"
+  lang.lockedvehicle = "Vehicle locked"
+  lang.unlockedvehicle = "Vehicle unlocked"
 end
 --##############################################################################

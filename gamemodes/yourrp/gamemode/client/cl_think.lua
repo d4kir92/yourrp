@@ -101,7 +101,7 @@ function useFunction( string )
 					openInteractMenu( "STEAM_0:1:20900349" )
 				end]]--
 			end
-		elseif string == "openDoorOptions" then
+		elseif string == "openOptions" then
 			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 				if _doorWindow != nil and keys["_hold"] == 0 then
 					keys["_hold"] = 1
@@ -115,6 +115,23 @@ function useFunction( string )
 					keys["_hold"] = 1
 					_menuIsOpen = 1
 					openDoorOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "buildingID" ) )
+					timer.Simple( 1, function()
+						keys["_hold"] = 0
+					end)
+				end
+			elseif eyeTrace.Entity:IsVehicle() then
+				if _vehicleWindow != nil and keys["_hold"] == 0 then
+					keys["_hold"] = 1
+					_vehicleWindow:Remove()
+					_vehicleWindow = nil
+					_menuIsOpen = 0
+					timer.Simple( 1, function()
+						keys["_hold"] = 0
+					end)
+				elseif _vehicleWindow == nil and keys["_hold"] == 0 then
+					keys["_hold"] = 1
+					_menuIsOpen = 1
+					openVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
 					timer.Simple( 1, function()
 						keys["_hold"] = 0
 					end)
@@ -218,7 +235,7 @@ function KeyPress()
 	keyPressed( KEY_PAGEUP, "vyes", nil )
 	keyPressed( KEY_PAGEDOWN, "vno", nil )
 
-	keyPressed( KEY_E, "openInteractMenu", "openDoorOptions", 100 )
+	keyPressed( KEY_E, "openInteractMenu", "openOptions", 100 )
 end
 hook.Add( "Think", "Thinker", KeyPress)
 

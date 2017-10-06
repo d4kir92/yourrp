@@ -18,65 +18,25 @@ net.Receive( "getCharakterList", function( len, ply )
 end)
 
 net.Receive( "getPlyList", function( len, ply )
-  local _tmpPlyList = dbSelect( "yrp_players", "*", nil )
+  local _tmpChaList = dbSelect( "yrp_characters", "*", nil )
   local _tmpRoleList = dbSelect( "yrp_roles", "*", nil )
   local _tmpGroupList = dbSelect( "yrp_groups", "*", nil )
-  if _tmpPlyList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
+  if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
     net.Start( "getPlyList" )
-      net.WriteTable( _tmpPlyList )
+      net.WriteTable( _tmpChaList )
       net.WriteTable( _tmpRoleList )
       net.WriteTable( _tmpGroupList )
     net.Send( ply )
   end
 end)
 
-function giveRole( ply, SteamID, uniqueID )
-  local tmpTable = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. uniqueID )
-  local _steamNick = SteamID
-
-  for k, v in pairs( player.GetAll() ) do
-    if SteamID == v:SteamID() then
-      v:KillSilent()
-      break
-    end
-  end
-
-  if tmpTable != nil then
-    if tmpTable[1].uses < tmpTable[1].maxamount or tonumber( tmpTable[1].maxamount ) == -1 then
-      local query = ""
-      query = query .. "UPDATE yrp_players "
-      query = query .. "SET roleID = " .. tonumber( tmpTable[1].uniqueID ) .. ", "
-      query = query .. "capital = " .. tonumber( tmpTable[1].capital ) .. " "
-      query = query .. "WHERE SteamID = '" .. SteamID .. "'"
-      local result = sql.Query( query )
-
-      updateUses()
-      for k, v in pairs( player.GetAll() ) do
-        if SteamID == v:SteamID() then
-          _steamNick = v:Nick()
-          --updateHud( v )
-          break
-        end
-      end
-      printGM( "admin", ply:Nick() .. " gives " .. _steamNick .. " the Role: " .. tmpTable[1].roleID )
-    else
-      for k, v in pairs( player.GetAll() ) do
-        if SteamID == v:SteamID() then
-          _steamNick = v:Nick()
-          break
-        end
-      end
-      printGM( "admin", ply:Nick() .. " can't give " .. _steamNick .. " the Role: " .. tmpTable[1].roleID .. ", because max amount reached")
-    end
-  else
-    printERROR( "Role " .. uniqueID .. " is not available" )
-  end
-end
+util.AddNetworkString( "giveRole" )
 
 net.Receive( "giveRole", function( len, ply )
   local _tmpSteamID = net.ReadString()
   local uniqueIDRole = net.ReadInt( 16 )
-  giveRole( ply, _tmpSteamID, uniqueIDRole )
+  SetRole( ply, uniqueIDRole )
+  SetRolVals( ply )
 end)
 
 function isWhitelisted( ply, id )
@@ -190,18 +150,9 @@ net.Receive( "wantRole", function( len, ply )
   local uniqueIDRole = net.ReadInt( 16 )
 
   if canGetRole( ply, uniqueIDRole ) then
-    local result = dbUpdate( "yrp_characters", "roleID = " .. uniqueIDRole, "uniqueID = " .. ply:CharID() )
 
-    local rolTab = ply:GetRolTab()
-    local groTab = ply:GetGroTab()
-    local result2 = dbUpdate( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+    SetRole( ply, uniqueIDRole )
 
-    dbUpdate( "yrp_characters", "skin = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0", "uniqueID = " .. ply:CharID() )
-    ply:SetSkin( 0 )
-    for i=1, 4 do
-      ply:SetBodygroup( i, 0 )
-    end
-    
-    SetRolVals( ply, rolTab, groTab )
+    SetRolVals( ply )
   end
 end)

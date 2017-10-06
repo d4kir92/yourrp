@@ -155,7 +155,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpFrame:MakePopup()
   end
 
-  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 + 50 + 10 )
+  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 396 )
   _buttonAddJailPoint:SetText( lang.addjailpoint )
   function _buttonAddJailPoint:DoClick()
     net.Start( "dbInsertInto" )
@@ -163,7 +163,24 @@ hook.Add( "open_server_map", "open_server_map", function()
       net.WriteString( "position, angle, type" )
       local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
       local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
-      local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'Jailpoint'"
+      local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'jailpoint'"
+      net.WriteString( tmpString )
+    net.SendToServer()
+
+    _mapListView:Clear()
+    net.Start( "getMapList" )
+    net.SendToServer()
+  end
+
+  local _buttonAddReleasePoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 396+60 )
+  _buttonAddReleasePoint:SetText( lang.addjailfreepoint )
+  function _buttonAddReleasePoint:DoClick()
+    net.Start( "dbInsertInto" )
+      net.WriteString( "yrp_" .. string.lower( game.GetMap() ) )
+      net.WriteString( "position, angle, type" )
+      local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
+      local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
+      local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'releasepoint'"
       net.WriteString( tmpString )
     net.SendToServer()
 

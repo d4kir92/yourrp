@@ -180,6 +180,9 @@ function dbUpdate( dbTable, dbSets, dbWhere )
       q = q .. dbWhere
     end
     local _result = sql.Query( q )
+    if _result != nil then
+      printGM( "db", "Update not worked" )
+    end
   end
 end
 
@@ -198,8 +201,6 @@ function sqlAddColumn( tableName, columnName, datatype )
   if result == false then
     local q = "ALTER TABLE " .. tableName .. " ADD " .. columnName .. " " .. datatype .. ""
     local _result = sql.Query( q )
-  else
-    --printGM( "db", columnName .. " vorhanden" )
   end
 end
 
@@ -242,6 +243,8 @@ function dbInitDatabase()
   initDatabase( "yrp_characters" )
   initDatabase( "yrp_players" )
 
+  initDatabase( "yrp_vehicles" )
+
   printGMImp( "db", "DONE Loading DATABASES" )
 end
 dbInitDatabase()
@@ -263,6 +266,7 @@ include( "database/db_role_whitelist.lua" )
 include( "database/db_buy.lua" )
 include( "database/db_restriction.lua" )
 include( "database/db_characters.lua" )
+include( "database/db_vehicles.lua" )
 
 include( "database/db_jail.lua" )
 --##############################################################################

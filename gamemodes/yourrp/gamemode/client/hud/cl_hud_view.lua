@@ -1,5 +1,11 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function showOwner( eyeTrace )
+  if eyeTrace.Entity:GetNWString( "ownerRPName" ) != "" or eyeTrace.Entity:GetNWString( "ownerGroup" ) != "" then
+    draw.SimpleText( lang.owner .. ": " ..  eyeTrace.Entity:GetNWString( "ownerRPName" ) .. eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH2() + ctr( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+end
+
 function HudView()
   local ply = LocalPlayer()
   local _eyeTrace = ply:GetEyeTrace()
@@ -11,14 +17,13 @@ function HudView()
   end
   if _eyeTrace.Entity != nil and _eyeTrace.Entity != NULL then
     if _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
-      draw.SimpleText( lang.presse, "sef", ScrW()/2, ScrH()/2 + 30, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.holde, "sef", ScrW()/2, ScrH()/2 + 45, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-      if _eyeTrace.Entity:GetNWString( "ownerRPName" ) != "" or _eyeTrace.Entity:GetNWString( "ownerGroup" ) != "" then
-        draw.SimpleText( lang.owner .. ": " ..  _eyeTrace.Entity:GetNWString( "ownerRPName" ) .. _eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH()/2 + 60, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      end
-
-
+      draw.SimpleText( lang.presse, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.holde, "sef", ScrW()/2, ScrH2() + ctr( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      showOwner( _eyeTrace )
+    elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
+      draw.SimpleText( lang.presseveh, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.holdeveh, "sef", ScrW()/2, ScrH2() + ctr( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      showOwner( _eyeTrace )
     end
   end
 end

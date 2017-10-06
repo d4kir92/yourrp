@@ -41,18 +41,13 @@ AddCSLuaFile( "client/cl_chat.lua" )
 --Settings
 AddCSLuaFile( "client/settings/cl_settings.lua" )
 --Settings Client
-AddCSLuaFile( "client/settings/cl_settings_client.lua" )
 AddCSLuaFile( "client/settings/cl_settings_client_charakter.lua" )
 AddCSLuaFile( "client/settings/cl_settings_client_hud.lua" )
-
-AddCSLuaFile( "client/settings/cl_settings_yourrp.lua" )
-AddCSLuaFile( "client/settings/cl_settings_settings.lua" )
 --YourRP
 AddCSLuaFile( "client/settings/cl_settings_yourrp_workshop.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_contact.lua" )
 AddCSLuaFile( "client/settings/cl_settings_yourrp_add_langu.lua" )
 --Settings Server
-AddCSLuaFile( "client/settings/cl_settings_server.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_general.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_questions.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_roles.lua" )
@@ -60,9 +55,6 @@ AddCSLuaFile( "client/settings/cl_settings_server_give.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_map.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_money.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_whitelist.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_buysystem.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_moneysystem.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_jailsystem.lua" )
 AddCSLuaFile( "client/settings/cl_settings_server_restriction.lua" )
 
 --Hud
@@ -81,6 +73,7 @@ AddCSLuaFile( "client/interact/cl_interact.lua" )
 AddCSLuaFile( "client/buy/cl_buy.lua" )
 
 AddCSLuaFile( "client/door/cl_door_options.lua" )
+AddCSLuaFile( "client/vehicle/cl_vehicle_options.lua" )
 --##############################################################################
 
 --##############################################################################

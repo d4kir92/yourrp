@@ -116,15 +116,8 @@ net.Receive( "CreateCharacter", function( len, ply )
 
   local role = dbSelect( "yrp_roles", "*", "uniqueID = " .. ch.roleID )
 
-  local cols = "SteamID, "
-  if !game.SinglePlayer() then
-    cols = cols .. "SteamID64, "
-  end
-  cols = cols .. "rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg1, bg2, bg3, bg4"
+  local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg1, bg2, bg3, bg4"
   local vals = "'" .. ply:SteamID() .. "', "
-  if !game.SinglePlayer() then
-    vals = vals .. "'" .. ply:SteamID64() .. "', "
-  end
   vals = vals .. "'" .. ch.rpname .. "', "
   vals = vals .. "'" .. ch.gender .. "', "
   vals = vals .. role[1].uniqueID .. ", "

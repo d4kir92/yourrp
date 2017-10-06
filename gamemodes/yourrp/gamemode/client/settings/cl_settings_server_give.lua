@@ -3,7 +3,7 @@
 --cl_settings_server_give.lua
 
 net.Receive( "getPlyList", function( len )
-  local _tmpPlyList = net.ReadTable()
+  local _tmpChaList = net.ReadTable()
   local _tmpRoleList = net.ReadTable()
   local _tmpGroupList = net.ReadTable()
 
@@ -16,12 +16,17 @@ net.Receive( "getPlyList", function( len )
   _giveListView:AddColumn( lang.role )
   _giveListView:AddColumn( lang.money )
 
-  for k, v in pairs( _tmpPlyList ) do
+  for k, v in pairs( _tmpChaList ) do
     for l, w in pairs( _tmpRoleList ) do
-      if ( w.uniqueID == v.roleID ) then
+      if ( tostring( w.uniqueID ) == tostring( v.roleID ) ) then
         for m, x in pairs( _tmpGroupList ) do
           if ( x.uniqueID == w.groupID ) then
-            _giveListView:AddLine( v.SteamID, v.nick, v.rpname, v.gender, x.groupID, w.roleID, v.money )
+            for n, y in pairs( player.GetAll() ) do
+              if y:SteamID() == v.SteamID then
+                _giveListView:AddLine( v.SteamID, y:SteamName(), v.rpname, v.gender, x.groupID, w.roleID, v.money )
+                break
+              end
+            end
             break
           end
         end
@@ -90,7 +95,7 @@ net.Receive( "getPlyList", function( len )
     end
 
     function _tmpPanel:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.panel )
+      draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondary )
       if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and _tmpPanel.ready == true then
         _tmpPanel:Remove()
       end
@@ -99,15 +104,18 @@ net.Receive( "getPlyList", function( len )
   end
 end)
 
-function tabServerGive( sheet )
+hook.Add( "open_server_give", "open_server_give", function()
   local ply = LocalPlayer()
 
-  sv_givePanel = vgui.Create( "DPanel", sheet )
-  sheet:AddSheet( lang.give, sv_givePanel, "icon16/user_go.png" )
+  local w = settingsWindow.sitepanel:GetWide()
+  local h = settingsWindow.sitepanel:GetTall()
+
+  sv_givePanel = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  --sheet:AddSheet( lang.give, sv_givePanel, "icon16/user_go.png" )
   function sv_givePanel:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
   net.Start( "getPlyList" )
   net.SendToServer()
-end
+end)

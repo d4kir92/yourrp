@@ -91,7 +91,7 @@ function loadDoors()
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   local _tmpDoors = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
   local _count = 0
-  if worked( _tmpDoors, "loadDoors 1" ) then
+  if worked( _tmpDoors, "_tmpDoors empty" ) then
     for k, v in pairs( _allPropDoors ) do
       if worked( _tmpDoors[k], "loadDoors 2" ) then
         v:SetNWInt( "buildingID", tonumber( _tmpDoors[k].buildingID ) )
@@ -117,8 +117,6 @@ function loadDoors()
         printGM( "note", "more doors, then in list!" )
       end
     end
-  else
-    printGM( "note", "_doors empty!" )
   end
 
   local _tmpBuildings = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )

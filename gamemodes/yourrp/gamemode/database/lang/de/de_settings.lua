@@ -94,6 +94,7 @@ function DE_Settings()
   lang.access = "Zugang"
   lang.jail = "Gefängnis"
   lang.addjailpoint = "Gefängnispunkt hinzufügen"
+  lang.addjailfreepoint = "Freilassungspunkt hinzufügen"
   lang.time = "Zeit"
   lang.tieup = "Fesseln"
   lang.unleash = "Entfesseln"

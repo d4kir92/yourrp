@@ -36,15 +36,18 @@ function GM:PlayerEndVoice( ply )
   end
 end
 
-function roundMoney( money, round )
-  if money > 1000 and money < 1000000 then
-    return math.Round( money / 1000, round ) .. "K"
-  elseif money > 1000000 and money < 1000000000 then
-    return math.Round( money / 1000000, round ) .. "M"
-  elseif money > 1000000000 then
-    return math.Round( money / 1000000000, round ) .. "B"
-  else
-    return math.Round( money, round )
+function roundMoney( _money, round )
+  if _money != nil then
+    local money = tonumber( _money )
+    if money > 1000 and money < 1000000 then
+      return math.Round( money / 1000, round ) .. "K"
+    elseif money > 1000000 and money < 1000000000 then
+      return math.Round( money / 1000000, round ) .. "M"
+    elseif money > 1000000000 then
+      return math.Round( money / 1000000000, round ) .. "B"
+    else
+      return math.Round( money, round )
+    end
   end
 end
 
@@ -277,14 +280,15 @@ function HudPlayer()
         --Money
         if tonumber( cl_db["mot"] ) == 1 then
           drawRBox( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          local _money = tonumber( ply:GetNWInt( "money" ) )
-          local _moneystring = ply:GetNWString( "moneyPre" ) .. roundMoney( _money, 1 ) .. ply:GetNWString( "moneyPost" )
-          local _capital = tonumber( ply:GetNWInt( "capital" ) )
-          if _capital > 0 then
-            _moneystring = _moneystring .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
+          local _money = tonumber( ply:GetNWString( "money" ) )
+          if _money != nil then
+            local _moneystring = ply:GetNWString( "moneyPre" ) .. roundMoney( _money, 1 ) .. ply:GetNWString( "moneyPost" )
+            local _capital = tonumber( ply:GetNWInt( "capital" ) )
+            if _capital > 0 then
+              _moneystring = _moneystring .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
+            end
+            drawText( _moneystring, "mof", cl_db["mox"] + (cl_db["mow"]/2), cl_db["moy"] + (cl_db["moh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           end
-          drawText( _moneystring, "mof", cl_db["mox"] + (cl_db["mow"]/2), cl_db["moy"] + (cl_db["moh"]/2), Color( 255, 255, 255, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
           showIcon( "mo", money )
         end
 

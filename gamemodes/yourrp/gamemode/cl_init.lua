@@ -370,6 +370,7 @@ include( "client/charakter/cl_charakter.lua" )
 include( "client/buy/cl_buy.lua" )
 include( "client/interact/cl_interact.lua" )
 include( "client/door/cl_door_options.lua" )
+include( "client/vehicle/cl_vehicle_options.lua" )
 --##############################################################################
 
 net.Receive( "yrpInfoBox", function( len )
@@ -543,9 +544,14 @@ end
 
 function drawPlate( ply, string )
   if ply:Alive() and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-    cam.Start3D2D( ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, ply:GetModelScale() * 20 ), Angle( 0, ply:GetAngles().y-90, 90 ), ply:GetModelScale()/4 )
-      draw.RoundedBox( 0, -55, 0, 110, 20, Color( 0, 0, 0, 200 ) )
-      draw.SimpleText( string, "HudBars", 0, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    local pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, ply:GetModelScale() * 20 )
+    local ang = Angle( 0, ply:GetAngles().y-90, 90 )
+    local sca = ply:GetModelScale()/4
+    local str = string
+    local strSize = string.len( str ) + 3
+    cam.Start3D2D( pos , ang, sca )
+      draw.RoundedBox( 0, -( ( strSize * 10 )/2 ), 0, strSize*10, 24, Color( 0, 0, 0, 200 ) )
+      draw.SimpleText( str, "HudBars", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     cam.End3D2D()
   end
 end

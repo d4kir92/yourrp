@@ -117,5 +117,15 @@ function PT_BR_General()
   lang.deletecharacter = "Excluir personagem"
   lang.characterselection = "Seleção de personagem"
   lang.charactercreation = "Criação de personagem"
+
+  lang.color = "Cor"
+  lang.dark = "Escuro"
+  lang.light = "Claro"
+
+  lang.localchat = "Local"
+  lang.globalchat = "Global"
+
+  lang.appearance = "Appearance"
+  lang.skin = "Variants"
 end
 --##############################################################################

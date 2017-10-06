@@ -117,5 +117,15 @@ function RU_General()
   lang.deletecharacter = "Удалить персонажа"
   lang.characterselection = "Выбор персонажа"
   lang.charactercreation = "Создание персонажа"
+
+  lang.color = "Цвет"
+  lang.dark = "Темный"
+  lang.light = "Светлый"
+
+  lang.localchat = "Локал."
+  lang.globalchat = "Глобал."
+
+  lang.appearance = "Appearance"
+  lang.skin = "Variants"
 end
 --##############################################################################

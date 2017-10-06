@@ -20,11 +20,11 @@ function ENT:Initialize()
 end
 
 function ENT:GetMoney()
-	return self:GetNWInt( "money" )
+	return tonumber( self:GetNWString( "money" ) )
 end
 
 function ENT:SetMoney( money )
-	self:SetNWInt( "money", tonumber( money ) )
+	self:SetNWString( "money", money )
 end
 
 function ENT:Use( activator, caller )

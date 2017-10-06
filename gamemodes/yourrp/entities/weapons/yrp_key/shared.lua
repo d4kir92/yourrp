@@ -71,7 +71,13 @@ function SWEP:PrimaryAttack()
       else
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
       end
-    end
+    elseif self.Owner:GetEyeTrace().Entity:IsVehicle() then
+			if unlockVehicle( self.Owner:GetEyeTrace().Entity, v ) then
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.unlockedvehicle )
+      else
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+      end
+		end
   end
 end
 
@@ -83,6 +89,12 @@ function SWEP:SecondaryAttack()
       else
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
       end
-    end
+		elseif self.Owner:GetEyeTrace().Entity:IsVehicle() then
+			if lockVehicle( self.Owner:GetEyeTrace().Entity, v ) then
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.lockedvehicle )
+      else
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+      end
+		end
   end
 end

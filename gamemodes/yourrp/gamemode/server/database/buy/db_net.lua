@@ -51,6 +51,10 @@ function spawnItem( ply, item, tab )
   local ent = {}
   if tab == "vehicles" then
     ent = SpawnVehicle( item )
+    local newVehicle = dbInsertInto( "yrp_vehicles", "ClassName, ownerCharID", "'" .. item.ClassName .. "', '" .. ply:CharID() .. "'" )
+    local getVehicles = dbSelect( "yrp_vehicles", "*", nil )
+    ent:SetNWInt( "vehicleID", getVehicles[#getVehicles].uniqueID)
+    ent:SetNWString( "ownerRPName", ply:RPName() )
     if ent == NULL then return end
   else
     ent = ents.Create( item.ClassName )

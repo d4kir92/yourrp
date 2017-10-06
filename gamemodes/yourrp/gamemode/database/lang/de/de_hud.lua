@@ -11,7 +11,10 @@ function DE_Hud()
   lang.fppr = "Ego perspektive realistisch"
 
   lang.presse = "Drück [E] um Tür zu öffnen/schließen"
-  lang.holde = "Halte [E] gedrückt um Einstellungen zu öffnen"
+  lang.holde = "Halte [E] gedrückt um die Einstellungen zu öffnen"
+
+  lang.presseveh = "Drück [E] um das Fahrzeug zu betreten"
+  lang.holdeveh = lang.holde
 
   lang.dead = "Tot"
   lang.respawning = "Wiederbeleben"
