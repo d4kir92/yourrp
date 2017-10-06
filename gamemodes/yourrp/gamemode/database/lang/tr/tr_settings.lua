@@ -94,6 +94,9 @@ function TR_Settings()
   lang.access = "Access"
   lang.jail = "Jail"
   lang.addjailpoint = "Add Jailpoint"
+  lang.addjailfreepoint = "Add Release point"
   lang.time = "Time"
+  lang.tieup = "Tie up"
+  lang.unleash = "Unleash"
 end
 --##############################################################################

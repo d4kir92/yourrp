@@ -94,6 +94,7 @@ function RU_Settings()
   lang.access = "Доступ"
   lang.jail = "Тюрьма"
   lang.addjailpoint = "Добавить Jailpoint"
+  --
   lang.time = "Время"
   lang.tieup = "Связать"
   lang.unleash = "Развязать"

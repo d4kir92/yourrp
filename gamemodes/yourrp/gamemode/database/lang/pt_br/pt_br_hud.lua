@@ -13,6 +13,9 @@ function PT_BR_Hud()
   lang.presse = "Pressione [E] para abrir/fechar"
   lang.holde = "Segurar [E] para abrir opções"
 
+  lang.presseveh = "Press [E] to enter/exit vehicle"
+  lang.holdeveh = lang.holde
+
   lang.dead = "Morto"
   lang.respawning = "Renacendo"
 

@@ -13,6 +13,9 @@ function TR_Hud()
   lang.presse = "Kapıyı Açmak/Kapamak için [E] Tuşuna Basın"
   lang.holde = "Ayarları Açmak içinn [E] Tuşuna Basılı Tutun"
 
+  lang.presseveh = "Press [E] to enter/exit vehicle"
+  lang.holdeveh = lang.holde
+
   lang.dead = "Öldün"
   lang.respawning = "Canlanıyorsun"
 

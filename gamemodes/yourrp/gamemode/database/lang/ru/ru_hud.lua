@@ -13,6 +13,9 @@ function RU_Hud()
   lang.presse = "Нажмите [E] чтобы открыть/закрыть дверь"
   lang.holde = "Удерживайте [E] для настроек"
 
+  lang.presseveh = "Press [E] to enter/exit vehicle"
+  lang.holdeveh = lang.holde
+
   lang.dead = "Погиб"
   lang.respawning = "возраждаемся"
 

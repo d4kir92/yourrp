@@ -116,6 +116,16 @@ function TR_General()
   lang.enterworld = "Dünya girin"
   lang.deletecharacter = "Karakteri silin"
   lang.characterselection = "Karakter seçmeyi aç"
-  lang.charactercreation = "Charaktererstellung"
+  lang.charactercreation = "Character creation"
+
+  lang.color = "Color"
+  lang.dark = "dark"
+  lang.light = "light"
+
+  lang.localchat = "local"
+  lang.globalchat = "global"
+
+  lang.appearance = "Appearance"
+  lang.skin = "Variants"
 end
 --##############################################################################
