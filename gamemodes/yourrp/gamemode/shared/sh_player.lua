@@ -5,9 +5,13 @@ local Player = FindMetaTable( "Player" )
 function Player:GetPlyTab()
   if SERVER then
     if worked( self:SteamID(), "SteamID fail" ) then
-      local yrp_players = dbSelect( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
-      if worked( yrp_players, "GetPlyTab fail" ) then
-        self.plytab = yrp_players[1]
+      local _yrp_players = dbSelect( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
+      if worked( _yrp_players, "GetPlyTab fail" ) then
+        self.plytab = _yrp_players[1]
+      else
+        printGM( "note", "GetPlyTab ALL PLAYERS")
+        local _all = dbSelect( "yrp_players", "*", nil )
+        PrintTable( _all )
       end
     end
   end

@@ -2,7 +2,7 @@
 SWEP.Author = "D4KiR"
 SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
-SWEP.Instructions = ""
+SWEP.Instructions = "Leftclick - arrest\nRightclick - unarrest"
 
 --The category that you SWep will be shown in, in the Spawn (Q) Menu
 --(This can be anything, GMod will create the categories for you)

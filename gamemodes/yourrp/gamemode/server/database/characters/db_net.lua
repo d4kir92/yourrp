@@ -78,6 +78,7 @@ net.Receive( "charGetRoleInfo", function( len, ply )
 end)
 
 net.Receive( "charGetCharacters", function( len, ply )
+  printGM( "db", "charGetCharacters" )
   local netTable = {}
 
   local chaTab = dbSelect( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
@@ -141,6 +142,6 @@ end)
 
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
-  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. char .. ", SteamID = '" .. ply:SteamID() .. "'" )
+  local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. char , "SteamID = '" .. ply:SteamID() .. "'" )
   ply:Spawn()
 end)

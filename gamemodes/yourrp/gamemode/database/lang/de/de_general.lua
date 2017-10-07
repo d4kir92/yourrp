@@ -127,5 +127,17 @@ function DE_General()
 
   lang.appearance = "Aussehen"
   lang.skin = "Varianten"
+
+  lang.moneyprinter = "Gelddrucker"
+  lang.max = "Max"
+  lang.cpu = "CPU"
+  lang.cooler = "Kühler"
+  lang.printer = "Drucker"
+  lang.storage = "Lager"
+  lang.upgrade = "Aufwerten"
+  lang.fuelup = "Auftanken"
+  lang.fuel = "Treibstoff"
+  lang.toggle = "Umschalten"
+  lang.full = "Voll"
 end
 --##############################################################################

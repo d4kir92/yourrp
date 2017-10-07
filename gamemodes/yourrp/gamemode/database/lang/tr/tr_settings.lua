@@ -89,14 +89,14 @@ function TR_Settings()
 
   lang.voteable = "Oylanabilir?"
 
-  lang.reason = "Reason"
-  lang.timeinsec = "Time in seconds"
-  lang.access = "Access"
-  lang.jail = "Jail"
-  lang.addjailpoint = "Add Jailpoint"
-  lang.addjailfreepoint = "Add Release point"
-  lang.time = "Time"
-  lang.tieup = "Tie up"
-  lang.unleash = "Unleash"
+  lang.reason = "Sebep"
+  lang.timeinsec = "Hapis süresi (saniye)"
+  lang.access = "Erişim"
+  lang.jail = "Hapishane"
+  lang.addjailpoint = "Hapis noktası ekle"
+  lang.addjailfreepoint = "Serbest bırakma noktası ekle"
+  lang.time = "Kalan süre"
+  lang.tieup = "Bağla"
+  lang.unleash = "Çöz"
 end
 --##############################################################################

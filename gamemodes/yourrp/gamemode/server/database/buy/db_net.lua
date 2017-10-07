@@ -19,7 +19,7 @@ function SpawnVehicle( item )
         local spawnname = item.ClassName
         local vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
 
-        local car = simfphys.SpawnVehicle( ply, Vector( 0, 0, 0 ), Angle( 0, 0, 0 ), item.WorldModel, v.ClassName, spawnname, vehicle, true )
+        local car = simfphys.SpawnVehicleSimple( spawnname, Vector( 1000, 1000, -12700 ), Angle( 0, 0, 0 ) )
         return car
       end
     end
@@ -79,7 +79,10 @@ function spawnItem( ply, item, tab )
       local _result = util.TraceHull( tr )
       if !_result.Hit then
         ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
-        ent:Spawn()
+        if tab == "vehicles" then
+        else
+          ent:Spawn()
+        end
         return true
       end
     end

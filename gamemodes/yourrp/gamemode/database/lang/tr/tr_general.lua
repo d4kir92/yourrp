@@ -116,16 +116,28 @@ function TR_General()
   lang.enterworld = "Dünya girin"
   lang.deletecharacter = "Karakteri silin"
   lang.characterselection = "Karakter seçmeyi aç"
-  lang.charactercreation = "Character creation"
+  lang.charactercreation = "Karakter Oluşturma"
 
-  lang.color = "Color"
-  lang.dark = "dark"
-  lang.light = "light"
+  lang.color = "Renk"
+  lang.dark = "karanlık"
+  lang.light = "açık"
 
-  lang.localchat = "local"
-  lang.globalchat = "global"
+  lang.localchat = "yerel"
+  lang.globalchat = "evrensel"
 
-  lang.appearance = "Appearance"
-  lang.skin = "Variants"
+  lang.appearance = "Görünüm"
+  lang.skin = "Çeşitler"
+
+  lang.moneyprinter = "Para Yazıcısı"
+  lang.max = "Maks"
+  lang.cpu = "İşlemci"
+  lang.cooler = "Soğutucu"
+  lang.printer = "Yazıcı"
+  lang.storage = "Depolama"
+  lang.upgrade = "Yükselt"
+  lang.fuelup = "Doldur"
+  lang.fuel = "Yakıt"
+  lang.toggle = "Geçiş"
+  lang.full = "Dolu"
 end
 --##############################################################################

@@ -127,5 +127,17 @@ function EN_General()
 
   lang.appearance = "Appearance"
   lang.skin = "Variants"
+
+  lang.moneyprinter = "Money Printer"
+  lang.max = "Max"
+  lang.cpu = "CPU"
+  lang.cooler = "Cooler"
+  lang.printer = "Printer"
+  lang.storage = "Storage"
+  lang.upgrade = "Upgrade"
+  lang.fuelup = "Fuel up"
+  lang.fuel = "Fuel"
+  lang.toggle = "Toggle"
+  lang.full = "Full"
 end
 --##############################################################################

@@ -176,15 +176,15 @@ net.Receive( "sellBuilding", function( len, ply )
     end
   end
 
-  ply:addMoney( ( _tmpTable[1].price / 2 ) )
+  ply:addMoney( ( _tmpTable[1].buildingprice / 2 ) )
 end)
 
 net.Receive( "buyBuilding", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-  if ply:canAfford( _tmpTable[1].price ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
-    ply:addMoney( - ( _tmpTable[1].price ) )
+  if ply:canAfford( _tmpTable[1].buildingprice ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
+    ply:addMoney( - ( _tmpTable[1].buildingprice ) )
     dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
     local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
     local _tmpPlys = dbSelect( "yrp_characters", "rpname", "uniqueID = " .. ply:CharID() )

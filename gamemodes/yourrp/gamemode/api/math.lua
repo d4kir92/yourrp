@@ -72,3 +72,7 @@ end
 function ScrH2()
   return ( ScrH() / 2 )
 end
+
+function formatMoney( ply, money )
+  return ply:GetNWString( "moneyPre" ) .. money .. ply:GetNWString( "moneyPost" )
+end

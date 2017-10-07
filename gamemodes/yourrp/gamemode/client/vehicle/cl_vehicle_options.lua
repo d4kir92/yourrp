@@ -4,13 +4,13 @@ net.Receive( "getVehicleInfo", function( len )
   if net.ReadBool() then
     local vehicle = net.ReadEntity()
     local _tmpVehicle = net.ReadTable()
-    optionWindow( vehicle, _tmpVehicle )
+    optionVehicleWindow( vehicle, _tmpVehicle )
   else
     _menuIsOpen = 0
   end
 end)
 
-function optionWindow( vehicle, vehicleTab )
+function optionVehicleWindow( vehicle, vehicleTab )
   local ply = LocalPlayer()
 
   local _vehicleWindow = createVGUI( "DFrame", nil, 800, 270, 0, 0 )

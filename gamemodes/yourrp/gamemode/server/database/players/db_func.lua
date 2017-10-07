@@ -82,16 +82,21 @@ function saveClients( string )
       local ang = "angle = '" .. tostring( ply:EyeAngles() ) .. "'"
       dbUpdate( "yrp_characters", ang, "uniqueID = " .. CharID )
 
-      local money = "money = '" .. ply:GetNWString( "money" ) .. "'"
-      dbUpdate( "yrp_characters", money, "uniqueID = " .. CharID )
+      if ply:GetNWString( "money" ) != nil and ply:GetNWString( "money" ) != "" then
+        local money = "money = '" .. ply:GetNWString( "money" ) .. "'"
+        dbUpdate( "yrp_characters", money, "uniqueID = " .. CharID )
+      end
 
-      local moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
-      dbUpdate( "yrp_characters", moneybank, "uniqueID = " .. CharID )
+      if ply:GetNWString( "moneybank" ) != nil and ply:GetNWString( "moneybank" ) != ""  then
+        local moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
+        dbUpdate( "yrp_characters", moneybank, "uniqueID = " .. CharID )
+      end
 
-      local map = "map = '" .. string.lower( game.GetMap() ) .. "'"
-      dbUpdate( "yrp_characters", map, "uniqueID = " .. CharID )
+      if string.lower( game.GetMap() ) != nil and string.lower( game.GetMap() ) != "" then
+        local map = "map = '" .. string.lower( game.GetMap() ) .. "'"
+        dbUpdate( "yrp_characters", map, "uniqueID = " .. CharID )
+      end
     end
-
   end
   printGM( "db", "saveClients done: Saved " .. player.GetCount() .. " Client(s)." )
 end
@@ -172,12 +177,13 @@ function GM:PlayerLoadout( ply )
   addKeys( ply )
 
   local plyTab = ply:GetPlyTab()
+
   local chaTab = ply:GetChaTab()
 
   SetRolVals( ply )
 
   if chaTab != nil then
-    ply:SetNWString( "money", chaTab.money )
+    ply:SetMoney( tonumber( chaTab.money ) )
     ply:SetNWString( "moneybank", chaTab.moneybank )
     ply:SetNWString( "rpname", chaTab.rpname )
 
@@ -244,7 +250,7 @@ function openCharacterSelection( ply )
   net.Send( ply )
 end
 
-function checkYRPPlayers( ply )
+function addYrpPlayer( ply )
   local result = dbSelect( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
   if result == nil then
@@ -253,22 +259,25 @@ function checkYRPPlayers( ply )
     ply:KillSilent()
 
     local _SteamID = ply:SteamID()
-    if !worked( _SteamID ) then
-      checkYRPPlayers( ply )
-      return
-    end
+    local _SteamID64 = ply:SteamID64() or ""
     local _SteamName = tostring( dbSQLStr( ply:SteamName() ) )
-    if !worked( _SteamName ) then
-      checkYRPPlayers( ply )
-      return
-    end
     local _ostime = os.time()
-    if !worked( _ostime ) then
-      checkYRPPlayers( ply )
-      return
-    end
 
-    local _insert = dbInsertInto( "yrp_players", "SteamID, SteamName, Timestamp", "'" .. _SteamID .. "', '" .. _SteamName .. "', '" .. _ostime .. "'" )
+    local cols = "SteamID, "
+    if !game.SinglePlayer() then
+      cols = cols .. "SteamID64, "
+    end
+    cols = cols .. "SteamName, "
+    cols = cols .. "Timestamp"
+
+    local vals = "'" .. _SteamID .. "', "
+    if !game.SinglePlayer() then
+      vals = vals .. "'" .. _SteamID64 .. "', "
+    end
+    vals = vals .. "'" .. _SteamName .. "', "
+    vals = vals .. "'" .. _ostime .. "'"
+
+    local _insert = dbInsertInto( "yrp_players", cols, vals )
   elseif result != nil then
     if #result > 1 then
       for k, v in pairs( result ) do
@@ -280,14 +289,26 @@ function checkYRPPlayers( ply )
   end
 end
 
-function checkClient( ply )
-  printGM( "db", "checkClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
+function checkYrpPlayer( ply )
+  printGM( "db", "checkYrpPlayer " .. ply:Nick() )
+
+  if ply:SteamID64() != nil or game.SinglePlayer() then
+    addYrpPlayer( ply )
+  else
+    timer.Simple( 1, function()
+      checkYrpPlayer( ply )
+    end)
+  end
+end
+
+function checkYrpClient( ply )
+  printGM( "db", "checkYRPClient: " .. ply:SteamName() .. " (" .. ply:SteamID() .. ")" )
 
   if ply:IPAddress() == "loopback" then
     ply:SetUserGroup( "superadmin" )
   end
 
-  checkYRPPlayers( ply )
+  checkYrpPlayer( ply )
 
   openCharacterSelection( ply )
 

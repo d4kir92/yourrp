@@ -155,7 +155,7 @@ function yrpSetModelScale( ply, size )
 end
 
 function GM:PlayerAuthed( ply, SteamID, uniqueid )
-  checkClient( ply )
+  checkYrpClient( ply )
 end
 
 function GM:PlayerDisconnected( ply )
