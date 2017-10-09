@@ -8,14 +8,17 @@ function Player:GetPlyTab()
       local _yrp_players = dbSelect( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
       if worked( _yrp_players, "GetPlyTab fail" ) then
         self.plytab = _yrp_players[1]
+        return self.plytab
       else
         printGM( "note", "GetPlyTab ALL PLAYERS")
         local _all = dbSelect( "yrp_players", "*", nil )
-        PrintTable( _all )
+        if _all != nil then
+          PrintTable( _all )
+        end
       end
     end
   end
-  return self.plytab
+  return {}
 end
 
 function Player:GetChaTab()
@@ -25,10 +28,17 @@ function Player:GetChaTab()
       local yrp_characters = dbSelect( "yrp_characters", "*", "uniqueID = " .. yrp_players.CurrentCharacter )
       if worked( yrp_characters, "yrp_characters GetChaTab" ) then
         self.chatab = yrp_characters[1]
+        return self.chatab
+      else
+        printGM( "note", "GetChaTab ALL Characters")
+        local _all = dbSelect( "yrp_characters", "*", nil )
+        if _all != nil then
+          PrintTable( _all )
+        end
       end
     end
   end
-  return self.chatab
+  return {}
 end
 
 function Player:GetRolTab()
@@ -38,10 +48,17 @@ function Player:GetRolTab()
       local yrp_roles = dbSelect( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
       if worked( yrp_roles, "yrp_roles GetRolTab" ) then
         self.roltab = yrp_roles[1]
+        return self.roltab
+      else
+        printGM( "note", "GetRolTab ALL Roles")
+        local _all = dbSelect( "yrp_roles", "*", nil )
+        if _all != nil then
+          PrintTable( _all )
+        end
       end
     end
   end
-  return self.roltab
+  return {}
 end
 
 function Player:GetGroTab()
@@ -51,10 +68,17 @@ function Player:GetGroTab()
       local yrp_groups = dbSelect( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
       if worked( yrp_groups, "yrp_groups GetGroTab" ) then
         self.grotab = yrp_groups[1]
+        return self.grotab
+      else
+        printGM( "note", "GetGroTab ALL Groups")
+        local _all = dbSelect( "yrp_groups", "*", nil )
+        if _all != nil then
+          PrintTable( _all )
+        end
       end
     end
   end
-  return self.grotab
+  return {}
 end
 
 function Player:CharID()

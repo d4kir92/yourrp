@@ -71,6 +71,10 @@ function openSettings()
   settingsWindow:AddCategory( lang.settings )
   settingsWindow:AddSite( "open_menu_settings", lang.settings, lang.settings, "vgui/yrp/dark_settings.png" )
 
+  --StartSite
+  settingsWindow.cursite = lang.character
+  settingsWindow:SwitchToSite( "open_client_character" )
+
   --Mainbar
   local mainBar = createD( "DPanel", settingsWindow, ScrW(), ctr( 100 ), 0, 0 )
   function mainBar:Paint( pw, ph )
@@ -78,7 +82,7 @@ function openSettings()
 
     surface.SetDrawColor( 255, 255, 255, 255 )
     surface.SetMaterial( yrp.materials.logo100	)
-    surface.DrawTexturedRect( ctr( 100 + 10 ), ctr( 10 ), ctr( 378*0.8 ), ctr( 100*0.8 ) )
+    surface.DrawTexturedRect( ctr( 100 + 400 + 10 ), ctr( 10 ), ctr( 378*0.8 ), ctr( 100*0.8 ) )
 
     if yrp.outdated == nil then
   		testVersion()
@@ -87,17 +91,21 @@ function openSettings()
   	if game.SinglePlayer() then
   		_singleplayer = "Singleplayer"
   	end
-  	draw.SimpleText( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version,"HudBars", ctr( 420 ), ph/2, yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+  	draw.SimpleText( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudBars", ctr( 810 ), ph/2, yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+    if settingsWindow.cursite != nil then
+      draw.SimpleText( settingsWindow.cursite, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
   end
 
-  local liveSupport = createD( "DButton", settingsWindow, ctr( 600 ), ctr( 80 ), ScrW() - ctr( 1450 ), ctr( 10 ) )
+  local liveSupport = createD( "DButton", settingsWindow, ctr( 250 ), ctr( 80 ), ScrW() - ctr( 1100 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end
   function liveSupport:Paint( pw, ph )
     paintMDBackground( self, pw, ph )
-    draw.SimpleText( "Live Support Click me! (Discord)", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( "Live Support!", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   local language = createD( "DPanel", settingsWindow, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
@@ -125,6 +133,7 @@ function openSettings()
 
     settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
     function settingsWindow.site:Paint( pw, ph )
+      draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
       draw.SimpleText( lang.color, "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
     end
 
@@ -180,14 +189,21 @@ function openSettings()
     _menuIsOpen = 0
   end
 
-  local burgerMenu = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
+  local burgerMenu = createD( "DButton", mainBar, ctr( 480 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
   burgerMenu:SetText( "" )
   function burgerMenu:Paint( pw, ph )
-    paintMDBackground( self, pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 100 ) )
+    if self:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, ph, ph, yrp.colors.dsecondaryH )
+    else
+      draw.RoundedBox( 0, 0, 0, ph, ph, yrp.colors.dsecondary )
+    end
 
   	surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( yrp.materials[yrp.design.mode].burger	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
+
+    draw.SimpleText( string.upper( lang.menu ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
   end
   function burgerMenu:DoClick()
     settingsWindow:openMenu()

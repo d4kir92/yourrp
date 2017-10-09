@@ -139,5 +139,9 @@ function DE_General()
   lang.fuel = "Treibstoff"
   lang.toggle = "Umschalten"
   lang.full = "Voll"
+
+  lang.menu = "Menü"
+
+  lang.suicide = "Selbstmord"
 end
 --##############################################################################

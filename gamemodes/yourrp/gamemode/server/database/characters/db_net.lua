@@ -11,10 +11,11 @@ util.AddNetworkString( "CreateCharacter" )
 
 util.AddNetworkString( "EnterWorld" )
 
-function GM:PlayerInitialSpawn( ply )
-  ply:KillSilent()
-  return false
+local function PlayerInitialSpawn( ply )
+  printGM( "gm", "PlayerInitialSpawn" )
+	ply:KillSilent()
 end
+hook.Add( "PlayerInitialSpawn", "some_unique_name", PlayerInitialSpawn )
 
 net.Receive( "charGetGroups", function( len, ply )
   local tmpTable = dbSelect( "yrp_groups", "*", nil )

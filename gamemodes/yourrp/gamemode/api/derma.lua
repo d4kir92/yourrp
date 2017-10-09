@@ -57,7 +57,7 @@ function createMDMenu( parent, w, h, x, y )
     self.sites[cat][tmpNr].material = material
   end
 
-	tmp.sitepanel = createD( "DPanel", tmp, (ScrH()/3)*4, ScrH() - ctr( 100 ), ScrW2() - ( (ScrH()/3)*4 )/2, ctr( 100 ) )
+	tmp.sitepanel = createD( "DPanel", tmp, (ScrH()*5)/4, ScrH() - ctr( 100 ), ScrW2() - ( (ScrH()*5)/4 )/2, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dprimaryBG )
 	end
@@ -79,9 +79,7 @@ function createMDMenu( parent, w, h, x, y )
 	  	surface.SetMaterial( yrp.materials[yrp.design.mode].burger	)
 	  	surface.DrawTexturedRect( ctr( 15+10 ), ctr( 15+10 ), ctr( 50 ), ctr( 50 ) )
 
-			surface.SetDrawColor( 255, 255, 255, 255 )
-	    surface.SetMaterial( yrp.materials.logo100	)
-	    surface.DrawTexturedRect( ctr( 100 + 10 ), ctr( 10 ), ctr( 378*0.8 ), ctr( 100*0.8 ) )
+			draw.SimpleText( lang.menu, "HudBars", ctr( 100 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
 			local x, y = gui.MousePos()
 			if x > ctr( 500 ) then

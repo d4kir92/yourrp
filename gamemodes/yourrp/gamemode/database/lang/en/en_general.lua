@@ -139,5 +139,9 @@ function EN_General()
   lang.fuel = "Fuel"
   lang.toggle = "Toggle"
   lang.full = "Full"
+
+  lang.menu = "Menu"
+
+  lang.suicide = "Suicide"
 end
 --##############################################################################

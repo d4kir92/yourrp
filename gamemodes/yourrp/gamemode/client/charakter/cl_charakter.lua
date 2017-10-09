@@ -754,14 +754,36 @@ function openCharacterSelection()
   button.y = ScrH() - button.h - border
   local confirmColor = Color( 255, 0, 0, 255 )
   local charactersEnter = createMDButton( frame, button.w, button.h, button.x, button.y, ctr( 5 ), lang.enterworld )
+  function charactersEnter:Paint( pw, ph )
+    local height = ctr( 5 )
+    --shadow
+    draw.RoundedBox( 0, height, height, pw-height, ph-height, Color( 0, 0, 0, 100 ) )
+
+    --Button
+    if self:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, yrp.colors.dsecondary )
+    else
+      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, yrp.colors.dprimary )
+    end
+    local text = lang.enterworld
+    if ply:Alive() then
+      text = lang.suicide
+    end
+    draw.SimpleText( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  end
+
   charactersEnter:SetText( "" )
   function charactersEnter:DoClick()
-    if curChar != "-1" then
-      net.Start( "EnterWorld" )
-        net.WriteString( curChar )
-      net.SendToServer()
-      _menuIsOpen = 0
-      frame:Close()
+    if ply:Alive() then
+      RunConsoleCommand( "kill" )
+    else
+      if curChar != "-1" then
+        net.Start( "EnterWorld" )
+          net.WriteString( curChar )
+        net.SendToServer()
+        _menuIsOpen = 0
+        frame:Close()
+      end
     end
   end
 

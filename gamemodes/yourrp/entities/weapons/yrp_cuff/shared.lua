@@ -75,10 +75,6 @@ function SWEP:PrimaryAttack()
 				if self.target:GetNWBool( "cuffed" ) then
 					ply:SetNWString( "castName", lang.unleash )
 					if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
-						if self.target:IsPlayer() then
-							self.target:SetRunSpeed( self.target:GetNWInt( "speedrun", 0 )*0.1 )
-			        self.target:SetWalkSpeed( self.target:GetNWInt( "speedwalk", 0 )*0.1 )
-						end
 						if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
 							ply:SetNWBool( "casting", false )
 							self.target:SetNWBool( "cuffed", false )
@@ -91,10 +87,6 @@ function SWEP:PrimaryAttack()
 				else
 					ply:SetNWString( "castName", lang.tieup )
 					if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
-						if self.target:IsPlayer() then
-							self.target:SetRunSpeed( self.target:GetNWInt( "speedrun", 0 )*0.1 )
-			        self.target:SetWalkSpeed( self.target:GetNWInt( "speedwalk", 0 )*0.1 )
-						end
 						if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
 							ply:SetNWBool( "casting", false )
 							if SERVER then

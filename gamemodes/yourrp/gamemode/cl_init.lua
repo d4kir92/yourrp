@@ -89,11 +89,14 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
       v:Remove()
     end
 
+    local itemSize = 320
+
     local tmpBr = 25
     local tmpX = 0
     local tmpY = 0
 
     site.count = 0
+    local count = 0
     for k, v in pairs( table ) do
       if v.WorldModel == nil then
         v.WorldModel = v.Model or ""
@@ -115,8 +118,9 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
 
       if string.find( string.lower( v.WorldModel ), search:GetText() ) or string.find( string.lower( v.PrintName ), search:GetText() ) or string.find( string.lower( v.ClassName ), search:GetText() ) then
         site.count = site.count + 1
-        if ( site.count - 1 ) >= ( site.cur - 1 ) * 42 and ( site.count - 1 ) < ( site.cur ) * 42 then
-          tmpCache[k] = createVGUI( "DPanel", scrollpanel, 256, 256, tmpX, tmpY )
+        if ( site.count - 1 ) >= ( site.cur - 1 ) * 25 and ( site.count - 1 ) < ( site.cur ) * 25 then
+          count = count + 1
+          tmpCache[k] = createVGUI( "DPanel", scrollpanel, itemSize, itemSize, tmpX, tmpY )
 
           local tmpPointer = tmpCache[k]
           function tmpPointer:Paint( pw, ph )
@@ -128,13 +132,19 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
           end
 
           if v.WorldModel != nil and v.WorldModel != "" then
-            local tmpModel = createVGUI( "SpawnIcon", tmpPointer, 256, 256, 0, 0 )
-            tmpModel:SetModel( v.WorldModel )
-            if tmpModel.Entity != nil then
-              tmpModel.Entity:SetModelScale( 1, 0 )
-              tmpModel:SetLookAt( Vector( 0, 0, 0 ) )
-              tmpModel:SetCamPos( Vector( 0, -30, 15 ) )
-            end
+            local icon = createVGUI( "SpawnIcon", tmpPointer, itemSize, itemSize, 0, 0 )
+            icon.item = v
+            icon:SetText( "" )
+            timer.Create( "shop" .. count, 0.5*count, 1, function()
+              if icon != nil and icon != NULL and icon.item != nil then
+                icon:SetModel( icon.item.WorldModel )
+                if icon.Entity != nil then
+                  icon.Entity:SetModelScale( 1, 0 )
+                  icon:SetLookAt( Vector( 0, 0, 0 ) )
+                  icon:SetCamPos( Vector( 0, -30, 15 ) )
+                end
+              end
+            end)
           end
 
           local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
@@ -172,10 +182,10 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             _globalWorking = tmpString
           end
 
-          tmpX = tmpX + 256 + tmpBr
-          if tmpX > 2000 - 256 - tmpBr then
+          tmpX = tmpX + itemSize + tmpBr
+          if tmpX > 2000 - itemSize - tmpBr then
             tmpX = 0
-            tmpY = tmpY + 256 + tmpBr
+            tmpY = tmpY + itemSize + tmpBr
           end
         end
       end
