@@ -1,24 +1,24 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---db_lang_en.lua
+--db_lang_ca.lua
 
 --##############################################################################
---LANGUAGE en English
-AddCSLuaFile( "en/en_all.lua" )
+--LANGUAGE ca Catalan
+AddCSLuaFile( "ca/ca_all.lua" )
 
-include( "en/en_all.lua" )
+include( "ca/ca_all.lua" )
 
-function LangEN()
-	lang.ineng = "English"
-	lang.lang = "English"
-	lang.short = "en"
+function LangCA()
+	lang.ineng = "Catalan"
+	lang.lang = "Català"
+	lang.short = "ca"
 
 	lang.translatedBy = "translated by"
-	lang.translatedByName = "D4KiR"
+	lang.translatedByName = "azamio143"
 
-	EN_All()
+	CA_All()
 end
 
-LangEN()
+LangCA()
 addLanguage()
 --##############################################################################

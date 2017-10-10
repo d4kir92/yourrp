@@ -96,6 +96,8 @@ net.Receive( "charGetCharacters", function( len, ply )
       end
     end
   end
+  local plytab = ply:GetPlyTab()
+  netTable.plytab = plytab
 
   net.Start( "charGetCharacters" )
     net.WriteTable( netTable )

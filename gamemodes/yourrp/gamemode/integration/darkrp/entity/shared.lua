@@ -114,3 +114,9 @@ function Entity:isMoneyBag()
   printDRP( yrp._not )
   return false
 end
+
+function Entity:Getowning_ent()
+  --Description: Not darkrp
+  printDRP( "Getowning_ent()" )
+  return self:GetOwner()
+end

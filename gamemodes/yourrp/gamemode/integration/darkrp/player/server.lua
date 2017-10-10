@@ -29,8 +29,8 @@ end
 function Player:arrest( time, Arrester )
   --Description: Arrest a player.
   printDRP( "arrest( " .. tostring( time ) .. ", " .. Arrester:Nick() .. " )" )
-  printDRP( yrp._not )
-  -- Need implementation: Teleport PLAYER to Jail
+  self:SetNWBool( "inJail", true )
+  self:SetNWInt( "jailtime", time )
 end
 
 function Player:canKeysLock( door )
@@ -236,7 +236,7 @@ end
 function Player:unArrest( Unarrester )
   --Description: Unarrest a player.
   printDRP( "unArrest( Unarrester )" )
-  printDRP( yrp._not )
+  self:SetNWBool( "inJail", false )
 end
 
 function Player:unWanted( actor )

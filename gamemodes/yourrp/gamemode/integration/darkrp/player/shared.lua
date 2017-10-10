@@ -17,11 +17,12 @@ function Player:getAgendaTable()
   return {}
 end
 
+local DarkRPVars = {}
 function Player:getDarkRPVar( var )
   --Description: Get the value of a DarkRPVar, which is shared between server and client.
   printDRP( "getDarkRPVar( " .. var .. " )" )
-  printDRP( yrp._not )
-  return -1 --value(any)
+  local vars = DarkRPVars[self:UserID()]
+  return vars and vars[var] or nil
 end
 
 function Player:getEyeSightHitEntity( searchDistance, hitDistance, filter )
@@ -82,9 +83,8 @@ end
 
 function Player:isArrested()
   --Description: Whether this player is arrested
-  printDRP( "isArrested()" )
-  printDRP( yrp._not )
-  return false
+  --printDRP( "isArrested()" )
+  return self:GetNWBool( "inJail", false )
 end
 
 function Player:isChief()
@@ -105,7 +105,7 @@ function Player:isCP()
   --Description: Whether this player is part of the police force (mayor, cp, chief).
   printDRP( "isCP()" )
   printDRP( yrp._not )
-  return false
+  return true
 end
 
 function Player:isHitman()

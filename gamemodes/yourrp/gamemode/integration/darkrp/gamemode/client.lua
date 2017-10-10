@@ -120,3 +120,8 @@ function DarkRP.toggleF4Menu()
   printDRP( yrp._not )
   return text
 end
+
+net.Receive( "sendNotify", function()
+  local message = net.ReadString()
+  notification.AddLegacy( message, NOTIFY_GENERIC, 3 )
+end)

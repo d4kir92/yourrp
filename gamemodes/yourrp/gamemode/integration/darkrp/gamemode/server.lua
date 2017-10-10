@@ -156,16 +156,22 @@ function DarkRP.log( message, colour, noFileSave )
   printDRP( yrp._not )
 end
 
+util.AddNetworkString( "sendNotify" )
 function DarkRP.notify( ply, msgType, time, message )
   --Description: Log a message in DarkRP
   printDRP( "notify( ply, msgType, time, " .. message .. " )" )
-  printDRP( yrp._not )
+
+  net.Start( "sendNotify" )
+    net.WriteString( message )
+  net.Send( ply )
 end
 
 function DarkRP.notifyAll( msgType, time, message)
   --Description: Make a notification pop up on the everyone's screen.
   printDRP( "notifyAll( msgType, time, " .. message .. " )" )
-  printDRP( yrp._not )
+  net.Start( "sendNotify" )
+    net.WriteString( message )
+  net.Broadcast()
 end
 
 function DarkRP.offlinePlayerData( SteamID, callback, failure )

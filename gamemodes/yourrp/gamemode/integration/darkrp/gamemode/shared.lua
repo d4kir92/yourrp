@@ -79,8 +79,11 @@ end
 function DarkRP.createEntity( name, tbl )
   --Description: Create an entity for DarkRP.
   printDRP( "createEntity( " .. name .. ", tbl )" )
-  printDRP( yrp._not )
+  print(name)
+  print(tbl)
+  PrintTable( tbl )
 end
+AddEntity = DarkRP.createEntity
 
 function DarkRP.createEntityGroup( name, teamNrs )
   --Description: Create an entity group for DarkRP.
@@ -166,9 +169,9 @@ end
 
 function DarkRP.formatMoney( amount )
   --Description: Format a number as a money value. Includes currency symbol.
-  printDRP( "formatMoney( " .. tostring( amount ) .. " )" )
-  printDRP( yrp._not )
-  return "OLD DARKRP MONEY"
+  --printDRP( "formatMoney( " .. tostring( amount ) .. " )" )
+  local ply = LocalPlayer()
+  return formatMoney( ply, amount )
 end
 
 function DarkRP.getAgendas()
@@ -316,16 +319,37 @@ function DarkRP.readNetDarkRPVarRemoval()
   --             calls this function when reading DarkRPVar net messages.
   --             This function the removal of a DarkRPVar.
   printDRP( "readNetDarkRPVar()" )
-  printDRP( yrp._not )
-  return "Old readNetDarkRPVarRemoval"
+  local DarkRPVarId = net.ReadUInt(DARKRP_ID_BITS)
+  local DarkRPVar = DarkRPVarById[DarkRPVarId]
+
+  if DarkRPVarId == UNKNOWN_DARKRPVAR then
+      local name, value = readUnknown()
+
+      return name, value
+  end
+
+  local val = DarkRPVar.readFn(value)
+
+  return DarkRPVar.name, val
 end
 
+local maxId = 0
+local DarkRPVars = {}
+local DarkRPVarById = {}
+local DARKRP_ID_BITS = 8
+local UNKNOWN_DARKRPVAR = 255 -- Should be equal to 2^DARKRP_ID_BITS - 1
+DarkRP.DARKRP_ID_BITS = DARKRP_ID_BITS
 function DarkRP.registerDarkRPVar( name, writeFn, readFn )
   --Description: Register a DarkRPVar by name. You should definitely register
   --             DarkRPVars. Registering DarkRPVars will make networking much
   --             more efficient.
   printDRP( "registerDarkRPVar( name, writeFn, readFn )" )
-  printDRP( yrp._not )
+  maxId = maxId + 1
+  -- UNKNOWN_DARKRPVAR is reserved for unknown values
+  if maxId >= UNKNOWN_DARKRPVAR then DarkRP.error(string.format("Too many DarkRPVar registrations! DarkRPVar '%s' triggered this error", name), 2) end
+
+  DarkRPVars[name] = {id = maxId, name = name, writeFn = writeFn, readFn = readFn}
+  DarkRPVarById[maxId] = DarkRPVars[name]
 end
 
 function DarkRP.registerDoorVar( name, writeFn, readFn )

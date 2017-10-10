@@ -33,6 +33,8 @@ AddCSLuaFile( "lang/db_lang_sv.lua" )
 AddCSLuaFile( "lang/db_lang_bg.lua" )
 AddCSLuaFile( "lang/db_lang_pl.lua" )
 AddCSLuaFile( "lang/db_lang_ro.lua" )
+AddCSLuaFile( "lang/db_lang_es.lua" )
+AddCSLuaFile( "lang/db_lang_ca.lua" )
 
 include( "lang/db_lang_en.lua" )
 include( "lang/db_lang_de.lua" )
@@ -46,6 +48,8 @@ include( "lang/db_lang_sv.lua" )
 include( "lang/db_lang_bg.lua" )
 include( "lang/db_lang_pl.lua" )
 include( "lang/db_lang_ro.lua" )
+include( "lang/db_lang_es.lua" )
+include( "lang/db_lang_ca.lua" )
 
 function checkLanguagepack()
 	for k, v in pairs( lang.all ) do
@@ -88,6 +92,10 @@ function changeLang( index )
 					LangPL()
 				elseif lang.getLang == "ro" then
 					LangRO()
+				elseif lang.getLang == "es" then
+					LangES()
+				elseif lang.getLang == "ca" then
+					LangCA()
 				end
       else
         LangEN()
@@ -123,6 +131,10 @@ function changeLang( index )
 			LangPL()
 		elseif index == "ro" then
 			LangRO()
+		elseif index == "es" then
+			LangES()
+		elseif index == "ca" then
+			LangCA()
 		else
       printERROR( "LANG_E0001" )
       return

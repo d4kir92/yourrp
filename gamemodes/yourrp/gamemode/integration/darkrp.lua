@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-yrp._not = "not needed."
+yrp._not = "not needed. If you need this function, please tell D4KiR!"
 
 AddCSLuaFile( "darkrp/fn.lua" )
 AddCSLuaFile( "darkrp/config.lua" )

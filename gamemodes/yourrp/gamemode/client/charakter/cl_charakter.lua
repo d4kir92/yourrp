@@ -511,7 +511,7 @@ function openCharacterCreation()
   end
 
   local button = {}
-  button.w = ctr( 500 )
+  button.w = ctr( 600 )
   button.h = ctr( 100 )
   button.x = ScrW2() + ctr( 300+50 )
   button.y = ScrH() - ctr( 100+50 )
@@ -624,6 +624,7 @@ function openCharacterSelection()
 
   net.Receive( "charGetCharacters", function( len )
     local tmpTable = net.ReadTable()
+
     character.amount = #tmpTable or 0
     if #tmpTable < 1 then
       openCharacterCreation()
@@ -677,7 +678,8 @@ function openCharacterSelection()
           charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
         end
       end
-      if i == 1 then
+
+      if tmpTable[i].char.uniqueID == tmpTable.plytab.CurrentCharacter then
         curChar = tmpChar.charid
         tmpChar:DoClick()
       end
@@ -766,23 +768,27 @@ function openCharacterSelection()
       draw.RoundedBox( 0, 0, 0, pw-height, ph-height, yrp.colors.dprimary )
     end
     local text = lang.enterworld
-    if ply:Alive() then
-      text = lang.suicide
+    if LocalPlayer() != nil then
+      if LocalPlayer():Alive() then
+        text = lang.suicide
+      end
     end
     draw.SimpleText( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   charactersEnter:SetText( "" )
   function charactersEnter:DoClick()
-    if ply:Alive() then
-      RunConsoleCommand( "kill" )
-    else
-      if curChar != "-1" then
-        net.Start( "EnterWorld" )
-          net.WriteString( curChar )
-        net.SendToServer()
-        _menuIsOpen = 0
-        frame:Close()
+    if LocalPlayer() != nil then
+      if LocalPlayer():Alive() then
+        RunConsoleCommand( "kill" )
+      else
+        if curChar != "-1" then
+          net.Start( "EnterWorld" )
+            net.WriteString( curChar )
+          net.SendToServer()
+          _menuIsOpen = 0
+          frame:Close()
+        end
       end
     end
   end
