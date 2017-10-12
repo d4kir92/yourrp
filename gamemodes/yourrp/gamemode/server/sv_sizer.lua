@@ -37,6 +37,8 @@ local skyCamera = nil
 --util
 util.AddNetworkString( "askCoords" )
 util.AddNetworkString( "sendCoords" )
+util.AddNetworkString( "askCoordsMM" )
+util.AddNetworkString( "sendCoordsMM" )
 --##############################################################################
 
 --##############################################################################
@@ -51,6 +53,22 @@ net.Receive( "askCoords", function( len, ply )
     getMapCoords()
   else
     net.Start( "sendCoords" )
+      net.WriteBool( true )
+      net.WriteTable( mapSize )
+    net.Send( ply )
+  end
+end)
+
+net.Receive( "askCoordsMM", function( len, ply )
+  if mapSize.sizeN == -9999999999 or mapSize.sizeS == 9999999999 or mapSize.sizeW == 9999999999 or mapSize.sizeE == -9999999999 then
+    net.Start( "sendCoordsMM" )
+      net.WriteBool( false )
+      net.WriteTable( mapSize )
+    net.Send( ply )
+
+    getMapCoords()
+  else
+    net.Start( "sendCoordsMM" )
       net.WriteBool( true )
       net.WriteTable( mapSize )
     net.Send( ply )

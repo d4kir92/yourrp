@@ -137,7 +137,7 @@ function TR_General()
   lang.upgrade = "Yükselt"
   lang.fuelup = "Doldur"
   lang.fuel = "Yakıt"
-  lang.toggle = "Geçiş"
+  lang.toggle = "Değiş"
   lang.full = "Dolu"
 end
 --##############################################################################

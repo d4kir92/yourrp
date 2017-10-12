@@ -11,7 +11,7 @@ function HudView()
   local _eyeTrace = ply:GetEyeTrace()
 
   if _eyeTrace.Entity != nil and _eyeTrace.Entity != NULL then
-  	if _eyeTrace.Entity:GetPos():Distance( ply:GetPos() ) > 100 then
+  	if _eyeTrace.Entity:GetPos():Distance( ply:GetPos() ) > 180 then
   		return
   	end
   end

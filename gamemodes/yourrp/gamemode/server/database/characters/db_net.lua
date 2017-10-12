@@ -139,7 +139,7 @@ net.Receive( "CreateCharacter", function( len, ply )
 
   local chars = dbSelect( "yrp_characters", "*", nil )
   if worked( chars ) then
-    local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID .. ", SteamID = '" .. ply:SteamID() .. "'" )
+    local result = dbUpdate( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID, "SteamID = '" .. ply:SteamID() .. "'" )
   end
 end)
 

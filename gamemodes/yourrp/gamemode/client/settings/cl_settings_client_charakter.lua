@@ -7,7 +7,9 @@ net.Receive( "getCharakterList", function()
   local _charTab = net.ReadTable()
 
   local cl_rpName = createVGUI( "DTextEntry", settingsWindow.site, 400, 50, 10, 40 )
-  cl_rpName:SetText( _charTab.rpname )
+  if _charTab.rpname != nil then
+    cl_rpName:SetText( _charTab.rpname )
+  end
   function cl_rpName:OnChange()
     net.Start( "dbUpdate" )
       net.WriteString( "yrp_characters" )

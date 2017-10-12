@@ -2,7 +2,7 @@
 
 --cl_hud_map.lua
 
-map = {}
+local map = {}
 function getCoords()
   net.Start( "askCoords" )
   net.SendToServer()
@@ -57,24 +57,23 @@ function openSpawnMenu()
         CamDataMap.orthotop = map.sizeS
         CamDataMap.orthobottom = map.sizeN
 
-        local rendering_map = false
-        local map_RT = GetRenderTarget( "YRP_Map", win.w, win.h, true )
-        local map_RT_mat = CreateMaterial( "YRP_Map", "UnlitGeneric", { ["$basetexture"] = "YRP_Map" } )
+        map_RT = GetRenderTarget( "YRP_Map", win.w, win.h, true )
+        map_RT_mat = CreateMaterial( "YRP_Map", "UnlitGeneric", { ["$basetexture"] = "YRP_Map" } )
         local old_RT = render.GetRenderTarget()
         local old_w, old_h = ScrW(), ScrH()
         render.SetRenderTarget( map_RT )
-        render.SetViewPort( win.x, win.y, win.w, win.h )
+          render.SetViewPort( win.x, win.y, win.w, win.h )
 
-        render.Clear( 0, 0, 0, 0 )
+          render.Clear( 0, 0, 0, 0 )
 
-        cam.Start2D()
-          rendering_map = true
-          render.RenderView( CamDataMap )
-          rendering_map = false
-        cam.End2D()
+            cam.Start2D()
+              render.RenderView( CamDataMap )
+            cam.End2D()
 
-        render.SetViewPort( 0, 0, old_w, old_h )
+          render.SetViewPort( 0, 0, old_w, old_h )
         render.SetRenderTarget( old_RT )
+
+        surface.SetDrawColor( 255, 255, 255, 255 )
         surface.SetMaterial( map_RT_mat )
         surface.DrawTexturedRect( win.x, win.y, win.w, win.h )
 

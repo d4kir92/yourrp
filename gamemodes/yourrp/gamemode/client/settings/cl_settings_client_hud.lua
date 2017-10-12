@@ -26,7 +26,7 @@ function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
       draw.RoundedBox( 0, pw - ctrW( 20 ), ph - ctrH( 20 ), ctrW( 20 ), ctrH( 20 ), Color( 0, 255, 0, 200 ) )
     end
 
-    drawText( textPre, "HudBars", pw, ph, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText( textPre, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
     if frame:IsHovered() then
 

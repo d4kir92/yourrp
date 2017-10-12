@@ -73,10 +73,14 @@ function SetRolVals( ply )
   local groTab = ply:GetGroTab()
   local ChaTab = ply:GetChaTab()
   if worked( rolTab, "SetRolVals rolTab" ) and worked( ChaTab, "SetRolVals ChaTab" ) then
-    local tmpID = tonumber( ChaTab.playermodelID )
-    local tmp = string.Explode( ",", rolTab.playermodels )
-    if worked( tmp[tmpID], "SetRolVals playermodel" ) then
-      ply:SetModel( tmp[tmpID] )
+    if ChaTab.playermodelID != nil then
+      local tmpID = tonumber( ChaTab.playermodelID )
+      if rolTab.playermodels != nil and rolTab.playermodels != "" then
+        local tmp = string.Explode( ",", rolTab.playermodels )
+        if worked( tmp[tmpID], "SetRolVals playermodel" ) then
+          ply:SetModel( tmp[tmpID] )
+        end
+      end
     end
   end
   if worked( rolTab, "SetRolVals rolTab" ) then

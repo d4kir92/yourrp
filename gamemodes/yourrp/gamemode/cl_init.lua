@@ -531,7 +531,10 @@ end)
 
 function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )
-  playerready = 1
+  playerready = true
+  timer.Simple( 4, function()
+    playerfullready = true
+  end)
 
   loadCompleteHud()
   testVersion()

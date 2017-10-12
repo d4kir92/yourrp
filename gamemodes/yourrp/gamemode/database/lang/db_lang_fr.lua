@@ -4,23 +4,9 @@
 
 --##############################################################################
 --LANGUAGE fr French
-AddCSLuaFile( "fr/fr_general.lua" )
-AddCSLuaFile( "fr/fr_hud.lua" )
-AddCSLuaFile( "fr/fr_role_menu.lua" )
-AddCSLuaFile( "fr/fr_buy_menu.lua" )
-AddCSLuaFile( "fr/fr_settings.lua" )
-AddCSLuaFile( "fr/fr_door.lua" )
-AddCSLuaFile( "fr/fr_interact_menu.lua" )
-AddCSLuaFile( "fr/fr_atm.lua" )
+AddCSLuaFile( "fr/fr_all.lua" )
 
-include( "fr/fr_general.lua" )
-include( "fr/fr_hud.lua" )
-include( "fr/fr_role_menu.lua" )
-include( "fr/fr_buy_menu.lua" )
-include( "fr/fr_settings.lua" )
-include( "fr/fr_door.lua" )
-include( "fr/fr_interact_menu.lua" )
-include( "fr/fr_atm.lua" )
+include( "fr/fr_all.lua" )
 
 function LangFR()
 	lang.ineng = "French"
@@ -30,14 +16,7 @@ function LangFR()
 	lang.translatedBy = "translated by"
 	lang.translatedByName = "Nogitsu"
 
-	FR_General()
-	FR_Hud()
-	FR_Role_Menu()
-	FR_Buy_Menu()
-	FR_Settings()
-	FR_Door()
-	FR_Interact_Menu()
-	FR_Atm()
+	FR_All()
 end
 
 LangFR()

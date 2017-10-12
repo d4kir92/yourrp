@@ -552,7 +552,7 @@ function openCharacterCreation()
     end
   end
 
-  charactersNameText:MakePopup()
+  frame:MakePopup()
 end
 
 local curChar = "-1"
@@ -793,7 +793,7 @@ function openCharacterSelection()
     end
   end
 
-  charactersCreate:MakePopup()
+  frame:MakePopup()
 end
 
 net.Receive( "openCharacterMenu", function( len, ply )

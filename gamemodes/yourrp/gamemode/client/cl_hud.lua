@@ -34,7 +34,7 @@ function GM:DrawDeathNotice( x, y )
 	--No Kill Feed
 end
 
-playerready = 0
+playerready = false
 hook.Add( "HUDShouldDraw", "HideHUD", function( name )
 	if g_VoicePanelList != nil then
 		g_VoicePanelList:SetVisible( false )

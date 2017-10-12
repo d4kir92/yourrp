@@ -74,12 +74,47 @@ hook.Add( "OnContextMenuClose", "OnContextMenuClose", function()
   contextMenuOpen = false
 end)
 
+local rendering_map = false
+--local map_RT = GetRenderTarget( "YRP_Minimap", ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ), false )
+--local map_RT_mat = CreateMaterial( "YRP_Minimap", "UnlitGeneric", { ["$basetexture"] = "YRP_Minimap" } )
+local old_RT = render.GetRenderTarget()
+local oldw = ScrW()
+local oldh = ScrH()
+
+--
+local rulesrt = GetRenderTarget("rulesrt", 1024, 1024, true)
+local rulesmat = CreateMaterial("rulesmat", "UnlitGeneric", {
+	["$basetexture"] = "rulesrt",
+	["$translucent"] = "1"
+})
+
+local minimap = {}
+local _rendered = false
+local _minimapDistance = 0
+local _minimapDistanceOld = 0
+local CamDataMiniMap = {}
+function getCoordsMM()
+  net.Start( "askCoordsMM" )
+  net.SendToServer()
+end
+
+net.Receive( "sendCoordsMM", function()
+  local _bool = net.ReadBool()
+  if _bool then
+    minimap = net.ReadTable()
+  else
+    printGM( "note", "wait for server coords" )
+    _menuIsOpen = 0
+  end
+end)
+
+local delay = 0
+
 local _tmp3P = 0
 function HudPlayer()
   local ply = LocalPlayer()
   local weapon = ply:GetActiveWeapon()
   if cl_db["_load"] == 1 then
-    local minimap = {}
     local br = 2
 
     if ply:Alive() then
@@ -197,61 +232,109 @@ function HudPlayer()
         end
 
         --Minimap
-        if tonumber( cl_db["mmt"] ) == 1 then
+        if tonumber( cl_db["mmt"] ) == 1 then -- and !ply:InVehicle() then
           drawRBox( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          if _filterTime + 20 < CurTime() then--alle 10 sekunden ents reinladen
-            _filterTime = CurTime()
-            _filterENTS = ents.GetAll()
+          if minimap != nil then
+            if playerfullready == true and minimap.facX != nil and minimap.facY != nil then
+              local win = {}
+              win.w = ctr( cl_db["mmw"] )
+              win.h = ctr( cl_db["mmh"] )
+              win.x = ctr( cl_db["mmx"] )
+              win.y = ctr( cl_db["mmy"] )
+
+              local _testHeight = 400
+              local tr = util.TraceLine( {
+                start = ply:GetPos() + Vector( 0, 0, 16 ),
+                endpos = ply:GetPos() + Vector( 0, 0, _testHeight ),
+                filter = _filterENTS
+              } )
+              local _minimapDistance = math.Round( math.abs( ply:GetPos().z ) )
+              local _distance = math.Round( math.abs( _minimapDistance - _minimapDistanceOld ) )
+
+              if CurTime() > delay and _rendered then
+                delay = CurTime() + 1
+                if _distance > 64 or tr.Hit then
+                  _minimapDistanceOld = _minimapDistance
+                  _rendered = false
+                end
+              end
+
+              if !_rendered or minimap_RT_mat == nil and minimap.sizeX != nil then
+                local _height = 0
+                if tr.Hit then
+                  _height = tr.HitPos.z
+                else
+                  _height = _testHeight
+                end
+                CamDataMiniMap.angles = Angle( 90, 90, 0 )
+                CamDataMiniMap.origin = Vector( 0, 0, _height - 16 )
+                CamDataMiniMap.x = 0
+                CamDataMiniMap.y = 0
+                CamDataMiniMap.w = minimap.sizeX
+                CamDataMiniMap.h = minimap.sizeY
+                CamDataMiniMap.ortho = true
+                CamDataMiniMap.ortholeft = minimap.sizeW
+                CamDataMiniMap.orthoright = minimap.sizeE
+                CamDataMiniMap.orthotop = minimap.sizeS
+                CamDataMiniMap.orthobottom = minimap.sizeN
+
+                minimap_RT = GetRenderTarget( "YRP_MiniMap", ScrW(), ScrH(), true )
+                minimap_RT_mat = CreateMaterial( "YRP_MiniMap", "UnlitGeneric", { ["$basetexture"] = "YRP_MiniMap" } )
+                local old_RT = render.GetRenderTarget()
+                local old_w, old_h = ScrW(), ScrH()
+                render.SetRenderTarget( minimap_RT )
+                  render.SetViewPort( 0, 0, ScrW(), ScrH() )
+
+                  render.Clear( 0, 0, 0, 0 )
+
+                    cam.Start2D()
+                      render.RenderView( CamDataMiniMap )
+                    cam.End2D()
+
+                  render.SetViewPort( 0, 0, old_w, old_h )
+                render.SetRenderTarget( old_RT )
+
+                _rendered = true
+              elseif minimap_RT_mat != nil and _rendered then
+                local plyPos = {}
+                plyPos.xMax = minimap.sizeX
+                plyPos.yMax = minimap.sizeY
+                local mm = {}
+                mm.w, mm.h = lowerToScreen( minimap.sizeX, minimap.sizeY )
+                if minimap.sizeW < 0 then
+                  plyPos.xtmp = ( LocalPlayer():GetPos().x - minimap.sizeW )
+                else
+                  plyPos.xtmp = ( LocalPlayer():GetPos().x + minimap.sizeE )
+                end
+                if minimap.sizeS < 0 then
+                  plyPos.ytmp = ( LocalPlayer():GetPos().y - minimap.sizeS )
+                else
+                  plyPos.ytmp = ( LocalPlayer():GetPos().y + minimap.sizeN )
+                end
+                plyPos.x = 0 + mm.w * ( plyPos.xtmp / plyPos.xMax )
+                plyPos.y = 0 + mm.h - mm.h * ( plyPos.ytmp / plyPos.yMax )
+
+                --STENCIL
+                render.ClearStencil()
+              	render.SetStencilEnable( true )
+              		render.SetStencilWriteMask( 255 )
+              		render.SetStencilTestMask( 255 )
+              		render.SetStencilReferenceValue( 25 )
+              		render.SetStencilFailOperation( STENCIL_REPLACE )
+
+              		draw.RoundedBox( 0, ctr(cl_db["mmx"]), ctr(cl_db["mmy"]), ctr(cl_db["mmw"]), ctr(cl_db["mmh"]), Color( 255, 255, 255 ) )
+
+              		render.SetStencilCompareFunction( STENCIL_EQUAL )
+
+                  surface.SetDrawColor( 255, 255, 255, 255 )
+                  surface.SetMaterial( minimap_RT_mat )
+                  surface.DrawTexturedRect( ctr(cl_db["mmx"]) + ctr(cl_db["mmw"]/2) - plyPos.x, ctr(cl_db["mmy"])  +ctr(cl_db["mmh"]/2)- plyPos.y, mm.w, mm.h )
+                render.SetStencilEnable( false )
+              end
+            else
+              getCoordsMM()
+            end
           end
-          local tr = util.TraceLine( {
-          	start = ply:GetPos() + Vector( 0, 0, 16 ),
-            endpos = ply:GetPos() + Vector( 0, 0, 4000 ),
-          	filter = _filterENTS
-          } )
-
-          local rendering_map = false
-          local map_RT = GetRenderTarget( "YRP_Minimap", ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ), true )
-          local map_RT_mat = CreateMaterial( "YRP_Minimap", "UnlitGeneric", { ["$basetexture"] = "YRP_Minimap" } )
-          local old_RT = render.GetRenderTarget()
-          local old_w, old_h = ScrW(), ScrH()
-          render.SetRenderTarget( map_RT )
-          render.SetViewPort( ctrW( cl_db["mmx"] ), ctrW( cl_db["mmy"] ), ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ) )
-
-          render.Clear( 0, 0, 0, 0 )
-
-        	CamDataMinimap.angles = Angle( 90, ply:EyeAngles().yaw, 0 )
-          if tr.Hit and !tr.Entity:IsPlayer() and !tr.Entity:IsNPC() then
-            local dist = 1400
-        	  CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, tr.HitPos.z-ply:GetPos().z - 4 )
-            CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
-          	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
-          	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
-          	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
-          else
-            local dist = 6000
-            CamDataMinimap.origin = ply:GetPos() + Vector( 0, 0, ply:GetPos().z + 4000 - ply:GetPos().z - 4 ) --+ Vector( 0, 0, 20000 )
-            CamDataMinimap.ortholeft = -dist * cl_db["mmw"] / 1000
-          	CamDataMinimap.orthoright = dist * cl_db["mmw"] / 1000
-          	CamDataMinimap.orthotop = -dist * cl_db["mmh"] / 1000
-          	CamDataMinimap.orthobottom = dist * cl_db["mmh"] / 1000
-          end
-        	CamDataMinimap.x = 0
-        	CamDataMinimap.y = 0
-        	CamDataMinimap.w = cl_db["mmw"]
-        	CamDataMinimap.h = cl_db["mmh"]
-          CamDataMinimap.ortho = true
-          CamDataMinimap.drawviewmodel = false
-
-          cam.Start2D()
-          	rendering_map = true
-            render.RenderView( CamDataMinimap )
-            rendering_map = false
-          cam.End2D()
-
-          render.SetViewPort( 0, 0, old_w, old_h )
-          render.SetRenderTarget( old_RT )
-          surface.SetMaterial( map_RT_mat )
-          surface.DrawTexturedRect( ctrW( cl_db["mmx"] ), ctrW( cl_db["mmy"] ), ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ) )
 
           minimap.point = 8
           drawRBoxCr( cl_db["mmx"] + (cl_db["mmw"]/2) - (minimap.point/2), cl_db["mmy"] + (cl_db["mmh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
