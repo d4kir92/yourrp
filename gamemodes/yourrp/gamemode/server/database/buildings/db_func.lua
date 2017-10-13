@@ -32,12 +32,15 @@ function addKeys( ply )
   if ply:IsPlayer() then
     for k, v in pairs( ply:GetWeapons() ) do
       if v.ClassName == "yrp_key" then
-        local _tmpTable = dbSelect( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
-        if worked( _tmpTable, "addKeys 1" ) then
-          _tmpTable = string.Explode( ",", _tmpTable[1].keynrs )
-          for l, w in pairs( _tmpTable ) do
-            if worked( w, "addKeys 2" ) and w != "" then
-              v:AddKeyNr( w )
+        local _charID = ply:CharID()
+        if _charID != nil then
+          local _tmpTable = dbSelect( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
+          if worked( _tmpTable, "addKeys 1" ) then
+            _tmpTable = string.Explode( ",", _tmpTable[1].keynrs )
+            for l, w in pairs( _tmpTable ) do
+              if worked( w, "addKeys 2" ) and w != "" then
+                v:AddKeyNr( w )
+              end
             end
           end
         end

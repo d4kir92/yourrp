@@ -269,12 +269,10 @@ net.Receive( "getBuyList", function( len )
 end)
 
 function openBuyMenu()
-  _menuIsOpen = 1
   _buyWindow = createVGUI( "DFrame", nil, winW, winH, 0, 0 )
   _buyWindow:SetTitle( lang.buymenu )
   _buyWindow:Center()
   function _buyWindow:OnClose()
-    _menuIsOpen = 0
     _buyWindow:Remove()
   end
   function _buyWindow:Paint( pw, ph )

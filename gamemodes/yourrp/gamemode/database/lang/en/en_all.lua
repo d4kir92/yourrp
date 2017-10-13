@@ -25,14 +25,14 @@ function EN_All()
 
   --Door
   lang.buybuildingpre = "buy"
-  lang.buybuildingpos = ""
+  lang.buybuildingpos = " "
   lang.addanewbuilding = "Add a new building"
   lang.doorlevel = "Door-Level"
   lang.upgradedoor = "Upgrade Door"
   lang.createkey = "Create Key"
   lang.resetkey = "Reset Key"
   lang.sellbuildingpre = "sell"
-  lang.sellbuildingpos = ""
+  lang.sellbuildingpos = " "
   lang.lockeddoor = "Door locked"
   lang.unlockeddoor = "Door unlocked"
   lang.youdonthaveakey = "You dont have a key for that"
@@ -267,4 +267,34 @@ function EN_All()
 
   --HUDExtras
   lang.anchor = "Anchor"
+  lang.abilitybar = "Abilitybar"
+  lang.castbar = "Castbar"
+  lang.statusbar = "Status"
+  lang.chatbox = "Chatbox"
+  lang.xpbar = "Xpbar"
+  lang.compass = "Compass"
+  lang.hotbar = "Hotbar"
+  lang.notifications = "Notifications"
+
+  lang.versionoldpre = "Older"
+  lang.versionoldpos = "version available"
+  lang.versionnewpre = "New"
+  lang.versionnewpos = "version available"
+  lang.currentversion = "Current version"
+  lang.workshopversion = "Workshop version"
+  lang.unstable = "Unstable"
+  lang.stable = "Stable"
+  lang.showchanges = "Show changes"
+  lang.serverlocal = "Local server"
+  lang.serverdedicated = "Dedicated server"
+
+  lang.inventory = "Inventory"
+  lang.licence = "Licence"
+  lang.licences = "Licences"
+  lang.dealer = "Dealer"
+  lang.dealers = "Dealers"
+  lang.gang = "Gang"
+  lang.gangs = "Gangs"
+
+  lang.keybindchanger = "Keybind changing"
 end

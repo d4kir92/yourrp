@@ -4,23 +4,9 @@
 
 --##############################################################################
 --LANGUAGE tr Turkish
-AddCSLuaFile( "tr/tr_general.lua" )
-AddCSLuaFile( "tr/tr_hud.lua" )
-AddCSLuaFile( "tr/tr_role_menu.lua" )
-AddCSLuaFile( "tr/tr_buy_menu.lua" )
-AddCSLuaFile( "tr/tr_settings.lua" )
-AddCSLuaFile( "tr/tr_door.lua" )
-AddCSLuaFile( "tr/tr_interact_menu.lua" )
-AddCSLuaFile( "tr/tr_atm.lua" )
+AddCSLuaFile( "tr/tr_all.lua" )
 
-include( "tr/tr_general.lua" )
-include( "tr/tr_hud.lua" )
-include( "tr/tr_role_menu.lua" )
-include( "tr/tr_buy_menu.lua" )
-include( "tr/tr_settings.lua" )
-include( "tr/tr_door.lua" )
-include( "tr/tr_interact_menu.lua" )
-include( "tr/tr_atm.lua" )
+include( "tr/tr_all.lua" )
 
 function LangTR()
 	lang.ineng = "Turkish"
@@ -28,16 +14,9 @@ function LangTR()
 	lang.short = "tr"
 
 	lang.translatedBy = "translated by"
-	lang.translatedByName = "CorayC"
+	lang.translatedByName = "CorayC and Kael"
 
-	TR_General()
-	TR_Hud()
-	TR_Role_Menu()
-	TR_Buy_Menu()
-	TR_Settings()
-	TR_Door()
-	TR_Interact_Menu()
-	TR_Atm()
+	TR_All()
 end
 
 LangTR()

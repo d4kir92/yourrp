@@ -30,7 +30,7 @@ function createFont( _name, _font, _size, _weight, _outline )
 		rotary = false,
 		shadow = _shadow,
 		additive = false,
-		outline = _outline,
+		outline = _outline
 	} )
 end
 --##############################################################################

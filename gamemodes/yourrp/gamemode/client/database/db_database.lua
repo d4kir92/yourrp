@@ -339,32 +339,32 @@ function setDefaultHud()
   dbUpdate( dbName, "value = 60", "name = 'wnh'" )
 
   dbUpdate( dbName, "value = 1", "name = 'rit'" )
-  dbUpdate( dbName, "value = 380", "name = 'rix'" )
-  dbUpdate( dbName, "value = 1780", "name = 'riy'" )
-  dbUpdate( dbName, "value = 400", "name = 'riw'" )
+  dbUpdate( dbName, "value = 20", "name = 'rix'" )
+  dbUpdate( dbName, "value = 1720", "name = 'riy'" )
+  dbUpdate( dbName, "value = 760", "name = 'riw'" )
   dbUpdate( dbName, "value = 60", "name = 'rih'" )
 
   dbUpdate( dbName, "value = 1", "name = 'ttt'" )
   dbUpdate( dbName, "value = 20", "name = 'ttx'" )
   dbUpdate( dbName, "value = 20", "name = 'tty'" )
-  dbUpdate( dbName, "value = 600", "name = 'ttw'" )
-  dbUpdate( dbName, "value = 400", "name = 'tth'" )
+  dbUpdate( dbName, "value = 640", "name = 'ttw'" )
+  dbUpdate( dbName, "value = 440", "name = 'tth'" )
 
   dbUpdate( dbName, "value = 1", "name = 'mot'" )
   dbUpdate( dbName, "value = 380", "name = 'mox'" )
-  dbUpdate( dbName, "value = 1840", "name = 'moy'" )
+  dbUpdate( dbName, "value = 1780", "name = 'moy'" )
   dbUpdate( dbName, "value = 400", "name = 'mow'" )
   dbUpdate( dbName, "value = 60", "name = 'moh'" )
 
   dbUpdate( dbName, "value = 1", "name = 'mht'" )
   dbUpdate( dbName, "value = 380", "name = 'mhx'" )
-  dbUpdate( dbName, "value = 1900", "name = 'mhy'" )
+  dbUpdate( dbName, "value = 1840", "name = 'mhy'" )
   dbUpdate( dbName, "value = 400", "name = 'mhw'" )
   dbUpdate( dbName, "value = 60", "name = 'mhh'" )
 
   dbUpdate( dbName, "value = 1", "name = 'mtt'" )
   dbUpdate( dbName, "value = 380", "name = 'mtx'" )
-  dbUpdate( dbName, "value = 1960", "name = 'mty'" )
+  dbUpdate( dbName, "value = 1900", "name = 'mty'" )
   dbUpdate( dbName, "value = 400", "name = 'mtw'" )
   dbUpdate( dbName, "value = 60", "name = 'mth'" )
 
@@ -382,13 +382,13 @@ function setDefaultHud()
 
   dbUpdate( dbName, "value = 1", "name = 'cbt'" )
   dbUpdate( dbName, "value = 20", "name = 'cbx'" )
-  dbUpdate( dbName, "value = 1300", "name = 'cby'" )
+  dbUpdate( dbName, "value = 1240", "name = 'cby'" )
   dbUpdate( dbName, "value = 900", "name = 'cbw'" )
   dbUpdate( dbName, "value = 460", "name = 'cbh'" )
 
   dbUpdate( dbName, "value = 1", "name = 'mat'" )
-  dbUpdate( dbName, "value = " .. ScrW()/2 * ctrF( ScrH() ) - 200, "name = 'max'" )
-  dbUpdate( dbName, "value = 1840", "name = 'may'" )
+  dbUpdate( dbName, "value = 380", "name = 'max'" )
+  dbUpdate( dbName, "value = 1960", "name = 'may'" )
   dbUpdate( dbName, "value = 400", "name = 'maw'" )
   dbUpdate( dbName, "value = 60", "name = 'mah'" )
 
@@ -511,7 +511,7 @@ function loadDatabaseHud()
   if !dbSelect( dbName, "name, value", "name = 'mmt'" ) then
     dbInsertInto( dbName, "name, value", "'mmt', 1" )
     dbInsertInto( dbName, "name, value", "'mmx', 20" )
-    dbInsertInto( dbName, "name, value", "'mmy', 1780" )
+    dbInsertInto( dbName, "name, value", "'mmy', 1840" )
     dbInsertInto( dbName, "name, value", "'mmw', 360" )
     dbInsertInto( dbName, "name, value", "'mmh', 360" )
   end
@@ -554,9 +554,9 @@ function loadDatabaseHud()
 
   if !dbSelect( dbName, "name, value", "name = 'rit'" ) then
     dbInsertInto( dbName, "name, value", "'rit', 1" )
-    dbInsertInto( dbName, "name, value", "'rix', 380" )
-    dbInsertInto( dbName, "name, value", "'riy', 1780" )
-    dbInsertInto( dbName, "name, value", "'riw', 400" )
+    dbInsertInto( dbName, "name, value", "'rix', 20" )
+    dbInsertInto( dbName, "name, value", "'riy', 1720" )
+    dbInsertInto( dbName, "name, value", "'riw', 760" )
     dbInsertInto( dbName, "name, value", "'rih', 60" )
   end
 
@@ -564,14 +564,14 @@ function loadDatabaseHud()
     dbInsertInto( dbName, "name, value", "'ttt', 1" )
     dbInsertInto( dbName, "name, value", "'ttx', 20" )
     dbInsertInto( dbName, "name, value", "'tty', 20" )
-    dbInsertInto( dbName, "name, value", "'ttw', 600" )
-    dbInsertInto( dbName, "name, value", "'tth', 400" )
+    dbInsertInto( dbName, "name, value", "'ttw', 640" )
+    dbInsertInto( dbName, "name, value", "'tth', 440" )
   end
 
   if !dbSelect( dbName, "name, value", "name = 'mot'" ) then
     dbInsertInto( dbName, "name, value", "'mot', 1" )
     dbInsertInto( dbName, "name, value", "'mox', 380" )
-    dbInsertInto( dbName, "name, value", "'moy', 1840" )
+    dbInsertInto( dbName, "name, value", "'moy', 1780" )
     dbInsertInto( dbName, "name, value", "'mow', 400" )
     dbInsertInto( dbName, "name, value", "'moh', 60" )
   end
@@ -587,7 +587,7 @@ function loadDatabaseHud()
   if !dbSelect( dbName, "name, value", "name = 'mtt'" ) then
     dbInsertInto( dbName, "name, value", "'mtt', 1" )
     dbInsertInto( dbName, "name, value", "'mtx', 380" )
-    dbInsertInto( dbName, "name, value", "'mty', 1960" )
+    dbInsertInto( dbName, "name, value", "'mty', 1900" )
     dbInsertInto( dbName, "name, value", "'mtw', 400" )
     dbInsertInto( dbName, "name, value", "'mth', 60" )
   end
@@ -611,15 +611,15 @@ function loadDatabaseHud()
   if !dbSelect( dbName, "name, value", "name = 'cbt'" ) then
     dbInsertInto( dbName, "name, value", "'cbt', 1" )
     dbInsertInto( dbName, "name, value", "'cbx', 20" )
-    dbInsertInto( dbName, "name, value", "'cby', 1300" )
+    dbInsertInto( dbName, "name, value", "'cby', 1240" )
     dbInsertInto( dbName, "name, value", "'cbw', 900" )
     dbInsertInto( dbName, "name, value", "'cbh', 460" )
   end
 
   if !dbSelect( dbName, "name, value", "name = 'mat'" ) then
     dbInsertInto( dbName, "name, value", "'mat', 1" )
-    dbInsertInto( dbName, "name, value", "'max', " .. ScrW()/2 * ctrF( ScrH() ) - 200 )
-    dbInsertInto( dbName, "name, value", "'may', 1840" )
+    dbInsertInto( dbName, "name, value", "'max', 380" )
+    dbInsertInto( dbName, "name, value", "'may', 1960" )
     dbInsertInto( dbName, "name, value", "'maw', 400" )
     dbInsertInto( dbName, "name, value", "'mah', 60" )
   end

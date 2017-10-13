@@ -84,15 +84,21 @@ net.Receive( "charGetCharacters", function( len, ply )
 
   local chaTab = dbSelect( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
+  local _charCount = 0
   if worked( chaTab, "charGetCharacters" ) then
     for k, v in pairs( chaTab ) do
-      netTable[k] = {}
-      netTable[k].char = v
-      local tmp = dbSelect( "yrp_roles", "*", "uniqueID = " .. v.roleID )
-      netTable[k].role = tmp[1]
-      local tmp2 = dbSelect( "yrp_groups", "*", "uniqueID = " .. v.groupID )
-      if worked( tmp2, "charGetCharacters groups" ) then
-        netTable[k].group = tmp2[1]
+      if worked( v.roleID, "charGetCharacters roleID" ) and worked( v.groupID, "charGetCharacters groupID" ) then
+        _charCount = _charCount + 1
+        netTable[_charCount] = {}
+        netTable[_charCount].char = v
+        local tmp = dbSelect( "yrp_roles", "*", "uniqueID = " .. v.roleID )
+        if worked( tmp, "charGetCharacters role" ) then
+          netTable[_charCount].role = tmp[1]
+        end
+        local tmp2 = dbSelect( "yrp_groups", "*", "uniqueID = " .. v.groupID )
+        if worked( tmp2, "charGetCharacters group" ) then
+          netTable[_charCount].group = tmp2[1]
+        end
       end
     end
   end

@@ -183,13 +183,13 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     changeHudElement( changeHudWindow, "mhx", "mhy", "mhw", "mhh", "mht", lang.hunger )
     changeHudElement( changeHudWindow, "mtx", "mty", "mtw", "mth", "mtt", lang.thirst )
     changeHudElement( changeHudWindow, "msx", "msy", "msw", "msh", "mst", lang.stamina )
-    changeHudElement( changeHudWindow, "max", "may", "maw", "mah", "mat", "Mana" )
-    changeHudElement( changeHudWindow, "cax", "cay", "caw", "cah", "cat", "Cast" )
-    changeHudElement( changeHudWindow, "stx", "sty", "stw", "sth", "stt", "Status" )
+    changeHudElement( changeHudWindow, "max", "may", "maw", "mah", "mat", lang.abilitybar )
+    changeHudElement( changeHudWindow, "cax", "cay", "caw", "cah", "cat", lang.castbar )
+    changeHudElement( changeHudWindow, "stx", "sty", "stw", "sth", "stt", lang.statusbar )
     --local votes = changeHudElement( changeHudWindow, "vtx", "vty", "vtw", "vth", "vtt", lang.votes )
     --votes:SetSizable( false )
 
-    changeHudElement( changeHudWindow, "cbx", "cby", "cbw", "cbh", "cbt", "ChatBox" )
+    changeHudElement( changeHudWindow, "cbx", "cby", "cbw", "cbh", "cbt", lang.chatbox )
 
     changeHudWindow:MakePopup()
   end

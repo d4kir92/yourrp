@@ -427,10 +427,10 @@ function showVersion()
       local verart = "Up-To-Date"
       yrp.versionCol = Color( 0, 255, 0, 255 )
       if cur2num < new2num then
-        verart = "NEW"
+        verart = lang.versionnewpre .. " " .. GAMEMODE.Name .. " " .. lang.versionnewpos
         yrp.versionCol = Color( 255, 0, 0, 255 )
       elseif cur2num > new2num then
-        verart = "OLDER"
+        verart = lang.versionoldpre .. " " .. GAMEMODE.Name .. " " .. lang.versionoldpos
         yrp.versionCol = Color( 100, 100, 255, 255 )
       end
 
@@ -440,16 +440,27 @@ function showVersion()
       local verart2 = "Up-To-Date"
       local outcol2 = Color( 0, 255, 0, 255 )
       if cur2num2 < new2num2 then
-        verart2 = "NEW"
+        verart2 = lang.versionnewpre .. " " .. GAMEMODE.Name .. " " .. lang.versionnewpos
         outcol2 = Color( 255, 0, 0, 255 )
       elseif cur2num2 > new2num2 then
-        verart2 = "OLDER"
+        verart2 = lang.versionoldpre .. " " .. GAMEMODE.Name .. " " .. lang.versionoldpos
         outcol2 = Color( 100, 100, 255, 255 )
       end
+
+      local _serverSort = ""
       if serverIsDedicated then
         GAMEMODE.dedicated = "Dedicated"
+        _serverSort = lang.serverdedicated
       else
         GAMEMODE.dedicated = "Local"
+        _serverSort = lang.serverlocal
+      end
+
+      local _versionsort = ""
+      if GAMEMODE.VersionSort == "unstable" then
+        _versionsort = lang.unstable
+      elseif GAMEMODE.VersionSort == "stable" then
+        _versionsort = lang.stable
       end
 
       if versionOnline != GAMEMODE.Version then
@@ -460,17 +471,17 @@ function showVersion()
         function frame:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
           draw.SimpleText( "Language:", "HudBars", ctrW( 300 ), ctrW( 25 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( verart .. " YOURRP VERSION AVAILABLE!" .. " (" .. GAMEMODE.VersionSort .. ")", "HudBars", pw/2, ctrW( 100 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( "Current YOURRP Version", "HudBars", pw/2, ctrW( 175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( verart .. "! (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 100 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( lang.currentversion .. ":", "HudBars", pw/2, ctrW( 175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
           draw.SimpleText( lang.client .. ": ", "HudBars", pw/2, ctrW( 225 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
           draw.SimpleText( GAMEMODE.Version, "HudBars", pw/2, ctrW( 225 ), yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-          draw.SimpleText( "(" .. GAMEMODE.dedicated .. ") " .. lang.server .. ": ", "HudBars", pw/2, ctrW( 275 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( "(" .. _serverSort .. ") " .. lang.server .. ": ", "HudBars", pw/2, ctrW( 275 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
           draw.SimpleText( serverVersion, "HudBars", pw/2, ctrW( 275 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-          draw.SimpleText( lang.workshop .. " Version: ", "HudBars", pw/2, ctrW( 375 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( versionOnline .. " (" .. GAMEMODE.VersionSort .. ")", "HudBars", pw/2, ctrW( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( lang.workshopversion .. ": ", "HudBars", pw/2, ctrW( 375 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+          draw.SimpleText( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
         end
 
         local Langu = createVGUI( "DComboBox", frame, 400, 50, 10 + 300, 10 )
@@ -483,18 +494,18 @@ function showVersion()
           changeLang(data)
         end
 
-        local showChanges = createVGUI( "DButton", frame, 400, 50, 0, 0 )
+        local showChanges = createVGUI( "DButton", frame, 460, 50, 0, 0 )
         showChanges:SetText( "" )
         function showChanges:DoClick()
           gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
         end
         function showChanges:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleText( "Show Changes", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleText( lang.showchanges, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         if ply:IsAdmin() or ply:IsSuperAdmin() then
-          local restartServer = createVGUI( "DButton", frame, 400, 50, 0, 0 )
+          local restartServer = createVGUI( "DButton", frame, 460, 50, 0, 0 )
           restartServer:SetText( "" )
           function restartServer:DoClick()
             net.Start( "restartServer" )
@@ -505,10 +516,10 @@ function showVersion()
             draw.SimpleText( lang.updateserver, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           end
 
-          showChanges:SetPos( ctrW( 500-400-10 ), ctrW( 425 ) )
+          showChanges:SetPos( ctrW( 500-460-10 ), ctrW( 425 ) )
           restartServer:SetPos( ctrW( 500+10 ), ctrW( 425 ) )
         else
-          showChanges:SetPos( ctrW( 500-200 ), ctrW( 425 ) )
+          showChanges:SetPos( ctrW( 500-230 ), ctrW( 425 ) )
         end
 
         frame:MakePopup()

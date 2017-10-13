@@ -43,7 +43,8 @@ function saveClients( string )
       end
     end
   end
-  printGM( "db", "saveClients done: Saved " .. player.GetCount() .. " Client(s)." )
+  local _allplayers = player.GetCount() or 0
+  printGM( "db", "saveClients done: Saved " .. _allplayers .. " Client(s)." )
 end
 
 function GM:PlayerSetModel( ply )
@@ -82,6 +83,9 @@ function SetRolVals( ply )
         end
       end
     end
+  else
+    printGM( "note", "No role or/and no character")
+    ply:KillSilent()
   end
   if worked( rolTab, "SetRolVals rolTab" ) then
     ply:SetModelScale( rolTab.playermodelsize, 0 )
@@ -107,13 +111,17 @@ function SetRolVals( ply )
         ply:Give( swep )
       end
     end
+  else
+    printGM( "note", "No role selected")
+    ply:KillSilent()
   end
 
   if groTab != nil then
     ply:SetNWString( "groupName", groTab.groupID )
     ply:SetNWString( "groupUniqueID", groTab.uniqueID )
   else
-    printGM( "note", "give group failed" )
+    printGM( "note", "No group selected" )
+    ply:KillSilent()
   end
 end
 
@@ -200,6 +208,7 @@ function openCharacterSelection( ply )
 end
 
 function addYrpPlayer( ply )
+  printGM( "db", "addYrpPlayer " .. ply:Nick() )
   local result = dbSelect( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
   if result == nil then

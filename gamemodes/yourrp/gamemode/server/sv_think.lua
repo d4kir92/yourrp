@@ -103,7 +103,7 @@ timer.Create( "ServerThink", 1, 0, function()
     end
   end
 
-  if time % 60 == 0 then
+  if time % 120 == 0 then
     for k, ply in pairs( _allPlayers ) do
       if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWInt( "capital" ), "sv_think capital fail" ) then
         local _m = ply:GetNWString( "money", -1 )

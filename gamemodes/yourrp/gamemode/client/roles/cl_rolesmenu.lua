@@ -377,7 +377,6 @@ function openRoleMenu()
   roleMenuWindow:SetTitle( lang.rolemenu )
   function roleMenuWindow:OnClose()
     cl_rolesMenuOpen = 0
-    _menuIsOpen = 0
   end
   function roleMenuWindow:Paint( w, h )
     --nothing

@@ -18,7 +18,11 @@ function Player:GetPlyTab()
       end
     end
   end
-  return {}
+  if self.plytab != nil then
+    return self.plytab
+  else
+    return nil
+  end
 end
 
 function Player:GetChaTab()
@@ -40,7 +44,11 @@ function Player:GetChaTab()
       end
     end
   end
-  return {}
+  if self.chatab != nil then
+    return self.chatab
+  else
+    return nil
+  end
 end
 
 function Player:GetRolTab()
@@ -62,7 +70,11 @@ function Player:GetRolTab()
       end
     end
   end
-  return {}
+  if self.roltab != nil then
+    return self.roltab
+  else
+    return nil
+  end
 end
 
 function Player:GetGroTab()
@@ -84,7 +96,11 @@ function Player:GetGroTab()
       end
     end
   end
-  return {}
+  if self.grotab != nil then
+    return self.grotab
+  else
+    return nil
+  end
 end
 
 function Player:CharID()
@@ -92,12 +108,14 @@ function Player:CharID()
     local char = self:GetChaTab()
     if worked( char, "char CharID" ) then
       self.charid = char.uniqueID
+      return self.charid
     end
   end
-  if self.charid == nil then
-    self.charid = -1
+  if self.charid != nil then
+    return self.charid
+  else
+    return nil
   end
-  return self.charid
 end
 
 function Player:CheckMoney()
@@ -147,7 +165,7 @@ function Player:GetPlayerModel()
       return self.pm
     end
   end
-  return {}
+  return nil
 end
 
 if SERVER then

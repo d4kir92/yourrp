@@ -39,7 +39,6 @@ function openSettings()
   addMDColor( "dsecondaryH", colorH( getMDSColor() ) )
 
   local ply = LocalPlayer()
-  _menuIsOpen = 1
 
   --Frame
   settingsWindow = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
@@ -186,7 +185,6 @@ function openSettings()
   function exitButton:DoClick()
     settingsWindow:Remove()
     settingsWindow = nil
-    _menuIsOpen = 0
   end
 
   local burgerMenu = createD( "DButton", mainBar, ctr( 480 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )

@@ -125,14 +125,24 @@ net.Receive( "addDBGroup", function( len, ply )
   sendDBGroups( ply )
 end)
 
+function changeToDefault( table )
+  for k, v in pairs( table ) do
+    local _result = dbUpdate( "yrp_characters", "roleID = 1, groupID = 1" ,"uniqueID = " .. v.uniqueID )
+  end
+end
+
 net.Receive( "removeDBRole", function( len, ply )
-  local dbSelect = dbSelect( "yrp_roles", "*", nil )
+  local _dbSelect = dbSelect( "yrp_roles", "*", nil )
   local tmp = net.ReadString()
   local _tmpUniqueID = net.ReadString()
-  for k, v in pairs( dbSelect ) do
+  for k, v in pairs( _dbSelect ) do
     if tonumber( v.uniqueID ) == tonumber( tmp ) then
       if tonumber( v.removeable ) == 1 then
-        dbDeleteFrom( "yrp_roles", "uniqueID = " .. tmp )
+        local _result = dbDeleteFrom( "yrp_roles", "uniqueID = " .. tmp )
+        local _changeToDefault = dbSelect( "yrp_characters", "*", "roleID = " .. v.uniqueID )
+        if _changeToDefault != nil then
+          changeToDefault( _changeToDefault )
+        end
       end
     end
   end
@@ -141,9 +151,9 @@ net.Receive( "removeDBRole", function( len, ply )
 end)
 
 net.Receive( "removeDBGroup", function( len, ply )
-  local dbSelect = dbSelect( "yrp_groups", "*", nil )
+  local _dbSelect = dbSelect( "yrp_groups", "*", nil )
   local tmp = net.ReadString()
-  for k, v in pairs( dbSelect ) do
+  for k, v in pairs( _dbSelect ) do
     if tonumber( v.uniqueID ) == tonumber( tmp ) then
       if tonumber( v.removeable ) == 1 then
         dbDeleteFrom( "yrp_groups", "uniqueID = " .. tmp )

@@ -3,7 +3,6 @@
 --cl_think.lua
 
 local chatisopen = 0
-_menuIsOpen = 0
 _thirdperson = 0
 local _thirdpersonC = 0
 local keyCooldown = 0.08
@@ -26,34 +25,26 @@ function useFunction( string )
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
 		elseif string == "openCharMenu" then
-			if _menuIsOpen == 0 then
-				openCharacterSelection()
-			end
+			openCharacterSelection()
 		elseif string == "openRoleMenu" then
 			if roleMenuWindow != nil then
 				roleMenuWindow:Remove()
 				roleMenuWindow = nil
-				_menuIsOpen = 0
-			elseif _menuIsOpen == 0 then
-				_menuIsOpen = 1
+			else
 				openRoleMenu()
 			end
 		elseif string == "openBuyMenu" then
 			if _buyWindow != nil then
 				_buyWindow:Remove()
 				_buyWindow = nil
-				_menuIsOpen = 0
-			elseif _menuIsOpen == 0 then
-				_menuIsOpen = 1
+			else
 				openBuyMenu()
 			end
 		elseif string == "openSettings" then
 			if settingsWindow != nil then
 				settingsWindow:Remove()
 				settingsWindow = nil
-				_menuIsOpen = 0
-			elseif _menuIsOpen == 0 then
-				_menuIsOpen = 1
+			else
 				openSettings()
 			end
 		elseif string == "ViewChange" then
@@ -73,9 +64,7 @@ function useFunction( string )
 			if mapWindow != nil then
 				mapWindow:Remove()
 				mapWindow = nil
-				_menuIsOpen = 0
-			elseif _menuIsOpen == 0 then
-				_menuIsOpen = 1
+			else
 				net.Start( "askCoords")
 					net.WriteEntity( LocalPlayer() )
 				net.SendToServer()
@@ -85,19 +74,15 @@ function useFunction( string )
 				if _windowInteract != nil then
 					_windowInteract:Remove()
 					_windowInteract = nil
-					_menuIsOpen = 0
 					gui.EnableScreenClicker( false )
-				elseif _menuIsOpen == 0 then
-					_menuIsOpen = 1
+				else
 					openInteractMenu( eyeTrace.Entity:SteamID() )
 				end
 			--[[else
 				if _windowInteract != nil then
 					_windowInteract:Close()
 					_windowInteract = nil
-					_menuIsOpen = 0
 				else
-					_menuIsOpen = 1
 					openInteractMenu( "STEAM_0:1:20900349" )
 				end]]--
 			end
@@ -107,7 +92,6 @@ function useFunction( string )
 					keys["_hold"] = 1
 					_doorWindow:Remove()
 					_doorWindow = nil
-					_menuIsOpen = 0
 					timer.Simple( 1, function()
 						keys["_hold"] = 0
 					end)
@@ -123,7 +107,6 @@ function useFunction( string )
 					keys["_hold"] = 1
 					_vehicleWindow:Remove()
 					_vehicleWindow = nil
-					_menuIsOpen = 0
 					timer.Simple( 1, function()
 						keys["_hold"] = 0
 					end)
@@ -138,7 +121,6 @@ function useFunction( string )
 		elseif string == "F11Toggle" then
 			GUIToggled = not GUIToggled
 			gui.EnableScreenClicker( GUIToggled )
-			_menuIsOpen = 0
 		elseif string == "eat" then
 			net.Start( "yrp_eat" )
 			net.SendToServer()

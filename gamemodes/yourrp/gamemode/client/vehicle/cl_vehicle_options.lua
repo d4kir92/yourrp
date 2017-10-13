@@ -5,8 +5,6 @@ net.Receive( "getVehicleInfo", function( len )
     local vehicle = net.ReadEntity()
     local _tmpVehicle = net.ReadTable()
     optionVehicleWindow( vehicle, _tmpVehicle )
-  else
-    _menuIsOpen = 0
   end
 end)
 
@@ -17,7 +15,6 @@ function optionVehicleWindow( vehicle, vehicleTab )
   _vehicleWindow:Center()
   _vehicleWindow:SetTitle( "" )
   function _vehicleWindow:Close()
-    _menuIsOpen = 0
     _vehicleWindow:Remove()
   end
 

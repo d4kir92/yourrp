@@ -97,7 +97,6 @@ local character = {}
 character.amount = 0
 
 function openCharacterCreation()
-  _menuIsOpen = 1
   local ply = LocalPlayer()
   character.cause = lang.enteraname
   character.rpname = ""
@@ -557,7 +556,6 @@ end
 
 local curChar = "-1"
 function openCharacterSelection()
-  _menuIsOpen = 1
   local ply = LocalPlayer()
 
   local cache = {}
@@ -669,13 +667,16 @@ function openCharacterSelection()
       end
       function tmpChar:DoClick()
         curChar = self.charid
-        charplayermodel:SetModel( self.playermodels[tonumber( self.playermodelID )] )
-        if charplayermodel.Entity != nil then
-          charplayermodel.Entity:SetSkin( self.skin )
-          charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
-          charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
-          charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
-          charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+        local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
+        if _playermodel != nil then
+          charplayermodel:SetModel( _playermodel )
+          if charplayermodel.Entity != nil then
+            charplayermodel.Entity:SetSkin( self.skin )
+            charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
+            charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
+            charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
+            charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+          end
         end
       end
 
@@ -721,6 +722,8 @@ function openCharacterSelection()
     function _noButton:DoClick()
       _window:Close()
     end
+
+    _window:MakePopup()
   end
 
   local backB = createMD( "DButton", frame, ctr( 400 ), ctr( 100 ), ScrW2() + ctr( 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
@@ -734,7 +737,6 @@ function openCharacterSelection()
   end
   function backB:DoClick()
     if curChar != "-1" then
-      _menuIsOpen = 0
       frame:Close()
     end
   end
@@ -786,7 +788,6 @@ function openCharacterSelection()
           net.Start( "EnterWorld" )
             net.WriteString( curChar )
           net.SendToServer()
-          _menuIsOpen = 0
           frame:Close()
         end
       end
@@ -797,7 +798,6 @@ function openCharacterSelection()
 end
 
 net.Receive( "openCharacterMenu", function( len, ply )
-  _menuIsOpen = 1
   local tmpTable = net.ReadTable()
   openCharacterSelection()
 end)

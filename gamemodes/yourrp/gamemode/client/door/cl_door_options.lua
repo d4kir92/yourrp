@@ -16,18 +16,13 @@ net.Receive( "getBuildingInfo", function( len )
           optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door, owner )
         else
           printGM( "note", "fail" )
-          _menuIsOpen = 0
         end
       else
-        _menuIsOpen = 0
         printGM( "note", "getDoorInfo Table empty" )
       end
     else
-      _menuIsOpen = 0
       printGM( "note", "getDoorInfo Receive: NIL" )
     end
-  else
-    _menuIsOpen = 0
   end
 end)
 
@@ -61,7 +56,6 @@ function buyWindow( buildingID, name, price, door )
   _doorWindow:Center()
   _doorWindow:SetTitle( "" )
   function _doorWindow:Close()
-    _menuIsOpen = 0
     _doorWindow:Remove()
   end
   function _doorWindow:Paint( pw, ph )
@@ -182,7 +176,6 @@ function optionWindow( buildingID, name, price, door, owner )
   _doorWindow:Center()
   _doorWindow:SetTitle( "" )
   function _doorWindow:Close()
-    _menuIsOpen = 0
     _doorWindow:Remove()
   end
   function _doorWindow:Paint( pw, ph )

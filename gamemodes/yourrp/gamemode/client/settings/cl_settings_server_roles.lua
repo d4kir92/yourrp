@@ -316,9 +316,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       yrp_roles_dbTable[id].playermodels = _globalWorking
       pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
       changepm = 1
-      if _menuIsOpen == 1 then
-        modelpanel:SetModel( pms[changepm] )
-      end
+      modelpanel:SetModel( pms[changepm] )
     end)
 
     openSelector( tmpTable, "yrp_roles", "playermodels", "uniqueID = " .. uniqueID, "closeRolePlayermodels" )
@@ -454,13 +452,11 @@ function addDBSwep( parent, id, uniqueID )
       local worldmodel = getWorldModel( sws[changesw] )
       if modelpanel != NULL then
         modelpanel:SetModel( worldmodel )
-        if _menuIsOpen == 1 then
-          if modelpanel.Entity != nil then
-            modelpanel.Entity:SetModelScale( 1, 0 )
-          end
-          modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
-          modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
+        if modelpanel.Entity != nil then
+          modelpanel.Entity:SetModelScale( 1, 0 )
         end
+        modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
+        modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
       end
     end)
 

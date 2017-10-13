@@ -135,11 +135,9 @@ function openSpawnMenu()
     end
   end
   function mapWindow:OnClose()
-    _menuIsOpen = 0
     map.open = false
   end
   function mapWindow:OnRemove()
-    _menuIsOpen = 0
     map.open = false
   end
 end
@@ -150,6 +148,5 @@ net.Receive( "sendCoords", function()
     openSpawnMenu()
   else
     printGM( "note", "wait for server coords" )
-    _menuIsOpen = 0
   end
 end)

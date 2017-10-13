@@ -32,7 +32,6 @@ net.Receive( "openInteractMenu", function ()
   function _windowInteract:OnClose()
     gui.EnableScreenClicker( false )
     _windowInteract = nil
-    _menuIsOpen = 0
   end
   function _windowInteract:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
