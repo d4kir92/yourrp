@@ -90,7 +90,6 @@ local rulesmat = CreateMaterial("rulesmat", "UnlitGeneric", {
 
 local minimap = {}
 local _rendered = false
-local _minimapDistance = 0
 local _minimapDistanceOld = 0
 local CamDataMiniMap = {}
 function getCoordsMM()
@@ -242,6 +241,7 @@ function HudPlayer()
               win.x = ctr( cl_db["mmx"] )
               win.y = ctr( cl_db["mmy"] )
 
+              _filterENTS = ents.GetAll()
               local _testHeight = 400
               local tr = util.TraceLine( {
                 start = ply:GetPos() + Vector( 0, 0, 16 ),
@@ -253,7 +253,14 @@ function HudPlayer()
 
               if CurTime() > delay and _rendered then
                 delay = CurTime() + 1
-                if _distance > 64 or tr.Hit then
+                if tr.Hit then
+                  delay = CurTime() + 1
+
+                  _minimapDistanceOld = _minimapDistance
+                  _rendered = false
+                elseif _distance > 64 then
+                  delay = CurTime() + 1
+
                   _minimapDistanceOld = _minimapDistance
                   _rendered = false
                 end

@@ -22,7 +22,7 @@ end)
 util.AddNetworkString( "upgradeCooler" )
 net.Receive( "upgradeCooler", function( len, ply )
 	local mp = net.ReadEntity()
-	local cost = mp:GetNWInt( "cooler" ) * mp:GetNWInt( "coolerCost" )
+	local cost = mp:GetNWInt( "coolerCost" )
 	if ply:canAfford( cost ) and mp:GetNWInt( "cooler" ) < mp:GetNWInt( "coolerMax" ) then
 		ply:addMoney( -cost )
 		mp:SetNWInt( "cooler", mp:GetNWInt( "cooler" ) + 1 )

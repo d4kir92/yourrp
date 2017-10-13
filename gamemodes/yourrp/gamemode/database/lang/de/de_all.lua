@@ -1,5 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
---en_all.lua
+--de_all.lua
 
 function DE_All()
   --ATM
@@ -13,41 +13,45 @@ function DE_All()
   lang.back = "Zurück"
   lang.nextsite = "Nächste"
   lang.prevsite = "Vorherige"
-  lang.errorsite = "ERROR"
+  lang.errorsite = "Fehler"
 
   --Buy Menu
   lang.buymenu = "Kauf Menü"
   lang.selectitem = "Gegenstand auswählen"
   lang.additem = "Gegenstand hinzufügen"
   lang.noitemselected = "Kein Gegenstand ausgewählt"
-  lang.itemMenu = "Gegenstand Menü"
+  lang.itemMenu = "Gegenstandsmenü"
   lang.removeitem = "Gegenstand entfernen"
 
   --Door
-  lang.buybuildingpre = ""
+  lang.buybuildingpre = "buy"
   lang.buybuildingpos = "kaufen"
-  lang.addanewbuilding = "Ein neues Gebäude erstellen"
-  lang.doorlevel = "Tür-Stufe"
-  lang.upgradedoor = "Tür hochstufen"
+  lang.addanewbuilding = "Neues Gebäude hinzufügen"
+  lang.doorlevel = "Türenlevel"
+  lang.upgradedoor = "Tür verbessern"
   lang.createkey = "Schlüssel erstellen"
   lang.resetkey = "Schlüssel resetten"
-  lang.sellbuildingpre = ""
+  lang.sellbuildingpre = "sell"
   lang.sellbuildingpos = "verkaufen"
-  lang.lockeddoor = "Tür abgeschlossen"
+  lang.lockeddoor = "Tür verschlossen"
   lang.unlockeddoor = "Tür aufgeschlossen"
-  lang.youdonthaveakey = "Du besitzt keinen Schlüssel der passt"
+  lang.youdonthaveakey = "Du hast keinen Schlüssel hierfür"
   lang.lockedvehicle = "Fahrzeug abgeschlossen"
   lang.unlockedvehicle = "Fahrzeug aufgeschlossen"
 
   --hud
   lang.tooltip = "Tooltip"
   lang.changeview = "Ansicht ändern"
-  lang.guimouse = "Maus an-/ausmachen"
+  lang.guimouse = "Maus umschalten"
   lang.fppr = "Ego perspektive realistisch"
-  lang.presse = "Drück [E] um Tür zu öffnen/schließen"
-  lang.holde = "Halte [E] gedrückt um die Einstellungen zu öffnen"
-  lang.presseveh = "Drück [E] um das Fahrzeug zu betreten"
-  lang.holdeveh = lang.holde
+  lang.pressepre = "Drück"
+  lang.pressepos = "um Tür zu öffnen/schließen"
+  lang.holdepre = "Halte"
+  lang.holdepos = "gedrückt um die Einstellungen zu öffnen"
+  lang.pressevehpre = "Drück"
+  lang.pressevehpos = "um das Fahrzeug zu betreten"
+  lang.holdevehpre = "Halte"
+  lang.holdevehpos = "gedrückt um die Einstellungen zu öffnen"
   lang.dead = "Tot"
   lang.respawning = "Wiederbeleben"
   lang.helpclose = "Auf leere Fläche klicken um zu verlassen"
@@ -61,7 +65,7 @@ function DE_All()
   lang.wsecondary = "Nebenmunition"
   lang.youarespeaking = "Du bist am reden"
 
-  --Interact Menu
+  --Interact
   lang.interactmenu = "Interaktives Menü"
   lang.trade = "Handeln"
   lang.promote = "Befördern"
@@ -129,7 +133,6 @@ function DE_All()
   lang.moneypos = "Geldpostfix"
   lang.startmoney = "Start-Geld"
   lang.giverole = "Rolle vergeben"
-  lang.rolegiver = "Rollen geber"
   lang.deleteentry = "Eintrag löschen"
   lang.addspawnpoint = "Spawnpunkt hinzufügen"
   lang.spawnpointcreator = "Spawnpunktersteller"
@@ -216,11 +219,11 @@ function DE_All()
   lang.removeowner = "Besitzer entfernen"
   lang.door = "Tür"
   lang.doors = "Türen"
-  lang.weapon = "Waffen"
+  lang.weapon = "Waffe"
   lang.weapons = "Waffen"
   lang.key = "Schlüssel"
   lang.fpp = "Ego perspektive"
-  lang.tpp = "Thirdperson"
+  lang.tpp = "Dritte Person"
   lang.ping = "Ping"
   lang.mute = "Muten"
   lang.metabolism = "Stoffwechsel"
@@ -260,4 +263,8 @@ function DE_All()
   lang.full = "Voll"
   lang.menu = "Menü"
   lang.suicide = "Selbstmord"
+  lang.gather = "Entnehmen"
+
+  --HUDExtras
+  lang.anchor = "Anker"
 end

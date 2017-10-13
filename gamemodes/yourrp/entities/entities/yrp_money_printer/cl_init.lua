@@ -70,7 +70,7 @@ net.Receive( "getMoneyPrintMenu", function( len )
     --Fuel
     moneyPrinterButton( mp, upgradeframe, ctr( 580 ), ctr( 60 ), ctr( 10 ), ctr( 60 + 280 ), "fuel", "fuelUP", lang.fuel, lang.fuelup, lang.full )
 
-    --Withdraw
+    --gather
     local moneyInfo = createD( "DPanel", upgradeframe, ctr( 580 ), ctr( 60 ), ctr( 10 ), ctr( 60 + 390 ) )
     function moneyInfo:Paint( pw, ph )
       draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
@@ -80,25 +80,25 @@ net.Receive( "getMoneyPrintMenu", function( len )
       draw.SimpleText( formatMoney( ply, mp:GetNWInt( "money", -1 ) ) .. "/" .. formatMoney( ply, mp:GetNWInt( "moneyMax" , -1 ) ), "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
 
-  	local withdrawMoney = createD( "DButton", moneyInfo, ctr( 220 ), ctr( 60 ), ctr( 360 ), ctr( 0 ) )
-    withdrawMoney:SetText( "" )
-    function withdrawMoney:Paint( pw, ph )
+  	local gatherMoney = createD( "DButton", moneyInfo, ctr( 220 ), ctr( 60 ), ctr( 360 ), ctr( 0 ) )
+    gatherMoney:SetText( "" )
+    function gatherMoney:Paint( pw, ph )
       if self:IsHovered() then
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-        draw.SimpleText( lang.withdraw, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.gather, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       else
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-        draw.SimpleText( lang.withdraw, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( lang.gather, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       end
     end
-    function withdrawMoney:DoClick()
+    function gatherMoney:DoClick()
       net.Start( "withdrawMoney" )
         net.WriteEntity( mp )
       net.SendToServer()
     end
 
     --Working
-    local workingB = createD( "DButton", upgradeframe, ctr( 250 ), ctr( 60 ), ctr( 10 ), ctr( 520 ) )
+    local workingB = createD( "DButton", upgradeframe, ctr( 360 ), ctr( 60 ), ctr( 10 ), ctr( 520 ) )
     workingB:SetText( "" )
     function workingB:Paint( pw, ph )
       local working = lang.off
@@ -124,7 +124,7 @@ net.Receive( "getMoneyPrintMenu", function( len )
     end
 
     --CLOSE
-    local closeMenu = createD( "DButton", upgradeframe, 30, 30, 150-15, 300-30-10 )
+    local closeMenu = createD( "DButton", upgradeframe, ctr( 200 ), ctr( 60 ), ctr( 600-200-10 ), ctr( 600-60-20 ) )
     closeMenu:SetText( "" )
     function closeMenu:Paint( pw, ph )
       if self:IsHovered() then

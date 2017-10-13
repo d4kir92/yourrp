@@ -63,7 +63,6 @@ function TR_Settings()
   lang.startmoney = "Başlangıç Parası"
 
   lang.giverole = "Rol Ver"
-  lang.rolegiver = "Rol Ver"
 
   lang.deleteentry = "Giriş Sil"
   lang.addspawnpoint = "Doğma Noktası Ekle"

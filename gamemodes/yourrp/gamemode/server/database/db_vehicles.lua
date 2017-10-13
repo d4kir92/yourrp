@@ -50,25 +50,27 @@ net.Receive( "getVehicleInfo", function( len, ply )
 
   local _vehicleTab = dbSelect( "yrp_vehicles", "*", "uniqueID = " .. _vehicleID )
 
-  local owner = ""
-  for k, v in pairs( player.GetAll() ) do
-    if tostring( v:CharID() ) == tostring( _vehicleTab[1].ownerCharID ) then
-      owner = v:RPName()
+  if worked( _vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle" ) then
+    local owner = ""
+    for k, v in pairs( player.GetAll() ) do
+      if tostring( v:CharID() ) == tostring( _vehicleTab[1].ownerCharID ) then
+        owner = v:RPName()
+      end
     end
-  end
 
-  if _vehicleTab != nil then
-    if allowedToUseVehicle( _vehicleID, ply ) then
-      net.Start( "getVehicleInfo" )
-        net.WriteBool( true )
-        net.WriteEntity( _vehicle )
-        net.WriteTable( _vehicleTab )
-        net.WriteString( owner )
-      net.Send( ply )
-    else
-      net.Start( "getVehicleInfo" )
-        net.WriteBool( false )
-      net.Send( ply )
+    if _vehicleTab != nil then
+      if allowedToUseVehicle( _vehicleID, ply ) then
+        net.Start( "getVehicleInfo" )
+          net.WriteBool( true )
+          net.WriteEntity( _vehicle )
+          net.WriteTable( _vehicleTab )
+          net.WriteString( owner )
+        net.Send( ply )
+      else
+        net.Start( "getVehicleInfo" )
+          net.WriteBool( false )
+        net.Send( ply )
+      end
     end
   end
 end)
@@ -124,18 +126,22 @@ function canVehicleLock( ent, nr )
   return false
 end
 
-function unlockVehicle( ent, nr )
-  if canVehicleLock( ent, nr ) then
-    ent:Fire( "Unlock" )
-    return true
+function unlockVehicle( ent, nrs )
+  for k, v in pairs( nrs ) do
+    if canVehicleLock( ent, v ) then
+      ent:Fire( "Unlock" )
+      return true
+    end
   end
   return false
 end
 
-function lockVehicle( ent, nr )
-  if canVehicleLock( ent, nr ) then
-    ent:Fire( "Lock", "", 0 )
-    return true
+function lockVehicle( ent, nrs )
+  for k, v in pairs( nrs ) do
+    if canVehicleLock( ent, v ) then
+      ent:Fire( "Lock", "", 0 )
+      return true
+    end
   end
   return false
 end

@@ -113,7 +113,6 @@ function useFunction( string )
 					end)
 				elseif _doorWindow == nil and keys["_hold"] == 0 then
 					keys["_hold"] = 1
-					_menuIsOpen = 1
 					openDoorOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "buildingID" ) )
 					timer.Simple( 1, function()
 						keys["_hold"] = 0
@@ -130,7 +129,6 @@ function useFunction( string )
 					end)
 				elseif _vehicleWindow == nil and keys["_hold"] == 0 then
 					keys["_hold"] = 1
-					_menuIsOpen = 1
 					openVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
 					timer.Simple( 1, function()
 						keys["_hold"] = 0

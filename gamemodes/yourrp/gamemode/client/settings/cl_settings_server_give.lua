@@ -54,7 +54,7 @@ net.Receive( "getPlyList", function( len )
       _giveFrame:Center()
       _giveFrame:ShowCloseButton( true )
       _giveFrame:SetDraggable( true )
-      _giveFrame:SetTitle( lang.rolegiver )
+      _giveFrame:SetTitle( lang.giverole )
 
       local _giveComboBox = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 85 )
       for k, v in pairs( _tmpGroupList ) do

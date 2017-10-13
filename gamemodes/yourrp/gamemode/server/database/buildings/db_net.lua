@@ -35,18 +35,22 @@ function canLock( ent, nr )
   return false
 end
 
-function unlockDoor( ent, nr )
-  if canLock( ent, nr ) then
-    ent:Fire( "Unlock" )
-    return true
+function unlockDoor( ent, nrs )
+  for k, v in pairs( nrs ) do
+    if canLock( ent, v ) then
+      ent:Fire( "Unlock" )
+      return true
+    end
   end
   return false
 end
 
-function lockDoor( ent, nr )
-  if canLock( ent, nr ) then
-    ent:Fire( "Lock", "", 0 )
-    return true
+function lockDoor( ent, nrs )
+  for k, v in pairs( nrs ) do
+    if canLock( ent, v ) then
+      ent:Fire( "Lock", "", 0 )
+      return true
+    end
   end
   return false
 end
@@ -77,13 +81,16 @@ net.Receive( "createKey", function( len, ply )
   local _door = net.ReadEntity()
   local _tmpBuildingID = net.ReadInt( 16 )
 
-  local _keynr = -1
   for k, v in pairs( ply:GetWeapons() ) do
     if v.ClassName == "yrp_key" then
-      _keynr = getNumber( _door, _tmpBuildingID )
+
+      local _keynr = getNumber( _door, _tmpBuildingID )
       local _oldkeynrs = dbSelect( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
       local _tmpTable = string.Explode( ",", _oldkeynrs[1].keynrs )
-      if !table.HasValue( _tmpTable, _keynr ) then
+
+      local hasValue = table.HasValue( _tmpTable, _keynr )
+
+      if !hasValue then
         v:AddKeyNr( _keynr )
 
         local _newkeynrs = ""
@@ -94,6 +101,7 @@ net.Receive( "createKey", function( len, ply )
           end
         end
         _newkeynrs = _newkeynrs .. _keynr
+
         dbUpdate( "yrp_characters", "keynrs = '" .. _newkeynrs .. "'", "uniqueID = " .. ply:CharID() )
       else
         printGM( "note", "Key already exists")

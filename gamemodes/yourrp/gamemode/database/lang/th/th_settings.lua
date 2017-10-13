@@ -63,7 +63,6 @@ function TH_Settings()
   lang.startmoney = "ค่าธรรมเนียมแรกเข้า"
 
   lang.giverole = "ให้บทบาท"
-  lang.rolegiver = "ให้บทบาท"
 
   lang.deleteentry = "ลบรายการ"
   lang.addspawnpoint = "จุดวางไข่เพิ่ม"

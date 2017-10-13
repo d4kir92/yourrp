@@ -20,7 +20,7 @@ function PT_BR_Settings()
   lang.updatecountdown = "Atualizar contagem"
   lang.updateserver = "Atualizar servidor"
   lang.cancelupdateserver = "Cancelar atualização do servidor"
-  lang.hardresetdatabase = "Resetar Base de dados"
+  lang.hardresetdatabase = ""
 
   lang.newgroup = "Novo grupo"
   lang.newrole = "Nova cargo"
@@ -63,7 +63,6 @@ function PT_BR_Settings()
   lang.startmoney = "Dinheiro-inicial"
 
   lang.giverole = "Pegar cargo"
-  lang.rolegiver = "Pegar cargo"
 
   lang.deleteentry = "Deletar entrada"
   lang.addspawnpoint = "Adicionar spawnpoint"

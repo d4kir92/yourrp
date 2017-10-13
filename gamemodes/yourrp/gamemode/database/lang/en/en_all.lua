@@ -25,14 +25,14 @@ function EN_All()
 
   --Door
   lang.buybuildingpre = "buy"
-  lang.buybuildingpos = " "
+  lang.buybuildingpos = ""
   lang.addanewbuilding = "Add a new building"
   lang.doorlevel = "Door-Level"
   lang.upgradedoor = "Upgrade Door"
   lang.createkey = "Create Key"
   lang.resetkey = "Reset Key"
   lang.sellbuildingpre = "sell"
-  lang.sellbuildingpos = " "
+  lang.sellbuildingpos = ""
   lang.lockeddoor = "Door locked"
   lang.unlockeddoor = "Door unlocked"
   lang.youdonthaveakey = "You dont have a key for that"
@@ -44,10 +44,14 @@ function EN_All()
   lang.changeview = "Change view"
   lang.guimouse = "turn mouse on/off"
   lang.fppr = "Firstperson realistic"
-  lang.presse = "Press [E] to open/close door"
-  lang.holde = "Hold [E] to open settings"
-  lang.presseveh = "Press [E] to enter/exit vehicle"
-  lang.holdeveh = lang.holde
+  lang.pressepre = "Press"
+  lang.pressepos = "to open/close door"
+  lang.holdepre = "Hold"
+  lang.holdepos = "to open settings"
+  lang.pressevehpre = "Press"
+  lang.pressevehpos = "to enter/exit vehicle"
+  lang.holdevehpre = "Hold"
+  lang.holdevehpos = "to open settings"
   lang.dead = "Dead"
   lang.respawning = "Respawning"
   lang.helpclose = "Click on empty space to Close"
@@ -259,4 +263,8 @@ function EN_All()
   lang.full = "Full"
   lang.menu = "Menu"
   lang.suicide = "Suicide"
+  lang.gather = "Gather"
+
+  --HUDExtras
+  lang.anchor = "Anchor"
 end

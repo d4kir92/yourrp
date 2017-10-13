@@ -17,12 +17,12 @@ function HudView()
   end
   if _eyeTrace.Entity != nil and _eyeTrace.Entity != NULL then
     if _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
-      draw.SimpleText( lang.presse, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.holde, "sef", ScrW()/2, ScrH2() + ctr( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.pressepre .. " [E] " .. lang.pressepos, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.holdepre .. " [E] " .. lang.holdepos, "sef", ScrW()/2, ScrH2() + ctr( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       showOwner( _eyeTrace )
     elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
-      draw.SimpleText( lang.presseveh, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.holdeveh, "sef", ScrW()/2, ScrH2() + ctr( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.pressevehpre .. " [E] " .. lang.pressevehpos, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang.holdevehpre .. " [E] " .. lang.holdevehpos, "sef", ScrW()/2, ScrH2() + ctr( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
       showOwner( _eyeTrace )
     end
   end

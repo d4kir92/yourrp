@@ -312,6 +312,7 @@ function openSingleSelector( table )
             LocalPlayer():SetNWString( "WorldModel", item.WorldModel )
             LocalPlayer():SetNWString( "ClassName", item.ClassName )
             LocalPlayer():SetNWString( "PrintName", item.PrintName )
+            LocalPlayer():SetNWString( "Skin", item.Skin )
             frame:Close()
           end
           tmpX = tmpX + iconsize + tmpBr

@@ -257,6 +257,7 @@ net.Receive( "getBuyList", function( len )
           net.WriteString( LocalPlayer():GetNWString( "PrintName", "" ) )
           net.WriteString( LocalPlayer():GetNWString( "WorldModel", "" ) )
           net.WriteString( addSwep.price )
+          net.WriteString( LocalPlayer():GetNWString( "Skin", "-1" ) )
         net.SendToServer()
         _windowAddItem:Close()
       end

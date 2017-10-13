@@ -10,9 +10,7 @@ function createFont( _name, _font, _size, _weight, _outline )
 		_size = 18
 	end
 	_size = ctrW( _size*2 )
-	if _size >= 72 then
-		_antialaising = true
-	end
+	_antialaising = true
 	if _size < 4 then
 		_outline = false
 		_shadow = true
@@ -40,12 +38,12 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
-	local weight = 700
+	local weight = 500
 
-	local tmpFont = "Roboto-Thin"
-	createFont( "HudDefault", tmpFont, 80, weight, false )
+	local tmpFont = "Roboto-Regular"
+	createFont( "HudDefault", tmpFont, 72, weight, false )
 
-	createFont( "SettingsNormal", tmpFont, 26, weight, true )
+	createFont( "SettingsNormal", tmpFont, 30, weight, true )
 	createFont( "SettingsHeader", tmpFont, 30, weight, false )
 
 	createFont( "roleInfoHeader", tmpFont, 24, weight, true )
@@ -56,33 +54,33 @@ function changeFontSize()
 	createFont( "charText", tmpFont, 18, weight, true )
 
 	createFont( "pmT", tmpFont, 18, weight, true )
-	createFont( "weaponT", tmpFont, 16, weight, true )
+	createFont( "weaponT", tmpFont, 14, weight, true )
 
-	createFont( "HudBars", tmpFont, 22, weight, true )
-	createFont( "HudHeader", tmpFont, 40, weight, true )
+	createFont( "HudBars", tmpFont, 24, weight, true )
+	createFont( "HudHeader", tmpFont, 36, weight, true )
 	createFont( "HudVersion", tmpFont, 30, 700, true )
 
 	--Creating
-	createFont( "mmf", tmpFont, 22, weight, true )
-	createFont( "hpf", tmpFont, 22, weight, true )
-	createFont( "arf", tmpFont, 22, weight, true )
-	createFont( "wpf", tmpFont, 22, weight, true )
-	createFont( "wsf", tmpFont, 22, weight, true )
-	createFont( "wnf", tmpFont, 22, weight, true )
-	createFont( "rif", tmpFont, 22, weight, true )
-	createFont( "ttf", tmpFont, 22, weight, true )
-	createFont( "mof", tmpFont, 22, weight, true )
-	createFont( "mhf", tmpFont, 22, weight, true )
-	createFont( "mtf", tmpFont, 22, weight, true )
-	createFont( "msf", tmpFont, 22, weight, true )
-	createFont( "vtf", tmpFont, 22, weight, true )
-	createFont( "cbf", tmpFont, 22, weight, true )
-	createFont( "vof", tmpFont, 22, weight, true )
-	createFont( "maf", tmpFont, 22, weight, true )
-	createFont( "caf", tmpFont, 22, weight, true )
-	createFont( "stf", tmpFont, 22, weight, true )
+	createFont( "mmf", tmpFont, 24, weight, true )
+	createFont( "hpf", tmpFont, 24, weight, true )
+	createFont( "arf", tmpFont, 24, weight, true )
+	createFont( "wpf", tmpFont, 24, weight, true )
+	createFont( "wsf", tmpFont, 24, weight, true )
+	createFont( "wnf", tmpFont, 24, weight, true )
+	createFont( "rif", tmpFont, 24, weight, true )
+	createFont( "ttf", tmpFont, 24, weight, true )
+	createFont( "mof", tmpFont, 24, weight, true )
+	createFont( "mhf", tmpFont, 24, weight, true )
+	createFont( "mtf", tmpFont, 24, weight, true )
+	createFont( "msf", tmpFont, 24, weight, true )
+	createFont( "vtf", tmpFont, 24, weight, true )
+	createFont( "cbf", tmpFont, 24, weight, true )
+	createFont( "vof", tmpFont, 24, weight, true )
+	createFont( "maf", tmpFont, 24, weight, true )
+	createFont( "caf", tmpFont, 24, weight, true )
+	createFont( "stf", tmpFont, 24, weight, true )
 
-	createFont( "sef", tmpFont, 22, weight, true )
+	createFont( "sef", tmpFont, 24, weight, true )
 
 	timer.Create( "createFontDB", 0.1, 0, function()
 		if cl_db["_load"] == 1 then
@@ -123,19 +121,19 @@ function changeFontSize()
 
 	--DarkRP Fonts
 	createFont( "DarkRPHUD1", tmpFont, 16, weight, true )
-	createFont( "DarkRPHUD2", tmpFont, 23, weight, true )
-	createFont( "Trebuchet18", tmpFont, 18, weight, true )
+	createFont( "DarkRPHUD2", tmpFont, 24, weight, true )
+	createFont( "Trebuchet18", tmpFont, 16, weight, true )
 	createFont( "Trebuchet20", tmpFont, 20, weight, true )
 	createFont( "Trebuchet24", tmpFont, 24, weight, true )
 	createFont( "Trebuchet48", tmpFont, 48, weight, true )
-	createFont( "TabLarge", tmpFont, 15, 700, true )
+	createFont( "TabLarge", tmpFont, 16, 700, true )
 	createFont( "UiBold", tmpFont, 16, 800, true )
 	createFont( "HUDNumber5", tmpFont, 30, 800, true )
 	createFont( "ScoreboardHeader", tmpFont, 32, weight, true )
-	createFont( "ScoreboardSubtitle", tmpFont, 22, weight, true )
+	createFont( "ScoreboardSubtitle", tmpFont, 24, weight, true )
 	createFont( "ScoreboardPlayerName", tmpFont, 19, weight, true )
 	createFont( "ScoreboardPlayerName2", tmpFont, 15, weight, true )
-	createFont( "ScoreboardPlayerNameBig", tmpFont, 22, weight, true )
+	createFont( "ScoreboardPlayerNameBig", tmpFont, 24, weight, true )
 	createFont( "AckBarWriting", tmpFont, 20, weight, true )
 	createFont( "DarkRP_tipjar", tmpFont, 100, weight, true )
 end

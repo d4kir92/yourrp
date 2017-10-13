@@ -88,12 +88,5 @@ function RO_Settings()
   lang.ragdolls = "Păpușă"
 
   lang.voteable = "Trebuie Votat?"
-
-  lang.reason = "Reason"
-  lang.timeinsec = "Time in seconds"
-  lang.access = "Access"
-  lang.jail = "Jail"
-  lang.addjailpoint = "Add Jailpoint"
-  lang.time = "Time"
 end
 --##############################################################################

@@ -63,7 +63,6 @@ function IT_Settings()
   lang.startmoney = "Avvia-Soldi"
 
   lang.giverole = "Aggiungi Ruolo"
-  lang.rolegiver = "Aggiungi Ruolo"
 
   lang.deleteentry = "Cancella Entrata"
   lang.addspawnpoint = "Aggiungi punto di spawn"

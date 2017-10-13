@@ -63,7 +63,6 @@ function SV_Settings()
   lang.startmoney = "Start-Pengar"
 
   lang.giverole = "Ge roll"
-  lang.rolegiver = "Ge roll"
 
   lang.deleteentry = "Radera Artikel"
   lang.addspawnpoint = "Lägg Till Upphovspunkt"

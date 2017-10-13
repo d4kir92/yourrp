@@ -13,7 +13,7 @@ function SpawnVehicle( item )
   local vehicles = getAllVehicles()
   local vehicle = {}
   for k, v in pairs( vehicles ) do
-    if v.ClassName == item.ClassName then
+    if v.ClassName == item.ClassName and v.PrintName == item.PrintName and v.WorldModel == item.WorldModel then
       vehicle = v
       if v.Custom == "simfphys" then
         local spawnname = item.ClassName
@@ -22,12 +22,16 @@ function SpawnVehicle( item )
         local car = simfphys.SpawnVehicleSimple( spawnname, Vector( 1000, 1000, -12700 ), Angle( 0, 0, 0 ) )
         return car
       end
+      break
     end
   end
   if vehicle.ClassName != nil then
     local car = ents.Create( vehicle.ClassName )
     if not car then return end
     car:SetModel( vehicle.WorldModel )
+    if  vehicle.Skin != "-1" then
+      car:SetSkin( vehicle.Skin )
+    end
     if vehicle.KeyValues then
       for k, v in pairs( vehicle.KeyValues ) do
         car:SetKeyValue( k, v )
@@ -115,12 +119,15 @@ net.Receive( "addNewBuyItem", function( len, ply )
   local _printname = net.ReadString()
   local _worldmodel = net.ReadString()
   local _price = net.ReadString()
-  dbInsertInto( "yrp_buy", "tab, ClassName, PrintName, WorldModel, price", "'" .. _tmpTab .. "', '" .. _classname .. "', '" .. _printname .. "', '" .. _worldmodel .. "', " .. tonumber( _price ) )
+  local _skin = net.ReadString()
+
+  dbInsertInto( "yrp_buy", "tab, ClassName, PrintName, WorldModel, price, skin", "'" .. _tmpTab .. "', '" .. _classname .. "', '" .. _printname .. "', '" .. _worldmodel .. "', " .. tonumber( _price ) .. ", '" .. _skin .. "'" )
 
   local _tmpTable = dbSelect( "yrp_buy", "*", "tab = '" .. _tmpTab .. "'" )
   if _tmpTable == nil then
     _tmpTable = {}
   end
+
   net.Start( "getBuyList" )
     net.WriteString( _tmpTab )
     net.WriteTable( _tmpTable )

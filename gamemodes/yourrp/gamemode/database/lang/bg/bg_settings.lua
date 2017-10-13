@@ -63,7 +63,6 @@ function BG_Settings()
   lang.startmoney = "Начални пари"
 
   lang.giverole = "Задай роля"
-  lang.rolegiver = "Задай роля"
 
   lang.deleteentry = "Премахни запис"
   lang.addspawnpoint = "Добави spawn-точка"
