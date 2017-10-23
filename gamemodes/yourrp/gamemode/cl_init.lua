@@ -22,15 +22,18 @@ include( "shared.lua" )
 include( "api/color.lua" )
 include( "api/derma.lua" )
 include( "api/math.lua" )
+include( "api/sql.lua" )
 
 --##############################################################################
-
 function ChangeLanguage( parent, w, h, x, y )
   local tmp = createD( "DComboBox", parent, w, h, x, y )
-  tmp:SetValue( lang.lang )
   tmp:AddChoice( "[AUTOMATIC]", "auto" )
-  for k, v in pairs( lang.all ) do
-    tmp:AddChoice( v.ineng .. "/" .. v.lang, v.short )
+  for k, v in pairs( allLang ) do
+    local _select = false
+    if lang.lang == v.lang then
+      _select = true
+    end
+    tmp:AddChoice( v.ineng .. "/" .. v.lang, v.short, _select )
   end
   tmp.OnSelect = function( panel, index, value, data )
     changeLang( data )
@@ -78,7 +81,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
   local scrollpanel = createVGUI( "DPanel", frame, 2000 - 20, 2000 - 50 - 40 - 10 - 10, 10, 50+40+10 )
   function scrollpanel:Paint( pw, ph )
     //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-    draw.SimpleText( site.cur .. "/" .. site.max, "sef", pw/2, ph - 50, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - 50, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local tmpCache = {}
@@ -155,8 +158,8 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             if tmpSelected[k].selected then
               text = lang.added
             end
-            draw.SimpleText( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            draw.SimpleText( v.PrintName, "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleTextOutlined( text, "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( v.PrintName, "sef", pw/2, ph - ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           function tmpButton:DoClick()
             if tmpSelected[k].selected then
@@ -196,7 +199,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
   nextB:SetText( "" )
   function nextB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    draw.SimpleText( lang.nextsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.nextsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function nextB:DoClick()
     if site.max > site.cur then
@@ -209,7 +212,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
   prevB:SetText( "" )
   function prevB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    draw.SimpleText( lang.prevsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.prevsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function prevB:DoClick()
     site.cur = site.cur - 1
@@ -256,7 +259,7 @@ function openSingleSelector( table )
   PanelSelect:SetText( "" )
   function PanelSelect:Paint( pw, ph )
     //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-    draw.SimpleText( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local search = createD( "DTextEntry", frame, shopsize - ctr( 20 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
@@ -306,7 +309,7 @@ function openSingleSelector( table )
           local _tmpName = createVGUI( "DButton", icon, iconsize, iconsize, 10, 10 )
           _tmpName:SetText( "" )
           function _tmpName:Paint( pw, ph )
-            draw.SimpleText( item.PrintName, "pmT", pw/2, ph-ctrW( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleTextOutlined( item.PrintName, "pmT", pw/2, ph-ctrW( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           function _tmpName:DoClick()
             LocalPlayer():SetNWString( "WorldModel", item.WorldModel )
@@ -329,7 +332,7 @@ function openSingleSelector( table )
   nextB:SetText( "" )
   function nextB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    draw.SimpleText( lang.nextsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.nextsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function nextB:DoClick()
     if site.max > site.cur then
@@ -342,7 +345,7 @@ function openSingleSelector( table )
   prevB:SetText( "" )
   function prevB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    draw.SimpleText( lang.prevsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.prevsite, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function prevB:DoClick()
     site.cur = site.cur - 1
@@ -390,7 +393,7 @@ net.Receive( "yrpInfoBox", function( len )
   local _text = net.ReadString()
   function _tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
-    draw.SimpleText( _text, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( _text, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local closeButton = createVGUI( "DButton", _tmp, 200, 50, 400 - 100, 400 - 50 )
@@ -470,24 +473,24 @@ function showVersion()
         frame:SetTitle( "" )
         function frame:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleText( "Language:", "HudBars", ctrW( 300 ), ctrW( 25 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( verart .. "! (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 100 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          draw.SimpleText( lang.currentversion .. ":", "HudBars", pw/2, ctrW( 175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( "Language:", "HudBars", ctrW( 300 ), ctrW( 25 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( verart .. "! (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 100 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang.currentversion .. ":", "HudBars", pw/2, ctrW( 175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleText( lang.client .. ": ", "HudBars", pw/2, ctrW( 225 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( GAMEMODE.Version, "HudBars", pw/2, ctrW( 225 ), yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( lang.client .. ": ", "HudBars", pw/2, ctrW( 225 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw/2, ctrW( 225 ), yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleText( "(" .. _serverSort .. ") " .. lang.server .. ": ", "HudBars", pw/2, ctrW( 275 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( serverVersion, "HudBars", pw/2, ctrW( 275 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( "(" .. _serverSort .. ") " .. lang.server .. ": ", "HudBars", pw/2, ctrW( 275 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( serverVersion, "HudBars", pw/2, ctrW( 275 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleText( lang.workshopversion .. ": ", "HudBars", pw/2, ctrW( 375 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( lang.workshopversion .. ": ", "HudBars", pw/2, ctrW( 375 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
         local Langu = createVGUI( "DComboBox", frame, 400, 50, 10 + 300, 10 )
         Langu:SetValue( lang.lang )
         Langu:AddChoice( "[AUTOMATIC]", "auto" )
-        for k, v in pairs( lang.all ) do
+        for k, v in pairs( allLang ) do
           Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
         end
         Langu.OnSelect = function( panel, index, value, data )
@@ -501,7 +504,7 @@ function showVersion()
         end
         function showChanges:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleText( lang.showchanges, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( lang.showchanges, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
         if ply:IsAdmin() or ply:IsSuperAdmin() then
@@ -513,7 +516,7 @@ function showVersion()
           end
           function restartServer:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-            draw.SimpleText( lang.updateserver, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleTextOutlined( lang.updateserver, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
 
           showChanges:SetPos( ctrW( 500-460-10 ), ctrW( 425 ) )
@@ -548,7 +551,7 @@ function GM:InitPostEntity()
     playerfullready = true
   end)
 
-  loadCompleteHud()
+  loadCompleteHUD()
   testVersion()
 end
 
@@ -576,7 +579,7 @@ function drawPlate( ply, string )
     local strSize = string.len( str ) + 3
     cam.Start3D2D( pos , ang, sca )
       draw.RoundedBox( 0, -( ( strSize * 10 )/2 ), 0, strSize*10, 24, Color( 0, 0, 0, 200 ) )
-      draw.SimpleText( str, "HudBars", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( str, "HudBars", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     cam.End3D2D()
   end
 end

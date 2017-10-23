@@ -12,7 +12,7 @@ hook.Add( "open_yourp_workshop", "open_yourp_workshop", function()
   settingsWindow.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, yrp.colors.dbackground ) end
 
   function settingsWindow.site:Paint()
-    draw.SimpleText( "Site is loading", "HudDefault", settingsWindow.site:GetWide()/2, settingsWindow.site:GetTall()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "Site is loading", "HudDefault", settingsWindow.site:GetWide()/2, settingsWindow.site:GetTall()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     --drawBackground( 0, 0, settingsWindow.site:GetWide(), settingsWindow.site:GetTall(), ctrW( 0 ) )
   end
 

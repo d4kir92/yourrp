@@ -21,13 +21,13 @@ hook.Add( "open_server_general", "open_server_general", function()
   local oldGamemodename = ""
   function settingsWindow.site:Paint()
     --draw.RoundedBox( 0, 0, 0, settingsWindow.site:GetWide(), settingsWindow.site:GetTall(), yrp.colors.panel )
-    draw.SimpleText( lang.gamemodename .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.gamemodename .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     if oldGamemodename != sv_generalName:GetText() then
-      draw.SimpleText( "you need to update Server!", "sef", ctrW( _center + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( "you need to update Server!", "sef", ctrW( _center + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
-    draw.SimpleText( lang.advertname .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.updatecountdown .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.metabolism .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.advertname .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.updatecountdown .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.metabolism .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctrW( _center ), ctrW( 5 ) )

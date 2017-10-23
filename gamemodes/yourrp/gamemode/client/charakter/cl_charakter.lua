@@ -37,7 +37,7 @@ function createMDPlus( parent, size, x, y, height )
       draw.RoundedBox( pw-height, 0, 0, pw-height, ph-height, yrp.colors.dsecondary )
     end
 
-    draw.SimpleText( "+", "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "+", "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   return tmpMD
 end
@@ -58,7 +58,7 @@ function createMDButton( parent, w, h, x, y, height, text )
       draw.RoundedBox( 0, 0, 0, pw-height, ph-height, yrp.colors.dprimary )
     end
 
-    draw.SimpleText( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   return tmpMD
 end
@@ -80,8 +80,16 @@ end
 
 function createD( derma, parent, w, h, x, y )
   local tmpD = vgui.Create( derma, parent )
-  tmpD:SetSize( w, h )
-  tmpD:SetPos( x, y )
+  if w != nil and h != nil then
+    tmpD:SetSize( w, h )
+  else
+    printGM( "note", w .. " " .. h )
+  end
+  if x != nil and y != nil then
+    tmpD:SetPos( x, y )
+  else
+    printGM( "note", x .. " " .. y )
+  end
   return tmpD
 end
 
@@ -90,7 +98,7 @@ function paintMD( w, h, string, color )
     string = ""
   end
   draw.RoundedBox( 0, 0, 0, w, h, color )
-  draw.SimpleText( string, "HudBars", w/2, h/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  draw.SimpleTextOutlined( string, "HudBars", w/2, h/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 end
 
 local character = {}
@@ -126,23 +134,23 @@ function openCharacterCreation()
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
-    draw.SimpleText( lang.charactercreation, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.charactercreation, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local identification = createD( "DPanel", frame, ctr( 800 ), ctr( 360 ), ScrW() - ctr( 800 ) - ctr( 100 ), ScrH() - ctr( 400 ) - ctr( 100 ) )
   function identification:Paint( pw, ph )
     draw.RoundedBox( ctr( 15 ), 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 
-    draw.SimpleText( lang.identifycard, "charText", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( GetHostName(), "charText", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.identifycard, "charText", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( GetHostName(), "charText", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( ply:SteamID(), "charText", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( ply:SteamID(), "charText", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.name, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( character.rpname, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.name, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.rpname, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.gender, "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( character.gender, "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.gender, "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.gender, "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
   end
   local avatar = createD( "AvatarImage", identification, ctr( 256 ), ctr( 256 ), ctr( 10 ), ctr( 360 - 10 - 256 ) )
@@ -163,7 +171,7 @@ function openCharacterCreation()
   local charactersGender = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersGender:Paint( pw, ph )
     paintMD( pw, ph, nil, yrp.colors.dsecondary )
-    draw.SimpleText( lang.gender, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.gender, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local charactersGenderMale = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)-105 ), ctr( 70 ), ctr( 5 ) )
@@ -178,7 +186,7 @@ function openCharacterCreation()
         draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondaryH )
       end
     end
-    draw.SimpleText( "♂", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "♂", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function charactersGenderMale:DoClick()
     character.gender = "male"
@@ -196,7 +204,7 @@ function openCharacterCreation()
         draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondaryH )
       end
     end
-    draw.SimpleText( "♀", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "♀", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function charactersGenderFemale:DoClick()
     character.gender = "female"
@@ -209,7 +217,7 @@ function openCharacterCreation()
   local charactersGroup = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersGroup:Paint( pw, ph )
     paintMD( pw, ph, nil, yrp.colors.dsecondary )
-    draw.SimpleText( lang.group, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.group, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local charactersGroupCB = createMD( "DComboBox", charactersGroup, ctr( 600 ), ctr( 50 ), ctr( (760-600)/2 ), ctr( 70 ), ctr( 5 ) )
@@ -239,17 +247,17 @@ function openCharacterCreation()
   local charactersRole = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersRole:Paint( pw, ph )
     paintMD( pw, ph, nil, yrp.colors.dsecondary )
-    draw.SimpleText( lang.role, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.rolehealth .. ": " .. character.hp .. "/" .. character.hpmax, "HudBars", ctr( 10 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.rolearmor .. ": " .. character.ar .. "/" .. character.armax, "HudBars", ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.rolesalary .. ": " .. character.capital, "HudBars", ctr( 10 ), ctr( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.roledescription .. ":", "HudBars", ctr( 10 ), ctr( 340 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( character.description[1], "HudBars", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( character.description[2] , "HudBars", ctr( 10 ), ctr( 460 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( character.description[3], "HudBars", ctr( 10 ), ctr( 520 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( character.description[4], "HudBars", ctr( 10 ), ctr( 580 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( character.description[5], "HudBars", ctr( 10 ), ctr( 640 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( character.description[6], "HudBars", ctr( 10 ), ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.role, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.rolehealth .. ": " .. character.hp .. "/" .. character.hpmax, "HudBars", ctr( 10 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.rolearmor .. ": " .. character.ar .. "/" .. character.armax, "HudBars", ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.rolesalary .. ": " .. character.capital, "HudBars", ctr( 10 ), ctr( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.roledescription .. ":", "HudBars", ctr( 10 ), ctr( 340 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.description[1], "HudBars", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.description[2] , "HudBars", ctr( 10 ), ctr( 460 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.description[3], "HudBars", ctr( 10 ), ctr( 520 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.description[4], "HudBars", ctr( 10 ), ctr( 580 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.description[5], "HudBars", ctr( 10 ), ctr( 640 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( character.description[6], "HudBars", ctr( 10 ), ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local characterPlayermodel = createMD( "DModelPanel", frame, ctr( 1600 ), ctr( 2160 ), ScrW2() - ctr( 1600/2 ), ScrH2() - ctr( 2160/2 ), ctr( 5 ) )
@@ -263,9 +271,9 @@ function openCharacterCreation()
   local charactersBodygroups = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersBodygroups:Paint( pw, ph )
     paintMD( pw, ph, nil, yrp.colors.dsecondary )
-    draw.SimpleText( lang.appearance, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.appearance, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     if characterPlayermodel.skin != nil and characterPlayermodel.skinmax != nil then
-      draw.SimpleText( lang.skin .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr( 80 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.skin .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr( 80 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 
@@ -290,7 +298,7 @@ function openCharacterCreation()
           tmp.count = 0
           tmp.countmax = v.num
           function tmp:Paint( pw, ph )
-            draw.SimpleText( v.name .. ": " .. self.count+1 .. "/" .. self.countmax, "HudBars", ctr( 80 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.SimpleTextOutlined( v.name .. ": " .. self.count+1 .. "/" .. self.countmax, "HudBars", ctr( 80 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           local tmpUp = createD( "DButton", tmp, ctr( 50 ), ctr( 50 ), ctr( 0 ), ctr( 0 ) )
           tmpUp:SetText( "" )
@@ -300,7 +308,7 @@ function openCharacterCreation()
               color = Color( 255, 255, 255, 255 )
             end
             draw.RoundedBox( 0, 0, 0, pw, ph, color )
-            draw.SimpleText( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleTextOutlined( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           function tmpUp:DoClick()
             if tmp.count < tmp.countmax-1 then
@@ -319,7 +327,7 @@ function openCharacterCreation()
               color = Color( 255, 255, 255, 255 )
             end
             draw.RoundedBox( 0, 0, 0, pw, ph, color )
-            draw.SimpleText( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.SimpleTextOutlined( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           function tmpDown:DoClick()
             if tmp.count > 0 then
@@ -454,7 +462,7 @@ function openCharacterCreation()
       end
     end
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleText( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function skinUp:DoClick()
     if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() then
@@ -474,7 +482,7 @@ function openCharacterCreation()
       end
     end
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleText( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function skinDo:DoClick()
     if characterPlayermodel.Entity:GetSkin() > 0 then
@@ -569,7 +577,7 @@ function openCharacterSelection()
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
-    draw.SimpleText( lang.characterselection, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.characterselection, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   ChangeLanguage( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
@@ -637,54 +645,56 @@ function openCharacterSelection()
       v.tmpChar:Remove()
     end
     for i = 1, #tmpTable do
-      cache[i] = {}
-      cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
-      local tmpChar = cache[i].tmpChar
-      tmpChar:SetText( "" )
-      tmpChar.charid = tmpTable[i].char.uniqueID
-      tmpChar.rpname = tmpTable[i].char.rpname
-      tmpChar.roleID = tmpTable[i].role.roleID
-      tmpChar.groupID = tmpTable[i].group.groupID
-      tmpChar.map = tmpTable[i].char.map
-      tmpChar.playermodelID = tmpTable[i].char.playermodelID
-      local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
-      tmpChar.playermodels = tmp
-      tmpChar.skin = tmpTable[i].char.skin
-      tmpChar.bg1 = tmpTable[i].char.bg1
-      tmpChar.bg2 = tmpTable[i].char.bg2
-      tmpChar.bg3 = tmpTable[i].char.bg3
-      tmpChar.bg4 = tmpTable[i].char.bg4
+      if tmpTable[i].char != nil and tmpTable[i].role != nil and tmpTable[i].group != nil then
+        cache[i] = {}
+        cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
+        local tmpChar = cache[i].tmpChar
+        tmpChar:SetText( "" )
+        tmpChar.charid = tmpTable[i].char.uniqueID
+        tmpChar.rpname = tmpTable[i].char.rpname
+        tmpChar.roleID = tmpTable[i].role.roleID
+        tmpChar.groupID = tmpTable[i].group.groupID
+        tmpChar.map = tmpTable[i].char.map
+        tmpChar.playermodelID = tmpTable[i].char.playermodelID
+        local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
+        tmpChar.playermodels = tmp
+        tmpChar.skin = tmpTable[i].char.skin
+        tmpChar.bg1 = tmpTable[i].char.bg1
+        tmpChar.bg2 = tmpTable[i].char.bg2
+        tmpChar.bg3 = tmpTable[i].char.bg3
+        tmpChar.bg4 = tmpTable[i].char.bg4
 
-      function tmpChar:Paint( pw, ph )
-        if tmpChar:IsHovered() or curChar == self.charid then
-          paintMD( pw, ph, nil, yrp.colors.dsecondaryH )
-        else
-          paintMD( pw, ph, nil, yrp.colors.dsecondary )
+        function tmpChar:Paint( pw, ph )
+          if tmpChar:IsHovered() or curChar == self.charid then
+            paintMD( pw, ph, nil, yrp.colors.dsecondaryH )
+          else
+            paintMD( pw, ph, nil, yrp.colors.dsecondary )
+          end
+          draw.SimpleTextOutlined( lang.name .. ": " .. self.rpname, "HudBars", ctr( 20 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang.role .. ": " .. self.groupID .. " " .. self.roleID, "HudBars", ctr( 20 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang.map .. ": " .. self.map, "HudBars", ctr( 20 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
-        draw.SimpleText( lang.name .. ": " .. self.rpname, "HudBars", ctr( 20 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( lang.role .. ": " .. self.groupID .. " " .. self.roleID, "HudBars", ctr( 20 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( lang.map .. ": " .. self.map, "HudBars", ctr( 20 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-      end
-      function tmpChar:DoClick()
-        curChar = self.charid
-        local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
-        if _playermodel != nil then
-          charplayermodel:SetModel( _playermodel )
-          if charplayermodel.Entity != nil then
-            charplayermodel.Entity:SetSkin( self.skin )
-            charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
-            charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
-            charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
-            charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+        function tmpChar:DoClick()
+          curChar = self.charid
+          local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
+          if _playermodel != nil then
+            charplayermodel:SetModel( _playermodel )
+            if charplayermodel.Entity != nil then
+              charplayermodel.Entity:SetSkin( self.skin )
+              charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
+              charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
+              charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
+              charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+            end
           end
         end
-      end
 
-      if tmpTable[i].char.uniqueID == tmpTable.plytab.CurrentCharacter then
-        curChar = tmpChar.charid
-        tmpChar:DoClick()
+        if tmpTable[i].char.uniqueID == tmpTable.plytab.CurrentCharacter then
+          curChar = tmpChar.charid
+          tmpChar:DoClick()
+        end
+        y = y + 1
       end
-      y = y + 1
     end
   end)
 
@@ -775,7 +785,7 @@ function openCharacterSelection()
         text = lang.suicide
       end
     end
-    draw.SimpleText( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   charactersEnter:SetText( "" )

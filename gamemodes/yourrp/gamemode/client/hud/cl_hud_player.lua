@@ -4,14 +4,17 @@ _filterENTS = ents.GetAll()
 local _filterTime = CurTime()
 local CamDataMinimap = {}
 
-local plyHealth = 100
-local plyArmor = 100
-local plyHunger = 100
-local plyThirst = 100
-local plyStamina = 100
-local plyMana = 100
-local plyCast = 0
-local plyXPBar = 0
+local hud = {}
+hud["hp"] = 100
+hud["ar"] = 100
+hud["mh"] = 100
+hud["mt"] = 100
+hud["ms"] = 100
+hud["ma"] = 100
+hud["ca"] = 0
+hud["xp"] = 0
+hud["wp"] = 0
+hud["ws"] = 0
 
 local reload = {}
 
@@ -52,23 +55,23 @@ function roundMoney( _money, round )
   end
 end
 
-local food = Material( "icon16/cake.png" )
-local drink = Material( "icon16/cup.png" )
+local hunger = Material( "icon16/cake.png" )
+local thirst = Material( "icon16/cup.png" )
 local health = Material( "icon16/heart.png" )
 local armor = Material( "icon16/shield.png" )
 local stamina = Material( "icon16/lightning.png" )
 local money = Material( "icon16/money.png" )
-local role = Material( "icon16/user.png" )
+local xp = Material( "icon16/user.png" )
 local mana = Material( "icon16/wand.png" )
 local cast = Material( "icon16/hourglass.png" )
 
 function showIcon( string, material )
   surface.SetDrawColor( 255, 255, 255, 255 )
   surface.SetMaterial( material	)
-  surface.DrawTexturedRect( ctrW( cl_db[string .. "x"] ) + ctrW( 30 ) - ctrW( 16 ), ctrW( cl_db[string .. "y"] ) + ctrW( cl_db[string .. "h"]/2 ) - ctrW( 16 ), ctrW( 32 ), ctrW( 32 ) )
+  surface.DrawTexturedRect( anchorW( cl_db[string .. "aw"] ) + ctr( cl_db[string .. "px"] ) + ctr( 30 ) - ctr( 16 ), anchorH( cl_db[string .. "ah"] ) + ctr( cl_db[string .. "py"] ) + ctr( cl_db[string .. "sh"]/2 ) - ctrW( 16 ), ctrW( 32 ), ctrW( 32 ) )
 end
 
-contextMenuOpen = false
+local contextMenuOpen = false
 hook.Add( "OnContextMenuOpen", "OnContextMenuOpen", function()
   contextMenuOpen = true
 end)
@@ -78,18 +81,6 @@ hook.Add( "OnContextMenuClose", "OnContextMenuClose", function()
 end)
 
 local rendering_map = false
---local map_RT = GetRenderTarget( "YRP_Minimap", ctrW( cl_db["mmw"] ), ctrW( cl_db["mmh"] ), false )
---local map_RT_mat = CreateMaterial( "YRP_Minimap", "UnlitGeneric", { ["$basetexture"] = "YRP_Minimap" } )
-local old_RT = render.GetRenderTarget()
-local oldw = ScrW()
-local oldh = ScrH()
-
---
-local rulesrt = GetRenderTarget("rulesrt", 1024, 1024, true)
-local rulesmat = CreateMaterial("rulesmat", "UnlitGeneric", {
-	["$basetexture"] = "rulesrt",
-	["$translucent"] = "1"
-})
 
 local minimap = {}
 local _rendered = false
@@ -109,142 +100,184 @@ net.Receive( "sendCoordsMM", function()
   end
 end)
 
+local _alpha = 200
+function drawHUDElement( dbV, cur, max, text, icon, color )
+  if tobool( HudV( dbV .. "to" ) ) then
+    if cur != nil and max != nil then
+      hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
+    end
+    draw.RoundedBox( 0, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+    if color != nil then
+      draw.RoundedBox( 0, anchorW( HudV( dbV .. "aw" ) ) + ctr( cl_db[dbV .. "px"] ), anchorH( HudV( dbV .. "ah" ) ) + ctr( cl_db[dbV .. "py"] ), ( hud[dbV] / max ) * ( ctr( cl_db[dbV .. "sw"] ) ), ctr( cl_db[dbV .. "sh"] ), color )
+    end
+
+    if text != nil then
+      local _st = {}
+      _st.br = 10
+      local _pw = 0
+      if HudV( dbV .. "tx" ) == 0 then
+        _pw = ctr( _st.br )
+      elseif HudV( dbV .. "tx" ) == 1 then
+        _pw = ctr( HudV( dbV .. "sw" ) ) / 2
+      elseif HudV( dbV .. "tx" ) == 2 then
+        _pw = ctr( HudV( dbV .. "sw" ) ) - ctr( _st.br )
+      end
+      local _ph = 0
+      if HudV( dbV .. "ty" ) == 3 then
+        _ph = ctr( _st.br )
+      elseif HudV( dbV .. "ty" ) == 1 then
+        _ph = ctr( HudV( dbV .. "sh" ) ) / 2
+      elseif HudV( dbV .. "ty" ) == 4 then
+        _ph = ctr( HudV( dbV .. "sh" ) ) - ctr( _st.br )
+      end
+      _st.x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ) + _pw
+      _st.y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ) + _ph
+      draw.SimpleTextOutlined( text, dbV .. "sf", _st.x, _st.y, Color( 255, 255, 255, 255 ), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color( 0, 0, 0 ) )
+    end
+
+    if icon != nil then
+      showIcon( dbV, icon )
+    end
+
+    drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( dbV .. "aw" ) ) + HudV( dbV .. "px" ), ctrF( ScrH() ) * anchorH( HudV( dbV .. "ah" ) ) + HudV( dbV .. "py" ), HudV( dbV .. "sw" ), HudV( dbV .. "sh" ), Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), ctr( 4 ) )
+  end
+end
+
 local delay = 0
 
 local _tmp3P = 0
 function HudPlayer()
   local ply = LocalPlayer()
   local weapon = ply:GetActiveWeapon()
-  local _alpha = 200
-  if cl_db["_load"] == 1 then
+  if cl_db["_loaded"] then
     local br = 2
 
     if ply:Alive() then
       if !contextMenuOpen then
         --Voice
         if _showVoice then
-          drawText( lang.youarespeaking, "vof", cl_db["vox"], cl_db["voy"], Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( lang.youarespeaking, "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
         --Health
-        if tonumber( cl_db["hpt"] ) == 1 then
-          plyHealth = Lerp( 10 * FrameTime(), plyHealth, ply:Health() )
-          drawRBox( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawRBox( 0, cl_db["hpx"], cl_db["hpy"], ( plyHealth / ply:GetMaxHealth() ) * (cl_db["hpw"]), cl_db["hph"], Color( 150, 52, 52, _alpha ) )
-          drawText( math.Round( plyHealth, 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( plyHealth, 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. "%", "hpf", cl_db["hpx"] + (cl_db["hpw"]/2), cl_db["hpy"] + (cl_db["hph"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-          showIcon( "hp", health )
-        end
+        local _hptext = math.Round( ply:Health(), 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( ply:Health(), 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. "%"
+        drawHUDElement( "hp", ply:Health(), ply:GetMaxHealth(), _hptext, health, Color( 150, 52, 52, _alpha ) )
 
         --Armor
-        if tonumber( cl_db["art"] ) == 1 then
-          plyArmor = Lerp( 10 * FrameTime(), plyArmor, ply:Armor() )
-          drawRBox( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawRBox( 0, cl_db["arx"], cl_db["ary"], ( ply:Armor() / ply:GetNWInt( "GetMaxArmor", 100 ) ) * cl_db["arw"], cl_db["arh"], Color( 52, 150, 72, _alpha ) )
-          drawText( math.Round( plyArmor, 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 100 ) .. "|" .. math.Round( ( math.Round( plyArmor, 0 ) / ply:GetNWInt( "GetMaxArmor", 100 ) ) * 100, 0 ) .. "%", "arf", cl_db["arx"] + (cl_db["arw"]/2), cl_db["ary"] + (cl_db["arh"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        local _artext = math.Round( ply:Armor(), 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 1 ) .. "|" .. math.Round( ( math.Round( ply:Armor(), 0 ) / ply:GetNWInt( "GetMaxArmor", 1 ) ) * 100, 0 ) .. "%"
+        drawHUDElement( "ar", ply:Armor(), ply:GetNWInt( "GetMaxArmor" ), _artext, armor, Color( 52, 150, 72, _alpha ) )
 
-          showIcon( "ar", armor )
+        if ply:GetNWBool( "metabolism", false ) then
+          --Hunger
+          local _mhtext = math.Round( ( math.Round( ply:GetNWInt( "hunger", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
+          drawHUDElement( "mh", ply:GetNWInt( "hunger", 0 ), 100, _mhtext, hunger, Color( 150, 88, 52, _alpha ) )
+
+          --Thirst
+          local _mttext = math.Round( ( math.Round( ply:GetNWInt( "thirst", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
+          drawHUDElement( "mt", ply:GetNWInt( "thirst", 0 ), 100, _mttext, thirst, Color( 52, 70, 150, _alpha ) )
+
+          --Stamina
+          local _mstext = math.Round( ( math.Round( ply:GetNWInt( "stamina", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
+          drawHUDElement( "ms", ply:GetNWInt( "stamina", 0 ), 100, _mstext, stamina, Color( 150, 150, 60, _alpha ) )
         end
 
+        --Mana
+        local _matext = math.Round( ( math.Round( ply:GetNWInt( "mana", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
+        drawHUDElement( "ma", ply:GetNWInt( "mana", 0 ), 100, _matext, mana, Color( 58, 143, 255, _alpha ) )
+
+        --Cast
+        if ply:GetNWBool( "casting", false ) then
+          local _catext = ply:GetNWString( "castName", "" ) .. " (" .. math.Round( ( math.Round( ply:GetNWInt( "castCur", 1 ), 0 ) / ply:GetNWInt( "castMax", 1 ) ) * 100, 0 ) .. "%)"
+          drawHUDElement( "ca", ply:GetNWInt( "castCur", 1 ), ply:GetNWInt( "castMax", 1 ), _catext, cast, Color( 132, 116, 188, _alpha ) )
+        else
+          ply:SetNWInt( "castCur", 0 )
+          plyCast = 0
+        end
+
+        --Money
+        local _money = tonumber( ply:GetNWString( "money", "" ) )
+        local _motext = ply:GetNWString( "moneyPre", "" ) .. roundMoney( _money, 1 ) .. ply:GetNWString( "moneyPost", "" )
+        local _capital = tonumber( ply:GetNWInt( "capital", 0 ) )
+        if _capital > 0 then
+          _motext = _motext .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
+        end
+        drawHUDElement( "mo", nil, nil, _motext, money, nil )
+
+        --XP
+        local _xptext = "lvl " .. 1 .. " (" .. 0 .. "%) " .. ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
+        drawHUDElement( "xp", 0, 100, _xptext, xp, Color( 181, 255, 107, _alpha ) )
+
         --Weapon Primary
-        if tonumber( cl_db["wpt"] ) == 1 then
-          local wpx = ctrW( cl_db["wpx"] )
-          local wpy = ctrW( cl_db["wpy"] )
-          local wpw = ctrW( cl_db["wpw"] )
-          local wph = ctrW( cl_db["wph"] )
-          if weapon != NULL then
-        		if weapon:GetMaxClip1() > -1 or ply:GetAmmoCount( weapon:GetPrimaryAmmoType() ) > -1 then
-              draw.RoundedBox( 0, wpx, wpy, wpw, wph, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        if weapon != NULL then
+      		if weapon:GetMaxClip1() > -1 or ply:GetAmmoCount( weapon:GetPrimaryAmmoType() ) > -1 then
+      			--Primary
+      			reload.nextP = weapon:GetNextPrimaryFire()
+      			reload.nextPC = reload.nextP - CurTime()
+      			if reload.nextP > CurTime() and reload.statusP == 0 and ( reload.nextPC ) > 0.6 then
+      				reload.statusP = 1
+      				reload.maxP = reload.nextP - CurTime()
+      			elseif reload.nextP < CurTime() and reload.statusP == 1 then
+      				reload.statusP = 0
+      			end
+      			if reload.nextPC > reload.maxP then
+      				reload.maxP = reload.nextPC
+      			end
 
-              draw.RoundedBox( 0, wpx, wpy, wpw * weapon:Clip1() / weapon:GetMaxClip1(), wph, Color( 255, 255, 0 ) )
-        			--Primary
-        			reload.nextP = weapon:GetNextPrimaryFire()
-        			reload.nextPC = reload.nextP - CurTime()
-        			if reload.nextP > CurTime() and reload.statusP == 0 and ( reload.nextPC ) > 0.6 then
-        				reload.statusP = 1
-        				reload.maxP = reload.nextP - CurTime()
-        			elseif reload.nextP < CurTime() and reload.statusP == 1 then
-        				reload.statusP = 0
-        			end
-        			if reload.nextPC > reload.maxP then
-        				reload.maxP = reload.nextPC
-        			end
-
-        			if reload.statusP == 1 then
-        				draw.RoundedBox( 0, wpx, wpy, wpw * ( 1 - ( ( 1 / reload.maxP ) * reload.nextPC )), wph, Color( 255, 0, 0, _alpha ) )
-        				draw.SimpleText( math.Round( 100 * ( 1 - ( ( 1 / reload.maxP ) * reload.nextPC ) ) ) .. "%", "wpf", wpx + ( wpw / 2 ), wpy + ( wph / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        			elseif weapon:GetMaxClip1() > -1 then
-        				draw.SimpleText( weapon:Clip1() .. "/" .. weapon:GetMaxClip1()  .. "|" .. ply:GetAmmoCount(weapon:GetPrimaryAmmoType()), "wpf", wpx + ( wpw / 2 ), wpy + ( wph / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        		  elseif ply:GetAmmoCount(weapon:GetPrimaryAmmoType()) > -1 then
-                draw.SimpleText( ply:GetAmmoCount( weapon:GetPrimaryAmmoType() ), "wpf", wpx + ( wpw / 2 ), wpy + ( wph / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-              end
+            local _wptext = ""
+      			if reload.statusP == 1 then
+      				_wptext = math.Round( 100 * ( 1 - ( ( 1 / reload.maxP ) * reload.nextPC ) ) ) .. "%"
+      			elseif weapon:GetMaxClip1() > -1 then
+      				_wptext = weapon:Clip1() .. "/" .. weapon:GetMaxClip1()  .. "|" .. ply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+      		  elseif ply:GetAmmoCount(weapon:GetPrimaryAmmoType()) > -1 then
+              _wptext = ply:GetAmmoCount( weapon:GetPrimaryAmmoType() )
             end
+
+            drawHUDElement( "wp", weapon:Clip1(), weapon:GetMaxClip1(), _wptext, nil, Color( 255, 255, 0, _alpha ) )
           end
         end
 
         --Weapon Secondary
-        if tonumber( cl_db["wst"] ) == 1 then
-          local wsx = ctrW( cl_db["wsx"] )
-          local wsy = ctrW( cl_db["wsy"] )
-          local wsw = ctrW( cl_db["wsw"] )
-          local wsh = ctrW( cl_db["wsh"] )
+        if weapon != NULL then
+      		if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
+      			reload.nextS = weapon:GetNextSecondaryFire()
+      			reload.nextSC = reload.nextS - CurTime()
+      			if reload.nextS > CurTime() and reload.statusS == 0 and ( reload.nextSC ) > 0.3 then
+      				reload.statusS = 1
+      				reload.maxS = reload.nextS - CurTime()
+      			elseif reload.nextS < CurTime() and reload.statusS == 1 then
+      				reload.statusS = 0
+      			end
+      			if reload.nextSC > reload.maxS then
+      				reload.maxS = reload.nextSC
+      			end
 
-          if weapon != NULL then
-        		if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
-              draw.RoundedBox( 0, wsx, wsy, wsw, wsh, Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-        			--Secondary
-        			draw.RoundedBox( 0, wsx, wsy, wsw, wsh, Color( 255, 255, 0, 255 ) )
-
-        			reload.nextS = weapon:GetNextSecondaryFire()
-        			reload.nextSC = reload.nextS - CurTime()
-        			if reload.nextS > CurTime() and reload.statusS == 0 and ( reload.nextSC ) > 0.3 then
-        				reload.statusS = 1
-        				reload.maxS = reload.nextS - CurTime()
-        			elseif reload.nextS < CurTime() and reload.statusS == 1 then
-        				reload.statusS = 0
-        			end
-        			if reload.nextSC > reload.maxS then
-        				reload.maxS = reload.nextSC
-        			end
-
-        			if reload.statusS == 1 then
-        				draw.RoundedBox( 0, wsx, wsy, wsw * ( 1 - ( ( 1 / reload.maxS ) * reload.nextSC ) ), wsh, Color( 255, 0, 0, 200 ) )
-        				draw.SimpleText( math.Round( 100 * ( 1 - ( ( 1 / reload.maxS ) * reload.nextSC ) ) ) .. "%", "wsf", wsx + ( wsw / 2 ), wsy + ( wsh / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        			else
-        				draw.SimpleText( ply:GetAmmoCount(weapon:GetSecondaryAmmoType()), "wsf", wsx + ( wsw / 2 ), wsy + ( wsh / 2 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        			end
-            end
-      		end
-        end
+            local _wstext = ""
+      			if reload.statusS == 1 then
+      				_wstext = math.Round( 100 * ( 1 - ( ( 1 / reload.maxS ) * reload.nextSC ) ) ) .. "%"
+      			else
+      				_wstext = ply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+      			end
+            drawHUDElement( "ws", ply:GetAmmoCount(weapon:GetSecondaryAmmoType()), ply:GetAmmoCount(weapon:GetSecondaryAmmoType()), _wstext, nil, Color( 255, 255, 0, _alpha ) )
+          end
+    		end
 
         --Weapon Name
-        if tonumber( cl_db["wnt"] ) == 1 then
-          if weapon != NULL then
-            drawRBox( 0, cl_db["wnx"], cl_db["wny"], cl_db["wnw"], cl_db["wnh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-            drawText( weapon:GetPrintName(), "wnf", cl_db["wnx"] + (cl_db["wnw"]/2), cl_db["wny"] + (cl_db["wnh"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          end
+        local _wntext = ""
+        if weapon != nil and weapon != NULL then
+          _wntext = weapon.PrintName or ""
         end
-
-        --RoleID
-        if tonumber( cl_db["rit"] ) == 1 then
-          plyXPBar = Lerp( 10 * FrameTime(), plyXPBar, 0 )
-          drawRBox( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawRBox( 0, cl_db["rix"], cl_db["riy"], ( plyXPBar/100 ) * cl_db["riw"], cl_db["rih"], Color( 181, 255, 107, _alpha ) )
-          drawText( "lvl 1 (" .. plyXPBar .. "%) " .. ply:GetNWString("groupName") .. " " .. ply:GetNWString("roleName"), "rif", cl_db["rix"] + (cl_db["riw"]/2), cl_db["riy"] + (cl_db["rih"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-          showIcon( "ri", role )
-        end
+        drawHUDElement( "wn", nil, nil, _wntext, nil, nil )
 
         --Minimap
-        if tonumber( cl_db["mmt"] ) == 1 then -- and !ply:InVehicle() then
-          drawRBox( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        if tonumber( cl_db["mmto"] ) == 1 then
+          draw.RoundedBox( 0, anchorW( cl_db["mmaw"] ) + ctr( cl_db["mmpx"] ), anchorH( cl_db["mmah"] ) + ctr( cl_db["mmpy"] ), ctr( cl_db["mmsw"] ), ctr( cl_db["mmsh"] ), Color( 0, 0, 0, _alpha ) )
           if minimap != nil then
             if playerfullready == true and minimap.facX != nil and minimap.facY != nil then
               local win = {}
-              win.w = ctr( cl_db["mmw"] )
-              win.h = ctr( cl_db["mmh"] )
-              win.x = ctr( cl_db["mmx"] )
-              win.y = ctr( cl_db["mmy"] )
+              win.w = ctr( cl_db["mmsw"] )
+              win.h = ctr( cl_db["mmsh"] )
+              win.x = ctr( cl_db["mmpx"] )
+              win.y = ctr( cl_db["mmpy"] )
 
               _filterENTS = ents.GetAll()
               local _testHeight = 400
@@ -334,14 +367,16 @@ function HudPlayer()
               		render.SetStencilReferenceValue( 25 )
               		render.SetStencilFailOperation( STENCIL_REPLACE )
 
-              		draw.RoundedBox( 0, ctr(cl_db["mmx"]), ctr(cl_db["mmy"]), ctr(cl_db["mmw"]), ctr(cl_db["mmh"]), Color( 255, 255, 255 ) )
+              		draw.RoundedBox( 0, anchorW( HudV( "mmaw" ) ) + ctr( cl_db["mmpx"] ), anchorH( HudV( "mmah" ) ) + ctr(cl_db["mmpy"]), ctr(cl_db["mmsw"]), ctr(cl_db["mmsh"]), Color( 255, 255, 255 ) )
 
               		render.SetStencilCompareFunction( STENCIL_EQUAL )
 
                   surface.SetDrawColor( 255, 255, 255, 255 )
                   surface.SetMaterial( minimap_RT_mat )
-                  surface.DrawTexturedRect( ctr(cl_db["mmx"]) + ctr(cl_db["mmw"]/2) - plyPos.x, ctr(cl_db["mmy"])  +ctr(cl_db["mmh"]/2)- plyPos.y, mm.w, mm.h )
+                  surface.DrawTexturedRect( anchorW( HudV( "mmaw" ) ) + ctr(cl_db["mmpx"]) + ctr(cl_db["mmsw"]/2) - plyPos.x, anchorH( HudV( "mmah" ) ) + ctr(cl_db["mmpy"])  +ctr(cl_db["mmsh"]/2)- plyPos.y, mm.w, mm.h )
                 render.SetStencilEnable( false )
+
+                drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "mm" .. "aw" ) ) + HudV( "mm" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "mm" .. "ah" ) ) + HudV( "mm" .. "py" ), HudV( "mm" .. "sw" ), HudV( "mm" .. "sh" ), Color( 0, 0, 0, 255 ), ctr( 4 ) )
               end
             else
               getCoordsMM()
@@ -349,150 +384,78 @@ function HudPlayer()
           end
 
           minimap.point = 8
-          drawRBoxCr( cl_db["mmx"] + (cl_db["mmw"]/2) - (minimap.point/2), cl_db["mmy"] + (cl_db["mmh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
+          drawRBoxCr( ctrF(ScrH()) * anchorW( HudV( "mmaw" ) ) + cl_db["mmpx"] + (cl_db["mmsw"]/2) - (minimap.point/2), ctrF(ScrH()) * anchorH( HudV( "mmah" ) ) + cl_db["mmpy"] + (cl_db["mmsh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
 
           --Coords
-          draw.SimpleText( math.Round( ply:GetPos().x, -1 ) .. ",", "mmf", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( " " .. math.Round( ply:GetPos().y, -1 ), "mmf", ctrW( cl_db["mmx"] ) + ( ctrW( cl_db["mmw"] ) / 2 ), ctrW( cl_db["mmy"] ) + ctrW( cl_db["mmh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( math.Round( ply:GetPos().x, -1 ) .. ",", "HudBars", anchorW( HudV( "mmaw" ) ) + ctrW( cl_db["mmpx"] ) + ( ctrW( cl_db["mmsw"] ) / 2 ), anchorH( HudV( "mmah" ) ) + ctrW( cl_db["mmpy"] ) + ctrW( cl_db["mmsh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( " " .. math.Round( ply:GetPos().y, -1 ), "HudBars", anchorW( HudV( "mmaw" ) ) + ctrW( cl_db["mmpx"] ) + ( ctrW( cl_db["mmsw"] ) / 2 ), anchorH( HudV( "mmah" ) ) + ctrW( cl_db["mmpy"] ) + ctrW( cl_db["mmsh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
         --Tooltip
-        if tonumber( cl_db["ttt"] ) == 1 then
-          local _abstand = 40
-          drawRBox( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawText( lang.tooltip .. ":", "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "F2 - " .. lang.characterselection, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 1*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "F3 - " .. lang.rolemenu, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 2*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "F4 - " .. lang.buymenu, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 3*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "F7  - " .. lang.settings, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 4*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "F11  - " .. lang.guimouse, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 5*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "B  - " .. lang.changeview, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 6*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "M  - " .. lang.map, "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 7*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "H  - " .. "Eat Food", "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 8*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-          drawText( "T  - " .. "Drink Water", "ttf", cl_db["ttx"] + ctrW( 32 ), cl_db["tty"] + 10 + 9*_abstand, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        end
+        if tonumber( cl_db["ttto"] ) == 1 then
+          local _abstand = ctr( cl_db["ttsf"] ) * 3.5
+          drawHUDElement( "tt", nil, nil, nil, nil, nil )
 
-        --Money
-        if tonumber( cl_db["mot"] ) == 1 then
-          drawRBox( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          local _money = tonumber( ply:GetNWString( "money" ) )
-          if _money != nil then
-            local _moneystring = ply:GetNWString( "moneyPre" ) .. roundMoney( _money, 1 ) .. ply:GetNWString( "moneyPost" )
-            local _capital = tonumber( ply:GetNWInt( "capital" ) )
-            if _capital > 0 then
-              _moneystring = _moneystring .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
-            end
-            drawText( _moneystring, "mof", cl_db["mox"] + (cl_db["mow"]/2), cl_db["moy"] + (cl_db["moh"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-          end
-          showIcon( "mo", money )
-        end
-
-        if ply:GetNWBool( "metabolism", false ) then
-          --Hunger
-          if tonumber( cl_db["mht"] ) == 1 then
-            plyHunger = Lerp( 10 * FrameTime(), plyHunger, ply:GetNWInt( "hunger", 0 ) )
-            drawRBox( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-            drawRBox( 0, cl_db["mhx"], cl_db["mhy"], ( plyHunger / 100 ) * (cl_db["mhw"]), cl_db["mhh"], Color( 150, 88, 52, _alpha ) )
-            drawText( math.Round( ( math.Round( plyHunger, 0 ) / 100 ) * 100, 0 ) .. "%", "mhf", cl_db["mhx"] + (cl_db["mhw"]/2), cl_db["mhy"] + (cl_db["mhh"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-          	showIcon( "mh", food )
-          end
-
-          --Thirst
-          if tonumber( cl_db["mtt"] ) == 1 then
-            plyThirst = Lerp( 10 * FrameTime(), plyThirst, ply:GetNWInt( "thirst", 0 ) )
-            drawRBox( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-            drawRBox( 0, cl_db["mtx"], cl_db["mty"], ( plyThirst / 100 ) * cl_db["mtw"], cl_db["mth"], Color( 52, 70, 150, _alpha ) )
-            drawText( math.Round( ( math.Round( plyThirst, 0 ) / 100 ) * 100, 0 ) .. "%", "mtf", cl_db["mtx"] + (cl_db["mtw"]/2), cl_db["mty"] + (cl_db["mth"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-            showIcon( "mt", drink )
-          end
-
-          --Stamina
-          if tonumber( cl_db["mst"] ) == 1 then
-            plyStamina = Lerp( 10 * FrameTime(), plyStamina, ply:GetNWInt( "stamina", 0 ) )
-            drawRBox( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-            drawRBox( 0, cl_db["msx"], cl_db["msy"], ( plyStamina / 100 ) * cl_db["msw"], cl_db["msh"], Color( 150, 150, 60, _alpha ) )
-            drawText( math.Round( ( math.Round( plyStamina, 0 ) / 100 ) * 100, 0 ) .. "%", "msf", cl_db["msx"] + (cl_db["msw"]/2), cl_db["msy"] + (cl_db["msh"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-            showIcon( "ms", stamina )
-          end
-        end
-
-        --Mana
-        if tonumber( cl_db["mat"] ) == 1 then
-          plyMana = Lerp( 10 * FrameTime(), plyMana, ply:GetNWInt( "mana", 100 ) )
-          drawRBox( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawRBox( 0, cl_db["max"], cl_db["may"], ( plyMana / ply:GetNWInt( "mana", 100 ) ) * cl_db["maw"], cl_db["mah"], Color( 58, 143, 255, _alpha ) )
-          drawText( math.Round( ( math.Round( plyMana, 0 ) / ply:GetNWInt( "mana", 100 ) ) * 100, 0 ) .. "%", "maf", cl_db["max"] + (cl_db["maw"]/2), cl_db["may"] + (cl_db["mah"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-          showIcon( "ma", mana )
-        end
-
-        --Cast
-        if tonumber( cl_db["cat"] ) == 1 and ply:GetNWBool( "casting", false ) then
-          plyCast = Lerp( 10 * FrameTime(), plyCast, ply:GetNWInt( "castCur", 0 ) )
-          drawRBox( 0, cl_db["cax"], cl_db["cay"], cl_db["caw"], cl_db["cah"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawRBox( 0, cl_db["cax"], cl_db["cay"], ( plyCast / ply:GetNWInt( "castMax", 0 ) ) * cl_db["caw"], cl_db["cah"], Color( 132, 116, 188, _alpha ) )
-          drawText( ply:GetNWString( "castName", "" ) .. " (" .. math.Round( ( math.Round( plyCast, 0 ) / ply:GetNWInt( "castMax", 0 ) ) * 100, 0 ) .. "%)", "caf", cl_db["cax"] + (cl_db["caw"]/2), cl_db["cay"] + (cl_db["cah"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-          showIcon( "ca", cast )
-        else
-          ply:SetNWInt( "castCur", 0 )
-          plyCast = 0
+          draw.SimpleTextOutlined( lang.tooltip .. ":", "ttsf", ctr( cl_db["ttpx"] ) + ctr( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "F2 - " .. lang.characterselection, "ttsf", ctr( cl_db["ttpx"] ) + ctr( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 + 1*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "F3 - " .. lang.rolemenu, "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 2*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "F4 - " .. lang.buymenu, "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "F7  - " .. lang.settings, "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "F11  - " .. lang.guimouse, "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "B  - " .. lang.changeview, "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "M  - " .. lang.map, "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "H  - " .. "Eat Food (later consumable)", "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "T  - " .. "Drink Water (later consumable)", "ttsf", ctr( cl_db["ttpx"] ) + ctrW( 32 ), ctr( cl_db["ttpy"] ) + ctr( 10 ) + ctr( 9*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
         end
 
         --Status
-        local _status = ""
+        local _sttext = ""
         local _showStatus = false
         if ply:GetNWBool( "cuffed" ) then
-          if _status != "" then
-            _status = _status .. ", "
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
           end
-          _status = _status .. "Cuffed"
+          _sttext = _sttext .. "Cuffed"
           _showStatus = true
         end
         if ply:GetNWInt( "hunger", 100 ) < 20 then
-          if _status != "" then
-            _status = _status .. ", "
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
           end
-          _status = _status .. "Hungry"
+          _sttext = _sttext .. "Hungry"
           _showStatus = true
         end
         if ply:GetNWInt( "thirst", 100 ) < 20 then
-          if _status != "" then
-            _status = _status .. ", "
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
           end
-          _status = _status .. "Thirsty"
+          _sttext = _sttext .. "Thirsty"
           _showStatus = true
         end
         if ply:GetNWBool( "inJail", false ) then
-          if _status != "" then
-            _status = _status .. ", "
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
           end
-          _status = _status .. lang.jail .. ": " .. ply:GetNWInt( "jailtime", 0 )
+          _sttext = _sttext .. lang.jail .. ": " .. ply:GetNWInt( "jailtime", 0 )
           _showStatus = true
         end
-        if tonumber( cl_db["stt"] ) == 1 and _status != "" then
-          drawRBox( 0, cl_db["stx"], cl_db["sty"], cl_db["stw"], cl_db["sth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-          drawText( _status, "stf", cl_db["stx"] + (cl_db["stw"]/2), cl_db["sty"] + (cl_db["sth"]/2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-          --showIcon( "st", stamina )
+        if tonumber( cl_db["stto"] ) == 1 and _sttext != "" then
+          drawHUDElement( "st", nil, nil, _sttext, nil, nil )
         end
 
         --Voting
-        if tonumber( cl_db["vtt"] ) == 1 and ply:GetNWBool( "voting", false ) then
-          drawRBox( 0, cl_db["vtx"], cl_db["vty"], cl_db["vtw"], cl_db["vth"], Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
+        if tonumber( cl_db["vtto"] ) == 1 and ply:GetNWBool( "voting", false ) then
+          drawRBox( 0, cl_db["vtpx"], cl_db["vtpy"], cl_db["vtsw"], cl_db["vtsh"], Color( 0, 0, 0, _alpha ) )
 
-          drawText( ply:GetNWString( "voteQuestion", "" ), "vof", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + cl_db["vth"]/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          drawText( ply:GetNWString( "voteQuestion", "" ), "HudBars", cl_db["vtpx"] + cl_db["vtsw"]/2, cl_db["vtpy"] + cl_db["vtsh"]/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           if ply:GetNWString( "voteStatus" ) != "yes" and ply:GetNWString( "voteStatus" ) != "no" then
-            drawText( lang.yes .. " - [Picture Up] | " .. lang.no .. " - [Picture Down]", "vof", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 2*(cl_db["vth"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            drawText( lang.yes .. " - [Picture Up] | " .. lang.no .. " - [Picture Down]", "vof", cl_db["vtpx"] + cl_db["vtsw"]/2, cl_db["vtpy"] + 2*(cl_db["vtsh"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           elseif ply:GetNWString( "voteStatus" ) == "yes" then
-            drawText( lang.yes, "vof", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 2*(cl_db["vth"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            drawText( lang.yes, "vof", cl_db["vtpx"] + cl_db["vtsw"]/2, cl_db["vtpy"] + 2*(cl_db["vtsh"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           elseif ply:GetNWString( "voteStatus" ) == "no" then
-            drawText( lang.no, "vof", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 2*(cl_db["vth"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            drawText( lang.no, "vof", cl_db["vtpx"] + cl_db["vtsw"]/2, cl_db["vtpy"] + 2*(cl_db["vtsh"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
           end
-          drawText( ply:GetNWInt( "voteCD", "" ), "vof", cl_db["vtx"] + cl_db["vtw"]/2, cl_db["vty"] + 3*(cl_db["vth"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          drawText( ply:GetNWInt( "voteCD", "" ), "vof", cl_db["vtpx"] + cl_db["vtsw"]/2, cl_db["vtpy"] + 3*(cl_db["vtsh"]/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         --Thirdperson
@@ -512,77 +475,12 @@ function HudPlayer()
           elseif _thirdperson == 2 then
             _3PText = lang.tpp
           end
-          draw.SimpleText( _3PText, "sef", ScrW()/2, ctrW( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        end
-
-        --Borders
-        if tonumber( cl_db["hpt"] ) == 1 then
-          drawRBoxBr( 0, cl_db["hpx"], cl_db["hpy"], cl_db["hpw"], cl_db["hph"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if tonumber( cl_db["art"] ) == 1 then
-          drawRBoxBr( 0, cl_db["arx"], cl_db["ary"], cl_db["arw"], cl_db["arh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if tonumber( cl_db["wst"] ) == 1 then
-          if weapon != NULL then
-            if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
-              drawRBoxBr( 0, cl_db["wsx"], cl_db["wsy"], cl_db["wsw"], cl_db["wsh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-            end
-          end
-        end
-        if tonumber( cl_db["wpt"] ) == 1 then
-          if weapon != NULL then
-            if weapon:GetMaxClip1() > -1 or ply:GetAmmoCount(weapon:GetPrimaryAmmoType()) > -1 then
-              drawRBoxBr( 0, cl_db["wpx"], cl_db["wpy"], cl_db["wpw"], cl_db["wph"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-            end
-          end
-        end
-        if tonumber( cl_db["wnt"] ) == 1 then
-          if weapon != NULL then
-            drawRBoxBr( 0, cl_db["wnx"], cl_db["wny"], cl_db["wnw"], cl_db["wnh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-          end
-        end
-        if tonumber( cl_db["rit"] ) == 1 then
-        drawRBoxBr( 0, cl_db["rix"], cl_db["riy"], cl_db["riw"], cl_db["rih"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if tonumber( cl_db["ttt"] ) == 1 then
-          drawRBoxBr( 0, cl_db["ttx"], cl_db["tty"], cl_db["ttw"], cl_db["tth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if tonumber( cl_db["mot"] ) == 1 then
-          drawRBoxBr( 0, cl_db["mox"], cl_db["moy"], cl_db["mow"], cl_db["moh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if tonumber( cl_db["mmt"] ) == 1 then
-          drawRBoxBr( 0, cl_db["mmx"], cl_db["mmy"], cl_db["mmw"], cl_db["mmh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if ply:GetNWBool( "metabolism", false ) then
-          if tonumber( cl_db["mht"] ) == 1 then
-            drawRBoxBr( 0, cl_db["mhx"], cl_db["mhy"], cl_db["mhw"], cl_db["mhh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-          end
-          if tonumber( cl_db["mtt"] ) == 1 then
-            drawRBoxBr( 0, cl_db["mtx"], cl_db["mty"], cl_db["mtw"], cl_db["mth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-          end
-          if tonumber( cl_db["mst"] ) == 1 then
-            drawRBoxBr( 0, cl_db["msx"], cl_db["msy"], cl_db["msw"], cl_db["msh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-          end
-        end
-        if tonumber( cl_db["cbt"] ) == 1 and _showChat then
-          drawRBoxBr( 0, cl_db["cbx"], cl_db["cby"], cl_db["cbw"], cl_db["cbh"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-
-        if tonumber( cl_db["mat"] ) == 1 then
-          if plyMana > 0 then
-            drawRBoxBr( 0, cl_db["max"], cl_db["may"], cl_db["maw"], cl_db["mah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-          end
-        end
-        if tonumber( cl_db["cat"] ) == 1 and ply:GetNWBool( "casting", false ) then
-          drawRBoxBr( 0, cl_db["cax"], cl_db["cay"], cl_db["caw"], cl_db["cah"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
-        end
-        if tonumber( cl_db["stt"] ) == 1 and _showStatus then
-          drawRBoxBr( 0, cl_db["stx"], cl_db["sty"], cl_db["stw"], cl_db["sth"], Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), br )
+          draw.SimpleTextOutlined( _3PText, "HudBars", ScrW()/2, ctrW( 2160/2 + 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
       end
     else
       drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )
-      drawText( lang.dead .. "! " .. lang.respawning .. "...", "HudBars", ScrW()/2 * ctrF( ScrH() ), ScrH()/2 * ctrF( ScrH() ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.dead .. "! " .. lang.respawning .. "...", "HudBars", ScrW()/2, ScrH()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 end

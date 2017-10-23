@@ -24,9 +24,9 @@ function optionVehicleWindow( vehicle, vehicleTab )
   function _vehicleWindow:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
-    draw.SimpleText( lang.settings, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.settings, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.owner .. ": " .. owner, "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.owner .. ": " .. owner, "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.RoundedBox( 0, 0, ctr( 210 ), pw, ph, Color( 255, 255, 0, 200 ) )
   end

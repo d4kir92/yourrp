@@ -4,88 +4,279 @@
 
 function createDerma( art, parent, w, h, x, y )
   tmpDerma = vgui.Create( art, parent )
-  tmpDerma:SetSize( ctrW(w), ctrW(h) )
-  tmpDerma:SetPos( ctrW(x), ctrW(y) )
+  tmpDerma:SetSize( ctr(w), ctr(h) )
+  tmpDerma:SetPos( ctr(x), ctr(y) )
   return tmpDerma
 end
 
-function changeHudElement( parent, tmpx, tmpy, tmpw, tmph, tmpt, textPre )
+local anchor = Material( "icon16/anchor.png" )
+local font_go = Material( "icon16/font_go.png" )
+local _settings = Material( "vgui/yrp/light_settings.png" )
+
+local tal = Material( "icon16/text_align_left.png" )
+local tac = Material( "icon16/text_align_center.png" )
+local tar = Material( "icon16/text_align_right.png" )
+
+local tavt = Material( "icon16/shape_align_top.png" )
+local tavc = Material( "icon16/shape_align_middle.png" )
+local tavb = Material( "icon16/shape_align_bottom.png" )
+
+function createTaBu( parent, _x, _y, tmp, tx, ty, icon )
+  local _tmp = createD( "DButton", parent, ctr( 50 ), ctr( 50 ), ctr( _x ), ctr( _y ) )
+  _tmp:SetText( "" )
+  _tmp.tx = tx
+  _tmp.ty = ty
+  function _tmp:Paint( pw, ph )
+    local _color = Color( 255, 255, 255, 255 )
+    if cl_db[tmp .. "tx"] == self.tx then
+      _color = Color( 255, 255, 0, 255 )
+    end
+    if cl_db[tmp .. "ty"] == self.ty then
+      _color = Color( 255, 255, 0, 255 )
+    end
+    draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+
+    local _br = 4
+    surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( icon	) -- If you use Material, cache it!
+  	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 50 ) - ctr( 2*_br ), ctr( 50 ) - ctr( 2*_br ) )
+  end
+  function _tmp:DoClick()
+    --TextAlignment
+    if self.tx != nil then
+      dbUpdateHUD( tmp .. "tx", self.tx )
+    end
+    if self.ty != nil then
+      print(self.ty)
+      dbUpdateHUD( tmp .. "ty", self.ty )
+    end
+  end
+  return _tmp
+end
+
+function changeHudElement( parent, tmp, textPre )
   local ply = LocalPlayer()
-  local frame = createDerma( "DFrame", parent, cl_db[tmpw], cl_db[tmph], cl_db[tmpx], cl_db[tmpy] )
+  local frame = createD( "DFrame", parent, ctr( cl_db[tmp .. "sw"] ), ctr( cl_db[tmp .. "sh"] ), anchorW( cl_db[tmp .. "aw"] ) + ctr( cl_db[tmp .. "px"] ), anchorH( cl_db[tmp .. "ah"] ) + ctr( cl_db[tmp .. "py"] ) )
   frame:SetTitle( "" )
   frame:ShowCloseButton( false )
   frame:SetSizable( true )
-  frame:SetMinHeight( ctrW( 40 ) )
-  frame:SetMinWidth( ctrW( 40 ) )
+  frame:SetMinHeight( ctr( 40 ) )
+  frame:SetMinWidth( ctr( 40 ) )
 
   function frame:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 120 ) )
-    draw.RoundedBox( 0, 0, 0, pw, ctrH( 50 ), Color( 0, 0, 255, 200 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ctr( 50 ), Color( 0, 0, 255, 200 ) )
 
     if frame:GetSizable() then
-      draw.RoundedBox( 0, pw - ctrW( 20 ), ph - ctrH( 20 ), ctrW( 20 ), ctrH( 20 ), Color( 0, 255, 0, 200 ) )
+      draw.RoundedBox( 0, pw - ctr( 20 ), ph - ctr( 20 ), ctr( 20 ), ctr( 20 ), Color( 0, 255, 0, 200 ) )
     end
 
-    draw.SimpleText( textPre, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( textPre, "HudSettings", pw - ctr( 6 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     if frame:IsHovered() then
 
       local tw, th = frame:GetSize()
-      if tw != ctrW( cl_db[tmpw] ) or th != ctrW( cl_db[tmph] ) then
-        cl_db[tmpw] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%20
-        cl_db[tmph] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%20
-        frame:SetSize( ctrW( cl_db[tmpw] ), ctrW( cl_db[tmph] ) )
-        updateDBHud( tmpw, cl_db[tmpw] )
-        updateDBHud( tmph, cl_db[tmph] )
+      if tw != ctr( cl_db[tmp .. "sw"] ) or th != ctr( cl_db[tmp .. "sh"] ) and !self.changing then
+        self.changing = true
+        cl_db[tmp .. "sw"] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%20
+        cl_db[tmp .. "sh"] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%20
+        frame:SetSize( ctr( cl_db[tmp .. "sw"] ), ctr( cl_db[tmp .. "sh"] ) )
+        dbUpdateHUD( tmp .. "sw", cl_db[tmp .. "sw"] )
+        dbUpdateHUD( tmp .. "sh", cl_db[tmp .. "sh"] )
+        self.changing = false
       end
 
       local x, y = frame:GetPos()
-      if x != ctrW( cl_db[tmpx] ) or y != ctrW( cl_db[tmpy] ) then
+      if x != anchorW( cl_db[tmp .. "aw"] ) + ctr( cl_db[tmp .. "px"] ) or y != anchorH( cl_db[tmp .. "ah"] ) + ctr( cl_db[tmp .. "py"] ) and !self.changing then
+        self.changing = true
         local w, h = frame:GetSize()
         local outside = false
         if x+w > ScrW() then
+          print("TEST1")
           frame:SetPos( ScrW()-w, y )
           outside = true
         elseif y+h > ScrH() then
+          print("TEST2")
           frame:SetPos( x, ScrH()-h )
           outside = true
         elseif x < 0 then
+          print("TEST3")
           frame:SetPos( 0, y )
           outside = true
         elseif y < 0 then
+          print("TEST4")
           frame:SetPos( x, 0 )
           outside = true
         end
         if !outside then
-          cl_db[tmpx] = ( x*ctrF( ScrH() ) ) - ( ( x*ctrF( ScrH() ) )%20 )
-          cl_db[tmpy] = ( y*ctrF( ScrH() ) ) - ( ( y*ctrF( ScrH() ) )%20 )
-
-          frame:SetPos( ctrW( cl_db[tmpx] ), ctrW( cl_db[tmpy] ) )
-          updateDBHud( tmpx, cl_db[tmpx] )
-          updateDBHud( tmpy, cl_db[tmpy] )
+          cl_db[tmp .. "px"] = ctrF( ScrH() ) * ( x - x%ctr(20) - anchorW( cl_db[tmp .. "aw"] ) )
+          cl_db[tmp .. "py"] = ctrF( ScrH() ) * ( y - y%ctr(20) - anchorH( cl_db[tmp .. "ah"] ) )
+          frame:SetPos( anchorW( cl_db[tmp .. "aw"] ) + ctr( cl_db[tmp .. "px"] ), anchorH( cl_db[tmp .. "ah"] ) + ctr( cl_db[tmp .. "py"] ) )
+          dbUpdateHUD( tmp .. "px", cl_db[tmp .. "px"] )
+          dbUpdateHUD( tmp .. "py", cl_db[tmp .. "py"] )
         end
+        self.changing = false
       end
     end
   end
 
-  local tmpToggle = createDerma( "DCheckBox", frame, 30, 30, 10, 10 )
-  local tmpToggleChecked = -1
-  if tonumber( cl_db[tmpt] ) == 0 then
-    tmpToggleChecked = false
-  elseif tonumber( cl_db[tmpt] ) == 1 then
-    tmpToggleChecked = true
-  end
-  tmpToggle:SetChecked( tmpToggleChecked )
-  function tmpToggle:OnChange( bVal )
-  	if ( bVal ) then
-      cl_db[tmpt] = 1
-  		updateDBHud( tmpt, cl_db[tmpt] )
-  	else
-      cl_db[tmpt] = 0
-  		updateDBHud( tmpt, cl_db[tmpt] )
-  	end
+  local _tmpSettings = createD( "DButton", frame, ctr( 50 ), ctr( 50 ), 0, 0 )
+  _tmpSettings:SetText( "" )
+  function _tmpSettings:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+
+    surface.SetDrawColor( 255, 255, 255, 255 )
+	  surface.SetMaterial( _settings	)
+    local _br = 4
+	  surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 50-2*_br ), ctr( 50-2*_br ) )
   end
 
+  function _tmpSettings:DoClick()
+    local _tsx, _tsy = frame:GetPos()
+    local _settingsFrame = createD( "DFrame", frame, ctr( 500 ), ctr( 100 ), _tsx, _tsy )
+    function _settingsFrame:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+    end
+    local tmpToggle = createDerma( "DCheckBox", _settingsFrame, 50, 50, 0, 0 )
+    local tmpToggleChecked = -1
+    if tonumber( cl_db[tmp .. "to"] ) == 0 then
+      tmpToggleChecked = false
+    elseif tonumber( cl_db[tmp .. "to"] ) == 1 then
+      tmpToggleChecked = true
+    end
+    tmpToggle:SetChecked( tmpToggleChecked )
+    function tmpToggle:OnChange( bVal )
+    	if ( bVal ) then
+        cl_db[tmp .. "to"] = 1
+    		dbUpdateHUD( tmp .. "to", cl_db[tmp .. "to"] )
+    	else
+        cl_db[tmp .. "to"] = 0
+    		dbUpdateHUD( tmp .. "to", cl_db[tmp .. "to"] )
+    	end
+    end
+
+    local _anchor = createD( "DButton", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 60 ), ctr( 0 ) )
+    _anchor:SetText( "" )
+    function _anchor:DoClick()
+      local mx, my = gui.MousePos()
+      local _context = createD( "DPanel", nil, ctr( 190 ), ctr( 190 ), mx - ctr( 10 ), my - ctr( 10 ) )
+      _context.loaded = false
+      _context:MakePopup()
+      local _tab = {}
+      local _x = 0
+      local _count = 1
+      for _x = 0, 2 do
+        local _y = 0
+        for _y = 0, 2 do
+          _tab[_count] = createD( "DButton", _context, ctr( 50 ), ctr( 50 ), ctr( 10 ) + _x* ctr( 60 ), ctr( 10 ) + _y* ctr( 60 ) )
+          _tab[_count]:SetText( "" )
+          local _tmp = _tab[_count]
+          _tmp._x = _x
+          _tmp._y = _y
+          function _tmp:Paint( pw, ph )
+            local _color = Color( 255, 255, 255, 255 )
+            if cl_db[tmp .. "aw"] == self._x and cl_db[tmp .. "ah"] == self._y then
+              _color = Color( 255, 255, 0, 255 )
+            end
+            draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+
+            draw.RoundedBox( 0, ctr( 4 ), ctr( 4 ) + _y * ctr( 16 ), pw - ctr( 9 ), ctr( 8 ), Color( 0, 0, 0, 255 ) )
+
+            draw.RoundedBox( 0, ctr( 4 ) + _x * ctr( 16 ), ctr( 4 ), ctr( 8 ), ph - ctr( 9 ), Color( 0, 0, 0, 255 ) )
+          end
+          function _tmp:DoClick()
+            --Anchor
+            dbUpdateHUD( tmp .. "aw", self._x )
+            dbUpdateHUD( tmp .. "ah", self._y )
+
+            --newPosition
+            local _dx, _dy = frame:GetPos()
+            dbUpdateHUD( tmp .. "px", ctrF(ScrH()) * _dx - ctrF(ScrH()) * anchorW( cl_db[tmp .. "aw"] ) )
+            dbUpdateHUD( tmp .. "py", ctrF(ScrH()) * _dy - ctrF(ScrH()) * anchorH( cl_db[tmp .. "ah"] ) )
+          end
+          _count = _count + 1
+        end
+      end
+      function _context:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+        if !self:IsHovered() and _context.loaded and !_tab[1]:IsHovered() and !_tab[2]:IsHovered() and !_tab[3]:IsHovered() and !_tab[4]:IsHovered() and !_tab[5]:IsHovered() and !_tab[6]:IsHovered() and !_tab[7]:IsHovered() and !_tab[8]:IsHovered() and !_tab[9]:IsHovered() then
+          self:Remove()
+        else
+          _context.loaded = true
+        end
+      end
+    end
+    function _anchor:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+
+      draw.RoundedBox( 0, ctr( 4 ), ctr( 4 ) + cl_db[tmp .. "ah"] * ctr( 16 ), pw - ctr( 9 ), ctr( 8 ), Color( 0, 0, 0, 255 ) )
+
+      draw.RoundedBox( 0, ctr( 4 ) + cl_db[tmp .. "aw"] * ctr( 16 ), ctr( 4 ), ctr( 8 ), ph - ctr( 9 ), Color( 0, 0, 0, 255 ) )
+    end
+
+    local _fontsize = createD( "DComboBox", _settingsFrame, ctr( 80 ), ctr( 50 ), ctr( 120 ), ctr( 0 ) )
+    local fontSizes = GetFontSizes()
+    for k, v in pairs( fontSizes ) do
+      local _cur = false
+      if v == cl_db[tmp .. "sf"] then
+        _cur = true
+      end
+      _fontsize:AddChoice( v, v, _cur )
+    end
+    function _fontsize:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+
+      --draw.SimpleTextOutlined( cl_db[tmp .. "sf"], "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    end
+    function _fontsize:OnSelect( ind, val )
+      dbUpdateHUD( tmp.."sf", val )
+      changeFontSizeOf( tmp.."sf", val )
+    end
+
+    local _textalign = createD( "DButton", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 210 ), ctr( 0 ) )
+    _textalign:SetText( "" )
+    function _textalign:DoClick()
+      local mx, my = gui.MousePos()
+      local _context = createD( "DPanel", nil, ctr( 190 ), ctr( 130 ), mx - ctr( 10 ), my - ctr( 10 ) )
+      _context.loaded = false
+      _context:MakePopup()
+      local _tab = {}
+      _tab[1] = createTaBu( _context, 10, 10, tmp, 0, nil, tal )
+      _tab[2] = createTaBu( _context, 70, 10, tmp, 1, nil, tac )
+      _tab[3] = createTaBu( _context, 130, 10, tmp, 2, nil, tar )
+      _tab[4] = createTaBu( _context, 10, 70, tmp, nil, 3, tavt )
+      _tab[5] = createTaBu( _context, 70, 70, tmp, nil, 1, tavc )
+      _tab[6] = createTaBu( _context, 130, 70, tmp, nil, 4, tavb )
+
+      function _context:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+        if !self:IsHovered() and _context.loaded and !_tab[1]:IsHovered() and !_tab[2]:IsHovered() and !_tab[3]:IsHovered() and !_tab[4]:IsHovered() and !_tab[5]:IsHovered() and !_tab[6]:IsHovered() then
+          self:Remove()
+        else
+          _context.loaded = true
+        end
+      end
+    end
+    function _textalign:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+
+      local _icon = ""
+      if cl_db[tmp.."tx"] == 0 then
+        _icon = tal
+      elseif cl_db[tmp.."tx"] == 1 then
+        _icon = tac
+      elseif cl_db[tmp.."tx"] == 2 then
+        _icon = tar
+      end
+
+      local _br = 4
+      surface.SetDrawColor( 255, 255, 255, 255 )
+    	surface.SetMaterial( _icon	) -- If you use Material, cache it!
+    	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 50 ) - ctr( 2*_br ), ctr( 50 ) - ctr( 2*_br ) )
+    end
+
+    _settingsFrame:MakePopup()
+  end
   return frame
 end
 
@@ -97,16 +288,16 @@ function changeFont( string, _settingsFontSizes, w, h, x, y )
   function _tmp:OnValueChanged( val )
     if tonumber( val ) >= _tmp:GetMin() then
       if tonumber( val ) <= _tmp:GetMax() then
-        updateDBHud( string, val )
+        dbUpdateHUD( string, val )
         loadDBHud( "yrp_cl_hud", string )
         createFont( string, tmpFont, cl_db[string], 500, true )
       else
-        updateDBHud( string, _tmp:GetMax() )
+        dbUpdateHUD( string, _tmp:GetMax() )
         loadDBHud( "yrp_cl_hud", string )
         createFont( string, tmpFont, cl_db[string], 500, true )
       end
     else
-      updateDBHud( string, _tmp:GetMin() )
+      dbUpdateHUD( string, _tmp:GetMin() )
       loadDBHud( "yrp_cl_hud", string )
       createFont( string, tmpFont, cl_db[string], 500, true )
     end
@@ -136,25 +327,25 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     changeHudWindow:SetTitle( "" )
     changeHudWindow:ShowCloseButton( false )
     function changeHudWindow:Paint( w, h )
-      local gridSize = ctrW( 20 )
+      local gridSize = ctr( 20 )
       draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 120 ) )
       for i=1, ScrW()/gridSize do
         if i%(ScrW()/gridSize/2) == 0 then
-          draw.RoundedBox( 0, (i*gridSize)-ctrW( 2 ), 0, ctrW( 4 ), ScrH(), Color( 255, 255, 0, 60 ) )
+          draw.RoundedBox( 0, (i*gridSize)-ctr( 2 ), 0, ctr( 4 ), ScrH(), Color( 255, 255, 0, 60 ) )
         elseif i%10 == 1 then
-            draw.RoundedBox( 0, (i*gridSize)-ctrW( 2 ), 0, ctrW( 4 ), ScrH(), Color( 0, 0, 255, 50 ) )
+            draw.RoundedBox( 0, (i*gridSize)-ctr( 2 ), 0, ctr( 4 ), ScrH(), Color( 0, 0, 255, 50 ) )
         else
-          draw.RoundedBox( 0, (i*gridSize)-ctrW( 2 ), 0, ctrW( 4 ), ScrH(), Color( 255, 255, 255, 20 ) )
+          draw.RoundedBox( 0, (i*gridSize)-ctr( 2 ), 0, ctr( 4 ), ScrH(), Color( 255, 255, 255, 20 ) )
         end
       end
 
       for i=1, ScrH()/gridSize do
         if i%(ScrH()/gridSize/2) == 0 then
-          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctrW( 4 ), Color( 255, 255, 0, 60 ) )
+          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctr( 4 ), Color( 255, 255, 0, 60 ) )
         elseif i%10 == 9 then
-          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctrW( 4 ), Color( 0, 0, 255, 50 ) )
+          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctr( 4 ), Color( 0, 0, 255, 50 ) )
         else
-          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctrW( 4 ), Color( 255, 255, 255, 20 ) )
+          draw.RoundedBox( 0, 0, (i*gridSize)-2, ScrW(), ctr( 4 ), Color( 255, 255, 255, 20 ) )
         end
       end
     end
@@ -165,31 +356,31 @@ hook.Add( "open_client_hud", "open_client_hud", function()
       changeHudWindow:Close()
     end
     function changeHudWindowCloseButton:Paint( pw, ph )
-      draw.SimpleText( lang.helpclose, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.helpclose, "HudSettings", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleText( lang.helpmove, "HudBars", pw/2, ph/2+20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.helpresize, "HudBars", pw/2, ph/2+40, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.helpmove, "HudSettings", pw/2, ph/2+20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang.helpresize, "HudSettings", pw/2, ph/2+40, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
-    changeHudElement( changeHudWindow, "mmx", "mmy", "mmw", "mmh", "mmt", lang.minimap )
-    changeHudElement( changeHudWindow, "hpx", "hpy", "hpw", "hph", "hpt", lang.health )
-    changeHudElement( changeHudWindow, "arx", "ary", "arw", "arh", "art", lang.armor )
-    changeHudElement( changeHudWindow, "wnx", "wny", "wnw", "wnh", "wnt", lang.wname )
-    changeHudElement( changeHudWindow, "wpx", "wpy", "wpw", "wph", "wpt", lang.wprimary )
-    changeHudElement( changeHudWindow, "wsx", "wsy", "wsw", "wsh", "wst", lang.wsecondary )
-    changeHudElement( changeHudWindow, "rix", "riy", "riw", "rih", "rit", lang.role )
-    changeHudElement( changeHudWindow, "ttx", "tty", "ttw", "tth", "ttt", lang.tooltip )
-    changeHudElement( changeHudWindow, "mox", "moy", "mow", "moh", "mot", lang.money )
-    changeHudElement( changeHudWindow, "mhx", "mhy", "mhw", "mhh", "mht", lang.hunger )
-    changeHudElement( changeHudWindow, "mtx", "mty", "mtw", "mth", "mtt", lang.thirst )
-    changeHudElement( changeHudWindow, "msx", "msy", "msw", "msh", "mst", lang.stamina )
-    changeHudElement( changeHudWindow, "max", "may", "maw", "mah", "mat", lang.abilitybar )
-    changeHudElement( changeHudWindow, "cax", "cay", "caw", "cah", "cat", lang.castbar )
-    changeHudElement( changeHudWindow, "stx", "sty", "stw", "sth", "stt", lang.statusbar )
-    --local votes = changeHudElement( changeHudWindow, "vtx", "vty", "vtw", "vth", "vtt", lang.votes )
-    --votes:SetSizable( false )
+    changeHudElement( changeHudWindow, "hp", lang.health )
+    changeHudElement( changeHudWindow, "ar", lang.armor )
+    changeHudElement( changeHudWindow, "mh", lang.hunger )
+    changeHudElement( changeHudWindow, "mt", lang.thirst )
+    changeHudElement( changeHudWindow, "ms", lang.stamina )
+    changeHudElement( changeHudWindow, "ma", lang.abilitybar )
+    changeHudElement( changeHudWindow, "ca", lang.castbar )
+    changeHudElement( changeHudWindow, "mo", lang.money )
+    changeHudElement( changeHudWindow, "xp", lang.xpbar )
 
-    changeHudElement( changeHudWindow, "cbx", "cby", "cbw", "cbh", "cbt", lang.chatbox )
+    changeHudElement( changeHudWindow, "mm", lang.minimap )
+    changeHudElement( changeHudWindow, "wn", lang.wname )
+    changeHudElement( changeHudWindow, "wp", lang.wprimary )
+    changeHudElement( changeHudWindow, "ws", lang.wsecondary )
+    changeHudElement( changeHudWindow, "tt", lang.tooltip )
+    changeHudElement( changeHudWindow, "st", lang.statusbar )
+    local votes = changeHudElement( changeHudWindow, "vt", lang.votes )
+    votes:SetSizable( false )
+    changeHudElement( changeHudWindow, "cb", lang.chatbox )
 
     changeHudWindow:MakePopup()
   end
@@ -222,7 +413,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
       draw.RoundedBox( 0, 0,0, pw, ph, Color( 255, 0, 0 ) )
     end
 
-    draw.SimpleText( lang.resethud, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.resethud, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function resetHudButton:DoClick()
     local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
@@ -249,7 +440,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   function _colorBackgroundPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.hudbackground, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.hudbackground, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   local _colorBackground = createVGUI( "DColorMixer", _colorBackgroundPanel, 450, 450, 10, 50 )
@@ -260,17 +451,17 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     _colorBackground:SetColor( Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )	--Set the default color
   end
   function _colorBackground:ValueChanged( newColor )
-    updateDBHud( "colbgr", newColor.r )
-    updateDBHud( "colbgg", newColor.g )
-    updateDBHud( "colbgb", newColor.b )
-    updateDBHud( "colbga", newColor.a )
+    dbUpdateHUD( "colbgr", newColor.r )
+    dbUpdateHUD( "colbgg", newColor.g )
+    dbUpdateHUD( "colbgb", newColor.b )
+    dbUpdateHUD( "colbga", newColor.a )
   end
 
   local _colorBorderPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10, 50+10+50+10 )
   function _colorBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.hudborder, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.hudborder, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   local _colorBorder = createVGUI( "DColorMixer", _colorBorderPanel, 450, 450, 10, 50 )
@@ -279,36 +470,36 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   _colorBorder:SetWangs( true )
   _colorBorder:SetColor( Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ) )	--Set the default color
   function _colorBorder:ValueChanged( newColor )
-    updateDBHud( "colbrr", newColor.r )
-    updateDBHud( "colbrg", newColor.g )
-    updateDBHud( "colbrb", newColor.b )
-    updateDBHud( "colbra", newColor.a )
+    dbUpdateHUD( "colbrr", newColor.r )
+    dbUpdateHUD( "colbrg", newColor.g )
+    dbUpdateHUD( "colbrb", newColor.b )
+    dbUpdateHUD( "colbra", newColor.a )
   end
 
   local _colorCrosshairPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 0, 50+10+50+10+510+10 )
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshair, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.crosshair, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )
   _colorCrosshair:SetPalette( true )
   _colorCrosshair:SetAlphaBar( true )
   _colorCrosshair:SetWangs( true )
-  _colorCrosshair:SetColor( Color( cl_db["colchr"], cl_db["colchg"], cl_db["colchb"], cl_db["colcha"] ) )	--Set the default color
+  _colorCrosshair:SetColor( Color( cl_db["colchcr"], cl_db["colchcg"], cl_db["colchcb"], cl_db["colchca"] ) )	--Set the default color
   function _colorCrosshair:ValueChanged( newColor )
-    updateDBHud( "colchr", newColor.r )
-    updateDBHud( "colchg", newColor.g )
-    updateDBHud( "colchb", newColor.b )
-    updateDBHud( "colcha", newColor.a )
+    dbUpdateHUD( "colchcr", newColor.r )
+    dbUpdateHUD( "colchcg", newColor.g )
+    dbUpdateHUD( "colchcb", newColor.b )
+    dbUpdateHUD( "colchca", newColor.a )
   end
 
   local _colorCrosshairBorderPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10, 50+10+50+10+510+10 )
   function _colorCrosshairBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshairborder, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.crosshairborder, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   local _colorCrosshairBorder = createVGUI( "DColorMixer", _colorCrosshairBorderPanel, 450, 450, 10, 50 )
@@ -317,92 +508,45 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   _colorCrosshairBorder:SetWangs( true )
   _colorCrosshairBorder:SetColor( Color( cl_db["colchbrr"], cl_db["colchbrg"], cl_db["colchbrb"], cl_db["colchbra"] ) )	--Set the default color
   function _colorCrosshairBorder:ValueChanged( newColor )
-    updateDBHud( "colchbrr", newColor.r )
-    updateDBHud( "colchbrg", newColor.g )
-    updateDBHud( "colchbrb", newColor.b )
-    updateDBHud( "colchbra", newColor.a )
+    dbUpdateHUD( "colchbrr", newColor.r )
+    dbUpdateHUD( "colchbrg", newColor.g )
+    dbUpdateHUD( "colchbrb", newColor.b )
+    dbUpdateHUD( "colchbra", newColor.a )
   end
 
   local _settingCrosshairPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10+470+10, 50+10+50+10+510+10 )
   function _settingCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleText( lang.crosshairsettings, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.crosshairsettings, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.length .. ":", "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.gap .. ":", "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.thickness .. ":", "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.border .. ":", "sef", ctrW( 10 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.length .. ":", "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.gap .. ":", "sef", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.thickness .. ":", "sef", ctr( 10 ), ctr( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.border .. ":", "sef", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 100 )
   _settingCrosshairLength:SetValue( cl_db["chl"] )
   function _settingCrosshairLength:OnValueChanged( val )
-    updateDBHud( "chl", val )
+    dbUpdateHUD( "chl", val )
   end
 
   local _settingCrosshairGap = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 200 )
   _settingCrosshairGap:SetValue( cl_db["chg"] )
   function _settingCrosshairGap:OnValueChanged( val )
-    updateDBHud( "chg", val )
+    dbUpdateHUD( "chg", val )
   end
 
   local _settingCrosshairThickness = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 300 )
   _settingCrosshairThickness:SetValue( cl_db["chh"] )
   function _settingCrosshairThickness:OnValueChanged( val )
-    updateDBHud( "chh", val )
+    dbUpdateHUD( "chh", val )
   end
 
   local _settingCrosshairBorder = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 400 )
   _settingCrosshairBorder:SetValue( cl_db["chbr"] )
   function _settingCrosshairBorder:OnValueChanged( val )
-    updateDBHud( "chbr", val )
+    dbUpdateHUD( "chbr", val )
   end
-
-  local _settingsFontSizes = createVGUI( "DPanel", settingsWindow.site, 1910, 510, 0, 50+10+50+10+510+10+510+10 )
-  function _settingsFontSizes:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
-
-    draw.SimpleText( "Change FontSizes", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-
-    draw.SimpleText( lang.health .. ":", "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.armor .. ":", "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.hunger .. ":", "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.thirst .. ":", "sef", ctrW( 10 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-
-    draw.SimpleText( lang.stamina .. ":", "sef", ctrW( 480 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.money .. ":", "sef", ctrW( 480 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.role .. ":", "sef", ctrW( 480 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.minimap .. ":", "sef", ctrW( 480 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-
-    draw.SimpleText( lang.wprimary .. ":", "sef", ctrW( 960 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.wsecondary .. ":", "sef", ctrW( 960 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.wname .. ":", "sef", ctrW( 960 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.votes .. ":", "sef", ctrW( 960 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-
-    draw.SimpleText( "Chat" .. ":", "sef", ctrW( 1440 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( "Voice" .. ":", "sef", ctrW( 1440 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.tooltip .. ":", "sef", ctrW( 1440 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-    draw.SimpleText( lang.settings .. ":", "sef", ctrW( 1440 ), ctrW( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
-  end
-
-  local _settingsHPF = changeFont( "hpf", _settingsFontSizes, 450, 40, 10, 100 )
-  local _settingsARF = changeFont( "arf", _settingsFontSizes, 450, 40, 10, 200 )
-  local _settingsMHF = changeFont( "mhf", _settingsFontSizes, 450, 40, 10, 300 )
-  local _settingsMTF = changeFont( "mtf", _settingsFontSizes, 450, 40, 10, 400 )
-
-  local _settingsMSF = changeFont( "msf", _settingsFontSizes, 450, 40, 480, 100 )
-  local _settingsMOF = changeFont( "mof", _settingsFontSizes, 450, 40, 480, 200 )
-  local _settingsRIF = changeFont( "rif", _settingsFontSizes, 450, 40, 480, 300 )
-  local _settingsRIF = changeFont( "mmf", _settingsFontSizes, 450, 40, 480, 400 )
-
-  local _settingsMSF = changeFont( "wpf", _settingsFontSizes, 450, 40, 960, 100 )
-  local _settingsMOF = changeFont( "wsf", _settingsFontSizes, 450, 40, 960, 200 )
-  local _settingsRIF = changeFont( "wnf", _settingsFontSizes, 450, 40, 960, 300 )
-  local _settingsRIF = changeFont( "vtf", _settingsFontSizes, 450, 40, 960, 400 )
-
-  local _settingsMSF = changeFont( "cbf", _settingsFontSizes, 450, 40, 1440, 100 )
-  local _settingsMOF = changeFont( "vof", _settingsFontSizes, 450, 40, 1440, 200 )
-  local _settingsMOF = changeFont( "ttf", _settingsFontSizes, 450, 40, 1440, 300 )
-  local _settingsSEF = changeFont( "sef", _settingsFontSizes, 450, 40, 1440, 400 )
 end)

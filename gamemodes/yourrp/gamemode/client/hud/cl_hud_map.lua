@@ -96,13 +96,13 @@ function openSpawnMenu()
         --You
         draw.RoundedBox( ctrW(8), plyPos.x-ctrW(8), plyPos.y-ctrW(8), ctrW(16), ctrW(16), Color(40,40,40))
         draw.RoundedBox( ctrW(8), plyPos.x-ctrW(6), plyPos.y-ctrW(6), ctrW(12), ctrW(12), Color(255,10,10))
-        draw.SimpleText( lang.you, "sef", plyPos.x, plyPos.y-ctrW(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.you, "sef", plyPos.x, plyPos.y-ctrW(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         --Coords
-        draw.SimpleText( math.Round( ply:GetPos().x, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( ", " .. math.Round( ply:GetPos().y, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( math.Round( ply:GetPos().x, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ", " .. math.Round( ply:GetPos().y, 0 ), "sef", ScrW()/2, ScrH() - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-        draw.SimpleText( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        draw.SimpleTextOutlined( "[M] - " .. lang.map .. ": " .. _mapName, "HudBars", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
         if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
           for k, plys in pairs( player.GetAll() ) do
@@ -127,7 +127,7 @@ function openSpawnMenu()
               --Draw
               draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(8), tmpPly.y-ctrW(8), ctrW(16), ctrW(16), Color( 40, 40, 40, 200 ))
               draw.RoundedBox( ctrW(8), tmpPly.x-ctrW(6), tmpPly.y-ctrW(6), ctrW(12), ctrW(12), Color( 40, 40, 255, 200 ))
-              draw.SimpleText( plys:Nick(), "sef", tmpPly.x, tmpPly.y-ctrW(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+              draw.SimpleTextOutlined( plys:Nick(), "sef", tmpPly.x, tmpPly.y-ctrW(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             end
           end
         end

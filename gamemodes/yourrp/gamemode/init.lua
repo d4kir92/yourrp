@@ -21,6 +21,7 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 AddCSLuaFile( "api/color.lua" )
 AddCSLuaFile( "api/derma.lua" )
 AddCSLuaFile( "api/math.lua" )
+AddCSLuaFile( "api/sql.lua" )
 
 AddCSLuaFile( "shared_pres.lua" )
 
@@ -79,6 +80,8 @@ AddCSLuaFile( "client/vehicle/cl_vehicle_options.lua" )
 --##############################################################################
 --Includes
 include( "shared_pres.lua" )
+
+include( "api/sql.lua" )
 
 include( "shared/sh_player.lua" )
 
@@ -154,10 +157,6 @@ function yrpSetModelScale( ply, size )
   end
 end
 
-function GM:PlayerAuthed( ply, SteamID, uniqueid )
-  checkYrpClient( ply )
-end
-
 function GM:PlayerDisconnected( ply )
   saveClients( "PlayerDisconnected" )
 end
@@ -184,6 +183,7 @@ end
 
 function GM:InitPostEntity()
   printGM( "note", "InitPostEntity()" )
+
   timer.Simple( 2, function()
     checkMapDoors()
   end)

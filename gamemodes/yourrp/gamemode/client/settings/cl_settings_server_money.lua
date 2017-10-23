@@ -51,11 +51,11 @@ hook.Add( "open_server_money", "open_server_money", function()
   function settingsWindow.site:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
 
-    draw.SimpleText( lang.moneypre, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.moneypre, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.moneypos, "sef", ctrW( 10 ), ctrW( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.moneypos, "sef", ctrW( 10 ), ctrW( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.startmoney, "sef", ctrW( 10 ), ctrW( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.startmoney, "sef", ctrW( 10 ), ctrW( 250 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   net.Start( "getMoneyTab" )

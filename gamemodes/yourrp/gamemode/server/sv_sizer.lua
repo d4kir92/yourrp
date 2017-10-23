@@ -27,7 +27,7 @@ mapSize.error = 1
 mapSize.facX = 1
 mapSize.facY = 1
 
---Ohne Problem durchgelaufen
+--Ohne Problem durchcgelaufen
 mapSize.error = 0
 --##############################################################################
 
@@ -223,7 +223,7 @@ function getCoords()
     mapSize.facY = 1
   end
 
-  --Ohne Problem durchgelaufen
+  --Ohne Problem durchcgelaufen
 	mapSize.error = 0
 
   if mapSize.sizeN == -9999999999 or mapSize.sizeS == 9999999999 or mapSize.sizeW == 9999999999 or mapSize.sizeE == -9999999999 then

@@ -75,7 +75,7 @@ function HudCrosshair()
             end
           end
 
-          if cl_db["_load"] == 1 then
+          if cl_db["_loaded"] then
             if ply:Alive() then
               if tonumber( cl_db["cht"] ) == 1 then
 
@@ -104,7 +104,7 @@ function HudCrosshair()
                 surface.DrawRect( x-h/2-br, y-w-gap-br, h+2*br, w+2*br )
                 surface.DrawRect( x-h/2-br, y+gap-br, h+2*br, w+2*br )
 
-                surface.SetDrawColor( cl_db["colchr"], cl_db["colchg"], cl_db["colchb"], cl_db["colcha"] * alphaFade )
+                surface.SetDrawColor( cl_db["colchcr"], cl_db["colchcg"], cl_db["colchcb"], cl_db["colchca"] * alphaFade )
 
                 surface.DrawRect( x-w-gap, y-h/2, w, h )
                 surface.DrawRect( x+gap, y-h/2, w, h )

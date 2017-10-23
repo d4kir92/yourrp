@@ -90,10 +90,10 @@ function openSettings()
   	if game.SinglePlayer() then
   		_singleplayer = "Singleplayer"
   	end
-  	draw.SimpleText( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudBars", ctr( 810 ), ph/2, yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudBars", ctr( 820 ), ph/2, yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     if settingsWindow.cursite != nil then
-      draw.SimpleText( settingsWindow.cursite, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( settingsWindow.cursite, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 
@@ -104,13 +104,13 @@ function openSettings()
   end
   function liveSupport:Paint( pw, ph )
     paintMDBackground( self, pw, ph )
-    draw.SimpleText( "Live Support!", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "Live Support!", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local language = createD( "DPanel", settingsWindow, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
   function language:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondary )
-    draw.SimpleText( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   ChangeLanguage( language, ctr( 400 ), ctr( 80 ), ctr( 250 ), ctr( 0 ) )
 
@@ -133,7 +133,7 @@ function openSettings()
     settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
     function settingsWindow.site:Paint( pw, ph )
       draw.RoundedBox( 4, 0, 0, pw, ph, yrp.colors.dbackground )
-      draw.SimpleText( lang.color, "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+      draw.SimpleTextOutlined( lang.color, "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
     end
 
     local switchMode = createMDSwitch( settingsWindow.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
@@ -201,7 +201,7 @@ function openSettings()
   	surface.SetMaterial( yrp.materials[yrp.design.mode].burger	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
 
-    draw.SimpleText( string.upper( lang.menu ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( string.upper( lang.menu ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function burgerMenu:DoClick()
     settingsWindow:openMenu()

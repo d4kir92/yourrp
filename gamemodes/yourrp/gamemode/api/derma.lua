@@ -1,31 +1,51 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function GetFontSizes()
+	local _fs = {}
+	_fs[1] = 6
+	_fs[2] = 8
+	_fs[3] = 9
+	_fs[4] = 10
+	_fs[5] = 11
+	_fs[6] = 12
+	_fs[7] = 14
+	_fs[8] = 18
+	_fs[9] = 24
+	_fs[10] = 30
+	_fs[11] = 36
+	_fs[12] = 48
+	_fs[13] = 60
+	_fs[14] = 72
+	_fs[15] = 96
+	return _fs
+end
+
 function drawRBox( r, x, y, w, h, col )
-	draw.RoundedBox( ctrW(r), ctrW(x), ctrW(y), ctrW(w), ctrW(h), col )
+	draw.RoundedBox( ctr(r), ctr(x), ctr(y), ctr(w), ctr(h), col )
 end
 
 function drawRBoxBr( r, x, y, w, h, col, br )
-	draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y-br), ctrW(w+2*br-1), ctrW(2*br), col )
-  draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y+h-br), ctrW(w+2*br-1), ctrW(2*br), col )
-  draw.RoundedBox( ctrW(r), ctrW(x-br), ctrW(y), ctrW(2*br), ctrW(h), col )
-  draw.RoundedBox( ctrW(r), ctrW(x+w-br), ctrW(y), ctrW(2*br), ctrW(h), col )
+	draw.RoundedBox( ctr(r), ctr(x-br), ctr(y-br), ctr(w+2*br-1), ctr(2*br), col )
+  draw.RoundedBox( ctr(r), ctr(x-br), ctr(y+h-br), ctr(w+2*br-1), ctr(2*br), col )
+  draw.RoundedBox( ctr(r), ctr(x-br), ctr(y), ctr(2*br), ctr(h), col )
+  draw.RoundedBox( ctr(r), ctr(x+w-br), ctr(y), ctr(2*br), ctr(h), col )
 end
 
 function drawRBoxCr( x, y, size, col )
-	draw.RoundedBox( ctrW(size/2), ctrW(x), ctrW(y), ctrW(size), ctrW(size), col )
+	draw.RoundedBox( ctr(size/2), ctr(x), ctr(y), ctr(size), ctr(size), col )
 end
 
 function drawText( text, font, x, y, col, ax, ay )
-	draw.SimpleText( text, font, ctrW(x), ctrW(y), col, ax, ay)
+	draw.SimpleTextOutlined( text, font, ctr(x), ctr(y), col, ax, ay, 0.5, Color( 0, 0, 0 ) )
 end
 
 function createVGUI( art, parent, w, h, x, y )
   local tmp = vgui.Create( art, parent, nil )
   if w != nil and h != nil then
-    tmp:SetSize( ctrW(w), ctrW(h) )
+    tmp:SetSize( ctr(w), ctr(h) )
   end
   if x != nil and y != nil then
-    tmp:SetPos( ctrW(x), ctrW(y) )
+    tmp:SetPos( ctr(x), ctr(y) )
   end
   return tmp
 end
@@ -79,7 +99,7 @@ function createMDMenu( parent, w, h, x, y )
 	  	surface.SetMaterial( yrp.materials[yrp.design.mode].burger	)
 	  	surface.DrawTexturedRect( ctr( 15+10 ), ctr( 15+10 ), ctr( 50 ), ctr( 50 ) )
 
-			draw.SimpleText( lang.menu, "HudBars", ctr( 100 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleTextOutlined( string.upper( lang.menu ), "HudBars", ctr( 100 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local x, y = gui.MousePos()
 			if x > ctr( 500 ) then
@@ -91,7 +111,7 @@ function createMDMenu( parent, w, h, x, y )
 		for k, v in pairs( self.cat ) do
 			local tmpCat = createD("DPanel", self.menu, ctr( 480 ), ctr( 50 ), ctr( 10 ), ctr( posY ) )
 			function tmpCat:Paint( pw, ph )
-				draw.SimpleText( string.upper( v ), "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+				draw.SimpleTextOutlined( string.upper( v ), "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 			posY = posY + 50 + 10
 			if self.sites[v] != nil then
@@ -113,7 +133,7 @@ function createMDMenu( parent, w, h, x, y )
 							surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
 						end
 
-						draw.SimpleText( string.upper( w.site ), "HudBars", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+						draw.SimpleTextOutlined( string.upper( w.site ), "HudBars", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
 					function tmp2:DoClick()
 						tmp.cursite = self.site
@@ -145,8 +165,8 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 		elseif tmp.value == opt2 then
 			draw.RoundedBox( 0, pw/2, 0, pw/2, ph, yrp.colors.dsecondaryH )
 		end
-		draw.SimpleText( lang.dark, "HudBars", 1*(pw/4), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( lang.light, "HudBars", 3*(pw/4), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleTextOutlined( lang.dark, "HudBars", 1*(pw/4), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( lang.light, "HudBars", 3*(pw/4), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 	function tmp:DoClick()
 		if self.value == self.opt1 then
@@ -157,9 +177,9 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 		yrp.design.mode = tostring( self.value )
 
 		if tostring( self.value ) == "dark" then
-			updateDBHud( "mdpm", 0 )
+			dbUpdateHUD( "mdpm", 0 )
 		elseif tostring( self.value ) == "light" then
-			updateDBHud( "mdpm", 1 )
+			dbUpdateHUD( "mdpm", 1 )
 		end
 
 		addMDColor( "dprimary", getMDPColor() )
@@ -179,13 +199,13 @@ function addPColorField( parent, col, x, y )
 	function tmp:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
 		if self:IsHovered() then
-			draw.SimpleText( "X", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			draw.SimpleTextOutlined( "X", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 	end
 	function tmp:DoClick()
-		updateDBHud( "mdpr", self.color.r )
-		updateDBHud( "mdpg", self.color.g )
-		updateDBHud( "mdpb", self.color.b )
+		dbUpdateHUD( "mdpr", self.color.r )
+		dbUpdateHUD( "mdpg", self.color.g )
+		dbUpdateHUD( "mdpb", self.color.b )
 		addMDColor( "dprimary", getMDPColor() )
 		addMDColor( "dprimaryBG", colorBG( getMDPColor() ) )
 	end
@@ -199,15 +219,35 @@ function addSColorField( parent, col, x, y )
 	function tmp:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
 		if self:IsHovered() then
-			draw.SimpleText( "X", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			draw.SimpleTextOutlined( "X", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 	end
 	function tmp:DoClick()
-		updateDBHud( "mdsr", self.color.r )
-		updateDBHud( "mdsg", self.color.g )
-		updateDBHud( "mdsb", self.color.b )
+		dbUpdateHUD( "mdsr", self.color.r )
+		dbUpdateHUD( "mdsg", self.color.g )
+		dbUpdateHUD( "mdsb", self.color.b )
 		addMDColor( "dsecondary", getMDSColor() )
 		addMDColor( "dsecondaryH", colorH( getMDSColor() ) )
 	end
 	return tmp
+end
+
+function anchorW( num )
+  if num == 0 then
+    return 0
+  elseif num == 1 then
+    return ScrW2()
+  elseif num == 2 then
+    return ScrW()
+  end
+end
+
+function anchorH( num )
+  if num == 0 then
+    return 0
+  elseif num == 1 then
+    return ScrH2()
+  elseif num == 2 then
+    return ScrH()
+  end
 end

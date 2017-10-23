@@ -15,7 +15,7 @@ function createCheckBox( _string, _x, _y, _nr, _value, _usergroup )
   local _tmp = _tmpRes[_value .. "tmp"]
   function _tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondary )
-    draw.SimpleText( _string, "sef", ctrW( 5 + 40 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( _string, "sef", ctrW( 5 + 40 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   _tmpRes[_value .. "tmpCB"] = createVGUI( "DCheckBox", settingsWindow.site, 40, 40, _x + 5, _y + 5 )

@@ -23,7 +23,7 @@ function addDPanel( parent, w, h, x, y, string, dbTable )
   local tmp = createVGUI( "DPanel", parent, w, h, x, y )
   function tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleText( string, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( string, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   return tmp
 end
@@ -230,10 +230,10 @@ function addDBPlayermodel( parent, id, uniqueID, size )
   function background:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
     if pms[changepm] != "" and pms[changepm] != nil then
-      draw.SimpleText( string.upper( player_manager.TranslateToPlayerModelName( pms[changepm] ) ), "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( string.upper( player_manager.TranslateToPlayerModelName( pms[changepm] ) ), "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
     if #pms > 1 then
-      draw.SimpleText( changepm .. "/" .. #pms, "sef", pw/2, ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( changepm .. "/" .. #pms, "sef", pw/2, ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 
@@ -254,7 +254,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( "<", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( "<", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
   function buttonback:DoClick()
@@ -273,7 +273,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( ">", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( ">", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
   function buttonforward:DoClick()
@@ -296,7 +296,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
-    draw.SimpleText( lang.change, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.change, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function buttonchange:DoClick()
     local playermodels = player_manager.AllValidModels()
@@ -358,9 +358,9 @@ function addDBSwep( parent, id, uniqueID )
   local background = createVGUI( "DPanel", parent, 800, 800, 810, 90 )
   function background:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
-    draw.SimpleText( sws[changesw], "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( sws[changesw], "sef", pw/2, ctrW( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     if #sws > 1 then
-      draw.SimpleText( changesw .. "/" .. #sws, "sef", pw/2, ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( changesw .. "/" .. #sws, "sef", pw/2, ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 
@@ -382,7 +382,7 @@ function addDBSwep( parent, id, uniqueID )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( "<", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( "<", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
   function buttonback:DoClick()
@@ -407,7 +407,7 @@ function addDBSwep( parent, id, uniqueID )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
       end
-      draw.SimpleText( ">", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( ">", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
   function buttonforward:DoClick()
@@ -431,7 +431,7 @@ function addDBSwep( parent, id, uniqueID )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
-    draw.SimpleText( lang.change, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.change, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function buttonchange:DoClick()
     local swepsL = weapons.GetList()
@@ -604,8 +604,8 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
 
     draw.RoundedBox( 0, 0, ph-ph/4, pw * ( reg*tmpreg / tmpmax ), ph/4, _color2 )
 
-    draw.SimpleText( string, "sef", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    draw.SimpleText( tmpmin .. "/" .. tmpmax .. "(" .. tmpreg .. ")", "sef", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( string, "sef", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( tmpmin .. "/" .. tmpmax .. "(" .. tmpreg .. ")", "sef", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local tmp2 = addDNumberWang( parent, w/3, h/3, x, y + h - (h/3), tmpmin )
@@ -677,7 +677,7 @@ net.Receive( "yrp_roles", function( len )
       if tonumber( yrp_roles_dbTable[k].removeable ) == 0 then
         _pre = "(" .. lang.startrole .. ") "
       end
-      draw.SimpleText( _pre .. yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( _pre .. yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
     tmp.uniqueID = v.uniqueID
     function tmp:DoClick()
@@ -757,7 +757,7 @@ net.Receive( "yrp_groups", function( len )
         _pre = "(" .. lang.startgroup .. ") "
       end
       draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
-      draw.SimpleText( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
     function tmp:DoClick()
       groupUniqueID = v.uniqueID
@@ -819,7 +819,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function groupsAdd:DoClick()
     addDBGroup()
@@ -832,7 +832,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( lang.duplicate, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.duplicate, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function groupsDup:DoClick()
     dupDBGroup( getCurrentGroup() )
@@ -845,7 +845,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function groupsRem:DoClick()
     deleteDBGroup()
@@ -854,7 +854,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   local groupsHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 65 )
   function groupsHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
-    draw.SimpleText( lang.groups, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.groups, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   groupsList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 500-40, 5, 65+40 )
@@ -873,7 +873,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function rolesAdd:DoClick()
     addDBRole( groupUniqueID )
@@ -886,7 +886,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( lang.duplicate, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.duplicate, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function rolesDup:DoClick()
     dupDBRole( groupUniqueID, getCurrentRole() )
@@ -899,7 +899,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
     end
-    draw.SimpleText( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function rolesRem:DoClick()
     deleteDBRole()
@@ -908,7 +908,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   local rolesHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 660 )
   function rolesHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
-    draw.SimpleText( groupID .. " - " .. lang.roles, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( groupID .. " - " .. lang.roles, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   rolesList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 1200-40, 5, 660+40 )

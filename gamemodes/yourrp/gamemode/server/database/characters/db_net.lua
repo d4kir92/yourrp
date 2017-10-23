@@ -11,11 +11,16 @@ util.AddNetworkString( "CreateCharacter" )
 
 util.AddNetworkString( "EnterWorld" )
 
-local function PlayerInitialSpawn( ply )
-  printGM( "gm", "PlayerInitialSpawn" )
-	ply:KillSilent()
+function GM:PlayerInitialSpawn( ply )
+  printGM( "gm", "PlayerInitialSpawn " .. ply:Nick() )
+  ply:KillSilent()
 end
-hook.Add( "PlayerInitialSpawn", "some_unique_name", PlayerInitialSpawn )
+
+function GM:PlayerAuthed( ply, steamid, uniqueid )
+  printGM( "gm", "PlayerAuthed " .. ply:Nick() )
+  ply:KillSilent()
+  checkYrpClient( ply )
+end
 
 net.Receive( "charGetGroups", function( len, ply )
   local tmpTable = dbSelect( "yrp_groups", "*", nil )
@@ -92,8 +97,13 @@ net.Receive( "charGetCharacters", function( len, ply )
         netTable[_charCount] = {}
         netTable[_charCount].char = v
         local tmp = dbSelect( "yrp_roles", "*", "uniqueID = " .. v.roleID )
+        tmp = tmp[1]
         if worked( tmp, "charGetCharacters role" ) then
-          netTable[_charCount].role = tmp[1]
+          netTable[_charCount].role = tmp
+        else
+          local tmpDefault = dbSelect( "yrp_roles", "*", "uniqueID = " .. "1" )
+          tmpDefault = tmpDefault[1]
+          netTable[_charCount].role = tmpDefault
         end
         local tmp2 = dbSelect( "yrp_groups", "*", "uniqueID = " .. v.groupID )
         if worked( tmp2, "charGetCharacters group" ) then

@@ -10,7 +10,7 @@ function moneyPrinterButton( mp, parent, w, h, x, y, item, _net, name, _up, _ful
 
     draw.RoundedBox( 0, 0, 0, ( mp:GetNWInt( item, -1 ) / mp:GetNWInt( item .. "Max", -1 ) ) * ctr( 360 ) , ph, Color( 0, 0, 255, 200 ) )
 
-    draw.SimpleText( mp:GetNWInt( item, -1 ) .. "/" .. mp:GetNWInt( item .. "Max", -1 ) .. " " .. name, "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( mp:GetNWInt( item, -1 ) .. "/" .. mp:GetNWInt( item .. "Max", -1 ) .. " " .. name, "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   local tmpBut = createD( "DButton", tmp, ctr( 220 ), h, w - ctr( 220 ), 0 )
   tmpBut:SetText( "" )
@@ -19,14 +19,14 @@ function moneyPrinterButton( mp, parent, w, h, x, y, item, _net, name, _up, _ful
     if mp:GetNWInt( item ) < mp:GetNWInt( item .. "Max" ) then
       if self:IsHovered() then
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-        draw.SimpleText( formatMoney( ply, cost ), "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( formatMoney( ply, cost ), "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       else
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-        draw.SimpleText( _up, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( _up, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     else
       draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
-      draw.SimpleText( _full, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( _full, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
   function tmpBut:DoClick()
@@ -52,7 +52,7 @@ net.Receive( "getMoneyPrintMenu", function( len )
     function upgradeframe:Paint( pw, ph )
       draw.RoundedBox( ctr( 30 ), 0, 0, pw, ph, Color( 40, 40, 40, 200 ) )
 
-      draw.SimpleText( lang.moneyprinter, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.moneyprinter, "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     --CPU
@@ -77,7 +77,7 @@ net.Receive( "getMoneyPrintMenu", function( len )
 
       draw.RoundedBox( 0, 0, 0, ( mp:GetNWInt( "money", -1 ) / mp:GetNWInt( "moneyMax", -1 ) ) * ctr( 360 ) , ph, Color( 0, 0, 255, 200 ) )
 
-      draw.SimpleText( formatMoney( ply, mp:GetNWInt( "money", -1 ) ) .. "/" .. formatMoney( ply, mp:GetNWInt( "moneyMax" , -1 ) ), "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( formatMoney( ply, mp:GetNWInt( "money", -1 ) ) .. "/" .. formatMoney( ply, mp:GetNWInt( "moneyMax" , -1 ) ), "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
   	local gatherMoney = createD( "DButton", moneyInfo, ctr( 220 ), ctr( 60 ), ctr( 360 ), ctr( 0 ) )
@@ -85,10 +85,10 @@ net.Receive( "getMoneyPrintMenu", function( len )
     function gatherMoney:Paint( pw, ph )
       if self:IsHovered() then
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-        draw.SimpleText( lang.gather, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.gather, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       else
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-        draw.SimpleText( lang.gather, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.gather, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     end
     function gatherMoney:DoClick()
@@ -107,14 +107,14 @@ net.Receive( "getMoneyPrintMenu", function( len )
       end
       if self:IsHovered() then
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-        draw.SimpleText( lang.toggle, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.toggle, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       else
         if mp:GetNWBool( "working" ) then
           draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
         else
           draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
         end
-        draw.SimpleText( working, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( working, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     end
     function workingB:DoClick()
@@ -133,7 +133,7 @@ net.Receive( "getMoneyPrintMenu", function( len )
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
       end
 
-      draw.SimpleText( "X", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( "X", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
     function closeMenu:DoClick()
       upgradeframe:Close()

@@ -5,7 +5,7 @@ DarkRP.disabledDefaults = {}
 DarkRP.disabledDefaults.modules = {}
 DarkRP.disabledDefaults.modules.hitmenu = true
 
-yrp._not = "not needed. If you need this function, please tell D4KiR!"
+yrp._not = "If you see this, please test all your darkrp addons, if some addon is not fully working, please tell D4KiR!"
 
 AddCSLuaFile( "darkrp/fn.lua" )
 AddCSLuaFile( "darkrp/config/config.lua" )

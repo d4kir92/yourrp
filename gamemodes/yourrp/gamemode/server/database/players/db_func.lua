@@ -159,10 +159,12 @@ function GM:PlayerLoadout( ply )
   ply:SetNWInt( "stamina", 100 )
 
   local monTab = dbSelect( "yrp_money", "*", nil )
-  local monPre = monTab[1].value
-  local monPos = monTab[2].value
-  ply:SetNWString( "moneyPre", monPre )
-  ply:SetNWString( "moneyPost", monPos )
+  if monTab != nil then
+    local monPre = monTab[1].value
+    local monPos = monTab[2].value
+    ply:SetNWString( "moneyPre", monPre )
+    ply:SetNWString( "moneyPost", monPos )
+  end
 
   local yrp_general = dbSelect( "yrp_general", "*", nil )
   for k, v in pairs( yrp_general ) do
@@ -180,9 +182,6 @@ function GM:PlayerLoadout( ply )
 end
 
 function setPlyPos( ply, map, pos, ang )
-  ply:KillSilent()
-
-  ply:Spawn()
   timer.Simple( 0.1, function()
     if map == game.GetMap() then
       local tmpPos = string.Split( pos, " " )

@@ -5,7 +5,7 @@
 --##############################################################################
 --Language Setup
 lang = {}
-lang.all = {}
+allLang = {}
 
 function addLanguage()
 	local tmp = {}
@@ -13,8 +13,15 @@ function addLanguage()
 	tmp.lang = lang.lang
 	tmp.short = lang.short
 	tmp.author = lang.translatedByName
+	tmp.varis = #lang
 
-	table.insert( lang.all, tmp )
+	local count = 0
+	for k, v in pairs( lang ) do
+		count = count + 1
+	end
+	tmp.varis = count
+
+	table.insert( allLang, tmp )
 end
 
 lang.getLang = GetConVar( "gmod_language" ):GetString()
@@ -52,7 +59,7 @@ include( "lang/db_lang_es.lua" )
 include( "lang/db_lang_ca.lua" )
 
 function checkLanguagepack()
-	for k, v in pairs( lang.all ) do
+	for k, v in pairs( allLang ) do
 		if lang.getLang == v.short then
 			return true
 		end

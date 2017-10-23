@@ -29,9 +29,9 @@ net.Receive( "openLawBoard", function( len )
     end
     function window:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
-      draw.SimpleText( lang.jail, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.jail, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleText( lang.access, "sef", ctrW( 600 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.access, "sef", ctrW( 600 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     local _tmpGroups = net.ReadTable()
@@ -79,9 +79,9 @@ net.Receive( "openLawBoard", function( len )
       function dpanel:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 255, 200 ) )
 
-        draw.SimpleText( lang.name .. ": " .. v.nick, "sef", pw/2, ph - ctrW( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        draw.SimpleText( lang.reason .. ": " .. v.reason, "sef", pw/2, ph - ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        draw.SimpleText( lang.time .. ": " .. v.time, "sef", pw/2, ph - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.name .. ": " .. v.nick, "sef", pw/2, ph - ctrW( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang.reason .. ": " .. v.reason, "sef", pw/2, ph - ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang.time .. ": " .. v.time, "sef", pw/2, ph - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
       scrollpanel:AddItem( dpanel )
       _x = _x + 1
@@ -114,13 +114,13 @@ net.Receive( "openLawBoard", function( len )
         function addWindow:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
-          draw.SimpleText( lang.add, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( lang.add, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleText( lang.player, "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+          draw.SimpleTextOutlined( lang.player, "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleText( lang.reason, "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+          draw.SimpleTextOutlined( lang.reason, "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleText( lang.timeinsec, "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+          draw.SimpleTextOutlined( lang.timeinsec, "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
         end
 
         local _player = createVGUI( "DComboBox", addWindow, 380, 50, 10, 100 )
@@ -140,7 +140,7 @@ net.Receive( "openLawBoard", function( len )
         _add:SetText( "" )
         function _add:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 255 ) )
-          draw.SimpleText( lang.add, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( lang.add, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
         function _add:DoClick()
           if _SteamID != nil then

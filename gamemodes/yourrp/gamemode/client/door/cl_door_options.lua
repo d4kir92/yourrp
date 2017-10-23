@@ -61,17 +61,17 @@ function buyWindow( buildingID, name, price, door )
   function _doorWindow:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
-    draw.SimpleText( lang.buymenu, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.buymenu, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.name .. ": " .. _name, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.price .. ": " .. ply:GetNWString( "moneyPre" ) .. _price .. ply:GetNWString( "moneyPost" ), "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.doors .. ": " .. _doors, "sef", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.name .. ": " .. _name, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.price .. ": " .. ply:GetNWString( "moneyPre" ) .. _price .. ply:GetNWString( "moneyPost" ), "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.doors .. ": " .. _doors, "sef", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.RoundedBox( 0, 0, ctrW( 210 ), pw, ph, Color( 255, 255, 0, 200 ) )
-    draw.SimpleText( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.building .. ":", "sef", ctrW( 10 ), ctrW( 320 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.group .. ":", "sef", ctrW( 10 ), ctrW( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.price .. ":", "sef", ctrW( 420 ), ctrW( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.building .. ":", "sef", ctrW( 10 ), ctrW( 320 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.group .. ":", "sef", ctrW( 10 ), ctrW( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.price .. ":", "sef", ctrW( 420 ), ctrW( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   local _buyButton = createVGUI( "DButton", _doorWindow, 400, 50, 10, 150 )
@@ -181,14 +181,14 @@ function optionWindow( buildingID, name, price, door, owner )
   function _doorWindow:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
-    draw.SimpleText( lang.settings, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.settings, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.name .. ": " .. _name, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.owner .. ": " .. owner, "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( lang.doorlevel .. ": " .. door:GetNWInt( "level", -1 ), "sef", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.name .. ": " .. _name, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.owner .. ": " .. owner, "sef", ctrW( 10 ), ctrW( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.doorlevel .. ": " .. door:GetNWInt( "level", -1 ), "sef", ctrW( 10 ), ctrW( 50 + 30 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.RoundedBox( 0, 0, ctrW( 270 ), pw, ph, Color( 255, 255, 0, 200 ) )
-    draw.SimpleText( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   local _ButtonUpgrade = createVGUI( "DButton", _doorWindow, 400, 50, 10, 150 )

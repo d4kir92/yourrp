@@ -1,465 +1,308 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local dbNameHud = "yrp_cl_hud"
+local _hudVersion = 2
+
+local dbNameHUD = "yrp_cl_hud"
 cl_db = {}
-cl_db["_load"] = 0
+cl_db["_loaded"] = false
 
-function dbTableExists( dbTable )
-  if sql.TableExists( dbTable ) then
-    return true
-  else
-    printGM( "note", dbTable .. " is not existing.")
+function HudV( name )
+  return cl_db[name]
+end
+
+function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf )
+  local tmp = {}
+  tmp.to = to
+  tmp.px = px
+  tmp.py = py
+  tmp.sw = sw
+  tmp.sh = sh
+  tmp.aw = aw
+  tmp.ah = ah
+  tmp.tx = tx
+  tmp.ty = ty
+  tmp.sf = sf
+  return tmp
+end
+
+function colTab( r, g, b, a )
+  local tmp = {}
+  tmp.r = r
+  tmp.g = g
+  tmp.b = b
+  tmp.a = a
+  return tmp
+end
+
+function checkDBHUD( name, value )
+  local tmpValue = dbSelect( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
+  if tmpValue == nil then
+    dbInsertInto( "yrp_cl_hud", "name, value", "'" .. name .. "', " .. value )
     return false
-  end
-end
-
-function dbSelect( dbTable, dbColumns, dbWhere )
-  if dbTableExists( dbTable ) then
-    local q = "SELECT "
-    q = q .. dbColumns
-    q = q .. " FROM "
-    q = q .. dbTable
-    if dbWhere != nil then
-      q = q .. " WHERE "
-      q = q .. dbWhere .. ";"
-    end
-    local _result = sql.Query( q )
-    if _result == nil then
-      printGM( "note", dbTable .. ": " .. q .." | NO DATA - can be ignored" )
-      return _result
-    elseif _result == false then
-      printERROR( dbTable .. ": " .. q .. " FALSE" )
-      return _result
-    else
-      return _result
-    end
-  end
-end
-
-function dbInsertInto( dbTable, dbColumns, dbValues )
-  local q = "INSERT INTO "
-  q = q .. dbTable
-  q = q .. " ( "
-  q = q .. dbColumns
-  q = q .. " ) VALUES ( "
-  q = q .. dbValues
-  q = q .. " );"
-  local result = sql.Query( q )
-end
-
-function dbUpdate( dbTable, dbSets, dbWhere )
-  if dbTableExists( dbTable ) then
-    local q = "UPDATE "
-    q = q .. dbTable
-    q = q .. " SET "
-    q = q .. dbSets
-    if dbWhere != nil then
-      q = q .. " WHERE "
-      q = q .. dbWhere .. ";"
-    end
-    local _result = sql.Query( q )
-  end
-end
-
-function sqlAddColumn( tableName, columnName, datatype )
-  local result = sqlCheckIfColumnExists( tableName, columnName )
-  if result == false then
-    local q = "ALTER TABLE " .. tableName .. " ADD " .. columnName .. " " .. datatype .. ";"
-    local _result = sql.Query( q )
   else
-    --printGM( columnName .. " vorhanden" )
+    return true
   end
 end
 
-function updateDBHud( name, value )
-  local query = "UPDATE yrp_cl_hud "
-  query = query .. "SET value = " .. tonumber( value ) .. " "
-  query = query .. "WHERE name = '" .. tostring( name ) .. "';"
-  local dbName = dbNameHud
-  local result = sql.Query( query )
-  loadDBHud( dbName, name )
+function checkDBColor( name )
+  --rgb
+  checkDBHUD( name .. "r", 255 )
+  checkDBHUD( name .. "g", 255 )
+  checkDBHUD( name .. "b", 255 )
+
+  --a
+  checkDBHUD( name .. "a", 255 )
 end
 
-function loadDBHud( dbName, name )
-  --printGM( "loadDBHud " .. name )
-  local tmpValue = sql.Query( "SELECT value FROM " .. dbName .. " WHERE name = '" .. name .. "';" )
-  if tmpValue != nil and tmpValue != false then
+function checkDBHUDGroup( name )
+  --Toggle
+  checkDBHUD( name .. "to", 1 )
+
+  --Position
+  checkDBHUD( name .. "px", 1 )
+  checkDBHUD( name .. "py", 1 )
+
+  --Size
+  checkDBHUD( name .. "sw", 1 )
+  checkDBHUD( name .. "sh", 1 )
+  checkDBHUD( name .. "sf", 1 )
+
+  --anchor
+  checkDBHUD( name .. "aw", 1 )
+  checkDBHUD( name .. "ah", 1 )
+
+  --align
+  checkDBHUD( name .. "tx", 1 )
+  checkDBHUD( name .. "ty", 1 )
+end
+
+function loadDBHUD( name )
+  local tmpValue = dbSelect( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
+  if worked( tmpValue, "loadDBHUD failed!" ) then
     cl_db[name] = tonumber( tmpValue[1].value )
-  else
-    printGM( "loadDBHud FAILED" )
-    --loadDatabaseHud()
   end
+end
+
+function loadDBColorGroup( name )
+  --rgb
+  loadDBHUD( name .. "r" )
+  loadDBHUD( name .. "g" )
+  loadDBHUD( name .. "b" )
+
+  --a
+  loadDBHUD( name .. "a" )
+end
+
+function loadDBHUDGroup( name )
+  --Toggle
+  loadDBHUD( name .. "to" )
+
+  --Position
+  loadDBHUD( name .. "px" )
+  loadDBHUD( name .. "py" )
+
+  --Size
+  loadDBHUD( name .. "sw" )
+  loadDBHUD( name .. "sh" )
+  loadDBHUD( name .. "sf" )
+
+  --anchor
+  loadDBHUD( name .. "aw" )
+  loadDBHUD( name .. "ah" )
+
+  --align
+  loadDBHUD( name .. "tx" )
+  loadDBHUD( name .. "ty" )
 end
 
 local defaultFS = 26
-function loadCompleteHud()
-  local dbName = dbNameHud
-  printGM( "db", "loading Hud" )
+function loadCompleteHUD()
+  local dbName = dbNameHUD
+  printGM( "db", "loading HUD" )
 
-  loadDBHud( dbName, "colbgt" )
-  loadDBHud( dbName, "colbgr" )
-  loadDBHud( dbName, "colbgg" )
-  loadDBHud( dbName, "colbgb" )
-  loadDBHud( dbName, "colbga" )
+  loadDBHUDGroup( "hp" ) --Health
+  loadDBHUDGroup( "ar" ) --Armor
+  loadDBHUDGroup( "mh" ) --Hunger
+  loadDBHUDGroup( "mt" ) --Thirst
+  loadDBHUDGroup( "ms" ) --Stamina
+  loadDBHUDGroup( "ma" ) --Mana
+  loadDBHUDGroup( "ca" ) --Cast
+  loadDBHUDGroup( "mo" ) --Money
+  loadDBHUDGroup( "xp" ) --Xp
 
-  loadDBHud( dbName, "colbrt" )
-  loadDBHud( dbName, "colbrr" )
-  loadDBHud( dbName, "colbrg" )
-  loadDBHud( dbName, "colbrb" )
-  loadDBHud( dbName, "colbra" )
+  loadDBHUDGroup( "mm" ) --Minimap
+  loadDBHUDGroup( "wn" ) --WeaponName
+  loadDBHUDGroup( "wp" ) --WeaponPrimary
+  loadDBHUDGroup( "ws" ) --WeaponSecondary
+  loadDBHUDGroup( "tt" ) --Tooltip
+  loadDBHUDGroup( "st" ) --Status
+  loadDBHUDGroup( "vt" ) --Vote
+  loadDBHUDGroup( "cb" ) --ChatBox
 
-  loadDBHud( dbName, "colcht" )
-  loadDBHud( dbName, "colchr" )
-  loadDBHud( dbName, "colchg" )
-  loadDBHud( dbName, "colchb" )
-  loadDBHud( dbName, "colcha" )
+  --crosshair
+  loadDBHUD( "cht" )
+  loadDBHUD( "chl" )
+  loadDBHUD( "chg" )
+  loadDBHUD( "chh" )
+  loadDBHUD( "chbr" )
 
-  loadDBHud( dbName, "colchbrt" )
-  loadDBHud( dbName, "colchbrr" )
-  loadDBHud( dbName, "colchbrg" )
-  loadDBHud( dbName, "colchbrb" )
-  loadDBHud( dbName, "colchbra" )
+  --colors
+  loadDBColorGroup( "colbg" )
+  loadDBColorGroup( "colbr" )
+  loadDBColorGroup( "colchc" )
+  loadDBColorGroup( "colchbr" )
+  loadDBColorGroup( "mdp" )
+  loadDBHUD( "mdpm" )
+  loadDBColorGroup( "mds" )
 
-  loadDBHud( dbName, "cht" )
-  loadDBHud( dbName, "chl" )
-  loadDBHud( dbName, "chg" )
-  loadDBHud( dbName, "chh" )
-  loadDBHud( dbName, "chbr" )
+  loadDBHUD( "_hudversion" )
 
-  loadDBHud( dbName, "mmt" )
-  loadDBHud( dbName, "mmx" )
-  loadDBHud( dbName, "mmy" )
-  loadDBHud( dbName, "mmw" )
-  loadDBHud( dbName, "mmh" )
-
-  loadDBHud( dbName, "hpt" )
-  loadDBHud( dbName, "hpx" )
-  loadDBHud( dbName, "hpy" )
-  loadDBHud( dbName, "hpw" )
-  loadDBHud( dbName, "hph" )
-
-  loadDBHud( dbName, "art" )
-  loadDBHud( dbName, "arx" )
-  loadDBHud( dbName, "ary" )
-  loadDBHud( dbName, "arw" )
-  loadDBHud( dbName, "arh" )
-
-  loadDBHud( dbName, "wst" )
-  loadDBHud( dbName, "wsx" )
-  loadDBHud( dbName, "wsy" )
-  loadDBHud( dbName, "wsw" )
-  loadDBHud( dbName, "wsh" )
-
-  loadDBHud( dbName, "wpt" )
-  loadDBHud( dbName, "wpx" )
-  loadDBHud( dbName, "wpy" )
-  loadDBHud( dbName, "wpw" )
-  loadDBHud( dbName, "wph" )
-
-  loadDBHud( dbName, "wnt" )
-  loadDBHud( dbName, "wnx" )
-  loadDBHud( dbName, "wny" )
-  loadDBHud( dbName, "wnw" )
-  loadDBHud( dbName, "wnh" )
-
-  loadDBHud( dbName, "rit" )
-  loadDBHud( dbName, "rix" )
-  loadDBHud( dbName, "riy" )
-  loadDBHud( dbName, "riw" )
-  loadDBHud( dbName, "rih" )
-
-  loadDBHud( dbName, "ttt" )
-  loadDBHud( dbName, "ttx" )
-  loadDBHud( dbName, "tty" )
-  loadDBHud( dbName, "ttw" )
-  loadDBHud( dbName, "tth" )
-
-  loadDBHud( dbName, "mot" )
-  loadDBHud( dbName, "mox" )
-  loadDBHud( dbName, "moy" )
-  loadDBHud( dbName, "mow" )
-  loadDBHud( dbName, "moh" )
-
-  loadDBHud( dbName, "mht" )
-  loadDBHud( dbName, "mhx" )
-  loadDBHud( dbName, "mhy" )
-  loadDBHud( dbName, "mhw" )
-  loadDBHud( dbName, "mhh" )
-
-  loadDBHud( dbName, "mtt" )
-  loadDBHud( dbName, "mtx" )
-  loadDBHud( dbName, "mty" )
-  loadDBHud( dbName, "mtw" )
-  loadDBHud( dbName, "mth" )
-
-  loadDBHud( dbName, "mst" )
-  loadDBHud( dbName, "msx" )
-  loadDBHud( dbName, "msy" )
-  loadDBHud( dbName, "msw" )
-  loadDBHud( dbName, "msh" )
-
-  loadDBHud( dbName, "vtt" )
-  loadDBHud( dbName, "vtx" )
-  loadDBHud( dbName, "vty" )
-  loadDBHud( dbName, "vtw" )
-  loadDBHud( dbName, "vth" )
-
-  loadDBHud( dbName, "cbt" )
-  loadDBHud( dbName, "cbx" )
-  loadDBHud( dbName, "cby" )
-  loadDBHud( dbName, "cbw" )
-  loadDBHud( dbName, "cbh" )
-
-  loadDBHud( dbName, "mat" )
-  loadDBHud( dbName, "max" )
-  loadDBHud( dbName, "may" )
-  loadDBHud( dbName, "maw" )
-  loadDBHud( dbName, "mah" )
-
-  loadDBHud( dbName, "cat" )
-  loadDBHud( dbName, "cax" )
-  loadDBHud( dbName, "cay" )
-  loadDBHud( dbName, "caw" )
-  loadDBHud( dbName, "cah" )
-
-  loadDBHud( dbName, "stt" )
-  loadDBHud( dbName, "stx" )
-  loadDBHud( dbName, "sty" )
-  loadDBHud( dbName, "stw" )
-  loadDBHud( dbName, "sth" )
-
-  loadDBHud( dbName, "vox" )
-  loadDBHud( dbName, "voy" )
-
-  loadDBHud( dbName, "mmf" )
-  loadDBHud( dbName, "hpf" )
-  loadDBHud( dbName, "arf" )
-  loadDBHud( dbName, "wpf" )
-  loadDBHud( dbName, "wsf" )
-  loadDBHud( dbName, "wnf" )
-  loadDBHud( dbName, "rif" )
-  loadDBHud( dbName, "ttf" )
-  loadDBHud( dbName, "mof" )
-  loadDBHud( dbName, "mhf" )
-  loadDBHud( dbName, "mtf" )
-  loadDBHud( dbName, "msf" )
-  loadDBHud( dbName, "vtf" )
-  loadDBHud( dbName, "cbf" )
-  loadDBHud( dbName, "vof" )
-  loadDBHud( dbName, "maf" )
-  loadDBHud( dbName, "caf" )
-  loadDBHud( dbName, "stf" )
-
-  loadDBHud( dbName, "sef" )
-
-  loadDBHud( dbName, "mdpr" )
-  loadDBHud( dbName, "mdpg" )
-  loadDBHud( dbName, "mdpb" )
-  loadDBHud( dbName, "mdpa" )
-  loadDBHud( dbName, "mdpm" )
-
-  loadDBHud( dbName, "mdsr" )
-  loadDBHud( dbName, "mdsg" )
-  loadDBHud( dbName, "mdsb" )
-  loadDBHud( dbName, "mdsa" )
-
-  timer.Simple( 0.1, function ()
-    cl_db["_load"] = 1
-  end)
-
-  printGM( "db", "loaded Hud" )
+  --loaded
+  cl_db["_loaded"] = true
+  printGM( "db", "loaded HUD" )
 end
 
-function setDefaultHud()
-  local dbName = dbNameHud
-  dbUpdate( dbName, "value = 1", "name = 'colbgt'" )
-  dbUpdate( dbName, "value = 0", "name = 'colbgr'" )
-  dbUpdate( dbName, "value = 0", "name = 'colbgg'" )
-  dbUpdate( dbName, "value = 0", "name = 'colbgb'" )
-  dbUpdate( dbName, "value = 200", "name = 'colbga'" )
+function dbUpdateHUD( name, value )
+  dbUpdate( "yrp_cl_hud", "value = " .. value, "name = '" .. name .. "'" )
+  loadDBHUD( name )
+end
 
-  dbUpdate( dbName, "value = 1", "name = 'colbrt'" )
-  dbUpdate( dbName, "value = 0", "name = 'colbrr'" )
-  dbUpdate( dbName, "value = 0", "name = 'colbrg'" )
-  dbUpdate( dbName, "value = 0", "name = 'colbrb'" )
-  dbUpdate( dbName, "value = 255", "name = 'colbra'" )
+function dbUpdateColor( name, tab )
+  dbUpdateHUD( name .. "r", tab.r )
+  dbUpdateHUD( name .. "g", tab.g )
+  dbUpdateHUD( name .. "b", tab.b )
 
-  dbUpdate( dbName, "value = 1", "name = 'colcht'" )
-  dbUpdate( dbName, "value = 0", "name = 'colchr'" )
-  dbUpdate( dbName, "value = 255", "name = 'colchg'" )
-  dbUpdate( dbName, "value = 0", "name = 'colchb'" )
-  dbUpdate( dbName, "value = 255", "name = 'colcha'" )
+  dbUpdateHUD( name .. "a", tab.a )
+end
 
-  dbUpdate( dbName, "value = 1", "name = 'colchbrt'" )
-  dbUpdate( dbName, "value = 0", "name = 'colchbrr'" )
-  dbUpdate( dbName, "value = 0", "name = 'colchbrg'" )
-  dbUpdate( dbName, "value = 0", "name = 'colchbrb'" )
-  dbUpdate( dbName, "value = 255", "name = 'colchbra'" )
+function dbUpdateHUDGroup( name, tab )
+  dbUpdateHUD( name .. "to", tab.to )
 
-  dbUpdate( dbName, "value = 1", "name = 'cht'" )
-  dbUpdate( dbName, "value = 10", "name = 'chl'" )
-  dbUpdate( dbName, "value = 10", "name = 'chg'" )
-  dbUpdate( dbName, "value = 1", "name = 'chh'" )
-  dbUpdate( dbName, "value = 1", "name = 'chbr'" )
+  dbUpdateHUD( name .. "px", tab.px )
+  dbUpdateHUD( name .. "py", tab.py )
 
-  dbUpdate( dbName, "value = 1", "name = 'mmt'" )
-  dbUpdate( dbName, "value = 20", "name = 'mmx'" )
-  dbUpdate( dbName, "value = 1780", "name = 'mmy'" )
-  dbUpdate( dbName, "value = 360", "name = 'mmw'" )
-  dbUpdate( dbName, "value = 360", "name = 'mmh'" )
+  dbUpdateHUD( name .. "sw", tab.sw )
+  dbUpdateHUD( name .. "sh", tab.sh )
+  dbUpdateHUD( name .. "sf", tab.sf )
 
-  dbUpdate( dbName, "value = 1", "name = 'hpt'" )
-  dbUpdate( dbName, "value = 380", "name = 'hpx'" )
-  dbUpdate( dbName, "value = 2080", "name = 'hpy'" )
-  dbUpdate( dbName, "value = 400", "name = 'hpw'" )
-  dbUpdate( dbName, "value = 60", "name = 'hph'" )
+  dbUpdateHUD( name .. "aw", tab.aw )
+  dbUpdateHUD( name .. "ah", tab.ah )
 
-  dbUpdate( dbName, "value = 1", "name = 'art'" )
-  dbUpdate( dbName, "value = 380", "name = 'arx'" )
-  dbUpdate( dbName, "value = 2020", "name = 'ary'" )
-  dbUpdate( dbName, "value = 400", "name = 'arw'" )
-  dbUpdate( dbName, "value = 60", "name = 'arh'" )
+  dbUpdateHUD( name .. "tx", tab.tx )
+  dbUpdateHUD( name .. "ty", tab.ty )
+end
 
-  dbUpdate( dbName, "value = 1", "name = 'wst'" )
-  dbUpdate( dbName, "value = " .. ScrW() * ctrF( ScrH() ) - 400 - 20, "name = 'wsx'" )
-  dbUpdate( dbName, "value = 1960", "name = 'wsy'" )
-  dbUpdate( dbName, "value = 400", "name = 'wsw'" )
-  dbUpdate( dbName, "value = 60", "name = 'wsh'" )
+function dbUpdateColor( name, tab )
+  dbUpdateHUD( name .. "r", tab.r )
+  dbUpdateHUD( name .. "g", tab.g )
+  dbUpdateHUD( name .. "b", tab.b )
 
-  dbUpdate( dbName, "value = 1", "name = 'wpt'" )
-  dbUpdate( dbName, "value = " .. ScrW() * ctrF( ScrH() ) - 400 - 20, "name = 'wpx'" )
-  dbUpdate( dbName, "value = 2020", "name = 'wpy'" )
-  dbUpdate( dbName, "value = 400", "name = 'wpw'" )
-  dbUpdate( dbName, "value = 60", "name = 'wph'" )
+  dbUpdateHUD( name .. "a", tab.a )
+end
 
-  dbUpdate( dbName, "value = 1", "name = 'wnt'" )
-  dbUpdate( dbName, "value = " .. ScrW() * ctrF( ScrH() ) - 400 - 20, "name = 'wnx'" )
-  dbUpdate( dbName, "value = 2080", "name = 'wny'" )
-  dbUpdate( dbName, "value = 400", "name = 'wnw'" )
-  dbUpdate( dbName, "value = 60", "name = 'wnh'" )
+function setDefaultHUD()
+  local hp = HUDTab( 1, 380, -80, 400, 60, 0, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "hp", hp )
 
-  dbUpdate( dbName, "value = 1", "name = 'rit'" )
-  dbUpdate( dbName, "value = 20", "name = 'rix'" )
-  dbUpdate( dbName, "value = 1720", "name = 'riy'" )
-  dbUpdate( dbName, "value = 760", "name = 'riw'" )
-  dbUpdate( dbName, "value = 60", "name = 'rih'" )
+  local ar = HUDTab( 1, 380, -140, 400, 60, 0, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "ar", ar )
 
-  dbUpdate( dbName, "value = 1", "name = 'ttt'" )
-  dbUpdate( dbName, "value = 20", "name = 'ttx'" )
-  dbUpdate( dbName, "value = 20", "name = 'tty'" )
-  dbUpdate( dbName, "value = 640", "name = 'ttw'" )
-  dbUpdate( dbName, "value = 440", "name = 'tth'" )
+  local mh = HUDTab( 1, 380, -320, 400, 60, 0, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "mh", mh )
 
-  dbUpdate( dbName, "value = 1", "name = 'mot'" )
-  dbUpdate( dbName, "value = 380", "name = 'mox'" )
-  dbUpdate( dbName, "value = 1780", "name = 'moy'" )
-  dbUpdate( dbName, "value = 400", "name = 'mow'" )
-  dbUpdate( dbName, "value = 60", "name = 'moh'" )
+  local mt = HUDTab( 1, 380, -260, 400, 60, 0, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "mt", mt )
 
-  dbUpdate( dbName, "value = 1", "name = 'mht'" )
-  dbUpdate( dbName, "value = 380", "name = 'mhx'" )
-  dbUpdate( dbName, "value = 1840", "name = 'mhy'" )
-  dbUpdate( dbName, "value = 400", "name = 'mhw'" )
-  dbUpdate( dbName, "value = 60", "name = 'mhh'" )
+  local ms = HUDTab( 1, -200, -320, 400, 60, 1, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "ms", ms )
 
-  dbUpdate( dbName, "value = 1", "name = 'mtt'" )
-  dbUpdate( dbName, "value = 380", "name = 'mtx'" )
-  dbUpdate( dbName, "value = 1900", "name = 'mty'" )
-  dbUpdate( dbName, "value = 400", "name = 'mtw'" )
-  dbUpdate( dbName, "value = 60", "name = 'mth'" )
+  local ma = HUDTab( 1, 380, -200, 400, 60, 0, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "ma", ma )
 
-  dbUpdate( dbName, "value = 1", "name = 'mst'" )
-  dbUpdate( dbName, "value = " .. ScrW()/2 * ctrF( ScrH() ) - 200, "name = 'msx'" )
-  dbUpdate( dbName, "value = 1920", "name = 'msy'" )
-  dbUpdate( dbName, "value = 400", "name = 'msw'" )
-  dbUpdate( dbName, "value = 60", "name = 'msh'" )
+  local ca = HUDTab( 1, -200, -400, 400, 60, 1, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "ca", ca )
 
-  dbUpdate( dbName, "value = 1", "name = 'vtt'" )
-  dbUpdate( dbName, "value = " .. ScrW()/2 * ctrF( ScrH() ) - 500, "name = 'vtx'" )
-  dbUpdate( dbName, "value = 0", "name = 'vty'" )
-  dbUpdate( dbName, "value = 1000", "name = 'vtw'" )
-  dbUpdate( dbName, "value = 160", "name = 'vth'" )
+  local mo = HUDTab( 1, 380, -380, 400, 60, 0, 2, 1, 1, 18 )
+  dbUpdateHUDGroup( "mo", mo )
 
-  dbUpdate( dbName, "value = 1", "name = 'cbt'" )
-  dbUpdate( dbName, "value = 20", "name = 'cbx'" )
-  dbUpdate( dbName, "value = 1240", "name = 'cby'" )
-  dbUpdate( dbName, "value = 900", "name = 'cbw'" )
-  dbUpdate( dbName, "value = 460", "name = 'cbh'" )
+  local xp = HUDTab( 1, 20, -440, 760, 60, 0, 2, 1, 1, 18 )
+  dbUpdateHUDGroup( "xp", xp )
 
-  dbUpdate( dbName, "value = 1", "name = 'mat'" )
-  dbUpdate( dbName, "value = 380", "name = 'max'" )
-  dbUpdate( dbName, "value = 1960", "name = 'may'" )
-  dbUpdate( dbName, "value = 400", "name = 'maw'" )
-  dbUpdate( dbName, "value = 60", "name = 'mah'" )
 
-  dbUpdate( dbName, "value = 1", "name = 'cat'" )
-  dbUpdate( dbName, "value = " .. ScrW()/2 * ctrF( ScrH() ) - 200, "name = 'cax'" )
-  dbUpdate( dbName, "value = 1760", "name = 'cay'" )
-  dbUpdate( dbName, "value = 400", "name = 'caw'" )
-  dbUpdate( dbName, "value = 60", "name = 'cah'" )
+  local mm = HUDTab( 1, 20, -380, 360, 360, 0, 2, 1, 1, 18 )
+  dbUpdateHUDGroup( "mm", mm )
 
-  dbUpdate( dbName, "value = 1", "name = 'stt'" )
-  dbUpdate( dbName, "value = " .. ScrW()/2 * ctrF( ScrH() ) - 200, "name = 'stx'" )
-  dbUpdate( dbName, "value = 500", "name = 'sty'" )
-  dbUpdate( dbName, "value = 400", "name = 'stw'" )
-  dbUpdate( dbName, "value = 60", "name = 'sth'" )
+  local wn = HUDTab( 1, -420, -200, 400, 60, 2, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "wn", wn )
 
-  dbUpdate( dbName, "value = 1920", "name = 'vox'" )
-  dbUpdate( dbName, "value = 540", "name = 'voy'" )
+  local wp = HUDTab( 1, -420, -80, 400, 60, 2, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "wp", wp )
 
-  dbUpdate( dbName, "value = 16", "name = 'mmf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'hpf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'arf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'wpf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'wsf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'wnf'" )
-  dbUpdate( dbName, "value = 16", "name = 'rif'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'ttf'" )
-  dbUpdate( dbName, "value = 18", "name = 'mof'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'mhf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'mtf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'msf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'vtf'" )
-  dbUpdate( dbName, "value = 16", "name = 'cbf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'vof'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'maf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'caf'" )
-  dbUpdate( dbName, "value = " .. defaultFS, "name = 'stf'" )
+  local ws = HUDTab( 1, -420, -140, 400, 60, 2, 2, 1, 1, 24 )
+  dbUpdateHUDGroup( "ws", ws )
 
-  dbUpdate( dbName, "value = 18", "name = 'sef'" )
+  local tt = HUDTab( 1, 20, 20, 660, 440, 0, 0, 1, 1, 24 )
+  dbUpdateHUDGroup( "tt", tt )
 
-  dbUpdate( dbName, "value = 66", "name = 'mdpr'" )
-  dbUpdate( dbName, "value = 66", "name = 'mdpg'" )
-  dbUpdate( dbName, "value = 66", "name = 'mdpb'" )
-  dbUpdate( dbName, "value = 255", "name = 'mdpa'" )
-  dbUpdate( dbName, "value = 0", "name = 'mdpm'" )
+  local st = HUDTab( 1, -380, 380, 760, 60, 1, 0, 1, 1, 18 )
+  dbUpdateHUDGroup( "st", st )
 
-  dbUpdate( dbName, "value = 30", "name = 'mdsr'" )
-  dbUpdate( dbName, "value = 136", "name = 'mdsg'" )
-  dbUpdate( dbName, "value = 229", "name = 'mdsb'" )
-  dbUpdate( dbName, "value = 255", "name = 'mdsa'" )
+  local vt = HUDTab( 1, -380, 20, 760, 300, 1, 0, 1, 1, 18 )
+  dbUpdateHUDGroup( "vt", vt )
 
-  loadCompleteHud()
+  local cb = HUDTab( 1, 20, -880, 760, 420, 0, 2, 1, 1, 18 )
+  dbUpdateHUDGroup( "cb", cb )
+
+  --crosshair
+  dbUpdateHUD( "cht", 1 )
+  dbUpdateHUD( "chl", 10 )
+  dbUpdateHUD( "chg", 10 )
+  dbUpdateHUD( "chh", 1 )
+  dbUpdateHUD( "chbr", 1 )
+
+  --colors
+  local bg = colTab( 0, 0, 0, 200 )
+  dbUpdateColor( "colbg", bg )
+
+  local br = colTab( 0, 0, 0, 255 )
+  dbUpdateColor( "colbr", br )
+
+  local chc = colTab( 0, 255, 0, 255 )
+  dbUpdateColor( "colchc", chc )
+
+  local chbr = colTab( 0, 0, 0, 255 )
+  dbUpdateColor( "colchbr", chbr )
+
+  local mdp = colTab( 66, 66, 66, 255 )
+  dbUpdateColor( "mdp", mdp )
+  dbUpdateHUD( "mdpm", 0 )
+
+  local mds = colTab( 13, 71, 161, 255 )
+  dbUpdateColor( "mds", mds )
+
+  loadCompleteHUD()
 end
 
 function resetHud()
-  printGM( "note", "yrp_cl_hud resetet" )
+  printGM( "note", "yrp_cl_hud reseted" )
 
-  setDefaultHud()
+  setDefaultHUD()
+
+  updateDBFonts()
 end
 
 --sql.Query( "DROP TABLE yrp_cl_hud" )
 
-function loadDatabaseHud()
+function loadDatabaseHUD()
   local ply = LocalPlayer()
-  local dbName = dbNameHud
-  printGM( "db", "Load Database: Hud" )
+  local dbName = dbNameHUD
+  printGM( "db", "Load Database: HUD" )
 
   if !sql.TableExists( dbName ) then
     printGM( "db", "CREATE Database " .. dbName )
     local query = "CREATE TABLE " .. dbName .. " ( "
     query = query .. "name TEXT, "
-    query = query .. "value INTEGER"
+    query = query .. "value INT"
 
     query = query .. " );"
     local result = sql.Query( query )
@@ -468,280 +311,68 @@ function loadDatabaseHud()
     end
   end
 
-  if !dbSelect( dbName, "name, value", "name = 'colbgt'" ) then
-    dbInsertInto( dbName, "name, value", "'colbgt', 1" )
-    dbInsertInto( dbName, "name, value", "'colbgr', 0" )
-    dbInsertInto( dbName, "name, value", "'colbgg', 0" )
-    dbInsertInto( dbName, "name, value", "'colbgb', 0" )
-    dbInsertInto( dbName, "name, value", "'colbga', 200" )
+  checkDBHUDGroup( "hp" ) --Health
+  checkDBHUDGroup( "ar" ) --Armor
+  checkDBHUDGroup( "mh" ) --Hunger
+  checkDBHUDGroup( "mt" ) --Thirst
+  checkDBHUDGroup( "ms" ) --Stamina
+  checkDBHUDGroup( "ma" ) --Mana
+  checkDBHUDGroup( "ca" ) --Cast
+  checkDBHUDGroup( "mo" ) --Money
+  checkDBHUDGroup( "xp" ) --XP
+
+  checkDBHUDGroup( "mm" ) --Minimap
+  checkDBHUDGroup( "wn" ) --WeaponName
+  checkDBHUDGroup( "wp" ) --WeaponPrimary
+  checkDBHUDGroup( "ws" ) --WeaponSecondary
+  checkDBHUDGroup( "tt" ) --Tooltip
+  checkDBHUDGroup( "st" ) --Status
+  checkDBHUDGroup( "vt" ) --Vote
+  checkDBHUDGroup( "cb" ) --ChatBox
+
+  --crosshair
+  checkDBHUD( "cht", 1 )
+  checkDBHUD( "chl", 1 )
+  checkDBHUD( "chg", 1 )
+  checkDBHUD( "chh", 1 )
+  checkDBHUD( "chbr", 1 )
+
+  --colors
+  checkDBColor( "colbg" )
+  checkDBColor( "colbr" )
+  checkDBColor( "colchc" )
+  checkDBColor( "colchbr" )
+  checkDBColor( "mdp" )
+  checkDBHUD( "mdpm", 0 )
+  checkDBColor( "mds" )
+
+  local _checkVersion = checkDBHUD( "_hudversion", _hudVersion )
+  local _resetHud = false
+  local _hudText = ""
+  if !_checkVersion then
+    _hudText = "Hud is outdated, resetting it!"
+    _resetHud = true
+  else
+    local _dbSelect = dbSelect( "yrp_cl_hud", "value", "name = '" .. "_hudversion" .. "'")
+    if tonumber( _dbSelect[1].value ) != _hudVersion then
+      _hudText = "Newer version of hud available, resetting it!"
+      dbUpdateHUD( "_hudversion", _hudVersion )
+      _resetHud = true
+    else
+      _hudText = "Hud up-to-date!"
+    end
+  end
+  printGM( "note", _hudText )
+
+  if _resetHud then
+    resetHud()
   end
 
-  if !dbSelect( dbName, "name, value", "name = 'colbrt'" ) then
-    dbInsertInto( dbName, "name, value", "'colbrt', 1" )
-    dbInsertInto( dbName, "name, value", "'colbrr', 0" )
-    dbInsertInto( dbName, "name, value", "'colbrg', 0" )
-    dbInsertInto( dbName, "name, value", "'colbrb', 0" )
-    dbInsertInto( dbName, "name, value", "'colbra', 255" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'colcht'" ) then
-    dbInsertInto( dbName, "name, value", "'colcht', 1" )
-    dbInsertInto( dbName, "name, value", "'colchr', 0" )
-    dbInsertInto( dbName, "name, value", "'colchg', 255" )
-    dbInsertInto( dbName, "name, value", "'colchb', 0" )
-    dbInsertInto( dbName, "name, value", "'colcha', 255" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'colchbrt'" ) then
-    dbInsertInto( dbName, "name, value", "'colchbrt', 1" )
-    dbInsertInto( dbName, "name, value", "'colchbrr', 0" )
-    dbInsertInto( dbName, "name, value", "'colchbrg', 0" )
-    dbInsertInto( dbName, "name, value", "'colchbrb', 0" )
-    dbInsertInto( dbName, "name, value", "'colchbra', 255" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'cht'" ) then
-    dbInsertInto( dbName, "name, value", "'cht', 1" )
-    dbInsertInto( dbName, "name, value", "'chl', 10" )
-    dbInsertInto( dbName, "name, value", "'chg', 10" )
-    dbInsertInto( dbName, "name, value", "'chh', 1" )
-    dbInsertInto( dbName, "name, value", "'chbr', 1" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mmt'" ) then
-    dbInsertInto( dbName, "name, value", "'mmt', 1" )
-    dbInsertInto( dbName, "name, value", "'mmx', 20" )
-    dbInsertInto( dbName, "name, value", "'mmy', 1840" )
-    dbInsertInto( dbName, "name, value", "'mmw', 360" )
-    dbInsertInto( dbName, "name, value", "'mmh', 360" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'hpt'" ) then
-    dbInsertInto( dbName, "name, value", "'hpt', 1" )
-    dbInsertInto( dbName, "name, value", "'hpx', 380" )
-    dbInsertInto( dbName, "name, value", "'hpy', 2080" )
-    dbInsertInto( dbName, "name, value", "'hpw', 400" )
-    dbInsertInto( dbName, "name, value", "'hph', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'art'" ) then
-    dbInsertInto( dbName, "name, value", "'art', 1" )
-    dbInsertInto( dbName, "name, value", "'arx', 380" )
-    dbInsertInto( dbName, "name, value", "'ary', 2020" )
-    dbInsertInto( dbName, "name, value", "'arw', 400" )
-    dbInsertInto( dbName, "name, value", "'arh', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'wpt'" ) then
-    dbInsertInto( dbName, "name, value", "'wst', 1" )
-    dbInsertInto( dbName, "name, value", "'wsx', " .. ScrW() * ctrF( ScrH() ) - 400 - 20 )
-    dbInsertInto( dbName, "name, value", "'wsy', 1960" )
-    dbInsertInto( dbName, "name, value", "'wsw', 400" )
-    dbInsertInto( dbName, "name, value", "'wsh', 60" )
-
-    dbInsertInto( dbName, "name, value", "'wpt', 1" )
-    dbInsertInto( dbName, "name, value", "'wpx', " .. ScrW() * ctrF( ScrH() ) - 400 - 20 )
-    dbInsertInto( dbName, "name, value", "'wpy', 2020" )
-    dbInsertInto( dbName, "name, value", "'wpw', 400" )
-    dbInsertInto( dbName, "name, value", "'wph', 60" )
-
-    dbInsertInto( dbName, "name, value", "'wnt', 1" )
-    dbInsertInto( dbName, "name, value", "'wnx', " .. ScrW() * ctrF( ScrH() ) - 400 - 20 )
-    dbInsertInto( dbName, "name, value", "'wny', 2080" )
-    dbInsertInto( dbName, "name, value", "'wnw', 400" )
-    dbInsertInto( dbName, "name, value", "'wnh', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'rit'" ) then
-    dbInsertInto( dbName, "name, value", "'rit', 1" )
-    dbInsertInto( dbName, "name, value", "'rix', 20" )
-    dbInsertInto( dbName, "name, value", "'riy', 1720" )
-    dbInsertInto( dbName, "name, value", "'riw', 760" )
-    dbInsertInto( dbName, "name, value", "'rih', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'ttt'" ) then
-    dbInsertInto( dbName, "name, value", "'ttt', 1" )
-    dbInsertInto( dbName, "name, value", "'ttx', 20" )
-    dbInsertInto( dbName, "name, value", "'tty', 20" )
-    dbInsertInto( dbName, "name, value", "'ttw', 640" )
-    dbInsertInto( dbName, "name, value", "'tth', 440" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mot'" ) then
-    dbInsertInto( dbName, "name, value", "'mot', 1" )
-    dbInsertInto( dbName, "name, value", "'mox', 380" )
-    dbInsertInto( dbName, "name, value", "'moy', 1780" )
-    dbInsertInto( dbName, "name, value", "'mow', 400" )
-    dbInsertInto( dbName, "name, value", "'moh', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mht'" ) then
-    dbInsertInto( dbName, "name, value", "'mht', 1" )
-    dbInsertInto( dbName, "name, value", "'mhx', 380" )
-    dbInsertInto( dbName, "name, value", "'mhy', 1900" )
-    dbInsertInto( dbName, "name, value", "'mhw', 400" )
-    dbInsertInto( dbName, "name, value", "'mhh', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mtt'" ) then
-    dbInsertInto( dbName, "name, value", "'mtt', 1" )
-    dbInsertInto( dbName, "name, value", "'mtx', 380" )
-    dbInsertInto( dbName, "name, value", "'mty', 1900" )
-    dbInsertInto( dbName, "name, value", "'mtw', 400" )
-    dbInsertInto( dbName, "name, value", "'mth', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mst'" ) then
-    dbInsertInto( dbName, "name, value", "'mst', 1" )
-    dbInsertInto( dbName, "name, value", "'msx', " .. ScrW()/2 * ctrF( ScrH() ) - 200 )
-    dbInsertInto( dbName, "name, value", "'msy', 1920" )
-    dbInsertInto( dbName, "name, value", "'msw', 400" )
-    dbInsertInto( dbName, "name, value", "'msh', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'vtt'" ) then
-    dbInsertInto( dbName, "name, value", "'vtt', 1" )
-    dbInsertInto( dbName, "name, value", "'vtx', " .. ScrW()/2 * ctrF( ScrH() ) - 500 )
-    dbInsertInto( dbName, "name, value", "'vty', 0" )
-    dbInsertInto( dbName, "name, value", "'vtw', 1000" )
-    dbInsertInto( dbName, "name, value", "'vth', 160" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'cbt'" ) then
-    dbInsertInto( dbName, "name, value", "'cbt', 1" )
-    dbInsertInto( dbName, "name, value", "'cbx', 20" )
-    dbInsertInto( dbName, "name, value", "'cby', 1240" )
-    dbInsertInto( dbName, "name, value", "'cbw', 900" )
-    dbInsertInto( dbName, "name, value", "'cbh', 460" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mat'" ) then
-    dbInsertInto( dbName, "name, value", "'mat', 1" )
-    dbInsertInto( dbName, "name, value", "'max', 380" )
-    dbInsertInto( dbName, "name, value", "'may', 1960" )
-    dbInsertInto( dbName, "name, value", "'maw', 400" )
-    dbInsertInto( dbName, "name, value", "'mah', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'cat'" ) then
-    dbInsertInto( dbName, "name, value", "'cat', 1" )
-    dbInsertInto( dbName, "name, value", "'cax', " .. ScrW()/2 * ctrF( ScrH() ) - 200 )
-    dbInsertInto( dbName, "name, value", "'cay', 1760" )
-    dbInsertInto( dbName, "name, value", "'caw', 400" )
-    dbInsertInto( dbName, "name, value", "'cah', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'stt'" ) then
-    dbInsertInto( dbName, "name, value", "'stt', 1" )
-    dbInsertInto( dbName, "name, value", "'stx', " .. ScrW()/2 * ctrF( ScrH() ) - 200 )
-    dbInsertInto( dbName, "name, value", "'sty', 500" )
-    dbInsertInto( dbName, "name, value", "'stw', 400" )
-    dbInsertInto( dbName, "name, value", "'sth', 60" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'vox'" ) then
-    dbInsertInto( dbName, "name, value", "'vox', 1920" )
-    dbInsertInto( dbName, "name, value", "'voy', 540" )
-  end
-
-  --Fontsizes
-  if !dbSelect( dbName, "name, value", "name = 'mmf'" ) then
-    dbInsertInto( dbName, "name, value", "'mmf', 16" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'hpf'" ) then
-    dbInsertInto( dbName, "name, value", "'hpf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'arf'" ) then
-    dbInsertInto( dbName, "name, value", "'arf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'wpf'" ) then
-    dbInsertInto( dbName, "name, value", "'wpf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'wsf'" ) then
-    dbInsertInto( dbName, "name, value", "'wsf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'wnf'" ) then
-    dbInsertInto( dbName, "name, value", "'wnf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'rif'" ) then
-    dbInsertInto( dbName, "name, value", "'rif', 16" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'ttf'" ) then
-    dbInsertInto( dbName, "name, value", "'ttf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mof'" ) then
-    dbInsertInto( dbName, "name, value", "'mof', 18" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mhf'" ) then
-    dbInsertInto( dbName, "name, value", "'mhf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mtf'" ) then
-    dbInsertInto( dbName, "name, value", "'mtf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'msf'" ) then
-    dbInsertInto( dbName, "name, value", "'msf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'vtf'" ) then
-    dbInsertInto( dbName, "name, value", "'vtf', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'cbf'" ) then
-    dbInsertInto( dbName, "name, value", "'cbf', 16" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'vof'" ) then
-    dbInsertInto( dbName, "name, value", "'vof', " .. defaultFS )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'sef'" ) then
-    dbInsertInto( dbName, "name, value", "'sef', 18" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'maf'" ) then
-    dbInsertInto( dbName, "name, value", "'maf', 16" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'caf'" ) then
-    dbInsertInto( dbName, "name, value", "'caf', 16" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'stf'" ) then
-    dbInsertInto( dbName, "name, value", "'stf', 16" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mdpm'" ) then
-    dbInsertInto( dbName, "name, value", "'mdpr', 66" )
-    dbInsertInto( dbName, "name, value", "'mdpg', 66" )
-    dbInsertInto( dbName, "name, value", "'mdpb', 66" )
-    dbInsertInto( dbName, "name, value", "'mdpa', 255" )
-    dbInsertInto( dbName, "name, value", "'mdpm', 0" )
-  end
-
-  if !dbSelect( dbName, "name, value", "name = 'mdsa'" ) then
-    dbInsertInto( dbName, "name, value", "'mdsr', 13" )
-    dbInsertInto( dbName, "name, value", "'mdsg', 71" )
-    dbInsertInto( dbName, "name, value", "'mdsb', 161" )
-    dbInsertInto( dbName, "name, value", "'mdsa', 255" )
-  end
-
-  loadCompleteHud()
+  loadCompleteHUD()
 end
 
 function initDatabase()
   printGM( "db", "initDatabase()" )
-  loadDatabaseHud()
+  loadDatabaseHUD()
 end
 initDatabase()

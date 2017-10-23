@@ -94,7 +94,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   local _mapName = createVGUI( "DPanel", settingsWindow.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
     draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.dprimary )
-    draw.SimpleText( lang.map .. ": " .. string.lower( game.GetMap() ), "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.map .. ": " .. string.lower( game.GetMap() ), "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   _mapListView = createVGUI( "DListView", settingsWindow.site, 1600, 1600, 10, 10 + 256 + 10 )
@@ -123,9 +123,9 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpFrame:SetTitle( "" )
     function tmpFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0,0, pw, ph, yrp.colors.dbackground )
-      draw.SimpleText( lang.spawnpointcreator, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.createspawnpointonyou, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-      draw.SimpleText( lang.selectgroup .. ":", "sef", ctrW( 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+      draw.SimpleTextOutlined( lang.spawnpointcreator, "sef", ctrW( 10 ), ctrW( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang.createspawnpointonyou, "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang.selectgroup .. ":", "sef", ctrW( 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     end
 
     local tmpGroup = createVGUI( "DComboBox", tmpFrame, 200, 50, 10, 50 + 10 + 50 + 10 )

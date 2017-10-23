@@ -69,11 +69,11 @@ function drawGroupPlayers( id )
       function _tmpHeader:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( yrp.colors["epicOrange"].r, yrp.colors["epicOrange"].g, yrp.colors["epicOrange"].b, yrp.colors["epicOrange"].a ) )
         if ply != NULL then
-          draw.SimpleText( ply:RPName(), "sef", ctrW( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( ply:GetNWString( "roleName" ), "sef", pw - ctrW( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-          draw.SimpleText( ply:Ping(), "sef", pw - ctrW( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          draw.SimpleTextOutlined( ply:RPName(), "sef", ctrW( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( ply:GetNWString( "roleName" ), "sef", pw - ctrW( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( ply:Ping(), "sef", pw - ctrW( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
-        draw.SimpleText( lang.mute, "sef", pw - ctrW( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.mute, "sef", pw - ctrW( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     end
   end
@@ -84,17 +84,17 @@ function drawGroup( id, name )
   local _tmpPanel = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 9999, elePos.x, elePos.y )
   function _tmpPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( yrp.colors["epicBlue"].r, yrp.colors["epicBlue"].g, yrp.colors["epicBlue"].b, yrp.colors["epicBlue"].a ) )
-    draw.SimpleText( name, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( name, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   if hasGroupPlayers( id ) then
     elePos.y = elePos.y + 50
     local _tmpHeader = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
     function _tmpHeader:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( yrp.colors["epicBlue"].r, yrp.colors["epicBlue"].g, yrp.colors["epicBlue"].b, yrp.colors["epicBlue"].a ) )
-      draw.SimpleText( lang.name, "sef", ctrW( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.role, "sef", pw - ctrW( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.ping, "sef", pw - ctrW( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-      draw.SimpleText( lang.mute, "sef", pw - ctrW( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.name, "sef", ctrW( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang.role, "sef", pw - ctrW( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang.ping, "sef", pw - ctrW( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang.mute, "sef", pw - ctrW( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     drawGroupPlayers( id )
@@ -190,11 +190,11 @@ function scoreboard:show()
 
     draw.RoundedBox( 0, ctrW( _br ), ctrW( 256 - _br ), pw - ctrW( _br*2 ), ph, Color( yrp.colors["darkBG"].r, yrp.colors["darkBG"].g, yrp.colors["darkBG"].b, yrp.colors["darkBG"].a ) )
 
-    draw.SimpleText( GAMEMODE:GetGameDescription(), "ScoreBoardNormal", ctrW( 256 + 20 ), ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( GetHostName(), "ScoreBoardTitle", ctrW( 256 + 20 ), ctrW( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( GAMEMODE:GetGameDescription(), "ScoreBoardNormal", ctrW( 256 + 20 ), ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctrW( 256 + 20 ), ctrW( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.map .. ": " .. string.upper( game.GetMap() ), "ScoreBoardNormal", pw - ctrW( 256 + 20 ), ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-    draw.SimpleText( lang.players .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctrW( 256 + 20 ), ctrW( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( lang.map .. ": " .. string.upper( game.GetMap() ), "ScoreBoardNormal", pw - ctrW( 256 + 20 ), ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.players .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctrW( 256 + 20 ), ctrW( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( _yrpIcon	)

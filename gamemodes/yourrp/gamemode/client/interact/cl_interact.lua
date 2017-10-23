@@ -38,22 +38,22 @@ net.Receive( "openInteractMenu", function ()
 
     draw.RoundedBox( ctrW( 30 ), ctrW( 10 ), ctrW( 50 ), ctrW( 750 ), ctrW( 350 ), Color( 255, 255, 255, 200 ) )
 
-    draw.SimpleText( lang.identifycard, "charTitle", ctrW( 10 + 10 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( GetHostName(), "charTitle", ctrW( 10 + 10 ), ctrW( 60+35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-    draw.SimpleText( LocalPlayer():SteamID(), "charTitle", ctrW( 745 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.identifycard, "charTitle", ctrW( 10 + 10 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( GetHostName(), "charTitle", ctrW( 10 + 10 ), ctrW( 60+35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( LocalPlayer():SteamID(), "charTitle", ctrW( 745 ), ctrW( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.name .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 70 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.name .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 70 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( tmpRPName, "charText", ctrW( 280 ), ctrW( 60 + 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( tmpRPName, "charText", ctrW( 280 ), ctrW( 60 + 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleText( lang.gender .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 210 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( lang.gender .. ":", "charHeader", ctrW( 280 ), ctrW( 60 + 210 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     local gender = lang.other
     if tmpGender == "male" then
       gender = lang.male
     elseif tmpGender == "female" then
       gender = lang.female
     end
-    draw.SimpleText( gender, "charText", ctrW( 280 ), ctrW( 60 + 240 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+    draw.SimpleTextOutlined( gender, "charText", ctrW( 280 ), ctrW( 60 + 240 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   local tmpAvatarI = createVGUI( "AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70 )

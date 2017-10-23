@@ -61,7 +61,7 @@ function hudVersion()
 	if game.SinglePlayer() then
 		_singleplayer = "Singleplayer"
 	end
-	draw.SimpleText( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), yrp.versionCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP )
+	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctrW( 70 ), ctrW( 60 ), yrp.versionCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 end
 --##############################################################################
 

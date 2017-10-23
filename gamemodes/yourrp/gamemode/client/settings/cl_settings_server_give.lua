@@ -87,8 +87,8 @@ net.Receive( "getPlyList", function( len )
       function _giveFrame:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
-        draw.SimpleText( lang.group .. ":", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-        draw.SimpleText( lang.role .. ":", "sef", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+        draw.SimpleTextOutlined( lang.group .. ":", "sef", ctrW( 10 ), ctrW( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang.role .. ":", "sef", ctrW( 10 ), ctrW( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
       end
 
       _giveFrame:MakePopup()

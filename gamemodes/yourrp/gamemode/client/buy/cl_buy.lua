@@ -18,7 +18,7 @@ function addNewItem( parent, item, tab )
   _itemPanel.uniqueID = item.uniqueID
   function _itemPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-    draw.SimpleText( item.PrintName, "weaponT", pw/2, ctrW( itemW - 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( item.PrintName, "weaponT", pw/2, ctrW( itemW - 15 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local _itemModelPanel = {}
@@ -40,7 +40,7 @@ function addNewItem( parent, item, tab )
   local _pricePanel = createVGUI( "DPanel", _itemPanel, itemW-2*8, 50, 8, itemW+10 )
   function _pricePanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    draw.SimpleText( ply:GetNWString( "moneyPre" ) .. item.price .. ply:GetNWString( "moneyPost" ), "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( ply:GetNWString( "moneyPre" ) .. item.price .. ply:GetNWString( "moneyPost" ), "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local _itemAmountNumberWang = createVGUI( "DNumberWang", _itemPanel, (itemW/3)-8, 50, 8, itemW+10+50+10 )
@@ -54,7 +54,7 @@ function addNewItem( parent, item, tab )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
     end
-    draw.SimpleText( "x " .. lang.buy, "weaponT", 5, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( "x " .. lang.buy, "weaponT", 5, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function _itemBuyButton:DoClick()
     net.Start( "buyItem" )
@@ -76,7 +76,7 @@ function addNewItem( parent, item, tab )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
       end
-      draw.SimpleText( lang.removeitem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang.removeitem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
     function _removeButton:DoClick()
       local frame = createVGUI( "DFrame", nil, 630, 120, 0, 0 )
@@ -165,14 +165,14 @@ net.Receive( "getBuyList", function( len )
       function _windowAddItem:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
 
-        draw.SimpleText( lang.price .. ":", "weaponT", ctrW( 8 ), ph - ctrW( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.price .. ":", "weaponT", ctrW( 8 ), ph - ctrW( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
 
       local _AddItemPanel = createVGUI( "DPanel", _windowAddItem, 500, 500, 6, 50 )
       function _AddItemPanel:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
 
-        draw.SimpleText( addSwep.PrintName, "weaponT", pw/2, ph - ctrW( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( addSwep.PrintName, "weaponT", pw/2, ph - ctrW( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
 
       local _AddItemModelPanel = createVGUI( "SpawnIcon", _AddItemPanel, 500, 500, 0, 0 )
@@ -189,7 +189,7 @@ net.Receive( "getBuyList", function( len )
         else
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
         end
-        draw.SimpleText( lang.selectitem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.selectitem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         if LocalPlayer():GetNWString( "WorldModel", "" ) != test then
           test = LocalPlayer():GetNWString( "WorldModel", "" )
           _AddItemModelPanel:SetModel( test )
@@ -248,7 +248,7 @@ net.Receive( "getBuyList", function( len )
         else
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
         end
-        draw.SimpleText( lang.additem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleTextOutlined( lang.additem, "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
       function _AddItemAdd:DoClick()
         net.Start( "addNewBuyItem" )
@@ -282,7 +282,7 @@ function openBuyMenu()
   local Langu = createVGUI( "DComboBox", _buyWindow, 400, 50, 1400, 0 )
   Langu:SetValue( lang.lang )
   Langu:AddChoice( "[AUTOMATIC]", "auto" )
-  for k, v in pairs( lang.all ) do
+  for k, v in pairs( allLang ) do
     Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
   end
   Langu.OnSelect = function( panel, index, value, data )

@@ -30,7 +30,7 @@ hook.Add( "open_client_character", "open_client_character", function()
   --sheet:AddSheet( lang.character, cl_charPanel, "icon16/user_edit.png" )
   function settingsWindow.site:Paint( w, h )
     --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), yrp.colors.panel )
-    draw.SimpleText( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM )
+    draw.SimpleTextOutlined( lang.name .. ":", "sef", ctrW( 10 ), ctrW( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   net.Start( "getCharakterList" )
