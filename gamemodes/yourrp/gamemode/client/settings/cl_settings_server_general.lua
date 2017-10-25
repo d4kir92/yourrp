@@ -17,6 +17,7 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.site )
   local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.site )
   local sv_generalMetabolism = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 315 )
+  local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 375 )
 
   local oldGamemodename = ""
   function settingsWindow.site:Paint()
@@ -25,10 +26,11 @@ hook.Add( "open_server_general", "open_server_general", function()
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleTextOutlined( "you need to update Server!", "sef", ctrW( _center + 400 + 10 ), ctrW( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
-    draw.SimpleTextOutlined( lang.advertname .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang.updatecountdown .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang.metabolism .. ":", "sef", ctrW( _center - 10 ), ctrW( 5 + 25 + 50 + 10 + 50 + 10 + 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
+    draw.SimpleTextOutlined( lang.advertname .. ":", "sef", ctrW( _center - 10 ), ctrW( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.updatecountdown .. ":", "sef", ctrW( _center - 10 ), ctrW( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.metabolism .. ":", "sef", ctrW( _center - 10 ), ctrW( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang.building .. ":", "sef", ctrW( _center - 10 ), ctrW( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+end
 
   sv_generalName:SetPos( ctrW( _center ), ctrW( 5 ) )
   sv_generalName:SetSize( ctrW( 400 ), ctrW( 50 ) )
@@ -53,6 +55,8 @@ hook.Add( "open_server_general", "open_server_general", function()
         end
       elseif v.name == "metabolism" then
         sv_generalMetabolism:SetChecked( tobool( v.value ) )
+      elseif v.name == "building" then
+        sv_generalBuilding:SetChecked( tobool( v.value ) )
       end
     end
   end)
@@ -200,5 +204,19 @@ hook.Add( "open_server_general", "open_server_general", function()
       net.WriteBool( bVal )
     net.SendToServer()
     RunConsoleCommand( "yrp_metabolism", math.Round( _tonumber, 0 ) )
+  end
+
+  function sv_generalBuilding:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "dbUpdateNWBool2" )
+      net.WriteString( "yrp_general" )
+      net.WriteString( "value = '" .. _tonumber .. "'" )
+      net.WriteString( "name = '" .. "building" .. "'" )
+      net.WriteBool( bVal )
+    net.SendToServer()
+    RunConsoleCommand( "yrp_building", math.Round( _tonumber, 0 ) )
   end
 end)

@@ -10,7 +10,7 @@ function HudV( name )
   return cl_db[name]
 end
 
-function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf )
+function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt )
   local tmp = {}
   tmp.to = to
   tmp.px = px
@@ -22,6 +22,7 @@ function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf )
   tmp.tx = tx
   tmp.ty = ty
   tmp.sf = sf
+  tmp.tt = tt
   return tmp
 end
 
@@ -74,6 +75,12 @@ function checkDBHUDGroup( name )
   --align
   checkDBHUD( name .. "tx", 1 )
   checkDBHUD( name .. "ty", 1 )
+
+  --texttoggle
+  checkDBHUD( name .. "tt", 1 )
+
+  --icontoggle
+  checkDBHUD( name .. "it", 1 )
 end
 
 function loadDBHUD( name )
@@ -113,6 +120,12 @@ function loadDBHUDGroup( name )
   --align
   loadDBHUD( name .. "tx" )
   loadDBHUD( name .. "ty" )
+
+  --texttoggle
+  loadDBHUD( name .. "tt" )
+
+  --icontoggle
+  loadDBHUD( name .. "it" )
 end
 
 local defaultFS = 26
@@ -190,6 +203,10 @@ function dbUpdateHUDGroup( name, tab )
 
   dbUpdateHUD( name .. "tx", tab.tx )
   dbUpdateHUD( name .. "ty", tab.ty )
+
+  dbUpdateHUD( name .. "tt", tab.tt )
+
+  dbUpdateHUD( name .. "it", tab.it )
 end
 
 function dbUpdateColor( name, tab )
@@ -201,56 +218,56 @@ function dbUpdateColor( name, tab )
 end
 
 function setDefaultHUD()
-  local hp = HUDTab( 1, 380, -80, 400, 60, 0, 2, 1, 1, 24 )
+  local hp = HUDTab( 1, 380, -80, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "hp", hp )
 
-  local ar = HUDTab( 1, 380, -140, 400, 60, 0, 2, 1, 1, 24 )
+  local ar = HUDTab( 1, 380, -140, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ar", ar )
 
-  local mh = HUDTab( 1, 380, -320, 400, 60, 0, 2, 1, 1, 24 )
+  local mh = HUDTab( 1, 380, -320, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "mh", mh )
 
-  local mt = HUDTab( 1, 380, -260, 400, 60, 0, 2, 1, 1, 24 )
+  local mt = HUDTab( 1, 380, -260, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "mt", mt )
 
-  local ms = HUDTab( 1, -200, -320, 400, 60, 1, 2, 1, 1, 24 )
+  local ms = HUDTab( 1, -200, -320, 400, 60, 1, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ms", ms )
 
-  local ma = HUDTab( 1, 380, -200, 400, 60, 0, 2, 1, 1, 24 )
+  local ma = HUDTab( 1, 380, -200, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ma", ma )
 
-  local ca = HUDTab( 1, -200, -400, 400, 60, 1, 2, 1, 1, 24 )
+  local ca = HUDTab( 1, -200, -400, 400, 60, 1, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ca", ca )
 
-  local mo = HUDTab( 1, 380, -380, 400, 60, 0, 2, 1, 1, 18 )
+  local mo = HUDTab( 1, 380, -380, 400, 60, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "mo", mo )
 
-  local xp = HUDTab( 1, 20, -440, 760, 60, 0, 2, 1, 1, 18 )
+  local xp = HUDTab( 1, 20, -440, 760, 60, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "xp", xp )
 
 
-  local mm = HUDTab( 1, 20, -380, 360, 360, 0, 2, 1, 1, 18 )
+  local mm = HUDTab( 1, 20, -380, 360, 360, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "mm", mm )
 
-  local wn = HUDTab( 1, -420, -200, 400, 60, 2, 2, 1, 1, 24 )
+  local wn = HUDTab( 1, -420, -200, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "wn", wn )
 
-  local wp = HUDTab( 1, -420, -80, 400, 60, 2, 2, 1, 1, 24 )
+  local wp = HUDTab( 1, -420, -80, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "wp", wp )
 
-  local ws = HUDTab( 1, -420, -140, 400, 60, 2, 2, 1, 1, 24 )
+  local ws = HUDTab( 1, -420, -140, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ws", ws )
 
-  local tt = HUDTab( 1, 20, 20, 660, 440, 0, 0, 1, 1, 24 )
+  local tt = HUDTab( 1, 20, 20, 660, 440, 0, 0, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "tt", tt )
 
-  local st = HUDTab( 1, -380, 380, 760, 60, 1, 0, 1, 1, 18 )
+  local st = HUDTab( 1, -380, 380, 760, 60, 1, 0, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "st", st )
 
-  local vt = HUDTab( 1, -380, 20, 760, 300, 1, 0, 1, 1, 18 )
+  local vt = HUDTab( 1, -380, 20, 760, 300, 1, 0, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "vt", vt )
 
-  local cb = HUDTab( 1, 20, -880, 760, 420, 0, 2, 1, 1, 18 )
+  local cb = HUDTab( 1, 20, -880, 760, 420, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "cb", cb )
 
   --crosshair

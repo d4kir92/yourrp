@@ -15,6 +15,7 @@ hud["ca"] = 0
 hud["xp"] = 0
 hud["wp"] = 0
 hud["ws"] = 0
+hud["mo"] = 0
 
 local reload = {}
 
@@ -107,11 +108,11 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
       hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
     end
     draw.RoundedBox( 0, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )
-    if color != nil then
+    if color != nil and cur != nil and max != nil then
       draw.RoundedBox( 0, anchorW( HudV( dbV .. "aw" ) ) + ctr( cl_db[dbV .. "px"] ), anchorH( HudV( dbV .. "ah" ) ) + ctr( cl_db[dbV .. "py"] ), ( hud[dbV] / max ) * ( ctr( cl_db[dbV .. "sw"] ) ), ctr( cl_db[dbV .. "sh"] ), color )
     end
 
-    if text != nil then
+    if text != nil and HudV( dbV .. "tt" ) == 1 then
       local _st = {}
       _st.br = 10
       local _pw = 0
@@ -135,7 +136,7 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
       draw.SimpleTextOutlined( text, dbV .. "sf", _st.x, _st.y, Color( 255, 255, 255, 255 ), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color( 0, 0, 0 ) )
     end
 
-    if icon != nil then
+    if icon != nil and HudV( dbV .. "it" ) == 1  then
       showIcon( dbV, icon )
     end
 
@@ -201,7 +202,13 @@ function HudPlayer()
         if _capital > 0 then
           _motext = _motext .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
         end
-        drawHUDElement( "mo", nil, nil, _motext, money, nil )
+        local _capitalMin = nil
+        local _capitalMax = nil
+        if _capital > 0 then
+          _capitalMin = CurTime() + ply:GetNWInt( "capitaltime" ) - 1 - ply:GetNWInt( "nextcapitaltime" )
+          _capitalMax = ply:GetNWInt( "capitaltime" )
+        end
+        drawHUDElement( "mo", _capitalMin, _capitalMax, _motext, money, Color( 33, 108, 42, _alpha ) )
 
         --XP
         local _xptext = "lvl " .. 1 .. " (" .. 0 .. "%) " .. ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
@@ -387,8 +394,10 @@ function HudPlayer()
           drawRBoxCr( ctrF(ScrH()) * anchorW( HudV( "mmaw" ) ) + cl_db["mmpx"] + (cl_db["mmsw"]/2) - (minimap.point/2), ctrF(ScrH()) * anchorH( HudV( "mmah" ) ) + cl_db["mmpy"] + (cl_db["mmsh"]/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
 
           --Coords
-          draw.SimpleTextOutlined( math.Round( ply:GetPos().x, -1 ) .. ",", "HudBars", anchorW( HudV( "mmaw" ) ) + ctrW( cl_db["mmpx"] ) + ( ctrW( cl_db["mmsw"] ) / 2 ), anchorH( HudV( "mmah" ) ) + ctrW( cl_db["mmpy"] ) + ctrW( cl_db["mmsh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( " " .. math.Round( ply:GetPos().y, -1 ), "HudBars", anchorW( HudV( "mmaw" ) ) + ctrW( cl_db["mmpx"] ) + ( ctrW( cl_db["mmsw"] ) / 2 ), anchorH( HudV( "mmah" ) ) + ctrW( cl_db["mmpy"] ) + ctrW( cl_db["mmsh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if HudV( "mm" .. "it" ) == 1 then
+            draw.SimpleTextOutlined( math.Round( ply:GetPos().x, -1 ) .. ",", "HudBars", anchorW( HudV( "mmaw" ) ) + ctrW( cl_db["mmpx"] ) + ( ctrW( cl_db["mmsw"] ) / 2 ), anchorH( HudV( "mmah" ) ) + ctrW( cl_db["mmpy"] ) + ctrW( cl_db["mmsh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( " " .. math.Round( ply:GetPos().y, -1 ), "HudBars", anchorW( HudV( "mmaw" ) ) + ctrW( cl_db["mmpx"] ) + ( ctrW( cl_db["mmsw"] ) / 2 ), anchorH( HudV( "mmah" ) ) + ctrW( cl_db["mmpy"] ) + ctrW( cl_db["mmsh"] - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
         end
 
         --Tooltip

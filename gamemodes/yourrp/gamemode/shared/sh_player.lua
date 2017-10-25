@@ -124,7 +124,7 @@ function Player:CheckMoney()
       local _m = self:GetNWString( "money", 0 )
       local money = tonumber( _m )
       if worked( money, "ply:money CheckMoney" ) then
-        dbUpdate( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
+        dbUpdate( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() ) --attempt to nil value
       end
       _mb = self:GetNWString( "moneybank", 0 )
       local moneybank = tonumber( _mb )

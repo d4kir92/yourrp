@@ -1,5 +1,10 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function teleportToPoint( ply, pos )
+  printGM( "note", "teleportToPoint " .. tostring( pos ) )
+  yrp_tp( ply, Vector( pos[1], pos[2], pos[3] ) )
+end
+
 function teleportToSpawnpoint( ply )
   local groTab = ply:GetGroTab()
 

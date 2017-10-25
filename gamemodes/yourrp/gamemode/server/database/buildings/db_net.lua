@@ -188,35 +188,39 @@ net.Receive( "sellBuilding", function( len, ply )
 end)
 
 net.Receive( "buyBuilding", function( len, ply )
-  local _tmpBuildingID = net.ReadInt( 16 )
-  local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+  if ply:GetNWBool( "building", false ) then
+    local _tmpBuildingID = net.ReadInt( 16 )
+    local _tmpTable = dbSelect( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-  if ply:canAfford( _tmpTable[1].buildingprice ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
-    ply:addMoney( - ( _tmpTable[1].buildingprice ) )
-    dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
-    local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
-    local _tmpPlys = dbSelect( "yrp_characters", "rpname", "uniqueID = " .. ply:CharID() )
-    for k, v in pairs( _tmpDoors ) do
-      if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-        v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
+    if ply:canAfford( _tmpTable[1].buildingprice ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
+      ply:addMoney( - ( _tmpTable[1].buildingprice ) )
+      dbUpdate( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
+      local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
+      local _tmpPlys = dbSelect( "yrp_characters", "rpname", "uniqueID = " .. ply:CharID() )
+      for k, v in pairs( _tmpDoors ) do
+        if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+          v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
+        end
       end
-    end
-    local _tmpFDoors = ents.FindByClass( "func_door" )
-    for k, v in pairs( _tmpFDoors ) do
-      if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-        v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
+      local _tmpFDoors = ents.FindByClass( "func_door" )
+      for k, v in pairs( _tmpFDoors ) do
+        if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+          v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
+        end
       end
-    end
-    local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
-    for k, v in pairs( _tmpFRDoors ) do
-      if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-        v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
+      local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
+      for k, v in pairs( _tmpFRDoors ) do
+        if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
+          v:SetNWString( "ownerRPName", _tmpPlys[1].rpname )
+        end
       end
-    end
 
-    printGM( "user", ply:RPName() .. " has buyed a door")
+      printGM( "user", ply:RPName() .. " has buyed a door")
+    else
+      printGM( "user", ply:RPName() .. " has not enough money to buy door")
+    end
   else
-    printGM( "user", ply:RPName() .. " has not enough money to buy door")
+    printGM( "note", "buildings disabled" )
   end
 end)
 

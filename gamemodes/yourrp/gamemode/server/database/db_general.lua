@@ -3,6 +3,7 @@
 --db_general.lua
 
 util.AddNetworkString( "dbUpdateNWBool" )
+util.AddNetworkString( "dbUpdateNWBool2" )
 
 include( "general/db_net.lua" )
 include( "general/db_func.lua" )
@@ -27,6 +28,9 @@ end
 if dbSelect( dbName, "*", "name = 'jailaccess'" ) == nil then
   dbInsertInto( dbName, "name, value", "'jailaccess', '-1'" )
 end
+if dbSelect( dbName, "*", "name = 'building'" ) == nil then
+  dbInsertInto( dbName, "name, value", "'building', '1'" )
+end
 
 function getAdvertName()
   local tmpTable = dbSelect( dbName, "*", nil )
@@ -44,12 +48,23 @@ net.Receive( "dbUpdateNWBool", function( len, ply )
   local _dbWhile = net.ReadString()
   local _NWBool = net.ReadBool()
   dbUpdate( _dbTable, _dbSets, _dbWhile )
-  local _usergroup_ = string.Explode( " ", _dbWhile )
-  local _restriction_ = string.Explode( " ", _dbSets )
   printGM( "note", ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "metabolism", _NWBool )
+  end
+end)
+
+net.Receive( "dbUpdateNWBool2", function( len, ply )
+  local _dbTable = net.ReadString()
+  local _dbSets = net.ReadString()
+  local _dbWhile = net.ReadString()
+  local _NWBool = net.ReadBool()
+  dbUpdate( _dbTable, _dbSets, _dbWhile )
+  printGM( "note", ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "building", _NWBool )
   end
 end)
 

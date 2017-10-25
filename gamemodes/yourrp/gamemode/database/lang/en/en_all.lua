@@ -297,4 +297,6 @@ function EN_All()
   lang.gangs = "Gangs"
 
   lang.keybindchanger = "Keybind changing"
+
+  lang.rolesalarytime = "Role salary time"
 end

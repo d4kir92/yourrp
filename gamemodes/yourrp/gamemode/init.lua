@@ -175,7 +175,7 @@ function GM:GetFallDamage( ply, speed )
 end
 
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
-  if ply:GetNWBool( "cuffed" ) then
+  if ply:GetNWBool( "cuffed" ) or ply.leiche != nil then
     return true
   end
   return false

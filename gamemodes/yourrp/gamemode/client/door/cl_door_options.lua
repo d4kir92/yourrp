@@ -8,20 +8,22 @@ net.Receive( "getBuildingInfo", function( len )
     local owner = net.ReadString()
 
     local ply = LocalPlayer()
-    if _building != nil and _tmpBuilding != nil then
-      if _tmpBuilding[1] != nil then
-        if _tmpBuilding[1].ownerCharID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
-          buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door )
-        elseif _tmpBuilding[1].ownerCharID == ply:CharID() or _tmpBuilding[1].groupID != -1 then
-          optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door, owner )
+    if ply:GetNWBool( "building", false ) then
+      if _building != nil and _tmpBuilding != nil then
+        if _tmpBuilding[1] != nil then
+          if _tmpBuilding[1].ownerCharID == "" and tonumber( _tmpBuilding[1].groupID ) == -1 then
+            buyWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door )
+          elseif _tmpBuilding[1].ownerCharID == ply:CharID() or _tmpBuilding[1].groupID != -1 then
+            optionWindow( _building, _tmpBuilding[1].name, _tmpBuilding[1].buildingprice, _door, owner )
+          else
+            printGM( "note", "fail" )
+          end
         else
-          printGM( "note", "fail" )
+          printGM( "note", "getDoorInfo Table empty" )
         end
       else
-        printGM( "note", "getDoorInfo Table empty" )
+        printGM( "note", "getDoorInfo Receive: NIL" )
       end
-    else
-      printGM( "note", "getDoorInfo Receive: NIL" )
     end
   end
 end)

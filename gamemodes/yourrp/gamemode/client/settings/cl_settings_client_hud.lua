@@ -92,19 +92,15 @@ function changeHudElement( parent, tmp, textPre )
         local w, h = frame:GetSize()
         local outside = false
         if x+w > ScrW() then
-          print("TEST1")
           frame:SetPos( ScrW()-w, y )
           outside = true
         elseif y+h > ScrH() then
-          print("TEST2")
           frame:SetPos( x, ScrH()-h )
           outside = true
         elseif x < 0 then
-          print("TEST3")
           frame:SetPos( 0, y )
           outside = true
         elseif y < 0 then
-          print("TEST4")
           frame:SetPos( x, 0 )
           outside = true
         end
@@ -133,7 +129,7 @@ function changeHudElement( parent, tmp, textPre )
 
   function _tmpSettings:DoClick()
     local _tsx, _tsy = frame:GetPos()
-    local _settingsFrame = createD( "DFrame", frame, ctr( 500 ), ctr( 100 ), _tsx, _tsy )
+    local _settingsFrame = createD( "DFrame", frame, ctr( 800 ), ctr( 200 ), _tsx, _tsy )
     function _settingsFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
     end
@@ -273,6 +269,43 @@ function changeHudElement( parent, tmp, textPre )
       surface.SetDrawColor( 255, 255, 255, 255 )
     	surface.SetMaterial( _icon	) -- If you use Material, cache it!
     	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 50 ) - ctr( 2*_br ), ctr( 50 ) - ctr( 2*_br ) )
+    end
+
+
+    local tmpTextToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 270 ), ctr( 0 ) )
+    local tmpTextToggleChecked = -1
+    if tonumber( cl_db[tmp .. "tt"] ) == 0 then
+      tmpTextToggleChecked = false
+    elseif tonumber( cl_db[tmp .. "tt"] ) == 1 then
+      tmpTextToggleChecked = true
+    end
+    tmpTextToggle:SetChecked( tmpTextToggleChecked )
+    function tmpTextToggle:OnChange( bVal )
+    	if ( bVal ) then
+        cl_db[tmp .. "tt"] = 1
+    		dbUpdateHUD( tmp .. "tt", cl_db[tmp .. "tt"] )
+    	else
+        cl_db[tmp .. "tt"] = 0
+    		dbUpdateHUD( tmp .. "tt", cl_db[tmp .. "tt"] )
+    	end
+    end
+
+    local tmpIconToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 330 ), ctr( 0 ) )
+    local tmpIconToggleChecked = -1
+    if tonumber( cl_db[tmp .. "it"] ) == 0 then
+      tmpIconToggleChecked = false
+    elseif tonumber( cl_db[tmp .. "it"] ) == 1 then
+      tmpIconToggleChecked = true
+    end
+    tmpIconToggle:SetChecked( tmpIconToggleChecked )
+    function tmpIconToggle:OnChange( bVal )
+    	if ( bVal ) then
+        cl_db[tmp .. "it"] = 1
+    		dbUpdateHUD( tmp .. "it", cl_db[tmp .. "it"] )
+    	else
+        cl_db[tmp .. "it"] = 0
+    		dbUpdateHUD( tmp .. "it", cl_db[tmp .. "it"] )
+    	end
     end
 
     _settingsFrame:MakePopup()

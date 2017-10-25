@@ -24,6 +24,8 @@ include( "api/derma.lua" )
 include( "api/math.lua" )
 include( "api/sql.lua" )
 
+local searchIcon = Material( "icon16/magnifier.png" )
+
 --##############################################################################
 function ChangeLanguage( parent, w, h, x, y )
   local tmp = createD( "DComboBox", parent, w, h, x, y )
@@ -63,7 +65,16 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
     hook.Call( closeF )
   end
 
-  local search = createVGUI( "DTextEntry", frame, 2000 - 20, 40, 10, 50 )
+  local searchButton = createD( "DButton", frame, ctr( 40 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
+  searchButton:SetText( "" )
+  function searchButton:Paint( pw, ph )
+    local _br = 4
+    surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( searchIcon	)
+  	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 40-2*_br ), ctr( 40-2*_br ) )
+  end
+
+  local search = createVGUI( "DTextEntry", frame, 2000 - 20 - 40, 40, 10 + 40, 50 )
 
   local site = {}
   site.cur = 1
@@ -262,7 +273,16 @@ function openSingleSelector( table )
     draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local search = createD( "DTextEntry", frame, shopsize - ctr( 20 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
+  local searchButton = createD( "DButton", frame, ctr( 40 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
+  searchButton:SetText( "" )
+  function searchButton:Paint( pw, ph )
+    local _br = 4
+    surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( searchIcon	)
+  	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 40-2*_br ), ctr( 40-2*_br ) )
+  end
+
+  local search = createD( "DTextEntry", frame, shopsize - ctr( 20+40 ), ctr( 40 ), ctr( 10+40 ), ctr( 50 ) )
   function showList()
     local tmpBr = 25
     local tmpX = 0

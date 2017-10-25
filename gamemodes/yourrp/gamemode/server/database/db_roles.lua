@@ -32,6 +32,7 @@ sqlAddColumn( dbName, "prerole", "INTEGER DEFAULT -1" )
 sqlAddColumn( dbName, "instructor", "INTEGER DEFAULT 0" )
 sqlAddColumn( dbName, "removeable", "INTEGER DEFAULT 1" )
 sqlAddColumn( dbName, "uses", "INTEGER DEFAULT 0" )
+sqlAddColumn( dbName, "capitaltime", "INTEGER DEFAULT 120" )
 
 if dbSelect( dbName, "*", "uniqueID = 1" ) == nil then
   printGM( "note", dbName .. " has not the default role" )

@@ -244,6 +244,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 								pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 12 * ply:GetModelScale() )
 							end
 							if _thirdperson == 2 then
+								--Thirdperson
 								local dist = 170 * ply:GetModelScale()
 
 								local _tmpThick = 4
@@ -285,7 +286,20 @@ local function yrpCalcView( ply, pos, angles, fov )
 							elseif _thirdperson == 0 then
 								--Disabled
 							elseif _thirdperson == 1 then
-								if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+								--Firstperson realistic
+								local dist = 170 * ply:GetModelScale()
+
+								local _tmpThick = 16
+								local tr = util.TraceHull( {
+									start = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + angles:Forward() * 4,
+									endpos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) - angles:Forward() * 4,
+									filter = {LocalPlayer(),LocalPlayer():GetActiveWeapon()},
+									mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
+									maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
+									mask = MASK_SHOT_HULL
+								} )
+
+								if !tr.Hit and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 									pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 16 * ply:GetModelScale() )
 									view.origin = pos2
 									_savePos = pos2
@@ -293,6 +307,12 @@ local function yrpCalcView( ply, pos, angles, fov )
 									view.fov = fov
 									_drawViewmodel = true
 
+									return view
+								else
+									view.origin = pos
+									view.angles = angles
+									view.fov = fov
+									_drawViewmodel = false
 									return view
 								end
 							end

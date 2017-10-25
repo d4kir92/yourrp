@@ -146,13 +146,25 @@ function canGetRole( ply, roleID )
   return false
 end
 
+function RemRolVals( ply )
+  local rolTab = ply:GetRolTab()
+  if rolTab != nil then
+    local _sweps = string.Explode( ",", rolTab.sweps )
+    for k, v in pairs( _sweps ) do
+      ply:StripWeapon( v )
+    end
+  end
+end
+
 net.Receive( "wantRole", function( len, ply )
   local uniqueIDRole = net.ReadInt( 16 )
 
   if canGetRole( ply, uniqueIDRole ) then
+    --Remove Sweps from old role
+    RemRolVals( ply )
 
+    --New role
     SetRole( ply, uniqueIDRole )
-
     SetRolVals( ply )
   end
 end)

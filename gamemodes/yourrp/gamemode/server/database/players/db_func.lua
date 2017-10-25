@@ -103,6 +103,7 @@ function SetRolVals( ply )
     ply:SetNWInt( "capital", rolTab.capital )
     ply:SetNWString( "roleName", rolTab.roleID )
     ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
+    ply:SetNWInt( "capitaltime", rolTab.capitaltime )
 
     --sweps
     local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
@@ -170,7 +171,8 @@ function GM:PlayerLoadout( ply )
   for k, v in pairs( yrp_general ) do
     if tostring( v.name ) == "metabolism" then
       ply:SetNWBool( "metabolism", tobool( v.value ) )
-      break
+    elseif tostring( v.name ) == "building" then
+      ply:SetNWBool( "building", tobool( v.value ) )
     end
   end
 

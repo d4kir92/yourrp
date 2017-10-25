@@ -101,11 +101,11 @@ timer.Create( "ServerThink", 1, 0, function()
         cleanUpJail( ply )
       end
     end
-  end
 
-  if time % 120 == 0 then
-    for k, ply in pairs( _allPlayers ) do
-      if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWInt( "capital" ), "sv_think capital fail" ) then
+    if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWInt( "capital" ), "sv_think capital fail" ) then
+      if CurTime() >= ply:GetNWInt( "nextcapitaltime", 0 ) then
+        ply:SetNWInt( "nextcapitaltime", CurTime() + ply:GetNWInt( "capitaltime" ) )
+
         local _m = ply:GetNWString( "money", -1 )
         local _money = tonumber( _m )
         local _c = ply:GetNWInt( "capital", -1 )
@@ -224,6 +224,7 @@ function GM:PlayerSay( sender, text, teamChat )
       sender:ChatPrint( "dropmoney AMOUNT - drop money to ground" )
       sender:ChatPrint( "roll - roll a number between 0 and 100" )
       sender:ChatPrint( "kill - suicide" )
+      sender:ChatPrint( "sleep - sleep or wake up" )
       sender:ChatPrint( "" )
       return ""
     end
@@ -325,6 +326,38 @@ function GM:PlayerSay( sender, text, teamChat )
         boxString( "Command-FAILED", Color( 255, 0, 0 ), Color( 255, 255, 255 ) )
       else
         printGM( "note", sender:Nick() .. " tried to use addmoney!" )
+      end
+    end
+
+    if isChatCommand( text, "sleep" ) then
+      if sender.leiche == nil then
+        local tmp = ents.Create( "prop_ragdoll" )
+        tmp:SetModel( sender:GetModel() )
+        tmp:SetModelScale( sender:GetModelScale(), 0 )
+        tmp:SetPos( sender:GetPos() )
+        tmp:Spawn()
+
+        sender.leiche = tmp
+
+        sender:SetRenderMode( RENDERMODE_TRANSALPHA )
+        sender:DrawWorldModel( false )
+  		  sender:SetColor( Color( 255, 255, 255, 0 ) )
+
+        timer.Simple( 0.1, function()
+          sender:SetParent( sender.leiche )
+          sender:Freeze( true )
+        end)
+      else
+        sender.leiche:Remove()
+
+        sender.leiche = nil
+
+        sender:SetRenderMode( RENDERMODE_NORMAL )
+        sender:DrawWorldModel( true )
+  		  sender:SetColor( Color( 255, 255, 255, 255 ) )
+
+        sender:SetParent( nil )
+        sender:Freeze( false )
       end
     end
 
