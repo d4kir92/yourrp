@@ -10,7 +10,7 @@ function HudV( name )
   return cl_db[name]
 end
 
-function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt )
+function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it )
   local tmp = {}
   tmp.to = to
   tmp.px = px
@@ -23,6 +23,7 @@ function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt )
   tmp.ty = ty
   tmp.sf = sf
   tmp.tt = tt
+  tmp.it = it
   return tmp
 end
 
@@ -175,9 +176,11 @@ function loadCompleteHUD()
   printGM( "db", "loaded HUD" )
 end
 
-function dbUpdateHUD( name, value )
-  dbUpdate( "yrp_cl_hud", "value = " .. value, "name = '" .. name .. "'" )
-  loadDBHUD( name )
+function dbUpdateHUD( _name, _value )
+  if worked( _name, "dbUpdateHUD _name" ) and worked( _value, "dbUpdateHUD _value" ) then
+    dbUpdate( "yrp_cl_hud", "value = " .. _value, "name = '" .. _name .. "'" )
+    loadDBHUD( _name )
+  end
 end
 
 function dbUpdateColor( name, tab )

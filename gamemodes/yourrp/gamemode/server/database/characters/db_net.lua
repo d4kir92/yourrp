@@ -97,17 +97,20 @@ net.Receive( "charGetCharacters", function( len, ply )
         netTable[_charCount] = {}
         netTable[_charCount].char = v
         local tmp = dbSelect( "yrp_roles", "*", "uniqueID = " .. v.roleID )
-        tmp = tmp[1]
         if worked( tmp, "charGetCharacters role" ) then
+          tmp = tmp[1]
           netTable[_charCount].role = tmp
         else
           local tmpDefault = dbSelect( "yrp_roles", "*", "uniqueID = " .. "1" )
-          tmpDefault = tmpDefault[1]
-          netTable[_charCount].role = tmpDefault
+          if worked( tmpDefault, "charGetCharacters tmpDefault" ) then
+            tmpDefault = tmpDefault[1]
+            netTable[_charCount].role = tmpDefault
+          end
         end
         local tmp2 = dbSelect( "yrp_groups", "*", "uniqueID = " .. v.groupID )
         if worked( tmp2, "charGetCharacters group" ) then
-          netTable[_charCount].group = tmp2[1]
+          tmp2 = tmp2[1]
+          netTable[_charCount].group = tmp2
         end
       end
     end
