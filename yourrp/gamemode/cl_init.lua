@@ -27,18 +27,18 @@ include( "api/sql.lua" )
 local searchIcon = Material( "icon16/magnifier.png" )
 
 --##############################################################################
-function ChangeLanguage( parent, w, h, x, y )
+function derma_change_language( parent, w, h, x, y )
   local tmp = createD( "DComboBox", parent, w, h, x, y )
   tmp:AddChoice( "[AUTOMATIC]", "auto" )
   for k, v in pairs( allLang ) do
     local _select = false
-    if lang.lang == v.lang then
+    if lang.language == v.lang then
       _select = true
     end
     tmp:AddChoice( v.ineng .. "/" .. v.lang, v.short, _select )
   end
   tmp.OnSelect = function( panel, index, value, data )
-    changeLang( data )
+    change_language( data )
   end
   return tmp
 end
@@ -507,15 +507,7 @@ function showVersion()
           draw.SimpleTextOutlined( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctrW( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
-        local Langu = createVGUI( "DComboBox", frame, 400, 50, 10 + 300, 10 )
-        Langu:SetValue( lang.lang )
-        Langu:AddChoice( "[AUTOMATIC]", "auto" )
-        for k, v in pairs( allLang ) do
-          Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
-        end
-        Langu.OnSelect = function( panel, index, value, data )
-          changeLang(data)
-        end
+        local Langu = derma_change_language( frame, ctr( 400 ), ctr( 50 ), ctr( 310 ), ctr( 10 ) )
 
         local showChanges = createVGUI( "DButton", frame, 460, 50, 0, 0 )
         showChanges:SetText( "" )

@@ -112,7 +112,7 @@ function openSettings()
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dsecondary )
     draw.SimpleTextOutlined( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
-  ChangeLanguage( language, ctr( 400 ), ctr( 80 ), ctr( 250 ), ctr( 0 ) )
+  derma_change_language( language, ctr( 400 ), ctr( 80 ), ctr( 250 ), ctr( 0 ) )
 
   local settingsButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 180 ), ctr( 10 ) )
   settingsButton:SetText( "" )

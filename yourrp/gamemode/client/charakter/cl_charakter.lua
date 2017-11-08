@@ -498,7 +498,7 @@ function openCharacterCreation()
     character.rpname = charactersNameText:GetValue()
   end
 
-  ChangeLanguage( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
+  derma_change_language( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
 
   if character.amount > 0 then
     local button = {}
@@ -580,7 +580,7 @@ function openCharacterSelection()
     draw.SimpleTextOutlined( lang.characterselection, "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  ChangeLanguage( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
+  derma_change_language( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
 
   local border = ctr( 50 )
   local charactersBackground = createD( "DPanel", frame, ctr( 800 ), ScrH() - (2*border), border, border )

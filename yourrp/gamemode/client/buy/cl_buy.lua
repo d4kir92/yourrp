@@ -279,15 +279,7 @@ function openBuyMenu()
     draw.RoundedBox( 0, 0, 0, pw, ph, yrp.colors.dbackground )
   end
 
-  local Langu = createVGUI( "DComboBox", _buyWindow, 400, 50, 1400, 0 )
-  Langu:SetValue( lang.lang )
-  Langu:AddChoice( "[AUTOMATIC]", "auto" )
-  for k, v in pairs( allLang ) do
-    Langu:AddChoice( v.ineng .. "/" .. v.lang, v.short )
-  end
-  Langu.OnSelect = function( panel, index, value, data )
-    changeLang(data)
-  end
+  local Langu = derma_change_language( _buyWindow, ctr( 400 ), ctr( 50 ), ctr( 1400 ), ctr( 0 ) )
 
   local _buyTabs = createVGUI( "DPropertySheet", _buyWindow, winW, winH, 0, 0 )
   _buyTabs:Dock( FILL )

@@ -693,7 +693,7 @@ net.Receive( "yrp_roles", function( len )
         rolesInfo = nil
       end
 
-      rolesInfo = createVGUI( "DPanel", settingsWindow.site, 1700, 1700, _lbr + _w + _br, 5 )
+      rolesInfo = createVGUI( "DPanel", settingsWindow.site, 1700, 1800, _lbr + _w + _br, 5 )
       function rolesInfo:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
       end
@@ -721,7 +721,7 @@ net.Receive( "yrp_roles", function( len )
       addDBComboBox( rolesInfo, 800, 80, 810, 1540, lang.roleprerole, yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
 
       if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
-        addDBComboBox( rolesInfo, 1610, 80, 0, 1540, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBComboBox( rolesInfo, 1610, 80, 0, 1630, lang.rolegroup, yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
       end
     end
     if tmp != nil then

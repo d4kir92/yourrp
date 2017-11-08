@@ -68,7 +68,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   end
 
   for k, v in pairs( descTable ) do
-    local addSize = surface.GetTextSize( v ) + surface.GetTextSize( "," )
+    local addSize = surface.GetTextSize( v ) + surface.GetTextSize( " " )
     if (stringL + addSize) > ctrW( 550 - 20 ) then
       stringL = addSize
       nextT = nextT + 1
@@ -76,7 +76,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
       stringL = stringL + addSize
     end
     if nextT <= 6 then
-      descTpl[nextT] = descTpl[nextT] .. v
+      descTpl[nextT] = descTpl[nextT] .. v .. " "
     else
       break
     end
