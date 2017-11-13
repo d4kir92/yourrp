@@ -1,0 +1,68 @@
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
+--db_role_whitelist.lua
+
+local _db_name = "yrp_role_whitelist"
+
+sql_add_column( _db_name, "SteamID", "TEXT DEFAULT ''" )
+sql_add_column( _db_name, "nick", "TEXT DEFAULT ''" )
+sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
+sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
+
+--sql.Query( "DROP TABLE " .. _db_name )
+db_is_empty( _db_name )
+
+function sendRoleWhitelist( ply )
+  if ply:IsSuperAdmin() or ply:IsAdmin() then
+    local _tmpWhiteList = db_select( "yrp_role_whitelist", "*", nil )
+    local _tmpRoleList = db_select( "yrp_roles", "*", nil )
+    local _tmpGroupList = db_select( "yrp_groups", "*", nil )
+    if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
+      net.Start( "getRoleWhitelist" )
+        net.WriteTable( _tmpWhiteList )
+        net.WriteTable( _tmpRoleList )
+        net.WriteTable( _tmpGroupList )
+      net.Send( ply )
+    else
+      _tmpWhiteList = {}
+      net.Start( "getRoleWhitelist" )
+        net.WriteTable( _tmpWhiteList )
+        net.WriteTable( _tmpRoleList )
+        net.WriteTable( _tmpGroupList )
+      net.Send( ply )
+    end
+  end
+end
+
+util.AddNetworkString( "getRoleWhitelist" )
+util.AddNetworkString( "whitelistPlayer" )
+util.AddNetworkString( "whitelistPlayerRemove" )
+util.AddNetworkString( "yrpInfoBox" )
+
+net.Receive( "whitelistPlayerRemove", function( len, ply )
+  local _tmpUniqueID = net.ReadInt( 16 )
+  db_delete_from( "yrp_role_whitelist", "uniqueID = " .. _tmpUniqueID )
+end)
+
+net.Receive( "whitelistPlayer", function( len, ply )
+  if ply:IsSuperAdmin() or ply:IsAdmin() then
+    local _SteamID = net.ReadString()
+    local _nick = ""
+    for k, v in pairs( player.GetAll() ) do
+      if v:SteamID() == _SteamID then
+        _nick = v:Nick()
+      end
+    end
+    local _roleID = net.ReadInt( 16 )
+    local _dbRole = db_select( "yrp_roles", "*", "uniqueID = " .. _roleID )
+    local _groupID = _dbRole[1].groupID
+
+    db_insert_into( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. _roleID )
+  end
+  sendRoleWhitelist( ply )
+end)
+
+
+net.Receive( "getRoleWhitelist", function( len, ply )
+  sendRoleWhitelist( ply )
+end)

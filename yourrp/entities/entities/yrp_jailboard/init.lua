@@ -25,11 +25,11 @@ function ENT:OnRemove()
 end
 
 function ENT:Use( activator, caller )
-	local tmpTable = dbSelect( "yrp_jail", "*", nil )
-	local tmpGroups = dbSelect( "yrp_groups", "*", nil )
-	local tmpGeneral = dbSelect( "yrp_general", "*", nil )
+	local tmpTable = db_select( "yrp_jail", "*", nil )
+	local tmpGroups = db_select( "yrp_groups", "*", nil )
+	local tmpGeneral = db_select( "yrp_general", "*", nil )
 	local chaTab = caller:GetChaTab()
-	local tmpRoles = dbSelect( "yrp_roles", "*", "uniqueID = " .. chaTab.roleID .. "")
+	local tmpRoles = db_select( "yrp_roles", "*", "uniqueID = " .. chaTab.roleID .. "")
 
 	if tmpTable == nil or tmpTable == false then
 		tmpTable = {}

@@ -73,7 +73,7 @@ function ENT:ChangeMenu()
 end
 
 function ENT:ATMPressPrev( ply )
-	local _tmpPlayers = dbSelect( "yrp_characters", "*", nil )
+	local _tmpPlayers = db_select( "yrp_characters", "*", nil )
 	self.namePos = self.namePos - 4
 	if self.namePos < 1 then
 		self.namePos = 1
@@ -109,7 +109,7 @@ function ENT:ATMPressPrev( ply )
 end
 
 function ENT:ATMPressNext( ply )
-	local _tmpPlayers = dbSelect( "yrp_players", "*", nil )
+	local _tmpPlayers = db_select( "yrp_players", "*", nil )
 	self.namePos = self.namePos + 4
 	local names = {}
 	local SteamIDs = {}
@@ -212,14 +212,14 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 						if self.money != nil and isnumber( self.money ) then
 							if self.money > 0 then
 								if activator:canAffordBank( self.money ) then
-									local dbSelectActivator = dbSelect( "yrp_characters", "*", "uniqueID = " .. activator:CharID() )
+									local dbSelectActivator = db_select( "yrp_characters", "*", "uniqueID = " .. activator:CharID() )
 									dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
-									dbUpdate( "yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID() )
+									db_update( "yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID() )
 
-									local dbSelectTarget = dbSelect( "yrp_characters", "*", "uniqueID = " .. tostring( self.parent:GetNWString( "SteamID" ) ) )
+									local dbSelectTarget = db_select( "yrp_characters", "*", "uniqueID = " .. tostring( self.parent:GetNWString( "SteamID" ) ) )
 									if dbSelectTarget != nil then
 										dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
-										dbUpdate( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID" ) .. "'")
+										db_update( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID" ) .. "'")
 
 										activator:SetNWString( "moneybank", dbSelectActivator[1].moneybank )
 										for k, v in pairs( player.GetAll() ) do

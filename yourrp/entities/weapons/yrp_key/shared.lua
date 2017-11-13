@@ -9,7 +9,7 @@ SWEP.Instructions = "Left Click - Unlock door\nRight Click - Lock door"
 SWEP.Category = "YourRP"
 
 --The name of the SWep, as appears in the weapons tab in the spawn menu(Q Menu)
-SWEP.PrintName = lang.key
+SWEP.PrintName = lang_string( "key" )
 
 --Sets the position of the weapon in the switching menu
 --(appears when you use the scroll wheel or keys 1-6 by default)
@@ -67,15 +67,15 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 	  if self.Owner:GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
 	    if unlockDoor( self.Owner:GetEyeTrace().Entity, self.numbers ) then
-	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.unlockeddoor )
+	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "unlockeddoor" ) )
 	    else
-	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
 	    end
 	  elseif self.Owner:GetEyeTrace().Entity:IsVehicle() then
 			if unlockVehicle( self.Owner:GetEyeTrace().Entity, self.numbers ) then
-	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.unlockedvehicle )
+	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "unlockedvehicle" ) )
 	    else
-	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
 	    end
 		end
 	end
@@ -85,15 +85,15 @@ function SWEP:SecondaryAttack()
   if SERVER then
     if self.Owner:GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
       if lockDoor( self.Owner:GetEyeTrace().Entity, self.numbers ) then
-        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.lockeddoor )
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "lockeddoor" ) )
       else
-        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
       end
 		elseif self.Owner:GetEyeTrace().Entity:IsVehicle() then
 			if lockVehicle( self.Owner:GetEyeTrace().Entity, self.numbers ) then
-        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.lockedvehicle )
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "lockedvehicle" ) )
       else
-        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang.youdonthaveakey )
+        self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
       end
 		end
   end

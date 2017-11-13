@@ -1,0 +1,106 @@
+--Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
+util.AddNetworkString( "dbUpdateNWBool" )
+util.AddNetworkString( "dbUpdateNWBool2" )
+
+local _db_name = "yrp_general"
+
+sql_add_column( _db_name, "name_gamemode", "TEXT DEFAULT 'YourRP'" )
+sql_add_column( _db_name, "name_advert", "TEXT DEFAULT 'Advert'" )
+sql_add_column( _db_name, "time_restart", "TEXT DEFAULT '10'" )
+sql_add_column( _db_name, "access_jail", "TEXT DEFAULT -1" )
+
+sql_add_column( _db_name, "toggle_metabolism", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_building", "INT DEFAULT 1" )
+
+--sql.Query( "DROP TABLE yrp_general")
+function check_yrp_general()
+  local _tmp = db_select( _db_name, "*", "uniqueID = 1" )
+  if _tmp == nil then
+    local _result = db_insert_into_DEFAULTVALUES( _db_name )
+    if worked( _tmp, "" ) then
+      printGM( "error", _db_name .. " has no entries." )
+    end
+  end
+
+  _tmp = db_select( _db_name, "*", nil )
+
+  if worked( _tmp, _db_name .. " is empty" ) then
+    hr_pre()
+    printGM( "db", _db_name )
+    PrintTable( _tmp )
+    hr_pos()
+  end
+end
+check_yrp_general()
+
+function get_advert_name()
+  local _tmp = db_select( _db_name, "name_advert", nil )
+  if worked( _tmp, "get_advert_name failed" ) then
+    _tmp = _tmp[1]
+    g_name_advert = _tmp.value
+  end
+end
+get_advert_name()
+
+net.Receive( "dbUpdateNWBool", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_metabolism = " .. _nw_bool, nil )
+  printGM( "note", ply:SteamName() .. " SETS " .. _nw_bool )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_metabolism", tobool( _nw_bool ) )
+  end
+end)
+
+net.Receive( "dbUpdateNWBool2", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_building = " .. _nw_bool, nil )
+  printGM( "note", ply:SteamName() .. " SETS " .. _nw_bool )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_building", tobool( _nw_bool ) )
+  end
+end)
+
+concommand.Add( "yrp_restart", function( ply, cmd, args )
+	if ply:IsPlayer() then
+		if ply:IsSuperAdmin() then
+	    printGM( "note", "RESTARTING SERVER by " .. ply:Nick() )
+      game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
+		else
+	    printGM( "note", ply:Nick() .. " tried to restart server!" )
+	  end
+	else
+    printGM( "note", "RESTARTING SERVER by [CONSOLE]" )
+    game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
+  end
+end )
+
+util.AddNetworkString( "updateGeneral" )
+util.AddNetworkString( "updateAdvert" )
+
+net.Receive( "updateAdvert", function( len, ply )
+  g_name_advert = net.ReadString()
+  db_update( "yrp_general", "name_advert = '" .. g_name_advert .. "'", nil )
+end)
+
+net.Receive( "getGamemodename", function( len, ply )
+  net.Start( "getGamemodename" )
+    net.WriteString( GAMEMODE.Name )
+  net.Send( ply )
+end)
+
+net.Receive( "dbGetGeneral", function( len, ply )
+  local _tmp = db_select( "yrp_general", "*", nil )
+  _tmp = _tmp[1]
+  net.Start( "dbGetGeneral" )
+    net.WriteTable( _tmp )
+  net.Send( ply )
+end)
+
+net.Receive( "updateGeneral", function( len, ply )
+  local _str = net.ReadString()
+
+  local _result = db_update( "yrp_general", "time_restart = '" .. _str .. "'", nil )
+end)

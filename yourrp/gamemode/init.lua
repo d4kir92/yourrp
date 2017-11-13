@@ -15,181 +15,45 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 ]]--
 
---init.lua
---##############################################################################
---AddCSLuaFiles
-AddCSLuaFile( "api/color.lua" )
-AddCSLuaFile( "api/derma.lua" )
-AddCSLuaFile( "api/math.lua" )
-AddCSLuaFile( "api/sql.lua" )
-
-AddCSLuaFile( "shared_pres.lua" )
-
+--[[
+AddCSLuaFiles
+]]--
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
-AddCSLuaFile( "shared/sh_player.lua" )
+AddCSLuaFile( "cl/cl_includes.lua" )
+AddCSLuaFile( "cl/gm/cl_startup.lua" )
+AddCSLuaFile( "cl/gm/cl_hud.lua" )
+AddCSLuaFile( "cl/gm/cl_chat.lua" )
+AddCSLuaFile( "cl/gm/cl_think.lua" )
+AddCSLuaFile( "cl/gm/hud/cl_hud_crosshair.lua" )
+AddCSLuaFile( "cl/gm/hud/cl_hud_map.lua" )
+AddCSLuaFile( "cl/gm/hud/cl_hud_player.lua" )
+AddCSLuaFile( "cl/gm/hud/cl_hud_view.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_buy.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_character.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_door_options.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_interact.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_rolesmenu.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_scoreboard.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_vehicle_options.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_client_charakter.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_client_hud.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_general.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_give.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_map.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_money.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_restriction.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_roles.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_whitelist.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_contact.lua" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_workshop.lua" )
 
-AddCSLuaFile( "integration/darkrp.lua" )
-
-AddCSLuaFile( "client/database/db_database.lua" )
-
-AddCSLuaFile( "client/cl_fonts.lua" )
-AddCSLuaFile( "client/cl_scoreboard.lua" )
-AddCSLuaFile( "client/cl_think.lua" )
-AddCSLuaFile( "client/cl_chat.lua" )
-
---Settings
-AddCSLuaFile( "client/settings/cl_settings.lua" )
---Settings Client
-AddCSLuaFile( "client/settings/cl_settings_client_charakter.lua" )
-AddCSLuaFile( "client/settings/cl_settings_client_hud.lua" )
---YourRP
-AddCSLuaFile( "client/settings/cl_settings_yourrp_workshop.lua" )
-AddCSLuaFile( "client/settings/cl_settings_yourrp_contact.lua" )
-AddCSLuaFile( "client/settings/cl_settings_yourrp_add_langu.lua" )
---Settings Server
-AddCSLuaFile( "client/settings/cl_settings_server_general.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_questions.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_roles.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_give.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_map.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_money.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_whitelist.lua" )
-AddCSLuaFile( "client/settings/cl_settings_server_restriction.lua" )
-
---Hud
-AddCSLuaFile( "client/cl_hud.lua" )
-AddCSLuaFile( "client/hud/cl_hud_map.lua" )
-AddCSLuaFile( "client/hud/cl_hud_player.lua" )
-AddCSLuaFile( "client/hud/cl_hud_crosshair.lua" )
-AddCSLuaFile( "client/hud/cl_hud_view.lua" )
-
-AddCSLuaFile( "client/charakter/cl_charakter.lua" )
-
-AddCSLuaFile( "client/roles/cl_rolesmenu.lua" )
-
-AddCSLuaFile( "client/interact/cl_interact.lua" )
-
-AddCSLuaFile( "client/buy/cl_buy.lua" )
-
-AddCSLuaFile( "client/door/cl_door_options.lua" )
-AddCSLuaFile( "client/vehicle/cl_vehicle_options.lua" )
---##############################################################################
-
---##############################################################################
---Includes
-include( "shared_pres.lua" )
-
-include( "api/sql.lua" )
-
-include( "shared/sh_player.lua" )
-
-include( "integration/darkrp.lua" )
-
-include( "server/sv_sizer.lua" )
-
-include( "server/db_database.lua" )
-
+--[[
+includes
+]]--
 include( "shared.lua" )
 
-include( "server/sv_func.lua" )
-include( "server/sv_think.lua" )
-
-include( "server/sv_convars.lua" )
---##############################################################################
-
---##############################################################################
---utils
-util.AddNetworkString( "restartServer" )
-util.AddNetworkString( "updateServer" )
-util.AddNetworkString( "cancelRestartServer" )
---##############################################################################
-
---##############################################################################
---Restart Server
-net.Receive( "restartServer", function( len, ply )
-  print("RunConsoleCommand(_restart)")
-  RunConsoleCommand( "_restart" )
-end)
-
-net.Receive( "updateServer", function( len, ply )
-  local tmpString = net.ReadString()
-  sql.Query( "UPDATE yrp_general SET value = '" .. tmpString .. "' WHERE name = 'gamemodename'" )
-
-  local countdown = net.ReadInt( 16 )
-  timer.Create( "timerRestartServer", 1, 0, function()
-		local message = "Updating Server in " .. countdown .. " seconds"
-		if countdown == 0 then
-			message = "Server is updating."
-		end
-    if countdown > 10 then
-      if (countdown%10) == 0 then
-        PrintMessage( HUD_PRINTCENTER, message )
-        printGM( "server", message )
-      end
-    elseif countdown <= 10 then
-      PrintMessage( HUD_PRINTCENTER, message )
-      printGM( "server", message )
-    end
-    countdown = countdown - 1
-    if countdown == -1 then
-      timer.Remove( "timerRestartServer" )
-      game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
-    end
-  end)
-end)
-
-net.Receive( "cancelRestartServer", function( len, ply )
-  timer.Remove( "timerRestartServer" )
-  local message = "Restart Server CANCELED!"
-  PrintMessage( HUD_PRINTCENTER, message )
-  printGM( "server", message )
-end)
---##############################################################################
-function yrpSetModelScale( ply, size )
-  ply:SetModelScale( size, 0 )
-
-  if size >= 1 then
-    ply:SetStepSize( 18*size )
-  else
-    ply:SetStepSize( 18 )
-  end
-end
-
-function GM:PlayerDisconnected( ply )
-  saveClients( "PlayerDisconnected" )
-end
-
-function GM:ShutDown()
-  saveClients( "Shutdown/Changelevel" )
-end
-
-function GM:GetFallDamage( ply, speed )
-  local _damage = speed / 8
-  if speed > ply:GetModelScale()*120 then
-    return _damage
-  else
-    return 0
-  end
-end
-
-function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
-  if ply:GetNWBool( "cuffed" ) or ply.leiche != nil then
-    return true
-  end
-  return false
-end
-
-function GM:InitPostEntity()
-  printGM( "note", "InitPostEntity()" )
-
-  timer.Simple( 2, function()
-    checkMapDoors()
-  end)
-
-  timer.Simple( 4, function()
-    getMapCoords()
-  end)
-
-end
+include( "sv/sv_includes.lua" )

@@ -29,9 +29,9 @@ net.Receive( "openLawBoard", function( len )
     end
     function window:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
-      draw.SimpleTextOutlined( lang.jail, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "jail" ), "sef", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang.access, "sef", ctrW( 600 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "access" ), "sef", ctr( 600 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     local _tmpGroups = net.ReadTable()
@@ -64,8 +64,8 @@ net.Receive( "openLawBoard", function( len )
 
 
     local scrollpanel = createVGUI( "DScrollPanel", window )
-    scrollpanel:SetSize( ScrH() - ctrW( 20 ), ScrH() - ctrW( 60 ) )
-    scrollpanel:SetPos( ctrW( 10 ), ctrW( 50 ) )
+    scrollpanel:SetSize( ScrH() - ctr( 20 ), ScrH() - ctr( 60 ) )
+    scrollpanel:SetPos( ctr( 10 ), ctr( 50 ) )
     function scrollpanel:Paint( pw, ph )
       --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
@@ -75,13 +75,13 @@ net.Receive( "openLawBoard", function( len )
     for k, v in pairs( tmpJailList ) do
       local dpanel = createVGUI( "DPanel", scrollpanel, 400, 400, 0, 0 )
       dpanel:SetText( "" )
-      dpanel:SetPos( _x*ctrW( 410 ), _y*ctrW( 410 ) )
+      dpanel:SetPos( _x*ctr( 410 ), _y*ctr( 410 ) )
       function dpanel:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 255, 200 ) )
 
-        draw.SimpleTextOutlined( lang.name .. ": " .. v.nick, "sef", pw/2, ph - ctrW( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang.reason .. ": " .. v.reason, "sef", pw/2, ph - ctrW( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang.time .. ": " .. v.time, "sef", pw/2, ph - ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. v.nick, "sef", pw/2, ph - ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "reason" ) .. ": " .. v.reason, "sef", pw/2, ph - ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "time" ) .. ": " .. v.time, "sef", pw/2, ph - ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
       scrollpanel:AddItem( dpanel )
       _x = _x + 1
@@ -95,14 +95,14 @@ net.Receive( "openLawBoard", function( len )
     if _gAccess == _tmpGroupID then
       local addButton = createVGUI( "DButton", scrollpanel, 400, 400 )
       addButton:SetText( "" )
-      addButton:SetPos( _x*ctrW( 410 ), _y*ctrW( 410 ) )
+      addButton:SetPos( _x*ctr( 410 ), _y*ctr( 410 ) )
       function addButton:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
 
         local _pl = 200
         local _ph = 50
-        draw.RoundedBox( 0, pw/2 - ctrW( _pl/2 ), ph/2 - ctrW( _ph/2 ), ctrW( _pl ), ctrW( _ph ), Color( 0, 0, 0, 255 ) )
-        draw.RoundedBox( 0, pw/2 - ctrW( _ph/2 ), ph/2 - ctrW( _pl/2 ), ctrW( _ph ), ctrW( _pl ), Color( 0, 0, 0, 255 ) )
+        draw.RoundedBox( 0, pw/2 - ctr( _pl/2 ), ph/2 - ctr( _ph/2 ), ctr( _pl ), ctr( _ph ), Color( 0, 0, 0, 255 ) )
+        draw.RoundedBox( 0, pw/2 - ctr( _ph/2 ), ph/2 - ctr( _pl/2 ), ctr( _ph ), ctr( _pl ), Color( 0, 0, 0, 255 ) )
       end
       scrollpanel:AddItem( addButton )
       function addButton:DoClick()
@@ -114,13 +114,13 @@ net.Receive( "openLawBoard", function( len )
         function addWindow:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
-          draw.SimpleTextOutlined( lang.add, "sef", ctrW( 10 ), ctrW( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "add" ), "sef", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( lang.player, "sef", ctrW( 10 ), ctrW( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "player" ), "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( lang.reason, "sef", ctrW( 10 ), ctrW( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "reason" ), "sef", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( lang.timeinsec, "sef", ctrW( 10 ), ctrW( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "timeinsec" ), "sef", ctr( 10 ), ctr( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
         end
 
         local _player = createVGUI( "DComboBox", addWindow, 380, 50, 10, 100 )
@@ -140,7 +140,7 @@ net.Receive( "openLawBoard", function( len )
         _add:SetText( "" )
         function _add:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 255 ) )
-          draw.SimpleTextOutlined( lang.add, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "add" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
         function _add:DoClick()
           if _SteamID != nil then

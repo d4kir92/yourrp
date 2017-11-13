@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack()
 			timer.Create( "handcuffPlayer" .. tostring(self.target), self.tick, 0, function()
 				ply:SetNWInt( "castCur", self.current )
 				if self.target:GetNWBool( "cuffed" ) then
-					ply:SetNWString( "castName", lang.unleash )
+					ply:SetNWString( "castName", lang_string( "unleash" ) )
 					if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
 						if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
 							ply:SetNWBool( "casting", false )
@@ -85,7 +85,7 @@ function SWEP:PrimaryAttack()
 						timer.Remove( "handcuffPlayer" .. tostring(self.target) )
 					end
 				else
-					ply:SetNWString( "castName", lang.tieup )
+					ply:SetNWString( "castName", lang_string( "tieup" ) )
 					if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
 						if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
 							ply:SetNWBool( "casting", false )
