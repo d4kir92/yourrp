@@ -18,14 +18,14 @@ function check_yrp_general()
   local _tmp = db_select( _db_name, "*", "uniqueID = 1" )
   if _tmp == nil then
     local _result = db_insert_into_DEFAULTVALUES( _db_name )
-    if worked( _tmp, "" ) then
+    if worked( _tmp, "check_yrp_general" ) then
       printGM( "error", _db_name .. " has no entries." )
     end
   end
 
   _tmp = db_select( _db_name, "*", nil )
 
-  if worked( _tmp, _db_name .. " is empty" ) then
+  if worked( _tmp, tostring( _db_name ) .. " is empty" ) then
     hr_pre()
     printGM( "db", _db_name )
     PrintTable( _tmp )

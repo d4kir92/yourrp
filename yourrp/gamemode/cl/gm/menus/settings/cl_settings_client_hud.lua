@@ -28,10 +28,10 @@ function createTaBu( parent, _x, _y, tmp, tx, ty, icon )
   _tmp.ty = ty
   function _tmp:Paint( pw, ph )
     local _color = Color( 255, 255, 255, 255 )
-    if cl_db[tmp .. "tx"] == self.tx then
+    if HudV(tmp .. "tx") == self.tx then
       _color = Color( 255, 255, 0, 255 )
     end
-    if cl_db[tmp .. "ty"] == self.ty then
+    if HudV(tmp .. "ty") == self.ty then
       _color = Color( 255, 255, 0, 255 )
     end
     draw.RoundedBox( 0, 0, 0, pw, ph, _color )
@@ -56,7 +56,7 @@ end
 
 function changeHudElement( parent, tmp, textPre )
   local ply = LocalPlayer()
-  local frame = createD( "DFrame", parent, ctr( cl_db[tmp .. "sw"] ), ctr( cl_db[tmp .. "sh"] ), anchorW( cl_db[tmp .. "aw"] ) + ctr( cl_db[tmp .. "px"] ), anchorH( cl_db[tmp .. "ah"] ) + ctr( cl_db[tmp .. "py"] ) )
+  local frame = createD( "DFrame", parent, ctr( HudV(tmp .. "sw") ), ctr( HudV(tmp .. "sh") ), anchorW( HudV(tmp .. "aw") ) + ctr( HudV(tmp .. "px") ), anchorH( HudV(tmp .. "ah") ) + ctr( HudV(tmp .. "py") ) )
   frame:SetTitle( "" )
   frame:ShowCloseButton( false )
   frame:SetSizable( true )
@@ -76,18 +76,18 @@ function changeHudElement( parent, tmp, textPre )
     if frame:IsHovered() then
 
       local tw, th = frame:GetSize()
-      if tw != ctr( cl_db[tmp .. "sw"] ) or th != ctr( cl_db[tmp .. "sh"] ) and !self.changing then
+      if tw != ctr( HudV(tmp .. "sw") ) or th != ctr( HudV(tmp .. "sh") ) and !self.changing then
         self.changing = true
-        cl_db[tmp .. "sw"] = (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%20
-        cl_db[tmp .. "sh"] = (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%20
-        frame:SetSize( ctr( cl_db[tmp .. "sw"] ), ctr( cl_db[tmp .. "sh"] ) )
-        dbUpdateHUD( tmp .. "sw", cl_db[tmp .. "sw"] )
-        dbUpdateHUD( tmp .. "sh", cl_db[tmp .. "sh"] )
+        set_hud_db_val( tmp .. "sw", (tw*ctrF( ScrH() )) - (tw*ctrF( ScrH() ))%20 )
+        set_hud_db_val( tmp .. "sh", (th*ctrF( ScrH() )) - (th*ctrF( ScrH() ))%20 )
+        frame:SetSize( ctr( HudV(tmp .. "sw") ), ctr( HudV(tmp .. "sh") ) )
+        dbUpdateHUD( tmp .. "sw", HudV(tmp .. "sw") )
+        dbUpdateHUD( tmp .. "sh", HudV(tmp .. "sh") )
         self.changing = false
       end
 
       local x, y = frame:GetPos()
-      if x != anchorW( cl_db[tmp .. "aw"] ) + ctr( cl_db[tmp .. "px"] ) or y != anchorH( cl_db[tmp .. "ah"] ) + ctr( cl_db[tmp .. "py"] ) and !self.changing then
+      if x != anchorW( HudV(tmp .. "aw") ) + ctr( HudV(tmp .. "px") ) or y != anchorH( HudV(tmp .. "ah") ) + ctr( HudV(tmp .. "py") ) and !self.changing then
         self.changing = true
         local w, h = frame:GetSize()
         local outside = false
@@ -105,11 +105,11 @@ function changeHudElement( parent, tmp, textPre )
           outside = true
         end
         if !outside then
-          cl_db[tmp .. "px"] = ctrF( ScrH() ) * ( x - x%ctr(20) - anchorW( cl_db[tmp .. "aw"] ) )
-          cl_db[tmp .. "py"] = ctrF( ScrH() ) * ( y - y%ctr(20) - anchorH( cl_db[tmp .. "ah"] ) )
-          frame:SetPos( anchorW( cl_db[tmp .. "aw"] ) + ctr( cl_db[tmp .. "px"] ), anchorH( cl_db[tmp .. "ah"] ) + ctr( cl_db[tmp .. "py"] ) )
-          dbUpdateHUD( tmp .. "px", cl_db[tmp .. "px"] )
-          dbUpdateHUD( tmp .. "py", cl_db[tmp .. "py"] )
+          set_hud_db_val( tmp .. "px", ctrF( ScrH() ) * ( x - x%ctr(20) - anchorW( HudV(tmp .. "aw") ) ) )
+          set_hud_db_val( tmp .. "py", ctrF( ScrH() ) * ( y - y%ctr(20) - anchorH( HudV(tmp .. "ah") ) ) )
+          frame:SetPos( anchorW( HudV(tmp .. "aw") ) + ctr( HudV(tmp .. "px") ), anchorH( HudV(tmp .. "ah") ) + ctr( HudV(tmp .. "py") ) )
+          dbUpdateHUD( tmp .. "px", HudV(tmp .. "px") )
+          dbUpdateHUD( tmp .. "py", HudV(tmp .. "py") )
         end
         self.changing = false
       end
@@ -135,19 +135,19 @@ function changeHudElement( parent, tmp, textPre )
     end
     local tmpToggle = createDerma( "DCheckBox", _settingsFrame, 50, 50, 0, 0 )
     local tmpToggleChecked = -1
-    if tonumber( cl_db[tmp .. "to"] ) == 0 then
+    if tonumber( HudV(tmp .. "to") ) == 0 then
       tmpToggleChecked = false
-    elseif tonumber( cl_db[tmp .. "to"] ) == 1 then
+    elseif tonumber( HudV(tmp .. "to") ) == 1 then
       tmpToggleChecked = true
     end
     tmpToggle:SetChecked( tmpToggleChecked )
     function tmpToggle:OnChange( bVal )
     	if ( bVal ) then
-        cl_db[tmp .. "to"] = 1
-    		dbUpdateHUD( tmp .. "to", cl_db[tmp .. "to"] )
+        set_hud_db_val( tmp .. "to", 1 )
+    		dbUpdateHUD( tmp .. "to", HudV(tmp .. "to") )
     	else
-        cl_db[tmp .. "to"] = 0
-    		dbUpdateHUD( tmp .. "to", cl_db[tmp .. "to"] )
+        set_hud_db_val( tmp .. "to", 0 )
+    		dbUpdateHUD( tmp .. "to", HudV(tmp .. "to") )
     	end
     end
 
@@ -171,7 +171,7 @@ function changeHudElement( parent, tmp, textPre )
           _tmp._y = _y
           function _tmp:Paint( pw, ph )
             local _color = Color( 255, 255, 255, 255 )
-            if cl_db[tmp .. "aw"] == self._x and cl_db[tmp .. "ah"] == self._y then
+            if HudV(tmp .. "aw") == self._x and HudV(tmp .. "ah") == self._y then
               _color = Color( 255, 255, 0, 255 )
             end
             draw.RoundedBox( 0, 0, 0, pw, ph, _color )
@@ -187,8 +187,8 @@ function changeHudElement( parent, tmp, textPre )
 
             --newPosition
             local _dx, _dy = frame:GetPos()
-            dbUpdateHUD( tmp .. "px", ctrF(ScrH()) * _dx - ctrF(ScrH()) * anchorW( cl_db[tmp .. "aw"] ) )
-            dbUpdateHUD( tmp .. "py", ctrF(ScrH()) * _dy - ctrF(ScrH()) * anchorH( cl_db[tmp .. "ah"] ) )
+            dbUpdateHUD( tmp .. "px", ctrF(ScrH()) * _dx - ctrF(ScrH()) * anchorW( HudV(tmp .. "aw") ) )
+            dbUpdateHUD( tmp .. "py", ctrF(ScrH()) * _dy - ctrF(ScrH()) * anchorH( HudV(tmp .. "ah") ) )
           end
           _count = _count + 1
         end
@@ -205,16 +205,16 @@ function changeHudElement( parent, tmp, textPre )
     function _anchor:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 
-      draw.RoundedBox( 0, ctr( 4 ), ctr( 4 ) + cl_db[tmp .. "ah"] * ctr( 16 ), pw - ctr( 9 ), ctr( 8 ), Color( 0, 0, 0, 255 ) )
+      draw.RoundedBox( 0, ctr( 4 ), ctr( 4 ) + HudV(tmp .. "ah") * ctr( 16 ), pw - ctr( 9 ), ctr( 8 ), Color( 0, 0, 0, 255 ) )
 
-      draw.RoundedBox( 0, ctr( 4 ) + cl_db[tmp .. "aw"] * ctr( 16 ), ctr( 4 ), ctr( 8 ), ph - ctr( 9 ), Color( 0, 0, 0, 255 ) )
+      draw.RoundedBox( 0, ctr( 4 ) + HudV(tmp .. "aw") * ctr( 16 ), ctr( 4 ), ctr( 8 ), ph - ctr( 9 ), Color( 0, 0, 0, 255 ) )
     end
 
     local _fontsize = createD( "DComboBox", _settingsFrame, ctr( 80 ), ctr( 50 ), ctr( 120 ), ctr( 0 ) )
     local fontSizes = GetFontSizes()
     for k, v in pairs( fontSizes ) do
       local _cur = false
-      if v == cl_db[tmp .. "sf"] then
+      if v == HudV(tmp .. "sf") then
         _cur = true
       end
       _fontsize:AddChoice( v, v, _cur )
@@ -222,7 +222,7 @@ function changeHudElement( parent, tmp, textPre )
     function _fontsize:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 
-      --draw.SimpleTextOutlined( cl_db[tmp .. "sf"], "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      --draw.SimpleTextOutlined( HudV(tmp .. "sf"), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
     function _fontsize:OnSelect( ind, val )
       dbUpdateHUD( tmp.."sf", val )
@@ -257,11 +257,11 @@ function changeHudElement( parent, tmp, textPre )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 
       local _icon = ""
-      if cl_db[tmp.."tx"] == 0 then
+      if HudV(tmp.."tx") == 0 then
         _icon = tal
-      elseif cl_db[tmp.."tx"] == 1 then
+      elseif HudV(tmp.."tx") == 1 then
         _icon = tac
-      elseif cl_db[tmp.."tx"] == 2 then
+      elseif HudV(tmp.."tx") == 2 then
         _icon = tar
       end
 
@@ -274,37 +274,37 @@ function changeHudElement( parent, tmp, textPre )
 
     local tmpTextToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 270 ), ctr( 0 ) )
     local tmpTextToggleChecked = -1
-    if tonumber( cl_db[tmp .. "tt"] ) == 0 then
+    if tonumber( HudV(tmp .. "tt") ) == 0 then
       tmpTextToggleChecked = false
-    elseif tonumber( cl_db[tmp .. "tt"] ) == 1 then
+    elseif tonumber( HudV(tmp .. "tt") ) == 1 then
       tmpTextToggleChecked = true
     end
     tmpTextToggle:SetChecked( tmpTextToggleChecked )
     function tmpTextToggle:OnChange( bVal )
     	if ( bVal ) then
-        cl_db[tmp .. "tt"] = 1
-    		dbUpdateHUD( tmp .. "tt", cl_db[tmp .. "tt"] )
+        set_hud_db_val( tmp .. "tt", 1 )
+    		dbUpdateHUD( tmp .. "tt", HudV(tmp .. "tt") )
     	else
-        cl_db[tmp .. "tt"] = 0
-    		dbUpdateHUD( tmp .. "tt", cl_db[tmp .. "tt"] )
+        set_hud_db_val( tmp .. "tt", 0 )
+    		dbUpdateHUD( tmp .. "tt", HudV(tmp .. "tt") )
     	end
     end
 
     local tmpIconToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 330 ), ctr( 0 ) )
     local tmpIconToggleChecked = -1
-    if tonumber( cl_db[tmp .. "it"] ) == 0 then
+    if tonumber( HudV(tmp .. "it") ) == 0 then
       tmpIconToggleChecked = false
-    elseif tonumber( cl_db[tmp .. "it"] ) == 1 then
+    elseif tonumber( HudV(tmp .. "it") ) == 1 then
       tmpIconToggleChecked = true
     end
     tmpIconToggle:SetChecked( tmpIconToggleChecked )
     function tmpIconToggle:OnChange( bVal )
     	if ( bVal ) then
-        cl_db[tmp .. "it"] = 1
-    		dbUpdateHUD( tmp .. "it", cl_db[tmp .. "it"] )
+        set_hud_db_val( tmp .. "it", 1 )
+    		dbUpdateHUD( tmp .. "it", HudV(tmp .. "it") )
     	else
-        cl_db[tmp .. "it"] = 0
-    		dbUpdateHUD( tmp .. "it", cl_db[tmp .. "it"] )
+        set_hud_db_val( tmp .. "it", 0 )
+    		dbUpdateHUD( tmp .. "it", HudV(tmp .. "it") )
     	end
     end
 
@@ -315,7 +315,7 @@ end
 
 function changeFont( string, _settingsFontSizes, w, h, x, y )
   local _tmp = createVGUI( "DNumberWang", _settingsFontSizes, w, h, x, y )
-  _tmp:SetValue( cl_db[string] )
+  _tmp:SetValue( HudV(string) )
   _tmp:SetMin( 6 )
   _tmp:SetMax( 72 )
   function _tmp:OnValueChanged( val )
@@ -323,16 +323,16 @@ function changeFont( string, _settingsFontSizes, w, h, x, y )
       if tonumber( val ) <= _tmp:GetMax() then
         dbUpdateHUD( string, val )
         loadDBHud( "yrp_cl_hud", string )
-        createFont( string, tmpFont, cl_db[string], 500, true )
+        createFont( string, tmpFont, HudV(string), 500, true )
       else
         dbUpdateHUD( string, _tmp:GetMax() )
         loadDBHud( "yrp_cl_hud", string )
-        createFont( string, tmpFont, cl_db[string], 500, true )
+        createFont( string, tmpFont, HudV(string), 500, true )
       end
     else
       dbUpdateHUD( string, _tmp:GetMin() )
       loadDBHud( "yrp_cl_hud", string )
-      createFont( string, tmpFont, cl_db[string], 500, true )
+      createFont( string, tmpFont, HudV(string), 500, true )
     end
   end
   return _tmp
@@ -480,8 +480,8 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   _colorBackground:SetPalette( true )
   _colorBackground:SetAlphaBar( true )
   _colorBackground:SetWangs( true )
-  if cl_db["colbgr"] != nil then
-    _colorBackground:SetColor( Color( cl_db["colbgr"], cl_db["colbgg"], cl_db["colbgb"], cl_db["colbga"] ) )	--Set the default color
+  if HudV("colbgr") != nil then
+    _colorBackground:SetColor( Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )	--Set the default color
   end
   function _colorBackground:ValueChanged( newColor )
     dbUpdateHUD( "colbgr", newColor.r )
@@ -501,7 +501,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   _colorBorder:SetPalette( true )
   _colorBorder:SetAlphaBar( true )
   _colorBorder:SetWangs( true )
-  _colorBorder:SetColor( Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ) )	--Set the default color
+  _colorBorder:SetColor( Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ) )	--Set the default color
   function _colorBorder:ValueChanged( newColor )
     dbUpdateHUD( "colbrr", newColor.r )
     dbUpdateHUD( "colbrg", newColor.g )
@@ -520,7 +520,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   _colorCrosshair:SetPalette( true )
   _colorCrosshair:SetAlphaBar( true )
   _colorCrosshair:SetWangs( true )
-  _colorCrosshair:SetColor( Color( cl_db["colchcr"], cl_db["colchcg"], cl_db["colchcb"], cl_db["colchca"] ) )	--Set the default color
+  _colorCrosshair:SetColor( Color( HudV("colchcr"), HudV("colchcg"), HudV("colchcb"), HudV("colchca") ) )	--Set the default color
   function _colorCrosshair:ValueChanged( newColor )
     dbUpdateHUD( "colchcr", newColor.r )
     dbUpdateHUD( "colchcg", newColor.g )
@@ -539,7 +539,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   _colorCrosshairBorder:SetPalette( true )
   _colorCrosshairBorder:SetAlphaBar( true )
   _colorCrosshairBorder:SetWangs( true )
-  _colorCrosshairBorder:SetColor( Color( cl_db["colchbrr"], cl_db["colchbrg"], cl_db["colchbrb"], cl_db["colchbra"] ) )	--Set the default color
+  _colorCrosshairBorder:SetColor( Color( HudV("colchbrr"), HudV("colchbrg"), HudV("colchbrb"), HudV("colchbra") ) )	--Set the default color
   function _colorCrosshairBorder:ValueChanged( newColor )
     dbUpdateHUD( "colchbrr", newColor.r )
     dbUpdateHUD( "colchbrg", newColor.g )
@@ -560,25 +560,25 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   end
 
   local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 100 )
-  _settingCrosshairLength:SetValue( cl_db["chl"] )
+  _settingCrosshairLength:SetValue( HudV("chl") )
   function _settingCrosshairLength:OnValueChanged( val )
     dbUpdateHUD( "chl", val )
   end
 
   local _settingCrosshairGap = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 200 )
-  _settingCrosshairGap:SetValue( cl_db["chg"] )
+  _settingCrosshairGap:SetValue( HudV("chg") )
   function _settingCrosshairGap:OnValueChanged( val )
     dbUpdateHUD( "chg", val )
   end
 
   local _settingCrosshairThickness = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 300 )
-  _settingCrosshairThickness:SetValue( cl_db["chh"] )
+  _settingCrosshairThickness:SetValue( HudV("chh") )
   function _settingCrosshairThickness:OnValueChanged( val )
     dbUpdateHUD( "chh", val )
   end
 
   local _settingCrosshairBorder = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 400 )
-  _settingCrosshairBorder:SetValue( cl_db["chbr"] )
+  _settingCrosshairBorder:SetValue( HudV("chbr") )
   function _settingCrosshairBorder:OnValueChanged( val )
     dbUpdateHUD( "chbr", val )
   end

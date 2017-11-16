@@ -75,44 +75,42 @@ function HudCrosshair()
             end
           end
 
-          if worked( cl_db, " " ) then
-            if cl_db["_loaded"] then
-              if ply:Alive() then
-                if tonumber( cl_db["cht"] ) == 1 then
+          if is_hud_db_loaded() then
+            if ply:Alive() then
+              if tonumber( HudV("cht") ) == 1 then
 
-                  if weapon:GetNetworkedBool( "Ironsights" ) then
-                    alphaFade = 0
-                    return
-                  end
-                  local p = ply:GetEyeTrace().HitPos:ToScreen()
-                	local x,y = p.x, p.y
-
-                	local gap = (cl_db["chg"]/2)
-                  if ch_attack1 >= 1 then
-                    gap = gap * ch_attack1
-                  end
-                	local length = gap + cl_db["chl"]
-
-                  local w = cl_db["chl"]
-                  local h = cl_db["chh"]
-
-                  surface.SetDrawColor( cl_db["colchbrr"], cl_db["colchbrg"], cl_db["colchbrb"], cl_db["colchbra"] * alphaFade )
-
-                  local br = cl_db["chbr"]
-                  surface.DrawRect( x-w-gap-br, y-h/2-br, w+2*br, h+2*br )
-                  surface.DrawRect( x+gap-br, y-h/2-br, w+2*br, h+2*br )
-
-                  surface.DrawRect( x-h/2-br, y-w-gap-br, h+2*br, w+2*br )
-                  surface.DrawRect( x-h/2-br, y+gap-br, h+2*br, w+2*br )
-
-                  surface.SetDrawColor( cl_db["colchcr"], cl_db["colchcg"], cl_db["colchcb"], cl_db["colchca"] * alphaFade )
-
-                  surface.DrawRect( x-w-gap, y-h/2, w, h )
-                  surface.DrawRect( x+gap, y-h/2, w, h )
-
-                  surface.DrawRect( x-h/2, y-w-gap, h, w )
-                  surface.DrawRect( x-h/2, y+gap, h, w )
+                if weapon:GetNetworkedBool( "Ironsights" ) then
+                  alphaFade = 0
+                  return
                 end
+                local p = ply:GetEyeTrace().HitPos:ToScreen()
+              	local x,y = p.x, p.y
+
+              	local gap = (HudV("chg")/2)
+                if ch_attack1 >= 1 then
+                  gap = gap * ch_attack1
+                end
+              	local length = gap + HudV("chl")
+
+                local w = HudV("chl")
+                local h = HudV("chh")
+
+                surface.SetDrawColor( HudV("colchbrr"), HudV("colchbrg"), HudV("colchbrb"), HudV("colchbra") * alphaFade )
+
+                local br = HudV("chbr")
+                surface.DrawRect( x-w-gap-br, y-h/2-br, w+2*br, h+2*br )
+                surface.DrawRect( x+gap-br, y-h/2-br, w+2*br, h+2*br )
+
+                surface.DrawRect( x-h/2-br, y-w-gap-br, h+2*br, w+2*br )
+                surface.DrawRect( x-h/2-br, y+gap-br, h+2*br, w+2*br )
+
+                surface.SetDrawColor( HudV("colchcr"), HudV("colchcg"), HudV("colchcb"), HudV("colchca") * alphaFade )
+
+                surface.DrawRect( x-w-gap, y-h/2, w, h )
+                surface.DrawRect( x+gap, y-h/2, w, h )
+
+                surface.DrawRect( x-h/2, y-w-gap, h, w )
+                surface.DrawRect( x-h/2, y+gap, h, w )
               end
             end
           end

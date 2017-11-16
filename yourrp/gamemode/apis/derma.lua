@@ -93,9 +93,9 @@ g_yrp.colors.dsecondary = Color( 0, 33, 113, 255 )
 g_yrp.colors.dsecondaryH = Color( 0, 33+50, 113+50, 255 )
 
 function getMDMode()
-  if tonumber( cl_db["mdpm"] ) == 0 then
+  if tonumber( HudV("mdpm") ) == 0 then
     return "dark"
-  elseif tonumber( cl_db["mdpm"] ) == 1 then
+  elseif tonumber( HudV("mdpm") ) == 1 then
     return "light"
   end
   return -1
@@ -162,11 +162,11 @@ function addMDColor( name, _color )
 end
 
 function getMDPCol()
-	return Color( cl_db["mdpr"], cl_db["mdpg"], cl_db["mdpb"], cl_db["mdpa"] )
+	return Color( HudV("mdpr"), HudV("mdpg"), HudV("mdpb"), HudV("mdpa") )
 end
 
 function getMDSCol()
-	return Color( cl_db["mdsr"], cl_db["mdsg"], cl_db["mdsb"], cl_db["mdsa"] )
+	return Color( HudV("mdsr"), HudV("mdsg"), HudV("mdsb"), HudV("mdsa") )
 end
 
 function getMDPColor()
@@ -343,9 +343,9 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 	local tmp = createD( "DButton", parent, w, h, x, y )
 	tmp.opt1 = opt1
 	tmp.opt2 = opt2
-	if tonumber( cl_db["mdpm"] ) == 0 then
+	if tonumber( HudV("mdpm") ) == 0 then
 		tmp.value = "dark"
-	elseif tonumber( cl_db["mdpm"] ) == 1 then
+	elseif tonumber( HudV("mdpm") ) == 1 then
 		tmp.value = "light"
 	end
   tmp:SetText( "" )

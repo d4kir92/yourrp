@@ -265,7 +265,7 @@ function isWhitelisted( ply, id )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
     return true
   else
-    if worked( _plyAllowed ) then
+    if worked( _plyAllowed, "_plyAllowed" ) then
       return true
     else
       return false
@@ -329,7 +329,7 @@ end
 function canGetRole( ply, roleID )
   local tmpTableRole = db_select( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
-  if worked( tmpTableRole ) then
+  if worked( tmpTableRole, "tmpTableRole" ) then
     local tmpTableGroup = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpTableRole[1].groupID )
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
       if tmpTableRole[1].adminonly == 1 then

@@ -51,26 +51,24 @@ end
 function yrpChat.window:Paint( pw, ph )
   checkChatVisible()
   if _showChat then
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-    drawRBoxBr(  0, 0, 0, ctrF( ScrH() ) * pw, ctrF( ScrH() ) * ph, Color( cl_db["colbrr"], cl_db["colbrg"], cl_db["colbrb"], cl_db["colbra"] ), ctr( 8 ) )
+    if is_hud_db_loaded() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+      drawRBoxBr(  0, 0, 0, ctrF( ScrH() ) * pw, ctrF( ScrH() ) * ph, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 8 ) )
 
-    if worked( cl_db, " " ) then
-      if cl_db["_loaded"] then
-        local x, y = yrpChat.window:GetPos()
-        local w, h = yrpChat.window:GetSize()
-        if ctr( cl_db["cbpx"] ) != x or ctr( cl_db["cbpy"] ) != y or ctr( cl_db["cbsw"] ) != w or ctr( cl_db["cbsh"] ) != h then
-          yrpChat.window:SetPos( anchorW( HudV( "cbaw" ) ) + ctr( cl_db["cbpx"] ), anchorH( HudV( "cbah" ) ) + ctr( cl_db["cbpy"] ) )
-          yrpChat.window:SetSize( ctr( cl_db["cbsw"] ), ctr( cl_db["cbsh"] ) )
+      local x, y = yrpChat.window:GetPos()
+      local w, h = yrpChat.window:GetSize()
+      if ctr( HudV("cbpx") ) != x or ctr( HudV("cbpy") ) != y or ctr( HudV("cbsw") ) != w or ctr( HudV("cbsh") ) != h then
+        yrpChat.window:SetPos( anchorW( HudV( "cbaw" ) ) + ctr( HudV("cbpx") ), anchorH( HudV( "cbah" ) ) + ctr( HudV("cbpy") ) )
+        yrpChat.window:SetSize( ctr( HudV("cbsw") ), ctr( HudV("cbsh") ) )
 
-          yrpChat.comboBox:SetPos( ctr( 10 ), ctr( cl_db["cbsh"] - 40 - 10 ) )
-          yrpChat.comboBox:SetSize( ctr( 100 ), ctr( 40 ) )
+        yrpChat.comboBox:SetPos( ctr( 10 ), ctr( HudV("cbsh") - 40 - 10 ) )
+        yrpChat.comboBox:SetSize( ctr( 100 ), ctr( 40 ) )
 
-          yrpChat.writeField:SetPos( ctr( 110 ), ctr( cl_db["cbsh"] - 40 - 10 ) )
-          yrpChat.writeField:SetSize( ctr( cl_db["cbsw"] - 2*10 - 100 ), ctr( 40 ) )
+        yrpChat.writeField:SetPos( ctr( 110 ), ctr( HudV("cbsh") - 40 - 10 ) )
+        yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 100 ), ctr( 40 ) )
 
-          yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
-          yrpChat.richText:SetSize( ctr( cl_db["cbsw"] - 2*10 ), ctr( cl_db["cbsh"] - 2*10 - 40 - 10 ) )
-        end
+        yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
+        yrpChat.richText:SetSize( ctr( HudV("cbsw") - 2*10 ), ctr( HudV("cbsh") - 2*10 - 40 - 10 ) )
       end
     end
 

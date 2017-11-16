@@ -4,14 +4,15 @@ local _hudVersion = 2
 
 local dbNameHUD = "yrp_cl_hud"
 
-function init_database_hud()
-  cl_db = cl_db or {}
-  cl_db["_loaded"] = false
-end
-init_database_hud()
+local yrp_cl_db = yrp_cl_db or {}
+yrp_cl_db["_loaded"] = false
 
 function HudV( name )
-  return cl_db[name]
+  return yrp_cl_db[name] or 0
+end
+
+function set_hud_db_val( name, value )
+  yrp_cl_db[name] = value
 end
 
 function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it )
@@ -91,7 +92,7 @@ end
 function loadDBHUD( name )
   local tmpValue = db_select( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
   if worked( tmpValue, "loadDBHUD failed!" ) then
-    cl_db[name] = tonumber( tmpValue[1].value )
+    yrp_cl_db[name] = tonumber( tmpValue[1].value )
   end
 end
 
@@ -176,7 +177,7 @@ function loadCompleteHUD()
   loadDBHUD( "_hudversion" )
 
   --loaded
-  cl_db["_loaded"] = true
+  yrp_cl_db["_loaded"] = true
   printGM( "db", "loaded HUD" )
 end
 
@@ -393,6 +394,15 @@ function loadDatabaseHUD()
   end
 
   loadCompleteHUD()
+end
+
+function is_hud_db_loaded()
+  if yrp_cl_db != nil then
+    if yrp_cl_db["_loaded"] != nil then
+      return yrp_cl_db["_loaded"] or false
+    end
+  end
+  return false
 end
 
 function initDatabase()

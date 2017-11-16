@@ -32,23 +32,23 @@ function changeFontSizeOf( _font, _size )
 end
 
 function updateDBFonts()
-	createFont( "mmsf", tmpFont, cl_db["mmsf"], _weight, false )
-	createFont( "hpsf", tmpFont, cl_db["hpsf"], _weight, false )
-	createFont( "arsf", tmpFont, cl_db["arsf"], _weight, false )
-	createFont( "wpsf", tmpFont, cl_db["wpsf"], _weight, false )
-	createFont( "wssf", tmpFont, cl_db["wssf"], _weight, false )
-	createFont( "wnsf", tmpFont, cl_db["wnsf"], _weight, false )
-	createFont( "ttsf", tmpFont, cl_db["ttsf"], _weight, false )
-	createFont( "mosf", tmpFont, cl_db["mosf"], _weight, false )
-	createFont( "mhsf", tmpFont, cl_db["mhsf"], _weight, false )
-	createFont( "mtsf", tmpFont, cl_db["mtsf"], _weight, false )
-	createFont( "mssf", tmpFont, cl_db["mssf"], _weight, false )
-	createFont( "vtsf", tmpFont, cl_db["vtsf"], _weight, false )
-	createFont( "cbsf", tmpFont, cl_db["cbsf"], _weight, false )
-	createFont( "masf", tmpFont, cl_db["masf"], _weight, false )
-	createFont( "casf", tmpFont, cl_db["casf"], _weight, false )
-	createFont( "stsf", tmpFont, cl_db["stsf"], _weight, false )
-	createFont( "xpsf", tmpFont, cl_db["xpsf"], _weight, false )
+	createFont( "mmsf", tmpFont, HudV("mmsf"), _weight, false )
+	createFont( "hpsf", tmpFont, HudV("hpsf"), _weight, false )
+	createFont( "arsf", tmpFont, HudV("arsf"), _weight, false )
+	createFont( "wpsf", tmpFont, HudV("wpsf"), _weight, false )
+	createFont( "wssf", tmpFont, HudV("wssf"), _weight, false )
+	createFont( "wnsf", tmpFont, HudV("wnsf"), _weight, false )
+	createFont( "ttsf", tmpFont, HudV("ttsf"), _weight, false )
+	createFont( "mosf", tmpFont, HudV("mosf"), _weight, false )
+	createFont( "mhsf", tmpFont, HudV("mhsf"), _weight, false )
+	createFont( "mtsf", tmpFont, HudV("mtsf"), _weight, false )
+	createFont( "mssf", tmpFont, HudV("mssf"), _weight, false )
+	createFont( "vtsf", tmpFont, HudV("vtsf"), _weight, false )
+	createFont( "cbsf", tmpFont, HudV("cbsf"), _weight, false )
+	createFont( "masf", tmpFont, HudV("masf"), _weight, false )
+	createFont( "casf", tmpFont, HudV("casf"), _weight, false )
+	createFont( "stsf", tmpFont, HudV("stsf"), _weight, false )
+	createFont( "xpsf", tmpFont, HudV("xpsf"), _weight, false )
 end
 
 function changeFontSize()
@@ -101,15 +101,13 @@ function changeFontSize()
 	createFont( "sef", tmpFont, 24, _weight, false )
 
 	timer.Create( "createFontDB", 0.1, 0, function()
-		if worked( cl_db, " " ) then
-			if cl_db["_loaded"] then
-				--Changing to right values
-				updateDBFonts()
+		if is_hud_db_loaded() then
+			--Changing to right values
+			updateDBFonts()
 
-				printGM( "db", "HUD Fonts loaded." )
+			printGM( "db", "HUD Fonts loaded." )
 
-				timer.Remove( "createFontDB" )
-			end
+			timer.Remove( "createFontDB" )
 		end
 	end)
 

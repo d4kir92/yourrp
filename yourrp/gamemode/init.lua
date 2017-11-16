@@ -21,6 +21,8 @@ AddCSLuaFiles
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
+AddCSLuaFile( "cl/db/db_database.lua")
+
 AddCSLuaFile( "cl/cl_includes.lua" )
 AddCSLuaFile( "cl/gm/cl_startup.lua" )
 AddCSLuaFile( "cl/gm/cl_hud.lua" )
@@ -41,7 +43,7 @@ AddCSLuaFile( "cl/gm/menus/cl_vehicle_options.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_client_charakter.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_client_hud.lua" )
-AddCSLuaFile( "cl/gm/menus/settings/cl_settings_client_keybinds" )
+AddCSLuaFile( "cl/gm/menus/settings/cl_settings_client_keybinds.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_general.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_give.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_map.lua" )

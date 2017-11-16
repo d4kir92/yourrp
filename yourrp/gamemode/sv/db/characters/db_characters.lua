@@ -174,7 +174,7 @@ net.Receive( "CreateCharacter", function( len, ply )
   db_insert_into( "yrp_characters", cols, vals )
 
   local chars = db_select( "yrp_characters", "*", nil )
-  if worked( chars ) then
+  if worked( chars, "CreateCharacter" ) then
     local result = db_update( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID, "SteamID = '" .. ply:SteamID() .. "'" )
   end
 end)
