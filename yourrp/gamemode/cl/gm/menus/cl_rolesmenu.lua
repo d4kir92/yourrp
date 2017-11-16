@@ -18,9 +18,9 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   if roleInfoPanel != nil then
     roleInfoPanel:Remove()
   end
-  roleInfoPanel = createVGUI( "DPanel", roleMenuWindow, 2160 - 1600 - 10, 2160-60, 1600 + 10, 60 )
-  function roleInfoPanel:Paint( w, h )
-    --draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 255, 120 ) )
+  roleInfoPanel = createVGUI( "DPanel", roleMenuWindow, 2160 - 1600 - 10, 2160-60, 1600 + 10 - 4, 60 )
+  function roleInfoPanel:Paint( pw, ph )
+    --
   end
 
   local tmpY = 0
@@ -28,8 +28,8 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   local tmpBr = 10
 
   local rolePMPanel = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
-  function rolePMPanel:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, g_yrp.colors.dbackground )
+  function rolePMPanel:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
   end
 
   if model != nil and model != "" then
@@ -162,17 +162,19 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
 
   if maxamount == -1 or uses < maxamount then
     local roleGetRole = createVGUI( "DButton", roleInfoPanel, 2160 - 1600 - 10, 120, 0, tmpY )
+    roleGetRole:SetText( "" )
+    roleGetRole.text = ""
     if adminonly == 1 and !ply:IsAdmin() and !ply:IsSuperAdmin() then
-      roleGetRole:SetText( lang_string( "adminonly" ) )
+      roleGetRole.text = lang_string( "adminonly" )
     elseif ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
       if ply:IsSuperAdmin() or ply:IsAdmin() then
-        roleGetRole:SetText( lang_string( "getrole" ) .. ": " .. name )
+        roleGetRole.text = lang_string( "getrole" ) .. ": " .. name
       elseif whitelist == 1 and allowed == 1 or whitelist == 0 then
-        roleGetRole:SetText( lang_string( "getrole" ) .. ": " .. name )
+        roleGetRole.text = lang_string( "getrole" ) .. ": " .. name
       elseif whitelist == 1 and adminonly != 1 and voteable == 1 then
-        roleGetRole:SetText( "start Vote" .. ": " .. name )
+        roleGetRole.text = "start Vote" .. ": " .. name
       elseif whitelist == 1 and adminonly != 1 and voteable == 0 then
-        roleGetRole:SetText( lang_string( "needwhitelist" ) )
+        roleGetRole.text = lang_string( "needwhitelist" )
       else
         --print("getrole else2")
       end
@@ -188,6 +190,9 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
           roleMenuWindow:Close()
         --end
       end
+    end
+    function roleGetRole:Paint( pw, ph )
+      paintButton( self, pw, ph, self.text )
     end
   end
 end
@@ -378,11 +383,11 @@ function openRoleMenu()
   function roleMenuWindow:OnClose()
     cl_rolesMenuOpen = 0
   end
-  function roleMenuWindow:Paint( w, h )
-    --nothing
+  function roleMenuWindow:Paint( pw, ph )
+    paintWindow( self, pw, ph, "" )
   end
 
-  local roleDPanelList = createVGUI( "DScrollPanel", roleMenuWindow, 1600, 2100, 0, 60 )
+  local roleDPanelList = createVGUI( "DScrollPanel", roleMenuWindow, 1600, 2100-4, 4, 60 )
   function roleDPanelList:Paint( w, h )
     draw.RoundedBox( 0, 0, 0, w, h, g_yrp.colors.dbackground )
   end

@@ -43,7 +43,7 @@ function con_th( ply )
 end
 
 function con_st( ply )
-  if !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) then
+  if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) and !ply:InVehicle() then
     ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) - 2 )
     if ply:GetNWInt( "stamina", 0 ) < 0 then
       ply:SetNWInt( "stamina", 0 )
@@ -107,8 +107,8 @@ timer.Create( "ServerThink", 1, 0, function()
     end
 
     if ply:GetNWBool( "toggle_metabolism", false ) then
-      con_hg( ply )   --Hunger
-      con_th( ply )   --Thirst
+      --con_hg( ply )   --Hunger
+      --con_th( ply )   --Thirst
       con_st( ply )   --Stamina
     end
 

@@ -299,4 +299,7 @@ function DE_All()
 
   set_lang_string( "rolesalarytime", "Rollen Gehaltszeit" )
   set_lang_string( "search", "Suche" )
+  set_lang_string( "about", "Über" )
+  set_lang_string( "enviroment", "Umgebung" )
+  set_lang_string( "attributes", "Eigenschaften" )
 end

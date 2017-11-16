@@ -298,4 +298,5 @@ function ES_All()
   set_lang_string( "keybindchanger", "Canviar controles" )
 
   set_lang_string( "rolesalarytime", "Tiempo del salario para el rol" )
+  set_lang_string( "search", "Buscar" )
 end

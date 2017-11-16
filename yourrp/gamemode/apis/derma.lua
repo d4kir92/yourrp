@@ -1,5 +1,75 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function paintBr( pw, ph, color )
+  local _br = ctr( 2 )
+  --links
+  draw.RoundedBox( 0, _br, _br, _br, ph - 2 *_br, color )
+  --oben
+  draw.RoundedBox( 0, _br, _br, pw - 2 * _br, _br, color )
+  --rechts
+  draw.RoundedBox( 0, pw - 2*_br, _br, _br, ph-2*_br, color )
+  --unten
+  draw.RoundedBox( 0, _br, ph - 2*_br, pw-2*_br, _br, color )
+end
+
+function paintWindow( derma, pw, ph, title )
+  --Background
+  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
+
+  local _br = ctr( 2 )
+  local _brC = Color( 200, 200, 200, 255 )
+  paintBr( pw, ph, _brC )
+
+  local _br2 = ctr( 300 )
+  local _h = ctr( 20 )
+  --
+  if pw > 2*_br2 then
+    draw.RoundedBox( 0, _br2, _br, pw - (_br2 * 2), _h, _brC )
+    local triangle = {
+    	{ x = _br2-_h, y = _br },
+    	{ x = _br2, y = _br },
+    	{ x = _br2, y = _h }
+    }
+  	surface.SetDrawColor( _brC )
+  	draw.NoTexture()
+  	surface.DrawPoly( triangle )
+    local triangle2 = {
+    	{ x = pw - _br2, y = _br },
+    	{ x = pw - _br2+_h, y = _br },
+    	{ x = pw - _br2, y = _h }
+    }
+  	surface.SetDrawColor( _brC )
+  	draw.NoTexture()
+  	surface.DrawPoly( triangle2 )
+  end
+
+  --TitleBarDesign
+  local _titlebar = ctr( 50 )
+  --draw.RoundedBox( 0, 0, 0, pw, _titlebar, Color( 80, 80, 200, 200 ) )
+
+  draw.SimpleTextOutlined( title, "windowTitle", ctr( 15 ), _titlebar/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+end
+
+function paintButton( derma, pw, ph, text )
+  local _color = Color( 255, 255, 255, 150 )
+  if derma:IsHovered() then
+    _color = Color( 255, 255, 100, 150 )
+  end
+  draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+
+  local _brC = Color( 0, 0, 0, 255 )
+  paintBr( pw, ph, _brC )
+
+  draw.SimpleTextOutlined( text, "windowTitle", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+end
+
+function paintPanel( derma, pw, ph )
+  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
+
+  local _brC = Color( 255, 255, 255, 255 )
+  paintBr( pw, ph, _brC )
+end
+
 function createD( derma, parent, w, h, x, y )
   local tmpD = vgui.Create( derma, parent )
   if w != nil and h != nil then
@@ -232,7 +302,7 @@ function createMDMenu( parent, w, h, x, y )
 		for k, v in pairs( self.cat ) do
 			local tmpCat = createD("DPanel", self.menu, ctr( 480 ), ctr( 50 ), ctr( 10 ), ctr( posY ) )
 			function tmpCat:Paint( pw, ph )
-				draw.SimpleTextOutlined( string.upper( v ), "HudBars", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( string.upper( v ), "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 			posY = posY + 50 + 10
 			if self.sites[v] != nil then
@@ -254,7 +324,7 @@ function createMDMenu( parent, w, h, x, y )
 							surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
 						end
 
-						draw.SimpleTextOutlined( string.upper( w.site ), "HudBars", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+						draw.SimpleTextOutlined( string.upper( w.site ), "mdMenu", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
 					function tmp2:DoClick()
 						tmp.cursite = self.site

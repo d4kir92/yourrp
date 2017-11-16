@@ -299,4 +299,7 @@ function EN_All()
 
   set_lang_string( "rolesalarytime", "Role salary time" )
   set_lang_string( "search", "Search" )
+  set_lang_string( "about", "About" )
+  set_lang_string( "enviroment", "Enviroment" )
+  set_lang_string( "attributes", "Attributes" )
 end

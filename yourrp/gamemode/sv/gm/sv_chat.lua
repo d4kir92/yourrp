@@ -18,7 +18,7 @@ end
 
 function get_player_by_name( string )
   for k, ply in pairs( player.GetAll() ) do
-    if string.find( string.lower( ply:Nick() ), string, 1, false ) then
+    if string.find( string.lower( ply:Nick() ), string.lower( string ), 1, false ) then
       return ply
     end
   end
@@ -140,11 +140,14 @@ function add_money( sender, text )
     local _name = _table[2]
     local _money = tonumber( _table[3] )
     if isnumber( _money ) then
-      local ply = get_player_by_name( _name )
-      ply:addMoney( _money )
-      return ""
+      local _receiver = get_player_by_name( _name )
+      if worked( _receiver, "money receiver not found!" ) then
+        _receiver:addMoney( _money )
+        return ""
+      else
+        sender:ChatPrint( "Command-FAILED NAME not found" )
+      end
     end
-    sender:ChatPrint( "Command-FAILED" )
   else
     printGM( "note", sender:Nick() .. " tried to use addmoney!" )
   end

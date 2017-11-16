@@ -50,6 +50,7 @@ function openSettings()
   settingsWindow:AddCategory( lang_string( "client" ) )
   settingsWindow:AddSite( "open_client_character", lang_string( "character" ), lang_string( "client" ), "icon16/user_edit.png" )
   settingsWindow:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
+  settingsWindow:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
     settingsWindow:AddCategory( lang_string( "server" ) )

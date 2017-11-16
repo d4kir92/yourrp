@@ -3,8 +3,12 @@
 local _hudVersion = 2
 
 local dbNameHUD = "yrp_cl_hud"
-cl_db = {}
-cl_db["_loaded"] = false
+
+function init_database_hud()
+  cl_db = cl_db or {}
+  cl_db["_loaded"] = false
+end
+init_database_hud()
 
 function HudV( name )
   return cl_db[name]

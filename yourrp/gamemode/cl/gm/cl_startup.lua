@@ -54,6 +54,10 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
+	createFont( "mdMenu", tmpFont, 17, 1000, false )
+
+	createFont( "windowTitle", tmpFont, 18, 1000, false )
+
 	createFont( "HudSettings", tmpFont, 24, _weight, false )
 
 	createFont( "HudDefault", tmpFont, 72, _weight, false )
@@ -97,13 +101,15 @@ function changeFontSize()
 	createFont( "sef", tmpFont, 24, _weight, false )
 
 	timer.Create( "createFontDB", 0.1, 0, function()
-		if cl_db["_loaded"] then
-			--Changing to right values
-			updateDBFonts()
+		if worked( cl_db, " " ) then
+			if cl_db["_loaded"] then
+				--Changing to right values
+				updateDBFonts()
 
-			printGM( "db", "HUD Fonts loaded." )
+				printGM( "db", "HUD Fonts loaded." )
 
-			timer.Remove( "createFontDB" )
+				timer.Remove( "createFontDB" )
+			end
 		end
 	end)
 
@@ -409,7 +415,7 @@ function openSingleSelector( table )
 		end
 		draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
-	
+
   function showList()
     local tmpBr = 25
     local tmpX = 0
@@ -593,53 +599,55 @@ function showVersion()
 
       if versionOnline != GAMEMODE.Version then
         g_yrp.outdated = true
-        local frame = createVGUI( "DFrame", nil, 1000, 500, 0, 0 )
+        local frame = createVGUI( "DFrame", nil, 1000, 570, 0, 0 )
         frame:Center()
         frame:SetTitle( "" )
         function frame:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 300 ), ctr( 25 + 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( verart .. "! (" .. _versionsort .. ")", "HudBars", pw/2, ctr( 100 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( lang_string( "currentversion" ) .. ":", "HudBars", pw/2, ctr( 175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
 
-          draw.SimpleTextOutlined( lang_string( "client" ) .. ": ", "HudBars", pw/2, ctr( 225 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw/2, ctr( 225 ), g_yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					paintWindow( self, pw, ph, lang_string( "about" ) )
 
-          draw.SimpleTextOutlined( "(" .. _serverSort .. ") " .. lang_string( "server" ) .. ": ", "HudBars", pw/2, ctr( 275 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( serverVersion, "HudBars", pw/2, ctr( 275 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 300 ), ctr( 50+30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( verart .. "! (" .. _versionsort .. ")", "HudBars", pw/2, ctr( 140 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "currentversion" ) .. ":", "HudBars", pw/2, ctr( 215 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( lang_string( "workshopversion" ) .. ": ", "HudBars", pw/2, ctr( 375 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctr( 375 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "client" ) .. ": ", "HudBars", pw/2, ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw/2, ctr( 265 ), g_yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+          draw.SimpleTextOutlined( "(" .. _serverSort .. ") " .. lang_string( "server" ) .. ": ", "HudBars", pw/2, ctr( 315 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( serverVersion, "HudBars", pw/2, ctr( 315 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+          draw.SimpleTextOutlined( lang_string( "workshopversion" ) .. ": ", "HudBars", pw/2, ctr( 415 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctr( 415 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
-        local _langu = derma_change_language( frame, ctr( 400 ), ctr( 50 ), ctr( 310 ), ctr( 10 ) )
+        local _langu = derma_change_language( frame, ctr( 400 ), ctr( 50 ), ctr( 310 ), ctr( 60 ) )
 
-        local showChanges = createVGUI( "DButton", frame, 460, 50, 0, 0 )
+        local showChanges = createVGUI( "DButton", frame, 460, 80, 0, 0 )
         showChanges:SetText( "" )
         function showChanges:DoClick()
           gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
         end
         function showChanges:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-          draw.SimpleTextOutlined( lang_string( "showchanges" ), "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          paintButton( self, pw, ph, lang_string( "showchanges" ) )
+          --draw.SimpleTextOutlined( lang_string( "showchanges" ), "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
         if ply:IsAdmin() or ply:IsSuperAdmin() then
-          local restartServer = createVGUI( "DButton", frame, 460, 50, 0, 0 )
+          local restartServer = createVGUI( "DButton", frame, 460, 80, 0, 0 )
           restartServer:SetText( "" )
           function restartServer:DoClick()
             net.Start( "restartServer" )
             net.SendToServer()
           end
           function restartServer:Paint( pw, ph )
-            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-            draw.SimpleTextOutlined( lang_string( "updateserver" ), "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+						paintButton( self, pw, ph, lang_string( "updateserver" ) )
           end
 
-          showChanges:SetPos( ctr( 500-460-10 ), ctr( 425 ) )
-          restartServer:SetPos( ctr( 500+10 ), ctr( 425 ) )
+          showChanges:SetPos( ctr( 500-460-10 ), ctr( 460 ) )
+          restartServer:SetPos( ctr( 500+10 ), ctr( 460 ) )
         else
-          showChanges:SetPos( ctr( 500-230 ), ctr( 425 ) )
+          showChanges:SetPos( ctr( 500-230 ), ctr( 460 ) )
         end
 
         frame:MakePopup()

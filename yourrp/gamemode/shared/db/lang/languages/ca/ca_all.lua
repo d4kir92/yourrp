@@ -298,4 +298,5 @@ function CA_All()
   set_lang_string( "keybindchanger", "Canviar controls" )
 
   set_lang_string( "rolesalarytime", "Temps del salari per al rol" )
+  set_lang_string( "search", "Buscar" )
 end

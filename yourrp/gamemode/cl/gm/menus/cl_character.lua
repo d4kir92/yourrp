@@ -569,6 +569,8 @@ function openCharacterSelection()
   local charactersBackground = createD( "DPanel", frame, ctr( 800 ), ScrH() - (2*border), border, border )
   function charactersBackground:Paint( pw, ph )
     paintMD( pw, ph, nil, g_yrp.colors.dprimary )
+
+    draw.SimpleTextOutlined( lang_string( "siteisloading" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
 
   local charplayermodel = createD( "DModelPanel", frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )

@@ -17,7 +17,7 @@ net.Receive( "openInteractMenu", function ()
   local demoteable = net.ReadBool()
   local demoteName = net.ReadString()
 
-  _windowInteract = createVGUI( "DFrame", nil, 830, 470 + 50 + 10, ScrW() - 160, ScrH() - 200 )
+  _windowInteract = createVGUI( "DFrame", nil, 1090, 470 + 50 + 10, ScrW() - 160, ScrH() - 200 )
   local tmpTargetName = ""
   local tmpRPName = ""
   for k, v in pairs ( player.GetAll() ) do
@@ -34,7 +34,7 @@ net.Receive( "openInteractMenu", function ()
     _windowInteract = nil
   end
   function _windowInteract:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+    paintWindow( self, pw, ph, "")
 
     draw.RoundedBox( ctr( 30 ), ctr( 10 ), ctr( 50 ), ctr( 750 ), ctr( 350 ), Color( 255, 255, 255, 200 ) )
 
@@ -69,29 +69,38 @@ net.Receive( "openInteractMenu", function ()
     end
   end)
 
-  local buttonTrade = createVGUI( "DButton", _windowInteract, 400, 50, 10, 410 )
-  buttonTrade:SetText( lang_string( "trade" ) .. " (NOT AVAILABLE: InWork)" )
+  local buttonTrade = createVGUI( "DButton", _windowInteract, 530, 50, 10, 410 )
+  buttonTrade:SetText( "" )
+  function buttonTrade:Paint( pw, ph )
+    paintButton( self, pw, ph, lang_string( "trade" ) .. " (in future update)" )
+  end
 
   if isInstructor then
     if promoteable then
-      local buttonPromote = createVGUI( "DButton", _windowInteract, 400, 50, 420, 410 )
-      buttonPromote:SetText( lang_string( "promote" ) .. ": " .. promoteName )
+      local buttonPromote = createVGUI( "DButton", _windowInteract, 530, 50, 545, 410 )
+      buttonPromote:SetText( "" )
       function buttonPromote:DoClick()
         net.Start( "promotePlayer" )
           net.WriteString( tmpTargetSteamID )
         net.SendToServer()
         _windowInteract:Close()
       end
+      function buttonPromote:Paint( pw, ph )
+        paintButton( self, pw, ph, lang_string( "promote" ) .. ": " .. promoteName )
+      end
     end
 
     if demoteable then
-      local buttonDemote = createVGUI( "DButton", _windowInteract, 400, 50, 420, 410 + 10 + 50 )
-      buttonDemote:SetText( lang_string( "demote" ) .. ": " .. demoteName )
+      local buttonDemote = createVGUI( "DButton", _windowInteract, 530, 50, 545, 410 + 10 + 50 )
+      buttonDemote:SetText( "" )
       function buttonDemote:DoClick()
         net.Start( "demotePlayer" )
           net.WriteString( tmpTargetSteamID )
         net.SendToServer()
         _windowInteract:Close()
+      end
+      function buttonDemote:Paint( pw, ph )
+        paintButton( self, pw, ph, lang_string( "demote" ) .. ": " .. demoteName )
       end
     end
   end

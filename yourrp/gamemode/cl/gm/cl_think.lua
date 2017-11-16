@@ -2,7 +2,7 @@
 
 --cl_think.lua
 
-local chatisopen = 0
+local chatisopen = false
 _thirdperson = 0
 local _thirdpersonC = 0
 local keyCooldown = 0.08
@@ -21,11 +21,18 @@ function useFunction( string )
 	local ply = LocalPlayer()
 	local eyeTrace = ply:GetEyeTrace()
 
-	if chatisopen == 0 then
+	if !chatisopen then
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
 		elseif string == "openCharMenu" then
 			openCharacterSelection()
+		elseif string == "openInventory" then
+			if yrp_inventory != nil then
+				yrp_inventory.window:Remove()
+				yrp_inventory = nil
+			else
+				open_inventory()
+			end
 		elseif string == "openRoleMenu" then
 			if roleMenuWindow != nil then
 				roleMenuWindow:Remove()
@@ -78,13 +85,16 @@ function useFunction( string )
 				else
 					openInteractMenu( eyeTrace.Entity:SteamID() )
 				end
-			--[[else
+				--[[
+			else
 				if _windowInteract != nil then
-					_windowInteract:Close()
+					_windowInteract:Remove()
 					_windowInteract = nil
+					gui.EnableScreenClicker( false )
 				else
 					openInteractMenu( "STEAM_0:1:20900349" )
-				end]]--
+				end
+				]]--
 			end
 		elseif string == "openOptions" then
 			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
@@ -198,10 +208,12 @@ end
 function KeyPress()
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 
+	keyPressed( KEY_I, "openInventory", nil, nil )
+
 	keyPressed( KEY_F2, "openCharMenu", nil, nil )
 	keyPressed( KEY_F3, "openRoleMenu", nil, nil )
 	keyPressed( KEY_F4, "openBuyMenu", nil, nil )
-	keyPressed( KEY_F7, "openSettings", nil, nil )
+	keyPressed( KEY_F8, "openSettings", nil, nil )
 
 	keyPressed( KEY_F11, "F11Toggle", nil, nil )
 
@@ -221,11 +233,11 @@ end
 hook.Add( "Think", "Thinker", KeyPress)
 
 hook.Add( "StartChat", "HasStartedTyping", function( isTeamChat )
-	chatisopen = 1
+	chatisopen = true
 end )
 
 hook.Add( "FinishChat", "ClientFinishTyping", function()
-	chatisopen = 0
+	chatisopen = false
 end )
 
 local _savePos = Vector( 0, 0, 0 )
@@ -263,7 +275,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 								if tr.HitPos:Distance( pos ) < dist and !tr.HitNonWorld then
 									dist = tr.HitPos:Distance( pos ) -- _tmpThick
 								end
-								--print(tr.HitPos:Distance( pos ))
+
 								if tr.Hit and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil and tr.HitPos:Distance( pos ) > _minDistBac then
 									view.origin = tr.HitPos -- ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale() )
 									_savePos = view.origin

@@ -149,14 +149,20 @@ function loadDoors()
         if w.ownerCharID != "" then
 
           local _tmpRPName = db_select( "yrp_characters", "*", "uniqueID = " .. w.ownerCharID )
-          if _tmpRPName[1].rpname != nil then
-            v:SetNWString( "ownerRPName", _tmpRPName[1].rpname )
+          if _tmpRPName != nil then
+            _tmpRPName = _tmpRPName[1]
+            if _tmpRPName.rpname != nil then
+              v:SetNWString( "ownerRPName", _tmpRPName.rpname )
+            end
           end
         else
           if tonumber( w.groupID ) != -1 then
             local _tmpGroupName = db_select( "yrp_groups", "groupID", "uniqueID = " .. w.groupID )
             if _tmpGroupName != nil then
-              v:SetNWString( "ownerGroup", tostring( _tmpGroupName[1].groupID ) )
+              _tmpGroupName = _tmpGroupName[1]
+              if _tmpGroupName != nil then
+                v:SetNWString( "ownerGroup", tostring( _tmpGroupName[1].groupID ) )
+              end
             end
           end
         end
@@ -188,7 +194,6 @@ function check_map_doors()
 
   loadDoors()
 end
-
 
 util.AddNetworkString( "getBuildingInfo")
 util.AddNetworkString( "getBuildings" )
@@ -511,27 +516,32 @@ net.Receive( "getBuildingInfo", function( len, ply )
     local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
     local owner = ""
-    if _tmpTable[1].ownerCharID != "" then
-      local tmpChaTab = db_select( "yrp_characters", "*", "uniqueID = " .. _tmpTable[1].ownerCharID )
-      if tmpChaTab != nil then
-        owner = tmpChaTab[1].rpname
-      end
-    elseif _tmpTable[1].groupID != "" then
-      local tmpGroTab = db_select( "yrp_groups", "*", "uniqueID = " .. _tmpTable[1].groupID )
-      if tmpGroTab != nil then
-        owner = tmpGroTab[1].groupID
-      end
-    end
-
     if _tmpTable != nil then
-      if allowedToUseDoor( _tmpBuildingID, ply ) then
-        net.Start( "getBuildingInfo" )
-          net.WriteBool( true )
-          net.WriteInt( _tmpDoorID, 16 )
-          net.WriteInt( _tmpBuildingID, 16 )
-          net.WriteTable( _tmpTable )
-          net.WriteString( owner )
-        net.Send( ply )
+      _tmpTable = _tmpTable[1]
+      if _tmpTable.ownerCharID != "" then
+        local _tmpChaTab = db_select( "yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID )
+        if _tmpChaTab != nil then
+          _tmpChaTab = _tmpChaTab[1]
+          owner = _tmpChaTab.rpname
+        end
+      elseif _tmpTable.groupID != "" then
+        local _tmpGroTab = db_select( "yrp_groups", "*", "uniqueID = " .. _tmpTable.groupID )
+        if _tmpGroTab != nil then
+          _tmpGroTab = _tmpGroTab[1]
+          owner = _tmpGroTab.groupID
+        end
+      end
+
+      if _tmpTable != nil then
+        if allowedToUseDoor( _tmpBuildingID, ply ) then
+          net.Start( "getBuildingInfo" )
+            net.WriteBool( true )
+            net.WriteInt( _tmpDoorID, 16 )
+            net.WriteInt( _tmpBuildingID, 16 )
+            net.WriteTable( _tmpTable )
+            net.WriteString( owner )
+          net.Send( ply )
+        end
       end
     else
       net.Start( "getBuildingInfo" )

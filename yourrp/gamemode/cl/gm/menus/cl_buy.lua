@@ -81,15 +81,15 @@ function addNewItem( parent, item, tab )
     function _removeButton:DoClick()
       local frame = createVGUI( "DFrame", nil, 630, 120, 0, 0 )
       frame:Center()
-      frame:SetTitle( lang_string( "areyousure" ) )
+      frame:SetTitle( "" )
       function frame:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+        paintWindow( self, pw, ph, lang_string( "areyousure" ) )
       end
 
       frame:MakePopup()
 
       local yes = createVGUI( "DButton", frame, 300, 50, 10, 60 )
-      yes:SetText( lang_string( "yes" ) )
+      yes:SetText( "" )
       function yes:DoClick()
         net.Start( "removeBuyItem" )
           net.WriteString( _itemPanel.uniqueID )
@@ -97,11 +97,17 @@ function addNewItem( parent, item, tab )
         _itemPanel:Remove()
         frame:Close()
       end
+      function yes:Paint( pw, ph )
+        paintButton( self, pw, ph, lang_string( "yes" ) )
+      end
 
       local no = createVGUI( "DButton", frame, 300, 50, 10 + 300 + 10, 60 )
-      no:SetText( lang_string( "no" ) )
+      no:SetText( "" )
       function no:DoClick()
         frame:Close()
+      end
+      function no:Paint( pw, ph )
+        paintButton( self, pw, ph, lang_string( "no" ) )
       end
     end
   end
@@ -159,11 +165,11 @@ net.Receive( "getBuyList", function( len )
       local addSwep = {}
       addSwep.PrintName = lang_string( "noitemselected" ) .. "!"
       local _windowAddItem = createVGUI( "DFrame", nil, 512, 50+500+10+50+10+50+10+30+50+10, 0, 0 )
-      _windowAddItem:SetTitle( lang_string( "additem" ) )
+      _windowAddItem:SetTitle( "" )
       _windowAddItem:ShowCloseButton( true )
       _windowAddItem:SetDraggable( true )
       function _windowAddItem:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+        paintWindow( self, pw, ph, lang_string( "additem" ) )
 
         draw.SimpleTextOutlined( lang_string( "price" ) .. ":", "weaponT", ctr( 8 ), ph - ctr( 135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
@@ -184,12 +190,8 @@ net.Receive( "getBuyList", function( len )
       local _AddItemSWEP = createVGUI( "DButton", _windowAddItem, 500, 50, 6, 50+500+10 )
       _AddItemSWEP:SetText( "" )
       function _AddItemSWEP:Paint( pw, ph )
-        if _AddItemSWEP:IsHovered() then
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-        else
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-        end
-        draw.SimpleTextOutlined( lang_string( "selectitem" ), "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        paintButton( self, pw, ph, lang_string( "selectitem" ) )
+
         if LocalPlayer():GetNWString( "WorldModel", "" ) != test then
           test = LocalPlayer():GetNWString( "WorldModel", "" )
           _AddItemModelPanel:SetModel( test )
@@ -243,12 +245,7 @@ net.Receive( "getBuyList", function( len )
       local _AddItemAdd = createVGUI( "DButton", _windowAddItem, 500, 50, 6, 50+500+10+50+10+30+50+10 )
       _AddItemAdd:SetText( "" )
       function _AddItemAdd:Paint( pw, ph )
-        if _AddItemAdd:IsHovered() then
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-        else
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-        end
-        draw.SimpleTextOutlined( lang_string( "additem" ), "weaponT", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        paintButton( self, pw, ph, lang_string( "additem" ) )
       end
       function _AddItemAdd:DoClick()
         net.Start( "addNewBuyItem" )
@@ -270,13 +267,13 @@ end)
 
 function openBuyMenu()
   _buyWindow = createVGUI( "DFrame", nil, winW, winH, 0, 0 )
-  _buyWindow:SetTitle( lang_string( "buymenu" ) )
+  _buyWindow:SetTitle( "" )
   _buyWindow:Center()
   function _buyWindow:OnClose()
     _buyWindow:Remove()
   end
   function _buyWindow:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    paintWindow( self, pw, ph, lang_string( "buymenu" ) )
   end
 
   derma_change_language( _buyWindow, 400, 50, 1400, 0 )

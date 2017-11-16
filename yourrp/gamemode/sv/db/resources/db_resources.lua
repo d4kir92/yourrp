@@ -6,6 +6,9 @@ printGM( "db", "Loading Resources" )
 --content
 resource.AddWorkshop( "1189643820" )
 
+--handcuffs
+resource.AddWorkshop( "314312925" )
+
 --[[ TEST
 
 --fonts
