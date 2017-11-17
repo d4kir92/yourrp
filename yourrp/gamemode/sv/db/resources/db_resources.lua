@@ -9,5 +9,8 @@ resource.AddWorkshop( "1189643820" )
 --handcuffs
 resource.AddWorkshop( "314312925" )
 
+--Food and Household items
+resource.AddWorkshop( "108024198" )
+
 printGM( "db", "Loaded Resources" )
 hr_pos()

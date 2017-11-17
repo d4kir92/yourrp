@@ -29,7 +29,7 @@ local Vector = FindMetaTable( "Vector" )
 function Vector:isInSight( filter, ply )
   --Description: Decides whether the vector could be seen by the player if they
   --             were to look at it.
-  printDRP( "isInSight( filter, ply )" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isInSight( filter, ply )" )
+  printGM( "darkrp", g_yrp._not )
   return false, Vector( 0, 0, 0 )
 end

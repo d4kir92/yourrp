@@ -52,7 +52,7 @@ net.Receive( "getMoneyPrintMenu", function( len )
     function upgradeframe:Paint( pw, ph )
       draw.RoundedBox( ctr( 30 ), 0, 0, pw, ph, Color( 40, 40, 40, 200 ) )
 
-      draw.SimpleTextOutlined( lang_string( "moneyprinter" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "money_printer" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     --CPU

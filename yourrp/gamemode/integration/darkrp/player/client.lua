@@ -4,38 +4,38 @@ local Player = FindMetaTable( "Player" )
 
 function Player:drawHitInfo()
   --Description: Start drawing the hit information above a hitman.
-  printDRP( "drawHitInfo()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "drawHitInfo()" )
+  printGM( "darkrp", g_yrp._not )
 end
 
 function Player:drawPlayerInfo()
   --Description: Draw player info above a player's head (name, health job). Override this function to disable or change drawing behaviour in DarkRP.
-  printDRP( "drawPlayerInfo()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "drawPlayerInfo()" )
+  printGM( "darkrp", g_yrp._not )
 end
 
 function Player:drawWantedInfo()
   --Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-  printDRP( "drawWantedInfo()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "drawWantedInfo()" )
+  printGM( "darkrp", g_yrp._not )
 end
 
 function Player:getPreferredJobModel( teamNr )
   --Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-  printDRP( "getPreferredJobModel( " .. tostring( teamNr ) .. " )" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getPreferredJobModel( " .. tostring( teamNr ) .. " )" )
+  printGM( "darkrp", g_yrp._not )
   return ""
 end
 
 function Player:isInRoom()
   --Description: Whether the player is in the same room as the LocalPlayer.
-  printDRP( "isInRoom()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isInRoom()" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Player:stopHitInfo()
   --Description: Stop drawing the hit information above a hitman.
-  printDRP( "stopHitInfo()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "stopHitInfo()" )
+  printGM( "darkrp", g_yrp._not )
 end

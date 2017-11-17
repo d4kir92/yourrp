@@ -16,8 +16,10 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.site )
   local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.site )
-  local sv_generalMetabolism = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 315 )
-  local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 375 )
+  local sv_generalHunger = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 315 )
+  local sv_generalThirst = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 375 )
+  local sv_generalStamina = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 435 )
+  local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 495 )
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
 
   local oldGamemodename = ""
@@ -29,8 +31,10 @@ hook.Add( "open_server_general", "open_server_general", function()
     end
     draw.SimpleTextOutlined( lang_string( "advertname" ) .. ":", "sef", ctr( _center - 10 ), ctr( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "updatecountdown" ) .. ":", "sef", ctr( _center - 10 ), ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "metabolism" ) .. ":", "sef", ctr( _center - 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "hunger" ) .. ":", "sef", ctr( _center - 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "thirst" ) .. ":", "sef", ctr( _center - 10 ), ctr( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "stamina" ) .. ":", "sef", ctr( _center - 10 ), ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -48,7 +52,9 @@ end
     sv_generalName:SetText( GAMEMODE.Name )
     _advertname = _yrp_general.name_advert or "FAILED"
     sv_generalAdvert:SetText( tostring( _advertname ) )
-    sv_generalMetabolism:SetChecked( tobool( _yrp_general.toggle_metabolism ) )
+    sv_generalHunger:SetChecked( tobool( _yrp_general.toggle_hunger ) )
+    sv_generalThirst:SetChecked( tobool( _yrp_general.toggle_thirst ) )
+    sv_generalStamina:SetChecked( tobool( _yrp_general.toggle_stamina ) )
     sv_generalBuilding:SetChecked( tobool( _yrp_general.toggle_building ) )
     sv_generalRestartTime:SetValue( tonumber( _yrp_general.time_restart ) )
   end)
@@ -168,15 +174,34 @@ end
     _tmpFrame:MakePopup()
   end
 
-  function sv_generalMetabolism:OnChange( bVal )
+  function sv_generalHunger:OnChange( bVal )
     local _tonumber = 0
     if bVal then
       _tonumber = 1
     end
-    net.Start( "dbUpdateNWBool" )
+    net.Start( "db_update_hunger" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
-    RunConsoleCommand( "yrp_metabolism", math.Round( _tonumber, 0 ) )
+  end
+
+  function sv_generalThirst:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_thirst" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalStamina:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_stamina" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
   end
 
   function sv_generalBuilding:OnChange( bVal )
@@ -187,6 +212,5 @@ end
     net.Start( "dbUpdateNWBool2" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
-    RunConsoleCommand( "yrp_building", math.Round( _tonumber, 0 ) )
   end
 end)

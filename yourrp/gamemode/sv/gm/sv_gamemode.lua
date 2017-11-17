@@ -116,7 +116,9 @@ function GM:PlayerLoadout( ply )
 
   local yrp_general = db_select( "yrp_general", "*", nil )
   yrp_general = yrp_general[1]
-  ply:SetNWBool( "toggle_metabolism", tobool( yrp_general.toggle_metabolism ) )
+  ply:SetNWBool( "toggle_hunger", tobool( yrp_general.toggle_hunger ) )
+  ply:SetNWBool( "toggle_thirst", tobool( yrp_general.toggle_thirst ) )
+  ply:SetNWBool( "toggle_stamina", tobool( yrp_general.toggle_stamina ) )
   ply:SetNWBool( "toggle_building", tobool( yrp_general.toggle_building ) )
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then

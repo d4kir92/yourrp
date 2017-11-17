@@ -12,111 +12,111 @@ end
 
 function Entity:getDoorData()
   --Description: Internal function to get the door/vehicle data.
-  printDRP( "getDoorData()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getDoorData()" )
+  printGM( "darkrp", g_yrp._not )
   return {}
 end
 
 function Entity:getDoorOwner()
   --Description: Get the owner of a door.
-  printDRP( "getDoorOwner()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getDoorOwner()" )
+  printGM( "darkrp", g_yrp._not )
   return NULL
 end
 
 function Entity:getKeysAllowedToOwn()
   --Description: The list of people of which the master door owner has added as allowed to own.
-  printDRP( "getKeysAllowedToOwn()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getKeysAllowedToOwn()" )
+  printGM( "darkrp", g_yrp._not )
   return {}
 end
 
 function Entity:getKeysCoOwners()
   --Description: The list of people who co-own the door.
-  printDRP( "getKeysCoOwners()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getKeysCoOwners()" )
+  printGM( "darkrp", g_yrp._not )
   return {}
 end
 
 function Entity:getKeysDoorGroup()
   --Description: The door group of a door if it exists.
-  printDRP( "getKeysDoorGroup()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getKeysDoorGroup()" )
+  printGM( "darkrp", g_yrp._not )
   return ""
 end
 
 function Entity:getKeysDoorTeams()
   --Description: The teams that are allowed to open this door.
-  printDRP( "getKeysDoorTeams()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getKeysDoorTeams()" )
+  printGM( "darkrp", g_yrp._not )
   return {}
 end
 
 function Entity:getKeysNonOwnable()
   --Description: Whether ownability of this door/vehicle is disabled.
-  printDRP( "getKeysNonOwnable()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getKeysNonOwnable()" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:getKeysTitle()
   --Description: Get the title of this door or vehicle.
-  printDRP( "getKeysTitle()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "getKeysTitle()" )
+  printGM( "darkrp", g_yrp._not )
   return ""
 end
 
 function Entity:isDoor()
   --Description: Whether this entity is considered a door in DarkRP.
-  printDRP( "isDoor()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isDoor()" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:isKeysAllowedToOwn( ply )
   --Description: Whether this player is allowed to co-own a door, as decided by the master door owner.
-  printDRP( "isKeysAllowedToOwn( ply )" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isKeysAllowedToOwn( ply )" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:isKeysOwnable()
   --Description: Whether this door can be bought.
-  printDRP( "isKeysOwnable()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isKeysOwnable()" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:isKeysOwned()
   --Description: Whether this door is owned by someone.
-  printDRP( "isKeysOwned()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isKeysOwned()" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:isKeysOwnedBy( ply )
   --Description: Whether this door is owned or co-owned by this player
-  printDRP( "isKeysOwnedBy( ply )" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isKeysOwnedBy( ply )" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:isMasterOwner( ply )
   --Description: Whether the player is the main owner of the door (as opposed to a co-owner).
-  printDRP( "isMasterOwner( ply )" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isMasterOwner( ply )" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:isMoneyBag()
   --Description: Whether this entity is a money bag
-  printDRP( "isMoneyBag()" )
-  printDRP( g_yrp._not )
+  printGM( "darkrp", "isMoneyBag()" )
+  printGM( "darkrp", g_yrp._not )
   return false
 end
 
 function Entity:Getowning_ent()
   --Description: Not darkrp
-  printDRP( "Getowning_ent()" )
-  return self:GetOwner()
+  --printGM( "darkrp", "Getowning_ent()" )
+  return player.GetAll()[1]
 end

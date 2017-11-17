@@ -1,6 +1,8 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-util.AddNetworkString( "dbUpdateNWBool" )
+util.AddNetworkString( "db_update_hunger" )
+util.AddNetworkString( "db_update_thirst" )
+util.AddNetworkString( "db_update_stamina" )
 util.AddNetworkString( "dbUpdateNWBool2" )
 
 local _db_name = "yrp_general"
@@ -12,6 +14,9 @@ sql_add_column( _db_name, "access_jail", "TEXT DEFAULT -1" )
 
 sql_add_column( _db_name, "toggle_metabolism", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_building", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_hunger", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 
 --sql.Query( "DROP TABLE yrp_general")
 function check_yrp_general()
@@ -43,13 +48,33 @@ function get_advert_name()
 end
 get_advert_name()
 
-net.Receive( "dbUpdateNWBool", function( len, ply )
+net.Receive( "db_update_hunger", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
-  db_update( "yrp_general", "toggle_metabolism = " .. _nw_bool, nil )
+  db_update( "yrp_general", "toggle_hunger = " .. _nw_bool, nil )
   printGM( "note", ply:SteamName() .. " SETS " .. _nw_bool )
 
   for k, v in pairs( player.GetAll() ) do
-    v:SetNWBool( "toggle_metabolism", tobool( _nw_bool ) )
+    v:SetNWBool( "toggle_hunger", tobool( _nw_bool ) )
+  end
+end)
+
+net.Receive( "db_update_thirst", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_thirst = " .. _nw_bool, nil )
+  printGM( "note", ply:SteamName() .. " SETS " .. _nw_bool )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_thirst", tobool( _nw_bool ) )
+  end
+end)
+
+net.Receive( "db_update_stamina", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_stamina = " .. _nw_bool, nil )
+  printGM( "note", ply:SteamName() .. " SETS " .. _nw_bool )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_stamina", tobool( _nw_bool ) )
   end
 end)
 

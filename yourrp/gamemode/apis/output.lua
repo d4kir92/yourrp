@@ -20,6 +20,7 @@ function hr_pos()
 	print( g_text.spacePos )
 end
 
+local darkrp_debug = false
 function printGM( channel, text )
 	local _string = tostring( text )
 	if _string != "nil" then
@@ -78,6 +79,9 @@ function printGM( channel, text )
 		elseif channel == "darkrp" then
 			_color2 = Color( 255, 0, 0 )
 			_channelName = "DarkRP-Int."
+			if !darkrp_debug then
+				return
+			end
 		end
 		for k, v in pairs(_tmpText) do
 			if _channelName != "" then

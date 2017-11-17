@@ -168,16 +168,20 @@ function HudPlayer()
         local _artext = math.Round( ply:Armor(), 0 ) .. "/" .. ply:GetNWInt( "GetMaxArmor", 1 ) .. "|" .. math.Round( ( math.Round( ply:Armor(), 0 ) / ply:GetNWInt( "GetMaxArmor", 1 ) ) * 100, 0 ) .. "%"
         drawHUDElement( "ar", ply:Armor(), ply:GetNWInt( "GetMaxArmor" ), _artext, armor, Color( 52, 150, 72, _alpha ) )
 
-        if ply:GetNWBool( "toggle_metabolism", false ) then
-          --Hunger
+        --Hunger
+        if ply:GetNWBool( "toggle_hunger", false ) then
           local _mhtext = math.Round( ( math.Round( ply:GetNWInt( "hunger", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
           drawHUDElement( "mh", ply:GetNWInt( "hunger", 0 ), 100, _mhtext, hunger, Color( 150, 88, 52, _alpha ) )
+        end
 
-          --Thirst
+        --Thirst
+        if ply:GetNWBool( "toggle_thirst", false ) then
           local _mttext = math.Round( ( math.Round( ply:GetNWInt( "thirst", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
           drawHUDElement( "mt", ply:GetNWInt( "thirst", 0 ), 100, _mttext, thirst, Color( 52, 70, 150, _alpha ) )
+        end
 
-          --Stamina
+        --Stamina
+        if ply:GetNWBool( "toggle_stamina", false ) then
           local _mstext = math.Round( ( math.Round( ply:GetNWInt( "stamina", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
           drawHUDElement( "ms", ply:GetNWInt( "stamina", 0 ), 100, _mstext, stamina, Color( 150, 150, 60, _alpha ) )
         end

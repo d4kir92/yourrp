@@ -36,7 +36,7 @@ function lang_string( var )
 	local _string = yrp_lang[var]
 	if _string == nil then
 		_string = "STRING NOT FOUND!"
-		printGM( "error", "lang_string failed! " .. var )
+		printGM( "error", "lang_string failed! string " .. var .. " not found" )
 	end
 	return _string
 end
@@ -60,6 +60,7 @@ AddCSLuaFile( "languages/db_lang_ro.lua" )
 AddCSLuaFile( "languages/db_lang_es.lua" )
 AddCSLuaFile( "languages/db_lang_ca.lua" )
 AddCSLuaFile( "languages/db_lang_ua.lua" )
+AddCSLuaFile( "languages/db_lang_ko.lua" )
 
 include( "languages/db_lang_en.lua" )
 include( "languages/db_lang_de.lua" )
@@ -76,6 +77,7 @@ include( "languages/db_lang_ro.lua" )
 include( "languages/db_lang_es.lua" )
 include( "languages/db_lang_ca.lua" )
 include( "languages/db_lang_ua.lua" )
+include( "languages/db_lang_ko.lua" )
 
 function check_languagepack()
 	for k, v in pairs( yrp_all_lang ) do
@@ -124,6 +126,8 @@ function change_language( index )
 					LangCA()
 				elseif yrp_lang.get_language == "ua" then
 					LangUA()
+				elseif yrp_lang.get_language == "ko" then
+					LangKO()
 				end
       else
         LangEN()
@@ -165,6 +169,8 @@ function change_language( index )
 			LangCA()
 		elseif index == "ua" then
 			LangUA()
+		elseif index == "ko" then
+			LangKO()
 		else
       printGM( "error", "LANG_E0001" )
       return
