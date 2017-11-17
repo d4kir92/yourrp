@@ -88,6 +88,7 @@ local character = {}
 character.amount = 0
 
 function openCharacterCreation()
+  openMenu()
   local ply = LocalPlayer()
   character.cause = lang_string( "enteraname" )
   character.rpname = ""
@@ -119,6 +120,13 @@ function openCharacterCreation()
 
     draw.SimpleTextOutlined( lang_string( "charactercreation" ), "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
+  function frame:OnClose()
+    closeMenu()
+  end
+  function frame:OnRemove()
+    closeMenu()
+  end
+
 
   local identification = createD( "DPanel", frame, ctr( 800 ), ctr( 360 ), ScrW() - ctr( 800 ) - ctr( 100 ), ScrH() - ctr( 400 ) - ctr( 100 ) )
   function identification:Paint( pw, ph )
@@ -495,8 +503,9 @@ function openCharacterCreation()
       paintMD( pw, ph, lang_string( "back" ), g_yrp.colors.dsecondary )
     end
     function charactersBack:DoClick()
-      openCharacterSelection()
       frame:Close()
+
+      openCharacterSelection()
     end
   end
 
@@ -534,8 +543,10 @@ function openCharacterCreation()
   end
   function charactersConfirm:DoClick()
     if testName() then
-      openCharacterSelection()
       frame:Close()
+
+      openCharacterSelection()
+
       net.Start( "CreateCharacter" )
         net.WriteTable( character )
       net.SendToServer()
@@ -547,6 +558,7 @@ end
 
 local curChar = "-1"
 function openCharacterSelection()
+  openMenu()
   local ply = LocalPlayer()
 
   local cache = {}
@@ -561,6 +573,12 @@ function openCharacterSelection()
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
     draw.SimpleTextOutlined( lang_string( "characterselection" ), "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
+  function frame:OnClose()
+    closeMenu()
+  end
+  function frame:OnRemove()
+    closeMenu()
   end
 
   derma_change_language( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
@@ -618,8 +636,11 @@ function openCharacterSelection()
 
     character.amount = #tmpTable or 0
     if #tmpTable < 1 then
-      openCharacterCreation()
+
       frame:Close()
+
+      openCharacterCreation()
+
       return
     end
     local y = 0
@@ -732,6 +753,8 @@ function openCharacterSelection()
   end
   function backB:DoClick()
     if curChar != "-1" then
+
+
       frame:Close()
     end
   end
@@ -743,8 +766,9 @@ function openCharacterSelection()
   local charactersCreate = createMDPlus( frame, button.size, button.x, button.y, ctr( 5 ) )
   charactersCreate:SetText( "" )
   function charactersCreate:DoClick()
-    openCharacterCreation()
     frame:Close()
+
+    openCharacterCreation()
   end
 
   button.w = ctr( 800 )
@@ -783,6 +807,7 @@ function openCharacterSelection()
           net.Start( "EnterWorld" )
             net.WriteString( curChar )
           net.SendToServer()
+
           frame:Close()
         end
       end

@@ -1,5 +1,18 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+local _menuOpen = false
+function isNoMenuOpen()
+  return !_menuOpen
+end
+
+function closeMenu()
+  _menuOpen = false
+end
+
+function openMenu()
+  _menuOpen = true
+end
+
 function paintBr( pw, ph, color )
   local _br = ctr( 2 )
   --links

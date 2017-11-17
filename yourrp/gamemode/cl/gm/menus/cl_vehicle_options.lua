@@ -9,6 +9,7 @@ net.Receive( "getVehicleInfo", function( len )
 end)
 
 function optionVehicleWindow( vehicle, vehicleTab )
+  openMenu()
   local ply = LocalPlayer()
 
   local _vehicleWindow = createVGUI( "DFrame", nil, 1090, 160, 0, 0 )
@@ -16,6 +17,12 @@ function optionVehicleWindow( vehicle, vehicleTab )
   _vehicleWindow:SetTitle( "" )
   function _vehicleWindow:Close()
     _vehicleWindow:Remove()
+  end
+  function _vehicleWindow:OnClose()
+    closeMenu()
+  end
+  function _vehicleWindow:OnRemove()
+    closeMenu()
   end
 
   local owner = net.ReadString()

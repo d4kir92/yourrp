@@ -373,6 +373,7 @@ function addGroups( uppergroupname, parent, uppergroup, x, y )
 end
 
 function openRoleMenu()
+  openMenu()
   cl_rolesMenuOpen = 1
 
   roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, 0, 0 )
@@ -385,6 +386,12 @@ function openRoleMenu()
   end
   function roleMenuWindow:Paint( pw, ph )
     paintWindow( self, pw, ph, "" )
+  end
+  function roleMenuWindow:OnClose()
+    closeMenu()
+  end
+  function roleMenuWindow:OnRemove()
+    closeMenu()
   end
 
   local roleDPanelList = createVGUI( "DScrollPanel", roleMenuWindow, 1600, 2100-4, 4, 60 )

@@ -75,7 +75,7 @@ function searchForDoors()
 
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _allPropDoors ) do
-    dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    db_insert_into_DEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
 
     local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
     db_insert_into( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
@@ -85,7 +85,7 @@ function searchForDoors()
 
   local _allFuncDoors = ents.FindByClass( "func_door" )
   for k, v in pairs( _allFuncDoors ) do
-    dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    db_insert_into_DEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
 
     local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
     db_insert_into( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
@@ -95,7 +95,7 @@ function searchForDoors()
 
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   for k, v in pairs( _allFuncRDoors ) do
-    dbInsertIntoDEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    db_insert_into_DEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
 
     local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
     db_insert_into( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )

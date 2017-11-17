@@ -27,6 +27,7 @@ net.Receive( "getBuildingInfo", function( len )
 end)
 
 function buyWindow( buildingID, name, price, door )
+  openMenu()
   local ply = LocalPlayer()
   local _buildingID = buildingID
   local _name = name
@@ -70,6 +71,12 @@ function buyWindow( buildingID, name, price, door )
     draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( 10 ), ctr( 320 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "price" ) .. ":", "sef", ctr( 545 ), ctr( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+  end
+  function _doorWindow:OnClose()
+    closeMenu()
+  end
+  function _doorWindow:OnRemove()
+    closeMenu()
   end
 
   local _buyButton = createVGUI( "DButton", _doorWindow, 530, 50, 545, 150 )
@@ -171,6 +178,7 @@ function buyWindow( buildingID, name, price, door )
 end
 
 function optionWindow( buildingID, name, price, door, owner )
+  openMenu()
   local ply = LocalPlayer()
   local _buildingID = buildingID
   local _name = name
@@ -192,6 +200,12 @@ function optionWindow( buildingID, name, price, door, owner )
 
     draw.RoundedBox( 0, ctr( 4 ), ctr( 320 ), pw - ctr( 8 ), ctr( 460 - 320 - 4 ), Color( 255, 255, 0, 200 ) )
     draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "sef", ctr( 10 ), ctr( 350 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+  end
+  function _doorWindow:OnClose()
+    closeMenu()
+  end
+  function _doorWindow:OnRemove()
+    closeMenu()
   end
 
   --[[

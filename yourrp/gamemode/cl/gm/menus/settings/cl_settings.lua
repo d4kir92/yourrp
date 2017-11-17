@@ -32,6 +32,7 @@ g_yrp.materials.light.settings = Material( "vgui/yrp/light_settings.png" )
 g_yrp.materials.light.burger = Material( "vgui/yrp/light_burger.png" )
 
 function openSettings()
+  openMenu()
   addMDColor( "dprimary", getMDPColor() )
   addMDColor( "dprimaryBG", colorBG( getMDPColor() ) )
 
@@ -44,6 +45,12 @@ function openSettings()
   settingsWindow = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
   function settingsWindow:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+  end
+  function settingsWindow:OnClose()
+    closeMenu()
+  end
+  function settingsWindow:OnRemove()
+    closeMenu()
   end
 
   --Sites

@@ -2,6 +2,7 @@
 
 local tmpTargetSteamID = ""
 function openInteractMenu( SteamID )
+  openMenu()
   tmpTargetSteamID = SteamID
   net.Start( "openInteractMenu" )
     net.WriteString( tmpTargetSteamID )
@@ -29,10 +30,7 @@ net.Receive( "openInteractMenu", function ()
     end
   end
   _windowInteract:SetTitle( lang_string( "interactmenu" ) )
-  function _windowInteract:OnClose()
-    gui.EnableScreenClicker( false )
-    _windowInteract = nil
-  end
+
   function _windowInteract:Paint( pw, ph )
     paintWindow( self, pw, ph, "")
 
@@ -54,6 +52,14 @@ net.Receive( "openInteractMenu", function ()
       gender = lang_string( "female" )
     end
     draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+  end
+  function _windowInteract:OnClose()
+    closeMenu()
+    gui.EnableScreenClicker( false )
+    _windowInteract = nil
+  end
+  function _windowInteract:OnRemove()
+    closeMenu()
   end
 
   local tmpAvatarI = createVGUI( "AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70 )

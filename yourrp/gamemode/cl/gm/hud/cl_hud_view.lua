@@ -18,11 +18,11 @@ function HudView()
   if _eyeTrace.Entity != nil and _eyeTrace.Entity != NULL then
     if ply:GetNWBool( "toggle_building", false ) and _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
       draw.SimpleTextOutlined( lang_string( "pressepre" ) .. " [E] " .. lang_string( "pressepos" ), "sef", ScrW()/2, ScrH2() + ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "holdepre" ) .. " [T] " .. lang_string( "holdepos" ), "sef", ScrW()/2, ScrH2() + ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "holdepre" ) .. " [" .. string.upper( input.GetKeyName( get_keybind("menu_options_door" ) ) ) .. "] " .. lang_string( "holdepos" ), "sef", ScrW()/2, ScrH2() + ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )
     elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
       draw.SimpleTextOutlined( lang_string( "pressevehpre" ) .. " [E] " .. lang_string( "pressevehpos" ), "sef", ScrW()/2, ScrH2() + ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "holdevehpre" ) .. " [T] " .. lang_string( "holdevehpos" ), "sef", ScrW()/2, ScrH2() + ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "holdevehpre" ) .. " [" .. string.upper( input.GetKeyName( get_keybind("menu_options_vehicle" ) ) ) .. "] " .. lang_string( "holdevehpos" ), "sef", ScrW()/2, ScrH2() + ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )
     end
   end

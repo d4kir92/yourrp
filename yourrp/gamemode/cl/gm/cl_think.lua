@@ -24,34 +24,34 @@ function useFunction( string )
 	if !chatisopen then
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
-		elseif string == "openCharMenu" then
+		elseif string == "openCharMenu" and isNoMenuOpen() then
 			openCharacterSelection()
 		elseif string == "openInventory" then
 			if yrp_inventory != nil then
 				yrp_inventory.window:Remove()
 				yrp_inventory = nil
-			else
+			elseif isNoMenuOpen() then
 				open_inventory()
 			end
 		elseif string == "openRoleMenu" then
 			if roleMenuWindow != nil then
 				roleMenuWindow:Remove()
 				roleMenuWindow = nil
-			else
+			elseif isNoMenuOpen() then
 				openRoleMenu()
 			end
 		elseif string == "openBuyMenu" then
 			if _buyWindow != nil then
 				_buyWindow:Remove()
 				_buyWindow = nil
-			else
+			elseif isNoMenuOpen() then
 				openBuyMenu()
 			end
 		elseif string == "openSettings" then
 			if settingsWindow != nil then
 				settingsWindow:Remove()
 				settingsWindow = nil
-			else
+			elseif isNoMenuOpen() then
 				openSettings()
 			end
 		elseif string == "ViewChange" then
@@ -71,7 +71,7 @@ function useFunction( string )
 			if mapWindow != nil then
 				mapWindow:Remove()
 				mapWindow = nil
-			else
+			elseif isNoMenuOpen() then
 				net.Start( "askCoords")
 					net.WriteEntity( LocalPlayer() )
 				net.SendToServer()
@@ -82,7 +82,7 @@ function useFunction( string )
 					_windowInteract:Remove()
 					_windowInteract = nil
 					gui.EnableScreenClicker( false )
-				else
+				elseif isNoMenuOpen() then
 					openInteractMenu( eyeTrace.Entity:SteamID() )
 				end
 				--[[
@@ -150,85 +150,90 @@ end
 function keyDown( key, string, string2, distance )
 	local ply = LocalPlayer()
 	local plyTrace = ply:GetEyeTrace()
+	local _return = false
 	if distance != nil then
 		if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
-			return
+			_return = true
 		end
 	end
-	if keys[tostring(key)] == nil then
-		keys[tostring(key)] = false
-	end
-	if ply:KeyDown(key) and !keys[tostring(key)] then
-		keys[tostring(key)] = true
-		timer.Simple( 0.2, function()
-			if ply:KeyDown(key) then
-				if string2 != nil then
-					useFunction( string2 )
-				end
-			else
-				if string != nil then
-					useFunction( string )
-				end
-			end
+	if !_return then
+		if keys[tostring(key)] == nil then
 			keys[tostring(key)] = false
-		end)
+		end
+		if ply:KeyDown(key) and !keys[tostring(key)] then
+			keys[tostring(key)] = true
+			timer.Simple( 0.2, function()
+				if ply:KeyDown(key) then
+					if string2 != nil then
+						useFunction( string2 )
+					end
+				else
+					if string != nil then
+						useFunction( string )
+					end
+				end
+				keys[tostring(key)] = false
+			end)
+		end
 	end
 end
 
 function keyPressed( key, string, string2, distance )
 	local ply = LocalPlayer()
 	local plyTrace = ply:GetEyeTrace()
+	local _return = false
 	if distance != nil then
 		if plyTrace.Entity != nil and plyTrace.Entity != NULL then
 			if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
-				return
+				_return = true
 			end
 		end
 	end
-	if keys[tostring(key)] == nil then
-		keys[tostring(key)] = false
-	end
-	if input.IsKeyDown(key) and !keys[tostring(key)] then
-		keys[tostring(key)] = true
-		timer.Simple( 0.14, function()
-			if input.IsKeyDown(key) then
-				if string2 != nil then
-					useFunction( string2 )
-				end
-			else
-				if string != nil then
-					useFunction( string )
-				end
-			end
+	if !_return then
+		if keys[tostring(key)] == nil then
 			keys[tostring(key)] = false
-		end)
+		end
+		if input.IsKeyDown(key) and !keys[tostring(key)] then
+			keys[tostring(key)] = true
+			timer.Simple( 0.14, function()
+				if input.IsKeyDown(key) then
+					if string2 != nil then
+						useFunction( string2 )
+					end
+				else
+					if string != nil then
+						useFunction( string )
+					end
+				end
+				keys[tostring(key)] = false
+			end)
+		end
 	end
 end
 
 function KeyPress()
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 
-	keyPressed( KEY_I, "openInventory", nil, nil )
+	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
 
-	keyPressed( KEY_F2, "openCharMenu", nil, nil )
-	keyPressed( KEY_F3, "openRoleMenu", nil, nil )
-	keyPressed( KEY_F4, "openBuyMenu", nil, nil )
-	keyPressed( KEY_F8, "openSettings", nil, nil )
+	keyPressed( get_keybind("menu_inventory"), "openInventory", nil, nil )
 
-	keyPressed( KEY_F11, "F11Toggle", nil, nil )
+	keyPressed( get_keybind("menu_character_selection"), "openCharMenu", nil, nil )
+	keyPressed( get_keybind("menu_role"), "openRoleMenu", nil, nil )
+	keyPressed( get_keybind("menu_buy"), "openBuyMenu", nil, nil )
 
-	keyPressed( KEY_B, "ViewChange", nil, nil )
+	keyPressed( KEY_E, "openInteractMenu", nil, 100 )
 
-	keyPressed( KEY_M, "openMap", nil, nil )
+	keyPressed( get_keybind("menu_options_door"), nil, "openOptions", 100 )
+	keyPressed( get_keybind("menu_options_vehicle"), nil, "openOptions", 100 )
 
-	keyPressed( KEY_O, "eat", "eat", nil )
-	keyPressed( KEY_P, "drink", "drink", nil )
+	keyPressed( get_keybind("toggle_view"), "ViewChange", nil, nil )
+	keyPressed( get_keybind("toggle_map"), "openMap", nil, nil )
+
+	keyPressed( get_keybind("toggle_mouse"), "F11Toggle", nil, nil )
 
 	keyPressed( KEY_PAGEUP, "vyes", nil )
 	keyPressed( KEY_PAGEDOWN, "vno", nil )
-
-	keyPressed( KEY_E, "openInteractMenu", nil, 100 )
-	keyPressed( KEY_T, nil, "openOptions", 100 )
 end
 hook.Add( "Think", "Thinker", KeyPress)
 

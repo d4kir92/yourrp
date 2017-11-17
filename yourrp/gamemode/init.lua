@@ -22,6 +22,8 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
 AddCSLuaFile( "cl/db/db_database.lua")
+AddCSLuaFile( "cl/db/db_hud.lua")
+AddCSLuaFile( "cl/db/db_keybinds.lua")
 
 AddCSLuaFile( "cl/cl_includes.lua" )
 AddCSLuaFile( "cl/gm/cl_startup.lua" )

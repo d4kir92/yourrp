@@ -176,7 +176,7 @@ end
 
 function DarkRP.offlinePlayerData( SteamID, callback, failure )
   --Description: Get a player's information from the database using a SteamID for use when the player is offline.
-  printGM( "darkrp", "notifyAll( msgType, time, " .. message .. " )" )
+  printGM( "darkrp", "offlinePlayerData( SteamID, callback, " .. tostring( failure ) .. " )" )
   printGM( "darkrp", g_yrp._not )
   --return?
 end
@@ -225,7 +225,7 @@ end
 
 function DarkRP.retrieveJailPos( index )
   --Description: Retrieve a jail position.
-  printGM( "darkrp", "retrieveJailPos( index )" )
+  printGM( "darkrp", "retrieveJailPos( " .. tostring( index ) .. " )" )
   printGM( "darkrp", g_yrp._not )
   return Vector( 0, 0, 0 )
 end
