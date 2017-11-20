@@ -455,8 +455,10 @@ end)
 net.Receive( "changeBuildingPrice", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   local _tmpNewPrice = net.ReadString()
+  _tmpNewPrice = tonumber( _tmpNewPrice ) or 99
 
-  db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
+  local _result = db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
+  worked( _result, "changeBuildingPrice failed" )
 end)
 
 

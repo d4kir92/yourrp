@@ -125,6 +125,7 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
 end)
 
 util.AddNetworkString( "getRistrictions" )
+util.AddNetworkString( "db_jailaccess" )
 util.AddNetworkString( "dbUpdate" )
 
 net.Receive( "getRistrictions", function( len, ply )
@@ -143,6 +144,14 @@ net.Receive( "getRistrictions", function( len, ply )
     net.WriteTable( {} )
   end
   net.Send( ply )
+end)
+
+net.Receive( "db_jailaccess", function( len, ply )
+  local _dbTable = net.ReadString()
+  local _dbSets = net.ReadString()
+
+  local _result = db_update( _dbTable, _dbSets, "uniqueID = 1" )
+  worked( _result, "access_jail update failed" )
 end)
 
 net.Receive( "dbUpdate", function( len, ply )

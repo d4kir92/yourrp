@@ -37,27 +37,23 @@ net.Receive( "openLawBoard", function( len )
     local _tmpGroups = net.ReadTable()
     local _tmpGeneral = net.ReadTable()
     local _gAccess = -1
-    for k, v in pairs( _tmpGeneral ) do
-      if v.name == "jailaccess" then
-        _gAccess = tonumber( v.value )
-        break
-      end
+    if worked( _tmpGeneral, "_tmpGeneral failed" ) then
+      _gAccess = tonumber( _tmpGeneral[1].access_jail )
     end
     if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
       local _access = createVGUI( "DComboBox", window, 300, 50, 610, 0 )
       _access:AddChoice( "-", -1, false )
       for k, v in pairs( _tmpGroups ) do
         local _hasaccess = false
-        if tonumber( v.uniqueID ) == _gAccess then
+        if tonumber( v.uniqueID ) == tonumber( _gAccess ) then
           _hasaccess = true
         end
         _access:AddChoice( v.groupID, v.uniqueID, _hasaccess )
       end
       function _access:OnSelect( index, value, data )
-        net.Start( "dbUpdate" )
+        net.Start( "db_jailaccess" )
           net.WriteString( "yrp_general" )
-          net.WriteString( "value = " .. data )
-          net.WriteString( "name = '" .. "jailaccess" .. "'" )
+          net.WriteString( "access_jail = " .. data )
         net.SendToServer()
       end
     end

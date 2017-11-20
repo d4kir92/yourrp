@@ -35,7 +35,7 @@ function teleportToJailpoint( ply )
 end
 
 
-function cleanUpJail( ply )
+function clean_up_jail( ply )
   local _tmpTable = db_select( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if _tmpTable != nil then
     db_delete_from( "yrp_jail", "SteamID = '" .. ply:SteamID() .. "'" )
