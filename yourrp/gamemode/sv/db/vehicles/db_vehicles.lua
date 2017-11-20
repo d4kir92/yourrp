@@ -14,7 +14,7 @@ sql_add_column( _db_name, "price", "TEXT DEFAULT 100" )
 sql_add_column( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "ClassName", "TEXT DEFAULT ''" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 function createVehicleKey( ent, id )

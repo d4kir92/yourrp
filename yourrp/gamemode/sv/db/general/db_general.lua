@@ -18,7 +18,7 @@ sql_add_column( _db_name, "toggle_hunger", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 
---sql.Query( "DROP TABLE yrp_general")
+--db_drop_table( "yrp_general")
 db_is_empty( _db_name )
 
 function get_advert_name()

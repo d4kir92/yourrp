@@ -5,7 +5,11 @@ function get_vehicles_custom( s_list, s_custom )
 	for k, v in pairs( _custom_list ) do
 		v.Custom = s_custom
 		v.WorldModel = v.WorldModel or v.Model or ""
-    v.ClassName = v.ClassName or v.Class or ""
+    if s_list == "simfphys_vehicles" then
+      v.ClassName = k or ""
+    else
+      v.ClassName = v.ClassName or v.Class or ""
+    end
     v.PrintName = v.PrintName or v.Name or ""
     v.Skin = v.Skin or "-1"
   end
@@ -46,6 +50,5 @@ function get_all_vehicles()
 		vehicles[count].Custom = v.Custom or ""
 		vehicles[count].KeyValues = v.KeyValues or {}
   end
-
   return vehicles
 end

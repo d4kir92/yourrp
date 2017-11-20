@@ -13,7 +13,7 @@ function set_keybind( name, value )
   yrp_keybinds[name] = value
 end
 
---sql.Query( "DROP TABLE yrp_keybinds")
+--db_drop_table( "yrp_keybinds" )
 function check_yrp_keybinds()
   init_database( _db_name )
 
@@ -36,18 +36,11 @@ function check_yrp_keybinds()
     end
   end
 
-  _tmp = db_select( _db_name, "*", nil )
-
-  if worked( _tmp, tostring( _db_name ) .. " is empty" ) then
-    hr_pre()
-    printGM( "db", _db_name )
-    PrintTable( _tmp )
-    hr_pos()
-
+  if !db_is_empty( _db_name ) then
+    local _tmp = db_select( _db_name, "*", nil )
     _tmp = _tmp[1]
+
     yrp_keybinds = _tmp
   end
 end
 check_yrp_keybinds()
-
-print( get_keybind( "menu_character_selection" ) )

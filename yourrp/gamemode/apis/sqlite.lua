@@ -1,5 +1,10 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function db_drop_table( db_table )
+  local _result = sql.Query( "DROP TABLE " .. db_table )
+  worked( _result, "db_drop_table fail" )
+end
+
 function db_sql_str( string )
   local _newString = sql.SQLStr( string, true )
   _newString = string.Replace( _newString, "'", " " )
@@ -11,7 +16,7 @@ function db_table_exists( _db_table )
   if sql.TableExists( _db_table ) then
     return true
   else
-    printGM( "note", _db_table .. " is not existing.")
+    printGM( "note", tostring( _db_table ) .. " is not existing.")
     return false
   end
 end
@@ -106,7 +111,7 @@ function db_update( db_table, db_sets, db_where )
     end
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_update failed: Update not worked " .. _q )
+      printGM( "error", "db_update failed: " .. _q )
       print( sql.LastError() )
     end
   end

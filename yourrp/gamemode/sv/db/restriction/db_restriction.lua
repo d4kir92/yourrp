@@ -30,7 +30,7 @@ if db_select( _db_name, "*", "usergroup = 'operator'" ) == nil then
   db_insert_into( _db_name, "usergroup", "'operator'" )
 end
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply )

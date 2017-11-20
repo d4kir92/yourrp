@@ -25,7 +25,7 @@ sql_add_column( _db_name, "position", "TEXT" )
 sql_add_column( _db_name, "angle", "TEXT" )
 sql_add_column( _db_name, "map", "TEXT" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 util.AddNetworkString( "charGetGroups" )

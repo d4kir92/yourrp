@@ -31,7 +31,7 @@ sql_add_column( _db_name, "removeable", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "uses", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "capitaltime", "INTEGER DEFAULT 120" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 if db_select( _db_name, "*", "uniqueID = 1" ) == nil then
@@ -147,14 +147,14 @@ end)
 net.Receive( "addDBRole", function( len, ply )
   printGM( "db", "addDBRole" )
   local _tmpUniqueID = net.ReadString()
-  local result = db_insert_into( "yrp_roles", "roleID, groupID", "'new Role', " .. _tmpUniqueID )
+  local result = db_insert_into( "yrp_roles", "roleID, groupID", "'" .. lang_string( "newrole" ) .. "', " .. _tmpUniqueID )
   printGM( "db", result)
 
   sendDBRoles( ply, _tmpUniqueID )
 end)
 
 net.Receive( "addDBGroup", function( len, ply )
-  sql.Query( "INSERT INTO yrp_groups ( groupID, uppergroup, removeable ) VALUES ( 'new Group', -1, 1 )" )
+  db_insert_into( "yrp_groups", "groupID, uppergroup, removeable", "'" .. lang_string( "newgroup" ) .. "', -1, 1" )
 
   sendDBGroups( ply )
 end)
@@ -324,7 +324,7 @@ net.Receive( "openInteractMenu", function( len, ply )
     tmpBool = true
 
     local tmpSearch = true  --tmpTargetSteamID
-    local tmpTableSearch = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTable[1].prerole )
+    local tmpTableSearch = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTable[1].prerole )
     if tmpTableSearch != nil then
       local tmpSearchUniqueID = tmpTableSearch[1].prerole
       local tmpCounter = 0
@@ -333,7 +333,7 @@ net.Receive( "openInteractMenu", function( len, ply )
 
         if tonumber( tmpTargetRole[1].prerole ) != -1 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
           tmpDemote = true
-          local tmp = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpTargetRole[1].prerole )
+          local tmp = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTargetRole[1].prerole )
           tmpDemoteName = tmp[1].roleID
         end
 
@@ -349,7 +349,7 @@ net.Receive( "openInteractMenu", function( len, ply )
           tmpSearch = false
         end
         tmpCounter = tmpCounter + 1
-        tmpTableSearch = sql.Query( "SELECT * FROM yrp_roles WHERE uniqueID = " .. tmpSearchUniqueID )
+        tmpTableSearch = db_select( "yrp_roles", "*", "uniqueID = " .. tmpSearchUniqueID )
       end
     end
   end
@@ -369,8 +369,8 @@ end)
 net.Receive( "getAllGroups", function( len, ply )
   local tmpUpperGroup = net.ReadInt( 16 )
 
-  local tmpTable = sql.Query( "SELECT * FROM yrp_groups" )
-  local tmpTable2 = sql.Query( "SELECT * FROM yrp_roles" )
+  local tmpTable = db_select( "yrp_groups", "*", nil )
+  local tmpTable2 = db_select( "yrp_roles", "*", nil )
   local tmpTable3 = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if tmpTable3 == nil then
     tmpTable3 = {}

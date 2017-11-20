@@ -11,7 +11,7 @@ sql_add_column( _db_name, "price", "INTEGER DEFAULT 100" )
 sql_add_column( _db_name, "tab", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "Skin", "TEXT DEFAULT ''" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 util.AddNetworkString( "getBuyList" )
@@ -29,9 +29,10 @@ function SpawnVehicle( item )
       vehicle = v
       if v.Custom == "simfphys" then
         local spawnname = item.ClassName
-        local vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
+        local _vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
 
         local car = simfphys.SpawnVehicleSimple( spawnname, Vector( 1000, 1000, -12700 ), Angle( 0, 0, 0 ) )
+
         return car
       end
       break
@@ -71,7 +72,10 @@ function spawnItem( ply, item, tab )
     local getVehicles = db_select( "yrp_vehicles", "*", nil )
     ent:SetNWInt( "vehicleID", getVehicles[#getVehicles].uniqueID)
     ent:SetNWString( "ownerRPName", ply:RPName() )
-    if ent == NULL then return end
+    if ent == NULL then
+      printGM( "note", "spawnItem failed: ent == NULL" )
+      return
+    end
   else
     ent = ents.Create( item.ClassName )
     if ent == NULL then return end
@@ -96,6 +100,7 @@ function spawnItem( ply, item, tab )
       if !_result.Hit then
         ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
         if tab == "vehicles" then
+          ent:SetVelocity( Vector( 0, 0, -500 ) )
         else
           ent:Spawn()
         end

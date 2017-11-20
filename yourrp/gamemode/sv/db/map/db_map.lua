@@ -9,7 +9,7 @@ sql_add_column( _db_name, "angle", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "type", "TEXT DEFAULT ''" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 function teleportToPoint( ply, pos )
@@ -46,14 +46,14 @@ util.AddNetworkString( "dbInsertInto" )
 util.AddNetworkString( "removeMapEntry" )
 
 net.Receive( "removeMapEntry", function( len, ply )
-  local _tmpMapTable = sql.Query( "SELECT * FROM yrp_" .. string.lower( game.GetMap() ) )
+  local _tmpMapTable = db_select( "yrp_" .. string.lower( game.GetMap() ), "*", nil )
   local _tmpUniqueID = net.ReadString()
   db_delete_from( "yrp_" .. string.lower( game.GetMap() ), "uniqueID = " .. _tmpUniqueID )
 end)
 
 net.Receive( "getMapList", function( len, ply )
-  local _tmpMapTable = sql.Query( "SELECT * FROM yrp_" .. string.lower( game.GetMap() ) )
-  local _tmpGroupTable = sql.Query( "SELECT * FROM yrp_groups" )
+  local _tmpMapTable = db_select( "yrp_" .. string.lower( game.GetMap() ), "*", nil )
+  local _tmpGroupTable = db_select( "yrp_groups", "*", nil )
 
   if _tmpMapTable != nil then
     net.Start( "getMapList" )

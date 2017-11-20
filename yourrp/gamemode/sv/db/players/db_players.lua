@@ -11,7 +11,7 @@ sql_add_column( _db_name, "SteamName", "TEXT" )
 sql_add_column( _db_name, "CurrentCharacter", "INT" )
 sql_add_column( _db_name, "Timestamp", "INT" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 function save_clients( string )
@@ -19,6 +19,8 @@ function save_clients( string )
   for k, ply in pairs( player.GetAll() ) do
 
     local _result = db_update( _db_name, "timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'" )
+    worked( _result, "timestamp update failed" )
+
     if ply:Alive() then
       local _char_id = ply:CharID()
       if worked( _char_id, "CharID failed @save_clients" ) then
@@ -34,12 +36,14 @@ function save_clients( string )
 
         if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) then
           local _money = "money = '" .. ply:GetNWString( "money" ) .. "'"
-          db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
+          local _mo_result = db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
+          worked( _mo_result, "_mo_result money failed" )
         end
 
         if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) then
           local _moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
-          db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
+          local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
+          worked( _mb_result, "_mb_result moneybank failed" )
         end
 
         if worked( string.lower( game.GetMap() ), "getmap failed @save_clients" ) then
@@ -330,7 +334,7 @@ function canGetRole( ply, roleID )
   local tmpTableRole = db_select( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
   if worked( tmpTableRole, "tmpTableRole" ) then
-    local tmpTableGroup = sql.Query( "SELECT * FROM yrp_groups WHERE uniqueID = " .. tmpTableRole[1].groupID )
+    local tmpTableGroup = db_select( "yrp_groups", "*", "uniqueID = " .. tmpTableRole[1].groupID )
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
       if tmpTableRole[1].adminonly == 1 then
         printGM( "user", "Adminonly-Role" )

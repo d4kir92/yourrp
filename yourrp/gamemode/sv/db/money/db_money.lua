@@ -19,7 +19,7 @@ if db_select( _db_name, "*", "name = 'moneystart'" ) == nil then
   db_insert_into( _db_name, "name, value", "'moneystart', '1000'" )
 end
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 util.AddNetworkString( "getMoneyTab" )

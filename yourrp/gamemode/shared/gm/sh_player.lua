@@ -9,12 +9,6 @@ function Player:GetPlyTab()
       if worked( yrp_players, "GetPlyTab fail" ) then
         self.plytab = yrp_players[1]
         return self.plytab
-      else
-        printGM( "note", "GetPlyTab ALL PLAYERS")
-        local _all = db_select( "yrp_players", "*", nil )
-        if _all != nil then
-          --PrintTable( _all )
-        end
       end
     end
   end
@@ -34,12 +28,6 @@ function Player:GetChaTab()
         if worked( yrp_characters, "yrp_characters GetChaTab" ) then
           self.chatab = yrp_characters[1]
           return self.chatab
-        else
-          printGM( "note", "GetChaTab ALL Characters")
-          local _all = db_select( "yrp_characters", "*", nil )
-          if _all != nil then
-            --PrintTable( _all )
-          end
         end
       end
     end
@@ -60,12 +48,6 @@ function Player:GetRolTab()
         if worked( yrp_roles, "yrp_roles GetRolTab" ) then
           self.roltab = yrp_roles[1]
           return self.roltab
-        else
-          printGM( "note", "GetRolTab ALL Roles")
-          local _all = db_select( "yrp_roles", "*", nil )
-          if _all != nil then
-            --PrintTable( _all )
-          end
         end
       end
     end
@@ -86,12 +68,6 @@ function Player:GetGroTab()
         if worked( yrp_groups, "yrp_groups GetGroTab" ) then
           self.grotab = yrp_groups[1]
           return self.grotab
-        else
-          printGM( "note", "GetGroTab ALL Groups")
-          local _all = db_select( "yrp_groups", "*", nil )
-          if _all != nil then
-            --PrintTable( _all )
-          end
         end
       end
     end

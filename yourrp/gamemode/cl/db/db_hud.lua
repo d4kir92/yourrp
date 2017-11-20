@@ -316,7 +316,7 @@ function resetHud()
   updateDBFonts()
 end
 
---sql.Query( "DROP TABLE yrp_cl_hud" )
+--db_drop_table( "yrp_cl_hud" )
 
 function loadDatabaseHUD()
   local ply = LocalPlayer()

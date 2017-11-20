@@ -38,7 +38,7 @@ function reset_database()
   table.insert( _dbs, "yrp_vehicles" )
 
   for k, v in pairs( _dbs ) do
-    sql.Query( "DROP TABLE " .. v )
+    db_drop_table( v )
   end
   printGM( "db", "DONE reset Database" )
 end

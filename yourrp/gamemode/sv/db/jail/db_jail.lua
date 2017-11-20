@@ -9,7 +9,7 @@ sql_add_column( _db_name, "nick", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "reason", "TEXT DEFAULT '-'" )
 sql_add_column( _db_name, "time", "TEXT INT 1" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 function teleportToReleasepoint( ply )

@@ -7,7 +7,7 @@ sql_add_column( _db_name, "buildingID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "level", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "keynr", "INTEGER DEFAULT -1" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 _db_name = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
@@ -16,7 +16,7 @@ sql_add_column( _db_name, "buildingprice", "TEXT DEFAULT 100" )
 sql_add_column( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "name", "TEXT DEFAULT 'Building'" )
 
---sql.Query( "DROP TABLE " .. _db_name )
+--db_drop_table( _db_name )
 db_is_empty( _db_name )
 
 
