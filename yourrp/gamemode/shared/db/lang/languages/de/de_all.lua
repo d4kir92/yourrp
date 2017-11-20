@@ -304,4 +304,5 @@ function DE_All()
   set_lang_string( "attributes", "Eigenschaften" )
   set_lang_string( "money_printer_exploded", "Dein Gelddrucker is explodiert" )
   set_lang_string( "money_printer_overheating", "Dein Gelddrucker is am überhitzen" )
+  set_lang_string( "unknown", "Unbekannt" )
 end

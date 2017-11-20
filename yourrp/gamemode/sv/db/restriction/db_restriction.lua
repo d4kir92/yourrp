@@ -35,8 +35,9 @@ db_is_empty( _db_name )
 
 hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "vehicles", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].vehicles ) then
+  if worked( _tmp, "PlayerSpawnVehicle failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.vehicles ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a vehicle." )
@@ -47,8 +48,9 @@ end)
 
 hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "weapons", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].weapons ) then
+  if worked( _tmp, "PlayerGiveSWEP failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.weapons ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a weapon." )
@@ -59,8 +61,9 @@ end)
 
 hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "entities", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].entities ) then
+  if worked( _tmp, "PlayerSpawnSENT failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.entities ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn an entity." )
@@ -71,8 +74,9 @@ end)
 
 hook.Add( "PlayerSpawnEffect", "yrp_effects_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "effects", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].effects ) then
+  if worked( _tmp, "PlayerSpawnEffect failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.effects ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn an effect." )
@@ -83,8 +87,9 @@ end)
 
 hook.Add( "PlayerSpawnNPC", "yrp_npcs_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "npcs", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].npcs ) then
+  if worked( _tmp, "PlayerSpawnNPC failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.npcs ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a npc." )
@@ -95,8 +100,9 @@ end)
 
 hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "props", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].props ) then
+  if worked( _tmp, "PlayerSpawnProp failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.props ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a prop." )
@@ -107,8 +113,9 @@ end)
 
 hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "ragdolls", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != false and _tmp != nil then
-    if tobool( _tmp[1].ragdolls ) then
+  if worked( _tmp, "PlayerSpawnRagdoll failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.ragdolls ) then
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a ragdoll." )
@@ -121,7 +128,14 @@ util.AddNetworkString( "getRistrictions" )
 util.AddNetworkString( "dbUpdate" )
 
 net.Receive( "getRistrictions", function( len, ply )
-  local _tmp = db_select( "yrp_restrictions", "*", nil )
+  local _usergroups = {}
+  for k, v in pairs( player.GetAll() ) do
+    local _ug = v:GetUserGroup()
+    if db_select( _db_name, "*", "usergroup = '" .. _ug .. "'" ) == nil then
+      printGM( "note", "usergroup: " .. _ug .. " not found" )
+    end
+  end
+  local _tmp = db_select( _db_name, "*", nil )
   net.Start( "getRistrictions" )
   if _tmp != nil then
     net.WriteTable( _tmp )

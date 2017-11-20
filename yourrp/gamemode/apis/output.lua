@@ -22,6 +22,7 @@ end
 
 local darkrp_debug = false
 function printGM( channel, text )
+	local _realm = "SHARED"
 	local _string = tostring( text )
 	if _string != "nil" then
 		local _pool = "unknown"
@@ -40,8 +41,10 @@ function printGM( channel, text )
 		local _channelName = "FAIL"
 		if CLIENT then
 			_color = Color( 255, 222, 102 )
+			_realm = "CLIENT"
 		elseif SERVER then
 			_color = Color( 137, 222, 255 )
+			_realm = "SERVER"
 		end
 		_color3 = _color
 
@@ -73,6 +76,7 @@ function printGM( channel, text )
 			_color2 = Color( 255, 0, 0 )
 			_channelName = "ERROR"
 			_color3 = _color2
+			send_errors( _realm, _tmpText )
 		elseif channel == "lang" then
 			_color2 = Color( 255, 255, 0 )
 			_channelName = "LANGUAGE"

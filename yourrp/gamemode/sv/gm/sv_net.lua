@@ -12,8 +12,9 @@ end)
 
 net.Receive( "updateServer", function( len, ply )
   local _tmpString = net.ReadString()
-  sql.Query( "UPDATE yrp_general SET value = '" .. _tmpString .. "' WHERE name = 'gamemodename'" )
-
+  local _result = db_update( "yrp_general", "name_gamemode = '" .. _tmpString .. "'" )
+  if worked( _result, "name_gamemode failed" ) then
+  end
   local countdown = net.ReadInt( 16 )
   timer.Create( "timerRestartServer", 1, 0, function()
 		local message = "Updating Server in " .. countdown .. " seconds"
@@ -89,7 +90,7 @@ function changeUserGroup( ply, cmd, args )
 	    printGM( "note", args[1] .. " not found." )
 	  elseif ply:IsSuperAdmin() or ply:IPAddress() == "loopback" then
 	    for k, v in pairs( player.GetAll() ) do
-	      if string.lower( v:SteamName() ) == string.lower( args[1] ) then
+	      if string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
 	        v:SetUserGroup( args[2] )
 	        printGM( "note", args[1] .. " is now the usergroup " .. args[2] )
 	        return

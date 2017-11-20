@@ -304,4 +304,5 @@ function EN_All()
   set_lang_string( "attributes", "Attributes" )
   set_lang_string( "money_printer_exploded", "Your money printer has exploded" )
   set_lang_string( "money_printer_overheating", "Your money printer is overheating" )
+  set_lang_string( "unknown", "unknown" )
 end

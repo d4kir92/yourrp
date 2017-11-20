@@ -166,7 +166,7 @@ function db_is_empty( db_name )
   if worked( _tmp, db_name .. " is empty!" ) then
     hr_pre()
     printGM( "db", db_name )
-    PrintTable( _tmp )
+    --PrintTable( _tmp )
     hr_pos()
     return false
   else
