@@ -271,7 +271,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 								local tr = util.TraceHull( {
 									start = pos + angles:Forward() * _minDistFor,
 									endpos = pos - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale()),
-									filter = {LocalPlayer(),LocalPlayer():GetActiveWeapon()},
+									filter = {LocalPlayer(),weapon},
 									mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
 									maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
 									mask = MASK_SHOT_HULL
@@ -281,8 +281,8 @@ local function yrpCalcView( ply, pos, angles, fov )
 									dist = tr.HitPos:Distance( pos ) -- _tmpThick
 								end
 
-								if tr.Hit and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil and tr.HitPos:Distance( pos ) > _minDistBac then
-									view.origin = tr.HitPos -- ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale() )
+								if tr.Hit and tr.HitPos:Distance( pos ) > _minDistBac then
+									view.origin = tr.HitPos
 									_savePos = view.origin
 									view.angles = angles
 									view.fov = fov
@@ -308,24 +308,34 @@ local function yrpCalcView( ply, pos, angles, fov )
 								local dist = 170 * ply:GetModelScale()
 
 								local _tmpThick = 16
-								local tr = util.TraceHull( {
-									start = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + angles:Forward() * 4,
-									endpos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) - angles:Forward() * 4,
-									filter = {LocalPlayer(),LocalPlayer():GetActiveWeapon()},
-									mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
-									maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
-									mask = MASK_SHOT_HULL
-								} )
+								local _head = ply:LookupBone( "ValveBiped.Bip01_Head1" )
 
-								if !tr.Hit and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-									pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 16 * ply:GetModelScale() )
-									view.origin = pos2
-									_savePos = pos2
-									view.angles = angles
-									view.fov = fov
-									_drawViewmodel = true
+								if worked( _head, "_head failed @cl_think.lua" ) then
+									local tr = util.TraceHull( {
+										start = ply:GetBonePosition( _head ) + angles:Forward() * 4,
+										endpos = ply:GetBonePosition( _head ) - angles:Forward() * 4,
+										filter = {LocalPlayer(),weapon},
+										mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
+										maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
+										mask = MASK_SHOT_HULL
+									} )
 
-									return view
+									if !tr.Hit then
+										pos2 = ply:GetBonePosition( _head ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 16 * ply:GetModelScale() )
+										view.origin = pos2
+										_savePos = pos2
+										view.angles = angles
+										view.fov = fov
+										_drawViewmodel = true
+
+										return view
+									else
+										view.origin = pos
+										view.angles = angles
+										view.fov = fov
+										_drawViewmodel = false
+										return view
+									end
 								else
 									view.origin = pos
 									view.angles = angles

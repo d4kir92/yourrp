@@ -111,9 +111,15 @@ end
 if CLIENT then
 	function DrawCuff( ply )
 		if ply:GetNWBool( "cuffed" ) then
-			local startPos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
-			local endPos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_L_Hand" ) )
-			local line = render.DrawLine( startPos, endPos, Color( 255, 0, 0 ), false )
+			local _r_hand = ply:LookupBone( "ValveBiped.Bip01_R_Hand" )
+			if _r_hand != nil then
+				local startPos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
+				local _l_hand = ply:LookupBone( "ValveBiped.Bip01_L_Hand" )
+				if _l_hand != nil then
+					local endPos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_L_Hand" ) )
+					local line = render.DrawLine( startPos, endPos, Color( 255, 0, 0 ), false )
+				end
+			end
 		end
 	end
 	hook.Add( "PostPlayerDraw", "DrawCuff", DrawCuff )

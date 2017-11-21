@@ -88,7 +88,9 @@ local character = {}
 character.amount = 0
 
 function openCharacterCreation()
-  openMenu()
+  timer.Simple( 0.2, function()
+    openMenu()
+  end)
   local ply = LocalPlayer()
   character.cause = lang_string( "enteraname" )
   character.rpname = ""
@@ -558,7 +560,9 @@ end
 
 local curChar = "-1"
 function openCharacterSelection()
-  openMenu()
+  timer.Simple( 0.2, function()
+    openMenu()
+  end)
   local ply = LocalPlayer()
 
   local cache = {}
