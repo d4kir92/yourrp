@@ -11,10 +11,14 @@ sql_add_column( _db_name, "groupID", "INT     DEFAULT 1" )
 
 sql_add_column( _db_name, "playermodelID", "INT     DEFAULT 1" )
 sql_add_column( _db_name, "skin", "INT     DEFAULT 1" )
-sql_add_column( _db_name, "bg1", "INT     DEFAULT 0" )
-sql_add_column( _db_name, "bg2", "INT     DEFAULT 0" )
-sql_add_column( _db_name, "bg3", "INT     DEFAULT 0" )
-sql_add_column( _db_name, "bg4", "INT     DEFAULT 0" )
+sql_add_column( _db_name, "bg0", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg1", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg2", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg3", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg4", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg5", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg6", "INT     DEFAULT 1" )
+sql_add_column( _db_name, "bg7", "INT     DEFAULT 1" )
 
 sql_add_column( _db_name, "keynrs", "TEXT    DEFAULT ''" )
 sql_add_column( _db_name, "rpname", "TEXT    DEFAULT 'ID_RPNAME'" )
@@ -156,7 +160,7 @@ net.Receive( "CreateCharacter", function( len, ply )
 
   local role = db_select( "yrp_roles", "*", "uniqueID = " .. ch.roleID )
 
-  local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg1, bg2, bg3, bg4"
+  local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
   local vals = "'" .. ply:SteamID() .. "', "
   vals = vals .. "'" .. ch.rpname .. "', "
   vals = vals .. "'" .. ch.gender .. "', "
@@ -167,10 +171,14 @@ net.Receive( "CreateCharacter", function( len, ply )
   vals = vals .. 500 .. ", "
   vals = vals .. "'" .. game.GetMap() .. "', "
   vals = vals .. ch.skin .. ", "
+  vals = vals .. ch.bg[0] .. ", "
+  vals = vals .. ch.bg[1] .. ", "
   vals = vals .. ch.bg[2] .. ", "
   vals = vals .. ch.bg[3] .. ", "
   vals = vals .. ch.bg[4] .. ", "
-  vals = vals .. ch.bg[5]
+  vals = vals .. ch.bg[5] .. ", "
+  vals = vals .. ch.bg[6] .. ", "
+  vals = vals .. ch.bg[7]
   db_insert_into( "yrp_characters", cols, vals )
 
   local chars = db_select( "yrp_characters", "*", nil )
@@ -183,4 +191,35 @@ net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
   local result = db_update( "yrp_players", "CurrentCharacter = " .. char , "SteamID = '" .. ply:SteamID() .. "'" )
   ply:Spawn()
+end)
+
+util.AddNetworkString( "get_menu_bodygroups" )
+
+net.Receive( "get_menu_bodygroups", function( len, ply )
+  local _charid = ply:CharID()
+  local _result = db_select( "yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7", "uniqueID = " .. _charid )
+  _result = _result[1]
+  net.Start( "get_menu_bodygroups" )
+    net.WriteTable( _result )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "inv_bg_up" )
+
+net.Receive( "inv_bg_up", function( len, ply )
+  local _cur = net.ReadInt( 16 )
+  local _id = net.ReadInt( 16 )
+  ply:SetBodygroup( _id, _cur )
+  local _charid = ply:CharID()
+  db_update( "yrp_characters", "bg" .. _id .. " = " .. _cur , "uniqueID = " .. _charid )
+end)
+
+util.AddNetworkString( "inv_bg_do" )
+
+net.Receive( "inv_bg_do", function( len, ply )
+  local _cur = net.ReadInt( 16 )
+  local _id = net.ReadInt( 16 )
+  ply:SetBodygroup( _id, _cur )
+  local _charid = ply:CharID()
+  db_update( "yrp_characters", "bg" .. _id .. " = " .. _cur , "uniqueID = " .. _charid )
 end)

@@ -8,7 +8,7 @@ sql_add_column( _db_name, "level", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "keynr", "INTEGER DEFAULT -1" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 _db_name = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
@@ -17,25 +17,21 @@ sql_add_column( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "name", "TEXT DEFAULT 'Building'" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
-
+--db_is_empty( _db_name )
 
 function allowedToUseDoor( id, ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
     return true
   else
     local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
-    --PrintTable(_tmpBuildingTable)
     if _tmpBuildingTable[1] != nil then
 
-      --PrintTable( _tmpBuildingTable )
       if tostring( _tmpBuildingTable[1].ownerCharID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
         return true
       else
         local _tmpChaTab = db_select( "yrp_characters", "*", "uniqueID = " .. _tmpBuildingTable[1].ownerCharID )
         local _tmpGroupTable = db_select( "yrp_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID )
 
-        --PrintTable(_tmpGroupTable)
         if tostring( _tmpBuildingTable[1].ownerCharID ) == tostring( ply:CharID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
           return true
         else

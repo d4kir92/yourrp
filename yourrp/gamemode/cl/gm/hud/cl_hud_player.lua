@@ -104,13 +104,13 @@ end)
 local _alpha = 200
 function drawHUDElement( dbV, cur, max, text, icon, color )
   local _r = 0
-  local _rounded = true
+  local _rounded = false
   if tobool( HudV( dbV .. "to" ) ) then
     if cur != nil and max != nil then
       hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
     end
     if _rounded then
-      _r = HudV( dbV .. "ah" )/2
+      _r = ctr( HudV( dbV .. "sh" ) )/2
     end
     draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
     if color != nil and cur != nil and max != nil then
@@ -144,8 +144,9 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
     if icon != nil and HudV( dbV .. "it" ) == 1  then
       showIcon( dbV, icon )
     end
-
-    drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( dbV .. "aw" ) ) + HudV( dbV .. "px" ), ctrF( ScrH() ) * anchorH( HudV( dbV .. "ah" ) ) + HudV( dbV .. "py" ), HudV( dbV .. "sw" ), HudV( dbV .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+    if !_rounded then
+      drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( dbV .. "aw" ) ) + HudV( dbV .. "px" ), ctrF( ScrH() ) * anchorH( HudV( dbV .. "ah" ) ) + HudV( dbV .. "py" ), HudV( dbV .. "sw" ), HudV( dbV .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+    end
   end
 end
 

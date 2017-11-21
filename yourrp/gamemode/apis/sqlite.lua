@@ -7,8 +7,8 @@ end
 
 function db_sql_str( string )
   local _newString = sql.SQLStr( string, true )
-  _newString = string.Replace( _newString, "'", " " )
-  _newString = string.Replace( _newString, "\"", " " )
+  _newString = string.Replace( _newString, "\"", "´´" )
+  _newString = string.Replace( _newString, "'", "´" )
   return _newString
 end
 
@@ -111,7 +111,7 @@ function db_update( db_table, db_sets, db_where )
     end
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_update failed: " .. _q )
+      printGM( "error", "db_update failed: " .. tostring( _q ) )
       print( sql.LastError() )
     end
   end
@@ -120,7 +120,7 @@ end
 function sql_check_if_column_exists( table_name, column_name )
   local _result = sql.Query( "SELECT " .. column_name .. " FROM " .. table_name )
   if _result == false then
-    printGM( "note", "In table " .. table_name .. " column " .. column_name .. " not exists. (" .. tostring( _result ) .. ")" )
+    --printGM( "note", "In table " .. table_name .. " column " .. column_name .. " not exists. (" .. tostring( _result ) .. ")" )
     return false
   else
     return true
@@ -143,7 +143,7 @@ function init_database( db_name )
   hr_pre()
   printGM( "db", "init_database " .. db_name )
   if db_table_exists( db_name ) then
-    --printGM( "db", db_name .. " exists" )
+    printGM( "db", db_name .. " exists" )
   else
     printGM( "note", db_name .. " not exists" )
     local _query = ""

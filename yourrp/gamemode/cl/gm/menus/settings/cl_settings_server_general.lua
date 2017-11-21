@@ -46,7 +46,6 @@ end
 
   net.Receive( "dbGetGeneral", function()
     local _yrp_general = net.ReadTable()
-    PrintTable( _yrp_general )
     GAMEMODE.Name = _yrp_general.name_gamemode or "FAILED"
     oldGamemodename = GAMEMODE.Name
     sv_generalName:SetText( GAMEMODE.Name )

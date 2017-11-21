@@ -133,9 +133,11 @@ net.Receive( "getRistrictions", function( len, ply )
   for k, v in pairs( player.GetAll() ) do
     local _ug = v:GetUserGroup()
     if db_select( _db_name, "*", "usergroup = '" .. _ug .. "'" ) == nil then
-      printGM( "note", "usergroup: " .. _ug .. " not found" )
+      printGM( "note", "usergroup: " .. _ug .. " not found, adding to db" )
+      db_insert_into( _db_name, "usergroup", "'" .. _ug .. "'" )
     end
   end
+
   local _tmp = db_select( _db_name, "*", nil )
   net.Start( "getRistrictions" )
   if _tmp != nil then
@@ -144,6 +146,14 @@ net.Receive( "getRistrictions", function( len, ply )
     net.WriteTable( {} )
   end
   net.Send( ply )
+
+end)
+
+util.AddNetworkString( "remove_res_usergroup" )
+
+net.Receive( "remove_res_usergroup", function( len, ply )
+  local _ug = net.ReadString()
+  db_delete_from( _db_name, "usergroup = '" .. _ug .. "'" )
 end)
 
 net.Receive( "db_jailaccess", function( len, ply )

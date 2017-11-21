@@ -12,7 +12,7 @@ sql_add_column( _db_name, "tab", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "Skin", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 util.AddNetworkString( "getBuyList" )
 

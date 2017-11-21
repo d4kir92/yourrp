@@ -38,33 +38,37 @@ function update_error_table_cl()
 
   local _read = file.Read( "clientside_errors.txt", "GAME" )
 
-	check_yrp_cl_errors( str )
+	if worked( _read, "_read failed" ) then
+		check_yrp_cl_errors( str )
 
-  local _yrp_read = file.Read( "yrp/cl_errors.txt", "DATA" )
+	  local _yrp_read = file.Read( "yrp/cl_errors.txt", "DATA" )
+		if worked( _yrp_read, "_yrp_read failed" ) then
 
-  local _explode_yrp_read = string.Explode( "\n", _yrp_read )
-  local _explode = string.Explode( "\n", _read )
+		  local _explode_yrp_read = string.Explode( "\n", _yrp_read )
+		  local _explode = string.Explode( "\n", _read )
 
-  if #_explode < #_explode_yrp_read then
-		--if error file is smaller, update data
-    file.Write( "yrp/cl_errors.txt", _read )
+		  if #_explode < #_explode_yrp_read then
+				--if error file is smaller, update data
+		    file.Write( "yrp/cl_errors.txt", _read )
 
-  elseif #_explode > #_explode_yrp_read then
-		--if error file is bigger, get all errors
-    local _errors = {}
-    for k, v in pairs( _explode ) do
-      if k > #_explode_yrp_read then
-        if string.find( v, "[ERROR] gamemodes/yourrp/", 1, true ) and !table.HasValue( _errors, v ) then
-          table.insert( _errors, v )
-        end
-      end
-    end
+		  elseif #_explode > #_explode_yrp_read then
+				--if error file is bigger, get all errors
+		    local _errors = {}
+		    for k, v in pairs( _explode ) do
+		      if k > #_explode_yrp_read then
+		        if string.find( v, "[ERROR] gamemodes/yourrp/", 1, true ) and !table.HasValue( _errors, v ) then
+		          table.insert( _errors, v )
+		        end
+		      end
+		    end
 
-		--update data file
-    file.Write( "yrp/cl_errors.txt", _read )
+				--update data file
+		    file.Write( "yrp/cl_errors.txt", _read )
 
-    return _errors
-  end
+		    return _errors
+			end
+	  end
+	end
   return {}
 end
 
@@ -75,10 +79,16 @@ function send_error( realm, str )
   entry["entry.915525654"] = tostring( str )
   entry["entry.58745995"] = tostring( realm )
   entry["entry.1306533151"] = game.GetMap() or "MAPNAME"
-  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
-  entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
-  entry["entry.1883727441"] = entry["entry.1883727441"] .. " (" .. gmod.GetGamemode().Version .. ")"
-  entry["entry.2045173320"] = gmod.GetGamemode().VersionSort or "UNKNOWN"
+	if gmod.GetGamemode() != nil then
+	  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
+	  entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
+	  entry["entry.1883727441"] = entry["entry.1883727441"] .. " (" .. gmod.GetGamemode().Version .. ")"
+	  entry["entry.2045173320"] = gmod.GetGamemode().VersionSort or "UNKNOWN"
+	else
+		entry["entry.2006356340"] = "GAMEMODENAME"
+	  entry["entry.1883727441"] = "UNKNOWN"
+	  entry["entry.2045173320"] = "UNKNOWN"
+	end
 
   http.Post( _url, entry, function( result )
     if result then end
@@ -101,7 +111,6 @@ function send_errors( realm, tbl )
       table.insert( g_sended[realm], v )
     end
   end
-  --PrintTable( g_sended )
 end
 
 timer.Create( "update_error_tables", 10, 0, function()

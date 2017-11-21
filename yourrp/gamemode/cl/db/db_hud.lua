@@ -313,7 +313,7 @@ function resetHud()
 
   setDefaultHUD()
 
-  updateDBFonts()
+  update_db_fonts()
 end
 
 --db_drop_table( "yrp_cl_hud" )

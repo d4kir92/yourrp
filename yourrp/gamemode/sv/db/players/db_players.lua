@@ -14,47 +14,52 @@ sql_add_column( _db_name, "Timestamp", "INT" )
 --db_drop_table( _db_name )
 db_is_empty( _db_name )
 
+g_db_reseted = false
 function save_clients( string )
   printGM( "db", string.upper( "[Saving all clients]" ) )
-  for k, ply in pairs( player.GetAll() ) do
+  if !g_db_reseted then
+    for k, ply in pairs( player.GetAll() ) do
 
-    local _result = db_update( _db_name, "timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'" )
-    worked( _result, "timestamp update failed" )
+      local _result = db_update( _db_name, "Timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'" )
+      worked( _result, "Timestamp update failed" )
 
-    if ply:Alive() then
-      local _char_id = ply:CharID()
-      if worked( _char_id, "CharID failed @save_clients" ) then
-        local _ply_pos = "position = '" .. tostring( ply:GetPos() ) .. "'"
-        if worked( _ply_pos, "_ply_pos failed @save_clients" ) then
-          db_update( "yrp_characters", _ply_pos, "uniqueID = " .. _char_id )
-        end
+      if ply:Alive() then
+        local _char_id = ply:CharID()
+        if worked( _char_id, "CharID failed @save_clients" ) then
+          local _ply_pos = "position = '" .. tostring( ply:GetPos() ) .. "'"
+          if worked( _ply_pos, "_ply_pos failed @save_clients" ) then
+            db_update( "yrp_characters", _ply_pos, "uniqueID = " .. _char_id )
+          end
 
-        local _ply_ang = "angle = '" .. tostring( ply:EyeAngles() ) .. "'"
-        if worked( _ply_ang, "_ply_ang failed @save_clients" ) then
-          db_update( "yrp_characters", _ply_ang, "uniqueID = " .. _char_id )
-        end
+          local _ply_ang = "angle = '" .. tostring( ply:EyeAngles() ) .. "'"
+          if worked( _ply_ang, "_ply_ang failed @save_clients" ) then
+            db_update( "yrp_characters", _ply_ang, "uniqueID = " .. _char_id )
+          end
 
-        if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) then
-          local _money = "money = '" .. ply:GetNWString( "money" ) .. "'"
-          local _mo_result = db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
-          worked( _mo_result, "_mo_result money failed" )
-        end
+          if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) then
+            local _money = "money = '" .. ply:GetNWString( "money" ) .. "'"
+            local _mo_result = db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
+            worked( _mo_result, "_mo_result money failed" )
+          end
 
-        if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) then
-          local _moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
-          local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
-          worked( _mb_result, "_mb_result moneybank failed" )
-        end
+          if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) then
+            local _moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
+            local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
+            worked( _mb_result, "_mb_result moneybank failed" )
+          end
 
-        if worked( string.lower( game.GetMap() ), "getmap failed @save_clients" ) then
-          local _map = "map = '" .. string.lower( game.GetMap() ) .. "'"
-          db_update( "yrp_characters", _map, "uniqueID = " .. _char_id )
+          if worked( string.lower( game.GetMap() ), "getmap failed @save_clients" ) then
+            local _map = "map = '" .. string.lower( game.GetMap() ) .. "'"
+            db_update( "yrp_characters", _map, "uniqueID = " .. _char_id )
+          end
         end
       end
     end
+    local _all_players = player.GetCount() or 0
+    printGM( "db", string.upper( "[Saved " .. tostring( _all_players ) .. " client(s)]" ) )
+  else
+    printGM( "db", "no saving, because db reset" )
   end
-  local _all_players = player.GetCount() or 0
-  printGM( "db", string.upper( "[Saved " .. tostring( _all_players ) .. " client(s)]" ) )
 end
 
 function set_role( ply, rid )
@@ -63,67 +68,69 @@ function set_role( ply, rid )
   _gid = _gid[1].groupID
   local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
   local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
-  local _result4 = db_update( "yrp_characters", "skin = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0", "uniqueID = " .. ply:CharID() )
+  local _result4 = db_update( "yrp_characters", "skin = 0, bg0 = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0, bg5 = 0, bg6 = 0, bg7 = 0", "uniqueID = " .. ply:CharID() )
   ply:SetSkin( 0 )
-  for i=1, 4 do
+  for i=0, 7 do
     ply:SetBodygroup( i, 0 )
   end
 end
 
 function set_role_values( ply )
-  local rolTab = ply:GetRolTab()
-  local groTab = ply:GetGroTab()
-  local ChaTab = ply:GetChaTab()
-  if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
-    if ChaTab.playermodelID != nil then
-      local tmpID = tonumber( ChaTab.playermodelID )
-      if rolTab.playermodels != nil and rolTab.playermodels != "" then
-        local tmp = string.Explode( ",", rolTab.playermodels )
-        if worked( tmp[tmpID], "set_role_values playermodel" ) then
-          ply:SetModel( tmp[tmpID] )
+  if g_db_loaded then
+    local rolTab = ply:GetRolTab()
+    local groTab = ply:GetGroTab()
+    local ChaTab = ply:GetChaTab()
+    if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
+      if ChaTab.playermodelID != nil then
+        local tmpID = tonumber( ChaTab.playermodelID )
+        if rolTab.playermodels != nil and rolTab.playermodels != "" then
+          local tmp = string.Explode( ",", rolTab.playermodels )
+          if worked( tmp[tmpID], "set_role_values playermodel" ) then
+            ply:SetModel( tmp[tmpID] )
+          end
         end
       end
+    else
+      printGM( "note", "No role or/and no character -> Suicide")
+      ply:KillSilent()
     end
-  else
-    printGM( "note", "No role or/and no character -> Suicide")
-    ply:KillSilent()
-  end
-  if worked( rolTab, "set_role_values rolTab" ) then
-    ply:SetModelScale( rolTab.playermodelsize, 0 )
-    ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
-    ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
-    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
-    ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
-    ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
-    ply:SetHealth( tonumber( rolTab.hp ) )
-    ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
-    ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
-    ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
-    ply:SetArmor( tonumber( rolTab.ar ) )
-    ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
-    ply:SetNWInt( "capital", rolTab.capital )
-    ply:SetNWString( "roleName", rolTab.roleID )
-    ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
-    ply:SetNWInt( "capitaltime", rolTab.capitaltime )
+    if worked( rolTab, "set_role_values rolTab" ) then
+      ply:SetModelScale( rolTab.playermodelsize, 0 )
+      ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
+      ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
+      ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
+      ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+      ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
+      ply:SetHealth( tonumber( rolTab.hp ) )
+      ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+      ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
+      ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
+      ply:SetArmor( tonumber( rolTab.ar ) )
+      ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
+      ply:SetNWInt( "capital", rolTab.capital )
+      ply:SetNWString( "roleName", rolTab.roleID )
+      ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
+      ply:SetNWInt( "capitaltime", rolTab.capitaltime )
 
-    --sweps
-    local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
-    for k, swep in pairs( tmpSWEPTable ) do
-      if swep != nil and swep != NULL and swep != "" then
-        ply:Give( swep )
+      --sweps
+      local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
+      for k, swep in pairs( tmpSWEPTable ) do
+        if swep != nil and swep != NULL and swep != "" then
+          ply:Give( swep )
+        end
       end
+    else
+      printGM( "note", "No role selected -> Suicide")
+      ply:KillSilent()
     end
-  else
-    printGM( "note", "No role selected -> Suicide")
-    ply:KillSilent()
-  end
 
-  if groTab != nil then
-    ply:SetNWString( "groupName", groTab.groupID )
-    ply:SetNWString( "groupUniqueID", groTab.uniqueID )
-  else
-    printGM( "note", "No group selected -> Suicide" )
-    ply:KillSilent()
+    if groTab != nil then
+      ply:SetNWString( "groupName", groTab.groupID )
+      ply:SetNWString( "groupUniqueID", groTab.uniqueID )
+    else
+      printGM( "note", "No group selected -> Suicide" )
+      ply:KillSilent()
+    end
   end
 end
 

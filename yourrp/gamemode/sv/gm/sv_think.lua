@@ -107,10 +107,10 @@ timer.Create( "ServerThink", 1, 0, function()
     end
 
     if ply:GetNWBool( "toggle_hunger", false ) then
-      con_hg( ply )
+      --con_hg( ply )
     end
     if ply:GetNWBool( "toggle_thirst", false ) then
-      con_th( ply )
+      --con_th( ply )
     end
     if ply:GetNWBool( "toggle_stamina", false ) then
       con_st( ply )

@@ -365,4 +365,3 @@ function showPlayermodel()
 	end
 end
 hook.Add( "ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel )
---PrintTable( hook.GetTable() )

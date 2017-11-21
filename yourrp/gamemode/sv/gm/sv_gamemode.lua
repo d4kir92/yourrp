@@ -93,10 +93,14 @@ function GM:PlayerLoadout( ply )
     ply:SetNWString( "rpname", chaTab.rpname )
 
     ply:SetSkin( chaTab.skin )
+    ply:SetBodygroup( 0, chaTab.bg0 )
     ply:SetBodygroup( 1, chaTab.bg1 )
     ply:SetBodygroup( 2, chaTab.bg2 )
     ply:SetBodygroup( 3, chaTab.bg3 )
     ply:SetBodygroup( 4, chaTab.bg4 )
+    ply:SetBodygroup( 5, chaTab.bg5 )
+    ply:SetBodygroup( 6, chaTab.bg6 )
+    ply:SetBodygroup( 7, chaTab.bg7 )
   else
     printGM( "note", "give char failed" )
     ply:KillSilent()
@@ -114,12 +118,16 @@ function GM:PlayerLoadout( ply )
     ply:SetNWString( "moneyPost", monPos )
   end
 
-  local yrp_general = db_select( "yrp_general", "*", nil )
-  yrp_general = yrp_general[1]
-  ply:SetNWBool( "toggle_hunger", tobool( yrp_general.toggle_hunger ) )
-  ply:SetNWBool( "toggle_thirst", tobool( yrp_general.toggle_thirst ) )
-  ply:SetNWBool( "toggle_stamina", tobool( yrp_general.toggle_stamina ) )
-  ply:SetNWBool( "toggle_building", tobool( yrp_general.toggle_building ) )
+  local _yrp_general = db_select( "yrp_general", "*", nil )
+  if _yrp_general != nil then
+    _yrp_general = _yrp_general[1]
+    ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
+    ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
+    ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
+    ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
+  else
+    printGM( "note", "yrp_general failed" )
+  end
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
     ply:Give( "yrp_arrest_stick" )

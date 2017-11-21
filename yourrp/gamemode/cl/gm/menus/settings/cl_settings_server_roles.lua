@@ -43,7 +43,7 @@ function addDBTextEntry( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTa
 
   local tmp2 = addDTextEntry( parent, w, h/2, x, y + h/2, stringTextEntry )
   function tmp2:OnChange()
-    tmpTable[dbSets] = tmp2:GetText()
+    tmpTable[dbSets] = db_sql_str( tmp2:GetText() )
     net.Start( "dbUpdate" )
       net.WriteString( dbTable )
       net.WriteString( dbSets .. " = '" .. tmpTable[dbSets] .. "'" )
@@ -450,7 +450,7 @@ function addDBSwep( parent, id, uniqueID )
       changesw = 1
 
       local worldmodel = getWorldModel( sws[changesw] )
-      if modelpanel != NULL then
+      if tostring(modelpanel) != "[NULL Panel]" then
         modelpanel:SetModel( worldmodel )
         if modelpanel.Entity != nil then
           modelpanel.Entity:SetModelScale( 1, 0 )

@@ -18,6 +18,12 @@ sql_add_column( _db_name, "toggle_hunger", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 
+local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
+if _check_general == nil then
+  printGM( "note", "INSERT DEFAULT VALUES for yrp_general")
+  db_insert_into_DEFAULTVALUES( _db_name )
+end
+
 --db_drop_table( "yrp_general")
 db_is_empty( _db_name )
 
@@ -100,10 +106,12 @@ end)
 
 net.Receive( "dbGetGeneral", function( len, ply )
   local _tmp = db_select( "yrp_general", "*", nil )
-  _tmp = _tmp[1]
-  net.Start( "dbGetGeneral" )
-    net.WriteTable( _tmp )
-  net.Send( ply )
+  if worked( _tmp, "yrp_general failed @1" ) then
+    _tmp = _tmp[1]
+    net.Start( "dbGetGeneral" )
+      net.WriteTable( _tmp )
+    net.Send( ply )
+  end
 end)
 
 net.Receive( "updateGeneral", function( len, ply )

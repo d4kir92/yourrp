@@ -21,6 +21,8 @@ end
 function reset_database()
   printGM( "db", "reset Database" )
 
+  g_db_reseted = true
+
   local _dbs = {}
   table.insert( _dbs, "yrp_general" )
   table.insert( _dbs, "yrp_questions" )
@@ -87,6 +89,8 @@ function db_init_database()
   init_database( "yrp_characters" )
   init_database( "yrp_players" )
   init_database( "yrp_vehicles" )
+
+  g_db_loaded = true
 
   printGM( "db", "DONE Loading DATABASES" )
 end

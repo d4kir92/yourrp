@@ -59,7 +59,7 @@ function openSettings()
   settingsWindow:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
   settingsWindow:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  --if ply:IsAdmin() or ply:IsSuperAdmin() then
     settingsWindow:AddCategory( lang_string( "server" ) )
     settingsWindow:AddSite( "open_server_general", lang_string( "general" ), lang_string( "server" ), "icon16/server_database.png" )
     settingsWindow:AddSite( "open_server_roles", lang_string( "roles" ), lang_string( "server" ), "icon16/group_gear.png" )
@@ -68,7 +68,7 @@ function openSettings()
     settingsWindow:AddSite( "open_server_map", lang_string( "map" ), lang_string( "server" ), "icon16/map.png" )
     settingsWindow:AddSite( "open_server_whitelist", lang_string( "whitelist" ), lang_string( "server" ), "icon16/page_white_key.png" )
     settingsWindow:AddSite( "open_server_restrictions", lang_string( "restriction" ), lang_string( "server" ), "icon16/group_go.png" )
-  end
+  --end
 
   settingsWindow:AddCategory( "yourrp" )
   settingsWindow:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )

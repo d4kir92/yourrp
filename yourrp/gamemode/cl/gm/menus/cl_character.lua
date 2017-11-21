@@ -271,7 +271,7 @@ function openCharacterCreation()
   end
 
   character.bg = {}
-  for i=1, 6 do
+  for i=0, 7 do
     character.bg[i] = 0
   end
 
@@ -669,10 +669,14 @@ function openCharacterSelection()
         local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
         tmpChar.playermodels = tmp
         tmpChar.skin = tmpTable[i].char.skin
+        tmpChar.bg0 = tmpTable[i].char.bg0
         tmpChar.bg1 = tmpTable[i].char.bg1
         tmpChar.bg2 = tmpTable[i].char.bg2
         tmpChar.bg3 = tmpTable[i].char.bg3
         tmpChar.bg4 = tmpTable[i].char.bg4
+        tmpChar.bg5 = tmpTable[i].char.bg5
+        tmpChar.bg6 = tmpTable[i].char.bg6
+        tmpChar.bg7 = tmpTable[i].char.bg7
 
         function tmpChar:Paint( pw, ph )
           if tmpChar:IsHovered() or curChar == self.charid then
@@ -691,10 +695,14 @@ function openCharacterSelection()
             charplayermodel:SetModel( _playermodel )
             if charplayermodel.Entity != nil then
               charplayermodel.Entity:SetSkin( self.skin )
+              charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
               charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
               charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
               charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
               charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+              charplayermodel.Entity:SetBodygroup( 5, self.bg5 )
+              charplayermodel.Entity:SetBodygroup( 6, self.bg6 )
+              charplayermodel.Entity:SetBodygroup( 7, self.bg7 )
             end
           end
         end

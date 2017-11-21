@@ -7,7 +7,7 @@ GM.Email = ""
 GM.Discord = "https://discord.gg/sEgNZxg"
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.9.2.9"
+GM.Version = "0.9.3.0"
 GM.VersionSort = "unstable"
 GM.dedicated = "-"
 GM.rpbase = "YourRP" --dont change this!
@@ -33,10 +33,12 @@ if SERVER then
 	end)
 
   util.AddNetworkString( "getGamemodename" )
-  local tmp = db_select( "yrp_general", "name_gamemode", nil )
-	if tmp != false and tmp != nil then
-	  GM.Name = tmp[1].name_gamemode
-	end
+	timer.Simple( 4, function()
+	  local tmp = db_select( "yrp_general", "name_gamemode", nil )
+		if tmp != false and tmp != nil then
+		  GAMEMODE.Name = tmp[1].name_gamemode
+		end
+	end)
 end
 
 if CLIENT then
