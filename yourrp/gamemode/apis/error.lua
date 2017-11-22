@@ -16,7 +16,7 @@ function worked( obj, name )
     return true
   else
     if g_debug then
-      printGM( "note", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
+      printGM( "error", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
     end
     return false
   end
@@ -30,16 +30,23 @@ function check_yrp_cl_errors( str )
 	  end
     printGM( "db", "yrp/cl_errors.txt existiert nicht" )
 		file.Write( "yrp/cl_errors.txt", str )
+		return false
   end
+	return true
 end
 
+local first_time_error = false
 local _cl_errors = {}
 function update_error_table_cl()
-
   local _read = file.Read( "clientside_errors.txt", "GAME" )
 
 	if worked( _read, "_read failed" ) then
-		check_yrp_cl_errors( str )
+		local _file_exists = check_yrp_cl_errors( _read )
+		if !_file_exists then
+			first_time_error = true
+		else
+			first_time_error = false
+		end
 
 	  local _yrp_read = file.Read( "yrp/cl_errors.txt", "DATA" )
 		if worked( _yrp_read, "_yrp_read failed" ) then
@@ -53,6 +60,7 @@ function update_error_table_cl()
 
 		  elseif #_explode > #_explode_yrp_read then
 				--if error file is bigger, get all errors
+
 		    local _errors = {}
 		    for k, v in pairs( _explode ) do
 		      if k > #_explode_yrp_read then
@@ -66,6 +74,20 @@ function update_error_table_cl()
 		    file.Write( "yrp/cl_errors.txt", _read )
 
 		    return _errors
+			elseif first_time_error then
+				local _errors = {}
+		    for k, v in pairs( _explode ) do
+	        if string.find( v, "[ERROR] gamemodes/yourrp/", 1, true ) and !table.HasValue( _errors, v ) then
+	          table.insert( _errors, v )
+	        end
+		    end
+
+				--update data file
+		    file.Write( "yrp/cl_errors.txt", _read )
+
+		    return _errors
+			else
+				--printGM( "gm", "No new error" )
 			end
 	  end
 	end
@@ -90,6 +112,14 @@ function send_error( realm, str )
 	  entry["entry.2045173320"] = "UNKNOWN"
 	end
 
+	if first_time_error then
+		entry["entry.1893317510"] = "YES"
+	elseif !first_time_error then
+		entry["entry.1893317510"] = "NO"
+	else
+		entry["entry.1893317510"] = "-"
+	end
+
   http.Post( _url, entry, function( result )
     if result then end
   end, function( failed )
@@ -99,7 +129,6 @@ end
 
 g_sended = {}
 function send_errors( realm, tbl )
-
   if g_sended[realm] == nil then
      g_sended[realm] = {}
   end
@@ -113,7 +142,7 @@ function send_errors( realm, tbl )
   end
 end
 
-timer.Create( "update_error_tables", 10, 0, function()
+timer.Create( "update_error_tables", 60, 0, function()
   _cl_errors = update_error_table_cl()
   send_errors( "client", _cl_errors )
 end)

@@ -73,6 +73,7 @@ net.Receive( "hardresetdatabase", function( len, ply )
 end)
 
 function db_init_database()
+  hr_pre()
   printGM( "db", "LOAD DATABASES" )
 
   init_database( "yrp_general" )
@@ -93,6 +94,7 @@ function db_init_database()
   g_db_loaded = true
 
   printGM( "db", "DONE Loading DATABASES" )
+  hr_pos()
 end
 db_init_database()
 
