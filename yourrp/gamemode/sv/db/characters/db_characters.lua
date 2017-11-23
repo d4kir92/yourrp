@@ -56,7 +56,7 @@ end)
 net.Receive( "charGetRoles", function( len, ply )
   local groupID = net.ReadString()
   local netTable = {}
-  local tmpTable = db_select( "yrp_roles", "*", "groupID = " .. groupID )
+  local tmpTable = db_select( "yrp_roles", "*", "groupID = " .. tonumber( groupID ) )
   if tmpTable != nil then
     local count = 1
     for k, v in pairs( tmpTable ) do
@@ -95,7 +95,7 @@ end)
 
 net.Receive( "charGetRoleInfo", function( len, ply )
   local roleID = net.ReadString()
-  local tmpTable = db_select( "yrp_roles", "*", "uniqueID = " .. roleID )
+  local tmpTable = db_select( "yrp_roles", "*", "uniqueID = " .. tonumber( roleID ) )
   if tmpTable == nil then
     tmpTable = {}
   end
@@ -117,7 +117,7 @@ net.Receive( "charGetCharacters", function( len, ply )
         _charCount = _charCount + 1
         netTable[_charCount] = {}
         netTable[_charCount].char = v
-        local tmp = db_select( "yrp_roles", "*", "uniqueID = " .. v.roleID )
+        local tmp = db_select( "yrp_roles", "*", "uniqueID = " .. tonumber( v.roleID ) )
         if worked( tmp, "charGetCharacters role" ) then
           tmp = tmp[1]
           netTable[_charCount].role = tmp
@@ -128,7 +128,7 @@ net.Receive( "charGetCharacters", function( len, ply )
             netTable[_charCount].role = tmpDefault
           end
         end
-        local tmp2 = db_select( "yrp_groups", "*", "uniqueID = " .. v.groupID )
+        local tmp2 = db_select( "yrp_groups", "*", "uniqueID = " .. tonumber( v.groupID ) )
         if worked( tmp2, "charGetCharacters group" ) then
           tmp2 = tmp2[1]
           netTable[_charCount].group = tmp2
@@ -147,7 +147,7 @@ end)
 net.Receive( "DeleteCharacter", function( len, ply )
   local charID = net.ReadString()
 
-  local result = db_delete_from( "yrp_characters", "uniqueID = " .. charID )
+  local result = db_delete_from( "yrp_characters", "uniqueID = " .. tonumber( charID ) )
   if result == nil then
     printGM( "db", "DeleteCharacter: success"  )
   else
@@ -158,38 +158,38 @@ end)
 net.Receive( "CreateCharacter", function( len, ply )
   local ch = net.ReadTable()
 
-  local role = db_select( "yrp_roles", "*", "uniqueID = " .. ch.roleID )
+  local role = db_select( "yrp_roles", "*", "uniqueID = " .. tonumber( ch.roleID ) )
 
   local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
   local vals = "'" .. ply:SteamID() .. "', "
-  vals = vals .. "'" .. ch.rpname .. "', "
-  vals = vals .. "'" .. ch.gender .. "', "
-  vals = vals .. role[1].uniqueID .. ", "
-  vals = vals .. role[1].groupID .. ", "
-  vals = vals .. "'" .. ch.playermodelID .. "', "
+  vals = vals .. "'" .. db_sql_str( ch.rpname ) .. "', "
+  vals = vals .. "'" .. db_sql_str( ch.gender ) .. "', "
+  vals = vals .. tonumber( role[1].uniqueID ) .. ", "
+  vals = vals .. tonumber( role[1].groupID ) .. ", "
+  vals = vals .. tonumber( ch.playermodelID ) .. ", "
   vals = vals .. 250 .. ", "
   vals = vals .. 500 .. ", "
-  vals = vals .. "'" .. game.GetMap() .. "', "
-  vals = vals .. ch.skin .. ", "
-  vals = vals .. ch.bg[0] .. ", "
-  vals = vals .. ch.bg[1] .. ", "
-  vals = vals .. ch.bg[2] .. ", "
-  vals = vals .. ch.bg[3] .. ", "
-  vals = vals .. ch.bg[4] .. ", "
-  vals = vals .. ch.bg[5] .. ", "
-  vals = vals .. ch.bg[6] .. ", "
-  vals = vals .. ch.bg[7]
+  vals = vals .. "'" .. db_sql_str( game.GetMap() ) .. "', "
+  vals = vals .. tonumber( ch.skin ) .. ", "
+  vals = vals .. tonumber( ch.bg[0] ) .. ", "
+  vals = vals .. tonumber( ch.bg[1] ) .. ", "
+  vals = vals .. tonumber( ch.bg[2] ) .. ", "
+  vals = vals .. tonumber( ch.bg[3] ) .. ", "
+  vals = vals .. tonumber( ch.bg[4] ) .. ", "
+  vals = vals .. tonumber( ch.bg[5] ) .. ", "
+  vals = vals .. tonumber( ch.bg[6] ) .. ", "
+  vals = vals .. tonumber( ch.bg[7] )
   db_insert_into( "yrp_characters", cols, vals )
 
   local chars = db_select( "yrp_characters", "*", nil )
   if worked( chars, "CreateCharacter" ) then
-    local result = db_update( "yrp_players", "CurrentCharacter = " .. chars[#chars].uniqueID, "SteamID = '" .. ply:SteamID() .. "'" )
+    local result = db_update( "yrp_players", "CurrentCharacter = " .. tonumber( chars[#chars].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
   end
 end)
 
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
-  local result = db_update( "yrp_players", "CurrentCharacter = " .. char , "SteamID = '" .. ply:SteamID() .. "'" )
+  local result = db_update( "yrp_players", "CurrentCharacter = " .. tonumber( char ), "SteamID = '" .. ply:SteamID() .. "'" )
   ply:Spawn()
 end)
 
@@ -197,7 +197,7 @@ util.AddNetworkString( "get_menu_bodygroups" )
 
 net.Receive( "get_menu_bodygroups", function( len, ply )
   local _charid = ply:CharID()
-  local _result = db_select( "yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7", "uniqueID = " .. _charid )
+  local _result = db_select( "yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7", "uniqueID = " .. tonumber( _charid ) )
   _result = _result[1]
   net.Start( "get_menu_bodygroups" )
     net.WriteTable( _result )
@@ -211,7 +211,7 @@ net.Receive( "inv_bg_up", function( len, ply )
   local _id = net.ReadInt( 16 )
   ply:SetBodygroup( _id, _cur )
   local _charid = ply:CharID()
-  db_update( "yrp_characters", "bg" .. _id .. " = " .. _cur , "uniqueID = " .. _charid )
+  db_update( "yrp_characters", "bg" .. tonumber( _id ) .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
 end)
 
 util.AddNetworkString( "inv_bg_do" )
@@ -221,5 +221,5 @@ net.Receive( "inv_bg_do", function( len, ply )
   local _id = net.ReadInt( 16 )
   ply:SetBodygroup( _id, _cur )
   local _charid = ply:CharID()
-  db_update( "yrp_characters", "bg" .. _id .. " = " .. _cur , "uniqueID = " .. _charid )
+  db_update( "yrp_characters", "bg" .. tonumber( _id ) .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
 end)

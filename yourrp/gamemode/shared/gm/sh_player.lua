@@ -210,3 +210,7 @@ end
 function Player:Nick()
   return self:SteamName() .. " [" .. self:RPName() .. "]"
 end
+
+function Player:Team()
+  return self:GetNWString( "groupName", "NO TEAM" )
+end

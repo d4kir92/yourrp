@@ -70,12 +70,11 @@ settingsopen = 0
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
 
-	if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
+	if GetConVar( "yrp_cl_hud" ):GetInt() == 1 and LocalPlayer():GetNWBool( "toggle_hud", false ) then
 		HudPlayer()
 		HudCrosshair()
-
-		HudView()
 	end
+	HudView()
 
 	hudVersion()
 end)

@@ -169,7 +169,7 @@ function drawScoreboard()
 end
 
 isScoreboardOpen = false
-function scoreboard:show()
+function scoreboard:show_sb()
   net.Start( "getScoreboardGroups" )
   net.SendToServer()
 
@@ -228,21 +228,23 @@ function scoreboard:show()
   end
 
   drawScoreboard()
+end
 
-	function scoreboard:hide()
-    isScoreboardOpen = false
-    if _SBFrame != nil then
-      _SBFrame:Remove()
-      _SBFrame = nil
-      gui.EnableScreenClicker( false )
-    end
-	end
+function scoreboard:hide_sb()
+  isScoreboardOpen = false
+  if _SBFrame != nil then
+    _SBFrame:Remove()
+    _SBFrame = nil
+    gui.EnableScreenClicker( false )
+  end
 end
 
 function GM:ScoreboardShow()
-	scoreboard:show()
+	scoreboard:show_sb()
 end
 
 function GM:ScoreboardHide()
-	scoreboard:hide()
+  if scoreboard != nil then
+	   scoreboard:hide_sb()
+   end
 end

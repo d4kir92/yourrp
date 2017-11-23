@@ -1,13 +1,16 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-GM.Name = "YourRP"
+GM.Name = "DarkRP"
+timer.Simple( 1, function()
+	GAMEMODE.Name = "YourRP"
+end)
 GM.ShortName = "YRP"	--Not longer then 4!
 GM.Author = "D4KiR"
 GM.Email = ""
 GM.Discord = "https://discord.gg/sEgNZxg"
 GM.Website = "youtube.com/c/D4KiR"
 GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.9.3.1" --dont change this
+GM.Version = "0.9.3.2" --dont change this
 GM.VersionSort = "unstable" --dont change this
 GM.dedicated = "-"
 GM.rpbase = "YourRP" --dont change this!

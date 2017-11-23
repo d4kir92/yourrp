@@ -17,12 +17,27 @@ function Player:getAgendaTable()
   return {}
 end
 
-local DarkRPVars = {}
 function Player:getDarkRPVar( var )
   --Description: Get the value of a DarkRPVar, which is shared between server and client.
-  printGM( "darkrp", "getDarkRPVar( " .. var .. " )" )
-  local vars = DarkRPVars[self:UserID()]
-  return "fail"
+  if var == "money" then
+    return self:GetNWString( "money", "FAIL" )
+  elseif var == "salary" then
+    return self:GetNWString( "capital", "FAIL" )
+  elseif var == "job" then
+    return self:GetNWString( "roleName", "FAIL" )
+  elseif var == "rpname" then
+    return self:RPName() or "FAIL"
+  else
+    local _nw_var = self:GetNWString( var, "-1" )
+    if tonumber( _nw_var ) == nil then
+      return _nw_var
+    elseif isnumber( _nw_var ) != nil then
+      return tonumber( _nw_var )
+    else
+      print( "else" )
+      return _nw_var
+    end
+  end
 end
 
 function Player:getEyeSightHitEntity( searchDistance, hitDistance, filter )
@@ -142,3 +157,69 @@ function Player:nickSortedPlayers()
   printGM( "darkrp", g_yrp._not )
   return {}
 end
+
+--
+local function RetrievePlayerVar(userID, var, value)
+    local ply = Player(userID)
+    DarkRPVars[userID] = DarkRPVars[userID] or {}
+
+    hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID][var], value)
+    DarkRPVars[userID][var] = value
+
+    -- Backwards compatibility
+    if IsValid(ply) then
+        ply.DarkRPVars = DarkRPVars[userID]
+    end
+end
+
+local function doRetrieve()
+    local userID = net.ReadUInt(16)
+    local var, value = DarkRP.readNetDarkRPVar()
+
+    RetrievePlayerVar(userID, var, value)
+end
+net.Receive("DarkRP_PlayerVar", doRetrieve)
+
+local function doRetrieveRemoval()
+    local userID = net.ReadUInt(16)
+    local vars = DarkRPVars[userID] or {}
+    local var = DarkRP.readNetDarkRPVarRemoval()
+    local ply = Player(userID)
+
+    hook.Call("DarkRPVarChanged", nil, ply, var, vars[var], nil)
+
+    vars[var] = nil
+end
+net.Receive("DarkRP_PlayerVarRemoval", doRetrieveRemoval)
+
+local function InitializeDarkRPVars(len)
+    local plyCount = net.ReadUInt(8)
+
+    for i = 1, plyCount, 1 do
+        local userID = net.ReadUInt(16)
+        local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
+
+        for j = 1, varCount, 1 do
+            local var, value = DarkRP.readNetDarkRPVar()
+            RetrievePlayerVar(userID, var, value)
+        end
+    end
+end
+net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
+timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
+
+net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
+    local userID = net.ReadUInt(16)
+    DarkRPVars[userID] = nil
+end)
+
+timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
+    for _, v in ipairs(player.GetAll()) do
+        if v:getDarkRPVar("rpname") then continue end
+
+        RunConsoleCommand("_sendDarkRPvars")
+        return
+    end
+
+    timer.Remove("DarkRPCheckifitcamethrough")
+end)

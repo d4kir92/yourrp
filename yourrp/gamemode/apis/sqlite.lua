@@ -6,10 +6,14 @@ function db_drop_table( db_table )
 end
 
 function db_sql_str( string )
-  local _newString = sql.SQLStr( string, true )
-  _newString = string.Replace( _newString, "\"", "´´" )
-  _newString = string.Replace( _newString, "'", "´" )
-  return _newString
+  if isstring( string ) then
+    local _newString = sql.SQLStr( string, true )
+    _newString = string.Replace( _newString, "\"", "´´" )
+    _newString = string.Replace( _newString, "'", "´" )
+    return _newString
+  else
+    printGM( "error", "db_sql_str: (" .. tostring( string ) .. ") is not a string." )
+  end
 end
 
 function db_table_exists( _db_table )
@@ -35,7 +39,6 @@ function db_select( db_table, db_columns, db_where )
     if _result == nil then
       return _result
     elseif _result == false then
-      printGM( "error", "db_select failed! table: " .. tostring( db_table ) .. " query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
       return _result
     else
       return _result
@@ -50,8 +53,7 @@ function db_insert_into_DEFAULTVALUES( db_table )
     _q = _q .. " DEFAULT VALUES"
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_insert_into_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
-      print( sql.LastError() )
+      printGM( "error", "db_insert_into_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -67,8 +69,7 @@ function db_insert_into( db_table, db_columns, db_values )
     _q = _q .. " )"
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_insert_into: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
-      print( sql.LastError() )
+      printGM( "error", "db_insert_into: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -83,23 +84,12 @@ function db_delete_from( db_table, db_where )
     end
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_delete_from: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) )
-      print( sql.LastError() )
+      printGM( "error", "db_delete_from: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) .. " lastError: " .. tostring( sql.LastError() ) )
     end
   end
 end
 
 function db_update( db_table, db_sets, db_where )
-  local _tmp = string.Explode( " = ", db_sets )
-  for k, v in pairs( _tmp ) do
-    if k%2 == 0 then
-      if !db_sql_str( v ) then
-        printGM( "note", "db_update: db_sets FALSE" )
-        print( sql.LastError() )
-        return false
-      end
-    end
-  end
   if db_table_exists( db_table ) then
     local _q = "UPDATE "
     _q = _q .. db_table
@@ -111,14 +101,13 @@ function db_update( db_table, db_sets, db_where )
     end
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_update failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
-      print( sql.LastError() )
+      printGM( "error", "db_update failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
     end
   end
 end
 
-function sql_check_if_column_exists( table_name, column_name )
-  local _result = sql.Query( "SELECT " .. column_name .. " FROM " .. table_name )
+function sql_check_if_column_exists( db_name, column_name )
+  local _result = db_select( db_name, column_name, nil )
   if _result == false then
     --printGM( "note", "In table " .. table_name .. " column " .. column_name .. " not exists. (" .. tostring( _result ) .. ")" )
     return false
@@ -133,14 +122,13 @@ function sql_add_column( table_name, column_name, datatype )
     local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "sql_add_column failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
-      print( sql.LastError() )
+      printGM( "error", "sql_add_column failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
     end
   end
 end
 
 function init_database( db_name )
-  printGM( "db", "init_database " .. db_name )
+  printGM( "db", "init_database " .. tostring( db_name ) )
   if db_table_exists( db_name ) then
     --printGM( "db", db_name .. " exists" )
   else
@@ -151,8 +139,7 @@ function init_database( db_name )
     _query = _query .. " )"
     local _result = sql.Query( _query )
     if _result != nil then
-      printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) )
-      print( sql.LastError() )
+      printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
     end
 		if sql.TableExists( db_name ) then
       --printGM( "db", db_name .. g_yrp.successdb )

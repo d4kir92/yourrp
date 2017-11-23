@@ -15,6 +15,8 @@ AddCSLuaFile( "darkrp/gamemode/shared.lua" )
 AddCSLuaFile( "darkrp/player/shared.lua" )
 AddCSLuaFile( "darkrp/entity/shared.lua" )
 
+AddCSLuaFile( "darkrp/drawfunction.lua" )
+
 include( "darkrp/fn.lua" )
 
 include( "darkrp/gamemode/shared.lua" )
@@ -23,6 +25,10 @@ include( "darkrp/entity/shared.lua" )
 
 include( "darkrp/config/config.lua" )
 include( "darkrp/config/jobrelated.lua" )
+
+if CLIENT then
+  include( "darkrp/drawfunction.lua" )
+end
 
 local Vector = FindMetaTable( "Vector" )
 

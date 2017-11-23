@@ -47,7 +47,6 @@ function createTaBu( parent, _x, _y, tmp, tx, ty, icon )
       dbUpdateHUD( tmp .. "tx", self.tx )
     end
     if self.ty != nil then
-      print(self.ty)
       dbUpdateHUD( tmp .. "ty", self.ty )
     end
   end

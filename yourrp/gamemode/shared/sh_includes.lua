@@ -6,5 +6,6 @@ add_luas( "db/lang/db_lang.lua" )
 
 add_luas( "gm/sh_gamemode.lua" )
 add_luas( "gm/sh_player.lua" )
+add_luas( "gm/sh_team.lua" )
 
 printGM( "note", "Loaded sh_includes.lua" )

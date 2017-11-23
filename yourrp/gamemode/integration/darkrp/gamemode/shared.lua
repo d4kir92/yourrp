@@ -304,53 +304,6 @@ function DarkRP.getSortedChatCommands()
   return {}
 end
 
-function DarkRP.readNetDarkRPVar()
-  --Description: Internal function. You probably shouldn't need this. DarkRP
-  --             calls this function when reading DarkRPVar net messages.
-  --             This function reads the net data for a specific DarkRPVar.
-  printGM( "darkrp", "readNetDarkRPVar()" )
-  printGM( "darkrp", g_yrp._not )
-  return "Old readNetDarkRPVar", nil
-end
-
-function DarkRP.readNetDarkRPVarRemoval()
-  --Description: Internal function. You probably shouldn't need this. DarkRP
-  --             calls this function when reading DarkRPVar net messages.
-  --             This function the removal of a DarkRPVar.
-  printGM( "darkrp", "readNetDarkRPVar()" )
-  local DarkRPVarId = net.ReadUInt(DARKRP_ID_BITS)
-  local DarkRPVar = DarkRPVarById[DarkRPVarId]
-
-  if DarkRPVarId == UNKNOWN_DARKRPVAR then
-      local name, value = readUnknown()
-
-      return name, value
-  end
-
-  local val = DarkRPVar.readFn(value)
-
-  return DarkRPVar.name, val
-end
-
-local maxId = 0
-local DarkRPVars = {}
-local DarkRPVarById = {}
-local DARKRP_ID_BITS = 8
-local UNKNOWN_DARKRPVAR = 255 -- Should be equal to 2^DARKRP_ID_BITS - 1
-DarkRP.DARKRP_ID_BITS = DARKRP_ID_BITS
-function DarkRP.registerDarkRPVar( name, writeFn, readFn )
-  --Description: Register a DarkRPVar by name. You should definitely register
-  --             DarkRPVars. Registering DarkRPVars will make networking much
-  --             more efficient.
-  printGM( "darkrp", "registerDarkRPVar( name, writeFn, readFn )" )
-  maxId = maxId + 1
-  -- UNKNOWN_DARKRPVAR is reserved for unknown values
-  if maxId >= UNKNOWN_DARKRPVAR then DarkRP.error(string.format("Too many DarkRPVar registrations! DarkRPVar '%s' triggered this error", name), 2) end
-
-  DarkRPVars[name] = {id = maxId, name = name, writeFn = writeFn, readFn = readFn}
-  DarkRPVarById[maxId] = DarkRPVars[name]
-end
-
 function DarkRP.registerDoorVar( name, writeFn, readFn )
   --Description: Register a door variable by name. You should definitely
   --             register door variables. Registering DarkRPVars will make
@@ -454,20 +407,4 @@ function DarkRP.simplerrRun( f, args )
   printGM( "darkrp", "simplerrRun( f, args )" )
   printGM( "darkrp", g_yrp._not )
   return {}
-end
-
-function DarkRP.writeNetDarkRPVar( name, value )
-  --Description: Internal function. You probably shouldn't need this. DarkRP
-  --             calls this function when sending DarkRPVar net messages. This
-  --             function writes the net data for a specific DarkRPVar.
-  printGM( "darkrp", "writeNetDarkRPVar( name, value )" )
-  printGM( "darkrp", g_yrp._not )
-end
-
-function DarkRP.writeNetDarkRPVarRemoval( name )
-  --Description: Internal function. You probably shouldn't need this. DarkRP
-  --             calls this function when sending DarkRPVar net messages. This
-  --             function sets a DarkRPVar to nil.
-  printGM( "darkrp", "writeNetDarkRPVarRemoval( name )" )
-  printGM( "darkrp", g_yrp._not )
 end

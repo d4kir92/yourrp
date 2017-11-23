@@ -125,6 +125,7 @@ function GM:PlayerLoadout( ply )
     ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
     ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
     ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
+    ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
   else
     printGM( "note", "yrp_general failed" )
   end

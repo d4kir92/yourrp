@@ -3,6 +3,7 @@
 util.AddNetworkString( "db_update_hunger" )
 util.AddNetworkString( "db_update_thirst" )
 util.AddNetworkString( "db_update_stamina" )
+util.AddNetworkString( "db_update_hud" )
 util.AddNetworkString( "dbUpdateNWBool2" )
 
 local _db_name = "yrp_general"
@@ -17,12 +18,27 @@ sql_add_column( _db_name, "toggle_building", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_hunger", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_hud", "INT DEFAULT 1" )
 
-local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
-if _check_general == nil then
-  printGM( "note", "INSERT DEFAULT VALUES for yrp_general")
-  db_insert_into_DEFAULTVALUES( _db_name )
+function add_first_entry( retries )
+  local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
+  if _check_general == nil then
+    printGM( "note", "INSERT DEFAULT VALUES for yrp_general")
+    db_insert_into_DEFAULTVALUES( _db_name )
+  else
+    return true
+  end
+  _check_general = db_select( _db_name, "*", "uniqueID = 1" )
+  if _check_general == nil then
+    printGM( "error", "add_first_entry failed @yrp_general, retry ( " .. tostring( retries ) .. " )" )
+    if retries < 10 then
+      timer.Simple( 1, function()
+        add_first_entry( retries + 1 )
+      end)
+    end
+  end
 end
+add_first_entry( 0 )
 
 --db_drop_table( "yrp_general")
 db_is_empty( _db_name )
@@ -63,6 +79,16 @@ net.Receive( "db_update_stamina", function( len, ply )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_stamina", tobool( _nw_bool ) )
+  end
+end)
+
+net.Receive( "db_update_hud", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_hud = " .. _nw_bool, nil )
+  printGM( "note", ply:SteamName() .. " SETS " .. _nw_bool )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_hud", tobool( _nw_bool ) )
   end
 end)
 

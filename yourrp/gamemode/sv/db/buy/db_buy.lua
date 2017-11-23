@@ -68,7 +68,7 @@ function spawnItem( ply, item, tab )
   local ent = {}
   if tab == "vehicles" then
     ent = SpawnVehicle( item )
-    local newVehicle = db_insert_into( "yrp_vehicles", "ClassName, ownerCharID", "'" .. item.ClassName .. "', '" .. ply:CharID() .. "'" )
+    local newVehicle = db_insert_into( "yrp_vehicles", "ClassName, ownerCharID", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "'" )
     local getVehicles = db_select( "yrp_vehicles", "*", nil )
     ent:SetNWInt( "vehicleID", getVehicles[#getVehicles].uniqueID)
     ent:SetNWString( "ownerRPName", ply:RPName() )
@@ -138,9 +138,9 @@ net.Receive( "addNewBuyItem", function( len, ply )
   local _price = net.ReadString()
   local _skin = net.ReadString()
 
-  db_insert_into( "yrp_buy", "tab, ClassName, PrintName, WorldModel, price, skin", "'" .. _tmpTab .. "', '" .. _classname .. "', '" .. _printname .. "', '" .. _worldmodel .. "', " .. tonumber( _price ) .. ", '" .. _skin .. "'" )
+  db_insert_into( "yrp_buy", "tab, ClassName, PrintName, WorldModel, price, skin", "'" .. db_sql_str( _tmpTab ) .. "', '" .. db_sql_str( _classname ) .. "', '" .. db_sql_str( _printname ) .. "', '" .. db_sql_str( _worldmodel ) .. "', " .. tonumber( _price ) .. ", '" .. tonumber( _skin ) .. "'" )
 
-  local _tmpTable = db_select( "yrp_buy", "*", "tab = '" .. _tmpTab .. "'" )
+  local _tmpTable = db_select( "yrp_buy", "*", "tab = '" .. db_sql_str( _tmpTab ) .. "'" )
   if _tmpTable == nil then
     _tmpTable = {}
   end
@@ -153,7 +153,7 @@ end)
 
 net.Receive( "getBuyList", function( len, ply )
   local _tmpTab = net.ReadString()
-  local _tmpTable = db_select( "yrp_buy", "*", "tab = '" .. _tmpTab .. "'" )
+  local _tmpTable = db_select( "yrp_buy", "*", "tab = '" .. db_sql_str( _tmpTab ) .. "'" )
   if _tmpTable == nil then
     _tmpTable = {}
   end
