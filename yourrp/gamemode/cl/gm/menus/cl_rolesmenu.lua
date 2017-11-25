@@ -312,7 +312,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newX = x + ctr( 60 )
     local newY = y
     for k, v in pairs( tmpTable ) do
-      if tonumber( v.prerole ) == -1 then
+      if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
         newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
       end
     end

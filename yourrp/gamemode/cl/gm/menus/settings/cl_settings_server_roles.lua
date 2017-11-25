@@ -9,6 +9,8 @@ local _lbr = 5
 local groupID = ""
 local groupUniqueID = -1
 
+local _start_role = ""
+
 function addButton( w, h, x, y, parent )
   local tmp = createVGUI( "DButton", parent, w, h, x, y )
   tmp:SetText( "" )
@@ -675,6 +677,7 @@ net.Receive( "yrp_roles", function( len )
       end
       local _pre = ""
       if tonumber( yrp_roles_dbTable[k].removeable ) == 0 then
+        _start_role = v
         _pre = "(" .. lang_string( "startrole" ) .. ") "
       end
       draw.SimpleTextOutlined( _pre .. yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -718,6 +721,11 @@ net.Receive( "yrp_roles", function( len )
       addDBCheckBox( rolesInfo, 800, 40, 810, 1390, lang_string( "roleinstructor" ), v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
       addDBCheckBox( rolesInfo, 800, 40, 810, 1440, lang_string( "roleadminonly" ), v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "" )
       addDBCheckBox( rolesInfo, 800, 40, 810, 1490, lang_string( "rolewhitelist" ), v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
+
+      if !table.HasValue( yrp_roles_dbTable, _start_role ) then
+        table.insert( yrp_roles_dbTable, _start_role )
+      end
+
       addDBComboBox( rolesInfo, 800, 80, 810, 1540, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
 
       if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then

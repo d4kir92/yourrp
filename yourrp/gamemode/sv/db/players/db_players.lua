@@ -12,7 +12,7 @@ sql_add_column( _db_name, "CurrentCharacter", "INT" )
 sql_add_column( _db_name, "Timestamp", "INT" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 g_db_reseted = false
 function save_clients( string )
@@ -21,7 +21,6 @@ function save_clients( string )
     for k, ply in pairs( player.GetAll() ) do
 
       local _result = db_update( _db_name, "Timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'" )
-      worked( _result, "Timestamp update failed" )
 
       if ply:Alive() then
         local _char_id = ply:CharID()
@@ -39,13 +38,11 @@ function save_clients( string )
           if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) then
             local _money = "money = '" .. ply:GetNWString( "money" ) .. "'"
             local _mo_result = db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
-            worked( _mo_result, "_mo_result money failed" )
           end
 
           if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) then
             local _moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
             local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
-            worked( _mb_result, "_mb_result moneybank failed" )
           end
 
           if worked( string.lower( game.GetMap() ), "getmap failed @save_clients" ) then

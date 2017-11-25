@@ -41,7 +41,7 @@ end
 add_first_entry( 0 )
 
 --db_drop_table( "yrp_general")
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 function get_advert_name()
   local _tmp = db_select( _db_name, "name_advert", nil )

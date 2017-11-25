@@ -109,6 +109,29 @@ function showAttributes()
   end
 end
 
+local inv = {}
+inv.size = 128
+
+net.Receive( "get_inventory", function( len )
+  if yrp_inventory.cache_inv != nil then
+    for k, v in pairs( yrp_inventory.cache_inv ) do
+      v:Remove()
+    end
+  end
+  local _inv = net.ReadTable()
+  yrp_inventory.cache_inv = yrp_inventory.cache_inv or {}
+  for x = 1, 8 do
+    yrp_inventory.cache_inv[x] = yrp_inventory.cache_inv[x] or {}
+    for y = 1, 8 do
+      yrp_inventory.cache_inv[x][y] = createD( "DPanel", yrp_inventory.left, ctr( inv.size ), ctr( inv.size ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
+      local _tmp = yrp_inventory.cache_inv[x][y]
+      function _tmp:Paint( pw, ph )
+        paintInv( self, pw, ph, _inv["f_x"..x]["f_y"..y].PrintName )
+      end
+    end
+  end
+end)
+
 function open_inventory()
   openMenu()
   yrp_inventory = yrp_inventory or {}
@@ -136,8 +159,11 @@ function open_inventory()
   function yrp_inventory.left:Paint( pw, ph )
     paintPanel( self, pw, ph )
 
-    draw.SimpleTextOutlined( "IN WORK", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( "IN WORK", "HudBars", pw/2, ctr( 1500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
+
+  net.Start( "get_inventory" )
+  net.SendToServer()
 
   yrp_inventory.tabInv = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), 0, ctr( 20 ) )
   yrp_inventory.tabInv:SetText( "" )

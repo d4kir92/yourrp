@@ -293,6 +293,9 @@ function DarkRP.getPhrase( key, parameters )
   --Description: Get a phrase from the selected language.
   printGM( "darkrp", "getPhrase( " .. key .. ", parameters )" )
   --printGM( "darkrp", g_yrp._not )
+  if key == "job" then
+    key = "role"
+  end
   local _translation = lang_string( key )
   return _translation
 end

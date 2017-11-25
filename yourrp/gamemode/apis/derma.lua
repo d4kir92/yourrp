@@ -83,6 +83,15 @@ function paintPanel( derma, pw, ph )
   paintBr( pw, ph, _brC )
 end
 
+function paintInv( derma, pw, ph, text )
+  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 150 ) )
+
+  local _brC = Color( 255, 255, 255, 255 )
+  paintBr( pw, ph, _brC )
+
+  draw.SimpleTextOutlined( text, "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+end
+
 function createD( derma, parent, w, h, x, y )
   local tmpD = vgui.Create( derma, parent )
   if w != nil and h != nil then

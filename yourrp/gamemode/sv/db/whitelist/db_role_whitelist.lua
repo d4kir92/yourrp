@@ -10,7 +10,7 @@ sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 function sendRoleWhitelist( ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then

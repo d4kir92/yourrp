@@ -1,9 +1,10 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-g_debug = false
+g_debug = true
 
 concommand.Add( "yrp__debug", function( ply, cmd, args )
 	g_debug = !g_debug
+	ply:SetNWBool( "yrp_debug", g_debug )
   if g_debug then
     printGM( "note", "Debug ON" )
   elseif !g_debug then
@@ -16,7 +17,7 @@ function worked( obj, name )
     return true
   else
     if g_debug then
-      printGM( "error", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
+      printGM( "note", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
     end
     return false
   end

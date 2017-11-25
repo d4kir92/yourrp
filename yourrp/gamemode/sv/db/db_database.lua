@@ -38,6 +38,7 @@ function reset_database()
   table.insert( _dbs, "yrp_restrictions" )
   table.insert( _dbs, "yrp_characters" )
   table.insert( _dbs, "yrp_vehicles" )
+  table.insert( _dbs, "yrp_inventory" )
 
   for k, v in pairs( _dbs ) do
     db_drop_table( v )
@@ -90,6 +91,7 @@ function db_init_database()
   init_database( "yrp_characters" )
   init_database( "yrp_players" )
   init_database( "yrp_vehicles" )
+  init_database( "yrp_inventory" )
 
   g_db_loaded = true
 
@@ -114,3 +116,5 @@ include( "buy/db_buy.lua" )
 include( "restriction/db_restriction.lua" )
 include( "vehicles/db_vehicles.lua" )
 include( "jail/db_jail.lua" )
+
+include( "inventory/db_inventory.lua" )

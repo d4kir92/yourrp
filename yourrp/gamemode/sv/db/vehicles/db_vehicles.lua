@@ -15,7 +15,7 @@ sql_add_column( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "ClassName", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 function createVehicleKey( ent, id )
   local _tmp = id

@@ -32,7 +32,7 @@ sql_add_column( _db_name, "uses", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "capitaltime", "INTEGER DEFAULT 120" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 if db_select( _db_name, "*", "uniqueID = 1" ) == nil then
   printGM( "note", _db_name .. " has not the default role" )

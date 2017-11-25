@@ -31,7 +31,7 @@ if db_select( _db_name, "*", "usergroup = 'operator'" ) == nil then
 end
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply )
   local _tmp = db_select( "yrp_restrictions", "vehicles", "usergroup = '" .. ply:GetUserGroup() .. "'" )

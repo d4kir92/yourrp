@@ -150,7 +150,7 @@ function init_database( db_name )
   end
 end
 
-local _show_db_if_not_empty = false
+local _show_db_if_not_empty = true
 function db_is_empty( db_name )
   local _tmp = db_select( db_name, "*", nil )
 

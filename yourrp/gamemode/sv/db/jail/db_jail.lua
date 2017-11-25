@@ -10,7 +10,7 @@ sql_add_column( _db_name, "reason", "TEXT DEFAULT '-'" )
 sql_add_column( _db_name, "time", "INT DEFAULT 1" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 function teleportToReleasepoint( ply )
   local _tmpTele = db_select( "yrp_" .. string.lower( game.GetMap() ), "*", "type = '" .. "releasepoint" .. "'" )

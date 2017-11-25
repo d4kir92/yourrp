@@ -30,7 +30,7 @@ sql_add_column( _db_name, "angle", "TEXT" )
 sql_add_column( _db_name, "map", "TEXT" )
 
 --db_drop_table( _db_name )
-db_is_empty( _db_name )
+--db_is_empty( _db_name )
 
 util.AddNetworkString( "charGetGroups" )
 util.AddNetworkString( "charGetRoles" )

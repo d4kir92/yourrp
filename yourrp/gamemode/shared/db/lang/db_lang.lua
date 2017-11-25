@@ -36,7 +36,9 @@ function lang_string( var )
 	local _string = yrp_lang[var]
 	if _string == nil then
 		_string = "STRING NOT FOUND!"
-		printGM( "note", "lang_string failed! string " .. var .. " not found" )
+		if LocalPlayer():GetNWBool( "yrp_debug", false ) then
+			printGM( "note", "lang_string failed! string " .. var .. " not found" )
+		end
 	end
 	return _string
 end
