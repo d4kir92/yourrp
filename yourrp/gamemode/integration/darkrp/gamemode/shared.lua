@@ -295,6 +295,8 @@ function DarkRP.getPhrase( key, parameters )
   --printGM( "darkrp", g_yrp._not )
   if key == "job" then
     key = "role"
+  elseif key == "wallet" then
+    key = "money"
   end
   local _translation = lang_string( key )
   return _translation

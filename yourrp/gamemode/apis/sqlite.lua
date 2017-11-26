@@ -16,11 +16,24 @@ function db_sql_str( string )
   end
 end
 
+function db_sql_str2( string )
+  if isstring( string ) then
+    local _newString = sql.SQLStr( string, true )
+    _newString = string.Replace( _newString, "\"", "´´" )
+    _newString = string.Replace( _newString, "'", "´" )
+    _newString = string.Replace( _newString, "-", "_" )
+    return _newString
+  else
+    printGM( "error", "db_sql_str2: (" .. tostring( string ) .. ") is not a string." )
+  end
+end
+
 function db_table_exists( _db_table )
-  if sql.TableExists( _db_table ) then
+  local _tbl = db_sql_str2( _db_table )
+  if sql.TableExists( _tbl ) then
     return true
   else
-    printGM( "note", tostring( _db_table ) .. " is not existing.")
+    printGM( "note", tostring( _tbl ) .. " is not existing.")
     return false
   end
 end
@@ -134,7 +147,7 @@ function init_database( db_name )
   else
     printGM( "note", db_name .. " not exists" )
     local _query = ""
-    _query = _query .. "CREATE TABLE " .. db_name .. " ( "
+    _query = _query .. "CREATE TABLE " .. db_sql_str2( db_name ) .. " ( "
     _query = _query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     _query = _query .. " )"
     local _result = sql.Query( _query )

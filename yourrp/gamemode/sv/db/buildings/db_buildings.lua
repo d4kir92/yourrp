@@ -2,7 +2,7 @@
 
 --db_map.lua
 
-local _db_name = "yrp_" .. string.lower( game.GetMap() ) .. "_doors"
+local _db_name = "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors"
 sql_add_column( _db_name, "buildingID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "level", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "keynr", "INTEGER DEFAULT -1" )
@@ -10,7 +10,7 @@ sql_add_column( _db_name, "keynr", "INTEGER DEFAULT -1" )
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
-_db_name = "yrp_" .. string.lower( game.GetMap() ) .. "_buildings"
+_db_name = "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings"
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "buildingprice", "TEXT DEFAULT 100" )
 sql_add_column( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
@@ -23,7 +23,7 @@ function allowedToUseDoor( id, ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
     return true
   else
-    local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
+    local _tmpBuildingTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
     if _tmpBuildingTable[1] != nil then
 
       if tostring( _tmpBuildingTable[1].ownerCharID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
@@ -71,32 +71,32 @@ function searchForDoors()
 
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _allPropDoors ) do
-    db_insert_into_DEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    db_insert_into_DEFAULTVALUES( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings" )
 
-    local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
-    db_insert_into( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
+    local _tmpBuildingTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
+    db_insert_into( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
 
-    local _tmpDoorsTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+    local _tmpDoorsTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   end
 
   local _allFuncDoors = ents.FindByClass( "func_door" )
   for k, v in pairs( _allFuncDoors ) do
-    db_insert_into_DEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    db_insert_into_DEFAULTVALUES( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings" )
 
-    local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
-    db_insert_into( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
+    local _tmpBuildingTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
+    db_insert_into( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
 
-    local _tmpDoorsTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+    local _tmpDoorsTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   end
 
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   for k, v in pairs( _allFuncRDoors ) do
-    db_insert_into_DEFAULTVALUES( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings" )
+    db_insert_into_DEFAULTVALUES( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings" )
 
-    local _tmpBuildingTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
-    db_insert_into( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
+    local _tmpBuildingTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
+    db_insert_into( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "buildingID", "" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "" )
 
-    local _tmpDoorsTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+    local _tmpDoorsTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   end
 
   printGM( "db", "Done finding them (" .. #_allPropDoors+#_allFuncDoors+#_allFuncRDoors .. " found)" )
@@ -108,7 +108,7 @@ function loadDoors()
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   local _allFuncDoors = ents.FindByClass( "func_door" )
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
-  local _tmpDoors = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  local _tmpDoors = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   local _count = 0
   if worked( _tmpDoors, "_tmpDoors empty" ) then
     for k, v in pairs( _allPropDoors ) do
@@ -138,7 +138,7 @@ function loadDoors()
     end
   end
 
-  local _tmpBuildings = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+  local _tmpBuildings = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
   for k, v in pairs( _allPropDoors ) do
     for l, w in pairs( _tmpBuildings ) do
       if tonumber( w.uniqueID ) == tonumber( v:GetNWInt( "buildingID" ) ) then
@@ -172,18 +172,18 @@ end
 
 function check_map_doors()
   printGM( "db", "check_map_doors()" )
-  local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
-  local _tmpTable2 = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+  local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
+  local _tmpTable2 = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
   local amountDoors = 0
   if _tmpTable == nil or _tmpTable2 == nil then
     amountDoors = searchForDoors()
   else
-    printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: found Doors" )
+    printGM( "db", "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors: found Doors" )
     local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
     local _allFuncDoors = ents.FindByClass( "func_door" )
     local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
     if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors + #_allFuncRDoors ) then
-      printGM( "db", "yrp_" .. string.lower( game.GetMap() ) .. "_doors: new doors found!" )
+      printGM( "db", "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors: new doors found!" )
       amountDoors = searchForDoors()
     end
   end
@@ -211,7 +211,7 @@ util.AddNetworkString( "resetKey" )
 util.AddNetworkString( "lockDoor" )
 
 function canLock( ent, nr )
-  local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr", "buildingID = " .. ent:GetNWInt( "buildingID" ) )
+  local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "keynr", "buildingID = " .. ent:GetNWInt( "buildingID" ) )
   if _tmpTable != nil then
     if _tmpTable[1] != nil then
       if _tmpTable[1].keynr == nr then
@@ -248,7 +248,7 @@ function createKey( ent, id )
   local _tmp = id
   _tmp = _tmp .. math.Round( math.Rand( 100000, 999999 ), 0 )
   ent.keynr = _tmp
-  db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = " .. _tmp, "buildingID = " .. id )
+  db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "keynr = " .. _tmp, "buildingID = " .. id )
   return _tmp
 end
 
@@ -302,7 +302,7 @@ end)
 
 net.Receive( "removeOwner", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
-  local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+  local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
   local result = db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
@@ -334,9 +334,9 @@ end)
 
 net.Receive( "sellBuilding", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
-  local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+  local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-  db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
+  db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'" )
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
 
   for k, v in pairs( _tmpDoors ) do
@@ -345,7 +345,7 @@ net.Receive( "sellBuilding", function( len, ply )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
       v:Fire("Unlock")
-      db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
+      db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
     end
   end
 
@@ -357,7 +357,7 @@ net.Receive( "sellBuilding", function( len, ply )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
       v:Fire("Unlock")
-      db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
+      db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
     end
   end
 
@@ -369,7 +369,7 @@ net.Receive( "sellBuilding", function( len, ply )
       v:SetNWString( "ownerGroup", "" )
       createKey( v, _tmpBuildingID )
       v:Fire("Unlock")
-      db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
+      db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "keynr = -1", "buildingID = " .. tonumber( v:GetNWInt( "buildingID" ) ) )
     end
   end
 
@@ -379,11 +379,11 @@ end)
 net.Receive( "buyBuilding", function( len, ply )
   if ply:GetNWBool( "toggle_building", false ) then
     local _tmpBuildingID = net.ReadInt( 16 )
-    local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+    local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
     if ply:canAfford( _tmpTable[1].buildingprice ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
       ply:addMoney( - ( _tmpTable[1].buildingprice ) )
-      db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
+      db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
       local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
       local _tmpPlys = db_select( "yrp_characters", "rpname", "uniqueID = " .. ply:CharID() )
       for k, v in pairs( _tmpDoors ) do
@@ -417,7 +417,7 @@ net.Receive( "setBuildingOwnerGroup", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   local _tmpGroupID = net.ReadInt( 16 )
 
-  db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID )
+  db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID )
 
   local _tmpGroupName = db_select( "yrp_groups", "groupID", "uniqueID = " .. _tmpGroupID )
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
@@ -453,13 +453,13 @@ net.Receive( "changeBuildingPrice", function( len, ply )
   local _tmpNewPrice = net.ReadString()
   _tmpNewPrice = tonumber( _tmpNewPrice ) or 99
 
-  local _result = db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
+  local _result = db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID )
   worked( _result, "changeBuildingPrice failed" )
 end)
 
 
 function hasDoors( id )
-  local _allDoors = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "*", nil )
+  local _allDoors = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   for k, v in pairs( _allDoors ) do
     if tonumber( v.buildingID ) == tonumber( id ) then
       return true
@@ -469,11 +469,11 @@ function hasDoors( id )
 end
 
 function lookForEmptyBuildings()
-  local _allBuildings = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+  local _allBuildings = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
 
   for k, v in pairs( _allBuildings ) do
     if !hasDoors( v.uniqueID ) then
-      db_delete_from( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "uniqueID = " .. tonumber( v.uniqueID ) )
+      db_delete_from( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "uniqueID = " .. tonumber( v.uniqueID ) )
     end
   end
 end
@@ -483,7 +483,7 @@ net.Receive( "changeBuildingID", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
 
   _tmpDoor:SetNWInt( "buildingID", tonumber( _tmpBuildingID ) )
-  db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_doors", "buildingID = " .. tonumber( _tmpBuildingID ) , "uniqueID = " .. _tmpDoor:GetNWInt( "uniqueID" ) )
+  db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "buildingID = " .. tonumber( _tmpBuildingID ) , "uniqueID = " .. _tmpDoor:GetNWInt( "uniqueID" ) )
 
   lookForEmptyBuildings()
 end)
@@ -493,14 +493,14 @@ net.Receive( "changeBuildingName", function( len, ply )
   local _tmpNewName = net.ReadString()
   if _tmpBuildingID != nil then
     printGM( "note", "renamed Building: " .. _tmpNewName )
-    db_update( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "name = '" .. _tmpNewName .. "'" , "uniqueID = " .. _tmpBuildingID )
+    db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "name = '" .. _tmpNewName .. "'" , "uniqueID = " .. _tmpBuildingID )
   else
     printGM( "note", "changeBuildingName failed" )
   end
 end)
 
 net.Receive( "getBuildings", function( len, ply )
-  local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", nil )
+  local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
   net.Start( "getBuildings" )
     net.WriteTable( _tmpTable )
   net.Send( ply )
@@ -511,7 +511,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
   local _tmpBuildingID = net.ReadInt( 16 )
   if _tmpBuildingID != nil then
 
-    local _tmpTable = db_select( "yrp_" .. string.lower( game.GetMap() ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
+    local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
     local owner = ""
     if _tmpTable != nil then

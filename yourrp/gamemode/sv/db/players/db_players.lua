@@ -45,8 +45,8 @@ function save_clients( string )
             local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
           end
 
-          if worked( string.lower( game.GetMap() ), "getmap failed @save_clients" ) then
-            local _map = "map = '" .. string.lower( game.GetMap() ) .. "'"
+          if worked( db_sql_str2( string.lower( game.GetMap() ) ), "getmap failed @save_clients" ) then
+            local _map = "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'"
             db_update( "yrp_characters", _map, "uniqueID = " .. _char_id )
           end
         end

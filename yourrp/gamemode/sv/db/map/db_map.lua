@@ -2,7 +2,7 @@
 
 --db_map.lua
 
-local _db_name = "yrp_" .. string.lower( game.GetMap() )
+local _db_name = "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) )
 
 sql_add_column( _db_name, "position", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "angle", "TEXT DEFAULT ''" )
@@ -22,8 +22,8 @@ function teleportToSpawnpoint( ply )
 
   local chaTab = ply:GetChaTab()
   if chaTab != nil then
-    if chaTab.map == string.lower( game.GetMap() ) and chaTab.position != "NULL" and chaTab.angle != "NULL" then
-      local _tmpMapTable = db_select( "yrp_" .. string.lower( game.GetMap() ), "*", "groupID = " .. groTab.uniqueID )
+    if chaTab.map == db_sql_str2( string.lower( game.GetMap() ) ) and chaTab.position != "NULL" and chaTab.angle != "NULL" then
+      local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. groTab.uniqueID )
       if _tmpMapTable != nil then
         local _randomSpawnPoint = table.Random( _tmpMapTable )
 
@@ -46,13 +46,13 @@ util.AddNetworkString( "dbInsertInto" )
 util.AddNetworkString( "removeMapEntry" )
 
 net.Receive( "removeMapEntry", function( len, ply )
-  local _tmpMapTable = db_select( "yrp_" .. string.lower( game.GetMap() ), "*", nil )
+  local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", nil )
   local _tmpUniqueID = net.ReadString()
-  db_delete_from( "yrp_" .. string.lower( game.GetMap() ), "uniqueID = " .. _tmpUniqueID )
+  db_delete_from( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "uniqueID = " .. _tmpUniqueID )
 end)
 
 net.Receive( "getMapList", function( len, ply )
-  local _tmpMapTable = db_select( "yrp_" .. string.lower( game.GetMap() ), "*", nil )
+  local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", nil )
   local _tmpGroupTable = db_select( "yrp_groups", "*", nil )
 
   if _tmpMapTable != nil then

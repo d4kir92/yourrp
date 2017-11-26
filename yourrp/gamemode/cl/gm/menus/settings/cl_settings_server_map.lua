@@ -27,7 +27,7 @@ net.Receive( "getMapList", function( len )
 end)
 
 function getMapPNG()
-  local _mapName = string.lower( game.GetMap() )
+  local _mapName = db_sql_str2( string.lower( game.GetMap() ) )
   local _mapPicturePath = "maps/" .. _mapName .. ".png"
   local _mapPictureDesti = _mapPicturePath
 
@@ -44,7 +44,7 @@ function getMapPNG()
 end
 
 function getCopyMapPNG()
-  local _mapName = string.lower( game.GetMap() )
+  local _mapName = db_sql_str2( string.lower( game.GetMap() ) )
   local _mapPicturePath = "maps/" .. _mapName .. ".png"
   local _mapPictureDesti = _mapPicturePath
 
@@ -94,7 +94,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   local _mapName = createVGUI( "DPanel", settingsWindow.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
     draw.RoundedBox( 0, 0,0, pw, ph, g_yrp.colors.dprimary )
-    draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. string.lower( game.GetMap() ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. db_sql_str2( string.lower( game.GetMap() ) ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   _mapListView = createVGUI( "DListView", settingsWindow.site, 1600, 1600, 10, 10 + 256 + 10 )
@@ -137,7 +137,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpButton:SetText( lang_string( "add" ) )
     function tmpButton:DoClick()
       net.Start( "dbInsertInto" )
-        net.WriteString( "yrp_" .. string.lower( game.GetMap() ) )
+        net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
         net.WriteString( "position, angle, groupID, type" )
         local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
         local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
@@ -159,7 +159,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   _buttonAddJailPoint:SetText( lang_string( "addjailpoint" ) )
   function _buttonAddJailPoint:DoClick()
     net.Start( "dbInsertInto" )
-      net.WriteString( "yrp_" .. string.lower( game.GetMap() ) )
+      net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
       net.WriteString( "position, angle, type" )
       local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
       local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
@@ -176,7 +176,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   _buttonAddReleasePoint:SetText( lang_string( "addjailfreepoint" ) )
   function _buttonAddReleasePoint:DoClick()
     net.Start( "dbInsertInto" )
-      net.WriteString( "yrp_" .. string.lower( game.GetMap() ) )
+      net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
       net.WriteString( "position, angle, type" )
       local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
       local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
