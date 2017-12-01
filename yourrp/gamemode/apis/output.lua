@@ -1,23 +1,23 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local g_text = g_text or {}
-g_text.pre = "#YRP# "
-g_text.gmname = "YourRP"
-g_text.loaddb = "LOAD DB: "
-g_text.successdb = " created successfully."
-g_text.spacePre = "\n__________________________________________________________________________[" .. "YRP" .. "]_"
-g_text.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯[" .. "YRP" .. "]¯\n"
+local _text = {}
+_text.pre = "#YRP# "
+_text.gmname = "YourRP"
+_text.loaddb = "LOAD DB: "
+_text.successdb = " created successfully."
+_text.spacePre = "\n__________________________________________________________________________[" .. "YRP" .. "]_"
+_text.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯[" .. "YRP" .. "]¯\n"
 
 function hr()
 	print( "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" )
 end
 
 function hr_pre()
-	print( g_text.spacePre )
+	print( _text.spacePre )
 end
 
 function hr_pos()
-	print( g_text.spacePos )
+	print( _text.spacePos )
 end
 
 local darkrp_debug = false
@@ -89,10 +89,10 @@ function printGM( channel, text )
 		end
 		for k, v in pairs(_tmpText) do
 			if _channelName != "" then
-				MsgC( _color, "[", Color( 255, 255, 0 ), g_text.gmname, _color, "|" .. string.upper( _pool ) .. "|", _color2, _channelName, _color, "] ", _color3, v )
+				MsgC( _color, "[", Color( 255, 255, 0 ), _text.gmname, _color, "|" .. string.upper( _pool ) .. "|", _color2, _channelName, _color, "] ", _color3, v )
 				MsgC( "\n" )
 			else
-				MsgC( _color, "[", Color( 255, 255, 0 ), g_text.gmname, _color, "] ", _color3, v )
+				MsgC( _color, "[", Color( 255, 255, 0 ), _text.gmname, _color, "] ", _color3, v )
 				MsgC( "\n" )
 			end
 		end

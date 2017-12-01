@@ -192,7 +192,7 @@ function optionWindow( buildingID, name, price, door, owner )
   end
   function _doorWindow:Paint( pw, ph )
     paintWindow( self, pw, ph, lang_string( "settings" ) )
-    --draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
     draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. _name, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " .. owner, "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )

@@ -315,7 +315,7 @@ function openBuyMenu()
 
     v.Tab.Paint = function(self,w,h)
       if v.Tab == _buyTabs:GetActiveTab() then
-		    draw.RoundedBox( 0, 0, 0, w, h, g_yrp.colors.dbackground )
+		    draw.RoundedBox( 0, 0, 0, w, h, get_dbg_col() )
         if v.selected != v[k] then
           v.selected = v[k]
           if v[k] == "weapons" then
@@ -333,7 +333,7 @@ function openBuyMenu()
           end
         end
       else
-        draw.RoundedBox( 0, 0, 0, w, h, g_yrp.colors.dprimary )
+        draw.RoundedBox( 0, 0, 0, w, h, get_dp_col() )
       end
     end
   end

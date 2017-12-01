@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_yourrp_add_langu.lua
-
 hook.Add( "open_yourp_add_langu", "open_yourp_add_langu", function()
   local ply = LocalPlayer()
 
@@ -9,7 +7,7 @@ hook.Add( "open_yourp_add_langu", "open_yourp_add_langu", function()
   local h = settingsWindow.sitepanel:GetTall()
 
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
-  settingsWindow.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, g_yrp.colors.dbackground ) end
+  settingsWindow.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, get_dbg_col() ) end
 
   function settingsWindow.sitepanel:Paint()
     --

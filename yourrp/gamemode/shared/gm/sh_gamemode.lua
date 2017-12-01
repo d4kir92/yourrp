@@ -1,20 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-GM.Name = "DarkRP"
-timer.Simple( 1, function()
-	GAMEMODE.Name = "YourRP"
-end)
-GM.ShortName = "YRP"	--Not longer then 4!
-GM.Author = "D4KiR"
-GM.Email = ""
-GM.Discord = "https://discord.gg/sEgNZxg"
-GM.Website = "youtube.com/c/D4KiR"
-GM.Twitter = "twitter.com/D4KIR"
-GM.Version = "0.9.3.4" --dont change this
-GM.VersionSort = "unstable" --dont change this
-GM.dedicated = "-"
-GM.rpbase = "YourRP" --dont change this!
-GM.Help = ""
+--here you can change this, but it's dumb, because you can change it ingame
+GM.Name = "YourRP" --it also do nothing here, because the database overwrite it
 
 DeriveGamemode( "sandbox" )
 
@@ -54,3 +41,16 @@ if CLIENT then
     GAMEMODE.Name = net.ReadString()
   end)
 end
+
+--do NOT change this! (it can cause crash!)
+GM.ShortName = "YRP"	--do NOT change this!
+GM.Author = "D4KiR" --do NOT change this!
+GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
+GM.Email = GM.Discord --do NOT change this!
+GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
+GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
+GM.Help = "Create your rp you want to make!" --do NOT change this!
+GM.dedicated = "-" --do NOT change this!
+GM.Version = "0.9.3.5" --do NOT change this!
+GM.VersionSort = "unstable" --do NOT change this!
+GM.rpbase = "YourRP" --do NOT change this!

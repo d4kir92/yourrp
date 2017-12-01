@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_server_restriction.lua
-
 function dbUpdateNet( dbName, dbSets, dbWhile )
   net.Start( "dbUpdate" )
     net.WriteString( dbName )
@@ -14,7 +12,7 @@ function createCheckBox( _string, _x, _y, _nr, _value, _usergroup )
   _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", settingsWindow.site, 400, 50, _x, _y )
   local _tmp = _tmpRes[_value .. "tmp"]
   function _tmp:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondary )
+    draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
     draw.SimpleTextOutlined( _string, "sef", ctr( 5 + 40 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
@@ -83,9 +81,10 @@ net.Receive( "getRistrictions", function( len )
         _tmpRes[5] = createCheckBox( lang_string( "npcs" ), 420, 250, k, "npcs", v.usergroup )
         _tmpRes[6] = createCheckBox( lang_string( "props" ), 420, 310, k, "props", v.usergroup )
         _tmpRes[7] = createCheckBox( lang_string( "ragdolls" ), 420, 370, k, "ragdolls", v.usergroup )
+        _tmpRes[8] = createCheckBox( lang_string( "noclip" ), 420, 430, k, "noclip", v.usergroup )
 
         if v.usergroup != "superadmin" and v.usergroup != "admin" then
-          _tmpRes[8] = createDeleteButton( v.usergroup, 210, 230, _restrictionListView, k )
+          _tmpRes[9] = createDeleteButton( v.usergroup, 210, 260, _restrictionListView, k )
         end
       end
     end
@@ -101,7 +100,7 @@ hook.Add( "open_server_restrictions", "open_server_restrictions", function()
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
 
   function settingsWindow.site:Paint( pw, ph )
-    --draw.RoundedBox( 4, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
 
   net.Start( "getRistrictions" )

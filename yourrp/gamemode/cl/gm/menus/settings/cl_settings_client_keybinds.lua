@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_client_keybinds.lua
-
 function createDKeybinder( parent, w, h, x, y, keybind )
   local _tmp = createD( "DBinder", parent, w, h, x, y )
   _tmp:SetValue( get_keybind( keybind ) )
@@ -16,7 +14,6 @@ end
 
 hook.Add( "open_client_keybinds", "open_client_keybinds", function()
   local ply = LocalPlayer()
-
   local w = settingsWindow.sitepanel:GetWide()
   local h = settingsWindow.sitepanel:GetTall()
 
@@ -25,7 +22,7 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
   --sheet:AddSheet( lang_string( "character" ), cl_charPanel, "icon16/user_edit.png" )
   function settingsWindow.site:Paint( w, h )
-    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), g_yrp.colors.panel )
+    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), _yrp.colors.panel )
     draw.SimpleTextOutlined( lang_string("characterselection"), "sef", ctr( _wide ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("rolemenu"), "sef", ctr( _wide ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("buymenu"), "sef", ctr( _wide ), ctr( 180 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )

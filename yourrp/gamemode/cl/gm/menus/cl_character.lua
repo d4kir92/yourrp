@@ -30,9 +30,9 @@ function createMDPlus( parent, size, x, y, height )
 
     --Button
     if tmpMD:IsHovered() then
-      draw.RoundedBox( pw-height, 0, 0, pw-height, ph-height, g_yrp.colors.dsecondaryH  )
+      draw.RoundedBox( pw-height, 0, 0, pw-height, ph-height, get_dsbg_col()  )
     else
-      draw.RoundedBox( pw-height, 0, 0, pw-height, ph-height, g_yrp.colors.dsecondary )
+      draw.RoundedBox( pw-height, 0, 0, pw-height, ph-height, get_ds_col() )
     end
 
     draw.SimpleTextOutlined( "+", "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -51,9 +51,9 @@ function createMDButton( parent, w, h, x, y, height, text )
 
     --Button
     if tmpMD:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, g_yrp.colors.dsecondary )
+      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, get_ds_col() )
     else
-      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, g_yrp.colors.dprimary )
+      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, get_dp_col() )
     end
 
     draw.SimpleTextOutlined( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -152,7 +152,7 @@ function openCharacterCreation()
   local border = ctr( 50 )
   local charactersBackground = createMD( "DPanel", frame, ctr( 800 ), ScrH() - (2*border), border, border, ctr( 5 ) )
   function charactersBackground:Paint( pw, ph )
-    paintMD( pw, ph, nil, g_yrp.colors.dprimary )
+    paintMD( pw, ph, nil, get_dp_col() )
   end
 
   border = ctr( 20 )
@@ -163,7 +163,7 @@ function openCharacterCreation()
   data.y = border
   local charactersGender = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersGender:Paint( pw, ph )
-    paintMD( pw, ph, nil, g_yrp.colors.dsecondary )
+    paintMD( pw, ph, nil, get_ds_col() )
     draw.SimpleTextOutlined( lang_string( "gender" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
@@ -176,7 +176,7 @@ function openCharacterCreation()
       if character.gender == "male" then
         draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.selected )
       else
-        draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondaryH )
+        draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
       end
     end
     draw.SimpleTextOutlined( "♂", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -194,7 +194,7 @@ function openCharacterCreation()
       if character.gender == "female" then
         draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.selected )
       else
-        draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondaryH )
+        draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
       end
     end
     draw.SimpleTextOutlined( "♀", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -209,7 +209,7 @@ function openCharacterCreation()
   data.h = ctr( 140 )
   local charactersGroup = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersGroup:Paint( pw, ph )
-    paintMD( pw, ph, nil, g_yrp.colors.dsecondary )
+    paintMD( pw, ph, nil, get_ds_col() )
     draw.SimpleTextOutlined( lang_string( "group" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
@@ -239,7 +239,7 @@ function openCharacterCreation()
   data.h = ctr( 740 )
   local charactersRole = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersRole:Paint( pw, ph )
-    paintMD( pw, ph, nil, g_yrp.colors.dsecondary )
+    paintMD( pw, ph, nil, get_ds_col() )
     draw.SimpleTextOutlined( lang_string( "role" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "rolehealth" ) .. ": " .. character.hp .. "/" .. character.hpmax, "HudBars", ctr( 10 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "rolearmor" ) .. ": " .. character.ar .. "/" .. character.armax, "HudBars", ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -257,13 +257,37 @@ function openCharacterCreation()
   characterPlayermodel.bodygroups = {}
   characterPlayermodel.cache = {}
 
+  characterPlayermodel:SetAnimated( true )
+  characterPlayermodel.Angles = Angle( 0, 0, 0 )
+
+  function characterPlayermodel:DragMousePress()
+		self.PressX, self.PressY = gui.MousePos()
+		self.Pressed = true
+	end
+  function characterPlayermodel:DragMouseRelease() self.Pressed = false end
+
+	function characterPlayermodel:LayoutEntity( ent )
+
+		if ( self.bAnimated ) then self:RunAnimation() end
+
+		if ( self.Pressed ) then
+			local mx, my = gui.MousePos()
+			self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
+
+			self.PressX, self.PressY = gui.MousePos()
+      if ent != nil then
+  	    ent:SetAngles( self.Angles )
+      end
+    end
+	end
+
   data.x = border
   data.y = data.y + data.h + border
   data.w = ctr( 800 ) - 2*border
   data.h = ctr( 740 )
   local charactersBodygroups = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersBodygroups:Paint( pw, ph )
-    paintMD( pw, ph, nil, g_yrp.colors.dsecondary )
+    paintMD( pw, ph, nil, get_ds_col() )
     draw.SimpleTextOutlined( lang_string( "appearance" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     if characterPlayermodel.skin != nil and characterPlayermodel.skinmax != nil then
       draw.SimpleTextOutlined( lang_string( "skin" ) .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr( 80 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -339,46 +363,15 @@ function openCharacterCreation()
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
     characterPlayermodel:UpdateBodyGroups()
   end
-  function characterPlayermodel:LayoutEntity( Entity ) return end
-
-  local turnR = createD( "DButton", frame, ctr( 100 ), ctr( 100 ), ScrW()/2 + ctr( -50 + 150 ), ScrH() - ctr( 300 ) )
-  turnR:SetText( "" )
-  function turnR:Paint( pw, ph )
-    if self:IsHovered() then
-      if self:IsDown() then
-        if characterPlayermodel.Entity != nil then
-          characterPlayermodel.Entity:SetAngles( characterPlayermodel.Entity:GetAngles() + Angle( 0, 1, 0 ) )
-        end
-      end
-      paintMD( pw, ph, "->", g_yrp.colors.dsecondaryH )
-    else
-      paintMD( pw, ph, "->", g_yrp.colors.dsecondary )
-    end
-  end
-
-  local turnL = createD( "DButton", frame, ctr( 100 ), ctr( 100 ), ScrW()/2 - ctr( 50 + 150 ), ScrH() - ctr( 300 ) )
-  turnL:SetText( "" )
-  function turnL:Paint( pw, ph )
-    if self:IsHovered() then
-      if self:IsDown() then
-        if characterPlayermodel.Entity != nil then
-          characterPlayermodel.Entity:SetAngles( characterPlayermodel.Entity:GetAngles() - Angle( 0, 1, 0 ) )
-        end
-      end
-      paintMD( pw, ph, "<-", g_yrp.colors.dsecondaryH )
-    else
-      paintMD( pw, ph, "<-", g_yrp.colors.dsecondary )
-    end
-  end
-
+  
   local prevPM = createD( "DButton", frame, ctr( 100 ), ctr( 1200 ), ScrW()/2 - ctr( 50 + 800 ), ScrH() - ctr( 1800 ) )
   prevPM:SetText( "" )
   function prevPM:Paint( pw, ph )
     if tonumber( character.playermodelID ) > 1 then
       if self:IsHovered() then
-        paintMD( pw, ph, "<", g_yrp.colors.dsecondaryH )
+        paintMD( pw, ph, "<", get_dsbg_col() )
       else
-        paintMD( pw, ph, "<", g_yrp.colors.dsecondary )
+        paintMD( pw, ph, "<", get_ds_col() )
       end
     end
   end
@@ -396,9 +389,9 @@ function openCharacterCreation()
   function nextPM:Paint( pw, ph )
     if tonumber( character.playermodelID ) < #character.playermodels then
       if self:IsHovered() then
-        paintMD( pw, ph, ">", g_yrp.colors.dsecondaryH )
+        paintMD( pw, ph, ">", get_dsbg_col() )
       else
-        paintMD( pw, ph, ">", g_yrp.colors.dsecondary )
+        paintMD( pw, ph, ">", get_ds_col() )
       end
     end
   end
@@ -502,7 +495,7 @@ function openCharacterCreation()
     local charactersBack = createMD( "DButton", frame, button.w, button.h, button.x, button.y, ctr( 10 ) )
     charactersBack:SetText( "" )
     function charactersBack:Paint( pw, ph )
-      paintMD( pw, ph, lang_string( "back" ), g_yrp.colors.dsecondary )
+      paintMD( pw, ph, lang_string( "back" ), get_ds_col() )
     end
     function charactersBack:DoClick()
       frame:Close()
@@ -537,7 +530,7 @@ function openCharacterCreation()
     local color = Color( 255, 255, 0, 255 )
     if testName() then
       text = lang_string( "confirm" )
-      color = g_yrp.colors.dprimary
+      color = get_dp_col()
     else
       text = character.cause
     end
@@ -590,44 +583,37 @@ function openCharacterSelection()
   local border = ctr( 50 )
   local charactersBackground = createD( "DPanel", frame, ctr( 800 ), ScrH() - (2*border), border, border )
   function charactersBackground:Paint( pw, ph )
-    paintMD( pw, ph, nil, g_yrp.colors.dprimary )
+    paintMD( pw, ph, nil, get_dp_col() )
 
     draw.SimpleTextOutlined( lang_string( "siteisloading" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
 
   local charplayermodel = createD( "DModelPanel", frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )
   charplayermodel:SetModel( "models/player/skeleton.mdl" )
-  function charplayermodel:LayoutEntity( Entity ) return end
+  charplayermodel:SetAnimated( true )
+  charplayermodel.Angles = Angle( 0, 0, 0 )
+  charplayermodel:RunAnimation()
 
-  local turnR = createD( "DButton", frame, ctr( 100 ), ctr( 100 ), ScrW()/2 + ctr( -50 + 150 ), ScrH() - ctr( 300 ) )
-  turnR:SetText( "" )
-  function turnR:Paint( pw, ph )
-    if self:IsHovered() then
-      if self:IsDown() then
-        if charplayermodel.Entity != nil then
-          charplayermodel.Entity:SetAngles( charplayermodel.Entity:GetAngles() + Angle( 0, 1, 0 ) )
-        end
-      end
-      paintMD( pw, ph, "->", g_yrp.colors.dsecondaryH )
-    else
-      paintMD( pw, ph, "->", g_yrp.colors.dsecondary )
-    end
-  end
+  function charplayermodel:DragMousePress()
+		self.PressX, self.PressY = gui.MousePos()
+		self.Pressed = true
+	end
+  function charplayermodel:DragMouseRelease() self.Pressed = false end
 
-  local turnL = createD( "DButton", frame, ctr( 100 ), ctr( 100 ), ScrW()/2 - ctr( 50 + 150 ), ScrH() - ctr( 300 ) )
-  turnL:SetText( "" )
-  function turnL:Paint( pw, ph )
-    if self:IsHovered() then
-      if self:IsDown() then
-        if charplayermodel.Entity != nil then
-          charplayermodel.Entity:SetAngles( charplayermodel.Entity:GetAngles() - Angle( 0, 1, 0 ) )
-        end
+	function charplayermodel:LayoutEntity( ent )
+
+		if ( self.bAnimated ) then self:RunAnimation() end
+
+		if ( self.Pressed ) then
+			local mx, my = gui.MousePos()
+			self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
+
+			self.PressX, self.PressY = gui.MousePos()
+      if ent != nil then
+  	    ent:SetAngles( self.Angles )
       end
-      paintMD( pw, ph, "<-", g_yrp.colors.dsecondaryH )
-    else
-      paintMD( pw, ph, "<-", g_yrp.colors.dsecondary )
     end
-  end
+	end
 
   local characterList = createD( "DScrollPanel", charactersBackground, ctr( 800 ), ScrH() - (2*border), 0, 0 )
   timer.Simple( 0.1, function()
@@ -680,9 +666,9 @@ function openCharacterSelection()
 
         function tmpChar:Paint( pw, ph )
           if tmpChar:IsHovered() or curChar == self.charid then
-            paintMD( pw, ph, nil, g_yrp.colors.dsecondaryH )
+            paintMD( pw, ph, nil, get_dsbg_col() )
           else
-            paintMD( pw, ph, nil, g_yrp.colors.dsecondary )
+            paintMD( pw, ph, nil, get_ds_col() )
           end
           draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. self.rpname, "HudBars", ctr( 20 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( lang_string( "role" ) .. ": " .. self.groupID .. " " .. self.roleID, "HudBars", ctr( 20 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -758,9 +744,9 @@ function openCharacterSelection()
   backB:SetText( "" )
   function backB:Paint( pw, ph )
     if self:IsHovered() then
-      paintMD( pw, ph, lang_string( "back" ), g_yrp.colors.dsecondaryH )
+      paintMD( pw, ph, lang_string( "back" ), get_dsbg_col() )
     else
-      paintMD( pw, ph, lang_string( "back" ), g_yrp.colors.dsecondary )
+      paintMD( pw, ph, lang_string( "back" ), get_ds_col() )
     end
   end
   function backB:DoClick()
@@ -796,9 +782,9 @@ function openCharacterSelection()
 
     --Button
     if self:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, g_yrp.colors.dsecondary )
+      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, get_ds_col() )
     else
-      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, g_yrp.colors.dprimary )
+      draw.RoundedBox( 0, 0, 0, pw-height, ph-height, get_dp_col() )
     end
     local text = lang_string( "enterworld" )
     if LocalPlayer() != nil then

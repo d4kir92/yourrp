@@ -1,22 +1,22 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-g_debug = true
+local _debug = true
 
 concommand.Add( "yrp__debug", function( ply, cmd, args )
-	g_debug = !g_debug
-	ply:SetNWBool( "yrp_debug", g_debug )
-  if g_debug then
+	_debug = !_debug
+	ply:SetNWBool( "yrp_debug", _debug )
+  if _debug then
     printGM( "note", "Debug ON" )
-  elseif !g_debug then
+  elseif !_debug then
     printGM( "note", "Debug OFF" )
   end
 end )
 
-function worked( obj, name )
+function worked( obj, name, _silence )
   if obj != nil and obj != false then
     return true
   else
-    if g_debug then
+    if _debug and !_silence then
       printGM( "note", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
     end
     return false
@@ -128,17 +128,17 @@ function send_error( realm, str )
   end )
 end
 
-g_sended = {}
+local _sended = {}
 function send_errors( realm, tbl )
-  if g_sended[realm] == nil then
-     g_sended[realm] = {}
+  if _sended[realm] == nil then
+     _sended[realm] = {}
   end
   for k, v in pairs( tbl ) do
-    if !table.HasValue( g_sended[realm], v ) then
+    if !table.HasValue( _sended[realm], v ) then
       if k > #tbl-10 then
         send_error( realm, v )
       end
-      table.insert( g_sended[realm], v )
+      table.insert( _sended[realm], v )
     end
   end
 end

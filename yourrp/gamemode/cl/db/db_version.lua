@@ -2,6 +2,14 @@
 
 local testingversion = false
 local serverVersion = "-1.-1.-1"
+local v_color = Color( 255, 255, 255, 255 )
+local v_outdated = true
+local v_tested = false
+
+function version_tested()
+  return v_tested
+end
+
 function testVersion()
   if !testingversion then
     testingversion = true
@@ -14,6 +22,12 @@ timer.Create( "check_yrp_version", 3600, 0, function()
   testVersion()
 end)
 
+function is_version_outdated()
+  return v_outdated
+end
+function version_color()
+  return v_color
+end
 
 function showVersion()
   local ply = LocalPlayer()
@@ -28,13 +42,13 @@ function showVersion()
       local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
       local new2num = string.Replace( versionOnline, ".", "" )
       local verart = "Up-To-Date"
-      g_yrp.versionCol = Color( 0, 255, 0, 255 )
+      v_color = Color( 0, 255, 0, 255 )
       if cur2num < new2num then
         verart = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
-        g_yrp.versionCol = Color( 255, 0, 0, 255 )
+        v_color = Color( 255, 0, 0, 255 )
       elseif cur2num > new2num then
         verart = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
-        g_yrp.versionCol = Color( 100, 100, 255, 255 )
+        v_color = Color( 100, 100, 255, 255 )
       end
 
       --Server
@@ -67,7 +81,7 @@ function showVersion()
       end
 
       if versionOnline != GAMEMODE.Version then
-        g_yrp.outdated = true
+        v_outdated = true
         local frame = createVGUI( "DFrame", nil, 1000, 570, 0, 0 )
         frame:Center()
         frame:SetTitle( "" )
@@ -81,7 +95,7 @@ function showVersion()
           draw.SimpleTextOutlined( lang_string( "currentversion" ) .. ":", "HudBars", pw/2, ctr( 215 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( lang_string( "client" ) .. ": ", "HudBars", pw/2, ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw/2, ctr( 265 ), g_yrp.versionCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw/2, ctr( 265 ), v_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( "(" .. _serverSort .. ") " .. lang_string( "server" ) .. ": ", "HudBars", pw/2, ctr( 315 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( serverVersion, "HudBars", pw/2, ctr( 315 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -121,10 +135,11 @@ function showVersion()
 
         frame:MakePopup()
       else
-        g_yrp.outdated = false
+        v_outdated = false
         printGM( "note", "YourRP is on the newest version (unstable)")
       end
       testingversion = false
+      v_tested = true
     end,
     function( error )
       -- We failed. =(

@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_server_whitelist.lua
-
 net.Receive( "getRoleWhitelist", function( len )
   local _tmpWhiteList = net.ReadTable()
   local _tmpRoleList = net.ReadTable()
@@ -73,7 +71,7 @@ net.Receive( "getRoleWhitelist", function( len )
     end
 
     function _whitelistFrame:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+      draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
       draw.SimpleTextOutlined( lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -109,7 +107,7 @@ hook.Add( "open_server_whitelist", "open_server_whitelist", function()
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
 
   function settingsWindow.site:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
 
   net.Start( "getRoleWhitelist" )

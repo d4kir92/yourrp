@@ -29,18 +29,6 @@ reload.nextSC = 0
 reload.maxS = 0
 reload.statusS = 0
 
-local _showVoice = false
-function GM:PlayerStartVoice( ply )
-  if ply == LocalPlayer() then
-    _showVoice = true
-  end
-end
-function GM:PlayerEndVoice( ply )
-  if ply == LocalPlayer() then
-    _showVoice = false
-  end
-end
-
 function roundMoney( _money, round )
   if _money != nil then
     local money = tonumber( _money )
@@ -161,11 +149,6 @@ function HudPlayer()
 
     if ply:Alive() then
       if !contextMenuOpen then
-        --Voice
-        if _showVoice then
-          draw.SimpleTextOutlined( lang_string( "youarespeaking" ), "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        end
-
         --Health
         local _hptext = math.Round( ply:Health(), 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( ply:Health(), 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. "%"
         drawHUDElement( "hp", ply:Health(), ply:GetMaxHealth(), _hptext, health, Color( 150, 52, 52, _alpha ) )
@@ -281,7 +264,7 @@ function HudPlayer()
         --Weapon Name
         local _wntext = ""
         if weapon != nil and weapon != NULL then
-          _wntext = weapon.PrintName or ""
+          _wntext = weapon:GetPrintName() or ""
         end
         drawHUDElement( "wn", nil, nil, _wntext, nil, nil )
 

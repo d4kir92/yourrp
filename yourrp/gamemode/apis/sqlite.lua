@@ -155,7 +155,7 @@ function init_database( db_name )
       printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
     end
 		if sql.TableExists( db_name ) then
-      --printGM( "db", db_name .. g_yrp.successdb )
+      --printGM( "db", db_name .. _yrp.successdb )
 		else
 			printGM( "error", "CREATE TABLE " .. db_name .. " fail" )
       retry_load_database()
@@ -163,7 +163,7 @@ function init_database( db_name )
   end
 end
 
-local _show_db_if_not_empty = true
+local _show_db_if_not_empty = false
 function db_is_empty( db_name )
   local _tmp = db_select( db_name, "*", nil )
 

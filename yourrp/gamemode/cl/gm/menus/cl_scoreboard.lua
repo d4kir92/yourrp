@@ -15,7 +15,7 @@ timer.Simple( 6, function()
   net.SendToServer()
 end)
 
-scoreboard = scoreboard or {}
+scoreboard = {}
 
 local elePos = {}
 elePos.x = 0
@@ -67,7 +67,7 @@ function drawGroupPlayers( id )
       elePos.y = elePos.y + 50
       local _tmpHeader = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
       function _tmpHeader:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( g_yrp.colors["epicOrange"].r, g_yrp.colors["epicOrange"].g, g_yrp.colors["epicOrange"].b, g_yrp.colors["epicOrange"].a ) )
+        draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicOrange" ) )
         if ply != NULL then
           draw.SimpleTextOutlined( ply:RPName(), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( ply:GetNWString( "roleName" ), "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -83,14 +83,14 @@ function drawGroup( id, name )
   elePos.y = elePos.y + 50
   local _tmpPanel = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 9999, elePos.x, elePos.y )
   function _tmpPanel:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( g_yrp.colors["epicBlue"].r, g_yrp.colors["epicBlue"].g, g_yrp.colors["epicBlue"].b, g_yrp.colors["epicBlue"].a ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicBlue" ) )
     draw.SimpleTextOutlined( name, "sef", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   if hasGroupPlayers( id ) then
     elePos.y = elePos.y + 50
     local _tmpHeader = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
     function _tmpHeader:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( g_yrp.colors["epicBlue"].r, g_yrp.colors["epicBlue"].g, g_yrp.colors["epicBlue"].b, g_yrp.colors["epicBlue"].a ) )
+      draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicBlue" ) )
       draw.SimpleTextOutlined( lang_string( "name" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "role" ), "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -186,9 +186,9 @@ function scoreboard:show_sb()
   local _mapPNG = getMapPNG()
 
   function _SBFrame:Paint( pw, ph )
-    draw.RoundedBox( 0, ctr( _br ), ctr( _br ), pw - ctr( 50 ), ctr( 125 ), Color( g_yrp.colors["epicBlue"].r, g_yrp.colors["epicBlue"].g, g_yrp.colors["epicBlue"].b, g_yrp.colors["epicBlue"].a ) )
+    draw.RoundedBox( 0, ctr( _br ), ctr( _br ), pw - ctr( 50 ), ctr( 125 ), get_color( "epicBlue" ) )
 
-    draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, Color( g_yrp.colors["darkBG"].r, g_yrp.colors["darkBG"].g, g_yrp.colors["darkBG"].b, g_yrp.colors["darkBG"].a ) )
+    draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, get_color( "darkBG" ) )
 
     draw.SimpleTextOutlined( GAMEMODE:GetGameDescription(), "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -224,7 +224,7 @@ function scoreboard:show_sb()
 
   local _DPanelHeader = createVGUI( "DPanel", _SBSP, 2000, 2000, 0, 0 )
   function _DPanelHeader:Paint( pw, ph )
-    --draw.RoundedBox( 0, ctr( 25 ), ctr( 256 - 25 ), pw, ph, Color( g_yrp.colors["darkBG"].r, g_yrp.colors["darkBG"].g, g_yrp.colors["darkBG"].b, g_yrp.colors["darkBG"].a ) )
+    --draw.RoundedBox( 0, ctr( 25 ), ctr( 256 - 25 ), pw, ph, get_color( "darkBG" ) )
   end
 
   drawScoreboard()

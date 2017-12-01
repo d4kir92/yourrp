@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings.lua
-
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
 
@@ -17,19 +15,28 @@ include( "cl_settings_yourrp_add_langu.lua")
 include( "cl_settings_yourrp_contact.lua")
 include( "cl_settings_yourrp_workshop.lua")
 
-g_yrp.design = {}
-g_yrp.design.mode = "dark"
-g_yrp.materials = {}
-g_yrp.materials.logo100 = Material( "vgui/yrp/logo100.png" )
-g_yrp.materials.dark = {}
-g_yrp.materials.dark.close = Material( "vgui/yrp/dark_close.png" )
-g_yrp.materials.dark.settings = Material( "vgui/yrp/dark_settings.png" )
-g_yrp.materials.dark.burger = Material( "vgui/yrp/dark_burger.png" )
+local _yrp_settings = {}
+_yrp_settings.design = {}
+_yrp_settings.design.mode = "dark"
+_yrp_settings.materials = {}
+_yrp_settings.materials.logo100 = Material( "vgui/yrp/logo100.png" )
+_yrp_settings.materials.dark = {}
+_yrp_settings.materials.dark.close = Material( "vgui/yrp/dark_close.png" )
+_yrp_settings.materials.dark.settings = Material( "vgui/yrp/dark_settings.png" )
+_yrp_settings.materials.dark.burger = Material( "vgui/yrp/dark_burger.png" )
 
-g_yrp.materials.light = {}
-g_yrp.materials.light.close = Material( "vgui/yrp/light_close.png" )
-g_yrp.materials.light.settings = Material( "vgui/yrp/light_settings.png" )
-g_yrp.materials.light.burger = Material( "vgui/yrp/light_burger.png" )
+_yrp_settings.materials.light = {}
+_yrp_settings.materials.light.close = Material( "vgui/yrp/light_close.png" )
+_yrp_settings.materials.light.settings = Material( "vgui/yrp/light_settings.png" )
+_yrp_settings.materials.light.burger = Material( "vgui/yrp/light_burger.png" )
+
+function get_icon_burger_menu()
+  return _yrp_settings.materials[_yrp_settings.design.mode].burger
+end
+
+function closeSettings()
+  settingsWindow:Close()
+end
 
 function openSettings()
   openMenu()
@@ -44,7 +51,7 @@ function openSettings()
   --Frame
   settingsWindow = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
   function settingsWindow:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
   end
   function settingsWindow:OnClose()
     closeMenu()
@@ -59,7 +66,7 @@ function openSettings()
   settingsWindow:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
   settingsWindow:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
-  --if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:IsAdmin() or ply:IsSuperAdmin() then
     settingsWindow:AddCategory( lang_string( "server" ) )
     settingsWindow:AddSite( "open_server_general", lang_string( "general" ), lang_string( "server" ), "icon16/server_database.png" )
     settingsWindow:AddSite( "open_server_roles", lang_string( "roles" ), lang_string( "server" ), "icon16/group_gear.png" )
@@ -68,7 +75,7 @@ function openSettings()
     settingsWindow:AddSite( "open_server_map", lang_string( "map" ), lang_string( "server" ), "icon16/map.png" )
     settingsWindow:AddSite( "open_server_whitelist", lang_string( "whitelist" ), lang_string( "server" ), "icon16/page_white_key.png" )
     settingsWindow:AddSite( "open_server_restrictions", lang_string( "restriction" ), lang_string( "server" ), "icon16/group_go.png" )
-  --end
+  end
 
   settingsWindow:AddCategory( "yourrp" )
   settingsWindow:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )
@@ -85,24 +92,22 @@ function openSettings()
   --Mainbar
   local mainBar = createD( "DPanel", settingsWindow, ScrW(), ctr( 100 ), 0, 0 )
   function mainBar:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dprimary )
+    draw.RoundedBox( 0, 0, 0, pw, ph, get_dp_col() )
 
     surface.SetDrawColor( 255, 255, 255, 255 )
-    surface.SetMaterial( g_yrp.materials.logo100	)
+    surface.SetMaterial( _yrp_settings.materials.logo100	)
     surface.DrawTexturedRect( ctr( 100 + 400 + 10 ), ctr( 10 ), ctr( 378*0.8 ), ctr( 100*0.8 ) )
 
-    if g_yrp.outdated == nil then
+    if !version_tested() then
   		testVersion()
   	end
   	local _singleplayer = ""
   	if game.SinglePlayer() then
   		_singleplayer = "Singleplayer"
   	end
-  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudBars", ctr( 820 ), ph/2, g_version_col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudBars", ctr( 820 ), ph/2, version_color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    if settingsWindow.cursite != nil then
-      draw.SimpleTextOutlined( settingsWindow.cursite, "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    end
+    --draw.SimpleTextOutlined( settingsWindow.cursite or "", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local liveSupport = createD( "DButton", settingsWindow, ctr( 250 ), ctr( 80 ), ScrW() - ctr( 1100 ), ctr( 10 ) )
@@ -117,7 +122,7 @@ function openSettings()
 
   local language = createD( "DPanel", settingsWindow, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
   function language:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondary )
+    draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
     draw.SimpleTextOutlined( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   derma_change_language( language, ctr( 400 ), ctr( 80 ), ctr( 250 ), ctr( 0 ) )
@@ -128,7 +133,7 @@ function openSettings()
     paintMDBackground( self, pw, ph )
 
   	surface.SetDrawColor( 255, 255, 255, 255 )
-  	surface.SetMaterial( g_yrp.materials[g_yrp.design.mode].settings	)
+  	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].settings	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
 
@@ -140,7 +145,7 @@ function openSettings()
 
     settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
     function settingsWindow.site:Paint( pw, ph )
-      draw.RoundedBox( 4, 0, 0, pw, ph, g_yrp.colors.dbackground )
+      draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
       draw.SimpleTextOutlined( lang_string( "color" ), "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
     end
 
@@ -187,7 +192,7 @@ function openSettings()
     paintMDBackground( self, pw, ph )
 
   	surface.SetDrawColor( 255, 255, 255, 255 )
-  	surface.SetMaterial( g_yrp.materials[g_yrp.design.mode].close	)
+  	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].close	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
   function exitButton:DoClick()
@@ -200,16 +205,16 @@ function openSettings()
   function burgerMenu:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 100 ) )
     if self:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, ph, ph, g_yrp.colors.dsecondaryH )
+      draw.RoundedBox( 0, 0, 0, ph, ph, get_dsbg_col() )
     else
-      draw.RoundedBox( 0, 0, 0, ph, ph, g_yrp.colors.dsecondary )
+      draw.RoundedBox( 0, 0, 0, ph, ph, get_ds_col() )
     end
 
   	surface.SetDrawColor( 255, 255, 255, 255 )
-  	surface.SetMaterial( g_yrp.materials[g_yrp.design.mode].burger	)
+  	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].burger	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
 
-    draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
   end
   function burgerMenu:DoClick()
     settingsWindow:openMenu()

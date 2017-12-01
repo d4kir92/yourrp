@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_server_roles.lua
-
 local _w = 500
 local _br = 10
 local _lbr = 5
@@ -318,7 +316,9 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       yrp_roles_dbTable[id].playermodels = _globalWorking
       pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
       changepm = 1
-      modelpanel:SetModel( pms[changepm] )
+      if modelpanel != "NULL" and modelpanel != NULL and modelpanel != nil then
+        modelpanel:SetModel( pms[changepm] )
+      end
     end)
 
     openSelector( tmpTable, "yrp_roles", "playermodels", "uniqueID = " .. uniqueID, "closeRolePlayermodels" )
@@ -817,7 +817,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   settingsWindow.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
 
   function settingsWindow.site:Paint()
-    --draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), g_yrp.colors.panel )
+    --draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), _yrp.colors.panel )
   end
 
   -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS

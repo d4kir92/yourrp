@@ -1,7 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local yrp_lang = yrp_lang or {}
-local yrp_all_lang = yrp_all_lang or {}
+local yrp_lang = {}
+local yrp_all_lang = {}
 
 function add_language()
 	local tmp = {}

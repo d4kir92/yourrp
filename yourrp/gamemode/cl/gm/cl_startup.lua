@@ -247,7 +247,7 @@ function openSingleSelector( table )
   frame:SetPos( ScrW2() - shopsize/2, ScrH2() - shopsize/2 )
   frame:SetTitle( lang_string( "itemMenu" ) )
   function frame:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
   end
 
   local PanelSelect = createD( "DPanel", frame, shopsize - ctr( 20 ), shopsize - ctr( 100 ), ctr( 10 ), ctr( 100 ) )

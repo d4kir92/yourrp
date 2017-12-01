@@ -83,13 +83,16 @@ function paintPanel( derma, pw, ph )
   paintBr( pw, ph, _brC )
 end
 
-function paintInv( derma, pw, ph, text )
+function paintInv( derma, pw, ph, text, text2 )
   draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 150 ) )
 
   local _brC = Color( 255, 255, 255, 255 )
   paintBr( pw, ph, _brC )
 
-  draw.SimpleTextOutlined( text, "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  draw.SimpleTextOutlined( text, "DermaDefault", ctr( 15 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  if text2 != nil then
+    draw.SimpleTextOutlined( text2, "DermaDefault", ctr( 15 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
 end
 
 function createD( derma, parent, w, h, x, y )
@@ -107,12 +110,37 @@ function createD( derma, parent, w, h, x, y )
   return tmpD
 end
 
-g_yrp.colors = {}
-g_yrp.colors.dbackground = Color( 0, 0, 0, 254 )
-g_yrp.colors.dprimary = Color( 40, 40, 40, 255 )
-g_yrp.colors.dprimaryBG = Color( 20, 20, 20, 255 )
-g_yrp.colors.dsecondary = Color( 0, 33, 113, 255 )
-g_yrp.colors.dsecondaryH = Color( 0, 33+50, 113+50, 255 )
+local _yrp_derma = {}
+_yrp_derma.colors = {}
+_yrp_derma.colors.dbackground = Color( 0, 0, 0, 254 )
+_yrp_derma.colors.dprimary = Color( 40, 40, 40, 255 )
+_yrp_derma.colors.dprimaryBG = Color( 20, 20, 20, 255 )
+_yrp_derma.colors.dsecondary = Color( 0, 33, 113, 255 )
+_yrp_derma.colors.dsecondaryH = Color( 0, 33+50, 113+50, 255 )
+_yrp_derma.colors.header = Color( 0, 255, 0, 200 )
+_yrp_derma.colors.font = Color( 255, 255, 255, 255 )
+
+function get_dbg_col()
+  return _yrp_derma.colors.dbackground
+end
+function get_dp_col()
+  return _yrp_derma.colors.dprimary
+end
+function get_dpbg_col()
+  return _yrp_derma.colors.dprimaryBG
+end
+function get_ds_col()
+  return _yrp_derma.colors.dsecondary or Color( 0, 0, 0, 255 )
+end
+function get_dsbg_col()
+  return _yrp_derma.colors.dsecondaryH
+end
+function get_header_col()
+  return _yrp_derma.colors.header
+end
+function get_font_col()
+  return _yrp_derma.colors.font
+end
 
 function getMDMode()
   if tonumber( HudV("mdpm") ) == 0 then
@@ -180,7 +208,7 @@ function colorToMode( colTab )
 end
 
 function addMDColor( name, _color )
-  g_yrp.colors[name] = _color
+  _yrp_derma.colors[name] = _color
 end
 
 function getMDPCol()
@@ -201,12 +229,16 @@ function getMDSColor()
   return colorToMode( tmp )
 end
 
+function get_color( string )
+  return _yrp_derma.colors[string]
+end
+
 function addColor( string, r, g, b, a )
-	g_yrp.colors[string] = {}
-	g_yrp.colors[string].r = r
-	g_yrp.colors[string].g = g
-	g_yrp.colors[string].b = b
-	g_yrp.colors[string].a = a
+	_yrp_derma.colors[string] = {}
+	_yrp_derma.colors[string].r = r
+	_yrp_derma.colors[string].g = g
+	_yrp_derma.colors[string].b = b
+	_yrp_derma.colors[string].a = a
 end
 
 addColor( "epicBlue", 23, 113, 240, 100 )
@@ -265,14 +297,16 @@ end
 
 function paintMDBackground( derma, pw, ph )
 	if derma:IsHovered() then
-		draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondaryH )
+		draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
 	else
-		draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondary )
+		draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
 	end
 end
 
 function createMDMenu( parent, w, h, x, y )
 	local tmp = createD( "DFrame", parent, w, h, x, y )
+  tmp:ShowCloseButton( true )
+  tmp:SetDraggable( true )
   tmp:SetTitle( "" )
   tmp.sites = {}
   tmp.cat = {}
@@ -292,7 +326,7 @@ function createMDMenu( parent, w, h, x, y )
 
 	tmp.sitepanel = createD( "DPanel", tmp, (ScrH()*5)/4, ScrH() - ctr( 100 ), ScrW2() - ( (ScrH()*5)/4 )/2, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dprimaryBG )
+		draw.RoundedBox( 0, 0, 0, pw, ph, get_dpbg_col() )
 	end
 
 	function tmp:SwitchToSite( _hook )
@@ -305,11 +339,11 @@ function createMDMenu( parent, w, h, x, y )
 	function tmp:openMenu()
 		self.menu = createD( "DPanel", self, ScrW(), ScrH(), 0, 0 )
 		function self.menu:Paint( pw, ph )
-			draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dbackground )
-			draw.RoundedBox( 0, 0, 0, ctr( 500 ), ph, g_yrp.colors.dprimary )
+			draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
+			draw.RoundedBox( 0, 0, 0, ctr( 500 ), ph, get_dp_col() )
 
 			surface.SetDrawColor( 255, 255, 255, 255 )
-	  	surface.SetMaterial( g_yrp.materials[g_yrp.design.mode].burger	)
+	  	surface.SetMaterial( get_icon_burger_menu()	)
 	  	surface.DrawTexturedRect( ctr( 15+10 ), ctr( 15+10 ), ctr( 50 ), ctr( 50 ) )
 
 			draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 100 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -335,7 +369,7 @@ function createMDMenu( parent, w, h, x, y )
 					tmp2.site = string.upper( w.site )
 					function tmp2:Paint( pw, ph )
 						if tmp.cursite == self.site then
-							draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondaryH )
+							draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
 						else
 							paintMDBackground( self, pw, ph )
 						end
@@ -358,6 +392,7 @@ function createMDMenu( parent, w, h, x, y )
 			end
 		end
 	end
+
 	return tmp
 end
 
@@ -372,11 +407,11 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 	end
   tmp:SetText( "" )
 	function tmp:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, g_yrp.colors.dsecondary )
+		draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
 		if tmp.value == opt1 then
-			draw.RoundedBox( 0, 0, 0, pw/2, ph, g_yrp.colors.dsecondaryH )
+			draw.RoundedBox( 0, 0, 0, pw/2, ph, get_dsbg_col() )
 		elseif tmp.value == opt2 then
-			draw.RoundedBox( 0, pw/2, 0, pw/2, ph, g_yrp.colors.dsecondaryH )
+			draw.RoundedBox( 0, pw/2, 0, pw/2, ph, get_dsbg_col() )
 		end
 		draw.SimpleTextOutlined( lang_string( "dark" ), "HudBars", 1*(pw/4), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		draw.SimpleTextOutlined( lang_string( "light" ), "HudBars", 3*(pw/4), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -387,7 +422,7 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 		elseif self.value == self.opt2 then
 			self.value = self.opt1
 		end
-		g_yrp.design.mode = tostring( self.value )
+		_yrp_derma.design.mode = tostring( self.value )
 
 		if tostring( self.value ) == "dark" then
 			dbUpdateHUD( "mdpm", 0 )

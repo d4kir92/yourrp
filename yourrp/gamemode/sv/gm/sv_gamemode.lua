@@ -77,8 +77,12 @@ end
 function GM:PlayerLoadout( ply )
   ply:SetNWBool( "cuffed", false )
 
-  ply:Give( "yrp_key" )
-  ply:Give( "yrp_unarmed" )
+  --if !is_in_inventory( ply , "yrp_key" ) then
+    ply:Give( "yrp_key" )
+  --end
+  --if !is_in_inventory( ply , "yrp_unarmed" ) then
+    ply:Give( "yrp_unarmed" )
+  --end
 
   addKeys( ply )
 
@@ -131,7 +135,9 @@ function GM:PlayerLoadout( ply )
   end
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
-    ply:Give( "yrp_arrest_stick" )
+    --if !is_in_inventory( ply , "yrp_arrest_stick" ) then
+      ply:Give( "yrp_arrest_stick" )
+    --end
   end
 
   teleportToSpawnpoint( ply )

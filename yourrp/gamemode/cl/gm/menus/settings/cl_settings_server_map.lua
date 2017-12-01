@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_server_map.lua
-
 local _groups = {}
 net.Receive( "getMapList", function( len )
   local _tmpBool = net.ReadBool()
@@ -81,7 +79,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
 
   function settingsWindow.site:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
   local _mapPanel = createVGUI( "DPanel", settingsWindow.site, 256, 256, 10, 10 )
   local _mapPNG = getMapPNG()
@@ -93,7 +91,7 @@ hook.Add( "open_server_map", "open_server_map", function()
 
   local _mapName = createVGUI( "DPanel", settingsWindow.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
-    draw.RoundedBox( 0, 0,0, pw, ph, g_yrp.colors.dprimary )
+    draw.RoundedBox( 0, 0,0, pw, ph, get_dp_col() )
     draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. db_sql_str2( string.lower( game.GetMap() ) ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
@@ -122,7 +120,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpFrame:Center()
     tmpFrame:SetTitle( "" )
     function tmpFrame:Paint( pw, ph )
-      draw.RoundedBox( 0, 0,0, pw, ph, g_yrp.colors.dbackground )
+      draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
       draw.SimpleTextOutlined( lang_string( "spawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "createspawnpointonyou" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "selectgroup" ) .. ":", "sef", ctr( 10 ), ctr( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )

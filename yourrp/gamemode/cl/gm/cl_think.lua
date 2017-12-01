@@ -27,12 +27,7 @@ function useFunction( string )
 		elseif string == "openCharMenu" and isNoMenuOpen() then
 			openCharacterSelection()
 		elseif string == "openInventory" then
-			if yrp_inventory != nil then
-				yrp_inventory.window:Remove()
-				yrp_inventory = nil
-			elseif isNoMenuOpen() then
-				open_inventory()
-			end
+			open_inventory()
 		elseif string == "openRoleMenu" then
 			if roleMenuWindow != nil then
 				roleMenuWindow:Remove()
@@ -48,11 +43,10 @@ function useFunction( string )
 				openBuyMenu()
 			end
 		elseif string == "openSettings" then
-			if settingsWindow != nil then
-				settingsWindow:Remove()
-				settingsWindow = nil
-			elseif isNoMenuOpen() then
+			if isNoMenuOpen() then
 				openSettings()
+			else
+				closeSettings()
 			end
 		elseif string == "ViewChange" then
 			_thirdpersonC = _thirdpersonC + 1

@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_client_hud.lua
-
 function createDerma( art, parent, w, h, x, y )
   tmpDerma = vgui.Create( art, parent )
   tmpDerma:SetSize( ctr(w), ctr(h) )
@@ -132,7 +130,7 @@ function changeHudElement( parent, tmp, textPre )
     function _settingsFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
     end
-    local tmpToggle = createDerma( "DCheckBox", _settingsFrame, 50, 50, 0, 0 )
+    local tmpToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), 0, 0 )
     local tmpToggleChecked = -1
     if tonumber( HudV(tmp .. "to") ) == 0 then
       tmpToggleChecked = false
@@ -346,15 +344,15 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
   --sheet:AddSheet( lang_string( "hud" ), cl_hudPanel, "icon16/photo.png" )
   function settingsWindow.site:Paint( w, h )
-    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), g_yrp.colors.panel )
+    --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), _yrp.colors.panel )
   end
 
-  local changeHudButton = createDerma( "DButton", settingsWindow.site, 470, 50, 0, 0 )
+  local changeHudButton = createD( "DButton", settingsWindow.site, ctr( 470 ), ctr( 50 ), 0, 0 )
   changeHudButton:SetText( lang_string( "changehud" ) )
   function changeHudButton:DoClick()
     settingsWindow:Close()
 
-    local changeHudWindow = createDerma( "DFrame", nil, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), 0, 0 )
+    local changeHudWindow = createD( "DFrame", nil, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), 0, 0 )
     changeHudWindow:SetDraggable( false )
     changeHudWindow:SetTitle( "" )
     changeHudWindow:ShowCloseButton( false )

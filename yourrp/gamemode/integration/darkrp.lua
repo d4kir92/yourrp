@@ -5,7 +5,7 @@ DarkRP.disabledDefaults = {}
 DarkRP.disabledDefaults.modules = {}
 DarkRP.disabledDefaults.modules.hitmenu = true
 
-g_yrp._not = "If you see this, please test all your darkrp addons, if some addon is not fully working, please tell D4KiR!"
+DarkRP._not = "If you see this, please test all your darkrp addons, if some addon is not fully working, please tell D4KiR!"
 
 AddCSLuaFile( "darkrp/fn.lua" )
 AddCSLuaFile( "darkrp/config/config.lua" )
@@ -36,6 +36,6 @@ function Vector:isInSight( filter, ply )
   --Description: Decides whether the vector could be seen by the player if they
   --             were to look at it.
   printGM( "darkrp", "isInSight( filter, ply )" )
-  printGM( "darkrp", g_yrp._not )
+  printGM( "darkrp", DarkRP._not )
   return false, Vector( 0, 0, 0 )
 end

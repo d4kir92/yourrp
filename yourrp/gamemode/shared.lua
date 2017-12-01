@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 ]]--
 
-g_yrp = {}
+_yrp = {}
 
 function add_luas( string )
   AddCSLuaFile( string )
@@ -26,4 +26,4 @@ add_luas( "apis/api_includes.lua" )
 
 add_luas( "shared/sh_includes.lua" )
 
-add_luas( "integration/darkrp.lua" )
+--add_luas( "integration/darkrp.lua" )

@@ -1,6 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---db_players.lua
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
 
 local _db_name = "yrp_players"
 
@@ -62,18 +63,20 @@ end
 function set_role( ply, rid )
   local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
   local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )
-  _gid = _gid[1].groupID
-  local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
-  local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
-  local _result4 = db_update( "yrp_characters", "skin = 0, bg0 = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0, bg5 = 0, bg6 = 0, bg7 = 0", "uniqueID = " .. ply:CharID() )
-  ply:SetSkin( 0 )
-  for i=0, 7 do
-    ply:SetBodygroup( i, 0 )
+  if _gid != nil then
+    _gid = _gid[1].groupID
+    local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
+    local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+    local _result4 = db_update( "yrp_characters", "skin = 0, bg0 = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0, bg5 = 0, bg6 = 0, bg7 = 0", "uniqueID = " .. ply:CharID() )
+    ply:SetSkin( 0 )
+    for i=0, 7 do
+      ply:SetBodygroup( i, 0 )
+    end
   end
 end
 
 function set_role_values( ply )
-  if g_db_loaded then
+  if yrp_db_loaded() then
     local rolTab = ply:GetRolTab()
     local groTab = ply:GetGroTab()
     local ChaTab = ply:GetChaTab()
@@ -91,6 +94,9 @@ function set_role_values( ply )
       printGM( "note", "No role or/and no character -> Suicide")
       ply:KillSilent()
     end
+
+    --[RE]--check_inv( ply, ply:CharID() )
+
     if worked( rolTab, "set_role_values rolTab" ) then
       ply:SetModelScale( rolTab.playermodelsize, 0 )
       ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
@@ -113,7 +119,9 @@ function set_role_values( ply )
       local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
       for k, swep in pairs( tmpSWEPTable ) do
         if swep != nil and swep != NULL and swep != "" then
-          ply:Give( swep )
+          --if !is_in_inventory( ply, swep ) then
+            ply:Give( swep )
+          --end
         end
       end
     else
@@ -264,6 +272,7 @@ util.AddNetworkString( "giveRole" )
 net.Receive( "giveRole", function( len, ply )
   local _tmpSteamID = net.ReadString()
   local uniqueIDRole = net.ReadInt( 16 )
+  RemRolVals( ply )
   set_role( ply, uniqueIDRole )
   set_role_values( ply )
 end)

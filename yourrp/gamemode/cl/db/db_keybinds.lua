@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local yrp_keybinds = yrp_keybinds or {}
+local yrp_keybinds = {}
 
 local _db_name = "yrp_keybinds"
 

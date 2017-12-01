@@ -1,6 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---db_role_whitelist.lua
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
 
 local _db_name = "yrp_role_whitelist"
 

@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-yrpChat = yrpChat or {}
+yrpChat = {}
 if yrpChat.window == nil then
   yrpChat.window = createVGUI( "DFrame", nil, 100, 100, 100, 100 )
   yrpChat.window:SetTitle( "" )

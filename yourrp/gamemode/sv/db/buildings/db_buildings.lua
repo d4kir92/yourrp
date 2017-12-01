@@ -1,6 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---db_map.lua
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
 
 local _db_name = "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors"
 sql_add_column( _db_name, "buildingID", "INTEGER DEFAULT -1" )

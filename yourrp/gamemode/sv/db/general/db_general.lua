@@ -1,5 +1,8 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
+
 util.AddNetworkString( "db_update_hunger" )
 util.AddNetworkString( "db_update_thirst" )
 util.AddNetworkString( "db_update_stamina" )
@@ -43,11 +46,12 @@ add_first_entry( 0 )
 --db_drop_table( "yrp_general")
 --db_is_empty( _db_name )
 
+local _name_advert = ""
 function get_advert_name()
   local _tmp = db_select( _db_name, "name_advert", nil )
   if worked( _tmp, "get_advert_name failed" ) then
     _tmp = _tmp[1]
-    g_name_advert = _tmp.value
+    _name_advert = _tmp.value
   end
 end
 get_advert_name()
@@ -120,8 +124,8 @@ util.AddNetworkString( "updateGeneral" )
 util.AddNetworkString( "updateAdvert" )
 
 net.Receive( "updateAdvert", function( len, ply )
-  g_name_advert = net.ReadString()
-  db_update( "yrp_general", "name_advert = '" .. g_name_advert .. "'", nil )
+  _name_advert = net.ReadString()
+  db_update( "yrp_general", "name_advert = '" .. _name_advert .. "'", nil )
 end)
 
 net.Receive( "getGamemodename", function( len, ply )

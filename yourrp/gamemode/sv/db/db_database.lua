@@ -4,8 +4,9 @@ util.AddNetworkString( "dbGetGeneral" )
 util.AddNetworkString( "dbGetQuestions" )
 util.AddNetworkString( "hardresetdatabase")
 
-local yrp_db = yrp_db or {}
+local yrp_db = {}
 yrp_db.version = 1
+yrp_db.loaded = false
 
 function retry_load_database()
   printGM( "db", "retry Load Database in 5sec" )
@@ -18,10 +19,11 @@ function retry_load_database()
   end)
 end
 
+local _db_reseted = false
 function reset_database()
   printGM( "db", "reset Database" )
 
-  g_db_reseted = true
+  _db_reseted = true
 
   local _dbs = {}
   table.insert( _dbs, "yrp_general" )
@@ -39,6 +41,7 @@ function reset_database()
   table.insert( _dbs, "yrp_characters" )
   table.insert( _dbs, "yrp_vehicles" )
   table.insert( _dbs, "yrp_inventory" )
+  table.insert( _dbs, "yrp_equipment" )
 
   for k, v in pairs( _dbs ) do
     db_drop_table( v )
@@ -73,6 +76,10 @@ net.Receive( "hardresetdatabase", function( len, ply )
   end
 end)
 
+function yrp_db_loaded()
+  return yrp_db.loaded
+end
+
 function db_init_database()
   hr_pre()
   printGM( "db", "LOAD DATABASES" )
@@ -93,7 +100,7 @@ function db_init_database()
   init_database( "yrp_vehicles" )
   init_database( "yrp_inventory" )
 
-  g_db_loaded = true
+  yrp_db.loaded = true
 
   printGM( "db", "DONE Loading DATABASES" )
   hr_pos()
@@ -107,7 +114,6 @@ include( "players/db_players.lua" )
 include( "characters/db_characters.lua" )
 include( "groups/db_groups.lua" )
 include( "roles/db_roles.lua" )
-
 include( "map/db_map.lua" )
 include( "money/db_money.lua" )
 include( "buildings/db_buildings.lua" )
@@ -117,4 +123,5 @@ include( "restriction/db_restriction.lua" )
 include( "vehicles/db_vehicles.lua" )
 include( "jail/db_jail.lua" )
 
-include( "inventory/db_inventory.lua" )
+--include( "items/db_give.lua" )
+--include( "items/db_inventory.lua" )

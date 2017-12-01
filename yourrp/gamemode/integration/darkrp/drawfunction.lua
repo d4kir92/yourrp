@@ -1,7 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local function safeText(text)
-    return string.match(text, "^#([a-zA-Z_]+)$") and text .. " " or text
+    return text
 end
 
 DarkRP.deLocalise = safeText

@@ -1,7 +1,5 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_settings_server_money.lua
-
 net.Receive( "getMoneyTab", function()
   local _tmpTable = net.ReadTable()
 
@@ -49,7 +47,7 @@ hook.Add( "open_server_money", "open_server_money", function()
   settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
 
   function settingsWindow.site:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, g_yrp.colors.dbackground )
+    draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
 
     draw.SimpleTextOutlined( lang_string( "moneypre" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 

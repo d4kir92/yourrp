@@ -4,7 +4,7 @@ local _hudVersion = 2
 
 local dbNameHUD = "yrp_cl_hud"
 
-local yrp_cl_db = yrp_cl_db or {}
+local yrp_cl_db = {}
 yrp_cl_db["_loaded"] = false
 
 function HudV( name )

@@ -4,9 +4,9 @@ local Player = FindMetaTable( "Player" )
 
 function Player:GetPlyTab()
   if SERVER then
-    if worked( self:SteamID(), "SteamID fail" ) then
+    if worked( self:SteamID(), "SteamID fail", true ) then
       local yrp_players = db_select( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
-      if worked( yrp_players, "GetPlyTab fail" ) then
+      if worked( yrp_players, "GetPlyTab fail", true ) then
         self.plytab = yrp_players[1]
         return self.plytab
       end
@@ -22,10 +22,10 @@ end
 function Player:GetChaTab()
   if SERVER then
     local _tmp = self:GetPlyTab()
-    if worked( _tmp, "GetPlyTab in GetChaTab" ) then
-      if worked( _tmp.CurrentCharacter, "_tmp.CurrentCharacter in GetChaTab" ) then
+    if worked( _tmp, "GetPlyTab in GetChaTab", true ) then
+      if worked( _tmp.CurrentCharacter, "_tmp.CurrentCharacter in GetChaTab", true ) then
         local yrp_characters = db_select( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
-        if worked( yrp_characters, "yrp_characters GetChaTab" ) then
+        if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
           self.chatab = yrp_characters[1]
           return self.chatab
         end
@@ -42,10 +42,10 @@ end
 function Player:GetRolTab()
   if SERVER then
     local yrp_characters = self:GetChaTab()
-    if worked( yrp_characters, "yrp_characters in GetRolTab" ) then
-      if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab" ) then
+    if worked( yrp_characters, "yrp_characters in GetRolTab", true ) then
+      if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true ) then
         local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
-        if worked( yrp_roles, "yrp_roles GetRolTab" ) then
+        if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
           self.roltab = yrp_roles[1]
           return self.roltab
         end
@@ -62,10 +62,10 @@ end
 function Player:GetGroTab()
   if SERVER then
     local yrp_characters = self:GetChaTab()
-    if worked( yrp_characters, "yrp_characters in GetGroTab" ) then
-      if worked( yrp_characters.groupID, "yrp_characters.groupID in GetGroTab" ) then
+    if worked( yrp_characters, "yrp_characters in GetGroTab", true ) then
+      if worked( yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true ) then
         local yrp_groups = db_select( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
-        if worked( yrp_groups, "yrp_groups GetGroTab" ) then
+        if worked( yrp_groups, "yrp_groups GetGroTab", true ) then
           self.grotab = yrp_groups[1]
           return self.grotab
         end
@@ -82,7 +82,7 @@ end
 function Player:CharID()
   if SERVER then
     local char = self:GetChaTab()
-    if worked( char, "char CharID" ) then
+    if worked( char, "char CharID", true ) then
       self.charid = char.uniqueID
       return self.charid
     end
@@ -99,12 +99,12 @@ function Player:CheckMoney()
     timer.Simple( 4, function()
       local _m = self:GetNWString( "money", 0 )
       local _money = tonumber( _m )
-      if worked( _money, "ply:money CheckMoney" ) and self:CharID() != nil then
+      if worked( _money, "ply:money CheckMoney", true ) and self:CharID() != nil then
         db_update( "yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID() ) --attempt to nil value
       end
       _mb = self:GetNWString( "moneybank", 0 )
       local _moneybank = tonumber( _mb )
-      if worked( _moneybank, "ply:moneybank CheckMoney" ) and self:CharID() != nil then
+      if worked( _moneybank, "ply:moneybank CheckMoney", true ) and self:CharID() != nil then
         db_update( "yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID() )
       end
     end)
@@ -114,11 +114,11 @@ end
 function Player:UpdateMoney()
   if SERVER then
     local money = tonumber( self:GetNWString( "money", 0 ) )
-    if worked( money, "ply:money UpdateMoney" ) then
+    if worked( money, "ply:money UpdateMoney", true ) then
       db_update( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
     end
     local moneybank = tonumber( self:GetNWString( "moneybank", 0 ) )
-    if worked( moneybank, "ply:moneybank UpdateMoney" ) then
+    if worked( moneybank, "ply:moneybank UpdateMoney", true ) then
       db_update( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. self:CharID() )
     end
   end
@@ -127,7 +127,7 @@ end
 function Player:GetPlayerModel()
   if SERVER then
     local yrp_characters = self:GetChaTab()
-    if worked( yrp_characters, "yrp_characters (GetPlayerModel)" ) then
+    if worked( yrp_characters, "yrp_characters (GetPlayerModel)", true ) then
       local pmID = tonumber( yrp_characters.playermodelID )
       local yrp_role = self:GetRolTab()
       local tmp = string.Explode( ",", yrp_role.playermodels )

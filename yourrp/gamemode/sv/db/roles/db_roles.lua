@@ -1,6 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---db_roles.lua
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
 
 local _db_name = "yrp_roles"
 
@@ -259,6 +260,7 @@ function addToWhitelist( SteamID, roleID, groupID, nick )
 end
 
 net.Receive( "promotePlayer", function( len, ply )
+  print("promotePlayer")
   local tmpTargetSteamID = net.ReadString()
 
   local tmpTarget = nil
@@ -269,13 +271,16 @@ net.Receive( "promotePlayer", function( len, ply )
   end
 
   local tmpTableInstructor = ply:GetChaTab()
-  local tmpTableInstructorRole = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+  local tmpTableInstructorRole = ply:GetRolTab() --db_select( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+
+  PrintTable( tmpTableInstructorRole )
 
   local tmpTargetChaTab = tmpTarget:GetChaTab()
 
-  if tonumber( tmpTableInstructorRole[1].instructor ) == 1 then
+  if tonumber( tmpTableInstructorRole.instructor ) == 1 then
     local tmpTableTargetRole = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
-    local tmpTableTargetPromoteRole = db_select( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID )
+    local tmpTableTargetPromoteRole = db_select( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID .. " AND groupID = " .. tmpTableInstructorRole.groupID )
+    PrintTable( tmpTableTargetPromoteRole )
     local tmpTableTargetGroup = db_select( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].groupID )
 
     tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
@@ -310,7 +315,7 @@ net.Receive( "openInteractMenu", function( len, ply )
   local tmpTargetRole = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 
   local tmpT = ply:GetChaTab()
-  local tmpTable = db_select( "yrp_roles", "*", "uniqueID = " .. tmpT.roleID )
+  local tmpTable = ply:GetRolTab()
 
   local tmpBool = false
 
@@ -320,11 +325,11 @@ net.Receive( "openInteractMenu", function( len, ply )
   local tmpDemote = false
   local tmpDemoteName = ""
 
-  if tonumber( tmpTable[1].instructor ) == 1 then
+  if tonumber( tmpTable.instructor ) == 1 then
     tmpBool = true
 
     local tmpSearch = true  --tmpTargetSteamID
-    local tmpTableSearch = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTable[1].prerole )
+    local tmpTableSearch = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTable.prerole )
     if tmpTableSearch != nil then
       local tmpSearchUniqueID = tmpTableSearch[1].prerole
       local tmpCounter = 0

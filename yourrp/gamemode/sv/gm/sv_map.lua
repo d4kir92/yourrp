@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local _map_size = _map_size or {}
+local _map_size = {}
 _map_size.size = 9999999999
 
 _map_size.sizeN = -_map_size.size

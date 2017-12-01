@@ -27,20 +27,21 @@ local hide = {
 	CHudBattery = true,
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
-	CHudCrosshair = true
+	CHudCrosshair = true,
+	CHudVoiceStatus = false
 }
 
 function GM:DrawDeathNotice( x, y )
 	--No Kill Feed
 end
 
-playerready = false
 hook.Add( "HUDShouldDraw", "HideHUD", function( name )
 	if g_VoicePanelList != nil then
 		g_VoicePanelList:SetVisible( false )
 	end
 	if ( hide[ name ] ) then return false end
 end )
+
 --##############################################################################
 
 --##############################################################################
@@ -51,21 +52,37 @@ include( "hud/cl_hud_view.lua" )
 include( "hud/cl_hud_crosshair.lua" )
 --##############################################################################
 
+local _showVoice = false
+function GM:PlayerStartVoice( ply )
+  if ply == LocalPlayer() then
+    _showVoice = true
+  end
+end
+function GM:PlayerEndVoice( ply )
+  if ply == LocalPlayer() then
+    _showVoice = false
+  end
+end
+
 --##############################################################################
-g_yrp.versionCol = Color( 255, 255, 255, 255 )
 function hudVersion()
-	if g_yrp.outdated == nil then
+	if !version_tested() then
 		testVersion()
+	else
+		local _singleplayer = ""
+		if game.SinglePlayer() then
+			_singleplayer = "Singleplayer"
+		end
+		local _alpha = 10
+		if input.IsKeyDown(KEY_F12) or input.IsKeyDown(KEY_F5) then
+			_alpha = 255
+		end
+		local _text = _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version
+		local _color1 = version_color() or Color( 0, 0, 0, 255 )
+		draw.SimpleTextOutlined( _text, "HudVersion", ScrW() - ctr( 70 ), ctr( 60 ), _color1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	end
-	local _singleplayer = ""
-	if game.SinglePlayer() then
-		_singleplayer = "Singleplayer"
-	end
-	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version, "HudVersion", ScrW() - ctr( 70 ), ctr( 60 ), g_yrp.versionCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 end
 --##############################################################################
-
-settingsopen = 0
 
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
@@ -75,6 +92,11 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		HudCrosshair()
 	end
 	HudView()
+
+	--Voice
+	if _showVoice then
+		draw.SimpleTextOutlined( lang_string( "youarespeaking" ), "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+	end
 
 	hudVersion()
 end)

@@ -1,6 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---db_restriction.lua
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
 
 local _db_name = "yrp_restrictions"
 
@@ -13,6 +14,7 @@ sql_add_column( _db_name, "effects", "INT DEFAULT 0" )
 sql_add_column( _db_name, "npcs", "INT DEFAULT 0" )
 sql_add_column( _db_name, "props", "INT DEFAULT 0" )
 sql_add_column( _db_name, "ragdolls", "INT DEFAULT 0" )
+sql_add_column( _db_name, "noclip", "INT DEFAULT 0" )
 
 if db_select( _db_name, "*", "usergroup = 'superadmin'" ) == nil then
   db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1" )
@@ -119,6 +121,19 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a ragdoll." )
+      return false
+    end
+  end
+end)
+
+hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
+  local _tmp = db_select( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+  if worked( _tmp, "PlayerNoClip failed" ) then
+    _tmp = _tmp[1]
+    if tobool( _tmp.noclip ) then
+      return true
+    else
+      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )
       return false
     end
   end
