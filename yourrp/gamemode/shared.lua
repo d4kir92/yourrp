@@ -26,4 +26,4 @@ add_luas( "apis/api_includes.lua" )
 
 add_luas( "shared/sh_includes.lua" )
 
---add_luas( "integration/darkrp.lua" )
+add_luas( "integration/darkrp.lua" )

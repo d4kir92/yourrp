@@ -41,7 +41,7 @@ local _cl_errors = {}
 function update_error_table_cl()
   local _read = file.Read( "clientside_errors.txt", "GAME" )
 
-	if worked( _read, "_read failed" ) then
+	if worked( _read, "_read failed", true ) then
 		local _file_exists = check_yrp_cl_errors( _read )
 		if !_file_exists then
 			first_time_error = true

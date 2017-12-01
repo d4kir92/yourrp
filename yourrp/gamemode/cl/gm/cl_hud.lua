@@ -52,6 +52,8 @@ include( "hud/cl_hud_view.lua" )
 include( "hud/cl_hud_crosshair.lua" )
 --##############################################################################
 
+Material("voice/icntlk_pl"):SetFloat("$alpha", 0)
+
 local _showVoice = false
 function GM:PlayerStartVoice( ply )
   if ply == LocalPlayer() then
@@ -86,11 +88,9 @@ end
 
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
+	HudPlayer()
+	HudCrosshair()
 
-	if GetConVar( "yrp_cl_hud" ):GetInt() == 1 and LocalPlayer():GetNWBool( "toggle_hud", false ) then
-		HudPlayer()
-		HudCrosshair()
-	end
 	HudView()
 
 	--Voice
