@@ -132,6 +132,8 @@ function set_role_values( ply )
     if groTab != nil then
       ply:SetNWString( "groupName", groTab.groupID )
       ply:SetNWString( "groupUniqueID", groTab.uniqueID )
+      ply:SetNWString( "groupColor", groTab.color )
+      ply:SetTeam( tonumber( groTab.uniqueID ) )
     else
       printGM( "note", "No group selected -> Suicide" )
       ply:KillSilent()

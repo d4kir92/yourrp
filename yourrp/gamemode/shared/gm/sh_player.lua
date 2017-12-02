@@ -212,5 +212,27 @@ function Player:Nick()
 end
 
 function Player:Team()
-  return self:GetNWString( "groupName", "NO TEAM" )
+  return tonumber( self:GetNWString( "groupUniqueID", "-1" ) )
 end
+
+timer.Simple( 1, function()
+  function team.GetName( index )
+    for k, v in pairs( player.GetAll() ) do
+      if v:Team() == index then
+        return v:GetNWString( "groupName", "NO TEAM" )
+      end
+    end
+    return "FAIL"
+  end
+
+  function team.GetColor( index )
+    for k, v in pairs( player.GetAll() ) do
+      if v:Team() == index then
+        local _color = v:GetNWString( "groupColor", "255,0,0" )
+        _color = string.Explode( ",", _color )
+        return Color( _color[1], _color[2], _color[3] )
+      end
+      return Color( 255, 0, 0 )
+    end
+  end
+end)
