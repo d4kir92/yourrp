@@ -26,7 +26,6 @@ net.Receive( "getRoleWhitelist", function( len )
     end
   end
 
-
   local _buttonAdd = createVGUI( "DButton", settingsWindow.site, 300, 50, 10 + 1500 + 10, 10 )
   _buttonAdd:SetText( lang_string( "addentry" ) )
   function _buttonAdd:DoClick()

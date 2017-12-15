@@ -95,7 +95,17 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 
 	--Voice
 	if _showVoice then
-		draw.SimpleTextOutlined( lang_string( "youarespeaking" ), "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		local _voice_text = lang_string( "youarespeaking" ) .. " ("
+		if LocalPlayer():GetNWInt( "speak_channel", -1 ) == 1 then
+			_voice_text = _voice_text .. lang_string( "speakgroup" )
+		elseif LocalPlayer():GetNWInt( "speak_channel", -1 ) == 2 then
+			_voice_text = _voice_text .. lang_string( "speakglobal" )
+		else
+			_voice_text = _voice_text .. lang_string( "speaklocal" )
+		end
+		_voice_text = _voice_text .. ")"
+
+		draw.SimpleTextOutlined( _voice_text, "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 
 	hudVersion()

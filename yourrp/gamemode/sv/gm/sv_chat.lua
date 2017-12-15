@@ -108,11 +108,19 @@ function do_suicide( sender )
   return ""
 end
 
-function show_tag( sender )
-  if !sender:GetNWBool( "tag", false ) then
-    sender:SetNWBool( "tag", true )
+function show_tag_dev( sender )
+  if !sender:GetNWBool( "tag_dev", false ) then
+    sender:SetNWBool( "tag_dev", true )
   else
-    sender:SetNWBool( "tag", false )
+    sender:SetNWBool( "tag_dev", false )
+  end
+  return ""
+end
+function show_tag_admin( sender )
+  if !sender:GetNWBool( "tag_admin", false ) then
+    sender:SetNWBool( "tag_admin", true )
+  else
+    sender:SetNWBool( "tag_admin", false )
   end
   return ""
 end
@@ -271,8 +279,13 @@ function GM:PlayerSay( sender, text, teamChat )
     return ""
   end
 
-  if paket.command == "tag" then
-    show_tag( sender )
+  if paket.command == "tag_dev" then
+    show_tag_dev( sender )
+    return ""
+  end
+
+  if paket.command == "tag_admin" then
+    show_tag_admin( sender )
     return ""
   end
 

@@ -21,6 +21,14 @@ function teleportToReleasepoint( ply )
     tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
     _tmp = string.Explode( ",", _tmpTele[1].angle )
     ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+  else
+    local _str = lang_string( "noreleasepoint" )
+    printGM( "note", _str )
+
+    net.Start( "yrp_noti" )
+      net.WriteString( "noreleasepoint" )
+      net.WriteString( "" )
+    net.Broadcast()
   end
 end
 
@@ -32,6 +40,14 @@ function teleportToJailpoint( ply )
     tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
     _tmp = string.Explode( ",", _tmpTele[1].angle )
     ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+  else
+    local _str = lang_string( "nojailpoint" )
+    printGM( "note", _str )
+
+    net.Start( "yrp_noti" )
+      net.WriteString( "nojailpoint" )
+      net.WriteString( "" )
+    net.Broadcast()
   end
 end
 
@@ -63,8 +79,37 @@ net.Receive( "dbAddJail", function( len, ply )
   local _tmpTable = db_select( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
   for k, v in pairs( player.GetAll() ) do
     if v:SteamID() == _SteamID then
-      ply:SetNWBool( "inJail", true )
-      ply:SetNWInt( "jailtime", _tmpTable[1].time )
+      printGM( "note", v:Nick() .. " added to jail")
+      v:SetNWBool( "inJail", true )
+      v:SetNWInt( "jailtime", _tmpTable[1].time )
+    end
+  end
+end)
+
+util.AddNetworkString( "dbRemJail" )
+
+net.Receive( "dbRemJail", function( len, ply )
+  local _uid = net.ReadString()
+
+  local _res = db_delete_from( "yrp_jail", "uniqueID = " .. _uid )
+
+  local _SteamID = net.ReadString()
+  local _tmpTable = db_select( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
+
+  local _in_jailboard = db_select( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
+  if _in_jailboard != nil then
+    for k, v in pairs( player.GetAll() ) do
+      if v:SteamID() == _SteamID then
+        v:SetNWBool( "inJail", true )
+        v:SetNWInt( "jailtime", _in_jailboard[1].time )
+      end
+    end
+  else
+    for k, v in pairs( player.GetAll() ) do
+      if v:SteamID() == _SteamID then
+        v:SetNWBool( "inJail", false )
+        v:SetNWInt( "jailtime", 0 )
+      end
     end
   end
 end)

@@ -141,7 +141,6 @@ end
 
 local delay = 0
 
-local _tmp3P = 0
 function HudPlayer()
   local ply = LocalPlayer()
   local weapon = ply:GetActiveWeapon()
@@ -153,7 +152,7 @@ function HudPlayer()
 
         --Tooltip
         if tonumber( HudV("ttto") ) == 1 then
-          local _abstand = ctr( HudV("ttsf") ) * 3.5
+          local _abstand = ctr( HudV("ttsf") ) * 3.8
           drawHUDElement( "tt", nil, nil, nil, nil, nil )
 
           draw.SimpleTextOutlined( lang_string( "tooltip" ) .. ":", "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -162,9 +161,12 @@ function HudPlayer()
           draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_buy" ) ) ) .. "] " .. lang_string( "buymenu" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_settings" ) ) ) .. "] " .. lang_string( "settings" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "toggle_mouse" ) ) ) .. "] " .. lang_string( "guimouse" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "toggle_view" ) ) ) .. "] " .. lang_string( "changeview" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "toggle_map" ) ) ) .. "] " .. lang_string( "map" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_inventory" ) ) ) .. "] " .. lang_string( "inventory" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "view_zoom_out" ) ) ) .. "] " .. lang_string( "viewzoomout" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "view_zoom_in" ) ) ) .. "] " .. lang_string( "viewzoomin" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "toggle_map" ) ) ) .. "] " .. lang_string( "map" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_inventory" ) ) ) .. "] " .. lang_string( "inventory" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 9*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "speak_next" ) ) ) .. "] " .. lang_string( "voicenext" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 10*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "speak_prev" ) ) ) .. "] " .. lang_string( "voiceprev" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( 11*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
         end
         if GetConVar( "yrp_cl_hud" ):GetInt() == 1 and LocalPlayer():GetNWBool( "toggle_hud", false ) then
 
@@ -209,7 +211,10 @@ function HudPlayer()
 
           --Money
           local _money = tonumber( ply:GetNWString( "money", "0" ) )
-          local _motext = ply:GetNWString( "moneyPre", "" ) .. roundMoney( _money, 1 ) .. ply:GetNWString( "moneyPost", "" )
+          local _pre = ply:GetNWString( "moneyPre", "" )
+          local _pos = ply:GetNWString( "moneyPost", "" )
+          _money = roundMoney( _money, 1 )
+          local _motext = _pre .. tostring(_money) .. _pos
           local _capital = tonumber( ply:GetNWInt( "capital", 0 ) )
           if _capital > 0 then
             _motext = _motext .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
@@ -412,76 +417,68 @@ function HudPlayer()
             end
           end
 
+        end
+        --Status
+        local _sttext = ""
+        local _showStatus = false
+        if ply:GetNWBool( "cuffed" ) then
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
+          end
+          _sttext = _sttext .. "Cuffed"
+          _showStatus = true
+        end
+        if ply:GetNWInt( "hunger", 100 ) < 20 then
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
+          end
+          _sttext = _sttext .. "Hungry"
+          _showStatus = true
+        end
+        if ply:GetNWInt( "thirst", 100 ) < 20 then
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
+          end
+          _sttext = _sttext .. "Thirsty"
+          _showStatus = true
+        end
+        if ply:GetNWBool( "inJail", false ) then
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
+          end
+          _sttext = _sttext .. lang_string( "jail" ) .. ": " .. ply:GetNWInt( "jailtime", 0 )
+          _showStatus = true
+        end
+        if tonumber( HudV("stto") ) == 1 and _sttext != "" then
+          drawHUDElement( "st", nil, nil, _sttext, nil, nil )
+        end
 
-          --Status
-          local _sttext = ""
-          local _showStatus = false
-          if ply:GetNWBool( "cuffed" ) then
-            if _sttext != "" then
-              _sttext = _sttext .. ", "
-            end
-            _sttext = _sttext .. "Cuffed"
-            _showStatus = true
-          end
-          if ply:GetNWInt( "hunger", 100 ) < 20 then
-            if _sttext != "" then
-              _sttext = _sttext .. ", "
-            end
-            _sttext = _sttext .. "Hungry"
-            _showStatus = true
-          end
-          if ply:GetNWInt( "thirst", 100 ) < 20 then
-            if _sttext != "" then
-              _sttext = _sttext .. ", "
-            end
-            _sttext = _sttext .. "Thirsty"
-            _showStatus = true
-          end
-          if ply:GetNWBool( "inJail", false ) then
-            if _sttext != "" then
-              _sttext = _sttext .. ", "
-            end
-            _sttext = _sttext .. lang_string( "jail" ) .. ": " .. ply:GetNWInt( "jailtime", 0 )
-            _showStatus = true
-          end
-          if tonumber( HudV("stto") ) == 1 and _sttext != "" then
-            drawHUDElement( "st", nil, nil, _sttext, nil, nil )
-          end
+        --Voting
+        if tonumber( HudV("vtto") ) == 1 and ply:GetNWBool( "voting", false ) then
+          drawRBox( 0, HudV("vtpx"), HudV("vtpy"), HudV("vtsw"), HudV("vtsh"), Color( 0, 0, 0, _alpha ) )
 
-          --Voting
-          if tonumber( HudV("vtto") ) == 1 and ply:GetNWBool( "voting", false ) then
-            drawRBox( 0, HudV("vtpx"), HudV("vtpy"), HudV("vtsw"), HudV("vtsh"), Color( 0, 0, 0, _alpha ) )
+          drawText( ply:GetNWString( "voteQuestion", "" ), "HudBars", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + HudV("vtsh")/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          if ply:GetNWString( "voteStatus" ) != "yes" and ply:GetNWString( "voteStatus" ) != "no" then
+            drawText( lang_string( "yes" ) .. " - [Picture Up] | " .. lang_string( "no" ) .. " - [Picture Down]", "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          elseif ply:GetNWString( "voteStatus" ) == "yes" then
+            drawText( lang_string( "yes" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          elseif ply:GetNWString( "voteStatus" ) == "no" then
+            drawText( lang_string( "no" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+          end
+          drawText( ply:GetNWInt( "voteCD", "" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 3*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        end
 
-            drawText( ply:GetNWString( "voteQuestion", "" ), "HudBars", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + HudV("vtsh")/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            if ply:GetNWString( "voteStatus" ) != "yes" and ply:GetNWString( "voteStatus" ) != "no" then
-              drawText( lang_string( "yes" ) .. " - [Picture Up] | " .. lang_string( "no" ) .. " - [Picture Down]", "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            elseif ply:GetNWString( "voteStatus" ) == "yes" then
-              drawText( lang_string( "yes" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            elseif ply:GetNWString( "voteStatus" ) == "no" then
-              drawText( lang_string( "no" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-            end
-            drawText( ply:GetNWInt( "voteCD", "" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 3*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        --Thirdperson
+        if input.IsKeyDown( get_keybind( "view_zoom_in" ) ) or input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
+          local _3PText = ""
+          if ply:GetNWInt( "view_range", 0 ) < -40 then
+            _3PText = lang_string( "fpp" )
+          elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) < 0 then
+            _3PText = lang_string( "fppr" )
+          elseif ply:GetNWInt( "view_range", 0 ) > 0 then
+            _3PText = lang_string( "tpp" )
           end
-
-          --Thirdperson
-          if _thirdperson != _tmp3P then
-            _tmp3P = _thirdperson
-            show3PInfo = 1
-            timer.Simple( 3, function()
-              show3PInfo = 0
-            end)
-          end
-          if show3PInfo == 1 then
-            local _3PText = ""
-            if _thirdperson == 0 then
-              _3PText = lang_string( "fpp" )
-            elseif _thirdperson == 1 then
-              _3PText = lang_string( "fppr" )
-            elseif _thirdperson == 2 then
-              _3PText = lang_string( "tpp" )
-            end
-            draw.SimpleTextOutlined( _3PText, "HudBars", ScrW()/2, ctr( 2160/2 + 550 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          end
+          draw.SimpleTextOutlined( _3PText, "HudBars", ScrW()/2, ctr( 2160/2 + 550 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
       end
     else

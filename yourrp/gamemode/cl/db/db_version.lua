@@ -80,7 +80,7 @@ function showVersion()
         _versionsort = lang_string( "stable" )
       end
 
-      if versionOnline != GAMEMODE.Version then
+      if versionOnline > GAMEMODE.Version then
         v_outdated = true
         local frame = createVGUI( "DFrame", nil, 1000, 570, 0, 0 )
         frame:Center()

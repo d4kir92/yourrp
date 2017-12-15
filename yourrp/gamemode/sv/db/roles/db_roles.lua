@@ -13,6 +13,7 @@ sql_add_column( _db_name, "capital", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "color", "TEXT DEFAULT '0,0,0'" )
 sql_add_column( _db_name, "sweps", "TEXT DEFAULT ''" )
+sql_add_column( _db_name, "ammunation", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "voteable", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "adminonly", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "whitelist", "INTEGER DEFAULT 0" )
@@ -31,6 +32,7 @@ sql_add_column( _db_name, "instructor", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "removeable", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "uses", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "capitaltime", "INTEGER DEFAULT 120" )
+sql_add_column( _db_name, "voiceglobal", "INTEGER DEFAULT 0" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -260,7 +262,6 @@ function addToWhitelist( SteamID, roleID, groupID, nick )
 end
 
 net.Receive( "promotePlayer", function( len, ply )
-  print("promotePlayer")
   local tmpTargetSteamID = net.ReadString()
 
   local tmpTarget = nil
@@ -273,14 +274,12 @@ net.Receive( "promotePlayer", function( len, ply )
   local tmpTableInstructor = ply:GetChaTab()
   local tmpTableInstructorRole = ply:GetRolTab() --db_select( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
 
-  PrintTable( tmpTableInstructorRole )
-
   local tmpTargetChaTab = tmpTarget:GetChaTab()
 
   if tonumber( tmpTableInstructorRole.instructor ) == 1 then
     local tmpTableTargetRole = db_select( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
     local tmpTableTargetPromoteRole = db_select( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID .. " AND groupID = " .. tmpTableInstructorRole.groupID )
-    PrintTable( tmpTableTargetPromoteRole )
+
     local tmpTableTargetGroup = db_select( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].groupID )
 
     tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]

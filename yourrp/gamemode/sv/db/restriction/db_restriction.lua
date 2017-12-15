@@ -17,19 +17,13 @@ sql_add_column( _db_name, "ragdolls", "INT DEFAULT 0" )
 sql_add_column( _db_name, "noclip", "INT DEFAULT 0" )
 
 if db_select( _db_name, "*", "usergroup = 'superadmin'" ) == nil then
-  db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1" )
+  db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if db_select( _db_name, "*", "usergroup = 'admin'" ) == nil then
-  db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls", "'admin', 1, 1, 1, 1, 1, 1, 1, 1" )
+  db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls", "'admin', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if db_select( _db_name, "*", "usergroup = 'user'" ) == nil then
   db_insert_into( _db_name, "usergroup", "'user'" )
-end
-if db_select( _db_name, "*", "usergroup = 'player'" ) == nil then
-  db_insert_into( _db_name, "usergroup", "'player'" )
-end
-if db_select( _db_name, "*", "usergroup = 'operator'" ) == nil then
-  db_insert_into( _db_name, "usergroup", "'operator'" )
 end
 
 --db_drop_table( _db_name )

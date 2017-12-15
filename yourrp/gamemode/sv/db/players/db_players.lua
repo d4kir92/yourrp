@@ -36,12 +36,12 @@ function save_clients( string )
             db_update( "yrp_characters", _ply_ang, "uniqueID = " .. _char_id )
           end
 
-          if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) then
+          if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) and isnumber( tonumber( ply:GetNWString( "money" ) ) ) then
             local _money = "money = '" .. ply:GetNWString( "money" ) .. "'"
             local _mo_result = db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
           end
 
-          if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) then
+          if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) and isnumber( tonumber( ply:GetNWString( "moneybank" ) ) ) then
             local _moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
             local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
           end
@@ -67,11 +67,6 @@ function set_role( ply, rid )
     _gid = _gid[1].groupID
     local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
     local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
-    local _result4 = db_update( "yrp_characters", "skin = 0, bg0 = 0, bg1 = 0, bg2 = 0, bg3 = 0, bg4 = 0, bg5 = 0, bg6 = 0, bg7 = 0", "uniqueID = " .. ply:CharID() )
-    ply:SetSkin( 0 )
-    for i=0, 7 do
-      ply:SetBodygroup( i, 0 )
-    end
   end
 end
 
@@ -114,14 +109,15 @@ function set_role_values( ply )
       ply:SetNWString( "roleName", rolTab.roleID )
       ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
       ply:SetNWInt( "capitaltime", rolTab.capitaltime )
+      ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )
 
       --sweps
       local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
       for k, swep in pairs( tmpSWEPTable ) do
         if swep != nil and swep != NULL and swep != "" then
-          --if !is_in_inventory( ply, swep ) then
-            ply:Give( swep )
-          --end
+          if !ply:HasItem( swep ) then
+            ply:AddSwep( swep )
+          end
         end
       end
     else
@@ -143,7 +139,7 @@ end
 
 function set_ply_pos( ply, map, pos, ang )
   timer.Simple( 0.1, function()
-    if map == game.GetMap() then
+    if map == db_sql_str2( string.lower( game.GetMap() ) ) then
       local tmpPos = string.Split( pos, " " )
       ply:SetPos( Vector( tonumber( tmpPos[1] ), tonumber( tmpPos[2] ), tonumber( tmpPos[3] ) ) )
 

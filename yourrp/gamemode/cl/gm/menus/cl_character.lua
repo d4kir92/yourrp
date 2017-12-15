@@ -309,8 +309,8 @@ function openCharacterCreation()
         v:Remove()
       end
       for k, v in pairs( self.bodygroups ) do
-        if k > 1 then
-          self.cache[k] = createD( "DPanel", charactersBodygroups, ctr( 600 ), ctr( 100 ), ctr( 10 ), ctr( 200 + (k-2)*110 ) )
+
+          self.cache[k] = createD( "DPanel", charactersBodygroups, ctr( 600 ), ctr( 100 ), ctr( 10 ), ctr( 200 + (k-1)*110 ) )
           local tmp = self.cache[k]
           tmp.count = 0
           tmp.countmax = v.num
@@ -333,8 +333,10 @@ function openCharacterCreation()
             end
             v.value = tmp.count
             characterPlayermodel.bodygroups[v.id] = v.value
-            character.bg[k] = v.value
-            characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
+            character.bg[k-1] = v.value
+            if characterPlayermodel.Entity != nil then
+              characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
+            end
           end
           local tmpDown = createD( "DButton", tmp, ctr( 50 ), ctr( 50 ), ctr( 0 ), ctr( 50 ) )
           tmpDown:SetText( "" )
@@ -352,10 +354,10 @@ function openCharacterCreation()
             end
             v.value = tmp.count
             characterPlayermodel.bodygroups[v.id] = v.value
-            character.bg[k] = v.value
+            character.bg[k-1] = v.value
             characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
           end
-        end
+
       end
     end
   end
@@ -363,7 +365,7 @@ function openCharacterCreation()
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
     characterPlayermodel:UpdateBodyGroups()
   end
-  
+
   local prevPM = createD( "DButton", frame, ctr( 100 ), ctr( 1200 ), ScrW()/2 - ctr( 50 + 800 ), ScrH() - ctr( 1800 ) )
   prevPM:SetText( "" )
   function prevPM:Paint( pw, ph )
@@ -451,11 +453,13 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( "↑", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function skinUp:DoClick()
-    if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() then
-      characterPlayermodel.skin = characterPlayermodel.skin + 1
+    if characterPlayermodel.Entity != nil then
+      if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() then
+        characterPlayermodel.skin = characterPlayermodel.skin + 1
+      end
+      character.skin = characterPlayermodel.skin
+      characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
     end
-    character.skin = characterPlayermodel.skin
-    characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
   end
 
   local skinDo = createD( "DButton", charactersBodygroups, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 110 ) )
@@ -471,11 +475,13 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( "↓", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function skinDo:DoClick()
-    if characterPlayermodel.Entity:GetSkin() > 0 then
-      characterPlayermodel.skin = characterPlayermodel.skin - 1
+    if characterPlayermodel.Entity != nil then
+      if characterPlayermodel.Entity:GetSkin() > 0 then
+        characterPlayermodel.skin = characterPlayermodel.skin - 1
+      end
+      character.skin = characterPlayermodel.skin
+      characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
     end
-    character.skin = characterPlayermodel.skin
-    characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
   end
 
   local charactersNameText = createMD( "DTextEntry", frame, ctr( 600 ), ctr( 100 ), ScrW2() - ctr( 600/2 ), ScrH() - ctr( 100+50 ), ctr( 5 ) )
@@ -817,5 +823,5 @@ end
 
 net.Receive( "openCharacterMenu", function( len, ply )
   local tmpTable = net.ReadTable()
-  openCharacterSelection()
+  --openCharacterSelection()
 end)

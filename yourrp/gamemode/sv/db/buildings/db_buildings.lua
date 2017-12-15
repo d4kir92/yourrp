@@ -158,7 +158,7 @@ function loadDoors()
             if _tmpGroupName != nil then
               _tmpGroupName = _tmpGroupName[1]
               if _tmpGroupName != nil then
-                v:SetNWString( "ownerGroup", tostring( _tmpGroupName[1].groupID ) )
+                v:SetNWString( "ownerGroup", tostring( _tmpGroupName.groupID ) )
               end
             end
           end

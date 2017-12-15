@@ -25,11 +25,7 @@ function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
 end
 
 function GM:CanPlayerSuicide( ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
-    return true
-  else
-    return false
-  end
+  return true
 end
 
 function GM:EntityTakeDamage( target, dmginfo )
@@ -45,23 +41,58 @@ function GM:EntityTakeDamage( target, dmginfo )
 	end
 end
 
+--[[ SPEAK Channels ]] --
+util.AddNetworkString( "press_speak_next" )
+util.AddNetworkString( "press_speak_prev" )
+
+net.Receive( "press_speak_next", function( len, ply )
+  ply:SetNWInt( "speak_channel", ply:GetNWInt( "speak_channel", 0 ) + 1 )
+  if ply:GetNWInt( "speak_channel", 0 ) > 1 then
+    if ply:GetNWBool( "yrp_voice_global", false ) then
+      if ply:GetNWInt( "speak_channel", 0 ) > 2 then
+        ply:SetNWInt( "speak_channel", 0 )
+      end
+    else
+      ply:SetNWInt( "speak_channel", 0 )
+    end
+  end
+end)
+
+net.Receive( "press_speak_prev", function( len, ply )
+  ply:SetNWInt( "speak_channel", ply:GetNWInt( "speak_channel", 0 ) - 1 )
+  if ply:GetNWInt( "speak_channel", 0 ) < 0 then
+    if ply:GetNWBool( "yrp_voice_global", false ) then
+      ply:SetNWInt( "speak_channel", 2 )
+    else
+      ply:SetNWInt( "speak_channel", 1 )
+    end
+  end
+end)
+
 function GM:PlayerCanHearPlayersVoice( listener, talker )
-  return true, true
-  --[[if listener:GetPos():Distance( talker:GetPos()) < 1000 then
+  if talker:GetNWInt( "speak_channel", 0 ) == 1 and talker:GetNWString( "groupUniqueID" ) == listener:GetNWString( "groupUniqueID" ) then
+    return true, false
+	elseif talker:GetNWInt( "speak_channel", 0 ) == 2 then
+    return true, false
+  elseif talker:GetNWInt( "speak_channel", 0 ) == 0 then
     return true, true
-  else
-    return false, false
-  end]]--
+  end
 end
 
 function GM:PlayerInitialSpawn( ply )
   printGM( "gm", "PlayerInitialSpawn " .. ply:Nick() )
-  ply:KillSilent()
+  --ply:KillSilent()
+  local rolTab = ply:GetRolTab()
+  timer.Simple( 1, function()
+
+    set_role( ply, rolTab.uniqueID )
+    set_role_values( ply )
+  end)
 end
 
 function GM:PlayerAuthed( ply, steamid, uniqueid )
   printGM( "gm", "PlayerAuthed " .. ply:Nick() )
-  ply:KillSilent()
+  --ply:KillSilent()
   check_yrp_client( ply )
 end
 
@@ -75,14 +106,17 @@ function GM:PlayerSetModel( ply )
 end
 
 function GM:PlayerLoadout( ply )
+  printGM( "note", "Get PlayerLoadout for player: " .. ply:Nick() )
+  ply:CheckInventory()
   ply:SetNWBool( "cuffed", false )
 
-  --if !is_in_inventory( ply , "yrp_key" ) then
-    ply:Give( "yrp_key" )
-  --end
-  --if !is_in_inventory( ply , "yrp_unarmed" ) then
-    ply:Give( "yrp_unarmed" )
-  --end
+  if !ply:HasItem( "yrp_key" ) then
+    ply:AddSwep( "yrp_key" )
+  end
+
+  if !ply:HasItem( "yrp_unarmed" ) then
+    ply:AddSwep( "yrp_unarmed" )
+  end
 
   addKeys( ply )
 
@@ -92,7 +126,8 @@ function GM:PlayerLoadout( ply )
   set_role_values( ply )
 
   if chaTab != nil then
-    ply:SetMoney( tonumber( chaTab.money ) )
+    local chaTab = ply:GetChaTab()
+    ply:SetNWString( "money", chaTab.money )
     ply:SetNWString( "moneybank", chaTab.moneybank )
     ply:SetNWString( "rpname", chaTab.rpname )
 
@@ -125,6 +160,7 @@ function GM:PlayerLoadout( ply )
   local _yrp_general = db_select( "yrp_general", "*", nil )
   if _yrp_general != nil then
     _yrp_general = _yrp_general[1]
+    ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
     ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
     ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
     ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
@@ -135,10 +171,22 @@ function GM:PlayerLoadout( ply )
   end
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
-    --if !is_in_inventory( ply , "yrp_arrest_stick" ) then
-      ply:Give( "yrp_arrest_stick" )
-    --end
+    if !ply:HasItem( "yrp_arrest_stick" ) then
+      ply:AddSwep( "yrp_arrest_stick" )
+    end
+    if !ply:HasItem( "weapon_physgun" ) then
+      ply:AddSwep( "weapon_physgun" )
+    end
+    if !ply:HasItem( "weapon_physcannon" ) then
+      ply:AddSwep( "weapon_physcannon" )
+    end
   end
 
-  teleportToSpawnpoint( ply )
+  ply:UseSweps()
 end
+
+hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
+  timer.Simple( 0.01, function()
+    teleportToSpawnpoint( ply )
+  end)
+end)

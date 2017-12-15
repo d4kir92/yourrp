@@ -13,32 +13,37 @@ sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
+util.AddNetworkString( "getRoleWhitelist" )
+util.AddNetworkString( "whitelistPlayer" )
+util.AddNetworkString( "whitelistPlayerRemove" )
+util.AddNetworkString( "yrpInfoBox" )
+
 function sendRoleWhitelist( ply )
   if ply:IsSuperAdmin() or ply:IsAdmin() then
     local _tmpWhiteList = db_select( "yrp_role_whitelist", "*", nil )
-    local _tmpRoleList = db_select( "yrp_roles", "*", nil )
-    local _tmpGroupList = db_select( "yrp_groups", "*", nil )
+    local _tmpRoleList = db_select( "yrp_roles", "groupID, roleID, uniqueID", nil )
+    local _tmpGroupList = db_select( "yrp_groups", "groupID, uniqueID", nil )
+
     if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
+
       net.Start( "getRoleWhitelist" )
         net.WriteTable( _tmpWhiteList )
         net.WriteTable( _tmpRoleList )
         net.WriteTable( _tmpGroupList )
       net.Send( ply )
-    else
+    elseif _tmpRoleList != nil and _tmpGroupList != nil then
+      printGM( "note", "sendRoleWhitelist Whitelist is empty" )
       _tmpWhiteList = {}
       net.Start( "getRoleWhitelist" )
         net.WriteTable( _tmpWhiteList )
         net.WriteTable( _tmpRoleList )
         net.WriteTable( _tmpGroupList )
       net.Send( ply )
+    else
+      printGM( "error", "group and role list broken" )
     end
   end
 end
-
-util.AddNetworkString( "getRoleWhitelist" )
-util.AddNetworkString( "whitelistPlayer" )
-util.AddNetworkString( "whitelistPlayerRemove" )
-util.AddNetworkString( "yrpInfoBox" )
 
 net.Receive( "whitelistPlayerRemove", function( len, ply )
   local _tmpUniqueID = net.ReadInt( 16 )

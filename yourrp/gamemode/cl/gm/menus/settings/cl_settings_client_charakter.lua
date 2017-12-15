@@ -9,10 +9,8 @@ net.Receive( "getCharakterList", function()
     cl_rpName:SetText( _charTab.rpname )
   end
   function cl_rpName:OnChange()
-    net.Start( "dbUpdate" )
-      net.WriteString( "yrp_characters" )
-      net.WriteString( "rpname = '" .. cl_rpName:GetText() .. "'" )
-      net.WriteString( "uniqueID = " .. _charTab.uniqueID )
+    net.Start( "change_rpname" )
+      net.WriteString( cl_rpName:GetText() )
     net.SendToServer()
   end
 

@@ -9,7 +9,7 @@ SWEP.Instructions = "Leftclick - arrest\nRightclick - unarrest"
 SWEP.Category = "YourRP"
 
 --The name of the SWep, as appears in the weapons tab in the spawn menu(Q Menu)
-SWEP.PrintName = "Arrest stick (ADMIN)"
+SWEP.PrintName = "Arrest stick"
 
 --Sets the position of the weapon in the switching menu
 --(appears when you use the scroll wheel or keys 1-6 by default)
@@ -82,7 +82,7 @@ function SWEP:PrimaryAttack()
 			if SERVER then
 				teleportToJailpoint( tr.Entity )
 				tr.Entity:SetNWBool( "inJail", true )
-				tr.Entity:SetNWInt( "jailtime", 9000 )
+				--tr.Entity:SetNWInt( "jailtime", 9000 )
 			end
 		end
 	else

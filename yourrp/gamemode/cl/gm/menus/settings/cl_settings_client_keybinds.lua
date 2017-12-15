@@ -33,6 +33,8 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
     draw.SimpleTextOutlined( lang_string("inventory"), "sef", ctr( _wide ), ctr( 480 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("vehicles") .. " (" .. lang_string("settings") .. ")", "sef", ctr( _wide ), ctr( 540 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("doors") .. " (" .. lang_string("settings") .. ")", "sef", ctr( _wide ), ctr( 600 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("voicenext"), "sef", ctr( _wide ), ctr( 660 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("voiceprev"), "sef", ctr( _wide ), ctr( 720 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 end
 
   local _k = {}
@@ -46,4 +48,6 @@ end
   _k._mi = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 480 ), "menu_inventory" )
   _k._mv = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 540 ), "menu_options_vehicle" )
   _k._md = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 600 ), "menu_options_door" )
+  _k._sgr = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 660 ), "speak_next" )
+  _k._sgl = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 720 ), "speak_prev" )
 end)

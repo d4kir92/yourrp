@@ -3,391 +3,520 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
+local INV_W = 8
+local INV_H = 8
+
 sql_add_column( "yrp_inventory", "CharID", "INT DEFAULT 0" )
-sql_add_column( "yrp_inventory", "f_x", "TEXT DEFAULT '0'" )
-sql_add_column( "yrp_inventory", "f_y", "TEXT DEFAULT '0'" )
-sql_add_column( "yrp_inventory", "i_w", "INT DEFAULT 0" )
-sql_add_column( "yrp_inventory", "i_h", "INT DEFAULT 0" )
-sql_add_column( "yrp_inventory", "i_aw", "TEXT DEFAULT 'x'" )
-sql_add_column( "yrp_inventory", "i_ah", "TEXT DEFAULT 'y'" )
-sql_add_column( "yrp_inventory", "i_center", "TEXT DEFAULT ''" )
-sql_add_column( "yrp_inventory", "ClassName", "TEXT DEFAULT '[EMPTY]'" )
-sql_add_column( "yrp_inventory", "PrintName", "TEXT DEFAULT ''" )
-sql_add_column( "yrp_inventory", "Model", "TEXT DEFAULT ''" )
+sql_add_column( "yrp_inventory", "field", "TEXT DEFAULT ''" )
+sql_add_column( "yrp_inventory", "item", "TEXT DEFAULT '-1'" )
 
 --db_drop_table( "yrp_inventory" )
 --db_is_empty( "yrp_inventory" )
 
-local INV_W = 8
+local Player = FindMetaTable( "Player" )
 
-util.AddNetworkString( "get_inventory" )
-
-function get_inv( id )
-  local _result = {}
-  for y = 1, 8 do
-    _result["f_y"..y] = {}
-    for x = 1, INV_W do
-      _result["f_y"..y]["f_x"..x] = db_select( "yrp_inventory", "*", "f_x = '" .. x .. "' AND f_y = '" .. y .. "' AND CharID = " .. id )
-      if _result["f_y"..y]["f_x"..x] == nil then
-        return nil
-      else
-        if _result["f_y"..y]["f_x"..x][1] != nil then
-          _result["f_y"..y]["f_x"..x] = _result["f_y"..y]["f_x"..x][1]
-        end
-      end
-    end
-  end
-  return _result
-end
-
-function check_inv( ply, id )
-  printGM( "db", "Check Inv" )
-  local _inv = get_inv( id )
-  if _inv == nil then
-    printGM( "note", ply:Nick() .. " has no inventory. Creating one." )
-    for y = 1, 8 do
-      for x = 1, INV_W do
-        db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", '" .. x .. "', '" .. y .. "'" )
-      end
-    end
-  end
-  if db_select( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'w1', 'w1'" ) == false then
-    printGM( "db", "weapon slots" )
-    --Weapons
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'w1', 'w1'" )
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'w2', 'w2'" )
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'w3', 'w3'" )
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'w4', 'w4'" )
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'w5', 'w5'" )
-  end
-  if db_select( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'bp', 'bp'" ) == false then
-    printGM( "db", "backpack slot" )
-    --Backpack
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'bp', 'bp'" )
-  end
-  if db_select( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'helm', 'helm'" ) == false then
-    printGM( "db", "equipment slots" )
-    --Equipment
-
-    --helm
-    db_insert_into( "yrp_inventory", "CharID, f_x, f_y", id .. ", 'helm', 'helm'" )
-  end
-end
-
-function send_inventory( ply )
-  local _char_id = ply:CharID()
-  local _inv = check_inv( ply, _char_id )
-  _inv = get_inv( _char_id )
-
-  net.Start( "get_inventory" )
-    net.WriteTable( _inv )
-  net.Send( ply )
-end
-
-net.Receive( "get_inventory", function( len, ply )
-  send_inventory( ply )
-end)
-
-function print_inventory( ply )
-  local _char_id = ply:CharID()
-
-  for y = 1, 8 do
-    local _str = ""
-    for x = 1, INV_W do
-      local _select = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND f_x = '" .. x .. "' AND f_y = '" .. y .. "'" )
-      if _select != nil then
-        _select = _select[1]
-        if _select.ClassName == "[EMPTY]" then
-          _str = _str .. "E" .. " "
-        else
-          if #_select.ClassName < 3 then
-            _str = _str .. _select.ClassName .. " "
-          else
-            _str = _str .. "C" .. " "
-          end
-        end
-      end
-    end
-    print(_str)
-  end
-end
-
-function is_in_inventory( ply, cname )
-  local _char_id = ply:CharID()
-  if _char_id != nil then
-    local _result = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND ClassName = '" .. cname .. "'" )
-    if _result == nil then
-      return false
-    else
-      return true
-    end
-    return false
-  end
-end
-
-function find_free_space( ply, w, h, posx, posy )
-  print_inventory( ply )
-  local _char_id = ply:CharID()
-
-  local _stx = 1
-  local _sty = 1
-  local _enx = INV_W
-  local _eny = 8
-  if posx != nil then
-    _stx = posx
-    _sty = posy
-    _enx = posx+w
-    _eny = posy+h
-  end
-
+function Player:GetInventory()
+  local _char_id = self:CharID()
   local _inv = {}
-  for y = _sty, _eny do
-    _inv[y] = {}
-    for x = _stx, _enx do
-      local _enough_space = true
-      local _select = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND f_x = '" .. x .. "' AND f_y = '" .. y .. "' AND ClassName = '[EMPTY]'" )
-      if _select != nil then
-        _select = _select[1]
+  for y = 1, INV_H do
+    _inv["y"..y] = {}
+    for x = 1, INV_W do
+      _inv["y"..y]["x"..x] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "'" )
+      if _inv["y"..y]["x"..x] != nil then
+        _inv["y"..y]["x"..x] = _inv["y"..y]["x"..x][1]
+      end
+    end
+  end
 
-        for _y = y, y + h-1 do
-          for _x = x, x + w-1 do
-            local _sel = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND f_x = '" .. _x .. "' AND f_y = '" .. _y .. "'" )
-            if _sel != nil then
-              _sel = _sel[1]
+  --[[
+  print("")
+  print("PrintInventory")
+  print("\tx1\tx2\tx3\tx4\tx5\tx6\tx7\tx8")
+  for y = 1, INV_H do
+    local _y_line = "y" .. y .. "\t"
+    for x = 1, INV_W do
+      if _inv["y"..y]["x"..x] != nil then
+        _y_line = _y_line .. tostring(_inv["y"..y]["x"..x].item) .. "\t"
+      end
+    end
+    print(_y_line)
+  end
+  print("")
+  ]]--
 
-              if _sel.ClassName != "[EMPTY]" then
-                _enough_space = false
-              end
-              if isnumber( tonumber( _sel.ClassName ) ) then
-                _enough_space = false
-              end
-            else
-              _enough_space = false
+  for y = 1, INV_H do
+    for x = 1, INV_W do
+      if _inv["y"..y]["x"..x] != nil then
+        if _inv["y"..y]["x"..x].item != "-1" then
+          if string.find( _inv["y"..y]["x"..x].item, "i," ) then
+            local _item_uid = string.Explode( ",", _inv["y"..y]["x"..x].item )
+            _item_uid = _item_uid[2]
+
+            _inv["y"..y]["x"..x].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+            if _inv["y"..y]["x"..x].item != nil then
+              _inv["y"..y]["x"..x].item = _inv["y"..y]["x"..x].item[1]
             end
           end
         end
-      else
-        _enough_space = false
       end
-      if _enough_space then
-        return x, y
+    end
+  end
+
+  --[[ EQ Items ]] --
+  _inv["w1"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" )
+  if _inv["w1"] != nil then
+    _inv["w1"] = _inv["w1"][1]
+    if _inv["w1"].item != "-1" then
+      local _item_uid = string.Explode( ",", _inv["w1"].item )
+      _item_uid = _item_uid[2]
+
+      _inv["w1"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      if _inv["w1"].item != nil then
+        _inv["w1"].item = _inv["w1"].item[1]
       end
+    end
+  end
+
+  _inv["w2"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" )
+  if _inv["w2"] != nil then
+    _inv["w2"] = _inv["w2"][1]
+    if _inv["w2"].item != "-1" then
+      local _item_uid = string.Explode( ",", _inv["w2"].item )
+      _item_uid = _item_uid[2]
+
+      _inv["w2"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      if _inv["w2"].item != nil then
+        _inv["w2"].item = _inv["w2"].item[1]
+      end
+    end
+  end
+
+  _inv["w3"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" )
+  if _inv["w3"] != nil then
+    _inv["w3"] = _inv["w3"][1]
+    if _inv["w3"].item != "-1" then
+      local _item_uid = string.Explode( ",", _inv["w3"].item )
+      _item_uid = _item_uid[2]
+
+      _inv["w3"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      if _inv["w3"].item != nil then
+        _inv["w3"].item = _inv["w3"].item[1]
+      end
+    end
+  end
+
+  _inv["w4"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" )
+  if _inv["w4"] != nil then
+    _inv["w4"] = _inv["w4"][1]
+    if _inv["w4"].item != "-1" then
+      local _item_uid = string.Explode( ",", _inv["w4"].item )
+      _item_uid = _item_uid[2]
+
+      _inv["w4"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      if _inv["w4"].item != nil then
+        _inv["w4"].item = _inv["w4"].item[1]
+      end
+    end
+  end
+
+  _inv["w5"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" )
+  if _inv["w5"] != nil then
+    _inv["w5"] = _inv["w5"][1]
+    if _inv["w5"].item != "-1" then
+      local _item_uid = string.Explode( ",", _inv["w5"].item )
+      _item_uid = _item_uid[2]
+
+      _inv["w5"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      if _inv["w5"].item != nil then
+        _inv["w5"].item = _inv["w5"].item[1]
+      end
+    end
+  end
+
+  return _inv
+end
+
+function Player:CheckInventory()
+  local _char_id = self:CharID()
+
+  --[[ Create Inventory ]]--
+  for y = 1, INV_H do
+    for x = 1, INV_W do
+      if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .."," .. y .. "'" ) == nil then
+        local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", '" .. x .."," .. y .. "'" )
+        if _res != nil then
+          printGM( "note", "CreateInventory failed" )
+        end
+      end
+    end
+  end
+
+  --[[ EQ ]]--
+  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" ) == nil then
+    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w1'" )
+  end
+  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" ) == nil then
+    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w2'" )
+  end
+  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" ) == nil then
+    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w3'" )
+  end
+  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" ) == nil then
+    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w4'" )
+  end
+  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" ) == nil then
+    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w5'" )
+  end
+
+  local _result = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+  if _result != nil then
+
+    self:GetInventory()
+  end
+end
+
+function Player:HasItem( cname )
+  local _char_id = self:CharID()
+  local _inv = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+  for k, item in pairs( _inv ) do
+    local _item = string.sub( item.item, 3 )
+    local _res = db_select( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. cname .. "'" )
+    if _res != nil and _res != false then
+      _res = _res[1]
+    end
+    if istable( _res ) then
+      return true
     end
   end
   return false
 end
 
-function insert_in_inventory( ply, _item, posx, posy )
-  print("insert")
+function Player:AddSwep( cname )
+  local _eq = self:EnoughSpaceInEQ()
+  if _eq != nil and _eq != false then
+    self:EquipItem( cname, _eq.field )
+  else
+    self:AddItem( cname )
+  end
+end
 
-  local _x, _y = find_free_space( ply, _item.i_w, _item.i_h, posx, posy )
-  if _x != false then
-    local _sets = "ClassName = '" .. _item.ClassName .. "'"
-    _sets = _sets .. ", PrintName = '" .. _item.PrintName .. "'"
-    _sets = _sets .. ", Model = '" .. _item.Model .. "'"
-    _sets = _sets .. ", i_w = " .. _item.i_w
-    _sets = _sets .. ", i_h = " .. _item.i_h
-    _sets = _sets .. ", i_aw = '" .. _item.i_aw .. "'"
-    _sets = _sets .. ", i_ah = '" .. _item.i_ah .. "'"
-    _sets = _sets .. ", i_center = '" .. _item.i_center .. "'"
+function Player:UseSweps()
+  local _char_id = self:CharID()
+  for i = 1, 5 do
+    local _res = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w" .. i .. "'" )
+    if _res != nil and _res != false then
+      _res = _res[1]
+      local _uid = string.sub( _res.item, 3 )
 
-    print(_sets)
+      local _swep = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
+      if _swep != nil and _swep != false then
+        _swep = _swep[1]
+        --PrintTable( _swep )
+        self.canpickup = true
+        _swep = self:old_give( _swep.ClassName, true )
+        self.canpickup = false
+      end
+    end
+  end
+end
 
-    db_update( "yrp_inventory", _sets, "CharID = "..ply:CharID() .. " AND f_x = '" .. _x .. "' AND f_y = '" .. _y .. "'" )
+function Player:EnoughSpaceInEQ()
+  local _char_id = self:CharID()
+  local _eq = {}
+  for i = 1, 5 do
+    _eq[i] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. "w" .. i .. "'" )
+    if _eq[i] != nil then
+      _eq[i] = _eq[i][1]
+    end
+  end
 
-    local _result = db_select( "yrp_inventory", "*", "CharID = " .. ply:CharID() .. " AND f_x = '" .. _x .. "' AND f_y = '" .. _y .. "'" )
-    if _result != nil then
-      _result = _result[#_result]
-      for __y = _y, (_y+_item.i_h-1) do
-        for __x = _x, (_x+_item.i_w-1) do
-          if __x != _x or __y != _y then
-            print("uniqueID insert")
-            local _result2 = db_update( "yrp_inventory", "ClassName = '" .. tostring( _result.uniqueID ) .. "'", "CharID = " .. ply:CharID() .. " AND f_x = '" .. __x .. "' AND f_y = '" .. __y .. "'" )
-          end
+  for k, eq in pairs( _eq ) do
+    if tostring( eq.item ) == "-1" then
+      return eq
+    end
+  end
+  return false
+end
+
+function Player:EnoughSpaceInField( _x, _y, w, h )
+  local _char_id = self:CharID()
+
+  for y = _y, _y+h-1 do
+    for x = _x, _x+w-1 do
+      local _select = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "' AND item = '-1'" )
+      if _select == nil or _select == false then
+        return false
+      end
+    end
+  end
+  return true
+end
+
+function Player:FindFreeSpaceInInventory( item, posx, posy )
+  local _char_id = self:CharID()
+
+  local _x = posx or 1
+  local _y = posy or 1
+
+  for y = _y, INV_H do
+    for x = _x, INV_W do
+      local _select = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "' AND item = '-1'" )
+      if _select != nil then
+        _select = _select[1]
+        local _field_zone = self:EnoughSpaceInField( x, y, item.w, item.h )
+        if _field_zone then
+          return x, y
         end
       end
     end
-    print_inventory( ply )
+  end
+
+  return false
+end
+
+function Player:GetItem( uid )
+  return get_item( uid )
+end
+
+function Player:DropItem( cname )
+  local _ent = ents.Create( cname )
+  _ent:SetPos( self:GetPos())
+  self.canpickup = false
+
+  local _pos = _ent:GetPos()
+  local _angle = Angle( 0, 0, 0 )
+
+  if enough_space( _ent, _pos + Vector( 0, 0, 2 ) ) then
+    local __pos = get_ground_pos( _ent, _pos + Vector( 0, 0, 2 ) )
+    _ent:SetPos( __pos )
+    _ent:Spawn()
   else
-    local _drop = ents.Create( _item.ClassName )
-    _drop:SetPos( ply:GetPos() + ply:GetForward() * 100 )
-    _drop:Spawn()
-  end
-end
-
-function rem_item( id, uid )
-  print("rem_item " .. id .. " " .. uid)
-  local _result = db_update( "yrp_inventory", "ClassName = '[EMPTY]', PrintName = '', Model = ''", "CharID = " .. id .. " AND uniqueID = " .. uid )
-  local _result2 = db_update( "yrp_inventory", "ClassName = '[EMPTY]', PrintName = '', Model = ''", "CharID = " .. id .. " AND ClassName = '" .. uid .. "'" )
-end
-
-function rem_item_at_pos( id, x, y, uid )
-  print("rem_item_at_pos " .. id .. " " .. x .. " " .. y .. " " .. uid)
-  local _result = db_update( "yrp_inventory", "ClassName = '[EMPTY]', PrintName = '', Model = ''", "CharID = " .. id .. " AND f_x = '" .. x .. "' AND f_y = '" .. y .. "'" )
-  local _result2 = db_update( "yrp_inventory", "ClassName = '[EMPTY]', PrintName = '', Model = ''", "CharID = " .. id .. " AND ClassName = '" .. uid .. "'" )
-end
-
-util.AddNetworkString( "item_drop" )
-
-net.Receive( "item_drop", function( len, ply )
-  local _uid = net.ReadString()
-  local _char_id = ply:CharID()
-  local _result = db_select( "yrp_inventory", "*", "uniqueID = " .. _uid .. " AND CharID = " .. _char_id )
-  PrintTable( _result )
-  if _result != nil then
-    _result = _result[1]
-
-    print(_result.ClassName)
-    local _drop = ents.Create( _result.ClassName )
-    if _drop != NULL then
-      _drop:SetPos( ply:GetPos() + ply:GetForward() * 100 )
-      _drop:Spawn()
+    for i = 1, 3 do
+      for j = 0, 360, 45 do
+        _angle:RotateAroundAxis( _ent:GetForward(), 45 )
+        local _enough_space = enough_space( _ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+        if _enough_space then
+          local __pos = get_ground_pos( _ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+          _ent:SetPos( __pos )
+          _ent:Spawn()
+          return
+        end
+      end
     end
-
-    rem_item_at_pos( _char_id, _result.f_x, _result.f_y, _uid )
   end
-  print_inventory( ply )
+end
+
+function Player:FindFreeSpaceInEquipment()
+  local _char_id = self:CharID()
+  local _w1 = db_select( "yrp_inventory", "*", "field = 'w1' AND CharID = " .. _char_id )
+  if _w1[1] != nil then
+    _w1 = _w1[1]
+    if _w1.item == "-1" then
+      return "w1"
+    end
+  elseif _w1 == false then
+    return "w1"
+  end
+  local _w2 = db_select( "yrp_inventory", "*", "field = 'w2' AND CharID = " .. _char_id )
+  if _w2[1] != nil then
+    _w2 = _w2[1]
+    if _w2.item == "-1" then
+      return "w2"
+    end
+  elseif _w2 == false then
+    return "w2"
+  end
+  local _w3 = db_select( "yrp_inventory", "*", "field = 'w3' AND CharID = " .. _char_id )
+  if _w3[1] != nil then
+    _w3 = _w3[1]
+    if _w3.item == "-1" then
+      return "w3"
+    end
+  elseif _w3 == false then
+    return "w3"
+  end
+  local _w4 = db_select( "yrp_inventory", "*", "field = 'w4' AND CharID = " .. _char_id )
+  if _w4[1] != nil then
+    _w4 = _w4[1]
+    if _w4.item == "-1" then
+      return "w4"
+    end
+  elseif _w4 == false then
+    return "w4"
+  end
+  local _w5 = db_select( "yrp_inventory", "*", "field = 'w5' AND CharID = " .. _char_id )
+  if _w5[1] != nil then
+    _w5 = _w5[1]
+    if _w5.item == "-1" then
+      return "w5"
+    end
+  elseif _w5 == false then
+    return "w5"
+  end
+
+  return false
+end
+
+function Player:AddItem( cname, posx, posy, origin, move_item )
+  local _item = create_item( cname, origin )
+  local _x = posx
+  local _y = posy
+  local _field = self:FindFreeSpaceInEquipment()
+  if _field != false and move_item != true then
+    self:EquipItem( cname, _field )
+  else
+    if _x == nil and _y == nil then
+      _x, _y = self:FindFreeSpaceInInventory( _item )
+    else
+      _x, _y = self:FindFreeSpaceInInventory( _item, _x, _y )
+    end
+    if _x != false then
+      --[[ Item starting ]]--
+      local _sets = "item = 'i," .. _item.uniqueID .. "'"
+      local _whil = "CharID = " .. self:CharID() .. " AND field = '" .. _x .. "," .. _y .. "'"
+      local _res = db_update( "yrp_inventory", _sets, _whil )
+
+      --[[ Item Linking ]]--
+      for y = _y, _y+_item.h-1 do
+        for x = _x, _x+_item.w-1 do
+          if x != _x or y !=_y then
+            _sets = "item = 'l," .. _item.uniqueID .. "'"
+            _whil = "CharID = " .. self:CharID() .. " AND field = '" .. x .. "," .. y .. "'"
+            _res = db_update( "yrp_inventory", _sets, _whil )
+          end
+        end
+      end
+    else
+      self:DropItem( cname )
+    end
+  end
+end
+
+function Player:GetNearbyItems()
+  local _ents = ents.GetAll()
+  local _env = {}
+  for k, ent in pairs( _ents ) do
+    if ent:GetPos():Distance( self:GetPos() ) < 60 and ent:GetClass() != "[NULL ENTITY]" and ent:IsWeapon() and ent:GetOwner() == NULL then
+      if ent:GetNWString( "yrp_uid", "hasnouid" ) == "hasnouid" then
+        local _item = create_item( ent:GetClass(), "nearby" )
+        ent:SetNWString( "yrp_uid",  _item.uniqueID )
+        table.insert( _env, _item )
+      elseif ent:GetNWString( "yrp_uid", "hasnouid" ) != "hasnouid" then
+        local _item = get_item( ent:GetNWString( "yrp_uid" ) )
+        table.insert( _env, _item )
+      end
+    end
+  end
+  return _env
+end
+
+util.AddNetworkString( "get_inventory" )
+
+function Player:SendInventory()
+  local _tbl = {}
+  _tbl.env = self:GetNearbyItems()
+  _tbl.inv = self:GetInventory()
+
+  net.Start( "get_inventory" )
+    net.WriteTable( _tbl )
+  net.Send( self )
+end
+
+net.Receive( "get_inventory", function( len, ply )
+  if ply:GetNWBool( "toggle_inventory", false ) then
+    ply:SendInventory()
+  end
 end)
 
 util.AddNetworkString( "item_move" )
 
-function is_enough_space( id, x, y )
-  local _enough_space = true
-
-  for _y = y, 8 do
-    for _x = x, INV_W do
-      local _select = db_select( "yrp_inventory", "*", "CharID = " .. id .. " AND f_x = '" .. _x .. "' AND f_y = '" .. _y .. "' AND ClassName = '[EMPTY]'" )
-      if _select != nil then
-        _select = _select[1]
-        if _select.ClassName != "[EMPTY]" then
-          --occupied
-          _enough_space = false
-        end
-      else
-        --outside of inventory
-        _enough_space = false
-      end
-    end
-  end
-
-  --enough space
-  return true
+function Player:RemoveItem( uid )
+  local _item = db_update( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'i," .. uid .. "'" )
+  local _item_links = db_update( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'l," .. uid .. "'" )
 end
 
-function insert_in_equipment( ply, _item, field )
-  print("insert in eq")
+function Player:MoveItem( uid, x, y, origin )
+  --[[ Remove item from inventory ]]--
+  self:RemoveItem( uid )
 
+  --[[ get item from database ]]--
+  local _item = db_select( "yrp_item", "*", "uniqueID = " .. uid )
+  if _item != nil then
+    _item = _item[1]
 
-  local _sets = "ClassName = '" .. _item.ClassName .. "'"
-  _sets = _sets .. ", PrintName = '" .. _item.PrintName .. "'"
-  _sets = _sets .. ", Model = '" .. _item.Model .. "'"
-  _sets = _sets .. ", i_w = " .. _item.i_w
-  _sets = _sets .. ", i_h = " .. _item.i_h
-  _sets = _sets .. ", i_aw = '" .. _item.i_aw .. "'"
-  _sets = _sets .. ", i_ah = '" .. _item.i_ah .. "'"
-  _sets = _sets .. ", i_center = '" .. _item.i_center .. "'"
-
-  print(_sets)
-
-  db_update( "yrp_inventory", _sets, "CharID = "..ply:CharID() .. " AND f_x = '" .. field .. "' AND f_y = '" .. field .. "'" )
+    --[[ Add item from database into inventory ]]--
+    self:AddItem( _item.ClassName, x, y, origin, true )
+  else
+    printGM( "note", "item " .. uid .. " is not in database." )
+  end
 end
 
 net.Receive( "item_move", function( len, ply )
   local _x = net.ReadString()
   local _y = net.ReadString()
   local _uid = net.ReadString()
-  local _char_id = ply:CharID()
+  local _new_origin = net.ReadString()
 
-  print("item_move")
-  print(_x,_y,_uid)
-
-  if !isnumber( tonumber( _x ) ) then
-    local _sel = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND uniqueID = " .. _uid )
-    if _sel != nil then
-      _sel = _sel[1]
-
-      local _item = {}
-      _item.ClassName = _sel.ClassName or "NO CLASSNAME"
-      _item.PrintName = _sel.PrintName or "NO PRINTNAME"
-      _item.Model = _sel.Model or "NO MODEL"
-      _item.i_w = _sel.i_w or 1
-      _item.i_h = _sel.i_h or 1
-      _item.i_aw = _sel.i_aw or "x"
-      _item.i_ah = _sel.i_ah or "y"
-      _item.i_center = _sel.i_center or "0 0 0"
-
-      rem_item( _char_id, _sel.uniqueID )
-
-      insert_in_equipment( ply, _item, _x, _y )
-
-      send_inventory( ply )
+  local _item = ply:GetItem( _uid )
+  if _item.origin == "nearby" then
+    local _ents = ents.GetAll()
+    for k, ent in pairs( _ents ) do
+      if _uid == ent:GetNWString( "yrp_uid" ) then
+        ent:Remove()
+        break
+      end
     end
-  elseif is_enough_space( _char_id, _x, _y ) then
-    print("ENOUGH SPACE")
-    local _sel = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND uniqueID = " .. _uid )
-    if _sel != nil then
-      _sel = _sel[1]
+  elseif _item.origin == "eq" then
+    ply:StripWeapon( _item.ClassName )
+  elseif _item.origin == "inv" then
 
-      local _item = {}
-      _item.ClassName = _sel.ClassName or "NO CLASSNAME"
-      _item.PrintName = _sel.PrintName or "NO PRINTNAME"
-      _item.Model = _sel.Model or "NO MODEL"
-      _item.i_w = _sel.i_w or 1
-      _item.i_h = _sel.i_h or 1
-      _item.i_aw = _sel.i_aw or "x"
-      _item.i_ah = _sel.i_ah or "y"
-      _item.i_center = _sel.i_center or "0 0 0"
-
-      rem_item( _char_id, _sel.uniqueID )
-
-      insert_in_inventory( ply, _item, _x, _y )
-
-      send_inventory( ply )
-    else
-      print("ÄHM")
-    end
-  else
-    print( "ELSE" )
-    send_inventory( ply )
   end
+
+  --[[ NEW ORIGIN ]]--
+  if _new_origin == "eq" then
+
+
+    ply:RemoveItem( _uid )
+
+    local _item = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
+    if _item != nil then
+      _item = _item[1]
+      ply:EquipItem( _item.ClassName, _x )
+    end
+  elseif _new_origin == "inv" then
+    ply:MoveItem( _uid, _x, _y, _new_origin )
+  else
+    ply:RemoveItem( _uid )
+    ply:DropItem( _item.ClassName )
+  end
+
+  timer.Simple( 0.04, function()
+    ply:SendInventory()
+  end)
 end)
 
-util.AddNetworkString( "get_equipment" )
+function Player:EquipItem( cname, field )
+  local _item = create_item( cname, "eq" )
 
-function get_field( field, id )
-  print("get_field(" .. field .. ", " .. id .. ")")
-  local _result = db_select( "yrp_inventory", "*", "CharID = " .. id .. " AND f_x = '" .. field .. "' AND f_y = '" .. field .. "'" )
-  print(_result)
-  _result = _result[1]
-  return _result
+  local _sets = "item = 'i," .. _item.uniqueID .. "'"
+  local _whil = "CharID = " .. self:CharID() .. " AND field = '" .. field .. "'"
+  local _res = db_update( "yrp_inventory", _sets, _whil )
+
+  local _swep = {}
+  _swep.in_inv = true
+
+  self.canpickup = true
+  _swep = self:old_give( cname, true )
+  self.canpickup = false
 end
 
-function get_equipment( id )
-  print("get_equipment(" .. id .. ")")
-  local _result = {}
-
-  _result.weaponp1 = get_field( "w1", id )
-  _result.weaponp2 = get_field( "w2", id )
-  _result.weapons = get_field( "w3", id )
-  _result.weaponm = get_field( "w4", id )
-  _result.weapong = get_field( "w5", id )
-
-  return _result
-end
-
-function send_equipment( ply )
-  local _char_id = ply:CharID()
-  local _em = get_equipment( _char_id )
-
-  net.Start( "get_equipment" )
-    net.WriteTable( _em )
-  net.Send( ply )
-end
-
-net.Receive( "get_equipment", function( len, ply )
-  send_equipment( ply )
-end)
-
-hook.Add( "PlayerCanPickupWeapon", "yrp_weapon_pickup", function()
-  return false
+hook.Add( "PlayerCanPickupWeapon", "yrpasdasdsd", function( ply, wep )
+  if ply:GetNWBool( "toggle_inventory", false ) == false then
+    return true
+  elseif ply.canpickup == true then
+    ply.canpickup = false
+    return true
+  else
+    return false
+  end
 end)

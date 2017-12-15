@@ -18,7 +18,10 @@ function teleportToPoint( ply, pos )
   tp_to( ply, Vector( pos[1], pos[2], pos[3] ) )
 end
 
+util.AddNetworkString( "yrp_noti" )
+
 function teleportToSpawnpoint( ply )
+  --printGM( "note", "teleportToSpawnpoint " .. ply:Nick() )
   local groTab = ply:GetGroTab()
 
   local chaTab = ply:GetChaTab()
@@ -27,13 +30,21 @@ function teleportToSpawnpoint( ply )
       local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. groTab.uniqueID )
       if _tmpMapTable != nil then
         local _randomSpawnPoint = table.Random( _tmpMapTable )
+        printGM( "note", ply:Nick() .. " teleported to spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 
         local _tmp = string.Explode( ",", _randomSpawnPoint.position )
-        tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
+        tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
         _tmp = string.Explode( ",", _randomSpawnPoint.angle )
         ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
       else
         printGM( "note", groTab.groupID .. " has no group spawn!" )
+
+        local _str = "[" .. tostring( groTab.groupID ) .. "]" .. " has no group spawn!"
+        net.Start( "yrp_noti" )
+          net.WriteString( "nogroupspawn" )
+          net.WriteString( tostring( groTab.groupID ) )
+        net.Broadcast()
+
         tp_to( ply, ply:GetPos() )
       end
     end

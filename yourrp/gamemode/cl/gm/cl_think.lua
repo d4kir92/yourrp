@@ -14,6 +14,14 @@ ch_attack1 = 0
 local keys = {}
 keys["_hold"] = 0
 
+hook.Add( "OnSpawnMenuOpen", "yrp_spawn_menu_open", function()
+	openMenu()
+end)
+
+hook.Add( "OnSpawnMenuClose", "yrp_spawn_menu_close", function()
+	closeMenu()
+end)
+
 function useFunction( string )
 	if string == nil then
 		return
@@ -49,17 +57,21 @@ function useFunction( string )
 				closeSettings()
 			end
 		elseif string == "ViewChange" then
-			_thirdpersonC = _thirdpersonC + 1
-			if _thirdpersonC > 2 then
-				_thirdpersonC = 0
-			end
+			if isNoMenuOpen() then
+				--[[
+				_thirdpersonC = _thirdpersonC + 1
+				if _thirdpersonC > 2 then
+					_thirdpersonC = 0
+				end
 
-			if _thirdpersonC == 0 then
-				_thirdperson = 0
-			elseif _thirdpersonC == 1 then
-				_thirdperson = 1
-			elseif _thirdpersonC == 2 then
-				_thirdperson = 2
+				if _thirdpersonC == 0 then
+					_thirdperson = 0
+				elseif _thirdpersonC == 1 then
+					_thirdperson = 1
+				elseif _thirdpersonC == 2 then
+					_thirdperson = 2
+				end
+				]]--
 			end
 		elseif string == "openMap" then
 			if mapWindow != nil then
@@ -205,7 +217,43 @@ function keyPressed( key, string, string2, distance )
 	end
 end
 
+local clicked = false
+
+function get_speak_channel_name( id )
+	if id == 0 then
+		return lang_string( "speaklocal" )
+	elseif id == 1 then
+		return lang_string( "speakgroup" )
+	elseif id == 2 then
+		return lang_string( "speakglobal" )
+	end
+end
+
+LocalPlayer():SetNWInt( "view_range", -60 )
 function KeyPress()
+	local ply = LocalPlayer()
+	if isNoMenuOpen() then
+		if input.IsKeyDown( KEY_PAD_PLUS ) then
+			if ply:GetNWInt( "view_range" ) > 80 then
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 2 )
+			else
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
+			end
+			if ply:GetNWInt( "view_range" ) > 400 then
+				ply:SetNWInt( "view_range", 400 )
+			end
+		elseif input.IsKeyDown( KEY_PAD_MINUS ) then
+			if ply:GetNWInt( "view_range" ) > 80 then
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 2 )
+			else
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
+			end
+			if ply:GetNWInt( "view_range" ) < -60 then
+				ply:SetNWInt( "view_range", -60 )
+			end
+		end
+	end
+
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 
 	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
@@ -228,6 +276,30 @@ function KeyPress()
 
 	keyPressed( KEY_PAGEUP, "vyes", nil )
 	keyPressed( KEY_PAGEDOWN, "vno", nil )
+
+	if isNoMenuOpen() and !chatisopen then
+		if input.IsKeyDown( get_keybind("speak_next") ) and !clicked then
+			clicked = true
+			net.Start( "press_speak_next" )
+			net.SendToServer()
+
+			timer.Simple( 0.4, function()
+				clicked = false
+				notification.AddLegacy( get_speak_channel_name( LocalPlayer():GetNWInt( "speak_channel" ) ), NOTIFY_GENERIC, 3 )
+			end)
+		end
+
+		if input.IsKeyDown( get_keybind("speak_prev") ) and !clicked then
+			clicked = true
+			net.Start( "press_speak_prev" )
+			net.SendToServer()
+
+			timer.Simple( 0.4, function()
+				clicked = false
+				notification.AddLegacy( get_speak_channel_name( LocalPlayer():GetNWInt( "speak_channel" ) ), NOTIFY_GENERIC, 3 )
+			end)
+		end
+	end
 end
 hook.Add( "Think", "Thinker", KeyPress)
 
@@ -255,16 +327,17 @@ local function yrpCalcView( ply, pos, angles, fov )
 							if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 								pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 12 * ply:GetModelScale() )
 							end
-							if _thirdperson == 2 then
+							--if _thirdperson == 2 then
+							if ply:GetNWInt( "view_range", 0 ) > 0 then
 								--Thirdperson
-								local dist = 170 * ply:GetModelScale()
+								local dist = ply:GetNWInt( "view_range", 0 ) * ply:GetModelScale()
 
 								local _tmpThick = 4
 								local _minDistFor = 8
 								local _minDistBac = 40
 								local tr = util.TraceHull( {
 									start = pos + angles:Forward() * _minDistFor,
-									endpos = pos - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale()),
+								endpos = pos - ( angles:Forward() * dist ) + Vector( 0, 0, ply:GetNWInt( "view_range", 0 )/3*ply:GetModelScale()),
 									filter = {LocalPlayer(),weapon},
 									mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
 									maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
@@ -289,17 +362,15 @@ local function yrpCalcView( ply, pos, angles, fov )
 									_drawViewmodel = false
 									return view
 								else
-									view.origin = pos - ( angles:Forward() * dist ) + Vector( 0, 0, 16*ply:GetModelScale())
+									view.origin = pos - ( angles:Forward() * dist ) + Vector( 0, 0, ply:GetNWInt( "view_range", 0 )/3*ply:GetModelScale())
 									view.angles = angles
 									view.fov = fov
 									_drawViewmodel = true
 									return view
 								end
-							elseif _thirdperson == 0 then
-								--Disabled
-							elseif _thirdperson == 1 then
+							elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) <= 0 then
 								--Firstperson realistic
-								local dist = 170 * ply:GetModelScale()
+								local dist = ply:GetNWInt( "view_range", 0 ) * ply:GetModelScale()
 
 								local _tmpThick = 16
 								local _head = ply:LookupBone( "ValveBiped.Bip01_Head1" )
@@ -315,7 +386,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 									} )
 
 									if !tr.Hit then
-										pos2 = ply:GetBonePosition( _head ) + ( angles:Forward() * 10 * ply:GetModelScale() ) + ( angles:Up() * 16 * ply:GetModelScale() )
+										pos2 = ply:GetBonePosition( _head ) + ( angles:Forward() * 5 * ply:GetModelScale() ) - Vector( 0, 0, 1.4 ) * ply:GetModelScale() + ( angles:Up() * 6 * ply:GetModelScale() )
 										view.origin = pos2
 										_savePos = pos2
 										view.angles = angles
@@ -337,6 +408,14 @@ local function yrpCalcView( ply, pos, angles, fov )
 									_drawViewmodel = false
 									return view
 								end
+							else
+								--Disabled
+								view.origin = pos
+								view.angles = angles
+								view.fov = fov
+								view.drawviewer = false
+								_drawViewmodel = false
+								return view
 							end
 						else
 							--Disabled
@@ -352,7 +431,7 @@ end
 hook.Add( "CalcView", "MyCalcView", yrpCalcView )
 
 function showPlayermodel()
-	if _thirdperson == 0 or _drawViewmodel == false then
+	if _drawViewmodel == false then
 		return false
 	else
 		return true

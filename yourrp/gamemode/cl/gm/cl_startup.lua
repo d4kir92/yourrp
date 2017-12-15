@@ -422,15 +422,15 @@ function GM:HUDDrawTargetID()
   return false
 end
 
-function drawPlate( ply, string )
+function drawPlate( ply, string, z, color )
   if ply:Alive() and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
     local pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, ply:GetModelScale() * 20 )
     local ang = Angle( 0, ply:GetAngles().y-90, 90 )
     local sca = ply:GetModelScale()/4
     local str = string
     local strSize = string.len( str ) + 3
-    cam.Start3D2D( pos , ang, sca )
-      draw.RoundedBox( 0, -( ( strSize * 10 )/2 ), 0, strSize*10, 24, Color( 0, 0, 0, 200 ) )
+    cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
+      draw.RoundedBox( 0, -( ( strSize * 10 )/2 ), 0, strSize*10, 24, color )
       draw.SimpleTextOutlined( str, "HudBars", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     cam.End3D2D()
   end
@@ -438,11 +438,40 @@ end
 
 function drawPlates()
   for k, v in pairs( player.GetAll() ) do
-    if v:GetNWBool( "tag", false ) then
+    if v:GetNWBool( "tag_dev", false ) then
       if tostring( v:SteamID() ) == "STEAM_0:1:20900349" then
-        drawPlate( v, "DEVELOPER" )
+        drawPlate( v, "DEVELOPER", 7, Color( 0, 0, 0, 200 ) )
+      end
+    end
+    if v:GetNWBool( "tag_admin", false ) then
+      if v:IsSuperAdmin() or v:IsAdmin() then
+        drawPlate( v, string.upper( v:GetUserGroup() ), 0, Color( 0, 0, 140, 200 ) )
       end
     end
   end
 end
 hook.Add( "PostPlayerDraw", "DrawName", drawPlates )
+
+net.Receive( "yrp_noti" , function( len )
+  if playerready then
+    local ply = LocalPlayer()
+    if ply != nil then
+      if ply:IsSuperAdmin() != nil and ply:IsAdmin() != nil then
+        if ply:IsSuperAdmin() or ply:IsAdmin() then
+          local _str_lang = net.ReadString()
+          print(_str_lang)
+          local _str = ""
+          if _str_lang == "noreleasepoint" then
+            _str = lang_string( _str_lang )
+          elseif _str_lang == "nojailpoint" then
+            _str = lang_string( _str_lang )
+          elseif _str_lang == "nogroupspawn" then
+            _str = "[" .. string.upper( net.ReadString() ) .. "]" .. " " .. lang_string( _str_lang ) .. "!"
+          end
+
+        	notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
+        end
+      end
+    end
+  end
+end)

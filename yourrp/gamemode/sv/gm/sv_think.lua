@@ -81,11 +81,15 @@ function check_salary( ply )
       local _money = tonumber( _m )
       local _c = ply:GetNWInt( "capital", -1 )
       local _capital = tonumber( _c )
-      if _money != -1 and _capital != -1 then
-        ply:SetNWString( "money", _money + _capital )
-        ply:UpdateMoney()
+      if _money != nil and _capital != nil then
+        if _money != -1 and _capital != -1 then
+          ply:SetNWString( "money", _money + _capital )
+          ply:UpdateMoney()
+        else
+          ply:CheckMoney()
+        end
       else
-        ply:CheckMoney()
+        print("FAIL")
       end
     end
   end
@@ -130,7 +134,7 @@ timer.Create( "ServerThink", 1, 0, function()
     if _time >= 21600 then
       printGM( "gm", "Auto Reload" )
       timer.Simple( 1, function()
-        game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
+        game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
       end)
     else
       printGM( "gm", "Auto Reload in " .. 21600-_time .. " sec" )

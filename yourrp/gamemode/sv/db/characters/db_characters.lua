@@ -33,6 +33,15 @@ sql_add_column( _db_name, "map", "TEXT" )
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
+util.AddNetworkString( "change_rpname" )
+
+net.Receive( "change_rpname", function( len, ply )
+  local _new_rp_name = net.ReadString()
+  db_update( "yrp_characters", "rpname = '" .. db_sql_str( _new_rp_name ) .. "'", "uniqueID = " .. ply:CharID() )
+  ply:SetNWString( "rpname", db_sql_str( _new_rp_name ) )
+end)
+
+
 util.AddNetworkString( "charGetGroups" )
 util.AddNetworkString( "charGetRoles" )
 util.AddNetworkString( "charGetRoleInfo" )
@@ -170,7 +179,7 @@ net.Receive( "CreateCharacter", function( len, ply )
   vals = vals .. tonumber( ch.playermodelID ) .. ", "
   vals = vals .. 250 .. ", "
   vals = vals .. 500 .. ", "
-  vals = vals .. "'" .. db_sql_str( game.GetMap() ) .. "', "
+  vals = vals .. "'" .. db_sql_str2( game.GetMap() ) .. "', "
   vals = vals .. tonumber( ch.skin ) .. ", "
   vals = vals .. tonumber( ch.bg[0] ) .. ", "
   vals = vals .. tonumber( ch.bg[1] ) .. ", "

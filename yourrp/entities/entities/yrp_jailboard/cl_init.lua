@@ -71,7 +71,7 @@ net.Receive( "openLawBoard", function( len )
     for k, v in pairs( tmpJailList ) do
       local dpanel = createVGUI( "DPanel", scrollpanel, 400, 400, 0, 0 )
       dpanel:SetText( "" )
-      dpanel:SetPos( _x*ctr( 410 ), _y*ctr( 410 ) )
+      dpanel:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) )
       function dpanel:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 255, 200 ) )
 
@@ -80,6 +80,28 @@ net.Receive( "openLawBoard", function( len )
         draw.SimpleTextOutlined( lang_string( "time" ) .. ": " .. v.time, "sef", pw/2, ph - ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
       scrollpanel:AddItem( dpanel )
+
+      local _removeButton = createD( "DButton", scrollpanel, ctr( 400 ), ctr( 50 ), 0, 0 )
+      _removeButton:SetText( "" )
+      _removeButton.uniqueID = v.uniqueID
+      _removeButton.panel = dpanel
+
+      _removeButton.steamID = v.steamID
+
+      function _removeButton:Paint( pw, ph )
+        paintButton( self, pw, ph, lang_string( "remove" ) )
+      end
+      function _removeButton:DoClick()
+        net.Start( "dbRemJail" )
+          net.WriteString( self.uniqueID )
+          net.WriteString( self.steamID )
+        net.SendToServer()
+        self.panel:Remove()
+        self:Remove()
+      end
+
+      _removeButton:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) + ctr( 400 ) )
+
       _x = _x + 1
       if _x > 4 then
         _y = _y + 1
@@ -91,7 +113,7 @@ net.Receive( "openLawBoard", function( len )
     if _gAccess == _tmpGroupID then
       local addButton = createVGUI( "DButton", scrollpanel, 400, 400 )
       addButton:SetText( "" )
-      addButton:SetPos( _x*ctr( 410 ), _y*ctr( 410 ) )
+      addButton:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) )
       function addButton:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
 

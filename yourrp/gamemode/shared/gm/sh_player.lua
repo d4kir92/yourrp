@@ -208,14 +208,14 @@ function Player:RPName()
 end
 
 function Player:Nick()
-  return self:SteamName() .. " [" .. self:RPName() .. "]"
+  return self:RPName()
 end
 
 function Player:Team()
   return tonumber( self:GetNWString( "groupUniqueID", "-1" ) )
 end
 
-timer.Simple( 1, function()
+timer.Simple( 10, function()
   function team.GetName( index )
     for k, v in pairs( player.GetAll() ) do
       if v:Team() == index then

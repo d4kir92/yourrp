@@ -2,6 +2,9 @@
 
 local _menuOpen = false
 function isNoMenuOpen()
+  if gui.IsConsoleVisible() then
+    return false
+  end
   return !_menuOpen
 end
 
@@ -76,15 +79,19 @@ function paintButton( derma, pw, ph, text )
   draw.SimpleTextOutlined( text, "windowTitle", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 end
 
-function paintPanel( derma, pw, ph )
-  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
+function paintPanel( derma, pw, ph, color )
+  local _c = color
+  if _c == nil then
+    _c = Color( 0, 0, 0, 250 )
+  end
+  draw.RoundedBox( 0, 0, 0, pw, ph, _c )
 
   local _brC = Color( 255, 255, 255, 255 )
   paintBr( pw, ph, _brC )
 end
 
 function paintInv( derma, pw, ph, text, text2 )
-  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 150 ) )
+  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 190 ) )
 
   local _brC = Color( 255, 255, 255, 255 )
   paintBr( pw, ph, _brC )
@@ -317,7 +324,8 @@ function createMDMenu( parent, w, h, x, y )
   end
   function tmp:AddSite( hook, site, cat, icon )
     local material = Material( icon )
-    local tmpNr = #tmp.sites[cat] + 1
+    local tmpNrMax = #tmp.sites[cat]
+    local tmpNr = tmpNrMax + 1
     self.sites[cat][tmpNr] = {}
     self.sites[cat][tmpNr].hook = hook
     self.sites[cat][tmpNr].site = site
@@ -422,7 +430,6 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 		elseif self.value == self.opt2 then
 			self.value = self.opt1
 		end
-		_yrp_derma.design.mode = tostring( self.value )
 
 		if tostring( self.value ) == "dark" then
 			dbUpdateHUD( "mdpm", 0 )

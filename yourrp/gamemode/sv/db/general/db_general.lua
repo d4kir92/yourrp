@@ -7,6 +7,7 @@ util.AddNetworkString( "db_update_hunger" )
 util.AddNetworkString( "db_update_thirst" )
 util.AddNetworkString( "db_update_stamina" )
 util.AddNetworkString( "db_update_hud" )
+util.AddNetworkString( "db_update_inventory" )
 util.AddNetworkString( "dbUpdateNWBool2" )
 
 local _db_name = "yrp_general"
@@ -22,6 +23,7 @@ sql_add_column( _db_name, "toggle_hunger", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_hud", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_inventory", "INT DEFAULT 1" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
@@ -55,6 +57,15 @@ function get_advert_name()
   end
 end
 get_advert_name()
+
+net.Receive( "db_update_inventory", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_inventory = " .. _nw_bool, nil )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_inventory", tobool( _nw_bool ) )
+  end
+end)
 
 net.Receive( "db_update_hunger", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
@@ -110,13 +121,13 @@ concommand.Add( "yrp_restart", function( ply, cmd, args )
 	if ply:IsPlayer() then
 		if ply:IsSuperAdmin() then
 	    printGM( "note", "RESTARTING SERVER by " .. ply:Nick() )
-      game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
+      game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
 		else
 	    printGM( "note", ply:Nick() .. " tried to restart server!" )
 	  end
 	else
     printGM( "note", "RESTARTING SERVER by [CONSOLE]" )
-    game.ConsoleCommand( "changelevel " .. string.lower( game.GetMap() ) .. "\n" )
+    game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
   end
 end )
 

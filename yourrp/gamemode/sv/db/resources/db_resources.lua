@@ -15,7 +15,7 @@ resource.AddWorkshop( "314312925" )
 
 --Food and Household items
 resource.AddWorkshop( "108024198" )
---[[
+
 --Server Workshop Collection
 printGM( "note", "Workshop files that will be send to Clients" )
 local _wsitems = engine.GetAddons()
@@ -28,6 +28,6 @@ for k, ws in pairs( _wsitems ) do
     resource.AddWorkshop( ws.wsid )
 	end
 end
-]]--
+
 printGM( "db", "Loaded Resources" )
 hr_pos()

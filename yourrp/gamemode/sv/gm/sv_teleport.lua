@@ -5,7 +5,8 @@ function enough_space( ply, pos )
   	start = pos,
     endpos = pos,
     mins = Vector( -18, -18, 0 ),
-  	maxs = Vector( 18, 18, 75 )
+  	maxs = Vector( 18, 18, 75 ),
+    filter = ply
   }
 
   local hullTrace = util.TraceHull( tr )
@@ -33,18 +34,24 @@ function get_ground_pos( ply, pos )
 end
 
 function tp_to( ply, pos )
+  local _pos = Vector( math.Round( pos[1], 2 ), math.Round( pos[2], 2 ), math.Round( pos[3], 2 ) )
   local _angle = Angle( 0, 0, 0 )
   local _tmpAngle = ply:EyeAngles()
   ply:SetEyeAngles( _angle )
-  if enough_space( ply, pos + Vector( 0, 0, 2 ) ) then
-    ply:SetPos( get_ground_pos( ply, pos + Vector( 0, 0, 2 ) ) )
+
+  if enough_space( ply, _pos + Vector( 0, 0, 2 ) ) then
+    local __pos = get_ground_pos( ply, _pos + Vector( 0, 0, 2 ) )
+
+    ply:SetPos( __pos )
     ply:SetEyeAngles( _tmpAngle )
   else
     for i = 1, 3 do
       for j = 0, 360, 45 do
         _angle:RotateAroundAxis( ply:GetForward(), 45 )
-        if enough_space( ply, pos + Vector( 0, 0, 2 ) + _angle:Forward() * 40 * i ) then
-          ply:SetPos( get_ground_pos( ply, pos + Vector( 0, 0, 2 ) + _angle:Forward() * 40 * i ) )
+        local _enough_space = enough_space( ply, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+        if _enough_space then
+          local __pos = get_ground_pos( ply, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+          ply:SetPos( __pos )
           ply:SetEyeAngles( _tmpAngle )
           return
         end

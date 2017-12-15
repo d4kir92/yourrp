@@ -30,13 +30,16 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
     draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
   end
 
+  local rolePM = createVGUI( "DModelPanel", roleInfoPanel, 550, 550, 0, 0 )
   if model != nil and model != "" then
-    local rolePM = createVGUI( "DModelPanel", roleInfoPanel, 550, 550, 0, 0 )
     rolePM:SetModel( model )
     if rolePM.Entity != nil then
       rolePM.Entity:SetModelScale( modelsize, 0 )
     end
+  elseif model == "" then
+    rolePM:SetModel( "models/player/skeleton.mdl" )
   end
+
   tmpY = tmpY + tmpH + tmpBr
   tmpH = 48+48
 
@@ -158,7 +161,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
   tmpY = tmpY + tmpH + 3*tmpBr
   tmpH = 60
 
-  if maxamount == -1 or uses < maxamount then
+  if maxamount <= 0 or uses < maxamount then
     local roleGetRole = createVGUI( "DButton", roleInfoPanel, 2160 - 1600 - 10, 120, 0, tmpY )
     roleGetRole:SetText( "" )
     roleGetRole.text = ""
@@ -226,17 +229,19 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 160 ) )
     draw.SimpleTextOutlined( name, "roleInfoText", ctr( 25 ), ctr( 25 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    if maxamount > 0 then
-      local maxbr = 4
-      local maxbbr = 10
-      local maxcolor = Color( 0, 255, 0, 160 )
-      draw.RoundedBox( ctr( maxbbr ), ctr( 10 ), ctr( 100 ), pw - ctr( maxbbr * 2 ), ph - ctr( 100 ), Color( 255, 255, 255, 160 ) )
-      if uses >= maxamount then
-        maxcolor = Color( 255, 0, 0, 255 )
-      end
-      draw.RoundedBox( ctr( maxbbr ), ctr( 10 + maxbr ), ctr( 100 + maxbr ), ( pw - ctr( maxbr*2 + maxbbr*2 ) ) / maxamount * uses, ph - ctr( 100 + maxbr*2 ), maxcolor )
+    if maxamount != nil then
+      if maxamount > 0 then
+        local maxbr = 4
+        local maxbbr = 10
+        local maxcolor = Color( 0, 255, 0, 160 )
+        draw.RoundedBox( ctr( maxbbr ), ctr( 10 ), ctr( 100 ), pw - ctr( maxbbr * 2 ), ph - ctr( 100 ), Color( 255, 255, 255, 160 ) )
+        if uses >= maxamount then
+          maxcolor = Color( 255, 0, 0, 255 )
+        end
+        draw.RoundedBox( ctr( maxbbr ), ctr( 10 + maxbr ), ctr( 100 + maxbr ), ( pw - ctr( maxbr*2 + maxbbr*2 ) ) / maxamount * uses, ph - ctr( 100 + maxbr*2 ), maxcolor )
 
-      draw.SimpleTextOutlined( uses .. "/" .. maxamount, "roleInfoText", pw/2, ctr( 100 + 25 ), get_font_col(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( uses .. "/" .. maxamount, "roleInfoText", pw/2, ctr( 100 + 25 ), get_font_col(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
     end
   end
 
@@ -245,11 +250,17 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
 
-  local randModel = string.Explode( ",", model )
-  local randNumb = math.Round( math.Rand( 1, #randModel ) )
-  if randModel[randNumb] != nil and randModel[randNumb] != "" then
-    local tmpRoleModel = createVGUI( "SpawnIcon", parent, h, h, x, y )
-    tmpRoleModel:SetModel( randModel[randNumb] )
+  local tmpRoleModel = createVGUI( "DModelPanel", parent, h, h, x, y )
+  local randModel = ""
+  local randNumb = 1
+  if model != nil then
+    randModel = string.Explode( ",", model )
+    randNumb = math.Round( math.Rand( 1, #randModel ) )
+    if randModel[randNumb] != nil and randModel[randNumb] != "" then
+      tmpRoleModel:SetModel( randModel[randNumb] )
+    elseif randModel[randNumb] == "" then
+      tmpRoleModel:SetModel( "models/player/skeleton.mdl" )
+    end
     if tmpRoleModel.Entity != nil then
       tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
       if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
@@ -311,7 +322,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newY = y
     for k, v in pairs( tmpTable ) do
       if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
-        newY = addRole( v.roleID, parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, v.capital, v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
+        newY = addRole( tostring( v.roleID ), parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, tonumber( v.capital ), v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
       end
     end
     return newY
@@ -353,7 +364,7 @@ function addGroup( name, parent, uppergroup, x, y, color )
     draw.SimpleTextOutlined( name, "roleInfoHeader", ctr( 25 ), ctr( 25 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  if parent != nil then
+  if parent != nil and parent != NULL then
     parent:AddItem( tmpGroup )
   end
   return y + 20
@@ -403,9 +414,9 @@ function openRoleMenu()
   net.SendToServer()
 
   net.Receive( "getAllGroups", function()
-    AllGroups = net.ReadTable()
-    AllRoles = net.ReadTable()
-    Whitelist = net.ReadTable()
+    AllGroups = net.ReadTable() or {}
+    AllRoles = net.ReadTable() or {}
+    Whitelist = net.ReadTable() or {}
 
     findChildGroups( -1 )
     addGroups( "No uppergroup", roleDPanelList, -1, -30, -60 )

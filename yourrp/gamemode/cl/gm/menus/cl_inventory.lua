@@ -20,7 +20,13 @@ function clearL()
 
   for k, v in pairs( yrp_inventory.cache_inv_item ) do
     for l, w in pairs( v ) do
-      w:Remove()
+      if (istable(w))then
+        for m, x in pairs( w ) do
+          x:Remove()
+        end
+      else
+        w:Remove()
+      end
     end
   end
 end
@@ -143,24 +149,232 @@ end
 local inv = {}
 inv.size = 128
 
+local INV_W = 8
+local INV_H = 8
+
+function insert_env_in_slot( parent, tbl, w, h, x, y )
+  if tbl != "-1" then
+
+    local _w = tbl.w
+    local _h = tbl.h
+    local _model = tbl.Model
+    local _pname = tbl.PrintName
+    local _cname = tbl.ClassName
+    local _cen = tbl.center
+
+    local _bg = createD( "DPanel", parent, ctr(w*inv.size), ctr(h*inv.size), ctr( x ), ctr( y ) )
+    local _tmp = createD( "DModelPanel", _bg, ctr(w*inv.size), ctr(h*inv.size), 0, 0 )
+    _tmp.name = "Item"
+    _tmp:SetModel( _model )
+    _tmp:SetToolTip( "Name: " .. _pname .. "\n" .. "CName: " .. _cname .. "\n" .. "w: " .. _w .. "\n" .. "h: " .. _h )
+    _tmp.tbl = tbl
+    _tmp:Droppable( "ITEM" )
+
+    local _center = _cen
+    _center = string.Explode( " ", _center )
+    local _cen = {}
+    _cen.x = _center[1]
+    _cen.y = _center[2]
+    _cen.z = _center[3]
+
+    local _sort = {}
+    for axis, value in SortedPairsByValue( _cen, true ) do
+      local tbl = {}
+      tbl.axis = axis
+      tbl.value = value
+      table.insert( _sort, tbl )
+    end
+
+    _tmp:SetLookAt( Vector( _cen.x, _cen.y, _cen.z ) )
+    _tmp:SetCamPos( Vector( _cen.x, _cen.y, _cen.z ) - Vector( 0, _w*6, 0 ) )	-- Move cam in front of eyes
+
+    function _tmp:LayoutEntity( ent )
+      return false
+    end
+    _tmp.PrintName = tbl.PrintName
+    function _bg:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 40 ) )
+    end
+    function _tmp:PaintOver( pw, ph )
+      --[[ Name ]]--
+      if self:IsDragging() then
+        draw.SimpleTextOutlined( self.PrintName, "DermaDefault", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ))
+
+        paintBr( pw, ph, Color( 18, 18, 18 ) )
+      end
+    end
+    return _bg
+  end
+end
+
+function add_eq_slot( field, w, h, x, y )
+  local _tmp = createD( "DPanel", yrp_inventory.left, w, h, x, y )
+  _tmp.name = "SLOT"
+  _tmp._x = field
+  _tmp._y = ""
+  function _tmp:Paint( pw, ph )
+    paintInv( self, pw, ph, "" )
+  end
+
+  _tmp:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
+    if isDropped then
+      if receiver:IsHovered() then
+        local _x, _y = receiver:GetPos()
+        tableOfDroppedPanels[1]:SetPos( _x + ctr(  1 ), _y + ctr(  1 ) )
+        net.Start( "item_move" )
+          net.WriteString( receiver._x )
+          net.WriteString( receiver._y )
+          net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
+          net.WriteString( "eq" )
+        net.SendToServer()
+      end
+    end
+  end, {} )
+end
+
+function insert_eq_in_slot( slot, tbl, w, h, x, y )
+  if tbl != "-1" then
+
+    local _w = tbl.w
+    local _h = tbl.h
+    local _model = tbl.Model
+    local _pname = tbl.PrintName
+    local _cname = tbl.ClassName
+    local _cen = tbl.center
+
+    local _bg = createD( "DPanel", yrp_inventory.left, w, h, x, y )
+
+    local _tmp = createD( "DModelPanel", _bg, w, h, 0, 0 )
+    _tmp.w = w
+    _tmp.h = h
+    _tmp.name = "Item"
+    _tmp:SetModel( _model )
+    _tmp:SetToolTip( "Name: " .. _pname .. "\n" .. "CName: " .. _cname .. "\n" .. "w: " .. _w .. "\n" .. "h: " .. _h )
+    _tmp.tbl = tbl
+    _tmp:Droppable( "ITEM" )
+
+    local _center = _cen
+    _center = string.Explode( " ", _center )
+    local _cen = {}
+    _cen.x = _center[1]
+    _cen.y = _center[2]
+    _cen.z = _center[3]
+
+    local _sort = {}
+    for axis, value in SortedPairsByValue( _cen, true ) do
+      local tbl = {}
+      tbl.axis = axis
+      tbl.value = value
+      table.insert( _sort, tbl )
+    end
+
+    _tmp:SetLookAt( Vector( _cen.x, _cen.y, _cen.z ) )
+    _tmp:SetCamPos( Vector( _cen.x, _cen.y, _cen.z ) - Vector( 0, _w*6, 0 ) )	-- Move cam in front of eyes
+
+    function _tmp:LayoutEntity( ent )
+      return false
+    end
+    _tmp.PrintName = tbl.PrintName
+    _tmp.ClassName = tbl.ClassName
+    local _weapen = LocalPlayer():GetWeapon( tbl.ClassName )
+    if _weapen != nil and _weapen != NULL then
+      _tmp.ammotype = _weapen:GetPrimaryAmmoType()
+      _tmp.sammotype = _weapen:GetSecondaryAmmoType()
+    end
+    function _bg:Paint( pw, ph  )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 40 ) )
+    end
+    function _tmp:PaintOver( pw, ph  )
+      if self:IsDragging() then
+        self:SetSize( ctr(self.tbl.w)*inv.size, ctr(self.tbl.h)*inv.size )
+      else
+        self:SetSize( self.w, self.h )
+      end
+      --[[ Name ]]--
+      draw.SimpleTextOutlined( self.PrintName, "DermaDefault", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ))
+
+      --[[ AMMO ]]--
+      draw.SimpleTextOutlined( LocalPlayer():GetAmmoCount( self.ammotype or 1 ), "DermaDefault", ctr( 10 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ))
+      draw.SimpleTextOutlined( LocalPlayer():GetAmmoCount( self.sammotype or 1 ), "DermaDefault", pw - ctr( 10 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ))
+
+      paintBr( pw, ph, Color( 18, 18, 18 ) )
+    end
+    return _bg
+  end
+end
+
 net.Receive( "get_inventory", function( len )
   clearL()
 
   function yrp_inventory.left:Paint( pw, ph )
-    paintPanel( self, pw, ph )
-
-    --draw.SimpleTextOutlined( lang_string( "attributes" ) .. " <- LATER!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    paintPanel( self, pw, ph, Color( 0, 0, 0, 160 ) )
   end
 
-  local _inv = net.ReadTable()
-  --PrintTable( _inv )
+  local _tbl = net.ReadTable()
+  local _env = _tbl.env
+  local _inv = _tbl.inv
+
+  local _env_header = createD( "DPanel", yrp_inventory.left, ctr( 1050 ), ctr( 50 ), ctr( 10 ), ctr( 10 ) )
+  function _env_header:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
+
+    draw.SimpleTextOutlined( lang_string( "nearbyitems" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
+
+  local _env_panel = createD( "DScrollPanel", yrp_inventory.left, ctr( 1050 ), ctr( 780 ), ctr( 10 ), ctr( 10 + 50 ) )
+  function _env_panel:Paint( pw, ph )
+    paintBr( pw, ph, Color( 255, 255, 255, 255 ) )
+  end
+
+  --[[ ENV SLOTS ]]--
+  yrp_inventory.cache_env = {}
+  local _env_y = 10
+  if _env != nil then
+    for k, env_item in pairs( _env ) do
+      yrp_inventory.cache_env[k] = createD( "DPanel", _env_panel, ctr( env_item.w*inv.size ), ctr( env_item.h*inv.size ), ctr( 10 ), ctr( _env_y ) )
+      _env_y = _env_y + env_item.h*inv.size + 10
+      local _tmp = yrp_inventory.cache_env[k]
+      _tmp.name = "SLOT"
+      _tmp._x = x
+      _tmp._y = y
+      function _tmp:Paint( pw, ph )
+        --paintInv( self, pw, ph, "" )
+      end
+
+      _tmp:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
+        if isDropped then
+          if receiver:IsHovered() then
+            local _x, _y = receiver:GetPos()
+            tableOfDroppedPanels[1]:SetPos( _x + ctr(  1 ), _y + ctr(  1 ) )
+            receiver:SetSize( tableOfDroppedPanels[1]:GetSize() )
+            net.Start( "item_move" )
+              net.WriteString( receiver._x )
+              net.WriteString( receiver._y )
+              net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
+              net.WriteString( "nearby" )
+            net.SendToServer()
+          end
+        end
+      end, {} )
+    end
+  end
 
   --[[ INV SLOTS ]]--
+  local _inv_header = createD( "DPanel", yrp_inventory.left, ctr( 1050 ), ctr( 50 ), ctr( 10 ), ctr( 840 + 10 ) )
+  function _inv_header:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
+
+    draw.SimpleTextOutlined( lang_string( "inventory" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
+  local _inv_panel = createD( "DScrollPanel", yrp_inventory.left, ctr( 1050 ), ctr( 1050 ), ctr( 10 ), ctr( 840 + 10 + 50 ) )
+  function _inv_panel:Paint( pw, ph )
+    paintBr( pw, ph, Color( 255, 255, 255, 255 ) )
+  end
   yrp_inventory.cache_inv = {}
-  for y = 1, 8 do
+  for y = 1, INV_H do
     yrp_inventory.cache_inv[y] = {}
-    for x = 1, 8 do
-      yrp_inventory.cache_inv[y][x] = createD( "DPanel", yrp_inventory.left, ctr( inv.size ), ctr( inv.size ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
+    for x = 1, INV_W do
+      yrp_inventory.cache_inv[y][x] = createD( "DPanel", _inv_panel, ctr( inv.size ), ctr( inv.size ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
       local _tmp = yrp_inventory.cache_inv[y][x]
       _tmp.name = "SLOT"
       _tmp._x = x
@@ -174,12 +388,11 @@ net.Receive( "get_inventory", function( len )
           if receiver:IsHovered() then
             local _x, _y = receiver:GetPos()
             tableOfDroppedPanels[1]:SetPos( _x + ctr(  1 ), _y + ctr(  1 ) )
-            --tableOfDroppedPanels[1]:SetParent( receiver )
-            --tableOfDroppedPanels[1]:SetParent( yrp_inventory.left )
             net.Start( "item_move" )
               net.WriteString( receiver._x )
               net.WriteString( receiver._y )
               net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
+              net.WriteString( "inv" )
             net.SendToServer()
           end
         end
@@ -187,202 +400,113 @@ net.Receive( "get_inventory", function( len )
     end
   end
 
-  yrp_inventory.cache_inv["eq"] = {}
-  yrp_inventory.cache_inv["eq"].w1 = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 + 1050 ) )
-  local _w1 = yrp_inventory.cache_inv["eq"].w1
-  function _w1:Paint( pw, ph )
-    paintInv( self, pw, ph, "", lang_string( "weapon" ) )
-  end
-  _w1._x = "w1"
-  _w1._y = "w1"
-  _w1:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
-    if isDropped then
-      if receiver:IsHovered() then
-        local _x, _y = receiver:GetPos()
-        tableOfDroppedPanels[1]:SetPos( _x + ctr(  1 ), _y + ctr(  1 ) )
-        --tableOfDroppedPanels[1]:SetParent( receiver )
-        --tableOfDroppedPanels[1]:SetParent( yrp_inventory.left )
-        net.Start( "item_move" )
-          net.WriteString( receiver._x )
-          net.WriteString( receiver._y )
-          net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
-        net.SendToServer()
-      end
+  --[[ EQ SLOTS ]]--
+  add_eq_slot( "w1", ctr( 200 ), ctr( 200 ), ctr( 1090 ), ctr( 900 ) )
+  add_eq_slot( "w2", ctr( 200 ), ctr( 200 ), ctr( 1300 ), ctr( 900 ) )
+  add_eq_slot( "w3", ctr( 200 ), ctr( 200 ), ctr( 1510 ), ctr( 900 ) )
+  add_eq_slot( "w4", ctr( 200 ), ctr( 200 ), ctr( 1720 ), ctr( 900 ) )
+  add_eq_slot( "w5", ctr( 200 ), ctr( 200 ), ctr( 1930 ), ctr( 900 ) )
+
+  --[[ ENV ITEMS ]]--
+  local _env_items = {}
+  _env_items.x = 10
+  _env_items.y = 10
+  if _env != nil then
+    for k, env_item in pairs( _env ) do
+      insert_env_in_slot( _env_panel, env_item, env_item.w, env_item.h, _env_items.x, _env_items.y )
+      _env_items.y = _env_items.y + env_item.h*inv.size + 10
     end
-  end, {} )
+  end
 
   --[[ INV ITEMS ]]--
   yrp_inventory.cache_inv_item = {}
-  for y = 1, 8 do
+  for y = 1, INV_H do
     yrp_inventory.cache_inv_item[y] = {}
-    for x = 1, 8 do
-      if _inv["f_y"..y]["f_x"..x].ClassName != "[EMPTY]" and !isnumber(tonumber(_inv["f_y"..y]["f_x"..x].ClassName)) then
-        local _w = _inv["f_y"..y]["f_x"..x].i_w
-        local _h = _inv["f_y"..y]["f_x"..x].i_h
+    for x = 1, INV_W do
+      if _inv != nil then
+        if _inv["y"..y]["x"..x] != nil then
+          if _inv["y"..y]["x"..x].item != "-1" then
+            if istable(_inv["y"..y]["x"..x].item ) then
 
-        yrp_inventory.cache_inv_item[y][x] = createD( "DModelPanel", yrp_inventory.left, ctr( inv.size*_w ), ctr( inv.size*_h ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
+              local _tbl = _inv["y"..y]["x"..x].item
 
-        local _tmp2 = yrp_inventory.cache_inv_item[y][x]
-        _tmp2.name = "Item"
-        _tmp2:SetModel( _inv["f_y"..y]["f_x"..x].Model )
-        _tmp2:SetToolTip( "Name: " .. _inv["f_y"..y]["f_x"..x].PrintName .. "\n" .. "CName: " .. _inv["f_y"..y]["f_x"..x].ClassName .. "\n" .. "w: " .. _inv["f_y"..y]["f_x"..x].i_w .. "\n" .. "h: " .. _inv["f_y"..y]["f_x"..x].i_h )
-        _tmp2.tbl = _inv["f_y"..y]["f_x"..x]
-        _tmp2:Droppable( "ITEM" )
+              local _w = _tbl.w
+              local _h = _tbl.h
+              local _model = _tbl.Model
+              local _pname = _tbl.PrintName
+              local _cname = _tbl.ClassName
+              local _cen = _tbl.center
 
-        local _center = _inv["f_y"..y]["f_x"..x].i_center
-        _center = string.Explode( " ", _center )
-        local _cen = {}
-        _cen.x = _center[1]
-        _cen.y = _center[2]
-        _cen.z = _center[3]
+              yrp_inventory.cache_inv_item[y][x] = createD( "DPanel", _inv_panel, ctr( inv.size*_w ), ctr( inv.size*_h ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
+              yrp_inventory.cache_inv_item[y][x].item = createD( "DModelPanel", yrp_inventory.cache_inv_item[y][x], ctr( inv.size*_w ), ctr( inv.size*_h ), 0, 0 )
+              local _bg2 = yrp_inventory.cache_inv_item[y][x]
+              local _tmp2 = yrp_inventory.cache_inv_item[y][x].item
+              _tmp2.name = "Item"
+              _tmp2:SetModel( _model )
+              _tmp2:SetToolTip( "Name: " .. _pname .. "\n" .. "CName: " .. _cname .. "\n" .. "w: " .. _w .. "\n" .. "h: " .. _h )
+              _tmp2.tbl = _tbl
+              _tmp2:Droppable( "ITEM" )
 
-        local _sort = {}
-        for axis, value in SortedPairsByValue( _cen, true ) do
-          local _tbl = {}
-          _tbl.axis = axis
-          _tbl.value = value
-          table.insert( _sort, _tbl )
-        end
+              local _center = _cen
+              _center = string.Explode( ",", _center )
+              local _cen = {}
+              _cen.x = tonumber(_center[1])
+              _cen.y = tonumber(_center[2])
+              _cen.z = tonumber(_center[3])
 
-        _tmp2:SetLookAt( Vector( _cen.x, _cen.y, _cen.z ) )
-        _tmp2:SetCamPos( Vector( _cen.x, _cen.y, _cen.z ) - Vector( 0, _inv["f_y"..y]["f_x"..x].i_w*6, 0 ) )	-- Move cam in front of eyes
+              local _sort = {}
+              for axis, value in SortedPairsByValue( _cen, true ) do
+                local _tbl = {}
+                _tbl.axis = axis
+                _tbl.value = value
+                table.insert( _sort, _tbl )
+              end
 
-        function _tmp2:LayoutEntity( ent )
-          return false
-        end
-        function _tmp2:PaintOver( pw, ph  )
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 4 ) )
-          paintBr( pw, ph, Color( 255, 255, 255 ) )
+              _tmp2:SetLookAt( Vector( _cen.x, _cen.y, _cen.z ) )
+              _tmp2:SetCamPos( Vector( _cen.x, _cen.y, _cen.z ) - Vector( 0, _w*6, 0 ) )	-- Move cam in front of eyes
+
+              function _tmp2:LayoutEntity( ent )
+                return false
+              end
+              _tmp2.PrintName = _tbl.PrintName
+              function _bg2:Paint( pw, ph )
+                draw.RoundedBox( 0, ctr(2), ctr(2), pw-ctr(4), ph-ctr(4), Color( 100, 100, 255, 40 ) )
+              end
+              function _tmp2:PaintOver( pw, ph  )
+                --[[ Name ]]--
+
+                draw.SimpleTextOutlined( self.PrintName, "DermaDefault", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ))
+
+                paintBr( pw, ph, Color( 18, 18, 18 ) )
+
+              end
+            end
+          end
         end
       end
     end
   end
 
-  --[[
-  _inv.r.pm = createD( "DModelPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ScrH2() - ctr( 30 ), 0, 0 )
-  _inv.r.pm:SetModel( LocalPlayer():GetModel() )
-  _inv.r.pm:SetAnimated( true )
-  _inv.r.pm.Angles = Angle( 0, 0, 0 )
-  _inv.r.pm:RunAnimation()
 
-  function _inv.r.pm:DragMousePress()
-		self.PressX, self.PressY = gui.MousePos()
-		self.Pressed = true
-	end
-  function _inv.r.pm:DragMouseRelease() self.Pressed = false end
-
-	function _inv.r.pm:LayoutEntity( ent )
-
-		if ( self.bAnimated ) then self:RunAnimation() end
-
-		if ( self.Pressed ) then
-			local mx, my = gui.MousePos()
-			self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
-
-			self.PressX, self.PressY = gui.MousePos()
-      if ent != nil then
-  	    ent:SetAngles( self.Angles )
-      end
+  --[[ EQ ITEMS ]]--
+  yrp_inventory.cache_inv_item["eq"] = {}
+  if _inv != nil then
+    if _inv["w1"] != nil then
+      yrp_inventory.cache_inv_item["eq"]["w1"] = insert_eq_in_slot( "w1", _inv["w1"].item, ctr( 200 ), ctr( 200 ), ctr( 1090 ), ctr( 900 ) )
     end
-	end
-
-
-  local _tbl = net.ReadTable()
-  --PrintTable( _tbl )
-  ]]--
-  --[[
-  _inv.r.helm = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 ) )
-  function _inv.r.helm:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.helm.PrintName, lang_string( "helm" ) )
+    if _inv["w2"] != nil then
+      yrp_inventory.cache_inv_item["eq"]["w2"] = insert_eq_in_slot( "w2", _inv["w2"].item, ctr( 200 ), ctr( 200 ), ctr( 1300 ), ctr( 900 ) )
+    end
+    if _inv["w3"] != nil then
+      yrp_inventory.cache_inv_item["eq"]["w3"] = insert_eq_in_slot( "w3", _inv["w3"].item, ctr( 200 ), ctr( 200 ), ctr( 1510 ), ctr( 900 ) )
+    end
+    if _inv["w4"] != nil then
+      yrp_inventory.cache_inv_item["eq"]["w4"] = insert_eq_in_slot( "w4", _inv["w4"].item, ctr( 200 ), ctr( 200 ), ctr( 1720 ), ctr( 900 ) )
+    end
+    if _inv["w5"] != nil then
+      yrp_inventory.cache_inv_item["eq"]["w5"] = insert_eq_in_slot( "w5", _inv["w5"].item, ctr( 200 ), ctr( 200 ), ctr( 1930 ), ctr( 900 ) )
+    end
   end
-
-  _inv.r.shoulders = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 + 200 + 10 ) )
-  function _inv.r.shoulders:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.shoulders.PrintName, lang_string( "shoulders" ) )
-  end
-
-  _inv.r.cap = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 + 420 ) )
-  function _inv.r.cap:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.cap.PrintName, lang_string( "cap" ) )
-  end
-
-  _inv.r.chest = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 + 630 ) )
-  function _inv.r.chest:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.chest.PrintName, lang_string( "chest" ) )
-  end
-
-  _inv.r.gloves = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ScrH2() - ctr( 30+200 ), ctr( 20 ) )
-  function _inv.r.gloves:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.gloves.PrintName, lang_string( "gloves" ) )
-  end
-
-  _inv.r.belt = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ScrH2() - ctr( 30+200 ), ctr( 20 + 200 + 10 ) )
-  function _inv.r.belt:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.belt.PrintName, lang_string( "belt" ) )
-  end
-
-  _inv.r.pants = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ScrH2() - ctr( 30+200 ), ctr( 20 + 420 ) )
-  function _inv.r.pants:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.pants.PrintName, lang_string( "pants" ) )
-  end
-
-  _inv.r.boots = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ScrH2() - ctr( 30+200 ), ctr( 20 + 630 ) )
-  function _inv.r.boots:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.boots.PrintName, lang_string( "boots" ) )
-  end
-
-  _inv.r.backpack = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 + 840 ) )
-  function _inv.r.backpack:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.backpack.PrintName, lang_string( "backpack" ) )
-  end
-  ]]--
-  --[[
-
-  _inv.r.weaponP2 = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20+205 ), ctr( 20 + 1050 ) )
-  function _inv.r.weaponP2:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.weaponp2.PrintName, lang_string( "weapon" ) )
-  end
-
-  _inv.r.weaponS = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20+410 ), ctr( 20 + 1050 ) )
-  function _inv.r.weaponS:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.weapons.PrintName, lang_string( "weapon" ) )
-  end
-
-  _inv.r.weaponM = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20+615 ), ctr( 20 + 1050 ) )
-  function _inv.r.weaponM:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.weaponm.PrintName, lang_string( "weapon" ) )
-  end
-
-  _inv.r.weaponG = createD( "DPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20+820 ), ctr( 20 + 1050 ) )
-  function _inv.r.weaponG:Paint( pw, ph )
-    paintInv( self, pw, ph, _tbl.weapong.PrintName, lang_string( "weapon" ) )
-  end
-
-  _inv.r.wp1 = createD( "DModelPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 ), ctr( 20 + 1050 ) )
-  _inv.r.wp1:SetModel( _tbl.weaponp1.Model )
-  _inv.r.wp1:SetLookAt( Vector( 0, 0, 5 ) )
-  _inv.r.wp1:SetCamPos( Vector( 0, 0, 5 )-Vector( -25, 0, 0 ) )
-
-  _inv.r.wp2 = createD( "DModelPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 + 205 ), ctr( 20 + 1050 ) )
-  _inv.r.wp2:SetModel( _tbl.weaponp2.Model )
-  _inv.r.wp2:SetLookAt( Vector( 0, 0, 5 ) )
-  _inv.r.wp2:SetCamPos( Vector( 0, 0, 5 )-Vector( -25, 0, 0 ) )
-
-  _inv.r.ws = createD( "DModelPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 + 410 ), ctr( 20 + 1050 ) )
-  _inv.r.ws:SetModel( _tbl.weapons.Model )
-  _inv.r.ws:SetLookAt( Vector( 0, 0, 5 ) )
-  _inv.r.ws:SetCamPos( Vector( 0, 0, 5 )-Vector( -25, 0, 0 ) )
-
-  _inv.r.wm = createD( "DModelPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 + 615 ), ctr( 20 + 1050 ) )
-  _inv.r.wm:SetModel( _tbl.weaponm.Model )
-  _inv.r.wm:SetLookAt( Vector( 0, 0, 5 ) )
-  _inv.r.wm:SetCamPos( Vector( 0, 0, 5 )-Vector( -25, 0, 0 ) )
-
-  _inv.r.wg = createD( "DModelPanel", yrp_inventory.left, ctr( 200 ), ctr( 200 ), ctr( 20 + 820 ), ctr( 20 + 1050 ) )
-  _inv.r.wg:SetModel( _tbl.weapong.Model )
-  _inv.r.wg:SetLookAt( Vector( 0, 0, 5 ) )
-  _inv.r.wg:SetCamPos( Vector( 0, 0, 5 )-Vector( -25, 0, 0 ) )
-  ]]--
 end)
 
 function close_inventory()
@@ -405,8 +529,11 @@ function open_inventory()
       if isDropped then
         if receiver:IsHovered() then
           tableOfDroppedPanels[1]:Remove()
-          net.Start( "item_drop" )
+          net.Start( "item_move" )
+            net.WriteString( "" )
+            net.WriteString( "" )
             net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
+            net.WriteString( "drop" )
           net.SendToServer()
         end
       end
@@ -436,7 +563,8 @@ function open_inventory()
 
     yrp_inventory.left = createD( "DPanel", yrp_inventory.window, ScrH() - ctr( 10 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )
     function yrp_inventory.left:Paint( pw, ph )
-      paintPanel( self, pw, ph )
+      --paintPanel( self, pw, ph )
+      --paintBr( pw, ph, Color( 255, 0, 0, 255 ))
     end
 
     yrp_inventory.tabInv = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 0 ), ctr( 20 ) )
@@ -468,8 +596,8 @@ function open_inventory()
       showAttributes()
     end
 
-    --net.Start( "get_inventory" )
-    --net.SendToServer()
+    net.Start( "get_inventory" )
+    net.SendToServer()
 
     yrp_inventory.window:MakePopup()
   end

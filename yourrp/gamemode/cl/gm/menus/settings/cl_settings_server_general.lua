@@ -19,6 +19,7 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalStamina = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 435 )
   local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 495 )
   local sv_generalHud = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 555 )
+  local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 615 )
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
 
   local oldGamemodename = ""
@@ -35,6 +36,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     draw.SimpleTextOutlined( lang_string( "stamina" ) .. ":", "sef", ctr( _center - 10 ), ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "server_hud" ) .. ":", "sef", ctr( _center - 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -56,6 +58,7 @@ end
     sv_generalStamina:SetChecked( tobool( _yrp_general.toggle_stamina ) )
     sv_generalBuilding:SetChecked( tobool( _yrp_general.toggle_building ) )
     sv_generalHud:SetValue( tonumber( _yrp_general.toggle_hud ) )
+    sv_generalInventory:SetValue( tonumber( _yrp_general.toggle_inventory ) )
     sv_generalRestartTime:SetValue( tonumber( _yrp_general.time_restart ) )
   end)
 
@@ -220,6 +223,16 @@ end
       _tonumber = 1
     end
     net.Start( "db_update_hud" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalInventory:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_inventory" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
   end
