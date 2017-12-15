@@ -233,7 +233,7 @@ LocalPlayer():SetNWInt( "view_range", -60 )
 function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
-		if input.IsKeyDown( KEY_PAD_PLUS ) then
+		if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
 			if ply:GetNWInt( "view_range" ) > 80 then
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 2 )
 			else
@@ -242,7 +242,7 @@ function KeyPress()
 			if ply:GetNWInt( "view_range" ) > 400 then
 				ply:SetNWInt( "view_range", 400 )
 			end
-		elseif input.IsKeyDown( KEY_PAD_MINUS ) then
+		elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
 			if ply:GetNWInt( "view_range" ) > 80 then
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 2 )
 			else

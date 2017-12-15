@@ -400,7 +400,22 @@ function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )
   playerready = true
   timer.Simple( 4, function()
+
+    local _wsitems = engine.GetAddons()
+    printGM( "note", "[" .. #_wsitems .. " Workshop items]" )
+    printGM( "note", " Nr.\tID\t\tName Mounted" )
+    for k, ws in pairs( _wsitems ) do
+    	if ws.mounted then
+        --printGM( "note", "+[" .. k .. "]\t[" ..ws.wsid .. "]\t[" .. ws.title .. "] is Mounted" )
+    	else
+        printGM( "note", "+[" .. k .. "]\t[" ..ws.wsid .. "]\t[" .. ws.title .. "] Mounting" )
+        game.MountGMA( ws.path )
+      end
+    end
+    printGM( "note", "Workshop Addons Done" )    
+
     playerfullready = true
+
   end)
 
   loadCompleteHUD()

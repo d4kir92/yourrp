@@ -113,7 +113,7 @@ function openSettings()
     --draw.SimpleTextOutlined( settingsWindow.cursite or "", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local liveSupport = createD( "DButton", settingsWindow, ctr( 250 ), ctr( 80 ), ScrW() - ctr( 1100 ), ctr( 10 ) )
+  local liveSupport = createD( "DButton", settingsWindow, ctr( 300 ), ctr( 80 ), ScrW() - ctr( 1150 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )

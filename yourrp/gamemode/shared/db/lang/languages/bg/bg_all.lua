@@ -242,8 +242,7 @@ function BG_All()
   set_lang_string( "deletecharacter", "Премахни герой" )
   set_lang_string( "characterselection", "Избор на герой" )
   set_lang_string( "charactercreation", "Създаване на герой" )
-  "set_lang_string( ""color"", ""Цвят
-  "" )"
+  set_lang_string( "color", "Цвят" )
   set_lang_string( "dark", "Тъмно" )
   set_lang_string( "light", "Светло" )
   set_lang_string( "localchat", "Околно" )
@@ -321,8 +320,7 @@ function BG_All()
   set_lang_string( "belt", "Колани" )
   set_lang_string( "pants", "Панталони" )
   set_lang_string( "boots", "Ботуши" )
-  "set_lang_string( ""drop"", ""Изостави
-  "" )"
+  set_lang_string( "drop", "Изостави" )
   set_lang_string( "pickup", "Вземи" )
   set_lang_string( "destroy", "Унищожи" )
   set_lang_string( "equip", "Екипирай" )

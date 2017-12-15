@@ -42,7 +42,7 @@ if CLIENT then
   end)
 end
 
---do NOT change this! (it can cause crash!)
+--do NOT change this! (it can cause crashes!)
 GM.ShortName = "YRP"	--do NOT change this!
 GM.Author = "D4KiR" --do NOT change this!
 GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
@@ -51,7 +51,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.4.0" --do NOT change this!
+GM.Version = "0.9.4.1" --do NOT change this!
 GM.VersionSort = "unstable" --do NOT change this!
 GM.rpbase = "YourRP" --do NOT change this!
 
