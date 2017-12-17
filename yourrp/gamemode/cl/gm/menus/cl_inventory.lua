@@ -8,24 +8,28 @@ yrp_inventory.cache_inv = {}
 yrp_inventory.cache_inv_item = {}
 
 function clearL()
-  for k, v in pairs( yrp_inventory.left:GetChildren() ) do
-    v:Remove()
-  end
+  if yrp_inventory != nil then
+    if yrp_inventory.left != nil then
+      for k, v in pairs( yrp_inventory.left:GetChildren() ) do
+        v:Remove()
+      end
 
-  for k, v in pairs( yrp_inventory.cache_inv ) do
-    for l, w in pairs( v ) do
-      w:Remove()
-    end
-  end
-
-  for k, v in pairs( yrp_inventory.cache_inv_item ) do
-    for l, w in pairs( v ) do
-      if (istable(w))then
-        for m, x in pairs( w ) do
-          x:Remove()
+      for k, v in pairs( yrp_inventory.cache_inv ) do
+        for l, w in pairs( v ) do
+          w:Remove()
         end
-      else
-        w:Remove()
+      end
+
+      for k, v in pairs( yrp_inventory.cache_inv_item ) do
+        for l, w in pairs( v ) do
+          if (istable(w))then
+            for m, x in pairs( w ) do
+              x:Remove()
+            end
+          else
+            w:Remove()
+          end
+        end
       end
     end
   end
@@ -424,61 +428,63 @@ net.Receive( "get_inventory", function( len )
     yrp_inventory.cache_inv_item[y] = {}
     for x = 1, INV_W do
       if _inv != nil then
-        if _inv["y"..y]["x"..x] != nil then
-          if _inv["y"..y]["x"..x].item != "-1" then
-            if istable(_inv["y"..y]["x"..x].item ) then
+        if _inv["y"..y] != nil then
+          if _inv["y"..y]["x"..x] != nil then
+            if _inv["y"..y]["x"..x].item != "-1" then
+              if istable(_inv["y"..y]["x"..x].item ) then
 
-              local _tbl = _inv["y"..y]["x"..x].item
+                local _tbl = _inv["y"..y]["x"..x].item
 
-              local _w = _tbl.w
-              local _h = _tbl.h
-              local _model = _tbl.Model
-              local _pname = _tbl.PrintName
-              local _cname = _tbl.ClassName
-              local _cen = _tbl.center
+                local _w = _tbl.w
+                local _h = _tbl.h
+                local _model = _tbl.Model
+                local _pname = _tbl.PrintName
+                local _cname = _tbl.ClassName
+                local _cen = _tbl.center
 
-              yrp_inventory.cache_inv_item[y][x] = createD( "DPanel", _inv_panel, ctr( inv.size*_w ), ctr( inv.size*_h ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
-              yrp_inventory.cache_inv_item[y][x].item = createD( "DModelPanel", yrp_inventory.cache_inv_item[y][x], ctr( inv.size*_w ), ctr( inv.size*_h ), 0, 0 )
-              local _bg2 = yrp_inventory.cache_inv_item[y][x]
-              local _tmp2 = yrp_inventory.cache_inv_item[y][x].item
-              _tmp2.name = "Item"
-              _tmp2:SetModel( _model )
-              _tmp2:SetToolTip( "Name: " .. _pname .. "\n" .. "CName: " .. _cname .. "\n" .. "w: " .. _w .. "\n" .. "h: " .. _h )
-              _tmp2.tbl = _tbl
-              _tmp2:Droppable( "ITEM" )
+                yrp_inventory.cache_inv_item[y][x] = createD( "DPanel", _inv_panel, ctr( inv.size*_w ), ctr( inv.size*_h ), ctr( 10 ) + ctr( (x-1)*inv.size ), ctr( 10 ) + ctr( (y-1)*inv.size ) )
+                yrp_inventory.cache_inv_item[y][x].item = createD( "DModelPanel", yrp_inventory.cache_inv_item[y][x], ctr( inv.size*_w ), ctr( inv.size*_h ), 0, 0 )
+                local _bg2 = yrp_inventory.cache_inv_item[y][x]
+                local _tmp2 = yrp_inventory.cache_inv_item[y][x].item
+                _tmp2.name = "Item"
+                _tmp2:SetModel( _model )
+                _tmp2:SetToolTip( "Name: " .. _pname .. "\n" .. "CName: " .. _cname .. "\n" .. "w: " .. _w .. "\n" .. "h: " .. _h )
+                _tmp2.tbl = _tbl
+                _tmp2:Droppable( "ITEM" )
 
-              local _center = _cen
-              _center = string.Explode( ",", _center )
-              local _cen = {}
-              _cen.x = tonumber(_center[1])
-              _cen.y = tonumber(_center[2])
-              _cen.z = tonumber(_center[3])
+                local _center = _cen
+                _center = string.Explode( ",", _center )
+                local _cen = {}
+                _cen.x = tonumber(_center[1])
+                _cen.y = tonumber(_center[2])
+                _cen.z = tonumber(_center[3])
 
-              local _sort = {}
-              for axis, value in SortedPairsByValue( _cen, true ) do
-                local _tbl = {}
-                _tbl.axis = axis
-                _tbl.value = value
-                table.insert( _sort, _tbl )
-              end
+                local _sort = {}
+                for axis, value in SortedPairsByValue( _cen, true ) do
+                  local _tbl = {}
+                  _tbl.axis = axis
+                  _tbl.value = value
+                  table.insert( _sort, _tbl )
+                end
 
-              _tmp2:SetLookAt( Vector( _cen.x, _cen.y, _cen.z ) )
-              _tmp2:SetCamPos( Vector( _cen.x, _cen.y, _cen.z ) - Vector( 0, _w*6, 0 ) )	-- Move cam in front of eyes
+                _tmp2:SetLookAt( Vector( _cen.x, _cen.y, _cen.z ) )
+                _tmp2:SetCamPos( Vector( _cen.x, _cen.y, _cen.z ) - Vector( 0, _w*6, 0 ) )	-- Move cam in front of eyes
 
-              function _tmp2:LayoutEntity( ent )
-                return false
-              end
-              _tmp2.PrintName = _tbl.PrintName
-              function _bg2:Paint( pw, ph )
-                draw.RoundedBox( 0, ctr(2), ctr(2), pw-ctr(4), ph-ctr(4), Color( 100, 100, 255, 40 ) )
-              end
-              function _tmp2:PaintOver( pw, ph  )
-                --[[ Name ]]--
+                function _tmp2:LayoutEntity( ent )
+                  return false
+                end
+                _tmp2.PrintName = _tbl.PrintName
+                function _bg2:Paint( pw, ph )
+                  draw.RoundedBox( 0, ctr(2), ctr(2), pw-ctr(4), ph-ctr(4), Color( 100, 100, 255, 40 ) )
+                end
+                function _tmp2:PaintOver( pw, ph  )
+                  --[[ Name ]]--
 
-                draw.SimpleTextOutlined( self.PrintName, "DermaDefault", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ))
+                  draw.SimpleTextOutlined( self.PrintName, "DermaDefault", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ))
 
-                paintBr( pw, ph, Color( 18, 18, 18 ) )
+                  paintBr( pw, ph, Color( 18, 18, 18 ) )
 
+                end
               end
             end
           end

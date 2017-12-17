@@ -349,4 +349,8 @@ function DE_All()
   set_lang_string( "nopermission", "Keine Berechtigung" )
   set_lang_string( "viewzoomout", "Ansicht vergrößern" )
   set_lang_string( "viewzoomin", "Ansicht verkleinern" )
+  set_lang_string( "viewzoomoutpre", "Halte" )
+  set_lang_string( "viewzoomoutpos", "gedrückt um rauszu zoomen" )
+  set_lang_string( "viewzoominpre", "Halte" )
+  set_lang_string( "viewzoominpos", "gedrückt um rauszu zoomen" )
 end

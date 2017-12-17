@@ -235,7 +235,7 @@ function KeyPress()
 	if isNoMenuOpen() then
 		if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
 			if ply:GetNWInt( "view_range" ) > 80 then
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 2 )
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
 			else
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
 			end
@@ -244,7 +244,7 @@ function KeyPress()
 			end
 		elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
 			if ply:GetNWInt( "view_range" ) > 80 then
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 2 )
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
 			else
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
 			end

@@ -180,7 +180,7 @@ function Player:HasItem( cname )
   local _inv = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
   for k, item in pairs( _inv ) do
     local _item = string.sub( item.item, 3 )
-    local _res = db_select( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. cname .. "'" )
+    local _res = db_select( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. db_sql_str( cname ) .. "'" )
     if _res != nil and _res != false then
       _res = _res[1]
     end
@@ -283,26 +283,28 @@ end
 
 function Player:DropItem( cname )
   local _ent = ents.Create( cname )
-  _ent:SetPos( self:GetPos())
-  self.canpickup = false
+  if _ent != nil then
+    _ent:SetPos( self:GetPos())
+    self.canpickup = false
 
-  local _pos = _ent:GetPos()
-  local _angle = Angle( 0, 0, 0 )
+    local _pos = _ent:GetPos()
+    local _angle = Angle( 0, 0, 0 )
 
-  if enough_space( _ent, _pos + Vector( 0, 0, 2 ) ) then
-    local __pos = get_ground_pos( _ent, _pos + Vector( 0, 0, 2 ) )
-    _ent:SetPos( __pos )
-    _ent:Spawn()
-  else
-    for i = 1, 3 do
-      for j = 0, 360, 45 do
-        _angle:RotateAroundAxis( _ent:GetForward(), 45 )
-        local _enough_space = enough_space( _ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
-        if _enough_space then
-          local __pos = get_ground_pos( _ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
-          _ent:SetPos( __pos )
-          _ent:Spawn()
-          return
+    if enough_space( _ent, _pos + Vector( 0, 0, 2 ) ) then
+      local __pos = get_ground_pos( _ent, _pos + Vector( 0, 0, 2 ) )
+      _ent:SetPos( __pos )
+      _ent:Spawn()
+    else
+      for i = 1, 3 do
+        for j = 0, 360, 45 do
+          _angle:RotateAroundAxis( _ent:GetForward(), 45 )
+          local _enough_space = enough_space( _ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+          if _enough_space then
+            local __pos = get_ground_pos( _ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+            _ent:SetPos( __pos )
+            _ent:Spawn()
+            return
+          end
         end
       end
     end

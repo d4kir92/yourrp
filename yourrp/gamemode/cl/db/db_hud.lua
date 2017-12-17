@@ -266,7 +266,7 @@ function setDefaultHUD()
   local ws = HUDTab( 1, -420, -140, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ws", ws )
 
-  local tt = HUDTab( 1, 20, 20, 660, 600, 0, 0, 1, 1, 24, 1, 1 )
+  local tt = HUDTab( 1, 20, 20, 900, 600, 0, 0, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "tt", tt )
 
   local st = HUDTab( 1, -380, 380, 760, 60, 1, 0, 1, 1, 18, 1, 1 )

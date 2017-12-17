@@ -33,7 +33,8 @@ function PlayerMeta:GiveAmmo( amount, atype, hidePopup )
   end
 
   if self:GetNWBool( "toggle_inventory", false ) then
-    self:AddItemAmmo( amount, atype )
+    self:old_give_ammo( amount, atype )
+    --self:AddItemAmmo( amount, atype )
   else
     self:old_give_ammo( amount, atype )
   end

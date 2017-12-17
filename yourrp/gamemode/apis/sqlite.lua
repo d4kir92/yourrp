@@ -67,6 +67,7 @@ function db_insert_into_DEFAULTVALUES( db_table )
     local _result = sql.Query( _q )
     if _result != nil then
       printGM( "error", "db_insert_into_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -83,6 +84,7 @@ function db_insert_into( db_table, db_columns, db_values )
     local _result = sql.Query( _q )
     if _result != nil then
       printGM( "error", "db_insert_into: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -98,6 +100,7 @@ function db_delete_from( db_table, db_where )
     local _result = sql.Query( _q )
     if _result != nil then
       printGM( "error", "db_delete_from: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) .. " lastError: " .. tostring( sql.LastError() ) )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -115,6 +118,7 @@ function db_update( db_table, db_sets, db_where )
     local _result = sql.Query( _q )
     if _result != nil then
       printGM( "error", "db_update failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -136,6 +140,7 @@ function sql_add_column( table_name, column_name, datatype )
     local _result = sql.Query( _q )
     if _result != nil then
       printGM( "error", "sql_add_column failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
     end
   end
 end
@@ -153,11 +158,13 @@ function init_database( db_name )
     local _result = sql.Query( _query )
     if _result != nil then
       printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
     end
 		if sql.TableExists( db_name ) then
       --printGM( "db", db_name .. _yrp.successdb )
 		else
 			printGM( "error", "CREATE TABLE " .. db_name .. " fail" )
+      PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
       retry_load_database()
 		end
   end

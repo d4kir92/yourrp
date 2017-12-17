@@ -75,11 +75,13 @@ net.Receive( "getPlyList", function( len )
       local _giveButton = createVGUI( "DButton", _giveFrame, 380, 50, 10, 185+10+50 )
       _giveButton:SetText( lang_string( "give" ) )
       function _giveButton:DoClick()
-        net.Start( "giveRole" )
-          net.WriteString( _tmpSteamID )
-          net.WriteInt( _giveComboBox2:GetOptionData( _giveComboBox2:GetSelectedID() ), 16 )
-        net.SendToServer()
-        _giveFrame:Close()
+        if isnumber( tonumber( _giveComboBox2:GetOptionData( _giveComboBox2:GetSelectedID() ) ) ) then
+          net.Start( "giveRole" )
+            net.WriteString( _tmpSteamID )
+            net.WriteInt( _giveComboBox2:GetOptionData( _giveComboBox2:GetSelectedID() ), 16 )
+          net.SendToServer()
+          _giveFrame:Close()
+        end
       end
 
       function _giveFrame:Paint( pw, ph )

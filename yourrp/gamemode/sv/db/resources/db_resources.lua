@@ -23,9 +23,9 @@ printGM( "note", "[" .. #_wsitems .. " Workshop items]" )
 printGM( "note", " Nr.\tID\t\tName" )
 for k, ws in pairs( _wsitems ) do
 	if ws.mounted then
-		printGM( "note", "+[" .. k .. "]\t[" ..ws.wsid .. "]\t[" .. ws.title .. "]" )
+		printGM( "note", "+[" .. k .. "]\t[" .. tostring( ws.wsid ) .. "]\t[" .. tostring( ws.title ) .. "]" )
 
-    resource.AddWorkshop( ws.wsid )
+    resource.AddWorkshop( tostring( ws.wsid ) )
 	end
 end
 

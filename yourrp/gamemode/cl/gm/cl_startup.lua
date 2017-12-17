@@ -408,11 +408,11 @@ function GM:InitPostEntity()
     	if ws.mounted then
         --printGM( "note", "+[" .. k .. "]\t[" ..ws.wsid .. "]\t[" .. ws.title .. "] is Mounted" )
     	else
-        printGM( "note", "+[" .. k .. "]\t[" ..ws.wsid .. "]\t[" .. ws.title .. "] Mounting" )
-        game.MountGMA( ws.path )
+        printGM( "note", "+[" .. k .. "]\t[" .. tostring( ws.wsid ) .. "]\t[" .. tostring( ws.title ) .. "] Mounting" )
+        game.MountGMA( tostring( ws.path ) )
       end
     end
-    printGM( "note", "Workshop Addons Done" )    
+    printGM( "note", "Workshop Addons Done" )
 
     playerfullready = true
 
