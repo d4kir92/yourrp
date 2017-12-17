@@ -472,9 +472,9 @@ function HudPlayer()
         if input.IsKeyDown( get_keybind( "view_zoom_in" ) ) or input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
           local _3PText = ""
           if ply:GetNWInt( "view_range", 0 ) < -40 then
-            _3PText = lang_string( "fpp" )
-          elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) < 0 then
             _3PText = lang_string( "fppr" )
+          elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) < 0 then
+            _3PText = lang_string( "fpp" )
           elseif ply:GetNWInt( "view_range", 0 ) > 0 then
             _3PText = lang_string( "tpp" )
           end

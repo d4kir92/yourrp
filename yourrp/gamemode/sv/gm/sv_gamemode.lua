@@ -82,12 +82,16 @@ end
 function GM:PlayerInitialSpawn( ply )
   printGM( "gm", "PlayerInitialSpawn " .. ply:Nick() )
   --ply:KillSilent()
-  local rolTab = ply:GetRolTab()
-  timer.Simple( 1, function()
+  if ply:HasCharacterSelected() then
+    local rolTab = ply:GetRolTab()
+    if rolTab != nil then
+      timer.Simple( 1, function()
 
-    set_role( ply, rolTab.uniqueID )
-    set_role_values( ply )
-  end)
+        set_role( ply, rolTab.uniqueID )
+        set_role_values( ply )
+      end)
+    end
+  end
 end
 
 function GM:PlayerAuthed( ply, steamid, uniqueid )
@@ -107,82 +111,84 @@ end
 
 function GM:PlayerLoadout( ply )
   printGM( "note", "Get PlayerLoadout for player: " .. ply:Nick() )
-  ply:CheckInventory()
-  ply:SetNWBool( "cuffed", false )
+  if ply:HasCharacterSelected() then
+    ply:CheckInventory()
+    ply:SetNWBool( "cuffed", false )
 
-  if !ply:HasItem( "yrp_key" ) then
-    ply:AddSwep( "yrp_key" )
-  end
+    if !ply:HasItem( "yrp_key" ) then
+      ply:AddSwep( "yrp_key" )
+    end
 
-  if !ply:HasItem( "yrp_unarmed" ) then
-    ply:AddSwep( "yrp_unarmed" )
-  end
+    if !ply:HasItem( "yrp_unarmed" ) then
+      ply:AddSwep( "yrp_unarmed" )
+    end
 
-  addKeys( ply )
+    addKeys( ply )
 
-  local plyTab = ply:GetPlyTab()
-  local chaTab = ply:GetChaTab()
-
-  set_role_values( ply )
-
-  if chaTab != nil then
+    local plyTab = ply:GetPlyTab()
     local chaTab = ply:GetChaTab()
-    ply:SetNWString( "money", chaTab.money )
-    ply:SetNWString( "moneybank", chaTab.moneybank )
-    ply:SetNWString( "rpname", chaTab.rpname )
 
-    ply:SetSkin( chaTab.skin )
-    ply:SetBodygroup( 0, chaTab.bg0 )
-    ply:SetBodygroup( 1, chaTab.bg1 )
-    ply:SetBodygroup( 2, chaTab.bg2 )
-    ply:SetBodygroup( 3, chaTab.bg3 )
-    ply:SetBodygroup( 4, chaTab.bg4 )
-    ply:SetBodygroup( 5, chaTab.bg5 )
-    ply:SetBodygroup( 6, chaTab.bg6 )
-    ply:SetBodygroup( 7, chaTab.bg7 )
-  else
-    printGM( "note", "give char failed" )
-    ply:KillSilent()
-  end
+    set_role_values( ply )
 
-  ply:SetNWInt( "hunger", 100 )
-  ply:SetNWInt( "thirst", 100 )
-  ply:SetNWInt( "stamina", 100 )
+    if chaTab != nil then
+      local chaTab = ply:GetChaTab()
+      ply:SetNWString( "money", chaTab.money )
+      ply:SetNWString( "moneybank", chaTab.moneybank )
+      ply:SetNWString( "rpname", chaTab.rpname )
 
-  local monTab = db_select( "yrp_money", "*", nil )
-  if monTab != nil then
-    local monPre = monTab[1].value
-    local monPos = monTab[2].value
-    ply:SetNWString( "moneyPre", monPre )
-    ply:SetNWString( "moneyPost", monPos )
-  end
-
-  local _yrp_general = db_select( "yrp_general", "*", nil )
-  if _yrp_general != nil then
-    _yrp_general = _yrp_general[1]
-    ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
-    ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
-    ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
-    ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
-    ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
-    ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
-  else
-    printGM( "note", "yrp_general failed" )
-  end
-
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
-    if !ply:HasItem( "yrp_arrest_stick" ) then
-      ply:AddSwep( "yrp_arrest_stick" )
+      ply:SetSkin( chaTab.skin )
+      ply:SetBodygroup( 0, chaTab.bg0 )
+      ply:SetBodygroup( 1, chaTab.bg1 )
+      ply:SetBodygroup( 2, chaTab.bg2 )
+      ply:SetBodygroup( 3, chaTab.bg3 )
+      ply:SetBodygroup( 4, chaTab.bg4 )
+      ply:SetBodygroup( 5, chaTab.bg5 )
+      ply:SetBodygroup( 6, chaTab.bg6 )
+      ply:SetBodygroup( 7, chaTab.bg7 )
+    else
+      printGM( "note", "give char failed" )
+      ply:KillSilent()
     end
-    if !ply:HasItem( "weapon_physgun" ) then
-      ply:AddSwep( "weapon_physgun" )
-    end
-    if !ply:HasItem( "weapon_physcannon" ) then
-      ply:AddSwep( "weapon_physcannon" )
-    end
-  end
 
-  ply:UseSweps()
+    ply:SetNWInt( "hunger", 100 )
+    ply:SetNWInt( "thirst", 100 )
+    ply:SetNWInt( "stamina", 100 )
+
+    local monTab = db_select( "yrp_money", "*", nil )
+    if monTab != nil then
+      local monPre = monTab[1].value
+      local monPos = monTab[2].value
+      ply:SetNWString( "moneyPre", monPre )
+      ply:SetNWString( "moneyPost", monPos )
+    end
+
+    local _yrp_general = db_select( "yrp_general", "*", nil )
+    if _yrp_general != nil then
+      _yrp_general = _yrp_general[1]
+      ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
+      ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
+      ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
+      ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
+      ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
+      ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
+    else
+      printGM( "note", "yrp_general failed" )
+    end
+
+    if ply:IsAdmin() or ply:IsSuperAdmin() then
+      if !ply:HasItem( "yrp_arrest_stick" ) then
+        ply:AddSwep( "yrp_arrest_stick" )
+      end
+      if !ply:HasItem( "weapon_physgun" ) then
+        ply:AddSwep( "weapon_physgun" )
+      end
+      if !ply:HasItem( "weapon_physcannon" ) then
+        ply:AddSwep( "weapon_physcannon" )
+      end
+    end
+
+    ply:UseSweps()
+  end
 end
 
 hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )

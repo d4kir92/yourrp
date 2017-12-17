@@ -61,78 +61,83 @@ function save_clients( string )
 end
 
 function set_role( ply, rid )
-  local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
-  local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )
-  if _gid != nil then
-    _gid = _gid[1].groupID
-    local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
-    local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+  print(ply:CharID())
+  if ply:HasCharacterSelected() then
+    local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
+    local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )
+    if _gid != nil then
+      _gid = _gid[1].groupID
+      local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
+      local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+    end
   end
 end
 
 function set_role_values( ply )
-  if yrp_db_loaded() then
-    local rolTab = ply:GetRolTab()
-    local groTab = ply:GetGroTab()
-    local ChaTab = ply:GetChaTab()
-    if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
-      if ChaTab.playermodelID != nil then
-        local tmpID = tonumber( ChaTab.playermodelID )
-        if rolTab.playermodels != nil and rolTab.playermodels != "" then
-          local tmp = string.Explode( ",", rolTab.playermodels )
-          if worked( tmp[tmpID], "set_role_values playermodel" ) then
-            ply:SetModel( tmp[tmpID] )
+  if ply:HasCharacterSelected() then
+    if yrp_db_loaded() then
+      local rolTab = ply:GetRolTab()
+      local groTab = ply:GetGroTab()
+      local ChaTab = ply:GetChaTab()
+      if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
+        if ChaTab.playermodelID != nil then
+          local tmpID = tonumber( ChaTab.playermodelID )
+          if rolTab.playermodels != nil and rolTab.playermodels != "" then
+            local tmp = string.Explode( ",", rolTab.playermodels )
+            if worked( tmp[tmpID], "set_role_values playermodel" ) then
+              ply:SetModel( tmp[tmpID] )
+            end
           end
         end
+      else
+        printGM( "note", "No role or/and no character -> Suicide")
+        ply:KillSilent()
       end
-    else
-      printGM( "note", "No role or/and no character -> Suicide")
-      ply:KillSilent()
-    end
 
-    --[RE]--check_inv( ply, ply:CharID() )
+      --[RE]--check_inv( ply, ply:CharID() )
 
-    if worked( rolTab, "set_role_values rolTab" ) then
-      ply:SetModelScale( rolTab.playermodelsize, 0 )
-      ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
-      ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
-      ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
-      ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
-      ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
-      ply:SetHealth( tonumber( rolTab.hp ) )
-      ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
-      ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
-      ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
-      ply:SetArmor( tonumber( rolTab.ar ) )
-      ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
-      ply:SetNWInt( "capital", rolTab.capital )
-      ply:SetNWString( "roleName", rolTab.roleID )
-      ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
-      ply:SetNWInt( "capitaltime", rolTab.capitaltime )
-      ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )
+      if worked( rolTab, "set_role_values rolTab" ) then
+        ply:SetModelScale( rolTab.playermodelsize, 0 )
+        ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
+        ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
+        ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
+        ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+        ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
+        ply:SetHealth( tonumber( rolTab.hp ) )
+        ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+        ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
+        ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
+        ply:SetArmor( tonumber( rolTab.ar ) )
+        ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
+        ply:SetNWInt( "capital", rolTab.capital )
+        ply:SetNWString( "roleName", rolTab.roleID )
+        ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
+        ply:SetNWInt( "capitaltime", rolTab.capitaltime )
+        ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )
 
-      --sweps
-      local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
-      for k, swep in pairs( tmpSWEPTable ) do
-        if swep != nil and swep != NULL and swep != "" then
-          if !ply:HasItem( swep ) then
-            ply:AddSwep( swep )
+        --sweps
+        local tmpSWEPTable = string.Explode( ",", rolTab.sweps )
+        for k, swep in pairs( tmpSWEPTable ) do
+          if swep != nil and swep != NULL and swep != "" then
+            if !ply:HasItem( swep ) then
+              ply:AddSwep( swep )
+            end
           end
         end
+      else
+        printGM( "note", "No role selected -> Suicide")
+        ply:KillSilent()
       end
-    else
-      printGM( "note", "No role selected -> Suicide")
-      ply:KillSilent()
-    end
 
-    if groTab != nil then
-      ply:SetNWString( "groupName", groTab.groupID )
-      ply:SetNWString( "groupUniqueID", groTab.uniqueID )
-      ply:SetNWString( "groupColor", groTab.color )
-      ply:SetTeam( tonumber( groTab.uniqueID ) )
-    else
-      printGM( "note", "No group selected -> Suicide" )
-      ply:KillSilent()
+      if groTab != nil then
+        ply:SetNWString( "groupName", groTab.groupID )
+        ply:SetNWString( "groupUniqueID", groTab.uniqueID )
+        ply:SetNWString( "groupColor", groTab.color )
+        ply:SetTeam( tonumber( groTab.uniqueID ) )
+      else
+        printGM( "note", "No group selected -> Suicide" )
+        ply:KillSilent()
+      end
     end
   end
 end
@@ -229,8 +234,6 @@ function check_yrp_client( ply )
   end
 
   check_yrp_player( ply )
-
-  open_character_selection( ply )
 
   save_clients( "check_yrp_client" )
 end

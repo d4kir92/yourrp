@@ -229,7 +229,7 @@ function get_speak_channel_name( id )
 	end
 end
 
-LocalPlayer():SetNWInt( "view_range", -60 )
+LocalPlayer():SetNWInt( "view_range", 0 )
 function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
@@ -369,6 +369,14 @@ local function yrpCalcView( ply, pos, angles, fov )
 									return view
 								end
 							elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) <= 0 then
+								--Disabled
+								view.origin = pos
+								view.angles = angles
+								view.fov = fov
+								view.drawviewer = false
+								_drawViewmodel = false
+								return view
+							else
 								--Firstperson realistic
 								local dist = ply:GetNWInt( "view_range", 0 ) * ply:GetModelScale()
 
@@ -408,14 +416,6 @@ local function yrpCalcView( ply, pos, angles, fov )
 									_drawViewmodel = false
 									return view
 								end
-							else
-								--Disabled
-								view.origin = pos
-								view.angles = angles
-								view.fov = fov
-								view.drawviewer = false
-								_drawViewmodel = false
-								return view
 							end
 						else
 							--Disabled

@@ -4,31 +4,43 @@ local Player = FindMetaTable( "Player" )
 
 function Player:GetPlyTab()
   if SERVER then
-    if worked( self:SteamID(), "SteamID fail", true ) then
-      local yrp_players = db_select( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
-      if worked( yrp_players, "GetPlyTab fail", true ) then
-        self.plytab = yrp_players[1]
-        return self.plytab
+    if tostring( self ) != "Player [NULL]" then
+      if worked( self:SteamID(), "SteamID fail", true ) then
+        local yrp_players = db_select( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
+        if worked( yrp_players, "GetPlyTab fail", true ) then
+          self.plytab = yrp_players[1]
+          return self.plytab
+        end
       end
     end
   end
-  if self.plytab != nil then
-    return self.plytab
-  else
-    return nil
+  return nil
+end
+
+function Player:HasCharacterSelected()
+  if SERVER then
+    local _ply_tab = self:GetPlyTab()
+    if _ply_tab != nil then
+      if _ply_tab.CurrentCharacter != NULL and self.opencharcter == nil then
+        open_character_selection( self )
+        self.opencharcter = true
+        return false
+      else
+        return true
+      end
+    end
   end
+  return false
 end
 
 function Player:GetChaTab()
   if SERVER then
     local _tmp = self:GetPlyTab()
-    if worked( _tmp, "GetPlyTab in GetChaTab", true ) then
-      if worked( _tmp.CurrentCharacter, "_tmp.CurrentCharacter in GetChaTab", true ) then
-        local yrp_characters = db_select( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
-        if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
-          self.chatab = yrp_characters[1]
-          return self.chatab
-        end
+    if self:HasCharacterSelected() then
+      local yrp_characters = db_select( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
+      if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
+        self.chatab = yrp_characters[1]
+        return self.chatab
       end
     end
   end
@@ -41,22 +53,20 @@ end
 
 function Player:GetRolTab()
   if SERVER then
-    local yrp_characters = self:GetChaTab()
-    if worked( yrp_characters, "yrp_characters in GetRolTab", true ) then
-      if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true ) then
-        local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
-        if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
-          self.roltab = yrp_roles[1]
-          return self.roltab
+    if self:HasCharacterSelected() then
+      local yrp_characters = self:GetChaTab()
+      if worked( yrp_characters, "yrp_characters in GetRolTab", true ) then
+        if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true ) then
+          local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
+          if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
+            self.roltab = yrp_roles[1]
+            return self.roltab
+          end
         end
       end
     end
   end
-  if self.roltab != nil then
-    return self.roltab
-  else
-    return nil
-  end
+  return nil
 end
 
 function Player:GetGroTab()

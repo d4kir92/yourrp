@@ -194,9 +194,6 @@ end
 function Player:AddSwep( cname )
   local _eq = self:EnoughSpaceInEQ()
   if _eq != nil and _eq != false then
-    print("TEST3")
-    print(_eq)
-    PrintTable( _eq )
     self:EquipItem( cname, _eq.field )
   else
     self:AddItem( cname )
@@ -368,8 +365,6 @@ function Player:AddItem( cname, posx, posy, origin, move_item )
   local _y = posy
   local _field = self:FindFreeSpaceInEquipment()
   if _field != false and move_item != true then
-    print("TEST1")
-    print(_field)
     self:EquipItem( cname, _field )
   else
     if _x == nil and _y == nil then
@@ -488,8 +483,6 @@ net.Receive( "item_move", function( len, ply )
     local _item = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
     if _item != nil then
       _item = _item[1]
-      print("TEST2")
-      print(_x)
       ply:EquipItem( _item.ClassName, _x )
     end
   elseif _new_origin == "inv" then

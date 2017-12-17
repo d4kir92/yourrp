@@ -822,6 +822,8 @@ function openCharacterSelection()
 end
 
 net.Receive( "openCharacterMenu", function( len, ply )
-  local tmpTable = net.ReadTable()
-  --openCharacterSelection()
+  if isNoMenuOpen() then
+    local tmpTable = net.ReadTable()
+    openCharacterSelection()
+  end
 end)
