@@ -51,7 +51,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.4.4" --do NOT change this!
+GM.Version = "0.9.4.5" --do NOT change this!
 GM.VersionSort = "unstable" --do NOT change this!
 GM.rpbase = "YourRP" --do NOT change this!
 

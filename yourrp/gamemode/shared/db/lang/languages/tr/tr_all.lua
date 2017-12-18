@@ -349,4 +349,8 @@ function TR_All()
   set_lang_string( "nopermission", "İzniniz yok" )
   set_lang_string( "viewzoomout", "Görüntüyü uzaklaştır" )
   set_lang_string( "viewzoomin", "Görüntüyü yakınlaştır" )
+  set_lang_string( "viewzoomoutpre", "Görüntüyü uzaklaştırmak için" )
+  set_lang_string( "viewzoomoutpos", "tuşuna basılı tutun" )
+  set_lang_string( "viewzoominpre", "Görüntüyü yakınlaştırmak için" )
+  set_lang_string( "viewzoominpos", "tuşuna basılı tutun" )
 end
