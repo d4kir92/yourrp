@@ -37,6 +37,11 @@ hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a vehicle." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "vehicles" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -50,6 +55,11 @@ hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a weapon." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "weapon" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -63,6 +73,11 @@ hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn an entity." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "entities" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -76,6 +91,11 @@ hook.Add( "PlayerSpawnEffect", "yrp_effects_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn an effect." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "effects" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -89,6 +109,11 @@ hook.Add( "PlayerSpawnNPC", "yrp_npcs_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a npc." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "npcs" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -102,6 +127,11 @@ hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a prop." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "props" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -115,6 +145,11 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a ragdoll." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "ragdolls" )
+      net.Send( ply )
+
       return false
     end
   end
@@ -128,6 +163,11 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
       return true
     else
       printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )
+
+      net.Start( "yrp_info" )
+        net.WriteString( "noclip" )
+      net.Send( ply )
+
       return false
     end
   end

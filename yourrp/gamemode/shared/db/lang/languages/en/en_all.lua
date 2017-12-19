@@ -353,4 +353,7 @@ function EN_All()
   set_lang_string( "viewzoomoutpos", "to zoom out view" )
   set_lang_string( "viewzoominpre", "Hold" )
   set_lang_string( "viewzoominpos", "to zoom in view" )
+  set_lang_string( "pressplypre", "Press" )
+  set_lang_string( "pressplymid", "to interact with" )
+  set_lang_string( "pressplypos", "" )
 end

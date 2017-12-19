@@ -89,7 +89,7 @@ function check_salary( ply )
           ply:CheckMoney()
         end
       else
-        print("FAIL")
+        printGM( "error", "FAIL @check_salary" )
       end
     end
   end

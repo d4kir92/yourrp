@@ -1,9 +1,10 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+local _url = "https://docs.google.com/forms/d/e/1FAIpQLSe9L51y9uV7EExUuxE2VWuwWagVpLMO-BDD8OXEaXTr2u1rUw/formResponse"
+
 if SERVER then
-	local _url = "https://docs.google.com/forms/d/e/1FAIpQLSe9L51y9uV7EExUuxE2VWuwWagVpLMO-BDD8OXEaXTr2u1rUw/formResponse"
-	function send_info( status )
-	  --printGM( "db", "send_info( " .. tostring( status ) .. " )" )
+	function send_server_info( status )
+		printGM( "db", "[Send Server Info: " .. tostring( status ) .. "]" )
 	  local entry = {}
 		timer.Create( "wait_for_server", 1, 0, function()
 			if gmod.GetGamemode() != nil then
@@ -29,14 +30,11 @@ if SERVER then
 		end)
 	end
 
-	local _minutes = 30
-	local _tick = _minutes*59
-
-	timer.Create( "update_info", tonumber( _tick ), 0, function()
-	  send_info( "auto ( " .. tostring( _tick ) .. " )" )
+	timer.Create( "update_server_info", 30*59, 0, function()
+	  send_server_info( "auto ( " .. tostring( _tick ) .. " )" )
 	end)
 
 	timer.Simple( 10, function()
-		send_info( "startup" )
+		send_server_info( "startup" )
 	end)
 end

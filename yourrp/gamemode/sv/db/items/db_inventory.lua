@@ -512,7 +512,7 @@ function Player:EquipItem( cname, field )
   self.canpickup = false
 end
 
-hook.Add( "PlayerCanPickupWeapon", "yrpasdasdsd", function( ply, wep )
+function GM:PlayerCanPickupWeapon( ply, wep )
   if ply:GetNWBool( "toggle_inventory", false ) == false then
     return true
   elseif ply.canpickup == true then
@@ -521,4 +521,5 @@ hook.Add( "PlayerCanPickupWeapon", "yrpasdasdsd", function( ply, wep )
   else
     return false
   end
-end)
+end
+hook.Remove( "PlayerCanPickupWeapon", "yrp_remove_pickup_hook" )

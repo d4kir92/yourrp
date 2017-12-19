@@ -75,13 +75,19 @@ function hudVersion()
 		if game.SinglePlayer() then
 			_singleplayer = "Singleplayer"
 		end
+
+		--[[ Version Color ]]--
+		local _color1 = version_color() or Color( 0, 0, 0, 255 )
+		local _color2 = Color( 0, 0, 0, 255 )
 		local _alpha = 10
-		if input.IsKeyDown(KEY_F12) or input.IsKeyDown(KEY_F5) then
+		if input.IsKeyDown(KEY_F12) or input.IsKeyDown(KEY_F5) or is_version_outdated() then
 			_alpha = 255
 		end
+		_color1.a = _alpha
+		_color2.a = _alpha
+
 		local _text = _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. "V.: " .. GAMEMODE.Version
-		local _color1 = version_color() or Color( 0, 0, 0, 255 )
-		draw.SimpleTextOutlined( _text, "HudVersion", ScrW() - ctr( 70 ), ctr( 60 ), _color1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( _text, "HudVersion", ScrW() - ctr( 70 ), ctr( 60 ), _color1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), _color2 )
 	end
 end
 --##############################################################################

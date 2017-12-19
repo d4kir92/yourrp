@@ -19,6 +19,7 @@ function teleportToPoint( ply, pos )
 end
 
 util.AddNetworkString( "yrp_noti" )
+util.AddNetworkString( "yrp_info" )
 
 function teleportToSpawnpoint( ply )
   --printGM( "note", "teleportToSpawnpoint " .. ply:Nick() )
@@ -40,6 +41,7 @@ function teleportToSpawnpoint( ply )
         printGM( "note", groTab.groupID .. " has no group spawn!" )
 
         local _str = "[" .. tostring( groTab.groupID ) .. "]" .. " has no group spawn!"
+
         net.Start( "yrp_noti" )
           net.WriteString( "nogroupspawn" )
           net.WriteString( tostring( groTab.groupID ) )

@@ -61,7 +61,7 @@ function save_clients( string )
 end
 
 function set_role( ply, rid )
-  print(ply:CharID())
+  --print(ply:CharID())
   if ply:HasCharacterSelected() then
     local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
     local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )

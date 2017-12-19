@@ -70,7 +70,7 @@ function get_item( id )
 end
 
 function create_item( cname, origin )
-  --print("create_item " .. cname )
+  --print("create_item " .. tostring( cname ) )
   local _item = {}
 
   local _ent = ents.Create( cname )
@@ -78,6 +78,9 @@ function create_item( cname, origin )
   _item = get_item_size( _ent )
   _item.Model = tostring( _ent:GetModel() )
   _item.PrintName = _ent:GetPrintName()
+  if _item.PrintName == "Scripted Weapon" then
+    _item.PrintName = _ent.ClassName or _ent.PrintName
+  end
   _item.ClassName = _ent:GetClass()
   _item.origin = origin or "inv"
   _ent:Remove()
@@ -86,7 +89,7 @@ function create_item( cname, origin )
   if amount != nil then
     _cols = _cols .. ", amount"
   end
-  local _vals = "'" .. _item.ClassName .. "', '" .. _item.PrintName .. "', '" .. _item.Model .. "', '" .. _item.aw .. "', '" .. _item.ah .. "', " .. _item.w .. ", " .. _item.h .. ", '" .. _item.center .. "', '" .. _item.origin .. "'"
+  local _vals = "'" .. db_sql_str( _item.ClassName ) .. "', '" .. db_sql_str( _item.PrintName ) .. "', '" .. _item.Model .. "', '" .. _item.aw .. "', '" .. _item.ah .. "', " .. _item.w .. ", " .. _item.h .. ", '" .. _item.center .. "', '" .. _item.origin .. "'"
   if amount != nil then
     _vals = _vals .. ", '" .. amount .. "'"
   end

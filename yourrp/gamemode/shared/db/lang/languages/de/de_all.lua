@@ -353,4 +353,7 @@ function DE_All()
   set_lang_string( "viewzoomoutpos", "gedrückt um raus zu zoomen" )
   set_lang_string( "viewzoominpre", "Halte" )
   set_lang_string( "viewzoominpos", "gedrückt um raus zu zoomen" )
+  set_lang_string( "pressplypre", "Drück" )
+  set_lang_string( "pressplymid", "um mit" )
+  set_lang_string( "pressplypos", "zu interagieren" )
 end

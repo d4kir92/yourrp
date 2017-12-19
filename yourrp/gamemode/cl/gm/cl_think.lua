@@ -33,10 +33,13 @@ function useFunction( string )
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
 		elseif string == "openCharMenu" and isNoMenuOpen() then
+			done_tutorial( "tut_cs" )
 			openCharacterSelection()
 		elseif string == "openInventory" then
+			done_tutorial( "tut_mi" )
 			open_inventory()
 		elseif string == "openRoleMenu" then
+			done_tutorial( "tut_mr" )
 			if roleMenuWindow != nil then
 				roleMenuWindow:Remove()
 				roleMenuWindow = nil
@@ -44,6 +47,7 @@ function useFunction( string )
 				openRoleMenu()
 			end
 		elseif string == "openBuyMenu" then
+			done_tutorial( "tut_mb" )
 			if _buyWindow != nil then
 				_buyWindow:Remove()
 				_buyWindow = nil
@@ -51,29 +55,14 @@ function useFunction( string )
 				openBuyMenu()
 			end
 		elseif string == "openSettings" then
+			done_tutorial( "tut_ms" )
 			if isNoMenuOpen() then
 				openSettings()
 			else
 				closeSettings()
 			end
-		elseif string == "ViewChange" then
-			if isNoMenuOpen() then
-				--[[
-				_thirdpersonC = _thirdpersonC + 1
-				if _thirdpersonC > 2 then
-					_thirdpersonC = 0
-				end
-
-				if _thirdpersonC == 0 then
-					_thirdperson = 0
-				elseif _thirdpersonC == 1 then
-					_thirdperson = 1
-				elseif _thirdpersonC == 2 then
-					_thirdperson = 2
-				end
-				]]--
-			end
 		elseif string == "openMap" then
+			done_tutorial( "tut_tma" )
 			if mapWindow != nil then
 				mapWindow:Remove()
 				mapWindow = nil
@@ -135,6 +124,7 @@ function useFunction( string )
 				end
 			end
 		elseif string == "F11Toggle" then
+			done_tutorial( "tut_tmo" )
 			GUIToggled = not GUIToggled
 			gui.EnableScreenClicker( GUIToggled )
 		elseif string == "eat" then
@@ -234,22 +224,20 @@ function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
 		if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
-			if ply:GetNWInt( "view_range" ) > 80 then
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
-			else
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
-			end
+			done_tutorial( "tut_vo", 5 )
+
+			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
+
 			if ply:GetNWInt( "view_range" ) > 400 then
 				ply:SetNWInt( "view_range", 400 )
 			end
 		elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
-			if ply:GetNWInt( "view_range" ) > 80 then
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
-			else
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
-			end
-			if ply:GetNWInt( "view_range" ) < -60 then
-				ply:SetNWInt( "view_range", -60 )
+			done_tutorial( "tut_vi", 5 )
+
+			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
+
+			if ply:GetNWInt( "view_range" ) < -100 then
+				ply:SetNWInt( "view_range", -100 )
 			end
 		end
 	end
@@ -269,7 +257,6 @@ function KeyPress()
 	keyPressed( get_keybind("menu_options_door"), nil, "openOptions", 100 )
 	keyPressed( get_keybind("menu_options_vehicle"), nil, "openOptions", 100 )
 
-	keyPressed( get_keybind("toggle_view"), "ViewChange", nil, nil )
 	keyPressed( get_keybind("toggle_map"), "openMap", nil, nil )
 
 	keyPressed( get_keybind("toggle_mouse"), "F11Toggle", nil, nil )
@@ -279,6 +266,7 @@ function KeyPress()
 
 	if isNoMenuOpen() and !chatisopen then
 		if input.IsKeyDown( get_keybind("speak_next") ) and !clicked then
+			done_tutorial( "tut_sn" )
 			clicked = true
 			net.Start( "press_speak_next" )
 			net.SendToServer()
@@ -290,6 +278,7 @@ function KeyPress()
 		end
 
 		if input.IsKeyDown( get_keybind("speak_prev") ) and !clicked then
+			done_tutorial( "tut_sp" )
 			clicked = true
 			net.Start( "press_speak_prev" )
 			net.SendToServer()
@@ -368,7 +357,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 									_drawViewmodel = true
 									return view
 								end
-							elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) <= 0 then
+							elseif ply:GetNWInt( "view_range", 0 ) > -50 and ply:GetNWInt( "view_range", 0 ) <= 0 then
 								--Disabled
 								view.origin = pos
 								view.angles = angles

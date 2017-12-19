@@ -24,6 +24,8 @@ function HudView()
       draw.SimpleTextOutlined( lang_string( "pressevehpre" ) .. " [E] " .. lang_string( "pressevehpos" ), "sef", ScrW()/2, ScrH2() + ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "holdevehpre" ) .. " [" .. string.upper( input.GetKeyName( get_keybind("menu_options_vehicle" ) ) ) .. "] " .. lang_string( "holdevehpos" ), "sef", ScrW()/2, ScrH2() + ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )
+    elseif _eyeTrace.Entity:IsPlayer() then
+      draw.SimpleTextOutlined( lang_string( "pressplypre" ) .. " [E] " .. lang_string( "pressplymid" ) .. " " .. tostring( _eyeTrace.Entity:RPName() ) .. " " .. lang_string( "pressplypos" ), "sef", ScrW()/2, ScrH2() + ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 end

@@ -3,13 +3,13 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local PlayerMeta = FindMetaTable( "Player" )
+local Player = FindMetaTable( "Player" )
 
-if PlayerMeta.old_give == nil then
-  PlayerMeta.old_give = PlayerMeta.Give
+if Player.old_give == nil then
+  Player.old_give = Player.Give
 end
 
-function PlayerMeta:Give( cname, noammo )
+function Player:Give( cname, noammo )
   local _no_ammo = noammo
   if _no_ammo == nil then
     _no_ammo = false
@@ -18,15 +18,15 @@ function PlayerMeta:Give( cname, noammo )
   if self:GetNWBool( "toggle_inventory", false ) then
     self:AddItem( cname )
   else
-    self:old_give( cname, noammo )
+    return self:old_give( cname, noammo )
   end
 end
 
-if PlayerMeta.old_give_ammo == nil then
-  PlayerMeta.old_give_ammo = PlayerMeta.GiveAmmo
+if Player.old_give_ammo == nil then
+  Player.old_give_ammo = Player.GiveAmmo
 end
 
-function PlayerMeta:GiveAmmo( amount, atype, hidePopup )
+function Player:GiveAmmo( amount, atype, hidePopup )
   local _hide_popup = hidePopup
   if _hide_popup == nil then
     _hide_popup = false
@@ -39,3 +39,17 @@ function PlayerMeta:GiveAmmo( amount, atype, hidePopup )
     self:old_give_ammo( amount, atype )
   end
 end
+
+hook.Add( "KeyPress", "yrp_keypress_use", function( ply, key )
+  if ( key == IN_USE ) then
+    local plytr = ply:GetEyeTrace()
+    if plytr.Hit then
+      if IsValid( plytr.Entity ) then
+        if plytr.Entity:IsWeapon() and ply:GetPos():Distance( plytr.Entity:GetPos() ) < 80 then
+          ply:Give( plytr.Entity:GetClass() )
+          plytr.Entity:Remove()
+        end
+      end
+    end
+  end
+end )

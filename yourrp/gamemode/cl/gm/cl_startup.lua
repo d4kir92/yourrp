@@ -490,3 +490,15 @@ net.Receive( "yrp_noti" , function( len )
     end
   end
 end)
+
+net.Receive( "yrp_info" , function( len )
+  print("yrp_info")
+  if playerready then
+    local ply = LocalPlayer()
+    if ply != nil then
+      local _str = net.ReadString()
+      _str = lang_string( "notallowed" ) .. " ( " .. lang_string( _str ) .. " )"
+      notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
+    end
+  end
+end)

@@ -26,6 +26,7 @@ AddCSLuaFile( "cl/db/db_hud.lua")
 AddCSLuaFile( "cl/db/db_keybinds.lua")
 AddCSLuaFile( "cl/db/db_fonts.lua")
 AddCSLuaFile( "cl/db/db_version.lua")
+AddCSLuaFile( "cl/db/db_tutorials.lua")
 
 AddCSLuaFile( "cl/cl_includes.lua" )
 AddCSLuaFile( "cl/gm/cl_startup.lua" )
