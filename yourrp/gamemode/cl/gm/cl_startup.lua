@@ -416,6 +416,20 @@ function GM:InitPostEntity()
 
     playerfullready = true
 
+    if game.SinglePlayer() then
+      local _warning = createD( "DFrame", nil, 600, 600, 0, 0 )
+      _warning:SetTitle( "" )
+      _warning:Center()
+
+      function _warning:Paint( pw, ph )
+        paintWindow( self, pw, ph, "WARNING!" )
+        draw.SimpleTextOutlined( "PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( "Use a dedicated server or start multiplayer, thanks!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+      end
+
+      _warning:MakePopup()
+    end
+
   end)
 
   loadCompleteHUD()
@@ -474,7 +488,6 @@ net.Receive( "yrp_noti" , function( len )
       if ply:IsSuperAdmin() != nil and ply:IsAdmin() != nil then
         if ply:IsSuperAdmin() or ply:IsAdmin() then
           local _str_lang = net.ReadString()
-          print(_str_lang)
           local _str = ""
           if _str_lang == "noreleasepoint" then
             _str = lang_string( _str_lang )
@@ -492,7 +505,7 @@ net.Receive( "yrp_noti" , function( len )
 end)
 
 net.Receive( "yrp_info" , function( len )
-  print("yrp_info")
+  printGM( "server", "yrp_info" )
   if playerready then
     local ply = LocalPlayer()
     if ply != nil then

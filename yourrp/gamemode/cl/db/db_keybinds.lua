@@ -35,7 +35,7 @@ function check_yrp_keybinds()
   if _tmp == nil then
     local _result = db_insert_into_DEFAULTVALUES( _db_name )
     _tmp = db_select( _db_name, "*", "uniqueID = 1" )
-    if worked( _tmp, "check_yrp_keybinds" ) then
+    if _tmp == nil or _tmp == false then
       printGM( "error", _db_name .. " has no entries." )
     end
   end

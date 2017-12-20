@@ -200,6 +200,7 @@ end)
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
   local result = db_update( "yrp_players", "CurrentCharacter = " .. tonumber( char ), "SteamID = '" .. ply:SteamID() .. "'" )
+  local test = db_select( "yrp_players", "*", nil )
   ply:Spawn()
 end)
 

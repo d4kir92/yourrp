@@ -356,4 +356,7 @@ function DE_All()
   set_lang_string( "pressplypre", "Drück" )
   set_lang_string( "pressplymid", "um mit" )
   set_lang_string( "pressplypos", "zu interagieren" )
+  set_lang_string( "thirdpersonviewdistance", "Entfernung der dritten Person" )
+  set_lang_string( "betachannel", "Beta" )
+  set_lang_string( "canarychannel", "Experimentell" )
 end

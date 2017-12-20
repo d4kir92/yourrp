@@ -2,7 +2,9 @@
 
 function db_drop_table( db_table )
   local _result = sql.Query( "DROP TABLE " .. db_table )
-  worked( _result, "db_drop_table fail" )
+  if _result != nil then
+    printGM( "error", "db_drop_table failed!" )
+  end
 end
 
 function db_sql_str( string )

@@ -228,8 +228,8 @@ function KeyPress()
 
 			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
 
-			if ply:GetNWInt( "view_range" ) > 400 then
-				ply:SetNWInt( "view_range", 400 )
+			if tonumber( ply:GetNWInt( "view_range" ) ) > tonumber( ply:GetNWInt( "view_distance", 0 ) ) then
+				ply:SetNWInt( "view_range", tonumber( ply:GetNWInt( "view_distance", 0 ) ) )
 			end
 		elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
 			done_tutorial( "tut_vi", 5 )

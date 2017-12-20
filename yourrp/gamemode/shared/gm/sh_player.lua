@@ -21,9 +21,11 @@ function Player:HasCharacterSelected()
   if SERVER then
     local _ply_tab = self:GetPlyTab()
     if _ply_tab != nil then
-      if _ply_tab.CurrentCharacter != NULL and self.opencharcter == nil then
-        open_character_selection( self )
-        self.opencharcter = true
+      if tostring( _ply_tab.CurrentCharacter ) == "NULL" or _ply_tab.CurrentCharacter == NULL then
+        if self.opencharacter == nil then
+          open_character_selection( self )
+          self.opencharacter = true
+        end
         return false
       else
         return true

@@ -9,6 +9,7 @@ util.AddNetworkString( "db_update_stamina" )
 util.AddNetworkString( "db_update_hud" )
 util.AddNetworkString( "db_update_inventory" )
 util.AddNetworkString( "dbUpdateNWBool2" )
+util.AddNetworkString( "db_update_view_distance" )
 
 local _db_name = "yrp_general"
 
@@ -24,6 +25,7 @@ sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_hud", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_inventory", "INT DEFAULT 1" )
+sql_add_column( _db_name, "view_distance", "INT DEFAULT 200" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
@@ -114,6 +116,16 @@ net.Receive( "dbUpdateNWBool2", function( len, ply )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_building", tobool( _nw_bool ) )
+  end
+end)
+
+net.Receive( "db_update_view_distance", function( len, ply )
+  local _nw_int = tonumber( net.ReadInt( 16 ) )
+  db_update( "yrp_general", "view_distance = " .. _nw_int, nil )
+  printGM( "note", ply:SteamName() .. " SETS " .. tostring( _nw_int ) )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWInt( "view_distance", _nw_int )
   end
 end)
 

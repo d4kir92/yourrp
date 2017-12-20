@@ -822,8 +822,13 @@ function openCharacterSelection()
 end
 
 net.Receive( "openCharacterMenu", function( len, ply )
-  if isNoMenuOpen() then
-    local tmpTable = net.ReadTable()
-    openCharacterSelection()
-  end
+  local tmpTable = net.ReadTable()
+  PrintTable( tmpTable )
+  timer.Create( "yrp_open_character_selection", 1, 0, function()
+    if playerfullready == true and isNoMenuOpen() then
+      openCharacterSelection()
+      timer.Remove( "yrp_open_character_selection" )
+    end
+  end)
+
 end)

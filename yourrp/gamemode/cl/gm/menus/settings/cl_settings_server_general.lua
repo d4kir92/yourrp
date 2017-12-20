@@ -22,6 +22,8 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 615 )
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
 
+  local sv_generalViewDistance = vgui.Create( "DNumberWang", settingsWindow.site )
+
   local oldGamemodename = ""
   function settingsWindow.site:Paint()
     --draw.RoundedBox( 0, 0, 0, settingsWindow.site:GetWide(), settingsWindow.site:GetTall(), _yrp.colors.panel )
@@ -37,7 +39,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "server_hud" ) .. ":", "sef", ctr( _center - 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-end
+    draw.SimpleTextOutlined( lang_string( "thirdpersonviewdistance" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
   sv_generalName:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -60,6 +63,7 @@ end
     sv_generalHud:SetValue( tonumber( _yrp_general.toggle_hud ) )
     sv_generalInventory:SetValue( tonumber( _yrp_general.toggle_inventory ) )
     sv_generalRestartTime:SetValue( tonumber( _yrp_general.time_restart ) )
+    sv_generalViewDistance:SetValue( tonumber( _yrp_general.view_distance ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -234,6 +238,21 @@ end
     end
     net.Start( "db_update_inventory" )
       net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  sv_generalViewDistance:SetPos( ctr( _center ), ctr( 665 ) )
+  sv_generalViewDistance:SetSize( ctr( 200 ), ctr( 50 ) )
+  sv_generalViewDistance:SetMin( 0 )
+  sv_generalViewDistance:SetMax( 800 )
+  sv_generalViewDistance:SetDecimals( 0 )
+  function sv_generalViewDistance:OnValueChanged( value )
+    if tonumber( value ) > tonumber( self:GetMax() ) then
+      value = tonumber( self:GetMax() )
+      self:SetValue( value )
+    end
+    net.Start( "db_update_view_distance" )
+      net.WriteInt( tostring( math.Round( value ) ), 16 )
     net.SendToServer()
   end
 end)

@@ -51,8 +51,8 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.4.6" --do NOT change this!
-GM.VersionSort = "unstable" --do NOT change this!
+GM.Version = "0.9.4.7" --do NOT change this!
+GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this!
 
 RunConsoleCommand( "gmod_mcore_test", "1" )
@@ -63,9 +63,10 @@ RunConsoleCommand( "r_hunkalloclightmaps", "0" )
 if CLIENT then
 	RunConsoleCommand( "cl_threaded_bone_setup", "1" )
 	RunConsoleCommand( "cl_threaded_client_leaf_system", "1" )
+
 	RunConsoleCommand( "r_threaded_particles", "1" )
 	RunConsoleCommand( "r_threaded_renderables", "1" )
-	RunConsoleCommand( "r_queued_ropes", "1" )
+	RunConsoleCommand( "r_threaded_client_shadow_manager", "1" )
 
-  RunConsoleCommand( "r_threaded_client_shadow_manager", "1" )
+	RunConsoleCommand( "r_queued_ropes", "1" )
 end

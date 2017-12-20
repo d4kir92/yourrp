@@ -107,7 +107,7 @@ function send_error( realm, str )
 		  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
 		  entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
 		  entry["entry.1883727441"] = entry["entry.1883727441"] .. " (" .. gmod.GetGamemode().Version .. ")"
-		  entry["entry.2045173320"] = gmod.GetGamemode().VersionSort or "UNKNOWN"
+		  entry["entry.2045173320"] = string.upper( gmod.GetGamemode().VersionSort ) or "UNKNOWN"
 			if first_time_error then
 				entry["entry.1893317510"] = "YES"
 			elseif !first_time_error then
@@ -115,6 +115,7 @@ function send_error( realm, str )
 			else
 				entry["entry.1893317510"] = "-"
 			end
+			entry["entry.471979789"] = string.upper( tostring( !game.SinglePlayer() ) )
 
 		  http.Post( _url, entry, function( result )
 		    if result then end

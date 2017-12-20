@@ -5,6 +5,7 @@ local serverVersion = "-1.-1.-1"
 local v_color = Color( 255, 255, 255, 255 )
 local v_outdated = true
 local v_tested = false
+local s_sort = ""
 
 function version_tested()
   return v_tested
@@ -27,6 +28,9 @@ function is_version_outdated()
 end
 function version_color()
   return v_color
+end
+function version_sort()
+  return s_sort
 end
 
 function showVersion()
@@ -73,16 +77,18 @@ function showVersion()
         _serverSort = lang_string( "serverlocal" )
       end
 
-      local _versionsort = ""
-      if GAMEMODE.VersionSort == "unstable" then
-        _versionsort = lang_string( "unstable" )
+      local s_sort = ""
+      if GAMEMODE.VersionSort == "canary" then
+        s_sort = lang_string( "canarychannel" )
+      elseif GAMEMODE.VersionSort == "beta" then
+        s_sort = lang_string( "betachannel" )
       elseif GAMEMODE.VersionSort == "stable" then
-        _versionsort = lang_string( "stable" )
+        s_sort = lang_string( "stable" )
       end
 
       if versionOnline > GAMEMODE.Version then
         v_outdated = true
-        local frame = createVGUI( "DFrame", nil, 1000, 570, 0, 0 )
+        local frame = createVGUI( "DFrame", nil, 1200, 570, 0, 0 )
         frame:Center()
         frame:SetTitle( "" )
         function frame:Paint( pw, ph )
@@ -90,8 +96,8 @@ function showVersion()
 
 					paintWindow( self, pw, ph, lang_string( "about" ) )
 
-          draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 300 ), ctr( 50+30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( verart .. "! (" .. _versionsort .. ")", "HudBars", pw/2, ctr( 140 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 400 ), ctr( 50+30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( verart .. "! (" .. s_sort .. ")", "HudBars", pw/2, ctr( 140 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( lang_string( "currentversion" ) .. ":", "HudBars", pw/2, ctr( 215 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( lang_string( "client" ) .. ": ", "HudBars", pw/2, ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -101,12 +107,12 @@ function showVersion()
           draw.SimpleTextOutlined( serverVersion, "HudBars", pw/2, ctr( 315 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( lang_string( "workshopversion" ) .. ": ", "HudBars", pw/2, ctr( 415 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( versionOnline .. " (" .. _versionsort .. ")", "HudBars", pw/2, ctr( 415 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( versionOnline .. " (" .. s_sort .. ")", "HudBars", pw/2, ctr( 415 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
-        local _langu = derma_change_language( frame, ctr( 400 ), ctr( 50 ), ctr( 310 ), ctr( 60 ) )
+        local _langu = derma_change_language( frame, ctr( 400 ), ctr( 50 ), ctr( 400 ), ctr( 60 ) )
 
-        local showChanges = createVGUI( "DButton", frame, 460, 80, 0, 0 )
+        local showChanges = createVGUI( "DButton", frame, 520, 80, 0, 0 )
         showChanges:SetText( "" )
         function showChanges:DoClick()
           gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
@@ -127,16 +133,16 @@ function showVersion()
 						paintButton( self, pw, ph, lang_string( "updateserver" ) )
           end
 
-          showChanges:SetPos( ctr( 500-460-10 ), ctr( 460 ) )
-          restartServer:SetPos( ctr( 500+10 ), ctr( 460 ) )
+          showChanges:SetPos( ctr( 600-460-10 ), ctr( 460 ) )
+          restartServer:SetPos( ctr( 600+10 ), ctr( 460 ) )
         else
-          showChanges:SetPos( ctr( 500-230 ), ctr( 460 ) )
+          showChanges:SetPos( ctr( 600-230 ), ctr( 460 ) )
         end
 
         frame:MakePopup()
       else
         v_outdated = false
-        printGM( "note", "YourRP is on the newest version (unstable)")
+        printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
       end
       testingversion = false
       v_tested = true
