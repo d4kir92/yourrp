@@ -115,13 +115,8 @@ function GM:PlayerLoadout( ply )
     ply:CheckInventory()
     ply:SetNWBool( "cuffed", false )
 
-    if !ply:HasItem( "yrp_key" ) then
-      ply:AddSwep( "yrp_key" )
-    end
-
-    if !ply:HasItem( "yrp_unarmed" ) then
-      ply:AddSwep( "yrp_unarmed" )
-    end
+    ply:old_give( "yrp_key" )
+    ply:old_give( "yrp_unarmed" )
 
     addKeys( ply )
 

@@ -553,7 +553,7 @@ function addDBAmmo( parent, id, uniqueID )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
-    draw.SimpleTextOutlined( lang_string( "change" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "in work", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function buttonchange:DoClick()
 

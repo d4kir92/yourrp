@@ -359,4 +359,5 @@ function DE_All()
   set_lang_string( "thirdpersonviewdistance", "Entfernung der dritten Person" )
   set_lang_string( "betachannel", "Beta" )
   set_lang_string( "canarychannel", "Experimentell" )
+  set_lang_string( "recommended", "Empfohlen" )
 end

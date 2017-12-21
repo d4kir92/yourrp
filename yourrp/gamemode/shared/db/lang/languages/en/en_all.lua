@@ -359,4 +359,5 @@ function EN_All()
   set_lang_string( "thirdpersonviewdistance", "Thirdperson view distance" )
   set_lang_string( "betachannel", "Beta" )
   set_lang_string( "canarychannel", "Canary" )
+  set_lang_string( "recommended", "Recommended" )
 end

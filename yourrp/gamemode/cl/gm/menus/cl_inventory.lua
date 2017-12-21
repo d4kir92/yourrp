@@ -237,7 +237,7 @@ function add_eq_slot( field, w, h, x, y )
 end
 
 function insert_eq_in_slot( slot, tbl, w, h, x, y )
-  if tbl != "-1" then
+  if tbl != "-1" and tbl != nil then
 
     local _w = tbl.w
     local _h = tbl.h

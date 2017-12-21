@@ -399,8 +399,8 @@ end)
 function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )
   playerready = true
-  timer.Simple( 4, function()
 
+  timer.Simple( 4, function()
     local _wsitems = engine.GetAddons()
     printGM( "note", "[" .. #_wsitems .. " Workshop items]" )
     printGM( "note", " Nr.\tID\t\tName Mounted" )
@@ -413,23 +413,18 @@ function GM:InitPostEntity()
       end
     end
     printGM( "note", "Workshop Addons Done" )
-
     playerfullready = true
-
     if game.SinglePlayer() then
       local _warning = createD( "DFrame", nil, 600, 600, 0, 0 )
       _warning:SetTitle( "" )
       _warning:Center()
-
       function _warning:Paint( pw, ph )
         paintWindow( self, pw, ph, "WARNING!" )
         draw.SimpleTextOutlined( "PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
         draw.SimpleTextOutlined( "Use a dedicated server or start multiplayer, thanks!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
       end
-
       _warning:MakePopup()
     end
-
   end)
 
   loadCompleteHUD()
