@@ -226,44 +226,44 @@ function dbUpdateColor( name, tab )
 end
 
 function setDefaultHUD()
-  local hp = HUDTab( 1, 380, -80, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local hp = HUDTab( 1, 380, -80, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "hp", hp )
 
-  local ar = HUDTab( 1, 380, -140, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local ar = HUDTab( 1, 380, -140, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ar", ar )
 
-  local mh = HUDTab( 1, 380, -320, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local mh = HUDTab( 1, 380, -320, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "mh", mh )
 
-  local mt = HUDTab( 1, 380, -260, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local mt = HUDTab( 1, 380, -260, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "mt", mt )
 
-  local ms = HUDTab( 1, -200, -320, 400, 60, 1, 2, 1, 1, 24, 1, 1 )
+  local ms = HUDTab( 1, -220, -320, 440, 60, 1, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ms", ms )
 
-  local ma = HUDTab( 1, 380, -200, 400, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local ma = HUDTab( 1, 380, -200, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ma", ma )
 
-  local ca = HUDTab( 1, -200, -400, 400, 60, 1, 2, 1, 1, 24, 1, 1 )
+  local ca = HUDTab( 1, -220, -400, 440, 60, 1, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ca", ca )
 
-  local mo = HUDTab( 1, 380, -380, 400, 60, 0, 2, 1, 1, 18, 1, 1 )
+  local mo = HUDTab( 1, 380, -380, 440, 60, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "mo", mo )
 
-  local xp = HUDTab( 1, 20, -440, 760, 60, 0, 2, 1, 1, 18, 1, 1 )
+  local xp = HUDTab( 1, 20, -440, 800, 60, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "xp", xp )
 
 
   local mm = HUDTab( 1, 20, -380, 360, 360, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "mm", mm )
 
-  local wn = HUDTab( 1, -420, -200, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
+  local wn = HUDTab( 1, -460, -200, 440, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "wn", wn )
 
-  local wp = HUDTab( 1, -420, -80, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
+  local wp = HUDTab( 1, -460, -80, 440, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "wp", wp )
 
-  local ws = HUDTab( 1, -420, -140, 400, 60, 2, 2, 1, 1, 24, 1, 1 )
+  local ws = HUDTab( 1, -460, -140, 440, 60, 2, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ws", ws )
 
   local tt = HUDTab( 1, 20, 20, 900, 600, 0, 0, 1, 1, 24, 1, 1 )
@@ -275,7 +275,7 @@ function setDefaultHUD()
   local vt = HUDTab( 1, -380, 20, 760, 300, 1, 0, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "vt", vt )
 
-  local cb = HUDTab( 1, 20, -880, 760, 420, 0, 2, 1, 1, 18, 1, 1 )
+  local cb = HUDTab( 1, 20, -880, 800, 420, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "cb", cb )
 
   --crosshair

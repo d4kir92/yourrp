@@ -36,6 +36,7 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
     draw.SimpleTextOutlined( lang_string("voiceprev"), "sef", ctr( _wide ), ctr( 660 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("viewzoomout"), "sef", ctr( _wide ), ctr( 720 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("viewzoomin"), "sef", ctr( _wide ), ctr( 780 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("drop"), "sef", ctr( _wide ), ctr( 840 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   local _k = {}
@@ -52,4 +53,5 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
   _k._sgl = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 660 ), "speak_prev" )
   _k._vzo = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 720 ), "view_zoom_out" )
   _k._vzi = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 780 ), "view_zoom_in" )
+  _k._di = createDKeybinder( settingsWindow.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 840 ), "drop_item" )
 end)

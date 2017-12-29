@@ -318,7 +318,8 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       yrp_roles_dbTable[id].playermodels = _globalWorking
       pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
       changepm = 1
-      if modelpanel != "NULL" and modelpanel != NULL and modelpanel != nil then
+      if modelpanel != "NULL" and modelpanel != NULL and modelpanel != nil and pms != nil and changepm != nil then
+        local _model = pms[changepm] or ""
         modelpanel:SetModel( pms[changepm] )
       end
     end)

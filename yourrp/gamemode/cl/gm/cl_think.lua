@@ -32,6 +32,10 @@ function useFunction( string )
 	if !chatisopen then
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
+		elseif string == "dropitem" then
+			print("DROPPPPPPPPPPP")
+			net.Start( "drop_item" )
+			net.SendToServer()
 		elseif string == "openHelpMenu" then
 			toggleHelpMenu()
 		elseif string == "openCharMenu" and isNoMenuOpen() then
@@ -267,6 +271,8 @@ function KeyPress()
 
 	keyPressed( KEY_PAGEUP, "vyes", nil )
 	keyPressed( KEY_PAGEDOWN, "vno", nil )
+
+	keyPressed( get_keybind("drop_item"), "dropitem", nil, nil )
 
 	if isNoMenuOpen() and !chatisopen then
 		if input.IsKeyDown( get_keybind("speak_next") ) and !clicked then

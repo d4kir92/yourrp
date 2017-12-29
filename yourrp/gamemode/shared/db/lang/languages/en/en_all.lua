@@ -374,4 +374,5 @@ function EN_All()
   set_lang_string( "rolespawnpointcreator", "Role spawnpoint creator" )
   set_lang_string( "creategroupspawnpoint", "Creates a group spawnpoint at your position" )
   set_lang_string( "createrolespawnpoint", "Creates a role spawnpoint at your position" )
+  set_lang_string( "level", "Level" )
 end

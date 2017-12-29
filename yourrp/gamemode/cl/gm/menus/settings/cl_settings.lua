@@ -19,7 +19,7 @@ local _yrp_settings = {}
 _yrp_settings.design = {}
 _yrp_settings.design.mode = "dark"
 _yrp_settings.materials = {}
-_yrp_settings.materials.logo100 = Material( "vgui/yrp/logo100.png" )
+_yrp_settings.materials.logo100 = Material( "vgui/yrp/logo100_beta.png" )
 _yrp_settings.materials.dark = {}
 _yrp_settings.materials.dark.close = Material( "vgui/yrp/dark_close.png" )
 _yrp_settings.materials.dark.settings = Material( "vgui/yrp/dark_settings.png" )
@@ -99,7 +99,7 @@ function openSettings()
 
     surface.SetDrawColor( 255, 255, 255, 255 )
     surface.SetMaterial( _yrp_settings.materials.logo100	)
-    surface.DrawTexturedRect( ctr( 100 + 400 + 10 ), ctr( 10 ), ctr( 378*0.8 ), ctr( 100*0.8 ) )
+    surface.DrawTexturedRect( ctr( 100 + 400 + 10 ), ctr( 10 ), ctr( 400*0.6 ), ctr( 130*0.6 ) )
 
     if !version_tested() then
   		testVersion()

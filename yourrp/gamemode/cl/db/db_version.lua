@@ -78,11 +78,11 @@ function showVersion()
       end
 
       local s_sort = ""
-      if GAMEMODE.VersionSort == "canary" then
+      if string.lower( GAMEMODE.VersionSort ) == "canary" then
         s_sort = lang_string( "canarychannel" )
-      elseif GAMEMODE.VersionSort == "beta" then
+      elseif string.lower( GAMEMODE.VersionSort ) == "beta" then
         s_sort = lang_string( "betachannel" )
-      elseif GAMEMODE.VersionSort == "stable" then
+      elseif string.lower( GAMEMODE.VersionSort ) == "stable" then
         s_sort = lang_string( "stable" )
       end
 

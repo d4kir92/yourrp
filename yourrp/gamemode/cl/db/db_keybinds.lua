@@ -30,6 +30,7 @@ function check_yrp_keybinds()
   sql_add_column( _db_name, "menu_options_door", "INT DEFAULT " .. KEY_T )
   sql_add_column( _db_name, "speak_next", "INT DEFAULT " .. KEY_PAGEUP )
   sql_add_column( _db_name, "speak_prev", "INT DEFAULT " .. KEY_PAGEDOWN )
+  sql_add_column( _db_name, "drop_item", "INT DEFAULT " .. KEY_G )
 
   local _tmp = db_select( _db_name, "*", "uniqueID = 1" )
   if _tmp == nil then

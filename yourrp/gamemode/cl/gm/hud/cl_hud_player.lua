@@ -38,6 +38,8 @@ function roundMoney( _money, round )
       return math.Round( money / 1000000, round ) .. "M"
     elseif money > 1000000000 then
       return math.Round( money / 1000000000, round ) .. "B"
+    elseif money > 1000000000000 then
+      return math.Round( money / 1000000000000, round ) .. "T"
     else
       return math.Round( money, round )
     end
@@ -265,7 +267,7 @@ function HudPlayer()
           drawHUDElement( "mo", _capitalMin, _capitalMax, _motext, money, Color( 33, 108, 42, _alpha ) )
 
           --XP
-          local _xptext = "lvl " .. 1 .. " (" .. 0 .. "%) " .. ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
+          local _xptext = lang_string( "level" ) .. " " .. 1 .. " (" .. 0 .. "%) " .. ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
           drawHUDElement( "xp", 0, 100, _xptext, xp, Color( 181, 255, 107, _alpha ) )
 
           --Weapon Primary

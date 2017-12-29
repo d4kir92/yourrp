@@ -633,7 +633,7 @@ function openCharacterSelection()
     character.amount = #tmpTable or 0
     if #tmpTable < 1 then
 
-      if frame != nil and frame != NULL then
+      if frame != nil and frame != NULL and ispanel( frame ) then
         frame:Close()
       end
 
