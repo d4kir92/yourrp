@@ -414,6 +414,8 @@ function GM:InitPostEntity()
     end
     printGM( "note", "Workshop Addons Done" )
     playerfullready = true
+
+    --[[ IF STARTED SINGLEPLAYER ]]--
     if game.SinglePlayer() then
       local _warning = createD( "DFrame", nil, 600, 600, 0, 0 )
       _warning:SetTitle( "" )
@@ -422,6 +424,7 @@ function GM:InitPostEntity()
         paintWindow( self, pw, ph, "WARNING!" )
         draw.SimpleTextOutlined( "PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
         draw.SimpleTextOutlined( "Use a dedicated server or start multiplayer, thanks!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR BEST EXPERIENCE!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
       end
       _warning:MakePopup()
     end
@@ -483,13 +486,15 @@ net.Receive( "yrp_noti" , function( len )
       if ply:IsSuperAdmin() != nil and ply:IsAdmin() != nil then
         if ply:IsSuperAdmin() or ply:IsAdmin() then
           local _str_lang = net.ReadString()
-          local _str = ""
+          local _str = "[" .. lang_string( "adminnotification") .. "] "
           if _str_lang == "noreleasepoint" then
-            _str = lang_string( _str_lang )
+            _str = _str .. lang_string( _str_lang )
           elseif _str_lang == "nojailpoint" then
-            _str = lang_string( _str_lang )
+            _str = _str .. lang_string( _str_lang )
           elseif _str_lang == "nogroupspawn" then
-            _str = "[" .. string.upper( net.ReadString() ) .. "]" .. " " .. lang_string( _str_lang ) .. "!"
+            _str = _str .. "[" .. string.upper( net.ReadString() ) .. "]" .. " " .. lang_string( _str_lang ) .. "!"
+          elseif _str_lang == "inventoryclearing" then
+            _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
           end
 
         	notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )

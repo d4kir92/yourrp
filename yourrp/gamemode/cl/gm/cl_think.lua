@@ -32,6 +32,8 @@ function useFunction( string )
 	if !chatisopen then
 		if string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
+		elseif string == "openHelpMenu" then
+			toggleHelpMenu()
 		elseif string == "openCharMenu" and isNoMenuOpen() then
 			done_tutorial( "tut_cs" )
 			openCharacterSelection()
@@ -243,6 +245,8 @@ function KeyPress()
 	end
 
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
+
+	keyPressed( KEY_F1, "openHelpMenu", nil, nil )
 
 	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
 

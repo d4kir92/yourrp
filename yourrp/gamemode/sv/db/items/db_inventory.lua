@@ -44,6 +44,7 @@ function Player:GetInventory()
   print("")
   ]]--
 
+
   for y = 1, INV_H do
     for x = 1, INV_W do
       if _inv["y"..y]["x"..x] != nil then
@@ -432,14 +433,14 @@ end)
 
 util.AddNetworkString( "item_move" )
 
-function Player:RemoveItem( uid )
+function Player:RemoveItemFromIventory( uid )
   local _item = db_update( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'i," .. uid .. "'" )
   local _item_links = db_update( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'l," .. uid .. "'" )
 end
 
 function Player:MoveItem( uid, x, y, origin )
   --[[ Remove item from inventory ]]--
-  self:RemoveItem( uid )
+  self:RemoveItemFromIventory( uid )
 
   --[[ get item from database ]]--
   local _item = db_select( "yrp_item", "*", "uniqueID = " .. uid )
@@ -476,10 +477,7 @@ net.Receive( "item_move", function( len, ply )
 
   --[[ NEW ORIGIN ]]--
   if _new_origin == "eq" then
-
-
-    ply:RemoveItem( _uid )
-
+    ply:RemoveItemFromIventory( _uid )
     local _item = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
     if _item != nil then
       _item = _item[1]
@@ -488,7 +486,7 @@ net.Receive( "item_move", function( len, ply )
   elseif _new_origin == "inv" then
     ply:MoveItem( _uid, _x, _y, _new_origin )
   else
-    ply:RemoveItem( _uid )
+    ply:RemoveItemFromIventory( _uid )
     ply:DropItem( _item.ClassName )
   end
 

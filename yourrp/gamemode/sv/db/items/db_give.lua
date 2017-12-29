@@ -16,7 +16,7 @@ function Player:Give( cname, noammo )
   end
 
   if self:GetNWBool( "toggle_inventory", false ) then
-    self:AddItem( cname )
+    self:AddSwep( cname )
   else
     return self:old_give( cname, noammo )
   end
@@ -63,17 +63,41 @@ function Player:StripWeapon( cname )
 
   if self:GetNWBool( "toggle_inventory", false ) then
     local _items = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
-    for k, item in pairs( _items ) do
-      local _id = string.sub( item.item, 3 )
-      local _res = db_select( "yrp_item", "*", "uniqueID = " .. _id )
-      if _res != false and _res != nil then
-        _res = _res[1]
-        if _res.ClassName == cname then
-          self:RemoveItem( _id )
-          db_delete_from( "yrp_item", "uniqueID = " .. _id .. " AND ClassName = '" .. tostring( cname ) .. "'" )
+    if _items != nil then
+      for k, item in pairs( _items ) do
+        local _id = string.sub( item.item, 3 )
+        local _res = db_select( "yrp_item", "*", "uniqueID = " .. _id )
+        if _res != false and _res != nil then
+          _res = _res[1]
+          if _res.ClassName == cname then
+            self:RemoveItemFromIventory( _id )
+          end
         end
       end
     end
   end
   self:old_stripweapon( cname )
+end
+
+if Player.old_stripweapons == nil then
+  Player.old_stripweapons = Player.StripWeapons
+end
+
+function Player:StripWeapons()
+  local _char_id = self:CharID()
+
+  if self:GetNWBool( "toggle_inventory", false ) then
+    local _items = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    if _items != nil then
+      for k, item in pairs( _items ) do
+        local _id = string.sub( item.item, 3 )
+        local _res = db_select( "yrp_item", "*", "uniqueID = " .. _id )
+        if _res != false and _res != nil then
+          _res = _res[1]
+          self:RemoveItemFromIventory( _id )
+        end
+      end
+    end
+  end
+  self:old_stripweapons()
 end

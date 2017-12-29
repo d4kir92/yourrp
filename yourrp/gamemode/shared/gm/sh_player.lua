@@ -189,7 +189,7 @@ end
 
 function Player:canAfford( money )
   local _tmpMoney = tonumber( money )
-  if isnumber( _tmpMoney ) then
+  if isnumber( _tmpMoney ) and self:GetNWString( "money" ) != nil then
     if tonumber( self:GetNWString( "money" ) ) >= math.abs( _tmpMoney ) then
       return true
     else

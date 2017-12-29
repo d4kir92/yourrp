@@ -8,6 +8,8 @@ util.AddNetworkString( "db_update_thirst" )
 util.AddNetworkString( "db_update_stamina" )
 util.AddNetworkString( "db_update_hud" )
 util.AddNetworkString( "db_update_inventory" )
+util.AddNetworkString( "db_update_clearinventoryondead" )
+util.AddNetworkString( "db_update_graffiti" )
 util.AddNetworkString( "dbUpdateNWBool2" )
 util.AddNetworkString( "db_update_view_distance" )
 
@@ -25,6 +27,8 @@ sql_add_column( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_hud", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_inventory", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_clearinventoryondead", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_graffiti", "INT DEFAULT 0" )
 sql_add_column( _db_name, "view_distance", "INT DEFAULT 200" )
 
 function add_first_entry( retries )
@@ -59,6 +63,24 @@ function get_advert_name()
   end
 end
 get_advert_name()
+
+net.Receive( "db_update_graffiti", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_graffiti = " .. _nw_bool, nil )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_graffiti", tobool( _nw_bool ) )
+  end
+end)
+
+net.Receive( "db_update_clearinventoryondead", function( len, ply )
+  local _nw_bool = tonumber( net.ReadInt( 4 ) )
+  db_update( "yrp_general", "toggle_clearinventoryondead = " .. _nw_bool, nil )
+
+  for k, v in pairs( player.GetAll() ) do
+    v:SetNWBool( "toggle_clearinventoryondead", tobool( _nw_bool ) )
+  end
+end)
 
 net.Receive( "db_update_inventory", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )

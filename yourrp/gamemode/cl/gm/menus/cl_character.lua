@@ -633,7 +633,9 @@ function openCharacterSelection()
     character.amount = #tmpTable or 0
     if #tmpTable < 1 then
 
-      frame:Close()
+      if frame != nil and frame != NULL then
+        frame:Close()
+      end
 
       openCharacterCreation()
 
@@ -682,19 +684,21 @@ function openCharacterSelection()
         end
         function tmpChar:DoClick()
           curChar = self.charid
-          local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
-          if _playermodel != nil then
-            charplayermodel:SetModel( _playermodel )
-            if charplayermodel.Entity != nil then
-              charplayermodel.Entity:SetSkin( self.skin )
-              charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
-              charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
-              charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
-              charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
-              charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
-              charplayermodel.Entity:SetBodygroup( 5, self.bg5 )
-              charplayermodel.Entity:SetBodygroup( 6, self.bg6 )
-              charplayermodel.Entity:SetBodygroup( 7, self.bg7 )
+          if self.playermodels != nil and self.playermodelID != nil then
+            local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
+            if _playermodel != nil and _playermodel != NULL then
+              charplayermodel:SetModel( _playermodel )
+              if charplayermodel.Entity != nil then
+                charplayermodel.Entity:SetSkin( self.skin )
+                charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
+                charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
+                charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
+                charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
+                charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+                charplayermodel.Entity:SetBodygroup( 5, self.bg5 )
+                charplayermodel.Entity:SetBodygroup( 6, self.bg6 )
+                charplayermodel.Entity:SetBodygroup( 7, self.bg7 )
+              end
             end
           end
         end

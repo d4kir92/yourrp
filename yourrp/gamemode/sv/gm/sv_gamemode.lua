@@ -192,3 +192,34 @@ hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
     teleportToSpawnpoint( ply )
   end)
 end)
+
+hook.Add( "DoPlayerDeath", "yrp_DoPlayerDeath", function( ply, attacker, dmg )
+  local _sel = db_select( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
+  if _sel != nil then
+    _sel = _sel[1]
+    if tobool( _sel.toggle_clearinventoryondead ) then
+      ply:StripWeapons()
+      if ply:IsSuperAdmin() or ply:IsAdmin() then
+        net.Start( "yrp_noti" )
+          net.WriteString( "inventoryclearing" )
+          net.WriteString( "enabled" )
+        net.Send( ply )
+      end
+    end
+  end
+end)
+
+function GM:PlayerSpray( ply )
+  local _sel = db_select( "yrp_general", "toggle_graffiti", "uniqueID = 1" )
+  if _sel != nil then
+    _sel = _sel[1]
+    if tobool( _sel.toggle_graffiti ) then
+      return false
+    end
+  end
+  return true
+end
+
+function GM:ShowHelp( ply )
+  return false
+end

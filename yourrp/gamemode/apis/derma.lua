@@ -2,7 +2,7 @@
 
 local _menuOpen = false
 function isNoMenuOpen()
-  if gui.IsConsoleVisible() then
+  if gui.IsConsoleVisible() or gui.IsGameUIVisible() then
     return false
   end
   return !_menuOpen
@@ -14,6 +14,10 @@ end
 
 function openMenu()
   _menuOpen = true
+end
+
+function mouseVisible()
+  return vgui.CursorVisible()
 end
 
 function paintBr( pw, ph, color )
@@ -110,9 +114,9 @@ function createD( derma, parent, w, h, x, y )
     printGM( "note", w .. " " .. h )
   end
   if x != nil and y != nil then
-    tmpD:SetPos( x, y )
+    tmpD:SetPos( tonumber( x ), tonumber( y ) )
   else
-    printGM( "note", x .. " " .. y )
+    printGM( "note", tostring( x ) .. " " .. tostring( y ) )
   end
   return tmpD
 end

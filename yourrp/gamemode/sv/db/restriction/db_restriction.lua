@@ -210,7 +210,9 @@ net.Receive( "db_jailaccess", function( len, ply )
   local _dbSets = net.ReadString()
 
   local _result = db_update( _dbTable, _dbSets, "uniqueID = 1" )
-  worked( _result, "access_jail update failed" )
+  if _result != nil then
+    printGM( "error", "access_jail failed!" )
+  end
 end)
 
 net.Receive( "dbUpdate", function( len, ply )

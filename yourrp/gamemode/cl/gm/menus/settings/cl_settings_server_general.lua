@@ -20,6 +20,9 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 495 )
   local sv_generalHud = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 555 )
   local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 615 )
+  local sv_generalClearInventoryOnDead = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 675 )
+  local sv_generalGraffiti = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 735 )
+
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
 
   local sv_generalViewDistance = vgui.Create( "DNumberWang", settingsWindow.site )
@@ -39,7 +42,9 @@ hook.Add( "open_server_general", "open_server_general", function()
     draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "server_hud" ) .. ":", "sef", ctr( _center - 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "thirdpersonviewdistance" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "clearinventoryondead" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "graffiti" ) .. ":", "sef", ctr( _center - 10 ), ctr( 750 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "thirdpersonviewdistance" ) .. ":", "sef", ctr( _center - 10 ), ctr( 810 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -62,6 +67,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalBuilding:SetChecked( tobool( _yrp_general.toggle_building ) )
     sv_generalHud:SetValue( tonumber( _yrp_general.toggle_hud ) )
     sv_generalInventory:SetValue( tonumber( _yrp_general.toggle_inventory ) )
+    sv_generalClearInventoryOnDead:SetValue( tonumber( _yrp_general.toggle_clearinventoryondead ) )
+    sv_generalGraffiti:SetValue( tonumber( _yrp_general.toggle_graffiti ) )
     sv_generalRestartTime:SetValue( tonumber( _yrp_general.time_restart ) )
     sv_generalViewDistance:SetValue( tonumber( _yrp_general.view_distance ) )
   end)
@@ -241,7 +248,27 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.SendToServer()
   end
 
-  sv_generalViewDistance:SetPos( ctr( _center ), ctr( 665 ) )
+  function sv_generalClearInventoryOnDead:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_clearinventoryondead" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalGraffiti:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_graffiti" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  sv_generalViewDistance:SetPos( ctr( _center ), ctr( 785 ) )
   sv_generalViewDistance:SetSize( ctr( 200 ), ctr( 50 ) )
   sv_generalViewDistance:SetMin( 0 )
   sv_generalViewDistance:SetMax( 800 )

@@ -162,7 +162,7 @@ net.Receive( "openLawBoard", function( len )
         end
         function _add:DoClick()
           if _SteamID != nil then
-            local _insert = "'" .. _SteamID .. "', '" .. _reason:GetText() .. "', " .. _time:GetValue() .. ", '" .. _nick .. "'"
+            local _insert = "'" .. _SteamID .. "', '" .. db_in_str( _reason:GetText() ) .. "', " .. db_int( _time:GetValue() ) .. ", '" .. db_in_str( _nick ) .. "'"
             net.Start( "dbAddJail" )
               net.WriteString( "yrp_jail" )
               net.WriteString( "SteamID, reason, time, nick" )

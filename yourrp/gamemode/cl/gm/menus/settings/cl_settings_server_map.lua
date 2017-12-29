@@ -1,24 +1,35 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local _groups = {}
+local _roles = {}
 net.Receive( "getMapList", function( len )
   local _tmpBool = net.ReadBool()
 
   local _tmpTable = net.ReadTable()
   _groups = net.ReadTable()
+  _roles = net.ReadTable()
   if !_tmpBool then
     for k, v in pairs( _tmpTable ) do
       if tonumber( v.groupID ) != -1 then
         for l, w in pairs( _groups ) do
-          if tostring( v.groupID ) == tostring( w.uniqueID ) then
+          if tostring( v.groupID ) == tostring( w.uniqueID ) and v.type == "GroupSpawnpoint" then
             if _mapListView != nil then
-              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID )
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID, "" )
+            end
+            break
+          end
+        end
+      elseif tonumber( v.roleID ) != -1 then
+        for l, w in pairs( _roles ) do
+          if tostring( v.roleID ) == tostring( w.uniqueID ) and v.type == "RoleSpawnpoint"  then
+            if _mapListView != nil then
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", w.roleID )
             end
             break
           end
         end
       else
-        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "" )
+        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "" )
       end
     end
   end
@@ -101,6 +112,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   _mapListView:AddColumn( lang_string( "angle" ) )
   _mapListView:AddColumn( lang_string( "type" ) )
   _mapListView:AddColumn( lang_string( "group" ) )
+  _mapListView:AddColumn( lang_string( "role" ) )
 
   local _buttonDelete = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 )
   _buttonDelete:SetText( lang_string( "deleteentry" ) )
@@ -113,34 +125,34 @@ hook.Add( "open_server_map", "open_server_map", function()
     end
   end
 
-  local _buttonAddSpawnPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 + 50 + 10 )
-  _buttonAddSpawnPoint:SetText( lang_string( "addspawnpoint" ) )
-  function _buttonAddSpawnPoint:DoClick()
-    local tmpFrame = createVGUI( "DFrame", nil, 500, 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10, 0, 0 )
+  local _buttonAddGroupSpawnPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 336 )
+  _buttonAddGroupSpawnPoint:SetText( lang_string( "addgroupspawnpoint" ) )
+  function _buttonAddGroupSpawnPoint:DoClick()
+    local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
     tmpFrame:Center()
     tmpFrame:SetTitle( "" )
     function tmpFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
-      draw.SimpleTextOutlined( lang_string( "spawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "createspawnpointonyou" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "selectgroup" ) .. ":", "sef", ctr( 10 ), ctr( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "groupspawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "creategroupspawnpoint" ), "sef", ctr( 10 ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "selectgroup" ) .. ":", "sef", ctr( 10 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     end
 
-    local tmpGroup = createVGUI( "DComboBox", tmpFrame, 200, 50, 10, 50 + 10 + 50 + 10 )
+    local tmpGroup = createD( "DComboBox", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
     for k, v in pairs( _groups ) do
       tmpGroup:AddChoice( v.groupID, v.uniqueID )
     end
 
-    local tmpButton = createVGUI( "DButton", tmpFrame, 200, 50, 150, 50 + 10 + 50 + 10 + 50 + 10 )
+    local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
     tmpButton:SetText( lang_string( "add" ) )
     function tmpButton:DoClick()
-      net.Start( "dbInsertInto" )
+      net.Start( "dbInsertIntoMap" )
         net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
         net.WriteString( "position, angle, groupID, type" )
         local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
         local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
         local tmpGroupID = tostring( tmpGroup:GetOptionData( tmpGroup:GetSelectedID() ) )
-        local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', " .. tmpGroupID .. ", 'Spawnpoint'"
+        local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', " .. tmpGroupID .. ", 'GroupSpawnpoint'"
         net.WriteString( tmpString )
       net.SendToServer()
 
@@ -153,10 +165,50 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpFrame:MakePopup()
   end
 
-  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 396 )
+  local _buttonAddRoleSpawnPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 396 )
+  _buttonAddRoleSpawnPoint:SetText( lang_string( "addrolespawnpoint" ) )
+  function _buttonAddRoleSpawnPoint:DoClick()
+    local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
+    tmpFrame:Center()
+    tmpFrame:SetTitle( "" )
+    function tmpFrame:Paint( pw, ph )
+      draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
+      draw.SimpleTextOutlined( lang_string( "rolespawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "createrolespawnpoint" ), "sef", ctr( 10 ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "selectrole" ) .. ":", "sef", ctr( 10 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    end
+
+    local tmpRole = createD( "DComboBox", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
+    for k, v in pairs( _roles ) do
+      tmpRole:AddChoice( v.roleID, v.uniqueID )
+    end
+
+    local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
+    tmpButton:SetText( lang_string( "add" ) )
+    function tmpButton:DoClick()
+      net.Start( "dbInsertIntoMap" )
+        net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
+        net.WriteString( "position, angle, roleID, type" )
+        local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
+        local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
+        local tmpRoleID = tostring( tmpRole:GetOptionData( tmpRole:GetSelectedID() ) )
+        local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', " .. tmpRoleID .. ", 'RoleSpawnpoint'"
+        net.WriteString( tmpString )
+      net.SendToServer()
+
+      _mapListView:Clear()
+      net.Start( "getMapList" )
+      net.SendToServer()
+      tmpFrame:Close()
+    end
+
+    tmpFrame:MakePopup()
+  end
+
+  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 456 )
   _buttonAddJailPoint:SetText( lang_string( "addjailpoint" ) )
   function _buttonAddJailPoint:DoClick()
-    net.Start( "dbInsertInto" )
+    net.Start( "dbInsertIntoMap" )
       net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
       net.WriteString( "position, angle, type" )
       local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
@@ -170,10 +222,10 @@ hook.Add( "open_server_map", "open_server_map", function()
     net.SendToServer()
   end
 
-  local _buttonAddReleasePoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 396+60 )
+  local _buttonAddReleasePoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 516 )
   _buttonAddReleasePoint:SetText( lang_string( "addjailfreepoint" ) )
   function _buttonAddReleasePoint:DoClick()
-    net.Start( "dbInsertInto" )
+    net.Start( "dbInsertIntoMap" )
       net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
       net.WriteString( "position, angle, type" )
       local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )

@@ -360,4 +360,6 @@ function RU_All()
   set_lang_string( "betachannel", "Beta" )
   set_lang_string( "canarychannel", "Canary" )
   set_lang_string( "recommended", "Рекомендованная" )
+  set_lang_string( "clearinventoryondead", "Очистить инвентарь при смерти" )
+  set_lang_string( "inventoryclearing", "Очистка инвенторя" )
 end

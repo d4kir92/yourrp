@@ -1,5 +1,25 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function db_in_str( str )
+  local _res = string.Replace( str, "'", "%" )
+  return _res
+end
+
+function db_out_str( str )
+  local _res = string.Replace( str, "%", "'" )
+  return _res
+end
+
+function db_int( int )
+  local _int = tonumber( int )
+  if isnumber( _int ) then
+    return _int
+  else
+    printGM( "error", tostring( int ) .. " is not a number! return -1" )
+    return -1
+  end
+end
+
 function db_drop_table( db_table )
   local _result = sql.Query( "DROP TABLE " .. db_table )
   if _result != nil then

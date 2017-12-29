@@ -451,18 +451,22 @@ function addDBSwep( parent, id, uniqueID )
     _globalWorking = yrp_roles_dbTable[id].sweps
 
     hook.Add( "closeRoleSweps", "crs", function()
-      yrp_roles_dbTable[id].sweps = _globalWorking
-      sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
-      changesw = 1
+      if yrp_roles_dbTable != nil then
+        if yrp_roles_dbTable[id] != nil then
+          yrp_roles_dbTable[id].sweps = _globalWorking
+          sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
+          changesw = 1
 
-      local worldmodel = getWorldModel( sws[changesw] )
-      if tostring(modelpanel) != "[NULL Panel]" then
-        modelpanel:SetModel( worldmodel )
-        if modelpanel.Entity != nil then
-          modelpanel.Entity:SetModelScale( 1, 0 )
+          local worldmodel = getWorldModel( sws[changesw] )
+          if tostring(modelpanel) != "[NULL Panel]" then
+            modelpanel:SetModel( worldmodel )
+            if modelpanel.Entity != nil then
+              modelpanel.Entity:SetModelScale( 1, 0 )
+            end
+            modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
+            modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
+          end
         end
-        modelpanel:SetLookAt( Vector( 0, 0, 0 ) )
-        modelpanel:SetCamPos( Vector( 0, -30, 15 ) )
       end
     end)
 
