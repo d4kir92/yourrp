@@ -517,96 +517,93 @@ net.Receive( "get_inventory", function( len )
   end
 end)
 
+function toggle_inventory()
+  if isNoMenuOpen() then
+    open_inventory()
+  else
+    close_inventory()
+  end
+end
+
 function close_inventory()
-  closeMenu()
-  yrp_inventory.window:Close()
-  yrp_inventory.isopen = false
-  yrp_inventory.drop_panel:Remove()
+  if yrp_inventory.window != nil then
+    closeMenu()
+    yrp_inventory.window:Remove()
+    yrp_inventory.drop_panel:Remove()
+    yrp_inventory.window = nil
+  end
 end
 
 function open_inventory()
-  if yrp_inventory.isopen then
-    close_inventory()
-    return false
-  elseif isNoMenuOpen() then
-    openMenu()
-    yrp_inventory.isopen = true
-
-    yrp_inventory.drop_panel = createD( "DPanel", nil, ScrW(), ScrH(), 0, 0 )
-    yrp_inventory.drop_panel:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
-      if isDropped then
-        if receiver:IsHovered() then
-          tableOfDroppedPanels[1]:Remove()
-          net.Start( "item_move" )
-            net.WriteString( "" )
-            net.WriteString( "" )
-            net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
-            net.WriteString( "drop" )
-          net.SendToServer()
-        end
+  openMenu()
+  yrp_inventory.drop_panel = createD( "DPanel", nil, ScrW(), ScrH(), 0, 0 )
+  yrp_inventory.drop_panel:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
+    if isDropped then
+      if receiver:IsHovered() then
+        tableOfDroppedPanels[1]:Remove()
+        net.Start( "item_move" )
+          net.WriteString( "" )
+          net.WriteString( "" )
+          net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
+          net.WriteString( "drop" )
+        net.SendToServer()
       end
-    end, {})
-    function yrp_inventory.drop_panel:Paint( pw, ph )
-      --
     end
+  end, {})
+  function yrp_inventory.drop_panel:Paint( pw, ph )
+    --
+  end
 
-    yrp_inventory.window = createD( "DFrame", nil, ScrH(), ScrH(), 0, 0 )
-    yrp_inventory.window:SetTitle( "" )
-    yrp_inventory.window:Center()
-    yrp_inventory.window:SetDraggable( false )
-    yrp_inventory.window:ShowCloseButton( false )
-    yrp_inventory.window:SetSizable( true )
-    function yrp_inventory.window:OnClose()
-      yrp_inventory.window:Remove()
-    end
-    function yrp_inventory.window:Paint( pw, ph )
-      --paintWindow( self, pw, ph, lang_string( "inventory" ) )
-    end
-    function yrp_inventory.window:OnClose()
-      closeMenu()
-    end
-    function yrp_inventory.window:OnRemove()
-      closeMenu()
-    end
+  yrp_inventory.window = createD( "DFrame", nil, ScrH(), ScrH(), 0, 0 )
+  yrp_inventory.window:SetTitle( "" )
+  yrp_inventory.window:Center()
+  yrp_inventory.window:SetDraggable( false )
+  yrp_inventory.window:ShowCloseButton( false )
+  yrp_inventory.window:SetSizable( true )
+  function yrp_inventory.window:OnClose()
+    yrp_inventory.window:Remove()
+  end
+  function yrp_inventory.window:Paint( pw, ph )
+    --paintWindow( self, pw, ph, lang_string( "inventory" ) )
+  end
 
-    yrp_inventory.left = createD( "DPanel", yrp_inventory.window, ScrH() - ctr( 10 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )
-    function yrp_inventory.left:Paint( pw, ph )
-      --paintPanel( self, pw, ph )
-      --paintBr( pw, ph, Color( 255, 0, 0, 255 ))
-    end
+  yrp_inventory.left = createD( "DPanel", yrp_inventory.window, ScrH() - ctr( 10 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )
+  function yrp_inventory.left:Paint( pw, ph )
+    --paintPanel( self, pw, ph )
+    --paintBr( pw, ph, Color( 255, 0, 0, 255 ))
+  end
 
-    yrp_inventory.tabInv = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 0 ), ctr( 20 ) )
-    yrp_inventory.tabInv:SetText( "" )
-    function yrp_inventory.tabInv:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "inventory" ) )
-    end
-    function yrp_inventory.tabInv:DoClick()
-      net.Start( "get_inventory" )
-      net.SendToServer()
-    end
-
-    yrp_inventory.tabBody = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 310 ), ctr( 20 ) )
-    yrp_inventory.tabBody:SetText( "" )
-    function yrp_inventory.tabBody:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "appearance" ) )
-    end
-    function yrp_inventory.tabBody:DoClick()
-      net.Start( "get_menu_bodygroups" )
-      net.SendToServer()
-    end
-
-    yrp_inventory.tabAtr = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 620 ), ctr( 20 ) )
-    yrp_inventory.tabAtr:SetText( "" )
-    function yrp_inventory.tabAtr:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "attributes" ) )
-    end
-    function yrp_inventory.tabAtr:DoClick()
-      showAttributes()
-    end
-
+  yrp_inventory.tabInv = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 0 ), ctr( 20 ) )
+  yrp_inventory.tabInv:SetText( "" )
+  function yrp_inventory.tabInv:Paint( pw, ph )
+    paintButton( self, pw, ph, lang_string( "inventory" ) )
+  end
+  function yrp_inventory.tabInv:DoClick()
     net.Start( "get_inventory" )
     net.SendToServer()
-
-    yrp_inventory.window:MakePopup()
   end
+
+  yrp_inventory.tabBody = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 310 ), ctr( 20 ) )
+  yrp_inventory.tabBody:SetText( "" )
+  function yrp_inventory.tabBody:Paint( pw, ph )
+    paintButton( self, pw, ph, lang_string( "appearance" ) )
+  end
+  function yrp_inventory.tabBody:DoClick()
+    net.Start( "get_menu_bodygroups" )
+    net.SendToServer()
+  end
+
+  yrp_inventory.tabAtr = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 620 ), ctr( 20 ) )
+  yrp_inventory.tabAtr:SetText( "" )
+  function yrp_inventory.tabAtr:Paint( pw, ph )
+    paintButton( self, pw, ph, lang_string( "attributes" ) )
+  end
+  function yrp_inventory.tabAtr:DoClick()
+    showAttributes()
+  end
+
+  net.Start( "get_inventory" )
+  net.SendToServer()
+
+  yrp_inventory.window:MakePopup()
 end

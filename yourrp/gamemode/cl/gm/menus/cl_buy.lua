@@ -265,22 +265,35 @@ net.Receive( "getBuyList", function( len )
   end
 end)
 
+function toggleBuyMenu()
+  if isNoMenuOpen() then
+    openBuyMenu()
+  else
+    closeBuyMenu()
+  end
+end
+
+function closeBuyMenu()
+  if _buyWindow != nil then
+    closeMenu()
+    _buyWindow:Remove()
+    _buyWindow = nil
+  end
+end
+
 function openBuyMenu()
   openMenu()
   _buyWindow = createVGUI( "DFrame", nil, winW, winH, 0, 0 )
   _buyWindow:SetTitle( "" )
   _buyWindow:Center()
   function _buyWindow:OnClose()
-    _buyWindow:Remove()
-  end
-  function _buyWindow:Paint( pw, ph )
-    paintWindow( self, pw, ph, lang_string( "buymenu" ) )
-  end
-  function _buyWindow:OnClose()
     closeMenu()
   end
   function _buyWindow:OnRemove()
     closeMenu()
+  end
+  function _buyWindow:Paint( pw, ph )
+    paintWindow( self, pw, ph, lang_string( "buymenu" ) )
   end
 
   derma_change_language( _buyWindow, 400, 50, 1400, 0 )

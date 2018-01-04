@@ -374,4 +374,5 @@ function RU_All()
   set_lang_string( "rolespawnpointcreator", "Создание ролевых точек спауна" )
   set_lang_string( "creategroupspawnpoint", "Создать групповую точку спауна на вашей позиции" )
   set_lang_string( "createrolespawnpoint", "Создать ролевую точку спауна на вашей позиции" )
+  set_lang_string( "level", "Уровень" )
 end

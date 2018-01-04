@@ -11,6 +11,26 @@ local _lastkey = nil
 local GUIToggled = false
 ch_attack1 = 0
 
+function isChatOpen()
+	return chatisopen or false
+end
+
+function isConsoleOpen()
+	return gui.IsConsoleVisible()
+end
+
+function isMainMenuOpen()
+	return gui.IsGameUIVisible()
+end
+
+hook.Add( "StartChat", "HasStartedTyping", function( isTeamChat )
+	chatisopen = true
+end )
+
+hook.Add( "FinishChat", "ClientFinishTyping", function()
+	chatisopen = false
+end )
+
 local keys = {}
 keys["_hold"] = 0
 
@@ -29,74 +49,30 @@ function useFunction( string )
 	local ply = LocalPlayer()
 	local eyeTrace = ply:GetEyeTrace()
 
-	if !chatisopen then
-		if string == "scoreboard" and isScoreboardOpen then
-			gui.EnableScreenClicker( true )
-		elseif string == "dropitem" then
-			print("DROPPPPPPPPPPP")
-			net.Start( "drop_item" )
-			net.SendToServer()
-		elseif string == "openHelpMenu" then
+	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
+		//Menues
+		if string == "openHelpMenu" then
 			toggleHelpMenu()
-		elseif string == "openCharMenu" and isNoMenuOpen() then
+		elseif string == "openCharMenu" then
 			done_tutorial( "tut_cs" )
-			openCharacterSelection()
+			toggleCharacterSelection()
 		elseif string == "openInventory" then
 			done_tutorial( "tut_mi" )
-			open_inventory()
+			toggle_inventory()
 		elseif string == "openRoleMenu" then
 			done_tutorial( "tut_mr" )
-			if roleMenuWindow != nil then
-				roleMenuWindow:Remove()
-				roleMenuWindow = nil
-			elseif isNoMenuOpen() then
-				openRoleMenu()
-			end
+			toggleRoleMenu()
 		elseif string == "openBuyMenu" then
 			done_tutorial( "tut_mb" )
-			if _buyWindow != nil then
-				_buyWindow:Remove()
-				_buyWindow = nil
-			elseif isNoMenuOpen() then
-				openBuyMenu()
-			end
+			toggleBuyMenu()
 		elseif string == "openSettings" then
 			done_tutorial( "tut_ms" )
-			if isNoMenuOpen() then
-				openSettings()
-			else
-				closeSettings()
-			end
+			toggleSettings()
 		elseif string == "openMap" then
 			done_tutorial( "tut_tma" )
-			if mapWindow != nil then
-				mapWindow:Remove()
-				mapWindow = nil
-			elseif isNoMenuOpen() then
-				net.Start( "askCoords")
-					net.WriteEntity( LocalPlayer() )
-				net.SendToServer()
-			end
+			toggleMap()
 		elseif string == "openInteractMenu" then
-			if eyeTrace.Entity:IsPlayer() then
-				if _windowInteract != nil then
-					_windowInteract:Remove()
-					_windowInteract = nil
-					gui.EnableScreenClicker( false )
-				elseif isNoMenuOpen() then
-					openInteractMenu( eyeTrace.Entity:SteamID() )
-				end
-				--[[
-			else
-				if _windowInteract != nil then
-					_windowInteract:Remove()
-					_windowInteract = nil
-					gui.EnableScreenClicker( false )
-				else
-					openInteractMenu( "STEAM_0:1:20900349" )
-				end
-				]]--
-			end
+			toggleInteractMenu()
 		elseif string == "openOptions" then
 			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 				if _doorWindow != nil and keys["_hold"] == 0 then
@@ -129,22 +105,29 @@ function useFunction( string )
 					end)
 				end
 			end
+
+		//When scoreboard open, enable mouse
+		elseif string == "scoreboard" and isScoreboardOpen then
+			gui.EnableScreenClicker( true )
+
+		//Inventory
+		elseif string == "dropitem" then
+			net.Start( "drop_item" )
+			net.SendToServer()
+
+		//Mouse changer
 		elseif string == "F11Toggle" then
 			done_tutorial( "tut_tmo" )
-			GUIToggled = not GUIToggled
-			gui.EnableScreenClicker( GUIToggled )
-		elseif string == "eat" then
-			net.Start( "yrp_eat" )
-			net.SendToServer()
-		elseif string == "drink" then
-			net.Start( "yrp_drink" )
-			net.SendToServer()
+			gui.EnableScreenClicker( !vgui.CursorVisible() )
+
 		elseif string == "vyes" then
 			net.Start( "voteYes" )
 			net.SendToServer()
 		elseif string == "vno" then
 			net.Start( "voteNo" )
 			net.SendToServer()
+		elseif string == "scoreboard" and isScoreboardOpen then
+			gui.EnableScreenClicker( true )
 		end
 	end
 end
@@ -246,6 +229,32 @@ function KeyPress()
 				ply:SetNWInt( "view_range", -100 )
 			end
 		end
+
+		if !chatisopen then
+			if input.IsKeyDown( get_keybind("speak_next") ) and !clicked then
+				done_tutorial( "tut_sn" )
+				clicked = true
+				net.Start( "press_speak_next" )
+				net.SendToServer()
+
+				timer.Simple( 0.4, function()
+					clicked = false
+					notification.AddLegacy( get_speak_channel_name( LocalPlayer():GetNWInt( "speak_channel" ) ), NOTIFY_GENERIC, 3 )
+				end)
+			end
+
+			if input.IsKeyDown( get_keybind("speak_prev") ) and !clicked then
+				done_tutorial( "tut_sp" )
+				clicked = true
+				net.Start( "press_speak_prev" )
+				net.SendToServer()
+
+				timer.Simple( 0.4, function()
+					clicked = false
+					notification.AddLegacy( get_speak_channel_name( LocalPlayer():GetNWInt( "speak_channel" ) ), NOTIFY_GENERIC, 3 )
+				end)
+			end
+		end
 	end
 
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
@@ -273,42 +282,8 @@ function KeyPress()
 	keyPressed( KEY_PAGEDOWN, "vno", nil )
 
 	keyPressed( get_keybind("drop_item"), "dropitem", nil, nil )
-
-	if isNoMenuOpen() and !chatisopen then
-		if input.IsKeyDown( get_keybind("speak_next") ) and !clicked then
-			done_tutorial( "tut_sn" )
-			clicked = true
-			net.Start( "press_speak_next" )
-			net.SendToServer()
-
-			timer.Simple( 0.4, function()
-				clicked = false
-				notification.AddLegacy( get_speak_channel_name( LocalPlayer():GetNWInt( "speak_channel" ) ), NOTIFY_GENERIC, 3 )
-			end)
-		end
-
-		if input.IsKeyDown( get_keybind("speak_prev") ) and !clicked then
-			done_tutorial( "tut_sp" )
-			clicked = true
-			net.Start( "press_speak_prev" )
-			net.SendToServer()
-
-			timer.Simple( 0.4, function()
-				clicked = false
-				notification.AddLegacy( get_speak_channel_name( LocalPlayer():GetNWInt( "speak_channel" ) ), NOTIFY_GENERIC, 3 )
-			end)
-		end
-	end
 end
 hook.Add( "Think", "Thinker", KeyPress)
-
-hook.Add( "StartChat", "HasStartedTyping", function( isTeamChat )
-	chatisopen = true
-end )
-
-hook.Add( "FinishChat", "ClientFinishTyping", function()
-	chatisopen = false
-end )
 
 local _savePos = Vector( 0, 0, 0 )
 _lookAtEnt = nil

@@ -1,12 +1,32 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local tmpTargetSteamID = ""
+function toggleInteractMenu()
+  local ply = LocalPlayer()
+	local eyeTrace = ply:GetEyeTrace()
+  if eyeTrace.Entity:IsPlayer() and isNoMenuOpen() then
+    openInteractMenu( eyeTrace.Entity:SteamID() )
+  else
+    closeInteractMenu()
+  end
+end
+
+function closeInteractMenu()
+  if _windowInteract != nil then
+    closeMenu()
+    _windowInteract:Remove()
+    _windowInteract = nil
+  end
+end
+
 function openInteractMenu( SteamID )
-  openMenu()
-  tmpTargetSteamID = SteamID
-  net.Start( "openInteractMenu" )
-    net.WriteString( tmpTargetSteamID )
-  net.SendToServer()
+  if SteamID != nil then
+    openMenu()
+    tmpTargetSteamID = SteamID
+    net.Start( "openInteractMenu" )
+      net.WriteString( tmpTargetSteamID )
+    net.SendToServer()
+  end
 end
 
 net.Receive( "openInteractMenu", function ()
@@ -19,6 +39,12 @@ net.Receive( "openInteractMenu", function ()
   local demoteName = net.ReadString()
 
   _windowInteract = createVGUI( "DFrame", nil, 1090, 470 + 50 + 10, ScrW() - 160, ScrH() - 200 )
+  function _windowInteract:OnClose()
+    closeMenu()
+  end
+  function _windowInteract:OnRemove()
+    closeMenu()
+  end
   local tmpTargetName = ""
   local tmpRPName = ""
   for k, v in pairs ( player.GetAll() ) do
@@ -52,14 +78,6 @@ net.Receive( "openInteractMenu", function ()
       gender = lang_string( "female" )
     end
     draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-  end
-  function _windowInteract:OnClose()
-    closeMenu()
-    gui.EnableScreenClicker( false )
-    _windowInteract = nil
-  end
-  function _windowInteract:OnRemove()
-    closeMenu()
   end
 
   local tmpAvatarI = createVGUI( "AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70 )

@@ -163,13 +163,17 @@ local args = { ... }
 yrpChat.richText:AppendText( "\n" )
   for _, obj in pairs( args ) do
     if type( obj ) == "table" then
-      yrpChat.richText:InsertColorChange( obj.r, obj.g, obj.b, 255 )
+      if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
+        yrpChat.richText:InsertColorChange( obj.r, obj.g, obj.b, 255 )
+      end
     elseif type( obj ) == "string" then
       yrpChat.richText:AppendText( obj )
     elseif obj:IsPlayer() then
       local col = GAMEMODE:GetTeamColor( obj )
-      yrpChat.richText:InsertColorChange( col.r, col.g, col.b, 255 )
-      yrpChat.richText:AppendText( obj:Nick() )
+      if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
+        yrpChat.richText:InsertColorChange( col.r, col.g, col.b, 255 )
+        yrpChat.richText:AppendText( obj:Nick() )
+      end
     end
   end
 

@@ -2,17 +2,16 @@
 
 local _menuOpen = false
 function isNoMenuOpen()
-  if gui.IsConsoleVisible() or gui.IsGameUIVisible() then
-    return false
-  end
   return !_menuOpen
 end
 
 function closeMenu()
+  print("closeMenu")
   _menuOpen = false
 end
 
 function openMenu()
+  print("openMenu")
   _menuOpen = true
 end
 

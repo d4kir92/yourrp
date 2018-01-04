@@ -117,12 +117,17 @@ net.Receive( "buyItem", function( len, ply )
   local _uniqueID = net.ReadString()
 
   local _item = db_select( "yrp_buy", "*", "uniqueID = " .. tonumber( _uniqueID ) )
-  if ply:canAfford( -tonumber( _item[1].price ) ) then
-    printGM( "note", ply:Nick() .. " can afford " .. tostring( _item[1].ClassName ) )
-    ply:addMoney( -tonumber( _item[1].price ) )
-    spawnItem( ply, _item[1], _tab )
+  if _item != nil then
+    _item = _item[1]
+    if ply:canAfford( -tonumber( _item.price ) ) then
+      printGM( "note", ply:Nick() .. " can afford " .. tostring( _item.ClassName ) )
+      ply:addMoney( -tonumber( _item.price ) )
+      spawnItem( ply, _item, _tab )
+    else
+      printGM( "note", ply:Nick() .. " can not afford " .. tostring( _item.ClassName ) )
+    end
   else
-    printGM( "note", ply:Nick() .. " can not afford " .. tostring( _item[1].ClassName ) )
+    printGM( "error", "buyItem fail " .. tostring( sql.LastError() ) )
   end
 end)
 

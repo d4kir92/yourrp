@@ -34,9 +34,24 @@ function get_icon_burger_menu()
   return _yrp_settings.materials[_yrp_settings.design.mode].burger
 end
 
+concommand.Add( "yrp_toggle_settings", function( ply, cmd, args )
+  printGM( "user", "Toggling settings window" )
+	toggleSettings()
+end )
+
+function toggleSettings()
+  if isNoMenuOpen() then
+    openSettings()
+  else
+    closeSettings()
+  end
+end
+
 function closeSettings()
   if settingsWindow != nil then
-    settingsWindow:Close()
+    closeMenu()
+    settingsWindow:Remove()
+    settingsWindow = nil
   end
 end
 

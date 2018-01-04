@@ -364,7 +364,7 @@ function addGroup( name, parent, uppergroup, x, y, color )
     draw.SimpleTextOutlined( name, "roleInfoHeader", ctr( 25 ), ctr( 25 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  if parent != nil and parent != NULL and parent != "NULL" then
+  if parent != nil and parent != NULL and parent != "NULL" and ispanel( parent ) then
     parent:AddItem( tmpGroup )
   end
   return y + 20
@@ -383,18 +383,30 @@ function addGroups( uppergroupname, parent, uppergroup, x, y )
   return y
 end
 
+function toggleRoleMenu()
+  if isNoMenuOpen() then
+    openRoleMenu()
+  else
+    closeRoleMenu()
+  end
+end
+
+function closeRoleMenu()
+  if roleMenuWindow != nil then
+    closeMenu()
+    roleMenuWindow:Remove()
+    roleMenuWindow = nil
+  end
+end
+
 function openRoleMenu()
   openMenu()
-  cl_rolesMenuOpen = 1
 
   roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, 0, 0 )
   roleMenuWindow:Center()
   roleMenuWindow:ShowCloseButton( true )
   roleMenuWindow:SetDraggable( true )
   roleMenuWindow:SetTitle( lang_string( "rolemenu" ) )
-  function roleMenuWindow:OnClose()
-    cl_rolesMenuOpen = 0
-  end
   function roleMenuWindow:Paint( pw, ph )
     paintWindow( self, pw, ph, "" )
   end

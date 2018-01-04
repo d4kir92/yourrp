@@ -23,9 +23,11 @@ net.Receive( "openLawBoard", function( len )
     window:Center()
     function window:OnClose()
       window:Remove()
+      closeMenu()
     end
     function window:OnRemove()
       windowOpen = false
+      closeMenu()
     end
     function window:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )

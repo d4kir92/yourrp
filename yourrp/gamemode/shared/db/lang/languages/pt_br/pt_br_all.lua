@@ -374,4 +374,5 @@ function PT_BR_All()
   set_lang_string( "rolespawnpointcreator", "Criar spawnpoint de funções" )
   set_lang_string( "creategroupspawnpoint", "Criar grupo de spawnpoint em sua posição" )
   set_lang_string( "createrolespawnpoint", "Criar spawnpoint de funções em sua posição" )
+  set_lang_string( "level", "Nivel" )
 end

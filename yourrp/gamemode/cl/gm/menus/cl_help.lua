@@ -1,21 +1,18 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local _hm = {}
-_hm.open = false
 
 function toggleHelpMenu()
-  if !_hm.open and isNoMenuOpen()then
+  if isNoMenuOpen() then
     openHelpMenu()
-  elseif _hm.open then
+  else
     closeHelpMenu()
   end
 end
 
 function closeHelpMenu()
-  closeMenu()
-  _hm.open = false
-
   if _hm.window != nil then
+    closeMenu()
     _hm.window:Remove()
     _hm.window = nil
   end
@@ -23,11 +20,15 @@ end
 
 function openHelpMenu()
   openMenu()
-  _hm.open = true
-
   _hm.window = createD( "DFrame", nil, ctr( 2000 ), ctr( 1600 ), 0, 0 )
   _hm.window:Center()
   _hm.window:SetTitle( "" )
+  function _hm.window:OnClose()
+    closeMenu()
+  end
+  function _hm.window:OnRemove()
+    closeMenu()
+  end
 
   _hm.langu = derma_change_language( _hm.window, ctr( 400 ), ctr( 50 ), ctr( 1400 ), ctr( 50 ) )
 

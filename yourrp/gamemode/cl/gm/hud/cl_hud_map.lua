@@ -8,8 +8,26 @@ function getCoords()
   net.SendToServer()
 end
 
+function toggleMap()
+  if isNoMenuOpen() then
+    openMenu()
+    net.Start( "askCoords")
+      net.WriteEntity( LocalPlayer() )
+    net.SendToServer()
+  else
+    closeMap()
+  end
+end
+
+function closeMap()
+  if mapWindow != nil then
+    closeMenu()
+    mapWindow:Remove()
+  end
+end
+
 local CamDataMap = {}
-function openSpawnMenu()
+function openMap()
   map.open = true
   mapWindow = vgui.Create( "DFrame" )
   mapWindow:SetTitle("")
@@ -136,16 +154,18 @@ function openSpawnMenu()
   end
   function mapWindow:OnClose()
     map.open = false
+    closeMenu()
   end
   function mapWindow:OnRemove()
     map.open = false
+    closeMenu()
   end
 end
 
 net.Receive( "sendCoords", function()
   if net.ReadBool() then
     map = net.ReadTable()
-    openSpawnMenu()
+    openMap()
   else
     printGM( "note", "wait for server coords" )
   end

@@ -374,4 +374,5 @@ function TR_All()
   set_lang_string( "rolespawnpointcreator", "Rol doğuş noktası oluşturucu" )
   set_lang_string( "creategroupspawnpoint", "Olduğunuz noktaya grup doğma noktası oluşturur" )
   set_lang_string( "createrolespawnpoint", "Olduğunuz noktaya rol doğma noktası oluşturur" )
+  set_lang_string( "level", "Seviye" )
 end

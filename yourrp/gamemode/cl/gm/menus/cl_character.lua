@@ -434,8 +434,10 @@ function openCharacterCreation()
       character.playermodels = string.Explode( ",", tmpTable[1].playermodels )
       character.playermodelID = 1
       if character.playermodels[tonumber( character.playermodelID )] != nil then
-        characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
-        characterPlayermodel:UpdateBodyGroups()
+        if characterPlayermodel != nil then
+          characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+          characterPlayermodel:UpdateBodyGroups()
+        end
       end
     end)
   end
@@ -557,6 +559,24 @@ function openCharacterCreation()
   frame:MakePopup()
 end
 
+local _cs = {}
+
+function toggleCharacterSelection()
+  if isNoMenuOpen() then
+    openCharacterSelection()
+  else
+    closeCharacterSelection()
+  end
+end
+
+function closeCharacterSelection()
+  if _cs.frame != nil then
+    closeMenu()
+    _cs.frame:Remove()
+    _cs.frame = nil
+  end
+end
+
 local curChar = "-1"
 function openCharacterSelection()
   timer.Simple( 0.2, function()
@@ -566,35 +586,35 @@ function openCharacterSelection()
 
   local cache = {}
 
-  local frame = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )
-  frame:SetTitle( "" )
-  frame:ShowCloseButton( false )
-  frame:SetDraggable( false )
-  frame:Center()
-  function frame:Paint( pw, ph )
+  _cs.frame = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )
+  _cs.frame:SetTitle( "" )
+  _cs.frame:ShowCloseButton( false )
+  _cs.frame:SetDraggable( false )
+  _cs.frame:Center()
+  function _cs.frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
     draw.SimpleTextOutlined( lang_string( "characterselection" ), "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
-  function frame:OnClose()
+  function _cs.frame:OnClose()
     closeMenu()
   end
-  function frame:OnRemove()
+  function _cs.frame:OnRemove()
     closeMenu()
   end
 
-  derma_change_language( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
+  derma_change_language( _cs.frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
 
   local border = ctr( 50 )
-  local charactersBackground = createD( "DPanel", frame, ctr( 800 ), ScrH() - (2*border), border, border )
+  local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), border, border )
   function charactersBackground:Paint( pw, ph )
     paintMD( pw, ph, nil, get_dp_col() )
 
     draw.SimpleTextOutlined( lang_string( "siteisloading" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
 
-  local charplayermodel = createD( "DModelPanel", frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )
+  local charplayermodel = createD( "DModelPanel", _cs.frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )
   charplayermodel:SetModel( "models/player/skeleton.mdl" )
   charplayermodel:SetAnimated( true )
   charplayermodel.Angles = Angle( 0, 0, 0 )
@@ -633,8 +653,8 @@ function openCharacterSelection()
     character.amount = #tmpTable or 0
     if #tmpTable < 1 then
 
-      if frame != nil and frame != NULL and ispanel( frame ) then
-        frame:Close()
+      if _cs.frame != nil and _cs.frame != NULL and ispanel( _cs.frame ) then
+        _cs.frame:Close()
       end
 
       openCharacterCreation()
@@ -663,14 +683,14 @@ function openCharacterSelection()
         local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
         tmpChar.playermodels = tmp
         tmpChar.skin = tmpTable[i].char.skin
-        tmpChar.bg0 = tmpTable[i].char.bg0
-        tmpChar.bg1 = tmpTable[i].char.bg1
-        tmpChar.bg2 = tmpTable[i].char.bg2
-        tmpChar.bg3 = tmpTable[i].char.bg3
-        tmpChar.bg4 = tmpTable[i].char.bg4
-        tmpChar.bg5 = tmpTable[i].char.bg5
-        tmpChar.bg6 = tmpTable[i].char.bg6
-        tmpChar.bg7 = tmpTable[i].char.bg7
+        tmpChar.bg0 = tmpTable[i].char.bg0 or 0
+        tmpChar.bg1 = tmpTable[i].char.bg1 or 0
+        tmpChar.bg2 = tmpTable[i].char.bg2 or 0
+        tmpChar.bg3 = tmpTable[i].char.bg3 or 0
+        tmpChar.bg4 = tmpTable[i].char.bg4 or 0
+        tmpChar.bg5 = tmpTable[i].char.bg5 or 0
+        tmpChar.bg6 = tmpTable[i].char.bg6 or 0
+        tmpChar.bg7 = tmpTable[i].char.bg7 or 0
 
         function tmpChar:Paint( pw, ph )
           if tmpChar:IsHovered() or curChar == self.charid then
@@ -712,7 +732,7 @@ function openCharacterSelection()
     end
   end)
 
-  local deleteChar = createMD( "DButton", frame, ctr( 400 ), ctr( 100 ), ScrW2() - ctr( 400 + 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
+  local deleteChar = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() - ctr( 400 + 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
   deleteChar:SetText( "" )
   function deleteChar:Paint( pw, ph )
     if self:IsHovered() then
@@ -750,7 +770,7 @@ function openCharacterSelection()
     _window:MakePopup()
   end
 
-  local backB = createMD( "DButton", frame, ctr( 400 ), ctr( 100 ), ScrW2() + ctr( 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
+  local backB = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() + ctr( 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
   backB:SetText( "" )
   function backB:Paint( pw, ph )
     if self:IsHovered() then
@@ -763,7 +783,7 @@ function openCharacterSelection()
     if curChar != "-1" then
 
 
-      frame:Close()
+      _cs.frame:Close()
     end
   end
 
@@ -771,10 +791,10 @@ function openCharacterSelection()
   button.size = ctr( 100 )
   button.x = ctr( 720 )
   button.y = ScrH() - button.size - border - ctr( 30 )
-  local charactersCreate = createMDPlus( frame, button.size, button.x, button.y, ctr( 5 ) )
+  local charactersCreate = createMDPlus( _cs.frame, button.size, button.x, button.y, ctr( 5 ) )
   charactersCreate:SetText( "" )
   function charactersCreate:DoClick()
-    frame:Close()
+    _cs.frame:Close()
 
     openCharacterCreation()
   end
@@ -784,7 +804,7 @@ function openCharacterSelection()
   button.x = ScrW2() - button.w/2
   button.y = ScrH() - button.h - border
   local confirmColor = Color( 255, 0, 0, 255 )
-  local charactersEnter = createMDButton( frame, button.w, button.h, button.x, button.y, ctr( 5 ), lang_string( "enterworld" ) )
+  local charactersEnter = createMDButton( _cs.frame, button.w, button.h, button.x, button.y, ctr( 5 ), lang_string( "enterworld" ) )
   function charactersEnter:Paint( pw, ph )
     local height = ctr( 5 )
     --shadow
@@ -816,13 +836,13 @@ function openCharacterSelection()
             net.WriteString( curChar )
           net.SendToServer()
 
-          frame:Close()
+          _cs.frame:Close()
         end
       end
     end
   end
 
-  frame:MakePopup()
+  _cs.frame:MakePopup()
 end
 
 net.Receive( "openCharacterMenu", function( len, ply )
