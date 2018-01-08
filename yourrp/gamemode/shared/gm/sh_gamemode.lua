@@ -26,7 +26,7 @@ if SERVER then
 	timer.Simple( 4, function()
 	  local tmp = db_select( "yrp_general", "name_gamemode", nil )
 		if tmp != false and tmp != nil then
-		  GAMEMODE.Name = tmp[1].name_gamemode
+		  GAMEMODE.Name = db_out_str( tmp[1].name_gamemode )
 		end
 	end)
 end
@@ -51,7 +51,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.8" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.9" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this!
 
@@ -69,4 +69,6 @@ if CLIENT then
 	RunConsoleCommand( "r_threaded_client_shadow_manager", "1" )
 
 	RunConsoleCommand( "r_queued_ropes", "1" )
+elseif SERVER then
+	RunConsoleCommand( "mp_show_voice_icons", "0" )
 end

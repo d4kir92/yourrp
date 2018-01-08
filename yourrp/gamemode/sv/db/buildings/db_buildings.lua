@@ -494,14 +494,18 @@ net.Receive( "changeBuildingName", function( len, ply )
   local _tmpNewName = net.ReadString()
   if _tmpBuildingID != nil then
     printGM( "note", "renamed Building: " .. _tmpNewName )
-    db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "name = '" .. _tmpNewName .. "'" , "uniqueID = " .. _tmpBuildingID )
+    db_update( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "name = '" .. db_in_str( _tmpNewName ) .. "'" , "uniqueID = " .. _tmpBuildingID )
   else
     printGM( "note", "changeBuildingName failed" )
   end
 end)
 
 net.Receive( "getBuildings", function( len, ply )
+  print("getBuildings")
   local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
+  for k, building in pairs( _tmpTable ) do
+    building.name = db_out_str( building.name )
+  end
   net.Start( "getBuildings" )
     net.WriteTable( _tmpTable )
   net.Send( ply )
@@ -517,6 +521,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
     local owner = ""
     if _tmpTable != nil then
       _tmpTable = _tmpTable[1]
+      _tmpTable.name = db_out_str( _tmpTable.name )
       if _tmpTable.ownerCharID != "" then
         local _tmpChaTab = db_select( "yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID )
         if _tmpChaTab != nil then
@@ -530,6 +535,8 @@ net.Receive( "getBuildingInfo", function( len, ply )
           owner = _tmpGroTab.groupID
         end
       end
+
+      PrintTable( _tmpTable )
 
       if _tmpTable != nil then
         if allowedToUseDoor( _tmpBuildingID, ply ) then

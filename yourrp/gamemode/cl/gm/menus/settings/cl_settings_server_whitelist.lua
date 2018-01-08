@@ -61,10 +61,12 @@ net.Receive( "getRoleWhitelist", function( len )
     local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 285+10+50 )
     _whitelistButton:SetText( lang_string( "whitelistplayer" ) )
     function _whitelistButton:DoClick()
-      net.Start( "whitelistPlayer" )
-        net.WriteString( _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) )
-        net.WriteInt( _whitelistComboBox2:GetOptionData( _whitelistComboBox2:GetSelectedID() ), 16 )
-      net.SendToServer()
+      if _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) != nil then
+        net.Start( "whitelistPlayer" )
+          net.WriteString( _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) )
+          net.WriteInt( _whitelistComboBox2:GetOptionData( _whitelistComboBox2:GetSelectedID() ), 16 )
+        net.SendToServer()
+      end
       _whitelistListView:Remove()
       _whitelistFrame:Close()
     end

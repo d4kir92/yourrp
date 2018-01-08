@@ -434,7 +434,7 @@ function openCharacterCreation()
       character.playermodels = string.Explode( ",", tmpTable[1].playermodels )
       character.playermodelID = 1
       if character.playermodels[tonumber( character.playermodelID )] != nil then
-        if characterPlayermodel != nil then
+        if characterPlayermodel != nil and characterPlayermodel != NULL then
           characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
           characterPlayermodel:UpdateBodyGroups()
         end

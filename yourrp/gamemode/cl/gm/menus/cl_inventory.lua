@@ -10,7 +10,7 @@ yrp_inventory.cache_inv_item = {}
 function clearL()
   if yrp_inventory != nil then
     if yrp_inventory.left != nil then
-      if yrp_inventory.left:GetChildren() != nil then
+      if yrp_inventory.left.GetChildren != nil then
         for k, v in pairs( yrp_inventory.left:GetChildren() ) do
           v:Remove()
         end

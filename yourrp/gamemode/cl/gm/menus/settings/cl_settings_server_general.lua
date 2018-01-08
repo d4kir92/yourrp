@@ -56,7 +56,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   net.Receive( "dbGetGeneral", function()
     local _yrp_general = net.ReadTable()
-    GAMEMODE.Name = _yrp_general.name_gamemode or "FAILED"
+    GAMEMODE.Name = db_out_str( _yrp_general.name_gamemode ) or "FAILED"
     oldGamemodename = GAMEMODE.Name
     sv_generalName:SetText( GAMEMODE.Name )
     _advertname = _yrp_general.name_advert or "FAILED"

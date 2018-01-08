@@ -364,7 +364,7 @@ function addGroup( name, parent, uppergroup, x, y, color )
     draw.SimpleTextOutlined( name, "roleInfoHeader", ctr( 25 ), ctr( 25 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  if parent != nil and parent != NULL and parent != "NULL" and ispanel( parent ) then
+  if parent != nil and parent != NULL and parent != "NULL" and ispanel( parent ) and parent.AddItem != nil then
     parent:AddItem( tmpGroup )
   end
   return y + 20

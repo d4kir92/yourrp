@@ -4,16 +4,17 @@ net.Receive( "getCharakterList", function()
   local ply = LocalPlayer()
   local _charTab = net.ReadTable()
 
-  local cl_rpName = createVGUI( "DTextEntry", settingsWindow.site, 400, 50, 10, 40 )
-  if _charTab.rpname != nil then
-    cl_rpName:SetText( _charTab.rpname )
+  if settingsWindow != nil then
+    local cl_rpName = createVGUI( "DTextEntry", settingsWindow.site, 400, 50, 10, 40 )
+    if _charTab.rpname != nil then
+      cl_rpName:SetText( _charTab.rpname )
+    end
+    function cl_rpName:OnChange()
+      net.Start( "change_rpname" )
+        net.WriteString( cl_rpName:GetText() )
+      net.SendToServer()
+    end
   end
-  function cl_rpName:OnChange()
-    net.Start( "change_rpname" )
-      net.WriteString( cl_rpName:GetText() )
-    net.SendToServer()
-  end
-
 end)
 
 hook.Add( "open_client_character", "open_client_character", function()

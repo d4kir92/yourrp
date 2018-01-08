@@ -6,12 +6,10 @@ function isNoMenuOpen()
 end
 
 function closeMenu()
-  print("closeMenu")
   _menuOpen = false
 end
 
 function openMenu()
-  print("openMenu")
   _menuOpen = true
 end
 
