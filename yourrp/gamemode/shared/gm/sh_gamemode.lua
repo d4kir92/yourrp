@@ -42,7 +42,7 @@ if CLIENT then
   end)
 end
 
---do NOT change this! (it can cause crashes!)
+-- >>> do NOT change this! (it can cause crashes!) <<<
 GM.ShortName = "YRP"	--do NOT change this!
 GM.Author = "D4KiR" --do NOT change this!
 GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
@@ -51,16 +51,18 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.9" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.10" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
-GM.rpbase = "YourRP" --do NOT change this!
+GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
+// Multicore (Shared) enable:
 RunConsoleCommand( "gmod_mcore_test", "1" )
 RunConsoleCommand( "mat_queue_mode", "-1" )
 RunConsoleCommand( "studio_queue_mode", "1" )
 RunConsoleCommand( "r_hunkalloclightmaps", "0" )
 
 if CLIENT then
+	// Multicore (Client) enable:
 	RunConsoleCommand( "cl_threaded_bone_setup", "1" )
 	RunConsoleCommand( "cl_threaded_client_leaf_system", "1" )
 
@@ -70,5 +72,6 @@ if CLIENT then
 
 	RunConsoleCommand( "r_queued_ropes", "1" )
 elseif SERVER then
+	//"removes" voice icons
 	RunConsoleCommand( "mp_show_voice_icons", "0" )
 end

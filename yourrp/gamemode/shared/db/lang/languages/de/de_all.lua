@@ -375,4 +375,5 @@ function DE_All()
   set_lang_string( "creategroupspawnpoint", "Erstellt einen Gruppeneinstiegspunkt auf deiner Position" )
   set_lang_string( "createrolespawnpoint", "Erstellt einen Rolleneinstiegspunkt auf deiner Position" )
   set_lang_string( "level", "Stufe" )
+  set_lang_string( "hasbeendropped", "wurde fallengelassen" )
 end

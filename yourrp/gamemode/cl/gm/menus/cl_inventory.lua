@@ -11,7 +11,8 @@ function clearL()
   if yrp_inventory != nil then
     if yrp_inventory.left != nil then
       if yrp_inventory.left.GetChildren != nil then
-        for k, v in pairs( yrp_inventory.left:GetChildren() ) do
+        local _childs = yrp_inventory.left:GetChildren()
+        for k, v in pairs( _childs ) do
           v:Remove()
         end
 

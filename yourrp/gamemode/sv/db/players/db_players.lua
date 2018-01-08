@@ -120,6 +120,7 @@ function set_role_values( ply )
         for k, swep in pairs( tmpSWEPTable ) do
           if swep != nil and swep != NULL and swep != "" then
             if !ply:HasItem( swep ) then
+              print("ADD " .. swep)
               ply:AddSwep( swep )
             end
           end
@@ -279,16 +280,29 @@ net.Receive( "giveRole", function( len, ply )
 end)
 
 function isWhitelisted( ply, id )
-  local _plyAllowed = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
-    return true
-  else
-    if worked( _plyAllowed, "_plyAllowed" ) then
+  local _role = db_select( "yrp_roles", "*", "uniqueID = " .. id )
+  if _role != nil then
+    _role = _role[1]
+
+    local _plyAllowed = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
+
+    local _plyAllowedGroup = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.groupID .. " AND roleID = -1" )
+
+    if ply:IsSuperAdmin() or ply:IsAdmin() then
       return true
     else
-      return false
+      if worked( _plyAllowed, "_plyAllowed", true ) then
+        printGM( "user", ply:RPName() .. " is role whitelisted" )
+        return true
+      elseif worked( _plyAllowedGroup, "_plyAllowedGroup", true ) then
+        printGM( "user", ply:RPName() .. " is group whitelisted" )
+        return true
+      else
+        return false
+      end
     end
   end
+  return false
 end
 
 util.AddNetworkString( "voteNo" )

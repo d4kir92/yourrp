@@ -214,8 +214,10 @@ function openSettings()
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
   function exitButton:DoClick()
-    settingsWindow:Remove()
-    settingsWindow = nil
+    if settingsWindow != nil then
+      settingsWindow:Remove()
+      settingsWindow = nil
+    end
   end
 
   local burgerMenu = createD( "DButton", mainBar, ctr( 480 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
@@ -235,7 +237,9 @@ function openSettings()
     draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
   end
   function burgerMenu:DoClick()
-    settingsWindow:openMenu()
+    if settingsWindow != nil then
+      settingsWindow:openMenu()
+    end
   end
 
   settingsWindow:MakePopup()

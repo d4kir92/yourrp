@@ -177,27 +177,35 @@ function Player:CheckInventory()
 end
 
 function Player:HasItem( cname )
-  local _char_id = self:CharID()
-  local _inv = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
-  for k, item in pairs( _inv ) do
-    local _item = string.sub( item.item, 3 )
-    local _res = db_select( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. db_sql_str( cname ) .. "'" )
-    if _res != nil and _res != false then
-      _res = _res[1]
+  if self:GetNWBool( "toggle_inventory", false ) then
+    local _char_id = self:CharID()
+    local _inv = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    for k, item in pairs( _inv ) do
+      local _item = string.sub( item.item, 3 )
+      local _res = db_select( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. db_sql_str( cname ) .. "'" )
+      if _res != nil and _res != false then
+        _res = _res[1]
+      end
+      if istable( _res ) then
+        return true
+      end
     end
-    if istable( _res ) then
-      return true
-    end
+    return false
+  else
+    return self:HasWeapon( cname )
   end
-  return false
 end
 
 function Player:AddSwep( cname )
-  local _eq = self:EnoughSpaceInEQ()
-  if _eq != nil and _eq != false then
-    self:EquipItem( cname, _eq.field )
+  if self:GetNWBool( "toggle_inventory", false ) then
+    local _eq = self:EnoughSpaceInEQ()
+    if _eq != nil and _eq != false then
+      self:EquipItem( cname, _eq.field )
+    else
+      self:AddItem( cname )
+    end
   else
-    self:AddItem( cname )
+    self:old_give( cname )
   end
 end
 

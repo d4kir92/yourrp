@@ -59,5 +59,23 @@ function openHelpMenu()
     end
   end
 
+  _hm.feedback = createD( "DButton", _hm.window, ctr( 400 ), ctr( 50 ), ctr( 50 ), ctr( 800 ) )
+  _hm.feedback:SetText( "" )
+  function _hm.feedback:Paint( pw, ph )
+    paintButton( self, pw, ph, "Give Feedback" )
+  end
+  function _hm.feedback:DoClick()
+    gui.OpenURL( "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link" )
+  end
+
+  _hm.discord = createD( "DButton", _hm.window, ctr( 400 ), ctr( 50 ), ctr( 460 ), ctr( 800 ) )
+  _hm.discord:SetText( "" )
+  function _hm.discord:Paint( pw, ph )
+    paintButton( self, pw, ph, "Live Support" )
+  end
+  function _hm.discord:DoClick()
+    gui.OpenURL( "https://discord.gg/sEgNZxg" )
+  end
+
   _hm.window:MakePopup()
 end

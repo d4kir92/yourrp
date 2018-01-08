@@ -43,29 +43,42 @@ function showVersion()
       local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
 
       --Client
-      local cur2num = string.Replace( GAMEMODE.Version, ".", "" )
-      local new2num = string.Replace( versionOnline, ".", "" )
+      local _v_off = string.Replace( GAMEMODE.Version, "V.: ", "" )
+      local _v_on = string.Replace( versionOnline, "V.: ", "" )
+      local cur2num = string.Explode( ".", _v_off )
+      local new2num = string.Explode( ".", _v_on )
       local verart = "Up-To-Date"
       v_color = Color( 0, 255, 0, 255 )
-      if cur2num < new2num then
-        verart = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
-        v_color = Color( 255, 0, 0, 255 )
-      elseif cur2num > new2num then
-        verart = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
-        v_color = Color( 100, 100, 255, 255 )
+      for k, v in pairs( cur2num ) do
+        if tonumber( cur2num[k] ) < tonumber( new2num[k] ) then
+          verart = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
+          v_color = Color( 255, 0, 0, 255 )
+        elseif tonumber( cur2num[k] ) > tonumber( new2num[k] ) then
+          verart = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
+          v_color = Color( 100, 100, 255, 255 )
+        end
       end
 
       --Server
-      local cur2num2 = string.Replace( GAMEMODE.Version, ".", "" )
-      local new2num2 = string.Replace( versionOnline, ".", "" )
+      local _v_off2 = string.Replace( GAMEMODE.Version, "V.: ", "" )
+      local _v_on2 = string.Replace( versionOnline, "V.: ", "" )
+      local cur2num2 = string.Explode( ".", _v_off2 )
+      local new2num2 = string.Explode( ".", _v_on2 )
       local verart2 = "Up-To-Date"
       local outcol2 = Color( 0, 255, 0, 255 )
-      if cur2num2 < new2num2 then
-        verart2 = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
-        outcol2 = Color( 255, 0, 0, 255 )
-      elseif cur2num2 > new2num2 then
-        verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
-        outcol2 = Color( 100, 100, 255, 255 )
+      for k, v in pairs( cur2num2 ) do
+        if tonumber( cur2num2[k] ) < tonumber( new2num2[k] ) then
+          verart2 = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
+          outcol2 = Color( 255, 0, 0, 255 )
+
+          v_outdated = true
+        elseif tonumber( cur2num2[k] ) > tonumber( new2num2[k] ) then
+          verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
+          outcol2 = Color( 100, 100, 255, 255 )
+
+          v_outdated = false
+          printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
+        end
       end
 
       local _serverSort = ""
@@ -86,8 +99,7 @@ function showVersion()
         s_sort = lang_string( "stable" )
       end
 
-      if versionOnline > GAMEMODE.Version then
-        v_outdated = true
+      if v_outdated then
         local frame = createVGUI( "DFrame", nil, 1200, 570, 0, 0 )
         frame:Center()
         frame:SetTitle( "" )
@@ -140,9 +152,6 @@ function showVersion()
         end
 
         frame:MakePopup()
-      else
-        v_outdated = false
-        printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
       end
       testingversion = false
       v_tested = true

@@ -15,6 +15,7 @@ sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
 
 util.AddNetworkString( "getRoleWhitelist" )
 util.AddNetworkString( "whitelistPlayer" )
+util.AddNetworkString( "whitelistPlayerGroup" )
 util.AddNetworkString( "whitelistPlayerRemove" )
 util.AddNetworkString( "yrpInfoBox" )
 
@@ -25,7 +26,7 @@ function sendRoleWhitelist( ply )
     local _tmpGroupList = db_select( "yrp_groups", "groupID, uniqueID", nil )
 
     if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
-
+      PrintTable( _tmpWhiteList )
       net.Start( "getRoleWhitelist" )
         net.WriteTable( _tmpWhiteList )
         net.WriteTable( _tmpRoleList )
@@ -68,6 +69,24 @@ net.Receive( "whitelistPlayer", function( len, ply )
   sendRoleWhitelist( ply )
 end)
 
+net.Receive( "whitelistPlayerGroup", function( len, ply )
+  print("whitelistPlayerGroup")
+  if ply:IsSuperAdmin() or ply:IsAdmin() then
+    local _SteamID = net.ReadString()
+    local _nick = ""
+    for k, v in pairs( player.GetAll() ) do
+      if v:SteamID() == _SteamID then
+        _nick = v:Nick()
+      end
+    end
+    local _groupID = net.ReadInt( 16 )
+    local _dbRole = db_select( "yrp_groups", "*", "uniqueID = " .. _groupID )
+
+    local res = db_insert_into( "yrp_role_whitelist", "SteamID, nick, groupID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID )
+    print(res)
+  end
+  sendRoleWhitelist( ply )
+end)
 
 net.Receive( "getRoleWhitelist", function( len, ply )
   sendRoleWhitelist( ply )

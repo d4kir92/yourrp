@@ -52,6 +52,7 @@ function useFunction( string )
 	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
 		//Menues
 		if string == "openHelpMenu" then
+			done_tutorial( "tut_feedback" )
 			toggleHelpMenu()
 		elseif string == "openCharMenu" then
 			done_tutorial( "tut_cs" )
@@ -112,6 +113,10 @@ function useFunction( string )
 
 		//Inventory
 		elseif string == "dropitem" then
+			local _weapon = LocalPlayer():GetActiveWeapon():GetPrintName()
+			print(_weapon)
+			notification.AddLegacy( _weapon .. " " ..lang_string("hasbeendropped"), 0, 3)
+
 			net.Start( "drop_item" )
 			net.SendToServer()
 

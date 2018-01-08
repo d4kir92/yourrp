@@ -203,6 +203,10 @@ function HudPlayer()
             _t_c = _t_c + 1
             draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "speak_prev" ) ) ) .. "] " .. lang_string( "voiceprev" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
           end
+          if tobool( get_tutorial( "tut_feedback" ) ) then
+            _t_c = _t_c + 1
+            draw.SimpleTextOutlined( "[" .. "F1" .. "] " .. "Help and Feedback", "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+          end
           if _t_c == 0 then
             done_tutorial( "tut_all" )
           end

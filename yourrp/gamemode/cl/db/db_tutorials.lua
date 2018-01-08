@@ -36,6 +36,7 @@ function check_yrp_tutorials()
   sql_add_column( _db_name, "tut_mi", "INT DEFAULT 1" )
   sql_add_column( _db_name, "tut_sn", "INT DEFAULT 1" )
   sql_add_column( _db_name, "tut_sp", "INT DEFAULT 1" )
+  sql_add_column( _db_name, "tut_feedback", "INT DEFAULT 1" )
 
   local _tmp = db_select( _db_name, "*", "uniqueID = 1" )
   if _tmp == nil then

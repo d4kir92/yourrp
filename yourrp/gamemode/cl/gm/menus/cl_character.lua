@@ -781,9 +781,9 @@ function openCharacterSelection()
   end
   function backB:DoClick()
     if curChar != "-1" then
-
-
-      _cs.frame:Close()
+      if _cs.frame != nil then
+        _cs.frame:Close()
+      end
     end
   end
 

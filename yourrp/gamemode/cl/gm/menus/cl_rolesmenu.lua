@@ -218,7 +218,7 @@ function findChildGroups( id )
   tmpGroupsTable = tmpTable
 end
 
-function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, capital, model, modelsize, maxamount, uses, whitelist, adminonly, voteable )
+function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, capital, model, modelsize, maxamount, uses, whitelist, adminonly, voteable, groupID )
   y = y + 50
   local w = 1600
   local h = 150
@@ -288,7 +288,9 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   function tmpButtonSelect:DoClick()
     local tmpAllowed = 0
     for k, v in pairs( Whitelist ) do
-      if tonumber( roleID ) == tonumber( v.roleID ) then
+      print(v.roleID)
+      print(tonumber( groupID ), tonumber( v.groupID ))
+      if tonumber( roleID ) == tonumber( v.roleID ) or ( tonumber( v.roleID ) == -1 and tonumber( groupID ) == tonumber( v.groupID ) ) then
         tmpAllowed = 1
         break
       end
@@ -322,7 +324,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newY = y
     for k, v in pairs( tmpTable ) do
       if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
-        newY = addRole( tostring( v.roleID ), parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, tonumber( v.capital ), v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ) )
+        newY = addRole( tostring( v.roleID ), parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, tonumber( v.capital ), v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ), uppergroup )
       end
     end
     return newY
