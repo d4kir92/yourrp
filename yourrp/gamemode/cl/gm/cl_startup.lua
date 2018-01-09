@@ -400,6 +400,11 @@ function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )
   playerready = true
 
+  if tobool( get_tutorial( "tut_welcome" ) ) then
+
+    openHelpMenu()
+  end
+
   timer.Simple( 4, function()
     local _wsitems = engine.GetAddons()
     printGM( "note", "[" .. #_wsitems .. " Workshop items]" )

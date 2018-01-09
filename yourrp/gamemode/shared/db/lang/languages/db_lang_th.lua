@@ -9,7 +9,7 @@ AddCSLuaFile( "th/th_all.lua" )
 include( "th/th_all.lua" )
 
 function LangTH()
-	set_lang_string( "ineng", "thailand" )
+	set_lang_string( "ineng", "Thailand" )
 	set_lang_string( "language", "ประเทศไทย" )
 	set_lang_string( "short", "th" )
 

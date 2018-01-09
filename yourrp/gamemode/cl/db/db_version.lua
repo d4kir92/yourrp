@@ -36,6 +36,7 @@ end
 function showVersion()
   local ply = LocalPlayer()
 
+  v_outdated = false
   http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
     function( body, len, headers, code )
       local StartPos = string.find( body, "#", 1, false )
@@ -76,7 +77,6 @@ function showVersion()
           verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
           outcol2 = Color( 100, 100, 255, 255 )
 
-          v_outdated = false
           printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
         end
       end

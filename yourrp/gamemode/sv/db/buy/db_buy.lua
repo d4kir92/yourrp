@@ -127,7 +127,7 @@ net.Receive( "buyItem", function( len, ply )
       printGM( "note", ply:Nick() .. " can not afford " .. tostring( _item.ClassName ) )
     end
   else
-    printGM( "error", "buyItem fail " .. tostring( sql.LastError() ) )
+    printGM( "error", "buyItem fail " .. sql_show_last_error() )
   end
 end)
 

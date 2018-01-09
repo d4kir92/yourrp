@@ -16,6 +16,11 @@ function done_tutorial( str, time )
   end
 end
 
+function reset_tutorial( str )
+  yrp_tutorials[str] = 1
+  db_update( _db_name, str .. " = " .. "1", "uniqueID = 1" )
+end
+
 function get_tutorial( str )
   return yrp_tutorials[str]
 end
@@ -37,6 +42,7 @@ function check_yrp_tutorials()
   sql_add_column( _db_name, "tut_sn", "INT DEFAULT 1" )
   sql_add_column( _db_name, "tut_sp", "INT DEFAULT 1" )
   sql_add_column( _db_name, "tut_feedback", "INT DEFAULT 1" )
+  sql_add_column( _db_name, "tut_welcome", "INT DEFAULT 1" )
 
   local _tmp = db_select( _db_name, "*", "uniqueID = 1" )
   if _tmp == nil then

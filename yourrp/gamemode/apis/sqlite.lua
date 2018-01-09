@@ -1,12 +1,28 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function sql_show_last_error()
-  if SERVER then
-    PrintMessage( HUD_PRINTCENTER, "[YourRP] SERVER-DATABASE: " .. tostring( sql.LastError() ) )
-  else
-    PrintMessage( HUD_PRINTCENTER, "[YourRP] CLIENT-DATABASE: " .. tostring( sql.LastError() ) )
+function disk_full( error )
+  if string.find( error, "database or disk is full" ) then
+    if SERVER then
+      PrintMessage( HUD_PRINTCENTER, "database or disk is full, please make more space!" )
+    elseif CLIENT then
+      LocalPlayer():PrintMessage( HUD_PRINTTALK, "database or disk is full, please make more space!" )
+    end
   end
 end
+
+function sql_show_last_error()
+  local _last_error = tostring( sql.LastError() ) or ""
+  if SERVER then
+    PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE: " .. _last_error )
+  elseif CLIENT then
+    LocalPlayer():PrintMessage( HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE: " .. _last_error )
+  end
+  timer.Simple( 3, function()
+    disk_full( _last_error )
+  end)
+  return _last_error
+end
+
 
 function db_in_str( str )
   local _res = string.Replace( str, "'", "%" )
@@ -96,7 +112,7 @@ function db_insert_into_DEFAULTVALUES( db_table )
     _q = _q .. " DEFAULT VALUES"
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_insert_into_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      printGM( "error", "db_insert_into_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
   end
@@ -113,7 +129,7 @@ function db_insert_into( db_table, db_columns, db_values )
     _q = _q .. " )"
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_insert_into: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      printGM( "error", "db_insert_into: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
   end
@@ -129,7 +145,7 @@ function db_delete_from( db_table, db_where )
     end
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_delete_from: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) .. " lastError: " .. tostring( sql.LastError() ) )
+      printGM( "error", "db_delete_from: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
   end
@@ -147,7 +163,7 @@ function db_update( db_table, db_sets, db_where )
     end
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "db_update failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      printGM( "error", "db_update failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
   end
@@ -169,7 +185,7 @@ function sql_add_column( table_name, column_name, datatype )
     local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
     local _result = sql.Query( _q )
     if _result != nil then
-      printGM( "error", "sql_add_column failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      printGM( "error", "sql_add_column failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
   end
@@ -187,7 +203,7 @@ function init_database( db_name )
     _query = _query .. " )"
     local _result = sql.Query( _query )
     if _result != nil then
-      printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. tostring( sql.LastError() ) )
+      printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
 		if sql.TableExists( db_name ) then

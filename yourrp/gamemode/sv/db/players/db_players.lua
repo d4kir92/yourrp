@@ -120,7 +120,6 @@ function set_role_values( ply )
         for k, swep in pairs( tmpSWEPTable ) do
           if swep != nil and swep != NULL and swep != "" then
             if !ply:HasItem( swep ) then
-              print("ADD " .. swep)
               ply:AddSwep( swep )
             end
           end

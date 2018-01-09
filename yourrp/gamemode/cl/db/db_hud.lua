@@ -332,7 +332,7 @@ function loadDatabaseHUD()
     query = query .. " );"
     local result = sql.Query( query )
     if result == false then
-      print( sql.LastError() )
+      sql_show_last_error()
     end
   end
 

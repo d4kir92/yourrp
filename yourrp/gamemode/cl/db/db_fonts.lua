@@ -23,7 +23,7 @@ function createFont( _name, _font, _size, __weight, _outline )
 	} )
 end
 
-local tmpFont = "Roboto-Regular"
+local tmpFont = "Arial" --"Roboto-Regular"
 local _weight = 1
 
 function changeFontSizeOf( _font, _size )

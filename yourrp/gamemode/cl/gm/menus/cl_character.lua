@@ -653,7 +653,7 @@ function openCharacterSelection()
     character.amount = #tmpTable or 0
     if #tmpTable < 1 then
 
-      if _cs.frame != nil and _cs.frame != NULL and ispanel( _cs.frame ) then
+      if _cs.frame != nil and _cs.frame != NULL and ispanel( _cs.frame ) and _cs.frame.Close != nil then
         _cs.frame:Close()
       end
 
@@ -847,7 +847,7 @@ end
 
 net.Receive( "openCharacterMenu", function( len, ply )
   local tmpTable = net.ReadTable()
-  PrintTable( tmpTable )
+
   timer.Create( "yrp_open_character_selection", 1, 0, function()
     if playerfullready == true and isNoMenuOpen() then
       openCharacterSelection()

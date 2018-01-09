@@ -113,12 +113,13 @@ function useFunction( string )
 
 		//Inventory
 		elseif string == "dropitem" then
-			local _weapon = LocalPlayer():GetActiveWeapon():GetPrintName()
-			print(_weapon)
-			notification.AddLegacy( _weapon .. " " ..lang_string("hasbeendropped"), 0, 3)
-
-			net.Start( "drop_item" )
-			net.SendToServer()
+			local _weapon = LocalPlayer():GetActiveWeapon()
+			if _weapon != NULL then
+				local _pname = _weapon:GetPrintName() or _weapon.PrintName or lang_string( "weapon" )
+				notification.AddLegacy( _pname .. " " ..lang_string("hasbeendropped"), 0, 3)
+				net.Start( "drop_item" )
+				net.SendToServer()
+			end
 
 		//Mouse changer
 		elseif string == "F11Toggle" then

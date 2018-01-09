@@ -376,4 +376,5 @@ function EN_All()
   set_lang_string( "createrolespawnpoint", "Creates a role spawnpoint at your position" )
   set_lang_string( "level", "Level" )
   set_lang_string( "hasbeendropped", "has been dropped" )
+  set_lang_string( "notshowagain", "Do not show again" )
 end
