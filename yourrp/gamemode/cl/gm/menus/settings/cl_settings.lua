@@ -201,7 +201,9 @@ function openSettings()
   end)
 
   function settingsButton:DoClick()
-    settingsWindow:SwitchToSite( "open_menu_settings" )
+    if settingsWindow != NULL then
+      settingsWindow:SwitchToSite( "open_menu_settings" )
+    end
   end
 
   local exitButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 80 + 10 ), ctr( 10 ) )

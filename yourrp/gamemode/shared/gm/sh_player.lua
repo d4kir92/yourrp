@@ -248,3 +248,12 @@ timer.Simple( 10, function()
     end
   end
 end)
+
+function Player:GetRoleName()
+  local _rn = self:GetNWString( "roleName" )
+  if _rn != "" then
+    return _rn
+  else
+    return nil
+  end
+end

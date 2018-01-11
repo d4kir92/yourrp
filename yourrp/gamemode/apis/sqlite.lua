@@ -47,7 +47,8 @@ end
 function db_drop_table( db_table )
   local _result = sql.Query( "DROP TABLE " .. db_table )
   if _result != nil then
-    printGM( "error", "db_drop_table failed!" )
+    printGM( "error", "db_drop_table " .. tostring( db_table ) .. " failed! ( result: " .. tostring( _result ) .. " )" )
+    sql_show_last_error()
   end
 end
 

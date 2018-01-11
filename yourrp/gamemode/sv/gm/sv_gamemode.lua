@@ -141,7 +141,7 @@ function GM:PlayerLoadout( ply )
       ply:SetBodygroup( 6, chaTab.bg6 )
       ply:SetBodygroup( 7, chaTab.bg7 )
     else
-      printGM( "note", "give char failed" )
+      printGM( "note", "Give char failed -> KillSilent -> " .. ply:Nick() )
       ply:KillSilent()
     end
 

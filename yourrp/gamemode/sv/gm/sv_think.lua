@@ -125,6 +125,14 @@ timer.Create( "ServerThink", 1, 0, function()
     check_salary( ply )
   end
 
+  if _time % 10 == 0 then
+    for k, ply in pairs( _all_players ) do
+      if ply:GetRoleName() == nil and ply:Alive() then
+        ply:KillSilent()
+      end
+    end
+  end
+
   local _auto_save = 300
   if _time % _auto_save == 0 then
     save_clients( "Auto-Save ( " .. _auto_save .. " sec )" )

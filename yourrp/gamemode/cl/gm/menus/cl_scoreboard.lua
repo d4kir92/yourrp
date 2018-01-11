@@ -71,7 +71,7 @@ function drawGroupPlayers( id )
         _tmpHeader._ply = ply
         function _tmpHeader:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicOrange" ) )
-          if self._ply != "[NULL ENTITY]" and self._ply:IsPlayer() then
+          if self._ply != NULL and self._ply:IsPlayer() then
             draw.SimpleTextOutlined( "1", "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             draw.SimpleTextOutlined( self._ply:RPName() or "", "sef", ctr( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             draw.SimpleTextOutlined( self._ply:GetNWString( "roleName" ) or "", "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )

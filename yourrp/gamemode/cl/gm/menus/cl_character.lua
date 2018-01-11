@@ -706,7 +706,7 @@ function openCharacterSelection()
           curChar = self.charid
           if self.playermodels != nil and self.playermodelID != nil then
             local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
-            if _playermodel != nil and _playermodel != NULL then
+            if _playermodel != nil and charplayermodel != NULL then
               charplayermodel:SetModel( _playermodel )
               if charplayermodel.Entity != nil then
                 charplayermodel.Entity:SetSkin( self.skin )

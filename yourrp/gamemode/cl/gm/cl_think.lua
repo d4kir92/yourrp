@@ -75,35 +75,37 @@ function useFunction( string )
 		elseif string == "openInteractMenu" then
 			toggleInteractMenu()
 		elseif string == "openOptions" then
-			if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
-				if _doorWindow != nil and keys["_hold"] == 0 then
-					keys["_hold"] = 1
-					_doorWindow:Remove()
-					_doorWindow = nil
-					timer.Simple( 1, function()
-						keys["_hold"] = 0
-					end)
-				elseif _doorWindow == nil and keys["_hold"] == 0 then
-					keys["_hold"] = 1
-					openDoorOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "buildingID" ) )
-					timer.Simple( 1, function()
-						keys["_hold"] = 0
-					end)
-				end
-			elseif eyeTrace.Entity:IsVehicle() then
-				if _vehicleWindow != nil and keys["_hold"] == 0 then
-					keys["_hold"] = 1
-					_vehicleWindow:Remove()
-					_vehicleWindow = nil
-					timer.Simple( 1, function()
-						keys["_hold"] = 0
-					end)
-				elseif _vehicleWindow == nil and keys["_hold"] == 0 then
-					keys["_hold"] = 1
-					openVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
-					timer.Simple( 1, function()
-						keys["_hold"] = 0
-					end)
+			if eyeTrace.Entity != NULL then
+				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
+					if _doorWindow != nil and keys["_hold"] == 0 then
+						keys["_hold"] = 1
+						_doorWindow:Remove()
+						_doorWindow = nil
+						timer.Simple( 1, function()
+							keys["_hold"] = 0
+						end)
+					elseif _doorWindow == nil and keys["_hold"] == 0 then
+						keys["_hold"] = 1
+						openDoorOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "buildingID" ) )
+						timer.Simple( 1, function()
+							keys["_hold"] = 0
+						end)
+					end
+				elseif eyeTrace.Entity:IsVehicle() then
+					if _vehicleWindow != nil and keys["_hold"] == 0 then
+						keys["_hold"] = 1
+						_vehicleWindow:Remove()
+						_vehicleWindow = nil
+						timer.Simple( 1, function()
+							keys["_hold"] = 0
+						end)
+					elseif _vehicleWindow == nil and keys["_hold"] == 0 then
+						keys["_hold"] = 1
+						openVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
+						timer.Simple( 1, function()
+							keys["_hold"] = 0
+						end)
+					end
 				end
 			end
 
