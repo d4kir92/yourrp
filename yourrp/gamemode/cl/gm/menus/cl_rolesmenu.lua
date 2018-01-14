@@ -177,10 +177,10 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
       elseif whitelist == 1 and adminonly != 1 and voteable == 0 then
         roleGetRole.text = lang_string( "needwhitelist" )
       else
-        --print("getrole else2")
+
       end
     else
-      --print("getrole else")
+
     end
     function roleGetRole:DoClick()
       if ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
@@ -288,8 +288,6 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
   function tmpButtonSelect:DoClick()
     local tmpAllowed = 0
     for k, v in pairs( Whitelist ) do
-      print(v.roleID)
-      print(tonumber( groupID ), tonumber( v.groupID ))
       if tonumber( roleID ) == tonumber( v.roleID ) or ( tonumber( v.roleID ) == -1 and tonumber( groupID ) == tonumber( v.groupID ) ) then
         tmpAllowed = 1
         break

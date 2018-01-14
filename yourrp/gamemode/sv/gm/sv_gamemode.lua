@@ -100,6 +100,21 @@ function GM:PlayerAuthed( ply, steamid, uniqueid )
   check_yrp_client( ply )
 end
 
+function setbodygroups( ply )
+  local chaTab = ply:GetChaTab()
+  if chaTab != nil then
+    ply:SetSkin( chaTab.skin )
+    ply:SetBodygroup( 0, chaTab.bg0 )
+    ply:SetBodygroup( 1, chaTab.bg1 )
+    ply:SetBodygroup( 2, chaTab.bg2 )
+    ply:SetBodygroup( 3, chaTab.bg3 )
+    ply:SetBodygroup( 4, chaTab.bg4 )
+    ply:SetBodygroup( 5, chaTab.bg5 )
+    ply:SetBodygroup( 6, chaTab.bg6 )
+    ply:SetBodygroup( 7, chaTab.bg7 )
+  end
+end
+
 function GM:PlayerSetModel( ply )
   local tmpRolePlayermodel = ply:GetPlayerModel()
   if tmpRolePlayermodel != nil and tmpRolePlayermodel != false then
@@ -107,6 +122,7 @@ function GM:PlayerSetModel( ply )
   else
     ply:SetModel( "models/player/skeleton.mdl" )
   end
+  setbodygroups( ply )
 end
 
 function GM:PlayerLoadout( ply )
@@ -125,21 +141,13 @@ function GM:PlayerLoadout( ply )
 
     set_role_values( ply )
 
+    local chaTab = ply:GetChaTab()
     if chaTab != nil then
-      local chaTab = ply:GetChaTab()
       ply:SetNWString( "money", chaTab.money )
       ply:SetNWString( "moneybank", chaTab.moneybank )
       ply:SetNWString( "rpname", chaTab.rpname )
 
-      ply:SetSkin( chaTab.skin )
-      ply:SetBodygroup( 0, chaTab.bg0 )
-      ply:SetBodygroup( 1, chaTab.bg1 )
-      ply:SetBodygroup( 2, chaTab.bg2 )
-      ply:SetBodygroup( 3, chaTab.bg3 )
-      ply:SetBodygroup( 4, chaTab.bg4 )
-      ply:SetBodygroup( 5, chaTab.bg5 )
-      ply:SetBodygroup( 6, chaTab.bg6 )
-      ply:SetBodygroup( 7, chaTab.bg7 )
+      setbodygroups( ply )
     else
       printGM( "note", "Give char failed -> KillSilent -> " .. ply:Nick() )
       ply:KillSilent()
@@ -160,7 +168,7 @@ function GM:PlayerLoadout( ply )
     local _yrp_general = db_select( "yrp_general", "*", nil )
     if _yrp_general != nil then
       _yrp_general = _yrp_general[1]
-      ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
+      ply:SetNWBool( "toggle_inventory", false ) -- LATER tobool( _yrp_general.toggle_inventory ) )
       ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
       ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
       ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )

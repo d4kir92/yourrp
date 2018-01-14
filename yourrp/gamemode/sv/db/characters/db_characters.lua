@@ -234,3 +234,21 @@ net.Receive( "inv_bg_do", function( len, ply )
   local _charid = ply:CharID()
   db_update( "yrp_characters", "bg" .. tonumber( _id ) .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
 end)
+
+util.AddNetworkString( "inv_skin_up" )
+
+net.Receive( "inv_skin_up", function( len, ply )
+  local _cur = net.ReadInt( 16 )
+  ply:SetSkin( _cur )
+  local _charid = ply:CharID()
+  db_update( "yrp_characters", "skin" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
+end)
+
+util.AddNetworkString( "inv_skin_do" )
+
+net.Receive( "inv_skin_do", function( len, ply )
+  local _cur = net.ReadInt( 16 )
+  ply:SetSkin( _cur )
+  local _charid = ply:CharID()
+  db_update( "yrp_characters", "skin" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
+end)

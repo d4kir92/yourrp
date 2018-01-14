@@ -37,7 +37,6 @@ function Player:getDarkRPVar( var )
     elseif isnumber( _nw_var ) != nil then
       return tonumber( _nw_var )
     else
-      print( "else" )
       return _nw_var
     end
   end

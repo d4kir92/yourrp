@@ -7,7 +7,7 @@ if SERVER then
 		printGM( "db", "[Send Server Info: " .. tostring( status ) .. "]" )
 	  local entry = {}
 		timer.Create( "wait_for_server", 1, 0, function()
-			if gmod.GetGamemode() != nil then
+			if gmod.GetGamemode() != nil and game.GetIPAddress() != "0.0.0.0:0" and !game.SinglePlayer() then
 			  entry["entry.1233170431"] = GetHostName() or "UNKNOWN"
 			  entry["entry.524147216"] = game.GetIPAddress() or "UNKNOWN"
 				entry["entry.1924789651"] = gmod.GetGamemode().rpbase or "UNKNOWN"

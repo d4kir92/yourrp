@@ -98,6 +98,7 @@ end
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
   printGM( "db", "send_error( " .. realm .. ", " .. str .. " )" )
+
   local entry = {}
 	timer.Create( "wait_for_gamemode"..str, 1, 0, function()
 		if gmod.GetGamemode() != nil then

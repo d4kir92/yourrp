@@ -45,7 +45,8 @@ end
 function ctr( tmpNumber )
   if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
     tmpNumber = 2160/tmpNumber
-    return math.Round( ScrH()/tmpNumber )
+    local _screen_h = ScrH() or 0
+    return math.Round( _screen_h/tmpNumber )
   else
     return -1
   end

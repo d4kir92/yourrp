@@ -501,7 +501,6 @@ net.Receive( "changeBuildingName", function( len, ply )
 end)
 
 net.Receive( "getBuildings", function( len, ply )
-  print("getBuildings")
   local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
   for k, building in pairs( _tmpTable ) do
     building.name = db_out_str( building.name )

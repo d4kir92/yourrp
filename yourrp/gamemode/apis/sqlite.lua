@@ -13,9 +13,14 @@ end
 function sql_show_last_error()
   local _last_error = tostring( sql.LastError() ) or ""
   if SERVER then
-    PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE: " .. _last_error )
+    PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:" )
+    PrintMessage( HUD_PRINTCENTER, _last_error )
   elseif CLIENT then
-    LocalPlayer():PrintMessage( HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE: " .. _last_error )
+    local ply = LocalPlayer()
+    if ply != NULL and ply != nil then
+      ply:PrintMessage( HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:" )
+      ply:PrintMessage( HUD_PRINTTALK, _last_error )
+    end
   end
   timer.Simple( 3, function()
     disk_full( _last_error )

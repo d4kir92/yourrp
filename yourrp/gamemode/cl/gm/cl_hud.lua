@@ -114,6 +114,10 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		draw.SimpleTextOutlined( _voice_text, "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 
+	if tobool( get_tutorial( "tut_hudhelp" ) ) then
+		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+	end
+
 	hudVersion()
 end)
 --##############################################################################

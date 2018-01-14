@@ -42,6 +42,7 @@ net.Receive( "get_menu_bodygroups", function( len )
   clearL()
 
   local _tbl = net.ReadTable()
+  local _skin = tonumber( _tbl.skin )
   local _cbg = {}
   _cbg[1] = tonumber( _tbl.bg0 )
   _cbg[2] = tonumber( _tbl.bg1 )
@@ -84,13 +85,60 @@ net.Receive( "get_menu_bodygroups", function( len )
     end
 	end
 
+  -- Skin changing
   _tbl.bgs = _inv.r.pm.Entity:GetBodyGroups()
+  PrintTable( _tbl.bgs )
+  local _tmpSkin = createD( "DPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ctr( 80 ), ctr( 10 ), ScrH2() - ctr( 30 ) )
+  _tmpSkin.cur = _inv.r.pm.Entity:GetSkin()
+  _tmpSkin.max = _inv.r.pm.Entity:SkinCount()
+  _tmpSkin.name = lang_string( "skin" )
+  function _tmpSkin:Paint( pw, ph )
+    paintPanel( self, pw, ph )
+    draw.SimpleTextOutlined( self.name .. " (" .. _tmpSkin.cur+1 .. "/" .. _tmpSkin.max .. ")", "DermaDefault", ctr( 60 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
 
+  local _tmpSkinUp = createD( "DButton", _tmpSkin, ctr( 50 ), ctr( 80/2 - 2 ), ctr( 1 ), ctr( 1 ) )
+  _tmpSkinUp:SetText( "" )
+  function _tmpSkinUp:Paint( pw, ph )
+    if _tmpSkin.cur >= _tmpSkin.max-1 then
+
+    else
+      paintButton( self, pw, ph, "↑" )
+    end
+  end
+  function _tmpSkinUp:DoClick()
+    if _tmpSkin.cur < _tmpSkin.max-1 then
+      _tmpSkin.cur = _tmpSkin.cur + 1
+    end
+    net.Start( "inv_skin_up" )
+      net.WriteInt( _tmpSkin.cur, 16 )
+    net.SendToServer()
+    _inv.r.pm.Entity:SetSkin( _tmpSkin.cur )
+  end
+
+  local _tmpSkinDo = createD( "DButton", _tmpSkin, ctr( 50 ), ctr( 80/2 - 2), ctr( 1 ), ctr( 1+40 ) )
+  _tmpSkinDo:SetText( "" )
+  function _tmpSkinDo:Paint( pw, ph )
+    if _tmpSkin.cur > 0 then
+      paintButton( self, pw, ph, "↓" )
+    end
+  end
+  function _tmpSkinDo:DoClick()
+    if _tmpSkin.cur > 0 then
+      _tmpSkin.cur = _tmpSkin.cur - 1
+    end
+    net.Start( "inv_skin_do" )
+      net.WriteInt( _tmpSkin.cur, 16 )
+    net.SendToServer()
+    _inv.r.pm.Entity:SetSkin( _tmpSkin.cur )
+  end
+
+  -- Bodygroups changing
   for k, v in pairs( _tbl.bgs ) do
     if k <= 8 then
       _inv.r.pm.Entity:SetBodygroup( k-1, _cbg[k])
       local _height = 80
-      local _tmpBg = createD( "DPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ctr( _height ), ctr( 10 ), ScrH2() - ctr( 30 ) + (k-1) * ctr( _height+2 ) )
+      local _tmpBg = createD( "DPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ctr( _height ), ctr( 10 ), ScrH2() - ctr( 30 ) + (k) * ctr( _height+2 ) )
       _tmpBg.name = v.name
       _tmpBg.max = v.num
       _tmpBg.cur = _cbg[k]
@@ -530,29 +578,36 @@ function close_inventory()
   if yrp_inventory.window != nil then
     closeMenu()
     yrp_inventory.window:Remove()
-    yrp_inventory.drop_panel:Remove()
+    if yrp_inventory.drop_panel != nil then
+      yrp_inventory.drop_panel:Remove()
+    end
     yrp_inventory.window = nil
   end
 end
 
 function open_inventory()
   openMenu()
-  yrp_inventory.drop_panel = createD( "DPanel", nil, ScrW(), ScrH(), 0, 0 )
-  yrp_inventory.drop_panel:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
-    if isDropped then
-      if receiver:IsHovered() then
-        tableOfDroppedPanels[1]:Remove()
-        net.Start( "item_move" )
-          net.WriteString( "" )
-          net.WriteString( "" )
-          net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
-          net.WriteString( "drop" )
-        net.SendToServer()
+
+  local ply = LocalPlayer()
+
+  if ply:GetNWBool( "toggle_inventory", false ) then
+    yrp_inventory.drop_panel = createD( "DPanel", nil, ScrW(), ScrH(), 0, 0 )
+    yrp_inventory.drop_panel:Receiver( "ITEM", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
+      if isDropped then
+        if receiver:IsHovered() then
+          tableOfDroppedPanels[1]:Remove()
+          net.Start( "item_move" )
+            net.WriteString( "" )
+            net.WriteString( "" )
+            net.WriteString( tableOfDroppedPanels[1].tbl.uniqueID )
+            net.WriteString( "drop" )
+          net.SendToServer()
+        end
       end
+    end, {})
+    function yrp_inventory.drop_panel:Paint( pw, ph )
+      --
     end
-  end, {})
-  function yrp_inventory.drop_panel:Paint( pw, ph )
-    --
   end
 
   yrp_inventory.window = createD( "DFrame", nil, ScrH(), ScrH(), 0, 0 )
@@ -574,14 +629,16 @@ function open_inventory()
     --paintBr( pw, ph, Color( 255, 0, 0, 255 ))
   end
 
-  yrp_inventory.tabInv = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 0 ), ctr( 20 ) )
-  yrp_inventory.tabInv:SetText( "" )
-  function yrp_inventory.tabInv:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "inventory" ) )
-  end
-  function yrp_inventory.tabInv:DoClick()
-    net.Start( "get_inventory" )
-    net.SendToServer()
+  if ply:GetNWBool( "toggle_inventory", false ) then
+    yrp_inventory.tabInv = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 0 ), ctr( 20 ) )
+    yrp_inventory.tabInv:SetText( "" )
+    function yrp_inventory.tabInv:Paint( pw, ph )
+      paintButton( self, pw, ph, lang_string( "inventory" ) )
+    end
+    function yrp_inventory.tabInv:DoClick()
+      net.Start( "get_inventory" )
+      net.SendToServer()
+    end
   end
 
   yrp_inventory.tabBody = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 310 ), ctr( 20 ) )
@@ -594,6 +651,7 @@ function open_inventory()
     net.SendToServer()
   end
 
+  --[[ Hidden
   yrp_inventory.tabAtr = createD( "DButton", yrp_inventory.window, ctr( 300 ), ctr( 80 ), ctr( 620 ), ctr( 20 ) )
   yrp_inventory.tabAtr:SetText( "" )
   function yrp_inventory.tabAtr:Paint( pw, ph )
@@ -602,9 +660,18 @@ function open_inventory()
   function yrp_inventory.tabAtr:DoClick()
     showAttributes()
   end
+  ]]--
 
-  net.Start( "get_inventory" )
-  net.SendToServer()
+  if ply:GetNWBool( "toggle_inventory", false ) then
+    net.Start( "get_inventory" )
+    net.SendToServer()
+  else
+    net.Start( "get_menu_bodygroups" )
+    net.SendToServer()
+
+    yrp_inventory.tabBody:SetPos( ctr( 0 ), ctr( 20 ) )
+    -- yrp_inventory.tabAtr:SetPos( ctr( 310 ), ctr( 20 ) )
+  end
 
   yrp_inventory.window:MakePopup()
 end

@@ -35,7 +35,13 @@ local Vector = FindMetaTable( "Vector" )
 function Vector:isInSight( filter, ply )
   --Description: Decides whether the vector could be seen by the player if they
   --             were to look at it.
-  printGM( "darkrp", "isInSight( filter, ply )" )
-  printGM( "darkrp", DarkRP._not )
-  return false, Vector( 0, 0, 0 )
+  ply = ply or LocalPlayer()
+  local trace = {}
+  trace.start = ply:EyePos()
+  trace.endpos = self
+  trace.filter = filter
+  trace.mask = -1
+  local TheTrace = util.TraceLine(trace)
+
+  return not TheTrace.Hit, TheTrace.HitPos
 end

@@ -285,17 +285,20 @@ function openCharacterCreation()
   data.y = data.y + data.h + border
   data.w = ctr( 800 ) - 2*border
   data.h = ctr( 740 )
-  local charactersBodygroups = createMD( "DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
+  local charactersBodygroups = createMD( "DScrollPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr( 5 ) )
   function charactersBodygroups:Paint( pw, ph )
     paintMD( pw, ph, nil, get_ds_col() )
     draw.SimpleTextOutlined( lang_string( "appearance" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
+  local _skins = createD( "DPanel", charactersBodygroups, ctr( 600 ), ctr( 100 ), ctr( 10 ), ctr( 60 ) )
+  function _skins:Paint( pw, ph )
     if characterPlayermodel.skin != nil and characterPlayermodel.skinmax != nil then
-      draw.SimpleTextOutlined( lang_string( "skin" ) .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr( 80 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "skin" ) .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr( 80 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 
   character.bg = {}
-  for i=0, 7 do
+  for i=0, 20 do
     character.bg[i] = 0
   end
 

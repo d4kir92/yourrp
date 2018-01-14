@@ -51,18 +51,18 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.12" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.13" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
-// Multicore (Shared) enable:
+-- Multicore (Shared) enable:
 RunConsoleCommand( "gmod_mcore_test", "1" )
 RunConsoleCommand( "mat_queue_mode", "-1" )
 RunConsoleCommand( "studio_queue_mode", "1" )
 RunConsoleCommand( "r_hunkalloclightmaps", "0" )
 
 if CLIENT then
-	// Multicore (Client) enable:
+	-- Multicore (Client) enable:
 	RunConsoleCommand( "cl_threaded_bone_setup", "1" )
 	RunConsoleCommand( "cl_threaded_client_leaf_system", "1" )
 
@@ -71,7 +71,13 @@ if CLIENT then
 	RunConsoleCommand( "r_threaded_client_shadow_manager", "1" )
 
 	RunConsoleCommand( "r_queued_ropes", "1" )
+
+	-- Disable Other Thirdperson that crash yourrp Thirdperson
+	RunConsoleCommand( "simple_thirdperson_enabled", "0" )
+
+	-- legs are build in
+	RunConsoleCommand( "cl_legs", "0" )
 elseif SERVER then
-	//"removes" voice icons
+	-- "removes" voice icons
 	RunConsoleCommand( "mp_show_voice_icons", "0" )
 end

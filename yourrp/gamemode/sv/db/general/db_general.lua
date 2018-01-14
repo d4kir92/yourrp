@@ -84,10 +84,10 @@ end)
 
 net.Receive( "db_update_inventory", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
-  db_update( "yrp_general", "toggle_inventory = " .. _nw_bool, nil )
+  db_update( "yrp_general", "toggle_inventory = " .. 0, nil ) -- LATER _nw_bool, nil )
 
   for k, v in pairs( player.GetAll() ) do
-    v:SetNWBool( "toggle_inventory", tobool( _nw_bool ) )
+    v:SetNWBool( "toggle_inventory", tobool( false ) ) -- LATER _nw_bool ) )
   end
 end)
 
