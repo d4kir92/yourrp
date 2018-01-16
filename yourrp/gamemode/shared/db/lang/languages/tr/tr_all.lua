@@ -388,6 +388,6 @@ function TR_All()
   set_lang_string( "decline", "Reddet" )
   set_lang_string( "category", "Kategori" )
   set_lang_string( "categories", "Kategoriler" )
-  set_lang_string( "helppre", "Press" )
-  set_lang_string( "helppos", "to open the Help or if you want to report a problem" )
+  set_lang_string( "helppre", "Yardım almak için veya bir problemi rapor etmek için" )
+  set_lang_string( "helppos", "tuşuna basın" )
 end

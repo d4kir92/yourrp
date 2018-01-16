@@ -94,12 +94,16 @@ net.Receive( "openLawBoard", function( len )
         paintButton( self, pw, ph, lang_string( "remove" ) )
       end
       function _removeButton:DoClick()
-        net.Start( "dbRemJail" )
-          net.WriteString( self.uniqueID )
-          net.WriteString( self.steamID )
-        net.SendToServer()
-        self.panel:Remove()
-        self:Remove()
+        if self.uniqueID != nil and self.steamID != nil then
+          net.Start( "dbRemJail" )
+            net.WriteString( self.uniqueID )
+            net.WriteString( self.steamID )
+          net.SendToServer()
+          self.panel:Remove()
+          self:Remove()
+        else
+          printGM( "note", "uniqueID and steamID is nil!" )
+        end
       end
 
       _removeButton:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) + ctr( 400 ) )

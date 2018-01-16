@@ -73,6 +73,7 @@ function spawnItem( ply, item, tab )
     local getVehicles = db_select( "yrp_vehicles", "*", nil )
     ent:SetNWInt( "vehicleID", getVehicles[#getVehicles].uniqueID)
     ent:SetNWString( "ownerRPName", ply:RPName() )
+
     if ent == NULL then
       printGM( "note", "spawnItem failed: ent == NULL" )
       return

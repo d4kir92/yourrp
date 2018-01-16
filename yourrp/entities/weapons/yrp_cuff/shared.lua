@@ -72,34 +72,36 @@ function SWEP:PrimaryAttack()
 			ply:SetNWBool( "casting", true )
 			timer.Create( "handcuffPlayer" .. tostring(self.target), self.tick, 0, function()
 				ply:SetNWInt( "castCur", self.current )
-				if self.target:GetNWBool( "cuffed" ) then
-					ply:SetNWString( "castName", lang_string( "unleash" ) )
-					if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
-						if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
-							ply:SetNWBool( "casting", false )
-							self.target:SetNWBool( "cuffed", false )
-							timer.Remove( "handcuffPlayer" .. tostring(self.target) )
-						end
-					else
-						ply:SetNWBool( "casting", false )
-						timer.Remove( "handcuffPlayer" .. tostring(self.target) )
-					end
-				else
-					ply:SetNWString( "castName", lang_string( "tieup" ) )
-					if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
-						if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
-							ply:SetNWBool( "casting", false )
-							if SERVER then
-								self.target:SetActiveWeapon( "yrp_unarmed" )
-						    self.target:SelectWeapon( "yrp_unarmed" )
+				if self.target != nil then
+					if self.target:GetNWBool( "cuffed" ) then
+						ply:SetNWString( "castName", lang_string( "unleash" ) )
+						if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
+							if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
+								ply:SetNWBool( "casting", false )
+								self.target:SetNWBool( "cuffed", false )
+								timer.Remove( "handcuffPlayer" .. tostring(self.target) )
 							end
-							self.target:SetNWBool( "cuffed", true )
-
+						else
+							ply:SetNWBool( "casting", false )
 							timer.Remove( "handcuffPlayer" .. tostring(self.target) )
 						end
 					else
-						ply:SetNWBool( "casting", false )
-						timer.Remove( "handcuffPlayer" .. tostring(self.target) )
+						ply:SetNWString( "castName", lang_string( "tieup" ) )
+						if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
+							if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
+								ply:SetNWBool( "casting", false )
+								if SERVER then
+									self.target:SetActiveWeapon( "yrp_unarmed" )
+							    self.target:SelectWeapon( "yrp_unarmed" )
+								end
+								self.target:SetNWBool( "cuffed", true )
+
+								timer.Remove( "handcuffPlayer" .. tostring(self.target) )
+							end
+						else
+							ply:SetNWBool( "casting", false )
+							timer.Remove( "handcuffPlayer" .. tostring(self.target) )
+						end
 					end
 				end
 				self.current = self.current + self.tick

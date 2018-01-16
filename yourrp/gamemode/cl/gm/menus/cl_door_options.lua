@@ -110,9 +110,11 @@ function buyWindow( buildingID, name, price, door )
 
     net.Receive( "getBuildings", function()
       local _tmpBuildings = net.ReadTable()
-
-      for k, v in pairs( _tmpBuildings ) do
-        _ComboBoxHouseName:AddChoice( v.name, v.uniqueID, false )
+      
+      if _ComboBoxHouseName != NULL then
+        for k, v in pairs( _tmpBuildings ) do
+          _ComboBoxHouseName:AddChoice( v.name, v.uniqueID, false )
+        end
       end
     end)
     function _ComboBoxHouseName:OnSelect( index, value, data )
@@ -143,8 +145,10 @@ function buyWindow( buildingID, name, price, door )
     net.Receive( "getBuildingGroups", function()
       local _tmpGroups = net.ReadTable()
 
-      for k, v in pairs( _tmpGroups ) do
-        _ComboBoxGroupName:AddChoice( v.groupID, v.uniqueID, false )
+      if _ComboBoxGroupName != NULL then
+        for k, v in pairs( _tmpGroups ) do
+          _ComboBoxGroupName:AddChoice( v.groupID, v.uniqueID, false )
+        end
       end
     end)
     function _ComboBoxGroupName:OnSelect( index, value, data )

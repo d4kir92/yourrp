@@ -62,7 +62,6 @@ function hasGroupRowPlayers( id )
 end
 
 function drawGroupPlayers( id )
-  local _ply_list = player.GetAll()
   for k, ply in pairs( player.GetAll() ) do
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
@@ -71,11 +70,12 @@ function drawGroupPlayers( id )
         _tmpHeader._ply = ply
         function _tmpHeader:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicOrange" ) )
-          if self._ply != NULL and self._ply:IsPlayer() then
-            draw.SimpleTextOutlined( "1", "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( self._ply:RPName() or "", "sef", ctr( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( self._ply:GetNWString( "roleName" ) or "", "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( self._ply:Ping() or "", "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if ply != NULL and ply:IsPlayer() then
+            local level, rpname, rolename, ping = "1", ply:RPName() or "", ply:GetNWString( "roleName" ) or "", ply:Ping() or ""
+            draw.SimpleTextOutlined( level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( rpname, "sef", ctr( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( rolename, "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( ping, "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           --draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end

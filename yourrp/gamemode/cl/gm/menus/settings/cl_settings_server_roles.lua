@@ -834,7 +834,7 @@ net.Receive( "yrp_roles", function( len )
           addDBComboBox( rolesInfo, 1610, 80, 0, 1730, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
         end
       end
-      if tmp != nil then
+      if tmp != nil and rolesList != NULL then
         rolesList:AddItem( tmp )
       end
     end

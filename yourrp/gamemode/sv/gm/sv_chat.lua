@@ -18,10 +18,11 @@ end
 
 function get_player_by_name( string )
   for k, ply in pairs( player.GetAll() ) do
-    if string.find( string.lower( ply:Nick() ), string.lower( string ), 1, false ) then
+    if string.find( string.lower( ply:Nick() ), string.lower( string ), 1, false ) or string.find( string.lower( ply:RPName() ), string.lower( string ), 1, false ) or string.find( string.lower( ply:SteamName() ), string.lower( string ), 1, false ) then
       return ply
     end
   end
+  return NULL
 end
 
 function print_warning( string )
