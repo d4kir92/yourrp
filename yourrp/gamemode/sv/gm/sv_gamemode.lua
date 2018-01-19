@@ -19,17 +19,20 @@ end
 
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
 
-  ply:SetNWBool( "weaponlowered", false )
-  if newWeapon:IsScripted() then
+
+  if newWeapon:IsScripted() and !ply:GetNWBool( "inCombat" ) then
+    ply:SetNWBool( "weaponlowered", false )
+
     local _hold_type = newWeapon.HoldType or newWeapon:GetHoldType() or "normal"
     ply:SetNWString( "yrp_hold_type", tostring( _hold_type)  )
 
-    if ply:GetNWBool( "weaponlowered" ) == false and ply:GetNWBool( "inCombat" ) == false then
+    if ply:GetNWBool( "weaponlowered" ) == false then
       timer.Simple( 0.1, function()
         lowering_weapon( ply )
-        ply:getJobTable()
       end)
     end
+  else
+    ply:SetNWBool( "weaponlowered", false )
   end
 
   if ply:GetNWBool( "cuffed" ) or ply.leiche != nil then

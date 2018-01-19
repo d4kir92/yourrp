@@ -106,7 +106,7 @@ util.AddNetworkString( "drop_item" )
 
 net.Receive( "drop_item", function( len, ply )
   local _weapon = ply:GetActiveWeapon()
-  if _weapon != NULL and _weapon != nil then
+  if _weapon != NULL and _weapon != nil and _weapon:GetModel() != "" then
     local _wclass = _weapon:GetClass() or ""
     ply:DropItem( _wclass )
     ply:StripWeapon( _wclass )

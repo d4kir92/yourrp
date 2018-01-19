@@ -424,4 +424,6 @@ function DE_All()
   set_lang_string( "force", "Kraft" )
   set_lang_string( "keypage", "Bild" )
   set_lang_string( "keynumpad", "NumPad" )
+  set_lang_string( "cannotbedropped", "Kann nicht fallen gelassen werden" )
+  set_lang_string( "none", "Nichts" )
 end
