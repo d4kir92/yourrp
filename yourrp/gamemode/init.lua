@@ -15,9 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 ]]--
 
---[[
-AddCSLuaFiles
-]]--
+--[[ AddCSLuaFiles ]]--
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
@@ -60,10 +58,9 @@ AddCSLuaFile( "cl/gm/menus/settings/cl_settings_server_whitelist.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_contact.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_workshop.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_smartphone.lua" )
 
---[[
-includes
-]]--
+--[[ includes ]]--
 include( "shared.lua" )
 
 include( "sv/sv_includes.lua" )

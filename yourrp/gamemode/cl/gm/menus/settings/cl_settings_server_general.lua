@@ -5,31 +5,31 @@ local _restartTime = 0
 hook.Add( "open_server_general", "open_server_general", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
   local _center = 800
 
-  local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.site )
-  local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.site )
-  local sv_generalHunger = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 315 )
-  local sv_generalThirst = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 375 )
-  local sv_generalStamina = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 435 )
-  local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 495 )
-  local sv_generalHud = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 555 )
-  local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 615 )
-  local sv_generalClearInventoryOnDead = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 675 )
-  local sv_generalGraffiti = createVGUI( "DCheckBox", settingsWindow.site, 30, 30, _center, 735 )
+  local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.window.site )
+  local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.window.site )
+  local sv_generalHunger = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 315 )
+  local sv_generalThirst = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 375 )
+  local sv_generalStamina = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 435 )
+  local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 495 )
+  local sv_generalHud = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 555 )
+  local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 615 )
+  local sv_generalClearInventoryOnDead = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 675 )
+  local sv_generalGraffiti = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 735 )
 
-  local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.site )
+  local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.window.site )
 
-  local sv_generalViewDistance = vgui.Create( "DNumberWang", settingsWindow.site )
+  local sv_generalViewDistance = vgui.Create( "DNumberWang", settingsWindow.window.site )
 
   local oldGamemodename = ""
-  function settingsWindow.site:Paint()
-    --draw.RoundedBox( 0, 0, 0, settingsWindow.site:GetWide(), settingsWindow.site:GetTall(), _yrp.colors.panel )
+  function settingsWindow.window.site:Paint()
+    --draw.RoundedBox( 0, 0, 0, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), _yrp.colors.panel )
     draw.SimpleTextOutlined( lang_string( "gamemodename" ) .. ":", "sef", ctr( _center - 10 ), ctr( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleTextOutlined( "you need to update Server!", "sef", ctr( _center + 400 + 10 ), ctr( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -100,7 +100,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.SendToServer()
   end
 
-  local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.site )
+  local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.window.site )
   sv_generalRestartServer:SetSize( ctr( 400 ), ctr( 50 ) )
   sv_generalRestartServer:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServer:SetText( lang_string( "updateserver" ) )
@@ -119,10 +119,10 @@ hook.Add( "open_server_general", "open_server_general", function()
         net.WriteInt( math.Round( sv_generalRestartTime:GetValue() ), 16 )
       net.SendToServer()
     end
-    settingsWindow:Close()
+    settingsWindow.window:Close()
   end
 
-  local sv_generalRestartServerCancel = vgui.Create( "DButton", settingsWindow.site )
+  local sv_generalRestartServerCancel = vgui.Create( "DButton", settingsWindow.window.site )
   sv_generalRestartServerCancel:SetSize( ctr( 400 ), ctr( 50 ) )
   sv_generalRestartServerCancel:SetPos( ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalRestartServerCancel:SetText( lang_string( "cancelupdateserver" ) )
@@ -136,10 +136,10 @@ hook.Add( "open_server_general", "open_server_general", function()
   function sv_generalRestartServerCancel:DoClick()
     net.Start( "cancelRestartServer" )
     net.SendToServer()
-    settingsWindow:Close()
+    settingsWindow.window:Close()
   end
 
-  local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.site )
+  local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
   sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
   sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
   sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
@@ -191,7 +191,7 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
     end
 
-    settingsWindow:Close()
+    settingsWindow.window:Close()
     _tmpFrame:MakePopup()
   end
 

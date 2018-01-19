@@ -158,6 +158,8 @@ function loadCompleteHUD()
   loadDBHUDGroup( "vt" ) --Vote
   loadDBHUDGroup( "cb" ) --ChatBox
 
+  loadDBHUDGroup( "ut" ) --ChatBox
+
   --crosshair
   loadDBHUD( "cht" )
   loadDBHUD( "chl" )
@@ -215,6 +217,8 @@ function dbUpdateHUDGroup( name, tab )
   dbUpdateHUD( name .. "tt", tab.tt )
 
   dbUpdateHUD( name .. "it", tab.it )
+
+  dbUpdateHUD( name .. "ut", tab.ut )
 end
 
 function dbUpdateColor( name, tab )
@@ -238,13 +242,13 @@ function setDefaultHUD()
   local mt = HUDTab( 1, 380, -260, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "mt", mt )
 
-  local ms = HUDTab( 1, -220, -320, 440, 60, 1, 2, 1, 1, 24, 1, 1 )
+  local ms = HUDTab( 1, -300, -80, 600, 60, 1, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ms", ms )
 
   local ma = HUDTab( 1, 380, -200, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ma", ma )
 
-  local ca = HUDTab( 1, -220, -400, 440, 60, 1, 2, 1, 1, 24, 1, 1 )
+  local ca = HUDTab( 1, -300, -160, 600, 60, 1, 2, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "ca", ca )
 
   local mo = HUDTab( 1, 380, -380, 440, 60, 0, 2, 1, 1, 18, 1, 1 )
@@ -269,14 +273,18 @@ function setDefaultHUD()
   local tt = HUDTab( 1, 20, 20, 900, 600, 0, 0, 1, 1, 24, 1, 1 )
   dbUpdateHUDGroup( "tt", tt )
 
-  local st = HUDTab( 1, -380, 380, 760, 60, 1, 0, 1, 1, 18, 1, 1 )
+  local st = HUDTab( 1, -380, 40, 760, 60, 1, 0, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "st", st )
 
-  local vt = HUDTab( 1, -380, 20, 760, 300, 1, 0, 1, 1, 18, 1, 1 )
+  local vt = HUDTab( 1, -380, 120, 760, 300, 1, 0, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "vt", vt )
 
-  local cb = HUDTab( 1, 20, -880, 800, 420, 0, 2, 1, 1, 18, 1, 1 )
+  local cb = HUDTab( 1, 20, -960, 800, 500, 0, 2, 1, 1, 18, 1, 1 )
   dbUpdateHUDGroup( "cb", cb )
+
+  --                to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it
+  local ut = HUDTab( 1, -400, 200, 400, 240, 2, 0, 1, 1, 18, 1, 1 )
+  dbUpdateHUDGroup( "ut", ut )
 
   --crosshair
   dbUpdateHUD( "cht", 1 )
@@ -354,6 +362,8 @@ function loadDatabaseHUD()
   checkDBHUDGroup( "st" ) --Status
   checkDBHUDGroup( "vt" ) --Vote
   checkDBHUDGroup( "cb" ) --ChatBox
+
+  checkDBHUDGroup( "ut" ) --UpTime
 
   --crosshair
   checkDBHUD( "cht", 1 )

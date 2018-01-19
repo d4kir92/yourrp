@@ -5,7 +5,7 @@ net.Receive( "getRoleWhitelist", function( len )
   local _tmpRoleList = net.ReadTable()
   local _tmpGroupList = net.ReadTable()
 
-  local _whitelistListView = createVGUI( "DListView", settingsWindow.site, 1500, 1800, 10, 10 )
+  local _whitelistListView = createVGUI( "DListView", settingsWindow.window.site, 1500, 1800, 10, 10 )
   _whitelistListView:AddColumn( "uniqueID" )
   _whitelistListView:AddColumn( "SteamID" )
   _whitelistListView:AddColumn( lang_string( "nick" ) )
@@ -34,7 +34,7 @@ net.Receive( "getRoleWhitelist", function( len )
     end
   end
 
-  local _buttonAdd = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1500 + 10, 10 )
+  local _buttonAdd = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1500 + 10, 10 )
   _buttonAdd:SetText( lang_string( "addentry" ) )
   function _buttonAdd:DoClick()
     local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
@@ -90,7 +90,7 @@ net.Receive( "getRoleWhitelist", function( len )
     _whitelistFrame:MakePopup()
   end
 
-  local _buttonAddGroup = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1500 + 10, 70 )
+  local _buttonAddGroup = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1500 + 10, 70 )
   _buttonAddGroup:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "group" ) .. ")" )
   function _buttonAddGroup:DoClick()
     local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
@@ -132,7 +132,7 @@ net.Receive( "getRoleWhitelist", function( len )
     _whitelistFrame:MakePopup()
   end
 
-  local _buttonRem = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1500 + 10, 130 )
+  local _buttonRem = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1500 + 10, 130 )
   _buttonRem:SetText( lang_string( "removeentry" ) )
   function _buttonRem:DoClick()
     if _whitelistListView:GetSelectedLine() != "" then
@@ -152,12 +152,12 @@ end)
 hook.Add( "open_server_whitelist", "open_server_whitelist", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  function settingsWindow.site:Paint( pw, ph )
+  function settingsWindow.window.site:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
 

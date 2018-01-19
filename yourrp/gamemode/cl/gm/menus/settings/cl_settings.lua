@@ -30,6 +30,8 @@ _yrp_settings.materials.light.close = Material( "vgui/yrp/light_close.png" )
 _yrp_settings.materials.light.settings = Material( "vgui/yrp/light_settings.png" )
 _yrp_settings.materials.light.burger = Material( "vgui/yrp/light_burger.png" )
 
+settingsWindow = settingsWindow or {}
+
 function get_icon_burger_menu()
   return _yrp_settings.materials[_yrp_settings.design.mode].burger
 end
@@ -48,10 +50,10 @@ function toggleSettings()
 end
 
 function closeSettings()
-  if settingsWindow != nil then
+  if settingsWindow.window != NULL then
     closeMenu()
-    settingsWindow:Remove()
-    settingsWindow = nil
+    settingsWindow.window:Remove()
+    settingsWindow.window = nil
   end
 end
 
@@ -66,49 +68,49 @@ function openSettings()
   local ply = LocalPlayer()
 
   --Frame
-  settingsWindow = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
-  function settingsWindow:Paint( pw, ph )
+  settingsWindow.window = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
+  function settingsWindow.window:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
   end
-  function settingsWindow:OnClose()
+  function settingsWindow.window:OnClose()
     closeMenu()
   end
-  function settingsWindow:OnRemove()
+  function settingsWindow.window:OnRemove()
     closeMenu()
   end
 
   --Sites
-  settingsWindow:AddCategory( lang_string( "client" ) )
-  settingsWindow:AddSite( "open_client_character", lang_string( "character" ), lang_string( "client" ), "icon16/user_edit.png" )
-  settingsWindow:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
-  settingsWindow:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
+  settingsWindow.window:AddCategory( lang_string( "client" ) )
+  settingsWindow.window:AddSite( "open_client_character", lang_string( "character" ), lang_string( "client" ), "icon16/user_edit.png" )
+  settingsWindow.window:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
+  settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
   if ply:IsAdmin() or ply:IsSuperAdmin() then
     local _server = lang_string( "server" ) .. " (" .. tostring( lang_string( "admin" ) ) .. ")"
-    settingsWindow:AddCategory( _server )
-    settingsWindow:AddSite( "open_server_general", lang_string( "general" ), _server, "icon16/server_database.png" )
-    settingsWindow:AddSite( "open_server_roles", lang_string( "roles" ), _server, "icon16/group_gear.png" )
-    settingsWindow:AddSite( "open_server_give", lang_string( "give" ), _server, "icon16/user_go.png" )
-    settingsWindow:AddSite( "open_server_money", lang_string( "money" ), _server, "icon16/money.png" )
-    settingsWindow:AddSite( "open_server_map", lang_string( "map" ), _server, "icon16/map.png" )
-    settingsWindow:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server, "icon16/page_white_key.png" )
-    settingsWindow:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server, "icon16/group_go.png" )
+    settingsWindow.window:AddCategory( _server )
+    settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server, "icon16/server_database.png" )
+    settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server, "icon16/group_gear.png" )
+    settingsWindow.window:AddSite( "open_server_give", lang_string( "give" ), _server, "icon16/user_go.png" )
+    settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server, "icon16/money.png" )
+    settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server, "icon16/map.png" )
+    settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server, "icon16/page_white_key.png" )
+    settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server, "icon16/group_go.png" )
   end
 
-  settingsWindow:AddCategory( "yourrp" )
-  settingsWindow:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )
-  settingsWindow:AddSite( "open_yourp_contact", lang_string( "contact" ), "yourrp", "icon16/user_comment.png" )
-  settingsWindow:AddSite( "open_yourp_add_langu", "Add Language", "yourrp", "icon16/comment_add.png" )
+  settingsWindow.window:AddCategory( "yourrp" )
+  settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )
+  settingsWindow.window:AddSite( "open_yourp_contact", lang_string( "contact" ), "yourrp", "icon16/user_comment.png" )
+  settingsWindow.window:AddSite( "open_yourp_add_langu", "Add Language", "yourrp", "icon16/comment_add.png" )
 
-  settingsWindow:AddCategory( lang_string( "settings" ) )
-  settingsWindow:AddSite( "open_menu_settings", lang_string( "settings" ), lang_string( "settings" ), "vgui/yrp/dark_settings.png" )
+  settingsWindow.window:AddCategory( lang_string( "settings" ) )
+  settingsWindow.window:AddSite( "open_menu_settings", lang_string( "settings" ), lang_string( "settings" ), "vgui/yrp/dark_settings.png" )
 
   --StartSite
-  settingsWindow.cursite = lang_string( "character" )
-  settingsWindow:SwitchToSite( "open_client_character" )
+  settingsWindow.window.cursite = lang_string( "character" )
+  settingsWindow.window:SwitchToSite( "open_client_character" )
 
   --Mainbar
-  local mainBar = createD( "DPanel", settingsWindow, ScrW(), ctr( 100 ), 0, 0 )
+  local mainBar = createD( "DPanel", settingsWindow.window, ScrW(), ctr( 100 ), 0, 0 )
   function mainBar:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_dp_col() )
 
@@ -123,12 +125,13 @@ function openSettings()
   	if game.SinglePlayer() then
   		_singleplayer = "Singleplayer"
   	end
-  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. GAMEMODE.Version, "HudBars", ctr( 820 ), ph/2, version_color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    local _color = version_color()
+  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) " .. GAMEMODE.Version .. " by D4KiR", "HudBars", ctr( 820 ), ph/2, Color( _color.r, _color.g, _color.b, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     --draw.SimpleTextOutlined( settingsWindow.cursite or "", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local liveSupport = createD( "DButton", settingsWindow, ctr( 300 ), ctr( 80 ), ScrW() - ctr( 1150 ), ctr( 10 ) )
+  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 300 ), ctr( 80 ), ScrW() - ctr( 1150 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
@@ -138,7 +141,7 @@ function openSettings()
     draw.SimpleTextOutlined( "Live Support!", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local language = createD( "DPanel", settingsWindow, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
+  local language = createD( "DPanel", settingsWindow.window, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
   function language:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
     draw.SimpleTextOutlined( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -158,16 +161,16 @@ function openSettings()
   hook.Add( "open_menu_settings", "open_menu_settings", function()
     local ply = LocalPlayer()
 
-    local w = settingsWindow.sitepanel:GetWide()
-    local h = settingsWindow.sitepanel:GetTall()
+    local w = settingsWindow.window.sitepanel:GetWide()
+    local h = settingsWindow.window.sitepanel:GetTall()
 
-    settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
-    function settingsWindow.site:Paint( pw, ph )
+    settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+    function settingsWindow.window.site:Paint( pw, ph )
       draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
       draw.SimpleTextOutlined( lang_string( "color" ), "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
     end
 
-    local switchMode = createMDSwitch( settingsWindow.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
+    local switchMode = createMDSwitch( settingsWindow.window.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
 
     --primary
     colorP = {}
@@ -178,7 +181,7 @@ function openSettings()
     colorP[5] = Color( 249, 168, 37, 255 )
     colorP[6] = Color( 78, 52, 46, 255 )
 
-    local primarybg = createD( "DPanel", settingsWindow.site, ctr( 400 ), ctr( 200 ), ctr( 10 ), ctr( 200 ) )
+    local primarybg = createD( "DPanel", settingsWindow.window.site, ctr( 400 ), ctr( 200 ), ctr( 10 ), ctr( 200 ) )
 
     for k, v in pairs( colorP ) do
       addPColorField( primarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
@@ -193,7 +196,7 @@ function openSettings()
     colorS[5] = Color( 253, 216, 53, 255 )
     colorS[6] = Color( 109, 76, 65, 255 )
 
-    local secondarybg = createD( "DPanel", settingsWindow.site, ctr( 400 ), ctr( 200 ), ctr( 500 ), ctr( 200 ) )
+    local secondarybg = createD( "DPanel", settingsWindow.window.site, ctr( 400 ), ctr( 200 ), ctr( 500 ), ctr( 200 ) )
 
     for k, v in pairs( colorS ) do
       addSColorField( secondarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
@@ -201,8 +204,8 @@ function openSettings()
   end)
 
   function settingsButton:DoClick()
-    if settingsWindow != NULL then
-      settingsWindow:SwitchToSite( "open_menu_settings" )
+    if settingsWindow.window != NULL then
+      settingsWindow.window:SwitchToSite( "open_menu_settings" )
     end
   end
 
@@ -216,9 +219,9 @@ function openSettings()
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
   function exitButton:DoClick()
-    if settingsWindow != nil then
-      settingsWindow:Remove()
-      settingsWindow = nil
+    if settingsWindow.window != NULL then
+      settingsWindow.window:Remove()
+      settingsWindow.window = nil
     end
   end
 
@@ -239,10 +242,10 @@ function openSettings()
     draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
   end
   function burgerMenu:DoClick()
-    if settingsWindow != nil then
-      settingsWindow:openMenu()
+    if settingsWindow.window != NULL then
+      settingsWindow.window:openMenu()
     end
   end
 
-  settingsWindow:MakePopup()
+  settingsWindow.window:MakePopup()
 end

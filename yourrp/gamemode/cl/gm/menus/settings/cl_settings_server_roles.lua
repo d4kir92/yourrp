@@ -485,10 +485,8 @@ function addDBAmmo( parent, id, uniqueID )
   local background = createVGUI( "DPanel", parent, 400, 800, 1620, 140 )
   function background:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
-    draw.SimpleTextOutlined( sws[changesw], "sef", pw/2, ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    if #sws > 1 then
-      draw.SimpleTextOutlined( changesw .. "/" .. #sws, "sef", pw/2, ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    end
+
+    draw.SimpleText( "(" .. string.upper( lang_string( "wip" ) ) .. ")", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
   end
 
   local modelpanel = createVGUI( "DModelPanel", background, 320, 720, 40, 80 )
@@ -558,7 +556,7 @@ function addDBAmmo( parent, id, uniqueID )
     else
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
-    draw.SimpleTextOutlined( "in work", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "(" .. string.upper( lang_string( "wip" ) ) .. ")", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function buttonchange:DoClick()
 
@@ -762,7 +760,7 @@ net.Receive( "yrp_roles", function( len )
   for k, v in pairs( yrp_roles_dbTable ) do
     if settingsWindow != nil then
       v.selected = false
-      yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.site )
+      yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
       local tmp = yrp_roles[k]
       tmp.uniqueID = v.uniqueID
       tmp.groupID = v.groupID
@@ -796,7 +794,7 @@ net.Receive( "yrp_roles", function( len )
           rolesInfo = nil
         end
 
-        rolesInfo = createVGUI( "DPanel", settingsWindow.site, 2100, 1900, _lbr + _w + _br, 5 )
+        rolesInfo = createVGUI( "DPanel", settingsWindow.window.site, 2100, 2100, _lbr + _w + _br, 5 )
         function rolesInfo:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
         end
@@ -807,16 +805,18 @@ net.Receive( "yrp_roles", function( len )
         addDBNumberWang( rolesInfo, 800, 80, 0, 950, lang_string( "roleplayermodelsize" ), v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1040, lang_string( "rolehealth" ), Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1170, lang_string( "rolearmor" ), Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1300, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1390, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1480, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.streg, "yrp_roles", "st", "stmax", "streg", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBBar( rolesInfo, 800, 120, 0, 1430, lang_string( "abilitybar" ) .. " (" .. string.upper( lang_string( "wip" ) ) .. ")", Color( 0, 0, 255 ), "yrp_roles", v.ab, v.abmax, v.abreg, "yrp_roles", "ab", "abmax", "abreg", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1740, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "" )
 
         --2.Spalte
         addDBNumberWang( rolesInfo, 800, 80, 810, 0, lang_string( "rolemaxamount" ) .. " (-1 = " .. lang_string( "disabled" ) .. ")", v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBSwep( rolesInfo, self.id, tmp.uniqueID )
         addDBAmmo( rolesInfo, self.id, tmp.uniqueID )
-        addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.capital, yrp_roles_dbTable[k], "yrp_roles", "capital", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.capitaltime, yrp_roles_dbTable[k], "yrp_roles", "capitaltime", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.salary, yrp_roles_dbTable[k], "yrp_roles", "salary", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.salarytime, yrp_roles_dbTable[k], "yrp_roles", "salarytime", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBTextEntryBig( rolesInfo, 800, 250, 810, 1130, lang_string( "roledescription" ), v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1390, lang_string( "voteable" ), v.voteable, yrp_roles_dbTable[k], "yrp_roles", "voteable", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1440, lang_string( "roleinstructor" ), v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
@@ -828,10 +828,10 @@ net.Receive( "yrp_roles", function( len )
           table.insert( yrp_roles_dbTable, _start_role )
         end
 
-        addDBComboBox( rolesInfo, 800, 80, 810, 1640, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBComboBox( rolesInfo, 800, 80, 810, 1740, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
 
         if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
-          addDBComboBox( rolesInfo, 1610, 80, 0, 1730, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+          addDBComboBox( rolesInfo, 1610, 80, 0, 1830, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
         end
       end
       if tmp != nil and rolesList != NULL then
@@ -851,7 +851,7 @@ net.Receive( "yrp_groups", function( len )
   yrp_groups_dbTable = net.ReadTable()
   for k, v in pairs( yrp_groups_dbTable ) do
     v.selected = false
-    yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.site )
+    yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
     local tmp = yrp_groups[k]
     tmp.uniqueID = v.uniqueID
     tmp.groupID = v.groupID
@@ -890,7 +890,7 @@ net.Receive( "yrp_groups", function( len )
         rolesInfo = nil
       end
 
-      groupsInfo = createVGUI( "DPanel", settingsWindow.site, 1700, 1700, _lbr + _w + _br, 5 )
+      groupsInfo = createVGUI( "DPanel", settingsWindow.window.site, 1700, 1700, _lbr + _w + _br, 5 )
       function groupsInfo:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
       end
@@ -913,18 +913,18 @@ end)
 hook.Add( "open_server_roles", "open_server_roles", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
-  settingsWindow.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site.Paint = function( self, w, h ) draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0 ) ) end
 
-  function settingsWindow.site:Paint()
+  function settingsWindow.window.site:Paint()
     --draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), _yrp.colors.panel )
   end
 
   -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS
-  local groupsAdd = addButton( 50, 50, _lbr, _lbr, settingsWindow.site )
+  local groupsAdd = addButton( 50, 50, _lbr, _lbr, settingsWindow.window.site )
   function groupsAdd:Paint( pw, ph )
     if groupsAdd:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -937,7 +937,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     addDBGroup()
   end
 
-  local groupsDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _lbr, settingsWindow.site )
+  local groupsDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _lbr, settingsWindow.window.site )
   function groupsDup:Paint( pw, ph )
     if groupsDup:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -950,7 +950,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     dupDBGroup( getCurrentGroup() )
   end
 
-  local groupsRem = addButton( 50, 50, _lbr + _w - 50, _lbr, settingsWindow.site )
+  local groupsRem = addButton( 50, 50, _lbr + _w - 50, _lbr, settingsWindow.window.site )
   function groupsRem:Paint( pw, ph )
     if groupsRem:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -963,13 +963,14 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     deleteDBGroup()
   end
 
-  local groupsHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 65 )
+  local groupsHeader = createVGUI( "DPanel", settingsWindow.window.site, _w, 40, 5, 65 )
   function groupsHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
     draw.SimpleTextOutlined( lang_string( "groups" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  groupsList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 500-40, 5, 65+40 )
+  local _group_height = 820
+  groupsList = createVGUI( "DScrollPanel", settingsWindow.window.site, _w, _group_height-40, 5, 65+40 )
   function groupsList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end
@@ -978,7 +979,8 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   net.SendToServer()
 
   -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
-  local rolesAdd = addButton( 50, 50, _lbr, 600, settingsWindow.site )
+  local _roles_height = _group_height + 80
+  local rolesAdd = addButton( 50, 50, _lbr, _roles_height, settingsWindow.window.site )
   function rolesAdd:Paint( pw, ph )
     if rolesAdd:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -991,7 +993,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     addDBRole( groupUniqueID )
   end
 
-  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, 600, settingsWindow.site )
+  local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _roles_height, settingsWindow.window.site )
   function rolesDup:Paint( pw, ph )
     if rolesDup:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -1004,7 +1006,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     dupDBRole( groupUniqueID, getCurrentRole() )
   end
 
-  local rolesRem = addButton( 50, 50, _lbr + _w - 50, 600, settingsWindow.site )
+  local rolesRem = addButton( 50, 50, _lbr + _w - 50, _roles_height, settingsWindow.window.site )
   function rolesRem:Paint( pw, ph )
     if rolesRem:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
@@ -1017,13 +1019,18 @@ hook.Add( "open_server_roles", "open_server_roles", function()
     deleteDBRole()
   end
 
-  local rolesHeader = createVGUI( "DPanel", settingsWindow.site, _w, 40, 5, 660 )
+  local rolesHeader = createD( "DPanel", settingsWindow.window.site, ctr( _w ), ctr( 40 ), ctr( 10 ), ctr( _roles_height + 60 ) )
   function rolesHeader:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
     draw.SimpleTextOutlined( groupID .. " - " .. lang_string( "roles" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  rolesList = createVGUI( "DScrollPanel", settingsWindow.site, _w, 1200-40, 5, 660+40 )
+  local _r_l = {}
+  _r_l.w = ctr( _w )
+  _r_l.h = ScrH() - ctr( _roles_height + 200+10 )
+  printTab( _r_l, "_r_l" )
+  
+  rolesList = createD( "DScrollPanel", settingsWindow.window.site, _r_l.w, _r_l.h, ctr( 10 ), ctr( _roles_height + 60 + 40 ) )
   function rolesList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
   end

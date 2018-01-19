@@ -462,7 +462,7 @@ function drawPlate( ply, string, z, color )
     local str = string
     local strSize = string.len( str ) + 3
     cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
-      draw.RoundedBox( 0, -( ( strSize * 10 )/2 ), 0, strSize*10, 24, color )
+      draw.RoundedBox( 0, -( ( strSize * 11 )/2 ), 0, strSize*11, 24, color )
       draw.SimpleTextOutlined( str, "HudBars", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     cam.End3D2D()
   end

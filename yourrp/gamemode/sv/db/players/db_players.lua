@@ -11,6 +11,8 @@ sql_add_column( _db_name, "SteamName", "TEXT" )
 
 sql_add_column( _db_name, "CurrentCharacter", "INT" )
 sql_add_column( _db_name, "Timestamp", "INT" )
+sql_add_column( _db_name, "uptime_total", "INT DEFAULT 0" )
+sql_add_column( _db_name, "uptime_current", "INT DEFAULT 0" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -102,17 +104,28 @@ function set_role_values( ply )
         ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
         ply:SetWalkSpeed( ply:GetNWInt( "speedwalk" ) )
         ply:SetRunSpeed( ply:GetNWInt( "speedrun" ) )
+
         ply:SetMaxHealth( tonumber( rolTab.hpmax ) )
         ply:SetHealth( tonumber( rolTab.hp ) )
         ply:SetNWInt( "GetHealthReg", tonumber( rolTab.hpreg ) )
+
         ply:SetNWInt( "GetMaxArmor", tonumber( rolTab.armax ) )
         ply:SetNWInt( "GetArmorReg", tonumber( rolTab.arreg ) )
         ply:SetArmor( tonumber( rolTab.ar ) )
+
+        ply:SetNWInt( "GetMaxStamina", tonumber( rolTab.stmax ) )
+        ply:SetNWInt( "GetRegStamina", tonumber( rolTab.streg ) )
+        ply:SetNWInt( "GetCurStamina", tonumber( rolTab.st ) )
+
+        ply:SetNWInt( "GetMaxAbility", tonumber( rolTab.abmax ) )
+        ply:SetNWInt( "GetRegAbility", tonumber( rolTab.abreg ) )
+        ply:SetNWInt( "GetCurAbility", tonumber( rolTab.ab ) )
+
         ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
-        ply:SetNWInt( "capital", rolTab.capital )
+        ply:SetNWInt( "salary", rolTab.salary )
         ply:SetNWString( "roleName", rolTab.roleID )
         ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
-        ply:SetNWInt( "capitaltime", rolTab.capitaltime )
+        ply:SetNWInt( "salarytime", rolTab.salarytime )
         ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )
 
         --sweps

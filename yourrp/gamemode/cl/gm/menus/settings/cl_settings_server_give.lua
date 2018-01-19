@@ -5,7 +5,7 @@ net.Receive( "getPlyList", function( len )
   local _tmpRoleList = net.ReadTable()
   local _tmpGroupList = net.ReadTable()
 
-  local _giveListView = createVGUI( "DListView", settingsWindow.site, 1800, 1800, 10, 10 )
+  local _giveListView = createVGUI( "DListView", settingsWindow.window.site, 1800, 1800, 10, 10 )
   _giveListView:AddColumn( "SteamID" )
   _giveListView:AddColumn( lang_string( "nick" ) )
   _giveListView:AddColumn( lang_string( "name" ) )
@@ -107,12 +107,12 @@ end)
 hook.Add( "open_server_give", "open_server_give", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  function settingsWindow.site:Paint( pw, ph )
+  function settingsWindow.window.site:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
 

@@ -220,7 +220,7 @@ function Player:UseSweps()
       local _swep = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
       if _swep != nil and _swep != false then
         _swep = _swep[1]
-        --PrintTable( _swep )
+        --printTab( _swep, "Player:UseSweps()" )
         self.canpickup = true
         _swep = self:old_give( _swep.ClassName, true )
         self.canpickup = false

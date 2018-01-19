@@ -84,15 +84,15 @@ end
 hook.Add( "open_server_map", "open_server_map", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  function settingsWindow.site:Paint( pw, ph )
+  function settingsWindow.window.site:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
-  local _mapPanel = createVGUI( "DPanel", settingsWindow.site, 256, 256, 10, 10 )
+  local _mapPanel = createVGUI( "DPanel", settingsWindow.window.site, 256, 256, 10, 10 )
   local _mapPNG = getMapPNG()
   function _mapPanel:Paint( pw, ph )
     surface.SetDrawColor( 255, 255, 255, 255 )
@@ -100,13 +100,13 @@ hook.Add( "open_server_map", "open_server_map", function()
   	surface.DrawTexturedRect( 0, 0, ctr( 256 ), ctr( 256 ) )
   end
 
-  local _mapName = createVGUI( "DPanel", settingsWindow.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
+  local _mapName = createVGUI( "DPanel", settingsWindow.window.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
   function _mapName:Paint( pw, ph )
     draw.RoundedBox( 0, 0,0, pw, ph, get_dp_col() )
     draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. db_sql_str2( string.lower( game.GetMap() ) ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
-  _mapListView = createVGUI( "DListView", settingsWindow.site, 1600, 1600, 10, 10 + 256 + 10 )
+  _mapListView = createVGUI( "DListView", settingsWindow.window.site, 1600, 1600, 10, 10 + 256 + 10 )
   _mapListView:AddColumn( "uniqueID" ):SetFixedWidth( ctr( 100 ) )
   _mapListView:AddColumn( lang_string( "position" ) )
   _mapListView:AddColumn( lang_string( "angle" ) )
@@ -114,7 +114,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   _mapListView:AddColumn( lang_string( "group" ) )
   _mapListView:AddColumn( lang_string( "role" ) )
 
-  local _buttonDelete = createVGUI( "DButton", settingsWindow.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 )
+  local _buttonDelete = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 )
   _buttonDelete:SetText( lang_string( "deleteentry" ) )
   function _buttonDelete:DoClick()
     if _mapListView:GetSelectedLine() != nil then
@@ -125,7 +125,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     end
   end
 
-  local _buttonAddGroupSpawnPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 336 )
+  local _buttonAddGroupSpawnPoint = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 1620, 336 )
   _buttonAddGroupSpawnPoint:SetText( lang_string( "addgroupspawnpoint" ) )
   function _buttonAddGroupSpawnPoint:DoClick()
     local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
@@ -165,7 +165,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpFrame:MakePopup()
   end
 
-  local _buttonAddRoleSpawnPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 396 )
+  local _buttonAddRoleSpawnPoint = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 1620, 396 )
   _buttonAddRoleSpawnPoint:SetText( lang_string( "addrolespawnpoint" ) )
   function _buttonAddRoleSpawnPoint:DoClick()
     local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
@@ -205,7 +205,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     tmpFrame:MakePopup()
   end
 
-  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 456 )
+  local _buttonAddJailPoint = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 1620, 456 )
   _buttonAddJailPoint:SetText( lang_string( "addjailpoint" ) )
   function _buttonAddJailPoint:DoClick()
     net.Start( "dbInsertIntoMap" )
@@ -222,7 +222,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     net.SendToServer()
   end
 
-  local _buttonAddReleasePoint = createVGUI( "DButton", settingsWindow.site, 400, 50, 1620, 516 )
+  local _buttonAddReleasePoint = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 1620, 516 )
   _buttonAddReleasePoint:SetText( lang_string( "addjailfreepoint" ) )
   function _buttonAddReleasePoint:DoClick()
     net.Start( "dbInsertIntoMap" )

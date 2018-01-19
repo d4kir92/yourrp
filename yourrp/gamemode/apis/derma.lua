@@ -2,11 +2,20 @@
 
 local _menuOpen = false
 function isNoMenuOpen()
-  return !_menuOpen
+  if canOpenMenu() and !_menuOpen then
+    return true
+  else
+    return false
+  end
 end
 
 function closeMenu()
   _menuOpen = false
+  gui.EnableScreenClicker( false )
+end
+
+function canOpenMenu()
+  return !mouseVisible()
 end
 
 function openMenu()

@@ -10,7 +10,7 @@ local tmpRolesTable = {}
 
 local Whitelist = {}
 
-function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, uses, maxamount, adminonly, whitelist, allowed, voteable )
+function getRoleInfos( name, uniqueID, desc, sweps, salary, model, modelsize, uses, maxamount, adminonly, whitelist, allowed, voteable )
   local ply = LocalPlayer()
 
   if roleInfoPanel != nil then
@@ -155,7 +155,7 @@ function getRoleInfos( name, uniqueID, desc, sweps, capital, model, modelsize, u
     draw.SimpleTextOutlined( lang_string( "salary" ), "roleInfoHeader", ctr( 10 ), ctr( 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     draw.RoundedBox( 0, 0, ctr( 48 ), w, h - ctr( 48 ), get_dbg_col() )
-    draw.SimpleTextOutlined( ply:GetNWString( "moneyPre" ) .. capital .. ply:GetNWString( "moneyPost" ), "roleInfoText", ctr( 10 ), ctr( 48 + 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( ply:GetNWString( "moneyPre" ) .. salary .. ply:GetNWString( "moneyPost" ), "roleInfoText", ctr( 10 ), ctr( 48 + 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   tmpY = tmpY + tmpH + 3*tmpBr
@@ -218,7 +218,7 @@ function findChildGroups( id )
   tmpGroupsTable = tmpTable
 end
 
-function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, capital, model, modelsize, maxamount, uses, whitelist, adminonly, voteable, groupID )
+function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, salary, model, modelsize, maxamount, uses, whitelist, adminonly, voteable, groupID )
   y = y + 50
   local w = 1600
   local h = 150
@@ -293,12 +293,12 @@ function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, ca
         break
       end
     end
-    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed, voteable )
+    getRoleInfos( name, roleID, desc, sweps, salary, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed, voteable )
   end
 
   --Init on Start UP First Role
   if tonumber( roleID ) == 1 then
-    getRoleInfos( name, roleID, desc, sweps, capital, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, 1, 1 )
+    getRoleInfos( name, roleID, desc, sweps, salary, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, 1, 1 )
   end
   -----------------------------------------
 
@@ -322,7 +322,7 @@ function addRoles( uppergroupname, parent, uppergroup, x, y )
     local newY = y
     for k, v in pairs( tmpTable ) do
       if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
-        newY = addRole( tostring( v.roleID ), parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, tonumber( v.capital ), v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ), uppergroup )
+        newY = addRole( tostring( v.roleID ), parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, tonumber( v.salary ), v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ), uppergroup )
       end
     end
     return newY

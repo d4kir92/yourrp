@@ -35,6 +35,6 @@ include( "gm/menus/settings/cl_settings_server_whitelist.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_contact.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_workshop.lua" )
-include( "gm/menus/cl_inventory.lua" )
+include( "gm/menus/cl_smartphone.lua" )
 
 printGM( "note", "Loaded cl_includes.lua" )

@@ -9,7 +9,7 @@ sql_add_column( _db_name, "roleID", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "description", "TEXT DEFAULT '-'" )
 sql_add_column( _db_name, "playermodels", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "playermodelsize", "INTEGER DEFAULT 1" )
-sql_add_column( _db_name, "capital", "INTEGER DEFAULT 0" )
+sql_add_column( _db_name, "salary", "INTEGER DEFAULT 50" )
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "color", "TEXT DEFAULT '0,0,0'" )
 sql_add_column( _db_name, "sweps", "TEXT DEFAULT ''" )
@@ -24,6 +24,15 @@ sql_add_column( _db_name, "hpreg", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "ar", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "armax", "INTEGER DEFAULT 100" )
 sql_add_column( _db_name, "arreg", "INTEGER DEFAULT 0" )
+sql_add_column( _db_name, "st", "INTEGER DEFAULT 50" )
+sql_add_column( _db_name, "stmax", "INTEGER DEFAULT 100" )
+sql_add_column( _db_name, "streg", "INTEGER DEFAULT 1" )
+
+sql_add_column( _db_name, "abart", "TEXT DEFAULT 'mana'" )
+sql_add_column( _db_name, "ab", "INTEGER DEFAULT 50" )
+sql_add_column( _db_name, "abmax", "INTEGER DEFAULT 1000" )
+sql_add_column( _db_name, "abreg", "INTEGER DEFAULT 5" )
+
 sql_add_column( _db_name, "speedwalk", "INTEGER DEFAULT 150" )
 sql_add_column( _db_name, "speedrun", "INTEGER DEFAULT 240" )
 sql_add_column( _db_name, "powerjump", "INTEGER DEFAULT 200" )
@@ -31,7 +40,7 @@ sql_add_column( _db_name, "prerole", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "instructor", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "removeable", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "uses", "INTEGER DEFAULT 0" )
-sql_add_column( _db_name, "capitaltime", "INTEGER DEFAULT 120" )
+sql_add_column( _db_name, "salarytime", "INTEGER DEFAULT 120" )
 sql_add_column( _db_name, "voiceglobal", "INTEGER DEFAULT 0" )
 
 --db_drop_table( _db_name )
@@ -100,8 +109,8 @@ function duplicateRole( ply, uniqueID, newGroupID )
     _dR.groupID = newGroupID
   end
   if tonumber( _dR.removeable ) == 1 then
-    local _dbColumns = "adminonly, ar, armax, arreg, capital, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodels, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
-    local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.capital .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
+    local _dbColumns = "adminonly, ar, armax, arreg, salary, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodels, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
+    local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.salary .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
     _dbValues = _dbValues .. _dR.groupID .. ", " .. _dR.hp .. ", " .. _dR.hpmax .. ", " .. _dR.hpreg .. ", " .. _dR.instructor .. ", " .. _dR.maxamount .. ", "
     _dbValues = _dbValues .. "'" .. _dR.playermodels .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
     _dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. db_in_str( _dR.sweps ) .. "', " .. _dR.whitelist

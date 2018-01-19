@@ -7,7 +7,7 @@ DEFINE_BASECLASS( "base_anim" )
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 
-ENT.PrintName		= lang_string( "moneyprinter" )
+ENT.PrintName		= "Money Printer"
 ENT.Author			= "D4KiR"
 ENT.Contact			= "-"
 ENT.Purpose			= "Prints money"

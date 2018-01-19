@@ -23,7 +23,7 @@ function Player:getDarkRPVar( var )
   if var == "money" then
     return self:GetNWString( "money", "FAIL" )
   elseif var == "salary" then
-    return self:GetNWString( "capital", "FAIL" )
+    return self:GetNWString( "salary", "FAIL" )
   elseif var == "job" then
     return self:GetNWString( "roleName", "FAIL" )
   elseif var == "rpname" then
@@ -63,11 +63,33 @@ function Player:getHitTarget()
   return NULL
 end
 
+function to_darkrp_job( tab )
+  local _ret_tab = {}
+  _ret_tab.color = Color( 0, 0, 0, 255 )
+  local _pm = string.Explode( ",", tab.playermodels )
+  _ret_tab.model = tostring( _pm[1] )
+  _ret_tab.description = tab.description
+  _ret_tab.weapons = string.Explode( ",", db_out_str( tab.sweps ) )
+  _ret_tab.command = tostring( tab.roleID )
+  _ret_tab.max = tonumber( tab.maxamount )
+  _ret_tab.salary = tonumber( tab.salary )
+  _ret_tab.admin = tonumber( tab.adminonly )
+  _ret_tab.vote = tobool( tab.voteable )
+  _ret_tab.hasLicense = false -- NEED TO BE EDITED, later
+  _ret_tab.customCheck = nil
+
+  return _ret_tab
+end
+
+RPExtraTeams = {}
+
 function Player:getJobTable()
   --Description: Get the job table of a player.
   printGM( "darkrp", "getJobTable()" )
-  printGM( "darkrp", DarkRP._not )
-  return {}
+  local _job = self:GetRolTab()
+
+  _job = to_darkrp_job( _job )
+  return _job
 end
 
 function Player:getPocketItems()

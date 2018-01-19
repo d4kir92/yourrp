@@ -9,14 +9,14 @@ function dbUpdateNet( dbName, dbSets, dbWhile )
 end
 
 function createCheckBox( _string, _x, _y, _nr, _value, _usergroup )
-  _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", settingsWindow.site, 400, 50, _x, _y )
+  _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", settingsWindow.window.site, 400, 50, _x, _y )
   local _tmp = _tmpRes[_value .. "tmp"]
   function _tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
     draw.SimpleTextOutlined( _string, "sef", ctr( 5 + 40 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  _tmpRes[_value .. "tmpCB"] = createVGUI( "DCheckBox", settingsWindow.site, 40, 40, _x + 5, _y + 5 )
+  _tmpRes[_value .. "tmpCB"] = createVGUI( "DCheckBox", settingsWindow.window.site, 40, 40, _x + 5, _y + 5 )
   local _tmpCB = _tmpRes[_value .. "tmpCB"]
   _tmpCB:SetValue( tobool( _tmpRestriction[_nr][_value] ) )
   function _tmpCB:OnChange( bVal )
@@ -32,7 +32,7 @@ function createCheckBox( _string, _x, _y, _nr, _value, _usergroup )
 end
 
 function createDeleteButton( text, _x, _y, _list, id )
-  local _rb = createD( "DButton", settingsWindow.site, ctr( 800 ), ctr( 50 ), _x, _y  )
+  local _rb = createD( "DButton", settingsWindow.window.site, ctr( 800 ), ctr( 50 ), _x, _y  )
   _rb:SetText( "" )
   function _rb:Paint( pw, ph )
     paintButton( self, pw, ph, lang_string( "remove" ) .. " (" .. text .. ")" )
@@ -59,7 +59,7 @@ net.Receive( "getRistrictions", function( len )
   end
   _tmpRestriction = net.ReadTable()
 
-  local _restrictionListView = createD( "DListView", settingsWindow.site, ctr( 400 ), ctr( 1800 ), ctr( 10 ), ctr( 10 ) )
+  local _restrictionListView = createD( "DListView", settingsWindow.window.site, ctr( 400 ), ctr( 1800 ), ctr( 10 ), ctr( 10 ) )
   _restrictionListView:AddColumn( "uniqueID" ):SetFixedWidth( ctr( 0 ) )
   _restrictionListView:AddColumn( lang_string( "usergroup" ) )
 
@@ -94,12 +94,12 @@ end)
 hook.Add( "open_server_restrictions", "open_server_restrictions", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  function settingsWindow.site:Paint( pw, ph )
+  function settingsWindow.window.site:Paint( pw, ph )
     --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
   end
 

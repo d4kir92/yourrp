@@ -49,6 +49,7 @@ function update_db_fonts()
 	createFont( "casf", tmpFont, HudV("casf"), _weight, false )
 	createFont( "stsf", tmpFont, HudV("stsf"), _weight, false )
 	createFont( "xpsf", tmpFont, HudV("xpsf"), _weight, false )
+	createFont( "utsf", tmpFont, HudV("utsf"), _weight, false )
 end
 
 function changeFontSize()
@@ -79,6 +80,7 @@ function changeFontSize()
 	createFont( "HudHeader", tmpFont, 36, _weight, false )
 	createFont( "HudVersion", tmpFont, 30, 1000, false )
 
+	createFont( "72", tmpFont, 72, _weight, false )
 	--Creating
 	createFont( "mmsf", tmpFont, 24, _weight, false )
 	createFont( "hpsf", tmpFont, 24, _weight, false )
@@ -97,6 +99,7 @@ function changeFontSize()
 	createFont( "casf", tmpFont, 24, _weight, false )
 	createFont( "stsf", tmpFont, 24, _weight, false )
 	createFont( "xpsf", tmpFont, 24, _weight, false )
+	createFont( "utsf", tmpFont, 24, _weight, false )
 
 	createFont( "sef", tmpFont, 24, _weight, false )
 

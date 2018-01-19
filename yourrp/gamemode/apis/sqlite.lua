@@ -230,7 +230,7 @@ function db_is_empty( db_name )
     if _show_db_if_not_empty then
       hr_pre()
       printGM( "db", db_name )
-      PrintTable( _tmp )
+      printTab( _tmp, db_name )
       hr_pos()
     end
     return false

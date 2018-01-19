@@ -9,7 +9,7 @@ SWEP.Instructions = "Left Click - Unlock door\nRight Click - Lock door"
 SWEP.Category = "YourRP"
 
 --The name of the SWep, as appears in the weapons tab in the spawn menu(Q Menu)
-SWEP.PrintName = lang_string( "key" )
+SWEP.PrintName = "Key"
 
 --Sets the position of the weapon in the switching menu
 --(appears when you use the scroll wheel or keys 1-6 by default)

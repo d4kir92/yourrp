@@ -18,6 +18,20 @@ function GM:GetFallDamage( ply, speed )
 end
 
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
+
+  ply:SetNWBool( "weaponlowered", false )
+  if newWeapon:IsScripted() then
+    local _hold_type = newWeapon.HoldType or newWeapon:GetHoldType() or "normal"
+    ply:SetNWString( "yrp_hold_type", tostring( _hold_type)  )
+
+    if ply:GetNWBool( "weaponlowered" ) == false and ply:GetNWBool( "inCombat" ) == false then
+      timer.Simple( 0.1, function()
+        lowering_weapon( ply )
+        ply:getJobTable()
+      end)
+    end
+  end
+
   if ply:GetNWBool( "cuffed" ) or ply.leiche != nil then
     return true
   end
@@ -36,6 +50,7 @@ function GM:EntityTakeDamage( target, dmginfo )
     end
     timer.Create( target:Nick() .. " outOfCombat", 6, 1, function()
       target:SetNWBool( "inCombat", false )
+      lowering_weapon( target )
       timer.Remove( target:Nick() .. " outOfCombat" )
     end)
 	end
@@ -97,6 +112,7 @@ end
 function GM:PlayerAuthed( ply, steamid, uniqueid )
   printGM( "gm", "PlayerAuthed " .. ply:Nick() )
   --ply:KillSilent()
+  ply:resetUptimeCurrent()
   check_yrp_client( ply )
 end
 
@@ -155,7 +171,6 @@ function GM:PlayerLoadout( ply )
 
     ply:SetNWInt( "hunger", 100 )
     ply:SetNWInt( "thirst", 100 )
-    ply:SetNWInt( "stamina", 100 )
 
     local monTab = db_select( "yrp_money", "*", nil )
     if monTab != nil then

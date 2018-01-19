@@ -185,6 +185,34 @@ if SERVER then
       self:UpdateMoney()
     end
   end
+
+  function Player:resetUptimeCurrent()
+    local _res = db_update( "yrp_players", "uptime_current = " .. 0, "SteamID = '" .. self:SteamID() .. "'" )
+  end
+
+  function Player:getuptimecurrent()
+    local _ret = db_select( "yrp_players", "uptime_current", "SteamID = '" .. self:SteamID() .. "'" )
+    if _ret != nil then
+      return tonumber( _ret[1].uptime_current )
+    end
+    return 0
+  end
+
+  function Player:getuptimetotal()
+    local _ret = db_select( "yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'" )
+    if _ret != nil then
+      return tonumber( _ret[1].uptime_total )
+    end
+    return 0
+  end
+
+  function Player:addSecond()
+    local _sec_total = self:getuptimetotal()
+    local _sec_current = self:getuptimecurrent()
+    if _sec_current != nil and _sec_total != nil then
+      local _res = db_update( "yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'" )
+    end
+  end
 end
 
 function Player:canAfford( money )

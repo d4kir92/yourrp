@@ -37,7 +37,7 @@ function get_item_size( item )
     _tbl.value = value
     table.insert( _sort, _tbl )
   end
-  --PrintTable( _sort )
+  --printTab( _sort, "get_item_size( item )" )
 
   local _center = item:OBBCenter()
 

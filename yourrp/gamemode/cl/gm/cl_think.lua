@@ -51,7 +51,11 @@ function useFunction( string )
 
 	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
 		//Menues
-		if string == "openHelpMenu" then
+		if string == "openSP" then
+			openSP()
+		elseif string == "closeSP" then
+			closeSP()
+		elseif string == "openHelpMenu" then
 			done_tutorial( "tut_feedback" )
 			toggleHelpMenu()
 		elseif string == "openCharMenu" then
@@ -77,35 +81,9 @@ function useFunction( string )
 		elseif string == "openOptions" then
 			if eyeTrace.Entity != NULL then
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
-					if _doorWindow != nil and keys["_hold"] == 0 then
-						keys["_hold"] = 1
-						_doorWindow:Remove()
-						_doorWindow = nil
-						timer.Simple( 1, function()
-							keys["_hold"] = 0
-						end)
-					elseif _doorWindow == nil and keys["_hold"] == 0 then
-						keys["_hold"] = 1
-						openDoorOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "buildingID" ) )
-						timer.Simple( 1, function()
-							keys["_hold"] = 0
-						end)
-					end
+					toggleDoorOptions( eyeTrace.Entity )
 				elseif eyeTrace.Entity:IsVehicle() then
-					if _vehicleWindow != nil and keys["_hold"] == 0 then
-						keys["_hold"] = 1
-						_vehicleWindow:Remove()
-						_vehicleWindow = nil
-						timer.Simple( 1, function()
-							keys["_hold"] = 0
-						end)
-					elseif _vehicleWindow == nil and keys["_hold"] == 0 then
-						keys["_hold"] = 1
-						openVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
-						timer.Simple( 1, function()
-							keys["_hold"] = 0
-						end)
-					end
+					toggleVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
 				end
 			end
 
@@ -114,7 +92,7 @@ function useFunction( string )
 			gui.EnableScreenClicker( true )
 
 		//Inventory
-		elseif string == "dropitem" then
+	elseif string == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or lang_string( "weapon" )
@@ -123,15 +101,20 @@ function useFunction( string )
 				net.SendToServer()
 			end
 
+		//Weapon Lowering
+		elseif string == "weaponlowering" and !mouseVisible() then
+			net.Start( "yrp_weaponlowering" )
+			net.SendToServer()
+
 		//Mouse changer
 		elseif string == "F11Toggle" then
 			done_tutorial( "tut_tmo" )
 			gui.EnableScreenClicker( !vgui.CursorVisible() )
 
-		elseif string == "vyes" then
+		elseif string == "vyes" and !mouseVisible() then
 			net.Start( "voteYes" )
 			net.SendToServer()
-		elseif string == "vno" then
+		elseif string == "vno" and !mouseVisible() then
 			net.Start( "voteNo" )
 			net.SendToServer()
 		elseif string == "scoreboard" and isScoreboardOpen then
@@ -233,8 +216,8 @@ function KeyPress()
 
 			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
 
-			if ply:GetNWInt( "view_range" ) < -100 then
-				ply:SetNWInt( "view_range", -100 )
+			if ply:GetNWInt( "view_range" ) < -200 then
+				ply:SetNWInt( "view_range", -200 )
 			end
 		end
 
@@ -279,8 +262,8 @@ function KeyPress()
 
 	keyPressed( KEY_E, "openInteractMenu", nil, 100 )
 
-	keyPressed( get_keybind("menu_options_door"), nil, "openOptions", 100 )
-	keyPressed( get_keybind("menu_options_vehicle"), nil, "openOptions", 100 )
+	keyPressed( get_keybind("menu_options_door"), "openOptions", nil, 100 )
+	keyPressed( get_keybind("menu_options_vehicle"), "openOptions", nil, 100 )
 
 	keyPressed( get_keybind("toggle_map"), "openMap", nil, nil )
 
@@ -290,6 +273,11 @@ function KeyPress()
 	keyPressed( KEY_PAGEDOWN, "vno", nil )
 
 	keyPressed( get_keybind("drop_item"), "dropitem", nil, nil )
+
+	keyPressed( get_keybind("weaponlowering"), "weaponlowering", nil, nil )
+
+	keyPressed( KEY_UP, "openSP", nil )
+	keyPressed( KEY_DOWN, "closeSP", nil )
 end
 hook.Add( "Think", "Thinker", KeyPress)
 
@@ -350,7 +338,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 									_drawViewmodel = true
 									return view
 								end
-							elseif ply:GetNWInt( "view_range", 0 ) > -50 and ply:GetNWInt( "view_range", 0 ) <= 0 then
+							elseif ply:GetNWInt( "view_range", 0 ) > -200 and ply:GetNWInt( "view_range", 0 ) <= 0 then
 								--Disabled
 								view.origin = pos
 								view.angles = angles

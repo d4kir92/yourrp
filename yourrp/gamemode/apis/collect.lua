@@ -30,7 +30,8 @@ if SERVER then
 		end)
 	end
 
-	timer.Create( "update_server_info", 30*59, 0, function()
+	local _tick = 30*59
+	timer.Create( "update_server_info", _tick, 0, function()
 	  send_server_info( "auto ( " .. tostring( _tick ) .. " )" )
 	end)
 

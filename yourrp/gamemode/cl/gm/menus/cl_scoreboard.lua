@@ -66,18 +66,17 @@ function drawGroupPlayers( id )
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
         elePos.y = elePos.y + 50
-        local _tmpHeader = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
-        _tmpHeader._ply = ply
-        function _tmpHeader:Paint( pw, ph )
+        local _tmpPly = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
+        _tmpPly.level = 1
+        _tmpPly.rpname = ply:RPName() or ""
+        _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
+        _tmpPly.ping = ply:Ping() or ""
+        function _tmpPly:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicOrange" ) )
-          if ply != NULL and ply:IsPlayer() then
-            local level, rpname, rolename, ping = "1", ply:RPName() or "", ply:GetNWString( "roleName" ) or "", ply:Ping() or ""
-            draw.SimpleTextOutlined( level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( rpname, "sef", ctr( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( rolename, "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( ping, "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          end
-          --draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.rpname, "sef", ctr( 200 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.rolename, "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
       end
     end

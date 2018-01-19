@@ -338,19 +338,19 @@ end
 hook.Add( "open_client_hud", "open_client_hud", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
   --sheet:AddSheet( lang_string( "hud" ), cl_hudPanel, "icon16/photo.png" )
-  function settingsWindow.site:Paint( w, h )
+  function settingsWindow.window.site:Paint( w, h )
     --draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), _yrp.colors.panel )
   end
 
-  local changeHudButton = createD( "DButton", settingsWindow.site, ctr( 470 ), ctr( 50 ), 0, 0 )
+  local changeHudButton = createD( "DButton", settingsWindow.window.site, ctr( 470 ), ctr( 50 ), 0, 0 )
   changeHudButton:SetText( lang_string( "changehud" ) )
   function changeHudButton:DoClick()
-    settingsWindow:Close()
+    settingsWindow.window:Close()
 
     local changeHudWindow = createD( "DFrame", nil, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), 0, 0 )
     changeHudWindow:SetDraggable( false )
@@ -412,6 +412,8 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     votes:SetSizable( false )
     changeHudElement( changeHudWindow, "cb", lang_string( "chatbox" ) )
 
+    changeHudElement( changeHudWindow, "ut", lang_string( "uptime" ) )
+
     changeHudWindow:MakePopup()
   end
 
@@ -423,7 +425,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     end
   end
 
-  local toggleHud = createVGUI( "DButton", settingsWindow.site, 470, 50, 0, 50 + 10 )
+  local toggleHud = createVGUI( "DButton", settingsWindow.window.site, 470, 50, 0, 50 + 10 )
   toggleHud:SetText( lang_string( "togglehud" ) .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang_string( "on" ), lang_string( "off" ) ) .. ")" )
   function toggleHud:DoClick()
     if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
@@ -434,7 +436,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     toggleHud:SetText( lang_string( "togglehud" ) .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang_string( "on" ), lang_string( "off" ) ) .. ")" )
   end
 
-  local resetHudButton = createDerma( "DColorButton", settingsWindow.site, 470, 50, 470 + 10, 50 + 10 )
+  local resetHudButton = createDerma( "DColorButton", settingsWindow.window.site, 470, 50, 470 + 10, 50 + 10 )
   resetHudButton:SetText( "" )
   function resetHudButton:Paint( pw, ph )
     if resetHudButton:IsHovered() then
@@ -466,7 +468,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     _window:MakePopup()
   end
 
-  local _colorBackgroundPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 0, 50+10+50+10 )
+  local _colorBackgroundPanel = createVGUI( "DPanel", settingsWindow.window.site, 470, 510, 0, 50+10+50+10 )
   function _colorBackgroundPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -487,7 +489,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     dbUpdateHUD( "colbga", newColor.a )
   end
 
-  local _colorBorderPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10, 50+10+50+10 )
+  local _colorBorderPanel = createVGUI( "DPanel", settingsWindow.window.site, 470, 510, 470+10, 50+10+50+10 )
   function _colorBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -506,7 +508,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     dbUpdateHUD( "colbra", newColor.a )
   end
 
-  local _colorCrosshairPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 0, 50+10+50+10+510+10 )
+  local _colorCrosshairPanel = createVGUI( "DPanel", settingsWindow.window.site, 470, 510, 0, 50+10+50+10+510+10 )
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -525,7 +527,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     dbUpdateHUD( "colchca", newColor.a )
   end
 
-  local _colorCrosshairBorderPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10, 50+10+50+10+510+10 )
+  local _colorCrosshairBorderPanel = createVGUI( "DPanel", settingsWindow.window.site, 470, 510, 470+10, 50+10+50+10+510+10 )
   function _colorCrosshairBorderPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
@@ -544,7 +546,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     dbUpdateHUD( "colchbra", newColor.a )
   end
 
-  local _settingCrosshairPanel = createVGUI( "DPanel", settingsWindow.site, 470, 510, 470+10+470+10, 50+10+50+10+510+10 )
+  local _settingCrosshairPanel = createVGUI( "DPanel", settingsWindow.window.site, 470, 510, 470+10+470+10, 50+10+50+10+510+10 )
   function _settingCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 

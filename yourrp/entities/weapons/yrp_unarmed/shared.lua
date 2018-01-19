@@ -45,7 +45,7 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.DrawCrosshair = true
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "passive"
 function SWEP:Initialize()
 	self:SetWeaponHoldType( self.HoldType )
 end
@@ -59,7 +59,7 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	
+
 end
 
 function SWEP:SecondaryAttack()

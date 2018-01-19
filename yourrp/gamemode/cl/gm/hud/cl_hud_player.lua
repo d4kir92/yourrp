@@ -237,13 +237,13 @@ function HudPlayer()
 
           --Stamina
           if ply:GetNWBool( "toggle_stamina", false ) then
-            local _mstext = math.Round( ( math.Round( ply:GetNWInt( "stamina", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
-            drawHUDElement( "ms", ply:GetNWInt( "stamina", 0 ), 100, _mstext, stamina, Color( 150, 150, 60, _alpha ) )
+            local _mstext = math.Round( ( math.Round( ply:GetNWInt( "GetCurStamina", 0 ), 0 ) / ply:GetNWInt( "GetMaxStamina", 0 ) ) * 100, 0 ) .. "%"
+            drawHUDElement( "ms", ply:GetNWInt( "GetCurStamina", 0 ), ply:GetNWInt( "GetMaxStamina", 0 ), _mstext, stamina, Color( 150, 150, 60, _alpha ) )
           end
 
           --Mana
-          local _matext = math.Round( ( math.Round( ply:GetNWInt( "mana", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
-          drawHUDElement( "ma", ply:GetNWInt( "mana", 0 ), 100, _matext, mana, Color( 58, 143, 255, _alpha ) )
+          local _matext = ply:GetNWInt( "GetCurAbility", 0 ) .. "/" .. ply:GetNWInt( "GetMaxAbility", 100 ) .. "|" .. math.Round( ( math.Round( ply:GetNWInt( "GetCurAbility", 0 ), 0 ) / ply:GetNWInt( "GetMaxAbility", 100 ) ) * 100, 0 ) .. "%"
+          drawHUDElement( "ma", ply:GetNWInt( "GetCurAbility", 0 ), ply:GetNWInt( "GetMaxAbility", 100 ), _matext, mana, Color( 58, 143, 255, _alpha ) )
 
           --Cast
           if ply:GetNWBool( "casting", false ) then
@@ -260,17 +260,17 @@ function HudPlayer()
           local _pos = ply:GetNWString( "moneyPost", "" )
           _money = roundMoney( _money, 1 )
           local _motext = _pre .. tostring(_money) .. _pos
-          local _capital = tonumber( ply:GetNWInt( "capital", 0 ) )
-          if _capital > 0 then
-            _motext = _motext .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _capital, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
+          local _salary = tonumber( ply:GetNWInt( "salary", 0 ) )
+          if _salary > 0 then
+            _motext = _motext .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _salary, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
           end
-          local _capitalMin = nil
-          local _capitalMax = nil
-          if _capital > 0 then
-            _capitalMin = CurTime() + ply:GetNWInt( "capitaltime" ) - 1 - ply:GetNWInt( "nextcapitaltime" )
-            _capitalMax = ply:GetNWInt( "capitaltime" )
+          local _salaryMin = nil
+          local _salaryMax = nil
+          if _salary > 0 then
+            _salaryMin = CurTime() + ply:GetNWInt( "salarytime" ) - 1 - ply:GetNWInt( "nextsalarytime" )
+            _salaryMax = ply:GetNWInt( "salarytime" )
           end
-          drawHUDElement( "mo", _capitalMin, _capitalMax, _motext, money, Color( 33, 108, 42, _alpha ) )
+          drawHUDElement( "mo", _salaryMin, _salaryMax, _motext, money, Color( 33, 108, 42, _alpha ) )
 
           --XP
           local _xptext = lang_string( "level" ) .. " " .. 1 .. " (" .. 0 .. "%) " .. ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
@@ -463,6 +463,7 @@ function HudPlayer()
           end
 
         end
+
         --Status
         local _sttext = ""
         local _showStatus = false
@@ -470,21 +471,28 @@ function HudPlayer()
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
-          _sttext = _sttext .. "Cuffed"
+          _sttext = _sttext .. lang_string( "cuffed" )
+          _showStatus = true
+        end
+        if ply:GetNWBool( "weaponlowered" ) then
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
+          end
+          _sttext = _sttext .. lang_string( "weaponlowered" )
           _showStatus = true
         end
         if ply:GetNWInt( "hunger", 100 ) < 20 then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
-          _sttext = _sttext .. "Hungry"
+          _sttext = _sttext .. lang_string( "hungry" )
           _showStatus = true
         end
         if ply:GetNWInt( "thirst", 100 ) < 20 then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
-          _sttext = _sttext .. "Thirsty"
+          _sttext = _sttext .. lang_string( "thirsty" )
           _showStatus = true
         end
         if ply:GetNWBool( "inJail", false ) then
@@ -516,9 +524,9 @@ function HudPlayer()
         --Thirdperson
         if input.IsKeyDown( get_keybind( "view_zoom_in" ) ) or input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
           local _3PText = ""
-          if ply:GetNWInt( "view_range", 0 ) < -40 then
+          if ply:GetNWInt( "view_range", 0 ) <= -200 then
             _3PText = lang_string( "fppr" )
-          elseif ply:GetNWInt( "view_range", 0 ) > -40 and ply:GetNWInt( "view_range", 0 ) < 0 then
+          elseif ply:GetNWInt( "view_range", 0 ) > -200 and ply:GetNWInt( "view_range", 0 ) < 0 then
             _3PText = lang_string( "fpp" )
           elseif ply:GetNWInt( "view_range", 0 ) > 0 then
             _3PText = lang_string( "tpp" )

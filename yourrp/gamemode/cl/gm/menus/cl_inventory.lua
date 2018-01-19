@@ -9,7 +9,7 @@ yrp_inventory.cache_inv_item = {}
 
 function clearL()
   if yrp_inventory != nil then
-    if yrp_inventory.left != NULL then
+    if yrp_inventory.left != NULL and yrp_inventory.left != nil then
       local _childs = yrp_inventory.left:GetChildren()
       if istable( _childs ) then
         for k, v in pairs( _childs ) do
@@ -87,7 +87,7 @@ net.Receive( "get_menu_bodygroups", function( len )
 
   -- Skin changing
   _tbl.bgs = _inv.r.pm.Entity:GetBodyGroups()
-  PrintTable( _tbl.bgs )
+
   local _tmpSkin = createD( "DPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ctr( 80 ), ctr( 10 ), ScrH2() - ctr( 30 ) )
   _tmpSkin.cur = _inv.r.pm.Entity:GetSkin()
   _tmpSkin.max = _inv.r.pm.Entity:SkinCount()

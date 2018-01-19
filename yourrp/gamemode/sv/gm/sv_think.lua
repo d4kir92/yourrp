@@ -44,22 +44,32 @@ end
 
 function con_st( ply )
   if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) and !ply:InVehicle() then
-    ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) - 2 )
-    if ply:GetNWInt( "stamina", 0 ) < 0 then
-      ply:SetNWInt( "stamina", 0 )
+    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) - ( ply:GetNWInt( "GetRegStamina", 1 )*2 ) )
+    if ply:GetNWInt( "GetCurStamina", 0 ) < 0 then
+      ply:SetNWInt( "GetCurStamina", 0 )
     end
   elseif ply:GetNWInt( "thirst", 0 ) > 20 then
-    ply:SetNWInt( "stamina", ply:GetNWInt( "stamina", 0 ) + 1 )
-    if ply:GetNWInt( "stamina", 0 ) > 100 then
-      ply:SetNWInt( "stamina", 100 )
+    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) + ply:GetNWInt( "GetRegStamina", 1 ) )
+    if ply:GetNWInt( "GetCurStamina", 0 ) > ply:GetNWInt( "GetMaxStamina", 100 ) then
+      ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetMaxStamina", 100 ) )
     end
   end
-  if ply:GetNWInt( "stamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
+  if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
   else
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+  end
+end
+
+function reg_ab( ply )
+  ply:SetNWInt( "GetCurAbility", ply:GetNWInt( "GetCurAbility", 0 ) + ply:GetNWInt( "GetRegAbility", 1 ) )
+
+  if ply:GetNWInt( "GetCurAbility" ) > ply:GetNWInt( "GetMaxAbility" ) then
+    ply:SetNWInt( "GetCurAbility", ply:GetNWInt( "GetMaxAbility" ) )
+  elseif ply:GetNWInt( "GetCurAbility" ) < 0 then
+    ply:SetNWInt( "GetCurAbility", 0 )
   end
 end
 
@@ -73,17 +83,17 @@ function time_jail( ply )
 end
 
 function check_salary( ply )
-  if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWInt( "capital" ), "sv_think capital fail" ) then
-    if CurTime() >= ply:GetNWInt( "nextcapitaltime", 0 ) then
-      ply:SetNWInt( "nextcapitaltime", CurTime() + ply:GetNWInt( "capitaltime" ) )
+  if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWInt( "salary" ), "sv_think salary fail" ) then
+    if CurTime() >= ply:GetNWInt( "nextsalarytime", 0 ) then
+      ply:SetNWInt( "nextsalarytime", CurTime() + ply:GetNWInt( "salarytime" ) )
 
       local _m = ply:GetNWString( "money", -1 )
       local _money = tonumber( _m )
-      local _c = ply:GetNWInt( "capital", -1 )
-      local _capital = tonumber( _c )
-      if _money != nil and _capital != nil then
-        if _money != -1 and _capital != -1 then
-          ply:SetNWString( "money", _money + _capital )
+      local _c = ply:GetNWInt( "salary", -1 )
+      local _salary = tonumber( _c )
+      if _money != nil and _salary != nil then
+        if _money != -1 and _salary != -1 then
+          ply:SetNWString( "money", _money + _salary )
           ply:UpdateMoney()
         else
           ply:CheckMoney()
@@ -101,6 +111,11 @@ timer.Create( "ServerThink", 1, 0, function()
 
   for k, ply in pairs( _all_players ) do
     if !ply:GetNWBool( "inCombat" ) then
+      ply:SetNWFloat( "uptime_current", ply:getuptimecurrent() )
+      ply:SetNWFloat( "uptime_total", ply:getuptimetotal() )
+      ply:SetNWFloat( "uptime_server", os.clock() )
+      ply:addSecond()
+
       reg_hp( ply )   --HealthReg
       reg_ar( ply )   --ArmorReg
       if ply:GetNWBool( "toggle_metabolism", false ) then
@@ -119,6 +134,7 @@ timer.Create( "ServerThink", 1, 0, function()
     if ply:GetNWBool( "toggle_stamina", false ) then
       con_st( ply )
     end
+    reg_ab( ply )
 
     time_jail( ply )  --Jail
 

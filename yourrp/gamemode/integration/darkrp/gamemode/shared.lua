@@ -79,7 +79,7 @@ function DarkRP.createEntity( name, tbl )
   printGM( "darkrp", "createEntity( " .. name .. ", tbl )" )
   print(name)
   print(tbl)
-  --PrintTable( tbl )
+  --printTab( tbl, "DarkRP.createEntity" )
 end
 AddEntity = DarkRP.createEntity
 

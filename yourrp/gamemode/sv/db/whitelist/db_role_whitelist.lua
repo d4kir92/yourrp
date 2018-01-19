@@ -26,7 +26,7 @@ function sendRoleWhitelist( ply )
     local _tmpGroupList = db_select( "yrp_groups", "groupID, uniqueID", nil )
 
     if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
-      PrintTable( _tmpWhiteList )
+      --printTab( _tmpWhiteList, "sendRoleWhitelist( ply )" )
       net.Start( "getRoleWhitelist" )
         net.WriteTable( _tmpWhiteList )
         net.WriteTable( _tmpRoleList )

@@ -8,6 +8,19 @@ _text.successdb = " created successfully."
 _text.spacePre = "\n__________________________________________________________________________[" .. "YRP" .. "]_"
 _text.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯[" .. "YRP" .. "]¯\n"
 
+function printTab( table, name )
+	hr_pre()
+	if name != nil then
+		printGM( "note", "PrintTable: " .. tostring( name ) .. " (" .. tostring( table ) .. ")" )
+	end
+	if istable( table ) then
+		PrintTable( table )
+	else
+		printGM( "note", "printTab " .. tostring( table ) .. " is not a table!" )
+	end
+	hr_pos()
+end
+
 function hr()
 	print( "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" )
 end

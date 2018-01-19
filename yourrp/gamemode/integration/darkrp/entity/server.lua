@@ -24,8 +24,8 @@ function Entity:doorIndex()
   --Description: Get the door index of a door. Use this to store door
   --             information in the database.
   printGM( "darkrp", "doorIndex()" )
-  printGM( "darkrp", DarkRP._not )
-  return 0
+
+  return self:GetNWInt( "uniqueID", -1 )
 end
 
 function Entity:isLocked()

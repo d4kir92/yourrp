@@ -14,6 +14,86 @@ function GM:GetGameDescription()
 end
 
 if SERVER then
+	util.AddNetworkString( "yrp_weaponlowering" )
+end
+
+if CLIENT then
+
+	function GM:CalcViewModelView( wep, vm, oldPos, oldAng, pos, ang )
+		local ply = LocalPlayer()
+
+		if wep:IsScripted() then
+			local _speed = 2
+			if ply.lerp_ang_up == nil then
+				ply.lerp_ang_up = 0
+			end
+			if ply:GetNWBool( "weaponlowered", true ) then
+				ply.lerp_ang_up = Lerp( _speed * FrameTime(), ply.lerp_ang_up, 90 )
+				if ply.lerp_ang_up > 90 then
+					ply.lerp_ang_up = 90
+				end
+			else
+				ply.lerp_ang_up = Lerp( _speed * FrameTime(), ply.lerp_ang_up, 0 )
+				if ply.lerp_ang_up < 0 then
+					ply.lerp_ang_up = 0
+				end
+			end
+			pos = pos + ang:Right() * ply.lerp_ang_up/90*10 + ang:Forward() * 0 + ang:Up() * -ply.lerp_ang_up/90*2
+
+			ang:RotateAroundAxis( ang:Up(), ply.lerp_ang_up*0.5 )
+			ang:RotateAroundAxis( ang:Right(), -ply.lerp_ang_up*0.1 )
+			--ang:RotateAroundAxis( ang:Forward(), -ply.lerp_ang_up/2 )
+
+			wep:SetPos( pos )
+			wep:SetAngles( ang )
+			return pos, ang
+		end
+	end
+end
+
+if SERVER then
+
+	function lowering_weapon( ply )
+		local _weapon = ply:GetActiveWeapon()
+		if _weapon != NULL then
+			if _weapon:IsScripted() then
+			  if ply:GetNWBool( "weaponlowered", true ) then
+			    ply:SetNWBool( "weaponlowered", false )
+			    _weapon:SetHoldType( ply:GetNWString( "yrp_hold_type" ) )
+			  else
+			    ply:SetNWBool( "weaponlowered", true )
+					local _w_ht = ply:GetNWString( "yrp_hold_type" )
+					if _w_ht == "melee" or _w_ht == "melee2" or _w_ht == "pistol" or _w_ht == "grenade" or _w_ht == "rpg" or _w_ht == "slam" or _w_ht == "fist" or _w_ht == "knife" or _w_ht == "duel" or _w_ht == "camera" or _w_ht == "magic" or _w_ht == "revolver" then
+						_weapon:SetHoldType( "normal" )
+					elseif _w_ht == "smg" or _w_ht == "ar2" or _w_ht == "shotgun" or _w_ht == "physgun" or _w_ht == "crossbow" then
+						_weapon:SetHoldType( "passive" )
+					else
+				    _weapon:SetHoldType( "normal" )
+					end
+			  end
+			end
+		end
+	end
+
+	hook.Add( "Tick", "KeyDown_Test", function()
+		for k, ply in pairs( player.GetAll() ) do
+			local _weapon = ply:GetActiveWeapon()
+			if _weapon != NULL then
+				if _weapon:IsScripted() then
+					if ( ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and !ply:SetNWBool( "weaponlowered", true ) then
+						lowering_weapon( ply )
+					end
+				end
+			end
+		end
+	end )
+
+	net.Receive( "yrp_weaponlowering", function( len, ply )
+	  lowering_weapon( ply )
+	end)
+end
+
+if SERVER then
 	util.AddNetworkString( "getServerVersion" )
 	net.Receive( "getServerVersion", function( len, ply )
 		net.Start( "getServerVersion" )
@@ -51,7 +131,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.14" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.15" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

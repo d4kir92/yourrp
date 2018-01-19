@@ -105,38 +105,46 @@ function searchForDoors()
 end
 
 function loadDoors()
-  printGM( "note", "loadDoors start!")
+  printGM( "db", "Loading map doors!" )
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   local _allFuncDoors = ents.FindByClass( "func_door" )
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   local _tmpDoors = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
-  local _count = 0
-  if worked( _tmpDoors, "_tmpDoors empty" ) then
-    for k, v in pairs( _allPropDoors ) do
-      if worked( _tmpDoors[k], "loadDoors 2" ) then
-        v:SetNWInt( "buildingID", tonumber( _tmpDoors[k].buildingID ) )
-        v:SetNWInt( "uniqueID", k )
-      else
-        printGM( "note", "more doors, then in list!" )
+  local _count = 1
+
+  if worked( _tmpDoors, "No Map Doors found" ) then
+    --for k, v in pairs( _tmpDoors ) do
+      for l, door in pairs( _allPropDoors ) do
+        if worked( _tmpDoors[_count], "loadDoors 2" ) then
+          door:SetNWInt( "buildingID", tonumber( _tmpDoors[_count].buildingID ) )
+          door:SetNWInt( "uniqueID", _count )
+        else
+          printGM( "note", "more doors, then in list!" )
+        end
+        _count = _count + 1
       end
-      _count = k
-    end
-    for k, v in pairs( _allFuncDoors ) do
-      if _tmpDoors[k+_count] != nil then
-        v:SetNWInt( "buildingID", tonumber( _tmpDoors[k+_count].buildingID ) )
-        v:SetNWInt( "uniqueID", k+_count )
-      else
-        printGM( "note", "more doors, then in list!" )
+
+      for l, door in pairs( _allFuncDoors ) do
+        if _tmpDoors[_count] != nil then
+          door:SetNWInt( "buildingID", tonumber( _tmpDoors[_count].buildingID ) )
+          door:SetNWInt( "uniqueID", _count )
+        else
+          printGM( "note", "more doors, then in list!" )
+        end
+        _count = _count + 1
       end
-    end
-    for k, v in pairs( _allFuncRDoors ) do
-      if _tmpDoors[k+_count] != nil then
-        v:SetNWInt( "buildingID", tonumber( _tmpDoors[k+_count].buildingID ) )
-        v:SetNWInt( "uniqueID", k+_count )
-      else
-        printGM( "note", "more doors, then in list!" )
+
+      for l, door in pairs( _allFuncRDoors ) do
+        if _tmpDoors[_count] != nil then
+          door:SetNWInt( "buildingID", tonumber( _tmpDoors[_count].buildingID ) )
+          door:SetNWInt( "uniqueID", _count )
+
+        else
+          printGM( "note", "more doors, then in list!" )
+        end
+        _count = _count + 1
       end
-    end
+    --end
   end
 
   local _tmpBuildings = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
@@ -168,23 +176,23 @@ function loadDoors()
     end
   end
 
-  printGM( "note", "loadDoors complete!")
+  printGM( "db", "Map doors loaded!" )
 end
 
 function check_map_doors()
-  printGM( "db", "check_map_doors()" )
+  printGM( "db", "Looking for doors" )
   local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   local _tmpTable2 = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
   local amountDoors = 0
   if _tmpTable == nil or _tmpTable2 == nil then
     amountDoors = searchForDoors()
   else
-    printGM( "db", "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors: found Doors" )
+    printGM( "db", "Found Doors!" )
     local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
     local _allFuncDoors = ents.FindByClass( "func_door" )
     local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
     if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors + #_allFuncRDoors ) then
-      printGM( "db", "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors: new doors found!" )
+      printGM( "db", "New doors found!" )
       amountDoors = searchForDoors()
     end
   end
@@ -511,10 +519,10 @@ net.Receive( "getBuildings", function( len, ply )
 end)
 
 net.Receive( "getBuildingInfo", function( len, ply )
-  local _tmpDoorID = net.ReadInt( 16 )
-  local _tmpBuildingID = net.ReadInt( 16 )
-  if _tmpBuildingID != nil then
+  local _tmpDoor = net.ReadEntity()
+  local _tmpBuildingID = _tmpDoor:GetNWInt( "buildingID" )
 
+  if _tmpBuildingID != nil then
     local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
     local owner = ""
@@ -535,13 +543,11 @@ net.Receive( "getBuildingInfo", function( len, ply )
         end
       end
 
-      PrintTable( _tmpTable )
-
       if _tmpTable != nil then
         if allowedToUseDoor( _tmpBuildingID, ply ) then
           net.Start( "getBuildingInfo" )
             net.WriteBool( true )
-            net.WriteInt( _tmpDoorID, 16 )
+            net.WriteEntity( _tmpDoor )
             net.WriteInt( _tmpBuildingID, 16 )
             net.WriteTable( _tmpTable )
             net.WriteString( owner )
@@ -549,9 +555,12 @@ net.Receive( "getBuildingInfo", function( len, ply )
         end
       end
     else
+      printGM( "note", "getBuildingInfo -> _tmpTable == NIL" )
       net.Start( "getBuildingInfo" )
         net.WriteBool( false )
       net.Send( ply )
     end
+  else
+    printGM( "note", "getBuildingInfo -> BuildingID == NIL" )
   end
 end)

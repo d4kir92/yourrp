@@ -3,7 +3,7 @@
 net.Receive( "getMoneyTab", function()
   local _tmpTable = net.ReadTable()
 
-  local _moneyPre = createVGUI( "DTextEntry", settingsWindow.site, 100, 50, 10, 50 )
+  local _moneyPre = createVGUI( "DTextEntry", settingsWindow.window.site, 100, 50, 10, 50 )
   function _moneyPre:OnChange()
     net.Start( "updateMoney" )
       net.WriteString( "moneypre" )
@@ -11,7 +11,7 @@ net.Receive( "getMoneyTab", function()
     net.SendToServer()
   end
 
-  local _moneyPost = createVGUI( "DTextEntry", settingsWindow.site, 100, 50, 900, 50 )
+  local _moneyPost = createVGUI( "DTextEntry", settingsWindow.window.site, 100, 50, 900, 50 )
   function _moneyPost:OnChange()
     net.Start( "updateMoney" )
       net.WriteString( "moneypost" )
@@ -19,7 +19,7 @@ net.Receive( "getMoneyTab", function()
     net.SendToServer()
   end
 
-  local _moneyStart = createVGUI( "DNumberWang", settingsWindow.site, 100, 50, 10, 350 )
+  local _moneyStart = createVGUI( "DNumberWang", settingsWindow.window.site, 100, 50, 10, 350 )
   _moneyStart:SetMax( 999999999999 )
   _moneyStart:SetMin( -9999 )
   function _moneyStart:OnChange()
@@ -39,7 +39,7 @@ net.Receive( "getMoneyTab", function()
     end
   end
 
-  function settingsWindow.site:Paint( pw, ph )
+  function settingsWindow.window.site:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
 
     draw.SimpleTextOutlined( lang_string( "moneypre" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
@@ -55,10 +55,10 @@ end)
 hook.Add( "open_server_money", "open_server_money", function()
   local ply = LocalPlayer()
 
-  local w = settingsWindow.sitepanel:GetWide()
-  local h = settingsWindow.sitepanel:GetTall()
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
 
-  settingsWindow.site = createD( "DPanel", settingsWindow.sitepanel, w, h, 0, 0 )
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
   net.Start( "getMoneyTab" )
   net.SendToServer()
