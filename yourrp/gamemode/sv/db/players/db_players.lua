@@ -63,7 +63,6 @@ function save_clients( string )
 end
 
 function set_role( ply, rid )
-  --print(ply:CharID())
   if ply:HasCharacterSelected() then
     local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
     local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )
@@ -268,16 +267,46 @@ net.Receive( "getCharakterList", function( len, ply )
   end
 end)
 
+util.AddNetworkString( "give_getGroTab" )
+
+net.Receive( "give_getGroTab", function( len, ply )
+  local _tmpGroupList = db_select( "yrp_groups", "*", nil )
+  if _tmpGroupList != nil then
+    net.Start( "give_getGroTab" )
+      net.WriteTable( _tmpGroupList )
+    net.Send( ply )
+  else
+    printGM( "note", "give_getGroTab: _tmpGroupList failed!" )
+  end
+end)
+
+util.AddNetworkString( "give_getRolTab" )
+
+net.Receive( "give_getRolTab", function( len, ply )
+  local _groupID = net.ReadString()
+  local _tmpRolTab = db_select( "yrp_roles", "*", "groupID = " .. tonumber( _groupID ) )
+  if _tmpRolTab != nil then
+    net.Start( "give_getRolTab" )
+      net.WriteTable( _tmpRolTab )
+    net.Send( ply )
+  else
+    printGM( "note", "give_getRolTab: _tmpRolTab failed!" )
+  end
+end)
+
 net.Receive( "getPlyList", function( len, ply )
   local _tmpChaList = db_select( "yrp_characters", "*", nil )
   local _tmpRoleList = db_select( "yrp_roles", "*", nil )
   local _tmpGroupList = db_select( "yrp_groups", "*", nil )
   if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
+
     net.Start( "getPlyList" )
       net.WriteTable( _tmpChaList )
-      net.WriteTable( _tmpRoleList )
       net.WriteTable( _tmpGroupList )
+      net.WriteTable( _tmpRoleList )
     net.Send( ply )
+  else
+    printGM( "note", "getPlyList: _tmpChaList and _tmpRoleList and _tmpGroupList failed!" )
   end
 end)
 
@@ -286,9 +315,11 @@ util.AddNetworkString( "giveRole" )
 net.Receive( "giveRole", function( len, ply )
   local _tmpSteamID = net.ReadString()
   local uniqueIDRole = net.ReadInt( 16 )
-  RemRolVals( ply )
-  set_role( ply, uniqueIDRole )
-  set_role_values( ply )
+  for k, _ply in pairs( player.GetAll() ) do
+    RemRolVals( _ply )
+    set_role( _ply, uniqueIDRole )
+    set_role_values( _ply )
+  end
 end)
 
 function isWhitelisted( ply, id )

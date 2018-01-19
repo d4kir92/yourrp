@@ -45,7 +45,7 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.DrawCrosshair = true
 
-SWEP.HoldType = "passive"
+SWEP.HoldType = "normal"
 function SWEP:Initialize()
 	self:SetWeaponHoldType( self.HoldType )
 end

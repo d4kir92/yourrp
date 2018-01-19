@@ -28,7 +28,7 @@ function teleportToSpawnpoint( ply )
   local groTab = ply:GetGroTab()
 
   local chaTab = ply:GetChaTab()
-  if chaTab != nil then
+  if chaTab != nil and groTab != nil and rolTab != nil then
     if chaTab.map == db_sql_str2( string.lower( game.GetMap() ) ) and chaTab.position != "NULL" and chaTab.angle != "NULL" then
       local _tmpRoleSpawnpoints = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "roleID = " .. rolTab.uniqueID )
       local _tmpGroupSpawnpoints = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. groTab.uniqueID )
@@ -61,7 +61,7 @@ function teleportToSpawnpoint( ply )
       end
     end
   else
-    printGM( "note", "map: no char" )
+    printGM( "note", "map: no char or no gro or no rol" )
   end
 end
 

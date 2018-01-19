@@ -115,6 +115,7 @@ function useFunction( string )
 		elseif string == "F11Toggle" then
 			done_tutorial( "tut_tmo" )
 			gui.EnableScreenClicker( !vgui.CursorVisible() )
+			closeMenu()
 
 		elseif string == "vyes" and !mouseVisible() then
 			net.Start( "voteYes" )

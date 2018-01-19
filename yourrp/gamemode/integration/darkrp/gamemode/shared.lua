@@ -77,8 +77,7 @@ end
 function DarkRP.createEntity( name, tbl )
   --Description: Create an entity for DarkRP.
   printGM( "darkrp", "createEntity( " .. name .. ", tbl )" )
-  print(name)
-  print(tbl)
+  printTab( tbl, name )
   --printTab( tbl, "DarkRP.createEntity" )
 end
 AddEntity = DarkRP.createEntity

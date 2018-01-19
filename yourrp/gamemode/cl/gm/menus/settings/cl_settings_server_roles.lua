@@ -318,7 +318,7 @@ function addDBPlayermodel( parent, id, uniqueID, size )
       yrp_roles_dbTable[id].playermodels = _globalWorking
       pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
       changepm = 1
-      if modelpanel != nil then
+      if modelpanel != nil and modelpanel != NULL then
         local _model = pms[changepm] or ""
         modelpanel:SetModel( _model )
       end
@@ -1029,7 +1029,7 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   _r_l.w = ctr( _w )
   _r_l.h = ScrH() - ctr( _roles_height + 200+10 )
   printTab( _r_l, "_r_l" )
-  
+
   rolesList = createD( "DScrollPanel", settingsWindow.window.site, _r_l.w, _r_l.h, ctr( 10 ), ctr( _roles_height + 60 + 40 ) )
   function rolesList:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
