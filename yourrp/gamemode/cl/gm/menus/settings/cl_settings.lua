@@ -50,7 +50,7 @@ function toggleSettings()
 end
 
 function closeSettings()
-  if settingsWindow.window != NULL then
+  if settingsWindow.window != NULL and settingsWindow.window != nil then
     closeMenu()
     settingsWindow.window:Remove()
     settingsWindow.window = nil

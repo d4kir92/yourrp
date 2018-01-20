@@ -3,43 +3,51 @@
 --cl_hud_map.lua
 
 local map = {}
+
+local _map = _map or {}
+_map.open = false
+
 function getCoords()
   net.Start( "askCoords" )
   net.SendToServer()
 end
 
 function toggleMap()
-  if isNoMenuOpen() then
+  if isNoMenuOpen() and !_map.open then
+    _map.open = true
     openMenu()
     net.Start( "askCoords")
       net.WriteEntity( LocalPlayer() )
     net.SendToServer()
   else
+    _map.open = false
     closeMap()
   end
 end
 
 function closeMap()
-  if mapWindow != nil then
+  if _map.window != nil and _map.window != NULL then
     closeMenu()
-    mapWindow:Remove()
+    _map.window:Remove()
+    _map.window = nil
   end
 end
 
 local CamDataMap = {}
 function openMap()
   map.open = true
-  mapWindow = vgui.Create( "DFrame" )
-  mapWindow:SetTitle("")
-  mapWindow:SetPos( 0, 0 )
-  mapWindow:SetSize( ScrW(), ScrH() )
-  mapWindow:ShowCloseButton( false )
-  mapWindow:SetDraggable( false )
-  function mapWindow:Paint( pw, ph )
+
+  _map.window = vgui.Create( "DFrame" )
+  _map.window:SetTitle("")
+  _map.window:SetPos( 0, 0 )
+  _map.window:SetSize( ScrW(), ScrH() )
+  _map.window:ShowCloseButton( false )
+  _map.window:SetDraggable( false )
+  function _map.window:Paint( pw, ph )
     if map != nil then
       if map.facX != nil and map.facY != nil then
         local ply = LocalPlayer()
-        draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )           --mapWindow of Map
+        draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )           --_map.window of Map
 
         local win = {}
         win.w, win.h = lowerToScreen( map.sizeX, map.sizeY )
@@ -152,14 +160,16 @@ function openMap()
       end
     end
   end
-  function mapWindow:OnClose()
+  function _map.window:OnClose()
     map.open = false
     closeMenu()
   end
-  function mapWindow:OnRemove()
+  function _map.window:OnRemove()
     map.open = false
     closeMenu()
   end
+
+  --_map.window:MakePopup()
 end
 
 net.Receive( "sendCoords", function()

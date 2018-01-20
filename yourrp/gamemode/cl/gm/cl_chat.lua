@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-yrpChat = {}
+yrpChat = yrpChat or {}
 if yrpChat.window == nil then
   yrpChat.window = createVGUI( "DFrame", nil, 100, 100, 100, 100 )
   yrpChat.window:SetTitle( "" )
@@ -102,7 +102,7 @@ yrpChat.writeField.OnKeyCodeTyped = function( self, code )
     gui.HideGameUI()
   elseif code == KEY_ENTER then
     if string.Trim( self:GetText() ) != "" then
-      LocalPlayer():ConCommand( "say "..self:GetText() )
+      LocalPlayer():ConCommand( "say \""..self:GetText() .. "\"" )
     end
     yrpChat.closeChatbox()
   end
@@ -156,18 +156,70 @@ hook.Add( "HUDShouldDraw", "noMoreDefault", function( name )
   end
 end )
 
-local oldAddText = chat.AddText
+local oldAddText = oldAddText or chat.AddText
 function chat.AddText( ... )
-local args = { ... }
+  local args = { ... }
 
-yrpChat.richText:AppendText( "\n" )
+  yrpChat.richText:AppendText( "\n" )
   for _, obj in pairs( args ) do
     if type( obj ) == "table" then
       if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
         yrpChat.richText:InsertColorChange( obj.r, obj.g, obj.b, 255 )
       end
     elseif type( obj ) == "string" then
-      yrpChat.richText:AppendText( obj )
+      local _text = string.Explode( " ", obj )
+      for k, str in pairs( _text ) do
+        if k > 1 then
+          yrpChat.richText:AppendText( " " )
+        end
+
+        --[[ find link start ]]--
+        local _l = {}
+        _l.l_start = string.find( str, "https://", 1 )
+        if _l.l_start != nil then
+          _l.l_secure = true
+        else
+          _l.l_secure = false
+          _l.l_start = string.find( str, "http://", 1 )
+          if _l.l_start == nil then
+            _l.l_www = true
+            _l.l_start = string.find( str, "www.", 1 )
+          end
+        end
+
+        if _l.l_start != nil then
+          --[[ is link ]]--
+
+          --[[ link end ]]--
+          _l.l_end = #str
+
+          local _link = string.sub( str, _l.l_start, _l.l_end )
+          if _l.l_www then
+            _link = "https://" .. _link
+          end
+          if _link != "" then
+            if _l.secure then
+              yrpChat.richText:InsertColorChange( 200, 200, 255, 255 )
+            else
+              yrpChat.richText:InsertColorChange( 255, 100, 100, 255 )
+            end
+            yrpChat.richText:InsertClickableTextStart( _link )	-- Make incoming text fire the "OpenWiki" value when clicked
+            yrpChat.richText:AppendText( _link )
+            yrpChat.richText:InsertClickableTextEnd()	-- End clickable text here
+            yrpChat.richText:InsertColorChange( 255, 255, 255, 255 )
+
+            function yrpChat.richText:ActionSignal( signalName, signalValue )
+            	if ( signalName == "TextClicked" ) then
+            		if ( signalValue == _link ) then
+            			gui.OpenURL( _link )
+            		end
+            	end
+            end
+          end
+        else
+          yrpChat.richText:AppendText( str )
+        end
+      end
     elseif obj:IsPlayer() then
       local col = GAMEMODE:GetTeamColor( obj )
       if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
@@ -197,7 +249,7 @@ net.Receive( "yrp_player_say", function( len )
     _tmp.name = _tmp.steamname
   end
 
-  if _write then
+  if true then
     local _unpack = {}
 
     _tmp._lokal = lang_string( "localchat" )

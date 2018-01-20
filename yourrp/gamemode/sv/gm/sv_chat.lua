@@ -2,17 +2,27 @@
 
 util.AddNetworkString( "yrp_player_say" )
 
+local paket = {}
+paket.lokal = true
+paket.command = "/test"
+paket.text = "TESTTEXT"
+paket.sender = "UNKNOWN"
+paket.usergroup = "USER"
+
 function is_chat_command( string, command )
   if string != nil and command != nil then
     local _size = string.len( string.lower( command ) )
     local _slash = string.sub( string.lower( string ), 1, 1+_size ) == "/" .. string.lower( command )
     local _call = string.sub( string.lower( string ), 1, 1+_size ) == "!" .. string.lower( command )
     if _slash or _call then
+      paket.iscommand = true
       return true
     else
+      paket.iscommand = false
       return false
     end
   end
+  paket.iscommand = false
   return false
 end
 
@@ -201,15 +211,9 @@ net.Receive( "set_chat_mode", function( len, ply )
   ply:SetNWString( "chat_mode", string.lower( _str ) )
 end)
 
-local paket = {}
-paket.lokal = true
-paket.command = "/test"
-paket.text = "TESTTEXT"
-paket.sender = "UNKNOWN"
-paket.usergroup = "USER"
+function unpack_paket( sender, text, iscommand )
 
-function unpack_paket( sender, text )
-  if string.find( text, "/", 1, false ) or string.find( text, "!", 1, false ) then
+  if string.find( text[1], "/", 1, false ) or string.find( text[1], "!", 1, false ) then
     //command
     local _start = 2
     local _end = string.find( text, " ", 1, false )
@@ -252,7 +256,10 @@ function unpack_paket( sender, text )
 end
 
 function GM:PlayerSay( sender, text, teamChat )
+
   unpack_paket( sender, text )
+
+
 
   if paket.command == "ooc" or paket.command == "advert" then
     paket.lokal = false
@@ -306,6 +313,7 @@ function GM:PlayerSay( sender, text, teamChat )
   end
 
   local pk = {}
+  pk.iscommand = paket.iscommand
   pk.command = paket.command
   pk.command_color = paket.command_color
   pk.text = paket.text

@@ -2,7 +2,7 @@
 
 local _menuOpen = false
 function isNoMenuOpen()
-  if canOpenMenu() and !_menuOpen then
+  if canOpenMenu() then -- and !_menuOpen then
     return true
   else
     return false

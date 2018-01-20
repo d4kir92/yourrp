@@ -92,7 +92,7 @@ function useFunction( string )
 			gui.EnableScreenClicker( true )
 
 		//Inventory
-	elseif string == "dropitem" and !mouseVisible() then
+		elseif string == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or lang_string( "weapon" )
@@ -115,7 +115,6 @@ function useFunction( string )
 		elseif string == "F11Toggle" then
 			done_tutorial( "tut_tmo" )
 			gui.EnableScreenClicker( !vgui.CursorVisible() )
-			closeMenu()
 
 		elseif string == "vyes" and !mouseVisible() then
 			net.Start( "voteYes" )
@@ -206,24 +205,41 @@ function get_speak_channel_name( id )
 end
 
 LocalPlayer():SetNWInt( "view_range", 0 )
+LocalPlayer():SetNWInt( "view_range_view", 0 )
+LocalPlayer():SetNWInt( "view_range_aim", 0 )
+
 function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
-		if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
-			done_tutorial( "tut_vo", 5 )
-
-			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 1 )
-
-			if tonumber( ply:GetNWInt( "view_range" ) ) > tonumber( ply:GetNWInt( "view_distance", 0 ) ) then
-				ply:SetNWInt( "view_range", tonumber( ply:GetNWInt( "view_distance", 0 ) ) )
+		if input.IsMouseDown( MOUSE_RIGHT ) then
+			if ply:GetNWInt( "view_range_aim" ) > 0 then
+				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_aim" ) - 4 )
 			end
-		elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
-			done_tutorial( "tut_vi", 5 )
+			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_aim" ) )
+		else
+			if ply:GetNWInt( "view_range" ) < ply:GetNWInt( "view_range_view" ) then
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + 4 )
+			else
 
-			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) - 1 )
+				if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
+					done_tutorial( "tut_vo", 5 )
 
-			if ply:GetNWInt( "view_range" ) < -200 then
-				ply:SetNWInt( "view_range", -200 )
+					ply:SetNWInt( "view_range_view", ply:GetNWInt( "view_range_view" ) + 1 )
+
+					if tonumber( ply:GetNWInt( "view_range_view" ) ) > tonumber( ply:GetNWInt( "view_distance", 0 ) ) then
+						ply:SetNWInt( "view_range_view", tonumber( ply:GetNWInt( "view_distance", 0 ) ) )
+					end
+				elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
+					done_tutorial( "tut_vi", 5 )
+
+					ply:SetNWInt( "view_range_view", ply:GetNWInt( "view_range_view" ) - 1 )
+
+					if ply:GetNWInt( "view_range_view" ) < -200 then
+						ply:SetNWInt( "view_range_view", -200 )
+					end
+				end
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
+				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )
 			end
 		end
 
