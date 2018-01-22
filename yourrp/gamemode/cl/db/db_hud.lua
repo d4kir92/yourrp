@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local _hudVersion = 2
+local _hudVersion = 3
 
 local dbNameHUD = "yrp_cl_hud"
 
@@ -15,7 +15,7 @@ function set_hud_db_val( name, value )
   yrp_cl_db[name] = value
 end
 
-function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it )
+function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it, tr )
   local tmp = {}
   tmp.to = to
   tmp.px = px
@@ -29,6 +29,7 @@ function HUDTab( to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it )
   tmp.sf = sf
   tmp.tt = tt
   tmp.it = it
+  tmp.tr = tr
   return tmp
 end
 
@@ -82,11 +83,14 @@ function checkDBHUDGroup( name )
   checkDBHUD( name .. "tx", 1 )
   checkDBHUD( name .. "ty", 1 )
 
-  --texttoggle
+  --toggletext
   checkDBHUD( name .. "tt", 1 )
 
   --icontoggle
   checkDBHUD( name .. "it", 1 )
+
+  --toggleradial
+  checkDBHUD( name .. "tr", 1 )
 end
 
 function loadDBHUD( name )
@@ -127,11 +131,14 @@ function loadDBHUDGroup( name )
   loadDBHUD( name .. "tx" )
   loadDBHUD( name .. "ty" )
 
-  --texttoggle
+  --toggletext
   loadDBHUD( name .. "tt" )
 
   --icontoggle
   loadDBHUD( name .. "it" )
+
+  --toggleradial
+  loadDBHUD( name .. "tr" )
 end
 
 local defaultFS = 26
@@ -184,7 +191,7 @@ function loadCompleteHUD()
 end
 
 function dbUpdateHUD( _name, _value )
-  if worked( _name, "dbUpdateHUD _name" ) and worked( _value, "dbUpdateHUD _value" ) then
+  if worked( _name, "dbUpdateHUD _name " .. tostring( _name ) ) and worked( _value, "dbUpdateHUD _value " .. tostring( _value ) ) then
     db_update( "yrp_cl_hud", "value = " .. _value, "name = '" .. _name .. "'" )
     loadDBHUD( _name )
   end
@@ -218,7 +225,7 @@ function dbUpdateHUDGroup( name, tab )
 
   dbUpdateHUD( name .. "it", tab.it )
 
-  dbUpdateHUD( name .. "ut", tab.ut )
+  dbUpdateHUD( name .. "tr", tab.tr )
 end
 
 function dbUpdateColor( name, tab )
@@ -230,60 +237,61 @@ function dbUpdateColor( name, tab )
 end
 
 function setDefaultHUD()
-  local hp = HUDTab( 1, 380, -80, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
+  _hudversion	=	_hudVersion
+  _loaded	=	true
+
+  local hp = HUDTab( 1, 20, -80, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "hp", hp )
 
-  local ar = HUDTab( 1, 380, -140, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local ar = HUDTab( 1, 20, -140, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "ar", ar )
 
-  local mh = HUDTab( 1, 380, -320, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local mh = HUDTab( 1, 20, -320, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "mh", mh )
 
-  local mt = HUDTab( 1, 380, -260, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local mt = HUDTab( 1, 20, -380, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "mt", mt )
 
-  local ms = HUDTab( 1, -300, -80, 600, 60, 1, 2, 1, 1, 24, 1, 1 )
+  local ms = HUDTab( 1, -300, -140, 600, 60, 1, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "ms", ms )
 
-  local ma = HUDTab( 1, 380, -200, 440, 60, 0, 2, 1, 1, 24, 1, 1 )
+  local ma = HUDTab( 0, 20, -440, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "ma", ma )
 
-  local ca = HUDTab( 1, -300, -160, 600, 60, 1, 2, 1, 1, 24, 1, 1 )
+  local ca = HUDTab( 1, -300, -220, 600, 60, 1, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "ca", ca )
 
-  local mo = HUDTab( 1, 380, -380, 440, 60, 0, 2, 1, 1, 18, 1, 1 )
+  local mo = HUDTab( 1, 20, -260, 440, 60, 0, 2, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "mo", mo )
 
-  local xp = HUDTab( 1, 20, -440, 800, 60, 0, 2, 1, 1, 18, 1, 1 )
+  local xp = HUDTab( 1, 20, -200, 440, 60, 0, 2, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "xp", xp )
 
-
-  local mm = HUDTab( 1, 20, -380, 360, 360, 0, 2, 1, 1, 18, 1, 1 )
+  local mm = HUDTab( 0, 20, 20, 600, 600, 0, 0, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "mm", mm )
 
-  local wn = HUDTab( 1, -460, -200, 440, 60, 2, 2, 1, 1, 24, 1, 1 )
+  local wn = HUDTab( 1, 480, -80, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "wn", wn )
 
-  local wp = HUDTab( 1, -460, -80, 440, 60, 2, 2, 1, 1, 24, 1, 1 )
+  local wp = HUDTab( 1, 480, -140, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "wp", wp )
 
-  local ws = HUDTab( 1, -460, -140, 440, 60, 2, 2, 1, 1, 24, 1, 1 )
+  local ws = HUDTab( 1, 480, -200, 440, 60, 0, 2, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "ws", ws )
 
-  local tt = HUDTab( 1, 20, 20, 900, 600, 0, 0, 1, 1, 24, 1, 1 )
+  local tt = HUDTab( 1, 20, 20, 900, 600, 0, 0, 1, 1, 24, 1, 1, 1 )
   dbUpdateHUDGroup( "tt", tt )
 
-  local st = HUDTab( 1, -380, 40, 760, 60, 1, 0, 1, 1, 18, 1, 1 )
+  local st = HUDTab( 1, -380, 40, 760, 60, 1, 0, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "st", st )
 
-  local vt = HUDTab( 1, -380, 120, 760, 300, 1, 0, 1, 1, 18, 1, 1 )
+  local vt = HUDTab( 1, -380, 120, 760, 300, 1, 0, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "vt", vt )
 
-  local cb = HUDTab( 1, 20, -960, 800, 500, 0, 2, 1, 1, 18, 1, 1 )
+  local cb = HUDTab( 1, 20, -980, 900, 520, 0, 2, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "cb", cb )
 
-  --                to, px, py, sw, sh, aw, ah, tx, ty, sf, tt, it
-  local ut = HUDTab( 1, -400, 200, 400, 240, 2, 0, 1, 1, 18, 1, 1 )
+  local ut = HUDTab( 1, -400, 140, 400, 240, 2, 0, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "ut", ut )
 
   --crosshair
@@ -407,12 +415,7 @@ function loadDatabaseHUD()
 end
 
 function is_hud_db_loaded()
-  if yrp_cl_db != nil then
-    if yrp_cl_db["_loaded"] != nil then
-      return yrp_cl_db["_loaded"] or false
-    end
-  end
-  return false
+  return yrp_cl_db["_loaded"]
 end
 
 function initDatabase()

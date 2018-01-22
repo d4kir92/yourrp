@@ -54,18 +54,6 @@ include( "hud/cl_hud_crosshair.lua" )
 
 Material("voice/icntlk_pl"):SetFloat("$alpha", 0)
 
-local _showVoice = false
-function GM:PlayerStartVoice( ply )
-  if ply == LocalPlayer() then
-    _showVoice = true
-  end
-end
-function GM:PlayerEndVoice( ply )
-  if ply == LocalPlayer() then
-    _showVoice = false
-  end
-end
-
 --##############################################################################
 function hudVersion()
 	if !version_tested() then
@@ -112,15 +100,37 @@ function hudUpTime()
 	drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "ut" .. "aw" ) ) + HudV( "ut" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "ut" .. "ah" ) ) + HudV( "ut" .. "py" ), HudV( "ut" .. "sw" ), HudV( "ut" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
 end
 
---##############################################################################
-hook.Add( "HUDPaint", "CustomHud", function( )
-	local ply = LocalPlayer()
-	if !ply:InVehicle() then
-		HudPlayer()
-		HudCrosshair()
-		HudView()
-	end
+function GM:PlayerStartVoice( ply )
 
+	if ply == LocalPlayer() then
+    _showVoice = true
+		net.Start( "yrp_voice_start" )
+		net.SendToServer()
+  end
+	if ply:SteamID() == LocalPlayer():GetNWString( "voice_global_steamid" ) and ply:GetNWInt( "speak_channel", 0 ) == 2 then
+		_showGlobalVoice = true
+	end
+end
+
+function GM:PlayerEndVoice( ply )
+	if ply == LocalPlayer() then
+    _showVoice = false
+		net.Start( "yrp_voice_end" )
+		net.SendToServer()
+  end
+	if ply:SteamID() == LocalPlayer():GetNWString( "voice_global_steamid" ) then
+		_showGlobalVoice = false
+	end
+end
+
+function show_global_voice_info( ply )
+	if _showGlobalVoice then
+		local _role_name = ply:GetNWString( "voice_global_rolename", "" )
+		draw.SimpleTextOutlined( lang_string( "makesanannoucmentpre" ) .. " " .. _role_name .. " " .. lang_string( "makesanannoucmentpos" ) .. "!", "HudBars", ScrW2(), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+	end
+end
+
+function show_voice_info( ply )
 	--Voice
 	if _showVoice then
 		local _voice_text = lang_string( "youarespeaking" ) .. " ("
@@ -135,9 +145,22 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 
 		draw.SimpleTextOutlined( _voice_text, "HudBars", ScrW2(), ctr( 500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
+end
+
+--##############################################################################
+hook.Add( "HUDPaint", "CustomHud", function( )
+	local ply = LocalPlayer()
+	if !ply:InVehicle() then
+		HudPlayer()
+		HudCrosshair()
+		HudView()
+	end
+
+	show_voice_info( ply )
+	show_global_voice_info( ply )
 
 	if tobool( get_tutorial( "tut_hudhelp" ) ) then
-		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 300 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 	end
 
 	--[[ YourRP Base ]]--

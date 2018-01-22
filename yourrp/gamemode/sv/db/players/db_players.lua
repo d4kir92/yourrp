@@ -316,9 +316,13 @@ net.Receive( "giveRole", function( len, ply )
   local _tmpSteamID = net.ReadString()
   local uniqueIDRole = net.ReadInt( 16 )
   for k, _ply in pairs( player.GetAll() ) do
-    RemRolVals( _ply )
-    set_role( _ply, uniqueIDRole )
-    set_role_values( _ply )
+    if tostring( _ply:SteamID() ) == tostring( _tmpSteamID ) then
+      RemRolVals( _ply )
+      set_role( _ply, uniqueIDRole )
+      set_role_values( _ply )
+      printGM( "note", tostring( _ply:Nick() ) .. " is now the role: " .. tostring( uniqueIDRole ) )
+      return true
+    end
   end
 end)
 

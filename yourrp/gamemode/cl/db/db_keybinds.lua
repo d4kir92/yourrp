@@ -1,6 +1,7 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local yrp_keybinds = {}
+yrp_keybinds.version = 1
 
 local _db_name = "yrp_keybinds"
 
@@ -17,6 +18,21 @@ end
 function check_yrp_keybinds()
   init_database( _db_name )
 
+  local _check_version = db_select( _db_name, "version", "uniqueID = 1" )
+  if _check_version != false and _check_version != nil then
+    printGM( "note", "Checking keybinds version" )
+    _check_version = _check_version[1]
+    if tonumber( _check_version.version ) != tonumber( yrp_keybinds.version ) then
+
+      printGM( "note", "Keybinds OUTDATED!" )
+      db_drop_table( _db_name )
+      init_database( _db_name )
+    else
+      printGM( "note", "Keybinds up to date" )
+    end
+  end
+
+  sql_add_column( _db_name, "version", "INT DEFAULT " .. yrp_keybinds.version )
   sql_add_column( _db_name, "menu_character_selection", "INT DEFAULT " .. KEY_F2 )
   sql_add_column( _db_name, "menu_role", "INT DEFAULT " .. KEY_F4 )
   sql_add_column( _db_name, "menu_buy", "INT DEFAULT " .. KEY_F11 )

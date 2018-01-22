@@ -12,6 +12,8 @@ util.AddNetworkString( "db_update_clearinventoryondead" )
 util.AddNetworkString( "db_update_graffiti" )
 util.AddNetworkString( "dbUpdateNWBool2" )
 util.AddNetworkString( "db_update_view_distance" )
+util.AddNetworkString( "db_update_realistic_damage" )
+util.AddNetworkString( "db_update_realistic_falldamage" )
 
 local _db_name = "yrp_general"
 
@@ -30,6 +32,8 @@ sql_add_column( _db_name, "toggle_inventory", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_clearinventoryondead", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_graffiti", "INT DEFAULT 0" )
 sql_add_column( _db_name, "view_distance", "INT DEFAULT 200" )
+sql_add_column( _db_name, "toggle_realistic_damage", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_realistic_falldamage", "INT DEFAULT 1" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
@@ -63,6 +67,37 @@ function get_advert_name()
   end
 end
 get_advert_name()
+
+local yrp_general = {}
+
+local _init_general = db_select( _db_name, "*", nil )
+if _init_general != false and _init_general != nil then
+  yrp_general = _init_general[1]
+end
+
+function IsRealisticFallDamage()
+  return tobool( yrp_general.toggle_realistic_falldamage )
+end
+
+function IsRealisticDamage()
+  return tobool( yrp_general.toggle_realistic_damage )
+end
+
+net.Receive( "db_update_realistic_damage", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    db_update( "yrp_general", "toggle_realistic_damage = " .. _nw, "uniqueID = 1" )
+    yrp_general.toggle_realistic_damage = _nw
+  end
+end)
+
+net.Receive( "db_update_realistic_falldamage", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    db_update( "yrp_general", "toggle_realistic_falldamage = " .. _nw, "uniqueID = 1" )
+    yrp_general.toggle_realistic_falldamage = _nw
+  end
+end)
 
 net.Receive( "db_update_graffiti", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )

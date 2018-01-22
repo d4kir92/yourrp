@@ -14,7 +14,7 @@ function retry_load_database()
   if timer.Exists( "retryLoadDatabase" ) then
     timer.Remove( "retryLoadDatabase" )
   end
-  
+
   timer.Create( "retryLoadDatabase", 10, 1, function()
     db_init_database()
     timer.Remove( "retryLoadDatabase" )
@@ -43,6 +43,7 @@ function reset_database()
   table.insert( _dbs, "yrp_vehicles" )
   table.insert( _dbs, "yrp_inventory" )
   table.insert( _dbs, "yrp_item" )
+  table.insert( _dbs, "yrp_realistic" )
 
   for k, v in pairs( _dbs ) do
     db_drop_table( v )
@@ -103,6 +104,8 @@ function db_init_database()
   init_database( "yrp_item" )
   init_database( "yrp_inventory" )
 
+  init_database( "yrp_realistic" )
+
   yrp_db.loaded = true
 
   printGM( "db", "DONE Loading DATABASES" )
@@ -129,3 +132,5 @@ include( "jail/db_jail.lua" )
 include( "items/db_item.lua" )
 include( "items/db_give.lua" )
 include( "items/db_inventory.lua" )
+
+include( "realistic/db_realistic.lua" )

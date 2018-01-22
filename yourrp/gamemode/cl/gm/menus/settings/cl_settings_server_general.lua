@@ -22,10 +22,10 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 615 )
   local sv_generalClearInventoryOnDead = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 675 )
   local sv_generalGraffiti = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 735 )
-
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.window.site )
-
   local sv_generalViewDistance = vgui.Create( "DNumberWang", settingsWindow.window.site )
+  local sv_generalRealisticDamage = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 855 )
+  local sv_generalRealisticFalldamage = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 915 )
 
   local oldGamemodename = ""
   function settingsWindow.window.site:Paint()
@@ -52,6 +52,10 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     draw.SimpleTextOutlined( lang_string( "graffiti" ) .. ":", "sef", ctr( _center - 10 ), ctr( 750 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "thirdpersonviewdistance" ) .. ":", "sef", ctr( _center - 10 ), ctr( 810 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+
+    draw.SimpleTextOutlined( lang_string( "realisticdamage" ) .. ":", "sef", ctr( _center - 10 ), ctr( 870 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "realisticfalldamage" ) .. ":", "sef", ctr( _center - 10 ), ctr( 930 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -63,6 +67,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   net.Receive( "dbGetGeneral", function()
     local _yrp_general = net.ReadTable()
+
     GAMEMODE.Name = db_out_str( _yrp_general.name_gamemode ) or "FAILED"
     oldGamemodename = GAMEMODE.Name
     sv_generalName:SetText( GAMEMODE.Name )
@@ -78,6 +83,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalGraffiti:SetValue( tonumber( _yrp_general.toggle_graffiti ) )
     sv_generalRestartTime:SetValue( tonumber( _yrp_general.time_restart ) )
     sv_generalViewDistance:SetValue( tonumber( _yrp_general.view_distance ) )
+    sv_generalRealisticDamage:SetValue( tonumber( _yrp_general.toggle_realistic_damage ) )
+    sv_generalRealisticFalldamage:SetValue( tonumber( _yrp_general.toggle_realistic_falldamage ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -287,6 +294,26 @@ hook.Add( "open_server_general", "open_server_general", function()
     end
     net.Start( "db_update_view_distance" )
       net.WriteInt( tostring( math.Round( value ) ), 16 )
+    net.SendToServer()
+  end
+
+  function sv_generalRealisticDamage:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_realistic_damage" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalRealisticFalldamage:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_realistic_falldamage" )
+      net.WriteInt( _tonumber, 4 )
     net.SendToServer()
   end
 end)

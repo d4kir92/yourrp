@@ -130,7 +130,7 @@ function openMap()
 
         draw.SimpleTextOutlined( "[M] - " .. lang_string( "map" ) .. ": " .. _mapName, "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-        if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+        if ( LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() ) and false then
           for k, plys in pairs( player.GetAll() ) do
             if plys != LocalPlayer() then
               --Other players

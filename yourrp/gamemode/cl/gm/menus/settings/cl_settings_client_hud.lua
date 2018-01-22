@@ -126,11 +126,22 @@ function changeHudElement( parent, tmp, textPre )
 
   function _tmpSettings:DoClick()
     local _tsx, _tsy = frame:GetPos()
-    local _settingsFrame = createD( "DFrame", frame, ctr( 800 ), ctr( 200 ), _tsx, _tsy )
+    local _settingsFrame = createD( "DFrame", frame, ctr( 800 ), ctr( 800 ), _tsx, _tsy )
+    _settingsFrame:SetTitle( "" )
     function _settingsFrame:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+
+      draw.SimpleText( textPre, "DermaDefault", ctr( 10 ),  ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+      draw.SimpleText( lang_string( "isvisible" ), "DermaDefault", ctr( 70 ),  ctr( 85 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang_string( "anchor" ), "DermaDefault", ctr( 70 ),  ctr( 145 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang_string( "textsize" ), "DermaDefault", ctr( 110 ),  ctr( 205 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang_string( "textposition" ), "DermaDefault", ctr( 70 ),  ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang_string( "isiconvisible" ), "DermaDefault", ctr( 70 ),  ctr( 325 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang_string( "istextvisible" ), "DermaDefault", ctr( 70 ),  ctr( 385 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+      draw.SimpleText( lang_string( "isrounded" ), "DermaDefault", ctr( 70 ),  ctr( 445 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
-    local tmpToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), 0, 0 )
+    local tmpToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 60 ) )
     local tmpToggleChecked = -1
     if tonumber( HudV(tmp .. "to") ) == 0 then
       tmpToggleChecked = false
@@ -148,7 +159,7 @@ function changeHudElement( parent, tmp, textPre )
     	end
     end
 
-    local _anchor = createD( "DButton", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 60 ), ctr( 0 ) )
+    local _anchor = createD( "DButton", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 120 ) )
     _anchor:SetText( "" )
     function _anchor:DoClick()
       local mx, my = gui.MousePos()
@@ -207,7 +218,7 @@ function changeHudElement( parent, tmp, textPre )
       draw.RoundedBox( 0, ctr( 4 ) + HudV(tmp .. "aw") * ctr( 16 ), ctr( 4 ), ctr( 8 ), ph - ctr( 9 ), Color( 0, 0, 0, 255 ) )
     end
 
-    local _fontsize = createD( "DComboBox", _settingsFrame, ctr( 80 ), ctr( 50 ), ctr( 120 ), ctr( 0 ) )
+    local _fontsize = createD( "DComboBox", _settingsFrame, ctr( 80 ), ctr( 50 ), ctr( 10 ), ctr( 180 ) )
     local fontSizes = GetFontSizes()
     for k, v in pairs( fontSizes ) do
       local _cur = false
@@ -226,7 +237,7 @@ function changeHudElement( parent, tmp, textPre )
       changeFontSizeOf( tmp.."sf", val )
     end
 
-    local _textalign = createD( "DButton", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 210 ), ctr( 0 ) )
+    local _textalign = createD( "DButton", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 240 ) )
     _textalign:SetText( "" )
     function _textalign:DoClick()
       local mx, my = gui.MousePos()
@@ -269,7 +280,7 @@ function changeHudElement( parent, tmp, textPre )
     end
 
 
-    local tmpTextToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 270 ), ctr( 0 ) )
+    local tmpTextToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 300 ) )
     local tmpTextToggleChecked = -1
     if tonumber( HudV(tmp .. "tt") ) == 0 then
       tmpTextToggleChecked = false
@@ -287,7 +298,7 @@ function changeHudElement( parent, tmp, textPre )
     	end
     end
 
-    local tmpIconToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 330 ), ctr( 0 ) )
+    local tmpIconToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 360 ) )
     local tmpIconToggleChecked = -1
     if tonumber( HudV(tmp .. "it") ) == 0 then
       tmpIconToggleChecked = false
@@ -302,6 +313,24 @@ function changeHudElement( parent, tmp, textPre )
     	else
         set_hud_db_val( tmp .. "it", 0 )
     		dbUpdateHUD( tmp .. "it", HudV(tmp .. "it") )
+    	end
+    end
+
+    local tmpRoundedToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 420 ) )
+    local tmpRoundedToggleChecked = -1
+    if tonumber( HudV(tmp .. "it") ) == 0 then
+      tmpRoundedToggleChecked = false
+    elseif tonumber( HudV(tmp .. "it") ) == 1 then
+      tmpRoundedToggleChecked = true
+    end
+    tmpRoundedToggle:SetChecked( tmpRoundedToggleChecked )
+    function tmpRoundedToggle:OnChange( bVal )
+    	if ( bVal ) then
+        set_hud_db_val( tmp .. "tr", 1 )
+    		dbUpdateHUD( tmp .. "tr", HudV(tmp .. "tr") )
+    	else
+        set_hud_db_val( tmp .. "tr", 0 )
+    		dbUpdateHUD( tmp .. "tr", HudV(tmp .. "tr") )
     	end
     end
 
@@ -406,7 +435,6 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     changeHudElement( changeHudWindow, "wn", lang_string( "wname" ) )
     changeHudElement( changeHudWindow, "wp", lang_string( "wprimary" ) )
     changeHudElement( changeHudWindow, "ws", lang_string( "wsecondary" ) )
-    changeHudElement( changeHudWindow, "tt", lang_string( "tooltip" ) )
     changeHudElement( changeHudWindow, "st", lang_string( "statusbar" ) )
     local votes = changeHudElement( changeHudWindow, "vt", lang_string( "votes" ) )
     votes:SetSizable( false )

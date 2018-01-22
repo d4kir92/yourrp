@@ -89,6 +89,7 @@ function openSettings()
     local _server = lang_string( "server" ) .. " (" .. tostring( lang_string( "admin" ) ) .. ")"
     settingsWindow.window:AddCategory( _server )
     settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server, "icon16/server_database.png" )
+    settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server, "icon16/bomb.png" )
     settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server, "icon16/group_gear.png" )
     settingsWindow.window:AddSite( "open_server_give", lang_string( "give" ), _server, "icon16/user_go.png" )
     settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server, "icon16/money.png" )

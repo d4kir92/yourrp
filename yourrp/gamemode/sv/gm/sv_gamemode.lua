@@ -9,11 +9,15 @@ function GM:ShutDown()
 end
 
 function GM:GetFallDamage( ply, speed )
-  local _damage = speed / 8
-  if speed > ply:GetModelScale()*120 then
-    return _damage
+  if IsRealisticFallDamage() then
+    local _damage = speed / 8
+    if speed > ply:GetModelScale()*120 then
+      return _damage
+    else
+      return 0
+    end
   else
-    return 0
+    return 10
   end
 end
 
@@ -43,7 +47,6 @@ function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
   if ply:GetNWBool( "cuffed" ) or ply.leiche != nil then
     return true
   end
-  return false
 end
 
 function GM:CanPlayerSuicide( ply )
@@ -57,12 +60,63 @@ function GM:EntityTakeDamage( target, dmginfo )
       timer.Remove( target:Nick() .. " outOfCombat" )
     end
     timer.Create( target:Nick() .. " outOfCombat", 6, 1, function()
-      target:SetNWBool( "inCombat", false )
-      lowering_weapon( target )
-      timer.Remove( target:Nick() .. " outOfCombat" )
+      if target != NULL then
+        target:SetNWBool( "inCombat", false )
+        lowering_weapon( target )
+        timer.Remove( target:Nick() .. " outOfCombat" )
+      end
     end)
 	end
 end
+
+function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
+  if IsRealisticDamage() then
+  	if hitgroup == HITGROUP_HEAD then
+      if IsHeadshotDeadlyPlayer() then
+        dmginfo:ScaleDamage( ply:GetMaxHealth() )
+      else
+    		dmginfo:ScaleDamage( GetHitFactorPlayerHead() )
+      end
+   	elseif hitgroup == HITGROUP_CHEST then
+      dmginfo:ScaleDamage( GetHitFactorPlayerChes() )
+    elseif hitgroup == HITGROUP_STOMACH then
+  		dmginfo:ScaleDamage( GetHitFactorPlayerStom() )
+    elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+      dmginfo:ScaleDamage( GetHitFactorPlayerArms() )
+    elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+      dmginfo:ScaleDamage( GetHitFactorPlayerLegs() )
+  	else
+      dmginfo:ScaleDamage( 1 )
+    end
+  else
+    dmginfo:ScaleDamage( 1 )
+  end
+end
+
+function GM:ScaleNPCDamage( npc, hitgroup, dmginfo )
+  if IsRealisticDamage() then
+  	if hitgroup == HITGROUP_HEAD then
+      if IsHeadshotDeadlyNpc() then
+        dmginfo:ScaleDamage( npc:Health() )
+      else
+    		dmginfo:ScaleDamage( GetHitFactorNpcHead() )
+      end
+   	elseif hitgroup == HITGROUP_CHEST then
+      dmginfo:ScaleDamage( GetHitFactorNpcChes() )
+    elseif hitgroup == HITGROUP_STOMACH then
+  		dmginfo:ScaleDamage( GetHitFactorNpcStom() )
+    elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+      dmginfo:ScaleDamage( GetHitFactorNpcArms() )
+    elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+      dmginfo:ScaleDamage( GetHitFactorNpcLegs() )
+  	else
+      dmginfo:ScaleDamage( 1 )
+    end
+  else
+    dmginfo:ScaleDamage( 1 )
+  end
+end
+
 
 --[[ SPEAK Channels ]] --
 util.AddNetworkString( "press_speak_next" )
@@ -92,14 +146,68 @@ net.Receive( "press_speak_prev", function( len, ply )
   end
 end)
 
-function GM:PlayerCanHearPlayersVoice( listener, talker )
-  if talker:GetNWInt( "speak_channel", 0 ) == 1 and talker:GetNWString( "groupUniqueID" ) == listener:GetNWString( "groupUniqueID" ) then
-    return true, false
-	elseif talker:GetNWInt( "speak_channel", 0 ) == 2 then
-    return true, false
-  elseif talker:GetNWInt( "speak_channel", 0 ) == 0 then
-    return true, true
+util.AddNetworkString( "yrp_voice_start" )
+
+net.Receive( "yrp_voice_start", function( len, ply )
+  ply:SetNWBool( "yrp_speaking", true )
+  if ply:GetNWString( "speak_channel" ) == 2 then
+    for k, v in pairs( player.GetAll() ) do
+      v:SetNWString( "voice_global_steamid", ply:SteamID() )
+      v:SetNWString( "voice_global_rolename", ply:GetNWString( "RoleName" ) )
+    end
   end
+end)
+
+util.AddNetworkString( "yrp_voice_end" )
+
+net.Receive( "yrp_voice_end", function( len, ply )
+  ply:SetNWBool( "yrp_speaking", false )
+end)
+
+function hearfaded( talker, listener )
+  if talker:GetNWInt( "speak_channel" ) == 0 or talker:GetNWInt( "speak_channel" ) == 1 and talker:GetNWString( "groupUniqueID" ) != listener:GetNWInt( "groupUniqueID" ) then
+    --print("hearfaded true")
+    return true
+  else
+    --print("hearfaded false")
+    return false
+  end
+end
+
+function canhear( talker, listener )
+  if talker:GetNWInt( "speak_channel" ) == 2 then
+    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear global" )
+    return true
+  elseif talker:GetNWInt( "speak_channel" ) == 1 and talker:GetNWString( "groupUniqueID" ) == listener:GetNWInt( "groupUniqueID" ) then
+    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear group")
+    return true
+  elseif talker:GetPos():Distance( listener:GetPos() ) < 300 then
+    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear local ")
+    return true
+  else
+    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can >>NOT<< hear")
+    return false
+  end
+end
+
+function GM:PlayerCanHearPlayersVoice( listener, talker )
+
+  if listener == talker then return false end
+
+  local _is_talker = talker
+  local _is_listener = listener
+  if talker:GetNWBool( "yrp_speaking" ) then
+    _is_talker = talker
+    _is_listener = listener
+  elseif listener:GetNWBool( "yrp_speaking" ) then
+    _is_talker = listener
+    _is_listener = talker
+  else
+    return false
+  end
+
+  return canhear( talker, listener ), hearfaded( talker, listener )
+  --return canhear( _is_talker, _is_listener ), hearfaded( _is_talker, _is_listener )
 end
 
 function GM:PlayerInitialSpawn( ply )

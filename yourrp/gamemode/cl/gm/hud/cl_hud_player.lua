@@ -94,13 +94,13 @@ end)
 local _alpha = 200
 function drawHUDElement( dbV, cur, max, text, icon, color )
   local _r = 0
-  local _rounded = false
+  local _rounded = true
   if tobool( HudV( dbV .. "to" ) ) then
 
     if cur != nil and max != nil then
       hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
     end
-    if _rounded then
+    if tobool( HudV( dbV .. "tr" ) ) then
       _r = ctr( HudV( dbV .. "sh" ) )/2
     end
     draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
@@ -135,11 +135,9 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
     if icon != nil and HudV( dbV .. "it" ) == 1  then
       showIcon( dbV, icon )
     end
-    if !_rounded then
+    if !tobool( HudV( dbV .. "tr" ) ) then
       drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( dbV .. "aw" ) ) + HudV( dbV .. "px" ), ctrF( ScrH() ) * anchorH( HudV( dbV .. "ah" ) ) + HudV( dbV .. "py" ), HudV( dbV .. "sw" ), HudV( dbV .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
     end
-  else
-    draw.SimpleTextOutlined( "Loading HUD", "DermaDefault", ScrW2(), ScrH2(), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
 end
 
@@ -154,65 +152,6 @@ function HudPlayer()
     if ply:Alive() then
       if !contextMenuOpen then
 
-        --Tooltip
-        if tonumber( HudV("ttto") ) == 1 and tobool( get_tutorial( "tut_all" ) ) then
-          local _abstand = ctr( HudV("ttsf") ) * 3.8
-          drawHUDElement( "tt", nil, nil, nil, nil, nil )
-
-          local _t_c = 0
-          draw.SimpleTextOutlined( lang_string( "tooltip" ) .. ":", "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          if tobool( get_tutorial( "tut_cs" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_character_selection" ) ) ) .. "] " .. lang_string( "characterselection" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 + _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_mr" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_role" ) ) ) .. "] " .. lang_string( "rolemenu" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_mb" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_buy" ) ) ) .. "] " .. lang_string( "buymenu" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_ms" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_settings" ) ) ) .. "] " .. lang_string( "settings" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_tmo" ) ) then
-            _t_c = _t_c + 1
-          draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "toggle_mouse" ) ) ) .. "] " .. lang_string( "guimouse" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_vo" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( lang_string( "viewzoomoutpre" ) .. " " .. "[" .. string.upper( input.GetKeyName( get_keybind( "view_zoom_out" ) ) ) .. "]" .. " " .. lang_string( "viewzoomoutpos" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_vi" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( lang_string( "viewzoominpre" ) .. " " .. "[" .. string.upper( input.GetKeyName( get_keybind( "view_zoom_in" ) ) ) .. "]" .. " " .. lang_string( "viewzoominpos" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_tma" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "toggle_map" ) ) ) .. "] " .. lang_string( "map" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_mi" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_inventory" ) ) ) .. "] " .. lang_string( "inventory" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_sn" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "speak_next" ) ) ) .. "] " .. lang_string( "voicenext" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_sp" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "speak_prev" ) ) ) .. "] " .. lang_string( "voiceprev" ), "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if tobool( get_tutorial( "tut_feedback" ) ) then
-            _t_c = _t_c + 1
-            draw.SimpleTextOutlined( "[" .. "F1" .. "] " .. "Help and Feedback", "ttsf", ctr( HudV("ttpx") ) + ctr( 32 ), ctr( HudV("ttpy") ) + ctr( 10 ) + ctr( _t_c*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-          end
-          if _t_c == 0 then
-            done_tutorial( "tut_all" )
-          end
-        end
         if GetConVar( "yrp_cl_hud" ):GetInt() == 1 and LocalPlayer():GetNWBool( "toggle_hud", false ) then
 
           --Health
@@ -273,7 +212,8 @@ function HudPlayer()
           drawHUDElement( "mo", _salaryMin, _salaryMax, _motext, money, Color( 33, 108, 42, _alpha ) )
 
           --XP
-          local _xptext = lang_string( "level" ) .. " " .. 1 .. " (" .. 0 .. "%) " .. ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
+          local _xptext = "" --lang_string( "level" ) .. " " .. 1 .. " (" .. 0 .. "%) " ..
+          _xptext = ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
           drawHUDElement( "xp", 0, 100, _xptext, xp, Color( 181, 255, 107, _alpha ) )
 
           --Weapon Primary
@@ -539,7 +479,8 @@ function HudPlayer()
       draw.SimpleTextOutlined( lang_string( "dead" ) .. "! " .. lang_string( "respawning" ) .. "...", "HudBars", ScrW()/2, ScrH()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   else
-    printGM( "note", "Try to reload hud database" )
+    draw.SimpleTextOutlined( "Loading HUD", "DermaDefault", ScrW2(), ScrH2(), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    --printGM( "note", "Try to reload hud database" )
     loadDatabaseHUD()
   end
 end
