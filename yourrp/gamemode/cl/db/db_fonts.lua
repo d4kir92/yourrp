@@ -55,6 +55,8 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
+	createFont( "plates", tmpFont, 25, 1000, false )
+
 	createFont( "mdMenu", tmpFont, 17, 1000, false )
 
 	createFont( "windowTitle", tmpFont, 18, 1000, false )

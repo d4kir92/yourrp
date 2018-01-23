@@ -54,7 +54,6 @@ net.Receive( "get_yrp_realistic", function( len, ply )
   local _tab = db_select( _db_name, "*", nil )
   if _tab != nil then
     _tab = _tab[1]
-    printTab( _tab )
     net.Start( "get_yrp_realistic" )
       net.WriteTable( _tab )
     net.Send( ply )

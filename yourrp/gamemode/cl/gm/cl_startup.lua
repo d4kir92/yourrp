@@ -41,24 +41,27 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
     hook.Call( closeF )
   end
 
-  local searchButton = createD( "DButton", frame, ctr( 40 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
+  _but_len = 160
+  local searchButton = createD( "DButton", frame, ctr( _but_len ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
   searchButton:SetText( "" )
   function searchButton:Paint( pw, ph )
     local _br = 4
     surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( searchIcon	)
   	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 40-2*_br ), ctr( 40-2*_br ) )
+
+    draw.SimpleText( lang_string("search") .. ":", "DermaDefault", ctr( _but_len ), ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
-  local search = createVGUI( "DTextEntry", frame, 2000 - 20 - 40, 40, 10 + 40, 50 )
-	function search:Paint( pw, ph )
+  local search = createVGUI( "DTextEntry", frame, 2000 - 20 - _but_len, 40, 10 + _but_len, 50 )
+	--[[function search:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 		local _string = search:GetText()
 		if _string == "" then
 			_string = lang_string( "search" )
 		end
 		draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-  end
+  end]]--
 
   local site = {}
   site.cur = 1
@@ -125,7 +128,13 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             if tmpSelected[k].selected then
               draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
             else
-              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+              if string.find( v.ClassName, "npc_" ) or string.find( v.ClassName, "base" ) then
+                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
+              elseif v.WorldModel == "" then
+                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+              else
+                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+              end
             end
           end
 
@@ -145,7 +154,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             end)
           end
 
-          local tmpButton = createVGUI( "DButton", tmpPointer, 256, 256, 0, 0 )
+          local tmpButton = createD( "DButton", tmpPointer, ctr( itemSize ), ctr( itemSize ), 0, 0 )
           tmpButton:SetText( "" )
           function tmpButton:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
@@ -153,8 +162,20 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             if tmpSelected[k].selected then
               text = lang_string( "added" )
             end
-            draw.SimpleTextOutlined( text, "sef", pw/2, ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( v.PrintName, "sef", pw/2, ph - ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+            local _test = "HAS NO NAME"
+            if v.PrintName != nil and v.PrintName != "" then
+              _test = v.PrintName
+            elseif v.ClassName != nil and v.ClassName != "" then
+              _test = v.ClassName
+            elseif v.WorldModel != nil and v.WorldModel != "" then
+              _test = v.WorldModel
+            elseif v.ViewModel != nil and v.ViewModel != "" then
+              _test = v.ViewModel
+            end
+            draw.SimpleTextOutlined( _test, "DermaDefault", ctr( 5 ), ctr( 5 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+
+            draw.SimpleTextOutlined( text, "DermaDefault", pw/2, ph - ctr( 5 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
           end
           function tmpButton:DoClick()
             if tmpSelected[k].selected then
@@ -457,28 +478,30 @@ end
 function drawPlate( ply, string, z, color )
   if ply:Alive() and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
     local pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, ply:GetModelScale() * 20 )
-    local ang = Angle( 0, ply:GetAngles().y-90, 90 )
+    local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
     local sca = ply:GetModelScale()/4
     local str = string
     local strSize = string.len( str ) + 3
     cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
-      draw.RoundedBox( 0, -( ( strSize * 11 )/2 ), 0, strSize*11, 24, color )
-      draw.SimpleTextOutlined( str, "HudBars", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.RoundedBox( 0, -( ( strSize * 11 )/2 ), 0,  strSize*11, 24, color )
+      draw.SimpleTextOutlined( str, "plates", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     cam.End3D2D()
   end
 end
 
-function drawPlates()
-  for k, v in pairs( player.GetAll() ) do
-    if v:GetNWBool( "tag_dev", false ) then
-      if tostring( v:SteamID() ) == "STEAM_0:1:20900349" then
-        drawPlate( v, "DEVELOPER", 7, Color( 0, 0, 0, 200 ) )
-      end
+hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
+  return false
+end)
+
+function drawPlates( ply )
+  if ply:GetNWBool( "tag_dev", false ) then
+    if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
+      drawPlate( ply, "DEVELOPER", 7, Color( 0, 0, 0, 200 ) )
     end
-    if v:GetNWBool( "tag_admin", false ) then
-      if v:IsSuperAdmin() or v:IsAdmin() then
-        drawPlate( v, string.upper( v:GetUserGroup() ), 0, Color( 0, 0, 140, 200 ) )
-      end
+  end
+  if ply:GetNWBool( "tag_admin", false ) then
+    if ply:IsSuperAdmin() or ply:IsAdmin() then
+      drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, 200 ) )
     end
   end
 end
@@ -510,7 +533,6 @@ net.Receive( "yrp_noti" , function( len )
 end)
 
 net.Receive( "yrp_info" , function( len )
-  printGM( "server", "yrp_info" )
   if playerready then
     local ply = LocalPlayer()
     if ply != nil then

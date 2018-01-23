@@ -156,22 +156,29 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
 end)
 
 hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
-  local _tmp = db_select( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if worked( _tmp, "PlayerNoClip failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.noclip ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "noclip" )
-      net.Send( ply )
+  if !bool then
+    setPlayerModel( ply )
+  else
+    local _tmp = db_select( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+    if worked( _tmp, "PlayerNoClip failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.noclip ) then
+        ply:SetModel( "models/crow.mdl" )
+        return true
+      else
+        printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )
 
-      return false
+        net.Start( "yrp_info" )
+          net.WriteString( "noclip" )
+        net.Send( ply )
+
+        return false
+      end
     end
   end
 end)
+
 
 util.AddNetworkString( "getRistrictions" )
 util.AddNetworkString( "db_jailaccess" )

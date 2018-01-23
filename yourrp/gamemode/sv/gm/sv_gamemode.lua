@@ -247,14 +247,18 @@ function setbodygroups( ply )
   end
 end
 
-function GM:PlayerSetModel( ply )
+function setPlayerModel( ply )
   local tmpRolePlayermodel = ply:GetPlayerModel()
-  if tmpRolePlayermodel != nil and tmpRolePlayermodel != false then
+  if tmpRolePlayermodel != nil and tmpRolePlayermodel != false and tmpRolePlayermodel != "" then
     ply:SetModel( tmpRolePlayermodel )
   else
     ply:SetModel( "models/player/skeleton.mdl" )
   end
   setbodygroups( ply )
+end
+
+function GM:PlayerSetModel( ply )
+  setPlayerModel( ply )
 end
 
 function GM:PlayerLoadout( ply )
@@ -327,12 +331,16 @@ function GM:PlayerLoadout( ply )
 end
 
 hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
-  timer.Simple( 0.01, function()
-    teleportToSpawnpoint( ply )
-  end)
+  if ply:GetNWBool( "can_respawn", true ) then
+    ply:SetNWBool( "can_respawn", false )
+    timer.Simple( 0.01, function()
+      teleportToSpawnpoint( ply )
+    end)
+  end
 end)
 
 hook.Add( "DoPlayerDeath", "yrp_DoPlayerDeath", function( ply, attacker, dmg )
+  ply:SetNWBool( "can_respawn", true )
   local _sel = db_select( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
   if _sel != nil then
     _sel = _sel[1]

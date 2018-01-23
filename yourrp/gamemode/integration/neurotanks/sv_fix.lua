@@ -85,7 +85,7 @@ function Meta:TankExitVehicle()
 
 	self.Pilot:SetViewEntity( self.Pilot )
 	self.Pilot:ExitVehicle()
-	--self.Pilot:Spawn()
+	self.Pilot:Spawn()
 	self.Pilot:SetHealth( 100 )
 
 	self.Pilot:UnSpectate()

@@ -177,18 +177,24 @@ function addDNumberWang( parent, w, h, x, y, table )
   return tmp
 end
 
-function addDBNumberWang( parent, w, h, x, y, string, table, tmpTable, dbTable, dbSets, dbWhile )
+function addDBNumberWang( parent, w, h, x, y, string, table, tmpTable, dbTable, dbSets, dbWhile, min, max )
   local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable )
 
   local tmp2 = addDNumberWang( parent, w, h/2, x, y + h/2, table )
+  tmp2:SetMin( min or -1 )
+  tmp2:SetMax( max or 999999999999 )
 
   function tmp2:OnValueChanged( val )
-    tmpTable[dbSets] = val
-    net.Start( "dbUpdate" )
-      net.WriteString( dbTable )
-      net.WriteString( dbSets .. " = " .. tmpTable[dbSets] .. "" )
-      net.WriteString( dbWhile )
-    net.SendToServer()
+    if isnumber( val ) then
+      if val >= self:GetMin() and val <= self:GetMax() then
+        tmpTable[dbSets] = val
+        net.Start( "dbUpdate" )
+          net.WriteString( dbTable )
+          net.WriteString( dbSets .. " = " .. tmpTable[dbSets] .. "" )
+          net.WriteString( dbWhile )
+        net.SendToServer()
+      end
+    end
   end
 end
 
@@ -802,21 +808,21 @@ net.Receive( "yrp_roles", function( len )
         --1.Spalte
         addDBTextEntry( rolesInfo, 800, 80, 0, 0, lang_string( "rolename" ), v.roleID, yrp_roles_dbTable[k], "yrp_roles", "roleID", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBPlayermodel( rolesInfo, self.id, tmp.uniqueID, v.playermodelsize )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 950, lang_string( "roleplayermodelsize" ), v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 950, lang_string( "roleplayermodelsize" ), v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "", 0.01, 999 )
         addDBBar( rolesInfo, 800, 120, 0, 1040, lang_string( "rolehealth" ), Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1170, lang_string( "rolearmor" ), Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.streg, "yrp_roles", "st", "stmax", "streg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1430, lang_string( "abilitybar" ) .. " (" .. string.upper( lang_string( "wip" ) ) .. ")", Color( 0, 0, 255 ), "yrp_roles", v.ab, v.abmax, v.abreg, "yrp_roles", "ab", "abmax", "abreg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1740, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "", 0 )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "", 0 )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1740, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "", 0 )
 
         --2.Spalte
-        addDBNumberWang( rolesInfo, 800, 80, 810, 0, lang_string( "rolemaxamount" ) .. " (-1 = " .. lang_string( "disabled" ) .. ")", v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 0, lang_string( "rolemaxamount" ) .. " (-1 = " .. lang_string( "disabled" ) .. ")", v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "", -1, game.MaxPlayers() )
         addDBSwep( rolesInfo, self.id, tmp.uniqueID )
         addDBAmmo( rolesInfo, self.id, tmp.uniqueID )
-        addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.salary, yrp_roles_dbTable[k], "yrp_roles", "salary", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.salarytime, yrp_roles_dbTable[k], "yrp_roles", "salarytime", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.salary, yrp_roles_dbTable[k], "yrp_roles", "salary", "uniqueID = " .. tmp.uniqueID .. "", 0, 999999999999 )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.salarytime, yrp_roles_dbTable[k], "yrp_roles", "salarytime", "uniqueID = " .. tmp.uniqueID .. "", 1, 999999999999 )
         addDBTextEntryBig( rolesInfo, 800, 250, 810, 1130, lang_string( "roledescription" ), v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1390, lang_string( "voteable" ), v.voteable, yrp_roles_dbTable[k], "yrp_roles", "voteable", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1440, lang_string( "roleinstructor" ), v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
@@ -1028,7 +1034,6 @@ hook.Add( "open_server_roles", "open_server_roles", function()
   local _r_l = {}
   _r_l.w = ctr( _w )
   _r_l.h = ScrH() - ctr( _roles_height + 200+10 )
-  printTab( _r_l, "_r_l" )
 
   rolesList = createD( "DScrollPanel", settingsWindow.window.site, _r_l.w, _r_l.h, ctr( 10 ), ctr( _roles_height + 60 + 40 ) )
   function rolesList:Paint( pw, ph )

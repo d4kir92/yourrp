@@ -77,7 +77,6 @@ end
     local _tab = net.ReadTable()
 
     if sv_bf != NULL then
-      printTab( _tag)
       sv_bf:SetValue( _tab.bonefracturing )
       sv_bl:SetValue( _tab.bleeding )
 
