@@ -465,4 +465,5 @@ function DE_All()
   set_lang_string( "textsize", "Textgröße" )
   set_lang_string( "isrounded", "Ist abgerundet?" )
   set_lang_string( "damage", "Schaden" )
+  set_lang_string( "playerisready", "Spieler ist bereit" )
 end

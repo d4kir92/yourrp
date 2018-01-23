@@ -12,7 +12,7 @@ function GM:GetFallDamage( ply, speed )
   if IsRealisticFallDamage() then
     local _damage = speed / 8
     if speed > ply:GetModelScale()*120 then
-      return _damage
+      return _damage*ply:GetMaxHealth()/100
     else
       return 0
     end
@@ -354,6 +354,14 @@ hook.Add( "DoPlayerDeath", "yrp_DoPlayerDeath", function( ply, attacker, dmg )
       end
     end
   end
+end)
+
+util.AddNetworkString( "player_is_ready" )
+net.Receive( "player_is_ready", function( len, ply )
+  net.Start( "yrp_noti" )
+    net.WriteString( "playerisready" )
+    net.WriteString( ply:Nick() )
+  net.Broadcast()
 end)
 
 function GM:PlayerSpray( ply )

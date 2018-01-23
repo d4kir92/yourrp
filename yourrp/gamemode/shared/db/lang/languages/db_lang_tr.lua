@@ -14,7 +14,7 @@ function LangTR()
 	set_lang_string( "short", "tr" )
 
 	set_lang_string( "translated_by", "translated by" )
-	set_lang_string( "translated_by_name", "CorayC and Kael" )
+	set_lang_string( "translated_by_name", "Kael" )
 
 	TR_All()
 end

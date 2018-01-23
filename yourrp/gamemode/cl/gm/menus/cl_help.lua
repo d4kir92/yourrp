@@ -19,20 +19,22 @@ function closeHelpMenu()
 end
 
 function nicekey( key_str )
-  if string.lower( key_str ) == "uparrow" then
-    return "↑"
-  elseif string.lower( key_str ) == "downarrow" then
-    return "↓"
-  elseif string.lower( key_str ) == "kp_plus" then
-    return lang_string( "keynumpad" ) .. "+"
-  elseif string.lower( key_str ) == "kp_minus" then
-    return lang_string( "keynumpad" ) .. "-"
-  elseif string.lower( key_str ) == "pgup" then
-    return lang_string( "keypage" ) .. "↑"
-  elseif string.lower( key_str ) == "pgdn" then
-    return lang_string( "keypage" ) .. "↓"
+  if key_str != nil then
+    if string.lower( key_str ) == "uparrow" then
+      return "↑"
+    elseif string.lower( key_str ) == "downarrow" then
+      return "↓"
+    elseif string.lower( key_str ) == "kp_plus" then
+      return lang_string( "keynumpad" ) .. "+"
+    elseif string.lower( key_str ) == "kp_minus" then
+      return lang_string( "keynumpad" ) .. "-"
+    elseif string.lower( key_str ) == "pgup" then
+      return lang_string( "keypage" ) .. "↑"
+    elseif string.lower( key_str ) == "pgdn" then
+      return lang_string( "keypage" ) .. "↓"
+    end
   end
-  return key_str
+  return tostring( key_str )
 end
 
 function openHelpMenu()
@@ -116,22 +118,22 @@ function openHelpMenu()
   end
 
   --[[ GDocs News ]]--
-  local _g_docs_news_panel = createD( "DPanel", _hm.window, ScrH() - ctr( 980 + 20 ), ctr( 600 ), ctr( 980 ), ctr( 120 ) )
+  local _g_docs_news_panel = createD( "DPanel", _hm.window, ctr( 1060 ), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
   function _g_docs_news_panel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
   end
 
-  local _g_docs_news_html = createD( "HTML", _g_docs_news_panel, ScrH() - ctr( 980 + 20 - 30 ), ctr( 600 + 212 + 50 ), -ctr( 30 ), -ctr( 212 ) )
+  local _g_docs_news_html = createD( "HTML", _g_docs_news_panel, ScrH() - ctr( 980 + 20 - 30 ), ctr( 1130 + 212 + 50 ), -ctr( 30 ), -ctr( 212 ) )
   _g_docs_news_html:OpenURL( "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing" )
   --_g_docs_news_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vRcuPnvnAqRD7dQFOkH9d0Q1G3qXFn6rAHJWAAl7wV2TEABGhDdJK9Y-LCONFKTiAWmJJZpsTcDnz5W/pub" )
 
   --[[ GDocs Help ]]--
-  local _g_docs_help_panel = createD( "DPanel", _hm.window, ScrH() - ctr( 980 + 20 ), ctr( 1400 ), ctr( 980 ), ctr( 740 ) )
+  local _g_docs_help_panel = createD( "DPanel", _hm.window, ctr( 1060 ), ctr( 1130 ), ctr( 10 + 1060 + 20 ), ctr( 1020 ) )
   function _g_docs_help_panel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
   end
 
-  local _g_docs_help_html = createD( "HTML", _g_docs_help_panel, ScrH() - ctr( 980 + 20 ), ctr( 1400 + 60 + 140 ), 0, -ctr( 80 ) )
+  local _g_docs_help_html = createD( "HTML", _g_docs_help_panel, ScrH() - ctr( 980 + 20 ), ctr( 1130 + 60 + 140 ), 0, -ctr( 80 ) )
   --_g_docs_help_html:OpenURL( "https://docs.google.com/document/d/1J-N9Hd2fliTdvHiN5cTHsj_1jPLeNn82X1A-pzkIKsU/edit?usp=sharing" )
   _g_docs_help_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vQrwLHPnntg4ZBAICAmwrgXyilU3i8L9n8ein9gHROoJAzmL8ypN1nxTltro_7CHV-qqE7vkoLqeyvH/pub" )
 

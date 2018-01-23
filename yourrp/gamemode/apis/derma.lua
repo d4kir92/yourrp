@@ -516,3 +516,111 @@ function anchorH( num )
     return ScrH()
   end
 end
+
+function draw.Circle( x, y, radius, seg )
+	local cir = {}
+
+	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+	for i = 0, seg do
+		local a = math.rad( ( i / seg ) * -360 )
+		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+	end
+
+	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
+	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+
+	surface.DrawPoly( cir )
+end
+
+function draw.CircleL( x, y, radius, seg )
+	local cir = {}
+
+	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+	for i = 0, seg do
+		local a = math.rad( ( i / seg ) * -180 )
+		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+	end
+
+	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
+	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+
+	surface.DrawPoly( cir )
+end
+
+function draw.CircleR( x, y, radius, seg )
+	local cir = {}
+
+	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+	for i = 0, seg do
+		local a = math.rad( ( ( i / seg ) * -180 ) + 180 )
+		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+	end
+
+	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
+	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+
+	surface.DrawPoly( cir )
+end
+
+function drawRoundedBox( r, x, y, w, h, color )
+  draw.RoundedBox( 0, x+h/2, y, w-h, h, color )
+  surface.SetDrawColor( color )
+  draw.NoTexture()
+
+  draw.CircleL( x+h/2, y+h/2, h/2, 64 )
+
+  if w >= h then
+    draw.CircleR( x+w-h/2, y+h/2, h/2, 64 )
+  end
+end
+
+function drawRoundedBoxStencil( r, x, y, w, h, color, max )
+
+  --drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 255, 100 ) )
+
+  if true then
+    render.ClearStencil()
+    render.SetStencilEnable( true )
+      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+
+      render.SetStencilFailOperation( STENCILOPERATION_INCR )
+      render.SetStencilPassOperation( STENCILOPERATION_KEEP )
+      render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
+
+      drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 0, 255 ) )
+
+      render.SetStencilReferenceValue( 1 )
+      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+
+      draw.RoundedBox( 0, x, y, w, h, color )
+
+    render.SetStencilEnable( false )
+  end
+end
+
+function drawRoundedBoxBR( r, x, y, w, h, color, br )
+  local _br = br or 0
+  --drawRoundedBox( 0, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 255 ) )
+  --drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 0, 100 ) )
+  --drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, Color( 0, 255, 0, 100 ) )
+  if true then
+    render.ClearStencil()
+    render.SetStencilEnable( true )
+      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+
+      render.SetStencilFailOperation( STENCILOPERATION_INCR )
+    	render.SetStencilPassOperation( STENCILOPERATION_INCR )
+    	render.SetStencilZFailOperation( STENCILOPERATION_INCR )
+
+      render.SetStencilTestMask( 1 )
+      drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 200 ) )
+
+      render.SetStencilReferenceValue( 1 )
+      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NOTEQUAL )
+
+      render.SetStencilWriteMask( 1 )
+      drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, color )
+
+    render.SetStencilEnable( false )
+  end
+end

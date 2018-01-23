@@ -125,6 +125,7 @@ function set_role_values( ply )
         ply:SetNWString( "roleName", rolTab.roleID )
         ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
         ply:SetNWInt( "salarytime", rolTab.salarytime )
+        ply:SetNWInt( "nextsalarytime", CurTime() + rolTab.salarytime )
         ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )
 
         --sweps

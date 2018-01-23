@@ -465,4 +465,5 @@ function EN_All()
   set_lang_string( "textsize", "Text size" )
   set_lang_string( "isrounded", "Is rounded?" )
   set_lang_string( "damage", "Damage" )
+  set_lang_string( "playerisready", "Player is ready" )
 end

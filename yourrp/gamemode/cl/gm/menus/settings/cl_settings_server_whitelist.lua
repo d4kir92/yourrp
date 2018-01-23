@@ -71,8 +71,17 @@ net.Receive( "getRoleWhitelist", function( len )
     function _whitelistButton:DoClick()
       if _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) != nil then
         net.Start( "whitelistPlayer" )
-          net.WriteString( _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) )
-          net.WriteInt( _whitelistComboBox2:GetOptionData( _whitelistComboBox2:GetSelectedID() ), 16 )
+          local _cb1_id = _whitelistComboBoxPlys:GetSelectedID()
+          local _cb2_id = _whitelistComboBox2:GetSelectedID()
+          local _cb1_data = _whitelistComboBoxPlys:GetOptionData( _cb1_id )
+          local _cb2_data = _whitelistComboBox2:GetOptionData( _cb2_id )
+          if _cb1_data != nil and _cb2_data != nil then
+            net.WriteString( tonumber( _cb1_data ) )
+            net.WriteInt( tonumber( _cb2_data ), 16 )
+          else
+            printGM( "error", "#0001 whitelist broken, maybe to much roles/groups" )
+            printGM( "error", "#0001 r: " .. tostring(  #_tmpRoleList ) .. " g: " .. tostring(  #_tmpGroupList ) )
+          end
         net.SendToServer()
       end
       _whitelistListView:Remove()

@@ -103,18 +103,22 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
     if tobool( HudV( dbV .. "tr" ) ) then
       _r = ctr( HudV( dbV .. "sh" ) )/2
     end
-    draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
+    drawRoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
     if color != nil and cur != nil and max != nil then
       if tonumber( max ) >= 0 then
         if tonumber(cur) > tonumber(max) then
           cur = max
         end
-        draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") ), ( hud[dbV] / max ) * ( ctr( HudV(dbV .. "sw") ) ), ctr( HudV(dbV .. "sh") ), color )
+        if !tobool( HudV( dbV .. "tr" ) ) then
+          draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") ), ( hud[dbV] / max ) * ( ctr( HudV(dbV .. "sw") ) ), ctr( HudV(dbV .. "sh") ), color )
+        else
+          drawRoundedBoxStencil( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") ), ( hud[dbV] / max ) * ( ctr( HudV(dbV .. "sw") ) ), ctr( HudV(dbV .. "sh") ), color, ctr( HudV(dbV .. "sw") ) )
+        end
       end
     end
 
+    local _st = {}
     if text != nil and HudV( dbV .. "tt" ) == 1 then
-      local _st = {}
       _st.br = 10
       local _pw = 0
       if HudV( dbV .. "tx" ) == 0 then
@@ -140,8 +144,24 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
     if icon != nil and HudV( dbV .. "it" ) == 1  then
       showIcon( dbV, icon )
     end
+  end
+end
+
+function drawHUDElementBr( dbV )
+  if tobool( HudV( dbV .. "to" ) ) then
     if !tobool( HudV( dbV .. "tr" ) ) then
       drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( dbV .. "aw" ) ) + HudV( dbV .. "px" ), ctrF( ScrH() ) * anchorH( HudV( dbV .. "ah" ) ) + HudV( dbV .. "py" ), HudV( dbV .. "sw" ), HudV( dbV .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+    else
+      _r = ctr( HudV( dbV .. "sh" ) )/2
+
+      local _br = {}
+      _br.r = _r
+      _br.x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") )
+      _br.y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") )
+      _br.w = ctr( HudV(dbV .. "sw") )
+      _br.h = ctr( HudV(dbV .. "sh") )
+
+      drawRoundedBoxBR( _br.r, _br.x, _br.y, _br.w, _br.h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), 1 )
     end
   end
 end
@@ -207,12 +227,11 @@ function HudPlayer()
           local _salary = tonumber( ply:GetNWInt( "salary", 0 ) )
           if _salary > 0 then
             _motext = _motext .. " (+".. ply:GetNWString( "moneyPre" ) .. roundMoney( _salary, 1 ) .. ply:GetNWString( "moneyPost" ) .. ")"
-          end
-          local _salaryMin = nil
-          local _salaryMax = nil
-          if _salary > 0 then
             _salaryMin = CurTime() + ply:GetNWInt( "salarytime" ) - 1 - ply:GetNWInt( "nextsalarytime" )
             _salaryMax = ply:GetNWInt( "salarytime" )
+          else
+            _salaryMin = 1
+            _salaryMax = 1
           end
           drawHUDElement( "mo", _salaryMin, _salaryMax, _motext, money, Color( 33, 108, 42, _alpha ) )
 
@@ -284,7 +303,9 @@ function HudPlayer()
 
           --Minimap
           if tonumber( HudV("mmto") ) == 1 then
-            draw.RoundedBox( 0, anchorW( HudV("mmaw") ) + ctr( HudV("mmpx") ), anchorH( HudV("mmah") ) + ctr( HudV("mmpy") ), ctr( HudV("mmsw") ), ctr( HudV("mmsh") ), Color( 0, 0, 0, _alpha ) )
+            if !HudV( "mm" .. "tr" ) then
+              draw.RoundedBox( 0, anchorW( HudV("mmaw") ) + ctr( HudV("mmpx") ), anchorH( HudV("mmah") ) + ctr( HudV("mmpy") ), ctr( HudV("mmsw") ), ctr( HudV("mmsh") ), Color( 0, 0, 0, _alpha ) )
+            end
             if minimap != nil then
               if playerfullready == true and minimap.facX != nil and minimap.facY != nil then
                 local win = {}
@@ -373,6 +394,11 @@ function HudPlayer()
                   plyPos.x = 0 + mm.w * ( plyPos.xtmp / plyPos.xMax )
                   plyPos.y = 0 + mm.h - mm.h * ( plyPos.ytmp / plyPos.yMax )
 
+                  local _m_w = ctr( HudV("mmsw") )
+                  local _m_h = ctr( HudV("mmsh") )
+
+                  local _m_x = anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") ) + _m_w/2
+                  local _m_y = anchorH( HudV( "mmah" ) ) + ctr( HudV("mmpy") ) + _m_h/2
                   --STENCIL
                   render.ClearStencil()
                 	render.SetStencilEnable( true )
@@ -381,8 +407,14 @@ function HudPlayer()
                 		render.SetStencilReferenceValue( 25 )
                 		render.SetStencilFailOperation( STENCIL_REPLACE )
 
-                		draw.RoundedBox( 0, anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") ), anchorH( HudV( "mmah" ) ) + ctr(HudV("mmpy")), ctr(HudV("mmsw")), ctr(HudV("mmsh")), Color( 255, 255, 255 ) )
+                    if HudV( "mm" .. "tr" ) then
+                      surface.SetDrawColor( 0, 0, 0, 200 )
+                    	draw.NoTexture()
 
+                    	draw.Circle( _m_x, _m_y, _m_w/2, 64 )
+                    else
+                  		draw.RoundedBox( 0, anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") ), anchorH( HudV( "mmah" ) ) + ctr(HudV("mmpy")), ctr(HudV("mmsw")), ctr(HudV("mmsh")), Color( 255, 255, 255 ) )
+                    end
                 		render.SetStencilCompareFunction( STENCIL_EQUAL )
 
                     surface.SetDrawColor( 255, 255, 255, 255 )
@@ -390,7 +422,27 @@ function HudPlayer()
                     surface.DrawTexturedRect( anchorW( HudV( "mmaw" ) ) + ctr(HudV("mmpx")) + ctr(HudV("mmsw")/2) - plyPos.x, anchorH( HudV( "mmah" ) ) + ctr(HudV("mmpy"))  +ctr(HudV("mmsh")/2)- plyPos.y, mm.w, mm.h )
                   render.SetStencilEnable( false )
 
-                  drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "mm" .. "aw" ) ) + HudV( "mm" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "mm" .. "ah" ) ) + HudV( "mm" .. "py" ), HudV( "mm" .. "sw" ), HudV( "mm" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+                  if !HudV( "mm" .. "tr" ) then
+                    drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "mm" .. "aw" ) ) + HudV( "mm" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "mm" .. "ah" ) ) + HudV( "mm" .. "py" ), HudV( "mm" .. "sw" ), HudV( "mm" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+                  else
+                    render.ClearStencil()
+                  	render.SetStencilEnable( true )
+                  		render.SetStencilWriteMask( 255 )
+                  		render.SetStencilTestMask( 255 )
+                  		render.SetStencilReferenceValue( 25 )
+                  		render.SetStencilFailOperation( STENCIL_REPLACE )
+
+                      surface.SetDrawColor( 0, 0, 0, 200 )
+                    	draw.NoTexture()
+                    	draw.Circle( _m_x, _m_y, _m_w/2*0.99, 64 )
+
+                  		render.SetStencilCompareFunction( STENCIL_NOTEQUAL )
+
+                      surface.SetDrawColor( Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ) )
+                    	draw.NoTexture()
+                    	draw.Circle( _m_x, _m_y, _m_w/2*1.01, 64 )
+                    render.SetStencilEnable( false )
+                  end
                 end
               else
                 getCoordsMM()
@@ -466,6 +518,28 @@ function HudPlayer()
           drawText( ply:GetNWInt( "voteCD", "" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 3*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
+        drawHUDElementBr( "mo" )
+        drawHUDElementBr( "hp" )
+        drawHUDElementBr( "ar" )
+        drawHUDElementBr( "xp" )
+        drawHUDElementBr( "ms" )
+        drawHUDElementBr( "wn" )
+        drawHUDElementBr( "wp" )
+        if weapon != NULL then
+          if ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) > 0 then
+            drawHUDElementBr( "ws" )
+          end
+        end
+        drawHUDElementBr( "mt" )
+        drawHUDElementBr( "mh" )
+        if ply:GetNWBool( "casting", false ) then
+          drawHUDElementBr( "ca" )
+        end
+        if _sttext != "" then
+          drawHUDElementBr( "st" )
+        end
+        drawHUDElementBr( "ma" )
+
         --Thirdperson
         if input.IsKeyDown( get_keybind( "view_zoom_in" ) ) or input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
           local _3PText = ""
@@ -476,7 +550,7 @@ function HudPlayer()
           elseif ply:GetNWInt( "view_range", 0 ) > 0 then
             _3PText = lang_string( "tpp" )
           end
-          draw.SimpleTextOutlined( _3PText .. " ( " .. ply:GetNWInt( "view_range", 0 ) .. " )", "HudBars", ScrW()/2, ctr( 2160/2 + 550 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( _3PText .. " ( " .. math.Round( ply:GetNWInt( "view_range", 0 ), -1 ) .. " )", "HudBars", ScrW()/2, ctr( 2160/2 + 550 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
       end
     else

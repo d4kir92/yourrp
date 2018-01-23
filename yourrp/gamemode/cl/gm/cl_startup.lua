@@ -421,6 +421,9 @@ function GM:InitPostEntity()
   printGM( "note", "All entities are loaded." )
   playerready = true
 
+  net.Start( "player_is_ready" )
+  net.SendToServer()
+
   if tobool( get_tutorial( "tut_welcome" ) ) then
 
     openHelpMenu()
@@ -523,6 +526,8 @@ net.Receive( "yrp_noti" , function( len )
             _str = _str .. "[" .. string.upper( net.ReadString() ) .. "]" .. " " .. lang_string( _str_lang ) .. "!"
           elseif _str_lang == "inventoryclearing" then
             _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
+          elseif _str_lang == "playerisready" then
+            _str = _str .. lang_string( _str_lang ) .. " (" .. net.ReadString() .. ")"
           end
 
         	notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )

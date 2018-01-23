@@ -1,6 +1,6 @@
 --Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local _hudVersion = 3
+local _hudVersion = 4
 
 local dbNameHUD = "yrp_cl_hud"
 
@@ -291,7 +291,7 @@ function setDefaultHUD()
   local cb = HUDTab( 1, 20, -980, 900, 520, 0, 2, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "cb", cb )
 
-  local ut = HUDTab( 1, -400, 140, 400, 240, 2, 0, 1, 1, 18, 1, 1, 1 )
+  local ut = HUDTab( 0, -400, 140, 400, 240, 2, 0, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "ut", ut )
 
   --crosshair

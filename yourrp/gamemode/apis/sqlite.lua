@@ -6,6 +6,7 @@ function disk_full( error )
       PrintMessage( HUD_PRINTCENTER, "database or disk is full, please make more space!" )
     elseif CLIENT then
       LocalPlayer():PrintMessage( HUD_PRINTTALK, "database or disk is full, please make more space!" )
+      notification.AddLegacy( "[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40 )
     end
   end
 end
@@ -197,12 +198,17 @@ function sql_add_column( table_name, column_name, datatype )
   end
 end
 
+function retry_load_database( db_name )
+  printGM( "error", "retry_load_database " .. tostring( db_name ) )
+  init_database( db_name )
+end
+
 function init_database( db_name )
   printGM( "db", "init_database " .. tostring( db_name ) )
   if db_table_exists( db_name ) then
     --printGM( "db", db_name .. " exists" )
   else
-    printGM( "note", db_name .. " not exists" )
+    printGM( "note", tostring( db_name ) .. " not exists" )
     local _query = ""
     _query = _query .. "CREATE TABLE " .. db_sql_str2( db_name ) .. " ( "
     _query = _query .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
@@ -212,12 +218,12 @@ function init_database( db_name )
       printGM( "error", "init_database failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       sql_show_last_error()
     end
-		if sql.TableExists( db_name ) then
+		if sql.TableExists( tostring( db_name ) ) then
       --printGM( "db", db_name .. _yrp.successdb )
 		else
-			printGM( "error", "CREATE TABLE " .. db_name .. " fail" )
+			printGM( "error", "CREATE TABLE " .. tostring( db_name ) .. " fail" )
       sql_show_last_error()
-      retry_load_database()
+      retry_load_database( db_name )
 		end
   end
 end

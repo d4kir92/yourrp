@@ -182,7 +182,9 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		draw.SimpleTextOutlined( lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	end
 
-	hudUpTime()
+	if tobool( HudV( "utto" ) ) then
+		hudUpTime()
+	end
 
 	if isSpVisible() then
 		local _br = {}
