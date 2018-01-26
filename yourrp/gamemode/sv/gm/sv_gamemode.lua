@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function GM:PlayerDisconnected( ply )
   save_clients( "PlayerDisconnected" )
@@ -9,7 +9,7 @@ function GM:ShutDown()
 end
 
 function GM:GetFallDamage( ply, speed )
-  if IsRealisticFallDamage() then
+  if IsRealisticFallDamageEnabled() then
     local _damage = speed / 8
     if speed > ply:GetModelScale()*120 then
       return _damage*ply:GetMaxHealth()/100
@@ -54,23 +54,35 @@ function GM:CanPlayerSuicide( ply )
 end
 
 function GM:EntityTakeDamage( target, dmginfo )
-	if target:IsPlayer() then
+	if target:IsPlayer() and dmginfo:GetAttacker() != target then
 		target:SetNWBool( "inCombat", true )
-    if timer.Exists( target:Nick() .. " outOfCombat" ) then
-      timer.Remove( target:Nick() .. " outOfCombat" )
+    if timer.Exists( target:SteamID() .. " outOfCombat" ) then
+      timer.Remove( target:SteamID() .. " outOfCombat" )
     end
-    timer.Create( target:Nick() .. " outOfCombat", 6, 1, function()
+    timer.Create( target:SteamID() .. " outOfCombat", 6, 1, function()
       if target != NULL then
         target:SetNWBool( "inCombat", false )
         lowering_weapon( target )
-        timer.Remove( target:Nick() .. " outOfCombat" )
+        timer.Remove( target:SteamID() .. " outOfCombat" )
       end
     end)
 	end
+
+	if IsEntity(target) and !target:IsPlayer() and !target:IsNPC() then
+		dmginfo:SetDamage( GetHitFactorEntity() )
+  end
+  if target:IsVehicle() then
+		dmginfo:SetDamage( GetHitFactorVehicle() )
+  end
 end
 
 function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
-  if IsRealisticDamage() then
+  if IsRealisticDamageEnabled() then
+    if IsBleedingEnabled() then
+      ply:StartBleeding()
+
+      ply:SetBleedingPosition( ply:GetPos() - dmginfo:GetDamagePosition() )
+    end
   	if hitgroup == HITGROUP_HEAD then
       if IsHeadshotDeadlyPlayer() then
         dmginfo:ScaleDamage( ply:GetMaxHealth() )
@@ -94,7 +106,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 end
 
 function GM:ScaleNPCDamage( npc, hitgroup, dmginfo )
-  if IsRealisticDamage() then
+  if IsRealisticDamageEnabled() then
   	if hitgroup == HITGROUP_HEAD then
       if IsHeadshotDeadlyNpc() then
         dmginfo:ScaleDamage( npc:Health() )
@@ -340,6 +352,8 @@ hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
 end)
 
 hook.Add( "DoPlayerDeath", "yrp_DoPlayerDeath", function( ply, attacker, dmg )
+  ply:StopBleeding()
+
   ply:SetNWBool( "can_respawn", true )
   local _sel = db_select( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
   if _sel != nil then

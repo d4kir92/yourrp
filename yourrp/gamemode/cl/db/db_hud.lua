@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local _hudVersion = 4
 
@@ -194,6 +194,7 @@ function dbUpdateHUD( _name, _value )
   if worked( _name, "dbUpdateHUD _name " .. tostring( _name ) ) and worked( _value, "dbUpdateHUD _value " .. tostring( _value ) ) then
     db_update( "yrp_cl_hud", "value = " .. _value, "name = '" .. _name .. "'" )
     loadDBHUD( _name )
+    print(_value)
   end
 end
 

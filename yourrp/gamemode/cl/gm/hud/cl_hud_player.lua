@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 _filterENTS = ents.GetAll()
 local _filterTime = CurTime()
@@ -16,6 +16,7 @@ hud["xp"] = 0
 hud["wp"] = 0
 hud["ws"] = 0
 hud["mo"] = 0
+hud["st"] = 0
 
 local reload = {}
 
@@ -94,7 +95,6 @@ end)
 local _alpha = 200
 function drawHUDElement( dbV, cur, max, text, icon, color )
   local _r = 0
-  local _rounded = true
   if tobool( HudV( dbV .. "to" ) ) then
 
     if cur != nil and max != nil then
@@ -103,7 +103,7 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
     if tobool( HudV( dbV .. "tr" ) ) then
       _r = ctr( HudV( dbV .. "sh" ) )/2
     end
-    drawRoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
+    draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
     if color != nil and cur != nil and max != nil then
       if tonumber( max ) >= 0 then
         if tonumber(cur) > tonumber(max) then
@@ -303,8 +303,10 @@ function HudPlayer()
 
           --Minimap
           if tonumber( HudV("mmto") ) == 1 then
-            if !HudV( "mm" .. "tr" ) then
+            if !tobool(HudV( "mm" .. "tr" )) then
               draw.RoundedBox( 0, anchorW( HudV("mmaw") ) + ctr( HudV("mmpx") ), anchorH( HudV("mmah") ) + ctr( HudV("mmpy") ), ctr( HudV("mmsw") ), ctr( HudV("mmsh") ), Color( 0, 0, 0, _alpha ) )
+            else
+              drawRoundedBox( 0, anchorW( HudV("mmaw") ) + ctr( HudV("mmpx") ), anchorH( HudV("mmah") ) + ctr( HudV("mmpy") ), ctr( HudV("mmsw") ), ctr( HudV("mmsh") ), Color( 0, 0, 0, _alpha ) )
             end
             if minimap != nil then
               if playerfullready == true and minimap.facX != nil and minimap.facY != nil then
@@ -407,11 +409,11 @@ function HudPlayer()
                 		render.SetStencilReferenceValue( 25 )
                 		render.SetStencilFailOperation( STENCIL_REPLACE )
 
-                    if HudV( "mm" .. "tr" ) then
+                    if tobool(HudV( "mm" .. "tr" )) then
                       surface.SetDrawColor( 0, 0, 0, 200 )
                     	draw.NoTexture()
 
-                    	draw.Circle( _m_x, _m_y, _m_w/2, 64 )
+                    	drawCircle( _m_x, _m_y, _m_w/2, 64 )
                     else
                   		draw.RoundedBox( 0, anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") ), anchorH( HudV( "mmah" ) ) + ctr(HudV("mmpy")), ctr(HudV("mmsw")), ctr(HudV("mmsh")), Color( 255, 255, 255 ) )
                     end
@@ -422,7 +424,7 @@ function HudPlayer()
                     surface.DrawTexturedRect( anchorW( HudV( "mmaw" ) ) + ctr(HudV("mmpx")) + ctr(HudV("mmsw")/2) - plyPos.x, anchorH( HudV( "mmah" ) ) + ctr(HudV("mmpy"))  +ctr(HudV("mmsh")/2)- plyPos.y, mm.w, mm.h )
                   render.SetStencilEnable( false )
 
-                  if !HudV( "mm" .. "tr" ) then
+                  if !tobool(HudV( "mm" .. "tr" )) then
                     drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "mm" .. "aw" ) ) + HudV( "mm" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "mm" .. "ah" ) ) + HudV( "mm" .. "py" ), HudV( "mm" .. "sw" ), HudV( "mm" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
                   else
                     render.ClearStencil()
@@ -434,13 +436,13 @@ function HudPlayer()
 
                       surface.SetDrawColor( 0, 0, 0, 200 )
                     	draw.NoTexture()
-                    	draw.Circle( _m_x, _m_y, _m_w/2*0.99, 64 )
+                    	drawCircle( _m_x, _m_y, _m_w/2*0.99, 64 )
 
                   		render.SetStencilCompareFunction( STENCIL_NOTEQUAL )
 
                       surface.SetDrawColor( Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ) )
                     	draw.NoTexture()
-                    	draw.Circle( _m_x, _m_y, _m_w/2*1.01, 64 )
+                    	drawCircle( _m_x, _m_y, _m_w/2*1.01, 64 )
                     render.SetStencilEnable( false )
                   end
                 end
@@ -453,9 +455,28 @@ function HudPlayer()
             drawRBoxCr( ctrF(ScrH()) * anchorW( HudV( "mmaw" ) ) + HudV("mmpx") + (HudV("mmsw")/2) - (minimap.point/2), ctrF(ScrH()) * anchorH( HudV( "mmah" ) ) + HudV("mmpy") + (HudV("mmsh")/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
 
             --Coords
-            if HudV( "mm" .. "it" ) == 1 then
-              draw.SimpleTextOutlined( math.Round( ply:GetPos().x, -1 ) .. ",", "HudBars", anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") ) + ( ctr( HudV("mmsw") ) / 2 ), anchorH( HudV( "mmah" ) ) + ctr( HudV("mmpy") ) + ctr( HudV("mmsh") - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-              draw.SimpleTextOutlined( " " .. math.Round( ply:GetPos().y, -1 ), "HudBars", anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") ) + ( ctr( HudV("mmsw") ) / 2 ), anchorH( HudV( "mmah" ) ) + ctr( HudV("mmpy") ) + ctr( HudV("mmsh") - 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            local _st = {}
+            if HudV( "mm" .. "tt" ) == 1 then
+              _st.br = 10
+              local _pw = 0
+              if HudV( "mm" .. "tx" ) == 0 then
+                _pw = ctr( _st.br )
+              elseif HudV( "mm" .. "tx" ) == 1 then
+                _pw = ctr( HudV( "mm" .. "sw" ) ) / 2
+              elseif HudV( "mm" .. "tx" ) == 2 then
+                _pw = ctr( HudV( "mm" .. "sw" ) ) - ctr( _st.br )
+              end
+              local _ph = 0
+              if HudV( "mm" .. "ty" ) == 3 then
+                _ph = ctr( _st.br )
+              elseif HudV( "mm" .. "ty" ) == 1 then
+                _ph = ctr( HudV( "mm" .. "sh" ) ) / 2
+              elseif HudV( "mm" .. "ty" ) == 4 then
+                _ph = ctr( HudV( "mm" .. "sh" ) ) - ctr( _st.br )
+              end
+              _st.x = anchorW( HudV( "mm" .. "aw" ) ) + ctr( HudV( "mm" .. "px" ) ) + _pw
+              _st.y = anchorH( HudV( "mm" .. "ah" ) ) + ctr( HudV( "mm" .. "py" ) ) + _ph
+              draw.SimpleTextOutlined( math.Round( ply:GetPos().x, -1 ) .. ", " .. math.Round( ply:GetPos().y, -1 ), "HudBars", _st.x, _st.y, Color( 255, 255, 255, 255 ), HudV( "mmtx" ), HudV( "mmty" ), 1, Color( 0, 0, 0 ) )
             end
           end
 
@@ -463,44 +484,71 @@ function HudPlayer()
 
         --Status
         local _sttext = ""
-        local _showStatus = false
+        local _st_m = 0
+        if ply:IsBleeding() then
+          if _sttext != "" then
+            _sttext = _sttext .. ", "
+          end
+          _sttext = _sttext .. lang_string( "youarebleeding" )
+          if _st_m < 3 then
+            _st_m = 3
+          end
+        end
         if ply:GetNWBool( "cuffed" ) then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
           _sttext = _sttext .. lang_string( "cuffed" )
-          _showStatus = true
+          if _st_m < 2 then
+            _st_m = 2
+          end
         end
         if ply:GetNWBool( "weaponlowered" ) then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
           _sttext = _sttext .. lang_string( "weaponlowered" )
-          _showStatus = true
+          if _st_m < 1 then
+            _st_m = 1
+          end
         end
         if ply:GetNWInt( "hunger", 100 ) < 20 then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
           _sttext = _sttext .. lang_string( "hungry" )
-          _showStatus = true
+          if _st_m < 2 then
+            _st_m = 2
+          end
         end
         if ply:GetNWInt( "thirst", 100 ) < 20 then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
           _sttext = _sttext .. lang_string( "thirsty" )
-          _showStatus = true
+          if _st_m < 2 then
+            _st_m = 2
+          end
         end
         if ply:GetNWBool( "inJail", false ) then
           if _sttext != "" then
             _sttext = _sttext .. ", "
           end
           _sttext = _sttext .. lang_string( "jail" ) .. ": " .. ply:GetNWInt( "jailtime", 0 )
-          _showStatus = true
+          if _st_m < 2 then
+            _st_m = 2
+          end
+        end
+        local _st_c = Color( 0, 0, 0, 0 )
+        if _st_m == 3 then
+          _st_c = Color( 255, 0, 0, HudV( "colbga" ) )
+        elseif _st_m == 2 then
+          _st_c = Color( 255, 255, 0, HudV( "colbga" ) )
+        elseif _st_m == 1 then
+          _st_c = Color( 0, 255, 0, HudV( "colbga" ) )
         end
         if tonumber( HudV("stto") ) == 1 and _sttext != "" then
-          drawHUDElement( "st", nil, nil, _sttext, nil, nil )
+          drawHUDElement( "st", 1, 1, _sttext, nil, _st_c )
         end
 
         --Voting
@@ -522,7 +570,9 @@ function HudPlayer()
         drawHUDElementBr( "hp" )
         drawHUDElementBr( "ar" )
         drawHUDElementBr( "xp" )
-        drawHUDElementBr( "ms" )
+        if ply:GetNWBool( "toggle_stamina", false ) then
+          drawHUDElementBr( "ms" )
+        end
         drawHUDElementBr( "wn" )
         drawHUDElementBr( "wp" )
         if weapon != NULL then
@@ -530,8 +580,12 @@ function HudPlayer()
             drawHUDElementBr( "ws" )
           end
         end
-        drawHUDElementBr( "mt" )
-        drawHUDElementBr( "mh" )
+        if ply:GetNWBool( "toggle_thirst", false ) then
+          drawHUDElementBr( "mt" )
+        end
+        if ply:GetNWBool( "toggle_hunger", false ) then
+          drawHUDElementBr( "mh" )
+        end
         if ply:GetNWBool( "casting", false ) then
           drawHUDElementBr( "ca" )
         end

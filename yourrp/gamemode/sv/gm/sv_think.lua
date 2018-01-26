@@ -1,8 +1,8 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function reg_hp( ply )
   if ply:GetNWInt( "GetHealthReg" ) != nil then
-    ply:SetHealth( ply:Health() + ply:GetNWInt( "GetHealthReg" ) )
+    ply:Heal( ply:GetNWInt( "GetHealthReg" ) )
     if ply:Health() > ply:GetMaxHealth() then
       ply:SetHealth( ply:GetMaxHealth() )
     end
@@ -110,7 +110,9 @@ timer.Create( "ServerThink", 1, 0, function()
   local _all_players = player.GetAll()
 
   for k, ply in pairs( _all_players ) do
+
     if !ply:GetNWBool( "inCombat" ) then
+      ply:CheckHeal()
       ply:SetNWFloat( "uptime_current", ply:getuptimecurrent() )
       ply:SetNWFloat( "uptime_total", ply:getuptimetotal() )
       ply:SetNWFloat( "uptime_server", os.clock() )
@@ -123,6 +125,14 @@ timer.Create( "ServerThink", 1, 0, function()
           reg_mb( ply ) --MetabolismReg (health up, when enough hunger)
         end
       end
+    end
+
+    if ply:IsBleeding() then
+      local effect = EffectData()
+      effect:SetOrigin( ply:GetPos() - ply:GetBleedingPosition() )
+      effect:SetScale( 1 )
+      util.Effect( "bloodimpact", effect )
+      ply:TakeDamage( 0.5, ply, ply )
     end
 
     if ply:GetNWBool( "toggle_hunger", false ) then

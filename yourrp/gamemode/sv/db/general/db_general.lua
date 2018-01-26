@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -55,7 +55,7 @@ function add_first_entry( retries )
 end
 add_first_entry( 0 )
 
---db_drop_table( "yrp_general")
+--db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
 local _name_advert = ""
@@ -75,27 +75,27 @@ if _init_general != false and _init_general != nil then
   yrp_general = _init_general[1]
 end
 
-function IsRealisticFallDamage()
+function IsRealisticFallDamageEnabled()
   return tobool( yrp_general.toggle_realistic_falldamage )
 end
 
-function IsRealisticDamage()
+function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
 
 net.Receive( "db_update_realistic_damage", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )
   if isnumber( _nw ) then
-    db_update( "yrp_general", "toggle_realistic_damage = " .. _nw, "uniqueID = 1" )
     yrp_general.toggle_realistic_damage = _nw
+    db_update( "yrp_general", "toggle_realistic_damage = " .. yrp_general.toggle_realistic_damage, nil )
   end
 end)
 
 net.Receive( "db_update_realistic_falldamage", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )
   if isnumber( _nw ) then
-    db_update( "yrp_general", "toggle_realistic_falldamage = " .. _nw, "uniqueID = 1" )
     yrp_general.toggle_realistic_falldamage = _nw
+    db_update( "yrp_general", "toggle_realistic_falldamage = " .. yrp_general.toggle_realistic_falldamage, nil )
   end
 end)
 

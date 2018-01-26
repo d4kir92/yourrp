@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function createDerma( art, parent, w, h, x, y )
   tmpDerma = vgui.Create( art, parent )
@@ -318,9 +318,9 @@ function changeHudElement( parent, tmp, textPre )
 
     local tmpRoundedToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 420 ) )
     local tmpRoundedToggleChecked = -1
-    if tonumber( HudV(tmp .. "it") ) == 0 then
+    if tonumber( HudV(tmp .. "tr") ) == 0 then
       tmpRoundedToggleChecked = false
-    elseif tonumber( HudV(tmp .. "it") ) == 1 then
+    elseif tonumber( HudV(tmp .. "tr") ) == 1 then
       tmpRoundedToggleChecked = true
     end
     tmpRoundedToggle:SetChecked( tmpRoundedToggleChecked )

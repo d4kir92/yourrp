@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 --cl_think.lua
 
@@ -213,12 +213,12 @@ function KeyPress()
 	if isNoMenuOpen() then
 		if input.IsMouseDown( MOUSE_RIGHT ) then
 			if ply:GetNWInt( "view_range_aim" ) > 0 then
-				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_aim" ) - ply:GetNWInt( "view_range_view" )/10 )
+				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_aim" ) - ply:GetNWInt( "view_range_view" )/16 )
 			end
 			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_aim" ) )
 		else
 			if ply:GetNWInt( "view_range" ) < ply:GetNWInt( "view_range_view" ) then
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + ply:GetNWInt( "view_range_view" )/10 )
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + ply:GetNWInt( "view_range_view" )/16 )
 			else
 
 				if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then

@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 hook.Add( "open_server_realistic", "open_server_realistic", function()
   local ply = LocalPlayer()
@@ -25,6 +25,24 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
   local sv_harms_npc = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1110 ) )
   local sv_hlegs_npc = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1180 ) )
 
+  local sv_h_entity = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1400 ) )
+  local sv_h_vehicle = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1470 ) )
+
+  sv_hhead:SetMax( 999999999 )
+  sv_hches:SetMax( 999999999 )
+  sv_hstom:SetMax( 999999999 )
+  sv_harms:SetMax( 999999999 )
+  sv_hlegs:SetMax( 999999999 )
+
+  sv_hhead_npc:SetMax( 999999999 )
+  sv_hches_npc:SetMax( 999999999 )
+  sv_hstom_npc:SetMax( 999999999 )
+  sv_harms_npc:SetMax( 999999999 )
+  sv_hlegs_npc:SetMax( 999999999 )
+
+  sv_h_entity:SetMax( 999999999 )
+  sv_h_vehicle:SetMax( 999999999 )
+
   local _preview = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 1300 ), ctr( 240 ) )
   _preview:SetValue( 1.0 )
 
@@ -32,7 +50,7 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
     --draw.RoundedBox( 0, 0, 0, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), _yrp.colors.panel )
 
     draw.SimpleTextOutlined( lang_string( "bonefracturing" ) .. " (" .. lang_string( "wip") .. ")", "sef", ctr( 70 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "bleeding" ) .. " (" .. lang_string( "wip") .. ")", "sef", ctr( 70 ), ctr( 95 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "bleeding" ), "sef", ctr( 70 ), ctr( 95 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 
     draw.SimpleTextOutlined( lang_string( "damage" ) .. " (" .. lang_string( "preview" ) .. ")", "sef", ctr( 1300 - 10 ), ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -68,7 +86,13 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
     draw.SimpleTextOutlined( sv_hstom_npc:GetValue()*_preview:GetValue() .. " " .. lang_string( "damage" ), "sef", ctr( 1300 ), ctr( 1065 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( sv_harms_npc:GetValue()*_preview:GetValue() .. " " .. lang_string( "damage" ), "sef", ctr( 1300 ), ctr( 1135 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( sv_hlegs_npc:GetValue()*_preview:GetValue() .. " " .. lang_string( "damage" ), "sef", ctr( 1300 ), ctr( 1205 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-end
+
+    draw.SimpleTextOutlined( lang_string( "hitfactor" ) .. " - " .. lang_string( "entities" ), "sef", ctr( 220 ), ctr( 1425 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "hitfactor" ) .. " - " .. lang_string( "vehicles" ), "sef", ctr( 220 ), ctr( 1495 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( sv_h_entity:GetValue()*_preview:GetValue() .. " " .. lang_string( "damage" ), "sef", ctr( 1300 ), ctr( 1425 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( sv_h_vehicle:GetValue()*_preview:GetValue() .. " " .. lang_string( "damage" ), "sef", ctr( 1300 ), ctr( 1495 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
 
   net.Start( "get_yrp_realistic" )
   net.SendToServer()
@@ -93,8 +117,23 @@ end
       sv_hstom_npc:SetValue( _tab.hitfactor_npc_stom )
       sv_harms_npc:SetValue( _tab.hitfactor_npc_arms )
       sv_hlegs_npc:SetValue( _tab.hitfactor_npc_legs )
+
+      sv_h_entity:SetValue( _tab.hitfactor_entity )
+      sv_h_vehicle:SetValue( _tab.hitfactor_vehicle )
     end
   end)
+
+  function sv_h_entity:OnValueChanged( val )
+    net.Start( "yrp_hit_entity" )
+      net.WriteFloat( val )
+    net.SendToServer()
+  end
+
+  function sv_h_vehicle:OnValueChanged( val )
+    net.Start( "yrp_hit_vehicle" )
+      net.WriteFloat( val )
+    net.SendToServer()
+  end
 
   function sv_bf:OnChange( bVal )
     local _tonumber = 0

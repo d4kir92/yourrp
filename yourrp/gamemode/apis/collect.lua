@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local _url1 = "https://docs.google.com/forms/d/e/1FAIpQLSe9L51y9uV7EExUuxE2VWuwWagVpLMO-BDD8OXEaXTr2u1rUw/formResponse"
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSfJfrnPqXh91wYsWUByr1S1lAQjfNH047NA12CEDCMINdwnhw/formResponse"

@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local Player = FindMetaTable( "Player" )
 
@@ -213,6 +213,40 @@ if SERVER then
       local _res = db_update( "yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'" )
     end
   end
+
+  function Player:CheckHeal()
+    if self:Health() > self:GetNWInt( "preHealth", 0 ) + 5 then
+      self:StopBleeding()
+    end
+    self:SetNWInt( "preHealth", self:Health() )
+  end
+
+  function Player:Heal( amount )
+    self:SetHealth( self:Health() + amount )
+    if self:Health() > self:GetMaxHealth() then
+      self:SetHealth( self:GetMaxHealth() )
+    end
+  end
+
+  function Player:StartBleeding()
+    self:SetNWBool( "isbleeding", true )
+  end
+
+  function Player:StopBleeding()
+    self:SetNWBool( "isbleeding", false )
+  end
+
+  function Player:SetBleedingPosition( pos )
+    self:SetNWVector( "bleedingpos", pos )
+  end
+end
+
+function Player:GetBleedingPosition()
+  return self:GetNWVector( "bleedingpos", Vector( 0, 0, 0 ) )
+end
+
+function Player:IsBleeding()
+  return self:GetNWBool( "isbleeding", false )
 end
 
 function Player:canAfford( money )

@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local Player = FindMetaTable( "Player" )
 
@@ -63,22 +63,25 @@ function Player:getHitTarget()
   return NULL
 end
 
-function to_darkrp_job( tab )
-  local _ret_tab = {}
-  _ret_tab.color = Color( 0, 0, 0, 255 )
-  local _pm = string.Explode( ",", tab.playermodels )
-  _ret_tab.model = tostring( _pm[1] )
-  _ret_tab.description = tab.description
-  _ret_tab.weapons = string.Explode( ",", db_out_str( tab.sweps ) )
-  _ret_tab.command = tostring( tab.roleID )
-  _ret_tab.max = tonumber( tab.maxamount )
-  _ret_tab.salary = tonumber( tab.salary )
-  _ret_tab.admin = tonumber( tab.adminonly )
-  _ret_tab.vote = tobool( tab.voteable )
-  _ret_tab.hasLicense = false -- NEED TO BE EDITED, later
-  _ret_tab.customCheck = nil
+function to_darkrp_job( rol_tab )
+  if istable( tab ) then
+    local _ret_tab = {}
+    _ret_tab.color = Color( 0, 0, 0, 255 )
+    _ret_tab.model = rol_tab.playermodels
+    _ret_tab.description = rol_tab.description
+    _ret_tab.weapons = string.Explode( ",", db_out_str( rol_tab.sweps ) )
+    _ret_tab.command = tostring( rol_tab.roleID )
+    _ret_tab.max = tonumber( rol_tab.maxamount )
+    _ret_tab.salary = tonumber( rol_tab.salary )
+    _ret_tab.admin = tonumber( rol_tab.adminonly )
+    _ret_tab.vote = tobool( rol_tab.voteable )
+    _ret_tab.hasLicense = false -- NEED TO BE EDITED, later
+    _ret_tab.customCheck = nil
 
-  return _ret_tab
+    return _ret_tab
+  else
+    printGM( "error", "tab: " .. tostring( tab ) .. " is not a table" )
+  end
 end
 
 RPExtraTeams = {}
@@ -87,9 +90,13 @@ function Player:getJobTable()
   --Description: Get the job table of a player.
   printGM( "darkrp", "getJobTable()" )
   local _job = self:GetRolTab()
-
-  _job = to_darkrp_job( _job )
-  return _job
+  if istable( _job ) then
+    _job = to_darkrp_job( _job )
+    return _job
+  else
+    printGM( "error", "_job: " .. tostring( _job ) .. " is not a table" )
+    return {}
+  end
 end
 
 function Player:getPocketItems()

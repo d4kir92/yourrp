@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 hook.Add( "open_yourp_add_langu", "open_yourp_add_langu", function()
   local ply = LocalPlayer()

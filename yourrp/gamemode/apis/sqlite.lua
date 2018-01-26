@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function disk_full( error )
   if string.find( error, "database or disk is full" ) then
@@ -179,7 +179,6 @@ end
 function sql_check_if_column_exists( db_name, column_name )
   local _result = db_select( db_name, column_name, nil )
   if _result == false then
-    --printGM( "note", "In table " .. table_name .. " column " .. column_name .. " not exists. (" .. tostring( _result ) .. ")" )
     return false
   else
     return true

@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local searchIcon = Material( "icon16/magnifier.png" )
 
@@ -527,7 +527,7 @@ net.Receive( "yrp_noti" , function( len )
           elseif _str_lang == "inventoryclearing" then
             _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
           elseif _str_lang == "playerisready" then
-            _str = _str .. lang_string( _str_lang ) .. " (" .. net.ReadString() .. ")"
+            _str = _str .. lang_string( "finishedloadingthegamepre" ) .. " " .. net.ReadString() .. " " .. lang_string( "finishedloadingthegamepos" )
           end
 
         	notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )

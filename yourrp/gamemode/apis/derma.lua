@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local _menuOpen = false
 function isNoMenuOpen()
@@ -517,7 +517,7 @@ function anchorH( num )
   end
 end
 
-function draw.Circle( x, y, radius, seg )
+function drawCircle( x, y, radius, seg )
 	local cir = {}
 
 	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
@@ -532,7 +532,7 @@ function draw.Circle( x, y, radius, seg )
 	surface.DrawPoly( cir )
 end
 
-function draw.CircleL( x, y, radius, seg )
+function drawCircleL( x, y, radius, seg )
 	local cir = {}
 
 	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
@@ -547,7 +547,7 @@ function draw.CircleL( x, y, radius, seg )
 	surface.DrawPoly( cir )
 end
 
-function draw.CircleR( x, y, radius, seg )
+function drawCircleR( x, y, radius, seg )
 	local cir = {}
 
 	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
@@ -567,10 +567,10 @@ function drawRoundedBox( r, x, y, w, h, color )
   surface.SetDrawColor( color )
   draw.NoTexture()
 
-  draw.CircleL( x+h/2, y+h/2, h/2, 64 )
+  drawCircleL( x+h/2, y+h/2, h/2, 64 )
 
   if w >= h then
-    draw.CircleR( x+w-h/2, y+h/2, h/2, 64 )
+    drawCircleR( x+w-h/2, y+h/2, h/2, 64 )
   end
 end
 
