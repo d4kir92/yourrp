@@ -4,6 +4,10 @@ function disk_full( error )
   if string.find( error, "database or disk is full" ) then
     if SERVER then
       PrintMessage( HUD_PRINTCENTER, "database or disk is full, please make more space!" )
+      net.Start( "yrp_noti" )
+        net.WriteString( "database_full_server" )
+        net.WriteString( "" )
+      net.Broadcast()
     elseif CLIENT then
       LocalPlayer():PrintMessage( HUD_PRINTTALK, "database or disk is full, please make more space!" )
       notification.AddLegacy( "[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40 )
@@ -29,14 +33,68 @@ function sql_show_last_error()
   return _last_error
 end
 
+local _db_dc = {}
+table.insert( _db_dc, " " )
+table.insert( _db_dc, "'" )
+table.insert( _db_dc, "´" )
+table.insert( _db_dc, "`" )
+table.insert( _db_dc, "#" )
+table.insert( _db_dc, "*" )
+table.insert( _db_dc, "+" )
+table.insert( _db_dc, "-" )
+table.insert( _db_dc, "(" )
+table.insert( _db_dc, ")" )
+table.insert( _db_dc, "[" )
+table.insert( _db_dc, "]" )
+table.insert( _db_dc, "{" )
+table.insert( _db_dc, "}" )
+table.insert( _db_dc, "^" )
+table.insert( _db_dc, "°" )
+table.insert( _db_dc, "!" )
+table.insert( _db_dc, "§" )
+table.insert( _db_dc, "$" )
+table.insert( _db_dc, "&" )
+table.insert( _db_dc, "/" )
+table.insert( _db_dc, "=" )
+table.insert( _db_dc, "\"" )
+table.insert( _db_dc, "?" )
+table.insert( _db_dc, "." )
+table.insert( _db_dc, "," )
+table.insert( _db_dc, ";" )
+table.insert( _db_dc, "<" )
+table.insert( _db_dc, ">" )
+table.insert( _db_dc, "ü" )
+table.insert( _db_dc, "ö" )
+table.insert( _db_dc, "ä" )
+table.insert( _db_dc, "Ü" )
+table.insert( _db_dc, "Ö" )
+table.insert( _db_dc, "Ä" )
 
 function db_in_str( str )
-  local _res = string.Replace( str, "'", "%" )
+  local _res = str
+  for k, sym in pairs( _db_dc ) do
+    local _pre = ""
+    if k < 10 then
+      _pre = "0"
+    end
+    _res = string.Replace( _res, sym, "%" .. _pre .. k )
+  end
   return _res
 end
 
 function db_out_str( str )
-  local _res = string.Replace( str, "%", "'" )
+  local _res = str
+
+  for k, sym in pairs( _db_dc ) do
+    local _pre = ""
+    if k < 10 then
+      _pre = "0"
+    end
+    _res = string.Replace( _res, "%" .. _pre .. k, sym )
+  end
+
+  _res = string.Replace( _res, "%", "'" )
+
   return _res
 end
 

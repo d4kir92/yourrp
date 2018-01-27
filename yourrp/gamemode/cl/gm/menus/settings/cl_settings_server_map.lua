@@ -13,7 +13,7 @@ net.Receive( "getMapList", function( len )
       if tonumber( v.groupID ) != -1 then
         for l, w in pairs( _groups ) do
           if tostring( v.groupID ) == tostring( w.uniqueID ) and v.type == "GroupSpawnpoint" then
-            if _mapListView != NULL and ispanel( _mapListView ) then
+            if _mapListView != nil and _mapListView != NULL and ispanel( _mapListView ) then
               _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID, "" )
             end
             break

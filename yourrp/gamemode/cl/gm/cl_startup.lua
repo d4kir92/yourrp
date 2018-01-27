@@ -517,6 +517,8 @@ net.Receive( "yrp_noti" , function( len )
       if ply:IsSuperAdmin() != nil and ply:IsAdmin() != nil then
         if ply:IsSuperAdmin() or ply:IsAdmin() then
           local _str_lang = net.ReadString()
+          local _time = 4
+          local _channel = NOTIFY_GENERIC
           local _str = "[" .. lang_string( "adminnotification") .. "] "
           if _str_lang == "noreleasepoint" then
             _str = _str .. lang_string( _str_lang )
@@ -528,9 +530,13 @@ net.Receive( "yrp_noti" , function( len )
             _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
           elseif _str_lang == "playerisready" then
             _str = _str .. lang_string( "finishedloadingthegamepre" ) .. " " .. net.ReadString() .. " " .. lang_string( "finishedloadingthegamepos" )
+          elseif _str_lang == "database_full_server" then
+            _str = _str .. "SERVER: Database or disk is full, please make more space!"
+            _time = 40
+            _channel = NOTIFY_ERROR
           end
 
-        	notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
+        	notification.AddLegacy( _str, _channel, _time )
         end
       end
     end

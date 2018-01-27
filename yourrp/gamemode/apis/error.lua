@@ -102,6 +102,12 @@ function send_error( realm, str )
   local entry = {}
 	timer.Create( "wait_for_gamemode"..str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
+			if SERVER then
+				if !game.IsDedicated() then
+					printGM( "note", "not dedicated" )
+					return
+				end
+			end
 		  entry["entry.915525654"] = tostring( str )
 		  entry["entry.58745995"] = tostring( realm )
 		  entry["entry.1306533151"] = db_sql_str2( string.lower( game.GetMap() ) ) or "MAPNAME"

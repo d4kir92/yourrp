@@ -188,6 +188,8 @@ function scoreboard:show_sb()
   _SBFrame:ShowCloseButton( false )
   _SBFrame:Center()
 
+  _SBFrame:MakePopup()
+
   local _mapPNG = getMapPNG()
 
   function _SBFrame:Paint( pw, ph )
@@ -212,20 +214,6 @@ function scoreboard:show_sb()
   end
 
   _SBSP = createVGUI( "DScrollPanel", _SBFrame, 2000-80, 2000-(256+48-50)-10, 40, 256+48-50+10 )
-
-  local _SBSPBar = _SBSP:GetVBar()
-  function _SBSPBar:Paint( w, h )
-  	draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
-  end
-  function _SBSPBar.btnUp:Paint( w, h )
-  	draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 255, 0, 100 ) )
-  end
-  function _SBSPBar.btnDown:Paint( w, h )
-  	draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 255, 0, 100 ) )
-  end
-  function _SBSPBar.btnGrip:Paint( w, h )
-  	draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 255, 100 ) )
-  end
 
   local _DPanelHeader = createVGUI( "DPanel", _SBSP, 2000, 2000, 0, 0 )
   function _DPanelHeader:Paint( pw, ph )
