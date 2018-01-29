@@ -91,9 +91,11 @@ function addNewItem( parent, item, tab )
       local yes = createVGUI( "DButton", frame, 300, 50, 10, 60 )
       yes:SetText( "" )
       function yes:DoClick()
-        net.Start( "removeBuyItem" )
-          net.WriteString( _itemPanel.uniqueID )
-        net.SendToServer()
+        if _itemPanel.uniqueID != nil then
+          net.Start( "removeBuyItem" )
+            net.WriteString( _itemPanel.uniqueID )
+          net.SendToServer()
+        end
         _itemPanel:Remove()
         frame:Close()
       end

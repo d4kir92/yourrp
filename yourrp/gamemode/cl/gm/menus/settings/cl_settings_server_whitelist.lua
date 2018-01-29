@@ -76,7 +76,7 @@ net.Receive( "getRoleWhitelist", function( len )
           local _cb1_data = _whitelistComboBoxPlys:GetOptionData( _cb1_id )
           local _cb2_data = _whitelistComboBox2:GetOptionData( _cb2_id )
           if _cb1_data != nil and _cb2_data != nil then
-            net.WriteString( tonumber( _cb1_data ) )
+            net.WriteString( _cb1_data )
             net.WriteInt( tonumber( _cb2_data ), 16 )
           else
             printGM( "error", "#0001 whitelist broken, maybe to much roles/groups" )

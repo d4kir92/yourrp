@@ -188,7 +188,9 @@ function getRoleInfos( name, uniqueID, desc, sweps, salary, model, modelsize, us
           net.Start( "wantRole" )
             net.WriteInt( uniqueID, 16 )
           net.SendToServer()
-          roleMenuWindow:Close()
+          if roleMenuWindow != nil then
+            roleMenuWindow:Close()
+          end
         --end
       end
     end
