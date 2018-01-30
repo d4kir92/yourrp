@@ -274,7 +274,7 @@ function GM:PlayerSetModel( ply )
 end
 
 function GM:PlayerLoadout( ply )
-  printGM( "note", "Get PlayerLoadout for player: " .. ply:Nick() )
+  printGM( "note", "[" .. tostring( ply:RPName() ) .. "] get his role equipment. (PlayerLoadout)" )
   if ply:HasCharacterSelected() then
     ply:CheckInventory()
     ply:SetNWBool( "cuffed", false )
@@ -343,15 +343,19 @@ function GM:PlayerLoadout( ply )
 end
 
 hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
+  printGM( "note", "[" .. tostring( ply:RPName() ) .. "] spawned. (PlayerSpawn)" )
   if ply:GetNWBool( "can_respawn", true ) then
     ply:SetNWBool( "can_respawn", false )
     timer.Simple( 0.01, function()
       teleportToSpawnpoint( ply )
     end)
+  else
+    printGM( "error", "yrp_PlayerSpawn failed!" )
   end
 end)
 
-hook.Add( "DoPlayerDeath", "yrp_DoPlayerDeath", function( ply, attacker, dmg )
+hook.Add( "PostPlayerDeath", "yrp_PostPlayerDeath", function( ply )
+  printGM( "note", "[" .. tostring( ply:RPName() ) .. "] is dead. (PostPlayerDeath)" )
   ply:StopBleeding()
 
   ply:SetNWBool( "can_respawn", true )
