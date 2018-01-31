@@ -349,8 +349,6 @@ hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
     timer.Simple( 0.01, function()
       teleportToSpawnpoint( ply )
     end)
-  else
-    printGM( "error", "yrp_PlayerSpawn failed!" )
   end
 end)
 

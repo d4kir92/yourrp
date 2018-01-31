@@ -94,7 +94,7 @@ function Player:getJobTable()
     _job = to_darkrp_job( _job )
     return _job
   else
-    printGM( "error", "_job: " .. tostring( _job ) .. " is not a table" )
+    printGM( "note", "currently not available for clientside")
     return {}
   end
 end
