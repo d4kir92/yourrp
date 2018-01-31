@@ -1,4 +1,4 @@
---Copyright (C) 2017 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function EN_All()
   --ATM
@@ -474,4 +474,10 @@ function EN_All()
   set_lang_string( "splinting", "splinting" )
   set_lang_string( "bandaging", "bandaging" )
   set_lang_string( "reviving", "reviving" )
+  set_lang_string( "usergroups", "UserGroups" )
+  set_lang_string( "playtimetotal", "Total playtime" )
+  set_lang_string( "playtimecurrent", "Current playtime" )
+  set_lang_string( "playtime", "Playtime" )
+  set_lang_string( "rolledpre", "rolled a" )
+  set_lang_string( "rolledpos", " " )
 end

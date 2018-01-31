@@ -62,15 +62,32 @@ function save_clients( string )
   end
 end
 
+function updateRoleUses( rid )
+  local _count = 0
+  for k, p in pairs( player.GetAll() ) do
+    if tonumber( p:GetNWInt( "roleUniqueID" ) ) == rid then
+      _count = _count + 1
+    end
+  end
+  db_update( "yrp_roles", "uses = " .. _count, "uniqueID = " .. rid )
+end
+
 function set_role( ply, rid )
   if ply:HasCharacterSelected() then
+    local _rol_Tab = ply:GetRolTab()
+    if _rol_Tab.uniqueID != nil then
+      updateRoleUses( _rol_Tab.uniqueID )
+    end
     local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
     local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )
+    ply:SetNWString( "roleUniqueID", rid )
     if _gid != nil then
       _gid = _gid[1].groupID
       local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
       local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
+      ply:SetNWString( "groupUniqueID", _gid )
     end
+    updateRoleUses( rid )
   end
 end
 
@@ -123,7 +140,7 @@ function set_role_values( ply )
         ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
         ply:SetNWInt( "salary", rolTab.salary )
         ply:SetNWString( "roleName", rolTab.roleID )
-        ply:SetNWString( "roleUniqueID", rolTab.uniqueID )
+
         ply:SetNWInt( "salarytime", rolTab.salarytime )
         ply:SetNWInt( "nextsalarytime", CurTime() + rolTab.salarytime )
         ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )

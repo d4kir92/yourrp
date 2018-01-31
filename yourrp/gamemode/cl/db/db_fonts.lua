@@ -103,7 +103,7 @@ function changeFontSize()
 	createFont( "xpsf", tmpFont, 24, _weight, false )
 	createFont( "utsf", tmpFont, 24, _weight, false )
 
-	createFont( "sef", tmpFont, 24, _weight, false )
+	createFont( "sef", tmpFont, 18, 560, false )
 
 	timer.Create( "createFontDB", 0.1, 0, function()
 		if is_hud_db_loaded() then

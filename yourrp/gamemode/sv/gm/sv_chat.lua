@@ -61,6 +61,12 @@ function print_help( sender )
   return ""
 end
 
+
+function roll_number( sender )
+  local number = math.Round( math.Rand( 0, 100 ) )
+  return number
+end
+
 function drop_weapon( sender )
   local _weapon = sender:GetActiveWeapon()
   if _weapon != nil then
@@ -246,6 +252,9 @@ function unpack_paket( sender, text, iscommand )
   elseif paket.command == "yell" then
     paket.command_color = Color( 255, 0, 0 )
     paket.text_color = Color( 255, 0, 0 )
+  elseif paket.command == "roll" then
+    paket.command_color = Color( 100, 100, 255 )
+    paket.text_color = Color( 100, 100, 255 )
   else
     paket.command_color = Color( 255, 0, 0 )
   end
@@ -322,6 +331,10 @@ function GM:PlayerSay( sender, text, teamChat )
   pk.rpname = paket.rpname
   pk.steamname = paket.steamname
   pk.usergroup = paket.usergroup
+
+  if paket.command == "roll" then
+    pk.text = lang_string( "rolledpre" ) .. " " .. tostring( roll_number( sender ) ) .. " " .. lang_string( "rolledpos" ) .. "!"
+  end
 
   if !paket.lokal then
     net.Start( "yrp_player_say" )

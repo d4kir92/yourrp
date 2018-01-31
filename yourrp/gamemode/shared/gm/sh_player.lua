@@ -282,7 +282,7 @@ function Player:RPName()
 end
 
 function Player:Nick()
-  return self:RPName()
+  return self:SteamName() .. " " .. self:RPName()
 end
 
 function Player:Team()

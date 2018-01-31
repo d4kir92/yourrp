@@ -237,8 +237,10 @@ end
 net.Receive( "yrp_player_say", function( len )
   local _tmp = net.ReadTable()
 
+  printTab( _tmp )
+
   local _write = false
-  if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" then
+  if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" then
     _write = true
     _tmp.name = _tmp.rpname
   end
@@ -260,6 +262,15 @@ net.Receive( "yrp_player_say", function( len )
     end
 
     if _tmp.command != "me" then
+      table.insert( _unpack, _tmp.lokal_color )
+      table.insert( _unpack, "[" )
+      table.insert( _unpack, string.upper( _tmp._lokal ) )
+      table.insert( _unpack, "]" )
+
+      table.insert( _unpack, " " )
+    end
+    printTab(_tmp)
+    if _tmp.command != "roll" then
       table.insert( _unpack, _tmp.lokal_color )
       table.insert( _unpack, "[" )
       table.insert( _unpack, string.upper( _tmp._lokal ) )

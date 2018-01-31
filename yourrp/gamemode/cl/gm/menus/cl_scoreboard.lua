@@ -2,7 +2,7 @@
 
 --cl_scoreboard.lua
 
-sb_groups = {}
+local sb_groups = {}
 net.Receive( "getScoreboardGroups", function()
   sb_groups = net.ReadTable()
 end)
@@ -15,7 +15,7 @@ timer.Simple( 6, function()
   net.SendToServer()
 end)
 
-scoreboard = {}
+local scoreboard = {}
 
 local elePos = {}
 elePos.x = 0
@@ -71,34 +71,71 @@ function drawGroupPlayers( id )
         _tmpPly.rpname = ply:RPName() or ""
         _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
         _tmpPly.ping = ply:Ping() or ""
+        _tmpPly.usergroup = ply:GetUserGroup() or ""
+        _tmpPly.steamname = ply:SteamName() or ""
+        if #_tmpPly.steamname > 16 then
+          _tmpPly.steamname = string.sub( _tmpPly.steamname, 1, 16 )
+          _tmpPly.steamname = _tmpPly.steamname .. "..."
+        end
+        local _pt = string.FormattedTime( ply:GetNWInt( "uptime_current", 0 ) )
+        if _pt.m < 10 then
+          _pt.m = "0" .. _pt.m
+        end
+        if _pt.h < 10 then
+          _pt.h = "0" .. _pt.h
+        end
+        _tmpPly.playtime = _pt.h .. ":" .. _pt.m
+
         function _tmpPly:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicOrange" ) )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
           --draw.SimpleTextOutlined( self.level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( self.rpname, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( self.rolename, "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 500 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+          if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+            draw.SimpleTextOutlined( string.upper( self.steamname ), "sef", pw - ctr( 600 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( string.upper( self.usergroup ), "sef", pw - ctr( 300 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+
+          draw.SimpleTextOutlined( self.playtime, "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+          draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
       end
     end
   end
 end
 
-function drawGroup( id, name )
+function drawGroup( id, name, color )
   elePos.y = elePos.y + 50
+
+  local _color = string.Explode( ",", color )
   local _tmpPanel = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 9999, elePos.x, elePos.y )
+  _tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
   function _tmpPanel:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicBlue" ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
     draw.SimpleTextOutlined( name, "sef", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   if hasGroupPlayers( id ) then
     elePos.y = elePos.y + 50
     local _tmpHeader = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
+    _tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
     function _tmpHeader:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "epicBlue" ) )
+      draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
       --draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "name" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "role" ), "sef", pw - ctr( 260 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 500 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+        draw.SimpleTextOutlined( lang_string( "nick" ), "sef", pw - ctr( 600 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "usergroup" ), "sef", pw - ctr( 300 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
+
+      draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       --draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
@@ -119,7 +156,7 @@ end
 function drawLowerGroup( id )
   for k, group in pairs( sb_groups ) do
     if tonumber( id ) == tonumber( group.uniqueID ) then
-      local _tmpGroup = drawGroup( group.uniqueID, group.groupID )
+      local _tmpGroup = drawGroup( group.uniqueID, group.groupID, group.color )
       return _tmpGroup
     end
   end
@@ -146,7 +183,7 @@ function drawGroupRow( id )
   if hasGroupRowPlayers( id ) then
     for k, group in pairs( sb_groups ) do
       if tonumber( id ) == tonumber( group.uniqueID ) then
-        local tmp = drawGroup( group.uniqueID, group.groupID )
+        local tmp = drawGroup( group.uniqueID, group.groupID, group.color )
         tryLowerGroup( group.uniqueID )
 
         elePos.y = elePos.y + ctr( 20 )
@@ -159,8 +196,16 @@ function drawGroupRow( id )
 end
 
 function drawGroups()
+  local _not_first = false
   for k, group in pairs( sb_groups ) do
     if tonumber( group.uppergroup ) == tonumber( -1 ) then
+      if hasGroupRowPlayers( group.uniqueID ) then
+        if _not_first then
+          elePos.y = elePos.y + 40
+        end
+        _not_first = true
+      end
+
       elePos.x = ctr( 20 )
       drawGroupRow( group.uniqueID )
     end
@@ -217,7 +262,7 @@ function scoreboard:show_sb()
 
   local _DPanelHeader = createVGUI( "DPanel", _SBSP, 2000, 2000, 0, 0 )
   function _DPanelHeader:Paint( pw, ph )
-    --draw.RoundedBox( 0, ctr( 25 ), ctr( 256 - 25 ), pw, ph, get_color( "darkBG" ) )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "darkBG" ) )
   end
 
   drawScoreboard()

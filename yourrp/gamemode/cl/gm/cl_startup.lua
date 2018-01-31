@@ -479,8 +479,12 @@ function GM:HUDDrawTargetID()
 end
 
 function drawPlate( ply, string, z, color )
-  if ply:Alive() and ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-    local pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + Vector( 0, 0, ply:GetModelScale() * 20 )
+  if ply:Alive() then
+    local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
+    local pos = ply:GetPos() + _abstand
+    if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
+      pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + _abstand
+    end
     local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
     local sca = ply:GetModelScale()/4
     local str = string
