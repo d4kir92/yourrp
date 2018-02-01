@@ -38,6 +38,13 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
     draw.SimpleTextOutlined( lang_string("viewzoomin"), "sef", ctr( _wide ), ctr( 780 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("drop"), "sef", ctr( _wide ), ctr( 840 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("weaponlowering"), "sef", ctr( _wide ), ctr( 900 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( lang_string("incviewheight"), "sef", ctr( _wide ), ctr( 960 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("decviewheight"), "sef", ctr( _wide ), ctr( 1020 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("turnviewangleright"), "sef", ctr( _wide ), ctr( 1080 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("turnviewangleleft"), "sef", ctr( _wide ), ctr( 1140 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("viewposright"), "sef", ctr( _wide ), ctr( 1200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("viewposleft"), "sef", ctr( _wide ), ctr( 1260 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   local _k = {}
@@ -56,4 +63,11 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
   _k._vzi = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 780 ), "view_zoom_in" )
   _k._di = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 840 ), "drop_item" )
   _k._wl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 900 ), "weaponlowering" )
+
+  _k._vu = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 960 ), "view_up" )
+  _k._vd = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1020 ), "view_down" )
+  _k._vr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1080 ), "view_right" )
+  _k._vl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1140 ), "view_left" )
+  _k._vsr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1200 ), "view_spin_right" )
+  _k._vsl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1260 ), "view_spin_left" )
 end)

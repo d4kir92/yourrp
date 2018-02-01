@@ -208,6 +208,10 @@ LocalPlayer():SetNWInt( "view_range", 0 )
 LocalPlayer():SetNWInt( "view_range_view", 0 )
 LocalPlayer():SetNWInt( "view_range_aim", 0 )
 
+LocalPlayer():SetNWInt( "view_z", 0 )
+LocalPlayer():SetNWInt( "view_x", 0 )
+LocalPlayer():SetNWInt( "view_s", 0 )
+
 function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
@@ -241,6 +245,55 @@ function KeyPress()
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
 				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )
 			end
+		end
+
+		--[[ Up and down ]]--
+		if input.IsKeyDown( get_keybind( "view_up" ) ) then
+			ply:SetNWInt( "view_z_c", ply:GetNWInt( "view_z_c" ) + 0.1 )
+		elseif input.IsKeyDown( get_keybind( "view_down" ) ) then
+			ply:SetNWInt( "view_z_c", ply:GetNWInt( "view_z_c" ) - 0.1 )
+		end
+		if ply:GetNWInt( "view_z_c" ) > 100 then
+			ply:SetNWInt( "view_z_c", 100 )
+		elseif ply:GetNWInt( "view_z_c" ) < -100 then
+			ply:SetNWInt( "view_z_c", -100 )
+		end
+		if ply:GetNWInt( "view_z_c" ) < 3 and ply:GetNWInt( "view_z_c" ) > -3 then
+			ply:SetNWInt( "view_z", 0 )
+		else
+			ply:SetNWInt( "view_z", ply:GetNWInt( "view_z_c" ) )
+		end
+
+		--[[ Left and right ]]--
+		if input.IsKeyDown( get_keybind( "view_right" ) ) then
+			ply:SetNWInt( "view_x_c", ply:GetNWInt( "view_x_c" ) + 0.1 )
+		elseif input.IsKeyDown( get_keybind( "view_left" ) ) then
+			ply:SetNWInt( "view_x_c", ply:GetNWInt( "view_x_c" ) - 0.1 )
+		end
+		if ply:GetNWInt( "view_x_c" ) > 300 then
+			ply:SetNWInt( "view_x_c", 300 )
+		elseif ply:GetNWInt( "view_x_c" ) < -300 then
+			ply:SetNWInt( "view_x_c", -300 )
+		end
+		if ply:GetNWInt( "view_x_c" ) < 3 and ply:GetNWInt( "view_x_c" ) > -3 then
+			ply:SetNWInt( "view_x", 0 )
+		else
+			ply:SetNWInt( "view_x", ply:GetNWInt( "view_x_c" ) )
+		end
+
+		--[[ spin right and spin left ]]--
+		if input.IsKeyDown( get_keybind( "view_spin_right" ) ) then
+			ply:SetNWInt( "view_s_c", ply:GetNWInt( "view_s_c" ) + 0.4 )
+		elseif input.IsKeyDown( get_keybind( "view_spin_left" ) ) then
+			ply:SetNWInt( "view_s_c", ply:GetNWInt( "view_s_c" ) - 0.4 )
+		end
+		if ply:GetNWInt( "view_s_c" ) > 360 or ply:GetNWInt( "view_s_c" ) < -360 then
+			ply:SetNWInt( "view_s_c", 0 )
+		end
+		if ply:GetNWInt( "view_s_c" ) < 6 and ply:GetNWInt( "view_s_c" ) > -6 then
+			ply:SetNWInt( "view_s", 0 )
+		else
+			ply:SetNWInt( "view_s", ply:GetNWInt( "view_s_c" ) )
 		end
 
 		if !chatisopen then
@@ -347,9 +400,14 @@ local function yrpCalcView( ply, pos, angles, fov )
 									local _tmpThick = 4
 									local _minDistFor = 8
 									local _minDistBac = 40
+									angles = angles + Angle( 0, ply:GetNWInt( "view_s" ), 0 )
+									local _pos_change = angles:Up() * ply:GetNWInt( "view_z" ) + angles:Right() * ply:GetNWInt( "view_x" )
+
+ 									//ply:GetNWInt( "view_s" )
+
 									local tr = util.TraceHull( {
 										start = pos + angles:Forward() * _minDistFor,
-									endpos = pos - ( angles:Forward() * dist ) + Vector( 0, 0, ply:GetNWInt( "view_range", 0 )/3*ply:GetModelScale()),
+										endpos = pos - ( angles:Forward() * dist ) + _pos_change,
 										filter = {LocalPlayer(),weapon},
 										mins = Vector( -_tmpThick, -_tmpThick, -_tmpThick ),
 										maxs = Vector( _tmpThick, _tmpThick, _tmpThick ),
@@ -374,7 +432,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 										_drawViewmodel = false
 										return view
 									else
-										view.origin = pos - ( angles:Forward() * dist ) + Vector( 0, 0, ply:GetNWInt( "view_range", 0 )/3*ply:GetModelScale())
+										view.origin = pos - ( angles:Forward() * dist ) + _pos_change
 										view.angles = angles
 										view.fov = fov
 										_drawViewmodel = true

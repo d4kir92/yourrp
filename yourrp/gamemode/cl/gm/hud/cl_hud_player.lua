@@ -606,6 +606,15 @@ function HudPlayer()
           end
           draw.SimpleTextOutlined( _3PText .. " ( " .. math.Round( ply:GetNWInt( "view_range", 0 ), -1 ) .. " )", "HudBars", ScrW()/2, ctr( 2160/2 + 550 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
+        if input.IsKeyDown( get_keybind( "view_up" ) ) or input.IsKeyDown( get_keybind( "view_down" ) ) then
+          draw.SimpleTextOutlined( lang_string( "viewingheight" ) .. " ( " .. math.Round( ply:GetNWInt( "view_z", 0 ), 0 ) .. " )", "HudBars", ScrW()/2, ctr( 2160/2 + 600 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        end
+        if input.IsKeyDown( get_keybind( "view_right" ) ) or input.IsKeyDown( get_keybind( "view_left" ) ) then
+          draw.SimpleTextOutlined( lang_string( "viewingposition" ) .. " ( " .. math.Round( ply:GetNWInt( "view_x", 0 ), 0 ) .. " )", "HudBars", ScrW()/2, ctr( 2160/2 + 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        end
+        if input.IsKeyDown( get_keybind( "view_spin_right" ) ) or input.IsKeyDown( get_keybind( "view_spin_left" ) ) then
+          draw.SimpleTextOutlined( lang_string( "viewingangle" ) .. " ( " .. math.Round( ply:GetNWInt( "view_s", 0 ), 0 ) .. " )", "HudBars", ScrW()/2, ctr( 2160/2 + 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        end
       end
     else
       drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )

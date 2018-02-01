@@ -18,23 +18,38 @@ function closeHelpMenu()
   end
 end
 
-function nicekey( key_str )
-  if key_str != nil then
-    if string.lower( key_str ) == "uparrow" then
-      return "↑"
-    elseif string.lower( key_str ) == "downarrow" then
-      return "↓"
-    elseif string.lower( key_str ) == "kp_plus" then
-      return lang_string( "keynumpad" ) .. "+"
-    elseif string.lower( key_str ) == "kp_minus" then
-      return lang_string( "keynumpad" ) .. "-"
-    elseif string.lower( key_str ) == "pgup" then
-      return lang_string( "keypage" ) .. "↑"
-    elseif string.lower( key_str ) == "pgdn" then
-      return lang_string( "keypage" ) .. "↓"
-    end
+function replaceKeyName( str )
+  if str == "uparrow" or str == "pgup" then
+    return "↑"
+  elseif str == "downarrow" or str == "pgdn"  then
+    return "↓"
+  elseif str == "rightarrow" then
+    return "→"
+  elseif str == "leftarrow" then
+    return "←"
+  elseif str == "home" then
+    return lang_string( "numpadhome" )
+  elseif str == "plus" then
+    return "+"
+  elseif str == "minus" then
+    return "-"
   end
-  return tostring( key_str )
+  return str
+end
+
+function nicekey( key_str )
+  local _str = string.lower( key_str )
+  if _str != nil then
+    if string.find( _str, "kp_" ) then
+      local _end = string.sub( _str, 4 )
+      _end = replaceKeyName( _end )
+      return lang_string( "keynumpad" ) .. " " .. _end
+    elseif string.find( _str, "pg" ) then
+      return lang_string( "keypage" ) .. " " .. replaceKeyName( _str )
+    end
+    _str = replaceKeyName( _str )
+  end
+  return tostring( _str )
 end
 
 function openHelpMenu()
@@ -59,7 +74,7 @@ function openHelpMenu()
 
     draw.SimpleTextOutlined( "Language: ", "ttsf", ctr( 1400 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( "[" .. nicekey( "F1" ) .. "] " .. lang_string( "help" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 + 1*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( "F1" ) ) .. "] " .. lang_string( "help" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 + 1*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "menu_character_selection" ) ) ) ) .. "] " .. lang_string( "characterselection" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 + 2*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "menu_role" ) ) ) ) .. "] " .. lang_string( "rolemenu" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "menu_buy" ) ) ) ) .. "] " .. lang_string( "buymenu" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -75,6 +90,13 @@ function openHelpMenu()
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "weaponlowering" ) ) ) ) .. "] " .. lang_string( "weaponlowering" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 14*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "howtoopensmartphonepre" ) .. " [" .. string.upper( nicekey( input.GetKeyName( KEY_UP ) ) ) .. "] " .. lang_string( "howtoopensmartphonepos" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 15*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "howtoclosesmartphonepre" ) .. " [" .. string.upper( nicekey( input.GetKeyName( KEY_DOWN ) ) ) .. "] " .. lang_string( "howtoclosesmartphonepos" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 16*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_up" ) ) ) ) .. "] " .. lang_string( "incviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_down" ) ) ) ) .. "] " .. lang_string( "decviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_right" ) ) ) ) .. "] " .. lang_string( "viewposright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_left" ) ) ) ) .. "] " .. lang_string( "viewposleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_right" ) ) ) ) .. "] " .. lang_string( "turnviewangleright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_left" ) ) ) ) .. "] " .. lang_string( "turnviewangleleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     if LocalPlayer():IsSuperAdmin() or LocalPlayer():IsAdmin() then
       draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_settings" ) ) ) .. "] " .. lang_string( "ifadminsettings" ).. "!", "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 18*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
