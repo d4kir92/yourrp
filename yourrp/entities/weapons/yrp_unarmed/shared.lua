@@ -8,6 +8,7 @@ SWEP.Category = "YourRP"
 
 SWEP.PrintName = "Unarmed"
 SWEP.Language = "en"
+SWEP.LanguageString = "unarmed"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

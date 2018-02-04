@@ -1,5 +1,11 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+util.AddNetworkString( "client_lang" )
+net.Receive( "client_lang", function( len, ply )
+  local _lang = net.ReadString()
+  ply:SetNWString( "client_lang", _lang or "NONE" )
+end)
+
 function reg_hp( ply )
   if ply:GetNWInt( "GetHealthReg" ) != nil then
     ply:Heal( ply:GetNWInt( "GetHealthReg" ) )

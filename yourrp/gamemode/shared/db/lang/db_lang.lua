@@ -94,11 +94,13 @@ end
 
 function change_language( index )
 	hr_pre()
+	local _net_lang = index
   if index == "auto" then
     printGM( "lang", "Automatic detection" )
     search_language()
     if yrp_lang.get_language != "" then
       printGM( "lang", "Found Language: " .. "[" .. yrp_lang.get_language .. "]" )
+			_net_lang = yrp_lang.get_language
       if check_languagepack() then
         if yrp_lang.get_language == "de" then
           LangDE()
@@ -182,6 +184,12 @@ function change_language( index )
   end
   printGM( "lang", "Get Language-Pack [" .. yrp_lang.short .. "] " .. yrp_lang.language .. " (" .. yrp_lang.translated_by .. " " .. yrp_lang.translated_by_name .. ")" )
   printGM( "lang", "Language changed to [" .. yrp_lang.short .. "] " .. yrp_lang.language )
+
+	--[[ send info to server ]]--
+	net.Start( "client_lang" )
+		net.WriteString( tostring( _net_lang ) )
+	net.SendToServer()
+
   hr_pos()
 end
 

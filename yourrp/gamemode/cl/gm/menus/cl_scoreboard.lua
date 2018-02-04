@@ -73,6 +73,7 @@ function drawGroupPlayers( id )
         _tmpPly.ping = ply:Ping() or ""
         _tmpPly.usergroup = ply:GetUserGroup() or ""
         _tmpPly.steamname = ply:SteamName() or ""
+        _tmpPly.lang = ply:GetNWString( "client_lang", lang_string( "none" ) )
         if #_tmpPly.steamname > 16 then
           _tmpPly.steamname = string.sub( _tmpPly.steamname, 1, 16 )
           _tmpPly.steamname = _tmpPly.steamname .. "..."
@@ -91,9 +92,10 @@ function drawGroupPlayers( id )
           --draw.SimpleTextOutlined( self.level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( self.rpname, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 500 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 420 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+            draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 960 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             draw.SimpleTextOutlined( string.upper( self.steamname ), "sef", pw - ctr( 600 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             draw.SimpleTextOutlined( string.upper( self.usergroup ), "sef", pw - ctr( 300 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
@@ -126,9 +128,10 @@ function drawGroup( id, name, color )
       --draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "name" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 500 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 420 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+        draw.SimpleTextOutlined( "Lang.", "sef", pw - ctr( 960 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         draw.SimpleTextOutlined( lang_string( "nick" ), "sef", pw - ctr( 600 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         draw.SimpleTextOutlined( lang_string( "usergroup" ), "sef", pw - ctr( 300 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end

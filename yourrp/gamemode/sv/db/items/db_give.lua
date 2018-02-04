@@ -112,3 +112,13 @@ net.Receive( "drop_item", function( len, ply )
     ply:StripWeapon( _wclass )
   end
 end)
+
+util.AddNetworkString( "dropswep" )
+
+net.Receive( "dropswep", function( len, ply )
+  local _weapon = ply:GetActiveWeapon()
+  if _weapon != NULL and _weapon != nil and _weapon:GetModel() != "" then
+    local _wclass = _weapon:GetClass() or ""
+    ply:DropWeapon( _weapon )
+  end
+end)

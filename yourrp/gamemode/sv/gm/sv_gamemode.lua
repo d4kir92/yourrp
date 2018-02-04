@@ -23,7 +23,6 @@ end
 
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
 
-
   if newWeapon:IsScripted() then
     --[[ Set default HoldType of currentweapon ]]--
     if newWeapon:GetNWString( "swep_holdtype", "" ) == "" then

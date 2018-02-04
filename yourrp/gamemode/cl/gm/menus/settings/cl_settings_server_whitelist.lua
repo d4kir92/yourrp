@@ -78,9 +78,6 @@ net.Receive( "getRoleWhitelist", function( len )
           if _cb1_data != nil and _cb2_data != nil then
             net.WriteString( _cb1_data )
             net.WriteInt( tonumber( _cb2_data ), 16 )
-          else
-            printGM( "error", "#0001 whitelist broken, maybe to much roles/groups" )
-            printGM( "error", "#0001 r: " .. tostring(  #_tmpRoleList ) .. " g: " .. tostring(  #_tmpGroupList ) )
           end
         net.SendToServer()
       end

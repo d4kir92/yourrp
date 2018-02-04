@@ -8,6 +8,7 @@ SWEP.Category = "YourRP"
 
 SWEP.PrintName = "Key"
 SWEP.Language = "en"
+SWEP.LanguageString = "keys"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1
@@ -21,6 +22,7 @@ SWEP.AdminSpawnable = true
 
 SWEP.ViewModel = "models/weapons/c_arms.mdl"
 SWEP.WorldModel = ""
+SWEP.UseHands = true
 
 SWEP.Primary.ClipSize = -1
 

@@ -8,6 +8,7 @@ SWEP.Category = "YourRP"
 
 SWEP.PrintName = "Syringe WIP"
 SWEP.Language = "en"
+SWEP.LanguageString = "syringe"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

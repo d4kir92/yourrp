@@ -8,6 +8,7 @@ SWEP.Category = "YourRP"
 
 SWEP.PrintName = "Splint WIP"
 SWEP.Language = "en"
+SWEP.LanguageString = "splint"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

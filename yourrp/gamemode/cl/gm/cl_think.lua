@@ -42,6 +42,15 @@ hook.Add( "OnSpawnMenuClose", "yrp_spawn_menu_close", function()
 	closeMenu()
 end)
 
+function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
+  --[[ Change language ]]--
+  if newWeapon.LanguageString != nil then
+    print("newWeapon.lang_string " .. newWeapon.LanguageString)
+    newWeapon.PrintName = lang_string(newWeapon.LanguageString)
+    print(newWeapon.PrintName)
+  end
+end
+
 function useFunction( string )
 	if string == nil then
 		return
@@ -99,7 +108,7 @@ function useFunction( string )
 				if _weapon:GetModel() != "" then
 					notification.AddLegacy( _pname .. " " .. lang_string( "hasbeendropped" ), 0, 3)
 
-					net.Start( "drop_item" )
+					net.Start( "dropswep" )
 					net.SendToServer()
 				else
 					notification.AddLegacy( _pname .. " " .. string.lower( lang_string( "cannotbedropped" ) ), 0, 3)

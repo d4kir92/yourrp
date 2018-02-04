@@ -1,7 +1,5 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_hud.lua
-
 CreateConVar( "yrp_cl_hud", 1, {}, "" )
 --##############################################################################
 --Resolution Change
@@ -151,7 +149,7 @@ end
 hook.Add( "HUDPaint", "CustomHud", function( )
 	local ply = LocalPlayer()
 	if !ply:InVehicle() then
-		HudPlayer()
+		HudPlayer( ply )
 		HudCrosshair()
 		HudView()
 	end

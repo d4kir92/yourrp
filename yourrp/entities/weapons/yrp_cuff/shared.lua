@@ -8,6 +8,7 @@ SWEP.Category = "YourRP"
 
 SWEP.PrintName = "Handcuffs"
 SWEP.Language = "en"
+SWEP.LanguageString = "handcuffs"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1
@@ -46,54 +47,16 @@ function SWEP:Think()
 
 end
 
+local _target
 function SWEP:PrimaryAttack()
-	local ply = self:GetOwner()
-	local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
-	if tr.Hit then
-		self.target = tr.Entity
-		if tr.Entity:IsPlayer() then
-			self.cd = 3
-			self.current = 0
-			self.tick = 0.1
-			ply:SetNWInt( "castMin", 0 )
-			ply:SetNWInt( "castMax", self.cd )
-			ply:SetNWBool( "casting", true )
-			timer.Create( "handcuffPlayer" .. tostring(self.target), self.tick, 0, function()
-				ply:SetNWInt( "castCur", self.current )
-				if self.target != nil then
-					if self.target:GetNWBool( "cuffed" ) then
-						ply:SetNWString( "castName", lang_string( "unleash" ) )
-						if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
-							if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
-								ply:SetNWBool( "casting", false )
-								self.target:SetNWBool( "cuffed", false )
-								timer.Remove( "handcuffPlayer" .. tostring(self.target) )
-							end
-						else
-							ply:SetNWBool( "casting", false )
-							timer.Remove( "handcuffPlayer" .. tostring(self.target) )
-						end
-					else
-						ply:SetNWString( "castName", lang_string( "tieup" ) )
-						if ply:Health() > 0 and self.target:Health() > 0 and ply:KeyDown( IN_ATTACK ) and ply:GetPos():Distance( self.target:GetPos() ) < 64 then
-							if tonumber( ply:GetNWInt( "castCur", 0 ) ) >= tonumber( self.cd ) then
-								ply:SetNWBool( "casting", false )
-								if SERVER then
-									self.target:SetActiveWeapon( "yrp_unarmed" )
-							    self.target:SelectWeapon( "yrp_unarmed" )
-								end
-								self.target:SetNWBool( "cuffed", true )
-
-								timer.Remove( "handcuffPlayer" .. tostring(self.target) )
-							end
-						else
-							ply:SetNWBool( "casting", false )
-							timer.Remove( "handcuffPlayer" .. tostring(self.target) )
-						end
-					end
-				end
-				self.current = self.current + self.tick
-			end)
+	if SERVER then
+		local ply = self:GetOwner()
+		local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
+		if tr.Hit then
+			self.target = tr.Entity
+			if tr.Entity:IsPlayer() then
+				ply:StartCasting( "tieup", "tieup", 0, self.target, 3, 100, 1, false )
+			end
 		end
 	end
 end
@@ -115,6 +78,29 @@ if CLIENT then
 	hook.Add( "PostPlayerDraw", "DrawCuff", DrawCuff )
 end
 
-function SWEP:SecondaryAttack()
+if SERVER then
+	hook.Add( "yrp_castdone_tieup", "tieup", function( args )
+		args.target:SetActiveWeapon( "yrp_unarmed" )
+		args.target:SelectWeapon( "yrp_unarmed" )
+		args.target:SetNWBool( "cuffed", true )
+	end)
+end
 
+if SERVER then
+	hook.Add( "yrp_castdone_unleash", "unleash", function( args )
+		args.target:SetNWBool( "cuffed", false )
+	end)
+end
+
+function SWEP:SecondaryAttack()
+	if SERVER then
+		local ply = self:GetOwner()
+		local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
+		if tr.Hit then
+			self.target = tr.Entity
+			if tr.Entity:IsPlayer() then
+				ply:StartCasting( "unleash", "unleash", 0, self.target, 3, 100, 1, false )
+			end
+		end
+	end
 end

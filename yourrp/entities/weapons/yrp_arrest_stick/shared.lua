@@ -8,6 +8,7 @@ SWEP.Category = "YourRP"
 
 SWEP.PrintName = "Arrest stick"
 SWEP.Language = "en"
+SWEP.LanguageString = "arreststick"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

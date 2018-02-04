@@ -157,6 +157,84 @@ function Player:GetPlayerModel()
 end
 
 if SERVER then
+  function Player:StopCasting()
+    --[[ successfull casting ]]--
+    self:SetNWBool( "iscasting", false )
+
+    local _args = {}
+    _args.attacker = self
+    _args.target = self:GetNWEntity( "casttarget" )
+    hook.Run( "yrp_castdone_" .. self:GetNWString( "castnet" ), _args )
+  end
+
+  function Player:InteruptCasting()
+    --[[ failed casting ]]--
+    self:SetNWBool( "iscasting", false )
+    if timer.Exists( self:SteamID() .. "castduration" ) then
+      timer.Remove( self:SteamID() .. "castduration" )
+    end
+  end
+
+  function Player:StartCasting( net_str, lang_str, mode, target, duration, range, cost, canmove )
+    --[[ cancel other spells ]]--
+    self:InteruptCasting()
+
+    --[[ Setup ]]--
+    self:SetNWString( "castnet", net_str )
+    self:SetNWInt( "castmode", mode or 0 )
+    self:SetNWBool( "castcanmove", canmove or false )
+    if !self:GetNWBool( "castcanmove" ) then
+      self:SetNWVector( "castposition", self:GetPos() )
+    end
+    self:SetNWString( "castname", lang_str )
+    self:SetNWFloat( "castmax", duration or 1.0 )
+    if self:GetNWInt( "castmode" ) == 0 then
+      self:SetNWFloat( "castcur", 0.0 )
+    elseif self:GetNWInt( "castmode" ) == 1 then
+      self:SetNWFloat( "castcur", self:GetNWFloat( "castmax" ) )
+    end
+    self:SetNWEntity( "casttarget", target or self )
+    self:SetNWFloat( "castrange", range or 0.0 )
+
+    --[[ Start casting ]]--
+    self:SetNWBool( "iscasting", true )
+    timer.Create( self:SteamID() .. "castduration", 0.1, 0, function()
+
+      --printGM( "note", self:GetNWString( "castname" ) .. " " .. tostring( self:GetNWFloat( "castcur" ) ) )
+
+      --[[ Casting ]]--
+      if self:GetNWInt( "castmode" ) == 0 then
+        self:SetNWFloat( "castcur", self:GetNWFloat( "castcur" ) + 0.1 )
+        if !self:GetNWBool( "castcanmove" ) then
+          local _o_pos = self:GetNWVector( "castposition" )
+          local _c_pos = self:GetPos()
+          local _space = 3
+
+          --[[ x, y moved ]]--
+          if _c_pos.x + _space < _o_pos.x or _c_pos.x - _space > _o_pos.x or _c_pos.y + _space < _o_pos.y or _c_pos.y - _space > _o_pos.y then
+            self:InteruptCasting()
+          end
+          if self:GetPos():Distance( target:GetPos() ) > self:GetNWFloat( "castrange" ) then
+            self:InteruptCasting()
+          end
+        end
+        if self:GetNWFloat( "castcur" ) >= self:GetNWFloat( "castmax" ) then
+          self:StopCasting()
+          timer.Remove( self:SteamID() .. "castduration" )
+        end
+
+      --[[ Channeling ]]--
+      elseif self:GetNWInt( "castmode" ) == 1 then
+        self:SetNWFloat( "castcur", self:GetNWFloat( "castcur" ) - 0.1 )
+        if self:GetNWFloat( "castcur" ) <= 0.0 then
+          self:StopCasting()
+          timer.Remove( self:SteamID() .. "castduration" )
+        end
+      end
+
+    end)
+  end
+
   function Player:updateMoney( money )
     self:UpdateMoney()
   end

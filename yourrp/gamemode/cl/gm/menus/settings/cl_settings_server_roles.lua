@@ -812,7 +812,7 @@ net.Receive( "yrp_roles", function( len )
         addDBBar( rolesInfo, 800, 120, 0, 1040, lang_string( "rolehealth" ), Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1170, lang_string( "rolearmor" ), Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.streg, "yrp_roles", "st", "stmax", "streg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBBar( rolesInfo, 800, 120, 0, 1430, lang_string( "abilitybar" ) .. " (" .. string.upper( lang_string( "wip" ) ) .. ")", Color( 0, 0, 255 ), "yrp_roles", v.ab, v.abmax, v.abreg, "yrp_roles", "ab", "abmax", "abreg", "uniqueID = " .. tmp.uniqueID .. "" )
+        -- in work WIP addDBBar( rolesInfo, 800, 120, 0, 1430, lang_string( "abilitybar" ) .. " (" .. string.upper( lang_string( "wip" ) ) .. ")", Color( 0, 0, 255 ), "yrp_roles", v.ab, v.abmax, v.abreg, "yrp_roles", "ab", "abmax", "abreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "", 0 )
         addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "", 0 )
         addDBNumberWang( rolesInfo, 800, 80, 0, 1740, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "", 0 )
@@ -820,7 +820,6 @@ net.Receive( "yrp_roles", function( len )
         --2.Spalte
         addDBNumberWang( rolesInfo, 800, 80, 810, 0, lang_string( "rolemaxamount" ) .. " (-1 = " .. lang_string( "disabled" ) .. ")", v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "", -1, game.MaxPlayers() )
         addDBSwep( rolesInfo, self.id, tmp.uniqueID )
-        addDBAmmo( rolesInfo, self.id, tmp.uniqueID )
         addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.salary, yrp_roles_dbTable[k], "yrp_roles", "salary", "uniqueID = " .. tmp.uniqueID .. "", 0, 999999999999 )
         addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.salarytime, yrp_roles_dbTable[k], "yrp_roles", "salarytime", "uniqueID = " .. tmp.uniqueID .. "", 1, 999999999999 )
         addDBTextEntryBig( rolesInfo, 800, 250, 810, 1130, lang_string( "roledescription" ), v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "" )
@@ -839,6 +838,9 @@ net.Receive( "yrp_roles", function( len )
         if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
           addDBComboBox( rolesInfo, 1610, 80, 0, 1830, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
         end
+
+        --3.Spalte
+        --addDBAmmo( rolesInfo, self.id, tmp.uniqueID )
       end
       if tmp != nil and rolesList != NULL then
         rolesList:AddItem( tmp )
