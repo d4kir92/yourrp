@@ -424,6 +424,8 @@ function GM:InitPostEntity()
   net.Start( "player_is_ready" )
   net.SendToServer()
 
+  initLang()
+
   if tobool( get_tutorial( "tut_welcome" ) ) then
 
     openHelpMenu()

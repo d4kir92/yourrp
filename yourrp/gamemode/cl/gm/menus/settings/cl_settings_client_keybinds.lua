@@ -41,10 +41,10 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
 
     draw.SimpleTextOutlined( lang_string("incviewheight"), "sef", ctr( _wide ), ctr( 960 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string("decviewheight"), "sef", ctr( _wide ), ctr( 1020 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string("turnviewangleright"), "sef", ctr( _wide ), ctr( 1080 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string("turnviewangleleft"), "sef", ctr( _wide ), ctr( 1140 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string("viewposright"), "sef", ctr( _wide ), ctr( 1200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string("viewposleft"), "sef", ctr( _wide ), ctr( 1260 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("viewposright"), "sef", ctr( _wide ), ctr( 1080 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("viewposleft"), "sef", ctr( _wide ), ctr( 1140 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("turnviewangleright"), "sef", ctr( _wide ), ctr( 1200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string("turnviewangleleft"), "sef", ctr( _wide ), ctr( 1260 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
 
   local _k = {}

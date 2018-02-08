@@ -23,7 +23,7 @@ function createFont( _name, _font, _size, __weight, _outline )
 	} )
 end
 
-local tmpFont = "Arial" --"Roboto-Regular"
+local tmpFont = "Calibri" --"Roboto-Regular"
 local _weight = 1
 
 function changeFontSizeOf( _font, _size )
@@ -103,7 +103,7 @@ function changeFontSize()
 	createFont( "xpsf", tmpFont, 24, _weight, false )
 	createFont( "utsf", tmpFont, 24, _weight, false )
 
-	createFont( "sef", tmpFont, 18, 560, false )
+	createFont( "sef", tmpFont, 24, 1, false )
 
 	timer.Create( "createFontDB", 0.1, 0, function()
 		if is_hud_db_loaded() then

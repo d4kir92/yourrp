@@ -77,6 +77,10 @@ function IsBleedingEnabled()
   return tobool( yrp_realistic.bleeding )
 end
 
+function IsBonefracturingEnabled()
+  return tobool( yrp_realistic.bonefracturing )
+end
+
 function IsHeadshotDeadlyPlayer()
   return tobool( yrp_realistic.headshotdeadly_player )
 end
@@ -146,6 +150,14 @@ net.Receive( "yrp_hit_vehicle", function( len, ply )
   if isnumber( _nw ) then
     yrp_realistic.hitfactor_vehicle = _nw
     db_update( _db_name, "hitfactor_vehicle = " .. yrp_realistic.hitfactor_vehicle, nil )
+  end
+end)
+
+net.Receive( "yrp_bonefracturing", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_realistic.bonefracturing = _nw
+    db_update( _db_name, "bonefracturing = " .. yrp_realistic.bonefracturing, nil )
   end
 end)
 

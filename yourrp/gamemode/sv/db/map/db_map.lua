@@ -26,8 +26,8 @@ function teleportToSpawnpoint( ply )
   --printGM( "note", "teleportToSpawnpoint " .. ply:Nick() )
   local rolTab = ply:GetRolTab()
   local groTab = ply:GetGroTab()
-
   local chaTab = ply:GetChaTab()
+
   if chaTab != nil and groTab != nil and rolTab != nil then
     if chaTab.map == db_sql_str2( string.lower( game.GetMap() ) ) and chaTab.position != "NULL" and chaTab.angle != "NULL" then
       local _tmpRoleSpawnpoints = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "roleID = " .. rolTab.uniqueID )

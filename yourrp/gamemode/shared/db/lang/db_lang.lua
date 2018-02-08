@@ -92,6 +92,15 @@ function check_languagepack()
 	return false
 end
 
+function send_lang()
+	--[[ send info to server ]]--
+	if CLIENT then
+		net.Start( "client_lang" )
+			net.WriteString( tostring( yrp_lang.get_language ) )
+		net.SendToServer()
+	end
+end
+
 function change_language( index )
 	hr_pre()
 	local _net_lang = index
@@ -185,10 +194,7 @@ function change_language( index )
   printGM( "lang", "Get Language-Pack [" .. yrp_lang.short .. "] " .. yrp_lang.language .. " (" .. yrp_lang.translated_by .. " " .. yrp_lang.translated_by_name .. ")" )
   printGM( "lang", "Language changed to [" .. yrp_lang.short .. "] " .. yrp_lang.language )
 
-	--[[ send info to server ]]--
-	net.Start( "client_lang" )
-		net.WriteString( tostring( _net_lang ) )
-	net.SendToServer()
+	send_lang()
 
   hr_pos()
 end

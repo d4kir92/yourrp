@@ -35,19 +35,42 @@ net.Receive( "getMapList", function( len )
   end
 end)
 
-function getMapPNG()
-  local _mapName = db_sql_str2( string.lower( game.GetMap() ) )
-  local _mapPicturePath = "maps/" .. _mapName .. ".png"
-  local _mapPictureDesti = _mapPicturePath
+function mapPNG()
+  local _mapName = game.GetMap()
+  local _map_png = _mapName .. ".png"
 
   local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
-  if file.Exists( _mapPicturePath, "GAME" ) then
-    _mapPNG =  Material( "../" .. _mapPicturePath, "noclamp smooth" )
-  else
-    _mapPicturePath = "maps/thumb/" .. _mapName .. ".png"
-    if file.Exists( _mapPicturePath, "GAME" ) then
-      _mapPNG = Material( "../" .. _mapPicturePath, "noclamp smooth" )
-    end
+
+  local _pre = "../"
+  local _maps = "maps/"
+  local _data = "data/maps/"
+  local _mapthumb = "maps/thumb/"
+
+  if file.Exists( _maps .. _map_png, "GAME" ) then
+    print(_pre .. _maps .. _map_png)
+    _mapPNG = Material( _pre .. _maps .. _map_png, "noclamp smooth" )
+    print(_mapPNG)
+    return _mapPNG
+  elseif file.Exists( _data .. _map_png, "GAME" ) then
+    print("2")
+    _mapPNG = Material( _pre .. _data .. _map_png, "noclamp smooth" )
+    print(_mapPNG)
+    return _mapPNG
+  elseif file.Exists( _mapthumb .. _map_png, "GAME" ) then
+    print(file.Exists( _mapthumb .. _map_png, "GAME" ))
+    print(_mapthumb .. _map_png)
+    print(_pre .. _mapthumb .. _map_png)
+    _mapPNG = Material( _pre .. _mapthumb .. _map_png, "noclamp smooth" )
+    print(_mapPNG)
+    return _mapPNG
+  end
+  return false
+end
+
+function getMapPNG()
+  local _mapPNG = mapPNG()
+  if tostring( _mapPNG ) == "Material [___error]" then
+    return false
   end
   return _mapPNG
 end

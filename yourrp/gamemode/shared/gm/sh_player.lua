@@ -157,6 +157,13 @@ function Player:GetPlayerModel()
 end
 
 if SERVER then
+  function Player:Unbroke()
+    self:SetNWBool( "broken_leg_right", false )
+    self:SetNWBool( "broken_leg_left", false )
+    self:SetNWBool( "broken_arm_right", false )
+    self:SetNWBool( "broken_arm_left", false )
+  end
+
   function Player:StopCasting()
     --[[ successfull casting ]]--
     self:SetNWBool( "iscasting", false )

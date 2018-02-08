@@ -3,6 +3,7 @@
 util.AddNetworkString( "client_lang" )
 net.Receive( "client_lang", function( len, ply )
   local _lang = net.ReadString()
+  printGM( "note", "[" .. ply:Nick() .. "] using language: " .. string.upper( _lang ) )
   ply:SetNWString( "client_lang", _lang or "NONE" )
 end)
 
@@ -63,6 +64,16 @@ function con_st( ply )
   if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
+  else
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+  end
+end
+
+function broken( ply )
+  if ply:GetNWBool( "broken_leg_left" ) or ply:GetNWBool( "broken_leg_right" ) then
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.3 )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.3 )
   else
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
@@ -155,12 +166,16 @@ timer.Create( "ServerThink", 1, 0, function()
     time_jail( ply )  --Jail
 
     check_salary( ply )
+
+    broken( ply )
   end
 
   if _time % 10 == 0 then
     for k, ply in pairs( _all_players ) do
       if ply:GetRoleName() == nil and ply:Alive() then
-        ply:KillSilent()
+        if !ply:IsBot() then
+          ply:KillSilent()
+        end
       end
     end
   end

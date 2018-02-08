@@ -20,8 +20,8 @@ SWEP.DrawCrosshair = false
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/c_arms.mdl"
-SWEP.WorldModel = ""
+SWEP.ViewModel = "models/weapons/v_ifak.mdl"
+SWEP.WorldModel = "models/Items/HealthKit.mdl"
 
 SWEP.Primary.ClipSize = 6
 SWEP.Primary.DefaultClip = 1

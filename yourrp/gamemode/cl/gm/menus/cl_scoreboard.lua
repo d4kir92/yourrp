@@ -66,7 +66,7 @@ function drawGroupPlayers( id )
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
         elePos.y = elePos.y + 50
-        local _tmpPly = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
+        local _tmpPly = createD( "DPanel", _SBSP, ScrH() - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
         _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
@@ -95,9 +95,9 @@ function drawGroupPlayers( id )
           draw.SimpleTextOutlined( self.rolename, "sef", ctr( 420 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
-            draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 960 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( string.upper( self.steamname ), "sef", pw - ctr( 600 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( string.upper( self.usergroup ), "sef", pw - ctr( 300 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 1150 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( string.upper( self.steamname ), "sef", pw - ctr( 750 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( string.upper( self.usergroup ), "sef", pw - ctr( 350 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
 
           draw.SimpleTextOutlined( self.playtime, "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -113,7 +113,7 @@ function drawGroup( id, name, color )
   elePos.y = elePos.y + 50
 
   local _color = string.Explode( ",", color )
-  local _tmpPanel = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 9999, elePos.x, elePos.y )
+  local _tmpPanel = createD( "DPanel", _SBSP, ScrH() - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
   _tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
   function _tmpPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
@@ -121,7 +121,7 @@ function drawGroup( id, name, color )
   end
   if hasGroupPlayers( id ) then
     elePos.y = elePos.y + 50
-    local _tmpHeader = createVGUI( "DPanel", _SBSP, 1880 - elePos.x, 50, elePos.x, elePos.y )
+    local _tmpHeader = createD( "DPanel", _SBSP, ScrH() - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
     _tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
     function _tmpHeader:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
@@ -131,9 +131,9 @@ function drawGroup( id, name, color )
       draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 420 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
-        draw.SimpleTextOutlined( "Lang.", "sef", pw - ctr( 960 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang_string( "nick" ), "sef", pw - ctr( 600 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang_string( "usergroup" ), "sef", pw - ctr( 300 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( "Lang.", "sef", pw - ctr( 1150 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "nick" ), "sef", pw - ctr( 750 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "usergroup" ), "sef", pw - ctr( 350 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
 
       draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -167,13 +167,13 @@ end
 
 function tryLowerGroup( id )
   if hasLowerGroup( id ) then
-    elePos.x = elePos.x + ctr( 20 )
+    elePos.x = elePos.x + ctr( 6 )
     for k, group in pairs( sb_groups ) do
       if tonumber( group.uppergroup ) == tonumber( id ) then
         local tmp = drawLowerGroup( group.uniqueID )
         tryLowerGroup( group.uniqueID )
 
-        elePos.y = elePos.y + ctr( 20 )
+        elePos.y = elePos.y + ctr( 6 )
 
         local tmpX, tmpY = tmp:GetPos()
         tmp:SetSize( tmp:GetWide(), ctr( elePos.y + 50 ) - tmpY )
@@ -189,7 +189,7 @@ function drawGroupRow( id )
         local tmp = drawGroup( group.uniqueID, group.groupID, group.color )
         tryLowerGroup( group.uniqueID )
 
-        elePos.y = elePos.y + ctr( 20 )
+        elePos.y = elePos.y + ctr( 6 )
 
         local tmpX, tmpY = tmp:GetPos()
         tmp:SetSize( tmp:GetWide(), ctr( elePos.y+50 ) - tmpY )
@@ -209,14 +209,14 @@ function drawGroups()
         _not_first = true
       end
 
-      elePos.x = ctr( 20 )
+      elePos.x = ctr( 10 )
       drawGroupRow( group.uniqueID )
     end
   end
 end
 
 function drawScoreboard()
-  elePos.x = ctr( 20 )
+  elePos.x = ctr( 10 )
   elePos.y = ctr( -50 )
   drawGroups()
 end
@@ -231,7 +231,7 @@ function scoreboard:show_sb()
     _SBFrame:Remove()
     _SBFrame = nil
   end
-  _SBFrame = createVGUI( "DFrame", nil, 2000, 2000, 10, 10 )
+  _SBFrame = createD( "DFrame", nil, ScrH(), ScrH(), 10, 10 )
   _SBFrame:SetTitle( "" )
   _SBFrame:ShowCloseButton( false )
   _SBFrame:Center()
@@ -255,15 +255,22 @@ function scoreboard:show_sb()
   	surface.SetMaterial( _yrpIcon	)
   	surface.DrawTexturedRect( 0, ctr( 4 ), ctr( 256 ), ctr( 256 ) )
 
-    draw.RoundedBox( 0, pw-ctr( 256+8 ), 0, ctr( 256+8 ), ctr( 256+8 ), Color( 0, 0, 0, 255 ) )
-    surface.SetDrawColor( 255, 255, 255, 255 )
-  	surface.SetMaterial( _mapPNG	)
-  	surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+    if _mapPNG != false then
+      draw.RoundedBox( 0, pw-ctr( 256+8 ), 0, ctr( 256+8 ), ctr( 256+8 ), Color( 0, 0, 0, 255 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+    	surface.SetMaterial( _mapPNG	)
+    	surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+    else
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( _yrpIcon	)
+      surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+    end
   end
 
-  _SBSP = createVGUI( "DScrollPanel", _SBFrame, 2000-80, 2000-(256+48-50)-10, 40, 256+48-50+10 )
+  _SBSP = createD( "DScrollPanel", _SBFrame, ScrH()-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
 
-  local _DPanelHeader = createVGUI( "DPanel", _SBSP, 2000, 2000, 0, 0 )
+  local _DPanelHeader = createD( "DPanel", _SBSP, ScrH(), ScrH(), 0, 0 )
   function _DPanelHeader:Paint( pw, ph )
     --draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "darkBG" ) )
   end

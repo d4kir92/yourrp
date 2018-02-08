@@ -58,6 +58,42 @@ function hudST( ply, color )
       _st_m = 2
     end
   end
+  if ply:GetNWBool( "broken_leg_right", false ) then
+    if _sttext != "" then
+      _sttext = _sttext .. ", "
+    end
+    _sttext = _sttext .. lang_string( "yourrightlegisbroken" )
+    if _st_m < 2 then
+      _st_m = 2
+    end
+  end
+  if ply:GetNWBool( "broken_leg_left", false ) then
+    if _sttext != "" then
+      _sttext = _sttext .. ", "
+    end
+    _sttext = _sttext .. lang_string( "yourleftlegisbroken" )
+    if _st_m < 2 then
+      _st_m = 2
+    end
+  end
+  if ply:GetNWBool( "broken_arm_right", false ) then
+    if _sttext != "" then
+      _sttext = _sttext .. ", "
+    end
+    _sttext = _sttext .. lang_string( "yourrightarmisbroken" )
+    if _st_m < 2 then
+      _st_m = 2
+    end
+  end
+  if ply:GetNWBool( "broken_arm_left", false ) then
+    if _sttext != "" then
+      _sttext = _sttext .. ", "
+    end
+    _sttext = _sttext .. lang_string( "yourleftarmisbroken" )
+    if _st_m < 2 then
+      _st_m = 2
+    end
+  end
   if ply:GetNWBool( "inJail", false ) then
     if _sttext != "" then
       _sttext = _sttext .. ", "

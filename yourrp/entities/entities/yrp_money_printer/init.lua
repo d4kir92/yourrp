@@ -142,7 +142,7 @@ function ENT:Think()
 				name = "moneyprintersound",
 				channel = CHAN_AUTO,
 				volume = 1.0/self:GetNWInt( "cooler" ),
-				level = 100,
+				level = 60,
 				pitch = { 90, 110 },
 				sound = "ambient/machines/combine_terminal_idle1.wav"
 			} )

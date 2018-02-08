@@ -10,8 +10,8 @@ printGM( "db", "Loading Resources" )
 --yourrp content
 resource.AddWorkshop( "1189643820" )
 
---handcuffs
-resource.AddWorkshop( "314312925" )
+--first aid kit
+resource.AddWorkshop( "1144876357" )
 
 --Food and Household items
 resource.AddWorkshop( "108024198" )

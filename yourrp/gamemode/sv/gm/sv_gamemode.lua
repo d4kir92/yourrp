@@ -12,6 +12,14 @@ function GM:GetFallDamage( ply, speed )
   if IsRealisticFallDamageEnabled() then
     local _damage = speed / 8
     if speed > ply:GetModelScale()*120 then
+      if IsBonefracturingEnabled() then
+        local _rand = math.Round( math.Rand( 0, 1 ), 0 )
+        if _rand == 0 then
+          ply:SetNWBool( "broken_leg_right", true )
+        elseif _rand == 1 then
+          ply:SetNWBool( "broken_leg_left", true )
+        end
+      end
       return _damage*ply:GetMaxHealth()/100
     else
       return 0
@@ -273,10 +281,16 @@ function GM:PlayerSetModel( ply )
 end
 
 function GM:PlayerLoadout( ply )
-  printGM( "note", "[" .. tostring( ply:RPName() ) .. "] get his role equipment. (PlayerLoadout)" )
+  printGM( "note", "[" .. tostring( ply:Nick() ) .. "] get his role equipment. (PlayerLoadout)" )
   if ply:HasCharacterSelected() then
     ply:CheckInventory()
+
+    --[[ Status Reset ]]--
     ply:SetNWBool( "cuffed", false )
+    ply:SetNWBool( "broken_leg_left", false )
+    ply:SetNWBool( "broken_leg_right", false )
+    ply:SetNWBool( "broken_arm_left", false )
+    ply:SetNWBool( "broken_arm_right", false )
 
     ply:old_give( "yrp_key" )
     ply:old_give( "yrp_unarmed" )
@@ -297,7 +311,9 @@ function GM:PlayerLoadout( ply )
       setbodygroups( ply )
     else
       printGM( "note", "Give char failed -> KillSilent -> " .. ply:Nick() )
-      ply:KillSilent()
+      if !ply:IsBot() then
+        ply:KillSilent()
+      end
     end
 
     ply:SetNWInt( "hunger", 100 )
@@ -342,7 +358,7 @@ function GM:PlayerLoadout( ply )
 end
 
 hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
-  printGM( "note", "[" .. tostring( ply:RPName() ) .. "] spawned. (PlayerSpawn)" )
+  printGM( "note", "[" .. tostring( ply:Nick() ) .. "] spawned. (PlayerSpawn)" )
   if ply:GetNWBool( "can_respawn", true ) then
     ply:SetNWBool( "can_respawn", false )
     timer.Simple( 0.01, function()
@@ -352,7 +368,7 @@ hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
 end)
 
 hook.Add( "PostPlayerDeath", "yrp_PostPlayerDeath", function( ply )
-  printGM( "note", "[" .. tostring( ply:RPName() ) .. "] is dead. (PostPlayerDeath)" )
+  printGM( "note", "[" .. tostring( ply:Nick() ) .. "] is dead. (PostPlayerDeath)" )
   ply:StopBleeding()
 
   ply:SetNWBool( "can_respawn", true )
