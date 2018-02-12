@@ -53,19 +53,16 @@ function printGM( channel, text )
 			_channelName = "NOTE"
 		elseif channel == "db" then
 			_color2 = Color( 255, 255, 0 )
-			_channelName = "DATABASE"
+			_channelName = "DB"
 		elseif channel == "server" then
 			_color2 = Color( 255, 255, 0 )
-			_channelName = "SERVER"
-		elseif channel == "user" then
-			_color2 = Color( 255, 255, 0 )
-			_channelName = "USER"
+			_channelName = "SV"
 		elseif channel == "admin" then
 			_color2 = Color( 255, 255, 0 )
 			_channelName = "ADMIN"
 		elseif channel == "gm" then
 			_color2 = Color( 255, 255, 0 )
-			_channelName = "GAMEMODE"
+			_channelName = "GM"
 		elseif channel == nil then
 			_color2 = Color( 255, 255, 0 )
 			_channelName = ""
@@ -74,12 +71,12 @@ function printGM( channel, text )
 			_channelName = "INSTRUCTOR"
 		elseif channel == "error" then
 			_color2 = Color( 255, 0, 0 )
-			_channelName = "ERROR"
+			_channelName = "!ERROR!"
 			_color3 = _color2
 			send_errors( _realm, _tmpText )
 		elseif channel == "lang" then
 			_color2 = Color( 255, 255, 0 )
-			_channelName = "LANGUAGE"
+			_channelName = "LANG"
 		elseif channel == "darkrp" then
 			_color2 = Color( 255, 0, 0 )
 			_channelName = "DarkRP-Int."
@@ -89,7 +86,7 @@ function printGM( channel, text )
 		end
 		for k, v in pairs(_tmpText) do
 			if _channelName != "" then
-				MsgC( _color, "[", Color( 255, 255, 0 ), _text.gmname, _color, "|" .. string.upper( _pool ) .. "|", _color2, _channelName, _color, "] ", _color3, v )
+				MsgC( _color, "[", Color( 255, 255, 0 ), _text.gmname, _color, "|", _color2, _channelName, _color, "] ", _color3, v )
 				MsgC( "\n" )
 			else
 				MsgC( _color, "[", Color( 255, 255, 0 ), _text.gmname, _color, "] ", _color3, v )

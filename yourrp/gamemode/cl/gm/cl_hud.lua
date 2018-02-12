@@ -171,10 +171,10 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 	_yrp_base.text = {}
 	_yrp_base.text.string = "GM-Base: YourRP"
 	_yrp_base.text.x = ScrW2()
-	_yrp_base.text.y = ctr( _yrp_base.h/2 ) + ctr( 2 )
+	_yrp_base.text.y = ctr( _yrp_base.h/2 ) + ctr( 4 )
 	draw.RoundedBoxEx( _yrp_base.r, _yrp_base.x, _yrp_base.y, _yrp_base.w, _yrp_base.h, Color( 0, 0, 0, 255 ), false, false, true, true )
 
-	draw.SimpleTextOutlined( _yrp_base.text.string, "DermaDefault", _yrp_base.text.x, _yrp_base.text.y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+	draw.SimpleTextOutlined( _yrp_base.text.string, "gmbase", _yrp_base.text.x, _yrp_base.text.y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined( lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )

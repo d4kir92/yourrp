@@ -38,7 +38,7 @@ function replaceKeyName( str )
 end
 
 function nicekey( key_str )
-  local _str = string.lower( key_str )
+  local _str = string.lower( tostring( key_str ) )
   if _str != nil then
     if string.find( _str, "kp_" ) then
       local _end = string.sub( _str, 4 )

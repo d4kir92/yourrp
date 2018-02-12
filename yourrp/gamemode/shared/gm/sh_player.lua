@@ -2,14 +2,20 @@
 
 local Player = FindMetaTable( "Player" )
 
+function Player:LoadedGamemode()
+  return self:GetNWBool( "finishedloading", false )
+end
+
 function Player:GetPlyTab()
   if SERVER then
-    if tostring( self ) != "Player [NULL]" then
-      if worked( self:SteamID(), "SteamID fail", true ) then
-        local yrp_players = db_select( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
-        if worked( yrp_players, "GetPlyTab fail", true ) then
-          self.plytab = yrp_players[1]
-          return self.plytab
+    if self:LoadedGamemode() then
+      if tostring( self ) != "Player [NULL]" then
+        if worked( self:SteamID(), "SteamID fail", true ) then
+          local yrp_players = db_select( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
+          if worked( yrp_players, "GetPlyTab fail", true ) then
+            self.plytab = yrp_players[1]
+            return self.plytab
+          end
         end
       end
     end
@@ -17,18 +23,32 @@ function Player:GetPlyTab()
   return nil
 end
 
-function Player:HasCharacterSelected()
+function Player:IsCharacterValid()
   if SERVER then
-    local _ply_tab = self:GetPlyTab()
-    if _ply_tab != nil then
-      if tostring( _ply_tab.CurrentCharacter ) == "NULL" or _ply_tab.CurrentCharacter == NULL then
-        if self.opencharacter == nil then
-          open_character_selection( self )
-          self.opencharacter = true
-        end
+    if self:LoadedGamemode() then
+      local _cha_tab = self:GetChaTab()
+      if _cha_tab == nil then
         return false
       else
+        printTab( _cha_tab )
         return true
+      end
+    end
+  end
+end
+
+function Player:HasCharacterSelected()
+  if SERVER then
+    if self:LoadedGamemode() then
+      --printGM( "note", self:Name() .. " HasCharacterSelected?" )
+      local _ply_tab = self:GetPlyTab()
+      --printTab( _ply_tab )
+      if _ply_tab != nil then
+        if tostring( _ply_tab.CurrentCharacter ) == "NULL" or _ply_tab.CurrentCharacter == NULL then
+          --open_character_selection( self )
+        else
+          return true
+        end
       end
     end
   end
@@ -37,12 +57,16 @@ end
 
 function Player:GetChaTab()
   if SERVER then
-    local _tmp = self:GetPlyTab()
-    if self:HasCharacterSelected() then
-      local yrp_characters = db_select( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
-      if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
-        self.chatab = yrp_characters[1]
-        return self.chatab
+    if self:LoadedGamemode() then
+      local _tmp = self:GetPlyTab()
+      if self:HasCharacterSelected() then
+        local yrp_characters = db_select( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
+        if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
+          self.chatab = yrp_characters[1]
+          return self.chatab
+        else
+          --open_character_selection( self )
+        end
       end
     end
   end
@@ -55,14 +79,16 @@ end
 
 function Player:GetRolTab()
   if SERVER then
-    if self:HasCharacterSelected() then
-      local yrp_characters = self:GetChaTab()
-      if worked( yrp_characters, "yrp_characters in GetRolTab", true ) then
-        if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true ) then
-          local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
-          if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
-            self.roltab = yrp_roles[1]
-            return self.roltab
+    if self:LoadedGamemode() then
+      if self:HasCharacterSelected() then
+        local yrp_characters = self:GetChaTab()
+        if worked( yrp_characters, "yrp_characters in GetRolTab", true ) then
+          if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true ) then
+            local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
+            if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
+              self.roltab = yrp_roles[1]
+              return self.roltab
+            end
           end
         end
       end
@@ -73,13 +99,15 @@ end
 
 function Player:GetGroTab()
   if SERVER then
-    local yrp_characters = self:GetChaTab()
-    if worked( yrp_characters, "yrp_characters in GetGroTab", true ) then
-      if worked( yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true ) then
-        local yrp_groups = db_select( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
-        if worked( yrp_groups, "yrp_groups GetGroTab", true ) then
-          self.grotab = yrp_groups[1]
-          return self.grotab
+    if self:LoadedGamemode() then
+      local yrp_characters = self:GetChaTab()
+      if worked( yrp_characters, "yrp_characters in GetGroTab", true ) then
+        if worked( yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true ) then
+          local yrp_groups = db_select( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
+          if worked( yrp_groups, "yrp_groups GetGroTab", true ) then
+            self.grotab = yrp_groups[1]
+            return self.grotab
+          end
         end
       end
     end
@@ -93,15 +121,18 @@ end
 
 function Player:CharID()
   if SERVER then
-    local char = self:GetChaTab()
-    if worked( char, "char CharID", true ) then
-      self.charid = char.uniqueID
-      return self.charid
+    if self:LoadedGamemode() then
+      local char = self:GetChaTab()
+      if worked( char, "char CharID", true ) then
+        self.charid = char.uniqueID
+        return self.charid
+      end
     end
   end
   if self.charid != nil then
     return self.charid
   else
+    --SPAM printGM( "note", self:Name() .. " CharID == NIL! " .. tostring( self.charid ) )
     return nil
   end
 end
@@ -277,7 +308,7 @@ if SERVER then
 
   function Player:getuptimecurrent()
     local _ret = db_select( "yrp_players", "uptime_current", "SteamID = '" .. self:SteamID() .. "'" )
-    if _ret != nil then
+    if _ret != nil and _ret != false then
       return tonumber( _ret[1].uptime_current )
     end
     return 0
@@ -285,7 +316,7 @@ if SERVER then
 
   function Player:getuptimetotal()
     local _ret = db_select( "yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'" )
-    if _ret != nil then
+    if _ret != nil and _ret != false then
       return tonumber( _ret[1].uptime_total )
     end
     return 0
@@ -294,7 +325,7 @@ if SERVER then
   function Player:addSecond()
     local _sec_total = self:getuptimetotal()
     local _sec_current = self:getuptimecurrent()
-    if _sec_current != nil and _sec_total != nil then
+    if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
       local _res = db_update( "yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'" )
     end
   end
@@ -359,15 +390,19 @@ function Player:canAffordBank( money )
 end
 
 function Player:SteamName()
-  return self:GetName()
+  return tostring( self:GetName() )
 end
 
 function Player:RPName()
-  return self:GetNWString( "rpname", "" )
+  return tostring( self:GetNWString( "rpname", "" ) )
 end
 
 function Player:Nick()
-  return self:SteamName() .. " " .. self:RPName()
+  return tostring( self:RPName() )
+end
+
+function Player:Name()
+  return "[" .. self:SteamName() .. " (".. self:RPName() .. ")] {Alive: " .. string.upper( tostring(self:Alive()) ) .. "}"
 end
 
 function Player:Team()

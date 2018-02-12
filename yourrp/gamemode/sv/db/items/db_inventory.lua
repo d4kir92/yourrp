@@ -140,39 +140,43 @@ end
 function Player:CheckInventory()
   local _char_id = self:CharID()
 
-  --[[ Create Inventory ]]--
-  for y = 1, INV_H do
-    for x = 1, INV_W do
-      if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .."," .. y .. "'" ) == nil then
-        local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", '" .. x .."," .. y .. "'" )
-        if _res != nil then
-          printGM( "note", "CreateInventory failed" )
+  if _char_id != nil then
+
+    --[[ Create Inventory ]]--
+    for y = 1, INV_H do
+      for x = 1, INV_W do
+        local _sel = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .."," .. y .. "'" )
+        if _sel == nil then
+          local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", '" .. x .."," .. y .. "'" )
+          if _res != nil then
+            printGM( "note", "CreateInventory failed" )
+          end
         end
       end
     end
-  end
 
-  --[[ EQ ]]--
-  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" ) == nil then
-    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w1'" )
-  end
-  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" ) == nil then
-    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w2'" )
-  end
-  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" ) == nil then
-    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w3'" )
-  end
-  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" ) == nil then
-    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w4'" )
-  end
-  if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" ) == nil then
-    local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w5'" )
-  end
+    --[[ EQ ]]--
+    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" ) == nil then
+      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w1'" )
+    end
+    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" ) == nil then
+      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w2'" )
+    end
+    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" ) == nil then
+      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w3'" )
+    end
+    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" ) == nil then
+      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w4'" )
+    end
+    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" ) == nil then
+      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w5'" )
+    end
 
-  local _result = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
-  if _result != nil then
+    local _result = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    if _result != nil then
 
-    self:GetInventory()
+      self:GetInventory()
+    end
   end
 end
 
@@ -211,19 +215,21 @@ end
 
 function Player:UseSweps()
   local _char_id = self:CharID()
-  for i = 1, 5 do
-    local _res = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w" .. i .. "'" )
-    if _res != nil and _res != false then
-      _res = _res[1]
-      local _uid = string.sub( _res.item, 3 )
+  if _char_id != nil then
+    for i = 1, 5 do
+      local _res = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w" .. i .. "'" )
+      if _res != nil and _res != false then
+        _res = _res[1]
+        local _uid = string.sub( _res.item, 3 )
 
-      local _swep = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
-      if _swep != nil and _swep != false then
-        _swep = _swep[1]
-        --printTab( _swep, "Player:UseSweps()" )
-        self.canpickup = true
-        _swep = self:old_give( _swep.ClassName, true )
-        self.canpickup = false
+        local _swep = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
+        if _swep != nil and _swep != false then
+          _swep = _swep[1]
+          --printTab( _swep, "Player:UseSweps()" )
+          self.canpickup = true
+          _swep = self:old_give( _swep.ClassName, true )
+          self.canpickup = false
+        end
       end
     end
   end

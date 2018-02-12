@@ -1,8 +1,173 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function GM:PlayerDisconnected( ply )
+  printGM( "gm", "[PlayerDisconnected] " .. ply:Name() )
   save_clients( "PlayerDisconnected" )
 end
+
+function GM:PlayerConnect( name, ip )
+	printGM( "gm", "[PlayerConnect] Name: " .. name .. " ( IP: " .. ip .. " )" )
+  PrintMessage( HUD_PRINTTALK, name .. " is connecting to the Server." )
+end
+
+function GM:PlayerInitialSpawn( ply )
+  printGM( "gm", "[PlayerInitialSpawn] " .. ply:Name() )
+  --ply:KillSilent()
+  if ply:HasCharacterSelected() then
+    local rolTab = ply:GetRolTab()
+    if rolTab != nil then
+      timer.Simple( 1, function()
+
+        set_role( ply, rolTab.uniqueID )
+        set_role_values( ply )
+      end)
+    end
+  end
+end
+
+function GM:PlayerSelectSpawn( ply )
+  printGM( "gm", "[PlayerSelectSpawn] " .. ply:Name() )
+
+	local spawns = ents.FindByClass( "info_player_start" )
+	local random_entry = math.random( #spawns )
+
+	return spawns[ random_entry ]
+
+end
+
+function GM:PlayerAuthed( ply, steamid, uniqueid )
+  ply:KillSilent()
+
+  printGM( "gm", "[PlayerAuthed] " .. ply:Name() )
+
+  --ply:KillSilent()
+  ply:resetUptimeCurrent()
+  check_yrp_client( ply )
+end
+
+function GM:PlayerLoadout( ply )
+  printGM( "gm", "[PlayerLoadout] " .. ply:Name() .. " get his role equipment." )
+  if ply:HasCharacterSelected() then
+    ply:CheckInventory()
+
+    --[[ Status Reset ]]--
+    ply:SetNWBool( "cuffed", false )
+    ply:SetNWBool( "broken_leg_left", false )
+    ply:SetNWBool( "broken_leg_right", false )
+    ply:SetNWBool( "broken_arm_left", false )
+    ply:SetNWBool( "broken_arm_right", false )
+
+    ply:old_give( "yrp_key" )
+    ply:old_give( "yrp_unarmed" )
+
+    addKeys( ply )
+
+    local plyTab = ply:GetPlyTab()
+    local chaTab = ply:GetChaTab()
+
+    set_role_values( ply )
+
+    local chaTab = ply:GetChaTab()
+    if chaTab != nil then
+      ply:SetNWString( "money", chaTab.money )
+      ply:SetNWString( "moneybank", chaTab.moneybank )
+      ply:SetNWString( "rpname", chaTab.rpname )
+
+      setbodygroups( ply )
+    else
+      printGM( "gm", "Give char failed -> KillSilent -> " .. ply:Name() )
+      if !ply:IsBot() then
+        ply:KillSilent()
+      end
+    end
+
+    ply:SetNWInt( "hunger", 100 )
+    ply:SetNWInt( "thirst", 100 )
+
+    local monTab = db_select( "yrp_money", "*", nil )
+    if monTab != nil then
+      local monPre = monTab[1].value
+      local monPos = monTab[2].value
+      ply:SetNWString( "moneyPre", monPre )
+      ply:SetNWString( "moneyPost", monPos )
+    end
+
+    local _yrp_general = db_select( "yrp_general", "*", nil )
+    if _yrp_general != nil then
+      _yrp_general = _yrp_general[1]
+      ply:SetNWBool( "toggle_inventory", false ) -- LATER tobool( _yrp_general.toggle_inventory ) )
+      ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
+      ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
+      ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
+      ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
+      ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
+      ply:SetNWInt( "view_distance", _yrp_general.view_distance )
+    else
+      printGM( "note", "yrp_general failed" )
+    end
+
+    if ply:IsAdmin() or ply:IsSuperAdmin() then
+      if !ply:HasItem( "yrp_arrest_stick" ) then
+        ply:AddSwep( "yrp_arrest_stick" )
+      end
+      if !ply:HasItem( "weapon_physgun" ) then
+        ply:AddSwep( "weapon_physgun" )
+      end
+      if !ply:HasItem( "weapon_physcannon" ) then
+        ply:AddSwep( "weapon_physcannon" )
+      end
+    end
+
+    ply:UseSweps()
+  end
+end
+
+function GM:PlayerSpawn( ply )--hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
+  printGM( "gm", "[PlayerSpawn] " .. tostring( ply:Name() ) .. " spawned." )
+  if ply:GetNWBool( "can_respawn", true ) then
+    ply:SetNWBool( "can_respawn", false )
+    GAMEMODE:PlayerLoadout( ply )
+    timer.Simple( 0.01, function()
+      teleportToSpawnpoint( ply )
+    end)
+  else
+    printGM( "note", "PlayerSpawn failed" )
+  end
+end
+
+function GM:PostPlayerDeath( ply )
+  printGM( "gm", "[PostPlayerDeath] " .. tostring( ply:Name() ) .. " is dead." )
+  ply:StopBleeding()
+
+  ply:SetNWBool( "can_respawn", true )
+  local _sel = db_select( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
+  if _sel != nil and _sel != false then
+    _sel = _sel[1]
+    if tobool( _sel.toggle_clearinventoryondead ) then
+      ply:StripWeapons()
+      if ply:IsSuperAdmin() or ply:IsAdmin() then
+        net.Start( "yrp_noti" )
+          net.WriteString( "inventoryclearing" )
+          net.WriteString( "enabled" )
+        net.Send( ply )
+      end
+    end
+  end
+end
+
+/*
+function GM:PlayerDeathThink( ply )
+  --printGM( "gm", "[PlayerDeathThink] " .. tostring( ply:Name() ) .. "" )
+end
+
+function GM:PlayerDeath( victim, inflictor, attacker )
+  printGM( "gm", "[PlayerDeath] " .. tostring( victim:Name() ) .. "" )
+end
+
+function GM:DoPlayerDeath( ply, attacker, dmg )
+  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:Name() ) .. "" )
+end
+*/
 
 function GM:ShutDown()
   save_clients( "Shutdown/Changelevel" )
@@ -229,28 +394,6 @@ function GM:PlayerCanHearPlayersVoice( listener, talker )
   --return canhear( _is_talker, _is_listener ), hearfaded( _is_talker, _is_listener )
 end
 
-function GM:PlayerInitialSpawn( ply )
-  printGM( "gm", "PlayerInitialSpawn " .. ply:Nick() )
-  --ply:KillSilent()
-  if ply:HasCharacterSelected() then
-    local rolTab = ply:GetRolTab()
-    if rolTab != nil then
-      timer.Simple( 1, function()
-
-        set_role( ply, rolTab.uniqueID )
-        set_role_values( ply )
-      end)
-    end
-  end
-end
-
-function GM:PlayerAuthed( ply, steamid, uniqueid )
-  printGM( "gm", "PlayerAuthed " .. ply:Nick() )
-  --ply:KillSilent()
-  ply:resetUptimeCurrent()
-  check_yrp_client( ply )
-end
-
 function setbodygroups( ply )
   local chaTab = ply:GetChaTab()
   if chaTab != nil then
@@ -280,115 +423,14 @@ function GM:PlayerSetModel( ply )
   setPlayerModel( ply )
 end
 
-function GM:PlayerLoadout( ply )
-  printGM( "note", "[" .. tostring( ply:Nick() ) .. "] get his role equipment. (PlayerLoadout)" )
-  if ply:HasCharacterSelected() then
-    ply:CheckInventory()
-
-    --[[ Status Reset ]]--
-    ply:SetNWBool( "cuffed", false )
-    ply:SetNWBool( "broken_leg_left", false )
-    ply:SetNWBool( "broken_leg_right", false )
-    ply:SetNWBool( "broken_arm_left", false )
-    ply:SetNWBool( "broken_arm_right", false )
-
-    ply:old_give( "yrp_key" )
-    ply:old_give( "yrp_unarmed" )
-
-    addKeys( ply )
-
-    local plyTab = ply:GetPlyTab()
-    local chaTab = ply:GetChaTab()
-
-    set_role_values( ply )
-
-    local chaTab = ply:GetChaTab()
-    if chaTab != nil then
-      ply:SetNWString( "money", chaTab.money )
-      ply:SetNWString( "moneybank", chaTab.moneybank )
-      ply:SetNWString( "rpname", chaTab.rpname )
-
-      setbodygroups( ply )
-    else
-      printGM( "note", "Give char failed -> KillSilent -> " .. ply:Nick() )
-      if !ply:IsBot() then
-        ply:KillSilent()
-      end
-    end
-
-    ply:SetNWInt( "hunger", 100 )
-    ply:SetNWInt( "thirst", 100 )
-
-    local monTab = db_select( "yrp_money", "*", nil )
-    if monTab != nil then
-      local monPre = monTab[1].value
-      local monPos = monTab[2].value
-      ply:SetNWString( "moneyPre", monPre )
-      ply:SetNWString( "moneyPost", monPos )
-    end
-
-    local _yrp_general = db_select( "yrp_general", "*", nil )
-    if _yrp_general != nil then
-      _yrp_general = _yrp_general[1]
-      ply:SetNWBool( "toggle_inventory", false ) -- LATER tobool( _yrp_general.toggle_inventory ) )
-      ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
-      ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
-      ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
-      ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
-      ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
-      ply:SetNWInt( "view_distance", _yrp_general.view_distance )
-    else
-      printGM( "note", "yrp_general failed" )
-    end
-
-    if ply:IsAdmin() or ply:IsSuperAdmin() then
-      if !ply:HasItem( "yrp_arrest_stick" ) then
-        ply:AddSwep( "yrp_arrest_stick" )
-      end
-      if !ply:HasItem( "weapon_physgun" ) then
-        ply:AddSwep( "weapon_physgun" )
-      end
-      if !ply:HasItem( "weapon_physcannon" ) then
-        ply:AddSwep( "weapon_physcannon" )
-      end
-    end
-
-    ply:UseSweps()
-  end
-end
-
-hook.Add( "PlayerSpawn", "yrp_PlayerSpawn", function( ply )
-  printGM( "note", "[" .. tostring( ply:Nick() ) .. "] spawned. (PlayerSpawn)" )
-  if ply:GetNWBool( "can_respawn", true ) then
-    ply:SetNWBool( "can_respawn", false )
-    timer.Simple( 0.01, function()
-      teleportToSpawnpoint( ply )
-    end)
-  end
-end)
-
-hook.Add( "PostPlayerDeath", "yrp_PostPlayerDeath", function( ply )
-  printGM( "note", "[" .. tostring( ply:Nick() ) .. "] is dead. (PostPlayerDeath)" )
-  ply:StopBleeding()
-
-  ply:SetNWBool( "can_respawn", true )
-  local _sel = db_select( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
-  if _sel != nil then
-    _sel = _sel[1]
-    if tobool( _sel.toggle_clearinventoryondead ) then
-      ply:StripWeapons()
-      if ply:IsSuperAdmin() or ply:IsAdmin() then
-        net.Start( "yrp_noti" )
-          net.WriteString( "inventoryclearing" )
-          net.WriteString( "enabled" )
-        net.Send( ply )
-      end
-    end
-  end
-end)
-
 util.AddNetworkString( "player_is_ready" )
 net.Receive( "player_is_ready", function( len, ply )
+  printGM( "note", ply:Name() .. " finished loading." )
+
+  open_character_selection( ply )
+
+  ply:SetNWBool( "finishedloading", true )
+
   net.Start( "yrp_noti" )
     net.WriteString( "playerisready" )
     net.WriteString( ply:Nick() )

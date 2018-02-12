@@ -646,11 +646,13 @@ function openCharacterSelection()
 
   local characterList = createD( "DScrollPanel", charactersBackground, ctr( 800 ), ScrH() - (2*border), 0, 0 )
   timer.Simple( 0.1, function()
+    printGM( "client", "ask for characterlist" )
     net.Start( "charGetCharacters" )
     net.SendToServer()
   end)
 
   net.Receive( "charGetCharacters", function( len )
+    printGM( "client", "received characterlist" )
     local tmpTable = net.ReadTable()
 
     character.amount = #tmpTable or 0
@@ -851,11 +853,11 @@ end
 net.Receive( "openCharacterMenu", function( len, ply )
   local tmpTable = net.ReadTable()
 
-  timer.Create( "yrp_open_character_selection", 1, 0, function()
-    if playerfullready == true and isNoMenuOpen() then
+  --timer.Create( "yrp_open_character_selection", 1, 0, function()
+    --if playerfullready == true and isNoMenuOpen() then
       openCharacterSelection()
-      timer.Remove( "yrp_open_character_selection" )
-    end
-  end)
+      --timer.Remove( "yrp_open_character_selection" )
+    --end
+  --end)
 
 end)

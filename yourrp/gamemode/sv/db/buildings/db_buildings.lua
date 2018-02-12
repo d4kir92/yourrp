@@ -68,7 +68,7 @@ function addKeys( ply )
 end
 
 function searchForDoors()
-  printGM( "db", "Search Map for Doors/Buildings" )
+  printGM( "db", "[Buildings] Search Map for Doors" )
 
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _allPropDoors ) do
@@ -100,26 +100,26 @@ function searchForDoors()
     local _tmpDoorsTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   end
 
-  printGM( "db", "Done finding them (" .. #_allPropDoors+#_allFuncDoors+#_allFuncRDoors .. " found)" )
+  printGM( "db", "[Buildings] Done finding them (" .. #_allPropDoors+#_allFuncDoors+#_allFuncRDoors .. " doors found)" )
   return #_allPropDoors+#_allFuncDoors+#_allFuncRDoors
 end
 
 function loadDoors()
-  printGM( "db", "Loading map doors!" )
+  printGM( "db", "[Buildings] Loading map doors!" )
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   local _allFuncDoors = ents.FindByClass( "func_door" )
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   local _tmpDoors = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   local _count = 1
 
-  if worked( _tmpDoors, "No Map Doors found" ) then
+  if worked( _tmpDoors, "[Buildings] No Map Doors found" ) then
     --for k, v in pairs( _tmpDoors ) do
       for l, door in pairs( _allPropDoors ) do
         if worked( _tmpDoors[_count], "loadDoors 2" ) then
           door:SetNWInt( "buildingID", tonumber( _tmpDoors[_count].buildingID ) )
           door:SetNWInt( "uniqueID", _count )
         else
-          printGM( "note", "more doors, then in list!" )
+          printGM( "note", "[Buildings] more doors, then in list!" )
         end
         _count = _count + 1
       end
@@ -129,7 +129,7 @@ function loadDoors()
           door:SetNWInt( "buildingID", tonumber( _tmpDoors[_count].buildingID ) )
           door:SetNWInt( "uniqueID", _count )
         else
-          printGM( "note", "more doors, then in list!" )
+          printGM( "note", "[Buildings] more doors, then in list!" )
         end
         _count = _count + 1
       end
@@ -140,7 +140,7 @@ function loadDoors()
           door:SetNWInt( "uniqueID", _count )
 
         else
-          printGM( "note", "more doors, then in list!" )
+          printGM( "note", "[Buildings] more doors, then in list!" )
         end
         _count = _count + 1
       end
@@ -176,23 +176,23 @@ function loadDoors()
     end
   end
 
-  printGM( "db", "Map doors loaded!" )
+  printGM( "db", "[Buildings] Map doors loaded!" )
 end
 
 function check_map_doors()
-  printGM( "db", "Looking for doors" )
+  printGM( "db", "[Buildings] Looking for doors" )
   local _tmpTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   local _tmpTable2 = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", nil )
   local amountDoors = 0
   if _tmpTable == nil or _tmpTable2 == nil then
     amountDoors = searchForDoors()
   else
-    printGM( "db", "Found Doors!" )
+    printGM( "db", "[Buildings] Found Doors!" )
     local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
     local _allFuncDoors = ents.FindByClass( "func_door" )
     local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
     if ( #_tmpTable ) < ( #_allPropDoors + #_allFuncDoors + #_allFuncRDoors ) then
-      printGM( "db", "New doors found!" )
+      printGM( "db", "[Buildings] New doors found!" )
       amountDoors = searchForDoors()
     end
   end

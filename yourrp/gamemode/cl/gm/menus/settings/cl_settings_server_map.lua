@@ -118,9 +118,11 @@ hook.Add( "open_server_map", "open_server_map", function()
   local _mapPanel = createVGUI( "DPanel", settingsWindow.window.site, 256, 256, 10, 10 )
   local _mapPNG = getMapPNG()
   function _mapPanel:Paint( pw, ph )
-    surface.SetDrawColor( 255, 255, 255, 255 )
-  	surface.SetMaterial( _mapPNG	)
-  	surface.DrawTexturedRect( 0, 0, ctr( 256 ), ctr( 256 ) )
+    if _mapPNG != false then
+      surface.SetDrawColor( 255, 255, 255, 255 )
+    	surface.SetMaterial( _mapPNG	)
+    	surface.DrawTexturedRect( 0, 0, ctr( 256 ), ctr( 256 ) )
+    end
   end
 
   local _mapName = createVGUI( "DPanel", settingsWindow.window.site, 2000 - 10 - 256, 256, 10 + 256, 10 )
