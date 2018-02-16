@@ -8,6 +8,9 @@ util.AddNetworkString( "get_yrp_realistic" )
 util.AddNetworkString( "yrp_bonefracturing" )
 util.AddNetworkString( "yrp_bleeding" )
 
+util.AddNetworkString( "yrp_bonechance_legs" )
+util.AddNetworkString( "yrp_bonechance_arms" )
+
 util.AddNetworkString( "yrp_headdeadly" )
 util.AddNetworkString( "yrp_hithead" )
 util.AddNetworkString( "yrp_hitches" )
@@ -29,6 +32,9 @@ local _db_name = "yrp_realistic"
 
 sql_add_column( _db_name, "bonefracturing", "INT DEFAULT 1" )
 sql_add_column( _db_name, "bleeding", "INT DEFAULT 1" )
+
+sql_add_column( _db_name, "bonechance_legs", "INT DEFAULT 15" )
+sql_add_column( _db_name, "bonechance_arms", "INT DEFAULT 15" )
 
 sql_add_column( _db_name, "headshotdeadly_player", "INT DEFAULT 1" )
 sql_add_column( _db_name, "hitfactor_player_head", "INT DEFAULT 10" )
@@ -135,6 +141,14 @@ end
 
 function GetHitFactorVehicle()
   return tonumber( yrp_realistic.hitfactor_vehicle )
+end
+
+function GetBrokeChanceLegs()
+  return tonumber( yrp_realistic.bonechance_legs )
+end
+
+function GetBrokeChanceArms()
+  return tonumber( yrp_realistic.bonechance_arms )
 end
 
 net.Receive( "yrp_hit_entity", function( len, ply )
@@ -272,5 +286,21 @@ net.Receive( "yrp_hitlegs_npc", function( len, ply )
   if isnumber( _nw ) then
     yrp_realistic.hitfactor_npc_legs = _nw
     db_update( _db_name, "hitfactor_npc_legs = " .. yrp_realistic.hitfactor_npc_legs, nil )
+  end
+end)
+
+net.Receive( "yrp_bonechance_legs", function( len, ply )
+  local _nw = tonumber( net.ReadFloat() )
+  if isnumber( _nw ) then
+    yrp_realistic.bonechance_legs = _nw
+    db_update( _db_name, "bonechance_legs = " .. yrp_realistic.bonechance_legs, nil )
+  end
+end)
+
+net.Receive( "yrp_bonechance_arms", function( len, ply )
+  local _nw = tonumber( net.ReadFloat() )
+  if isnumber( _nw ) then
+    yrp_realistic.bonechance_arms = _nw
+    db_update( _db_name, "bonechance_arms = " .. yrp_realistic.bonechance_arms, nil )
   end
 end)

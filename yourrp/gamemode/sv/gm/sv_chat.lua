@@ -45,7 +45,7 @@ function print_warning( string )
 end
 
 function print_help( sender )
-  sender:ChatPrint( "\n" )
+  sender:ChatPrint( "" )
   sender:ChatPrint( "[HELP]" )
   sender:ChatPrint( "me - Emote chat" )
   sender:ChatPrint( "yell - Yell locally" )
@@ -213,7 +213,7 @@ end
 util.AddNetworkString( "set_chat_mode" )
 
 net.Receive( "set_chat_mode", function( len, ply )
-  local _str = net.ReadString() or "say"
+  local _str = net.ReadString() or "looc"
   ply:SetNWString( "chat_mode", string.lower( _str ) )
 end)
 
@@ -235,7 +235,7 @@ function unpack_paket( sender, text, iscommand )
 
     paket.text = string.sub( text, _start_txt )
   else
-    paket.command = sender:GetNWString( "chat_mode", "say" )
+    paket.command = sender:GetNWString( "chat_mode", "looc" )
     paket.text = text
   end
 
@@ -247,7 +247,7 @@ function unpack_paket( sender, text, iscommand )
   elseif paket.command == "me" then
     paket.command_color = Color( 0, 255, 0 )
     paket.text_color = Color( 0, 255, 0 )
-  elseif paket.command == "ooc" or paket.command == "looc" or paket.command == "say" then
+  elseif paket.command == "ooc" or paket.command == "looc" then
     paket.command_color = Color( 100, 255, 100 )
   elseif paket.command == "yell" then
     paket.command_color = Color( 255, 0, 0 )
@@ -267,8 +267,6 @@ end
 function GM:PlayerSay( sender, text, teamChat )
 
   unpack_paket( sender, text )
-
-
 
   if paket.command == "ooc" or paket.command == "advert" then
     paket.lokal = false

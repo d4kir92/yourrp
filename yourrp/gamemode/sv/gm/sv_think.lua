@@ -3,7 +3,7 @@
 util.AddNetworkString( "client_lang" )
 net.Receive( "client_lang", function( len, ply )
   local _lang = net.ReadString()
-  printGM( "note", "[" .. ply:Nick() .. "] using language: " .. string.upper( _lang ) )
+  printGM( "note", ply:Name() .. " using language: " .. string.upper( _lang ) )
   ply:SetNWString( "client_lang", _lang or "NONE" )
 end)
 
@@ -62,21 +62,31 @@ function con_st( ply )
     end
   end
   if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
-    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
-    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.6 )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.6 )
+    ply:SetCanWalk( false )
   else
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+    ply:SetCanWalk( true )
   end
 end
 
 function broken( ply )
-  if ply:GetNWBool( "broken_leg_left" ) or ply:GetNWBool( "broken_leg_right" ) then
-    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.3 )
-    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.3 )
+  if ply:GetNWBool( "broken_leg_left" ) and ply:GetNWBool( "broken_leg_right" ) then
+    --[[ Both legs broken ]]--
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
+    ply:SetCanWalk( false )
+  elseif ply:GetNWBool( "broken_leg_left" ) or ply:GetNWBool( "broken_leg_right" ) then
+    --[[ One leg broken ]]--
+    ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.25 )
+    ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.25 )
+    ply:SetCanWalk( false )
   else
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+    ply:SetCanWalk( true )
   end
 end
 

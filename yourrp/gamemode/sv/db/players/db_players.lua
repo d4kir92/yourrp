@@ -139,7 +139,7 @@ function set_role_values( ply )
         ply:SetNWInt( "GetRegAbility", tonumber( rolTab.abreg ) )
         ply:SetNWInt( "GetCurAbility", tonumber( rolTab.ab ) )
 
-        ply:SetJumpPower( tonumber( rolTab.powerjump ) * rolTab.playermodelsize )
+        ply:SetJumpPower( tonumber( rolTab.powerjump ) ) -- * rolTab.playermodelsize )
         ply:SetNWInt( "salary", rolTab.salary )
         ply:SetNWString( "roleName", rolTab.roleID )
 

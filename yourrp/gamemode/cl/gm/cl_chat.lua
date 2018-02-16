@@ -10,16 +10,15 @@ if yrpChat.window == nil then
   yrpChat.richText = createVGUI( "RichText", yrpChat.window, 1, 1, 1, 1 )
 
   yrpChat.comboBox = createD( "DComboBox", yrpChat.window, 1, 1, 1, 1 )
-  yrpChat.comboBox:AddChoice( "SAY", "", true )
-  yrpChat.comboBox:AddChoice( "OOC", "/ooc ", false )
-  yrpChat.comboBox:AddChoice( "LOOC", "/looc ", false )
-  yrpChat.comboBox:AddChoice( "ADVERT", "/advert ", false )
-  yrpChat.comboBox:AddChoice( "YELL", "/yell ", false )
-  yrpChat.comboBox:AddChoice( "ME", "/me ", false )
+  yrpChat.comboBox:AddChoice( lang_string( "globalchat" ), "ooc", false )
+  yrpChat.comboBox:AddChoice( lang_string( "say" ), "looc", true )
+  yrpChat.comboBox:AddChoice( lang_string( "advert" ), "advert", false )
+  yrpChat.comboBox:AddChoice( lang_string( "yell" ), "yell", false )
+  yrpChat.comboBox:AddChoice( lang_string( "me" ), "me", false )
 
   function yrpChat.comboBox:OnSelect( index, value, data )
     net.Start( "set_chat_mode" )
-      net.WriteString( string.lower( value ) )
+      net.WriteString( string.lower( data ) )
     net.SendToServer()
   end
 
@@ -75,22 +74,19 @@ function yrpChat.window:Paint( pw, ph )
 
       if yrpChat.writeField:GetText() == "/ooc " or yrpChat.writeField:GetText() == "!ooc " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( "OOC" )
+        yrpChat.comboBox:ChooseOption( lang_string( "globalchat" ), 1 )
       elseif yrpChat.writeField:GetText() == "/looc " or yrpChat.writeField:GetText() == "!looc " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( "LOOC" )
+        yrpChat.comboBox:ChooseOption( lang_string( "say" ), 2 )
       elseif yrpChat.writeField:GetText() == "/me " or yrpChat.writeField:GetText() == "!me " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( "ME" )
+        yrpChat.comboBox:ChooseOption( lang_string( "me" ), 5 )
       elseif yrpChat.writeField:GetText() == "/yell " or yrpChat.writeField:GetText() == "!yell " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( "YELL" )
-      elseif yrpChat.writeField:GetText() == "/say " or yrpChat.writeField:GetText() == "!say " then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( "SAY" )
+        yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 4 )
       elseif yrpChat.writeField:GetText() == "/advert " or yrpChat.writeField:GetText() == "!advert " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( "ADVERT" )
+        yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 3 )
       end
     end
   end
@@ -237,16 +233,14 @@ end
 net.Receive( "yrp_player_say", function( len )
   local _tmp = net.ReadTable()
 
-  printTab( _tmp )
-
   local _write = false
-  if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" then
+  if _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" then
     _write = true
     _tmp.name = _tmp.rpname
   end
 
   local _usergroup = false
-  if _tmp.command == "ooc" or _tmp.command == "looc" then
+  if _tmp.command == "ooc" then
     _usergroup = true
     _tmp.name = _tmp.steamname
   end
@@ -254,35 +248,33 @@ net.Receive( "yrp_player_say", function( len )
   if true then
     local _unpack = {}
 
-    _tmp._lokal = lang_string( "localchat" )
+    _tmp._lokal = ""
     _tmp.lokal_color = Color( 255, 100, 100 )
     if !_tmp.lokal then
       _tmp._lokal = lang_string( "globalchat" )
       _tmp.lokal_color = Color( 255, 165, 0 )
-    end
 
-    if _tmp.command != "me" then
       table.insert( _unpack, _tmp.lokal_color )
       table.insert( _unpack, "[" )
       table.insert( _unpack, string.upper( _tmp._lokal ) )
       table.insert( _unpack, "]" )
 
       table.insert( _unpack, " " )
+
+      if _usergroup then
+        table.insert( _unpack, Color( 0, 0, 100 ) )
+        table.insert( _unpack, "[" )
+        table.insert( _unpack, string.upper( _tmp.usergroup ) )
+        table.insert( _unpack, "]" )
+
+        table.insert( _unpack, " " )
+      end
     end
-    printTab(_tmp)
-    if _tmp.command != "roll" then
+
+    if _tmp.command == "advert" then
       table.insert( _unpack, _tmp.lokal_color )
       table.insert( _unpack, "[" )
-      table.insert( _unpack, string.upper( _tmp._lokal ) )
-      table.insert( _unpack, "]" )
-
-      table.insert( _unpack, " " )
-    end
-
-    if _usergroup then
-      table.insert( _unpack, Color( 0, 0, 100 ) )
-      table.insert( _unpack, "[" )
-      table.insert( _unpack, string.upper( _tmp.usergroup ) )
+      table.insert( _unpack, string.upper( lang_string( "advert" ) ) )
       table.insert( _unpack, "]" )
 
       table.insert( _unpack, " " )

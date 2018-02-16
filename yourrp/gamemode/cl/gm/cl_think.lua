@@ -403,6 +403,11 @@ local function yrpCalcView( ply, pos, angles, fov )
 							else
 							--if _thirdperson == 2 then
 								if ply:GetNWInt( "view_range", 0 ) > 0 then
+									if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+										local _head = ply:GetPos().z + ply:OBBMaxs().z
+										print(_head)
+										pos.z = _head
+									end
 									--Thirdperson
 									local dist = ply:GetNWInt( "view_range", 0 ) * ply:GetModelScale()
 

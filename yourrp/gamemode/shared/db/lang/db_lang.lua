@@ -20,6 +20,15 @@ function add_language()
 	table.insert( yrp_all_lang, tmp )
 end
 
+function get_language_name( ls )
+	for k, lang in pairs( yrp_all_lang ) do
+		if lang.short == ls then
+			return lang.ineng
+		end
+	end
+	return "FAILED"
+end
+
 yrp_lang.get_language = "Unknown"
 yrp_lang.not_found = "not found, using default one."
 yrp_lang.language = "Unknown"
@@ -103,6 +112,10 @@ end
 
 function change_language( index )
 	hr_pre()
+
+	--[[ change to english first, so missing translations are in english ]]--
+	LangEN()
+
 	local _net_lang = index
   if index == "auto" then
     printGM( "lang", "Automatic detection" )

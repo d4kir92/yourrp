@@ -66,18 +66,17 @@ function drawGroupPlayers( id )
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
         elePos.y = elePos.y + 50
-        local _tmpPly = createD( "DPanel", _SBSP, ScrH() - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+        local _tmpPly = createD( "DButton", _SBSP, ScrH() - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+        _tmpPly:SetText( "" )
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
         _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
         _tmpPly.ping = ply:Ping() or ""
         _tmpPly.usergroup = ply:GetUserGroup() or ""
         _tmpPly.steamname = ply:SteamName() or ""
-        _tmpPly.lang = ply:GetNWString( "client_lang", lang_string( "none" ) )
-        if #_tmpPly.steamname > 16 then
-          _tmpPly.steamname = string.sub( _tmpPly.steamname, 1, 16 )
-          _tmpPly.steamname = _tmpPly.steamname .. "..."
-        end
+        _tmpPly.lang = get_language_name( ply:GetNWString( "client_lang", lang_string( "none" ) ) )
+        _tmpPly.money = ply:GetNWString( "money" )
+        _tmpPly.moneybank = ply:GetNWString( "moneybank" )
         local _pt = string.FormattedTime( ply:GetNWInt( "uptime_current", 0 ) )
         if _pt.m < 10 then
           _pt.m = "0" .. _pt.m
@@ -88,21 +87,71 @@ function drawGroupPlayers( id )
         _tmpPly.playtime = _pt.h .. ":" .. _pt.m
 
         function _tmpPly:Paint( pw, ph )
-          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          if self:IsHovered() then
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+          else
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          end
+
           --draw.SimpleTextOutlined( self.level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( self.rpname, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 420 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 520 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
-            draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 1150 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( string.upper( self.steamname ), "sef", pw - ctr( 750 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-            draw.SimpleTextOutlined( string.upper( self.usergroup ), "sef", pw - ctr( 350 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          end
+          draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( self.playtime, "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        end
+
+        function _tmpPly:DoClick()
+          local _info = createD( "DFrame", nil, ctr( 800 ), ctr( 800 ), ctr( 0 ), ctr( 0 ) )
+          _info:SetTitle( "" )
+
+          local _mx, _my = gui.MousePos()
+          _info:SetPos( _mx - _info:GetWide()/2, _my - ctr( 25 ) )
+          _info:MakePopup()
+          _info.startup = true
+          function _info:Paint( pw, ph )
+            if tostring( _tmpPly ) == "[NULL Panel]" then
+              self:Remove()
+            else
+              if !self:HasFocus() and self.startup then
+                self.startup = false
+              else
+                if tostring( _info ) != "[NULL Panel]" then
+                  if !self:HasFocus() then
+                    self:Remove()
+                  end
+                end
+              end
+              paintWindow( self, pw, ph, lang_string( "info" ) )
+
+              draw.SimpleTextOutlined( lang_string( "nick" ) .. ":", "sef", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+              draw.SimpleTextOutlined( string.upper( _tmpPly.steamname ), "sef", ctr( 10 ), ctr( 440 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+              if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+                draw.SimpleTextOutlined( lang_string( "usergroup" ) .. ":", "sef", ctr( 10 ), ctr( 500 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( string.upper( _tmpPly.usergroup ), "sef", ctr( 10 ), ctr( 540 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+                draw.SimpleTextOutlined( lang_string( "moneychar" ) .. ":", "sef", ctr( 10 ), ctr( 600 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( formatMoney( ply, _tmpPly.money ), "sef", ctr( 10 ), ctr( 640 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+                draw.SimpleTextOutlined( lang_string( "moneybank" ) .. ":", "sef", ctr( 10 ), ctr( 700 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( formatMoney( ply, _tmpPly.moneybank ), "sef", ctr( 10 ), ctr( 740 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+              end
+            end
+          end
+
+          _info.profile = createD( "DButton", _info, ctr( 780 ), ctr( 50 ), ctr( 10 ), ctr( 60 ) )
+          _info.profile:SetText( "" )
+          function _info.profile:Paint( pw, ph )
+            paintButton( self, pw, ph, lang_string( "openprofile" ) )
+          end
+          function _info.profile:DoClick()
+            ply:ShowProfile()
+          end
         end
       end
     end
@@ -128,13 +177,9 @@ function drawGroup( id, name, color )
       --draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "name" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 420 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 520 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
-        draw.SimpleTextOutlined( "Lang.", "sef", pw - ctr( 1150 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang_string( "nick" ), "sef", pw - ctr( 750 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang_string( "usergroup" ), "sef", pw - ctr( 350 ), ph/2, Color( 255, 255, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      end
+      draw.SimpleTextOutlined( "Lang.", "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 

@@ -267,8 +267,28 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
   		dmginfo:ScaleDamage( GetHitFactorPlayerStom() )
     elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
       dmginfo:ScaleDamage( GetHitFactorPlayerArms() )
+      if IsBonefracturingEnabled() then
+        local _break = math.Round( math.Rand( 0, 100 ), 0 )
+        if _break <= GetBrokeChanceArms() then
+          if hitgroup == HITGROUP_LEFTARM then
+            ply:SetNWBool( "broken_arm_left", true )
+          elseif hitgroup == HITGROUP_RIGHTARM then
+            ply:SetNWBool( "broken_arm_right", true )
+          end
+        end
+      end
     elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
       dmginfo:ScaleDamage( GetHitFactorPlayerLegs() )
+      if IsBonefracturingEnabled() then
+        local _break = math.Round( math.Rand( 0, 100 ), 0 )
+        if _break <= GetBrokeChanceLegs() then
+          if hitgroup == HITGROUP_LEFTLEG then
+            ply:SetNWBool( "broken_leg_left", true )
+          elseif hitgroup == HITGROUP_RIGHTLEG then
+            ply:SetNWBool( "broken_leg_right", true )
+          end
+        end
+      end
   	else
       dmginfo:ScaleDamage( 1 )
     end

@@ -366,6 +366,7 @@ function openCharacterCreation()
   end
   if character.playermodels[tonumber( character.playermodelID )] != nil then
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+    characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
     characterPlayermodel:UpdateBodyGroups()
   end
 
@@ -386,6 +387,7 @@ function openCharacterCreation()
       character.playermodelID = 1
     end
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+    characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
     characterPlayermodel:UpdateBodyGroups()
   end
 
@@ -406,6 +408,7 @@ function openCharacterCreation()
       character.playermodelID = #character.playermodels
     end
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+    characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
     characterPlayermodel:UpdateBodyGroups()
   end
 
@@ -436,9 +439,11 @@ function openCharacterCreation()
       character.salary = tmpTable[1].salary
       character.playermodels = string.Explode( ",", tmpTable[1].playermodels )
       character.playermodelID = 1
+      character.playermodelsize = tmpTable[1].playermodelsize
       if character.playermodels[tonumber( character.playermodelID )] != nil then
         if characterPlayermodel != nil and characterPlayermodel != NULL then
           characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+          characterPlayermodel.Entity:SetModelScale( tonumber( character.playermodelsize ) )
           characterPlayermodel:UpdateBodyGroups()
         end
       end
@@ -687,6 +692,7 @@ function openCharacterSelection()
         tmpChar.playermodelID = tmpTable[i].char.playermodelID
         local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
         tmpChar.playermodels = tmp
+        tmpChar.playermodelsize = tmpTable[i].role.playermodelsize
         tmpChar.skin = tmpTable[i].char.skin
         tmpChar.bg0 = tmpTable[i].char.bg0 or 0
         tmpChar.bg1 = tmpTable[i].char.bg1 or 0
@@ -714,6 +720,7 @@ function openCharacterSelection()
             if _playermodel != nil and charplayermodel != NULL then
               charplayermodel:SetModel( _playermodel )
               if charplayermodel.Entity != nil then
+                charplayermodel.Entity:SetModelScale( self.playermodelsize )
                 charplayermodel.Entity:SetSkin( self.skin )
                 charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
                 charplayermodel.Entity:SetBodygroup( 1, self.bg1 )

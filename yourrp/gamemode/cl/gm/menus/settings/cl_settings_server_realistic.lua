@@ -11,6 +11,9 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
   local sv_bf = createD( "DCheckBox", settingsWindow.window.site, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 10 ) )
   local sv_bl = createD( "DCheckBox", settingsWindow.window.site, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 70 ) )
 
+  local sv_bcl = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 400 ), ctr( 10 ) )
+  local sv_bca = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 1100 ), ctr( 10 ) )
+
   local sv_hd = createD( "DCheckBox", settingsWindow.window.site, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 180 ) )
   local sv_hhead = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 300 ) )
   local sv_hches = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 370 ) )
@@ -27,6 +30,9 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
 
   local sv_h_entity = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1400 ) )
   local sv_h_vehicle = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1470 ) )
+
+  sv_bcl:SetMax( 100 )
+  sv_bca:SetMax( 100 )
 
   sv_hhead:SetMax( 999999999 )
   sv_hches:SetMax( 999999999 )
@@ -49,9 +55,11 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
   function settingsWindow.window.site:Paint()
     --draw.RoundedBox( 0, 0, 0, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), _yrp.colors.panel )
 
-    draw.SimpleTextOutlined( lang_string( "bonefracturing" ) .. " (" .. lang_string( "wip") .. ")", "sef", ctr( 70 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "bonefracturing" ), "sef", ctr( 70 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "bleeding" ), "sef", ctr( 70 ), ctr( 95 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
+    draw.SimpleTextOutlined( "% " .. lang_string( "breakchance" ) .. " - " .. lang_string( "legs" ), "sef", ctr( 610 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "% " .. lang_string( "breakchance" ) .. " - " .. lang_string( "arms" ), "sef", ctr( 1310 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     draw.SimpleTextOutlined( lang_string( "damage" ) .. " (" .. lang_string( "preview" ) .. ")", "sef", ctr( 1300 - 10 ), ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
@@ -103,6 +111,9 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
     if sv_bf != NULL then
       sv_bf:SetValue( _tab.bonefracturing )
       sv_bl:SetValue( _tab.bleeding )
+
+      sv_bcl:SetValue( _tab.bonechance_legs )
+      sv_bca:SetValue( _tab.bonechance_arms )
 
       sv_hd:SetValue( _tab.headshotdeadly_player )
       sv_hhead:SetValue( _tab.hitfactor_player_head )
@@ -233,6 +244,18 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
 
   function sv_hlegs_npc:OnValueChanged( val )
     net.Start( "yrp_hitlegs_npc" )
+      net.WriteFloat( val, 16 )
+    net.SendToServer()
+  end
+
+  function sv_bcl:OnValueChanged( val )
+    net.Start( "yrp_bonechance_legs" )
+      net.WriteFloat( val, 16 )
+    net.SendToServer()
+  end
+
+  function sv_bca:OnValueChanged( val )
+    net.Start( "yrp_bonechance_arms" )
       net.WriteFloat( val, 16 )
     net.SendToServer()
   end
