@@ -272,8 +272,14 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
         if _break <= GetBrokeChanceArms() then
           if hitgroup == HITGROUP_LEFTARM then
             ply:SetNWBool( "broken_arm_left", true )
+
+            ply:SetActiveWeapon( "yrp_unarmed" )
+        		ply:SelectWeapon( "yrp_unarmed" )
           elseif hitgroup == HITGROUP_RIGHTARM then
             ply:SetNWBool( "broken_arm_right", true )
+
+            ply:SetActiveWeapon( "yrp_unarmed" )
+        		ply:SelectWeapon( "yrp_unarmed" )
           end
         end
       end

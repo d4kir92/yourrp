@@ -213,7 +213,7 @@ end
 util.AddNetworkString( "set_chat_mode" )
 
 net.Receive( "set_chat_mode", function( len, ply )
-  local _str = net.ReadString() or "looc"
+  local _str = net.ReadString() or "say"
   ply:SetNWString( "chat_mode", string.lower( _str ) )
 end)
 
@@ -235,7 +235,7 @@ function unpack_paket( sender, text, iscommand )
 
     paket.text = string.sub( text, _start_txt )
   else
-    paket.command = sender:GetNWString( "chat_mode", "looc" )
+    paket.command = sender:GetNWString( "chat_mode", "say" )
     paket.text = text
   end
 
@@ -247,8 +247,20 @@ function unpack_paket( sender, text, iscommand )
   elseif paket.command == "me" then
     paket.command_color = Color( 0, 255, 0 )
     paket.text_color = Color( 0, 255, 0 )
+  elseif paket.command == "say" then
+    paket.command_color = Color( 100, 255, 100 )
+    paket.text_color = Color( 255, 255, 255 )
   elseif paket.command == "ooc" or paket.command == "looc" then
     paket.command_color = Color( 100, 255, 100 )
+  elseif paket.command == "admin" then
+    paket.command_color = Color( 255, 255, 0 )
+    paket.text_color = Color( 255, 255, 20 )
+  elseif paket.command == "group" then
+    paket.command_color = Color( 0, 0, 255 )
+    paket.text_color = Color( 20, 20, 255 )
+  elseif paket.command == "role" then
+    paket.command_color = Color( 0, 255, 0 )
+    paket.text_color = Color( 20, 255, 20 )
   elseif paket.command == "yell" then
     paket.command_color = Color( 255, 0, 0 )
     paket.text_color = Color( 255, 0, 0 )
@@ -262,6 +274,7 @@ function unpack_paket( sender, text, iscommand )
   paket.steamname = sender:SteamName()
   paket.rpname = sender:RPName()
   paket.usergroup = sender:GetUserGroup()
+  paket.role = sender:GetNWString( "roleName" )
 end
 
 function GM:PlayerSay( sender, text, teamChat )
@@ -329,9 +342,47 @@ function GM:PlayerSay( sender, text, teamChat )
   pk.rpname = paket.rpname
   pk.steamname = paket.steamname
   pk.usergroup = paket.usergroup
+  pk.rolename = paket.role
 
   if paket.command == "roll" then
     pk.text = lang_string( "rolledpre" ) .. " " .. tostring( roll_number( sender ) ) .. " " .. lang_string( "rolledpos" ) .. "!"
+  end
+
+  if paket.command == "admin" then
+    if sender:IsAdmin() or sender:IsSuperAdmin() then
+      for k, receiver in pairs( player.GetAll() ) do
+        if receiver:IsSuperAdmin() or receiver:IsAdmin() then
+          net.Start( "yrp_player_say" )
+            net.WriteTable( pk )
+          net.Send( receiver )
+        end
+      end
+      return ""
+    else
+      return ""
+    end
+  end
+
+  if paket.command == "group" then
+    for k, receiver in pairs( player.GetAll() ) do
+      if receiver:GetNWString( "groupName" ) == sender:GetNWString( "groupName" ) then
+        net.Start( "yrp_player_say" )
+          net.WriteTable( pk )
+        net.Send( receiver )
+      end
+    end
+    return ""
+  end
+
+  if paket.command == "role" then
+    for k, receiver in pairs( player.GetAll() ) do
+      if receiver:GetNWString( "roleName" ) == sender:GetNWString( "roleName" ) then
+        net.Start( "yrp_player_say" )
+          net.WriteTable( pk )
+        net.Send( receiver )
+      end
+    end
+    return ""
   end
 
   if !paket.lokal then

@@ -47,21 +47,13 @@ function mapPNG()
   local _mapthumb = "maps/thumb/"
 
   if file.Exists( _maps .. _map_png, "GAME" ) then
-    print(_pre .. _maps .. _map_png)
     _mapPNG = Material( _pre .. _maps .. _map_png, "noclamp smooth" )
-    print(_mapPNG)
     return _mapPNG
   elseif file.Exists( _data .. _map_png, "GAME" ) then
-    print("2")
     _mapPNG = Material( _pre .. _data .. _map_png, "noclamp smooth" )
-    print(_mapPNG)
     return _mapPNG
   elseif file.Exists( _mapthumb .. _map_png, "GAME" ) then
-    print(file.Exists( _mapthumb .. _map_png, "GAME" ))
-    print(_mapthumb .. _map_png)
-    print(_pre .. _mapthumb .. _map_png)
     _mapPNG = Material( _pre .. _mapthumb .. _map_png, "noclamp smooth" )
-    print(_mapPNG)
     return _mapPNG
   end
   return false

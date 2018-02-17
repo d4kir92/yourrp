@@ -38,7 +38,7 @@ function openSP()
 
     yrp_sp.visible = true
 
-    yrp_sp.window = createD( "DFrame", nil, ctr( yrp_sp.s_w ), ctr( yrp_sp.s_h ), ScrW() - ctr( yrp_sp.s_w + 25 ), ScrH() - ctr( yrp_sp.s_h ) )
+    yrp_sp.window = createD( "DFrame", nil, ctrb( yrp_sp.s_w ), ctrb( yrp_sp.s_h ), ScrW() - ctrb( yrp_sp.s_w + 25 ), ScrH() - ctrb( yrp_sp.s_h ) )
     yrp_sp.window:ShowCloseButton( false )
     yrp_sp.window:SetTitle( "" )
     yrp_sp.window:SetDraggable( false )
@@ -50,7 +50,7 @@ function openSP()
       draw.SimpleTextOutlined( "YRP " .. lang_string( "smartphone" ) .. " (" .. lang_string( "wip" ) .. ")", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
     end
 
-    yrp_sp.topbar = createD( "DPanel", yrp_sp.window, ctr( yrp_sp.s_w ), ctr( 40 ), 0, 0 )
+    yrp_sp.topbar = createD( "DPanel", yrp_sp.window, ctrb( yrp_sp.s_w ), ctrb( 40 ), 0, 0 )
     function yrp_sp.topbar:Paint( pw, ph )
       --[[ Top Bar ]]--
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
@@ -61,7 +61,27 @@ function openSP()
       if os.date( "%p" ) == "PM" then
         _clock.hours = tonumber( _clock.hours ) + 12
       end
-      draw.SimpleTextOutlined( "100% " .._clock.hours .. ":" .. _clock.min, "DermaDefault", pw - ctr( 10 ), ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+      draw.SimpleTextOutlined( "100% " .._clock.hours .. ":" .. _clock.min, "DermaDefault", pw - ctr( 10 ), ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, ctrb( 1 ), Color( 0, 0, 0, 255 ) )
+    end
+
+    --[[ load apps ]]--
+    yrp_sp.pages = {}
+    yrp_sp.pages.x = 20
+    yrp_sp.pages.y = 40 + 20
+    for k, app in pairs( getAllApps() ) do
+      local _app = createD( "YRPAPP", yrp_sp.window, ctrb( appSize() ), ctrb( appSize() ) + ctrb( 40 ), ctrb( yrp_sp.pages.x ), ctrb( yrp_sp.pages.y ) )
+      _app:SetText( "" )
+      _app.name = app.name or "UNNAMED"
+      _app.paint = app.paint
+
+      function _app:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
+        _app.paint( ctrb( appSize() ), ctrb( appSize() ) )
+        draw.SimpleTextOutlined( self.name, "appname", pw/2, ph - ctrb( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb( 1 ), Color( 0, 0, 0, 255 ) )
+      end
+
+      yrp_sp.pages.x = yrp_sp.pages.x + appSize() + 20
+      --yrp_sp.pages.y = yrp_sp.pages.y + 128 + 20
     end
 
     --[[ Smartphone Loaded ]]--

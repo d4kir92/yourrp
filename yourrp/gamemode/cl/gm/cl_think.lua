@@ -45,9 +45,7 @@ end)
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
   --[[ Change language ]]--
   if newWeapon.LanguageString != nil then
-    print("newWeapon.lang_string " .. newWeapon.LanguageString)
     newWeapon.PrintName = lang_string(newWeapon.LanguageString)
-    print(newWeapon.PrintName)
   end
 end
 
@@ -405,7 +403,6 @@ local function yrpCalcView( ply, pos, angles, fov )
 								if ply:GetNWInt( "view_range", 0 ) > 0 then
 									if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 										local _head = ply:GetPos().z + ply:OBBMaxs().z
-										print(_head)
 										pos.z = _head
 									end
 									--Thirdperson

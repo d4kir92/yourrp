@@ -14,7 +14,7 @@ ENT.Purpose			= ""
 ENT.Information = ""
 ENT.Instructions	= ""
 
-ENT.Category = "YourRP"
+ENT.Category = "YourRP Jail"
 
 ENT.Editable = false
 ENT.Spawnable = true

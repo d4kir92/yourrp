@@ -1,6 +1,20 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 yrpChat = yrpChat or {}
+
+function update_chat_choices()
+  yrpChat.comboBox:Clear()
+  yrpChat.comboBox:AddChoice( lang_string( "ooc" ) .. " /OOC", "ooc", false )
+  yrpChat.comboBox:AddChoice( lang_string( "looc" ) .. " /LOOC", "looc", false )
+  yrpChat.comboBox:AddChoice( lang_string( "say" ) .. " /SAY", "say", true )
+  yrpChat.comboBox:AddChoice( lang_string( "advert" ) .. " /ADVERT", "advert", false )
+  yrpChat.comboBox:AddChoice( lang_string( "yell" ) .. " /YELL", "yell", false )
+  yrpChat.comboBox:AddChoice( lang_string( "me" ) .. " /ME", "me", false )
+  yrpChat.comboBox:AddChoice( lang_string( "admin" ) .. " /ADMIN", "admin", false )
+  yrpChat.comboBox:AddChoice( lang_string( "group" ) .. " /GROUP", "group", false )
+  yrpChat.comboBox:AddChoice( lang_string( "role" ) .. " /ROLE", "role", false )
+end
+
 if yrpChat.window == nil then
   yrpChat.window = createVGUI( "DFrame", nil, 100, 100, 100, 100 )
   yrpChat.window:SetTitle( "" )
@@ -10,11 +24,7 @@ if yrpChat.window == nil then
   yrpChat.richText = createVGUI( "RichText", yrpChat.window, 1, 1, 1, 1 )
 
   yrpChat.comboBox = createD( "DComboBox", yrpChat.window, 1, 1, 1, 1 )
-  yrpChat.comboBox:AddChoice( lang_string( "globalchat" ), "ooc", false )
-  yrpChat.comboBox:AddChoice( lang_string( "say" ), "looc", true )
-  yrpChat.comboBox:AddChoice( lang_string( "advert" ), "advert", false )
-  yrpChat.comboBox:AddChoice( lang_string( "yell" ), "yell", false )
-  yrpChat.comboBox:AddChoice( lang_string( "me" ), "me", false )
+  update_chat_choices()
 
   function yrpChat.comboBox:OnSelect( index, value, data )
     net.Start( "set_chat_mode" )
@@ -24,6 +34,10 @@ if yrpChat.window == nil then
 
   yrpChat.writeField = createVGUI( "DTextEntry", yrpChat.window, 1, 1, 1, 1 )
 end
+
+hook.Add( "yrp_language_changed", "chat_language_changed", function()
+  update_chat_choices()
+end)
 
 function yrpChat.richText:PerformLayout()
 	self:SetFontInternal( "cbsf" )
@@ -37,7 +51,7 @@ function checkChatVisible()
   if _chatIsOpen then
     _fadeout = CurTime() + _delay
   end
-  if CurTime() > _fadeout then
+  if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() then
     _showChat = false
   else
     _showChat = true
@@ -74,19 +88,31 @@ function yrpChat.window:Paint( pw, ph )
 
       if yrpChat.writeField:GetText() == "/ooc " or yrpChat.writeField:GetText() == "!ooc " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "globalchat" ), 1 )
+        yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
       elseif yrpChat.writeField:GetText() == "/looc " or yrpChat.writeField:GetText() == "!looc " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "say" ), 2 )
+        yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
+      elseif yrpChat.writeField:GetText() == "/say " or yrpChat.writeField:GetText() == "!say " then
+        yrpChat.writeField:SetText("")
+        yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
       elseif yrpChat.writeField:GetText() == "/me " or yrpChat.writeField:GetText() == "!me " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "me" ), 5 )
+        yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
       elseif yrpChat.writeField:GetText() == "/yell " or yrpChat.writeField:GetText() == "!yell " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 4 )
+        yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
       elseif yrpChat.writeField:GetText() == "/advert " or yrpChat.writeField:GetText() == "!advert " then
         yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 3 )
+        yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
+      elseif yrpChat.writeField:GetText() == "/admin " or yrpChat.writeField:GetText() == "!admin " then
+        yrpChat.writeField:SetText("")
+        yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
+      elseif yrpChat.writeField:GetText() == "/group " or yrpChat.writeField:GetText() == "!group " then
+        yrpChat.writeField:SetText("")
+        yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
+      elseif yrpChat.writeField:GetText() == "/role " or yrpChat.writeField:GetText() == "!role " then
+        yrpChat.writeField:SetText("")
+        yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
       end
     end
   end
@@ -234,15 +260,24 @@ net.Receive( "yrp_player_say", function( len )
   local _tmp = net.ReadTable()
 
   local _write = false
-  if _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" then
+  if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" then
     _write = true
-    _tmp.name = _tmp.rpname
+    _tmp.name = ""
+    if _tmp.command == "group" then
+      _tmp.name = "[" .. lang_string( "group" ) .. "] "
+    elseif _tmp.command == "role" then
+      _tmp.name = "[" .. lang_string( "role" ) .. "] "
+    end
+    _tmp.name = _tmp.name .. _tmp.rolename .. " " .. _tmp.rpname
   end
 
   local _usergroup = false
-  if _tmp.command == "ooc" then
+  if _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "admin" then
     _usergroup = true
-    _tmp.name = _tmp.steamname
+    if _tmp.command == "admin" then
+      _tmp.name = "[" .. string.upper( lang_string( "admin" ) ) .. "] "
+    end
+    _tmp.name = _tmp.name .. _tmp.steamname
   end
 
   if true then

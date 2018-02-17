@@ -55,6 +55,8 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
+	createFont( "appname", tmpFont, fontr( 24 ), 1, false )
+
 	createFont( "gmbase", tmpFont, 16, 500, false )
 
 	createFont( "plates", tmpFont, 25, 1000, false )

@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "YourRP"
+SWEP.Category = "YourRP Medical"
 
 SWEP.PrintName = "Bandage"
 SWEP.Language = "en"
@@ -20,14 +20,14 @@ SWEP.DrawCrosshair = false
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_ifak.mdl"
-SWEP.WorldModel = "models/Items/HealthKit.mdl"
+SWEP.ViewModel = "models/props_junk/PopCan01a.mdl"
+SWEP.WorldModel = "models/props_junk/PopCan01a.mdl"
 
-SWEP.Primary.ClipSize = 6
+SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "bandage"
-SWEP.Secondary.Ammo = "bandage"
+SWEP.Secondary.Ammo = "bandagesecondary"
 
 SWEP.DrawCrosshair = true
 
@@ -37,7 +37,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Reload()
-
+	self:DefaultReload( ACT_VM_RELOAD )
 end
 
 function SWEP:Think()

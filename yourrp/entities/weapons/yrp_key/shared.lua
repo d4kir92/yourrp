@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = "This item can unlock/lock the door that you owned"
 SWEP.Instructions = "Left Click - Unlock door\nRight Click - Lock door"
 
-SWEP.Category = "YourRP"
+SWEP.Category = "YourRP Custom"
 
 SWEP.PrintName = "Key"
 SWEP.Language = "en"

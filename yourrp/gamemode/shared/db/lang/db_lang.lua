@@ -209,6 +209,8 @@ function change_language( index )
 
 	send_lang()
 
+	hook.Run( "yrp_language_changed" )
+
   hr_pos()
 end
 

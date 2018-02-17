@@ -76,6 +76,8 @@ AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_contact.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_workshop.lua" )
 AddCSLuaFile( "cl/gm/menus/cl_smartphone.lua" )
+AddCSLuaFile( "cl/gm/menus/app/api_app.lua" )
+AddCSLuaFile( "cl/gm/menus/app/cl_app_settings.lua" )
 
 --[[ includes ]]--
 include( "shared.lua" )

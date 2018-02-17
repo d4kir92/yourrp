@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "YourRP"
+SWEP.Category = "YourRP Weapon"
 
 SWEP.PrintName = "Handcuffs"
 SWEP.Language = "en"

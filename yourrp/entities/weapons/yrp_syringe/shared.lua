@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "YourRP"
+SWEP.Category = "YourRP Medical"
 
 SWEP.PrintName = "Syringe WIP"
 SWEP.Language = "en"
@@ -20,8 +20,8 @@ SWEP.DrawCrosshair = false
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/c_arms.mdl"
-SWEP.WorldModel = "models/Items/HealthKit.mdl"
+SWEP.ViewModel = "models/props_junk/PopCan01a.mdl"
+SWEP.WorldModel = "models/props_junk/PopCan01a.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1

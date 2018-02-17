@@ -52,6 +52,36 @@ function ctr( tmpNumber )
   end
 end
 
+function under1080p()
+  if ScrH() < 1080 then
+    return true
+  else
+    return false
+  end
+end
+
+function fontr( fontsize )
+  if !under1080p() then
+    return ctr( fontsize )
+  else
+    return fontsize
+  end
+end
+
+function ctrb( tmpNumber )
+  if !under1080p() then
+    if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
+      tmpNumber = 2160/tmpNumber
+      local _screen_h = ScrH() or 0
+      return math.Round( _screen_h/tmpNumber )
+    else
+      return -1
+    end
+  else
+    return tmpNumber/2
+  end
+end
+
 function ScrW2()
   return ( ScrW() / 2 )
 end

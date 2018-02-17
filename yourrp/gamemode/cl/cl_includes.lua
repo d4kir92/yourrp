@@ -37,5 +37,7 @@ include( "gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_contact.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_workshop.lua" )
 include( "gm/menus/cl_smartphone.lua" )
+include( "gm/menus/app/api_app.lua" )
+include( "gm/menus/app/cl_app_settings.lua" )
 
 printGM( "note", "Loaded cl_includes.lua" )
