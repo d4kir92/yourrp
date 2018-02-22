@@ -89,11 +89,11 @@ function hudUpTime()
 	draw.RoundedBox( 0, _ut.x, _ut.y, _ut.w, _ut.h, Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
 
 	draw.SimpleTextOutlined( lang_string( "totaluptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWInt( "uptime_total", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 2, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWFloat( "uptime_total", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 2, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 	draw.SimpleTextOutlined( lang_string( "currentuptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 3, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWInt( "uptime_current", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 4, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWFloat( "uptime_current", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 4, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 	draw.SimpleTextOutlined( lang_string( "serveruptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 5, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWInt( "uptime_server", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 6, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWFloat( "uptime_server", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 6, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 
 	drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "ut" .. "aw" ) ) + HudV( "ut" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "ut" .. "ah" ) ) + HudV( "ut" .. "py" ), HudV( "ut" .. "sw" ), HudV( "ut" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
 end
@@ -145,6 +145,8 @@ function show_voice_info( ply )
 	end
 end
 
+local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
+
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
 	local ply = LocalPlayer()
@@ -184,16 +186,20 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		hudUpTime()
 	end
 
-	if isSpVisible() then
+	if IsSpVisible() then
 		local _br = {}
 		_br.y = 50
 		_br.x = 10
 
 		local _r = 60
 
-		local _sp = getSpTable()
+		local _sp = GetSpTable()
 
-		draw.RoundedBox( ctr( _r ), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2*_br.x, _sp.h + 2*_br.y, Color( 255, 255, 0, 255 ) )
+		draw.RoundedBox( ctrb( _r ), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2*_br.x, _sp.h + 2*_br.y, getSpCaseColor() )
+
+		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.SetMaterial( _yrp_icon	)
+		surface.DrawTexturedRect( _sp.x + _sp.w/2 - ctrb( 246 )/2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
 	end
 
 	hudVersion()

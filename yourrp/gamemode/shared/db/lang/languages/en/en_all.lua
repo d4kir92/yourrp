@@ -507,4 +507,7 @@ function EN_All()
   set_lang_string( "advert", "Advert" )
   set_lang_string( "ooc", "Out of character" )
   set_lang_string( "looc", "Local out of character" )
+  set_lang_string( "battery", "Battery" )
+  set_lang_string( "batterylife", "Battery life" )
+  set_lang_string( "colorsettings", "Colorsettings" )
 end

@@ -11,5 +11,6 @@ add_luas( "trace.lua" )
 add_luas( "vehicles.lua" )
 add_luas( "date.lua" )
 add_luas( "derma.lua" )
+add_luas( "sp.lua" )
 
 print( "Loaded api_includes.lua" )

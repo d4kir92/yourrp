@@ -77,7 +77,7 @@ function drawGroupPlayers( id )
         _tmpPly.lang = get_language_name( ply:GetNWString( "client_lang", lang_string( "none" ) ) )
         _tmpPly.money = ply:GetNWString( "money" )
         _tmpPly.moneybank = ply:GetNWString( "moneybank" )
-        local _pt = string.FormattedTime( ply:GetNWInt( "uptime_current", 0 ) )
+        local _pt = string.FormattedTime( ply:GetNWFloat( "uptime_current", 0 ) )
         if _pt.m < 10 then
           _pt.m = "0" .. _pt.m
         end

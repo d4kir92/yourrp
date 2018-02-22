@@ -586,6 +586,7 @@ function closeCharacterSelection()
 end
 
 local curChar = "-1"
+local _cur = ""
 function openCharacterSelection()
   timer.Simple( 0.2, function()
     openMenu()
@@ -603,7 +604,8 @@ function openCharacterSelection()
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
-    draw.SimpleTextOutlined( lang_string( "characterselection" ), "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "characterselection" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( _cur, "HudHeader", pw/2, ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function _cs.frame:OnClose()
     closeMenu()
@@ -658,10 +660,10 @@ function openCharacterSelection()
 
   net.Receive( "charGetCharacters", function( len )
     printGM( "client", "received characterlist" )
-    local tmpTable = net.ReadTable()
+    local _characters = net.ReadTable()
 
-    character.amount = #tmpTable or 0
-    if #tmpTable < 1 then
+    character.amount = #_characters or 0
+    if #_characters < 1 then
 
       if _cs.frame != nil and _cs.frame != NULL and ispanel( _cs.frame ) and _cs.frame.Close != nil then
         _cs.frame:Close()
@@ -678,43 +680,61 @@ function openCharacterSelection()
       end
       v.tmpChar:Remove()
     end
-    for i = 1, #tmpTable do
-      if tmpTable[i].char != nil and tmpTable[i].role != nil and tmpTable[i].group != nil then
+    for i = 1, #_characters do
+      if _characters[i].char != nil and _characters[i].role != nil and _characters[i].group != nil then
         cache[i] = {}
         cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
         local tmpChar = cache[i].tmpChar
         tmpChar:SetText( "" )
-        tmpChar.charid = tmpTable[i].char.uniqueID
-        tmpChar.rpname = tmpTable[i].char.rpname
-        tmpChar.roleID = tmpTable[i].role.roleID
-        tmpChar.groupID = tmpTable[i].group.groupID
-        tmpChar.map = tmpTable[i].char.map
-        tmpChar.playermodelID = tmpTable[i].char.playermodelID
-        local tmp = string.Explode( ",", tmpTable[i].role.playermodels )
+        tmpChar.charid = _characters[i].char.uniqueID
+        tmpChar.rpname = _characters[i].char.rpname
+        tmpChar.roleID = _characters[i].role.roleID
+        tmpChar.groupID = _characters[i].group.groupID
+        tmpChar.map = _characters[i].char.map
+        tmpChar.playermodelID = _characters[i].char.playermodelID
+        local tmp = string.Explode( ",", _characters[i].role.playermodels )
         tmpChar.playermodels = tmp
-        tmpChar.playermodelsize = tmpTable[i].role.playermodelsize
-        tmpChar.skin = tmpTable[i].char.skin
-        tmpChar.bg0 = tmpTable[i].char.bg0 or 0
-        tmpChar.bg1 = tmpTable[i].char.bg1 or 0
-        tmpChar.bg2 = tmpTable[i].char.bg2 or 0
-        tmpChar.bg3 = tmpTable[i].char.bg3 or 0
-        tmpChar.bg4 = tmpTable[i].char.bg4 or 0
-        tmpChar.bg5 = tmpTable[i].char.bg5 or 0
-        tmpChar.bg6 = tmpTable[i].char.bg6 or 0
-        tmpChar.bg7 = tmpTable[i].char.bg7 or 0
+        tmpChar.playermodelsize = _characters[i].role.playermodelsize
+        tmpChar.skin = _characters[i].char.skin
+        tmpChar.bg0 = _characters[i].char.bg0 or 0
+        tmpChar.bg1 = _characters[i].char.bg1 or 0
+        tmpChar.bg2 = _characters[i].char.bg2 or 0
+        tmpChar.bg3 = _characters[i].char.bg3 or 0
+        tmpChar.bg4 = _characters[i].char.bg4 or 0
+        tmpChar.bg5 = _characters[i].char.bg5 or 0
+        tmpChar.bg6 = _characters[i].char.bg6 or 0
+        tmpChar.bg7 = _characters[i].char.bg7 or 0
 
         function tmpChar:Paint( pw, ph )
-          if tmpChar:IsHovered() or curChar == self.charid then
-            paintMD( pw, ph, nil, get_dsbg_col() )
+          if tmpChar:IsHovered() then
+            paintMD( pw, ph, nil, Color( 255, 255, 0, 255 ) )
           else
             paintMD( pw, ph, nil, get_ds_col() )
           end
-          draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. self.rpname, "HudBars", ctr( 20 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( lang_string( "role" ) .. ": " .. self.groupID .. " " .. self.roleID, "HudBars", ctr( 20 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. self.map, "HudBars", ctr( 20 ), ctr( 160 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if curChar == self.charid then
+            paintMD( pw, ph, nil, Color( 255, 255, 100, 255 ) )
+            local _br = 4
+            local _w = 50
+            local _h = 10
+            draw.RoundedBox( 0, ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+            draw.RoundedBox( 0, ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+            draw.RoundedBox( 0, ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+            draw.RoundedBox( 0, ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+            draw.RoundedBox( 0, pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+            draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+            draw.RoundedBox( 0, pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+            draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+          end
+          draw.SimpleTextOutlined( self.rpname, "HudBars", ctr( 30 ), ctr( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( lang_string( "level" ) .. " 1 " .. self.roleID, "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.map, "HudBars", ctr( 30 ), ctr( 155 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
         function tmpChar:DoClick()
           curChar = self.charid
+          _cur = self.rpname
           if self.playermodels != nil and self.playermodelID != nil then
             local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
             if _playermodel != nil and charplayermodel != NULL then
@@ -735,7 +755,7 @@ function openCharacterSelection()
           end
         end
 
-        if tmpTable[i].char.uniqueID == tmpTable.plytab.CurrentCharacter then
+        if _characters[i].char.uniqueID == _characters.plytab.CurrentCharacter then
           curChar = tmpChar.charid
           tmpChar:DoClick()
         end
@@ -828,10 +848,10 @@ function openCharacterSelection()
     else
       draw.RoundedBox( 0, 0, 0, pw-height, ph-height, get_dp_col() )
     end
-    local text = lang_string( "enterworld" )
+    local text = lang_string( "enterworld" ) .. " (" .. _cur .. ")"
     if LocalPlayer() != nil then
       if LocalPlayer():Alive() then
-        text = lang_string( "suicide" )
+        text = lang_string( "suicide" ) .. " (" .. LocalPlayer():RPName() .. ")"
       end
     end
     draw.SimpleTextOutlined( text, "HudBars", (pw-height)/2, (ph-height)/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )

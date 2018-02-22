@@ -61,6 +61,13 @@ function checkChatVisible()
   yrpChat.comboBox:SetVisible( _showChat )
 end
 
+function isFullyCommand( com, iscom, iscom2 )
+  if com == "/" .. iscom .. " " or com == "!" .. iscom .. " " or com == "/" .. string.lower( iscom2 ) .. " " or com == "!" .. string.lower( iscom2 ) .. " " then
+    return true
+  end
+  return false
+end
+
 function yrpChat.window:Paint( pw, ph )
   if HudV( "cbto" ) == 1 then
     checkChatVisible()
@@ -86,31 +93,32 @@ function yrpChat.window:Paint( pw, ph )
         end
       end
 
-      if yrpChat.writeField:GetText() == "/ooc " or yrpChat.writeField:GetText() == "!ooc " then
+      local _com = yrpChat.writeField:GetText()
+      if isFullyCommand( _com, "ooc", lang_string( "ooc" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
-      elseif yrpChat.writeField:GetText() == "/looc " or yrpChat.writeField:GetText() == "!looc " then
+      elseif isFullyCommand( _com, "looc", lang_string( "looc" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
-      elseif yrpChat.writeField:GetText() == "/say " or yrpChat.writeField:GetText() == "!say " then
+      elseif isFullyCommand( _com, "say", lang_string( "say" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
-      elseif yrpChat.writeField:GetText() == "/me " or yrpChat.writeField:GetText() == "!me " then
+      elseif isFullyCommand( _com, "me", lang_string( "me" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
-      elseif yrpChat.writeField:GetText() == "/yell " or yrpChat.writeField:GetText() == "!yell " then
+      elseif isFullyCommand( _com, "yell", lang_string( "yell" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
-      elseif yrpChat.writeField:GetText() == "/advert " or yrpChat.writeField:GetText() == "!advert " then
+      elseif isFullyCommand( _com, "advert", lang_string( "advert" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
-      elseif yrpChat.writeField:GetText() == "/admin " or yrpChat.writeField:GetText() == "!admin " then
+      elseif isFullyCommand( _com, "admin", lang_string( "admin" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
-      elseif yrpChat.writeField:GetText() == "/group " or yrpChat.writeField:GetText() == "!group " then
+      elseif isFullyCommand( _com, "group", lang_string( "group" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
-      elseif yrpChat.writeField:GetText() == "/role " or yrpChat.writeField:GetText() == "!role " then
+      elseif isFullyCommand( _com, "role", lang_string( "role" ) ) then
         yrpChat.writeField:SetText("")
         yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
       end
@@ -256,28 +264,36 @@ function chat.AddText( ... )
   oldAddText ( ... )
 end
 
+function niceCommand( com )
+  if com == "say" then
+    return lang_string( "say" )
+  elseif com == "yell" then
+    return lang_string( "yell" )
+  elseif com == "advert" then
+    return lang_string( "advert" )
+  elseif com == "admin" then
+    return lang_string( "admin" )
+  elseif com == "group" then
+    return lang_string( "group" )
+  elseif com == "role" then
+    return lang_string( "role" )
+  end
+  return com
+end
+
 net.Receive( "yrp_player_say", function( len )
   local _tmp = net.ReadTable()
 
   local _write = false
   if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" then
     _write = true
-    _tmp.name = ""
-    if _tmp.command == "group" then
-      _tmp.name = "[" .. lang_string( "group" ) .. "] "
-    elseif _tmp.command == "role" then
-      _tmp.name = "[" .. lang_string( "role" ) .. "] "
-    end
-    _tmp.name = _tmp.name .. _tmp.rolename .. " " .. _tmp.rpname
+    _tmp.name = _tmp.rolename .. " " .. _tmp.rpname
   end
 
   local _usergroup = false
   if _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "admin" then
     _usergroup = true
-    if _tmp.command == "admin" then
-      _tmp.name = "[" .. string.upper( lang_string( "admin" ) ) .. "] "
-    end
-    _tmp.name = _tmp.name .. _tmp.steamname
+    _tmp.name = _tmp.steamname
   end
 
   if true then
@@ -305,7 +321,7 @@ net.Receive( "yrp_player_say", function( len )
         table.insert( _unpack, " " )
       end
     end
-
+    /*
     if _tmp.command == "advert" then
       table.insert( _unpack, _tmp.lokal_color )
       table.insert( _unpack, "[" )
@@ -314,6 +330,16 @@ net.Receive( "yrp_player_say", function( len )
 
       table.insert( _unpack, " " )
     end
+    */
+
+    if _tmp.command != "me" then
+      table.insert( _unpack, _tmp.command_color )
+      table.insert( _unpack, "[" )
+      table.insert( _unpack, string.upper(  niceCommand( _tmp.command ) ) )
+      table.insert( _unpack, "]" )
+      table.insert( _unpack, " " )
+    end
+
 
     table.insert( _unpack, _tmp.command_color )
     table.insert( _unpack, _tmp.name )

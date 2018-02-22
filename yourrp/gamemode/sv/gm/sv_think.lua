@@ -110,23 +110,24 @@ function time_jail( ply )
 end
 
 function check_salary( ply )
-  if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWInt( "salary" ), "sv_think salary fail" ) then
-    if CurTime() >= ply:GetNWInt( "nextsalarytime", 0 ) then
+  if worked( ply:GetNWString( "money" ), "sv_think money fail" ) and worked( ply:GetNWString( "salary" ), "sv_think salary fail" ) then
+    if CurTime() >= ply:GetNWInt( "nextsalarytime", 0 ) and ply:HasCharacterSelected() and ply:Alive() then
       ply:SetNWInt( "nextsalarytime", CurTime() + ply:GetNWInt( "salarytime" ) )
 
-      local _m = ply:GetNWString( "money", -1 )
+      local _m = ply:GetNWString( "money", "FAILED" )
+      local _ms = ply:GetNWString( "salary", "FAILED" )
+      if _m == "FAILED" or _ms == "FAILED" then
+        printGM( "error", "_m or _ms failed " .. _m .. " " .. _ms )
+        return false
+      end
       local _money = tonumber( _m )
-      local _c = ply:GetNWInt( "salary", -1 )
-      local _salary = tonumber( _c )
+      local _salary = tonumber( _ms )
       if _money != nil and _salary != nil then
-        if _money != -1 and _salary != -1 then
-          ply:SetNWString( "money", _money + _salary )
-          ply:UpdateMoney()
-        else
-          ply:CheckMoney()
-        end
+        ply:SetNWString( "money", _money + _salary )
+        ply:UpdateMoney()
       else
-        printGM( "error", "FAIL @check_salary" )
+        printGM( "error", "CheckMoney in check_salary [ money: " .. tostring( _money ) .. " salary: " .. tostring( _salary ) .. " ]" )
+        ply:CheckMoney()
       end
     end
   end
@@ -137,47 +138,44 @@ timer.Create( "ServerThink", 1, 0, function()
   local _all_players = player.GetAll()
 
   for k, ply in pairs( _all_players ) do
+    ply:addSecond()
 
-    if !ply:GetNWBool( "inCombat" ) then
-      ply:CheckHeal()
-      ply:SetNWFloat( "uptime_current", ply:getuptimecurrent() )
-      ply:SetNWFloat( "uptime_total", ply:getuptimetotal() )
-      ply:SetNWFloat( "uptime_server", os.clock() )
-      ply:addSecond()
+    if ply:GetNWBool( "loaded", false ) then
+      if !ply:GetNWBool( "inCombat" ) then
+        ply:CheckHeal()
 
-      reg_hp( ply )   --HealthReg
-      reg_ar( ply )   --ArmorReg
-      if ply:GetNWBool( "toggle_metabolism", false ) then
-        if ply:GetNWInt( "hunger", 0 ) > 20 and _time%4 == 0 then
-          reg_mb( ply ) --MetabolismReg (health up, when enough hunger)
+        reg_hp( ply )   --HealthReg
+        reg_ar( ply )   --ArmorReg
+        if ply:GetNWBool( "toggle_metabolism", false ) then
+          if ply:GetNWInt( "hunger", 0 ) > 20 and _time%4 == 0 then
+            reg_mb( ply ) --MetabolismReg (health up, when enough hunger)
+          end
         end
       end
-    end
 
-    if ply:IsBleeding() then
-      local effect = EffectData()
-      effect:SetOrigin( ply:GetPos() - ply:GetBleedingPosition() )
-      effect:SetScale( 1 )
-      util.Effect( "bloodimpact", effect )
-      ply:TakeDamage( 0.5, ply, ply )
-    end
+      if ply:IsBleeding() then
+        local effect = EffectData()
+        effect:SetOrigin( ply:GetPos() - ply:GetBleedingPosition() )
+        effect:SetScale( 1 )
+        util.Effect( "bloodimpact", effect )
+        ply:TakeDamage( 0.5, ply, ply )
+      end
 
-    if ply:GetNWBool( "toggle_hunger", false ) then
-      --con_hg( ply )
-    end
-    if ply:GetNWBool( "toggle_thirst", false ) then
-      --con_th( ply )
-    end
-    if ply:GetNWBool( "toggle_stamina", false ) then
-      con_st( ply )
-    end
-    reg_ab( ply )
+      if ply:GetNWBool( "toggle_hunger", false ) then
+        --con_hg( ply )
+      end
+      if ply:GetNWBool( "toggle_thirst", false ) then
+        --con_th( ply )
+      end
+      if ply:GetNWBool( "toggle_stamina", false ) then
+        con_st( ply )
+      end
 
-    time_jail( ply )  --Jail
-
-    check_salary( ply )
-
-    broken( ply )
+      reg_ab( ply )
+      time_jail( ply )
+      check_salary( ply )
+      broken( ply )
+    end
   end
 
   if _time % 10 == 0 then
@@ -192,17 +190,20 @@ timer.Create( "ServerThink", 1, 0, function()
 
   local _auto_save = 300
   if _time % _auto_save == 0 then
-    save_clients( "Auto-Save ( " .. _auto_save .. " sec )" )
+    local _mod = _time%60
+    local _left = _time/60 - _mod
+    save_clients( "Auto-Save ( Uptime: " .. _left .. " " .. lang_string( "minutes" ) .. " )" )
   end
 
-  if _time >= 21600-30 then
-    if _time >= 21600 then
+  local _changelevel = 21600
+  if _time >= _changelevel-30 then
+    if _time >= _changelevel then
       printGM( "gm", "Auto Reload" )
       timer.Simple( 1, function()
         game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
       end)
     else
-      printGM( "gm", "Auto Reload in " .. 21600-_time .. " sec" )
+      printGM( "gm", "Auto Reload in " .. _changelevel-_time .. " sec" )
     end
   end
 

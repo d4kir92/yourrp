@@ -63,24 +63,24 @@ function Player:getHitTarget()
   return NULL
 end
 
-function to_darkrp_job( rol_tab )
+function to_darkrp_job( tab )
   if istable( tab ) then
     local _ret_tab = {}
     _ret_tab.color = Color( 0, 0, 0, 255 )
-    _ret_tab.model = rol_tab.playermodels
-    _ret_tab.description = rol_tab.description
-    _ret_tab.weapons = string.Explode( ",", db_out_str( rol_tab.sweps ) )
-    _ret_tab.command = tostring( rol_tab.roleID )
-    _ret_tab.max = tonumber( rol_tab.maxamount )
-    _ret_tab.salary = tonumber( rol_tab.salary )
-    _ret_tab.admin = tonumber( rol_tab.adminonly )
-    _ret_tab.vote = tobool( rol_tab.voteable )
+    _ret_tab.model = tab.playermodels
+    _ret_tab.description = tab.description
+    _ret_tab.weapons = string.Explode( ",", db_out_str( tab.sweps ) )
+    _ret_tab.command = tostring( tab.roleID )
+    _ret_tab.max = tonumber( tab.maxamount )
+    _ret_tab.salary = tonumber( tab.salary )
+    _ret_tab.admin = tonumber( tab.adminonly )
+    _ret_tab.vote = tobool( tab.voteable )
     _ret_tab.hasLicense = false -- NEED TO BE EDITED, later
     _ret_tab.customCheck = nil
 
     return _ret_tab
   else
-    printGM( "error", "tab: " .. tostring( tab ) .. " is not a table" )
+    printGM( "error", "to_darkrp_job [ tab: " .. tostring( tab ) .. " is not a table ]" )
   end
 end
 
@@ -94,7 +94,7 @@ function Player:getJobTable()
     _job = to_darkrp_job( _job )
     return _job
   else
-    printGM( "note", "currently not available for clientside")
+    printGM( "note", "currently not available for clientside" )
     return {}
   end
 end

@@ -30,7 +30,7 @@ function Player:IsCharacterValid()
       if _cha_tab == nil then
         return false
       else
-        printTab( _cha_tab )
+        --printTab( _cha_tab )
         return true
       end
     end
@@ -140,12 +140,20 @@ end
 function Player:CheckMoney()
   if SERVER then
     timer.Simple( 4, function()
-      local _m = self:GetNWString( "money", 0 )
+      local _m = self:GetNWString( "money", "FAILED" )
+      if _m == "FAILED" then
+        printGM( "error", "CheckMoney failed" )
+        return false
+      end
       local _money = tonumber( _m )
       if worked( _money, "ply:money CheckMoney", true ) and self:CharID() != nil then
         db_update( "yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID() ) --attempt to nil value
       end
-      _mb = self:GetNWString( "moneybank", 0 )
+      _mb = self:GetNWString( "moneybank", "FAILED" )
+      if _mb == "FAILED" then
+        printGM( "error", "CheckMoney failed" )
+        return false
+      end
       local _moneybank = tonumber( _mb )
       if worked( _moneybank, "ply:moneybank CheckMoney", true ) and self:CharID() != nil then
         db_update( "yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID() )
@@ -156,11 +164,17 @@ end
 
 function Player:UpdateMoney()
   if SERVER then
-    local money = tonumber( self:GetNWString( "money", 0 ) )
+    local money = self:GetNWString( "money", "FAILED" )
+    if money == "FAILED" then
+      return false
+    end
     if worked( money, "ply:money UpdateMoney", true ) then
       db_update( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
     end
-    local moneybank = tonumber( self:GetNWString( "moneybank", 0 ) )
+    local moneybank = tonumber( self:GetNWString( "moneybank", "FAILED" ) )
+    if moneybank == "FAILED" then
+      return false
+    end
     if worked( moneybank, "ply:moneybank UpdateMoney", true ) then
       db_update( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. self:CharID() )
     end
@@ -309,7 +323,7 @@ if SERVER then
   function Player:getuptimecurrent()
     local _ret = db_select( "yrp_players", "uptime_current", "SteamID = '" .. self:SteamID() .. "'" )
     if _ret != nil and _ret != false then
-      return tonumber( _ret[1].uptime_current )
+      return _ret[1].uptime_current
     end
     return 0
   end
@@ -317,7 +331,7 @@ if SERVER then
   function Player:getuptimetotal()
     local _ret = db_select( "yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'" )
     if _ret != nil and _ret != false then
-      return tonumber( _ret[1].uptime_total )
+      return _ret[1].uptime_total
     end
     return 0
   end
@@ -327,6 +341,9 @@ if SERVER then
     local _sec_current = self:getuptimecurrent()
     if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
       local _res = db_update( "yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'" )
+      self:SetNWFloat( "uptime_current", self:getuptimecurrent() )
+      self:SetNWFloat( "uptime_total", self:getuptimetotal() )
+      self:SetNWFloat( "uptime_server", os.clock() )
     end
   end
 
@@ -402,7 +419,7 @@ function Player:Nick()
 end
 
 function Player:Name()
-  return "[" .. self:SteamName() .. " (".. self:RPName() .. ")] {Alive: " .. string.upper( tostring(self:Alive()) ) .. "}"
+  return "[" .. self:SteamName() .. " (".. self:RPName() .. ")]" -- " {Alive: " .. string.upper( tostring(self:Alive()) ) .. "}"
 end
 
 function Player:Team()

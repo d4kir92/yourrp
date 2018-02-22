@@ -122,7 +122,7 @@ function GM:PlayerLoadout( ply )
   end
 end
 
-function GM:PlayerSpawn( ply )--hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
+hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
   printGM( "gm", "[PlayerSpawn] " .. tostring( ply:Name() ) .. " spawned." )
   if ply:GetNWBool( "can_respawn", true ) then
     ply:SetNWBool( "can_respawn", false )
@@ -133,9 +133,9 @@ function GM:PlayerSpawn( ply )--hook.Add( "PlayerSpawn", "yrp_player_spawn", fun
   else
     printGM( "note", "PlayerSpawn failed" )
   end
-end
+end)
 
-function GM:PostPlayerDeath( ply )
+hook.Add( "PostPlayerDeath", "yrp_player_spawn", function( ply )
   printGM( "gm", "[PostPlayerDeath] " .. tostring( ply:Name() ) .. " is dead." )
   ply:StopBleeding()
 
@@ -153,7 +153,7 @@ function GM:PostPlayerDeath( ply )
       end
     end
   end
-end
+end)
 
 /*
 function GM:PlayerDeathThink( ply )

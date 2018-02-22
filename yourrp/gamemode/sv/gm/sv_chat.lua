@@ -256,8 +256,8 @@ function unpack_paket( sender, text, iscommand )
     paket.command_color = Color( 255, 255, 0 )
     paket.text_color = Color( 255, 255, 20 )
   elseif paket.command == "group" then
-    paket.command_color = Color( 0, 0, 255 )
-    paket.text_color = Color( 20, 20, 255 )
+    paket.command_color = Color( 160, 160, 255 )
+    paket.text_color = Color( 160, 160, 255 )
   elseif paket.command == "role" then
     paket.command_color = Color( 0, 255, 0 )
     paket.text_color = Color( 20, 255, 20 )

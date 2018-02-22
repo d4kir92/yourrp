@@ -4,8 +4,22 @@ local _url1 = "https://docs.google.com/forms/d/e/1FAIpQLSe9L51y9uV7EExUuxE2VWuwW
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSfJfrnPqXh91wYsWUByr1S1lAQjfNH047NA12CEDCMINdwnhw/formResponse"
 
 if SERVER then
-	function send_server_info( status )
-		printGM( "db", "[Send Server Info: " .. tostring( status ) .. "]" )
+
+	function send_server_info( status, time )
+		if isnumber( time ) then
+			local _sec = time % 60
+			local _min = ( time - _sec ) / 60
+
+			status = status .. " ("
+			if _min > 0 then
+				status = status .. " " .. tostring( _min ) .. " " .. lang_string( "minutes" )
+			end
+			if _sec != 0 then
+				status = status .. " " .. tostring( _sec ) .. " " .. lang_string( "seconds" )
+			end
+			status = status .. " )"
+		end
+		--printGM( "db", "[Send Server Info: " .. tostring( status ) .. "]" )
 
 	  local entry = {}
 
@@ -54,9 +68,9 @@ if SERVER then
 		end)
 	end
 
-	local _tick = 30*59
+	local _tick = 5*60 - 1
 	timer.Create( "update_server_info", _tick, 0, function()
-	  send_server_info( "auto ( " .. tostring( _tick ) .. " )" )
+	  send_server_info( "auto", _tick )
 	end)
 
 	timer.Simple( 10, function()

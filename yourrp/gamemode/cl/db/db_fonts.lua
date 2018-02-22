@@ -55,7 +55,10 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
-	createFont( "appname", tmpFont, fontr( 24 ), 1, false )
+	createFont( "apph1", tmpFont, fontr( 36 ), 1, false )
+	createFont( "appt", tmpFont, fontr( 30 ), 1, false )
+
+	createFont( "appname", tmpFont, fontr( 28 ), 1, false )
 
 	createFont( "gmbase", tmpFont, 16, 500, false )
 
@@ -106,6 +109,7 @@ function changeFontSize()
 	createFont( "stsf", tmpFont, 24, _weight, false )
 	createFont( "xpsf", tmpFont, 24, _weight, false )
 	createFont( "utsf", tmpFont, 24, _weight, false )
+	createFont( "blsf", tmpFont, 24, _weight, false )
 
 	createFont( "sef", tmpFont, 24, 1, false )
 

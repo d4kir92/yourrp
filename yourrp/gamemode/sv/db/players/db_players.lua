@@ -19,7 +19,7 @@ sql_add_column( _db_name, "uptime_current", "INT DEFAULT 0" )
 
 g_db_reseted = false
 function save_clients( string )
-  printGM( "db", string.upper( "[Saving all clients]" ) )
+  printGM( "db", string.upper( "[Saving all clients] [" .. string .. "]" ) )
   if !g_db_reseted then
     for k, ply in pairs( player.GetAll() ) do
 
@@ -56,7 +56,16 @@ function save_clients( string )
       end
     end
     local _all_players = player.GetCount() or 0
-    printGM( "db", string.upper( "[Saved " .. tostring( _all_players ) .. " client(s)]" ) )
+    if _all_players > 0 then
+      local _text = "=> [Saved " .. tostring( _all_players ) .. " client"
+      if _all_players > 1 then
+        _text = _text .. "s"
+      end
+      _text = _text .. "]"
+      printGM( "db", string.upper( _text ) )
+    else
+      printGM( "db", string.upper( "=> [No clients on server]" ) )
+    end
   else
     printGM( "db", "no saving, because db reset" )
   end
@@ -140,7 +149,7 @@ function set_role_values( ply )
         ply:SetNWInt( "GetCurAbility", tonumber( rolTab.ab ) )
 
         ply:SetJumpPower( tonumber( rolTab.powerjump ) ) -- * rolTab.playermodelsize )
-        ply:SetNWInt( "salary", rolTab.salary )
+        ply:SetNWString( "salary", rolTab.salary )
         ply:SetNWString( "roleName", rolTab.roleID )
 
         ply:SetNWInt( "salarytime", rolTab.salarytime )
@@ -174,6 +183,7 @@ function set_role_values( ply )
           ply:KillSilent()
         end
       end
+      ply:SetNWBool( "loaded", true )
     end
   end
 end

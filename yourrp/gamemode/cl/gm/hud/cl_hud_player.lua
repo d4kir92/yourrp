@@ -16,6 +16,7 @@ hud["wp"] = 0
 hud["ws"] = 0
 hud["mo"] = 0
 hud["st"] = 0
+hud["bl"] = 0
 
 function roundMoney( _money, round )
   if _money != nil then
@@ -138,6 +139,7 @@ include( "player/cl_hud_ws.lua" )
 include( "player/cl_hud_mm.lua" )
 include( "player/cl_hud_st.lua" )
 include( "player/cl_hud_vt.lua" )
+include( "player/cl_hud_bl.lua" )
 
 include( "player/cl_hud_thirdperson.lua" )
 
@@ -182,6 +184,8 @@ function HudPlayer( ply )
           hudVT( ply, Color( 0, 0, 0, _alpha ) )
           hudST( ply, Color( 0, 0, 0, _alpha ) )
 
+          hudBL( ply, Color( 0, 0, 0, _alpha ) )
+
           --[[ Hud Borders ]]--
           if server_toggled( ply ) then
             hudHPBR( ply )
@@ -204,6 +208,8 @@ function HudPlayer( ply )
 
           hudVTBR( ply )
           hudSTBR( ply )
+
+          hudBLBR( ply )
         end
 
         --[[ Extras ]]--

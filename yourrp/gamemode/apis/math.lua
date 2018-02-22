@@ -93,3 +93,11 @@ end
 function formatMoney( ply, money )
   return ply:GetNWString( "moneyPre" ) .. money .. ply:GetNWString( "moneyPost" )
 end
+
+function getTblX( nr, max )
+  return nr % max
+end
+
+function getTblY( nr, max )
+  return ( nr / max ) - ( 1 / max ) * ( nr % max )
+end

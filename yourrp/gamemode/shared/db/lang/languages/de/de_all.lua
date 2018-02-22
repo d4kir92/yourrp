@@ -507,4 +507,7 @@ function DE_All()
   set_lang_string( "advert", "Anzeige" )
   set_lang_string( "ooc", "Aus dem Körper heraus" )
   set_lang_string( "looc", "Lokal aus dem Körper heraus" )
+  set_lang_string( "battery", "Akku" )
+  set_lang_string( "batterylife", "Akkulaufzeit" )
+  set_lang_string( "colorsettings", "Farbeinstellungen" )
 end

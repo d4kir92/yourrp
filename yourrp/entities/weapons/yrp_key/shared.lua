@@ -22,7 +22,6 @@ SWEP.AdminSpawnable = true
 
 SWEP.ViewModel = ""--"models/weapons/yrp/yrp_key_v.mdl"
 SWEP.WorldModel = ""--"models/weapons/yrp/yrp_key_v.mdl"
-SWEP.UseHands = true
 
 SWEP.Primary.ClipSize = -1
 
