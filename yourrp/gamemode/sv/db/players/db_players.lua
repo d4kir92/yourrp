@@ -156,6 +156,9 @@ function set_role_values( ply )
         ply:SetNWInt( "nextsalarytime", CurTime() + rolTab.salarytime )
         ply:SetNWBool( "yrp_voice_global", tobool(rolTab.voiceglobal) )
 
+        ply:SetNWBool( "canbeagent", tobool( rolTab.canbeagent ) )
+        ply:SetNWBool( "iscivil", tobool( rolTab.iscivil ) )
+
         --sweps
         local tmpSWEPTable = string.Explode( ",", db_out_str( rolTab.sweps ) )
         for k, swep in pairs( tmpSWEPTable ) do

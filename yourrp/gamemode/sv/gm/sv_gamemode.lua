@@ -126,7 +126,7 @@ hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
   printGM( "gm", "[PlayerSpawn] " .. tostring( ply:Name() ) .. " spawned." )
   if ply:GetNWBool( "can_respawn", true ) then
     ply:SetNWBool( "can_respawn", false )
-    GAMEMODE:PlayerLoadout( ply )
+
     timer.Simple( 0.01, function()
       teleportToSpawnpoint( ply )
     end)
@@ -155,19 +155,22 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn", function( ply )
   end
 end)
 
-/*
+--[[
 function GM:PlayerDeathThink( ply )
   --printGM( "gm", "[PlayerDeathThink] " .. tostring( ply:Name() ) .. "" )
 end
-
-function GM:PlayerDeath( victim, inflictor, attacker )
-  printGM( "gm", "[PlayerDeath] " .. tostring( victim:Name() ) .. "" )
-end
-
-function GM:DoPlayerDeath( ply, attacker, dmg )
-  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:Name() ) .. "" )
-end
-*/
+]]--
+hook.Add( "DoPlayerDeath", "yrp_player_spawn", function( ply, attacker, dmg )
+  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:Name() ) )
+  local _reward = tonumber( ply:GetNWString( "hitreward" ) )
+  if isnumber( _reward ) and attacker:IsPlayer() then
+    if attacker:IsAgent() then
+      printGM( "note", "Hit done! " .. _reward )
+      attacker:addMoney( _reward )
+      hitdone( ply, attacker )
+    end
+  end
+end)
 
 function GM:ShutDown()
   save_clients( "Shutdown/Changelevel" )

@@ -186,6 +186,11 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		hudUpTime()
 	end
 
+	local _target = LocalPlayer():GetNWString( "hittarget", "" )
+	if _target != "" then
+		surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittarget", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
+	end
+
 	if IsSpVisible() then
 		local _br = {}
 		_br.y = 50

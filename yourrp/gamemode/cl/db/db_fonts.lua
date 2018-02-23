@@ -58,7 +58,7 @@ function changeFontSize()
 	createFont( "apph1", tmpFont, fontr( 36 ), 1, false )
 	createFont( "appt", tmpFont, fontr( 30 ), 1, false )
 
-	createFont( "appname", tmpFont, fontr( 28 ), 1, false )
+	createFont( "appname", tmpFont, ctrb( 28 ), 1, false )
 
 	createFont( "gmbase", tmpFont, 16, 500, false )
 

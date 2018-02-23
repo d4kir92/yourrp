@@ -83,7 +83,7 @@ function createSmartphone( parent, w, h, x, y )
   --[[ Elements ]]--
   _tmp.display = createD( "DPanel", _tmp, w, h, 0, 0 )
   function _tmp.display:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, getSpBackColor() )
 
     if self.apps != nil then
       for i, app in pairs( getAllDBApps() ) do
@@ -93,7 +93,8 @@ function createSmartphone( parent, w, h, x, y )
 
         local _appName = app.PrintName
         if app.LangName != nil then
-          _appName = lang_string( app.LangName )
+          local _name = lang_string( app.LangName, app.PrintName )
+          _appName = _name
         end
 
         if #_appName > 8 then
@@ -183,8 +184,39 @@ function createSmartphone( parent, w, h, x, y )
     return self.tbl
   end
 
+  function _tmp.display:OpenFullscreen()
+    self:ClearDisplay()
+
+    local _w = getGoodW()
+    local _h = _w/16*9
+
+    _tmp:SetPos( 0, 0 )
+    _tmp.display:SetPos( 0, 0 )
+
+    _tmp:SetSize( _w, _h )
+    _tmp.display:SetSize( _w, _h )
+
+    _tmp.topbar:SetPos( 0, 0 )
+    _tmp.botbar:SetPos( 0, _h - ctrb( 40 ) )
+    _tmp.topbar:SetSize( _w, ctrb( 40 ) )
+    _tmp.botbar:SetSize( _w, ctrb( 40 ) )
+
+    _tmp:Center()
+  end
+
   function _tmp.display:HomeScreen()
     self:ClearDisplay()
+
+    _tmp:SetPos( _tmp.tbl.x, _tmp.tbl.y )
+    _tmp.display:SetPos( 0, 0 )
+
+    _tmp:SetSize( _tmp.tbl.w, _tmp.tbl.h )
+    _tmp.display:SetSize( _tmp.tbl.w, _tmp.tbl.h )
+
+    _tmp.topbar:SetPos( 0, 0 )
+    _tmp.botbar:SetPos( 0, _tmp.tbl.h - ctrb( 40 ) )
+    _tmp.topbar:SetSize( _tmp.tbl.w, ctrb( 40 ) )
+    _tmp.botbar:SetSize( _tmp.tbl.w, ctrb( 40 ) )
 
     --[[ App Positions ]]--
     _tmp.pos = {}
@@ -206,6 +238,7 @@ function createSmartphone( parent, w, h, x, y )
     for i, app in pairs( getAllDBApps() ) do
       _x = getTblX( app.Position, 5 )
       _y = getTblY( app.Position, 5 )
+
       _tmp.display.apps[app.Position] = createApp( app, _tmp.display, ctrb( 40 ) + _x*ctrb( 64 ) + _x*ctrb( 40 ), ctrb( 40 ) + ctrb( 40 ) + _y*ctrb( 64 ) + _y*ctrb( 40+30 ) )
     end
   end

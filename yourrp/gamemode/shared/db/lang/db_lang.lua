@@ -41,7 +41,10 @@ function set_lang_string( var, str )
 	yrp_lang[var] = str
 end
 
-function lang_string( var )
+function lang_string( var, failed )
+	--[[ string var, string failed ]]--
+	--[[ returns translated string, when worked ]]--
+	--[[ if failed it uses failed string ]]--
 	local _string = yrp_lang[var]
 	if _string == nil then
 		_string = "STRING NOT FOUND!"
@@ -50,6 +53,7 @@ function lang_string( var )
 				printGM( "note", "lang_string failed! string " .. var .. " not found" )
 			end
 		end
+		return failed or _string
 	end
 	return _string
 end

@@ -828,6 +828,8 @@ net.Receive( "yrp_roles", function( len )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1490, lang_string( "roleadminonly" ), v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1540, lang_string( "rolewhitelist" ), v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1590, lang_string( "rolevoiceglobal" ), v.voiceglobal, yrp_roles_dbTable[k], "yrp_roles", "voiceglobal", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1640, lang_string( "canbeagent" ), v.canbeagent, yrp_roles_dbTable[k], "yrp_roles", "canbeagent", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1690, lang_string( "iscivil" ), v.iscivil, yrp_roles_dbTable[k], "yrp_roles", "iscivil", "uniqueID = " .. tmp.uniqueID .. "" )
 
         if !table.HasValue( yrp_roles_dbTable, _start_role ) then
           table.insert( yrp_roles_dbTable, _start_role )

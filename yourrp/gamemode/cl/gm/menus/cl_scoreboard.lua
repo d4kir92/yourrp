@@ -66,7 +66,7 @@ function drawGroupPlayers( id )
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
         elePos.y = elePos.y + 50
-        local _tmpPly = createD( "DButton", _SBSP, ScrH() - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+        local _tmpPly = createD( "DButton", _SBSP, getGoodW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
         _tmpPly:SetText( "" )
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
@@ -162,7 +162,7 @@ function drawGroup( id, name, color )
   elePos.y = elePos.y + 50
 
   local _color = string.Explode( ",", color )
-  local _tmpPanel = createD( "DPanel", _SBSP, ScrH() - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
+  local _tmpPanel = createD( "DPanel", _SBSP, getGoodW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
   _tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
   function _tmpPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
@@ -170,7 +170,7 @@ function drawGroup( id, name, color )
   end
   if hasGroupPlayers( id ) then
     elePos.y = elePos.y + 50
-    local _tmpHeader = createD( "DPanel", _SBSP, ScrH() - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+    local _tmpHeader = createD( "DPanel", _SBSP, getGoodW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
     _tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
     function _tmpHeader:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
@@ -266,6 +266,15 @@ function drawScoreboard()
   drawGroups()
 end
 
+function getGoodW()
+  --[[ give ScrW() only when under 21:9 ]]--
+  if ScrW() > ScrH()*1.8 then
+    return ctr( 3840 )
+  else
+    return ScrW()
+  end
+end
+
 isScoreboardOpen = false
 function scoreboard:show_sb()
   net.Start( "getScoreboardGroups" )
@@ -276,7 +285,8 @@ function scoreboard:show_sb()
     _SBFrame:Remove()
     _SBFrame = nil
   end
-  _SBFrame = createD( "DFrame", nil, ScrH(), ScrH(), 10, 10 )
+  local _w = getGoodW() - ctr( 400 )
+  _SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
   _SBFrame:SetTitle( "" )
   _SBFrame:ShowCloseButton( false )
   _SBFrame:Center()
@@ -286,7 +296,7 @@ function scoreboard:show_sb()
   local _mapPNG = getMapPNG()
 
   function _SBFrame:Paint( pw, ph )
-    draw.RoundedBox( 0, ctr( _br ), ctr( _br ), pw - ctr( 50 ), ctr( 125 ), get_color( "epicBlue" ) )
+    draw.RoundedBox( 0, ctr( 256 ), ctr( _br ), pw - ctr( 256*2 ), ctr( 125 ), get_color( "epicBlue" ) )
 
     draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, get_color( "darkBG" ) )
 
@@ -313,7 +323,7 @@ function scoreboard:show_sb()
     end
   end
 
-  _SBSP = createD( "DScrollPanel", _SBFrame, ScrH()-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
+  _SBSP = createD( "DScrollPanel", _SBFrame, _w-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
 
   local _DPanelHeader = createD( "DPanel", _SBSP, ScrH(), ScrH(), 0, 0 )
   function _DPanelHeader:Paint( pw, ph )

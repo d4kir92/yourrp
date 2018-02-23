@@ -130,22 +130,27 @@ function showVersion()
           gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
         end
         function showChanges:Paint( pw, ph )
-          paintButton( self, pw, ph, lang_string( "showchanges" ) )
-          --draw.SimpleTextOutlined( lang_string( "showchanges" ), "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          paintButton( self, pw, ph, "" )
+          surfaceText( lang_string( "showchanges" ), "Trebuchet20", pw/2, ph/2, Color( 0, 0, 0, 255 ), 1, 1 )
         end
 
         if ply:IsAdmin() or ply:IsSuperAdmin() then
-          local restartServer = createVGUI( "DButton", frame, 460, 80, 0, 0 )
+          local restartServer = createVGUI( "DButton", frame, 520, 80, 0, 0 )
           restartServer:SetText( "" )
           function restartServer:DoClick()
             net.Start( "restartServer" )
             net.SendToServer()
           end
           function restartServer:Paint( pw, ph )
-						paintButton( self, pw, ph, lang_string( "updateserver" ) )
+						paintButton( self, pw, ph, "" )
+
+            --surfaceText( text, font, x, y, color, ax, ay )
+            surfaceText( lang_string( "updateserver" ), "Trebuchet20", pw/2, ph/3, Color( 0, 0, 0, 255 ), 1, 1 )
+            surfaceText( "(" .. lang_string( "workshopversion" ) .. ")", "Trebuchet20", pw/2, (ph/3)*2, Color( 0, 0, 0, 255 ), 1, 1 )
           end
 
-          showChanges:SetPos( ctr( 600-460-10 ), ctr( 460 ) )
+
+          showChanges:SetPos( ctr( 600-520-10 ), ctr( 460 ) )
           restartServer:SetPos( ctr( 600+10 ), ctr( 460 ) )
         else
           showChanges:SetPos( ctr( 600-230 ), ctr( 460 ) )

@@ -40,5 +40,6 @@ include( "gm/menus/cl_smartphone.lua" )
 
 include( "gm/apps/cl_app_settings_yrp.lua" )
 include( "gm/apps/cl_app_settings_sp.lua" )
+include( "gm/apps/cl_app_dark_web.lua" )
 
 printGM( "note", "Loaded cl_includes.lua" )

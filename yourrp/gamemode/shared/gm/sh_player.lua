@@ -201,6 +201,10 @@ function Player:GetPlayerModel()
   return nil
 end
 
+function Player:IsAgent()
+  return self:GetNWBool( "canbeagent" )
+end
+
 if SERVER then
   function Player:Unbroke()
     self:SetNWBool( "broken_leg_right", false )

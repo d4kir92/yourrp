@@ -19,14 +19,23 @@ function appSize()
   return 64
 end
 
-local yrp_apps = {}
+function addApp( app )
+	printGM( "db", "Add App: " .. tostring( app.PrintName ) .. " [" .. tostring( app.ClassName ).. "]" )
+	if app.PrintName == nil then
+		printGM( "note", "-> app.PrintName is missing!" )
+	end
+	if app.ClassName == nil then
+		printGM( "note", "-> app.ClassName is missing!" )
+	end
+	if app.OpenApp == nil then
+		printGM( "note", "-> function app:OpenApp is missing!" )
+	end
 
-function addApp( derma )
-  table.insert( yrp_apps, derma )
+	list.Add( "yrp_apps", app )
 end
 
 function getAllApps()
-  return yrp_apps
+  return list.Get( "yrp_apps" ) --yrp_apps
 end
 
 function createApp( app, parent, x, y )
@@ -46,6 +55,10 @@ function createApp( app, parent, x, y )
 			self:olddoclick()
 		else
 			parent:ClearDisplay()
+			if app.Fullscreen then
+				parent:OpenFullscreen()
+			end
+
 			app:OpenApp( parent, 0, ctrb( 40 ), parent:GetWide(), parent:GetTall() - ctrb( 40+40 ) )
 		end
 	end

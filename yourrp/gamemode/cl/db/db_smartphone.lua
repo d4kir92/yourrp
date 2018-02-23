@@ -4,6 +4,17 @@ local yrp_smartphone = {}
 
 local _db_name = "yrp_smartphone"
 
+function setSpBackColor( color )
+	db_update( _db_name, "value = '" .. color .. "'", "name = '" .. "color_back" .. "'")
+end
+
+function getSpBackColor()
+	local _color = db_select( _db_name, "*", "name = 'color_back'" )
+	_color = string.Explode( ",", _color[1].value )
+
+	return Color( _color[1], _color[2], _color[3], 255 )
+end
+
 function setSpCaseColor( color )
 	db_update( _db_name, "value = '" .. color .. "'", "name = '" .. "color_case" .. "'")
 end
@@ -29,6 +40,9 @@ function check_yrp_smartphone()
 
 	if db_select( _db_name, "*", "name = '" .. "color_case" .. "'" ) == nil then
 		db_insert_into( _db_name, "name, value", "'" .. "color_case" .. "', '0,0,0,255'" )
+	end
+	if db_select( _db_name, "*", "name = '" .. "color_back" .. "'" ) == nil then
+		db_insert_into( _db_name, "name, value", "'" .. "color_back" .. "', '0,0,0,255'" )
 	end
 
 	local _res = db_select( _db_name, "*", nil )

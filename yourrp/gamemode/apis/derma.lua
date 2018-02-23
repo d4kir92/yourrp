@@ -297,6 +297,26 @@ function drawRBoxCr( x, y, size, col )
 	draw.RoundedBox( ctr(size/2), ctr(x), ctr(y), ctr(size), ctr(size), col )
 end
 
+function surfaceText( text, font, x, y, color, ax, ay )
+  surface.SetFont( font )
+
+  local _tw, _th = surface.GetTextSize( text )
+  if ax == 1 then
+    x = x - _tw/2
+  elseif ax == 2 then
+    x = x - _tw
+  end
+  if ay == 1 then
+    y = y - _th/2
+  elseif ay == 2 then
+    y = y - _th
+  end
+  surface.SetTextPos( x, y )
+
+  surface.SetTextColor( color )
+  surface.DrawText( text )
+end
+
 function drawText( text, font, x, y, col, ax, ay )
 	draw.SimpleTextOutlined( text, font, ctr(x), ctr(y), col, ax, ay, 0.5, Color( 0, 0, 0 ) )
 end
