@@ -19,3 +19,15 @@ if db_select( _db_name, "*", "uniqueID = 1" ) == nil then
   local _result = db_insert_into( _db_name, "uniqueID, groupID, color, uppergroup, friendlyfire, removeable", "1, 'Civilians', '0,0,255', -1, 1, 0" )
   printGM( "note", _result )
 end
+
+util.AddNetworkString( "get_all_grps_no_upper" )
+
+net.Receive( "get_all_grps_no_upper", function( len, ply )
+  local _get_all_grps_no_upper = db_select( _db_name, "*", "uppergroup = -1" )
+  if _get_all_grps_no_upper != nil then
+
+    net.Start( "get_all_grps_no_upper" )
+      net.WriteTable( _get_all_grps_no_upper )
+    net.Send( ply )
+  end
+end)

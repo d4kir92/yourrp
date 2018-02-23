@@ -14,6 +14,7 @@ util.AddNetworkString( "dbUpdateNWBool2" )
 util.AddNetworkString( "db_update_view_distance" )
 util.AddNetworkString( "db_update_realistic_damage" )
 util.AddNetworkString( "db_update_realistic_falldamage" )
+util.AddNetworkString( "db_update_smartphone" )
 
 local _db_name = "yrp_general"
 
@@ -34,6 +35,8 @@ sql_add_column( _db_name, "toggle_graffiti", "INT DEFAULT 0" )
 sql_add_column( _db_name, "view_distance", "INT DEFAULT 200" )
 sql_add_column( _db_name, "toggle_realistic_damage", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_realistic_falldamage", "INT DEFAULT 1" )
+
+sql_add_column( _db_name, "toggle_smartphone", "INT DEFAULT 1" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
@@ -82,6 +85,17 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_smartphone", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_smartphone = _nw
+    db_update( "yrp_general", "toggle_smartphone = " .. yrp_general.toggle_smartphone, nil )
+  end
+  for i, ply in pairs( player.GetAll() ) do
+    ply:SetNWBool( "toggle_smartphone", yrp_general.toggle_smartphone )
+  end
+end)
 
 net.Receive( "db_update_realistic_damage", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

@@ -27,6 +27,8 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalRealisticDamage = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 855 )
   local sv_generalRealisticFalldamage = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 915 )
 
+  local sv_generalSmartphone = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 975 )
+
   local oldGamemodename = ""
   function settingsWindow.window.site:Paint()
     --draw.RoundedBox( 0, 0, 0, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), _yrp.colors.panel )
@@ -56,6 +58,8 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     draw.SimpleTextOutlined( lang_string( "realisticdamage" ) .. ":", "sef", ctr( _center - 10 ), ctr( 870 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "realisticfalldamage" ) .. ":", "sef", ctr( _center - 10 ), ctr( 930 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( lang_string( "smartphone" ) .. ":", "sef", ctr( _center - 10 ), ctr( 990 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -85,6 +89,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalViewDistance:SetValue( tonumber( _yrp_general.view_distance ) )
     sv_generalRealisticDamage:SetValue( tonumber( _yrp_general.toggle_realistic_damage ) )
     sv_generalRealisticFalldamage:SetValue( tonumber( _yrp_general.toggle_realistic_falldamage ) )
+    sv_generalSmartphone:SetValue( tonumber( _yrp_general.toggle_smartphone ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -313,6 +318,16 @@ hook.Add( "open_server_general", "open_server_general", function()
       _tonumber = 1
     end
     net.Start( "db_update_realistic_falldamage" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalSmartphone:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_smartphone" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
   end

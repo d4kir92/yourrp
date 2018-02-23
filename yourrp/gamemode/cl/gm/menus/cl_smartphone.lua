@@ -11,16 +11,18 @@ function GetSpTable()
 end
 
 function openSP()
-  print("openSP")
+  if LocalPlayer():GetNWBool( "toggle_smartphone" ) then
+    print("openSP")
 
-  if isNoMenuOpen() and ( !sp.visible or sp.visible == nil ) then
-    openMenu()
-    local _w = ctrb( 560 )
-    local _h = ctrb( 1000 )
-    local _x = ScrW() - ( _w + ctrb( 25 ) )
-    local _y = ScrH() - ( _h )
-    sp = createSmartphone( nil, _w, _h, _x, _y )
-    sp.visible = true
+    if isNoMenuOpen() and ( !sp.visible or sp.visible == nil ) then
+      openMenu()
+      local _w = ctrb( 560 )
+      local _h = ctrb( 1000 )
+      local _x = ScrW() - ( _w + ctrb( 25 ) )
+      local _y = ScrH() - ( _h )
+      sp = createSmartphone( nil, _w, _h, _x, _y )
+      sp.visible = true
+    end
   end
 end
 

@@ -101,6 +101,7 @@ function GM:PlayerLoadout( ply )
       ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
       ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
       ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
+      ply:SetNWBool( "toggle_smartphone", tobool( _yrp_general.toggle_smartphone ) )
       ply:SetNWInt( "view_distance", _yrp_general.view_distance )
     else
       printGM( "note", "yrp_general failed" )

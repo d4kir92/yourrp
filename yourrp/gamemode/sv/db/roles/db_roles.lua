@@ -401,3 +401,16 @@ net.Receive( "getAllGroups", function( len, ply )
     net.Send( ply )
   end
 end)
+
+--[[ Role menu ]]--
+util.AddNetworkString( "get_grp_roles" )
+
+net.Receive( "get_grp_roles", function( len, ply )
+  local _uid = net.ReadString()
+  local _roles = db_select( _db_name, "*", "groupID = " .. _uid )
+  if _roles != nil then
+    net.Start( "get_grp_roles" )
+      net.WriteTable( _roles )
+    net.Send( ply )
+  end
+end)
