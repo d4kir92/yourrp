@@ -127,7 +127,7 @@ function send_error( realm, str )
 		  http.Post( _url, entry, function( result )
 		    if result then end
 		  end, function( failed )
-		    print( failed )
+		    printGM( "error", failed )
 		  end )
 
 			timer.Remove( "wait_for_gamemode"..str )

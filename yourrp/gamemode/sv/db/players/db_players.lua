@@ -141,8 +141,9 @@ function set_role_values( ply )
         ply:SetArmor( tonumber( rolTab.ar ) )
 
         ply:SetNWInt( "GetMaxStamina", tonumber( rolTab.stmax ) )
-        ply:SetNWInt( "GetRegStamina", tonumber( rolTab.streg ) )
         ply:SetNWInt( "GetCurStamina", tonumber( rolTab.st ) )
+        ply:SetNWInt( "staminup", tonumber( rolTab.stregup ) )
+        ply:SetNWInt( "stamindown", tonumber( rolTab.stregdn ) )
 
         ply:SetNWInt( "GetMaxAbility", tonumber( rolTab.abmax ) )
         ply:SetNWInt( "GetRegAbility", tonumber( rolTab.abreg ) )
@@ -452,35 +453,23 @@ function canGetRole( ply, roleID )
   local tmpTableRole = db_select( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
   if worked( tmpTableRole, "tmpTableRole" ) then
-    local tmpTableGroup = db_select( "yrp_groups", "*", "uniqueID = " .. tmpTableRole[1].groupID )
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
-      if tmpTableRole[1].adminonly == 1 then
+      if tonumber( tmpTableRole[1].adminonly ) == 1 then
         printGM( "user", "Adminonly-Role" )
         if ply:IsAdmin() or ply:IsSuperAdmin() then
+          -- printGM( "note", ply:Name() .. " is admin" )
           -- continue
         else
           printGM( "user", "ADMIN-ONLY Role: " .. ply:SteamName() .. " is not admin or superadmin" )
           return false
         end
-      elseif tonumber( tmpTableRole[1].whitelist ) == 1 then
-        printGM( "user", "Whitelist-Role" )
-        if tonumber( tmpTableRole[1].voteable ) == 1 then
-          printGM( "user", "Voteable-Role" )
-          if !isWhitelisted( ply, roleID ) then
-            printGM( "user", "Start-Whitelist Vote" )
-            startVote( ply, tmpTableRole )
-            return false
-          else
-            printGM( "user", ply:SteamName() .. " already whitelisted" )
-          end
+      elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
+        printGM( "user", "Whitelist-Role or Prerole-Role or Vote-Role" )
+        if !isWhitelisted( ply, roleID ) then
+          printGM( "user", ply:SteamName() .. " is not whitelisted" )
+          return false
         else
-          printGM( "user", "No Voteable-Role" )
-          if !isWhitelisted( ply, roleID ) then
-            printGM( "user", ply:SteamName() .. " is not whitelisted" )
-            return false
-          else
-            printGM( "user", ply:SteamName() .. " is whitelisted" )
-          end
+          printGM( "user", ply:SteamName() .. " is whitelisted" )
         end
       end
     end
@@ -499,6 +488,19 @@ function RemRolVals( ply )
   end
 end
 
+function canVoteRole( ply, roleID )
+  local tmpTableRole = db_select( "yrp_roles" , "*", "uniqueID = " .. roleID )
+
+  if worked( tmpTableRole, "tmpTableRole" ) then
+    if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
+      if tonumber( tmpTableRole[1].voteable ) == 1 then
+        return true
+      end
+    end
+  end
+  return false
+end
+
 net.Receive( "wantRole", function( len, ply )
   local uniqueIDRole = net.ReadInt( 16 )
 
@@ -509,5 +511,8 @@ net.Receive( "wantRole", function( len, ply )
     --New role
     set_role( ply, uniqueIDRole )
     set_role_values( ply )
+  elseif canVoteRole( ply, uniqueIDRole ) then
+    local _role = db_select( "yrp_roles" , "*", "uniqueID = " .. uniqueIDRole )
+    startVote( ply, _role )
   end
 end)

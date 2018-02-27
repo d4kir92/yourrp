@@ -41,7 +41,7 @@ if SERVER then
 				  http.Post( _url1, entry, function( result )
 				    if result then end
 				  end, function( failed )
-				    print( failed )
+				    printGM( "error", failed )
 				  end )
 				else
 					entry["entry.1233170431"] = GetHostName() or "UNKNOWN"
@@ -58,7 +58,7 @@ if SERVER then
 				  http.Post( _url2, entry, function( result )
 				    if result then end
 				  end, function( failed )
-				    print( failed )
+				    printGM( "error", failed )
 				  end )
 				end
 

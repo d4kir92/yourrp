@@ -12,8 +12,6 @@ end
 
 function openSP()
   if LocalPlayer():GetNWBool( "toggle_smartphone" ) then
-    print("openSP")
-
     if isNoMenuOpen() and ( !sp.visible or sp.visible == nil ) then
       openMenu()
       local _w = ctrb( 560 )
@@ -27,8 +25,6 @@ function openSP()
 end
 
 function closeSP()
-  print("closeSP")
-
   closeMenu()
 
   if sp != nil and sp.visible then

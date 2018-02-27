@@ -13,4 +13,9 @@ add_luas( "date.lua" )
 add_luas( "derma.lua" )
 add_luas( "sp.lua" )
 
+AddCSLuaFile( "derma/DYRPCollapsibleCategory.lua" )
+if CLIENT then
+  include( "derma/DYRPCollapsibleCategory.lua" )
+end
+
 print( "Loaded api_includes.lua" )

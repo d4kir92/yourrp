@@ -350,7 +350,7 @@ net.Receive( "yrp_player_say", function( len )
     end
 
     table.insert( _unpack, _tmp.text_color )
-    table.insert( _unpack, _tmp.text )
+    table.insert( _unpack, tostring( _tmp.text ) )
 
     chat.AddText( unpack( _unpack ) )
     chat.PlaySound()

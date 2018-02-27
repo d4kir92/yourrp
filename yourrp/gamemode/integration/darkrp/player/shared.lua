@@ -90,6 +90,7 @@ function Player:getJobTable()
   --Description: Get the job table of a player.
   printGM( "darkrp", "getJobTable()" )
   local _job = self:GetRolTab()
+
   if istable( _job ) then
     _job = to_darkrp_job( _job )
     return _job

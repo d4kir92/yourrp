@@ -113,17 +113,14 @@ function paintInv( derma, pw, ph, text, text2 )
 end
 
 function createD( derma, parent, w, h, x, y )
+  local _parent = parent or nil
+  local _w = w or 100
+  local _h = h or 100
+  local _x = x or 0
+  local _y = y or 0
   local tmpD = vgui.Create( derma, parent )
-  if w != nil and h != nil then
-    tmpD:SetSize( w, h )
-  else
-    printGM( "note", w .. " " .. h )
-  end
-  if x != nil and y != nil then
-    tmpD:SetPos( tonumber( x ), tonumber( y ) )
-  else
-    printGM( "note", tostring( x ) .. " " .. tostring( y ) )
-  end
+  tmpD:SetSize( _w, _h )
+  tmpD:SetPos( _x, _y )
   return tmpD
 end
 
@@ -616,6 +613,15 @@ function drawRoundedBoxStencil( r, x, y, w, h, color, max )
 
     render.SetStencilEnable( false )
   end
+end
+
+function drawRBBR( r, x, y, w, h, color, br )
+  local _br = br or 0
+  draw.RoundedBox( 0, x, y, w, br, color )
+  draw.RoundedBox( 0, x, y+h-br, w, br, color )
+  draw.RoundedBox( 0, x, y, br, h, color )
+  draw.RoundedBox( 0, x+w-br, y, br, h, color )
+
 end
 
 function drawRoundedBoxBR( r, x, y, w, h, color, br )

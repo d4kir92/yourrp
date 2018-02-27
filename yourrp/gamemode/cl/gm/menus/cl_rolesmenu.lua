@@ -1,389 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---cl_rolesmenu.lua
-
-local AllGroups = {}
-local tmpGroupsTable = {}
-
-local AllRoles = {}
-local tmpRolesTable = {}
-
-local Whitelist = {}
-
-function getRoleInfos( name, uniqueID, desc, sweps, salary, model, modelsize, uses, maxamount, adminonly, whitelist, allowed, voteable )
-  local ply = LocalPlayer()
-
-  if roleInfoPanel != nil then
-    roleInfoPanel:Remove()
-  end
-  roleInfoPanel = createVGUI( "DPanel", roleMenuWindow, 2160 - 1600 - 10, 2160-60, 1600 + 10 - 4, 60 )
-  function roleInfoPanel:Paint( pw, ph )
-    --
-  end
-
-  local tmpY = 0
-  local tmpH = 550
-  local tmpBr = 10
-
-  local rolePMPanel = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
-  function rolePMPanel:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
-  end
-
-  local rolePM = createVGUI( "DModelPanel", roleInfoPanel, 550, 550, 0, 0 )
-  if model != nil and model != "" then
-    rolePM:SetModel( model )
-    if rolePM.Entity != nil then
-      rolePM.Entity:SetModelScale( modelsize, 0 )
-    end
-  elseif model == "" then
-    rolePM:SetModel( "models/player/skeleton.mdl" )
-  end
-
-  tmpY = tmpY + tmpH + tmpBr
-  tmpH = 48+48
-
-  local roleName = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
-  function roleName:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctr( 48 ), get_header_col() )
-    draw.SimpleTextOutlined( lang_string( "role" ), "roleInfoHeader", ctr( 10 ), ctr( 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    draw.RoundedBox( 0, 0, ctr( 48 ), w, h - ctr( 48 ), get_dbg_col() )
-    draw.SimpleTextOutlined( name, "roleInfoText", ctr( 10 ), ctr( 48 + 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
-
-  tmpY = tmpY + tmpH + tmpBr
-  tmpH = 48 + 12 + 6*24 + 12
-
-  local roleDescription = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
-
-  local descTable = string.Split( desc, " " )
-  local descTpl = {}
-  local stringL = 0
-  local nextT = 1
-
-  for i = 1, 6 do
-    if descTpl[i] == nil then
-      descTpl[i] = ""
-    end
-  end
-
-  for k, v in pairs( descTable ) do
-    local addSize = surface.GetTextSize( v ) + surface.GetTextSize( "," )
-    if (stringL + addSize) > ctr( 550 - 20 ) then
-      stringL = addSize
-      nextT = nextT + 1
-    else
-      stringL = stringL + addSize
-    end
-    if nextT <= 6 then
-      descTpl[nextT] = descTpl[nextT] .. v .. " "
-    else
-      break
-    end
-  end
-
-  function roleDescription:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctr( 48 ), get_header_col() )
-    draw.SimpleTextOutlined( lang_string( "description" ), "roleInfoHeader", ctr( 10 ), ctr( 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    draw.RoundedBox( 0, 0, ctr( 48 ), w, h - ctr( 48 ), get_dbg_col() )
-
-    draw.SimpleTextOutlined( descTpl[1], "roleInfoText", ctr( 10 ), ctr( 50 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( descTpl[2], "roleInfoText", ctr( 10 ), ctr( 75 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( descTpl[3], "roleInfoText", ctr( 10 ), ctr( 100 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( descTpl[4], "roleInfoText", ctr( 10 ), ctr( 125 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( descTpl[5], "roleInfoText", ctr( 10 ), ctr( 150 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( descTpl[6], "roleInfoText", ctr( 10 ), ctr( 175 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-  end
-
-  tmpY = tmpY + tmpH + tmpBr
-  tmpH = 48 + 12 + 6*24 + 12
-
-  local roleSWEPs = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
-
-  local swepTable = string.Split( sweps, "," )
-  local swepList = {}
-  local stringL = 0
-  local nextT = 1
-
-  for i = 1, 6 do
-    if swepList[i] == nil then
-      swepList[i] = ""
-    end
-  end
-
-  for k, v in pairs( swepTable ) do
-    local addSize = surface.GetTextSize( v ) + surface.GetTextSize( "," )
-    if (stringL + addSize) > ctr( 550 - 20 ) then
-      stringL = addSize
-      nextT = nextT + 1
-    else
-      stringL = stringL + addSize
-    end
-    if nextT <= 6 then
-      if swepList[1] == "" then
-        swepList[nextT] = swepList[nextT] .. v
-      else
-        swepList[nextT] = swepList[nextT] .. ", " .. v
-      end
-    else
-      break
-    end
-  end
-
-  function roleSWEPs:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctr( 48 ), get_header_col() )
-    draw.SimpleTextOutlined( lang_string( "sweps" ), "roleInfoHeader", ctr( 10 ), ctr( 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    draw.RoundedBox( 0, 0, ctr( 48 ), w, h - ctr( 48 ), get_dbg_col() )
-
-    draw.SimpleTextOutlined( swepList[1], "roleInfoText", ctr( 10 ), ctr( 50 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( swepList[2], "roleInfoText", ctr( 10 ), ctr( 75 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( swepList[3], "roleInfoText", ctr( 10 ), ctr( 100 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( swepList[4], "roleInfoText", ctr( 10 ), ctr( 125 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( swepList[5], "roleInfoText", ctr( 10 ), ctr( 150 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( swepList[6], "roleInfoText", ctr( 10 ), ctr( 175 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-  end
-
-  tmpY = tmpY + tmpH + tmpBr
-  tmpH = 48+48
-
-  local roleSalary = createVGUI( "DPanel", roleInfoPanel, 2160 - 1600 - 10, tmpH, 0, tmpY )
-  function roleSalary:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, ctr( 48 ), get_header_col() )
-    draw.SimpleTextOutlined( lang_string( "salary" ), "roleInfoHeader", ctr( 10 ), ctr( 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    draw.RoundedBox( 0, 0, ctr( 48 ), w, h - ctr( 48 ), get_dbg_col() )
-    draw.SimpleTextOutlined( ply:GetNWString( "moneyPre" ) .. salary .. ply:GetNWString( "moneyPost" ), "roleInfoText", ctr( 10 ), ctr( 48 + 24 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
-
-  tmpY = tmpY + tmpH + 3*tmpBr
-  tmpH = 60
-
-  if maxamount <= 0 or uses < maxamount then
-    local roleGetRole = createVGUI( "DButton", roleInfoPanel, 2160 - 1600 - 10, 120, 0, tmpY )
-    roleGetRole:SetText( "" )
-    roleGetRole.text = ""
-    if adminonly == 1 and !ply:IsAdmin() and !ply:IsSuperAdmin() then
-      roleGetRole.text = lang_string( "adminonly" )
-    elseif ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
-      if ply:IsSuperAdmin() or ply:IsAdmin() then
-        roleGetRole.text = lang_string( "getrole" ) .. ": " .. name
-      elseif whitelist == 1 and allowed == 1 or whitelist == 0 then
-        roleGetRole.text = lang_string( "getrole" ) .. ": " .. name
-      elseif whitelist == 1 and adminonly != 1 and voteable == 1 then
-        roleGetRole.text = "start Vote" .. ": " .. name
-      elseif whitelist == 1 and adminonly != 1 and voteable == 0 then
-        roleGetRole.text = lang_string( "needwhitelist" )
-      else
-
-      end
-    else
-
-    end
-    function roleGetRole:DoClick()
-      if ply:IsSuperAdmin() or ply:IsAdmin() or adminonly == 0 then
-        --if ply:IsSuperAdmin() or ply:IsAdmin() or whitelist == 1 and allowed == 1 or whitelist == 0 then
-          net.Start( "wantRole" )
-            net.WriteInt( uniqueID, 16 )
-          net.SendToServer()
-          if roleMenuWindow != nil and roleMenuWindow != NULL then
-            roleMenuWindow:Close()
-          end
-        --end
-      end
-    end
-    function roleGetRole:Paint( pw, ph )
-      paintButton( self, pw, ph, self.text )
-    end
-  end
-end
-
-function findRoles( id )
-  local tmpTable = {}
-  for k, v in pairs( AllRoles ) do
-    if tonumber( v.groupID ) == tonumber( id ) then
-      table.insert( tmpTable, v )
-    end
-  end
-  tmpRolesTable = tmpTable
-end
-
-function findChildGroups( id )
-  local tmpTable = {}
-  for k, v in pairs( AllGroups ) do
-    if tonumber( v.uppergroup ) == tonumber( id ) then
-      table.insert( tmpTable, v )
-    end
-  end
-  tmpGroupsTable = tmpTable
-end
-
-function addRole( name, parent, uppergroup, x, y, color, roleID, desc, sweps, salary, model, modelsize, maxamount, uses, whitelist, adminonly, voteable, groupID )
-  y = y + 50
-  local w = 1600
-  local h = 150
-  local scrollbar = 32
-
-  local tmpRole = createVGUI( "DPanel", parent, w - x - 1 * h - scrollbar, h, x + h, y )
-  function tmpRole:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 160 ) )
-    draw.SimpleTextOutlined( name, "roleInfoText", ctr( 25 ), ctr( 25 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    if maxamount != nil then
-      if maxamount > 0 then
-        local maxbr = 4
-        local maxbbr = 10
-        local maxcolor = Color( 0, 255, 0, 160 )
-        draw.RoundedBox( ctr( maxbbr ), ctr( 10 ), ctr( 100 ), pw - ctr( maxbbr * 2 ), ph - ctr( 100 ), Color( 255, 255, 255, 160 ) )
-        if uses >= maxamount then
-          maxcolor = Color( 255, 0, 0, 255 )
-        end
-        draw.RoundedBox( ctr( maxbbr ), ctr( 10 + maxbr ), ctr( 100 + maxbr ), ( pw - ctr( maxbr*2 + maxbbr*2 ) ) / maxamount * uses, ph - ctr( 100 + maxbr*2 ), maxcolor )
-
-        draw.SimpleTextOutlined( uses .. "/" .. maxamount, "roleInfoText", pw/2, ctr( 100 + 25 ), get_font_col(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      end
-    end
-  end
-
-  local tmpRoleModelBG = createVGUI( "DPanel", parent, h, h, x, y )
-  function tmpRoleModelBG:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-  end
-
-  local tmpRoleModel = createVGUI( "DModelPanel", parent, h, h, x, y )
-  local randModel = ""
-  local randNumb = 1
-  if model != nil then
-    randModel = string.Explode( ",", model )
-    randNumb = math.Round( math.Rand( 1, #randModel ) )
-    if randModel[randNumb] != nil and randModel[randNumb] != "" then
-      tmpRoleModel:SetModel( randModel[randNumb] )
-    elseif randModel[randNumb] == "" then
-      tmpRoleModel:SetModel( "models/player/skeleton.mdl" )
-    end
-    if tmpRoleModel.Entity != nil then
-      tmpRoleModel.Entity:SetModelScale( modelsize, 0 )
-      if tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-        local eyepos = tmpRoleModel.Entity:GetBonePosition( tmpRoleModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-        tmpRoleModel:SetLookAt( eyepos )
-        tmpRoleModel:SetCamPos( eyepos - Vector( -25 * modelsize, 0, 0 ) )	-- Move cam in front of eyes
-      end
-    end
-  end
-
-  local tmpButtonSelect = createVGUI( "DButton", parent, w-x-scrollbar, h, x, y )
-  tmpButtonSelect:SetText( "" )
-  function tmpButtonSelect:Paint( pw, ph )
-    if tmpButtonSelect:IsHovered() then
-      if maxamount > 0 and uses >= maxamount then
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 100 ) )
-      else
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 100 ) )
-      end
-    else
-
-    end
-    --draw.SimpleTextOutlined( lang_string( "moreinfo" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
-  function tmpButtonSelect:DoClick()
-    local tmpAllowed = 0
-    for k, v in pairs( Whitelist ) do
-      if tonumber( roleID ) == tonumber( v.roleID ) or ( tonumber( v.roleID ) == -1 and tonumber( groupID ) == tonumber( v.groupID ) ) then
-        tmpAllowed = 1
-        break
-      end
-    end
-    getRoleInfos( name, roleID, desc, sweps, salary, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, tmpAllowed, voteable )
-  end
-
-  --Init on Start UP First Role
-  if tonumber( roleID ) == 1 then
-    getRoleInfos( name, roleID, desc, sweps, salary, randModel[randNumb], modelsize, uses, maxamount, adminonly, whitelist, 1, 1 )
-  end
-  -----------------------------------------
-
-  y = y + h - 50 + 10
-  return y
-end
-
-function isInWhitelist( id )
-  for k, v in pairs( Whitelist ) do
-    if tonumber( id ) == tonumber( v.roleID ) then
-      return true
-    end
-  end
-  return false
-end
-
-function addRoles( uppergroupname, parent, uppergroup, x, y )
-  local tmpTable = tmpRolesTable
-  if #tmpTable > 0 then
-    local newX = x + ctr( 60 )
-    local newY = y
-    for k, v in pairs( tmpTable ) do
-      if tonumber( v.prerole ) == -1 or isInWhitelist( v.uniqueID ) then
-        newY = addRole( tostring( v.roleID ), parent, v.uniqueID, newX, newY, v.color, v.uniqueID, v.description, v.sweps, tonumber( v.salary ), v.playermodels, tonumber( v.playermodelsize ), tonumber( v.maxamount ), tonumber( v.uses ), tonumber( v.whitelist ), tonumber( v.adminonly ), tonumber( v.voteable ), uppergroup )
-      end
-    end
-    return newY
-  end
-  return nil
-end
-
-function addGroup( name, parent, uppergroup, x, y, color )
-  y = y + ctr( 100 )
-
-  local expColor = string.Explode( ",", color )
-  local gColor = Color( expColor[1], expColor[2], expColor[3], 200 )
-  local w = 1600
-  local h = 50
-  local tmpGroup = createVGUI( "DPanel", parent, w-x, h, x, y )
-
-  local newH = h
-
-  findRoles( uppergroup )
-  local result = addRoles( name, parent, uppergroup, x, y )
-
-  if result != nil then
-    newH = newH + result - y
-    y = result
-  end
-
-  findChildGroups( uppergroup )
-  local result2 = addGroups( name, parent, uppergroup, x, y )
-
-  if result2 != nil then
-    newH = newH + result2 - y
-    y = result2
-  end
-
-  tmpGroup:SetSize( ctr( w ), ctr( newH ) )
-
-  function tmpGroup:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, gColor )
-    draw.SimpleTextOutlined( name, "roleInfoHeader", ctr( 25 ), ctr( 25 ), get_font_col(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
-
-  if parent != nil and parent != NULL and parent != "NULL" and ispanel( parent ) and parent.AddItem != nil then
-    parent:AddItem( tmpGroup )
-  end
-  return y + 20
-end
-
-function addGroups( uppergroupname, parent, uppergroup, x, y )
-  local tmpTable = tmpGroupsTable
-  if #tmpTable > 0 then
-    local newX = x + ctr( 50 )
-    local newY = y
-    for k, v in pairs( tmpTable ) do
-      newY = addGroup( v.groupID, parent, v.uniqueID, newX, newY, v.color )
-    end
-    return newY
-  end
-  return y
-end
+local _rm = nil
 
 function toggleRoleMenu()
   if isNoMenuOpen() then
@@ -394,47 +11,348 @@ function toggleRoleMenu()
 end
 
 function closeRoleMenu()
-  if roleMenuWindow != nil then
+  if _rm != nil then
     closeMenu()
-    roleMenuWindow:Remove()
-    roleMenuWindow = nil
+    _rm:Remove()
+    _rm = nil
   end
+end
+
+local _pr = {}
+
+local _adminonly = Material( "icon16/shield.png" )
+
+function createRoleBox( rol, parent )
+  local _rol = createD( "DPanel", parent, ctrb( 400 ), ctrb( 400 ), 0, 0 )
+  function _rol:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+    drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
+  end
+  _rol.tbl = rol
+
+  --[[ Role Playermodel ]]--
+  _rol.pm = createD( "DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0 )
+  _rol.pm:SetModel( string.Explode( ",", _rol.tbl.playermodels )[1] or "" )
+
+  --[[ Role Name ]]--
+  _rol.rn = createD( "DPanel", _rol, _rol:GetWide(), ctrb( 60 ), 0, 0 )
+  function _rol.rn:Paint( pw, ph )
+    surfaceText( self:GetParent().tbl.roleID, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  end
+
+  --[[ Role MaxAmount ]]--
+  if tonumber( rol.maxamount ) > 0 then
+    _rol.ma = createD( "DPanel", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 + 60 ) )
+    function _rol.ma:Paint( pw, ph )
+      local _br = 4
+      pw = pw - 2*ctrb( 4 )
+      ph = ph - 1*ctrb( 4 )
+
+      --Background
+      draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, Color( 255, 255, 255, 100 ) )
+
+      --Maxamount
+      draw.RoundedBox( 0, ctrb( _br ), 0, (rol.uses/rol.maxamount) * (pw), ph, Color( 255, 0, 0, 255 ) )
+      surfaceText( self:GetParent().tbl.uses .. "/" .. self:GetParent().tbl.maxamount, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+
+      --BR
+      drawRBBR( 0, ctrb( _br ), 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
+    end
+  end
+
+  --[[ Role Adminonly ]]--
+  if tobool( rol.adminonly ) then -- and LocalPlayer():IsAdmin() and !LocalPlayer():IsSuperAdmin() then
+    _rol.aoicon = 64
+    _rol.ao = createD( "DPanel", _rol, ctrb( _rol.aoicon ), ctrb( _rol.aoicon ), _rol:GetWide()/2-ctrb( _rol.aoicon/2 ), _rol:GetTall()/2-ctrb( _rol.aoicon/2 ) )
+    function _rol.ao:Paint( pw, ph )
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( _adminonly	)
+      surface.DrawTexturedRect( 0, 0, pw, ph )
+    end
+  end
+
+  --[[ Role Button ]]--
+  _rol.gr = createD( "DButton", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 ) )
+  function _rol.gr:Paint( pw, ph )
+    local _br = 4
+    pw = pw - 2*ctrb( 4 )
+    ph = ph - 1*ctrb( 4 )
+
+    local _color = Color( 255, 255, 100 )
+    if self:IsHovered() then
+      _color = Color( 255, 255, 0 )
+    end
+    draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, _color )
+    surfaceText( lang_string( "moreinfo" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+
+    --BR
+    drawRBBR( 0, ctrb( _br ), 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
+  end
+  _rol.gr:SetText( "" )
+  function _rol.gr:DoClick()
+    local _pm = string.Explode( ",", rol.playermodels )
+    _rm.infopm:SetModel( _pm[1] or "" )
+
+    _rm.info.rolename = rol.roleID
+
+    _rm.infodesc:SetText( "" )
+    _rm.infodesc:SetFontInternal( "roleInfoText" )
+    _rm.infodesc:InsertColorChange( 255, 255, 255, 255 )
+    _rm.infodesc:AppendText( rol.description )
+
+    _rm.infosweps:SetText( "" )
+    _rm.infosweps:SetFontInternal( "roleInfoText" )
+    _rm.infosweps:InsertColorChange( 255, 255, 255, 255 )
+    _rm.infosweps:AppendText( string.Implode( ", ", string.Explode( ",", rol.sweps ) ) )
+
+    _rm.info.rolesala = rol.salary
+    _rm.info.roleswep = rol.sweps
+
+    _rm.infobutton.rolename = rol.roleID
+    _rm.infobutton.uniqueID = rol.uniqueID
+  end
+
+  if parent.AddPanel != nil then
+    parent:AddPanel( _rol )
+  end
+end
+
+function createBouncer( parent )
+  local _bou = createD( "DPanel", parent, ctrb( 50 ), ctrb( 200 ), 0, 0 )
+  function _bou:Paint( pw, ph )
+    surfaceText( "➔", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  end
+  if parent.AddPanel != nil then
+    parent:AddPanel( _bou )
+  end
+end
+
+function addPreRole( rol, parent )
+  _pr[rol.uniqueID] = parent
+  local _tmp = createBouncer( parent )
+  createRoleBox( rol, parent )
+  getPreRole( rol.uniqueID, _pr[rol.uniqueID] )
+end
+
+function getPreRole( uid, parent )
+  net.Receive( "get_rol_prerole", function( len )
+    local _prerole = net.ReadTable()
+    if _prerole.prerole != nil then
+      addPreRole( _prerole, _pr[_prerole.prerole] )
+    end
+  end)
+
+  net.Start( "get_rol_prerole" )
+    net.WriteString( uid )
+  net.SendToServer()
+end
+
+function addRole( rol, parent )
+  createRoleBox( rol, parent )
+  _pr[rol.uniqueID] = parent
+  if rol.uniqueID != "1" then
+    getPreRole( rol.uniqueID, _pr[rol.uniqueID] )
+  end
+end
+
+function addRoleRow( rol, parent )
+  local _rr = createD( "DHorizontalScroller", parent.content, parent:GetWide() - 2*ctrb( parent:GetSpacing() ), ctrb( 400 ), 0, 0 )
+  _rr:SetOverlap( ctrb( -30 ) )
+  function _rr:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 20 ) )
+  end
+
+  addRole( rol, _rr )
+
+  parent:Add( _rr )
+end
+
+function getRoles( uid, parent )
+  net.Receive( "get_grp_roles", function( len )
+    local _roles = net.ReadTable()
+    for i, rol in pairs( _roles ) do
+      if rol.prerole == "-1" then
+        addRoleRow( rol, parent )
+      elseif rol.prerole == "1" then
+        addRoleRow( rol, parent )
+      end
+    end
+    --getGroups( uid, parent )
+  end)
+
+  net.Start( "get_grp_roles" )
+    net.WriteString( uid )
+  net.SendToServer()
+
+  getGroups( uid, parent )
+end
+
+function addGroup( grp, parent )
+  local _grp = createD( "DYRPCollapsibleCategory", parent, parent:GetWide() - ctrb( 40 ), ctrb( 200 ), ctrb( 0 ), ctrb( 0 ) )
+  _grp:SetHeader( grp.groupID )
+  _grp:SetSpacing( 30 )
+  _grp.color = string.Explode( ",", grp.color )
+  _grp.color = Color( _grp.color[1], _grp.color[2], _grp.color[3] )
+  _grp.tbl = grp
+  function _grp:PaintHeader( pw, ph )
+    local _hl = 0
+    if self.header:IsHovered() then
+      _hl = 70
+    end
+    draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r + _hl, self.color.g + _hl, self.color.b + _hl ), true, true, !self:IsOpen(), !self:IsOpen() )
+    surfaceText( self.tbl.groupID, "roleInfoHeader", ph/2, ph/2, Color( 255, 255, 255 ), 0, 1 )
+
+    local _box = ctrb( 50 )
+    local _dif = 50
+    local _br = (ph - _box)/2
+    local _tog = "▼"
+    if self:IsOpen() then
+      _tog = "▲"
+    end
+    draw.RoundedBox( 0, pw - _box - _br, _br, _box, _box, Color( self.color.r - _dif, self.color.g - _dif, self.color.b - _dif ) )
+    surfaceText( _tog, "roleInfoHeader", pw - _box/2 - _br, _br + _box/2, Color( 255, 255, 255 ), 1, 1 )
+  end
+  function _grp:PaintContent( pw, ph )
+    draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r+40, self.color.g+40, self.color.b+40 ), false, false, true, true )
+  end
+  _grp:SetHeaderHeight( ctrb( 100 ) )
+
+  function _grp:DoClick()
+    if self:IsOpen() then
+      getRoles( grp.uniqueID, _grp )
+    else
+      self:ClearContent()
+    end
+  end
+
+  if grp.uppergroup != "-1" then
+    parent:Add( _grp )
+  else
+    parent:AddItem( _grp )
+  end
+  --parent:Rebuild()
+
+  return _grp
+end
+
+function getGroups( uid, parent )
+  net.Receive( "get_grps", function( len )
+    local _groups = net.ReadTable()
+    for i, grp in pairs( _groups ) do
+      addGroup( grp, parent )
+    end
+  end)
+
+  net.Start( "get_grps" )
+    net.WriteString( uid )
+  net.SendToServer()
 end
 
 function openRoleMenu()
   openMenu()
 
-  roleMenuWindow = createVGUI( "DFrame", nil, 2160, 2160, 0, 0 )
-  roleMenuWindow:Center()
-  roleMenuWindow:ShowCloseButton( true )
-  roleMenuWindow:SetDraggable( true )
-  roleMenuWindow:SetTitle( lang_string( "rolemenu" ) )
-  function roleMenuWindow:Paint( pw, ph )
-    paintWindow( self, pw, ph, "" )
-  end
-  function roleMenuWindow:OnClose()
-    closeMenu()
-  end
-  function roleMenuWindow:OnRemove()
-    closeMenu()
+  _rm = createD( "DFrame", nil, getGoodW(), ScrH(), 0, 0 )
+  _rm:Center()
+  _rm:ShowCloseButton( false )
+  _rm:SetDraggable( false )
+  _rm:SetTitle( lang_string( "rolemenu" ) )
+  function _rm:Paint( pw, ph )
+    --paintWindow( self, pw, ph, "" )
   end
 
-  local roleDPanelList = createVGUI( "DScrollPanel", roleMenuWindow, 1600, 2100-4, 4, 60 )
-  function roleDPanelList:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, get_dbg_col() )
+  _rm.close = createD( "DButton", _rm, ctrb( 50), ctrb( 50 ), _rm:GetWide()-ctrb( 50+10 ), ctrb( 10 ) )
+  _rm.close:SetText( "" )
+  function _rm.close:Paint( pw, ph )
+    self.color = Color( 255, 255, 255 )
+    if self:IsHovered() then
+      self.color = Color( 255, 255, 0 )
+    end
+    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+    surfaceText( "X", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  end
+  function _rm.close:DoClick()
+    _rm:Close()
   end
 
-  net.Start( "getAllGroups" )
-  net.SendToServer()
+  _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), getGoodW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
+  _rm.info.rolename = lang_string( "none" )
+  _rm.info.rolesala = lang_string( "none" )
+  function _rm.info:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
 
-  net.Receive( "getAllGroups", function()
-    AllGroups = net.ReadTable() or {}
-    AllRoles = net.ReadTable() or {}
-    Whitelist = net.ReadTable() or {}
+    --[[ Role Appearance ]]--
+    draw.RoundedBox( 0, 0, 0, pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+    surfaceText( lang_string( "appearance" ), "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
+    --draw.RoundedBox( 0, 0, ctrb( 50 ), pw, pw, Color( 0, 0, 0, 200 ) )
 
-    findChildGroups( -1 )
-    addGroups( "No uppergroup", roleDPanelList, -1, -30, -60 )
-  end)
+    --[[ Role Name ]]--
+    draw.RoundedBox( 0, 0, ctrb( 900 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+    surfaceText( lang_string( "role" ), "roleInfoHeader", ctrb( 25 ), ctrb( 900 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    draw.RoundedBox( 0, 0, ctrb( 900+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
+    surfaceText( self.rolename, "roleInfoText", ctrb( 25 ), ctrb( 900 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 
-  roleMenuWindow:MakePopup()
+    --[[ Role Description ]]--
+    draw.RoundedBox( 0, 0, ctrb( 1050 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+    surfaceText( lang_string( "description" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1050 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+
+    --[[ Role Equipment ]]--
+    draw.RoundedBox( 0, 0, ctrb( 1450 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+    surfaceText( lang_string( "sweps" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1450 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+
+    --[[ Role Salary ]]--
+    draw.RoundedBox( 0, 0, ctrb( 1850 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+    surfaceText( lang_string( "salary" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1850 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    draw.RoundedBox( 0, 0, ctrb( 1850+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
+    surfaceText( self.rolesala, "roleInfoText", ctrb( 25 ), ctrb( 1850 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+  end
+  _rm.infopm = createD( "DModelPanel", _rm.info, ctrb( 800 ), ctrb( 800 ), 0, ctrb( 50 ) )
+
+  _rm.infodesc = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1050+50 ) )
+  function _rm.infodesc:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+  end
+
+  _rm.infosweps = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1450+50 ) )
+  function _rm.infosweps:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+  end
+
+  _rm.infobutton = createD( "DButton", _rm.info, ctrb( 800-20 ), ctrb( 100 ), ctrb( 10 ), _rm.info:GetTall() - ctrb( 100+10 ) )
+  _rm.infobutton:SetText( "" )
+  _rm.infobutton.rolename = ""
+  function _rm.infobutton:Paint( pw, ph )
+    self.text = lang_string( "none" )
+    self.color = Color( 255, 255, 255 )
+    if self.rolename != "" then
+      self.text = lang_string( "getrole" )
+      if self:IsHovered() then
+        self.color = Color( 255, 255, 0 )
+      end
+    end
+    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+    surfaceText( self.text, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  end
+  function _rm.infobutton:DoClick()
+    if self.uniqueID != nil then
+      net.Start( "wantRole" )
+        net.WriteInt( self.uniqueID, 16 )
+      net.SendToServer()
+      _rm:Close()
+    end
+  end
+
+  _rm.pl = createD( "DPanelList", _rm, getGoodW() - ctrb( 10+10+10 ) - ctrb( 800 ), ScrH() - ctrb( 60 ), ctrb( 10 ), ctrb( 50 ) )
+  _rm.pl:EnableVerticalScrollbar( true )
+  _rm.pl:SetSpacing( 10 )
+  _rm.pl:SetNoSizing( true )
+
+  function _rm.pl:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
+  end
+
+  getGroups( -1, _rm.pl )
+
+
+
+  _rm:MakePopup()
 end

@@ -9,17 +9,20 @@ end
 
 function hudVT( ply, color )
   if showVT( ply ) then
-    drawRBox( 0, HudV("vtpx"), HudV("vtpy"), HudV("vtsw"), HudV("vtsh"), color )
+    local _x = anchorW( HudV("vtaw") ) + ctr( HudV("vtpx") )
+    local _y = anchorW( HudV("vtah") ) + ctr( HudV("vtpy") )
+    draw.RoundedBox( 0, _x, _y, ctr( HudV("vtsw") ), ctr( HudV("vtsh") ), color )
 
-    drawText( ply:GetNWString( "voteQuestion", "" ), "HudBars", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + HudV("vtsh")/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    local _x2 = _x + ctr( HudV( "vtsw" ) )/2
+    draw.SimpleTextOutlined( ply:GetNWString( "voteQuestion", "" ), "HudBars", _x2, _y + ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
     if ply:GetNWString( "voteStatus" ) != "yes" and ply:GetNWString( "voteStatus" ) != "no" then
-      drawText( lang_string( "yes" ) .. " - [Picture Up] | " .. lang_string( "no" ) .. " - [Picture Down]", "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang_string( "yes" ) .. " - [Picture Up] | " .. lang_string( "no" ) .. " - [Picture Down]", "vtsf", _x2, _y + 2*ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
     elseif ply:GetNWString( "voteStatus" ) == "yes" then
-      drawText( lang_string( "yes" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang_string( "yes" ), "vtsf", _x2, _y + 2*ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
     elseif ply:GetNWString( "voteStatus" ) == "no" then
-      drawText( lang_string( "no" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 2*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+      draw.SimpleTextOutlined( lang_string( "no" ), "vtsf", _x2, _y + 2*ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
     end
-    drawText( ply:GetNWInt( "voteCD", "" ), "vof", HudV("vtpx") + HudV("vtsw")/2, HudV("vtpy") + 3*(HudV("vtsh")/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleTextOutlined( ply:GetNWInt( "voteCD", "Loading" ), "vtsf", _x2, _y + 3*ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
   end
 end
 

@@ -20,14 +20,16 @@ if db_select( _db_name, "*", "uniqueID = 1" ) == nil then
   printGM( "note", _result )
 end
 
-util.AddNetworkString( "get_all_grps_no_upper" )
+util.AddNetworkString( "get_grps" )
 
-net.Receive( "get_all_grps_no_upper", function( len, ply )
-  local _get_all_grps_no_upper = db_select( _db_name, "*", "uppergroup = -1" )
-  if _get_all_grps_no_upper != nil then
+net.Receive( "get_grps", function( len, ply )
+  local _uid = tonumber( net.ReadString() )
 
-    net.Start( "get_all_grps_no_upper" )
-      net.WriteTable( _get_all_grps_no_upper )
+  local _get_grps = db_select( _db_name, "*", "uppergroup = " .. _uid )
+  if _get_grps != nil then
+
+    net.Start( "get_grps" )
+      net.WriteTable( _get_grps )
     net.Send( ply )
   end
 end)

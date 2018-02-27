@@ -87,6 +87,7 @@ function Player:GetRolTab()
             local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
             if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
               self.roltab = yrp_roles[1]
+
               return self.roltab
             end
           end

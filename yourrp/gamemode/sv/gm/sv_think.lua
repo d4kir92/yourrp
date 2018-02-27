@@ -51,12 +51,12 @@ end
 
 function con_st( ply )
   if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) and !ply:InVehicle() then
-    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) - ( ply:GetNWInt( "GetRegStamina", 1 )*2 ) )
+    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) - ( ply:GetNWInt( "stamindown", 1 ) ) )
     if ply:GetNWInt( "GetCurStamina", 0 ) < 0 then
       ply:SetNWInt( "GetCurStamina", 0 )
     end
   elseif ply:GetNWInt( "thirst", 0 ) > 20 then
-    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) + ply:GetNWInt( "GetRegStamina", 1 ) )
+    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) + ply:GetNWInt( "staminup", 1 ) )
     if ply:GetNWInt( "GetCurStamina", 0 ) > ply:GetNWInt( "GetMaxStamina", 100 ) then
       ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetMaxStamina", 100 ) )
     end

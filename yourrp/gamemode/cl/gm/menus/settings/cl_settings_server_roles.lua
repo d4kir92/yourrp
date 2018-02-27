@@ -688,7 +688,7 @@ function addDBGroup()
   net.SendToServer()
 end
 
-function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile )
+function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile, tmpreg2, dbReg2 )
   local _color1 = Color( color.r, color.g, color.b, 125 )
   local _color2 = Color( color.r, color.g, color.b, 255 )
   local tmp = createVGUI( "DPanel", parent, w, 2*(h/3), x, y )
@@ -710,11 +710,21 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
     draw.RoundedBox( 0, 0, ph-ph/4, pw * ( reg*tmpreg / tmpmax ), ph/4, _color2 )
 
     draw.SimpleTextOutlined( string, "sef", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( tmpmin .. "/" .. tmpmax .. "(" .. tmpreg .. ")", "sef", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    local _text = tmpmin .. "/" .. tmpmax .. "(" .. tmpreg
+    if tmpreg2 != nil then
+      _text = _text .. "/" .. tmpreg2
+    end
+    _text = _text .. ")"
+    draw.SimpleTextOutlined( _text, "sef", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local tmp2 = addDNumberWang( parent, w/3, h/3, x, y + h - (h/3), tmpmin )
-  local tmp3 = addDNumberWang( parent, w/3, h/3, x + w/3, y + h - (h/3), tmpmax )
+  local _ele = 3
+  if tmpreg2 != nil then
+    _ele = 4
+  end
+
+  local tmp2 = addDNumberWang( parent, w/_ele, h/3, x, y + h - (h/3), tmpmin )
+  local tmp3 = addDNumberWang( parent, w/_ele, h/3, x + w/_ele, y + h - (h/3), tmpmax )
 
   function tmp2:OnValueChanged( val )
     tmpmin = val
@@ -742,7 +752,7 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
     net.SendToServer()
   end
 
-  local tmp4 = addDNumberWang( parent, w/3, h/3, x + 2*(w/3), y + h - (h/3), tmpreg )
+  local tmp4 = addDNumberWang( parent, w/_ele, h/3, x + 2*(w/_ele), y + h - (h/3), tmpreg )
   function tmp4:OnValueChanged( val )
     tmpreg = val
 
@@ -751,6 +761,19 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
       net.WriteString( dbReg .. " = " .. tmpreg .. "" )
       net.WriteString( dbWhile )
     net.SendToServer()
+  end
+
+  if tmpreg2 != nil then
+    local tmp5 = addDNumberWang( parent, w/_ele, h/3, x + 3*(w/_ele), y + h - (h/3), tmpreg2 )
+    function tmp5:OnValueChanged( val )
+      tmpreg2 = val
+
+      net.Start( "dbUpdate" )
+        net.WriteString( dbTable )
+        net.WriteString( dbReg2 .. " = " .. tmpreg2 .. "" )
+        net.WriteString( dbWhile )
+      net.SendToServer()
+    end
   end
 end
 
@@ -811,7 +834,7 @@ net.Receive( "yrp_roles", function( len )
         addDBNumberWang( rolesInfo, 800, 80, 0, 950, lang_string( "roleplayermodelsize" ), v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "", 0.01, 999 )
         addDBBar( rolesInfo, 800, 120, 0, 1040, lang_string( "rolehealth" ), Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBBar( rolesInfo, 800, 120, 0, 1170, lang_string( "rolearmor" ), Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.streg, "yrp_roles", "st", "stmax", "streg", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.stregup, "yrp_roles", "st", "stmax", "stregup", "uniqueID = " .. tmp.uniqueID .. "", v.stregdn, "stregdn" )
         -- in work WIP addDBBar( rolesInfo, 800, 120, 0, 1430, lang_string( "abilitybar" ) .. " (" .. string.upper( lang_string( "wip" ) ) .. ")", Color( 0, 0, 255 ), "yrp_roles", v.ab, v.abmax, v.abreg, "yrp_roles", "ab", "abmax", "abreg", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "", 0 )
         addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "", 0 )

@@ -108,7 +108,9 @@ function buyWindow( buildingID, name, price, door )
     net.Start( "buyBuilding" )
       net.WriteInt( _buildingID, 16 )
     net.SendToServer()
-    yrp_door.window:Close()
+    if yrp_door.window.Close != nil then
+      yrp_door.window:Close()
+    end
   end
   function _buyButton:Paint( pw, ph )
     paintButton( self, pw, ph, lang_string( "buybuildingpre" ) .. " " .. _name .. " " .. lang_string( "buybuildingpos" ) )

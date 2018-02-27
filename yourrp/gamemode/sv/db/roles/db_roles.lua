@@ -26,7 +26,8 @@ sql_add_column( _db_name, "armax", "INTEGER DEFAULT 100" )
 sql_add_column( _db_name, "arreg", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "st", "INTEGER DEFAULT 50" )
 sql_add_column( _db_name, "stmax", "INTEGER DEFAULT 100" )
-sql_add_column( _db_name, "streg", "INTEGER DEFAULT 1" )
+sql_add_column( _db_name, "stregup", "INTEGER DEFAULT 1" )
+sql_add_column( _db_name, "stregdn", "INTEGER DEFAULT 0.5" )
 
 sql_add_column( _db_name, "abart", "TEXT DEFAULT 'mana'" )
 sql_add_column( _db_name, "ab", "INTEGER DEFAULT 50" )
@@ -410,6 +411,19 @@ net.Receive( "get_grp_roles", function( len, ply )
   local _roles = db_select( _db_name, "*", "groupID = " .. _uid )
   if _roles != nil then
     net.Start( "get_grp_roles" )
+      net.WriteTable( _roles )
+    net.Send( ply )
+  end
+end)
+
+util.AddNetworkString( "get_rol_prerole" )
+
+net.Receive( "get_rol_prerole", function( len, ply )
+  local _uid = net.ReadString()
+  local _roles = db_select( _db_name, "*", "prerole = " .. _uid )
+  if _roles != nil then
+    _roles = _roles[1]
+    net.Start( "get_rol_prerole" )
       net.WriteTable( _roles )
     net.Send( ply )
   end

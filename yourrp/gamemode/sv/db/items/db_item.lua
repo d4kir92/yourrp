@@ -70,7 +70,6 @@ function get_item( id )
 end
 
 function create_item( cname, origin )
-  --print("create_item " .. tostring( cname ) )
   local _item = {}
 
   local _ent = ents.Create( cname )

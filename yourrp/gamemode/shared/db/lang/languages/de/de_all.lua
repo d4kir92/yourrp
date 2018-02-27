@@ -72,7 +72,7 @@ function DE_All()
 
   --Role Menu
   set_lang_string( "rolemenu", "Rollen Menü" )
-  set_lang_string( "moreinfo", "Mehr Info." )
+  set_lang_string( "moreinfo", "Mehr Informationen" )
   set_lang_string( "role", "Rolle" )
   set_lang_string( "description", "Beschreibung" )
   set_lang_string( "salary", "Gehalt" )
