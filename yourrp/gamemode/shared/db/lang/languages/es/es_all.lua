@@ -289,7 +289,7 @@ function ES_All()
 
   set_lang_string( "inventory", "Inventario" )
   set_lang_string( "licence", "Liciencia" )
-  set_lang_string( "licences", "Licencias" )
+  set_lang_string( "licenses", "Licencias" )
   set_lang_string( "dealer", "Comerciante" )
   set_lang_string( "dealers", "Comerciantes" )
   set_lang_string( "gang", "Gangster" )

@@ -72,8 +72,8 @@ function changeFontSize()
 
 	createFont( "HudDefault", tmpFont, 72, _weight, false )
 
-	createFont( "SettingsNormal", tmpFont, 30, _weight, false )
-	createFont( "SettingsHeader", tmpFont, 30, _weight, false )
+	createFont( "SettingsNormal", tmpFont, 24, _weight, true )
+	createFont( "SettingsHeader", tmpFont, 30, _weight, true )
 
 	createFont( "roleInfoHeader", tmpFont, 24, _weight, true )
 	createFont( "roleInfoText", tmpFont, 20, _weight, true )

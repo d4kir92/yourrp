@@ -359,7 +359,7 @@ function createMDMenu( parent, w, h, x, y )
     self.sites[cat][tmpNr].material = material
   end
 
-	tmp.sitepanel = createD( "DPanel", tmp, (ScrH()*5)/4, ScrH() - ctr( 100 ), ScrW2() - ( (ScrH()*5)/4 )/2, ctr( 100 ) )
+	tmp.sitepanel = createD( "DPanel", tmp, BScrW(), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, get_dpbg_col() )
 	end
@@ -412,7 +412,7 @@ function createMDMenu( parent, w, h, x, y )
 						if w.material != nil then
 							surface.SetDrawColor( 255, 255, 255, 255 )
 							surface.SetMaterial( w.material	)
-							surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
+							surface.DrawTexturedRect( ctr( 24 ), ctr( 24 ), ctr( 32 ), ctr( 32 ) )
 						end
 
 						draw.SimpleTextOutlined( string.upper( w.site ), "mdMenu", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )

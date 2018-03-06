@@ -289,7 +289,7 @@ function RU_All()
 
   set_lang_string( "inventory", "Инвентарь" )
   set_lang_string( "licence", "Лицензия" )
-  set_lang_string( "licences", "Лицензии" )
+  set_lang_string( "licenses", "Лицензии" )
   set_lang_string( "dealer", "Дилер" )
   set_lang_string( "dealers", "Дилеры" )
   set_lang_string( "gang", "Банда" )

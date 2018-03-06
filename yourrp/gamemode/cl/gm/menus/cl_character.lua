@@ -290,6 +290,7 @@ function openCharacterCreation()
     paintMD( pw, ph, nil, get_ds_col() )
     draw.SimpleTextOutlined( lang_string( "appearance" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
+
   local _skins = createD( "DPanel", charactersBodygroups, ctr( 600 ), ctr( 100 ), ctr( 10 ), ctr( 60 ) )
   function _skins:Paint( pw, ph )
     if characterPlayermodel.skin != nil and characterPlayermodel.skinmax != nil then

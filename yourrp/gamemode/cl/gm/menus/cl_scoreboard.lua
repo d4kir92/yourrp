@@ -66,7 +66,7 @@ function drawGroupPlayers( id )
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
         elePos.y = elePos.y + 50
-        local _tmpPly = createD( "DButton", _SBSP, getGoodW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+        local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
         _tmpPly:SetText( "" )
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
@@ -162,7 +162,7 @@ function drawGroup( id, name, color )
   elePos.y = elePos.y + 50
 
   local _color = string.Explode( ",", color )
-  local _tmpPanel = createD( "DPanel", _SBSP, getGoodW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
+  local _tmpPanel = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
   _tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
   function _tmpPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
@@ -170,7 +170,7 @@ function drawGroup( id, name, color )
   end
   if hasGroupPlayers( id ) then
     elePos.y = elePos.y + 50
-    local _tmpHeader = createD( "DPanel", _SBSP, getGoodW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+    local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
     _tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
     function _tmpHeader:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
@@ -267,7 +267,7 @@ function drawScoreboard()
   drawGroups()
 end
 
-function getGoodW()
+function BScrW()
   --[[ give ScrW() only when under 21:9 ]]--
   if ScrW() > ScrH()*1.8 then
     return ctr( 3840 )
@@ -286,7 +286,7 @@ function scoreboard:show_sb()
     _SBFrame:Remove()
     _SBFrame = nil
   end
-  local _w = getGoodW() - ctr( 400 )
+  local _w = BScrW() - ctr( 400 )
   _SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
   _SBFrame:SetTitle( "" )
   _SBFrame:ShowCloseButton( false )

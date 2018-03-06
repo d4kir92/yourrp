@@ -12,8 +12,10 @@ end
 
 function closeVehicleOptions()
   closeMenu()
-  yrp_vehicle.window:Close()
-  yrp_vehicle.window = nil
+  if yrp_vehicle.window != nil then
+    yrp_vehicle.window:Close()
+    yrp_vehicle.window = nil
+  end
 end
 
 net.Receive( "getVehicleInfo", function( len )

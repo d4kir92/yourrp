@@ -251,7 +251,7 @@ end
 function openRoleMenu()
   openMenu()
 
-  _rm = createD( "DFrame", nil, getGoodW(), ScrH(), 0, 0 )
+  _rm = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
   _rm:Center()
   _rm:ShowCloseButton( false )
   _rm:SetDraggable( false )
@@ -274,7 +274,7 @@ function openRoleMenu()
     _rm:Close()
   end
 
-  _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), getGoodW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
+  _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), BScrW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
   _rm.info.rolename = lang_string( "none" )
   _rm.info.rolesala = lang_string( "none" )
   function _rm.info:Paint( pw, ph )
@@ -341,7 +341,7 @@ function openRoleMenu()
     end
   end
 
-  _rm.pl = createD( "DPanelList", _rm, getGoodW() - ctrb( 10+10+10 ) - ctrb( 800 ), ScrH() - ctrb( 60 ), ctrb( 10 ), ctrb( 50 ) )
+  _rm.pl = createD( "DPanelList", _rm, BScrW() - ctrb( 10+10+10 ) - ctrb( 800 ), ScrH() - ctrb( 60 ), ctrb( 10 ), ctrb( 50 ) )
   _rm.pl:EnableVerticalScrollbar( true )
   _rm.pl:SetSpacing( 10 )
   _rm.pl:SetNoSizing( true )

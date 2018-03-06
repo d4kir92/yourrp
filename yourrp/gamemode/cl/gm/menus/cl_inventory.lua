@@ -43,6 +43,10 @@ net.Receive( "get_menu_bodygroups", function( len )
 
   local _tbl = net.ReadTable()
   local _skin = tonumber( _tbl.skin )
+  local _pms = string.Explode( ",", _tbl.playermodels )
+  local _pmid = tonumber( _tbl.playermodelID )
+  local _pm = _pms[_pmid]
+
   local _cbg = {}
   _cbg[1] = tonumber( _tbl.bg0 )
   _cbg[2] = tonumber( _tbl.bg1 )
@@ -85,7 +89,53 @@ net.Receive( "get_menu_bodygroups", function( len )
     end
 	end
 
-  -- Skin changing
+  --[[ Playermodel changing ]]--
+  local _tmpPM = createD( "DPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ctr( 80 ), ctr( 10 ), ScrH2() - ctr( 30+80 ) )
+  _tmpPM.cur = _pmid
+  _tmpPM.max = #_pms
+  _tmpPM.name = lang_string( "appearance" )
+  function _tmpPM:Paint( pw, ph )
+    paintPanel( self, pw, ph )
+    draw.SimpleTextOutlined( self.name .. " (" .. _tmpPM.cur .. "/" .. _tmpPM.max .. ")", "DermaDefault", ctr( 60 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
+
+  local _tmpPMUp = createD( "DButton", _tmpPM, ctr( 50 ), ctr( 80/2 - 2 ), ctr( 1 ), ctr( 1 ) )
+  _tmpPMUp:SetText( "" )
+  function _tmpPMUp:Paint( pw, ph )
+    if _tmpPM.cur >= _tmpPM.max then
+
+    else
+      paintButton( self, pw, ph, "↑" )
+    end
+  end
+  function _tmpPMUp:DoClick()
+    if _tmpPM.cur < _tmpPM.max then
+      _tmpPM.cur = _tmpPM.cur + 1
+    end
+    net.Start( "inv_pm_up" )
+      net.WriteInt( _tmpPM.cur, 16 )
+    net.SendToServer()
+    _inv.r.pm.Entity:SetModel( _pms[_tmpPM.cur] )
+  end
+
+  local _tmpPMDo = createD( "DButton", _tmpPM, ctr( 50 ), ctr( 80/2 - 2), ctr( 1 ), ctr( 1+40 ) )
+  _tmpPMDo:SetText( "" )
+  function _tmpPMDo:Paint( pw, ph )
+    if _tmpPM.cur > 1 then
+      paintButton( self, pw, ph, "↓" )
+    end
+  end
+  function _tmpPMDo:DoClick()
+    if _tmpPM.cur > 1 then
+      _tmpPM.cur = _tmpPM.cur - 1
+    end
+    net.Start( "inv_pm_do" )
+      net.WriteInt( _tmpPM.cur, 16 )
+    net.SendToServer()
+    _inv.r.pm.Entity:SetModel( _pms[_tmpPM.cur] )
+  end
+
+  --[[ Skin changing ]]--
   _tbl.bgs = _inv.r.pm.Entity:GetBodyGroups()
 
   local _tmpSkin = createD( "DPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ctr( 80 ), ctr( 10 ), ScrH2() - ctr( 30 ) )

@@ -248,7 +248,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
   frame:MakePopup()
 end
 
-function openSingleSelector( table )
+function openSingleSelector( table, closeF )
   local site = {}
   site.cur = 1
   site.max = 1
@@ -269,6 +269,9 @@ function openSingleSelector( table )
   frame:SetTitle( lang_string( "itemMenu" ) )
   function frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
+  end
+  function frame:OnClose()
+    hook.Call( closeF )
   end
 
   local PanelSelect = createD( "DPanel", frame, shopsize - ctr( 20 ), shopsize - ctr( 100 ), ctr( 10 ), ctr( 100 ) )

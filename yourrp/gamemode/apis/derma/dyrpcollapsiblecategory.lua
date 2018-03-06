@@ -7,6 +7,9 @@ function PANEL:Init()
   self.header:SetText( "" )
   self.content = createD( "DPanelList", self, 100, 50, 0, 100 )
 
+  self.color = Color( 255, 0, 0 )
+  self.color2 = Color( 255, 0, 0 )
+
   self.header:SetTall( self:GetHeaderHeight() )
   self:SetTall( self:GetHeaderHeight() )
 
@@ -19,9 +22,23 @@ function PANEL:Init()
 
   self.headertext = "Header"
 
-  function self:PaintHeader( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 255 ) )
-    draw.SimpleText( self.headertext, "DermaDefault", w/2, h/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+  function self:PaintHeader( pw, ph )
+      local _hl = 0
+      if self.header:IsHovered() then
+        _hl = 70
+      end
+      draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r + _hl, self.color.g + _hl, self.color.b + _hl ), true, true, !self:IsOpen(), !self:IsOpen() )
+      surfaceText( self.headertext, "roleInfoHeader", ph/2, ph/2, Color( 255, 255, 255 ), 0, 1 )
+
+      local _box = ctrb( 50 )
+      local _dif = 50
+      local _br = (ph - _box)/2
+      local _tog = "▼"
+      if self:IsOpen() then
+        _tog = "▲"
+      end
+      draw.RoundedBox( 0, pw - _box - _br, _br, _box, _box, Color( self.color.r - _dif, self.color.g - _dif, self.color.b - _dif ) )
+      surfaceText( _tog, "roleInfoHeader", pw - _box/2 - _br, _br + _box/2, Color( 255, 255, 255 ), 1, 1 )
   end
 
   function self.header:Paint( w, h )
@@ -36,7 +53,7 @@ function PANEL:Init()
   end
 
   function self:PaintContent( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 255, 0 ) )
+    draw.RoundedBox( 0, 0, 0, w, h, self.color2 )
   end
 
   function self.content:Paint( w, h )

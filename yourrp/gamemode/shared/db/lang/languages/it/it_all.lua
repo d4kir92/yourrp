@@ -289,7 +289,7 @@ function IT_All()
 
   set_lang_string( "inventory", "Inventario" )
   set_lang_string( "licence", "Licenza" )
-  set_lang_string( "licences", "Licenze" )
+  set_lang_string( "licenses", "Licenze" )
   set_lang_string( "dealer", "Venditore" )
   set_lang_string( "dealers", "Venditori" )
   set_lang_string( "gang", "Banda" )

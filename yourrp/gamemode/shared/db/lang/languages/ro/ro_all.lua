@@ -289,7 +289,7 @@ function RO_All()
 
   set_lang_string( "inventory", "Inventar" )
   set_lang_string( "licence", "Liceență" )
-  set_lang_string( "licences", "Liceențe" )
+  set_lang_string( "licenses", "Liceențe" )
   set_lang_string( "dealer", "Comerciant" )
   set_lang_string( "dealers", "Comercianți" )
   set_lang_string( "gang", "Bandă" )

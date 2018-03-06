@@ -289,7 +289,7 @@ function CA_All()
 
   set_lang_string( "inventory", "Inventari" )
   set_lang_string( "licence", "Llicència" )
-  set_lang_string( "licences", "Llicències" )
+  set_lang_string( "licenses", "Llicències" )
   set_lang_string( "dealer", "Comerciant" )
   set_lang_string( "dealers", "Comerciants" )
   set_lang_string( "gang", "Gangster" )

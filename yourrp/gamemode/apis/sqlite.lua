@@ -301,3 +301,11 @@ function db_is_empty( db_name )
     return true
   end
 end
+
+function db_worked( query )
+  if query == nil then
+    return "worked"
+  else
+    return "not worked"
+  end
+end

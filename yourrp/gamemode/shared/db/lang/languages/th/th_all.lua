@@ -289,7 +289,7 @@ function TH_All()
 
   set_lang_string( "inventory", "สินค้าคงคลัง" )
   set_lang_string( "licence", "อนุญาต" )
-  set_lang_string( "licences", "ใบอนุญาต" )
+  set_lang_string( "licenses", "ใบอนุญาต" )
   set_lang_string( "dealer", "เจ้ามือ" )
   set_lang_string( "dealers", "ผู้แทนจำหน่าย" )
   set_lang_string( "gang", "แก๊ง" )

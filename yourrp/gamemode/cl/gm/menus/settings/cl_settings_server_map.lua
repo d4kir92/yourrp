@@ -28,6 +28,8 @@ net.Receive( "getMapList", function( len )
             break
           end
         end
+      elseif v.type == "dealer" then
+        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "", v.linkID )
       else
         _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "" )
       end
@@ -124,12 +126,13 @@ hook.Add( "open_server_map", "open_server_map", function()
   end
 
   _mapListView = createVGUI( "DListView", settingsWindow.window.site, 1600, 1600, 10, 10 + 256 + 10 )
-  _mapListView:AddColumn( "uniqueID" ):SetFixedWidth( ctr( 100 ) )
+  _mapListView:AddColumn( "uniqueID" )
   _mapListView:AddColumn( lang_string( "position" ) )
   _mapListView:AddColumn( lang_string( "angle" ) )
   _mapListView:AddColumn( lang_string( "type" ) )
   _mapListView:AddColumn( lang_string( "group" ) )
   _mapListView:AddColumn( lang_string( "role" ) )
+  _mapListView:AddColumn( "linkID" )
 
   local _buttonDelete = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1600 + 10, 10 + 256 + 10 )
   _buttonDelete:SetText( lang_string( "deleteentry" ) )
@@ -249,6 +252,17 @@ hook.Add( "open_server_map", "open_server_map", function()
       local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
       local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'releasepoint'"
       net.WriteString( tmpString )
+    net.SendToServer()
+
+    _mapListView:Clear()
+    net.Start( "getMapList" )
+    net.SendToServer()
+  end
+
+  local _buttonAddDealer = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 1620, 576 )
+  _buttonAddDealer:SetText( lang_string( "add" ) .. " [" .. lang_string( "dealer" ) .. "]" )
+  function _buttonAddDealer:DoClick()
+    net.Start( "dealer_add" )
     net.SendToServer()
 
     _mapListView:Clear()

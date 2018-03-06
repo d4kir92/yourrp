@@ -98,9 +98,14 @@ end
 
 function printTab( table, name )
 	hr_pre()
-	if name != nil then
-		printGM( "note", "PrintTable: " .. tostring( name ) .. " (" .. tostring( table ) .. ")" )
+	local _header = "PrintTable: "
+	name = name or ""
+	if name != "" then
+		name = name .. " "
 	end
+	_header = _header .. name .. "(" .. tostring( table ) .. ")"
+	printGM( "note", _header )
+
 	if istable( table ) then
 		PrintTable( table )
 	else

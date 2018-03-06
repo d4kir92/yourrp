@@ -289,7 +289,7 @@ function UA_All()
 
   set_lang_string( "inventory", "Інвентарь" )
   set_lang_string( "licence", "Ліцензія" )
-  set_lang_string( "licences", "Ліцензії" )
+  set_lang_string( "licenses", "Ліцензії" )
   set_lang_string( "dealer", "Дилер" )
   set_lang_string( "dealers", "Дилери" )
   set_lang_string( "gang", "Банда" )

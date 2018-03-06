@@ -289,7 +289,7 @@ function BG_All()
 
   set_lang_string( "inventory", "Инвентар" )
   set_lang_string( "licence", "Лиценз" )
-  set_lang_string( "licences", "Лицензи" )
+  set_lang_string( "licenses", "Лицензи" )
   set_lang_string( "dealer", "Дилър" )
   set_lang_string( "dealers", "Дилъри" )
   set_lang_string( "gang", "Банда" )

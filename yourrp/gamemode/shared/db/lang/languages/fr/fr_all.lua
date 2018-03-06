@@ -289,7 +289,7 @@ function FR_All()
 
   set_lang_string( "inventory", "Inventaire" )
   set_lang_string( "licence", "Licence" )
-  set_lang_string( "licences", "Licences" )
+  set_lang_string( "licenses", "licenses" )
   set_lang_string( "dealer", "Marchand" )
   set_lang_string( "dealers", "Marchands" )
   set_lang_string( "gang", "Gang" )

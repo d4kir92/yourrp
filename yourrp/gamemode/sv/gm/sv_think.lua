@@ -133,6 +133,17 @@ function check_salary( ply )
   end
 end
 
+function checkNPC( uid )
+  for j, npc in pairs( ents.GetAll() ) do
+    if npc:IsNPC() then
+      if npc:GetNWString( "dealerID", "FAILED" ) == tostring( uid ) then
+        return true
+      end
+    end
+  end
+  return false
+end
+
 local _time = 0
 timer.Create( "ServerThink", 1, 0, function()
   local _all_players = player.GetAll()
@@ -179,10 +190,35 @@ timer.Create( "ServerThink", 1, 0, function()
   end
 
   if _time % 10 == 0 then
-    for k, ply in pairs( _all_players ) do
+    for i, ply in pairs( _all_players ) do
       if ply:GetRoleName() == nil and ply:Alive() then
         if !ply:IsBot() then
           ply:KillSilent()
+        end
+      end
+    end
+    local _dealers = db_select( "yrp_dealers", "*", nil )
+    if _dealers != nil then
+      for i, dealer in pairs( _dealers ) do
+        if dealer.uniqueID != "-1" then
+          if !checkNPC( dealer.uniqueID ) then
+            printGM( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )
+            local _del = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
+            if _del != nil then
+              _del = _del[1]
+              local _dealer = ents.Create( "yrp_dealer" )
+              _dealer:SetNWString( "dealerID", dealer.uniqueID )
+              _dealer:SetNWString( "name", dealer.name )
+              local _pos = string.Explode( ",", _del.position )
+              _pos = Vector( _pos[1], _pos[2], _pos[3] )
+              _dealer:SetPos( _pos )
+              local _ang = string.Explode( ",", _del.angle )
+              _ang = Angle( 0, _ang[2], 0 )
+              _dealer:SetAngles( _ang )
+              _dealer:SetModel( dealer.WorldModel )
+              _dealer:Spawn()
+            end
+          end
         end
       end
     end

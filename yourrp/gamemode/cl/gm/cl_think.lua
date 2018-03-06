@@ -42,10 +42,16 @@ hook.Add( "OnSpawnMenuClose", "yrp_spawn_menu_close", function()
 	closeMenu()
 end)
 
+hook.Add( "HUDWeaponPickedUp", "yrp_translate_weaponname", function( wep )
+	if wep.LanguageString != nil then
+		wep.PrintName = lang_string( wep.LanguageString )
+	end
+end)
+
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
   --[[ Change language ]]--
   if newWeapon.LanguageString != nil then
-    newWeapon.PrintName = lang_string(newWeapon.LanguageString)
+    newWeapon.PrintName = lang_string( newWeapon.LanguageString )
   end
 end
 

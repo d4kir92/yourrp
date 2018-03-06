@@ -10,6 +10,7 @@ sql_add_column( _db_name, "angle", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
 sql_add_column( _db_name, "type", "TEXT DEFAULT ''" )
+sql_add_column( _db_name, "linkID", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -70,8 +71,15 @@ util.AddNetworkString( "dbInsertIntoMap" )
 util.AddNetworkString( "removeMapEntry" )
 
 net.Receive( "removeMapEntry", function( len, ply )
-  local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", nil )
   local _tmpUniqueID = net.ReadString()
+
+  local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "uniqueID = '" .. _tmpUniqueID .. "'" )
+  if _tmpMapTable != nil then
+    _tmpMapTable = _tmpMapTable[1]
+    if _tmpMapTable.type == "dealer" then
+      dealer_rem( _tmpMapTable.linkID )
+    end
+  end
   db_delete_from( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "uniqueID = " .. _tmpUniqueID )
 end)
 

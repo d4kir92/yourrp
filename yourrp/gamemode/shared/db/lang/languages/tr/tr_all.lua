@@ -289,7 +289,7 @@ function TR_All()
 
   set_lang_string( "inventory", "Envanter" )
   set_lang_string( "licence", "Lisans" )
-  set_lang_string( "licences", "Lisanslar" )
+  set_lang_string( "licenses", "Lisanslar" )
   set_lang_string( "dealer", "Satıcısı" )
   set_lang_string( "dealers", "Satıcılar" )
   set_lang_string( "gang", "Çete" )

@@ -289,7 +289,7 @@ function PL_All()
 
   set_lang_string( "inventory", "Wyposarzenie" )
   set_lang_string( "licence", "Licencja " )
-  set_lang_string( "licences", "Licencje" )
+  set_lang_string( "licenses", "Licencje" )
   set_lang_string( "dealer", "Handlarz" )
   set_lang_string( "dealers", "Handlarze" )
   set_lang_string( "gang", "Gang" )

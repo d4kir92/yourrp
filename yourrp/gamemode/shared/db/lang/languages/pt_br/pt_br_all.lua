@@ -289,7 +289,7 @@ function PT_BR_All()
 
   set_lang_string( "inventory", "Inventario" )
   set_lang_string( "licence", "Licença" )
-  set_lang_string( "licences", "Licenças" )
+  set_lang_string( "licenses", "Licenças" )
   set_lang_string( "dealer", "Revendedor" )
   set_lang_string( "dealers", "Revendedores" )
   set_lang_string( "gang", "Gangue" )

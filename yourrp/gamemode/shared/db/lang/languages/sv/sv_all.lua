@@ -289,7 +289,7 @@ function SV_All()
 
   set_lang_string( "inventory", "Inventory" )
   set_lang_string( "licence", "Licence" )
-  set_lang_string( "licences", "Licences" )
+  set_lang_string( "licenses", "licenses" )
   set_lang_string( "dealer", "Dealer" )
   set_lang_string( "dealers", "Dealers" )
   set_lang_string( "gang", "Gang" )

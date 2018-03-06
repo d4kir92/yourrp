@@ -187,7 +187,7 @@ function createSmartphone( parent, w, h, x, y )
   function _tmp.display:OpenFullscreen()
     self:ClearDisplay()
 
-    local _w = getGoodW()
+    local _w = BScrW()
     local _h = _w/16*9
 
     _tmp:SetPos( 0, 0 )

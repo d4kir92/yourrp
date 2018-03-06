@@ -289,7 +289,7 @@ function KO_All()
 
   set_lang_string( "inventory", "인벤토리" )
   set_lang_string( "licence", "라이센스" )
-  set_lang_string( "licences", "라이센스" )
+  set_lang_string( "licenses", "라이센스" )
   set_lang_string( "dealer", "딜러" )
   set_lang_string( "dealers", "딜러" )
   set_lang_string( "gang", "갱" )
