@@ -16,6 +16,10 @@ util.AddNetworkString( "db_update_realistic_damage" )
 util.AddNetworkString( "db_update_realistic_falldamage" )
 util.AddNetworkString( "db_update_smartphone" )
 
+util.AddNetworkString( "db_update_noclip_crow" )
+util.AddNetworkString( "db_update_noclip_tags" )
+util.AddNetworkString( "db_update_noclip_stealth" )
+
 local _db_name = "yrp_general"
 
 sql_add_column( _db_name, "name_gamemode", "TEXT DEFAULT 'YourRP'" )
@@ -37,6 +41,10 @@ sql_add_column( _db_name, "toggle_realistic_damage", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_realistic_falldamage", "INT DEFAULT 1" )
 
 sql_add_column( _db_name, "toggle_smartphone", "INT DEFAULT 1" )
+
+sql_add_column( _db_name, "toggle_noclip_crow", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_noclip_stealth", "INT DEFAULT 0" )
+sql_add_column( _db_name, "toggle_noclip_tags", "INT DEFAULT 1" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
@@ -78,6 +86,18 @@ if _init_general != false and _init_general != nil then
   yrp_general = _init_general[1]
 end
 
+function IsNoClipStealthEnabled()
+  return tobool( yrp_general.toggle_noclip_stealth )
+end
+
+function IsNoClipTagsEnabled()
+  return tobool( yrp_general.toggle_noclip_tags )
+end
+
+function IsNoClipCrowEnabled()
+  return tobool( yrp_general.toggle_noclip_crow )
+end
+
 function IsRealisticFallDamageEnabled()
   return tobool( yrp_general.toggle_realistic_falldamage )
 end
@@ -85,6 +105,33 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_noclip_crow", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_noclip_crow = _nw
+    db_update( "yrp_general", "toggle_noclip_crow = " .. yrp_general.toggle_noclip_crow, nil )
+  end
+end)
+
+net.Receive( "db_update_noclip_tags", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_noclip_tags = _nw
+    db_update( "yrp_general", "toggle_noclip_tags = " .. yrp_general.toggle_noclip_tags, nil )
+  end
+  for i, ply in pairs( player.GetAll() ) do
+    ply:SetNWBool( "show_tags", yrp_general.toggle_noclip_tags )
+  end
+end)
+
+net.Receive( "db_update_noclip_stealth", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_noclip_stealth = _nw
+    db_update( "yrp_general", "toggle_noclip_stealth = " .. yrp_general.toggle_noclip_stealth, nil )
+  end
+end)
 
 net.Receive( "db_update_smartphone", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

@@ -61,3 +61,19 @@ net.Receive( "dealer_add_tab", function( len, ply )
     local _up = db_update( _db_name, "tabs = '" .. _tabs .. "'", "uniqueID = " .. _dealer_uid )
   end
 end)
+
+util.AddNetworkString( "dealer_rem_tab" )
+
+net.Receive( "dealer_rem_tab", function( len, ply )
+  local _dealer_uid = net.ReadString()
+  local _tab_uid = net.ReadString()
+
+  local _dealer = db_select( _db_name, "*", "uniqueID = " .. _dealer_uid )
+  if _dealer != nil then
+    _dealer = _dealer[1]
+    _dealer.tabs = string.Explode( ",", _dealer.tabs )
+    table.RemoveByValue( _dealer.tabs, _tab_uid )
+    _dealer.tabs = string.Implode( ",", _dealer.tabs )
+    db_update( _db_name, "tabs = '" .. _dealer.tabs .. "'", "uniqueID = " .. _dealer_uid )
+  end
+end)

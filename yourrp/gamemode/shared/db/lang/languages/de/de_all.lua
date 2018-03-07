@@ -531,4 +531,8 @@ function DE_All()
   set_lang_string( "permanent", "Permanent" )
   set_lang_string( "tab", "Reiter" )
   set_lang_string( "tabs", "Reiter" )
+  set_lang_string( "crow", "Krähe" )
+  set_lang_string( "tag", "Schlagwort" )
+  set_lang_string( "tags", "Schlagwörter" )
+  set_lang_string( "stealth", "Tarnung" )
 end

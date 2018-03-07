@@ -385,7 +385,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 							if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 								pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 12 * ply:GetModelScale() )
 							end
-							if ply:GetMoveType() == MOVETYPE_NOCLIP then
+							if ply:GetMoveType() == MOVETYPE_NOCLIP and ply:GetModel() == "models/crow.mdl" then
 								local _view_range = ply:GetNWInt( "view_range", 0 )
 								if _view_range < 0 then
 									_view_range = 0

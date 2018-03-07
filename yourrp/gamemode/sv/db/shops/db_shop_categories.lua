@@ -71,6 +71,7 @@ net.Receive( "shop_get_categories", function( len, ply )
   end
 
   net.Start( "shop_get_categories" )
+    net.WriteString( _uid )
     net.WriteTable( _nw )
   net.Send( ply )
 end)

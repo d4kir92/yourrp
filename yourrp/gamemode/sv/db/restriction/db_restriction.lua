@@ -159,12 +159,38 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
 
   if !bool then
     setPlayerModel( ply )
+    ply:SetRenderMode( RENDERMODE_NORMAL )
+    ply:SetColor( Color( 255, 255, 255, 255 ) )
+    for i, wp in pairs(ply:GetWeapons()) do
+      wp:SetRenderMode( RENDERMODE_NORMAL )
+      wp:SetColor( Color( 255, 255, 255, 255 ) )
+    end
   else
     local _tmp = db_select( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
     if worked( _tmp, "PlayerNoClip failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.noclip ) then
-        ply:SetModel( "models/crow.mdl" )
+        if IsNoClipCrowEnabled() then
+          ply:SetModel( "models/crow.mdl" )
+        end
+
+        local _alpha = 255
+        if IsNoClipStealthEnabled() then
+          _alpha = 8
+        else
+          if ply:GetModel() == "models/crow.mdl" then
+            _alpha = 180
+          else
+            _alpha = 100
+          end
+        end
+        ply:SetRenderMode( RENDERMODE_TRANSALPHA )
+        ply:SetColor( Color( 255, 255, 255, _alpha ) )
+        for i, wp in pairs(ply:GetWeapons()) do
+          wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+          wp:SetColor( Color( 255, 255, 255, _alpha ) )
+        end
+
         return true
       else
         printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )

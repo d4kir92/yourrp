@@ -18,13 +18,39 @@ function closeBuyMenu()
   end
 end
 
+
 function createShopItem( item )
+
   local _i = createD( "DPanel", nil, ctrb( 400 ), ctrb( 400 ), 0, 0 )
+  function _i:Paint( pw, ph )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+  end
   _i.item = item
   if item.WorldModel != nil then
-    _i.model = createD( "DModelPanel", _i, ctrb( 300 ), ctrb( 300 ), ctrb( 50 ), ctrb( 0 ) )
-    _i.model:SetModel( item.WorldModel )
+    if item.WorldModel == "" then
+      --
+    else
+      _i.model = createD( "DModelPanel", _i, ctrb( 400 ), ctrb( 400 ), ctrb( 0 ), ctrb( 0 ) )
+      _i.model:SetModel( item.WorldModel )
+      if _i.model.Entity != NULL then
+        local _height = 0
+        local _range = 0
+        if item.type == "weapons" then
+          _height = 10
+          _range = 40
+        elseif item.type == "vehicles" then
+          _height = 50
+          _range = 200
+        elseif item.type == "entities" then
+          height = 30
+          _range = 30
+        end
+        _i.model:SetLookAt( Vector( 0, 0, _height ) )
+        _i.model:SetCamPos( Vector( 0, 0, _height ) - Vector( -_range, 0, 0 ) )
+      end
+    end
   end
+
   if item.name != nil then
     _i.name = createD( "DPanel", _i, ctrb( 400 ), ctrb( 50 ), 0, 0 )
     function _i.name:Paint( pw, ph )
@@ -100,7 +126,7 @@ net.Receive( "shop_get_tabs", function( len )
   _bm.shop = createD( "DPanelList", _bm.window, BScrW() - ctrb( 10+10 ), ScrH() - ctrb( 50 + 10 + 60 + 10 ), ctrb( 10 ), ctrb( 50 + 10 + 60 ) )
   _bm.shop:EnableVerticalScrollbar( false )
   _bm.shop:SetSpacing( 10 )
-  _bm.shop:SetNoSizing( true )
+  _bm.shop:SetNoSizing( false )
   function _bm.shop:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 100, 240 ) )
   end
@@ -111,13 +137,15 @@ net.Receive( "shop_get_tabs", function( len )
 
   for i, tab in pairs( _tabs ) do
     local _tab = _bm.tabs:AddTab( tab.name, tab.uniqueID )
-    function _tab:Click()
+
+    function _tab:GetCategories()
       net.Receive( "shop_get_categories", function( len )
+        local _uid = net.ReadString()
         local _cats = net.ReadTable()
 
         _bm.shop:Clear()
 
-        for i, cat in pairs( _cats ) do
+        for j, cat in pairs( _cats ) do
           local _cat = createD( "DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb( 100 ), 0, 0 )
           _cat.uid = cat.uniqueID
           _cat:SetHeaderHeight( ctrb( 100 ) )
@@ -129,7 +157,7 @@ net.Receive( "shop_get_tabs", function( len )
             if self:IsOpen() then
               net.Receive( "shop_get_items", function( len )
                 local _items = net.ReadTable()
-                for i, item in pairs( _items ) do
+                for k, item in pairs( _items ) do
                   local _item = createShopItem( item )
                   self:Add( _item )
                 end
@@ -145,11 +173,37 @@ net.Receive( "shop_get_tabs", function( len )
           _bm.shop:AddItem( _cat )
           _bm.shop:Rebuild()
         end
+        if LocalPlayer():IsSuperAdmin() or LocalPlayer():IsSuperAdmin() then
+          local _remove = createD( "DButton", _cat, ctr( 400 ), ctr( 100 ), 0, 0 )
+          _remove:SetText( "" )
+          _remove.uid = _uid
+          function _remove:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0 ) )
+            surfaceText( lang_string( "remove" ) .. " [" .. lang_string( "tab" ) .. "] => " .. tab.name, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+          end
+          function _remove:DoClick()
+            net.Start( "dealer_rem_tab" )
+              net.WriteString( _dealer_uid )
+              net.WriteString( self.uid )
+            net.SendToServer()
+            _bm.window:Close()
+          end
+          _bm.shop:AddItem( _remove )
+          _bm.shop:Rebuild()
+        end
       end)
 
       net.Start( "shop_get_categories" )
-        net.WriteString( self.tbl )
+        net.WriteString( _tab.tbl )
       net.SendToServer()
+    end
+
+    function _tab:Click()
+      _tab.GetCategories()
+    end
+
+    if i == 1 then
+      _tab.GetCategories()
     end
   end
 

@@ -496,7 +496,7 @@ function drawPlate( ply, string, z, color )
     local strSize = string.len( str ) + 3
     cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
       draw.RoundedBox( 0, -( ( strSize * 11 )/2 ), 0,  strSize*11, 24, color )
-      draw.SimpleTextOutlined( str, "plates", 0, 12, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( str, "plates", 0, 12, Color( 255, 255, 255, color.a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, color.a ) )
     cam.End3D2D()
   end
 end
@@ -508,12 +508,13 @@ end)
 function drawPlates( ply )
   if ply:GetNWBool( "tag_dev", false ) then
     if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
-      drawPlate( ply, "DEVELOPER", 7, Color( 0, 0, 0, 200 ) )
+      drawPlate( ply, "DEVELOPER", 7, Color( 0, 0, 0, ply:GetColor().a ) )
     end
   end
-  if ply:GetNWBool( "tag_admin", false ) then
+  if ply:GetNWBool( "tag_admin", false ) or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
     if ply:IsSuperAdmin() or ply:IsAdmin() then
-      drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, 200 ) )
+
+      drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
     end
   end
 end

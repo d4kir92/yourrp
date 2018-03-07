@@ -30,6 +30,7 @@ function send_shop_items( ply, uid )
   if _nw == nil then
     _nw = {}
   end
+
   net.Start( "get_shop_items" )
     net.WriteTable( _nw )
   net.Send( ply )

@@ -531,4 +531,8 @@ function EN_All()
   set_lang_string( "permanent", "Permanent" )
   set_lang_string( "tab", "Tab" )
   set_lang_string( "tabs", "Tabs" )
+  set_lang_string( "crow", "Crow" )
+  set_lang_string( "tag", "Tag" )
+  set_lang_string( "tags", "Tags" )
+  set_lang_string( "stealth", "Stealth" )
 end
