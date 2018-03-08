@@ -81,7 +81,7 @@ function changeUserGroup( ply, cmd, args )
 	if args[2] != nil then
 	  if !ply:IsPlayer() then
 	    for k, v in pairs( player.GetAll() ) do
-	      if string.find( string.lower( v:Nick() ), string.lower( args[1] ) ) then
+	      if string.find( string.lower( v:Nick() ), string.lower( args[1] ) ) or string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
 	        v:SetUserGroup( args[2] )
 	        printGM( "note", args[1] .. " is now the usergroup " .. args[2] )
 	        return
@@ -90,7 +90,7 @@ function changeUserGroup( ply, cmd, args )
 	    printGM( "note", args[1] .. " not found." )
 	  elseif ply:IsSuperAdmin() or ply:IPAddress() == "loopback" then
 	    for k, v in pairs( player.GetAll() ) do
-	      if string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
+	      if string.find( string.lower( v:Nick() ), string.lower( args[1] ) ) or string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
 	        v:SetUserGroup( args[2] )
 	        printGM( "note", args[1] .. " is now the usergroup " .. args[2] )
 	        return

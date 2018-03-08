@@ -535,4 +535,5 @@ function DE_All()
   set_lang_string( "tag", "Schlagwort" )
   set_lang_string( "tags", "Schlagwörter" )
   set_lang_string( "stealth", "Tarnung" )
+  set_lang_string( "require", "Benötigt" )
 end

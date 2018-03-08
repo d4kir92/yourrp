@@ -83,3 +83,65 @@ net.Receive( "get_all_licenses_simple", function( len, ply )
     net.WriteTable( _all )
   net.Send( ply )
 end)
+
+util.AddNetworkString( "get_role_licenses" )
+
+net.Receive( "get_role_licenses", function( len, ply )
+  local _licenses = db_select( _db_name, "*", nil )
+
+  if _licenses == nil then
+    _licenses = {}
+  end
+
+  net.Start( "get_role_licenses" )
+    net.WriteTable( _licenses )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "role_add_license" )
+
+net.Receive( "role_add_license", function( len, ply )
+  local _role_uid = net.ReadString()
+  local _license_uid = net.ReadString()
+
+  local _role = db_select( "yrp_roles", "licenseIDs", "uniqueID = " .. _role_uid )
+  if _role != nil then
+    _role = _role[1]
+    local _licenseIDs = {}
+    if _role.licenseIDs != "" then
+      _licenseIDs = string.Explode( ",", _role.licenseIDs )
+    end
+    if !table.HasValue( _licenseIDs, _license_uid ) then
+      table.insert( _licenseIDs, _license_uid )
+      _licenseIDs = string.Implode( ",", _licenseIDs )
+
+      print(_licenseIDs)
+      db_update( "yrp_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid )
+    end
+  end
+end)
+
+util.AddNetworkString( "role_rem_license" )
+
+net.Receive( "role_rem_license", function( len, ply )
+  local _role_uid = net.ReadString()
+  local _license_uid = net.ReadString()
+
+  local _role = db_select( "yrp_roles", "licenseIDs", "uniqueID = " .. _role_uid )
+  if _role != nil then
+    _role = _role[1]
+    local _licenseIDs = {}
+    if _role.licenseIDs != "" then
+      _licenseIDs = string.Explode( ",", _role.licenseIDs )
+    end
+
+    if table.HasValue( _licenseIDs, _license_uid ) then
+      table.RemoveByValue( _licenseIDs, _license_uid )
+
+      _licenseIDs = string.Implode( ",", _licenseIDs )
+
+      print(_licenseIDs)
+      db_update( "yrp_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid )
+    end
+  end
+end)

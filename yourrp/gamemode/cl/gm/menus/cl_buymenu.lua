@@ -64,33 +64,44 @@ function createShopItem( item )
     end
   end
 
-  _i.buy = createD( "DButton", _i, ctrb( 400/2 ), ctrb( 50 ), ctrb( 200 ), ctrb( 350 ) )
-  _i.buy:SetText( "" )
-  _i.buy.item = item
-  function _i.buy:Paint( pw, ph )
-    local _color = Color( 0, 255, 0 )
-    if !LocalPlayer():canAfford( item.price ) then
-      _color = Color( 255, 0, 0 )
+  if LocalPlayer():HasLicense( item.licenseID ) then
+    _i.buy = createD( "DButton", _i, ctrb( 400/2 ), ctrb( 50 ), ctrb( 200 ), ctrb( 350 ) )
+    _i.buy:SetText( "" )
+    _i.buy.item = item
+    function _i.buy:Paint( pw, ph )
+      local _color = Color( 0, 255, 0 )
+      if !LocalPlayer():canAfford( item.price ) then
+        _color = Color( 255, 0, 0 )
+      end
+      if self:IsHovered() then
+        _color = Color( 255, 255, 0 )
+      end
+      draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+      surfaceText( lang_string( "buy" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
-    if self:IsHovered() then
-      _color = Color( 255, 255, 0 )
+    function _i.buy:DoClick()
+      net.Start( "item_buy" )
+        net.WriteTable( self.item )
+      net.SendToServer()
     end
-    draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-    surfaceText( lang_string( "buy" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  else
+    _i.require = createD( "DPanel", _i, ctrb( 400 ), ctrb( 50 ), ctrb( 0 ), ctrb( 350 ) )
+    function _i.require:Paint( pw, ph )
+      local _color = Color( 255, 0, 0 )
+      draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+      surfaceText( lang_string( "require" ) .. ": " .. lang_string( "license" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+    end
   end
-  function _i.buy:DoClick()
-    net.Start( "item_buy" )
-      net.WriteTable( self.item )
-    net.SendToServer()
-  end
-
   return _i
 end
+
+local _mat_set = Material( "vgui/yrp/light_settings.png" )
 
 net.Receive( "shop_get_tabs", function( len )
   openMenu()
 
-  local _dealer_uid = net.ReadString()
+  local _dealer = net.ReadTable()
+  local _dealer_uid = _dealer.uniqueID
   local _tabs = net.ReadTable()
 
   _bm.window = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
@@ -106,7 +117,7 @@ net.Receive( "shop_get_tabs", function( len )
     closeMenu()
   end
   function _bm.window:Paint( pw, ph )
-    surfaceText( lang_string( "buymenu" ), "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
+    surfaceText( _dealer.name, "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
   end
 
   _bm.close = createD( "DButton", _bm.window, ctrb( 50), ctrb( 50 ), _bm.window:GetWide()-ctrb( 50+10 ), ctrb( 10 ) )
@@ -121,6 +132,78 @@ net.Receive( "shop_get_tabs", function( len )
   end
   function _bm.close:DoClick()
     _bm.window:Close()
+  end
+
+  if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+    _bm.settings = createD( "DButton", _bm.window, ctrb( 50 ), ctrb( 50 ), _bm.window:GetWide()-ctrb( 50+10+50+10 ), ctrb( 10 ) )
+    _bm.settings:SetText( "" )
+    function _bm.settings:Paint( pw, ph )
+      local _br = 4
+      self.color = Color( 255, 255, 255 )
+      if self:IsHovered() then
+        self.color = Color( 255, 255, 0 )
+      end
+      draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( _mat_set	)
+      surface.DrawTexturedRect( ctr(_br), ctr(_br), pw-ctr(2*_br), ph-ctr(2*_br) )
+    end
+    function _bm.settings:DoClick()
+      local _set = createD( "DFrame", nil, ctrb( 600 ), ctrb( 50+10+100+10+100+10 ), 0, 0 )
+      _set:SetTitle( "" )
+      _set:Center()
+      _set:MakePopup()
+      function _set:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+      end
+
+      _set.name = createD( "DYRPPanelPlus", _set, ctrb( 580 ), ctrb( 100 ), ctrb( 10 ), ctrb( 50+10 ) )
+      _set.name:INITPanel( "DTextEntry" )
+      _set.name:SetHeader( lang_string( "name" ) )
+      _set.name:SetText( _dealer.name )
+      function _set.name.plus:OnChange()
+        _dealer.name = self:GetText()
+        net.Start( "dealer_edit_name" )
+          net.WriteString( _dealer.uniqueID )
+          net.WriteString( _dealer.name )
+        net.SendToServer()
+      end
+
+      _set.name = createD( "DYRPPanelPlus", _set, ctrb( 580 ), ctrb( 100 ), ctrb( 10 ), ctrb( 100+10+50+10 ) )
+      _set.name:INITPanel( "DButton" )
+      _set.name:SetHeader( lang_string( "appearance" ) )
+      _set.name.plus:SetText( "" )
+      function _set.name.plus:Paint( pw, ph )
+        self.color = Color( 200, 200, 200 )
+        if self:IsHovered() then
+          self.color = Color( 200, 200, 0 )
+        end
+        draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+        surfaceText( lang_string( "change" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      end
+      function _set.name.plus:DoClick()
+        local playermodels = player_manager.AllValidModels()
+        local tmpTable = {}
+        local count = 0
+        for k, v in pairs( playermodels ) do
+          count = count + 1
+          tmpTable[count] = {}
+          tmpTable[count].WorldModel = v
+          tmpTable[count].ClassName = v
+          tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName( v )
+        end
+        _globalWorking = _dealer.WorldModel
+        hook.Add( "close_dealer_worldmodel", "close_dealer_worldmodel_hook", function()
+          _dealer.WorldModel = LocalPlayer():GetNWString( "WorldModel" )
+          print(_dealer.WorldModel)
+          net.Start( "dealer_edit_worldmodel" )
+            net.WriteString( _dealer.uniqueID )
+            net.WriteString( _dealer.WorldModel )
+          net.SendToServer()
+        end)
+        openSingleSelector( tmpTable, "close_dealer_worldmodel" )
+      end
+    end
   end
 
   _bm.shop = createD( "DPanelList", _bm.window, BScrW() - ctrb( 10+10 ), ScrH() - ctrb( 50 + 10 + 60 + 10 ), ctrb( 10 ), ctrb( 50 + 10 + 60 ) )

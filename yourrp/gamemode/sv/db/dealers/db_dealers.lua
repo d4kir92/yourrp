@@ -13,7 +13,7 @@ sql_add_column( _db_name, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.md
 --db_is_empty( _db_name )
 
 if db_select( _db_name, "*", "uniqueID = -1" ) == nil then
-  local _global_shop = db_insert_into( _db_name, "uniqueID", "-1" )
+  local _global_shop = db_insert_into( _db_name, "name, uniqueID", "'Buy menu', -1" )
 end
 
 util.AddNetworkString( "dealer_add" )
@@ -26,8 +26,11 @@ function dealer_add( ply )
   local _uid = math.Round( math.Rand( 1, 999999 ), 2 )
   local _insert = db_insert_into(  _db_name, "name", "'" .. _uid .. "'" )
   local _db_sel = db_select( _db_name, "uniqueID", "name = '" .. _uid .. "'" )
+
   if _db_sel != nil then
     _db_sel = _db_sel[1]
+    local _db_upd = db_update( _db_name, "name = 'Unnamed Dealer'", "uniqueID = " .. _db_sel.uniqueID )
+
     local _pos = ply:GetPos()
     local _ang = ply:EyeAngles()
     local _vals = "'dealer', '" .. math.Round( _pos.x, 2 ) .. "," .. math.Round( _pos.y, 2 ) .. "," .. math.Round( _pos.z, 2 ) .. "', '" .. math.Round( _ang.p, 2 ) .. "," .. math.Round( _ang.y, 2 ) .. "," .. math.Round( _ang.r, 2 ) .. "', '" .. _db_sel.uniqueID .. "'"
@@ -75,5 +78,28 @@ net.Receive( "dealer_rem_tab", function( len, ply )
     table.RemoveByValue( _dealer.tabs, _tab_uid )
     _dealer.tabs = string.Implode( ",", _dealer.tabs )
     db_update( _db_name, "tabs = '" .. _dealer.tabs .. "'", "uniqueID = " .. _dealer_uid )
+  end
+end)
+
+util.AddNetworkString( "dealer_edit_name" )
+
+net.Receive( "dealer_edit_name", function( len, ply )
+  local _dealer_uid = net.ReadString()
+  local _dealer_new_name = net.ReadString()
+
+  local _dealer = db_update( _db_name, "name = '" .. _dealer_new_name .. "'", "uniqueID = " .. _dealer_uid )
+end)
+
+util.AddNetworkString( "dealer_edit_worldmodel" )
+
+net.Receive( "dealer_edit_worldmodel", function( len, ply )
+  local _dealer_uid = net.ReadString()
+  local _dealer_new_wm = net.ReadString()
+
+  local _dealer = db_update( _db_name, "WorldModel = '" .. _dealer_new_wm .. "'", "uniqueID = " .. _dealer_uid )
+  for i, npc in pairs( ents.GetAll() ) do
+    if npc:GetNWString( "dealerID", "FAILED" ) == tostring( _dealer_uid ) then
+      npc:SetModel( _dealer_new_wm )
+    end
   end
 end)

@@ -8,8 +8,9 @@ function PANEL:Init()
   function self:SetHeader( text )
     self.header.text = text
   end
+  self.header.color = Color( 255, 255, 255, 255 )
   function self.header:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
     surfaceText( db_out_str( self.text ), "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
   end
 end

@@ -108,6 +108,74 @@ function addDBCheckBox( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTa
   end
 end
 
+function addDBLicenses( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTable, dbSets, dbWhile )
+  local tmp = createD( "DYRPPanelPlus", parent, ctr(w), ctr(h), ctr(x), ctr(y) )
+  tmp.header:SetTall( ctr( h/2 ) )
+  tmp.header.color = Color( 100, 255, 100, 200 )
+  tmp:INITPanel( "DButton" )
+  tmp:SetHeader( lang_string( "licenses" ) )
+  tmp.plus:SetText( "" )
+  function tmp.plus:Paint( pw, ph )
+    self.color = Color( 255, 255, 255 )
+    if self:IsHovered() then
+      self.color = Color( 255, 255, 0 )
+    end
+    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+    surfaceText( lang_string( "change" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  end
+  function tmp.plus:DoClick()
+    net.Receive( "get_role_licenses", function( len )
+      local _licenses = net.ReadTable()
+      local _role_licenses = string.Explode( ",", tmpTable.licenseIDs )
+
+      local _lic = createD( "DFrame", nil, ctrb( 600 ), ctrb( 650 ), 0, 0 )
+      _lic:SetTitle( "" )
+      _lic:MakePopup()
+      _lic:Center()
+      function _lic:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+      end
+
+      _lic.pl = createD( "DPanelList", _lic, ctrb( 580 ), ctrb( 580 ), ctrb( 10 ), ctrb( 60 ) )
+      _lic.pl:SetSpacing( 4 )
+      function _lic.pl:Paint( pw, ph )
+        --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
+      end
+
+      for i, licence in pairs( _licenses ) do
+        local _p = createD( "DPanel", _lic.pl, ctrb( 580 ), ctrb( 50 ), 0, 0 )
+        function _p:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+
+          surfaceText( db_out_str( licence.name ), "roleInfoHeader", ph + ctrb( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+        end
+        _lic.pl:AddItem( _p )
+
+        _p.cb = createD( "DCheckBox", _p, ctrb( 50 ), ctrb( 50 ), 0, 0 )
+        if table.HasValue( _role_licenses, licence.uniqueID ) then
+          _p.cb:SetChecked( true )
+        end
+        function _p.cb:OnChange( bVal )
+          if ( bVal ) then
+            net.Start( "role_add_license" )
+              net.WriteString( tmpTable.uniqueID )
+              net.WriteString( licence.uniqueID )
+            net.SendToServer()
+          else
+            net.Start( "role_rem_license" )
+              net.WriteString( tmpTable.uniqueID )
+              net.WriteString( licence.uniqueID )
+            net.SendToServer()
+          end
+        end
+      end
+    end)
+    net.Start( "get_role_licenses" )
+    net.SendToServer()
+  end
+end
+
+
 function toColor( string )
   local colorTable = string.Explode( ",", string )
   return Color( colorTable[1], colorTable[2], colorTable[3] )
@@ -853,15 +921,16 @@ net.Receive( "yrp_roles", function( len )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1590, lang_string( "rolevoiceglobal" ), v.voiceglobal, yrp_roles_dbTable[k], "yrp_roles", "voiceglobal", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1640, lang_string( "canbeagent" ), v.canbeagent, yrp_roles_dbTable[k], "yrp_roles", "canbeagent", "uniqueID = " .. tmp.uniqueID .. "" )
         addDBCheckBox( rolesInfo, 800, 40, 810, 1690, lang_string( "iscivil" ), v.iscivil, yrp_roles_dbTable[k], "yrp_roles", "iscivil", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBLicenses( rolesInfo, 800, 80, 810, 1740, lang_string( "licenses" ), v.lincenseIDs, yrp_roles_dbTable[k], "yrp_roles", "licenseIDs", "uniqueID = " .. tmp.uniqueID .. "" )
 
         if !table.HasValue( yrp_roles_dbTable, _start_role ) then
           table.insert( yrp_roles_dbTable, _start_role )
         end
 
-        addDBComboBox( rolesInfo, 800, 80, 810, 1740, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBComboBox( rolesInfo, 800, 80, 810, 1830, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
 
         if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
-          addDBComboBox( rolesInfo, 1610, 80, 0, 1830, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+          addDBComboBox( rolesInfo, 1610, 80, 0, 1920, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
         end
 
         --3.Spalte

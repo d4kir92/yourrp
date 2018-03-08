@@ -164,6 +164,8 @@ function set_role_values( ply )
         ply:SetNWBool( "canbeagent", tobool( rolTab.canbeagent ) )
         ply:SetNWBool( "iscivil", tobool( rolTab.iscivil ) )
 
+        ply:SetNWString( "licenseIDs", rolTab.licenseIDs )
+
         --sweps
         local tmpSWEPTable = string.Explode( ",", db_out_str( rolTab.sweps ) )
         for k, swep in pairs( tmpSWEPTable ) do

@@ -47,6 +47,8 @@ sql_add_column( _db_name, "voiceglobal", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "canbeagent", "INTEGER DEFAULT 0" )
 sql_add_column( _db_name, "iscivil", "INTEGER DEFAULT 0" )
 
+sql_add_column( _db_name, "licenseIDs", "TEXT DEFAULT ''" )
+
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 

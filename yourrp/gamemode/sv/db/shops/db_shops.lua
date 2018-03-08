@@ -76,7 +76,7 @@ function openBuyMenu( ply, uid )
     end
 
     net.Start( "shop_get_tabs" )
-      net.WriteString( uid )
+      net.WriteTable( _dealer )
       net.WriteTable( _nw_tabs )
     net.Send( ply )
   end
