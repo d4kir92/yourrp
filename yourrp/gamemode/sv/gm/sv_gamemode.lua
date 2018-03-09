@@ -229,30 +229,30 @@ function GM:CanPlayerSuicide( ply )
   return true
 end
 
-function GM:EntityTakeDamage( target, dmginfo )
-	if target:IsPlayer() and dmginfo:GetAttacker() != target then
-		target:SetNWBool( "inCombat", true )
-    if timer.Exists( target:SteamID() .. " outOfCombat" ) then
-      timer.Remove( target:SteamID() .. " outOfCombat" )
-    end
-    timer.Create( target:SteamID() .. " outOfCombat", 6, 1, function()
-      if target != NULL then
-        target:SetNWBool( "inCombat", false )
-        lowering_weapon( target )
-        timer.Remove( target:SteamID() .. " outOfCombat" )
-      end
-    end)
-	end
-
+hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( target, dmginfo )
 	if IsEntity(target) and !target:IsPlayer() and !target:IsNPC() then
 		dmginfo:SetDamage( GetHitFactorEntity() )
   end
   if target:IsVehicle() then
 		dmginfo:SetDamage( GetHitFactorVehicle() )
   end
-end
+end)
 
 function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
+  if dmginfo:GetAttacker() != ply then
+		ply:SetNWBool( "inCombat", true )
+    if timer.Exists( ply:SteamID() .. " outOfCombat" ) then
+      timer.Remove( ply:SteamID() .. " outOfCombat" )
+    end
+    timer.Create( ply:SteamID() .. " outOfCombat", 6, 1, function()
+      if ply != NULL then
+        ply:SetNWBool( "inCombat", false )
+        lowering_weapon( ply )
+        timer.Remove( ply:SteamID() .. " outOfCombat" )
+      end
+    end)
+	end
+
   if IsRealisticDamageEnabled() then
     if IsBleedingEnabled() then
       ply:StartBleeding()

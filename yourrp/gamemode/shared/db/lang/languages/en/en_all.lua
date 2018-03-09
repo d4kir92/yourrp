@@ -535,5 +535,6 @@ function EN_All()
   set_lang_string( "tag", "Tag" )
   set_lang_string( "tags", "Tags" )
   set_lang_string( "stealth", "Stealth" )
-  set_lang_string( "require", "Require" )
+  set_lang_string( "requirespre", "Requires" )
+  set_lang_string( "requirespos", "" )
 end

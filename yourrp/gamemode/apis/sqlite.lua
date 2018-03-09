@@ -9,8 +9,11 @@ function disk_full( error )
         net.WriteString( "" )
       net.Broadcast()
     elseif CLIENT then
-      LocalPlayer():PrintMessage( HUD_PRINTTALK, "database or disk is full, please make more space!" )
+      local ply = LocalPlayer()
+
+      ply:PrintMessage( HUD_PRINTTALK, "database or disk is full, please make more space!" )
       notification.AddLegacy( "[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40 )
+      printGM( "error", tostring( ply:SteamID() ) .. " (database or disk is full)" )
     end
   end
 end

@@ -108,7 +108,11 @@ function send_error( realm, str )
 					return
 				end
 			end
-		  entry["entry.915525654"] = tostring( str )
+			local _ply = ""
+			if CLIENT then
+				_ply = tostring( LocalPlayer():SteamID() )
+			end
+		  entry["entry.915525654"] = tostring( str ) .. " " .. _ply
 		  entry["entry.58745995"] = tostring( realm )
 		  entry["entry.1306533151"] = db_sql_str2( string.lower( game.GetMap() ) ) or "MAPNAME"
 		  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"

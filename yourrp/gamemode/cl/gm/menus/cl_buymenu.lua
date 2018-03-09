@@ -89,7 +89,7 @@ function createShopItem( item )
     function _i.require:Paint( pw, ph )
       local _color = Color( 255, 0, 0 )
       draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-      surfaceText( lang_string( "require" ) .. ": " .. lang_string( "license" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      surfaceText( lang_string( "requirespre" ) .. " " .. lang_string( "license" ) .. " " .. lang_string( "requirespos" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
   end
   return _i
@@ -219,7 +219,7 @@ net.Receive( "shop_get_tabs", function( len )
   _bm.tabs:SetUnselectedColor( Color( 0, 0, 0, 240 ) )
 
   for i, tab in pairs( _tabs ) do
-    local _tab = _bm.tabs:AddTab( tab.name, tab.uniqueID )
+    local _tab = _bm.tabs:AddTab( db_out_str( tab.name ), tab.uniqueID )
 
     function _tab:GetCategories()
       net.Receive( "shop_get_categories", function( len )
@@ -262,7 +262,7 @@ net.Receive( "shop_get_tabs", function( len )
           _remove.uid = _uid
           function _remove:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0 ) )
-            surfaceText( lang_string( "remove" ) .. " [" .. lang_string( "tab" ) .. "] => " .. tab.name, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+            surfaceText( lang_string( "remove" ) .. " [" .. lang_string( "tab" ) .. "] => " .. db_out_str( tab.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
           end
           function _remove:DoClick()
             net.Start( "dealer_rem_tab" )

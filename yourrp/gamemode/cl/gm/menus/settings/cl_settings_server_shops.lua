@@ -248,6 +248,7 @@ net.Receive( "get_shop_items", function()
       net.SendToServer()
       net.Receive( "get_all_licenses_simple", function( len )
         local _licenses = net.ReadTable()
+        _sh._sit.itemlice.plus:AddChoice( lang_string( "none" ), -1 )
         for i, lic in pairs( _licenses ) do
           local _b = false
           if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
@@ -257,6 +258,7 @@ net.Receive( "get_shop_items", function()
         end
       end)
       function _sh._sit.itemlice.plus:OnSelect( index, value, data )
+        print(data)
         self.tbl.licenseID = data
         net.Start( "shop_item_edit_lice" )
           net.WriteString( self.tbl.uniqueID )

@@ -176,7 +176,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
 
         local _alpha = 255
         if IsNoClipStealthEnabled() then
-          _alpha = 8
+          _alpha = 1
         else
           if ply:GetModel() == "models/crow.mdl" then
             _alpha = 180

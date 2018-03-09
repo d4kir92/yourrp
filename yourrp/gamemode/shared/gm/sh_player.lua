@@ -464,8 +464,10 @@ end
 
 function Player:HasLicense( license )
   local _licenses = string.Explode( ",", self:GetNWString( "licenseIDs", "" ) )
-  printTab( _licenses )
+
   if table.HasValue( _licenses, license ) then
+    return true
+  elseif tonumber( license ) == -1 then
     return true
   end
   return false

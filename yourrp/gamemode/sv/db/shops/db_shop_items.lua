@@ -119,8 +119,10 @@ net.Receive( "shop_item_edit_lice", function( len, ply )
   local _uid = net.ReadString()
   local _new_lice = net.ReadString()
   local _catID = net.ReadString()
-  local _new = db_update( _db_name, "licenseID = '" .. db_in_str( _new_lice ) .. "'", "uniqueID = " .. _uid )
+  local _new = db_update( _db_name, "licenseID = '" .. _new_lice .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_item_edit_lice: " .. db_worked( _new ) )
+  local _test = db_select( _db_name, "licenseID", "uniqueID = " .. _uid)
+
 end)
 
 util.AddNetworkString( "shop_item_edit_perm" )

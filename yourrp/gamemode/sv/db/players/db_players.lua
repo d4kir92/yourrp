@@ -130,6 +130,7 @@ function set_role_values( ply )
       --[RE]--check_inv( ply, ply:CharID() )
 
       if worked( rolTab, "set_role_values rolTab" ) then
+
         ply:SetModelScale( rolTab.playermodelsize, 0 )
         ply:SetNWInt( "speedwalk", rolTab.speedwalk*rolTab.playermodelsize )
         ply:SetNWInt( "speedrun", rolTab.speedrun*rolTab.playermodelsize )
@@ -156,6 +157,10 @@ function set_role_values( ply )
         ply:SetJumpPower( tonumber( rolTab.powerjump ) ) -- * rolTab.playermodelsize )
         ply:SetNWString( "salary", rolTab.salary )
         ply:SetNWString( "roleName", rolTab.roleID )
+        ply:SetNWBool( "isInstructor", tobool( rolTab.instructor ) )
+        ply:SetNWString( "roleDescription", rolTab.description )
+
+        ply:SetNWBool( "isVoteable", tobool( rolTab.voteable ) )
 
         ply:SetNWInt( "salarytime", rolTab.salarytime )
         ply:SetNWInt( "nextsalarytime", CurTime() + rolTab.salarytime )
@@ -163,9 +168,14 @@ function set_role_values( ply )
 
         ply:SetNWBool( "canbeagent", tobool( rolTab.canbeagent ) )
         ply:SetNWBool( "iscivil", tobool( rolTab.iscivil ) )
+        ply:SetNWBool( "isadminonly", tobool( rolTab.adminonly ) )
 
         ply:SetNWString( "licenseIDs", rolTab.licenseIDs )
 
+        ply:SetNWString( "maxamount", rolTab.maxamount )
+
+        ply:SetNWString( "sweps", rolTab.sweps )
+        ply:SetNWString( "playermodels", rolTab.playermodels )
         --sweps
         local tmpSWEPTable = string.Explode( ",", db_out_str( rolTab.sweps ) )
         for k, swep in pairs( tmpSWEPTable ) do

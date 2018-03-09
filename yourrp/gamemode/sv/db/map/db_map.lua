@@ -35,21 +35,46 @@ function teleportToSpawnpoint( ply )
       local _tmpGroupSpawnpoints = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. groTab.uniqueID )
       if _tmpRoleSpawnpoints != nil then
         local _randomSpawnPoint = table.Random( _tmpRoleSpawnpoints )
-        printGM( "note", "[" .. ply:Nick() .. "] teleported to role spawnpoint " .. tostring( _randomSpawnPoint.position ) )
+        printGM( "note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring( _tmpRoleSpawnpoints.roleID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 
         local _tmp = string.Explode( ",", _randomSpawnPoint.position )
         tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
         _tmp = string.Explode( ",", _randomSpawnPoint.angle )
         ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+        return true
       elseif _tmpGroupSpawnpoints != nil then
         local _randomSpawnPoint = table.Random( _tmpGroupSpawnpoints )
-        printGM( "note", "[" .. ply:Nick() .. "] teleported to group spawnpoint " .. tostring( _randomSpawnPoint.position ) )
+        printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( _tmpGroupSpawnpoints.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 
         local _tmp = string.Explode( ",", _randomSpawnPoint.position )
         tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
         _tmp = string.Explode( ",", _randomSpawnPoint.angle )
         ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+        return true
       else
+        local _has_ug = true
+        local _ug = {}
+        _ug.uppergroup = groTab.uppergroup
+
+        while (_has_ug) do
+          _ug = db_select( "yrp_groups", "*", "uniqueID = " .. _ug.uppergroup )
+
+          if _ug != nil then
+            _ug = _ug[1]
+            local _gs = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. _ug.uniqueID )
+            if _gs != nil then
+              local _randomSpawnPoint = table.Random( _gs )
+              printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( _ug.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
+              local _tmp = string.Explode( ",", _randomSpawnPoint.position )
+              tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
+              _tmp = string.Explode( ",", _randomSpawnPoint.angle )
+              ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+              return true
+            end
+          else
+            _has_ug = false
+          end
+        end
         local _str = "[" .. tostring( groTab.groupID ) .. "]" .. " has NO role or group spawnpoint!"
         printGM( "note", _str )
 
@@ -59,10 +84,12 @@ function teleportToSpawnpoint( ply )
         net.Broadcast()
 
         tp_to( ply, ply:GetPos() )
+        return false
       end
     end
   else
     printGM( "note", "map: no char or no gro or no rol" )
+    return false
   end
 end
 

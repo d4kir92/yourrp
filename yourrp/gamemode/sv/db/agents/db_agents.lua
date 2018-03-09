@@ -42,9 +42,13 @@ net.Receive( "yrp_gethits", function( len, ply )
 end)
 
 function hitdone( target, agent )
-  target:SetNWString( "hitreward", "nil" )
   db_delete_from( _db_name, "uniqueID = " .. target:GetNWString( "hituid" ) )
-  agent:SetNWString( "hittarget", "" )
+
+  target:SetNWBool( "iswanted", false )
+  target:SetNWString( "hitreward", "" )
+  target:SetNWString( "hituid", "" )
+  agent:SetNWString( "hittargetName", "" )
+  agent:SetNWEntity( "hittarget", NULL )
 end
 
 net.Receive( "yrp_accepthit", function( len, ply )
@@ -55,9 +59,11 @@ net.Receive( "yrp_accepthit", function( len, ply )
     _hit = _hit[1]
     for i, p in pairs( player.GetAll() ) do
       if _hit.target == p:SteamID() then
+        p:SetNWBool( "iswanted", true )
         p:SetNWString( "hitreward", _hit.reward )
         p:SetNWString( "hituid", _hit.uniqueID )
-        ply:SetNWString( "hittarget", p:RPName() )
+        ply:SetNWString( "hittargetName", p:RPName() )
+        ply:SetNWEntity( "hittarget", p )
         break
       end
     end

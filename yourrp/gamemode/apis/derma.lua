@@ -598,6 +598,10 @@ function drawRoundedBoxStencil( r, x, y, w, h, color, max )
   if true then
     render.ClearStencil()
     render.SetStencilEnable( true )
+
+      render.SetStencilWriteMask( 99 )
+  		render.SetStencilTestMask( 99 )
+
       render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
 
       render.SetStencilFailOperation( STENCILOPERATION_INCR )

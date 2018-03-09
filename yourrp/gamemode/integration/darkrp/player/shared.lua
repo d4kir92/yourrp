@@ -51,53 +51,38 @@ end
 
 function Player:getHitPrice()
   --Description: Get the price the hitman demands for his work.
-  printGM( "darkrp", "getHitPrice()" )
-  printGM( "darkrp", DarkRP._not )
-  return 0
+  return self:getHitTarget():GetNWString( "hitreward", -1 )
 end
 
 function Player:getHitTarget()
   --Description: Get the target of a hitman.
-  printGM( "darkrp", "getHitTarget()" )
-  printGM( "darkrp", DarkRP._not )
-  return NULL
-end
-
-function to_darkrp_job( tab )
-  if istable( tab ) then
-    local _ret_tab = {}
-    _ret_tab.color = Color( 0, 0, 0, 255 )
-    _ret_tab.model = tab.playermodels
-    _ret_tab.description = tab.description
-    _ret_tab.weapons = string.Explode( ",", db_out_str( tab.sweps ) )
-    _ret_tab.command = tostring( tab.roleID )
-    _ret_tab.max = tonumber( tab.maxamount )
-    _ret_tab.salary = tonumber( tab.salary )
-    _ret_tab.admin = tonumber( tab.adminonly )
-    _ret_tab.vote = tobool( tab.voteable )
-    _ret_tab.hasLicense = false -- NEED TO BE EDITED, later
-    _ret_tab.customCheck = nil
-
-    return _ret_tab
-  else
-    printGM( "error", "to_darkrp_job [ tab: " .. tostring( tab ) .. " is not a table ]" )
-  end
+  return self:GetNWEntity( "hittarget", NULL )
 end
 
 RPExtraTeams = {}
 
 function Player:getJobTable()
   --Description: Get the job table of a player.
-  printGM( "darkrp", "getJobTable()" )
-  local _job = self:GetRolTab()
+  local _job = {}
 
-  if istable( _job ) then
-    _job = to_darkrp_job( _job )
-    return _job
+  _job.name = self:GetNWString( "roleName", "INVALID" )
+  _job.model = self:GetNWString( "playermodels", "INVALID" )
+  _job.description = self:GetNWString( "roleDescription", "INVALID" )
+  _job.weapons = self:GetNWString( "sweps", "INVALID" )
+  _job.command = "NONE"
+  _job.max = tonumber( self:GetNWString( "maxamount", -1 ) )
+  _job.salary = tonumber( self:GetNWString( "salary", "INVALID" ) )
+  _job.admin = self:GetNWBool( "isadminonly" ) or false
+  _job.vote = self:GetNWBool( "isVoteable" ) or false
+  if self:GetNWString( "licenseIDs", "" ) != "" then
+    _job.hasLicense = true
   else
-    printGM( "note", "currently not available for clientside" )
-    return {}
+    _job.hasLicense = false
   end
+  _job.candemote = self:GetNWBool( "isInstructor" ) or false
+  _job.category = self:GetNWString( "groupName", "INVALID" )
+
+  return _job
 end
 
 function Player:getPocketItems()
@@ -123,9 +108,11 @@ end
 
 function Player:hasHit()
   --Description: Whether this hitman has a hit.
-  printGM( "darkrp", "hasHit()" )
-  printGM( "darkrp", DarkRP._not )
-  return false
+  if self:getHitTarget() != NULL then
+    return true
+  else
+    return false
+  end
 end
 
 function Player:isArrested()
@@ -150,16 +137,12 @@ end
 
 function Player:isCP()
   --Description: Whether this player is part of the police force (mayor, cp, chief).
-  printGM( "darkrp", "isCP()" )
-  printGM( "darkrp", DarkRP._not )
-  return true
+  return self:GetNWBool( "iscivil", false )
 end
 
 function Player:isHitman()
   --Description: Whether this player is a hitman.
-  printGM( "darkrp", "isHitman()" )
-  printGM( "darkrp", DarkRP._not )
-  return false
+  return self:GetNWBool( "canbeagent", false )
 end
 
 function Player:isMayor()
@@ -178,9 +161,7 @@ end
 
 function Player:isWanted()
   --Description: Whether this player is wanted
-  printGM( "darkrp", "isWanted()" )
-  printGM( "darkrp", DarkRP._not )
-  return false
+  return self:GetNWBool( "iswanted", false )
 end
 
 function Player:nickSortedPlayers()
