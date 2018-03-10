@@ -413,9 +413,9 @@ net.Receive( "buyBuilding", function( len, ply )
         end
       end
 
-      printGM( "user", ply:RPName() .. " has buyed a door")
+      printGM( "gm", ply:RPName() .. " has buyed a door")
     else
-      printGM( "user", ply:RPName() .. " has not enough money to buy door")
+      printGM( "gm", ply:RPName() .. " has not enough money to buy door")
     end
   else
     printGM( "note", "buildings disabled" )

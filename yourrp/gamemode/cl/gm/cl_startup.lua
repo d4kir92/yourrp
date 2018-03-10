@@ -517,6 +517,8 @@ function drawPlates( ply )
       drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
     end
   end
+  self:drawPlayerInfo()
+  self:drawWantedInfo()
 end
 hook.Add( "PostPlayerDraw", "DrawName", drawPlates )
 

@@ -8,6 +8,7 @@ local _db_name = "yrp_dealers"
 sql_add_column( _db_name, "name", "TEXT DEFAULT 'Unnamed dealer'" )
 sql_add_column( _db_name, "tabs", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'" )
+sql_add_column( _db_name, "map", "TEXT DEFAULT 'gm_construct'" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -24,7 +25,7 @@ end
 
 function dealer_add( ply )
   local _uid = math.Round( math.Rand( 1, 999999 ), 2 )
-  local _insert = db_insert_into(  _db_name, "name", "'" .. _uid .. "'" )
+  local _insert = db_insert_into(  _db_name, "name, map", "'" .. _uid .. "', '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'" )
   local _db_sel = db_select( _db_name, "uniqueID", "name = '" .. _uid .. "'" )
 
   if _db_sel != nil then

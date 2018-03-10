@@ -58,7 +58,7 @@ end)
 util.AddNetworkString( "shop_get_tabs" )
 
 function openBuyMenu( ply, uid )
-  printGM( "note", "openBuyMenu | ply: " .. tostring( ply:RPName() ) .. " | uid: " .. tostring( uid ) )
+  --printGM( "note", "openBuyMenu | ply: " .. tostring( ply:RPName() ) .. " | uid: " .. tostring( uid ) )
   local _dealer = db_select( "yrp_dealers", "*", "uniqueID = '" .. uid .. "'" )
 
   if _dealer != nil then

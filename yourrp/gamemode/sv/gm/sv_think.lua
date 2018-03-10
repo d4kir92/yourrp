@@ -197,14 +197,14 @@ timer.Create( "ServerThink", 1, 0, function()
         end
       end
     end
-    local _dealers = db_select( "yrp_dealers", "*", nil )
+    local _dealers = db_select( "yrp_dealers", "*", "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'" )
     if _dealers != nil then
       for i, dealer in pairs( _dealers ) do
         if dealer.uniqueID != "-1" then
           if !checkNPC( dealer.uniqueID ) then
-            printGM( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )
             local _del = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
             if _del != nil then
+              printGM( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )
               _del = _del[1]
               local _dealer = ents.Create( "yrp_dealer" )
               _dealer:SetNWString( "dealerID", dealer.uniqueID )

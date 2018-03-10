@@ -14,7 +14,7 @@ end )
 
 hook.Add( "ResolutionChanged", "Resolution Change", function( w, h )
 	local rw, rh = getResolutionRatio()
-	printGM( "user", "Changed Resolution to " .. w .. "x" .. h .. " (" .. rw .. ":" .. rh .. ")" )
+	printGM( "gm", "Changed Resolution to " .. w .. "x" .. h .. " (" .. rw .. ":" .. rh .. ")" )
 	changeFontSize()
 end )
 --##############################################################################
@@ -189,6 +189,7 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 	local _target = LocalPlayer():GetNWString( "hittarget", "" )
 	if _target != "" then
 		surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
+		self:drawHitInfo()
 	end
 
 	if IsSpVisible() then

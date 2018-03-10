@@ -654,13 +654,13 @@ function openCharacterSelection()
 
   local characterList = createD( "DScrollPanel", charactersBackground, ctr( 800 ), ScrH() - (2*border), 0, 0 )
   timer.Simple( 0.1, function()
-    printGM( "client", "ask for characterlist" )
+    printGM( "gm", "ask for characterlist" )
     net.Start( "charGetCharacters" )
     net.SendToServer()
   end)
 
   net.Receive( "charGetCharacters", function( len )
-    printGM( "client", "received characterlist" )
+    printGM( "gm", "received characterlist" )
     local _characters = net.ReadTable()
 
     character.amount = #_characters or 0

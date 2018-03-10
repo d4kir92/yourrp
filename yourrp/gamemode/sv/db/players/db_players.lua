@@ -399,10 +399,10 @@ function isWhitelisted( ply, id )
       return true
     else
       if worked( _plyAllowed, "_plyAllowed", true ) then
-        printGM( "user", ply:RPName() .. " is role whitelisted" )
+        printGM( "gm", ply:RPName() .. " is role whitelisted" )
         return true
       elseif worked( _plyAllowedGroup, "_plyAllowedGroup", true ) then
-        printGM( "user", ply:RPName() .. " is group whitelisted" )
+        printGM( "gm", ply:RPName() .. " is group whitelisted" )
         return true
       else
         return false
@@ -471,21 +471,21 @@ function canGetRole( ply, roleID )
   if worked( tmpTableRole, "tmpTableRole" ) then
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
       if tonumber( tmpTableRole[1].adminonly ) == 1 then
-        printGM( "user", "Adminonly-Role" )
+        printGM( "gm", "Adminonly-Role" )
         if ply:IsAdmin() or ply:IsSuperAdmin() then
           -- printGM( "note", ply:Name() .. " is admin" )
           -- continue
         else
-          printGM( "user", "ADMIN-ONLY Role: " .. ply:SteamName() .. " is not admin or superadmin" )
+          printGM( "gm", "ADMIN-ONLY Role: " .. ply:SteamName() .. " is not admin or superadmin" )
           return false
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
-        printGM( "user", "Whitelist-Role or Prerole-Role or Vote-Role" )
+        printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
         if !isWhitelisted( ply, roleID ) then
-          printGM( "user", ply:SteamName() .. " is not whitelisted" )
+          printGM( "gm", ply:SteamName() .. " is not whitelisted" )
           return false
         else
-          printGM( "user", ply:SteamName() .. " is whitelisted" )
+          printGM( "gm", ply:SteamName() .. " is whitelisted" )
         end
       end
     end

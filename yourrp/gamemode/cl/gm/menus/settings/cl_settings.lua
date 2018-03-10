@@ -39,7 +39,7 @@ function get_icon_burger_menu()
 end
 
 concommand.Add( "yrp_toggle_settings", function( ply, cmd, args )
-  printGM( "user", "Toggling settings window" )
+  printGM( "gm", "Toggling settings window" )
 	toggleSettings()
 end )
 
