@@ -537,4 +537,6 @@ function DE_All()
   set_lang_string( "stealth", "Tarnung" )
   set_lang_string( "requirespre", "Erfordert" )
   set_lang_string( "requirespos", "" )
+  set_lang_string( "viewswitch", "Ansicht wechseln" )
+  set_lang_string( "keyinsert", "Einfügen" )
 end

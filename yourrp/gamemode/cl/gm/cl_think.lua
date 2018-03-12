@@ -225,6 +225,7 @@ LocalPlayer():SetNWInt( "view_z", 0 )
 LocalPlayer():SetNWInt( "view_x", 0 )
 LocalPlayer():SetNWInt( "view_s", 0 )
 
+local _view_delay = true
 function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
@@ -233,6 +234,22 @@ function KeyPress()
 				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_aim" ) - ply:GetNWInt( "view_range_view" )/16 )
 			end
 			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_aim" ) )
+		elseif input.IsKeyDown( get_keybind( "view_switch" ) ) then
+			if _view_delay then
+				_view_delay = false
+				timer.Simple( 0.4, function()
+					_view_delay = true
+				end)
+
+				if ply:GetNWInt( "view_range_view" ) > 0 then
+					ply:SetNWInt( "view_range_view", 0 )
+				else
+					ply:SetNWInt( "view_range_view", ply:GetNWInt( "view_range_old" ) )
+				end
+
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
+				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )
+			end
 		else
 			if ply:GetNWInt( "view_range" ) < ply:GetNWInt( "view_range_view" ) then
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + ply:GetNWInt( "view_range_view" )/16 )
@@ -246,6 +263,7 @@ function KeyPress()
 					if tonumber( ply:GetNWInt( "view_range_view" ) ) > tonumber( ply:GetNWInt( "view_distance", 0 ) ) then
 						ply:SetNWInt( "view_range_view", tonumber( ply:GetNWInt( "view_distance", 0 ) ) )
 					end
+					ply:SetNWInt( "view_range_old", ply:GetNWInt( "view_range_view" ) )
 				elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then
 					done_tutorial( "tut_vi", 5 )
 
@@ -254,6 +272,7 @@ function KeyPress()
 					if ply:GetNWInt( "view_range_view" ) < -200 then
 						ply:SetNWInt( "view_range_view", -200 )
 					end
+					ply:SetNWInt( "view_range_old", ply:GetNWInt( "view_range_view" ) )
 				end
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
 				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )

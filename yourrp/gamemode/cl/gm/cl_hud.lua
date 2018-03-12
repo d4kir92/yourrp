@@ -189,7 +189,7 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 	local _target = LocalPlayer():GetNWString( "hittarget", "" )
 	if _target != "" then
 		surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
-		self:drawHitInfo()
+		LocalPlayer():drawHitInfo()
 	end
 
 	if IsSpVisible() then

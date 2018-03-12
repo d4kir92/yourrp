@@ -65,7 +65,7 @@ function update_error_table_cl()
 		    local _errors = {}
 		    for k, v in pairs( _explode ) do
 		      if k > #_explode_yrp_read then
-		        if (( !first_time_error and string.find( v, "[ERROR] gamemodes/", 1, true ) ) or string.find( v, "[ERROR] gamemodes/yourrp/", 1, true )) and !table.HasValue( _errors, v ) then
+		        if (( !first_time_error and string.find( v, "[ERROR] gamemodes/", 1, true ) ) or string.find( v, "[ERROR] gamemodes/", 1, true )) and !table.HasValue( _errors, v ) then
 		          table.insert( _errors, v )
 		        end
 		      end
@@ -78,7 +78,7 @@ function update_error_table_cl()
 			elseif first_time_error then
 				local _errors = {}
 		    for k, v in pairs( _explode ) do
-	        if string.find( v, "[ERROR] gamemodes/yourrp/", 1, true ) and !table.HasValue( _errors, v ) then
+	        if string.find( v, "[ERROR] gamemodes/", 1, true ) and !table.HasValue( _errors, v ) then
 	          table.insert( _errors, v )
 	        end
 		    end

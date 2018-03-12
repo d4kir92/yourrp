@@ -22,8 +22,9 @@ end
 
 function Player:applyPlayerClassVars( applyHealth )
   --Description: Applies all variables in a player's associated GMod player class to the player.
-  printGM( "darkrp", "applyPlayerClassVars( " .. tostring( applyHealth ) .. " )" )
-  printGM( "darkrp", DarkRP._not )
+  if applyHealth then
+    self:SetHealth( self:GetMaxHealth() )
+  end
 end
 
 function Player:arrest( time, Arrester )
@@ -49,7 +50,7 @@ end
 
 function Player:changeAllowed( team )
   --Description: Returns whether a player is allowed to get a certain job.
-  printGM( "darkrp", "arrest( " .. tostring( team ) .. " )" )
+  printGM( "darkrp", "changeAllowed( " .. tostring( team ) .. " )" )
   printGM( "darkrp", DarkRP._not )
   return false
 end
@@ -171,6 +172,11 @@ function Player:sendDarkRPVars()
   --Description: Internal function. Sends all visibleDarkRPVars of all players to this player.
   printGM( "darkrp", "sendDarkRPVars()" )
   printGM( "darkrp", DarkRP._not )
+  timer.Simple( 10, function()
+    printGM( "darkrp", "10 sec later" )
+    printGM( "darkrp", "sendDarkRPVars()" )
+    printGM( "darkrp", DarkRP._not )
+  end)
 end
 
 function Player:sendDoorData()
@@ -235,7 +241,7 @@ end
 
 function Player:unArrest( Unarrester )
   --Description: Unarrest a player.
-  printGM( "darkrp", "unArrest( Unarrester )" )
+  printGM( "darkrp", "unArrest( " .. Unarrester:Name() .. " )" )
   self:SetNWBool( "inJail", false )
 end
 

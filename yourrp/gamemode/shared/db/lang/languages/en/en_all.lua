@@ -537,4 +537,6 @@ function EN_All()
   set_lang_string( "stealth", "Stealth" )
   set_lang_string( "requirespre", "Requires" )
   set_lang_string( "requirespos", "" )
+  set_lang_string( "viewswitch", "Switch view" )
+  set_lang_string( "keyinsert", "Insert" )
 end

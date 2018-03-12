@@ -33,6 +33,8 @@ function replaceKeyName( str )
     return "+"
   elseif str == "minus" then
     return "-"
+  elseif str == "ins" then
+    return lang_string( "keyinsert" )
   end
   return str
 end
@@ -42,6 +44,7 @@ function nicekey( key_str )
   if _str != nil then
     if string.find( _str, "kp_" ) then
       local _end = string.sub( _str, 4 )
+      print(_str)
       _end = replaceKeyName( _end )
       return lang_string( "keynumpad" ) .. " " .. _end
     elseif string.find( _str, "pg" ) then
@@ -91,12 +94,13 @@ function openHelpMenu()
     draw.SimpleTextOutlined( lang_string( "howtoopensmartphonepre" ) .. " [" .. string.upper( nicekey( input.GetKeyName( KEY_UP ) ) ) .. "] " .. lang_string( "howtoopensmartphonepos" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 15*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "howtoclosesmartphonepre" ) .. " [" .. string.upper( nicekey( input.GetKeyName( KEY_DOWN ) ) ) .. "] " .. lang_string( "howtoclosesmartphonepos" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 16*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_up" ) ) ) ) .. "] " .. lang_string( "incviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_down" ) ) ) ) .. "] " .. lang_string( "decviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_right" ) ) ) ) .. "] " .. lang_string( "viewposright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_left" ) ) ) ) .. "] " .. lang_string( "viewposleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_right" ) ) ) ) .. "] " .. lang_string( "turnviewangleright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_left" ) ) ) ) .. "] " .. lang_string( "turnviewangleleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_switch" ) ) ) ) .. "] " .. lang_string( "viewswitch" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_up" ) ) ) ) .. "] " .. lang_string( "incviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_down" ) ) ) ) .. "] " .. lang_string( "decviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_right" ) ) ) ) .. "] " .. lang_string( "viewposright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_left" ) ) ) ) .. "] " .. lang_string( "viewposleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_right" ) ) ) ) .. "] " .. lang_string( "turnviewangleright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_left" ) ) ) ) .. "] " .. lang_string( "turnviewangleleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 9*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     if LocalPlayer():IsSuperAdmin() or LocalPlayer():IsAdmin() then
       draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_settings" ) ) ) .. "] " .. lang_string( "ifadminsettings" ).. "!", "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 18*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )

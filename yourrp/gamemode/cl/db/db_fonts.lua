@@ -1,5 +1,27 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function createFontOld( _name, _font, _size, __weight, _outline )
+	--printGM( "db", "createFont: " .. _name )
+	--printGM( "db", _font .. ", " .. _size .. ", " .. __weight )
+	surface.CreateFont( _name, {
+		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+		extended = true,
+		size = _size,
+		weight = __weight,
+		blursize = 0,
+		scanlines = 0,
+		antialias = false,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = _outline
+	} )
+end
+
 function createFont( _name, _font, _size, __weight, _outline )
 	--printGM( "db", "createFont: " .. _name )
 	--printGM( "db", _font .. ", " .. _size .. ", " .. __weight )
@@ -62,7 +84,7 @@ function changeFontSize()
 
 	createFont( "gmbase", tmpFont, 16, 500, false )
 
-	createFont( "plates", tmpFont, 25, 1000, false )
+	createFontOld( "plates", tmpFont, 30, 1000, true )
 
 	createFont( "mdMenu", tmpFont, 17, 1000, false )
 

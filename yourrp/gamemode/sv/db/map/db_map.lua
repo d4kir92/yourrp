@@ -88,7 +88,6 @@ function teleportToSpawnpoint( ply )
       end
     end
   else
-    printGM( "note", "map: no char or no gro or no rol" )
     return false
   end
 end

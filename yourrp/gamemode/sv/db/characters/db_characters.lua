@@ -46,7 +46,7 @@ util.AddNetworkString( "charGetGroups" )
 util.AddNetworkString( "charGetRoles" )
 util.AddNetworkString( "charGetRoleInfo" )
 
-util.AddNetworkString( "charGetCharacters" )
+util.AddNetworkString( "yrp_get_characters" )
 
 util.AddNetworkString( "DeleteCharacter" )
 util.AddNetworkString( "CreateCharacter" )
@@ -114,14 +114,14 @@ net.Receive( "charGetRoleInfo", function( len, ply )
   net.Send( ply )
 end)
 
-net.Receive( "charGetCharacters", function( len, ply )
-  printGM( "db", "charGetCharacters" )
+net.Receive( "yrp_get_characters", function( len, ply )
+  printGM( "db", ply:Name() .. " ask for characters" )
   local netTable = {}
 
   local chaTab = db_select( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
   local _charCount = 0
-  if worked( chaTab, "charGetCharacters" ) then
+  if worked( chaTab, "yrp_get_characters" ) then
     for k, v in pairs( chaTab ) do
       if worked( v.roleID, "charGetCharacters roleID" ) and worked( v.groupID, "charGetCharacters groupID" ) then
         _charCount = _charCount + 1
@@ -149,7 +149,7 @@ net.Receive( "charGetCharacters", function( len, ply )
   local plytab = ply:GetPlyTab()
   netTable.plytab = plytab
 
-  net.Start( "charGetCharacters" )
+  net.Start( "yrp_get_characters" )
     net.WriteTable( netTable )
   net.Send( ply )
 end)

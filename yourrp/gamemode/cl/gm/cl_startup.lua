@@ -483,6 +483,11 @@ function GM:HUDDrawTargetID()
   return false
 end
 
+function surfaceBox( x, y, w, h, color )
+  surface.SetDrawColor( color )
+  surface.DrawRect( x, y, w, h )
+end
+
 function drawPlate( ply, string, z, color )
   if ply:Alive() then
     local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
@@ -495,8 +500,13 @@ function drawPlate( ply, string, z, color )
     local str = string
     local strSize = string.len( str ) + 3
     cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
-      draw.RoundedBox( 0, -( ( strSize * 11 )/2 ), 0,  strSize*11, 24, color )
-      draw.SimpleTextOutlined( str, "plates", 0, 12, Color( 255, 255, 255, color.a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, color.a ) )
+      surface.SetFont( "plates" )
+      local _tw, _th = surface.GetTextSize( str )
+      _tw = math.Round( _tw * 1.06, 0 )
+      _th = _th - 8
+      color.a = math.Round( color.a*0.5, 0 )
+      surfaceBox( -_tw/2, 0, _tw, _th, color )
+      surfaceText( str, "plates", 0, _th/2+1, Color( 255, 255, 255, color.a+1 ), 1, 1 )
     cam.End3D2D()
   end
 end
@@ -517,8 +527,8 @@ function drawPlates( ply )
       drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
     end
   end
-  self:drawPlayerInfo()
-  self:drawWantedInfo()
+  ply:drawPlayerInfo()
+  ply:drawWantedInfo()
 end
 hook.Add( "PostPlayerDraw", "DrawName", drawPlates )
 

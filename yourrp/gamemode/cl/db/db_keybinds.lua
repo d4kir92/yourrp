@@ -47,6 +47,7 @@ function check_yrp_keybinds()
   sql_add_column( _db_name, "drop_item", "INT DEFAULT " .. KEY_G )
   sql_add_column( _db_name, "weaponlowering", "INT DEFAULT " .. KEY_H )
 
+  sql_add_column( _db_name, "view_switch", "INT DEFAULT " .. KEY_PAD_0 )
   sql_add_column( _db_name, "view_zoom_out", "INT DEFAULT " .. KEY_PAD_PLUS )
   sql_add_column( _db_name, "view_zoom_in", "INT DEFAULT " .. KEY_PAD_MINUS )
   sql_add_column( _db_name, "view_up", "INT DEFAULT " .. KEY_PAD_8 )
