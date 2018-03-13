@@ -39,7 +39,7 @@ function get_all_vehicles()
   for k, v in pairs( _getVehicles ) do
     count = count + 1
     vehicles[count] = {}
-    vehicles[count].WorldModel = v.WorldModel or v.Model or ""
+    vehicles[count].WorldModel = v.WorldModel or v.Model or v.EntModel or ""
     vehicles[count].ClassName = v.ClassName or v.Class or ""
     vehicles[count].PrintName = v.PrintName or v.Name or ""
 		if v.EMV != nil then
@@ -50,5 +50,6 @@ function get_all_vehicles()
 		vehicles[count].Custom = v.Custom or ""
 		vehicles[count].KeyValues = v.KeyValues or {}
   end
+
   return vehicles
 end

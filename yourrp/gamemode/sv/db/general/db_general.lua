@@ -19,6 +19,7 @@ util.AddNetworkString( "db_update_smartphone" )
 util.AddNetworkString( "db_update_noclip_crow" )
 util.AddNetworkString( "db_update_noclip_tags" )
 util.AddNetworkString( "db_update_noclip_stealth" )
+util.AddNetworkString( "db_update_noclip_effect" )
 
 local _db_name = "yrp_general"
 
@@ -45,11 +46,12 @@ sql_add_column( _db_name, "toggle_smartphone", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_noclip_crow", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_noclip_stealth", "INT DEFAULT 0" )
 sql_add_column( _db_name, "toggle_noclip_tags", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_noclip_effect", "INT DEFAULT 1" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
   if _check_general == nil then
-    printGM( "note", "INSERT DEFAULT VALUES for yrp_general")
+    printGM( "note", "INSERT DEFAULT VALUES for yrp_general" )
     db_insert_into_DEFAULTVALUES( _db_name )
   else
     return true
@@ -86,6 +88,10 @@ if _init_general != false and _init_general != nil then
   yrp_general = _init_general[1]
 end
 
+function IsNoClipEffectEnabled()
+  return tobool( yrp_general.toggle_noclip_effect )
+end
+
 function IsNoClipStealthEnabled()
   return tobool( yrp_general.toggle_noclip_stealth )
 end
@@ -105,6 +111,14 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_noclip_effect", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_noclip_effect = _nw
+    db_update( "yrp_general", "toggle_noclip_effect = " .. yrp_general.toggle_noclip_effect, nil )
+  end
+end)
 
 net.Receive( "db_update_noclip_crow", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

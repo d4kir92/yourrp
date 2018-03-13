@@ -539,4 +539,5 @@ function EN_All()
   set_lang_string( "requirespos", "" )
   set_lang_string( "viewswitch", "Switch view" )
   set_lang_string( "keyinsert", "Insert" )
+  set_lang_string( "effect", "Effect" )
 end

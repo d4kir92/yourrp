@@ -539,4 +539,5 @@ function DE_All()
   set_lang_string( "requirespos", "" )
   set_lang_string( "viewswitch", "Ansicht wechseln" )
   set_lang_string( "keyinsert", "Einfügen" )
+  set_lang_string( "effect", "Effekt" )
 end

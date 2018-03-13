@@ -230,28 +230,36 @@ function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
 		if input.IsMouseDown( MOUSE_RIGHT ) then
-			if ply:GetNWInt( "view_range_aim" ) > 0 then
+			--[[ When aiming ]]--
+			if tonumber( ply:GetNWInt( "view_range_aim" ) ) > 0 then
 				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_aim" ) - ply:GetNWInt( "view_range_view" )/16 )
 			end
 			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_aim" ) )
 		elseif input.IsKeyDown( get_keybind( "view_switch" ) ) then
+			--[[ When toggle view ]]--
 			if _view_delay then
 				_view_delay = false
-				timer.Simple( 0.4, function()
+				timer.Simple( 0.16, function()
 					_view_delay = true
 				end)
 
-				if ply:GetNWInt( "view_range_view" ) > 0 then
+				if tonumber( ply:GetNWInt( "view_range_view", 0 ) ) > 0 then
 					ply:SetNWInt( "view_range_view", 0 )
 				else
-					ply:SetNWInt( "view_range_view", ply:GetNWInt( "view_range_old" ) )
+					local _old_view = tonumber( LocalPlayer():GetNWInt( "view_range_old", 200 ) )
+					if _old_view > 0 then
+						ply:SetNWInt( "view_range_view", _old_view )
+					else
+						ply:SetNWInt( "view_range_view", tonumber( LocalPlayer():GetNWInt( "view_distance", 200 ) ) )
+					end
 				end
 
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
 				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )
 			end
 		else
-			if ply:GetNWInt( "view_range" ) < ply:GetNWInt( "view_range_view" ) then
+			--[[ smoothing ]]--
+			if tonumber( ply:GetNWInt( "view_range", 0 ) ) < tonumber( ply:GetNWInt( "view_range_view", 0 ) ) then
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + ply:GetNWInt( "view_range_view" )/16 )
 			else
 
@@ -269,7 +277,7 @@ function KeyPress()
 
 					ply:SetNWInt( "view_range_view", ply:GetNWInt( "view_range_view" ) - 1 )
 
-					if ply:GetNWInt( "view_range_view" ) < -200 then
+					if tonumber( ply:GetNWInt( "view_range_view", 0 ) ) < -200 then
 						ply:SetNWInt( "view_range_view", -200 )
 					end
 					ply:SetNWInt( "view_range_old", ply:GetNWInt( "view_range_view" ) )
@@ -285,12 +293,12 @@ function KeyPress()
 		elseif input.IsKeyDown( get_keybind( "view_down" ) ) then
 			ply:SetNWInt( "view_z_c", ply:GetNWInt( "view_z_c" ) - 0.1 )
 		end
-		if ply:GetNWInt( "view_z_c" ) > 100 then
+		if tonumber( ply:GetNWInt( "view_z_c" ) ) > 100 then
 			ply:SetNWInt( "view_z_c", 100 )
-		elseif ply:GetNWInt( "view_z_c" ) < -100 then
+		elseif tonumber( ply:GetNWInt( "view_z_c" ) ) < -100 then
 			ply:SetNWInt( "view_z_c", -100 )
 		end
-		if ply:GetNWInt( "view_z_c" ) < 3 and ply:GetNWInt( "view_z_c" ) > -3 then
+		if tonumber( ply:GetNWInt( "view_z_c" ) ) < 3 and tonumber( ply:GetNWInt( "view_z_c" ) ) > -3 then
 			ply:SetNWInt( "view_z", 0 )
 		else
 			ply:SetNWInt( "view_z", ply:GetNWInt( "view_z_c" ) )
@@ -302,12 +310,12 @@ function KeyPress()
 		elseif input.IsKeyDown( get_keybind( "view_left" ) ) then
 			ply:SetNWInt( "view_x_c", ply:GetNWInt( "view_x_c" ) - 0.1 )
 		end
-		if ply:GetNWInt( "view_x_c" ) > 300 then
+		if tonumber( ply:GetNWInt( "view_x_c" ) ) > 300 then
 			ply:SetNWInt( "view_x_c", 300 )
-		elseif ply:GetNWInt( "view_x_c" ) < -300 then
+		elseif tonumber( ply:GetNWInt( "view_x_c" ) ) < -300 then
 			ply:SetNWInt( "view_x_c", -300 )
 		end
-		if ply:GetNWInt( "view_x_c" ) < 3 and ply:GetNWInt( "view_x_c" ) > -3 then
+		if tonumber( ply:GetNWInt( "view_x_c" ) ) < 3 and tonumber( ply:GetNWInt( "view_x_c" ) ) > -3 then
 			ply:SetNWInt( "view_x", 0 )
 		else
 			ply:SetNWInt( "view_x", ply:GetNWInt( "view_x_c" ) )
@@ -319,10 +327,10 @@ function KeyPress()
 		elseif input.IsKeyDown( get_keybind( "view_spin_left" ) ) then
 			ply:SetNWInt( "view_s_c", ply:GetNWInt( "view_s_c" ) - 0.4 )
 		end
-		if ply:GetNWInt( "view_s_c" ) > 360 or ply:GetNWInt( "view_s_c" ) < -360 then
+		if tonumber( ply:GetNWInt( "view_s_c" ) ) > 360 or tonumber( ply:GetNWInt( "view_s_c" ) ) < -360 then
 			ply:SetNWInt( "view_s_c", 0 )
 		end
-		if ply:GetNWInt( "view_s_c" ) < 6 and ply:GetNWInt( "view_s_c" ) > -6 then
+		if tonumber( ply:GetNWInt( "view_s_c" ) ) < 6 and tonumber( ply:GetNWInt( "view_s_c" ) ) > -6 then
 			ply:SetNWInt( "view_s", 0 )
 		else
 			ply:SetNWInt( "view_s", ply:GetNWInt( "view_s_c" ) )
@@ -425,7 +433,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 								return view
 							else
 							--if _thirdperson == 2 then
-								if ply:GetNWInt( "view_range", 0 ) > 0 then
+								if tonumber( ply:GetNWInt( "view_range", 0 ) ) > 0 then
 									if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 										local _head = ply:GetPos().z + ply:OBBMaxs().z
 										pos.z = _head
@@ -474,7 +482,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 										_drawViewmodel = true
 										return view
 									end
-								elseif ply:GetNWInt( "view_range", 0 ) > -200 and ply:GetNWInt( "view_range", 0 ) <= 0 then
+								elseif tonumber( ply:GetNWInt( "view_range", 0 ) ) > -200 and tonumber( ply:GetNWInt( "view_range", 0 ) ) <= 0 then
 									--Disabled
 									view.origin = pos
 									view.angles = angles

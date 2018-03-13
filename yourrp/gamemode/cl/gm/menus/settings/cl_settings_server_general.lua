@@ -31,6 +31,7 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalNoClipCrow = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1100 )
   local sv_generalNoClipTags = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1160 )
   local sv_generalNoClipStealth = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1220 )
+  local sv_generalNoClipEffect = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1280 )
 
   local oldGamemodename = ""
   function settingsWindow.window.site:Paint()
@@ -64,9 +65,10 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     draw.SimpleTextOutlined( lang_string( "smartphone" ) .. ":", "sef", ctr( _center - 10 ), ctr( 990 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "crow" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1115 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "usergroup" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1175 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "stealth" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1235 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "crow" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "usergroup" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1170 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "stealth" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1230 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "effect" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1290 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -101,6 +103,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalNoClipCrow:SetValue( tonumber( _yrp_general.toggle_noclip_crow ) )
     sv_generalNoClipTags:SetValue( tonumber( _yrp_general.toggle_noclip_tags ) )
     sv_generalNoClipStealth:SetValue( tonumber( _yrp_general.toggle_noclip_stealth ) )
+    sv_generalNoClipEffect:SetValue( tonumber( _yrp_general.toggle_noclip_effect ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -369,6 +372,16 @@ hook.Add( "open_server_general", "open_server_general", function()
       _tonumber = 1
     end
     net.Start( "db_update_noclip_stealth" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalNoClipEffect:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_noclip_effect" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
   end

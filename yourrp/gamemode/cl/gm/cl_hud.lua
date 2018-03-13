@@ -65,7 +65,7 @@ function hudVersion()
 		--[[ Version Color ]]--
 		local _color1 = version_color() or Color( 0, 0, 0, 255 )
 		local _color2 = Color( 0, 0, 0, 255 )
-		local _alpha = 10
+		local _alpha = 0
 		if input.IsKeyDown(KEY_F12) or input.IsKeyDown(KEY_F5) or is_version_outdated() then
 			_alpha = 255
 		end
@@ -162,21 +162,6 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 	if tobool( get_tutorial( "tut_hudhelp" ) ) then
 		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 300 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 	end
-
-	--[[ YourRP Base ]]--
-	local _yrp_base = {}
-	_yrp_base.w = ctr( 220 )
-	_yrp_base.h = ctr( 30 )
-	_yrp_base.x = ScrW2() - _yrp_base.w/2
-	_yrp_base.y = 0
-	_yrp_base.r = ctr( 15 )
-	_yrp_base.text = {}
-	_yrp_base.text.string = "GM-Base: YourRP"
-	_yrp_base.text.x = ScrW2()
-	_yrp_base.text.y = ctr( _yrp_base.h/2 ) + ctr( 4 )
-	draw.RoundedBoxEx( _yrp_base.r, _yrp_base.x, _yrp_base.y, _yrp_base.w, _yrp_base.h, Color( 0, 0, 0, 255 ), false, false, true, true )
-
-	draw.SimpleTextOutlined( _yrp_base.text.string, "gmbase", _yrp_base.text.x, _yrp_base.text.y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined( lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )

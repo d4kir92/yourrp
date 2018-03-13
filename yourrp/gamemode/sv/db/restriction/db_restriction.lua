@@ -170,22 +170,25 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
     if worked( _tmp, "PlayerNoClip failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.noclip ) then
+
         if IsNoClipCrowEnabled() then
           ply:SetModel( "models/crow.mdl" )
         end
 
         local _alpha = 255
-        if IsNoClipStealthEnabled() then
-          if ply:GetModel() == "models/crow.mdl" then
-            _alpha = 180
+        if IsNoClipEffectEnabled() then
+          if IsNoClipStealthEnabled() then
+            if ply:GetModel() == "models/crow.mdl" then
+              _alpha = 180
+            else
+              _alpha = 10
+            end
           else
-            _alpha = 10
-          end
-        else
-          if ply:GetModel() == "models/crow.mdl" then
-            _alpha = 255
-          else
-            _alpha = 100
+            if ply:GetModel() == "models/crow.mdl" then
+              _alpha = 240
+            else
+              _alpha = 100
+            end
           end
         end
         ply:SetRenderMode( RENDERMODE_TRANSALPHA )

@@ -21,13 +21,13 @@ SetGlobalBool( "DarkRP_LockDown", false )
 function Player:getDarkRPVar( var )
   --Description: Get the value of a DarkRPVar, which is shared between server and client.
   if var == "money" then
-    return self:GetNWString( "money", "FAIL" )
+    return self:GetNWString( "money", "-1" )
   elseif var == "salary" then
-    return self:GetNWString( "salary", "FAIL" )
+    return self:GetNWString( "salary", "-1" )
   elseif var == "job" then
-    return self:GetNWString( "roleName", "FAIL" )
+    return self:GetNWString( "roleName", "NO ROLE SELECTED" )
   elseif var == "rpname" then
-    return self:RPName() or "FAIL"
+    return self:RPName() or "NO CHARACTER SELECTED"
   elseif var == "HasGunlicense" then
     return true
   else

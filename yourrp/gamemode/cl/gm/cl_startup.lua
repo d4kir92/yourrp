@@ -30,30 +30,50 @@ function isInTable( table, item )
 end
 
 function openSelector( table, dbTable, dbSets, dbWhile, closeF )
+  local site = {}
+  site.cur = 1
+  site.max = 1
+  site.count = #table
+
   local table2 = string.Explode( ",", _globalWorking )
-  local frame = createVGUI( "DFrame", nil, 2000, 2000, 0, 0 )
+  local frame = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
   frame:Center()
   frame:SetTitle( "" )
   function frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
+
+    draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 10+25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function frame:OnClose()
     hook.Call( closeF )
   end
 
-  _but_len = 160
-  local searchButton = createD( "DButton", frame, ctr( _but_len ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
+  local item = {}
+  item.w = 740
+  item.h = 370
+
+  local _w = BScrW() - ctr( 20 )
+  local _h = ScrH() - ctr( 50 + 10 + 50 + 10 + 10 + 50 + 10 )
+  local _x = ctr( 10 )
+  local _y = ctr( 50 + 10 + 50 + 10 )
+  local _cw = (_w)/ctr(item.w+10)
+  _cw = _cw - _cw%1
+  local _ch = (_h)/ctr(item.h+10)
+  _ch = _ch - _ch%1
+  local _cs = _cw*_ch
+
+  local searchButton = createD( "DButton", frame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 50 + 10 ) )
   searchButton:SetText( "" )
   function searchButton:Paint( pw, ph )
     local _br = 4
     surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( searchIcon	)
-  	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 40-2*_br ), ctr( 40-2*_br ) )
+  	surface.DrawTexturedRect( ctr( 5 ), ctr( 5 ), ctr( 40 ), ctr( 40 ) )
 
     draw.SimpleText( lang_string("search") .. ":", "DermaDefault", ctr( _but_len ), ctr( 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
   end
 
-  local search = createVGUI( "DTextEntry", frame, 2000 - 20 - _but_len, 40, 10 + _but_len, 50 )
+  local search = createD( "DTextEntry", frame, _w - ctr( 50 ), ctr( 50 ), ctr( 10 + 50 ), ctr( 50 + 10 ) )
 	--[[function search:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 		local _string = search:GetText()
@@ -63,23 +83,19 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
 		draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end]]--
 
-  local site = {}
-  site.cur = 1
-  site.max = 1
-  site.count = #table
   function getMaxSite()
-    local tmpMax = math.Round( site.count/42, 2 )
-    site.max = math.Round( site.count/42, 0 )
-    if tmpMax > site.max then
+    site.max = site.count/_cs
+    local _mod = site.max%1
+    site.max = site.max - _mod
+    if site.max + _mod > site.max then
       site.max = site.max + 1
     end
   end
   getMaxSite()
 
-  local scrollpanel = createVGUI( "DPanel", frame, 2000 - 20, 2000 - 50 - 40 - 10 - 10, 10, 50+40+10 )
+  local scrollpanel = createD( "DPanel", frame, _w, _h, _x, _y )
   function scrollpanel:Paint( pw, ph )
-    //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-    draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - 50, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
   end
 
   local tmpCache = {}
@@ -90,9 +106,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
       v:Remove()
     end
 
-    local itemSize = 320
-
-    local tmpBr = 25
+    local tmpBr = 10
     local tmpX = 0
     local tmpY = 0
 
@@ -119,9 +133,9 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
 
       if string.find( string.lower( v.WorldModel ), search:GetText() ) or string.find( string.lower( v.PrintName ), search:GetText() ) or string.find( string.lower( v.ClassName ), search:GetText() ) then
         site.count = site.count + 1
-        if ( site.count - 1 ) >= ( site.cur - 1 ) * 25 and ( site.count - 1 ) < ( site.cur ) * 25 then
+        if ( site.count - 1 ) >= ( site.cur - 1 ) * _cs and ( site.count - 1 ) < ( site.cur ) * _cs then
           count = count + 1
-          tmpCache[k] = createVGUI( "DPanel", scrollpanel, itemSize, itemSize, tmpX, tmpY )
+          tmpCache[k] = createD( "DPanel", scrollpanel, ctr( item.w ), ctr( item.h ), tmpX, tmpY )
 
           local tmpPointer = tmpCache[k]
           function tmpPointer:Paint( pw, ph )
@@ -139,10 +153,10 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
           end
 
           if v.WorldModel != nil and v.WorldModel != "" then
-            local icon = createVGUI( "SpawnIcon", tmpPointer, itemSize, itemSize, 0, 0 )
+            local icon = createD( "SpawnIcon", tmpPointer, ctr( item.h ), ctr( item.h ), 0, 0 )
             icon.item = v
             icon:SetText( "" )
-            timer.Create( "shop" .. count, 0.5*count, 1, function()
+            timer.Create( "shop" .. count, 0.02*count, 1, function()
               if icon != nil and icon != NULL and icon.item != nil then
                 icon:SetModel( icon.item.WorldModel )
                 if icon.Entity != nil then
@@ -154,7 +168,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             end)
           end
 
-          local tmpButton = createD( "DButton", tmpPointer, ctr( itemSize ), ctr( itemSize ), 0, 0 )
+          local tmpButton = createD( "DButton", tmpPointer, ctr( item.w ), ctr( item.h ), 0, 0 )
           tmpButton:SetText( "" )
           function tmpButton:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
@@ -173,9 +187,9 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             elseif v.ViewModel != nil and v.ViewModel != "" then
               _test = v.ViewModel
             end
-            draw.SimpleTextOutlined( _test, "DermaDefault", ctr( 5 ), ctr( 5 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+            draw.SimpleTextOutlined( _test, "DermaDefault", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 
-            draw.SimpleTextOutlined( text, "DermaDefault", pw/2, ph - ctr( 5 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+            draw.SimpleTextOutlined( text, "DermaDefault", pw - ctr( 10 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
           end
           function tmpButton:DoClick()
             if tmpSelected[k].selected then
@@ -201,17 +215,17 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             _globalWorking = tmpString
           end
 
-          tmpX = tmpX + itemSize + tmpBr
-          if tmpX > 2000 - itemSize - tmpBr then
+          tmpX = tmpX + ctr( item.w ) + tmpBr
+          if tmpX > _w - ctr( item.w ) then
             tmpX = 0
-            tmpY = tmpY + itemSize + tmpBr
+            tmpY = tmpY + ctr( item.h ) + tmpBr
           end
         end
       end
     end
   end
 
-  local nextB = createVGUI( "DButton", frame, 200, 50, 2000 - 10 - 200, 1800 )
+  local nextB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), BScrW() - ctr( 200 + 10 ), ScrH() - ctr( 50 + 10 ) )
   nextB:SetText( "" )
   function nextB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -224,7 +238,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
     end
   end
 
-  local prevB = createVGUI( "DButton", frame, 200, 50, 10, 1800 )
+  local prevB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), ctr( 10 + 10 ), ScrH() - ctr( 50 + 10 ) )
   prevB:SetText( "" )
   function prevB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -253,9 +267,24 @@ function openSingleSelector( table, closeF )
   site.cur = 1
   site.max = 1
   site.count = #table
+
+  local _item = {}
+  _item.w = 740
+  _item.h = 370
+
+  local _w = BScrW() - ctr( 20 )
+  local _h = ScrH() - ctr( 50 + 10 + 50 + 10 + 10 + 50 + 10 )
+  local _x = ctr( 10 )
+  local _y = ctr( 50 + 10 + 50 + 10 )
+  local _cw = (_w)/ctr(_item.w+10)
+  _cw = _cw - _cw%1
+  local _ch = (_h)/ctr(_item.h+10)
+  _ch = _ch - _ch%1
+  local _cs = _cw*_ch
+
   function getMaxSite()
-    local tmpMax = math.Round( site.count/42, 2 )
-    site.max = math.Round( site.count/42, 0 )
+    local tmpMax = math.Round( site.count/20, 0 )
+    site.max = math.Round( site.count/20, 0 )
     if tmpMax > site.max then
       site.max = site.max + 1
     end
@@ -263,34 +292,33 @@ function openSingleSelector( table, closeF )
   getMaxSite()
 
   local shopsize = ScrH()
-  local frame = vgui.Create( "DFrame" )
-  frame:SetSize( shopsize, shopsize )
-  frame:SetPos( ScrW2() - shopsize/2, ScrH2() - shopsize/2 )
+  local frame = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
   frame:SetTitle( lang_string( "itemMenu" ) )
   function frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
+    draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
   function frame:OnClose()
     hook.Call( closeF )
   end
 
-  local PanelSelect = createD( "DPanel", frame, shopsize - ctr( 20 ), shopsize - ctr( 100 ), ctr( 10 ), ctr( 100 ) )
+  local PanelSelect = createD( "DPanel", frame, _w, _h, _x, _y )
   PanelSelect:SetText( "" )
   function PanelSelect:Paint( pw, ph )
-    //draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 255 ) )
-    draw.SimpleTextOutlined( site.cur .. "/" .. site.max, "sef", pw/2, ph - ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
   end
 
-  local searchButton = createD( "DButton", frame, ctr( 40 ), ctr( 40 ), ctr( 10 ), ctr( 50 ) )
+  local searchButton = createD( "DButton", frame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 50 + 10 ) )
   searchButton:SetText( "" )
   function searchButton:Paint( pw, ph )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
     local _br = 4
     surface.SetDrawColor( 255, 255, 255, 255 )
   	surface.SetMaterial( searchIcon	)
-  	surface.DrawTexturedRect( ctr( _br ), ctr( _br ), ctr( 40-2*_br ), ctr( 40-2*_br ) )
+  	surface.DrawTexturedRect( ctr( 5 ), ctr( 5 ), ctr( 40 ), ctr( 40 ) )
   end
 
-  local search = createD( "DTextEntry", frame, shopsize - ctr( 20+40 ), ctr( 40 ), ctr( 10+40 ), ctr( 50 ) )
+  local search = createD( "DTextEntry", frame, _w - ctr( 50 + 10 ), ctr( 50 ), ctr( 10+50+10 ), ctr( 50 + 10 ) )
 	function search:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 		local _string = search:GetText()
@@ -301,7 +329,7 @@ function openSingleSelector( table, closeF )
   end
 
   function showList()
-    local tmpBr = 25
+    local tmpBr = 10
     local tmpX = 0
     local tmpY = 0
 
@@ -313,15 +341,14 @@ function openSingleSelector( table, closeF )
 
     site.count = 0
     local count = 0
-    local iconsize = 384
-    local amount = 20
+
     for k, item in SortedPairsByMemberValue( table, _cat, false ) do
       item.PrintName = item.PrintName or item.Name or ""
       item.ClassName = item.ClassName or item.Class or ""
       item.WorldModel = item.WorldModel or item.Model or ""
-      if string.find( string.lower( item.WorldModel or "XXXXXXXXX" ), search:GetText() ) or string.find( string.lower( item.PrintName or "XXXXXXXXX" ), search:GetText() ) or string.find( string.lower( item.ClassName or "XXXXXXXXX" ), search:GetText() ) then
+      if string.find( string.lower( item.WorldModel or "" ), search:GetText() ) or string.find( string.lower( item.PrintName or "" ), search:GetText() ) or string.find( string.lower( item.ClassName or "" ), search:GetText() ) then
         site.count = site.count + 1
-        if ( site.count - 1 ) >= ( site.cur - 1 ) * amount and ( site.count - 1 ) < ( site.cur ) * amount then
+        if ( site.count - 1 ) >= ( site.cur - 1 ) * _cs and ( site.count - 1 ) < ( site.cur ) * _cs then
           count = count + 1
 
           if item.WorldModel == nil then
@@ -333,20 +360,23 @@ function openSingleSelector( table, closeF )
           if item.PrintName == nil then
             item.PrintName = item.Name or ""
           end
-
-          local icon = createD( "SpawnIcon", PanelSelect, ctr( iconsize ), ctr( iconsize ), ctr( tmpX ), ctr( tmpY ) )
-          icon.item = item
-          icon:SetText( "" )
-          timer.Create( "shop" .. count, 0.6*count, 1, function()
-            if icon != nil and icon != NULL and icon.item != nil then
-              icon:SetModel( icon.item.WorldModel )
+          local icon = createD( "DPanel", PanelSelect, ctr( _item.w ), ctr( _item.h ), tmpX, tmpY )
+          function icon:Paint( pw, ph )
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+          end
+          local spawnicon = createD( "SpawnIcon", icon, ctr( _item.h ), ctr( _item.h ), 0, 0 )
+          spawnicon.item = item
+          spawnicon:SetText( "" )
+          timer.Create( "shop" .. count, 0.01*count, 1, function()
+            if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
+              spawnicon:SetModel( spawnicon.item.WorldModel )
             end
           end)
-          icon:SetTooltip( item.PrintName )
-          local _tmpName = createVGUI( "DButton", icon, iconsize, iconsize, 10, 10 )
+          spawnicon:SetTooltip( item.PrintName )
+          local _tmpName = createD( "DButton", icon, ctr( _item.w ), ctr( _item.h ), 0, 0 )
           _tmpName:SetText( "" )
           function _tmpName:Paint( pw, ph )
-            draw.SimpleTextOutlined( item.PrintName, "pmT", pw/2, ph-ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            draw.SimpleTextOutlined( item.PrintName, "pmT", pw - ctr( 10 ), ph-ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
           end
           function _tmpName:DoClick()
             LocalPlayer():SetNWString( "WorldModel", item.WorldModel )
@@ -355,17 +385,18 @@ function openSingleSelector( table, closeF )
             LocalPlayer():SetNWString( "Skin", item.Skin )
             frame:Close()
           end
-          tmpX = tmpX + iconsize + tmpBr
-          if ctr( tmpX ) > shopsize - ctr( iconsize ) - tmpBr then
+
+          tmpX = tmpX + ctr( _item.w ) + tmpBr
+          if tmpX > _w - ctr( _item.w ) then
             tmpX = 0
-            tmpY = tmpY + iconsize + tmpBr
+            tmpY = tmpY + ctr( _item.h ) + tmpBr
           end
         end
       end
     end
   end
 
-  local nextB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), shopsize - ctr( 10 ) - ctr( 200 ), ctr( 1800 ) )
+  local nextB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), BScrW() - ctr( 200 + 10 ), ScrH() - ctr( 50 + 10 ) )
   nextB:SetText( "" )
   function nextB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -378,7 +409,7 @@ function openSingleSelector( table, closeF )
     end
   end
 
-  local prevB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1800 ) )
+  local prevB = createD( "DButton", frame, ctr( 200 ), ctr( 50 ), ctr( 10 ), ScrH() - ctr( 50 + 10 ) )
   prevB:SetText( "" )
   function prevB:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
