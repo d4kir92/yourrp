@@ -269,7 +269,7 @@ end
 
 function BScrW()
   --[[ give ScrW() only when under 21:9 ]]--
-  if ScrW() > ScrH()*1.8 then
+  if ScrW() > ScrH()*2.5 then
     return ctr( 3840 )
   else
     return ScrW()

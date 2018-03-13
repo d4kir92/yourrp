@@ -9,13 +9,26 @@ local groupUniqueID = -1
 
 local _start_role = ""
 
+local _i = Material( "icon16/information.png" )
+function addInfoBox( parent, x, y, help )
+  local tmp = createD( "DPanel", parent, ctr( 40 ), ctr( 40 ), x, y )
+  function tmp:Paint( pw, ph )
+    --surfaceBox( 0, 0, pw, ph, Color( 255, 0, 0 ) )
+    surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetMaterial( _i	)
+  	surface.DrawTexturedRect( ctr( 4 ), ctr( 4 ), pw - ctr( 8 ), ph - ctr( 8 ) )
+  end
+  tmp:SetTooltip( help )
+  return tmp
+end
+
 function addButton( w, h, x, y, parent )
   local tmp = createVGUI( "DButton", parent, w, h, x, y )
   tmp:SetText( "" )
   return tmp
 end
 
-function addDPanel( parent, w, h, x, y, string, dbTable )
+function addDPanel( parent, w, h, x, y, string, dbTable, help )
   local color = Color( 100, 100, 255, 200 )
   if dbTable == "yrp_roles" then
     color = Color( 100, 255, 100, 200 )
@@ -25,6 +38,7 @@ function addDPanel( parent, w, h, x, y, string, dbTable )
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
     draw.SimpleTextOutlined( string, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
+  local tmp2 = addInfoBox( tmp, ctr(w)-ctr( 40 ), 0, help )
   return tmp
 end
 
@@ -38,8 +52,8 @@ function addDTextEntry( parent, w, h, x, y, string )
   return tmp
 end
 
-function addDBTextEntry( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTable, dbTable, dbSets, dbWhile )
-  local tmp = addDPanel( parent, w, h/2, x, y, stringPanel, dbTable )
+function addDBTextEntry( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTable, dbTable, dbSets, dbWhile, help )
+  local tmp = addDPanel( parent, w, h/2, x, y, stringPanel, dbTable, help )
 
   local tmp2 = addDTextEntry( parent, w, h/2, x, y + h/2, stringTextEntry )
   function tmp2:OnChange()
@@ -62,8 +76,8 @@ function addDTextEntryBig( parent, w, h, x, y, string )
   return tmp
 end
 
-function addDBTextEntryBig( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTable, dbTable, dbSets, dbWhile )
-  local tmp = addDPanel( parent, w, 40, x, y, stringPanel, dbTable )
+function addDBTextEntryBig( parent, w, h, x, y, stringPanel, stringTextEntry, tmpTable, dbTable, dbSets, dbWhile, help )
+  local tmp = addDPanel( parent, w, 40, x, y, stringPanel, dbTable, help )
 
   local tmp2 = addDTextEntryBig( parent, w, h-40, x, y + 40, stringTextEntry )
   tmp2:SetMultiline( true )
@@ -90,8 +104,8 @@ function addDCheckBox( parent, w, h, x, y, checked )
   return tmp
 end
 
-function addDBCheckBox( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTable, dbSets, dbWhile )
-  local tmp = addDPanel( parent, w - h, h, x+h, y, stringPanel, dbTable )
+function addDBCheckBox( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTable, dbSets, dbWhile, help )
+  local tmp = addDPanel( parent, w - h, h, x+h, y, stringPanel, dbTable, help )
 
   local tmp2 = addDCheckBox( parent, h, h, x, y, checked )
   function tmp2:OnChange( bVal )
@@ -108,7 +122,7 @@ function addDBCheckBox( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTa
   end
 end
 
-function addDBLicenses( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTable, dbSets, dbWhile )
+function addDBLicenses( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTable, dbSets, dbWhile, help )
   local tmp = createD( "DYRPPanelPlus", parent, ctr(w), ctr(h), ctr(x), ctr(y) )
   tmp.header:SetTall( ctr( h/2 ) )
   tmp.header.color = Color( 100, 255, 100, 200 )
@@ -173,6 +187,8 @@ function addDBLicenses( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTa
     net.Start( "get_role_licenses" )
     net.SendToServer()
   end
+  local tmp2 = addInfoBox( tmp, ctr(w)-ctr(40), 0, help )
+  return tmp
 end
 
 
@@ -221,8 +237,8 @@ function addDComboBox( parent, w, h, x, y, table, value1, value2, uniqueID, stri
   return tmp
 end
 
-function addDBComboBox( parent, w, h, x, y, string, table, value1, value2, tmpTable, dbTable, dbSets, dbWhile )
-  local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable )
+function addDBComboBox( parent, w, h, x, y, string, table, value1, value2, tmpTable, dbTable, dbSets, dbWhile, help )
+  local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable, help )
 
   local tmp2 = addDComboBox( parent, w, h, x, y, table, value1, value2, tmpTable.uniqueID, string, tmpTable[dbSets] )
   function tmp2.OnSelect( test, index, value, data )
@@ -245,8 +261,8 @@ function addDNumberWang( parent, w, h, x, y, table )
   return tmp
 end
 
-function addDBNumberWang( parent, w, h, x, y, string, table, tmpTable, dbTable, dbSets, dbWhile, min, max )
-  local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable )
+function addDBNumberWang( parent, w, h, x, y, string, table, tmpTable, dbTable, dbSets, dbWhile, min, max, help )
+  local tmp = addDPanel( parent, w, h/2, x, y, string, dbTable, help )
 
   local tmp2 = addDNumberWang( parent, w, h/2, x, y + h/2, table )
   tmp2:SetMin( min or -1 )
@@ -296,8 +312,8 @@ function updatePlayermodels( table, id, uniqueID )
   net.SendToServer()
 end
 
-function addDBPlayermodel( parent, id, uniqueID, size )
-  local tmp = addDPanel( parent, 800, 50, 0, 90, lang_string( "roleplayermodel" ), "yrp_roles" )
+function addDBPlayermodel( parent, id, uniqueID, size, help )
+  local tmp = addDPanel( parent, 800, 50, 0, 90, lang_string( "roleplayermodel" ), "yrp_roles", help )
 
   local pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
   local changepm = 1
@@ -432,8 +448,8 @@ function getWorldModel( ClassName )
   return ""
 end
 
-function addDBSwep( parent, id, uniqueID )
-  local tmp = addDPanel( parent, 800, 50, 810, 90, lang_string( "rolesweps" ), "yrp_roles" )
+function addDBSwep( parent, id, uniqueID, help )
+  local tmp = addDPanel( parent, 800, 50, 810, 90, lang_string( "rolesweps" ), "yrp_roles", help )
 
   local sws = string.Explode( ",", yrp_roles_dbTable[id].sweps )
   local changesw = 1
@@ -552,8 +568,8 @@ function addDBSwep( parent, id, uniqueID )
   return modelpanel
 end
 
-function addDBAmmo( parent, id, uniqueID )
-  local tmp = addDPanel( parent, 400, 50, 1620, 90, lang_string( "roleammunation" ), "yrp_roles" )
+function addDBAmmo( parent, id, uniqueID, help )
+  local tmp = addDPanel( parent, 400, 50, 1620, 90, lang_string( "roleammunation" ), "yrp_roles", help )
 
   local sws = string.Explode( ",", yrp_roles_dbTable[id].ammunation )
   local changesw = 1
@@ -758,7 +774,8 @@ function addDBGroup()
   net.SendToServer()
 end
 
-function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile, tmpreg2, dbReg2 )
+function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile, tmpreg2, dbReg2, help )
+
   local _color1 = Color( color.r, color.g, color.b, 125 )
   local _color2 = Color( color.r, color.g, color.b, 255 )
   local tmp = createVGUI( "DPanel", parent, w, 2*(h/3), x, y )
@@ -845,6 +862,8 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
       net.SendToServer()
     end
   end
+  local tmp6 = addInfoBox( tmp, ctr(w)-ctr(40), 0, help )
+  return tmp
 end
 
 net.Receive( "yrp_roles", function( len )
@@ -899,40 +918,40 @@ net.Receive( "yrp_roles", function( len )
         end
 
         --1.Spalte
-        addDBTextEntry( rolesInfo, 800, 80, 0, 0, lang_string( "rolename" ), v.roleID, yrp_roles_dbTable[k], "yrp_roles", "roleID", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBPlayermodel( rolesInfo, self.id, tmp.uniqueID, v.playermodelsize )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 950, lang_string( "roleplayermodelsize" ), v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "", 0.01, 999 )
-        addDBBar( rolesInfo, 800, 120, 0, 1040, lang_string( "rolehealth" ), Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBBar( rolesInfo, 800, 120, 0, 1170, lang_string( "rolearmor" ), Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.stregup, "yrp_roles", "st", "stmax", "stregup", "uniqueID = " .. tmp.uniqueID .. "", v.stregdn, "stregdn" )
+        addDBTextEntry( rolesInfo, 800, 80, 0, 0, lang_string( "rolename" ), v.roleID, yrp_roles_dbTable[k], "yrp_roles", "roleID", "uniqueID = " .. tmp.uniqueID .. "", "Name of the role" )
+        addDBPlayermodel( rolesInfo, self.id, tmp.uniqueID, v.playermodelsize, "Multiple playermodels, that the player can select" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 950, lang_string( "roleplayermodelsize" ), v.playermodelsize, yrp_roles_dbTable[k], "yrp_roles", "playermodelsize", "uniqueID = " .. tmp.uniqueID .. "", 0.01, 999, "Set the playermodel size of this role" )
+        addDBBar( rolesInfo, 800, 120, 0, 1040, lang_string( "rolehealth" ), Color( 255, 0, 0 ), "yrp_roles", v.hp, v.hpmax, v.hpreg, "yrp_roles", "hp", "hpmax", "hpreg", "uniqueID = " .. tmp.uniqueID .. "", nil, nil, "set the starting health / max health / regeneration of health" )
+        addDBBar( rolesInfo, 800, 120, 0, 1170, lang_string( "rolearmor" ), Color( 0, 255, 0 ), "yrp_roles", v.ar, v.armax, v.arreg, "yrp_roles", "ar", "armax", "arreg", "uniqueID = " .. tmp.uniqueID .. "", nil, nil, "set the starting armor / max armor / regeneration of armor" )
+        addDBBar( rolesInfo, 800, 120, 0, 1300, lang_string( "stamina" ), Color( 255, 255, 0 ), "yrp_roles", v.st, v.stmax, v.stregup, "yrp_roles", "st", "stmax", "stregup", "uniqueID = " .. tmp.uniqueID .. "", v.stregdn, "stregdn", "set the starting stamina / max stamina / regeneration of stamina" )
         -- in work WIP addDBBar( rolesInfo, 800, 120, 0, 1430, lang_string( "abilitybar" ) .. " (" .. string.upper( lang_string( "wip" ) ) .. ")", Color( 0, 0, 255 ), "yrp_roles", v.ab, v.abmax, v.abreg, "yrp_roles", "ab", "abmax", "abreg", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "", 0 )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "", 0 )
-        addDBNumberWang( rolesInfo, 800, 80, 0, 1740, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "", 0 )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1560, lang_string( "rolewalkspeed" ), v.speedwalk, yrp_roles_dbTable[k], "yrp_roles", "speedwalk", "uniqueID = " .. tmp.uniqueID .. "", 0, nil, "set the walkspeed (KEY: W)" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1650, lang_string( "rolerunspeed" ), v.speedrun, yrp_roles_dbTable[k], "yrp_roles", "speedrun", "uniqueID = " .. tmp.uniqueID .. "", 0, nil, "set the runspeed (KEY: W+SPRINT)" )
+        addDBNumberWang( rolesInfo, 800, 80, 0, 1740, lang_string( "rolejumppower" ), v.powerjump, yrp_roles_dbTable[k], "yrp_roles", "powerjump", "uniqueID = " .. tmp.uniqueID .. "", 0, nil, "set the jump power (KEY: JUMP), how high he can jump" )
 
         --2.Spalte
-        addDBNumberWang( rolesInfo, 800, 80, 810, 0, lang_string( "rolemaxamount" ) .. " (-1 = " .. lang_string( "disabled" ) .. ")", v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "", -1, game.MaxPlayers() )
-        addDBSwep( rolesInfo, self.id, tmp.uniqueID )
-        addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.salary, yrp_roles_dbTable[k], "yrp_roles", "salary", "uniqueID = " .. tmp.uniqueID .. "", 0, 999999999999 )
-        addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.salarytime, yrp_roles_dbTable[k], "yrp_roles", "salarytime", "uniqueID = " .. tmp.uniqueID .. "", 1, 999999999999 )
-        addDBTextEntryBig( rolesInfo, 800, 250, 810, 1130, lang_string( "roledescription" ), v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1390, lang_string( "voteable" ), v.voteable, yrp_roles_dbTable[k], "yrp_roles", "voteable", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1440, lang_string( "roleinstructor" ), v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1490, lang_string( "roleadminonly" ), v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1540, lang_string( "rolewhitelist" ), v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1590, lang_string( "rolevoiceglobal" ), v.voiceglobal, yrp_roles_dbTable[k], "yrp_roles", "voiceglobal", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1640, lang_string( "canbeagent" ), v.canbeagent, yrp_roles_dbTable[k], "yrp_roles", "canbeagent", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBCheckBox( rolesInfo, 800, 40, 810, 1690, lang_string( "iscivil" ), v.iscivil, yrp_roles_dbTable[k], "yrp_roles", "iscivil", "uniqueID = " .. tmp.uniqueID .. "" )
-        addDBLicenses( rolesInfo, 800, 80, 810, 1740, lang_string( "licenses" ), v.lincenseIDs, yrp_roles_dbTable[k], "yrp_roles", "licenseIDs", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 0, lang_string( "rolemaxamount" ) .. " (-1 = " .. lang_string( "disabled" ) .. ")", v.maxamount, yrp_roles_dbTable[k], "yrp_roles", "maxamount", "uniqueID = " .. tmp.uniqueID .. "", -1, game.MaxPlayers(), "how many players can get the role" )
+        addDBSwep( rolesInfo, self.id, tmp.uniqueID, "the starting sweps" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 950, lang_string( "rolesalary" ), v.salary, yrp_roles_dbTable[k], "yrp_roles", "salary", "uniqueID = " .. tmp.uniqueID .. "", 0, 999999999999, "how much the player will get, when salary is ready" )
+        addDBNumberWang( rolesInfo, 800, 80, 810, 1040, lang_string( "rolesalarytime" ) .. " (" .. lang_string( "timeinsec" ) .. ")", v.salarytime, yrp_roles_dbTable[k], "yrp_roles", "salarytime", "uniqueID = " .. tmp.uniqueID .. "", 1, 999999999999, "how long they need to wait to get salary" )
+        addDBTextEntryBig( rolesInfo, 800, 250, 810, 1130, lang_string( "roledescription" ), v.description, yrp_roles_dbTable[k], "yrp_roles", "description", "uniqueID = " .. tmp.uniqueID .. "", "role description" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1390, lang_string( "voteable" ), v.voteable, yrp_roles_dbTable[k], "yrp_roles", "voteable", "uniqueID = " .. tmp.uniqueID .. "", "if the role is voteable, via role menu" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1440, lang_string( "roleinstructor" ), v.instructor, yrp_roles_dbTable[k], "yrp_roles", "instructor", "uniqueID = " .. tmp.uniqueID .. "", "intructor can promote/demote other roles, that are below him" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1490, lang_string( "roleadminonly" ), v.adminonly, yrp_roles_dbTable[k], "yrp_roles", "adminonly", "uniqueID = " .. tmp.uniqueID .. "", "if only admins can get this role" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1540, lang_string( "rolewhitelist" ), v.whitelist, yrp_roles_dbTable[k], "yrp_roles", "whitelist", "uniqueID = " .. tmp.uniqueID .. "", "if the role need to be whitelisted for a player" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1590, lang_string( "rolevoiceglobal" ), v.voiceglobal, yrp_roles_dbTable[k], "yrp_roles", "voiceglobal", "uniqueID = " .. tmp.uniqueID .. "", "if the role can speak over the whole server" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1640, lang_string( "canbeagent" ), v.canbeagent, yrp_roles_dbTable[k], "yrp_roles", "canbeagent", "uniqueID = " .. tmp.uniqueID .. "", "if he can get a hitman/agent" )
+        addDBCheckBox( rolesInfo, 800, 40, 810, 1690, lang_string( "iscivil" ), v.iscivil, yrp_roles_dbTable[k], "yrp_roles", "iscivil", "uniqueID = " .. tmp.uniqueID .. "", "if the role is for civil protection" )
+        addDBLicenses( rolesInfo, 800, 80, 810, 1740, lang_string( "licenses" ), v.lincenseIDs, yrp_roles_dbTable[k], "yrp_roles", "licenseIDs", "uniqueID = " .. tmp.uniqueID .. "", "role licenses for shops" )
 
         if !table.HasValue( yrp_roles_dbTable, _start_role ) then
           table.insert( yrp_roles_dbTable, _start_role )
         end
 
-        addDBComboBox( rolesInfo, 800, 80, 810, 1830, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBComboBox( rolesInfo, 800, 80, 810, 1830, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "", "here you need to select the role below you (lower role), needed for instructor" )
 
         if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
-          addDBComboBox( rolesInfo, 1610, 80, 0, 1920, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+          addDBComboBox( rolesInfo, 1610, 80, 0, 1920, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "", "which group it is in" )
         end
 
         --3.Spalte
@@ -999,12 +1018,12 @@ net.Receive( "yrp_groups", function( len )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
       end
 
-      addDBTextEntry( groupsInfo, 800, 80, 0, 0, lang_string( "groupname" ), v.groupID, yrp_groups_dbTable[k], "yrp_groups", "groupID", "uniqueID = " .. tmp.uniqueID .. "" )
+      addDBTextEntry( groupsInfo, 800, 80, 0, 0, lang_string( "groupname" ), v.groupID, yrp_groups_dbTable[k], "yrp_groups", "groupID", "uniqueID = " .. tmp.uniqueID .. "", "Name of the group" )
 
       addDBColorMixer( groupsInfo, 800, 800, 0, 80 + _br, v.color, yrp_groups_dbTable[k], "yrp_groups", "color", "uniqueID = " .. tmp.uniqueID .. "" )
 
       if tonumber( yrp_groups_dbTable[k].removeable ) == 1 then
-        addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang_string( "uppergroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "" )
+        addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang_string( "uppergroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "", "the group, where this group is inside" )
       end
     end
     groupsList:AddItem( tmp )

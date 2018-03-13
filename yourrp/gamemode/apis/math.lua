@@ -42,11 +42,9 @@ function ctrF( tmpNumber )
   return math.Round( tmpNumber, 8 )
 end
 
-function ctr( tmpNumber )
-  if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
-    tmpNumber = 2160/tmpNumber
-    local _screen_h = ScrH() or 0
-    return math.Round( _screen_h/tmpNumber )
+function ctr( input )
+  if input != nil then
+    return math.Round( (tonumber(input) / 2160) * ScrH(), 0 )
   else
     return -1
   end
@@ -68,17 +66,15 @@ function fontr( fontsize )
   end
 end
 
-function ctrb( tmpNumber )
-  if !under1080p() then
-    if isnumber( tonumber( tmpNumber ) ) and tmpNumber != nil then
-      tmpNumber = 2160/tmpNumber
-      local _screen_h = ScrH() or 0
-      return math.Round( _screen_h/tmpNumber )
+function ctrb( input )
+  if input != nil then
+    if !under1080p() then
+      return ctr( input )
     else
-      return -1
+      return input/2
     end
   else
-    return tmpNumber/2
+    return -1
   end
 end
 

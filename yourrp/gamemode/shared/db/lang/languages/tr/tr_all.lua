@@ -537,4 +537,7 @@ function TR_All()
   set_lang_string( "stealth", "Görünmez" )
   set_lang_string( "requirespre", "Gerekir" )
   set_lang_string( "requirespos", "" )
+  set_lang_string( "viewswitch", "Kamerayı değiştir" )
+  set_lang_string( "keyinsert", "Yerleştir" )
+  set_lang_string( "effect", "Effect" )
 end
