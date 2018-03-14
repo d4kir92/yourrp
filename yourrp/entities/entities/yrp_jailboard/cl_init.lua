@@ -42,7 +42,7 @@ net.Receive( "openLawBoard", function( len )
     if worked( _tmpGeneral, "_tmpGeneral failed" ) then
       _gAccess = tonumber( _tmpGeneral[1].access_jail )
     end
-    if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+    if LocalPlayer():HasAccess() then
       local _access = createVGUI( "DComboBox", window, 300, 50, 610, 0 )
       _access:AddChoice( "-", -1, false )
       for k, v in pairs( _tmpGroups ) do

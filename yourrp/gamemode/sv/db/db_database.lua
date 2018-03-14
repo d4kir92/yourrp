@@ -58,7 +58,7 @@ end
 --reset_database()
 
 net.Receive( "hardresetdatabase", function( len, ply )
-  if ply:IsSuperAdmin() then
+  if string.lower( ply:GetUserGroup() ) == "owner" then
     printGM( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )
     printGM( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )
     printGM( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )

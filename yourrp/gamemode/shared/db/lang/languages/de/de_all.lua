@@ -540,4 +540,8 @@ function DE_All()
   set_lang_string( "viewswitch", "Ansicht wechseln" )
   set_lang_string( "keyinsert", "Einfügen" )
   set_lang_string( "effect", "Effekt" )
+  set_lang_string( "all", "Alle" )
+  set_lang_string( "baseentity", "Base ENTITY" )
+  set_lang_string( "npcswep", "NPC SWEP" )
+  set_lang_string( "hasnoworldmodel", "Hat kein WorldModel" )
 end

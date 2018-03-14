@@ -21,7 +21,7 @@ sql_add_column( _db_name, "name", "TEXT DEFAULT 'Building'" )
 --db_is_empty( _db_name )
 
 function allowedToUseDoor( id, ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
+  if ply:HasAccess() then
     return true
   else
     local _tmpBuildingTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_buildings", "*", "uniqueID = '" .. id .. "'" )

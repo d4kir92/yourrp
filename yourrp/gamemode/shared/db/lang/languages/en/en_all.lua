@@ -540,4 +540,8 @@ function EN_All()
   set_lang_string( "viewswitch", "Switch view" )
   set_lang_string( "keyinsert", "Insert" )
   set_lang_string( "effect", "Effect" )
+  set_lang_string( "all", "All" )
+  set_lang_string( "baseentity", "Base ENTITY" )
+  set_lang_string( "npcswep", "Npc SWEP" )
+  set_lang_string( "hasnoworldmodel", "Has no WorldModel" )
 end

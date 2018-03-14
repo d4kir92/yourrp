@@ -16,11 +16,12 @@ sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
 util.AddNetworkString( "getRoleWhitelist" )
 util.AddNetworkString( "whitelistPlayer" )
 util.AddNetworkString( "whitelistPlayerGroup" )
+util.AddNetworkString( "whitelistPlayerAll" )
 util.AddNetworkString( "whitelistPlayerRemove" )
 util.AddNetworkString( "yrpInfoBox" )
 
 function sendRoleWhitelist( ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
+  if ply:HasAccess() then
     local _tmpWhiteList = db_select( "yrp_role_whitelist", "*", nil )
     local _tmpRoleList = db_select( "yrp_roles", "groupID, roleID, uniqueID", nil )
     local _tmpGroupList = db_select( "yrp_groups", "groupID, uniqueID", nil )
@@ -52,7 +53,7 @@ net.Receive( "whitelistPlayerRemove", function( len, ply )
 end)
 
 net.Receive( "whitelistPlayer", function( len, ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
+  if ply:HasAccess() then
     local _SteamID = net.ReadString()
     local _nick = ""
     for k, v in pairs( player.GetAll() ) do
@@ -70,7 +71,7 @@ net.Receive( "whitelistPlayer", function( len, ply )
 end)
 
 net.Receive( "whitelistPlayerGroup", function( len, ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
+  if ply:HasAccess() then
     local _SteamID = net.ReadString()
     local _nick = ""
     for k, v in pairs( player.GetAll() ) do
@@ -82,6 +83,20 @@ net.Receive( "whitelistPlayerGroup", function( len, ply )
     local _dbRole = db_select( "yrp_groups", "*", "uniqueID = " .. _groupID )
 
     local res = db_insert_into( "yrp_role_whitelist", "SteamID, nick, groupID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID )
+  end
+  sendRoleWhitelist( ply )
+end)
+
+net.Receive( "whitelistPlayerAll", function( len, ply )
+  if ply:HasAccess() then
+    local _SteamID = net.ReadString()
+    local _nick = ""
+    for k, v in pairs( player.GetAll() ) do
+      if v:SteamID() == _SteamID then
+        _nick = v:Nick()
+      end
+    end
+    local res = db_insert_into( "yrp_role_whitelist", "SteamID, nick, roleID, groupID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. "-1" .. ", " .. "-1" )
   end
   sendRoleWhitelist( ply )
 end)

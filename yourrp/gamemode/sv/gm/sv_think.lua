@@ -1,5 +1,12 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+hook.Add( "PlayerStartTaunt", "yrp_taunt_start", function( ply, act, length )
+	ply:SetNWBool( "taunting", true )
+	timer.Simple( length, function()
+		ply:SetNWBool( "taunting", false )
+	end)
+end)
+
 util.AddNetworkString( "client_lang" )
 net.Receive( "client_lang", function( len, ply )
   local _lang = net.ReadString()

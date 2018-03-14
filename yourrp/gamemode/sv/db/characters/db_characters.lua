@@ -72,7 +72,7 @@ net.Receive( "charGetRoles", function( len, ply )
     for k, v in pairs( tmpTable ) do
       local insert = true
       if tonumber( v.adminonly ) == 1 then
-        if ply:IsAdmin() or ply:IsSuperAdmin() then
+        if ply:HasAccess() then
           insert = true
         else
           insert = false
@@ -147,11 +147,13 @@ net.Receive( "yrp_get_characters", function( len, ply )
     end
   end
   local plytab = ply:GetPlyTab()
-  netTable.plytab = plytab
+  if plytab != nil then
+    netTable.plytab = plytab
 
-  net.Start( "yrp_get_characters" )
-    net.WriteTable( netTable )
-  net.Send( ply )
+    net.Start( "yrp_get_characters" )
+      net.WriteTable( netTable )
+    net.Send( ply )
+  end
 end)
 
 net.Receive( "DeleteCharacter", function( len, ply )

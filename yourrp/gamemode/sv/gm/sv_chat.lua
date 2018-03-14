@@ -143,7 +143,7 @@ function show_tag_admin( sender )
 end
 
 function set_money( sender, text )
-  if sender:IsAdmin() or sender:IsSuperAdmin() then
+  if sender:HasAccess() then
     local _table = string.Explode( " ", text, false )
     local _name = _table[2]
     local _money = tonumber( _table[3] )
@@ -160,7 +160,7 @@ function set_money( sender, text )
 end
 
 function add_money( sender, text )
-  if sender:IsAdmin() or sender:IsSuperAdmin() then
+  if sender:HasAccess() then
     local _table = string.Explode( " ", text, false )
     local _name = _table[2]
     local _money = tonumber( _table[3] )
@@ -349,9 +349,9 @@ function GM:PlayerSay( sender, text, teamChat )
   end
 
   if paket.command == "admin" then
-    if sender:IsAdmin() or sender:IsSuperAdmin() then
+    if sender:HasAccess() then
       for k, receiver in pairs( player.GetAll() ) do
-        if receiver:IsSuperAdmin() or receiver:IsAdmin() then
+        if receiver:HasAccess() then
           net.Start( "yrp_player_say" )
             net.WriteTable( pk )
           net.Send( receiver )

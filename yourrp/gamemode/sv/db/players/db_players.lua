@@ -391,24 +391,32 @@ function isWhitelisted( ply, id )
   if _role != nil then
     _role = _role[1]
 
-    local _plyAllowed = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
+    local _plyAllowedAll = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+    if worked( _plyAllowedAll, "_plyAllowedAll", true ) then
+      _plyAllowedAll = _plyAllowedAll[1]
+      if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
+        printGM( "gm", ply:RPName() .. " is ALL whitelisted" )
+        return true
+      end
+    end
+
+    local _plyAllowedRole = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
 
     local _plyAllowedGroup = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.groupID .. " AND roleID = -1" )
 
-    if ply:IsSuperAdmin() or ply:IsAdmin() then
+    if ply:HasAccess() then
       return true
     else
-      if worked( _plyAllowed, "_plyAllowed", true ) then
+      if worked( _plyAllowedRole, "_plyAllowedRole", true ) then
         printGM( "gm", ply:RPName() .. " is role whitelisted" )
         return true
       elseif worked( _plyAllowedGroup, "_plyAllowedGroup", true ) then
         printGM( "gm", ply:RPName() .. " is group whitelisted" )
         return true
-      else
-        return false
       end
     end
   end
+  printGM( "gm", ply:RPName() .. " is not whitelisted" )
   return false
 end
 
@@ -472,7 +480,7 @@ function canGetRole( ply, roleID )
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
       if tonumber( tmpTableRole[1].adminonly ) == 1 then
         printGM( "gm", "Adminonly-Role" )
-        if ply:IsAdmin() or ply:IsSuperAdmin() then
+        if ply:HasAccess() then
           -- printGM( "note", ply:Name() .. " is admin" )
           -- continue
         else
@@ -480,12 +488,12 @@ function canGetRole( ply, roleID )
           return false
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
-        printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
+        --printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
         if !isWhitelisted( ply, roleID ) then
-          printGM( "gm", ply:SteamName() .. " is not whitelisted" )
+          --printGM( "gm", ply:SteamName() .. " is not whitelisted" )
           return false
         else
-          printGM( "gm", ply:SteamName() .. " is whitelisted" )
+          --printGM( "gm", ply:SteamName() .. " is whitelisted" )
         end
       end
     end

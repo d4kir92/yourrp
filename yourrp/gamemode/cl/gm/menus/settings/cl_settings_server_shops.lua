@@ -258,7 +258,6 @@ net.Receive( "get_shop_items", function()
         end
       end)
       function _sh._sit.itemlice.plus:OnSelect( index, value, data )
-        print(data)
         self.tbl.licenseID = data
         net.Start( "shop_item_edit_lice" )
           net.WriteString( self.tbl.uniqueID )

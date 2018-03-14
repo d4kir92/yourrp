@@ -88,7 +88,7 @@ function changeUserGroup( ply, cmd, args )
 	      end
 	    end
 	    printGM( "note", args[1] .. " not found." )
-	  elseif ply:IsSuperAdmin() or ply:IPAddress() == "loopback" then
+	  elseif ply:HasAccess() or ply:IPAddress() == "loopback" then
 	    for k, v in pairs( player.GetAll() ) do
 	      if string.find( string.lower( v:Nick() ), string.lower( args[1] ) ) or string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
 	        v:SetUserGroup( args[2] )

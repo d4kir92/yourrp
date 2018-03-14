@@ -40,6 +40,11 @@ hook.Add( "open_server_general", "open_server_general", function()
     if oldGamemodename != sv_generalName:GetText() then
       draw.SimpleTextOutlined( "you need to update Server!", "sef", ctr( _center + 400 + 10 ), ctr( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
+
+    if string.lower( LocalPlayer():GetUserGroup() ) != "owner" then
+      draw.SimpleTextOutlined( "Only UserGroup [owner] can reset DATABASE", "sef", ctr( 10 ), ctr( 270 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    end
+
     draw.SimpleTextOutlined( lang_string( "advertname" ) .. ":", "sef", ctr( _center - 10 ), ctr( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "updatecountdown" ) .. ":", "sef", ctr( _center - 10 ), ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "hunger" ) .. ":", "sef", ctr( _center - 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -73,7 +78,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
   sv_generalName:SetSize( ctr( 400 ), ctr( 50 ) )
-  sv_generalName:SetText( GAMEMODE.Name )
+  sv_generalName:SetText( GAMEMODE.BaseName )
 
   net.Start("dbGetGeneral")
   net.SendToServer()
@@ -81,9 +86,9 @@ hook.Add( "open_server_general", "open_server_general", function()
   net.Receive( "dbGetGeneral", function()
     local _yrp_general = net.ReadTable()
 
-    GAMEMODE.Name = db_out_str( _yrp_general.name_gamemode ) or "FAILED"
-    oldGamemodename = GAMEMODE.Name
-    sv_generalName:SetText( GAMEMODE.Name )
+    GAMEMODE.BaseName = db_out_str( _yrp_general.name_gamemode ) or "FAILED"
+    oldGamemodename = GAMEMODE.BaseName or ""
+    sv_generalName:SetText( oldGamemodename )
     _advertname = _yrp_general.name_advert or "FAILED"
     sv_generalAdvert:SetText( tostring( _advertname ) )
     sv_generalHunger:SetChecked( tobool( _yrp_general.toggle_hunger ) )
@@ -140,8 +145,8 @@ hook.Add( "open_server_general", "open_server_general", function()
   function sv_generalRestartServer:DoClick()
     if sv_generalName != nil then
       net.Start( "updateServer" )
-        GAMEMODE.Name = sv_generalName:GetText()
-        net.WriteString( GAMEMODE.Name )
+        GAMEMODE.BaseName = sv_generalName:GetText()
+        net.WriteString( GAMEMODE.BaseName )
         net.WriteInt( math.Round( sv_generalRestartTime:GetValue() ), 16 )
       net.SendToServer()
     end
@@ -165,60 +170,61 @@ hook.Add( "open_server_general", "open_server_general", function()
     settingsWindow.window:Close()
   end
 
-  local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
-  sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
-  sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
-  function sv_generalHardReset:Paint( pw, ph )
-    local color = Color( 255, 0, 0, 200 )
-    if sv_generalHardReset:IsHovered() then
-      color = Color( 255, 255, 0, 200 )
-    end
-    draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-  end
-  function sv_generalHardReset:DoClick()
-    local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
-    _tmpFrame:Center()
-    _tmpFrame:SetTitle( lang_string( "areyousure" ) )
-    function _tmpFrame:Paint( pw, ph )
-      local color = Color( 0, 0, 0, 200 )
-      draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-    end
-
-    local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
-    sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
-    sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
-    sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": DELETE DATABASE" )
-    function sv_generalHardResetSure:DoClick()
-      net.Start( "hardresetdatabase" )
-      net.SendToServer()
-      _tmpFrame:Close()
-    end
-    function sv_generalHardResetSure:Paint( pw, ph )
+  if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
+    local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
+    sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
+    sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+    sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
+    function sv_generalHardReset:Paint( pw, ph )
       local color = Color( 255, 0, 0, 200 )
-      if sv_generalHardResetSure:IsHovered() then
+      if sv_generalHardReset:IsHovered() then
         color = Color( 255, 255, 0, 200 )
       end
       draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
     end
-
-    local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
-    sv_generalHardResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
-    sv_generalHardResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
-    sv_generalHardResetNot:SetText( lang_string( "no" ) .. ": do nothing" )
-    function sv_generalHardResetNot:DoClick()
-      _tmpFrame:Close()
-    end
-    function sv_generalHardResetNot:Paint( pw, ph )
-      local color = Color( 0, 255, 0, 200 )
-      if sv_generalHardResetNot:IsHovered() then
-        color = Color( 255, 255, 0, 200 )
+    function sv_generalHardReset:DoClick()
+      local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+      _tmpFrame:Center()
+      _tmpFrame:SetTitle( lang_string( "areyousure" ) )
+      function _tmpFrame:Paint( pw, ph )
+        local color = Color( 0, 0, 0, 200 )
+        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
       end
-      draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-    end
 
-    settingsWindow.window:Close()
-    _tmpFrame:MakePopup()
+      local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
+      sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
+      sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
+      sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": DELETE DATABASE" )
+      function sv_generalHardResetSure:DoClick()
+        net.Start( "hardresetdatabase" )
+        net.SendToServer()
+        _tmpFrame:Close()
+      end
+      function sv_generalHardResetSure:Paint( pw, ph )
+        local color = Color( 255, 0, 0, 200 )
+        if sv_generalHardResetSure:IsHovered() then
+          color = Color( 255, 255, 0, 200 )
+        end
+        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      end
+
+      local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
+      sv_generalHardResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
+      sv_generalHardResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
+      sv_generalHardResetNot:SetText( lang_string( "no" ) .. ": do nothing" )
+      function sv_generalHardResetNot:DoClick()
+        _tmpFrame:Close()
+      end
+      function sv_generalHardResetNot:Paint( pw, ph )
+        local color = Color( 0, 255, 0, 200 )
+        if sv_generalHardResetNot:IsHovered() then
+          color = Color( 255, 255, 0, 200 )
+        end
+        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      end
+      settingsWindow.window:Close()
+      _tmpFrame:MakePopup()
+    end
   end
 
   function sv_generalHunger:OnChange( bVal )

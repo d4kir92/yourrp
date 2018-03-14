@@ -107,7 +107,7 @@ function GM:PlayerLoadout( ply )
       printGM( "note", "yrp_general failed" )
     end
 
-    if ply:IsAdmin() or ply:IsSuperAdmin() then
+    if ply:HasAccess() then
       if !ply:HasItem( "yrp_arrest_stick" ) then
         ply:AddSwep( "yrp_arrest_stick" )
       end
@@ -146,7 +146,7 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn", function( ply )
     _sel = _sel[1]
     if tobool( _sel.toggle_clearinventoryondead ) then
       ply:StripWeapons()
-      if ply:IsSuperAdmin() or ply:IsAdmin() then
+      if ply:HasAccess() then
         net.Start( "yrp_noti" )
           net.WriteString( "inventoryclearing" )
           net.WriteString( "enabled" )
@@ -229,12 +229,12 @@ function GM:CanPlayerSuicide( ply )
   return true
 end
 
-hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( target, dmginfo )
-	if IsEntity(target) and !target:IsPlayer() and !target:IsNPC() then
-		dmginfo:SetDamage( GetHitFactorEntity() )
+hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( ent, dmginfo )
+	if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
+    dmginfo:ScaleDamage( GetHitFactorEntity() )
   end
-  if target:IsVehicle() then
-		dmginfo:SetDamage( GetHitFactorVehicle() )
+  if ent:IsVehicle() then
+		dmginfo:ScaleDamage( GetHitFactorVehicle() )
   end
 end)
 

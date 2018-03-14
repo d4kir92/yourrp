@@ -64,7 +64,7 @@ function addNewItem( parent, item, tab )
     --_buyWindow:Close()
   end
 
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:HasAccess() then
     panH = itemW+10+50+10+50+10+50+10
     _itemPanel:SetSize( ctr( itemW ), ctr( panH ) )
 
@@ -151,7 +151,7 @@ net.Receive( "getBuyList", function( len )
       addNewItem( _buyScrollPanel, item, _tab )
     end
   end
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:HasAccess() then
     _addItemButton = createVGUI( "DButton", _buyScrollPanel, itemW, panH, swepList.x, swepList.y )
     _addItemButton:SetText( "" )
     function _addItemButton:Paint( pw, ph )

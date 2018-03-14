@@ -1,7 +1,8 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 --here you can change this, but it's dumb, because you can change it ingame
-GM.Name = "YourRP" --it also do nothing here, because the database overwrite it
+GM.Name = "DarkRP" -- Is for other addons detecting that the gamemode is "DarkRP" compatible
+GM.BaseName = "YourRP" -- DO NOT CHANGE THIS, thanks
 
 DeriveGamemode( "sandbox" )
 
@@ -10,7 +11,7 @@ function GM:Initialize()
 end
 
 function GM:GetGameDescription()
-	return GAMEMODE.Name
+	return GAMEMODE.BaseName
 end
 
 if SERVER then
@@ -50,7 +51,6 @@ if CLIENT then
 end
 
 if SERVER then
-
 	function lowering_weapon( ply )
 		if ply != NULL then
 			local _weapon = ply:GetActiveWeapon()
@@ -107,7 +107,7 @@ if SERVER then
 	timer.Simple( 4, function()
 	  local tmp = db_select( "yrp_general", "name_gamemode", nil )
 		if tmp != false and tmp != nil then
-		  GAMEMODE.Name = db_out_str( tmp[1].name_gamemode )
+		  GAMEMODE.BaseName = db_out_str( tmp[1].name_gamemode )
 		end
 	end)
 end
@@ -119,7 +119,7 @@ if CLIENT then
   end)
 
   net.Receive( "getGamemodename", function( len, ply )
-    GAMEMODE.Name = net.ReadString()
+    GAMEMODE.BaseName = net.ReadString()
   end)
 end
 
@@ -132,7 +132,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.44" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.45" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

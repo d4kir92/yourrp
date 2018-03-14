@@ -52,10 +52,10 @@ function showVersion()
       v_color = Color( 0, 255, 0, 255 )
       for k, v in pairs( cur2num ) do
         if tonumber( cur2num[k] ) < tonumber( new2num[k] ) then
-          verart = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
+          verart = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionnewpos" )
           v_color = Color( 255, 0, 0, 255 )
         elseif tonumber( cur2num[k] ) > tonumber( new2num[k] ) then
-          verart = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
+          verart = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
           v_color = Color( 100, 100, 255, 255 )
         end
       end
@@ -69,12 +69,12 @@ function showVersion()
       local outcol2 = Color( 0, 255, 0, 255 )
       for k, v in pairs( cur2num2 ) do
         if tonumber( cur2num2[k] ) < tonumber( new2num2[k] ) then
-          verart2 = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionnewpos" )
+          verart2 = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionnewpos" )
           outcol2 = Color( 255, 0, 0, 255 )
 
           v_outdated = true
         elseif tonumber( cur2num2[k] ) > tonumber( new2num2[k] ) then
-          verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.Name .. " " .. lang_string( "versionoldpos" )
+          verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
           outcol2 = Color( 100, 100, 255, 255 )
 
           printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
@@ -134,7 +134,7 @@ function showVersion()
           surfaceText( lang_string( "showchanges" ), "Trebuchet20", pw/2, ph/2, Color( 0, 0, 0, 255 ), 1, 1 )
         end
 
-        if ply:IsAdmin() or ply:IsSuperAdmin() then
+        if ply:HasAccess() then
           local restartServer = createVGUI( "DButton", frame, 520, 80, 0, 0 )
           restartServer:SetText( "" )
           function restartServer:DoClick()

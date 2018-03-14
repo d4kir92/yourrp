@@ -123,12 +123,14 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
         v.ClassName = v.Class or ""
       end
 
-      tmpSelected[k] = {}
-      tmpSelected[k].ClassName = v.ClassName
-      if isInTable( table2, v ) then
-        tmpSelected[k].selected = true
-      else
-        tmpSelected[k].selected = false
+      if tmpSelected[k] == nil then
+        tmpSelected[k] = {}
+        tmpSelected[k].ClassName = v.ClassName
+        if isInTable( table2, v ) then
+          tmpSelected[k].selected = true
+        else
+          tmpSelected[k].selected = false
+        end
       end
 
       if string.find( string.lower( v.WorldModel ), search:GetText() ) or string.find( string.lower( v.PrintName ), search:GetText() ) or string.find( string.lower( v.ClassName ), search:GetText() ) then
@@ -139,21 +141,47 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
 
           local tmpPointer = tmpCache[k]
           function tmpPointer:Paint( pw, ph )
+            self.text = ""
+            self.color = Color( 255, 255, 255 )
             if tmpSelected[k].selected then
-              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
-            else
-              if string.find( v.ClassName, "npc_" ) or string.find( v.ClassName, "base" ) then
-                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
+              self.color = Color( 0, 255, 0 )
+              self.tcolor = Color( 255, 255, 255, 255 )
+              if string.find( v.ClassName, "npc_" ) then
+                self.text = lang_string( "npcswep" )
+                self.color = Color( 255, 255, 0, 255 )
+                self.tcolor = Color( 255, 0, 0, 255 )
+              elseif string.find( v.ClassName, "base" ) then
+                self.text = lang_string( "baseentity" )
+                self.color = Color( 255, 255, 0, 255 )
+                self.tcolor = Color( 255, 0, 0, 255 )
               elseif v.WorldModel == "" then
-                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-              else
-                draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+                self.text = lang_string( "hasnoworldmodel" )
+                self.color = Color( 255, 255, 0, 255 )
+                self.tcolor = Color( 255, 255, 0, 255 )
+              end
+              draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+            else
+              if string.find( v.ClassName, "npc_" ) then
+                self.text = lang_string( "npcswep" )
+                self.color = Color( 255, 0, 0, 255 )
+              elseif string.find( v.ClassName, "base" ) then
+                self.text = lang_string( "baseentity" )
+                self.color = Color( 255, 0, 0, 255 )
+              elseif v.WorldModel == "" then
+                self.text = lang_string( "hasnoworldmodel" )
+                self.color = Color( 255, 255, 0, 255 )
+              end
+              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+              if self.text != "" then
+                surfaceText( string.upper( self.text ) .. "!", "plates", pw/2, ph/2, self.color, 1, 1 )
               end
             end
+
           end
 
           if v.WorldModel != nil and v.WorldModel != "" then
             local icon = createD( "SpawnIcon", tmpPointer, ctr( item.h ), ctr( item.h ), 0, 0 )
+
             icon.item = v
             icon:SetText( "" )
             timer.Create( "shop" .. count, 0.02*count, 1, function()
@@ -172,9 +200,12 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
           tmpButton:SetText( "" )
           function tmpButton:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-            local text = lang_string( "notadded" )
+            local text = "" //lang_string( "notadded" )
             if tmpSelected[k].selected then
               text = lang_string( "added" )
+              if tmpPointer.text != "" then
+                text = text .. " (" .. tmpPointer.text .. ")"
+              end
             end
 
             local _test = "HAS NO NAME"
@@ -189,7 +220,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             end
             draw.SimpleTextOutlined( _test, "DermaDefault", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 
-            draw.SimpleTextOutlined( text, "DermaDefault", pw - ctr( 10 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+            draw.SimpleTextOutlined( text, "HudBars", pw/2, ph/2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
           end
           function tmpButton:DoClick()
             if tmpSelected[k].selected then
@@ -533,7 +564,7 @@ function drawPlate( ply, string, z, color )
     cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
       surface.SetFont( "plates" )
       local _tw, _th = surface.GetTextSize( str )
-      _tw = math.Round( _tw * 1.06, 0 )
+      _tw = math.Round( _tw * 1.08, 0 )
       _th = _th - 8
       color.a = math.Round( color.a*0.5, 0 )
       surfaceBox( -_tw/2, 0, _tw, _th, color )
@@ -553,7 +584,7 @@ function drawPlates( ply )
     end
   end
   if ply:GetNWBool( "tag_admin", false ) or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
-    if ply:IsSuperAdmin() or ply:IsAdmin() then
+    if ply:HasAccess() then
 
       drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
     end
@@ -567,30 +598,28 @@ net.Receive( "yrp_noti" , function( len )
   if playerready then
     local ply = LocalPlayer()
     if ply != nil then
-      if ply:IsSuperAdmin() != nil and ply:IsAdmin() != nil then
-        if ply:IsSuperAdmin() or ply:IsAdmin() then
-          local _str_lang = net.ReadString()
-          local _time = 4
-          local _channel = NOTIFY_GENERIC
-          local _str = "[" .. lang_string( "adminnotification") .. "] "
-          if _str_lang == "noreleasepoint" then
-            _str = _str .. lang_string( _str_lang )
-          elseif _str_lang == "nojailpoint" then
-            _str = _str .. lang_string( _str_lang )
-          elseif _str_lang == "nogroupspawn" then
-            _str = _str .. "[" .. string.upper( net.ReadString() ) .. "]" .. " " .. lang_string( _str_lang ) .. "!"
-          elseif _str_lang == "inventoryclearing" then
-            _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
-          elseif _str_lang == "playerisready" then
-            _str = _str .. lang_string( "finishedloadingthegamepre" ) .. " " .. net.ReadString() .. " " .. lang_string( "finishedloadingthegamepos" )
-          elseif _str_lang == "database_full_server" then
-            _str = _str .. "SERVER: Database or disk is full, please make more space!"
-            _time = 40
-            _channel = NOTIFY_ERROR
-          end
-
-        	notification.AddLegacy( _str, _channel, _time )
+      if ply:HasAccess() then
+        local _str_lang = net.ReadString()
+        local _time = 4
+        local _channel = NOTIFY_GENERIC
+        local _str = "[" .. lang_string( "adminnotification") .. "] "
+        if _str_lang == "noreleasepoint" then
+          _str = _str .. lang_string( _str_lang )
+        elseif _str_lang == "nojailpoint" then
+          _str = _str .. lang_string( _str_lang )
+        elseif _str_lang == "nogroupspawn" then
+          _str = _str .. "[" .. string.upper( net.ReadString() ) .. "]" .. " " .. lang_string( _str_lang ) .. "!"
+        elseif _str_lang == "inventoryclearing" then
+          _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
+        elseif _str_lang == "playerisready" then
+          _str = _str .. lang_string( "finishedloadingthegamepre" ) .. " " .. net.ReadString() .. " " .. lang_string( "finishedloadingthegamepos" )
+        elseif _str_lang == "database_full_server" then
+          _str = _str .. "SERVER: Database or disk is full, please make more space!"
+          _time = 40
+          _channel = NOTIFY_ERROR
         end
+
+      	notification.AddLegacy( _str, _channel, _time )
       end
     end
   end

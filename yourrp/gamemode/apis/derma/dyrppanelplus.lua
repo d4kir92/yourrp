@@ -36,7 +36,6 @@ function PANEL:Think()
 
   local _px, _py = self.plus:GetPos()
   if _py != self.header:GetTall() then
-    print("RESPOSITING")
     self.plus:SetPos( 0, self.header:GetTall() )
   end
 end

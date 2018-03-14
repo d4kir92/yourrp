@@ -399,8 +399,9 @@ hook.Add( "Think", "Thinker", KeyPress)
 local _savePos = Vector( 0, 0, 0 )
 _lookAtEnt = nil
 _drawViewmodel = false
+
 local function yrpCalcView( ply, pos, angles, fov )
-	if ply:Alive() then
+	if ply:Alive() and !ply:IsPlayingTaunt() then
 		if ply:GetActiveWeapon() != nil then
 			local weapon = ply:GetActiveWeapon()
 			if weapon != NULL then
@@ -408,6 +409,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 					local _weaponName = string.lower( tostring( ply:GetActiveWeapon():GetClass() ) )
 					if !string.find( _weaponName, "lightsaber", 0, false ) then
 						local view = {}
+
 						if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() then
 							if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 								pos2 = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 12 * ply:GetModelScale() )
@@ -433,6 +435,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 								return view
 							else
 							--if _thirdperson == 2 then
+
 								if tonumber( ply:GetNWInt( "view_range", 0 ) ) > 0 then
 									if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 										local _head = ply:GetPos().z + ply:OBBMaxs().z
@@ -484,12 +487,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 									end
 								elseif tonumber( ply:GetNWInt( "view_range", 0 ) ) > -200 and tonumber( ply:GetNWInt( "view_range", 0 ) ) <= 0 then
 									--Disabled
-									view.origin = pos
-									view.angles = angles
-									view.fov = fov
-									view.drawviewer = false
 									_drawViewmodel = false
-									return view
 								else
 									--Firstperson realistic
 									local dist = ply:GetNWInt( "view_range", 0 ) * ply:GetModelScale()
@@ -535,6 +533,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 						else
 							--Disabled
 						end
+
 					else
 						--LocalPlayer():PrintMessage( HUD_PRINTTALK, _weaponName )
 					end
@@ -546,10 +545,10 @@ end
 hook.Add( "CalcView", "MyCalcView", yrpCalcView )
 
 function showPlayermodel()
-	if _drawViewmodel == false then
-		return false
-	else
+	if _drawViewmodel or LocalPlayer():IsPlayingTaunt() then
 		return true
+	else
+		return false
 	end
 end
 hook.Add( "ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel )

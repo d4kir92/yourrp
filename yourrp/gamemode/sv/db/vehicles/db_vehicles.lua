@@ -34,7 +34,7 @@ function getVehicleNumber( ent, id )
 end
 
 function allowedToUseVehicle( id, ply )
-  if ply:IsSuperAdmin() or ply:IsAdmin() then
+  if ply:HasAccess() then
     return true
   else
     local _tmpVehicleTable = db_select( "yrp_vehicles", "*", "uniqueID = '" .. id .. "'" )

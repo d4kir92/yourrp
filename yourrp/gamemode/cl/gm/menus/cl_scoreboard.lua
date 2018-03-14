@@ -131,7 +131,7 @@ function drawGroupPlayers( id )
               draw.SimpleTextOutlined( lang_string( "nick" ) .. ":", "sef", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
               draw.SimpleTextOutlined( string.upper( _tmpPly.steamname ), "sef", ctr( 10 ), ctr( 440 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-              if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+              if LocalPlayer():HasAccess() then
                 draw.SimpleTextOutlined( lang_string( "usergroup" ) .. ":", "sef", ctr( 10 ), ctr( 500 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
                 draw.SimpleTextOutlined( string.upper( _tmpPly.usergroup ), "sef", ctr( 10 ), ctr( 540 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 

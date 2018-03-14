@@ -2,6 +2,14 @@
 
 local Player = FindMetaTable( "Player" )
 
+function Player:HasAccess()
+  if self:IsAdmin() or self:IsSuperAdmin() or string.lower( self:GetUserGroup() == "owner" ) then
+    return true
+  else
+    return false
+  end
+end
+
 function Player:LoadedGamemode()
   return self:GetNWBool( "finishedloading", false )
 end

@@ -27,6 +27,9 @@ net.Receive( "getRoleWhitelist", function( len )
           if ( x.uniqueID == v.groupID ) then
             _whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.groupID, "" )
             break
+          elseif v.groupID == "-1" then
+            _whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, lang_string( "all" ), lang_string( "all" ) )
+            break
           end
         end
         break
@@ -34,8 +37,8 @@ net.Receive( "getRoleWhitelist", function( len )
     end
   end
 
-  local _buttonAdd = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1500 + 10, 10 )
-  _buttonAdd:SetText( lang_string( "addentry" ) )
+  local _buttonAdd = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 10 )
+  _buttonAdd:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "role" ) .. ")" )
   function _buttonAdd:DoClick()
     local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
     _whitelistFrame:Center()
@@ -96,7 +99,7 @@ net.Receive( "getRoleWhitelist", function( len )
     _whitelistFrame:MakePopup()
   end
 
-  local _buttonAddGroup = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1500 + 10, 70 )
+  local _buttonAddGroup = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 70 )
   _buttonAddGroup:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "group" ) .. ")" )
   function _buttonAddGroup:DoClick()
     local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
@@ -138,7 +141,42 @@ net.Receive( "getRoleWhitelist", function( len )
     _whitelistFrame:MakePopup()
   end
 
-  local _buttonRem = createVGUI( "DButton", settingsWindow.window.site, 400, 50, 10 + 1500 + 10, 130 )
+  local _buttonAddAll = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 130 )
+  _buttonAddAll:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "all" ) .. " [" .. lang_string( "roles" ) .. "|".. lang_string( "groups" ) .. "] " .. ")" )
+  function _buttonAddAll:DoClick()
+    local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
+    _whitelistFrame:Center()
+    _whitelistFrame:ShowCloseButton( true )
+    _whitelistFrame:SetDraggable( true )
+    _whitelistFrame:SetTitle( "Whitelist" )
+
+    local _whitelistComboBoxPlys = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 100 )
+    for k, v in pairs( player.GetAll() ) do
+      _whitelistComboBoxPlys:AddChoice( v:Nick(), v:SteamID() )
+    end
+
+    local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 400 )
+    _whitelistButton:SetText( lang_string( "whitelistplayer" ) )
+    function _whitelistButton:DoClick()
+      if _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) != nil then
+        net.Start( "whitelistPlayerAll" )
+          net.WriteString( _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) )
+        net.SendToServer()
+      end
+      _whitelistListView:Remove()
+      _whitelistFrame:Close()
+    end
+
+    function _whitelistFrame:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
+
+      draw.SimpleTextOutlined( lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    end
+
+    _whitelistFrame:MakePopup()
+  end
+
+  local _buttonRem = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 190 )
   _buttonRem:SetText( lang_string( "removeentry" ) )
   function _buttonRem:DoClick()
     if _whitelistListView:GetSelectedLine() != "" then

@@ -263,7 +263,7 @@ end)
 
 concommand.Add( "yrp_restart", function( ply, cmd, args )
 	if ply:IsPlayer() then
-		if ply:IsSuperAdmin() then
+		if ply:HasAccess() then
 	    printGM( "note", "RESTARTING SERVER by " .. ply:Nick() )
       game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
 		else
@@ -285,7 +285,7 @@ end)
 
 net.Receive( "getGamemodename", function( len, ply )
   net.Start( "getGamemodename" )
-    net.WriteString( GAMEMODE.Name )
+    net.WriteString( GAMEMODE.BaseName )
   net.Send( ply )
 end)
 

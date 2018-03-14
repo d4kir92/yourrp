@@ -61,7 +61,7 @@ function createRoleBox( rol, parent )
   end
 
   --[[ Role Adminonly ]]--
-  if tobool( rol.adminonly ) then -- and LocalPlayer():IsAdmin() and !LocalPlayer():IsSuperAdmin() then
+  if tobool( rol.adminonly ) then
     _rol.aoicon = 64
     _rol.ao = createD( "DPanel", _rol, ctrb( _rol.aoicon ), ctrb( _rol.aoicon ), _rol:GetWide()/2-ctrb( _rol.aoicon/2 ), _rol:GetTall()/2-ctrb( _rol.aoicon/2 ) )
     function _rol.ao:Paint( pw, ph )

@@ -87,7 +87,7 @@ function openSettings()
   settingsWindow.window:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
   settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:HasAccess() then
     local _server = lang_string( "server" ) .. " (" .. tostring( lang_string( "admin" ) ) .. ")"
     settingsWindow.window:AddCategory( _server )
     settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server, "icon16/server_database.png" )

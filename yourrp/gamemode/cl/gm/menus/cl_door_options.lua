@@ -116,7 +116,7 @@ function buyWindow( buildingID, name, price, door )
     paintButton( self, pw, ph, lang_string( "buybuildingpre" ) .. " " .. _name .. " " .. lang_string( "buybuildingpos" ) )
   end
 
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:HasAccess() then
     local _TextEntryName = createVGUI( "DTextEntry", yrp_door.window, 530, 50, 10, 270 )
     _TextEntryName:SetText( name )
     function _TextEntryName:OnChange()
@@ -293,7 +293,7 @@ function optionWindow( buildingID, name, price, door, owner )
     paintButton( self, pw, ph, lang_string( "resetkey" ) .. " (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
   end
 
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:HasAccess() then
     local _TextEntryName = createVGUI( "DTextEntry", yrp_door.window, 530, 50, 10, 400 )
     _TextEntryName:SetText( name )
     function _TextEntryName:OnChange()

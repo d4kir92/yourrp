@@ -80,7 +80,7 @@ function optionVehicleWindow( vehicle, vehicleTab )
     paintButton( self, pw, ph, lang_string( "resetkey" ) .. " (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
   end
 
-  if ply:IsAdmin() or ply:IsSuperAdmin() then
+  if ply:HasAccess() then
     local _buttonRemoveOwner = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 170 )
     _buttonRemoveOwner:SetText( "" )
     function _buttonRemoveOwner:DoClick()

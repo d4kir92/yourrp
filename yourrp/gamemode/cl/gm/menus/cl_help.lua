@@ -44,7 +44,7 @@ function nicekey( key_str )
   if _str != nil then
     if string.find( _str, "kp_" ) then
       local _end = string.sub( _str, 4 )
-      print(_str)
+
       _end = replaceKeyName( _end )
       return lang_string( "keynumpad" ) .. " " .. _end
     elseif string.find( _str, "pg" ) then
@@ -102,7 +102,7 @@ function openHelpMenu()
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_right" ) ) ) ) .. "] " .. lang_string( "turnviewangleright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_left" ) ) ) ) .. "] " .. lang_string( "turnviewangleleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 9*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    if LocalPlayer():IsSuperAdmin() or LocalPlayer():IsAdmin() then
+    if LocalPlayer():HasAccess() then
       draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_settings" ) ) ) .. "] " .. lang_string( "ifadminsettings" ).. "!", "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 18*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     else
       draw.SimpleTextOutlined( lang_string( "ifnotadminsettings" ) .. "!", "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 18*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )

@@ -134,7 +134,7 @@ net.Receive( "shop_get_tabs", function( len )
     _bm.window:Close()
   end
 
-  if LocalPlayer():IsAdmin() or LocalPlayer():IsSuperAdmin() then
+  if LocalPlayer():HasAccess() then
     _bm.settings = createD( "DButton", _bm.window, ctrb( 50 ), ctrb( 50 ), _bm.window:GetWide()-ctrb( 50+10+50+10 ), ctrb( 10 ) )
     _bm.settings:SetText( "" )
     function _bm.settings:Paint( pw, ph )
@@ -195,7 +195,7 @@ net.Receive( "shop_get_tabs", function( len )
         _globalWorking = _dealer.WorldModel
         hook.Add( "close_dealer_worldmodel", "close_dealer_worldmodel_hook", function()
           _dealer.WorldModel = LocalPlayer():GetNWString( "WorldModel" )
-          print(_dealer.WorldModel)
+
           net.Start( "dealer_edit_worldmodel" )
             net.WriteString( _dealer.uniqueID )
             net.WriteString( _dealer.WorldModel )
@@ -256,7 +256,7 @@ net.Receive( "shop_get_tabs", function( len )
           _bm.shop:AddItem( _cat )
           _bm.shop:Rebuild()
         end
-        if LocalPlayer():IsSuperAdmin() or LocalPlayer():IsSuperAdmin() then
+        if LocalPlayer():HasAccess() then
           local _remove = createD( "DButton", _cat, ctr( 400 ), ctr( 100 ), 0, 0 )
           _remove:SetText( "" )
           _remove.uid = _uid
@@ -290,7 +290,7 @@ net.Receive( "shop_get_tabs", function( len )
     end
   end
 
-  if LocalPlayer():IsSuperAdmin() or LocalPlayer():IsAdmin() then
+  if LocalPlayer():HasAccess() then
     _bm.addtab = createD( "DButton", _bm.tabs, ctr( 80 ), ctr( 60 ), 0, 0 )
     _bm.addtab:SetText( "" )
     _bm.addtab:SetPos( 0, 0 )

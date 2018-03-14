@@ -115,7 +115,6 @@ net.Receive( "role_add_license", function( len, ply )
       table.insert( _licenseIDs, _license_uid )
       _licenseIDs = string.Implode( ",", _licenseIDs )
 
-      print(_licenseIDs)
       db_update( "yrp_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid )
     end
   end
@@ -140,7 +139,6 @@ net.Receive( "role_rem_license", function( len, ply )
 
       _licenseIDs = string.Implode( ",", _licenseIDs )
 
-      print(_licenseIDs)
       db_update( "yrp_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid )
     end
   end
