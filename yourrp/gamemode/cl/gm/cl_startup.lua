@@ -184,7 +184,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
 
             icon.item = v
             icon:SetText( "" )
-            timer.Create( "shop" .. count, 0.02*count, 1, function()
+            timer.Create( "shop" .. count, 0.002*count, 1, function()
               if icon != nil and icon != NULL and icon.item != nil then
                 icon:SetModel( icon.item.WorldModel )
                 if icon.Entity != nil then
@@ -398,7 +398,7 @@ function openSingleSelector( table, closeF )
           local spawnicon = createD( "SpawnIcon", icon, ctr( _item.h ), ctr( _item.h ), 0, 0 )
           spawnicon.item = item
           spawnicon:SetText( "" )
-          timer.Create( "shop" .. count, 0.01*count, 1, function()
+          timer.Create( "shop" .. count, 0.002*count, 1, function()
             if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
               spawnicon:SetModel( spawnicon.item.WorldModel )
             end

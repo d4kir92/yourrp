@@ -8,6 +8,7 @@ local _db_name = "yrp_roles"
 sql_add_column( _db_name, "roleID", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "description", "TEXT DEFAULT '-'" )
 sql_add_column( _db_name, "playermodels", "TEXT DEFAULT ''" )
+sql_add_column( _db_name, "playermodelsnone", "TEXT DEFAULT ''" )
 sql_add_column( _db_name, "playermodelsize", "INTEGER DEFAULT 1" )
 sql_add_column( _db_name, "salary", "INTEGER DEFAULT 50" )
 sql_add_column( _db_name, "groupID", "INTEGER DEFAULT 1" )
@@ -115,10 +116,10 @@ function duplicateRole( ply, uniqueID, newGroupID )
     _dR.groupID = newGroupID
   end
   if tonumber( _dR.removeable ) == 1 then
-    local _dbColumns = "adminonly, ar, armax, arreg, salary, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodels, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
+    local _dbColumns = "adminonly, ar, armax, arreg, salary, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodels, playermodelsnone, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
     local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.salary .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
     _dbValues = _dbValues .. _dR.groupID .. ", " .. _dR.hp .. ", " .. _dR.hpmax .. ", " .. _dR.hpreg .. ", " .. _dR.instructor .. ", " .. _dR.maxamount .. ", "
-    _dbValues = _dbValues .. "'" .. _dR.playermodels .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
+    _dbValues = _dbValues .. "'" .. _dR.playermodels .. "', '" .. _dR.playermodelsnone .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
     _dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. db_in_str( _dR.sweps ) .. "', " .. _dR.whitelist
     db_insert_into( "yrp_roles", _dbColumns, _dbValues )
   else

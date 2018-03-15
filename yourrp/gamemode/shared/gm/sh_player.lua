@@ -197,6 +197,10 @@ function Player:GetPlayerModel()
       local pmID = tonumber( yrp_characters.playermodelID )
       local yrp_role = self:GetRolTab()
       local tmp = string.Explode( ",", yrp_role.playermodels )
+      local tmp2 = string.Explode( ",", yrp_role.playermodelsnone )
+      for i, pm in pairs( tmp2 ) do
+        table.insert( tmp, pm )
+      end
       local pm = tmp[pmID]
 
       if pm == "" then

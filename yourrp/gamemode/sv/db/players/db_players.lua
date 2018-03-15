@@ -115,6 +115,10 @@ function set_role_values( ply )
           local tmpID = tonumber( ChaTab.playermodelID )
           if rolTab.playermodels != nil and rolTab.playermodels != "" then
             local tmp = string.Explode( ",", rolTab.playermodels )
+            local tmp2 = string.Explode( ",", rolTab.playermodelsnone )
+            for i, pm in pairs( tmp2 ) do
+              table.insert( tmp, pm )
+            end
             if worked( tmp[tmpID], "set_role_values playermodel" ) then
               ply:SetModel( tmp[tmpID] )
             end
@@ -176,6 +180,8 @@ function set_role_values( ply )
 
         ply:SetNWString( "sweps", rolTab.sweps )
         ply:SetNWString( "playermodels", rolTab.playermodels )
+        ply:SetNWString( "playermodelsnone", rolTab.playermodelsnone )
+
         --sweps
         local tmpSWEPTable = string.Explode( ",", db_out_str( rolTab.sweps ) )
         for k, swep in pairs( tmpSWEPTable ) do

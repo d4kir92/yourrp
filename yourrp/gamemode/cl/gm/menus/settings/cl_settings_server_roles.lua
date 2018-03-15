@@ -312,10 +312,26 @@ function updatePlayermodels( table, id, uniqueID )
   net.SendToServer()
 end
 
+local function AddToTabRecursive( tab, folder, path, wildcard )
+	local files, folders = file.Find( folder .. "*", path )
+	for k, v in pairs( files ) do
+		if ( !string.EndsWith( v, ".mdl" ) ) then continue end
+		table.insert( tab, folder .. v )
+	end
+
+	for k, v in pairs( folders ) do
+		AddToTabRecursive( tab, folder .. v .. "/", path, wildcard )
+	end
+end
+
 function addDBPlayermodel( parent, id, uniqueID, size, help )
   local tmp = addDPanel( parent, 800, 50, 0, 90, lang_string( "roleplayermodel" ), "yrp_roles", help )
 
   local pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
+  local pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
+  for i, pm in pairs( pms2 ) do
+    table.insert( pms, pm )
+  end
   local changepm = 1
 
   local background = createVGUI( "DPanel", parent, 800, 800, 0, 140 )
@@ -337,7 +353,7 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     end
   end
 
-  local buttonback = createVGUI( "DButton", parent, 80, 800, 0, 140 )
+  local buttonback = createVGUI( "DButton", parent, 80, 80, 0, 140+400-40 )
   buttonback:SetText( "" )
   function buttonback:Paint( pw, ph )
     if changepm > 1 then
@@ -356,7 +372,7 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     end
   end
 
-  local buttonforward = createVGUI( "DButton", parent, 80, 800, 800-80, 140 )
+  local buttonforward = createVGUI( "DButton", parent, 80, 80, 800-80, 140+400-40 )
   buttonforward:SetText( "" )
   function buttonforward:Paint( pw, ph )
     if changepm < #pms then
@@ -375,7 +391,7 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     end
   end
 
-  local buttonchange = createVGUI( "DButton", parent, 200, 40, 400-100, 140 + 800 - 40 )
+  local buttonchange = createVGUI( "DButton", parent, 390, 50, 0, 140 + 800 - 50 )
   buttonchange:SetText( "" )
   function buttonchange:Paint( pw, ph )
     if modelpanel.Entity != nil then
@@ -384,9 +400,9 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
       end
     end
     if buttonchange:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
     else
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
     end
     draw.SimpleTextOutlined( lang_string( "change" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
@@ -408,6 +424,10 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
       if settingsWindow.window.site != nil then
         yrp_roles_dbTable[id].playermodels = _globalWorking
         pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
+        pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
+        for i, pm in pairs( pms2 ) do
+          table.insert( pms, pm )
+        end
         changepm = 1
         if modelpanel != nil and modelpanel != NULL then
           local _model = pms[changepm] or ""
@@ -417,6 +437,60 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     end)
 
     openSelector( tmpTable, "yrp_roles", "playermodels", "uniqueID = " .. uniqueID, "closeRolePlayermodels" )
+  end
+
+  local buttonchange2 = createVGUI( "DButton", parent, 390, 50, 410, 140 + 800 - 50 )
+  buttonchange2:SetText( "" )
+  function buttonchange2:Paint( pw, ph )
+    if modelpanel.Entity != nil then
+      if yrp_roles_dbTable[id] != nil then
+        modelpanel.Entity:SetModelScale( yrp_roles_dbTable[id].playermodelsize, 0 )
+      end
+    end
+    if self:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+    else
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+    end
+    draw.SimpleTextOutlined( lang_string( "noneplayermodels" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
+  function buttonchange2:DoClick()
+    local playermodels = {}
+    for _, addon in SortedPairsByMemberValue( engine.GetAddons(), "title" ) do
+      if ( !addon.downloaded || !addon.mounted ) then continue end
+      if ( addon.models <= 0 ) then continue end
+      AddToTabRecursive( playermodels, "models/", addon.title, "*.mdl" )
+  	end
+
+    local tmpTable = {}
+    local count = 0
+    for k, v in pairs( playermodels ) do
+      count = count + 1
+      tmpTable[count] = {}
+      tmpTable[count].WorldModel = v
+      tmpTable[count].ClassName = v
+      tmpTable[count].PrintName = v
+    end
+
+    _globalWorking = yrp_roles_dbTable[id].playermodelsnone
+
+    hook.Add( "closeRolePlayermodels2", "yrp_close_playermodel_selector2", function()
+      if settingsWindow.window.site != nil then
+        yrp_roles_dbTable[id].playermodelsnone = _globalWorking
+        pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
+        pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
+        for i, pm in pairs( pms2 ) do
+          table.insert( pms, pm )
+        end
+        changepm = 1
+        if modelpanel != nil and modelpanel != NULL then
+          local _model = pms[changepm] or ""
+          modelpanel:SetModel( _model )
+        end
+      end
+    end)
+
+    openSelector( tmpTable, "yrp_roles", "playermodelsnone", "uniqueID = " .. uniqueID, "closeRolePlayermodels2" )
   end
   return modelpanel
 end
@@ -472,7 +546,7 @@ function addDBSwep( parent, id, uniqueID, help )
     modelpanel:SetCamPos( Vector(0,-30,15))
   end
 
-  local buttonback = createVGUI( "DButton", background, 80, 800, 0, 0 )
+  local buttonback = createVGUI( "DButton", background, 80, 80, 0, 400-40 )
   buttonback:SetText( "" )
   function buttonback:Paint( pw, ph )
     if changesw > 1 then
@@ -497,7 +571,7 @@ function addDBSwep( parent, id, uniqueID, help )
     end
   end
 
-  local buttonforward = createVGUI( "DButton", background, 80, 800, 800-80, 0 )
+  local buttonforward = createVGUI( "DButton", background, 80, 80, 800-80, 400-40 )
   buttonforward:SetText( "" )
   function buttonforward:Paint( pw, ph )
     if changesw < #sws then
@@ -522,13 +596,13 @@ function addDBSwep( parent, id, uniqueID, help )
     end
   end
 
-  local buttonchange = createVGUI( "DButton", background, 200, 40, 400-100, 800 - 40 )
+  local buttonchange = createVGUI( "DButton", background, 400, 50, 400-200, 800 - 50 )
   buttonchange:SetText( "" )
   function buttonchange:Paint( pw, ph )
     if buttonchange:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100 ) )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
     else
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
     end
     draw.SimpleTextOutlined( lang_string( "change" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end

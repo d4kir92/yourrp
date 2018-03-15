@@ -103,6 +103,7 @@ function openCharacterCreation()
   character.armax = 0
   character.salary = 0
   character.playermodels = {}
+  character.playermodelsnone = {}
   character.playermodelID = 1
   character.skin = 1
 
@@ -439,6 +440,10 @@ function openCharacterCreation()
       character.armax = tmpTable[1].armax
       character.salary = tmpTable[1].salary
       character.playermodels = string.Explode( ",", tmpTable[1].playermodels )
+      character.playermodelsnone = string.Explode( ",", tmpTable[1].playermodelsnone )
+      for i, pm in pairs( character.playermodelsnone ) do
+        table.insert( character.playermodels, pm )
+      end
       character.playermodelID = 1
       character.playermodelsize = tmpTable[1].playermodelsize
       if character.playermodels[tonumber( character.playermodelID )] != nil then
@@ -664,8 +669,6 @@ function openCharacterSelection()
     local _characters = net.ReadTable()
 
     if _characters != nil then
-      printTab(_characters)
-
       character.amount = #_characters or 0
       if #_characters < 1 then
 
@@ -696,8 +699,13 @@ function openCharacterSelection()
           tmpChar.groupID = _characters[i].group.groupID
           tmpChar.map = _characters[i].char.map
           tmpChar.playermodelID = _characters[i].char.playermodelID
-          local tmp = string.Explode( ",", _characters[i].role.playermodels )
-          tmpChar.playermodels = tmp
+
+          tmpChar.playermodels = string.Explode( ",", _characters[i].role.playermodels )
+          tmpChar.playermodelsnone = string.Explode( ",", _characters[i].role.playermodelsnone )
+          for i, pm in pairs( tmpChar.playermodelsnone ) do
+            table.insert( tmpChar.playermodels, pm )
+          end
+
           tmpChar.playermodelsize = _characters[i].role.playermodelsize
           tmpChar.skin = _characters[i].char.skin
           tmpChar.bg0 = _characters[i].char.bg0 or 0

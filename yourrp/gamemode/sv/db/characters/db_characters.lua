@@ -214,6 +214,7 @@ net.Receive( "get_menu_bodygroups", function( len, ply )
   _result = _result[1]
   local _role = ply:GetRolTab()
   _result.playermodels = _role.playermodels
+  _result.playermodelsnone = _role.playermodelsnone
   net.Start( "get_menu_bodygroups" )
     net.WriteTable( _result )
   net.Send( ply )
@@ -262,6 +263,10 @@ util.AddNetworkString( "inv_pm_up" )
 net.Receive( "inv_pm_up", function( len, ply )
   local _cur = net.ReadInt( 16 )
   local _pms = string.Explode( ",", ply:GetRolTab().playermodels )
+  local _pms2 = string.Explode( ",", ply:GetRolTab().playermodelsnone )
+  for i, pm in pairs( _pms2 ) do
+    table.insert( _pms, pm )
+  end
   ply:SetModel( _pms[_cur] )
   local _charid = ply:CharID()
   db_update( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
@@ -272,6 +277,10 @@ util.AddNetworkString( "inv_pm_do" )
 net.Receive( "inv_pm_do", function( len, ply )
   local _cur = net.ReadInt( 16 )
   local _pms = string.Explode( ",", ply:GetRolTab().playermodels )
+  local _pms2 = string.Explode( ",", ply:GetRolTab().playermodelsnone )
+  for i, pm in pairs( _pms2 ) do
+    table.insert( _pms, pm )
+  end
   ply:SetModel( _pms[_cur] )
   local _charid = ply:CharID()
   db_update( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )

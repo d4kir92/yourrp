@@ -544,4 +544,5 @@ function DE_All()
   set_lang_string( "baseentity", "Base ENTITY" )
   set_lang_string( "npcswep", "NPC SWEP" )
   set_lang_string( "hasnoworldmodel", "Hat kein WorldModel" )
+  set_lang_string( "noneplayermodels", "Keine Playermodels" )
 end

@@ -91,6 +91,10 @@ function createRoleBox( rol, parent )
   _rol.gr:SetText( "" )
   function _rol.gr:DoClick()
     local _pm = string.Explode( ",", rol.playermodels )
+    local _pm2 = string.Explode( ",", rol.playermodelsnone )
+    for i, pm in pairs( _pm2 ) do
+      table.insert( _pm, pm )
+    end
     _rm.infopm:SetModel( _pm[1] or "" )
 
     _rm.info.rolename = rol.roleID

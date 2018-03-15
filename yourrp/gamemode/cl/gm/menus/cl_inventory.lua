@@ -44,6 +44,11 @@ net.Receive( "get_menu_bodygroups", function( len )
   local _tbl = net.ReadTable()
   local _skin = tonumber( _tbl.skin )
   local _pms = string.Explode( ",", _tbl.playermodels )
+  local _pms2 = string.Explode( ",", _tbl.playermodelsnone )
+  for i, pm in pairs( _pms2 ) do
+    table.insert( _pms, pm )
+  end
+
   local _pmid = tonumber( _tbl.playermodelID )
   local _pm = _pms[_pmid]
 
@@ -63,7 +68,7 @@ net.Receive( "get_menu_bodygroups", function( len )
   end
 
   _inv.r.pm = createD( "DModelPanel", yrp_inventory.left, ScrH2() - ctr( 30 ), ScrH2() - ctr( 30 ), 0, 0 )
-  _inv.r.pm:SetModel( LocalPlayer():GetModel() )
+  _inv.r.pm:SetModel( _pm )
   _inv.r.pm:SetAnimated( true )
   _inv.r.pm.Angles = Angle( 0, 0, 0 )
   _inv.r.pm:RunAnimation()
@@ -660,7 +665,7 @@ function open_inventory()
     end
   end
 
-  yrp_inventory.window = createD( "DFrame", nil, ScrH(), ScrH(), 0, 0 )
+  yrp_inventory.window = createD( "DFrame", nil, BScrW() - ctr( 100 ), ScrH(), 0, 0 )
   yrp_inventory.window:SetTitle( "" )
   yrp_inventory.window:Center()
   yrp_inventory.window:SetDraggable( false )
@@ -673,7 +678,7 @@ function open_inventory()
     --paintWindow( self, pw, ph, lang_string( "inventory" ) )
   end
 
-  yrp_inventory.left = createD( "DPanel", yrp_inventory.window, ScrH() - ctr( 10 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )
+  yrp_inventory.left = createD( "DPanel", yrp_inventory.window, BScrW() - ctr( 100 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )
   function yrp_inventory.left:Paint( pw, ph )
     --paintPanel( self, pw, ph )
     --paintBr( pw, ph, Color( 255, 0, 0, 255 ))

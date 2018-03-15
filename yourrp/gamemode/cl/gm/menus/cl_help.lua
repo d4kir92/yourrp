@@ -58,7 +58,7 @@ end
 function openHelpMenu()
   done_tutorial( "tut_hudhelp" )
   openMenu()
-  _hm.window = createD( "DFrame", nil, ScrH(), ScrH(), 0, 0 )
+  _hm.window = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
   _hm.window:Center()
   _hm.window:SetTitle( "" )
   function _hm.window:OnClose()
@@ -68,14 +68,15 @@ function openHelpMenu()
     closeMenu()
   end
 
-  _hm.langu = derma_change_language( _hm.window, ctr( 400 ), ctr( 50 ), ctr( 1400 ), ctr( 50 ) )
+  _hm.langu = derma_change_language( _hm.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 50 ) )
 
   function _hm.window:Paint( pw, ph )
-    paintWindow( self, pw, ph, lang_string( "help" ) )
+    --paintWindow( self, pw, ph, lang_string( "help" ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
 
     local _abstand = ctr( HudV("ttsf") ) * 3.8
 
-    draw.SimpleTextOutlined( "Language: ", "ttsf", ctr( 1400 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "Language: ", "ttsf", BScrW()/2 - ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( "F1" ) ) .. "] " .. lang_string( "help" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 + 1*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "menu_character_selection" ) ) ) ) .. "] " .. lang_string( "characterselection" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 + 2*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -94,13 +95,13 @@ function openHelpMenu()
     draw.SimpleTextOutlined( lang_string( "howtoopensmartphonepre" ) .. " [" .. string.upper( nicekey( input.GetKeyName( KEY_UP ) ) ) .. "] " .. lang_string( "howtoopensmartphonepos" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 15*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "howtoclosesmartphonepre" ) .. " [" .. string.upper( nicekey( input.GetKeyName( KEY_DOWN ) ) ) .. "] " .. lang_string( "howtoclosesmartphonepos" ), "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 16*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_switch" ) ) ) ) .. "] " .. lang_string( "viewswitch" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_up" ) ) ) ) .. "] " .. lang_string( "incviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_down" ) ) ) ) .. "] " .. lang_string( "decviewheight" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_right" ) ) ) ) .. "] " .. lang_string( "viewposright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_left" ) ) ) ) .. "] " .. lang_string( "viewposleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_right" ) ) ) ) .. "] " .. lang_string( "turnviewangleright" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_left" ) ) ) ) .. "] " .. lang_string( "turnviewangleleft" ), "ttsf", ctr( 1100 ), ctr( 10 ) + ctr( 10 ) + ctr( 9*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_switch" ) ) ) ) .. "] " .. lang_string( "viewswitch" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_up" ) ) ) ) .. "] " .. lang_string( "incviewheight" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 4*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_down" ) ) ) ) .. "] " .. lang_string( "decviewheight" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 5*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_right" ) ) ) ) .. "] " .. lang_string( "viewposright" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 6*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_left" ) ) ) ) .. "] " .. lang_string( "viewposleft" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 7*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_right" ) ) ) ) .. "] " .. lang_string( "turnviewangleright" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 8*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( input.GetKeyName( get_keybind( "view_spin_left" ) ) ) ) .. "] " .. lang_string( "turnviewangleleft" ), "ttsf", pw/2, ctr( 10 ) + ctr( 10 ) + ctr( 9*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     if LocalPlayer():HasAccess() then
       draw.SimpleTextOutlined( "[" .. string.upper( input.GetKeyName( get_keybind( "menu_settings" ) ) ) .. "] " .. lang_string( "ifadminsettings" ).. "!", "ttsf", ctr( 10 ) + ctr( 32 ), ctr( 10 ) + ctr( 10 ) + ctr( 18*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -144,22 +145,22 @@ function openHelpMenu()
   end
 
   --[[ GDocs News ]]--
-  local _g_docs_news_panel = createD( "DPanel", _hm.window, ctr( 1060 ), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
+  local _g_docs_news_panel = createD( "DPanel", _hm.window, BScrW()/2-ctr(10+10), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
   function _g_docs_news_panel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
   end
 
-  local _g_docs_news_html = createD( "HTML", _g_docs_news_panel, ScrH() - ctr( 980 + 20 - 30 ), ctr( 1130 + 212 + 50 ), -ctr( 30 ), -ctr( 212 ) )
+  local _g_docs_news_html = createD( "HTML", _g_docs_news_panel, BScrW()/2-ctr(10+10), ctr( 1130 + 212 + 50 ), 0, -ctr( 212 ) )
   _g_docs_news_html:OpenURL( "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing" )
   --_g_docs_news_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vRcuPnvnAqRD7dQFOkH9d0Q1G3qXFn6rAHJWAAl7wV2TEABGhDdJK9Y-LCONFKTiAWmJJZpsTcDnz5W/pub" )
 
   --[[ GDocs Help ]]--
-  local _g_docs_help_panel = createD( "DPanel", _hm.window, ctr( 1060 ), ctr( 1130 ), ctr( 10 + 1060 + 20 ), ctr( 1020 ) )
+  local _g_docs_help_panel = createD( "DPanel", _hm.window, BScrW()/2-ctr(10+10), ctr( 1130 ), BScrW()/2 + ctr( 10 ), ctr( 1020 ) )
   function _g_docs_help_panel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
   end
 
-  local _g_docs_help_html = createD( "HTML", _g_docs_help_panel, ScrH() - ctr( 980 + 20 ), ctr( 1130 + 60 + 140 ), 0, -ctr( 80 ) )
+  local _g_docs_help_html = createD( "HTML", _g_docs_help_panel, BScrW()/2-ctr(10+10), ctr( 1130 + 60 + 140 ), 0, -ctr( 80 ) )
   --_g_docs_help_html:OpenURL( "https://docs.google.com/document/d/1J-N9Hd2fliTdvHiN5cTHsj_1jPLeNn82X1A-pzkIKsU/edit?usp=sharing" )
   _g_docs_help_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vQrwLHPnntg4ZBAICAmwrgXyilU3i8L9n8ein9gHROoJAzmL8ypN1nxTltro_7CHV-qqE7vkoLqeyvH/pub" )
 
