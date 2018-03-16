@@ -131,7 +131,9 @@ net.Receive( "shop_get_tabs", function( len )
     surfaceText( "X", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
   end
   function _bm.close:DoClick()
-    _bm.window:Close()
+    if _bm.window != nil then
+      _bm.window:Close()
+    end
   end
 
   if LocalPlayer():HasAccess() then

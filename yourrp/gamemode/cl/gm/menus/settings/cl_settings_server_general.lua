@@ -131,6 +131,52 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.SendToServer()
   end
 
+  if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
+    local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
+    sv_generalSQL:SetText( lang_string( "database" ) )
+    function sv_generalSQL:DoClick()
+      local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 800 ), 0, 0 )
+      _win:SetTitle( "" )
+      _win:MakePopup()
+      _win:Center()
+      function _win:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 100, 200 ) )
+      end
+
+      local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
+      _sqlmode:INITPanel( "DComboBox" )
+      _sqlmode:SetHeader( lang_string( "sqlmode" ) )
+      _sqlmode.plus:AddChoice( "SQLite", 0 )
+      _sqlmode.plus:AddChoice( "MYSQL", 1 )
+      _sqlmode.plus.choice = "SQLite"
+      function _sqlmode.plus:OnSelect( index, value, data )
+        self.choice = value
+      end
+
+      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 ) )
+      _sql_host:INITPanel( "DTextEntry" )
+      _sql_host:SetHeader( lang_string( "host" ) )
+
+      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
+      _sql_host:INITPanel( "DTextEntry" )
+      _sql_host:SetHeader( lang_string( "username" ) )
+
+      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      _sql_host:INITPanel( "DTextEntry" )
+      _sql_host:SetHeader( lang_string( "password" ) )
+
+      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      _sql_host:INITPanel( "DTextEntry" )
+      _sql_host:SetHeader( lang_string( "port" ) )
+
+      local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      function _sql_change_to:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+        _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
+      end
+    end
+  end
+
   local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.window.site )
   sv_generalRestartServer:SetSize( ctr( 400 ), ctr( 50 ) )
   sv_generalRestartServer:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )

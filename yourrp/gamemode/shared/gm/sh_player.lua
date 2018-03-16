@@ -3,7 +3,11 @@
 local Player = FindMetaTable( "Player" )
 
 function Player:HasAccess()
-  if self:IsAdmin() or self:IsSuperAdmin() or string.lower( self:GetUserGroup() == "owner" ) then
+  local _ug = self:GetUserGroup()
+  if isbool( _ug ) then
+    _ug = ""
+  end
+  if self:IsAdmin() or self:IsSuperAdmin() or string.lower( _ug ) == "owner" then
     return true
   else
     return false

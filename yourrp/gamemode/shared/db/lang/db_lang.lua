@@ -78,6 +78,7 @@ AddCSLuaFile( "languages/db_lang_es.lua" )
 AddCSLuaFile( "languages/db_lang_ca.lua" )
 AddCSLuaFile( "languages/db_lang_ua.lua" )
 AddCSLuaFile( "languages/db_lang_ko.lua" )
+AddCSLuaFile( "languages/db_lang_hu.lua" )
 
 include( "languages/db_lang_en.lua" )
 include( "languages/db_lang_de.lua" )
@@ -95,6 +96,7 @@ include( "languages/db_lang_es.lua" )
 include( "languages/db_lang_ca.lua" )
 include( "languages/db_lang_ua.lua" )
 include( "languages/db_lang_ko.lua" )
+include( "languages/db_lang_hu.lua" )
 
 function check_languagepack()
 	for k, v in pairs( yrp_all_lang ) do
@@ -108,6 +110,7 @@ end
 function send_lang()
 	--[[ send info to server ]]--
 	if CLIENT then
+		printGM( "lang", "Send Language to Server (" .. tostring( yrp_lang.get_language ) .. ")" )
 		net.Start( "client_lang" )
 			net.WriteString( tostring( yrp_lang.get_language ) )
 		net.SendToServer()
@@ -160,6 +163,8 @@ function change_language( index )
 					LangUA()
 				elseif yrp_lang.get_language == "ko" then
 					LangKO()
+				elseif yrp_lang.get_language == "hu" then
+					LangHU()
 				end
       else
         LangEN()
@@ -171,6 +176,7 @@ function change_language( index )
     end
   else
     printGM( "lang", "Manually change to Language [" .. index .. "]" )
+		yrp_lang.get_language = index
     if index == "de" then
       LangDE()
     elseif index == "en" then
@@ -203,6 +209,8 @@ function change_language( index )
 			LangUA()
 		elseif index == "ko" then
 			LangKO()
+		elseif index == "hu" then
+			LangHU()
 		else
       printGM( "error", "LANG_E0001" )
       return

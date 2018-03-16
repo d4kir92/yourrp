@@ -475,17 +475,21 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     _globalWorking = yrp_roles_dbTable[id].playermodelsnone
 
     hook.Add( "closeRolePlayermodels2", "yrp_close_playermodel_selector2", function()
-      if settingsWindow.window.site != nil then
-        yrp_roles_dbTable[id].playermodelsnone = _globalWorking
-        pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
-        pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
-        for i, pm in pairs( pms2 ) do
-          table.insert( pms, pm )
-        end
-        changepm = 1
-        if modelpanel != nil and modelpanel != NULL then
-          local _model = pms[changepm] or ""
-          modelpanel:SetModel( _model )
+      if settingsWindow != nil then
+        if settingsWindow.window != nil then
+          if settingsWindow.window.site != nil then
+            yrp_roles_dbTable[id].playermodelsnone = _globalWorking
+            pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
+            pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
+            for i, pm in pairs( pms2 ) do
+              table.insert( pms, pm )
+            end
+            changepm = 1
+            if modelpanel != nil and modelpanel != NULL then
+              local _model = pms[changepm] or ""
+              modelpanel:SetModel( _model )
+            end
+          end
         end
       end
     end)

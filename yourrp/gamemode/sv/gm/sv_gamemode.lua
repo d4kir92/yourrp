@@ -3,6 +3,13 @@
 function GM:PlayerDisconnected( ply )
   printGM( "gm", "[PlayerDisconnected] " .. ply:Name() )
   save_clients( "PlayerDisconnected" )
+
+  local _rol_tab = ply:GetRolTab()
+  if tonumber( _rol_tab.maxamount ) > 0 then
+    ply:SetNWString( "roleUniqueID", "1" )
+    updateRoleUses( _rol_tab.uniqueID )
+    print("DONE")
+  end
 end
 
 function GM:PlayerConnect( name, ip )
@@ -18,8 +25,7 @@ function GM:PlayerInitialSpawn( ply )
     if rolTab != nil then
       timer.Simple( 1, function()
 
-        set_role( ply, rolTab.uniqueID )
-        set_role_values( ply )
+        SetRole( ply, rolTab.uniqueID )
       end)
     end
   end
@@ -63,9 +69,17 @@ function GM:PlayerLoadout( ply )
     addKeys( ply )
 
     local plyTab = ply:GetPlyTab()
-    local chaTab = ply:GetChaTab()
 
-    set_role_values( ply )
+    local _rol_tab = ply:GetRolTab()
+    if _rol_tab != nil then
+      print(_rol_tab.uniqueID)
+      SetRole( ply, _rol_tab.uniqueID )
+    else
+      printGM( "gm", "Give role failed -> KillSilent -> " .. ply:Name() )
+      if !ply:IsBot() then
+        ply:KillSilent()
+      end
+    end
 
     local chaTab = ply:GetChaTab()
     if chaTab != nil then

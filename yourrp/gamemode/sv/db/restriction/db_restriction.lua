@@ -16,6 +16,9 @@ sql_add_column( _db_name, "props", "INT DEFAULT 0" )
 sql_add_column( _db_name, "ragdolls", "INT DEFAULT 0" )
 sql_add_column( _db_name, "noclip", "INT DEFAULT 0" )
 
+if db_select( _db_name, "*", "usergroup = 'owner'" ) == nil then
+  db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip", "'owner', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+end
 if db_select( _db_name, "*", "usergroup = 'superadmin'" ) == nil then
   db_insert_into( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
