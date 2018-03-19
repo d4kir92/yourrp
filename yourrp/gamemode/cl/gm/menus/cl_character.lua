@@ -453,7 +453,7 @@ function openCharacterCreation()
       if character.playermodels[tonumber( character.playermodelID )] != nil then
         if characterPlayermodel != nil and characterPlayermodel != NULL then
           characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
-          if haracterPlayermodel.Entity != nil then
+          if characterPlayermodel.Entity != nil then
             characterPlayermodel.Entity:SetModelScale( tonumber( character.playermodelsize ) )
           end
           characterPlayermodel:UpdateBodyGroups()
@@ -476,11 +476,11 @@ function openCharacterCreation()
   end
   function skinUp:DoClick()
     if characterPlayermodel.Entity != nil then
-      if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() then
+      if characterPlayermodel.Entity:SkinCount()-1 > characterPlayermodel.Entity:GetSkin() and characterPlayermodel.skin != nil then
         characterPlayermodel.skin = characterPlayermodel.skin + 1
+        character.skin = characterPlayermodel.skin
+        characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
       end
-      character.skin = characterPlayermodel.skin
-      characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
     end
   end
 
@@ -500,9 +500,9 @@ function openCharacterCreation()
     if characterPlayermodel.Entity != nil then
       if characterPlayermodel.Entity:GetSkin() > 0 then
         characterPlayermodel.skin = characterPlayermodel.skin - 1
+        character.skin = characterPlayermodel.skin
+        characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
       end
-      character.skin = characterPlayermodel.skin
-      characterPlayermodel.Entity:SetSkin( characterPlayermodel.skin )
     end
   end
 
