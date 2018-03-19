@@ -554,4 +554,6 @@ function TR_All()
   set_lang_string( "ip", "IP" )
   set_lang_string( "changetopre", "Sorgu dili olarak" )
   set_lang_string( "changetopos", "seç" )
+  set_lang_string( "internal", "İçsel" )
+  set_lang_string( "external", "Dışsal" )
 end

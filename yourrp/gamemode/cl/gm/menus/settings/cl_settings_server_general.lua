@@ -133,7 +133,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
     local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
-    sv_generalSQL:SetText( lang_string( "database" ) )
+    sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
     function sv_generalSQL:DoClick()
       local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 800 ), 0, 0 )
       _win:SetTitle( "" )

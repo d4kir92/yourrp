@@ -345,11 +345,12 @@ net.Receive( "shop_get_tabs", function( len )
       end
       function _tmp.addtab:DoClick()
         local _name, _uid = _tmp.tabs.plus:GetSelected()
-
-        net.Start( "dealer_add_tab" )
-          net.WriteString( _bm.window.dUID )
-          net.WriteString( _uid )
-        net.SendToServer()
+        if _uid != nil then
+          net.Start( "dealer_add_tab" )
+            net.WriteString( _bm.window.dUID )
+            net.WriteString( _uid )
+          net.SendToServer()
+        end
         self:GetParent():Close()
         _bm.window:Close()
       end

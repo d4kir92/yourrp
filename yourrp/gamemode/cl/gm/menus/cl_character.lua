@@ -405,13 +405,17 @@ function openCharacterCreation()
     end
   end
   function nextPM:DoClick()
-    character.playermodelID = character.playermodelID + 1
-    if tonumber( character.playermodelID ) > #character.playermodels then
-      character.playermodelID = #character.playermodels
+    if characterPlayermodel != nil then
+      character.playermodelID = character.playermodelID + 1
+      if tonumber( character.playermodelID ) > #character.playermodels then
+        character.playermodelID = #character.playermodels
+      end
+      characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
+      if characterPlayermodel.Entity != nil then
+        characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
+      end
+      characterPlayermodel:UpdateBodyGroups()
     end
-    characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
-    characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
-    characterPlayermodel:UpdateBodyGroups()
   end
 
   local charactersRoleCB = createMD( "DComboBox", charactersRole, ctr( 600 ), ctr( 50 ), ctr( (760-600)/2 ), ctr( 70 ), ctr( 5 ) )
@@ -449,7 +453,9 @@ function openCharacterCreation()
       if character.playermodels[tonumber( character.playermodelID )] != nil then
         if characterPlayermodel != nil and characterPlayermodel != NULL then
           characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
-          characterPlayermodel.Entity:SetModelScale( tonumber( character.playermodelsize ) )
+          if haracterPlayermodel.Entity != nil then
+            characterPlayermodel.Entity:SetModelScale( tonumber( character.playermodelsize ) )
+          end
           characterPlayermodel:UpdateBodyGroups()
         end
       end

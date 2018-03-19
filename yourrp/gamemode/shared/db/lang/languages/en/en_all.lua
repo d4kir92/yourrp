@@ -554,4 +554,6 @@ function EN_All()
   set_lang_string( "ip", "IP" )
   set_lang_string( "changetopre", "Change to" )
   set_lang_string( "changetopos", " " )
+  set_lang_string( "internal", "Internal" )
+  set_lang_string( "external", "External" )
 end

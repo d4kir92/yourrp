@@ -554,4 +554,6 @@ function DE_All()
   set_lang_string( "ip", "IP" )
   set_lang_string( "changetopre", "Zu" )
   set_lang_string( "changetopos", "wechseln" )
+  set_lang_string( "internal", "Intern" )
+  set_lang_string( "external", "Extern" )
 end
