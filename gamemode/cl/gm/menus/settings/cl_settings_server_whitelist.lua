@@ -179,11 +179,13 @@ net.Receive( "getRoleWhitelist", function( len )
   local _buttonRem = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 190 )
   _buttonRem:SetText( lang_string( "removeentry" ) )
   function _buttonRem:DoClick()
-    if _whitelistListView:GetSelectedLine() != "" then
-      net.Start( "whitelistPlayerRemove" )
-        net.WriteInt( _whitelistListView:GetLine( _whitelistListView:GetSelectedLine() ):GetValue( 1 ) , 16 )
-      net.SendToServer()
-      _whitelistListView:RemoveLine( _whitelistListView:GetSelectedLine() )
+    if _whitelistListView:GetSelectedLine() != "" and _whitelistListView:GetSelectedLine() != nil then
+      if _whitelistListView:GetLine( _whitelistListView:GetSelectedLine() ):GetValue( 1 ) != nil then
+        net.Start( "whitelistPlayerRemove" )
+          net.WriteInt( _whitelistListView:GetLine( _whitelistListView:GetSelectedLine() ):GetValue( 1 ) , 16 )
+        net.SendToServer()
+        _whitelistListView:RemoveLine( _whitelistListView:GetSelectedLine() )
+      end
     end
   end
 

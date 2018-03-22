@@ -8,7 +8,6 @@ function GM:PlayerDisconnected( ply )
   if tonumber( _rol_tab.maxamount ) > 0 then
     ply:SetNWString( "roleUniqueID", "1" )
     updateRoleUses( _rol_tab.uniqueID )
-    print("DONE")
   end
 end
 
@@ -72,7 +71,6 @@ function GM:PlayerLoadout( ply )
 
     local _rol_tab = ply:GetRolTab()
     if _rol_tab != nil then
-      print(_rol_tab.uniqueID)
       SetRole( ply, _rol_tab.uniqueID )
     else
       printGM( "gm", "Give role failed -> KillSilent -> " .. ply:Name() )

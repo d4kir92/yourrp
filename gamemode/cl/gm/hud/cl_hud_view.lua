@@ -32,7 +32,11 @@ function HudView()
       draw.SimpleTextOutlined( lang_string( "pressplypre" ) .. " [E] " .. lang_string( "pressplymid" ) .. " " .. tostring( _eyeTrace.Entity:RPName() ) .. " " .. lang_string( "pressplypos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     elseif _eyeTrace.Entity:IsNPC() then
       if _eyeTrace.Entity:GetNWString( "dealerID", "" ) != "" then
-        draw.SimpleTextOutlined( "[E] " .. lang_string( "trade" ) .. " [" .. _eyeTrace.Entity:GetNWString( "name", "" ) .. "]", "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        local _str = "[E] " .. lang_string( "trade" ) .. " [" .. _eyeTrace.Entity:GetNWString( "name", "" ) .. "]"
+        if _eyeTrace.Entity:GetNWBool( "immortal", false ) then
+          _str = _str .. " (" .. lang_string( "immortal" ) .. ")"
+        end
+        draw.SimpleTextOutlined( _str, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     end
   end

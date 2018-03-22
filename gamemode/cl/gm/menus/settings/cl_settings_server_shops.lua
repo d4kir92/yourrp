@@ -146,11 +146,13 @@ net.Receive( "get_shop_items", function()
       _sh._sit.itemname:SetHeader( lang_string( "name" ) )
       _sh._sit.itemname:SetText( db_out_str( tbl.name ) )
       function _sh._sit.itemname.textentry:SendNewName()
-        net.Start( "shop_item_edit_name" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.name )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_name" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.name )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
       function _sh._sit.itemname.textentry:OnChange()
         self.tbl.name = self:GetValue()
@@ -167,11 +169,13 @@ net.Receive( "get_shop_items", function()
       _sh._sit.itemdesc:SetHeader( lang_string( "description" ) )
       _sh._sit.itemdesc:SetText( db_out_str( tbl.description ) )
       function _sh._sit.itemdesc.textentry:SendNewDesc()
-        net.Start( "shop_item_edit_desc" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.description )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_desc" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.description )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
       function _sh._sit.itemdesc.textentry:OnChange()
         self.tbl.description = self:GetValue()
@@ -192,11 +196,13 @@ net.Receive( "get_shop_items", function()
       _sh._sit.itemprice.plus:SetValue( tbl.price )
       function _sh._sit.itemprice.plus:OnValueChanged( value )
         self.tbl.price = value
-        net.Start( "shop_item_edit_price" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.price )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_price" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.price )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
 
       --[[ Quantity ]]--
@@ -215,11 +221,13 @@ net.Receive( "get_shop_items", function()
       end
       function _sh._sit.itemquan.plus:OnSelect( index, value, data )
         self.tbl.quantity = data
-        net.Start( "shop_item_edit_quan" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.quantity )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_quan" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.quantity )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
 
       --[[ Cooldown ]]--
@@ -232,11 +240,13 @@ net.Receive( "get_shop_items", function()
       _sh._sit.itemcool.plus:SetValue( tbl.cooldown )
       function _sh._sit.itemcool.plus:OnValueChanged( value )
         self.tbl.cooldown = value
-        net.Start( "shop_item_edit_cool" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.cooldown )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_cool" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.cooldown )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
 
       --[[ License ]]--
@@ -259,11 +269,13 @@ net.Receive( "get_shop_items", function()
       end)
       function _sh._sit.itemlice.plus:OnSelect( index, value, data )
         self.tbl.licenseID = data
-        net.Start( "shop_item_edit_lice" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.licenseID )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_lice" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.licenseID )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
 
       --[[ Permanent ]]--
@@ -278,11 +290,13 @@ net.Receive( "get_shop_items", function()
           _checked = 1
         end
         self.tbl.permanent = _checked
-        net.Start( "shop_item_edit_perm" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.permanent )
-          net.WriteString( _sh._cat.uid )
-        net.SendToServer()
+        if _sh._cat.uid != nil then
+          net.Start( "shop_item_edit_perm" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.permanent )
+            net.WriteString( _sh._cat.uid )
+          net.SendToServer()
+        end
       end
 
       --[[ TYPE ]]--

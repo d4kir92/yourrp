@@ -556,4 +556,5 @@ function EN_All()
   set_lang_string( "changetopos", " " )
   set_lang_string( "internal", "Internal" )
   set_lang_string( "external", "External" )
+  set_lang_string( "immortal", "Immortal" )
 end

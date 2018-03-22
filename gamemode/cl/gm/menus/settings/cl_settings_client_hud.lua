@@ -443,6 +443,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
     changeHudElement( changeHudWindow, "ut", lang_string( "uptime" ) )
 
     changeHudElement( changeHudWindow, "bl", lang_string( "batterylife" ) )
+    changeHudElement( changeHudWindow, "rt", lang_string( "realtime" ) )
 
     changeHudWindow:MakePopup()
   end

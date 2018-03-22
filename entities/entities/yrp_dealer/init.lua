@@ -4,6 +4,7 @@ AddCSLuaFile( "shared.lua" )
 
 include('shared.lua')
 
+/*
 local schdChase = ai_schedule.New( "yrp_dealer" )
 
 schdChase:EngTask( "TASK_GET_PATH_TO_RANDOM_NODE", 	128 )
@@ -21,7 +22,7 @@ schdChase:EngTask( "TASK_FACE_ENEMY", 			0 )
 schdChase:EngTask( "TASK_ANNOUNCE_ATTACK", 		0 )
 schdChase:EngTask( "TASK_RANGE_ATTACK1", 		0 )
 schdChase:EngTask( "TASK_RELOAD", 				0 )
-
+*/
 
 function ENT:Initialize()
 	self:SetHullType( HULL_HUMAN )
@@ -34,35 +35,47 @@ function ENT:Initialize()
 
 	self:SetHealth( 100 )
 
-	local sequence = self:LookupSequence("idle")
-	self:ResetSequence(sequence)
-
 	self:SetUseType( SIMPLE_USE )
+	if IsDealerImmortal() then
+		self:SetNWBool( "immortal", true )
+	else
+		self:SetNWBool( "immortal", false )
+	end
 end
 
 function ENT:OnTakeDamage(dmg)
 	self:SetHealth(self:Health() - dmg:GetDamage())
-	if self:Health() <= 0 then
-		self:SetSchedule( SCHED_FALL_TO_GROUND )
-		local _rd = ents.Create( "prop_ragdoll" )
-		_rd:SetModel( self:GetModel() )
-		_rd:SetPos( self:GetPos() )
-		_rd:SetAngles( self:GetAngles() )
-		_rd:Spawn()
-		self:Remove()
-		timer.Simple( 9, function()
-			if tostring( _rd ) != "[NULL Entity]" then
-				_rd:Remove()
-			end
-		end)
+	if IsDealerImmortal() then
+		self:SetNWBool( "immortal", true )
+	else
+		self:SetNWBool( "immortal", false )
+		if self:Health() <= 0 then
+			self:SetSchedule( SCHED_FALL_TO_GROUND )
+			local _rd = ents.Create( "prop_ragdoll" )
+			_rd:SetModel( self:GetModel() )
+			_rd:SetPos( self:GetPos() )
+			_rd:SetAngles( self:GetAngles() )
+			_rd:Spawn()
+			self:Remove()
+			timer.Simple( 9, function()
+				if tostring( _rd ) != "[NULL Entity]" then
+					_rd:Remove()
+				end
+			end)
+		end
 	end
 end
 
 function ENT:SelectSchedule()
-	self:StartSchedule( schdChase )
+	//self:StartSchedule( schdChase )
 end
 
 function ENT:Open( activator, caller )
+	if IsDealerImmortal() then
+		self:SetNWBool( "immortal", true )
+	else
+		self:SetNWBool( "immortal", false )
+	end
 	if !activator:GetNWBool( "open_menu", false ) then
 		openBuyMenu( activator, self:GetNWString( "dealerID", "-1" ) )
 

@@ -15,6 +15,7 @@ util.AddNetworkString( "db_update_view_distance" )
 util.AddNetworkString( "db_update_realistic_damage" )
 util.AddNetworkString( "db_update_realistic_falldamage" )
 util.AddNetworkString( "db_update_smartphone" )
+util.AddNetworkString( "db_update_dealer_immortal" )
 
 util.AddNetworkString( "db_update_noclip_crow" )
 util.AddNetworkString( "db_update_noclip_tags" )
@@ -42,6 +43,7 @@ sql_add_column( _db_name, "toggle_realistic_damage", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_realistic_falldamage", "INT DEFAULT 1" )
 
 sql_add_column( _db_name, "toggle_smartphone", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_dealer_immortal", "INT DEFAULT 0" )
 
 sql_add_column( _db_name, "toggle_noclip_crow", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_noclip_stealth", "INT DEFAULT 0" )
@@ -88,6 +90,10 @@ if _init_general != false and _init_general != nil then
   yrp_general = _init_general[1]
 end
 
+function IsDealerImmortal()
+  return tobool( yrp_general.toggle_dealer_immortal )
+end
+
 function IsNoClipEffectEnabled()
   return tobool( yrp_general.toggle_noclip_effect )
 end
@@ -111,6 +117,14 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_dealer_immortal", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_dealer_immortal = _nw
+    db_update( "yrp_general", "toggle_dealer_immortal = " .. yrp_general.toggle_dealer_immortal, nil )
+  end
+end)
 
 net.Receive( "db_update_noclip_effect", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

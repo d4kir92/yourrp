@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local _hudVersion = 5
+local _hudVersion = 6
 
 local dbNameHUD = "yrp_cl_hud"
 
@@ -167,6 +167,7 @@ function loadCompleteHUD()
   loadDBHUDGroup( "ut" ) --Uptime
 
   loadDBHUDGroup( "bl" ) --Batterylife
+  loadDBHUDGroup( "rt" ) --RealTime
 
   --crosshair
   loadDBHUD( "cht" )
@@ -298,6 +299,9 @@ function setDefaultHUD()
   local bl = HUDTab( 1, -400, 0, 400, 60, 2, 0, 1, 1, 18, 1, 1, 1 )
   dbUpdateHUDGroup( "bl", bl )
 
+  local rt = HUDTab( 0, -400, 60, 400, 60, 2, 0, 1, 1, 18, 1, 1, 1 )
+  dbUpdateHUDGroup( "rt", rt )
+
   --crosshair
   dbUpdateHUD( "cht", 1 )
   dbUpdateHUD( "chl", 10 )
@@ -376,6 +380,7 @@ function loadDatabaseHUD()
   checkDBHUDGroup( "cb" ) --ChatBox
   checkDBHUDGroup( "ut" ) --uptime
   checkDBHUDGroup( "bl" ) --Batterylife
+  checkDBHUDGroup( "rt" ) --RealTime
 
   --crosshair
   checkDBHUD( "cht", 1 )

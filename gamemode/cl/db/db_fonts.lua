@@ -72,6 +72,8 @@ function update_db_fonts()
 	createFont( "stsf", tmpFont, HudV("stsf"), _weight, false )
 	createFont( "xpsf", tmpFont, HudV("xpsf"), _weight, false )
 	createFont( "utsf", tmpFont, HudV("utsf"), _weight, false )
+	createFont( "blsf", tmpFont, HudV("utsf"), _weight, false )
+	createFont( "rtsf", tmpFont, HudV("utsf"), _weight, false )
 end
 
 function changeFontSize()
@@ -132,7 +134,8 @@ function changeFontSize()
 	createFont( "xpsf", tmpFont, 24, _weight, false )
 	createFont( "utsf", tmpFont, 24, _weight, false )
 	createFont( "blsf", tmpFont, 24, _weight, false )
-
+	createFont( "rtsf", tmpFont, 24, _weight, false )
+	
 	createFont( "sef", tmpFont, 24, 1, false )
 
 	timer.Create( "createFontDB", 0.1, 0, function()

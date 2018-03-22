@@ -556,4 +556,6 @@ function DE_All()
   set_lang_string( "changetopos", "wechseln" )
   set_lang_string( "internal", "Intern" )
   set_lang_string( "external", "Extern" )
+  set_lang_string( "immortal", "Unsterblich" )
+  set_lang_string( "realtime", "Echtzeit" )
 end

@@ -224,6 +224,9 @@ timer.Create( "ServerThink", 1, 0, function()
               _dealer:SetAngles( _ang )
               _dealer:SetModel( dealer.WorldModel )
               _dealer:Spawn()
+
+							local sequence = _dealer.Entity:LookupSequence("idle_all_01")
+							_dealer.Entity:ResetSequence(sequence)
             end
           end
         end
