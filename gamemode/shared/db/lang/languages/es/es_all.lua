@@ -556,4 +556,6 @@ function ES_All()
   set_lang_string( "changetopos", " " )
   set_lang_string( "internal", "Interno" )
   set_lang_string( "external", "Externo" )
+  set_lang_string( "immortal", "Inmortal" )
+  set_lang_string( "realtime", "TIempo Real" )
 end

@@ -327,11 +327,7 @@ end
 function addDBPlayermodel( parent, id, uniqueID, size, help )
   local tmp = addDPanel( parent, 800, 50, 0, 90, lang_string( "roleplayermodel" ), "yrp_roles", help )
 
-  local pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
-  local pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
-  for i, pm in pairs( pms2 ) do
-    table.insert( pms, pm )
-  end
+  local pms = combineStringTables( yrp_roles_dbTable[id].playermodels, yrp_roles_dbTable[id].playermodelsnone )
   local changepm = 1
 
   local background = createVGUI( "DPanel", parent, 800, 800, 0, 140 )
@@ -421,17 +417,15 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     _globalWorking = yrp_roles_dbTable[id].playermodels
 
     hook.Add( "closeRolePlayermodels", "yrp_close_playermodel_selector", function()
-      if settingsWindow.window.site != nil then
-        yrp_roles_dbTable[id].playermodels = _globalWorking
-        pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
-        pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
-        for i, pm in pairs( pms2 ) do
-          table.insert( pms, pm )
-        end
-        changepm = 1
-        if modelpanel != nil and modelpanel != NULL then
-          local _model = pms[changepm] or ""
-          modelpanel:SetModel( _model )
+      if settingsWindow.window != nil then
+        if settingsWindow.window.site != nil then
+          yrp_roles_dbTable[id].playermodels = _globalWorking
+          pms = combineStringTables( yrp_roles_dbTable[id].playermodels, yrp_roles_dbTable[id].playermodelsnone )
+          changepm = 1
+          if modelpanel != nil and modelpanel != NULL then
+            local _model = pms[changepm] or ""
+            modelpanel:SetModel( _model )
+          end
         end
       end
     end)
@@ -479,11 +473,7 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
         if settingsWindow.window != nil then
           if settingsWindow.window.site != nil then
             yrp_roles_dbTable[id].playermodelsnone = _globalWorking
-            pms = string.Explode( ",", yrp_roles_dbTable[id].playermodels )
-            pms2 = string.Explode( ",", yrp_roles_dbTable[id].playermodelsnone )
-            for i, pm in pairs( pms2 ) do
-              table.insert( pms, pm )
-            end
+            pms = combineStringTables( yrp_roles_dbTable[id].playermodels, yrp_roles_dbTable[id].playermodelsnone )
             changepm = 1
             if modelpanel != nil and modelpanel != NULL then
               local _model = pms[changepm] or ""
@@ -807,11 +797,13 @@ function deleteDBRole()
   end
   local count = 0
   for k, v in pairs( yrp_roles ) do
-    v:SetPos( 0, (count) * ctr( 40 ) )
-    if k == tmp then
-      v:Remove()
-    else
-      count = count + 1
+    if v != NULL then
+      v:SetPos( 0, (count) * ctr( 40 ) )
+      if k == tmp then
+        v:Remove()
+      else
+        count = count + 1
+      end
     end
   end
 end
@@ -854,6 +846,10 @@ end
 
 function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile, tmpreg2, dbReg2, help )
 
+  local tmin = tmpmin or 1
+  local tmax = tmpmax or 1
+  local treg = tmpreg or 1
+  local treg2 = tmpreg2 or 1
   local _color1 = Color( color.r, color.g, color.b, 125 )
   local _color2 = Color( color.r, color.g, color.b, 255 )
   local tmp = createVGUI( "DPanel", parent, w, 2*(h/3), x, y )
@@ -863,79 +859,79 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
     if CurTime() > tmpSec then
       tmpSec = CurTime() + 1
       reg = reg + 1
-      if reg * tmpreg > tonumber( tmpmax ) then
+      if reg * tmpreg > tonumber( tmax ) then
         reg = 0
       end
     end
 
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 10 ) )
 
-    draw.RoundedBox( 0, 0, 0, pw * ( tmpmin / tmpmax ), ph, _color1 )
+    draw.RoundedBox( 0, 0, 0, pw * ( tmin / tmax ), ph, _color1 )
 
-    draw.RoundedBox( 0, 0, ph-ph/4, pw * ( reg*tmpreg / tmpmax ), ph/4, _color2 )
+    draw.RoundedBox( 0, 0, ph-ph/4, pw * ( reg*treg / tmax ), ph/4, _color2 )
 
     draw.SimpleTextOutlined( string, "sef", pw/2, 1 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    local _text = tmpmin .. "/" .. tmpmax .. "(" .. tmpreg
-    if tmpreg2 != nil then
-      _text = _text .. "/" .. tmpreg2
+    local _text = tmin .. "/" .. tmax .. "(" .. treg
+    if treg2 != nil then
+      _text = _text .. "/" .. treg2
     end
     _text = _text .. ")"
     draw.SimpleTextOutlined( _text, "sef", pw/2, 3 * (ph/4), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local _ele = 3
-  if tmpreg2 != nil then
+  if treg2 != nil then
     _ele = 4
   end
 
-  local tmp2 = addDNumberWang( parent, w/_ele, h/3, x, y + h - (h/3), tmpmin )
-  local tmp3 = addDNumberWang( parent, w/_ele, h/3, x + w/_ele, y + h - (h/3), tmpmax )
+  local tmp2 = addDNumberWang( parent, w/_ele, h/3, x, y + h - (h/3), tmin )
+  local tmp3 = addDNumberWang( parent, w/_ele, h/3, x + w/_ele, y + h - (h/3), tmax )
 
   function tmp2:OnValueChanged( val )
-    tmpmin = val
-    if tonumber( tmpmin ) > tonumber( tmpmax ) then
-      tmpmax = tmpmin
-      tmp3:SetValue( tmpmax )
+    tmin = val
+    if tonumber( tmin ) > tonumber( tmax ) then
+      tmax = tmin
+      tmp3:SetValue( tmax )
     end
     net.Start( "dbUpdate" )
       net.WriteString( dbTable )
-      net.WriteString( dbMin .. " = " .. tmpmin .. "" )
+      net.WriteString( dbMin .. " = " .. tmin .. "" )
       net.WriteString( dbWhile )
     net.SendToServer()
   end
 
   function tmp3:OnValueChanged( val )
-    tmpmax = val
-    if tonumber( tmpmax ) < tonumber( tmpmin ) then
-      tmpmin = tmpmax
-      tmp2:SetValue( tmpmin )
+    tmax = val
+    if tonumber( tmax ) < tonumber( tmin ) then
+      tmin = tmax
+      tmp2:SetValue( tmin )
     end
     net.Start( "dbUpdate" )
       net.WriteString( dbTable )
-      net.WriteString( dbMax .. " = " .. tmpmax .. "" )
+      net.WriteString( dbMax .. " = " .. tmax .. "" )
       net.WriteString( dbWhile )
     net.SendToServer()
   end
 
-  local tmp4 = addDNumberWang( parent, w/_ele, h/3, x + 2*(w/_ele), y + h - (h/3), tmpreg )
+  local tmp4 = addDNumberWang( parent, w/_ele, h/3, x + 2*(w/_ele), y + h - (h/3), treg )
   function tmp4:OnValueChanged( val )
-    tmpreg = val
+    treg = val
 
     net.Start( "dbUpdate" )
       net.WriteString( dbTable )
-      net.WriteString( dbReg .. " = " .. tmpreg .. "" )
+      net.WriteString( dbReg .. " = " .. treg .. "" )
       net.WriteString( dbWhile )
     net.SendToServer()
   end
 
-  if tmpreg2 != nil then
-    local tmp5 = addDNumberWang( parent, w/_ele, h/3, x + 3*(w/_ele), y + h - (h/3), tmpreg2 )
+  if treg2 != nil then
+    local tmp5 = addDNumberWang( parent, w/_ele, h/3, x + 3*(w/_ele), y + h - (h/3), treg2 )
     function tmp5:OnValueChanged( val )
-      tmpreg2 = val
+      treg2 = val
 
       net.Start( "dbUpdate" )
         net.WriteString( dbTable )
-        net.WriteString( dbReg2 .. " = " .. tmpreg2 .. "" )
+        net.WriteString( dbReg2 .. " = " .. treg2 .. "" )
         net.WriteString( dbWhile )
       net.SendToServer()
     end
@@ -1035,7 +1031,7 @@ net.Receive( "yrp_roles", function( len )
         --3.Spalte
         --addDBAmmo( rolesInfo, self.id, tmp.uniqueID )
       end
-      if tmp != nil and rolesList != NULL then
+      if tmp != nil and rolesList != NULL and rolesList.AddItem != nil then
         rolesList:AddItem( tmp )
       end
     end

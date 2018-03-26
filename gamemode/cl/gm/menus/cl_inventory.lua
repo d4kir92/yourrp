@@ -9,7 +9,7 @@ yrp_inventory.cache_inv_item = {}
 
 function clearL()
   if yrp_inventory != nil then
-    if yrp_inventory.left != NULL and yrp_inventory.left != nil then
+    if yrp_inventory.left != NULL and yrp_inventory.left != nil and tostring(yrp_inventory.left) != "[NULL Panel]" then
       local _childs = yrp_inventory.left:GetChildren()
       if istable( _childs ) then
         for k, v in pairs( _childs ) do
@@ -43,11 +43,7 @@ net.Receive( "get_menu_bodygroups", function( len )
 
   local _tbl = net.ReadTable()
   local _skin = tonumber( _tbl.skin )
-  local _pms = string.Explode( ",", _tbl.playermodels )
-  local _pms2 = string.Explode( ",", _tbl.playermodelsnone )
-  for i, pm in pairs( _pms2 ) do
-    table.insert( _pms, pm )
-  end
+  local _pms = combineStringTables( _tbl.playermodels, _tbl.playermodelsnone )
 
   local _pmid = tonumber( _tbl.playermodelID )
   local _pm = _pms[_pmid]

@@ -360,7 +360,9 @@ function openCharacterCreation()
             v.value = tmp.count
             characterPlayermodel.bodygroups[v.id] = v.value
             character.bg[k-1] = v.value
-            characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
+            if characterPlayermodel.Entity != nil then
+              characterPlayermodel.Entity:SetBodygroup( v.id, v.value )
+            end
           end
 
       end
@@ -389,7 +391,9 @@ function openCharacterCreation()
       character.playermodelID = 1
     end
     characterPlayermodel:SetModel( character.playermodels[tonumber( character.playermodelID )] )
-    characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
+    if characterPlayermodel.Entity != nil then
+      characterPlayermodel.Entity:SetModelScale( character.playermodelsize )
+    end
     characterPlayermodel:UpdateBodyGroups()
   end
 
@@ -443,11 +447,7 @@ function openCharacterCreation()
       character.ar = tmpTable[1].ar
       character.armax = tmpTable[1].armax
       character.salary = tmpTable[1].salary
-      character.playermodels = string.Explode( ",", tmpTable[1].playermodels )
-      character.playermodelsnone = string.Explode( ",", tmpTable[1].playermodelsnone )
-      for i, pm in pairs( character.playermodelsnone ) do
-        table.insert( character.playermodels, pm )
-      end
+      character.playermodels = combineStringTables( tmpTable[1].playermodels, tmpTable[1].playermodelsnone )
       character.playermodelID = 1
       character.playermodelsize = tmpTable[1].playermodelsize
       if character.playermodels[tonumber( character.playermodelID )] != nil then
@@ -706,11 +706,7 @@ function openCharacterSelection()
           tmpChar.map = _characters[i].char.map
           tmpChar.playermodelID = _characters[i].char.playermodelID
 
-          tmpChar.playermodels = string.Explode( ",", _characters[i].role.playermodels )
-          tmpChar.playermodelsnone = string.Explode( ",", _characters[i].role.playermodelsnone )
-          for i, pm in pairs( tmpChar.playermodelsnone ) do
-            table.insert( tmpChar.playermodels, pm )
-          end
+          tmpChar.playermodels = combineStringTables( _characters[i].role.playermodels, _characters[i].role.playermodelsnone )
 
           tmpChar.playermodelsize = _characters[i].role.playermodelsize
           tmpChar.skin = _characters[i].char.skin
@@ -755,7 +751,7 @@ function openCharacterSelection()
             _cur = self.rpname
             if self.playermodels != nil and self.playermodelID != nil then
               local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
-              if _playermodel != nil and charplayermodel != NULL then
+              if _playermodel != nil and charplayermodel != NULL and tostring( charplayermodel ) != "[NULL Panel]" then
                 charplayermodel:SetModel( _playermodel )
                 if charplayermodel.Entity != nil then
                   charplayermodel.Entity:SetModelScale( self.playermodelsize )

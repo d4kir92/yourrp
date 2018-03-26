@@ -23,101 +23,100 @@ local _pr = {}
 local _adminonly = Material( "icon16/shield.png" )
 
 function createRoleBox( rol, parent )
-  local _rol = createD( "DPanel", parent, ctrb( 400 ), ctrb( 400 ), 0, 0 )
-  function _rol:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
-    drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
-  end
-  _rol.tbl = rol
+  if rol != nil then
+    local _rol = createD( "DPanel", parent, ctrb( 400 ), ctrb( 400 ), 0, 0 )
+    function _rol:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
+    end
+    _rol.tbl = rol
 
-  --[[ Role Playermodel ]]--
-  _rol.pm = createD( "DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0 )
-  _rol.pm:SetModel( string.Explode( ",", _rol.tbl.playermodels )[1] or "" )
+    --[[ Role Playermodel ]]--
+    _rol.pm = createD( "DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0 )
+    _rol.pm:SetModel( string.Explode( ",", _rol.tbl.playermodels )[1] or "" )
 
-  --[[ Role Name ]]--
-  _rol.rn = createD( "DPanel", _rol, _rol:GetWide(), ctrb( 60 ), 0, 0 )
-  function _rol.rn:Paint( pw, ph )
-    surfaceText( self:GetParent().tbl.roleID, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
-  end
+    --[[ Role Name ]]--
+    _rol.rn = createD( "DPanel", _rol, _rol:GetWide(), ctrb( 60 ), 0, 0 )
+    function _rol.rn:Paint( pw, ph )
+      surfaceText( self:GetParent().tbl.roleID, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+    end
 
-  --[[ Role MaxAmount ]]--
-  if tonumber( rol.maxamount ) > 0 then
-    _rol.ma = createD( "DPanel", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 + 60 ) )
-    function _rol.ma:Paint( pw, ph )
+    --[[ Role MaxAmount ]]--
+    if tonumber( rol.maxamount ) > 0 then
+      _rol.ma = createD( "DPanel", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 + 60 ) )
+      function _rol.ma:Paint( pw, ph )
+        local _br = 4
+        pw = pw - 2*ctrb( 4 )
+        ph = ph - 1*ctrb( 4 )
+
+        --Background
+        draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, Color( 255, 255, 255, 100 ) )
+
+        --Maxamount
+        draw.RoundedBox( 0, ctrb( _br ), 0, (rol.uses/rol.maxamount) * (pw), ph, Color( 255, 0, 0, 255 ) )
+        surfaceText( self:GetParent().tbl.uses .. "/" .. self:GetParent().tbl.maxamount, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+
+        --BR
+        drawRBBR( 0, ctrb( _br ), 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
+      end
+    end
+
+    --[[ Role Adminonly ]]--
+    if tobool( rol.adminonly ) then
+      _rol.aoicon = 64
+      _rol.ao = createD( "DPanel", _rol, ctrb( _rol.aoicon ), ctrb( _rol.aoicon ), _rol:GetWide()/2-ctrb( _rol.aoicon/2 ), _rol:GetTall()/2-ctrb( _rol.aoicon/2 ) )
+      function _rol.ao:Paint( pw, ph )
+        surface.SetDrawColor( 255, 255, 255, 255 )
+        surface.SetMaterial( _adminonly	)
+        surface.DrawTexturedRect( 0, 0, pw, ph )
+      end
+    end
+
+    --[[ Role Button ]]--
+    _rol.gr = createD( "DButton", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 ) )
+    function _rol.gr:Paint( pw, ph )
       local _br = 4
       pw = pw - 2*ctrb( 4 )
       ph = ph - 1*ctrb( 4 )
 
-      --Background
-      draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, Color( 255, 255, 255, 100 ) )
-
-      --Maxamount
-      draw.RoundedBox( 0, ctrb( _br ), 0, (rol.uses/rol.maxamount) * (pw), ph, Color( 255, 0, 0, 255 ) )
-      surfaceText( self:GetParent().tbl.uses .. "/" .. self:GetParent().tbl.maxamount, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      local _color = Color( 255, 255, 100 )
+      if self:IsHovered() then
+        _color = Color( 255, 255, 0 )
+      end
+      draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, _color )
+      surfaceText( lang_string( "moreinfo" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 
       --BR
       drawRBBR( 0, ctrb( _br ), 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
     end
-  end
+    _rol.gr:SetText( "" )
+    function _rol.gr:DoClick()
+      local _pm = combineStringTables( rol.playermodels, rol.playermodelsnone )
+      
+      _rm.infopm:SetModel( _pm[1] or "" )
 
-  --[[ Role Adminonly ]]--
-  if tobool( rol.adminonly ) then
-    _rol.aoicon = 64
-    _rol.ao = createD( "DPanel", _rol, ctrb( _rol.aoicon ), ctrb( _rol.aoicon ), _rol:GetWide()/2-ctrb( _rol.aoicon/2 ), _rol:GetTall()/2-ctrb( _rol.aoicon/2 ) )
-    function _rol.ao:Paint( pw, ph )
-      surface.SetDrawColor( 255, 255, 255, 255 )
-      surface.SetMaterial( _adminonly	)
-      surface.DrawTexturedRect( 0, 0, pw, ph )
+      _rm.info.rolename = rol.roleID
+
+      _rm.infodesc:SetText( "" )
+      _rm.infodesc:SetFontInternal( "roleInfoText" )
+      _rm.infodesc:InsertColorChange( 255, 255, 255, 255 )
+      _rm.infodesc:AppendText( rol.description )
+
+      _rm.infosweps:SetText( "" )
+      _rm.infosweps:SetFontInternal( "roleInfoText" )
+      _rm.infosweps:InsertColorChange( 255, 255, 255, 255 )
+      _rm.infosweps:AppendText( string.Implode( ", ", string.Explode( ",", rol.sweps ) ) )
+
+      _rm.info.rolesala = rol.salary
+      _rm.info.roleswep = rol.sweps
+
+      _rm.infobutton.rolename = rol.roleID
+      _rm.infobutton.uniqueID = rol.uniqueID
     end
-  end
 
-  --[[ Role Button ]]--
-  _rol.gr = createD( "DButton", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 ) )
-  function _rol.gr:Paint( pw, ph )
-    local _br = 4
-    pw = pw - 2*ctrb( 4 )
-    ph = ph - 1*ctrb( 4 )
-
-    local _color = Color( 255, 255, 100 )
-    if self:IsHovered() then
-      _color = Color( 255, 255, 0 )
+    if parent.AddPanel != nil then
+      parent:AddPanel( _rol )
     end
-    draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, _color )
-    surfaceText( lang_string( "moreinfo" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
-
-    --BR
-    drawRBBR( 0, ctrb( _br ), 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
-  end
-  _rol.gr:SetText( "" )
-  function _rol.gr:DoClick()
-    local _pm = string.Explode( ",", rol.playermodels )
-    local _pm2 = string.Explode( ",", rol.playermodelsnone )
-    for i, pm in pairs( _pm2 ) do
-      table.insert( _pm, pm )
-    end
-    _rm.infopm:SetModel( _pm[1] or "" )
-
-    _rm.info.rolename = rol.roleID
-
-    _rm.infodesc:SetText( "" )
-    _rm.infodesc:SetFontInternal( "roleInfoText" )
-    _rm.infodesc:InsertColorChange( 255, 255, 255, 255 )
-    _rm.infodesc:AppendText( rol.description )
-
-    _rm.infosweps:SetText( "" )
-    _rm.infosweps:SetFontInternal( "roleInfoText" )
-    _rm.infosweps:InsertColorChange( 255, 255, 255, 255 )
-    _rm.infosweps:AppendText( string.Implode( ", ", string.Explode( ",", rol.sweps ) ) )
-
-    _rm.info.rolesala = rol.salary
-    _rm.info.roleswep = rol.sweps
-
-    _rm.infobutton.rolename = rol.roleID
-    _rm.infobutton.uniqueID = rol.uniqueID
-  end
-
-  if parent.AddPanel != nil then
-    parent:AddPanel( _rol )
   end
 end
 
@@ -192,51 +191,55 @@ function getRoles( uid, parent )
 end
 
 function addGroup( grp, parent )
-  local _grp = createD( "DYRPCollapsibleCategory", parent, parent:GetWide() - ctrb( 40 ), ctrb( 200 ), ctrb( 0 ), ctrb( 0 ) )
-  _grp:SetHeader( grp.groupID )
-  _grp:SetSpacing( 30 )
-  _grp.color = string.Explode( ",", grp.color )
-  _grp.color = Color( _grp.color[1], _grp.color[2], _grp.color[3] )
-  _grp.tbl = grp
-  function _grp:PaintHeader( pw, ph )
-    local _hl = 0
-    if self.header:IsHovered() then
-      _hl = 70
-    end
-    draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r + _hl, self.color.g + _hl, self.color.b + _hl ), true, true, !self:IsOpen(), !self:IsOpen() )
-    surfaceText( self.tbl.groupID, "roleInfoHeader", ph/2, ph/2, Color( 255, 255, 255 ), 0, 1 )
+  if parent != NULL then
+    local _grp = createD( "DYRPCollapsibleCategory", parent, parent:GetWide() - ctrb( 40 ), ctrb( 200 ), ctrb( 0 ), ctrb( 0 ) )
+    _grp:SetHeader( grp.groupID )
+    _grp:SetSpacing( 30 )
+    _grp.color = string.Explode( ",", grp.color )
+    _grp.color = Color( _grp.color[1], _grp.color[2], _grp.color[3] )
+    _grp.tbl = grp
+    function _grp:PaintHeader( pw, ph )
+      local _hl = 0
+      if self.header:IsHovered() then
+        _hl = 70
+      end
+      draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r + _hl, self.color.g + _hl, self.color.b + _hl ), true, true, !self:IsOpen(), !self:IsOpen() )
+      surfaceText( self.tbl.groupID, "roleInfoHeader", ph/2, ph/2, Color( 255, 255, 255 ), 0, 1 )
 
-    local _box = ctrb( 50 )
-    local _dif = 50
-    local _br = (ph - _box)/2
-    local _tog = "▼"
-    if self:IsOpen() then
-      _tog = "▲"
+      local _box = ctrb( 50 )
+      local _dif = 50
+      local _br = (ph - _box)/2
+      local _tog = "▼"
+      if self:IsOpen() then
+        _tog = "▲"
+      end
+      draw.RoundedBox( 0, pw - _box - _br, _br, _box, _box, Color( self.color.r - _dif, self.color.g - _dif, self.color.b - _dif ) )
+      surfaceText( _tog, "roleInfoHeader", pw - _box/2 - _br, _br + _box/2, Color( 255, 255, 255 ), 1, 1 )
     end
-    draw.RoundedBox( 0, pw - _box - _br, _br, _box, _box, Color( self.color.r - _dif, self.color.g - _dif, self.color.b - _dif ) )
-    surfaceText( _tog, "roleInfoHeader", pw - _box/2 - _br, _br + _box/2, Color( 255, 255, 255 ), 1, 1 )
-  end
-  function _grp:PaintContent( pw, ph )
-    draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r+40, self.color.g+40, self.color.b+40 ), false, false, true, true )
-  end
-  _grp:SetHeaderHeight( ctrb( 100 ) )
+    function _grp:PaintContent( pw, ph )
+      draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r+40, self.color.g+40, self.color.b+40 ), false, false, true, true )
+    end
+    _grp:SetHeaderHeight( ctrb( 100 ) )
 
-  function _grp:DoClick()
-    if self:IsOpen() then
-      getRoles( grp.uniqueID, _grp )
+    function _grp:DoClick()
+      if self:IsOpen() then
+        getRoles( grp.uniqueID, _grp )
+      else
+        self:ClearContent()
+      end
+    end
+
+    if grp.uppergroup != "-1" then
+      parent:Add( _grp )
     else
-      self:ClearContent()
+      parent:AddItem( _grp )
     end
-  end
+    --parent:Rebuild()
 
-  if grp.uppergroup != "-1" then
-    parent:Add( _grp )
+    return _grp
   else
-    parent:AddItem( _grp )
+    return NULL
   end
-  --parent:Rebuild()
-
-  return _grp
 end
 
 function getGroups( uid, parent )

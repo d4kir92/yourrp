@@ -241,7 +241,7 @@ end
 
 function Player:unArrest( Unarrester )
   --Description: Unarrest a player.
-  printGM( "darkrp", "unArrest( " .. Unarrester:Name() .. " )" )
+  printGM( "darkrp", "unArrest( " .. Unarrester:YRPName() .. " )" )
   self:SetNWBool( "inJail", false )
 end
 

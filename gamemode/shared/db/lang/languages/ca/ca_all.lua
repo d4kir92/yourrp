@@ -556,4 +556,6 @@ function CA_All()
   set_lang_string( "changetopos", " " )
   set_lang_string( "internal", "Intern" )
   set_lang_string( "external", "Extern" )
+  set_lang_string( "immortal", "Inmortal" )
+  set_lang_string( "realtime", "Temps real" )
 end

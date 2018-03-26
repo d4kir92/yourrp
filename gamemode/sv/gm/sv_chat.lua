@@ -391,7 +391,7 @@ function GM:PlayerSay( sender, text, teamChat )
     net.Broadcast()
   elseif paket.lokal then
     for k, receiver in pairs( player.GetAll() ) do
-      if sender:GetPos():Distance( receiver:GetPos() ) < 2000 then
+      if sender:GetPos():Distance( receiver:GetPos() ) < 400 then
         net.Start( "yrp_player_say" )
           net.WriteTable( pk )
         net.Send( receiver )

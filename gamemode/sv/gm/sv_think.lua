@@ -10,7 +10,7 @@ end)
 util.AddNetworkString( "client_lang" )
 net.Receive( "client_lang", function( len, ply )
   local _lang = net.ReadString()
-  printGM( "note", ply:Name() .. " using language: " .. string.upper( _lang ) )
+  printGM( "note", ply:YRPName() .. " using language: " .. string.upper( _lang ) )
   ply:SetNWString( "client_lang", _lang or "NONE" )
 end)
 

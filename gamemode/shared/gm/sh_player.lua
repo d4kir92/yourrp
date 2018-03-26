@@ -52,7 +52,7 @@ end
 function Player:HasCharacterSelected()
   if SERVER then
     if self:LoadedGamemode() then
-      --printGM( "note", self:Name() .. " HasCharacterSelected?" )
+      --printGM( "note", self:YRPName() .. " HasCharacterSelected?" )
       local _ply_tab = self:GetPlyTab()
       --printTab( _ply_tab )
       if _ply_tab != nil then
@@ -145,7 +145,7 @@ function Player:CharID()
   if self.charid != nil then
     return self.charid
   else
-    --SPAM printGM( "note", self:Name() .. " CharID == NIL! " .. tostring( self.charid ) )
+    --SPAM printGM( "note", self:YRPName() .. " CharID == NIL! " .. tostring( self.charid ) )
     return nil
   end
 end
@@ -200,11 +200,7 @@ function Player:GetPlayerModel()
     if worked( yrp_characters, "yrp_characters (GetPlayerModel)", true ) then
       local pmID = tonumber( yrp_characters.playermodelID )
       local yrp_role = self:GetRolTab()
-      local tmp = string.Explode( ",", yrp_role.playermodels )
-      local tmp2 = string.Explode( ",", yrp_role.playermodelsnone )
-      for i, pm in pairs( tmp2 ) do
-        table.insert( tmp, pm )
-      end
+      local tmp = combineStringTables( yrp_role.playermodels, yrp_role.playermodelsnone )
       local pm = tmp[pmID]
 
       if pm == "" then
@@ -439,7 +435,7 @@ function Player:Nick()
   return tostring( self:RPName() )
 end
 
-function Player:Name()
+function Player:YRPName()
   return "[" .. self:SteamName() .. " (".. self:RPName() .. ")]" -- " {Alive: " .. string.upper( tostring(self:Alive()) ) .. "}"
 end
 

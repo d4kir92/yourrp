@@ -115,7 +115,7 @@ net.Receive( "charGetRoleInfo", function( len, ply )
 end)
 
 net.Receive( "yrp_get_characters", function( len, ply )
-  printGM( "db", ply:Name() .. " ask for characters" )
+  printGM( "db", ply:YRPName() .. " ask for characters" )
   local netTable = {}
 
   local chaTab = db_select( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
@@ -262,11 +262,7 @@ util.AddNetworkString( "inv_pm_up" )
 
 net.Receive( "inv_pm_up", function( len, ply )
   local _cur = net.ReadInt( 16 )
-  local _pms = string.Explode( ",", ply:GetRolTab().playermodels )
-  local _pms2 = string.Explode( ",", ply:GetRolTab().playermodelsnone )
-  for i, pm in pairs( _pms2 ) do
-    table.insert( _pms, pm )
-  end
+  local _pms = combineStringTables( ply:GetRolTab().playermodels, ply:GetRolTab().playermodelsnone )
   ply:SetModel( _pms[_cur] )
   local _charid = ply:CharID()
   db_update( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
@@ -276,11 +272,7 @@ util.AddNetworkString( "inv_pm_do" )
 
 net.Receive( "inv_pm_do", function( len, ply )
   local _cur = net.ReadInt( 16 )
-  local _pms = string.Explode( ",", ply:GetRolTab().playermodels )
-  local _pms2 = string.Explode( ",", ply:GetRolTab().playermodelsnone )
-  for i, pm in pairs( _pms2 ) do
-    table.insert( _pms, pm )
-  end
+  local _pms = combineStringTables( ply:GetRolTab().playermodels, ply:GetRolTab().playermodelsnone )
   ply:SetModel( _pms[_cur] )
   local _charid = ply:CharID()
   db_update( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )

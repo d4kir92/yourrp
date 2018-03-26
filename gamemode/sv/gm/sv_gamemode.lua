@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function GM:PlayerDisconnected( ply )
-  printGM( "gm", "[PlayerDisconnected] " .. ply:Name() )
+  printGM( "gm", "[PlayerDisconnected] " .. ply:YRPName() )
   save_clients( "PlayerDisconnected" )
 
   local _rol_tab = ply:GetRolTab()
@@ -17,7 +17,7 @@ function GM:PlayerConnect( name, ip )
 end
 
 function GM:PlayerInitialSpawn( ply )
-  printGM( "gm", "[PlayerInitialSpawn] " .. ply:Name() )
+  printGM( "gm", "[PlayerInitialSpawn] " .. ply:YRPName() )
   --ply:KillSilent()
   if ply:HasCharacterSelected() then
     local rolTab = ply:GetRolTab()
@@ -31,7 +31,7 @@ function GM:PlayerInitialSpawn( ply )
 end
 
 function GM:PlayerSelectSpawn( ply )
-  printGM( "gm", "[PlayerSelectSpawn] " .. ply:Name() )
+  printGM( "gm", "[PlayerSelectSpawn] " .. ply:YRPName() )
 
 	local spawns = ents.FindByClass( "info_player_start" )
 	local random_entry = math.random( #spawns )
@@ -43,7 +43,7 @@ end
 function GM:PlayerAuthed( ply, steamid, uniqueid )
   ply:KillSilent()
 
-  printGM( "gm", "[PlayerAuthed] " .. ply:Name() )
+  printGM( "gm", "[PlayerAuthed] " .. ply:YRPName() )
 
   --ply:KillSilent()
   ply:resetUptimeCurrent()
@@ -51,7 +51,7 @@ function GM:PlayerAuthed( ply, steamid, uniqueid )
 end
 
 function GM:PlayerLoadout( ply )
-  printGM( "gm", "[PlayerLoadout] " .. ply:Name() .. " get his role equipment." )
+  printGM( "gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment." )
   if ply:HasCharacterSelected() then
     ply:CheckInventory()
 
@@ -73,7 +73,7 @@ function GM:PlayerLoadout( ply )
     if _rol_tab != nil then
       SetRole( ply, _rol_tab.uniqueID )
     else
-      printGM( "gm", "Give role failed -> KillSilent -> " .. ply:Name() )
+      printGM( "gm", "Give role failed -> KillSilent -> " .. ply:YRPName() )
       if !ply:IsBot() then
         ply:KillSilent()
       end
@@ -87,7 +87,7 @@ function GM:PlayerLoadout( ply )
 
       setbodygroups( ply )
     else
-      printGM( "gm", "Give char failed -> KillSilent -> " .. ply:Name() )
+      printGM( "gm", "Give char failed -> KillSilent -> " .. ply:YRPName() )
       if !ply:IsBot() then
         ply:KillSilent()
       end
@@ -136,7 +136,7 @@ function GM:PlayerLoadout( ply )
 end
 
 hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
-  printGM( "gm", "[PlayerSpawn] " .. tostring( ply:Name() ) .. " spawned." )
+  printGM( "gm", "[PlayerSpawn] " .. tostring( ply:YRPName() ) .. " spawned." )
   if ply:GetNWBool( "can_respawn", true ) then
     ply:SetNWBool( "can_respawn", false )
 
@@ -149,7 +149,7 @@ hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
 end)
 
 hook.Add( "PostPlayerDeath", "yrp_player_spawn", function( ply )
-  printGM( "gm", "[PostPlayerDeath] " .. tostring( ply:Name() ) .. " is dead." )
+  printGM( "gm", "[PostPlayerDeath] " .. tostring( ply:YRPName() ) .. " is dead." )
   ply:StopBleeding()
 
   ply:SetNWBool( "can_respawn", true )
@@ -170,11 +170,11 @@ end)
 
 --[[
 function GM:PlayerDeathThink( ply )
-  --printGM( "gm", "[PlayerDeathThink] " .. tostring( ply:Name() ) .. "" )
+  --printGM( "gm", "[PlayerDeathThink] " .. tostring( ply:YRPName() ) .. "" )
 end
 ]]--
 hook.Add( "DoPlayerDeath", "yrp_player_spawn", function( ply, attacker, dmg )
-  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:Name() ) )
+  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:YRPName() ) )
   local _reward = tonumber( ply:GetNWString( "hitreward" ) )
   if isnumber( _reward ) and attacker:IsPlayer() then
     if attacker:IsAgent() then
@@ -467,7 +467,7 @@ end
 
 util.AddNetworkString( "player_is_ready" )
 net.Receive( "player_is_ready", function( len, ply )
-  printGM( "note", ply:Name() .. " finished loading." )
+  printGM( "note", ply:YRPName() .. " finished loading." )
 
   open_character_selection( ply )
 

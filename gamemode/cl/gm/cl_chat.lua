@@ -159,7 +159,7 @@ function yrpChat.closeChatbox()
 	gamemode.Call( "ChatTextChanged", "" )
 end
 
-hook.Add( "PlayerBindPress", "overrideChatbind", function( ply, bind, pressed )
+hook.Add( "PlayerBindPress", "yrp_overrideChatbind", function( ply, bind, pressed )
   local bTeam = nil
   if bind == "messagemode" then
     bTeam = false
@@ -174,7 +174,7 @@ hook.Add( "PlayerBindPress", "overrideChatbind", function( ply, bind, pressed )
   return true
 end )
 
-hook.Add( "ChatText", "serverNotifications", function( index, name, text, type )
+hook.Add( "ChatText", "yrp_serverNotifications", function( index, name, text, type )
   if type == "joinleave" or type == "none" then
     yrpChat.richText:AppendText( text.."\n" )
   end
