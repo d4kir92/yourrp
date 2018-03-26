@@ -267,9 +267,11 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 
   if IsRealisticDamageEnabled() then
     if IsBleedingEnabled() then
-      ply:StartBleeding()
-
-      ply:SetBleedingPosition( ply:GetPos() - dmginfo:GetDamagePosition() )
+      local _rand = math.Rand( 0, 100 )
+      if _rand < GetBleedingChance() then
+        ply:StartBleeding()
+        ply:SetBleedingPosition( ply:GetPos() - dmginfo:GetDamagePosition() )
+      end
     end
   	if hitgroup == HITGROUP_HEAD then
       if IsHeadshotDeadlyPlayer() then

@@ -515,16 +515,25 @@ function GM:InitPostEntity()
 
     --[[ IF STARTED SINGLEPLAYER ]]--
     if game.SinglePlayer() then
-      local _warning = createD( "DFrame", nil, 600, 600, 0, 0 )
+      local _warning = createD( "DFrame", nil, 600, 300, 0, 0 )
       _warning:SetTitle( "" )
       _warning:Center()
       function _warning:Paint( pw, ph )
         paintWindow( self, pw, ph, "WARNING!" )
-        draw.SimpleTextOutlined( "PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-        draw.SimpleTextOutlined( "Use a dedicated server or start multiplayer, thanks!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-        draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR BEST EXPERIENCE!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( "PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw/2, ph/2 - ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( "Use a dedicated server or start multiplayer, thanks!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
       end
       _warning:MakePopup()
+    elseif !serverIsDedicated and serverIsDedicated != nil then
+      local _warning2 = createD( "DFrame", nil, 600, 300, 0, 0 )
+      _warning2:SetTitle( "" )
+      _warning2:Center()
+      function _warning2:Paint( pw, ph )
+        paintWindow( self, pw, ph, "WARNING!" )
+        draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+      end
+      _warning2:MakePopup()
     end
   end)
 

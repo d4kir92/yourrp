@@ -11,6 +11,8 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
   local sv_bf = createD( "DCheckBox", settingsWindow.window.site, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 10 ) )
   local sv_bl = createD( "DCheckBox", settingsWindow.window.site, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 70 ) )
 
+  local sv_blc = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 400 ), ctr( 70 ) )
+
   local sv_bcl = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 400 ), ctr( 10 ) )
   local sv_bca = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 1100 ), ctr( 10 ) )
 
@@ -30,6 +32,8 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
 
   local sv_h_entity = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1400 ) )
   local sv_h_vehicle = createD( "DNumberWang", settingsWindow.window.site, ctr( 200 ), ctr( 50 ), ctr( 10 ), ctr( 1470 ) )
+
+  sv_blc:SetMax( 100 )
 
   sv_bcl:SetMax( 100 )
   sv_bca:SetMax( 100 )
@@ -57,6 +61,8 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
 
     draw.SimpleTextOutlined( lang_string( "bonefracturing" ), "sef", ctr( 70 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "bleeding" ), "sef", ctr( 70 ), ctr( 95 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( "% " .. lang_string( "bleedingchance" ), "sef", ctr( 610 ), ctr( 95 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     draw.SimpleTextOutlined( "% " .. lang_string( "breakchance" ) .. " - " .. lang_string( "legs" ), "sef", ctr( 610 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "% " .. lang_string( "breakchance" ) .. " - " .. lang_string( "arms" ), "sef", ctr( 1310 ), ctr( 35 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -111,6 +117,8 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
     if sv_bf != NULL then
       sv_bf:SetValue( _tab.bonefracturing )
       sv_bl:SetValue( _tab.bleeding )
+
+      sv_blc:SetValue( _tab.bleedingchance )
 
       sv_bcl:SetValue( _tab.bonechance_legs )
       sv_bca:SetValue( _tab.bonechance_arms )
@@ -256,6 +264,12 @@ hook.Add( "open_server_realistic", "open_server_realistic", function()
 
   function sv_bca:OnValueChanged( val )
     net.Start( "yrp_bonechance_arms" )
+      net.WriteFloat( val, 16 )
+    net.SendToServer()
+  end
+
+  function sv_blc:OnValueChanged( val )
+    net.Start( "yrp_bleedingchance" )
       net.WriteFloat( val, 16 )
     net.SendToServer()
   end

@@ -13,8 +13,19 @@ hook.Add( "open_yourp_contact", "open_yourp_contact", function()
     --
   end
 
-  local button = createVGUI( "DButton", settingsWindow.window.site, 2070, 2070, 0, 0 )
-  button:SetText( lang_string( "contact" ) .. " (Discord-Link)" )
+  local _bg = createD( "HTML", settingsWindow.window.site, ctr( 800-20 ), ctr( 200-20 ), ctr( 10+10 ), ctr( 10+10 ) )
+  _bg:OpenURL( "https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg" )
+
+  local button = createD( "DButton", settingsWindow.window.site, ctr( 800 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) )
+  button:SetText( "" )
+  function button:Paint( pw, ph )
+    local color = Color( 0, 255, 0 )
+    if self:IsHovered() then
+      color = Color( 255, 255, 0 )
+    end
+    drawRBBR( 0, 0, 0, pw, ph, color, ctr( 2 ) )
+    surfaceText( lang_string( "contact" ), "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  end
   function button:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end

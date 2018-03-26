@@ -46,6 +46,9 @@ net.Receive( "get_menu_bodygroups", function( len )
   local _pms = combineStringTables( _tbl.playermodels, _tbl.playermodelsnone )
 
   local _pmid = tonumber( _tbl.playermodelID )
+  if _pmid > #_pms then
+    _pmid = 1
+  end
   local _pm = _pms[_pmid]
 
   local _cbg = {}

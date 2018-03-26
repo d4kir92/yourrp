@@ -3,6 +3,7 @@
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
 
+include( "cl_settings_server_collection.lua" )
 include( "cl_settings_server_general.lua" )
 include( "cl_settings_server_roles.lua" )
 include( "cl_settings_server_give.lua" )
@@ -87,19 +88,22 @@ function openSettings()
   settingsWindow.window:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
   settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
+  local _server = lang_string( "server" )
+  settingsWindow.window:AddCategory( _server )
+  settingsWindow.window:AddSite( "open_server_collection", lang_string( "workshopcollection" ), _server, "icon16/page_world.png" )
   if ply:HasAccess() then
-    local _server = lang_string( "server" ) .. " (" .. tostring( lang_string( "admin" ) ) .. ")"
-    settingsWindow.window:AddCategory( _server )
-    settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server, "icon16/server_database.png" )
-    settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server, "icon16/bomb.png" )
-    settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server, "icon16/group_edit.png" )
-    settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server, "icon16/user_edit.png" )
-    settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server, "icon16/money.png" )
-    settingsWindow.window:AddSite( "open_server_licenses", lang_string( "licenses" ), _server, "icon16/vcard_edit.png" )
-    settingsWindow.window:AddSite( "open_server_shops", lang_string( "shops" ), _server, "icon16/basket_edit.png" )
-    settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server, "icon16/map.png" )
-    settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server, "icon16/page_white_key.png" )
-    settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server, "icon16/group_go.png" )
+    local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "adminonly" ) ) .. ")"
+    settingsWindow.window:AddCategory( _server_admin )
+    settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
+    settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
+    settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
+    settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server_admin, "icon16/user_edit.png" )
+    settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server_admin, "icon16/money.png" )
+    settingsWindow.window:AddSite( "open_server_licenses", lang_string( "licenses" ), _server_admin, "icon16/vcard_edit.png" )
+    settingsWindow.window:AddSite( "open_server_shops", lang_string( "shops" ), _server_admin, "icon16/basket_edit.png" )
+    settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
+    settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
+    settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
   end
 
   settingsWindow.window:AddCategory( "yourrp" )
@@ -136,14 +140,22 @@ function openSettings()
     --draw.SimpleTextOutlined( settingsWindow.cursite or "", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 300 ), ctr( 80 ), ScrW() - ctr( 1150 ), ctr( 10 ) )
+  local _bg = createD( "HTML", settingsWindow.window, ctr( 500-8 ), ctr( 80-12 ), ScrW() - ctr( 1350-6 ), ctr( 10+6 ) )
+  _bg:OpenURL( "https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg" )
+
+  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 1350 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end
   function liveSupport:Paint( pw, ph )
-    paintMDBackground( self, pw, ph )
-    draw.SimpleTextOutlined( "Live Support!", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    local color = get_dsbg_col()
+    if !self:IsHovered() then
+      color = get_ds_col()
+  	end
+    color.a = 200
+    draw.RoundedBox( 0, 0, 0, pw, ph, color )
+    draw.SimpleTextOutlined( lang_string( "support" ) .. " (" .. lang_string( "live" ) .. ")", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local language = createD( "DPanel", settingsWindow.window, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )

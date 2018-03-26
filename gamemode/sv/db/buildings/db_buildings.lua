@@ -112,7 +112,7 @@ function loadDoors()
   local _tmpDoors = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "_doors", "*", nil )
   local _count = 1
 
-  if worked( _tmpDoors, "[Buildings] No Map Doors found" ) then
+  if worked( _tmpDoors, "[Buildings] No Map Doors found", true ) then
     --for k, v in pairs( _tmpDoors ) do
       for l, door in pairs( _allPropDoors ) do
         if worked( _tmpDoors[_count], "loadDoors 2" ) then

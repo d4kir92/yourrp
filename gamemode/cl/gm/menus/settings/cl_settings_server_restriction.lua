@@ -83,7 +83,7 @@ net.Receive( "getRistrictions", function( len )
         _tmpRes[7] = createCheckBox( lang_string( "ragdolls" ), 420, 370, k, "ragdolls", v.usergroup )
         _tmpRes[8] = createCheckBox( lang_string( "noclip" ), 420, 430, k, "noclip", v.usergroup )
 
-        if v.usergroup != "superadmin" and v.usergroup != "admin" then
+        if v.usergroup != "superadmin" and v.usergroup != "admin" and v.usergroup != "owner" then
           _tmpRes[9] = createDeleteButton( v.usergroup, 210, 260, _restrictionListView, k )
         end
       end

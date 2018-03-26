@@ -8,6 +8,8 @@ util.AddNetworkString( "get_yrp_realistic" )
 util.AddNetworkString( "yrp_bonefracturing" )
 util.AddNetworkString( "yrp_bleeding" )
 
+util.AddNetworkString( "yrp_bleedingchance" )
+
 util.AddNetworkString( "yrp_bonechance_legs" )
 util.AddNetworkString( "yrp_bonechance_arms" )
 
@@ -32,6 +34,8 @@ local _db_name = "yrp_realistic"
 
 sql_add_column( _db_name, "bonefracturing", "INT DEFAULT 1" )
 sql_add_column( _db_name, "bleeding", "INT DEFAULT 1" )
+
+sql_add_column( _db_name, "bleedingchance", "INT DEFAULT 20" )
 
 sql_add_column( _db_name, "bonechance_legs", "INT DEFAULT 15" )
 sql_add_column( _db_name, "bonechance_arms", "INT DEFAULT 15" )
@@ -149,6 +153,10 @@ end
 
 function GetBrokeChanceArms()
   return tonumber( yrp_realistic.bonechance_arms )
+end
+
+function GetBleedingChance()
+  return tonumber( yrp_realistic.bleedingchance )
 end
 
 net.Receive( "yrp_hit_entity", function( len, ply )
@@ -302,5 +310,13 @@ net.Receive( "yrp_bonechance_arms", function( len, ply )
   if isnumber( _nw ) then
     yrp_realistic.bonechance_arms = _nw
     db_update( _db_name, "bonechance_arms = " .. yrp_realistic.bonechance_arms, nil )
+  end
+end)
+
+net.Receive( "yrp_bleedingchance", function( len, ply )
+  local _nw = tonumber( net.ReadFloat() )
+  if isnumber( _nw ) then
+    yrp_realistic.bleedingchance = _nw
+    db_update( _db_name, "bleedingchance = " .. yrp_realistic.bleedingchance, nil )
   end
 end)

@@ -16,11 +16,15 @@ util.AddNetworkString( "db_update_realistic_damage" )
 util.AddNetworkString( "db_update_realistic_falldamage" )
 util.AddNetworkString( "db_update_smartphone" )
 util.AddNetworkString( "db_update_dealer_immortal" )
+util.AddNetworkString( "db_update_weapon_lowering" )
+util.AddNetworkString( "db_update_crosshair" )
 
 util.AddNetworkString( "db_update_noclip_crow" )
 util.AddNetworkString( "db_update_noclip_tags" )
 util.AddNetworkString( "db_update_noclip_stealth" )
 util.AddNetworkString( "db_update_noclip_effect" )
+
+util.AddNetworkString( "db_update_collection" )
 
 local _db_name = "yrp_general"
 
@@ -44,11 +48,15 @@ sql_add_column( _db_name, "toggle_realistic_falldamage", "INT DEFAULT 1" )
 
 sql_add_column( _db_name, "toggle_smartphone", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_dealer_immortal", "INT DEFAULT 0" )
+sql_add_column( _db_name, "toggle_weapon_lowering", "INT DEFAULT 1" )
+sql_add_column( _db_name, "toggle_crosshair", "INT DEFAULT 1" )
 
 sql_add_column( _db_name, "toggle_noclip_crow", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_noclip_stealth", "INT DEFAULT 0" )
 sql_add_column( _db_name, "toggle_noclip_tags", "INT DEFAULT 1" )
 sql_add_column( _db_name, "toggle_noclip_effect", "INT DEFAULT 1" )
+
+sql_add_column( _db_name, "collection", "INT DEFAULT 0" )
 
 function add_first_entry( retries )
   local _check_general = db_select( _db_name, "*", "uniqueID = 1" )
@@ -90,6 +98,14 @@ if _init_general != false and _init_general != nil then
   yrp_general = _init_general[1]
 end
 
+function ServerCollection()
+  return tobool( yrp_general.collection )
+end
+
+function IsWeaponLoweringEnabled()
+  return tobool( yrp_general.toggle_weapon_lowering )
+end
+
 function IsDealerImmortal()
   return tobool( yrp_general.toggle_dealer_immortal )
 end
@@ -117,6 +133,33 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_collection", function( len, ply )
+  local _nw = tonumber( net.ReadString() )
+  if isnumber( _nw ) then
+    yrp_general.collection = _nw
+    db_update( "yrp_general", "collection = " .. yrp_general.collection, nil )
+  end
+end)
+
+net.Receive( "db_update_crosshair", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_crosshair = _nw
+    db_update( "yrp_general", "toggle_crosshair = " .. yrp_general.toggle_crosshair, nil )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "yrp_crosshair", tobool(_nw) )
+  end
+end)
+
+net.Receive( "db_update_weapon_lowering", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_weapon_lowering = _nw
+    db_update( "yrp_general", "toggle_weapon_lowering = " .. yrp_general.toggle_weapon_lowering, nil )
+  end
+end)
 
 net.Receive( "db_update_dealer_immortal", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )
@@ -295,6 +338,9 @@ util.AddNetworkString( "updateAdvert" )
 net.Receive( "updateAdvert", function( len, ply )
   _name_advert = net.ReadString()
   db_update( "yrp_general", "name_advert = '" .. _name_advert .. "'", nil )
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWString( "channel_advert", _name_advert )
+  end
 end)
 
 net.Receive( "getGamemodename", function( len, ply )

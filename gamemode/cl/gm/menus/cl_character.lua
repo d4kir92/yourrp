@@ -630,10 +630,10 @@ function openCharacterSelection()
 
   local border = ctr( 50 )
   local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), border, border )
+  charactersBackground.text = lang_string( "siteisloading" )
   function charactersBackground:Paint( pw, ph )
     paintMD( pw, ph, nil, get_dp_col() )
-
-    draw.SimpleTextOutlined( lang_string( "siteisloading" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( self.text, "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
 
   local charplayermodel = createD( "DModelPanel", _cs.frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )
@@ -672,6 +672,7 @@ function openCharacterSelection()
 
   net.Receive( "yrp_get_characters", function( len )
     printGM( "gm", "received characterlist" )
+    charactersBackground.text = ""
     local _characters = net.ReadTable()
 
     if _characters != nil then

@@ -4,6 +4,19 @@ util.AddNetworkString( "restartServer" )
 util.AddNetworkString( "updateServer" )
 util.AddNetworkString( "cancelRestartServer" )
 
+util.AddNetworkString( "get_workshop_collection" )
+net.Receive( "get_workshop_collection", function( len, ply )
+  local _wscnr = db_select( "yrp_general", "collection", nil )
+  if _wscnr != nil then
+    _wscnr = _wscnr[1].collection
+  end
+  local _wsc = engine.GetAddons()
+  net.Start( "get_workshop_collection" )
+    net.WriteString( _wscnr )
+    net.WriteTable( _wsc )
+  net.Send( ply )
+end)
+
 --Restart Server
 net.Receive( "restartServer", function( len, ply )
   print("RunConsoleCommand(_restart)")
@@ -61,16 +74,6 @@ net.Receive( "yrp_drink", function( len, ply )
     ply:SetNWInt( "thirst", 100 )
   end
 end)
-
-concommand.Add( "yrp__help", function( ply, cmd, args )
-	printGMPre( "note", "concommands" )
-  printGM( "note", "yrp_status - shows gamemode version" )
-  printGMPos()
-
-  printGMPre( "note", "convars" )
-  printGM( "note", "yrp_cl_hud X - 1: shows hud, 0: hide hud" )
-  printGMPos()
-end )
 
 concommand.Add( "yrp_status", function( ply, cmd, args )
 	printGM( "note", "YourRP Version: " .. GAMEMODE.Version )

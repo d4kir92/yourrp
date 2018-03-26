@@ -42,7 +42,6 @@ function Player:IsCharacterValid()
       if _cha_tab == nil then
         return false
       else
-        --printTab( _cha_tab )
         return true
       end
     end
@@ -54,7 +53,6 @@ function Player:HasCharacterSelected()
     if self:LoadedGamemode() then
       --printGM( "note", self:YRPName() .. " HasCharacterSelected?" )
       local _ply_tab = self:GetPlyTab()
-      --printTab( _ply_tab )
       if _ply_tab != nil then
         if tostring( _ply_tab.CurrentCharacter ) == "NULL" or _ply_tab.CurrentCharacter == NULL then
           --open_character_selection( self )
@@ -199,8 +197,12 @@ function Player:GetPlayerModel()
     local yrp_characters = self:GetChaTab()
     if worked( yrp_characters, "yrp_characters (GetPlayerModel)", true ) then
       local pmID = tonumber( yrp_characters.playermodelID )
+
       local yrp_role = self:GetRolTab()
       local tmp = combineStringTables( yrp_role.playermodels, yrp_role.playermodelsnone )
+      if pmID > #tmp then
+        pmID = 1
+      end
       local pm = tmp[pmID]
 
       if pm == "" then

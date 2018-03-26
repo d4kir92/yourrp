@@ -197,6 +197,10 @@ timer.Create( "ServerThink", 1, 0, function()
   end
 
   if _time % 10 == 0 then
+		if !game.IsDedicated() then
+			PrintMessage( HUD_PRINTCENTER, "Please use a dedicated server, for the best experience!" )
+		end
+
     for i, ply in pairs( _all_players ) do
       if ply:GetRoleName() == nil and ply:Alive() then
         if !ply:IsBot() then
@@ -227,6 +231,14 @@ timer.Create( "ServerThink", 1, 0, function()
 
 							local sequence = _dealer.Entity:LookupSequence("idle_all_01")
 							_dealer.Entity:ResetSequence(sequence)
+							timer.Simple( 2, function()
+								if _dealer != nil then
+									if _dealer.Entity != NULL then
+										local sequence2 = _dealer.Entity:LookupSequence("idle_all_01")
+										_dealer.Entity:ResetSequence(sequence2)
+									end
+								end
+							end)
             end
           end
         end

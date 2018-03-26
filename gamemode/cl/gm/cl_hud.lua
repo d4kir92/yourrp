@@ -164,7 +164,7 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 	end
 
 	if game.SinglePlayer() then
-		draw.SimpleTextOutlined( lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	end
 
 	if tobool( HudV( "utto" ) ) then

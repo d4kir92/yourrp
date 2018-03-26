@@ -6,7 +6,7 @@ net.Receive( "getRoleWhitelist", function( len )
     local _tmpRoleList = net.ReadTable()
     local _tmpGroupList = net.ReadTable()
 
-    local _whitelistListView = createVGUI( "DListView", settingsWindow.window.site, 1500, 1800, 10, 10 )
+    local _whitelistListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 + 10 + 500 ), ScrH() - ctr( 180 ), ctr( 10 ), ctr( 10 + 50 ) )
     _whitelistListView:AddColumn( "uniqueID" )
     _whitelistListView:AddColumn( "SteamID" )
     _whitelistListView:AddColumn( lang_string( "nick" ) )
@@ -38,7 +38,7 @@ net.Receive( "getRoleWhitelist", function( len )
       end
     end
 
-    local _buttonAdd = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 10 )
+    local _buttonAdd = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 60 ) )
     _buttonAdd:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "role" ) .. ")" )
     function _buttonAdd:DoClick()
       local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
@@ -100,7 +100,7 @@ net.Receive( "getRoleWhitelist", function( len )
       _whitelistFrame:MakePopup()
     end
 
-    local _buttonAddGroup = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 70 )
+    local _buttonAddGroup = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 120 ) )
     _buttonAddGroup:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "group" ) .. ")" )
     function _buttonAddGroup:DoClick()
       local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
@@ -142,7 +142,7 @@ net.Receive( "getRoleWhitelist", function( len )
       _whitelistFrame:MakePopup()
     end
 
-    local _buttonAddAll = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 130 )
+    local _buttonAddAll = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 180 ) )
     _buttonAddAll:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "all" ) .. " [" .. lang_string( "roles" ) .. "|".. lang_string( "groups" ) .. "] " .. ")" )
     function _buttonAddAll:DoClick()
       local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
@@ -177,7 +177,7 @@ net.Receive( "getRoleWhitelist", function( len )
       _whitelistFrame:MakePopup()
     end
 
-    local _buttonRem = createVGUI( "DButton", settingsWindow.window.site, 600, 50, 10 + 1500 + 10, 190 )
+    local _buttonRem = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 240 ) )
     _buttonRem:SetText( lang_string( "removeentry" ) )
     function _buttonRem:DoClick()
       if _whitelistListView:GetSelectedLine() != "" and _whitelistListView:GetSelectedLine() != nil then
@@ -206,7 +206,8 @@ hook.Add( "open_server_whitelist", "open_server_whitelist", function()
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
   function settingsWindow.window.site:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+    --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+    surfaceText( lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
   end
 
   net.Start( "getRoleWhitelist" )

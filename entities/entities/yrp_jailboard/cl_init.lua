@@ -17,8 +17,7 @@ net.Receive( "openLawBoard", function( len )
   if !windowOpen then
     local tmpJailList = net.ReadTable()
     windowOpen = true
-    local window = createVGUI( "DFrame", nil, ScrH(), ScrH(), 0, 0 )
-    window:SetSize( ScrH(), ScrH() )
+    local window = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
     window:SetTitle( "" )
     window:Center()
     function window:OnClose()
@@ -43,7 +42,7 @@ net.Receive( "openLawBoard", function( len )
       _gAccess = tonumber( _tmpGeneral[1].access_jail )
     end
     if LocalPlayer():HasAccess() then
-      local _access = createVGUI( "DComboBox", window, 300, 50, 610, 0 )
+      local _access = createD( "DComboBox", window, ctr(300), ctr(50), ctr(610), 0 )
       _access:AddChoice( "-", -1, false )
       for k, v in pairs( _tmpGroups ) do
         local _hasaccess = false
@@ -61,29 +60,28 @@ net.Receive( "openLawBoard", function( len )
     end
 
 
-    local scrollpanel = createVGUI( "DScrollPanel", window )
-    scrollpanel:SetSize( ScrH() - ctr( 20 ), ScrH() - ctr( 60 ) )
-    scrollpanel:SetPos( ctr( 10 ), ctr( 50 ) )
+    local scrollpanel = createD( "DScrollPanel", window, BScrW() - ctr( 20 ), ScrH() - ctr( 50+10+10 ), ctr( 10 ), ctr( 50+10 ) )
     function scrollpanel:Paint( pw, ph )
       --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 100 ) )
     end
 
     local _x = 0
     local _y = 0
+    local _size = 800
     for k, v in pairs( tmpJailList ) do
-      local dpanel = createVGUI( "DPanel", scrollpanel, 400, 400, 0, 0 )
+      local dpanel = createVGUI( "DPanel", scrollpanel, _size, _size, 0, 0 )
       dpanel:SetText( "" )
-      dpanel:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) )
+      dpanel:SetPos( _x*ctr( _size+10 ), _y*ctr( _size+60+10 ) )
       function dpanel:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 255, 200 ) )
 
         draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. v.nick, "sef", pw/2, ph - ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang_string( "reason" ) .. ": " .. v.reason, "sef", pw/2, ph - ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "reason" ) .. ": " .. db_out_str( v.reason ), "sef", pw/2, ph - ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         draw.SimpleTextOutlined( lang_string( "time" ) .. ": " .. v.time, "sef", pw/2, ph - ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
       scrollpanel:AddItem( dpanel )
 
-      local _removeButton = createD( "DButton", scrollpanel, ctr( 400 ), ctr( 50 ), 0, 0 )
+      local _removeButton = createD( "DButton", scrollpanel, ctr( _size ), ctr( 50 ), 0, 0 )
       _removeButton:SetText( "" )
       _removeButton.uniqueID = v.uniqueID
       _removeButton.panel = dpanel
@@ -106,10 +104,10 @@ net.Receive( "openLawBoard", function( len )
         end
       end
 
-      _removeButton:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) + ctr( 400 ) )
+      _removeButton:SetPos( _x*ctr( _size+10 ), _y*ctr( _size+70 ) + ctr( _size ) )
 
       _x = _x + 1
-      if _x > 4 then
+      if (_x-1)*_size >= BScrW() then
         _y = _y + 1
         _x = 0
       end
@@ -117,9 +115,9 @@ net.Receive( "openLawBoard", function( len )
 
     local _tmpGroupID = net.ReadInt( 16 )
     if _gAccess == _tmpGroupID then
-      local addButton = createVGUI( "DButton", scrollpanel, 400, 400 )
+      local addButton = createVGUI( "DButton", scrollpanel, _size, _size )
       addButton:SetText( "" )
-      addButton:SetPos( _x*ctr( 410 ), _y*ctr( 470 ) )
+      addButton:SetPos( _x*ctr( _size+10 ), _y*ctr( _size+70 ) )
       function addButton:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 0, 200 ) )
 

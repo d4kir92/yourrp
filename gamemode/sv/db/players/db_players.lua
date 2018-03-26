@@ -101,7 +101,6 @@ function set_role( ply, rid )
     if _gid != nil then
       _gid = _gid[1].groupID
       local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
-      local _result3 = db_update( "yrp_characters", "playermodelID = " .. 1, "uniqueID = " .. ply:CharID() )
       ply:SetNWString( "groupUniqueID", _gid )
     end
     updateRoleUses( _old_uid )
@@ -114,6 +113,15 @@ function set_role_values( ply )
     if yrp_db_loaded() then
       if IsNoClipTagsEnabled() then
         ply:SetNWBool( "show_tags", true )
+      end
+
+      local _gen_tab = db_select( "yrp_general", "*", nil )
+      if worked( _gen_tab, "set_role_values _gen_tab failed" ) then
+        _gen_tab = _gen_tab[1]
+        if _gen_tab.name_advert != "" and string.lower( _gen_tab.name_advert ) != "advert" then
+          ply:SetNWString( "channel_advert", _gen_tab.name_advert )
+          ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
+        end
       end
 
       local rolTab = ply:GetRolTab()
@@ -314,7 +322,7 @@ function check_yrp_client( ply )
 
   if ply:IPAddress() == "loopback" then
     printGM( "db", "[" .. ply:SteamName() .. "] -> Set UserGroup to superadmin, because owner." )
-    ply:SetUserGroup( "superadmin" )
+    ply:SetUserGroup( "owner" )
   end
 
   check_yrp_player( ply )

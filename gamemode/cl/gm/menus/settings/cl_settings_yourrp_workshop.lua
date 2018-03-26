@@ -14,8 +14,6 @@ hook.Add( "open_yourp_workshop", "open_yourp_workshop", function()
     --drawBackground( 0, 0, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), ctr( 0 ) )
   end
 
-  local form = vgui.Create( "HTML", settingsWindow.window.site )
-  form:SetSize( ctr( 2070 ), ctr( 2070 ) )
-  form:SetPos( ctr( 5 ), ctr( 5 ) )
+  local form = createD( "HTML", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 100 + 10 + 10 ), ctr( 10 ), ctr( 10 ) )
   form:OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/?id=1114204152" )
 end)

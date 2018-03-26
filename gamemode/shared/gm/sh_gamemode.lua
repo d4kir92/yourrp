@@ -14,6 +14,17 @@ function GM:GetGameDescription()
 	return GAMEMODE.BaseName
 end
 
+concommand.Add( "yrp__help", function( ply, cmd, args )
+	printGMPre( "note", "concommands" )
+  printGM( "note", "yrp_status - shows gamemode version" )
+	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
+  printGMPos()
+
+  printGMPre( "note", "convars" )
+  printGM( "note", "yrp_cl_hud X - 1: shows hud, 0: hide hud" )
+  printGMPos()
+end )
+
 if SERVER then
 	util.AddNetworkString( "yrp_weaponlowering" )
 end
@@ -52,37 +63,41 @@ end
 
 if SERVER then
 	function lowering_weapon( ply )
-		if ply != NULL then
-			local _weapon = ply:GetActiveWeapon()
-			if _weapon != NULL then
-				if _weapon:IsScripted() then
-				  if ply:GetNWBool( "weaponlowered", true ) then
-				    ply:SetNWBool( "weaponlowered", false )
-				    _weapon:SetHoldType( _weapon:GetNWString( "swep_holdtype" ) )
-						_weapon.HoldType = _weapon:GetNWString( "swep_holdtype" )
-				  else
-				    ply:SetNWBool( "weaponlowered", true )
-						local _w_ht = _weapon:GetNWString( "swep_holdtype" )
-						if _w_ht == "melee" or _w_ht == "melee2" or _w_ht == "pistol" or _w_ht == "grenade" or _w_ht == "rpg" or _w_ht == "slam" or _w_ht == "fist" or _w_ht == "knife" or _w_ht == "duel" or _w_ht == "camera" or _w_ht == "magic" or _w_ht == "revolver" then
-							_weapon:SetHoldType( "normal" )
-						elseif _w_ht == "smg" or _w_ht == "ar2" or _w_ht == "shotgun" or _w_ht == "physgun" or _w_ht == "crossbow" then
-							_weapon:SetHoldType( "passive" )
-						else
-					    _weapon:SetHoldType( "normal" )
-						end
-				  end
+		if IsWeaponLoweringEnabled() then
+			if ply != NULL then
+				local _weapon = ply:GetActiveWeapon()
+				if _weapon != NULL then
+					if _weapon:IsScripted() then
+					  if ply:GetNWBool( "weaponlowered", true ) then
+					    ply:SetNWBool( "weaponlowered", false )
+					    _weapon:SetHoldType( _weapon:GetNWString( "swep_holdtype" ) )
+							_weapon.HoldType = _weapon:GetNWString( "swep_holdtype" )
+					  else
+					    ply:SetNWBool( "weaponlowered", true )
+							local _w_ht = _weapon:GetNWString( "swep_holdtype" )
+							if _w_ht == "melee" or _w_ht == "melee2" or _w_ht == "pistol" or _w_ht == "grenade" or _w_ht == "rpg" or _w_ht == "slam" or _w_ht == "fist" or _w_ht == "knife" or _w_ht == "duel" or _w_ht == "camera" or _w_ht == "magic" or _w_ht == "revolver" then
+								_weapon:SetHoldType( "normal" )
+							elseif _w_ht == "smg" or _w_ht == "ar2" or _w_ht == "shotgun" or _w_ht == "physgun" or _w_ht == "crossbow" then
+								_weapon:SetHoldType( "passive" )
+							else
+						    _weapon:SetHoldType( "normal" )
+							end
+					  end
+					end
 				end
 			end
 		end
 	end
 
 	hook.Add( "Tick", "KeyDown_Test", function()
-		for k, ply in pairs( player.GetAll() ) do
-			local _weapon = ply:GetActiveWeapon()
-			if _weapon != NULL then
-				if _weapon:IsScripted() then
-					if ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) then
-						lowering_weapon( ply )
+		if IsWeaponLoweringEnabled() then
+			for k, ply in pairs( player.GetAll() ) do
+				local _weapon = ply:GetActiveWeapon()
+				if _weapon != NULL then
+					if _weapon:IsScripted() then
+						if ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) then
+							lowering_weapon( ply )
+						end
 					end
 				end
 			end
@@ -132,7 +147,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.51" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.52" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

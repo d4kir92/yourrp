@@ -9,10 +9,11 @@ hook.Add( "open_server_give", "open_server_give", function()
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
   function settingsWindow.window.site:Paint( pw, ph )
-    draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+    --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+    surfaceText( lang_string( "players" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
   end
 
-  local _giveListView = createVGUI( "DListView", settingsWindow.window.site, 1800, 1800, 10, 10 )
+  local _giveListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 180 ), ctr( 10 ), ctr( 10 + 50 ) )
   _giveListView:AddColumn( "SteamID" )
   _giveListView:AddColumn( lang_string( "nick" ) )
   _giveListView:AddColumn( lang_string( "name" ) )

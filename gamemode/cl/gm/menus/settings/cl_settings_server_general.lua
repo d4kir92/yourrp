@@ -29,10 +29,17 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalSmartphone = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 975 )
   local sv_generalDealerImmortal = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1035 )
 
-  local sv_generalNoClipCrow = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1160 )
-  local sv_generalNoClipTags = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1220 )
-  local sv_generalNoClipStealth = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1280 )
-  local sv_generalNoClipEffect = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1340 )
+  local sv_generalWeaponLowering = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1095 )
+  local sv_generalCrosshair = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1155 )
+
+  local sv_generalNoClipCrow = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1280 )
+  local sv_generalNoClipTags = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1340 )
+  local sv_generalNoClipStealth = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1400 )
+  local sv_generalNoClipEffect = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1460 )
+
+  local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1600 )
+  sv_generalCollection:SetMin( 0 )
+  sv_generalCollection:SetMax( 99999999999999 )
 
   local oldGamemodename = ""
   function settingsWindow.window.site:Paint()
@@ -71,11 +78,15 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     draw.SimpleTextOutlined( lang_string( "smartphone" ) .. ":", "sef", ctr( _center - 10 ), ctr( 990 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "dealers" ) .. " [" .. lang_string("immortal") .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1050 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "weaponlowering" ) .. ":", "sef", ctr( _center - 10 ), ctr( 1110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "crosshair" ).. ":", "sef", ctr( _center - 10 ), ctr( 1170 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "crow" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1170 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "usergroup" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1230 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "stealth" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1290 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "effect" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1350 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "crow" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1290 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "usergroup" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1350 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "stealth" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1410 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "effect" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1470 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( lang_string( "collection" ) .. ":", "sef", ctr( _center - 10 ), ctr( 1625 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -107,11 +118,15 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalRealisticFalldamage:SetValue( tonumber( _yrp_general.toggle_realistic_falldamage ) )
     sv_generalSmartphone:SetValue( tonumber( _yrp_general.toggle_smartphone ) )
     sv_generalDealerImmortal:SetValue( tonumber( _yrp_general.toggle_dealer_immortal ) )
+    sv_generalWeaponLowering:SetValue( tonumber( _yrp_general.toggle_weapon_lowering ) )
+    sv_generalCrosshair:SetValue( tonumber( _yrp_general.toggle_crosshair ) )
 
     sv_generalNoClipCrow:SetValue( tonumber( _yrp_general.toggle_noclip_crow ) )
     sv_generalNoClipTags:SetValue( tonumber( _yrp_general.toggle_noclip_tags ) )
     sv_generalNoClipStealth:SetValue( tonumber( _yrp_general.toggle_noclip_stealth ) )
     sv_generalNoClipEffect:SetValue( tonumber( _yrp_general.toggle_noclip_effect ) )
+
+    sv_generalCollection:SetValue( tonumber( _yrp_general.collection ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -448,6 +463,32 @@ hook.Add( "open_server_general", "open_server_general", function()
     end
     net.Start( "db_update_dealer_immortal" )
       net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalWeaponLowering:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_weapon_lowering" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalCrosshair:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_crosshair" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalCollection:OnValueChanged( Val )
+    net.Start( "db_update_collection" )
+      net.WriteString( Val )
     net.SendToServer()
   end
 end)

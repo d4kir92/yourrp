@@ -543,7 +543,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
   function _colorCrosshairPanel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-    draw.SimpleTextOutlined( lang_string( "crosshair" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "crosshaircolor" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 
   local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )

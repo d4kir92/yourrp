@@ -452,7 +452,6 @@ function addDBPlayermodel( parent, id, uniqueID, size, help )
     local playermodels = {}
     for _, addon in SortedPairsByMemberValue( engine.GetAddons(), "title" ) do
       if ( !addon.downloaded || !addon.mounted ) then continue end
-      if ( addon.models <= 0 ) then continue end
       AddToTabRecursive( playermodels, "models/", addon.title, "*.mdl" )
   	end
 

@@ -270,7 +270,7 @@ function niceCommand( com )
   elseif com == "yell" then
     return lang_string( "yell" )
   elseif com == "advert" then
-    return lang_string( "advert" )
+    return LocalPlayer():GetNWString( "channel_advert", lang_string( "advert" ) )
   elseif com == "admin" then
     return lang_string( "admin" )
   elseif com == "group" then
