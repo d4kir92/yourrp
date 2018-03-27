@@ -525,15 +525,11 @@ function GM:InitPostEntity()
         draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
       end
       _warning:MakePopup()
-    elseif !serverIsDedicated and serverIsDedicated != nil then
-      local _warning2 = createD( "DFrame", nil, 600, 300, 0, 0 )
-      _warning2:SetTitle( "" )
-      _warning2:Center()
-      function _warning2:Paint( pw, ph )
-        paintWindow( self, pw, ph, "WARNING!" )
-        draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-      end
-      _warning2:MakePopup()
+    elseif !serverIsDedicated and serverIsDedicated != nil and LocalPlayer():HasAccess() then
+      LocalPlayer():SetNWBool( "warning_dedicated", true )
+      timer.Create( "yrp_warning_dedicated_server", 10, 0, function()
+        LocalPlayer():SetNWBool( "warning_dedicated", false )
+      end)
     end
   end)
 

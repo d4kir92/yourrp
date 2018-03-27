@@ -53,7 +53,7 @@ function printGM( channel, text )
 			_channelName = "NOTE"
 		elseif channel == "db" then
 			_color2 = Color( 255, 255, 0 )
-			_channelName = "DB"
+			_channelName = "DB:" .. GetSQLModeName()
 		elseif channel == "server" then
 			_color2 = Color( 255, 255, 0 )
 			_channelName = "SV"

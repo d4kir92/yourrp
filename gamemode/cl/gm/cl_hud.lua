@@ -165,6 +165,8 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+	elseif ply:GetNWBool( "warning_dedicated", false ) then
+		surfaceText( "[YourRP] PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "SettingsHeader", ScrW()/2, ScrH()/4, Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 
 	if tobool( HudV( "utto" ) ) then

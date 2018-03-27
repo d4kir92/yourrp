@@ -17,7 +17,7 @@ net.Receive( "get_workshop_collection", function()
       _dlv_wsc:AddColumn( lang_string( "id" ) )
       _dlv_wsc:AddColumn( lang_string( "link" ) )
       for i, wsi in pairs( _wsc ) do
-        _dlv_wsc:AddLine( wsi.title, wsi.wsid, "http://steamcommunity.com/sharedfiles/filedetails/?id=" .. wsi.wsid )
+        _dlv_wsc:AddLine( tostring( wsi.title ), tostring( wsi.wsid ), "http://steamcommunity.com/sharedfiles/filedetails/?id=" .. tostring( wsi.wsid ) )
       end
 
       _dlv_wsc.OnRowSelected = function( lst, index, pnl )

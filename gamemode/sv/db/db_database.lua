@@ -91,6 +91,8 @@ function db_init_database()
   hr_pre()
   printGM( "db", "LOAD DATABASES" )
 
+  init_database( "yrp_sql" )
+
   init_database( "yrp_general" )
   init_database( "yrp_roles" )
   init_database( "yrp_groups" )
@@ -122,6 +124,8 @@ end
 db_init_database()
 
 include( "resources/db_resources.lua" )
+
+include( "sql/db_sql.lua" )
 
 include( "general/db_general.lua" )
 include( "players/db_players.lua" )

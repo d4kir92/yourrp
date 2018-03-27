@@ -153,7 +153,13 @@ hook.Add( "open_server_general", "open_server_general", function()
     local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
     sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
     function sv_generalSQL:DoClick()
-      local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 800 ), 0, 0 )
+      net.Start( "get_sql_info" )
+      net.SendToServer()
+    end
+    net.Receive( "get_sql_info", function( len )
+      local _sv_sql = net.ReadTable()
+
+      local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 820 ), 0, 0 )
       _win:SetTitle( "" )
       _win:MakePopup()
       _win:Center()
@@ -161,38 +167,105 @@ hook.Add( "open_server_general", "open_server_general", function()
         surfaceBox( 0, 0, pw, ph, Color( 0, 0, 100, 200 ) )
       end
 
-      local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
-      _sqlmode:INITPanel( "DComboBox" )
-      _sqlmode:SetHeader( lang_string( "sqlmode" ) )
-      _sqlmode.plus:AddChoice( "SQLite", 0 )
-      _sqlmode.plus:AddChoice( "MYSQL", 1 )
-      _sqlmode.plus.choice = "SQLite"
-      function _sqlmode.plus:OnSelect( index, value, data )
-        self.choice = value
-      end
-
       local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 ) )
       _sql_host:INITPanel( "DTextEntry" )
       _sql_host:SetHeader( lang_string( "host" ) )
+      _sql_host.plus:SetText( _sv_sql.host )
+      function _sql_host.plus:OnChange()
+        net.Start( "set_host" )
+          net.WriteString( _sql_host.plus:GetText() )
+        net.SendToServer()
+      end
 
-      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
-      _sql_host:INITPanel( "DTextEntry" )
-      _sql_host:SetHeader( lang_string( "username" ) )
+      local _sql_port = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
+      _sql_port:INITPanel( "DTextEntry" )
+      _sql_port:SetHeader( lang_string( "port" ) )
+      _sql_port.plus:SetText( _sv_sql.port )
+      function _sql_port.plus:OnChange()
+        net.Start( "set_port" )
+          net.WriteString( _sql_port.plus:GetText() )
+        net.SendToServer()
+      end
 
-      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-      _sql_host:INITPanel( "DTextEntry" )
-      _sql_host:SetHeader( lang_string( "password" ) )
+      local _sql_database = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      _sql_database:INITPanel( "DTextEntry" )
+      _sql_database:SetHeader( lang_string( "database" ) )
+      _sql_database.plus:SetText( _sv_sql.database )
+      function _sql_database.plus:OnChange()
+        net.Start( "set_database" )
+          net.WriteString( _sql_database.plus:GetText() )
+        net.SendToServer()
+      end
 
-      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-      _sql_host:INITPanel( "DTextEntry" )
-      _sql_host:SetHeader( lang_string( "port" ) )
+      local _sql_username = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      _sql_username:INITPanel( "DTextEntry" )
+      _sql_username:SetHeader( lang_string( "username" ) )
+      _sql_username.plus:SetText( _sv_sql.username )
+      function _sql_username.plus:OnChange()
+        net.Start( "set_username" )
+          net.WriteString( _sql_username.plus:GetText() )
+        net.SendToServer()
+      end
 
-      local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      local _sql_password = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+      _sql_password:INITPanel( "DTextEntry" )
+      _sql_password:SetHeader( lang_string( "password" ) )
+      _sql_password.plus:SetText( _sv_sql.password )
+      function _sql_password.plus:OnChange()
+        net.Start( "set_password" )
+          net.WriteString( _sql_password.plus:GetText() )
+        net.SendToServer()
+      end
+
+      local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
+      _sqlmode:INITPanel( "DComboBox" )
+      _sqlmode:SetHeader( lang_string( "sqlmode" ) )
+      if tonumber( _sv_sql.mode ) == 0 then
+        _sql_host:SetVisible( false )
+        _sql_port:SetVisible( false )
+        _sql_database:SetVisible( false )
+        _sql_username:SetVisible( false )
+        _sql_password:SetVisible( false )
+        _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, true )
+        _sqlmode.plus.choice = "SQLite"
+      else
+        _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, false )
+      end
+      if tonumber( _sv_sql.mode ) == 1 then
+        _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, true )
+        _sqlmode.plus.choice = "MYSQL"
+      else
+        _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, false )
+      end
+      function _sqlmode.plus:OnSelect( index, value, data )
+        self.choice = value
+        if data == 0 then
+          _sql_host:SetVisible( false )
+          _sql_port:SetVisible( false )
+          _sql_database:SetVisible( false )
+          _sql_username:SetVisible( false )
+          _sql_password:SetVisible( false )
+        else
+          _sql_host:SetVisible( true )
+          _sql_port:SetVisible( true )
+          _sql_database:SetVisible( true )
+          _sql_username:SetVisible( true )
+          _sql_password:SetVisible( true )
+        end
+        net.Start( "set_sql_mode" )
+          net.WriteInt( data, 4 )
+        net.SendToServer()
+      end
+
+      local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
       function _sql_change_to:Paint( pw, ph )
         surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
         _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
       end
-    end
+      function _sql_change_to:DoClick()
+        --[[ CHANGE TO SQL MODE XYZ ]]--
+      end
+    end)
   end
 
   local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.window.site )
