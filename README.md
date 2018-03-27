@@ -8,9 +8,9 @@ name this folder yourrp or change it to your category, but also rename the txt f
 #!/bin/sh  
 if [ -z "$1" ];  
 then  
-    gmod='~/server1/garrysmod/gamemodes/yourrp'  
+  gmod='~/server1/garrysmod/gamemodes/yourrp'  
 else  
-    gmod=$1  
+  gmod=$1  
 fi  
 echo $gmod  
 git clone https://github.com/d4kir92/GMOD-YourRP-unstable.git tmp  
