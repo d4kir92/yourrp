@@ -16,14 +16,18 @@ SQL_ADD_COLUMN( _db_name, "props", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "ragdolls", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "noclip", "INT DEFAULT 0" )
 
+SQL_ADD_COLUMN( _db_name, "canuseremovetool", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "canusephysgunpickup", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "canusedynamitetool", "INT DEFAULT 0" )
+
 if SQL_SELECT( _db_name, "*", "usergroup = 'owner'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip", "'owner', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool", "'owner', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if SQL_SELECT( _db_name, "*", "usergroup = 'superadmin'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if SQL_SELECT( _db_name, "*", "usergroup = 'admin'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip", "'admin', 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool", "'admin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if SQL_SELECT( _db_name, "*", "usergroup = 'user'" ) == nil then
   SQL_INSERT_INTO( _db_name, "usergroup", "'user'" )
@@ -215,6 +219,58 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
   end
 end)
 
+hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( ply, ent )
+  --printGM( "gm", "PhysgunPickup: " .. ply:YRPName() )
+  local _tmp = SQL_SELECT( "yrp_restrictions", "canusephysgunpickup", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+  if _tmp != nil and _tmp != false then
+    _tmp = _tmp[1]
+    if tobool( _tmp.canuseremovetool ) then
+      return true
+    else
+      net.Start( "yrp_info" )
+        net.WriteString( "canusephysgunpickup" )
+      net.Send( ply )
+      return false
+    end
+  else
+    return false
+  end
+end)
+
+hook.Add( "CanTool", "yrp_can_tool", function( ply, tr, tool )
+  --printGM( "gm", "CanTool: " .. tool )
+  if tool == "remover" then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "canuseremovetool", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+    if _tmp != nil and _tmp != false then
+      _tmp = _tmp[1]
+      if tobool( _tmp.canuseremovetool ) then
+        return true
+      else
+        net.Start( "yrp_info" )
+          net.WriteString( "canuseremovetool" )
+        net.Send( ply )
+        return false
+      end
+    else
+      return false
+    end
+  elseif tool == "dynamite" then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "canusedynamitetool", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+    if _tmp != nil and _tmp != false then
+      _tmp = _tmp[1]
+      if tobool( _tmp.canusedynamitetool ) then
+        return true
+      else
+        net.Start( "yrp_info" )
+          net.WriteString( "canusedynamitetool" )
+        net.Send( ply )
+        return false
+      end
+    else
+      return false
+    end
+  end
+end)
 
 util.AddNetworkString( "getRistrictions" )
 util.AddNetworkString( "db_jailaccess" )
@@ -238,7 +294,6 @@ net.Receive( "getRistrictions", function( len, ply )
     net.WriteTable( {} )
   end
   net.Send( ply )
-
 end)
 
 util.AddNetworkString( "remove_res_usergroup" )
@@ -262,7 +317,7 @@ net.Receive( "dbUpdate", function( len, ply )
   local _dbTable = net.ReadString()
   local _dbSets = net.ReadString()
   local _dbWhile = net.ReadString()
-  SQL_UPDATE( _dbTable, _dbSets, _dbWhile )
+  local _result = SQL_UPDATE( _dbTable, _dbSets, _dbWhile )
   local _usergroup_ = string.Explode( " ", _dbWhile )
   local _restriction_ = string.Explode( " ", db_in_str( _dbSets ) )
   printGM( "note", ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile )

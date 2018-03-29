@@ -230,9 +230,10 @@ function SQL_QUERY( query )
       --printGM( "db", "SQL_QUERY TABLE EMPTY" )
       return _result
     elseif _result == false then
-      printGM( "db", "SQL_QUERY TABLE MISSING" )
+      printGM( "db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND" )
       return _result
     else
+      --printGM( "db", "ELSE" )
       return _result
     end
   elseif YRPSQL.mode == 1 then
@@ -264,7 +265,7 @@ function SQL_QUERY( query )
 end
 
 function SQL_CREATE_TABLE( db_table )
-  --printGM( "db", "SQL_CREATE_TABLE( " .. tostring( db_table ) .. " )" )
+  printGM( "db", "SQL_CREATE_TABLE( " .. tostring( db_table ) .. " )" )
 
   if YRPSQL.mode == 0 then
     local _q = "CREATE TABLE "
@@ -272,11 +273,8 @@ function SQL_CREATE_TABLE( db_table )
     _q = _q .. "uniqueID    INTEGER         PRIMARY KEY autoincrement"
     _q = _q .. " )"
     _q = _q .. ";"
-
-    if SQL_TABLE_EXISTS( db_table ) then
-      local _result = SQL_QUERY( _q )
-      return _result
-    end
+    local _result = SQL_QUERY( _q )
+    return _result
   elseif YRPSQL.mode == 1 then
     local _q = "CREATE TABLE "
     _q = _q .. YRPSQL.schema .. "." .. db_table .. " ( "
@@ -328,9 +326,7 @@ function SQL_UPDATE( db_table, db_sets, db_where )
     end
     _q = _q .. ";"
 
-    if SQL_TABLE_EXISTS( db_table ) then
-      SQL_QUERY( _q )
-    end
+    return SQL_QUERY( _q )
   elseif YRPSQL.mode == 1 then
     local _q = "UPDATE "
     _q = _q .. YRPSQL.schema .. "." .. db_table
@@ -341,7 +337,7 @@ function SQL_UPDATE( db_table, db_sets, db_where )
     end
     _q = _q .. ";"
 
-    SQL_QUERY( _q )
+    return SQL_QUERY( _q )
   end
 end
 

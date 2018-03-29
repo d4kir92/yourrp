@@ -567,4 +567,8 @@ function EN_All()
   set_lang_string( "support", "Support" )
   set_lang_string( "crosshair", "Crosshair" )
   set_lang_string( "bleedingchance", "Bleeding chance" )
+  set_lang_string( "openinsteamoverlay", "Open in Steam Overlay" )
+  set_lang_string( "canusephysgunpickup", "Can use physgun pickup" )
+  set_lang_string( "canuseremovetool", "Can use remove tool" )
+  set_lang_string( "canusedynamitetool", "Can use dynamite tool" )
 end

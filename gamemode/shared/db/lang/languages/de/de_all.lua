@@ -567,4 +567,8 @@ function DE_All()
   set_lang_string( "support", "Support" )
   set_lang_string( "crosshair", "Fadenkreuz" )
   set_lang_string( "bleedingchance", "Blutungschance" )
+  set_lang_string( "openinsteamoverlay", "In der Steam Oberfläche öffnen" )
+  set_lang_string( "canusephysgunpickup", "Kann das Aufheben der physgun benutzen" )
+  set_lang_string( "canuseremovetool", "Kann das Entferner Werkzeug benutzen" )
+  set_lang_string( "canusedynamitetool", "Kann das Dynamit Werkzeug benutzen" )
 end

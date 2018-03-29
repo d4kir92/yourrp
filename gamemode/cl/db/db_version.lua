@@ -135,23 +135,35 @@ function showVersion()
         end
 
         if ply:HasAccess() then
-          local restartServer = createVGUI( "DButton", frame, 520, 80, 0, 0 )
-          restartServer:SetText( "" )
-          function restartServer:DoClick()
-            net.Start( "restartServer" )
-            net.SendToServer()
+          if VERSIONART == "workshop" then
+            local restartServer = createVGUI( "DButton", frame, 520, 80, 0, 0 )
+            restartServer:SetText( "" )
+            function restartServer:DoClick()
+              net.Start( "restartServer" )
+              net.SendToServer()
+            end
+            function restartServer:Paint( pw, ph )
+  						paintButton( self, pw, ph, "" )
+
+              --surfaceText( text, font, x, y, color, ax, ay )
+              surfaceText( lang_string( "updateserver" ), "Trebuchet20", pw/2, ph/3, Color( 0, 0, 0, 255 ), 1, 1 )
+              surfaceText( "(" .. lang_string( "workshopversion" ) .. ")", "Trebuchet20", pw/2, (ph/3)*2, Color( 0, 0, 0, 255 ), 1, 1 )
+            end
+            restartServer:SetPos( ctr( 600+10 ), ctr( 460 ) )
+          else
+            local download_latest_git = createVGUI( "DButton", frame, 520, 80, 0, 0 )
+            download_latest_git:SetText( "" )
+            function download_latest_git:DoClick()
+              gui.OpenURL( "https://github.com/d4kir92/GMOD-YourRP-unstable" )
+            end
+            function download_latest_git:Paint( pw, ph )
+  						paintButton( self, pw, ph, "" )
+
+              surfaceText( "Download Latest Version", "Trebuchet20", pw/2, ph/2, Color( 0, 0, 0, 255 ), 1, 1 )
+            end
+            download_latest_git:SetPos( ctr( 600+10 ), ctr( 460 ) )
           end
-          function restartServer:Paint( pw, ph )
-						paintButton( self, pw, ph, "" )
-
-            --surfaceText( text, font, x, y, color, ax, ay )
-            surfaceText( lang_string( "updateserver" ), "Trebuchet20", pw/2, ph/3, Color( 0, 0, 0, 255 ), 1, 1 )
-            surfaceText( "(" .. lang_string( "workshopversion" ) .. ")", "Trebuchet20", pw/2, (ph/3)*2, Color( 0, 0, 0, 255 ), 1, 1 )
-          end
-
-
           showChanges:SetPos( ctr( 600-520-10 ), ctr( 460 ) )
-          restartServer:SetPos( ctr( 600+10 ), ctr( 460 ) )
         else
           showChanges:SetPos( ctr( 600-230 ), ctr( 460 ) )
         end

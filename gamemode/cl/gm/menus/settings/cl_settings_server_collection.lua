@@ -5,7 +5,21 @@ net.Receive( "get_workshop_collection", function()
   local _wscnr = tonumber( net.ReadString() )
   if _wscnr != 0 then
     if settingsWindow.window != nil then
-      local _dlv_wsc = createD( "HTML", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 180 ), ctr( 10 ), ctr( 10 + 50 ) )
+      local _dlv_wscso = createD( "DButton", settingsWindow.window.site, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 10 + 50 ) )
+      _dlv_wscso:SetText( "" )
+      function _dlv_wscso:Paint( pw, ph )
+        local _color = Color( 255, 255, 255 )
+        if self:IsHovered() then
+          _color = Color( 255, 255, 0 )
+        end
+        surfaceBox( 0, 0, pw, ph, _color )
+        surfaceText( lang_string( "openinsteamoverlay" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      end
+      function _dlv_wscso:DoClick()
+        gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/?id=" .. _wscnr )
+      end
+
+      local _dlv_wsc = createD( "HTML", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 180 + 50 ), ctr( 10 ), ctr( 10 + 50 + 50 ) )
       _dlv_wsc:OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/?id=" .. _wscnr )
     end
   else

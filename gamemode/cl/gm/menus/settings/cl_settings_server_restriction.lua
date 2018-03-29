@@ -9,7 +9,7 @@ function dbUpdateNet( dbName, dbSets, dbWhile )
 end
 
 function createCheckBox( _string, _x, _y, _nr, _value, _usergroup )
-  _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", settingsWindow.window.site, 400, 50, _x, _y )
+  _tmpRes[_value .. "tmp"] = createVGUI( "DPanel", settingsWindow.window.site, 900, 50, _x, _y )
   local _tmp = _tmpRes[_value .. "tmp"]
   function _tmp:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
@@ -83,8 +83,12 @@ net.Receive( "getRistrictions", function( len )
         _tmpRes[7] = createCheckBox( lang_string( "ragdolls" ), 420, 370, k, "ragdolls", v.usergroup )
         _tmpRes[8] = createCheckBox( lang_string( "noclip" ), 420, 430, k, "noclip", v.usergroup )
 
+        _tmpRes[9] = createCheckBox( lang_string( "canuseremovetool" ), 420, 490, k, "canuseremovetool", v.usergroup )
+        _tmpRes[10] = createCheckBox( lang_string( "canusephysgunpickup" ), 420, 550, k, "canusephysgunpickup", v.usergroup )
+        _tmpRes[11] = createCheckBox( lang_string( "canusedynamitetool" ), 420, 610, k, "canusedynamitetool", v.usergroup )
+
         if v.usergroup != "superadmin" and v.usergroup != "admin" and v.usergroup != "owner" then
-          _tmpRes[9] = createDeleteButton( v.usergroup, 210, 260, _restrictionListView, k )
+          _tmpRes[12] = createDeleteButton( v.usergroup, 210, 360, _restrictionListView, k )
         end
       end
     end
