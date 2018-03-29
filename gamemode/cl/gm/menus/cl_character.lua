@@ -442,6 +442,7 @@ function openCharacterCreation()
 
     net.Receive( "charGetRoleInfo", function( len )
       local tmpTable = net.ReadTable()
+
       character.hp = tmpTable[1].hp
       character.hpmax = tmpTable[1].hpmax
       character.ar = tmpTable[1].ar

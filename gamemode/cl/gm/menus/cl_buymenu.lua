@@ -363,6 +363,6 @@ end)
 function openBuyMenu()
   openMenu()
   net.Start( "shop_get_tabs" )
-    net.WriteString( "-1" )
+    net.WriteString( "1" )
   net.SendToServer()
 end

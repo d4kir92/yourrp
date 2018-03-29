@@ -96,7 +96,7 @@ function GM:PlayerLoadout( ply )
     ply:SetNWInt( "hunger", 100 )
     ply:SetNWInt( "thirst", 100 )
 
-    local monTab = db_select( "yrp_money", "*", nil )
+    local monTab = SQL_SELECT( "yrp_money", "*", nil )
     if monTab != nil then
       local monPre = monTab[1].value
       local monPos = monTab[2].value
@@ -104,7 +104,7 @@ function GM:PlayerLoadout( ply )
       ply:SetNWString( "moneyPost", monPos )
     end
 
-    local _yrp_general = db_select( "yrp_general", "*", nil )
+    local _yrp_general = SQL_SELECT( "yrp_general", "*", nil )
     if _yrp_general != nil then
       _yrp_general = _yrp_general[1]
       ply:SetNWBool( "toggle_inventory", false ) -- LATER tobool( _yrp_general.toggle_inventory ) )
@@ -153,7 +153,7 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn", function( ply )
   ply:StopBleeding()
 
   ply:SetNWBool( "can_respawn", true )
-  local _sel = db_select( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
+  local _sel = SQL_SELECT( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
   if _sel != nil and _sel != false then
     _sel = _sel[1]
     if tobool( _sel.toggle_clearinventoryondead ) then
@@ -475,6 +475,8 @@ net.Receive( "player_is_ready", function( len, ply )
 
   ply:SetNWBool( "finishedloading", true )
 
+  ply:KillSilent()
+
   net.Start( "yrp_noti" )
     net.WriteString( "playerisready" )
     net.WriteString( ply:Nick() )
@@ -482,7 +484,7 @@ net.Receive( "player_is_ready", function( len, ply )
 end)
 
 function GM:PlayerSpray( ply )
-  local _sel = db_select( "yrp_general", "toggle_graffiti", "uniqueID = 1" )
+  local _sel = SQL_SELECT( "yrp_general", "toggle_graffiti", "uniqueID = 1" )
   if _sel != nil then
     _sel = _sel[1]
     if tobool( _sel.toggle_graffiti ) then

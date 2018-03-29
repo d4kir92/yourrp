@@ -92,7 +92,7 @@ function createRoleBox( rol, parent )
     _rol.gr:SetText( "" )
     function _rol.gr:DoClick()
       local _pm = combineStringTables( rol.playermodels, rol.playermodelsnone )
-      
+
       _rm.infopm:SetModel( _pm[1] or "" )
 
       _rm.info.rolename = rol.roleID
@@ -153,7 +153,7 @@ end
 function addRole( rol, parent )
   createRoleBox( rol, parent )
   _pr[rol.uniqueID] = parent
-  if rol.uniqueID != "1" then
+  if tostring( rol.uniqueID ) != "1" then
     getPreRole( rol.uniqueID, _pr[rol.uniqueID] )
   end
 end
@@ -174,9 +174,9 @@ function getRoles( uid, parent )
   net.Receive( "get_grp_roles", function( len )
     local _roles = net.ReadTable()
     for i, rol in pairs( _roles ) do
-      if rol.prerole == "-1" then
+      if tostring( rol.prerole ) == "-1" then
         addRoleRow( rol, parent )
-      elseif rol.prerole == "1" then
+      elseif tostring( rol.prerole ) == "1" then
         addRoleRow( rol, parent )
       end
     end
@@ -229,7 +229,7 @@ function addGroup( grp, parent )
       end
     end
 
-    if grp.uppergroup != "-1" then
+    if tostring( grp.uppergroup ) != "-1" then
       parent:Add( _grp )
     else
       parent:AddItem( _grp )
@@ -330,7 +330,7 @@ function openRoleMenu()
   function _rm.infobutton:Paint( pw, ph )
     self.text = lang_string( "none" )
     self.color = Color( 255, 255, 255 )
-    if self.rolename != "" then
+    if tostring( self.rolename ) != "" then
       self.text = lang_string( "getrole" )
       if self:IsHovered() then
         self.color = Color( 255, 255, 0 )

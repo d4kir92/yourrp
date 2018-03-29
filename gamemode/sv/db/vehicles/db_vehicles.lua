@@ -10,10 +10,10 @@ util.AddNetworkString( "removeVehicleOwner" )
 util.AddNetworkString( "getVehicleInfo" )
 
 local _db_name = "yrp_vehicles"
-sql_add_column( _db_name, "keynr", "TEXT DEFAULT '-1'" )
-sql_add_column( _db_name, "price", "TEXT DEFAULT 100" )
-sql_add_column( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
-sql_add_column( _db_name, "ClassName", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "keynr", "TEXT DEFAULT '-1'" )
+SQL_ADD_COLUMN( _db_name, "price", "TEXT DEFAULT 100" )
+SQL_ADD_COLUMN( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -22,7 +22,7 @@ function createVehicleKey( ent, id )
   local _tmp = id
   _tmp = _tmp .. math.Round( math.Rand( 100000, 999999 ), 0 )
   ent.keynr = _tmp
-  local result = db_update( "yrp_vehicles", "keynr = '" .. _tmp .. "'", "uniqueID = " .. id )
+  local result = SQL_UPDATE( "yrp_vehicles", "keynr = '" .. _tmp .. "'", "uniqueID = " .. id )
   return _tmp
 end
 
@@ -37,7 +37,7 @@ function allowedToUseVehicle( id, ply )
   if ply:HasAccess() then
     return true
   else
-    local _tmpVehicleTable = db_select( "yrp_vehicles", "*", "uniqueID = '" .. id .. "'" )
+    local _tmpVehicleTable = SQL_SELECT( "yrp_vehicles", "*", "uniqueID = '" .. id .. "'" )
     if _tmpVehicleTable[1] != nil then
       if tostring( _tmpVehicleTable[1].ownerCharID ) == ply:CharID() then
         return true
@@ -52,7 +52,7 @@ net.Receive( "getVehicleInfo", function( len, ply )
 
   local _vehicleID = net.ReadString()
 
-  local _vehicleTab = db_select( "yrp_vehicles", "*", "uniqueID = " .. _vehicleID )
+  local _vehicleTab = SQL_SELECT( "yrp_vehicles", "*", "uniqueID = " .. _vehicleID )
 
   if worked( _vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle" ) then
     local owner = ""
@@ -94,7 +94,7 @@ net.Receive( "createVehicleKey", function( len, ply )
   for k, v in pairs( ply:GetWeapons() ) do
     if v.ClassName == "yrp_key" then
       _keynr = getVehicleNumber( _vehicle, _tmpVehicleID )
-      local _oldkeynrs = db_select( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
+      local _oldkeynrs = SQL_SELECT( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
       local _tmpTable = string.Explode( ",", _oldkeynrs[1].keynrs )
       if !table.HasValue( _tmpTable, _keynr ) then
         v:AddKeyNr( _keynr )
@@ -107,7 +107,7 @@ net.Receive( "createVehicleKey", function( len, ply )
           end
         end
         _newkeynrs = _newkeynrs .. _keynr
-        db_update( "yrp_characters", "keynrs = '" .. _newkeynrs .. "'", "uniqueID = " .. ply:CharID() )
+        SQL_UPDATE( "yrp_characters", "keynrs = '" .. _newkeynrs .. "'", "uniqueID = " .. ply:CharID() )
       else
         printGM( "note", "Key already exists")
       end
@@ -117,7 +117,7 @@ net.Receive( "createVehicleKey", function( len, ply )
 end)
 
 function canVehicleLock( ent, nr )
-  local _tmpTable = db_select( "yrp_vehicles", "keynr", "uniqueID = " .. ent:GetNWInt( "vehicleID" ) )
+  local _tmpTable = SQL_SELECT( "yrp_vehicles", "keynr", "uniqueID = " .. ent:GetNWInt( "vehicleID" ) )
   if _tmpTable != nil then
     if _tmpTable[1] != nil then
       if _tmpTable[1].keynr == nr then
@@ -152,9 +152,9 @@ end
 
 net.Receive( "removeVehicleOwner", function( len, ply )
   local _tmpVehicleID = net.ReadInt( 16 )
-  local _tmpTable = db_select( "yrp_vehicles", "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
+  local _tmpTable = SQL_SELECT( "yrp_vehicles", "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
 
-  local result = db_update( "yrp_vehicles", "ownerCharID = ''", "uniqueID = '" .. _tmpVehicleID .. "'" )
+  local result = SQL_UPDATE( "yrp_vehicles", "ownerCharID = ''", "uniqueID = '" .. _tmpVehicleID .. "'" )
 
   for k, v in pairs( ents.GetAll() ) do
     if tonumber( v:GetNWInt( "vehicleID" ) ) == tonumber( _tmpVehicleID ) then

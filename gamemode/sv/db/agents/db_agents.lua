@@ -4,9 +4,9 @@
 -- https://discord.gg/sEgNZxg
 
 local _db_name = "yrp_agents"
-sql_add_column( _db_name, "target", "TEXT DEFAULT 'No Target'" )
-sql_add_column( _db_name, "reward", "INTEGER DEFAULT 1" )
-sql_add_column( _db_name, "description", "TEXT DEFAULT 'NO DESCRIPTION'" )
+SQL_ADD_COLUMN( _db_name, "target", "TEXT DEFAULT 'No Target'" )
+SQL_ADD_COLUMN( _db_name, "reward", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "description", "TEXT DEFAULT 'NO DESCRIPTION'" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -25,7 +25,7 @@ net.Receive( "yrp_placehit", function( len, ply )
   if ply:canAfford( _reward ) then
     ply:addMoney( - _reward )
     printGM( "note", "Set hit" )
-    local _res = db_insert_into( _db_name, "target, reward, description", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "'" )
+    local _res = SQL_INSERT_INTO( _db_name, "target, reward, description", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "'" )
 
   else
     printGM( "note", "Cant afford hit" )
@@ -33,7 +33,7 @@ net.Receive( "yrp_placehit", function( len, ply )
 end)
 
 net.Receive( "yrp_gethits", function( len, ply )
-  local _hits = db_select( _db_name, "*", nil )
+  local _hits = SQL_SELECT( _db_name, "*", nil )
   if _hits != nil then
     net.Start( "yrp_gethits" )
       net.WriteTable( _hits )
@@ -42,7 +42,7 @@ net.Receive( "yrp_gethits", function( len, ply )
 end)
 
 function hitdone( target, agent )
-  db_delete_from( _db_name, "uniqueID = " .. target:GetNWString( "hituid" ) )
+  SQL_DELETE_FROM( _db_name, "uniqueID = " .. target:GetNWString( "hituid" ) )
 
   target:SetNWBool( "iswanted", false )
   target:SetNWString( "hitreward", "" )
@@ -53,7 +53,7 @@ end
 
 net.Receive( "yrp_accepthit", function( len, ply )
   local _uid = net.ReadString()
-  local _hit = db_select( _db_name, "*", "uniqueID = " .. _uid )
+  local _hit = SQL_SELECT( _db_name, "*", "uniqueID = " .. _uid )
 
   if _hit != nil then
     _hit = _hit[1]

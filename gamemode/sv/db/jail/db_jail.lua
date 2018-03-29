@@ -5,16 +5,16 @@
 
 local _db_name = "yrp_jail"
 
-sql_add_column( _db_name, "SteamID", "TEXT DEFAULT ''" )
-sql_add_column( _db_name, "nick", "TEXT DEFAULT ''" )
-sql_add_column( _db_name, "reason", "TEXT DEFAULT '-'" )
-sql_add_column( _db_name, "time", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "SteamID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "nick", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "reason", "TEXT DEFAULT '-'" )
+SQL_ADD_COLUMN( _db_name, "time", "INT DEFAULT 1" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
 function teleportToReleasepoint( ply )
-  local _tmpTele = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = '" .. "releasepoint" .. "'" )
+  local _tmpTele = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = '" .. "releasepoint" .. "'" )
 
   if _tmpTele != nil then
     local _tmp = string.Explode( ",", _tmpTele[1].position )
@@ -33,7 +33,7 @@ function teleportToReleasepoint( ply )
 end
 
 function teleportToJailpoint( ply )
-  local _tmpTele = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = '" .. "jailpoint" .. "'" )
+  local _tmpTele = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = '" .. "jailpoint" .. "'" )
 
   if _tmpTele != nil then
     local _tmp = string.Explode( ",", _tmpTele[1].position )
@@ -53,9 +53,9 @@ end
 
 
 function clean_up_jail( ply )
-  local _tmpTable = db_select( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+  local _tmpTable = SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if _tmpTable != nil then
-    db_delete_from( "yrp_jail", "SteamID = '" .. ply:SteamID() .. "'" )
+    SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. ply:SteamID() .. "'" )
     ply:SetNWBool( "inJail", false )
     ply:SetNWInt( "jailtime", 0 )
 
@@ -70,13 +70,13 @@ net.Receive( "dbAddJail", function( len, ply )
   local _tmpDBCol = net.ReadString()
   local _tmpDBVal = net.ReadString()
   if sql.TableExists( _tmpDBTable ) then
-    db_insert_into( _tmpDBTable, _tmpDBCol, _tmpDBVal )
+    SQL_INSERT_INTO( _tmpDBTable, _tmpDBCol, _tmpDBVal )
   else
     printGM( "error", "dbInsertInto: " .. _tmpDBTable .. " is not existing" )
   end
 
   local _SteamID = net.ReadString()
-  local _tmpTable = db_select( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
+  local _tmpTable = SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
   for k, v in pairs( player.GetAll() ) do
     if v:SteamID() == _SteamID then
       printGM( "note", v:Nick() .. " added to jail")
@@ -91,12 +91,12 @@ util.AddNetworkString( "dbRemJail" )
 net.Receive( "dbRemJail", function( len, ply )
   local _uid = net.ReadString()
 
-  local _res = db_delete_from( "yrp_jail", "uniqueID = " .. _uid )
+  local _res = SQL_DELETE_FROM( "yrp_jail", "uniqueID = " .. _uid )
 
   local _SteamID = net.ReadString()
-  local _tmpTable = db_select( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
+  local _tmpTable = SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
 
-  local _in_jailboard = db_select( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
+  local _in_jailboard = SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
   if _in_jailboard != nil then
     for k, v in pairs( player.GetAll() ) do
       if v:SteamID() == _SteamID then

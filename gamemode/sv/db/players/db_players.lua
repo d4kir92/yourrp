@@ -5,14 +5,14 @@
 
 local _db_name = "yrp_players"
 
-sql_add_column( _db_name, "SteamID", "TEXT" )
-sql_add_column( _db_name, "SteamID64", "TEXT" )
-sql_add_column( _db_name, "SteamName", "TEXT" )
+SQL_ADD_COLUMN( _db_name, "SteamID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "SteamID64", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "SteamName", "TEXT DEFAULT ''" )
 
-sql_add_column( _db_name, "CurrentCharacter", "INT" )
-sql_add_column( _db_name, "Timestamp", "INT" )
-sql_add_column( _db_name, "uptime_total", "INT DEFAULT 0" )
-sql_add_column( _db_name, "uptime_current", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "CurrentCharacter", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "Timestamp", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "uptime_total", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "uptime_current", "INT DEFAULT 0" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -23,34 +23,34 @@ function save_clients( string )
   if !g_db_reseted then
     for k, ply in pairs( player.GetAll() ) do
 
-      local _result = db_update( _db_name, "Timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'" )
+      local _result = SQL_UPDATE( _db_name, "Timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'" )
 
       if ply:Alive() then
         local _char_id = ply:CharID()
         if worked( _char_id, "CharID failed @save_clients" ) then
           local _ply_pos = "position = '" .. tostring( ply:GetPos() ) .. "'"
           if worked( _ply_pos, "_ply_pos failed @save_clients" ) then
-            db_update( "yrp_characters", _ply_pos, "uniqueID = " .. _char_id )
+            SQL_UPDATE( "yrp_characters", _ply_pos, "uniqueID = " .. _char_id )
           end
 
           local _ply_ang = "angle = '" .. tostring( ply:EyeAngles() ) .. "'"
           if worked( _ply_ang, "_ply_ang failed @save_clients" ) then
-            db_update( "yrp_characters", _ply_ang, "uniqueID = " .. _char_id )
+            SQL_UPDATE( "yrp_characters", _ply_ang, "uniqueID = " .. _char_id )
           end
 
           if worked( ply:GetNWString( "money" ), "money failed @save_clients" ) and isnumber( tonumber( ply:GetNWString( "money" ) ) ) then
             local _money = "money = '" .. ply:GetNWString( "money" ) .. "'"
-            local _mo_result = db_update( "yrp_characters", _money, "uniqueID = " .. _char_id )
+            local _mo_result = SQL_UPDATE( "yrp_characters", _money, "uniqueID = " .. _char_id )
           end
 
           if worked( ply:GetNWString( "moneybank" ), "moneybank failed @save_clients" ) and isnumber( tonumber( ply:GetNWString( "moneybank" ) ) ) then
             local _moneybank = "moneybank = '" .. ply:GetNWString( "moneybank" ) .. "'"
-            local _mb_result = db_update( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
+            local _mb_result = SQL_UPDATE( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
           end
 
           if worked( db_sql_str2( string.lower( game.GetMap() ) ), "getmap failed @save_clients" ) then
             local _map = "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'"
-            db_update( "yrp_characters", _map, "uniqueID = " .. _char_id )
+            SQL_UPDATE( "yrp_characters", _map, "uniqueID = " .. _char_id )
           end
         end
       end
@@ -78,7 +78,7 @@ function updateRoleUses( rid )
       _count = _count + 1
     end
   end
-  db_update( "yrp_roles", "uses = " .. _count, "uniqueID = " .. rid )
+  SQL_UPDATE( "yrp_roles", "uses = " .. _count, "uniqueID = " .. rid )
 end
 
 function SetRole( ply, rid )
@@ -94,13 +94,13 @@ end
 
 function set_role( ply, rid )
   if ply:HasCharacterSelected() then
-    local _result = db_update( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
-    local _gid = db_select( "yrp_roles", "*", "uniqueID = " .. rid )
+    local _result = SQL_UPDATE( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
+    local _gid = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. rid )
     local _old_uid = ply:GetNWString( "roleUniqueID", "1" )
     ply:SetNWString( "roleUniqueID", rid )
     if _gid != nil then
       _gid = _gid[1].groupID
-      local _result2 = db_update( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
+      local _result2 = SQL_UPDATE( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
       ply:SetNWString( "groupUniqueID", _gid )
     end
     updateRoleUses( _old_uid )
@@ -115,7 +115,7 @@ function set_role_values( ply )
         ply:SetNWBool( "show_tags", true )
       end
 
-      local _gen_tab = db_select( "yrp_general", "*", nil )
+      local _gen_tab = SQL_SELECT( "yrp_general", "*", nil )
       if worked( _gen_tab, "set_role_values _gen_tab failed" ) then
         _gen_tab = _gen_tab[1]
         if _gen_tab.name_advert != "" and string.lower( _gen_tab.name_advert ) != "advert" then
@@ -246,7 +246,7 @@ function open_character_selection( ply )
   if ply:IsFullyAuthenticated() then
 
       printGM( "db", "[" .. ply:SteamName() .. "] -> open character selection." )
-      local tmpTable = db_select( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+      local tmpTable = SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'" )
       if tmpTable == nil then
         tmpTable = {}
       end
@@ -283,7 +283,7 @@ function add_yrp_player( ply )
   vals = vals .. "'" .. _SteamName .. "', "
   vals = vals .. "'" .. _ostime .. "'"
 
-  local _insert = db_insert_into( "yrp_players", cols, vals )
+  local _insert = SQL_INSERT_INTO( "yrp_players", cols, vals )
   if worked( _insert, "inserting new player failed @db_players." ) then
     printGM( "db", "[" .. ply:SteamName() .. "] -> Successfully added player to database." )
   end
@@ -293,7 +293,7 @@ function check_yrp_player( ply )
   printGM( "db", "[" .. ply:SteamName() .. "] -> Checking if player is in database." )
 
   if ply:SteamID64() != nil or game.SinglePlayer() then
-    local _result = db_select( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
+    local _result = SQL_SELECT( "yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
     if _result == nil then
       add_yrp_player( ply )
@@ -304,7 +304,7 @@ function check_yrp_player( ply )
         for k, v in pairs( _result ) do
           if k > 1 then
             printGM( "db", "[" .. ply:SteamName() .. "] delete other entry." )
-            db_delete_from( "yrp_players", "uniqueID = " .. v.uniqueID )
+            SQL_DELETE_FROM( "yrp_players", "uniqueID = " .. v.uniqueID )
           end
         end
       end
@@ -350,7 +350,7 @@ end)
 util.AddNetworkString( "give_getGroTab" )
 
 net.Receive( "give_getGroTab", function( len, ply )
-  local _tmpGroupList = db_select( "yrp_groups", "*", nil )
+  local _tmpGroupList = SQL_SELECT( "yrp_groups", "*", nil )
   if _tmpGroupList != nil then
     net.Start( "give_getGroTab" )
       net.WriteTable( _tmpGroupList )
@@ -364,7 +364,7 @@ util.AddNetworkString( "give_getRolTab" )
 
 net.Receive( "give_getRolTab", function( len, ply )
   local _groupID = net.ReadString()
-  local _tmpRolTab = db_select( "yrp_roles", "*", "groupID = " .. tonumber( _groupID ) )
+  local _tmpRolTab = SQL_SELECT( "yrp_roles", "*", "groupID = " .. tonumber( _groupID ) )
   if _tmpRolTab != nil then
     net.Start( "give_getRolTab" )
       net.WriteTable( _tmpRolTab )
@@ -375,9 +375,9 @@ net.Receive( "give_getRolTab", function( len, ply )
 end)
 
 net.Receive( "getPlyList", function( len, ply )
-  local _tmpChaList = db_select( "yrp_characters", "*", nil )
-  local _tmpRoleList = db_select( "yrp_roles", "*", nil )
-  local _tmpGroupList = db_select( "yrp_groups", "*", nil )
+  local _tmpChaList = SQL_SELECT( "yrp_characters", "*", nil )
+  local _tmpRoleList = SQL_SELECT( "yrp_roles", "*", nil )
+  local _tmpGroupList = SQL_SELECT( "yrp_groups", "*", nil )
   if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
 
     net.Start( "getPlyList" )
@@ -407,11 +407,11 @@ net.Receive( "giveRole", function( len, ply )
 end)
 
 function isWhitelisted( ply, id )
-  local _role = db_select( "yrp_roles", "*", "uniqueID = " .. id )
+  local _role = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. id )
   if _role != nil then
     _role = _role[1]
 
-    local _plyAllowedAll = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+    local _plyAllowedAll = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'" )
     if worked( _plyAllowedAll, "_plyAllowedAll", true ) then
       _plyAllowedAll = _plyAllowedAll[1]
       if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
@@ -420,9 +420,9 @@ function isWhitelisted( ply, id )
       end
     end
 
-    local _plyAllowedRole = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
+    local _plyAllowedRole = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id )
 
-    local _plyAllowedGroup = db_select( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.groupID .. " AND roleID = -1" )
+    local _plyAllowedGroup = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.groupID .. " AND roleID = -1" )
 
     if ply:HasAccess() then
       printGM( "gm", ply:RPName() .. " has access." )
@@ -495,7 +495,7 @@ function startVote( ply, table )
 end
 
 function canGetRole( ply, roleID )
-  local tmpTableRole = db_select( "yrp_roles" , "*", "uniqueID = " .. roleID )
+  local tmpTableRole = SQL_SELECT( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
   if worked( tmpTableRole, "tmpTableRole" ) then
     if tonumber( tmpTableRole[1].uses ) < tonumber( tmpTableRole[1].maxamount ) or tonumber( tmpTableRole[1].maxamount ) == -1 then
@@ -538,7 +538,7 @@ function RemRolVals( ply )
 end
 
 function canVoteRole( ply, roleID )
-  local tmpTableRole = db_select( "yrp_roles" , "*", "uniqueID = " .. roleID )
+  local tmpTableRole = SQL_SELECT( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
   if worked( tmpTableRole, "tmpTableRole" ) then
     if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber( tmpTableRole[1].maxamount ) == -1 then
@@ -560,7 +560,7 @@ net.Receive( "wantRole", function( len, ply )
     --New role
     SetRole( ply, uniqueIDRole )
   elseif canVoteRole( ply, uniqueIDRole ) then
-    local _role = db_select( "yrp_roles" , "*", "uniqueID = " .. uniqueIDRole )
+    local _role = SQL_SELECT( "yrp_roles" , "*", "uniqueID = " .. uniqueIDRole )
     startVote( ply, _role )
   end
 end)

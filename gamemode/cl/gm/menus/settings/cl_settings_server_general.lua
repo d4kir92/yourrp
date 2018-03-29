@@ -220,6 +220,7 @@ hook.Add( "open_server_general", "open_server_general", function()
       local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
       _sqlmode:INITPanel( "DComboBox" )
       _sqlmode:SetHeader( lang_string( "sqlmode" ) )
+      _sqlmode.plus.mode = GetSQLMode()
       if tonumber( _sv_sql.mode ) == 0 then
         _sql_host:SetVisible( false )
         _sql_port:SetVisible( false )
@@ -252,9 +253,7 @@ hook.Add( "open_server_general", "open_server_general", function()
           _sql_username:SetVisible( true )
           _sql_password:SetVisible( true )
         end
-        net.Start( "set_sql_mode" )
-          net.WriteInt( data, 4 )
-        net.SendToServer()
+        self.mode = data
       end
 
       local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
@@ -263,7 +262,10 @@ hook.Add( "open_server_general", "open_server_general", function()
         _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
       end
       function _sql_change_to:DoClick()
-        --[[ CHANGE TO SQL MODE XYZ ]]--
+        net.Start( "change_to_sql_mode" )
+          net.WriteString( _sqlmode.plus.mode )
+        net.SendToServer()
+        _win:Close()
       end
     end)
   end

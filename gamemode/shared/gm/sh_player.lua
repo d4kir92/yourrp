@@ -23,7 +23,7 @@ function Player:GetPlyTab()
     if self:LoadedGamemode() then
       if tostring( self ) != "Player [NULL]" then
         if worked( self:SteamID(), "SteamID fail", true ) then
-          local yrp_players = db_select( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
+          local yrp_players = SQL_SELECT( "yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'" )
           if worked( yrp_players, "GetPlyTab fail", true ) then
             self.plytab = yrp_players[1]
             return self.plytab
@@ -70,7 +70,7 @@ function Player:GetChaTab()
     if self:LoadedGamemode() then
       local _tmp = self:GetPlyTab()
       if self:HasCharacterSelected() then
-        local yrp_characters = db_select( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
+        local yrp_characters = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
         if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
           self.chatab = yrp_characters[1]
           return self.chatab
@@ -94,7 +94,7 @@ function Player:GetRolTab()
         local yrp_characters = self:GetChaTab()
         if worked( yrp_characters, "yrp_characters in GetRolTab", true ) then
           if worked( yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true ) then
-            local yrp_roles = db_select( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
+            local yrp_roles = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID )
             if worked( yrp_roles, "yrp_roles GetRolTab", true ) then
               self.roltab = yrp_roles[1]
 
@@ -114,7 +114,7 @@ function Player:GetGroTab()
       local yrp_characters = self:GetChaTab()
       if worked( yrp_characters, "yrp_characters in GetGroTab", true ) then
         if worked( yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true ) then
-          local yrp_groups = db_select( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
+          local yrp_groups = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
           if worked( yrp_groups, "yrp_groups GetGroTab", true ) then
             self.grotab = yrp_groups[1]
             return self.grotab
@@ -158,7 +158,7 @@ function Player:CheckMoney()
       end
       local _money = tonumber( _m )
       if worked( _money, "ply:money CheckMoney", true ) and self:CharID() != nil then
-        db_update( "yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID() ) --attempt to nil value
+        SQL_UPDATE( "yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID() ) --attempt to nil value
       end
       _mb = self:GetNWString( "moneybank", "FAILED" )
       if _mb == "FAILED" then
@@ -167,7 +167,7 @@ function Player:CheckMoney()
       end
       local _moneybank = tonumber( _mb )
       if worked( _moneybank, "ply:moneybank CheckMoney", true ) and self:CharID() != nil then
-        db_update( "yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID() )
+        SQL_UPDATE( "yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID() )
       end
     end)
   end
@@ -180,14 +180,14 @@ function Player:UpdateMoney()
       return false
     end
     if worked( money, "ply:money UpdateMoney", true ) then
-      db_update( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
+      SQL_UPDATE( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
     end
     local moneybank = tonumber( self:GetNWString( "moneybank", "FAILED" ) )
     if moneybank == "FAILED" then
       return false
     end
     if worked( moneybank, "ply:moneybank UpdateMoney", true ) then
-      db_update( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. self:CharID() )
+      SQL_UPDATE( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. self:CharID() )
     end
   end
 end
@@ -336,11 +336,11 @@ if SERVER then
   end
 
   function Player:resetUptimeCurrent()
-    local _res = db_update( "yrp_players", "uptime_current = " .. 0, "SteamID = '" .. self:SteamID() .. "'" )
+    local _res = SQL_UPDATE( "yrp_players", "uptime_current = " .. 0, "SteamID = '" .. self:SteamID() .. "'" )
   end
 
   function Player:getuptimecurrent()
-    local _ret = db_select( "yrp_players", "uptime_current", "SteamID = '" .. self:SteamID() .. "'" )
+    local _ret = SQL_SELECT( "yrp_players", "uptime_current", "SteamID = '" .. self:SteamID() .. "'" )
     if _ret != nil and _ret != false then
       return _ret[1].uptime_current
     end
@@ -348,7 +348,7 @@ if SERVER then
   end
 
   function Player:getuptimetotal()
-    local _ret = db_select( "yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'" )
+    local _ret = SQL_SELECT( "yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'" )
     if _ret != nil and _ret != false then
       return _ret[1].uptime_total
     end
@@ -359,7 +359,7 @@ if SERVER then
     local _sec_total = self:getuptimetotal()
     local _sec_current = self:getuptimecurrent()
     if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
-      local _res = db_update( "yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'" )
+      local _res = SQL_UPDATE( "yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'" )
       self:SetNWFloat( "uptime_current", self:getuptimecurrent() )
       self:SetNWFloat( "uptime_total", self:getuptimetotal() )
       self:SetNWFloat( "uptime_server", os.clock() )

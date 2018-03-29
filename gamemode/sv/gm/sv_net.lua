@@ -6,7 +6,7 @@ util.AddNetworkString( "cancelRestartServer" )
 
 util.AddNetworkString( "get_workshop_collection" )
 net.Receive( "get_workshop_collection", function( len, ply )
-  local _wscnr = db_select( "yrp_general", "collection", nil )
+  local _wscnr = SQL_SELECT( "yrp_general", "collection", nil )
   if _wscnr != nil then
     _wscnr = _wscnr[1].collection
   end
@@ -25,7 +25,7 @@ end)
 
 net.Receive( "updateServer", function( len, ply )
   local _tmpString = net.ReadString()
-  local _result = db_update( "yrp_general", "name_gamemode = '" .. db_in_str( _tmpString ) .. "'" )
+  local _result = SQL_UPDATE( "yrp_general", "name_gamemode = '" .. db_in_str( _tmpString ) .. "'" )
   if worked( _result, "name_gamemode failed" ) then
   end
   local countdown = net.ReadInt( 16 )

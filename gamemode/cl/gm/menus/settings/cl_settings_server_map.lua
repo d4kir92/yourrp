@@ -10,26 +10,26 @@ net.Receive( "getMapList", function( len )
   _roles = net.ReadTable()
   if !_tmpBool then
     for k, v in pairs( _tmpTable ) do
-      if tonumber( v.groupID ) != -1 then
+      if tostring( v.type ) == "dealer" then
+        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "", v.linkID )
+      elseif tostring( v.type ) == "GroupSpawnpoint" then
         for l, w in pairs( _groups ) do
-          if tostring( v.groupID ) == tostring( w.uniqueID ) and v.type == "GroupSpawnpoint" then
+          if tostring( v.groupID ) == tostring( w.uniqueID ) then
             if _mapListView != nil and _mapListView != NULL and ispanel( _mapListView ) then
               _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID, "" )
             end
             break
           end
         end
-      elseif tonumber( v.roleID ) != -1 then
+      elseif tostring( v.type ) == "RoleSpawnpoint" then
         for l, w in pairs( _roles ) do
-          if tostring( v.roleID ) == tostring( w.uniqueID ) and v.type == "RoleSpawnpoint"  then
+          if tostring( v.roleID ) == tostring( w.uniqueID ) then
             if _mapListView != NULL and ispanel( _mapListView ) then
               _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", w.roleID )
             end
             break
           end
         end
-      elseif v.type == "dealer" then
-        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "", v.linkID )
       else
         _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "" )
       end

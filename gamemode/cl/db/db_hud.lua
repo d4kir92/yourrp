@@ -43,9 +43,9 @@ function colTab( r, g, b, a )
 end
 
 function checkDBHUD( name, value )
-  local tmpValue = db_select( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
+  local tmpValue = SQL_SELECT( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
   if tmpValue == nil then
-    db_insert_into( "yrp_cl_hud", "name, value", "'" .. name .. "', " .. value )
+    SQL_INSERT_INTO( "yrp_cl_hud", "name, value", "'" .. name .. "', " .. value )
     return false
   else
     return true
@@ -94,7 +94,7 @@ function checkDBHUDGroup( name )
 end
 
 function loadDBHUD( name )
-  local tmpValue = db_select( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
+  local tmpValue = SQL_SELECT( "yrp_cl_hud", "value", "name = '" .. name .. "'" )
   if worked( tmpValue, "loadDBHUD failed!" ) then
     yrp_cl_db[name] = tonumber( tmpValue[1].value )
   end
@@ -194,7 +194,7 @@ end
 
 function dbUpdateHUD( _name, _value )
   if worked( _name, "dbUpdateHUD _name " .. tostring( _name ) ) and worked( _value, "dbUpdateHUD _value " .. tostring( _value ) ) then
-    db_update( "yrp_cl_hud", "value = " .. _value, "name = '" .. _name .. "'" )
+    SQL_UPDATE( "yrp_cl_hud", "value = " .. _value, "name = '" .. _name .. "'" )
     loadDBHUD( _name )
   end
 end
@@ -405,7 +405,7 @@ function loadDatabaseHUD()
     _hudText = "Hud is outdated, resetting it!"
     _resetHud = true
   else
-    local _dbSelect = db_select( "yrp_cl_hud", "value", "name = '" .. "_hudversion" .. "'")
+    local _dbSelect = SQL_SELECT( "yrp_cl_hud", "value", "name = '" .. "_hudversion" .. "'")
     if tonumber( _dbSelect[1].value ) != _hudVersion then
       _hudText = "Newer version of hud available, resetting it!"
       dbUpdateHUD( "_hudversion", _hudVersion )

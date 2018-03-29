@@ -62,11 +62,11 @@ function Player:StripWeapon( cname )
   local _char_id = self:CharID()
 
   if self:GetNWBool( "toggle_inventory", false ) then
-    local _items = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    local _items = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id )
     if _items != nil then
       for k, item in pairs( _items ) do
         local _id = string.sub( item.item, 3 )
-        local _res = db_select( "yrp_item", "*", "uniqueID = " .. _id )
+        local _res = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _id )
         if _res != false and _res != nil then
           _res = _res[1]
           if _res.ClassName == cname then
@@ -87,11 +87,11 @@ function Player:StripWeapons()
   local _char_id = self:CharID()
 
   if self:GetNWBool( "toggle_inventory", false ) then
-    local _items = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    local _items = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id )
     if _items != nil then
       for k, item in pairs( _items ) do
         local _id = string.sub( item.item, 3 )
-        local _res = db_select( "yrp_item", "*", "uniqueID = " .. _id )
+        local _res = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _id )
         if _res != false and _res != nil then
           _res = _res[1]
           self:RemoveItemFromIventory( _id )

@@ -5,12 +5,12 @@
 
 local _db_name = "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) )
 
-sql_add_column( _db_name, "position", "TEXT DEFAULT ''" )
-sql_add_column( _db_name, "angle", "TEXT DEFAULT ''" )
-sql_add_column( _db_name, "groupID", "INTEGER DEFAULT -1" )
-sql_add_column( _db_name, "roleID", "INTEGER DEFAULT -1" )
-sql_add_column( _db_name, "type", "TEXT DEFAULT ''" )
-sql_add_column( _db_name, "linkID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "position", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "angle", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "groupID", "INTEGER DEFAULT -1" )
+SQL_ADD_COLUMN( _db_name, "roleID", "INTEGER DEFAULT -1" )
+SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "linkID", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -31,8 +31,8 @@ function teleportToSpawnpoint( ply )
 
   if chaTab != nil and groTab != nil and rolTab != nil then
     if chaTab.map == db_sql_str2( string.lower( game.GetMap() ) ) and chaTab.position != "NULL" and chaTab.angle != "NULL" then
-      local _tmpRoleSpawnpoints = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "roleID = " .. rolTab.uniqueID )
-      local _tmpGroupSpawnpoints = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. groTab.uniqueID )
+      local _tmpRoleSpawnpoints = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "roleID = " .. rolTab.uniqueID )
+      local _tmpGroupSpawnpoints = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. groTab.uniqueID )
       if _tmpRoleSpawnpoints != nil then
         local _randomSpawnPoint = table.Random( _tmpRoleSpawnpoints )
         printGM( "note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring( _tmpRoleSpawnpoints.roleID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
@@ -57,11 +57,11 @@ function teleportToSpawnpoint( ply )
         _ug.uppergroup = groTab.uppergroup
 
         while (_has_ug) do
-          _ug = db_select( "yrp_groups", "*", "uniqueID = " .. _ug.uppergroup )
+          _ug = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _ug.uppergroup )
 
           if _ug != nil then
             _ug = _ug[1]
-            local _gs = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. _ug.uniqueID )
+            local _gs = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "groupID = " .. _ug.uniqueID )
             if _gs != nil then
               local _randomSpawnPoint = table.Random( _gs )
               printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( _ug.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
@@ -99,20 +99,20 @@ util.AddNetworkString( "removeMapEntry" )
 net.Receive( "removeMapEntry", function( len, ply )
   local _tmpUniqueID = net.ReadString()
 
-  local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "uniqueID = '" .. _tmpUniqueID .. "'" )
+  local _tmpMapTable = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "uniqueID = '" .. _tmpUniqueID .. "'" )
   if _tmpMapTable != nil then
     _tmpMapTable = _tmpMapTable[1]
     if _tmpMapTable.type == "dealer" then
       dealer_rem( _tmpMapTable.linkID )
     end
   end
-  db_delete_from( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "uniqueID = " .. _tmpUniqueID )
+  SQL_DELETE_FROM( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "uniqueID = " .. _tmpUniqueID )
 end)
 
 net.Receive( "getMapList", function( len, ply )
-  local _tmpMapTable = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", nil )
-  local _tmpGroupTable = db_select( "yrp_groups", "*", nil )
-  local _tmpRoleTable = db_select( "yrp_roles", "*", nil )
+  local _tmpMapTable = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", nil )
+  local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", nil )
+  local _tmpRoleTable = SQL_SELECT( "yrp_roles", "*", nil )
 
   if _tmpMapTable != nil then
     net.Start( "getMapList" )
@@ -137,7 +137,7 @@ net.Receive( "dbInsertIntoMap", function( len, ply )
   local _tmpDBCol = net.ReadString()
   local _tmpDBVal = net.ReadString()
   if sql.TableExists( _tmpDBTable ) then
-    db_insert_into( _tmpDBTable, _tmpDBCol, _tmpDBVal )
+    SQL_INSERT_INTO( _tmpDBTable, _tmpDBCol, _tmpDBVal )
   else
     printGM( "error", "dbInsertInto: " .. _tmpDBTable .. " is not existing" )
   end

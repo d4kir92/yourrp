@@ -120,7 +120,7 @@ if SERVER then
 
   util.AddNetworkString( "getGamemodename" )
 	timer.Simple( 4, function()
-	  local tmp = db_select( "yrp_general", "name_gamemode", nil )
+	  local tmp = SQL_SELECT( "yrp_general", "name_gamemode", nil )
 		if tmp != false and tmp != nil then
 		  GAMEMODE.BaseName = db_out_str( tmp[1].name_gamemode )
 		end
@@ -147,9 +147,16 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.53" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.54" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
+
+VERSIONART = "github"
+for i, wsi in pairs( engine.GetAddons() ) do
+	if tostring( wsi.wsid ) == "1114204152" then
+		VERSIONART = "workshop"
+	end
+end
 
 -- Multicore (Shared) enable:
 RunConsoleCommand( "gmod_mcore_test", "1" )

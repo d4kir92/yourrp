@@ -848,7 +848,7 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
   local tmin = tmpmin or 1
   local tmax = tmpmax or 1
   local treg = tmpreg or 1
-  local treg2 = tmpreg2 or 1
+  local treg2 = tmpreg2
   local _color1 = Color( color.r, color.g, color.b, 125 )
   local _color2 = Color( color.r, color.g, color.b, 255 )
   local tmp = createVGUI( "DPanel", parent, w, 2*(h/3), x, y )

@@ -140,10 +140,10 @@ function check_salary( ply )
   end
 end
 
-function checkNPC( uid )
+function dealerAlive( uid )
   for j, npc in pairs( ents.GetAll() ) do
     if npc:IsNPC() then
-      if npc:GetNWString( "dealerID", "FAILED" ) == tostring( uid ) then
+      if tostring( npc:GetNWString( "dealerID", "FAILED" ) ) == tostring( uid ) then
         return true
       end
     end
@@ -204,12 +204,12 @@ timer.Create( "ServerThink", 1, 0, function()
         end
       end
     end
-    local _dealers = db_select( "yrp_dealers", "*", "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'" )
+    local _dealers = SQL_SELECT( "yrp_dealers", "*", "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'" )
     if _dealers != nil then
       for i, dealer in pairs( _dealers ) do
-        if dealer.uniqueID != "-1" then
-          if !checkNPC( dealer.uniqueID ) then
-            local _del = db_select( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
+        if tostring( dealer.uniqueID ) != "1" then
+          if !dealerAlive( dealer.uniqueID ) then
+            local _del = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
             if _del != nil then
               printGM( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )
               _del = _del[1]

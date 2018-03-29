@@ -5,8 +5,8 @@
 
 local _db_name = "yrp_shop_categories"
 
-sql_add_column( _db_name, "name", "TEXT DEFAULT 'UNNAMED'" )
-sql_add_column( _db_name, "shopID", "INT DEFAULT -1" )
+SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'UNNAMED'" )
+SQL_ADD_COLUMN( _db_name, "shopID", "INT DEFAULT -1" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -14,7 +14,7 @@ sql_add_column( _db_name, "shopID", "INT DEFAULT -1" )
 util.AddNetworkString( "get_shop_categories" )
 
 function send_categories( ply, uid )
-  local _cats = db_select( _db_name, "*", "shopID = " .. uid )
+  local _cats = SQL_SELECT( _db_name, "*", "shopID = " .. uid )
   local _nw = _cats
   if _nw == nil then
     _nw = {}
@@ -33,7 +33,7 @@ util.AddNetworkString( "category_add" )
 
 net.Receive( "category_add", function( len, ply )
   local _shopid = net.ReadString()
-  local _new = db_insert_into( _db_name, "shopID", _shopid )
+  local _new = SQL_INSERT_INTO( _db_name, "shopID", _shopid )
   printGM( "db", "category_add: " .. _shopid )
 
   send_categories( ply, _shopid )
@@ -44,7 +44,7 @@ util.AddNetworkString( "category_rem" )
 net.Receive( "category_rem", function( len, ply )
   local _uid = net.ReadString()
   local _shopid = net.ReadString()
-  local _new = db_delete_from( _db_name, "uniqueID = " .. _uid )
+  local _new = SQL_DELETE_FROM( _db_name, "uniqueID = " .. _uid )
   printGM( "db", "category_rem: " .. _uid )
 
   send_categories( ply, _shopid )
@@ -56,7 +56,7 @@ net.Receive( "category_edit_name", function( len, ply )
   local _uid = net.ReadString()
   local _new_name = net.ReadString()
   local _shopid = net.ReadString()
-  local _new = db_update( _db_name, "name = '" .. db_in_str( _new_name ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "name = '" .. db_in_str( _new_name ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "category_edit_name: " .. db_worked( _new ) )
 end)
 
@@ -64,7 +64,7 @@ util.AddNetworkString( "shop_get_categories" )
 
 net.Receive( "shop_get_categories", function( len, ply )
   local _uid = net.ReadString()
-  local _cats = db_select( _db_name, "*", "shopID = '" .. _uid .. "'")
+  local _cats = SQL_SELECT( _db_name, "*", "shopID = '" .. _uid .. "'")
   local _nw = {}
   if _cats != nil then
     _nw = _cats

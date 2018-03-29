@@ -6,9 +6,9 @@
 local INV_W = 8
 local INV_H = 8
 
-sql_add_column( "yrp_inventory", "CharID", "INT DEFAULT 0" )
-sql_add_column( "yrp_inventory", "field", "TEXT DEFAULT ''" )
-sql_add_column( "yrp_inventory", "item", "TEXT DEFAULT '-1'" )
+SQL_ADD_COLUMN( "yrp_inventory", "CharID", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( "yrp_inventory", "field", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( "yrp_inventory", "item", "TEXT DEFAULT '-1'" )
 
 --db_drop_table( "yrp_inventory" )
 --db_is_empty( "yrp_inventory" )
@@ -21,7 +21,7 @@ function Player:GetInventory()
   for y = 1, INV_H do
     _inv["y"..y] = {}
     for x = 1, INV_W do
-      _inv["y"..y]["x"..x] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "'" )
+      _inv["y"..y]["x"..x] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "'" )
       if _inv["y"..y]["x"..x] != nil then
         _inv["y"..y]["x"..x] = _inv["y"..y]["x"..x][1]
       end
@@ -53,7 +53,7 @@ function Player:GetInventory()
             local _item_uid = string.Explode( ",", _inv["y"..y]["x"..x].item )
             _item_uid = _item_uid[2]
 
-            _inv["y"..y]["x"..x].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+            _inv["y"..y]["x"..x].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
             if _inv["y"..y]["x"..x].item != nil then
               _inv["y"..y]["x"..x].item = _inv["y"..y]["x"..x].item[1]
             end
@@ -64,70 +64,70 @@ function Player:GetInventory()
   end
 
   --[[ EQ Items ]] --
-  _inv["w1"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" )
+  _inv["w1"] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" )
   if _inv["w1"] != nil then
     _inv["w1"] = _inv["w1"][1]
     if _inv["w1"].item != "-1" then
       local _item_uid = string.Explode( ",", _inv["w1"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w1"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w1"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
       if _inv["w1"].item != nil then
         _inv["w1"].item = _inv["w1"].item[1]
       end
     end
   end
 
-  _inv["w2"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" )
+  _inv["w2"] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" )
   if _inv["w2"] != nil then
     _inv["w2"] = _inv["w2"][1]
     if _inv["w2"].item != "-1" then
       local _item_uid = string.Explode( ",", _inv["w2"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w2"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w2"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
       if _inv["w2"].item != nil then
         _inv["w2"].item = _inv["w2"].item[1]
       end
     end
   end
 
-  _inv["w3"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" )
+  _inv["w3"] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" )
   if _inv["w3"] != nil then
     _inv["w3"] = _inv["w3"][1]
     if _inv["w3"].item != "-1" then
       local _item_uid = string.Explode( ",", _inv["w3"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w3"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w3"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
       if _inv["w3"].item != nil then
         _inv["w3"].item = _inv["w3"].item[1]
       end
     end
   end
 
-  _inv["w4"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" )
+  _inv["w4"] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" )
   if _inv["w4"] != nil then
     _inv["w4"] = _inv["w4"][1]
     if _inv["w4"].item != "-1" then
       local _item_uid = string.Explode( ",", _inv["w4"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w4"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w4"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
       if _inv["w4"].item != nil then
         _inv["w4"].item = _inv["w4"].item[1]
       end
     end
   end
 
-  _inv["w5"] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" )
+  _inv["w5"] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" )
   if _inv["w5"] != nil then
     _inv["w5"] = _inv["w5"][1]
     if _inv["w5"].item != "-1" then
       local _item_uid = string.Explode( ",", _inv["w5"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w5"].item = db_select( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w5"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
       if _inv["w5"].item != nil then
         _inv["w5"].item = _inv["w5"].item[1]
       end
@@ -145,9 +145,9 @@ function Player:CheckInventory()
     --[[ Create Inventory ]]--
     for y = 1, INV_H do
       for x = 1, INV_W do
-        local _sel = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .."," .. y .. "'" )
+        local _sel = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .."," .. y .. "'" )
         if _sel == nil then
-          local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", '" .. x .."," .. y .. "'" )
+          local _res = SQL_INSERT_INTO( "yrp_inventory", "CharID, field", _char_id .. ", '" .. x .."," .. y .. "'" )
           if _res != nil then
             printGM( "note", "CreateInventory failed" )
           end
@@ -156,23 +156,23 @@ function Player:CheckInventory()
     end
 
     --[[ EQ ]]--
-    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" ) == nil then
-      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w1'" )
+    if SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w1'" ) == nil then
+      local _res = SQL_INSERT_INTO( "yrp_inventory", "CharID, field", _char_id .. ", 'w1'" )
     end
-    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" ) == nil then
-      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w2'" )
+    if SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w2'" ) == nil then
+      local _res = SQL_INSERT_INTO( "yrp_inventory", "CharID, field", _char_id .. ", 'w2'" )
     end
-    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" ) == nil then
-      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w3'" )
+    if SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w3'" ) == nil then
+      local _res = SQL_INSERT_INTO( "yrp_inventory", "CharID, field", _char_id .. ", 'w3'" )
     end
-    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" ) == nil then
-      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w4'" )
+    if SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w4'" ) == nil then
+      local _res = SQL_INSERT_INTO( "yrp_inventory", "CharID, field", _char_id .. ", 'w4'" )
     end
-    if db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" ) == nil then
-      local _res = db_insert_into( "yrp_inventory", "CharID, field", _char_id .. ", 'w5'" )
+    if SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w5'" ) == nil then
+      local _res = SQL_INSERT_INTO( "yrp_inventory", "CharID, field", _char_id .. ", 'w5'" )
     end
 
-    local _result = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    local _result = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id )
     if _result != nil then
 
       self:GetInventory()
@@ -183,10 +183,10 @@ end
 function Player:HasItem( cname )
   if self:GetNWBool( "toggle_inventory", false ) then
     local _char_id = self:CharID()
-    local _inv = db_select( "yrp_inventory", "*", "CharID = " .. _char_id )
+    local _inv = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id )
     for k, item in pairs( _inv ) do
       local _item = string.sub( item.item, 3 )
-      local _res = db_select( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. db_sql_str( cname ) .. "'" )
+      local _res = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item .. " AND ClassName = '" .. db_sql_str( cname ) .. "'" )
       if _res != nil and _res != false then
         _res = _res[1]
       end
@@ -217,12 +217,12 @@ function Player:UseSweps()
   local _char_id = self:CharID()
   if _char_id != nil then
     for i = 1, 5 do
-      local _res = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w" .. i .. "'" )
+      local _res = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w" .. i .. "'" )
       if _res != nil and _res != false then
         _res = _res[1]
         local _uid = string.sub( _res.item, 3 )
 
-        local _swep = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
+        local _swep = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _uid )
         if _swep != nil and _swep != false then
           _swep = _swep[1]
           self.canpickup = true
@@ -238,7 +238,7 @@ function Player:EnoughSpaceInEQ()
   local _char_id = self:CharID()
   local _eq = {}
   for i = 1, 5 do
-    _eq[i] = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. "w" .. i .. "'" )
+    _eq[i] = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. "w" .. i .. "'" )
     if _eq[i] != nil then
       _eq[i] = _eq[i][1]
     end
@@ -257,7 +257,7 @@ function Player:EnoughSpaceInField( _x, _y, w, h )
 
   for y = _y, _y+h-1 do
     for x = _x, _x+w-1 do
-      local _select = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "' AND item = '-1'" )
+      local _select = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "' AND item = '-1'" )
       if _select == nil or _select == false then
         return false
       end
@@ -274,7 +274,7 @@ function Player:FindFreeSpaceInInventory( item, posx, posy )
 
   for y = _y, INV_H do
     for x = _x, INV_W do
-      local _select = db_select( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "' AND item = '-1'" )
+      local _select = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = '" .. x .. "," .. y .. "' AND item = '-1'" )
       if _select != nil then
         _select = _select[1]
         local _field_zone = self:EnoughSpaceInField( x, y, item.w, item.h )
@@ -324,7 +324,7 @@ end
 
 function Player:FindFreeSpaceInEquipment()
   local _char_id = self:CharID()
-  local _w1 = db_select( "yrp_inventory", "*", "field = 'w1' AND CharID = " .. _char_id )
+  local _w1 = SQL_SELECT( "yrp_inventory", "*", "field = 'w1' AND CharID = " .. _char_id )
   if _w1[1] != nil then
     _w1 = _w1[1]
     if _w1.item == "-1" then
@@ -333,7 +333,7 @@ function Player:FindFreeSpaceInEquipment()
   elseif _w1 == false then
     return "w1"
   end
-  local _w2 = db_select( "yrp_inventory", "*", "field = 'w2' AND CharID = " .. _char_id )
+  local _w2 = SQL_SELECT( "yrp_inventory", "*", "field = 'w2' AND CharID = " .. _char_id )
   if _w2[1] != nil then
     _w2 = _w2[1]
     if _w2.item == "-1" then
@@ -342,7 +342,7 @@ function Player:FindFreeSpaceInEquipment()
   elseif _w2 == false then
     return "w2"
   end
-  local _w3 = db_select( "yrp_inventory", "*", "field = 'w3' AND CharID = " .. _char_id )
+  local _w3 = SQL_SELECT( "yrp_inventory", "*", "field = 'w3' AND CharID = " .. _char_id )
   if _w3[1] != nil then
     _w3 = _w3[1]
     if _w3.item == "-1" then
@@ -351,7 +351,7 @@ function Player:FindFreeSpaceInEquipment()
   elseif _w3 == false then
     return "w3"
   end
-  local _w4 = db_select( "yrp_inventory", "*", "field = 'w4' AND CharID = " .. _char_id )
+  local _w4 = SQL_SELECT( "yrp_inventory", "*", "field = 'w4' AND CharID = " .. _char_id )
   if _w4[1] != nil then
     _w4 = _w4[1]
     if _w4.item == "-1" then
@@ -360,7 +360,7 @@ function Player:FindFreeSpaceInEquipment()
   elseif _w4 == false then
     return "w4"
   end
-  local _w5 = db_select( "yrp_inventory", "*", "field = 'w5' AND CharID = " .. _char_id )
+  local _w5 = SQL_SELECT( "yrp_inventory", "*", "field = 'w5' AND CharID = " .. _char_id )
   if _w5[1] != nil then
     _w5 = _w5[1]
     if _w5.item == "-1" then
@@ -390,7 +390,7 @@ function Player:AddItem( cname, posx, posy, origin, move_item )
       --[[ Item starting ]]--
       local _sets = "item = 'i," .. _item.uniqueID .. "'"
       local _whil = "CharID = " .. self:CharID() .. " AND field = '" .. _x .. "," .. _y .. "'"
-      local _res = db_update( "yrp_inventory", _sets, _whil )
+      local _res = SQL_UPDATE( "yrp_inventory", _sets, _whil )
 
       --[[ Item Linking ]]--
       for y = _y, _y+_item.h-1 do
@@ -398,7 +398,7 @@ function Player:AddItem( cname, posx, posy, origin, move_item )
           if x != _x or y !=_y then
             _sets = "item = 'l," .. _item.uniqueID .. "'"
             _whil = "CharID = " .. self:CharID() .. " AND field = '" .. x .. "," .. y .. "'"
-            _res = db_update( "yrp_inventory", _sets, _whil )
+            _res = SQL_UPDATE( "yrp_inventory", _sets, _whil )
           end
         end
       end
@@ -447,8 +447,8 @@ end)
 util.AddNetworkString( "item_move" )
 
 function Player:RemoveItemFromIventory( uid )
-  local _item = db_update( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'i," .. uid .. "'" )
-  local _item_links = db_update( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'l," .. uid .. "'" )
+  local _item = SQL_UPDATE( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'i," .. uid .. "'" )
+  local _item_links = SQL_UPDATE( "yrp_inventory", "item = '-1'", "CharID = " .. self:CharID() .. " AND item = 'l," .. uid .. "'" )
 end
 
 function Player:MoveItem( uid, x, y, origin )
@@ -456,7 +456,7 @@ function Player:MoveItem( uid, x, y, origin )
   self:RemoveItemFromIventory( uid )
 
   --[[ get item from database ]]--
-  local _item = db_select( "yrp_item", "*", "uniqueID = " .. uid )
+  local _item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. uid )
   if _item != nil then
     _item = _item[1]
 
@@ -491,7 +491,7 @@ net.Receive( "item_move", function( len, ply )
   --[[ NEW ORIGIN ]]--
   if _new_origin == "eq" then
     ply:RemoveItemFromIventory( _uid )
-    local _item = db_select( "yrp_item", "*", "uniqueID = " .. _uid )
+    local _item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _uid )
     if _item != nil then
       _item = _item[1]
       ply:EquipItem( _item.ClassName, _x )
@@ -513,7 +513,7 @@ function Player:EquipItem( cname, field )
 
   local _sets = "item = 'i," .. _item.uniqueID .. "'"
   local _whil = "CharID = " .. self:CharID() .. " AND field = '" .. field .. "'"
-  local _res = db_update( "yrp_inventory", _sets, _whil )
+  local _res = SQL_UPDATE( "yrp_inventory", _sets, _whil )
 
   local _swep = {}
   _swep.in_inv = true

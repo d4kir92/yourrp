@@ -4,18 +4,18 @@
 -- https://discord.gg/sEgNZxg
 
 --[[ ITEM ]]
-sql_add_column( "yrp_item", "ClassName", "TEXT DEFAULT '[EMPTY]'" )
-sql_add_column( "yrp_item", "PrintName", "TEXT DEFAULT ''" )
-sql_add_column( "yrp_item", "amount", "TEXT DEFAULT '1'" )
-sql_add_column( "yrp_item", "origin", "TEXT DEFAULT 'inv'" )
+SQL_ADD_COLUMN( "yrp_item", "ClassName", "TEXT DEFAULT '[EMPTY]'" )
+SQL_ADD_COLUMN( "yrp_item", "PrintName", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( "yrp_item", "amount", "TEXT DEFAULT '1'" )
+SQL_ADD_COLUMN( "yrp_item", "origin", "TEXT DEFAULT 'inv'" )
 
 --[[ MODEL ]] --
-sql_add_column( "yrp_item", "Model", "TEXT DEFAULT ''" )
-sql_add_column( "yrp_item", "aw", "TEXT DEFAULT 'x'" )
-sql_add_column( "yrp_item", "ah", "TEXT DEFAULT 'y'" )
-sql_add_column( "yrp_item", "w", "INT DEFAULT 0" )
-sql_add_column( "yrp_item", "h", "INT DEFAULT 0" )
-sql_add_column( "yrp_item", "center", "TEXT DEFAULT '0,0,0'" )
+SQL_ADD_COLUMN( "yrp_item", "Model", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( "yrp_item", "aw", "TEXT DEFAULT 'x'" )
+SQL_ADD_COLUMN( "yrp_item", "ah", "TEXT DEFAULT 'y'" )
+SQL_ADD_COLUMN( "yrp_item", "w", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( "yrp_item", "h", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( "yrp_item", "center", "TEXT DEFAULT '0,0,0'" )
 
 --db_drop_table( "yrp_item" )
 --db_is_empty( "yrp_item" )
@@ -60,7 +60,7 @@ function get_item_size( item )
 end
 
 function get_item( id )
-  local _result = db_select( "yrp_item", "*", "uniqueID = " .. id )
+  local _result = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. id )
   if _result != nil then
     return _result[1]
   else
@@ -91,10 +91,10 @@ function create_item( cname, origin )
   if amount != nil then
     _vals = _vals .. ", '" .. amount .. "'"
   end
-  local _result = db_insert_into( "yrp_item", _cols, _vals )
+  local _result = SQL_INSERT_INTO( "yrp_item", _cols, _vals )
 
   if _result == nil then
-    local _sel = db_select( "yrp_item", "*", nil )
+    local _sel = SQL_SELECT( "yrp_item", "*", nil )
     if _sel != nil then
       return _sel[#_sel]
     else
