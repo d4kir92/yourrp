@@ -608,7 +608,7 @@ function openCharacterSelection()
 
   local cache = {}
 
-  _cs.frame = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )
+  _cs.frame = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
   _cs.frame:SetTitle( "" )
   _cs.frame:ShowCloseButton( false )
   _cs.frame:SetDraggable( false )
@@ -625,6 +625,25 @@ function openCharacterSelection()
   end
   function _cs.frame:OnRemove()
     closeMenu()
+  end
+
+  local _close = createD( "DButton", _cs.frame, ctr( 50 ), ctr( 50 ), BScrW() - ctr( 60 ), ctr( 10 ) )
+  _close:SetText( "" )
+  function _close:Paint( pw, ph )
+    paintButton( self, pw, ph, "X" )
+  end
+  function _close:DoClick()
+    closeCharacterSelection()
+  end
+
+  local feedback = createD( "DButton", _cs.frame, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 510 ), ScrH() - ctr( 60 ) )
+  feedback:SetText( "" )
+  function feedback:Paint( pw, ph )
+    paintButton( self, pw, ph, "Give Feedback / Report problem" )
+  end
+  function feedback:DoClick()
+    closeCharacterSelection()
+    openFeedbackMenu()
   end
 
   derma_change_language( _cs.frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )

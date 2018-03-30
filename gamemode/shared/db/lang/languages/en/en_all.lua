@@ -571,4 +571,5 @@ function EN_All()
   set_lang_string( "canusephysgunpickup", "Can use physgun pickup" )
   set_lang_string( "canuseremovetool", "Can use remove tool" )
   set_lang_string( "canusedynamitetool", "Can use dynamite tool" )
+  set_lang_string( "disablebhop", "Disable bunny hopping" )
 end

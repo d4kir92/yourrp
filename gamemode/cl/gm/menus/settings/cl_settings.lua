@@ -143,7 +143,23 @@ function openSettings()
   local _bg = createD( "HTML", settingsWindow.window, ctr( 500-8 ), ctr( 80-12 ), ScrW() - ctr( 1350-6 ), ctr( 10+6 ) )
   _bg:OpenURL( "https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg" )
 
-  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 1350 ), ctr( 10 ) )
+  local feedback = createD( "DButton", settingsWindow.window, ctr( 600 ), ctr( 80 ), ScrW() - ctr( 1860 ), ctr( 10 ) )
+  feedback:SetText( "" )
+  function feedback:Paint( pw, ph )
+    local color = get_dsbg_col()
+    if !self:IsHovered() then
+      color = get_ds_col()
+  	end
+    color.a = 200
+    draw.RoundedBox( 0, 0, 0, pw, ph, color )
+    draw.SimpleTextOutlined( "Give Feedback / Report problem", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
+  function feedback:DoClick()
+    closeSettings()
+    openFeedbackMenu()
+  end
+
+  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 400 ), ctr( 80 ), ScrW() - ctr( 1250 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )

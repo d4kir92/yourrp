@@ -121,6 +121,7 @@ function set_role_values( ply )
         if _gen_tab.name_advert != "" and string.lower( _gen_tab.name_advert ) != "advert" then
           ply:SetNWString( "channel_advert", _gen_tab.name_advert )
           ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
+          ply:SetNWBool( "anti_bhop", tobool( _gen_tab.toggle_anti_bhop ) )
         end
       end
 

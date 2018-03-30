@@ -15,16 +15,31 @@ function GM:GetGameDescription()
 end
 
 concommand.Add( "yrp__help", function( ply, cmd, args )
-	printGMPre( "note", "concommands" )
+	hr_pre()
   printGM( "note", "yrp_status - shows gamemode version" )
 	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
-  printGMPos()
+  hr_pos()
 
-  printGMPre( "note", "convars" )
+  hr_pre()
   printGM( "note", "yrp_cl_hud X - 1: shows hud, 0: hide hud" )
-  printGMPos()
+  hr_pos()
 end )
 
+hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
+	if ply:GetNWBool( "anti_bhop", false ) then
+		if !ply:GetNWBool( "canjump", false ) then
+			cmd:RemoveKey(IN_JUMP)
+		end
+	end
+end)
+--[[
+hook.Add( "Move", "yrp_anti_bhop", function( ply, mv )
+	if ply:GetNWBool( "anti_bhop", false ) and ply:OnGround() and ply:KeyDown( IN_JUMP ) and mv:KeyDown( IN_JUMP ) and !ply:GetNWBool( "canjump", false ) then
+		return true
+	end
+	return false
+end)
+]]--
 if SERVER then
 	util.AddNetworkString( "yrp_weaponlowering" )
 end
@@ -147,7 +162,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.55" --do NOT change this!
+GM.Version = "V.:" .. " " .. "0.9.56" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

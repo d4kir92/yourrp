@@ -560,15 +560,6 @@ function SQL_INIT_DATABASE( db_name )
 end
 
 if SERVER then
-  --[[ MYSQL ]]--
-  require( "mysqloo" )
-  if (mysqloo.VERSION != "9" || !mysqloo.MINOR_VERSION || tonumber(mysqloo.MINOR_VERSION) < 1) then
-  	MsgC(Color(255, 0, 0), "You are using an outdated mysqloo version\n")
-  	MsgC(Color(255, 0, 0), "Download the latest mysqloo9 from here\n")
-  	MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
-  	return
-  end
-
   --[[ SQLMODE ]]--
   if !sql.TableExists( "yrp_sql" ) then
     local _q = "CREATE TABLE "
@@ -587,18 +578,27 @@ if SERVER then
   end
 
   if YRPSQL.mode == 1 then
-    printGM( "db", "CONNECT TO DATABASE" )
+    --[[ MYSQL ]]--
+    require( "mysqloo" )
+    if (mysqloo.VERSION != "9" || !mysqloo.MINOR_VERSION || tonumber(mysqloo.MINOR_VERSION) < 1) then
+    	MsgC(Color(255, 0, 0), "You are using an outdated mysqloo version\n")
+    	MsgC(Color(255, 0, 0), "Download the latest mysqloo9 from here\n")
+    	MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
+    	return
+    end
+
+    printGM( "db", "CONNECT TO MYSQL DATABASE" )
     YRPSQL.db = mysqloo.connect( _sql_settings.host, _sql_settings.username, _sql_settings.password, _sql_settings.database, tonumber( _sql_settings.port ) )
     YRPSQL.db.onConnected = function()
       printGM( "note", "CONNECTED!" )
       SetSQLMode( 1 )
-      SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
+      --SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
     end
-	  YRPSQL.db.onConnectionFailed = function()
+    YRPSQL.db.onConnectionFailed = function()
       printGM( "note", "CONNECTION failed, changing to SQLITE!" )
       SetSQLMode( 0 )
     end
-	  YRPSQL.db:connect()
+    YRPSQL.db:connect()
   elseif YRPSQL.mode == 0 then
     --
   end

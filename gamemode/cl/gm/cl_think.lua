@@ -71,9 +71,13 @@ function useFunction( string )
 		elseif string == "openHelpMenu" then
 			done_tutorial( "tut_feedback" )
 			toggleHelpMenu()
+		elseif string == "openFeedbackMenu" then
+			toggleFeedbackMenu()
 		elseif string == "openCharMenu" then
 			done_tutorial( "tut_cs" )
 			toggleCharacterSelection()
+		elseif string == "openAppearance" then
+			toggleAppearanceMenu()
 		elseif string == "openInventory" then
 			done_tutorial( "tut_mi" )
 			toggle_inventory()
@@ -366,10 +370,12 @@ function KeyPress()
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 
 	keyPressed( KEY_F1, "openHelpMenu", nil, nil )
+	keyPressed( KEY_F7, "openFeedbackMenu", nil, nil )
 
 	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
 
 	keyPressed( get_keybind("menu_inventory"), "openInventory", nil, nil )
+	keyPressed( get_keybind("menu_appearance"), "openAppearance", nil, nil )
 
 	keyPressed( get_keybind("menu_character_selection"), "openCharMenu", nil, nil )
 	keyPressed( get_keybind("menu_role"), "openRoleMenu", nil, nil )

@@ -224,7 +224,7 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( ply, ent )
   local _tmp = SQL_SELECT( "yrp_restrictions", "canusephysgunpickup", "usergroup = '" .. ply:GetUserGroup() .. "'" )
   if _tmp != nil and _tmp != false then
     _tmp = _tmp[1]
-    if tobool( _tmp.canuseremovetool ) then
+    if tobool( _tmp.canusephysgunpickup ) then
       return true
     else
       net.Start( "yrp_info" )

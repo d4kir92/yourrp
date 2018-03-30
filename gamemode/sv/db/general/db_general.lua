@@ -18,6 +18,7 @@ util.AddNetworkString( "db_update_smartphone" )
 util.AddNetworkString( "db_update_dealer_immortal" )
 util.AddNetworkString( "db_update_weapon_lowering" )
 util.AddNetworkString( "db_update_crosshair" )
+util.AddNetworkString( "db_update_anti_bhop" )
 
 util.AddNetworkString( "db_update_noclip_crow" )
 util.AddNetworkString( "db_update_noclip_tags" )
@@ -50,6 +51,7 @@ SQL_ADD_COLUMN( _db_name, "toggle_smartphone", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_dealer_immortal", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "toggle_weapon_lowering", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_crosshair", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "toggle_anti_bhop", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "toggle_noclip_crow", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_noclip_stealth", "INT DEFAULT 0" )
@@ -117,6 +119,17 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_anti_bhop", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_anti_bhop = _nw
+    SQL_UPDATE( "yrp_general", "toggle_anti_bhop = " .. yrp_general.toggle_anti_bhop, nil )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "anti_bhop", tobool(_nw) )
+  end
+end)
 
 net.Receive( "db_update_collection", function( len, ply )
   local _nw = tonumber( net.ReadString() )

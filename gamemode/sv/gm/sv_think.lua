@@ -79,6 +79,24 @@ function con_st( ply )
   end
 end
 
+hook.Add( "Tick", "yrp_keydown", function()
+	for k, ply in pairs( player.GetAll() ) do
+		anti_bunnyhop( ply )
+	end
+end)
+
+function anti_bunnyhop( ply )
+	if ply:KeyDown( IN_JUMP ) and ply:GetNWBool( "canjump", true ) then
+	  ply:SetNWBool( "canjump", false )
+	elseif ply:OnGround() and !ply:GetNWBool( "jump_resetting", false ) and !ply:GetNWBool( "canjump", false ) then
+		ply:SetNWBool( "jump_resetting", true )
+		timer.Simple( 0.2, function()
+			ply:SetNWBool( "jump_resetting", false )
+			ply:SetNWBool( "canjump", true )
+		end)
+	end
+end
+
 function broken( ply )
   if ply:GetNWBool( "broken_leg_left" ) and ply:GetNWBool( "broken_leg_right" ) then
     --[[ Both legs broken ]]--
@@ -159,6 +177,8 @@ timer.Create( "ServerThink", 1, 0, function()
     ply:addSecond()
 
     if ply:GetNWBool( "loaded", false ) then
+			anti_bunnyhop( ply )
+
       if !ply:GetNWBool( "inCombat" ) then
         ply:CheckHeal()
 

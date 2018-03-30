@@ -46,6 +46,7 @@ function check_yrp_keybinds()
   SQL_ADD_COLUMN( _db_name, "speak_prev", "INT DEFAULT " .. KEY_PAGEDOWN )
   SQL_ADD_COLUMN( _db_name, "drop_item", "INT DEFAULT " .. KEY_G )
   SQL_ADD_COLUMN( _db_name, "weaponlowering", "INT DEFAULT " .. KEY_H )
+  SQL_ADD_COLUMN( _db_name, "menu_appearance", "INT DEFAULT " .. KEY_O )
 
   SQL_ADD_COLUMN( _db_name, "view_switch", "INT DEFAULT " .. KEY_T )
   SQL_ADD_COLUMN( _db_name, "view_zoom_out", "INT DEFAULT " .. KEY_PAD_PLUS )

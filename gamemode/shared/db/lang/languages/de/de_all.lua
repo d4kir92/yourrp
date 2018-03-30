@@ -571,4 +571,5 @@ function DE_All()
   set_lang_string( "canusephysgunpickup", "Kann das Aufheben der physgun benutzen" )
   set_lang_string( "canuseremovetool", "Kann das Entferner Werkzeug benutzen" )
   set_lang_string( "canusedynamitetool", "Kann das Dynamit Werkzeug benutzen" )
+  set_lang_string( "disablebhop", "Bunnyhopping deaktivieren" )
 end
