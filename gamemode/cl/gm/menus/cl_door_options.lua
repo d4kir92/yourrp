@@ -19,7 +19,7 @@ end
 net.Receive( "getBuildingInfo", function( len )
   if net.ReadBool() then
     local _door = net.ReadEntity()
-    local _building = net.ReadInt( 16 )
+    local _building = net.ReadString()
     local _tmpBuilding = net.ReadTable()
     local owner = net.ReadString()
 
@@ -52,19 +52,19 @@ function buyWindow( buildingID, name, price, door )
   local _doors = 0
   local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
   for k, v in pairs( _tmpDoors ) do
-    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _buildingID ) then
+    if tonumber( v:GetNWString( "buildingID", "-1" ) ) == tonumber( _buildingID ) then
       _doors = _doors + 1
     end
   end
   local _tmpFDoors = ents.FindByClass( "func_door" )
   for k, v in pairs( _tmpFDoors ) do
-    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _buildingID ) then
+    if tonumber( v:GetNWString( "buildingID", "-1" ) ) == tonumber( _buildingID ) then
       _doors = _doors + 1
     end
   end
   local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
   for k, v in pairs( _tmpFRDoors ) do
-    if tonumber( v:GetNWInt( "buildingID" ) ) == tonumber( _buildingID ) then
+    if tonumber( v:GetNWString( "buildingID", "-1" ) ) == tonumber( _buildingID ) then
       _doors = _doors + 1
     end
   end
@@ -88,11 +88,11 @@ function buyWindow( buildingID, name, price, door )
     draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "price" ) .. ":", "sef", ctr( 545 ), ctr( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    if door:GetNWInt( "buildingID", -1 ) == -1 then
+    if door:GetNWString( "BuildingID", "-1" ) == "-1" then
       draw.SimpleTextOutlined( "Loading IDs", "sef", pw - ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     else
-      draw.SimpleTextOutlined( "Building-ID: " .. door:GetNWInt( "buildingID", -1 ), "sef", pw - ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( "Door-ID: " .. door:GetNWInt( "uniqueID", -1 ), "sef", pw - ctr( 10 ), ctr( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "Building-ID: " .. door:GetNWString( "BuildingID", "-1" ), "sef", pw - ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "Door-ID: " .. door:GetNWString( "uniqueID", "-1" ), "sef", pw - ctr( 10 ), ctr( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     end
   end
   function yrp_door.window:OnClose()
@@ -106,7 +106,7 @@ function buyWindow( buildingID, name, price, door )
   _buyButton:SetText( "" )
   function _buyButton:DoClick()
     net.Start( "buyBuilding" )
-      net.WriteInt( _buildingID, 16 )
+      net.WriteString( _buildingID )
     net.SendToServer()
     if yrp_door.window.Close != nil then
       yrp_door.window:Close()
@@ -124,7 +124,7 @@ function buyWindow( buildingID, name, price, door )
       _name = _newName
       _buyButton:SetText( "Buy " .. _newName )
       net.Start( "changeBuildingName" )
-        net.WriteInt( _buildingID, 16 )
+        net.WriteString( _buildingID )
         net.WriteString( _newName )
       net.SendToServer()
     end
@@ -150,7 +150,7 @@ function buyWindow( buildingID, name, price, door )
         _buildingID = _ComboBoxHouseName:GetOptionData( index )
         net.Start( "changeBuildingID" )
           net.WriteEntity( door )
-          net.WriteInt( _buildingID, 16 )
+          net.WriteString( _buildingID )
         net.SendToServer()
         yrp_door.window:Close()
       end
@@ -182,7 +182,7 @@ function buyWindow( buildingID, name, price, door )
       local _tmpData = _ComboBoxGroupName:GetOptionData( index )
       if _tmpData != nil then
         net.Start( "setBuildingOwnerGroup" )
-          net.WriteInt( _buildingID, 16 )
+          net.WriteString( _buildingID )
           net.WriteInt( _tmpData, 16 )
         net.SendToServer()
         yrp_door.window:Close()
@@ -195,7 +195,7 @@ function buyWindow( buildingID, name, price, door )
       _price = _TextEntryPrice:GetText()
       if _price != nil then
         net.Start( "changeBuildingPrice" )
-          net.WriteInt( _buildingID, 16 )
+          net.WriteString( _buildingID )
           net.WriteString( _price )
         net.SendToServer()
       end
@@ -227,13 +227,13 @@ function optionWindow( buildingID, name, price, door, owner )
 
     draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. _name, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " .. owner, "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    --draw.SimpleTextOutlined( lang_string( "doorlevel" ) .. ": " .. door:GetNWInt( "level", -1 ), "sef", ctr( 10 ), ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    --draw.SimpleTextOutlined( lang_string( "doorlevel" ) .. ": " .. door:GetNWString( "level", -1 ), "sef", ctr( 10 ), ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.RoundedBox( 0, ctr( 4 ), ctr( 320 ), pw - ctr( 8 ), ctr( 460 - 320 - 4 ), Color( 255, 255, 0, 200 ) )
     draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "sef", ctr( 10 ), ctr( 350 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( "Building-ID: " .. door:GetNWInt( "buildingID", -1 ), "sef", pw - ctr( 10 ), ctr( 320 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( "Door-ID: " .. door:GetNWInt( "uniqueID", -1 ), "sef", pw - ctr( 10 ), ctr( 380 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "Building-ID: " .. door:GetNWString( "buildingID", "FAILED" ), "sef", pw - ctr( 10 ), ctr( 320 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "Door-ID: " .. door:GetNWString( "uniqueID", -1 ), "sef", pw - ctr( 10 ), ctr( 380 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
   end
   function yrp_door.window:OnClose()
     closeMenu()
@@ -258,39 +258,13 @@ function optionWindow( buildingID, name, price, door, owner )
     _ButtonSell:SetText( "" )
     function _ButtonSell:DoClick()
       net.Start( "sellBuilding" )
-        net.WriteInt( _buildingID, 16 )
+        net.WriteString( _buildingID )
       net.SendToServer()
       yrp_door.window:Close()
     end
     function _ButtonSell:Paint( pw, ph )
       paintButton( self, pw, ph, lang_string( "sellbuildingpre" ) .. " " .. _name .. " " .. lang_string( "sellbuildingpos" ) .. " (+" .. ply:GetNWString( "moneyPre" ) .. _price/2 .. ply:GetNWString( "moneyPost" ) .. ")" )
     end
-  end
-
-  local _ButtonKeyCreate = createVGUI( "DButton", yrp_door.window, 530, 50, 545, 200 )
-  _ButtonKeyCreate:SetText( "" )
-  function _ButtonKeyCreate:DoClick()
-    net.Start( "createKey" )
-      net.WriteEntity( door )
-      net.WriteInt( _buildingID, 16 )
-    net.SendToServer()
-    yrp_door.window:Close()
-  end
-  function _ButtonKeyCreate:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "createkey" ) .. " (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
-  end
-
-  local _ButtonKeyReset = createVGUI( "DButton", yrp_door.window, 530, 50, 545, 260 )
-  _ButtonKeyReset:SetText( "" )
-  function _ButtonKeyReset:DoClick()
-    net.Start( "resetKey" )
-      net.WriteEntity( door )
-      net.WriteInt( _buildingID, 16 )
-    net.SendToServer()
-    yrp_door.window:Close()
-  end
-  function _ButtonKeyReset:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "resetkey" ) .. " (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
   end
 
   if ply:HasAccess() then
@@ -300,7 +274,7 @@ function optionWindow( buildingID, name, price, door, owner )
       local _newName = _TextEntryName:GetText()
       _name = _newName
       net.Start( "changeBuildingName" )
-        net.WriteInt( _buildingID, 16 )
+        net.WriteString( _buildingID )
         net.WriteString( _newName )
       net.SendToServer()
     end
@@ -309,7 +283,7 @@ function optionWindow( buildingID, name, price, door, owner )
     _buttonRemoveOwner:SetText( "" )
     function _buttonRemoveOwner:DoClick()
       net.Start( "removeOwner" )
-        net.WriteInt( _buildingID, 16 )
+        net.WriteString( _buildingID )
       net.SendToServer()
       yrp_door.window:Close()
     end

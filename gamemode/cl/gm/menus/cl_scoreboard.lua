@@ -114,13 +114,13 @@ function drawGroupPlayers( id )
           _info:MakePopup()
           _info.startup = true
           function _info:Paint( pw, ph )
-            if tostring( _tmpPly ) == "[NULL Panel]" then
+            if pa( _tmpPly ) then
               self:Remove()
             else
               if !self:HasFocus() and self.startup then
                 self.startup = false
               else
-                if tostring( _info ) != "[NULL Panel]" then
+                if pa( _info ) then
                   if !self:HasFocus() then
                     self:Remove()
                   end

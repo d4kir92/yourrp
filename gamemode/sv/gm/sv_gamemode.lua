@@ -65,8 +65,6 @@ function GM:PlayerLoadout( ply )
     ply:old_give( "yrp_key" )
     ply:old_give( "yrp_unarmed" )
 
-    addKeys( ply )
-
     local plyTab = ply:GetPlyTab()
 
     local _rol_tab = ply:GetRolTab()

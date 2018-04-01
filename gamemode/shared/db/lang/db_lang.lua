@@ -34,7 +34,7 @@ yrp_lang.not_found = "not found, using default one."
 yrp_lang.language = "Unknown"
 
 function search_language()
-	yrp_lang.get_language = GetConVar( "gmod_language" ):GetString()
+	yrp_lang.get_language = string.lower( GetConVar( "gmod_language" ):GetString() )
 end
 
 function set_lang_string( var, str )
@@ -79,6 +79,7 @@ AddCSLuaFile( "languages/db_lang_ca.lua" )
 AddCSLuaFile( "languages/db_lang_ua.lua" )
 AddCSLuaFile( "languages/db_lang_ko.lua" )
 AddCSLuaFile( "languages/db_lang_hu.lua" )
+AddCSLuaFile( "languages/db_lang_cs.lua" )
 
 include( "languages/db_lang_en.lua" )
 include( "languages/db_lang_de.lua" )
@@ -97,6 +98,7 @@ include( "languages/db_lang_ca.lua" )
 include( "languages/db_lang_ua.lua" )
 include( "languages/db_lang_ko.lua" )
 include( "languages/db_lang_hu.lua" )
+include( "languages/db_lang_cs.lua" )
 
 function check_languagepack()
 	for k, v in pairs( yrp_all_lang ) do
@@ -128,43 +130,45 @@ function change_language( index )
     printGM( "lang", "Automatic detection" )
     search_language()
     if yrp_lang.get_language != "" then
-      printGM( "lang", "Found Language: " .. "[" .. yrp_lang.get_language .. "]" )
-			_net_lang = yrp_lang.get_language
+			_net_lang = string.lower( yrp_lang.get_language )
+      printGM( "lang", "Found Language: " .. "[" .. _net_lang .. "]" )
       if check_languagepack() then
-        if yrp_lang.get_language == "de" then
+        if _net_lang == "de" then
           LangDE()
-				elseif yrp_lang.get_language == "en" then
+				elseif _net_lang == "en" then
           LangEN()
-				elseif yrp_lang.get_language == "ru" then
+				elseif _net_lang == "ru" then
 					LangRU()
-				elseif yrp_lang.get_language == "tr" then
+				elseif _net_lang == "tr" then
 					LangTR()
-				elseif yrp_lang.get_language == "fr" then
+				elseif _net_lang == "fr" then
 					LangFR()
-				elseif yrp_lang.get_language == "pt-br" then
+				elseif _net_lang == "pt-br" then
 					LangPT_BR()
-				elseif yrp_lang.get_language == "th" then
+				elseif _net_lang == "th" then
 					LangTH()
-				elseif yrp_lang.get_language == "it" then
+				elseif _net_lang == "it" then
 					LangIT()
-				elseif yrp_lang.get_language == "sv" then
+				elseif _net_lang == "sv" then
 					LangSV()
-				elseif yrp_lang.get_language == "bg" then
+				elseif _net_lang == "bg" then
 					LangBG()
-				elseif yrp_lang.get_language == "pl" then
+				elseif _net_lang == "pl" then
 					LangPL()
-				elseif yrp_lang.get_language == "ro" then
+				elseif _net_lang == "ro" then
 					LangRO()
-				elseif yrp_lang.get_language == "es" then
+				elseif _net_lang == "es" then
 					LangES()
-				elseif yrp_lang.get_language == "ca" then
+				elseif _net_lang == "ca" then
 					LangCA()
-				elseif yrp_lang.get_language == "ua" then
+				elseif _net_lang == "ua" then
 					LangUA()
-				elseif yrp_lang.get_language == "ko" then
+				elseif _net_lang == "ko" then
 					LangKO()
-				elseif yrp_lang.get_language == "hu" then
+				elseif _net_lang == "hu" then
 					LangHU()
+				elseif _net_lang == "cs" then
+					LangCS()
 				end
       else
         LangEN()
@@ -175,8 +179,8 @@ function change_language( index )
       printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
     end
   else
-    printGM( "lang", "Manually change to Language [" .. index .. "]" )
 		yrp_lang.get_language = index
+    printGM( "lang", "Manually change to Language [" .. index .. "]" )
     if index == "de" then
       LangDE()
     elseif index == "en" then
@@ -211,6 +215,8 @@ function change_language( index )
 			LangKO()
 		elseif index == "hu" then
 			LangHU()
+		elseif index == "cs" then
+			LangCS()
 		else
       printGM( "error", "LANG_E0001" )
       return

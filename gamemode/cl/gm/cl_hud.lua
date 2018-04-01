@@ -72,7 +72,7 @@ function hudVersion()
 		_color1.a = _alpha
 		_color2.a = _alpha
 
-		local _text = string.upper( tostring( VERSIONART ) ) .. " " .. tostring( _singleplayer ) .. " (" .. GAMEMODE.dedicated .. " Server) YourRP " .. GAMEMODE.Version .. " " .. string.upper( tostring( GAMEMODE.VersionSort ) ) .. " by D4KiR"
+		local _text = tostring( _singleplayer ) .. " [" .. string.upper( tostring( VERSIONART ) ) .. "] " .. "YourRP Version:" .. " " .. GAMEMODE.Version .. " " .. string.upper( tostring( GAMEMODE.VersionSort ) ) .. " (on " .. GAMEMODE.dedicated .. " Server)"
 		draw.SimpleTextOutlined( _text, "HudVersion", ScrW() - ctr( 70 ), ctr( 60 ), _color1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), _color2 )
 	end
 end

@@ -55,13 +55,13 @@ end
 function SWEP:PrimaryAttack()
 	if SERVER then
 	  if self.Owner:GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
-	    if unlockDoor( self.Owner:GetEyeTrace().Entity, self.numbers ) then
+	    if unlockDoor( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "buildingID", "Failed" ) ) then
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "unlockeddoor" ) )
 	    else
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
 	    end
-	  elseif self.Owner:GetEyeTrace().Entity:IsVehicle() then
-			if unlockVehicle( self.Owner:GetEyeTrace().Entity, self.numbers ) then
+	  elseif self.Owner:GetEyeTrace().Entity:IsVehicle() and self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) != "Failed" then
+			if unlockVehicle( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) ) then
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "unlockedvehicle" ) )
 	    else
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
@@ -73,13 +73,13 @@ end
 function SWEP:SecondaryAttack()
   if SERVER then
     if self.Owner:GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door" or self.Owner:GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
-      if lockDoor( self.Owner:GetEyeTrace().Entity, self.numbers ) then
+      if lockDoor( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "buildingID", "Failed" ) ) then
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "lockeddoor" ) )
       else
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
       end
-		elseif self.Owner:GetEyeTrace().Entity:IsVehicle() then
-			if lockVehicle( self.Owner:GetEyeTrace().Entity, self.numbers ) then
+		elseif self.Owner:GetEyeTrace().Entity:IsVehicle() and self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) != "Failed" then
+			if lockVehicle( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) ) then
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "lockedvehicle" ) )
       else
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )

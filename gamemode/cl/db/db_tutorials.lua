@@ -55,7 +55,7 @@ function check_yrp_tutorials()
   end
 
   local _tuts = SQL_SELECT( _db_name, "*", nil )
-  if _tuts != nil then
+  if _tuts != nil and _tuts != false then
     yrp_tutorials = _tuts[1]
   end
 end

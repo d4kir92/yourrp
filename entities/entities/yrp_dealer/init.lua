@@ -4,26 +4,6 @@ AddCSLuaFile( "shared.lua" )
 
 include('shared.lua')
 
-/*
-local schdChase = ai_schedule.New( "yrp_dealer" )
-
-schdChase:EngTask( "TASK_GET_PATH_TO_RANDOM_NODE", 	128 )
-schdChase:EngTask( "TASK_RUN_PATH", 				0 )
-schdChase:EngTask( "TASK_WAIT_FOR_MOVEMENT", 	0 )
-schdChase:AddTask( "PlaySequence", 				{ Name = "cheer1", Speed = 1 } )
-
-schdChase:AddTask( "FindEnemy", 		{ Class = "player", Radius = 2000 } )
-schdChase:EngTask( "TASK_GET_PATH_TO_RANGE_ENEMY_LKP_LOS", 	0 )
-schdChase:EngTask( "TASK_RUN_PATH", 				0 )
-schdChase:EngTask( "TASK_WAIT_FOR_MOVEMENT", 	0 )
-
-schdChase:EngTask( "TASK_STOP_MOVING", 			0 )
-schdChase:EngTask( "TASK_FACE_ENEMY", 			0 )
-schdChase:EngTask( "TASK_ANNOUNCE_ATTACK", 		0 )
-schdChase:EngTask( "TASK_RANGE_ATTACK1", 		0 )
-schdChase:EngTask( "TASK_RELOAD", 				0 )
-*/
-
 function ENT:Initialize()
 	self:SetHullType( HULL_HUMAN )
 	self:SetHullSizeNormal( )

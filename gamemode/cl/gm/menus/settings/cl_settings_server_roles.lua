@@ -618,7 +618,7 @@ function addDBSwep( parent, id, uniqueID, help )
           changesw = 1
 
           local worldmodel = getWorldModel( sws[changesw] )
-          if tostring(modelpanel) != "[NULL Panel]" then
+          if pa( modelpanel) then
             modelpanel:SetModel( worldmodel )
             if modelpanel.Entity != nil then
               modelpanel.Entity:SetModelScale( 1, 0 )

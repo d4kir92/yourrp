@@ -3,8 +3,6 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-util.AddNetworkString( "resetVehicleKey" )
-util.AddNetworkString( "createVehicleKey" )
 util.AddNetworkString( "removeVehicleOwner" )
 
 util.AddNetworkString( "getVehicleInfo" )
@@ -17,21 +15,6 @@ SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
-
-function createVehicleKey( ent, id )
-  local _tmp = id
-  _tmp = _tmp .. math.Round( math.Rand( 100000, 999999 ), 0 )
-  ent.keynr = _tmp
-  local result = SQL_UPDATE( "yrp_vehicles", "keynr = '" .. _tmp .. "'", "uniqueID = " .. id )
-  return _tmp
-end
-
-function getVehicleNumber( ent, id )
-  if ent.keynr == nil then
-    ent.keynr = createVehicleKey( ent, id )
-  end
-  return ent.keynr
-end
 
 function allowedToUseVehicle( id, ply )
   if ply:HasAccess() then
@@ -79,87 +62,55 @@ net.Receive( "getVehicleInfo", function( len, ply )
   end
 end)
 
-net.Receive( "resetVehicleKey", function( len, ply )
-  local _vehicle = net.ReadEntity()
-  local _tmpVehicleID = net.ReadInt( 16 )
-
-  createVehicleKey( _vehicle, _tmpVehicleID )
-end)
-
-net.Receive( "createVehicleKey", function( len, ply )
-  local _vehicle = net.ReadEntity()
-  local _tmpVehicleID = net.ReadInt( 16 )
-
-  local _keynr = -1
-  for k, v in pairs( ply:GetWeapons() ) do
-    if v.ClassName == "yrp_key" then
-      _keynr = getVehicleNumber( _vehicle, _tmpVehicleID )
-      local _oldkeynrs = SQL_SELECT( "yrp_characters", "keynrs", "uniqueID = " .. ply:CharID() )
-      local _tmpTable = string.Explode( ",", _oldkeynrs[1].keynrs )
-      if !table.HasValue( _tmpTable, _keynr ) then
-        v:AddKeyNr( _keynr )
-
-        local _newkeynrs = ""
-        for l, w in pairs( _tmpTable ) do
-          if w != "" then
-            _newkeynrs = _newkeynrs .. w
-            _newkeynrs = _newkeynrs .. ","
-          end
-        end
-        _newkeynrs = _newkeynrs .. _keynr
-        SQL_UPDATE( "yrp_characters", "keynrs = '" .. _newkeynrs .. "'", "uniqueID = " .. ply:CharID() )
-      else
-        printGM( "note", "Key already exists")
-      end
-      break
+function canVehicleLock( ply, tab )
+  if tab.ownerCharID != "" then
+    if tostring( ply:CharID() ) == tostring( tab.ownerCharID ) then
+      return true
     end
+    return false
+  elseif tab.ownerCharID == "" then
+    return false
+  else
+    printGM( "error", "canVehicleLock ELSE" )
+    return false
   end
-end)
-
-function canVehicleLock( ent, nr )
-  local _tmpTable = SQL_SELECT( "yrp_vehicles", "keynr", "uniqueID = " .. ent:GetNWInt( "vehicleID" ) )
-  if _tmpTable != nil then
-    if _tmpTable[1] != nil then
-      if _tmpTable[1].keynr == nr then
-        return true
-      else
-        return false
-      end
-    end
-  end
-  return false
 end
 
-function unlockVehicle( ent, nrs )
-  for k, v in pairs( nrs ) do
-    if canVehicleLock( ent, v ) then
+function unlockVehicle( ply, ent, nr )
+  local _tmpVehicleTable = SQL_SELECT( "yrp_vehicles", "*", "uniqueID = '" .. nr .. "'" )
+  if _tmpVehicleTable != nil then
+    _tmpVehicleTable = _tmpVehicleTable[1]
+    if canVehicleLock( ply, _tmpVehicleTable ) then
       ent:Fire( "Unlock" )
       return true
     end
+  else
+    return false
   end
-  return false
 end
 
-function lockVehicle( ent, nrs )
-  for k, v in pairs( nrs ) do
-    if canVehicleLock( ent, v ) then
-      ent:Fire( "Lock", "", 0 )
+function lockVehicle( ply, ent, nr )
+  local _tmpVehicleTable = SQL_SELECT( "yrp_vehicles", "*", "uniqueID = '" .. nr .. "'" )
+  if _tmpVehicleTable != nil then
+    _tmpVehicleTable = _tmpVehicleTable[1]
+    if canVehicleLock( ply, _tmpVehicleTable ) then
+      ent:Fire( "Lock" )
       return true
     end
+  else
+    return false
   end
-  return false
 end
 
 net.Receive( "removeVehicleOwner", function( len, ply )
-  local _tmpVehicleID = net.ReadInt( 16 )
+  local _tmpVehicleID = net.ReadString()
   local _tmpTable = SQL_SELECT( "yrp_vehicles", "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
 
   local result = SQL_UPDATE( "yrp_vehicles", "ownerCharID = ''", "uniqueID = '" .. _tmpVehicleID .. "'" )
 
   for k, v in pairs( ents.GetAll() ) do
-    if tonumber( v:GetNWInt( "vehicleID" ) ) == tonumber( _tmpVehicleID ) then
+    if tonumber( v:GetNWString( "vehicleID" ) ) == tonumber( _tmpVehicleID ) then
       v:SetNWString( "ownerRPName", "" )
-      createVehicleKey( v, _tmpVehicleID )
     end
   end
 end)

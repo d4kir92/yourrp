@@ -220,7 +220,7 @@ end)
 function unpack_paket( sender, text, iscommand )
 
   if string.find( text[1], "/", 1, false ) or string.find( text[1], "!", 1, false ) then
-    //command
+    --command
     local _start = 2
     local _end = string.find( text, " ", 1, false )
     if _end != nil then
@@ -229,7 +229,7 @@ function unpack_paket( sender, text, iscommand )
 
     paket.command = string.sub( text, _start, _end )
 
-    //text
+    --text
     local _start_txt = _end or 0
     _start_txt = _start_txt + 2
 

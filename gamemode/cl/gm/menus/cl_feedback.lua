@@ -78,6 +78,7 @@ function openFeedbackMenu()
     entry["entry.1141598078"] = _fb.titleT:GetText() or "FAILED"
     entry["entry.761186932"] = _fb.feedbackT:GetText() or "FAILED"
     entry["entry.1633448754"] = _fb.contactT:GetText() or "FAILED"
+    entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
 
     http.Post( _url, entry, function( result )
       if result then end

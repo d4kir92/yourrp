@@ -63,7 +63,7 @@ function useFunction( string )
 	local eyeTrace = ply:GetEyeTrace()
 
 	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
-		//Menues
+		--Menues
 		if string == "openSP" then
 			openSP()
 		elseif string == "closeSP" then
@@ -104,11 +104,11 @@ function useFunction( string )
 				end
 			end
 
-		//When scoreboard open, enable mouse
+		--When scoreboard open, enable mouse
 		elseif string == "scoreboard" and isScoreboardOpen then
 			gui.EnableScreenClicker( true )
 
-		//Inventory
+		--Inventory
 		elseif string == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
@@ -123,12 +123,12 @@ function useFunction( string )
 				end
 			end
 
-		//Weapon Lowering
+		--Weapon Lowering
 		elseif string == "weaponlowering" and !mouseVisible() then
 			net.Start( "yrp_weaponlowering" )
 			net.SendToServer()
 
-		//Mouse changer
+		--Mouse changer
 		elseif string == "F11Toggle" then
 			done_tutorial( "tut_tmo" )
 			gui.EnableScreenClicker( !vgui.CursorVisible() )
@@ -456,7 +456,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 									angles = angles + Angle( 0, ply:GetNWInt( "view_s" ), 0 )
 									local _pos_change = angles:Up() * ply:GetNWInt( "view_z" ) + angles:Right() * ply:GetNWInt( "view_x" )
 
- 									//ply:GetNWInt( "view_s" )
+ 									--ply:GetNWInt( "view_s" )
 
 									local tr = util.TraceHull( {
 										start = pos + angles:Forward() * _minDistFor,

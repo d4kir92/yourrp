@@ -191,7 +191,7 @@ function getRoles( uid, parent )
 end
 
 function addGroup( grp, parent )
-  if parent != NULL then
+  if parent != NULL and pa( parent ) then
     local _grp = createD( "DYRPCollapsibleCategory", parent, parent:GetWide() - ctrb( 40 ), ctrb( 200 ), ctrb( 0 ), ctrb( 0 ) )
     _grp:SetHeader( grp.groupID )
     _grp:SetSpacing( 30 )

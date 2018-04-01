@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-// this config will not be used! its only here to remove some bugs!
-// in yourrp you can set everything up
+-- this config will not be used! its only here to remove some bugs!
+-- in yourrp you can set everything up
 
 GM.Config = {} -- config table
 

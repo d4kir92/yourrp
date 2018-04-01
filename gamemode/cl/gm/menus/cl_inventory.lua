@@ -9,7 +9,7 @@ yrp_inventory.cache_inv_item = {}
 
 function clearL()
   if yrp_inventory != nil then
-    if yrp_inventory.left != NULL and yrp_inventory.left != nil and tostring(yrp_inventory.left) != "[NULL Panel]" then
+    if yrp_inventory.left != NULL and yrp_inventory.left != nil and pa( yrp_inventory.left ) then
       local _childs = yrp_inventory.left:GetChildren()
       if istable( _childs ) then
         for k, v in pairs( _childs ) do

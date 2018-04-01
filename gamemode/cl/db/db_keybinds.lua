@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local yrp_keybinds = {}
-yrp_keybinds.version = 1
+yrp_keybinds.version = 2
 
 local _db_name = "yrp_keybinds"
 
@@ -40,8 +40,8 @@ function check_yrp_keybinds()
   SQL_ADD_COLUMN( _db_name, "toggle_mouse", "INT DEFAULT " .. KEY_F3 )
   SQL_ADD_COLUMN( _db_name, "toggle_map", "INT DEFAULT " .. KEY_M )
   SQL_ADD_COLUMN( _db_name, "menu_inventory", "INT DEFAULT " .. KEY_I )
-  SQL_ADD_COLUMN( _db_name, "menu_options_vehicle", "INT DEFAULT " .. KEY_F )
-  SQL_ADD_COLUMN( _db_name, "menu_options_door", "INT DEFAULT " .. KEY_F )
+  SQL_ADD_COLUMN( _db_name, "menu_options_vehicle", "INT DEFAULT " .. KEY_B )
+  SQL_ADD_COLUMN( _db_name, "menu_options_door", "INT DEFAULT " .. KEY_B )
   SQL_ADD_COLUMN( _db_name, "speak_next", "INT DEFAULT " .. KEY_PAGEUP )
   SQL_ADD_COLUMN( _db_name, "speak_prev", "INT DEFAULT " .. KEY_PAGEDOWN )
   SQL_ADD_COLUMN( _db_name, "drop_item", "INT DEFAULT " .. KEY_G )

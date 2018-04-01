@@ -321,16 +321,6 @@ net.Receive( "yrp_player_say", function( len )
         table.insert( _unpack, " " )
       end
     end
-    /*
-    if _tmp.command == "advert" then
-      table.insert( _unpack, _tmp.lokal_color )
-      table.insert( _unpack, "[" )
-      table.insert( _unpack, string.upper( lang_string( "advert" ) ) )
-      table.insert( _unpack, "]" )
-
-      table.insert( _unpack, " " )
-    end
-    */
 
     if _tmp.command != "me" then
       table.insert( _unpack, _tmp.command_color )

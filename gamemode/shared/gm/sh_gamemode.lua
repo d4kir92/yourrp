@@ -32,14 +32,7 @@ hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
 		end
 	end
 end)
---[[
-hook.Add( "Move", "yrp_anti_bhop", function( ply, mv )
-	if ply:GetNWBool( "anti_bhop", false ) and ply:OnGround() and ply:KeyDown( IN_JUMP ) and mv:KeyDown( IN_JUMP ) and !ply:GetNWBool( "canjump", false ) then
-		return true
-	end
-	return false
-end)
-]]--
+
 if SERVER then
 	util.AddNetworkString( "yrp_weaponlowering" )
 end
@@ -162,7 +155,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "V.:" .. " " .. "0.9.56" --do NOT change this!
+GM.Version = "0.9.57" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

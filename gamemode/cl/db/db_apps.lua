@@ -119,7 +119,7 @@ function check_yrp_apps()
   SQL_ADD_COLUMN( _db_name, "Position", "INT DEFAULT '0'" )
 
   local _sp = SQL_SELECT( _db_name, "*", nil )
-  if _sp != nil then
+  if _sp != nil and _sp != false then
     yrp_apps = _sp[1]
   end
 end

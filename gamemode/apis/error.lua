@@ -23,6 +23,13 @@ function worked( obj, name, _silence )
   end
 end
 
+function pa( panel )
+	if tostring( panel ) != "[NULL Panel]" then
+		return true
+	end
+	return false
+end
+
 function check_yrp_cl_errors( str )
 	if !file.Exists( "yrp/cl_errors.txt", "DATA" ) then
 		if !file.Exists( "yrp", "DATA" ) then
@@ -117,8 +124,9 @@ function send_error( realm, str )
 		  entry["entry.1306533151"] = db_sql_str2( string.lower( game.GetMap() ) ) or "MAPNAME"
 		  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
 		  entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
-		  entry["entry.1883727441"] = entry["entry.1883727441"] .. " (" .. gmod.GetGamemode().Version .. ")"
+		  entry["entry.1883727441"] = gmod.GetGamemode().Version or "0.0.0"
 		  entry["entry.2045173320"] = string.upper( gmod.GetGamemode().VersionSort ) or "UNKNOWN"
+			entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
 			if first_time_error then
 				entry["entry.1893317510"] = "YES"
 			elseif !first_time_error then

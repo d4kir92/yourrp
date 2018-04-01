@@ -406,12 +406,16 @@ function loadDatabaseHUD()
     _resetHud = true
   else
     local _dbSelect = SQL_SELECT( "yrp_cl_hud", "value", "name = '" .. "_hudversion" .. "'")
-    if tonumber( _dbSelect[1].value ) != _hudVersion then
-      _hudText = "Newer version of hud available, resetting it!"
-      dbUpdateHUD( "_hudversion", _hudVersion )
-      _resetHud = true
+    if _dbSelect != nil and _dbSelect != false then
+      if tonumber( _dbSelect[1].value ) != _hudVersion then
+        _hudText = "Newer version of hud available, resetting it!"
+        dbUpdateHUD( "_hudversion", _hudVersion )
+        _resetHud = true
+      else
+        _hudText = "Hud up-to-date!"
+      end
     else
-      _hudText = "Hud up-to-date!"
+      printGM( "note", "loadDatabaseHUD _hudversion fail" )
     end
   end
   printGM( "note", _hudText )

@@ -695,7 +695,7 @@ function openCharacterSelection()
     charactersBackground.text = ""
     local _characters = net.ReadTable()
 
-    if _characters != nil then
+    if _characters != nil and pa( _characters ) then
       character.amount = #_characters or 0
       if #_characters < 1 then
 
@@ -772,7 +772,7 @@ function openCharacterSelection()
             _cur = self.rpname
             if self.playermodels != nil and self.playermodelID != nil then
               local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
-              if _playermodel != nil and charplayermodel != NULL and tostring( charplayermodel ) != "[NULL Panel]" then
+              if _playermodel != nil and charplayermodel != NULL and pa( charplayermodel ) then
                 charplayermodel:SetModel( _playermodel )
                 if charplayermodel.Entity != nil then
                   charplayermodel.Entity:SetModelScale( self.playermodelsize )

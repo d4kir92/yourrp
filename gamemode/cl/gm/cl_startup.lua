@@ -201,7 +201,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
           tmpButton:SetText( "" )
           function tmpButton:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-            local text = "" //lang_string( "notadded" )
+            local text = "" --lang_string( "notadded" )
             if tmpSelected[k].selected then
               text = lang_string( "added" )
               if tmpPointer.text != "" then
