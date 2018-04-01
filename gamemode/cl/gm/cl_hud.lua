@@ -52,6 +52,14 @@ include( "hud/cl_hud_crosshair.lua" )
 
 Material("voice/icntlk_pl"):SetFloat("$alpha", 0)
 
+function IsScreenshotting()
+	if input.IsKeyDown(KEY_F12) or input.IsKeyDown(KEY_F5) then
+		return true
+	else
+		return false
+	end
+end
+
 --##############################################################################
 function hudVersion()
 	if !version_tested() then
@@ -66,7 +74,7 @@ function hudVersion()
 		local _color1 = version_color() or Color( 0, 0, 0, 255 )
 		local _color2 = Color( 0, 0, 0, 255 )
 		local _alpha = 0
-		if input.IsKeyDown(KEY_F12) or input.IsKeyDown(KEY_F5) or is_version_outdated() then
+		if IsScreenshotting() or is_version_outdated() then
 			_alpha = 255
 		end
 		_color1.a = _alpha
@@ -150,51 +158,52 @@ local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
 	local ply = LocalPlayer()
-	if !ply:InVehicle() then
-		HudPlayer( ply )
-		HudCrosshair()
-		HudView()
+	if !IsScreenshotting() then
+		if !ply:InVehicle() then
+			HudPlayer( ply )
+			HudCrosshair()
+			HudView()
+		end
+
+		show_voice_info( ply )
+		show_global_voice_info( ply )
+
+		if tobool( get_tutorial( "tut_hudhelp" ) ) then
+			draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 300 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+		end
+
+		if game.SinglePlayer() then
+			draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+		elseif ply:GetNWBool( "warning_dedicated", false ) then
+			surfaceText( "[YourRP] PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "SettingsHeader", ScrW()/2, ScrH()/4, Color( 255, 255, 0, 255 ), 1, 1 )
+		end
+
+		if tobool( HudV( "utto" ) ) then
+			hudUpTime()
+		end
+
+		local _target = LocalPlayer():GetNWString( "hittarget", "" )
+		if _target != "" then
+			surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
+			LocalPlayer():drawHitInfo()
+		end
+
+		if IsSpVisible() then
+			local _br = {}
+			_br.y = 50
+			_br.x = 10
+
+			local _r = 60
+
+			local _sp = GetSpTable()
+
+			draw.RoundedBox( ctrb( _r ), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2*_br.x, _sp.h + 2*_br.y, getSpCaseColor() )
+
+			surface.SetDrawColor( 255, 255, 255, 255 )
+			surface.SetMaterial( _yrp_icon	)
+			surface.DrawTexturedRect( _sp.x + _sp.w/2 - ctrb( 246 )/2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
+		end
 	end
-
-	show_voice_info( ply )
-	show_global_voice_info( ply )
-
-	if tobool( get_tutorial( "tut_hudhelp" ) ) then
-		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 300 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-	end
-
-	if game.SinglePlayer() then
-		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-	elseif ply:GetNWBool( "warning_dedicated", false ) then
-		surfaceText( "[YourRP] PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "SettingsHeader", ScrW()/2, ScrH()/4, Color( 255, 255, 0, 255 ), 1, 1 )
-	end
-
-	if tobool( HudV( "utto" ) ) then
-		hudUpTime()
-	end
-
-	local _target = LocalPlayer():GetNWString( "hittarget", "" )
-	if _target != "" then
-		surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
-		LocalPlayer():drawHitInfo()
-	end
-
-	if IsSpVisible() then
-		local _br = {}
-		_br.y = 50
-		_br.x = 10
-
-		local _r = 60
-
-		local _sp = GetSpTable()
-
-		draw.RoundedBox( ctrb( _r ), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2*_br.x, _sp.h + 2*_br.y, getSpCaseColor() )
-
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.SetMaterial( _yrp_icon	)
-		surface.DrawTexturedRect( _sp.x + _sp.w/2 - ctrb( 246 )/2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
-	end
-
 	hudVersion()
 end)
 --##############################################################################

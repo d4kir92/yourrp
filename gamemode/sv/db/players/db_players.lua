@@ -83,7 +83,6 @@ end
 
 function SetRole( ply, rid )
   if canGetRole( ply, rid ) then
-    printGM( "note", "SET ROLE WORKED" )
     set_role( ply, rid )
     set_role_values( ply )
   else
@@ -500,23 +499,21 @@ function canGetRole( ply, roleID )
 
   if worked( tmpTableRole, "tmpTableRole" ) then
     if tonumber( tmpTableRole[1].uses ) < tonumber( tmpTableRole[1].maxamount ) or tonumber( tmpTableRole[1].maxamount ) == -1 then
-      printGM( "gm", "Has maxamount set" )
       if tonumber( tmpTableRole[1].adminonly ) == 1 then
-        printGM( "gm", "Adminonly-Role" )
         if ply:HasAccess() then
-          printGM( "note", ply:YRPName() .. " is admin" )
+          -- printGM( "note", ply:YRPName() .. " is admin" )
           -- continue
         else
           printGM( "gm", "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin" )
           return false
         end
       elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
-        printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
+        -- printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
         if !isWhitelisted( ply, roleID ) then
           printGM( "gm", ply:YRPName() .. " is not whitelisted" )
           return false
         else
-          printGM( "gm", ply:SteamName() .. " is whitelisted" )
+          -- printGM( "gm", ply:SteamName() .. " is whitelisted" )
         end
       end
       return true

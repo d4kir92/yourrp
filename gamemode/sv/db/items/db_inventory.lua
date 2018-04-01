@@ -53,7 +53,7 @@ function Player:GetInventory()
             local _item_uid = string.Explode( ",", _inv["y"..y]["x"..x].item )
             _item_uid = _item_uid[2]
 
-            _inv["y"..y]["x"..x].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
+            _inv["y"..y]["x"..x].item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _item_uid ) .. "'" )
             if _inv["y"..y]["x"..x].item != nil then
               _inv["y"..y]["x"..x].item = _inv["y"..y]["x"..x].item[1]
             end
@@ -71,7 +71,7 @@ function Player:GetInventory()
       local _item_uid = string.Explode( ",", _inv["w1"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w1"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w1"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _item_uid ) .. "'" )
       if _inv["w1"].item != nil then
         _inv["w1"].item = _inv["w1"].item[1]
       end
@@ -85,7 +85,7 @@ function Player:GetInventory()
       local _item_uid = string.Explode( ",", _inv["w2"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w2"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w2"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _item_uid ) .. "'" )
       if _inv["w2"].item != nil then
         _inv["w2"].item = _inv["w2"].item[1]
       end
@@ -99,7 +99,7 @@ function Player:GetInventory()
       local _item_uid = string.Explode( ",", _inv["w3"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w3"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w3"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _item_uid ) .. "'" )
       if _inv["w3"].item != nil then
         _inv["w3"].item = _inv["w3"].item[1]
       end
@@ -113,7 +113,7 @@ function Player:GetInventory()
       local _item_uid = string.Explode( ",", _inv["w4"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w4"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w4"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _item_uid ) .. "'" )
       if _inv["w4"].item != nil then
         _inv["w4"].item = _inv["w4"].item[1]
       end
@@ -127,7 +127,7 @@ function Player:GetInventory()
       local _item_uid = string.Explode( ",", _inv["w5"].item )
       _item_uid = _item_uid[2]
 
-      _inv["w5"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _item_uid )
+      _inv["w5"].item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _item_uid ) .. "'" )
       if _inv["w5"].item != nil then
         _inv["w5"].item = _inv["w5"].item[1]
       end
@@ -220,14 +220,17 @@ function Player:UseSweps()
       local _res = SQL_SELECT( "yrp_inventory", "*", "CharID = " .. _char_id .. " AND field = 'w" .. i .. "'" )
       if _res != nil and _res != false then
         _res = _res[1]
-        local _uid = string.sub( _res.item, 3 )
+        if tonumber( _res.item ) != -1 then
 
-        local _swep = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _uid )
-        if _swep != nil and _swep != false then
-          _swep = _swep[1]
-          self.canpickup = true
-          _swep = self:old_give( _swep.ClassName, true )
-          self.canpickup = false
+          local _uid = string.sub( _res.item, 3 )
+
+          local _swep = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _uid ) .. "'" )
+          if _swep != nil and _swep != false then
+            _swep = _swep[1]
+            self.canpickup = true
+            _swep = self:old_give( _swep.ClassName, true )
+            self.canpickup = false
+          end
         end
       end
     end
@@ -456,7 +459,7 @@ function Player:MoveItem( uid, x, y, origin )
   self:RemoveItemFromIventory( uid )
 
   --[[ get item from database ]]--
-  local _item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. uid )
+  local _item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( uid ) .. "'" )
   if _item != nil then
     _item = _item[1]
 
@@ -491,7 +494,7 @@ net.Receive( "item_move", function( len, ply )
   --[[ NEW ORIGIN ]]--
   if _new_origin == "eq" then
     ply:RemoveItemFromIventory( _uid )
-    local _item = SQL_SELECT( "yrp_item", "*", "uniqueID = " .. _uid )
+    local _item = SQL_SELECT( "yrp_item", "*", "uniqueID = '" .. tostring( _uid ) .. "'" )
     if _item != nil then
       _item = _item[1]
       ply:EquipItem( _item.ClassName, _x )

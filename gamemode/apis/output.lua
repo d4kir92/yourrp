@@ -20,6 +20,14 @@ function hr_pos()
 	print( _text.spacePos )
 end
 
+function bool_status( b )
+	if tobool(b) then
+		return lang_string( "enabled" )
+	elseif !tobool(b) then
+		return lang_string( "disabled" )
+	end
+end
+
 local darkrp_debug = false
 function printGM( channel, text )
 	local _realm = "SHARED"

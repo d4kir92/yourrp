@@ -54,32 +54,6 @@ function optionVehicleWindow( vehicle, vehicleTab )
     draw.RoundedBox( 0, ctr( 4 ), ctr( 160 ), pw - ctr( 8 ), ctr( 70-4 ), Color( 255, 255, 0, 200 ) )
   end
 
-  local _ButtonKeyCreate = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 10, 100 )
-  _ButtonKeyCreate:SetText( "" )
-  function _ButtonKeyCreate:DoClick()
-    net.Start( "createVehicleKey" )
-      net.WriteEntity( vehicle )
-      net.WriteInt( vehicleTab[1].uniqueID, 16 )
-    net.SendToServer()
-    yrp_vehicle.window:Close()
-  end
-  function _ButtonKeyCreate:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "createkey" ) .. " (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
-  end
-
-  local _ButtonKeyReset = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 100 )
-  _ButtonKeyReset:SetText( "" )
-  function _ButtonKeyReset:DoClick()
-    net.Start( "resetVehicleKey" )
-      net.WriteEntity( vehicle )
-      net.WriteInt( vehicleTab[1].uniqueID, 16 )
-    net.SendToServer()
-    yrp_vehicle.window:Close()
-  end
-  function _ButtonKeyReset:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "resetkey" ) .. " (-" .. ply:GetNWString( "moneyPre" ) .. "15" .. ply:GetNWString( "moneyPost" ) .. ")" )
-  end
-
   if ply:HasAccess() then
     local _buttonRemoveOwner = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 170 )
     _buttonRemoveOwner:SetText( "" )

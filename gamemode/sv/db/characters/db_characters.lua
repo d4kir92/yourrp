@@ -114,8 +114,7 @@ net.Receive( "charGetRoleInfo", function( len, ply )
   net.Send( ply )
 end)
 
-net.Receive( "yrp_get_characters", function( len, ply )
-  printGM( "db", ply:YRPName() .. " ask for characters" )
+function send_characters( ply )
   local netTable = {}
 
   local chaTab = SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
@@ -123,7 +122,7 @@ net.Receive( "yrp_get_characters", function( len, ply )
   local _charCount = 0
   if worked( chaTab, "yrp_get_characters" ) then
     for k, v in pairs( chaTab ) do
-      if worked( v.roleID, "charGetCharacters roleID" ) and worked( v.groupID, "charGetCharacters groupID" ) then
+      if v.roleID != nil and v.groupID != nil then
         _charCount = _charCount + 1
         netTable[_charCount] = {}
         netTable[_charCount].char = v
@@ -138,10 +137,14 @@ net.Receive( "yrp_get_characters", function( len, ply )
             netTable[_charCount].role = tmpDefault
           end
         end
-        local tmp2 = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. tonumber( v.groupID ) )
-        if worked( tmp2, "charGetCharacters group" ) then
+        local tmp2 = SQL_SELECT( "yrp_roles", "*", "uniqueID = '" .. tonumber( v.roleID ) .. "'" )
+        if tmp2 != nil and tmp2 != false then
           tmp2 = tmp2[1]
-          netTable[_charCount].group = tmp2
+          local tmp3 = SQL_SELECT( "yrp_groups", "*", "uniqueID = '" .. tonumber( tmp2.groupID ) .. "'" )
+          if worked( tmp3, "charGetCharacters group" ) then
+            tmp3 = tmp3[1]
+            netTable[_charCount].group = tmp3
+          end
         end
       end
     end
@@ -154,17 +157,28 @@ net.Receive( "yrp_get_characters", function( len, ply )
       net.WriteTable( netTable )
     net.Send( ply )
   end
+end
+
+net.Receive( "yrp_get_characters", function( len, ply )
+  printGM( "db", ply:YRPName() .. " ask for characters" )
+  send_characters( ply )
 end)
 
 net.Receive( "DeleteCharacter", function( len, ply )
   local charID = net.ReadString()
 
-  local result = SQL_DELETE_FROM( "yrp_characters", "uniqueID = " .. tonumber( charID ) )
+  local result = SQL_DELETE_FROM( "yrp_characters", "uniqueID = '" .. tonumber( charID ) .. "'" )
   if result == nil then
     printGM( "db", "DeleteCharacter: success"  )
+    ply:KillSilent()
+    local _first_character = SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+    local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( _first_character[1].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
+    local test = SQL_SELECT( "yrp_players", "*", nil )
+    ply:Spawn()
   else
     printGM( "note", "DeleteCharacter: fail"  )
   end
+  send_characters( ply )
 end)
 
 net.Receive( "CreateCharacter", function( len, ply )
@@ -197,6 +211,7 @@ net.Receive( "CreateCharacter", function( len, ply )
   if worked( chars, "CreateCharacter" ) then
     local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( chars[#chars].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
   end
+  send_characters( ply )
 end)
 
 net.Receive( "EnterWorld", function( len, ply )

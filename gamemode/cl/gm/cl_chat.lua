@@ -69,60 +69,66 @@ function isFullyCommand( com, iscom, iscom2 )
 end
 
 function yrpChat.window:Paint( pw, ph )
-  if HudV( "cbto" ) == 1 then
-    checkChatVisible()
-    if _showChat then
-      if is_hud_db_loaded() then
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-        drawRBoxBr(  0, 0, 0, ctrF( ScrH() ) * pw, ctrF( ScrH() ) * ph, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 8 ) )
+  if !IsScreenshotting() then
+    if HudV( "cbto" ) == 1 then
+      checkChatVisible()
+      if _showChat then
+        if is_hud_db_loaded() then
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+          drawRBoxBr(  0, 0, 0, ctrF( ScrH() ) * pw, ctrF( ScrH() ) * ph, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 8 ) )
 
-        local x, y = yrpChat.window:GetPos()
-        local w, h = yrpChat.window:GetSize()
-        if ctr( HudV("cbpx") ) != x or ctr( HudV("cbpy") ) != y or ctr( HudV("cbsw") ) != w or ctr( HudV("cbsh") ) != h then
-          yrpChat.window:SetPos( anchorW( HudV( "cbaw" ) ) + ctr( HudV("cbpx") ), anchorH( HudV( "cbah" ) ) + ctr( HudV("cbpy") ) )
-          yrpChat.window:SetSize( ctr( HudV("cbsw") ), ctr( HudV("cbsh") ) )
+          local x, y = yrpChat.window:GetPos()
+          local w, h = yrpChat.window:GetSize()
+          if ctr( HudV("cbpx") ) != x or ctr( HudV("cbpy") ) != y or ctr( HudV("cbsw") ) != w or ctr( HudV("cbsh") ) != h then
+            yrpChat.window:SetPos( anchorW( HudV( "cbaw" ) ) + ctr( HudV("cbpx") ), anchorH( HudV( "cbah" ) ) + ctr( HudV("cbpy") ) )
+            yrpChat.window:SetSize( ctr( HudV("cbsw") ), ctr( HudV("cbsh") ) )
 
-          yrpChat.comboBox:SetPos( ctr( 10 ), ctr( HudV("cbsh") - 40 - 10 ) )
-          yrpChat.comboBox:SetSize( ctr( 100 ), ctr( 40 ) )
+            yrpChat.comboBox:SetPos( ctr( 10 ), ctr( HudV("cbsh") - 40 - 10 ) )
+            yrpChat.comboBox:SetSize( ctr( 100 ), ctr( 40 ) )
 
-          yrpChat.writeField:SetPos( ctr( 110 ), ctr( HudV("cbsh") - 40 - 10 ) )
-          yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 100 ), ctr( 40 ) )
+            yrpChat.writeField:SetPos( ctr( 110 ), ctr( HudV("cbsh") - 40 - 10 ) )
+            yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 100 ), ctr( 40 ) )
 
-          yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
-          yrpChat.richText:SetSize( ctr( HudV("cbsw") - 2*10 ), ctr( HudV("cbsh") - 2*10 - 40 - 10 ) )
+            yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
+            yrpChat.richText:SetSize( ctr( HudV("cbsw") - 2*10 ), ctr( HudV("cbsh") - 2*10 - 40 - 10 ) )
+          end
+        end
+
+        local _com = yrpChat.writeField:GetText()
+        if isFullyCommand( _com, "ooc", lang_string( "ooc" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
+        elseif isFullyCommand( _com, "looc", lang_string( "looc" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
+        elseif isFullyCommand( _com, "say", lang_string( "say" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
+        elseif isFullyCommand( _com, "me", lang_string( "me" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
+        elseif isFullyCommand( _com, "yell", lang_string( "yell" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
+        elseif isFullyCommand( _com, "advert", lang_string( "advert" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
+        elseif isFullyCommand( _com, "admin", lang_string( "admin" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
+        elseif isFullyCommand( _com, "group", lang_string( "group" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
+        elseif isFullyCommand( _com, "role", lang_string( "role" ) ) then
+          yrpChat.writeField:SetText("")
+          yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
         end
       end
-
-      local _com = yrpChat.writeField:GetText()
-      if isFullyCommand( _com, "ooc", lang_string( "ooc" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
-      elseif isFullyCommand( _com, "looc", lang_string( "looc" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
-      elseif isFullyCommand( _com, "say", lang_string( "say" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
-      elseif isFullyCommand( _com, "me", lang_string( "me" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
-      elseif isFullyCommand( _com, "yell", lang_string( "yell" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
-      elseif isFullyCommand( _com, "advert", lang_string( "advert" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
-      elseif isFullyCommand( _com, "admin", lang_string( "admin" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
-      elseif isFullyCommand( _com, "group", lang_string( "group" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
-      elseif isFullyCommand( _com, "role", lang_string( "role" ) ) then
-        yrpChat.writeField:SetText("")
-        yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
-      end
     end
+  else
+    yrpChat.richText:SetVisible( false )
+    yrpChat.writeField:SetVisible( false )
+    yrpChat.comboBox:SetVisible( false )
   end
 end
 

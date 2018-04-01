@@ -29,6 +29,23 @@ net.Receive( "get_licenses", function( len, ply )
   send_licenses( ply )
 end)
 
+function sendlicenses( ply )
+  local _all = SQL_SELECT( _db_name, "*", nil )
+  local _nm = _all
+  if _nm == nil or _nm == false then
+    _nm = {}
+  end
+  net.Start( "getlicenses" )
+    net.WriteTable( _nm )
+  net.Send( ply )
+end
+
+util.AddNetworkString( "getlicenses" )
+
+net.Receive( "getlicenses", function( len, ply )
+  sendlicenses( ply )
+end)
+
 util.AddNetworkString( "licence_add" )
 
 net.Receive( "licence_add", function( len, ply )
@@ -143,3 +160,18 @@ net.Receive( "role_rem_license", function( len, ply )
     end
   end
 end)
+
+local Player = FindMetaTable( "Player" )
+function Player:AddLicense( license )
+  local _licenses = string.Explode( ",", self:GetNWString( "licenseIDs", "" ) )
+
+  if !table.HasValue( _licenses, license ) then
+    table.insert(_licenses, license)
+  end
+  if table.HasValue( _licenses, "" ) then
+    table.RemoveByValue( _licenses, "" )
+  end
+
+  _licenses = string.Implode( ",", _licenses )
+  self:SetNWString( "licenseIDs", _licenses )
+end

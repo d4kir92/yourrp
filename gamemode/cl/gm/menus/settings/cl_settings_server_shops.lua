@@ -306,6 +306,7 @@ net.Receive( "get_shop_items", function()
       _sh._sit.type.plus:AddChoice( lang_string( "weapons" ), "weapons" )
       _sh._sit.type.plus:AddChoice( lang_string( "entities" ), "entities" )
       _sh._sit.type.plus:AddChoice( lang_string( "vehicles" ), "vehicles" )
+      _sh._sit.type.plus:AddChoice( lang_string( "licenses" ), "licenses" )
       _sh._sit.type.plus.tbl = tbl
       function _sh._sit.type.plus:OnSelect( panel, index, value )
         local _itemlist = {}
@@ -319,6 +320,7 @@ net.Receive( "get_shop_items", function()
             end
           end
           _itemlist = swepsL
+          openSingleSelector( _itemlist, "selected_shop_item" )
         elseif value == "entities" then
           local _sentlist = list.Get( "SpawnableEntities" )
 
@@ -334,11 +336,25 @@ net.Receive( "get_shop_items", function()
             end
           end
           _itemlist = tmpTable
+          openSingleSelector( _itemlist, "selected_shop_item" )
         elseif value == "vehicles" then
           local tmpTable = get_all_vehicles()
           _itemlist = tmpTable
+          openSingleSelector( _itemlist, "selected_shop_item" )
+        elseif value == "licenses" then
+          net.Start( "getlicenses" )
+          net.SendToServer()
+          net.Receive( "getlicenses", function()
+            local _net_tab = net.ReadTable()
+            _itemlist = _net_tab
+            for i, lic in pairs( _itemlist ) do
+              lic.PrintName = db_out_str( lic.name )
+              lic.ClassName = lic.uniqueID
+            end
+
+            openSingleSelector( _itemlist, "selected_shop_item" )
+          end)
         end
-        openSingleSelector( _itemlist, "selected_shop_item" )
       end
       hook.Add( "selected_shop_item", "yrp_selected_shop_item", function()
         if _sh._sit.type.plus != nil then

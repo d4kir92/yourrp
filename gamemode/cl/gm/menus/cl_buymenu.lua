@@ -20,8 +20,9 @@ end
 
 
 function createShopItem( item )
-
-  local _i = createD( "DPanel", nil, ctrb( 400 ), ctrb( 400 ), 0, 0 )
+  local _w = 800
+  local _h = 400
+  local _i = createD( "DPanel", nil, ctrb( _w ), ctrb( _h ), 0, 0 )
   function _i:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
   end
@@ -30,7 +31,7 @@ function createShopItem( item )
     if item.WorldModel == "" then
       --
     else
-      _i.model = createD( "DModelPanel", _i, ctrb( 400 ), ctrb( 400 ), ctrb( 0 ), ctrb( 0 ) )
+      _i.model = createD( "DModelPanel", _i, ctrb( _w ), ctrb( _h ), ctrb( 0 ), ctrb( 0 ) )
       _i.model:SetModel( item.WorldModel )
       if _i.model.Entity != NULL then
         local _height = 0
@@ -52,20 +53,24 @@ function createShopItem( item )
   end
 
   if item.name != nil then
-    _i.name = createD( "DPanel", _i, ctrb( 400 ), ctrb( 50 ), 0, 0 )
+    _i.name = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, 0 )
+    _i.name.name = db_out_str( item.name )
+    if item.type == "licenses" then
+      _i.name.name = lang_string( "license" ) .. ": " .. _i.name.name
+    end
     function _i.name:Paint( pw, ph )
-      surfaceText( db_out_str( item.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      surfaceText( self.name, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
   end
   if item.price != nil then
-    _i.price = createD( "DPanel", _i, ctrb( 400 ), ctrb( 50 ), 0, ctrb( 300 ) )
+    _i.price = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, ctrb( 300 ) )
     function _i.price:Paint( pw, ph )
       surfaceText( formatMoney( LocalPlayer(), item.price ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
   end
 
   if LocalPlayer():HasLicense( item.licenseID ) then
-    _i.buy = createD( "DButton", _i, ctrb( 400/2 ), ctrb( 50 ), ctrb( 200 ), ctrb( 350 ) )
+    _i.buy = createD( "DButton", _i, ctrb( _w/2 ), ctrb( 50 ), ctrb( _w/2 ), ctrb( 350 ) )
     _i.buy:SetText( "" )
     _i.buy.item = item
     function _i.buy:Paint( pw, ph )
@@ -85,7 +90,7 @@ function createShopItem( item )
       net.SendToServer()
     end
   else
-    _i.require = createD( "DPanel", _i, ctrb( 400 ), ctrb( 50 ), ctrb( 0 ), ctrb( 350 ) )
+    _i.require = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), ctrb( 0 ), ctrb( 350 ) )
     function _i.require:Paint( pw, ph )
       local _color = Color( 255, 0, 0 )
       draw.RoundedBox( 0, 0, 0, pw, ph, _color )

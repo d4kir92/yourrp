@@ -265,7 +265,11 @@ net.Receive( "item_buy", function( len, ply )
     if ply:canAfford( tonumber( _item.price ) ) then
 
       ply:addMoney( -tonumber( _item.price ) )
-      spawnItem( ply, _item, _item.type )
+      if _item.type == "licenses" then
+        ply:AddLicense( _item.ClassName )
+      else
+        spawnItem( ply, _item, _item.type )
+      end
     end
   end
 end)

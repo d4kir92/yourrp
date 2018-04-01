@@ -14,7 +14,7 @@ function disk_full( error )
 
       ply:PrintMessage( HUD_PRINTTALK, "database or disk is full, please make more space!" )
       notification.AddLegacy( "[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40 )
-      printGM( "error", tostring( ply:SteamID() ) .. " (database or disk is full)" )
+      printGM( "error", GetSQLModeName() .. ": " .. tostring( ply:SteamID() ) .. " (database or disk is full)" )
     end
   end
 end
@@ -108,7 +108,7 @@ function db_int( int )
   if isnumber( _int ) then
     return _int
   else
-    printGM( "error", tostring( int ) .. " is not a number! return -1" )
+    printGM( "error", GetSQLModeName() .. ": " .. tostring( int ) .. " is not a number! return -1" )
     return -1
   end
 end
@@ -116,7 +116,7 @@ end
 function db_drop_table( db_table )
   local _result = sql.Query( "DROP TABLE " .. db_table )
   if _result != nil then
-    printGM( "error", "db_drop_table " .. tostring( db_table ) .. " failed! ( result: " .. tostring( _result ) .. " )" )
+    printGM( "error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring( db_table ) .. " failed! ( result: " .. tostring( _result ) .. " )" )
     sql_show_last_error()
   end
 end
@@ -128,7 +128,7 @@ function db_sql_str( string )
     _newString = string.Replace( _newString, "'", "´" )
     return _newString
   else
-    printGM( "error", "db_sql_str: (" .. tostring( string ) .. ") is not a string." )
+    printGM( "error", GetSQLModeName() .. ": " .. "db_sql_str: (" .. tostring( string ) .. ") is not a string." )
   end
 end
 
@@ -140,12 +140,12 @@ function db_sql_str2( string )
     _newString = string.Replace( _newString, "-", "_" )
     return _newString
   else
-    printGM( "error", "db_sql_str2: (" .. tostring( string ) .. ") is not a string." )
+    printGM( "error", GetSQLModeName() .. ": " .. "db_sql_str2: (" .. tostring( string ) .. ") is not a string." )
   end
 end
 
 function retry_load_database( db_name )
-  printGM( "error", "retry_load_database " .. tostring( db_name ) )
+  printGM( "error", GetSQLModeName() .. ": " .. "retry_load_database " .. tostring( db_name ) )
   --SQL_INIT_DATABASE( db_name )
 end
 
@@ -230,7 +230,7 @@ function SQL_QUERY( query )
       --printGM( "db", "SQL_QUERY TABLE EMPTY" )
       return _result
     elseif _result == false then
-      printGM( "db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND" )
+      printGM( "db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query )
       return _result
     else
       --printGM( "db", "ELSE" )
@@ -240,8 +240,8 @@ function SQL_QUERY( query )
     local que = YRPSQL.db:query( query )
     que.onError = function( q, e )
       if string.find( e, "Unknown column" ) == nil and string.find( e, "doesn't exist" ) == nil then
-        printGM( "error", "SQL_QUERY - ERROR: " .. e )
-        printGM( "error", query )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring( e ) )
+        printGM( "error", GetSQLModeName() .. ": " .. tostring( query ) )
         q:error()
       end
     end
@@ -350,7 +350,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES( db_table )
       _q = _q .. " DEFAULT VALUES"
       local _result = SQL_QUERY( _q )
       if _result != nil then
-        printGM( "error", "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       end
       return _result
     end
@@ -369,7 +369,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES( db_table )
       local _result = SQL_INSERT_INTO( db_table, _cols, _vals )
 
       if _result != nil then
-        printGM( "error", "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
       end
       return _result
     end
@@ -389,7 +389,7 @@ function SQL_INSERT_INTO( db_table, db_columns, db_values )
       _q = _q .. " )"
       local _result = SQL_QUERY( _q )
       if _result != nil then
-        printGM( "error", "SQL_INSERT_INTO: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       end
       return _result
     end
@@ -431,7 +431,7 @@ function SQL_INSERT_INTO( db_table, db_columns, db_values )
 
       local _result = SQL_QUERY( _q )
       if _result != nil then
-        printGM( "error", "SQL_INSERT_INTO: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) )
       end
       return _result
     end
@@ -449,7 +449,7 @@ function SQL_DELETE_FROM( db_table, db_where )
       end
       local _result = SQL_QUERY( _q )
       if _result != nil then
-        printGM( "error", "SQL_DELETE_FROM: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
       end
     end
   elseif YRPSQL.mode == 1 then
@@ -462,7 +462,7 @@ function SQL_DELETE_FROM( db_table, db_where )
       end
       local _result = SQL_QUERY( _q )
       if _result != nil then
-        printGM( "error", "SQL_DELETE_FROM: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring( _q ) .. " result: " .. tostring(_result) )
       end
     end
   end
@@ -495,7 +495,7 @@ function SQL_ADD_COLUMN( table_name, column_name, datatype )
       local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
       local _r = SQL_QUERY( _q )
       if _r != nil then
-        printGM( "error", "SQL_ADD_COLUMN failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       end
       return _r
     end
@@ -522,7 +522,7 @@ function SQL_ADD_COLUMN( table_name, column_name, datatype )
       local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
       local _r = SQL_QUERY( _q )
       if _r != nil then
-        printGM( "error", "SQL_ADD_COLUMN failed! query: " .. tostring( _q ) .. " result: " .. tostring( _r ) )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring( _q ) .. " result: " .. tostring( _r ) )
       end
       return _r
     end
@@ -539,12 +539,12 @@ function SQL_INIT_DATABASE( db_name )
       local _result = SQL_CREATE_TABLE( db_name )
 
       if _result != nil then
-        printGM( "error", "SQL_INIT_DATABASE failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
+        printGM( "error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! query: " .. tostring( _query ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
       end
   		if sql.TableExists( tostring( db_name ) ) then
         --printGM( "db", db_name .. _yrp.successdb )
   		else
-  			printGM( "error", "CREATE TABLE " .. tostring( db_name ) .. " fail" )
+  			printGM( "error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring( db_name ) .. " fail" )
         sql_show_last_error()
         retry_load_database( db_name )
   		end
