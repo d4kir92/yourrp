@@ -60,8 +60,8 @@ function SWEP:PrimaryAttack()
 	    else
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
 	    end
-	  elseif self.Owner:GetEyeTrace().Entity:IsVehicle() and self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) != "Failed" then
-			if unlockVehicle( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) ) then
+	  elseif self.Owner:GetEyeTrace().Entity:IsVehicle() and self.Owner:GetEyeTrace().Entity:GetNWString( "uniqueID", "Failed" ) != "Failed" then
+			if unlockVehicle( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "uniqueID", "Failed" ) ) then
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "unlockedvehicle" ) )
 	    else
 	      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
@@ -78,8 +78,8 @@ function SWEP:SecondaryAttack()
       else
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
       end
-		elseif self.Owner:GetEyeTrace().Entity:IsVehicle() and self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) != "Failed" then
-			if lockVehicle( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "vehicleID", "Failed" ) ) then
+		elseif self.Owner:GetEyeTrace().Entity:IsVehicle() and self.Owner:GetEyeTrace().Entity:GetNWString( "uniqueID", "Failed" ) != "Failed" then
+			if lockVehicle( self.Owner, self.Owner:GetEyeTrace().Entity, self.Owner:GetEyeTrace().Entity:GetNWString( "uniqueID", "Failed" ) ) then
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "lockedvehicle" ) )
       else
         self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )

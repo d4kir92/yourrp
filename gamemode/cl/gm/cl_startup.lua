@@ -620,6 +620,8 @@ net.Receive( "yrp_noti" , function( len )
           _str = _str .. lang_string( _str_lang ) .. " (" .. lang_string( net.ReadString() ) .. ")"
         elseif _str_lang == "playerisready" then
           _str = _str .. lang_string( "finishedloadingthegamepre" ) .. " " .. net.ReadString() .. " " .. lang_string( "finishedloadingthegamepos" )
+        elseif _str_lang == "newfeedback" then
+          _str = _str .. lang_string( "newfeedback" )
         elseif _str_lang == "database_full_server" then
           _str = _str .. "SERVER: Database or disk is full, please make more space!"
           _time = 40
@@ -632,12 +634,23 @@ net.Receive( "yrp_noti" , function( len )
   end
 end)
 
-net.Receive( "yrp_info" , function( len )
+net.Receive( "yrp_info", function( len )
   if playerready then
     local ply = LocalPlayer()
     if ply != nil then
       local _str = net.ReadString()
       _str = lang_string( "notallowed" ) .. " ( " .. lang_string( _str ) .. " )"
+      notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
+    end
+  end
+end)
+
+net.Receive( "yrp_info2", function( len )
+  if playerready then
+    local ply = LocalPlayer()
+    if ply != nil then
+      local _str = net.ReadString()
+      _str = lang_string( _str )
       notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
     end
   end

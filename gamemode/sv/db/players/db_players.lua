@@ -498,28 +498,32 @@ function canGetRole( ply, roleID )
   local tmpTableRole = SQL_SELECT( "yrp_roles" , "*", "uniqueID = " .. roleID )
 
   if worked( tmpTableRole, "tmpTableRole" ) then
-    if tonumber( tmpTableRole[1].uses ) < tonumber( tmpTableRole[1].maxamount ) or tonumber( tmpTableRole[1].maxamount ) == -1 then
-      if tonumber( tmpTableRole[1].adminonly ) == 1 then
-        if ply:HasAccess() then
-          -- printGM( "note", ply:YRPName() .. " is admin" )
-          -- continue
-        else
-          printGM( "gm", "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin" )
-          return false
-        end
-      elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
-        -- printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
-        if !isWhitelisted( ply, roleID ) then
-          printGM( "gm", ply:YRPName() .. " is not whitelisted" )
-          return false
-        else
-          -- printGM( "gm", ply:SteamName() .. " is whitelisted" )
-        end
-      end
+    if tonumber( ply:GetNWString( "roleUniqueID", "0" ) ) == tonumber( roleID ) then
       return true
     else
-      printGM( "gm", ply:YRPName() .. " maxamount reached")
-      return false
+      if tonumber( tmpTableRole[1].uses ) < tonumber( tmpTableRole[1].maxamount ) or tonumber( tmpTableRole[1].maxamount ) == -1 then
+        if tonumber( tmpTableRole[1].adminonly ) == 1 then
+          if ply:HasAccess() then
+            -- printGM( "note", ply:YRPName() .. " is admin" )
+            -- continue
+          else
+            printGM( "gm", "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin" )
+            return false
+          end
+        elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
+          -- printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
+          if !isWhitelisted( ply, roleID ) then
+            printGM( "gm", ply:YRPName() .. " is not whitelisted" )
+            return false
+          else
+            -- printGM( "gm", ply:SteamName() .. " is whitelisted" )
+          end
+        end
+        return true
+      else
+        printGM( "gm", ply:YRPName() .. " maxamount reached")
+        return false
+      end
     end
   end
   return false

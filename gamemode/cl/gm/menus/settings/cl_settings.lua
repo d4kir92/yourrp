@@ -14,6 +14,8 @@ include( "cl_settings_server_map.lua" )
 include( "cl_settings_server_whitelist.lua" )
 include( "cl_settings_server_restriction.lua" )
 
+include( "cl_settings_server_feedback.lua" )
+
 include( "cl_settings_yourrp_add_langu.lua")
 include( "cl_settings_yourrp_contact.lua")
 include( "cl_settings_yourrp_workshop.lua")
@@ -92,7 +94,7 @@ function openSettings()
   settingsWindow.window:AddCategory( _server )
   settingsWindow.window:AddSite( "open_server_collection", lang_string( "workshopcollection" ), _server, "icon16/page_world.png" )
   if ply:HasAccess() then
-    local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "adminonly" ) ) .. ")"
+    local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "admin" ) ) .. ")"
     settingsWindow.window:AddCategory( _server_admin )
     settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
     settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
@@ -104,6 +106,11 @@ function openSettings()
     settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
     settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
     settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
+
+    local _feedback = lang_string( "feedback" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "admin" ) ) .. ")"
+    settingsWindow.window:AddCategory( _feedback )
+    --[[ Feedback ]]--
+    settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _feedback, "icon16/page_lightning.png" )
   end
 
   settingsWindow.window:AddCategory( "yourrp" )

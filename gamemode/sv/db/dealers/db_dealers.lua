@@ -9,6 +9,7 @@ SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'Unnamed dealer'" )
 SQL_ADD_COLUMN( _db_name, "tabs", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'" )
 SQL_ADD_COLUMN( _db_name, "map", "TEXT DEFAULT 'gm_construct'" )
+SQL_ADD_COLUMN( _db_name, "storagepoints", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -83,7 +84,6 @@ net.Receive( "dealer_rem_tab", function( len, ply )
 end)
 
 util.AddNetworkString( "dealer_edit_name" )
-
 net.Receive( "dealer_edit_name", function( len, ply )
   local _dealer_uid = net.ReadString()
   local _dealer_new_name = net.ReadString()
@@ -92,7 +92,6 @@ net.Receive( "dealer_edit_name", function( len, ply )
 end)
 
 util.AddNetworkString( "dealer_edit_worldmodel" )
-
 net.Receive( "dealer_edit_worldmodel", function( len, ply )
   local _dealer_uid = net.ReadString()
   local _dealer_new_wm = net.ReadString()
@@ -103,4 +102,12 @@ net.Receive( "dealer_edit_worldmodel", function( len, ply )
       npc:SetModel( _dealer_new_wm )
     end
   end
+end)
+
+util.AddNetworkString( "dealer_edit_storagepoints" )
+net.Receive( "dealer_edit_storagepoints", function( len, ply )
+  local _dealer_uid = net.ReadString()
+  local _dealer_storagepoints = net.ReadString()
+
+  local _dealer = SQL_UPDATE( _db_name, "storagepoints = '" .. _dealer_storagepoints .. "'", "uniqueID = " .. _dealer_uid )
 end)

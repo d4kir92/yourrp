@@ -109,7 +109,7 @@ net.Receive( "removeVehicleOwner", function( len, ply )
   local result = SQL_UPDATE( "yrp_vehicles", "ownerCharID = ''", "uniqueID = '" .. _tmpVehicleID .. "'" )
 
   for k, v in pairs( ents.GetAll() ) do
-    if tonumber( v:GetNWString( "vehicleID" ) ) == tonumber( _tmpVehicleID ) then
+    if tonumber( v:GetNWString( "uniqueID" ) ) == tonumber( _tmpVehicleID ) then
       v:SetNWString( "ownerRPName", "" )
     end
   end

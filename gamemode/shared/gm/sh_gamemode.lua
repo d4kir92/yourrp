@@ -135,6 +135,15 @@ if SERVER then
 	end)
 end
 
+function IsEntityAlive( uid )
+  for i, ent in pairs( ents.GetAll() ) do
+    if tostring( ent:GetNWString( "uniqueID", "" ) ) == tostring( uid ) then
+      return true, ent
+    end
+  end
+  return false
+end
+
 if CLIENT then
   timer.Simple( 1, function()
     net.Start( "getGamemodename" )
@@ -155,7 +164,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.58" --do NOT change this!
+GM.Version = "0.9.59" --do NOT change this!
 GM.VersionSort = "BETA" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

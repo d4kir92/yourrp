@@ -135,6 +135,33 @@ net.Receive( "shop_item_edit_perm", function( len, ply )
   printGM( "db", "shop_item_edit_perm: " .. db_worked( _new ) )
 end)
 
+util.AddNetworkString( "shop_get_items_storage" )
+
+net.Receive( "shop_get_items_storage", function( len, ply )
+  local _uid = net.ReadString()
+  local _cha_perm = SQL_SELECT( "yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'" )
+  if _cha_perm != nil and _cha_perm != false then
+    _cha_perm = _cha_perm[1].storage
+    _cha_perm = string.Explode( ",", _cha_perm )
+
+    local _nw = {}
+    for i, item in pairs( _cha_perm ) do
+      local _item = SQL_SELECT( _db_name, "*", "categoryID = '" .. _uid .. "' AND uniqueID = '" .. item .. "'" )
+      if _item != nil and _item != false then
+        table.insert( _nw, _item[1] )
+      end
+    end
+
+    if _items != nil then
+      _nw = _items
+    end
+
+    net.Start( "shop_get_items_storage" )
+      net.WriteTable( _nw )
+    net.Send( ply )
+  end
+end)
+
 util.AddNetworkString( "shop_get_items" )
 
 net.Receive( "shop_get_items", function( len, ply )
@@ -203,16 +230,18 @@ function SpawnVehicle( item )
   end
 end
 
-function spawnItem( ply, item, tab )
+util.AddNetworkString( "yrp_info2" )
+
+function spawnItem( ply, item, duid )
   local _distSpace = 8
   local _distMax = 2000
   local _angle = ply:EyeAngles()
   local ent = {}
-  if tab == "vehicles" then
+  if item.type == "vehicles" then
     ent = SpawnVehicle( item )
     local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "'" )
     local getVehicles = SQL_SELECT( "yrp_vehicles", "*", nil )
-    ent:SetNWInt( "vehicleID", getVehicles[#getVehicles].uniqueID)
+    ent:SetNWString( "uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
 
     if ent == NULL then
@@ -222,32 +251,73 @@ function spawnItem( ply, item, tab )
   else
     ent = ents.Create( item.ClassName )
     if ent == NULL then return end
+    ent:SetNWString( "uniqueID", item.uniqueID )
     --ent:Spawn()
   end
 
-  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 64 ) )
-  for dist = 0, _distMax, _distSpace do
-    for ang = 0, 360, 45 do
-      if ang != 0 then
-        _angle = _angle + Angle( 0, 45, 0 )
-      end
-      local tr = {}
-    	tr.start = ent:GetPos() + _angle:Forward() * dist
-    	tr.endpos = ent:GetPos() + _angle:Forward() * dist
-    	tr.filter = ent
-    	tr.mins = ent:OBBMins()*1.1 --1.1 because so that no one get stuck
-    	tr.maxs = ent:OBBMaxs()*1.1 --1.1 because so that no one get stuck
-    	tr.mask = MASK_SHOT_HULL
+  local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
+  if _sps != nil and _sps != false then
+    _sps = _sps[1].storagepoints
+    local _storagepoint = SQL_SELECT( "yrp_" .. string.lower( game.GetMap() ), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
+    if _storagepoint != nil and _storagepoint != false then
+      _storagepoint = _storagepoint[1]
 
-      local _result = util.TraceHull( tr )
-      if !_result.Hit then
-        ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
-        if tab == "vehicles" then
-          ent:SetVelocity( Vector( 0, 0, -500 ) )
-        else
-          ent:Spawn()
+      --[[ Position ]]--
+      local _pos = string.Explode( ",", _storagepoint.position )
+      local _edit = Vector( 0, 0, math.abs( ent:OBBMins().z ) )
+      _pos = Vector( _pos[1], _pos[2], _pos[3] ) + _edit + Vector( 0, 0, 4 )
+      ent:SetPos( _pos )
+      local _mins = ent:OBBMins() + _edit
+      local _maxs = ent:OBBMaxs() + _edit
+      local tr = {
+        start = _pos,
+        endpos = _pos,
+        mins = _mins,
+        maxs = _maxs,
+        filter = ent
+      }
+      local hullTrace = util.TraceHull( tr )
+      if hullTrace.Hit then
+        net.Start( "yrp_info2" )
+          net.WriteString( "notenoughspace" )
+        net.Send( ply )
+        printTab(hullTrace)
+        ent:Remove()
+        return false
+      end
+
+      --[[ Angle ]]--
+      local _ang = string.Explode( ",", _storagepoint.angle )
+      _ang = Angle( 0, _ang[2], 0 )
+      ent:SetAngles( _ang )
+
+      return true
+    end
+  else
+    ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 64 ) )
+    for dist = 0, _distMax, _distSpace do
+      for ang = 0, 360, 45 do
+        if ang != 0 then
+          _angle = _angle + Angle( 0, 45, 0 )
         end
-        return true
+        local tr = {}
+      	tr.start = ent:GetPos() + _angle:Forward() * dist
+      	tr.endpos = ent:GetPos() + _angle:Forward() * dist
+      	tr.filter = ent
+      	tr.mins = ent:OBBMins()*1.1 --1.1 because so that no one get stuck
+      	tr.maxs = ent:OBBMaxs()*1.1 --1.1 because so that no one get stuck
+      	tr.mask = MASK_SHOT_HULL
+
+        local _result = util.TraceHull( tr )
+        if !_result.Hit then
+          ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
+          if item.type == "vehicles" then
+            ent:SetVelocity( Vector( 0, 0, -500 ) )
+          else
+            ent:Spawn()
+          end
+          return true
+        end
       end
     end
   end
@@ -258,18 +328,68 @@ util.AddNetworkString( "item_buy" )
 
 net.Receive( "item_buy", function( len, ply )
   local _tab = net.ReadTable()
+  local _dealer_uid = net.ReadString()
 
   local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
   if _item != nil then
     _item = _item[1]
     if ply:canAfford( tonumber( _item.price ) ) then
 
-      ply:addMoney( -tonumber( _item.price ) )
       if _item.type == "licenses" then
         ply:AddLicense( _item.ClassName )
+        ply:addMoney( -tonumber( _item.price ) )
       else
-        spawnItem( ply, _item, _item.type )
+        local _spawned = spawnItem( ply, _item, _dealer_uid )
+        if _spawned then
+          ply:addMoney( -tonumber( _item.price ) )
+        else
+          return false
+        end
       end
+      if tonumber( _item.permanent ) == 1 then
+        local _cha = ply:GetChaTab()
+        local _stor = string.Explode( ",", _cha.storage )
+        for i, item in pairs( _stor ) do
+          if item == "" then
+            table.RemoveByValue( _stor, "" )
+          end
+        end
+        if !table.HasValue( _stor, _item.uniqueID ) then
+          table.insert( _stor, _item.uniqueID )
+        end
+        _stor = string.Implode( ",", _stor )
+        local _result = SQL_UPDATE( "yrp_characters", "storage = '" .. _stor .. "'", "uniqueID = '" .. ply:CharID() .. "'" )
+      end
+    end
+  end
+end)
+
+util.AddNetworkString( "item_spawn" )
+
+net.Receive( "item_spawn", function( len, ply )
+  local _tab = net.ReadTable()
+  local _dealer_uid = net.ReadString()
+
+  local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
+  if _item != nil then
+    _item = _item[1]
+    if !IsEntityAlive( _item.uniqueID ) then
+      spawnItem( ply, _item, _dealer_uid )
+    end
+  end
+end)
+
+util.AddNetworkString( "item_despawn" )
+
+net.Receive( "item_despawn", function( len, ply )
+  local _tab = net.ReadTable()
+
+  local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
+  if _item != nil then
+    _item = _item[1]
+    local _alive, _ent = IsEntityAlive( _item.uniqueID )
+    if _alive then
+      _ent:Remove()
     end
   end
 end)

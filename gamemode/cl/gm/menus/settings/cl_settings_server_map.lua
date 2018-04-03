@@ -8,30 +8,36 @@ net.Receive( "getMapList", function( len )
   local _tmpTable = net.ReadTable()
   _groups = net.ReadTable()
   _roles = net.ReadTable()
+  _dealers = net.ReadTable()
   if !_tmpBool then
     for k, v in pairs( _tmpTable ) do
       if tostring( v.type ) == "dealer" then
-        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "", v.linkID )
+        for i, dealer in pairs( _dealers ) do
+          if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
+            _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, dealer.name )
+            break
+          end
+        end
       elseif tostring( v.type ) == "GroupSpawnpoint" then
         for l, w in pairs( _groups ) do
-          if tostring( v.groupID ) == tostring( w.uniqueID ) then
+          if tostring( v.linkID ) == tostring( w.uniqueID ) then
             if _mapListView != nil and _mapListView != NULL and ispanel( _mapListView ) then
-              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID, "" )
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID )
             end
             break
           end
         end
       elseif tostring( v.type ) == "RoleSpawnpoint" then
         for l, w in pairs( _roles ) do
-          if tostring( v.roleID ) == tostring( w.uniqueID ) then
+          if tostring( v.linkID ) == tostring( w.uniqueID ) then
             if _mapListView != NULL and ispanel( _mapListView ) then
-              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", w.roleID )
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.roleID )
             end
             break
           end
         end
       else
-        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "", "" )
+        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name )
       end
     end
   end
@@ -131,9 +137,7 @@ hook.Add( "open_server_map", "open_server_map", function()
   _mapListView:AddColumn( lang_string( "position" ) )
   _mapListView:AddColumn( lang_string( "angle" ) )
   _mapListView:AddColumn( lang_string( "type" ) )
-  _mapListView:AddColumn( lang_string( "group" ) )
-  _mapListView:AddColumn( lang_string( "role" ) )
-  _mapListView:AddColumn( "linkID" )
+  _mapListView:AddColumn( lang_string( "name" ) )
 
   local _buttonDelete = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 10+256+10 ) )
   _buttonDelete:SetText( lang_string( "deleteentry" ) )
@@ -169,7 +173,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     function tmpButton:DoClick()
       net.Start( "dbInsertIntoMap" )
         net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
-        net.WriteString( "position, angle, groupID, type" )
+        net.WriteString( "position, angle, linkID, type" )
         local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
         local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
         local tmpGroupID = tostring( tmpGroup:GetOptionData( tmpGroup:GetSelectedID() ) )
@@ -209,7 +213,7 @@ hook.Add( "open_server_map", "open_server_map", function()
     function tmpButton:DoClick()
       net.Start( "dbInsertIntoMap" )
         net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
-        net.WriteString( "position, angle, roleID, type" )
+        net.WriteString( "position, angle, linkID, type" )
         local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
         local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
         local tmpRoleID = tostring( tmpRole:GetOptionData( tmpRole:GetSelectedID() ) )
@@ -269,6 +273,41 @@ hook.Add( "open_server_map", "open_server_map", function()
     _mapListView:Clear()
     net.Start( "getMapList" )
     net.SendToServer()
+  end
+
+  local _buttonAddStoragepoint = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 636 ) )
+  _buttonAddStoragepoint:SetText( lang_string( "add" ) .. " [" .. lang_string( "storagepoint" ) .. "]" )
+  function _buttonAddStoragepoint:DoClick()
+    local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
+    tmpFrame:Center()
+    tmpFrame:SetTitle( "" )
+    function tmpFrame:Paint( pw, ph )
+      draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
+      draw.SimpleTextOutlined( lang_string( "storagepoint" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    end
+
+    local tmpName = createD( "DTextEntry", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 100 ) )
+
+    local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
+    tmpButton:SetText( lang_string( "add" ) )
+    function tmpButton:DoClick()
+      net.Start( "dbInsertIntoMap" )
+        net.WriteString( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ) )
+        net.WriteString( "position, angle, name, type" )
+        local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
+        local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
+        local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', '" .. tmpName:GetText() .. "', 'Storagepoint'"
+        net.WriteString( tmpString )
+      net.SendToServer()
+
+      _mapListView:Clear()
+      net.Start( "getMapList" )
+      net.SendToServer()
+      tmpFrame:Close()
+    end
+
+    tmpFrame:MakePopup()
   end
 
   net.Start( "getMapList" )

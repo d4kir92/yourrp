@@ -113,6 +113,7 @@ function db_init_database()
   SQL_INIT_DATABASE( "yrp_shop_items" )
   SQL_INIT_DATABASE( "yrp_shop_categories" )
   SQL_INIT_DATABASE( "yrp_dealers" )
+  SQL_INIT_DATABASE( "yrp_feedback" )
 
   yrp_db.loaded = true
 
@@ -147,3 +148,4 @@ include( "shops/db_shops.lua" )
 include( "shops/db_shop_items.lua" )
 include( "shops/db_shop_categories.lua" )
 include( "dealers/db_dealers.lua" )
+include( "feedback/db_feedback.lua" )

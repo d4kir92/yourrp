@@ -35,13 +35,13 @@ function openFeedbackMenu()
   _fb.langu = derma_change_language( _fb.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 50 ) )
 
   function _fb.window:Paint( pw, ph )
-    paintWindow( self, pw, ph, "Feedback Menu" )
+    paintWindow( self, pw, ph, lang_string( "givefeedback" ) )
   end
 
   _fb.discord = createD( "DButton", _fb.window, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
   _fb.discord:SetText( "" )
   function _fb.discord:Paint( pw, ph )
-    paintButton( self, pw, ph, "Get Live Support" )
+    paintButton( self, pw, ph, lang_string( "livesupport" ) )
   end
   function _fb.discord:DoClick()
     gui.OpenURL( "https://discord.gg/sEgNZxg" )
@@ -55,36 +55,48 @@ function openFeedbackMenu()
 
   _fb.feedbackP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 250 ) )
   function _fb.feedbackP:Paint( pw, ph )
-    surfaceText( "Feedback (Problems, suggestions, ...)", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+    surfaceText( lang_string( "feedback" ) .. " (" .. lang_string( "problems" ) .. ", " .. lang_string( "suggestions" ) .. ", ...)", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
   end
   _fb.feedbackT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 500 ), ctr( 10 ), ctr( 300 ) )
   _fb.feedbackT:SetMultiline( true )
 
   _fb.contactP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 850 ) )
   function _fb.contactP:Paint( pw, ph )
-    surfaceText( "Contact link (for faster helping) (not required)", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+    surfaceText( lang_string( "contact" ) .. " (" .. lang_string( "notrequired" ) .. ")", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
   end
   _fb.contactT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 900 ) )
 
   _fb.send = createD( "DButton", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 1000 ) )
   _fb.send:SetText( "" )
   function _fb.send:Paint( pw, ph )
-    paintButton( self, pw, ph, "Send Feedback" )
+    paintButton( self, pw, ph, string.upper( lang_string( "sendfeedback" ) ) )
   end
   function _fb.send:DoClick()
     printGM( "gm", "send feedback" )
 
-    local entry = {}
-    entry["entry.1141598078"] = _fb.titleT:GetText() or "FAILED"
-    entry["entry.761186932"] = _fb.feedbackT:GetText() or "FAILED"
-    entry["entry.1633448754"] = _fb.contactT:GetText() or "FAILED"
-    entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
+    if _fb.titleT:GetText() != "" or _fb.feedbackT:GetText() != "" or _fb.contactT:GetText() != "" then
+      local entry = {}
+      entry["entry.1141598078"] = _fb.titleT:GetText() or "FAILED"
+      entry["entry.761186932"] = _fb.feedbackT:GetText() or "FAILED"
+      entry["entry.1633448754"] = _fb.contactT:GetText() or "FAILED"
+      entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
 
-    http.Post( _url, entry, function( result )
-      if result then end
-    end, function( failed )
-      printGM( "error", failed )
-    end )
+      http.Post( _url, entry, function( result )
+        if result then end
+      end, function( failed )
+        printGM( "error", failed )
+      end )
+
+      local _net_table = {}
+      _net_table.title = _fb.titleT:GetText() or "FAILED"
+      _net_table.feedback = _fb.feedbackT:GetText() or "FAILED"
+      _net_table.contact = _fb.contactT:GetText() or "FAILED"
+      _net_table.steamid = LocalPlayer():SteamID() or "FAILED"
+      net.Start( "add_feedback" )
+        net.WriteTable( _net_table )
+      net.SendToServer()
+    end
+
     closeFeedbackMenu()
   end
 

@@ -21,6 +21,8 @@ SQL_ADD_COLUMN( _db_name, "bg5", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "bg6", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "bg7", "INT DEFAULT 0" )
 
+SQL_ADD_COLUMN( _db_name, "storage", "TEXT DEFAULT ''" )
+
 SQL_ADD_COLUMN( _db_name, "keynrs", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "rpname", "TEXT DEFAULT 'ID_RPNAME'" )
 SQL_ADD_COLUMN( _db_name, "gender", "TEXT DEFAULT 'male'" )

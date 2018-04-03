@@ -100,7 +100,7 @@ function useFunction( string )
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 					toggleDoorOptions( eyeTrace.Entity )
 				elseif eyeTrace.Entity:IsVehicle() then
-					toggleVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "vehicleID" ) )
+					toggleVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "uniqueID" ) )
 				end
 			end
 
