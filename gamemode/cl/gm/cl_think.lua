@@ -80,7 +80,7 @@ function useFunction( string )
 			toggleAppearanceMenu()
 		elseif string == "openInventory" then
 			done_tutorial( "tut_mi" )
-			toggle_inventory()
+			--toggle_inventory()
 		elseif string == "openRoleMenu" then
 			done_tutorial( "tut_mr" )
 			toggleRoleMenu()

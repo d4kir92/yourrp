@@ -285,6 +285,7 @@ function openRoleMenu()
   _rm.info.rolename = lang_string( "none" )
   _rm.info.rolesala = lang_string( "none" )
   function _rm.info:Paint( pw, ph )
+    if _rm.info.rolename == lang_string( "none" ) then return end
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
 
     --[[ Role Appearance ]]--
@@ -316,11 +317,13 @@ function openRoleMenu()
 
   _rm.infodesc = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1050+50 ) )
   function _rm.infodesc:Paint( pw, ph )
+    if _rm.info.rolename == lang_string( "none" ) then return end
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
   end
 
   _rm.infosweps = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1450+50 ) )
   function _rm.infosweps:Paint( pw, ph )
+    if _rm.info.rolename == lang_string( "none" ) then return end
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
   end
 
@@ -328,6 +331,7 @@ function openRoleMenu()
   _rm.infobutton:SetText( "" )
   _rm.infobutton.rolename = ""
   function _rm.infobutton:Paint( pw, ph )
+    if _rm.info.rolename == lang_string( "none" ) then return end
     self.text = lang_string( "none" )
     self.color = Color( 255, 255, 255 )
     if tostring( self.rolename ) != "" then

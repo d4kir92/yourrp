@@ -66,7 +66,7 @@ function openFeedbackMenu()
   end
   _fb.contactT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 900 ) )
 
-  _fb.send = createD( "DButton", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 1000 ) )
+  _fb.send = createD( "DButton", _fb.window, ctr( 600 ), ctr( 50 ), ctr( 10 ), ctr( 1000 ) )
   _fb.send:SetText( "" )
   function _fb.send:Paint( pw, ph )
     paintButton( self, pw, ph, string.upper( lang_string( "sendfeedback" ) ) )

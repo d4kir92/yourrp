@@ -147,10 +147,7 @@ function openSettings()
     --draw.SimpleTextOutlined( settingsWindow.cursite or "", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local _bg = createD( "HTML", settingsWindow.window, ctr( 500-8 ), ctr( 80-12 ), ScrW() - ctr( 1350-6 ), ctr( 10+6 ) )
-  _bg:OpenURL( "https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg" )
-
-  local feedback = createD( "DButton", settingsWindow.window, ctr( 600 ), ctr( 80 ), ScrW() - ctr( 1860 ), ctr( 10 ) )
+  local feedback = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 1860 ), ctr( 10 ) )
   feedback:SetText( "" )
   function feedback:Paint( pw, ph )
     local color = get_dsbg_col()
@@ -159,14 +156,17 @@ function openSettings()
   	end
     color.a = 200
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleTextOutlined( "Give Feedback / Report problem", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "givefeedback" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function feedback:DoClick()
     closeSettings()
     openFeedbackMenu()
   end
 
-  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 400 ), ctr( 80 ), ScrW() - ctr( 1250 ), ctr( 10 ) )
+  local _bg = createD( "HTML", settingsWindow.window, ctr( 500-8 ), ctr( 80-12 ), ScrW() - ctr( 1350-6 ), ctr( 10+6 ) )
+  _bg:OpenURL( "https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg" )
+
+  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 1350 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
@@ -178,7 +178,7 @@ function openSettings()
   	end
     color.a = 200
     draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleTextOutlined( lang_string( "support" ) .. " (" .. lang_string( "live" ) .. ")", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "livesupport" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   local language = createD( "DPanel", settingsWindow.window, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )

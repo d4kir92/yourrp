@@ -639,7 +639,7 @@ function openCharacterSelection()
   local feedback = createD( "DButton", _cs.frame, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 510 ), ScrH() - ctr( 60 ) )
   feedback:SetText( "" )
   function feedback:Paint( pw, ph )
-    paintButton( self, pw, ph, "Give Feedback / Report problem" )
+    paintButton( self, pw, ph, lang_string( "givefeedback" ) )
   end
   function feedback:DoClick()
     closeCharacterSelection()

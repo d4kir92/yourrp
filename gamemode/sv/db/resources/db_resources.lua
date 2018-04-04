@@ -11,9 +11,6 @@ printGM( "db", "" )
 --yourrp content
 resource.AddWorkshop( "1189643820" )
 
---first aid kit
-resource.AddWorkshop( "1144876357" )
-
 --Food and Household items
 resource.AddWorkshop( "108024198" )
 

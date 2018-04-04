@@ -375,7 +375,7 @@ function createMDMenu( parent, w, h, x, y )
 		self.menu = createD( "DPanel", self, ScrW(), ScrH(), 0, 0 )
 		function self.menu:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
-			draw.RoundedBox( 0, 0, 0, ctr( 500 ), ph, get_dp_col() )
+			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, get_dp_col() )
 
 			surface.SetDrawColor( 255, 255, 255, 255 )
 	  	surface.SetMaterial( get_icon_burger_menu()	)
@@ -384,21 +384,21 @@ function createMDMenu( parent, w, h, x, y )
 			draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 100 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local x, y = gui.MousePos()
-			if x > ctr( 500 ) then
+			if x > ctr( 600 ) then
 				self:Remove()
 			end
 		end
 
 		local posY = 100
 		for k, v in pairs( self.cat ) do
-			local tmpCat = createD("DPanel", self.menu, ctr( 480 ), ctr( 50 ), ctr( 10 ), ctr( posY ) )
+			local tmpCat = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 50 ), ctr( 10 ), ctr( posY ) )
 			function tmpCat:Paint( pw, ph )
 				draw.SimpleTextOutlined( string.upper( v ), "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 			posY = posY + 50 + 10
 			if self.sites[v] != nil then
 				for l, w in pairs( self.sites[v] ) do
-					local tmp2 = createD("DButton", self.menu, ctr( 480 ), ctr( 80 ), ctr( 10 ), ctr( posY ) )
+					local tmp2 = createD( "DButton", self.menu, ctr( 600-20 ), ctr( 80 ), ctr( 10 ), ctr( posY ) )
 					tmp2:SetText( "" )
 					tmp2.hook = string.lower( w.hook )
 					tmp2.site = string.upper( w.site )
@@ -420,6 +420,7 @@ function createMDMenu( parent, w, h, x, y )
 					function tmp2:DoClick()
 						tmp.cursite = self.site
 						tmp:SwitchToSite( self.hook )
+            tmp.menu:Remove()
 					end
 
 					posY = posY + 80 + 10
