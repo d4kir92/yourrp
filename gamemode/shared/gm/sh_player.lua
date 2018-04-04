@@ -473,7 +473,9 @@ function Player:GetRoleName()
 end
 
 function Player:HasLicense( license )
-  local _licenses = string.Explode( ",", self:GetNWString( "licenseIDs", "" ) )
+  local _licenseIDs = self:GetNWString( "licenseIDs", "" )
+
+  local _licenses = string.Explode( ",", _licenseIDs )
 
   if table.HasValue( _licenses, license ) then
     return true

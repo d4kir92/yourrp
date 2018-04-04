@@ -129,6 +129,16 @@ function set_role_values( ply )
       local ChaTab = ply:GetChaTab()
 
       if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
+        local _storage = string.Explode( ",", ChaTab.storage )
+        printGM( "note", ply:YRPName() .. " Give permanent Licenses" )
+        for i, lic in pairs( _storage ) do
+          local _lic = SQL_SELECT( "yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'" )
+          if _lic != nil and _lic != false then
+            _lic = _lic[1]
+            ply:AddLicense( _lic.ClassName )
+          end
+        end
+
         if ChaTab.playermodelID != nil then
           local tmpID = tonumber( ChaTab.playermodelID )
           if rolTab.playermodels != nil and rolTab.playermodels != "" then
@@ -188,7 +198,10 @@ function set_role_values( ply )
         ply:SetNWBool( "iscivil", tobool( rolTab.iscivil ) )
         ply:SetNWBool( "isadminonly", tobool( rolTab.adminonly ) )
 
-        ply:SetNWString( "licenseIDs", rolTab.licenseIDs )
+        local _licenseIDs = string.Explode( ",", rolTab.licenseIDs )
+        for i, lic in pairs( _licenseIDs ) do
+          ply:AddLicense( lic )
+        end
 
         ply:SetNWString( "maxamount", rolTab.maxamount )
 

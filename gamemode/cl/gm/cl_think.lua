@@ -2,6 +2,12 @@
 
 --cl_think.lua
 
+local _cmdpre = "[COMMAND] "
+local _cmdsv = "This command is adminonly/serversided!"
+concommand.Add( "yrp_usergroup", function( ply, cmd, args )
+  printGM( "note", _cmdpre .. _cmdsv )
+end )
+
 local chatisopen = false
 _thirdperson = 0
 local _thirdpersonC = 0
@@ -100,7 +106,7 @@ function useFunction( string )
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 					toggleDoorOptions( eyeTrace.Entity )
 				elseif eyeTrace.Entity:IsVehicle() then
-					toggleVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "uniqueID" ) )
+					toggleVehicleOptions( eyeTrace.Entity, eyeTrace.Entity:GetNWInt( "item_uniqueID" ) )
 				end
 			end
 

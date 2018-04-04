@@ -18,7 +18,7 @@ function closeBuyMenu()
   end
 end
 
-function createShopItem( item )
+function createShopItem( item, duid )
   local _w = 800
   local _h = 400
   local _i = createD( "DPanel", nil, ctrb( _w ), ctrb( _h ), 0, 0 )
@@ -92,6 +92,7 @@ function createShopItem( item )
     function _i.buy:DoClick()
       net.Start( "item_buy" )
         net.WriteTable( self.item )
+        net.WriteString( duid )
       net.SendToServer()
       closeBuyMenu()
     end
@@ -147,38 +148,40 @@ function createStorageItem( item, duid )
     end
   end
 
-  _i.spawn = createD( "DButton", _i, ctrb( _w ), ctrb( 50 ), ctrb( 0 ), ctrb( 350 ) )
-  _i.spawn:SetText( "" )
-  _i.spawn.item = item
-  _i.spawn.action = 0
-  _i.spawn.name = "tospawn"
-  if IsEntityAlive( item.uniqueID ) then
-    _i.spawn.action = 1
-    _i.spawn.name = "tostore"
-  end
-  function _i.spawn:Paint( pw, ph )
-    local _color = Color( 0, 255, 0 )
-    if !LocalPlayer():canAfford( item.price ) then
-      _color = Color( 255, 0, 0 )
+  if item.type != "licenses" then
+    _i.spawn = createD( "DButton", _i, ctrb( _w ), ctrb( 50 ), ctrb( 0 ), ctrb( 350 ) )
+    _i.spawn:SetText( "" )
+    _i.spawn.item = item
+    _i.spawn.action = 0
+    _i.spawn.name = "tospawn"
+    if IsEntityAlive( item.uniqueID ) then
+      _i.spawn.action = 1
+      _i.spawn.name = "tostore"
     end
-    if self:IsHovered() then
-      _color = Color( 255, 255, 0 )
+    function _i.spawn:Paint( pw, ph )
+      local _color = Color( 0, 255, 0 )
+      if !LocalPlayer():canAfford( item.price ) then
+        _color = Color( 255, 0, 0 )
+      end
+      if self:IsHovered() then
+        _color = Color( 255, 255, 0 )
+      end
+      draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+      surfaceText( lang_string( self.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
-    draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-    surfaceText( lang_string( self.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
-  end
-  function _i.spawn:DoClick()
-    if self.action == 0 then
-      net.Start( "item_spawn" )
-        net.WriteTable( self.item )
-        net.WriteString( duid )
-      net.SendToServer()
-    elseif self.action == 1 then
-      net.Start( "item_despawn" )
-        net.WriteTable( self.item )
-      net.SendToServer()
+    function _i.spawn:DoClick()
+      if self.action == 0 then
+        net.Start( "item_spawn" )
+          net.WriteTable( self.item )
+          net.WriteString( duid )
+        net.SendToServer()
+      elseif self.action == 1 then
+        net.Start( "item_despawn" )
+          net.WriteTable( self.item )
+        net.SendToServer()
+      end
+      closeBuyMenu()
     end
-    closeBuyMenu()
   end
 
   return _i
@@ -359,7 +362,7 @@ net.Receive( "shop_get_tabs", function( len )
               net.Receive( "shop_get_items", function( len )
                 local _items = net.ReadTable()
                 for k, item in pairs( _items ) do
-                  local _item = createShopItem( item )
+                  local _item = createShopItem( item, _dealer_uid )
                   self:Add( _item )
                 end
               end)

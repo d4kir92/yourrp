@@ -241,7 +241,7 @@ function spawnItem( ply, item, duid )
     ent = SpawnVehicle( item )
     local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "'" )
     local getVehicles = SQL_SELECT( "yrp_vehicles", "*", nil )
-    ent:SetNWString( "uniqueID", item.uniqueID )
+    ent:SetNWString( "item_uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
 
     if ent == NULL then
@@ -251,7 +251,7 @@ function spawnItem( ply, item, duid )
   else
     ent = ents.Create( item.ClassName )
     if ent == NULL then return end
-    ent:SetNWString( "uniqueID", item.uniqueID )
+    ent:SetNWString( "item_uniqueID", item.uniqueID )
     --ent:Spawn()
   end
 
@@ -281,7 +281,6 @@ function spawnItem( ply, item, duid )
         net.Start( "yrp_info2" )
           net.WriteString( "notenoughspace" )
         net.Send( ply )
-        printTab(hullTrace)
         ent:Remove()
         return false
       end
@@ -293,31 +292,30 @@ function spawnItem( ply, item, duid )
 
       return true
     end
-  else
-    ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 64 ) )
-    for dist = 0, _distMax, _distSpace do
-      for ang = 0, 360, 45 do
-        if ang != 0 then
-          _angle = _angle + Angle( 0, 45, 0 )
-        end
-        local tr = {}
-      	tr.start = ent:GetPos() + _angle:Forward() * dist
-      	tr.endpos = ent:GetPos() + _angle:Forward() * dist
-      	tr.filter = ent
-      	tr.mins = ent:OBBMins()*1.1 --1.1 because so that no one get stuck
-      	tr.maxs = ent:OBBMaxs()*1.1 --1.1 because so that no one get stuck
-      	tr.mask = MASK_SHOT_HULL
+  end
+  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 64 ) )
+  for dist = 0, _distMax, _distSpace do
+    for ang = 0, 360, 45 do
+      if ang != 0 then
+        _angle = _angle + Angle( 0, 45, 0 )
+      end
+      local tr = {}
+    	tr.start = ent:GetPos() + _angle:Forward() * dist
+    	tr.endpos = ent:GetPos() + _angle:Forward() * dist
+    	tr.filter = ent
+    	tr.mins = ent:OBBMins()*1.1 --1.1 because so that no one get stuck
+    	tr.maxs = ent:OBBMaxs()*1.1 --1.1 because so that no one get stuck
+    	tr.mask = MASK_SHOT_HULL
 
-        local _result = util.TraceHull( tr )
-        if !_result.Hit then
-          ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
-          if item.type == "vehicles" then
-            ent:SetVelocity( Vector( 0, 0, -500 ) )
-          else
-            ent:Spawn()
-          end
-          return true
+      local _result = util.TraceHull( tr )
+      if !_result.Hit then
+        ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
+        if item.type == "vehicles" then
+          ent:SetVelocity( Vector( 0, 0, -500 ) )
+        else
+          ent:Spawn()
         end
+        return true
       end
     end
   end

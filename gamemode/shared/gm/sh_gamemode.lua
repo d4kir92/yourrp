@@ -14,10 +14,15 @@ function GM:GetGameDescription()
 	return GAMEMODE.BaseName
 end
 
+concommand.Add( "yrp_status", function( ply, cmd, args )
+	printGM( "note", "YourRP Version: " .. GAMEMODE.Version )
+end )
+
 concommand.Add( "yrp__help", function( ply, cmd, args )
 	hr_pre()
   printGM( "note", "yrp_status - shows gamemode version" )
 	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
+	printGM( "note", "yrp_togglesettings - toggle settings menu" )
   hr_pos()
 
   hr_pre()
@@ -137,7 +142,7 @@ end
 
 function IsEntityAlive( uid )
   for i, ent in pairs( ents.GetAll() ) do
-    if tostring( ent:GetNWString( "uniqueID", "" ) ) == tostring( uid ) then
+    if tostring( ent:GetNWString( "item_uniqueID", "" ) ) == tostring( uid ) then
       return true, ent
     end
   end

@@ -75,37 +75,39 @@ net.Receive( "yrp_drink", function( len, ply )
   end
 end)
 
-concommand.Add( "yrp_status", function( ply, cmd, args )
-	printGM( "note", "YourRP Version: " .. GAMEMODE.Version )
-end )
-
 function changeUserGroup( ply, cmd, args )
+  local _cmdpre = "[" .. string.upper( "yrp_usergroup" ) .. "] "
 	local message = ""
 	if args[2] != nil then
 	  if !ply:IsPlayer() then
+      --[[ if server tries ]]--
 	    for k, v in pairs( player.GetAll() ) do
 	      if string.find( string.lower( v:Nick() ), string.lower( args[1] ) ) or string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
 	        v:SetUserGroup( args[2] )
-	        printGM( "note", args[1] .. " is now the usergroup " .. args[2] )
+	        printGM( "note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2] )
 	        return
 	      end
 	    end
-	    printGM( "note", args[1] .. " not found." )
+	    printGM( "note", _cmdpre .. "Player [" .. args[1] .. "] not found." )
 	  elseif ply:HasAccess() or ply:IPAddress() == "loopback" then
+      --[[ if admin/superadmin/owner tries ]]--
 	    for k, v in pairs( player.GetAll() ) do
 	      if string.find( string.lower( v:Nick() ), string.lower( args[1] ) ) or string.find( string.lower( v:SteamName() ), string.lower( args[1] ) ) then
 	        v:SetUserGroup( args[2] )
-	        printGM( "note", args[1] .. " is now the usergroup " .. args[2] )
+	        printGM( "note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2] )
 	        return
 	      end
 	    end
-	    printGM( "note", args[1] .. " not found." )
+	    printGM( "note", _cmdpre .. args[1] .. " not found." )
 	  elseif ply:IsPlayer() then
+      --[[ if no rcon rights tries ]]--
 	    message = ply:SteamName() .. " tried to give " .. args[1] .. " the usergroup " .. args[2] .. "."
-	    printGM( "note", message )
+	    printGM( "note", _cmdpre .. message )
 	  end
 	else
-		printGM( "note", "not enough arguments" )
+    --[[ Failed command ]]--
+		printGM( "note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME UserGroup)" )
+    printGM( "note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin" )
 	end
 end
 
