@@ -9,19 +9,16 @@ util.AddNetworkString( "openLawBoard" )
 
 function ENT:Initialize()
 	self:SetModel( "models/props_c17/Frame002a.mdl" )
-	self:SetModelScale( 2, 0 )
 	self:PhysicsInit( SOLID_VPHYSICS )
-	self:SetMoveType( MOVETYPE_NONE )
+	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
 
+	self:SetPos(self:GetPos()+Vector(0,0,100))
+	self:DropToFloor()
   local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
-end
-
-function ENT:OnRemove()
-
 end
 
 function ENT:Use( activator, caller )

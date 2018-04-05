@@ -228,6 +228,10 @@ function close_appearance()
   end
 end
 
+net.Receive( "openAM", function( len )
+  toggleAppearanceMenu()
+end)
+
 function open_appearance()
   openMenu()
 
@@ -237,7 +241,7 @@ function open_appearance()
   _yrp_appearance.window:SetTitle( "" )
   _yrp_appearance.window:Center()
   _yrp_appearance.window:SetDraggable( false )
-  _yrp_appearance.window:ShowCloseButton( false )
+  _yrp_appearance.window:ShowCloseButton( true )
   _yrp_appearance.window:SetSizable( true )
   function _yrp_appearance.window:OnClose()
     _yrp_appearance.window:Remove()

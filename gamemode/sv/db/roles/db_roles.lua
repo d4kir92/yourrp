@@ -50,6 +50,8 @@ SQL_ADD_COLUMN( _db_name, "iscivil", "INTEGER DEFAULT 0" )
 
 SQL_ADD_COLUMN( _db_name, "licenseIDs", "TEXT DEFAULT ''" )
 
+SQL_UPDATE( _db_name, "uses = 0", nil )
+
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 

@@ -121,6 +121,7 @@ function set_role_values( ply )
           ply:SetNWString( "channel_advert", _gen_tab.name_advert )
           ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
           ply:SetNWBool( "anti_bhop", tobool( _gen_tab.toggle_anti_bhop ) )
+          ply:SetNWBool( "toggle_building", tobool( _gen_tab.toggle_building ) )
         end
       end
 

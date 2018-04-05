@@ -6,12 +6,28 @@ yrp_keybinds.version = 2
 local _db_name = "yrp_keybinds"
 
 function get_keybind( name )
-  return yrp_keybinds[name] or -1
+  return tonumber( yrp_keybinds[name] ) or -1
 end
 
 function set_keybind( name, value )
   local _result = SQL_UPDATE( _db_name, name .. " = " .. value, "uniqueID = " .. 1 )
   yrp_keybinds[name] = value
+end
+
+function GetKeybindName( kbname )
+  local _kb = ""
+  if !string.StartWith( kbname, "in_" ) then
+    _kb = get_keybind( kbname ) or "UNKNOWN"
+  end
+  if isnumber( tonumber( _kb ) ) then
+    _kb = input.GetKeyName( _kb )
+  end
+  if string.StartWith( kbname, "in_" ) then
+    _kb = lang_string( kbname )
+  else
+    _kb = tostring( _kb )
+  end
+  return _kb
 end
 
 --db_drop_table( "yrp_keybinds" )
