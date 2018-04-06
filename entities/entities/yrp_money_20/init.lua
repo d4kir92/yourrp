@@ -5,8 +5,6 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
-resource.AddFile( "models/props/cs_assault/money.mdl" )
-
 function ENT:Initialize()
 	self:SetModel( "models/props/cs_assault/money.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
@@ -16,6 +14,7 @@ function ENT:Initialize()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
+	self:SetMoney( 20 )
 end
 
 function ENT:GetMoney()

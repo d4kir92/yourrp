@@ -24,10 +24,8 @@ function GetKeybindName( kbname )
   end
   if string.StartWith( kbname, "in_" ) then
     _kb = lang_string( kbname )
-  else
-    _kb = tostring( _kb )
   end
-  return _kb
+  return tostring( _kb )
 end
 
 --db_drop_table( "yrp_keybinds" )

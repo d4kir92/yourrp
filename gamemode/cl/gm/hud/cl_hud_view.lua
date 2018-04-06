@@ -16,7 +16,7 @@ function HudView()
   	end
   end
   if _eyeTrace.Entity != nil and _eyeTrace.Entity != NULL then
-    if ply:GetNWBool( "toggle_building", false ) and _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
+    if ply:GetNWBool( "toggle_building", false ) and ( _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" ) and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
       draw.SimpleTextOutlined( lang_string( "pressepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "pressepos" ), "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "holdepre" ) .. " [" .. string.upper( GetKeybindName( "menu_options_door" ) ) .. "] " .. lang_string( "holdepos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )
@@ -30,14 +30,14 @@ function HudView()
       draw.SimpleTextOutlined( lang_string( "pressplypre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "pressplymid" ) .. " " .. tostring( _eyeTrace.Entity:RPName() ) .. " " .. lang_string( "pressplypos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     elseif _eyeTrace.Entity:IsNPC() then
       if _eyeTrace.Entity:GetNWString( "dealerID", "" ) != "" then
-        local _str = "[" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "trade" ) .. " [" .. _eyeTrace.Entity:GetNWString( "name", "" ) .. "]"
+        local _str = lang_string( "totradepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "totradepos" ) .. " [" .. _eyeTrace.Entity:GetNWString( "name", "" ) .. "]"
         if _eyeTrace.Entity:GetNWBool( "immortal", false ) then
           _str = _str .. " (" .. lang_string( "immortal" ) .. ")"
         end
         draw.SimpleTextOutlined( _str, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
-      draw.SimpleTextOutlined( "Press [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] to open Appearance Menu", "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "toappearancepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "toappearancepos" ), "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )
     end
   end

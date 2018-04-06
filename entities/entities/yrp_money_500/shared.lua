@@ -7,7 +7,7 @@ DEFINE_BASECLASS( "base_anim" )
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 
-ENT.PrintName		= "YourRP - 0 Money"
+ENT.PrintName		= "YourRP - 500 Money"
 ENT.Author			= "D4KiR"
 ENT.Contact			= "-"
 ENT.Purpose			= "Sharing money"
