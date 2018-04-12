@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "YourRP Medical"
+SWEP.Category = "[YourRP] Medical"
 
 SWEP.PrintName = "Syringe WIP"
 SWEP.Language = "en"

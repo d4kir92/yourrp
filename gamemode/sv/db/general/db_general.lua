@@ -8,7 +8,7 @@ util.AddNetworkString( "db_update_thirst" )
 util.AddNetworkString( "db_update_stamina" )
 util.AddNetworkString( "db_update_hud" )
 util.AddNetworkString( "db_update_inventory" )
-util.AddNetworkString( "db_update_clearinventoryondead" )
+util.AddNetworkString( "db_update_dropitemsondeath" )
 util.AddNetworkString( "db_update_graffiti" )
 util.AddNetworkString( "dbUpdateNWBool2" )
 util.AddNetworkString( "db_update_view_distance" )
@@ -41,7 +41,7 @@ SQL_ADD_COLUMN( _db_name, "toggle_thirst", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_stamina", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_hud", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_inventory", "INT DEFAULT 1" )
-SQL_ADD_COLUMN( _db_name, "toggle_clearinventoryondead", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "toggle_dropitemsondeath", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_graffiti", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "view_distance", "INT DEFAULT 200" )
 SQL_ADD_COLUMN( _db_name, "toggle_realistic_damage", "INT DEFAULT 1" )
@@ -88,6 +88,10 @@ function ServerCollection()
   return tobool( yrp_general.collection )
 end
 
+function IsDropItemsOnDeathEnabled()
+  return tobool( yrp_general.toggle_dropitemsondeath or false )
+end
+
 function IsWeaponLoweringEnabled()
   return tobool( yrp_general.toggle_weapon_lowering or false )
 end
@@ -125,7 +129,7 @@ net.Receive( "db_update_anti_bhop", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_anti_bhop = _nw
     SQL_UPDATE( "yrp_general", "toggle_anti_bhop = " .. yrp_general.toggle_anti_bhop, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " anti_bhop" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " anti_bhop" )
   end
   for i, p in pairs( player.GetAll() ) do
     p:SetNWBool( "anti_bhop", tobool(_nw) )
@@ -145,7 +149,7 @@ net.Receive( "db_update_crosshair", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_crosshair = _nw
     SQL_UPDATE( "yrp_general", "toggle_crosshair = " .. yrp_general.toggle_crosshair, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " crosshair" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " crosshair" )
   end
   for i, p in pairs( player.GetAll() ) do
     p:SetNWBool( "yrp_crosshair", tobool(_nw) )
@@ -157,7 +161,7 @@ net.Receive( "db_update_weapon_lowering", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_weapon_lowering = _nw
     SQL_UPDATE( "yrp_general", "toggle_weapon_lowering = " .. yrp_general.toggle_weapon_lowering, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " weapon_lowering" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " weapon_lowering" )
   end
 end)
 
@@ -166,7 +170,7 @@ net.Receive( "db_update_dealer_immortal", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_dealer_immortal = _nw
     SQL_UPDATE( "yrp_general", "toggle_dealer_immortal = " .. yrp_general.toggle_dealer_immortal, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " dealer_immortal" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " dealer_immortal" )
   end
 end)
 
@@ -175,7 +179,7 @@ net.Receive( "db_update_noclip_effect", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_noclip_effect = _nw
     SQL_UPDATE( "yrp_general", "toggle_noclip_effect = " .. yrp_general.toggle_noclip_effect, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " noclip_effect" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " noclip_effect" )
   end
 end)
 
@@ -184,7 +188,7 @@ net.Receive( "db_update_noclip_crow", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_noclip_crow = _nw
     SQL_UPDATE( "yrp_general", "toggle_noclip_crow = " .. yrp_general.toggle_noclip_crow, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " noclip_stealth" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " noclip_stealth" )
   end
 end)
 
@@ -193,7 +197,7 @@ net.Receive( "db_update_noclip_tags", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_noclip_tags = _nw
     SQL_UPDATE( "yrp_general", "toggle_noclip_tags = " .. yrp_general.toggle_noclip_tags, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " noclip_tags" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " noclip_tags" )
   end
   for i, ply in pairs( player.GetAll() ) do
     ply:SetNWBool( "show_tags", yrp_general.toggle_noclip_tags )
@@ -205,7 +209,7 @@ net.Receive( "db_update_noclip_stealth", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_noclip_stealth = _nw
     SQL_UPDATE( "yrp_general", "toggle_noclip_stealth = " .. yrp_general.toggle_noclip_stealth, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " noclip_stealth" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " noclip_stealth" )
   end
 end)
 
@@ -214,7 +218,7 @@ net.Receive( "db_update_smartphone", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_smartphone = _nw
     SQL_UPDATE( "yrp_general", "toggle_smartphone = " .. yrp_general.toggle_smartphone, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " smartphone" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " smartphone" )
   end
   for i, ply in pairs( player.GetAll() ) do
     ply:SetNWBool( "toggle_smartphone", yrp_general.toggle_smartphone )
@@ -226,7 +230,7 @@ net.Receive( "db_update_realistic_damage", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_realistic_damage = _nw
     SQL_UPDATE( "yrp_general", "toggle_realistic_damage = " .. yrp_general.toggle_realistic_damage, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " realistic_damage" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " realistic_damage" )
   end
 end)
 
@@ -235,44 +239,47 @@ net.Receive( "db_update_realistic_falldamage", function( len, ply )
   if isnumber( _nw ) then
     yrp_general.toggle_realistic_falldamage = _nw
     SQL_UPDATE( "yrp_general", "toggle_realistic_falldamage = " .. yrp_general.toggle_realistic_falldamage, nil )
-    printGM( "note", ply:SteamName() .. " " .. bool_status( _nw ) .. " realistic_falldamage" )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " realistic_falldamage" )
   end
 end)
 
 net.Receive( "db_update_graffiti", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
   SQL_UPDATE( "yrp_general", "toggle_graffiti = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " grafiti" )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " grafiti" )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_graffiti", tobool( _nw_bool ) )
   end
 end)
 
-net.Receive( "db_update_clearinventoryondead", function( len, ply )
+net.Receive( "db_update_dropitemsondeath", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
-  SQL_UPDATE( "yrp_general", "toggle_clearinventoryondead = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " clearinventoryondead" )
+  if isnumber( _nw_bool ) then
+    yrp_general.toggle_dropitemsondeath = _nw_bool
+    SQL_UPDATE( "yrp_general", "toggle_dropitemsondeath = " .. yrp_general.toggle_dropitemsondeath, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( yrp_general.toggle_dropitemsondeath ) .. " dropitemsondeath" )
 
-  for k, v in pairs( player.GetAll() ) do
-    v:SetNWBool( "toggle_clearinventoryondead", tobool( _nw_bool ) )
+    for k, v in pairs( player.GetAll() ) do
+      v:SetNWBool( "toggle_dropitemsondeath", tobool( _nw_bool ) )
+    end
   end
 end)
 
 net.Receive( "db_update_inventory", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
-  SQL_UPDATE( "yrp_general", "toggle_inventory = " .. 0, nil ) -- LATER _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " inventory" )
+  SQL_UPDATE( "yrp_general", "toggle_inventory = " .. _nw_bool, nil ) -- LATER _nw_bool, nil )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " inventory" )
 
   for k, v in pairs( player.GetAll() ) do
-    v:SetNWBool( "toggle_inventory", tobool( false ) ) -- LATER _nw_bool ) )
+    v:SetNWBool( "toggle_inventory", tobool( _nw_bool ) )
   end
 end)
 
 net.Receive( "db_update_hunger", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
   SQL_UPDATE( "yrp_general", "toggle_hunger = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " hunger" )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " hunger" )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_hunger", tobool( _nw_bool ) )
@@ -282,7 +289,7 @@ end)
 net.Receive( "db_update_thirst", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
   SQL_UPDATE( "yrp_general", "toggle_thirst = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " thirst" )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " thirst" )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_thirst", tobool( _nw_bool ) )
@@ -292,7 +299,7 @@ end)
 net.Receive( "db_update_stamina", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
   SQL_UPDATE( "yrp_general", "toggle_stamina = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " stamina" )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " stamina" )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_stamina", tobool( _nw_bool ) )
@@ -302,7 +309,7 @@ end)
 net.Receive( "db_update_hud", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
   SQL_UPDATE( "yrp_general", "toggle_hud = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " hud" )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " hud" )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_hud", tobool( _nw_bool ) )
@@ -312,7 +319,7 @@ end)
 net.Receive( "dbUpdateNWBool2", function( len, ply )
   local _nw_bool = tonumber( net.ReadInt( 4 ) )
   SQL_UPDATE( "yrp_general", "toggle_building = " .. _nw_bool, nil )
-  printGM( "note", ply:SteamName() .. " " .. bool_status( _nw_bool ) .. " building" )
+  printGM( "note", ply:YRPName() .. " " .. bool_status( _nw_bool ) .. " building" )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWBool( "toggle_building", tobool( _nw_bool ) )
@@ -322,7 +329,7 @@ end)
 net.Receive( "db_update_view_distance", function( len, ply )
   local _nw_int = tonumber( net.ReadInt( 16 ) )
   SQL_UPDATE( "yrp_general", "view_distance = " .. _nw_int, nil )
-  printGM( "note", ply:SteamName() .. " SETS view_distance TO " .. tostring( _nw_int ) )
+  printGM( "note", ply:YRPName() .. " SETS view_distance TO " .. tostring( _nw_int ) )
 
   for k, v in pairs( player.GetAll() ) do
     v:SetNWInt( "view_distance", _nw_int )

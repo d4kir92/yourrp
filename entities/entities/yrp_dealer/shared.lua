@@ -14,7 +14,7 @@ ENT.Purpose			= ""
 ENT.Information = ""
 ENT.Instructions	= ""
 
-ENT.Category = "YourRP - Hidden"
+ENT.Category = "[YourRP] - Hidden"
 
 ENT.Editable = false
 ENT.Spawnable = false

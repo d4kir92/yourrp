@@ -14,7 +14,7 @@ ENT.Purpose			= "Sharing money"
 ENT.Information = "Test"
 ENT.Instructions	= ""
 
-ENT.Category = "YourRP DarkRPIntegration"
+ENT.Category = "[YourRP] DarkRPIntegration"
 
 ENT.Editable = false
 ENT.Spawnable = true

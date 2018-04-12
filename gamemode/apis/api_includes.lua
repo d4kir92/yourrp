@@ -13,6 +13,7 @@ add_luas( "date.lua" )
 add_luas( "derma.lua" )
 add_luas( "sp.lua" )
 add_luas( "table.lua" )
+add_luas( "items.lua" )
 
 AddCSLuaFile( "derma/DYRPCollapsibleCategory.lua" )
 AddCSLuaFile( "derma/DYRPDBList.lua" )

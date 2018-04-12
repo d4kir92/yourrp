@@ -57,6 +57,8 @@ function print_help( sender )
   sender:ChatPrint( "roll - roll a number between 0 and 100" )
   sender:ChatPrint( "kill - suicide" )
   sender:ChatPrint( "sleep - sleep or wake up" )
+  sender:ChatPrint( "tag_ug - show usergroup tag" )
+  sender:ChatPrint( "tag_immortal - shows immortal tag" )
   sender:ChatPrint( "" )
   return ""
 end
@@ -133,11 +135,19 @@ function show_tag_dev( sender )
   end
   return ""
 end
-function show_tag_admin( sender )
-  if !sender:GetNWBool( "tag_admin", false ) then
-    sender:SetNWBool( "tag_admin", true )
+function show_tag_ug( sender )
+  if !sender:GetNWBool( "tag_ug", false ) then
+    sender:SetNWBool( "tag_ug", true )
   else
-    sender:SetNWBool( "tag_admin", false )
+    sender:SetNWBool( "tag_ug", false )
+  end
+  return ""
+end
+function show_tag_immortal( sender )
+  if !sender:GetNWBool( "tag_immortal", false ) then
+    sender:SetNWBool( "tag_immortal", true )
+  else
+    sender:SetNWBool( "tag_immortal", false )
   end
   return ""
 end
@@ -281,6 +291,8 @@ function GM:PlayerSay( sender, text, teamChat )
 
   unpack_paket( sender, text )
 
+  paket.command = string.lower( paket.command )
+
   if paket.command == "ooc" or paket.command == "advert" then
     paket.lokal = false
   else
@@ -312,8 +324,13 @@ function GM:PlayerSay( sender, text, teamChat )
     return ""
   end
 
-  if paket.command == "tag_admin" then
-    show_tag_admin( sender )
+  if paket.command == "tag_ug" then
+    show_tag_ug( sender )
+    return ""
+  end
+
+  if paket.command == "tag_immortal" then
+    show_tag_immortal( sender )
     return ""
   end
 

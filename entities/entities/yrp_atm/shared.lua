@@ -14,7 +14,7 @@ ENT.Purpose			= "Entry for Bank"
 ENT.Information = "Test"
 ENT.Instructions	= "use your card"
 
-ENT.Category = "YourRP Bank"
+ENT.Category = "[YourRP] Bank"
 
 ENT.Editable = false
 ENT.Spawnable = true

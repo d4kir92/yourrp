@@ -88,9 +88,7 @@ local character = {}
 character.amount = 0
 
 function openCharacterCreation()
-  timer.Simple( 0.2, function()
-    openMenu()
-  end)
+  openMenu()
   local ply = LocalPlayer()
   character.cause = lang_string( "enteraname" )
   character.rpname = ""
@@ -601,9 +599,7 @@ end
 local curChar = "-1"
 local _cur = ""
 function openCharacterSelection()
-  timer.Simple( 0.2, function()
-    openMenu()
-  end)
+  openMenu()
   local ply = LocalPlayer()
 
   local cache = {}
@@ -692,15 +688,13 @@ function openCharacterSelection()
       charactersBackground.text = ""
       if _characters != nil and pa( _characters ) then
         character.amount = #_characters or 0
-        if #_characters < 1 then
 
-          if _cs.frame != nil and _cs.frame != NULL and ispanel( _cs.frame ) and _cs.frame.Close != nil then
+        if #_characters < 1 then
+          if pa( _cs.frame ) then
             _cs.frame:Close()
           end
-
           openCharacterCreation()
-
-          return
+          return false
         end
         local y = 0
         for k, v in pairs( cache ) do
@@ -797,8 +791,10 @@ function openCharacterSelection()
   end)
 
   printGM( "gm", "ask for characterlist" )
-  net.Start( "yrp_get_characters" )
-  net.SendToServer()
+  timer.Simple( 0.1, function()
+    net.Start( "yrp_get_characters" )
+    net.SendToServer()
+  end)
 
   local deleteChar = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() - ctr( 400 + 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
   deleteChar:SetText( "" )
@@ -821,10 +817,6 @@ function openCharacterSelection()
       net.Start( "DeleteCharacter" )
         net.WriteString( curChar )
       net.SendToServer()
-      timer.Simple( 0.1, function()
-        net.Start( "yrp_get_characters" )
-        net.SendToServer()
-      end)
 
       _window:Close()
     end

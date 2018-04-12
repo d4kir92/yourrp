@@ -266,7 +266,9 @@ timer.Create( "ServerThink", 1, 0, function()
   if _time % _auto_save == 0 then
     local _mod = _time%60
     local _left = _time/60 - _mod
-    save_clients( "Auto-Save ( Uptime: " .. _left .. " " .. lang_string( "minutes" ) .. " )" )
+		local _str = "Auto-Save ( Uptime: " .. _left .. " " .. lang_string( "minutes" ) .. " )"
+    save_clients( _str )
+		SaveStorages( _str )
   end
 
   local _changelevel = 21600

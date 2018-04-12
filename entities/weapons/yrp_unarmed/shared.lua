@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "YourRP Custom"
+SWEP.Category = "[YourRP] Custom"
 
 SWEP.PrintName = "Unarmed"
 SWEP.Language = "en"

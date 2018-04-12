@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = "Leftclick - arrest\nRightclick - unarrest"
 
-SWEP.Category = "YourRP Admin"
+SWEP.Category = "[YourRP] Admin"
 
 SWEP.PrintName = "Arrest stick"
 SWEP.Language = "en"

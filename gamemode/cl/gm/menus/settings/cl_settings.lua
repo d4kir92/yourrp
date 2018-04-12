@@ -106,17 +106,11 @@ function openSettings()
     settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
     settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
     settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
-
-    local _feedback = lang_string( "feedback" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "admin" ) ) .. ")"
-    settingsWindow.window:AddCategory( _feedback )
-    --[[ Feedback ]]--
-    settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _feedback, "icon16/page_lightning.png" )
+    settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
   end
 
   settingsWindow.window:AddCategory( "yourrp" )
   settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )
-  settingsWindow.window:AddSite( "open_yourp_contact", lang_string( "contact" ), "yourrp", "icon16/user_comment.png" )
-  settingsWindow.window:AddSite( "open_yourp_add_langu", "Add Language", "yourrp", "icon16/comment_add.png" )
 
   settingsWindow.window:AddCategory( lang_string( "settings" ) )
   settingsWindow.window:AddSite( "open_menu_settings", lang_string( "settings" ), lang_string( "settings" ), "vgui/yrp/dark_settings.png" )

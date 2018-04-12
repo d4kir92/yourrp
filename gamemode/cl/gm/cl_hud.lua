@@ -158,11 +158,11 @@ local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
 	local ply = LocalPlayer()
-
+	
 	if !ply:InVehicle() then
 		HudPlayer( ply )
-		HudCrosshair()
 		HudView()
+		HudCrosshair()
 	end
 
 	show_voice_info( ply )

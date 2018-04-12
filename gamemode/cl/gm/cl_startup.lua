@@ -558,7 +558,7 @@ function surfaceBox( x, y, w, h, color )
 end
 
 function drawPlate( ply, string, z, color )
-  if ply:Alive() then
+  --if ply:Alive() then
     local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
     local pos = ply:GetPos() + _abstand
     if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
@@ -572,12 +572,12 @@ function drawPlate( ply, string, z, color )
       surface.SetFont( "plates" )
       local _tw, _th = surface.GetTextSize( str )
       _tw = math.Round( _tw * 1.08, 0 )
-      _th = _th - 8
+      _th = _th
       color.a = math.Round( color.a*0.5, 0 )
       surfaceBox( -_tw/2, 0, _tw, _th, color )
       surfaceText( str, "plates", 0, _th/2+1, Color( 255, 255, 255, color.a+1 ), 1, 1 )
     cam.End3D2D()
-  end
+  --end
 end
 
 hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
@@ -585,21 +585,33 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
 end)
 
 function drawPlates( ply )
-  if ply:GetNWBool( "tag_dev", false ) then
-    if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
-      drawPlate( ply, "DEVELOPER", 7, Color( 0, 0, 0, ply:GetColor().a ) )
+  if ply:Alive() then
+    if ply:GetNWBool( "tag_dev", false ) then
+      if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
+        drawPlate( ply, "DEVELOPER", 9, Color( 0, 0, 0, ply:GetColor().a ) )
+      end
     end
-  end
-  if ply:GetNWBool( "tag_admin", false ) or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
-    if ply:HasAccess() then
-
-      drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
+    if ply:GetNWBool( "tag_ug", false ) or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
+      if ply:HasAccess() then
+        drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
+      end
     end
   end
   ply:drawPlayerInfo()
   ply:drawWantedInfo()
 end
 hook.Add( "PostPlayerDraw", "DrawName", drawPlates )
+
+hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
+  local ply = LocalPlayer()
+  if ply:GetNWBool( "tag_immortal", false ) then
+  	for i, ent in pairs( ents.GetAll() ) do
+      if ent:IsNPC() then
+        drawPlate( ent, string.upper( "[" .. lang_string( "immortal" ) .. "]" ), 0, Color( 0, 0, 100, ent:GetColor().a ) )
+      end
+  	end
+  end
+end )
 
 net.Receive( "yrp_noti" , function( len )
   if playerready then

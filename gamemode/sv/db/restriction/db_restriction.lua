@@ -162,17 +162,98 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
   end
 end)
 
+function RenderNoClip( ply, alpha )
+  local _alpha = 255
+  if IsNoClipEffectEnabled() then
+    if IsNoClipStealthEnabled() then
+      if ply:GetModel() == "models/crow.mdl" then
+        _alpha = 180
+      else
+        _alpha = 10
+      end
+    else
+      if ply:GetModel() == "models/crow.mdl" then
+        _alpha = 240
+      else
+        _alpha = 100
+      end
+    end
+  end
+
+  ply:SetRenderMode( RENDERMODE_TRANSALPHA )
+  ply:SetColor( Color( 255, 255, 255, _alpha ) )
+  for i, wp in pairs(ply:GetWeapons()) do
+    wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+    wp:SetColor( Color( 255, 255, 255, _alpha ) )
+  end
+end
+
+function RenderNormal( ply )
+  setPlayerModel( ply )
+  ply:SetRenderMode( RENDERMODE_NORMAL )
+  ply:SetColor( Color( 255, 255, 255, 255 ) )
+  for i, wp in pairs(ply:GetWeapons()) do
+    wp:SetRenderMode( RENDERMODE_NORMAL )
+    wp:SetColor( Color( 255, 255, 255, 255 ) )
+  end
+end
+
 hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
 
   if !bool then
-    setPlayerModel( ply )
-    ply:SetRenderMode( RENDERMODE_NORMAL )
-    ply:SetColor( Color( 255, 255, 255, 255 ) )
-    for i, wp in pairs(ply:GetWeapons()) do
-      wp:SetRenderMode( RENDERMODE_NORMAL )
-      wp:SetColor( Color( 255, 255, 255, 255 ) )
+    --[[ TURNED OFF ]]--
+    RenderNormal( ply )
+
+    local _pos = ply:GetPos()
+
+    --[[ Stuck? ]]--
+    local tr = {
+      start = _pos,
+      endpos = _pos,
+      mins = ply:OBBMins(),
+      maxs = ply:OBBMaxs(),
+      filter = ply
+    }
+    local _t = util.TraceHull( tr )
+
+    if _t.Hit then
+      --[[ Up ]]--
+      local trup = {
+        start = _pos+Vector(0,0,100),
+        endpos = _pos,
+        mins = Vector(1,1,0),
+        maxs = Vector(-1,-1,0),
+        filter = ply
+      }
+      local _tup = util.TraceHull( trup )
+
+      --[[ Down ]]--
+      local trdn = {
+        start = _pos,
+        endpos = _pos+Vector(0,0,100),
+        mins = Vector(1,1,0),
+        maxs = Vector(-1,-1,0),
+        filter = ply
+      }
+      local _tdn = util.TraceHull( trdn )
+
+      timer.Simple( 0.001, function()
+        if !_tup.StartSolid and _tdn.StartSolid then
+          ply:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
+        elseif _tup.StartSolid and !_tdn.StartSolid then
+          ply:SetPos( _tdn.HitPos - Vector( 0, 0, 72+1 ) )
+        elseif !_tup.StartSolid and !_tdn.StartSolid then
+          _pos = _pos + Vector( 0, 0, 36 )
+          if _pos:Distance( _tup.HitPos ) < _pos:Distance( _tdn.HitPos ) then
+            ply:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
+          elseif _pos:Distance( _tup.HitPos ) > _pos:Distance( _tdn.HitPos ) then
+            ply:SetPos( _tdn.HitPos - Vector( 0, 0, 72+6 ) )
+          end
+        end
+      end)
     end
   else
+    --[[ TURNED ON ]]--
     local _tmp = SQL_SELECT( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
     if worked( _tmp, "PlayerNoClip failed" ) then
       _tmp = _tmp[1]
@@ -182,29 +263,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
           ply:SetModel( "models/crow.mdl" )
         end
 
-        local _alpha = 255
-        if IsNoClipEffectEnabled() then
-          if IsNoClipStealthEnabled() then
-            if ply:GetModel() == "models/crow.mdl" then
-              _alpha = 180
-            else
-              _alpha = 10
-            end
-          else
-            if ply:GetModel() == "models/crow.mdl" then
-              _alpha = 240
-            else
-              _alpha = 100
-            end
-          end
-        end
-        ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-        ply:SetColor( Color( 255, 255, 255, _alpha ) )
-        for i, wp in pairs(ply:GetWeapons()) do
-          wp:SetRenderMode( RENDERMODE_TRANSALPHA )
-          wp:SetColor( Color( 255, 255, 255, _alpha ) )
-        end
-
+        RenderNoClip( ply )
         return true
       else
         printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )

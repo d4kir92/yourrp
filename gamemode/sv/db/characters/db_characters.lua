@@ -174,8 +174,11 @@ net.Receive( "DeleteCharacter", function( len, ply )
     printGM( "db", "DeleteCharacter: success"  )
     ply:KillSilent()
     local _first_character = SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'" )
-    local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( _first_character[1].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
-    local test = SQL_SELECT( "yrp_players", "*", nil )
+    if _first_character != nil then
+      _first_character = _first_character[1]
+      local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( _first_character.uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
+      local test = SQL_SELECT( "yrp_players", "*", nil )
+    end
     ply:Spawn()
   else
     printGM( "note", "DeleteCharacter: fail"  )

@@ -57,7 +57,7 @@ SQL_UPDATE( _db_name, "uses = 0", nil )
 
 if SQL_SELECT( _db_name, "*", "uniqueID = 1" ) == nil then
   printGM( "note", _db_name .. " has not the default role" )
-  local _result = SQL_INSERT_INTO( _db_name, "uniqueID, roleID, color, playermodels, removeable", "1, 'Civilian', '0,0,0', 'models/player/skeleton.mdl', 0" )
+  local _result = SQL_INSERT_INTO( _db_name, "uniqueID, roleID, color, playermodels, removeable", "1, 'Civilian', '0,0,0', '', 0" )
   printGM( "note", _result )
 end
 

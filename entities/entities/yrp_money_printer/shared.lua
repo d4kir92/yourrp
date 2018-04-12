@@ -14,7 +14,7 @@ ENT.Purpose			= "Prints money"
 ENT.Information = "Money printer by yrp"
 ENT.Instructions	= "Press E on printer"
 
-ENT.Category = "YourRP Moneyprinters"
+ENT.Category = "[YourRP] Moneyprinters"
 
 ENT.Editable = false
 ENT.Spawnable = true

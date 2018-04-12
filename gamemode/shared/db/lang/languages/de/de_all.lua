@@ -601,4 +601,8 @@ function DE_All()
   set_lang_string( "totradepos", "um zu handeln" )
   set_lang_string( "toappearancepre", "Drück" )
   set_lang_string( "toappearancepos", "um dein Aussehen zu ändern" )
+  set_lang_string( "dropitemsondeath", "Gegenstände beim Tod fallen lassen" )
+  set_lang_string( "openstoragepre", "Drücken Sie" )
+  set_lang_string( "openstoragepos", "zum öffnen" )
+  set_lang_string( "howtoworkshopcollection", "Wie füge ich eine Workshop Kollektion zum Server hinzu" )
 end

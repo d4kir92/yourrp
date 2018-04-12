@@ -86,7 +86,7 @@ function useFunction( string )
 			toggleAppearanceMenu()
 		elseif string == "openInventory" then
 			done_tutorial( "tut_mi" )
-			--toggle_inventory()
+			ToggleInventory()
 		elseif string == "openRoleMenu" then
 			done_tutorial( "tut_mr" )
 			toggleRoleMenu()
@@ -229,7 +229,6 @@ end
 
 LocalPlayer():SetNWInt( "view_range", 0 )
 LocalPlayer():SetNWInt( "view_range_view", 0 )
-LocalPlayer():SetNWInt( "view_range_aim", 0 )
 
 LocalPlayer():SetNWInt( "view_z", 0 )
 LocalPlayer():SetNWInt( "view_x", 0 )
@@ -239,13 +238,7 @@ local _view_delay = true
 function KeyPress()
 	local ply = LocalPlayer()
 	if isNoMenuOpen() then
-		if input.IsMouseDown( MOUSE_RIGHT ) then
-			--[[ When aiming ]]--
-			if tonumber( ply:GetNWInt( "view_range_aim" ) ) > 0 then
-				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_aim" ) - ply:GetNWInt( "view_range_view" )/16 )
-			end
-			ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_aim" ) )
-		elseif input.IsKeyDown( get_keybind( "view_switch" ) ) then
+		if input.IsKeyDown( get_keybind( "view_switch" ) ) then
 			--[[ When toggle view ]]--
 			if _view_delay then
 				_view_delay = false
@@ -265,7 +258,6 @@ function KeyPress()
 				end
 
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
-				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )
 			end
 		else
 			--[[ smoothing ]]--
@@ -293,7 +285,6 @@ function KeyPress()
 					ply:SetNWInt( "view_range_old", ply:GetNWInt( "view_range_view" ) )
 				end
 				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range_view" ) )
-				ply:SetNWInt( "view_range_aim", ply:GetNWInt( "view_range_view" ) )
 			end
 		end
 

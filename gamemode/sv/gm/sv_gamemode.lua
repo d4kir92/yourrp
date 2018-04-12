@@ -53,7 +53,7 @@ end
 function GM:PlayerLoadout( ply )
   printGM( "gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment." )
   if ply:HasCharacterSelected() then
-    ply:CheckInventory()
+    --ply:CheckInventory()
 
     --[[ Status Reset ]]--
     ply:SetNWBool( "cuffed", false )
@@ -62,8 +62,8 @@ function GM:PlayerLoadout( ply )
     ply:SetNWBool( "broken_arm_left", false )
     ply:SetNWBool( "broken_arm_right", false )
 
-    ply:old_give( "yrp_key" )
-    ply:old_give( "yrp_unarmed" )
+    ply:ForceGive( "yrp_key" )
+    ply:ForceGive( "yrp_unarmed" )
 
     local plyTab = ply:GetPlyTab()
 
@@ -105,7 +105,7 @@ function GM:PlayerLoadout( ply )
     local _yrp_general = SQL_SELECT( "yrp_general", "*", nil )
     if _yrp_general != nil then
       _yrp_general = _yrp_general[1]
-      ply:SetNWBool( "toggle_inventory", false ) -- LATER tobool( _yrp_general.toggle_inventory ) )
+      ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
       ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
       ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
       ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
@@ -118,19 +118,12 @@ function GM:PlayerLoadout( ply )
     end
 
     if ply:HasAccess() then
-      if !ply:HasItem( "yrp_arrest_stick" ) then
-        ply:AddSwep( "yrp_arrest_stick" )
-      end
-      if !ply:HasItem( "weapon_physgun" ) then
-        ply:AddSwep( "weapon_physgun" )
-      end
-      if !ply:HasItem( "weapon_physcannon" ) then
-        ply:AddSwep( "weapon_physcannon" )
-      end
+      ply:ForceGive( "yrp_arrest_stick" )
+      ply:ForceGive( "weapon_physgun" )
+      ply:ForceGive( "weapon_physcannon" )
     end
-
-    ply:UseSweps()
   end
+  RenderNormal( ply )
 end
 
 hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
@@ -171,8 +164,27 @@ function GM:PlayerDeathThink( ply )
   --printGM( "gm", "[PlayerDeathThink] " .. tostring( ply:YRPName() ) .. "" )
 end
 ]]--
+
+function IsNoDefaultWeapon( weapon )
+  local _class = weapon:GetClass()
+  if weapon:GetModel() != "" and _class != "yrp_key" and _class != "yrp_unarmed" then
+    return true
+  else
+    return false
+  end
+end
+
+function IsNoAdminWeapon( weapon )
+  local _class = weapon:GetClass()
+  if !weapon.AdminSpawnable and _class != "weapon_physgun" and _class != "weapon_physcannon" and _class != "gmod_tool" then
+    return true
+  else
+    return false
+  end
+end
+
 hook.Add( "DoPlayerDeath", "yrp_player_spawn", function( ply, attacker, dmg )
-  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:YRPName() ) )
+  printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:YRPName() ) .. " do death." )
   local _reward = tonumber( ply:GetNWString( "hitreward" ) )
   if isnumber( _reward ) and attacker:IsPlayer() then
     if attacker:IsAgent() then
@@ -181,10 +193,24 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn", function( ply, attacker, dmg )
       hitdone( ply, attacker )
     end
   end
+
+  if IsDropItemsOnDeathEnabled() then
+    local _weapons = ply:GetWeapons()
+    local _cooldown_item = 120
+    for i, wep in pairs( _weapons ) do
+      if IsNoAdminWeapon( wep ) and IsNoDefaultWeapon( wep ) then
+        ply:DropWeapon( wep )
+        timer.Simple( _cooldown_item, function()
+          wep:Remove()
+        end)
+      end
+    end
+  end
 end)
 
 function GM:ShutDown()
   save_clients( "Shutdown/Changelevel" )
+  SaveStorages( "Shutdown/Changelevel" )
 end
 
 function GM:GetFallDamage( ply, speed )

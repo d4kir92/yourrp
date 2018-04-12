@@ -601,4 +601,8 @@ function EN_All()
   set_lang_string( "totradepos", "to trade" )
   set_lang_string( "toappearancepre", "Press" )
   set_lang_string( "toappearancepos", "to change your appearance" )
+  set_lang_string( "dropitemsondeath", "Drop items on death" )
+  set_lang_string( "openstoragepre", "Press" )
+  set_lang_string( "openstoragepos", "to open" )
+  set_lang_string( "howtoworkshopcollection", "How to add Workshop Collection to Server" )
 end

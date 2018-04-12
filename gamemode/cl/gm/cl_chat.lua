@@ -95,31 +95,31 @@ function yrpChat.window:Paint( pw, ph )
         end
 
         local _com = yrpChat.writeField:GetText()
-        if isFullyCommand( _com, "ooc", lang_string( "ooc" ) ) then
+        if isFullyCommand( _com, "sooc", lang_string( "ooc" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
-        elseif isFullyCommand( _com, "looc", lang_string( "looc" ) ) then
+        elseif isFullyCommand( _com, "slooc", lang_string( "looc" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
-        elseif isFullyCommand( _com, "say", lang_string( "say" ) ) then
+        elseif isFullyCommand( _com, "ssay", lang_string( "say" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
-        elseif isFullyCommand( _com, "me", lang_string( "me" ) ) then
+        elseif isFullyCommand( _com, "sme", lang_string( "me" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
-        elseif isFullyCommand( _com, "yell", lang_string( "yell" ) ) then
+        elseif isFullyCommand( _com, "syell", lang_string( "yell" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
-        elseif isFullyCommand( _com, "advert", lang_string( "advert" ) ) then
+        elseif isFullyCommand( _com, "sadvert", lang_string( "advert" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
-        elseif isFullyCommand( _com, "admin", lang_string( "admin" ) ) then
+        elseif isFullyCommand( _com, "sadmin", lang_string( "admin" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
-        elseif isFullyCommand( _com, "group", lang_string( "group" ) ) then
+        elseif isFullyCommand( _com, "sgroup", lang_string( "group" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
-        elseif isFullyCommand( _com, "role", lang_string( "role" ) ) then
+        elseif isFullyCommand( _com, "srole", lang_string( "role" ) ) then
           yrpChat.writeField:SetText("")
           yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
         end

@@ -19,8 +19,8 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalStamina = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 435 )
   local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 495 )
   local sv_generalHud = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 555 )
-  --local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 615 )
-  --local sv_generalClearInventoryOnDead = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 675 )
+  local sv_generalInventory = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 615 )
+  local sv_generalDropItemsOnDeath = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 675 )
   local sv_generalGraffiti = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 735 )
   local sv_generalRestartTime = vgui.Create( "DNumberWang", settingsWindow.window.site )
   local sv_generalViewDistance = vgui.Create( "DNumberWang", settingsWindow.window.site )
@@ -41,6 +41,7 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
   sv_generalCollection:SetMin( 0 )
   sv_generalCollection:SetMax( 99999999999999 )
+  local sv_generalCollectionButton = createVGUI( "DButton", settingsWindow.window.site, 1000, 50, _center, 1760 )
 
   local oldGamemodename = ""
   function settingsWindow.window.site:Paint()
@@ -62,17 +63,10 @@ hook.Add( "open_server_general", "open_server_general", function()
     draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "server_hud" ) .. ":", "sef", ctr( _center - 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    --draw.SimpleTextOutlined( lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    --draw.SimpleTextOutlined( "(After stable release)", "sef", ctr( _center + 60 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    --draw.SimpleTextOutlined( lang_string( "clearinventoryondead" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    --draw.SimpleTextOutlined( "(After stable release)", "sef", ctr( _center + 60 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
+    draw.SimpleTextOutlined( lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "dropitemsondeath" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "graffiti" ) .. ":", "sef", ctr( _center - 10 ), ctr( 750 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "thirdpersonviewdistance" ) .. ":", "sef", ctr( _center - 10 ), ctr( 810 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
 
     draw.SimpleTextOutlined( lang_string( "realisticdamage" ) .. ":", "sef", ctr( _center - 10 ), ctr( 870 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "realisticfalldamage" ) .. ":", "sef", ctr( _center - 10 ), ctr( 930 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -111,8 +105,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalStamina:SetChecked( tobool( _yrp_general.toggle_stamina ) )
     sv_generalBuilding:SetChecked( tobool( _yrp_general.toggle_building ) )
     sv_generalHud:SetValue( tonumber( _yrp_general.toggle_hud ) )
-    --sv_generalInventory:SetValue( tonumber( _yrp_general.toggle_inventory ) )
-    --sv_generalClearInventoryOnDead:SetValue( tonumber( _yrp_general.toggle_clearinventoryondead ) )
+    sv_generalInventory:SetValue( tonumber( _yrp_general.toggle_inventory ) )
+    sv_generalDropItemsOnDeath:SetValue( tonumber( _yrp_general.toggle_dropitemsondeath ) )
     sv_generalGraffiti:SetValue( tonumber( _yrp_general.toggle_graffiti ) )
     sv_generalRestartTime:SetValue( tonumber( _yrp_general.time_restart ) )
     sv_generalViewDistance:SetValue( tonumber( _yrp_general.view_distance ) )
@@ -419,7 +413,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.SendToServer()
   end
 
-  --[[function sv_generalInventory:OnChange( bVal )
+  function sv_generalInventory:OnChange( bVal )
     local _tonumber = 0
     if bVal then
       _tonumber = 1
@@ -429,15 +423,15 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.SendToServer()
   end
 
-  function sv_generalClearInventoryOnDead:OnChange( bVal )
+  function sv_generalDropItemsOnDeath:OnChange( bVal )
     local _tonumber = 0
     if bVal then
       _tonumber = 1
     end
-    net.Start( "db_update_clearinventoryondead" )
+    net.Start( "db_update_dropitemsondeath" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
-  end]]--
+  end
 
   function sv_generalGraffiti:OnChange( bVal )
     local _tonumber = 0
@@ -562,6 +556,14 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.Start( "db_update_crosshair" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
+  end
+
+  sv_generalCollectionButton:SetText( "" )
+  function sv_generalCollectionButton:Paint( pw, ph )
+    paintButton( self, pw, ph, lang_string( "howtoworkshopcollection" ) )
+  end
+  function sv_generalCollectionButton:DoClick()
+    gui.OpenURL( "https://wiki.garrysmod.com/page/Workshop_for_Dedicated_Servers" )
   end
 
   function sv_generalCollection:OnValueChanged( Val )

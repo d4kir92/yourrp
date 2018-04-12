@@ -129,8 +129,11 @@ function set_role_values( ply )
       local groTab = ply:GetGroTab()
       local ChaTab = ply:GetChaTab()
 
+      ply:SetNWString( "licenseIDs", "" )
+
       if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
         local _storage = string.Explode( ",", ChaTab.storage )
+        printTab(_storage)
         printGM( "note", ply:YRPName() .. " Give permanent Licenses" )
         for i, lic in pairs( _storage ) do
           local _lic = SQL_SELECT( "yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'" )
@@ -214,9 +217,7 @@ function set_role_values( ply )
         local tmpSWEPTable = string.Explode( ",", db_out_str( rolTab.sweps ) )
         for k, swep in pairs( tmpSWEPTable ) do
           if swep != nil and swep != NULL and swep != "" then
-            if !ply:HasItem( swep ) then
-              ply:AddSwep( swep )
-            end
+            ply:Give( swep )
           end
         end
       else
@@ -333,11 +334,6 @@ end
 
 function check_yrp_client( ply )
   printGM( "db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")" )
-
-  if ply:IPAddress() == "loopback" then
-    printGM( "db", "[" .. ply:SteamName() .. "] -> Set UserGroup to superadmin, because owner." )
-    ply:SetUserGroup( "owner" )
-  end
 
   check_yrp_player( ply )
 

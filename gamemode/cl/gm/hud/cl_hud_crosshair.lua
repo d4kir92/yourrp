@@ -10,6 +10,7 @@ table.insert( _hl2Weapons, "weapon_bugbait" )
 table.insert( _hl2Weapons, "weapon_crossbow" )
 table.insert( _hl2Weapons, "weapon_crowbar" )
 table.insert( _hl2Weapons, "weapon_frag" )
+table.insert( _hl2Weapons, "weapon_physgun" )
 table.insert( _hl2Weapons, "weapon_physcannon" )
 table.insert( _hl2Weapons, "weapon_pistol" )
 table.insert( _hl2Weapons, "weapon_rpg" )
@@ -31,7 +32,7 @@ local reloading = 0
 local aimdownsights = 0
 function HudCrosshair()
   local ply = LocalPlayer()
-  if ply:Alive() and !ply:InVehicle() and ply:GetNWBool( "yrp_crosshair", false ) then
+  if ply:Alive() and ply:GetNWBool( "yrp_crosshair", false ) then
     if !contextMenuOpen then
       local weapon = ply:GetActiveWeapon()
       if weapon != NULL then

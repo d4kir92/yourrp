@@ -967,7 +967,7 @@ net.Receive( "yrp_roles", function( len )
         local _pre = ""
         if tonumber( yrp_roles_dbTable[k].removeable ) == 0 then
           _start_role = v
-          _pre = "(" .. lang_string( "startrole" ) .. ") "
+          _pre = "(" .. lang_string( "default" ) .. ") "
         end
         draw.SimpleTextOutlined( _pre .. yrp_roles_dbTable[k].roleID, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
@@ -1062,7 +1062,7 @@ net.Receive( "yrp_groups", function( len )
       end
       local _pre = ""
       if tonumber( yrp_groups_dbTable[k].removeable ) == 0 then
-        _pre = "(" .. lang_string( "startgroup" ) .. ") "
+        _pre = "(" .. lang_string( "default" ) .. ") "
       end
       draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
       draw.SimpleTextOutlined( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )

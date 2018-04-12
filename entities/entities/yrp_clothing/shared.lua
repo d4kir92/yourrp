@@ -14,7 +14,7 @@ ENT.Purpose			= ""
 ENT.Information = ""
 ENT.Instructions	= ""
 
-ENT.Category = "YourRP Character"
+ENT.Category = "[YourRP] Character"
 
 ENT.Editable = false
 ENT.Spawnable = true

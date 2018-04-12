@@ -5,6 +5,14 @@ local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSfJfrnPqXh91wYsWUByr1S1l
 
 if SERVER then
 
+	function ServerHasPassword()
+		if GetConVar("sv_password"):GetString() != "" then
+			return true
+		else
+			return false
+		end
+	end
+
 	function send_server_info( status, time )
 		if isnumber( time ) then
 			local _sec = time % 60
@@ -37,6 +45,7 @@ if SERVER then
 					entry["entry.1862304741"] = tostring( game.MaxPlayers() ) or "UNKNOWN"
 					entry["entry.1969171778"] = tostring( #player.GetAll() ) or "UNKNOWN"
 					entry["entry.1821263531"] = string.upper( tostring( game.IsDedicated() ) ) or "UNKNOWN"
+					entry["entry.452849918"] = string.upper( tostring( ServerHasPassword() ) )
 
 				  http.Post( _url1, entry, function( result )
 				    if result then end

@@ -30,15 +30,15 @@ function HudView()
       draw.SimpleTextOutlined( lang_string( "pressplypre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "pressplymid" ) .. " " .. tostring( _eyeTrace.Entity:RPName() ) .. " " .. lang_string( "pressplypos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     elseif _eyeTrace.Entity:IsNPC() then
       if _eyeTrace.Entity:GetNWString( "dealerID", "" ) != "" then
-        local _str = lang_string( "totradepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "totradepos" ) .. " [" .. _eyeTrace.Entity:GetNWString( "name", "" ) .. "]"
-        if _eyeTrace.Entity:GetNWBool( "immortal", false ) then
-          _str = _str .. " (" .. lang_string( "immortal" ) .. ")"
-        end
-        draw.SimpleTextOutlined( _str, "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( _eyeTrace.Entity:GetNWString( "name", "" ), "sef", ScrW()/2, ScrH2() + ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "totradepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "totradepos" ), "sef", ScrW()/2, ScrH2() + ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
     elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
       draw.SimpleTextOutlined( lang_string( "toappearancepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "toappearancepos" ), "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )
+    elseif _eyeTrace.Entity:HasStorage() and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
+      draw.SimpleTextOutlined( _eyeTrace.Entity:StorageName(), "sef", ScrW()/2, ScrH2() + ctr( 600 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "openstoragepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "openstoragepos" ), "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
   end
 end

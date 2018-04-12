@@ -14,7 +14,7 @@ ENT.Purpose			= ""
 ENT.Information = ""
 ENT.Instructions	= ""
 
-ENT.Category = "YourRP Ammunation"
+ENT.Category = "[YourRP] Ammunation"
 
 ENT.Editable = false
 ENT.Spawnable = true

@@ -59,8 +59,6 @@ function Player:getHitTarget()
   return self:GetNWEntity( "hittarget", NULL )
 end
 
-RPExtraTeams = {}
-
 function Player:getJobTable()
   --Description: Get the job table of a player.
   local _job = {}
@@ -83,6 +81,18 @@ function Player:getJobTable()
   _job.category = self:GetNWString( "groupName", "INVALID" )
 
   return _job
+end
+
+RPExtraTeams = {}
+function GetRPExtraTeams()
+  --[[ this function: may be wrong ]]--
+  RPExtraTeams = {}
+
+  for i, ply in pairs( player.GetAll() ) do
+    local _job = ply:getJobTable()
+    RPExtraTeams[ply:GetNWString( "roleName" )] = _job
+  end
+  return RPExtraTeams
 end
 
 function Player:getPocketItems()
