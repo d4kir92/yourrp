@@ -15,12 +15,57 @@ function GM:GetGameDescription()
 end
 
 concommand.Add( "yrp_status", function( ply, cmd, args )
-	printGM( "note", "YourRP Version: " .. GAMEMODE.Version )
+	hr_pre()
+	printGM( "gm", "YourRP Version:\t" .. GAMEMODE.Version )
+	printGM( "gm", "    Servername:\t" .. GetHostName() )
+	printGM( "gm", "            IP:\t" .. game.GetIPAddress() )
+
+	printGM( "gm", "           Map:\t" .. game.GetMap() )
+	printGM( "gm", "       Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
+	hr_pos()
+--[[
+# userid name                uniqueid            connected ping loss state
+#      2 "D4KiR | Arno"      STEAM_0:1:20900349  25:15       38    0 active
+]]--
+end )
+
+function makeString( tab, str_len, cut )
+	local _result = ""
+	for i = 1, str_len do
+		if tab[i] != nil then
+			_result = _result .. tab[i]
+		elseif i >= str_len-3 and cut then
+			_result = _result .. "."
+		else
+			_result = _result .. " "
+		end
+	end
+	return _result
+end
+
+concommand.Add( "yrp_players", function( ply, cmd, args )
+	hr_pre()
+	printGM( "gm", "Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
+	printGM( "gm", "ID   SteamID              Name                     Money")
+	for i, pl in pairs( player.GetAll() ) do
+		local _id = makeString( string.ToTable( pl:UserID() ), 4, false )
+		local _steamid = makeString( string.ToTable( pl:SteamID() ), 20, false )
+		local _name = makeString( string.ToTable( pl:YRPName() ), 24, true )
+		local _money = makeString( string.ToTable( pl:GetNWString( "money" ) ), 12, false )
+		local _str = string.format( "%s %s %s %s", _id, _steamid, _name, _money )
+		printGM( "gm", _str)
+	end
+	hr_pos()
+--[[
+# userid name                uniqueid            connected ping loss state
+#      2 "D4KiR | Arno"      STEAM_0:1:20900349  25:15       38    0 active
+]]--
 end )
 
 concommand.Add( "yrp__help", function( ply, cmd, args )
 	hr_pre()
   printGM( "note", "yrp_status - shows gamemode version" )
+	printGM( "note", "yrp_players - shows all players" )
 	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
 	printGM( "note", "yrp_togglesettings - toggle settings menu" )
   hr_pos()
@@ -32,7 +77,7 @@ end )
 
 hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
 	if ply:GetNWBool( "anti_bhop", false ) then
-		if !ply:GetNWBool( "canjump", false ) then
+		if !ply:GetNWBool( "canjump", false ) and ply:GetMoveType() != MOVETYPE_NOCLIP then
 			cmd:RemoveKey(IN_JUMP)
 		end
 	end
@@ -169,7 +214,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.64" --do NOT change this!
+GM.Version = "0.9.65" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

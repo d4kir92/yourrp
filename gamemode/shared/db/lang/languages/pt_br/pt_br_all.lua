@@ -604,5 +604,6 @@ function PT_BR_All()
   set_lang_string( "dropitemsondeath", "Largar itens ao morrer" )
   set_lang_string( "openstoragepre", "Pressione" )
   set_lang_string( "openstoragepos", "para abrir" )
-  set_lang_string( "howtoworkshopcollection", "How to add Workshop Collection to Server" )
+  set_lang_string( "howtoworkshopcollection", "Como adicionar uma coleção de servidor ao Workshop" )
+  set_lang_string( "playerinfo", "Informação do Player" )
 end

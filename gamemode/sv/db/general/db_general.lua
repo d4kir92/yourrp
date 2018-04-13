@@ -25,6 +25,13 @@ util.AddNetworkString( "db_update_noclip_tags" )
 util.AddNetworkString( "db_update_noclip_stealth" )
 util.AddNetworkString( "db_update_noclip_effect" )
 
+util.AddNetworkString( "db_update_tag_info" )
+util.AddNetworkString( "db_update_tag_name" )
+util.AddNetworkString( "db_update_tag_role" )
+util.AddNetworkString( "db_update_tag_group" )
+util.AddNetworkString( "db_update_tag_hp" )
+util.AddNetworkString( "db_update_tag_ar" )
+
 util.AddNetworkString( "db_update_collection" )
 
 local _db_name = "yrp_general"
@@ -57,6 +64,13 @@ SQL_ADD_COLUMN( _db_name, "toggle_noclip_crow", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_noclip_stealth", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "toggle_noclip_tags", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "toggle_noclip_effect", "INT DEFAULT 1" )
+
+SQL_ADD_COLUMN( _db_name, "tag_info", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "tag_name", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "tag_role", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "tag_group", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "tag_hp", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "tag_ar", "INT DEFAULT 0" )
 
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
 
@@ -123,6 +137,78 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+net.Receive( "db_update_tag_ar", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.tag_ar = _nw
+    SQL_UPDATE( "yrp_general", "tag_ar = " .. yrp_general.tag_ar, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " tag_ar" )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "tag_ar", tobool(_nw) )
+  end
+end)
+
+net.Receive( "db_update_tag_hp", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.tag_hp = _nw
+    SQL_UPDATE( "yrp_general", "tag_hp = " .. yrp_general.tag_hp, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " tag_hp" )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "tag_hp", tobool(_nw) )
+  end
+end)
+
+net.Receive( "db_update_tag_group", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.tag_group = _nw
+    SQL_UPDATE( "yrp_general", "tag_group = " .. yrp_general.tag_group, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " tag_group" )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "tag_group", tobool(_nw) )
+  end
+end)
+
+net.Receive( "db_update_tag_role", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.tag_role = _nw
+    SQL_UPDATE( "yrp_general", "tag_role = " .. yrp_general.tag_role, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " tag_info" )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "tag_role", tobool(_nw) )
+  end
+end)
+
+net.Receive( "db_update_tag_name", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.tag_name = _nw
+    SQL_UPDATE( "yrp_general", "tag_name = " .. yrp_general.tag_name, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " tag_name" )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "tag_name", tobool(_nw) )
+  end
+end)
+
+net.Receive( "db_update_tag_info", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.tag_info = _nw
+    SQL_UPDATE( "yrp_general", "tag_info = " .. yrp_general.tag_info, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " tag_info" )
+  end
+  for i, p in pairs( player.GetAll() ) do
+    p:SetNWBool( "tag_info", tobool(_nw) )
+  end
+end)
 
 net.Receive( "db_update_anti_bhop", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

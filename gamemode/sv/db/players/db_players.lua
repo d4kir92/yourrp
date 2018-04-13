@@ -122,6 +122,13 @@ function set_role_values( ply )
           ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
           ply:SetNWBool( "anti_bhop", tobool( _gen_tab.toggle_anti_bhop ) )
           ply:SetNWBool( "toggle_building", tobool( _gen_tab.toggle_building ) )
+
+          ply:SetNWBool( "tag_info", tobool( _gen_tab.tag_info ) )
+          ply:SetNWBool( "tag_name", tobool( _gen_tab.tag_name ) )
+          ply:SetNWBool( "tag_role", tobool( _gen_tab.tag_role ) )
+          ply:SetNWBool( "tag_group", tobool( _gen_tab.tag_group ) )
+          ply:SetNWBool( "tag_hp", tobool( _gen_tab.tag_hp ) )
+          ply:SetNWBool( "tag_ar", tobool( _gen_tab.tag_ar ) )
         end
       end
 
@@ -133,7 +140,6 @@ function set_role_values( ply )
 
       if worked( rolTab, "set_role_values rolTab" ) and worked( ChaTab, "set_role_values ChaTab" ) then
         local _storage = string.Explode( ",", ChaTab.storage )
-        printTab(_storage)
         printGM( "note", ply:YRPName() .. " Give permanent Licenses" )
         for i, lic in pairs( _storage ) do
           local _lic = SQL_SELECT( "yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'" )

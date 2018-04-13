@@ -59,6 +59,7 @@ function GetEntityItemSize( ent )
   local _scale = 6
   _result.sizew = _axis[1].value/_scale - _axis[1].value/_scale%1
   _result.sizeh = _axis[2].value/_scale - _axis[2].value/_scale%1
+
   if _result.sizew < 1 then
     _result.sizew = 1
   end

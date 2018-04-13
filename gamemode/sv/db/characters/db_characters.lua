@@ -25,6 +25,7 @@ SQL_ADD_COLUMN( _db_name, "storage", "TEXT DEFAULT ''" )
 
 SQL_ADD_COLUMN( _db_name, "keynrs", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "rpname", "TEXT DEFAULT 'ID_RPNAME'" )
+SQL_ADD_COLUMN( _db_name, "rpdescription", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "gender", "TEXT DEFAULT 'male'" )
 SQL_ADD_COLUMN( _db_name, "money", "TEXT DEFAULT '250'" )
 SQL_ADD_COLUMN( _db_name, "moneybank", "TEXT DEFAULT '500'" )
@@ -36,13 +37,18 @@ SQL_ADD_COLUMN( _db_name, "map", "TEXT" )
 --db_is_empty( _db_name )
 
 util.AddNetworkString( "change_rpname" )
-
 net.Receive( "change_rpname", function( len, ply )
   local _new_rp_name = net.ReadString()
   SQL_UPDATE( "yrp_characters", "rpname = '" .. db_sql_str( _new_rp_name ) .. "'", "uniqueID = " .. ply:CharID() )
   ply:SetNWString( "rpname", db_sql_str( _new_rp_name ) )
 end)
 
+util.AddNetworkString( "change_rpdescription" )
+net.Receive( "change_rpdescription", function( len, ply )
+  local _new_rp_description = net.ReadString()
+  SQL_UPDATE( "yrp_characters", "rpdescription = '" .. db_sql_str( _new_rp_description ) .. "'", "uniqueID = " .. ply:CharID() )
+  ply:SetNWString( "rpdescription", db_sql_str( _new_rp_description ) )
+end)
 
 util.AddNetworkString( "charGetGroups" )
 util.AddNetworkString( "charGetRoles" )

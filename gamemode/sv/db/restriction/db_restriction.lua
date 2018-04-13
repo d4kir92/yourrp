@@ -199,14 +199,13 @@ function RenderNormal( ply )
 end
 
 hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
-
   if !bool then
-    --[[ TURNED OFF ]]--
+    -- TURNED OFF
     RenderNormal( ply )
 
     local _pos = ply:GetPos()
 
-    --[[ Stuck? ]]--
+    -- Stuck?
     local tr = {
       start = _pos,
       endpos = _pos,
@@ -217,7 +216,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
     local _t = util.TraceHull( tr )
 
     if _t.Hit then
-      --[[ Up ]]--
+      -- Up
       local trup = {
         start = _pos+Vector(0,0,100),
         endpos = _pos,
@@ -227,7 +226,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
       }
       local _tup = util.TraceHull( trup )
 
-      --[[ Down ]]--
+      -- Down
       local trdn = {
         start = _pos,
         endpos = _pos+Vector(0,0,100),
@@ -253,7 +252,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
       end)
     end
   else
-    --[[ TURNED ON ]]--
+    -- TURNED ON
     local _tmp = SQL_SELECT( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
     if worked( _tmp, "PlayerNoClip failed" ) then
       _tmp = _tmp[1]

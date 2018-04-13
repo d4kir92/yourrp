@@ -31,7 +31,7 @@ SWEP.Secondary.Ammo = "bandagesecondary"
 
 SWEP.DrawCrosshair = true
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "fist"
 function SWEP:Initialize()
 	self:SetWeaponHoldType( self.HoldType )
 end

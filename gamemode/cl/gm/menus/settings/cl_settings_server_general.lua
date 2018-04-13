@@ -38,6 +38,13 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalNoClipStealth = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1500 )
   local sv_generalNoClipEffect = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 1560 )
 
+  local sv_generalTagInfo = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 315 ) )
+  local sv_generalTagName = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 375 ) )
+  local sv_generalTagRole = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 435 ) )
+  local sv_generalTagGroup = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 495 ) )
+  local sv_generalTagHP = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 555 ) )
+  local sv_generalTagAR = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 615 ) )
+
   local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
   sv_generalCollection:SetMin( 0 )
   sv_generalCollection:SetMax( 99999999999999 )
@@ -83,6 +90,13 @@ hook.Add( "open_server_general", "open_server_general", function()
     draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "effect" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     draw.SimpleTextOutlined( lang_string( "collection" ) .. ":", "sef", ctr( _center - 10 ), ctr( 1725 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( lang_string( "playerinfo" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "role" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "health" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "armor" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -124,6 +138,13 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalNoClipEffect:SetValue( tonumber( _yrp_general.toggle_noclip_effect ) )
 
     sv_generalCollection:SetValue( tonumber( _yrp_general.collection ) )
+
+    sv_generalTagInfo:SetValue( tonumber( _yrp_general.tag_info ) )
+    sv_generalTagName:SetValue( tonumber( _yrp_general.tag_name ) )
+    sv_generalTagRole:SetValue( tonumber( _yrp_general.tag_role ) )
+    sv_generalTagGroup:SetValue( tonumber( _yrp_general.tag_group ) )
+    sv_generalTagHP:SetValue( tonumber( _yrp_general.tag_hp ) )
+    sv_generalTagAR:SetValue( tonumber( _yrp_general.tag_ar ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -578,6 +599,66 @@ hook.Add( "open_server_general", "open_server_general", function()
       _tonumber = 1
     end
     net.Start( "db_update_anti_bhop" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalTagInfo:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_tag_info" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalTagName:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_tag_name" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalTagRole:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_tag_role" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalTagGroup:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_tag_group" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalTagHP:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_tag_hp" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalTagAR:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_tag_ar" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
   end

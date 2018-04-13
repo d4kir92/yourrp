@@ -27,13 +27,13 @@ function SaveStorages( str )
   for i, ent in pairs( _ents ) do
     if ent:GetNWString( "storage_uid", "" ) != "" then
       local _pos = string.Explode( " ", tostring( ent:GetPos() ) )
-      local _posx = math.Round( _pos[1], 2 )
-      local _posy = math.Round( _pos[2], 2 )
-      local _posz = math.Round( _pos[3], 2 )
+      local _posx = _pos[1]
+      local _posy = _pos[2]
+      local _posz = _pos[3]
       local _ang = string.Explode( " ", tostring( ent:GetAngles() ) )
-      local _angp = math.Round( _ang[1], 2 )
-      local _angy = math.Round( _ang[2], 2 )
-      local _angr = math.Round( _ang[3], 2 )
+      local _angp = _ang[1]
+      local _angy = _ang[2]
+      local _angr = _ang[3]
 
       SQL_UPDATE( _db_name, "posx = '" .. _posx .. "', posy = '" .. _posy .. "', posz = '" .. _posz .. "', angp = '" .. _angp .. "', angy = '" .. _angy .. "', angr = '" .. _angr .. "'", "uniqueID = '" .. ent:GetNWString( "storage_uid" ) .. "'" )
     end
@@ -73,13 +73,13 @@ function InitStorage( ent, sizew, sizeh )
       --[[ NEW STORAGE ]]--
       printGM( "note", "NEW STORAGE( " .. tostring( ent ) .. ", " .. sizew .. ", " .. sizeh .. " )" )
       local _pos = string.Explode( " ", tostring( ent:GetPos() ) )
-      local _posx = math.Round( _pos[1], 2 )
-      local _posy = math.Round( _pos[2], 2 )
-      local _posz = math.Round( _pos[3], 2 )
+      local _posx = _pos[1]
+      local _posy = _pos[2]
+      local _posz = _pos[3]
       local _ang = string.Explode( " ", tostring( ent:GetAngles() ) )
-      local _angp = math.Round( _ang[1], 2 )
-      local _angy = math.Round( _ang[2], 2 )
-      local _angr = math.Round( _ang[3], 2 )
+      local _angp = _ang[1]
+      local _angy = _ang[2]
+      local _angr = _ang[3]
       local _r = SQL_INSERT_INTO( _db_name, "map, sizew, sizeh, ClassName, posx, posy, posz, angp, angy, angr", "'" .. game.GetMap() .. "', " .. sizew .. ", " .. sizeh .. ", '" .. ent:GetClass() .. "', '" .. _posx .. "', '" .. _posy .. "', '" .. _posz .. "', '" .. _angp .. "', '" .. _angy .. "', '" .. _angr .. "'"  )
       local _storages = SQL_SELECT( _db_name, "*", nil )
       for i, stor in pairs( _storages ) do

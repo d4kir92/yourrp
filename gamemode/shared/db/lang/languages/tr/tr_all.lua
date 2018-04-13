@@ -604,5 +604,6 @@ function TR_All()
   set_lang_string( "dropitemsondeath", "Öldüğünüzde eşyaları düşür" )
   set_lang_string( "openstoragepre", "Açmak için" )
   set_lang_string( "openstoragepos", "tuşuna basın" )
-  set_lang_string( "howtoworkshopcollection", "How to add Workshop Collection to Server" )
+  set_lang_string( "howtoworkshopcollection", "Sunucuya Atölye koleksiyonu nasıl eklenir" )
+  set_lang_string( "playerinfo", "Player information" )
 end

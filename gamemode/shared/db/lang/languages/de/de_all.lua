@@ -605,4 +605,5 @@ function DE_All()
   set_lang_string( "openstoragepre", "Drücken Sie" )
   set_lang_string( "openstoragepos", "zum öffnen" )
   set_lang_string( "howtoworkshopcollection", "Wie füge ich eine Workshop Kollektion zum Server hinzu" )
+  set_lang_string( "playerinfo", "Spielerinformationen" )
 end

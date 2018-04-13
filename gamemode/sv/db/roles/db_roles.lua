@@ -366,7 +366,7 @@ net.Receive( "openInteractMenu", function( len, ply )
             tmpSearch = false
           end
           if tmpCounter >= 100 then
-            printGM( "error", "counter" )
+            printGM( "note", "You have a loop in your preroles!" )
             tmpSearch = false
           end
           tmpCounter = tmpCounter + 1

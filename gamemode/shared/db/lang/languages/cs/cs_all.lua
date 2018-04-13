@@ -604,5 +604,6 @@ function CS_All()
   set_lang_string( "dropitemsondeath", "Po smrti upustit předměty" )
   set_lang_string( "openstoragepre", "Zmáčknutím" )
   set_lang_string( "openstoragepos", "otevřeš" )
-  set_lang_string( "howtoworkshopcollection", "How to add Workshop Collection to Server" )
+  set_lang_string( "howtoworkshopcollection", "Jak přidat z Workshopu kolekci na server" )
+  set_lang_string( "playerinfo", "Player information" )
 end

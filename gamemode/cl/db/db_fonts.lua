@@ -87,6 +87,7 @@ function changeFontSize()
 	createFont( "gmbase", tmpFont, 16, 500, false )
 
 	createFontOld( "plates", tmpFont, 30, 1000, true )
+	createFontOld( "plyinfo", tmpFont, 18, 800, true )
 
 	createFont( "mdMenu", tmpFont, 17, 1000, false )
 
@@ -102,9 +103,9 @@ function changeFontSize()
 	createFont( "roleInfoHeader", tmpFont, 24, _weight, true )
 	createFont( "roleInfoText", tmpFont, 20, _weight, true )
 
-	createFont( "charTitle", tmpFont, 18, _weight, false )
-	createFont( "charHeader", tmpFont, 18, _weight, false )
-	createFont( "charText", tmpFont, 18, _weight, false )
+	createFont( "charTitle", tmpFont, 20, 800, false )
+	createFont( "charHeader", tmpFont, 20, 800, false )
+	createFont( "charText", tmpFont, 20, 800, false )
 
 	createFont( "pmT", tmpFont, 18, _weight, false )
 	createFont( "weaponT", tmpFont, 14, _weight, false )
@@ -135,7 +136,7 @@ function changeFontSize()
 	createFont( "utsf", tmpFont, 24, _weight, false )
 	createFont( "blsf", tmpFont, 24, _weight, false )
 	createFont( "rtsf", tmpFont, 24, _weight, false )
-	
+
 	createFont( "sef", tmpFont, 24, 1, false )
 
 	timer.Create( "createFontDB", 0.1, 0, function()

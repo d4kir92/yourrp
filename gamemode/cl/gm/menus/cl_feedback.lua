@@ -84,7 +84,7 @@ function openFeedbackMenu()
       http.Post( _url, entry, function( result )
         if result then end
       end, function( failed )
-        printGM( "error", failed )
+        printGM( "error", "Feedback-API: " .. tostring( failed ) )
       end )
 
       local _net_table = {}

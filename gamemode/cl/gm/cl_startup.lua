@@ -143,7 +143,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
           local tmpPointer = tmpCache[k]
           function tmpPointer:Paint( pw, ph )
             self.text = ""
-            self.color = Color( 255, 255, 255 )
+            self.color = Color( 0, 0, 0 )
             if tmpSelected[k].selected then
               self.color = Color( 0, 255, 0 )
               self.tcolor = Color( 255, 255, 255, 255 )
@@ -177,7 +177,6 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
                 surfaceText( string.upper( self.text ) .. "!", "plates", pw/2, ph/2, self.color, 1, 1 )
               end
             end
-
           end
 
           if v.WorldModel != nil and v.WorldModel != "" then
@@ -200,7 +199,7 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
           local tmpButton = createD( "DButton", tmpPointer, ctr( item.w ), ctr( item.h ), 0, 0 )
           tmpButton:SetText( "" )
           function tmpButton:Paint( pw, ph )
-            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+            --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
             local text = "" --lang_string( "notadded" )
             if tmpSelected[k].selected then
               text = lang_string( "added" )
@@ -219,7 +218,14 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
             elseif v.ViewModel != nil and v.ViewModel != "" then
               _test = v.ViewModel
             end
-            draw.SimpleTextOutlined( _test, "DermaDefault", pw - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+
+            surface.SetFont( "DermaDefaultBold" )
+            local _tw, _th = surface.GetTextSize( _test )
+            local _x = ctr( 4 )
+            local _y = ctr( 4 )
+            surfaceBox( _x, _y, _tw + ctr( 8 ), _th + ctr( 8 ), Color( 0, 0, 0 ) )
+            surfaceText( _test, "DermaDefaultBold",  _x + ctr( 4 ), _y + ctr( 15 ), Color( 255, 255, 255, 255 ), 0, 1 )
+            --draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
 
             draw.SimpleTextOutlined( text, "HudBars", pw/2, ph/2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
           end
@@ -558,45 +564,131 @@ function surfaceBox( x, y, w, h, color )
 end
 
 function drawPlate( ply, string, z, color )
-  --if ply:Alive() then
-    local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
-    local pos = ply:GetPos() + _abstand
-    if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
-      pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + _abstand
+  local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
+  local pos = ply:GetPos() + _abstand
+  if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
+    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + _abstand
+  end
+  local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
+  local sca = ply:GetModelScale()/4
+  local str = string
+  local strSize = string.len( str ) + 3
+  cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
+    surface.SetFont( "plates" )
+    local _tw, _th = surface.GetTextSize( str )
+    _tw = math.Round( _tw * 1.08, 0 )
+    _th = _th
+    color.a = math.Round( color.a*0.5, 0 )
+    surfaceBox( -_tw/2, 0, _tw, _th, color )
+    surfaceText( str, "plates", 0, _th/2+1, Color( 255, 255, 255, color.a+1 ), 1, 1 )
+  cam.End3D2D()
+end
+
+function drawPlayerInfo( ply, string, x, y, z, w, h, color, alpha, icon, cur, max, color2 )
+  local pos = ply:GetPos()
+  local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
+  local sca = 0.25
+  x = x * (0.75 + ply:GetModelScale()*0.25)
+  y = y * (0.75 + ply:GetModelScale()*0.25)
+  local str = string
+  local strSize = string.len( str ) + 3
+  --cam.Start3D2D( pos + Vector( 0, 0, z ) + ply:GetRight() * y + ply:GetForward() * x, ang, sca )
+  cam.Start3D2D( pos + Vector( 0, 0, z ) + LocalPlayer():GetRight() * y + LocalPlayer():GetForward() * x, ang, sca )
+    surface.SetFont( "plyinfo" )
+    local _tw, _th = surface.GetTextSize( str )
+    _tw = _tw + 8
+    _th = _th
+    color.a = math.Round( color.a*0.5, 0 )
+
+    surfaceBox( 0, 0, w, h, color )
+
+    if cur != nil then
+      color2.a = alpha
+      surfaceBox( 0, 0, cur/max*w, h, color2 )
     end
-    local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
-    local sca = ply:GetModelScale()/4
-    local str = string
-    local strSize = string.len( str ) + 3
-    cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
-      surface.SetFont( "plates" )
-      local _tw, _th = surface.GetTextSize( str )
-      _tw = math.Round( _tw * 1.08, 0 )
-      _th = _th
-      color.a = math.Round( color.a*0.5, 0 )
-      surfaceBox( -_tw/2, 0, _tw, _th, color )
-      surfaceText( str, "plates", 0, _th/2+1, Color( 255, 255, 255, color.a+1 ), 1, 1 )
-    cam.End3D2D()
-  --end
+    if icon != nil then
+      surface.SetDrawColor( 255, 255, 255, alpha )
+      surface.SetMaterial( icon	)
+      surface.DrawTexturedRect( 2, 2, h-4, h-4 )
+    end
+
+    color.a = alpha
+    surfaceText( str, "plyinfo", 5+h, h/2, Color( 255, 255, 255, color.a+1 ), 0, 1 )
+
+  cam.End3D2D()
 end
 
 hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
-  return false
+  return true
 end)
+
+local _icons = {}
+_icons["hp"] = Material( "icon16/heart.png" )
+_icons["ar"] = Material( "icon16/shield.png" )
+_icons["gn"] = Material( "icon16/group.png" )
+_icons["rn"] = Material( "icon16/user_gray.png" )
+_icons["na"] = Material( "icon16/user.png" )
+_icons["sa"] = Material( "icon16/money_add.png" )
+_icons["mo"] = Material( "icon16/money.png" )
 
 function drawPlates( ply )
   if ply:Alive() then
-    if ply:GetNWBool( "tag_dev", false ) then
-      if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
-        drawPlate( ply, "DEVELOPER", 9, Color( 0, 0, 0, ply:GetColor().a ) )
-      end
-    end
     if ply:GetNWBool( "tag_ug", false ) or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
       if ply:HasAccess() then
         drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
       end
     end
+    if ply:GetNWBool( "tag_dev", false ) then
+      if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
+        drawPlate( ply, "DEVELOPER", 9, Color( 0, 0, 0, ply:GetColor().a ) )
+      end
+    end
+
+    if ply:GetNWBool( "tag_info", false ) then
+      if ply != LocalPlayer() then
+        local _distance = 200
+        if LocalPlayer():GetPos():Distance( ply:GetPos() ) < _distance then
+          local _alpha = 255-255*(LocalPlayer():GetPos():Distance( ply:GetPos() ) / _distance )
+          if ply:GetColor().a < _alpha then
+            _alpha = ply:GetColor().a
+          end
+          local _z = 50
+          local _x = -10
+          local _y = 18
+          local _w = 160
+          local _h = 20
+          if ply:GetNWBool( "tag_name", false ) then
+            drawPlayerInfo( ply, ply:RPName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["na"] )
+            _z = _z + 5
+          end
+          if ply:GetNWBool( "tag_role", false ) then
+            drawPlayerInfo( ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["rn"] )
+            _z = _z + 5
+          end
+          if ply:GetNWBool( "tag_group", false ) then
+            drawPlayerInfo( ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["gn"] )
+            _z = _z + 5
+          end
+          if ply:GetNWBool( "tag_hp", false ) then
+            drawPlayerInfo( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color( 150, 52, 52, 200 ) )
+            _z = _z + 5
+          end
+          if ply:GetNWBool( "tag_ar", false ) then
+            drawPlayerInfo( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "" ) .. " " .. lang_string( "armor" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString( "GetMaxArmor", "" ), Color( 52, 150, 72, 200 ) )
+            _z = _z + 5
+          end
+          if LocalPlayer():HasAccess() then
+            drawPlayerInfo( ply, "+" .. ply:GetNWString( "moneypre", "" ) .. ply:GetNWString( "salary", "" ) .. ply:GetNWString( "moneypos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sa"] )
+            _z = _z + 5
+
+            drawPlayerInfo( ply, ply:GetNWString( "moneypre", "" ) .. ply:GetNWString( "money", "" ) .. ply:GetNWString( "moneypos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["mo"] )
+            _z = _z + 5
+          end
+        end
+      end
+    end
   end
+
   ply:drawPlayerInfo()
   ply:drawWantedInfo()
 end

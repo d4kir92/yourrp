@@ -472,6 +472,11 @@ function Player:GetRoleName()
   return _rn
 end
 
+function Player:GetGroupName()
+  local _rg = self:GetNWString( "groupName" )
+  return _rg
+end
+
 function Player:HasLicense( license )
   local _licenseIDs = self:GetNWString( "licenseIDs", "" )
 

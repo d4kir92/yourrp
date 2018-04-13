@@ -90,7 +90,7 @@ function anti_bunnyhop( ply )
 	  ply:SetNWBool( "canjump", false )
 	elseif ply:OnGround() and !ply:GetNWBool( "jump_resetting", false ) and !ply:GetNWBool( "canjump", false ) then
 		ply:SetNWBool( "jump_resetting", true )
-		timer.Simple( 0.2, function()
+		timer.Simple( 0.4, function()
 			ply:SetNWBool( "jump_resetting", false )
 			ply:SetNWBool( "canjump", true )
 		end)

@@ -605,4 +605,5 @@ function EN_All()
   set_lang_string( "openstoragepre", "Press" )
   set_lang_string( "openstoragepos", "to open" )
   set_lang_string( "howtoworkshopcollection", "How to add Workshop Collection to Server" )
+  set_lang_string( "playerinfo", "Player information" )
 end

@@ -62,15 +62,18 @@ function hasGroupRowPlayers( id )
 end
 
 function drawGroupPlayers( id )
+  elePos.y = elePos.y + 50
   for k, ply in pairs( player.GetAll() ) do
     if ply != NULL then
       if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
-        elePos.y = elePos.y + 50
-        local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+        local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 128 ), ctr( elePos.x ), ctr( elePos.y ) )
         _tmpPly:SetText( "" )
+        _tmpPly.gerade = k%2
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
         _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
+        _tmpPly.groupname = ply:GetNWString( "groupName" ) or ""
+        _tmpPly.rank = ply:GetUserGroup() or ""
         _tmpPly.ping = ply:Ping() or ""
         _tmpPly.usergroup = ply:GetUserGroup() or ""
         _tmpPly.steamname = ply:SteamName() or ""
@@ -86,21 +89,59 @@ function drawGroupPlayers( id )
         end
         _tmpPly.playtime = _pt.h .. ":" .. _pt.m
 
+        local _tmp_p_ava = createD( "DPanel", _tmpPly, ctr( 128-8 ), ctr( 128-8 ), ctr( 4 ), ctr( 4 ) )
+        _tmp_p_ava.Avatar = createD( "AvatarImage", _tmp_p_ava, ctr( 128-8 ), ctr( 128-8 ), 0, 0 )
+        _tmp_p_ava.Avatar:SetPlayer( ply, ctr( 128-8 ) )
+        _tmp_p_ava.Avatar:SetPaintedManually( true )
+        function _tmp_p_ava:Paint( pw, ph )
+          render.ClearStencil()
+          render.SetStencilEnable( true )
+
+            render.SetStencilWriteMask( 1 )
+            render.SetStencilTestMask( 1 )
+
+            render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+
+            render.SetStencilFailOperation( STENCILOPERATION_INCR )
+            render.SetStencilPassOperation( STENCILOPERATION_KEEP )
+            render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
+
+            render.SetStencilReferenceValue( 1 )
+
+            drawRoundedBox( ph/2, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
+
+            render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+
+            self.Avatar:SetPaintedManually(false)
+            self.Avatar:PaintManual()
+            --draw.SimpleTextOutlined( _tmpPly.level, "SettingsHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            self.Avatar:SetPaintedManually(true)
+
+          render.SetStencilEnable( false )
+        end
+
         function _tmpPly:Paint( pw, ph )
+          local _extra = 0
+          if self.gerade == 0 then
+            _extra = 40
+          end
           if self:IsHovered() then
-            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+            if self.gerade == 1 then
+            end
+            draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( 255, 255, 0, 200 ), true, false, true, false )
           else
-            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+            draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( 0+_extra, 0+_extra, 0+_extra, 200 ), true, false, true, false )
           end
 
-          --draw.SimpleTextOutlined( self.level, "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 600 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.rpname, "sef", ctr( 128+16 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( string.upper( self.rank ), "sef", ctr( 128+16 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( self.rpname, "sef", ctr( 620 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 700 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.groupname, "sef", ctr( 700 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( self.playtime, "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          draw.SimpleTextOutlined( self.playtime, "sef", pw - ctr( 180 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
           draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
@@ -114,7 +155,7 @@ function drawGroupPlayers( id )
           _info:MakePopup()
           _info.startup = true
           function _info:Paint( pw, ph )
-            if pa( _tmpPly ) then
+            if !pa( _tmpPly ) then
               self:Remove()
             else
               if !self:HasFocus() and self.startup then
@@ -132,14 +173,11 @@ function drawGroupPlayers( id )
               draw.SimpleTextOutlined( string.upper( _tmpPly.steamname ), "sef", ctr( 10 ), ctr( 440 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
               if LocalPlayer():HasAccess() then
-                draw.SimpleTextOutlined( lang_string( "usergroup" ) .. ":", "sef", ctr( 10 ), ctr( 500 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-                draw.SimpleTextOutlined( string.upper( _tmpPly.usergroup ), "sef", ctr( 10 ), ctr( 540 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( lang_string( "moneychar" ) .. ":", "sef", ctr( 10 ), ctr( 500 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( formatMoney( ply, _tmpPly.money ), "sef", ctr( 10 ), ctr( 540 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-                draw.SimpleTextOutlined( lang_string( "moneychar" ) .. ":", "sef", ctr( 10 ), ctr( 600 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-                draw.SimpleTextOutlined( formatMoney( ply, _tmpPly.money ), "sef", ctr( 10 ), ctr( 640 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-                draw.SimpleTextOutlined( lang_string( "moneybank" ) .. ":", "sef", ctr( 10 ), ctr( 700 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-                draw.SimpleTextOutlined( formatMoney( ply, _tmpPly.moneybank ), "sef", ctr( 10 ), ctr( 740 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( lang_string( "moneybank" ) .. ":", "sef", ctr( 10 ), ctr( 600 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+                draw.SimpleTextOutlined( formatMoney( ply, _tmpPly.moneybank ), "sef", ctr( 10 ), ctr( 640 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
               end
             end
           end
@@ -153,6 +191,8 @@ function drawGroupPlayers( id )
             ply:ShowProfile()
           end
         end
+
+        elePos.y = elePos.y + 128
       end
     end
   end
@@ -176,13 +216,13 @@ function drawGroup( id, name, color )
       draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
       --draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "role" ), "sef", ctr( 600 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "name" ) .. "/" .. lang_string( "usergroup" ), "sef", ctr( 128 + 16 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "name" ), "sef", ctr( 620 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "role" ) .. "/" .. lang_string( "group" ), "sef", ctr( 700 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( "Lang.", "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "Language", "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", pw - ctr( 130 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", pw - ctr( 180 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       --draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -290,6 +330,7 @@ function scoreboard:show_sb()
   _SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
   _SBFrame:SetTitle( "" )
   _SBFrame:ShowCloseButton( false )
+  _SBFrame:SetDraggable( false )
   _SBFrame:Center()
 
   _SBFrame:MakePopup()
