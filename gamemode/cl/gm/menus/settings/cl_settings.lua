@@ -75,7 +75,7 @@ function openSettings()
   --Frame
   settingsWindow.window = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
   function settingsWindow.window:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
   end
   function settingsWindow.window:OnClose()
     closeMenu()
@@ -98,7 +98,7 @@ function openSettings()
     settingsWindow.window:AddCategory( _server_admin )
 
     settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
-    --settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
+    settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
     settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
     settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
     settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server_admin, "icon16/user_edit.png" )

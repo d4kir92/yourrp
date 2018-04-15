@@ -47,6 +47,8 @@ function GM:PlayerAuthed( ply, steamid, uniqueid )
 
   printGM( "gm", "[PlayerAuthed] " .. ply:YRPName() )
 
+  SetDesign( ply )
+
   --ply:KillSilent()
   ply:resetUptimeCurrent()
   check_yrp_client( ply )
@@ -128,7 +130,7 @@ function GM:PlayerLoadout( ply )
   RenderNormal( ply )
 end
 
-hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
+hook.Add( "PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function( ply )
   printGM( "gm", "[PlayerSpawn] " .. tostring( ply:YRPName() ) .. " spawned." )
   if ply:GetNWBool( "can_respawn", true ) then
     ply:SetNWBool( "can_respawn", false )
@@ -141,7 +143,7 @@ hook.Add( "PlayerSpawn", "yrp_player_spawn", function( ply )
   end
 end)
 
-hook.Add( "PostPlayerDeath", "yrp_player_spawn", function( ply )
+hook.Add( "PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function( ply )
   printGM( "gm", "[PostPlayerDeath] " .. tostring( ply:YRPName() ) .. " is dead." )
   ply:StopBleeding()
 
@@ -185,7 +187,7 @@ function IsNoAdminWeapon( weapon )
   end
 end
 
-hook.Add( "DoPlayerDeath", "yrp_player_spawn", function( ply, attacker, dmg )
+hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, attacker, dmg )
   printGM( "gm", "[DoPlayerDeath] " .. tostring( ply:YRPName() ) .. " do death." )
   local _reward = tonumber( ply:GetNWString( "hitreward" ) )
   if isnumber( _reward ) and attacker:IsPlayer() then

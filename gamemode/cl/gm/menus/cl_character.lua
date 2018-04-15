@@ -92,7 +92,7 @@ function openCharacterCreation()
   local ply = LocalPlayer()
   character.cause = lang_string( "enteraname" )
   character.rpname = ""
-  character.gender = "male"
+  character.gender = "gendermale"
   character.groupID = 1
   character.roleID = 1
   character.hp = 0
@@ -142,7 +142,7 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( character.rpname, "charText", ctr( 256 + 20 ), ctr( 130 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.SimpleTextOutlined( lang_string( "gender" ), "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( character.gender, "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( character.gender ), "charText", ctr( 256 + 20 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
   end
   local avatar = createD( "AvatarImage", identification, ctr( 256 ), ctr( 256 ), ctr( 10 ), ctr( 360 - 10 - 256 ) )
@@ -172,7 +172,7 @@ function openCharacterCreation()
     if self:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.hovered )
     else
-      if character.gender == "male" then
+      if character.gender == "gendermale" then
         draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.selected )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
@@ -181,7 +181,7 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( "♂", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function charactersGenderMale:DoClick()
-    character.gender = "male"
+    character.gender = "gendermale"
   end
 
   local charactersGenderFemale = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)-50 ), ctr( 70 ), ctr( 5 ) )
@@ -190,7 +190,7 @@ function openCharacterCreation()
     if self:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.hovered )
     else
-      if character.gender == "female" then
+      if character.gender == "genderfemale" then
         draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.selected )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
@@ -199,7 +199,7 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( "♀", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function charactersGenderFemale:DoClick()
-    character.gender = "female"
+    character.gender = "genderfemale"
   end
 
   local charactersGenderOther = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)+50+20 ), ctr( 70 ), ctr( 5 ) )
@@ -208,7 +208,7 @@ function openCharacterCreation()
     if self:IsHovered() then
       draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.hovered )
     else
-      if character.gender == "other" then
+      if character.gender == "genderother" then
         draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.selected )
       else
         draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
@@ -217,7 +217,7 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( "⚲", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function charactersGenderOther:DoClick()
-    character.gender = "other"
+    character.gender = "genderother"
   end
 
   data.x = border
@@ -644,7 +644,7 @@ function openCharacterSelection()
   local _close = createD( "DButton", _cs.frame, ctr( 50 ), ctr( 50 ), BScrW() - ctr( 60 ), ctr( 10 ) )
   _close:SetText( "" )
   function _close:Paint( pw, ph )
-    paintButton( self, pw, ph, "X" )
+    surfaceButton( self, pw, ph, "X" )
   end
   function _close:DoClick()
     closeCharacterSelection()
@@ -653,7 +653,7 @@ function openCharacterSelection()
   local feedback = createD( "DButton", _cs.frame, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 510 ), ScrH() - ctr( 60 ) )
   feedback:SetText( "" )
   function feedback:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "givefeedback" ) )
+    surfaceButton( self, pw, ph, lang_string( "givefeedback" ) )
   end
   function feedback:DoClick()
     closeCharacterSelection()

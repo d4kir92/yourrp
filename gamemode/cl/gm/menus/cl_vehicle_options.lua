@@ -47,7 +47,7 @@ function optionVehicleWindow( vehicle, vehicleTab )
 
 
   function yrp_vehicle.window:Paint( pw, ph )
-    paintWindow( self, pw, ph, lang_string( "settings" ) )
+    surfaceWindow( self, pw, ph, lang_string( "settings" ) )
 
     draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " .. owner, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
@@ -64,7 +64,7 @@ function optionVehicleWindow( vehicle, vehicleTab )
       yrp_vehicle.window:Close()
     end
     function _buttonRemoveOwner:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "removeowner" ) )
+      surfaceButton( self, pw, ph, lang_string( "removeowner" ) )
     end
 
 

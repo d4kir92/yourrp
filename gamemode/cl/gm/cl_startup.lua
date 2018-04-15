@@ -525,7 +525,7 @@ function GM:InitPostEntity()
       _warning:SetTitle( "" )
       _warning:Center()
       function _warning:Paint( pw, ph )
-        paintWindow( self, pw, ph, "WARNING!" )
+        surfaceWindow( self, pw, ph, "WARNING!" )
         draw.SimpleTextOutlined( "PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw/2, ph/2 - ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
         draw.SimpleTextOutlined( "Use a dedicated server or start multiplayer, thanks!", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
         draw.SimpleTextOutlined( "PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw/2, ph/2 + ctr( 100 ), Color( 255, 255, 255, 255 ),TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
@@ -638,6 +638,7 @@ _icons["rn"] = Material( "icon16/user_gray.png" )
 _icons["na"] = Material( "icon16/user.png" )
 _icons["sa"] = Material( "icon16/money_add.png" )
 _icons["mo"] = Material( "icon16/money.png" )
+_icons["sn"] = Material( "icon16/status_online.png" )
 
 function drawPlates( ply )
   if ply:Alive() then
@@ -686,6 +687,9 @@ function drawPlates( ply )
             _z = _z + 5
           end
           if LocalPlayer():HasAccess() then
+            drawPlayerInfo( ply, ply:SteamName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sn"] )
+            _z = _z + 5
+
             drawPlayerInfo( ply, "+" .. ply:GetNWString( "moneypre", "" ) .. ply:GetNWString( "salary", "" ) .. ply:GetNWString( "moneypos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sa"] )
             _z = _z + 5
 

@@ -26,7 +26,7 @@ SQL_ADD_COLUMN( _db_name, "storage", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "keynrs", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "rpname", "TEXT DEFAULT 'ID_RPNAME'" )
 SQL_ADD_COLUMN( _db_name, "rpdescription", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "gender", "TEXT DEFAULT 'male'" )
+SQL_ADD_COLUMN( _db_name, "gender", "TEXT DEFAULT 'gendermale'" )
 SQL_ADD_COLUMN( _db_name, "money", "TEXT DEFAULT '250'" )
 SQL_ADD_COLUMN( _db_name, "moneybank", "TEXT DEFAULT '500'" )
 SQL_ADD_COLUMN( _db_name, "position", "TEXT" )
@@ -35,6 +35,15 @@ SQL_ADD_COLUMN( _db_name, "map", "TEXT" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
+
+util.AddNetworkString( "moneyreset" )
+net.Receive( "moneyreset", function( len, ply )
+  printGM( "db", "[MONEY RESET]" )
+  SQL_UPDATE( "yrp_characters", "money = '" .. "0" .. "'", nil )
+  for i, pl in pairs( player.GetAll() ) do
+    pl:SetMoney( 0 )
+  end
+end)
 
 util.AddNetworkString( "change_rpname" )
 net.Receive( "change_rpname", function( len, ply )

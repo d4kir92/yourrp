@@ -76,7 +76,7 @@ function buyWindow( buildingID, name, price, door )
     yrp_door.window:Remove()
   end
   function yrp_door.window:Paint( pw, ph )
-    paintWindow( self, pw, ph, lang_string( "buymenu" ) )
+    surfaceWindow( self, pw, ph, lang_string( "buymenu" ) )
 
     draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. _name, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "price" ) .. ": " .. ply:GetNWString( "moneyPre" ) .. _price .. ply:GetNWString( "moneyPost" ), "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -113,7 +113,7 @@ function buyWindow( buildingID, name, price, door )
     end
   end
   function _buyButton:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "buybuildingpre" ) .. " " .. _name .. " " .. lang_string( "buybuildingpos" ) )
+    surfaceButton( self, pw, ph, lang_string( "buybuildingpre" ) .. " " .. _name .. " " .. lang_string( "buybuildingpos" ) )
   end
 
   if ply:HasAccess() then
@@ -162,7 +162,7 @@ function buyWindow( buildingID, name, price, door )
 
     end
     function _ButtonAddNew:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "addanewbuilding" ) )
+      surfaceButton( self, pw, ph, lang_string( "addanewbuilding" ) )
     end
 
     local _ComboBoxGroupName = createVGUI( "DComboBox", yrp_door.window, 530, 50, 10, 470 )
@@ -222,7 +222,7 @@ function optionWindow( buildingID, name, price, door, owner )
     yrp_door.window:Remove()
   end
   function yrp_door.window:Paint( pw, ph )
-    paintWindow( self, pw, ph, lang_string( "settings" ) )
+    surfaceWindow( self, pw, ph, lang_string( "settings" ) )
     --draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
     draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. _name, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -263,7 +263,7 @@ function optionWindow( buildingID, name, price, door, owner )
       yrp_door.window:Close()
     end
     function _ButtonSell:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "sellbuildingpre" ) .. " " .. _name .. " " .. lang_string( "sellbuildingpos" ) .. " (+" .. ply:GetNWString( "moneyPre" ) .. _price/2 .. ply:GetNWString( "moneyPost" ) .. ")" )
+      surfaceButton( self, pw, ph, lang_string( "sellbuildingpre" ) .. " " .. _name .. " " .. lang_string( "sellbuildingpos" ) .. " (+" .. ply:GetNWString( "moneyPre" ) .. _price/2 .. ply:GetNWString( "moneyPost" ) .. ")" )
     end
   end
 
@@ -288,7 +288,7 @@ function optionWindow( buildingID, name, price, door, owner )
       yrp_door.window:Close()
     end
     function _buttonRemoveOwner:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "removeowner" ) )
+      surfaceButton( self, pw, ph, lang_string( "removeowner" ) )
     end
 
 

@@ -57,7 +57,7 @@ function testApp( display, x, y, w, h )
     _target_accept:SetText( "" )
     function _target_accept:Paint( pw, ph )
       if self.hit != nil then
-        paintButton( self, pw, ph, lang_string( "accepthit" ) )
+        surfaceButton( self, pw, ph, lang_string( "accepthit" ) )
       end
     end
     function _target_accept:DoClick()
@@ -112,14 +112,14 @@ function testApp( display, x, y, w, h )
     local _ch = createD( "DButton", _dw, ctrb( 400 ), ctrb( 60 ), 0, 0 )
     _ch:SetText( "" )
     function _ch:Paint( pw, ph )
-      paintButton( self, pw, ph, lang_string( "createahit" ) )
+      surfaceButton( self, pw, ph, lang_string( "createahit" ) )
     end
     function _ch:DoClick()
       local _newhit = createD( "DFrame", nil, ctrb( 1400 ), ctrb( 1400 ), 0, 0 )
       _newhit:SetTitle( "" )
       _newhit:Center()
       function _newhit:Paint( pw, ph )
-        paintWindow( self, pw, ph, lang_string( "createahit" ) )
+        surfaceWindow( self, pw, ph, lang_string( "createahit" ) )
 
         surfaceText( lang_string( "target" ) .. ":", "apph1", ctrb( 10 ), ctrb( 100 ), Color( 255, 255, 255 ), 0, 2 )
       end
@@ -151,7 +151,7 @@ function testApp( display, x, y, w, h )
         local _hp = createD( "DButton", self._hi, ctrb( 400 ), ctrb( 50 ), ctrb( 10 ), ctrb( 350 ) )
         _hp:SetText( "" )
         function _hp:Paint( pw, ph )
-          paintButton( self, pw, ph, lang_string( "placehit" ) )
+          surfaceButton( self, pw, ph, lang_string( "placehit" ) )
         end
         function _hp:DoClick()
           local _steamid = data

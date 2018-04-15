@@ -99,6 +99,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "health" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "armor" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+    draw.SimpleTextOutlined( lang_string( "autoserverreload" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 740 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
   sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -355,7 +357,7 @@ hook.Add( "open_server_general", "open_server_general", function()
       local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
       sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
       sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
-      sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": DELETE DATABASE" )
+      sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": " .. lang_string( "hardresetdatabase" ) )
       function sv_generalHardResetSure:DoClick()
         net.Start( "hardresetdatabase" )
         net.SendToServer()
@@ -382,6 +384,47 @@ hook.Add( "open_server_general", "open_server_general", function()
           color = Color( 255, 255, 0, 200 )
         end
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      end
+      settingsWindow.window:Close()
+      _tmpFrame:MakePopup()
+    end
+
+    local sv_generalMoneyReset = createD( "DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+    sv_generalMoneyReset:SetText( "" )
+    function sv_generalMoneyReset:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "moneyreset" ) )
+    end
+    function sv_generalMoneyReset:DoClick()
+      local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+      _tmpFrame:Center()
+      _tmpFrame:SetTitle( lang_string( "areyousure" ) )
+      function _tmpFrame:Paint( pw, ph )
+        local color = Color( 0, 0, 0, 200 )
+        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      end
+
+      local sv_generalMoneyResetSure = vgui.Create( "DButton", _tmpFrame )
+      sv_generalMoneyResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
+      sv_generalMoneyResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
+      sv_generalMoneyResetSure:SetText( "" )
+      function sv_generalMoneyResetSure:DoClick()
+        net.Start( "moneyreset" )
+        net.SendToServer()
+        _tmpFrame:Close()
+      end
+      function sv_generalMoneyResetSure:Paint( pw, ph )
+        surfaceButton( self, pw, ph, lang_string( "yes" ) .. ": " .. lang_string( "moneyreset" ) )
+      end
+
+      local sv_generalMoneyResetNot = vgui.Create( "DButton", _tmpFrame )
+      sv_generalMoneyResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
+      sv_generalMoneyResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
+      sv_generalMoneyResetNot:SetText( "" )
+      function sv_generalMoneyResetNot:DoClick()
+        _tmpFrame:Close()
+      end
+      function sv_generalMoneyResetNot:Paint( pw, ph )
+        surfaceButton( self, pw, ph, lang_string( "no" ) .. ": do nothing" )
       end
       settingsWindow.window:Close()
       _tmpFrame:MakePopup()
@@ -585,7 +628,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   sv_generalCollectionButton:SetText( "" )
   function sv_generalCollectionButton:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "howtoworkshopcollection" ) )
+    surfaceButton( self, pw, ph, lang_string( "howtoworkshopcollection" ) )
   end
   function sv_generalCollectionButton:DoClick()
     gui.OpenURL( "https://wiki.garrysmod.com/page/Workshop_for_Dedicated_Servers" )

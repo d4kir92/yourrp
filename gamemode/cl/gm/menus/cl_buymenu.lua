@@ -200,7 +200,7 @@ net.Receive( "shop_get_tabs", function( len )
   _bm.window.dUID = _dealer_uid
   _bm.window:SetTitle( "" )
   _bm.window:Center()
-  _bm.window:ShowCloseButton( false )
+  _bm.window:ShowCloseButton( true )
   _bm.window:SetDraggable( false )
   function _bm.window:OnClose()
     closeMenu()
@@ -209,28 +209,12 @@ net.Receive( "shop_get_tabs", function( len )
     closeMenu()
   end
   function _bm.window:Paint( pw, ph )
-    surfaceText( _dealer.name, "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
-  end
-
-  _bm.close = createD( "DButton", _bm.window, ctrb( 50), ctrb( 50 ), _bm.window:GetWide()-ctrb( 50+10 ), ctrb( 10 ) )
-  _bm.close:SetText( "" )
-  function _bm.close:Paint( pw, ph )
-    self.color = Color( 255, 255, 255 )
-    if self:IsHovered() then
-      self.color = Color( 255, 255, 0 )
-    end
-    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-    surfaceText( "X", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
-  end
-  function _bm.close:DoClick()
-    if _bm.window != nil then
-      _bm.window:Close()
-    end
+    surfaceWindow( self, pw, ph, _dealer.name )
   end
 
   --[[ Settings ]]--
   if LocalPlayer():HasAccess() then
-    _bm.settings = createD( "DButton", _bm.window, ctrb( 50 ), ctrb( 50 ), _bm.window:GetWide()-ctrb( 50+10+50+10 ), ctrb( 10 ) )
+    _bm.settings = createD( "DButton", _bm.window, ctrb( 40 ), ctrb( 40 ), _bm.window:GetWide()-ctrb( 240 ), ctrb( 5 ) )
     _bm.settings:SetText( "" )
     function _bm.settings:Paint( pw, ph )
       local _br = 4
@@ -333,7 +317,7 @@ net.Receive( "shop_get_tabs", function( len )
   _bm.shop:SetSpacing( 10 )
   _bm.shop:SetNoSizing( false )
   function _bm.shop:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 100, 240 ) )
+    --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 100, 240 ) )
   end
 
   _bm.tabs = createD( "DYRPTabs", _bm.window, BScrW() - ctrb( 10+10 ), ctrb( 60 ), ctrb( 10 ), ctrb( 50 + 10 ) )

@@ -70,18 +70,15 @@ function openHelpMenu()
     closeMenu()
   end
 
-  _hm.langu = derma_change_language( _hm.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
+  _hm.langu = derma_change_language( _hm.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 0 ) )
 
   function _hm.window:Paint( pw, ph )
-    --paintWindow( self, pw, ph, lang_string( "help" ) )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-
+    surfaceWindow( self, pw, ph, lang_string( "help" ) .. " - " .. lang_string( "menu" ) )
     local _abstand = ctr( HudV("ttsf") ) * 3.8
 
-    draw.SimpleTextOutlined( "Language: ", "ttsf", BScrW()/2 - ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "Language: ", "ttsf", BScrW()/2 - ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
     --[[ LEFT ]]--
-    draw.SimpleTextOutlined( lang_string( "help" ) .. " - " .. lang_string( "menu" ), "ttsf", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( "F1" ) ) .. "] " .. lang_string( "help" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 + 1*_abstand ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("menu_character_selection" ) ) ) .. "] " .. lang_string( "characterselection" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 + 2*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("toggle_mouse" ) ) ) .. "] " .. lang_string( "guimouse" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -121,7 +118,7 @@ function openHelpMenu()
   _hm.feedback = createD( "DButton", _hm.window, ctr( 500 ), ctr( 50 ), ctr( 50 ), ctr( 900 ) )
   _hm.feedback:SetText( "" )
   function _hm.feedback:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "givefeedback" ) )
+    surfaceButton( self, pw, ph, lang_string( "givefeedback" ) )
   end
   function _hm.feedback:DoClick()
     closeHelpMenu()
@@ -132,7 +129,7 @@ function openHelpMenu()
   _hm.discord = createD( "DButton", _hm.window, ctr( 400 ), ctr( 50 ), ctr( 560 ), ctr( 900 ) )
   _hm.discord:SetText( "" )
   function _hm.discord:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "livesupport" ) )
+    surfaceButton( self, pw, ph, lang_string( "livesupport" ) )
   end
   function _hm.discord:DoClick()
     gui.OpenURL( "https://discord.gg/sEgNZxg" )

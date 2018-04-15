@@ -35,7 +35,7 @@ function createDeleteButton( text, _x, _y, _list, id )
   local _rb = createD( "DButton", settingsWindow.window.site, ctr( 800 ), ctr( 50 ), _x, _y  )
   _rb:SetText( "" )
   function _rb:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "remove" ) .. " (" .. text .. ")" )
+    surfaceButton( self, pw, ph, lang_string( "remove" ) .. " (" .. text .. ")" )
   end
   function _rb:DoClick()
     net.Start( "remove_res_usergroup" )

@@ -114,7 +114,6 @@ function drawGroupPlayers( id )
 
             self.Avatar:SetPaintedManually(false)
             self.Avatar:PaintManual()
-            --draw.SimpleTextOutlined( _tmpPly.level, "SettingsHeader", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             self.Avatar:SetPaintedManually(true)
 
           render.SetStencilEnable( false )
@@ -123,14 +122,14 @@ function drawGroupPlayers( id )
         function _tmpPly:Paint( pw, ph )
           local _extra = 0
           if self.gerade == 0 then
-            _extra = 40
+            _extra = 50
           end
           if self:IsHovered() then
             if self.gerade == 1 then
             end
             draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( 255, 255, 0, 200 ), true, false, true, false )
           else
-            draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( 0+_extra, 0+_extra, 0+_extra, 200 ), true, false, true, false )
+            draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( _extra, _extra, _extra, 200 ), true, false, true, false )
           end
 
           draw.SimpleTextOutlined( self.rpname, "sef", ctr( 128+16 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -167,7 +166,7 @@ function drawGroupPlayers( id )
                   end
                 end
               end
-              paintWindow( self, pw, ph, lang_string( "info" ) )
+              surfaceWindow( self, pw, ph, lang_string( "info" ) )
 
               draw.SimpleTextOutlined( lang_string( "nick" ) .. ":", "sef", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
               draw.SimpleTextOutlined( string.upper( _tmpPly.steamname ), "sef", ctr( 10 ), ctr( 440 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -185,10 +184,12 @@ function drawGroupPlayers( id )
           _info.profile = createD( "DButton", _info, ctr( 780 ), ctr( 50 ), ctr( 10 ), ctr( 60 ) )
           _info.profile:SetText( "" )
           function _info.profile:Paint( pw, ph )
-            paintButton( self, pw, ph, lang_string( "openprofile" ) )
+            surfaceButton( self, pw, ph, lang_string( "openprofile" ) )
           end
           function _info.profile:DoClick()
-            ply:ShowProfile()
+            if pa( ply ) then
+              ply:ShowProfile()
+            end
           end
         end
 

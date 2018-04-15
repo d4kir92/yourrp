@@ -885,6 +885,7 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
 
   local tmp2 = addDNumberWang( parent, w/_ele, h/3, x, y + h - (h/3), tmin )
   local tmp3 = addDNumberWang( parent, w/_ele, h/3, x + w/_ele, y + h - (h/3), tmax )
+  tmp3:SetMin( 1 )
 
   function tmp2:OnValueChanged( val )
     tmin = val
@@ -901,6 +902,9 @@ function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, t
 
   function tmp3:OnValueChanged( val )
     tmax = val
+    if tonumber( tmax ) < self:GetMin() then
+      self:SetValue( 1 )
+    end
     if tonumber( tmax ) < tonumber( tmin ) then
       tmin = tmax
       tmp2:SetValue( tmin )

@@ -156,6 +156,7 @@ function set_role_values( ply )
             end
           end
         end
+        ply:SetNWString( "Gender", ChaTab.gender )
       else
         printGM( "note", "No role or/and no character -> Suicide")
         if !ply:IsBot() then

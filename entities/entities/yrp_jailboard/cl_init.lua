@@ -89,7 +89,7 @@ net.Receive( "openLawBoard", function( len )
       _removeButton.steamID = v.steamID
 
       function _removeButton:Paint( pw, ph )
-        paintButton( self, pw, ph, lang_string( "remove" ) )
+        surfaceButton( self, pw, ph, lang_string( "remove" ) )
       end
       function _removeButton:DoClick()
         if self.uniqueID != nil and self.steamID != nil then

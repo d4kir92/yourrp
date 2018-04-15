@@ -111,7 +111,7 @@ function showVersion()
         function frame:Paint( pw, ph )
           --draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
 
-					paintWindow( self, pw, ph, lang_string( "about" ) )
+					surfaceWindow( self, pw, ph, lang_string( "about" ) )
 
           draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 400 ), ctr( 50+30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( tostring( verart ) .. "! (" .. tostring( s_sort ) .. ")", "HudBars", pw/2, ctr( 140 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -135,8 +135,7 @@ function showVersion()
           gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )
         end
         function showChanges:Paint( pw, ph )
-          paintButton( self, pw, ph, "" )
-          surfaceText( lang_string( "showchanges" ), "Trebuchet20", pw/2, ph/2, Color( 0, 0, 0, 255 ), 1, 1 )
+          surfaceButton( self, pw, ph, lang_string( "showchanges" ) )
         end
 
         if ply:HasAccess() then
@@ -148,11 +147,7 @@ function showVersion()
               net.SendToServer()
             end
             function restartServer:Paint( pw, ph )
-  						paintButton( self, pw, ph, "" )
-
-              --surfaceText( text, font, x, y, color, ax, ay )
-              surfaceText( lang_string( "updateserver" ), "Trebuchet20", pw/2, ph/3, Color( 0, 0, 0, 255 ), 1, 1 )
-              surfaceText( "(" .. lang_string( "workshopversion" ) .. ")", "Trebuchet20", pw/2, (ph/3)*2, Color( 0, 0, 0, 255 ), 1, 1 )
+  						surfaceButton( self, pw, ph, lang_string( "updateserver" ) )
             end
             restartServer:SetPos( ctr( 600+10 ), ctr( 460 ) )
           else
@@ -162,9 +157,7 @@ function showVersion()
               gui.OpenURL( "https://github.com/d4kir92/GMOD-YourRP-unstable" )
             end
             function download_latest_git:Paint( pw, ph )
-  						paintButton( self, pw, ph, "" )
-
-              surfaceText( "Download Latest Version", "Trebuchet20", pw/2, ph/2, Color( 0, 0, 0, 255 ), 1, 1 )
+  						surfaceButton( self, pw, ph, "Download Latest Version" )
             end
             download_latest_git:SetPos( ctr( 600+10 ), ctr( 460 ) )
           end

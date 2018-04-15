@@ -75,19 +75,7 @@ function createRoleBox( rol, parent )
     --[[ Role Button ]]--
     _rol.gr = createD( "DButton", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 ) )
     function _rol.gr:Paint( pw, ph )
-      local _br = 4
-      pw = pw - 2*ctrb( 4 )
-      ph = ph - 1*ctrb( 4 )
-
-      local _color = Color( 255, 255, 100 )
-      if self:IsHovered() then
-        _color = Color( 255, 255, 0 )
-      end
-      draw.RoundedBox( 0, ctrb( _br ), 0, pw, ph, _color )
-      surfaceText( lang_string( "moreinfo" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
-
-      --BR
-      drawRBBR( 0, ctrb( _br ), 0, pw, ph, Color( 0, 0, 0, 255 ), ctrb( 4 ) )
+      surfaceButton( self, pw, ph, lang_string( "moreinfo" ) )
     end
     _rol.gr:SetText( "" )
     function _rol.gr:DoClick()
@@ -264,25 +252,11 @@ function openRoleMenu()
 
   _rm = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
   _rm:Center()
-  _rm:ShowCloseButton( false )
+  _rm:ShowCloseButton( true )
   _rm:SetDraggable( false )
-  _rm:SetTitle( lang_string( "rolemenu" ) )
+  _rm:SetTitle( "" )
   function _rm:Paint( pw, ph )
-    --paintWindow( self, pw, ph, "" )
-  end
-
-  _rm.close = createD( "DButton", _rm, ctrb( 50), ctrb( 50 ), _rm:GetWide()-ctrb( 50+10 ), ctrb( 10 ) )
-  _rm.close:SetText( "" )
-  function _rm.close:Paint( pw, ph )
-    self.color = Color( 255, 255, 255 )
-    if self:IsHovered() then
-      self.color = Color( 255, 255, 0 )
-    end
-    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-    surfaceText( "X", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
-  end
-  function _rm.close:DoClick()
-    _rm:Close()
+    surfaceWindow( self, pw, ph, lang_string( "rolemenu" ) )
   end
 
   _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), BScrW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
@@ -336,16 +310,7 @@ function openRoleMenu()
   _rm.infobutton.rolename = ""
   function _rm.infobutton:Paint( pw, ph )
     if _rm.info.rolename == lang_string( "none" ) then return end
-    self.text = lang_string( "none" )
-    self.color = Color( 255, 255, 255 )
-    if tostring( self.rolename ) != "" then
-      self.text = lang_string( "getrole" )
-      if self:IsHovered() then
-        self.color = Color( 255, 255, 0 )
-      end
-    end
-    draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-    surfaceText( self.text, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+    surfaceButton( self, pw, ph, lang_string( "getrole" ) )
   end
   function _rm.infobutton:DoClick()
     if self.uniqueID != nil then

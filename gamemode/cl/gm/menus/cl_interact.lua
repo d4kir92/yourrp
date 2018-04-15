@@ -61,7 +61,7 @@ net.Receive( "openInteractMenu", function ()
   _windowInteract:SetTitle( lang_string( "interactmenu" ) )
 
   function _windowInteract:Paint( pw, ph )
-    paintWindow( self, pw, ph, "")
+    surfaceWindow( self, pw, ph, "")
 
     draw.RoundedBox( ctr( 30 ), ctr( 10 ), ctr( 50 ), ctr( 750 ), ctr( 350 ), Color( 255, 255, 255, 255 ) )
 
@@ -74,11 +74,13 @@ net.Receive( "openInteractMenu", function ()
     draw.SimpleTextOutlined( tmpRPName, "charText", ctr( 280 ), ctr( 60 + 100 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
     draw.SimpleTextOutlined( lang_string( "gender" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 210 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
-    local gender = lang_string( "other" )
-    if tmpGender == "male" then
-      gender = lang_string( "male" )
-    elseif tmpGender == "female" then
-      gender = lang_string( "female" )
+    local gender = lang_string( "genderother" )
+    if tmpGender == "gendermale" then
+      gender = lang_string( "gendermale" )
+    elseif tmpGender == "genderfemale" then
+      gender = lang_string( "genderfemale" )
+    elseif tmpGender == "genderother" then
+      gender = lang_string( "genderother" )
     end
     draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
@@ -98,7 +100,7 @@ net.Receive( "openInteractMenu", function ()
   local buttonTrade = createVGUI( "DButton", _windowInteract, 530, 50, 10, 820 )
   buttonTrade:SetText( "" )
   function buttonTrade:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "trade" ) .. " (in future update)" )
+    surfaceButton( self, pw, ph, lang_string( "trade" ) .. " (in future update)" )
   end
 
   if isInstructor then
@@ -112,7 +114,7 @@ net.Receive( "openInteractMenu", function ()
         _windowInteract:Close()
       end
       function buttonPromote:Paint( pw, ph )
-        paintButton( self, pw, ph, lang_string( "promote" ) .. ": " .. promoteName )
+        surfaceButton( self, pw, ph, lang_string( "promote" ) .. ": " .. promoteName )
       end
     end
 
@@ -126,7 +128,7 @@ net.Receive( "openInteractMenu", function ()
         _windowInteract:Close()
       end
       function buttonDemote:Paint( pw, ph )
-        paintButton( self, pw, ph, lang_string( "demote" ) .. ": " .. demoteName )
+        surfaceButton( self, pw, ph, lang_string( "demote" ) .. ": " .. demoteName )
       end
     end
   end

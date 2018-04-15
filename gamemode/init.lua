@@ -92,6 +92,8 @@ AddCSLuaFile( "cl/gm/apps/cl_app_settings_yrp.lua" )
 AddCSLuaFile( "cl/gm/apps/cl_app_settings_sp.lua" )
 AddCSLuaFile( "cl/gm/apps/cl_app_dark_web.lua" )
 
+AddCSLuaFile( "cl/gm/designs/cl_d_material1.lua" )
+
 --[[ includes ]]--
 include( "shared.lua" )
 

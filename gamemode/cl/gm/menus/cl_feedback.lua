@@ -35,13 +35,13 @@ function openFeedbackMenu()
   _fb.langu = derma_change_language( _fb.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 50 ) )
 
   function _fb.window:Paint( pw, ph )
-    paintWindow( self, pw, ph, lang_string( "givefeedback" ) )
+    surfaceWindow( self, pw, ph, lang_string( "givefeedback" ) )
   end
 
   _fb.discord = createD( "DButton", _fb.window, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
   _fb.discord:SetText( "" )
   function _fb.discord:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "livesupport" ) )
+    surfaceButton( self, pw, ph, lang_string( "livesupport" ) )
   end
   function _fb.discord:DoClick()
     gui.OpenURL( "https://discord.gg/sEgNZxg" )
@@ -69,7 +69,7 @@ function openFeedbackMenu()
   _fb.send = createD( "DButton", _fb.window, ctr( 600 ), ctr( 50 ), ctr( 10 ), ctr( 1000 ) )
   _fb.send:SetText( "" )
   function _fb.send:Paint( pw, ph )
-    paintButton( self, pw, ph, string.upper( lang_string( "sendfeedback" ) ) )
+    surfaceButton( self, pw, ph, string.upper( lang_string( "sendfeedback" ) ) )
   end
   function _fb.send:DoClick()
     printGM( "gm", "send feedback" )

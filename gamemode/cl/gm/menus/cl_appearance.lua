@@ -73,7 +73,7 @@ net.Receive( "get_menu_bodygroups", function( len )
     if _tmpPM.cur >= _tmpPM.max then
 
     else
-      paintButton( self, pw, ph, "↑" )
+      surfaceButton( self, pw, ph, "↑" )
     end
   end
   function _tmpPMUp:DoClick()
@@ -90,7 +90,7 @@ net.Receive( "get_menu_bodygroups", function( len )
   _tmpPMDo:SetText( "" )
   function _tmpPMDo:Paint( pw, ph )
     if _tmpPM.cur > 1 then
-      paintButton( self, pw, ph, "↓" )
+      surfaceButton( self, pw, ph, "↓" )
     end
   end
   function _tmpPMDo:DoClick()
@@ -121,7 +121,7 @@ net.Receive( "get_menu_bodygroups", function( len )
     if _tmpSkin.cur >= _tmpSkin.max-1 then
 
     else
-      paintButton( self, pw, ph, "↑" )
+      surfaceButton( self, pw, ph, "↑" )
     end
   end
   function _tmpSkinUp:DoClick()
@@ -138,7 +138,7 @@ net.Receive( "get_menu_bodygroups", function( len )
   _tmpSkinDo:SetText( "" )
   function _tmpSkinDo:Paint( pw, ph )
     if _tmpSkin.cur > 0 then
-      paintButton( self, pw, ph, "↓" )
+      surfaceButton( self, pw, ph, "↓" )
     end
   end
   function _tmpSkinDo:DoClick()
@@ -171,7 +171,7 @@ net.Receive( "get_menu_bodygroups", function( len )
         if _tmpBg.cur >= _tmpBg.max-1 then
 
         else
-          paintButton( self, pw, ph, "↑" )
+          surfaceButton( self, pw, ph, "↑" )
         end
       end
       function _tmpBgUp:DoClick()
@@ -189,7 +189,7 @@ net.Receive( "get_menu_bodygroups", function( len )
       _tmpBgDo:SetText( "" )
       function _tmpBgDo:Paint( pw, ph )
         if _tmpBg.cur > 0 then
-          paintButton( self, pw, ph, "↓" )
+          surfaceButton( self, pw, ph, "↓" )
         else
 
         end
@@ -247,7 +247,7 @@ function open_appearance()
     _yrp_appearance.window:Remove()
   end
   function _yrp_appearance.window:Paint( pw, ph )
-    --paintWindow( self, pw, ph, lang_string( "inventory" ) )
+    --surfaceWindow( self, pw, ph, lang_string( "inventory" ) )
   end
 
   _yrp_appearance.left = createD( "DPanel", _yrp_appearance.window, BScrW() - ctr( 100 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )
@@ -259,7 +259,7 @@ function open_appearance()
   _yrp_appearance.tabBody = createD( "DButton", _yrp_appearance.window, ctr( 300 ), ctr( 80 ), ctr( 0 ), ctr( 20 ) )
   _yrp_appearance.tabBody:SetText( "" )
   function _yrp_appearance.tabBody:Paint( pw, ph )
-    paintButton( self, pw, ph, lang_string( "appearance" ) )
+    surfaceButton( self, pw, ph, lang_string( "appearance" ) )
   end
   function _yrp_appearance.tabBody:DoClick()
     net.Start( "get_menu_bodygroups" )

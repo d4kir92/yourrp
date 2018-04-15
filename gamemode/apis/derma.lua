@@ -1,5 +1,100 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+--[[ NEW ]]--
+local yrp_if = {}
+
+function RegisterDesign( tab )
+  if tab.name != nil then
+    yrp_if[tab.name] = {}
+    yrp_if[tab.name].author = tab.author or "NO AUTHOR"
+    yrp_if[tab.name].name = tab.name or "NO Name"
+  end
+end
+
+function RegisterPanelFunction( name, func )
+  yrp_if[name]["DPanel"] = func
+end
+
+function RegisterButtonFunction( name, func )
+  yrp_if[name]["DButton"] = func
+end
+
+function RegisterWindowFunction( name, func )
+  yrp_if[name]["DFrame"] = func
+end
+
+function GetDesigns()
+  return yrp_if
+end
+
+function interfaceDesign()
+  local ply = LocalPlayer()
+  return ply:GetNWString( "interface_design", "Material Design 1" )
+end
+
+function InterfaceBorder()
+  local ply = LocalPlayer()
+  return ply:GetNWBool( "interface_border", false )
+end
+
+function InterfaceRounded()
+  local ply = LocalPlayer()
+  return ply:GetNWBool( "interface_rounded", false )
+end
+
+function InterfaceTransparent()
+  local ply = LocalPlayer()
+  return ply:GetNWBool( "interface_transparent", false )
+end
+
+function InterfaceColor()
+  local ply = LocalPlayer()
+  return ply:GetNWString( "interface_color", "blue" )
+end
+
+function InterfaceStyle()
+  local ply = LocalPlayer()
+  return ply:GetNWString( "interface_style", "dark" )
+end
+
+local _delay = 1
+local _get_design = true
+function GetDesign()
+  if _get_design then
+    _get_design = !_get_design
+    net.Start( "get_design" )
+    net.SendToServer()
+  end
+end
+
+function surfaceWindow( derma, pw, ph, title )
+  local ply = LocalPlayer()
+  if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DFrame"]( derma, pw, ph, title )
+  else
+    GetDesign()
+  end
+end
+
+function surfaceButton( derma, pw, ph, text )
+  local ply = LocalPlayer()
+  if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text )
+  else
+    GetDesign()
+  end
+end
+
+function surfacePanel( derma, pw, ph, text )
+  local ply = LocalPlayer()
+  if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DPanel"]( derma, pw, ph, text )
+  else
+    GetDesign()
+  end
+end
+
+--[[ OLD ]]--
 local _menuOpen = false
 function isNoMenuOpen()
   if canOpenMenu() then -- and !_menuOpen then
@@ -39,41 +134,7 @@ function paintBr( pw, ph, color )
 end
 
 function paintWindow( derma, pw, ph, title )
-  --Background
-  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
-
-  local _br = ctr( 2 )
-  local _brC = Color( 200, 200, 200, 255 )
-  paintBr( pw, ph, _brC )
-
-  local _br2 = ctr( 300 )
-  local _h = ctr( 20 )
-  --
-  if pw > 2*_br2 then
-    draw.RoundedBox( 0, _br2, _br, pw - (_br2 * 2), _h, _brC )
-    local triangle = {
-    	{ x = _br2-_h, y = _br },
-    	{ x = _br2, y = _br },
-    	{ x = _br2, y = _h }
-    }
-  	surface.SetDrawColor( _brC )
-  	draw.NoTexture()
-  	surface.DrawPoly( triangle )
-    local triangle2 = {
-    	{ x = pw - _br2, y = _br },
-    	{ x = pw - _br2+_h, y = _br },
-    	{ x = pw - _br2, y = _h }
-    }
-  	surface.SetDrawColor( _brC )
-  	draw.NoTexture()
-  	surface.DrawPoly( triangle2 )
-  end
-
-  --TitleBarDesign
-  local _titlebar = ctr( 50 )
-  --draw.RoundedBox( 0, 0, 0, pw, _titlebar, Color( 80, 80, 200, 200 ) )
-
-  draw.SimpleTextOutlined( title, "windowTitle", ctr( 15 ), _titlebar/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  yrp_if["Material Design 1"]["DFrame"]( derma, pw, ph, title )
 end
 
 function paintButton( derma, pw, ph, text )
