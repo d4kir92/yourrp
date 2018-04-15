@@ -166,7 +166,7 @@ function openCharacterCreation()
     draw.SimpleTextOutlined( lang_string( "gender" ), "HudBars", pw/2, ctr( 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local charactersGenderMale = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)-105 ), ctr( 70 ), ctr( 5 ) )
+  local charactersGenderMale = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)-50-100-20 ), ctr( 70 ), ctr( 5 ) )
   charactersGenderMale:SetText( "" )
   function charactersGenderMale:Paint( pw, ph )
     if self:IsHovered() then
@@ -184,7 +184,7 @@ function openCharacterCreation()
     character.gender = "male"
   end
 
-  local charactersGenderFemale = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)+5 ), ctr( 70 ), ctr( 5 ) )
+  local charactersGenderFemale = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)-50 ), ctr( 70 ), ctr( 5 ) )
   charactersGenderFemale:SetText( "" )
   function charactersGenderFemale:Paint( pw, ph )
     if self:IsHovered() then
@@ -200,6 +200,24 @@ function openCharacterCreation()
   end
   function charactersGenderFemale:DoClick()
     character.gender = "female"
+  end
+
+  local charactersGenderOther = createMD( "DButton", charactersGender, ctr( 100 ), ctr( 100 ), ctr( (760/2)+50+20 ), ctr( 70 ), ctr( 5 ) )
+  charactersGenderOther:SetText( "" )
+  function charactersGenderOther:Paint( pw, ph )
+    if self:IsHovered() then
+      draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.hovered )
+    else
+      if character.gender == "other" then
+        draw.RoundedBox( 0, 0, 0, pw, ph, _char_colors.selected )
+      else
+        draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
+      end
+    end
+    draw.SimpleTextOutlined( "⚲", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  end
+  function charactersGenderOther:DoClick()
+    character.gender = "other"
   end
 
   data.x = border

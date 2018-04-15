@@ -5,9 +5,11 @@ function GM:PlayerDisconnected( ply )
   save_clients( "PlayerDisconnected" )
 
   local _rol_tab = ply:GetRolTab()
-  if tonumber( _rol_tab.maxamount ) > 0 then
-    ply:SetNWString( "roleUniqueID", "1" )
-    updateRoleUses( _rol_tab.uniqueID )
+  if _rol_tab != nil then
+    if tonumber( _rol_tab.maxamount ) > 0 then
+      ply:SetNWString( "roleUniqueID", "1" )
+      updateRoleUses( _rol_tab.uniqueID )
+    end
   end
 end
 

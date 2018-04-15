@@ -159,15 +159,19 @@ function addRole( rol, parent )
 end
 
 function addRoleRow( rol, parent )
-  local _rr = createD( "DHorizontalScroller", parent.content, parent:GetWide() - 2*ctrb( parent:GetSpacing() ), ctrb( 400 ), 0, 0 )
-  _rr:SetOverlap( ctrb( -30 ) )
-  function _rr:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 20 ) )
+  if pa( parent ) then
+    if pa( parent.content ) then
+      local _rr = createD( "DHorizontalScroller", parent.content, parent:GetWide() - 2*ctrb( parent:GetSpacing() ), ctrb( 400 ), 0, 0 )
+      _rr:SetOverlap( ctrb( -30 ) )
+      function _rr:Paint( pw, ph )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 20 ) )
+      end
+
+      addRole( rol, _rr )
+
+      parent:Add( _rr )
+    end
   end
-
-  addRole( rol, _rr )
-
-  parent:Add( _rr )
 end
 
 function getRoles( uid, parent )

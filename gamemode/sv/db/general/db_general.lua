@@ -32,6 +32,8 @@ util.AddNetworkString( "db_update_tag_group" )
 util.AddNetworkString( "db_update_tag_hp" )
 util.AddNetworkString( "db_update_tag_ar" )
 
+util.AddNetworkString( "db_update_server_changelevel" )
+
 util.AddNetworkString( "db_update_collection" )
 
 local _db_name = "yrp_general"
@@ -71,6 +73,8 @@ SQL_ADD_COLUMN( _db_name, "tag_role", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "tag_group", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "tag_hp", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "tag_ar", "INT DEFAULT 0" )
+
+SQL_ADD_COLUMN( _db_name, "server_changelevel", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
 
@@ -137,6 +141,20 @@ end
 function IsRealisticDamageEnabled()
   return tobool( yrp_general.toggle_realistic_damage )
 end
+
+function IsServerChangelevelEnabled()
+  return tobool( yrp_general.server_changelevel )
+end
+
+
+net.Receive( "db_update_server_changelevel", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.server_changelevel = _nw
+    SQL_UPDATE( "yrp_general", "server_changelevel = " .. yrp_general.server_changelevel, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " server_changelevel" )
+  end
+end)
 
 net.Receive( "db_update_tag_ar", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

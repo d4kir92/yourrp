@@ -17,3 +17,13 @@ function combineStringTables( str1, str2 )
 	local _tab2 = string.Explode( ",", str2 )
 	return combineTables( _tab1, _tab2 )
 end
+
+local _addons = engine.GetAddons()
+local _wsids = {}
+for i, add in pairs( _addons ) do
+	table.insert( _wsids, add.wsid )
+end
+
+function GetWorkshopIDs()
+	return _wsids
+end

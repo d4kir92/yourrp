@@ -361,7 +361,7 @@ function createMDMenu( parent, w, h, x, y )
 
 	tmp.sitepanel = createD( "DPanel", tmp, BScrW(), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, get_dpbg_col() )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, get_dpbg_col() )
 	end
 
 	function tmp:SwitchToSite( _hook )

@@ -239,11 +239,11 @@ net.Receive( "demotePlayer", function( len, ply )
   end
 
   local tmpTableInstructor = ply:GetChaTab()
-  local tmpTableInstructorRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+  local tmpTableInstructorRole = ply:GetRolTab()
 
   local tmpTargetChaTab = tmpTarget:GetChaTab()
 
-  if tonumber( tmpTableInstructorRole[1].instructor ) == 1 then
+  if tonumber( tmpTableInstructorRole.instructor ) == 1 then
 
 
     local tmpTableTargetRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
@@ -258,8 +258,10 @@ net.Receive( "demotePlayer", function( len, ply )
     removeFromWhitelist( tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID )
 
     printGM( "instructor", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.roleID )
-  else
+  elseif tonumber( tmpTableInstructorRole.instructor ) == 0 then
     printGM( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
+  else
+    printGM( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.instructor ) )
   end
 end)
 
@@ -312,8 +314,10 @@ net.Receive( "promotePlayer", function( len, ply )
     end
 
     printGM( "instructor", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.roleID )
-  else
+  elseif tonumber( tmpTableInstructorRole.instructor ) == 0 then
     printGM( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
+  else
+    printGM( "error", "ELSE promote: " .. tostring( tmpTableInstructorRole.instructor ) )
   end
 end)
 

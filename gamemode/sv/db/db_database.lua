@@ -49,6 +49,7 @@ function reset_database()
   table.insert( _dbs, "yrp_shop_items" )
   table.insert( _dbs, "yrp_shop_categories" )
   table.insert( _dbs, "yrp_dealers" )
+  table.insert( _dbs, "yrp_interface" )
 
   for k, v in pairs( _dbs ) do
     db_drop_table( v )
@@ -114,6 +115,7 @@ function db_init_database()
   SQL_INIT_DATABASE( "yrp_shop_categories" )
   SQL_INIT_DATABASE( "yrp_dealers" )
   SQL_INIT_DATABASE( "yrp_feedback" )
+  SQL_INIT_DATABASE( "yrp_interface" )
 
   yrp_db.loaded = true
 
@@ -149,3 +151,4 @@ include( "shops/db_shop_items.lua" )
 include( "shops/db_shop_categories.lua" )
 include( "dealers/db_dealers.lua" )
 include( "feedback/db_feedback.lua" )
+include( "interface/db_interface.lua" )

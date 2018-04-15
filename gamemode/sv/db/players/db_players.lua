@@ -117,19 +117,17 @@ function set_role_values( ply )
       local _gen_tab = SQL_SELECT( "yrp_general", "*", nil )
       if worked( _gen_tab, "set_role_values _gen_tab failed" ) then
         _gen_tab = _gen_tab[1]
-        if _gen_tab.name_advert != "" and string.lower( _gen_tab.name_advert ) != "advert" then
-          ply:SetNWString( "channel_advert", _gen_tab.name_advert )
-          ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
-          ply:SetNWBool( "anti_bhop", tobool( _gen_tab.toggle_anti_bhop ) )
-          ply:SetNWBool( "toggle_building", tobool( _gen_tab.toggle_building ) )
+        ply:SetNWString( "channel_advert", _gen_tab.name_advert )
+        ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
+        ply:SetNWBool( "anti_bhop", tobool( _gen_tab.toggle_anti_bhop ) )
+        ply:SetNWBool( "toggle_building", tobool( _gen_tab.toggle_building ) )
 
-          ply:SetNWBool( "tag_info", tobool( _gen_tab.tag_info ) )
-          ply:SetNWBool( "tag_name", tobool( _gen_tab.tag_name ) )
-          ply:SetNWBool( "tag_role", tobool( _gen_tab.tag_role ) )
-          ply:SetNWBool( "tag_group", tobool( _gen_tab.tag_group ) )
-          ply:SetNWBool( "tag_hp", tobool( _gen_tab.tag_hp ) )
-          ply:SetNWBool( "tag_ar", tobool( _gen_tab.tag_ar ) )
-        end
+        ply:SetNWBool( "tag_info", tobool( _gen_tab.tag_info ) )
+        ply:SetNWBool( "tag_name", tobool( _gen_tab.tag_name ) )
+        ply:SetNWBool( "tag_role", tobool( _gen_tab.tag_role ) )
+        ply:SetNWBool( "tag_group", tobool( _gen_tab.tag_group ) )
+        ply:SetNWBool( "tag_hp", tobool( _gen_tab.tag_hp ) )
+        ply:SetNWBool( "tag_ar", tobool( _gen_tab.tag_ar ) )
       end
 
       local rolTab = ply:GetRolTab()
@@ -476,7 +474,8 @@ function startVote( ply, table )
     for k, v in pairs( player.GetAll() ) do
       v:SetNWString( "voteStatus", "not voted" )
       v:SetNWBool( "voting", true )
-      v:SetNWString( "voteQuestion", ply:RPName() .. " want the role: " .. table[1].roleID )
+      v:SetNWString( "voteName", ply:RPName() )
+      v:SetNWString( "voteRole", table[1].roleID )
     end
     votePly = ply
     voteCount = 30
@@ -527,7 +526,7 @@ function canGetRole( ply, roleID )
             return false
           end
         elseif tonumber( tmpTableRole[1].whitelist ) == 1 or tonumber( tmpTableRole[1].prerole ) != -1 then
-          -- printGM( "gm", "Whitelist-Role or Prerole-Role or Vote-Role" )
+          printGM( "gm", "Whitelist-Role or Prerole-Role" )
           if !isWhitelisted( ply, roleID ) then
             printGM( "gm", ply:YRPName() .. " is not whitelisted" )
             return false
@@ -537,7 +536,7 @@ function canGetRole( ply, roleID )
         end
         return true
       else
-        printGM( "gm", ply:YRPName() .. " maxamount reached")
+        printGM( "gm", ply:YRPName() .. " maxamount reached." )
         return false
       end
     end
@@ -580,5 +579,9 @@ net.Receive( "wantRole", function( len, ply )
   elseif canVoteRole( ply, uniqueIDRole ) then
     local _role = SQL_SELECT( "yrp_roles" , "*", "uniqueID = " .. uniqueIDRole )
     startVote( ply, _role )
+  else
+    net.Start( "yrp_info2" )
+      net.WriteString( "not allowed to get this role" )
+    net.Broadcast()
   end
 end)

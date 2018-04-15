@@ -142,7 +142,7 @@ function check_salary( ply )
       local _m = ply:GetNWString( "money", "FAILED" )
       local _ms = ply:GetNWString( "salary", "FAILED" )
       if _m == "FAILED" or _ms == "FAILED" then
-        printGM( "error", "_m or _ms failed " .. _m .. " " .. _ms )
+        printGM( "note", "_m or _ms failed _m: " .. _m .. " _ms: " .. _ms )
         return false
       end
       local _money = tonumber( _m )
@@ -272,16 +272,22 @@ timer.Create( "ServerThink", 1, 0, function()
   end
 
   local _changelevel = 21600
-  if _time >= _changelevel-30 then
-    if _time >= _changelevel then
-      printGM( "gm", "Auto Reload" )
-      timer.Simple( 1, function()
-        game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
-      end)
-    else
-      printGM( "gm", "Auto Reload in " .. _changelevel-_time .. " sec" )
-    end
-  end
+	if IsServerChangelevelEnabled() then
+	  if _time >= _changelevel-30 then
+	    if _time >= _changelevel then
+	      printGM( "gm", "Auto Reload" )
+	      timer.Simple( 1, function()
+	        game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
+	      end)
+	    else
+				local _str = "Auto Reload in " .. _changelevel-_time .. " sec"
+	      printGM( "gm", _str )
+				net.Start( "yrp_info2" )
+					net.WriteString( _str )
+				net.Broadcast()
+	    end
+	  end
+	end
 
   _time = _time + 1
 end)

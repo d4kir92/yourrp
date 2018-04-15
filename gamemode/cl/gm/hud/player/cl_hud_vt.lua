@@ -11,10 +11,15 @@ function hudVT( ply, color )
   if showVT( ply ) then
     local _x = anchorW( HudV("vtaw") ) + ctr( HudV("vtpx") )
     local _y = anchorW( HudV("vtah") ) + ctr( HudV("vtpy") )
-    draw.RoundedBox( 0, _x, _y, ctr( HudV("vtsw") ), ctr( HudV("vtsh") ), color )
+    --draw.RoundedBox( 0, _x, _y, ctr( HudV("vtsw") ), ctr( HudV("vtsh") ), color )
+    if !tobool( HudV( "vt" .. "tr" ) ) then
+      draw.RoundedBox( 0, anchorW( HudV( "vt" .. "aw" ) ) + ctr( HudV("vt" .. "px") ), anchorH( HudV( "vt" .. "ah" ) ) + ctr( HudV("vt" .. "py") ), ctr( HudV("vt" .. "sw") ), ctr( HudV("vt" .. "sh") ), color )
+    else
+      drawRoundedBoxStencil( ctr( HudV("vt" .. "sh") ), anchorW( HudV( "vt" .. "aw" ) ) + ctr( HudV("vt" .. "px") ), anchorH( HudV( "vt" .. "ah" ) ) + ctr( HudV("vt" .. "py") ), ctr( HudV("vt" .. "sw") ), ctr( HudV("vt" .. "sh") ), color, ctr( HudV("vt" .. "sw") ) )
+    end
 
     local _x2 = _x + ctr( HudV( "vtsw" ) )/2
-    draw.SimpleTextOutlined( ply:GetNWString( "voteQuestion", "" ), "HudBars", _x2, _y + ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "wantstherolepre" ) .. " " .. ply:GetNWString( "voteName", "" ) .. " " .. lang_string( "wantstherolemid" ) .. " " .. ply:GetNWString( "voteRole", "" ) .. " " .. lang_string( "wantstherolepos" ), "HudBars", _x2, _y + ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
     if ply:GetNWString( "voteStatus" ) != "yes" and ply:GetNWString( "voteStatus" ) != "no" then
       draw.SimpleTextOutlined( lang_string( "yes" ) .. " - [Picture Up] | " .. lang_string( "no" ) .. " - [Picture Down]", "vtsf", _x2, _y + 2*ctr( HudV("vtsh") )/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 2 ), Color( 0, 0, 0 ) )
     elseif ply:GetNWString( "voteStatus" ) == "yes" then

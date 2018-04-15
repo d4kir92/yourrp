@@ -62,6 +62,7 @@ function SWEP:PrimaryAttack()
 end
 
 if CLIENT then
+
 	function DrawCuff( ply )
 		if ply:GetNWBool( "cuffed" ) then
 			local _r_hand = ply:LookupBone( "ValveBiped.Bip01_R_Hand" )
@@ -70,25 +71,36 @@ if CLIENT then
 				local _l_hand = ply:LookupBone( "ValveBiped.Bip01_L_Hand" )
 				if _l_hand != nil then
 					local endPos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_L_Hand" ) )
-					local line = render.DrawLine( startPos, endPos, Color( 255, 0, 0 ), false )
+					for i=0, 0.5, 0.01 do
+						render.DrawLine( startPos-Vector(0,0,i), endPos-Vector(0,0,i), Color( 100, 100, 100 ), true )
+					end
 				end
 			end
 		end
 	end
-	hook.Add( "PostPlayerDraw", "DrawCuff", DrawCuff )
+	hook.Add( "PrePlayerDraw", "DrawCuff", DrawCuff )
 end
 
 if SERVER then
 	hook.Add( "yrp_castdone_tieup", "tieup", function( args )
-		args.target:SetActiveWeapon( "yrp_unarmed" )
-		args.target:SelectWeapon( "yrp_unarmed" )
-		args.target:SetNWBool( "cuffed", true )
+		if !args.target:GetNWBool( "cuffed" ) then
+			args.target:Give( "yrp_cuffed" )
+			args.target:SetActiveWeapon( "yrp_cuffed" )
+			args.target:SelectWeapon( "yrp_cuffed" )
+			args.target:SetNWBool( "cuffed", true )
+		end
 	end)
 end
 
 if SERVER then
 	hook.Add( "yrp_castdone_unleash", "unleash", function( args )
-		args.target:SetNWBool( "cuffed", false )
+		if args.target:GetNWBool( "cuffed", false ) then
+			args.target:SetNWBool( "cuffed", false )
+			args.target:GetActiveWeapon():Remove()
+
+			args.target:SetActiveWeapon( "yrp_unarmed" )
+			args.target:SelectWeapon( "yrp_unarmed" )
+		end
 	end)
 end
 

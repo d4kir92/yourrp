@@ -96,7 +96,9 @@ function openSettings()
   if ply:HasAccess() then
     local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "admin" ) ) .. ")"
     settingsWindow.window:AddCategory( _server_admin )
+
     settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
+    --settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
     settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
     settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
     settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server_admin, "icon16/user_edit.png" )
@@ -200,7 +202,7 @@ function openSettings()
 
     settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
     function settingsWindow.window.site:Paint( pw, ph )
-      draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+      --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
       draw.SimpleTextOutlined( lang_string( "color" ), "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
     end
 

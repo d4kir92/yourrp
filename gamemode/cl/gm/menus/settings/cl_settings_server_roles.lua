@@ -1046,60 +1046,62 @@ net.Receive( "yrp_groups", function( len )
   yrp_groups = {}
   yrp_groups_dbTable = net.ReadTable()
   for k, v in pairs( yrp_groups_dbTable ) do
-    v.selected = false
-    yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
-    local tmp = yrp_groups[k]
-    tmp.uniqueID = v.uniqueID
-    tmp.groupID = v.groupID
-    tmp.id = k
-    function tmp:Paint( pw, ph )
-      if self:IsHovered() then
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 165, 0, 200 ) )
-      elseif yrp_groups_dbTable[self.id].selected then
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-      else
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+    if pa( settingsWindow.window.site ) then
+      v.selected = false
+      yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
+      local tmp = yrp_groups[k]
+      tmp.uniqueID = v.uniqueID
+      tmp.groupID = v.groupID
+      tmp.id = k
+      function tmp:Paint( pw, ph )
+        if self:IsHovered() then
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 165, 0, 200 ) )
+        elseif yrp_groups_dbTable[self.id].selected then
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+        else
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+        end
+        local _pre = ""
+        if tonumber( yrp_groups_dbTable[k].removeable ) == 0 then
+          _pre = "(" .. lang_string( "default" ) .. ") "
+        end
+        draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
+        draw.SimpleTextOutlined( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
-      local _pre = ""
-      if tonumber( yrp_groups_dbTable[k].removeable ) == 0 then
-        _pre = "(" .. lang_string( "default" ) .. ") "
+      function tmp:DoClick()
+        groupUniqueID = v.uniqueID
+        unselectAll()
+        yrp_groups_dbTable[self.id].selected = true
+        net.Start( "yrp_roles" )
+          net.WriteString( tmp.uniqueID )
+        net.SendToServer()
+
+        groupID = yrp_groups_dbTable[tmp.id].groupID
+
+        if groupsInfo != nil then
+          groupsInfo:Remove()
+          groupsInfo = nil
+        end
+        if rolesInfo != nil then
+          rolesInfo:Remove()
+          rolesInfo = nil
+        end
+
+        groupsInfo = createVGUI( "DPanel", settingsWindow.window.site, 1700, 1700, _lbr + _w + _br, 5 )
+        function groupsInfo:Paint( pw, ph )
+          draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
+        end
+
+        addDBTextEntry( groupsInfo, 800, 80, 0, 0, lang_string( "groupname" ), v.groupID, yrp_groups_dbTable[k], "yrp_groups", "groupID", "uniqueID = " .. tmp.uniqueID .. "", "Name of the group" )
+
+        addDBColorMixer( groupsInfo, 800, 800, 0, 80 + _br, v.color, yrp_groups_dbTable[k], "yrp_groups", "color", "uniqueID = " .. tmp.uniqueID .. "" )
+
+        if tonumber( yrp_groups_dbTable[k].removeable ) == 1 then
+          addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang_string( "uppergroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "", "the group, where this group is inside" )
+        end
       end
-      draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
-      draw.SimpleTextOutlined( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      groupsList:AddItem( tmp )
     end
-    function tmp:DoClick()
-      groupUniqueID = v.uniqueID
-      unselectAll()
-      yrp_groups_dbTable[self.id].selected = true
-      net.Start( "yrp_roles" )
-        net.WriteString( tmp.uniqueID )
-      net.SendToServer()
-
-      groupID = yrp_groups_dbTable[tmp.id].groupID
-
-      if groupsInfo != nil then
-        groupsInfo:Remove()
-        groupsInfo = nil
-      end
-      if rolesInfo != nil then
-        rolesInfo:Remove()
-        rolesInfo = nil
-      end
-
-      groupsInfo = createVGUI( "DPanel", settingsWindow.window.site, 1700, 1700, _lbr + _w + _br, 5 )
-      function groupsInfo:Paint( pw, ph )
-        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
-      end
-
-      addDBTextEntry( groupsInfo, 800, 80, 0, 0, lang_string( "groupname" ), v.groupID, yrp_groups_dbTable[k], "yrp_groups", "groupID", "uniqueID = " .. tmp.uniqueID .. "", "Name of the group" )
-
-      addDBColorMixer( groupsInfo, 800, 800, 0, 80 + _br, v.color, yrp_groups_dbTable[k], "yrp_groups", "color", "uniqueID = " .. tmp.uniqueID .. "" )
-
-      if tonumber( yrp_groups_dbTable[k].removeable ) == 1 then
-        addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang_string( "uppergroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "", "the group, where this group is inside" )
-      end
-    end
-    groupsList:AddItem( tmp )
   end
 
   -- First Group View

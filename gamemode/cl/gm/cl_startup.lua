@@ -584,13 +584,21 @@ function drawPlate( ply, string, z, color )
   cam.End3D2D()
 end
 
-function drawPlayerInfo( ply, string, x, y, z, w, h, color, alpha, icon, cur, max, color2 )
+function drawPlayerInfo( ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur, _max, color2 )
+  local x = tonumber( _x )
+  local y = tonumber( _y )
+  local z = tonumber( _z )
+  local w = tonumber( _w )
+  local h = tonumber( _h )
+  local h = tonumber( _h )
+  local alpha = tonumber( _alpha )
+  local max = tonumber( _max )
   local pos = ply:GetPos()
   local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
   local sca = 0.25
   x = x * (0.75 + ply:GetModelScale()*0.25)
   y = y * (0.75 + ply:GetModelScale()*0.25)
-  local str = string
+  local str = _str
   local strSize = string.len( str ) + 3
   --cam.Start3D2D( pos + Vector( 0, 0, z ) + ply:GetRight() * y + ply:GetForward() * x, ang, sca )
   cam.Start3D2D( pos + Vector( 0, 0, z ) + LocalPlayer():GetRight() * y + LocalPlayer():GetForward() * x, ang, sca )
@@ -698,7 +706,7 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
   local ply = LocalPlayer()
   if ply:GetNWBool( "tag_immortal", false ) then
   	for i, ent in pairs( ents.GetAll() ) do
-      if ent:IsNPC() then
+      if ent:IsNPC() and self:GetNWBool( "immortal", false ) then
         drawPlate( ent, string.upper( "[" .. lang_string( "immortal" ) .. "]" ), 0, Color( 0, 0, 100, ent:GetColor().a ) )
       end
   	end

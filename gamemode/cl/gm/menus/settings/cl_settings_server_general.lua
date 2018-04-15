@@ -45,6 +45,8 @@ hook.Add( "open_server_general", "open_server_general", function()
   local sv_generalTagHP = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 555 ) )
   local sv_generalTagAR = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 615 ) )
 
+  local sv_generalServerChangelevel = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 730 ) )
+
   local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
   sv_generalCollection:SetMin( 0 )
   sv_generalCollection:SetMax( 99999999999999 )
@@ -145,6 +147,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalTagGroup:SetValue( tonumber( _yrp_general.tag_group ) )
     sv_generalTagHP:SetValue( tonumber( _yrp_general.tag_hp ) )
     sv_generalTagAR:SetValue( tonumber( _yrp_general.tag_ar ) )
+
+    sv_generalServerChangelevel:SetValue( tonumber( _yrp_general.server_changelevel ) )
   end)
 
   sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
@@ -659,6 +663,16 @@ hook.Add( "open_server_general", "open_server_general", function()
       _tonumber = 1
     end
     net.Start( "db_update_tag_ar" )
+      net.WriteInt( _tonumber, 4 )
+    net.SendToServer()
+  end
+
+  function sv_generalServerChangelevel:OnChange( bVal )
+    local _tonumber = 0
+    if bVal then
+      _tonumber = 1
+    end
+    net.Start( "db_update_server_changelevel" )
       net.WriteInt( _tonumber, 4 )
     net.SendToServer()
   end
