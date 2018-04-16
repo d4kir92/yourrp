@@ -629,4 +629,8 @@ function EN_All()
   set_lang_string( "purple", "Purple" )
   set_lang_string( "autoserverreload", "Auto server reload" )
   set_lang_string( "moneyreset", "Money reset" )
+  set_lang_string( "canignite", "Can ignite" )
+  set_lang_string( "candrive", "Can drive" )
+  set_lang_string( "canchangecollision", "Can Change collision" )
+  set_lang_string( "canchangegravity", "Can Change Gravity" )
 end

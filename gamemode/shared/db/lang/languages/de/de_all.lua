@@ -629,4 +629,8 @@ function DE_All()
   set_lang_string( "purple", "Lila" )
   set_lang_string( "autoserverreload", "Automatisches Neuladen des Servers" )
   set_lang_string( "moneyreset", "Geld zurücksetzen" )
+  set_lang_string( "canignite", "Kann Entzünden" )
+  set_lang_string( "candrive", "Kann Fahren" )
+  set_lang_string( "canchangecollision", "Kann Kollision ändern" )
+  set_lang_string( "canchangegravity", "Kann Schwerkraft ändern" )
 end

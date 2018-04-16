@@ -93,11 +93,10 @@ function openSettings()
   local _server = lang_string( "server" )
   settingsWindow.window:AddCategory( _server )
   settingsWindow.window:AddSite( "open_server_collection", lang_string( "workshopcollection" ), _server, "icon16/page_world.png" )
-  if ply:HasAccess() then
-    local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. tostring( lang_string( "admin" ) ) .. ")"
-    settingsWindow.window:AddCategory( _server_admin )
 
-    settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
+  local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. string.upper( lang_string( "admin" ) ) .. ")"
+  settingsWindow.window:AddCategory( _server_admin )
+  if ply:HasAccess() then
     settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
     settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
     settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
@@ -107,8 +106,14 @@ function openSettings()
     settingsWindow.window:AddSite( "open_server_shops", lang_string( "shops" ), _server_admin, "icon16/basket_edit.png" )
     settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
     settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
-    settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
     settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
+  end
+
+  local _server_owner = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. "OWNER" .. ")"
+  settingsWindow.window:AddCategory( _server_owner )
+  if string.lower( tostring( ply:GetUserGroup() ) ) == "owner" then
+    settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_owner, "icon16/server_database.png" )
+    settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_owner, "icon16/group_go.png" )
   end
 
   settingsWindow.window:AddCategory( "yourrp" )

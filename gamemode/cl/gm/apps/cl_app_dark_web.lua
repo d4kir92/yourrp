@@ -66,14 +66,17 @@ function testApp( display, x, y, w, h )
       net.SendToServer()
     end
 
-    local _target_list = createD( "DListView", _dw, ctrb( 400 ), ctrb( 1200 ), 0, ctrb( 100 ) )
-    _target_list:AddColumn( lang_string( "hits" ) )
+    local _target_list = createD( "DListView", _dw, ctrb( 1000 ), ctrb( 1200 ), 0, ctrb( 100 ) )
+    _target_list:AddColumn( lang_string( "name" ) )
+    _target_list:AddColumn( lang_string( "target" ) )
+    _target_list:AddColumn( lang_string( "reward" ) )
+    _target_list:AddColumn( lang_string( "description" ) )
     net.Receive( "yrp_gethits", function( len )
       local _hits = net.ReadTable()
       for i, hit in pairs( _hits ) do
         for j, ply in pairs( player.GetAll() ) do
           if ply:SteamID() == hit.target then
-            _target_list:AddLine( ply:RPName(), hit.target, hit.reward, hit.description, hit.uniqueID )
+            _target_list:AddLine( ply:RPName(), hit.target, hit.reward, hit.description )
             break
           end
         end
@@ -162,10 +165,30 @@ function testApp( display, x, y, w, h )
             net.WriteString( _reward )
             net.WriteString( _desc )
           net.SendToServer()
+          _newhit:Close()
         end
       end
       _newhit:MakePopup()
     end
+
+    local _target_list = createD( "DListView", _dw, ctrb( 1000 ), ctrb( 1200 ), 0, ctrb( 100 ) )
+    _target_list:AddColumn( lang_string( "name" ) )
+    _target_list:AddColumn( lang_string( "target" ) )
+    _target_list:AddColumn( lang_string( "reward" ) )
+    _target_list:AddColumn( lang_string( "description" ) )
+    net.Receive( "yrp_get_contracts", function( len )
+      local _hits = net.ReadTable()
+      for i, hit in pairs( _hits ) do
+        for j, ply in pairs( player.GetAll() ) do
+          if ply:SteamID() == hit.target then
+            _target_list:AddLine( ply:RPName(), hit.target, hit.reward, hit.description )
+            break
+          end
+        end
+      end
+    end)
+    net.Start( "yrp_get_contracts" )
+    net.SendToServer()
   end
 end
 

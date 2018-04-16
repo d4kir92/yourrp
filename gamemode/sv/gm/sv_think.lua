@@ -128,7 +128,7 @@ end
 function time_jail( ply )
   if ply:GetNWBool( "inJail", false ) then
     ply:SetNWInt( "jailtime", ply:GetNWInt( "jailtime", 0 ) - 1 )
-    if ply:GetNWInt( "jailtime", 0 ) <= 0 then
+    if tonumber( ply:GetNWInt( "jailtime", 0 ) ) <= 0 then
       clean_up_jail( ply )
     end
   end

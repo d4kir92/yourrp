@@ -87,8 +87,13 @@ net.Receive( "getRistrictions", function( len )
         _tmpRes[10] = createCheckBox( lang_string( "canusephysgunpickup" ), 420, 550, k, "canusephysgunpickup", v.usergroup )
         _tmpRes[11] = createCheckBox( lang_string( "canusedynamitetool" ), 420, 610, k, "canusedynamitetool", v.usergroup )
 
+        _tmpRes[12] = createCheckBox( lang_string( "canignite" ), 420, 670, k, "canignite", v.usergroup )
+        _tmpRes[13] = createCheckBox( lang_string( "candrive" ), 420, 730, k, "candrive", v.usergroup )
+        _tmpRes[14] = createCheckBox( lang_string( "canchangecollision" ), 420, 790, k, "canchangecollision", v.usergroup )
+        _tmpRes[15] = createCheckBox( lang_string( "canchangegravity" ), 420, 850, k, "canchangegravity", v.usergroup )
+
         if v.usergroup != "superadmin" and v.usergroup != "admin" and v.usergroup != "owner" then
-          _tmpRes[12] = createDeleteButton( v.usergroup, 210, 360, _restrictionListView, k )
+          _tmpRes[16] = createDeleteButton( v.usergroup, 210, 360, _restrictionListView, k )
         end
       end
     end

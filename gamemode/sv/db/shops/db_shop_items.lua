@@ -190,7 +190,7 @@ net.Receive( "shop_item_edit_base", function( len, ply )
   printGM( "db", "shop_item_edit_base: " .. db_worked( _new ) )
 end)
 
-function SpawnVehicle( item )
+function SpawnVehicle( item, ply, ang )
   local vehicles = get_all_vehicles()
   local vehicle = {}
   for k, v in pairs( vehicles ) do
@@ -200,7 +200,7 @@ function SpawnVehicle( item )
         local spawnname = item.ClassName
         local _vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
 
-        local car = simfphys.SpawnVehicleSimple( spawnname, Vector( 1000, 1000, -12700 ), Angle( 0, 0, 0 ) )
+        local car = simfphys.SpawnVehicleSimple( v.ClassName, ply:GetPos(), ang )
 
         return car
       end
@@ -238,7 +238,18 @@ function spawnItem( ply, item, duid )
   local _angle = ply:EyeAngles()
   local ent = {}
   if item.type == "vehicles" then
-    ent = SpawnVehicle( item )
+    local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
+    if _sps != nil and _sps != false then
+      _sps = _sps[1].storagepoints
+      local _storagepoint = SQL_SELECT( "yrp_" .. string.lower( game.GetMap() ), "angle", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
+      if _storagepoint != nil and _storagepoint != false then
+        _storagepoint = _storagepoint[1]
+        local _ang = string.Explode( ",", _storagepoint.angle )
+        _angle = Angle( 0, _ang[2], 0 )
+      end
+    end
+
+    ent = SpawnVehicle( item, ply, _angle )
     local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "'" )
     local getVehicles = SQL_SELECT( "yrp_vehicles", "*", nil )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
@@ -293,7 +304,8 @@ function spawnItem( ply, item, duid )
       return true
     end
   end
-  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 64 ) )
+  _angle = ply:EyeAngles()
+  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 32 ) )
   for dist = 0, _distMax, _distSpace do
     for ang = 0, 360, 45 do
       if ang != 0 then

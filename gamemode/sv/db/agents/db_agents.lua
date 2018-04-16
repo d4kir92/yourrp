@@ -7,6 +7,7 @@ local _db_name = "yrp_agents"
 SQL_ADD_COLUMN( _db_name, "target", "TEXT DEFAULT 'No Target'" )
 SQL_ADD_COLUMN( _db_name, "reward", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "description", "TEXT DEFAULT 'NO DESCRIPTION'" )
+SQL_ADD_COLUMN( _db_name, "contract_SteamID", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -25,7 +26,7 @@ net.Receive( "yrp_placehit", function( len, ply )
   if ply:canAfford( _reward ) then
     ply:addMoney( - _reward )
     printGM( "note", "Set hit" )
-    local _res = SQL_INSERT_INTO( _db_name, "target, reward, description", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "'" )
+    local _res = SQL_INSERT_INTO( _db_name, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:SteamID() .. "'" )
 
   else
     printGM( "note", "Cant afford hit" )
@@ -41,12 +42,27 @@ net.Receive( "yrp_gethits", function( len, ply )
   end
 end)
 
+util.AddNetworkString( "yrp_get_contracts" )
+net.Receive( "yrp_get_contracts", function( len, ply )
+  local _hits = SQL_SELECT( _db_name, "*", "contract_SteamID = '" .. ply:SteamID() .. "'" )
+  if _hits != nil then
+    net.Start( "yrp_get_contracts" )
+      net.WriteTable( _hits )
+    net.Send( ply )
+  end
+end)
+
 function hitdone( target, agent )
   SQL_DELETE_FROM( _db_name, "uniqueID = " .. target:GetNWString( "hituid" ) )
 
   target:SetNWBool( "iswanted", false )
   target:SetNWString( "hitreward", "" )
   target:SetNWString( "hituid", "" )
+  agent:SetNWString( "hittargetName", "" )
+  agent:SetNWEntity( "hittarget", NULL )
+end
+
+function hitquit( agent )
   agent:SetNWString( "hittargetName", "" )
   agent:SetNWEntity( "hittarget", NULL )
 end

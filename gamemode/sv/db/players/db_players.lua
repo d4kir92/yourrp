@@ -109,6 +109,8 @@ end
 
 function set_role_values( ply )
   if ply:HasCharacterSelected() then
+    hitquit( ply )
+
     if yrp_db_loaded() then
       if IsNoClipTagsEnabled() then
         ply:SetNWBool( "show_tags", true )

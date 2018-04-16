@@ -126,6 +126,10 @@ function GM:PlayerLoadout( ply )
       ply:ForceGive( "weapon_physgun" )
       ply:ForceGive( "weapon_physcannon" )
     end
+
+    timer.Simple( 0.01, function()
+      teleportToSpawnpoint( ply )
+    end)
   end
   RenderNormal( ply )
 end

@@ -158,7 +158,7 @@ local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
 --##############################################################################
 hook.Add( "HUDPaint", "CustomHud", function( )
 	local ply = LocalPlayer()
-	
+
 	if !ply:InVehicle() then
 		HudPlayer( ply )
 		HudView()
@@ -182,7 +182,7 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		hudUpTime()
 	end
 
-	local _target = LocalPlayer():GetNWString( "hittarget", "" )
+	local _target = LocalPlayer():GetNWString( "hittargetName", "" )
 	if _target != "" then
 		surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
 		LocalPlayer():drawHitInfo()

@@ -71,6 +71,9 @@ function _mat1.DrawWindow( window, pw, ph, title )
       _color_bar.a = 240
       _color_bg.a = 40
     end
+  else
+    _color_bar.a = 255
+    _color_bg.a = 255
   end
   surfaceBox( 0, 0, pw, ctr( 50 ), _color_bar )
   surfaceBox( 0, ctr( 50 ), pw, ph - ctr( 50 ), _color_bg )
@@ -98,6 +101,8 @@ function _mat1.DrawButton( btn, pw, ph, text )
   local _color_br = _mat1.GetColor( "br", InterfaceStyle() )
   if InterfaceTransparent() then
     _color_bar.a = 220
+  else
+    _color_bar.a = 255
   end
   local _hovered = 0
   if btn:IsHovered() then
@@ -127,6 +132,8 @@ function _mat1.DrawPanel( pnl, pw, ph, text )
   local _color_br = _mat1.GetColor( "br", InterfaceStyle() )
   if InterfaceTransparent() then
     _color_bar.a = 220
+  else
+    _color_bar.a = 255
   end
   surfaceBox( 0, 0, pw, ph,_color_bar )
   if InterfaceBorder() then
