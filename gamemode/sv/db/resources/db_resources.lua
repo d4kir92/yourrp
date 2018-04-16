@@ -8,10 +8,14 @@ hr_pre()
 printGM( "db", "Loading Resources" )
 printGM( "db", "" )
 
---yourrp content
+-- yourrp content
 resource.AddWorkshop( "1189643820" )
+-- FONTS
+resource.AddFile( "resource/fonts/Roboto-Regular.ttf" )
+resource.AddFile( "resource/fonts/Roboto-Thin.ttf" )
+resource.AddFile( "resource/fonts/Roboto-Bold.ttf" )
 
---Food and Household items
+-- Food and Household items
 resource.AddWorkshop( "108024198" )
 
 --Server Workshop Collection

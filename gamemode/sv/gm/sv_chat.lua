@@ -79,7 +79,7 @@ end
 
 function drop_money( sender, text )
   local _table = string.Explode( " ", text )
-  local _moneyAmount = tonumber( _table[2] )
+  local _moneyAmount = math.abs( tonumber( _table[2] ) )
   if isnumber( _moneyAmount ) then
     if sender:canAfford( _moneyAmount ) then
       local _money = ents.Create( "yrp_money" )
@@ -165,7 +165,7 @@ function set_money( sender, text )
     end
     sender:ChatPrint( "Command-FAILED" )
   else
-    printGM( "note", sender:Nick() .. " tried to use setmoney!" )
+    printGM( "note", sender:YRPName() .. " tried to use setmoney!" )
   end
 end
 

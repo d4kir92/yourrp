@@ -64,6 +64,7 @@ function testApp( display, x, y, w, h )
       net.Start( "yrp_accepthit" )
         net.WriteString( self.hit.uniqueID )
       net.SendToServer()
+      closeSP()
     end
 
     local _target_list = createD( "DListView", _dw, ctrb( 1000 ), ctrb( 1200 ), 0, ctrb( 100 ) )
@@ -76,7 +77,7 @@ function testApp( display, x, y, w, h )
       for i, hit in pairs( _hits ) do
         for j, ply in pairs( player.GetAll() ) do
           if ply:SteamID() == hit.target then
-            _target_list:AddLine( ply:RPName(), hit.target, hit.reward, hit.description )
+            _target_list:AddLine( ply:RPName(), hit.target, hit.reward, hit.description, hit.uniqueID )
             break
           end
         end

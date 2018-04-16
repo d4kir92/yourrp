@@ -633,4 +633,6 @@ function DE_All()
   set_lang_string( "candrive", "Kann Fahren" )
   set_lang_string( "canchangecollision", "Kann Kollision ändern" )
   set_lang_string( "canchangegravity", "Kann Schwerkraft ändern" )
+  set_lang_string( "canchangekeepupright", "Kann Aufrechterhalten ändern" )
+  set_lang_string( "canchangebodygroups", "Kann Körpergruppen ändern" )
 end

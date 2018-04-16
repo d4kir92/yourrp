@@ -250,9 +250,13 @@ net.Receive( "get_menu_bodygroups", function( len, ply )
   local _role = ply:GetRolTab()
   _result.playermodels = _role.playermodels
   _result.playermodelsnone = _role.playermodelsnone
-  net.Start( "get_menu_bodygroups" )
-    net.WriteTable( _result )
-  net.Send( ply )
+  if _result.playermodels == "" and _result.playermodelsnone == "" then
+    -- nothing
+  else
+    net.Start( "get_menu_bodygroups" )
+      net.WriteTable( _result )
+    net.Send( ply )
+  end
 end)
 
 util.AddNetworkString( "inv_bg_up" )

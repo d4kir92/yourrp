@@ -21,7 +21,8 @@ SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
 SWEP.ViewModel = ""
-SWEP.WorldModel = "models/Items/combine_rifle_ammo01.mdl"
+SWEP.WorldModel = ""
+SWEP.notdropable = true
 
 SWEP.Primary.ClipSize = -1
 

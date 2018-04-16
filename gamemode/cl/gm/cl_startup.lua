@@ -610,8 +610,10 @@ function drawPlayerInfo( ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cu
 
     surfaceBox( 0, 0, w, h, color )
 
-    if cur != nil then
+    if _cur != nil then
       color2.a = alpha
+      local cur = tonumber( _cur )
+      local max = tonumber( _max )
       surfaceBox( 0, 0, cur/max*w, h, color2 )
     end
     if icon != nil then
@@ -635,10 +637,12 @@ _icons["hp"] = Material( "icon16/heart.png" )
 _icons["ar"] = Material( "icon16/shield.png" )
 _icons["gn"] = Material( "icon16/group.png" )
 _icons["rn"] = Material( "icon16/user_gray.png" )
-_icons["na"] = Material( "icon16/user.png" )
+_icons["na"] = Material( "icon16/vcard.png" )
 _icons["sa"] = Material( "icon16/money_add.png" )
 _icons["mo"] = Material( "icon16/money.png" )
 _icons["sn"] = Material( "icon16/status_online.png" )
+_icons["ug"] = Material( "icon16/group_key.png" )
+_icons["ms"] = Material( "icon16/lightning.png" )
 
 function drawPlates( ply )
   if ply:Alive() then
@@ -666,34 +670,48 @@ function drawPlates( ply )
           local _y = 18
           local _w = 160
           local _h = 20
-          if ply:GetNWBool( "tag_name", false ) then
+          if ply:GetNWBool( "tag_name", false ) or LocalPlayer():HasAccess() then
             drawPlayerInfo( ply, ply:RPName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["na"] )
             _z = _z + 5
           end
-          if ply:GetNWBool( "tag_role", false ) then
+          if ply:GetNWBool( "tag_role", false ) or LocalPlayer():HasAccess() then
             drawPlayerInfo( ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["rn"] )
             _z = _z + 5
           end
-          if ply:GetNWBool( "tag_group", false ) then
-            drawPlayerInfo( ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["gn"] )
+          if ply:GetNWBool( "tag_group", false ) or LocalPlayer():HasAccess() then
+            local _color = ply:GetNWString( "groupColor", "255,0,0" )
+            _color = string.Explode( ",", _color )
+            _color = Color( _color[1], _color[2], _color[3] )
+            drawPlayerInfo( ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["gn"], 1, 1, _color )
             _z = _z + 5
           end
-          if ply:GetNWBool( "tag_hp", false ) then
-            drawPlayerInfo( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color( 150, 52, 52, 200 ) )
+          if ply:GetNWBool( "tag_hp", false ) or LocalPlayer():HasAccess() then
+            drawPlayerInfo( ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color( 150, 52, 52, 200 ) )
             _z = _z + 5
           end
-          if ply:GetNWBool( "tag_ar", false ) then
-            drawPlayerInfo( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "" ) .. " " .. lang_string( "armor" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString( "GetMaxArmor", "" ), Color( 52, 150, 72, 200 ) )
+          if ply:GetNWBool( "tag_ar", false ) or LocalPlayer():HasAccess() then
+            drawPlayerInfo( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString( "GetMaxArmor", "" ), Color( 52, 150, 72, 200 ) )
             _z = _z + 5
           end
+
           if LocalPlayer():HasAccess() then
+            drawPlayerInfo( ply, ply:GetNWString( "GetCurStamina", "" ) .. "/" .. ply:GetNWString( "GetMaxStamina", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ms"], ply:GetNWString( "GetCurStamina", "" ), ply:GetNWString( "GetMaxStamina", "" ), Color( 150, 150, 60, _alpha ) )
+            _z = _z + 5
+
             drawPlayerInfo( ply, ply:SteamName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sn"] )
+            _z = _z + 5
+
+            drawPlayerInfo( ply, ply:GetUserGroup(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ug"] )
             _z = _z + 5
 
             drawPlayerInfo( ply, "+" .. ply:GetNWString( "moneypre", "" ) .. ply:GetNWString( "salary", "" ) .. ply:GetNWString( "moneypos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sa"] )
             _z = _z + 5
 
-            drawPlayerInfo( ply, ply:GetNWString( "moneypre", "" ) .. ply:GetNWString( "money", "" ) .. ply:GetNWString( "moneypos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["mo"] )
+            local _motext = ply:GetNWString( "moneypre", "" ) .. ply:GetNWString( "money", "" ) .. ply:GetNWString( "moneypos", "" )
+            local _mMin = CurTime() + ply:GetNWInt( "salarytime" ) - ply:GetNWInt( "nextsalarytime" )
+            local _mMax = ply:GetNWInt( "salarytime" )+1
+
+            drawPlayerInfo( ply, _motext, _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["mo"], _mMin, _mMax, Color( 33, 108, 42, _alpha ) )
             _z = _z + 5
           end
         end
@@ -704,7 +722,7 @@ function drawPlates( ply )
   ply:drawPlayerInfo()
   ply:drawWantedInfo()
 end
-hook.Add( "PostPlayerDraw", "DrawName", drawPlates )
+hook.Add( "PostPlayerDraw", "yrp_draw_plates", drawPlates )
 
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
   local ply = LocalPlayer()

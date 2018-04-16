@@ -119,7 +119,7 @@ function useFunction( string )
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or lang_string( "weapon" )
-				if _weapon:GetModel() != "" then
+				if _weapon.notdropable == nil then
 					notification.AddLegacy( _pname .. " " .. lang_string( "hasbeendropped" ), 0, 3)
 
 					net.Start( "dropswep" )

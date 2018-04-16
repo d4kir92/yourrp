@@ -24,15 +24,17 @@ SQL_ADD_COLUMN( _db_name, "canignite", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "candrive", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "canchangecollision", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "canchangegravity", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "canchangekeepupright", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( _db_name, "canchangebodygroups", "INT DEFAULT 0" )
 
 if SQL_SELECT( _db_name, "*", "usergroup = 'owner'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity", "'owner', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity, canchangekeepupright, canchangebodygroups", "'owner', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if SQL_SELECT( _db_name, "*", "usergroup = 'superadmin'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity, canchangekeepupright, canchangebodygroups", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if SQL_SELECT( _db_name, "*", "usergroup = 'admin'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity", "'admin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+  SQL_INSERT_INTO( _db_name, "usergroup, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity, canchangekeepupright, canchangebodygroups", "'admin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 if SQL_SELECT( _db_name, "*", "usergroup = 'user'" ) == nil then
   SQL_INSERT_INTO( _db_name, "usergroup", "'user'" )
@@ -336,8 +338,8 @@ hook.Add( "CanTool", "yrp_can_tool", function( ply, tr, tool )
 end)
 
 hook.Add( "CanProperty", "yrp_canproperty", function( ply, property, ent )
-  --printGM( "gm", "CanProperty: " .. property )
-  if tool == "ignite" then
+  printGM( "gm", "CanProperty: " .. property )
+  if property == "ignite" then
     local _tmp = SQL_SELECT( "yrp_restrictions", "canignite", "usergroup = '" .. ply:GetUserGroup() .. "'" )
     if _tmp != nil and _tmp != false then
       _tmp = _tmp[1]
@@ -391,6 +393,36 @@ hook.Add( "CanProperty", "yrp_canproperty", function( ply, property, ent )
       else
         net.Start( "yrp_info" )
           net.WriteString( "canchangecollision" )
+        net.Send( ply )
+        return false
+      end
+    else
+      return false
+    end
+  elseif property == "keepupright" then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "canchangekeepupright", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+    if _tmp != nil and _tmp != false then
+      _tmp = _tmp[1]
+      if tobool( _tmp.canchangekeepupright ) then
+        return true
+      else
+        net.Start( "yrp_info" )
+          net.WriteString( "canchangekeepupright" )
+        net.Send( ply )
+        return false
+      end
+    else
+      return false
+    end
+  elseif property == "bodygroups" then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "canchangebodygroups", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+    if _tmp != nil and _tmp != false then
+      _tmp = _tmp[1]
+      if tobool( _tmp.canchangebodygroups ) then
+        return true
+      else
+        net.Start( "yrp_info" )
+          net.WriteString( "canchangebodygroups" )
         net.Send( ply )
         return false
       end

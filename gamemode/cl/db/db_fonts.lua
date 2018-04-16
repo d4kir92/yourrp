@@ -91,7 +91,7 @@ function changeFontSize()
 	createFont( "gmbase", tmpFont, 16, 500, false )
 
 	createFontOld( "plates", tmpFont, 30, 1000, true )
-	createFontOld( "plyinfo", tmpFont, 18, 800, true )
+	createFontOld( "plyinfo", "Roboto-Regular", 16, 800, true )
 
 	createFont( "mdMenu", tmpFont, 17, 1000, false )
 

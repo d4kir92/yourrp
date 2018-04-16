@@ -68,15 +68,17 @@ function GetDesign()
 end
 
 function surfaceWindow( derma, pw, ph, title )
+  local _title = title or ""
   local ply = LocalPlayer()
   if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DFrame"]( derma, pw, ph, title )
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DFrame"]( derma, pw, ph, _title )
   else
     GetDesign()
   end
 end
 
 function surfaceButton( derma, pw, ph, text )
+  local _text = text or ""
   local ply = LocalPlayer()
   if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
     yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text )
@@ -86,9 +88,10 @@ function surfaceButton( derma, pw, ph, text )
 end
 
 function surfacePanel( derma, pw, ph, text )
+  local _text = text or ""
   local ply = LocalPlayer()
   if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DPanel"]( derma, pw, ph, text )
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DPanel"]( derma, pw, ph, _text )
   else
     GetDesign()
   end

@@ -633,4 +633,6 @@ function EN_All()
   set_lang_string( "candrive", "Can drive" )
   set_lang_string( "canchangecollision", "Can Change collision" )
   set_lang_string( "canchangegravity", "Can Change Gravity" )
+  set_lang_string( "canchangekeepupright", "Can Change Keep Upright" )
+  set_lang_string( "canchangebodygroups", "Can Change Bodygroups" )
 end

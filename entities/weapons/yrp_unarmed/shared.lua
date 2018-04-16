@@ -20,8 +20,9 @@ SWEP.DrawCrosshair = false
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/c_arms.mdl"
+SWEP.ViewModel = ""
 SWEP.WorldModel = ""
+SWEP.notdropable = true
 
 SWEP.Primary.ClipSize = -1
 
