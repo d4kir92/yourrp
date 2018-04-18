@@ -79,8 +79,9 @@ end
 
 function drop_money( sender, text )
   local _table = string.Explode( " ", text )
-  local _moneyAmount = math.abs( tonumber( _table[2] ) )
-  if isnumber( _moneyAmount ) then
+  local _money = tonumber( _table[2] )
+  if isnumber( _money ) then
+    local _moneyAmount = math.abs( _money )
     if sender:canAfford( _moneyAmount ) then
       local _money = ents.Create( "yrp_money" )
       sender:addMoney( -_moneyAmount )

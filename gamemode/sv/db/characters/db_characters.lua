@@ -38,8 +38,9 @@ SQL_ADD_COLUMN( _db_name, "map", "TEXT" )
 
 util.AddNetworkString( "moneyreset" )
 net.Receive( "moneyreset", function( len, ply )
-  printGM( "db", "[MONEY RESET]" )
+  printGM( "db", "<[MONEY RESET]>" )
   SQL_UPDATE( "yrp_characters", "money = '" .. "0" .. "'", nil )
+  SQL_UPDATE( "yrp_characters", "moneybank = '" .. "0" .. "'", nil )
   for i, pl in pairs( player.GetAll() ) do
     pl:SetMoney( 0 )
   end

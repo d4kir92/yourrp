@@ -37,6 +37,7 @@ include( "gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_contact.lua" )
 include( "gm/menus/settings/cl_settings_yourrp_workshop.lua" )
 include( "gm/menus/cl_smartphone.lua" )
+include( "gm/menus/cl_emotes.lua" )
 
 include( "gm/apps/cl_app_settings_yrp.lua" )
 include( "gm/apps/cl_app_settings_sp.lua" )

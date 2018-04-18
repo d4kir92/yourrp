@@ -100,5 +100,11 @@ end
 
 util.AddNetworkString( "get_design" )
 net.Receive( "get_design", function( len, ply )
-  SetDesign( ply )
+  if ply:GetNWString( "interface_design", "" ) == "" then
+    printGM( "db", "DESIGN IS EMPTY -> SET DEFAULT" )
+    SQL_INSERT_INTO( _db_name, "color, style, design, rounded, transparent, border", "'blue', 'dark', 'Material Design 1', '1', '1', '1'" )
+    SetDesign( ply )
+  else
+    SetDesign( ply )
+  end
 end)

@@ -91,6 +91,7 @@ function openHelpMenu()
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("menu_appearance" ) ) ) .. "] " .. lang_string( "appearance" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 10*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("drop_item" ) ) ) .. "] " .. lang_string( "drop" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 11*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("weaponlowering" ) ) ) .. "] " .. lang_string( "weaponlowering" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 12*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("menu_emotes" ) ) ) .. "] " .. lang_string( "emotes" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 13*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     --[[ RIGHT ]]--
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("view_switch" ) ) ) .. "] " .. lang_string( "viewswitch" ), "ttsf", pw/2, ctr( 20 ) + ctr( 1*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )

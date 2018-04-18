@@ -77,6 +77,8 @@ function useFunction( string )
 		elseif string == "openHelpMenu" then
 			done_tutorial( "tut_feedback" )
 			toggleHelpMenu()
+    elseif string == "ToggleEmotesMenu" then
+      ToggleEmotesMenu()
 		elseif string == "openFeedbackMenu" then
 			toggleFeedbackMenu()
 		elseif string == "openCharMenu" then
@@ -369,6 +371,8 @@ function KeyPress()
 	keyPressed( KEY_F1, "openHelpMenu", nil, nil )
 	keyPressed( KEY_F7, "openFeedbackMenu", nil, nil )
 
+  keyPressed( get_keybind("menu_emotes"), "ToggleEmotesMenu", nil, nil )
+
 	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
 
 	keyPressed( get_keybind("menu_inventory"), "openInventory", nil, nil )
@@ -410,7 +414,7 @@ local function yrpCalcView( ply, pos, angles, fov )
 			if weapon != NULL then
 				if weapon:GetClass() != nil then
 					local _weaponName = string.lower( tostring( ply:GetActiveWeapon():GetClass() ) )
-					if !string.find( _weaponName, "lightsaber", 0, false ) then
+					if !string.find( _weaponName, "lightsaber", 0, false ) and !ply:GetNWBool( "istaunting", false ) then
 						local view = {}
 
 						if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() then

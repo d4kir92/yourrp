@@ -110,8 +110,8 @@ function GM:PlayerLoadout( ply )
     if _yrp_general != nil then
       _yrp_general = _yrp_general[1]
       ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
-      ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
-      ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
+      --ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
+      --ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
       ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
       ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
       ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
@@ -152,19 +152,6 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function( ply )
   ply:StopBleeding()
 
   ply:SetNWBool( "can_respawn", true )
-  local _sel = SQL_SELECT( "yrp_general", "toggle_clearinventoryondead", "uniqueID = 1" )
-  if _sel != nil and _sel != false then
-    _sel = _sel[1]
-    if tobool( _sel.toggle_clearinventoryondead ) then
-      ply:StripWeapons()
-      if ply:HasAccess() then
-        net.Start( "yrp_noti" )
-          net.WriteString( "inventoryclearing" )
-          net.WriteString( "enabled" )
-        net.Send( ply )
-      end
-    end
-  end
 end)
 
 --[[

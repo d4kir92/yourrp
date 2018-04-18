@@ -10,13 +10,13 @@ if Player.LegacyGive == nil then
 end
 
 function Player:ForceGive( cname, noammo )
-  print("ForceGive")
+  printGM( "gm", "ForceGive( " .. cname .. " )" )
   self.canpickup = true
   return self:Give( cname, noammo )
 end
 
 function Player:Give( cname, noammo )
-  print("Give")
+  printGM( "gm", "Give( " .. cname .. " )" )
   local _noAmmo = noammo
   if _noAmmo == nil then
     _noAmmo = false

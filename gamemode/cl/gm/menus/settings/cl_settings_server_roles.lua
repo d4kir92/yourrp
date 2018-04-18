@@ -608,8 +608,9 @@ function addDBSwep( parent, id, uniqueID, help )
         table.insert( swepsL, v )
       end
     end
-    _globalWorking = yrp_roles_dbTable[id].sweps
-
+    if yrp_roles_dbTable != nil then
+      _globalWorking = yrp_roles_dbTable[id].sweps
+    end
     hook.Add( "closeRoleSweps", "crs", function()
       if yrp_roles_dbTable != nil then
         if yrp_roles_dbTable[id] != nil then

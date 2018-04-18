@@ -83,6 +83,9 @@ function changeFontSize()
 	createFont( "mat1header", "Roboto-Regular", 24, 1, true )
 	createFont( "mat1text", "Roboto-Regular", 18, 1, true )
 
+	--[[ EMOTES ]]--
+	createFont( "emotes", "Roboto-Regular", 22, 1, true )
+
 	createFont( "apph1", tmpFont, fontr( 36 ), 1, false )
 	createFont( "appt", tmpFont, fontr( 30 ), 1, false )
 

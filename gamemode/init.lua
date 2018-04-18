@@ -87,6 +87,7 @@ AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_add_langu.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_contact.lua" )
 AddCSLuaFile( "cl/gm/menus/settings/cl_settings_yourrp_workshop.lua" )
 AddCSLuaFile( "cl/gm/menus/cl_smartphone.lua" )
+AddCSLuaFile( "cl/gm/menus/cl_emotes.lua" )
 
 AddCSLuaFile( "cl/gm/apps/cl_app_settings_yrp.lua" )
 AddCSLuaFile( "cl/gm/apps/cl_app_settings_sp.lua" )

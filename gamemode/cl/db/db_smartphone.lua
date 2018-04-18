@@ -34,7 +34,7 @@ function check_yrp_smartphone()
   SQL_ADD_COLUMN( _db_name, "value", "TEXT DEFAULT 'value'" )
 
   local _sp = SQL_SELECT( _db_name, "*", nil )
-  if _sp != nil then
+  if _sp != nil and _sp != false then
     yrp_smartphone = _sp[1]
   end
 

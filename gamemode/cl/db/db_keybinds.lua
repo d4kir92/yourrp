@@ -61,7 +61,8 @@ function check_yrp_keybinds()
   SQL_ADD_COLUMN( _db_name, "drop_item", "INT DEFAULT " .. KEY_G )
   SQL_ADD_COLUMN( _db_name, "weaponlowering", "INT DEFAULT " .. KEY_H )
   SQL_ADD_COLUMN( _db_name, "menu_appearance", "INT DEFAULT " .. KEY_O )
-
+  SQL_ADD_COLUMN( _db_name, "menu_emotes", "INT DEFAULT " .. KEY_N )
+  
   SQL_ADD_COLUMN( _db_name, "view_switch", "INT DEFAULT " .. KEY_T )
   SQL_ADD_COLUMN( _db_name, "view_zoom_out", "INT DEFAULT " .. KEY_PAD_PLUS )
   SQL_ADD_COLUMN( _db_name, "view_zoom_in", "INT DEFAULT " .. KEY_PAD_MINUS )
@@ -71,6 +72,7 @@ function check_yrp_keybinds()
   SQL_ADD_COLUMN( _db_name, "view_left", "INT DEFAULT " .. KEY_PAD_4 )
   SQL_ADD_COLUMN( _db_name, "view_spin_right", "INT DEFAULT " .. KEY_PAD_9 )
   SQL_ADD_COLUMN( _db_name, "view_spin_left", "INT DEFAULT " .. KEY_PAD_7 )
+
 
   local _tmp = SQL_SELECT( _db_name, "*", "uniqueID = 1" )
   if _tmp == nil then

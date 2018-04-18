@@ -610,11 +610,13 @@ function drawPlayerInfo( ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cu
 
     surfaceBox( 0, 0, w, h, color )
 
-    if _cur != nil then
+    if _cur != nil and _max != nil then
       color2.a = alpha
       local cur = tonumber( _cur )
       local max = tonumber( _max )
-      surfaceBox( 0, 0, cur/max*w, h, color2 )
+      if max > 0 then
+        surfaceBox( 0, 0, cur/max*w, h, color2 )
+      end
     end
     if icon != nil then
       surface.SetDrawColor( 255, 255, 255, alpha )
