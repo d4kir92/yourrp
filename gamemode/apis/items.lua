@@ -79,8 +79,20 @@ function GetSurroundingEntities( ply )
   local _ents = ents.FindInSphere( ply:GetPos(), 60 )
   local _tab = {}
   for i, ent in pairs( _ents ) do
-    if ent:GetOwner() == NULL and ent:IsWeapon() then
-      table.insert( _tab, ent )
+    if ent:GetModel() != nil and ent:GetModel() != "" then
+      if !ent:IsPlayer() and !ent:IsNPC() and !ent:IsRagdoll() and !ent:IsVehicle() then
+        if !ent:IsWorld() then
+          if !ent:GetPersistent() then
+            if ent:GetParent() != ply then
+              if !ent:GetParent():IsVehicle() and !string.find( ent:GetClass(), "wheel" ) then
+                if ent:GetNWBool( "isaworldstorage", false ) == false then
+                  table.insert( _tab, ent )
+                end
+              end
+            end
+          end
+        end
+      end
     end
   end
   return _tab
@@ -89,7 +101,11 @@ end
 function FormatEntityToItem( ent )
   local _item = {}
   _item.ClassName = ent:GetClass()
-  _item.PrintName = ent:GetPrintName()
+  if ent.GetPrintName then
+    _item.PrintName = ent:GetPrintName() or ent.PrintName or "UNNAMED"
+  else
+    _item.PrintName = ent.PrintName or ent:GetClass() or "UNNAMED"
+  end
   _item.WorldModel = ent:GetModel()
   _item.storageID = 0
   _item.entity = ent
@@ -219,9 +235,23 @@ if CLIENT then
     return item_handler
   end
 
+  function RemoveStorage( pnl, uid )
+    if item_handler[tonumber(uid)] != nil then
+      for y = 1, #item_handler[tonumber(uid)] do
+        for x = 1, #item_handler[tonumber(uid)][y] do
+          item_handler[tonumber(uid)][y][x].slot:Remove()
+          if item_handler[tonumber(uid)][y][x].item != nil then
+            item_handler[tonumber(uid)][y][x].item:Remove()
+          end
+        end
+      end
+    end
+  end
+
   function AddStorage( pnl, uid, w, h )
     item_handler[tonumber(uid)] = {}
     item_handler[tonumber(uid)].pnl = pnl
+    item_handler[tonumber(uid)].pnl:SetSize( ctr( 128*w ), ctr( 128*h ) )
     for y = 1, h do
       item_handler[tonumber(uid)][y] = {}
       for x = 1, w do
@@ -264,6 +294,15 @@ if CLIENT then
 
   function ResetStorages()
     item_handler = {}
+  end
+
+  function GetItemHandlerStoragePnl( storageID )
+    if item_handler != nil then
+      if item_handler[tonumber(storageID)] != nil then
+        return item_handler[tonumber(storageID)].pnl
+      end
+    end
+    return NULL
   end
 
   function AddItemToStorage( tab )

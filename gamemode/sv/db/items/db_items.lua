@@ -47,10 +47,33 @@ net.Receive( "yrp_close_storages", function( len, ply )
   RemoveFromStorageClientHandler( ply, uid )
 end)
 
+function TeleportEntityTo( ent, pos )
+  local _pos = Vector( math.Round( pos[1], 2 ), math.Round( pos[2], 2 ), math.Round( pos[3], 2 ) )
+  local _angle = ent:GetAngles()
+
+  if enough_space( ent, _pos + Vector( 0, 0, 2 ) ) then
+    local __pos = get_ground_pos( ent, _pos + Vector( 0, 0, 2 ) )
+    ent:SetPos( __pos )
+  else
+    for i = 1, 3 do
+      for j = 0, 360, 45 do
+        _angle:RotateAroundAxis( ent:GetForward(), 45 )
+        local _enough_space = enough_space( ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+        if _enough_space then
+          local __pos = get_ground_pos( ent, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+          ent:SetPos( __pos )
+          return
+        end
+      end
+    end
+  end
+end
+
 function ItemToEntity( item, ply )
   local _ent = ents.Create( item.ClassName )
+  _ent:SetModel( item.WorldModel )
   _ent:Spawn()
-  _ent:SetPos( ply:GetPos() )
+  TeleportEntityTo(_ent, ply:GetPos() )
   return item
 end
 

@@ -27,6 +27,7 @@ function GM:PlayerInitialSpawn( ply )
       timer.Simple( 1, function()
 
         SetRole( ply, rolTab.uniqueID )
+        teleportToSpawnpoint( ply )
       end)
     end
   end
@@ -126,24 +127,18 @@ function GM:PlayerLoadout( ply )
       ply:ForceGive( "weapon_physgun" )
       ply:ForceGive( "weapon_physcannon" )
     end
-
-    timer.Simple( 0.01, function()
-      teleportToSpawnpoint( ply )
-    end)
   end
   RenderNormal( ply )
 end
 
 hook.Add( "PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function( ply )
   printGM( "gm", "[PlayerSpawn] " .. tostring( ply:YRPName() ) .. " spawned." )
-  if ply:GetNWBool( "can_respawn", true ) then
+  if ply:GetNWBool( "can_respawn", false ) then
     ply:SetNWBool( "can_respawn", false )
 
     timer.Simple( 0.01, function()
       teleportToSpawnpoint( ply )
     end)
-  else
-    printGM( "note", "PlayerSpawn failed" )
   end
 end)
 

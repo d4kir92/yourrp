@@ -38,69 +38,96 @@ net.Receive( "openStorage", function( len )
       CloseInventory()
     end
 
-    --[[ Storage ScrollPanel ]]--
-    inv.storages = createD( "DPanelList", inv.window, (BScrW()/2) - ctr( 20 ), ScrH() - ctr( 50 + 10 + 10 ), ctr( 10 ), ctr( 50 + 10 ) )
-    inv.storages:EnableVerticalScrollbar( true )
-    inv.storages:SetSpacing( 10 )
-    function inv.storages:Paint( pw, ph )
-      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 40 ) )
+    --[[ Surrounding ]]--
+    inv.sur_tab = GetSurroundingStorage( ply )
+
+    -- Header
+    inv.sur_header = createD( "DPanel", inv.window, ctr(128*8) + ctr( 25 ), ctr( 50 ), ctr( 10 ), ctr( 50 + 10 ) )
+    function inv.sur_header:Paint( pw, ph )
+      local _str = string.upper( lang_string( string.lower( inv.sur_tab.name ) ) ) -- .. " [DEBUG] UID: " .. stor.uniqueID
+      surfacePanel( self, pw, ph, _str )
     end
 
-    --[[ Surrounding Storage ]]--
-    table.insert( _tabs, 0, GetSurroundingStorage( ply ) )
+    -- DPanelList
+    inv.sur_pl = createD( "DPanelList", inv.window, ctr( 128 * 8 + 25 ), ScrH2() - ctr( 50 + 10 + 50 + 10 ), ctr( 10 ), ctr( 50 + 10 + 50 ) )
+    inv.sur_pl:EnableVerticalScrollbar( true )
+    inv.sur_pl:SetSpacing( 10 )
+    function inv.sur_pl:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+    end
+    inv.sur_content = createD( "DPanel", nil, ctr( 128 * inv.sur_tab.sizew ), ctr( 128 * inv.sur_tab.sizeh ), 0, 0 )
+    inv.sur_items = {}
+    function inv.sur_content:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      local _new = GetSurroundingItems( ply )
+      if #_new != #inv.sur_items then
+        UpdateSurroundingStorage( _new )
+      end
+    end
+    inv.sur_pl:AddItem( inv.sur_content )
+    function UpdateSurroundingStorage( tab )
+      RemoveStorage( inv.sur_content, 0 )
+      inv.sur_tab = GetSurroundingStorage( ply )
+      AddStorage( inv.sur_content, inv.sur_tab.uniqueID, inv.sur_tab.sizew, inv.sur_tab.sizeh )
+      inv.sur_pl:Rebuild()
+
+      inv.sur_items = tab
+      inv._stor = {}
+      for y = 1, inv.sur_tab.sizeh do
+        inv._stor[y] = {}
+        for x = 1, inv.sur_tab.sizew do
+          inv._stor[y][x] = {}
+          inv._stor[y][x].value = ""
+        end
+      end
+      for _, item in pairs( inv.sur_items ) do
+        local _bool, _x, _y = FindPlace( inv._stor, item.sizew, item.sizeh )
+        if _bool then
+          for y = _y, _y+item.sizeh-1 do
+            for x = _x, _x+item.sizew-1 do
+              inv._stor[y][x].value = item.uniqueID
+            end
+          end
+          item.posx = _x
+          item.posy = _y
+          AddItemToStorage( item )
+        end
+      end
+      --PrintStorage( inv._stor )
+    end
+    UpdateSurroundingStorage( GetSurroundingItems( ply ) )
 
     --[[ Database Storages ]]--
-    for i, stor in pairs( _tabs ) do
-      --[[ Add Storage X ]]--
-      local _tmp = createD( "DPanel", inv.storages, (BScrW()/2) - ctr( 20 ), ctr( 50 ) + ctr( 128 * stor.sizeh ), 0, 0 )
-      function _tmp:Paint( pw, ph )
-        --[[ Header ]]--
-        surfaceBox( 0, 0, pw, ctr( 50 ), Color( 255, 255, 255, 250 ) )
-        local _str = string.upper( lang_string( string.lower( stor.name ) ) ) -- .. " [DEBUG] UID: " .. stor.uniqueID
-        surfaceText( _str, "SettingsHeader", ctr( 10 ), ctr( 50/2 ), Color( 255, 255, 255, 255 ), 0, 1 )
+    -- Header
+    local _stor = _tabs[1]
+    if _stor != nil then
+      inv.sur_header = createD( "DPanel", inv.window, ctr(128*8) + ctr( 25 ), ctr( 50 ), ctr( 10 ), ScrH2() )
+      function inv.sur_header:Paint( pw, ph )
+        local _str = string.upper( _stor.name ) -- .. " [DEBUG] UID: " .. stor.uniqueID
+        surfacePanel( self, pw, ph, _str )
       end
-      local _tmp2 = createD( "DPanel", _tmp, ctr( 128 * stor.sizew ), ctr( 128 * stor.sizeh ), 0, ctr( 50 ) )
+
+      -- DPanelList
+      inv.storages = createD( "DPanelList", inv.window, ctr( 128 * 8 + 25 ), ScrH2() - ctr( 10 + 50 ), ctr( 10 ), ScrH2() + ctr( 50 ) )
+      inv.storages:EnableVerticalScrollbar( true )
+      inv.storages:SetSpacing( 10 )
+      function inv.storages:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      end
+
+      local _tmp2 = createD( "DPanel", inv.sur_header, ctr( 128 * _stor.sizew ), ctr( 128 * _stor.sizeh ), 0, ctr( 50 ) )
       function _tmp2:Paint( pw, ph )
-        --[[ Content]]--
-        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 40 ) )
+        -- Content
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
       end
-      AddStorage( _tmp2, stor.uniqueID, stor.sizew, stor.sizeh )
-      inv.storages:AddItem( _tmp )
-    end
+      AddStorage( _tmp2, _stor.uniqueID, _stor.sizew, _stor.sizeh )
+      inv.storages:AddItem( _tmp2 )
 
-    --[[ Database Storages Items ]]--
-    for i, stor in pairs( _tabs ) do
-      if stor.uniqueID == 0 then
-
-        local _stor = {}
-        for y = 1, stor.sizeh do
-          _stor[y] = {}
-          for x = 1, stor.sizew do
-            _stor[y][x] = {}
-            _stor[y][x].value = ""
-          end
-        end
-
-        local _items = GetSurroundingItems( ply )
-        for _, item in pairs( _items ) do
-          local _bool, _x, _y = FindPlace( _stor, item.sizew, item.sizeh )
-          if _bool then
-            for y = _y, _y+item.sizeh-1 do
-              for x = _x, _x+item.sizew-1 do
-                _stor[y][x].value = item.uniqueID
-              end
-            end
-            item.posx = _x
-            item.posy = _y
-            AddItemToStorage( item )
-          end
-        end
-        --IsEnoughSpace( stor, w, h, x, y )
-      else
-        net.Start( "getstorageitems" )
-          net.WriteString( stor.uniqueID )
-        net.SendToServer()
-      end
+      net.Start( "getstorageitems" )
+        net.WriteString( _stor.uniqueID )
+      net.SendToServer()
+    else
+      inv.sur_pl:SetSize( inv.sur_pl:GetWide(), ScrH() - ctr( 50 + 10 + 50 + 10 ) )
     end
   end
 end)

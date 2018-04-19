@@ -6,7 +6,7 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 
 function ENT:Initialize()
-	self:SetModel( "models/props_wasteland/controlroom_storagecloset001a.mdl" )
+	self:SetModel( "models/Items/ammocrate_smg1.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
@@ -18,6 +18,7 @@ function ENT:Initialize()
 	end
 
 	self.storage = InitStorage( self, 8, 12 )
+	self:SetNWBool( "isaworldstorage", true )
 end
 
 function ENT:Use( activator, caller )
