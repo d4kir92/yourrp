@@ -96,8 +96,10 @@ if SERVER then
 	hook.Add( "yrp_castdone_unleash", "unleash", function( args )
 		if args.target:GetNWBool( "cuffed", false ) then
 			args.target:SetNWBool( "cuffed", false )
-			args.target:GetActiveWeapon():Remove()
-
+			local _weapon = args.target:GetActiveWeapon()
+			if _weapon != NULL then
+				_weapon:Remove()
+			end
 			args.target:SetActiveWeapon( "yrp_unarmed" )
 			args.target:SelectWeapon( "yrp_unarmed" )
 		end

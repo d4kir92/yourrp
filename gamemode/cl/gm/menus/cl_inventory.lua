@@ -106,6 +106,8 @@ net.Receive( "openStorage", function( len )
 end)
 
 function OpenInventory()
-  net.Start( "openStorage" )
-  net.SendToServer()
+  if LocalPlayer():GetNWBool( "toggle_inventory", false ) then
+    net.Start( "openStorage" )
+    net.SendToServer()
+  end
 end

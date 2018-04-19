@@ -107,9 +107,6 @@ hook.Add( "open_server_general", "open_server_general", function()
   sv_generalName:SetSize( ctr( 400 ), ctr( 50 ) )
   sv_generalName:SetText( GAMEMODE.BaseName )
 
-  net.Start("dbGetGeneral")
-  net.SendToServer()
-
   net.Receive( "dbGetGeneral", function()
     local _yrp_general = net.ReadTable()
 
@@ -151,572 +148,575 @@ hook.Add( "open_server_general", "open_server_general", function()
     sv_generalTagAR:SetValue( tonumber( _yrp_general.tag_ar ) )
 
     sv_generalServerChangelevel:SetValue( tonumber( _yrp_general.server_changelevel ) )
-  end)
 
-  sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
-  sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
-  sv_generalAdvert:SetText( _advertname )
-  function sv_generalAdvert:OnChange()
-    net.Start( "updateAdvert" )
-      net.WriteString( sv_generalAdvert:GetText() )
-    net.SendToServer()
-  end
-
-  sv_generalRestartTime:SetPos( ctr( _center ), ctr( 5 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartTime:SetSize( ctr( 400 ), ctr( 50 ) )
-  sv_generalRestartTime:SetMin( 3 )
-  sv_generalRestartTime:SetMax( 240 )
-  sv_generalRestartTime:SetDecimals( 0 )
-  function sv_generalRestartTime:OnValueChanged( value )
-    net.Start( "updateGeneral" )
-      net.WriteString( tostring( math.Round( value ) ) )
-    net.SendToServer()
-  end
-
-  if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
-    local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
-    sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
-    function sv_generalSQL:DoClick()
-      net.Start( "get_sql_info" )
+    sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
+    sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
+    sv_generalAdvert:SetText( _advertname )
+    function sv_generalAdvert:OnChange()
+      net.Start( "updateAdvert" )
+        net.WriteString( sv_generalAdvert:GetText() )
       net.SendToServer()
     end
-    net.Receive( "get_sql_info", function( len )
-      local _sv_sql = net.ReadTable()
 
-      local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 820 ), 0, 0 )
-      _win:SetTitle( "" )
-      _win:MakePopup()
-      _win:Center()
-      function _win:Paint( pw, ph )
-        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 100, 200 ) )
-      end
+    sv_generalRestartTime:SetPos( ctr( _center ), ctr( 5 + 50 + 10 + 50 + 10 ) )
+    sv_generalRestartTime:SetSize( ctr( 400 ), ctr( 50 ) )
+    sv_generalRestartTime:SetMin( 3 )
+    sv_generalRestartTime:SetMax( 240 )
+    sv_generalRestartTime:SetDecimals( 0 )
+    function sv_generalRestartTime:OnValueChanged( value )
+      net.Start( "updateGeneral" )
+        net.WriteString( tostring( math.Round( value ) ) )
+      net.SendToServer()
+    end
 
-      local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 ) )
-      _sql_host:INITPanel( "DTextEntry" )
-      _sql_host:SetHeader( lang_string( "host" ) )
-      _sql_host.plus:SetText( _sv_sql.host )
-      function _sql_host.plus:OnChange()
-        net.Start( "set_host" )
-          net.WriteString( _sql_host.plus:GetText() )
+    if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
+      local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
+      sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
+      function sv_generalSQL:DoClick()
+        net.Start( "get_sql_info" )
         net.SendToServer()
       end
+      net.Receive( "get_sql_info", function( len )
+        local _sv_sql = net.ReadTable()
 
-      local _sql_port = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
-      _sql_port:INITPanel( "DTextEntry" )
-      _sql_port:SetHeader( lang_string( "port" ) )
-      _sql_port.plus:SetText( _sv_sql.port )
-      function _sql_port.plus:OnChange()
-        net.Start( "set_port" )
-          net.WriteString( _sql_port.plus:GetText() )
-        net.SendToServer()
-      end
+        local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 820 ), 0, 0 )
+        _win:SetTitle( "" )
+        _win:MakePopup()
+        _win:Center()
+        function _win:Paint( pw, ph )
+          surfaceBox( 0, 0, pw, ph, Color( 0, 0, 100, 200 ) )
+        end
 
-      local _sql_database = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-      _sql_database:INITPanel( "DTextEntry" )
-      _sql_database:SetHeader( lang_string( "database" ) )
-      _sql_database.plus:SetText( _sv_sql.database )
-      function _sql_database.plus:OnChange()
-        net.Start( "set_database" )
-          net.WriteString( _sql_database.plus:GetText() )
-        net.SendToServer()
-      end
+        local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 ) )
+        _sql_host:INITPanel( "DTextEntry" )
+        _sql_host:SetHeader( lang_string( "host" ) )
+        _sql_host.plus:SetText( _sv_sql.host )
+        function _sql_host.plus:OnChange()
+          net.Start( "set_host" )
+            net.WriteString( _sql_host.plus:GetText() )
+          net.SendToServer()
+        end
 
-      local _sql_username = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-      _sql_username:INITPanel( "DTextEntry" )
-      _sql_username:SetHeader( lang_string( "username" ) )
-      _sql_username.plus:SetText( _sv_sql.username )
-      function _sql_username.plus:OnChange()
-        net.Start( "set_username" )
-          net.WriteString( _sql_username.plus:GetText() )
-        net.SendToServer()
-      end
+        local _sql_port = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
+        _sql_port:INITPanel( "DTextEntry" )
+        _sql_port:SetHeader( lang_string( "port" ) )
+        _sql_port.plus:SetText( _sv_sql.port )
+        function _sql_port.plus:OnChange()
+          net.Start( "set_port" )
+            net.WriteString( _sql_port.plus:GetText() )
+          net.SendToServer()
+        end
 
-      local _sql_password = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-      _sql_password:INITPanel( "DTextEntry" )
-      _sql_password:SetHeader( lang_string( "password" ) )
-      _sql_password.plus:SetText( _sv_sql.password )
-      function _sql_password.plus:OnChange()
-        net.Start( "set_password" )
-          net.WriteString( _sql_password.plus:GetText() )
-        net.SendToServer()
-      end
+        local _sql_database = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        _sql_database:INITPanel( "DTextEntry" )
+        _sql_database:SetHeader( lang_string( "database" ) )
+        _sql_database.plus:SetText( _sv_sql.database )
+        function _sql_database.plus:OnChange()
+          net.Start( "set_database" )
+            net.WriteString( _sql_database.plus:GetText() )
+          net.SendToServer()
+        end
 
-      local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
-      _sqlmode:INITPanel( "DComboBox" )
-      _sqlmode:SetHeader( lang_string( "sqlmode" ) )
-      _sqlmode.plus.mode = GetSQLMode()
-      if tonumber( _sv_sql.mode ) == 0 then
-        _sql_host:SetVisible( false )
-        _sql_port:SetVisible( false )
-        _sql_database:SetVisible( false )
-        _sql_username:SetVisible( false )
-        _sql_password:SetVisible( false )
-        _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, true )
-        _sqlmode.plus.choice = "SQLite"
-      else
-        _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, false )
-      end
-      if tonumber( _sv_sql.mode ) == 1 then
-        _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, true )
-        _sqlmode.plus.choice = "MYSQL"
-      else
-        _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, false )
-      end
-      function _sqlmode.plus:OnSelect( index, value, data )
-        self.choice = value
-        if data == 0 then
+        local _sql_username = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        _sql_username:INITPanel( "DTextEntry" )
+        _sql_username:SetHeader( lang_string( "username" ) )
+        _sql_username.plus:SetText( _sv_sql.username )
+        function _sql_username.plus:OnChange()
+          net.Start( "set_username" )
+            net.WriteString( _sql_username.plus:GetText() )
+          net.SendToServer()
+        end
+
+        local _sql_password = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        _sql_password:INITPanel( "DTextEntry" )
+        _sql_password:SetHeader( lang_string( "password" ) )
+        _sql_password.plus:SetText( _sv_sql.password )
+        function _sql_password.plus:OnChange()
+          net.Start( "set_password" )
+            net.WriteString( _sql_password.plus:GetText() )
+          net.SendToServer()
+        end
+
+        local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
+        _sqlmode:INITPanel( "DComboBox" )
+        _sqlmode:SetHeader( lang_string( "sqlmode" ) )
+        _sqlmode.plus.mode = GetSQLMode()
+        if tonumber( _sv_sql.mode ) == 0 then
           _sql_host:SetVisible( false )
           _sql_port:SetVisible( false )
           _sql_database:SetVisible( false )
           _sql_username:SetVisible( false )
           _sql_password:SetVisible( false )
+          _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, true )
+          _sqlmode.plus.choice = "SQLite"
         else
-          _sql_host:SetVisible( true )
-          _sql_port:SetVisible( true )
-          _sql_database:SetVisible( true )
-          _sql_username:SetVisible( true )
-          _sql_password:SetVisible( true )
+          _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, false )
         end
-        self.mode = data
-      end
+        if tonumber( _sv_sql.mode ) == 1 then
+          _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, true )
+          _sqlmode.plus.choice = "MYSQL"
+        else
+          _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, false )
+        end
+        function _sqlmode.plus:OnSelect( index, value, data )
+          self.choice = value
+          if data == 0 then
+            _sql_host:SetVisible( false )
+            _sql_port:SetVisible( false )
+            _sql_database:SetVisible( false )
+            _sql_username:SetVisible( false )
+            _sql_password:SetVisible( false )
+          else
+            _sql_host:SetVisible( true )
+            _sql_port:SetVisible( true )
+            _sql_database:SetVisible( true )
+            _sql_username:SetVisible( true )
+            _sql_password:SetVisible( true )
+          end
+          self.mode = data
+        end
 
-      local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-      function _sql_change_to:Paint( pw, ph )
-        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-        _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
-      end
-      function _sql_change_to:DoClick()
-        net.Start( "change_to_sql_mode" )
-          net.WriteString( _sqlmode.plus.mode )
-        net.SendToServer()
-        _win:Close()
-      end
-    end)
-  end
-
-  local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.window.site )
-  sv_generalRestartServer:SetSize( ctr( 400 ), ctr( 50 ) )
-  sv_generalRestartServer:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartServer:SetText( lang_string( "updateserver" ) )
-  function sv_generalRestartServer:Paint()
-    local color = Color( 255, 0, 0, 200 )
-    if sv_generalRestartServer:IsHovered() then
-      color = Color( 255, 255, 0, 200 )
+        local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        function _sql_change_to:Paint( pw, ph )
+          surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+          _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
+        end
+        function _sql_change_to:DoClick()
+          net.Start( "change_to_sql_mode" )
+            net.WriteString( _sqlmode.plus.mode )
+          net.SendToServer()
+          _win:Close()
+        end
+      end)
     end
-    draw.RoundedBox( ctr( 10 ), 0, 0, sv_generalRestartServer:GetWide(), sv_generalRestartServer:GetTall(), color )
-  end
-  function sv_generalRestartServer:DoClick()
-    if sv_generalName != nil then
-      net.Start( "updateServer" )
-        GAMEMODE.BaseName = sv_generalName:GetText()
-        net.WriteString( GAMEMODE.BaseName )
-        net.WriteInt( math.Round( sv_generalRestartTime:GetValue() ), 16 )
-      net.SendToServer()
-    end
-    settingsWindow.window:Close()
-  end
 
-  local sv_generalRestartServerCancel = vgui.Create( "DButton", settingsWindow.window.site )
-  sv_generalRestartServerCancel:SetSize( ctr( 400 ), ctr( 50 ) )
-  sv_generalRestartServerCancel:SetPos( ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-  sv_generalRestartServerCancel:SetText( lang_string( "cancelupdateserver" ) )
-  function sv_generalRestartServerCancel:Paint()
-    local color = Color( 0, 255, 0, 200 )
-    if sv_generalRestartServerCancel:IsHovered() then
-      color = Color( 255, 255, 0, 200 )
-    end
-    draw.RoundedBox( ctr( 10 ), 0, 0, sv_generalRestartServerCancel:GetWide(), sv_generalRestartServerCancel:GetTall(), color )
-  end
-  function sv_generalRestartServerCancel:DoClick()
-    net.Start( "cancelRestartServer" )
-    net.SendToServer()
-    settingsWindow.window:Close()
-  end
-
-  if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
-    local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
-    sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
-    sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-    sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
-    function sv_generalHardReset:Paint( pw, ph )
+    local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.window.site )
+    sv_generalRestartServer:SetSize( ctr( 400 ), ctr( 50 ) )
+    sv_generalRestartServer:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+    sv_generalRestartServer:SetText( lang_string( "updateserver" ) )
+    function sv_generalRestartServer:Paint()
       local color = Color( 255, 0, 0, 200 )
-      if sv_generalHardReset:IsHovered() then
+      if sv_generalRestartServer:IsHovered() then
         color = Color( 255, 255, 0, 200 )
       end
-      draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      draw.RoundedBox( ctr( 10 ), 0, 0, sv_generalRestartServer:GetWide(), sv_generalRestartServer:GetTall(), color )
     end
-    function sv_generalHardReset:DoClick()
-      local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
-      _tmpFrame:Center()
-      _tmpFrame:SetTitle( lang_string( "areyousure" ) )
-      function _tmpFrame:Paint( pw, ph )
-        local color = Color( 0, 0, 0, 200 )
-        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-      end
-
-      local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
-      sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
-      sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
-      sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": " .. lang_string( "hardresetdatabase" ) )
-      function sv_generalHardResetSure:DoClick()
-        net.Start( "hardresetdatabase" )
+    function sv_generalRestartServer:DoClick()
+      if sv_generalName != nil then
+        net.Start( "updateServer" )
+          GAMEMODE.BaseName = sv_generalName:GetText()
+          net.WriteString( GAMEMODE.BaseName )
+          net.WriteInt( math.Round( sv_generalRestartTime:GetValue() ), 16 )
         net.SendToServer()
-        _tmpFrame:Close()
       end
-      function sv_generalHardResetSure:Paint( pw, ph )
+      settingsWindow.window:Close()
+    end
+
+    local sv_generalRestartServerCancel = vgui.Create( "DButton", settingsWindow.window.site )
+    sv_generalRestartServerCancel:SetSize( ctr( 400 ), ctr( 50 ) )
+    sv_generalRestartServerCancel:SetPos( ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+    sv_generalRestartServerCancel:SetText( lang_string( "cancelupdateserver" ) )
+    function sv_generalRestartServerCancel:Paint()
+      local color = Color( 0, 255, 0, 200 )
+      if sv_generalRestartServerCancel:IsHovered() then
+        color = Color( 255, 255, 0, 200 )
+      end
+      draw.RoundedBox( ctr( 10 ), 0, 0, sv_generalRestartServerCancel:GetWide(), sv_generalRestartServerCancel:GetTall(), color )
+    end
+    function sv_generalRestartServerCancel:DoClick()
+      net.Start( "cancelRestartServer" )
+      net.SendToServer()
+      settingsWindow.window:Close()
+    end
+
+    if string.lower( LocalPlayer():GetUserGroup() ) == "owner" then
+      local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
+      sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
+      sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+      sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
+      function sv_generalHardReset:Paint( pw, ph )
         local color = Color( 255, 0, 0, 200 )
-        if sv_generalHardResetSure:IsHovered() then
+        if sv_generalHardReset:IsHovered() then
           color = Color( 255, 255, 0, 200 )
         end
         draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
       end
-
-      local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
-      sv_generalHardResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
-      sv_generalHardResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
-      sv_generalHardResetNot:SetText( lang_string( "no" ) .. ": do nothing" )
-      function sv_generalHardResetNot:DoClick()
-        _tmpFrame:Close()
-      end
-      function sv_generalHardResetNot:Paint( pw, ph )
-        local color = Color( 0, 255, 0, 200 )
-        if sv_generalHardResetNot:IsHovered() then
-          color = Color( 255, 255, 0, 200 )
+      function sv_generalHardReset:DoClick()
+        local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+        _tmpFrame:Center()
+        _tmpFrame:SetTitle( lang_string( "areyousure" ) )
+        function _tmpFrame:Paint( pw, ph )
+          local color = Color( 0, 0, 0, 200 )
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
         end
-        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+
+        local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
+        sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
+        sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": " .. lang_string( "hardresetdatabase" ) )
+        function sv_generalHardResetSure:DoClick()
+          net.Start( "hardresetdatabase" )
+          net.SendToServer()
+          _tmpFrame:Close()
+        end
+        function sv_generalHardResetSure:Paint( pw, ph )
+          local color = Color( 255, 0, 0, 200 )
+          if sv_generalHardResetSure:IsHovered() then
+            color = Color( 255, 255, 0, 200 )
+          end
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+        end
+
+        local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
+        sv_generalHardResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalHardResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
+        sv_generalHardResetNot:SetText( lang_string( "no" ) .. ": do nothing" )
+        function sv_generalHardResetNot:DoClick()
+          _tmpFrame:Close()
+        end
+        function sv_generalHardResetNot:Paint( pw, ph )
+          local color = Color( 0, 255, 0, 200 )
+          if sv_generalHardResetNot:IsHovered() then
+            color = Color( 255, 255, 0, 200 )
+          end
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+        end
+        settingsWindow.window:Close()
+        _tmpFrame:MakePopup()
       end
-      settingsWindow.window:Close()
-      _tmpFrame:MakePopup()
-    end
 
-    local sv_generalMoneyReset = createD( "DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-    sv_generalMoneyReset:SetText( "" )
-    function sv_generalMoneyReset:Paint( pw, ph )
-      surfaceButton( self, pw, ph, lang_string( "moneyreset" ) )
-    end
-    function sv_generalMoneyReset:DoClick()
-      local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
-      _tmpFrame:Center()
-      _tmpFrame:SetTitle( lang_string( "areyousure" ) )
-      function _tmpFrame:Paint( pw, ph )
-        local color = Color( 0, 0, 0, 200 )
-        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      local sv_generalMoneyReset = createD( "DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+      sv_generalMoneyReset:SetText( "" )
+      function sv_generalMoneyReset:Paint( pw, ph )
+        surfaceButton( self, pw, ph, lang_string( "moneyreset" ) )
       end
+      function sv_generalMoneyReset:DoClick()
+        local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+        _tmpFrame:Center()
+        _tmpFrame:SetTitle( lang_string( "areyousure" ) )
+        function _tmpFrame:Paint( pw, ph )
+          local color = Color( 0, 0, 0, 200 )
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+        end
 
-      local sv_generalMoneyResetSure = vgui.Create( "DButton", _tmpFrame )
-      sv_generalMoneyResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
-      sv_generalMoneyResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
-      sv_generalMoneyResetSure:SetText( "" )
-      function sv_generalMoneyResetSure:DoClick()
-        net.Start( "moneyreset" )
-        net.SendToServer()
-        _tmpFrame:Close()
+        local sv_generalMoneyResetSure = vgui.Create( "DButton", _tmpFrame )
+        sv_generalMoneyResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalMoneyResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
+        sv_generalMoneyResetSure:SetText( "" )
+        function sv_generalMoneyResetSure:DoClick()
+          net.Start( "moneyreset" )
+          net.SendToServer()
+          _tmpFrame:Close()
+        end
+        function sv_generalMoneyResetSure:Paint( pw, ph )
+          surfaceButton( self, pw, ph, lang_string( "yes" ) .. ": " .. lang_string( "moneyreset" ) )
+        end
+
+        local sv_generalMoneyResetNot = vgui.Create( "DButton", _tmpFrame )
+        sv_generalMoneyResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalMoneyResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
+        sv_generalMoneyResetNot:SetText( "" )
+        function sv_generalMoneyResetNot:DoClick()
+          _tmpFrame:Close()
+        end
+        function sv_generalMoneyResetNot:Paint( pw, ph )
+          surfaceButton( self, pw, ph, lang_string( "no" ) .. ": do nothing" )
+        end
+        settingsWindow.window:Close()
+        _tmpFrame:MakePopup()
       end
-      function sv_generalMoneyResetSure:Paint( pw, ph )
-        surfaceButton( self, pw, ph, lang_string( "yes" ) .. ": " .. lang_string( "moneyreset" ) )
+    end
+
+    --[[function sv_generalHunger:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
       end
+      net.Start( "db_update_hunger" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
+    end
 
-      local sv_generalMoneyResetNot = vgui.Create( "DButton", _tmpFrame )
-      sv_generalMoneyResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
-      sv_generalMoneyResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
-      sv_generalMoneyResetNot:SetText( "" )
-      function sv_generalMoneyResetNot:DoClick()
-        _tmpFrame:Close()
+    function sv_generalThirst:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
       end
-      function sv_generalMoneyResetNot:Paint( pw, ph )
-        surfaceButton( self, pw, ph, lang_string( "no" ) .. ": do nothing" )
+      net.Start( "db_update_thirst" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
+    end]]--
+
+    function sv_generalStamina:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
       end
-      settingsWindow.window:Close()
-      _tmpFrame:MakePopup()
+      net.Start( "db_update_stamina" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-  end
 
-  --[[function sv_generalHunger:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalBuilding:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "dbUpdateNWBool2" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_hunger" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalThirst:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalHud:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_hud" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_thirst" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end]]--
 
-  function sv_generalStamina:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalInventory:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_inventory" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_stamina" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalBuilding:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalDropItemsOnDeath:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_dropitemsondeath" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "dbUpdateNWBool2" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalHud:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalGraffiti:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_graffiti" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_hud" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalInventory:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    sv_generalViewDistance:SetPos( ctr( _center ), ctr( 785 ) )
+    sv_generalViewDistance:SetSize( ctr( 200 ), ctr( 50 ) )
+    sv_generalViewDistance:SetMin( 0 )
+    sv_generalViewDistance:SetMax( 800 )
+    sv_generalViewDistance:SetDecimals( 0 )
+    function sv_generalViewDistance:OnValueChanged( value )
+      if tonumber( value ) > tonumber( self:GetMax() ) then
+        value = tonumber( self:GetMax() )
+        self:SetValue( value )
+      end
+      net.Start( "db_update_view_distance" )
+        net.WriteInt( tostring( math.Round( value ) ), 16 )
+      net.SendToServer()
     end
-    net.Start( "db_update_inventory" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalDropItemsOnDeath:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalRealisticDamage:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_realistic_damage" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_dropitemsondeath" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalGraffiti:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalRealisticFalldamage:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_realistic_falldamage" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_graffiti" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  sv_generalViewDistance:SetPos( ctr( _center ), ctr( 785 ) )
-  sv_generalViewDistance:SetSize( ctr( 200 ), ctr( 50 ) )
-  sv_generalViewDistance:SetMin( 0 )
-  sv_generalViewDistance:SetMax( 800 )
-  sv_generalViewDistance:SetDecimals( 0 )
-  function sv_generalViewDistance:OnValueChanged( value )
-    if tonumber( value ) > tonumber( self:GetMax() ) then
-      value = tonumber( self:GetMax() )
-      self:SetValue( value )
+    function sv_generalSmartphone:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_smartphone" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_view_distance" )
-      net.WriteInt( tostring( math.Round( value ) ), 16 )
-    net.SendToServer()
-  end
 
-  function sv_generalRealisticDamage:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalNoClipCrow:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_noclip_crow" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_realistic_damage" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalRealisticFalldamage:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalNoClipTags:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_noclip_tags" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_realistic_falldamage" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalSmartphone:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalNoClipStealth:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_noclip_stealth" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_smartphone" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalNoClipCrow:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalNoClipEffect:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_noclip_effect" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_noclip_crow" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalNoClipTags:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalDealerImmortal:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_dealer_immortal" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_noclip_tags" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalNoClipStealth:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalWeaponLowering:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_weapon_lowering" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_noclip_stealth" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalNoClipEffect:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalCrosshair:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_crosshair" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_noclip_effect" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalDealerImmortal:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    sv_generalCollectionButton:SetText( "" )
+    function sv_generalCollectionButton:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "howtoworkshopcollection" ) )
     end
-    net.Start( "db_update_dealer_immortal" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
-
-  function sv_generalWeaponLowering:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalCollectionButton:DoClick()
+      gui.OpenURL( "https://wiki.garrysmod.com/page/Workshop_for_Dedicated_Servers" )
     end
-    net.Start( "db_update_weapon_lowering" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalCrosshair:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalCollection:OnValueChanged( Val )
+      net.Start( "db_update_collection" )
+        net.WriteString( Val )
+      net.SendToServer()
     end
-    net.Start( "db_update_crosshair" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  sv_generalCollectionButton:SetText( "" )
-  function sv_generalCollectionButton:Paint( pw, ph )
-    surfaceButton( self, pw, ph, lang_string( "howtoworkshopcollection" ) )
-  end
-  function sv_generalCollectionButton:DoClick()
-    gui.OpenURL( "https://wiki.garrysmod.com/page/Workshop_for_Dedicated_Servers" )
-  end
-
-  function sv_generalCollection:OnValueChanged( Val )
-    net.Start( "db_update_collection" )
-      net.WriteString( Val )
-    net.SendToServer()
-  end
-
-  function sv_generalAntibhop:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalAntibhop:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_anti_bhop" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_anti_bhop" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalTagInfo:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalTagInfo:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_tag_info" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_tag_info" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalTagName:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalTagName:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_tag_name" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_tag_name" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalTagRole:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalTagRole:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_tag_role" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_tag_role" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalTagGroup:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalTagGroup:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_tag_group" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_tag_group" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalTagHP:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalTagHP:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_tag_hp" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_tag_hp" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalTagAR:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalTagAR:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_tag_ar" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_tag_ar" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
 
-  function sv_generalServerChangelevel:OnChange( bVal )
-    local _tonumber = 0
-    if bVal then
-      _tonumber = 1
+    function sv_generalServerChangelevel:OnChange( bVal )
+      local _tonumber = 0
+      if bVal then
+        _tonumber = 1
+      end
+      net.Start( "db_update_server_changelevel" )
+        net.WriteInt( _tonumber, 4 )
+      net.SendToServer()
     end
-    net.Start( "db_update_server_changelevel" )
-      net.WriteInt( _tonumber, 4 )
-    net.SendToServer()
-  end
+  end)
+
+  net.Start("dbGetGeneral")
+  net.SendToServer()
 end)

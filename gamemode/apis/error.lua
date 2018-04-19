@@ -24,7 +24,7 @@ function worked( obj, name, _silence )
 end
 
 function pa( panel )
-	if tostring( panel ) != "[NULL Panel]" then
+	if tostring( panel ) != "[NULL Panel]" and panel != nil then
 		return true
 	end
 	return false
@@ -116,7 +116,7 @@ function send_error( realm, str )
 				end
 			end
 			if CLIENT then
-				local _steamid = LocalPlayer():SteamID()
+ 				local _steamid = LocalPlayer():SteamID()
 				str = str .. " " .. tostring( _steamid )
 			end
 		  entry["entry.915525654"] = tostring( str )

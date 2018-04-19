@@ -4,26 +4,30 @@ net.Receive( "getCharakterList", function()
   local ply = LocalPlayer()
   local _charTab = net.ReadTable()
 
-  if pa( settingsWindow.window ) then
-    local cl_rpName = createVGUI( "DTextEntry", settingsWindow.window.site, 400, 50, 10, 50 )
-    if _charTab.rpname != nil then
-      cl_rpName:SetText( _charTab.rpname )
-    end
-    function cl_rpName:OnChange()
-      net.Start( "change_rpname" )
-        net.WriteString( cl_rpName:GetText() )
-      net.SendToServer()
-    end
+  if pa( settingsWindow ) then
+    if pa( settingsWindow.window ) then
+      if pa( settingsWindow.window.site ) then
+        local cl_rpName = createVGUI( "DTextEntry", settingsWindow.window.site, 400, 50, 10, 50 )
+        if _charTab.rpname != nil then
+          cl_rpName:SetText( _charTab.rpname )
+        end
+        function cl_rpName:OnChange()
+          net.Start( "change_rpname" )
+            net.WriteString( cl_rpName:GetText() )
+          net.SendToServer()
+        end
 
-    local cl_rpDescription = createVGUI( "DTextEntry", settingsWindow.window.site, 1200, 400, 10, 200 )
-    cl_rpDescription:SetMultiline( true )
-    if _charTab.rpdescription != nil then
-      cl_rpDescription:SetText( _charTab.rpdescription )
-    end
-    function cl_rpDescription:OnChange()
-      net.Start( "change_rpdescription" )
-        net.WriteString( cl_rpDescription:GetText() )
-      net.SendToServer()
+        local cl_rpDescription = createVGUI( "DTextEntry", settingsWindow.window.site, 1200, 400, 10, 200 )
+        cl_rpDescription:SetMultiline( true )
+        if _charTab.rpdescription != nil then
+          cl_rpDescription:SetText( _charTab.rpdescription )
+        end
+        function cl_rpDescription:OnChange()
+          net.Start( "change_rpdescription" )
+            net.WriteString( cl_rpDescription:GetText() )
+          net.SendToServer()
+        end
+      end
     end
   end
 end)

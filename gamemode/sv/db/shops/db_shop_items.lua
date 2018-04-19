@@ -202,6 +202,10 @@ function SpawnVehicle( item, ply, ang )
 
         local car = simfphys.SpawnVehicleSimple( v.ClassName, ply:GetPos(), ang )
 
+        timer.Simple( 0.2, function()
+      		simfphys.RegisterEquipment( car )
+      	end)
+
         return car
       end
       break

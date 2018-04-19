@@ -96,6 +96,9 @@ util.AddNetworkString( "get_all_licenses_simple" )
 
 net.Receive( "get_all_licenses_simple", function( len, ply )
   local _all = SQL_SELECT( _db_name, "name, uniqueID", nil )
+  if _all == false or _all == nil then
+    _all = {}
+  end
   net.Start( "get_all_licenses_simple" )
     net.WriteTable( _all )
   net.Send( ply )
