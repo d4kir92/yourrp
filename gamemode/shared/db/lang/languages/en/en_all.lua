@@ -653,4 +653,6 @@ function EN_All()
   set_lang_string( "emoteforward", "Forward" )
   set_lang_string( "emote", "Emote" )
   set_lang_string( "emotes", "Emotes" )
+  set_lang_string( "public", "Public" )
+  set_lang_string( "private", "Private" )
 end

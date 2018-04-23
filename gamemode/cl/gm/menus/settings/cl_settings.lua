@@ -46,6 +46,14 @@ concommand.Add( "yrp_toggle_settings", function( ply, cmd, args )
 	toggleSettings()
 end )
 
+function F8RequireUG( site, ug )
+  function settingsWindow.window.site:Paint( w, h )
+    surfaceBox( 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+    surfaceText( site, "roleInfoHeader", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255 ), 0, 1 )
+    surfaceText( string.upper( lang_string( "require" ) ) .. ": " .. ug .. " (" .. lang_string( "usergroup" ) .. ")", "roleInfoHeader", ctr( 10 ), ctr( 100 ), Color( 255, 0, 0 ), 0, 1 )
+  end
+end
+
 function toggleSettings()
   if isNoMenuOpen() then
     openSettings()
@@ -90,31 +98,24 @@ function openSettings()
   settingsWindow.window:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
   settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
 
-  local _server = lang_string( "server" )
+  local _server = lang_string( "server" ) .. " " .. "(" .. lang_string( "public" ) .. ")"
   settingsWindow.window:AddCategory( _server )
   settingsWindow.window:AddSite( "open_server_collection", lang_string( "workshopcollection" ), _server, "icon16/page_world.png" )
 
-  local _server_admin = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. string.upper( lang_string( "admin" ) ) .. ")"
+  local _server_admin = lang_string( "server" )
   settingsWindow.window:AddCategory( _server_admin )
-  if ply:HasAccess() then
-    settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
-    settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
-    settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
-    settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server_admin, "icon16/user_edit.png" )
-    settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server_admin, "icon16/money.png" )
-    settingsWindow.window:AddSite( "open_server_licenses", lang_string( "licenses" ), _server_admin, "icon16/vcard_edit.png" )
-    settingsWindow.window:AddSite( "open_server_shops", lang_string( "shops" ), _server_admin, "icon16/basket_edit.png" )
-    settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
-    settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
-    settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
-  end
-
-  local _server_owner = lang_string( "server" ) .. " (" .. lang_string( "access" ) .. ": " .. "OWNER" .. ")"
-  settingsWindow.window:AddCategory( _server_owner )
-  if string.lower( tostring( ply:GetUserGroup() ) ) == "owner" then
-    settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_owner, "icon16/server_database.png" )
-    settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_owner, "icon16/group_go.png" )
-  end
+  settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
+  settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
+  settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
+  settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server_admin, "icon16/user_edit.png" )
+  settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server_admin, "icon16/money.png" )
+  settingsWindow.window:AddSite( "open_server_licenses", lang_string( "licenses" ), _server_admin, "icon16/vcard_edit.png" )
+  settingsWindow.window:AddSite( "open_server_shops", lang_string( "shops" ), _server_admin, "icon16/basket_edit.png" )
+  settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
+  settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
+  settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
+  settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
+  settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
   settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )

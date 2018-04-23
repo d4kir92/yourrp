@@ -653,4 +653,6 @@ function DE_All()
   set_lang_string( "emoteforward", "Vorwärts" )
   set_lang_string( "emote", "Emotion" )
   set_lang_string( "emotes", "Emotionen" )
+  set_lang_string( "public", "Öffentlich" )
+  set_lang_string( "private", "Privat" )
 end

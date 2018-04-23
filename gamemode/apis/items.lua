@@ -1,8 +1,9 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 --[[ GLOBAL ]]--
-ITEM_MAXH = 2
-INV_MAXW = 8
+ITEM_MAXH = 3
+ITEM_MAXW = 8
+INV_MAXW = ITEM_MAXW
 
 --[[ SHARED ]]--
 
@@ -69,8 +70,8 @@ function GetEntityItemSize( ent )
   if _result.sizew > INV_MAXW then
     _result.sizew = INV_MAXW
   end
-  if _result.sizeh > 2 then
-    _result.sizeh = 2
+  if _result.sizeh > ITEM_MAXH then
+    _result.sizeh = ITEM_MAXH
   end
   return _result
 end
@@ -222,7 +223,7 @@ function GetSurroundingStorage( ply )
   local _items = GetSurroundingItems( ply )
   local _size = GetSurroundingStorageSize( _items )
   _sur.sizew = _size.sizew
-  _sur.sizeh = _size.sizeh + 2
+  _sur.sizeh = _size.sizeh + ITEM_MAXH
   return _sur
 end
 
@@ -305,21 +306,48 @@ if CLIENT then
     return NULL
   end
 
+  function SetCamPosition( pnl, item )
+    local _mins, _maxs = pnl.Entity:GetRenderBounds()
+    local _center = (_mins + _maxs)/2
+    pnl:SetFOV( 90 )
+  	pnl:SetLookAt( _center )
+    pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+  end
+
   function AddItemToStorage( tab )
     local _storage = item_handler[tonumber(tab.storageID)].pnl
     local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
     local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
-    local _item = createD( "SpawnIcon", _parent, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), _x + ctr( (tab.posx-1)*128 ), _y + ctr( (tab.posy-1)*128 ) )
-    item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item
+
+    local _bg = createD( "DPanel", _parent, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), _x + ctr( (tab.posx-1)*128 ), _y + ctr( (tab.posy-1)*128 ) )
+    function _bg:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+    end
+    function _bg:PaintOver( pw, ph )
+      local _br = 2
+      surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+      surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+
+      surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+      surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+
+      surfaceText( tab.PrintName, "mat1text", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
+    end
+
+    local _item = createD( "DModelPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
+    _item:InvalidateLayout( true )
+    _item:SetModel( tab.WorldModel )
+    SetCamPosition( _item, tab )
+    function _item:LayoutEntity( Entity ) return end
+
+    local _item2 = createD( "DPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
+    item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
     item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber( tab.uniqueID )
     local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
     _i.item = tab
-    _i:SetModel( tab.WorldModel )
-    _i:Droppable( "slot" )
     function _i:Paint( pw, ph )
-      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+      --surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
     end
-    _i:SetToolTip( _i.item.PrintName )
     function _i:PaintOver( pw, ph )
       local _br = 2
       surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
@@ -328,6 +356,9 @@ if CLIENT then
       surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
       surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
     end
+    _i:Droppable( "slot" )
+    _i:SetToolTip( _i.item.PrintName .. "\n" .. _i.item.ClassName .. "\n" .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
+
     return _item
   end
 
@@ -341,6 +372,7 @@ if CLIENT then
 
     --[[ ITEM ]]--
     if item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item != nil then
+      item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item:GetParent():Remove()
       item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item:Remove()
       item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item = nil
       item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].value = ""

@@ -109,11 +109,14 @@ hook.Add( "open_server_restrictions", "open_server_restrictions", function()
   local h = settingsWindow.window.sitepanel:GetTall()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+  if ply:HasAccess() then
+    function settingsWindow.window.site:Paint( pw, ph )
+      --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+    end
 
-  function settingsWindow.window.site:Paint( pw, ph )
-    --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+    net.Start( "getRistrictions" )
+    net.SendToServer()
+  else
+    F8RequireUG( lang_string( "restriction" ), "owner" )
   end
-
-  net.Start( "getRistrictions" )
-  net.SendToServer()
 end)

@@ -14,6 +14,7 @@ SQL_ADD_COLUMN( _db_name, "posx", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "posy", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "sizew", "TEXT DEFAULT '1'" )
 SQL_ADD_COLUMN( _db_name, "sizeh", "TEXT DEFAULT '1'" )
+SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT 'entity'" )
 
 --db_drop_table( _db_name )
 
@@ -100,7 +101,12 @@ end)
 function CreateItem( item, slot )
   local _size = GetEntityItemSize( item.entity )
 
-  SQL_INSERT_INTO( _db_name, "ClassName, WorldModel, PrintName, storageID, sizew, sizeh, posx, posy", "'" .. item.ClassName .. "', '" .. item.WorldModel .. "', '" .. item.PrintName .. "', '" .. item.storageID .. "', " .. _size.sizew .. ", " .. _size.sizeh .. ", " .. item.posx .. ", " .. item.posy )
+  local _type = "entity"
+  if item.entity:IsWeapon() then
+    _type = "weapon"
+  end
+
+  SQL_INSERT_INTO( _db_name, "ClassName, WorldModel, PrintName, storageID, sizew, sizeh, posx, posy, type", "'" .. item.ClassName .. "', '" .. item.WorldModel .. "', '" .. item.PrintName .. "', '" .. item.storageID .. "', " .. _size.sizew .. ", " .. _size.sizeh .. ", " .. item.posx .. ", " .. item.posy .. ", '" .. _type .. "'" )
   local _items = SQL_SELECT( _db_name, "*", nil )
   local _item = _items[#_items]
   return _item

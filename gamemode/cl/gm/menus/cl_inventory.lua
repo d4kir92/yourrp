@@ -129,6 +129,62 @@ net.Receive( "openStorage", function( len )
     else
       inv.sur_pl:SetSize( inv.sur_pl:GetWide(), ScrH() - ctr( 50 + 10 + 50 + 10 ) )
     end
+
+    --[[ Backpacks ]]--
+    local _bps = {}
+    _bps.backpack = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 ), ScrH() - ctr( 128 + 10 ) )
+
+    _bps.bag1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*1 ), ScrH() - ctr( 128 + 10 ) )
+    _bps.bag2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*2 ), ScrH() - ctr( 128 + 10 ) )
+    _bps.bag3 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*3 ), ScrH() - ctr( 128 + 10 ) )
+    _bps.bag4 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*4 ), ScrH() - ctr( 128 + 10 ) )
+
+    --[[ EQUIPMENT ]]--
+    local _eq = {}
+    -- LEFT
+    _eq.helm = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 ) )
+
+    _eq.necklace = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*1 ) )
+
+    _eq.shoulders = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*2 ) )
+
+    _eq.cap = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*3 ) )
+
+    _eq.chest = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*4 ) )
+
+    _eq.shirt = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*5 ) )
+
+    _eq.tabard = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*6 ) )
+
+    _eq.bracelet = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*7 ) )
+
+    -- RIGHT
+    _eq.gloves = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 ) )
+
+    _eq.belt = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*1 ) )
+
+    _eq.pants = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*2 ) )
+
+    _eq.boots = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*3 ) )
+
+    _eq.ring1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*4 ) )
+
+    _eq.ring2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*5 ) )
+
+    _eq.trinket1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*6 ) )
+
+    _eq.trinket2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*7 ) )
+
+    -- Weapons
+    _eq.pweapon1 = createD( "DPanel", inv.window, ctr( 128 * ITEM_MAXW ), ctr( 128 * ITEM_MAXH ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*8 ) )
+
+    _eq.pweapon2 = createD( "DPanel", inv.window, ctr( 128 * ITEM_MAXW ), ctr( 128 * ITEM_MAXH ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*8 + 10 + 128*ITEM_MAXH ) )
+
+    _eq.sweapon1 = createD( "DPanel", inv.window, ctr( 128 * 4 ), ctr( 128 * 2 ), ctr( 128*16 + 10 + 10 + 10 + 10 + 128*ITEM_MAXW ), ctr( 50 + 10 + 138*8 ) )
+
+    _eq.sweapon2 = createD( "DPanel", inv.window, ctr( 128 * 4 ), ctr( 128 * 2 ), ctr( 128*16 + 10 + 10 + 10 + 10 + 128*ITEM_MAXW ), ctr( 50 + 10 + 138*8 + 10 + 128*2 ) )
+
+    _eq.sgrenade = createD( "DPanel", inv.window, ctr( 128 * 2 ), ctr( 128 * 2 ), ctr( 128*16 + 10 + 10 + 10 + 10 + 128*ITEM_MAXW ), ctr( 50 + 10 + 138*8 + 10 + 128*2 + 10 + 128*2 ) )
   end
 end)
 

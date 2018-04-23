@@ -5,6 +5,10 @@ net.Receive( "get_feedback", function()
   local _fbt = net.ReadTable()
 
   if settingsWindow.window != nil then
+    function settingsWindow.window.site:Paint( w, h )
+      surfaceText( lang_string( "feedback" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    end
+
     local _fbl = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 180 ), ctr( 10 ), ctr( 10 + 50 ) )
     _fbl:AddColumn( lang_string( "title" ) )
     _fbl:AddColumn( lang_string( "feedback" ) )
@@ -24,10 +28,13 @@ hook.Add( "open_server_feedback", "open_server_feedback", function()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
   function settingsWindow.window.site:Paint( w, h )
-    surfaceText( lang_string( "feedback" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    --
   end
 
-  printGM( "gm", "start" )
-  net.Start( "get_feedback" )
-  net.SendToServer()
+  if ply:HasAccess() then
+    net.Start( "get_feedback" )
+    net.SendToServer()
+  else
+    F8RequireUG( lang_string( "feedback" ), "owner, superadmin or admin" )
+  end
 end)

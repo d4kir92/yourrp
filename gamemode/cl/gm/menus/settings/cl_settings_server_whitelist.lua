@@ -205,11 +205,15 @@ hook.Add( "open_server_whitelist", "open_server_whitelist", function()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  function settingsWindow.window.site:Paint( pw, ph )
-    --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
-    surfaceText( lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-  end
+  if ply:HasAccess() then
+    function settingsWindow.window.site:Paint( pw, ph )
+      --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+      surfaceText( lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    end
 
-  net.Start( "getRoleWhitelist" )
-  net.SendToServer()
+    net.Start( "getRoleWhitelist" )
+    net.SendToServer()
+  else
+    F8RequireUG( lang_string( "whitelist" ), "owner, superadmin or admin" )
+  end
 end)

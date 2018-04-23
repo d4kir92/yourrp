@@ -44,6 +44,7 @@ include( "gm/apps/cl_app_settings_sp.lua" )
 include( "gm/apps/cl_app_dark_web.lua" )
 
 include( "gm/designs/cl_d_material1.lua" )
+include( "gm/designs/cl_d_futuristic.lua" )
 
 include( "gm/cl_hud.lua" )
 include( "gm/cl_chat.lua" )

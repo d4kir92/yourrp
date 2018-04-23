@@ -203,7 +203,6 @@ function chat.AddText( ... )
           yrpChat.richText:AppendText( " " )
         end
 
-        --[[ find link start ]]--
         local _l = {}
         _l.l_start = string.find( str, "https://", 1 )
         if _l.l_start != nil then
@@ -218,9 +217,7 @@ function chat.AddText( ... )
         end
 
         if _l.l_start != nil then
-          --[[ is link ]]--
 
-          --[[ link end ]]--
           _l.l_end = #str
 
           local _link = string.sub( str, _l.l_start, _l.l_end )
