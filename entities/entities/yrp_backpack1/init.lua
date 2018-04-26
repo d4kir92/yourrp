@@ -6,7 +6,8 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 
 function ENT:Initialize()
-	self:SetModel( "models/Items/ammocrate_smg1.mdl" )
+	self:SetModel( "models/props_junk/cardboard_box002b.mdl" )
+	self:SetModelScale( 0.6, 0 )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
@@ -17,8 +18,7 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
-	self.storage = self:InitStorage( 8, 12 )
-	self:SetNWBool( "isaworldstorage", true )
+	self.storage = self:InitBackpackStorage( 8, 12 )
 end
 
 function ENT:Use( activator, caller )

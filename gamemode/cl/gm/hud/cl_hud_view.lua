@@ -2,7 +2,7 @@
 
 function showOwner( eyeTrace )
   if eyeTrace.Entity:GetNWString( "ownerRPName" ) != "" or eyeTrace.Entity:GetNWString( "ownerGroup" ) != "" then
-    draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " ..  eyeTrace.Entity:GetNWString( "ownerRPName" ) .. eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH2() + ctr( 600 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " ..  eyeTrace.Entity:GetNWString( "ownerRPName" ) .. eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 end
 
@@ -39,6 +39,7 @@ function HudView()
     elseif _eyeTrace.Entity:HasStorage() and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
       draw.SimpleTextOutlined( _eyeTrace.Entity:StorageName(), "sef", ScrW()/2, ScrH2() + ctr( 600 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "openstoragepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "openstoragepos" ), "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      showOwner( _eyeTrace )
     end
   end
 end

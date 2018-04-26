@@ -653,4 +653,6 @@ function TR_All()
   set_lang_string( "emoteforward", "İleri" )
   set_lang_string( "emote", "Jest" )
   set_lang_string( "emotes", "Jestler" )
+  set_lang_string( "public", "Genel" )
+  set_lang_string( "private", "Özel" )
 end

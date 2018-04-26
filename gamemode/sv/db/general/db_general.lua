@@ -444,13 +444,13 @@ concommand.Add( "yrp_restart", function( ply, cmd, args )
 	if ply:IsPlayer() then
 		if ply:HasAccess() then
 	    printGM( "note", "RESTARTING SERVER by " .. ply:Nick() )
-      game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
+      game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
 		else
 	    printGM( "note", ply:Nick() .. " tried to restart server!" )
 	  end
 	else
     printGM( "note", "RESTARTING SERVER by [CONSOLE]" )
-    game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
+    game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
   end
 end )
 

@@ -48,32 +48,40 @@ function AddTableAxis( tab, axis, value )
 end
 
 function GetEntityItemSize( ent )
-  local _maxs = ent:OBBMaxs()
-  local _mins = ent:OBBMins()
-  local _axis = {}
-  AddTableAxis( _axis, "x", distance( _mins.x, _maxs.x ) )
-  AddTableAxis( _axis, "y", distance( _mins.y, _maxs.y ) )
-  AddTableAxis( _axis, "z", distance( _mins.z, _maxs.z ) )
-  table.SortByMember( _axis, "value" )
+  if ent:ItemSizeW() == nil and ent:ItemSizeH() == nil then
+    local _maxs = ent:OBBMaxs()
+    local _mins = ent:OBBMins()
+    local _axis = {}
+    AddTableAxis( _axis, "x", distance( _mins.x, _maxs.x ) )
+    AddTableAxis( _axis, "y", distance( _mins.y, _maxs.y ) )
+    AddTableAxis( _axis, "z", distance( _mins.z, _maxs.z ) )
+    table.SortByMember( _axis, "value" )
 
-  local _result = {}
-  local _scale = 6
-  _result.sizew = _axis[1].value/_scale - _axis[1].value/_scale%1
-  _result.sizeh = _axis[2].value/_scale - _axis[2].value/_scale%1
+    local _result = {}
+    local _scale = 6
+    _result.sizew = _axis[1].value/_scale - _axis[1].value/_scale%1
+    _result.sizeh = _axis[2].value/_scale - _axis[2].value/_scale%1
 
-  if _result.sizew < 1 then
-    _result.sizew = 1
+    if _result.sizew < 1 then
+      _result.sizew = 1
+    end
+    if _result.sizeh < 1 then
+      _result.sizeh = 1
+    end
+    if _result.sizew > INV_MAXW then
+      _result.sizew = INV_MAXW
+    end
+    if _result.sizeh > ITEM_MAXH then
+      _result.sizeh = ITEM_MAXH
+    end
+    return _result
+  else
+    local _result = {}
+    _result.sizew = ent:ItemSizeW()
+    _result.sizeh = ent:ItemSizeH()
+    return _result
   end
-  if _result.sizeh < 1 then
-    _result.sizeh = 1
-  end
-  if _result.sizew > INV_MAXW then
-    _result.sizew = INV_MAXW
-  end
-  if _result.sizeh > ITEM_MAXH then
-    _result.sizeh = ITEM_MAXH
-  end
-  return _result
+  return false
 end
 
 function GetSurroundingEntities( ply )
@@ -86,7 +94,7 @@ function GetSurroundingEntities( ply )
           if !ent:GetPersistent() then
             if ent:GetParent() != ply then
               if !ent:GetParent():IsVehicle() and !string.find( ent:GetClass(), "wheel" ) then
-                if ent:GetNWBool( "isaworldstorage", false ) == false then
+                if !ent:IsWorldStorage() then
                   table.insert( _tab, ent )
                 end
               end
@@ -218,7 +226,7 @@ function GetSurroundingStorage( ply )
   _sur.posy = ply:GetPos().y
   _sur.posz = ply:GetPos().z
   _sur.uniqueID = 0
-  _sur.map = game.GetMap()
+  _sur.map = GetMapNameDB()
 
   local _items = GetSurroundingItems( ply )
   local _size = GetSurroundingStorageSize( _items )
@@ -237,57 +245,75 @@ if CLIENT then
   end
 
   function RemoveStorage( pnl, uid )
-    if item_handler[tonumber(uid)] != nil then
-      for y = 1, #item_handler[tonumber(uid)] do
-        for x = 1, #item_handler[tonumber(uid)][y] do
-          item_handler[tonumber(uid)][y][x].slot:Remove()
-          if item_handler[tonumber(uid)][y][x].item != nil then
-            item_handler[tonumber(uid)][y][x].item:Remove()
+    if uid != nil then
+      if item_handler[tonumber(uid)] != nil then
+        for y = 1, #item_handler[tonumber(uid)] do
+          for x = 1, #item_handler[tonumber(uid)][y] do
+            item_handler[tonumber(uid)][y][x].slot:Remove()
+            local _item = item_handler[tonumber(uid)][y][x].item
+            if pa( _item ) then
+              _item:Remove()
+              local _parent = _item:GetParent()
+              if pa( _parent ) then
+                _parent:Remove()
+              end
+            end
           end
         end
       end
     end
   end
 
-  function AddStorage( pnl, uid, w, h )
+  function AddStorage( pnl, uid, w, h, typ )
     item_handler[tonumber(uid)] = {}
     item_handler[tonumber(uid)].pnl = pnl
-    item_handler[tonumber(uid)].pnl:SetSize( ctr( 128*w ), ctr( 128*h ) )
-    for y = 1, h do
-      item_handler[tonumber(uid)][y] = {}
-      for x = 1, w do
-        item_handler[tonumber(uid)][y][x] = {}
-        item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, ctr( 128 ), ctr( 128 ), ctr( (x-1)*128 ), ctr( (y-1)*128 ) )
-        local _edit_slot = item_handler[tonumber(uid)][y][x].slot
-        item_handler[tonumber(uid)][y][x].value = ""
-        _edit_slot.storageID = uid
-        _edit_slot.posy = y
-        _edit_slot.posx = x
-        _edit_slot:Receiver( "slot", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
-          if isDropped then
-            local _item = tableOfDroppedPanels[1].item
-            local _slot1 = {}
-            _slot1.storageID = _item.storageID
-            _slot1.posy = _item.posy
-            _slot1.posx = _item.posx
-            local _slot2 = {}
-            _slot2.storageID = receiver.storageID
-            _slot2.posy = receiver.posy
-            _slot2.posx = receiver.posx
-            net.Start( "moveitem" )
-              net.WriteTable( _slot1 )
-              net.WriteTable( _slot2 )
-              net.WriteTable( _item )
-            net.SendToServer()
+    pnl.uid = uid
+    if pa( item_handler[tonumber(uid)].pnl ) then
+      item_handler[tonumber(uid)].pnl:SetSize( ctr( 128*w ), ctr( 128*h ) )
+      for y = 1, h do
+        item_handler[tonumber(uid)][y] = {}
+        for x = 1, w do
+          item_handler[tonumber(uid)][y][x] = {}
+          item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, ctr( 128 ), ctr( 128 ), ctr( (x-1)*128 ), ctr( (y-1)*128 ) )
+          local _edit_slot = item_handler[tonumber(uid)][y][x].slot
+          item_handler[tonumber(uid)][y][x].value = ""
+          _edit_slot.storageID = uid
+          _edit_slot.posy = y
+          _edit_slot.posx = x
+          _edit_slot.typ = typ
+          _edit_slot:Receiver( "slot", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
+            if isDropped then
+              local _item = tableOfDroppedPanels[1].item
+              local _slot1 = {}
+              _slot1.storageID = _item.storageID
+              _slot1.posy = _item.posy
+              _slot1.posx = _item.posx
+              local _slot2 = {}
+              _slot2.storageID = receiver.storageID
+              _slot2.posy = receiver.posy
+              _slot2.posx = receiver.posx
+              local _typ = receiver.typ or "world"
+              net.Start( "moveitem" )
+                net.WriteTable( _slot1 )
+                net.WriteTable( _slot2 )
+                net.WriteTable( _item )
+                net.WriteString( _typ )
+              net.SendToServer()
+
+              if tostring( _item.intern_storageID ) != "" then
+                net.Start( "update_backpack" )
+                net.SendToServer()
+              end
+            end
+          end, {} )
+          function _edit_slot:Paint( pw, ph )
+            self.color = Color( 0, 0, 0, 0 )
+            if self:IsHovered() then
+              self.color = Color( 255, 255, 255, 200 )
+            end
+            surfaceBox( 0, 0, pw, ph, self.color )
+            drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
           end
-        end, {} )
-        function _edit_slot:Paint( pw, ph )
-          self.color = Color( 0, 0, 0, 0 )
-          if self:IsHovered() then
-            self.color = Color( 255, 255, 255, 200 )
-          end
-          surfaceBox( 0, 0, pw, ph, self.color )
-          drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
         end
       end
     end
@@ -315,51 +341,56 @@ if CLIENT then
   end
 
   function AddItemToStorage( tab )
+    if tab.entity != nil then
+      tab.intern_storageID = tab.entity:GetNWString( "storage_uid", "" )
+    end
     local _storage = item_handler[tonumber(tab.storageID)].pnl
-    local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
-    local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
+    if pa( _storage ) then
+      local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
+      local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 
-    local _bg = createD( "DPanel", _parent, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), _x + ctr( (tab.posx-1)*128 ), _y + ctr( (tab.posy-1)*128 ) )
-    function _bg:Paint( pw, ph )
-      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+      local _bg = createD( "DPanel", _parent, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), _x + ctr( (tab.posx-1)*128 ), _y + ctr( (tab.posy-1)*128 ) )
+      function _bg:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+      end
+      function _bg:PaintOver( pw, ph )
+        local _br = 2
+        surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+        surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+
+        surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+        surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+
+        surfaceText( tab.PrintName, "mat1text", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
+      end
+
+      local _item = createD( "DModelPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
+      _item:InvalidateLayout( true )
+      _item:SetModel( tab.WorldModel )
+      SetCamPosition( _item, tab )
+      function _item:LayoutEntity( Entity ) return end
+
+      local _item2 = createD( "DPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
+      item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
+      item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber( tab.uniqueID )
+      local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
+      _i.item = tab
+      function _i:Paint( pw, ph )
+        --surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+      end
+      function _i:PaintOver( pw, ph )
+        local _br = 2
+        surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+        surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+
+        surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+        surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+      end
+      _i:Droppable( "slot" )
+      _i:SetToolTip( _i.item.PrintName .. "\n" .. _i.item.ClassName .. "\n" .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
+
+      return _item
     end
-    function _bg:PaintOver( pw, ph )
-      local _br = 2
-      surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
-      surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
-
-      surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
-      surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
-
-      surfaceText( tab.PrintName, "mat1text", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
-    end
-
-    local _item = createD( "DModelPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
-    _item:InvalidateLayout( true )
-    _item:SetModel( tab.WorldModel )
-    SetCamPosition( _item, tab )
-    function _item:LayoutEntity( Entity ) return end
-
-    local _item2 = createD( "DPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
-    item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
-    item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber( tab.uniqueID )
-    local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
-    _i.item = tab
-    function _i:Paint( pw, ph )
-      --surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
-    end
-    function _i:PaintOver( pw, ph )
-      local _br = 2
-      surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
-      surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
-
-      surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
-      surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
-    end
-    _i:Droppable( "slot" )
-    _i:SetToolTip( _i.item.PrintName .. "\n" .. _i.item.ClassName .. "\n" .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
-
-    return _item
   end
 
   net.Receive( "additemtostorage", function( len )
@@ -368,14 +399,15 @@ if CLIENT then
   end)
 
   net.Receive( "moveitem_slot1", function( len )
-    local _slot1 = net.ReadTable()
+    local _s1 = net.ReadTable()
 
     --[[ ITEM ]]--
-    if item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item != nil then
-      item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item:GetParent():Remove()
-      item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item:Remove()
-      item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].item = nil
-      item_handler[tonumber(_slot1.storageID)][tonumber(_slot1.posy)][tonumber(_slot1.posx)].value = ""
+    local _i = item_handler[tonumber(_s1.storageID)][tonumber(_s1.posy)][tonumber(_s1.posx)]
+    if _i.item != nil then
+      _i.item:GetParent():Remove()
+      _i.item:Remove()
+      _i.item = nil
+      _i.value = ""
     end
   end)
 

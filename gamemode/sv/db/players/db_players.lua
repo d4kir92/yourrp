@@ -48,8 +48,8 @@ function save_clients( string )
             local _mb_result = SQL_UPDATE( "yrp_characters", _moneybank, "uniqueID = " .. _char_id )
           end
 
-          if worked( db_sql_str2( string.lower( game.GetMap() ) ), "getmap failed @save_clients" ) then
-            local _map = "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'"
+          if worked( GetMapNameDB(), "getmap failed @save_clients" ) then
+            local _map = "map = '" .. GetMapNameDB() .. "'"
             SQL_UPDATE( "yrp_characters", _map, "uniqueID = " .. _char_id )
           end
         end
@@ -252,7 +252,7 @@ end
 
 function set_ply_pos( ply, map, pos, ang )
   timer.Simple( 0.1, function()
-    if map == db_sql_str2( string.lower( game.GetMap() ) ) then
+    if map == GetMapNameDB() then
       local tmpPos = string.Split( pos, " " )
       ply:SetPos( Vector( tonumber( tmpPos[1] ), tonumber( tmpPos[2] ), tonumber( tmpPos[3] ) ) )
 

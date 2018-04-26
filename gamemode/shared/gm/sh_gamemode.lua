@@ -14,13 +14,44 @@ function GM:GetGameDescription()
 	return GAMEMODE.BaseName
 end
 
+function GetNiceMapName()
+	local map = game.GetMap()
+	local _first = string.find( map, "_", 1, false )
+	map = string.sub( map, _first+1 )
+	map = string.Explode( "_", map )
+	local _new_map = {}
+	for i, str in pairs( map ) do
+		local _tab = string.Explode( "", str )
+		local _insert = true
+		for j, char in pairs( _tab ) do
+			if isnumber( tonumber( char ) ) then
+				_insert = false
+				break
+			end
+		end
+		if _insert then
+			table.insert( _new_map, str )
+		end
+	end
+	map = string.Implode( " ", _new_map )
+	return string.upper( map )
+end
+
+function GetMapName()
+	return game.GetMap()
+end
+
+function GetMapNameDB()
+	return string.lower( db_in_str( game.GetMap() ) )
+end
+
 concommand.Add( "yrp_status", function( ply, cmd, args )
 	hr_pre()
 	printGM( "gm", "YourRP Version:\t" .. GAMEMODE.Version )
 	printGM( "gm", "    Servername:\t" .. GetHostName() )
 	printGM( "gm", "            IP:\t" .. game.GetIPAddress() )
 
-	printGM( "gm", "           Map:\t" .. game.GetMap() )
+	printGM( "gm", "           Map:\t" .. GetMapNameDB() )
 	printGM( "gm", "       Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
 	hr_pos()
 --[[
@@ -214,7 +245,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.73" --do NOT change this!
+GM.Version = "0.9.74" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

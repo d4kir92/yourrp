@@ -245,7 +245,7 @@ function spawnItem( ply, item, duid )
     local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
     if _sps != nil and _sps != false then
       _sps = _sps[1].storagepoints
-      local _storagepoint = SQL_SELECT( "yrp_" .. string.lower( game.GetMap() ), "angle", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
+      local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "angle", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
       if _storagepoint != nil and _storagepoint != false then
         _storagepoint = _storagepoint[1]
         local _ang = string.Explode( ",", _storagepoint.angle )
@@ -273,7 +273,7 @@ function spawnItem( ply, item, duid )
   local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
   if _sps != nil and _sps != false then
     _sps = _sps[1].storagepoints
-    local _storagepoint = SQL_SELECT( "yrp_" .. string.lower( game.GetMap() ), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
+    local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
     if _storagepoint != nil and _storagepoint != false then
       _storagepoint = _storagepoint[1]
 

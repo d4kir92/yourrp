@@ -3,7 +3,7 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) )
+local _db_name = "yrp_" .. GetMapNameDB()
 
 SQL_ADD_COLUMN( _db_name, "position", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "angle", "TEXT DEFAULT ''" )
@@ -30,9 +30,9 @@ function teleportToSpawnpoint( ply )
     local chaTab = ply:GetChaTab()
 
     if chaTab != nil and groTab != nil and rolTab != nil then
-      if chaTab.map == db_sql_str2( string.lower( game.GetMap() ) ) then
-        local _tmpRoleSpawnpoints = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'RoleSpawnpoint' AND linkID = " .. rolTab.uniqueID )
-        local _tmpGroupSpawnpoints = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'GroupSpawnpoint' AND linkID = " .. groTab.uniqueID )
+      if chaTab.map == GetMapNameDB() then
+        local _tmpRoleSpawnpoints = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'RoleSpawnpoint' AND linkID = " .. rolTab.uniqueID )
+        local _tmpGroupSpawnpoints = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = " .. groTab.uniqueID )
         if _tmpRoleSpawnpoints != nil then
           local _randomSpawnPoint = table.Random( _tmpRoleSpawnpoints )
           printGM( "note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring( rolTab.roleID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
@@ -61,7 +61,7 @@ function teleportToSpawnpoint( ply )
 
             if _ug != nil then
               _ug = _ug[1]
-              local _gs = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "linkID = " .. _ug.uniqueID )
+              local _gs = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "linkID = " .. _ug.uniqueID )
               if _gs != nil then
                 local _randomSpawnPoint = table.Random( _gs )
                 printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( _ug.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
@@ -100,18 +100,18 @@ util.AddNetworkString( "removeMapEntry" )
 net.Receive( "removeMapEntry", function( len, ply )
   local _tmpUniqueID = net.ReadString()
 
-  local _tmpMapTable = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "uniqueID = '" .. _tmpUniqueID .. "'" )
+  local _tmpMapTable = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. _tmpUniqueID .. "'" )
   if _tmpMapTable != nil then
     _tmpMapTable = _tmpMapTable[1]
     if _tmpMapTable.type == "dealer" then
       dealer_rem( _tmpMapTable.linkID )
     end
   end
-  SQL_DELETE_FROM( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "uniqueID = " .. _tmpUniqueID )
+  SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = " .. _tmpUniqueID )
 end)
 
 net.Receive( "getMapList", function( len, ply )
-  local _tmpMapTable = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", nil )
+  local _tmpMapTable = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", nil )
   if _tmpMapTable == nil or _tmpMapTable == false then
     _tmpMapTable = {}
   end

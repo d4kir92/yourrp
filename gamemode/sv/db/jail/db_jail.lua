@@ -14,7 +14,7 @@ SQL_ADD_COLUMN( _db_name, "time", "INT DEFAULT 1" )
 --db_is_empty( _db_name )
 
 function teleportToReleasepoint( ply )
-  local _tmpTele = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = '" .. "releasepoint" .. "'" )
+  local _tmpTele = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'" )
 
   if _tmpTele != nil then
     local _tmp = string.Explode( ",", _tmpTele[1].position )
@@ -33,7 +33,7 @@ function teleportToReleasepoint( ply )
 end
 
 function teleportToJailpoint( ply )
-  local _tmpTele = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = '" .. "jailpoint" .. "'" )
+  local _tmpTele = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'" )
 
   if _tmpTele != nil then
     local _tmp = string.Explode( ",", _tmpTele[1].position )

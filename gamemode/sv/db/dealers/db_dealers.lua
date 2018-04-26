@@ -26,7 +26,7 @@ end
 
 function dealer_add( ply )
   local _uid = math.Round( math.Rand( 1, 999999 ), 2 )
-  local _insert = SQL_INSERT_INTO(  _db_name, "name, map", "'" .. _uid .. "', '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'" )
+  local _insert = SQL_INSERT_INTO(  _db_name, "name, map", "'" .. _uid .. "', '" .. GetMapNameDB() .. "'" )
   local _db_sel = SQL_SELECT( _db_name, "uniqueID", "name = '" .. _uid .. "'" )
 
   if _db_sel != nil then
@@ -36,7 +36,7 @@ function dealer_add( ply )
     local _pos = ply:GetPos()
     local _ang = ply:EyeAngles()
     local _vals = "'dealer', '" .. math.Round( _pos.x, 2 ) .. "," .. math.Round( _pos.y, 2 ) .. "," .. math.Round( _pos.z, 2 ) .. "', '" .. math.Round( _ang.p, 2 ) .. "," .. math.Round( _ang.y, 2 ) .. "," .. math.Round( _ang.r, 2 ) .. "', '" .. _db_sel.uniqueID .. "'"
-    SQL_INSERT_INTO( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "type, position, angle, linkID", _vals )
+    SQL_INSERT_INTO( "yrp_" .. GetMapNameDB(), "type, position, angle, linkID", _vals )
   end
 end
 

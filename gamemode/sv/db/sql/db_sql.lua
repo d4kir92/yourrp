@@ -131,7 +131,7 @@ net.Receive( "change_to_sql_mode", function( len, ply )
     SetSQLMode( _mode )
     printGM( "note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName() )
     timer.Simple( 1, function()
-      game.ConsoleCommand( "changelevel " .. game.GetMap() .. "\n" )
+      game.ConsoleCommand( "changelevel " .. GetMapName() .. "\n" )
     end)
   else
     printGM( "note", ply:YRPName() .. " tried to use change_to_sql_mode" )

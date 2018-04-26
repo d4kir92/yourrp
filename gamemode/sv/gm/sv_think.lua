@@ -224,12 +224,12 @@ timer.Create( "ServerThink", 1, 0, function()
         end
       end
     end
-    local _dealers = SQL_SELECT( "yrp_dealers", "*", "map = '" .. db_sql_str2( string.lower( game.GetMap() ) ) .. "'" )
+    local _dealers = SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
     if _dealers != nil then
       for i, dealer in pairs( _dealers ) do
         if tostring( dealer.uniqueID ) != "1" then
           if !dealerAlive( dealer.uniqueID ) then
-            local _del = SQL_SELECT( "yrp_" .. db_sql_str2( string.lower( game.GetMap() ) ), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
+            local _del = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
             if _del != nil then
               printGM( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )
               _del = _del[1]
@@ -277,7 +277,7 @@ timer.Create( "ServerThink", 1, 0, function()
 	    if _time >= _changelevel then
 	      printGM( "gm", "Auto Reload" )
 	      timer.Simple( 1, function()
-	        game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
+	        game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
 	      end)
 	    else
 				local _str = "Auto Reload in " .. _changelevel-_time .. " sec"

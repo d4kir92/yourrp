@@ -3,6 +3,12 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
+local Entity = FindMetaTable( "Entity" )
+
+function Entity:SetWorldStorage( b )
+  self:SetNWString( "isaworldstorage", tobool( b ) )
+end
+
 local Player = FindMetaTable( "Player" )
 
 if Player.LegacyGive == nil then

@@ -33,8 +33,91 @@ SQL_ADD_COLUMN( _db_name, "position", "TEXT" )
 SQL_ADD_COLUMN( _db_name, "angle", "TEXT" )
 SQL_ADD_COLUMN( _db_name, "map", "TEXT" )
 
+--[[ EQUIPMENT ]]--
+SQL_ADD_COLUMN( _db_name, "eqbp1", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqbag1", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqbag2", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqbag3", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqbag4", "TEXT DEFAULT ''" )
+
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
+
+local Player = FindMetaTable( "Player" )
+
+function Player:UpdateBackpack()
+  if self.backpack != nil and self.backpack != NULL then
+    self.backpack:Remove()
+  end
+
+  if self:HasCharacterSelected() then
+    self:DoAnimationEvent( ACT_IDLE_ANGRY )
+
+    local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. self:CharID() .. "'" )
+    _uid = _uid[1].eqbp1
+    local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
+    if _bp != nil then
+      _bp = _bp[1]
+
+      local _spine = self:LookupBone( "ValveBiped.Bip01_Spine4" )
+      self.backpack = ents.Create( "prop_dynamic" )
+      self.backpack:SetModel( _bp.WorldModel )
+      self.backpack:SetModelScale( 0.5, 0 )
+
+      self.backpack:Spawn()
+
+      local pos, ang = self:GetBonePosition( _spine )
+      local _cor = self:GetPos() - pos
+      local _cor2 = self:GetAngles() - ang
+
+      self.backpack:FollowBone( self, _spine )
+      self.backpack:SetLocalPos( Vector( 0, 0, 0 ) + Vector( -10, -10, 0 ) )
+	    self.backpack:SetLocalAngles( Angle( 0, 0, 0 ) + Angle( 90, -15, 90 ) )
+      --self.backpack:SetPos( self:GetPos() - pos -_cor + Vector( -8, -8, 0 ) )
+      --self.backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
+    end
+    return _bp
+  end
+end
+
+util.AddNetworkString( "update_backpack" )
+net.Receive( "update_backpack", function( len, ply )
+  local _bp = ply:UpdateBackpack()
+
+  if _bp != nil then
+    local _uid = _bp.intern_storageID
+
+    local _stor = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
+    _stor = _stor[1]
+
+    net.Start( "update_backpack" )
+      net.WriteBool( true )
+      net.WriteTable( _stor )
+    net.Send( ply )
+  else
+    net.Start( "update_backpack" )
+      net.WriteBool( false )
+    net.Send( ply )
+  end
+end)
+
+util.AddNetworkString( "update_slot_backpack" )
+net.Receive( "update_slot_backpack", function( len, ply )
+  local _charid = ply:CharID()
+  local _uid = SQL_SELECT( _db_name, "eqbp1", "uniqueID = '" .. _charid .. "'" )
+  if _uid != nil then
+    _uid = _uid[1].eqbp1
+    local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+    if _backpack_storage == nil then
+      _backpack_storage = CreateEquipmentStorage( ply, "eqbp1", _charid )
+      _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+    end
+    _backpack_storage = _backpack_storage[1]
+    net.Start( "update_slot_backpack" )
+      net.WriteTable( _backpack_storage )
+    net.Send( ply )
+  end
+end)
 
 util.AddNetworkString( "moneyreset" )
 net.Receive( "moneyreset", function( len, ply )
@@ -216,7 +299,7 @@ net.Receive( "CreateCharacter", function( len, ply )
   vals = vals .. tonumber( ch.playermodelID ) .. ", "
   vals = vals .. 250 .. ", "
   vals = vals .. 500 .. ", "
-  vals = vals .. "'" .. db_sql_str2( game.GetMap() ) .. "', "
+  vals = vals .. "'" .. GetMapNameDB() .. "', "
   vals = vals .. tonumber( ch.skin ) .. ", "
   vals = vals .. tonumber( ch.bg[0] ) .. ", "
   vals = vals .. tonumber( ch.bg[1] ) .. ", "
@@ -306,6 +389,7 @@ net.Receive( "inv_pm_up", function( len, ply )
   ply:SetModel( _pms[_cur] )
   local _charid = ply:CharID()
   SQL_UPDATE( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
+  ply:UpdateBackpack()
 end)
 
 util.AddNetworkString( "inv_pm_do" )
@@ -316,4 +400,5 @@ net.Receive( "inv_pm_do", function( len, ply )
   ply:SetModel( _pms[_cur] )
   local _charid = ply:CharID()
   SQL_UPDATE( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
+  ply:UpdateBackpack()
 end)

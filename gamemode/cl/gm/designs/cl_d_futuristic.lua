@@ -114,7 +114,7 @@ end
 
 RegisterWindowFunction( _fut.name, _fut.DrawWindow )
 
-function _fut.DrawButton( btn, pw, ph, text )
+function _fut.DrawButton( btn, pw, ph, text, color )
   --[[ Vars ]]--
   local _text = text or ""
 
@@ -129,6 +129,7 @@ function _fut.DrawButton( btn, pw, ph, text )
   if btn:IsHovered() then
     _hovered = 60
   end
+  local _color = color or _color_bar
   surfaceBox( 0, 0, pw, ph, Color( _color_bar.r + _hovered, _color_bar.g + _hovered, _color_bar.b + _hovered, _color_bar.a  ) )
   if InterfaceBorder() then
     LaserBorder( pw, ph )

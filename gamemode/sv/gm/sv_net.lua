@@ -46,7 +46,7 @@ net.Receive( "updateServer", function( len, ply )
     countdown = countdown - 1
     if countdown == -1 then
       timer.Remove( "timerRestartServer" )
-      game.ConsoleCommand( "changelevel " .. db_sql_str2( string.lower( game.GetMap() ) ) .. "\n" )
+      game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
     end
   end)
 end)

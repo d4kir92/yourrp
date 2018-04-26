@@ -92,7 +92,7 @@ end
 
 RegisterWindowFunction( _mat1.name, _mat1.DrawWindow )
 
-function _mat1.DrawButton( btn, pw, ph, text )
+function _mat1.DrawButton( btn, pw, ph, text, color )
   --[[ Vars ]]--
   local _text = text or ""
 
@@ -108,7 +108,8 @@ function _mat1.DrawButton( btn, pw, ph, text )
   if btn:IsHovered() then
     _hovered = 40
   end
-  surfaceBox( 0, 0, pw, ph, Color( _color_bar.r + _hovered, _color_bar.g + _hovered, _color_bar.b + _hovered, _color_bar.a  ) )
+  local _color = color or _color_bar
+  surfaceBox( 0, 0, pw, ph, Color( _color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a  ) )
   if InterfaceBorder() then
     local _br = 2
     surfaceBox( 0, 0, pw, ctr( _br ), _color_br )

@@ -15,6 +15,7 @@ SQL_ADD_COLUMN( _db_name, "posy", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "sizew", "TEXT DEFAULT '1'" )
 SQL_ADD_COLUMN( _db_name, "sizeh", "TEXT DEFAULT '1'" )
 SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT 'entity'" )
+SQL_ADD_COLUMN( _db_name, "intern_storageID", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 
@@ -74,7 +75,11 @@ function ItemToEntity( item, ply )
   local _ent = ents.Create( item.ClassName )
   _ent:SetModel( item.WorldModel )
   _ent:Spawn()
+  if item.intern_storageID != "" then
+    _ent:SetNWString( "storage_uid", item.intern_storageID )
+  end
   TeleportEntityTo(_ent, ply:GetPos() )
+  _ent:SetNWString( "ownerRPName", ply:RPName() )
   return item
 end
 
@@ -106,7 +111,7 @@ function CreateItem( item, slot )
     _type = "weapon"
   end
 
-  SQL_INSERT_INTO( _db_name, "ClassName, WorldModel, PrintName, storageID, sizew, sizeh, posx, posy, type", "'" .. item.ClassName .. "', '" .. item.WorldModel .. "', '" .. item.PrintName .. "', '" .. item.storageID .. "', " .. _size.sizew .. ", " .. _size.sizeh .. ", " .. item.posx .. ", " .. item.posy .. ", '" .. _type .. "'" )
+  SQL_INSERT_INTO( _db_name, "intern_storageID, ClassName, WorldModel, PrintName, storageID, sizew, sizeh, posx, posy, type", "'" .. item.entity:GetNWString( "storage_uid", "" ) .. "', '" .. item.ClassName .. "', '" .. item.WorldModel .. "', '" .. item.PrintName .. "', '" .. item.storageID .. "', " .. _size.sizew .. ", " .. _size.sizeh .. ", " .. item.posx .. ", " .. item.posy .. ", '" .. _type .. "'" )
   local _items = SQL_SELECT( _db_name, "*", nil )
   local _item = _items[#_items]
   return _item
@@ -119,18 +124,37 @@ net.Receive( "moveitem", function( len, ply )
   local _slot1 = net.ReadTable()
   local _slot2 = net.ReadTable()
   local _item = net.ReadTable()
+  local _type = net.ReadString()
+
+  printTab( _slot1, "SLOT1" )
+  printTab( _slot2, "SLOT2" )
+  printTab( _item, "Item" )
+
+  if tonumber( _item.intern_storageID ) == tonumber( _slot2.storageID ) then
+    printGM( "note", tostring( _item.ClassName ) .. " (CANT PUT SELF INSIDE SELF)")
+    return false
+  end
 
   if _slot1.storageID == 0 then
-    if _slot2.storageID == 0 then
-      --print( "FROM NEARBY TO NEARBY" )
+    local _i = _item
+    _i.storageID = _slot2.storageID
+    _i.posx = _slot2.posx
+    _i.posy = _slot2.posy
+
+    if _type == "eqbp1" then
+      print( "FROM NEARBY TO EQUIPMENT" )
+      local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. ply:CharID() .. "'" )
+      _uid = _uid[1].eqbp1
+      local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _uid )
+      local _result = CreateItem( _item, _slot2 )
+      _item.entity:Remove()
+      _item.uniqueID = _result.uniqueID
+
+    elseif _slot2.storageID == 0 then
+      print( "FROM NEARBY TO NEARBY" )
       --
     elseif _slot2.storageID != 0 then
-      --print( "FROM NEARBY TO STORAGE", _slot2.storageID )
-      local _i = _item
-      _i.storageID = _slot2.storageID
-      _i.posx = _slot2.posx
-      _i.posy = _slot2.posy
-
+      print( "FROM NEARBY TO STORAGE", _slot2.storageID )
       local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _i.storageID )
       if _storage != nil then
         _storage = _storage[1]
@@ -143,7 +167,7 @@ net.Receive( "moveitem", function( len, ply )
           end
         end
 
-        local _stor_items = SQL_SELECT( _db_name, "*" , "storageID = " .. _i.storageID )
+        local _stor_items = SQL_SELECT( _db_name, "*" , "uniqueID = " .. _i.storageID )
         if _stor_items != nil and _stor_items != false then
           for i, item in pairs( _stor_items ) do
             AddItemToTable( _stor, item )
@@ -151,6 +175,7 @@ net.Receive( "moveitem", function( len, ply )
         end
 
         if IsEnoughSpace( _stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID ) then
+          print("ENOUGH SPACE")
           local _result = CreateItem( _item, _slot2 )
           _item.entity:Remove()
           _item.uniqueID = _result.uniqueID
@@ -165,11 +190,11 @@ net.Receive( "moveitem", function( len, ply )
     end
   elseif _slot1.storageID != 0 then
     if _slot2.storageID == 0 then
-      --print( "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
+      print( "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
       local _result = SQL_DELETE_FROM( _db_name, "uniqueID = " .. _item.uniqueID )
       _item = ItemToEntity( _item, ply )
     elseif _slot2.storageID != 0 then
-      --print( "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
+      print( "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
       local _i = SQL_SELECT( _db_name, "*", "uniqueID = " .. _item.uniqueID )
       if _i != nil then
         _i = _i[1]
@@ -179,6 +204,7 @@ net.Receive( "moveitem", function( len, ply )
 
         local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _i.storageID )
         if _storage != nil then
+
           _storage = _storage[1]
           local _stor = {}
           for y = 1, _storage.sizeh do
@@ -240,17 +266,26 @@ net.Receive( "moveitem", function( len, ply )
     end
 
     if _slot2.storageID != 0 then
-      local _clients_slot2 = GetStorageClients( _slot2.storageID )
-      for i, pl in pairs( player.GetAll() ) do
-        if table.HasValue( _clients_slot2, pl:SteamID() ) then
-          net.Start( "moveitem_slot2" )
-            net.WriteTable( _slot2 )
-            net.WriteTable( _item )
-          net.Send( pl )
+      if _type == "eqbp1" then
+        net.Start( "moveitem_slot2" )
+          net.WriteTable( _slot2 )
+          net.WriteTable( _item )
+        net.Send( ply )
+      else
+        local _clients_slot2 = GetStorageClients( _slot2.storageID )
+        for i, pl in pairs( player.GetAll() ) do
+          if table.HasValue( _clients_slot2, pl:SteamID() ) then
+            net.Start( "moveitem_slot2" )
+              net.WriteTable( _slot2 )
+              net.WriteTable( _item )
+            net.Send( pl )
+          end
         end
       end
     else
       --
     end
   end
+
+  ply:UpdateBackpack()
 end)

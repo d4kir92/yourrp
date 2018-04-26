@@ -57,7 +57,7 @@ function openMap()
         draw.RoundedBox( 0, win.x - ctr(2), win.y - ctr(2), win.w + ctr( 4 ), win.h + ctr( 4 ), Color( 255, 255, 0, 240 ) )
         draw.RoundedBox( 0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255 ) )
 
-        local _mapName = string.Replace( string.upper( game.GetMap() ), "_", " " )
+        local _mapName = GetNiceMapName()
 
         local _testHeight = 4000
         local tr = util.TraceLine( {

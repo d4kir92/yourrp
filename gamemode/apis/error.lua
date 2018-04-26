@@ -115,18 +115,25 @@ function send_error( realm, str )
 					return
 				end
 			end
-			if CLIENT then
- 				local _steamid = LocalPlayer():SteamID()
-				str = str .. " " .. tostring( _steamid )
-			end
 		  entry["entry.915525654"] = tostring( str )
 		  entry["entry.58745995"] = tostring( realm )
-		  entry["entry.1306533151"] = db_sql_str2( string.lower( game.GetMap() ) ) or "MAPNAME"
+		  entry["entry.1306533151"] = GetMapName() or "MAPNAME"
 		  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
 		  entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
 		  entry["entry.1883727441"] = gmod.GetGamemode().Version or "0.0.0"
 		  entry["entry.2045173320"] = string.upper( gmod.GetGamemode().VersionSort ) or "UNKNOWN"
 			entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
+			if CLIENT then
+				local ply = LocalPlayer()
+				local _steamid = "UNKNOWN"
+				if ply != nil then
+					_steamid = ply:SteamID()
+				end
+				entry["entry.1898856001"] = tostring( _steamid )
+			else
+				entry["entry.1898856001"] = "SERVER"
+			end
+
 			if first_time_error then
 				entry["entry.1893317510"] = "YES"
 			elseif !first_time_error then

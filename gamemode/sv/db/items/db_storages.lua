@@ -18,14 +18,46 @@ SQL_ADD_COLUMN( _db_name, "angr", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT 'error'" )
 SQL_ADD_COLUMN( _db_name, "ParentID", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "map", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT 'world'" )
 
 --db_drop_table(_db_name)
+
+util.AddNetworkString( "remove_storage" )
+function RemoveDBStorage( ply, uid )
+  if ply:HasAccess() then
+    for i, ent in pairs( ents.GetAll() ) do
+      if tostring( ent:GetNWString( "storage_uid" ) ) == tostring( uid ) then
+        ent:Remove()
+        SQL_DELETE_FROM( _db_name, "uniqueID = '" .. uid .. "'" )
+      end
+    end
+  end
+end
+net.Receive( "remove_storage", function( len, ply )
+  local uid = net.ReadString()
+  RemoveDBStorage( ply, uid )
+end)
+
+function CreateEquipmentStorage( ply, typ, PID )
+  local _r = SQL_INSERT_INTO( _db_name, "type, ParentID, sizew, sizeh", "'" .. typ .. "', '" .. PID .. "', 1, 1"  )
+  local _uid = 0
+  local _storages = SQL_SELECT( _db_name, "*", nil )
+  for i, stor in pairs( _storages ) do
+    if tonumber( stor.uniqueID ) > _uid then
+      _uid = tonumber( stor.uniqueID )
+    end
+  end
+
+  local _eq = SQL_UPDATE( "yrp_characters", typ .. " = '" .. _uid .. "'", "uniqueID = '" .. ply:CharID() .. "'"  )
+
+  return _uid
+end
 
 function SaveStorages( str )
   printGM( "db", "SaveStorages( " .. string.upper( tostring( str ) ) .. " )" )
   local _ents = ents.GetAll()
   for i, ent in pairs( _ents ) do
-    if ent:GetNWString( "storage_uid", "" ) != "" then
+    if ent:GetNWString( "storage_uid", "" ) != "" and ent:IsWorldStorage() then
       local _pos = string.Explode( " ", tostring( ent:GetPos() ) )
       local _posx = _pos[1]
       local _posy = _pos[2]
@@ -41,7 +73,7 @@ function SaveStorages( str )
 end
 
 function LoadStorages()
-  local _storages = SQL_SELECT( _db_name, "*", "map = '" .. game.GetMap() .. "'" )
+  local _storages = SQL_SELECT( _db_name, "*", "ParentID = '' AND map = '" .. GetMapNameDB() .. "'" )
 
   if _storages == nil or _storages == false then
     _storages = {}
@@ -62,37 +94,53 @@ function LoadStorages()
   end
 end
 
-function InitStorage( ent, sizew, sizeh )
+local Entity = FindMetaTable( "Entity" )
+
+function Entity:InitBackpackStorage( w, h )
+  self:SetNWString( "item_size_w", 1 )
+  self:SetNWString( "item_size_h", 1 )
+
+  self:InitStorage( w, h, "backpack" )
+  self:SetNWBool( "isbackpack", true )
+end
+
+function Entity:InitStorage( w, h, t )
+  local sizew = w
+  local sizeh = h
+  local _type = t or "world"
+  if sizew > ITEM_MAXW then
+    sizew = ITEM_MAXW
+  end
   timer.Simple( 0.1, function()
     local _storage = nil
-    local _uid = tonumber( ent:GetNWString( "storage_uid", "0" ) )
+    local _uid = tonumber( self:GetNWString( "storage_uid", "0" ) )
     if _uid != 0 then
       --[[ FOUND STORAGE ]]--
       _storage = SQL_SELECT( _db_name, "*", "uniqueID = " .. _uid )
     else
       --[[ NEW STORAGE ]]--
-      printGM( "note", "NEW STORAGE( " .. tostring( ent ) .. ", " .. sizew .. ", " .. sizeh .. " )" )
-      local _pos = string.Explode( " ", tostring( ent:GetPos() ) )
+      printGM( "note", "NEW STORAGE( " .. tostring( self ) .. ", " .. sizew .. ", " .. sizeh .. " )" )
+      local _pos = string.Explode( " ", tostring( self:GetPos() ) )
       local _posx = _pos[1]
       local _posy = _pos[2]
       local _posz = _pos[3]
-      local _ang = string.Explode( " ", tostring( ent:GetAngles() ) )
+      local _ang = string.Explode( " ", tostring( self:GetAngles() ) )
       local _angp = _ang[1]
       local _angy = _ang[2]
       local _angr = _ang[3]
-      local _r = SQL_INSERT_INTO( _db_name, "map, sizew, sizeh, ClassName, posx, posy, posz, angp, angy, angr", "'" .. game.GetMap() .. "', " .. sizew .. ", " .. sizeh .. ", '" .. ent:GetClass() .. "', '" .. _posx .. "', '" .. _posy .. "', '" .. _posz .. "', '" .. _angp .. "', '" .. _angy .. "', '" .. _angr .. "'"  )
+      local _r = SQL_INSERT_INTO( _db_name, "type, map, sizew, sizeh, ClassName, posx, posy, posz, angp, angy, angr", "'" .. _type .. "', '" .. GetMapNameDB() .. "', " .. sizew .. ", " .. sizeh .. ", '" .. self:GetClass() .. "', '" .. _posx .. "', '" .. _posy .. "', '" .. _posz .. "', '" .. _angp .. "', '" .. _angy .. "', '" .. _angr .. "'"  )
       local _storages = SQL_SELECT( _db_name, "*", nil )
       for i, stor in pairs( _storages ) do
         if tonumber( stor.uniqueID ) > _uid then
           _uid = tonumber( stor.uniqueID )
         end
       end
-      ent:SetNWString( "storage_uid", _uid )
-      _storage = SQL_SELECT( _db_name, "*", "uniqueID = " .. ent:GetNWString( "storage_uid" ) )
+      self:SetNWString( "storage_uid", _uid )
+      _storage = SQL_SELECT( _db_name, "*", "uniqueID = " .. self:GetNWString( "storage_uid" ) )
     end
     _storage = _storage[1]
-    ent:SetNWBool( "storagename", _storage.name )
-    ent:SetNWBool( "hasinventory", true )
+    self:SetNWBool( "storagename", _storage.name )
+    self:SetNWBool( "hasinventory", true )
     return _storage
   end)
 end
@@ -104,17 +152,21 @@ function openStorage( ply, uid )
   --[[ Add World Storage ]]--
   if uid != nil then
     local _result = SQL_SELECT( _db_name, "*", "uniqueID = " .. uid )
-    _result = _result[1]
-    table.insert( _storages, _result )
+    if _result != nil then
+      _result = _result[1]
+      table.insert( _storages, _result )
+    end
   end
 
   --[[ Add Storages from Player ]]--
+  --[[
   local _ply_storages = SQL_SELECT( _db_name, "*", "ParentID = '" .. ply:SteamID() .. "'" )
   if _ply_storages != false and _ply_storages != nil then
     for i, plystor in pairs( _ply_storages ) do
       table.insert( _storages, plystor )
     end
   end
+  ]]--
 
   net.Start( "openStorage" )
     net.WriteTable( _storages )

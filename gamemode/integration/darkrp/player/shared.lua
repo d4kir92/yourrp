@@ -64,13 +64,15 @@ function Player:getJobTable()
   local _job = {}
 
   _job.name = self:GetNWString( "roleName", "INVALID" )
-  _job.model = self:GetNWString( "playermodels", "INVALID" )
+  local _pms = string.Explode( ",", self:GetNWString( "playermodels", "INVALID" ) )
+  _job.model = _pms
   _job.description = self:GetNWString( "roleDescription", "INVALID" )
-  _job.weapons = self:GetNWString( "sweps", "INVALID" )
+  local _weapons = string.Explode( ",", self:GetNWString( "sweps", "INVALID" ) )
+  _job.weapons = _weapons
   _job.command = "NONE"
   _job.max = tonumber( self:GetNWString( "maxamount", -1 ) )
   _job.salary = tonumber( self:GetNWString( "salary", "INVALID" ) )
-  _job.admin = self:GetNWBool( "isadminonly" ) or false
+  _job.admin = tonumber( self:GetNWBool( "isadminonly" ) ) or 0
   _job.vote = self:GetNWBool( "isVoteable" ) or false
   if self:GetNWString( "licenseIDs", "" ) != "" then
     _job.hasLicense = true
@@ -85,12 +87,10 @@ end
 
 RPExtraTeams = {}
 function GetRPExtraTeams()
-  --[[ this function: may be wrong ]]--
   RPExtraTeams = {}
-
   for i, ply in pairs( player.GetAll() ) do
     local _job = ply:getJobTable()
-    RPExtraTeams[ply:GetNWString( "roleName" )] = _job
+    table.insert( RPExtraTeams, _job )
   end
   return RPExtraTeams
 end

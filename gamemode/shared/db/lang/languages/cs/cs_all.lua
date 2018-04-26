@@ -653,4 +653,6 @@ function CS_All()
   set_lang_string( "emoteforward", "Dobředu" )
   set_lang_string( "emote", "Emoce" )
   set_lang_string( "emotes", "Emoce" )
+  set_lang_string( "public", "Veřejné" )
+  set_lang_string( "private", "Soukromé" )
 end

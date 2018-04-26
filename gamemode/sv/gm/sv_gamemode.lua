@@ -128,6 +128,9 @@ function GM:PlayerLoadout( ply )
       ply:ForceGive( "weapon_physcannon" )
     end
   end
+
+  ply:UpdateBackpack()
+  
   RenderNormal( ply )
 end
 

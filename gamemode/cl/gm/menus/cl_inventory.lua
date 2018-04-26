@@ -101,10 +101,28 @@ net.Receive( "openStorage", function( len )
     -- Header
     local _stor = _tabs[1]
     if _stor != nil then
-      inv.sur_header = createD( "DPanel", inv.window, ctr(128*8) + ctr( 25 ), ctr( 50 ), ctr( 10 ), ScrH2() )
-      function inv.sur_header:Paint( pw, ph )
-        local _str = string.upper( _stor.name ) -- .. " [DEBUG] UID: " .. stor.uniqueID
+      inv.db_header = createD( "DPanel", inv.window, ctr(128*8) + ctr( 25 ), ctr( 50 ), ctr( 10 ), ScrH2() )
+      function inv.db_header:Paint( pw, ph )
+        local _str = string.upper( _stor.name )
         surfacePanel( self, pw, ph, _str )
+      end
+      if ply:HasAccess() then
+        inv.db_remove = createD( "DButton", inv.db_header, ctr( 300 ), ctr( 50 ), ctr( 128*8 + 25 - 300 ), 0 )
+        inv.db_remove:SetText( "" )
+        inv.db_remove.uid = _stor.uniqueID
+        function inv.db_remove:Paint( pw, ph )
+          if self.uid != "" then
+            surfaceButton( self, pw, ph, string.upper( lang_string( "remove" ) ), Color( 200, 0, 0 ) )
+          end
+        end
+        function inv.db_remove:DoClick()
+          if self.uid != "" then
+            net.Start( "remove_storage" )
+              net.WriteString( self.uid )
+            net.SendToServer()
+            inv.window:Close()
+          end
+        end
       end
 
       -- DPanelList
@@ -115,7 +133,7 @@ net.Receive( "openStorage", function( len )
         surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
       end
 
-      local _tmp2 = createD( "DPanel", inv.sur_header, ctr( 128 * _stor.sizew ), ctr( 128 * _stor.sizeh ), 0, ctr( 50 ) )
+      local _tmp2 = createD( "DPanel", inv.db_header, ctr( 128 * _stor.sizew ), ctr( 128 * _stor.sizeh ), 0, ctr( 50 ) )
       function _tmp2:Paint( pw, ph )
         -- Content
         surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
@@ -132,7 +150,49 @@ net.Receive( "openStorage", function( len )
 
     --[[ Backpacks ]]--
     local _bps = {}
+    _bps.bpheader = createD( "DPanel", inv.window, ctr( 128*8 ) + ctr( 25 ), ctr( 50 ), ctr( 10 ) + ctr( 128*8 ) + ctr( 25 ) + ctr( 10 ), ctr( 50 + 10 ) )
+    function _bps.bpheader:Paint( pw, ph )
+      local _str = string.upper( lang_string( "backpack" ) )
+      surfacePanel( self, pw, ph, _str )
+    end
+
+    _bps.bpstorage = createD( "DPanel", inv.window, ctr( 128*8 ) + ctr( 25 ), ctr( 128*4.5 ), ctr( 10 ) + ctr( 128*8 ) + ctr( 25 ) + ctr( 10 ), ctr( 50 + 10 + 50 ) )
+    function _bps.bpstorage:Paint( pw, ph )
+      -- Content
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+    end
+
     _bps.backpack = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 ), ScrH() - ctr( 128 + 10 ) )
+    function _bps.backpack:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
+    end
+    net.Receive( "update_slot_backpack", function( len )
+      local _s = net.ReadTable()
+      AddStorage( _bps.backpack, _s.uniqueID, _s.sizew, _s.sizeh, "eqbp1" )
+      net.Start( "getstorageitems" )
+        net.WriteString( _s.uniqueID )
+      net.SendToServer()
+
+      net.Receive( "update_backpack", function( len )
+        local _bo = net.ReadBool()
+        if _bo then
+          local _s_bp = net.ReadTable()
+          AddStorage( _bps.bpstorage, _s_bp.uniqueID, _s_bp.sizew, _s_bp.sizeh )
+
+          net.Start( "getstorageitems" )
+            net.WriteString( _s_bp.uniqueID )
+          net.SendToServer()
+        else
+          local _stor = _bps.bpstorage
+          RemoveStorage( _stor, _stor.uid )
+        end
+      end)
+      net.Start( "update_backpack" )
+      net.SendToServer()
+    end)
+    net.Start( "update_slot_backpack" )
+    net.SendToServer()
 
     _bps.bag1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*1 ), ScrH() - ctr( 128 + 10 ) )
     _bps.bag2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*2 ), ScrH() - ctr( 128 + 10 ) )

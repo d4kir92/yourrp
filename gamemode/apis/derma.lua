@@ -77,11 +77,11 @@ function surfaceWindow( derma, pw, ph, title )
   end
 end
 
-function surfaceButton( derma, pw, ph, text )
+function surfaceButton( derma, pw, ph, text, color )
   local _text = text or ""
   local ply = LocalPlayer()
   if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text )
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text, color )
   else
     GetDesign()
   end

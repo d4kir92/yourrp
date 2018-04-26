@@ -132,7 +132,7 @@ function db_sql_str( string )
   end
 end
 
-function db_sql_str2( string )
+function db_in_str( string )
   if isstring( string ) then
     local _newString = sql.SQLStr( string, true )
     _newString = string.Replace( _newString, "\"", "´´" )
@@ -140,7 +140,7 @@ function db_sql_str2( string )
     _newString = string.Replace( _newString, "-", "_" )
     return _newString
   else
-    printGM( "error", GetSQLModeName() .. ": " .. "db_sql_str2: (" .. tostring( string ) .. ") is not a string." )
+    printGM( "error", GetSQLModeName() .. ": " .. "db_in_str: (" .. tostring( string ) .. ") is not a string." )
   end
 end
 
