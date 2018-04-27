@@ -655,4 +655,5 @@ function TR_All()
   set_lang_string( "emotes", "Jestler" )
   set_lang_string( "public", "Genel" )
   set_lang_string( "private", "Özel" )
+  set_lang_string( "playerscandropweapons", "Oyuncular yere silah atabilir" )
 end

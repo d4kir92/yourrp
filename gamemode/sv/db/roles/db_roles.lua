@@ -253,9 +253,8 @@ net.Receive( "demotePlayer", function( len, ply )
     tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
     tmpTableTargetGroup = tmpTableTargetGroup[1]
 
-    SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
-
     removeFromWhitelist( tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID )
+    SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
 
     printGM( "instructor", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.roleID )
   elseif tonumber( tmpTableInstructorRole.instructor ) == 0 then
@@ -304,14 +303,14 @@ net.Receive( "promotePlayer", function( len, ply )
     tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
     tmpTableTargetGroup = tmpTableTargetGroup[1]
 
-    SetRole( tmpTarget, tmpTableTargetPromoteRole.uniqueID )
-
     for k, v in pairs(player.GetAll()) do
       if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
         addToWhitelist( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick() )
         break
       end
     end
+
+    SetRole( tmpTarget, tmpTableTargetPromoteRole.uniqueID, true )
 
     printGM( "instructor", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.roleID )
   elseif tonumber( tmpTableInstructorRole.instructor ) == 0 then

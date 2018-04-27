@@ -9,7 +9,7 @@ hook.Add( "open_server_general", "open_server_general", function()
   local h = settingsWindow.window.sitepanel:GetTall()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-  
+
   if string.lower( ply:GetUserGroup() ) == "owner" then
     local _center = 800
 
@@ -47,6 +47,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     local sv_generalTagAR = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 615 ) )
 
     local sv_generalServerChangelevel = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 730 ) )
+    local sv_generalPlayersCanDropWeapons = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 790 ) )
 
     local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
     sv_generalCollection:SetMin( 0 )
@@ -102,6 +103,7 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "armor" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       draw.SimpleTextOutlined( lang_string( "autoserverreload" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 740 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "playerscandropweapons" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 800 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -149,6 +151,7 @@ hook.Add( "open_server_general", "open_server_general", function()
       sv_generalTagAR:SetValue( tonumber( _yrp_general.tag_ar ) )
 
       sv_generalServerChangelevel:SetValue( tonumber( _yrp_general.server_changelevel ) )
+      sv_generalPlayersCanDropWeapons:SetValue( tonumber( _yrp_general.playerscandropweapons ) )
 
       sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
       sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -713,6 +716,16 @@ hook.Add( "open_server_general", "open_server_general", function()
           _tonumber = 1
         end
         net.Start( "db_update_server_changelevel" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalPlayersCanDropWeapons:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_playerscandropweapons" )
           net.WriteInt( _tonumber, 4 )
         net.SendToServer()
       end

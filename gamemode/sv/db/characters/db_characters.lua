@@ -46,8 +46,9 @@ SQL_ADD_COLUMN( _db_name, "eqbag4", "TEXT DEFAULT ''" )
 local Player = FindMetaTable( "Player" )
 
 function Player:UpdateBackpack()
-  if self.backpack != nil and self.backpack != NULL then
-    self.backpack:Remove()
+  print("UPDATE BACKPACK")
+  if ea( self:GetNWEntity( "backpack" ) ) then
+    self:GetNWEntity( "backpack" ):Remove()
   end
 
   if self:HasCharacterSelected() then
@@ -58,23 +59,27 @@ function Player:UpdateBackpack()
     local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
     if _bp != nil then
       _bp = _bp[1]
-
+      printTab(_bp)
       local _spine = self:LookupBone( "ValveBiped.Bip01_Spine4" )
-      self.backpack = ents.Create( "prop_dynamic" )
-      self.backpack:SetModel( _bp.WorldModel )
-      self.backpack:SetModelScale( 0.5, 0 )
+      local _backpack = ents.Create( "prop_dynamic" )
+      _backpack:SetModel( _bp.WorldModel )
+      _backpack:SetModelScale( 1.4, 0 )
 
-      self.backpack:Spawn()
+      _backpack:Spawn()
 
       local pos, ang = self:GetBonePosition( _spine )
       local _cor = self:GetPos() - pos
       local _cor2 = self:GetAngles() - ang
 
-      self.backpack:FollowBone( self, _spine )
-      self.backpack:SetLocalPos( Vector( 0, 0, 0 ) + Vector( -10, -10, 0 ) )
-	    self.backpack:SetLocalAngles( Angle( 0, 0, 0 ) + Angle( 90, -15, 90 ) )
-      --self.backpack:SetPos( self:GetPos() - pos -_cor + Vector( -8, -8, 0 ) )
-      --self.backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
+      _backpack:FollowBone( self, _spine )
+      _backpack:SetLocalPos( Vector( 0, 0, 0 ) + Vector( -18, -10, 4 ))  --+ Vector( -10, -10, 0 ) )
+	    _backpack:SetLocalAngles( Angle( 0, 0, 0 ) + Angle( 0, -90 -12, -90 ) )  --)+ Angle( 90, -15, 90 ) )
+      --_backpack:SetPos( self:GetPos() - pos -_cor + Vector( -8, -8, 0 ) )
+      --_backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
+
+      self:SetNWEntity( "backpack", _backpack )
+      self:SetPos( _backpack:GetPos() )
+      print(self:GetNWEntity( "backpack" ))
     end
     return _bp
   end

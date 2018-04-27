@@ -71,8 +71,10 @@ end
 
 function drop_weapon( sender )
   local _weapon = sender:GetActiveWeapon()
-  if _weapon != nil then
+  if _weapon != nil and PlayersCanDropWeapons() then
     sender:DropWeapon( _weapon )
+  else
+    printGM( "note", sender:YRPName() .. " drop weapon is disabled!" )
   end
   return ""
 end
@@ -286,6 +288,7 @@ function unpack_paket( sender, text, iscommand )
   paket.rpname = sender:RPName()
   paket.usergroup = sender:GetUserGroup()
   paket.role = sender:GetNWString( "roleName" )
+  paket.group = sender:GetNWString( "groupName" )
 end
 
 function GM:PlayerSay( sender, text, teamChat )
@@ -361,6 +364,7 @@ function GM:PlayerSay( sender, text, teamChat )
   pk.steamname = paket.steamname
   pk.usergroup = paket.usergroup
   pk.rolename = paket.role
+  pk.groupname = paket.group
 
   if paket.command == "roll" then
     pk.text = lang_string( "rolledpre" ) .. " " .. tostring( roll_number( sender ) ) .. " " .. lang_string( "rolledpos" ) .. "!"

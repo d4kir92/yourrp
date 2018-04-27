@@ -2,6 +2,10 @@
 
 local Player = FindMetaTable( "Player" )
 
+function Player:GetBackpack()
+  return self:GetNWEntity( "backpack" )
+end
+
 function Player:HasAccess()
   local _ug = self:GetUserGroup()
   if isbool( _ug ) then
@@ -430,6 +434,10 @@ function Player:SteamName()
 end
 
 function Player:RPName()
+  return tostring( self:GetNWString( "rpname", "" ) )
+end
+
+function Player:Name()
   return tostring( self:GetNWString( "rpname", "" ) )
 end
 

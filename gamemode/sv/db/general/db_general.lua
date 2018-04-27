@@ -33,6 +33,7 @@ util.AddNetworkString( "db_update_tag_hp" )
 util.AddNetworkString( "db_update_tag_ar" )
 
 util.AddNetworkString( "db_update_server_changelevel" )
+util.AddNetworkString( "db_update_playerscandropweapons" )
 
 util.AddNetworkString( "db_update_collection" )
 
@@ -75,6 +76,7 @@ SQL_ADD_COLUMN( _db_name, "tag_hp", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "tag_ar", "INT DEFAULT 0" )
 
 SQL_ADD_COLUMN( _db_name, "server_changelevel", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "playerscandropweapons", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
 
@@ -146,6 +148,18 @@ function IsServerChangelevelEnabled()
   return tobool( yrp_general.server_changelevel )
 end
 
+function PlayersCanDropWeapons()
+  return tobool( yrp_general.playerscandropweapons )
+end
+
+net.Receive( "db_update_playerscandropweapons", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.playerscandropweapons = _nw
+    SQL_UPDATE( "yrp_general", "playerscandropweapons = " .. yrp_general.playerscandropweapons, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " playerscandropweapons" )
+  end
+end)
 
 net.Receive( "db_update_server_changelevel", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

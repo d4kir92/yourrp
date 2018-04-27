@@ -122,12 +122,18 @@ function useFunction( string )
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or lang_string( "weapon" )
 				if _weapon.notdropable == nil then
-					notification.AddLegacy( _pname .. " " .. lang_string( "hasbeendropped" ), 0, 3)
-
+          net.Receive( "dropswep", function( len )
+  					local _b = net.ReadBool()
+            if _b then
+              notification.AddLegacy( _pname .. " " .. lang_string( "hasbeendropped" ), 0, 3 )
+            else
+              notification.AddLegacy( _pname .. " " .. string.lower( lang_string( "cannotbedropped" ) ), 0, 3 )
+            end
+          end)
 					net.Start( "dropswep" )
 					net.SendToServer()
 				else
-					notification.AddLegacy( _pname .. " " .. string.lower( lang_string( "cannotbedropped" ) ), 0, 3)
+					notification.AddLegacy( _pname .. " " .. string.lower( lang_string( "cannotbedropped" ) ), 0, 3 )
 				end
 			end
 

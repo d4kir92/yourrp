@@ -159,6 +159,15 @@ local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
 hook.Add( "HUDPaint", "CustomHud", function( )
 	local ply = LocalPlayer()
 
+	local _bp = ply:GetBackpack()
+	if ea( _bp ) then
+		if tonumber( ply:GetNWString( "view_range", "0" ) ) <= 0 then
+			_bp:SetNoDraw( true )
+		else
+			_bp:SetNoDraw( false )
+		end
+	end
+
 	if !ply:InVehicle() then
 		HudPlayer( ply )
 		HudView()

@@ -130,7 +130,7 @@ function GM:PlayerLoadout( ply )
   end
 
   ply:UpdateBackpack()
-  
+
   RenderNormal( ply )
 end
 
@@ -194,7 +194,11 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
       if IsNoAdminWeapon( wep ) and IsNoDefaultWeapon( wep ) then
         ply:DropWeapon( wep )
         timer.Simple( _cooldown_item, function()
-          wep:Remove()
+          if wep:IsValid() then
+            if wep:GetOwner() == "" then
+              wep:Remove()
+            end
+          end
         end)
       end
     end

@@ -88,10 +88,10 @@ function buyWindow( buildingID, name, price, door )
     draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "price" ) .. ":", "sef", ctr( 545 ), ctr( 420 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    if door:GetNWString( "BuildingID", "-1" ) == "-1" then
+    if tostring( door:GetNWString( "buildingID", "-1" ) ) == "-1" then
       draw.SimpleTextOutlined( "Loading IDs", "sef", pw - ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     else
-      draw.SimpleTextOutlined( "Building-ID: " .. door:GetNWString( "BuildingID", "-1" ), "sef", pw - ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "Building-ID: " .. door:GetNWString( "buildingID", "-1" ), "sef", pw - ctr( 10 ), ctr( 220 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( "Door-ID: " .. door:GetNWString( "uniqueID", "-1" ), "sef", pw - ctr( 10 ), ctr( 280 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     end
   end
@@ -138,8 +138,10 @@ function buyWindow( buildingID, name, price, door )
 
       if _ComboBoxHouseName != NULL then
         for k, v in pairs( _tmpBuildings ) do
-          if _ComboBoxHouseName != NULL then
+          if pa( _ComboBoxHouseName ) then
             _ComboBoxHouseName:AddChoice( v.name, v.uniqueID, false )
+          else
+            break
           end
         end
       end
@@ -174,7 +176,11 @@ function buyWindow( buildingID, name, price, door )
 
       if _ComboBoxGroupName != NULL then
         for k, v in pairs( _tmpGroups ) do
-          _ComboBoxGroupName:AddChoice( v.groupID, v.uniqueID, false )
+          if pa( _ComboBoxGroupName ) then
+            _ComboBoxGroupName:AddChoice( v.groupID, v.uniqueID, false )
+          else
+            break
+          end
         end
       end
     end)

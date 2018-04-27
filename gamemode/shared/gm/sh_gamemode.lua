@@ -17,7 +17,9 @@ end
 function GetNiceMapName()
 	local map = game.GetMap()
 	local _first = string.find( map, "_", 1, false )
-	map = string.sub( map, _first+1 )
+	if _first != nil then
+		map = string.sub( map, _first+1 )
+	end
 	map = string.Explode( "_", map )
 	local _new_map = {}
 	for i, str in pairs( map ) do
@@ -245,7 +247,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.74" --do NOT change this!
+GM.Version = "0.9.75" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

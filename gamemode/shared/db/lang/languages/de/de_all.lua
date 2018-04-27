@@ -655,4 +655,5 @@ function DE_All()
   set_lang_string( "emotes", "Emotionen" )
   set_lang_string( "public", "Öffentlich" )
   set_lang_string( "private", "Privat" )
+  set_lang_string( "playerscandropweapons", "Spieler können Waffen fallen lassen" )
 end

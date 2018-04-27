@@ -23,6 +23,13 @@ function worked( obj, name, _silence )
   end
 end
 
+function ea( ent )
+	if tostring( ent ) != "[NULL Entity]" and ent != nil then
+		return true
+	end
+	return false
+end
+
 function pa( panel )
 	if tostring( panel ) != "[NULL Panel]" and panel != nil then
 		return true

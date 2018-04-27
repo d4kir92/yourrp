@@ -655,4 +655,5 @@ function EN_All()
   set_lang_string( "emotes", "Emotes" )
   set_lang_string( "public", "Public" )
   set_lang_string( "private", "Private" )
+  set_lang_string( "playerscandropweapons", "Players can drop weapons" )
 end

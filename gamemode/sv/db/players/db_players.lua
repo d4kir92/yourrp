@@ -81,8 +81,8 @@ function updateRoleUses( rid )
   SQL_UPDATE( "yrp_roles", "uses = " .. _count, "uniqueID = " .. rid )
 end
 
-function SetRole( ply, rid )
-  if canGetRole( ply, rid ) then
+function SetRole( ply, rid, force )
+  if canGetRole( ply, rid ) or force then
     set_role( ply, rid )
     set_role_values( ply )
   else

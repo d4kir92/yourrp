@@ -123,9 +123,17 @@ end)
 
 util.AddNetworkString( "dropswep" )
 net.Receive( "dropswep", function( len, ply )
-  local _weapon = ply:GetActiveWeapon()
-  if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
-    local _wclass = _weapon:GetClass() or ""
-    ply:DropWeapon( _weapon )
+  local _enabled = PlayersCanDropWeapons()
+  if _enabled then
+    local _weapon = ply:GetActiveWeapon()
+    if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
+      local _wclass = _weapon:GetClass() or ""
+      ply:DropWeapon( _weapon )
+    end
+  else
+    printGM( "note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE" )
   end
+  net.Start( "dropswep" )
+    net.WriteBool( _enabled )
+  net.Send( ply )
 end)

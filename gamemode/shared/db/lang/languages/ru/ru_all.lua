@@ -653,4 +653,7 @@ function RU_All()
   set_lang_string( "emoteforward", "Вперёд" )
   set_lang_string( "emote", "Эмоция" )
   set_lang_string( "emotes", "Эмоции" )
+  set_lang_string( "public", "Публичный" )
+  set_lang_string( "private", "Частный" )
+  set_lang_string( "playerscandropweapons", "Игроки могут бросать оружие" )
 end

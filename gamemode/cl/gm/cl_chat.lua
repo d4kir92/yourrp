@@ -83,10 +83,10 @@ function yrpChat.window:Paint( pw, ph )
           yrpChat.window:SetSize( ctr( HudV("cbsw") ), ctr( HudV("cbsh") ) )
 
           yrpChat.comboBox:SetPos( ctr( 10 ), ctr( HudV("cbsh") - 40 - 10 ) )
-          yrpChat.comboBox:SetSize( ctr( 100 ), ctr( 40 ) )
+          yrpChat.comboBox:SetSize( ctr( 140 ), ctr( 40 ) )
 
-          yrpChat.writeField:SetPos( ctr( 110 ), ctr( HudV("cbsh") - 40 - 10 ) )
-          yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 100 ), ctr( 40 ) )
+          yrpChat.writeField:SetPos( ctr( 10 + 140 ), ctr( HudV("cbsh") - 40 - 10 ) )
+          yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 140 ), ctr( 40 ) )
 
           yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
           yrpChat.richText:SetSize( ctr( HudV("cbsw") - 2*10 ), ctr( HudV("cbsh") - 2*10 - 40 - 10 ) )
@@ -284,7 +284,7 @@ net.Receive( "yrp_player_say", function( len )
   local _write = false
   if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" then
     _write = true
-    _tmp.name = _tmp.rolename .. " " .. _tmp.rpname
+    _tmp.name = _tmp.groupname .. " " .. _tmp.rolename .. " " .. _tmp.rpname
   end
 
   local _usergroup = false
