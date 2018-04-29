@@ -88,22 +88,24 @@ net.Receive( "get_shop_categories", function()
       end
 
       --[[ NAME ]]--
-      _sh._cat._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
-      _sh._cat._name.textentry.tbl = tbl
-      _sh._cat._name:SetHeader( lang_string( "name" ) )
-      _sh._cat._name:SetText( db_out_str( tbl.name ) )
-      function _sh._cat._name.textentry:OnChange()
-        self.tbl.name = self:GetValue()
-        net.Start( "category_edit_name" )
-          net.WriteString( self.tbl.uniqueID )
-          net.WriteString( self.tbl.name )
-          net.WriteString( _sh._sho.uid )
+      if pa( _sh.ea ) then
+        _sh._cat._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
+        _sh._cat._name.textentry.tbl = tbl
+        _sh._cat._name:SetHeader( lang_string( "name" ) )
+        _sh._cat._name:SetText( db_out_str( tbl.name ) )
+        function _sh._cat._name.textentry:OnChange()
+          self.tbl.name = self:GetValue()
+          net.Start( "category_edit_name" )
+            net.WriteString( self.tbl.uniqueID )
+            net.WriteString( self.tbl.name )
+            net.WriteString( _sh._sho.uid )
+          net.SendToServer()
+        end
+
+        net.Start( "get_shop_items" )
+          net.WriteString( tbl.uniqueID )
         net.SendToServer()
       end
-
-      net.Start( "get_shop_items" )
-        net.WriteString( tbl.uniqueID )
-      net.SendToServer()
     end
     _sh._cat:SetEditFunc( _sh.eaf2 )
     for i, cat in pairs( _scats ) do
@@ -357,7 +359,7 @@ net.Receive( "get_shop_items", function()
         end
       end
       hook.Add( "selected_shop_item", "yrp_selected_shop_item", function()
-        if _sh._sit.type.plus != nil then
+        if pa( _sh._sit ) then
           local _wm = LocalPlayer():GetNWString( "WorldModel" )
           local _cn = LocalPlayer():GetNWString( "ClassName" )
           local _pn = LocalPlayer():GetNWString( "PrintName" )
@@ -387,7 +389,7 @@ hook.Add( "open_server_shops", "open_server_shops", function()
   local h = settingsWindow.window.sitepanel:GetTall()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-  
+
   if ply:HasAccess() then
     function settingsWindow.window.site:Paint( w, h )
       --

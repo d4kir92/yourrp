@@ -201,6 +201,7 @@ function SpawnVehicle( item, ply, ang )
         local _vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
 
         local car = simfphys.SpawnVehicleSimple( v.ClassName, ply:GetPos(), ang )
+        car.Offset = vehicle.Offset or 0
 
         timer.Simple( 0.2, function()
       		simfphys.RegisterEquipment( car )
@@ -226,6 +227,7 @@ function SpawnVehicle( item, ply, ang )
     car:Spawn()
     car:Activate()
     car.ClassOverride = Class
+    car.Offset = vehicle.Offset or 0
     --car:SetCollisionGroup(COLLISION_GROUP_WEAPON)
     return car
   else
@@ -254,6 +256,7 @@ function spawnItem( ply, item, duid )
     end
 
     ent = SpawnVehicle( item, ply, _angle )
+
     local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "'" )
     local getVehicles = SQL_SELECT( "yrp_vehicles", "*", nil )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
@@ -280,7 +283,8 @@ function spawnItem( ply, item, duid )
       --[[ Position ]]--
       local _pos = string.Explode( ",", _storagepoint.position )
       local _edit = Vector( 0, 0, math.abs( ent:OBBMins().z ) )
-      _pos = Vector( _pos[1], _pos[2], _pos[3] ) + _edit + Vector( 0, 0, 4 )
+
+      _pos = Vector( _pos[1], _pos[2], _pos[3] ) + _edit + Vector( 0, 0, 14 )
       ent:SetPos( _pos )
       local _mins = ent:OBBMins() + _edit
       local _maxs = ent:OBBMaxs() + _edit

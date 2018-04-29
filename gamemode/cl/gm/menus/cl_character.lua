@@ -240,7 +240,11 @@ function openCharacterCreation()
       if tonumber( v.uniqueID ) == tonumber( character.groupID ) then
         selectChoice = true
       end
-      charactersGroupCB:AddChoice( v.groupID, v.uniqueID, selectChoice )
+      if pa( charactersGroupCB ) then
+        charactersGroupCB:AddChoice( v.groupID, v.uniqueID, selectChoice )
+      else
+        break
+      end
     end
   end)
   function charactersGroupCB:OnSelect( index, value, data  )

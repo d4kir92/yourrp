@@ -34,7 +34,7 @@ function get_ground_pos( ply, pos )
 end
 
 function tp_to( ply, pos )
-  local _pos = Vector( math.Round( pos[1], 2 ), math.Round( pos[2], 2 ), math.Round( pos[3], 2 ) )
+  local _pos = Vector( pos[1], pos[2], pos[3] )
   local _angle = Angle( 0, 0, 0 )
   local _tmpAngle = ply:EyeAngles()
   ply:SetEyeAngles( _angle )

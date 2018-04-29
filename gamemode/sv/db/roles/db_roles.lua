@@ -205,6 +205,10 @@ net.Receive( "removeDBRole", function( len, ply )
   sendDBRoles( ply, _tmpUniqueID )
 end)
 
+function DeleteRolesFromGroup( uid )
+  SQL_DELETE_FROM( "yrp_roles", "groupID = '" .. uid .. "' AND removeable = '1'" )
+end
+
 net.Receive( "removeDBGroup", function( len, ply )
   local _dbSelect = SQL_SELECT( "yrp_groups", "*", nil )
   local tmp = net.ReadString()
@@ -212,6 +216,7 @@ net.Receive( "removeDBGroup", function( len, ply )
     if tonumber( v.uniqueID ) == tonumber( tmp ) then
       if tonumber( v.removeable ) == 1 then
         SQL_DELETE_FROM( "yrp_groups", "uniqueID = " .. tmp )
+        DeleteRolesFromGroup( tmp )
       end
     end
   end

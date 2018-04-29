@@ -38,7 +38,7 @@ function teleportToSpawnpoint( ply )
           printGM( "note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring( rolTab.roleID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 
           local _tmp = string.Explode( ",", _randomSpawnPoint.position )
-          tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
+          tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
           _tmp = string.Explode( ",", _randomSpawnPoint.angle )
           ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
           return true
@@ -47,7 +47,7 @@ function teleportToSpawnpoint( ply )
           printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( groTab.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 
           local _tmp = string.Explode( ",", _randomSpawnPoint.position )
-          tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
+          tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
           _tmp = string.Explode( ",", _randomSpawnPoint.angle )
           ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
           return true
@@ -66,7 +66,7 @@ function teleportToSpawnpoint( ply )
                 local _randomSpawnPoint = table.Random( _gs )
                 printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( _ug.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
                 local _tmp = string.Explode( ",", _randomSpawnPoint.position )
-                tp_to( ply, Vector( math.Round( _tmp[1], 2 ), math.Round( _tmp[2], 2 ), math.Round( _tmp[3], 2 ) ) )
+                tp_to( ply, Vector( tmp[1], _tmp[2], _tmp[3] ) )
                 _tmp = string.Explode( ",", _randomSpawnPoint.angle )
                 ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
                 return true

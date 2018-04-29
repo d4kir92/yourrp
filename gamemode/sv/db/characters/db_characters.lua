@@ -46,20 +46,16 @@ SQL_ADD_COLUMN( _db_name, "eqbag4", "TEXT DEFAULT ''" )
 local Player = FindMetaTable( "Player" )
 
 function Player:UpdateBackpack()
-  print("UPDATE BACKPACK")
   if ea( self:GetNWEntity( "backpack" ) ) then
     self:GetNWEntity( "backpack" ):Remove()
   end
 
   if self:HasCharacterSelected() then
-    self:DoAnimationEvent( ACT_IDLE_ANGRY )
-
     local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. self:CharID() .. "'" )
     _uid = _uid[1].eqbp1
     local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
     if _bp != nil then
       _bp = _bp[1]
-      printTab(_bp)
       local _spine = self:LookupBone( "ValveBiped.Bip01_Spine4" )
       local _backpack = ents.Create( "prop_dynamic" )
       _backpack:SetModel( _bp.WorldModel )
@@ -78,8 +74,6 @@ function Player:UpdateBackpack()
       --_backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
 
       self:SetNWEntity( "backpack", _backpack )
-      self:SetPos( _backpack:GetPos() )
-      print(self:GetNWEntity( "backpack" ))
     end
     return _bp
   end
@@ -92,18 +86,20 @@ net.Receive( "update_backpack", function( len, ply )
   if _bp != nil then
     local _uid = _bp.intern_storageID
 
-    local _stor = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
-    _stor = _stor[1]
-
-    net.Start( "update_backpack" )
-      net.WriteBool( true )
-      net.WriteTable( _stor )
-    net.Send( ply )
-  else
-    net.Start( "update_backpack" )
-      net.WriteBool( false )
-    net.Send( ply )
+    local _stor = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+    if _stor != nil then
+      _stor = _stor[1]
+      net.Start( "update_backpack" )
+        net.WriteBool( true )
+        net.WriteTable( _stor )
+      net.Send( ply )
+      return true
+    end
   end
+  net.Start( "update_backpack" )
+    net.WriteBool( false )
+  net.Send( ply )
+  return false
 end)
 
 util.AddNetworkString( "update_slot_backpack" )

@@ -653,4 +653,7 @@ function PT_BR_All()
   set_lang_string( "emoteforward", "Frente" )
   set_lang_string( "emote", "Emote" )
   set_lang_string( "emotes", "Emores" )
+  set_lang_string( "public", "Publico" )
+  set_lang_string( "private", "Privado" )
+  set_lang_string( "playerscandropweapons", "Jogadores podem largar armas" )
 end

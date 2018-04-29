@@ -178,7 +178,7 @@ hook.Add( "open_server_map", "open_server_map", function()
           local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
           local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
           local tmpGroupID = tostring( tmpGroup:GetOptionData( tmpGroup:GetSelectedID() ) )
-          local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', " .. tmpGroupID .. ", 'GroupSpawnpoint'"
+          local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', " .. tmpGroupID .. ", 'GroupSpawnpoint'"
           net.WriteString( tmpString )
         net.SendToServer()
 
@@ -218,7 +218,7 @@ hook.Add( "open_server_map", "open_server_map", function()
           local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
           local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
           local tmpRoleID = tostring( tmpRole:GetOptionData( tmpRole:GetSelectedID() ) )
-          local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', " .. tmpRoleID .. ", 'RoleSpawnpoint'"
+          local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', " .. tmpRoleID .. ", 'RoleSpawnpoint'"
           net.WriteString( tmpString )
         net.SendToServer()
 
@@ -239,7 +239,7 @@ hook.Add( "open_server_map", "open_server_map", function()
         net.WriteString( "position, angle, type" )
         local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
         local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
-        local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'jailpoint'"
+        local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', 'jailpoint'"
         net.WriteString( tmpString )
       net.SendToServer()
 
@@ -256,7 +256,7 @@ hook.Add( "open_server_map", "open_server_map", function()
         net.WriteString( "position, angle, type" )
         local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
         local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
-        local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', 'releasepoint'"
+        local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', 'releasepoint'"
         net.WriteString( tmpString )
       net.SendToServer()
 
@@ -298,7 +298,7 @@ hook.Add( "open_server_map", "open_server_map", function()
           net.WriteString( "position, angle, name, type" )
           local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
           local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
-          local tmpString = "'" .. math.Round( tonumber( tmpPos[1] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[2] ), 2 ) .. "," .. math.Round( tonumber( tmpPos[3] + 4 ), 2 ) .. "', '" .. math.Round( tonumber( tmpAng[1] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[2] ), 2 ) .. "," .. math.Round( tonumber( tmpAng[3] ), 2 ) .. "', '" .. tmpName:GetText() .. "', 'Storagepoint'"
+          local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', '" .. tmpName:GetText() .. "', 'Storagepoint'"
           net.WriteString( tmpString )
         net.SendToServer()
 

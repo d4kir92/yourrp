@@ -265,54 +265,61 @@ if CLIENT then
   end
 
   function AddStorage( pnl, uid, w, h, typ )
-    item_handler[tonumber(uid)] = {}
-    item_handler[tonumber(uid)].pnl = pnl
-    pnl.uid = uid
-    if pa( item_handler[tonumber(uid)].pnl ) then
-      item_handler[tonumber(uid)].pnl:SetSize( ctr( 128*w ), ctr( 128*h ) )
-      for y = 1, h do
-        item_handler[tonumber(uid)][y] = {}
-        for x = 1, w do
-          item_handler[tonumber(uid)][y][x] = {}
-          item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, ctr( 128 ), ctr( 128 ), ctr( (x-1)*128 ), ctr( (y-1)*128 ) )
-          local _edit_slot = item_handler[tonumber(uid)][y][x].slot
-          item_handler[tonumber(uid)][y][x].value = ""
-          _edit_slot.storageID = uid
-          _edit_slot.posy = y
-          _edit_slot.posx = x
-          _edit_slot.typ = typ
-          _edit_slot:Receiver( "slot", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
-            if isDropped then
-              local _item = tableOfDroppedPanels[1].item
-              local _slot1 = {}
-              _slot1.storageID = _item.storageID
-              _slot1.posy = _item.posy
-              _slot1.posx = _item.posx
-              local _slot2 = {}
-              _slot2.storageID = receiver.storageID
-              _slot2.posy = receiver.posy
-              _slot2.posx = receiver.posx
-              local _typ = receiver.typ or "world"
-              net.Start( "moveitem" )
-                net.WriteTable( _slot1 )
-                net.WriteTable( _slot2 )
-                net.WriteTable( _item )
-                net.WriteString( _typ )
-              net.SendToServer()
-
-              if tostring( _item.intern_storageID ) != "" then
-                net.Start( "update_backpack" )
+    if pa( pnl ) then
+      item_handler[tonumber(uid)] = {}
+      item_handler[tonumber(uid)].pnl = pnl
+      pnl.uid = uid
+      if pa( item_handler[tonumber(uid)].pnl ) then
+        item_handler[tonumber(uid)].pnl:SetSize( ctr( 128*w ), ctr( 128*h ) )
+        for y = 1, h do
+          item_handler[tonumber(uid)][y] = {}
+          for x = 1, w do
+            item_handler[tonumber(uid)][y][x] = {}
+            item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, ctr( 128 ), ctr( 128 ), ctr( (x-1)*128 ), ctr( (y-1)*128 ) )
+            local _edit_slot = item_handler[tonumber(uid)][y][x].slot
+            item_handler[tonumber(uid)][y][x].value = ""
+            _edit_slot.storageID = uid
+            _edit_slot.posy = y
+            _edit_slot.posx = x
+            _edit_slot.typ = typ
+            _edit_slot:Receiver( "slot", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
+              if isDropped then
+                print("IS DROPPED")
+                local _item = tableOfDroppedPanels[1].item
+                local _slot1 = {}
+                _slot1.storageID = _item.storageID
+                _slot1.posy = _item.posy
+                _slot1.posx = _item.posx
+                local _slot2 = {}
+                _slot2.storageID = receiver.storageID
+                _slot2.posy = receiver.posy
+                _slot2.posx = receiver.posx
+                local _typ = receiver.typ or "world"
+                printTab( _item )
+                printTab( _slot1 )
+                printTab( _slot2 )
+                print(_typ)
+                net.Start( "moveitem" )
+                  net.WriteTable( _slot1 )
+                  net.WriteTable( _slot2 )
+                  net.WriteTable( _item )
+                  net.WriteString( _typ )
                 net.SendToServer()
+
+                if tostring( _item.intern_storageID ) != "" then
+                  net.Start( "update_backpack" )
+                  net.SendToServer()
+                end
               end
+            end, {} )
+            function _edit_slot:Paint( pw, ph )
+              self.color = Color( 0, 0, 0, 0 )
+              if self:IsHovered() then
+                self.color = Color( 255, 255, 255, 200 )
+              end
+              surfaceBox( 0, 0, pw, ph, self.color )
+              drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
             end
-          end, {} )
-          function _edit_slot:Paint( pw, ph )
-            self.color = Color( 0, 0, 0, 0 )
-            if self:IsHovered() then
-              self.color = Color( 255, 255, 255, 200 )
-            end
-            surfaceBox( 0, 0, pw, ph, self.color )
-            drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
           end
         end
       end

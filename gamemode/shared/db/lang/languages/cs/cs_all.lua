@@ -655,4 +655,5 @@ function CS_All()
   set_lang_string( "emotes", "Emoce" )
   set_lang_string( "public", "Veřejné" )
   set_lang_string( "private", "Soukromé" )
+  set_lang_string( "playerscandropweapons", "Hráči mohou upustit zbraně" )
 end

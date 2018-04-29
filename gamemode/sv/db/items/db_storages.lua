@@ -68,21 +68,24 @@ function SaveStorages( str )
       local _angr = _ang[3]
 
       SQL_UPDATE( _db_name, "posx = '" .. _posx .. "', posy = '" .. _posy .. "', posz = '" .. _posz .. "', angp = '" .. _angp .. "', angy = '" .. _angy .. "', angr = '" .. _angr .. "'", "uniqueID = '" .. ent:GetNWString( "storage_uid" ) .. "'" )
+      local _all = SQL_SELECT( _db_name, "*", nil )
+      printTab(_all)
     end
   end
 end
 
 function LoadStorages()
   local _storages = SQL_SELECT( _db_name, "*", "ParentID = '' AND map = '" .. GetMapNameDB() .. "'" )
-
+  printTab(_storages)
   if _storages == nil or _storages == false then
     _storages = {}
   end
 
   for i, stor in pairs( _storages ) do
     local _tmp = ents.Create( stor.ClassName )
-    _tmp:SetNWString( "storage_uid", stor.uniqueID )
-    if _tmp != NULL then
+    if ea( _tmp ) then
+      printTab( stor )
+      _tmp:SetNWString( "storage_uid", stor.uniqueID )
       _tmp:SetPos( Vector( stor.posx, stor.posy, stor.posz ) )
       _tmp:SetAngles( Angle( stor.angp, stor.angy, stor.angr ) )
       _tmp:Spawn()
@@ -102,6 +105,7 @@ function Entity:InitBackpackStorage( w, h )
 
   self:InitStorage( w, h, "backpack" )
   self:SetNWBool( "isbackpack", true )
+  print("InitBackpackStorage")
 end
 
 function Entity:InitStorage( w, h, t )
@@ -138,10 +142,12 @@ function Entity:InitStorage( w, h, t )
       self:SetNWString( "storage_uid", _uid )
       _storage = SQL_SELECT( _db_name, "*", "uniqueID = " .. self:GetNWString( "storage_uid" ) )
     end
-    _storage = _storage[1]
-    self:SetNWBool( "storagename", _storage.name )
-    self:SetNWBool( "hasinventory", true )
-    return _storage
+    if _storage != nil then
+      _storage = _storage[1]
+      self:SetNWBool( "storagename", _storage.name )
+      self:SetNWBool( "hasinventory", true )
+      return _storage
+    end
   end)
 end
 
@@ -157,16 +163,6 @@ function openStorage( ply, uid )
       table.insert( _storages, _result )
     end
   end
-
-  --[[ Add Storages from Player ]]--
-  --[[
-  local _ply_storages = SQL_SELECT( _db_name, "*", "ParentID = '" .. ply:SteamID() .. "'" )
-  if _ply_storages != false and _ply_storages != nil then
-    for i, plystor in pairs( _ply_storages ) do
-      table.insert( _storages, plystor )
-    end
-  end
-  ]]--
 
   net.Start( "openStorage" )
     net.WriteTable( _storages )

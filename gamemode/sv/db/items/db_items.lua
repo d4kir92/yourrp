@@ -50,7 +50,7 @@ net.Receive( "yrp_close_storages", function( len, ply )
 end)
 
 function TeleportEntityTo( ent, pos )
-  local _pos = Vector( math.Round( pos[1], 2 ), math.Round( pos[2], 2 ), math.Round( pos[3], 2 ) )
+  local _pos = Vector( pos[1], pos[2], pos[3] )
   local _angle = ent:GetAngles()
 
   if enough_space( ent, _pos + Vector( 0, 0, 2 ) ) then
@@ -145,16 +145,26 @@ net.Receive( "moveitem", function( len, ply )
       print( "FROM NEARBY TO EQUIPMENT" )
       local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. ply:CharID() .. "'" )
       _uid = _uid[1].eqbp1
+
       local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _uid )
+      --printTab( _storage )
+
       local _result = CreateItem( _item, _slot2 )
       _item.entity:Remove()
       _item.uniqueID = _result.uniqueID
 
+      --[[ Parent Backpack to Character ]]--
+      local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
+      if _bp != nil then
+        _bp = _bp[1]
+        SQL_UPDATE( "yrp_storages", "ParentID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _bp.intern_storageID .. "'" )
+      end
+
     elseif _slot2.storageID == 0 then
-      print( "FROM NEARBY TO NEARBY" )
+      --print( "FROM NEARBY TO NEARBY" )
       --
     elseif _slot2.storageID != 0 then
-      print( "FROM NEARBY TO STORAGE", _slot2.storageID )
+      --print( "FROM NEARBY TO STORAGE", _slot2.storageID )
       local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _i.storageID )
       if _storage != nil then
         _storage = _storage[1]
@@ -175,7 +185,7 @@ net.Receive( "moveitem", function( len, ply )
         end
 
         if IsEnoughSpace( _stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID ) then
-          print("ENOUGH SPACE")
+          --print("ENOUGH SPACE")
           local _result = CreateItem( _item, _slot2 )
           _item.entity:Remove()
           _item.uniqueID = _result.uniqueID
@@ -190,11 +200,11 @@ net.Receive( "moveitem", function( len, ply )
     end
   elseif _slot1.storageID != 0 then
     if _slot2.storageID == 0 then
-      print( "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
+      --print( "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
       local _result = SQL_DELETE_FROM( _db_name, "uniqueID = " .. _item.uniqueID )
       _item = ItemToEntity( _item, ply )
     elseif _slot2.storageID != 0 then
-      print( "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
+      --print( "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
       local _i = SQL_SELECT( _db_name, "*", "uniqueID = " .. _item.uniqueID )
       if _i != nil then
         _i = _i[1]

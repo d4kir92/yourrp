@@ -25,7 +25,7 @@ function dealer_rem( uid )
 end
 
 function dealer_add( ply )
-  local _uid = math.Round( math.Rand( 1, 999999 ), 2 )
+  local _uid = math.Round( math.Rand( 1, 999999 ), 0 )
   local _insert = SQL_INSERT_INTO(  _db_name, "name, map", "'" .. _uid .. "', '" .. GetMapNameDB() .. "'" )
   local _db_sel = SQL_SELECT( _db_name, "uniqueID", "name = '" .. _uid .. "'" )
 
@@ -35,7 +35,7 @@ function dealer_add( ply )
 
     local _pos = ply:GetPos()
     local _ang = ply:EyeAngles()
-    local _vals = "'dealer', '" .. math.Round( _pos.x, 2 ) .. "," .. math.Round( _pos.y, 2 ) .. "," .. math.Round( _pos.z, 2 ) .. "', '" .. math.Round( _ang.p, 2 ) .. "," .. math.Round( _ang.y, 2 ) .. "," .. math.Round( _ang.r, 2 ) .. "', '" .. _db_sel.uniqueID .. "'"
+    local _vals = "'dealer', '" .. _pos.x .. "," .. _pos.y .. "," .. _pos.z .. "', '" .. _ang.p .. "," .. _ang.y .. "," .. _ang.r .. "', '" .. _db_sel.uniqueID .. "'"
     SQL_INSERT_INTO( "yrp_" .. GetMapNameDB(), "type, position, angle, linkID", _vals )
   end
 end
