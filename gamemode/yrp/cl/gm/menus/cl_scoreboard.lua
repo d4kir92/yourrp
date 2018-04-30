@@ -147,7 +147,7 @@ function drawGroupPlayers( id )
 
         function _tmpPly:DoClick()
           local _mx, _my = gui.MousePos()
-          local _menu = createD( "DYRPMenu", nil, ctr( 400 ), ctr( 50 ), _mx - ctr( 25 ), _my - ctr( 25 ) )
+          local _menu = createD( "DYRPMenu", nil, ctr( 500 ), ctr( 50 ), _mx - ctr( 25 ), _my - ctr( 25 ) )
           _menu:MakePopup()
 
           local osp = _menu:AddOption( lang_string( "openprofile" ), "icon16/page.png" )

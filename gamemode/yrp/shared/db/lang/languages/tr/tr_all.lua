@@ -682,4 +682,7 @@ function TR_All()
   set_lang_string( "unblind", "Körleştirmeyi kapat" )
   set_lang_string( "ignite", "Yak" )
   set_lang_string( "extinguish", "Söndür" )
+  set_lang_string( "blinded", "Körleştirildiniz" )
+  set_lang_string( "frozen", "Donduruldunuz" )
+  set_lang_string( "cloaked", "Pelerinininiz açık" )
 end

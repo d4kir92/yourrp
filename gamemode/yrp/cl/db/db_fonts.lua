@@ -46,7 +46,7 @@ function createFont( _name, _font, _size, __weight, _outline )
 end
 
 local tmpFont = "Calibri" --"Roboto-Regular"
-local _weight = 1
+local _weight = 500
 
 function changeFontSizeOf( _font, _size )
 	printGM( "note", "changeFontSizeOf" .. _font .. _size)
@@ -79,20 +79,21 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
+	local _w = 500
 	--[[ DESIGNS ]]--
-	createFont( "mat1header", "Roboto", 28, 1, true )
-	createFont( "mat1text", "Roboto", 21, 1, true )
+	createFont( "mat1header", "Roboto", 28, _w, true )
+	createFont( "mat1text", "Roboto", 22, _w, true )
 
 	--[[ EMOTES ]]--
-	createFont( "emotes", "Roboto", 22, 1, true )
+	createFont( "emotes", "Roboto", 22, _w, true )
 
 	--[[ DYRPMenu ]]--
-	createFont( "dyrpmenu", "Roboto", 22, 1, true )
+	createFont( "dyrpmenu", "Roboto", 22, _w, true )
 
-	createFont( "apph1", tmpFont, fontr( 36 ), 1, false )
-	createFont( "appt", tmpFont, fontr( 30 ), 1, false )
+	createFont( "apph1", tmpFont, fontr( 36 ), _w, false )
+	createFont( "appt", tmpFont, fontr( 30 ), _w, false )
 
-	createFont( "appname", tmpFont, ctrb( 28 ), 1, false )
+	createFont( "appname", tmpFont, ctrb( 28 ), _w, false )
 
 	createFont( "gmbase", tmpFont, 16, 500, false )
 
