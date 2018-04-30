@@ -20,4 +20,4 @@ includes
 ]]--
 include( "shared.lua" )
 
-include( "cl/cl_includes.lua" )
+include( "yrp/cl/cl_includes.lua" )
