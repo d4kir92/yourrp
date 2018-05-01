@@ -89,22 +89,24 @@ net.Receive( "get_shop_categories", function()
 
       --[[ NAME ]]--
       if pa( _sh.ea ) then
-        _sh._cat._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
-        _sh._cat._name.textentry.tbl = tbl
-        _sh._cat._name:SetHeader( lang_string( "name" ) )
-        _sh._cat._name:SetText( db_out_str( tbl.name ) )
-        function _sh._cat._name.textentry:OnChange()
-          self.tbl.name = self:GetValue()
-          net.Start( "category_edit_name" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.name )
-            net.WriteString( _sh._sho.uid )
+        if pa( _sh._cat ) then
+          _sh._cat._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
+          _sh._cat._name.textentry.tbl = tbl
+          _sh._cat._name:SetHeader( lang_string( "name" ) )
+          _sh._cat._name:SetText( db_out_str( tbl.name ) )
+          function _sh._cat._name.textentry:OnChange()
+            self.tbl.name = self:GetValue()
+            net.Start( "category_edit_name" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.name )
+              net.WriteString( _sh._sho.uid )
+            net.SendToServer()
+          end
+
+          net.Start( "get_shop_items" )
+            net.WriteString( tbl.uniqueID )
           net.SendToServer()
         end
-
-        net.Start( "get_shop_items" )
-          net.WriteString( tbl.uniqueID )
-        net.SendToServer()
       end
     end
     _sh._cat:SetEditFunc( _sh.eaf2 )
@@ -360,18 +362,20 @@ net.Receive( "get_shop_items", function()
       end
       hook.Add( "selected_shop_item", "yrp_selected_shop_item", function()
         if pa( _sh._sit ) then
-          local _wm = LocalPlayer():GetNWString( "WorldModel" )
-          local _cn = LocalPlayer():GetNWString( "ClassName" )
-          local _pn = LocalPlayer():GetNWString( "PrintName" )
-          local _type = _sh._sit.type.plus:GetOptionData( _sh._sit.type.plus:GetSelectedID() )
-          net.Start( "shop_item_edit_base" )
-            net.WriteString( _sh._sit.type.plus.tbl.uniqueID )
-            net.WriteString( _wm )
-            net.WriteString( _cn )
-            net.WriteString( _pn )
-            net.WriteString( _type )
-          net.SendToServer()
-          _sh._sit.itemname.textentry:SetValue( _pn )
+          if pa( _sh._sit.type ) then
+            local _wm = LocalPlayer():GetNWString( "WorldModel" )
+            local _cn = LocalPlayer():GetNWString( "ClassName" )
+            local _pn = LocalPlayer():GetNWString( "PrintName" )
+            local _type = _sh._sit.type.plus:GetOptionData( _sh._sit.type.plus:GetSelectedID() )
+            net.Start( "shop_item_edit_base" )
+              net.WriteString( _sh._sit.type.plus.tbl.uniqueID )
+              net.WriteString( _wm )
+              net.WriteString( _cn )
+              net.WriteString( _pn )
+              net.WriteString( _type )
+            net.SendToServer()
+            _sh._sit.itemname.textentry:SetValue( _pn )
+          end
         end
       end)
     end

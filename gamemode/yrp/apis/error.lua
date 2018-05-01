@@ -252,7 +252,7 @@ function send_error( realm, str )
 			if CLIENT then
 				local ply = LocalPlayer()
 				local _steamid = "UNKNOWN"
-				if ply != nil then
+				if ea( ply ) then
 					_steamid = ply:SteamID()
 				end
 				entry["entry.1898856001"] = tostring( _steamid )
@@ -287,9 +287,7 @@ function send_errors( realm, tbl )
   end
   for k, v in pairs( tbl ) do
     if !table.HasValue( _sended[realm], v ) then
-      if k > #tbl-10 then
-        send_error( realm, v )
-      end
+      send_error( realm, v )
       table.insert( _sended[realm], v )
     end
   end

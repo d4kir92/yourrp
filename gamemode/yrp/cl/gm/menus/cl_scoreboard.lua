@@ -61,6 +61,13 @@ function hasGroupRowPlayers( id )
   return false
 end
 
+function notself( ply )
+  if LocalPlayer() != ply then
+    return true
+  end
+  return false
+end
+
 function drawGroupPlayers( id )
   elePos.y = elePos.y + 50
   for k, ply in pairs( player.GetAll() ) do
@@ -177,10 +184,9 @@ function drawGroupPlayers( id )
             SetClipboardText( ply:SteamName() )
             _menu:Remove()
           end
+          _menu:AddSpacer()
 
-          if LocalPlayer():HasAccess() then
-            _menu:AddSpacer()
-
+          if LocalPlayer():HasAccess() and notself( ply ) then
             local ban = _menu:AddOption( lang_string( "ban" ), "icon16/world_link.png" )
             function ban:DoClick()
               net.Start( "ply_ban" )
@@ -193,9 +199,10 @@ function drawGroupPlayers( id )
                 net.WriteEntity( ply )
               net.SendToServer()
             end
-
             _menu:AddSpacer()
+          end
 
+          if LocalPlayer():HasAccess() and notself( ply ) then
             local tpto = _menu:AddOption( lang_string( "tpto" ), "icon16/arrow_right.png" )
             function tpto:DoClick()
               net.Start( "tp_tpto" )
@@ -208,6 +215,9 @@ function drawGroupPlayers( id )
                 net.WriteEntity( ply )
               net.SendToServer()
             end
+          end
+
+          if LocalPlayer():HasAccess() then
             if !ply:GetNWBool( "injail", false ) then
               local jail = _menu:AddOption( lang_string( "jail" ), "icon16/lock_go.png" )
               function jail:DoClick()
@@ -225,9 +235,10 @@ function drawGroupPlayers( id )
                 _menu:Remove()
               end
             end
-
             _menu:AddSpacer()
+          end
 
+          if LocalPlayer():HasAccess() then
             if !ply:GetNWBool( "ragdolled", false ) then
               local ragdoll = _menu:AddOption( lang_string( "ragdoll" ), "icon16/user_red.png" )
               function ragdoll:DoClick()
@@ -262,6 +273,9 @@ function drawGroupPlayers( id )
                 _menu:Remove()
               end
             end
+          end
+
+          if LocalPlayer():HasAccess() then
             if !ply:GetNWBool( "godmode", false ) then
               local god = _menu:AddOption( lang_string( "god" ), "icon16/star.png" )
               function god:DoClick()

@@ -204,6 +204,24 @@ function RenderNoClip( ply, alpha )
   end
 end
 
+function RenderFrozen( ply )
+  ply:SetRenderMode( RENDERMODE_NORMAL )
+  ply:SetColor( Color( 0, 0, 255 ) )
+  for i, wp in pairs(ply:GetWeapons()) do
+    wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+    wp:SetColor( Color( 0, 0, 255 ) )
+  end
+  local _backpack = ply:GetBackpack()
+  if ea( _backpack ) then
+    _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
+    if ply:GetModel() == "models/crow.mdl" then
+      _backpack:SetColor( Color( 0, 0, 255 ) )
+    else
+      _backpack:SetColor( Color( 0, 0, 255 ) )
+    end
+  end
+end
+
 function RenderCloaked( ply )
   local _alpha = 0
   ply:SetRenderMode( RENDERMODE_TRANSALPHA )
@@ -224,17 +242,23 @@ function RenderCloaked( ply )
 end
 
 function RenderNormal( ply )
-  setPlayerModel( ply )
-  ply:SetRenderMode( RENDERMODE_NORMAL )
-  ply:SetColor( Color( 255, 255, 255, 255 ) )
-  for i, wp in pairs(ply:GetWeapons()) do
-    wp:SetRenderMode( RENDERMODE_NORMAL )
-    wp:SetColor( Color( 255, 255, 255, 255 ) )
-  end
-  local _backpack = ply:GetBackpack()
-  if ea( _backpack ) then
-    _backpack:SetRenderMode( RENDERMODE_NORMAL )
-    _backpack:SetColor( Color( 255, 255, 255, 255 ) )
+  if ply:GetNWBool( "cloaked", false ) then
+    RenderCloaked( ply )
+  elseif ply:IsFlagSet( FL_FROZEN ) then
+    RenderFrozen( ply )
+  else
+    setPlayerModel( ply )
+    ply:SetRenderMode( RENDERMODE_NORMAL )
+    ply:SetColor( Color( 255, 255, 255, 255 ) )
+    for i, wp in pairs(ply:GetWeapons()) do
+      wp:SetRenderMode( RENDERMODE_NORMAL )
+      wp:SetColor( Color( 255, 255, 255, 255 ) )
+    end
+    local _backpack = ply:GetBackpack()
+    if ea( _backpack ) then
+      _backpack:SetRenderMode( RENDERMODE_NORMAL )
+      _backpack:SetColor( Color( 255, 255, 255, 255 ) )
+    end
   end
 end
 

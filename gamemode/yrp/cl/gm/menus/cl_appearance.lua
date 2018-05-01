@@ -258,8 +258,14 @@ function open_appearance()
     --paintBr( pw, ph, Color( 255, 0, 0, 255 ))
   end
 
-  net.Start( "get_menu_bodygroups" )
-  net.SendToServer()
+  if ply:GetNWBool( "appearancemenu", false ) then
+    net.Start( "get_menu_bodygroups" )
+    net.SendToServer()
+  else
+    function _yrp_appearance.left:Paint( pw, ph )
+      surfacePanel( self, pw, ph, lang_string( "disabled" ) )
+    end
+  end
 
   _yrp_appearance.window:MakePopup()
 end

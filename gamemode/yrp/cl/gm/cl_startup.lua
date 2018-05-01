@@ -134,7 +134,9 @@ function openSelector( table, dbTable, dbSets, dbWhile, closeF )
         end
       end
 
-      if string.find( string.lower( v.WorldModel ), search:GetText() ) or string.find( string.lower( v.PrintName ), search:GetText() ) or string.find( string.lower( v.ClassName ), search:GetText() ) then
+      if string.find( string.lower( v.WorldModel ), search:GetText() )
+      or string.find( string.lower( v.PrintName ), search:GetText() )
+      or string.find( string.lower( v.ClassName ), search:GetText() ) then
         site.count = site.count + 1
         if ( site.count - 1 ) >= ( site.cur - 1 ) * _cs and ( site.count - 1 ) < ( site.cur ) * _cs then
           count = count + 1
@@ -648,14 +650,15 @@ _icons["ms"] = Material( "icon16/lightning.png" )
 
 function drawPlates( ply )
   if ply:Alive() then
-    if ply:GetNWBool( "tag_ug", false ) or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
+    if ply:GetNWBool( "tag_ug", false )
+    or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
       if ply:HasAccess() then
-        drawPlate( ply, string.upper( ply:GetUserGroup() ), 0, Color( 0, 0, 140, ply:GetColor().a ) )
+        drawPlate( ply, string.upper( ply:GetUserGroup() ), 9, Color( 0, 0, 140, ply:GetColor().a ) )
       end
     end
     if ply:GetNWBool( "tag_dev", false ) then
       if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
-        drawPlate( ply, "DEVELOPER", 9, Color( 0, 0, 0, ply:GetColor().a ) )
+        drawPlate( ply, "DEVELOPER", 18, Color( 0, 0, 0, ply:GetColor().a ) )
       end
     end
 
@@ -730,7 +733,7 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
   local ply = LocalPlayer()
   if ply:GetNWBool( "tag_immortal", false ) then
   	for i, ent in pairs( ents.GetAll() ) do
-      if ent:IsNPC() and self:GetNWBool( "immortal", false ) then
+      if ( ent:IsNPC() or ent:IsPlayer() ) and ( ent:GetNWBool( "immortal", false ) or ent:GetNWBool( "godmode", false ) ) then
         drawPlate( ent, string.upper( "[" .. lang_string( "immortal" ) .. "]" ), 0, Color( 0, 0, 100, ent:GetColor().a ) )
       end
   	end

@@ -201,9 +201,7 @@ function do_sleep( sender )
 
     sender.leiche = tmp
 
-    sender:SetRenderMode( RENDERMODE_TRANSALPHA )
-    sender:DrawWorldModel( false )
-    sender:SetColor( Color( 255, 255, 255, 0 ) )
+    RenderFrozen( ply )
 
     timer.Simple( 0.1, function()
       sender:SetParent( sender.leiche )
@@ -214,9 +212,7 @@ function do_sleep( sender )
 
     sender.leiche = nil
 
-    sender:SetRenderMode( RENDERMODE_NORMAL )
-    sender:DrawWorldModel( true )
-    sender:SetColor( Color( 255, 255, 255, 255 ) )
+    RenderNormal( ply )
 
     sender:SetParent( nil )
     sender:Freeze( false )

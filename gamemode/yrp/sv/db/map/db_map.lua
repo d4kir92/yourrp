@@ -152,3 +152,16 @@ net.Receive( "dealer_settings", function( len, ply )
     net.WriteTable( _storages )
   net.Send( ply )
 end)
+
+util.AddNetworkString( "teleportto" )
+net.Receive( "teleportto", function( len, ply )
+  if ply:HasAccess() then
+    local _uid = net.ReadString()
+    local _entry = SQL_SELECT( _db_name, "*", "uniqueID = '" .. _uid .. "'" )
+    if _entry != nil then
+      _entry = _entry[1]
+      _entry = string.Explode( ",", _entry.position )
+      ply:SetPos( Vector( _entry[1], _entry[2], _entry[3] ) )
+    end
+  end
+end)

@@ -133,15 +133,15 @@ hook.Add( "open_server_map", "open_server_map", function()
       end
     end
 
-    _mapListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 + 10 + 500 ), ScrH() - ctr( 180 + 256 + 20 ), ctr( 10 ), ctr( 10 + 256 + 10 ) )
+    _mapListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 + 10 + 700 ), ScrH() - ctr( 180 + 256 + 20 ), ctr( 10 ), ctr( 10 + 256 + 10 ) )
     _mapListView:AddColumn( "uniqueID" )
     _mapListView:AddColumn( lang_string( "position" ) )
     _mapListView:AddColumn( lang_string( "angle" ) )
     _mapListView:AddColumn( lang_string( "type" ) )
     _mapListView:AddColumn( lang_string( "name" ) )
 
-    local _buttonDelete = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 10+256+10 ) )
-    _buttonDelete:SetText( lang_string( "deleteentry" ) )
+    local _buttonDelete = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 10+256+10 ) )
+    _buttonDelete:SetText( "" )
     function _buttonDelete:DoClick()
       if _mapListView:GetSelectedLine() != nil then
         net.Start( "removeMapEntry" )
@@ -150,9 +150,30 @@ hook.Add( "open_server_map", "open_server_map", function()
         _mapListView:RemoveLine(  _mapListView:GetSelectedLine() )
       end
     end
+    function _buttonDelete:Paint( pw, ph )
+      if _mapListView:GetSelectedLine() != nil then
+        surfaceButton( self, pw, ph, lang_string( "deleteentry" ), Color( 255, 0, 0 ) )
+      end
+    end
 
-    local _buttonAddGroupSpawnPoint = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 336 ) )
-    _buttonAddGroupSpawnPoint:SetText( lang_string( "addgroupspawnpoint" ) )
+    local _buttonTeleport = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 336 ) )
+    _buttonTeleport:SetText( "" )
+    function _buttonTeleport:DoClick()
+      if _mapListView:GetSelectedLine() != nil then
+        net.Start( "teleportto" )
+          net.WriteString( _mapListView:GetLine(_mapListView:GetSelectedLine()):GetValue( 1 ) )
+        net.SendToServer()
+        settingsWindow.window:Remove()
+      end
+    end
+    function _buttonTeleport:Paint( pw, ph )
+      if _mapListView:GetSelectedLine() != nil then
+        surfaceButton( self, pw, ph, lang_string( "tpto" ) )
+      end
+    end
+
+    local _buttonAddGroupSpawnPoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 396 ) )
+    _buttonAddGroupSpawnPoint:SetText( "" )
     function _buttonAddGroupSpawnPoint:DoClick()
       local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
       tmpFrame:Center()
@@ -190,9 +211,12 @@ hook.Add( "open_server_map", "open_server_map", function()
 
       tmpFrame:MakePopup()
     end
+    function _buttonAddGroupSpawnPoint:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "addgroupspawnpoint" ) )
+    end
 
-    local _buttonAddRoleSpawnPoint = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 396 ) )
-    _buttonAddRoleSpawnPoint:SetText( lang_string( "addrolespawnpoint" ) )
+    local _buttonAddRoleSpawnPoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 456 ) )
+    _buttonAddRoleSpawnPoint:SetText( "" )
     function _buttonAddRoleSpawnPoint:DoClick()
       local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
       tmpFrame:Center()
@@ -206,7 +230,12 @@ hook.Add( "open_server_map", "open_server_map", function()
 
       local tmpRole = createD( "DComboBox", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
       for k, v in pairs( _roles ) do
-        tmpRole:AddChoice( v.roleID, v.uniqueID )
+        for l, w in pairs( _groups ) do
+          if tonumber( v.groupID ) == tonumber( w.uniqueID ) then
+            tmpRole:AddChoice( "[" .. w.groupID .. "] " .. v.roleID, v.uniqueID )
+            break
+          end
+        end
       end
 
       local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
@@ -230,9 +259,12 @@ hook.Add( "open_server_map", "open_server_map", function()
 
       tmpFrame:MakePopup()
     end
+    function _buttonAddRoleSpawnPoint:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "addrolespawnpoint" ) )
+    end
 
-    local _buttonAddJailPoint = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 456 ) )
-    _buttonAddJailPoint:SetText( lang_string( "addjailpoint" ) )
+    local _buttonAddJailPoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 516 ) )
+    _buttonAddJailPoint:SetText( "" )
     function _buttonAddJailPoint:DoClick()
       net.Start( "dbInsertIntoMap" )
         net.WriteString( "yrp_" .. GetMapNameDB() )
@@ -247,9 +279,12 @@ hook.Add( "open_server_map", "open_server_map", function()
       net.Start( "getMapList" )
       net.SendToServer()
     end
+    function _buttonAddJailPoint:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "addjailpoint" ) )
+    end
 
-    local _buttonAddReleasePoint = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 516 ) )
-    _buttonAddReleasePoint:SetText( lang_string( "addjailfreepoint" ) )
+    local _buttonAddReleasePoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 576 ) )
+    _buttonAddReleasePoint:SetText( "" )
     function _buttonAddReleasePoint:DoClick()
       net.Start( "dbInsertIntoMap" )
         net.WriteString( "yrp_" .. GetMapNameDB() )
@@ -264,9 +299,12 @@ hook.Add( "open_server_map", "open_server_map", function()
       net.Start( "getMapList" )
       net.SendToServer()
     end
+    function _buttonAddReleasePoint:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "addjailfreepoint" ) )
+    end
 
-    local _buttonAddDealer = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 576 ) )
-    _buttonAddDealer:SetText( lang_string( "add" ) .. " [" .. lang_string( "dealer" ) .. "]" )
+    local _buttonAddDealer = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 636 ) )
+    _buttonAddDealer:SetText( "" )
     function _buttonAddDealer:DoClick()
       net.Start( "dealer_add" )
       net.SendToServer()
@@ -275,9 +313,12 @@ hook.Add( "open_server_map", "open_server_map", function()
       net.Start( "getMapList" )
       net.SendToServer()
     end
+    function _buttonAddDealer:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "add" ) .. " [" .. lang_string( "dealer" ) .. "]" )
+    end
 
-    local _buttonAddStoragepoint = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 636 ) )
-    _buttonAddStoragepoint:SetText( lang_string( "add" ) .. " [" .. lang_string( "storagepoint" ) .. "]" )
+    local _buttonAddStoragepoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 696 ) )
+    _buttonAddStoragepoint:SetText( "" )
     function _buttonAddStoragepoint:DoClick()
       local tmpFrame = createD( "DFrame", nil, ctr( 1200 ), ctr( 290 ), 0, 0 )
       tmpFrame:Center()
@@ -309,6 +350,9 @@ hook.Add( "open_server_map", "open_server_map", function()
       end
 
       tmpFrame:MakePopup()
+    end
+    function _buttonAddStoragepoint:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "add" ) .. " [" .. lang_string( "storagepoint" ) .. "]" )
     end
 
     net.Start( "getMapList" )

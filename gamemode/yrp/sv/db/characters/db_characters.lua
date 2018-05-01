@@ -51,31 +51,36 @@ function Player:UpdateBackpack()
   end
 
   if self:HasCharacterSelected() then
-    local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. self:CharID() .. "'" )
-    _uid = _uid[1].eqbp1
-    local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
-    if _bp != nil then
-      _bp = _bp[1]
-      local _spine = self:LookupBone( "ValveBiped.Bip01_Spine4" )
-      local _backpack = ents.Create( "prop_dynamic" )
-      _backpack:SetModel( _bp.WorldModel )
-      _backpack:SetModelScale( 1.4, 0 )
+    local _charid = self:CharID()
+    if _charid != nil then
+      local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. _charid .. "'" )
+      if _uid != nil then
+        _uid = _uid[1].eqbp1
+        local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
+        if _bp != nil then
+          _bp = _bp[1]
+          local _spine = self:LookupBone( "ValveBiped.Bip01_Spine4" )
+          local _backpack = ents.Create( "prop_dynamic" )
+          _backpack:SetModel( _bp.WorldModel )
+          _backpack:SetModelScale( 1.4, 0 )
 
-      _backpack:Spawn()
+          _backpack:Spawn()
 
-      local pos, ang = self:GetBonePosition( _spine )
-      local _cor = self:GetPos() - pos
-      local _cor2 = self:GetAngles() - ang
+          local pos, ang = self:GetBonePosition( _spine )
+          local _cor = self:GetPos() - pos
+          local _cor2 = self:GetAngles() - ang
 
-      _backpack:FollowBone( self, _spine )
-      _backpack:SetLocalPos( Vector( 0, 0, 0 ) + Vector( -18, -10, 4 ))  --+ Vector( -10, -10, 0 ) )
-	    _backpack:SetLocalAngles( Angle( 0, 0, 0 ) + Angle( 0, -90 -12, -90 ) )  --)+ Angle( 90, -15, 90 ) )
-      --_backpack:SetPos( self:GetPos() - pos -_cor + Vector( -8, -8, 0 ) )
-      --_backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
+          _backpack:FollowBone( self, _spine )
+          _backpack:SetLocalPos( Vector( 0, 0, 0 ) + Vector( -18, -10, 4 ))  --+ Vector( -10, -10, 0 ) )
+    	    _backpack:SetLocalAngles( Angle( 0, 0, 0 ) + Angle( 0, -90 -12, -90 ) )  --)+ Angle( 90, -15, 90 ) )
+          --_backpack:SetPos( self:GetPos() - pos -_cor + Vector( -8, -8, 0 ) )
+          --_backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
 
-      self:SetNWEntity( "backpack", _backpack )
+          self:SetNWEntity( "backpack", _backpack )
+        end
+        return _bp
+      end
     end
-    return _bp
   end
 end
 

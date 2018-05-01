@@ -34,6 +34,7 @@ util.AddNetworkString( "db_update_tag_ar" )
 
 util.AddNetworkString( "db_update_server_changelevel" )
 util.AddNetworkString( "db_update_playerscandropweapons" )
+util.AddNetworkString( "db_update_appearancemenu" )
 
 util.AddNetworkString( "db_update_collection" )
 
@@ -77,6 +78,7 @@ SQL_ADD_COLUMN( _db_name, "tag_ar", "INT DEFAULT 0" )
 
 SQL_ADD_COLUMN( _db_name, "server_changelevel", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "playerscandropweapons", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "appearancemenu", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
 
@@ -134,6 +136,7 @@ net.Receive( "tp_jail", function( len, ply )
     local _target = net.ReadEntity()
     teleportToJailpoint( _target )
     _target:SetNWBool( "injail", true )
+    _target:SetNWInt( "jailtime", 5*60 )
   end
 end)
 util.AddNetworkString( "tp_unjail" )
@@ -182,6 +185,7 @@ net.Receive( "freeze", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
     _target:Freeze( true )
+    RenderFrozen( ply )
   end
 end)
 util.AddNetworkString( "unfreeze" )
@@ -189,6 +193,7 @@ net.Receive( "unfreeze", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
     _target:Freeze( false )
+    RenderNormal( ply )
   end
 end)
 util.AddNetworkString( "god" )
@@ -324,6 +329,18 @@ end
 function PlayersCanDropWeapons()
   return tobool( yrp_general.playerscandropweapons )
 end
+
+net.Receive( "db_update_appearancemenu", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.appearancemenu = _nw
+    SQL_UPDATE( "yrp_general", "appearancemenu = " .. yrp_general.appearancemenu, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " appearancemenu" )
+    for i, p in pairs( player.GetAll() ) do
+      p:SetNWBool( "appearancemenu", tobool(_nw) )
+    end
+  end
+end)
 
 net.Receive( "db_update_playerscandropweapons", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )
@@ -491,7 +508,7 @@ net.Receive( "db_update_noclip_tags", function( len, ply )
     printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " noclip_tags" )
   end
   for i, ply in pairs( player.GetAll() ) do
-    ply:SetNWBool( "show_tags", yrp_general.toggle_noclip_tags )
+    ply:SetNWBool( "show_tags", tobool( yrp_general.toggle_noclip_tags ) )
   end
 end)
 

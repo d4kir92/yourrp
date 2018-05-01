@@ -204,7 +204,11 @@ function SpawnVehicle( item, ply, ang )
         car.Offset = vehicle.Offset or 0
 
         timer.Simple( 0.2, function()
-      		simfphys.RegisterEquipment( car )
+          if simfphys != nil then
+            if simfphys.RegisterEquipment != nil then
+          		simfphys.RegisterEquipment( car )
+            end
+          end
       	end)
 
         return car

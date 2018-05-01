@@ -10,7 +10,8 @@ hook.Add( "open_server_general", "open_server_general", function()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  if string.lower( ply:GetUserGroup() ) == "superadmin" then
+  local _ug = string.lower( ply:GetUserGroup() )
+  if _ug == "superadmin" or _ug == "owner" then
     local _center = 800
 
     local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.window.site )
@@ -48,6 +49,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     local sv_generalServerChangelevel = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 730 ) )
     local sv_generalPlayersCanDropWeapons = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 790 ) )
+    local sv_generalAppearanceMenu = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 850 ) )
 
     local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
     sv_generalCollection:SetMin( 0 )
@@ -60,10 +62,6 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "gamemodename" ) .. ":", "sef", ctr( _center - 10 ), ctr( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       if oldGamemodename != sv_generalName:GetText() then
         draw.SimpleTextOutlined( "you need to update Server!", "sef", ctr( _center + 400 + 10 ), ctr( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      end
-
-      if string.lower( LocalPlayer():GetUserGroup() ) != "superadmin" then
-        draw.SimpleTextOutlined( "Only UserGroup [owner] can reset DATABASE", "sef", ctr( 10 ), ctr( 270 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
 
       draw.SimpleTextOutlined( lang_string( "advertname" ) .. ":", "sef", ctr( _center - 10 ), ctr( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -104,6 +102,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
       draw.SimpleTextOutlined( lang_string( "autoserverreload" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 740 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "playerscandropweapons" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 800 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "appearance" ) .. " - " .. lang_string( "menu" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 860 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -152,6 +151,7 @@ hook.Add( "open_server_general", "open_server_general", function()
 
       sv_generalServerChangelevel:SetValue( tonumber( _yrp_general.server_changelevel ) )
       sv_generalPlayersCanDropWeapons:SetValue( tonumber( _yrp_general.playerscandropweapons ) )
+      sv_generalAppearanceMenu:SetValue( tonumber( _yrp_general.appearancemenu ) )
 
       sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
       sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -173,126 +173,124 @@ hook.Add( "open_server_general", "open_server_general", function()
         net.SendToServer()
       end
 
-      if string.lower( LocalPlayer():GetUserGroup() ) == "superadmin" then
-        local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
-        sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
-        function sv_generalSQL:DoClick()
-          net.Start( "get_sql_info" )
+      local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
+      sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
+      function sv_generalSQL:DoClick()
+        net.Start( "get_sql_info" )
+        net.SendToServer()
+      end
+      net.Receive( "get_sql_info", function( len )
+        local _sv_sql = net.ReadTable()
+
+        local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 820 ), 0, 0 )
+        _win:SetTitle( "" )
+        _win:MakePopup()
+        _win:Center()
+        function _win:Paint( pw, ph )
+          surfaceBox( 0, 0, pw, ph, Color( 0, 0, 100, 200 ) )
+        end
+
+        local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 ) )
+        _sql_host:INITPanel( "DTextEntry" )
+        _sql_host:SetHeader( lang_string( "host" ) )
+        _sql_host.plus:SetText( _sv_sql.host )
+        function _sql_host.plus:OnChange()
+          net.Start( "set_host" )
+            net.WriteString( _sql_host.plus:GetText() )
           net.SendToServer()
         end
-        net.Receive( "get_sql_info", function( len )
-          local _sv_sql = net.ReadTable()
 
-          local _win = createD( "DFrame", nil, ctr( 600 ), ctr( 820 ), 0, 0 )
-          _win:SetTitle( "" )
-          _win:MakePopup()
-          _win:Center()
-          function _win:Paint( pw, ph )
-            surfaceBox( 0, 0, pw, ph, Color( 0, 0, 100, 200 ) )
-          end
+        local _sql_port = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
+        _sql_port:INITPanel( "DTextEntry" )
+        _sql_port:SetHeader( lang_string( "port" ) )
+        _sql_port.plus:SetText( _sv_sql.port )
+        function _sql_port.plus:OnChange()
+          net.Start( "set_port" )
+            net.WriteString( _sql_port.plus:GetText() )
+          net.SendToServer()
+        end
 
-          local _sql_host = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 ) )
-          _sql_host:INITPanel( "DTextEntry" )
-          _sql_host:SetHeader( lang_string( "host" ) )
-          _sql_host.plus:SetText( _sv_sql.host )
-          function _sql_host.plus:OnChange()
-            net.Start( "set_host" )
-              net.WriteString( _sql_host.plus:GetText() )
-            net.SendToServer()
-          end
+        local _sql_database = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        _sql_database:INITPanel( "DTextEntry" )
+        _sql_database:SetHeader( lang_string( "database" ) )
+        _sql_database.plus:SetText( _sv_sql.database )
+        function _sql_database.plus:OnChange()
+          net.Start( "set_database" )
+            net.WriteString( _sql_database.plus:GetText() )
+          net.SendToServer()
+        end
 
-          local _sql_port = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 ) )
-          _sql_port:INITPanel( "DTextEntry" )
-          _sql_port:SetHeader( lang_string( "port" ) )
-          _sql_port.plus:SetText( _sv_sql.port )
-          function _sql_port.plus:OnChange()
-            net.Start( "set_port" )
-              net.WriteString( _sql_port.plus:GetText() )
-            net.SendToServer()
-          end
+        local _sql_username = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        _sql_username:INITPanel( "DTextEntry" )
+        _sql_username:SetHeader( lang_string( "username" ) )
+        _sql_username.plus:SetText( _sv_sql.username )
+        function _sql_username.plus:OnChange()
+          net.Start( "set_username" )
+            net.WriteString( _sql_username.plus:GetText() )
+          net.SendToServer()
+        end
 
-          local _sql_database = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-          _sql_database:INITPanel( "DTextEntry" )
-          _sql_database:SetHeader( lang_string( "database" ) )
-          _sql_database.plus:SetText( _sv_sql.database )
-          function _sql_database.plus:OnChange()
-            net.Start( "set_database" )
-              net.WriteString( _sql_database.plus:GetText() )
-            net.SendToServer()
-          end
+        local _sql_password = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        _sql_password:INITPanel( "DTextEntry" )
+        _sql_password:SetHeader( lang_string( "password" ) )
+        _sql_password.plus:SetText( _sv_sql.password )
+        function _sql_password.plus:OnChange()
+          net.Start( "set_password" )
+            net.WriteString( _sql_password.plus:GetText() )
+          net.SendToServer()
+        end
 
-          local _sql_username = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-          _sql_username:INITPanel( "DTextEntry" )
-          _sql_username:SetHeader( lang_string( "username" ) )
-          _sql_username.plus:SetText( _sv_sql.username )
-          function _sql_username.plus:OnChange()
-            net.Start( "set_username" )
-              net.WriteString( _sql_username.plus:GetText() )
-            net.SendToServer()
-          end
-
-          local _sql_password = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-          _sql_password:INITPanel( "DTextEntry" )
-          _sql_password:SetHeader( lang_string( "password" ) )
-          _sql_password.plus:SetText( _sv_sql.password )
-          function _sql_password.plus:OnChange()
-            net.Start( "set_password" )
-              net.WriteString( _sql_password.plus:GetText() )
-            net.SendToServer()
-          end
-
-          local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
-          _sqlmode:INITPanel( "DComboBox" )
-          _sqlmode:SetHeader( lang_string( "sqlmode" ) )
-          _sqlmode.plus.mode = GetSQLMode()
-          if tonumber( _sv_sql.mode ) == 0 then
+        local _sqlmode = createD( "DYRPPanelPlus", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 ) )
+        _sqlmode:INITPanel( "DComboBox" )
+        _sqlmode:SetHeader( lang_string( "sqlmode" ) )
+        _sqlmode.plus.mode = GetSQLMode()
+        if tonumber( _sv_sql.mode ) == 0 then
+          _sql_host:SetVisible( false )
+          _sql_port:SetVisible( false )
+          _sql_database:SetVisible( false )
+          _sql_username:SetVisible( false )
+          _sql_password:SetVisible( false )
+          _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, true )
+          _sqlmode.plus.choice = "SQLite"
+        else
+          _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, false )
+        end
+        if tonumber( _sv_sql.mode ) == 1 then
+          _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, true )
+          _sqlmode.plus.choice = "MYSQL"
+        else
+          _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, false )
+        end
+        function _sqlmode.plus:OnSelect( index, value, data )
+          self.choice = value
+          if data == 0 then
             _sql_host:SetVisible( false )
             _sql_port:SetVisible( false )
             _sql_database:SetVisible( false )
             _sql_username:SetVisible( false )
             _sql_password:SetVisible( false )
-            _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, true )
-            _sqlmode.plus.choice = "SQLite"
           else
-            _sqlmode.plus:AddChoice( "SQLite (" .. lang_string( "internal" ).. ")", 0, false )
+            _sql_host:SetVisible( true )
+            _sql_port:SetVisible( true )
+            _sql_database:SetVisible( true )
+            _sql_username:SetVisible( true )
+            _sql_password:SetVisible( true )
           end
-          if tonumber( _sv_sql.mode ) == 1 then
-            _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, true )
-            _sqlmode.plus.choice = "MYSQL"
-          else
-            _sqlmode.plus:AddChoice( "MYSQL (" .. lang_string( "external" ).. ")", 1, false )
-          end
-          function _sqlmode.plus:OnSelect( index, value, data )
-            self.choice = value
-            if data == 0 then
-              _sql_host:SetVisible( false )
-              _sql_port:SetVisible( false )
-              _sql_database:SetVisible( false )
-              _sql_username:SetVisible( false )
-              _sql_password:SetVisible( false )
-            else
-              _sql_host:SetVisible( true )
-              _sql_port:SetVisible( true )
-              _sql_database:SetVisible( true )
-              _sql_username:SetVisible( true )
-              _sql_password:SetVisible( true )
-            end
-            self.mode = data
-          end
+          self.mode = data
+        end
 
-          local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
-          function _sql_change_to:Paint( pw, ph )
-            surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-            _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
-          end
-          function _sql_change_to:DoClick()
-            net.Start( "change_to_sql_mode" )
-              net.WriteString( _sqlmode.plus.mode )
-            net.SendToServer()
-            _win:Close()
-          end
-        end)
-      end
+        local _sql_change_to = createD( "DButton", _win, ctr( 580 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 + 100 + 10 ) )
+        function _sql_change_to:Paint( pw, ph )
+          surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+          _sql_change_to:SetText( lang_string( "changetopre" ) .. " " .. tostring( _sqlmode.plus.choice ) .. " " .. lang_string( "changetopos" ) )
+        end
+        function _sql_change_to:DoClick()
+          net.Start( "change_to_sql_mode" )
+            net.WriteString( _sqlmode.plus.mode )
+          net.SendToServer()
+          _win:Close()
+        end
+      end)
 
       local sv_generalRestartServer = vgui.Create( "DButton", settingsWindow.window.site )
       sv_generalRestartServer:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -333,61 +331,59 @@ hook.Add( "open_server_general", "open_server_general", function()
         settingsWindow.window:Close()
       end
 
-      if string.lower( LocalPlayer():GetUserGroup() ) == "superadmin" then
-        local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
-        sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
-        sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-        sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
-        function sv_generalHardReset:Paint( pw, ph )
+      local sv_generalHardReset = vgui.Create( "DButton", settingsWindow.window.site )
+      sv_generalHardReset:SetSize( ctr( 400 ), ctr( 50 ) )
+      sv_generalHardReset:SetPos( ctr( 5 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+      sv_generalHardReset:SetText( lang_string( "hardresetdatabase" ) )
+      function sv_generalHardReset:Paint( pw, ph )
+        local color = Color( 255, 0, 0, 200 )
+        if sv_generalHardReset:IsHovered() then
+          color = Color( 255, 255, 0, 200 )
+        end
+        draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+      end
+      function sv_generalHardReset:DoClick()
+        local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+        _tmpFrame:Center()
+        _tmpFrame:SetTitle( lang_string( "areyousure" ) )
+        function _tmpFrame:Paint( pw, ph )
+          local color = Color( 0, 0, 0, 200 )
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+        end
+
+        local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
+        sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
+        sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": " .. lang_string( "hardresetdatabase" ) )
+        function sv_generalHardResetSure:DoClick()
+          net.Start( "hardresetdatabase" )
+          net.SendToServer()
+          _tmpFrame:Close()
+        end
+        function sv_generalHardResetSure:Paint( pw, ph )
           local color = Color( 255, 0, 0, 200 )
-          if sv_generalHardReset:IsHovered() then
+          if sv_generalHardResetSure:IsHovered() then
             color = Color( 255, 255, 0, 200 )
           end
           draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
         end
-        function sv_generalHardReset:DoClick()
-          local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
-          _tmpFrame:Center()
-          _tmpFrame:SetTitle( lang_string( "areyousure" ) )
-          function _tmpFrame:Paint( pw, ph )
-            local color = Color( 0, 0, 0, 200 )
-            draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-          end
 
-          local sv_generalHardResetSure = vgui.Create( "DButton", _tmpFrame )
-          sv_generalHardResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
-          sv_generalHardResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
-          sv_generalHardResetSure:SetText( lang_string( "yes" ) .. ": " .. lang_string( "hardresetdatabase" ) )
-          function sv_generalHardResetSure:DoClick()
-            net.Start( "hardresetdatabase" )
-            net.SendToServer()
-            _tmpFrame:Close()
-          end
-          function sv_generalHardResetSure:Paint( pw, ph )
-            local color = Color( 255, 0, 0, 200 )
-            if sv_generalHardResetSure:IsHovered() then
-              color = Color( 255, 255, 0, 200 )
-            end
-            draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-          end
-
-          local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
-          sv_generalHardResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
-          sv_generalHardResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
-          sv_generalHardResetNot:SetText( lang_string( "no" ) .. ": do nothing" )
-          function sv_generalHardResetNot:DoClick()
-            _tmpFrame:Close()
-          end
-          function sv_generalHardResetNot:Paint( pw, ph )
-            local color = Color( 0, 255, 0, 200 )
-            if sv_generalHardResetNot:IsHovered() then
-              color = Color( 255, 255, 0, 200 )
-            end
-            draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-          end
-          settingsWindow.window:Close()
-          _tmpFrame:MakePopup()
+        local sv_generalHardResetNot = vgui.Create( "DButton", _tmpFrame )
+        sv_generalHardResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalHardResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
+        sv_generalHardResetNot:SetText( lang_string( "no" ) .. ": do nothing" )
+        function sv_generalHardResetNot:DoClick()
+          _tmpFrame:Close()
         end
+        function sv_generalHardResetNot:Paint( pw, ph )
+          local color = Color( 0, 255, 0, 200 )
+          if sv_generalHardResetNot:IsHovered() then
+            color = Color( 255, 255, 0, 200 )
+          end
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
+        end
+        settingsWindow.window:Close()
+        _tmpFrame:MakePopup()
 
         local sv_generalMoneyReset = createD( "DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
         sv_generalMoneyReset:SetText( "" )
@@ -729,11 +725,21 @@ hook.Add( "open_server_general", "open_server_general", function()
           net.WriteInt( _tonumber, 4 )
         net.SendToServer()
       end
+
+      function sv_generalAppearanceMenu:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_appearancemenu" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
     end)
 
     net.Start("dbGetGeneral")
     net.SendToServer()
   else
-    F8RequireUG( lang_string( "general" ), "superadmin" )
+    F8RequireUG( lang_string( "general" ), "superadmin or owner" )
   end
 end)
