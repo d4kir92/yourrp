@@ -34,58 +34,122 @@ SQL_ADD_COLUMN( _db_name, "angle", "TEXT" )
 SQL_ADD_COLUMN( _db_name, "map", "TEXT" )
 
 --[[ EQUIPMENT ]]--
-SQL_ADD_COLUMN( _db_name, "eqbp1", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqbp", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "eqbag1", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "eqbag2", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "eqbag3", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( _db_name, "eqbag4", "TEXT DEFAULT ''" )
+
+SQL_ADD_COLUMN( _db_name, "eqwpp1", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqwpp2", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqwps1", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqwps2", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqwpg", "TEXT DEFAULT ''" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
 local Player = FindMetaTable( "Player" )
 
-function Player:UpdateBackpack()
-  if ea( self:GetNWEntity( "backpack" ) ) then
-    self:GetNWEntity( "backpack" ):Remove()
+function Player:VisualEquipment( name, slot, bone, size, v_pos, a_ang )
+  if ea( self:GetNWEntity( name ) ) then
+    self:GetNWEntity( name ):Remove()
   end
 
   if self:HasCharacterSelected() then
     local _charid = self:CharID()
     if _charid != nil then
-      local _uid = SQL_SELECT( "yrp_characters", "eqbp1", "uniqueID = '" .. _charid .. "'" )
+      local _uid = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. _charid .. "'" )
       if _uid != nil then
-        _uid = _uid[1].eqbp1
-        local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
-        if _bp != nil then
-          _bp = _bp[1]
-          local _spine = self:LookupBone( "ValveBiped.Bip01_Spine4" )
-          local _backpack = ents.Create( "prop_dynamic" )
-          _backpack:SetModel( _bp.WorldModel )
-          _backpack:SetModelScale( 1.4, 0 )
+        _uid = _uid[1][slot]
+        local _item = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
+        if _item != nil then
+          _item = _item[1]
+          local _spine = self:LookupBone( bone )
+          local _visual = ents.Create( "prop_dynamic" )
+          _visual:SetRenderMode( RENDERGROUP_OPAQUE )
+          _visual:SetModel( _item.WorldModel )
+          _visual:SetModelScale( size, 0 )
 
-          _backpack:Spawn()
+          _visual:Spawn()
+
+          local _maxs = _visual:OBBMaxs()
+          local _mins = _visual:OBBMins()
+          print(name)
+          print(_maxs, _mins)
+          local _x = _maxs.x - _mins.x
+          local _y = _maxs.y - _mins.y
+          local _z = _maxs.z - _mins.z
+          print(_x, _y, _z)
+          local cor = 0
+          if _y > _x then
+            cor = 90
+          end
 
           local pos, ang = self:GetBonePosition( _spine )
+          --print(pos, ang)
           local _cor = self:GetPos() - pos
           local _cor2 = self:GetAngles() - ang
 
-          _backpack:FollowBone( self, _spine )
-          _backpack:SetLocalPos( Vector( 0, 0, 0 ) + Vector( -18, -10, 4 ))  --+ Vector( -10, -10, 0 ) )
-    	    _backpack:SetLocalAngles( Angle( 0, 0, 0 ) + Angle( 0, -90 -12, -90 ) )  --)+ Angle( 90, -15, 90 ) )
-          --_backpack:SetPos( self:GetPos() - pos -_cor + Vector( -8, -8, 0 ) )
-          --_backpack:SetAngles( _cor2 ) --+ Angle( 0, self:GetAngles().y, 0 ) )
+          _visual:FollowBone( self, _spine )
+          _visual:SetLocalPos( Vector( 0, 0, 0 ) + v_pos )
+    	    _visual:SetLocalAngles( Angle( 0, 0, 0 ) + a_ang + Angle( cor, 0, 0 ) )
 
-          self:SetNWEntity( "backpack", _backpack )
+          self:SetNWEntity( name, _visual )
         end
-        return _bp
+        return _item
       end
     end
   end
 end
 
+function Player:UpdateBackpack()
+  local _bp = self:VisualEquipment( "backpack", "eqbp", "ValveBiped.Bip01_Spine4", 1.3, Vector( -16, -7, 3.4 ), Angle( 0, -90 -12, -90 ) )
+  self:UpdateWeaponPrimary1()
+
+  --[[
+  local ply = self
+  print('List of bones (i, name, index, position, angle):')
+  for i = 0, ply:GetBoneCount() - 1 do
+    local boneName = ply:GetBoneName(i)
+  	local boneIndex = ply:LookupBone(boneName)
+  	local bonePos, boneAng = ply:GetBonePosition(boneIndex)
+	  print(i, boneName, boneIndex, bonePos, boneAng)
+  end
+  ]]--
+
+  return _bp
+end
+
+function Player:UpdateWeaponPrimary1()
+  return self:VisualEquipment( "weaponprimary1", "eqwpp1", "ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90, 90 ) )
+end
+
+function Player:UpdateWeaponPrimary2()
+  return self:VisualEquipment( "weaponprimary2", "eqwpp2", "ValveBiped.Bip01_L_Clavicle", 1, Vector( 0, 0, 0 ), Angle( 0, 0, 0 ) )
+end
+
+util.AddNetworkString( "update_slot_weapon_primary_1" )
+net.Receive( "update_slot_weapon_primary_1", function( len, ply )
+  local _charid = ply:CharID()
+  local _uid = SQL_SELECT( _db_name, "eqwpp1", "uniqueID = '" .. _charid .. "'" )
+  if _uid != nil then
+    _uid = _uid[1].eqwpp1
+    local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+    if _backpack_storage == nil then
+      _backpack_storage = CreateEquipmentStorage( ply, "eqwpp1", _charid, ITEM_MAXW, ITEM_MAXH )
+      _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+    end
+    _backpack_storage = _backpack_storage[1]
+    net.Start( "update_slot_weapon_primary_1" )
+      net.WriteTable( _backpack_storage )
+    net.Send( ply )
+  end
+end)
+
 util.AddNetworkString( "update_backpack" )
 net.Receive( "update_backpack", function( len, ply )
+  print("update_backpack")
   local _bp = ply:UpdateBackpack()
 
   if _bp != nil then
@@ -101,6 +165,7 @@ net.Receive( "update_backpack", function( len, ply )
       return true
     end
   end
+
   net.Start( "update_backpack" )
     net.WriteBool( false )
   net.Send( ply )
@@ -110,12 +175,12 @@ end)
 util.AddNetworkString( "update_slot_backpack" )
 net.Receive( "update_slot_backpack", function( len, ply )
   local _charid = ply:CharID()
-  local _uid = SQL_SELECT( _db_name, "eqbp1", "uniqueID = '" .. _charid .. "'" )
+  local _uid = SQL_SELECT( _db_name, "eqbp", "uniqueID = '" .. _charid .. "'" )
   if _uid != nil then
-    _uid = _uid[1].eqbp1
+    _uid = _uid[1].eqbp
     local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
     if _backpack_storage == nil then
-      _backpack_storage = CreateEquipmentStorage( ply, "eqbp1", _charid )
+      _backpack_storage = CreateEquipmentStorage( ply, "eqbp", _charid, 1, 1 )
       _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
     end
     _backpack_storage = _backpack_storage[1]

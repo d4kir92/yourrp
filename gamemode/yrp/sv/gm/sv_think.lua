@@ -225,7 +225,7 @@ timer.Create( "ServerThink", 1, 0, function()
       end
     end
     local _dealers = SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
-    if _dealers != nil then
+    if _dealers != nil and _dealers != false then
       for i, dealer in pairs( _dealers ) do
         if tostring( dealer.uniqueID ) != "1" then
           if !dealerAlive( dealer.uniqueID ) then

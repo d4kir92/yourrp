@@ -336,63 +336,67 @@ net.Receive( "openInteractMenu", function( len, ply )
   end
   if tmpTarget:IsPlayer() then
     local tmpTargetChaTab = tmpTarget:GetChaTab()
-    local tmpTargetRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+    if tmpTargetChaTab != nil then
+      local tmpTargetRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 
-    local tmpT = ply:GetChaTab()
-    local tmpTable = ply:GetRolTab()
+      local tmpT = ply:GetChaTab()
+      local tmpTable = ply:GetRolTab()
 
-    local tmpBool = false
+      local tmpBool = false
 
-    local tmpPromote = false
-    local tmpPromoteName = ""
+      local tmpPromote = false
+      local tmpPromoteName = ""
 
-    local tmpDemote = false
-    local tmpDemoteName = ""
+      local tmpDemote = false
+      local tmpDemoteName = ""
 
-    if tonumber( tmpTable.instructor ) == 1 then
-      tmpBool = true
+      if tonumber( tmpTable.instructor ) == 1 then
+        tmpBool = true
 
-      local tmpSearch = true  --tmpTargetSteamID
-      local tmpTableSearch = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTable.prerole )
-      if tmpTableSearch != nil then
-        local tmpSearchUniqueID = tmpTableSearch[1].prerole
-        local tmpCounter = 0
-        while (tmpSearch) do
-          tmpSearchUniqueID = tonumber( tmpTableSearch[1].prerole )
+        local tmpSearch = true  --tmpTargetSteamID
+        local tmpTableSearch = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTable.prerole )
+        if tmpTableSearch != nil then
+          local tmpSearchUniqueID = tmpTableSearch[1].prerole
+          local tmpCounter = 0
+          while (tmpSearch) do
+            tmpSearchUniqueID = tonumber( tmpTableSearch[1].prerole )
 
-          if tonumber( tmpTargetRole[1].prerole ) != -1 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
-            tmpDemote = true
-            local tmp = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetRole[1].prerole )
-            tmpDemoteName = tmp[1].roleID
+            if tonumber( tmpTargetRole[1].prerole ) != -1 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
+              tmpDemote = true
+              local tmp = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetRole[1].prerole )
+              tmpDemoteName = tmp[1].roleID
+            end
+
+            if tonumber( tmpSearchUniqueID ) == tonumber( tmpTargetRole[1].uniqueID ) then
+              tmpPromote = true
+              tmpPromoteName = tmpTableSearch[1].roleID
+            end
+            if tmpSearchUniqueID == -1 then
+              tmpSearch = false
+            end
+            if tmpCounter >= 100 then
+              printGM( "note", "You have a loop in your preroles!" )
+              tmpSearch = false
+            end
+            tmpCounter = tmpCounter + 1
+            tmpTableSearch = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpSearchUniqueID )
           end
-
-          if tonumber( tmpSearchUniqueID ) == tonumber( tmpTargetRole[1].uniqueID ) then
-            tmpPromote = true
-            tmpPromoteName = tmpTableSearch[1].roleID
-          end
-          if tmpSearchUniqueID == -1 then
-            tmpSearch = false
-          end
-          if tmpCounter >= 100 then
-            printGM( "note", "You have a loop in your preroles!" )
-            tmpSearch = false
-          end
-          tmpCounter = tmpCounter + 1
-          tmpTableSearch = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpSearchUniqueID )
         end
       end
+
+      net.Start( "openInteractMenu" )
+        net.WriteBool( tmpBool )
+
+        net.WriteBool( tmpPromote )
+        net.WriteString( tmpPromoteName )
+
+        net.WriteBool( tmpDemote )
+        net.WriteString( tmpDemoteName )
+
+      net.Send( ply )
+    else
+      printGM( "error", "openInteractMenu: tmpTargetChaTab == nil (" .. tostring( ply:YRPName() ) .. ", " .. tostring( tmpTarget:YRPName() ) .. ")" )
     end
-
-    net.Start( "openInteractMenu" )
-      net.WriteBool( tmpBool )
-
-      net.WriteBool( tmpPromote )
-      net.WriteString( tmpPromoteName )
-
-      net.WriteBool( tmpDemote )
-      net.WriteString( tmpDemoteName )
-
-    net.Send( ply )
   end
 end)
 

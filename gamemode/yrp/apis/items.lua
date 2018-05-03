@@ -5,6 +5,8 @@ ITEM_MAXH = 3
 ITEM_MAXW = 8
 INV_MAXW = ITEM_MAXW
 
+ICON_SIZE = 100
+
 --[[ SHARED ]]--
 
 function PrintStorage( tab )
@@ -134,6 +136,14 @@ function GetSurroundingItems( ply )
     table.insert( _items, FormatEntityToItem( ent ) )
   end
   return _items
+end
+
+function IsRightInventoryType( storage, item )
+  if storage == item then
+    return true
+  else
+    return false
+  end
 end
 
 function IsEnoughSpace( stor, w, h, x, y, uid )
@@ -270,18 +280,18 @@ if CLIENT then
       item_handler[tonumber(uid)].pnl = pnl
       pnl.uid = uid
       if pa( item_handler[tonumber(uid)].pnl ) then
-        item_handler[tonumber(uid)].pnl:SetSize( ctr( 128*w ), ctr( 128*h ) )
+        item_handler[tonumber(uid)].pnl:SetSize( ctr( ICON_SIZE*w ), ctr( ICON_SIZE*h ) )
         for y = 1, h do
           item_handler[tonumber(uid)][y] = {}
           for x = 1, w do
             item_handler[tonumber(uid)][y][x] = {}
-            item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, ctr( 128 ), ctr( 128 ), ctr( (x-1)*128 ), ctr( (y-1)*128 ) )
+            item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, ctr( ICON_SIZE ), ctr( ICON_SIZE ), ctr( (x-1)*ICON_SIZE ), ctr( (y-1)*ICON_SIZE ) )
             local _edit_slot = item_handler[tonumber(uid)][y][x].slot
             item_handler[tonumber(uid)][y][x].value = ""
             _edit_slot.storageID = uid
             _edit_slot.posy = y
             _edit_slot.posx = x
-            _edit_slot.typ = typ
+            _edit_slot.type = typ
             _edit_slot:Receiver( "slot", function( receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY )
               if isDropped then
                 local _item = tableOfDroppedPanels[1].item
@@ -293,13 +303,12 @@ if CLIENT then
                 _slot2.storageID = receiver.storageID
                 _slot2.posy = receiver.posy
                 _slot2.posx = receiver.posx
-                local _typ = receiver.typ or "world"
+                _slot2.type = receiver.type or "world"
 
                 net.Start( "moveitem" )
                   net.WriteTable( _slot1 )
                   net.WriteTable( _slot2 )
                   net.WriteTable( _item )
-                  net.WriteString( _typ )
                 net.SendToServer()
 
                 if tostring( _item.intern_storageID ) != "" then
@@ -352,7 +361,7 @@ if CLIENT then
       local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
       local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 
-      local _bg = createD( "DPanel", _parent, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), _x + ctr( (tab.posx-1)*128 ), _y + ctr( (tab.posy-1)*128 ) )
+      local _bg = createD( "DPanel", _parent, ctr( ICON_SIZE*tab.sizew ), ctr( ICON_SIZE*tab.sizeh ), _x + ctr( (tab.posx-1)*ICON_SIZE ), _y + ctr( (tab.posy-1)*ICON_SIZE ) )
       function _bg:Paint( pw, ph )
         surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
       end
@@ -367,13 +376,13 @@ if CLIENT then
         surfaceText( tab.PrintName, "mat1text", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
       end
 
-      local _item = createD( "DModelPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
+      local _item = createD( "DModelPanel", _bg, ctr( ICON_SIZE*tab.sizew ), ctr( ICON_SIZE*tab.sizeh ), 0, 0 )
       _item:InvalidateLayout( true )
       _item:SetModel( tab.WorldModel )
       SetCamPosition( _item, tab )
       function _item:LayoutEntity( Entity ) return end
 
-      local _item2 = createD( "DPanel", _bg, ctr( 128*tab.sizew ), ctr( 128*tab.sizeh ), 0, 0 )
+      local _item2 = createD( "DPanel", _bg, ctr( ICON_SIZE*tab.sizew ), ctr( ICON_SIZE*tab.sizeh ), 0, 0 )
       item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
       item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber( tab.uniqueID )
       local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item

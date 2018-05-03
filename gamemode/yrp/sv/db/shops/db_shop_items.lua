@@ -191,12 +191,14 @@ net.Receive( "shop_item_edit_base", function( len, ply )
 end)
 
 function SpawnVehicle( item, ply, ang )
+  printGM( "gm", "SpawnVehicle()" )
   local vehicles = get_all_vehicles()
   local vehicle = {}
   for k, v in pairs( vehicles ) do
     if v.ClassName == item.ClassName and v.PrintName == item.PrintName and v.WorldModel == item.WorldModel then
       vehicle = v
       if v.Custom == "simfphys" then
+        printGM( "gm", "[SpawnVehicle] simfphys vehicle" )
         local spawnname = item.ClassName
         local _vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
 
@@ -206,6 +208,7 @@ function SpawnVehicle( item, ply, ang )
         timer.Simple( 0.2, function()
           if simfphys != nil then
             if simfphys.RegisterEquipment != nil then
+              printGM( "gm", "[SpawnVehicle] -> simfphys armored vehilce" )
           		simfphys.RegisterEquipment( car )
             end
           end
@@ -235,7 +238,7 @@ function SpawnVehicle( item, ply, ang )
     --car:SetCollisionGroup(COLLISION_GROUP_WEAPON)
     return car
   else
-    printGM( "note", "vehicle not available anymore" )
+    printGM( "note", "[SpawnVehicle] vehicle not available anymore" )
     return NULL
   end
 end
@@ -265,9 +268,8 @@ function spawnItem( ply, item, duid )
     local getVehicles = SQL_SELECT( "yrp_vehicles", "*", nil )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
-
     if ent == NULL then
-      printGM( "note", "spawnItem failed: ent == NULL" )
+      printGM( "note", "[spawnItem] failed: ent == NULL" )
       return
     end
   else
@@ -283,6 +285,7 @@ function spawnItem( ply, item, duid )
     local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
     if _storagepoint != nil and _storagepoint != false then
       _storagepoint = _storagepoint[1]
+      printGM( "gm", "[spawnItem] Item To Storagepoint" )
 
       --[[ Position ]]--
       local _pos = string.Explode( ",", _storagepoint.position )
@@ -316,6 +319,8 @@ function spawnItem( ply, item, duid )
       return true
     end
   end
+
+  printGM( "gm", "[spawnItem] Item To Player" )
   _angle = ply:EyeAngles()
   ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 32 ) )
   for dist = 0, _distMax, _distSpace do
@@ -335,14 +340,17 @@ function spawnItem( ply, item, duid )
       if !_result.Hit then
         ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
         if item.type == "vehicles" then
-          ent:SetVelocity( Vector( 0, 0, -500 ) )
+          --ent:SetVelocity( Vector( 0, 0, -500 ) )
         else
+          printGM( "gm", "[spawnItem] Spawn Item" )
           ent:Spawn()
         end
+        printGM( "gm", "[spawnItem] Enough Space" )
         return true
       end
     end
   end
+  printGM( "note", "[spawnItem] Not Enough Space" )
   return false
 end
 
@@ -356,6 +364,7 @@ net.Receive( "item_buy", function( len, ply )
   if _item != nil then
     _item = _item[1]
     if ply:canAfford( tonumber( _item.price ) ) then
+      printGM( "gm", ply:YRPName() .. " buyed " .. tostring( _item.name ) )
 
       if _item.type == "licenses" then
         ply:AddLicense( _item.ClassName )

@@ -34,17 +34,17 @@ end
 
 function InterfaceBorder()
   local ply = LocalPlayer()
-  return ply:GetNWBool( "interface_border", false )
+  return ply:GetNWBool( "interface_border", true )
 end
 
 function InterfaceRounded()
   local ply = LocalPlayer()
-  return ply:GetNWBool( "interface_rounded", false )
+  return ply:GetNWBool( "interface_rounded", true )
 end
 
 function InterfaceTransparent()
   local ply = LocalPlayer()
-  return ply:GetNWBool( "interface_transparent", false )
+  return ply:GetNWBool( "interface_transparent", true )
 end
 
 function InterfaceColor()

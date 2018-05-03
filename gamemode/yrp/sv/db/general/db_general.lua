@@ -148,36 +148,44 @@ net.Receive( "tp_unjail", function( len, ply )
   end
 end)
 
+function DoRagdoll( ply )
+  ply:SetNWBool( "ragdolled", true )
+
+  local tmp = ents.Create( "prop_ragdoll" )
+  tmp:SetModel( ply:GetModel() )
+  tmp:SetModelScale( ply:GetModelScale(), 0 )
+  tmp:SetPos( ply:GetPos() + Vector( 0, 0, 0 ) )
+  tmp:Spawn()
+
+  ply:SetParent( tmp )
+  ply:SetNWEntity( "ragdoll", tmp )
+
+  RenderCloaked( ply )
+end
+
+function DoUnRagdoll( ply )
+  ply:SetNWBool( "ragdolled", false )
+
+  local ragdoll = ply:GetNWEntity( "ragdoll" )
+  ply:SetParent( nil )
+  ply:SetPos( ragdoll:GetPos() )
+  ragdoll:Remove()
+
+  RenderNormal( ply )
+end
+
 util.AddNetworkString( "ragdoll" )
 net.Receive( "ragdoll", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
-    _target:SetNWBool( "ragdolled", true )
-
-    local tmp = ents.Create( "prop_ragdoll" )
-    tmp:SetModel( _target:GetModel() )
-    tmp:SetModelScale( _target:GetModelScale(), 0 )
-    tmp:SetPos( _target:GetPos() + Vector( 0, 0, 0 ) )
-    tmp:Spawn()
-
-    _target:SetParent( tmp )
-    _target:SetNWEntity( "ragdoll", tmp )
-
-    RenderCloaked( ply )
+    DoRagdoll( _target )
   end
 end)
 util.AddNetworkString( "unragdoll" )
 net.Receive( "unragdoll", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
-    _target:SetNWBool( "ragdolled", false )
-
-    local ragdoll = _target:GetNWEntity( "ragdoll" )
-    _target:SetParent( nil )
-    _target:SetPos( ragdoll:GetPos() )
-    ragdoll:Remove()
-
-    RenderNormal( ply )
+    DoUnRagdoll( _target )
   end
 end)
 util.AddNetworkString( "freeze" )

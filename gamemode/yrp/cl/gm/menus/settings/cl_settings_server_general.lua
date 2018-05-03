@@ -174,7 +174,10 @@ hook.Add( "open_server_general", "open_server_general", function()
       end
 
       local sv_generalSQL = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW()/2, ctr( 10 ) )
-      sv_generalSQL:SetText( lang_string( "database" ) .. " (" .. lang_string( "wip" ) .. ")" )
+      sv_generalSQL:SetText( "" )
+      function sv_generalSQL:Paint( pw, ph )
+        surfaceButton( self, pw, ph, lang_string( "database" ) )
+      end
       function sv_generalSQL:DoClick()
         net.Start( "get_sql_info" )
         net.SendToServer()
@@ -384,47 +387,47 @@ hook.Add( "open_server_general", "open_server_general", function()
         end
         settingsWindow.window:Close()
         _tmpFrame:MakePopup()
+      end
 
-        local sv_generalMoneyReset = createD( "DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
-        sv_generalMoneyReset:SetText( "" )
-        function sv_generalMoneyReset:Paint( pw, ph )
-          surfaceButton( self, pw, ph, lang_string( "moneyreset" ) )
+      local sv_generalMoneyReset = createD( "DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( 5 + 400 + 10 ), ctr( 5 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 ) )
+      sv_generalMoneyReset:SetText( "" )
+      function sv_generalMoneyReset:Paint( pw, ph )
+        surfaceButton( self, pw, ph, lang_string( "moneyreset" ) )
+      end
+      function sv_generalMoneyReset:DoClick()
+        local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
+        _tmpFrame:Center()
+        _tmpFrame:SetTitle( lang_string( "areyousure" ) )
+        function _tmpFrame:Paint( pw, ph )
+          local color = Color( 0, 0, 0, 200 )
+          draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
         end
-        function sv_generalMoneyReset:DoClick()
-          local _tmpFrame = createVGUI( "DFrame", nil, 630, 110, 0, 0 )
-          _tmpFrame:Center()
-          _tmpFrame:SetTitle( lang_string( "areyousure" ) )
-          function _tmpFrame:Paint( pw, ph )
-            local color = Color( 0, 0, 0, 200 )
-            draw.RoundedBox( ctr( 10 ), 0, 0, pw, ph, color )
-          end
 
-          local sv_generalMoneyResetSure = vgui.Create( "DButton", _tmpFrame )
-          sv_generalMoneyResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
-          sv_generalMoneyResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
-          sv_generalMoneyResetSure:SetText( "" )
-          function sv_generalMoneyResetSure:DoClick()
-            net.Start( "moneyreset" )
-            net.SendToServer()
-            _tmpFrame:Close()
-          end
-          function sv_generalMoneyResetSure:Paint( pw, ph )
-            surfaceButton( self, pw, ph, lang_string( "yes" ) .. ": " .. lang_string( "moneyreset" ) )
-          end
-
-          local sv_generalMoneyResetNot = vgui.Create( "DButton", _tmpFrame )
-          sv_generalMoneyResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
-          sv_generalMoneyResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
-          sv_generalMoneyResetNot:SetText( "" )
-          function sv_generalMoneyResetNot:DoClick()
-            _tmpFrame:Close()
-          end
-          function sv_generalMoneyResetNot:Paint( pw, ph )
-            surfaceButton( self, pw, ph, lang_string( "no" ) .. ": do nothing" )
-          end
-          settingsWindow.window:Close()
-          _tmpFrame:MakePopup()
+        local sv_generalMoneyResetSure = vgui.Create( "DButton", _tmpFrame )
+        sv_generalMoneyResetSure:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalMoneyResetSure:SetPos( ctr( 10 ), ctr( 50 ) )
+        sv_generalMoneyResetSure:SetText( "" )
+        function sv_generalMoneyResetSure:DoClick()
+          net.Start( "moneyreset" )
+          net.SendToServer()
+          _tmpFrame:Close()
         end
+        function sv_generalMoneyResetSure:Paint( pw, ph )
+          surfaceButton( self, pw, ph, lang_string( "yes" ) .. ": " .. lang_string( "moneyreset" ) )
+        end
+
+        local sv_generalMoneyResetNot = vgui.Create( "DButton", _tmpFrame )
+        sv_generalMoneyResetNot:SetSize( ctr( 300 ), ctr( 50 ) )
+        sv_generalMoneyResetNot:SetPos( ctr( 10 + 300 + 10 ), ctr( 50 ) )
+        sv_generalMoneyResetNot:SetText( "" )
+        function sv_generalMoneyResetNot:DoClick()
+          _tmpFrame:Close()
+        end
+        function sv_generalMoneyResetNot:Paint( pw, ph )
+          surfaceButton( self, pw, ph, lang_string( "no" ) .. ": do nothing" )
+        end
+        settingsWindow.window:Close()
+        _tmpFrame:MakePopup()
       end
 
       --[[function sv_generalHunger:OnChange( bVal )

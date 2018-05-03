@@ -170,94 +170,102 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
 end)
 
 function RenderNoClip( ply, alpha )
-  local _alpha = 255
-  if IsNoClipEffectEnabled() then
-    if IsNoClipStealthEnabled() then
-      if ply:GetModel() == "models/crow.mdl" then
-        _alpha = 180
+  if ea( ply ) then
+    local _alpha = 255
+    if IsNoClipEffectEnabled() then
+      if IsNoClipStealthEnabled() then
+        if ply:GetModel() == "models/crow.mdl" then
+          _alpha = 180
+        else
+          _alpha = 10
+        end
       else
-        _alpha = 10
-      end
-    else
-      if ply:GetModel() == "models/crow.mdl" then
-        _alpha = 240
-      else
-        _alpha = 100
+        if ply:GetModel() == "models/crow.mdl" then
+          _alpha = 240
+        else
+          _alpha = 100
+        end
       end
     end
-  end
 
-  ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-  ply:SetColor( Color( 255, 255, 255, _alpha ) )
-  for i, wp in pairs(ply:GetWeapons()) do
-    wp:SetRenderMode( RENDERMODE_TRANSALPHA )
-    wp:SetColor( Color( 255, 255, 255, _alpha ) )
-  end
-  local _backpack = ply:GetBackpack()
-  if ea( _backpack ) then
-    _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
-    if ply:GetModel() == "models/crow.mdl" then
-      _backpack:SetColor( Color( 255, 255, 255, 0 ) )
-    else
-      _backpack:SetColor( Color( 255, 255, 255, _alpha ) )
+    ply:SetRenderMode( RENDERMODE_TRANSALPHA )
+    ply:SetColor( Color( 255, 255, 255, _alpha ) )
+    for i, wp in pairs(ply:GetWeapons()) do
+      wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+      wp:SetColor( Color( 255, 255, 255, _alpha ) )
+    end
+    local _backpack = ply:GetBackpack()
+    if ea( _backpack ) then
+      _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
+      if ply:GetModel() == "models/crow.mdl" then
+        _backpack:SetColor( Color( 255, 255, 255, 0 ) )
+      else
+        _backpack:SetColor( Color( 255, 255, 255, _alpha ) )
+      end
     end
   end
 end
 
 function RenderFrozen( ply )
-  ply:SetRenderMode( RENDERMODE_NORMAL )
-  ply:SetColor( Color( 0, 0, 255 ) )
-  for i, wp in pairs(ply:GetWeapons()) do
-    wp:SetRenderMode( RENDERMODE_TRANSALPHA )
-    wp:SetColor( Color( 0, 0, 255 ) )
-  end
-  local _backpack = ply:GetBackpack()
-  if ea( _backpack ) then
-    _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
-    if ply:GetModel() == "models/crow.mdl" then
-      _backpack:SetColor( Color( 0, 0, 255 ) )
-    else
-      _backpack:SetColor( Color( 0, 0, 255 ) )
+  if ea( ply ) then
+    ply:SetRenderMode( RENDERMODE_NORMAL )
+    ply:SetColor( Color( 0, 0, 255 ) )
+    for i, wp in pairs(ply:GetWeapons()) do
+      wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+      wp:SetColor( Color( 0, 0, 255 ) )
+    end
+    local _backpack = ply:GetBackpack()
+    if ea( _backpack ) then
+      _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
+      if ply:GetModel() == "models/crow.mdl" then
+        _backpack:SetColor( Color( 0, 0, 255 ) )
+      else
+        _backpack:SetColor( Color( 0, 0, 255 ) )
+      end
     end
   end
 end
 
 function RenderCloaked( ply )
-  local _alpha = 0
-  ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-  ply:SetColor( Color( 255, 255, 255, _alpha ) )
-  for i, wp in pairs(ply:GetWeapons()) do
-    wp:SetRenderMode( RENDERMODE_TRANSALPHA )
-    wp:SetColor( Color( 255, 255, 255, _alpha ) )
-  end
-  local _backpack = ply:GetBackpack()
-  if ea( _backpack ) then
-    _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
-    if ply:GetModel() == "models/crow.mdl" then
-      _backpack:SetColor( Color( 255, 255, 255, 0 ) )
-    else
-      _backpack:SetColor( Color( 255, 255, 255, _alpha ) )
+  if ea( ply ) then
+    local _alpha = 0
+    ply:SetRenderMode( RENDERMODE_TRANSALPHA )
+    ply:SetColor( Color( 255, 255, 255, _alpha ) )
+    for i, wp in pairs(ply:GetWeapons()) do
+      wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+      wp:SetColor( Color( 255, 255, 255, _alpha ) )
+    end
+    local _backpack = ply:GetBackpack()
+    if ea( _backpack ) then
+      _backpack:SetRenderMode( RENDERMODE_TRANSALPHA )
+      if ply:GetModel() == "models/crow.mdl" then
+        _backpack:SetColor( Color( 255, 255, 255, 0 ) )
+      else
+        _backpack:SetColor( Color( 255, 255, 255, _alpha ) )
+      end
     end
   end
 end
 
 function RenderNormal( ply )
-  if ply:GetNWBool( "cloaked", false ) then
-    RenderCloaked( ply )
-  elseif ply:IsFlagSet( FL_FROZEN ) then
-    RenderFrozen( ply )
-  else
-    setPlayerModel( ply )
-    ply:SetRenderMode( RENDERMODE_NORMAL )
-    ply:SetColor( Color( 255, 255, 255, 255 ) )
-    for i, wp in pairs(ply:GetWeapons()) do
-      wp:SetRenderMode( RENDERMODE_NORMAL )
-      wp:SetColor( Color( 255, 255, 255, 255 ) )
-    end
-    local _backpack = ply:GetBackpack()
-    if ea( _backpack ) then
-      _backpack:SetRenderMode( RENDERMODE_NORMAL )
-      _backpack:SetColor( Color( 255, 255, 255, 255 ) )
+  if ea( ply ) then
+    if ply:GetNWBool( "cloaked", false ) then
+      RenderCloaked( ply )
+    elseif ply:IsFlagSet( FL_FROZEN ) then
+      RenderFrozen( ply )
+    else
+      setPlayerModel( ply )
+      ply:SetRenderMode( RENDERMODE_NORMAL )
+      ply:SetColor( Color( 255, 255, 255, 255 ) )
+      for i, wp in pairs(ply:GetWeapons()) do
+        wp:SetRenderMode( RENDERMODE_NORMAL )
+        wp:SetColor( Color( 255, 255, 255, 255 ) )
+      end
+      local _backpack = ply:GetBackpack()
+      if ea( _backpack ) then
+        _backpack:SetRenderMode( RENDERMODE_NORMAL )
+        _backpack:SetColor( Color( 255, 255, 255, 255 ) )
+      end
     end
   end
 end

@@ -38,8 +38,8 @@ net.Receive( "remove_storage", function( len, ply )
   RemoveDBStorage( ply, uid )
 end)
 
-function CreateEquipmentStorage( ply, typ, PID )
-  local _r = SQL_INSERT_INTO( _db_name, "type, ParentID, sizew, sizeh", "'" .. typ .. "', '" .. PID .. "', 1, 1"  )
+function CreateEquipmentStorage( ply, typ, PID, w, h )
+  local _r = SQL_INSERT_INTO( _db_name, "type, ParentID, sizew, sizeh", "'" .. typ .. "', '" .. PID .. "', " .. w .. ", " .. h .. ""  )
   local _uid = 0
   local _storages = SQL_SELECT( _db_name, "*", nil )
   for i, stor in pairs( _storages ) do
@@ -104,13 +104,12 @@ function Entity:InitBackpackStorage( w, h )
 
   self:InitStorage( w, h, "backpack" )
   self:SetNWBool( "isbackpack", true )
-
+  self:SetNWString( "eqtype", "eqbp" )
 end
 
-function Entity:InitStorage( w, h, t )
+function Entity:InitStorage( w, h )
   local sizew = w
   local sizeh = h
-  local _type = t or "world"
   if sizew > ITEM_MAXW then
     sizew = ITEM_MAXW
   end
@@ -131,7 +130,7 @@ function Entity:InitStorage( w, h, t )
       local _angp = _ang[1]
       local _angy = _ang[2]
       local _angr = _ang[3]
-      local _r = SQL_INSERT_INTO( _db_name, "type, map, sizew, sizeh, ClassName, posx, posy, posz, angp, angy, angr", "'" .. _type .. "', '" .. GetMapNameDB() .. "', " .. sizew .. ", " .. sizeh .. ", '" .. self:GetClass() .. "', '" .. _posx .. "', '" .. _posy .. "', '" .. _posz .. "', '" .. _angp .. "', '" .. _angy .. "', '" .. _angr .. "'"  )
+      local _r = SQL_INSERT_INTO( _db_name, "map, sizew, sizeh, ClassName, posx, posy, posz, angp, angy, angr", "'" .. GetMapNameDB() .. "', " .. sizew .. ", " .. sizeh .. ", '" .. self:GetClass() .. "', '" .. _posx .. "', '" .. _posy .. "', '" .. _posz .. "', '" .. _angp .. "', '" .. _angy .. "', '" .. _angr .. "'"  )
       local _storages = SQL_SELECT( _db_name, "*", nil )
       for i, stor in pairs( _storages ) do
         if tonumber( stor.uniqueID ) > _uid then

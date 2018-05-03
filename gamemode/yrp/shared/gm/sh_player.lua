@@ -6,6 +6,10 @@ function Player:GetBackpack()
   return self:GetNWEntity( "backpack" )
 end
 
+function Player:GetWeaponPrimary1()
+  return self:GetNWEntity( "weaponprimary1" )
+end
+
 function Player:HasAccess()
   local _ug = self:GetUserGroup()
   if isbool( _ug ) then
@@ -59,7 +63,7 @@ function Player:HasCharacterSelected()
       local _ply_tab = self:GetPlyTab()
       if _ply_tab != nil then
         if tostring( _ply_tab.CurrentCharacter ) == "NULL" or _ply_tab.CurrentCharacter == NULL then
-          --open_character_selection( self )
+          --
         else
           return true
         end
@@ -78,17 +82,11 @@ function Player:GetChaTab()
         if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
           self.chatab = yrp_characters[1]
           return self.chatab
-        else
-          --open_character_selection( self )
         end
       end
     end
   end
-  if self.chatab != nil then
-    return self.chatab
-  else
-    return nil
-  end
+  return self.chatab
 end
 
 function Player:GetRolTab()

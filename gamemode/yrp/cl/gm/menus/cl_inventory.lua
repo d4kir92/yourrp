@@ -1,5 +1,33 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+--[[
+hook.Add("PostPlayerDraw", "yrp_equipment", function(ply)
+	if ply:Alive() then
+		local model = ply:GetBackpack()
+    if ea( model ) then
+      local bone = ply:LookupBone( "ValveBiped.Bip01_Spine4" )
+      local matrix = ply:GetBoneMatrix(bone)
+  		local pos = matrix:GetTranslation()
+  		local ang = matrix:GetAngles()
+  		model:SetRenderOrigin(pos)
+  		model:SetRenderAngles(ang)
+  		model:DrawModel()
+    end
+
+    local model2 = ply:GetWeaponPrimary1()
+    if ea( model2 ) then
+      local bone = ply:LookupBone( "ValveBiped.Bip01_R_Clavicle" )
+      local matrix = ply:GetBoneMatrix(bone)
+  		local pos = matrix:GetTranslation()
+  		local ang = matrix:GetAngles()
+  		model2:SetRenderOrigin(pos)
+  		model2:SetRenderAngles(ang)
+  		model2:DrawModel()
+    end
+  end
+end)
+]]--
+
 local inv = {}
 
 function ToggleInventory()
@@ -42,20 +70,20 @@ net.Receive( "openStorage", function( len )
     inv.sur_tab = GetSurroundingStorage( ply )
 
     -- Header
-    inv.sur_header = createD( "DPanel", inv.window, ctr(128*8) + ctr( 25 ), ctr( 50 ), ctr( 10 ), ctr( 50 + 10 ) )
+    inv.sur_header = createD( "DPanel", inv.window, ctr(ICON_SIZE*8) + ctr( 25 ), ctr( 50 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2*3 - ctr( 10 ), ctr( 50 + 10 ) )
     function inv.sur_header:Paint( pw, ph )
       local _str = string.upper( lang_string( string.lower( inv.sur_tab.name ) ) ) -- .. " [DEBUG] UID: " .. stor.uniqueID
       surfacePanel( self, pw, ph, _str )
     end
 
     -- DPanelList
-    inv.sur_pl = createD( "DPanelList", inv.window, ctr( 128 * 8 + 25 ), ScrH2() - ctr( 50 + 10 + 50 + 10 ), ctr( 10 ), ctr( 50 + 10 + 50 ) )
+    inv.sur_pl = createD( "DPanelList", inv.window, ctr( ICON_SIZE * 8 + 25 ), ScrH2() - ctr( 50 + 10 + 50 + 10 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2*3 - ctr( 10 ), ctr( 50 + 10 + 50 ) )
     inv.sur_pl:EnableVerticalScrollbar( true )
     inv.sur_pl:SetSpacing( 10 )
     function inv.sur_pl:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
     end
-    inv.sur_content = createD( "DPanel", nil, ctr( 128 * inv.sur_tab.sizew ), ctr( 128 * inv.sur_tab.sizeh ), 0, 0 )
+    inv.sur_content = createD( "DPanel", nil, ctr( ICON_SIZE * inv.sur_tab.sizew ), ctr( ICON_SIZE * inv.sur_tab.sizeh ), 0, 0 )
     inv.sur_items = {}
     function inv.sur_content:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
@@ -101,13 +129,13 @@ net.Receive( "openStorage", function( len )
     -- Header
     local _stor = _tabs[1]
     if _stor != nil then
-      inv.db_header = createD( "DPanel", inv.window, ctr(128*8) + ctr( 25 ), ctr( 50 ), ctr( 10 ), ScrH2() )
+      inv.db_header = createD( "DPanel", inv.window, ctr(ICON_SIZE*8) + ctr( 25 ), ctr( 50 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2*3 - ctr( 10 ), ScrH2() )
       function inv.db_header:Paint( pw, ph )
         local _str = string.upper( _stor.name )
         surfacePanel( self, pw, ph, _str )
       end
       if ply:HasAccess() then
-        inv.db_remove = createD( "DButton", inv.db_header, ctr( 300 ), ctr( 50 ), ctr( 128*8 + 25 - 300 ), 0 )
+        inv.db_remove = createD( "DButton", inv.db_header, ctr( 200 ), ctr( 50 ), ctr( ICON_SIZE*8 + 25 - 200 ), 0 )
         inv.db_remove:SetText( "" )
         inv.db_remove.uid = _stor.uniqueID
         function inv.db_remove:Paint( pw, ph )
@@ -126,14 +154,14 @@ net.Receive( "openStorage", function( len )
       end
 
       -- DPanelList
-      inv.storages = createD( "DPanelList", inv.window, ctr( 128 * 8 + 25 ), ScrH2() - ctr( 10 + 50 ), ctr( 10 ), ScrH2() + ctr( 50 ) )
+      inv.storages = createD( "DPanelList", inv.window, ctr( ICON_SIZE * 8 + 25 ), ScrH2() - ctr( 10 + 50 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2*3 - ctr( 10 ), ScrH2() + ctr( 50 ) )
       inv.storages:EnableVerticalScrollbar( true )
       inv.storages:SetSpacing( 10 )
       function inv.storages:Paint( pw, ph )
         surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
       end
 
-      local _tmp2 = createD( "DPanel", inv.db_header, ctr( 128 * _stor.sizew ), ctr( 128 * _stor.sizeh ), 0, ctr( 50 ) )
+      local _tmp2 = createD( "DPanel", inv.db_header, ctr( ICON_SIZE * _stor.sizew ), ctr( ICON_SIZE * _stor.sizeh ), 0, ctr( 50 ) )
       function _tmp2:Paint( pw, ph )
         -- Content
         surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
@@ -150,26 +178,26 @@ net.Receive( "openStorage", function( len )
 
     --[[ Backpacks ]]--
     local _bps = {}
-    _bps.bpheader = createD( "DPanel", inv.window, ctr( 128*8 ) + ctr( 25 ), ctr( 50 ), ctr( 10 ) + ctr( 128*8 ) + ctr( 25 ) + ctr( 10 ), ctr( 50 + 10 ) )
+    _bps.bpheader = createD( "DPanel", inv.window, ctr( ICON_SIZE*8 + 25 ), ctr( 50 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2, ctr( 50 + 10 ) )
     function _bps.bpheader:Paint( pw, ph )
       local _str = string.upper( lang_string( "backpack" ) )
       surfacePanel( self, pw, ph, _str )
     end
 
-    _bps.bpstorage = createD( "DPanel", inv.window, ctr( 128*8 ) + ctr( 25 ), ctr( 128*4.5 ), ctr( 10 ) + ctr( 128*8 ) + ctr( 25 ) + ctr( 10 ), ctr( 50 + 10 + 50 ) )
+    _bps.bpstorage = createD( "DPanel", inv.window, ctr( ICON_SIZE*8 + 25 ), ctr( ICON_SIZE*4.5 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2, ctr( 50 + 10 + 50 ) )
     function _bps.bpstorage:Paint( pw, ph )
       -- Content
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
     end
 
-    _bps.backpack = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 ), ScrH() - ctr( 128 + 10 ) )
+    _bps.backpack = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2, ScrH() - ctr( ICON_SIZE + 10 ) )
     function _bps.backpack:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_backpack", function( len )
       local _s = net.ReadTable()
-      AddStorage( _bps.backpack, _s.uniqueID, _s.sizew, _s.sizeh, "eqbp1" )
+      AddStorage( _bps.backpack, _s.uniqueID, _s.sizew, _s.sizeh, "eqbp" )
       net.Start( "getstorageitems" )
         net.WriteString( _s.uniqueID )
       net.SendToServer()
@@ -184,8 +212,7 @@ net.Receive( "openStorage", function( len )
             net.WriteString( _s_bp.uniqueID )
           net.SendToServer()
         else
-          local _stor = _bps.bpstorage
-          RemoveStorage( _stor, _stor.uid )
+          RemoveStorage( _bps.bpstorage, _bps.bpstorage.uid )
         end
       end)
       net.Start( "update_backpack" )
@@ -194,57 +221,77 @@ net.Receive( "openStorage", function( len )
     net.Start( "update_slot_backpack" )
     net.SendToServer()
 
-    _bps.bag1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*1 ), ScrH() - ctr( 128 + 10 ) )
-    _bps.bag2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*2 ), ScrH() - ctr( 128 + 10 ) )
-    _bps.bag3 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*3 ), ScrH() - ctr( 128 + 10 ) )
-    _bps.bag4 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*8 + 25 + 10 + 10 + 138*4 ), ScrH() - ctr( 128 + 10 ) )
+    _bps.bag1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*1, ScrH() - ctr( ICON_SIZE + 10 ) )
+    _bps.bag2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*2, ScrH() - ctr( ICON_SIZE + 10 ) )
+    _bps.bag3 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*3, ScrH() - ctr( ICON_SIZE + 10 ) )
+    _bps.bag4 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*4, ScrH() - ctr( ICON_SIZE + 10 ) )
 
     --[[ EQUIPMENT ]]--
     local _eq = {}
     -- LEFT
-    _eq.helm = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 ) )
+    local _left = ScrW2() + (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( 10 )
+    _eq.helm = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 ) )
 
-    _eq.necklace = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*1 ) )
+    _eq.necklace = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*1 ) )
 
-    _eq.shoulders = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*2 ) )
+    _eq.shoulders = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*2 ) )
 
-    _eq.cap = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*3 ) )
+    _eq.cap = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*3 ) )
 
-    _eq.chest = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*4 ) )
+    _eq.chest = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*4 ) )
 
-    _eq.shirt = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*5 ) )
+    _eq.shirt = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*5 ) )
 
-    _eq.tabard = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*6 ) )
+    _eq.tabard = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*6 ) )
 
-    _eq.bracelet = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*7 ) )
+    _eq.bracelet = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*7 ) )
 
     -- RIGHT
-    _eq.gloves = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 ) )
+    local _right = ScrW2() + (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( 10 ) + ctr( ICON_SIZE*8 + 25 )
+    _eq.gloves = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 ) )
 
-    _eq.belt = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*1 ) )
+    _eq.belt = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*1 ) )
 
-    _eq.pants = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*2 ) )
+    _eq.pants = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*2 ) )
 
-    _eq.boots = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*3 ) )
+    _eq.boots = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*3 ) )
 
-    _eq.ring1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*4 ) )
+    _eq.ring1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*4 ) )
 
-    _eq.ring2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*5 ) )
+    _eq.ring2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*5 ) )
 
-    _eq.trinket1 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*6 ) )
+    _eq.trinket1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*6 ) )
 
-    _eq.trinket2 = createD( "DPanel", inv.window, ctr( 128 * 1 ), ctr( 128 * 1 ), ctr( 128*16 + 10 + 10 + 10 + 1000 ), ctr( 50 + 10 + 138*7 ) )
+    _eq.trinket2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*7 ) )
 
     -- Weapons
-    _eq.pweapon1 = createD( "DPanel", inv.window, ctr( 128 * ITEM_MAXW ), ctr( 128 * ITEM_MAXH ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*8 ) )
+    local _height = ctr( 50 + 10 + (ICON_SIZE + 10)*8 )
+    _eq.pweapon1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * ITEM_MAXW ), ctr( ICON_SIZE * ITEM_MAXH ), _left, _height )
+    function _eq.pweapon1:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
+    end
 
-    _eq.pweapon2 = createD( "DPanel", inv.window, ctr( 128 * ITEM_MAXW ), ctr( 128 * ITEM_MAXH ), ctr( 128*16 + 10 + 10 + 10 ), ctr( 50 + 10 + 138*8 + 10 + 128*ITEM_MAXH ) )
+    net.Receive( "update_slot_weapon_primary_1", function( len )
+      local _s = net.ReadTable()
+      AddStorage( _eq.pweapon1, _s.uniqueID, _s.sizew, _s.sizeh, "eqwpp1" )
+      net.Start( "getstorageitems" )
+        net.WriteString( _s.uniqueID )
+      net.SendToServer()
+    end)
+    net.Start( "update_slot_weapon_primary_1" )
+    net.SendToServer()
 
-    _eq.sweapon1 = createD( "DPanel", inv.window, ctr( 128 * 4 ), ctr( 128 * 2 ), ctr( 128*16 + 10 + 10 + 10 + 10 + 128*ITEM_MAXW ), ctr( 50 + 10 + 138*8 ) )
+    _height = _height + ctr( 10 + ICON_SIZE*ITEM_MAXH )
+    _eq.pweapon2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * ITEM_MAXW ), ctr( ICON_SIZE * ITEM_MAXH ), _left, _height )
 
-    _eq.sweapon2 = createD( "DPanel", inv.window, ctr( 128 * 4 ), ctr( 128 * 2 ), ctr( 128*16 + 10 + 10 + 10 + 10 + 128*ITEM_MAXW ), ctr( 50 + 10 + 138*8 + 10 + 128*2 ) )
+    _height = _height + ctr( 10 + ICON_SIZE*ITEM_MAXH )
+    _eq.sweapon1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 4 ), ctr( ICON_SIZE * 2 ), _left, _height )
 
-    _eq.sgrenade = createD( "DPanel", inv.window, ctr( 128 * 2 ), ctr( 128 * 2 ), ctr( 128*16 + 10 + 10 + 10 + 10 + 128*ITEM_MAXW ), ctr( 50 + 10 + 138*8 + 10 + 128*2 + 10 + 128*2 ) )
+    _eq.sweapon2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 4 ), ctr( ICON_SIZE * 2 ), _left + ctr( ICON_SIZE * 4 + 10 ), _height )
+
+    _height = _height + ctr( 10 + ICON_SIZE*2 )
+    _eq.sgrenade = createD( "DPanel", inv.window, ctr( ICON_SIZE * 2 ), ctr( ICON_SIZE * 2 ), _left, _height )
   end
 end)
 

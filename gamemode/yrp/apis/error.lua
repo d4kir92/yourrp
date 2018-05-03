@@ -94,15 +94,9 @@ function update_error_table_sv()
 		      if k > #_explode_yrp_read then
 		        if !table.HasValue( _errors, v ) and !first_time_error then
 							if
-							string.find( v, "yrp/apis/", 1, true )
+							string.find( string.lower( v ), "yrp", 1 )
 							or
-							string.find( v, "yrp/cl/", 1, true )
-							or
-							string.find( v, "yrp/integration/", 1, true )
-							or
-							string.find( v, "yrp/shared/", 1, true )
-							or
-							string.find( v, "yrp/sv/", 1, true )
+							string.find( string.lower( v ), "yourrp", 1 )
 							then
 		          	table.insert( _errors, v )
 							end
@@ -119,15 +113,9 @@ function update_error_table_sv()
 		    for k, v in pairs( _explode ) do
 					if !table.HasValue( _errors, v ) then
 						if
-						string.find( v, "yrp/apis/", 1, true )
+						string.find( string.lower( v ), "yrp", 1 )
 						or
-						string.find( v, "yrp/cl/", 1, true )
-						or
-						string.find( v, "yrp/integration/", 1, true )
-						or
-						string.find( v, "yrp/shared/", 1, true )
-						or
-						string.find( v, "yrp/sv/", 1, true )
+						string.find( string.lower( v ), "yourrp", 1 )
 						then
 							table.insert( _errors, v )
 						end
@@ -229,6 +217,7 @@ function update_error_table_cl()
 end
 
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
+local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
   printGM( "db", "send_error( " .. realm .. ", " .. str .. " )" )
 
@@ -237,7 +226,7 @@ function send_error( realm, str )
 		if gmod.GetGamemode() != nil then
 			if SERVER then
 				if !game.IsDedicated() then
-					printGM( "note", "not dedicated" )
+					--printGM( "note", "not dedicated" )
 					return
 				end
 			end
@@ -269,11 +258,19 @@ function send_error( realm, str )
 			end
 			entry["entry.471979789"] = string.upper( tostring( !game.SinglePlayer() ) )
 
-		  http.Post( _url, entry, function( result )
-		    if result then end
-		  end, function( failed )
-		    printGM( "note", "ERROR-API: " .. tostring( failed ) )
-		  end )
+			if realm != "server_all" then
+			  http.Post( _url, entry, function( result )
+			    if result then end
+			  end, function( failed )
+			    printGM( "error", "ERROR1-API: " .. tostring( failed ) )
+			  end )
+			else
+				http.Post( _url2, entry, function( result )
+			    if result then end
+			  end, function( failed )
+			    printGM( "error", "ERROR2-API: " .. tostring( failed ) )
+			  end )
+			end
 
 			timer.Remove( "wait_for_gamemode"..str )
 		end

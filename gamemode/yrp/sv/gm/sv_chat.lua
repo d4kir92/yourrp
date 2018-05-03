@@ -70,11 +70,13 @@ function roll_number( sender )
 end
 
 function drop_weapon( sender )
-  local _weapon = sender:GetActiveWeapon()
-  if _weapon != nil and PlayersCanDropWeapons() then
-    sender:DropWeapon( _weapon )
-  else
-    printGM( "note", sender:YRPName() .. " drop weapon is disabled!" )
+  if ea( sender ) then
+    local _weapon = sender:GetActiveWeapon()
+    if _weapon != nil and PlayersCanDropWeapons() then
+      sender:DropWeapon( _weapon )
+    else
+      printGM( "note", sender:YRPName() .. " drop weapon is disabled!" )
+    end
   end
   return ""
 end
@@ -192,30 +194,10 @@ function add_money( sender, text )
 end
 
 function do_sleep( sender )
-  if sender.leiche == nil then
-    local tmp = ents.Create( "prop_ragdoll" )
-    tmp:SetModel( sender:GetModel() )
-    tmp:SetModelScale( sender:GetModelScale(), 0 )
-    tmp:SetPos( sender:GetPos() + Vector( 0, 0, 40 ) )
-    tmp:Spawn()
-
-    sender.leiche = tmp
-
-    RenderFrozen( ply )
-
-    timer.Simple( 0.1, function()
-      sender:SetParent( sender.leiche )
-      sender:Freeze( true )
-    end)
+  if sender:GetNWBool( "ragdolled", false ) then
+    DoUnRagdoll( sender )
   else
-    sender.leiche:Remove()
-
-    sender.leiche = nil
-
-    RenderNormal( ply )
-
-    sender:SetParent( nil )
-    sender:Freeze( false )
+    DoRagdoll( sender )
   end
 end
 
