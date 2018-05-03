@@ -126,7 +126,7 @@ function reg_ab( ply )
 end
 
 function time_jail( ply )
-  if ply:GetNWBool( "inJail", false ) then
+  if ply:GetNWBool( "injail", false ) then
     ply:SetNWInt( "jailtime", ply:GetNWInt( "jailtime", 0 ) - 1 )
     if tonumber( ply:GetNWInt( "jailtime", 0 ) ) <= 0 then
       clean_up_jail( ply )

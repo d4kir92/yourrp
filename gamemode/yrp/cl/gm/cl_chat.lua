@@ -284,7 +284,16 @@ net.Receive( "yrp_player_say", function( len )
   local _write = false
   if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" then
     _write = true
-    _tmp.name = _tmp.groupname .. " " .. _tmp.rolename .. " " .. _tmp.rpname
+
+    _tmp.name = ""
+
+    if _tmp.groupname != "" then
+      _tmp.name = _tmp.name .. _tmp.groupname .. " "
+    end
+    if _tmp.rolename != "" then
+      _tmp.name = _tmp.name .. _tmp.rolename .. " "
+    end
+    _tmp.name = _tmp.name .. _tmp.rpname
   end
 
   local _usergroup = false

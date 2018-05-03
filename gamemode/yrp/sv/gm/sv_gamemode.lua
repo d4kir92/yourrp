@@ -101,9 +101,10 @@ function GM:PlayerLoadout( ply )
 
     local monTab = SQL_SELECT( "yrp_money", "*", nil )
     if monTab != nil then
-      local monPre = monTab[1].value
-      local monPos = monTab[2].value
-      ply:SetNWString( "moneyPre", monPre )
+      monTab = monTab[1]
+      local monPre = monTab.moneypre
+      local monPos = monTab.moneypos
+      ply:SetNWString( "moneypre", monPre )
       ply:SetNWString( "moneyPost", monPos )
     end
 
@@ -258,8 +259,16 @@ function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
   end
 end
 
+function IsAllowedToSuicide( ply )
+  if IsSuicideDisabled() or ply:IsFlagSet( FL_FROZEN ) or ply:GetNWBool( "ragdolled", false ) or ply:GetNWBool( "injail", false ) then
+    return false
+  else
+    return true
+  end
+end
+
 function GM:CanPlayerSuicide( ply )
-  return true
+  return IsAllowedToSuicide( ply )
 end
 
 hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( ent, dmginfo )

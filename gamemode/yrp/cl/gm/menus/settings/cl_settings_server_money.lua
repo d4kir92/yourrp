@@ -11,11 +11,11 @@ net.Receive( "getMoneyTab", function()
     net.SendToServer()
   end
 
-  local _moneyPost = createVGUI( "DTextEntry", settingsWindow.window.site, 100, 50, 900, 50 )
-  function _moneyPost:OnChange()
+  local _moneyPos = createVGUI( "DTextEntry", settingsWindow.window.site, 100, 50, 900, 50 )
+  function _moneyPos:OnChange()
     net.Start( "updateMoney" )
-      net.WriteString( "moneypost" )
-      net.WriteString( _moneyPost:GetText() )
+      net.WriteString( "moneypos" )
+      net.WriteString( _moneyPos:GetText() )
     net.SendToServer()
   end
 
@@ -29,15 +29,9 @@ net.Receive( "getMoneyTab", function()
     net.SendToServer()
   end
 
-  for k, v in pairs( _tmpTable ) do
-    if v.name == "moneypre" then
-      _moneyPre:SetText( v.value )
-    elseif v.name == "moneypost" then
-      _moneyPost:SetText( v.value )
-    elseif v.name == "moneystart" then
-      _moneyStart:SetText( v.value )
-    end
-  end
+  _moneyPre:SetText( _tmpTable.moneypre )
+  _moneyPos:SetText( _tmpTable.moneypos )
+  _moneyStart:SetText( _tmpTable.moneystart )
 
   function settingsWindow.window.site:Paint( pw, ph )
     draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
@@ -48,7 +42,7 @@ net.Receive( "getMoneyTab", function()
 
     draw.SimpleTextOutlined( lang_string( "startmoney" ), "sef", ctr( 10 ), ctr( 350 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-    draw.SimpleTextOutlined( lang_string( "preview" ) .. ": " .. _moneyPre:GetText() .. _moneyStart:GetValue() .. _moneyPost:GetText(), "sef", ctr( 500 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "preview" ) .. ": " .. _moneyPre:GetText() .. _moneyStart:GetValue() .. _moneyPos:GetText(), "sef", ctr( 500 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
   end
 end)
 

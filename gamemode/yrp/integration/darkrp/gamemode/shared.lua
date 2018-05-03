@@ -167,8 +167,12 @@ end
 function DarkRP.formatMoney( amount )
   --Description: Format a number as a money value. Includes currency symbol.
   --printGM( "darkrp", "formatMoney( " .. tostring( amount ) .. " )" )
-  local ply = LocalPlayer()
-  return formatMoney( ply, amount )
+  if CLIENT then
+    local ply = LocalPlayer()
+    return formatMoney( amount, ply )
+  else
+    return formatMoney( amount )
+  end
 end
 
 function DarkRP.getAgendas()

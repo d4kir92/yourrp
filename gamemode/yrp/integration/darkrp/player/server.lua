@@ -30,7 +30,7 @@ end
 function Player:arrest( time, Arrester )
   --Description: Arrest a player.
   printGM( "darkrp", "arrest( " .. tostring( time ) .. ", " .. Arrester:Nick() .. " )" )
-  self:SetNWBool( "inJail", true )
+  self:SetNWBool( "injail", true )
   self:SetNWInt( "jailtime", time )
 end
 
@@ -242,7 +242,7 @@ end
 function Player:unArrest( Unarrester )
   --Description: Unarrest a player.
   printGM( "darkrp", "unArrest( " .. Unarrester:YRPName() .. " )" )
-  self:SetNWBool( "inJail", false )
+  self:SetNWBool( "injail", false )
 end
 
 function Player:unWanted( actor )

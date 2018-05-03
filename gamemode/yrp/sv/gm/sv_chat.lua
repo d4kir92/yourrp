@@ -128,7 +128,9 @@ function drop_money( sender, text )
 end
 
 function do_suicide( sender )
-  sender:Kill()
+  if IsAllowedToSuicide( sender ) then
+    sender:Kill()
+  end
   return ""
 end
 
@@ -265,8 +267,12 @@ function unpack_paket( sender, text, iscommand )
   paket.steamname = sender:SteamName()
   paket.rpname = sender:RPName()
   paket.usergroup = sender:GetUserGroup()
-  paket.role = sender:GetNWString( "roleName" )
-  paket.group = sender:GetNWString( "groupName" )
+  if ShowRole() then
+    paket.role = sender:GetNWString( "roleName" )
+  end
+  if ShowGroup() then
+    paket.group = sender:GetNWString( "groupName" )
+  end
 end
 
 function GM:PlayerSay( sender, text, teamChat )
@@ -338,11 +344,11 @@ function GM:PlayerSay( sender, text, teamChat )
   pk.text = paket.text
   pk.text_color = paket.text_color
   pk.lokal = paket.lokal
-  pk.rpname = paket.rpname
-  pk.steamname = paket.steamname
-  pk.usergroup = paket.usergroup
-  pk.rolename = paket.role
-  pk.groupname = paket.group
+  pk.rpname = paket.rpname or ""
+  pk.steamname = paket.steamname or ""
+  pk.usergroup = paket.usergroup or ""
+  pk.rolename = paket.role or ""
+  pk.groupname = paket.group or ""
 
   if paket.command == "roll" then
     pk.text = lang_string( "rolledpre" ) .. " " .. tostring( roll_number( sender ) ) .. " " .. lang_string( "rolledpos" ) .. "!"

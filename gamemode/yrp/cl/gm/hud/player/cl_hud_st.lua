@@ -94,7 +94,7 @@ function hudST( ply, color )
       _st_m = 2
     end
   end
-  if ply:GetNWBool( "inJail", false ) then
+  if ply:GetNWBool( "injail", false ) then
     if _sttext != "" then
       _sttext = _sttext .. ", "
     end

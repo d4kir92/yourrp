@@ -201,18 +201,20 @@ function Player:GetPlayerModel()
       local pmID = tonumber( yrp_characters.playermodelID )
 
       local yrp_role = self:GetRolTab()
-      local tmp = combineStringTables( yrp_role.playermodels, yrp_role.playermodelsnone )
-      if pmID > #tmp then
-        pmID = 1
-      end
-      local pm = tmp[pmID]
+      if yrp_role != nil then
+        local tmp = combineStringTables( yrp_role.playermodels, yrp_role.playermodelsnone )
+        if pmID > #tmp then
+          pmID = 1
+        end
+        local pm = tmp[pmID]
 
-      if pm == "" then
-        self.pm = "models/player/skeleton.mdl"
-      elseif pm != "" then
-        self.pm = pm
+        if pm == "" then
+          self.pm = "models/player/skeleton.mdl"
+        elseif pm != "" then
+          self.pm = pm
+        end
+        return self.pm
       end
-      return self.pm
     end
   end
   return nil
@@ -474,13 +476,18 @@ timer.Simple( 10, function()
 end)
 
 function Player:GetRoleName()
-  local _rn = self:GetNWString( "roleName" )
+  local _rn = self:GetNWString( "roleName", "NO ROLE SELECTED" )
   return _rn
 end
 
 function Player:GetGroupName()
-  local _rg = self:GetNWString( "groupName" )
-  return _rg
+  local _gn = self:GetNWString( "groupName", "NO GROUP SELECTED" )
+  return _gn
+end
+
+function Player:GetGroupColor()
+  local _gc = self:GetNWString( "groupColor", "255,0,0" )
+  return _gc
 end
 
 function Player:HasLicense( license )

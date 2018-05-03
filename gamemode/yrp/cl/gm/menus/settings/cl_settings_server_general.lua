@@ -51,6 +51,11 @@ hook.Add( "open_server_general", "open_server_general", function()
     local sv_generalPlayersCanDropWeapons = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 790 ) )
     local sv_generalAppearanceMenu = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 850 ) )
 
+    local sv_generalShowGroup = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 950 ) )
+    local sv_generalShowRole = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1010 ) )
+
+    local sv_generalSuicideDisabled = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1100 ) )
+
     local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
     sv_generalCollection:SetMin( 0 )
     sv_generalCollection:SetMax( 99999999999999 )
@@ -103,6 +108,11 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "autoserverreload" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 740 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "playerscandropweapons" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 800 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "appearance" ) .. " - " .. lang_string( "menu" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 860 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( lang_string( "showgroup" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 960 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "showrole" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1020 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( lang_string( "suicidedisabled" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -152,6 +162,11 @@ hook.Add( "open_server_general", "open_server_general", function()
       sv_generalServerChangelevel:SetValue( tonumber( _yrp_general.server_changelevel ) )
       sv_generalPlayersCanDropWeapons:SetValue( tonumber( _yrp_general.playerscandropweapons ) )
       sv_generalAppearanceMenu:SetValue( tonumber( _yrp_general.appearancemenu ) )
+
+      sv_generalShowGroup:SetValue( tonumber( _yrp_general.showgroup ) )
+      sv_generalShowRole:SetValue( tonumber( _yrp_general.showrole ) )
+
+      sv_generalSuicideDisabled:SetValue( tonumber( _yrp_general.suicidedisabled ) )
 
       sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
       sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -735,6 +750,36 @@ hook.Add( "open_server_general", "open_server_general", function()
           _tonumber = 1
         end
         net.Start( "db_update_appearancemenu" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalShowGroup:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_showgroup" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalShowRole:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_showrole" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalSuicideDisabled:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_suicidedisabled" )
           net.WriteInt( _tonumber, 4 )
         net.SendToServer()
       end

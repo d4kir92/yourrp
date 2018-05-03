@@ -238,6 +238,15 @@ if CLIENT then
   end)
 end
 
+function ChangeChannel( channel )
+	if channel == "stable" or channel == "beta" or channel == "canary" then
+		GAMEMODE.VersionSort = channel
+		printGM( "gm", "Switched to " .. tostring( channel ) )
+	else
+		printGM( "error", "Switched to not available channel (" .. tostring( channel ) .. ")" )
+	end
+end
+
 -- >>> do NOT change this! (it can cause crashes!) <<<
 GM.ShortName = "YRP"	--do NOT change this!
 GM.Author = "D4KiR" --do NOT change this!
@@ -247,7 +256,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.80" --do NOT change this!
+GM.Version = "0.9.81" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

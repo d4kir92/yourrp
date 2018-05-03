@@ -86,8 +86,12 @@ function ScrH2()
   return ( ScrH() / 2 )
 end
 
-function formatMoney( ply, money )
-  return ply:GetNWString( "moneyPre" ) .. money .. ply:GetNWString( "moneyPost" )
+function formatMoney( money, ply )
+  if CLIENT then
+    return ply:GetNWString( "moneypre" ) .. money .. ply:GetNWString( "moneyPost" )
+  else
+    return GetMoneyPre() .. money .. GetMoneyPos()
+  end
 end
 
 function getTblX( nr, max )

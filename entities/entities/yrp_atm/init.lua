@@ -228,7 +228,7 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 												break
 											end
 										end
-										printGM( "note", activator:RPName() .. " transfered " .. activator:GetNWString( "moneyPre" ) .. self.money .. activator:GetNWString( "moneyPost" ) .. " to " .. dbSelectTarget[1].rpname )
+										printGM( "note", activator:RPName() .. " transfered " .. activator:GetNWString( "moneypre" ) .. self.money .. activator:GetNWString( "moneyPost" ) .. " to " .. dbSelectTarget[1].rpname )
 									end
 								end
 							end

@@ -40,6 +40,8 @@ function teleportToJailpoint( ply )
     tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
     _tmp = string.Explode( ",", _tmpTele[1].angle )
     ply:SetEyeAngles( Angle( _tmp[1], _tmp[2], _tmp[3] ) )
+
+    RemRolVals( ply )
   else
     local _str = lang_string( "nojailpoint" )
     printGM( "note", _str )
@@ -56,11 +58,11 @@ function clean_up_jail( ply )
   local _tmpTable = SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
   if _tmpTable != nil then
     SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. ply:SteamID() .. "'" )
-    ply:SetNWBool( "inJail", false )
-    ply:SetNWInt( "jailtime", 0 )
-
-    teleportToReleasepoint( ply )
   end
+  ply:SetNWBool( "injail", false )
+  ply:SetNWInt( "jailtime", 0 )
+
+  teleportToReleasepoint( ply )
 end
 
 util.AddNetworkString( "dbAddJail" )
@@ -80,7 +82,7 @@ net.Receive( "dbAddJail", function( len, ply )
   for k, v in pairs( player.GetAll() ) do
     if v:SteamID() == _SteamID then
       printGM( "note", v:Nick() .. " added to jail")
-      v:SetNWBool( "inJail", true )
+      v:SetNWBool( "injail", true )
       v:SetNWInt( "jailtime", _tmpTable[1].time )
     end
   end
@@ -100,14 +102,14 @@ net.Receive( "dbRemJail", function( len, ply )
   if _in_jailboard != nil then
     for k, v in pairs( player.GetAll() ) do
       if v:SteamID() == _SteamID then
-        v:SetNWBool( "inJail", true )
+        v:SetNWBool( "injail", true )
         v:SetNWInt( "jailtime", _in_jailboard[1].time )
       end
     end
   else
     for k, v in pairs( player.GetAll() ) do
       if v:SteamID() == _SteamID then
-        v:SetNWBool( "inJail", false )
+        v:SetNWBool( "injail", false )
         v:SetNWInt( "jailtime", 0 )
       end
     end

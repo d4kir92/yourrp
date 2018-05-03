@@ -51,6 +51,27 @@ SQL_ADD_COLUMN( _db_name, "eqwpg", "TEXT DEFAULT ''" )
 
 local Player = FindMetaTable( "Player" )
 
+function Player:VisualEquipment( name, slot )
+  if self:HasCharacterSelected() then
+    local _charid = self:CharID()
+    if _charid != nil then
+      local _uid = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. _charid .. "'" )
+      if _uid != nil then
+        _uid = _uid[1][slot]
+        local _item = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
+        if _item != nil then
+          _item = _item[1]
+          local _model = _item.WorldModel
+
+          self:SetNWString( name, _model )
+        end
+        return _item
+      end
+    end
+  end
+end
+
+--[[
 function Player:VisualEquipment( name, slot, bone, size, v_pos, a_ang )
   if ea( self:GetNWEntity( name ) ) then
     self:GetNWEntity( name ):Remove()
@@ -75,26 +96,23 @@ function Player:VisualEquipment( name, slot, bone, size, v_pos, a_ang )
 
           local _maxs = _visual:OBBMaxs()
           local _mins = _visual:OBBMins()
-          print(name)
-          print(_maxs, _mins)
+
           local _x = _maxs.x - _mins.x
           local _y = _maxs.y - _mins.y
           local _z = _maxs.z - _mins.z
-          print(_x, _y, _z)
           local cor = 0
           if _y > _x then
             cor = 90
           end
 
           local pos, ang = self:GetBonePosition( _spine )
-          --print(pos, ang)
+
           local _cor = self:GetPos() - pos
           local _cor2 = self:GetAngles() - ang
 
           _visual:FollowBone( self, _spine )
           _visual:SetLocalPos( Vector( 0, 0, 0 ) + v_pos )
     	    _visual:SetLocalAngles( Angle( 0, 0, 0 ) + a_ang + Angle( cor, 0, 0 ) )
-
           self:SetNWEntity( name, _visual )
         end
         return _item
@@ -102,31 +120,20 @@ function Player:VisualEquipment( name, slot, bone, size, v_pos, a_ang )
     end
   end
 end
+]]--
 
 function Player:UpdateBackpack()
-  local _bp = self:VisualEquipment( "backpack", "eqbp", "ValveBiped.Bip01_Spine4", 1.3, Vector( -16, -7, 3.4 ), Angle( 0, -90 -12, -90 ) )
+  local _bp = self:VisualEquipment( "backpack", "eqbp" ) --, "ValveBiped.Bip01_Spine4", 1.3, Vector( -16, -7, 3.4 ), Angle( 0, -90 -12, -90 ) )
   self:UpdateWeaponPrimary1()
-
-  --[[
-  local ply = self
-  print('List of bones (i, name, index, position, angle):')
-  for i = 0, ply:GetBoneCount() - 1 do
-    local boneName = ply:GetBoneName(i)
-  	local boneIndex = ply:LookupBone(boneName)
-  	local bonePos, boneAng = ply:GetBonePosition(boneIndex)
-	  print(i, boneName, boneIndex, bonePos, boneAng)
-  end
-  ]]--
-
   return _bp
 end
 
 function Player:UpdateWeaponPrimary1()
-  return self:VisualEquipment( "weaponprimary1", "eqwpp1", "ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90, 90 ) )
+  return self:VisualEquipment( "weaponprimary1", "eqwpp1" ) --, "ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90, 90 ) )
 end
 
 function Player:UpdateWeaponPrimary2()
-  return self:VisualEquipment( "weaponprimary2", "eqwpp2", "ValveBiped.Bip01_L_Clavicle", 1, Vector( 0, 0, 0 ), Angle( 0, 0, 0 ) )
+  return self:VisualEquipment( "weaponprimary2", "eqwpp2" ) --, "ValveBiped.Bip01_L_Clavicle", 1, Vector( 0, 0, 0 ), Angle( 0, 0, 0 ) )
 end
 
 util.AddNetworkString( "update_slot_weapon_primary_1" )
@@ -149,7 +156,6 @@ end)
 
 util.AddNetworkString( "update_backpack" )
 net.Receive( "update_backpack", function( len, ply )
-  print("update_backpack")
   local _bp = ply:UpdateBackpack()
 
   if _bp != nil then

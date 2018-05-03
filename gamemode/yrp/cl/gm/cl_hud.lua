@@ -173,9 +173,9 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 	local _bp = ply:GetBackpack()
 	if ea( _bp ) then
 		if tonumber( ply:GetNWString( "view_range", "0" ) ) <= 0 then
-			_bp:SetNoDraw( true )
+			--_bp:SetNoDraw( true )
 		else
-			_bp:SetNoDraw( false )
+			--_bp:SetNoDraw( false )
 		end
 	end
 

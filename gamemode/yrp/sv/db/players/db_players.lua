@@ -130,8 +130,11 @@ function set_role_values( ply )
         ply:SetNWBool( "tag_group", tobool( _gen_tab.tag_group ) )
         ply:SetNWBool( "tag_hp", tobool( _gen_tab.tag_hp ) )
         ply:SetNWBool( "tag_ar", tobool( _gen_tab.tag_ar ) )
-        
+
         ply:SetNWBool( "appearancemenu", tobool( _gen_tab.appearancemenu ) )
+
+        ply:SetNWBool( "showrole", tobool( _gen_tab.showrole ) )
+        ply:SetNWBool( "showgroup", tobool( _gen_tab.showgroup ) )
       end
 
       local rolTab = ply:GetRolTab()

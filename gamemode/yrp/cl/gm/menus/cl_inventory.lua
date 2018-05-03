@@ -1,28 +1,66 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 --[[
+local Player = FindMetaTable( "Player" )
+
+function Player:VisualEquipment( name, bone, size, v_pos, a_ang )
+  self[name] = self[name] or {}
+  if ea( self[name].model ) then
+    self[name].model:Remove()
+  end
+
+  self[name].bone = bone
+  self[name].lookupbone = self:LookupBone( self[name].bone )
+  self[name].model = ClientsideModel( self:GetNWString( name, "" ), RENDERGROUP_OPAQUE )
+  self[name].model:SetModelScale( size, 0 )
+  self[name].model:Spawn()
+
+  local _maxs = self[name].model:OBBMaxs()
+  local _mins = self[name].model:OBBMins()
+
+  local _x = _maxs.x - _mins.x
+  local _y = _maxs.y - _mins.y
+  local _z = _maxs.z - _mins.z
+
+  local cor = 0
+  if _y > _x then
+    cor = 90
+  end
+
+  --local pos, ang = self:GetBonePosition( self[name].lookupbone )
+
+  --local _cor = self:GetPos() - pos
+  --local _cor2 = self:GetAngles() - ang
+end
+
 hook.Add("PostPlayerDraw", "yrp_equipment", function(ply)
 	if ply:Alive() then
-		local model = ply:GetBackpack()
-    if ea( model ) then
-      local bone = ply:LookupBone( "ValveBiped.Bip01_Spine4" )
-      local matrix = ply:GetBoneMatrix(bone)
-  		local pos = matrix:GetTranslation()
-  		local ang = matrix:GetAngles()
-  		model:SetRenderOrigin(pos)
-  		model:SetRenderAngles(ang)
-  		model:DrawModel()
+    if ply["backpack"] != nil then
+			local bone = ply:LookupBone( ply["backpack"].bone )
+
+			if not bone then
+				return
+			end
+
+			local matrix = ply:GetBoneMatrix(bone)
+
+			if not matrix then
+				return
+			end
+
+			local pos = matrix:GetTranslation()
+			local ang = matrix:GetAngles()
+      pos = pos + ang:Right() * 12 + ang:Forward() * -14 + ang:Up() * 3.4
+			ply["backpack"].model:SetRenderOrigin( pos )
+			ang:RotateAroundAxis( ang:Forward(), 90 )
+			ang:RotateAroundAxis( ang:Up(), 180 )
+			ang:RotateAroundAxis( ang:Right(), 90 )
+			ply["backpack"].model:SetRenderAngles(ang)
+			ply["backpack"].model:DrawModel()
     end
 
-    local model2 = ply:GetWeaponPrimary1()
-    if ea( model2 ) then
-      local bone = ply:LookupBone( "ValveBiped.Bip01_R_Clavicle" )
-      local matrix = ply:GetBoneMatrix(bone)
-  		local pos = matrix:GetTranslation()
-  		local ang = matrix:GetAngles()
-  		model2:SetRenderOrigin(pos)
-  		model2:SetRenderAngles(ang)
-  		model2:DrawModel()
+    if ply["weaponprimary1"] != nil then
+	    --ply["weaponprimary1"].model:DrawModel()
     end
   end
 end)
@@ -52,6 +90,9 @@ end
 net.Receive( "openStorage", function( len )
   local ply = LocalPlayer()
   local _tabs = net.ReadTable()
+
+  --local _bp = ply:VisualEquipment( "backpack", "ValveBiped.Bip01_Spine4", 1.3, Vector( -16, -7, 3.4 ), Angle( 0, -90 -12, -90 ) )
+  --local _wp1 = ply:VisualEquipment( "weaponprimary1", "ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90, 90 ) )
 
   if inv.window == nil then
     inv.window = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )

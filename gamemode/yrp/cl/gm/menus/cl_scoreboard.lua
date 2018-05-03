@@ -78,7 +78,9 @@ function drawGroupPlayers( id )
         _tmpPly.gerade = k%2
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
+        _tmpPly.showrole = ply:GetNWBool( "showrole", false )
         _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
+        _tmpPly.showgroup = ply:GetNWBool( "showgroup", false )
         _tmpPly.groupname = ply:GetNWString( "groupName" ) or ""
         _tmpPly.rank = ply:GetUserGroup() or ""
         _tmpPly.ping = ply:Ping() or ""
@@ -142,8 +144,16 @@ function drawGroupPlayers( id )
           draw.SimpleTextOutlined( self.rpname, "sef", ctr( 128+16 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           draw.SimpleTextOutlined( string.upper( self.rank ), "sef", ctr( 128+16 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-          draw.SimpleTextOutlined( self.rolename, "sef", ctr( 700 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( self.groupname, "sef", ctr( 700 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if self.showrole then
+            draw.SimpleTextOutlined( self.rolename, "sef", ctr( 700 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          else
+            draw.SimpleTextOutlined( "[" .. string.upper( lang_string( "hidden" ) ) .. "]", "sef", ctr( 700 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+          if self.showgroup then
+            draw.SimpleTextOutlined( self.groupname, "sef", ctr( 700 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          else
+            draw.SimpleTextOutlined( "[" .. string.upper( lang_string( "hidden" ) ) .. "]", "sef", ctr( 700 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
 
           draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 

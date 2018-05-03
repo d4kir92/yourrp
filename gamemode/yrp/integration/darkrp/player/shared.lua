@@ -128,7 +128,7 @@ end
 function Player:isArrested()
   --Description: Whether this player is arrested
   --printGM( "darkrp", "isArrested()" )
-  return self:GetNWBool( "inJail", false )
+  return self:GetNWBool( "injail", false )
 end
 
 function Player:isChief()

@@ -36,6 +36,11 @@ util.AddNetworkString( "db_update_server_changelevel" )
 util.AddNetworkString( "db_update_playerscandropweapons" )
 util.AddNetworkString( "db_update_appearancemenu" )
 
+util.AddNetworkString( "db_update_showgroup" )
+util.AddNetworkString( "db_update_showrole" )
+
+util.AddNetworkString( "db_update_suicidedisabled" )
+
 util.AddNetworkString( "db_update_collection" )
 
 local _db_name = "yrp_general"
@@ -79,6 +84,11 @@ SQL_ADD_COLUMN( _db_name, "tag_ar", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "server_changelevel", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "playerscandropweapons", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "appearancemenu", "INT DEFAULT 1" )
+
+SQL_ADD_COLUMN( _db_name, "showgroup", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "showrole", "INT DEFAULT 1" )
+
+SQL_ADD_COLUMN( _db_name, "suicidedisabled", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
 
@@ -337,6 +347,51 @@ end
 function PlayersCanDropWeapons()
   return tobool( yrp_general.playerscandropweapons )
 end
+
+function ShowGroup()
+  return tobool( yrp_general.showgroup )
+end
+
+function ShowRole()
+  return tobool( yrp_general.showrole )
+end
+
+function IsSuicideDisabled()
+  return tobool( yrp_general.suicidedisabled )
+end
+
+net.Receive( "db_update_suicidedisabled", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.suicidedisabled = _nw
+    SQL_UPDATE( "yrp_general", "suicidedisabled = " .. yrp_general.suicidedisabled, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " suicidedisabled" )
+  end
+end)
+
+net.Receive( "db_update_showrole", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.showrole = _nw
+    SQL_UPDATE( "yrp_general", "showrole = " .. yrp_general.showrole, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " showrole" )
+    for i, p in pairs( player.GetAll() ) do
+      p:SetNWBool( "showrole", tobool(_nw) )
+    end
+  end
+end)
+
+net.Receive( "db_update_showgroup", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.showgroup = _nw
+    SQL_UPDATE( "yrp_general", "showgroup = " .. yrp_general.showgroup, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " showgroup" )
+    for i, p in pairs( player.GetAll() ) do
+      p:SetNWBool( "showgroup", tobool(_nw) )
+    end
+  end
+end)
 
 net.Receive( "db_update_appearancemenu", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

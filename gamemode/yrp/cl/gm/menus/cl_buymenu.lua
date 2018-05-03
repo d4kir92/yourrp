@@ -64,7 +64,7 @@ function createShopItem( item, duid )
   if item.price != nil then
     _i.price = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, ctrb( 300 ) )
     function _i.price:Paint( pw, ph )
-      surfaceText( formatMoney( LocalPlayer(), item.price ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      surfaceText( formatMoney( item.price, LocalPlayer() ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
   end
   if tonumber( item.permanent ) == 1 then

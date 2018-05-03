@@ -99,7 +99,7 @@ function testApp( display, x, y, w, h )
 
           _target_rpname.rpname = ply:RPName()
 
-          local _pre = ply:GetNWString( "moneyPre", "" )
+          local _pre = ply:GetNWString( "moneypre", "" )
           local _pos = ply:GetNWString( "moneyPost", "" )
           _target_reward.reward = _pre .. hit.reward .. _pos
 

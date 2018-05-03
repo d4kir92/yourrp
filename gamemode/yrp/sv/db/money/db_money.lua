@@ -5,23 +5,32 @@
 
 local _db_name = "yrp_money"
 
-SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'NAME'" )
-SQL_ADD_COLUMN( _db_name, "value", "TEXT DEFAULT '0'" )
+SQL_ADD_COLUMN( _db_name, "moneypre", "TEXT DEFAULT '$'" )
+SQL_ADD_COLUMN( _db_name, "moneypos", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "moneystart", "TEXT DEFAULT '1000'" )
 
-if SQL_SELECT( _db_name, "*", "name = 'moneypre'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "name, value", "'moneypre', '$'" )
-end
-
-if SQL_SELECT( _db_name, "*", "name = 'moneypost'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "name, value", "'moneypost', ''" )
-end
-
-if SQL_SELECT( _db_name, "*", "name = 'moneystart'" ) == nil then
-  SQL_INSERT_INTO( _db_name, "name, value", "'moneystart', '1000'" )
+if SQL_SELECT( _db_name, "*", "uniqueID = 1" ) == nil then
+  SQL_INSERT_INTO_DEFAULTVALUES( _db_name )
 end
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
+
+local yrp_money = {}
+local _tmp = SQL_SELECT( _db_name, "*", "uniqueID = 1" )
+if _tmp != nil and _tmp != false then
+  yrp_money = _tmp[1]
+end
+
+function GetMoneyPre()
+  return yrp_money.moneypre
+end
+function GetMoneyPos()
+  return yrp_money.moneypos
+end
+function GetMoneyStart()
+  return yrp_money.moneystart
+end
 
 util.AddNetworkString( "getMoneyTab" )
 util.AddNetworkString( "updateMoney" )
@@ -29,14 +38,18 @@ util.AddNetworkString( "updateMoney" )
 net.Receive( "updateMoney", function( len, ply )
   local _name = net.ReadString()
   local _value = net.ReadString()
-
-  SQL_UPDATE( "yrp_money", "value = '" .. _value .. "'", "name = '" .. _name .. "'" )
-  --updateHud( ply )
+  yrp_money[_name] = _value
+  SQL_UPDATE( "yrp_money", _name .. " = '" .. _value .. "'", "uniqueID = 1" )
+  if _name == "moneypre" or _name == "moneypos" then
+    for i, pl in pairs( player.GetAll() ) do
+      pl:SetNWString( _name, _value )
+    end
+  end
 end)
 
 net.Receive( "getMoneyTab", function( len, ply )
   local _tmpTable = SQL_SELECT( "yrp_money", "*", nil )
   net.Start( "getMoneyTab" )
-    net.WriteTable( _tmpTable )
+    net.WriteTable( _tmpTable[1] )
   net.Send( ply )
 end)
