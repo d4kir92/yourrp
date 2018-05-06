@@ -2,6 +2,10 @@
 
 local Player = FindMetaTable( "Player" )
 
+function Player:YRPGetLanguage()
+  return get_language_name( self:GetNWString( "client_lang", lang_string( "none" ) ) )
+end
+
 function Player:GetBackpack()
   return self:GetNWEntity( "backpack" )
 end
@@ -177,19 +181,24 @@ end
 
 function Player:UpdateMoney()
   if SERVER then
-    local money = self:GetNWString( "money", "FAILED" )
-    if money == "FAILED" then
-      return false
-    end
-    if worked( money, "ply:money UpdateMoney", true ) then
-      SQL_UPDATE( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. self:CharID() )
-    end
-    local moneybank = tonumber( self:GetNWString( "moneybank", "FAILED" ) )
-    if moneybank == "FAILED" then
-      return false
-    end
-    if worked( moneybank, "ply:moneybank UpdateMoney", true ) then
-      SQL_UPDATE( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. self:CharID() )
+    if self:HasCharacterSelected() then
+      local _char_id = self:CharID()
+      if _char_id != nil then
+        local money = self:GetNWString( "money", "FAILED" )
+        if money == "FAILED" then
+          return false
+        end
+        if worked( money, "ply:money UpdateMoney", true ) then
+          SQL_UPDATE( "yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. _char_id )
+        end
+        local moneybank = tonumber( self:GetNWString( "moneybank", "FAILED" ) )
+        if moneybank == "FAILED" then
+          return false
+        end
+        if worked( moneybank, "ply:moneybank UpdateMoney", true ) then
+          SQL_UPDATE( "yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. _char_id )
+        end
+      end
     end
   end
 end
@@ -325,6 +334,14 @@ if SERVER then
     end
   end
 
+  function Player:YRPGetMoney()
+    return tonumber( self:GetNWString( "money", "0" ) )
+  end
+
+  function Player:YRPGetMoneyBank()
+    return tonumber( self:GetNWString( "moneybank", "0" ) )
+  end
+
   function Player:SetMoney( money )
     if isnumber( money ) then
       self:SetNWString( "money", math.Round( money, 2 ) )
@@ -433,16 +450,16 @@ function Player:SteamName()
   return tostring( self:GetName() )
 end
 
-function Player:RPName()
-  return tostring( self:GetNWString( "rpname", "" ) )
+function Player:YRPRPName()
+  return tostring( self:GetNWString( "rpname", "NO CHARACTER SELECTED" ) )
 end
 
 function Player:Name()
-  return tostring( self:GetNWString( "rpname", "" ) )
+  return tostring( self:GetNWString( "rpname", "NO CHARACTER SELECTED" ) )
 end
 
 function Player:Nick()
-  return tostring( self:RPName() )
+  return tostring( self:YRPRPName() )
 end
 
 function Player:YRPName()
@@ -475,18 +492,20 @@ timer.Simple( 10, function()
   end
 end)
 
-function Player:GetRoleName()
+function Player:YRPGetRoleName()
   local _rn = self:GetNWString( "roleName", "NO ROLE SELECTED" )
   return _rn
 end
 
-function Player:GetGroupName()
+function Player:YRPGetGroupName()
   local _gn = self:GetNWString( "groupName", "NO GROUP SELECTED" )
   return _gn
 end
 
-function Player:GetGroupColor()
+function Player:YRPGetGroupColor()
   local _gc = self:GetNWString( "groupColor", "255,0,0" )
+  _gc = string.Explode( ",", _gc )
+  _gc = Color( _gc[1], _gc[2], _gc[3], _gc[4] or 255 )
   return _gc
 end
 

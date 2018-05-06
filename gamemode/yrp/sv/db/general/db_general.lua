@@ -41,6 +41,8 @@ util.AddNetworkString( "db_update_showrole" )
 
 util.AddNetworkString( "db_update_suicidedisabled" )
 
+util.AddNetworkString( "db_update_dropmoneyondeath" )
+
 util.AddNetworkString( "db_update_collection" )
 
 local _db_name = "yrp_general"
@@ -90,6 +92,8 @@ SQL_ADD_COLUMN( _db_name, "showrole", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "suicidedisabled", "INT DEFAULT 1" )
 
+SQL_ADD_COLUMN( _db_name, "toggle_dropmoneyondeath", "INT DEFAULT 1" )
+
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
 
 --db_drop_table( _db_name )
@@ -121,8 +125,12 @@ util.AddNetworkString( "ply_ban" )
 net.Receive( "ply_ban", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
-    _target:Ban( 24*60, false )
-    _target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
+    if ea( _target ) then
+      _target:Ban( 24*60, false )
+      _target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
+    else
+      printGM( "note", "ply_ban " .. tostring( _target ) .. " IS NIL => NOT AVAILABLE" )
+    end
   end
 end)
 
@@ -359,6 +367,19 @@ end
 function IsSuicideDisabled()
   return tobool( yrp_general.suicidedisabled )
 end
+
+function IsDropMoneyOnDeathEnabled()
+  return tobool( yrp_general.toggle_dropmoneyondeath )
+end
+
+net.Receive( "db_update_dropmoneyondeath", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.toggle_dropmoneyondeath = _nw
+    SQL_UPDATE( "yrp_general", "toggle_dropmoneyondeath = " .. yrp_general.toggle_dropmoneyondeath, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " toggle_dropmoneyondeath" )
+  end
+end)
 
 net.Receive( "db_update_suicidedisabled", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

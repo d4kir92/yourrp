@@ -43,8 +43,8 @@ end
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
-hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "vehicles", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply, model, name, table )
+  local _tmp = SQL_SELECT( "yrp_restrictions", "vehicles", "usergroup = '" .. tostring( ply:GetUserGroup() ) .. "'" )
   if worked( _tmp, "PlayerSpawnVehicle failed" ) then
     _tmp = _tmp[1]
     if tobool( _tmp.vehicles ) then
@@ -151,8 +151,8 @@ hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( ply )
   end
 end)
 
-hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "ragdolls", "usergroup = '" .. ply:GetUserGroup() .. "'" )
+hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply, model )
+  local _tmp = SQL_SELECT( "yrp_restrictions", "ragdolls", "usergroup = '" .. tostring( ply:GetUserGroup() ) .. "'" )
   if worked( _tmp, "PlayerSpawnRagdoll failed" ) then
     _tmp = _tmp[1]
     if tobool( _tmp.ragdolls ) then

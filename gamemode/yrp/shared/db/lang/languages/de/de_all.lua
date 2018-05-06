@@ -690,4 +690,5 @@ function DE_All()
   set_lang_string( "hidden", "Versteckt" )
   set_lang_string( "visible", "Sichtbar" )
   set_lang_string( "suicidedisabled", "Selbstmord deaktiviert" )
+  set_lang_string( "dropmoneyondeath", "Geld beim Tod fallen lassen" )
 end

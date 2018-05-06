@@ -690,4 +690,5 @@ function TR_All()
   set_lang_string( "hidden", "Gizli" )
   set_lang_string( "visible", "Görünür" )
   set_lang_string( "suicidedisabled", "İntihar Devredışı" )
+  set_lang_string( "dropmoneyondeath", "Ölümde para düşür" )
 end

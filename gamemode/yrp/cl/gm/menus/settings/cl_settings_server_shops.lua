@@ -119,7 +119,7 @@ end)
 net.Receive( "get_shop_items", function()
   local _sitems = net.ReadTable()
 
-  if settingsWindow.window != nil then
+  if pa( settingsWindow.window ) then
     _sh._sit = createD( "DYRPDBList", settingsWindow.window.site, ctr( 480 ), ctr( 500 ), ctr( 40 ), ctr( 40+500+40+500+40 ) )
     _sh._sit.tbl = _sitems
     _sh._sit:SetListHeader( "items" )
@@ -145,239 +145,241 @@ net.Receive( "get_shop_items", function()
       end
 
       --[[ NAME ]]--
-      _sh._sit.itemname = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 150 ) )
-      _sh._sit.itemname.textentry.tbl = tbl
-      _sh._sit.itemname:SetHeader( lang_string( "name" ) )
-      _sh._sit.itemname:SetText( db_out_str( tbl.name ) )
-      function _sh._sit.itemname.textentry:SendNewName()
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_name" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.name )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-      function _sh._sit.itemname.textentry:OnChange()
-        self.tbl.name = self:GetValue()
-        self:SendNewName()
-      end
-      function _sh._sit.itemname.textentry:OnValueChange()
-        self.tbl.name = self:GetValue()
-        self:SendNewName()
-      end
-
-      --[[ Description ]]--
-      _sh._sit.itemdesc = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 300 ) )
-      _sh._sit.itemdesc.textentry.tbl = tbl
-      _sh._sit.itemdesc:SetHeader( lang_string( "description" ) )
-      _sh._sit.itemdesc:SetText( db_out_str( tbl.description ) )
-      function _sh._sit.itemdesc.textentry:SendNewDesc()
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_desc" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.description )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-      function _sh._sit.itemdesc.textentry:OnChange()
-        self.tbl.description = self:GetValue()
-        self:SendNewDesc()
-      end
-      function _sh._sit.itemdesc.textentry:OnValueChange()
-        self.tbl.description = self:GetValue()
-        self:SendNewDesc()
-      end
-
-      --[[ Price ]]--
-      _sh._sit.itemprice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 450 ) )
-      _sh._sit.itemprice:SetHeader( lang_string( "price" ) )
-      _sh._sit.itemprice:INITPanel( "DNumberWang" )
-      _sh._sit.itemprice.plus.tbl = tbl
-      _sh._sit.itemprice.plus:SetMin( 0 )
-      _sh._sit.itemprice.plus:SetMax( 999999999 )
-      _sh._sit.itemprice.plus:SetValue( tbl.price )
-      function _sh._sit.itemprice.plus:OnValueChanged( value )
-        self.tbl.price = value
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_price" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.price )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-
-      --[[ Quantity ]]--
-      _sh._sit.itemquan = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 600 ) )
-      _sh._sit.itemquan:SetHeader( lang_string( "quantity" ) .. " (" .. lang_string( "wip" ) .. ")" )
-      _sh._sit.itemquan:INITPanel( "DComboBox" )
-      _sh._sit.itemquan.plus.tbl = tbl
-      _sh._sit.itemquan.plus:AddChoice( lang_string( "disabled" ), -1 )
-      for i=1, 32 do
-        _sh._sit.itemquan.plus:AddChoice( i, i )
-      end
-      if tonumber( tbl.quantity ) == -1 then
-        _sh._sit.itemquan.plus:ChooseOption( lang_string( "disabled" ), tonumber( tbl.quantity ) )
-      else
-        _sh._sit.itemquan.plus:ChooseOption( tbl.quantity, tonumber( tbl.quantity ) )
-      end
-      function _sh._sit.itemquan.plus:OnSelect( index, value, data )
-        self.tbl.quantity = data
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_quan" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.quantity )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-
-      --[[ Cooldown ]]--
-      _sh._sit.itemcool = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 750 ) )
-      _sh._sit.itemcool:SetHeader( lang_string( "cooldown" ) .. " (" .. lang_string( "wip" ) .. ")" )
-      _sh._sit.itemcool:INITPanel( "DNumberWang" )
-      _sh._sit.itemcool.plus.tbl = tbl
-      _sh._sit.itemcool.plus:SetMin( 0 )
-      _sh._sit.itemcool.plus:SetMax( 9999 )
-      _sh._sit.itemcool.plus:SetValue( tbl.cooldown )
-      function _sh._sit.itemcool.plus:OnValueChanged( value )
-        self.tbl.cooldown = value
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_cool" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.cooldown )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-
-      --[[ License ]]--
-      _sh._sit.itemlice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 900 ) )
-      _sh._sit.itemlice:SetHeader( lang_string( "licenses" ) )
-      _sh._sit.itemlice:INITPanel( "DComboBox" )
-      _sh._sit.itemlice.plus.tbl = tbl
-      net.Start( "get_all_licenses_simple" )
-      net.SendToServer()
-      net.Receive( "get_all_licenses_simple", function( len )
-        local _licenses = net.ReadTable()
-        _sh._sit.itemlice.plus:AddChoice( lang_string( "none" ), -1 )
-        for i, lic in pairs( _licenses ) do
-          local _b = false
-          if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
-            _b = true
-          end
-          _sh._sit.itemlice.plus:AddChoice( db_out_str( lic.name ), lic.uniqueID, _b )
-        end
-      end)
-      function _sh._sit.itemlice.plus:OnSelect( index, value, data )
-        self.tbl.licenseID = data
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_lice" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.licenseID )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-
-      --[[ Permanent ]]--
-      _sh._sit.itemperm = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1050 ) )
-      _sh._sit.itemperm:SetHeader( lang_string( "permanent" ) .. " (" .. lang_string( "wip" ) .. ")" )
-      _sh._sit.itemperm:INITPanel( "DCheckBox" )
-      _sh._sit.itemperm.plus.tbl = tbl
-      _sh._sit.itemperm.plus:SetChecked( tobool( tbl.permanent ) )
-      function _sh._sit.itemperm.plus:OnChange( bVal )
-        local _checked = 0
-        if bVal then
-          _checked = 1
-        end
-        self.tbl.permanent = _checked
-        if _sh._cat.uid != nil then
-          net.Start( "shop_item_edit_perm" )
-            net.WriteString( self.tbl.uniqueID )
-            net.WriteString( self.tbl.permanent )
-            net.WriteString( _sh._cat.uid )
-          net.SendToServer()
-        end
-      end
-
-      --[[ TYPE ]]--
-      _sh._sit.type = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
-      _sh._sit.type:SetHeader( lang_string( "type" ) )
-      _sh._sit.type:INITPanel( "DComboBox" )
-      _sh._sit.type.plus:AddChoice( lang_string( "weapons" ), "weapons" )
-      _sh._sit.type.plus:AddChoice( lang_string( "entities" ), "entities" )
-      _sh._sit.type.plus:AddChoice( lang_string( "vehicles" ), "vehicles" )
-      _sh._sit.type.plus:AddChoice( lang_string( "licenses" ), "licenses" )
-      _sh._sit.type.plus.tbl = tbl
-      function _sh._sit.type.plus:OnSelect( panel, index, value )
-        local _itemlist = {}
-        if value == "weapons" then
-          local swepsL = weapons.GetList()
-          local _weaplist = list.Get( "Weapon" )
-
-          for k, v in pairs( _weaplist ) do
-            if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun" ) then
-              table.insert( swepsL, v )
-            end
-          end
-          _itemlist = swepsL
-          openSingleSelector( _itemlist, "selected_shop_item" )
-        elseif value == "entities" then
-          local _sentlist = list.Get( "SpawnableEntities" )
-
-          local tmpTable = {}
-          local count = 0
-          for k, v in pairs( _sentlist ) do
-            if !string.find( v.ClassName or v.Class or "", "base" ) then
-              count = count + 1
-              tmpTable[count] = {}
-              tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
-              tmpTable[count].ClassName = v.ClassName or v.Class or ""
-              tmpTable[count].PrintName = v.PrintName or v.Name or ""
-            end
-          end
-          _itemlist = tmpTable
-          openSingleSelector( _itemlist, "selected_shop_item" )
-        elseif value == "vehicles" then
-          local tmpTable = get_all_vehicles()
-          _itemlist = tmpTable
-          openSingleSelector( _itemlist, "selected_shop_item" )
-        elseif value == "licenses" then
-          net.Start( "getlicenses" )
-          net.SendToServer()
-          net.Receive( "getlicenses", function()
-            local _net_tab = net.ReadTable()
-            _itemlist = _net_tab
-            for i, lic in pairs( _itemlist ) do
-              lic.PrintName = db_out_str( lic.name )
-              lic.ClassName = lic.uniqueID
-            end
-
-            openSingleSelector( _itemlist, "selected_shop_item" )
-          end)
-        end
-      end
-      hook.Add( "selected_shop_item", "yrp_selected_shop_item", function()
-        if pa( _sh._sit ) then
-          if pa( _sh._sit.type ) then
-            local _wm = LocalPlayer():GetNWString( "WorldModel" )
-            local _cn = LocalPlayer():GetNWString( "ClassName" )
-            local _pn = LocalPlayer():GetNWString( "PrintName" )
-            local _type = _sh._sit.type.plus:GetOptionData( _sh._sit.type.plus:GetSelectedID() )
-            net.Start( "shop_item_edit_base" )
-              net.WriteString( _sh._sit.type.plus.tbl.uniqueID )
-              net.WriteString( _wm )
-              net.WriteString( _cn )
-              net.WriteString( _pn )
-              net.WriteString( _type )
+      if pa( _sh.ea ) then
+        _sh._sit.itemname = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 150 ) )
+        _sh._sit.itemname.textentry.tbl = tbl
+        _sh._sit.itemname:SetHeader( lang_string( "name" ) )
+        _sh._sit.itemname:SetText( db_out_str( tbl.name ) )
+        function _sh._sit.itemname.textentry:SendNewName()
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_name" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.name )
+              net.WriteString( _sh._cat.uid )
             net.SendToServer()
-            _sh._sit.itemname.textentry:SetValue( _pn )
           end
         end
-      end)
+        function _sh._sit.itemname.textentry:OnChange()
+          self.tbl.name = self:GetValue()
+          self:SendNewName()
+        end
+        function _sh._sit.itemname.textentry:OnValueChange()
+          self.tbl.name = self:GetValue()
+          self:SendNewName()
+        end
+
+        --[[ Description ]]--
+        _sh._sit.itemdesc = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 300 ) )
+        _sh._sit.itemdesc.textentry.tbl = tbl
+        _sh._sit.itemdesc:SetHeader( lang_string( "description" ) )
+        _sh._sit.itemdesc:SetText( db_out_str( tbl.description ) )
+        function _sh._sit.itemdesc.textentry:SendNewDesc()
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_desc" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.description )
+              net.WriteString( _sh._cat.uid )
+            net.SendToServer()
+          end
+        end
+        function _sh._sit.itemdesc.textentry:OnChange()
+          self.tbl.description = self:GetValue()
+          self:SendNewDesc()
+        end
+        function _sh._sit.itemdesc.textentry:OnValueChange()
+          self.tbl.description = self:GetValue()
+          self:SendNewDesc()
+        end
+
+        --[[ Price ]]--
+        _sh._sit.itemprice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 450 ) )
+        _sh._sit.itemprice:SetHeader( lang_string( "price" ) )
+        _sh._sit.itemprice:INITPanel( "DNumberWang" )
+        _sh._sit.itemprice.plus.tbl = tbl
+        _sh._sit.itemprice.plus:SetMin( 0 )
+        _sh._sit.itemprice.plus:SetMax( 999999999 )
+        _sh._sit.itemprice.plus:SetValue( tbl.price )
+        function _sh._sit.itemprice.plus:OnValueChanged( value )
+          self.tbl.price = value
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_price" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.price )
+              net.WriteString( _sh._cat.uid )
+            net.SendToServer()
+          end
+        end
+
+        --[[ Quantity ]]--
+        _sh._sit.itemquan = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 600 ) )
+        _sh._sit.itemquan:SetHeader( lang_string( "quantity" ) .. " (" .. lang_string( "wip" ) .. ")" )
+        _sh._sit.itemquan:INITPanel( "DComboBox" )
+        _sh._sit.itemquan.plus.tbl = tbl
+        _sh._sit.itemquan.plus:AddChoice( lang_string( "disabled" ), -1 )
+        for i=1, 32 do
+          _sh._sit.itemquan.plus:AddChoice( i, i )
+        end
+        if tonumber( tbl.quantity ) == -1 then
+          _sh._sit.itemquan.plus:ChooseOption( lang_string( "disabled" ), tonumber( tbl.quantity ) )
+        else
+          _sh._sit.itemquan.plus:ChooseOption( tbl.quantity, tonumber( tbl.quantity ) )
+        end
+        function _sh._sit.itemquan.plus:OnSelect( index, value, data )
+          self.tbl.quantity = data
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_quan" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.quantity )
+              net.WriteString( _sh._cat.uid )
+            net.SendToServer()
+          end
+        end
+
+        --[[ Cooldown ]]--
+        _sh._sit.itemcool = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 750 ) )
+        _sh._sit.itemcool:SetHeader( lang_string( "cooldown" ) .. " (" .. lang_string( "wip" ) .. ")" )
+        _sh._sit.itemcool:INITPanel( "DNumberWang" )
+        _sh._sit.itemcool.plus.tbl = tbl
+        _sh._sit.itemcool.plus:SetMin( 0 )
+        _sh._sit.itemcool.plus:SetMax( 9999 )
+        _sh._sit.itemcool.plus:SetValue( tbl.cooldown )
+        function _sh._sit.itemcool.plus:OnValueChanged( value )
+          self.tbl.cooldown = value
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_cool" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.cooldown )
+              net.WriteString( _sh._cat.uid )
+            net.SendToServer()
+          end
+        end
+
+        --[[ License ]]--
+        _sh._sit.itemlice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 900 ) )
+        _sh._sit.itemlice:SetHeader( lang_string( "licenses" ) )
+        _sh._sit.itemlice:INITPanel( "DComboBox" )
+        _sh._sit.itemlice.plus.tbl = tbl
+        net.Start( "get_all_licenses_simple" )
+        net.SendToServer()
+        net.Receive( "get_all_licenses_simple", function( len )
+          local _licenses = net.ReadTable()
+          _sh._sit.itemlice.plus:AddChoice( lang_string( "none" ), -1 )
+          for i, lic in pairs( _licenses ) do
+            local _b = false
+            if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
+              _b = true
+            end
+            _sh._sit.itemlice.plus:AddChoice( db_out_str( lic.name ), lic.uniqueID, _b )
+          end
+        end)
+        function _sh._sit.itemlice.plus:OnSelect( index, value, data )
+          self.tbl.licenseID = data
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_lice" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.licenseID )
+              net.WriteString( _sh._cat.uid )
+            net.SendToServer()
+          end
+        end
+
+        --[[ Permanent ]]--
+        _sh._sit.itemperm = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1050 ) )
+        _sh._sit.itemperm:SetHeader( lang_string( "permanent" ) .. " (" .. lang_string( "wip" ) .. ")" )
+        _sh._sit.itemperm:INITPanel( "DCheckBox" )
+        _sh._sit.itemperm.plus.tbl = tbl
+        _sh._sit.itemperm.plus:SetChecked( tobool( tbl.permanent ) )
+        function _sh._sit.itemperm.plus:OnChange( bVal )
+          local _checked = 0
+          if bVal then
+            _checked = 1
+          end
+          self.tbl.permanent = _checked
+          if _sh._cat.uid != nil then
+            net.Start( "shop_item_edit_perm" )
+              net.WriteString( self.tbl.uniqueID )
+              net.WriteString( self.tbl.permanent )
+              net.WriteString( _sh._cat.uid )
+            net.SendToServer()
+          end
+        end
+
+        --[[ TYPE ]]--
+        _sh._sit.type = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
+        _sh._sit.type:SetHeader( lang_string( "type" ) )
+        _sh._sit.type:INITPanel( "DComboBox" )
+        _sh._sit.type.plus:AddChoice( lang_string( "weapons" ), "weapons" )
+        _sh._sit.type.plus:AddChoice( lang_string( "entities" ), "entities" )
+        _sh._sit.type.plus:AddChoice( lang_string( "vehicles" ), "vehicles" )
+        _sh._sit.type.plus:AddChoice( lang_string( "licenses" ), "licenses" )
+        _sh._sit.type.plus.tbl = tbl
+        function _sh._sit.type.plus:OnSelect( panel, index, value )
+          local _itemlist = {}
+          if value == "weapons" then
+            local swepsL = weapons.GetList()
+            local _weaplist = list.Get( "Weapon" )
+
+            for k, v in pairs( _weaplist ) do
+              if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun" ) then
+                table.insert( swepsL, v )
+              end
+            end
+            _itemlist = swepsL
+            openSingleSelector( _itemlist, "selected_shop_item" )
+          elseif value == "entities" then
+            local _sentlist = list.Get( "SpawnableEntities" )
+
+            local tmpTable = {}
+            local count = 0
+            for k, v in pairs( _sentlist ) do
+              if !string.find( v.ClassName or v.Class or "", "base" ) then
+                count = count + 1
+                tmpTable[count] = {}
+                tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
+                tmpTable[count].ClassName = v.ClassName or v.Class or ""
+                tmpTable[count].PrintName = v.PrintName or v.Name or ""
+              end
+            end
+            _itemlist = tmpTable
+            openSingleSelector( _itemlist, "selected_shop_item" )
+          elseif value == "vehicles" then
+            local tmpTable = get_all_vehicles()
+            _itemlist = tmpTable
+            openSingleSelector( _itemlist, "selected_shop_item" )
+          elseif value == "licenses" then
+            net.Start( "getlicenses" )
+            net.SendToServer()
+            net.Receive( "getlicenses", function()
+              local _net_tab = net.ReadTable()
+              _itemlist = _net_tab
+              for i, lic in pairs( _itemlist ) do
+                lic.PrintName = db_out_str( lic.name )
+                lic.ClassName = lic.uniqueID
+              end
+
+              openSingleSelector( _itemlist, "selected_shop_item" )
+            end)
+          end
+        end
+        hook.Add( "selected_shop_item", "yrp_selected_shop_item", function()
+          if pa( _sh._sit ) then
+            if pa( _sh._sit.type ) then
+              local _wm = LocalPlayer():GetNWString( "WorldModel" )
+              local _cn = LocalPlayer():GetNWString( "ClassName" )
+              local _pn = LocalPlayer():GetNWString( "PrintName" )
+              local _type = _sh._sit.type.plus:GetOptionData( _sh._sit.type.plus:GetSelectedID() )
+              net.Start( "shop_item_edit_base" )
+                net.WriteString( _sh._sit.type.plus.tbl.uniqueID )
+                net.WriteString( _wm )
+                net.WriteString( _cn )
+                net.WriteString( _pn )
+                net.WriteString( _type )
+              net.SendToServer()
+              _sh._sit.itemname.textentry:SetValue( _pn )
+            end
+          end
+        end)
+      end
     end
     _sh._sit:SetEditFunc( _sh.eaf3 )
     for i, cat in pairs( _sitems ) do

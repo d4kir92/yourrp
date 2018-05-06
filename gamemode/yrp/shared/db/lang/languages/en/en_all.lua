@@ -690,4 +690,5 @@ function EN_All()
   set_lang_string( "hidden", "Hidden" )
   set_lang_string( "visible", "Visible" )
   set_lang_string( "suicidedisabled", "Suicide Disabled" )
+  set_lang_string( "dropmoneyondeath", "Drop money on death" )
 end

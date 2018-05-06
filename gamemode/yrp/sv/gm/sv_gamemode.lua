@@ -204,6 +204,15 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
       end
     end
   end
+  if IsDropMoneyOnDeathEnabled() then
+    print(ply:YRPName(), dmg)
+    local money = ents.Create( "yrp_money" )
+    money:SetPos( ply:GetPos() )
+    money:Spawn()
+    local _money = ply:GetMoney()
+    money:SetMoney( ply:GetMoney() )
+    ply:SetMoney( 0 )
+  end
 end)
 
 function GM:ShutDown()
@@ -260,7 +269,9 @@ function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
 end
 
 function IsAllowedToSuicide( ply )
-  if IsSuicideDisabled() or ply:IsFlagSet( FL_FROZEN ) or ply:GetNWBool( "ragdolled", false ) or ply:GetNWBool( "injail", false ) then
+  if ply:HasAccess() then
+    return true
+  elseif IsSuicideDisabled() or ply:IsFlagSet( FL_FROZEN ) or ply:GetNWBool( "ragdolled", false ) or ply:GetNWBool( "injail", false ) then
     return false
   else
     return true

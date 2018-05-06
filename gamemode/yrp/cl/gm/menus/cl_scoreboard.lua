@@ -79,14 +79,14 @@ function drawGroupPlayers( id )
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
         _tmpPly.showrole = ply:GetNWBool( "showrole", false )
-        _tmpPly.rolename = ply:GetNWString( "roleName" ) or ""
+        _tmpPly.rolename = ply:GetRoleName()
         _tmpPly.showgroup = ply:GetNWBool( "showgroup", false )
-        _tmpPly.groupname = ply:GetNWString( "groupName" ) or ""
+        _tmpPly.groupname = ply:GetGroupName()
         _tmpPly.rank = ply:GetUserGroup() or ""
         _tmpPly.ping = ply:Ping() or ""
         _tmpPly.usergroup = ply:GetUserGroup() or ""
         _tmpPly.steamname = ply:SteamName() or ""
-        _tmpPly.lang = get_language_name( ply:GetNWString( "client_lang", lang_string( "none" ) ) )
+        _tmpPly.lang = ply:GetLanguage() or ""
         _tmpPly.money = ply:GetNWString( "money" )
         _tmpPly.moneybank = ply:GetNWString( "moneybank" )
         local _pt = string.FormattedTime( ply:GetNWFloat( "uptime_current", 0 ) )
@@ -249,38 +249,40 @@ function drawGroupPlayers( id )
           end
 
           if LocalPlayer():HasAccess() then
-            if !ply:GetNWBool( "ragdolled", false ) then
-              local ragdoll = _menu:AddOption( lang_string( "ragdoll" ), "icon16/user_red.png" )
-              function ragdoll:DoClick()
-                net.Start( "ragdoll" )
-                  net.WriteEntity( ply )
-                net.SendToServer()
-                _menu:Remove()
+            if ea( ply ) then
+              if !ply:GetNWBool( "ragdolled", false ) then
+                local ragdoll = _menu:AddOption( lang_string( "ragdoll" ), "icon16/user_red.png" )
+                function ragdoll:DoClick()
+                  net.Start( "ragdoll" )
+                    net.WriteEntity( ply )
+                  net.SendToServer()
+                  _menu:Remove()
+                end
+              else
+                local unragdoll = _menu:AddOption( lang_string( "unragdoll" ), "icon16/user_green.png" )
+                function unragdoll:DoClick()
+                  net.Start( "unragdoll" )
+                    net.WriteEntity( ply )
+                  net.SendToServer()
+                  _menu:Remove()
+                end
               end
-            else
-              local unragdoll = _menu:AddOption( lang_string( "unragdoll" ), "icon16/user_green.png" )
-              function unragdoll:DoClick()
-                net.Start( "unragdoll" )
-                  net.WriteEntity( ply )
-                net.SendToServer()
-                _menu:Remove()
-              end
-            end
-            if !ply:IsFlagSet( FL_FROZEN ) then
-              local freeze = _menu:AddOption( lang_string( "freeze" ), "icon16/user_suit.png" )
-              function freeze:DoClick()
-                net.Start( "freeze" )
-                  net.WriteEntity( ply )
-                net.SendToServer()
-                _menu:Remove()
-              end
-            else
-              local unfreeze = _menu:AddOption( lang_string( "unfreeze" ), "icon16/user_gray.png" )
-              function unfreeze:DoClick()
-                net.Start( "unfreeze" )
-                  net.WriteEntity( ply )
-                net.SendToServer()
-                _menu:Remove()
+              if !ply:IsFlagSet( FL_FROZEN ) then
+                local freeze = _menu:AddOption( lang_string( "freeze" ), "icon16/user_suit.png" )
+                function freeze:DoClick()
+                  net.Start( "freeze" )
+                    net.WriteEntity( ply )
+                  net.SendToServer()
+                  _menu:Remove()
+                end
+              else
+                local unfreeze = _menu:AddOption( lang_string( "unfreeze" ), "icon16/user_gray.png" )
+                function unfreeze:DoClick()
+                  net.Start( "unfreeze" )
+                    net.WriteEntity( ply )
+                  net.SendToServer()
+                  _menu:Remove()
+                end
               end
             end
           end

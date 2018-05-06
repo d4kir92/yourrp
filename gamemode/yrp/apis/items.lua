@@ -50,38 +50,42 @@ function AddTableAxis( tab, axis, value )
 end
 
 function GetEntityItemSize( ent )
-  if ent:ItemSizeW() == nil and ent:ItemSizeH() == nil then
-    local _maxs = ent:OBBMaxs()
-    local _mins = ent:OBBMins()
-    local _axis = {}
-    AddTableAxis( _axis, "x", distance( _mins.x, _maxs.x ) )
-    AddTableAxis( _axis, "y", distance( _mins.y, _maxs.y ) )
-    AddTableAxis( _axis, "z", distance( _mins.z, _maxs.z ) )
-    table.SortByMember( _axis, "value" )
+  if ea( ent ) then
+    if ent:ItemSizeW() == nil and ent:ItemSizeH() == nil then
+      local _maxs = ent:OBBMaxs()
+      local _mins = ent:OBBMins()
+      local _axis = {}
+      AddTableAxis( _axis, "x", distance( _mins.x, _maxs.x ) )
+      AddTableAxis( _axis, "y", distance( _mins.y, _maxs.y ) )
+      AddTableAxis( _axis, "z", distance( _mins.z, _maxs.z ) )
+      table.SortByMember( _axis, "value" )
 
-    local _result = {}
-    local _scale = 6
-    _result.sizew = _axis[1].value/_scale - _axis[1].value/_scale%1
-    _result.sizeh = _axis[2].value/_scale - _axis[2].value/_scale%1
+      local _result = {}
+      local _scale = 6
+      _result.sizew = _axis[1].value/_scale - _axis[1].value/_scale%1
+      _result.sizeh = _axis[2].value/_scale - _axis[2].value/_scale%1
 
-    if _result.sizew < 1 then
-      _result.sizew = 1
+      if _result.sizew < 1 then
+        _result.sizew = 1
+      end
+      if _result.sizeh < 1 then
+        _result.sizeh = 1
+      end
+      if _result.sizew > INV_MAXW then
+        _result.sizew = INV_MAXW
+      end
+      if _result.sizeh > ITEM_MAXH then
+        _result.sizeh = ITEM_MAXH
+      end
+      return _result
+    else
+      local _result = {}
+      _result.sizew = ent:ItemSizeW()
+      _result.sizeh = ent:ItemSizeH()
+      return _result
     end
-    if _result.sizeh < 1 then
-      _result.sizeh = 1
-    end
-    if _result.sizew > INV_MAXW then
-      _result.sizew = INV_MAXW
-    end
-    if _result.sizeh > ITEM_MAXH then
-      _result.sizeh = ITEM_MAXH
-    end
-    return _result
   else
-    local _result = {}
-    _result.sizew = ent:ItemSizeW()
-    _result.sizeh = ent:ItemSizeH()
-    return _result
+    printGM( "error", "GetEntityItemSize failed => ent not alive" )
   end
   return false
 end

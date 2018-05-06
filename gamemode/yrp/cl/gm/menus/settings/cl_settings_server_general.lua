@@ -56,6 +56,8 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     local sv_generalSuicideDisabled = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1100 ) )
 
+    local sv_generalDropMoneyOnDeath = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1200 ) )
+
     local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
     sv_generalCollection:SetMin( 0 )
     sv_generalCollection:SetMax( 99999999999999 )
@@ -113,6 +115,8 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "showrole" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1020 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       draw.SimpleTextOutlined( lang_string( "suicidedisabled" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( lang_string( "dropmoneyondeath" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1210 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -167,6 +171,8 @@ hook.Add( "open_server_general", "open_server_general", function()
       sv_generalShowRole:SetValue( tonumber( _yrp_general.showrole ) )
 
       sv_generalSuicideDisabled:SetValue( tonumber( _yrp_general.suicidedisabled ) )
+
+      sv_generalDropMoneyOnDeath:SetValue( tonumber( _yrp_general.toggle_dropmoneyondeath ) )
 
       sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
       sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -780,6 +786,16 @@ hook.Add( "open_server_general", "open_server_general", function()
           _tonumber = 1
         end
         net.Start( "db_update_suicidedisabled" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalDropMoneyOnDeath:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_dropmoneyondeath" )
           net.WriteInt( _tonumber, 4 )
         net.SendToServer()
       end
