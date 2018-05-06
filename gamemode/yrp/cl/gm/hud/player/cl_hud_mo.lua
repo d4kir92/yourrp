@@ -5,8 +5,8 @@ local money = Material( "icon16/money.png" )
 function hudMO( ply, color )
   --Money
   local _money = tonumber( ply:GetNWString( "money", "-1" ) )
-  local _pre = ply:GetNWString( "moneypre", "[LOADING]" )
-  local _pos = ply:GetNWString( "moneyPost", "[LOADING]" )
+  local _pre = ply:GetNWString( "moneypre", "[LOADING PRE]" )
+  local _pos = ply:GetNWString( "moneyPost", "[LOADING POS]" )
   _money = roundMoney( _money, 1 )
   local _motext = _pre .. tostring(_money) .. _pos
   local _salary = tonumber( ply:GetNWString( "salary", "-1" ) )

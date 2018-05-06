@@ -58,23 +58,6 @@ net.Receive( "cancelRestartServer", function( len, ply )
   printGM( "server", message )
 end)
 
-util.AddNetworkString( "yrp_eat" )
-util.AddNetworkString( "yrp_drink" )
-
-net.Receive( "yrp_eat", function( len, ply )
-  ply:SetNWInt( "hunger", ply:GetNWInt( "hunger", 0 ) + 20 )
-  if ply:GetNWInt( "hunger", 0 ) > 100 then
-    ply:SetNWInt( "hunger", 100 )
-  end
-end)
-
-net.Receive( "yrp_drink", function( len, ply )
-  ply:SetNWInt( "thirst", ply:GetNWInt( "thirst", 0 ) + 20 )
-  if ply:GetNWInt( "thirst", 0 ) > 100 then
-    ply:SetNWInt( "thirst", 100 )
-  end
-end)
-
 function changeUserGroup( ply, cmd, args )
   local _cmdpre = "[" .. string.upper( "yrp_usergroup" ) .. "] "
 	local message = ""

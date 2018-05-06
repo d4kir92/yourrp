@@ -2,6 +2,24 @@
 
 local Player = FindMetaTable( "Player" )
 
+function Player:YRPEat( num )
+  if isnumber( num ) then
+    self:SetNWFloat( "hunger", self:GetNWFloat( "hunger", 0.0 ) + num )
+    if self:GetNWFloat( "hunger", 0.0 ) > 100.0 then
+      self:SetNWFloat( "hunger", 100.0 )
+    end
+  end
+end
+
+function Player:YRPDrink( num )
+  if isnumber( num ) then
+    self:SetNWFloat( "thirst", self:GetNWFloat( "thirst", 0.0 ) + num )
+    if self:GetNWFloat( "thirst", 0.0 ) > 100.0 then
+      self:SetNWFloat( "thirst", 100.0 )
+    end
+  end
+end
+
 function Player:YRPGetLanguage()
   return get_language_name( self:GetNWString( "client_lang", lang_string( "none" ) ) )
 end
@@ -350,9 +368,11 @@ if SERVER then
   end
 
   function Player:addMoneyBank( money )
-    if isnumber( money ) then
-      self:SetNWString( "moneybank", tonumber( self:GetNWString( "moneybank" ) ) + math.Round( money, 2 ) )
-      self:UpdateMoney()
+    if money != nil then
+      if isnumber( money ) and self:GetNWString( "moneybank" ) != nil then
+        self:SetNWString( "moneybank", tonumber( self:GetNWString( "moneybank" ) ) + math.Round( money, 2 ) )
+        self:UpdateMoney()
+      end
     end
   end
 

@@ -96,8 +96,8 @@ function GM:PlayerLoadout( ply )
       end
     end
 
-    ply:SetNWInt( "hunger", 100 )
-    ply:SetNWInt( "thirst", 100 )
+    ply:SetNWFloat( "hunger", 100 )
+    ply:SetNWFloat( "thirst", 100 )
 
     local monTab = SQL_SELECT( "yrp_money", "*", nil )
     if monTab != nil then
@@ -112,8 +112,8 @@ function GM:PlayerLoadout( ply )
     if _yrp_general != nil then
       _yrp_general = _yrp_general[1]
       ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
-      --ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
-      --ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
+      ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
+      ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
       ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
       ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
       ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
@@ -152,12 +152,6 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function( ply )
 
   ply:SetNWBool( "can_respawn", true )
 end)
-
---[[
-function GM:PlayerDeathThink( ply )
-  --printGM( "gm", "[PlayerDeathThink] " .. tostring( ply:YRPName() ) .. "" )
-end
-]]--
 
 function IsNoDefaultWeapon( weapon )
   local _class = weapon:GetClass()

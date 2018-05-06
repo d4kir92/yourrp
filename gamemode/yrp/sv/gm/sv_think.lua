@@ -40,19 +40,19 @@ function reg_mb( ply )
 end
 
 function con_hg( ply )
-  ply:SetNWInt( "hunger", ply:GetNWInt( "hunger", 0 ) - 0.1 )
-  if ply:GetNWInt( "hunger", 0 ) < 0 then
-    ply:SetNWInt( "hunger", 0 )
+  ply:SetNWFloat( "hunger", tonumber( ply:GetNWFloat( "hunger", 0.0 ) ) - 0.01 )
+  if tonumber( ply:GetNWFloat( "hunger", 0.0 ) ) < 0.0 then
+    ply:SetNWFloat( "hunger", 0.0 )
   end
-  if ply:GetNWInt( "hunger", 0 ) < 20 then
+  if tonumber( ply:GetNWFloat( "hunger", 0.0 ) ) < 20.0 then
     ply:TakeDamage( ply:GetMaxHealth() / 100 )
   end
 end
 
 function con_th( ply )
-  ply:SetNWInt( "thirst", ply:GetNWInt( "thirst", 0 ) - 0.2 )
-  if ply:GetNWInt( "thirst", 0 ) < 0 then
-    ply:SetNWInt( "thirst", 0 )
+  ply:SetNWFloat( "thirst", tonumber( ply:GetNWFloat( "thirst", 0.0 ) ) - 0.02 )
+  if tonumber( ply:GetNWFloat( "thirst", 0.0 ) ) < 0.0 then
+    ply:SetNWFloat( "thirst", 0.0 )
   end
 end
 
@@ -62,13 +62,13 @@ function con_st( ply )
     if ply:GetNWInt( "GetCurStamina", 0 ) < 0 then
       ply:SetNWInt( "GetCurStamina", 0 )
     end
-  elseif ply:GetNWInt( "thirst", 0 ) > 20 then
+  elseif ply:GetNWFloat( "thirst", 0 ) > 20 then
     ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) + ply:GetNWInt( "staminup", 1 ) )
     if ply:GetNWInt( "GetCurStamina", 0 ) > ply:GetNWInt( "GetMaxStamina", 100 ) then
       ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetMaxStamina", 100 ) )
     end
   end
-  if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWInt( "thirst", 0 ) < 20 then
+  if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWFloat( "thirst", 0 ) < 20 then
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.6 )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.6 )
     ply:SetCanWalk( false )
@@ -185,7 +185,7 @@ timer.Create( "ServerThink", 1, 0, function()
         reg_hp( ply )   --HealthReg
         reg_ar( ply )   --ArmorReg
         if ply:GetNWBool( "toggle_metabolism", false ) then
-          if ply:GetNWInt( "hunger", 0 ) > 20 and _time%4 == 0 then
+          if tonumber( ply:GetNWFloat( "hunger", "0" ) ) > 20 and _time%4 == 0 then
             reg_mb( ply ) --MetabolismReg (health up, when enough hunger)
           end
         end
@@ -200,10 +200,10 @@ timer.Create( "ServerThink", 1, 0, function()
       end
 
       if ply:GetNWBool( "toggle_hunger", false ) then
-        --con_hg( ply )
+        con_hg( ply )
       end
       if ply:GetNWBool( "toggle_thirst", false ) then
-        --con_th( ply )
+        con_th( ply )
       end
       if ply:GetNWBool( "toggle_stamina", false ) then
         con_st( ply )

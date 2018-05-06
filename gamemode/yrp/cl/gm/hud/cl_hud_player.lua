@@ -177,8 +177,8 @@ function HudPlayer( ply )
           end
           hudMA( ply, Color( 58, 143, 255, _alpha ) )
 
-          --hudMH( ply, Color( 150, 88, 52, _alpha ) )
-          --hudMT( ply, Color( 52, 70, 150, _alpha ) )
+          hudMH( ply, Color( 150, 88, 52, _alpha ) )
+          hudMT( ply, Color( 52, 70, 150, _alpha ) )
           hudMS( ply, Color( 150, 150, 60, _alpha ) )
 
           hudCA( ply, Color( 132, 116, 188, _alpha ) )
@@ -203,8 +203,8 @@ function HudPlayer( ply )
           end
           hudMABR( ply )
 
-          --hudMHBR( ply )
-          --hudMTBR( ply )
+          hudMHBR( ply )
+          hudMTBR( ply )
           hudMSBR( ply )
 
           hudCABR( ply )

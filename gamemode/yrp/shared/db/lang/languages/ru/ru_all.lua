@@ -690,5 +690,5 @@ function RU_All()
   set_lang_string( "hidden", "Скрыто" )
   set_lang_string( "visible", "Отображено" )
   set_lang_string( "suicidedisabled", "Отключить суицид" )
-  set_lang_string( "dropmoneyondeath", "Drop money on death" )
+  set_lang_string( "dropmoneyondeath", "Бросать деньги при смерти" )
 end

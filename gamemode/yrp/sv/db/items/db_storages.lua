@@ -90,7 +90,9 @@ function LoadStorages()
       _tmp:Spawn()
       _tmp:DropToFloor()
       timer.Simple( 0.01, function()
-        _tmp:GetPhysicsObject():EnableMotion( false )
+        if ea( _tmp ) then
+          _tmp:GetPhysicsObject():EnableMotion( false )
+        end
       end)
     end
   end

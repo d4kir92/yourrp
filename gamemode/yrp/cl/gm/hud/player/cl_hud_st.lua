@@ -40,7 +40,7 @@ function hudST( ply, color )
       _st_m = 1
     end
   end
-  if ply:GetNWInt( "hunger", 100 ) < 20 then
+  if ply:GetNWFloat( "hunger", 100 ) < 20 then
     if _sttext != "" then
       _sttext = _sttext .. ", "
     end
@@ -49,7 +49,7 @@ function hudST( ply, color )
       _st_m = 2
     end
   end
-  if ply:GetNWInt( "thirst", 100 ) < 20 then
+  if ply:GetNWFloat( "thirst", 100 ) < 20.0 then
     if _sttext != "" then
       _sttext = _sttext .. ", "
     end

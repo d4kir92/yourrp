@@ -9,6 +9,16 @@ function Player:GetLanguage() -- The Language the player selected
   return self:YRPGetLanguage() -- return string
 end
 
+--[[ Metabolism ]]--
+function Player:Eat( num ) -- Add num to hunger
+  self:YRPEat( num )
+end
+
+function Player:Drink( num ) -- Add num to thirst
+  self:YRPDrink( num )
+end
+
+--[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
   return self:YRPGetMoney() -- return float
 end

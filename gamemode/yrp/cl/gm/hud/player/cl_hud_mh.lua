@@ -8,8 +8,8 @@ end
 
 function hudMH( ply, color )
   if showMH( ply ) then
-    local _mhtext = math.Round( ( math.Round( ply:GetNWInt( "hunger", 0 ), 0 ) / 100 ) * 100, 0 ) .. "%"
-    drawHUDElement( "mh", ply:GetNWInt( "hunger", 0 ), 100, _mhtext, hunger, color )
+    local _mhtext = math.Round( ( math.Round( ply:GetNWFloat( "hunger", 0.0 ), 1 ) / 100 ) * 100, 1 ) .. "%"
+    drawHUDElement( "mh", ply:GetNWFloat( "hunger", 0.0 ), 100, _mhtext, hunger, color )
   end
 end
 

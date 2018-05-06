@@ -16,8 +16,8 @@ hook.Add( "open_server_general", "open_server_general", function()
 
     local sv_generalName = vgui.Create( "DTextEntry", settingsWindow.window.site )
     local sv_generalAdvert = vgui.Create( "DTextEntry", settingsWindow.window.site )
-    --local sv_generalHunger = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 315 )
-    --local sv_generalThirst = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 375 )
+    local sv_generalHunger = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 315 )
+    local sv_generalThirst = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 375 )
     local sv_generalStamina = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 435 )
     local sv_generalBuilding = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 495 )
     local sv_generalHud = createVGUI( "DCheckBox", settingsWindow.window.site, 30, 30, _center, 555 )
@@ -73,8 +73,8 @@ hook.Add( "open_server_general", "open_server_general", function()
 
       draw.SimpleTextOutlined( lang_string( "advertname" ) .. ":", "sef", ctr( _center - 10 ), ctr( 90 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "updatecountdown" ) .. ":", "sef", ctr( _center - 10 ), ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      --draw.SimpleTextOutlined( lang_string( "hunger" ) .. ":", "sef", ctr( _center - 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      --draw.SimpleTextOutlined( lang_string( "thirst" ) .. ":", "sef", ctr( _center - 10 ), ctr( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "hunger" ) .. ":", "sef", ctr( _center - 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "thirst" ) .. ":", "sef", ctr( _center - 10 ), ctr( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "stamina" ) .. ":", "sef", ctr( _center - 10 ), ctr( 450 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "server_hud" ) .. ":", "sef", ctr( _center - 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -131,8 +131,8 @@ hook.Add( "open_server_general", "open_server_general", function()
       sv_generalName:SetText( oldGamemodename )
       _advertname = _yrp_general.name_advert or "FAILED"
       sv_generalAdvert:SetText( tostring( _advertname ) )
-      --sv_generalHunger:SetChecked( tobool( _yrp_general.toggle_hunger ) )
-      --sv_generalThirst:SetChecked( tobool( _yrp_general.toggle_thirst ) )
+      sv_generalHunger:SetChecked( tobool( _yrp_general.toggle_hunger ) )
+      sv_generalThirst:SetChecked( tobool( _yrp_general.toggle_thirst ) )
       sv_generalStamina:SetChecked( tobool( _yrp_general.toggle_stamina ) )
       sv_generalBuilding:SetChecked( tobool( _yrp_general.toggle_building ) )
       sv_generalHud:SetValue( tonumber( _yrp_general.toggle_hud ) )
@@ -451,7 +451,7 @@ hook.Add( "open_server_general", "open_server_general", function()
         _tmpFrame:MakePopup()
       end
 
-      --[[function sv_generalHunger:OnChange( bVal )
+      function sv_generalHunger:OnChange( bVal )
         local _tonumber = 0
         if bVal then
           _tonumber = 1
@@ -469,7 +469,7 @@ hook.Add( "open_server_general", "open_server_general", function()
         net.Start( "db_update_thirst" )
           net.WriteInt( _tonumber, 4 )
         net.SendToServer()
-      end]]--
+      end
 
       function sv_generalStamina:OnChange( bVal )
         local _tonumber = 0
