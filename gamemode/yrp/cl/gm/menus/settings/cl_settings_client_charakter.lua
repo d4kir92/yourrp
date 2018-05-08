@@ -33,6 +33,7 @@ net.Receive( "getCharakterList", function()
 end)
 
 hook.Add( "open_client_character", "open_client_character", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

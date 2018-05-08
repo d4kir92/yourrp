@@ -1,70 +1,48 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---[[
-local Player = FindMetaTable( "Player" )
+function PositionEquipment( ply, na, bo, v_pos, a_ang )
+  local bone = ply:LookupBone( bo )
 
-function Player:VisualEquipment( name, bone, size, v_pos, a_ang )
-  self[name] = self[name] or {}
-  if ea( self[name].model ) then
-    self[name].model:Remove()
+  local matrix = ply:GetBoneMatrix( bone )
+  local pos = matrix:GetTranslation()
+  local ang = matrix:GetAngles()
+
+  local ent = ply:GetNWEntity( na, NULL )
+  if ea( ent ) then
+    local _aw = ply:GetActiveWeapon()
+    if ea( _aw ) then
+      if _aw:GetClass() == ply:GetNWString( na .. "ClassName", "NULL" ) then
+        ent:SetNoDraw( true )
+      else
+        ent:SetNoDraw( false )
+      end
+    end
+    local corax = tonumber( ply:GetNWString( na .. "corax", "0" ) )
+    local coray = tonumber( ply:GetNWString( na .. "coray", "0" ) )
+    local coraz = tonumber( ply:GetNWString( na .. "coraz", "0" ) )
+
+    ent:SetLocalPos( pos + ang:Forward() * v_pos.x + ang:Up() * v_pos.y + ang:Right() * v_pos.z )
+
+    ang:RotateAroundAxis( ang:Forward(), a_ang.p + corax )
+    ang:RotateAroundAxis( ang:Up(), a_ang.y + coray )
+    ang:RotateAroundAxis( ang:Right(), a_ang.r + coraz )
+    ent:SetLocalAngles( ang )
   end
-
-  self[name].bone = bone
-  self[name].lookupbone = self:LookupBone( self[name].bone )
-  self[name].model = ClientsideModel( self:GetNWString( name, "" ), RENDERGROUP_OPAQUE )
-  self[name].model:SetModelScale( size, 0 )
-  self[name].model:Spawn()
-
-  local _maxs = self[name].model:OBBMaxs()
-  local _mins = self[name].model:OBBMins()
-
-  local _x = _maxs.x - _mins.x
-  local _y = _maxs.y - _mins.y
-  local _z = _maxs.z - _mins.z
-
-  local cor = 0
-  if _y > _x then
-    cor = 90
-  end
-
-  --local pos, ang = self:GetBonePosition( self[name].lookupbone )
-
-  --local _cor = self:GetPos() - pos
-  --local _cor2 = self:GetAngles() - ang
 end
 
-hook.Add("PostPlayerDraw", "yrp_equipment", function(ply)
-	if ply:Alive() then
-    if ply["backpack"] != nil then
-			local bone = ply:LookupBone( ply["backpack"].bone )
+hook.Add( "PostPlayerDraw", "yrp_weapon_holster", function( ply )
+	if ply:Alive() and ply:GetNWBool( "toggle_inventory", false ) then
+		 PositionEquipment( ply, "backpack", "ValveBiped.Bip01_Spine4", Vector( -10, 3, 8 ), Angle( 0, 90, 0 ) )
 
-			if not bone then
-				return
-			end
+     PositionEquipment( ply, "weaponprimary1", "ValveBiped.Bip01_R_Clavicle", Vector( 5, 4, 0 ), Angle( 0, -90, 0 ) )
+     PositionEquipment( ply, "weaponprimary2", "ValveBiped.Bip01_L_Clavicle", Vector( 5, -4 -tonumber( ply:GetNWString( "weaponprimary2" .. "thick", "0" ) )/5, 0 ), Angle( 0, -90, 0 ) )
 
-			local matrix = ply:GetBoneMatrix(bone)
+     PositionEquipment( ply, "weaponsecondary1", "ValveBiped.Bip01_R_Thigh", Vector( 0, -3.6, 0 ), Angle( 0, -90, -90 ) )
+     PositionEquipment( ply, "weaponsecondary2", "ValveBiped.Bip01_L_Thigh", Vector( 0, 3.6, 0 ), Angle( 0, -90, -90 ) )
 
-			if not matrix then
-				return
-			end
-
-			local pos = matrix:GetTranslation()
-			local ang = matrix:GetAngles()
-      pos = pos + ang:Right() * 12 + ang:Forward() * -14 + ang:Up() * 3.4
-			ply["backpack"].model:SetRenderOrigin( pos )
-			ang:RotateAroundAxis( ang:Forward(), 90 )
-			ang:RotateAroundAxis( ang:Up(), 180 )
-			ang:RotateAroundAxis( ang:Right(), 90 )
-			ply["backpack"].model:SetRenderAngles(ang)
-			ply["backpack"].model:DrawModel()
-    end
-
-    if ply["weaponprimary1"] != nil then
-	    --ply["weaponprimary1"].model:DrawModel()
-    end
+     PositionEquipment( ply, "weapongadget", "ValveBiped.Bip01_L_Thigh", Vector( 0, 0, 5 ), Angle( 0, 0, 0 ) )
   end
 end)
-]]--
 
 local inv = {}
 
@@ -87,12 +65,11 @@ function CloseInventory()
   end
 end
 
+inv["backpack"] = Material( "vgui/material/ic_work_black_24dp_2x.png" )
+
 net.Receive( "openStorage", function( len )
   local ply = LocalPlayer()
   local _tabs = net.ReadTable()
-
-  --local _bp = ply:VisualEquipment( "backpack", "ValveBiped.Bip01_Spine4", 1.3, Vector( -16, -7, 3.4 ), Angle( 0, -90 -12, -90 ) )
-  --local _wp1 = ply:VisualEquipment( "weaponprimary1", "ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90, 90 ) )
 
   if inv.window == nil then
     inv.window = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
@@ -234,6 +211,11 @@ net.Receive( "openStorage", function( len )
     _bps.backpack = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2, ScrH() - ctr( ICON_SIZE + 10 ) )
     function _bps.backpack:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( inv["backpack"] )
+      surface.DrawTexturedRect( ctr( 4 ), ctr( 4 ), pw - ctr( 8 ), ph - ctr( 8 ) )
+
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_backpack", function( len )
@@ -312,7 +294,6 @@ net.Receive( "openStorage", function( len )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
-
     net.Receive( "update_slot_weapon_primary_1", function( len )
       local _s = net.ReadTable()
       AddStorage( _eq.pweapon1, _s.uniqueID, _s.sizew, _s.sizeh, "eqwpp1" )
@@ -325,14 +306,66 @@ net.Receive( "openStorage", function( len )
 
     _height = _height + ctr( 10 + ICON_SIZE*ITEM_MAXH )
     _eq.pweapon2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * ITEM_MAXW ), ctr( ICON_SIZE * ITEM_MAXH ), _left, _height )
+    function _eq.pweapon2:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
+    end
+    net.Receive( "update_slot_weapon_primary_2", function( len )
+      local _s = net.ReadTable()
+      AddStorage( _eq.pweapon2, _s.uniqueID, _s.sizew, _s.sizeh, "eqwpp2" )
+      net.Start( "getstorageitems" )
+        net.WriteString( _s.uniqueID )
+      net.SendToServer()
+    end)
+    net.Start( "update_slot_weapon_primary_2" )
+    net.SendToServer()
 
     _height = _height + ctr( 10 + ICON_SIZE*ITEM_MAXH )
     _eq.sweapon1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 4 ), ctr( ICON_SIZE * 2 ), _left, _height )
+    function _eq.sweapon1:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
+    end
+    net.Receive( "update_slot_weapon_secondary_1", function( len )
+      local _s = net.ReadTable()
+      AddStorage( _eq.sweapon1, _s.uniqueID, _s.sizew, _s.sizeh, "eqwps1" )
+      net.Start( "getstorageitems" )
+        net.WriteString( _s.uniqueID )
+      net.SendToServer()
+    end)
+    net.Start( "update_slot_weapon_secondary_1" )
+    net.SendToServer()
 
     _eq.sweapon2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 4 ), ctr( ICON_SIZE * 2 ), _left + ctr( ICON_SIZE * 4 + 10 ), _height )
+    function _eq.sweapon2:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
+    end
+    net.Receive( "update_slot_weapon_secondary_2", function( len )
+      local _s = net.ReadTable()
+      AddStorage( _eq.sweapon2, _s.uniqueID, _s.sizew, _s.sizeh, "eqwps2" )
+      net.Start( "getstorageitems" )
+        net.WriteString( _s.uniqueID )
+      net.SendToServer()
+    end)
+    net.Start( "update_slot_weapon_secondary_2" )
+    net.SendToServer()
 
     _height = _height + ctr( 10 + ICON_SIZE*2 )
-    _eq.sgrenade = createD( "DPanel", inv.window, ctr( ICON_SIZE * 2 ), ctr( ICON_SIZE * 2 ), _left, _height )
+    _eq.sgadget = createD( "DPanel", inv.window, ctr( ICON_SIZE * 2 ), ctr( ICON_SIZE * 2 ), _left, _height )
+    function _eq.sgadget:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+      drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
+    end
+    net.Receive( "update_slot_weapon_gadget", function( len )
+      local _s = net.ReadTable()
+      AddStorage( _eq.sgadget, _s.uniqueID, _s.sizew, _s.sizeh, "eqwpg" )
+      net.Start( "getstorageitems" )
+        net.WriteString( _s.uniqueID )
+      net.SendToServer()
+    end)
+    net.Start( "update_slot_weapon_gadget" )
+    net.SendToServer()
   end
 end)
 

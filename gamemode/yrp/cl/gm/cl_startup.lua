@@ -790,7 +790,13 @@ net.Receive( "yrp_info2", function( len )
     if ply != nil then
       local _str = net.ReadString()
       _str = lang_string( _str )
-      notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
+      local _str2 = net.ReadString()
+      if _str2 != nil then
+        _str2 = " " .. lang_string( _str2 )
+      else
+        _str2 = ""
+      end
+      notification.AddLegacy( _str .. _str2, NOTIFY_GENERIC, 3 )
     end
   end
 end)

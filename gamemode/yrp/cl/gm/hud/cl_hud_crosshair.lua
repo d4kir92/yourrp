@@ -66,8 +66,14 @@ function HudCrosshair()
           end
           if ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) and reloading == 0 then
             alphaFade = alphaFade - 0.05
-            if alphaFade < 0 then
-              alphaFade = 0
+            if alphaFade < 0.5 then
+              alphaFade = 0.5
+            end
+            ch_attack1 = ch_attack1 + 2
+            if ch_attack1 < 0 then
+              ch_attack1 = 0
+            elseif ch_attack1 > 20 then
+              ch_attack1 = 20
             end
           elseif reloading == 0 then
             alphaFade = alphaFade + 0.1

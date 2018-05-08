@@ -20,20 +20,21 @@ end )
 --##############################################################################
 
 --##############################################################################
-local hide = {
-	CHudHealth = true,
-	CHudBattery = true,
-	CHudAmmo = true,
-	CHudSecondaryAmmo = true,
-	CHudCrosshair = true,
-	CHudVoiceStatus = false
-}
 
 function GM:DrawDeathNotice( x, y )
 	--No Kill Feed
 end
 
-hook.Add( "HUDShouldDraw", "HideHUD", function( name )
+hook.Add( "HUDShouldDraw", "yrp_hidehud", function( name )
+	local hide = {
+		CHudHealth = true,
+		CHudBattery = true,
+		CHudAmmo = true,
+		CHudSecondaryAmmo = true,
+		CHudCrosshair = LocalPlayer():GetNWBool( "yrp_crosshair", false ),
+		CHudVoiceStatus = false
+	}
+
 	if g_VoicePanelList != nil then
 		g_VoicePanelList:SetVisible( false )
 	end
@@ -155,8 +156,19 @@ end
 
 local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
 
+function DrawEquipment( ply, name )
+	local _tmp = ply:GetNWEntity( name, NULL )
+	if ea( _tmp ) then
+		if tonumber( ply:GetNWString( "view_range", "0" ) ) <= 0 then
+			_tmp:SetNoDraw( true )
+		else
+			_tmp:SetNoDraw( false )
+		end
+	end
+end
+
 --##############################################################################
-hook.Add( "HUDPaint", "CustomHud", function( )
+hook.Add( "HUDPaint", "yrp_hud", function( )
 	local ply = LocalPlayer()
 
 	if ply:GetNWBool( "blinded", false ) then
@@ -170,14 +182,12 @@ hook.Add( "HUDPaint", "CustomHud", function( )
 		surfaceText( lang_string( "cloaked" ), "SettingsHeader", ScrW2(), ScrH2() - ctr( 400 ), Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 
-	local _bp = ply:GetBackpack()
-	if ea( _bp ) then
-		if tonumber( ply:GetNWString( "view_range", "0" ) ) <= 0 then
-			--_bp:SetNoDraw( true )
-		else
-			--_bp:SetNoDraw( false )
-		end
-	end
+	DrawEquipment( ply, "backpack" )
+	DrawEquipment( ply, "weaponprimary1" )
+	DrawEquipment( ply, "weaponprimary2" )
+	DrawEquipment( ply, "weaponsecondary1" )
+	DrawEquipment( ply, "weaponsecondary2" )
+	DrawEquipment( ply, "weapongadget" )
 
 	if !ply:InVehicle() then
 		HudPlayer( ply )

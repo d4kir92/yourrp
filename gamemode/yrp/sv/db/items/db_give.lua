@@ -129,6 +129,7 @@ net.Receive( "dropswep", function( len, ply )
     if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
       local _wclass = _weapon:GetClass() or ""
       ply:DropWeapon( _weapon )
+      _weapon:SetOwner( NULL )
     end
   else
     printGM( "note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE" )

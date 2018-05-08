@@ -389,6 +389,7 @@ net.Receive( "get_shop_items", function()
 end)
 
 hook.Add( "open_server_shops", "open_server_shops", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

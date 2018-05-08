@@ -70,6 +70,7 @@ net.Receive( "get_licenses", function()
 end)
 
 hook.Add( "open_server_licenses", "open_server_licenses", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

@@ -79,7 +79,6 @@ function ItemToEntity( item, ply )
     _ent:SetNWString( "storage_uid", item.intern_storageID )
   end
   TeleportEntityTo(_ent, ply:GetPos() )
-  _ent:SetNWString( "ownerRPName", ply:RPName() )
   return item
 end
 
@@ -139,10 +138,13 @@ net.Receive( "moveitem", function( len, ply )
     _i.storageID = _slot2.storageID
     _i.posx = _slot2.posx
     _i.posy = _slot2.posy
+    if _i.entity:IsWeapon() then
+      _i.entity:SetNWString( "eqtype", "weapon" )
+    end
 
     --[[
     if _type == "eqbp" then
-      print( "FROM NEARBY TO EQUIPMENT" )
+      printGM( "db", "FROM NEARBY TO EQUIPMENT" )
       local _uid = SQL_SELECT( "yrp_characters", "eqbp", "uniqueID = '" .. ply:CharID() .. "'" )
       _uid = _uid[1].eqbp
 
@@ -161,10 +163,10 @@ net.Receive( "moveitem", function( len, ply )
 
     else]]--
     if _slot2.storageID == 0 then
-      print( "FROM NEARBY TO NEARBY" )
+      printGM( "db", "FROM NEARBY TO NEARBY" )
       --
     elseif _slot2.storageID != 0 then
-      print( "FROM NEARBY TO STORAGE", _slot2.storageID )
+      printGM( "db", "FROM NEARBY TO STORAGE", _slot2.storageID )
       local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _i.storageID )
       if _storage != nil then
         _storage = _storage[1]
@@ -184,8 +186,12 @@ net.Receive( "moveitem", function( len, ply )
           end
         end
 
-        if IsEnoughSpace( _stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID ) and IsRightInventoryType( _storage.type, _item.entity:GetNWString( "eqtype", "world" ) ) then
-          --print("ENOUGH SPACE")
+        if IsEnoughSpace( _stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID ) then
+          if !IsRightInventoryType( _storage.type, _item.entity:GetNWString( "eqtype", "world" ) ) then
+            printGM( "note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetNWString( "eqtype", "world" ) )
+            return "notrighttype"
+          end
+          --printGM( "db", "ENOUGH SPACE")
           local _result = CreateItem( _item, _slot2 )
           _item.entity:Remove()
           _item.uniqueID = _result.uniqueID
@@ -212,11 +218,11 @@ net.Receive( "moveitem", function( len, ply )
     end
   elseif _slot1.storageID != 0 then
     if _slot2.storageID == 0 then
-      print( "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
+      printGM( "db", "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
       local _result = SQL_DELETE_FROM( _db_name, "uniqueID = " .. _item.uniqueID )
       _item = ItemToEntity( _item, ply )
     elseif _slot2.storageID != 0 then
-      print( "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
+      printGM( "db", "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
       local _i = SQL_SELECT( _db_name, "*", "uniqueID = " .. _item.uniqueID )
       if _i != nil then
         _i = _i[1]

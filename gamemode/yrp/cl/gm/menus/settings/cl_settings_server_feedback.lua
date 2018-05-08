@@ -21,6 +21,7 @@ net.Receive( "get_feedback", function()
 end)
 
 hook.Add( "open_server_feedback", "open_server_feedback", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

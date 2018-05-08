@@ -47,6 +47,7 @@ net.Receive( "getMoneyTab", function()
 end)
 
 hook.Add( "open_server_money", "open_server_money", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

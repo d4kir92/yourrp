@@ -199,7 +199,6 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     end
   end
   if IsDropMoneyOnDeathEnabled() then
-    print(ply:YRPName(), dmg)
     local money = ents.Create( "yrp_money" )
     money:SetPos( ply:GetPos() )
     money:Spawn()

@@ -1114,6 +1114,7 @@ net.Receive( "yrp_groups", function( len )
 end)
 
 hook.Add( "open_server_roles", "open_server_roles", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

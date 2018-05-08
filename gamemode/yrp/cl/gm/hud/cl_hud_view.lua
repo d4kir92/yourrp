@@ -2,7 +2,7 @@
 
 function showOwner( eyeTrace )
   if eyeTrace.Entity:GetNWString( "ownerRPName" ) != "" or eyeTrace.Entity:GetNWString( "ownerGroup" ) != "" then
-    draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " ..  eyeTrace.Entity:GetNWString( "ownerRPName" ) .. eyeTrace.Entity:GetNWString( "ownerGroup" ), "sef", ScrW()/2, ScrH2() + ctr( 750 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "owner" ) .. ": " ..  eyeTrace.Entity:GetNWString( "ownerRPName", "" ) .. eyeTrace.Entity:GetNWString( "ownerGroup", "" ), "sef", ScrW()/2, ScrH2() + ctr( 750 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 end
 

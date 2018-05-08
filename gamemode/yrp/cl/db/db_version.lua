@@ -3,7 +3,6 @@
 local testingversion = false
 local serverVersion = "-1.-1.-1"
 local v_color = Color( 255, 255, 255, 255 )
-local v_outdated = true
 local v_tested = false
 local s_sort = ""
 
@@ -24,7 +23,7 @@ timer.Create( "check_yrp_version", 3600, 0, function()
 end)
 
 function is_version_outdated()
-  return v_outdated
+  return LocalPlayer():GetNWBool( "version_outdated", false )
 end
 function version_color()
   return v_color
@@ -36,7 +35,7 @@ end
 function showVersion()
   local ply = LocalPlayer()
 
-  v_outdated = false
+  LocalPlayer():SetNWBool( "version_outdated", false )
   http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
     function( body, len, headers, code )
       local StartPos = string.find( body, "#", 1, false )
@@ -72,7 +71,7 @@ function showVersion()
           verart2 = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionnewpos" )
           outcol2 = Color( 255, 0, 0, 255 )
 
-          v_outdated = true
+          LocalPlayer():SetNWBool( "version_outdated", true )
         elseif tonumber( cur2num2[k] ) > tonumber( new2num2[k] ) then
           verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
           outcol2 = Color( 100, 100, 255, 255 )
@@ -104,7 +103,7 @@ function showVersion()
         s_sort = lang_string( "stable" )
       end
 
-      if v_outdated then
+      if LocalPlayer():GetNWBool( "version_outdated", false ) then
         local frame = createVGUI( "DFrame", nil, 1200, 570, 0, 0 )
         frame:Center()
         frame:SetTitle( "" )

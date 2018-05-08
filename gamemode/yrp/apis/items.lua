@@ -101,7 +101,9 @@ function GetSurroundingEntities( ply )
             if ent:GetParent() != ply then
               if !ent:GetParent():IsVehicle() and !string.find( ent:GetClass(), "wheel" ) then
                 if !ent:IsWorldStorage() then
-                  table.insert( _tab, ent )
+                  if !ea( ent:GetOwner() ) then
+                    table.insert( _tab, ent )
+                  end
                 end
               end
             end
@@ -143,7 +145,14 @@ function GetSurroundingItems( ply )
 end
 
 function IsRightInventoryType( storage, item )
-  if storage == item then
+  if storage == "world" then
+    return true
+  end
+  local _storage = storage
+  if storage == "eqwpp1" or storage == "eqwpp2" or storage == "eqwps1" or storage == "eqwps2" or storage == "eqwpg" then
+    _storage = "weapon"
+  end
+  if _storage == item then
     return true
   else
     return false
@@ -324,7 +333,7 @@ if CLIENT then
             function _edit_slot:Paint( pw, ph )
               self.color = Color( 0, 0, 0, 0 )
               if self:IsHovered() then
-                self.color = Color( 255, 255, 255, 200 )
+                self.color = Color( 255, 255, 255, 10 )
               end
               surfaceBox( 0, 0, pw, ph, self.color )
               drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
@@ -367,7 +376,7 @@ if CLIENT then
 
       local _bg = createD( "DPanel", _parent, ctr( ICON_SIZE*tab.sizew ), ctr( ICON_SIZE*tab.sizeh ), _x + ctr( (tab.posx-1)*ICON_SIZE ), _y + ctr( (tab.posy-1)*ICON_SIZE ) )
       function _bg:Paint( pw, ph )
-        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
       end
       function _bg:PaintOver( pw, ph )
         local _br = 2

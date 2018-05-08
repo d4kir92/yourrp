@@ -105,6 +105,7 @@ function getCopyMapPNG()
 end
 
 hook.Add( "open_server_map", "open_server_map", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

@@ -286,9 +286,11 @@ function send_errors( realm, tbl )
 end
 
 timer.Create( "update_error_tables", 60, 0, function()
-  _cl_errors = update_error_table_cl()
-  send_errors( "client", _cl_errors )
+	if !IsYRPOutdated() then
+	  _cl_errors = update_error_table_cl()
+	  send_errors( "client", _cl_errors )
 
-	_sv_errors = update_error_table_sv()
-  send_errors( "server", _sv_errors )
+		_sv_errors = update_error_table_sv()
+	  send_errors( "server", _sv_errors )
+	end
 end)

@@ -13,6 +13,7 @@ function createDKeybinder( parent, w, h, x, y, keybind )
 end
 
 hook.Add( "open_client_keybinds", "open_client_keybinds", function()
+  SaveLastSite()
   local ply = LocalPlayer()
   local w = settingsWindow.window.sitepanel:GetWide()
   local h = settingsWindow.window.sitepanel:GetTall()

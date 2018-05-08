@@ -63,36 +63,18 @@ function Player:VisualEquipment( name, slot )
           _item = _item[1]
           local _model = _item.WorldModel
 
+          local _old = self:GetNWEntity( name )
+          if ea( _old ) then
+            _old:Remove()
+          end
           self:SetNWString( name, _model )
-        end
-        return _item
-      end
-    end
-  end
-end
-
---[[
-function Player:VisualEquipment( name, slot, bone, size, v_pos, a_ang )
-  if ea( self:GetNWEntity( name ) ) then
-    self:GetNWEntity( name ):Remove()
-  end
-
-  if self:HasCharacterSelected() then
-    local _charid = self:CharID()
-    if _charid != nil then
-      local _uid = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. _charid .. "'" )
-      if _uid != nil then
-        _uid = _uid[1][slot]
-        local _item = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _uid .. "'" )
-        if _item != nil then
-          _item = _item[1]
-          local _spine = self:LookupBone( bone )
           local _visual = ents.Create( "prop_dynamic" )
-          _visual:SetRenderMode( RENDERGROUP_OPAQUE )
           _visual:SetModel( _item.WorldModel )
-          _visual:SetModelScale( size, 0 )
-
+          _visual:SetOwner( self )
           _visual:Spawn()
+
+          self:SetNWEntity( name, _visual )
+          self:SetNWString( name .. "ClassName", _item.ClassName )
 
           local _maxs = _visual:OBBMaxs()
           local _mins = _visual:OBBMins()
@@ -100,99 +82,216 @@ function Player:VisualEquipment( name, slot, bone, size, v_pos, a_ang )
           local _x = _maxs.x - _mins.x
           local _y = _maxs.y - _mins.y
           local _z = _maxs.z - _mins.z
-          local cor = 0
-          if _y > _x then
-            cor = 90
+
+          local corax = 0
+          local coray = 0
+          local coraz = 0
+          if _z >= _x and _y >= _x then
+            corax = 0
+            coray = -90
+            coraz = 90
+            self:SetNWString( name .. "thick", _x )
+          elseif _x >= _z and _y >= _z then
+            corax = 0
+            coray = 0
+            coraz = 0
+            self:SetNWString( name .. "thick", _z )
+          elseif _x >= _y and _z >= _y then
+            corax = 90
+            coray = 90
+            coraz = 90
+            self:SetNWString( name .. "thick", _y )
           end
-
-          local pos, ang = self:GetBonePosition( _spine )
-
-          local _cor = self:GetPos() - pos
-          local _cor2 = self:GetAngles() - ang
-
-          _visual:FollowBone( self, _spine )
-          _visual:SetLocalPos( Vector( 0, 0, 0 ) + v_pos )
-    	    _visual:SetLocalAngles( Angle( 0, 0, 0 ) + a_ang + Angle( cor, 0, 0 ) )
-          self:SetNWEntity( name, _visual )
+          self:SetNWString( name .. "corax", corax )
+          self:SetNWString( name .. "coray", coray )
+          self:SetNWString( name .. "coraz", coraz )
+        else
+          local _old = self:GetNWEntity( name )
+          if ea( _old ) then
+            _old:Remove()
+            self:SetNWEntity( name, NULL )
+          end
         end
         return _item
       end
     end
   end
 end
-]]--
 
 function Player:UpdateBackpack()
   local _bp = self:VisualEquipment( "backpack", "eqbp" ) --, "ValveBiped.Bip01_Spine4", 1.3, Vector( -16, -7, 3.4 ), Angle( 0, -90 -12, -90 ) )
   self:UpdateWeaponPrimary1()
+  self:UpdateWeaponPrimary2()
+  self:UpdateWeaponSecondary1()
+  self:UpdateWeaponSecondary2()
+  self:UpdateWeaponGadget()
   return _bp
 end
 
+local _site = 14
 function Player:UpdateWeaponPrimary1()
-  return self:VisualEquipment( "weaponprimary1", "eqwpp1" ) --, "ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90, 90 ) )
+  return self:VisualEquipment( "weaponprimary1", "eqwpp1" ) --,"ValveBiped.Bip01_R_Clavicle", 1, Vector( 0, -10, 7 ), Angle( 0, 90 - _site, 90 ) )
 end
 
 function Player:UpdateWeaponPrimary2()
-  return self:VisualEquipment( "weaponprimary2", "eqwpp2" ) --, "ValveBiped.Bip01_L_Clavicle", 1, Vector( 0, 0, 0 ), Angle( 0, 0, 0 ) )
+  return self:VisualEquipment( "weaponprimary2", "eqwpp2" ) --,"ValveBiped.Bip01_L_Clavicle", 1, Vector( 0, -10, -7 ), Angle( 0, 90 - _site, 90 ) )
+end
+
+function Player:UpdateWeaponSecondary1()
+  return self:VisualEquipment( "weaponsecondary1", "eqwps1" ) --,"ValveBiped.Bip01_R_Thigh", 1, Vector( 0, 0, -4 ), Angle( 0, 0, 90 ) )
+end
+
+function Player:UpdateWeaponSecondary2()
+  return self:VisualEquipment( "weaponsecondary2", "eqwps2" ) --,"ValveBiped.Bip01_L_Thigh", 1, Vector( 0, 0, 4 ), Angle( 0, 0, 90 ) )
+end
+
+function Player:UpdateWeaponGadget()
+  return self:VisualEquipment( "weapongadget", "eqwpg" ) --,"ValveBiped.Bip01_L_Thigh", 1, Vector( 0, -5, 0 ), Angle( 0, 0, 90 ) )
 end
 
 util.AddNetworkString( "update_slot_weapon_primary_1" )
 net.Receive( "update_slot_weapon_primary_1", function( len, ply )
-  local _charid = ply:CharID()
-  local _uid = SQL_SELECT( _db_name, "eqwpp1", "uniqueID = '" .. _charid .. "'" )
-  if _uid != nil then
-    _uid = _uid[1].eqwpp1
-    local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
-    if _backpack_storage == nil then
-      _backpack_storage = CreateEquipmentStorage( ply, "eqwpp1", _charid, ITEM_MAXW, ITEM_MAXH )
-      _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+  if ea( ply ) then
+    local _charid = ply:CharID()
+    local _uid = SQL_SELECT( _db_name, "eqwpp1", "uniqueID = '" .. _charid .. "'" )
+    if _uid != nil then
+      _uid = _uid[1].eqwpp1
+      local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _backpack_storage == nil then
+        _backpack_storage = CreateEquipmentStorage( ply, "eqwpp1", _charid, ITEM_MAXW, ITEM_MAXH )
+        _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+      end
+      _backpack_storage = _backpack_storage[1]
+      net.Start( "update_slot_weapon_primary_1" )
+        net.WriteTable( _backpack_storage )
+      net.Send( ply )
     end
-    _backpack_storage = _backpack_storage[1]
-    net.Start( "update_slot_weapon_primary_1" )
-      net.WriteTable( _backpack_storage )
-    net.Send( ply )
+  end
+end)
+
+util.AddNetworkString( "update_slot_weapon_primary_2" )
+net.Receive( "update_slot_weapon_primary_2", function( len, ply )
+  if ea( ply ) then
+    local _charid = ply:CharID()
+    local _uid = SQL_SELECT( _db_name, "eqwpp2", "uniqueID = '" .. _charid .. "'" )
+    if _uid != nil then
+      _uid = _uid[1].eqwpp2
+      local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _backpack_storage == nil then
+        _backpack_storage = CreateEquipmentStorage( ply, "eqwpp2", _charid, ITEM_MAXW, ITEM_MAXH )
+        _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+      end
+      _backpack_storage = _backpack_storage[1]
+      net.Start( "update_slot_weapon_primary_2" )
+        net.WriteTable( _backpack_storage )
+      net.Send( ply )
+    end
+  end
+end)
+
+util.AddNetworkString( "update_slot_weapon_secondary_1" )
+net.Receive( "update_slot_weapon_secondary_1", function( len, ply )
+  if ea( ply ) then
+    local _charid = ply:CharID()
+    local _uid = SQL_SELECT( _db_name, "eqwps1", "uniqueID = '" .. _charid .. "'" )
+    if _uid != nil then
+      _uid = _uid[1].eqwps1
+      local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _backpack_storage == nil then
+        _backpack_storage = CreateEquipmentStorage( ply, "eqwps1", _charid, 4, 2 )
+        _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+      end
+      _backpack_storage = _backpack_storage[1]
+      net.Start( "update_slot_weapon_secondary_1" )
+        net.WriteTable( _backpack_storage )
+      net.Send( ply )
+    end
+  end
+end)
+
+util.AddNetworkString( "update_slot_weapon_secondary_2" )
+net.Receive( "update_slot_weapon_secondary_2", function( len, ply )
+  if ea( ply ) then
+    local _charid = ply:CharID()
+    local _uid = SQL_SELECT( _db_name, "eqwps2", "uniqueID = '" .. _charid .. "'" )
+    if _uid != nil then
+      _uid = _uid[1].eqwps2
+      local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _backpack_storage == nil then
+        _backpack_storage = CreateEquipmentStorage( ply, "eqwps2", _charid, 4, 2 )
+        _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+      end
+      _backpack_storage = _backpack_storage[1]
+      net.Start( "update_slot_weapon_secondary_2" )
+        net.WriteTable( _backpack_storage )
+      net.Send( ply )
+    end
+  end
+end)
+
+util.AddNetworkString( "update_slot_weapon_gadget" )
+net.Receive( "update_slot_weapon_gadget", function( len, ply )
+  if ea( ply ) then
+    local _charid = ply:CharID()
+    local _uid = SQL_SELECT( _db_name, "eqwpg", "uniqueID = '" .. _charid .. "'" )
+    if _uid != nil then
+      _uid = _uid[1].eqwpg
+      local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _backpack_storage == nil then
+        _backpack_storage = CreateEquipmentStorage( ply, "eqwpg", _charid, 2, 2 )
+        _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+      end
+      _backpack_storage = _backpack_storage[1]
+      net.Start( "update_slot_weapon_gadget" )
+        net.WriteTable( _backpack_storage )
+      net.Send( ply )
+    end
   end
 end)
 
 util.AddNetworkString( "update_backpack" )
 net.Receive( "update_backpack", function( len, ply )
-  local _bp = ply:UpdateBackpack()
+  if ea( ply ) then
+    local _bp = ply:UpdateBackpack()
 
-  if _bp != nil then
-    local _uid = _bp.intern_storageID
+    if _bp != nil then
+      local _uid = _bp.intern_storageID
 
-    local _stor = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
-    if _stor != nil then
-      _stor = _stor[1]
-      net.Start( "update_backpack" )
-        net.WriteBool( true )
-        net.WriteTable( _stor )
-      net.Send( ply )
-      return true
+      local _stor = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _stor != nil then
+        _stor = _stor[1]
+        net.Start( "update_backpack" )
+          net.WriteBool( true )
+          net.WriteTable( _stor )
+        net.Send( ply )
+        return true
+      end
     end
-  end
 
-  net.Start( "update_backpack" )
-    net.WriteBool( false )
-  net.Send( ply )
-  return false
+    net.Start( "update_backpack" )
+      net.WriteBool( false )
+    net.Send( ply )
+    return false
+  end
 end)
 
 util.AddNetworkString( "update_slot_backpack" )
 net.Receive( "update_slot_backpack", function( len, ply )
-  local _charid = ply:CharID()
-  local _uid = SQL_SELECT( _db_name, "eqbp", "uniqueID = '" .. _charid .. "'" )
-  if _uid != nil then
-    _uid = _uid[1].eqbp
-    local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
-    if _backpack_storage == nil then
-      _backpack_storage = CreateEquipmentStorage( ply, "eqbp", _charid, 1, 1 )
-      _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+  if ea( ply ) then
+    local _charid = ply:CharID()
+    local _uid = SQL_SELECT( _db_name, "eqbp", "uniqueID = '" .. _charid .. "'" )
+    if _uid != nil then
+      _uid = _uid[1].eqbp
+      local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
+      if _backpack_storage == nil then
+        _backpack_storage = CreateEquipmentStorage( ply, "eqbp", _charid, 1, 1 )
+        _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
+      end
+      _backpack_storage = _backpack_storage[1]
+      net.Start( "update_slot_backpack" )
+        net.WriteTable( _backpack_storage )
+      net.Send( ply )
     end
-    _backpack_storage = _backpack_storage[1]
-    net.Start( "update_slot_backpack" )
-      net.WriteTable( _backpack_storage )
-    net.Send( ply )
   end
 end)
 

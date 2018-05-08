@@ -198,6 +198,7 @@ net.Receive( "getRoleWhitelist", function( len )
 end)
 
 hook.Add( "open_server_whitelist", "open_server_whitelist", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

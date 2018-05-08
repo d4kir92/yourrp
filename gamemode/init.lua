@@ -19,11 +19,11 @@ along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
+AddCSLuaFile( "yrp/cl/db/db_version.lua")
 AddCSLuaFile( "yrp/cl/db/db_database.lua")
 AddCSLuaFile( "yrp/cl/db/db_hud.lua")
 AddCSLuaFile( "yrp/cl/db/db_keybinds.lua")
 AddCSLuaFile( "yrp/cl/db/db_fonts.lua")
-AddCSLuaFile( "yrp/cl/db/db_version.lua")
 AddCSLuaFile( "yrp/cl/db/db_tutorials.lua")
 AddCSLuaFile( "yrp/cl/db/db_apps.lua")
 AddCSLuaFile( "yrp/cl/db/db_smartphone.lua")

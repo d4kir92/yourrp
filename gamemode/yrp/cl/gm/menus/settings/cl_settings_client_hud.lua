@@ -365,6 +365,7 @@ function changeFont( string, _settingsFontSizes, w, h, x, y )
 end
 
 hook.Add( "open_client_hud", "open_client_hud", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

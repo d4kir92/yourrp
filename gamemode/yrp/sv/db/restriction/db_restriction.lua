@@ -43,131 +43,178 @@ end
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
-hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( ply, model, name, table )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "vehicles", "usergroup = '" .. tostring( ply:GetUserGroup() ) .. "'" )
-  if worked( _tmp, "PlayerSpawnVehicle failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.vehicles ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a vehicle." )
+hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( pl, model, name, table )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "vehicles", "usergroup = '" .. tostring( pl:GetUserGroup() ) .. "'" )
+    if worked( _tmp, "PlayerSpawnVehicle failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.vehicles ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn a vehicle." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "vehicles" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "vehicles" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
 
-hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "weapons", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if worked( _tmp, "PlayerGiveSWEP failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.weapons ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a weapon." )
+hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( pl )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "weapons", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+    if worked( _tmp, "PlayerGiveSWEP failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.weapons ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn a weapon." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "weapon" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "weapon" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
 
-hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "entities", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if worked( _tmp, "PlayerSpawnSENT failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.entities ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn an entity." )
+hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( pl )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "entities", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+    if worked( _tmp, "PlayerSpawnSENT failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.entities ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn an entity." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "entities" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "entities" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
 
-hook.Add( "PlayerSpawnEffect", "yrp_effects_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "effects", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if worked( _tmp, "PlayerSpawnEffect failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.effects ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn an effect." )
+hook.Add( "PlayerSpawnEffect", "yrp_effects_restriction", function( pl )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "effects", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+    if worked( _tmp, "PlayerSpawnEffect failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.effects ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn an effect." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "effects" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "effects" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
 
-hook.Add( "PlayerSpawnNPC", "yrp_npcs_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "npcs", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if worked( _tmp, "PlayerSpawnNPC failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.npcs ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a npc." )
+hook.Add( "PlayerSpawnNPC", "yrp_npcs_restriction", function( pl )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "npcs", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+    if worked( _tmp, "PlayerSpawnNPC failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.npcs ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn a npc." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "npcs" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "npcs" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
 
-hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( ply )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "props", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if worked( _tmp, "PlayerSpawnProp failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.props ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a prop." )
+hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( pl )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "props", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+    if worked( _tmp, "PlayerSpawnProp failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.props ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn a prop." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "props" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "props" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
 
-hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( ply, model )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "ragdolls", "usergroup = '" .. tostring( ply:GetUserGroup() ) .. "'" )
-  if worked( _tmp, "PlayerSpawnRagdoll failed" ) then
-    _tmp = _tmp[1]
-    if tobool( _tmp.ragdolls ) then
-      return true
-    else
-      printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to spawn a ragdoll." )
+hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( pl, model )
+  if ea( pl ) then
+    local _tmp = SQL_SELECT( "yrp_restrictions", "ragdolls", "usergroup = '" .. tostring( pl:GetUserGroup() ) .. "'" )
+    if worked( _tmp, "PlayerSpawnRagdoll failed" ) then
+      _tmp = _tmp[1]
+      if tobool( _tmp.ragdolls ) then
+        return true
+      else
+        printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to spawn a ragdoll." )
 
-      net.Start( "yrp_info" )
-        net.WriteString( "ragdolls" )
-      net.Send( ply )
+        net.Start( "yrp_info" )
+          net.WriteString( "ragdolls" )
+        net.Send( pl )
 
-      return false
+        return false
+      end
     end
   end
 end)
+
+function RenderEquipment( ply, mode, color )
+  local _bp = ply:GetNWEntity( "backpack" )
+  if ea( _bp ) then
+    _bp:SetRenderMode( mode )
+    _bp:SetColor( color )
+  end
+  local _wpp1 = ply:GetNWEntity( "weaponprimary1" )
+  if ea( _wpp1 ) then
+    _wpp1:SetRenderMode( mode )
+    _wpp1:SetColor( color )
+  end
+  local _wpp2 = ply:GetNWEntity( "weaponprimary2" )
+  if ea( _wpp2 ) then
+    _wpp2:SetRenderMode( mode )
+    _wpp2:SetColor( color )
+  end
+  local _wps1 = ply:GetNWEntity( "weaponsecondary1" )
+  if ea( _wps1 ) then
+    _wps1:SetRenderMode( mode )
+    _wps1:SetColor( color )
+  end
+  local _wps2 = ply:GetNWEntity( "weaponsecondary2" )
+  if ea( _wps2 ) then
+    _wps2:SetRenderMode( mode )
+    _wps2:SetColor( color )
+  end
+  local _wpg = ply:GetNWEntity( "weapongadget" )
+  if ea( _wpg ) then
+    _wpg:SetRenderMode( mode )
+    _wpg:SetColor( color )
+  end
+end
 
 function RenderNoClip( ply, alpha )
   if ea( ply ) then
@@ -194,6 +241,7 @@ function RenderNoClip( ply, alpha )
       wp:SetRenderMode( RENDERMODE_TRANSALPHA )
       wp:SetColor( Color( 255, 255, 255, _alpha ) )
     end
+    RenderEquipment( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
   end
 end
 
@@ -205,6 +253,7 @@ function RenderFrozen( ply )
       wp:SetRenderMode( RENDERMODE_TRANSALPHA )
       wp:SetColor( Color( 0, 0, 255 ) )
     end
+    RenderEquipment( ply, RENDERMODE_TRANSALPHA, Color( 0, 0, 255 ) )
   end
 end
 
@@ -217,6 +266,7 @@ function RenderCloaked( ply )
       wp:SetRenderMode( RENDERMODE_TRANSALPHA )
       wp:SetColor( Color( 255, 255, 255, _alpha ) )
     end
+    RenderEquipment( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
   end
 end
 
@@ -234,257 +284,266 @@ function RenderNormal( ply )
         wp:SetRenderMode( RENDERMODE_NORMAL )
         wp:SetColor( Color( 255, 255, 255, 255 ) )
       end
+      RenderEquipment( ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255 ) )
     end
   end
 end
 
-hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( ply, bool )
-  if !bool then
-    -- TURNED OFF
-    RenderNormal( ply )
+hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
+  if ea( pl ) then
+    if !bool then
+      -- TURNED OFF
+      RenderNormal( pl )
 
-    local _pos = ply:GetPos()
+      local _pos = pl:GetPos()
 
-    -- Stuck?
-    local tr = {
-      start = _pos,
-      endpos = _pos,
-      mins = ply:OBBMins(),
-      maxs = ply:OBBMaxs(),
-      filter = ply
-    }
-    local _t = util.TraceHull( tr )
-
-    if _t.Hit then
-      -- Up
-      local trup = {
-        start = _pos+Vector(0,0,100),
-        endpos = _pos,
-        mins = Vector(1,1,0),
-        maxs = Vector(-1,-1,0),
-        filter = ply
-      }
-      local _tup = util.TraceHull( trup )
-
-      -- Down
-      local trdn = {
+      -- Stuck?
+      local tr = {
         start = _pos,
-        endpos = _pos+Vector(0,0,100),
-        mins = Vector(1,1,0),
-        maxs = Vector(-1,-1,0),
-        filter = ply
+        endpos = _pos,
+        mins = pl:OBBMins(),
+        maxs = pl:OBBMaxs(),
+        filter = pl
       }
-      local _tdn = util.TraceHull( trdn )
+      local _t = util.TraceHull( tr )
 
-      timer.Simple( 0.001, function()
-        if !_tup.StartSolid and _tdn.StartSolid then
-          ply:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
-        elseif _tup.StartSolid and !_tdn.StartSolid then
-          ply:SetPos( _tdn.HitPos - Vector( 0, 0, 72+1 ) )
-        elseif !_tup.StartSolid and !_tdn.StartSolid then
-          _pos = _pos + Vector( 0, 0, 36 )
-          if _pos:Distance( _tup.HitPos ) < _pos:Distance( _tdn.HitPos ) then
-            ply:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
-          elseif _pos:Distance( _tup.HitPos ) > _pos:Distance( _tdn.HitPos ) then
-            ply:SetPos( _tdn.HitPos - Vector( 0, 0, 72+6 ) )
+      if _t.Hit then
+        -- Up
+        local trup = {
+          start = _pos+Vector(0,0,100),
+          endpos = _pos,
+          mins = Vector(1,1,0),
+          maxs = Vector(-1,-1,0),
+          filter = pl
+        }
+        local _tup = util.TraceHull( trup )
+
+        -- Down
+        local trdn = {
+          start = _pos,
+          endpos = _pos+Vector(0,0,100),
+          mins = Vector(1,1,0),
+          maxs = Vector(-1,-1,0),
+          filter = pl
+        }
+        local _tdn = util.TraceHull( trdn )
+
+        timer.Simple( 0.001, function()
+          if !_tup.StartSolid and _tdn.StartSolid then
+            pl:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
+          elseif _tup.StartSolid and !_tdn.StartSolid then
+            pl:SetPos( _tdn.HitPos - Vector( 0, 0, 72+1 ) )
+          elseif !_tup.StartSolid and !_tdn.StartSolid then
+            _pos = _pos + Vector( 0, 0, 36 )
+            if _pos:Distance( _tup.HitPos ) < _pos:Distance( _tdn.HitPos ) then
+              pl:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
+            elseif _pos:Distance( _tup.HitPos ) > _pos:Distance( _tdn.HitPos ) then
+              pl:SetPos( _tdn.HitPos - Vector( 0, 0, 72+6 ) )
+            end
           end
+        end)
+      end
+    else
+      -- TURNED ON
+      local _tmp = SQL_SELECT( "yrp_restrictions", "noclip", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if worked( _tmp, "PlayerNoClip failed" ) then
+        _tmp = _tmp[1]
+        if tobool( _tmp.noclip ) then
+
+          if IsNoClipCrowEnabled() then
+            pl:SetModel( "models/crow.mdl" )
+          end
+
+          RenderNoClip( pl )
+          return true
+        else
+          printGM( "note", pl:Nick() .. " [" .. pl:GetUserGroup() .. "] tried to noclip." )
+
+          net.Start( "yrp_info" )
+            net.WriteString( "noclip" )
+          net.Send( pl )
+
+          return false
         end
-      end)
+      end
     end
-  else
-    -- TURNED ON
-    local _tmp = SQL_SELECT( "yrp_restrictions", "noclip", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if worked( _tmp, "PlayerNoClip failed" ) then
-      _tmp = _tmp[1]
-      if tobool( _tmp.noclip ) then
+  end
+end)
 
-        if IsNoClipCrowEnabled() then
-          ply:SetModel( "models/crow.mdl" )
+hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
+  if ea( pl ) then
+    --printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
+    local _tmp = SQL_SELECT( "yrp_restrictions", "canusephysgunpickup", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+    if _tmp != nil and _tmp != false then
+      _tmp = _tmp[1]
+      if tobool( _tmp.canusephysgunpickup ) then
+        return true
+      else
+        net.Start( "yrp_info" )
+          net.WriteString( "canusephysgunpickup" )
+        net.Send( pl )
+        return false
+      end
+    else
+      return false
+    end
+  end
+end)
+
+hook.Add( "CanTool", "yrp_can_tool", function( pl, tr, tool )
+  if ea( pl ) then
+    --printGM( "gm", "CanTool: " .. tool )
+    if tool == "remover" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canuseremovetool", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canuseremovetool ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canuseremovetool" )
+          net.Send( pl )
+          return false
         end
-
-        RenderNoClip( ply )
-        return true
       else
-        printGM( "note", ply:Nick() .. " [" .. ply:GetUserGroup() .. "] tried to noclip." )
-
-        net.Start( "yrp_info" )
-          net.WriteString( "noclip" )
-        net.Send( ply )
-
+        return false
+      end
+    elseif tool == "dynamite" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canusedynamitetool", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canusedynamitetool ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canusedynamitetool" )
+          net.Send( pl )
+          return false
+        end
+      else
         return false
       end
     end
   end
 end)
 
-hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( ply, ent )
-  --printGM( "gm", "PhysgunPickup: " .. ply:YRPName() )
-  local _tmp = SQL_SELECT( "yrp_restrictions", "canusephysgunpickup", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-  if _tmp != nil and _tmp != false then
-    _tmp = _tmp[1]
-    if tobool( _tmp.canusephysgunpickup ) then
-      return true
-    else
-      net.Start( "yrp_info" )
-        net.WriteString( "canusephysgunpickup" )
-      net.Send( ply )
-      return false
-    end
-  else
-    return false
-  end
-end)
-
-hook.Add( "CanTool", "yrp_can_tool", function( ply, tr, tool )
-  --printGM( "gm", "CanTool: " .. tool )
-  if tool == "remover" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canuseremovetool", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canuseremovetool ) then
+hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
+  if ea( pl ) then
+    printGM( "gm", "CanProperty: " .. property )
+    if property == "ignite" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canignite", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canignite ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canignite" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "remover" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canuseremovetool", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canuseremovetool ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canuseremovetool" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "drive" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "candrive", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.candrive ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "candrive" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "collision" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canchangecollision", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canchangecollision ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canchangecollision" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "keepupright" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canchangekeepupright", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canchangekeepupright ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canchangekeepupright" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "bodygroups" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canchangebodygroups", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canchangebodygroups ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canchangebodygroups" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "gravity" then
+      local _tmp = SQL_SELECT( "yrp_restrictions", "canchangegravity", "usergroup = '" .. pl:GetUserGroup() .. "'" )
+      if _tmp != nil and _tmp != false then
+        _tmp = _tmp[1]
+        if tobool( _tmp.canchangegravity ) then
+          return true
+        else
+          net.Start( "yrp_info" )
+            net.WriteString( "canchangegravity" )
+          net.Send( pl )
+          return false
+        end
+      else
+        return false
+      end
+    elseif property == "persist" then
+      if pl:HasAccess() then
         return true
       else
         net.Start( "yrp_info" )
-          net.WriteString( "canuseremovetool" )
-        net.Send( ply )
+          net.WriteString( "persist" )
+        net.Send( pl )
         return false
       end
-    else
-      return false
-    end
-  elseif tool == "dynamite" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canusedynamitetool", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canusedynamitetool ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canusedynamitetool" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  end
-end)
-
-hook.Add( "CanProperty", "yrp_canproperty", function( ply, property, ent )
-  printGM( "gm", "CanProperty: " .. property )
-  if property == "ignite" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canignite", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canignite ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canignite" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "remover" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canuseremovetool", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canuseremovetool ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canuseremovetool" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "drive" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "candrive", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.candrive ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "candrive" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "collision" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canchangecollision", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canchangecollision ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canchangecollision" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "keepupright" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canchangekeepupright", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canchangekeepupright ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canchangekeepupright" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "bodygroups" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canchangebodygroups", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canchangebodygroups ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canchangebodygroups" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "gravity" then
-    local _tmp = SQL_SELECT( "yrp_restrictions", "canchangegravity", "usergroup = '" .. ply:GetUserGroup() .. "'" )
-    if _tmp != nil and _tmp != false then
-      _tmp = _tmp[1]
-      if tobool( _tmp.canchangegravity ) then
-        return true
-      else
-        net.Start( "yrp_info" )
-          net.WriteString( "canchangegravity" )
-        net.Send( ply )
-        return false
-      end
-    else
-      return false
-    end
-  elseif property == "persist" then
-    if ply:HasAccess() then
-      return true
-    else
-      net.Start( "yrp_info" )
-        net.WriteString( "persist" )
-      net.Send( ply )
-      return false
     end
   end
 end)

@@ -3,6 +3,7 @@
 local _advertname = "NULL"
 local _restartTime = 0
 hook.Add( "open_server_general", "open_server_general", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

@@ -200,6 +200,64 @@ if SERVER then
 	end)
 end
 
+local _sv_outdated = false
+local _cl_outdated = false
+function IsYRPOutdated()
+	if SERVER then
+		return _sv_outdated
+	elseif CLIENT then
+		return _cl_outdated
+	end
+end
+
+function YRPCheckVersion()
+	http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
+	function( body, len, headers, code )
+		local StartPos = string.find( body, "#", 1, false )
+		local EndPos = string.find( body, "*", 1, false )
+		local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
+
+		if CLIENT then
+			--Server
+			local _v_off = string.Replace( GAMEMODE.Version, "V.: ", "" )
+			local _v_on = string.Replace( versionOnline, "V.: ", "" )
+			local curnum = string.Explode( ".", _v_off )
+			local newnum = string.Explode( ".", _v_on )
+			for k, v in pairs( curnum ) do
+			  if tonumber( curnum[k] ) < tonumber( newnum[k] ) then
+					_cl_outdated = true
+			  elseif tonumber( curnum[k] ) > tonumber( newnum[k] ) then
+			   	_cl_outdated = false
+			  elseif tonumber( curnum[k] ) == tonumber( newnum[k] ) then
+					_cl_outdated = false
+				end
+			end
+		end
+
+		if SERVER then
+			--Server
+			local _v_off2 = string.Replace( GAMEMODE.Version, "V.: ", "" )
+			local _v_on2 = string.Replace( versionOnline, "V.: ", "" )
+			local cur2num2 = string.Explode( ".", _v_off2 )
+			local new2num2 = string.Explode( ".", _v_on2 )
+			for k, v in pairs( cur2num2 ) do
+			  if tonumber( cur2num2[k] ) < tonumber( new2num2[k] ) then
+					_sv_outdated = true
+			  elseif tonumber( cur2num2[k] ) > tonumber( new2num2[k] ) then
+			   	_sv_outdated = false
+			  elseif tonumber( cur2num2[k] ) == tonumber( new2num2[k] ) then
+					_sv_outdated = false
+				end
+			end
+		end
+	end,
+		function( error )
+			--
+		end
+	 )
+end
+YRPCheckVersion()
+
 if SERVER then
 	util.AddNetworkString( "getServerVersion" )
 	net.Receive( "getServerVersion", function( len, ply )
@@ -256,7 +314,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.83" --do NOT change this!
+GM.Version = "0.9.84" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 

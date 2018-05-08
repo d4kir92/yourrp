@@ -191,11 +191,13 @@ net.Receive( "shop_item_edit_base", function( len, ply )
 end)
 
 function SpawnVehicle( item, ply, ang )
-  printGM( "gm", "SpawnVehicle()" )
+  printGM( "gm", "SpawnVehicle( " .. tostring( item ) .. ", " .. tostring( ply ) .. ", " .. tostring( ang ) .. " )" )
   local vehicles = get_all_vehicles()
   local vehicle = {}
+  local _custom = ""
   for k, v in pairs( vehicles ) do
     if v.ClassName == item.ClassName and v.PrintName == item.PrintName and v.WorldModel == item.WorldModel then
+      _custom = v.Custom
       vehicle = v
       if v.Custom == "simfphys" then
         printGM( "gm", "[SpawnVehicle] simfphys vehicle" )
@@ -213,7 +215,7 @@ function SpawnVehicle( item, ply, ang )
             end
           end
       	end)
-
+        car.Custom = "simfphys"
         return car
       end
       break
@@ -231,11 +233,14 @@ function SpawnVehicle( item, ply, ang )
         car:SetKeyValue( k, v )
       end
     end
-    car:Spawn()
+    --car:Spawn()
     car:Activate()
     car.ClassOverride = Class
     car.Offset = vehicle.Offset or 0
     --car:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+
+    car.Custom = _custom
+
     return car
   else
     printGM( "note", "[SpawnVehicle] vehicle not available anymore" )
@@ -264,94 +269,116 @@ function spawnItem( ply, item, duid )
 
     ent = SpawnVehicle( item, ply, _angle )
 
-    local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "'" )
-    local getVehicles = SQL_SELECT( "yrp_vehicles", "*", nil )
+    local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'" )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
+    ent:SetOwner( ply )
     if ent == NULL then
       printGM( "note", "[spawnItem] failed: ent == NULL" )
       return
     end
-  else
+  elseif item.type != "weapons" then
     ent = ents.Create( item.ClassName )
     if ent == NULL then return end
     ent:SetNWString( "item_uniqueID", item.uniqueID )
-    --ent:Spawn()
+    ent:SetNWString( "ownerRPName", ply:RPName() )
+    ent:SetOwner( ply )
   end
 
-  local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
-  if _sps != nil and _sps != false then
-    _sps = _sps[1].storagepoints
-    local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
-    if _storagepoint != nil and _storagepoint != false then
-      _storagepoint = _storagepoint[1]
-      printGM( "gm", "[spawnItem] Item To Storagepoint" )
+  if item.type == "weapons" then
+    ply:Give( item.ClassName )
+  else
+    local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
+    if _sps != nil and _sps != false then
+      _sps = _sps[1].storagepoints
+      local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
+      if _storagepoint != nil and _storagepoint != false then
+        _storagepoint = _storagepoint[1]
+        printGM( "gm", "[spawnItem] Item To Storagepoint" )
 
-      --[[ Position ]]--
-      local _pos = string.Explode( ",", _storagepoint.position )
-      local _edit = Vector( 0, 0, math.abs( ent:OBBMins().z ) )
+        --[[ Position ]]--
+        local _pos = string.Explode( ",", _storagepoint.position )
+        local _edit = Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 4 )
 
-      _pos = Vector( _pos[1], _pos[2], _pos[3] ) + _edit + Vector( 0, 0, 14 )
-      ent:SetPos( _pos )
-      local _mins = ent:OBBMins() + _edit
-      local _maxs = ent:OBBMaxs() + _edit
-      local tr = {
-        start = _pos,
-        endpos = _pos,
-        mins = _mins,
-        maxs = _maxs,
-        filter = ent
-      }
-      local hullTrace = util.TraceHull( tr )
-      if hullTrace.Hit then
-        net.Start( "yrp_info2" )
-          net.WriteString( "notenoughspace" )
-        net.Send( ply )
-        ent:Remove()
-        return false
-      end
-
-      --[[ Angle ]]--
-      local _ang = string.Explode( ",", _storagepoint.angle )
-      _ang = Angle( 0, _ang[2], 0 )
-      ent:SetAngles( _ang )
-
-      return true
-    end
-  end
-
-  printGM( "gm", "[spawnItem] Item To Player" )
-  _angle = ply:EyeAngles()
-  ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 32 ) )
-  for dist = 0, _distMax, _distSpace do
-    for ang = 0, 360, 45 do
-      if ang != 0 then
-        _angle = _angle + Angle( 0, 45, 0 )
-      end
-      local tr = {}
-    	tr.start = ent:GetPos() + _angle:Forward() * dist
-    	tr.endpos = ent:GetPos() + _angle:Forward() * dist
-    	tr.filter = ent
-    	tr.mins = ent:OBBMins()*1.1 --1.1 because so that no one get stuck
-    	tr.maxs = ent:OBBMaxs()*1.1 --1.1 because so that no one get stuck
-    	tr.mask = MASK_SHOT_HULL
-
-      local _result = util.TraceHull( tr )
-      if !_result.Hit then
-        ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
+        local _height = Vector( 0, 0, 14 )
         if item.type == "vehicles" then
-          --ent:SetVelocity( Vector( 0, 0, -500 ) )
-        else
-          printGM( "gm", "[spawnItem] Spawn Item" )
+          if ent.Custom != nil then
+            if string.lower( ent.Custom ) == "scars" then
+              _height = Vector( 0, 0, 24 )
+            end
+          end
+        end
+
+        _pos = Vector( _pos[1], _pos[2], _pos[3] ) + _edit + _height
+
+        ent:SetPos( _pos )
+
+        --[[ Angle ]]--
+        if ent.Custom != "simfphys" then
+          local _ang = string.Explode( ",", _storagepoint.angle )
+          _ang = Angle( 0, _ang[2], 0 )
+          ent:SetAngles( _ang )
+        end
+
+        local _mins = ent:OBBMins() + _edit
+        local _maxs = ent:OBBMaxs() + _edit
+        local tr = {
+          start = _pos,
+          endpos = _pos,
+          mins = _mins,
+          maxs = _maxs,
+          filter = {ent, ent:GetChildren() }
+        }
+        local hullTrace = util.TraceHull( tr )
+        if hullTrace.Hit then
+          printGM( "note", "[spawnItem] NOT ENOUGH SPACE" )
+          net.Start( "yrp_info2" )
+            net.WriteString( "notenoughspace" )
+            net.WriteString( "(" .. tostring( hullTrace.Entity ) .. ")" )
+          net.Send( ply )
+          ent:Remove()
+          return false
+        end
+        if ent.Custom != "simfphys" then
           ent:Spawn()
         end
-        printGM( "gm", "[spawnItem] Enough Space" )
         return true
       end
     end
+
+    printGM( "gm", "[spawnItem] Item To Player" )
+    _angle = ply:EyeAngles()
+    ent:SetPos( ply:GetPos() + Vector( 0, 0, math.abs( ent:OBBMins().z ) ) + Vector( 0, 0, 32 ) )
+    for dist = 0, _distMax, _distSpace do
+      for ang = 0, 360, 45 do
+        if ang != 0 then
+          _angle = _angle + Angle( 0, 45, 0 )
+        end
+        local tr = {}
+      	tr.start = ent:GetPos() + _angle:Forward() * dist
+      	tr.endpos = ent:GetPos() + _angle:Forward() * dist
+      	tr.filter = ent
+      	tr.mins = ent:OBBMins()*1.1 --1.1 because so that no one get stuck
+      	tr.maxs = ent:OBBMaxs()*1.1 --1.1 because so that no one get stuck
+      	tr.mask = MASK_SHOT_HULL
+
+        local _result = util.TraceHull( tr )
+        if !_result.Hit then
+          ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
+          if item.type == "vehicles" then
+            --ent:SetVelocity( Vector( 0, 0, -500 ) )
+          else
+            printGM( "gm", "[spawnItem] Spawn Item" )
+            ent:Spawn()
+          end
+          printGM( "gm", "[spawnItem] Enough Space" )
+          return true
+        end
+      end
+    end
+    printGM( "note", "[spawnItem] Not Enough Space" )
+    return false
   end
-  printGM( "note", "[spawnItem] Not Enough Space" )
-  return false
 end
 
 util.AddNetworkString( "item_buy" )

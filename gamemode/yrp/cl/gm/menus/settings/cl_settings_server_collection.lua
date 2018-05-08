@@ -42,6 +42,7 @@ net.Receive( "get_workshop_collection", function()
 end)
 
 hook.Add( "open_server_collection", "open_server_collection", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

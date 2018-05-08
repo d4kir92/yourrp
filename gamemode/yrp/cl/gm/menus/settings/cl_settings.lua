@@ -70,6 +70,15 @@ function closeSettings()
   end
 end
 
+local _save_site = "open_client_character"
+function SaveLastSite()
+  if pa( settingsWindow ) then
+    if settingsWindow.window.lastsite != "" then
+      _save_site = settingsWindow.window.lastsite
+    end
+  end
+end
+
 function openSettings()
   openMenu()
   addMDColor( "dprimary", getMDPColor() )
@@ -125,7 +134,7 @@ function openSettings()
 
   --StartSite
   settingsWindow.window.cursite = lang_string( "character" )
-  settingsWindow.window:SwitchToSite( "open_client_character" )
+  settingsWindow.window:SwitchToSite( _save_site )
 
   --Mainbar
   local mainBar = createD( "DPanel", settingsWindow.window, ScrW(), ctr( 100 ), 0, 0 )

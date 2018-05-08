@@ -103,6 +103,7 @@ net.Receive( "getRistrictions", function( len )
 end)
 
 hook.Add( "open_server_restrictions", "open_server_restrictions", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

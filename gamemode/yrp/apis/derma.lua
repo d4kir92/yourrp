@@ -429,6 +429,7 @@ function createMDMenu( parent, w, h, x, y )
 	end
 
 	function tmp:SwitchToSite( _hook )
+    self.lastsite = _hook
 	  if self.site != nil then
 	    self.site:Remove()
 	  end

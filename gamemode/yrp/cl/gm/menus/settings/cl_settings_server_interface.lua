@@ -135,6 +135,7 @@ net.Receive( "get_interface_settings", function( len )
 end)
 
 hook.Add( "open_server_interface", "open_server_interface", function()
+  SaveLastSite()
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()
