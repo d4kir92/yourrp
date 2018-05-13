@@ -97,7 +97,7 @@ if SERVER then
 		if args.target:GetNWBool( "cuffed", false ) then
 			args.target:SetNWBool( "cuffed", false )
 			local _weapon = args.target:GetActiveWeapon()
-			if _weapon != NULL then
+			if ea( _weapon ) then
 				_weapon:Remove()
 			end
 			args.target:SetActiveWeapon( "yrp_unarmed" )

@@ -21,12 +21,12 @@ net.Receive( "yrp_placehit", function( len, ply )
   local _reward = net.ReadString()
   local _desc = net.ReadString()
 
-  printGM( "note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. _desc )
+  printGM( "note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. SQL_STR_IN( _desc ) )
   _reward = tonumber( _reward )
   if ply:canAfford( _reward ) then
     ply:addMoney( - _reward )
     printGM( "note", "Set hit" )
-    local _res = SQL_INSERT_INTO( _db_name, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:SteamID() .. "'" )
+    local _res = SQL_INSERT_INTO( _db_name, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. SQL_STR_IN( _desc ) .. "', '" .. ply:SteamID() .. "'" )
 
   else
     printGM( "note", "Cant afford hit" )

@@ -69,27 +69,27 @@ util.AddNetworkString( "edit_licence_name" )
 
 net.Receive( "edit_licence_name", function( len, ply )
   local _uid = net.ReadString()
-  local _new_name = db_in_str( net.ReadString() )
+  local _new_name = SQL_STR_IN( net.ReadString() )
   local _edit = SQL_UPDATE( _db_name, "name = '" .. _new_name .. "'", "uniqueID = " .. _uid )
-  printGM( "db", "edit_licence_name: " .. tostring( db_out_str( _new_name ) ) )
+  printGM( "db", "edit_licence_name: " .. tostring( SQL_STR_OUT( _new_name ) ) )
 end)
 
 util.AddNetworkString( "edit_licence_description" )
 
 net.Receive( "edit_licence_description", function( len, ply )
   local _uid = net.ReadString()
-  local _new_description = db_in_str( net.ReadString() )
+  local _new_description = SQL_STR_IN( net.ReadString() )
   local _edit = SQL_UPDATE( _db_name, "description = '" .. _new_description .. "'", "uniqueID = " .. _uid )
-  printGM( "db", "edit_licence_description: " .. tostring( db_out_str( _new_description ) ) )
+  printGM( "db", "edit_licence_description: " .. tostring( SQL_STR_OUT( _new_description ) ) )
 end)
 
 util.AddNetworkString( "edit_licence_price" )
 
 net.Receive( "edit_licence_price", function( len, ply )
   local _uid = net.ReadString()
-  local _new_price = db_in_str( net.ReadString() )
+  local _new_price = SQL_STR_IN( net.ReadString() )
   local _edit = SQL_UPDATE( _db_name, "price = " .. _new_price, "uniqueID = " .. _uid )
-  printGM( "db", "edit_licence_price: " .. tostring( db_out_str( _new_price ) ) )
+  printGM( "db", "edit_licence_price: " .. tostring( SQL_STR_OUT( _new_price ) ) )
 end)
 
 util.AddNetworkString( "get_all_licenses_simple" )

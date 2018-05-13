@@ -51,7 +51,7 @@ util.AddNetworkString( "shop_edit_name" )
 net.Receive( "shop_edit_name", function( len, ply )
   local _uid = net.ReadString()
   local _new_name = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "name = '" .. db_in_str( _new_name ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "name = '" .. SQL_STR_IN( _new_name ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_edit_name: " .. tostring( _uid ) )
 end)
 

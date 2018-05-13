@@ -1,32 +1,40 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function PositionEquipment( ply, na, bo, v_pos, a_ang )
-  local bone = ply:LookupBone( bo )
+  if ea( ply ) then
+    local bone = ply:LookupBone( bo )
 
-  local matrix = ply:GetBoneMatrix( bone )
-  local pos = matrix:GetTranslation()
-  local ang = matrix:GetAngles()
+    if wk( bone ) then
+      local matrix = ply:GetBoneMatrix( bone )
+      if wk( matrix ) then
+        local pos = matrix:GetTranslation()
+        local ang = matrix:GetAngles()
 
-  local ent = ply:GetNWEntity( na, NULL )
-  if ea( ent ) then
-    local _aw = ply:GetActiveWeapon()
-    if ea( _aw ) then
-      if _aw:GetClass() == ply:GetNWString( na .. "ClassName", "NULL" ) then
-        ent:SetNoDraw( true )
-      else
-        ent:SetNoDraw( false )
+        local ent = ply:GetNWEntity( na, NULL )
+        if ea( ent ) then
+          local _aw = ply:GetActiveWeapon()
+          if ea( _aw ) then
+            if tostring( _aw:GetClass() ) == tostring( ply:GetNWString( na .. "ClassName", "" ) ) then
+              ent:SetRenderMode( RENDERMODE_TRANSALPHA )
+              ent:SetColor( Color( 255, 255, 255, 0 ) )
+            else
+              ent:SetColor( ply:GetColor() )
+
+              local corax = tonumber( ply:GetNWString( na .. "corax", "0" ) )
+              local coray = tonumber( ply:GetNWString( na .. "coray", "0" ) )
+              local coraz = tonumber( ply:GetNWString( na .. "coraz", "0" ) )
+
+              ent:SetLocalPos( pos + ang:Forward() * v_pos.x + ang:Up() * v_pos.y + ang:Right() * v_pos.z )
+
+              ang:RotateAroundAxis( ang:Forward(), a_ang.p + corax )
+              ang:RotateAroundAxis( ang:Up(), a_ang.y + coray )
+              ang:RotateAroundAxis( ang:Right(), a_ang.r + coraz )
+              ent:SetLocalAngles( ang )
+            end
+          end
+        end
       end
     end
-    local corax = tonumber( ply:GetNWString( na .. "corax", "0" ) )
-    local coray = tonumber( ply:GetNWString( na .. "coray", "0" ) )
-    local coraz = tonumber( ply:GetNWString( na .. "coraz", "0" ) )
-
-    ent:SetLocalPos( pos + ang:Forward() * v_pos.x + ang:Up() * v_pos.y + ang:Right() * v_pos.z )
-
-    ang:RotateAroundAxis( ang:Forward(), a_ang.p + corax )
-    ang:RotateAroundAxis( ang:Up(), a_ang.y + coray )
-    ang:RotateAroundAxis( ang:Right(), a_ang.r + coraz )
-    ent:SetLocalAngles( ang )
   end
 end
 
@@ -37,8 +45,8 @@ hook.Add( "PostPlayerDraw", "yrp_weapon_holster", function( ply )
      PositionEquipment( ply, "weaponprimary1", "ValveBiped.Bip01_R_Clavicle", Vector( 5, 4, 0 ), Angle( 0, -90, 0 ) )
      PositionEquipment( ply, "weaponprimary2", "ValveBiped.Bip01_L_Clavicle", Vector( 5, -4 -tonumber( ply:GetNWString( "weaponprimary2" .. "thick", "0" ) )/5, 0 ), Angle( 0, -90, 0 ) )
 
-     PositionEquipment( ply, "weaponsecondary1", "ValveBiped.Bip01_R_Thigh", Vector( 0, -3.6, 0 ), Angle( 0, -90, -90 ) )
-     PositionEquipment( ply, "weaponsecondary2", "ValveBiped.Bip01_L_Thigh", Vector( 0, 3.6, 0 ), Angle( 0, -90, -90 ) )
+     PositionEquipment( ply, "weaponsecondary1", "ValveBiped.Bip01_R_Thigh", Vector( 0, -tonumber( ply:GetNWString( "weaponsecondary1" .. "thick", "0" ) ), 0 ), Angle( 0, -90, -90 ) )
+     PositionEquipment( ply, "weaponsecondary2", "ValveBiped.Bip01_L_Thigh", Vector( 0, tonumber( ply:GetNWString( "weaponsecondary2" .. "thick", "0" ) ), 0 ), Angle( 0, -90, -90 ) )
 
      PositionEquipment( ply, "weapongadget", "ValveBiped.Bip01_L_Thigh", Vector( 0, 0, 5 ), Angle( 0, 0, 0 ) )
   end
@@ -65,7 +73,18 @@ function CloseInventory()
   end
 end
 
+function IsInventoryOpen()
+  if pa( inv.window ) then
+    return true
+  else
+    return false
+  end
+end
+
 inv["backpack"] = Material( "vgui/material/ic_work_black_24dp_2x.png" )
+inv["primary"] = Material( "vgui/yrp/yrp_primary.png" )
+inv["secondary"] = Material( "vgui/yrp/yrp_secondary.png" )
+inv["gadget"] = Material( "vgui/yrp/yrp_gadget.png" )
 
 net.Receive( "openStorage", function( len )
   local ply = LocalPlayer()
@@ -244,54 +263,59 @@ net.Receive( "openStorage", function( len )
     net.Start( "update_slot_backpack" )
     net.SendToServer()
 
-    _bps.bag1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*1, ScrH() - ctr( ICON_SIZE + 10 ) )
-    _bps.bag2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*2, ScrH() - ctr( ICON_SIZE + 10 ) )
-    _bps.bag3 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*3, ScrH() - ctr( ICON_SIZE + 10 ) )
-    _bps.bag4 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*4, ScrH() - ctr( ICON_SIZE + 10 ) )
+    --_bps.bag1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*1, ScrH() - ctr( ICON_SIZE + 10 ) )
+    --_bps.bag2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*2, ScrH() - ctr( ICON_SIZE + 10 ) )
+    --_bps.bag3 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*3, ScrH() - ctr( ICON_SIZE + 10 ) )
+    --_bps.bag4 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( ICON_SIZE + 10 )*4, ScrH() - ctr( ICON_SIZE + 10 ) )
 
     --[[ EQUIPMENT ]]--
     local _eq = {}
     -- LEFT
     local _left = ScrW2() + (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( 10 )
-    _eq.helm = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 ) )
+    --_eq.helm = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 ) )
 
-    _eq.necklace = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*1 ) )
+    --_eq.necklace = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*1 ) )
 
-    _eq.shoulders = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*2 ) )
+    --_eq.shoulders = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*2 ) )
 
-    _eq.cap = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*3 ) )
+    --_eq.cap = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*3 ) )
 
-    _eq.chest = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*4 ) )
+    --_eq.chest = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*4 ) )
 
-    _eq.shirt = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*5 ) )
+    --_eq.shirt = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*5 ) )
 
-    _eq.tabard = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*6 ) )
+    --_eq.tabard = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*6 ) )
 
-    _eq.bracelet = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*7 ) )
+    --_eq.bracelet = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _left, ctr( 50 + 10 + (ICON_SIZE + 10)*7 ) )
 
     -- RIGHT
     local _right = ScrW2() + (ctr( ICON_SIZE*8 + 25 ))/2 + ctr( 10 ) + ctr( ICON_SIZE*8 + 25 )
-    _eq.gloves = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 ) )
+    --_eq.gloves = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 ) )
 
-    _eq.belt = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*1 ) )
+    --_eq.belt = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*1 ) )
 
-    _eq.pants = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*2 ) )
+    --_eq.pants = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*2 ) )
 
-    _eq.boots = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*3 ) )
+    --_eq.boots = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*3 ) )
 
-    _eq.ring1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*4 ) )
+    --_eq.ring1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*4 ) )
 
-    _eq.ring2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*5 ) )
+    --_eq.ring2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*5 ) )
 
-    _eq.trinket1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*6 ) )
+    --_eq.trinket1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*6 ) )
 
-    _eq.trinket2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*7 ) )
+    --_eq.trinket2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 1 ), ctr( ICON_SIZE * 1 ), _right, ctr( 50 + 10 + (ICON_SIZE + 10)*7 ) )
 
     -- Weapons
     local _height = ctr( 50 + 10 + (ICON_SIZE + 10)*8 )
     _eq.pweapon1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * ITEM_MAXW ), ctr( ICON_SIZE * ITEM_MAXH ), _left, _height )
     function _eq.pweapon1:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( inv["primary"] )
+      surface.DrawTexturedRect( ctr( 20 ), ctr( 20 ), pw - ctr( 40 ), ph - ctr( 40 ) )
+
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_weapon_primary_1", function( len )
@@ -308,6 +332,11 @@ net.Receive( "openStorage", function( len )
     _eq.pweapon2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * ITEM_MAXW ), ctr( ICON_SIZE * ITEM_MAXH ), _left, _height )
     function _eq.pweapon2:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( inv["primary"] )
+      surface.DrawTexturedRect( ctr( 20 ), ctr( 20 ), pw - ctr( 40 ), ph - ctr( 40 ) )
+
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_weapon_primary_2", function( len )
@@ -324,6 +353,11 @@ net.Receive( "openStorage", function( len )
     _eq.sweapon1 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 4 ), ctr( ICON_SIZE * 2 ), _left, _height )
     function _eq.sweapon1:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( inv["secondary"] )
+      surface.DrawTexturedRect( ctr( 20 ), ctr( 20 ), pw - ctr( 40 ), ph - ctr( 40 ) )
+
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_weapon_secondary_1", function( len )
@@ -339,6 +373,11 @@ net.Receive( "openStorage", function( len )
     _eq.sweapon2 = createD( "DPanel", inv.window, ctr( ICON_SIZE * 4 ), ctr( ICON_SIZE * 2 ), _left + ctr( ICON_SIZE * 4 + 10 ), _height )
     function _eq.sweapon2:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( inv["secondary"] )
+      surface.DrawTexturedRect( ctr( 20 ), ctr( 20 ), pw - ctr( 40 ), ph - ctr( 40 ) )
+
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_weapon_secondary_2", function( len )
@@ -355,6 +394,11 @@ net.Receive( "openStorage", function( len )
     _eq.sgadget = createD( "DPanel", inv.window, ctr( ICON_SIZE * 2 ), ctr( ICON_SIZE * 2 ), _left, _height )
     function _eq.sgadget:Paint( pw, ph )
       surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 80 ) )
+
+      surface.SetDrawColor( 255, 255, 255, 255 )
+      surface.SetMaterial( inv["gadget"] )
+      surface.DrawTexturedRect( ctr( 20 ), ctr( 20 ), pw - ctr( 40 ), ph - ctr( 40 ) )
+
       drawRBBR( 0, 0, 0, pw, ph, Color( 0, 0, 0 ), ctr( 4 ) )
     end
     net.Receive( "update_slot_weapon_gadget", function( len )

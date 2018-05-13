@@ -67,8 +67,8 @@ function GM:PlayerLoadout( ply )
     ply:SetNWBool( "broken_arm_left", false )
     ply:SetNWBool( "broken_arm_right", false )
 
-    ply:ForceGive( "yrp_key" )
-    ply:ForceGive( "yrp_unarmed" )
+    ply:ForceEquip( "yrp_key" )
+    ply:ForceEquip( "yrp_unarmed" )
 
     local plyTab = ply:GetPlyTab()
 
@@ -95,6 +95,8 @@ function GM:PlayerLoadout( ply )
         ply:KillSilent()
       end
     end
+
+    ply:EquipWeapons()
 
     ply:SetNWFloat( "hunger", 100 )
     ply:SetNWFloat( "thirst", 100 )
@@ -124,9 +126,9 @@ function GM:PlayerLoadout( ply )
     end
 
     if ply:HasAccess() then
-      ply:ForceGive( "yrp_arrest_stick" )
-      ply:ForceGive( "weapon_physgun" )
-      ply:ForceGive( "weapon_physcannon" )
+      ply:ForceEquip( "yrp_arrest_stick" )
+      ply:ForceEquip( "weapon_physgun" )
+      ply:ForceEquip( "weapon_physcannon" )
     end
   end
 
@@ -187,7 +189,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     local _cooldown_item = 120
     for i, wep in pairs( _weapons ) do
       if IsNoAdminWeapon( wep ) and IsNoDefaultWeapon( wep ) then
-        ply:DropWeapon( wep )
+        ply:DropSWEP( wep:GetClass() )
         timer.Simple( _cooldown_item, function()
           if wep:IsValid() then
             if wep:GetOwner() == "" then
@@ -291,7 +293,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
       timer.Remove( ply:SteamID() .. " outOfCombat" )
     end
     timer.Create( ply:SteamID() .. " outOfCombat", 6, 1, function()
-      if ply != NULL then
+      if ea( ply ) then
         ply:SetNWBool( "inCombat", false )
         lowering_weapon( ply )
         timer.Remove( ply:SteamID() .. " outOfCombat" )
@@ -454,22 +456,11 @@ end
 
 function GM:PlayerCanHearPlayersVoice( listener, talker )
 
-  if listener == talker then return false end
-
-  local _is_talker = talker
-  local _is_listener = listener
-  if talker:GetNWBool( "yrp_speaking" ) then
-    _is_talker = talker
-    _is_listener = listener
-  elseif listener:GetNWBool( "yrp_speaking" ) then
-    _is_talker = listener
-    _is_listener = talker
-  else
-    return false
+  if !IsYrpVoiceChatEnabled() then
+    return true
   end
 
   return canhear( talker, listener ), hearfaded( talker, listener )
-  --return canhear( _is_talker, _is_listener ), hearfaded( _is_talker, _is_listener )
 end
 
 function setbodygroups( ply )
@@ -507,6 +498,13 @@ net.Receive( "player_is_ready", function( len, ply )
 
   open_character_selection( ply )
 
+  -- YRP Chat?
+  local _chat = SQL_SELECT( "yrp_general", "yrp_chat", "uniqueID = 1" )
+  if _chat != nil and _chat != false then
+    _chat = _chat[1]
+    ply:SetNWBool( "yrp_chat", tobool( _chat.yrp_chat ) )
+  end
+
   ply:SetNWBool( "finishedloading", true )
 
   ply:KillSilent()
@@ -519,7 +517,7 @@ end)
 
 function GM:PlayerSpray( ply )
   local _sel = SQL_SELECT( "yrp_general", "toggle_graffiti", "uniqueID = 1" )
-  if _sel != nil then
+  if wk( _sel ) then
     _sel = _sel[1]
     if tobool( _sel.toggle_graffiti ) then
       return false

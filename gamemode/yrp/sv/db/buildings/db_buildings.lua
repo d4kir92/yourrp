@@ -31,11 +31,16 @@ function allowedToUseDoor( id, ply )
         return true
       else
         local _tmpChaTab = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmpBuildingTable[1].ownerCharID )
-        local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID )
+        if wk( _tmpChaTab ) then
+          local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID )
 
-        if tostring( _tmpBuildingTable[1].ownerCharID ) == tostring( ply:CharID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
-          return true
+          if tostring( _tmpBuildingTable[1].ownerCharID ) == tostring( ply:CharID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
+            return true
+          else
+            return false
+          end
         else
+          printGM( "error", "_tmpChaTab: " .. tostring( _tmpChaTab ) )
           return false
         end
       end
@@ -426,7 +431,7 @@ net.Receive( "changeBuildingName", function( len, ply )
   local _tmpNewName = net.ReadString()
   if _tmpBuildingID != nil then
     printGM( "note", "renamed Building: " .. _tmpNewName )
-    SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", "name = '" .. db_in_str( _tmpNewName ) .. "'" , "uniqueID = " .. _tmpBuildingID )
+    SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", "name = '" .. SQL_STR_IN( _tmpNewName ) .. "'" , "uniqueID = " .. _tmpBuildingID )
   else
     printGM( "note", "changeBuildingName failed" )
   end
@@ -435,7 +440,7 @@ end)
 net.Receive( "getBuildings", function( len, ply )
   local _tmpTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil )
   for k, building in pairs( _tmpTable ) do
-    building.name = db_out_str( building.name )
+    building.name = SQL_STR_OUT( building.name )
   end
   net.Start( "getBuildings" )
     net.WriteTable( _tmpTable )
@@ -452,7 +457,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
     local owner = ""
     if _tmpTable != nil then
       _tmpTable = _tmpTable[1]
-      _tmpTable.name = db_out_str( _tmpTable.name )
+      _tmpTable.name = SQL_STR_OUT( _tmpTable.name )
       if _tmpTable.ownerCharID != "" then
         local _tmpChaTab = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID )
         if _tmpChaTab != nil then

@@ -27,7 +27,7 @@ function sql_show_last_error()
     PrintMessage( HUD_PRINTCENTER, _last_error )
   elseif CLIENT then
     local ply = LocalPlayer()
-    if ply != NULL and ply != nil then
+    if ea( ply ) then
       ply:PrintMessage( HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:" )
       ply:PrintMessage( HUD_PRINTTALK, _last_error )
     end
@@ -75,7 +75,7 @@ table.insert( _db_dc, "Ü" )
 table.insert( _db_dc, "Ö" )
 table.insert( _db_dc, "Ä" )
 
-function db_in_str( str )
+function SQL_STR_IN( str )
   local _res = str
   for k, sym in pairs( _db_dc ) do
     local _pre = ""
@@ -87,7 +87,7 @@ function db_in_str( str )
   return _res
 end
 
-function db_out_str( str )
+function SQL_STR_OUT( str )
   local _res = str
 
   for k, sym in pairs( _db_dc ) do
@@ -132,7 +132,7 @@ function db_sql_str( string )
   end
 end
 
-function db_in_str( string )
+function SQL_STR_IN( string )
   if isstring( string ) then
     local _newString = sql.SQLStr( string, true )
     _newString = string.Replace( _newString, "\"", "´´" )

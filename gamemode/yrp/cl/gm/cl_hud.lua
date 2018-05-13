@@ -65,7 +65,7 @@ end
 function hudVersion()
 	if !version_tested() then
 		testVersion()
-	else
+	elseif IsScreenshotting() then
 		local _singleplayer = ""
 		if game.SinglePlayer() then
 			_singleplayer = "Singleplayer"
@@ -74,10 +74,7 @@ function hudVersion()
 		--[[ Version Color ]]--
 		local _color1 = version_color() or Color( 0, 0, 0, 255 )
 		local _color2 = Color( 0, 0, 0, 255 )
-		local _alpha = 0
-		if IsScreenshotting() or is_version_outdated() then
-			_alpha = 50
-		end
+		local _alpha = 50
 		_color1.a = _alpha
 		_color2.a = _alpha
 

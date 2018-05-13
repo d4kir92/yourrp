@@ -56,7 +56,7 @@ net.Receive( "category_edit_name", function( len, ply )
   local _uid = net.ReadString()
   local _new_name = net.ReadString()
   local _shopid = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "name = '" .. db_in_str( _new_name ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "name = '" .. SQL_STR_IN( _new_name ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "category_edit_name: " .. db_worked( _new ) )
 end)
 

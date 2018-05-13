@@ -161,7 +161,7 @@ function addDBLicenses( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTa
         function _p:Paint( pw, ph )
           draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 
-          surfaceText( db_out_str( licence.name ), "roleInfoHeader", ph + ctrb( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+          surfaceText( SQL_STR_OUT( licence.name ), "roleInfoHeader", ph + ctrb( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
         end
         _lic.pl:AddItem( _p )
 

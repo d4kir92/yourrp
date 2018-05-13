@@ -226,7 +226,7 @@ function set_role_values( ply )
         ply:SetNWString( "playermodelsnone", rolTab.playermodelsnone )
 
         --sweps
-        local tmpSWEPTable = string.Explode( ",", db_out_str( rolTab.sweps ) )
+        local tmpSWEPTable = string.Explode( ",", SQL_STR_OUT( rolTab.sweps ) )
         for k, swep in pairs( tmpSWEPTable ) do
           if swep != nil and swep != NULL and swep != "" then
             ply:Give( swep )
@@ -555,7 +555,7 @@ end
 function RemRolVals( ply )
   local rolTab = ply:GetRolTab()
   if rolTab != nil then
-    local _sweps = string.Explode( ",", db_out_str( rolTab.sweps ) )
+    local _sweps = string.Explode( ",", SQL_STR_OUT( rolTab.sweps ) )
     for k, v in pairs( _sweps ) do
       ply:StripWeapon( v )
     end

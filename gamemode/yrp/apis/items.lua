@@ -90,6 +90,13 @@ function GetEntityItemSize( ent )
   return false
 end
 
+function IsViewModel( ent )
+  if string.find( ent:GetClass(), "viewmodel" ) or string.find( ent:GetModel(), "/c_" ) or ent:GetNWBool( "isviewmodel", false ) or string.find( string.lower( ent:GetClass() ), "c_baseflex" ) then
+    return true
+  end
+  return false
+end
+
 function GetSurroundingEntities( ply )
   local _ents = ents.FindInSphere( ply:GetPos(), 60 )
   local _tab = {}
@@ -101,7 +108,7 @@ function GetSurroundingEntities( ply )
             if ent:GetParent() != ply then
               if !ent:GetParent():IsVehicle() and !string.find( ent:GetClass(), "wheel" ) then
                 if !ent:IsWorldStorage() then
-                  if !ea( ent:GetOwner() ) then
+                  if !IsViewModel( ent ) then
                     table.insert( _tab, ent )
                   end
                 end
@@ -412,7 +419,7 @@ if CLIENT then
         surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
       end
       _i:Droppable( "slot" )
-      _i:SetToolTip( _i.item.PrintName .. "\n" .. _i.item.ClassName .. "\n" .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
+      _i:SetToolTip( "PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
 
       return _item
     end
@@ -424,35 +431,39 @@ if CLIENT then
   end)
 
   net.Receive( "moveitem_slot1", function( len )
-    local _s1 = net.ReadTable()
+    if IsInventoryOpen() then
+      local _s1 = net.ReadTable()
 
-    --[[ ITEM ]]--
-    local _i = item_handler[tonumber(_s1.storageID)][tonumber(_s1.posy)][tonumber(_s1.posx)]
-    if _i.item != nil then
-      _i.item:GetParent():Remove()
-      _i.item:Remove()
-      _i.item = nil
-      _i.value = ""
+      --[[ ITEM ]]--
+      local _i = item_handler[tonumber(_s1.storageID)][tonumber(_s1.posy)][tonumber(_s1.posx)]
+      if _i.item != nil then
+        _i.item:GetParent():Remove()
+        _i.item:Remove()
+        _i.item = nil
+        _i.value = ""
+      end
     end
   end)
 
   net.Receive( "moveitem_slot2", function( len )
-    local _s2 = net.ReadTable()
-    local _i = net.ReadTable()
+    if IsInventoryOpen() then
+      local _s2 = net.ReadTable()
+      local _i = net.ReadTable()
 
-    _i.storageID = tonumber( _s2.storageID )
-    _i.posy = tonumber( _s2.posy )
-    _i.posx = tonumber( _s2.posx )
+      _i.storageID = tonumber( _s2.storageID )
+      _i.posy = tonumber( _s2.posy )
+      _i.posx = tonumber( _s2.posx )
 
-    _i.ClassName = tostring( _i.ClassName )
-    _i.PrintName = tostring( _i.PrintName )
-    _i.WorldModel = tostring( _i.WorldModel )
-    _i.sizeh = tonumber( _i.sizeh )
-    _i.sizew = tonumber( _i.sizew )
-    _i.uniqueID = tonumber( _i.uniqueID )
+      _i.ClassName = tostring( _i.ClassName )
+      _i.PrintName = tostring( _i.PrintName )
+      _i.WorldModel = tostring( _i.WorldModel )
+      _i.sizeh = tonumber( _i.sizeh )
+      _i.sizew = tonumber( _i.sizew )
+      _i.uniqueID = tonumber( _i.uniqueID )
 
-    --[[ Target ]]--
-    local _item = AddItemToStorage( _i )
+      --[[ Target ]]--
+      local _item = AddItemToStorage( _i )
+    end
   end)
 end
 

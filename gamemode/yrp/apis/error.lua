@@ -12,6 +12,14 @@ concommand.Add( "yrp__debug", function( ply, cmd, args )
   end
 end )
 
+function wk( obj )
+  if obj != nil and obj != false then
+    return true
+  else
+    return false
+  end
+end
+
 function worked( obj, name, _silence )
   if obj != nil and obj != false then
     return true
@@ -285,8 +293,27 @@ function send_errors( realm, tbl )
   end
 end
 
-timer.Create( "update_error_tables", 60, 0, function()
-	if !IsYRPOutdated() then
+function IsNearVersion( distance )
+	local _version = YRPVersion()
+	local _version_online = YRPOnlineVersion()
+
+	for k, v in pairs( _version ) do
+		if k < #_version_online then
+			if tonumber( _version[k] ) < tonumber( _version_online[k] ) then
+				break
+			end
+		else
+			if tonumber( _version[k] ) + distance >= tonumber( _version_online[k] ) then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+timer.Create( "update_error_tables", 4, 0, function()
+	if !IsYRPOutdated() or IsNearVersion( 1 ) then
 	  _cl_errors = update_error_table_cl()
 	  send_errors( "client", _cl_errors )
 

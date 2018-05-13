@@ -132,7 +132,7 @@ function PANEL:Init()
         _color = Color( 255, 255, 0 )
       end
       draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-      surfaceText( db_out_str( self.tbl.name ), "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+      surfaceText( SQL_STR_OUT( self.tbl.name ), "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
     function _new:DoClick()
       _pnl.edf( self.tbl )

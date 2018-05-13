@@ -122,7 +122,7 @@ function duplicateRole( ply, uniqueID, newGroupID )
     local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.salary .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
     _dbValues = _dbValues .. _dR.groupID .. ", " .. _dR.hp .. ", " .. _dR.hpmax .. ", " .. _dR.hpreg .. ", " .. _dR.instructor .. ", " .. _dR.maxamount .. ", "
     _dbValues = _dbValues .. "'" .. _dR.playermodels .. "', '" .. _dR.playermodelsnone .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
-    _dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. db_in_str( _dR.sweps ) .. "', " .. _dR.whitelist
+    _dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. SQL_STR_IN( _dR.sweps ) .. "', " .. _dR.whitelist
     SQL_INSERT_INTO( "yrp_roles", _dbColumns, _dbValues )
   else
     printGM( "note", "not duplicateable!" )

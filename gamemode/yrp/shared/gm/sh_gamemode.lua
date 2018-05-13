@@ -6,6 +6,35 @@ GM.BaseName = "YourRP" -- DO NOT CHANGE THIS, thanks
 
 DeriveGamemode( "sandbox" )
 
+function ChangeChannel( channel )
+	if channel == "stable" or channel == "beta" or channel == "canary" then
+		GAMEMODE.VersionSort = channel
+		printGM( "gm", "Switched to " .. tostring( channel ) )
+	else
+		printGM( "error", "Switched to not available channel (" .. tostring( channel ) .. ")" )
+	end
+end
+
+-- >>> do NOT change this! (it can cause crashes!) <<<
+GM.ShortName = "YRP"	--do NOT change this!
+GM.Author = "D4KiR" --do NOT change this!
+GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
+GM.Email = GM.Discord --do NOT change this!
+GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
+GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
+GM.Help = "Create your rp you want to make!" --do NOT change this!
+GM.dedicated = "-" --do NOT change this!
+GM.Version = "0.9.85" --do NOT change this!
+GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
+GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
+
+VERSIONART = "github"
+for i, wsi in pairs( engine.GetAddons() ) do
+	if tostring( wsi.wsid ) == "1114204152" then
+		VERSIONART = "workshop"
+	end
+end
+
 function GM:Initialize()
 	self.BaseClass.Initialize(self)
 end
@@ -44,7 +73,7 @@ function GetMapName()
 end
 
 function GetMapNameDB()
-	return string.lower( db_in_str( game.GetMap() ) )
+	return string.lower( SQL_STR_IN( game.GetMap() ) )
 end
 
 concommand.Add( "yrp_status", function( ply, cmd, args )
@@ -155,9 +184,9 @@ end
 if SERVER then
 	function lowering_weapon( ply )
 		if IsWeaponLoweringEnabled() then
-			if ply != NULL then
+			if ea( ply ) then
 				local _weapon = ply:GetActiveWeapon()
-				if _weapon != NULL then
+				if ea( _weapon ) then
 					if _weapon:IsScripted() then
 					  if ply:GetNWBool( "weaponlowered", true ) then
 					    ply:SetNWBool( "weaponlowered", false )
@@ -184,7 +213,7 @@ if SERVER then
 		if IsWeaponLoweringEnabled() then
 			for k, ply in pairs( player.GetAll() ) do
 				local _weapon = ply:GetActiveWeapon()
-				if _weapon != NULL then
+				if ea( _weapon ) then
 					if _weapon:IsScripted() then
 						if ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) then
 							lowering_weapon( ply )
@@ -200,14 +229,9 @@ if SERVER then
 	end)
 end
 
-local _sv_outdated = false
-local _cl_outdated = false
-function IsYRPOutdated()
-	if SERVER then
-		return _sv_outdated
-	elseif CLIENT then
-		return _cl_outdated
-	end
+local _version_online = {}
+function YRPOnlineVersion()
+	return _version_online
 end
 
 function YRPCheckVersion()
@@ -216,47 +240,67 @@ function YRPCheckVersion()
 		local StartPos = string.find( body, "#", 1, false )
 		local EndPos = string.find( body, "*", 1, false )
 		local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
-
-		if CLIENT then
-			--Server
-			local _v_off = string.Replace( GAMEMODE.Version, "V.: ", "" )
-			local _v_on = string.Replace( versionOnline, "V.: ", "" )
-			local curnum = string.Explode( ".", _v_off )
-			local newnum = string.Explode( ".", _v_on )
-			for k, v in pairs( curnum ) do
-			  if tonumber( curnum[k] ) < tonumber( newnum[k] ) then
-					_cl_outdated = true
-			  elseif tonumber( curnum[k] ) > tonumber( newnum[k] ) then
-			   	_cl_outdated = false
-			  elseif tonumber( curnum[k] ) == tonumber( newnum[k] ) then
-					_cl_outdated = false
-				end
-			end
-		end
-
-		if SERVER then
-			--Server
-			local _v_off2 = string.Replace( GAMEMODE.Version, "V.: ", "" )
-			local _v_on2 = string.Replace( versionOnline, "V.: ", "" )
-			local cur2num2 = string.Explode( ".", _v_off2 )
-			local new2num2 = string.Explode( ".", _v_on2 )
-			for k, v in pairs( cur2num2 ) do
-			  if tonumber( cur2num2[k] ) < tonumber( new2num2[k] ) then
-					_sv_outdated = true
-			  elseif tonumber( cur2num2[k] ) > tonumber( new2num2[k] ) then
-			   	_sv_outdated = false
-			  elseif tonumber( cur2num2[k] ) == tonumber( new2num2[k] ) then
-					_sv_outdated = false
-				end
-			end
-		end
+		_version_online = string.Explode( ".", versionOnline )
 	end,
 		function( error )
 			--
 		end
-	 )
+	)
 end
 YRPCheckVersion()
+
+local _sv_outdated = false
+local _cl_outdated = false
+local _version_client = {}
+local _version_server = {}
+
+function YRPVersion()
+	if SERVER then
+		return _version_server
+	elseif CLIENT then
+		return _version_client
+	end
+end
+
+function IsYRPOutdated()
+	YRPCheckVersion()
+	timer.Simple( 2, function()
+		if CLIENT then
+			_version_client = string.Explode( ".", GAMEMODE.Version )
+			if #_version_client == #_version_online then
+				for k, v in pairs( _version_client ) do
+					if tonumber( _version_client[k] ) < tonumber( _version_online[k] ) then
+						_cl_outdated = true
+					elseif tonumber( _version_client[k] ) > tonumber( _version_online[k] ) then
+						_cl_outdated = false
+					elseif tonumber( _version_client[k] ) == tonumber( _version_online[k] ) then
+						_cl_outdated = false
+					end
+				end
+			else
+				printGM( "error", "VERSION CHECK ERROR CL" )
+			end
+			return _cl_outdated
+		end
+		if SERVER then
+			_version_server = string.Explode( ".", GAMEMODE.Version )
+			if #_version_server == #_version_online then
+				for k, v in pairs( _version_server ) do
+					if tonumber( _version_server[k] ) < tonumber( _version_online[k] ) then
+						_sv_outdated = true
+					elseif tonumber( _version_server[k] ) > tonumber( _version_online[k] ) then
+						_sv_outdated = false
+					elseif tonumber( _version_server[k] ) == tonumber( _version_online[k] ) then
+						_sv_outdated = false
+					end
+				end
+			else
+				printGM( "error", "VERSION CHECK ERROR SV" )
+			end
+			return _sv_outdated
+		end
+	end)
+end
 
 if SERVER then
 	util.AddNetworkString( "getServerVersion" )
@@ -271,7 +315,7 @@ if SERVER then
 	timer.Simple( 4, function()
 	  local tmp = SQL_SELECT( "yrp_general", "name_gamemode", nil )
 		if tmp != false and tmp != nil then
-		  GAMEMODE.BaseName = db_out_str( tmp[1].name_gamemode )
+		  GAMEMODE.BaseName = SQL_STR_OUT( tmp[1].name_gamemode )
 		end
 	end)
 end
@@ -294,35 +338,6 @@ if CLIENT then
   net.Receive( "getGamemodename", function( len, ply )
     GAMEMODE.BaseName = net.ReadString()
   end)
-end
-
-function ChangeChannel( channel )
-	if channel == "stable" or channel == "beta" or channel == "canary" then
-		GAMEMODE.VersionSort = channel
-		printGM( "gm", "Switched to " .. tostring( channel ) )
-	else
-		printGM( "error", "Switched to not available channel (" .. tostring( channel ) .. ")" )
-	end
-end
-
--- >>> do NOT change this! (it can cause crashes!) <<<
-GM.ShortName = "YRP"	--do NOT change this!
-GM.Author = "D4KiR" --do NOT change this!
-GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
-GM.Email = GM.Discord --do NOT change this!
-GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
-GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
-GM.Help = "Create your rp you want to make!" --do NOT change this!
-GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.84" --do NOT change this!
-GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
-GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
-
-VERSIONART = "github"
-for i, wsi in pairs( engine.GetAddons() ) do
-	if tostring( wsi.wsid ) == "1114204152" then
-		VERSIONART = "workshop"
-	end
 end
 
 -- Multicore (Shared) enable:

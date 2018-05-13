@@ -25,7 +25,7 @@ end)
 
 net.Receive( "updateServer", function( len, ply )
   local _tmpString = net.ReadString()
-  local _result = SQL_UPDATE( "yrp_general", "name_gamemode = '" .. db_in_str( _tmpString ) .. "'" )
+  local _result = SQL_UPDATE( "yrp_general", "name_gamemode = '" .. SQL_STR_IN( _tmpString ) .. "'" )
   if worked( _result, "name_gamemode failed" ) then
   end
   local countdown = net.ReadInt( 16 )

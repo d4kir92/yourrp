@@ -69,7 +69,7 @@ net.Receive( "shop_item_edit_name", function( len, ply )
   local _uid = net.ReadString()
   local _new_name = net.ReadString()
   local _catID = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "name = '" .. db_in_str( _new_name ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "name = '" .. SQL_STR_IN( _new_name ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_item_edit_name: " .. db_worked( _new ) )
 end)
 
@@ -79,7 +79,7 @@ net.Receive( "shop_item_edit_desc", function( len, ply )
   local _uid = net.ReadString()
   local _new_desc = net.ReadString()
   local _catID = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "description = '" .. db_in_str( _new_desc ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "description = '" .. SQL_STR_IN( _new_desc ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_item_edit_desc: " .. db_worked( _new ) )
 end)
 
@@ -89,7 +89,7 @@ net.Receive( "shop_item_edit_price", function( len, ply )
   local _uid = net.ReadString()
   local _new_price = net.ReadString()
   local _catID = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "price = '" .. db_in_str( _new_price ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "price = '" .. SQL_STR_IN( _new_price ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_item_edit_price: " .. db_worked( _new ) )
 end)
 
@@ -109,7 +109,7 @@ net.Receive( "shop_item_edit_cool", function( len, ply )
   local _uid = net.ReadString()
   local _new_cool = net.ReadString()
   local _catID = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "cooldown = '" .. db_in_str( _new_cool ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "cooldown = '" .. SQL_STR_IN( _new_cool ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_item_edit_cool: " .. db_worked( _new ) )
 end)
 
@@ -131,7 +131,7 @@ net.Receive( "shop_item_edit_perm", function( len, ply )
   local _uid = net.ReadString()
   local _new_perm = net.ReadString()
   local _catID = net.ReadString()
-  local _new = SQL_UPDATE( _db_name, "permanent = '" .. db_in_str( _new_perm ) .. "'", "uniqueID = " .. _uid )
+  local _new = SQL_UPDATE( _db_name, "permanent = '" .. SQL_STR_IN( _new_perm ) .. "'", "uniqueID = " .. _uid )
   printGM( "db", "shop_item_edit_perm: " .. db_worked( _new ) )
 end)
 
@@ -253,8 +253,9 @@ util.AddNetworkString( "yrp_info2" )
 function spawnItem( ply, item, duid )
   local _distSpace = 8
   local _distMax = 2000
-  local _angle = ply:EyeAngles()
+  local _angle = Angle( 0, ply:EyeAngles().p, 0 )
   local ent = {}
+  local _pos_end = ply:GetPos()
   if item.type == "vehicles" then
     local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
     if _sps != nil and _sps != false then
@@ -283,6 +284,8 @@ function spawnItem( ply, item, duid )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
     ent:SetOwner( ply )
+    ent:SetCreator( ply )
+    ent:Activate()
   end
 
   if item.type == "weapons" then
@@ -310,6 +313,8 @@ function spawnItem( ply, item, duid )
         end
 
         _pos = Vector( _pos[1], _pos[2], _pos[3] ) + _edit + _height
+
+        _pos_end = _pos
 
         ent:SetPos( _pos )
 
@@ -340,7 +345,19 @@ function spawnItem( ply, item, duid )
           return false
         end
         if ent.Custom != "simfphys" then
-          ent:Spawn()
+          local tr = util.TraceHull( {
+            start = _pos_end + Vector( 0, 0, 128 ),
+            endpos = _pos_end - Vector( 0, 0, 128 ),
+            maxs = maxs,
+            mins = mins,
+            filter = ent
+          } )
+          if ent.SpawnFunction != nil then
+            ent:SpawnFunction( ply, tr, ent:GetClass() )
+          else
+            ent:Spawn()
+          end
+          ent:SetPos( _pos_end )
         end
         return true
       end
@@ -364,12 +381,25 @@ function spawnItem( ply, item, duid )
 
         local _result = util.TraceHull( tr )
         if !_result.Hit then
-          ent:SetPos( ent:GetPos() + _angle:Forward() * dist )
+          _pos_end = ent:GetPos() + _angle:Forward() * dist
+          ent:SetPos( _pos_end )
           if item.type == "vehicles" then
             --ent:SetVelocity( Vector( 0, 0, -500 ) )
           else
             printGM( "gm", "[spawnItem] Spawn Item" )
-            ent:Spawn()
+            local tr = util.TraceHull( {
+              start = _pos_end + Vector( 0, 0, 128 ),
+              endpos = _pos_end - Vector( 0, 0, 128 ),
+              maxs = maxs,
+              mins = mins,
+              filter = ent
+            } )
+            if ent.SpawnFunction != nil then
+              ent:SpawnFunction( ply, tr )
+            else
+              ent:Spawn()
+            end
+            ent:SetPos( _pos_end )
           end
           printGM( "gm", "[spawnItem] Enough Space" )
           return true

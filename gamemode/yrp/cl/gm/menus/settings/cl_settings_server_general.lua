@@ -58,6 +58,8 @@ hook.Add( "open_server_general", "open_server_general", function()
     local sv_generalSuicideDisabled = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1100 ) )
 
     local sv_generalDropMoneyOnDeath = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1200 ) )
+    local sv_generalYrpChat = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1300 ) )
+    local sv_generalYrpVoiceChat = createD( "DCheckBox", settingsWindow.window.site, ctr( 30 ), ctr( 30 ), BScrW()/2, ctr( 1360 ) )
 
     local sv_generalCollection = createVGUI( "DNumberWang", settingsWindow.window.site, 400, 50, _center, 1700 )
     sv_generalCollection:SetMin( 0 )
@@ -65,9 +67,10 @@ hook.Add( "open_server_general", "open_server_general", function()
     local sv_generalCollectionButton = createVGUI( "DButton", settingsWindow.window.site, 1000, 50, _center, 1760 )
 
     local oldGamemodename = ""
-    function settingsWindow.window.site:Paint()
+    function settingsWindow.window.site:Paint( pw, ph )
+      surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
       --draw.RoundedBox( 0, 0, 0, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), _yrp.colors.panel )
-      draw.SimpleTextOutlined( lang_string( "gamemodename" ) .. ":", "sef", ctr( _center - 10 ), ctr( 5 + 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "*" .. lang_string( "gamemodename" ) .. ":", "sef", ctr( _center - 10 ), ctr( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       if oldGamemodename != sv_generalName:GetText() then
         draw.SimpleTextOutlined( "you need to update Server!", "sef", ctr( _center + 400 + 10 ), ctr( 5 + 25 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
@@ -80,8 +83,8 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "building" ) .. ":", "sef", ctr( _center - 10 ), ctr( 510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "server_hud" ) .. ":", "sef", ctr( _center - 10 ), ctr( 570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-      draw.SimpleTextOutlined( lang_string( "dropitemsondeath" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "*" .. lang_string( "inventory" ) .. ":", "sef", ctr( _center - 10 ), ctr( 630 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "*" .. lang_string( "dropitemsondeath" ) .. ":", "sef", ctr( _center - 10 ), ctr( 690 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "graffiti" ) .. ":", "sef", ctr( _center - 10 ), ctr( 750 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "thirdpersonviewdistance" ) .. ":", "sef", ctr( _center - 10 ), ctr( 810 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
@@ -99,7 +102,7 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "stealth" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1510 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "noclip" ) .. " [" .. lang_string( "effect" ) .. "]" .. ":", "sef", ctr( _center - 10 ), ctr( 1570 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "collection" ) .. ":", "sef", ctr( _center - 10 ), ctr( 1725 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "collectionid" ) .. ":", "sef", ctr( _center - 10 ), ctr( 1725 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       draw.SimpleTextOutlined( lang_string( "playerinfo" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 330 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 390 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -118,6 +121,11 @@ hook.Add( "open_server_general", "open_server_general", function()
       draw.SimpleTextOutlined( lang_string( "suicidedisabled" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
       draw.SimpleTextOutlined( lang_string( "dropmoneyondeath" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1210 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( "*" .. "[YourRP] " .. lang_string( "chat" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1310 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "voicechat" ) .. ":", "sef", BScrW()/2 - ctr( 10 ), ctr( 1370 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( "*" .. lang_string( "requiresserverrestart" ) .. "/" .. lang_string( "requireschangelevel" ), "sef", BScrW()/2 - ctr( 10 ), ScrH() - ctr( 200 ), Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
 
     sv_generalName:SetPos( ctr( _center ), ctr( 5 ) )
@@ -127,7 +135,7 @@ hook.Add( "open_server_general", "open_server_general", function()
     net.Receive( "dbGetGeneral", function()
       local _yrp_general = net.ReadTable()
 
-      GAMEMODE.BaseName = db_out_str( _yrp_general.name_gamemode ) or "FAILED"
+      GAMEMODE.BaseName = SQL_STR_OUT( _yrp_general.name_gamemode ) or "FAILED"
       oldGamemodename = GAMEMODE.BaseName or ""
       sv_generalName:SetText( oldGamemodename )
       _advertname = _yrp_general.name_advert or "FAILED"
@@ -174,6 +182,8 @@ hook.Add( "open_server_general", "open_server_general", function()
       sv_generalSuicideDisabled:SetValue( tonumber( _yrp_general.suicidedisabled ) )
 
       sv_generalDropMoneyOnDeath:SetValue( tonumber( _yrp_general.toggle_dropmoneyondeath ) )
+      sv_generalYrpChat:SetValue( tonumber( _yrp_general.yrp_chat ) )
+      sv_generalYrpVoiceChat:SetValue( tonumber( _yrp_general.yrp_voice_chat ) )
 
       sv_generalAdvert:SetPos( ctr( _center ), ctr( 5 + 50 + 10 ) )
       sv_generalAdvert:SetSize( ctr( 400 ), ctr( 50 ) )
@@ -797,6 +807,26 @@ hook.Add( "open_server_general", "open_server_general", function()
           _tonumber = 1
         end
         net.Start( "db_update_dropmoneyondeath" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalYrpChat:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_yrp_chat" )
+          net.WriteInt( _tonumber, 4 )
+        net.SendToServer()
+      end
+
+      function sv_generalYrpVoiceChat:OnChange( bVal )
+        local _tonumber = 0
+        if bVal then
+          _tonumber = 1
+        end
+        net.Start( "db_update_yrp_voice_chat" )
           net.WriteInt( _tonumber, 4 )
         net.SendToServer()
       end

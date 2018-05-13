@@ -36,7 +36,7 @@ net.Receive( "get_shops", function()
       _sh._sho._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
       _sh._sho._name.textentry.tbl = tbl
       _sh._sho._name:SetHeader( lang_string( "name" ) )
-      _sh._sho._name:SetText( db_out_str( tbl.name ) )
+      _sh._sho._name:SetText( SQL_STR_OUT( tbl.name ) )
       function _sh._sho._name.textentry:OnChange()
         self.tbl.name = self:GetValue()
         net.Start( "shop_edit_name" )
@@ -93,7 +93,7 @@ net.Receive( "get_shop_categories", function()
           _sh._cat._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
           _sh._cat._name.textentry.tbl = tbl
           _sh._cat._name:SetHeader( lang_string( "name" ) )
-          _sh._cat._name:SetText( db_out_str( tbl.name ) )
+          _sh._cat._name:SetText( SQL_STR_OUT( tbl.name ) )
           function _sh._cat._name.textentry:OnChange()
             self.tbl.name = self:GetValue()
             net.Start( "category_edit_name" )
@@ -149,7 +149,7 @@ net.Receive( "get_shop_items", function()
         _sh._sit.itemname = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 150 ) )
         _sh._sit.itemname.textentry.tbl = tbl
         _sh._sit.itemname:SetHeader( lang_string( "name" ) )
-        _sh._sit.itemname:SetText( db_out_str( tbl.name ) )
+        _sh._sit.itemname:SetText( SQL_STR_OUT( tbl.name ) )
         function _sh._sit.itemname.textentry:SendNewName()
           if _sh._cat.uid != nil then
             net.Start( "shop_item_edit_name" )
@@ -172,7 +172,7 @@ net.Receive( "get_shop_items", function()
         _sh._sit.itemdesc = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 300 ) )
         _sh._sit.itemdesc.textentry.tbl = tbl
         _sh._sit.itemdesc:SetHeader( lang_string( "description" ) )
-        _sh._sit.itemdesc:SetText( db_out_str( tbl.description ) )
+        _sh._sit.itemdesc:SetText( SQL_STR_OUT( tbl.description ) )
         function _sh._sit.itemdesc.textentry:SendNewDesc()
           if _sh._cat.uid != nil then
             net.Start( "shop_item_edit_desc" )
@@ -269,7 +269,7 @@ net.Receive( "get_shop_items", function()
             if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
               _b = true
             end
-            _sh._sit.itemlice.plus:AddChoice( db_out_str( lic.name ), lic.uniqueID, _b )
+            _sh._sit.itemlice.plus:AddChoice( SQL_STR_OUT( lic.name ), lic.uniqueID, _b )
           end
         end)
         function _sh._sit.itemlice.plus:OnSelect( index, value, data )
@@ -353,7 +353,7 @@ net.Receive( "get_shop_items", function()
               local _net_tab = net.ReadTable()
               _itemlist = _net_tab
               for i, lic in pairs( _itemlist ) do
-                lic.PrintName = db_out_str( lic.name )
+                lic.PrintName = SQL_STR_OUT( lic.name )
                 lic.ClassName = lic.uniqueID
               end
 

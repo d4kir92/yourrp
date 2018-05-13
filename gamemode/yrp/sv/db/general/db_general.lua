@@ -43,6 +43,9 @@ util.AddNetworkString( "db_update_suicidedisabled" )
 
 util.AddNetworkString( "db_update_dropmoneyondeath" )
 
+util.AddNetworkString( "db_update_yrp_chat" )
+util.AddNetworkString( "db_update_yrp_voice_chat" )
+
 util.AddNetworkString( "db_update_collection" )
 
 local _db_name = "yrp_general"
@@ -92,6 +95,9 @@ SQL_ADD_COLUMN( _db_name, "showrole", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "suicidedisabled", "INT DEFAULT 1" )
 
+SQL_ADD_COLUMN( _db_name, "yrp_chat", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "yrp_voice_chat", "INT DEFAULT 1" )
+
 SQL_ADD_COLUMN( _db_name, "toggle_dropmoneyondeath", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "collection", "INT DEFAULT 0" )
@@ -118,7 +124,9 @@ util.AddNetworkString( "ply_kick" )
 net.Receive( "ply_kick", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
-    _target:Kick( "You get kicked by " .. ply:YRPName() )
+    if _target:IsPlayer() then
+      _target:Kick( "You get kicked by " .. ply:YRPName() )
+    end
   end
 end)
 util.AddNetworkString( "ply_ban" )
@@ -126,8 +134,10 @@ net.Receive( "ply_ban", function( len, ply )
   if ply:HasAccess() then
     local _target = net.ReadEntity()
     if ea( _target ) then
-      _target:Ban( 24*60, false )
-      _target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
+      if _target:IsPlayer() then
+        _target:Ban( 24*60, false )
+        _target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
+      end
     else
       printGM( "note", "ply_ban " .. tostring( _target ) .. " IS NIL => NOT AVAILABLE" )
     end
@@ -183,11 +193,13 @@ end
 
 function DoUnRagdoll( ply )
   ply:SetNWBool( "ragdolled", false )
+  ply:SetParent( nil )
 
   local ragdoll = ply:GetNWEntity( "ragdoll" )
-  ply:SetParent( nil )
-  ply:SetPos( ragdoll:GetPos() )
-  ragdoll:Remove()
+  if ea( ragdoll ) then
+    ply:SetPos( ragdoll:GetPos() )
+    ragdoll:Remove()
+  end
 
   RenderNormal( ply )
 end
@@ -371,6 +383,32 @@ end
 function IsDropMoneyOnDeathEnabled()
   return tobool( yrp_general.toggle_dropmoneyondeath )
 end
+
+function IsYrpChatEnabled()
+  return tobool( yrp_general.yrp_chat )
+end
+
+function IsYrpVoiceChatEnabled()
+  return tobool( yrp_general.yrp_voice_chat )
+end
+
+net.Receive( "db_update_yrp_voice_chat", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.yrp_voice_chat = _nw
+    SQL_UPDATE( "yrp_general", "yrp_voice_chat = " .. yrp_general.yrp_voice_chat, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " yrp_voice_chat" )
+  end
+end)
+
+net.Receive( "db_update_yrp_chat", function( len, ply )
+  local _nw = tonumber( net.ReadInt( 4 ) )
+  if isnumber( _nw ) then
+    yrp_general.yrp_chat = _nw
+    SQL_UPDATE( "yrp_general", "yrp_chat = " .. yrp_general.yrp_chat, nil )
+    printGM( "note", ply:YRPName() .. " " .. bool_status( _nw ) .. " yrp_chat" )
+  end
+end)
 
 net.Receive( "db_update_dropmoneyondeath", function( len, ply )
   local _nw = tonumber( net.ReadInt( 4 ) )

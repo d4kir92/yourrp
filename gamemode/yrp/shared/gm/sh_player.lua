@@ -28,10 +28,6 @@ function Player:GetBackpack()
   return self:GetNWEntity( "backpack" )
 end
 
-function Player:GetWeaponPrimary1()
-  return self:GetNWEntity( "weaponprimary1" )
-end
-
 function Player:HasAccess()
   local _ug = self:GetUserGroup()
   if isbool( _ug ) then

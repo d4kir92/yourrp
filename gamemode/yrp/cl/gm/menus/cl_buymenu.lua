@@ -53,7 +53,7 @@ function createShopItem( item, duid )
 
   if item.name != nil then
     _i.name = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, 0 )
-    _i.name.name = db_out_str( item.name )
+    _i.name.name = SQL_STR_OUT( item.name )
     if item.type == "licenses" then
       _i.name.name = lang_string( "license" ) .. ": " .. _i.name.name
     end
@@ -142,7 +142,7 @@ function createStorageItem( item, duid )
 
   if item.name != nil then
     _i.name = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, 0 )
-    _i.name.name = db_out_str( item.name )
+    _i.name.name = SQL_STR_OUT( item.name )
     function _i.name:Paint( pw, ph )
       surfaceText( self.name, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
@@ -325,7 +325,7 @@ net.Receive( "shop_get_tabs", function( len )
   _bm.tabs:SetUnselectedColor( Color( 0, 0, 0, 240 ) )
 
   for i, tab in pairs( _tabs ) do
-    local _tab = _bm.tabs:AddTab( db_out_str( tab.name ), tab.uniqueID )
+    local _tab = _bm.tabs:AddTab( SQL_STR_OUT( tab.name ), tab.uniqueID )
     function _tab:GetCategories()
       net.Receive( "shop_get_categories", function( len )
         local _uid = net.ReadString()
@@ -337,7 +337,7 @@ net.Receive( "shop_get_tabs", function( len )
           local _cat = createD( "DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb( 100 ), 0, 0 )
           _cat.uid = cat.uniqueID
           _cat:SetHeaderHeight( ctrb( 100 ) )
-          _cat:SetHeader( db_out_str( cat.name ) )
+          _cat:SetHeader( SQL_STR_OUT( cat.name ) )
           _cat:SetSpacing( 30 )
           _cat.color = Color( 100, 100, 255 )
           _cat.color2 = Color( 50, 50, 255 )
@@ -367,7 +367,7 @@ net.Receive( "shop_get_tabs", function( len )
           _remove.uid = _uid
           function _remove:Paint( pw, ph )
             draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0 ) )
-            surfaceText( lang_string( "remove" ) .. " [" .. lang_string( "tab" ) .. "] => " .. db_out_str( tab.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+            surfaceText( lang_string( "remove" ) .. " [" .. lang_string( "tab" ) .. "] => " .. SQL_STR_OUT( tab.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
           end
           function _remove:DoClick()
             net.Start( "dealer_rem_tab" )
@@ -388,7 +388,7 @@ net.Receive( "shop_get_tabs", function( len )
       _tab.GetCategories()
     end
 
-    local _tab2 = _bm.tabs:AddTab( lang_string( "mystorage" ) .. ": " .. db_out_str( tab.name ), tab.uniqueID )
+    local _tab2 = _bm.tabs:AddTab( lang_string( "mystorage" ) .. ": " .. SQL_STR_OUT( tab.name ), tab.uniqueID )
     function _tab2:GetCategories()
       net.Receive( "shop_get_categories", function( len )
         local _uid = net.ReadString()
@@ -400,7 +400,7 @@ net.Receive( "shop_get_tabs", function( len )
           local _cat = createD( "DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb( 100 ), 0, 0 )
           _cat.uid = cat.uniqueID
           _cat:SetHeaderHeight( ctrb( 100 ) )
-          _cat:SetHeader( db_out_str( cat.name ) )
+          _cat:SetHeader( SQL_STR_OUT( cat.name ) )
           _cat:SetSpacing( 30 )
           _cat.color = Color( 100, 100, 255 )
           _cat.color2 = Color( 50, 50, 255 )
@@ -475,7 +475,7 @@ net.Receive( "shop_get_tabs", function( len )
       net.Receive( "shop_get_all_tabs", function( len )
         local _tabs = net.ReadTable()
         for i, tab in pairs( _tabs ) do
-          _tmp.tabs.plus:AddChoice( db_out_str( tab.name ), tab.uniqueID )
+          _tmp.tabs.plus:AddChoice( SQL_STR_OUT( tab.name ), tab.uniqueID )
         end
       end)
 

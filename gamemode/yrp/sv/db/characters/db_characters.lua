@@ -71,6 +71,7 @@ function Player:VisualEquipment( name, slot )
           local _visual = ents.Create( "prop_dynamic" )
           _visual:SetModel( _item.WorldModel )
           _visual:SetOwner( self )
+          _visual:SetNWBool( "isviewmodel", true )
           _visual:Spawn()
 
           self:SetNWEntity( name, _visual )
@@ -110,6 +111,7 @@ function Player:VisualEquipment( name, slot )
           if ea( _old ) then
             _old:Remove()
             self:SetNWEntity( name, NULL )
+            self:SetNWString( name .. "ClassName", "" )
           end
         end
         return _item

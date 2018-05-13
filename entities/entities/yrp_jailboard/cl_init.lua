@@ -76,7 +76,7 @@ net.Receive( "openLawBoard", function( len )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 255, 200 ) )
 
         draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. v.nick, "sef", pw/2, ph - ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-        draw.SimpleTextOutlined( lang_string( "reason" ) .. ": " .. db_out_str( v.reason ), "sef", pw/2, ph - ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( lang_string( "reason" ) .. ": " .. SQL_STR_OUT( v.reason ), "sef", pw/2, ph - ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         draw.SimpleTextOutlined( lang_string( "time" ) .. ": " .. v.time, "sef", pw/2, ph - ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       end
       scrollpanel:AddItem( dpanel )
@@ -166,7 +166,7 @@ net.Receive( "openLawBoard", function( len )
         end
         function _add:DoClick()
           if _SteamID != nil then
-            local _insert = "'" .. _SteamID .. "', '" .. db_in_str( _reason:GetText() ) .. "', " .. db_int( _time:GetValue() ) .. ", '" .. db_in_str( _nick ) .. "'"
+            local _insert = "'" .. _SteamID .. "', '" .. SQL_STR_IN( _reason:GetText() ) .. "', " .. db_int( _time:GetValue() ) .. ", '" .. SQL_STR_IN( _nick ) .. "'"
             net.Start( "dbAddJail" )
               net.WriteString( "yrp_jail" )
               net.WriteString( "SteamID, reason, time, nick" )

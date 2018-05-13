@@ -183,37 +183,25 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( pl, model 
   end
 end)
 
-function RenderEquipment( ply, mode, color )
-  local _bp = ply:GetNWEntity( "backpack" )
-  if ea( _bp ) then
-    _bp:SetRenderMode( mode )
-    _bp:SetColor( color )
+function RenderEquipment( ply, name, mode, color )
+print( ply, name, mode, color )
+  local _eq = ply:GetNWEntity( name )
+  if ea( _eq ) then
+    _eq:SetRenderMode( mode )
+    _eq:SetColor( color )
+    _eq:SetNWInt( name .. "mode", mode )
+    _eq:SetNWString( name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a )
   end
-  local _wpp1 = ply:GetNWEntity( "weaponprimary1" )
-  if ea( _wpp1 ) then
-    _wpp1:SetRenderMode( mode )
-    _wpp1:SetColor( color )
-  end
-  local _wpp2 = ply:GetNWEntity( "weaponprimary2" )
-  if ea( _wpp2 ) then
-    _wpp2:SetRenderMode( mode )
-    _wpp2:SetColor( color )
-  end
-  local _wps1 = ply:GetNWEntity( "weaponsecondary1" )
-  if ea( _wps1 ) then
-    _wps1:SetRenderMode( mode )
-    _wps1:SetColor( color )
-  end
-  local _wps2 = ply:GetNWEntity( "weaponsecondary2" )
-  if ea( _wps2 ) then
-    _wps2:SetRenderMode( mode )
-    _wps2:SetColor( color )
-  end
-  local _wpg = ply:GetNWEntity( "weapongadget" )
-  if ea( _wpg ) then
-    _wpg:SetRenderMode( mode )
-    _wpg:SetColor( color )
-  end
+end
+
+function RenderEquipments( ply, mode, color )
+  RenderEquipment( ply, "backpack", mode, color )
+
+  RenderEquipment( ply, "weaponprimary1", mode, color )
+  RenderEquipment( ply, "weaponprimary2", mode, color )
+  RenderEquipment( ply, "weaponsecondary1", mode, color )
+  RenderEquipment( ply, "weaponsecondary2", mode, color )
+  RenderEquipment( ply, "weapongadget", mode, color )
 end
 
 function RenderNoClip( ply, alpha )
@@ -241,7 +229,7 @@ function RenderNoClip( ply, alpha )
       wp:SetRenderMode( RENDERMODE_TRANSALPHA )
       wp:SetColor( Color( 255, 255, 255, _alpha ) )
     end
-    RenderEquipment( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
+    RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
   end
 end
 
@@ -253,7 +241,7 @@ function RenderFrozen( ply )
       wp:SetRenderMode( RENDERMODE_TRANSALPHA )
       wp:SetColor( Color( 0, 0, 255 ) )
     end
-    RenderEquipment( ply, RENDERMODE_TRANSALPHA, Color( 0, 0, 255 ) )
+    RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 0, 0, 255 ) )
   end
 end
 
@@ -266,7 +254,7 @@ function RenderCloaked( ply )
       wp:SetRenderMode( RENDERMODE_TRANSALPHA )
       wp:SetColor( Color( 255, 255, 255, _alpha ) )
     end
-    RenderEquipment( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
+    RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
   end
 end
 
@@ -284,7 +272,7 @@ function RenderNormal( ply )
         wp:SetRenderMode( RENDERMODE_NORMAL )
         wp:SetColor( Color( 255, 255, 255, 255 ) )
       end
-      RenderEquipment( ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255 ) )
+      RenderEquipments( ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255 ) )
     end
   end
 end
@@ -595,6 +583,6 @@ net.Receive( "dbUpdate", function( len, ply )
   local _dbWhile = net.ReadString()
   local _result = SQL_UPDATE( _dbTable, _dbSets, _dbWhile )
   local _usergroup_ = string.Explode( " ", _dbWhile )
-  local _restriction_ = string.Explode( " ", db_in_str( _dbSets ) )
+  local _restriction_ = string.Explode( " ", SQL_STR_IN( _dbSets ) )
   printGM( "note", ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile )
 end)

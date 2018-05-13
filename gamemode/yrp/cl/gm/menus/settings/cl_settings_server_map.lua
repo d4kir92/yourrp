@@ -194,15 +194,17 @@ hook.Add( "open_server_map", "open_server_map", function()
       local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
       tmpButton:SetText( lang_string( "add" ) )
       function tmpButton:DoClick()
-        net.Start( "dbInsertIntoMap" )
-          net.WriteString( "yrp_" .. GetMapNameDB() )
-          net.WriteString( "position, angle, linkID, type" )
-          local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
-          local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
-          local tmpGroupID = tostring( tmpGroup:GetOptionData( tmpGroup:GetSelectedID() ) )
-          local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', " .. tmpGroupID .. ", 'GroupSpawnpoint'"
-          net.WriteString( tmpString )
-        net.SendToServer()
+        local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
+        local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
+        local tmpGroupID = tostring( tmpGroup:GetOptionData( tmpGroup:GetSelectedID() ) )
+        if tmpGroupID != nil then
+          net.Start( "dbInsertIntoMap" )
+            net.WriteString( "yrp_" .. GetMapNameDB() )
+            net.WriteString( "position, angle, linkID, type" )
+            local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', " .. tostring( tmpGroupID ) .. ", 'GroupSpawnpoint'"
+            net.WriteString( tmpString )
+          net.SendToServer()
+        end
 
         _mapListView:Clear()
         net.Start( "getMapList" )
