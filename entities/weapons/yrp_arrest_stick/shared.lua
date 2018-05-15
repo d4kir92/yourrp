@@ -57,6 +57,8 @@ function SWEP:PrimaryAttack()
 
 	local ply = self:GetOwner()
 
+	if !ply:IsValid() then return false end
+
 	if CurTime() < self.delay then return end
 	self.delay = CurTime() + self.cooldown
 

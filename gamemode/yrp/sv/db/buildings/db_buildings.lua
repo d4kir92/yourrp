@@ -40,7 +40,7 @@ function allowedToUseDoor( id, ply )
             return false
           end
         else
-          printGM( "error", "_tmpChaTab: " .. tostring( _tmpChaTab ) )
+          printGM( "error", "[allowedToUseDoor] _tmpChaTab: " .. tostring( _tmpChaTab ) )
           return false
         end
       end

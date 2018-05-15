@@ -169,10 +169,11 @@ net.Receive( "get_shop_items", function()
         end
 
         --[[ Description ]]--
-        _sh._sit.itemdesc = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 300 ) )
+        _sh._sit.itemdesc = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 400 ), 0, ctr( 300 ) )
         _sh._sit.itemdesc.textentry.tbl = tbl
         _sh._sit.itemdesc:SetHeader( lang_string( "description" ) )
         _sh._sit.itemdesc:SetText( SQL_STR_OUT( tbl.description ) )
+        _sh._sit.itemdesc.textentry:SetMultiline( true )
         function _sh._sit.itemdesc.textentry:SendNewDesc()
           if _sh._cat.uid != nil then
             net.Start( "shop_item_edit_desc" )

@@ -19,7 +19,7 @@ function closeBuyMenu()
 end
 
 function createShopItem( item, duid )
-  local _w = 800
+  local _w = 2000
   local _h = 400
   local _i = createD( "DPanel", nil, ctrb( _w ), ctrb( _h ), 0, 0 )
   function _i:Paint( pw, ph )
@@ -30,29 +30,31 @@ function createShopItem( item, duid )
     if item.WorldModel == "" then
       --
     else
-      _i.model = createD( "DModelPanel", _i, ctrb( _w ), ctrb( _h ), ctrb( 0 ), ctrb( 0 ) )
+      _i.model = createD( "DModelPanel", _i, ctrb( _w/2 ), ctrb( _h ), ctrb( 0 ), ctrb( 0 ) )
       _i.model:SetModel( item.WorldModel )
-      if _i.model.Entity != NULL then
-        local _height = 0
+
+      if ea( _i.model.Entity ) then
+        local _mins, _maxs = _i.model.Entity:GetRenderBounds()
+        local _x = _maxs.x - _mins.x
+        local _y = _maxs.y - _mins.y
         local _range = 0
-        if item.type == "weapons" then
-          _height = 10
-          _range = 40
-        elseif item.type == "vehicles" then
-          _height = 50
-          _range = 200
-        elseif item.type == "entities" then
-          height = 30
-          _range = 30
+        if _x > _y then
+          _range = _x
+        elseif _y > _x then
+          _range = _y
         end
-        _i.model:SetLookAt( Vector( 0, 0, _height ) )
-        _i.model:SetCamPos( Vector( 0, 0, _height ) - Vector( -_range, 0, 0 ) )
+
+        local _h = _maxs.z - _mins.z
+        local _z = _mins.z + _h*2/3
+
+        _i.model:SetLookAt( Vector( 0, 0, _z ) )
+        _i.model:SetCamPos( Vector( 0, 0, _z ) - Vector( -_range*1.6, 0, 0 ) )
       end
     end
   end
 
   if item.name != nil then
-    _i.name = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, 0 )
+    _i.name = createD( "DPanel", _i, ctrb( _w/2 ), ctrb( 50 ), 0, 0 )
     _i.name.name = SQL_STR_OUT( item.name )
     if item.type == "licenses" then
       _i.name.name = lang_string( "license" ) .. ": " .. _i.name.name
@@ -62,16 +64,23 @@ function createShopItem( item, duid )
     end
   end
   if item.price != nil then
-    _i.price = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, ctrb( 300 ) )
+    _i.price = createD( "DPanel", _i, ctrb( _w/2 ), ctrb( 50 ), ctrb( _w/2 ), ctrb( 300 ) )
     function _i.price:Paint( pw, ph )
       surfaceText( formatMoney( item.price, LocalPlayer() ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
   end
   if tonumber( item.permanent ) == 1 then
-    _i.price = createD( "DPanel", _i, ctrb( _w ), ctrb( 50 ), 0, ctrb( 50 ) )
+    _i.price = createD( "DPanel", _i, ctrb( _w/2 ), ctrb( 50 ), 0, ctrb( 50 ) )
     function _i.price:Paint( pw, ph )
       surfaceText( "[" .. lang_string( "permanent" ) .. "]", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
     end
+  end
+
+  if item.description != "" then
+    _i.description = createD( "DTextEntry", _i, ctrb( _w/2 ), ctrb( _h - 100 ), ctrb( _w/2 ), ctrb( 0 ) )
+    _i.description:SetMultiline( true )
+    _i.description:SetEditable( false )
+    _i.description:SetText( item.description )
   end
 
   if LocalPlayer():HasLicense( item.licenseID ) then
@@ -119,23 +128,24 @@ function createStorageItem( item, duid )
     if item.WorldModel == "" then
       --
     else
-      _i.model = createD( "DModelPanel", _i, ctrb( _w ), ctrb( _h ), ctrb( 0 ), ctrb( 0 ) )
+      _i.model = createD( "DModelPanel", _i, ctrb( _w - 50 ), ctrb( _h ), ctrb( 0 ), ctrb( 0 ) )
       _i.model:SetModel( item.WorldModel )
       if _i.model.Entity != NULL then
-        local _height = 0
+        local _mins, _maxs = _i.model.Entity:GetRenderBounds()
+        local _x = _maxs.x - _mins.x
+        local _y = _maxs.y - _mins.y
         local _range = 0
-        if item.type == "weapons" then
-          _height = 10
-          _range = 40
-        elseif item.type == "vehicles" then
-          _height = 50
-          _range = 200
-        elseif item.type == "entities" then
-          height = 30
-          _range = 30
+        if _x > _y then
+          _range = _x
+        elseif _y > _x then
+          _range = _y
         end
-        _i.model:SetLookAt( Vector( 0, 0, _height ) )
-        _i.model:SetCamPos( Vector( 0, 0, _height ) - Vector( -_range, 0, 0 ) )
+
+        local _h = _maxs.z - _mins.z
+        local _z = _mins.z + _h*2/3
+
+        _i.model:SetLookAt( Vector( 0, 0, _z ) )
+        _i.model:SetCamPos( Vector( 0, 0, _z ) - Vector( -_range*1.6, 0, 0 ) )
       end
     end
   end

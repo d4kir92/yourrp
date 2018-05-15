@@ -286,7 +286,9 @@ end )
 hook.Add( "ChatText", "yrp_serverNotifications", function( index, name, text, type )
   if LocalPlayer():GetNWBool( "yrp_chat", false ) then
     if type == "joinleave" or type == "none" then
-      yrpChat.richText:AppendText( text.."\n" )
+      if pa( yrpChat.richText ) then
+        yrpChat.richText:AppendText( text.."\n" )
+      end
     end
   end
 end )

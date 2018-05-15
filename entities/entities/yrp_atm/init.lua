@@ -213,22 +213,24 @@ function ENT:createButton( parent, up, forward, right, status, _money, func )
 							if self.money > 0 then
 								if activator:canAffordBank( self.money ) then
 									local dbSelectActivator = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. activator:CharID() )
-									dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
-									SQL_UPDATE( "yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID() )
-
 									local dbSelectTarget = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. tostring( self.parent:GetNWString( "SteamID" ) ) )
-									if dbSelectTarget != nil then
-										dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
-										SQL_UPDATE( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID" ) .. "'")
+									if dbSelectActivator != nil and dbSelectTarget != nil then
+										if dbSelectTarget[1].SteamID != activator:SteamID() then
+											dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
+											SQL_UPDATE( "yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID() )
 
-										activator:SetNWString( "moneybank", dbSelectActivator[1].moneybank )
-										for k, v in pairs( player.GetAll() ) do
-											if v:SteamID() == dbSelectTarget[1].SteamID then
-												v:SetNWString( "moneybank", dbSelectTarget[1].moneybank )
-												break
+											dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
+											SQL_UPDATE( "yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNWString( "SteamID" ) .. "'")
+
+											activator:SetNWString( "moneybank", dbSelectActivator[1].moneybank )
+											for k, v in pairs( player.GetAll() ) do
+												if v:SteamID() == dbSelectTarget[1].SteamID then
+													v:SetNWString( "moneybank", dbSelectTarget[1].moneybank )
+													break
+												end
 											end
+											printGM( "note", activator:RPName() .. " transfered " .. activator:GetNWString( "moneypre" ) .. self.money .. activator:GetNWString( "moneyPost" ) .. " to " .. dbSelectTarget[1].rpname )
 										end
-										printGM( "note", activator:RPName() .. " transfered " .. activator:GetNWString( "moneypre" ) .. self.money .. activator:GetNWString( "moneyPost" ) .. " to " .. dbSelectTarget[1].rpname )
 									end
 								end
 							end

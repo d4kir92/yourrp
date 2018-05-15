@@ -32,7 +32,7 @@ function worked( obj, name, _silence )
 end
 
 function ea( ent )
-	if tostring( ent ) != "[NULL Entity]" and ent != nil then
+	if ent:IsValid() and tostring( ent ) != "[NULL Entity]" and ent != nil and ent != NULL then
 		return true
 	end
 	return false
@@ -71,6 +71,18 @@ function check_yrp_cl_errors( str )
 	return true
 end
 
+function yts( str , str2 )
+	return string.find( string.lower( str ), string.lower( str2 ) )
+end
+
+function ErrorValidToSend( str )
+	if ( yts( str, "/yrp/" ) or yts( str, "yourrp" ) ) and !yts( str, "database or disk is full" ) and !yts( str , "<eof>" ) then
+		return true
+	else
+		return false
+	end
+end
+
 local first_time_error = false
 local _sv_errors = {}
 function update_error_table_sv()
@@ -101,11 +113,7 @@ function update_error_table_sv()
 		    for k, v in pairs( _explode ) do
 		      if k > #_explode_yrp_read then
 		        if !table.HasValue( _errors, v ) and !first_time_error then
-							if
-							string.find( string.lower( v ), "yrp", 1 )
-							or
-							string.find( string.lower( v ), "yourrp", 1 )
-							then
+							if ErrorValidToSend( v ) then
 		          	table.insert( _errors, v )
 							end
 		        end
@@ -120,11 +128,7 @@ function update_error_table_sv()
 				local _errors = {}
 		    for k, v in pairs( _explode ) do
 					if !table.HasValue( _errors, v ) then
-						if
-						string.find( string.lower( v ), "yrp", 1 )
-						or
-						string.find( string.lower( v ), "yourrp", 1 )
-						then
+						if ErrorValidToSend( v ) then
 							table.insert( _errors, v )
 						end
 					end
@@ -171,17 +175,7 @@ function update_error_table_cl()
 		    for k, v in pairs( _explode ) do
 		      if k > #_explode_yrp_read then
 		        if !table.HasValue( _errors, v ) and !first_time_error then
-							if
-							string.find( v, "yrp/apis/", 1, true )
-							or
-							string.find( v, "yrp/cl/", 1, true )
-							or
-							string.find( v, "yrp/integration/", 1, true )
-							or
-							string.find( v, "yrp/shared/", 1, true )
-							or
-							string.find( v, "yrp/sv/", 1, true )
-							then
+							if ErrorValidToSend( v ) then
 		          	table.insert( _errors, v )
 							end
 		        end
@@ -196,17 +190,7 @@ function update_error_table_cl()
 				local _errors = {}
 		    for k, v in pairs( _explode ) do
 					if !table.HasValue( _errors, v ) then
-						if
-						string.find( v, "yrp/apis/", 1, true )
-						or
-						string.find( v, "yrp/cl/", 1, true )
-						or
-						string.find( v, "yrp/integration/", 1, true )
-						or
-						string.find( v, "yrp/shared/", 1, true )
-						or
-						string.find( v, "yrp/sv/", 1, true )
-						then
+						if ErrorValidToSend( v ) then
 							table.insert( _errors, v )
 						end
 					end
@@ -227,7 +211,7 @@ end
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
-  printGM( "db", "send_error( " .. realm .. ", " .. str .. " )" )
+  printGM( "gm", "SEND ERROR TO DEVELOPER: " .. str )
 
   local entry = {}
 	timer.Create( "wait_for_gamemode"..str, 1, 0, function()

@@ -151,14 +151,19 @@ function GetSurroundingItems( ply )
   return _items
 end
 
+function InventoryTypeChanger( typ )
+  local _type = typ
+  if _type == "eqwpp1" or _type == "eqwpp2" or _type == "eqwps1" or _type == "eqwps2" or _type == "eqwpg" then
+    _type = "weapon"
+  end
+  return _type
+end
+
 function IsRightInventoryType( storage, item )
   if storage == "world" then
     return true
   end
-  local _storage = storage
-  if storage == "eqwpp1" or storage == "eqwpp2" or storage == "eqwps1" or storage == "eqwps2" or storage == "eqwpg" then
-    _storage = "weapon"
-  end
+  local _storage = InventoryTypeChanger( storage )
   if _storage == item then
     return true
   else
@@ -169,8 +174,12 @@ end
 function IsEnoughSpace( stor, w, h, x, y, uid )
   for _y = y, y+h-1 do
     for _x = x, x+w-1 do
-      if stor[_y][_x] != nil then
-        if stor[_y][_x].value != "" and stor[_y][_x].value != tostring( uid ) then
+      if stor[_y] != nil then
+        if stor[_y][_x] != nil then
+          if stor[_y][_x].value != "" and stor[_y][_x].value != tostring( uid ) then
+            return false
+          end
+        else
           return false
         end
       else
@@ -365,11 +374,13 @@ if CLIENT then
   end
 
   function SetCamPosition( pnl, item )
-    local _mins, _maxs = pnl.Entity:GetRenderBounds()
-    local _center = (_mins + _maxs)/2
-    pnl:SetFOV( 90 )
-  	pnl:SetLookAt( _center )
-    pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+    if pnl.Entity:IsValid() then
+      local _mins, _maxs = pnl.Entity:GetRenderBounds()
+      local _center = (_mins + _maxs)/2
+      pnl:SetFOV( 90 )
+    	pnl:SetLookAt( _center )
+      pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+    end
   end
 
   function AddItemToStorage( tab )

@@ -184,7 +184,6 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( pl, model 
 end)
 
 function RenderEquipment( ply, name, mode, color )
-print( ply, name, mode, color )
   local _eq = ply:GetNWEntity( name )
   if ea( _eq ) then
     _eq:SetRenderMode( mode )

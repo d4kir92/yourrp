@@ -190,8 +190,8 @@ net.Receive( "shop_item_edit_base", function( len, ply )
   printGM( "db", "shop_item_edit_base: " .. db_worked( _new ) )
 end)
 
-function SpawnVehicle( item, ply, ang )
-  printGM( "gm", "SpawnVehicle( " .. tostring( item ) .. ", " .. tostring( ply ) .. ", " .. tostring( ang ) .. " )" )
+function SpawnVehicle( item, pos, ang )
+  printGM( "gm", "SpawnVehicle( " .. tostring( item ) .. ", " .. tostring( pos ) .. ", " .. tostring( ang ) .. " )" )
   local vehicles = get_all_vehicles()
   local vehicle = {}
   local _custom = ""
@@ -204,7 +204,7 @@ function SpawnVehicle( item, ply, ang )
         local spawnname = item.ClassName
         local _vehicle = list.Get( "simfphys_vehicles" )[ spawnname ]
 
-        local car = simfphys.SpawnVehicleSimple( v.ClassName, ply:GetPos(), ang )
+        local car = simfphys.SpawnVehicleSimple( v.ClassName, pos, ang )
         car.Offset = vehicle.Offset or 0
 
         timer.Simple( 0.2, function()
@@ -233,8 +233,7 @@ function SpawnVehicle( item, ply, ang )
         car:SetKeyValue( k, v )
       end
     end
-    --car:Spawn()
-    car:Activate()
+
     car.ClassOverride = Class
     car.Offset = vehicle.Offset or 0
     --car:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -260,24 +259,28 @@ function spawnItem( ply, item, duid )
     local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
     if _sps != nil and _sps != false then
       _sps = _sps[1].storagepoints
-      local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "angle", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
+      local _storagepoint = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'" )
       if _storagepoint != nil and _storagepoint != false then
         _storagepoint = _storagepoint[1]
         local _ang = string.Explode( ",", _storagepoint.angle )
         _angle = Angle( 0, _ang[2], 0 )
+        local _pos = string.Explode( ",", _storagepoint.position )
+        _position = Vector( _pos[1], _pos[2], _pos[3] )
+        _pos_end = _position
       end
     end
 
-    ent = SpawnVehicle( item, ply, _angle )
+    ent = SpawnVehicle( item, _pos_end, _angle )
+
+    if !ent:IsValid() then
+      printGM( "note", "[spawnItem] Vehicle is not valid: Vehicle not exists anymore on server!" )
+      return "ent isnt valid"
+    end
 
     local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'" )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
-    ent:SetOwner( ply )
-    if ent == NULL then
-      printGM( "note", "[spawnItem] failed: ent == NULL" )
-      return
-    end
+    ent.Owner = ply
   elseif item.type != "weapons" then
     ent = ents.Create( item.ClassName )
     if ent == NULL then return end
@@ -285,11 +288,11 @@ function spawnItem( ply, item, duid )
     ent:SetNWString( "ownerRPName", ply:RPName() )
     ent:SetOwner( ply )
     ent:SetCreator( ply )
-    ent:Activate()
   end
 
   if item.type == "weapons" then
     ply:Give( item.ClassName )
+    return true
   else
     local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
     if _sps != nil and _sps != false then
@@ -316,7 +319,7 @@ function spawnItem( ply, item, duid )
 
         _pos_end = _pos
 
-        ent:SetPos( _pos )
+        ent:SetPos( _pos_end )
 
         --[[ Angle ]]--
         if ent.Custom != "simfphys" then
@@ -354,8 +357,10 @@ function spawnItem( ply, item, duid )
           } )
           if ent.SpawnFunction != nil then
             ent:SpawnFunction( ply, tr, ent:GetClass() )
+            ent:Activate()
           else
             ent:Spawn()
+            ent:Activate()
           end
           ent:SetPos( _pos_end )
         end

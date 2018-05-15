@@ -118,17 +118,38 @@ end
 
 local Player = FindMetaTable( "Player" )
 function Player:MoveItem( _slot1, _slot2, _item )
-  -- printTab( _slot1, "SLOT1" )
-  -- printTab( _slot2, "SLOT2" )
-  -- printTab( _item, "ITEM" )
+  --[[
+  printTab( _slot1, "SLOT1" )
+  printTab( _slot2, "SLOT2" )
+  printTab( _item, "ITEM" )
+  ]]--
+  local _stor1 = {}
+  if _slot1.storageID != 0 then
+    _stor1 = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot1.storageID .. "'" )
+    if wk( _stor1 ) then
+      _stor1 = _stor1[1]
+    else
+      return false
+    end
+  end
+  local _stor2 = {}
+  if _slot2.storageID != 0 then
+    _stor2 = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot2.storageID .. "'" )
+    if wk( _stor2 ) then
+      _stor2 = _stor2[1]
+    else
+      return false
+    end
+  end
 
   if tonumber( _item.intern_storageID ) == tonumber( _slot2.storageID ) then
-    printGM( "note", tostring( _item.ClassName ) .. " (CANT PUT SELF INSIDE SELF)")
+    printGM( "note", "[moveitem] " .. tostring( _item.ClassName ) .. " (CANT PUT SELF INSIDE SELF)")
     return false
   end
 
+  local _i = {}
   if _slot1.storageID == 0 then
-    local _i = _item
+    _i = _item
     _i.storageID = _slot2.storageID
     _i.posx = _slot2.posx
     _i.posy = _slot2.posy
@@ -137,10 +158,10 @@ function Player:MoveItem( _slot1, _slot2, _item )
     end
 
     if _slot2.storageID == 0 then
-      printGM( "db", "FROM NEARBY TO NEARBY" )
+      printGM( "db", "[moveitem] FROM NEARBY TO NEARBY" )
       --
     elseif _slot2.storageID != 0 then
-      printGM( "db", "FROM NEARBY TO STORAGE", _slot2.storageID )
+      printGM( "db", "[moveitem] FROM NEARBY TO STORAGE", _slot2.storageID )
       local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _i.storageID )
       if _storage != nil then
         _storage = _storage[1]
@@ -162,15 +183,11 @@ function Player:MoveItem( _slot1, _slot2, _item )
 
         if IsEnoughSpace( _stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID ) then
           if !IsRightInventoryType( _storage.type, _item.entity:GetNWString( "eqtype", "world" ) ) then
-            printGM( "note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetNWString( "eqtype", "world" ) )
+            printGM( "note", "[moveitem] Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetNWString( "eqtype", "world" ) )
             return "notrighttype"
           end
 
-          if IsRightInventoryType( "weapon", _item.entity:GetNWString( "eqtype", "world" ) ) then
-            self:ForceEquip( _i.ClassName )
-          end
-
-          --printGM( "db", "ENOUGH SPACE")
+          --printGM( "db", "[moveitem] ENOUGH SPACE")
           local _result = CreateItem( _item, _slot2 )
           _item.entity:Remove()
           _item.uniqueID = _result.uniqueID
@@ -187,16 +204,16 @@ function Player:MoveItem( _slot1, _slot2, _item )
             end
           end
         else
-          printGM( "db", "moveitem: FROM NEARBY TO STORAGE: Not Enough Space!" )
+          printGM( "db", "[moveitem] FROM NEARBY TO STORAGE: Not Enough Space!" )
           return "e1"
         end
       end
     else
-      printGM( "error", "FROM NEARBY TO ERROR" )
+      printGM( "error", "[moveitem] FROM NEARBY TO ERROR" )
       return false
     end
   elseif _slot1.storageID != 0 then
-    local _i = SQL_SELECT( _db_name, "*", "uniqueID = " .. _item.uniqueID )
+    _i = SQL_SELECT( _db_name, "*", "uniqueID = " .. _item.uniqueID )
     if _i != nil then
       _i = _i[1]
       _i.storageID = _slot2.storageID
@@ -204,11 +221,11 @@ function Player:MoveItem( _slot1, _slot2, _item )
       _i.posy = _slot2.posy
 
       if _slot2.storageID == 0 then
-        printGM( "db", "FROM STORAGE", _slot1.storageID, "TO NEARBY" )
+        printGM( "db", "FROM STORAGE " .. _slot1.storageID .. " TO NEARBY" )
         local _result = SQL_DELETE_FROM( _db_name, "uniqueID = " .. _item.uniqueID )
         _item = ItemToEntity( _item, self )
       elseif _slot2.storageID != 0 then
-        printGM( "db", "FROM STORAGE", _slot1.storageID, "TO STORAGE", _slot2.storageID )
+        printGM( "db", "FROM STORAGE " .. _slot1.storageID .. " TO STORAGE " .._slot2.storageID )
         local _storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = " .. _i.storageID )
         if _storage != nil then
           _storage = _storage[1]
@@ -222,12 +239,13 @@ function Player:MoveItem( _slot1, _slot2, _item )
           end
 
           if !IsRightInventoryType( _storage.type, _i.type ) then
-            printGM( "note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetNWString( "eqtype", "world" ) )
+            local _ent = _item.entity
+            local _type = "failed"
+            if ea( _ent ) then
+              _type = _item.entity:GetNWString( "eqtype", "world" )
+            end
+            printGM( "note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _type )
             return "notrighttype"
-          end
-
-          if IsRightInventoryType( "weapon", _i.type ) then
-            self:ForceEquip( _i.ClassName )
           end
 
           local _stor_items = SQL_SELECT( _db_name, "*" , "storageID = " .. _i.storageID )
@@ -249,11 +267,22 @@ function Player:MoveItem( _slot1, _slot2, _item )
         return false
       end
     else
-      printGM( "error", "_i moveitem" )
+      printGM( "note", "[moveitem] item not available anymore" )
     end
   else
-    printGM( "error", "FROM UNKNOWN" )
+    printGM( "error", "[moveitem] FROM UNKNOWN" )
     return false
+  end
+
+  --[[ WORKED ]]--
+  if ( IsRightInventoryType( "weapon", _i.type ) or _slot1.storageID == 0 ) and InventoryTypeChanger( _stor2.type ) == "weapon" then
+    self:ForceEquip( _i.ClassName )
+  elseif IsRightInventoryType( "weapon", _i.type ) and InventoryTypeChanger( _stor1.type ) == "weapon" then
+    for i, wep in pairs( self:GetWeapons() ) do
+      if _i.ClassName == wep:GetClass() then
+        wep:Remove()
+      end
+    end
   end
 
   --[[ Worked: Move item ]]--
