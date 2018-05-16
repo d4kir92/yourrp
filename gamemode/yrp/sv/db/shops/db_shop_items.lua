@@ -357,11 +357,10 @@ function spawnItem( ply, item, duid )
           } )
           if ent.SpawnFunction != nil then
             ent:SpawnFunction( ply, tr, ent:GetClass() )
-            ent:Activate()
           else
             ent:Spawn()
-            ent:Activate()
           end
+          ent:Activate()
           ent:SetPos( _pos_end )
         end
         return true
@@ -400,10 +399,11 @@ function spawnItem( ply, item, duid )
               filter = ent
             } )
             if ent.SpawnFunction != nil then
-              ent:SpawnFunction( ply, tr )
+              ent:SpawnFunction( ply, tr, ent:GetClass() )
             else
               ent:Spawn()
             end
+            ent:Activate()
             ent:SetPos( _pos_end )
           end
           printGM( "gm", "[spawnItem] Enough Space" )

@@ -374,12 +374,14 @@ if CLIENT then
   end
 
   function SetCamPosition( pnl, item )
-    if pnl.Entity:IsValid() then
-      local _mins, _maxs = pnl.Entity:GetRenderBounds()
-      local _center = (_mins + _maxs)/2
-      pnl:SetFOV( 90 )
-    	pnl:SetLookAt( _center )
-      pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+    if pa( pnl ) then
+      if pnl.Entity:IsValid() then
+        local _mins, _maxs = pnl.Entity:GetRenderBounds()
+        local _center = (_mins + _maxs)/2
+        pnl:SetFOV( 90 )
+      	pnl:SetLookAt( _center )
+        pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+      end
     end
   end
 

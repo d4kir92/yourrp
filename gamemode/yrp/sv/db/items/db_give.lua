@@ -222,25 +222,27 @@ end
 function Player:PutInInventory( cname, noammo )
   printGM( "db", "Player:PutInInventory( " .. cname .. ", " .. tostring( noammo ) .. " )" )
   local ent = ents.Create( cname )
-  ent:Spawn()
-  --local sizew, sizeh = GetEntityItemSize( ent )
-  local item = FormatEntityToItem( ent )
-  item.posx = 1
-  item.posy = 1
-  ent:Remove()
+  if ea( ent ) then
+    ent:Spawn()
+    --local sizew, sizeh = GetEntityItemSize( ent )
+    local item = FormatEntityToItem( ent )
+    item.posx = 1
+    item.posy = 1
+    ent:Remove()
 
-  if item.entity:IsWeapon() then
-    local _worked = self:PutInWeaponSlot( item )
+    if item.entity:IsWeapon() then
+      local _worked = self:PutInWeaponSlot( item )
+      if _worked then
+        return true
+      end
+    end
+    local _worked = self:PutInBackpack( item )
     if _worked then
       return true
     end
-  end
-  local _worked = self:PutInBackpack( item )
-  if _worked then
-    return true
-  end
 
-  self:DropSWEP( item.ClassName )
+    self:DropSWEP( item.ClassName )
+  end
 end
 
 function Player:ForceEquip( cname, noammo )
