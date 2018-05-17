@@ -240,7 +240,7 @@ net.Receive( "update_slot_weapon_gadget", function( len, ply )
       _uid = _uid[1].eqwpg
       local _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
       if _backpack_storage == nil then
-        _backpack_storage = CreateEquipmentStorage( ply, "eqwpg", _charid, 2, 2 )
+        _backpack_storage = CreateEquipmentStorage( ply, "eqwpg", _charid, 1, 1 )
         _backpack_storage = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
       end
       _backpack_storage = _backpack_storage[1]

@@ -32,8 +32,10 @@ function worked( obj, name, _silence )
 end
 
 function ea( ent )
-	if ent:IsValid() and tostring( ent ) != "[NULL Entity]" and ent != nil and ent != NULL then
-		return true
+	if tostring( ent ) != "[NULL Entity]" and ent != nil and ent != NULL then
+		if ent:IsValid() then
+			return true
+		end
 	end
 	return false
 end
@@ -211,8 +213,6 @@ end
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
-  printGM( "gm", "SEND ERROR TO DEVELOPER: " .. str )
-
   local entry = {}
 	timer.Create( "wait_for_gamemode"..str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
@@ -247,13 +247,17 @@ function send_error( realm, str )
 
 			if realm != "server_all" then
 			  http.Post( _url, entry, function( result )
-			    if result then end
+			    if result then
+						printGM( "gm", "[SENDED ERROR TO DEVELOPER] " .. str )
+					end
 			  end, function( failed )
 			    printGM( "error", "ERROR1-API: " .. tostring( failed ) )
 			  end )
 			else
 				http.Post( _url2, entry, function( result )
-			    if result then end
+			    if result then
+						printGM( "gm", "[SENDED ERROR TO DEVELOPER] " .. str )
+					end
 			  end, function( failed )
 			    printGM( "error", "ERROR2-API: " .. tostring( failed ) )
 			  end )

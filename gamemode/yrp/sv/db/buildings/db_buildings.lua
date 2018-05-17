@@ -88,14 +88,14 @@ function searchForDoors()
 end
 
 function loadDoors()
-  printGM( "db", "[Buildings] Loading map doors!" )
+  printGM( "db", "[Buildings] Setting up Doors!" )
   local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
   local _allFuncDoors = ents.FindByClass( "func_door" )
   local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
   local _tmpDoors = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil )
   local _count = 1
 
-  if worked( _tmpDoors, "[Buildings] No Map Doors found", true ) then
+  if worked( _tmpDoors, "[Buildings] No Map Doors found" ) then
     --for k, v in pairs( _tmpDoors ) do
       for l, door in pairs( _allPropDoors ) do
         if worked( _tmpDoors[_count], "loadDoors 2" ) then
@@ -159,18 +159,18 @@ function loadDoors()
     end
   end
 
-  printGM( "db", "[Buildings] Map doors loaded!" )
+  printGM( "db", "[Buildings] Map Doors are now available!" )
 end
 
 function check_map_doors()
-  printGM( "db", "[Buildings] Looking for doors" )
+  printGM( "db", "[Buildings] Get Database Doors and Buildings" )
   local _tmpTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil )
   local _tmpTable2 = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil )
   local amountDoors = 0
   if _tmpTable == nil or _tmpTable2 == nil then
     amountDoors = searchForDoors()
   else
-    printGM( "db", "[Buildings] Found Doors! (" .. tostring( #_tmpTable ) .. " Doors)" )
+    printGM( "db", "[Buildings] Found! ( " .. tostring( #_tmpTable ) .. " Doors | " .. tostring( #_tmpTable ) .. " Buildings )" )
     local _allPropDoors = ents.FindByClass( "prop_door_rotating" )
     local _allFuncDoors = ents.FindByClass( "func_door" )
     local _allFuncRDoors = ents.FindByClass( "func_door_rotating" )
@@ -484,12 +484,12 @@ net.Receive( "getBuildingInfo", function( len, ply )
         end
       end
     else
-      printGM( "note", "getBuildingInfo -> _tmpTable == NIL" )
+      printGM( "note", "getBuildingInfo -> Building not found in Database." )
       net.Start( "getBuildingInfo" )
         net.WriteBool( false )
       net.Send( ply )
     end
   else
-    printGM( "note", "getBuildingInfo -> BuildingID == NIL" )
+    printGM( "note", "getBuildingInfo -> BuildingID is not valid" )
   end
 end)

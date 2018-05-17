@@ -188,7 +188,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     local _weapons = ply:GetWeapons()
     local _cooldown_item = 120
     for i, wep in pairs( _weapons ) do
-      if IsNoAdminWeapon( wep ) and IsNoDefaultWeapon( wep ) then
+      if IsNoDefaultWeapon( wep ) then
         ply:DropSWEP( wep:GetClass() )
         timer.Simple( _cooldown_item, function()
           if wep:IsValid() then
@@ -199,6 +199,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
         end)
       end
     end
+    ply:DropBackpackStorage()
   end
   if IsDropMoneyOnDeathEnabled() then
     local money = ents.Create( "yrp_money" )

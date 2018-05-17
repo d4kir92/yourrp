@@ -3,6 +3,11 @@
 --[[ NEW ]]--
 local yrp_if = {}
 
+function StringToColor( str )
+  local _col = string.Explode( ",", str )
+  return Color( _col[1], _col[2], _col[3], _col[4] or 255 )
+end
+
 function RegisterDesign( tab )
   if tab.name != nil then
     yrp_if[tab.name] = {}
@@ -77,11 +82,11 @@ function surfaceWindow( derma, pw, ph, title )
   end
 end
 
-function surfaceButton( derma, pw, ph, text, color )
+function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay )
   local _text = text or ""
   local ply = LocalPlayer()
   if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text, color )
+    yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay )
   else
     GetDesign()
   end

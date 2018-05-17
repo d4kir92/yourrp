@@ -3,6 +3,56 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
+local DATABASE_NAME = "yrp_usergroups"
+
+SQL_ADD_COLUMN( DATABASE_NAME, "name", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "color", "TEXT DEFAULT '0,0,0,255'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "icon", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "sweps", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "vehicles", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "weapons", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "duplicator", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "entities", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "effects", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "npcs", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "props", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "ragdolls", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "noclip", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canuseremovetool", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canusephysgunpickup", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canusedynamitetool", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canignite", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "candrive", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canchangecollision", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canchangegravity", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canchangekeepupright", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canchangebodygroups", "INT DEFAULT 0" )
+
+if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
+  SQL_INSERT_INTO( DATABASE_NAME, "name, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity, canchangekeepupright, canchangebodygroups", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
+end
+
+util.AddNetworkString( "GetSettingsUserGroups" )
+net.Receive( "GetSettingsUserGroups", function( len, ply )
+  local _usergroups = {}
+  for k, v in pairs( player.GetAll() ) do
+    local _ug = v:GetUserGroup()
+    if SQL_SELECT( DATABASE_NAME, "*", "name = '" .. _ug .. "'" ) == nil then
+      printGM( "note", "usergroup: " .. _ug .. " not found, adding to db" )
+      SQL_INSERT_INTO( DATABASE_NAME, "name", "'" .. _ug .. "'" )
+    end
+  end
+
+  local _tmp = SQL_SELECT( DATABASE_NAME, "*", nil )
+  net.Start( "GetSettingsUserGroups" )
+    if _tmp != nil then
+      net.WriteTable( _tmp )
+    else
+      net.WriteTable( {} )
+    end
+  net.Send( ply )
+end)
+
 local _db_name = "yrp_restrictions"
 
 SQL_ADD_COLUMN( _db_name, "usergroup", "TEXT DEFAULT ''" )

@@ -1,10 +1,15 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+--[[ NEW Sites ]]--
+include( "cl_settings_server_usergroups.lua" )
+include( "cl_settings_server_general.lua" )
+
+--[[ OLD Sites ]]--
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
 
 include( "cl_settings_server_collection.lua" )
-include( "cl_settings_server_general.lua" )
+include( "cl_settings_server_general_old.lua" )
 include( "cl_settings_server_roles.lua" )
 include( "cl_settings_server_give.lua" )
 include( "cl_settings_server_money.lua" )
@@ -12,7 +17,7 @@ include( "cl_settings_server_licenses.lua" )
 include( "cl_settings_server_shops.lua" )
 include( "cl_settings_server_map.lua" )
 include( "cl_settings_server_whitelist.lua" )
-include( "cl_settings_server_restriction.lua" )
+include( "cl_settings_server_restriction_old.lua" )
 
 include( "cl_settings_server_feedback.lua" )
 
@@ -113,6 +118,7 @@ function openSettings()
 
   local _server_admin = lang_string( "server" )
   settingsWindow.window:AddCategory( _server_admin )
+  --settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ) .. " [NEW!]", _server_admin, "icon16/server_database.png" )
   settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
   settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
   settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
@@ -123,8 +129,9 @@ function openSettings()
   settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
   settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
   settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
-  settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
-  settingsWindow.window:AddSite( "open_server_restrictions", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
+  settingsWindow.window:AddSite( "open_server_general_old", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
+  settingsWindow.window:AddSite( "open_server_restrictions_old", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
+  settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
   settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )

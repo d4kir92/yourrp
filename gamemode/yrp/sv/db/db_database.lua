@@ -28,6 +28,7 @@ function reset_database()
   _db_reseted = true
 
   local _dbs = {}
+  table.insert( _dbs, "yrp_usergroups" )
   table.insert( _dbs, "yrp_general" )
   table.insert( _dbs, "yrp_roles" )
   table.insert( _dbs, "yrp_groups" )
@@ -92,6 +93,7 @@ function db_init_database()
   hr_pre()
   printGM( "db", "LOAD DATABASES" )
 
+  SQL_INIT_DATABASE( "yrp_usergroups" )
   SQL_INIT_DATABASE( "yrp_general" )
   SQL_INIT_DATABASE( "yrp_roles" )
   SQL_INIT_DATABASE( "yrp_groups" )

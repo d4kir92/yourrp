@@ -36,7 +36,11 @@ function AddItemToTable( tab, item )
   local h = item.sizeh
   for _y = y, y+h-1 do
     for _x = x, x+w-1 do
-      tab[_y][_x].value = item.uniqueID
+      if tab[_y] != nil then
+        if tab[_y][_x] != nil then
+          tab[_y][_x].value = item.uniqueID
+        end
+      end
     end
   end
   return tab
@@ -375,12 +379,14 @@ if CLIENT then
 
   function SetCamPosition( pnl, item )
     if pa( pnl ) then
-      if pnl.Entity:IsValid() then
-        local _mins, _maxs = pnl.Entity:GetRenderBounds()
-        local _center = (_mins + _maxs)/2
-        pnl:SetFOV( 90 )
-      	pnl:SetLookAt( _center )
-        pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+      if pnl.Entity != nil then
+        if pnl.Entity:IsValid() then
+          local _mins, _maxs = pnl.Entity:GetRenderBounds()
+          local _center = (_mins + _maxs)/2
+          pnl:SetFOV( 90 )
+        	pnl:SetLookAt( _center )
+          pnl:SetCamPos( _center - Vector( 0, item.sizew*6, 0 ) )
+        end
       end
     end
   end

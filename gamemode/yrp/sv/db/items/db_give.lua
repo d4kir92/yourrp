@@ -192,16 +192,24 @@ function Player:RemoveSwep( cname, slot )
   if _eq != nil then
     if cname == _eq.ClassName then
       local test = SQL_DELETE_FROM( "yrp_items", "uniqueID = '" .. _eq.uniqueID .. "'" )
+      return true
     end
   end
+  return false
 end
 
 function Player:RemoveVisual( cname )
   local _wpp1 = self:RemoveSwep( cname, "eqwpp1" )
+  if _wpp1 then return true end
   local _wpp2 = self:RemoveSwep( cname, "eqwpp2" )
+  if _wpp2 then return true end
   local _wps1 = self:RemoveSwep( cname, "eqwps1" )
-  local _wps1 = self:RemoveSwep( cname, "eqwps2" )
+  if _wps1 then return true end
+  local _wps2 = self:RemoveSwep( cname, "eqwps2" )
+  if _wps2 then return true end
   local _wpg = self:RemoveSwep( cname, "eqwpg" )
+  if _wpg then return true end
+  return false
 end
 
 function Player:DropSWEP( cname )
@@ -216,6 +224,37 @@ function Player:DropSWEP( cname )
 
   if ent:GetPhysicsObject():IsValid() then
     ent:GetPhysicsObject():SetVelocity( self:EyeAngles():Forward() * 200 )
+  end
+end
+
+function Player:DropBackpackStorage()
+  if !rv then
+    local _slot = SQL_SELECT( "yrp_characters", "eqbp", "uniqueID = '" .. self:CharID() .. "'" )
+    if wk( _slot ) then
+      _slot = _slot[1]["eqbp"]
+      _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot .. "'" )
+      if wk( _slot ) then
+        _slot = _slot[1]
+        local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
+        if wk( _bp ) then
+          _bp = _bp[1]
+          _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _bp.intern_storageID .. "'" )
+          if wk( _slot ) then
+            _slot = _slot[1]
+            local _items = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
+            if wk( _items ) then
+              for i, item in pairs( _items ) do
+                local _item = ents.Create( item.ClassName )
+                _item:SetPos( self:GetPos() )
+                _item:Spawn()
+
+                SQL_DELETE_FROM( "yrp_items", "uniqueID = '" .. item.uniqueID .. "'" )
+              end
+            end
+          end
+        end
+      end
+    end
   end
 end
 

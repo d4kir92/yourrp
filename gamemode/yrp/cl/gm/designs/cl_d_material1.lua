@@ -92,7 +92,7 @@ end
 
 RegisterWindowFunction( _mat1.name, _mat1.DrawWindow )
 
-function _mat1.DrawButton( btn, pw, ph, text, color )
+function _mat1.DrawButton( btn, pw, ph, text, color, px, py, ax, ah )
   --[[ Vars ]]--
   local _text = text or ""
 
@@ -120,7 +120,7 @@ function _mat1.DrawButton( btn, pw, ph, text, color )
   end
 
   --[[ text ]]--
-  surfaceText( _text, "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  surfaceText( _text, "mat1text", px or pw/2, py or ph/2, Color( 255, 255, 255 ), ax or 1, ay or 1 )
 end
 RegisterButtonFunction( _mat1.name, _mat1.DrawButton )
 
