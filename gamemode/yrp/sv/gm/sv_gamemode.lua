@@ -60,6 +60,8 @@ function GM:PlayerLoadout( ply )
   if ply:HasCharacterSelected() then
     --ply:CheckInventory()
 
+    SetDesign( ply )
+    
     --[[ Status Reset ]]--
     ply:SetNWBool( "cuffed", false )
     ply:SetNWBool( "broken_leg_left", false )
@@ -166,7 +168,16 @@ end
 
 function IsNoAdminWeapon( weapon )
   local _class = weapon:GetClass()
-  if !weapon.AdminSpawnable and _class != "weapon_physgun" and _class != "weapon_physcannon" and _class != "gmod_tool" then
+  if _class != "weapon_physgun" and _class != "weapon_physcannon" and _class != "gmod_tool" and _class != "yrp_arrest_stick" then
+    return true
+  else
+    return false
+  end
+end
+
+function IsNoRoleSwep( ply, cname )
+  local _sweps = string.Explode( ",", ply:GetRolTab().sweps )
+  if !table.HasValue( _sweps, cname ) then
     return true
   else
     return false
@@ -188,7 +199,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     local _weapons = ply:GetWeapons()
     local _cooldown_item = 120
     for i, wep in pairs( _weapons ) do
-      if IsNoDefaultWeapon( wep ) then
+      if IsNoDefaultWeapon( wep ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoAdminWeapon( wep ) then
         ply:DropSWEP( wep:GetClass() )
         timer.Simple( _cooldown_item, function()
           if wep:IsValid() then
@@ -197,6 +208,8 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
             end
           end
         end)
+      else
+        ply:DropSWEPSilence( wep:GetClass() )
       end
     end
     ply:DropBackpackStorage()

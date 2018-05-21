@@ -53,6 +53,7 @@ function showVersion()
         if tonumber( cur2num[k] ) < tonumber( new2num[k] ) then
           verart = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionnewpos" )
           v_color = Color( 255, 0, 0, 255 )
+          ChangeChannel( "canary" )
         elseif tonumber( cur2num[k] ) > tonumber( new2num[k] ) then
           verart = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
           v_color = Color( 100, 100, 255, 255 )
@@ -70,19 +71,18 @@ function showVersion()
         if tonumber( cur2num2[k] ) < tonumber( new2num2[k] ) then
           verart2 = lang_string( "versionnewpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionnewpos" )
           outcol2 = Color( 255, 0, 0, 255 )
-
           LocalPlayer():SetNWBool( "version_outdated", true )
         elseif tonumber( cur2num2[k] ) > tonumber( new2num2[k] ) then
           verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
           outcol2 = Color( 100, 100, 255, 255 )
-
+          ChangeChannel( "canary" )
           printGM( "note", "YourRP is on a newer version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
         elseif tonumber( cur2num2[k] ) == tonumber( new2num2[k] ) then
-            verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
-            outcol2 = Color( 100, 100, 255, 255 )
+          verart2 = lang_string( "versionoldpre" ) .. " " .. GAMEMODE.BaseName .. " " .. lang_string( "versionoldpos" )
+          outcol2 = Color( 100, 255, 0, 255 )
 
-            printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
-          end
+          printGM( "note", "YourRP is on the newest version (" .. tostring( GAMEMODE.VersionSort ) .. ")")
+        end
       end
 
       local _serverSort = ""

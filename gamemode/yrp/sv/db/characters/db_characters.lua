@@ -498,9 +498,13 @@ end)
 
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
-  local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( char ), "SteamID = '" .. ply:SteamID() .. "'" )
-  local test = SQL_SELECT( "yrp_players", "*", nil )
-  ply:Spawn()
+  if char != nil then
+    local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( char ), "SteamID = '" .. ply:SteamID() .. "'" )
+    local test = SQL_SELECT( "yrp_players", "*", nil )
+    ply:Spawn()
+  else
+    print( "gm", "no valid character selected" )
+  end
 end)
 
 util.AddNetworkString( "get_menu_bodygroups" )

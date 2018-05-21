@@ -463,11 +463,13 @@ net.Receive( "item_spawn", function( len, ply )
   local _tab = net.ReadTable()
   local _dealer_uid = net.ReadString()
 
-  local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
-  if _item != nil then
-    _item = _item[1]
-    if !IsEntityAlive( _item.uniqueID ) then
-      spawnItem( ply, _item, _dealer_uid )
+  if wk( _tab ) and wk( _dealer_uid ) then
+    local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
+    if _item != nil then
+      _item = _item[1]
+      if !IsEntityAlive( _item.uniqueID ) then
+        spawnItem( ply, _item, _dealer_uid )
+      end
     end
   end
 end)

@@ -7,9 +7,13 @@ include( "cl_settings_server_general.lua" )
 --[[ OLD Sites ]]--
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
+include( "cl_settings_client_keybinds.lua" )
 
 include( "cl_settings_server_collection.lua" )
+
 include( "cl_settings_server_general_old.lua" )
+include( "cl_settings_server_interface.lua" )
+include( "cl_settings_server_realistic.lua" )
 include( "cl_settings_server_roles.lua" )
 include( "cl_settings_server_give.lua" )
 include( "cl_settings_server_money.lua" )
@@ -46,11 +50,6 @@ function get_icon_burger_menu()
   return _yrp_settings.materials[_yrp_settings.design.mode].burger
 end
 
-concommand.Add( "yrp_toggle_settings", function( ply, cmd, args )
-  printGM( "gm", "Toggling settings window" )
-	toggleSettings()
-end )
-
 function F8RequireUG( site, ug )
   function settingsWindow.window.site:Paint( w, h )
     surfaceBox( 0, 0, w, h, Color( 0, 0, 0, 255 ) )
@@ -60,12 +59,18 @@ function F8RequireUG( site, ug )
 end
 
 function toggleSettings()
+  print(isNoMenuOpen())
   if isNoMenuOpen() then
     openSettings()
   else
     closeSettings()
   end
 end
+
+concommand.Add( "yrp_open_settings", function( ply, cmd, args )
+  printGM( "gm", "Open settings window" )
+  openSettings()
+end )
 
 function closeSettings()
   if settingsWindow.window != NULL and settingsWindow.window != nil then
@@ -131,7 +136,7 @@ function openSettings()
   settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
   settingsWindow.window:AddSite( "open_server_general_old", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
   settingsWindow.window:AddSite( "open_server_restrictions_old", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
-  settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
+  --settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
   settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )

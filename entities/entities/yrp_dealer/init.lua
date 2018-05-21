@@ -23,7 +23,7 @@ function ENT:Initialize()
 	end
 end
 
-function ENT:OnTakeDamage(dmg)
+function ENT:OnTakeDamage( dmg )
 	self:SetHealth(self:Health() - dmg:GetDamage())
 	if IsDealerImmortal() then
 		self:SetNWBool( "immortal", true )

@@ -17,7 +17,7 @@ AddCSLuaFile( "darkrp/entity/shared.lua" )
 
 AddCSLuaFile( "darkrp/drawfunction.lua" )
 
-AddCSLuaFile( "darkrp/scoreboard/sh_scoreboard.lua" )
+--AddCSLuaFile( "darkrp/scoreboard/sh_scoreboard.lua" )
 
 include( "darkrp/fn.lua" )
 
@@ -28,7 +28,7 @@ include( "darkrp/entity/shared.lua" )
 include( "darkrp/config/config.lua" )
 include( "darkrp/config/jobrelated.lua" )
 
-include( "darkrp/scoreboard/sh_scoreboard.lua" )
+--include( "darkrp/scoreboard/sh_scoreboard.lua" )
 
 if CLIENT then
   include( "darkrp/drawfunction.lua" )

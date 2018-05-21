@@ -14,14 +14,16 @@ net.Receive( "getMapList", function( len )
       if tostring( v.type ) == "dealer" then
         for i, dealer in pairs( _dealers ) do
           if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
-            _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, dealer.name )
+            if pa( _mapListView ) then
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, dealer.name )
+            end
             break
           end
         end
       elseif tostring( v.type ) == "GroupSpawnpoint" then
         for l, w in pairs( _groups ) do
           if tostring( v.linkID ) == tostring( w.uniqueID ) then
-            if _mapListView != nil and _mapListView != NULL and ispanel( _mapListView ) then
+            if pa( _mapListView ) then
               _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID )
             end
             break
@@ -30,14 +32,16 @@ net.Receive( "getMapList", function( len )
       elseif tostring( v.type ) == "RoleSpawnpoint" then
         for l, w in pairs( _roles ) do
           if tostring( v.linkID ) == tostring( w.uniqueID ) then
-            if _mapListView != NULL and ispanel( _mapListView ) then
+            if pa( _mapListView ) then
               _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.roleID )
             end
             break
           end
         end
       else
-        _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name )
+        if pa( _mapListView ) then
+          _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name )
+        end
       end
     end
   end

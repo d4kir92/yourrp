@@ -300,7 +300,7 @@ function IsNearVersion( distance )
 	return false
 end
 
-timer.Create( "update_error_tables", 4, 0, function()
+timer.Create( "update_error_tables", 10, 0, function()
 	if !IsYRPOutdated() or IsNearVersion( 1 ) then
 	  _cl_errors = update_error_table_cl()
 	  send_errors( "client", _cl_errors )

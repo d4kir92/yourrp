@@ -15,7 +15,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.88" --do NOT change this!
+GM.Version = "0.9.89" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -78,17 +78,14 @@ end
 
 concommand.Add( "yrp_status", function( ply, cmd, args )
 	hr_pre()
-	printGM( "gm", "YourRP Version:\t" .. GAMEMODE.Version )
-	printGM( "gm", "    Servername:\t" .. GetHostName() )
-	printGM( "gm", "            IP:\t" .. game.GetIPAddress() )
+	printGM( "gm", "   Version:\t" .. GAMEMODE.Version )
+	printGM( "gm", "   Channel:\t" .. string.upper( GAMEMODE.VersionSort ) )
+	printGM( "gm", "Servername:\t" .. GetHostName() )
+	printGM( "gm", "        IP:\t" .. game.GetIPAddress() )
 
-	printGM( "gm", "           Map:\t" .. GetMapNameDB() )
-	printGM( "gm", "       Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
+	printGM( "gm", "       Map:\t" .. GetMapNameDB() )
+	printGM( "gm", "   Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
 	hr_pos()
---[[
-# userid name                uniqueid            connected ping loss state
-#      2 "D4KiR | Arno"      STEAM_0:1:20900349  25:15       38    0 active
-]]--
 end )
 
 function makeString( tab, str_len, cut )
@@ -118,10 +115,6 @@ concommand.Add( "yrp_players", function( ply, cmd, args )
 		printGM( "gm", _str)
 	end
 	hr_pos()
---[[
-# userid name                uniqueid            connected ping loss state
-#      2 "D4KiR | Arno"      STEAM_0:1:20900349  25:15       38    0 active
-]]--
 end )
 
 concommand.Add( "yrp__help", function( ply, cmd, args )
@@ -241,6 +234,43 @@ function YRPCheckVersion()
 		local EndPos = string.find( body, "*", 1, false )
 		local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
 		_version_online = string.Explode( ".", versionOnline )
+
+		if CLIENT then
+			_version_client = string.Explode( ".", GAMEMODE.Version )
+			if #_version_client == #_version_online then
+				for k, v in pairs( _version_client ) do
+					if tonumber( _version_client[k] ) < tonumber( _version_online[k] ) then
+						_cl_outdated = true
+					elseif tonumber( _version_client[k] ) > tonumber( _version_online[k] ) then
+						_cl_outdated = false
+						ChangeChannel( "canary" )
+					elseif tonumber( _version_client[k] ) == tonumber( _version_online[k] ) then
+						_cl_outdated = false
+					end
+				end
+			else
+				printGM( "error", "VERSION CHECK ERROR CL" )
+			end
+			return _cl_outdated
+		end
+		if SERVER then
+			_version_server = string.Explode( ".", GAMEMODE.Version )
+			if #_version_server == #_version_online then
+				for k, v in pairs( _version_server ) do
+					if tonumber( _version_server[k] ) < tonumber( _version_online[k] ) then
+						_sv_outdated = true
+					elseif tonumber( _version_server[k] ) > tonumber( _version_online[k] ) then
+						_sv_outdated = false
+						ChangeChannel( "canary" )
+					elseif tonumber( _version_server[k] ) == tonumber( _version_online[k] ) then
+						_sv_outdated = false
+					end
+				end
+			else
+				printGM( "error", "VERSION CHECK ERROR SV" )
+			end
+			return _sv_outdated
+		end
 	end,
 		function( error )
 			--
@@ -263,43 +293,11 @@ function YRPVersion()
 end
 
 function IsYRPOutdated()
-	YRPCheckVersion()
-	timer.Simple( 2, function()
-		if CLIENT then
-			_version_client = string.Explode( ".", GAMEMODE.Version )
-			if #_version_client == #_version_online then
-				for k, v in pairs( _version_client ) do
-					if tonumber( _version_client[k] ) < tonumber( _version_online[k] ) then
-						_cl_outdated = true
-					elseif tonumber( _version_client[k] ) > tonumber( _version_online[k] ) then
-						_cl_outdated = false
-					elseif tonumber( _version_client[k] ) == tonumber( _version_online[k] ) then
-						_cl_outdated = false
-					end
-				end
-			else
-				printGM( "error", "VERSION CHECK ERROR CL" )
-			end
-			return _cl_outdated
-		end
-		if SERVER then
-			_version_server = string.Explode( ".", GAMEMODE.Version )
-			if #_version_server == #_version_online then
-				for k, v in pairs( _version_server ) do
-					if tonumber( _version_server[k] ) < tonumber( _version_online[k] ) then
-						_sv_outdated = true
-					elseif tonumber( _version_server[k] ) > tonumber( _version_online[k] ) then
-						_sv_outdated = false
-					elseif tonumber( _version_server[k] ) == tonumber( _version_online[k] ) then
-						_sv_outdated = false
-					end
-				end
-			else
-				printGM( "error", "VERSION CHECK ERROR SV" )
-			end
-			return _sv_outdated
-		end
-	end)
+	if CLIENT then
+		return _cl_outdated
+	elseif SERVER then
+		return _sv_outdated
+	end
 end
 
 if SERVER then

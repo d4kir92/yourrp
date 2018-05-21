@@ -16,13 +16,16 @@ if Player.LegacyGive == nil then
 end
 
 function Player:GetEQ( slot )
-  local _slot_uid = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. self:CharID() .. "'" )
-  if wk( _slot_uid ) then
-    _slot_uid = _slot_uid[1][slot]
-    local _item = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot_uid .. "'" )
-    if wk( _item ) then
-      _item = _item[1]
-      return _item
+  local _char_id = self:CharID()
+  if _char_id != nil then
+    local _slot_uid = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. _char_id .. "'" )
+    if wk( _slot_uid ) then
+      _slot_uid = _slot_uid[1][slot]
+      local _item = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot_uid .. "'" )
+      if wk( _item ) then
+        _item = _item[1]
+        return _item
+      end
     end
   end
   return nil
@@ -227,28 +230,38 @@ function Player:DropSWEP( cname )
   end
 end
 
+function Player:DropSWEPSilence( cname )
+  local _cname = cname
+
+  self:RemoveWeapon( _cname )
+  self:RemoveVisual( _cname )
+end
+
 function Player:DropBackpackStorage()
   if !rv then
-    local _slot = SQL_SELECT( "yrp_characters", "eqbp", "uniqueID = '" .. self:CharID() .. "'" )
-    if wk( _slot ) then
-      _slot = _slot[1]["eqbp"]
-      _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot .. "'" )
+    local _char_id = self:CharID()
+    if _char_id != nil then
+      local _slot = SQL_SELECT( "yrp_characters", "eqbp", "uniqueID = '" .. _char_id .. "'" )
       if wk( _slot ) then
-        _slot = _slot[1]
-        local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
-        if wk( _bp ) then
-          _bp = _bp[1]
-          _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _bp.intern_storageID .. "'" )
-          if wk( _slot ) then
-            _slot = _slot[1]
-            local _items = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
-            if wk( _items ) then
-              for i, item in pairs( _items ) do
-                local _item = ents.Create( item.ClassName )
-                _item:SetPos( self:GetPos() )
-                _item:Spawn()
+        _slot = _slot[1]["eqbp"]
+        _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot .. "'" )
+        if wk( _slot ) then
+          _slot = _slot[1]
+          local _bp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
+          if wk( _bp ) then
+            _bp = _bp[1]
+            _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _bp.intern_storageID .. "'" )
+            if wk( _slot ) then
+              _slot = _slot[1]
+              local _items = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
+              if wk( _items ) then
+                for i, item in pairs( _items ) do
+                  local _item = ents.Create( item.ClassName )
+                  _item:SetPos( self:GetPos() )
+                  _item:Spawn()
 
-                SQL_DELETE_FROM( "yrp_items", "uniqueID = '" .. item.uniqueID .. "'" )
+                  SQL_DELETE_FROM( "yrp_items", "uniqueID = '" .. item.uniqueID .. "'" )
+                end
               end
             end
           end

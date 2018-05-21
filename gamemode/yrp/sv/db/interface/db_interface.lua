@@ -16,14 +16,13 @@ SQL_ADD_COLUMN( _db_name, "border", "INT DEFAULT '0'" )
 --db_is_empty( _db_name )
 
 if SQL_SELECT( "yrp_interface", "*", "uniqueID = 1" ) == nil then
-  SQL_INSERT_INTO( _db_name, "color, style, design, rounded, transparent, border", "'blue', 'dark', 'Material Design 1', '1', '1', '1'" )
+  SQL_INSERT_INTO( _db_name, "color, style, rounded, transparent, border, design", "'blue', 'dark', '1', '1', '1'", 'Material Design 1' )
 end
 
 util.AddNetworkString( "get_interface_settings" )
 net.Receive( "get_interface_settings", function( len, ply )
   local _tbl = SQL_SELECT( "yrp_interface", "*", "uniqueID = 1" )
-
-  if _tbl != nil then
+  if wk( _tbl ) then
     _tbl = _tbl[1]
     net.Start( "get_interface_settings" )
       net.WriteTable( _tbl)
@@ -89,12 +88,18 @@ function SetDesign( ply )
   local _tbl = SQL_SELECT( "yrp_interface", "*", "uniqueID = 1" )
   if _tbl != nil then
     _tbl = _tbl[1]
-    ply:SetNWString( "interface_design", _tbl.design )
+    local _design = _tbl.design
+    if _design == "" then
+      _design = "Material Design 1"
+    end
+    ply:SetNWString( "interface_design", _design )
     ply:SetNWString( "interface_color", _tbl.color )
     ply:SetNWString( "interface_style", _tbl.style )
     ply:SetNWBool( "interface_transparent", tobool( _tbl.transparent ) )
     ply:SetNWBool( "interface_rounded", tobool( _tbl.rounded ) )
     ply:SetNWBool( "interface_border", tobool( _tbl.border ) )
+
+    print(ply:GetNWString( "interface_design", "failed" ) )
   end
 end
 

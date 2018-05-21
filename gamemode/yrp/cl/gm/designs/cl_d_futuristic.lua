@@ -130,7 +130,7 @@ function _fut.DrawButton( btn, pw, ph, text, color )
     _hovered = 60
   end
   local _color = color or _color_bar
-  surfaceBox( 0, 0, pw, ph, Color( _color_bar.r + _hovered, _color_bar.g + _hovered, _color_bar.b + _hovered, _color_bar.a  ) )
+  surfaceBox( 0, 0, pw, ph, Color( _color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a  ) )
   if InterfaceBorder() then
     LaserBorder( pw, ph )
   end

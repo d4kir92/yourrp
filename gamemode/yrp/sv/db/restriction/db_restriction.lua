@@ -5,9 +5,9 @@
 
 local DATABASE_NAME = "yrp_usergroups"
 
-SQL_ADD_COLUMN( DATABASE_NAME, "name", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed UserGroup'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "color", "TEXT DEFAULT '0,0,0,255'" )
-SQL_ADD_COLUMN( DATABASE_NAME, "icon", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "sweps", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "vehicles", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "weapons", "INT DEFAULT 0" )
@@ -32,8 +32,31 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
   SQL_INSERT_INTO( DATABASE_NAME, "name, vehicles, weapons, duplicator, entities, effects, npcs, props, ragdolls, noclip, canuseremovetool, canusephysgunpickup, canusedynamitetool, canignite, candrive, canchangecollision, canchangegravity, canchangekeepupright, canchangebodygroups", "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1" )
 end
 
-util.AddNetworkString( "GetSettingsUserGroups" )
-net.Receive( "GetSettingsUserGroups", function( len, ply )
+--[[ Global Handler ]]--
+local HANDLER_USERGROUPS = {}
+
+function RemFromHandler_UserGroups( ply )
+  table.RemoveByValue( HANDLER_USERGROUPS, ply )
+  printGM( "gm", ply:YRPName() .. " disconnected from UserGroups" )
+end
+
+function AddToHandler_UserGroups( ply )
+  if !table.HasValue( HANDLER_USERGROUPS, ply ) then
+    table.insert( HANDLER_USERGROUPS, ply )
+    printGM( "gm", ply:YRPName() .. " connected to UserGroups" )
+  else
+    printGM( "gm", ply:YRPName() .. " already connected to UserGroups" )
+  end
+end
+
+util.AddNetworkString( "Disconnect_Settings_UserGroups" )
+net.Receive( "Disconnect_Settings_UserGroups", function( len, ply )
+  RemFromHandler_UserGroups( ply )
+end)
+
+util.AddNetworkString( "Connect_Settings_UserGroups" )
+net.Receive( "Connect_Settings_UserGroups", function( len, ply )
+  AddToHandler_UserGroups( ply )
   local _usergroups = {}
   for k, v in pairs( player.GetAll() ) do
     local _ug = v:GetUserGroup()
@@ -44,7 +67,11 @@ net.Receive( "GetSettingsUserGroups", function( len, ply )
   end
 
   local _tmp = SQL_SELECT( DATABASE_NAME, "*", nil )
-  net.Start( "GetSettingsUserGroups" )
+  local _ugs = {}
+  for i, ug in pairs( _tmp ) do
+    _ugs[tonumber(ug.uniqueID)] = ug
+  end
+  net.Start( "Connect_Settings_UserGroups" )
     if _tmp != nil then
       net.WriteTable( _tmp )
     else
@@ -53,6 +80,132 @@ net.Receive( "GetSettingsUserGroups", function( len, ply )
   net.Send( ply )
 end)
 
+--[[ Usergroup Handler ]]--
+local HANDLER_USERGROUP = {}
+
+function RemFromHandler_UserGroup( ply, uid )
+  table.RemoveByValue( HANDLER_USERGROUP[uid], ply )
+  printGM( "gm", ply:YRPName() .. " disconnected from UserGroup ( " .. uid .. " )" )
+end
+
+function AddToHandler_UserGroup( ply, uid )
+  HANDLER_USERGROUP[uid] = HANDLER_USERGROUP[uid] or {}
+  if !table.HasValue( HANDLER_USERGROUP[uid], ply ) then
+    table.insert( HANDLER_USERGROUP[uid], ply )
+    printGM( "gm", ply:YRPName() .. " connected to UserGroup ( " .. uid .. " )" )
+  else
+    printGM( "gm", ply:YRPName() .. " already connected to UserGroup ( " .. uid .. " )" )
+  end
+end
+
+util.AddNetworkString( "Disconnect_Settings_UserGroup" )
+net.Receive( "Disconnect_Settings_UserGroup", function( len, ply )
+  local uid = tonumber( net.ReadString() )
+  RemFromHandler_UserGroup( ply, uid )
+end)
+
+util.AddNetworkString( "Connect_Settings_UserGroup" )
+net.Receive( "Connect_Settings_UserGroup", function( len, ply )
+  local uid = tonumber( net.ReadString() )
+  AddToHandler_UserGroup( ply, uid )
+
+  local _tmp = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = " .. uid )
+  if wk( _tmp ) then
+    _tmp = _tmp[1]
+  end
+  net.Start( "Connect_Settings_UserGroup" )
+    if _tmp != nil then
+      net.WriteTable( _tmp )
+    else
+      net.WriteTable( {} )
+    end
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "usergroup_add" )
+net.Receive( "usergroup_add", function( len, ply )
+  SQL_INSERT_INTO_DEFAULTVALUES( DATABASE_NAME )
+  printGM( "gm", ply:YRPName() .. " added a new UserGroup" )
+
+  local _tmp = SQL_SELECT( DATABASE_NAME, "*", nil )
+  local _ugs = {}
+  for i, ug in pairs( _tmp ) do
+    _ugs[tonumber(ug.uniqueID)] = ug
+  end
+  for i, pl in pairs( HANDLER_USERGROUPS ) do
+    net.Start( "usergroup_add" )
+      net.WriteTable( _ugs )
+    net.Send( pl )
+  end
+end)
+
+util.AddNetworkString( "usergroup_rem" )
+net.Receive( "usergroup_rem", function( len, ply )
+  local uid = tonumber( net.ReadString() )
+  SQL_DELETE_FROM( DATABASE_NAME, "uniqueID = '" .. uid .. "'" )
+  printGM( "gm", ply:YRPName() .. " removed UserGroup ( " .. uid .. " )" )
+
+  for i, pl in pairs( HANDLER_USERGROUPS ) do
+    net.Start( "usergroup_rem" )
+      net.WriteString( uid )
+    net.Send( pl )
+  end
+end)
+
+--[[ Usergroup Edit ]]--
+util.AddNetworkString( "usergroup_update_name" )
+net.Receive( "usergroup_update_name", function( len, ply )
+  local uid = tonumber( net.ReadString() )
+  local name = net.ReadString()
+  SQL_UPDATE( DATABASE_NAME, "name = '" .. name .. "'", "uniqueID = '" .. uid .. "'" )
+
+  printGM( "db", ply:YRPName() .. " updated name of usergroup ( " .. uid .. " ) to [" .. name .. "]" )
+
+  for i, pl in pairs( HANDLER_USERGROUP[uid] ) do
+    if pl != ply then
+      net.Start( "usergroup_update_name" )
+        net.WriteString( name )
+      net.Send( pl )
+    end
+  end
+end)
+
+util.AddNetworkString( "usergroup_update_color" )
+net.Receive( "usergroup_update_color", function( len, ply )
+  local uid = tonumber( net.ReadString() )
+  local color = net.ReadString()
+  SQL_UPDATE( DATABASE_NAME, "color = '" .. color .. "'", "uniqueID = '" .. uid .. "'" )
+
+  printGM( "db", ply:YRPName() .. " updated color of usergroup ( " .. uid .. " ) to [" .. color .. "]" )
+
+  for i, pl in pairs( HANDLER_USERGROUP[uid] ) do
+    if pl != ply then
+      net.Start( "usergroup_update_color" )
+        net.WriteString( color )
+      net.Send( pl )
+    end
+  end
+end)
+
+util.AddNetworkString( "usergroup_update_icon" )
+net.Receive( "usergroup_update_icon", function( len, ply )
+  local uid = tonumber( net.ReadString() )
+  local icon = net.ReadString()
+  SQL_UPDATE( DATABASE_NAME, "icon = '" .. icon .. "'", "uniqueID = '" .. uid .. "'" )
+
+  printGM( "db", ply:YRPName() .. " updated icon of usergroup ( " .. uid .. " ) to [" .. icon .. "]" )
+
+  for i, pl in pairs( HANDLER_USERGROUP[uid] ) do
+    if pl != ply then
+      net.Start( "usergroup_update_icon" )
+        net.WriteString( icon )
+      net.Send( pl )
+    end
+  end
+end)
+
+
+--[[ OLD ]]--
 local _db_name = "yrp_restrictions"
 
 SQL_ADD_COLUMN( _db_name, "usergroup", "TEXT DEFAULT ''" )

@@ -195,7 +195,7 @@ function keyPressed( key, string, string2, distance )
 	local plyTrace = ply:GetEyeTrace()
 	local _return = false
 	if distance != nil then
-		if plyTrace.Entity != nil and plyTrace.Entity != NULL then
+		if ea( plyTrace.Entity ) then
 			if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
 				_return = true
 			end

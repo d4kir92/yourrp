@@ -54,6 +54,9 @@ function con_th( ply )
   if tonumber( ply:GetNWFloat( "thirst", 0.0 ) ) < 0.0 then
     ply:SetNWFloat( "thirst", 0.0 )
   end
+	if tonumber( ply:GetNWFloat( "thirst", 0.0 ) ) < 20.0 then
+    ply:TakeDamage( ply:GetMaxHealth() / 100 )
+  end
 end
 
 function con_st( ply )

@@ -136,6 +136,7 @@ end)
 
 hook.Add( "open_server_interface", "open_server_interface", function()
   SaveLastSite()
+  print("open_server_interface")
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()

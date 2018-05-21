@@ -3,6 +3,14 @@
 --[[ NEW ]]--
 local yrp_if = {}
 
+function GetHTMLImage( url, w, h )
+  return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\"width=\"" .. w .. "\" height=\"" .. h .. "\" /> </body>"
+end
+
+function TableToColorStr( tbl )
+  return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
+end
+
 function StringToColor( str )
   local _col = string.Explode( ",", str )
   return Color( _col[1], _col[2], _col[3], _col[4] or 255 )
@@ -34,7 +42,12 @@ end
 
 function interfaceDesign()
   local ply = LocalPlayer()
-  return ply:GetNWString( "interface_design", "Material Design 1" )
+  local design = ply:GetNWString( "interface_design", "Material Design 1" )
+  if yrp_if[design] != nil then
+    return design
+  else
+    return "Material Design 1"
+  end
 end
 
 function InterfaceBorder()
@@ -75,8 +88,8 @@ end
 function surfaceWindow( derma, pw, ph, title )
   local _title = title or ""
   local ply = LocalPlayer()
-  if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DFrame"]( derma, pw, ph, _title )
+  if yrp_if[interfaceDesign()] != nil then
+    yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title )
   else
     GetDesign()
   end
@@ -85,8 +98,8 @@ end
 function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay )
   local _text = text or ""
   local ply = LocalPlayer()
-  if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay )
+  if yrp_if[interfaceDesign()] != nil then
+    yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay )
   else
     GetDesign()
   end
@@ -95,8 +108,35 @@ end
 function surfacePanel( derma, pw, ph, text )
   local _text = text or ""
   local ply = LocalPlayer()
-  if yrp_if[ply:GetNWString( "interface_design", "" )] != nil then
-    yrp_if[ply:GetNWString( "interface_design", "" )]["DPanel"]( derma, pw, ph, _text )
+  if yrp_if[interfaceDesign()] != nil then
+    yrp_if[interfaceDesign()]["DPanel"]( derma, pw, ph, _text )
+  else
+    GetDesign()
+  end
+end
+
+function surfaceSelected( derma, pw, ph )
+  local _text = text or ""
+  local ply = LocalPlayer()
+  if yrp_if[interfaceDesign()] != nil then
+    if yrp_if[interfaceDesign()]["Selected"] != nil then
+      yrp_if[interfaceDesign()]["Selected"]( derma, pw, ph )
+    else
+      local _br = 2
+      local _w = 30
+      local _h = 10
+      surfaceBox( ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+      surfaceBox( ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+      surfaceBox( pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+      surfaceBox( pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+    end
   else
     GetDesign()
   end
