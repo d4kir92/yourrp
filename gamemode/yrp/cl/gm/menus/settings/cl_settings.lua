@@ -21,7 +21,6 @@ include( "cl_settings_server_licenses.lua" )
 include( "cl_settings_server_shops.lua" )
 include( "cl_settings_server_map.lua" )
 include( "cl_settings_server_whitelist.lua" )
-include( "cl_settings_server_restriction_old.lua" )
 
 include( "cl_settings_server_feedback.lua" )
 
@@ -135,8 +134,8 @@ function openSettings()
   settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
   settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
   settingsWindow.window:AddSite( "open_server_general_old", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
-  settingsWindow.window:AddSite( "open_server_restrictions_old", lang_string( "restriction" ), _server_admin, "icon16/group_go.png" )
-  --settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
+  
+  settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
   settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )

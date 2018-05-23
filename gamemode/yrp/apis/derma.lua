@@ -75,6 +75,16 @@ function InterfaceStyle()
   return ply:GetNWString( "interface_style", "dark" )
 end
 
+local _icons = {}
+function AddDesignIcon( name, path )
+  _icons[name] = Material( path )
+end
+function GetDesignIcon( name )
+  return _icons[name]
+end
+
+AddDesignIcon( "done", "vgui/material/baseline_done_outline_black_24dp.png" )
+
 local _delay = 1
 local _get_design = true
 function GetDesign()
@@ -87,7 +97,6 @@ end
 
 function surfaceWindow( derma, pw, ph, title )
   local _title = title or ""
-  local ply = LocalPlayer()
   if yrp_if[interfaceDesign()] != nil then
     yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title )
   else
@@ -97,7 +106,6 @@ end
 
 function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay )
   local _text = text or ""
-  local ply = LocalPlayer()
   if yrp_if[interfaceDesign()] != nil then
     yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay )
   else
@@ -105,37 +113,79 @@ function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay )
   end
 end
 
-function surfacePanel( derma, pw, ph, text )
+function surfacePanel( derma, pw, ph, text, color, px, py, ax, ay )
   local _text = text or ""
-  local ply = LocalPlayer()
   if yrp_if[interfaceDesign()] != nil then
-    yrp_if[interfaceDesign()]["DPanel"]( derma, pw, ph, _text )
+    yrp_if[interfaceDesign()]["DPanel"]( derma, pw, ph, _text, color, px, py, ax, ay )
   else
     GetDesign()
   end
 end
 
-function surfaceSelected( derma, pw, ph )
+function surfaceCheckBox( derma, pw, ph, icon )
+  if yrp_if[interfaceDesign()] != nil then
+    if yrp_if[interfaceDesign()]["Selected"] != nil then
+      yrp_if[interfaceDesign()]["DCheckBox"]( derma, pw, ph, icon )
+    else
+      local th = 4
+      local br = 8
+      local color = Color( 0, 0, 0, 255 )
+      surfaceBox( ctr( br ), ctr( br ), pw - ctr( br*2 ), ctr( th ), color )
+      surfaceBox( ctr( br ), ctr( br ), ctr( th ), ph - ctr( br*2 ), color )
+      surfaceBox( ctr( br ), ph - ctr( br+th ), pw - ctr( br*2 ), ctr( th ), color )
+      surfaceBox( pw - ctr( br+th ), ctr( br ), ctr( th ), ph - ctr( br*2 ), color )
+      if derma:GetChecked() then
+        br = 4
+        surface.SetDrawColor( 255, 255, 255, 255 )
+      	surface.SetMaterial( GetDesignIcon( icon ) )
+      	surface.DrawTexturedRect( ctr( br ), ctr( br ), pw - ctr( br*2 ), ph - ctr( 8 ) )
+      end
+    end
+  else
+    GetDesign()
+  end
+end
+
+function surfaceSelected( derma, pw, ph, px, py )
+  local px = px or 0
+  local py = py or 0
   local _text = text or ""
   local ply = LocalPlayer()
   if yrp_if[interfaceDesign()] != nil then
     if yrp_if[interfaceDesign()]["Selected"] != nil then
-      yrp_if[interfaceDesign()]["Selected"]( derma, pw, ph )
+      yrp_if[interfaceDesign()]["Selected"]( derma, pw, ph, px, py )
     else
-      local _br = 2
-      local _w = 30
-      local _h = 10
-      surfaceBox( ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+      local _br = 4
+      local _w = 32
+      local _h = 12
+      --Outter
+      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      surfaceBox( ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      surfaceBox( pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      surfaceBox( pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+      _br = 8
+      _w = 32-2*4
+      _h = 12-2*4
+      --Inner
+      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+
+      surfaceBox( px + ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+      surfaceBox( px + ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+
+      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+
+      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
     end
   else
     GetDesign()

@@ -1,5 +1,13 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function btn( bool )
+  if bool then
+    return 1
+  else
+    return 0
+  end
+end
+
 function ggT( _num1, _num2 )
   local _ggt = _num1 % _num2
   while ( _ggt != 0 ) do

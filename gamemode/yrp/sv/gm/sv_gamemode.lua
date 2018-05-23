@@ -61,7 +61,7 @@ function GM:PlayerLoadout( ply )
     --ply:CheckInventory()
 
     SetDesign( ply )
-    
+
     --[[ Status Reset ]]--
     ply:SetNWBool( "cuffed", false )
     ply:SetNWBool( "broken_leg_left", false )
@@ -176,11 +176,14 @@ function IsNoAdminWeapon( weapon )
 end
 
 function IsNoRoleSwep( ply, cname )
-  local _sweps = string.Explode( ",", ply:GetRolTab().sweps )
-  if !table.HasValue( _sweps, cname ) then
-    return true
-  else
-    return false
+  local _rol_tab = ply:GetRolTab()
+  if wk( _rol_tab ) then
+    local _sweps = string.Explode( ",", _rol_tab.sweps )
+    if !table.HasValue( _sweps, cname ) then
+      return true
+    else
+      return false
+    end
   end
 end
 

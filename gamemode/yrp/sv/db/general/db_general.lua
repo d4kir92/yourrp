@@ -119,6 +119,17 @@ function get_advert_name()
 end
 get_advert_name()
 
+util.AddNetworkString( "db_jailaccess" )
+net.Receive( "db_jailaccess", function( len, ply )
+  local _dbTable = net.ReadString()
+  local _dbSets = net.ReadString()
+
+  local _result = SQL_UPDATE( _dbTable, _dbSets, "uniqueID = 1" )
+  if _result != nil then
+    printGM( "error", "access_jail failed!" )
+  end
+end)
+
 -- Scoreboard Commands
 util.AddNetworkString( "ply_kick" )
 net.Receive( "ply_kick", function( len, ply )
