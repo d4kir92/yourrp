@@ -130,6 +130,17 @@ net.Receive( "db_jailaccess", function( len, ply )
   end
 end)
 
+util.AddNetworkString( "dbUpdate" )
+net.Receive( "dbUpdate", function( len, ply )
+  local _dbTable = net.ReadString()
+  local _dbSets = net.ReadString()
+  local _dbWhile = net.ReadString()
+  local _result = SQL_UPDATE( _dbTable, _dbSets, _dbWhile )
+  local _usergroup_ = string.Explode( " ", _dbWhile )
+  local _restriction_ = string.Explode( " ", SQL_STR_IN( _dbSets ) )
+  printGM( "note", ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile )
+end)
+
 -- Scoreboard Commands
 util.AddNetworkString( "ply_kick" )
 net.Receive( "ply_kick", function( len, ply )
@@ -809,12 +820,14 @@ net.Receive( "getGamemodename", function( len, ply )
 end)
 
 net.Receive( "dbGetGeneral", function( len, ply )
-  local _tmp = SQL_SELECT( "yrp_general", "*", nil )
-  if worked( _tmp, "yrp_general failed @1" ) then
-    _tmp = _tmp[1]
-    net.Start( "dbGetGeneral" )
-      net.WriteTable( _tmp )
-    net.Send( ply )
+  if ply:CanAccess( "general" ) then
+    local _tmp = SQL_SELECT( "yrp_general", "*", nil )
+    if worked( _tmp, "yrp_general failed @1" ) then
+      _tmp = _tmp[1]
+      net.Start( "dbGetGeneral" )
+        net.WriteTable( _tmp )
+      net.Send( ply )
+    end
   end
 end)
 

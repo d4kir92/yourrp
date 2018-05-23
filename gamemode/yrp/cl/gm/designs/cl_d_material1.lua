@@ -147,6 +147,6 @@ function _mat1.DrawPanel( pnl, pw, ph, text, color, px, py, ax, ah )
   end
 
   --[[ text ]]--
-  surfaceText( _text, "mat1text", px or pw/2, py or ph/2, Color( 255, 255, 255 ), ax or 1, ay or 1 )
+  surfaceText( _text, "mat1text", px or pw/2, py or ph/2, color or Color( 255, 255, 255, 255 ), ax or 1, ay or 1 )
 end
 RegisterPanelFunction( _mat1.name, _mat1.DrawPanel )

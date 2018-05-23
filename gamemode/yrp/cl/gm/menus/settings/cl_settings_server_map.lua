@@ -5,119 +5,12 @@ local _roles = {}
 net.Receive( "getMapList", function( len )
   local _tmpBool = net.ReadBool()
 
-  local _tmpTable = net.ReadTable()
-  _groups = net.ReadTable()
-  _roles = net.ReadTable()
-  _dealers = net.ReadTable()
   if !_tmpBool then
-    for k, v in pairs( _tmpTable ) do
-      if tostring( v.type ) == "dealer" then
-        for i, dealer in pairs( _dealers ) do
-          if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
-            if pa( _mapListView ) then
-              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, dealer.name )
-            end
-            break
-          end
-        end
-      elseif tostring( v.type ) == "GroupSpawnpoint" then
-        for l, w in pairs( _groups ) do
-          if tostring( v.linkID ) == tostring( w.uniqueID ) then
-            if pa( _mapListView ) then
-              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID )
-            end
-            break
-          end
-        end
-      elseif tostring( v.type ) == "RoleSpawnpoint" then
-        for l, w in pairs( _roles ) do
-          if tostring( v.linkID ) == tostring( w.uniqueID ) then
-            if pa( _mapListView ) then
-              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.roleID )
-            end
-            break
-          end
-        end
-      else
-        if pa( _mapListView ) then
-          _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name )
-        end
-      end
-    end
-  end
-end)
-
-function mapPNG()
-  local _mapName = GetMapNameDB()
-  local _map_png = _mapName .. ".png"
-
-  local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
-
-  local _pre = "../"
-  local _maps = "maps/"
-  local _data = "data/maps/"
-  local _mapthumb = "maps/thumb/"
-
-  if file.Exists( _maps .. _map_png, "GAME" ) then
-    _mapPNG = Material( _pre .. _maps .. _map_png, "noclamp smooth" )
-    return _mapPNG
-  elseif file.Exists( _data .. _map_png, "GAME" ) then
-    _mapPNG = Material( _pre .. _data .. _map_png, "noclamp smooth" )
-    return _mapPNG
-  elseif file.Exists( _mapthumb .. _map_png, "GAME" ) then
-    _mapPNG = Material( _pre .. _mapthumb .. _map_png, "noclamp smooth" )
-    return _mapPNG
-  end
-  return false
-end
-
-function getMapPNG()
-  local _mapPNG = mapPNG()
-  if tostring( _mapPNG ) == "Material [___error]" then
-    return false
-  end
-  return _mapPNG
-end
-
-function getCopyMapPNG()
-  local _mapName = GetMapNameDB()
-  local _mapPicturePath = "maps/" .. _mapName .. ".png"
-  local _mapPictureDesti = _mapPicturePath
-
-  local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
-  if file.Exists( _mapPicturePath, "GAME" ) then
-    if !file.Exists( "maps", "DATA" ) then
-      file.CreateDir( "maps" )
-    end
-    file.Write( _mapPicturePath, file.Read( _mapPicturePath, "GAME" ) )
-    if file.Exists( _mapPicturePath, "DATA" ) then
-  		_mapPNG =  Material( "../data/" .. _mapPicturePath, "noclamp smooth" )
-    end
-  else
-    _mapPicturePath = "maps/thumb/" .. _mapName .. ".png"
-    if file.Exists( _mapPicturePath, "GAME" ) then
-      if !file.Exists( "maps", "DATA" ) then
-        file.CreateDir( "maps" )
-      end
-      file.Write( _mapPictureDesti, file.Read( _mapPicturePath, "GAME" ) )
-      if file.Exists( _mapPictureDesti, "DATA" ) then
-    		_mapPNG = Material( "../data/" .. _mapPictureDesti, "noclamp smooth" )
-      end
-    end
-  end
-  return _mapPNG
-end
-
-hook.Add( "open_server_map", "open_server_map", function()
-  SaveLastSite()
-  local ply = LocalPlayer()
-
-  local w = settingsWindow.window.sitepanel:GetWide()
-  local h = settingsWindow.window.sitepanel:GetTall()
-
-  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-
-  if ply:HasAccess() then
+    local _tmpTable = net.ReadTable()
+    _groups = net.ReadTable()
+    _roles = net.ReadTable()
+    _dealers = net.ReadTable()
+    
     function settingsWindow.window.site:Paint( pw, ph )
       draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
     end
@@ -362,9 +255,113 @@ hook.Add( "open_server_map", "open_server_map", function()
       surfaceButton( self, pw, ph, lang_string( "add" ) .. " [" .. lang_string( "storagepoint" ) .. "]" )
     end
 
-    net.Start( "getMapList" )
-    net.SendToServer()
-  else
-    F8RequireUG( lang_string( "map" ), "superadmin or admin" )
+    for k, v in pairs( _tmpTable ) do
+      if tostring( v.type ) == "dealer" then
+        for i, dealer in pairs( _dealers ) do
+          if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
+            if pa( _mapListView ) then
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, dealer.name )
+            end
+            break
+          end
+        end
+      elseif tostring( v.type ) == "GroupSpawnpoint" then
+        for l, w in pairs( _groups ) do
+          if tostring( v.linkID ) == tostring( w.uniqueID ) then
+            if pa( _mapListView ) then
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID )
+            end
+            break
+          end
+        end
+      elseif tostring( v.type ) == "RoleSpawnpoint" then
+        for l, w in pairs( _roles ) do
+          if tostring( v.linkID ) == tostring( w.uniqueID ) then
+            if pa( _mapListView ) then
+              _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.roleID )
+            end
+            break
+          end
+        end
+      else
+        if pa( _mapListView ) then
+          _mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name )
+        end
+      end
+    end
   end
+end)
+
+function mapPNG()
+  local _mapName = GetMapNameDB()
+  local _map_png = _mapName .. ".png"
+
+  local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
+
+  local _pre = "../"
+  local _maps = "maps/"
+  local _data = "data/maps/"
+  local _mapthumb = "maps/thumb/"
+
+  if file.Exists( _maps .. _map_png, "GAME" ) then
+    _mapPNG = Material( _pre .. _maps .. _map_png, "noclamp smooth" )
+    return _mapPNG
+  elseif file.Exists( _data .. _map_png, "GAME" ) then
+    _mapPNG = Material( _pre .. _data .. _map_png, "noclamp smooth" )
+    return _mapPNG
+  elseif file.Exists( _mapthumb .. _map_png, "GAME" ) then
+    _mapPNG = Material( _pre .. _mapthumb .. _map_png, "noclamp smooth" )
+    return _mapPNG
+  end
+  return false
+end
+
+function getMapPNG()
+  local _mapPNG = mapPNG()
+  if tostring( _mapPNG ) == "Material [___error]" then
+    return false
+  end
+  return _mapPNG
+end
+
+function getCopyMapPNG()
+  local _mapName = GetMapNameDB()
+  local _mapPicturePath = "maps/" .. _mapName .. ".png"
+  local _mapPictureDesti = _mapPicturePath
+
+  local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
+  if file.Exists( _mapPicturePath, "GAME" ) then
+    if !file.Exists( "maps", "DATA" ) then
+      file.CreateDir( "maps" )
+    end
+    file.Write( _mapPicturePath, file.Read( _mapPicturePath, "GAME" ) )
+    if file.Exists( _mapPicturePath, "DATA" ) then
+  		_mapPNG =  Material( "../data/" .. _mapPicturePath, "noclamp smooth" )
+    end
+  else
+    _mapPicturePath = "maps/thumb/" .. _mapName .. ".png"
+    if file.Exists( _mapPicturePath, "GAME" ) then
+      if !file.Exists( "maps", "DATA" ) then
+        file.CreateDir( "maps" )
+      end
+      file.Write( _mapPictureDesti, file.Read( _mapPicturePath, "GAME" ) )
+      if file.Exists( _mapPictureDesti, "DATA" ) then
+    		_mapPNG = Material( "../data/" .. _mapPictureDesti, "noclamp smooth" )
+      end
+    end
+  end
+  return _mapPNG
+end
+
+hook.Add( "open_server_map", "open_server_map", function()
+  SaveLastSite()
+  local ply = LocalPlayer()
+
+  local w = settingsWindow.window.sitepanel:GetWide()
+  local h = settingsWindow.window.sitepanel:GetTall()
+
+  settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+
+  net.Start( "getMapList" )
+  net.SendToServer()
 end)

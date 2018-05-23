@@ -111,24 +111,26 @@ net.Receive( "removeMapEntry", function( len, ply )
 end)
 
 net.Receive( "getMapList", function( len, ply )
-  local _tmpMapTable = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", nil )
-  if _tmpMapTable == nil or _tmpMapTable == false then
-    _tmpMapTable = {}
-  end
-  local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", nil )
-  local _tmpRoleTable = SQL_SELECT( "yrp_roles", "*", nil )
-  local _tmpDealerTable = SQL_SELECT( "yrp_dealers", "*", nil )
-  if _tmpDealerTable == nil or _tmpDealerTable == false then
-    _tmpDealerTable = {}
-  end
+  if ply:CanAccess( "map" ) then
+    local _tmpMapTable = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", nil )
+    if _tmpMapTable == nil or _tmpMapTable == false then
+      _tmpMapTable = {}
+    end
+    local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", nil )
+    local _tmpRoleTable = SQL_SELECT( "yrp_roles", "*", nil )
+    local _tmpDealerTable = SQL_SELECT( "yrp_dealers", "*", nil )
+    if _tmpDealerTable == nil or _tmpDealerTable == false then
+      _tmpDealerTable = {}
+    end
 
-  net.Start( "getMapList" )
-    net.WriteBool( false )
-    net.WriteTable( _tmpMapTable )
-    net.WriteTable( _tmpGroupTable )
-    net.WriteTable( _tmpRoleTable )
-    net.WriteTable( _tmpDealerTable )
-  net.Send( ply )
+    net.Start( "getMapList" )
+      net.WriteBool( false )
+      net.WriteTable( _tmpMapTable )
+      net.WriteTable( _tmpGroupTable )
+      net.WriteTable( _tmpRoleTable )
+      net.WriteTable( _tmpDealerTable )
+    net.Send( ply )
+  end
 end)
 
 net.Receive( "dbInsertIntoMap", function( len, ply )

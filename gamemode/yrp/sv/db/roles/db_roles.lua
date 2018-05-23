@@ -83,6 +83,14 @@ util.AddNetworkString( "dupDBRole" )
 
 util.AddNetworkString( "getScoreboardGroups" )
 
+util.AddNetworkString( "setting_getroles" )
+net.Receive( "setting_getroles", function( len, ply )
+  if ply:CanAccess( "groupsandroles" ) then
+    net.Start( "setting_getroles" )
+    net.Send( ply )
+  end
+end)
+
 function sendDBGroups( ply )
   local tmp = SQL_SELECT( "yrp_groups", "*", nil )
   net.Start( "yrp_groups" )

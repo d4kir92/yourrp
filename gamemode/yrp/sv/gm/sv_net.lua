@@ -19,7 +19,7 @@ end)
 
 --Restart Server
 net.Receive( "restartServer", function( len, ply )
-  print("RunConsoleCommand(_restart)")
+  printGM( "gm", "RunConsoleCommand(_restart)" )
   RunConsoleCommand( "_restart" )
 end)
 

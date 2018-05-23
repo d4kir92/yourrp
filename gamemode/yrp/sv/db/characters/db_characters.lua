@@ -503,7 +503,7 @@ net.Receive( "EnterWorld", function( len, ply )
     local test = SQL_SELECT( "yrp_players", "*", nil )
     ply:Spawn()
   else
-    print( "gm", "no valid character selected" )
+    printGM( "gm", "No valid character selected" )
   end
 end)
 

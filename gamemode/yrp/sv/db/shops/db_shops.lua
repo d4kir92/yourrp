@@ -24,7 +24,9 @@ function send_shops( ply )
 end
 
 net.Receive( "get_shops", function( len, ply )
-  send_shops( ply )
+  if ply:CanAccess( "shops" ) then
+    send_shops( ply )
+  end
 end)
 
 util.AddNetworkString( "shop_add" )

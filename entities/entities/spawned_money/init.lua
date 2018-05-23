@@ -9,10 +9,10 @@ resource.AddFile( "models/props/cs_assault/money.mdl" )
 
 function ENT:Initialize()
 	if table.HasValue( GetWorkshopIDs(), "1189643820" ) then
-  self:SetModel( "models/props/cs_assault/money.mdl" )
-else
-  self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
-end
+	  self:SetModel( "models/props/cs_assault/money.mdl" )
+	else
+	  self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
+	end
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )

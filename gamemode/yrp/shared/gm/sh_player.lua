@@ -33,7 +33,7 @@ function Player:HasAccess()
   if isbool( _ug ) then
     _ug = ""
   end
-  if self:IsAdmin() or self:IsSuperAdmin() or string.lower( _ug ) == "owner" then
+  if self:IsAdmin() or self:IsSuperAdmin() or string.lower( _ug ) == "owner" or string.lower( _ug ) == "yrp_usergroups" then
     return true
   else
     return false
@@ -440,7 +440,7 @@ end
 
 function Player:canAfford( money )
   if money == nil then return false end
-  
+
   local _tmpMoney = math.abs( tonumber( money ) )
   if isnumber( _tmpMoney ) and self:GetNWString( "money" ) != nil then
     if tonumber( self:GetNWString( "money" ) ) >= math.abs( _tmpMoney ) then

@@ -1,7 +1,12 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 net.Receive( "getRoleWhitelist", function( len )
-  if settingsWindow.window != nil then
+  if pa( settingsWindow.window ) then
+    function settingsWindow.window.site:Paint( pw, ph )
+      --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+      surfaceText( lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    end
+
     local _tmpWhiteList = net.ReadTable()
     local _tmpRoleList = net.ReadTable()
     local _tmpGroupList = net.ReadTable()
@@ -206,15 +211,6 @@ hook.Add( "open_server_whitelist", "open_server_whitelist", function()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-  if ply:HasAccess() then
-    function settingsWindow.window.site:Paint( pw, ph )
-      --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
-      surfaceText( lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-    end
-
-    net.Start( "getRoleWhitelist" )
-    net.SendToServer()
-  else
-    F8RequireUG( lang_string( "whitelist" ), "superadmin or admin" )
-  end
+  net.Start( "getRoleWhitelist" )
+  net.SendToServer()
 end)

@@ -68,7 +68,6 @@ function SWEP:PrimaryAttack()
 					if unlockVehicle( self:GetOwner(), ent, ent:GetNWString( "item_uniqueID", "Failed" ) ) then
 			      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "unlockedvehicle" ) )
 			    else
-						print("DASDAS")
 			      self:GetOwner():PrintMessage( HUD_PRINTCENTER, lang_string( "youdonthaveakey" ) )
 			    end
 				end

@@ -40,6 +40,11 @@ end
 
 hook.Add( "PostPlayerDraw", "yrp_weapon_holster", function( ply )
 	if ply:Alive() and ply:GetNWBool( "toggle_inventory", false ) then
+    if ply == LocalPlayer() then
+      if tonumber( ply:GetNWString( "view_range", "0" ) ) <= 0 then
+        return false
+      end
+    end
 		 PositionEquipment( ply, "backpack", "ValveBiped.Bip01_Spine4", Vector( -10, 3, 8 ), Angle( 0, 90, 0 ) )
 
      PositionEquipment( ply, "weaponprimary1", "ValveBiped.Bip01_R_Clavicle", Vector( 5, 4, 0 ), Angle( 0, -90, 0 ) )

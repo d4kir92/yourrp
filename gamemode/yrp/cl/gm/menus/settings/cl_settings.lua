@@ -49,16 +49,14 @@ function get_icon_burger_menu()
   return _yrp_settings.materials[_yrp_settings.design.mode].burger
 end
 
-function F8RequireUG( site, ug )
+function F8RequireUG( site )
   function settingsWindow.window.site:Paint( w, h )
     surfaceBox( 0, 0, w, h, Color( 0, 0, 0, 255 ) )
-    surfaceText( site, "roleInfoHeader", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255 ), 0, 1 )
-    surfaceText( string.upper( lang_string( "require" ) ) .. ": " .. ug .. " (" .. lang_string( "usergroup" ) .. ")", "roleInfoHeader", ctr( 10 ), ctr( 100 ), Color( 255, 0, 0 ), 0, 1 )
+    surfaceText( lang_string( "settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "roleInfoHeader", w/2, h/2, Color( 255, 0, 0 ), 1, 1 )
   end
 end
 
 function toggleSettings()
-  print(isNoMenuOpen())
   if isNoMenuOpen() then
     openSettings()
   else
@@ -111,34 +109,35 @@ function openSettings()
   end
 
   --Sites
-  settingsWindow.window:AddCategory( lang_string( "client" ) )
-  settingsWindow.window:AddSite( "open_client_character", lang_string( "character" ), lang_string( "client" ), "icon16/user_edit.png" )
-  settingsWindow.window:AddSite( "open_client_hud", lang_string( "hud" ), lang_string( "client" ), "icon16/photo.png" )
-  settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "keybindchanger" ), lang_string( "client" ), "icon16/keyboard.png" )
+  local _client = lang_string( "settings_client" )
+  settingsWindow.window:AddCategory( _client )
+  settingsWindow.window:AddSite( "open_client_character", lang_string( "settings_character" ), _client, "icon16/user_edit.png" )
+  settingsWindow.window:AddSite( "open_client_hud", lang_string( "settings_hud" ), _client, "icon16/photo.png" )
+  settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "settings_keybinds" ), _client, "icon16/keyboard.png" )
 
-  local _server = lang_string( "server" ) .. " " .. "(" .. lang_string( "public" ) .. ")"
+  local _server = lang_string( "settings_serverpublic" )
   settingsWindow.window:AddCategory( _server )
-  settingsWindow.window:AddSite( "open_server_collection", lang_string( "workshopcollection" ), _server, "icon16/page_world.png" )
+  settingsWindow.window:AddSite( "open_server_collection", lang_string( "settings_workshopcollection" ), _server, "icon16/page_world.png" )
 
-  local _server_admin = lang_string( "server" )
+  local _server_admin = lang_string( "settings_server" )
   settingsWindow.window:AddCategory( _server_admin )
   --settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ) .. " [NEW!]", _server_admin, "icon16/server_database.png" )
-  settingsWindow.window:AddSite( "open_server_interface", lang_string( "interface" ), _server_admin, "icon16/application_view_gallery.png" )
-  settingsWindow.window:AddSite( "open_server_realistic", lang_string( "realistic" ), _server_admin, "icon16/bomb.png" )
-  settingsWindow.window:AddSite( "open_server_roles", lang_string( "roles" ), _server_admin, "icon16/group_edit.png" )
-  settingsWindow.window:AddSite( "open_server_give", lang_string( "players" ), _server_admin, "icon16/user_edit.png" )
-  settingsWindow.window:AddSite( "open_server_money", lang_string( "money" ), _server_admin, "icon16/money.png" )
-  settingsWindow.window:AddSite( "open_server_licenses", lang_string( "licenses" ), _server_admin, "icon16/vcard_edit.png" )
-  settingsWindow.window:AddSite( "open_server_shops", lang_string( "shops" ), _server_admin, "icon16/basket_edit.png" )
-  settingsWindow.window:AddSite( "open_server_map", lang_string( "map" ), _server_admin, "icon16/map.png" )
+  settingsWindow.window:AddSite( "open_server_interface", lang_string( "settings_surface" ), _server_admin, "icon16/application_view_gallery.png" )
+  settingsWindow.window:AddSite( "open_server_realistic", lang_string( "settings_realistic" ), _server_admin, "icon16/bomb.png" )
+  settingsWindow.window:AddSite( "open_server_roles", lang_string( "settings_groupsandroles" ), _server_admin, "icon16/group_edit.png" )
+  settingsWindow.window:AddSite( "open_server_give", lang_string( "settings_players" ), _server_admin, "icon16/user_edit.png" )
+  settingsWindow.window:AddSite( "open_server_money", lang_string( "settings_money" ), _server_admin, "icon16/money.png" )
+  settingsWindow.window:AddSite( "open_server_licenses", lang_string( "settings_licenses" ), _server_admin, "icon16/vcard_edit.png" )
+  settingsWindow.window:AddSite( "open_server_shops", lang_string( "settings_shops" ), _server_admin, "icon16/basket_edit.png" )
+  settingsWindow.window:AddSite( "open_server_map", lang_string( "settings_map" ), _server_admin, "icon16/map.png" )
   settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
-  settingsWindow.window:AddSite( "open_server_feedback", lang_string( "feedback" ), _server_admin, "icon16/page_lightning.png" )
-  settingsWindow.window:AddSite( "open_server_general_old", lang_string( "general" ), _server_admin, "icon16/server_database.png" )
-  
-  settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
+  settingsWindow.window:AddSite( "open_server_feedback", lang_string( "settings_feedback" ), _server_admin, "icon16/page_lightning.png" )
+  settingsWindow.window:AddSite( "open_server_general_old", lang_string( "settings_general" ), _server_admin, "icon16/server_database.png" )
+
+  settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "settings_usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
-  settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "workshop" ), "yourrp", "icon16/layout_content.png" )
+  settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "settings_workshop" ), "yourrp", "icon16/layout_content.png" )
 
   settingsWindow.window:AddCategory( lang_string( "settings" ) )
   settingsWindow.window:AddSite( "open_menu_settings", lang_string( "settings" ), lang_string( "settings" ), "vgui/yrp/dark_settings.png" )
@@ -311,3 +310,10 @@ function openSettings()
 
   settingsWindow.window:MakePopup()
 end
+
+net.Receive( "setting_hasnoaccess", function( len )
+  local ply = LocalPlayer()
+  local site = net.ReadString()
+
+  F8RequireUG( lang_string( site ) )
+end)

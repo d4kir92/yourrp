@@ -5,6 +5,33 @@ net.Receive( "get_interface_settings", function( len )
   local _tbl = net.ReadTable()
 
   if pa( settingsWindow.window ) then
+
+    function settingsWindow.window.site:Paint( w, h )
+      --[[ Left ]]--
+      surfaceBox( 0, 0, w/2, h, Color( 0, 0, 0, 240 ) )
+      surfaceText( lang_string( "interface" ), "SettingsHeader", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
+
+      --[[ Right ]]--
+      surfaceText( lang_string( "preview" ), "SettingsHeader", ScrW2() + ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
+    end
+
+    local _dframe = createD( "DFrame", settingsWindow.window.site, ScrW2() - ctr( 200 ), ScrH2() - ctr( 200 ), ScrW2() + ctr( 100 ), ctr( 100 ) )
+    _dframe:SetTitle( "" )
+    function _dframe:Paint( pw, ph )
+      surfaceWindow( self, pw, ph, lang_string( "dframe" ) )
+    end
+
+    local _dpanel = createD( "DPanel", _dframe, _dframe:GetWide() - ctr( 100 ), ctr( 200 ), ctr( 50 ), ctr( 60 ) )
+    function _dpanel:Paint( pw, ph )
+      surfacePanel( self, pw, ph, lang_string( "dpanel" ) )
+    end
+
+    local _dbutton = createD( "DButton", _dframe, ctr( 200 ), ctr( 50 ), ctr( 50 ), ctr( 270 ) )
+    _dbutton:SetText( "" )
+    function _dbutton:Paint( pw, ph )
+      surfaceButton( self, pw, ph, lang_string( "dbutton" ) )
+    end
+    
     local _parent = settingsWindow.window.site
 
     --[[ Color ]]--
@@ -136,43 +163,13 @@ end)
 
 hook.Add( "open_server_interface", "open_server_interface", function()
   SaveLastSite()
-  print("open_server_interface")
   local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()
   local h = settingsWindow.window.sitepanel:GetTall()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-  if ply:HasAccess() then
-    function settingsWindow.window.site:Paint( w, h )
-      --[[ Left ]]--
-      surfaceBox( 0, 0, w/2, h, Color( 0, 0, 0, 240 ) )
-      surfaceText( lang_string( "interface" ), "SettingsHeader", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
 
-      --[[ Right ]]--
-      surfaceText( lang_string( "preview" ), "SettingsHeader", ScrW2() + ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
-    end
-
-    local _dframe = createD( "DFrame", settingsWindow.window.site, ScrW2() - ctr( 200 ), ScrH2() - ctr( 200 ), ScrW2() + ctr( 100 ), ctr( 100 ) )
-    _dframe:SetTitle( "" )
-    function _dframe:Paint( pw, ph )
-      surfaceWindow( self, pw, ph, lang_string( "dframe" ) )
-    end
-
-    local _dpanel = createD( "DPanel", _dframe, _dframe:GetWide() - ctr( 100 ), ctr( 200 ), ctr( 50 ), ctr( 60 ) )
-    function _dpanel:Paint( pw, ph )
-      surfacePanel( self, pw, ph, lang_string( "dpanel" ) )
-    end
-
-    local _dbutton = createD( "DButton", _dframe, ctr( 200 ), ctr( 50 ), ctr( 50 ), ctr( 270 ) )
-    _dbutton:SetText( "" )
-    function _dbutton:Paint( pw, ph )
-      surfaceButton( self, pw, ph, lang_string( "dbutton" ) )
-    end
-
-    net.Start( "get_interface_settings" )
-    net.SendToServer()
-  else
-    F8RequireUG( lang_string( "interface" ), "superadmin or admin" )
-  end
+  net.Start( "get_interface_settings" )
+  net.SendToServer()
 end)

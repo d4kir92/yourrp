@@ -67,12 +67,14 @@ if SQL_SELECT( _db_name, "*", "uniqueID = 1" ) == nil then
 end
 
 net.Receive( "get_yrp_realistic", function( len, ply )
-  local _tab = SQL_SELECT( _db_name, "*", nil )
-  if _tab != nil then
-    _tab = _tab[1]
-    net.Start( "get_yrp_realistic" )
-      net.WriteTable( _tab )
-    net.Send( ply )
+  if ply:CanAccess( "realistic" ) then
+    local _tab = SQL_SELECT( _db_name, "*", nil )
+    if _tab != nil then
+      _tab = _tab[1]
+      net.Start( "get_yrp_realistic" )
+        net.WriteTable( _tab )
+      net.Send( ply )
+    end
   end
 end)
 

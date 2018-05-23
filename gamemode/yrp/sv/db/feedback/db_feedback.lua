@@ -16,14 +16,16 @@ SQL_ADD_COLUMN( _db_name, "steamid", "TEXT DEFAULT 'UNNAMED'" )
 util.AddNetworkString( "get_feedback" )
 
 net.Receive( "get_feedback", function( len, ply )
-  local _result = SQL_SELECT( _db_name, "*", nil )
-  if _result == nil or _result == false then
-    _result = {}
-  end
+  if ply:CanAccess( "feedback" ) then
+    local _result = SQL_SELECT( _db_name, "*", nil )
+    if _result == nil or _result == false then
+      _result = {}
+    end
 
-  net.Start( "get_feedback" )
-    net.WriteTable( _result )
-  net.Send( ply )
+    net.Start( "get_feedback" )
+      net.WriteTable( _result )
+    net.Send( ply )
+  end
 end)
 
 util.AddNetworkString( "add_feedback" )

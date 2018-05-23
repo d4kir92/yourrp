@@ -193,11 +193,30 @@ net.Receive( "usergroup_rem", function( len, ply )
   end
 end)
 
+--[[ Access Functions ]]--
+
+local Player = FindMetaTable( "Player" )
+
+util.AddNetworkString( "setting_hasnoaccess" )
+function Player:CanAccess( site )
+  local _b = SQL_SELECT( DATABASE_NAME, site, "uniqueID = 1" )
+  if wk( _b ) then
+    _b = tobool( _b[1][site] )
+    if !_b then
+      net.Start( "setting_hasnoaccess" )
+        net.WriteString( site )
+      net.Send( self )
+    end
+    return tobool( _b )
+  end
+  return false
+end
+
 --[[ Usergroup Edit ]]--
 util.AddNetworkString( "usergroup_update_name" )
 net.Receive( "usergroup_update_name", function( len, ply )
   local uid = tonumber( net.ReadString() )
-  local name = net.ReadString()
+  local name = string.lower( net.ReadString() )
   SQL_UPDATE( DATABASE_NAME, "name = '" .. name .. "'", "uniqueID = '" .. uid .. "'" )
 
   printGM( "db", ply:YRPName() .. " updated name of usergroup ( " .. uid .. " ) to [" .. name .. "]" )
@@ -623,7 +642,7 @@ end)
 
 hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( pl, model, name, table )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "vehicles", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "vehicles", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if worked( _tmp, "PlayerSpawnVehicle failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.vehicles ) then
@@ -643,7 +662,7 @@ end)
 
 hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( pl )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "weapons", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "weapons", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if worked( _tmp, "PlayerGiveSWEP failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.weapons ) then
@@ -663,7 +682,7 @@ end)
 
 hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( pl )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "entities", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "entities", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if worked( _tmp, "PlayerSpawnSENT failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.entities ) then
@@ -683,7 +702,7 @@ end)
 
 hook.Add( "PlayerSpawnEffect", "yrp_effects_restriction", function( pl )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "effects", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "effects", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if worked( _tmp, "PlayerSpawnEffect failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.effects ) then
@@ -703,7 +722,7 @@ end)
 
 hook.Add( "PlayerSpawnNPC", "yrp_npcs_restriction", function( pl )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "npcs", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "npcs", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if worked( _tmp, "PlayerSpawnNPC failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.npcs ) then
@@ -723,7 +742,7 @@ end)
 
 hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( pl )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "props", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "props", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if worked( _tmp, "PlayerSpawnProp failed" ) then
       _tmp = _tmp[1]
       if tobool( _tmp.props ) then
@@ -743,8 +762,8 @@ end)
 
 hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( pl, model )
   if ea( pl ) then
-    local _tmp = SQL_SELECT( DATABASE_NAME, "ragdolls", "usergroup = '" .. tostring( string.lower( pl:GetUserGroup() ) ) .. "'" )
-    if worked( _tmp, "PlayerSpawnRagdoll failed" ) then
+    local _tmp = SQL_SELECT( DATABASE_NAME, "ragdolls", "name = '" .. tostring( string.lower( pl:GetUserGroup() ) ) .. "'" )
+    if wk( _tmp ) then
       _tmp = _tmp[1]
       if tobool( _tmp.ragdolls ) then
         return true
@@ -757,6 +776,8 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( pl, model 
 
         return false
       end
+    else
+      printGM( "db", "[PlayerSpawnRagdoll] failed! UserGroup not found in database." )
     end
   end
 end)
@@ -911,7 +932,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
     else
       -- TURNED ON
       local _tmp = SQL_SELECT( DATABASE_NAME, "noclip", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
-      if worked( _tmp, "PlayerNoClip failed" ) then
+      if wk( _tmp ) then
         _tmp = _tmp[1]
         if tobool( _tmp.noclip ) then
 
@@ -930,6 +951,8 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 
           return false
         end
+      else
+        printGM( "db", "[noclip] failed! UserGroup not found in database." )
       end
     end
   end
@@ -939,10 +962,27 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
   if ea( pl ) then
     --printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
     local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
-    if _tmp != nil and _tmp != false then
+    if wk( _tmp ) then
       _tmp = _tmp[1]
       if tobool( _tmp.physgunpickup ) then
-        return true
+        if ent:IsPlayer() then
+          local _tmp2 = SQL_SELECT( DATABASE_NAME, "physgunpickupplayer", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+          if wk( _tmp2 ) then
+            _tmp2 = _tmp2[1]
+            if tobool( _tmp2.physgunpickupplayer ) then
+              return true
+            else
+              net.Start( "yrp_info" )
+                net.WriteString( "physgunpickupplayer" )
+              net.Send( pl )
+              return false
+            end
+          else
+            return false
+          end
+        else
+          return true
+        end
       else
         net.Start( "yrp_info" )
           net.WriteString( "physgunpickup" )
@@ -950,6 +990,7 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
         return false
       end
     else
+      printGM( "db", "[PhysgunPickup] failed! UserGroup not found in database." )
       return false
     end
   end
@@ -971,6 +1012,7 @@ hook.Add( "CanTool", "yrp_can_tool", function( pl, tr, tool )
           return false
         end
       else
+        printGM( "db", "[remover] failed! UserGroup not found in database." )
         return false
       end
     elseif tool == "dynamite" then
@@ -986,6 +1028,7 @@ hook.Add( "CanTool", "yrp_can_tool", function( pl, tr, tool )
           return false
         end
       else
+        printGM( "db", "[dynamite] failed! UserGroup not found in database." )
         return false
       end
     end
@@ -1008,6 +1051,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[ignite] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "remover" then
@@ -1023,6 +1067,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[remover] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "drive" then
@@ -1038,6 +1083,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[drive] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "collision" then
@@ -1053,6 +1099,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[collision] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "keepupright" then
@@ -1068,6 +1115,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[keepupright] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "bodygroups" then
@@ -1083,10 +1131,11 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[bodygroups] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "gravity" then
-      local _tmp = SQL_SELECT( DATABASE_NAME, "gravity", "usergroup = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+      local _tmp = SQL_SELECT( DATABASE_NAME, "gravity", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
       if _tmp != nil and _tmp != false then
         _tmp = _tmp[1]
         if tobool( _tmp.gravity ) then
@@ -1098,6 +1147,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
           return false
         end
       else
+        printGM( "db", "[gravity] failed! UserGroup not found in database." )
         return false
       end
     elseif property == "persist" then

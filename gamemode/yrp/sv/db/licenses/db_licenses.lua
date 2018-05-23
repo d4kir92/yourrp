@@ -26,7 +26,9 @@ end
 util.AddNetworkString( "get_licenses" )
 
 net.Receive( "get_licenses", function( len, ply )
-  send_licenses( ply )
+  if ply:CanAccess( "licenses" ) then
+    send_licenses( ply )
+  end
 end)
 
 function sendlicenses( ply )

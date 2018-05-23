@@ -17,6 +17,14 @@ SQL_ADD_COLUMN( _db_name, "uptime_current", "INT DEFAULT 0" )
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
+util.AddNetworkString( "setting_players" )
+net.Receive( "setting_players", function( len, ply )
+  if ply:CanAccess( "players" ) then
+    net.Start( "setting_players" )
+    net.Send( ply )
+  end
+end)
+
 g_db_reseted = false
 function save_clients( string )
   printGM( "db", string.upper( "[Saving all clients] [" .. string .. "]" ) )

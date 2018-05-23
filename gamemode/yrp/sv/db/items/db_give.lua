@@ -222,11 +222,18 @@ function Player:DropSWEP( cname )
   self:RemoveVisual( _cname )
 
   local ent = ents.Create( _cname )
-  ent:SetPos( self:GetPos() + Vector( 0, 0, 56 ) + self:EyeAngles():Forward() * 20  )
+  local tr = self:GetEyeTrace()
+  local dist = self:GetPos():Distance( tr.HitPos )
+  ent:SetPos( self:GetPos() + Vector( 0, 0, 56 ) + self:EyeAngles():Forward() * 16  )
+  ent:SetAngles( self:GetAngles() )
+  ent:SetNWBool( "ispickupable", false )
+  timer.Simple( 1, function()
+    ent:SetNWBool( "ispickupable", true )
+  end)
   ent:Spawn()
 
   if ent:GetPhysicsObject():IsValid() then
-    ent:GetPhysicsObject():SetVelocity( self:EyeAngles():Forward() * 200 )
+    ent:GetPhysicsObject():SetVelocity( self:EyeAngles():Forward() * 360 )
   end
 end
 
@@ -300,7 +307,9 @@ end
 function Player:ForceEquip( cname, noammo )
   printGM( "gm", "ForceEquip( " .. cname .. " )" )
   self.canpickup = true
-  return self:LegacyGive( cname, noammo )
+  local weapon = self:LegacyGive( cname, noammo )
+  weapon:SetNWBool( "ispickupable", true )
+  return weapon
 end
 
 function Player:Give( cname, noammo )
@@ -313,7 +322,9 @@ function Player:Give( cname, noammo )
   if self:GetNWBool( "toggle_inventory", false ) then
     return self:PutInInventory( cname, noammo )
   else
-    return self:LegacyGive( cname, noammo )
+    local weapon = self:LegacyGive( cname, noammo )
+    weapon:SetNWBool( "ispickupable", true )
+    return weapon
   end
 end
 
@@ -416,12 +427,12 @@ end
 function GM:PlayerCanPickupWeapon( ply, wep )
   if !ply:GetNWBool( "toggle_inventory", false ) then
     --[[ Inventory OFF ]]--
-    return true
+    return wep:GetNWBool( "ispickupable", true )
   else
     --[[ Inventory ON ]]--
     if ply.canpickup == true then
       ply.canpickup = false
-      return true
+      return wep:GetNWBool( "ispickupable", true )
     else
       return false
     end

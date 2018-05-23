@@ -24,9 +24,11 @@ net.Receive( "get_interface_settings", function( len, ply )
   local _tbl = SQL_SELECT( "yrp_interface", "*", "uniqueID = 1" )
   if wk( _tbl ) then
     _tbl = _tbl[1]
-    net.Start( "get_interface_settings" )
-      net.WriteTable( _tbl)
-    net.Send( ply )
+    if ply:CanAccess( "interface" ) then
+      net.Start( "get_interface_settings" )
+        net.WriteTable( _tbl)
+      net.Send( ply )
+    end
   end
 end)
 
@@ -98,8 +100,6 @@ function SetDesign( ply )
     ply:SetNWBool( "interface_transparent", tobool( _tbl.transparent ) )
     ply:SetNWBool( "interface_rounded", tobool( _tbl.rounded ) )
     ply:SetNWBool( "interface_border", tobool( _tbl.border ) )
-
-    print(ply:GetNWString( "interface_design", "failed" ) )
   end
 end
 

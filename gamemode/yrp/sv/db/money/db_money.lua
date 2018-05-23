@@ -48,8 +48,10 @@ net.Receive( "updateMoney", function( len, ply )
 end)
 
 net.Receive( "getMoneyTab", function( len, ply )
-  local _tmpTable = SQL_SELECT( "yrp_money", "*", nil )
-  net.Start( "getMoneyTab" )
-    net.WriteTable( _tmpTable[1] )
-  net.Send( ply )
+  if ply:CanAccess( "money" ) then
+    local _tmpTable = SQL_SELECT( "yrp_money", "*", nil )
+    net.Start( "getMoneyTab" )
+      net.WriteTable( _tmpTable[1] )
+    net.Send( ply )
+  end
 end)
