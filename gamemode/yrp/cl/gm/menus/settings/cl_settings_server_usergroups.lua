@@ -288,6 +288,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   function ENTITIES.add:DoClick()
     OpenSingleSelector( GetSENTsList(), "selector_usergroup_sents" )
     hook.Add( "selector_usergroup_sents", "selector_usergroup_sents", function()
+      local ply = LocalPlayer()
       local sent = ply:GetNWString( "ClassName", "" )
 
       net.Start( "usergroup_add_sent" )

@@ -308,7 +308,9 @@ function Player:ForceEquip( cname, noammo )
   printGM( "gm", "ForceEquip( " .. cname .. " )" )
   self.canpickup = true
   local weapon = self:LegacyGive( cname, noammo )
-  weapon:SetNWBool( "ispickupable", true )
+  if wk( weapon ) then
+    weapon:SetNWBool( "ispickupable", true )
+  end
   return weapon
 end
 
@@ -322,9 +324,7 @@ function Player:Give( cname, noammo )
   if self:GetNWBool( "toggle_inventory", false ) then
     return self:PutInInventory( cname, noammo )
   else
-    local weapon = self:LegacyGive( cname, noammo )
-    weapon:SetNWBool( "ispickupable", true )
-    return weapon
+    return self:ForceEquip( cname, noammo )
   end
 end
 

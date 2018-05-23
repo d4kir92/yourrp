@@ -16,7 +16,7 @@ SQL_ADD_COLUMN( _db_name, "border", "INT DEFAULT '0'" )
 --db_is_empty( _db_name )
 
 if SQL_SELECT( "yrp_interface", "*", "uniqueID = 1" ) == nil then
-  SQL_INSERT_INTO( _db_name, "color, style, rounded, transparent, border, design", "'blue', 'dark', '1', '1', '1'", 'Material Design 1' )
+  SQL_INSERT_INTO( _db_name, "color, style, rounded, transparent, border, design", "'blue', 'dark', '1', '1', '1', 'Material Design 1'" )
 end
 
 util.AddNetworkString( "get_interface_settings" )

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function RO_ALL()
+function RO_All()
   set_lang_string( "loading", "Se încarcă" )
   set_lang_string( "welcome", "Bun venit" )
   set_lang_string( "home", "Casă" )
