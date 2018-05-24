@@ -622,8 +622,7 @@ function openCharacterSelection()
   _cs.frame:SetDraggable( false )
   _cs.frame:Center()
   function _cs.frame:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
 
     draw.SimpleTextOutlined( lang_string( "characterselection" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( _cur, "HudHeader", pw/2, ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -716,15 +715,15 @@ function openCharacterSelection()
           v.tmpChar:Remove()
         end
         for i = 1, #_characters do
-          if _characters[i].char != nil and _characters[i].role != nil and _characters[i].group != nil then
+          if _characters[i].char != nil then
             cache[i] = {}
             cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
             local tmpChar = cache[i].tmpChar
             tmpChar:SetText( "" )
-            tmpChar.charid = _characters[i].char.uniqueID
-            tmpChar.rpname = _characters[i].char.rpname
-            tmpChar.roleID = _characters[i].role.roleID
-            tmpChar.groupID = _characters[i].group.groupID
+            tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
+            tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
+            tmpChar.roleID = _characters[i].role.roleID or "ROLE INVALID"
+            tmpChar.groupID = _characters[i].group.groupID or "GROUP INVALID"
             tmpChar.map = _characters[i].char.map
             tmpChar.playermodelID = _characters[i].char.playermodelID
 
@@ -838,6 +837,7 @@ function openCharacterSelection()
     _window:MakePopup()
   end
 
+--[[
   local backB = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() + ctr( 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
   backB:SetText( "" )
   function backB:Paint( pw, ph )
@@ -850,6 +850,7 @@ function openCharacterSelection()
       end
     end
   end
+]]--
 
   local button = {}
   button.size = ctr( 100 )
@@ -882,14 +883,14 @@ function openCharacterSelection()
   charactersEnter:SetText( "" )
   function charactersEnter:DoClick()
     if LocalPlayer() != nil then
-      if LocalPlayer():Alive() then
-        RunConsoleCommand( "kill" )
-      else
-        if curChar != "-1" then
+      if curChar != "-1" then
+        if LocalPlayer():Alive() then
+          net.Start( "LogOut" )
+          net.SendToServer()
+        else
           net.Start( "EnterWorld" )
             net.WriteString( curChar )
           net.SendToServer()
-
           _cs.frame:Close()
         end
       end

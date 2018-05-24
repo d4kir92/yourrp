@@ -25,7 +25,9 @@ function HudView()
       end
       showOwner( _eyeTrace )
     elseif _eyeTrace.Entity:IsPlayer() then
-      draw.SimpleTextOutlined( lang_string( "pressplypre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "pressplymid" ) .. " " .. tostring( _eyeTrace.Entity:RPName() ) .. " " .. lang_string( "pressplypos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      if _eyeTrace.Entity:GetColor().a != 0 or !_eyeTrace.Entity:GetNWBool( "cloaked" ) then
+        draw.SimpleTextOutlined( lang_string( "pressplypre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "pressplymid" ) .. " " .. tostring( _eyeTrace.Entity:RPName() ) .. " " .. lang_string( "pressplypos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
     elseif _eyeTrace.Entity:IsNPC() then
       if _eyeTrace.Entity:GetNWString( "dealerID", "" ) != "" then
         draw.SimpleTextOutlined( _eyeTrace.Entity:GetNWString( "name", "" ), "sef", ScrW()/2, ScrH2() + ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )

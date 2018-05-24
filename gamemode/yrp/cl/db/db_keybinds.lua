@@ -73,6 +73,8 @@ function check_yrp_keybinds()
   SQL_ADD_COLUMN( _db_name, "view_spin_right", "INT DEFAULT " .. KEY_PAD_9 )
   SQL_ADD_COLUMN( _db_name, "view_spin_left", "INT DEFAULT " .. KEY_PAD_7 )
 
+  SQL_ADD_COLUMN( _db_name, "view_freelook", "INT DEFAULT " .. KEY_Z )
+
   SQL_ADD_COLUMN( _db_name, "sp_open", "INT DEFAULT " .. KEY_UP )
   SQL_ADD_COLUMN( _db_name, "sp_close", "INT DEFAULT " .. KEY_DOWN )
 

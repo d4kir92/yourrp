@@ -62,9 +62,13 @@ net.Receive( "whitelistPlayer", function( len, ply )
     end
     local _roleID = net.ReadInt( 16 )
     local _dbRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. _roleID )
-    local _groupID = _dbRole[1].groupID
+    if wk( _dbRole ) then
+      local _groupID = _dbRole[1].groupID
 
-    SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. _roleID )
+      SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. _roleID )
+    else
+      printGM( "note", "whitelistPlayer FAILED! CALL DEVS" )
+    end
   end
   sendRoleWhitelist( ply )
 end)

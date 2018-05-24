@@ -9,7 +9,7 @@ net.Receive( "get_interface_settings", function( len )
     function settingsWindow.window.site:Paint( w, h )
       --[[ Left ]]--
       surfaceBox( 0, 0, w/2, h, Color( 0, 0, 0, 240 ) )
-      surfaceText( lang_string( "interface" ), "SettingsHeader", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
+      surfaceText( lang_string( "settings_surface" ), "SettingsHeader", ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
 
       --[[ Right ]]--
       surfaceText( lang_string( "preview" ), "SettingsHeader", ScrW2() + ctr( 20 ), ctr( 10 ), Color( 255, 255, 255 ), 0, 0 )
@@ -31,7 +31,7 @@ net.Receive( "get_interface_settings", function( len )
     function _dbutton:Paint( pw, ph )
       surfaceButton( self, pw, ph, lang_string( "dbutton" ) )
     end
-    
+
     local _parent = settingsWindow.window.site
 
     --[[ Color ]]--

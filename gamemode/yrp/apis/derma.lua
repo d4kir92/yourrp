@@ -245,7 +245,7 @@ function paintButton( derma, pw, ph, text )
   local _brC = Color( 0, 0, 0, 255 )
   paintBr( pw, ph, _brC )
 
-  draw.SimpleTextOutlined( text, "windowTitle", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  draw.SimpleTextOutlined( lang_string( text ), "windowTitle", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 end
 
 function paintPanel( derma, pw, ph, color )
@@ -265,9 +265,9 @@ function paintInv( derma, pw, ph, text, text2 )
   local _brC = Color( 255, 255, 255, 255 )
   paintBr( pw, ph, _brC )
 
-  draw.SimpleTextOutlined( text, "DermaDefault", ctr( 15 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  draw.SimpleTextOutlined( lang_string( text ), "DermaDefault", ctr( 15 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   if text2 != nil then
-    draw.SimpleTextOutlined( text2, "DermaDefault", ctr( 15 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( lang_string( text2 ), "DermaDefault", ctr( 15 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
 end
 
@@ -553,7 +553,7 @@ function createMDMenu( parent, w, h, x, y )
 		for k, v in pairs( self.cat ) do
 			local tmpCat = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 50 ), ctr( 10 ), ctr( posY ) )
 			function tmpCat:Paint( pw, ph )
-				draw.SimpleTextOutlined( string.upper( v ), "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( string.upper( lang_string( v ) ), "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 			posY = posY + 50 + 10
 			if self.sites[v] != nil then
@@ -575,7 +575,7 @@ function createMDMenu( parent, w, h, x, y )
 							surface.DrawTexturedRect( ctr( 24 ), ctr( 24 ), ctr( 32 ), ctr( 32 ) )
 						end
 
-						draw.SimpleTextOutlined( string.upper( w.site ), "mdMenu", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+						draw.SimpleTextOutlined( string.upper( lang_string( w.site ) ), "mdMenu", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
 					function tmp2:DoClick()
 						tmp.cursite = self.site

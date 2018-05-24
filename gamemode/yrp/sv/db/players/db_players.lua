@@ -143,6 +143,11 @@ function set_role_values( ply )
 
         ply:SetNWBool( "showrole", tobool( _gen_tab.showrole ) )
         ply:SetNWBool( "showgroup", tobool( _gen_tab.showgroup ) )
+      else
+        printGM( "note", "[SET ROLE VALUES] YRP_GENERAL IS BROKEN!" )
+        if !ply:IsBot() then
+          ply:KillSilent()
+        end
       end
 
       local rolTab = ply:GetRolTab()
@@ -173,7 +178,7 @@ function set_role_values( ply )
         end
         ply:SetNWString( "Gender", ChaTab.gender )
       else
-        printGM( "note", "No role or/and no character -> Suicide")
+        printGM( "note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
         if !ply:IsBot() then
           ply:KillSilent()
         end
@@ -241,7 +246,7 @@ function set_role_values( ply )
           end
         end
       else
-        printGM( "note", "No role selected -> Suicide")
+        printGM( "note", "[SET ROLE VALUES] No role selected -> Suicide")
         if !ply:IsBot() then
           ply:KillSilent()
         end
@@ -253,7 +258,7 @@ function set_role_values( ply )
         ply:SetNWString( "groupColor", groTab.color )
         ply:SetTeam( tonumber( groTab.uniqueID ) )
       else
-        printGM( "note", "No group selected -> Suicide" )
+        printGM( "note", "[SET ROLE VALUES] No group selected -> Suicide" )
         if !ply:IsBot() then
           ply:KillSilent()
         end

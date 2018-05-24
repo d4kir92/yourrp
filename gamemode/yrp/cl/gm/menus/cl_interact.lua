@@ -135,5 +135,4 @@ net.Receive( "openInteractMenu", function ()
 
   _windowInteract:Center()
   _windowInteract:MakePopup()
-  gui.EnableScreenClicker( true )
 end)

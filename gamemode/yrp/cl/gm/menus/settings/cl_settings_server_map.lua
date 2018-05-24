@@ -5,12 +5,14 @@ local _roles = {}
 net.Receive( "getMapList", function( len )
   local _tmpBool = net.ReadBool()
 
+  local ply = LocalPlayer()
+  
   if !_tmpBool then
     local _tmpTable = net.ReadTable()
     _groups = net.ReadTable()
     _roles = net.ReadTable()
     _dealers = net.ReadTable()
-    
+
     function settingsWindow.window.site:Paint( pw, ph )
       draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
     end
@@ -355,7 +357,6 @@ end
 
 hook.Add( "open_server_map", "open_server_map", function()
   SaveLastSite()
-  local ply = LocalPlayer()
 
   local w = settingsWindow.window.sitepanel:GetWide()
   local h = settingsWindow.window.sitepanel:GetTall()

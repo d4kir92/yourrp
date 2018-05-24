@@ -330,8 +330,6 @@ util.AddNetworkString( "yrp_get_characters" )
 util.AddNetworkString( "DeleteCharacter" )
 util.AddNetworkString( "CreateCharacter" )
 
-util.AddNetworkString( "EnterWorld" )
-
 net.Receive( "charGetGroups", function( len, ply )
   local tmpTable = SQL_SELECT( "yrp_groups", "*", nil )
   if tmpTable == nil then
@@ -405,6 +403,10 @@ function send_characters( ply )
         _charCount = _charCount + 1
         netTable[_charCount] = {}
         netTable[_charCount].char = v
+        
+        netTable[_charCount].role = {}
+        netTable[_charCount].group = {}
+
         local tmp = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tonumber( v.roleID ) )
         if worked( tmp, "charGetCharacters role" ) then
           tmp = tmp[1]
@@ -496,11 +498,16 @@ net.Receive( "CreateCharacter", function( len, ply )
   send_characters( ply )
 end)
 
+util.AddNetworkString( "LogOut" )
+net.Receive( "LogOut", function( len, ply )
+  ply:KillSilent()
+end)
+
+util.AddNetworkString( "EnterWorld" )
 net.Receive( "EnterWorld", function( len, ply )
   local char = net.ReadString()
   if char != nil then
     local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( char ), "SteamID = '" .. ply:SteamID() .. "'" )
-    local test = SQL_SELECT( "yrp_players", "*", nil )
     ply:Spawn()
   else
     printGM( "gm", "No valid character selected" )

@@ -109,41 +109,41 @@ function openSettings()
   end
 
   --Sites
-  local _client = lang_string( "settings_client" )
+  local _client = "settings_client"
   settingsWindow.window:AddCategory( _client )
-  settingsWindow.window:AddSite( "open_client_character", lang_string( "settings_character" ), _client, "icon16/user_edit.png" )
-  settingsWindow.window:AddSite( "open_client_hud", lang_string( "settings_hud" ), _client, "icon16/photo.png" )
-  settingsWindow.window:AddSite( "open_client_keybinds", lang_string( "settings_keybinds" ), _client, "icon16/keyboard.png" )
+  settingsWindow.window:AddSite( "open_client_character", "settings_character", _client, "icon16/user_edit.png" )
+  settingsWindow.window:AddSite( "open_client_hud", "settings_hud", _client, "icon16/photo.png" )
+  settingsWindow.window:AddSite( "open_client_keybinds", "settings_keybinds", _client, "icon16/keyboard.png" )
 
-  local _server = lang_string( "settings_serverpublic" )
+  local _server = "settings_serverpublic"
   settingsWindow.window:AddCategory( _server )
-  settingsWindow.window:AddSite( "open_server_collection", lang_string( "settings_workshopcollection" ), _server, "icon16/page_world.png" )
+  settingsWindow.window:AddSite( "open_server_collection", "settings_workshopcollection", _server, "icon16/page_world.png" )
 
-  local _server_admin = lang_string( "settings_server" )
+  local _server_admin = "settings_server"
   settingsWindow.window:AddCategory( _server_admin )
-  --settingsWindow.window:AddSite( "open_server_general", lang_string( "general" ) .. " [NEW!]", _server_admin, "icon16/server_database.png" )
-  settingsWindow.window:AddSite( "open_server_interface", lang_string( "settings_surface" ), _server_admin, "icon16/application_view_gallery.png" )
-  settingsWindow.window:AddSite( "open_server_realistic", lang_string( "settings_realistic" ), _server_admin, "icon16/bomb.png" )
-  settingsWindow.window:AddSite( "open_server_roles", lang_string( "settings_groupsandroles" ), _server_admin, "icon16/group_edit.png" )
-  settingsWindow.window:AddSite( "open_server_give", lang_string( "settings_players" ), _server_admin, "icon16/user_edit.png" )
-  settingsWindow.window:AddSite( "open_server_money", lang_string( "settings_money" ), _server_admin, "icon16/money.png" )
-  settingsWindow.window:AddSite( "open_server_licenses", lang_string( "settings_licenses" ), _server_admin, "icon16/vcard_edit.png" )
-  settingsWindow.window:AddSite( "open_server_shops", lang_string( "settings_shops" ), _server_admin, "icon16/basket_edit.png" )
-  settingsWindow.window:AddSite( "open_server_map", lang_string( "settings_map" ), _server_admin, "icon16/map.png" )
-  settingsWindow.window:AddSite( "open_server_whitelist", lang_string( "whitelist" ), _server_admin, "icon16/page_white_key.png" )
-  settingsWindow.window:AddSite( "open_server_feedback", lang_string( "settings_feedback" ), _server_admin, "icon16/page_lightning.png" )
-  settingsWindow.window:AddSite( "open_server_general_old", lang_string( "settings_general" ), _server_admin, "icon16/server_database.png" )
+  --settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
+  settingsWindow.window:AddSite( "open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png" )
+  settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _server_admin, "icon16/bomb.png" )
+  settingsWindow.window:AddSite( "open_server_roles", "settings_groupsandroles", _server_admin, "icon16/group_edit.png" )
+  settingsWindow.window:AddSite( "open_server_give", "settings_players", _server_admin, "icon16/user_edit.png" )
+  settingsWindow.window:AddSite( "open_server_money", "settings_money", _server_admin, "icon16/money.png" )
+  settingsWindow.window:AddSite( "open_server_licenses", "settings_licenses", _server_admin, "icon16/vcard_edit.png" )
+  settingsWindow.window:AddSite( "open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png" )
+  settingsWindow.window:AddSite( "open_server_map", "settings_map", _server_admin, "icon16/map.png" )
+  settingsWindow.window:AddSite( "open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png" )
+  settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server_admin, "icon16/page_lightning.png" )
+  settingsWindow.window:AddSite( "open_server_general_old", "settings_general", _server_admin, "icon16/server_database.png" )
 
-  settingsWindow.window:AddSite( "open_server_usergroups", lang_string( "settings_usergroups" ) .. " [" .. lang_string( "NEW" ) .. "!]", _server_admin, "icon16/group_go.png" )
+  settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
-  settingsWindow.window:AddSite( "open_yourp_workshop", lang_string( "settings_workshop" ), "yourrp", "icon16/layout_content.png" )
+  settingsWindow.window:AddSite( "open_yourp_workshop", "settings_workshop", "yourrp", "icon16/layout_content.png" )
 
-  settingsWindow.window:AddCategory( lang_string( "settings" ) )
-  settingsWindow.window:AddSite( "open_menu_settings", lang_string( "settings" ), lang_string( "settings" ), "vgui/yrp/dark_settings.png" )
+  settingsWindow.window:AddCategory( "settings" )
+  settingsWindow.window:AddSite( "open_menu_settings", "settings", "settings", "vgui/yrp/dark_settings.png" )
 
   --StartSite
-  settingsWindow.window.cursite = lang_string( "character" )
+  settingsWindow.window.cursite = "character"
   settingsWindow.window:SwitchToSite( _save_site )
 
   --Mainbar

@@ -804,47 +804,6 @@ function RenderEquipments( ply, mode, color )
   RenderEquipment( ply, "weapongadget", mode, color )
 end
 
-function RenderNoClip( ply, alpha )
-  if ea( ply ) then
-    local _alpha = 255
-    if IsNoClipEffectEnabled() then
-      if IsNoClipStealthEnabled() then
-        if ply:GetModel() == "models/crow.mdl" then
-          _alpha = 180
-        else
-          _alpha = 10
-        end
-      else
-        if ply:GetModel() == "models/crow.mdl" then
-          _alpha = 240
-        else
-          _alpha = 100
-        end
-      end
-    end
-
-    ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-    ply:SetColor( Color( 255, 255, 255, _alpha ) )
-    for i, wp in pairs(ply:GetWeapons()) do
-      wp:SetRenderMode( RENDERMODE_TRANSALPHA )
-      wp:SetColor( Color( 255, 255, 255, _alpha ) )
-    end
-    RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
-  end
-end
-
-function RenderFrozen( ply )
-  if ea( ply ) then
-    ply:SetRenderMode( RENDERMODE_NORMAL )
-    ply:SetColor( Color( 0, 0, 255 ) )
-    for i, wp in pairs(ply:GetWeapons()) do
-      wp:SetRenderMode( RENDERMODE_TRANSALPHA )
-      wp:SetColor( Color( 0, 0, 255 ) )
-    end
-    RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 0, 0, 255 ) )
-  end
-end
-
 function RenderCloaked( ply )
   if ea( ply ) then
     local _alpha = 0
@@ -855,6 +814,55 @@ function RenderCloaked( ply )
       wp:SetColor( Color( 255, 255, 255, _alpha ) )
     end
     RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
+  end
+end
+
+function RenderNoClip( ply, alpha )
+  if ea( ply ) then
+    if ply:GetNWBool( "cloaked", false ) then
+      RenderCloaked( ply )
+    else
+      local _alpha = 255
+      if IsNoClipEffectEnabled() then
+        if IsNoClipStealthEnabled() then
+          if ply:GetModel() == "models/crow.mdl" then
+            _alpha = 180
+          else
+            _alpha = 10
+          end
+        else
+          if ply:GetModel() == "models/crow.mdl" then
+            _alpha = 240
+          else
+            _alpha = 100
+          end
+        end
+      end
+
+      ply:SetRenderMode( RENDERMODE_TRANSALPHA )
+      ply:SetColor( Color( 255, 255, 255, _alpha ) )
+      for i, wp in pairs(ply:GetWeapons()) do
+        wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+        wp:SetColor( Color( 255, 255, 255, _alpha ) )
+      end
+      RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 255, 255, 255, _alpha ) )
+    end
+  end
+end
+
+function RenderFrozen( ply )
+  if ea( ply ) then
+    if ply:GetNWBool( "cloaked", false ) then
+      RenderCloaked( ply )
+    else
+      ply:SetRenderMode( RENDERMODE_NORMAL )
+      ply:SetColor( Color( 0, 0, 255 ) )
+      for i, wp in pairs(ply:GetWeapons()) do
+        wp:SetRenderMode( RENDERMODE_TRANSALPHA )
+        wp:SetColor( Color( 0, 0, 255 ) )
+      end
+      RenderEquipments( ply, RENDERMODE_TRANSALPHA, Color( 0, 0, 255 ) )
+    end
   end
 end
 
@@ -962,7 +970,7 @@ end)
 
 hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
   if ea( pl ) then
-    --printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
+    printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
     local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if wk( _tmp ) then
       _tmp = _tmp[1]
@@ -1000,7 +1008,7 @@ end)
 
 hook.Add( "CanTool", "yrp_can_tool", function( pl, tr, tool )
   if ea( pl ) then
-    --printGM( "gm", "CanTool: " .. tool )
+    printGM( "gm", "CanTool: " .. tool )
     if tool == "remover" then
       local _tmp = SQL_SELECT( DATABASE_NAME, "removetool", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
       if _tmp != nil and _tmp != false then

@@ -61,7 +61,7 @@ end)
 function changeUserGroup( ply, cmd, args )
   local _cmdpre = "[" .. string.upper( "yrp_usergroup" ) .. "] "
 	local message = ""
-	if args[2] != nil then
+	if #args == 2 then
 	  if !ply:IsPlayer() then
       --[[ if server tries ]]--
 	    for k, v in pairs( player.GetAll() ) do
@@ -89,8 +89,13 @@ function changeUserGroup( ply, cmd, args )
 	  end
 	else
     --[[ Failed command ]]--
-		printGM( "note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME UserGroup)" )
-    printGM( "note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin" )
+    if #args > 2 then
+      printGM( "note", _cmdpre .. "To much arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)" )
+      printGM( "note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin" )
+    else
+  		printGM( "note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)" )
+      printGM( "note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin" )
+    end
 	end
 end
 
