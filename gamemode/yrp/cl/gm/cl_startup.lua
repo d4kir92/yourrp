@@ -1138,9 +1138,7 @@ function drawPlates( ply )
   if ply:Alive() then
     if ply:GetNWBool( "tag_ug", false )
     or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
-      if ply:HasAccess() then
-        drawPlate( ply, string.upper( ply:GetUserGroup() ), 9, Color( 0, 0, 140, ply:GetColor().a ) )
-      end
+      drawPlate( ply, string.upper( ply:GetUserGroup() ), 9, Color( 0, 0, 140, ply:GetColor().a ) )
     end
     if ply:GetNWBool( "tag_dev", false ) then
       if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then

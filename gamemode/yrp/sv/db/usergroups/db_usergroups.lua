@@ -97,28 +97,30 @@ end)
 
 util.AddNetworkString( "Connect_Settings_UserGroups" )
 net.Receive( "Connect_Settings_UserGroups", function( len, ply )
-  AddToHandler_UserGroups( ply )
-  local _usergroups = {}
-  for k, v in pairs( player.GetAll() ) do
-    local _ug = v:GetUserGroup()
-    if SQL_SELECT( DATABASE_NAME, "*", "name = '" .. _ug .. "'" ) == nil then
-      printGM( "note", "usergroup: " .. _ug .. " not found, adding to db" )
-      SQL_INSERT_INTO( DATABASE_NAME, "name", "'" .. _ug .. "'" )
+  if ply:CanAccess( "usergroups" ) then
+    AddToHandler_UserGroups( ply )
+    local _usergroups = {}
+    for k, v in pairs( player.GetAll() ) do
+      local _ug = v:GetUserGroup()
+      if SQL_SELECT( DATABASE_NAME, "*", "name = '" .. _ug .. "'" ) == nil then
+        printGM( "note", "usergroup: " .. _ug .. " not found, adding to db" )
+        SQL_INSERT_INTO( DATABASE_NAME, "name", "'" .. _ug .. "'" )
+      end
     end
-  end
 
-  local _tmp = SQL_SELECT( DATABASE_NAME, "*", nil )
-  local _ugs = {}
-  for i, ug in pairs( _tmp ) do
-    _ugs[tonumber(ug.uniqueID)] = ug
-  end
-  net.Start( "Connect_Settings_UserGroups" )
-    if _tmp != nil then
-      net.WriteTable( _tmp )
-    else
-      net.WriteTable( {} )
+    local _tmp = SQL_SELECT( DATABASE_NAME, "*", nil )
+    local _ugs = {}
+    for i, ug in pairs( _tmp ) do
+      _ugs[tonumber(ug.uniqueID)] = ug
     end
-  net.Send( ply )
+    net.Start( "Connect_Settings_UserGroups" )
+      if _tmp != nil then
+        net.WriteTable( _tmp )
+      else
+        net.WriteTable( {} )
+      end
+    net.Send( ply )
+  end
 end)
 
 --[[ Usergroup Handler ]]--
@@ -199,7 +201,7 @@ local Player = FindMetaTable( "Player" )
 
 util.AddNetworkString( "setting_hasnoaccess" )
 function Player:CanAccess( site )
-  local _b = SQL_SELECT( DATABASE_NAME, site, "uniqueID = 1" )
+  local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
   if wk( _b ) then
     _b = tobool( _b[1][site] )
     if !_b then
