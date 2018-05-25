@@ -1284,3 +1284,13 @@ net.Receive( "yrp_info2", function( len )
     end
   end
 end)
+
+net.Receive( "yrp_message", function( len )
+  if playerready then
+    local ply = LocalPlayer()
+    if ply != nil then
+      local _str = lang_string( net.ReadString() )
+      notification.AddLegacy( _str, NOTIFY_GENERIC, 3 )
+    end
+  end
+end)

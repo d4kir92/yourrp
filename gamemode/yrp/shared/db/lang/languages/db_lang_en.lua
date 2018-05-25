@@ -18,7 +18,7 @@ function LangEN()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "D4KiR" )
 
-	EN_All()
+	EN_ALL()
 	EN_GENERAL()
 	EN_SETTINGS()
 	EN_SETTINGSUSERGROUPS()

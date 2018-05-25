@@ -21,4 +21,6 @@ function DE_SETTINGS()
   set_lang_string( "settings_groupsandroles", "Gruppen und Rollen" )
   set_lang_string( "settings_players", "Spieler" )
   set_lang_string( "settings_yourusergrouphasnopermission", "Ihre Benutzergruppe hat keine Berechtigung" )
+  set_lang_string( "settings_gotof8usergroups", "Geh zu F8 Benutzergruppen" )
+  set_lang_string( "settings_giveyourselftheusergroup", "Um auf diese Seite zugreifen zu können, müssen Sie sich eine der folgenden Benutzergruppen geben: [1]" )
 end

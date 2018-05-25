@@ -202,11 +202,21 @@ local Player = FindMetaTable( "Player" )
 util.AddNetworkString( "setting_hasnoaccess" )
 function Player:CanAccess( site )
   local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
+  local _ugs = SQL_SELECT( DATABASE_NAME, "name", "usergroups = '1'" )
   if wk( _b ) then
     _b = tobool( _b[1][site] )
+    local usergroups = ""
+    for i, ug in pairs( _ugs ) do
+      if usergroups == "" then
+        usergroups = usergroups .. ug.name
+      else
+        usergroups = usergroups .. ", " .. ug.name
+      end
+    end
     if !_b then
       net.Start( "setting_hasnoaccess" )
         net.WriteString( site )
+        net.WriteString( usergroups )
       net.Send( self )
     end
     return tobool( _b )

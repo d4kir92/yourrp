@@ -41,6 +41,13 @@ function set_lang_string( var, str )
 	yrp_lang[var] = str
 end
 
+function replace_string( in_str, tab )
+	for i, str in pairs( tab ) do
+		in_str = string.Replace( in_str, "[" .. tostring( i ) .. "]", tab[i] )
+	end
+	return in_str
+end
+
 function lang_string( var, failed )
 	--[[ string var, string failed ]]--
 	--[[ returns translated string, when worked ]]--

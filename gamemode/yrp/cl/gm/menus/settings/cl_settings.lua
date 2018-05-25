@@ -49,10 +49,17 @@ function get_icon_burger_menu()
   return _yrp_settings.materials[_yrp_settings.design.mode].burger
 end
 
-function F8RequireUG( site )
+function F8RequireUG( site, usergroups )
   function settingsWindow.window.site:Paint( w, h )
     surfaceBox( 0, 0, w, h, Color( 0, 0, 0, 255 ) )
     surfaceText( lang_string( "settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "roleInfoHeader", w/2, h/2, Color( 255, 0, 0 ), 1, 1 )
+    if site != lang_string( "usergroups" ) then
+      surfaceText( lang_string( "settings_gotof8usergroups" ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
+    else
+      local tab = {}
+      tab[1] = usergroups
+      surfaceText( replace_string( lang_string( "settings_giveyourselftheusergroup" ), tab ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
+    end
   end
 end
 
@@ -80,8 +87,10 @@ end
 local _save_site = "open_client_character"
 function SaveLastSite()
   if pa( settingsWindow ) then
-    if settingsWindow.window.lastsite != "" then
-      _save_site = settingsWindow.window.lastsite
+    if pa( settingsWindow.window ) then
+      if settingsWindow.window.lastsite != "" then
+        _save_site = settingsWindow.window.lastsite
+      end
     end
   end
 end
@@ -137,7 +146,7 @@ function openSettings()
   settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _server_admin, "icon16/group_go.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
-  settingsWindow.window:AddSite( "open_yourp_workshop", "settings_workshop", "yourrp", "icon16/layout_content.png" )
+  settingsWindow.window:AddSite( "open_yourp_workshop", "workshop", "yourrp", "icon16/layout_content.png" )
 
   settingsWindow.window:AddCategory( "settings" )
   settingsWindow.window:AddSite( "open_menu_settings", "settings", "settings", "vgui/yrp/dark_settings.png" )
@@ -221,46 +230,49 @@ function openSettings()
 
   hook.Add( "open_menu_settings", "open_menu_settings", function()
     local ply = LocalPlayer()
+    if pa( settingsWindow ) then
+      if pa( settingsWindow.window ) then
+        local w = settingsWindow.window.sitepanel:GetWide()
+        local h = settingsWindow.window.sitepanel:GetTall()
 
-    local w = settingsWindow.window.sitepanel:GetWide()
-    local h = settingsWindow.window.sitepanel:GetTall()
+        settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+        function settingsWindow.window.site:Paint( pw, ph )
+          --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
+          draw.SimpleTextOutlined( lang_string( "color" ), "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+        end
 
-    settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-    function settingsWindow.window.site:Paint( pw, ph )
-      --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
-      draw.SimpleTextOutlined( lang_string( "color" ), "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
-    end
+        local switchMode = createMDSwitch( settingsWindow.window.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
 
-    local switchMode = createMDSwitch( settingsWindow.window.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
+        --primary
+        colorP = {}
+        colorP[1] = Color( 66, 66, 66, 255 )
+        colorP[2] = Color( 21, 101, 192, 255 )
+        colorP[3] = Color( 46, 125, 50, 255 )
+        colorP[4] = Color( 239, 108, 0, 255 )
+        colorP[5] = Color( 249, 168, 37, 255 )
+        colorP[6] = Color( 78, 52, 46, 255 )
 
-    --primary
-    colorP = {}
-    colorP[1] = Color( 66, 66, 66, 255 )
-    colorP[2] = Color( 21, 101, 192, 255 )
-    colorP[3] = Color( 46, 125, 50, 255 )
-    colorP[4] = Color( 239, 108, 0, 255 )
-    colorP[5] = Color( 249, 168, 37, 255 )
-    colorP[6] = Color( 78, 52, 46, 255 )
+        local primarybg = createD( "DPanel", settingsWindow.window.site, ctr( 400 ), ctr( 200 ), ctr( 10 ), ctr( 200 ) )
 
-    local primarybg = createD( "DPanel", settingsWindow.window.site, ctr( 400 ), ctr( 200 ), ctr( 10 ), ctr( 200 ) )
+        for k, v in pairs( colorP ) do
+          addPColorField( primarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
+        end
 
-    for k, v in pairs( colorP ) do
-      addPColorField( primarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
-    end
+        --secondary
+        colorS = {}
+        colorS[1] = Color( 117, 117, 117, 255 )
+        colorS[2] = Color( 30, 136, 229, 255 )
+        colorS[3] = Color( 67, 160, 71, 255 )
+        colorS[4] = Color( 251, 140, 0, 255 )
+        colorS[5] = Color( 253, 216, 53, 255 )
+        colorS[6] = Color( 109, 76, 65, 255 )
 
-    --secondary
-    colorS = {}
-    colorS[1] = Color( 117, 117, 117, 255 )
-    colorS[2] = Color( 30, 136, 229, 255 )
-    colorS[3] = Color( 67, 160, 71, 255 )
-    colorS[4] = Color( 251, 140, 0, 255 )
-    colorS[5] = Color( 253, 216, 53, 255 )
-    colorS[6] = Color( 109, 76, 65, 255 )
+        local secondarybg = createD( "DPanel", settingsWindow.window.site, ctr( 400 ), ctr( 200 ), ctr( 500 ), ctr( 200 ) )
 
-    local secondarybg = createD( "DPanel", settingsWindow.window.site, ctr( 400 ), ctr( 200 ), ctr( 500 ), ctr( 200 ) )
-
-    for k, v in pairs( colorS ) do
-      addSColorField( secondarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
+        for k, v in pairs( colorS ) do
+          addSColorField( secondarybg, v, ctr( 10 + (k-1)*60 ), ctr( 10 ) )
+        end
+      end
     end
   end)
 
@@ -314,6 +326,7 @@ end
 net.Receive( "setting_hasnoaccess", function( len )
   local ply = LocalPlayer()
   local site = net.ReadString()
+  local usergroups = net.ReadString()
 
-  F8RequireUG( lang_string( site ) )
+  F8RequireUG( lang_string( site ), usergroups )
 end)

@@ -278,6 +278,7 @@ function Player:DropBackpackStorage()
   end
 end
 
+util.AddNetworkString( "yrp_message" )
 function Player:PutInInventory( cname, noammo )
   printGM( "db", "Player:PutInInventory( " .. cname .. ", " .. tostring( noammo ) .. " )" )
   local ent = ents.Create( cname )
@@ -300,6 +301,9 @@ function Player:PutInInventory( cname, noammo )
       return true
     end
 
+    net.Start( "yrp_message" )
+      net.WriteString( "yourinventoryisfull" )
+    net.Send( self )
     self:DropSWEP( item.ClassName )
   end
 end

@@ -422,25 +422,29 @@ if CLIENT then
       function _item:LayoutEntity( Entity ) return end
 
       local _item2 = createD( "DPanel", _bg, ctr( ICON_SIZE*tab.sizew ), ctr( ICON_SIZE*tab.sizeh ), 0, 0 )
-      item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
-      item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber( tab.uniqueID )
-      local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
-      _i.item = tab
-      function _i:Paint( pw, ph )
-        --surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
-      end
-      function _i:PaintOver( pw, ph )
-        local _br = 2
-        surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
-        surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+      if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)] != nil then
+        if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)] != nil then
+          item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
+          item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber( tab.uniqueID )
+          local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
+          _i.item = tab
+          function _i:Paint( pw, ph )
+            --surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 240 ) )
+          end
+          function _i:PaintOver( pw, ph )
+            local _br = 2
+            surfaceBox( 0, 0, pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
+            surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), Color( 0, 0, 255, 255 ) )
 
-        surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
-        surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
-      end
-      _i:Droppable( "slot" )
-      _i:SetToolTip( "PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
+            surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+            surfaceBox( pw-ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( _br*2 ), Color( 0, 0, 255, 255 ) )
+          end
+          _i:Droppable( "slot" )
+          _i:SetToolTip( "PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh )
 
-      return _item
+          return _item
+        end
+      end
     end
   end
 

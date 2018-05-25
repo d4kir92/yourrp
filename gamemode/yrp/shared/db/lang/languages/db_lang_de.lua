@@ -18,7 +18,7 @@ function LangDE()
 	set_lang_string( "translated_by", "übersetzt von" )
 	set_lang_string( "translated_by_name", "D4KiR" )
 
-	DE_All()
+	DE_ALL()
 	DE_GENERAL()
 	DE_SETTINGS()
 	DE_SETTINGSUSERGROUPS()
