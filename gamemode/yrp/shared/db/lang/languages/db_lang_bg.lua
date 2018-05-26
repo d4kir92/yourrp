@@ -16,7 +16,7 @@ function LangBG()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "RobyVan" )
 
-	BG_All()
+	BG_ALL()
 end
 
 LangBG()

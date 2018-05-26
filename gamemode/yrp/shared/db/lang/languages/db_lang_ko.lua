@@ -16,7 +16,7 @@ function LangKO()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "플보" )
 
-	KO_All()
+	KO_ALL()
 end
 
 LangKO()

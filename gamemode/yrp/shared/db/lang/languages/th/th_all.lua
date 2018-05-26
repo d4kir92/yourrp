@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function TH_All()
+function TH_ALL()
   --ATM
   set_lang_string( "loading", "กำลังโหลด" )
   set_lang_string( "welcome", "ยินดีต้อนรับ" )

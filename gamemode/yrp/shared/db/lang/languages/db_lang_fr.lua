@@ -16,7 +16,7 @@ function LangFR()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "Nogitsu" )
 
-	FR_All()
+	FR_ALL()
 end
 
 LangFR()

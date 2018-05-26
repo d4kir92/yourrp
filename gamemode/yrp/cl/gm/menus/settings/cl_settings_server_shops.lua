@@ -193,7 +193,7 @@ net.Receive( "get_shop_items", function()
         end
 
         --[[ Price ]]--
-        _sh._sit.itemprice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 450 ) )
+        _sh._sit.itemprice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 750 ) )
         _sh._sit.itemprice:SetHeader( lang_string( "price" ) )
         _sh._sit.itemprice:INITPanel( "DNumberWang" )
         _sh._sit.itemprice.plus.tbl = tbl
@@ -212,7 +212,7 @@ net.Receive( "get_shop_items", function()
         end
 
         --[[ Quantity ]]--
-        _sh._sit.itemquan = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 600 ) )
+        _sh._sit.itemquan = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 900 ) )
         _sh._sit.itemquan:SetHeader( lang_string( "quantity" ) .. " (" .. lang_string( "wip" ) .. ")" )
         _sh._sit.itemquan:INITPanel( "DComboBox" )
         _sh._sit.itemquan.plus.tbl = tbl
@@ -237,7 +237,7 @@ net.Receive( "get_shop_items", function()
         end
 
         --[[ Cooldown ]]--
-        _sh._sit.itemcool = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 750 ) )
+        _sh._sit.itemcool = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1050 ) )
         _sh._sit.itemcool:SetHeader( lang_string( "cooldown" ) .. " (" .. lang_string( "wip" ) .. ")" )
         _sh._sit.itemcool:INITPanel( "DNumberWang" )
         _sh._sit.itemcool.plus.tbl = tbl
@@ -256,7 +256,7 @@ net.Receive( "get_shop_items", function()
         end
 
         --[[ License ]]--
-        _sh._sit.itemlice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 900 ) )
+        _sh._sit.itemlice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1200 ) )
         _sh._sit.itemlice:SetHeader( lang_string( "licenses" ) )
         _sh._sit.itemlice:INITPanel( "DComboBox" )
         _sh._sit.itemlice.plus.tbl = tbl
@@ -285,7 +285,7 @@ net.Receive( "get_shop_items", function()
         end
 
         --[[ Permanent ]]--
-        _sh._sit.itemperm = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1050 ) )
+        _sh._sit.itemperm = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1350 ) )
         _sh._sit.itemperm:SetHeader( lang_string( "permanent" ) .. " (" .. lang_string( "wip" ) .. ")" )
         _sh._sit.itemperm:INITPanel( "DCheckBox" )
         _sh._sit.itemperm.plus.tbl = tbl

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function ES_All()
+function ES_ALL()
   --ATM
   set_lang_string( "loading", "Cargando" )
   set_lang_string( "welcome", "Bienvenido" )

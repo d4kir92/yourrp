@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function KO_All()
+function KO_ALL()
   --ATM
   set_lang_string( "loading", "로딩" )
   set_lang_string( "welcome", "환영합니다" )

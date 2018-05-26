@@ -264,6 +264,7 @@ function Player:DropBackpackStorage()
               if wk( _items ) then
                 for i, item in pairs( _items ) do
                   local _item = ents.Create( item.ClassName )
+                  if item == NULL then return NULL end
                   _item:SetPos( self:GetPos() )
                   _item:Spawn()
 

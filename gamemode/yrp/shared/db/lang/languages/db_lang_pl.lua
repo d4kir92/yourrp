@@ -16,7 +16,7 @@ function LangPL()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "CallsignCubGambino" )
 
-	PL_All()
+	PL_ALL()
 end
 
 LangPL()

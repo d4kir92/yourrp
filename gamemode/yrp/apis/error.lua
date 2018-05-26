@@ -210,12 +210,53 @@ function update_error_table_cl()
   return {}
 end
 
+function isdbfull( str )
+	if CLIENT then
+		if string.find( str, "full" ) then
+			local FRAME = createD( "DFrame", nil, ctr( 1800 ), ctr( 300 ), 0, 0 )
+			FRAME:SetTitle( "" )
+			FRAME:Center()
+			FRAME:MakePopup()
+			function FRAME:Paint( pw, ph )
+				surfaceWindow( self, pw, ph, "INFO" )
+				surfaceText( "YOUR DATABASE IS FULL! (Your Disk)", "mat1header", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), 1, 1 )
+			end
+		end
+	end
+end
+
+function ismalformed( str )
+	if CLIENT then
+		if string.find( str, "database disk image is malformed" ) then
+			local FRAME = createD( "DFrame", nil, ctr( 1800 ), ctr( 300 ), 0, 0 )
+			FRAME:SetTitle( "" )
+			FRAME:Center()
+			FRAME:MakePopup()
+			function FRAME:Paint( pw, ph )
+				surfaceWindow( self, pw, ph, "INFO" )
+				surfaceText( "YOUR DATABASE IS MALFORMED, please join the Discord and tell the DEVs!", "mat1header", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), 1, 1 )
+			end
+
+			FRAME.discord = createD( "DButton", FRAME, ctr( 400 ), ctr( 50 ), ctr( 900-200 ), ctr( 200 ) )
+		  FRAME.discord:SetText( "" )
+		  function FRAME.discord:Paint( pw, ph )
+		    surfaceButton( self, pw, ph, "JOIN DISCORD" )
+		  end
+		  function FRAME.discord:DoClick()
+		    gui.OpenURL( "https://discord.gg/sEgNZxg" )
+		  end
+		end
+	end
+end
+
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
   local entry = {}
 	timer.Create( "wait_for_gamemode"..str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
+			isdbfull( str )
+			ismalformed( str )
 			entry["entry.956735581"] = string.upper( tostring( game.IsDedicated() ) )
 		  entry["entry.915525654"] = tostring( str )
 		  entry["entry.58745995"] = tostring( realm )

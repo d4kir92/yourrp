@@ -73,6 +73,7 @@ end
 
 function ItemToEntity( item, ply )
   local _ent = ents.Create( item.ClassName )
+  if _ent == NULL then return end
   _ent:SetModel( item.WorldModel )
   _ent:Spawn()
   if item.intern_storageID != "" then

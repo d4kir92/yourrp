@@ -18,7 +18,7 @@ function LangRU()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "DropSpawn3rFree and roni_sl" )
 
-	RU_All()
+	RU_ALL()
 	RU_GENERAL()
 	RU_SETTINGS()
 	RU_SETTINGSUSERGROUPS()

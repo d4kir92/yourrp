@@ -18,7 +18,7 @@ function LangPT_BR()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "NyanHeavy and Brayan" )
 
-	PT_BR_All()
+	PT_BR_ALL()
 	PT_BR_GENERAL()
 	PT_BR_SETTINGS()
 	PT_BR_SETTINGSUSERGROUPS()

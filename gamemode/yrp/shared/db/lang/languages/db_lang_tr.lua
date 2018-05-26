@@ -18,7 +18,7 @@ function LangTR()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "Kael" )
 
-	TR_All()
+	TR_ALL()
 	TR_GENERAL()
 	TR_SETTINGS()
 	TR_SETTINGSUSERGROUPS()

@@ -21,4 +21,6 @@ function PT_BR_SETTINGS()
   set_lang_string( "settings_groupsandroles", "Grupos e Cargos" )
   set_lang_string( "settings_players", "Players" )
   set_lang_string( "settings_yourusergrouphasnopermission", "O seu grupo de usuarios não tem permissão" )
+  set_lang_string( "settings_gotof8usergroups", "Pressione F8 para ir ao Grupo de usuarios" )
+  set_lang_string( "settings_giveyourselftheusergroup", "Para acessar essa pagina você precisa estar no grupo de usuarios: [1]" )
 end

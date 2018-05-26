@@ -18,7 +18,7 @@ function LangRO()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "5elesium" )
 
-	RO_All()
+	RO_ALL()
 	RO_GENERAL()
 	RO_SETTINGS()
 	RO_SETTINGSUSERGROUPS()

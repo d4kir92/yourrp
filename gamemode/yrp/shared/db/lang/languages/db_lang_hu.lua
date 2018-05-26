@@ -16,7 +16,7 @@ function LangHU()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "ZoliK" )
 
-	HU_All()
+	HU_ALL()
 end
 
 LangHU()

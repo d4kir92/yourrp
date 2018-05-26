@@ -160,7 +160,7 @@ function openStorage( ply, uid )
   --[[ Add World Storage ]]--
   if uid != nil then
     local _result = SQL_SELECT( _db_name, "*", "uniqueID = " .. uid )
-    if _result != nil then
+    if wk( _result ) then
       _result = _result[1]
       table.insert( _storages, _result )
     end

@@ -16,7 +16,7 @@ function LangES()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "azamio143" )
 
-	ES_All()
+	ES_ALL()
 end
 
 LangES()

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function UA_All()
+function UA_ALL()
   --ATM
   set_lang_string( "loading", "Завантаження" )
   set_lang_string( "welcome", "Ласкаво просимо" )

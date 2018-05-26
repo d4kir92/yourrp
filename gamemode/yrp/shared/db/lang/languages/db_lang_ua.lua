@@ -16,7 +16,7 @@ function LangUA()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "Mojito Tea" )
 
-	UA_All()
+	UA_ALL()
 end
 
 LangUA()

@@ -16,7 +16,7 @@ function LangSV()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "| Phoenix |" )
 
-	SV_All()
+	SV_ALL()
 end
 
 LangSV()

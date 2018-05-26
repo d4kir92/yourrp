@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function BG_All()
+function BG_ALL()
   --ATM
   set_lang_string( "loading", "Зареждане" )
   set_lang_string( "welcome", "Добре дошли" )

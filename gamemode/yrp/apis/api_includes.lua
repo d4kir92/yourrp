@@ -2,11 +2,11 @@
 
 print( "Loading api_includes.lua" )
 
-add_luas( "error.lua" )
 add_luas( "collect.lua" )
 add_luas( "output.lua" )
 add_luas( "math.lua" )
 add_luas( "sql.lua" )
+add_luas( "error.lua" )
 add_luas( "trace.lua" )
 add_luas( "vehicles.lua" )
 add_luas( "date.lua" )

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function SV_All()
+function SV_ALL()
   --ATM
   set_lang_string( "loading", "Loading" )
   set_lang_string( "welcome", "Welcome" )

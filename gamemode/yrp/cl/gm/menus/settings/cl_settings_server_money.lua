@@ -54,10 +54,7 @@ hook.Add( "open_server_money", "open_server_money", function()
   local h = settingsWindow.window.sitepanel:GetTall()
 
   settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-  if ply:HasAccess() then
-    net.Start( "getMoneyTab" )
-    net.SendToServer()
-  else
-    F8RequireUG( lang_string( "money" ), "superadmin or admin" )
-  end
+
+  net.Start( "getMoneyTab" )
+  net.SendToServer()  
 end)

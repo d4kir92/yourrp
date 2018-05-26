@@ -16,7 +16,7 @@ function LangTH()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "EagleGamingZ" )
 
-	TH_All()
+	TH_ALL()
 end
 
 LangTH()

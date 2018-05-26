@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function CS_All()
+function CS_ALL()
   --ATM
   set_lang_string( "loading", "Načítání" )
   set_lang_string( "welcome", "Vítejte" )

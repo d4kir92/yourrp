@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function HU_All()
+function HU_ALL()
   --ATM
   set_lang_string( "loading", "Betöltés" )
   set_lang_string( "welcome", "Üdvözöljük" )

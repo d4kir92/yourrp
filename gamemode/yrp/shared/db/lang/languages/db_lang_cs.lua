@@ -16,7 +16,7 @@ function LangCS()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "ph0enix_z" )
 
-	CS_All()
+	CS_ALL()
 end
 
 LangCS()

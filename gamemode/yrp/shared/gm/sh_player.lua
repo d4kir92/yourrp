@@ -342,7 +342,7 @@ if SERVER then
   end
 
   function Player:addMoney( money )
-    if isnumber( money ) then
+    if isnumber( money ) and self:GetNWString( "money" ) != nil then
       self:SetNWString( "money", tonumber( self:GetNWString( "money" ) ) + math.Round( money, 2 ) )
       self:UpdateMoney()
     end

@@ -16,7 +16,7 @@ function LangIT()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "Frost and Mew Bird" )
 
-	IT_All()
+	IT_ALL()
 end
 
 LangIT()

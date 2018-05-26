@@ -34,6 +34,11 @@ function get_all_vehicles()
     table.insert( _getVehicles, v )
   end
 
+  local _halovehicles = get_vehicles_custom( "HaloVehicles", "halo" )
+	for k, v in pairs( _halovehicles ) do
+    table.insert( _getVehicles, v )
+  end
+
   local vehicles = {}
   local count = 0
   for k, v in pairs( _getVehicles ) do

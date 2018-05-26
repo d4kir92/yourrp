@@ -16,7 +16,7 @@ function LangCA()
 	set_lang_string( "translated_by", "translated by" )
 	set_lang_string( "translated_by_name", "azamio143" )
 
-	CA_All()
+	CA_ALL()
 end
 
 LangCA()

@@ -243,8 +243,6 @@ LocalPlayer():SetNWInt( "view_z", 0 )
 LocalPlayer():SetNWInt( "view_x", 0 )
 LocalPlayer():SetNWInt( "view_s", 0 )
 
-LocalPlayer():SetNWInt( "view_freelook", 0 )
-
 local _view_delay = true
 function KeyPress()
 	local ply = LocalPlayer()
@@ -416,11 +414,6 @@ local _savePos = Vector( 0, 0, 0 )
 _lookAtEnt = nil
 _drawViewmodel = false
 
-local m = {}
-m.x = 0
-m.y = 0
-m.freelook = false
-
 local function yrpCalcView( ply, pos, angles, fov )
 	if ply:Alive() and !ply:IsPlayingTaunt() then
 		local weapon = ply:GetActiveWeapon()
@@ -429,30 +422,6 @@ local function yrpCalcView( ply, pos, angles, fov )
 				local _weaponName = string.lower( tostring( ply:GetActiveWeapon():GetClass() ) )
 				if !string.find( _weaponName, "lightsaber", 0, false ) and !ply:GetNWBool( "istaunting", false ) then
 					local view = {}
-
-          if input.IsKeyDown( get_keybind( "view_freelook" ) ) then
-            if !m.freelook then
-              m.freelook = true
-              gui.EnableScreenClicker( true )
-              gui.SetMousePos( 360 + ply:EyeAngles().p, 360 + ply:EyeAngles().y )
-            end
-
-            local my = 0
-            local my = 0
-            mx, my = gui.MousePos()
-            mx = mx - 360
-            my = my - 360
-
-            m.x = mx%360
-            m.y = my%360
-
-            gui.SetMousePos( 360 + m.x, 360 + m.y )
-
-            angles = Angle( m.y, m.x, 0 )
-          elseif m.freelook then
-            m.freelook = false
-            gui.EnableScreenClicker( false )
-          end
 
 					if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() then
 						if ply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
