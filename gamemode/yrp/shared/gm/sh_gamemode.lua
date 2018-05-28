@@ -15,7 +15,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.96" --do NOT change this!
+GM.Version = "0.9.97" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -203,13 +203,15 @@ if SERVER then
 	end
 
 	hook.Add( "Tick", "KeyDown_Test", function()
-		if IsWeaponLoweringEnabled() then
-			for k, ply in pairs( player.GetAll() ) do
-				local _weapon = ply:GetActiveWeapon()
-				if ea( _weapon ) then
-					if _weapon:IsScripted() then
-						if ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) then
-							lowering_weapon( ply )
+		if SERVER then
+			if IsWeaponLoweringEnabled() then
+				for k, ply in pairs( player.GetAll() ) do
+					local _weapon = ply:GetActiveWeapon()
+					if ea( _weapon ) then
+						if _weapon:IsScripted() then
+							if ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) then
+								lowering_weapon( ply )
+							end
 						end
 					end
 				end

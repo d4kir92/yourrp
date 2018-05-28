@@ -87,6 +87,7 @@ AddCSLuaFile( "languages/db_lang_ua.lua" )
 AddCSLuaFile( "languages/db_lang_ko.lua" )
 AddCSLuaFile( "languages/db_lang_hu.lua" )
 AddCSLuaFile( "languages/db_lang_cs.lua" )
+AddCSLuaFile( "languages/db_lang_lt.lua" )
 
 include( "languages/db_lang_en.lua" )
 include( "languages/db_lang_de.lua" )
@@ -106,6 +107,7 @@ include( "languages/db_lang_ua.lua" )
 include( "languages/db_lang_ko.lua" )
 include( "languages/db_lang_hu.lua" )
 include( "languages/db_lang_cs.lua" )
+include( "languages/db_lang_lt.lua" )
 
 function check_languagepack()
 	for k, v in pairs( yrp_all_lang ) do
@@ -176,6 +178,8 @@ function change_language( index )
 					LangHU()
 				elseif _net_lang == "cs" then
 					LangCS()
+				elseif _net_lang == "lt" then
+					LangLT()
 				end
       else
         LangEN()
@@ -224,6 +228,8 @@ function change_language( index )
 			LangHU()
 		elseif index == "cs" then
 			LangCS()
+		elseif index == "lt" then
+			LangLT()
 		else
       printGM( "error", "LANG_E0001" )
       return

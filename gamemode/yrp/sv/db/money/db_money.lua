@@ -6,7 +6,7 @@
 local _db_name = "yrp_money"
 
 SQL_ADD_COLUMN( _db_name, "moneypre", "TEXT DEFAULT '$'" )
-SQL_ADD_COLUMN( _db_name, "moneypos", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "moneypos", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "moneystart", "TEXT DEFAULT '1000'" )
 
 if SQL_SELECT( _db_name, "*", "uniqueID = 1" ) == nil then

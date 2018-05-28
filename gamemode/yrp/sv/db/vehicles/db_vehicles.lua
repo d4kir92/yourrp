@@ -10,9 +10,9 @@ util.AddNetworkString( "getVehicleInfo" )
 local _db_name = "yrp_vehicles"
 SQL_ADD_COLUMN( _db_name, "keynr", "TEXT DEFAULT '-1'" )
 SQL_ADD_COLUMN( _db_name, "price", "TEXT DEFAULT 100" )
-SQL_ADD_COLUMN( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "item_id", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "ownerCharID", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "item_id", "TEXT DEFAULT ' '" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )

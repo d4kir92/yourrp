@@ -5,8 +5,8 @@
 
 local _db_name = "yrp_jail"
 
-SQL_ADD_COLUMN( _db_name, "SteamID", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "nick", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "SteamID", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "nick", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "reason", "TEXT DEFAULT '-'" )
 SQL_ADD_COLUMN( _db_name, "time", "INT DEFAULT 1" )
 

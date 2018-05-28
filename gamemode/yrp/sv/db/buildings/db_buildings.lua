@@ -14,7 +14,7 @@ SQL_ADD_COLUMN( _db_name, "keynr", "INTEGER DEFAULT -1" )
 _db_name = "yrp_" .. GetMapNameDB() .. "_buildings"
 SQL_ADD_COLUMN( _db_name, "groupID", "INTEGER DEFAULT -1" )
 SQL_ADD_COLUMN( _db_name, "buildingprice", "TEXT DEFAULT 100" )
-SQL_ADD_COLUMN( _db_name, "ownerCharID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "ownerCharID", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'Building'" )
 
 --db_drop_table( _db_name )

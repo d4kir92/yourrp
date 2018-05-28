@@ -21,11 +21,11 @@ SQL_ADD_COLUMN( _db_name, "bg5", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "bg6", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "bg7", "INT DEFAULT 0" )
 
-SQL_ADD_COLUMN( _db_name, "storage", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "storage", "TEXT DEFAULT ' '" )
 
-SQL_ADD_COLUMN( _db_name, "keynrs", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "keynrs", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "rpname", "TEXT DEFAULT 'ID_RPNAME'" )
-SQL_ADD_COLUMN( _db_name, "rpdescription", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "rpdescription", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "gender", "TEXT DEFAULT 'gendermale'" )
 SQL_ADD_COLUMN( _db_name, "money", "TEXT DEFAULT '250'" )
 SQL_ADD_COLUMN( _db_name, "moneybank", "TEXT DEFAULT '500'" )
@@ -34,17 +34,17 @@ SQL_ADD_COLUMN( _db_name, "angle", "TEXT" )
 SQL_ADD_COLUMN( _db_name, "map", "TEXT" )
 
 --[[ EQUIPMENT ]]--
-SQL_ADD_COLUMN( _db_name, "eqbp", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqbag1", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqbag2", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqbag3", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqbag4", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqbp", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqbag1", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqbag2", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqbag3", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqbag4", "TEXT DEFAULT ' '" )
 
-SQL_ADD_COLUMN( _db_name, "eqwpp1", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqwpp2", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqwps1", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqwps2", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "eqwpg", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "eqwpp1", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqwpp2", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqwps1", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqwps2", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "eqwpg", "TEXT DEFAULT ' '" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
@@ -403,7 +403,7 @@ function send_characters( ply )
         _charCount = _charCount + 1
         netTable[_charCount] = {}
         netTable[_charCount].char = v
-        
+
         netTable[_charCount].role = {}
         netTable[_charCount].group = {}
 
@@ -519,16 +519,20 @@ util.AddNetworkString( "get_menu_bodygroups" )
 net.Receive( "get_menu_bodygroups", function( len, ply )
   local _charid = ply:CharID()
   local _result = SQL_SELECT( "yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber( _charid ) )
-  _result = _result[1]
-  local _role = ply:GetRolTab()
-  _result.playermodels = _role.playermodels
-  _result.playermodelsnone = _role.playermodelsnone
-  if _result.playermodels == "" and _result.playermodelsnone == "" then
-    -- nothing
+  if wk( _result ) then
+    _result = _result[1]
+    local _role = ply:GetRolTab()
+    _result.playermodels = _role.playermodels
+    _result.playermodelsnone = _role.playermodelsnone
+    if _result.playermodels == "" and _result.playermodelsnone == "" then
+      -- nothing
+    else
+      net.Start( "get_menu_bodygroups" )
+        net.WriteTable( _result )
+      net.Send( ply )
+    end
   else
-    net.Start( "get_menu_bodygroups" )
-      net.WriteTable( _result )
-    net.Send( ply )
+    printGM( "note", "get_menu_bodygroups failed!" )
   end
 end)
 

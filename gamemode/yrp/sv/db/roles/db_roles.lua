@@ -5,16 +5,16 @@
 
 local _db_name = "yrp_roles"
 
-SQL_ADD_COLUMN( _db_name, "roleID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "roleID", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "description", "TEXT DEFAULT '-'" )
-SQL_ADD_COLUMN( _db_name, "playermodels", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "playermodelsnone", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "playermodels", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "playermodelsnone", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "playermodelsize", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "salary", "INTEGER DEFAULT 50" )
 SQL_ADD_COLUMN( _db_name, "groupID", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "color", "TEXT DEFAULT '0,0,0'" )
-SQL_ADD_COLUMN( _db_name, "sweps", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "ammunation", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "sweps", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "ammunation", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "voteable", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "adminonly", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "whitelist", "INTEGER DEFAULT 0" )
@@ -48,7 +48,7 @@ SQL_ADD_COLUMN( _db_name, "voiceglobal", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "canbeagent", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "iscivil", "INTEGER DEFAULT 0" )
 
-SQL_ADD_COLUMN( _db_name, "licenseIDs", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "licenseIDs", "TEXT DEFAULT ' '" )
 
 SQL_UPDATE( _db_name, "uses = 0", nil )
 

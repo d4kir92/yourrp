@@ -5,11 +5,11 @@
 
 local _db_name = "yrp_" .. GetMapNameDB()
 
-SQL_ADD_COLUMN( _db_name, "position", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "angle", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "linkID", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "position", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "angle", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "linkID", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT ' '" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )

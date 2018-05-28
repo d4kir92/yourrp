@@ -231,6 +231,8 @@ function SQL_QUERY( query )
       return _result
     elseif _result == false then
       printGM( "db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query )
+      sql.Query( "REINDEX nodes;" )
+      sql.Query( "REINDEX pristine;" )
       return _result
     else
       --printGM( "db", "ELSE" )
@@ -571,7 +573,7 @@ if SERVER then
   end
 
   local _sql_settings = sql.Query( "SELECT * FROM yrp_sql" )
-  if _sql_settings != nil then
+  if wk( _sql_settings ) then
     _sql_settings = _sql_settings[1]
     SetSQLMode( tonumber( _sql_settings.mode ) )
     YRPSQL.schema = _sql_settings.database

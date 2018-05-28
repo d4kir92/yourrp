@@ -5,9 +5,9 @@
 
 local _db_name = "yrp_interface"
 
-SQL_ADD_COLUMN( _db_name, "color", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "style", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "design", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "color", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "style", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "design", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "rounded", "INT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "transparent", "INT DEFAULT '1'" )
 SQL_ADD_COLUMN( _db_name, "border", "INT DEFAULT '0'" )

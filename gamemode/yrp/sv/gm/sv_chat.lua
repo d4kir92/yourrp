@@ -166,9 +166,14 @@ function set_money( sender, text )
     local _money = tonumber( _table[3] )
     if isnumber( _money ) then
       local ply = get_player_by_name( _name )
-      ply:SetMoney( _money )
-      printGM( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money )
-      return ""
+      if ply != NULL then
+        ply:SetMoney( _money )
+        printGM( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money )
+        return ""
+      else
+        printGM( "note", "[set_money] Name: " .. tostring( _name ) .. " not found!" )
+        return ""
+      end
     end
     sender:ChatPrint( "Command-FAILED" )
   else

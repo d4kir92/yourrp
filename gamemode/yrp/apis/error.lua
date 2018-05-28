@@ -226,8 +226,8 @@ function isdbfull( str )
 end
 
 function ismalformed( str )
-	if CLIENT then
-		if string.find( str, "database disk image is malformed" ) then
+	if string.find( str, "database disk image is malformed" ) then
+		if CLIENT then
 			local FRAME = createD( "DFrame", nil, ctr( 1800 ), ctr( 300 ), 0, 0 )
 			FRAME:SetTitle( "" )
 			FRAME:Center()

@@ -6,16 +6,16 @@
 local _db_name = "yrp_items"
 
 --[[ ITEM ]]--
-SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "PrintName", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "WorldModel", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "PrintName", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "WorldModel", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "storageID", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "posx", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "posy", "TEXT DEFAULT '0'" )
 SQL_ADD_COLUMN( _db_name, "sizew", "TEXT DEFAULT '1'" )
 SQL_ADD_COLUMN( _db_name, "sizeh", "TEXT DEFAULT '1'" )
 SQL_ADD_COLUMN( _db_name, "type", "TEXT DEFAULT 'entity'" )
-SQL_ADD_COLUMN( _db_name, "intern_storageID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "intern_storageID", "TEXT DEFAULT ' '" )
 
 --db_drop_table( _db_name )
 

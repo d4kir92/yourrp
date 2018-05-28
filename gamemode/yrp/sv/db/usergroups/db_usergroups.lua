@@ -10,8 +10,8 @@ SQL_ADD_COLUMN( DATABASE_NAME, "removeable", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed UserGroup'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "color", "TEXT DEFAULT '0,0,0,255'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'" )
-SQL_ADD_COLUMN( DATABASE_NAME, "sweps", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( DATABASE_NAME, "sents", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "sweps", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "sents", "TEXT DEFAULT ' '" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "adminaccess", "INT DEFAULT 0" )
 
@@ -97,6 +97,7 @@ end)
 
 util.AddNetworkString( "Connect_Settings_UserGroups" )
 net.Receive( "Connect_Settings_UserGroups", function( len, ply )
+  printGM( "gm", "Connect_Settings_UserGroups => " .. ply:YRPName() )
   if ply:CanAccess( "usergroups" ) then
     AddToHandler_UserGroups( ply )
     local _usergroups = {}
@@ -199,8 +200,16 @@ end)
 
 local Player = FindMetaTable( "Player" )
 
+function Player:NoAccess( site, usergroups )
+  net.Start( "setting_hasnoaccess" )
+    net.WriteString( site )
+    net.WriteString( usergroups or "yrp_usergroups" )
+  net.Send( self )
+end
+
 util.AddNetworkString( "setting_hasnoaccess" )
 function Player:CanAccess( site )
+  printGM( "note", "CanAccess( " .. site .. " )" )
   local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
   local _ugs = SQL_SELECT( DATABASE_NAME, "name", "usergroups = '1'" )
   if wk( _b ) then
@@ -214,13 +223,12 @@ function Player:CanAccess( site )
       end
     end
     if !_b then
-      net.Start( "setting_hasnoaccess" )
-        net.WriteString( site )
-        net.WriteString( usergroups )
-      net.Send( self )
+      self:NoAccess( site, usergroups )
     end
     return tobool( _b )
   end
+  self:NoAccess( site )
+
   return false
 end
 

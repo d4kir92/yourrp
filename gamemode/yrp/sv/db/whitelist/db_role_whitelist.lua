@@ -5,8 +5,8 @@
 
 local _db_name = "yrp_role_whitelist"
 
-SQL_ADD_COLUMN( _db_name, "SteamID", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( _db_name, "nick", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "SteamID", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( _db_name, "nick", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "groupID", "INTEGER DEFAULT -1" )
 SQL_ADD_COLUMN( _db_name, "roleID", "INTEGER DEFAULT -1" )
 

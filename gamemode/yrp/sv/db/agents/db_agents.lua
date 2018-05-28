@@ -7,7 +7,7 @@ local _db_name = "yrp_agents"
 SQL_ADD_COLUMN( _db_name, "target", "TEXT DEFAULT 'No Target'" )
 SQL_ADD_COLUMN( _db_name, "reward", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "description", "TEXT DEFAULT 'NO DESCRIPTION'" )
-SQL_ADD_COLUMN( _db_name, "contract_SteamID", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( _db_name, "contract_SteamID", "TEXT DEFAULT ' '" )
 
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )

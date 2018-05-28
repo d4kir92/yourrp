@@ -347,11 +347,16 @@ function ServerCollection()
 end
 
 function IsDropItemsOnDeathEnabled()
-  return tobool( yrp_general.toggle_dropitemsondeath or false )
+  return tobool( yrp_general.toggle_dropitemsondeath ) or false
 end
 
 function IsWeaponLoweringEnabled()
-  return tobool( yrp_general.toggle_weapon_lowering or false )
+  if yrp_general != nil then
+    if yrp_general.toggle_weapon_lowering != nil then
+      return tobool( yrp_general.toggle_weapon_lowering )
+    end
+  end
+  return false
 end
 
 function IsDealerImmortal()
