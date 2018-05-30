@@ -3,11 +3,13 @@
 AddCSLuaFile( "lt/lt_all.lua" )
 AddCSLuaFile( "lt/lt_general.lua" )
 AddCSLuaFile( "lt/lt_settings.lua" )
+AddCSLuaFile( "lt/lt_settingsfeedback.lua" )
 AddCSLuaFile( "lt/lt_settingsusergroups.lua" )
 
 include( "lt/lt_all.lua" )
 include( "lt/lt_general.lua" )
 include( "lt/lt_settings.lua" )
+include( "lt/lt_settingsfeedback.lua" )
 include( "lt/lt_settingsusergroups.lua" )
 
 function LangLT()
@@ -21,6 +23,7 @@ function LangLT()
 	LT_ALL()
 	LT_GENERAL()
 	LT_SETTINGS()
+	LT_SETTINGSFEEDBACK()
 	LT_SETTINGSUSERGROUPS()
 end
 

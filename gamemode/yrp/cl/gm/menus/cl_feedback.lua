@@ -92,6 +92,7 @@ function openFeedbackMenu()
       _net_table.feedback = _fb.feedbackT:GetText() or "FAILED"
       _net_table.contact = _fb.contactT:GetText() or "FAILED"
       _net_table.steamid = LocalPlayer():SteamID() or "FAILED"
+      _net_table.steamname = LocalPlayer():SteamName() or "FAILED"
       net.Start( "add_feedback" )
         net.WriteTable( _net_table )
       net.SendToServer()

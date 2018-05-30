@@ -21,4 +21,6 @@ function RO_SETTINGS()
   set_lang_string( "settings_groupsandroles", "Grupe și roluri" )
   set_lang_string( "settings_players", "Jucători" )
   set_lang_string( "settings_yourusergrouphasnopermission", "Grupul tău de utilizatori nu are permisiune" )
+  set_lang_string( "settings_gotof8usergroups", "Du-te la F8 Grupuri de utilizatori" )
+  set_lang_string( "settings_giveyourselftheusergroup", "Pentru a acesa această pagină trebuie să îți dai unul dintre aceste Grupe de Utilizatori: [1]" )
 end

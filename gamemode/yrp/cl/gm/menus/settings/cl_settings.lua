@@ -140,10 +140,11 @@ function openSettings()
   settingsWindow.window:AddSite( "open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png" )
   settingsWindow.window:AddSite( "open_server_map", "settings_map", _server_admin, "icon16/map.png" )
   settingsWindow.window:AddSite( "open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png" )
-  settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server_admin, "icon16/page_lightning.png" )
   settingsWindow.window:AddSite( "open_server_general_old", "settings_general", _server_admin, "icon16/server_database.png" )
 
   settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _server_admin, "icon16/group_go.png" )
+
+  settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server_admin, "icon16/page_lightning.png" )
 
   settingsWindow.window:AddCategory( "yourrp" )
   settingsWindow.window:AddSite( "open_yourp_workshop", "workshop", "yourrp", "icon16/layout_content.png" )

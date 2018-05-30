@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function LT_SETTINGS()
-  set_lang_string( "settings", "Settings" )
-  set_lang_string( "settings_client", "Client" )
+  set_lang_string( "settings", "Nustatymai" )
+  set_lang_string( "settings_client", "Klientas" )
   set_lang_string( "settings_character", "Charakteris" )
   set_lang_string( "settings_hud", "HUD" )
   set_lang_string( "settings_keybinds", "Mygtukai" )

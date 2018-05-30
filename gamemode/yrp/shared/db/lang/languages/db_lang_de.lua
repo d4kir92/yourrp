@@ -3,11 +3,13 @@
 AddCSLuaFile( "de/de_all.lua" )
 AddCSLuaFile( "de/de_general.lua" )
 AddCSLuaFile( "de/de_settings.lua" )
+AddCSLuaFile( "de/de_settingsfeedback.lua" )
 AddCSLuaFile( "de/de_settingsusergroups.lua" )
 
 include( "de/de_all.lua" )
 include( "de/de_general.lua" )
 include( "de/de_settings.lua" )
+include( "de/de_settingsfeedback.lua" )
 include( "de/de_settingsusergroups.lua" )
 
 function LangDE()
@@ -21,6 +23,7 @@ function LangDE()
 	DE_ALL()
 	DE_GENERAL()
 	DE_SETTINGS()
+	DE_SETTINGSFEEDBACK()
 	DE_SETTINGSUSERGROUPS()
 end
 

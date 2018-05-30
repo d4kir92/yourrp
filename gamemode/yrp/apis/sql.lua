@@ -239,29 +239,33 @@ function SQL_QUERY( query )
       return _result
     end
   elseif YRPSQL.mode == 1 then
-    local que = YRPSQL.db:query( query )
-    que.onError = function( q, e )
-      if string.find( e, "Unknown column" ) == nil and string.find( e, "doesn't exist" ) == nil then
-        printGM( "error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring( e ) )
-        printGM( "error", GetSQLModeName() .. ": " .. tostring( query ) )
-        q:error()
+    if YRPSQL.db != nil then
+      local que = YRPSQL.db:query( query )
+      que.onError = function( q, e )
+        if string.find( e, "Unknown column" ) == nil and string.find( e, "doesn't exist" ) == nil then
+          printGM( "error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring( e ) )
+          printGM( "error", GetSQLModeName() .. ": " .. tostring( query ) )
+          q:error()
+        end
       end
-    end
-    que:start()
-    que:wait( true )
-    local _test = que:getData()
-    if istable( _test ) then
-      if #_test == 0 then
-        --printGM( "db", "SQL_QUERY TABLE EMPTY 1" )
-        return nil
+      que:start()
+      que:wait( true )
+      local _test = que:getData()
+      if istable( _test ) then
+        if #_test == 0 then
+          --printGM( "db", "SQL_QUERY TABLE EMPTY 1" )
+          return nil
+        end
+        return _test
+      elseif _test == nil then
+        --printGM( "db", "SQL_QUERY TABLE EMPTY 2" )
+        return false
+      else
+        printGM( "db", "SQL_QUERY TABLE MISSING (" .. tostring( _test ) .. ")" )
+        return false
       end
-      return _test
-    elseif _test == nil then
-      --printGM( "db", "SQL_QUERY TABLE EMPTY 2" )
-      return false
     else
-      printGM( "db", "SQL_QUERY TABLE MISSING (" .. tostring( _test ) .. ")" )
-      return false
+      printGM( "db", "CURRENTLY NOT CONNECTED TO MYSQL SERVER" )
     end
   end
 end

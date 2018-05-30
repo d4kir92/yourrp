@@ -159,11 +159,15 @@ end
 util.AddNetworkString( "sendNotify" )
 function DarkRP.notify( ply, msgType, time, message )
   --Description: Log a message in DarkRP
-  printGM( "darkrp", "notify( ply, msgType, time, " .. message .. " )" )
+  printGM( "darkrp", "notify( ply, msgType, time, " .. tostring( message ) .. " )" )
 
-  net.Start( "sendNotify" )
-    net.WriteString( message )
-  net.Send( ply )
+  if wk( message ) then
+    net.Start( "sendNotify" )
+      net.WriteString( message )
+    net.Send( ply )
+  else
+    printGM( "gm", "[DarkRP.notify] message is NIL" )
+  end
 end
 
 function DarkRP.notifyAll( msgType, time, message)

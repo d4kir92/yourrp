@@ -3,11 +3,13 @@
 AddCSLuaFile( "ru/ru_all.lua" )
 AddCSLuaFile( "ru/ru_general.lua" )
 AddCSLuaFile( "ru/ru_settings.lua" )
+AddCSLuaFile( "ru/ru_settingsfeedback.lua" )
 AddCSLuaFile( "ru/ru_settingsusergroups.lua" )
 
 include( "ru/ru_all.lua" )
 include( "ru/ru_general.lua" )
 include( "ru/ru_settings.lua" )
+include( "ru/ru_settingsfeedback.lua" )
 include( "ru/ru_settingsusergroups.lua" )
 
 function LangRU()
@@ -21,6 +23,7 @@ function LangRU()
 	RU_ALL()
 	RU_GENERAL()
 	RU_SETTINGS()
+	RU_SETTINGSFEEDBACK()
 	RU_SETTINGSUSERGROUPS()
 end
 

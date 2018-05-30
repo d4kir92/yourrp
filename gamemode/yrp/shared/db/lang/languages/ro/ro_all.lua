@@ -695,4 +695,5 @@ function RO_ALL()
   set_lang_string( "requiresserverrestart", "Cere resetarea serverului" )
   set_lang_string( "requireschangelevel", "Cere schimbarea nivelului" )
   set_lang_string( "collectionid", "ID-ul colecției" )
+  set_lang_string( "yourinventoryisfull", "Inventarul tău e plin" )
 end
