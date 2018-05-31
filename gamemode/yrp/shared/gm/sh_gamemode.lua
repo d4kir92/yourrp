@@ -15,7 +15,7 @@ GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.98" --do NOT change this!
+GM.Version = "0.9.99" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -221,102 +221,6 @@ if SERVER then
 
 	net.Receive( "yrp_weaponlowering", function( len, ply )
 	  lowering_weapon( ply )
-	end)
-end
-
-local _version_online = {}
-function YRPOnlineVersion()
-	return _version_online
-end
-
-function YRPCheckVersion()
-	http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
-	function( body, len, headers, code )
-		local StartPos = string.find( body, "#", 1, false )
-		local EndPos = string.find( body, "*", 1, false )
-		local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
-		_version_online = string.Explode( ".", versionOnline )
-
-		if CLIENT then
-			_version_client = string.Explode( ".", GAMEMODE.Version )
-			if #_version_client == #_version_online then
-				for k, v in pairs( _version_client ) do
-					if tonumber( _version_client[k] ) < tonumber( _version_online[k] ) then
-						_cl_outdated = true
-					elseif tonumber( _version_client[k] ) > tonumber( _version_online[k] ) then
-						_cl_outdated = false
-						ChangeChannel( "canary" )
-					elseif tonumber( _version_client[k] ) == tonumber( _version_online[k] ) then
-						_cl_outdated = false
-					end
-				end
-			else
-				printGM( "error", "VERSION CHECK ERROR CL" )
-			end
-			return _cl_outdated
-		end
-		if SERVER then
-			_version_server = string.Explode( ".", GAMEMODE.Version )
-			if #_version_server == #_version_online then
-				for k, v in pairs( _version_server ) do
-					if tonumber( _version_server[k] ) < tonumber( _version_online[k] ) then
-						_sv_outdated = true
-					elseif tonumber( _version_server[k] ) > tonumber( _version_online[k] ) then
-						_sv_outdated = false
-						ChangeChannel( "canary" )
-					elseif tonumber( _version_server[k] ) == tonumber( _version_online[k] ) then
-						_sv_outdated = false
-					end
-				end
-			else
-				printGM( "error", "VERSION CHECK ERROR SV" )
-			end
-			return _sv_outdated
-		end
-	end,
-		function( error )
-			--
-		end
-	)
-end
-YRPCheckVersion()
-
-local _sv_outdated = false
-local _cl_outdated = false
-local _version_client = {}
-local _version_server = {}
-
-function YRPVersion()
-	if SERVER then
-		return _version_server
-	elseif CLIENT then
-		return _version_client
-	end
-end
-
-function IsYRPOutdated()
-	if CLIENT then
-		return _cl_outdated
-	elseif SERVER then
-		return _sv_outdated
-	end
-end
-
-if SERVER then
-	util.AddNetworkString( "getServerVersion" )
-	net.Receive( "getServerVersion", function( len, ply )
-		net.Start( "getServerVersion" )
-			net.WriteString( GAMEMODE.Version )
-			net.WriteBool( game.IsDedicated() )
-		net.Send( ply )
-	end)
-
-  util.AddNetworkString( "getGamemodename" )
-	timer.Simple( 4, function()
-	  local tmp = SQL_SELECT( "yrp_general", "name_gamemode", nil )
-		if tmp != false and tmp != nil then
-		  GAMEMODE.BaseName = SQL_STR_OUT( tmp[1].name_gamemode )
-		end
 	end)
 end
 

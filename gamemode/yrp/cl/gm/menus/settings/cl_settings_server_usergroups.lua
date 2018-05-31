@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+local ply = LocalPlayer()
+
 local UGS = UGS or {}
 
 local CURRENT_USERGROUP = nil
@@ -105,9 +107,14 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   end
 
   SWEPS.preview = createD( "DModelPanel", SWEPS, ctr( 500 ), ctr( 500 ), ctr( 0 ), ctr( 50 ) )
-  SWEPS.preview:SetModel( GetSWEPWorldModel( ug.sweps[1] ) )
-  SWEPS.preview.cur = 1
-  SWEPS.preview.max = #ug.sweps
+  if ug.sweps[1] != "" then
+    SWEPS.preview:SetModel( GetSWEPWorldModel( ug.sweps[1] ) )
+    SWEPS.preview.cur = 1
+    SWEPS.preview.max = #ug.sweps
+  else
+    SWEPS.preview.cur = 0
+    SWEPS.preview.max = 0
+  end
   SWEPS.preview:SetLookAt( Vector( 0, 0, 10 ) )
   SWEPS.preview:SetCamPos( Vector( 0, 0, 10 ) - Vector( -40, -20, -20 ) )
   SWEPS.preview:SetAnimated( true )
@@ -184,11 +191,15 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   net.Receive( "usergroup_update_sweps", function( len )
     local sweps = net.ReadString()
     UGS[CURRENT_USERGROUP].sweps = string.Explode( ",", sweps )
-
-    SWEPS.preview.cur = 1
-    SWEPS.preview.max = #UGS[CURRENT_USERGROUP].sweps
-
-    SWEPS.preview:SetModel( GetSWEPWorldModel( UGS[CURRENT_USERGROUP].sweps[1] or "" ) )
+    if UGS[CURRENT_USERGROUP].sweps[1] != "" then
+      SWEPS.preview.cur = 1
+      SWEPS.preview.max = #UGS[CURRENT_USERGROUP].sweps
+      SWEPS.preview:SetModel( GetSWEPWorldModel( UGS[CURRENT_USERGROUP].sweps[1] or "" ) )
+    else
+      SWEPS.preview.cur = 0
+      SWEPS.preview.max = 0
+      SWEPS.preview:SetModel( "" )
+    end
   end)
 
   -- ENTITIES
@@ -207,13 +218,15 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   ENTITIES.plus:EnableVerticalScrollbar( true )
 
   function AddSENT( amount, cname )
-    if amount != "" and cname != "" then
+    if amount != nil and cname != nil then
+      cname = tostring( cname )
+      amount = tonumber( amount )
       if ug.dsents[cname] == nil then
         ug.dsents[cname] = createD( "DButton", ENTITIES.plus, ENTITIES.plus:GetWide(), ctr( 100 ), 0, 0 )
         local SENT = ug.dsents[cname]
         SENT:SetText( "" )
         SENT.cname = cname
-        SENT.amount = tonumber( amount )
+        SENT.amount = amount
         function SENT:Paint( pw, ph )
           surfaceButton( self, pw, ph, "[" .. self.amount .. "x] " .. self.cname, nil, ctr( 50 + 10 + 10 ), ph/2, 0, 1 )
           if self.cname == ug.cur_sent then
@@ -276,8 +289,10 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   end
 
   for i, sent in pairs( ug.sents ) do
-    sent = string.Explode( ",", sent )
-    AddSENT( sent[1], sent[2] )
+    if sent != "" then
+      sent = string.Explode( ",", sent )
+      AddSENT( sent[1], sent[2] )
+    end
   end
 
   ENTITIES.add = createD( "DButton", PARENT, ctr( 250 ), ctr( 50 ), ctr( 20 ), ctr( 20 + 100 + 20 + 100 + 20 + 100 + 20 + 600 + 20 + 550 ) )
@@ -288,7 +303,6 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   function ENTITIES.add:DoClick()
     OpenSingleSelector( GetSENTsList(), "selector_usergroup_sents" )
     hook.Add( "selector_usergroup_sents", "selector_usergroup_sents", function()
-      local ply = LocalPlayer()
       local sent = ply:GetNWString( "ClassName", "" )
 
       net.Start( "usergroup_add_sent" )
@@ -517,7 +531,6 @@ net.Receive( "Connect_Settings_UserGroups", function( len )
 
       CURRENT_USERGROUP = nil
 
-      local ply = LocalPlayer()
       local ugs = net.ReadTable()
 
       local PARENT = settingsWindow.window.site
@@ -580,7 +593,6 @@ end)
 
 hook.Add( "open_server_usergroups", "open_server_usergroups", function()
   SaveLastSite()
-  local ply = LocalPlayer()
   if pa( settingsWindow ) then
     if pa( settingsWindow.window ) then
       local w = settingsWindow.window.sitepanel:GetWide()

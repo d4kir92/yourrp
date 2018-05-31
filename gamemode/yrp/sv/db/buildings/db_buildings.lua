@@ -25,7 +25,7 @@ function allowedToUseDoor( id, ply )
     return true
   else
     local _tmpBuildingTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
-    if _tmpBuildingTable[1] != nil then
+    if wk( _tmpBuildingTable ) then
 
       if tostring( _tmpBuildingTable[1].ownerCharID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
         return true
@@ -108,7 +108,7 @@ function loadDoors()
       end
 
       for l, door in pairs( _allFuncDoors ) do
-        if _tmpDoors[_count] != nil then
+        if wk( _tmpDoors[_count] ) then
           door:SetNWString( "buildingID", _tmpDoors[_count].buildingID )
           door:SetNWString( "uniqueID", _count )
         else
@@ -118,7 +118,7 @@ function loadDoors()
       end
 
       for l, door in pairs( _allFuncRDoors ) do
-        if _tmpDoors[_count] != nil then
+        if wk( _tmpDoors[_count] ) then
           door:SetNWString( "buildingID", _tmpDoors[_count].buildingID )
           door:SetNWString( "uniqueID", _count )
 
@@ -137,18 +137,18 @@ function loadDoors()
         if w.ownerCharID != "" then
 
           local _tmpRPName = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. w.ownerCharID )
-          if _tmpRPName != nil then
+          if wk( _tmpRPName ) then
             _tmpRPName = _tmpRPName[1]
-            if _tmpRPName.rpname != nil then
+            if wk( _tmpRPName.rpname ) then
               v:SetNWString( "ownerRPName", _tmpRPName.rpname )
             end
           end
         else
           if tonumber( w.groupID ) != -1 then
             local _tmpGroupName = SQL_SELECT( "yrp_groups", "groupID", "uniqueID = " .. w.groupID )
-            if _tmpGroupName != nil then
+            if wk( _tmpGroupName ) then
               _tmpGroupName = _tmpGroupName[1]
-              if _tmpGroupName != nil then
+              if wk( _tmpGroupName ) then
                 v:SetNWString( "ownerGroup", tostring( _tmpGroupName.groupID ) )
               end
             end
@@ -220,7 +220,7 @@ end
 
 function unlockDoor( ply, ent, nr )
   local _tmpBuildingTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. nr .. "'" )
-  if _tmpBuildingTable != nil then
+  if wk( _tmpBuildingTable ) then
     _tmpBuildingTable = _tmpBuildingTable[1]
     if canLock( ply, _tmpBuildingTable ) then
       ent:Fire( "Unlock" )
@@ -233,7 +233,7 @@ end
 
 function lockDoor( ply, ent, nr )
   local _tmpBuildingTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. nr .. "'" )
-  if _tmpBuildingTable != nil then
+  if wk( _tmpBuildingTable ) then
     _tmpBuildingTable = _tmpBuildingTable[1]
     if canLock( ply, _tmpBuildingTable ) then
       ent:Fire( "Lock" )
@@ -429,7 +429,7 @@ end)
 net.Receive( "changeBuildingName", function( len, ply )
   local _tmpBuildingID = net.ReadString()
   local _tmpNewName = net.ReadString()
-  if _tmpBuildingID != nil then
+  if wk( _tmpBuildingID ) then
     printGM( "note", "renamed Building: " .. _tmpNewName )
     SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", "name = '" .. SQL_STR_IN( _tmpNewName ) .. "'" , "uniqueID = " .. _tmpBuildingID )
   else
@@ -451,28 +451,28 @@ net.Receive( "getBuildingInfo", function( len, ply )
   local _tmpDoor = net.ReadEntity()
   local _tmpBuildingID = _tmpDoor:GetNWString( "buildingID" )
 
-  if _tmpBuildingID != nil then
+  if wk( _tmpBuildingID ) then
     local _tmpTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
     local owner = ""
-    if _tmpTable != nil then
+    if wk( _tmpTable ) then
       _tmpTable = _tmpTable[1]
       _tmpTable.name = SQL_STR_OUT( _tmpTable.name )
       if _tmpTable.ownerCharID != "" then
         local _tmpChaTab = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID )
-        if _tmpChaTab != nil then
+        if wk( _tmpChaTab ) then
           _tmpChaTab = _tmpChaTab[1]
           owner = _tmpChaTab.rpname
         end
       elseif _tmpTable.groupID != "" then
         local _tmpGroTab = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _tmpTable.groupID )
-        if _tmpGroTab != nil then
+        if wk( _tmpGroTab ) then
           _tmpGroTab = _tmpGroTab[1]
           owner = _tmpGroTab.groupID
         end
       end
 
-      if _tmpTable != nil then
+      if wk( _tmpTable ) then
         if allowedToUseDoor( _tmpBuildingID, ply ) then
           net.Start( "getBuildingInfo" )
             net.WriteBool( true )

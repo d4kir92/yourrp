@@ -3,11 +3,13 @@
 AddCSLuaFile( "pt_br/pt_br_all.lua" )
 AddCSLuaFile( "pt_br/pt_br_general.lua" )
 AddCSLuaFile( "pt_br/pt_br_settings.lua" )
+AddCSLuaFile( "pt_br/pt_br_settingsfeedback.lua" )
 AddCSLuaFile( "pt_br/pt_br_settingsusergroups.lua" )
 
 include( "pt_br/pt_br_all.lua" )
 include( "pt_br/pt_br_general.lua" )
 include( "pt_br/pt_br_settings.lua" )
+include( "pt_br/pt_br_settingsfeedback.lua" )
 include( "pt_br/pt_br_settingsusergroups.lua" )
 
 function LangPT_BR()
@@ -21,6 +23,7 @@ function LangPT_BR()
 	PT_BR_ALL()
 	PT_BR_GENERAL()
 	PT_BR_SETTINGS()
+	PT_BR_SETTINGSFEEDBACK()
 	PT_BR_SETTINGSUSERGROUPS()
 end
 

@@ -4,6 +4,7 @@ print( "Loading api_includes.lua" )
 
 add_luas( "collect.lua" )
 add_luas( "output.lua" )
+add_luas( "version.lua" )
 add_luas( "error.lua" )
 add_luas( "math.lua" )
 add_luas( "sql.lua" )

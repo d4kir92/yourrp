@@ -157,6 +157,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len, ply )
   if wk( _tmp ) then
     _tmp = _tmp[1]
   end
+
   net.Start( "Connect_Settings_UserGroup" )
     if _tmp != nil then
       net.WriteTable( _tmp )

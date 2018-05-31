@@ -440,10 +440,11 @@ end
 
 function Player:canAfford( money )
   if money == nil then return false end
+  if self:GetNWString( "money" ) == nil then return false end
 
   local _tmpMoney = math.abs( tonumber( money ) )
-  if isnumber( _tmpMoney ) and self:GetNWString( "money" ) != nil then
-    if tonumber( self:GetNWString( "money" ) ) >= math.abs( _tmpMoney ) then
+  if isnumber( _tmpMoney ) then
+    if tonumber( self:GetNWString( "money" ) ) >= _tmpMoney then
       return true
     else
       return false
@@ -454,14 +455,18 @@ function Player:canAfford( money )
 end
 
 function Player:canAffordBank( money )
-  local _tmpMoney = tonumber( money )
+  if money == nil then return false end
+  if self:GetNWString( "moneybank" ) == nil then return false end
+
+  local _tmpMoney = math.abs( tonumber( money ) )
   if isnumber( _tmpMoney ) then
-    if tonumber( self:GetNWString( "moneybank" ) ) >= math.abs( _tmpMoney ) then
+    if tonumber( self:GetNWString( "moneybank" ) ) >= _tmpMoney then
       return true
     else
       return false
     end
   end
+
 end
 
 function Player:SteamName()
