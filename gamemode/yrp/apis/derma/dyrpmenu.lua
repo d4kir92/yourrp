@@ -68,7 +68,6 @@ function PANEL:AddOption( name, icon )
   Entry.button:SetText( "" )
   function Entry.button:Paint( pw, ph )
     surfaceButton( self, pw, ph, Entry.name )
-    --surfaceText( lang_string( Entry.name ), "dyrpmenu", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
   end
 
   self.lastheight = self.lastheight + Entry.size

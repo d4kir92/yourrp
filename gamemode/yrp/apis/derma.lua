@@ -457,10 +457,15 @@ function drawRBoxCr( x, y, size, col )
 end
 
 function surfaceText( text, font, x, y, color, ax, ay, br )
+  br = br or true
+  local col_br = Color( 0, 0, 0, 255 )
+  if color == Color( 0, 0, 0, 255 ) then
+    col_br = Color( 255, 255, 255, 255 )
+  end
   if !br then
-    draw.SimpleText( text, font, x, y, color, ax, ay )
+    draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 0 ), Color( 0, 0, 0, 0 ) )
   else
-    draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 1 ), col_br )
   end
 end
 

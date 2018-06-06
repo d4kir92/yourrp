@@ -158,6 +158,15 @@ function IsNoAdminWeapon( weapon )
   end
 end
 
+function IsNoUserGroupWeapon( ply, cname )
+  local _ugsweps = string.Explode( ",", ply:GetNWString( "usergroup_sweps", "" ) )
+  if !table.HasValue( _ugsweps, cname ) then
+    return true
+  else
+    return false
+  end
+end
+
 function IsNoRoleSwep( ply, cname )
   local _rol_tab = ply:GetRolTab()
   if wk( _rol_tab ) then
@@ -185,7 +194,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     local _weapons = ply:GetWeapons()
     local _cooldown_item = 120
     for i, wep in pairs( _weapons ) do
-      if IsNoDefaultWeapon( wep ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoAdminWeapon( wep ) then
+      if IsNoDefaultWeapon( wep ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoUserGroupWeapon( ply, wep:GetClass() ) then
         ply:DropSWEP( wep:GetClass() )
         timer.Simple( _cooldown_item, function()
           if wep:IsValid() then

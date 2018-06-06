@@ -131,7 +131,8 @@ end
 function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr2 )
   local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 ), 0, 0 )
   function background:Paint( pw, ph )
-    surfacePanel( self, pw, ph, lang_string( lstr ) .. ": (" .. text .. "100" .. text2 .. ")", nil, ctr( 10 ), ph*1/4, 0, 1 )
+    local ply = LocalPlayer()
+    surfacePanel( self, pw, ph, lang_string( lstr ) .. ": (" .. ply:GetNWString( "text_money_pre", "" ) .. "100" .. ply:GetNWString( "text_money_pos", "" ) .. ")", nil, ctr( 10 ), ph*1/4, 0, 1 )
   end
 
   background.textbox = createD( "DTextEntry", background, ctr( 400 ) - ctr( 10*2 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
@@ -242,7 +243,6 @@ net.Receive( "Connect_Settings_General", function( len )
       end
 
       local GEN = net.ReadTable()
-      printTab( GEN )
 
 
 

@@ -1175,47 +1175,49 @@ function drawPlates( ply )
     if ply != LocalPlayer() then
       local _height = 0
 
-      if ply:GetNWBool( "bool_tag_on_head_voice", false ) and ply:IsSpeaking() then
-        drawIcon( ply, "voice", -6, Color( 255, 255, 255, ply:GetColor().a ) )
-      end
+      if ply:GetNWBool( "bool_tag_on_head", false ) then
+        if ply:GetNWBool( "bool_tag_on_head_voice", false ) and ply:IsSpeaking() then
+          drawIcon( ply, "voice", -6, Color( 255, 255, 255, ply:GetColor().a ) )
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_chat", false ) and isChatOpen() then
-        drawIcon( ply, "chat", -6, Color( 255, 255, 255, ply:GetColor().a ) )
-      end
+        if ply:GetNWBool( "bool_tag_on_head_chat", false ) and isChatOpen() then
+          drawIcon( ply, "chat", -6, Color( 255, 255, 255, ply:GetColor().a ) )
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_clan", false ) then
-        drawString( ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
-      end
+        if ply:GetNWBool( "bool_tag_on_head_clan", false ) then
+          drawString( ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_name", false ) then
-        drawString( ply, ply:RPName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
-      end
+        if ply:GetNWBool( "bool_tag_on_head_name", false ) then
+          drawString( ply, ply:RPName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_rolename", false ) then
-        drawString( ply, ply:GetRoleName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
-      end
+        if ply:GetNWBool( "bool_tag_on_head_rolename", false ) then
+          drawString( ply, ply:GetRoleName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_groupname", false ) then
-        drawString( ply, ply:GetGroupName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
-      end
+        if ply:GetNWBool( "bool_tag_on_head_groupname", false ) then
+          drawString( ply, ply:GetGroupName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_health", false ) then
-        drawString( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
-      end
+        if ply:GetNWBool( "bool_tag_on_head_health", false ) then
+          drawString( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_armor", false ) then
-        drawString( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "100" ) .. " " .. lang_string( "armor" ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
-      end
+        if ply:GetNWBool( "bool_tag_on_head_armor", false ) then
+          drawString( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "100" ) .. " " .. lang_string( "armor" ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
 
-      if ply:GetNWBool( "bool_tag_on_head_usergroup", false ) then
-        drawString( ply, string.upper( ply:GetUserGroup() ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-        _height = _height + 5
+        if ply:GetNWBool( "bool_tag_on_head_usergroup", false ) then
+          drawString( ply, string.upper( ply:GetUserGroup() ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
+          _height = _height + 5
+        end
       end
 
       _height = _height + 2

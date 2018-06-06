@@ -143,7 +143,9 @@ function OpenEmotesMenu()
         if e == _em.emotes.select then
           _color = Color( 255, 255, 0, 255 )
         end
+
         surface.SetDrawColor( _color.r, _color.g, _color.b, _color.a )
+        draw.NoTexture()
         surface.DrawPoly( _quad )
       end
     end

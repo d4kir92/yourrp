@@ -1,6 +1,7 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 local _rm = nil
+local _info = nil
 
 function toggleRoleMenu()
   if isNoMenuOpen() then
@@ -15,6 +16,10 @@ function closeRoleMenu()
     closeMenu()
     _rm:Remove()
     _rm = nil
+  elseif _info != nil then
+    closeMenu()
+    _info:Remove()
+    _info = nil
   end
 end
 
@@ -249,90 +254,100 @@ end
 
 function openRoleMenu()
   openMenu()
-
-  _rm = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
-  _rm:Center()
-  _rm:ShowCloseButton( true )
-  _rm:SetDraggable( false )
-  _rm:SetTitle( "" )
-  function _rm:Paint( pw, ph )
-    surfaceWindow( self, pw, ph, lang_string( "rolemenu" ) )
-  end
-
-  _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), BScrW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
-  _rm.info.rolename = lang_string( "none" )
-  _rm.info.rolesala = lang_string( "none" )
-  function _rm.info:Paint( pw, ph )
-    if _rm.info.rolename == lang_string( "none" ) then return end
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
-
-    --[[ Role Appearance ]]--
-    draw.RoundedBox( 0, 0, 0, pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-    surfaceText( lang_string( "appearance" ), "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
-    --draw.RoundedBox( 0, 0, ctrb( 50 ), pw, pw, Color( 0, 0, 0, 200 ) )
-
-    --[[ Role Name ]]--
-    draw.RoundedBox( 0, 0, ctrb( 900 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-    surfaceText( lang_string( "role" ), "roleInfoHeader", ctrb( 25 ), ctrb( 900 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-    draw.RoundedBox( 0, 0, ctrb( 900+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
-    surfaceText( self.rolename, "roleInfoText", ctrb( 25 ), ctrb( 900 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-
-    --[[ Role Description ]]--
-    draw.RoundedBox( 0, 0, ctrb( 1050 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-    surfaceText( lang_string( "description" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1050 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-
-    --[[ Role Equipment ]]--
-    draw.RoundedBox( 0, 0, ctrb( 1450 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-    surfaceText( lang_string( "sweps" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1450 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-
-    --[[ Role Salary ]]--
-    draw.RoundedBox( 0, 0, ctrb( 1850 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-    surfaceText( lang_string( "salary" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1850 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-    draw.RoundedBox( 0, 0, ctrb( 1850+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
-    surfaceText( self.rolesala, "roleInfoText", ctrb( 25 ), ctrb( 1850 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
-  end
-  _rm.infopm = createD( "DModelPanel", _rm.info, ctrb( 800 ), ctrb( 800 ), 0, ctrb( 50 ) )
-
-  _rm.infodesc = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1050+50 ) )
-  function _rm.infodesc:Paint( pw, ph )
-    if _rm.info.rolename == lang_string( "none" ) then return end
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-  end
-
-  _rm.infosweps = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1450+50 ) )
-  function _rm.infosweps:Paint( pw, ph )
-    if _rm.info.rolename == lang_string( "none" ) then return end
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-  end
-
-  _rm.infobutton = createD( "DButton", _rm.info, ctrb( 800-20 ), ctrb( 100 ), ctrb( 10 ), _rm.info:GetTall() - ctrb( 100+10 ) )
-  _rm.infobutton:SetText( "" )
-  _rm.infobutton.rolename = ""
-  function _rm.infobutton:Paint( pw, ph )
-    if _rm.info.rolename == lang_string( "none" ) then return end
-    surfaceButton( self, pw, ph, lang_string( "getrole" ) )
-  end
-  function _rm.infobutton:DoClick()
-    if self.uniqueID != nil then
-      net.Start( "wantRole" )
-        net.WriteInt( self.uniqueID, 16 )
-      net.SendToServer()
-      _rm:Close()
+  if LocalPlayer():GetNWBool( "bool_players_can_switch_role", false ) then
+    _rm = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
+    _rm:Center()
+    _rm:ShowCloseButton( true )
+    _rm:SetDraggable( false )
+    _rm:SetTitle( "" )
+    function _rm:Paint( pw, ph )
+      surfaceWindow( self, pw, ph, lang_string( "rolemenu" ) )
     end
+
+    _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), BScrW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
+    _rm.info.rolename = lang_string( "none" )
+    _rm.info.rolesala = lang_string( "none" )
+    function _rm.info:Paint( pw, ph )
+      if _rm.info.rolename == lang_string( "none" ) then return end
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
+
+      --[[ Role Appearance ]]--
+      draw.RoundedBox( 0, 0, 0, pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+      surfaceText( lang_string( "appearance" ), "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
+      --draw.RoundedBox( 0, 0, ctrb( 50 ), pw, pw, Color( 0, 0, 0, 200 ) )
+
+      --[[ Role Name ]]--
+      draw.RoundedBox( 0, 0, ctrb( 900 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+      surfaceText( lang_string( "role" ), "roleInfoHeader", ctrb( 25 ), ctrb( 900 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+      draw.RoundedBox( 0, 0, ctrb( 900+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
+      surfaceText( self.rolename, "roleInfoText", ctrb( 25 ), ctrb( 900 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+
+      --[[ Role Description ]]--
+      draw.RoundedBox( 0, 0, ctrb( 1050 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+      surfaceText( lang_string( "description" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1050 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+
+      --[[ Role Equipment ]]--
+      draw.RoundedBox( 0, 0, ctrb( 1450 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+      surfaceText( lang_string( "sweps" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1450 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+
+      --[[ Role Salary ]]--
+      draw.RoundedBox( 0, 0, ctrb( 1850 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
+      surfaceText( lang_string( "salary" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1850 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+      draw.RoundedBox( 0, 0, ctrb( 1850+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
+      surfaceText( self.rolesala, "roleInfoText", ctrb( 25 ), ctrb( 1850 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+    end
+    _rm.infopm = createD( "DModelPanel", _rm.info, ctrb( 800 ), ctrb( 800 ), 0, ctrb( 50 ) )
+
+    _rm.infodesc = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1050+50 ) )
+    function _rm.infodesc:Paint( pw, ph )
+      if _rm.info.rolename == lang_string( "none" ) then return end
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+    end
+
+    _rm.infosweps = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1450+50 ) )
+    function _rm.infosweps:Paint( pw, ph )
+      if _rm.info.rolename == lang_string( "none" ) then return end
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+    end
+
+    _rm.infobutton = createD( "DButton", _rm.info, ctrb( 800-20 ), ctrb( 100 ), ctrb( 10 ), _rm.info:GetTall() - ctrb( 100+10 ) )
+    _rm.infobutton:SetText( "" )
+    _rm.infobutton.rolename = ""
+    function _rm.infobutton:Paint( pw, ph )
+      if _rm.info.rolename == lang_string( "none" ) then return end
+      surfaceButton( self, pw, ph, lang_string( "getrole" ) )
+    end
+    function _rm.infobutton:DoClick()
+      if self.uniqueID != nil then
+        net.Start( "wantRole" )
+          net.WriteInt( self.uniqueID, 16 )
+        net.SendToServer()
+        _rm:Close()
+      end
+    end
+
+    _rm.pl = createD( "DPanelList", _rm, BScrW() - ctrb( 10+10+10 ) - ctrb( 800 ), ScrH() - ctrb( 60 ), ctrb( 10 ), ctrb( 50 ) )
+    _rm.pl:EnableVerticalScrollbar( true )
+    _rm.pl:SetSpacing( 10 )
+    _rm.pl:SetNoSizing( true )
+
+    function _rm.pl:Paint( pw, ph )
+      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
+    end
+
+    getGroups( -1, _rm.pl )
+
+
+
+    _rm:MakePopup()
+  else
+    _info = createD( "DFrame", nil, ctr( 400 ), ctr( 400 ), 0, 0 )
+    _info:SetTitle( "" )
+    function _info:Paint( pw, ph )
+      surfaceWindow( self, pw, ph, "rolemenu" )
+      surfaceText( lang_string( "disabled" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+    end
+    _info:MakePopup()
+    _info:Center()
   end
-
-  _rm.pl = createD( "DPanelList", _rm, BScrW() - ctrb( 10+10+10 ) - ctrb( 800 ), ScrH() - ctrb( 60 ), ctrb( 10 ), ctrb( 50 ) )
-  _rm.pl:EnableVerticalScrollbar( true )
-  _rm.pl:SetSpacing( 10 )
-  _rm.pl:SetNoSizing( true )
-
-  function _rm.pl:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
-  end
-
-  getGroups( -1, _rm.pl )
-
-
-
-  _rm:MakePopup()
 end

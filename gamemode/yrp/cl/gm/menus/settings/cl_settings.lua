@@ -53,6 +53,8 @@ function get_icon_burger_menu()
 end
 
 function F8RequireUG( site, usergroups )
+  local ply = LocalPlayer()
+  
   local tab = {}
   tab[1] = usergroups
 

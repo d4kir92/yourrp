@@ -58,17 +58,14 @@ function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
 	--[[ DESIGNS ]]--
-	createFont( "mat1header", tmpFont, 22, _weight, true )
+	createFont( "mat1header", tmpFont, 22, _weight, false )
 	createFont( "mat1text", tmpFont, 18, 0, false )
 
 	--[[ EMOTES ]]--
-	createFont( "emotes", tmpFont, 22, _weight, true )
-
-	--[[ DYRPMenu ]]--
-	createFont( "dyrpmenu", tmpFont, 22, _weight, true )
+	createFont( "emotes", tmpFont, 22, _weight, false )
 
 	--[[ 3D2D ]]--
-	createFont( "3d2d_string", tmpFont, 22, _weight, false, true )
+	createFont( "3d2d_string", tmpFont, 22, _weight, false )
 
 	--[[ Settings ]]--
 	createFont( "Settings_Normal", tmpFont, 22, _weight, false )
@@ -90,11 +87,11 @@ function changeFontSize()
 
 	createFont( "HudDefault", tmpFont, 72, _weight, false )
 
-	createFont( "SettingsNormal", tmpFont, 24, _weight, true )
-	createFont( "SettingsHeader", tmpFont, 30, _weight, true )
+	createFont( "SettingsNormal", tmpFont, 24, _weight, false )
+	createFont( "SettingsHeader", tmpFont, 30, _weight, false )
 
-	createFont( "roleInfoHeader", tmpFont, 24, _weight, true )
-	createFont( "roleInfoText", tmpFont, 20, _weight, true )
+	createFont( "roleInfoHeader", tmpFont, 24, _weight, false )
+	createFont( "roleInfoText", tmpFont, 20, _weight, false )
 
 	createFont( "charTitle", tmpFont, 20, 800, false )
 	createFont( "charHeader", tmpFont, 20, 800, false )

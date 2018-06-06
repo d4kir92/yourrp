@@ -64,30 +64,32 @@ function Player:EquipWeapons()
 end
 
 function Player:EquipWeapon( slot, item )
-  local _slot = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. self:CharID() .. "'" )
-  if wk( _slot ) then
-    _slot = _slot[1][slot]
-    _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot .. "'" )
+  if self:CharID() != nil then
+    local _slot = SQL_SELECT( "yrp_characters", slot, "uniqueID = '" .. self:CharID() .. "'" )
     if wk( _slot ) then
-      _slot = _slot[1]
+      _slot = _slot[1][slot]
+      _slot = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot .. "'" )
+      if wk( _slot ) then
+        _slot = _slot[1]
 
-      if tonumber( item.sizew ) <= tonumber( _slot.sizew ) and tonumber( item.sizeh ) <= tonumber( _slot.sizeh ) then
-        local _wp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
+        if tonumber( item.sizew ) <= tonumber( _slot.sizew ) and tonumber( item.sizeh ) <= tonumber( _slot.sizeh ) then
+          local _wp = SQL_SELECT( "yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'" )
 
-        if !wk( _wp ) then
-          item = CreateItem( item, _slot )
+          if !wk( _wp ) then
+            item = CreateItem( item, _slot )
 
-          net.Start( "moveitem_slot2" )
-            net.WriteTable( _slot )
-            net.WriteTable( item )
-          net.Send( self )
+            net.Start( "moveitem_slot2" )
+              net.WriteTable( _slot )
+              net.WriteTable( item )
+            net.Send( self )
 
-          self:UpdateBackpack()
-          self:ForceEquip( item.ClassName )
-          return true
-        else
-          _wp = _wp[1]
-          return false
+            self:UpdateBackpack()
+            self:ForceEquip( item.ClassName )
+            return true
+          else
+            _wp = _wp[1]
+            return false
+          end
         end
       end
     end

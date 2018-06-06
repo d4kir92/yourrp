@@ -846,7 +846,7 @@ function RenderNoClip( ply, alpha )
         if IsNoClipStealthEnabled() then
           _alpha = 0
         else
-          _alpha = 100
+          _alpha = 180
         end
       end
 
@@ -1192,6 +1192,7 @@ function Player:UserGroupLoadout()
   printGM( "gm", self:SteamName() .. " UserGroupLoadout" )
   local UG = SQL_SELECT( DATABASE_NAME, "*", "name = '" .. self:GetUserGroup() .. "'" )
   if wk( UG ) then
+    self:SetNWString( "usergroup_sweps", UG[1].sweps )
     local SWEPS = string.Explode( ",", UG[1].sweps )
     for i, swep in pairs( SWEPS ) do
       self:Give( swep )

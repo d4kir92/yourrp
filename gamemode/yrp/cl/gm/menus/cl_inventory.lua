@@ -58,6 +58,7 @@ hook.Add( "PostPlayerDraw", "yrp_weapon_holster", function( ply )
 end)
 
 local inv = {}
+local _info = nil
 
 function ToggleInventory()
   if isNoMenuOpen() then
@@ -75,6 +76,10 @@ function CloseInventory()
     closeMenu()
     inv.window:Remove()
     inv.window = nil
+  elseif _info != nil then
+    closeMenu()
+    _info:Remove()
+    _info = nil
   end
 end
 
@@ -422,5 +427,14 @@ function OpenInventory()
   if LocalPlayer():GetNWBool( "bool_inventory_system", false ) then
     net.Start( "openStorage" )
     net.SendToServer()
+  else
+    _info = createD( "DFrame", nil, ctr( 400 ), ctr( 400 ), 0, 0 )
+    _info:SetTitle( "" )
+    function _info:Paint( pw, ph )
+      surfaceWindow( self, pw, ph, "inventory" )
+      surfaceText( lang_string( "disabled" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+    end
+    _info:MakePopup()
+    _info:Center()
   end
 end
