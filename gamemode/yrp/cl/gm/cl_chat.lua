@@ -53,7 +53,7 @@ function niceCommand( com )
   elseif com == "yell" then
     return lang_string( "yell" )
   elseif com == "advert" then
-    return LocalPlayer():GetNWString( "channel_advert", lang_string( "advert" ) )
+    return LocalPlayer():GetNWString( "text_chat_advert", lang_string( "advert" ) )
   elseif com == "admin" then
     return lang_string( "admin" )
   elseif com == "group" then
@@ -66,7 +66,7 @@ end
 
 function InitYRPChat()
 
-  if LocalPlayer():GetNWBool( "yrp_chat", false ) then
+  if LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
     if yrpChat.window == nil then
       yrpChat.window = createVGUI( "DFrame", nil, 100, 100, 100, 100 )
       yrpChat.window:SetTitle( "" )
@@ -93,7 +93,7 @@ function InitYRPChat()
 
 
     function yrpChat.window:Paint( pw, ph )
-      if HudV( "cbto" ) == 1 and LocalPlayer():GetNWBool( "yrp_chat", false ) then
+      if HudV( "cbto" ) == 1 and LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
         checkChatVisible()
         if _showChat then
           if is_hud_db_loaded() then
@@ -267,7 +267,7 @@ timer.Create( "yrp_init_chat", 1, 0, function()
 end)
 
 hook.Add( "PlayerBindPress", "yrp_overrideChatbind", function( ply, bind, pressed )
-  if ply:GetNWBool( "yrp_chat", false ) then
+  if ply:GetNWBool( "bool_yrp_chat", false ) then
     local bTeam = nil
     if bind == "messagemode" then
       bTeam = false
@@ -284,7 +284,7 @@ hook.Add( "PlayerBindPress", "yrp_overrideChatbind", function( ply, bind, presse
 end )
 
 hook.Add( "ChatText", "yrp_serverNotifications", function( index, name, text, type )
-  if LocalPlayer():GetNWBool( "yrp_chat", false ) then
+  if LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
     if type == "joinleave" or type == "none" then
       if pa( yrpChat.richText ) then
         yrpChat.richText:AppendText( text.."\n" )
@@ -294,7 +294,7 @@ hook.Add( "ChatText", "yrp_serverNotifications", function( index, name, text, ty
 end )
 
 hook.Add( "HUDShouldDraw", "noMoreDefault", function( name )
-  if LocalPlayer():GetNWBool( "yrp_chat", false ) then
+  if LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
     if name == "CHudChat" then
     	return false
     end

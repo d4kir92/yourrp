@@ -26,7 +26,7 @@ function ENT:Draw()
     self.display.ent = self
 
     function self.display:Paint( pw, ph )
-      local bankName = "YRP Bank [" .. ply:GetNWString( "moneypre" ) .. ply:GetNWString( "moneybank" ) .. ply:GetNWString( "moneyPost" ) .."]"
+      local bankName = "YRP Bank [" .. ply:GetNWString( "text_money_pre" ).. ply:GetNWString( "moneybank" ) .. ply:GetNWString( "text_money_pos" ) .."]"
       if self.ent:GetNWString( "status" ) == "startup" then
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0 ) )
         draw.SimpleTextOutlined( "..." .. lang_string( "loading" ) .. "...", "ATM_Header", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -56,22 +56,22 @@ function ENT:Draw()
         draw.SimpleTextOutlined( lang_string( "withdraw" ), "ATM_Header", pw/2, 150+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 300, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "5" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "5" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 450, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "10" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "10" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 600, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "20" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 200, 600+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "20" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 200, 600+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 850, 400, 100, Color( 255, 255, 255 ) )
         draw.SimpleTextOutlined( lang_string( "back" ), "ATM_Normal", 200, 850+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, pw-400, 300, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "50" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", pw-200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "50" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", pw-200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, pw-400, 450, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "100" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", pw-200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "100" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", pw-200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, pw-400, 600, 400, 100, Color( 255, 255, 255 ) )
         draw.SimpleTextOutlined( lang_string( "other" ), "ATM_Normal", pw-200, 600+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -83,22 +83,22 @@ function ENT:Draw()
         draw.SimpleTextOutlined( lang_string( "deposit" ), "ATM_Header", pw/2, 150+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 300, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "5" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "5" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 450, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "10" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "10" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 600, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "20" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 200, 600+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "20" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 200, 600+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 0, 850, 400, 100, Color( 255, 255, 255 ) )
         draw.SimpleTextOutlined( lang_string( "back" ), "ATM_Normal", 200, 850+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, pw-400, 300, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "50" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", pw-200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "50" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", pw-200, 300+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, pw-400, 450, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. "100" .. ply:GetNWString( "moneyPost" ), "ATM_Normal", pw-200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. "100" .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", pw-200, 450+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, pw-400, 600, 400, 100, Color( 255, 255, 255 ) )
         draw.SimpleTextOutlined( lang_string( "other" ), "ATM_Normal", pw-200, 600+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -157,7 +157,7 @@ function ENT:Draw()
         draw.SimpleTextOutlined( otherText .. " > " .. otherTextPos, "ATM_Header", pw/2, 150+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 300, 250, 400, 100, Color( 255, 255, 255 ) )
-        draw.SimpleTextOutlined( ply:GetNWString( "moneypre" ) .. self.ent:GetNWString("othermoney") .. ply:GetNWString( "moneyPost" ), "ATM_Normal", 500, 250+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined( ply:GetNWString( "text_money_pre" ).. self.ent:GetNWString("othermoney") .. ply:GetNWString( "text_money_pos" ), "ATM_Normal", 500, 250+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         draw.RoundedBox( 0, 750, 250, 100, 100, Color( 255, 255, 255 ) )
         draw.SimpleTextOutlined( "<", "ATM_Normal", 800, 250+50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )

@@ -3,7 +3,7 @@
 local stamina = Material( "icon16/lightning.png" )
 
 function showMS( ply )
-  return ply:GetNWBool( "toggle_stamina", false )
+  return ply:GetNWBool( "bool_stamina", false )
 end
 
 function hudMS( ply, color )

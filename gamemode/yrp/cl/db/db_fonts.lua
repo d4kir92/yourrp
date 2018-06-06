@@ -1,28 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function createFontOld( _name, _font, _size, __weight, _outline )
-	--printGM( "db", "createFont: " .. _name )
-	--printGM( "db", _font .. ", " .. _size .. ", " .. __weight )
-	surface.CreateFont( _name, {
-		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = true,
-		size = _size,
-		weight = __weight,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = false,
-		additive = false,
-		outline = _outline
-	} )
-end
-
-function createFont( _name, _font, _size, __weight, _outline )
+function createFont( _name, _font, _size, __weight, _outline, _shadow )
 	--printGM( "db", "createFont: " .. _name )
 	--printGM( "db", _font .. ", " .. _size .. ", " .. __weight )
 	_size = ctr( _size*2 )
@@ -33,19 +11,19 @@ function createFont( _name, _font, _size, __weight, _outline )
 		weight = __weight,
 		blursize = 0,
 		scanlines = 0,
-		antialias = false,
+		antialias = true,
 		underline = false,
 		italic = false,
 		strikeout = false,
 		symbol = false,
 		rotary = false,
-		shadow = false,
+		shadow = _shadow or false,
 		additive = false,
-		outline = _outline
+		outline = _outline or false
 	} )
 end
 
-local tmpFont = "Calibri" --"Roboto-Regular"
+local tmpFont = "Roboto"
 local _weight = 500
 
 function changeFontSizeOf( _font, _size )
@@ -79,26 +57,30 @@ end
 function changeFontSize()
 	printGM( "db", "changeFontSize" )
 
-	local _w = 500
 	--[[ DESIGNS ]]--
-	createFont( "mat1header", "Roboto", 28, _w, true )
-	createFont( "mat1text", "Roboto", 22, _w, true )
+	createFont( "mat1header", tmpFont, 22, _weight, true )
+	createFont( "mat1text", tmpFont, 18, 0, false )
 
 	--[[ EMOTES ]]--
-	createFont( "emotes", "Roboto", 22, _w, true )
+	createFont( "emotes", tmpFont, 22, _weight, true )
 
 	--[[ DYRPMenu ]]--
-	createFont( "dyrpmenu", "Roboto", 22, _w, true )
+	createFont( "dyrpmenu", tmpFont, 22, _weight, true )
 
-	createFont( "apph1", tmpFont, fontr( 36 ), _w, false )
-	createFont( "appt", tmpFont, fontr( 30 ), _w, false )
+	--[[ 3D2D ]]--
+	createFont( "3d2d_string", tmpFont, 22, _weight, false, true )
 
-	createFont( "appname", tmpFont, ctrb( 28 ), _w, false )
+	--[[ Settings ]]--
+	createFont( "Settings_Normal", tmpFont, 22, _weight, false )
+	createFont( "Settings_Header", tmpFont, 26, _weight, false )
 
-	createFont( "gmbase", tmpFont, 16, 500, false )
+	createFont( "apph1", tmpFont, fontr( 36 ), _weight, false )
+	createFont( "appt", tmpFont, fontr( 30 ), _weight, false )
 
-	createFontOld( "plates", tmpFont, 30, 1000, true )
-	createFontOld( "plyinfo", "Roboto", 16, 800, true )
+	createFont( "appname", tmpFont, ctrb( 28 ), _weight, false )
+
+	createFont( "plates", tmpFont, 30, _weight, false )
+	createFont( "plyinfo", tmpFont, 18, _weight, false )
 
 	createFont( "mdMenu", tmpFont, 17, 1000, false )
 

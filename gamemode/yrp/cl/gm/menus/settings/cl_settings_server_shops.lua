@@ -264,13 +264,15 @@ net.Receive( "get_shop_items", function()
         net.SendToServer()
         net.Receive( "get_all_licenses_simple", function( len )
           local _licenses = net.ReadTable()
-          _sh._sit.itemlice.plus:AddChoice( lang_string( "none" ), -1 )
-          for i, lic in pairs( _licenses ) do
-            local _b = false
-            if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
-              _b = true
+          if pa( _sh._sit ) then
+            _sh._sit.itemlice.plus:AddChoice( lang_string( "none" ), -1 )
+            for i, lic in pairs( _licenses ) do
+              local _b = false
+              if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
+                _b = true
+              end
+              _sh._sit.itemlice.plus:AddChoice( SQL_STR_OUT( lic.name ), lic.uniqueID, _b )
             end
-            _sh._sit.itemlice.plus:AddChoice( SQL_STR_OUT( lic.name ), lic.uniqueID, _b )
           end
         end)
         function _sh._sit.itemlice.plus:OnSelect( index, value, data )

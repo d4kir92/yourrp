@@ -304,6 +304,7 @@ net.Receive( "moneyreset", function( len, ply )
   SQL_UPDATE( "yrp_characters", "moneybank = '" .. "0" .. "'", nil )
   for i, pl in pairs( player.GetAll() ) do
     pl:SetMoney( 0 )
+    pl:SetMoneyBank( 0 )
   end
 end)
 

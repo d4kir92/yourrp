@@ -6,9 +6,9 @@ util.AddNetworkString( "cancelRestartServer" )
 
 util.AddNetworkString( "get_workshop_collection" )
 net.Receive( "get_workshop_collection", function( len, ply )
-  local _wscnr = SQL_SELECT( "yrp_general", "collection", nil )
-  if _wscnr != nil then
-    _wscnr = _wscnr[1].collection
+  local _wscnr = SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
+  if wk( _wscnr ) then
+    _wscnr = _wscnr[1].text_server_collectionid
   end
   local _wsc = engine.GetAddons()
   net.Start( "get_workshop_collection" )
@@ -25,8 +25,8 @@ end)
 
 net.Receive( "updateServer", function( len, ply )
   local _tmpString = net.ReadString()
-  local _result = SQL_UPDATE( "yrp_general", "name_gamemode = '" .. SQL_STR_IN( _tmpString ) .. "'" )
-  if worked( _result, "name_gamemode failed" ) then
+  local _result = SQL_UPDATE( "yrp_general", "text_gamemode_name = '" .. SQL_STR_IN( _tmpString ) .. "'" )
+  if worked( _result, "text_gamemode_name failed" ) then
   end
   local countdown = net.ReadInt( 16 )
   timer.Create( "timerRestartServer", 1, 0, function()

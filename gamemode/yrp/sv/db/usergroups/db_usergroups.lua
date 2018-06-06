@@ -844,17 +844,9 @@ function RenderNoClip( ply, alpha )
       local _alpha = 255
       if IsNoClipEffectEnabled() then
         if IsNoClipStealthEnabled() then
-          if ply:GetModel() == "models/crow.mdl" then
-            _alpha = 180
-          else
-            _alpha = 10
-          end
+          _alpha = 0
         else
-          if ply:GetModel() == "models/crow.mdl" then
-            _alpha = 240
-          else
-            _alpha = 100
-          end
+          _alpha = 100
         end
       end
 
@@ -965,8 +957,11 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
         _tmp = _tmp[1]
         if tobool( _tmp.noclip ) then
 
-          if IsNoClipCrowEnabled() then
-            pl:SetModel( "models/crow.mdl" )
+          if IsNoClipModelEnabled() then
+            local mdl = pl:GetNWString( "text_noclip_mdl", "" )
+            if mdl != "" then
+              pl:SetModel( mdl )
+            end
           end
 
           RenderNoClip( pl )
@@ -1191,3 +1186,15 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
     end
   end
 end)
+
+local Player = FindMetaTable( "Player" )
+function Player:UserGroupLoadout()
+  printGM( "gm", self:SteamName() .. " UserGroupLoadout" )
+  local UG = SQL_SELECT( DATABASE_NAME, "*", "name = '" .. self:GetUserGroup() .. "'" )
+  if wk( UG ) then
+    local SWEPS = string.Explode( ",", UG[1].sweps )
+    for i, swep in pairs( SWEPS ) do
+      self:Give( swep )
+    end
+  end
+end

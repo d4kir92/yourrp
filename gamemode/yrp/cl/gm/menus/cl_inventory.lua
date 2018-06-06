@@ -39,7 +39,7 @@ function PositionEquipment( ply, na, bo, v_pos, a_ang )
 end
 
 hook.Add( "PostPlayerDraw", "yrp_weapon_holster", function( ply )
-	if ply:Alive() and ply:GetNWBool( "toggle_inventory", false ) then
+	if ply:Alive() and ply:GetNWBool( "bool_inventory_system", false ) then
     if ply == LocalPlayer() then
       if tonumber( ply:GetNWString( "view_range", "0" ) ) <= 0 then
         return false
@@ -86,7 +86,7 @@ function IsInventoryOpen()
   end
 end
 
-inv["backpack"] = Material( "vgui/material/ic_work_black_24dp_2x.png" )
+inv["backpack"] = Material( "vgui/material/icon_work.png" )
 inv["primary"] = Material( "vgui/yrp/yrp_primary.png" )
 inv["secondary"] = Material( "vgui/yrp/yrp_secondary.png" )
 inv["gadget"] = Material( "vgui/yrp/yrp_gadget.png" )
@@ -419,7 +419,7 @@ net.Receive( "openStorage", function( len )
 end)
 
 function OpenInventory()
-  if LocalPlayer():GetNWBool( "toggle_inventory", false ) then
+  if LocalPlayer():GetNWBool( "bool_inventory_system", false ) then
     net.Start( "openStorage" )
     net.SendToServer()
   end

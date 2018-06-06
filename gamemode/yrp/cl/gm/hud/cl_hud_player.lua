@@ -150,7 +150,7 @@ function client_toggled()
 end
 
 function server_toggled( ply )
-  return ply:GetNWBool( "toggle_hud", false )
+  return ply:GetNWBool( "bool_yrp_hud", false )
 end
 
 function HudPlayer( ply )

@@ -160,8 +160,7 @@ util.AddNetworkString( "sendNotify" )
 function DarkRP.notify( ply, msgType, time, message )
   --Description: Log a message in DarkRP
   printGM( "darkrp", "notify( ply, msgType, time, " .. tostring( message ) .. " )" )
-
-  if wk( message ) then
+  if ply:IsPlayer() and wk( message ) then
     net.Start( "sendNotify" )
       net.WriteString( message )
     net.Send( ply )

@@ -31,7 +31,7 @@ hook.Add( "HUDShouldDraw", "yrp_hidehud", function( name )
 		CHudBattery = true,
 		CHudAmmo = true,
 		CHudSecondaryAmmo = true,
-		CHudCrosshair = LocalPlayer():GetNWBool( "yrp_crosshair", false ),
+		CHudCrosshair = LocalPlayer():GetNWBool( "bool_yrp_crosshair", false ),
 		CHudVoiceStatus = false
 	}
 

@@ -262,7 +262,7 @@ function KeyPress()
 					if _old_view > 0 then
 						ply:SetNWInt( "view_range_view", _old_view )
 					else
-						ply:SetNWInt( "view_range_view", tonumber( LocalPlayer():GetNWInt( "view_distance", 0 ) ) )
+						ply:SetNWInt( "view_range_view", tonumber( LocalPlayer():GetNWString( "text_view_distance", "0" ) ) )
 					end
 				end
 
@@ -279,8 +279,8 @@ function KeyPress()
 
 					ply:SetNWInt( "view_range_view", ply:GetNWInt( "view_range_view" ) + 1 )
 
-					if tonumber( ply:GetNWInt( "view_range_view" ) ) > tonumber( ply:GetNWInt( "view_distance", 0 ) ) then
-						ply:SetNWInt( "view_range_view", tonumber( ply:GetNWInt( "view_distance", 0 ) ) )
+					if tonumber( ply:GetNWInt( "view_range_view" ) ) > tonumber( ply:GetNWString( "text_view_distance", "0" ) ) then
+						ply:SetNWInt( "view_range_view", tonumber( ply:GetNWString( "text_view_distance", "0" ) ) )
 					end
 					ply:SetNWInt( "view_range_old", ply:GetNWInt( "view_range_view" ) )
 				elseif input.IsKeyDown( get_keybind( "view_zoom_in" ) ) then

@@ -363,6 +363,13 @@ if SERVER then
     end
   end
 
+  function Player:SetMoneyBank( money )
+    if isnumber( money ) then
+      self:SetNWString( "moneybank", math.Round( money, 2 ) )
+      self:UpdateMoney()
+    end
+  end
+
   function Player:addMoneyBank( money )
     if money != nil then
       if isnumber( money ) and self:GetNWString( "moneybank" ) != nil then

@@ -32,7 +32,7 @@ local reloading = 0
 local aimdownsights = 0
 function HudCrosshair()
   local ply = LocalPlayer()
-  if ply:Alive() and ply:GetNWBool( "yrp_crosshair", false ) then
+  if ply:Alive() and ply:GetNWBool( "bool_yrp_crosshair", false ) then
     if !contextMenuOpen then
       local weapon = ply:GetActiveWeapon()
       if weapon != NULL then

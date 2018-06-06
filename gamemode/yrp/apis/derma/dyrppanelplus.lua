@@ -11,7 +11,7 @@ function PANEL:Init()
   self.header.color = Color( 255, 255, 255, 255 )
   function self.header:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-    surfaceText( SQL_STR_OUT( self.text ), "SettingsNormal", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+    surfaceText( lang_string( SQL_STR_OUT( self.text ) ), "Settings_Header", pw/2, ph/2, Color( 0, 0, 0 ), 1, 1 )
   end
 end
 

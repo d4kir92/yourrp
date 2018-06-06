@@ -326,7 +326,7 @@ function Player:Give( cname, noammo )
     _noAmmo = false
   end
 
-  if self:GetNWBool( "toggle_inventory", false ) then
+  if self:GetNWBool( "bool_inventory_system", false ) then
     return self:PutInInventory( cname, noammo )
   else
     return self:ForceEquip( cname, noammo )
@@ -343,7 +343,7 @@ function Player:GiveAmmo( amount, atype, hidePopup )
     _hide_popup = false
   end
 
-  if self:GetNWBool( "toggle_inventory", false ) then
+  if self:GetNWBool( "bool_inventory_system", false ) then
     self:LegacyGiveAmmo( amount, atype )
     --self:AddItemAmmo( amount, atype )
   else
@@ -408,7 +408,7 @@ end
 
 function Player:StripWeapon( weapon )
   printGM( "note", "StripWeapon( " .. tostring( weapon ) .. " )" )
-  if self:GetNWBool( "toggle_inventory", false ) then
+  if self:GetNWBool( "bool_inventory_system", false ) then
     self:RemoveWeaponFromInventory( weapon )
     self:LegacyStripWeapon( weapon )
   else
@@ -423,14 +423,14 @@ end
 function Player:StripWeapons()
   local _char_id = self:CharID()
 
-  if self:GetNWBool( "toggle_inventory", false ) then
+  if self:GetNWBool( "bool_inventory_system", false ) then
 
   end
   self:LegacyStripWeapons()
 end
 
 function GM:PlayerCanPickupWeapon( ply, wep )
-  if !ply:GetNWBool( "toggle_inventory", false ) then
+  if !ply:GetNWBool( "bool_inventory_system", false ) then
     --[[ Inventory OFF ]]--
     return wep:GetNWBool( "ispickupable", true )
   else

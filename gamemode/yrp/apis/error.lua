@@ -292,7 +292,9 @@ function send_error( realm, str )
 						printGM( "gm", "[SENT ERROR TO DEVELOPER] " .. str )
 					end
 			  end, function( failed )
-			    printGM( "error", "ERROR1-API: " .. tostring( failed ) )
+					if tostring( failed ) != "unsuccessful" then
+			    	printGM( "error", "ERROR1-API: " .. tostring( failed ) )
+					end
 			  end )
 			else
 				http.Post( _url2, entry, function( result )
@@ -300,7 +302,9 @@ function send_error( realm, str )
 						printGM( "gm", "[SENT ERROR TO DEVELOPER 2] " .. str )
 					end
 			  end, function( failed )
-			    printGM( "error", "ERROR2-API: " .. tostring( failed ) )
+					if tostring( failed ) != "unsuccessful" then
+			    	printGM( "error", "ERROR2-API: " .. tostring( failed ) )
+					end
 			  end )
 			end
 

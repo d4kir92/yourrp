@@ -61,7 +61,7 @@ end
 
 function con_st( ply )
   if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:IsOnGround() or ply:KeyDown( IN_SPEED ) and ( ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK ) or ply:KeyDown( IN_MOVERIGHT ) or ply:KeyDown( IN_MOVELEFT ) ) and !ply:InVehicle() then
-    ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) - ( ply:GetNWInt( "stamindown", 1 ) ) )
+		ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetCurStamina", 0 ) - ( ply:GetNWInt( "stamindown", 1 ) ) )
     if ply:GetNWInt( "GetCurStamina", 0 ) < 0 then
       ply:SetNWInt( "GetCurStamina", 0 )
     end
@@ -71,6 +71,7 @@ function con_st( ply )
       ply:SetNWInt( "GetCurStamina", ply:GetNWInt( "GetMaxStamina", 100 ) )
     end
   end
+
   if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWFloat( "thirst", 0 ) < 20 then
     ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.6 )
     ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.6 )
@@ -187,11 +188,10 @@ timer.Create( "ServerThink", 1, 0, function()
 
         reg_hp( ply )   --HealthReg
         reg_ar( ply )   --ArmorReg
-        if ply:GetNWBool( "toggle_metabolism", false ) then
-          if tonumber( ply:GetNWFloat( "hunger", "0" ) ) > 20 and _time%4 == 0 then
-            reg_mb( ply ) --MetabolismReg (health up, when enough hunger)
-          end
-        end
+
+				if ply:GetNWBool( "bool_hunger", false ) then
+					reg_mb( ply )
+				end
       end
 
       if ply:IsBleeding() then
@@ -202,13 +202,13 @@ timer.Create( "ServerThink", 1, 0, function()
         ply:TakeDamage( 0.5, ply, ply )
       end
 
-      if ply:GetNWBool( "toggle_hunger", false ) then
+      if ply:GetNWBool( "bool_hunger", false ) then
         con_hg( ply )
       end
-      if ply:GetNWBool( "toggle_thirst", false ) then
+      if ply:GetNWBool( "bool_thirst", false ) then
         con_th( ply )
       end
-      if ply:GetNWBool( "toggle_stamina", false ) then
+      if ply:GetNWBool( "bool_stamina", false ) then
         con_st( ply )
       end
 
@@ -275,7 +275,7 @@ timer.Create( "ServerThink", 1, 0, function()
   end
 
   local _changelevel = 21600
-	if IsServerChangelevelEnabled() then
+	if GAMEMODE:IsAutomaticServerReloadingEnabled() then
 	  if _time >= _changelevel-30 then
 	    if _time >= _changelevel then
 	      printGM( "gm", "Auto Reload" )

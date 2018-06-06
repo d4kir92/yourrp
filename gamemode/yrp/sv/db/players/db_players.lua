@@ -124,32 +124,6 @@ function set_role_values( ply )
         ply:SetNWBool( "show_tags", true )
       end
 
-      local _gen_tab = SQL_SELECT( "yrp_general", "*", nil )
-      if worked( _gen_tab, "set_role_values _gen_tab failed" ) then
-        _gen_tab = _gen_tab[1]
-        ply:SetNWString( "channel_advert", _gen_tab.name_advert )
-        ply:SetNWBool( "yrp_crosshair", tobool( _gen_tab.toggle_crosshair ) )
-        ply:SetNWBool( "anti_bhop", tobool( _gen_tab.toggle_anti_bhop ) )
-        ply:SetNWBool( "toggle_building", tobool( _gen_tab.toggle_building ) )
-
-        ply:SetNWBool( "tag_info", tobool( _gen_tab.tag_info ) )
-        ply:SetNWBool( "tag_name", tobool( _gen_tab.tag_name ) )
-        ply:SetNWBool( "tag_role", tobool( _gen_tab.tag_role ) )
-        ply:SetNWBool( "tag_group", tobool( _gen_tab.tag_group ) )
-        ply:SetNWBool( "tag_hp", tobool( _gen_tab.tag_hp ) )
-        ply:SetNWBool( "tag_ar", tobool( _gen_tab.tag_ar ) )
-
-        ply:SetNWBool( "appearancemenu", tobool( _gen_tab.appearancemenu ) )
-
-        ply:SetNWBool( "showrole", tobool( _gen_tab.showrole ) )
-        ply:SetNWBool( "showgroup", tobool( _gen_tab.showgroup ) )
-      else
-        printGM( "note", "[SET ROLE VALUES] YRP_GENERAL IS BROKEN!" )
-        if !ply:IsBot() then
-          ply:KillSilent()
-        end
-      end
-
       local rolTab = ply:GetRolTab()
       local groTab = ply:GetGroTab()
       local ChaTab = ply:GetChaTab()

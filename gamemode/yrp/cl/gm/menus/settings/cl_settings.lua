@@ -1,9 +1,5 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---[[ NEW Sites ]]--
-include( "cl_settings_server_usergroups.lua" )
-include( "cl_settings_server_general.lua" )
-
 --[[ OLD Sites ]]--
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
@@ -11,22 +7,29 @@ include( "cl_settings_client_keybinds.lua" )
 
 include( "cl_settings_server_collection.lua" )
 
-include( "cl_settings_server_general_old.lua" )
 include( "cl_settings_server_interface.lua" )
 include( "cl_settings_server_realistic.lua" )
 include( "cl_settings_server_roles.lua" )
 include( "cl_settings_server_give.lua" )
-include( "cl_settings_server_money.lua" )
 include( "cl_settings_server_licenses.lua" )
 include( "cl_settings_server_shops.lua" )
 include( "cl_settings_server_map.lua" )
 include( "cl_settings_server_whitelist.lua" )
 
+--[[ CLIENT ]]--
+
+
+--[[ SERVER Public ]]--
+
+
+--[[ WIP ]]--
+include( "cl_settings_server_usergroups.lua" )
+include( "cl_settings_server_general.lua" )
+
+--[[ SERVER ]]--
 include( "cl_settings_server_feedback.lua" )
 
-include( "cl_settings_yourrp_add_langu.lua")
-include( "cl_settings_yourrp_contact.lua")
-include( "cl_settings_yourrp_workshop.lua")
+
 
 local _yrp_settings = {}
 _yrp_settings.design = {}
@@ -50,16 +53,26 @@ function get_icon_burger_menu()
 end
 
 function F8RequireUG( site, usergroups )
+  local tab = {}
+  tab[1] = usergroups
+
   function settingsWindow.window.site:Paint( w, h )
     surfaceBox( 0, 0, w, h, Color( 0, 0, 0, 255 ) )
     surfaceText( lang_string( "settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "roleInfoHeader", w/2, h/2, Color( 255, 0, 0 ), 1, 1 )
     if site != lang_string( "usergroups" ) then
       surfaceText( lang_string( "settings_gotof8usergroups" ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
     else
-      local tab = {}
-      tab[1] = usergroups
       surfaceText( replace_string( lang_string( "settings_giveyourselftheusergroup" ), tab ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
+
+      surfaceText( "(In Server Console) Example:", "roleInfoHeader", w/2, h/2 + ctr( 250 ), Color( 255, 255, 0 ), 1, 1 )
     end
+  end
+
+  if site == lang_string( "usergroups" ) then
+    local first_usergroup = string.Explode( ",", tab[1] )
+
+    local example = createD( "DTextEntry", settingsWindow.window.site, ctr( 1000 ), ctr( 50 ), settingsWindow.window.site:GetWide()/2 - ctr( 1000/2 ), settingsWindow.window.site:GetTall()/2 + ctr( 300 ) )
+    example:SetText( "yrp_usergroup \"" .. ply:SteamName() .. "\" " .. first_usergroup[1] )
   end
 end
 
@@ -124,30 +137,40 @@ function openSettings()
   settingsWindow.window:AddSite( "open_client_hud", "settings_hud", _client, "icon16/photo.png" )
   settingsWindow.window:AddSite( "open_client_keybinds", "settings_keybinds", _client, "icon16/keyboard.png" )
 
+
+
   local _server = "settings_serverpublic"
   settingsWindow.window:AddCategory( _server )
   settingsWindow.window:AddSite( "open_server_collection", "settings_workshopcollection", _server, "icon16/page_world.png" )
 
-  local _server_admin = "settings_server"
+
+
+  local _server_admin = lang_string( "settings_server" ) .. " [OLD]"
   settingsWindow.window:AddCategory( _server_admin )
   --settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
   settingsWindow.window:AddSite( "open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png" )
   settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _server_admin, "icon16/bomb.png" )
   settingsWindow.window:AddSite( "open_server_roles", "settings_groupsandroles", _server_admin, "icon16/group_edit.png" )
   settingsWindow.window:AddSite( "open_server_give", "settings_players", _server_admin, "icon16/user_edit.png" )
-  settingsWindow.window:AddSite( "open_server_money", "settings_money", _server_admin, "icon16/money.png" )
   settingsWindow.window:AddSite( "open_server_licenses", "settings_licenses", _server_admin, "icon16/vcard_edit.png" )
   settingsWindow.window:AddSite( "open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png" )
   settingsWindow.window:AddSite( "open_server_map", "settings_map", _server_admin, "icon16/map.png" )
   settingsWindow.window:AddSite( "open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png" )
-  settingsWindow.window:AddSite( "open_server_general_old", "settings_general", _server_admin, "icon16/server_database.png" )
 
-  settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _server_admin, "icon16/group_go.png" )
 
-  settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server_admin, "icon16/page_lightning.png" )
 
-  settingsWindow.window:AddCategory( "yourrp" )
-  settingsWindow.window:AddSite( "open_yourp_workshop", "workshop", "yourrp", "icon16/layout_content.png" )
+  local _wip = "wip"
+  settingsWindow.window:AddCategory( _wip )
+
+  settingsWindow.window:AddSite( "open_server_general", "settings_general", _wip, "icon16/server_database.png" )
+  settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _wip, "icon16/group_go.png" )
+
+  local _server = "settings_server"
+  settingsWindow.window:AddCategory( _server )
+
+  settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server, "icon16/page_lightning.png" )
+
+
 
   settingsWindow.window:AddCategory( "settings" )
   settingsWindow.window:AddSite( "open_menu_settings", "settings", "settings", "vgui/yrp/dark_settings.png" )

@@ -272,10 +272,10 @@ function unpack_paket( sender, text, iscommand )
   paket.steamname = sender:SteamName()
   paket.rpname = sender:RPName()
   paket.usergroup = sender:GetUserGroup()
-  if ShowRole() then
+  if sender:GetNWBool( "bool_yrp_chat_show_rolename", false ) then
     paket.role = sender:GetNWString( "roleName" )
   end
-  if ShowGroup() then
+  if sender:GetNWBool( "bool_yrp_chat_show_groupname", false ) then
     paket.group = sender:GetNWString( "groupName" )
   end
 end

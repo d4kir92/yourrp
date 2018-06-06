@@ -3,7 +3,7 @@
 local hunger = Material( "icon16/cake.png" )
 
 function showMH( ply )
-  return ply:GetNWBool( "toggle_hunger", false )
+  return ply:GetNWBool( "bool_hunger", false )
 end
 
 function hudMH( ply, color )

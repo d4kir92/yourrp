@@ -258,7 +258,7 @@ function open_appearance()
     --paintBr( pw, ph, Color( 255, 0, 0, 255 ))
   end
 
-  if ply:GetNWBool( "appearancemenu", false ) then
+  if ply:GetNWBool( "bool_appearance_system", false ) then
     net.Start( "get_menu_bodygroups" )
     net.SendToServer()
   else

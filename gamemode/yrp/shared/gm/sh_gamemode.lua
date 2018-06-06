@@ -11,11 +11,12 @@ GM.ShortName = "YRP"	--do NOT change this!
 GM.Author = "D4KiR" --do NOT change this!
 GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
 GM.Email = GM.Discord --do NOT change this!
-GM.Website = "youtube.com/c/D4KiR" --do NOT change this!
+GM.Website = "https://sites.google.com/view/yrp" --do NOT change this!
+GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.99" --do NOT change this!
+GM.Version = "0.9.100" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -131,7 +132,7 @@ concommand.Add( "yrp__help", function( ply, cmd, args )
 end )
 
 hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
-	if ply:GetNWBool( "anti_bhop", false ) then
+	if ply:GetNWBool( "bool_anti_bhop", false ) then
 		if !ply:GetNWBool( "canjump", false ) and ply:GetMoveType() != MOVETYPE_NOCLIP then
 			cmd:RemoveKey(IN_JUMP)
 		end

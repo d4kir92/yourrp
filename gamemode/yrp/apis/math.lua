@@ -96,9 +96,9 @@ end
 
 function formatMoney( money, ply )
   if CLIENT then
-    return ply:GetNWString( "moneypre" ) .. money .. ply:GetNWString( "moneyPost" )
+    return ply:GetNWString( "text_money_pre" ).. money .. ply:GetNWString( "text_money_pos" )
   else
-    return GetMoneyPre() .. money .. GetMoneyPos()
+    return "[FAILED]" .. money .. "[FAILED]"
   end
 end
 

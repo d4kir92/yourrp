@@ -2,8 +2,8 @@
 
 net.Receive( "get_workshop_collection", function()
   local ply = LocalPlayer()
-  local _wscnr = tonumber( net.ReadString() )
-  if _wscnr != 0 then
+  local _wscnr = tostring( net.ReadString() )
+  if _wscnr != "" and _wscnr != "0" then
     if settingsWindow.window != nil then
       local _dlv_wscso = createD( "DButton", settingsWindow.window.site, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 10 + 50 ) )
       _dlv_wscso:SetText( "" )

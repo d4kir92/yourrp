@@ -78,10 +78,10 @@ function drawGroupPlayers( id )
         _tmpPly.gerade = k%2
         _tmpPly.level = 1
         _tmpPly.rpname = ply:RPName() or ""
-        _tmpPly.showrole = ply:GetNWBool( "showrole", false )
         _tmpPly.rolename = ply:GetRoleName()
-        _tmpPly.showgroup = ply:GetNWBool( "showgroup", false )
         _tmpPly.groupname = ply:GetGroupName()
+        _tmpPly.frags = ply:Frags()
+        _tmpPly.deaths = ply:Deaths()
         _tmpPly.rank = ply:GetUserGroup() or ""
         _tmpPly.ping = ply:Ping() or ""
         _tmpPly.usergroup = ply:GetUserGroup() or ""
@@ -141,23 +141,43 @@ function drawGroupPlayers( id )
             draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( _extra, _extra, _extra, 200 ), true, false, true, false )
           end
 
-          draw.SimpleTextOutlined( self.rpname, "sef", ctr( 128+16 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          draw.SimpleTextOutlined( string.upper( self.rank ), "sef", ctr( 128+16 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-          if self.showrole then
-            draw.SimpleTextOutlined( self.rolename, "sef", ctr( 700 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          else
-            draw.SimpleTextOutlined( "[" .. string.upper( lang_string( "hidden" ) ) .. "]", "sef", ctr( 700 ), ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          end
-          if self.showgroup then
-            draw.SimpleTextOutlined( self.groupname, "sef", ctr( 700 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-          else
-            draw.SimpleTextOutlined( "[" .. string.upper( lang_string( "hidden" ) ) .. "]", "sef", ctr( 700 ), ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          local _w = ctr( 128+16 )
+          draw.SimpleTextOutlined( self.rpname, "sef", _w, ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+            draw.SimpleTextOutlined( string.upper( self.rank ), "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
 
-          draw.SimpleTextOutlined( string.upper( self.lang ), "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+            _w = _w + ctr( 600 )
+          end
 
-          draw.SimpleTextOutlined( self.playtime, "sef", pw - ctr( 180 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) then
+            draw.SimpleTextOutlined( self.rolename, "sef", _w, ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+            draw.SimpleTextOutlined( self.groupname, "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+            _w = _w + ctr( 500 )
+          end
+
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
+            draw.SimpleTextOutlined( self.frags, "sef", _w, ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+            draw.SimpleTextOutlined( self.deaths, "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
+            _w = _w + ctr( 400 )
+            draw.SimpleTextOutlined( string.upper( self.lang ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
+
+          if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
+            _w = _w + ctr( 400 )
+            draw.SimpleTextOutlined( self.playtime, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          end
 
           draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
@@ -397,13 +417,54 @@ function drawGroup( id, name, color )
       draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
       --draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "name" ) .. "/" .. lang_string( "usergroup" ), "sef", ctr( 128 + 16 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      local _w = ctr( 128+16 )
 
-      draw.SimpleTextOutlined( lang_string( "role" ) .. "/" .. lang_string( "group" ), "sef", ctr( 700 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      local str = lang_string( "name" )
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+        str = lang_string( "name" ) .. "/" .. lang_string( "usergroup" )
+      end
 
-      draw.SimpleTextOutlined( "Language", "sef", pw - ctr( 1000 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-      draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", pw - ctr( 180 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      str = ""
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) then
+        str = lang_string( "role" )
+      end
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+        if str != "" then
+          str = str .. "/"
+        end
+        str = str .. lang_string( "group" )
+      end
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+        _w = _w + ctr( 600 )
+        draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
+
+      str = ""
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
+        str = lang_string( "kills" )
+      end
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+        if str != "" then
+          str = str .. "/"
+        end
+        str = str .. lang_string( "deaths" )
+      end
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+        _w = _w + ctr( 500 )
+        draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
+
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
+        _w = _w + ctr( 400 )
+        draw.SimpleTextOutlined( "Language", "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
+
+      if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
+        _w = _w + ctr( 400 )
+        draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      end
 
       draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       --draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -499,61 +560,79 @@ end
 
 isScoreboardOpen = false
 function scoreboard:show_sb()
-  net.Start( "getScoreboardGroups" )
-  net.SendToServer()
+  if LocalPlayer():GetNWBool( "bool_yrp_scoreboard", false ) then
+    net.Start( "getScoreboardGroups" )
+    net.SendToServer()
 
-  isScoreboardOpen = true
-  if _SBFrame != nil then
-    _SBFrame:Remove()
-    _SBFrame = nil
-  end
-  local _w = BScrW() - ctr( 400 )
-  _SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
-  _SBFrame:SetTitle( "" )
-  _SBFrame:ShowCloseButton( false )
-  _SBFrame:SetDraggable( false )
-  _SBFrame:Center()
-
-  _SBFrame:MakePopup()
-
-  local _mapPNG = getMapPNG()
-
-  function _SBFrame:Paint( pw, ph )
-    draw.RoundedBox( 0, ctr( 256 ), ctr( _br ), pw - ctr( 256*2 ), ctr( 125 ), get_color( "epicBlue" ) )
-
-    draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, get_color( "darkBG" ) )
-
-    draw.SimpleTextOutlined( GAMEMODE:GetGameDescription(), "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    surface.SetDrawColor( 255, 255, 255, 255 )
-  	surface.SetMaterial( _yrpIcon	)
-  	surface.DrawTexturedRect( 0, ctr( 4 ), ctr( 256 ), ctr( 256 ) )
-
-    if _mapPNG != false then
-      draw.RoundedBox( 0, pw-ctr( 256+8 ), 0, ctr( 256+8 ), ctr( 256+8 ), Color( 0, 0, 0, 255 ) )
-
-      surface.SetDrawColor( 255, 255, 255, 255 )
-    	surface.SetMaterial( _mapPNG	)
-    	surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
-    else
-      surface.SetDrawColor( 255, 255, 255, 255 )
-      surface.SetMaterial( _yrpIcon	)
-      surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+    isScoreboardOpen = true
+    if _SBFrame != nil then
+      _SBFrame:Remove()
+      _SBFrame = nil
     end
+    local _w = BScrW() - ctr( 400 )
+    _SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
+    _SBFrame:SetTitle( "" )
+    _SBFrame:ShowCloseButton( false )
+    _SBFrame:SetDraggable( false )
+    _SBFrame:Center()
+
+    _SBFrame:MakePopup()
+
+    local _mapPNG = getMapPNG()
+
+    local _server_logo = LocalPlayer():GetNWString( "text_server_logo", "" )
+    text_server_logo = GetHTMLImage( LocalPlayer():GetNWString( "text_server_logo", "" ), ctr( 256 ), ctr( 256 ) )
+
+    function _SBFrame:Paint( pw, ph )
+      draw.RoundedBox( 0, ctr( 256 ), ctr( _br ), pw - ctr( 256*2 ), ctr( 125 ), get_color( "epicBlue" ) )
+
+      draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, get_color( "darkBG" ) )
+
+      draw.SimpleTextOutlined( GAMEMODE:GetGameDescription(), "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+      draw.SimpleTextOutlined( lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+      if _server_logo == "" then
+        surface.SetDrawColor( 255, 255, 255, 255 )
+      	surface.SetMaterial( _yrpIcon	)
+      	surface.DrawTexturedRect( 0, ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+      end
+
+      if _mapPNG != false then
+        draw.RoundedBox( 0, pw-ctr( 256+8 ), 0, ctr( 256+8 ), ctr( 256+8 ), Color( 0, 0, 0, 255 ) )
+
+        surface.SetDrawColor( 255, 255, 255, 255 )
+      	surface.SetMaterial( _mapPNG	)
+      	surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+      else
+        if _server_logo == "" then
+          surface.SetDrawColor( 255, 255, 255, 255 )
+          surface.SetMaterial( _yrpIcon	)
+          surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+        end
+      end
+    end
+
+    if _server_logo != "" then
+      local ServerLogo = createD( "DHTML", _SBFrame, ctr( 256 ), ctr( 256 ), 0, ctr( 4 ) )
+      ServerLogo:SetHTML( text_server_logo )
+      if _mapPNG == false then
+        local ServerLogo2 = createD( "DHTML", _SBFrame, ctr( 256 ), ctr( 256 ), _SBFrame:GetWide()-ctr( 256+4 ), ctr( 4 ) )
+        ServerLogo2:SetHTML( text_server_logo )
+      end
+    end
+
+    _SBSP = createD( "DScrollPanel", _SBFrame, _w-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
+
+    local _DPanelHeader = createD( "DPanel", _SBSP, ScrH(), ScrH(), 0, 0 )
+    function _DPanelHeader:Paint( pw, ph )
+      --draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "darkBG" ) )
+    end
+
+    drawScoreboard()
   end
-
-  _SBSP = createD( "DScrollPanel", _SBFrame, _w-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
-
-  local _DPanelHeader = createD( "DPanel", _SBSP, ScrH(), ScrH(), 0, 0 )
-  function _DPanelHeader:Paint( pw, ph )
-    --draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "darkBG" ) )
-  end
-
-  drawScoreboard()
 end
 
 function scoreboard:hide_sb()

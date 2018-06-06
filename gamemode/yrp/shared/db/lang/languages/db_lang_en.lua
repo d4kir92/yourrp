@@ -4,12 +4,14 @@ AddCSLuaFile( "en/en_all.lua" )
 AddCSLuaFile( "en/en_general.lua" )
 AddCSLuaFile( "en/en_settings.lua" )
 AddCSLuaFile( "en/en_settingsfeedback.lua" )
+AddCSLuaFile( "en/en_settingsgeneral.lua" )
 AddCSLuaFile( "en/en_settingsusergroups.lua" )
 
 include( "en/en_all.lua" )
 include( "en/en_general.lua" )
 include( "en/en_settings.lua" )
 include( "en/en_settingsfeedback.lua" )
+include( "en/en_settingsgeneral.lua" )
 include( "en/en_settingsusergroups.lua" )
 
 function LangEN()
@@ -24,6 +26,7 @@ function LangEN()
 	EN_GENERAL()
 	EN_SETTINGS()
 	EN_SETTINGSFEEDBACK()
+	EN_SETTINGSGENERAL()
 	EN_SETTINGSUSERGROUPS()
 end
 

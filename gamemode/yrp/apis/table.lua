@@ -34,7 +34,9 @@ function SENTSTable( str )
   for i, senttbl in pairs( se ) do
     if senttbl != "" then
       senttbl = string.Explode( ",", senttbl )
-      tbl[senttbl[2]] = senttbl[1]
+			if senttbl[1] != nil and senttbl[2] != nil then
+      	tbl[senttbl[2]] = senttbl[1]
+			end
     end
   end
   return tbl

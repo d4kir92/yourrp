@@ -120,9 +120,16 @@ function openMap()
         plyPos.y = win.y + win.h - win.h * ( plyPos.ytmp / plyPos.yMax )
 
         --You
-        draw.RoundedBox( ctr(8), plyPos.x-ctr(8), plyPos.y-ctr(8), ctr(16), ctr(16), Color(40,40,40))
-        draw.RoundedBox( ctr(8), plyPos.x-ctr(6), plyPos.y-ctr(6), ctr(12), ctr(12), Color(255,10,10))
-        draw.SimpleTextOutlined( lang_string( "you" ), "sef", plyPos.x, plyPos.y-ctr(24), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        local x = plyPos.x
+        local y = plyPos.y
+        local w = ctr( 50 )
+        local h = ctr( 50 )
+        local rot = ply:EyeAngles().y - 90
+
+        surface.SetDrawColor( 100, 100, 255, 255 )
+      	surface.SetMaterial( GetDesignIcon( "navigation" ) )
+        surface.DrawTexturedRectRotated( x, y, w, h, rot )
+        draw.SimpleTextOutlined( lang_string( "you" ), "sef", plyPos.x, plyPos.y-ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
         --Coords
         draw.SimpleTextOutlined( math.Round( ply:GetPos().x, 0 ), "sef", ScrW()/2, ScrH() - ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -131,29 +138,36 @@ function openMap()
         draw.SimpleTextOutlined( "[M] - " .. lang_string( "map" ) .. ": " .. _mapName, "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
         if LocalPlayer():HasAccess() and true then
-          for k, plys in pairs( player.GetAll() ) do
-            if plys != LocalPlayer() then
+          for k, pl in pairs( player.GetAll() ) do
+            if pl != LocalPlayer() then
               --Other players
               local tmpPly = {}
               tmpPly.xMax = map.sizeX
               tmpPly.yMax = map.sizeY
               if map.sizeW < 0 then
-                tmpPly.xtmp = ( plys:GetPos().x - map.sizeW )
+                tmpPly.xtmp = ( pl:GetPos().x - map.sizeW )
               else
-                tmpPly.xtmp = ( plys:GetPos().x + map.sizeE )
+                tmpPly.xtmp = ( pl:GetPos().x + map.sizeE )
               end
               if map.sizeS < 0 then
-                tmpPly.ytmp = ( plys:GetPos().y - map.sizeS )
+                tmpPly.ytmp = ( pl:GetPos().y - map.sizeS )
               else
-                tmpPly.ytmp = ( plys:GetPos().y + map.sizeN )
+                tmpPly.ytmp = ( pl:GetPos().y + map.sizeN )
               end
               tmpPly.x = win.x + win.w * ( tmpPly.xtmp / tmpPly.xMax )
               tmpPly.y = win.y + win.h - win.h * ( tmpPly.ytmp / tmpPly.yMax )
 
               --Draw
-              draw.RoundedBox( ctr(8), tmpPly.x-ctr(8), tmpPly.y-ctr(8), ctr(16), ctr(16), Color( 40, 40, 40, 200 ))
-              draw.RoundedBox( ctr(8), tmpPly.x-ctr(6), tmpPly.y-ctr(6), ctr(12), ctr(12), Color( 40, 40, 255, 200 ))
-              draw.SimpleTextOutlined( plys:Nick(), "sef", tmpPly.x, tmpPly.y-ctr(24), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+              local x = tmpPly.x
+              local y = tmpPly.y
+              local w = ctr( 50 )
+              local h = ctr( 50 )
+              local rot = pl:EyeAngles().y - 90
+
+              surface.SetDrawColor( 100, 100, 255, 255 )
+            	surface.SetMaterial( GetDesignIcon( "navigation" ) )
+              surface.DrawTexturedRectRotated( x, y, w, h, rot )
+              draw.SimpleTextOutlined( pl:Nick(), "sef", tmpPly.x, tmpPly.y-ctr(50), Color(0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
             end
           end
         end

@@ -83,7 +83,10 @@ function GetDesignIcon( name )
   return _icons[name]
 end
 
-AddDesignIcon( "done", "vgui/material/baseline_done_outline_black_24dp.png" )
+AddDesignIcon( "done", "vgui/material/icon_done_outline.png" )
+AddDesignIcon( "navigation", "vgui/material/icon_navigation.png" )
+AddDesignIcon( "chat", "vgui/material/icon_chat.png" )
+AddDesignIcon( "voice", "vgui/material/icon_voice.png" )
 
 local _delay = 1
 local _get_design = true
@@ -453,24 +456,12 @@ function drawRBoxCr( x, y, size, col )
 	draw.RoundedBox( ctr(size/2), ctr(x), ctr(y), ctr(size), ctr(size), col )
 end
 
-function surfaceText( text, font, x, y, color, ax, ay )
-  surface.SetFont( font )
-
-  local _tw, _th = surface.GetTextSize( text )
-  if ax == 1 then
-    x = x - _tw/2
-  elseif ax == 2 then
-    x = x - _tw
+function surfaceText( text, font, x, y, color, ax, ay, br )
+  if !br then
+    draw.SimpleText( text, font, x, y, color, ax, ay )
+  else
+    draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
-  if ay == 1 then
-    y = y - _th/2
-  elseif ay == 2 then
-    y = y - _th
-  end
-  surface.SetTextPos( x, y )
-
-  surface.SetTextColor( color )
-  surface.DrawText( text )
 end
 
 function drawText( text, font, x, y, col, ax, ay )
@@ -532,16 +523,11 @@ function createMDMenu( parent, w, h, x, y )
 	end
 
 	function tmp:openMenu()
-		self.menu = createD( "DPanel", self, ScrW(), ScrH(), 0, 0 )
+		self.menu = createD( "DPanelList", self, ctr( 600 ), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
+    self.menu:EnableVerticalScrollbar( true )
 		function self.menu:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, get_dp_col() )
-
-			surface.SetDrawColor( 255, 255, 255, 255 )
-	  	surface.SetMaterial( get_icon_burger_menu()	)
-	  	surface.DrawTexturedRect( ctr( 15+10 ), ctr( 15+10 ), ctr( 50 ), ctr( 50 ) )
-
-			draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 100 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local x, y = gui.MousePos()
 			if x > ctr( 600 ) then
@@ -555,7 +541,9 @@ function createMDMenu( parent, w, h, x, y )
 			function tmpCat:Paint( pw, ph )
 				draw.SimpleTextOutlined( string.upper( lang_string( v ) ), "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
-			posY = posY + 50 + 10
+      self.menu:AddItem( tmpCat )
+
+			--posY = posY + 50 + 10
 			if self.sites[v] != nil then
 				for l, w in pairs( self.sites[v] ) do
 					local tmp2 = createD( "DButton", self.menu, ctr( 600-20 ), ctr( 80 ), ctr( 10 ), ctr( posY ) )
@@ -582,9 +570,21 @@ function createMDMenu( parent, w, h, x, y )
 						tmp:SwitchToSite( self.hook )
             tmp.menu:Remove()
 					end
+          self.menu:AddItem( tmp2 )
 
-					posY = posY + 80 + 10
+          local tmpHr2 = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 6 ), ctr( 10 ), ctr( posY ) )
+    			function tmpHr2:Paint( pw, ph )
+
+    			end
+          self.menu:AddItem( tmpHr2 )
+
+					--posY = posY + 80 + 10
 				end
+        local tmpHr = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 20 ), ctr( 10 ), ctr( posY ) )
+  			function tmpHr:Paint( pw, ph )
+  				--draw.SimpleTextOutlined( "test", "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  			end
+        self.menu:AddItem( tmpHr )
 			end
 		end
 	end

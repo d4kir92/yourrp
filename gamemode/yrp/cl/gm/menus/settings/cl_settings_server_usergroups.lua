@@ -100,7 +100,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 
   local SWEPS = createD( "DYRPPanelPlus", PARENT, ctr( 500 ), ctr( 50 + 500 + 50 ), ctr( 20 ), ctr( 20 + 100 + 20 + 100 + 20 + 100 + 20 ) )
   SWEPS:INITPanel( "DPanel" )
-  SWEPS:SetHeader( lang_string( "weapons" ) .. " [" .. lang_string( "wip" ) .. "]" )
+  SWEPS:SetHeader( lang_string( "weapons" ) )
   SWEPS:SetText( ug.icon )
   function SWEPS.plus:Paint( pw, ph )
     surfaceBox( 0, 0, pw, ph, Color( 80, 80, 80, 255 ) )
@@ -359,11 +359,21 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
       surfaceCheckBox( self, pw, ph, "done" )
     end
     function tmp.cb:OnChange( bVal )
-      net.Start( "usergroup_update_" .. name )
-        net.WriteString( CURRENT_USERGROUP )
-        net.WriteString( btn( bVal ) )
-      net.SendToServer()
+      if !self.serverside then
+        net.Start( "usergroup_update_" .. name )
+          net.WriteString( CURRENT_USERGROUP )
+          net.WriteString( btn( bVal ) )
+        net.SendToServer()
+      end
     end
+    net.Receive( "usergroup_update_" .. name, function( len )
+      local b = net.ReadString()
+      if pa( tmp.cb ) then
+        tmp.cb.serverside = true
+        tmp.cb:SetValue( b )
+        tmp.cb.serverside = false
+      end
+    end)
 
     ACCESS.plus:AddItem( tmp )
   end
@@ -525,8 +535,6 @@ net.Receive( "Connect_Settings_UserGroups", function( len )
     if pa( settingsWindow.window ) then
       function settingsWindow.window.site:Paint( pw, ph )
         draw.RoundedBox( 4, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
-
-        surfaceText( lang_string( "wip" ), "mat1text", pw - ctr( 400 ), ph - ctr( 100 ), Color( 255, 255, 255 ), 1, 1 )
       end
 
       CURRENT_USERGROUP = nil
@@ -572,7 +580,8 @@ net.Receive( "Connect_Settings_UserGroups", function( len )
 
       local _ugs_title = createD( "DPanel", PARENT, ctr( 500 ), ctr( 50 ), ctr( 20 ), ctr( 20 + 50 + 20 ) )
       function _ugs_title:Paint( pw, ph )
-        surfacePanel( self, pw, ph, lang_string( "usergroup" ) )
+        draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+        surfaceText( lang_string( "usergroups" ), "Settings_Header", pw/2, ph/2, Color( 0, 0, 0 ), 1, 1 )
       end
 
       --[[ UserGroupsList ]]--

@@ -11,7 +11,7 @@ function GetSpTable()
 end
 
 function openSP()
-  if LocalPlayer():GetNWBool( "toggle_smartphone" ) then
+  if LocalPlayer():GetNWBool( "bool_smartphone_system" ) then
     if isNoMenuOpen() and ( !sp.visible or sp.visible == nil ) then
       openMenu()
       local _w = ctrb( 560 )

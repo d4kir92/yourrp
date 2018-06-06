@@ -55,9 +55,22 @@ function GM:PlayerAuthed( ply, steamid, uniqueid )
   check_yrp_client( ply )
 end
 
+YRP = YRP or {}
+
+function YRP:Loadout( ply )
+  printGM( "gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout." )
+
+  ply:UserGroupLoadout()
+  ply:GeneralLoadout()
+end
+
 function GM:PlayerLoadout( ply )
   printGM( "gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment." )
+
   if ply:HasCharacterSelected() then
+
+    YRP:Loadout( ply )
+
     --ply:CheckInventory()
 
     SetDesign( ply )
@@ -102,36 +115,6 @@ function GM:PlayerLoadout( ply )
 
     ply:SetNWFloat( "hunger", 100 )
     ply:SetNWFloat( "thirst", 100 )
-
-    local monTab = SQL_SELECT( "yrp_money", "*", nil )
-    if monTab != nil then
-      monTab = monTab[1]
-      local monPre = monTab.moneypre
-      local monPos = monTab.moneypos
-      ply:SetNWString( "moneypre", monPre )
-      ply:SetNWString( "moneyPost", monPos )
-    end
-
-    local _yrp_general = SQL_SELECT( "yrp_general", "*", nil )
-    if _yrp_general != nil then
-      _yrp_general = _yrp_general[1]
-      ply:SetNWBool( "toggle_inventory", tobool( _yrp_general.toggle_inventory ) )
-      ply:SetNWBool( "toggle_hunger", tobool( _yrp_general.toggle_hunger ) )
-      ply:SetNWBool( "toggle_thirst", tobool( _yrp_general.toggle_thirst ) )
-      ply:SetNWBool( "toggle_stamina", tobool( _yrp_general.toggle_stamina ) )
-      ply:SetNWBool( "toggle_building", tobool( _yrp_general.toggle_building ) )
-      ply:SetNWBool( "toggle_hud", tobool( _yrp_general.toggle_hud ) )
-      ply:SetNWBool( "toggle_smartphone", tobool( _yrp_general.toggle_smartphone ) )
-      ply:SetNWInt( "view_distance", _yrp_general.view_distance )
-    else
-      printGM( "note", "yrp_general failed" )
-    end
-
-    if ply:HasAccess() then
-      ply:ForceEquip( "yrp_arrest_stick" )
-      ply:ForceEquip( "weapon_physgun" )
-      ply:ForceEquip( "weapon_physcannon" )
-    end
   end
 
   ply:UpdateBackpack()
@@ -218,12 +201,18 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     ply:DropBackpackStorage()
   end
   if IsDropMoneyOnDeathEnabled() then
-    local money = ents.Create( "yrp_money" )
-    money:SetPos( ply:GetPos() )
-    money:Spawn()
     local _money = ply:GetMoney()
-    money:SetMoney( ply:GetMoney() )
-    ply:SetMoney( 0 )
+    local _max = GetMaxAmountOfDroppedMoney()
+    if _money > _max then
+      _money = _max
+    end
+    if _money > 0 then
+      local money = ents.Create( "yrp_money" )
+      money:SetPos( ply:GetPos() )
+      money:Spawn()
+      money:SetMoney( _money )
+      ply:addMoney( -_money )
+    end
   end
 end)
 
@@ -233,23 +222,19 @@ function GM:ShutDown()
 end
 
 function GM:GetFallDamage( ply, speed )
-  if IsRealisticFallDamageEnabled() then
-    local _damage = speed / 8
-    if speed > ply:GetModelScale()*120 then
-      if IsBonefracturingEnabled() then
-        local _rand = math.Round( math.Rand( 0, 1 ), 0 )
-        if _rand == 0 then
-          ply:SetNWBool( "broken_leg_right", true )
-        elseif _rand == 1 then
-          ply:SetNWBool( "broken_leg_left", true )
-        end
+  local _damage = speed / 8
+  if speed > ply:GetModelScale()*120 then
+    if IsBonefracturingEnabled() then
+      local _rand = math.Round( math.Rand( 0, 1 ), 0 )
+      if _rand == 0 then
+        ply:SetNWBool( "broken_leg_right", true )
+      elseif _rand == 1 then
+        ply:SetNWBool( "broken_leg_left", true )
       end
-      return _damage*ply:GetMaxHealth()/100
-    else
-      return 0
     end
+    return _damage*ply:GetMaxHealth()/100
   else
-    return 10
+    return 0
   end
 end
 
@@ -318,7 +303,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
     end)
 	end
 
-  if IsRealisticDamageEnabled() then
+  if true then
     if IsBleedingEnabled() then
       local _rand = math.Rand( 0, 100 )
       if _rand < GetBleedingChance() then
@@ -375,7 +360,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 end
 
 function GM:ScaleNPCDamage( npc, hitgroup, dmginfo )
-  if IsRealisticDamageEnabled() then
+  if true then
   	if hitgroup == HITGROUP_HEAD then
       if IsHeadshotDeadlyNpc() then
         dmginfo:ScaleDamage( npc:Health() )
@@ -472,12 +457,16 @@ function canhear( talker, listener )
 end
 
 function GM:PlayerCanHearPlayersVoice( listener, talker )
-
-  if !IsYrpVoiceChatEnabled() then
-    return true
+  if Is3DVoiceEnabled() then --[[ BEARBEITEN ]]
+    if IsVoiceChannelsEnabled() then
+      return canhear( talker, listener ), hearfaded( talker, listener )
+    else
+      return true, true
+    end
+  else
+    return true, false
   end
-
-  return canhear( talker, listener ), hearfaded( talker, listener )
+  return true
 end
 
 function setbodygroups( ply )
@@ -516,10 +505,10 @@ net.Receive( "player_is_ready", function( len, ply )
   open_character_selection( ply )
 
   -- YRP Chat?
-  local _chat = SQL_SELECT( "yrp_general", "yrp_chat", "uniqueID = 1" )
+  local _chat = SQL_SELECT( "yrp_general", "bool_yrp_chat", "uniqueID = 1" )
   if _chat != nil and _chat != false then
     _chat = _chat[1]
-    ply:SetNWBool( "yrp_chat", tobool( _chat.yrp_chat ) )
+    ply:SetNWBool( "bool_yrp_chat", tobool( _chat.yrp_chat ) )
   end
 
   ply:SetNWBool( "finishedloading", true )
@@ -533,14 +522,11 @@ net.Receive( "player_is_ready", function( len, ply )
 end)
 
 function GM:PlayerSpray( ply )
-  local _sel = SQL_SELECT( "yrp_general", "toggle_graffiti", "uniqueID = 1" )
-  if wk( _sel ) then
-    _sel = _sel[1]
-    if tobool( _sel.toggle_graffiti ) then
-      return false
-    end
+  if ply:GetNWBool( "bool_graffiti_disabled", false ) then
+    return true
+  else
+    return false
   end
-  return true
 end
 
 function GM:ShowHelp( ply )

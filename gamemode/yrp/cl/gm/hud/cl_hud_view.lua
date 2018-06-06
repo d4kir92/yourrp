@@ -14,7 +14,7 @@ function HudView()
   	if _eyeTrace.Entity:GetPos():Distance( ply:GetPos() ) > 100 then
   		return
   	end
-    if ply:GetNWBool( "toggle_building", false ) and ( _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" ) and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
+    if ply:GetNWBool( "bool_building_system", false ) and ( _eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating" ) and ply:GetPos():Distance( _eyeTrace.Entity:GetPos() ) < 150 then
       draw.SimpleTextOutlined( lang_string( "pressepre" ) .. " [" .. string.upper( GetKeybindName( "in_use" ) ) .. "] " .. lang_string( "pressepos" ), "sef", ScrW()/2, ScrH2() + ctr( 650 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       draw.SimpleTextOutlined( lang_string( "holdepre" ) .. " [" .. string.upper( GetKeybindName( "menu_options_door" ) ) .. "] " .. lang_string( "holdepos" ), "sef", ScrW()/2, ScrH2() + ctr( 700 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
       showOwner( _eyeTrace )

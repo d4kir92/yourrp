@@ -24,7 +24,7 @@ net.Receive( "getBuildingInfo", function( len )
     local owner = net.ReadString()
 
     local ply = LocalPlayer()
-    if ply:GetNWBool( "toggle_building", false ) then
+    if ply:GetNWBool( "bool_building_system", false ) then
       if _building != nil and _tmpBuilding != nil then
         if _tmpBuilding.ownerCharID == "" and tonumber( _tmpBuilding.groupID ) == -1 then
           buyWindow( _building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door )
@@ -79,7 +79,7 @@ function buyWindow( buildingID, name, price, door )
     surfaceWindow( self, pw, ph, lang_string( "buymenu" ) )
 
     draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. _name, "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined( lang_string( "price" ) .. ": " .. ply:GetNWString( "moneypre" ) .. _price .. ply:GetNWString( "moneyPost" ), "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "price" ) .. ": " .. ply:GetNWString( "text_money_pre" ).. _price .. ply:GetNWString( "text_money_pos" ), "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( lang_string( "doors" ) .. ": " .. _doors, "sef", ctr( 10 ), ctr( 150 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     draw.RoundedBox( 0, ctr( 4 ), ctr( 210 ), pw - ctr( 8 ), ctr( 530 - 210 - 4 ), Color( 255, 255, 0, 200 ) )
@@ -249,7 +249,7 @@ function optionWindow( buildingID, name, price, door, owner )
 
   --[[
   local _ButtonUpgrade = createVGUI( "DButton", yrp_door.window, 400, 50, 10, 200 )
-  _ButtonUpgrade:SetText( lang_string( "upgradedoor" ) .. " (-" .. ply:GetNWString( "moneypre" ) .. "100" .. ply:GetNWString( "moneyPost" ) .. ") NOT AVAILABLE" )
+  _ButtonUpgrade:SetText( lang_string( "upgradedoor" ) .. " (-" .. ply:GetNWString( "text_money_pre" ).. "100" .. ply:GetNWString( "text_money_pos" ) .. ") NOT AVAILABLE" )
   function _ButtonUpgrade:DoClick()
     net.Start( "wantHouse" )
       net.WriteInt( _buildingID, 16 )
@@ -268,7 +268,7 @@ function optionWindow( buildingID, name, price, door, owner )
       yrp_door.window:Remove()
     end
     function _ButtonSell:Paint( pw, ph )
-      surfaceButton( self, pw, ph, lang_string( "sellbuildingpre" ) .. " " .. _name .. " " .. lang_string( "sellbuildingpos" ) .. " (+" .. ply:GetNWString( "moneypre" ) .. _price/2 .. ply:GetNWString( "moneyPost" ) .. ")" )
+      surfaceButton( self, pw, ph, lang_string( "sellbuildingpre" ) .. " " .. _name .. " " .. lang_string( "sellbuildingpos" ) .. " (+" .. ply:GetNWString( "text_money_pre" ).. _price/2 .. ply:GetNWString( "text_money_pos" ) .. ")" )
     end
   end
 

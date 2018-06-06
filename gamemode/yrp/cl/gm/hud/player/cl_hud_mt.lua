@@ -3,7 +3,7 @@
 local thirst = Material( "icon16/cup.png" )
 
 function showMT( ply )
-  return ply:GetNWBool( "toggle_thirst", false )
+  return ply:GetNWBool( "bool_thirst", false )
 end
 
 function hudMT( ply, color )

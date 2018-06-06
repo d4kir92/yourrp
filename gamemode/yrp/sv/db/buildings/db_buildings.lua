@@ -40,7 +40,7 @@ function allowedToUseDoor( id, ply )
             return false
           end
         else
-          printGM( "error", "[allowedToUseDoor] _tmpChaTab: " .. tostring( _tmpChaTab ) )
+          printGM( "note", "[allowedToUseDoor] buildings database not available, maybe database corrupt: " .. tostring( _tmpChaTab ) )
           return false
         end
       end
@@ -58,9 +58,11 @@ function searchForDoors()
     SQL_INSERT_INTO_DEFAULTVALUES( "yrp_" .. GetMapNameDB() .. "_buildings" )
 
     local _tmpBuildingTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil )
-    SQL_INSERT_INTO( "yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "'" )
+    if wk( _tmpBuildingTable ) then
+      SQL_INSERT_INTO( "yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "'" )
 
-    local _tmpDoorsTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil )
+      local _tmpDoorsTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil )
+    end
   end
 
   local _allFuncDoors = ents.FindByClass( "func_door" )
@@ -315,7 +317,7 @@ net.Receive( "sellBuilding", function( len, ply )
 end)
 
 net.Receive( "buyBuilding", function( len, ply )
-  if ply:GetNWBool( "toggle_building", false ) then
+  if ply:GetNWBool( "bool_building_system", false ) then
     local _tmpBuildingID = net.ReadString()
     local _tmpTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 

@@ -89,9 +89,9 @@ if SERVER then
 
   util.AddNetworkString( "getGamemodename" )
 	timer.Simple( 4, function()
-	  local tmp = SQL_SELECT( "yrp_general", "name_gamemode", nil )
+	  local tmp = SQL_SELECT( "yrp_general", "text_gamemode_name", nil )
 		if tmp != false and tmp != nil then
-		  GAMEMODE.BaseName = SQL_STR_OUT( tmp[1].name_gamemode )
+		  GAMEMODE.BaseName = SQL_STR_OUT( tmp[1].text_gamemode_name )
 		end
 	end)
 end

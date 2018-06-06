@@ -178,6 +178,16 @@ function hudMM( ply, color )
     minimap.point = 8
     drawRBoxCr( ctrF(ScrH()) * anchorW( HudV( "mmaw" ) ) + HudV("mmpx") + (HudV("mmsw")/2) - (minimap.point/2), ctrF(ScrH()) * anchorH( HudV( "mmah" ) ) + HudV("mmpy") + (HudV("mmsh")/2) - (minimap.point/2), minimap.point, Color( 0, 0, 255, 200 ) )
 
+    local x = ctrF(ScrH()) * anchorW( HudV( "mmaw" ) ) + ctr( HudV("mmpx") + (HudV("mmsw")/2) )
+    local y = ctrF(ScrH()) * anchorH( HudV( "mmah" ) ) + ctr( HudV("mmpy") + (HudV("mmsh")/2) )
+    local w = ctr( 50 )
+    local h = ctr( 50 )
+    local rot = ply:EyeAngles().y - 90
+
+    surface.SetDrawColor( 100, 100, 255, 255 )
+  	surface.SetMaterial( GetDesignIcon( "navigation" ) )
+    surface.DrawTexturedRectRotated( x, y, w, h, rot )
+
     --Coords
     local _st = {}
     if HudV( "mm" .. "tt" ) == 1 then
