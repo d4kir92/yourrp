@@ -66,196 +66,194 @@ end
 
 function InitYRPChat()
 
-  if LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
-    if yrpChat.window == nil then
-      yrpChat.window = createVGUI( "DFrame", nil, 100, 100, 100, 100 )
-      yrpChat.window:SetTitle( "" )
-      yrpChat.window:ShowCloseButton( false )
-      yrpChat.window:SetDraggable( false )
+  if yrpChat.window == nil then
+    yrpChat.window = createVGUI( "DFrame", nil, 100, 100, 100, 100 )
+    yrpChat.window:SetTitle( "" )
+    yrpChat.window:ShowCloseButton( false )
+    yrpChat.window:SetDraggable( false )
 
-      yrpChat.richText = createVGUI( "RichText", yrpChat.window, 1, 1, 1, 1 )
+    yrpChat.richText = createVGUI( "RichText", yrpChat.window, 1, 1, 1, 1 )
 
-      yrpChat.comboBox = createD( "DComboBox", yrpChat.window, 1, 1, 1, 1 )
-      update_chat_choices()
+    yrpChat.comboBox = createD( "DComboBox", yrpChat.window, 1, 1, 1, 1 )
+    update_chat_choices()
 
-      function yrpChat.comboBox:OnSelect( index, value, data )
-        net.Start( "set_chat_mode" )
-          net.WriteString( string.lower( data ) )
-        net.SendToServer()
+    function yrpChat.comboBox:OnSelect( index, value, data )
+      net.Start( "set_chat_mode" )
+        net.WriteString( string.lower( data ) )
+      net.SendToServer()
+    end
+  end
+  if pa( yrpChat.window ) then
+    yrpChat.writeField = createVGUI( "DTextEntry", yrpChat.window, 1, 1, 1, 1 )
+
+    function yrpChat.richText:PerformLayout()
+    	self:SetFontInternal( "cbsf" )
+    end
+
+
+    function yrpChat.window:Paint( pw, ph )
+      if HudV( "cbto" ) == 1 and LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
+        checkChatVisible()
+        if _showChat then
+          if is_hud_db_loaded() then
+            draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+            drawRBoxBr(  0, 0, 0, ctrF( ScrH() ) * pw, ctrF( ScrH() ) * ph, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 8 ) )
+
+            local x, y = yrpChat.window:GetPos()
+            local w, h = yrpChat.window:GetSize()
+            if ctr( HudV("cbpx") ) != x or ctr( HudV("cbpy") ) != y or ctr( HudV("cbsw") ) != w or ctr( HudV("cbsh") ) != h then
+              yrpChat.window:SetPos( anchorW( HudV( "cbaw" ) ) + ctr( HudV("cbpx") ), anchorH( HudV( "cbah" ) ) + ctr( HudV("cbpy") ) )
+              yrpChat.window:SetSize( ctr( HudV("cbsw") ), ctr( HudV("cbsh") ) )
+
+              yrpChat.comboBox:SetPos( ctr( 10 ), ctr( HudV("cbsh") - 40 - 10 ) )
+              yrpChat.comboBox:SetSize( ctr( 140 ), ctr( 40 ) )
+
+              yrpChat.writeField:SetPos( ctr( 10 + 140 ), ctr( HudV("cbsh") - 40 - 10 ) )
+              yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 140 ), ctr( 40 ) )
+
+              yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
+              yrpChat.richText:SetSize( ctr( HudV("cbsw") - 2*10 ), ctr( HudV("cbsh") - 2*10 - 40 - 10 ) )
+            end
+          end
+
+          local _com = yrpChat.writeField:GetText()
+          if isFullyCommand( _com, "sooc", lang_string( "ooc" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
+          elseif isFullyCommand( _com, "slooc", lang_string( "looc" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
+          elseif isFullyCommand( _com, "ssay", lang_string( "say" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
+          elseif isFullyCommand( _com, "sme", lang_string( "me" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
+          elseif isFullyCommand( _com, "syell", lang_string( "yell" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
+          elseif isFullyCommand( _com, "sadvert", lang_string( "advert" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
+          elseif isFullyCommand( _com, "sadmin", lang_string( "admin" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
+          elseif isFullyCommand( _com, "sgroup", lang_string( "group" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
+          elseif isFullyCommand( _com, "srole", lang_string( "role" ) ) then
+            yrpChat.writeField:SetText("")
+            yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
+          end
+        end
       end
     end
-    if pa( yrpChat.window ) then
-      yrpChat.writeField = createVGUI( "DTextEntry", yrpChat.window, 1, 1, 1, 1 )
 
-      function yrpChat.richText:PerformLayout()
-      	self:SetFontInternal( "cbsf" )
+    yrpChat.writeField.OnKeyCodeTyped = function( self, code )
+      if code == KEY_ESCAPE then
+        yrpChat.closeChatbox()
+        gui.HideGameUI()
+      elseif code == KEY_ENTER then
+        if string.Trim( self:GetText() ) != "" then
+          LocalPlayer():ConCommand( "say \""..self:GetText() .. "\"" )
+        end
+        yrpChat.closeChatbox()
       end
+    end
+    function yrpChat:openChatbox()
+    	yrpChat.window:MakePopup()
+    	yrpChat.writeField:RequestFocus()
 
+      _chatIsOpen = true
+      gamemode.Call( "StartChat" )
+    end
 
-      function yrpChat.window:Paint( pw, ph )
-        if HudV( "cbto" ) == 1 and LocalPlayer():GetNWBool( "bool_yrp_chat", false ) then
-          checkChatVisible()
-          if _showChat then
-            if is_hud_db_loaded() then
-              draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-              drawRBoxBr(  0, 0, 0, ctrF( ScrH() ) * pw, ctrF( ScrH() ) * ph, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 8 ) )
+    function yrpChat.closeChatbox()
 
-              local x, y = yrpChat.window:GetPos()
-              local w, h = yrpChat.window:GetSize()
-              if ctr( HudV("cbpx") ) != x or ctr( HudV("cbpy") ) != y or ctr( HudV("cbsw") ) != w or ctr( HudV("cbsh") ) != h then
-                yrpChat.window:SetPos( anchorW( HudV( "cbaw" ) ) + ctr( HudV("cbpx") ), anchorH( HudV( "cbah" ) ) + ctr( HudV("cbpy") ) )
-                yrpChat.window:SetSize( ctr( HudV("cbsw") ), ctr( HudV("cbsh") ) )
+    	yrpChat.window:SetMouseInputEnabled( false )
+    	yrpChat.window:SetKeyboardInputEnabled( false )
+    	gui.EnableScreenClicker( false )
 
-                yrpChat.comboBox:SetPos( ctr( 10 ), ctr( HudV("cbsh") - 40 - 10 ) )
-                yrpChat.comboBox:SetSize( ctr( 140 ), ctr( 40 ) )
+      _chatIsOpen = false
+    	gamemode.Call( "FinishChat" )
 
-                yrpChat.writeField:SetPos( ctr( 10 + 140 ), ctr( HudV("cbsh") - 40 - 10 ) )
-                yrpChat.writeField:SetSize( ctr( HudV("cbsw") - 2*10 - 140 ), ctr( 40 ) )
+    	yrpChat.writeField:SetText( "" )
+    	gamemode.Call( "ChatTextChanged", "" )
+    end
 
-                yrpChat.richText:SetPos( ctr( 10 ), ctr( 10 ) )
-                yrpChat.richText:SetSize( ctr( HudV("cbsw") - 2*10 ), ctr( HudV("cbsh") - 2*10 - 40 - 10 ) )
+    local oldAddText = oldAddText or chat.AddText
+    function chat.AddText( ... )
+      local args = { ... }
+
+      yrpChat.richText:AppendText( "\n" )
+      for _, obj in pairs( args ) do
+        if type( obj ) == "table" then
+          if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
+            yrpChat.richText:InsertColorChange( obj.r, obj.g, obj.b, 255 )
+          end
+        elseif type( obj ) == "string" then
+          local _text = string.Explode( " ", obj )
+          for k, str in pairs( _text ) do
+            if k > 1 then
+              yrpChat.richText:AppendText( " " )
+            end
+
+            local _l = {}
+            _l.l_start = string.find( str, "https://", 1 )
+            if _l.l_start != nil then
+              _l.l_secure = true
+            else
+              _l.l_secure = false
+              _l.l_start = string.find( str, "http://", 1 )
+              if _l.l_start == nil then
+                _l.l_www = true
+                _l.l_start = string.find( str, "www.", 1 )
               end
             end
 
-            local _com = yrpChat.writeField:GetText()
-            if isFullyCommand( _com, "sooc", lang_string( "ooc" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "ooc" ), 1 )
-            elseif isFullyCommand( _com, "slooc", lang_string( "looc" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "looc" ), 2 )
-            elseif isFullyCommand( _com, "ssay", lang_string( "say" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "say" ), 3 )
-            elseif isFullyCommand( _com, "sme", lang_string( "me" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "me" ), 6 )
-            elseif isFullyCommand( _com, "syell", lang_string( "yell" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "yell" ), 5 )
-            elseif isFullyCommand( _com, "sadvert", lang_string( "advert" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "advert" ), 4 )
-            elseif isFullyCommand( _com, "sadmin", lang_string( "admin" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "admin" ), 7 )
-            elseif isFullyCommand( _com, "sgroup", lang_string( "group" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "group" ), 8 )
-            elseif isFullyCommand( _com, "srole", lang_string( "role" ) ) then
-              yrpChat.writeField:SetText("")
-              yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
+            if _l.l_start != nil then
+
+              _l.l_end = #str
+
+              local _link = string.sub( str, _l.l_start, _l.l_end )
+              if _l.l_www then
+                _link = "https://" .. _link
+              end
+              if _link != "" then
+                if _l.secure then
+                  yrpChat.richText:InsertColorChange( 200, 200, 255, 255 )
+                else
+                  yrpChat.richText:InsertColorChange( 255, 100, 100, 255 )
+                end
+                yrpChat.richText:InsertClickableTextStart( _link )	-- Make incoming text fire the "OpenWiki" value when clicked
+                yrpChat.richText:AppendText( _link )
+                yrpChat.richText:InsertClickableTextEnd()	-- End clickable text here
+                yrpChat.richText:InsertColorChange( 255, 255, 255, 255 )
+
+                function yrpChat.richText:ActionSignal( signalName, signalValue )
+                	if ( signalName == "TextClicked" ) then
+                		if ( signalValue == _link ) then
+                			gui.OpenURL( _link )
+                		end
+                	end
+                end
+              end
+            else
+              yrpChat.richText:AppendText( str )
             end
+          end
+        elseif obj:IsPlayer() then
+          local col = GAMEMODE:GetTeamColor( obj )
+          if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
+            yrpChat.richText:InsertColorChange( col.r, col.g, col.b, 255 )
+            yrpChat.richText:AppendText( obj:Nick() )
           end
         end
       end
 
-      yrpChat.writeField.OnKeyCodeTyped = function( self, code )
-        if code == KEY_ESCAPE then
-          yrpChat.closeChatbox()
-          gui.HideGameUI()
-        elseif code == KEY_ENTER then
-          if string.Trim( self:GetText() ) != "" then
-            LocalPlayer():ConCommand( "say \""..self:GetText() .. "\"" )
-          end
-          yrpChat.closeChatbox()
-        end
-      end
-      function yrpChat.openChatbox()
-      	yrpChat.window:MakePopup()
-      	yrpChat.writeField:RequestFocus()
+      _fadeout = CurTime() + _delay
 
-        _chatIsOpen = true
-        gamemode.Call( "StartChat" )
-      end
-
-      function yrpChat.closeChatbox()
-
-      	yrpChat.window:SetMouseInputEnabled( false )
-      	yrpChat.window:SetKeyboardInputEnabled( false )
-      	gui.EnableScreenClicker( false )
-
-        _chatIsOpen = false
-      	gamemode.Call( "FinishChat" )
-
-      	yrpChat.writeField:SetText( "" )
-      	gamemode.Call( "ChatTextChanged", "" )
-      end
-
-      local oldAddText = oldAddText or chat.AddText
-      function chat.AddText( ... )
-        local args = { ... }
-
-        yrpChat.richText:AppendText( "\n" )
-        for _, obj in pairs( args ) do
-          if type( obj ) == "table" then
-            if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
-              yrpChat.richText:InsertColorChange( obj.r, obj.g, obj.b, 255 )
-            end
-          elseif type( obj ) == "string" then
-            local _text = string.Explode( " ", obj )
-            for k, str in pairs( _text ) do
-              if k > 1 then
-                yrpChat.richText:AppendText( " " )
-              end
-
-              local _l = {}
-              _l.l_start = string.find( str, "https://", 1 )
-              if _l.l_start != nil then
-                _l.l_secure = true
-              else
-                _l.l_secure = false
-                _l.l_start = string.find( str, "http://", 1 )
-                if _l.l_start == nil then
-                  _l.l_www = true
-                  _l.l_start = string.find( str, "www.", 1 )
-                end
-              end
-
-              if _l.l_start != nil then
-
-                _l.l_end = #str
-
-                local _link = string.sub( str, _l.l_start, _l.l_end )
-                if _l.l_www then
-                  _link = "https://" .. _link
-                end
-                if _link != "" then
-                  if _l.secure then
-                    yrpChat.richText:InsertColorChange( 200, 200, 255, 255 )
-                  else
-                    yrpChat.richText:InsertColorChange( 255, 100, 100, 255 )
-                  end
-                  yrpChat.richText:InsertClickableTextStart( _link )	-- Make incoming text fire the "OpenWiki" value when clicked
-                  yrpChat.richText:AppendText( _link )
-                  yrpChat.richText:InsertClickableTextEnd()	-- End clickable text here
-                  yrpChat.richText:InsertColorChange( 255, 255, 255, 255 )
-
-                  function yrpChat.richText:ActionSignal( signalName, signalValue )
-                  	if ( signalName == "TextClicked" ) then
-                  		if ( signalValue == _link ) then
-                  			gui.OpenURL( _link )
-                  		end
-                  	end
-                  end
-                end
-              else
-                yrpChat.richText:AppendText( str )
-              end
-            end
-          elseif obj:IsPlayer() then
-            local col = GAMEMODE:GetTeamColor( obj )
-            if isnumber( tonumber( obj.r ) ) and isnumber( tonumber( obj.g ) ) and isnumber( tonumber( obj.b ) ) then
-              yrpChat.richText:InsertColorChange( col.r, col.g, col.b, 255 )
-              yrpChat.richText:AppendText( obj:Nick() )
-            end
-          end
-        end
-
-        _fadeout = CurTime() + _delay
-
-        oldAddText ( ... )
-      end
+      oldAddText ( ... )
     end
   end
 end
@@ -279,7 +277,7 @@ hook.Add( "PlayerBindPress", "yrp_overrideChatbind", function( ply, bind, presse
     end
     if HudV( "cbto" ) == 1 then
       if pa( yrpChat ) then
-        yrpChat.openChatbox( bTeam )
+        yrpChat:openChatbox( bTeam )
       end
     end
     return true
