@@ -400,6 +400,8 @@ function drawGroupPlayers( id )
 end
 
 function drawGroup( id, name, color )
+  local ply = LocalPlayer()
+  
   elePos.y = elePos.y + 50
 
   local _color = string.Explode( ",", color )
