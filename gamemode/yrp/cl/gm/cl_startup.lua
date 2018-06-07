@@ -1060,6 +1060,7 @@ function drawIcon( ply, string, z, color )
   end
   local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
   local sca = ply:GetModelScale()/4
+  print(color)
   cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
     surface.SetDrawColor( color )
     surface.SetMaterial( GetDesignIcon( string ) )
@@ -1082,8 +1083,7 @@ function drawString( ply, string, z, color )
     local _tw, _th = surface.GetTextSize( str )
     _tw = math.Round( _tw * 1.08, 0 )
     _th = _th
-    color.a = math.Round( color.a*0.5, 0 )
-    surfaceText( str, "3d2d_string", 0, _th/2+1, Color( 255, 255, 255, color.a+1 ), 1, 1 )
+    surfaceText( str, "3d2d_string", 0, _th/2+1, color, 1, 1 )
   cam.End3D2D()
 end
 
@@ -1172,128 +1172,133 @@ _icons["ms"] = Material( "icon16/lightning.png" )
 
 function drawPlates( ply )
   if ply:Alive() then
-    if ply != LocalPlayer() then
-      local _height = 0
 
-      if ply:GetNWBool( "bool_tag_on_head", false ) then
-        if ply:GetNWBool( "bool_tag_on_head_voice", false ) and ply:IsSpeaking() then
-          drawIcon( ply, "voice", -6, Color( 255, 255, 255, ply:GetColor().a ) )
-        end
+    local _height = 0
 
-        if ply:GetNWBool( "bool_tag_on_head_chat", false ) and isChatOpen() then
-          drawIcon( ply, "chat", -6, Color( 255, 255, 255, ply:GetColor().a ) )
-        end
+    local color = ply:GetColor()
+    color.a = color.a - 160
+    if color.a <= 0 then
+      color.a = 10
+    end
 
-        if ply:GetNWBool( "bool_tag_on_head_clan", false ) then
-          drawString( ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
-
-        if ply:GetNWBool( "bool_tag_on_head_name", false ) then
-          drawString( ply, ply:RPName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
-
-        if ply:GetNWBool( "bool_tag_on_head_rolename", false ) then
-          drawString( ply, ply:GetRoleName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
-
-        if ply:GetNWBool( "bool_tag_on_head_groupname", false ) then
-          drawString( ply, ply:GetGroupName(), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
-
-        if ply:GetNWBool( "bool_tag_on_head_health", false ) then
-          drawString( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
-
-        if ply:GetNWBool( "bool_tag_on_head_armor", false ) then
-          drawString( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "100" ) .. " " .. lang_string( "armor" ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
-
-        if ply:GetNWBool( "bool_tag_on_head_usergroup", false ) then
-          drawString( ply, string.upper( ply:GetUserGroup() ), _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 5
-        end
+    if ply:GetNWBool( "bool_tag_on_head", false ) then
+      if ply:GetNWBool( "bool_tag_on_head_voice", false ) and ply:IsSpeaking() then
+        drawIcon( ply, "voice", -6, color )
       end
 
-      _height = _height + 2
-
-      if ply:GetNWBool( "tag_ug", false )
-      or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
-        if ply:GetColor().a > 10 then
-          drawPlate( ply, string.upper( ply:GetUserGroup() ), _height, Color( 0, 0, 140, ply:GetColor().a ) )
-          _height = _height + 9
-        end
+      if ply:GetNWBool( "bool_tag_on_head_chat", false ) and isChatOpen() then
+        drawIcon( ply, "chat", -6, color )
       end
 
-      if ply:GetNWBool( "tag_dev", false ) then
-        if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
-          drawPlate( ply, "DEVELOPER", _height, Color( 0, 0, 0, ply:GetColor().a ) )
-          _height = _height + 9
-        end
+      if ply:GetNWBool( "bool_tag_on_head_clan", false ) then
+        drawString( ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, color )
+        _height = _height + 5
       end
 
-      if ply:GetNWBool( "bool_tag_on_side", false ) then
-        local _distance = 200
-        if LocalPlayer():GetPos():Distance( ply:GetPos() ) < _distance then
-          local _alpha = 255-255*(LocalPlayer():GetPos():Distance( ply:GetPos() ) / _distance )
-          if ply:GetColor().a < _alpha then
-            _alpha = ply:GetColor().a
-          end
-          local _z = 50
-          local _x = -10
-          local _y = 18
-          local _w = 160
-          local _h = 20
-          local _d = 2
-          if ply:GetNWBool( "bool_tag_on_side_name", false ) then
-            drawPlayerInfo( ply, ply:RPName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["na"] )
-            _z = _z + _d
-          end
-          if ply:GetNWBool( "bool_tag_on_side_rolename", false ) then
-            drawPlayerInfo( ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["rn"] )
-            _z = _z + _d
-          end
-          if ply:GetNWBool( "bool_tag_on_side_groupname", false ) then
-            local _color = ply:GetNWString( "groupColor", "255,0,0" )
-            _color = string.Explode( ",", _color )
-            _color = Color( _color[1], _color[2], _color[3] )
-            drawPlayerInfo( ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["gn"], 1, 1, _color )
-            _z = _z + _d
-          end
-          if ply:GetNWBool( "bool_tag_on_side_health", false ) then
-            drawPlayerInfo( ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color( 150, 52, 52, 200 ) )
-            _z = _z + _d
-          end
-          if ply:GetNWBool( "bool_tag_on_side_armor", false ) then
-            drawPlayerInfo( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString( "GetMaxArmor", "" ), Color( 52, 150, 72, 200 ) )
-            _z = _z + _d
-          end
+      if ply:GetNWBool( "bool_tag_on_head_name", false ) then
+        drawString( ply, ply:RPName(), _height, color )
+        _height = _height + 5
+      end
 
-          if LocalPlayer():HasAccess() then
-            drawPlayerInfo( ply, ply:GetNWString( "GetCurStamina", "" ) .. "/" .. ply:GetNWString( "GetMaxStamina", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ms"], ply:GetNWString( "GetCurStamina", "" ), ply:GetNWString( "GetMaxStamina", "" ), Color( 150, 150, 60, _alpha ) )
-            _z = _z + _d
+      if ply:GetNWBool( "bool_tag_on_head_rolename", false ) then
+        drawString( ply, ply:GetRoleName(), _height, color )
+        _height = _height + 5
+      end
 
-            drawPlayerInfo( ply, ply:SteamName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sn"] )
-            _z = _z + _d
+      if ply:GetNWBool( "bool_tag_on_head_groupname", false ) then
+        drawString( ply, ply:GetGroupName(), _height, color )
+        _height = _height + 5
+      end
 
-            drawPlayerInfo( ply, string.upper( ply:GetUserGroup() ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ug"] )
-            _z = _z + _d
+      if ply:GetNWBool( "bool_tag_on_head_health", false ) then
+        drawString( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _height, color )
+        _height = _height + 5
+      end
 
-            drawPlayerInfo( ply, "+" .. ply:GetNWString( "text_money_pre", "" ) .. ply:GetNWString( "salary", "" ) .. ply:GetNWString( "text_money_pos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sa"] )
-            _z = _z + _d
+      if ply:GetNWBool( "bool_tag_on_head_armor", false ) then
+        drawString( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "100" ) .. " " .. lang_string( "armor" ), _height, color )
+        _height = _height + 5
+      end
 
-            local _motext = ply:GetNWString( "text_money_pre", "" ) .. ply:GetNWString( "money", "" ) .. ply:GetNWString( "text_money_pos", "" )
-            local _mMin = CurTime() + ply:GetNWInt( "salarytime" ) - ply:GetNWInt( "nextsalarytime" )
-            local _mMax = ply:GetNWInt( "salarytime" )+1
+      if ply:GetNWBool( "bool_tag_on_head_usergroup", false ) then
+        drawString( ply, string.upper( ply:GetUserGroup() ), _height, color )
+        _height = _height + 5
+      end
+    end
 
-            drawPlayerInfo( ply, _motext, _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["mo"], _mMin, _mMax, Color( 33, 108, 42, _alpha ) )
-            _z = _z + _d
-          end
+    _height = _height + 2
+
+    if ply:GetNWBool( "tag_ug", false )
+    or ( ply:GetNWBool( "show_tags", false ) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle() ) then
+      if ply:GetColor().a > 10 then
+        drawPlate( ply, string.upper( ply:GetUserGroup() ), _height, Color( 0, 0, 140, ply:GetColor().a ) )
+        _height = _height + 9
+      end
+    end
+
+    if ply:GetNWBool( "tag_dev", false ) then
+      if tostring( ply:SteamID() ) == "STEAM_0:1:20900349" then
+        drawPlate( ply, "DEVELOPER", _height, Color( 0, 0, 0, ply:GetColor().a ) )
+        _height = _height + 9
+      end
+    end
+
+    if ply:GetNWBool( "bool_tag_on_side", false ) then
+      local _distance = 200
+      if LocalPlayer():GetPos():Distance( ply:GetPos() ) < _distance then
+        local _alpha = 255-255*(LocalPlayer():GetPos():Distance( ply:GetPos() ) / _distance )
+        if ply:GetColor().a < _alpha then
+          _alpha = ply:GetColor().a
+        end
+        local _z = 50
+        local _x = -10
+        local _y = 18
+        local _w = 160
+        local _h = 20
+        local _d = 2
+        if ply:GetNWBool( "bool_tag_on_side_name", false ) then
+          drawPlayerInfo( ply, ply:RPName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["na"] )
+          _z = _z + _d
+        end
+        if ply:GetNWBool( "bool_tag_on_side_rolename", false ) then
+          drawPlayerInfo( ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["rn"] )
+          _z = _z + _d
+        end
+        if ply:GetNWBool( "bool_tag_on_side_groupname", false ) then
+          local _color = ply:GetNWString( "groupColor", "255,0,0" )
+          _color = string.Explode( ",", _color )
+          _color = Color( _color[1], _color[2], _color[3] )
+          drawPlayerInfo( ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["gn"], 1, 1, _color )
+          _z = _z + _d
+        end
+        if ply:GetNWBool( "bool_tag_on_side_health", false ) then
+          drawPlayerInfo( ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color( 150, 52, 52, 200 ) )
+          _z = _z + _d
+        end
+        if ply:GetNWBool( "bool_tag_on_side_armor", false ) then
+          drawPlayerInfo( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString( "GetMaxArmor", "" ), Color( 52, 150, 72, 200 ) )
+          _z = _z + _d
+        end
+
+        if LocalPlayer():HasAccess() then
+          drawPlayerInfo( ply, ply:GetNWString( "GetCurStamina", "" ) .. "/" .. ply:GetNWString( "GetMaxStamina", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ms"], ply:GetNWString( "GetCurStamina", "" ), ply:GetNWString( "GetMaxStamina", "" ), Color( 150, 150, 60, _alpha ) )
+          _z = _z + _d
+
+          drawPlayerInfo( ply, ply:SteamName(), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sn"] )
+          _z = _z + _d
+
+          drawPlayerInfo( ply, string.upper( ply:GetUserGroup() ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["ug"] )
+          _z = _z + _d
+
+          drawPlayerInfo( ply, "+" .. ply:GetNWString( "text_money_pre", "" ) .. ply:GetNWString( "salary", "" ) .. ply:GetNWString( "text_money_pos", "" ), _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["sa"] )
+          _z = _z + _d
+
+          local _motext = ply:GetNWString( "text_money_pre", "" ) .. ply:GetNWString( "money", "" ) .. ply:GetNWString( "text_money_pos", "" )
+          local _mMin = CurTime() + ply:GetNWInt( "salarytime" ) - ply:GetNWInt( "nextsalarytime" )
+          local _mMax = ply:GetNWInt( "salarytime" )+1
+
+          drawPlayerInfo( ply, _motext, _x, _y, _z, _w, _h, Color( 0, 0, 0, ply:GetColor().a ), _alpha, _icons["mo"], _mMin, _mMax, Color( 33, 108, 42, _alpha ) )
+          _z = _z + _d
         end
       end
     end

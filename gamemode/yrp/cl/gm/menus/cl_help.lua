@@ -1,5 +1,130 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+--[[
+local HELPMENU = {}
+
+function toggleHelpMenu()
+  if isNoMenuOpen() then
+    openHelpMenu()
+  else
+    closeHelpMenu()
+  end
+end
+
+function closeHelpMenu()
+  if HELPMENU.window != nil then
+    closeMenu()
+    HELPMENU.window:Remove()
+    HELPMENU.window = nil
+  end
+end
+
+function GetTextLength( text, font )
+  surface.SetFont( font )
+  local l, h = surface.GetTextSize( text )
+  return l
+end
+
+function DrawSelector( btn, w, h, text )
+  draw.SimpleTextOutlined( text, "mat1text", w/2, h/2, Color( 255, 255, 255, 255 ), 1, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  if btn.ani_h == nil then
+    btn.ani_h = 0
+  end
+  if btn:IsHovered() then
+    if btn.ani_h < 10 then
+      btn.ani_h = btn.ani_h + 1
+    end
+  else
+    if btn.ani_h > 0 then
+      btn.ani_h = btn.ani_h - 1
+    end
+  end
+  surfaceBox( 0, h - ctr( btn.ani_h ), w, ctr( btn.ani_h ), Color( 26, 121, 255, 255 ) )
+end
+
+function MakeHelpSpacer()
+  local spacer = createD( "DButton", HELPMENU.window, ctr( 30 ), ctr( 100 ), 0, 0 )
+  spacer:SetText( "" )
+  function spacer:Paint( pw, ph )
+  end
+  return spacer
+end
+
+function openHelpMenu()
+
+  openMenu()
+  HELPMENU.window = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )
+  HELPMENU.window:MakePopup()
+  HELPMENU.window:Center()
+  HELPMENU.window:SetTitle( "" )
+  HELPMENU.window:SetDraggable( false )
+  function HELPMENU.window:Paint( pw, ph )
+    surfaceBox( 0, 0, pw, ph, Color( 90, 90, 90, 100 ) )
+  end
+
+  HELPMENU.tabs = {}
+
+  local help = lang_string( "help" )
+  HELPMENU.help = createD( "DButton", HELPMENU.window, GetTextLength( help, "mat1text" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
+  HELPMENU.help:SetText( "" )
+  function HELPMENU.help:Paint( pw, ph )
+    DrawSelector( self, pw, ph, help )
+  end
+  table.insert( HELPMENU.tabs, HELPMENU.help )
+
+  HELPMENU.spacer = MakeHelpSpacer()
+  table.insert( HELPMENU.tabs, HELPMENU.spacer )
+
+  local staff = lang_string( "staff" )
+  HELPMENU.staff = createD( "DButton", HELPMENU.window, GetTextLength( staff, "mat1text" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
+  HELPMENU.staff:SetText( "" )
+  function HELPMENU.staff:Paint( pw, ph )
+    DrawSelector( self, pw, ph, staff )
+  end
+  table.insert( HELPMENU.tabs, HELPMENU.staff )
+
+  table.insert( HELPMENU.tabs, HELPMENU.spacer )
+
+  local collection = lang_string( "collection" )
+  HELPMENU.collection = createD( "DButton", HELPMENU.window, GetTextLength( collection, "mat1text" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
+  HELPMENU.collection:SetText( "" )
+  function HELPMENU.collection:Paint( pw, ph )
+    DrawSelector( self, pw, ph, collection )
+  end
+  table.insert( HELPMENU.tabs, HELPMENU.collection )
+
+  table.insert( HELPMENU.tabs, HELPMENU.spacer )
+
+  local community = lang_string( "community" )
+  HELPMENU.community = createD( "DButton", HELPMENU.window, GetTextLength( community, "mat1text" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
+  HELPMENU.community:SetText( "" )
+  function HELPMENU.community:Paint( pw, ph )
+    DrawSelector( self, pw, ph, community )
+  end
+  table.insert( HELPMENU.tabs, HELPMENU.community )
+
+  table.insert( HELPMENU.tabs, HELPMENU.spacer )
+
+  local yourrp = "YourRP"
+  HELPMENU.yourrp = createD( "DButton", HELPMENU.window, GetTextLength( yourrp, "mat1text" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
+  HELPMENU.yourrp:SetText( "" )
+  function HELPMENU.yourrp:Paint( pw, ph )
+    DrawSelector( self, pw, ph, yourrp )
+  end
+  table.insert( HELPMENU.tabs, HELPMENU.yourrp )
+
+  HELPMENU.mainmenu = createD( "DHorizontalScroller", HELPMENU.window, ctr( 100 ), ctr( 100 ), 0, 0 )
+  HELPMENU.mainmenu.w = 0
+  HELPMENU.mainmenu.x = 0
+  for i, tab in pairs( HELPMENU.tabs ) do
+    HELPMENU.mainmenu.w = HELPMENU.mainmenu.w + tab:GetWide()
+    HELPMENU.mainmenu:AddPanel( tab )
+  end
+  HELPMENU.mainmenu:SetSize( HELPMENU.mainmenu.w, ctr( 100 ) )
+  HELPMENU.mainmenu:SetPos( ScrW2() - HELPMENU.mainmenu.w/2, 0 )
+end
+]]--
+
 local _hm = {}
 
 function toggleHelpMenu()
@@ -78,7 +203,6 @@ function openHelpMenu()
 
     draw.SimpleTextOutlined( "Language: ", "ttsf", BScrW()/2 - ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-    --[[ LEFT ]]--
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( "F1" ) ) .. "] " .. lang_string( "help" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 + 1*_abstand ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("menu_character_selection" ) ) ) .. "] " .. lang_string( "characterselection" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 + 2*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("toggle_mouse" ) ) ) .. "] " .. lang_string( "guimouse" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -93,7 +217,6 @@ function openHelpMenu()
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("weaponlowering" ) ) ) .. "] " .. lang_string( "weaponlowering" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 12*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("menu_emotes" ) ) ) .. "] " .. lang_string( "emotes" ), "ttsf", ctr( 50 ), ctr( 10 ) + ctr( 10 ) + ctr( 13*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-    --[[ RIGHT ]]--
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("view_switch" ) ) ) .. "] " .. lang_string( "viewswitch" ), "ttsf", pw/2, ctr( 20 ) + ctr( 1*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("view_up" ) ) ) .. "] " .. lang_string( "incviewheight" ), "ttsf", pw/2, ctr( 20 ) + ctr( 2*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( "[" .. string.upper( nicekey( GetKeybindName("view_down" ) ) ) .. "] " .. lang_string( "decviewheight" ), "ttsf", pw/2, ctr( 20 ) + ctr( 3*_abstand ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -136,7 +259,6 @@ function openHelpMenu()
     gui.OpenURL( "https://discord.gg/sEgNZxg" )
   end
 
-  --[[ GDocs News ]]--
   local _g_docs_news_panel = createD( "DPanel", _hm.window, BScrW()/2-ctr(10+10), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
   function _g_docs_news_panel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -146,7 +268,6 @@ function openHelpMenu()
   _g_docs_news_html:OpenURL( "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing" )
   --_g_docs_news_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vRcuPnvnAqRD7dQFOkH9d0Q1G3qXFn6rAHJWAAl7wV2TEABGhDdJK9Y-LCONFKTiAWmJJZpsTcDnz5W/pub" )
 
-  --[[ GDocs Help ]]--
   local _g_docs_help_panel = createD( "DPanel", _hm.window, BScrW()/2-ctr(10+10), ctr( 1130 ), BScrW()/2 + ctr( 10 ), ctr( 1020 ) )
   function _g_docs_help_panel:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )

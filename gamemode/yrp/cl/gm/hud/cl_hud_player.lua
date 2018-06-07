@@ -85,7 +85,7 @@ function drawMenuInfo()
   sText( text, "mat1text", x, y + isize/2, color, 0, 1 )
 end
 
-local _alpha = 200
+local _alpha = 100
 function drawHUDElement( dbV, cur, max, text, icon, color )
   local _r = 0
   if tobool( HudV( dbV .. "to" ) ) then

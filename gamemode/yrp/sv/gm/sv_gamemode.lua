@@ -140,18 +140,16 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function( ply )
   ply:SetNWBool( "can_respawn", true )
 end)
 
-function IsNoDefaultWeapon( weapon )
-  local _class = weapon:GetClass()
-  if weapon:GetModel() != "" and _class != "yrp_key" and _class != "yrp_unarmed" then
+function IsNoDefaultWeapon( cname )
+  if cname != "yrp_key" and cname != "yrp_unarmed" then
     return true
   else
     return false
   end
 end
 
-function IsNoAdminWeapon( weapon )
-  local _class = weapon:GetClass()
-  if _class != "weapon_physgun" and _class != "weapon_physcannon" and _class != "gmod_tool" and _class != "yrp_arrest_stick" then
+function IsNoAdminWeapon( cname )
+  if cname != "weapon_physgun" and cname != "weapon_physcannon" and cname != "gmod_tool" and cname != "yrp_arrest_stick" then
     return true
   else
     return false
@@ -194,7 +192,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     local _weapons = ply:GetWeapons()
     local _cooldown_item = 120
     for i, wep in pairs( _weapons ) do
-      if IsNoDefaultWeapon( wep ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoUserGroupWeapon( ply, wep:GetClass() ) then
+      if weapon:GetModel() != "" and IsNoDefaultWeapon( wep:GetClass() ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoUserGroupWeapon( ply, wep:GetClass() ) then
         ply:DropSWEP( wep:GetClass() )
         timer.Simple( _cooldown_item, function()
           if wep:IsValid() then

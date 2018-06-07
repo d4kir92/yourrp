@@ -474,9 +474,9 @@ end
 
 function surfaceText( text, font, x, y, color, ax, ay, br )
   br = br or true
-  local col_br = Color( 0, 0, 0, 255 )
+  local col_br = Color( 0, 0, 0, color.a )
   if color == Color( 0, 0, 0, 255 ) then
-    col_br = Color( 255, 255, 255, 255 )
+    col_br = Color( 255, 255, 255, color.a )
   end
   if !br then
     draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 0 ), Color( 0, 0, 0, 0 ) )

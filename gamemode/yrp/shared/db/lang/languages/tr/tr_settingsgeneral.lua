@@ -70,4 +70,7 @@ function TR_SETTINGSGENERAL()
   set_lang_string( "facebook", "Facebook" )
   set_lang_string( "youtube", "Youtube" )
   set_lang_string( "steamgroup", "Steam Grubu" )
+  set_lang_string( "welcomemessage", "Karşılama Mesajı" )
+  set_lang_string( "messageoftheday", "Günün Mesajı" )
+  set_lang_string( "hungerhealthregenerationtickrate", "Açlık Can Yenileme Hızı Oranı" )
 end
