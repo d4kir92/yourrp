@@ -70,4 +70,7 @@ function EN_SETTINGSGENERAL()
   set_lang_string( "facebook", "Facebook" )
   set_lang_string( "youtube", "Youtube" )
   set_lang_string( "steamgroup", "Steam Group" )
+  set_lang_string( "welcomemessage", "Welcome Message" )
+  set_lang_string( "messageoftheday", "Message of the Day" )
+  set_lang_string( "hungerhealthregenerationtickrate", "Hunger Health Regeneration Tickrate" )
 end

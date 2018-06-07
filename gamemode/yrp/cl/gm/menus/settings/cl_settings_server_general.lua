@@ -297,7 +297,9 @@ net.Receive( "Connect_Settings_General", function( len )
       --[LATER] local community_servers = CreateButtonLine( SERVER_SETTINGS.plus, "communityservers", "update_community_servers" )
       CreateHRLine( SERVER_SETTINGS.plus )
       local text_server_rules = CreateTextBoxBox( SERVER_SETTINGS.plus, GEN.text_server_rules, "rules", "update_text_server_rules" )
-
+      CreateHRLine( SERVER_SETTINGS.plus )
+      local text_server_welcome_message = CreateTextBoxLine( SERVER_SETTINGS.plus, GEN.text_server_welcome_message, "welcomemessage", "update_text_server_welcome_message" )
+      local text_server_message_of_the_day = CreateTextBoxLine( SERVER_SETTINGS.plus, GEN.text_server_message_of_the_day, "messageoftheday", "update_text_server_message_of_the_day" )
 
 
       --[[ GAMEMODE SETTINGS ]]--
@@ -339,6 +341,7 @@ net.Receive( "Connect_Settings_General", function( len )
       end
 
       local bool_hunger = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_hunger, "hunger", "update_bool_hunger" )
+      local text_hunger_health_regeneration_tickrate = CreateTextBoxLine( GAMEMODE_SYSTEMS.plus, GEN.text_hunger_health_regeneration_tickrate, "hungerhealthregenerationtickrate", "update_text_hunger_health_regeneration_tickrate" )
       local bool_thirst = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_thirst, "thirst", "update_bool_thirst" )
       local bool_stamina = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_stamina, "stamina", "update_bool_stamina" )
       CreateHRLine( GAMEMODE_SYSTEMS.plus )
@@ -456,7 +459,9 @@ net.Receive( "Connect_Settings_General", function( len )
       local text_social_forum = CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_forum, "forum", "update_text_social_forum" )
       CreateHRLine( SOCIAL_SETTINGS.plus )
       local text_social_discord = CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_discord, "discord", "update_text_social_discord" )
-      local text_social_teamspeak = CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak, "teamspeak", "update_text_social_teamspeak" )
+      local text_social_teamspeak_ip = CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_ip, lang_string( "teamspeak" ) .. " [" .. lang_string( "ip" ) .."/" .. lang_string( "hostname" ) .. "]", "update_text_social_teamspeak" )
+      local text_social_teamspeak_port = CreateNumberWangLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_port, lang_string( "teamspeak" ) .. " [" .. lang_string( "port" ) .. "]", "update_text_social_teamspeak" )
+      local text_social_teamspeak_query_port = CreateNumberWangLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_query_port, lang_string( "teamspeak" ) .. " [" .. lang_string( "queryport" ) .. "]", "update_text_social_teamspeak" )
       CreateHRLine( SOCIAL_SETTINGS.plus )
       local text_social_youtube = CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_youtube, "youtube", "update_text_social_youtube" )
       local text_social_twitter = CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_twitter, "twitter", "update_text_social_twitter" )

@@ -140,7 +140,7 @@ function _fut.DrawButton( btn, pw, ph, text, color )
 end
 RegisterButtonFunction( _fut.name, _fut.DrawButton )
 
-function _fut.DrawPanel( pnl, pw, ph, text )
+function _fut.DrawPanel( pnl, pw, ph, text, color, px, py, ax, ah )
   --[[ Vars ]]--
   local _text = text or ""
 
@@ -151,12 +151,12 @@ function _fut.DrawPanel( pnl, pw, ph, text )
   else
     _color_bar.a = 255
   end
-  surfaceBox( 0, 0, pw, ph,_color_bar )
+  surfaceBox( 0, 0, pw, ph, _color_bar )
   if InterfaceBorder() then
     LaserBorder( pw, ph )
   end
 
   --[[ text ]]--
-  surfaceText( _text, "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+  surfaceText( _text, "mat1text", px or pw/2, py or ph/2, color or Color( 255, 255, 255 ), ax or 1, ay or 1, 1 )
 end
 RegisterPanelFunction( _fut.name, _fut.DrawPanel )

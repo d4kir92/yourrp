@@ -32,21 +32,24 @@ function reg_ar( ply )
   end
 end
 
-function reg_mb( ply )
-  ply:SetHealth( ply:Health() + 1 )
-  if ply:Health() > ply:GetMaxHealth() then
-    ply:SetHealth( ply:GetMaxHealth() )
-  end
-end
-
-function con_hg( ply )
+function con_hg( ply, time )
   ply:SetNWFloat( "hunger", tonumber( ply:GetNWFloat( "hunger", 0.0 ) ) - 0.01 )
   if tonumber( ply:GetNWFloat( "hunger", 0.0 ) ) < 0.0 then
     ply:SetNWFloat( "hunger", 0.0 )
   end
   if tonumber( ply:GetNWFloat( "hunger", 0.0 ) ) < 20.0 then
     ply:TakeDamage( ply:GetMaxHealth() / 100 )
-  end
+  else
+		local tickrate = tonumber( ply:GetNWString( "text_hunger_health_regeneration_tickrate", 1 ) )
+		if tickrate >= 1 then
+			if time % tickrate == 0 then
+				ply:SetHealth( ply:Health() + 1 )
+			  if ply:Health() > ply:GetMaxHealth() then
+			    ply:SetHealth( ply:GetMaxHealth() )
+			  end
+			end
+		end
+	end
 end
 
 function con_th( ply )
@@ -184,14 +187,8 @@ timer.Create( "ServerThink", 1, 0, function()
 			anti_bunnyhop( ply )
 
       if !ply:GetNWBool( "inCombat" ) then
-        ply:CheckHeal()
-
         reg_hp( ply )   --HealthReg
         reg_ar( ply )   --ArmorReg
-
-				if ply:GetNWBool( "bool_hunger", false ) then
-					reg_mb( ply )
-				end
       end
 
       if ply:IsBleeding() then
@@ -203,7 +200,7 @@ timer.Create( "ServerThink", 1, 0, function()
       end
 
       if ply:GetNWBool( "bool_hunger", false ) then
-        con_hg( ply )
+        con_hg( ply, _time )
       end
       if ply:GetNWBool( "bool_thirst", false ) then
         con_th( ply )

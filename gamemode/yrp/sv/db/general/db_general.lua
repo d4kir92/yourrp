@@ -25,6 +25,9 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ''" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''" )
 
+SQL_ADD_COLUMN( DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'" )
+
 --[[ Gamemode Settings ]]--
 SQL_ADD_COLUMN( DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'" )
 
@@ -44,6 +47,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'" )
 
 --[[ Gamemode Systems ]]--
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_hunger", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT DEFAULT '10'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_thirst", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_stamina", "INT DEFAULT 1" )
 
@@ -105,7 +109,9 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''" )
@@ -430,6 +436,12 @@ util.AddNetworkString( "update_bool_hunger" )
 net.Receive( "update_bool_hunger", function( len, ply )
   local b = btn( net.ReadBool() )
   GeneralUpdateBool( ply, "update_bool_hunger", "bool_hunger", b )
+end)
+
+util.AddNetworkString( "update_text_hunger_health_regeneration_tickrate" )
+net.Receive( "update_text_hunger_health_regeneration_tickrate", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_hunger_health_regeneration_tickrate", "text_hunger_health_regeneration_tickrate", str )
 end)
 
 util.AddNetworkString( "update_bool_thirst" )

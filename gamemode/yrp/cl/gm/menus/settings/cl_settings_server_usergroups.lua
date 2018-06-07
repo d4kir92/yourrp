@@ -189,16 +189,18 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
   end
 
   net.Receive( "usergroup_update_sweps", function( len )
-    local sweps = net.ReadString()
-    UGS[CURRENT_USERGROUP].sweps = string.Explode( ",", sweps )
-    if UGS[CURRENT_USERGROUP].sweps[1] != "" then
-      SWEPS.preview.cur = 1
-      SWEPS.preview.max = #UGS[CURRENT_USERGROUP].sweps
-      SWEPS.preview:SetModel( GetSWEPWorldModel( UGS[CURRENT_USERGROUP].sweps[1] or "" ) )
-    else
-      SWEPS.preview.cur = 0
-      SWEPS.preview.max = 0
-      SWEPS.preview:SetModel( "" )
+    if pa( SWEPS ) then
+      local sweps = net.ReadString()
+      UGS[CURRENT_USERGROUP].sweps = string.Explode( ",", sweps )
+      if UGS[CURRENT_USERGROUP].sweps[1] != "" then
+        SWEPS.preview.cur = 1
+        SWEPS.preview.max = #UGS[CURRENT_USERGROUP].sweps
+        SWEPS.preview:SetModel( GetSWEPWorldModel( UGS[CURRENT_USERGROUP].sweps[1] or "" ) )
+      else
+        SWEPS.preview.cur = 0
+        SWEPS.preview.max = 0
+        SWEPS.preview:SetModel( "" )
+      end
     end
   end)
 

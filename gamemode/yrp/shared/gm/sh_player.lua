@@ -410,13 +410,6 @@ if SERVER then
     end
   end
 
-  function Player:CheckHeal()
-    if self:Health() > self:GetNWInt( "preHealth", 0 ) + 5 then
-      self:StopBleeding()
-    end
-    self:SetNWInt( "preHealth", self:Health() )
-  end
-
   function Player:Heal( amount )
     self:SetHealth( self:Health() + amount )
     if self:Health() > self:GetMaxHealth() then

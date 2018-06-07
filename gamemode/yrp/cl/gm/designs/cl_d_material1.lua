@@ -16,7 +16,7 @@ end
 _mat1.color = {}
 
 _mat1.color["bg"] = {}
-_mat1.color["bg"]["dark"] = Color( 30, 30, 30 )
+_mat1.color["bg"]["dark"] = Color( 90, 90, 90 )
 _mat1.color["bg"]["light"] = Color( 255, 255, 255 )
 
 _mat1.color["br"] = {}
@@ -26,6 +26,11 @@ _mat1.color["br"]["light"] = Color( 0, 0, 0 )
 _mat1.color["blue"] = {}
 _mat1.color["blue"]["dark"] = Color( 0, 57, 203 )
 _mat1.color["blue"]["light"] = Color( 118, 143, 255 )
+_mat1.color["blue"]["1"] = Color( 46, 135, 255 )
+_mat1.color["blue"]["2"] = Color( 26, 121, 255 )
+_mat1.color["blue"]["3"] = Color( 13, 63, 135 )
+_mat1.color["blue"]["4"] = Color( 90, 90, 90 )
+_mat1.color["blue"]["5"] = Color( 51, 51, 51 )
 
 _mat1.color["red"] = {}
 _mat1.color["red"]["dark"] = Color( 155, 0, 0 )
@@ -60,16 +65,16 @@ function _mat1.DrawWindow( window, pw, ph, title )
   local _title = title or ""
 
   --[[ Background ]]--
-  local _color_bar = _mat1.color[InterfaceColor()][InterfaceStyle()]
+  local _color_bar = _mat1.GetColor( "blue", "2" )
   local _color_bg = _mat1.color["bg"][InterfaceStyle()]
   local _color_br = _mat1.color["br"][InterfaceStyle()]
   if InterfaceTransparent() then
     if InterfaceStyle() == "dark" then
-      _color_bar.a = 240
-      _color_bg.a = 240
+      _color_bar.a = 100
+      _color_bg.a = 100
     else
-      _color_bar.a = 240
-      _color_bg.a = 40
+      _color_bar.a = 100
+      _color_bg.a = 20
     end
   else
     _color_bar.a = 255
@@ -97,19 +102,18 @@ function _mat1.DrawButton( btn, pw, ph, text, color, px, py, ax, ah )
   local _text = text or ""
 
   --[[ Background ]]--
-  local _color_bar = _mat1.GetColor( InterfaceColor(), InterfaceStyle() )
+  local _color_bar = _mat1.GetColor( "blue", "2" )
   local _color_br = _mat1.GetColor( "br", InterfaceStyle() )
   if InterfaceTransparent() then
     _color_bar.a = 220
   else
     _color_bar.a = 255
   end
-  local _hovered = 0
   if btn:IsHovered() then
-    _hovered = 40
+    _color_bar = _mat1.GetColor( "blue", "1" )
   end
   local _color = color or _color_bar
-  surfaceBox( 0, 0, pw, ph, Color( _color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a  ) )
+  surfaceBox( 0, 0, pw, ph, _color )
   if InterfaceBorder() then
     local _br = 2
     surfaceBox( 0, 0, pw, ctr( _br ), _color_br )
@@ -129,7 +133,7 @@ function _mat1.DrawPanel( pnl, pw, ph, text, color, px, py, ax, ah )
   local _text = text or ""
 
   --[[ Background ]]--
-  local _color_bar = _mat1.GetColor( InterfaceColor(), InterfaceStyle() )
+  local _color_bar = _mat1.GetColor( "blue", "2" )
   local _color_br = _mat1.GetColor( "br", InterfaceStyle() )
   if InterfaceTransparent() then
     _color_bar.a = 220

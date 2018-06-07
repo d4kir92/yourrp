@@ -51,10 +51,46 @@ hook.Add( "OnContextMenuClose", "OnContextMenuClose", function()
   contextMenuOpen = false
 end)
 
+function sText( text, font, x, y, color, ax, ay )
+  surface.SetFont( font )
+
+  local w, h = surface.GetTextSize( text )
+
+  local _ax = 0
+  local _ay = 0
+
+  if ay == 1 then
+    _ay = h/2
+  end
+
+	surface.SetTextColor( color or Color( 255, 255, 255, 255 ) )
+	surface.SetTextPos( x - _ax, y - _ay )
+	surface.DrawText( text )
+end
+
+function drawMenuInfo()
+  local isize = ctr( 48 )
+  local ibr = ctr( 10 )
+  local color = Color( 255, 255, 255, 20 )
+
+  local x = ibr
+  local y = ibr
+
+  --[[ F1 ]]--
+  surface.SetDrawColor( color )
+  surface.SetMaterial( GetDesignIcon( "help" )	)
+  surface.DrawTexturedRect( x, y, isize, isize )
+  x = x + isize + ibr
+  local text = "[" .. "F1" .. "] " .. lang_string( "help" )
+  sText( text, "mat1text", x, y + isize/2, color, 0, 1 )
+end
+
 local _alpha = 200
 function drawHUDElement( dbV, cur, max, text, icon, color )
   local _r = 0
   if tobool( HudV( dbV .. "to" ) ) then
+
+    drawMenuInfo()
 
     if cur != nil and max != nil then
       hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
@@ -215,6 +251,7 @@ function HudPlayer( ply )
           hudBLBR( ply )
           hudRTBR( ply )
         end
+
 
         --[[ Extras ]]--
         hudThirdperson( ply )

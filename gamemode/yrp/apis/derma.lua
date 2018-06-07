@@ -83,8 +83,24 @@ function GetDesignIcon( name )
   return _icons[name]
 end
 
+AddDesignIcon( "group", "vgui/material/icon_group.png" )
+AddDesignIcon( "role", "vgui/material/icon_person.png" )
+AddDesignIcon( "help", "vgui/material/icon_help.png" )
+AddDesignIcon( "keyboard", "vgui/material/icon_keyboard.png" )
+AddDesignIcon( "mouse", "vgui/material/icon_mouse.png" )
+AddDesignIcon( "security", "vgui/material/icon_security.png" )
+AddDesignIcon( "usergroup", "vgui/material/icon_usergroup.png" )
+AddDesignIcon( "character", "vgui/material/icon_character.png" )
+AddDesignIcon( "shop", "vgui/material/icon_shop.png" )
+AddDesignIcon( "settings", "vgui/material/icon_settings.png" )
+AddDesignIcon( "feedback", "vgui/material/icon_feedback.png" )
+
+AddDesignIcon( "work", "vgui/material/icon_work.png" )
+
 AddDesignIcon( "done", "vgui/material/icon_done_outline.png" )
+
 AddDesignIcon( "navigation", "vgui/material/icon_navigation.png" )
+
 AddDesignIcon( "chat", "vgui/material/icon_chat.png" )
 AddDesignIcon( "voice", "vgui/material/icon_voice.png" )
 
