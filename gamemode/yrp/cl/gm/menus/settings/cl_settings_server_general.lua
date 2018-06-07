@@ -341,7 +341,7 @@ net.Receive( "Connect_Settings_General", function( len )
       end
 
       local bool_hunger = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_hunger, "hunger", "update_bool_hunger" )
-      local text_hunger_health_regeneration_tickrate = CreateTextBoxLine( GAMEMODE_SYSTEMS.plus, GEN.text_hunger_health_regeneration_tickrate, "hungerhealthregenerationtickrate", "update_text_hunger_health_regeneration_tickrate" )
+      local text_hunger_health_regeneration_tickrate = CreateNumberWangLine( GAMEMODE_SYSTEMS.plus, GEN.text_hunger_health_regeneration_tickrate, "hungerhealthregenerationtickrate", "update_text_hunger_health_regeneration_tickrate" )
       local bool_thirst = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_thirst, "thirst", "update_bool_thirst" )
       local bool_stamina = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_stamina, "stamina", "update_bool_stamina" )
       CreateHRLine( GAMEMODE_SYSTEMS.plus )

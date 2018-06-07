@@ -41,12 +41,14 @@ function con_hg( ply, time )
     ply:TakeDamage( ply:GetMaxHealth() / 100 )
   else
 		local tickrate = tonumber( ply:GetNWString( "text_hunger_health_regeneration_tickrate", 1 ) )
-		if tickrate >= 1 then
-			if time % tickrate == 0 then
-				ply:SetHealth( ply:Health() + 1 )
-			  if ply:Health() > ply:GetMaxHealth() then
-			    ply:SetHealth( ply:GetMaxHealth() )
-			  end
+		if isnumber( tickrate ) then
+			if tickrate >= 1 then
+				if time % tickrate == 0 then
+					ply:SetHealth( ply:Health() + 1 )
+				  if ply:Health() > ply:GetMaxHealth() then
+				    ply:SetHealth( ply:GetMaxHealth() )
+				  end
+				end
 			end
 		end
 	end
