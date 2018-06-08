@@ -2,6 +2,73 @@
 
 local searchIcon = Material( "icon16/magnifier.png" )
 
+function DChangeLanguage( parent, x, y, size )
+  local LanguageChanger = createD( "DButton", parent, size, size*0.671, x, y )
+  LanguageChanger:SetText( "" )
+  function LanguageChanger:Paint( pw, ph )
+    surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 255 ) )
+
+    local size = ph
+    DrawIcon( GetDesignIcon( GetCurrentLanguage() ), size, size*0.671, ( pw - size ) / 2, ( ph - size*0.671 ) / 2 )
+  end
+  function LanguageChanger:DoClick()
+    local window = createD( "DFrame", nil, ctr( 400 ), ctr( 400 ), 0, 0 )
+    window:SetTitle( "" )
+    window:ShowCloseButton( false )
+    window:SetDraggable( false )
+    function window:Paint( pw, ph )
+      if self.startup == nil then
+        if self:IsHovered() then
+          self.startup = true
+        else
+          for i, child in pairs( window.dpanellist:GetItems() ) do
+            if child:IsHovered() then
+              self.startup = true
+            end
+          end
+        end
+      elseif self.startup and !self:IsHovered() then
+        for i, child in pairs( window.dpanellist:GetItems() ) do
+          if child:IsHovered() then
+            return true
+          end
+        end
+        self:Remove()
+      end
+    end
+    window:MakePopup()
+    local mx, my = gui.MousePos()
+    mx = mx - window:GetWide()/2
+    my = my - ctr( 25 )
+    window:SetPos( mx, my )
+
+    window.dpanellist = createD( "DPanelList", window, ctr( 400 ), ctr( 400 ), 0, 0 )
+
+    local languages = GetAllLanguages()
+    for k, v in pairs( languages ) do
+      local lang = createD( "DButton", window.dpanellist, ctr( 400 ), ctr( 40 ), 0, 0 )
+      lang:SetText( "" )
+      lang.data = v.short
+      function lang:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 100 ) )
+
+        DrawIcon( GetDesignIcon( v.short ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ) )
+
+        draw.SimpleTextOutlined( v.lang .. "/" .. v.ineng, "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+      end
+      function lang:DoClick()
+        change_language( self.data )
+      end
+
+      window.dpanellist:AddItem( lang )
+    end
+
+    window.dpanellist:SetTall( ctr( 40*( #languages ) ) )
+    window:SetTall( ctr( 40*( #languages ) ) )
+  end
+  return LanguageChanger
+end
+
 --##############################################################################
 function derma_change_language( parent, w, h, x, y )
   local _tmp = createD( "DComboBox", parent, w, h, x, y )
@@ -1060,7 +1127,7 @@ function drawIcon( ply, string, z, color )
   end
   local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
   local sca = ply:GetModelScale()/4
-  print(color)
+
   cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
     surface.SetDrawColor( color )
     surface.SetMaterial( GetDesignIcon( string ) )

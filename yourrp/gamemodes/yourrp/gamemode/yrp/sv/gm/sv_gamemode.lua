@@ -192,7 +192,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function( ply, atta
     local _weapons = ply:GetWeapons()
     local _cooldown_item = 120
     for i, wep in pairs( _weapons ) do
-      if weapon:GetModel() != "" and IsNoDefaultWeapon( wep:GetClass() ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoUserGroupWeapon( ply, wep:GetClass() ) then
+      if wep:GetModel() != "" and IsNoDefaultWeapon( wep:GetClass() ) and IsNoRoleSwep( ply, wep:GetClass() ) and IsNoUserGroupWeapon( ply, wep:GetClass() ) then
         ply:DropSWEP( wep:GetClass() )
         timer.Simple( _cooldown_item, function()
           if wep:IsValid() then

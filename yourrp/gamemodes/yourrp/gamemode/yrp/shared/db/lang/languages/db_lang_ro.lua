@@ -4,12 +4,14 @@ AddCSLuaFile( "ro/ro_all.lua" )
 AddCSLuaFile( "ro/ro_general.lua" )
 AddCSLuaFile( "ro/ro_settings.lua" )
 AddCSLuaFile( "ro/ro_settingsfeedback.lua" )
+AddCSLuaFile( "ro/ro_settingsgeneral.lua" )
 AddCSLuaFile( "ro/ro_settingsusergroups.lua" )
 
 include( "ro/ro_all.lua" )
 include( "ro/ro_general.lua" )
 include( "ro/ro_settings.lua" )
 include( "ro/ro_settingsfeedback.lua" )
+include( "ro/ro_settingsgeneral.lua" )
 include( "ro/ro_settingsusergroups.lua" )
 
 function LangRO()
@@ -24,6 +26,7 @@ function LangRO()
 	RO_GENERAL()
 	RO_SETTINGS()
 	RO_SETTINGSFEEDBACK()
+	RO_SETTINGSGENERAL()
 	RO_SETTINGSUSERGROUPS()
 end
 

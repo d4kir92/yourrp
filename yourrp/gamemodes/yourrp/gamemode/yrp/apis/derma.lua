@@ -1,6 +1,11 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
---[[ NEW ]]--
+function GetTextLength( text, font )
+  surface.SetFont( font )
+  local l, h = surface.GetTextSize( text )
+  return l
+end
+
 local yrp_if = {}
 
 function GetHTMLImage( url, w, h )
@@ -83,6 +88,13 @@ function GetDesignIcon( name )
   return _icons[name]
 end
 
+function DrawIcon( material, w, h, x, y, color )
+  local col = color or Color( 255, 255, 255, 255 )
+  surface.SetDrawColor( col )
+  surface.SetMaterial( material )
+  surface.DrawTexturedRect( x or 0, y or 0, w or 64, h or 64 )
+end
+
 AddDesignIcon( "group", "vgui/material/icon_group.png" )
 AddDesignIcon( "role", "vgui/material/icon_person.png" )
 AddDesignIcon( "help", "vgui/material/icon_help.png" )
@@ -103,6 +115,8 @@ AddDesignIcon( "navigation", "vgui/material/icon_navigation.png" )
 
 AddDesignIcon( "chat", "vgui/material/icon_chat.png" )
 AddDesignIcon( "voice", "vgui/material/icon_voice.png" )
+
+AddDesignIcon( "close", "vgui/material/icon_highlight_off.png" )
 
 local _delay = 1
 local _get_design = true
@@ -211,10 +225,14 @@ function surfaceSelected( derma, pw, ph, px, py )
   end
 end
 
+function mouseVisible()
+  return vgui.CursorVisible()
+end
+
 --[[ OLD ]]--
 local _menuOpen = false
 function isNoMenuOpen()
-  if canOpenMenu() then -- and !_menuOpen then
+  if !vgui.CursorVisible() then -- and !_menuOpen then
     return true
   else
     return false
@@ -226,16 +244,8 @@ function closeMenu()
   gui.EnableScreenClicker( false )
 end
 
-function canOpenMenu()
-  return !mouseVisible()
-end
-
 function openMenu()
   _menuOpen = true
-end
-
-function mouseVisible()
-  return vgui.CursorVisible()
 end
 
 function paintBr( pw, ph, color )

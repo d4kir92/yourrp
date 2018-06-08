@@ -228,24 +228,22 @@ function Player:DropSWEP( cname )
     end
   end
   if cont then
-    if IsNoDefaultWeapon( _cname ) and IsNoRoleSwep( self, _cname ) and IsNoUserGroupWeapon( self, _cname ) then
-      self:RemoveWeapon( _cname )
-      self:RemoveVisual( _cname )
+    self:RemoveWeapon( _cname )
+    self:RemoveVisual( _cname )
 
-      local ent = ents.Create( _cname )
-      local tr = self:GetEyeTrace()
-      local dist = self:GetPos():Distance( tr.HitPos )
-      ent:SetPos( self:GetPos() + Vector( 0, 0, 56 ) + self:EyeAngles():Forward() * 16  )
-      ent:SetAngles( self:GetAngles() )
-      ent:SetNWBool( "ispickupable", false )
-      timer.Simple( 1, function()
-        ent:SetNWBool( "ispickupable", true )
-      end)
-      ent:Spawn()
+    local ent = ents.Create( _cname )
+    local tr = self:GetEyeTrace()
+    local dist = self:GetPos():Distance( tr.HitPos )
+    ent:SetPos( self:GetPos() + Vector( 0, 0, 56 ) + self:EyeAngles():Forward() * 16  )
+    ent:SetAngles( self:GetAngles() )
+    ent:SetNWBool( "ispickupable", false )
+    timer.Simple( 1, function()
+      ent:SetNWBool( "ispickupable", true )
+    end)
+    ent:Spawn()
 
-      if ent:GetPhysicsObject():IsValid() then
-        ent:GetPhysicsObject():SetVelocity( self:EyeAngles():Forward() * 360 )
-      end
+    if ent:GetPhysicsObject():IsValid() then
+      ent:GetPhysicsObject():SetVelocity( self:EyeAngles():Forward() * 360 )
     end
   end
 end

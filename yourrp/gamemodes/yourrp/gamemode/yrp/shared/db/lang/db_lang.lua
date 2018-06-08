@@ -69,6 +69,23 @@ function get_all_lang()
 	return yrp_all_lang
 end
 
+local auto = {}
+auto.short = "auto"
+auto.lang = "Automatic"
+auto.ineng = "Automatic"
+
+function GetAllLanguages()
+	local langs = yrp_all_lang
+	if !table.HasValue( langs, auto ) then
+		table.insert( langs, 1, auto )
+	end
+	return langs
+end
+
+function GetCurrentLanguage()
+	return yrp_lang.get_language
+end
+
 AddCSLuaFile( "languages/db_lang_en.lua" )
 AddCSLuaFile( "languages/db_lang_de.lua" )
 AddCSLuaFile( "languages/db_lang_ru.lua" )
@@ -108,6 +125,14 @@ include( "languages/db_lang_ko.lua" )
 include( "languages/db_lang_hu.lua" )
 include( "languages/db_lang_cs.lua" )
 include( "languages/db_lang_lt.lua" )
+
+if CLIENT then
+	--[[ FLAGS ]]--
+	AddDesignIcon( "auto", "vgui/flags/lang_" .. "auto" .. ".png" )
+	for i, lang in pairs( get_all_lang() ) do
+	  AddDesignIcon( lang.short, "vgui/flags/lang_" .. lang.short .. ".png" )
+	end
+end
 
 function check_languagepack()
 	for k, v in pairs( yrp_all_lang ) do

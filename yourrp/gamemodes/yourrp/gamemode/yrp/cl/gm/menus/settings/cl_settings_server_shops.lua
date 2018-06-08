@@ -145,7 +145,7 @@ net.Receive( "get_shop_items", function()
       end
 
       --[[ NAME ]]--
-      if pa( _sh.ea ) then
+      if pa( _sh.ea ) and pa( _sh._sit ) then
         _sh._sit.itemname = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 150 ) )
         _sh._sit.itemname.textentry.tbl = tbl
         _sh._sit.itemname:SetHeader( lang_string( "name" ) )

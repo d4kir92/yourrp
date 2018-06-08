@@ -3,10 +3,12 @@
 local Player = FindMetaTable( "Player" )
 
 function Player:YRPEat( num )
-  if isnumber( num ) then
-    self:SetNWFloat( "hunger", self:GetNWFloat( "hunger", 0.0 ) + num )
-    if self:GetNWFloat( "hunger", 0.0 ) > 100.0 then
-      self:SetNWFloat( "hunger", 100.0 )
+  if !isbool( num ) then
+    if isnumber( num ) then
+      self:SetNWFloat( "hunger", self:GetNWFloat( "hunger", 0.0 ) + num )
+      if self:GetNWFloat( "hunger", 0.0 ) > 100.0 then
+        self:SetNWFloat( "hunger", 100.0 )
+      end
     end
   end
 end

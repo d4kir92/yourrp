@@ -366,6 +366,19 @@ net.Receive( "update_text_server_rules", function( len, ply )
   GeneralUpdateString( ply, "update_text_server_rules", "text_server_rules", str )
 end)
 
+util.AddNetworkString( "update_text_server_welcome_message" )
+net.Receive( "update_text_server_welcome_message", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_server_welcome_message", "text_server_welcome_message", str )
+end)
+
+
+util.AddNetworkString( "update_text_server_message_of_the_day" )
+net.Receive( "update_text_server_message_of_the_day", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_server_message_of_the_day", "text_server_message_of_the_day", str )
+end)
+
 
 
 --[[ GAMEMODE SETTINGS ]]--
@@ -788,6 +801,50 @@ net.Receive( "update_text_social_steamgroup", function( len, ply )
 end)
 
 
+
+function AddTab( tab, name, netstr )
+  local entry = {}
+  entry.name = name
+  entry.netstr = netstr
+  table.insert( tab, entry )
+end
+
+util.AddNetworkString( "gethelpmenu" )
+net.Receive( "gethelpmenu", function( len, ply )
+  local tabs = {}
+  AddTab( tabs, "help", "getsitehelp" )
+  AddTab( tabs, "staff", "getsitestaff" )
+  AddTab( tabs, "collection", "" )
+
+  net.Start( "gethelpmenu" )
+    net.WriteTable( tabs )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitehelp" )
+net.Receive( "getsitehelp", function( len, ply )
+  net.Start( "getsitehelp" )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitestaff" )
+net.Receive( "getsitestaff", function( len, ply )
+  local staff = {}
+  for i, pl in pairs( player.GetAll() ) do
+    if pl:HasAccess() then
+      table.insert( staff, pl )
+    end
+  end
+  net.Start( "getsitestaff" )
+    net.WriteTable( staff )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecollection" )
+net.Receive( "getsitecollection", function( len, ply )
+  net.Start( "getsitecollection" )
+  net.Send( ply )
+end)
 
 --[[ OLD GETTER BELOW ]]--
 util.AddNetworkString( "db_jailaccess" )
