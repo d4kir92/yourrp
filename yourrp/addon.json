@@ -1,0 +1,11 @@
+{
+    "title"        :    "YourRP - Your rules, endless possibilities [Multiplayer Gamemode] [BETA]",
+    "type"        :    "gamemode",
+    "tags"        :    [ "fun", "roleplay" ],
+    "ignore"    :
+    [
+        "*.psd",
+        "*.vcproj",
+        "*.svn*"
+    ]
+}
