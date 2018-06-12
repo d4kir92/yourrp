@@ -109,9 +109,11 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT '9987'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT '10011'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''" )
@@ -770,16 +772,40 @@ net.Receive( "update_text_social_discord", function( len, ply )
   GeneralUpdateString( ply, "update_text_social_discord", "text_social_discord", str )
 end)
 
-util.AddNetworkString( "update_text_social_teamspeak" )
-net.Receive( "update_text_social_teamspeak", function( len, ply )
+util.AddNetworkString( "update_text_social_discord_widgetid" )
+net.Receive( "update_text_social_discord_widgetid", function( len, ply )
   local str = net.ReadString()
-  GeneralUpdateString( ply, "update_text_social_teamspeak", "text_social_teamspeak", str )
+  GeneralUpdateString( ply, "update_text_social_discord_widgetid", "text_social_discord_widgetid", str )
+end)
+
+util.AddNetworkString( "update_text_social_teamspeak_ip" )
+net.Receive( "update_text_social_teamspeak_ip", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_social_teamspeak_ip", "text_social_teamspeak_ip", str )
+end)
+
+util.AddNetworkString( "update_text_social_teamspeak_port" )
+net.Receive( "update_text_social_teamspeak_port", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_social_teamspeak_port", "text_social_teamspeak_port", str )
+end)
+
+util.AddNetworkString( "update_text_social_teamspeak_query_port" )
+net.Receive( "update_text_social_teamspeak_query_port", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_social_teamspeak_query_port", "text_social_teamspeak_query_port", str )
 end)
 
 util.AddNetworkString( "update_text_social_youtube" )
 net.Receive( "update_text_social_youtube", function( len, ply )
   local str = net.ReadString()
   GeneralUpdateString( ply, "update_text_social_youtube", "text_social_youtube", str )
+end)
+
+util.AddNetworkString( "update_text_social_twitch" )
+net.Receive( "update_text_social_twitch", function( len, ply )
+  local str = net.ReadString()
+  GeneralUpdateString( ply, "update_text_social_twitch", "text_social_twitch", str )
 end)
 
 util.AddNetworkString( "update_text_social_twitter" )
@@ -822,36 +848,62 @@ net.Receive( "gethelpmenu", function( len, ply )
   local info = SQL_SELECT( "yrp_general", "*", "uniqueID = '1'" )
   if wk( info ) then
     info = info[1]
-  end
 
-  local tabs = {}
-  local subtabs = {}
+    local tabs = {}
+    local subtabs = {}
 
-  AddTab( tabs, "help", "getsitehelp" )
-  AddTab( tabs, "staff", "getsitestaff" )
-  if info.text_server_collectionid != "" then
-    if tonumber( info.text_server_collectionid ) > 0 then
-      AddTab( tabs, "collection", "getsitecollection" )
+    AddTab( tabs, "help", "getsitehelp" )
+    AddTab( tabs, "staff", "getsitestaff" )
+    if info.text_server_collectionid != "" then
+      if tonumber( info.text_server_collectionid ) > 0 then
+        AddTab( tabs, "collection", "getsitecollection" )
+      end
     end
-  end
 
-  if info.text_social_website != "" or info.text_social_forum != "" then
-    AddTab( tabs, "community", "" )
-    if info.text_social_website != "" then
-      AddSubTab( subtabs, "community", "website", "getsitecommunitywebsite" )
+    if info.text_social_website != "" or info.text_social_forum != "" then
+      AddTab( tabs, "community", "" )
+      if info.text_social_website != "" then
+        AddSubTab( subtabs, "community", "website", "getsitecommunitywebsite" )
+      end
+      if info.text_social_forum != "" then
+        AddSubTab( subtabs, "community", "forum", "getsitecommunityforum" )
+      end
+      if info.text_social_discord != "" then
+        AddSubTab( subtabs, "community", "discord", "getsitecommunitydiscord" )
+      end
+      if info.text_social_teamspeak_ip != "" then
+        AddSubTab( subtabs, "community", "teamspeak", "getsitecommunityteamspeak" )
+      end
+      if info.text_social_twitch != "" then
+        AddSubTab( subtabs, "community", "twitch", "getsitecommunitytwitch" )
+      end
+      if info.text_social_twitter != "" then
+        AddSubTab( subtabs, "community", "twitter", "getsitecommunitytwitter" )
+      end
+      if info.text_social_youtube != "" then
+        AddSubTab( subtabs, "community", "youtube", "getsitecommunityyoutube" )
+      end
+      if info.text_social_facebook != "" then
+        AddSubTab( subtabs, "community", "facebook", "getsitecommunityfacebook" )
+      end
+      --if info.text_social_servers != "" then
+        --AddSubTab( subtabs, "community", "servers", "getsitecommunityservers" )
+      --end
     end
-    if info.text_social_forum != "" then
-      AddSubTab( subtabs, "community", "forum", "getsitecommunityforum" )
-    end
+
+    AddTab( tabs, "YourRP", "" )
+    AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
+    AddSubTab( subtabs, "YourRP", "website", "getsiteyourrpwebsite" )
+    AddSubTab( subtabs, "YourRP", "discord", "getsiteyourrpdiscord" )
+    -- AddSubTab( subtabs, "YourRP", "translations", "getsiteyourrptranslations" )
+
+    net.Start( "gethelpmenu" )
+      net.WriteTable( tabs )
+      net.WriteTable( subtabs )
+    net.Send( ply )
+  else
+    printGM( "note", "gamemode broken contact developer!" )
   end
-
-  AddTab( tabs, "YourRP", "" )
-  AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
-
-  net.Start( "gethelpmenu" )
-    net.WriteTable( tabs )
-    net.WriteTable( subtabs )
-  net.Send( ply )
 end)
 
 util.AddNetworkString( "getsitehelp" )
@@ -912,9 +964,108 @@ net.Receive( "getsitecommunityforum", function( len, ply )
   net.Send( ply )
 end)
 
+util.AddNetworkString( "getsitecommunitydiscord" )
+net.Receive( "getsitecommunitydiscord", function( len, ply )
+  local sql_select = SQL_SELECT( "yrp_general", "text_social_discord, text_social_discord_widgetid", "uniqueID = '1'" )
+  local link = ""
+  local widgetid = ""
+  if wk( link ) then
+    link = sql_select[1].text_social_discord
+    widgetid = sql_select[1].text_social_discord_widgetid
+  end
+  net.Start( "getsitecommunitydiscord" )
+    net.WriteString( link )
+    net.WriteString( widgetid )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunityteamspeak" )
+net.Receive( "getsitecommunityteamspeak", function( len, ply )
+  local sql_select = SQL_SELECT( "yrp_general", "text_social_teamspeak_ip, text_social_teamspeak_port, text_social_teamspeak_query_port", "uniqueID = '1'" )
+  local ip = ""
+  local port = ""
+  local query_port = ""
+  if wk( sql_select ) then
+    ip = sql_select[1].text_social_teamspeak_ip
+    port = sql_select[1].text_social_teamspeak_port
+    query_port = sql_select[1].text_social_teamspeak_query_port
+  end
+  net.Start( "getsitecommunityteamspeak" )
+    net.WriteString( ip )
+    net.WriteString( port )
+    net.WriteString( query_port )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunitytwitch" )
+net.Receive( "getsitecommunitytwitch", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_twitch", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_twitch
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunitytwitch" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunitytwitter" )
+net.Receive( "getsitecommunitytwitter", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_twitter", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_twitter
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunitytwitter" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunityyoutube" )
+net.Receive( "getsitecommunityyoutube", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_youtube", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_youtube
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunityyoutube" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunityfacebook" )
+net.Receive( "getsitecommunityfacebook", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_facebook", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_facebook
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunityfacebook" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
+
+
 util.AddNetworkString( "getsiteyourrpnews" )
 net.Receive( "getsiteyourrpnews", function( len, ply )
   net.Start( "getsiteyourrpnews" )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsiteyourrpwebsite" )
+net.Receive( "getsiteyourrpwebsite", function( len, ply )
+  net.Start( "getsiteyourrpwebsite" )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsiteyourrpdiscord" )
+net.Receive( "getsiteyourrpdiscord", function( len, ply )
+  net.Start( "getsiteyourrpdiscord" )
   net.Send( ply )
 end)
 

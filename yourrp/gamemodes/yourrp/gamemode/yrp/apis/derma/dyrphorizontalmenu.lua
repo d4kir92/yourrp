@@ -114,8 +114,11 @@ function PANEL:AddTab( name, netstr, starttab )
           surfaceText( lang_string( self.name ), "mat1text", pw/2, ph/2, Color( 255, 255, 255, 255 ), 1, 1 )
         end
         function st:DoClick()
+          TAB.menu.current_site = self.menu.name
+
           TAB.menu:ClearSite()
           st.menu:HideSubTabs()
+
           net.Start( self.netstr )
           net.SendToServer()
         end
@@ -190,8 +193,6 @@ function PANEL:GetMenuInfo( netstr )
   net.Receive( netstr, function( len )
     local tabs = net.ReadTable()
     local subtabs = net.ReadTable()
-
-    printTab( tabs )
 
     for i, tab in pairs( tabs ) do
       local starttab = false

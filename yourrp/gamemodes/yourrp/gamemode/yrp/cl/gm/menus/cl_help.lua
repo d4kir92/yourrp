@@ -238,6 +238,157 @@ net.Receive( "getsitecommunityforum", function( len )
   end
 end)
 
+net.Receive( "getsitecommunitydiscord", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+    local widgetid = net.ReadString()
+
+    if widgetid != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, ctr( 1000 + 2*20 ), ph, Color( 255, 255, 255, 255 ) )
+      end
+      local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. ctr( 1000 ) .. "\" height=\"" .. page:GetTall() - ctr( 2*20 ) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
+      page:SetHTML( widgetlink )
+
+      local openLink = createD( "DButton", page, ctr( 240 ), ctr( 54 ), ctr( 390 ), page:GetTall() - ctr( 92 ) )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunityteamspeak", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local ip = net.ReadString()
+    local port = net.ReadString()
+    local query_port = net.ReadString()
+
+    printGM( "gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port )
+
+    if ip != "" then
+      if port != "" and query_port != "" then
+        local page = createD( "DHTML", HELPMENU.mainmenu.site, ctr( 1000 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+        function page:Paint( pw, ph )
+          surfaceBox( 0, 0, ctr( 1000 + 2*20 ), ph, Color( 0, 0, 0, 255 ) )
+        end
+        local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
+        page:SetHTML( widgetlink )
+
+        local ipport = createD( "DTextEntry", HELPMENU.mainmenu.site, ctr( 400 ), ctr( 50 ), page:GetWide() + ctr( 20 ), 0 )
+        ipport:SetText( ip .. ":" .. port )
+        ipport:SetEditable( false )
+      else
+        printGM( "note", "missing Port and QueryPort" )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunitytwitch", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunitytwitter", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunityyoutube", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunityfacebook", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+
+
 net.Receive( "getsiteyourrpnews", function( len )
   if pa( HELPMENU.mainmenu.site ) then
     local link = "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing"
@@ -251,6 +402,54 @@ net.Receive( "getsiteyourrpnews", function( len )
       page:OpenURL( link )
 
       local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsiteyourrpwebsite", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = "https://sites.google.com/view/yrp"
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsiteyourrpdiscord", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = "https://discord.gg/CXXDCMJ"
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, ctr( 1000 + 2*20 ), ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:SetHTML( "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. ctr( 1000 ) .. "\" height=\"" .. page:GetTall() - ctr( 2*20 ) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>" )
+
+      local openLink = createD( "DButton", page, ctr( 240 ), ctr( 54 ), ctr( 390 ), page:GetTall() - ctr( 92 ) )
       openLink:SetText( "" )
       function openLink:Paint( pw, ph )
         surfaceButton( self, pw, ph, "" )
