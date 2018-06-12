@@ -107,7 +107,7 @@ net.Receive( "openStorage", function( len )
     inv.window:SetDraggable( false )
     inv.window:MakePopup()
     function inv.window:Paint( pw, ph )
-      surfaceWindow( self, pw, ph, lang_string( "inventory" ) )
+      surfaceWindow( self, pw, ph, lang_string( "inventory" ) .. " [PROTOTYPE]" )
     end
     function inv.window:OnClose()
       CloseInventory()

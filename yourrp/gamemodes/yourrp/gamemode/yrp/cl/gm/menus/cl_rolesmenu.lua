@@ -261,7 +261,7 @@ function openRoleMenu()
     _rm:SetDraggable( false )
     _rm:SetTitle( "" )
     function _rm:Paint( pw, ph )
-      surfaceWindow( self, pw, ph, lang_string( "rolemenu" ) )
+      surfaceWindow( self, pw, ph, lang_string( "rolemenu" ) .. " [PROTOTYPE]" )
     end
 
     _rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), BScrW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )

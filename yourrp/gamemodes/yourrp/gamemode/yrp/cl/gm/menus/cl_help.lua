@@ -55,18 +55,6 @@ function closeHelpMenu()
   end
 end
 
-function OpenStaffSite()
-  for i, child in pairs( HELPMENU.site:GetChildren() ) do
-    child:Remove()
-  end
-
-  local staffpnl = createD( "DPanel", HELPMENU.site, HELPMENU.site:GetWide(), HELPMENU.site:GetTall(), 0, 0 )
-  function staffpnl:Paint( pw, ph )
-    local _abstand = ctr( HudV("ttsf") ) * 3.8
-    draw.SimpleTextOutlined( lang_string( "wip" ), "ttsf", BScrW()/2 - ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
-end
-
 net.Receive( "getsitehelp", function( len )
   if pa( HELPMENU.mainmenu.site ) then
     local helppnl = createD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.mainmenu.site:GetWide(), HELPMENU.mainmenu.site:GetTall(), 0, 0 )
@@ -131,16 +119,7 @@ net.Receive( "getsitehelp", function( len )
       gui.OpenURL( "https://discord.gg/sEgNZxg" )
     end
 
-    local _g_docs_news_panel = createD( "DPanel", helppnl, BScrW()/2-ctr(10+10), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
-    function _g_docs_news_panel:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    end
-
-    local _g_docs_news_html = createD( "HTML", _g_docs_news_panel, BScrW()/2-ctr(10+10), ctr( 1130 + 212 + 50 ), 0, -ctr( 212 ) )
-    _g_docs_news_html:OpenURL( "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing" )
-    --_g_docs_news_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vRcuPnvnAqRD7dQFOkH9d0Q1G3qXFn6rAHJWAAl7wV2TEABGhDdJK9Y-LCONFKTiAWmJJZpsTcDnz5W/pub" )
-
-    local _g_docs_help_panel = createD( "DPanel", helppnl, BScrW()/2-ctr(10+10), ctr( 1130 ), BScrW()/2 + ctr( 10 ), ctr( 1020 ) )
+    local _g_docs_help_panel = createD( "DPanel", helppnl, BScrW()/2-ctr(10+10), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
     function _g_docs_help_panel:Paint( pw, ph )
       draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
     end
@@ -155,12 +134,130 @@ net.Receive( "getsitestaff", function( len )
   if pa( HELPMENU.mainmenu.site ) then
     local staff = net.ReadTable()
 
+    local stafflist = createD( "DPanelList", HELPMENU.mainmenu.site, ctr( 800 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+    stafflist:SetSpacing( ctr( 10 ) )
+
     for i, pl in pairs( staff ) do
-      local tmp = createD( "DButton", HELPMENU.mainmenu.site, ctr( 800 ), ctr( 200 ), 0, 0 )
+      local tmp = createD( "DButton", stafflist, ctr( 800 ), ctr( 200 ), 0, 0 )
       tmp:SetText( "" )
       function tmp:Paint( pw, ph )
         draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 255, 255, 200 ) )
-        draw.SimpleTextOutlined( "RPName: " .. pl:RPName(), "mat1text", ph + ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( lang_string( "name" ) .. ": " .. pl:RPName(), "mat1text", ph + ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+        draw.SimpleTextOutlined( lang_string( "usergroup" ) .. ": " .. pl:GetUserGroup(), "mat1text", ph + ctr( 10 ), ctr( 50 + 25 ), Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+      end
+
+      tmp.avatar = createD( "AvatarImage", tmp, ctr( 200 - 8 ), ctr( 200 - 8 ), ctr( 4 ), ctr( 4 ) )
+      tmp.avatar:SetPlayer( pl, ctr( 200 ) )
+
+      local steamsize = 50
+      tmp.steam = createD( "DButton", tmp, ctr( steamsize ), ctr( steamsize ), ctr( 200 + 10 ), ctr( 200 - steamsize - 10 ) )
+      tmp.steam:SetText( "" )
+      function tmp.steam:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "steam" ), pw - ctr( 4 ), ph - ctr( 4 ), ctr( 2 ), ctr( 2 ), Color( 255, 255, 255, 255 ) )
+      end
+      function tmp.steam:DoClick()
+        pl:ShowProfile()
+      end
+
+      stafflist:AddItem( tmp )
+    end
+  end
+end)
+
+net.Receive( "getsitecollection", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local collectionid = tonumber( net.ReadString() )
+
+    if collectionid > 0 then
+      local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
+      local WorkshopPage = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function WorkshopPage:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      WorkshopPage:OpenURL( link )
+
+      local openLink = createD( "DButton", WorkshopPage, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunitywebsite", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsitecommunityforum", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
+
+net.Receive( "getsiteyourrpnews", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing"
+
+    if link != "" then
+      local posy = ctr( 220 )
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ) + posy, 0, -posy )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
       end
     end
   end
@@ -187,7 +284,11 @@ function openHelpMenu()
   HELPMENU.close = createD( "DButton", HELPMENU.window, ctr( 64 ), ctr( 64 ), BScrW() - ctr( 64 + 20 ), ctr( 20 ) )
   HELPMENU.close:SetText( "" )
   function HELPMENU.close:Paint( pw, ph )
-    draw.RoundedBox( ph/2, 0, 0, pw, ph, Color( 0, 0, 255, 255 ) )
+    local color = Color( 0, 0, 255, 255 )
+    if self:IsHovered() then
+      color = Color( 100, 100, 255, 255 )
+    end
+    draw.RoundedBox( ph/2, 0, 0, pw, ph, color )
     DrawIcon( GetDesignIcon( "close" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
   end
   function HELPMENU.close:DoClick()

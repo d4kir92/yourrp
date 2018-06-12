@@ -149,7 +149,9 @@ net.Receive( "get_menu_bodygroups", function( len )
         net.Start( "inv_skin_do" )
           net.WriteInt( _tmpSkin.cur, 16 )
         net.SendToServer()
-        _appe.r.pm.Entity:SetSkin( _tmpSkin.cur )
+        if ea( _appe.r.pm.Entity ) then
+          _appe.r.pm.Entity:SetSkin( _tmpSkin.cur )
+        end
       end
 
       -- Bodygroups changing
@@ -249,7 +251,7 @@ function open_appearance()
     _yrp_appearance.window:Remove()
   end
   function _yrp_appearance.window:Paint( pw, ph )
-    surfaceWindow( self, pw, ph, lang_string( "appearance" ) .. " - " .. lang_string( "menu" ) )
+    surfaceWindow( self, pw, ph, lang_string( "appearance" ) .. " - " .. lang_string( "menu" ) .. " [PROTOTYPE]" )
   end
 
   _yrp_appearance.left = createD( "DPanel", _yrp_appearance.window, BScrW() - ctr( 100 ), ScrH() - ctr( 200 ), 0, ctr( 100 ) )

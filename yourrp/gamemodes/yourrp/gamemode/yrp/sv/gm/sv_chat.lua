@@ -73,7 +73,9 @@ function drop_weapon( sender )
   if ea( sender ) then
     local _weapon = sender:GetActiveWeapon()
     if _weapon != nil and PlayersCanDropWeapons() then
-      sender:DropSWEP( _weapon:GetClass() )
+      if ea( _weapon ) then
+        sender:DropSWEP( _weapon:GetClass() )
+      end
     else
       printGM( "note", sender:YRPName() .. " drop weapon is disabled!" )
     end

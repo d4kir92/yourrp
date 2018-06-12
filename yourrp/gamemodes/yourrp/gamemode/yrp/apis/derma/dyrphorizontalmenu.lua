@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function DrawSelector( btn, w, h, text, selected )
-  draw.SimpleTextOutlined( text, "mat1text", w/2, h/2, Color( 255, 255, 255, 255 ), 1, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  draw.SimpleTextOutlined( text, "mat1header", w/2, h/2, Color( 255, 255, 255, 255 ), 1, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   if btn.ani_h == nil then
     btn.ani_h = 0
   end
@@ -81,11 +81,59 @@ function PANEL:AddTab( name, netstr, starttab )
   if #self.tabs > 0 then
     self:MakeSpacer()
   end
-  local TAB = createD( "DButton", self, GetTextLength( lang_string( name ), "mat1text" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
+  local TAB = createD( "DButton", self, GetTextLength( lang_string( name ), "mat1header" ) + ctr( 30 * 2 ), ctr( 100 ), ctr( 400 ), 0 )
   TAB.menu = self
   TAB.name = name
   TAB.netstr = netstr
   TAB:SetText( "" )
+  TAB.subtabs = {}
+
+  function TAB:ShowSubTabs()
+    if self.stabs == nil then
+      local posx, posy = self:LocalToScreen( 0, 0 )
+      self.stabs = createD( "DFrame", self, ctr( 400 ), self:GetTall() * #self.subtabs, posx, posy + self:GetTall() )
+      self.stabs:SetTitle( "" )
+      self.stabs:ShowCloseButton( false )
+      self.stabs:SetDraggable( false )
+      function self.stabs:Paint( pw, ph )
+        if !pa( self:GetParent() ) then
+          self:Remove()
+        end
+        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 255 ) )
+      end
+
+      self.stabs.pl = createD( "DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0 )
+
+      for i, subtab in pairs( self.subtabs ) do
+        local st = createD( "DButton", self.stabs.pl, self.stabs:GetWide(), self:GetTall(), 0, 0 )
+        st:SetText( "" )
+        st.menu = TAB
+        st.name = subtab.name
+        st.netstr = subtab.netstr
+        function st:Paint( pw, ph )
+          surfaceText( lang_string( self.name ), "mat1text", pw/2, ph/2, Color( 255, 255, 255, 255 ), 1, 1 )
+        end
+        function st:DoClick()
+          TAB.menu:ClearSite()
+          st.menu:HideSubTabs()
+          net.Start( self.netstr )
+          net.SendToServer()
+        end
+
+        self.stabs.pl:AddItem( st )
+      end
+
+      self.stabs:MakePopup()
+    end
+  end
+
+  function TAB:HideSubTabs()
+    if self.stabs != nil then
+      self.stabs:Remove()
+      self.stabs = nil
+    end
+  end
+
   function TAB:Paint( pw, ph )
     if self.menu.current_site == self.name then
       self.selected = true
@@ -93,16 +141,29 @@ function PANEL:AddTab( name, netstr, starttab )
       self.selected = false
     end
     DrawSelector( self, pw, ph, lang_string( self.name ), self.selected )
+
+    if self:IsHovered() then
+      self:GetParent().hovered = TAB.name
+      self:ShowSubTabs()
+    elseif self:GetParent().hovered != TAB.name then
+      self:HideSubTabs()
+    end
   end
+
   function TAB:DoClick()
     self.menu.current_site = self.name
     if self.netstr != "" then
       self.menu:ClearSite()
       net.Start( self.netstr )
       net.SendToServer()
-    else
-      self.menu:SiteNotFound()
     end
+  end
+
+  function TAB:AddToTab( name, netstr )
+    local entry = {}
+    entry.name = name
+    entry.netstr = netstr
+    table.insert( self.subtabs, entry )
   end
   if starttab then
     TAB:DoClick()
@@ -125,14 +186,24 @@ end
 function PANEL:GetMenuInfo( netstr )
   net.Start( netstr )
   net.SendToServer()
+
   net.Receive( netstr, function( len )
     local tabs = net.ReadTable()
+    local subtabs = net.ReadTable()
+
+    printTab( tabs )
+
     for i, tab in pairs( tabs ) do
       local starttab = false
       if tab.name == self.starttab then
         starttab = true
       end
-      self:AddTab( tab.name, tab.netstr, starttab )
+      local pnl = self:AddTab( tab.name, tab.netstr, starttab )
+      for i, subtab in pairs( subtabs ) do
+        if subtab.parent == tab.name then
+          pnl:AddToTab( subtab.name, subtab.netstr )
+        end
+      end
     end
   end)
 end

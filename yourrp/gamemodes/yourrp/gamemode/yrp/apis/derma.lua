@@ -85,7 +85,11 @@ function AddDesignIcon( name, path )
   _icons[name] = Material( path )
 end
 function GetDesignIcon( name )
-  return _icons[name]
+  if _icons[name] != nil then
+    return _icons[name]
+  else
+    return _icons["clear"]
+  end
 end
 
 function DrawIcon( material, w, h, x, y, color )
@@ -117,6 +121,12 @@ AddDesignIcon( "chat", "vgui/material/icon_chat.png" )
 AddDesignIcon( "voice", "vgui/material/icon_voice.png" )
 
 AddDesignIcon( "close", "vgui/material/icon_highlight_off.png" )
+
+AddDesignIcon( "clear", "vgui/material/icon_clear.png" )
+
+AddDesignIcon( "launch", "vgui/material/icon_launch.png" )
+
+AddDesignIcon( "steam", "vgui/material/icon_steam.png" )
 
 local _delay = 1
 local _get_design = true

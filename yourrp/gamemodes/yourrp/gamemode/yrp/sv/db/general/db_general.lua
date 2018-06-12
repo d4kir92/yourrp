@@ -809,15 +809,48 @@ function AddTab( tab, name, netstr )
   table.insert( tab, entry )
 end
 
+function AddSubTab( tab, parent, name, netstr )
+  local entry = {}
+  entry.name = name
+  entry.netstr = netstr
+  entry.parent = parent
+  table.insert( tab, entry )
+end
+
 util.AddNetworkString( "gethelpmenu" )
 net.Receive( "gethelpmenu", function( len, ply )
+  local info = SQL_SELECT( "yrp_general", "*", "uniqueID = '1'" )
+  if wk( info ) then
+    info = info[1]
+  end
+
   local tabs = {}
+  local subtabs = {}
+
   AddTab( tabs, "help", "getsitehelp" )
   AddTab( tabs, "staff", "getsitestaff" )
-  AddTab( tabs, "collection", "" )
+  if info.text_server_collectionid != "" then
+    if tonumber( info.text_server_collectionid ) > 0 then
+      AddTab( tabs, "collection", "getsitecollection" )
+    end
+  end
+
+  if info.text_social_website != "" or info.text_social_forum != "" then
+    AddTab( tabs, "community", "" )
+    if info.text_social_website != "" then
+      AddSubTab( subtabs, "community", "website", "getsitecommunitywebsite" )
+    end
+    if info.text_social_forum != "" then
+      AddSubTab( subtabs, "community", "forum", "getsitecommunityforum" )
+    end
+  end
+
+  AddTab( tabs, "YourRP", "" )
+  AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
 
   net.Start( "gethelpmenu" )
     net.WriteTable( tabs )
+    net.WriteTable( subtabs )
   net.Send( ply )
 end)
 
@@ -842,7 +875,46 @@ end)
 
 util.AddNetworkString( "getsitecollection" )
 net.Receive( "getsitecollection", function( len, ply )
+  local collectionid = SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
+  if wk( collectionid ) then
+    collectionid = collectionid[1].text_server_collectionid
+  else
+    collectionid = ""
+  end
   net.Start( "getsitecollection" )
+    net.WriteString( collectionid )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunitywebsite" )
+net.Receive( "getsitecommunitywebsite", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_website", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_website
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunitywebsite" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsitecommunityforum" )
+net.Receive( "getsitecommunityforum", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_forum", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_forum
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunityforum" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsiteyourrpnews" )
+net.Receive( "getsiteyourrpnews", function( len, ply )
+  net.Start( "getsiteyourrpnews" )
   net.Send( ply )
 end)
 

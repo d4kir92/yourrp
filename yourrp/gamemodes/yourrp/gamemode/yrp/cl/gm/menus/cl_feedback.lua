@@ -35,7 +35,7 @@ function openFeedbackMenu()
   _fb.langu = derma_change_language( _fb.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 50 ) )
 
   function _fb.window:Paint( pw, ph )
-    surfaceWindow( self, pw, ph, lang_string( "givefeedback" ) )
+    surfaceWindow( self, pw, ph, lang_string( "givefeedback" ) .. " [PROTOTYPE]" )
   end
 
   _fb.discord = createD( "DButton", _fb.window, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )

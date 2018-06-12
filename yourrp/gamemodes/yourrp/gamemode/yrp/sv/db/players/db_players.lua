@@ -101,17 +101,20 @@ end
 
 function set_role( ply, rid )
   if ply:HasCharacterSelected() then
-    local _result = SQL_UPDATE( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
-    local _gid = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. rid )
-    local _old_uid = ply:GetNWString( "roleUniqueID", "1" )
-    ply:SetNWString( "roleUniqueID", rid )
-    if _gid != nil then
-      _gid = _gid[1].groupID
-      local _result2 = SQL_UPDATE( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
-      ply:SetNWString( "groupUniqueID", _gid )
+    local _char_id = ply:CharID()
+    if _char_id != nil then
+      local _result = SQL_UPDATE( "yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID() )
+      local _gid = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. rid )
+      local _old_uid = ply:GetNWString( "roleUniqueID", "1" )
+      ply:SetNWString( "roleUniqueID", rid )
+      if _gid != nil then
+        _gid = _gid[1].groupID
+        local _result2 = SQL_UPDATE( "yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID() )
+        ply:SetNWString( "groupUniqueID", _gid )
+      end
+      updateRoleUses( _old_uid )
+      updateRoleUses( rid )
     end
-    updateRoleUses( _old_uid )
-    updateRoleUses( rid )
   end
 end
 

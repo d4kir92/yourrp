@@ -142,7 +142,11 @@ function drawGroupPlayers( id )
           end
 
           local _w = ctr( 128+16 )
-          draw.SimpleTextOutlined( self.rpname, "sef", _w, ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+          local namey = ph/4
+          if !ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+            namey = ph/2
+          end
+          draw.SimpleTextOutlined( self.rpname, "sef", _w, namey, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           if ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
             draw.SimpleTextOutlined( string.upper( self.rank ), "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
@@ -152,10 +156,18 @@ function drawGroupPlayers( id )
           end
 
           if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) then
-            draw.SimpleTextOutlined( self.rolename, "sef", _w, ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            local y = ph/4
+            if !ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+              y = ph/2
+            end
+            draw.SimpleTextOutlined( self.rolename, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           if ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
-            draw.SimpleTextOutlined( self.groupname, "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            local y = ph*3/4
+            if !ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) then
+              y = ph/2
+            end
+            draw.SimpleTextOutlined( self.groupname, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
 
           if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
@@ -163,10 +175,18 @@ function drawGroupPlayers( id )
           end
 
           if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-            draw.SimpleTextOutlined( self.frags, "sef", _w, ph/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            local y = ph/4
+            if !ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+              y = ph/2
+            end
+            draw.SimpleTextOutlined( self.frags, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
           if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-            draw.SimpleTextOutlined( self.deaths, "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+            local y = ph*3/4
+            if !ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
+              y = ph/2
+            end
+            draw.SimpleTextOutlined( self.deaths, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
           end
 
           if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
@@ -401,7 +421,7 @@ end
 
 function drawGroup( id, name, color )
   local ply = LocalPlayer()
-  
+
   elePos.y = elePos.y + 50
 
   local _color = string.Explode( ",", color )

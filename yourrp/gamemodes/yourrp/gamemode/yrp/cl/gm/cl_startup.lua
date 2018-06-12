@@ -6,7 +6,11 @@ function DChangeLanguage( parent, x, y, size )
   local LanguageChanger = createD( "DButton", parent, size, size*0.671, x, y )
   LanguageChanger:SetText( "" )
   function LanguageChanger:Paint( pw, ph )
-    surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 255 ) )
+    local color = Color( 0, 0, 255, 255 )
+    if self:IsHovered() then
+      color = Color( 100, 100, 255, 255 )
+    end
+    surfaceBox( 0, 0, pw, ph, color )
 
     local size = ph
     DrawIcon( GetDesignIcon( GetCurrentLanguage() ), size, size*0.671, ( pw - size ) / 2, ( ph - size*0.671 ) / 2 )
@@ -50,7 +54,11 @@ function DChangeLanguage( parent, x, y, size )
       lang:SetText( "" )
       lang.data = v.short
       function lang:Paint( pw, ph )
-        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 100 ) )
+        local color = Color( 0, 0, 255, 100 )
+        if self:IsHovered() then
+          color = Color( 100, 100, 255, 100 )
+        end
+        surfaceBox( 0, 0, pw, ph, color )
 
         DrawIcon( GetDesignIcon( v.short ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ) )
 
@@ -1120,10 +1128,9 @@ end
 
 function drawIcon( ply, string, z, color )
   local _size = 32
-  local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
-  local pos = ply:GetPos() + _abstand
+  local pos = ply:GetPos()
   if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
-    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + _abstand
+    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
   end
   local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
   local sca = ply:GetModelScale()/4
@@ -1136,20 +1143,40 @@ function drawIcon( ply, string, z, color )
 end
 
 function drawString( ply, string, z, color )
-  local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
-  local pos = ply:GetPos() + _abstand
+  local pos = ply:GetPos()
   if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
-    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + _abstand
+    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
   end
   local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
   local sca = ply:GetModelScale()/4
   local str = string
   local strSize = string.len( str ) + 3
   cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
-    surface.SetFont( "plates" )
+    surface.SetFont( "3d2d_string" )
     local _tw, _th = surface.GetTextSize( str )
     _tw = math.Round( _tw * 1.08, 0 )
     _th = _th
+    surfaceText( str, "3d2d_string", 0, _th/2+1, color, 1, 1 )
+  cam.End3D2D()
+end
+
+function drawBar( ply, string, z, color, cur, max, barcolor )
+  local pos = ply:GetPos()
+  if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
+    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
+  end
+  local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
+  local sca = ply:GetModelScale()/4
+  local str = string
+  local strSize = string.len( str ) + 3
+  cam.Start3D2D( pos + Vector( 0, 0, z ) , ang, sca )
+    surface.SetFont( "3d2d_string" )
+    local _tw, _th = surface.GetTextSize( str )
+    _tw = math.Round( _tw * 1.00, 0 )
+    _th = _th
+    local w = 200
+    surfaceBox( -w/2 - 2, 2 - 2, w + 4, 20 + 4, Color( 0, 0, 0, 100 ) )
+    surfaceBox( -w/2, 2, w * cur/max, 20, barcolor )
     surfaceText( str, "3d2d_string", 0, _th/2+1, color, 1, 1 )
   cam.End3D2D()
 end
@@ -1240,7 +1267,7 @@ _icons["ms"] = Material( "icon16/lightning.png" )
 function drawPlates( ply )
   if ply:Alive() then
 
-    local _height = 0
+    local _height = 23
 
     local color = ply:GetColor()
     color.a = color.a - 160
@@ -1250,11 +1277,11 @@ function drawPlates( ply )
 
     if ply:GetNWBool( "bool_tag_on_head", false ) then
       if ply:GetNWBool( "bool_tag_on_head_voice", false ) and ply:IsSpeaking() then
-        drawIcon( ply, "voice", -6, color )
+        drawIcon( ply, "voice", 17, color )
       end
 
       if ply:GetNWBool( "bool_tag_on_head_chat", false ) and isChatOpen() then
-        drawIcon( ply, "chat", -6, color )
+        drawIcon( ply, "chat", 17, color )
       end
 
       if ply:GetNWBool( "bool_tag_on_head_clan", false ) then
@@ -1277,14 +1304,18 @@ function drawPlates( ply )
         _height = _height + 5
       end
 
-      if ply:GetNWBool( "bool_tag_on_head_health", false ) then
-        drawString( ply, ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" ), _height, color )
-        _height = _height + 5
+      if ply:GetNWBool( "bool_tag_on_head_armor", false ) then
+        _height = _height + 1
+        local str = ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "100" ) .. " " .. lang_string( "armor" )
+        drawBar( ply, str, _height, color, ply:Armor(), tonumber( ply:GetNWString( "GetMaxArmor", "100" ) ), Color( 0, 0, 255, color.a ) )
+        _height = _height + 6
       end
 
-      if ply:GetNWBool( "bool_tag_on_head_armor", false ) then
-        drawString( ply, ply:Armor() .. "/" .. ply:GetNWString( "GetMaxArmor", "100" ) .. " " .. lang_string( "armor" ), _height, color )
-        _height = _height + 5
+      if ply:GetNWBool( "bool_tag_on_head_health", false ) then
+        _height = _height + 1
+        local str = ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string( "health" )
+        drawBar( ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color( 0, 255, 0, color.a ) )
+        _height = _height + 6
       end
 
       if ply:GetNWBool( "bool_tag_on_head_usergroup", false ) then

@@ -109,7 +109,7 @@ function openCharacterCreation()
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 250 ) )
 
-    draw.SimpleTextOutlined( lang_string( "charactercreation" ), "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "charactercreation" ) .. " [PROTOTYPE]", "HudHeader", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function frame:OnClose()
     closeMenu()
@@ -624,7 +624,7 @@ function openCharacterSelection()
   function _cs.frame:Paint( pw, ph )
     draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
 
-    draw.SimpleTextOutlined( lang_string( "characterselection" ), "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined( lang_string( "characterselection" ) .. " [PROTOTYPE]", "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     draw.SimpleTextOutlined( _cur, "HudHeader", pw/2, ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function _cs.frame:OnClose()
