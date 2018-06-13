@@ -1,0 +1,14 @@
+"Gamemode"
+
+{
+	"base"		"sandbox"
+	"title"		"YourRP"
+	"maps"		"^rp_"
+	"menusystem"	"1"
+	"workshopid"	"1114204152"
+
+	"settings"
+	{
+
+	}
+}
