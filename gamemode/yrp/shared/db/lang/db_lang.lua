@@ -105,7 +105,9 @@ AddCSLuaFile( "languages/db_lang_ko.lua" )
 AddCSLuaFile( "languages/db_lang_hu.lua" )
 AddCSLuaFile( "languages/db_lang_cs.lua" )
 AddCSLuaFile( "languages/db_lang_lt.lua" )
+AddCSLuaFile( "languages/read_lang.lua" )
 
+include( "languages/read_lang.lua" )
 include( "languages/db_lang_en.lua" )
 include( "languages/db_lang_de.lua" )
 include( "languages/db_lang_ru.lua" )
@@ -217,6 +219,7 @@ function change_language( index )
   else
 		yrp_lang.get_language = index
     printGM( "lang", "Manually change to Language [" .. index .. "]" )
+	print(type(index), "["..index.."]", type("en"), index=="en\r")
     if index == "de" then
       LangDE()
     elseif index == "en" then

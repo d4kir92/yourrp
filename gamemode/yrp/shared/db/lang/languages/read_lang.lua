@@ -3,11 +3,17 @@ function read_lang( filepath )
 		print( "PIMMELPIMMELPIMMELPIMMELPIMMELPIMMELPIMMELPIMMELPIMMEL" )
 		local _langFile = file.Read( filepath, "GAME" )
 		if(!_langFile) then return end
+		_langFile = string.gsub( _langFile, "\r", "")
 		local _rawLines = string.Explode( "\n", _langFile, false )
 		for key, value in pairs(_rawLines) do
-			
+			if string.len(value)>0 then
+				local _splitLine = string.Split(value, "=")
+				if #_splitLine>1 then
+					print("[".._splitLine[1].."]", ":", "[".._splitLine[2].."]")
+					set_lang_string(_splitLine[1], _splitLine[2])
+				end
+			end
 		end
-		set_lang_string(_splitline[1], _splitline[2])
 	else
 		print( "FILE NOT FOUND")
 	end
