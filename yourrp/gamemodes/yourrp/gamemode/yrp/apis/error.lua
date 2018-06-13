@@ -345,12 +345,53 @@ function IsNearVersion( distance )
 	return false
 end
 
-timer.Create( "update_error_tables", 10, 0, function()
+local tick = 0
+
+function ErrorMod()
+	return YRPErrorMod()
+end
+
+function CanSendError()
+	if CLIENT then
+		if LocalPlayer():GetNWBool( "bool_server_debug", true ) then
+			if tick%LocalPlayer():GetNWInt( "int_server_debug_tick", 60 ) == 0 then
+				return true
+			end
+		else
+			if tick%3600 == 0 then
+				return true
+			end
+		end
+	elseif SERVER then
+		if YRPDebug() then
+			if tick%ErrorMod() == 0 then
+				return true
+			end
+		else
+			if tick%3600 == 0 then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function SendAllErrors( str )
+	if str != nil then
+		printGM( "note", "SendAllErrors: " .. str )
+	end
 	if !IsYRPOutdated() or IsNearVersion( 1 ) then
-	  _cl_errors = update_error_table_cl()
-	  send_errors( "client", _cl_errors )
+		_cl_errors = update_error_table_cl()
+		send_errors( "client", _cl_errors )
 
 		_sv_errors = update_error_table_sv()
-	  send_errors( "server", _sv_errors )
+		send_errors( "server", _sv_errors )
 	end
+end
+
+timer.Create( "update_error_tables", 1, 0, function()
+	if CanSendError() then
+		SendAllErrors( "tick" )
+	end
+	tick = tick + 1
 end)

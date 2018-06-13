@@ -28,6 +28,10 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'" )
 
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_server_debug", "INT DEFAULT 1" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "int_server_debug_tick", "INT DEFAULT 60" )
+
 --[[ Gamemode Settings ]]--
 SQL_ADD_COLUMN( DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'" )
 
@@ -173,11 +177,22 @@ end
 local _init_general = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '1'" )
 if _init_general != false and _init_general != nil then
   yrp_general = _init_general[1]
+
+  RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug )
+  RunConsoleCommand( "lua_log_cl", yrp_general.bool_server_debug )
 end
 
 
 
 --[[ GETTER ]]--
+function YRPDebug()
+  return tobool( yrp_general.bool_server_debug )
+end
+
+function YRPErrorMod()
+  return yrp_general.int_server_debug_tick or 60
+end
+
 function YRPIsAutomaticServerReloadingEnabled()
   return tobool( yrp_general.bool_server_reload )
 end
@@ -308,6 +323,13 @@ function GeneralUpdateString( ply, netstr, str, value )
   end
 end
 
+function GeneralUpdateInt( ply, netstr, str, value )
+  printGM( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring( value ) )
+  GeneralUpdateValue( ply, netstr, str, value )
+  for i, pl in pairs( player.GetAll() ) do
+    pl:SetNWInt( str, value )
+  end
+end
 
 
 --[[ SERVER SETTINGS ]]--
@@ -379,6 +401,22 @@ util.AddNetworkString( "update_text_server_message_of_the_day" )
 net.Receive( "update_text_server_message_of_the_day", function( len, ply )
   local str = net.ReadString()
   GeneralUpdateString( ply, "update_text_server_message_of_the_day", "text_server_message_of_the_day", str )
+end)
+
+util.AddNetworkString( "update_bool_server_debug" )
+net.Receive( "update_bool_server_debug", function( len, ply )
+  local b = btn( net.ReadBool() )
+  GeneralUpdateBool( ply, "update_bool_server_debug", "bool_server_debug", b )
+  RunConsoleCommand( "lua_log_sv", b )
+  RunConsoleCommand( "lua_log_cl", b )
+end)
+
+util.AddNetworkString( "update_int_server_debug_tick" )
+net.Receive( "update_int_server_debug_tick", function( len, ply )
+  local int = net.ReadString()
+  if isnumber( tonumber( int ) ) then
+    GeneralUpdateInt( ply, "update_int_server_debug_tick", "int_server_debug_tick", int )
+  end
 end)
 
 

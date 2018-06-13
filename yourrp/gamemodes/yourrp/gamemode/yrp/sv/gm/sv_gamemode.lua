@@ -439,26 +439,26 @@ end)
 
 function hearfaded( talker, listener )
   if talker:GetNWInt( "speak_channel" ) == 0 or talker:GetNWInt( "speak_channel" ) == 1 and talker:GetNWString( "groupUniqueID" ) != listener:GetNWInt( "groupUniqueID" ) then
-    --print("hearfaded true")
+    --printGM( "note", "hearfaded true")
     return true
   else
-    --print("hearfaded false")
+    --printGM( "note", "hearfaded false")
     return false
   end
 end
 
 function canhear( talker, listener )
   if talker:GetNWInt( "speak_channel" ) == 2 then
-    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear global" )
+    --printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear global" )
     return true
   elseif talker:GetNWInt( "speak_channel" ) == 1 and talker:GetNWString( "groupUniqueID" ) == listener:GetNWInt( "groupUniqueID" ) then
-    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear group")
+    --printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear group")
     return true
   elseif talker:GetPos():Distance( listener:GetPos() ) < 300 then
-    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear local ")
+    --printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear local ")
     return true
   else
-    --print( "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can >>NOT<< hear")
+    --printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can >>NOT<< hear")
     return false
   end
 end

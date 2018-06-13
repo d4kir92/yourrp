@@ -42,7 +42,7 @@ function CreateCheckBoxLineTab( dpanellist, val, lstr, netstr )
 end
 
 function CreateButtonLine( dpanellist, lstr, netstr, lstr2 )
-  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 ), 0, 0 )
+  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
   function background:Paint( pw, ph )
     surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ph*1/4, 0, 1 )
   end
@@ -64,7 +64,7 @@ function CreateButtonLine( dpanellist, lstr, netstr, lstr2 )
 end
 
 function CreateTextBoxLine( dpanellist, text, lstr, netstr )
-  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 ), 0, 0 )
+  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
   function background:Paint( pw, ph )
     surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ph*1/4, 0, 1 )
   end
@@ -96,7 +96,7 @@ function CreateTextBoxLine( dpanellist, text, lstr, netstr )
 end
 
 function CreateTextBoxBox( dpanellist, text, lstr, netstr )
-  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 50+400 ), 0, 0 )
+  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 50+400 + 10 ), 0, 0 )
   function background:Paint( pw, ph )
     surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ctr( 25 ), 0, 1 )
   end
@@ -129,7 +129,7 @@ function CreateTextBoxBox( dpanellist, text, lstr, netstr )
 end
 
 function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr2 )
-  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 ), 0, 0 )
+  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
   function background:Paint( pw, ph )
     local ply = LocalPlayer()
     surfacePanel( self, pw, ph, lang_string( lstr ) .. ": (" .. ply:GetNWString( "text_money_pre", "" ) .. "100" .. ply:GetNWString( "text_money_pos", "" ) .. ")", nil, ctr( 10 ), ph*1/4, 0, 1 )
@@ -183,7 +183,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 end
 
 function CreateNumberWangLine( dpanellist, value, lstr, netstr )
-  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 ), 0, 0 )
+  local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
   function background:Paint( pw, ph )
     surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ph*1/4, 0, 1 )
   end
@@ -196,9 +196,26 @@ function CreateNumberWangLine( dpanellist, value, lstr, netstr )
 
   function background.numberwang:OnChange()
     if !self.serverside then
-      net.Start( netstr )
-        net.WriteString( self:GetText() )
-      net.SendToServer()
+      local num = tonumber( self:GetValue() )
+      local max = self:GetMax()
+      local min = self:GetMin()
+
+      if num >= min and num <= max then
+        net.Start( netstr )
+          net.WriteString( num )
+        net.SendToServer()
+      else
+        if num > max then
+          self:SetText( max )
+          num = max
+        elseif num < min then
+          self:SetText( min )
+          num = min
+        end
+        net.Start( netstr )
+          net.WriteString( num )
+        net.SendToServer()
+      end
     end
   end
 
@@ -300,6 +317,11 @@ net.Receive( "Connect_Settings_General", function( len )
       CreateHRLine( SERVER_SETTINGS.plus )
       local text_server_welcome_message = CreateTextBoxLine( SERVER_SETTINGS.plus, GEN.text_server_welcome_message, "welcomemessage", "update_text_server_welcome_message" )
       local text_server_message_of_the_day = CreateTextBoxLine( SERVER_SETTINGS.plus, GEN.text_server_message_of_the_day, "messageoftheday", "update_text_server_message_of_the_day" )
+      CreateHRLine( SERVER_SETTINGS.plus )
+      local bool_server_debug = CreateCheckBoxLine( SERVER_SETTINGS.plus, GEN.bool_server_debug, "DEBUG MODE", "update_bool_server_debug" )
+      local int_server_debug_tick = CreateNumberWangLine( SERVER_SETTINGS.plus, GEN.int_server_debug_tick, "DEBUG TICKRATE", "update_int_server_debug_tick" )
+      int_server_debug_tick.numberwang:SetMin( 1 )
+      int_server_debug_tick.numberwang:SetMax( 60*60 )
 
 
       --[[ GAMEMODE SETTINGS ]]--
@@ -325,6 +347,8 @@ net.Receive( "Connect_Settings_General", function( len )
       local bool_dealers_can_take_damage = CreateCheckBoxLine( GAMEMODE_SETTINGS.plus, GEN.bool_dealers_can_take_damage, "dealerscantakedamage", "update_bool_dealers_can_take_damage" )
       CreateHRLine( GAMEMODE_SETTINGS.plus )
       local text_view_distance = CreateNumberWangLine( GAMEMODE_SETTINGS.plus, GEN.text_view_distance, "thirdpersonmaxdistance", "update_text_view_distance" )
+      text_view_distance.numberwang:SetMax( 9999 )
+      text_view_distance.numberwang:SetMin( -200 )
       CreateHRLine( GAMEMODE_SETTINGS.plus )
       local text_chat_advert = CreateTextBoxLine( GAMEMODE_SETTINGS.plus, GEN.text_chat_advert, "channelname", "update_text_chat_advert" )
 
@@ -342,6 +366,8 @@ net.Receive( "Connect_Settings_General", function( len )
 
       local bool_hunger = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_hunger, "hunger", "update_bool_hunger" )
       local text_hunger_health_regeneration_tickrate = CreateNumberWangLine( GAMEMODE_SYSTEMS.plus, GEN.text_hunger_health_regeneration_tickrate, "hungerhealthregenerationtickrate", "update_text_hunger_health_regeneration_tickrate" )
+      text_hunger_health_regeneration_tickrate.numberwang:SetMax( 3600 )
+      text_hunger_health_regeneration_tickrate.numberwang:SetMin( 1 )
       local bool_thirst = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_thirst, "thirst", "update_bool_thirst" )
       local bool_stamina = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_stamina, "stamina", "update_bool_stamina" )
       CreateHRLine( GAMEMODE_SYSTEMS.plus )
