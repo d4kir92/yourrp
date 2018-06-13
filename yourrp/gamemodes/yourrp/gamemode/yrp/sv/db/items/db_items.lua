@@ -125,12 +125,6 @@ function Player:MoveItem( _slot1, _slot2, _item )
   printTab( _item, "ITEM" )
   ]]--
 
-  local _cname = _item.ClassName
-  if tonumber( _slot2.storageID ) == 0 and ( IsNoDefaultWeapon( _cname ) or IsNoRoleSwep( self, _cname ) or IsNoUserGroupWeapon( self, _cname ) ) then
-    printGM( "gm", _item.ClassName .. " is a role/usergroup/default SWEP" )
-    return false
-  end
-
   local _stor1 = {}
   if _slot1.storageID != 0 then
     _stor1 = SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _slot1.storageID .. "'" )

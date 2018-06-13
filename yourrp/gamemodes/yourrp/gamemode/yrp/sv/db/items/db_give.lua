@@ -222,9 +222,9 @@ function Player:DropSWEP( cname )
   local cont = true
   for i, wep in pairs( self:GetWeapons() ) do
     if wep:GetClass() == cname then
-      if wep:GetModel() == "" then
-        cont = false
-      end
+      --if wep:GetModel() == "" then
+        --cont = false
+      --end
     end
   end
   if cont then
@@ -232,6 +232,9 @@ function Player:DropSWEP( cname )
     self:RemoveVisual( _cname )
 
     local ent = ents.Create( _cname )
+    if ent.WorldModel == "" then
+      ent.WorldModel = "models/hunter/blocks/cube025x025x025.mdl"
+    end
     local tr = self:GetEyeTrace()
     local dist = self:GetPos():Distance( tr.HitPos )
     ent:SetPos( self:GetPos() + Vector( 0, 0, 56 ) + self:EyeAngles():Forward() * 16  )
@@ -470,17 +473,18 @@ end)
 util.AddNetworkString( "dropswep" )
 net.Receive( "dropswep", function( len, ply )
   local _enabled = PlayersCanDropWeapons()
+  local _dropped = false
   if _enabled then
     local _weapon = ply:GetActiveWeapon()
     if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
       local _wclass = _weapon:GetClass() or ""
       ply:DropSWEP( _wclass )
-      _weapon:SetOwner( NULL )
+      _dropped = true
     end
   else
     printGM( "note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE" )
   end
   net.Start( "dropswep" )
-    net.WriteBool( _enabled )
+    net.WriteBool( _dropped )
   net.Send( ply )
 end)

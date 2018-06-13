@@ -31,15 +31,7 @@ function Player:GetBackpack()
 end
 
 function Player:HasAccess()
-  local _ug = self:GetUserGroup()
-  if isbool( _ug ) then
-    _ug = ""
-  end
-  if self:IsAdmin() or self:IsSuperAdmin() or string.lower( _ug ) == "owner" or string.lower( _ug ) == "yrp_usergroups" then
-    return true
-  else
-    return false
-  end
+  return self:GetNWBool( "adminaccess", false )
 end
 
 function Player:LoadedGamemode()

@@ -1192,10 +1192,12 @@ function Player:UserGroupLoadout()
   printGM( "gm", self:SteamName() .. " UserGroupLoadout" )
   local UG = SQL_SELECT( DATABASE_NAME, "*", "name = '" .. self:GetUserGroup() .. "'" )
   if wk( UG ) then
-    self:SetNWString( "usergroup_sweps", UG[1].sweps )
-    local SWEPS = string.Explode( ",", UG[1].sweps )
+    UG = UG[1]
+    self:SetNWString( "usergroup_sweps", UG.sweps )
+    local SWEPS = string.Explode( ",", UG.sweps )
     for i, swep in pairs( SWEPS ) do
       self:Give( swep )
     end
+    self:SetNWBool( "adminaccess", tobool( UG.adminaccess ) )
   end
 end
