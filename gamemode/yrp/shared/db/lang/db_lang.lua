@@ -105,7 +105,9 @@ AddCSLuaFile( "languages/db_lang_ko.lua" )
 AddCSLuaFile( "languages/db_lang_hu.lua" )
 AddCSLuaFile( "languages/db_lang_cs.lua" )
 AddCSLuaFile( "languages/db_lang_lt.lua" )
+AddCSLuaFile( "languages/read_lang.lua" )
 
+include( "languages/read_lang.lua" )
 include( "languages/db_lang_en.lua" )
 include( "languages/db_lang_de.lua" )
 include( "languages/db_lang_ru.lua" )
@@ -153,11 +155,17 @@ function send_lang()
 	end
 end
 
+function PrintLang()
+	printTab( yrp_lang )
+end
+
 function change_language( index )
 	hr_pre()
 
+	print( index, type(index), type("de") )
+
 	--[[ change to english first, so missing translations are in english ]]--
-	LangEN()
+	--LangEN()
 
 	local _net_lang = index
   if index == "auto" then

@@ -378,7 +378,7 @@ end
 
 function SendAllErrors( str )
 	if str != nil then
-		printGM( "note", "SendAllErrors: " .. str )
+		printGM( "note", "[SendAllErrors] " .. str )
 	end
 	if !IsYRPOutdated() or IsNearVersion( 1 ) then
 		_cl_errors = update_error_table_cl()
@@ -391,7 +391,7 @@ end
 
 timer.Create( "update_error_tables", 1, 0, function()
 	if CanSendError() then
-		SendAllErrors( "tick" )
+		SendAllErrors()
 	end
 	tick = tick + 1
 end)
