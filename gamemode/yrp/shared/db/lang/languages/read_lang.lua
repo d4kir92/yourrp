@@ -2,6 +2,7 @@ function read_lang( filepath )
 	if file.Exists( filepath, "GAME" ) then
 		local _langFile = file.Read( filepath, "GAME" )
 		if(!_langFile) then return end
+		_langFile = string.gsub( _langFile, "\r", "")
 		local _rawLines = string.Explode( "\n", _langFile, false )
 		for key, value in pairs(_rawLines) do
 			if string.len(value)>0 then

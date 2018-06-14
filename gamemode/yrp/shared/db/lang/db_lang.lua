@@ -155,17 +155,11 @@ function send_lang()
 	end
 end
 
-function PrintLang()
-	printTab( yrp_lang )
-end
-
 function change_language( index )
 	hr_pre()
 
-	print( index, type(index), type("de") )
-
 	--[[ change to english first, so missing translations are in english ]]--
-	--LangEN()
+	LangEN()
 
 	local _net_lang = index
   if index == "auto" then
@@ -225,6 +219,7 @@ function change_language( index )
   else
 		yrp_lang.get_language = index
     printGM( "lang", "Manually change to Language [" .. index .. "]" )
+	print(type(index), "["..index.."]", type("en"), index=="en\r")
     if index == "de" then
       LangDE()
     elseif index == "en" then
