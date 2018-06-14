@@ -81,7 +81,7 @@ end
 function derma_change_language( parent, w, h, x, y )
   local _tmp = createD( "DComboBox", parent, w, h, x, y )
   _tmp:AddChoice( "[AUTOMATIC]", "auto" )
-  for k, v in pairs( get_all_lang() ) do
+  for k, v in pairs( GetAllLanguages() ) do
     local _select = false
     if lang_string( "language" ) == v.lang then
       _select = true
