@@ -105,11 +105,11 @@ function send_lang( short )
 	end
 end
 
-function read_language( short, init)
+function read_language( short, init )
 	read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
 	if ( !init ) then
 		read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
-		read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )	
+		read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )
 		read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
 		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
 		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
@@ -117,7 +117,7 @@ function read_language( short, init)
 	end
 end
 
-function LoadLanguage( short , init)
+function LoadLanguage( short , init )
 	hr_pre()
 	if short == "auto" then
 		printGM( "lang", "Automatic detection" )
@@ -152,7 +152,7 @@ function LoadLanguage( short , init)
 			read_language( short, init)
 		end
 	end
-	
+
 	printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. yrp_current_lang.translated_by_name .. ")" )
 	printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
 
@@ -168,20 +168,12 @@ function add_language( short )
 		tmp.lang = "Automatic"
 		tmp.short = short
 		tmp.author = "D4KiR"
-		--tmp.varis = 5
 	else
 		tmp.ineng = yrp_current_lang.ineng
 		tmp.lang = yrp_current_lang.language
 		tmp.short = yrp_current_lang.short
 		tmp.author = yrp_current_lang.translated_by_name
-		--tmp.varis = #yrp_current_lang
 	end
-
-	--local count = 0
-	--for k, v in pairs( yrp_current_lang ) do
-		--count = count + 1
-	--end
-	--tmp.varis = count
 
 	table.insert( yrp_button_info, tmp )
 end
