@@ -13,6 +13,6 @@ function read_lang( filepath )
 			end
 		end
 	else
-		print( "FILE NOT FOUND")
+		print( "read_lang.lua:FILE NOT FOUND")
 	end
 end
