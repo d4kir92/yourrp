@@ -15,6 +15,12 @@ resource.AddFile( "resource/fonts/Roboto-Regular.ttf" )
 resource.AddFile( "resource/fonts/Roboto-Thin.ttf" )
 resource.AddFile( "resource/fonts/Roboto-Bold.ttf" )
 
+resource.AddFile( "resource/fonts/NotoSans-Regular.ttf" )
+resource.AddFile( "resource/fonts/NotoSans-Thin.ttf" )
+resource.AddFile( "resource/fonts/NotoSans-Bold.ttf" )
+
+resource.AddFile( "resource/fonts/NationalCartoon.ttf" )
+
 -- Food and Household items
 resource.AddWorkshop( "108024198" )
 

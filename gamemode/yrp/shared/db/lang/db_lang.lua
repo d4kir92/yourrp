@@ -1,27 +1,39 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-local yrp_lang = {}
-local yrp_all_lang = {}
+local yrp_current_lang = {}
+local yrp_button_info = {}
+local yrp_shorts = {}
+table.insert( yrp_shorts, "auto" )
+table.insert( yrp_shorts, "en" )
+table.insert( yrp_shorts, "de" )
+table.insert( yrp_shorts, "bg" )
+table.insert( yrp_shorts, "ca" )
+table.insert( yrp_shorts, "cs" )
+table.insert( yrp_shorts, "es" )
+table.insert( yrp_shorts, "fr" )
+table.insert( yrp_shorts, "hu" )
+table.insert( yrp_shorts, "it" )
+table.insert( yrp_shorts, "ko" )
+table.insert( yrp_shorts, "lt" )
+table.insert( yrp_shorts, "pl" )
+table.insert( yrp_shorts, "pt_br" )
+table.insert( yrp_shorts, "ro" )
+table.insert( yrp_shorts, "ru" )
+table.insert( yrp_shorts, "sv" )
+table.insert( yrp_shorts, "th" )
+table.insert( yrp_shorts, "tr" )
+table.insert( yrp_shorts, "ua" )
 
-function add_language()
-	local tmp = {}
-	tmp.ineng = yrp_lang.ineng
-	tmp.lang = yrp_lang.language
-	tmp.short = yrp_lang.short
-	tmp.author = yrp_lang.translated_by_name
-	tmp.varis = #yrp_lang
+AddCSLuaFile( "read_lang.lua" )
 
-	local count = 0
-	for k, v in pairs( yrp_lang ) do
-		count = count + 1
-	end
-	tmp.varis = count
+include( "read_lang.lua" )
 
-	table.insert( yrp_all_lang, tmp )
+function set_lang_string( var, str )
+	yrp_current_lang[var] = str
 end
 
 function get_language_name( ls )
-	for k, lang in pairs( yrp_all_lang ) do
+	for k, lang in pairs( yrp_button_info ) do
 		if lang.short == ls then
 			return lang.ineng
 		end
@@ -29,16 +41,12 @@ function get_language_name( ls )
 	return "FAILED"
 end
 
-yrp_lang.get_language = "Unknown"
-yrp_lang.not_found = "not found, using default one."
-yrp_lang.language = "Unknown"
+yrp_current_lang.get_language = "Unknown"
+yrp_current_lang.not_found = "not found, using default one."
+yrp_current_lang.language = "Unknown"
 
 function search_language()
-	yrp_lang.get_language = string.lower( GetConVar( "gmod_language" ):GetString() )
-end
-
-function set_lang_string( var, str )
-	yrp_lang[var] = str
+	yrp_current_lang.get_language = string.lower( GetConVar( "gmod_language" ):GetString() )
 end
 
 function replace_string( in_str, tab )
@@ -52,7 +60,7 @@ function lang_string( var, failed )
 	--[[ string var, string failed ]]--
 	--[[ returns translated string, when worked ]]--
 	--[[ if failed it uses failed string ]]--
-	local _string = yrp_lang[var]
+	local _string = yrp_current_lang[var]
 	if _string == nil then
 		_string = var
 		if CLIENT then
@@ -66,7 +74,7 @@ function lang_string( var, failed )
 end
 
 function get_all_lang()
-	return yrp_all_lang
+	return yrp_button_info
 end
 
 local auto = {}
@@ -75,70 +83,16 @@ auto.lang = "Automatic"
 auto.ineng = "Automatic"
 
 function GetAllLanguages()
-	local langs = yrp_all_lang
-	if !table.HasValue( langs, auto ) then
-		table.insert( langs, 1, auto )
-	end
-	return langs
+	return yrp_button_info
 end
 
 function GetCurrentLanguage()
-	return yrp_lang.get_language
-end
-
-AddCSLuaFile( "languages/db_lang_en.lua" )
-AddCSLuaFile( "languages/db_lang_de.lua" )
-AddCSLuaFile( "languages/db_lang_ru.lua" )
-AddCSLuaFile( "languages/db_lang_tr.lua" )
-AddCSLuaFile( "languages/db_lang_fr.lua" )
-AddCSLuaFile( "languages/db_lang_pt_br.lua" )
-AddCSLuaFile( "languages/db_lang_th.lua" )
-AddCSLuaFile( "languages/db_lang_it.lua" )
-AddCSLuaFile( "languages/db_lang_sv.lua" )
-AddCSLuaFile( "languages/db_lang_bg.lua" )
-AddCSLuaFile( "languages/db_lang_pl.lua" )
-AddCSLuaFile( "languages/db_lang_ro.lua" )
-AddCSLuaFile( "languages/db_lang_es.lua" )
-AddCSLuaFile( "languages/db_lang_ca.lua" )
-AddCSLuaFile( "languages/db_lang_ua.lua" )
-AddCSLuaFile( "languages/db_lang_ko.lua" )
-AddCSLuaFile( "languages/db_lang_hu.lua" )
-AddCSLuaFile( "languages/db_lang_cs.lua" )
-AddCSLuaFile( "languages/db_lang_lt.lua" )
-AddCSLuaFile( "languages/read_lang.lua" )
-
-include( "languages/read_lang.lua" )
-include( "languages/db_lang_en.lua" )
-include( "languages/db_lang_de.lua" )
-include( "languages/db_lang_ru.lua" )
-include( "languages/db_lang_tr.lua" )
-include( "languages/db_lang_fr.lua" )
-include( "languages/db_lang_pt_br.lua" )
-include( "languages/db_lang_th.lua" )
-include( "languages/db_lang_it.lua" )
-include( "languages/db_lang_sv.lua" )
-include( "languages/db_lang_bg.lua" )
-include( "languages/db_lang_pl.lua" )
-include( "languages/db_lang_ro.lua" )
-include( "languages/db_lang_es.lua" )
-include( "languages/db_lang_ca.lua" )
-include( "languages/db_lang_ua.lua" )
-include( "languages/db_lang_ko.lua" )
-include( "languages/db_lang_hu.lua" )
-include( "languages/db_lang_cs.lua" )
-include( "languages/db_lang_lt.lua" )
-
-if CLIENT then
-	--[[ FLAGS ]]--
-	AddDesignIcon( "auto", "vgui/flags/lang_" .. "auto" .. ".png" )
-	for i, lang in pairs( get_all_lang() ) do
-	  AddDesignIcon( lang.short, "vgui/flags/lang_" .. lang.short .. ".png" )
-	end
+	return yrp_current_lang.get_language
 end
 
 function check_languagepack()
-	for k, v in pairs( yrp_all_lang ) do
-		if yrp_lang.get_language == v.short then
+	for k, v in pairs( yrp_button_info ) do
+		if yrp_current_lang.get_language == v.short then
 			return true
 		end
 	end
@@ -148,135 +102,90 @@ end
 function send_lang()
 	--[[ send info to server ]]--
 	if CLIENT then
-		printGM( "lang", "Send Language to Server (" .. tostring( yrp_lang.get_language ) .. ")" )
+		printGM( "lang", "Send Language to Server (" .. tostring( yrp_current_lang.get_language ) .. ")" )
 		net.Start( "client_lang" )
-			net.WriteString( tostring( yrp_lang.get_language ) )
+			net.WriteString( tostring( yrp_current_lang.get_language ) )
 		net.SendToServer()
 	end
 end
 
-function change_language( index )
+function LoadLanguage( short )
 	hr_pre()
-
-	--[[ change to english first, so missing translations are in english ]]--
-	LangEN()
-
-	local _net_lang = index
-  if index == "auto" then
+	if short == "auto" then
     printGM( "lang", "Automatic detection" )
+
     search_language()
-    if yrp_lang.get_language != "" then
-			_net_lang = string.lower( yrp_lang.get_language )
-      printGM( "lang", "Found Language: " .. "[" .. _net_lang .. "]" )
-      if check_languagepack() then
-        if _net_lang == "de" then
-          LangDE()
-				elseif _net_lang == "en" then
-          LangEN()
-				elseif _net_lang == "ru" then
-					LangRU()
-				elseif _net_lang == "tr" then
-					LangTR()
-				elseif _net_lang == "fr" then
-					LangFR()
-				elseif _net_lang == "pt-br" then
-					LangPT_BR()
-				elseif _net_lang == "th" then
-					LangTH()
-				elseif _net_lang == "it" then
-					LangIT()
-				elseif _net_lang == "sv" then
-					LangSV()
-				elseif _net_lang == "bg" then
-					LangBG()
-				elseif _net_lang == "pl" then
-					LangPL()
-				elseif _net_lang == "ro" then
-					LangRO()
-				elseif _net_lang == "es" then
-					LangES()
-				elseif _net_lang == "ca" then
-					LangCA()
-				elseif _net_lang == "ua" then
-					LangUA()
-				elseif _net_lang == "ko" then
-					LangKO()
-				elseif _net_lang == "hu" then
-					LangHU()
-				elseif _net_lang == "cs" then
-					LangCS()
-				elseif _net_lang == "lt" then
-					LangLT()
-				end
-      else
-        LangEN()
-        printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
+
+    if yrp_current_lang.get_language != "" then
+			short = string.lower( yrp_current_lang.get_language )
+      printGM( "lang", "Found Language: " .. "[" .. short .. "]" )
+      if !check_languagepack() then
+				printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
       end
     else
-      LangEN()
       printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
     end
   else
-		yrp_lang.get_language = index
-    printGM( "lang", "Manually change to Language [" .. index .. "]" )
-	print(type(index), "["..index.."]", type("en"), index=="en\r")
-    if index == "de" then
-      LangDE()
-    elseif index == "en" then
-      LangEN()
-		elseif index == "ru" then
-			LangRU()
-		elseif index == "tr" then
-			LangTR()
-		elseif index == "fr" then
-			LangFR()
-		elseif index == "pt-br" then
-			LangPT_BR()
-		elseif index == "th" then
-			LangTH()
-		elseif index == "it" then
-			LangIT()
-		elseif index == "sv" then
-			LangSV()
-		elseif index == "bg" then
-			LangBG()
-		elseif index == "pl" then
-			LangPL()
-		elseif index == "ro" then
-			LangRO()
-		elseif index == "es" then
-			LangES()
-		elseif index == "ca" then
-			LangCA()
-		elseif index == "ua" then
-			LangUA()
-		elseif index == "ko" then
-			LangKO()
-		elseif index == "hu" then
-			LangHU()
-		elseif index == "cs" then
-			LangCS()
-		elseif index == "lt" then
-			LangLT()
-		else
-      printGM( "error", "LANG_E0001" )
-      return
-    end
+		yrp_current_lang.get_language = short
+    printGM( "lang", "Manually change to Language [" .. short .. "]" )
   end
-  printGM( "lang", "Get Language-Pack [" .. yrp_lang.short .. "] " .. yrp_lang.language .. " (" .. yrp_lang.translated_by .. " " .. yrp_lang.translated_by_name .. ")" )
-  printGM( "lang", "Language changed to [" .. yrp_lang.short .. "] " .. yrp_lang.language )
 
-	send_lang()
+	read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )
+	read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
+	read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
+	read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
+	read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
+	read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
 
-	hook.Run( "yrp_language_changed" )
+  printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. yrp_current_lang.translated_by_name .. ")" )
+  printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
 
-  hr_pos()
+	send_lang() -- Send To Server
+	hook.Run( "yrp_current_language_changed" )	-- Update Chat
+	hr_pos()
+end
+
+function add_language( short )
+	local tmp = {}
+	if short == "auto" then
+		tmp.ineng = "Automatic"
+		tmp.lang = "Automatic"
+		tmp.short = short
+		tmp.author = "D4KiR"
+		tmp.varis = 5
+	else
+		tmp.ineng = yrp_current_lang.ineng
+		tmp.lang = yrp_current_lang.language
+		tmp.short = yrp_current_lang.short
+		tmp.author = yrp_current_lang.translated_by_name
+		tmp.varis = #yrp_current_lang
+	end
+
+	local count = 0
+	for k, v in pairs( yrp_current_lang ) do
+		count = count + 1
+	end
+	tmp.varis = count
+
+	table.insert( yrp_button_info, tmp )
+end
+
+for i, short in pairs( yrp_shorts ) do
+	LoadLanguage( short )
+	add_language( short )
+end
+
+if CLIENT then
+	--[[ FLAGS ]]--
+	for i, lang in pairs( get_all_lang() ) do
+	  AddDesignIcon( lang.short, "vgui/flags/lang_" .. lang.short .. ".png" )
+	end
 end
 
 function initLang()
 	hr_pre()
 	printGM( "lang", "... SEARCHING FOR LANGUAGE ..." )
-	change_language( "auto" )
+	LoadLanguage( "auto" )
 	hr_pos()
 end
 initLang()
