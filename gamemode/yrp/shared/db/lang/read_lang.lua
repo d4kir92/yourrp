@@ -13,6 +13,6 @@ function read_lang( filepath )
 			end
 		end
 	else
-		print( "FILE NOT FOUND")
+		printGM( "note", "FILE NOT FOUND (" .. tostring( filepath ) .. ")" )
 	end
 end

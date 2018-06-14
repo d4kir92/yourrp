@@ -118,15 +118,6 @@ net.Receive( "getsitehelp", function( len )
     function HELPMENU.discord:DoClick()
       gui.OpenURL( "https://discord.gg/sEgNZxg" )
     end
-
-    local _g_docs_help_panel = createD( "DPanel", helppnl, BScrW()/2-ctr(10+10), ctr( 1130 ), ctr( 10 ), ctr( 1020 ) )
-    function _g_docs_help_panel:Paint( pw, ph )
-      draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-    end
-
-    local _g_docs_help_html = createD( "HTML", _g_docs_help_panel, BScrW()/2-ctr(10+10), ctr( 1130 + 60 + 140 ), 0, -ctr( 80 ) )
-    --_g_docs_help_html:OpenURL( "https://docs.google.com/document/d/1J-N9Hd2fliTdvHiN5cTHsj_1jPLeNn82X1A-pzkIKsU/edit?usp=sharing" )
-    _g_docs_help_html:OpenURL( "https://docs.google.com/document/d/e/2PACX-1vQrwLHPnntg4ZBAICAmwrgXyilU3i8L9n8ein9gHROoJAzmL8ypN1nxTltro_7CHV-qqE7vkoLqeyvH/pub" )
   end
 end)
 
@@ -291,30 +282,6 @@ net.Receive( "getsitecommunityteamspeak", function( len )
   end
 end)
 
-net.Receive( "getsitecommunitytwitch", function( len )
-  if pa( HELPMENU.mainmenu.site ) then
-    local link = net.ReadString()
-
-    if link != "" then
-      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
-      function page:Paint( pw, ph )
-        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-      end
-      page:OpenURL( link )
-
-      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
-      openLink:SetText( "" )
-      function openLink:Paint( pw, ph )
-        surfaceButton( self, pw, ph, "" )
-        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
-      end
-      function openLink:DoClick()
-        gui.OpenURL( link )
-      end
-    end
-  end
-end)
-
 net.Receive( "getsitecommunitytwitter", function( len )
   if pa( HELPMENU.mainmenu.site ) then
     local link = net.ReadString()
@@ -387,6 +354,29 @@ net.Receive( "getsitecommunityfacebook", function( len )
   end
 end)
 
+net.Receive( "getsitecommunitysteamgroup", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    local link = net.ReadString()
+
+    if link != "" then
+      local page = createD( "DHTML", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+      end
+      page:OpenURL( link )
+
+      local openLink = createD( "DButton", page, ctr( 100 ), ctr( 100 ), ScrW() - ctr( 100 + 20 + 20 ), 0 )
+      openLink:SetText( "" )
+      function openLink:Paint( pw, ph )
+        surfaceButton( self, pw, ph, "" )
+        DrawIcon( GetDesignIcon( "launch" ), ph, ph, 0, 0, Color( 255, 255, 255, 255 ) )
+      end
+      function openLink:DoClick()
+        gui.OpenURL( link )
+      end
+    end
+  end
+end)
 
 
 net.Receive( "getsiteyourrpnews", function( len )

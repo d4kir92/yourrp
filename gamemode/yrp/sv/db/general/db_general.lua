@@ -873,11 +873,12 @@ function AddTab( tab, name, netstr )
   table.insert( tab, entry )
 end
 
-function AddSubTab( tab, parent, name, netstr )
+function AddSubTab( tab, parent, name, netstr, url )
   local entry = {}
   entry.name = name
-  entry.netstr = netstr
+  entry.netstr = netstr or ""
   entry.parent = parent
+  entry.url = url or ""
   table.insert( tab, entry )
 end
 
@@ -902,11 +903,11 @@ net.Receive( "gethelpmenu", function( len, ply )
       info.text_social_forum != "" or
       info.text_social_discord != "" or
       info.text_social_teamspeak_ip != "" or
-      info.text_social_twitch != "" or
       info.text_social_twitter != "" or
       info.text_social_youtube != "" or
       info.text_social_facebook != "" or
-      info.text_social_servers != "" then    
+      info.text_social_steamgroup != "" or
+      info.text_social_servers != "" then
       AddTab( tabs, "community", "" )
       if info.text_social_website != "" then
         AddSubTab( subtabs, "community", "website", "getsitecommunitywebsite" )
@@ -920,9 +921,6 @@ net.Receive( "gethelpmenu", function( len, ply )
       if info.text_social_teamspeak_ip != "" then
         AddSubTab( subtabs, "community", "teamspeak", "getsitecommunityteamspeak" )
       end
-      if info.text_social_twitch != "" then
-        AddSubTab( subtabs, "community", "twitch", "getsitecommunitytwitch" )
-      end
       if info.text_social_twitter != "" then
         AddSubTab( subtabs, "community", "twitter", "getsitecommunitytwitter" )
       end
@@ -931,6 +929,9 @@ net.Receive( "gethelpmenu", function( len, ply )
       end
       if info.text_social_facebook != "" then
         AddSubTab( subtabs, "community", "facebook", "getsitecommunityfacebook" )
+      end
+      if info.text_social_steamgroup != "" then
+        AddSubTab( subtabs, "community", "steamgroup", "getsitecommunitysteamgroup" )
       end
       --if info.text_social_servers != "" then
         --AddSubTab( subtabs, "community", "servers", "getsitecommunityservers" )
@@ -941,7 +942,7 @@ net.Receive( "gethelpmenu", function( len, ply )
     AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
     AddSubTab( subtabs, "YourRP", "website", "getsiteyourrpwebsite" )
     AddSubTab( subtabs, "YourRP", "discord", "getsiteyourrpdiscord" )
-    -- AddSubTab( subtabs, "YourRP", "translations", "getsiteyourrptranslations" )
+    AddSubTab( subtabs, "YourRP", "Translations", "", "https://yourrp.noserver4u.de/engage/yourrp/" )
 
     net.Start( "gethelpmenu" )
       net.WriteTable( tabs )
@@ -1043,19 +1044,6 @@ net.Receive( "getsitecommunityteamspeak", function( len, ply )
   net.Send( ply )
 end)
 
-util.AddNetworkString( "getsitecommunitytwitch" )
-net.Receive( "getsitecommunitytwitch", function( len, ply )
-  local link = SQL_SELECT( "yrp_general", "text_social_twitch", "uniqueID = '1'" )
-  if wk( link ) then
-    link = link[1].text_social_twitch
-  else
-    link = ""
-  end
-  net.Start( "getsitecommunitytwitch" )
-    net.WriteString( link )
-  net.Send( ply )
-end)
-
 util.AddNetworkString( "getsitecommunitytwitter" )
 net.Receive( "getsitecommunitytwitter", function( len, ply )
   local link = SQL_SELECT( "yrp_general", "text_social_twitter", "uniqueID = '1'" )
@@ -1095,6 +1083,19 @@ net.Receive( "getsitecommunityfacebook", function( len, ply )
   net.Send( ply )
 end)
 
+util.AddNetworkString( "getsitecommunitysteamgroup" )
+net.Receive( "getsitecommunitysteamgroup", function( len, ply )
+  local link = SQL_SELECT( "yrp_general", "text_social_steamgroup", "uniqueID = '1'" )
+  if wk( link ) then
+    link = link[1].text_social_steamgroup
+  else
+    link = ""
+  end
+  net.Start( "getsitecommunitysteamgroup" )
+    net.WriteString( link )
+  net.Send( ply )
+end)
+
 
 
 util.AddNetworkString( "getsiteyourrpnews" )
@@ -1112,6 +1113,12 @@ end)
 util.AddNetworkString( "getsiteyourrpdiscord" )
 net.Receive( "getsiteyourrpdiscord", function( len, ply )
   net.Start( "getsiteyourrpdiscord" )
+  net.Send( ply )
+end)
+
+util.AddNetworkString( "getsiteyourrptranslations" )
+net.Receive( "getsiteyourrptranslations", function( len, ply )
+  net.Start( "getsiteyourrptranslations" )
   net.Send( ply )
 end)
 

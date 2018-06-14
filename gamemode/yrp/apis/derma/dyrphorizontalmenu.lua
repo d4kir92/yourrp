@@ -99,7 +99,7 @@ function PANEL:AddTab( name, netstr, starttab )
         if !pa( self:GetParent() ) then
           self:Remove()
         end
-        surfaceBox( 0, 0, pw, ph, Color( 0, 0, 255, 255 ) )
+        --surfaceBox( 0, ctr( 4 ), pw, ph - ctr( 8 ), Color( 0, 0, 255, 255 ) )
       end
 
       self.stabs.pl = createD( "DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0 )
@@ -109,18 +109,23 @@ function PANEL:AddTab( name, netstr, starttab )
         st:SetText( "" )
         st.menu = TAB
         st.name = subtab.name
-        st.netstr = subtab.netstr
+        st.netstr = subtab.netstr or ""
+        st.url = subtab.url or ""
         function st:Paint( pw, ph )
-          surfaceText( lang_string( self.name ), "mat1text", pw/2, ph/2, Color( 255, 255, 255, 255 ), 1, 1 )
+          surfaceButton( self, pw, ph, self.name )
         end
         function st:DoClick()
-          TAB.menu.current_site = self.menu.name
+          if self.netstr != "" then
+            TAB.menu.current_site = self.menu.name
 
-          TAB.menu:ClearSite()
-          st.menu:HideSubTabs()
+            TAB.menu:ClearSite()
+            st.menu:HideSubTabs()
 
-          net.Start( self.netstr )
-          net.SendToServer()
+            net.Start( self.netstr )
+            net.SendToServer()
+          else
+            gui.OpenURL( self.url )
+          end
         end
 
         self.stabs.pl:AddItem( st )
@@ -162,10 +167,11 @@ function PANEL:AddTab( name, netstr, starttab )
     end
   end
 
-  function TAB:AddToTab( name, netstr )
+  function TAB:AddToTab( name, netstr, url )
     local entry = {}
     entry.name = name
-    entry.netstr = netstr
+    entry.netstr = netstr or ""
+    entry.url = url or ""
     table.insert( self.subtabs, entry )
   end
   if starttab then
@@ -202,7 +208,7 @@ function PANEL:GetMenuInfo( netstr )
       local pnl = self:AddTab( tab.name, tab.netstr, starttab )
       for i, subtab in pairs( subtabs ) do
         if subtab.parent == tab.name then
-          pnl:AddToTab( subtab.name, subtab.netstr )
+          pnl:AddToTab( subtab.name, subtab.netstr, subtab.url )
         end
       end
     end
