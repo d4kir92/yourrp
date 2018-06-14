@@ -276,7 +276,7 @@ net.Receive( "getsitecommunityteamspeak", function( len )
       if port != "" and query_port != "" then
         local page = createD( "DHTML", HELPMENU.mainmenu.site, ctr( 1000 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
         function page:Paint( pw, ph )
-          surfaceBox( 0, 0, ctr( 1000 + 2*20 ), ph, Color( 0, 0, 0, 255 ) )
+          surfaceBox( 0, 0, ctr( 1000 + 2*20 ), ph, Color( 40, 40, 40, 255 ) )
         end
         local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
         page:SetHTML( widgetlink )
