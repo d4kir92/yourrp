@@ -112,23 +112,23 @@ end
 function LoadLanguage( short )
 	hr_pre()
 	if short == "auto" then
-    printGM( "lang", "Automatic detection" )
+		printGM( "lang", "Automatic detection" )
 
-    search_language()
+		search_language()
 
-    if yrp_current_lang.get_language != "" then
+		if yrp_current_lang.get_language != "" then
 			short = string.lower( yrp_current_lang.get_language )
-      printGM( "lang", "Found Language: " .. "[" .. short .. "]" )
-      if !check_languagepack() then
-				printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
-      end
-    else
-      printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
-    end
-  else
+			printGM( "lang", "Found Language: " .. "[" .. short .. "]" )
+				if !check_languagepack() then
+					printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
+				end
+		else
+			printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
+		end
+	else
 		yrp_current_lang.get_language = short
-    printGM( "lang", "Manually change to Language [" .. short .. "]" )
-  end
+		printGM( "lang", "Manually change to Language [" .. short .. "]" )
+	end
 
 	read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )
 	read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
@@ -137,8 +137,8 @@ function LoadLanguage( short )
 	read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
 	read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
 
-  printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. yrp_current_lang.translated_by_name .. ")" )
-  printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
+	printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. yrp_current_lang.translated_by_name .. ")" )
+	printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
 
 	send_lang() -- Send To Server
 	hook.Run( "yrp_current_language_changed" )	-- Update Chat
@@ -178,7 +178,7 @@ end
 if CLIENT then
 	--[[ FLAGS ]]--
 	for i, lang in pairs( get_all_lang() ) do
-	  AddDesignIcon( lang.short, "vgui/flags/lang_" .. lang.short .. ".png" )
+		AddDesignIcon( lang.short, "vgui/flags/lang_" .. lang.short .. ".png" )
 	end
 end
 
