@@ -87,8 +87,8 @@ function GetCurrentLanguage()
 end
 
 function check_languagepack()
-	for k, v in pairs( yrp_button_info ) do
-		if yrp_current_lang.get_language == v.short then
+	for k, v in pairs( yrp_shorts ) do
+		if yrp_current_lang.get_language == v then
 			return true
 		end
 	end
@@ -96,7 +96,7 @@ function check_languagepack()
 end
 
 function send_lang( short )
-	--[[ send info to server ]]--
+	--[[ send info to server, to let others know what language i chose ]]--
 	if CLIENT then
 		printGM( "lang", "Send Language to Server (" .. tostring( short ) .. ")" )
 		net.Start( "client_lang" )
@@ -105,7 +105,19 @@ function send_lang( short )
 	end
 end
 
-function LoadLanguage( short )
+function read_language( short, init)
+	read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
+	if ( !init ) then
+		read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )	
+		read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
+	end
+end
+
+function LoadLanguage( short , init)
 	hr_pre()
 	if short == "auto" then
 		printGM( "lang", "Automatic detection" )
@@ -116,9 +128,11 @@ function LoadLanguage( short )
 			short = string.lower( yrp_current_lang.get_language )
 			printGM( "lang", "Found Language: " .. "[" .. short .. "]" )
 				if !check_languagepack() then
+					short = "en"
 					printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
 				end
 		else
+			short = "en"
 			printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
 		end
 	else
@@ -126,13 +140,19 @@ function LoadLanguage( short )
 		printGM( "lang", "Manually change to Language [" .. short .. "]" )
 	end
 
-	read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )
-	read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
-	read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
-	read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
-	read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
-	read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
-
+	--lazy loading on init
+	if( init ) then
+		read_language( short, init)
+	else
+		--have to read en first, so incomplete translations have en as base
+		if( short == "en") then
+			read_language( short, init)
+		else
+			read_language( "en", init)
+			read_language( short, init)
+		end
+	end
+	
 	printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. yrp_current_lang.translated_by_name .. ")" )
 	printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
 
@@ -148,26 +168,26 @@ function add_language( short )
 		tmp.lang = "Automatic"
 		tmp.short = short
 		tmp.author = "D4KiR"
-		tmp.varis = 5
+		--tmp.varis = 5
 	else
 		tmp.ineng = yrp_current_lang.ineng
 		tmp.lang = yrp_current_lang.language
 		tmp.short = yrp_current_lang.short
 		tmp.author = yrp_current_lang.translated_by_name
-		tmp.varis = #yrp_current_lang
+		--tmp.varis = #yrp_current_lang
 	end
 
-	local count = 0
-	for k, v in pairs( yrp_current_lang ) do
-		count = count + 1
-	end
-	tmp.varis = count
+	--local count = 0
+	--for k, v in pairs( yrp_current_lang ) do
+		--count = count + 1
+	--end
+	--tmp.varis = count
 
 	table.insert( yrp_button_info, tmp )
 end
 
 for i, short in pairs( yrp_shorts ) do
-	LoadLanguage( short )
+	LoadLanguage( short , true)
 	add_language( short )
 end
 
@@ -181,7 +201,7 @@ end
 function initLang()
 	hr_pre()
 	printGM( "lang", "... SEARCHING FOR LANGUAGE ..." )
-	LoadLanguage( "auto" )
+	LoadLanguage( "auto" , false)
 	hr_pos()
 end
 initLang()
