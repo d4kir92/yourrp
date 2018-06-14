@@ -32,7 +32,7 @@ function openFeedbackMenu()
     closeMenu()
   end
 
-  _fb.langu = derma_change_language( _fb.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 50 ) )
+  _fb.langu = DChangeLanguage( _fb.window, BScrW()/2, ctr( 50 ), ctr( 100 ) )
 
   function _fb.window:Paint( pw, ph )
     surfaceWindow( self, pw, ph, lang_string( "givefeedback" ) .. " [PROTOTYPE]" )

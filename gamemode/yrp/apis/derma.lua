@@ -80,6 +80,25 @@ function InterfaceStyle()
   return ply:GetNWString( "interface_style", "dark" )
 end
 
+local yrp_colors = {}
+local Player = FindMetaTable( "Player" )
+function Player:YRPGetColor( nr )
+  if yrp_colors[interfaceDesign()] != nil then
+    if yrp_colors[interfaceDesign()][InterfaceColor()] != nil then
+      if yrp_colors[interfaceDesign()][InterfaceColor()][nr] != nil then
+        return yrp_colors[interfaceDesign()][InterfaceColor()][nr]
+      end
+    end
+  end
+  return Color( 255, 0, 0, 255 )
+end
+
+function Player:YRPAddColor( design, color, nr, col )
+  yrp_colors[design] = yrp_colors[design] or {}
+  yrp_colors[design][color] = yrp_colors[design][color] or {}
+  yrp_colors[design][color][nr] = col
+end
+
 local _icons = {}
 function AddDesignIcon( name, path )
   _icons[name] = Material( path )
@@ -93,7 +112,7 @@ function GetDesignIcon( name )
 end
 
 function DrawIcon( material, w, h, x, y, color )
-  local col = color or Color( 255, 255, 255, 255 )
+  local col = color or LocalPlayer():YRPGetColor( "6" )
   surface.SetDrawColor( col )
   surface.SetMaterial( material )
   surface.DrawTexturedRect( x or 0, y or 0, w or 64, h or 64 )
@@ -110,6 +129,23 @@ AddDesignIcon( "character", "vgui/material/icon_character.png" )
 AddDesignIcon( "shop", "vgui/material/icon_shop.png" )
 AddDesignIcon( "settings", "vgui/material/icon_settings.png" )
 AddDesignIcon( "feedback", "vgui/material/icon_feedback.png" )
+AddDesignIcon( "map", "vgui/material/icon_map.png" )
+AddDesignIcon( "color_lens", "vgui/material/icon_color_lens.png" )
+AddDesignIcon( "pin_drop", "vgui/material/icon_pin_drop.png" )
+AddDesignIcon( "face", "vgui/material/icon_face.png" )
+AddDesignIcon( "smile", "vgui/material/icon_insert_emoticon.png" )
+AddDesignIcon( "keyboard_arrow_down", "vgui/material/icon_keyboard_arrow_down.png" )
+AddDesignIcon( "keyboard_arrow_up", "vgui/material/icon_keyboard_arrow_up.png" )
+AddDesignIcon( "keyboard_arrow_right", "vgui/material/icon_keyboard_arrow_right.png" )
+AddDesignIcon( "keyboard_arrow_left", "vgui/material/icon_keyboard_arrow_left.png" )
+AddDesignIcon( "unfold_less", "vgui/material/icon_unfold_less.png" )
+AddDesignIcon( "unfold_more", "vgui/material/icon_unfold_more.png" )
+AddDesignIcon( "record_voice_over", "vgui/material/icon_record_voice_over.png" )
+AddDesignIcon( "3d_rotation", "vgui/material/icon_3d_rotation.png" )
+AddDesignIcon( "rotate_left", "vgui/material/icon_rotate_left.png" )
+AddDesignIcon( "rotate_right", "vgui/material/icon_rotate_right.png" )
+AddDesignIcon( "smartphone", "vgui/material/icon_smartphone.png" )
+AddDesignIcon( "system_update", "vgui/material/icon_system_update.png" )
 
 AddDesignIcon( "work", "vgui/material/icon_work.png" )
 
@@ -552,7 +588,7 @@ function createMDMenu( parent, w, h, x, y )
 
 	tmp.sitepanel = createD( "DPanel", tmp, BScrW(), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
-		--draw.RoundedBox( 0, 0, 0, pw, ph, get_dpbg_col() )
+		--
 	end
 
 	function tmp:SwitchToSite( _hook )
@@ -567,8 +603,7 @@ function createMDMenu( parent, w, h, x, y )
 		self.menu = createD( "DPanelList", self, ctr( 600 ), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
     self.menu:EnableVerticalScrollbar( true )
 		function self.menu:Paint( pw, ph )
-			draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
-			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, get_dp_col() )
+			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, LocalPlayer():YRPGetColor( "5" ) )
 
 			local x, y = gui.MousePos()
 			if x > ctr( 600 ) then
@@ -592,11 +627,13 @@ function createMDMenu( parent, w, h, x, y )
 					tmp2.hook = string.lower( w.hook )
 					tmp2.site = string.upper( w.site )
 					function tmp2:Paint( pw, ph )
+            local color = LocalPlayer():YRPGetColor( "2" )
 						if tmp.cursite == self.site then
-							draw.RoundedBox( 0, 0, 0, pw, ph, get_dsbg_col() )
-						else
-							paintMDBackground( self, pw, ph )
-						end
+              color = LocalPlayer():YRPGetColor( "3" )
+						elseif self:IsHovered() then
+              color = LocalPlayer():YRPGetColor( "1" )
+            end
+            draw.RoundedBox( 0, 0, 0, pw, ph, color )
 
 						if w.material != nil then
 							surface.SetDrawColor( 255, 255, 255, 255 )
@@ -604,7 +641,7 @@ function createMDMenu( parent, w, h, x, y )
 							surface.DrawTexturedRect( ctr( 24 ), ctr( 24 ), ctr( 32 ), ctr( 32 ) )
 						end
 
-						draw.SimpleTextOutlined( string.upper( lang_string( w.site ) ), "mdMenu", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+						draw.SimpleTextOutlined( string.upper( lang_string( w.site ) ), "mat1text", ctr( 80 + 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
 					function tmp2:DoClick()
 						tmp.cursite = self.site

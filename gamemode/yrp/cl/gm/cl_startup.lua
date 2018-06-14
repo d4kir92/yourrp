@@ -6,14 +6,14 @@ function DChangeLanguage( parent, x, y, size )
   local LanguageChanger = createD( "DButton", parent, size, size*0.671, x, y )
   LanguageChanger:SetText( "" )
   function LanguageChanger:Paint( pw, ph )
-    local color = Color( 0, 0, 255, 255 )
+    local color = LocalPlayer():YRPGetColor( "2" )
     if self:IsHovered() then
-      color = Color( 100, 100, 255, 255 )
+      color = LocalPlayer():YRPGetColor( "1" )
     end
-    surfaceBox( 0, 0, pw, ph, color )
+    draw.RoundedBox( ph/4, 0, 0, pw, ph, color )
 
     local size = ph
-    DrawIcon( GetDesignIcon( GetCurrentLanguage() ), size, size*0.671, ( pw - size ) / 2, ( ph - size*0.671 ) / 2 )
+    DrawIcon( GetDesignIcon( GetCurrentLanguage() ), size, size*0.671, ( pw - size ) / 2, ( ph - size*0.671 ) / 2, Color( 255, 255, 255, 255 ) )
   end
   function LanguageChanger:DoClick()
     local window = createD( "DFrame", nil, ctr( 400 ), ctr( 400 ), 0, 0 )
@@ -21,6 +21,13 @@ function DChangeLanguage( parent, x, y, size )
     window:ShowCloseButton( false )
     window:SetDraggable( false )
     function window:Paint( pw, ph )
+      local px, py = self:GetPos()
+      if px > ScrW() - pw then
+        self:SetPos( ScrW() - pw, py )
+      elseif py > ScrH() - ph then
+        self:SetPos( px, ScrH() - ph )
+      end
+
       if self.startup == nil then
         if self:IsHovered() then
           self.startup = true
@@ -54,13 +61,13 @@ function DChangeLanguage( parent, x, y, size )
       lang:SetText( "" )
       lang.data = v.short
       function lang:Paint( pw, ph )
-        local color = Color( 0, 0, 255, 100 )
+        local color = LocalPlayer():YRPGetColor( "2" )
         if self:IsHovered() then
-          color = Color( 100, 100, 255, 100 )
+          color = LocalPlayer():YRPGetColor( "1" )
         end
         surfaceBox( 0, 0, pw, ph, color )
 
-        DrawIcon( GetDesignIcon( self.data ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ) )
+        DrawIcon( GetDesignIcon( self.data ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ), Color( 255, 255, 255, 255 ) )
 
         draw.SimpleTextOutlined( v.lang .. "/" .. v.ineng, "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
       end
@@ -76,24 +83,6 @@ function DChangeLanguage( parent, x, y, size )
   end
   return LanguageChanger
 end
-
---##############################################################################
-function derma_change_language( parent, w, h, x, y )
-  local _tmp = createD( "DComboBox", parent, w, h, x, y )
-  _tmp:AddChoice( "[AUTOMATIC]", "auto" )
-  for k, v in pairs( GetAllLanguages() ) do
-    local _select = false
-    if lang_string( "language" ) == v.lang then
-      _select = true
-    end
-    _tmp:AddChoice( v.ineng .. "/" .. v.lang, v.short, _select )
-  end
-  _tmp.OnSelect = function( panel, index, value, data )
-    LoadLanguage( data )
-  end
-  return _tmp
-end
---##############################################################################
 
 function isInTable( table, item )
   for k, v in pairs( table ) do
@@ -1128,7 +1117,7 @@ end
 
 function drawIcon( ply, string, z, color )
   local _size = 32
-  local pos = ply:GetPos()
+  local pos = ply:GetPos() + Vector( 0, 0, 86 )
   if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
     pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
   end
@@ -1143,7 +1132,7 @@ function drawIcon( ply, string, z, color )
 end
 
 function drawString( ply, string, z, color )
-  local pos = ply:GetPos()
+  local pos = ply:GetPos() + Vector( 0, 0, 86 )
   if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
     pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
   end
@@ -1161,7 +1150,7 @@ function drawString( ply, string, z, color )
 end
 
 function drawBar( ply, string, z, color, cur, max, barcolor )
-  local pos = ply:GetPos()
+  local pos = ply:GetPos() + Vector( 0, 0, 86 )
   if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
     pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
   end
@@ -1182,10 +1171,9 @@ function drawBar( ply, string, z, color, cur, max, barcolor )
 end
 
 function drawPlate( ply, string, z, color )
-  local _abstand = Vector( 0, 0, ply:GetModelScale() * 24 )
-  local pos = ply:GetPos() + _abstand
+  local pos = ply:GetPos() + Vector( 0, 0, 86 )
   if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
-    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + _abstand
+    pos = ply:GetBonePosition( ply:LookupBone( "ValveBiped.Bip01_Head1" ) )
   end
   local ang = Angle( 0, LocalPlayer():GetAngles().y-90, 90 )
   local sca = ply:GetModelScale()/4
@@ -1267,7 +1255,7 @@ _icons["ms"] = Material( "icon16/lightning.png" )
 function drawPlates( ply )
   if ply:Alive() then
 
-    local _height = 23
+    local _height = 31
 
     local color = ply:GetColor()
     color.a = color.a - 160
@@ -1277,11 +1265,11 @@ function drawPlates( ply )
 
     if ply:GetNWBool( "bool_tag_on_head", false ) then
       if ply:GetNWBool( "bool_tag_on_head_voice", false ) and ply:IsSpeaking() then
-        drawIcon( ply, "voice", 17, color )
+        drawIcon( ply, "voice", 26, color )
       end
 
       if ply:GetNWBool( "bool_tag_on_head_chat", false ) and isChatOpen() then
-        drawIcon( ply, "chat", 17, color )
+        drawIcon( ply, "chat", 26, color )
       end
 
       if ply:GetNWBool( "bool_tag_on_head_clan", false ) then

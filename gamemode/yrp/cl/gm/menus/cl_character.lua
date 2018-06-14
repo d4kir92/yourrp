@@ -523,7 +523,7 @@ function openCharacterCreation()
     character.rpname = charactersNameText:GetValue()
   end
 
-  derma_change_language( frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
+  DChangeLanguage( frame, ScrW() - ctr( 100 + 10 ), ctr( 10 ), ctr( 100 ) )
 
   if character.amount > 0 then
     local button = {}
@@ -653,7 +653,7 @@ function openCharacterSelection()
     openFeedbackMenu()
   end
 
-  derma_change_language( _cs.frame, ctr( 400 ), ctr( 100 ), ScrW() - ctr( 400 + 100 ), ctr( 100 ) )
+  DChangeLanguage( _cs.frame, _cs.frame:GetWide() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 100 ) )
 
   local border = ctr( 50 )
   local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), border, border )

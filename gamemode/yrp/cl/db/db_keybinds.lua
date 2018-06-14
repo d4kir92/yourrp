@@ -15,7 +15,7 @@ function set_keybind( name, value )
 end
 
 function GetKeybindName( kbname )
-  local _kb = ""
+  local _kb = kbname
   if !string.StartWith( kbname, "in_" ) then
     _kb = get_keybind( kbname ) or "UNKNOWN"
   end

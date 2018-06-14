@@ -126,7 +126,7 @@ function showVersion()
           draw.SimpleTextOutlined( tostring( versionOnline ) .. " (" .. tostring( s_sort ) .. ")", "HudBars", pw/2, ctr( 415 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
         end
 
-        local _langu = derma_change_language( frame, ctr( 400 ), ctr( 50 ), ctr( 400 ), ctr( 60 ) )
+        local _langu = DChangeLanguage( frame, ctr( 400 + 10 ), ctr( 60 ), ctr( 72 ) )
 
         local showChanges = createVGUI( "DButton", frame, 520, 80, 0, 0 )
         showChanges:SetText( "" )

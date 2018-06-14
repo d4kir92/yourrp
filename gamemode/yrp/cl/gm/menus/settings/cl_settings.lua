@@ -5,8 +5,6 @@ include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
 include( "cl_settings_client_keybinds.lua" )
 
-include( "cl_settings_server_collection.lua" )
-
 include( "cl_settings_server_interface.lua" )
 include( "cl_settings_server_realistic.lua" )
 include( "cl_settings_server_roles.lua" )
@@ -54,12 +52,12 @@ end
 
 function F8RequireUG( site, usergroups )
   local ply = LocalPlayer()
-  
+
   local tab = {}
   tab[1] = usergroups
 
   function settingsWindow.window.site:Paint( w, h )
-    surfaceBox( 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+    draw.RoundedBox( ph/2, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
     surfaceText( lang_string( "settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "roleInfoHeader", w/2, h/2, Color( 255, 0, 0 ), 1, 1 )
     if site != lang_string( "usergroups" ) then
       surfaceText( lang_string( "settings_gotof8usergroups" ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
@@ -112,18 +110,12 @@ end
 
 function openSettings()
   openMenu()
-  addMDColor( "dprimary", getMDPColor() )
-  addMDColor( "dprimaryBG", colorBG( getMDPColor() ) )
-
-  addMDColor( "dsecondary", getMDSColor() )
-  addMDColor( "dsecondaryH", colorH( getMDSColor() ) )
-
   local ply = LocalPlayer()
 
   --Frame
   settingsWindow.window = createMDMenu( nil, ScrW(), ScrH(), 0, 0 )
   function settingsWindow.window:Paint( pw, ph )
-    --draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
+    --
   end
   function settingsWindow.window:OnClose()
     closeMenu()
@@ -141,17 +133,10 @@ function openSettings()
 
 
 
-  local _server = "settings_serverpublic"
-  settingsWindow.window:AddCategory( _server )
-  settingsWindow.window:AddSite( "open_server_collection", "settings_workshopcollection", _server, "icon16/page_world.png" )
-
-
-
   local _server_admin = lang_string( "settings_server" ) .. " [OLD]"
   settingsWindow.window:AddCategory( _server_admin )
   --settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
   settingsWindow.window:AddSite( "open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png" )
-  settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _server_admin, "icon16/bomb.png" )
   settingsWindow.window:AddSite( "open_server_roles", "settings_groupsandroles", _server_admin, "icon16/group_edit.png" )
   settingsWindow.window:AddSite( "open_server_give", "settings_players", _server_admin, "icon16/user_edit.png" )
   settingsWindow.window:AddSite( "open_server_licenses", "settings_licenses", _server_admin, "icon16/vcard_edit.png" )
@@ -164,12 +149,13 @@ function openSettings()
   local _wip = "wip"
   settingsWindow.window:AddCategory( _wip )
 
-  settingsWindow.window:AddSite( "open_server_general", "settings_general", _wip, "icon16/server_database.png" )
-  settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _wip, "icon16/group_go.png" )
+  settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _wip, "icon16/bomb.png" )
 
   local _server = "settings_server"
   settingsWindow.window:AddCategory( _server )
 
+  settingsWindow.window:AddSite( "open_server_general", "settings_general", _server, "icon16/server_database.png" )
+  settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _server, "icon16/group_go.png" )
   settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server, "icon16/page_lightning.png" )
 
 
@@ -184,11 +170,11 @@ function openSettings()
   --Mainbar
   local mainBar = createD( "DPanel", settingsWindow.window, ScrW(), ctr( 100 ), 0, 0 )
   function mainBar:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, get_dp_col() )
+    draw.RoundedBox( 0, 0, 0, pw, ph, LocalPlayer():YRPGetColor( "5" ) )
 
     surface.SetDrawColor( 255, 255, 255, 255 )
     surface.SetMaterial( _yrp_settings.materials.logo100	)
-    surface.DrawTexturedRect( ctr( 100 + 400 + 10 ), ctr( 10 ), ctr( 400*0.6 ), ctr( 130*0.6 ) )
+    surface.DrawTexturedRect( ctr( 610 ), ctr( 10 ), ctr( 400*0.6 ), ctr( 130*0.6 ) )
 
     if !version_tested() then
   		testVersion()
@@ -198,58 +184,55 @@ function openSettings()
   		_singleplayer = "Singleplayer"
   	end
     local _color = version_color()
-  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) V.: " .. GAMEMODE.Version .. " by D4KiR", "HudBars", ctr( 820 ), ph/2, Color( _color.r, _color.g, _color.b, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-
-    --draw.SimpleTextOutlined( settingsWindow.cursite or "", "HudBars", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+  	draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", ctr( 610 + 400*0.6 + 10 ), ph/2, Color( _color.r, _color.g, _color.b, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
 
-  local feedback = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 1860 ), ctr( 10 ) )
+  local lc = DChangeLanguage( settingsWindow.window, ScrW() - ctr( 310 ), ctr( 10 ), ctr( 120 ) )
+
+  local feedback = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 820 ), ctr( 10 ) )
   feedback:SetText( "" )
   function feedback:Paint( pw, ph )
-    local color = get_dsbg_col()
-    if !self:IsHovered() then
-      color = get_ds_col()
+    local color = LocalPlayer():YRPGetColor( "2" )
+    if self:IsHovered() then
+      color = LocalPlayer():YRPGetColor( "1" )
   	end
     color.a = 200
-    draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleTextOutlined( lang_string( "givefeedback" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.RoundedBox( ph/4, 0, 0, pw, ph, color )
+    draw.SimpleTextOutlined( lang_string( "givefeedback" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
   function feedback:DoClick()
     closeSettings()
     openFeedbackMenu()
   end
 
-  local _bg = createD( "HTML", settingsWindow.window, ctr( 500-8 ), ctr( 80-12 ), ScrW() - ctr( 1350-6 ), ctr( 10+6 ) )
+  local _bg = createD( "HTML", settingsWindow.window, ctr( 500-8 ), ctr( 80-12 ), ScrW() - ctr( 820 + 500 + 10 - 6 ), ctr( 10+6 ) )
   _bg:OpenURL( "https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg" )
 
-  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 1350 ), ctr( 10 ) )
+  local liveSupport = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 820 + 500 + 10 ), ctr( 10 ) )
   liveSupport:SetText( "" )
   function liveSupport:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end
   function liveSupport:Paint( pw, ph )
-    local color = get_dsbg_col()
-    if !self:IsHovered() then
-      color = get_ds_col()
+    local color = LocalPlayer():YRPGetColor( "2" )
+    if self:IsHovered() then
+      color = LocalPlayer():YRPGetColor( "1" )
   	end
     color.a = 200
-    draw.RoundedBox( 0, 0, 0, pw, ph, color )
-    draw.SimpleTextOutlined( lang_string( "livesupport" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+    draw.RoundedBox( ph/4, 0, 0, pw, ph, color )
+    draw.SimpleTextOutlined( lang_string( "livesupport" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
   end
-
-  local language = createD( "DPanel", settingsWindow.window, ctr( 650 ), ctr( 80 ), ScrW() - ctr( 840 ), ctr( 10 ) )
-  function language:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
-    draw.SimpleTextOutlined( "Language: ", "HudBars", ctr( 250 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  end
-  derma_change_language( language, ctr( 400 ), ctr( 80 ), ctr( 250 ), ctr( 0 ) )
 
   local settingsButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 180 ), ctr( 10 ) )
   settingsButton:SetText( "" )
   function settingsButton:Paint( pw, ph )
-    paintMDBackground( self, pw, ph )
+    local color = LocalPlayer():YRPGetColor( "2" )
+    if self:IsHovered() then
+      color = LocalPlayer():YRPGetColor( "1" )
+    end
+    draw.RoundedBox( ph/2, 0, 0, pw, ph, color )
 
-  	surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetDrawColor( LocalPlayer():YRPGetColor( "6" ) )
   	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].settings	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
@@ -263,8 +246,8 @@ function openSettings()
 
         settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
         function settingsWindow.window.site:Paint( pw, ph )
-          --draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
-          draw.SimpleTextOutlined( lang_string( "color" ), "HudBars", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+          --
+          draw.SimpleTextOutlined( lang_string( "color" ), "mat1text", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
         end
 
         local switchMode = createMDSwitch( settingsWindow.window.site, ctr( 400 ), ctr( 80 ), ctr( 10 ), ctr( 10 ), "dark", "light", "cl_mode" )
@@ -311,9 +294,13 @@ function openSettings()
   local exitButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 80 + 10 ), ctr( 10 ) )
   exitButton:SetText( "" )
   function exitButton:Paint( pw, ph )
-    paintMDBackground( self, pw, ph )
+    local color = LocalPlayer():YRPGetColor( "2" )
+    if self:IsHovered() then
+      color = LocalPlayer():YRPGetColor( "1" )
+    end
+    draw.RoundedBox( ph/2, 0, 0, pw, ph, color )
 
-  	surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetDrawColor( LocalPlayer():YRPGetColor( "6" ) )
   	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].close	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
@@ -324,21 +311,21 @@ function openSettings()
     end
   end
 
-  local burgerMenu = createD( "DButton", mainBar, ctr( 480 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
+  local burgerMenu = createD( "DButton", mainBar, ctr( 600 - 10*2 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
   burgerMenu:SetText( "" )
   function burgerMenu:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 100 ) )
+    draw.RoundedBox( ph/2, 0, 0, pw, ph, LocalPlayer():YRPGetColor( "4" ) )
+    local color = LocalPlayer():YRPGetColor( "2" )
     if self:IsHovered() then
-      draw.RoundedBox( 0, 0, 0, ph, ph, get_dsbg_col() )
-    else
-      draw.RoundedBox( 0, 0, 0, ph, ph, get_ds_col() )
+      color = LocalPlayer():YRPGetColor( "1" )
     end
+    draw.RoundedBox( ph/2, 0, 0, ph, ph, color )
 
-  	surface.SetDrawColor( 255, 255, 255, 255 )
+  	surface.SetDrawColor( LocalPlayer():YRPGetColor( "6" ) )
   	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].burger	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
 
-    draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "HudBars", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( string.upper( lang_string( "menu" ) ), "mat1text", ctr( 90 ), ctr( 40 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
   end
   function burgerMenu:DoClick()
     if settingsWindow.window != NULL then
