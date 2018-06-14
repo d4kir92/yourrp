@@ -60,12 +60,12 @@ function DChangeLanguage( parent, x, y, size )
         end
         surfaceBox( 0, 0, pw, ph, color )
 
-        DrawIcon( GetDesignIcon( v.short ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ) )
+        DrawIcon( GetDesignIcon( self.data ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ) )
 
         draw.SimpleTextOutlined( v.lang .. "/" .. v.ineng, "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
       end
       function lang:DoClick()
-        change_language( self.data )
+        LoadLanguage( self.data )
       end
 
       window.dpanellist:AddItem( lang )
@@ -89,7 +89,7 @@ function derma_change_language( parent, w, h, x, y )
     _tmp:AddChoice( v.ineng .. "/" .. v.lang, v.short, _select )
   end
   _tmp.OnSelect = function( panel, index, value, data )
-    change_language( data )
+    LoadLanguage( data )
   end
   return _tmp
 end

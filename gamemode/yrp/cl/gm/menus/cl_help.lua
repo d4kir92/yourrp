@@ -58,7 +58,7 @@ end
 net.Receive( "getsitehelp", function( len )
   if pa( HELPMENU.mainmenu.site ) then
     local helppnl = createD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.mainmenu.site:GetWide(), HELPMENU.mainmenu.site:GetTall(), 0, 0 )
-
+    print( "TESTTTTTTTTTTTTTT", helppnl:GetFont() )
     function helppnl:Paint( pw, ph )
       -- draw.RoundedBox( 0, 0, 0, pw, ph, Color(255, 0, 0 ))
       local _abstand = ctr( HudV("ttsf") ) * 3.8
