@@ -153,7 +153,7 @@ function LoadLanguage( short , init )
 		end
 	end
 
-	printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. yrp_current_lang.translated_by_name .. ")" )
+	printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. tostring( yrp_current_lang.translated_by_name ) .. ")" )
 	printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
 
 	send_lang( short ) -- Send To Server

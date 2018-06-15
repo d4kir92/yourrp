@@ -170,7 +170,7 @@ function openSettings()
   --Mainbar
   local mainBar = createD( "DPanel", settingsWindow.window, ScrW(), ctr( 100 ), 0, 0 )
   function mainBar:Paint( pw, ph )
-    draw.RoundedBox( 0, 0, 0, pw, ph, LocalPlayer():YRPGetColor( "5" ) )
+    draw.RoundedBox( 0, 0, 0, pw, ph, YRPGetColor( "5" ) )
 
     surface.SetDrawColor( 255, 255, 255, 255 )
     surface.SetMaterial( _yrp_settings.materials.logo100	)
@@ -192,9 +192,9 @@ function openSettings()
   local feedback = createD( "DButton", settingsWindow.window, ctr( 500 ), ctr( 80 ), ScrW() - ctr( 820 ), ctr( 10 ) )
   feedback:SetText( "" )
   function feedback:Paint( pw, ph )
-    local color = LocalPlayer():YRPGetColor( "2" )
+    local color = YRPGetColor( "2" )
     if self:IsHovered() then
-      color = LocalPlayer():YRPGetColor( "1" )
+      color = YRPGetColor( "1" )
   	end
     color.a = 200
     draw.RoundedBox( ph/4, 0, 0, pw, ph, color )
@@ -214,9 +214,9 @@ function openSettings()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
   end
   function liveSupport:Paint( pw, ph )
-    local color = LocalPlayer():YRPGetColor( "2" )
+    local color = YRPGetColor( "2" )
     if self:IsHovered() then
-      color = LocalPlayer():YRPGetColor( "1" )
+      color = YRPGetColor( "1" )
   	end
     color.a = 200
     draw.RoundedBox( ph/4, 0, 0, pw, ph, color )
@@ -226,13 +226,13 @@ function openSettings()
   local settingsButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 180 ), ctr( 10 ) )
   settingsButton:SetText( "" )
   function settingsButton:Paint( pw, ph )
-    local color = LocalPlayer():YRPGetColor( "2" )
+    local color = YRPGetColor( "2" )
     if self:IsHovered() then
-      color = LocalPlayer():YRPGetColor( "1" )
+      color = YRPGetColor( "1" )
     end
     draw.RoundedBox( ph/2, 0, 0, pw, ph, color )
 
-  	surface.SetDrawColor( LocalPlayer():YRPGetColor( "6" ) )
+  	surface.SetDrawColor( YRPGetColor( "6" ) )
   	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].settings	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
@@ -294,13 +294,13 @@ function openSettings()
   local exitButton = createD( "DButton", mainBar, ctr( 80 ), ctr( 80 ), ScrW() - ctr( 80 + 10 ), ctr( 10 ) )
   exitButton:SetText( "" )
   function exitButton:Paint( pw, ph )
-    local color = LocalPlayer():YRPGetColor( "2" )
+    local color = YRPGetColor( "2" )
     if self:IsHovered() then
-      color = LocalPlayer():YRPGetColor( "1" )
+      color = YRPGetColor( "1" )
     end
     draw.RoundedBox( ph/2, 0, 0, pw, ph, color )
 
-  	surface.SetDrawColor( LocalPlayer():YRPGetColor( "6" ) )
+  	surface.SetDrawColor( YRPGetColor( "6" ) )
   	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].close	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
   end
@@ -314,14 +314,14 @@ function openSettings()
   local burgerMenu = createD( "DButton", mainBar, ctr( 600 - 10*2 ), ctr( 80 ), ctr( 10 ), ctr( 10 ) )
   burgerMenu:SetText( "" )
   function burgerMenu:Paint( pw, ph )
-    draw.RoundedBox( ph/2, 0, 0, pw, ph, LocalPlayer():YRPGetColor( "4" ) )
-    local color = LocalPlayer():YRPGetColor( "2" )
+    draw.RoundedBox( ph/2, 0, 0, pw, ph, YRPGetColor( "4" ) )
+    local color = YRPGetColor( "2" )
     if self:IsHovered() then
-      color = LocalPlayer():YRPGetColor( "1" )
+      color = YRPGetColor( "1" )
     end
     draw.RoundedBox( ph/2, 0, 0, ph, ph, color )
 
-  	surface.SetDrawColor( LocalPlayer():YRPGetColor( "6" ) )
+  	surface.SetDrawColor( YRPGetColor( "6" ) )
   	surface.SetMaterial( _yrp_settings.materials[_yrp_settings.design.mode].burger	)
   	surface.DrawTexturedRect( ctr( 15 ), ctr( 15 ), ctr( 50 ), ctr( 50 ) )
 

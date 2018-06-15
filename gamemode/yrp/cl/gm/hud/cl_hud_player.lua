@@ -69,20 +69,22 @@ function sText( text, font, x, y, color, ax, ay )
 end
 
 function drawMenuInfo()
-  local isize = ctr( 48 )
-  local ibr = ctr( 10 )
-  local color = Color( 255, 255, 255, 20 )
+  if get_tutorial( "tut_f1info" ) then
+    local isize = ctr( 48 )
+    local ibr = ctr( 10 )
+    local color = Color( 255, 255, 255, 20 )
 
-  local x = ibr
-  local y = ibr
+    local x = ibr
+    local y = ibr
 
-  --[[ F1 ]]--
-  surface.SetDrawColor( color )
-  surface.SetMaterial( GetDesignIcon( "help" )	)
-  surface.DrawTexturedRect( x, y, isize, isize )
-  x = x + isize + ibr
-  local text = "[" .. "F1" .. "] " .. lang_string( "help" )
-  sText( text, "mat1text", x, y + isize/2, color, 0, 1 )
+    --[[ F1 ]]--
+    surface.SetDrawColor( color )
+    surface.SetMaterial( GetDesignIcon( "help" )	)
+    surface.DrawTexturedRect( x, y, isize, isize )
+    x = x + isize + ibr
+    local text = "[" .. "F1" .. "] " .. lang_string( "help" )
+    sText( text, "mat1text", x, y + isize/2, color, 0, 1 )
+  end
 end
 
 local _alpha = 130

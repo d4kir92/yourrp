@@ -22,7 +22,7 @@ function reset_tutorial( str )
 end
 
 function get_tutorial( str )
-  return yrp_tutorials[str]
+  return tobool( yrp_tutorials[str] )
 end
 
 --db_drop_table( _db_name )
@@ -44,6 +44,7 @@ function check_yrp_tutorials()
   SQL_ADD_COLUMN( _db_name, "tut_feedback", "INT DEFAULT 1" )
   SQL_ADD_COLUMN( _db_name, "tut_welcome", "INT DEFAULT 1" )
   SQL_ADD_COLUMN( _db_name, "tut_hudhelp", "INT DEFAULT 1" )
+  SQL_ADD_COLUMN( _db_name, "tut_f1info", "INT DEFAULT 1" )
 
   local _tmp = SQL_SELECT( _db_name, "*", "uniqueID = 1" )
   if _tmp == nil then

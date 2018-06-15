@@ -77,6 +77,7 @@ function useFunction( string )
 			closeSP()
 		elseif string == "openHelpMenu" then
 			done_tutorial( "tut_feedback" )
+      done_tutorial( "tut_f1info", 10 )
 			toggleHelpMenu()
     elseif string == "ToggleEmotesMenu" then
       ToggleEmotesMenu()

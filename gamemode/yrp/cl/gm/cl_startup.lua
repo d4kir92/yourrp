@@ -6,9 +6,9 @@ function DChangeLanguage( parent, x, y, size )
   local LanguageChanger = createD( "DButton", parent, size, size*0.671, x, y )
   LanguageChanger:SetText( "" )
   function LanguageChanger:Paint( pw, ph )
-    local color = LocalPlayer():YRPGetColor( "2" )
+    local color = YRPGetColor( "2" )
     if self:IsHovered() then
-      color = LocalPlayer():YRPGetColor( "1" )
+      color = YRPGetColor( "1" )
     end
     draw.RoundedBox( ph/4, 0, 0, pw, ph, color )
 
@@ -61,9 +61,9 @@ function DChangeLanguage( parent, x, y, size )
       lang:SetText( "" )
       lang.data = v.short
       function lang:Paint( pw, ph )
-        local color = LocalPlayer():YRPGetColor( "2" )
+        local color = YRPGetColor( "2" )
         if self:IsHovered() then
-          color = LocalPlayer():YRPGetColor( "1" )
+          color = YRPGetColor( "1" )
         end
         surfaceBox( 0, 0, pw, ph, color )
 

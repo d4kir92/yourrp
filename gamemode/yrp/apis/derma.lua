@@ -81,11 +81,10 @@ function InterfaceStyle()
 end
 
 local yrp_colors = {}
-local Player = FindMetaTable( "Player" )
-function Player:YRPGetColor( nr )
-  if yrp_colors[interfaceDesign()] != nil then
-    if yrp_colors[interfaceDesign()][InterfaceColor()] != nil then
-      if yrp_colors[interfaceDesign()][InterfaceColor()][nr] != nil then
+function YRPGetColor( nr )
+  if wk( yrp_colors[interfaceDesign()] ) then
+    if wk( yrp_colors[interfaceDesign()][InterfaceColor()] ) then
+      if wk( yrp_colors[interfaceDesign()][InterfaceColor()][nr] ) then
         return yrp_colors[interfaceDesign()][InterfaceColor()][nr]
       end
     end
@@ -93,7 +92,7 @@ function Player:YRPGetColor( nr )
   return Color( 255, 0, 0, 255 )
 end
 
-function Player:YRPAddColor( design, color, nr, col )
+function YRPAddColor( design, color, nr, col )
   yrp_colors[design] = yrp_colors[design] or {}
   yrp_colors[design][color] = yrp_colors[design][color] or {}
   yrp_colors[design][color][nr] = col
@@ -112,7 +111,7 @@ function GetDesignIcon( name )
 end
 
 function DrawIcon( material, w, h, x, y, color )
-  local col = color or LocalPlayer():YRPGetColor( "6" )
+  local col = color or YRPGetColor( "6" )
   surface.SetDrawColor( col )
   surface.SetMaterial( material )
   surface.DrawTexturedRect( x or 0, y or 0, w or 64, h or 64 )
@@ -603,7 +602,7 @@ function createMDMenu( parent, w, h, x, y )
 		self.menu = createD( "DPanelList", self, ctr( 600 ), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
     self.menu:EnableVerticalScrollbar( true )
 		function self.menu:Paint( pw, ph )
-			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, LocalPlayer():YRPGetColor( "5" ) )
+			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, YRPGetColor( "5" ) )
 
 			local x, y = gui.MousePos()
 			if x > ctr( 600 ) then
@@ -627,11 +626,11 @@ function createMDMenu( parent, w, h, x, y )
 					tmp2.hook = string.lower( w.hook )
 					tmp2.site = string.upper( w.site )
 					function tmp2:Paint( pw, ph )
-            local color = LocalPlayer():YRPGetColor( "2" )
+            local color = YRPGetColor( "2" )
 						if tmp.cursite == self.site then
-              color = LocalPlayer():YRPGetColor( "3" )
+              color = YRPGetColor( "3" )
 						elseif self:IsHovered() then
-              color = LocalPlayer():YRPGetColor( "1" )
+              color = YRPGetColor( "1" )
             end
             draw.RoundedBox( 0, 0, 0, pw, ph, color )
 

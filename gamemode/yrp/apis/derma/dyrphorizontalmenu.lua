@@ -14,11 +14,11 @@ function DrawSelector( btn, w, h, text, selected )
       btn.ani_h = btn.ani_h - 1
     end
   end
-  local color = LocalPlayer():YRPGetColor( "2" )
+  local color = YRPGetColor( "2" )
   if btn:IsHovered() then
-    color = LocalPlayer():YRPGetColor( "1" )
+    color = YRPGetColor( "1" )
   elseif selected then
-    color = LocalPlayer():YRPGetColor( "3" )
+    color = YRPGetColor( "3" )
   end
   surfaceBox( 0, h - ctr( btn.ani_h ), w, ctr( btn.ani_h ), color )
 end
@@ -118,7 +118,7 @@ function PANEL:AddTab( name, netstr, starttab )
           if self.url != "" then
             local br = ctr( 10 )
             local size = ph - 2*ctr( 20 )
-            DrawIcon( GetDesignIcon( "launch" ), size, size, pw - size - br, ph/2 - size/2, LocalPlayer():YRPGetColor( "6" ) )
+            DrawIcon( GetDesignIcon( "launch" ), size, size, pw - size - br, ph/2 - size/2, YRPGetColor( "6" ) )
           end
         end
         function st:DoClick()

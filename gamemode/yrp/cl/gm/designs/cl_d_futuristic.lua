@@ -47,6 +47,55 @@ _fut.color["purple"] = {}
 _fut.color["purple"]["dark"] = Color( 114, 0, 202 )
 _fut.color["purple"]["light"] = Color( 226, 84, 255 )
 
+YRPAddColor( _fut.name, "blue", "1", Color( 46, 135, 255 ) )   -- Hovered
+YRPAddColor( _fut.name, "blue", "2", Color( 26, 121, 255 ) )   -- Normal
+YRPAddColor( _fut.name, "blue", "3", Color( 13, 63, 135 ) )    -- Selected
+YRPAddColor( _fut.name, "blue", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "blue", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "blue", "6", Color( 255, 255, 255 ) )  -- Border/Icon
+
+YRPAddColor( _fut.name, "red", "1", Color( 255, 81, 49 ) )   -- Hovered
+YRPAddColor( _fut.name, "red", "2", Color( 155, 0, 0 ) )   -- Normal
+YRPAddColor( _fut.name, "red", "3", Color( 13, 63, 135 ) )    -- Selected
+YRPAddColor( _fut.name, "red", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "red", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "red", "6", Color( 255, 255, 255 ) )  -- Border
+
+YRPAddColor( _fut.name, "green", "1", Color( 94, 252, 130 ) )   -- Hovered
+YRPAddColor( _fut.name, "green", "2", Color( 0, 150, 36 ) )   -- Normal
+YRPAddColor( _fut.name, "green", "3", Color( 13, 63, 135 ) )    -- Selected
+YRPAddColor( _fut.name, "green", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "green", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "green", "6", Color( 255, 255, 255 ) )  -- Border
+
+YRPAddColor( _fut.name, "yellow", "1", Color( 255, 255, 82 ) )   -- Hovered
+YRPAddColor( _fut.name, "yellow", "2", Color( 199, 165, 0 ) )   -- Normal
+YRPAddColor( _fut.name, "yellow", "3", Color( 179, 125, 0 ) )    -- Selected
+YRPAddColor( _fut.name, "yellow", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "yellow", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "yellow", "6", Color( 0, 0, 0 ) )  -- Border
+
+YRPAddColor( _fut.name, "brown", "1", Color( 106, 79, 75 ) )   -- Hovered
+YRPAddColor( _fut.name, "brown", "2", Color( 27, 0, 0 ) )   -- Normal
+YRPAddColor( _fut.name, "brown", "3", Color( 13, 63, 135 ) )    -- Selected
+YRPAddColor( _fut.name, "brown", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "brown", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "brown", "6", Color( 255, 255, 255 ) )  -- Border
+
+YRPAddColor( _fut.name, "orange", "1", Color( 255, 158, 64 ) )   -- Hovered
+YRPAddColor( _fut.name, "orange", "2", Color( 196, 60, 0 ) )   -- Normal
+YRPAddColor( _fut.name, "orange", "3", Color( 13, 63, 135 ) )    -- Selected
+YRPAddColor( _fut.name, "orange", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "orange", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "orange", "6", Color( 0, 0, 0 ) )  -- Border
+
+YRPAddColor( _fut.name, "purple", "1", Color( 226, 84, 255 ) )   -- Hovered
+YRPAddColor( _fut.name, "purple", "2", Color( 114, 0, 202 ) )   -- Normal
+YRPAddColor( _fut.name, "purple", "3", Color( 13, 63, 135 ) )    -- Selected
+YRPAddColor( _fut.name, "purple", "4", Color( 90, 90, 90 ) )     -- Background Highlight
+YRPAddColor( _fut.name, "purple", "5", Color( 51, 51, 51 ) )     -- Background
+YRPAddColor( _fut.name, "purple", "6", Color( 255, 255, 255 ) )  -- Border
+
 function _fut.GetColor( color, style )
   return _fut.color[color][style]
 end
