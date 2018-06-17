@@ -2,6 +2,9 @@
 
 local _debug = true
 
+if CLIENT then
+	LocalPlayer():SetNWBool( "yrp_debug", false )
+end
 concommand.Add( "yrp__debug", function( ply, cmd, args )
 	_debug = !_debug
 	ply:SetNWBool( "yrp_debug", _debug )

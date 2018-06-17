@@ -280,7 +280,7 @@ function spawnItem( ply, item, duid )
     local newVehicle = SQL_INSERT_INTO( "yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. db_sql_str( item.ClassName ) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'" )
     ent:SetNWString( "item_uniqueID", item.uniqueID )
     ent:SetNWString( "ownerRPName", ply:RPName() )
-    ent.Owner = ply
+    ent.yrpowner = ply
   elseif item.type != "weapons" then
     ent = ents.Create( item.ClassName )
     if ent == NULL then return end

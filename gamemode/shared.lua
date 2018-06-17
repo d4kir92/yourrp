@@ -29,4 +29,5 @@ add_luas( "yrp/shared/sh_includes.lua" )
 add_luas( "yrp/integration/integration.lua" )
 
 add_luas( "yrp/public/player.lua" )
+add_luas( "yrp/public/entity.lua" )
 add_luas( "yrp/public/gamemode.lua" )

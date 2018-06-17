@@ -465,7 +465,7 @@ function drawGroup( id, name, color )
 
       str = ""
       if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-        str = lang_string( "kills" )
+        str = lang_string( "frags" )
       end
       if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
         if str != "" then

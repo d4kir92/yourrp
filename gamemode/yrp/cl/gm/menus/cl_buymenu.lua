@@ -219,7 +219,7 @@ net.Receive( "shop_get_tabs", function( len )
     closeMenu()
   end
   function _bm.window:Paint( pw, ph )
-    surfaceWindow( self, pw, ph, _dealer.name )
+    surfaceWindow( self, pw, ph, lang_string( _dealer.name ) .. " [PROTOTYPE]" )
   end
 
   --[[ Settings ]]--

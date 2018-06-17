@@ -126,7 +126,7 @@ function Meta:TankExitVehicle()
 
 		self.Pilot:SetPos( p )
 		self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
-		self.Owner = NULL
+		self.yrpowner = NULL
 
 	end
 

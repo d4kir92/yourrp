@@ -906,8 +906,8 @@ net.Receive( "gethelpmenu", function( len, ply )
       info.text_social_twitter != "" or
       info.text_social_youtube != "" or
       info.text_social_facebook != "" or
-      info.text_social_steamgroup != "" or
-      info.text_social_servers != "" then
+      info.text_social_steamgroup != "" then
+      --info.text_social_servers != "" then
       AddTab( tabs, "community", "" )
       if info.text_social_website != "" then
         AddSubTab( subtabs, "community", "website", "getsitecommunitywebsite" )

@@ -701,6 +701,43 @@ hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( pl )
   end
 end)
 
+local Entity = FindMetaTable( "Entity" )
+function Entity:YRPSetOwner( ply )
+  self:SetNWEntity( "yrp_owner", ply )
+end
+
+function Entity:YRPRemoveOwner()
+  self:SetNWEntity( "yrp_owner", NULL )
+end
+
+hook.Add( "PlayerSpawnedVehicle", "yrp_vehicles_spawned", function( pl, ent )
+  ent:YRPSetOwner( pl )
+end)
+
+hook.Add( "PlayerSpawnedSWEP", "yrp_entities_spawned", function( pl, ent )
+  ent:YRPSetOwner( pl )
+end)
+
+hook.Add( "PlayerSpawnedSENT", "yrp_entities_spawned", function( pl, ent )
+  ent:YRPSetOwner( pl )
+end)
+
+hook.Add( "PlayerSpawnedEffect", "yrp_effects_spawned", function( pl, model, ent )
+  ent:YRPSetOwner( pl )
+end)
+
+hook.Add( "PlayerSpawnedNPC", "yrp_npcs_spawned", function( pl, ent )
+  ent:YRPSetOwner( pl )
+end)
+
+hook.Add( "PlayerSpawnedProp", "yrp_props_spawned", function( pl, model, ent )
+  ent:YRPSetOwner( pl )
+end)
+
+hook.Add( "PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function( pl, model, ent )
+  ent:YRPSetOwner( pl )
+end)
+
 hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( pl )
   if ea( pl ) then
     local _tmp = SQL_SELECT( DATABASE_NAME, "entities", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
@@ -984,7 +1021,7 @@ end)
 
 hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
   if ea( pl ) then
-    printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
+    --printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
     local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
     if wk( _tmp ) then
       _tmp = _tmp[1]
@@ -1007,6 +1044,8 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
         else
           return true
         end
+      elseif ent:GetRPOwner() == pl then
+        return true
       else
         net.Start( "yrp_info" )
           net.WriteString( "physgunpickup" )
@@ -1187,7 +1226,6 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
   end
 end)
 
-local Player = FindMetaTable( "Player" )
 function Player:UserGroupLoadout()
   printGM( "gm", self:SteamName() .. " UserGroupLoadout" )
   local UG = SQL_SELECT( DATABASE_NAME, "*", "name = '" .. self:GetUserGroup() .. "'" )
