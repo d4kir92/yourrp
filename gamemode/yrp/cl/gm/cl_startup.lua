@@ -2,8 +2,40 @@
 
 local searchIcon = Material( "icon16/magnifier.png" )
 
+function OpenAddLanguageWindow()
+  local window = createD( "DFrame", nil, ctr( 1200 ), ctr( 500 ), 0, 0 )
+  window:SetTitle( "" )
+  window:Center()
+  window:MakePopup()
+
+  function window:Paint( pw, ph )
+    surfaceWindow( self, pw, ph, "Add Your Language" )
+    draw.SimpleTextOutlined( "First go to the translationsite and register there:", "mat1text", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+
+    draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "mat1text", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+  end
+
+  window.translationsite = createD( "DButton", window, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 100 ) )
+  window.translationsite:SetText( "" )
+  function window.translationsite:Paint( pw, ph )
+    surfaceButton( self, pw, ph, "Translation Site" )
+  end
+  function window.translationsite:DoClick()
+    gui.OpenURL( "https://yourrp.noserver4u.de/engage/yourrp/" )
+  end
+
+  window.discordserver = createD( "DButton", window, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 200 ) )
+  window.discordserver:SetText( "" )
+  function window.discordserver:Paint( pw, ph )
+    surfaceButton( self, pw, ph, "Translation Site" )
+  end
+  function window.discordserver:DoClick()
+    gui.OpenURL( "https://discord.gg/CXXDCMJ" )
+  end
+end
+
 function AddLanguageChangerLine( parent, tab, mainparent )
-  local lang = createD( "DButton", parent, ctr( 400 ), ctr( 40 ), 0, 0 )
+  local lang = createD( "DButton", parent, parent:GetWide(), ctr( 40 ), 0, 0 )
   lang:SetText( "" )
   lang.lang = tab
   function lang:Paint( pw, ph )
@@ -14,10 +46,35 @@ function AddLanguageChangerLine( parent, tab, mainparent )
     surfaceBox( 0, 0, pw, ph, color )
     DrawIcon( GetDesignIcon( tostring( self.lang.short ) ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ), Color( 255, 255, 255, 255 ) )
 
-    draw.SimpleTextOutlined( tostring( self.lang.lang ) .. "/" .. tostring( self.lang.ineng ), "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    local text = tostring( self.lang.lang ) .. "/" .. tostring( self.lang.ineng )
+    if self.lang.percentage != nil then
+      text = text .. " (" .. self.lang.percentage .. "%)"
+    end
+    draw.SimpleTextOutlined( text, "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
   end
   function lang:DoClick()
     LoadLanguage( self.lang.short )
+    mainparent:Remove()
+  end
+
+  parent:AddItem( lang )
+end
+
+function AddLanguageAddLine( parent, mainparent )
+  local lang = createD( "DButton", parent, parent:GetWide(), ctr( 40 ), 0, 0 )
+  lang:SetText( "" )
+  function lang:Paint( pw, ph )
+    local color = YRPGetColor( "2" )
+    if self:IsHovered() then
+      color = YRPGetColor( "1" )
+    end
+    surfaceBox( 0, 0, pw, ph, color )
+
+    local text = "Add Your Language"
+    draw.SimpleTextOutlined( text, "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
+  function lang:DoClick()
+    OpenAddLanguageWindow()
     mainparent:Remove()
   end
 
@@ -38,7 +95,7 @@ function DChangeLanguage( parent, x, y, size )
     DrawIcon( GetDesignIcon( GetCurrentLanguage() ), size, size*0.671, ( pw - size ) / 2, ( ph - size*0.671 ) / 2, Color( 255, 255, 255, 255 ) )
   end
   function LanguageChanger:DoClick()
-    local window = createD( "DFrame", nil, ctr( 400 ), ctr( 400 ), 0, 0 )
+    local window = createD( "DFrame", nil, ctr( 420 ), ctr( 400 ), 0, 0 )
     window:SetTitle( "" )
     window:ShowCloseButton( false )
     window:SetDraggable( false )
@@ -75,16 +132,17 @@ function DChangeLanguage( parent, x, y, size )
     my = my - ctr( 25 )
     window:SetPos( mx, my )
 
-    window.dpanellist = createD( "DPanelList", window, ctr( 400 ), ctr( 400 ), 0, 0 )
+    window.dpanellist = createD( "DPanelList", window, window:GetWide(), ctr( 400 ), 0, 0 )
 
     local languages = GetAllLanguages()
     AddLanguageChangerLine( window.dpanellist, GetLanguageAutoInfo(), window )
     for k, lang in pairs( languages ) do
       AddLanguageChangerLine( window.dpanellist, lang, window )
     end
+    AddLanguageAddLine( window.dpanellist, window )
 
-    window.dpanellist:SetTall( ctr( 40*( #languages ) ) )
-    window:SetTall( ctr( 40*( #languages ) ) )
+    window.dpanellist:SetTall( ctr( 40*( #languages+2 ) ) )
+    window:SetTall( ctr( 40*( #languages+2 ) ) )
   end
   return LanguageChanger
 end

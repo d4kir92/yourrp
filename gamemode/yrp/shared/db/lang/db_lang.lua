@@ -123,19 +123,19 @@ function send_lang( short )
 end
 
 function read_language( short, init )
-	print( "read_language( " .. short .. "," .. tostring( init ) .." )" )
 	local default = false
 	if short == "en" then
 		default = true
 	end
 
 	if ( !init ) then
+		yrp_current_lang = {}
+
+		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", default )
+
 		if !default then
 			printGM( "lang", "Get Language-Pack [" .. lang_string( "short" ) .. "] " .. lang_string( "language" ) .. "/" .. lang_string( "ineng" ) )
-			printGM( "lang", "Translated by" .. " " .. lang_string( "translated_by_name" ) )
 		end
-
-		yrp_current_lang = {}
 
 		read_lang( "resource/localization/yrp/_old/lang_" .. "en" .. ".properties", default )
 
@@ -146,22 +146,28 @@ function read_language( short, init )
 		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties", default )
 
 		if !default then
-			printGM( "lang", math.Round( ( table.Count( yrp_current_lang ) / table.Count( yrp_default_lang ) )*100 ) .. "% translated" )
+			local count_cur = table.Count( yrp_current_lang )
+			local count_def = table.Count( yrp_default_lang )
+			local percentage = math.Round( ( count_cur / count_def )*100, 0 )
+			printGM( "lang", "Translated by" .. " " .. lang_string( "translated_by_name" ) )
+			printGM( "lang", percentage .. "% translated" )
+			for i, language in pairs( yrp_button_info ) do
+				if language.short == short then
+					language.percentage = percentage
+				end
+			end
 		end
-		--printTab(yrp_current_lang)
 	else
-		print( "init " .. short )
 		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", nil, init )
 	end
 	yrp_cur_lang = short
 end
 
 function LoadLanguage( short , init )
-	hr_pre()
-
 	if ( init ) then
 		read_language( short, init )
 	else
+		hr_pre()
 		if short == "auto" then
 			printGM( "lang", "[AUTOMATIC DETECTION]" )
 
@@ -186,21 +192,23 @@ function LoadLanguage( short , init )
 		--have to read en first, so incomplete translations have en as base
 		if ( short == "en" ) then
 			read_language( short, init )
+
+			printGM( "lang", "Language changed to [" .. tostring( yrp_default_lang.short ) .. "] " .. tostring( yrp_default_lang.language ) )
 		else
 			read_language( "en", init )
 			read_language( short, init )
+
+			printGM( "lang", "Language changed to [" .. tostring( yrp_current_lang.short ) .. "] " .. tostring( yrp_current_lang.language ) )
 		end
+
+		send_lang( short ) -- Send To Server
+		hook.Run( "yrp_current_language_changed" )	-- Update Chat
+
+		hr_pos()
 	end
-
-	printGM( "lang", "Language changed to [" .. tostring( yrp_current_lang.short ) .. "] " .. tostring( yrp_current_lang.language ) )
-	send_lang( short ) -- Send To Server
-	hook.Run( "yrp_current_language_changed" )	-- Update Chat
-
-	hr_pos()
 end
 
 function add_language( short )
-	print("add:", short)
 	local tmp = {}
 	if short == "auto" then
 		tmp.ineng = "Automatic"
@@ -218,8 +226,6 @@ function add_language( short )
 end
 
 for i, short in pairs( yrp_shorts ) do
-	print("LOAD INIT LANGUAGESSSSSSSSSSSSSSSSS")
-	print(i, short)
 	LoadLanguage( short , true )
 	add_language( short )
 end

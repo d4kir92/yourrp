@@ -463,6 +463,49 @@ net.Receive( "getsiteyourrpdiscord", function( len )
   end
 end)
 
+net.Receive( "getsiteyourrptranslations", function( len )
+  if pa( HELPMENU.mainmenu.site ) then
+    if link != "" then
+      local page = createD( "DPanel", HELPMENU.mainmenu.site, ScrW() - ctr( 20 + 20 ), ScrH() - ctr( 100 + 20 + 20 ), 0, 0 )
+      function page:Paint( pw, ph )
+        --surfacePanel( self, pw, ph, "" )
+      end
+
+      page.panellist = createD( "DPanelList", page, ctr( 1200 ), page:GetTall(), 0, 0 )
+
+      for i, language in pairs( GetAllLanguages() ) do
+        local lan = createD( "DButton", page, page.panellist:GetWide(), ctr( 50 ), 0, 0 )
+        lan:SetText( "" )
+        lan.language = language
+        function lan:Paint( pw, ph )
+          local text = self.language.lang .. "/" .. self.language.ineng .. " ( "
+          if self.language.percentage != nil then
+            text = text .. self.language.percentage .. "% "
+          end
+          text = text .. "translated by " .. self.language.author .. " )"
+          surfaceButton( self, pw, ph, text, nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
+          DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
+        end
+        function lan:DoClick()
+          LoadLanguage( self.language.short )
+        end
+
+        page.panellist:AddItem( lan )
+      end
+
+      local addlan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), ctr( 1400 ), 0 )
+      addlan:SetText( "" )
+      function addlan:Paint( pw, ph )
+        local text = "Add Your Language"
+        surfaceButton( self, pw, ph, text )
+      end
+      function addlan:DoClick()
+        OpenAddLanguageWindow()
+      end
+    end
+  end
+end)
+
 function openHelpMenu()
   openMenu()
   HELPMENU.window = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )

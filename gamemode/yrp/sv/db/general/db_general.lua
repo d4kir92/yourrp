@@ -873,12 +873,14 @@ function AddTab( tab, name, netstr )
   table.insert( tab, entry )
 end
 
-function AddSubTab( tab, parent, name, netstr, url )
+function AddSubTab( tab, parent, name, netstr, url, func )
   local entry = {}
   entry.name = name
   entry.netstr = netstr or ""
   entry.parent = parent
   entry.url = url or ""
+  entry.func = func or nil
+  print(func)
   table.insert( tab, entry )
 end
 
@@ -942,7 +944,7 @@ net.Receive( "gethelpmenu", function( len, ply )
     AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
     AddSubTab( subtabs, "YourRP", "website", "getsiteyourrpwebsite" )
     AddSubTab( subtabs, "YourRP", "discord", "getsiteyourrpdiscord" )
-    AddSubTab( subtabs, "YourRP", "Translations", "", "https://yourrp.noserver4u.de/engage/yourrp/" )
+    AddSubTab( subtabs, "YourRP", "Translations", "getsiteyourrptranslations", "" )
 
     net.Start( "gethelpmenu" )
       net.WriteTable( tabs )

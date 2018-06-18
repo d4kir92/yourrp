@@ -4,9 +4,10 @@
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
 include( "cl_settings_client_keybinds.lua" )
+include( "cl_settings_server_realistic.lua" )
 
 include( "cl_settings_server_interface.lua" )
-include( "cl_settings_server_realistic.lua" )
+include( "cl_settings_server_realistic_old.lua" )
 include( "cl_settings_server_roles.lua" )
 include( "cl_settings_server_give.lua" )
 include( "cl_settings_server_licenses.lua" )
@@ -57,7 +58,7 @@ function F8RequireUG( site, usergroups )
   tab[1] = usergroups
 
   function settingsWindow.window.site:Paint( w, h )
-    draw.RoundedBox( ph/2, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+    draw.RoundedBox( h/2, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
     surfaceText( lang_string( "settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "roleInfoHeader", w/2, h/2, Color( 255, 0, 0 ), 1, 1 )
     if site != lang_string( "usergroups" ) then
       surfaceText( lang_string( "settings_gotof8usergroups" ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
@@ -149,7 +150,8 @@ function openSettings()
   local _wip = "wip"
   settingsWindow.window:AddCategory( _wip )
 
-  settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _wip, "icon16/bomb.png" )
+  settingsWindow.window:AddSite( "open_server_realistic_old", lang_string( "settings_realistic" ) .. " [OLD]", _wip, "icon16/bomb.png" )
+  settingsWindow.window:AddSite( "open_server_realistic", lang_string( "settings_realistic" ) .. " [" .. lang_string( "wip" ) .. "]", _wip, "icon16/bomb.png" )
 
   local _server = "settings_server"
   settingsWindow.window:AddCategory( _server )

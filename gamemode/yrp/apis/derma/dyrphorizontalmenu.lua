@@ -113,9 +113,10 @@ function PANEL:AddTab( name, netstr, starttab )
         st.name = subtab.name
         st.netstr = subtab.netstr or ""
         st.url = subtab.url or ""
+        st.func = subtab.func or nil
         function st:Paint( pw, ph )
           surfaceButton( self, pw, ph, self.name )
-          if self.url != "" then
+          if self.url != "" or self.func != nil then
             local br = ctr( 10 )
             local size = ph - 2*ctr( 20 )
             DrawIcon( GetDesignIcon( "launch" ), size, size, pw - size - br, ph/2 - size/2, YRPGetColor( "6" ) )
@@ -130,8 +131,10 @@ function PANEL:AddTab( name, netstr, starttab )
 
             net.Start( self.netstr )
             net.SendToServer()
-          else
+          elseif self.url != "" then
             gui.OpenURL( self.url )
+          elseif self.func != nil then
+            self.func()
           end
         end
 
@@ -174,11 +177,12 @@ function PANEL:AddTab( name, netstr, starttab )
     end
   end
 
-  function TAB:AddToTab( name, netstr, url )
+  function TAB:AddToTab( name, netstr, url, func )
     local entry = {}
     entry.name = name
     entry.netstr = netstr or ""
     entry.url = url or ""
+    entry.func = func or nil
     table.insert( self.subtabs, entry )
   end
   if starttab then
@@ -204,18 +208,20 @@ function PANEL:GetMenuInfo( netstr )
   net.SendToServer()
 
   net.Receive( netstr, function( len )
-    local tabs = net.ReadTable()
-    local subtabs = net.ReadTable()
+    if pa( self ) then
+      local tabs = net.ReadTable()
+      local subtabs = net.ReadTable()
 
-    for i, tab in pairs( tabs ) do
-      local starttab = false
-      if tab.name == self.starttab then
-        starttab = true
-      end
-      local pnl = self:AddTab( tab.name, tab.netstr, starttab )
-      for i, subtab in pairs( subtabs ) do
-        if subtab.parent == tab.name then
-          pnl:AddToTab( subtab.name, subtab.netstr, subtab.url )
+      for i, tab in pairs( tabs ) do
+        local starttab = false
+        if tab.name == self.starttab then
+          starttab = true
+        end
+        local pnl = self:AddTab( tab.name, tab.netstr, starttab )
+        for i, subtab in pairs( subtabs ) do
+          if subtab.parent == tab.name then
+            pnl:AddToTab( subtab.name, subtab.netstr, subtab.url, subtab.func )
+          end
         end
       end
     end
