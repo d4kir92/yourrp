@@ -2,6 +2,28 @@
 
 local searchIcon = Material( "icon16/magnifier.png" )
 
+function AddLanguageChangerLine( parent, tab, mainparent )
+  local lang = createD( "DButton", parent, ctr( 400 ), ctr( 40 ), 0, 0 )
+  lang:SetText( "" )
+  lang.lang = tab
+  function lang:Paint( pw, ph )
+    local color = YRPGetColor( "2" )
+    if self:IsHovered() then
+      color = YRPGetColor( "1" )
+    end
+    surfaceBox( 0, 0, pw, ph, color )
+    DrawIcon( GetDesignIcon( tostring( self.lang.short ) ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ), Color( 255, 255, 255, 255 ) )
+
+    draw.SimpleTextOutlined( tostring( self.lang.lang ) .. "/" .. tostring( self.lang.ineng ), "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+  end
+  function lang:DoClick()
+    LoadLanguage( self.lang.short )
+    mainparent:Remove()
+  end
+
+  parent:AddItem( lang )
+end
+
 function DChangeLanguage( parent, x, y, size )
   local LanguageChanger = createD( "DButton", parent, size, size*0.671, x, y )
   LanguageChanger:SetText( "" )
@@ -56,26 +78,9 @@ function DChangeLanguage( parent, x, y, size )
     window.dpanellist = createD( "DPanelList", window, ctr( 400 ), ctr( 400 ), 0, 0 )
 
     local languages = GetAllLanguages()
-    for k, v in pairs( languages ) do
-      local lang = createD( "DButton", window.dpanellist, ctr( 400 ), ctr( 40 ), 0, 0 )
-      lang:SetText( "" )
-      lang.data = v.short
-      function lang:Paint( pw, ph )
-        local color = YRPGetColor( "2" )
-        if self:IsHovered() then
-          color = YRPGetColor( "1" )
-        end
-        surfaceBox( 0, 0, pw, ph, color )
-
-        DrawIcon( GetDesignIcon( self.data ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ), Color( 255, 255, 255, 255 ) )
-
-        draw.SimpleTextOutlined( v.lang .. "/" .. v.ineng, "DermaDefault", ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-      end
-      function lang:DoClick()
-        LoadLanguage( self.data )
-      end
-
-      window.dpanellist:AddItem( lang )
+    AddLanguageChangerLine( window.dpanellist, GetLanguageAutoInfo(), window )
+    for k, lang in pairs( languages ) do
+      AddLanguageChangerLine( window.dpanellist, lang, window )
     end
 
     window.dpanellist:SetTall( ctr( 40*( #languages ) ) )

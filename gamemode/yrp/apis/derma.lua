@@ -117,6 +117,8 @@ function DrawIcon( material, w, h, x, y, color )
   surface.DrawTexturedRect( x or 0, y or 0, w or 64, h or 64 )
 end
 
+AddDesignIcon( "auto", "vgui/flags/lang_" .. "auto" .. ".png" )
+
 AddDesignIcon( "group", "vgui/material/icon_group.png" )
 AddDesignIcon( "role", "vgui/material/icon_person.png" )
 AddDesignIcon( "help", "vgui/material/icon_help.png" )

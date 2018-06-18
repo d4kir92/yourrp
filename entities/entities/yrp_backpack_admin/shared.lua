@@ -7,7 +7,7 @@ DEFINE_BASECLASS( "base_anim" )
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 
-ENT.PrintName		= "Backpack 1 (96)"
+ENT.PrintName		= "Admin Backpack (480)"
 ENT.Author			= "D4KiR"
 ENT.Contact			= "-"
 ENT.Purpose			= ""
@@ -18,5 +18,5 @@ ENT.Category = "[YourRP] Backpacks"
 
 ENT.Editable = false
 ENT.Spawnable = true
-ENT.AdminOnly = false
+ENT.AdminOnly = true
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT

@@ -1,9 +1,11 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
+local yrp_default_lang = {}
+local yrp_cache_lang = {}
 local yrp_button_info = {}
 local yrp_shorts = {}
-table.insert( yrp_shorts, "auto" )
 table.insert( yrp_shorts, "en" )
 table.insert( yrp_shorts, "de" )
 table.insert( yrp_shorts, "bg" )
@@ -24,12 +26,27 @@ table.insert( yrp_shorts, "th" )
 table.insert( yrp_shorts, "tr" )
 table.insert( yrp_shorts, "ua" )
 
+function GetLanguageAutoInfo()
+	local auto = {}
+	auto.ineng = "Automatic"
+	auto.lang = "Automatic"
+	auto.translated_by_name = "D4KiR"
+	auto.short = "auto"
+	return auto
+end
+
 AddCSLuaFile( "read_lang.lua" )
 
 include( "read_lang.lua" )
 
-function set_lang_string( var, str )
-	yrp_current_lang[var] = str
+function set_lang_string( var, str, default, init )
+	if default then
+		yrp_default_lang[var] = str
+	elseif init then
+		yrp_cache_lang[var] = str
+	else
+		yrp_current_lang[var] = str
+	end
 end
 
 function get_language_name( ls )
@@ -60,7 +77,7 @@ function lang_string( var, failed )
 	--[[ string var, string failed ]]--
 	--[[ returns translated string, when worked ]]--
 	--[[ if failed it uses failed string ]]--
-	local _string = yrp_current_lang[var]
+	local _string = yrp_current_lang[var] or yrp_default_lang[var]
 	if _string == nil then
 		_string = var
 		if CLIENT then
@@ -83,7 +100,7 @@ function GetAllLanguages()
 end
 
 function GetCurrentLanguage()
-	return yrp_current_lang.get_language
+	return yrp_cur_lang
 end
 
 function check_languagepack()
@@ -98,7 +115,7 @@ end
 function send_lang( short )
 	--[[ send info to server, to let others know what language i chose ]]--
 	if CLIENT then
-		printGM( "lang", "Send Language to Server (" .. tostring( short ) .. ")" )
+		printGM( "lang", "Send Language to Server: [" .. tostring( short ) .. "]" )
 		net.Start( "client_lang" )
 			net.WriteString( tostring( short ) )
 		net.SendToServer()
@@ -106,62 +123,84 @@ function send_lang( short )
 end
 
 function read_language( short, init )
-	read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
-	if ( !init ) then
-		read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
-		read_lang( "resource/localization/yrp/_old/lang_" .. short .. ".properties" )
-		read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
-		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
-		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
-		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
+	print( "read_language( " .. short .. "," .. tostring( init ) .." )" )
+	local default = false
+	if short == "en" then
+		default = true
 	end
+
+	if ( !init ) then
+		if !default then
+			printGM( "lang", "Get Language-Pack [" .. lang_string( "short" ) .. "] " .. lang_string( "language" ) .. "/" .. lang_string( "ineng" ) )
+			printGM( "lang", "Translated by" .. " " .. lang_string( "translated_by_name" ) )
+		end
+
+		yrp_current_lang = {}
+
+		read_lang( "resource/localization/yrp/_old/lang_" .. "en" .. ".properties", default )
+
+		read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties", default )
+		read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties", default )
+		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties", default )
+		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties", default )
+		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties", default )
+
+		if !default then
+			printGM( "lang", math.Round( ( table.Count( yrp_current_lang ) / table.Count( yrp_default_lang ) )*100 ) .. "% translated" )
+		end
+		--printTab(yrp_current_lang)
+	else
+		print( "init " .. short )
+		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", nil, init )
+	end
+	yrp_cur_lang = short
 end
 
 function LoadLanguage( short , init )
 	hr_pre()
-	if short == "auto" then
-		printGM( "lang", "Automatic detection" )
 
-		search_language()
+	if ( init ) then
+		read_language( short, init )
+	else
+		if short == "auto" then
+			printGM( "lang", "[AUTOMATIC DETECTION]" )
 
-		if yrp_current_lang.get_language != "" then
-			short = string.lower( yrp_current_lang.get_language )
-			printGM( "lang", "Found Language: " .. "[" .. short .. "]" )
-				if !check_languagepack() then
-					short = "en"
-					printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
-				end
+			search_language()
+
+			if yrp_current_lang.get_language != "" then
+				short = string.lower( yrp_current_lang.get_language )
+				printGM( "lang", "Found Language: " .. "[" .. short .. "]" )
+					if !check_languagepack() then
+						short = "en"
+						printGM( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
+					end
+			else
+				short = "en"
+				printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
+			end
 		else
-			short = "en"
-			printGM( "lang", "Can't find Language from Game, using Default-Language-Pack." )
+			yrp_current_lang.get_language = short
+			printGM( "lang", "Manually change to Language [" .. short .. "]" )
 		end
-	else
-		yrp_current_lang.get_language = short
-		printGM( "lang", "Manually change to Language [" .. short .. "]" )
-	end
 
-	--lazy loading on init
-	if( init ) then
-		read_language( short, init)
-	else
 		--have to read en first, so incomplete translations have en as base
-		if( short == "en") then
-			read_language( short, init)
+		if ( short == "en" ) then
+			read_language( short, init )
 		else
-			read_language( "en", init)
-			read_language( short, init)
+			read_language( "en", init )
+			read_language( short, init )
 		end
 	end
 
-	printGM( "lang", "Get Language-Pack [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language .. " (" .. "translated by" .. " " .. tostring( yrp_current_lang.translated_by_name ) .. ")" )
-	printGM( "lang", "Language changed to [" .. yrp_current_lang.short .. "] " .. yrp_current_lang.language )
-
+	printGM( "lang", "Language changed to [" .. tostring( yrp_current_lang.short ) .. "] " .. tostring( yrp_current_lang.language ) )
 	send_lang( short ) -- Send To Server
 	hook.Run( "yrp_current_language_changed" )	-- Update Chat
+
 	hr_pos()
 end
 
 function add_language( short )
+	print("add:", short)
 	local tmp = {}
 	if short == "auto" then
 		tmp.ineng = "Automatic"
@@ -169,31 +208,35 @@ function add_language( short )
 		tmp.short = short
 		tmp.author = "D4KiR"
 	else
-		tmp.ineng = yrp_current_lang.ineng
-		tmp.lang = yrp_current_lang.language
-		tmp.short = yrp_current_lang.short
-		tmp.author = yrp_current_lang.translated_by_name
+		tmp.ineng = yrp_cache_lang.ineng
+		tmp.lang = yrp_cache_lang.language
+		tmp.short = yrp_cache_lang.short
+		tmp.author = yrp_cache_lang.translated_by_name
 	end
 
 	table.insert( yrp_button_info, tmp )
 end
 
 for i, short in pairs( yrp_shorts ) do
-	LoadLanguage( short , true)
+	print("LOAD INIT LANGUAGESSSSSSSSSSSSSSSSS")
+	print(i, short)
+	LoadLanguage( short , true )
 	add_language( short )
 end
 
 if CLIENT then
 	--[[ FLAGS ]]--
-	for i, lang in pairs( GetAllLanguages() ) do
-		AddDesignIcon( lang.short, "vgui/flags/lang_" .. lang.short .. ".png" )
+	for i, tab_lang in pairs( GetAllLanguages() ) do
+		if tab_lang.short != nil then
+			AddDesignIcon( tab_lang.short, "vgui/flags/lang_" .. tab_lang.short .. ".png" )
+		end
 	end
 end
 
 function initLang()
 	hr_pre()
 	printGM( "lang", "... SEARCHING FOR LANGUAGE ..." )
-	LoadLanguage( "auto" , false)
+	LoadLanguage( "auto" , false )
 	hr_pos()
 end
 initLang()

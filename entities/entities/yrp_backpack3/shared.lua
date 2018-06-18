@@ -7,7 +7,7 @@ DEFINE_BASECLASS( "base_anim" )
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 
-ENT.PrintName		= "Backpack 1 (96)"
+ENT.PrintName		= "Backpack 3 (160)"
 ENT.Author			= "D4KiR"
 ENT.Contact			= "-"
 ENT.Purpose			= ""
