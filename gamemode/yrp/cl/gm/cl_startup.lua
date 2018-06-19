@@ -10,7 +10,7 @@ function OpenAddLanguageWindow()
 
   function window:Paint( pw, ph )
     surfaceWindow( self, pw, ph, "Add Your Language" )
-    draw.SimpleTextOutlined( "First go to the translationsite and register there:", "mat1text", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( "First go to the translation-website and register there:", "mat1text", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 
     draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "mat1text", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
   end
@@ -18,7 +18,7 @@ function OpenAddLanguageWindow()
   window.translationsite = createD( "DButton", window, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 100 ) )
   window.translationsite:SetText( "" )
   function window.translationsite:Paint( pw, ph )
-    surfaceButton( self, pw, ph, "Translation Site" )
+    surfaceButton( self, pw, ph, "Translation Website" )
   end
   function window.translationsite:DoClick()
     gui.OpenURL( "https://yourrp.noserver4u.de/engage/yourrp/" )
@@ -27,7 +27,7 @@ function OpenAddLanguageWindow()
   window.discordserver = createD( "DButton", window, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 200 ) )
   window.discordserver:SetText( "" )
   function window.discordserver:Paint( pw, ph )
-    surfaceButton( self, pw, ph, "Translation Site" )
+    surfaceButton( self, pw, ph, "YourRP Discord Server" )
   end
   function window.discordserver:DoClick()
     gui.OpenURL( "https://discord.gg/CXXDCMJ" )
@@ -136,13 +136,13 @@ function DChangeLanguage( parent, x, y, size )
 
     local languages = GetAllLanguages()
     AddLanguageChangerLine( window.dpanellist, GetLanguageAutoInfo(), window )
-    for k, lang in pairs( languages ) do
+    for k, lang in SortedPairs( languages ) do
       AddLanguageChangerLine( window.dpanellist, lang, window )
     end
     AddLanguageAddLine( window.dpanellist, window )
 
-    window.dpanellist:SetTall( ctr( 40*( #languages+2 ) ) )
-    window:SetTall( ctr( 40*( #languages+2 ) ) )
+    window.dpanellist:SetTall( ctr( 40*( table.Count( languages )+2 ) ) )
+    window:SetTall( ctr( 40*( table.Count( languages )+2 ) ) )
   end
   return LanguageChanger
 end

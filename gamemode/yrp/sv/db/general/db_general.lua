@@ -55,6 +55,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_thirst", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_stamina", "INT DEFAULT 1" )
 
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_map_system", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_building_system", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1" )
@@ -510,6 +511,12 @@ net.Receive( "update_bool_stamina", function( len, ply )
   GeneralUpdateBool( ply, "update_bool_stamina", "bool_stamina", b )
 end)
 
+
+util.AddNetworkString( "update_bool_map_system" )
+net.Receive( "update_bool_map_system", function( len, ply )
+  local b = btn( net.ReadBool() )
+  GeneralUpdateBool( ply, "update_bool_map_system", "bool_map_system", b )
+end)
 
 util.AddNetworkString( "update_bool_building_system" )
 net.Receive( "update_bool_building_system", function( len, ply )

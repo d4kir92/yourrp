@@ -7,7 +7,6 @@ include( "cl_settings_client_keybinds.lua" )
 include( "cl_settings_server_realistic.lua" )
 
 include( "cl_settings_server_interface.lua" )
-include( "cl_settings_server_realistic_old.lua" )
 include( "cl_settings_server_roles.lua" )
 include( "cl_settings_server_give.lua" )
 include( "cl_settings_server_licenses.lua" )
@@ -150,8 +149,9 @@ function openSettings()
   local _wip = "wip"
   settingsWindow.window:AddCategory( _wip )
 
-  settingsWindow.window:AddSite( "open_server_realistic_old", lang_string( "settings_realistic" ) .. " [OLD]", _wip, "icon16/bomb.png" )
-  settingsWindow.window:AddSite( "open_server_realistic", lang_string( "settings_realistic" ) .. " [" .. lang_string( "wip" ) .. "]", _wip, "icon16/bomb.png" )
+  settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _wip, "icon16/bomb.png" )
+
+
 
   local _server = "settings_server"
   settingsWindow.window:AddCategory( _server )

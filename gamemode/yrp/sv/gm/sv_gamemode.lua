@@ -229,19 +229,27 @@ function GM:ShutDown()
 end
 
 function GM:GetFallDamage( ply, speed )
-  local _damage = speed / 8
-  if speed > ply:GetModelScale()*120 then
-    if IsBonefracturingEnabled() then
-      local _rand = math.Round( math.Rand( 0, 1 ), 0 )
-      if _rand == 0 then
-        ply:SetNWBool( "broken_leg_right", true )
-      elseif _rand == 1 then
-        ply:SetNWBool( "broken_leg_left", true )
+  local _damage = speed * ply:GetNWFloat( "float_falldamage_multiplier", 0.125 )
+  if IsCustomFalldamageEnabled() or true then
+    if speed > ply:GetModelScale()*120 then
+      if IsBonefracturingEnabled() then
+        local _rand = math.Round( math.Rand( 0, 1 ), 0 )
+        if _rand == 0 then
+          ply:SetNWBool( "broken_leg_right", true )
+        elseif _rand == 1 then
+          ply:SetNWBool( "broken_leg_left", true )
+        end
       end
+      if ply:GetNWBool( "bool_falldamage_percentage", false ) then
+        return _damage*ply:GetMaxHealth()/100
+      else
+        return _damage
+      end
+    else
+      return 0
     end
-    return _damage*ply:GetMaxHealth()/100
   else
-    return 0
+    -- Disabled
   end
 end
 

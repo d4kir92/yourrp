@@ -289,6 +289,7 @@ function spawnItem( ply, item, duid )
     ent:SetOwner( ply )
     ent:SetCreator( ply )
   end
+  ent:YRPSetOwner( ply )
 
   if item.type == "weapons" then
     ply:Give( item.ClassName )
@@ -467,7 +468,7 @@ net.Receive( "item_spawn", function( len, ply )
     local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
     if _item != nil then
       _item = _item[1]
-      if !IsEntityAlive( _item.uniqueID ) then
+      if !IsEntityAlive( ply, _item.uniqueID ) then
         spawnItem( ply, _item, _dealer_uid )
       end
     end
@@ -482,7 +483,7 @@ net.Receive( "item_despawn", function( len, ply )
   local _item = SQL_SELECT( _db_name, "*", "uniqueID = " .. _tab.uniqueID )
   if _item != nil then
     _item = _item[1]
-    local _alive, _ent = IsEntityAlive( _item.uniqueID )
+    local _alive, _ent = IsEntityAlive( ply, _item.uniqueID )
     if _alive then
       _ent:Remove()
     end
