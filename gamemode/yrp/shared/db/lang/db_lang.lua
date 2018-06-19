@@ -131,8 +131,6 @@ function read_language( short, init )
 	end
 
 	if ( !init ) then
-		yrp_current_lang = {}
-
 		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", default )
 
 		if !default then
@@ -146,19 +144,6 @@ function read_language( short, init )
 		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties", default )
 		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties", default )
 		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties", default )
-
-		if !default then
-			local count_cur = table.Count( yrp_current_lang )
-			local count_def = table.Count( yrp_default_lang )
-			local percentage = math.Round( ( count_cur / count_def )*100, 0 )
-			printGM( "lang", "Translated by" .. " " .. lang_string( "translated_by_name" ) )
-			printGM( "lang", percentage .. "% translated" )
-			for i, language in pairs( yrp_button_info ) do
-				if language.short == short then
-					language.percentage = percentage
-				end
-			end
-		end
 	else
 		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", nil, init )
 	end
@@ -166,6 +151,10 @@ function read_language( short, init )
 end
 
 function LoadLanguage( short , init )
+	if short == nil then
+		printGM( "note", "LoadLanguage ERROR!" )
+		return false
+	end
 	if ( init ) then
 		read_language( short, init )
 	else
@@ -208,6 +197,7 @@ function LoadLanguage( short , init )
 
 		hr_pos()
 	end
+	return true
 end
 
 function add_language( short )
@@ -224,7 +214,7 @@ function add_language( short )
 		tmp.author = yrp_cache_lang.translated_by_name
 	end
 
-	table.insert( yrp_button_info, tmp )
+	yrp_button_info[short] = tmp
 end
 
 for i, short in pairs( yrp_shorts ) do

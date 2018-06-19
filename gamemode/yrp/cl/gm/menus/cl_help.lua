@@ -55,13 +55,25 @@ function closeHelpMenu()
   end
 end
 
-function AddKeybind( plist, keybind, lstr, icon )
+function AddKeybind( plist, keybind, lstr, icon, disabled )
   local kb = createD( "DPanel", nil, ctr( 100 ), ctr( 50 ), 0, 0 )
   kb.key = keybind
   function kb:Paint( pw, ph )
     draw.SimpleTextOutlined( string.upper( "[" .. nicekey( self.key ) .. "]" ), "mat1text", ph + ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-    draw.SimpleTextOutlined( lang_string( lstr ), "mat1text", ph + ctr( 300 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-    DrawIcon( GetDesignIcon( icon ), ph - ctr( 4 ), ph - ctr( 4 ), ctr( 2 ), ctr( 2 ), Color( 255, 255, 255, 255 ) )
+
+    local text = ""
+    local color = Color( 255, 255, 255, 255 )
+    if disabled != nil then
+      if !LocalPlayer():GetNWBool( disabled ) then
+        text = "[" .. lang_string( "disabled" ) .. "] "
+        color = Color( 255, 0, 0, 255 )
+      end
+    end
+    text = text .. lang_string( lstr )
+    draw.SimpleTextOutlined( string.upper( "[" .. nicekey( self.key ) .. "]" ), "mat1text", ph + ctr( 10 ), ph/2, color, 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+    draw.SimpleTextOutlined( text, "mat1text", ph + ctr( 300 ), ph/2, color, 0, 1, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+
+    DrawIcon( GetDesignIcon( icon ), ph - ctr( 4 ), ph - ctr( 4 ), ctr( 2 ), ctr( 2 ), color )
   end
 
   plist:AddItem( kb )
@@ -82,17 +94,17 @@ net.Receive( "getsitehelp", function( len )
     AddKeybind( keybinds, "F1",                                           "help",               "help" )
     AddKeybind( keybinds, GetKeybindName( "menu_character_selection" ),   "characterselection", "character" )
     AddKeybind( keybinds, GetKeybindName( "toggle_mouse" ),               "togglemouse",           "mouse" )
-    AddKeybind( keybinds, GetKeybindName( "menu_role" ),                  "rolemenu",           "role" )
+    AddKeybind( keybinds, GetKeybindName( "menu_role" ),                  "rolemenu",           "role", "bool_players_can_switch_role" )
     AddKeybind( keybinds, "F7",                                           "givefeedback",       "feedback" )
     AddKeybind( keybinds, GetKeybindName( "menu_settings" ),              "settings",           "settings" )
     AddKeybind( keybinds, GetKeybindName( "menu_role" ),                  "buymenu",            "shop" )
-    AddKeybind( keybinds, GetKeybindName( "toggle_map" ),                 "map",                "map" )
-    AddKeybind( keybinds, GetKeybindName( "menu_inventory" ),             "inventory",          "work" )
-    AddKeybind( keybinds, GetKeybindName( "menu_appearance" ),            "appearance",         "face" )
+    AddKeybind( keybinds, GetKeybindName( "toggle_map" ),                 "map",                "map", "bool_map_system" )
+    AddKeybind( keybinds, GetKeybindName( "menu_inventory" ),             "inventory",          "work", "bool_inventory_system" )
+    AddKeybind( keybinds, GetKeybindName( "menu_appearance" ),            "appearance",         "face", "bool_appearance_system" )
     AddKeybind( keybinds, GetKeybindName( "menu_emotes" ),                "emotes",             "smile" )
     AddKeybindBr( keybinds )
-    AddKeybind( keybinds, GetKeybindName( "drop_item" ),                  "drop",               "pin_drop" )
-    AddKeybind( keybinds, GetKeybindName( "weaponlowering" ),             "weaponlowering",     "keyboard_arrow_down" )
+    AddKeybind( keybinds, GetKeybindName( "drop_item" ),                  "drop",               "pin_drop", "bool_players_can_drop_weapons" )
+    AddKeybind( keybinds, GetKeybindName( "weaponlowering" ),             "weaponlowering",     "keyboard_arrow_down", "bool_weapon_lowering_system" )
     AddKeybindBr( keybinds )
     AddKeybind( keybinds, GetKeybindName( "view_switch" ),                "switchview",         "3d_rotation" )
     AddKeybind( keybinds, GetKeybindName( "view_up" ),                    "increaseviewingheight",      "keyboard_arrow_up" )
@@ -104,11 +116,11 @@ net.Receive( "getsitehelp", function( len )
     AddKeybind( keybinds, GetKeybindName( "view_zoom_out" ),              "holdtozoomoutview",     "unfold_more" )
     AddKeybind( keybinds, GetKeybindName( "view_zoom_in" ),               "holdtozoominview",        "unfold_less" )
     AddKeybindBr( keybinds )
-    AddKeybind( keybinds, GetKeybindName( "sp_open" ),                    "presstoopensmartphone",       "smartphone" )
-    AddKeybind( keybinds, GetKeybindName( "sp_close" ),                   "presstoclosesmartphone",    "system_update" )
+    AddKeybind( keybinds, GetKeybindName( "sp_open" ),                    "presstoopensmartphone",       "smartphone", "bool_smartphone_system" )
+    AddKeybind( keybinds, GetKeybindName( "sp_close" ),                   "presstoclosesmartphone",    "system_update", "bool_smartphone_system" )
     AddKeybindBr( keybinds )
-    AddKeybind( keybinds, GetKeybindName( "speak_next" ),                 "nextvoicechannel",          "record_voice_over" )
-    AddKeybind( keybinds, GetKeybindName( "speak_prev" ),                 "previousvoicechannel",          "record_voice_over" )
+    AddKeybind( keybinds, GetKeybindName( "speak_next" ),                 "nextvoicechannel",          "record_voice_over", "bool_voice_channels" )
+    AddKeybind( keybinds, GetKeybindName( "speak_prev" ),                 "previousvoicechannel",          "record_voice_over", "bool_voice_channels" )
 
     HELPMENU.feedback = createD( "DButton", HELPMENU.mainmenu.site, ctr( 500 ), ctr( 50 ), ctr( 1210 ), ctr( 10 ) )
     HELPMENU.feedback:SetText( "" )
@@ -471,7 +483,7 @@ net.Receive( "getsiteyourrptranslations", function( len )
         --surfacePanel( self, pw, ph, "" )
       end
 
-      page.panellist = createD( "DPanelList", page, ctr( 1200 ), page:GetTall(), 0, 0 )
+      page.panellist = createD( "DPanelList", page, ctr( 1400 ), page:GetTall(), 0, 0 )
 
       for i, language in pairs( GetAllLanguages() ) do
         local lan = createD( "DButton", page, page.panellist:GetWide(), ctr( 50 ), 0, 0 )
@@ -481,8 +493,14 @@ net.Receive( "getsiteyourrptranslations", function( len )
           local text = self.language.lang .. "/" .. self.language.ineng .. " ( "
           if self.language.percentage != nil then
             text = text .. self.language.percentage .. "% "
+            if tonumber( self.language.percentage ) < 100 then
+              text = text .. "currently being translated by " .. self.language.author .. " )"
+            else
+              text = text .. "translated by " .. self.language.author .. " )"
+            end
+          else
+            text = text .. "translated by " .. self.language.author .. " )"
           end
-          text = text .. "translated by " .. self.language.author .. " )"
           surfaceButton( self, pw, ph, text, nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
           DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
         end
@@ -493,7 +511,7 @@ net.Receive( "getsiteyourrptranslations", function( len )
         page.panellist:AddItem( lan )
       end
 
-      local addlan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), ctr( 1400 ), 0 )
+      local addlan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), ctr( 1450 ), 0 )
       addlan:SetText( "" )
       function addlan:Paint( pw, ph )
         local text = "Add Your Language"

@@ -210,7 +210,7 @@ end
 
 util.AddNetworkString( "setting_hasnoaccess" )
 function Player:CanAccess( site )
-  printGM( "note", "CanAccess( " .. site .. " )" )
+  printGM( "note", self:YRPName() .. " can access " .. site .. "" )
   local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
   local _ugs = SQL_SELECT( DATABASE_NAME, "name", "usergroups = '1'" )
   if wk( _b ) then

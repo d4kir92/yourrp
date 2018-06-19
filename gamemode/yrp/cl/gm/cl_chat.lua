@@ -304,7 +304,6 @@ end )
 
 net.Receive( "yrp_player_say", function( len )
   local _tmp = net.ReadTable()
-
   local _write = false
   if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" then
     _write = true
@@ -343,12 +342,14 @@ net.Receive( "yrp_player_say", function( len )
       table.insert( _unpack, " " )
 
       if _usergroup then
-        table.insert( _unpack, Color( 0, 0, 100 ) )
-        table.insert( _unpack, "[" )
-        table.insert( _unpack, string.upper( _tmp.usergroup ) )
-        table.insert( _unpack, "]" )
+        if _tmp.usergroup != "" then
+          table.insert( _unpack, Color( 0, 0, 100 ) )
+          table.insert( _unpack, "[" )
+          table.insert( _unpack, string.upper( _tmp.usergroup ) )
+          table.insert( _unpack, "]" )
 
-        table.insert( _unpack, " " )
+          table.insert( _unpack, " " )
+        end
       end
     end
 

@@ -164,7 +164,7 @@ function createStorageItem( item, duid )
     _i.spawn.item = item
     _i.spawn.action = 0
     _i.spawn.name = "tospawn"
-    if IsEntityAlive( item.uniqueID ) then
+    if IsEntityAlive( LocalPlayer(), item.uniqueID ) then
       _i.spawn.action = 1
       _i.spawn.name = "tostore"
     end

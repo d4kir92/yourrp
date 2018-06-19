@@ -1,5 +1,13 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+function RemoveUnallowedSymbols( input )
+	local output = input
+	output = string.Replace( output, "\"", "" )
+	output = string.Replace( output, "\'", "" )
+	output = string.Replace( output, "=", "" )
+	return output
+end
+
 function read_lang( filepath, default, init )
 	if file.Exists( filepath, "GAME" ) then
 		local _langFile = file.Read( filepath, "GAME" )
@@ -8,9 +16,12 @@ function read_lang( filepath, default, init )
 		local _rawLines = string.Explode( "\n", _langFile, false )
 		for key, value in pairs(_rawLines) do
 			if string.len(value)>0 then
-				local _splitLine = string.Split(value, "=")
+				local _splitLine = string.Split( value, "=" )
 				if #_splitLine>1 then
-					set_lang_string( _splitLine[1], _splitLine[2], default, init )
+					local str_id = _splitLine[1]
+					local str_trans = _splitLine[2]
+					str_trans = RemoveUnallowedSymbols( str_trans )
+					set_lang_string( str_id, str_trans, default, init )
 				end
 			end
 		end

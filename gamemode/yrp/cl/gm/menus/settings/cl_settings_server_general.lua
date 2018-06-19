@@ -248,8 +248,6 @@ net.Receive( "Connect_Settings_General", function( len )
     if pa( settingsWindow.window ) then
       function settingsWindow.window.site:Paint( pw, ph )
         draw.RoundedBox( 4, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
-
-        surfaceText( lang_string( "wip" ), "mat1text", pw - ctr( 400 ), ph - ctr( 100 ), Color( 255, 255, 255 ), 1, 1 )
       end
 
       local PARENT = settingsWindow.window.site
@@ -375,6 +373,7 @@ net.Receive( "Connect_Settings_General", function( len )
       local bool_inventory_system = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_inventory_system, "inventorysystem", "update_bool_inventory_system" )
       local bool_realistic_system = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_realistic_system, "realisticsystem", "update_bool_realistic_system" )
       CreateHRLine( GAMEMODE_SYSTEMS.plus )
+      local bool_map_system = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_map_system, "map", "update_bool_map_system" )
       local bool_appearance_system = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_appearance_system, "appearancesystem", "update_bool_appearance_system" )
       local bool_smartphone_system = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_smartphone_system, "smartphonesystem", "update_bool_smartphone_system" )
       local bool_weapon_lowering_system = CreateCheckBoxLine( GAMEMODE_SYSTEMS.plus, GEN.bool_weapon_lowering_system, "weaponloweringsystem", "update_bool_weapon_lowering_system" )
@@ -399,6 +398,7 @@ net.Receive( "Connect_Settings_General", function( len )
       local bool_yrp_chat = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat, "yourrpchat", "update_bool_yrp_chat" )
       local bool_yrp_chat_show_rolename = CreateCheckBoxLineTab( GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat_show_rolename, "showrolename", "update_bool_yrp_chat_show_rolename" )
       local bool_yrp_chat_show_groupname = CreateCheckBoxLineTab( GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat_show_groupname, "showgroupname", "update_bool_yrp_chat_show_groupname" )
+      local bool_yrp_chat_show_usergroup = CreateCheckBoxLineTab( GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat_show_usergroup, "showusergroup", "update_bool_yrp_chat_show_usergroup" )
       local bool_yrp_crosshair = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_crosshair, "yourrpcrosshair", "update_bool_yrp_crosshair" )
       local bool_yrp_hud = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_hud, "yourrphud", "update_bool_yrp_hud" )
       local bool_yrp_scoreboard = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard, "yourrpscoreboard", "update_bool_yrp_scoreboard" )
