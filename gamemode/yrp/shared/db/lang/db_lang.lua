@@ -36,8 +36,10 @@ function GetLanguageAutoInfo()
 end
 
 AddCSLuaFile( "read_lang.lua" )
+AddCSLuaFile( "get_translation_progress.lua" )
 
 include( "read_lang.lua" )
+include( "get_translation_progress.lua" )
 
 function set_lang_string( var, str, default, init )
 	if default then
@@ -242,6 +244,7 @@ end
 function initLang()
 	hr_pre()
 	printGM( "lang", "... SEARCHING FOR LANGUAGE ..." )
+	get_translation_progress()
 	LoadLanguage( "auto" , false )
 	hr_pos()
 end
