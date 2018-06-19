@@ -7,7 +7,7 @@ paket.lokal = true
 paket.command = "/test"
 paket.text = "TESTTEXT"
 paket.sender = "UNKNOWN"
-paket.usergroup = "USER"
+paket.usergroup = ""
 
 function is_chat_command( string, command )
   if string != nil and command != nil then
@@ -273,7 +273,9 @@ function unpack_paket( sender, text, iscommand )
 
   paket.steamname = sender:SteamName()
   paket.rpname = sender:RPName()
-  paket.usergroup = sender:GetUserGroup()
+  if sender:GetNWBool( "bool_yrp_chat_show_usergroup", false ) then
+    paket.usergroup = sender:GetUserGroup()
+  end
   if sender:GetNWBool( "bool_yrp_chat_show_rolename", false ) then
     paket.role = sender:GetNWString( "roleName" )
   end

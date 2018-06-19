@@ -71,6 +71,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_chat_show_groupname", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_chat_show_usergroup", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1" )
@@ -588,6 +589,12 @@ net.Receive( "update_bool_yrp_chat_show_groupname", function( len, ply )
   GeneralUpdateBool( ply, "update_bool_yrp_chat_show_groupname", "bool_yrp_chat_show_groupname", b )
 end)
 
+util.AddNetworkString( "update_bool_yrp_chat_show_usergroup" )
+net.Receive( "update_bool_yrp_chat_show_usergroup", function( len, ply )
+  local b = btn( net.ReadBool() )
+  GeneralUpdateBool( ply, "update_bool_yrp_chat_show_usergroup", "bool_yrp_chat_show_usergroup", b )
+end)
+
 
 util.AddNetworkString( "update_bool_yrp_crosshair" )
 net.Receive( "update_bool_yrp_crosshair", function( len, ply )
@@ -880,7 +887,6 @@ function AddSubTab( tab, parent, name, netstr, url, func )
   entry.parent = parent
   entry.url = url or ""
   entry.func = func or nil
-  print(func)
   table.insert( tab, entry )
 end
 
