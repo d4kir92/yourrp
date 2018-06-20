@@ -10,8 +10,14 @@ function get_keybind( name )
 end
 
 function set_keybind( name, value )
-	local _result = SQL_UPDATE( _db_name, name .. " = " .. value, "uniqueID = " .. 1 )
+	for n,v in pairs(yrp_keybinds) do
+		if tonumber(value) == tonumber(v) and name != n then
+			return false
+		end
+	end
+	SQL_UPDATE( _db_name, name .. " = " .. value, "uniqueID = " .. 1 )
 	yrp_keybinds[name] = value
+	return true
 end
 
 function GetKeybindName( kbname )

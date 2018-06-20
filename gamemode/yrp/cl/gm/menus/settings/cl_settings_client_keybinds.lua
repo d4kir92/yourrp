@@ -1,10 +1,13 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
-
+local _wide = 800
 function createDKeybinder( parent, w, h, x, y, keybind )
 	local _tmp = createD( "DBinder", parent, w, h, x, y )
 	_tmp:SetValue( get_keybind( keybind ) )
 	function _tmp:OnChange( num )
-		set_keybind( keybind, num )
+		if !set_keybind( keybind, num ) then
+			_tmp:SetSelectedNumber(get_keybind( keybind ))
+			Derma_Message( lang_string("hotkeyinuse"), lang_string("error"), lang_string("ok") )
+		end
 	end
 	function _tmp:Paint( pw, ph )
 		paintButton( self, pw, ph, "" )
@@ -18,7 +21,7 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
 
-	local _wide = 800
+
 
 	settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 	--sheet:AddSheet( lang_string( "character" ), cl_charPanel, "icon16/user_edit.png" )
