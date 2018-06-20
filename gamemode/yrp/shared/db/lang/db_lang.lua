@@ -2,10 +2,9 @@
 
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
-local yrp_default_lang = {}
-local yrp_cache_lang = {}
 local yrp_button_info = {}
 local yrp_shorts = {}
+local _translationProgress = {}
 table.insert( yrp_shorts, "en" )
 table.insert( yrp_shorts, "de" )
 table.insert( yrp_shorts, "bg" )
@@ -24,7 +23,7 @@ table.insert( yrp_shorts, "ru" )
 table.insert( yrp_shorts, "sv" )
 table.insert( yrp_shorts, "th" )
 table.insert( yrp_shorts, "tr" )
-table.insert( yrp_shorts, "ua" )
+table.insert( yrp_shorts, "uk" )
 
 function GetLanguageAutoInfo()
 	local auto = {}
@@ -36,19 +35,11 @@ function GetLanguageAutoInfo()
 end
 
 AddCSLuaFile( "read_lang.lua" )
-AddCSLuaFile( "get_translation_progress.lua" )
 
 include( "read_lang.lua" )
-include( "get_translation_progress.lua" )
 
-function set_lang_string( var, str, default, init )
-	if default then
-		yrp_default_lang[var] = str
-	elseif init then
-		yrp_cache_lang[var] = str
-	else
-		yrp_current_lang[var] = str
-	end
+function set_lang_string( var, str)
+	yrp_current_lang[var] = str
 end
 
 function get_language_name( ls )
@@ -79,7 +70,7 @@ function lang_string( var, failed )
 	--[[ string var, string failed ]]--
 	--[[ returns translated string, when worked ]]--
 	--[[ if failed it uses failed string ]]--
-	local _string = yrp_current_lang[var] or yrp_default_lang[var]
+	local _string = yrp_current_lang[var]
 	if _string == nil then
 		_string = var
 		if CLIENT then
@@ -131,21 +122,22 @@ function read_language( short, init )
 	end
 
 	if ( !init ) then
-		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", default )
+		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
 
 		if !default then
 			printGM( "lang", "Get Language-Pack [" .. lang_string( "short" ) .. "] " .. lang_string( "language" ) .. "/" .. lang_string( "ineng" ) )
 		end
 
-		read_lang( "resource/localization/yrp/_old/lang_" .. "en" .. ".properties", default )
+		read_lang( "resource/localization/yrp/_old/lang_" .. "en" .. ".properties" )
 
 		read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties", default )
-		read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties", default )
-		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties", default )
-		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties", default )
-		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties", default )
+		read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
+		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
 	else
-		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties", nil, init )
+		print("TESTESTET")
+		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
 	end
 	yrp_cur_lang = short
 end
@@ -183,15 +175,11 @@ function LoadLanguage( short , init )
 		--have to read en first, so incomplete translations have en as base
 		if ( short == "en" ) then
 			read_language( short, init )
-
-			printGM( "lang", "Language changed to [" .. tostring( yrp_default_lang.short ) .. "] " .. tostring( yrp_default_lang.language ) )
 		else
 			read_language( "en", init )
 			read_language( short, init )
-
-			printGM( "lang", "Language changed to [" .. tostring( yrp_current_lang.short ) .. "] " .. tostring( yrp_current_lang.language ) )
 		end
-
+		printGM( "lang", "Language changed to [" .. tostring( yrp_current_lang.short ) .. "] " .. tostring( yrp_current_lang.language ) )
 		send_lang( short ) -- Send To Server
 		hook.Run( "yrp_current_language_changed" )	-- Update Chat
 
@@ -200,22 +188,50 @@ function LoadLanguage( short , init )
 	return true
 end
 
-function add_language( short )
-	local tmp = {}
-	if short == "auto" then
-		tmp.ineng = "Automatic"
-		tmp.lang = "Automatic"
-		tmp.short = short
-		tmp.author = "D4KiR"
-	else
-		tmp.ineng = yrp_cache_lang.ineng
-		tmp.lang = yrp_cache_lang.language
-		tmp.short = yrp_cache_lang.short
-		tmp.author = yrp_cache_lang.translated_by_name
-	end
-
-	yrp_button_info[short] = tmp
+function fetch_translation_progress()
+	http.Fetch( "https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json",
+		function( body, len, headers, code )
+			-- The first argument is the HTML we asked for.
+			print(tonumber(code))
+			PrintTable(util.JSONToTable( body ))
+			if tonumber(code) == 200 then
+				for key,value in pairs(util.JSONToTable( body )) do
+					if yrp_button_info[string.lower(value.code)] == nil then
+						yrp_button_info[string.lower(value.code)] = {}
+					end
+					yrp_button_info[string.lower(value.code)]["percentage"]=value.translated_percent
+				end
+			end
+			
+			--PrintTable(util.JSONToTable( body ))
+			--PrintTable(yrp_button_info)
+		end,
+		function( error )
+			print("http.fetch error:" .. error)
+			-- We failed. =(
+		end,
+		{Authorization="Token BcDpAAbYBYTieW9tB63U1EGWeOYsjl9M3EV4kNDF"}
+	)
 end
+
+function add_language( short )
+	if yrp_button_info[short] == nil then
+		yrp_button_info[short] = {}
+	end
+	if short == "auto" then
+		yrp_button_info[short].ineng = "Automatic"
+		yrp_button_info[short].lang = "Automatic"
+		yrp_button_info[short].short = short
+		yrp_button_info[short].author = "D4KiR"
+	else
+		yrp_button_info[short].ineng = yrp_current_lang.ineng
+		yrp_button_info[short].lang = yrp_current_lang.language
+		yrp_button_info[short].short = yrp_current_lang.short
+		yrp_button_info[short].author = yrp_current_lang.translated_by_name
+	end
+end
+
+fetch_translation_progress()
 
 for i, short in pairs( yrp_shorts ) do
 	LoadLanguage( short , true )
@@ -224,9 +240,9 @@ end
 
 if CLIENT then
 	--[[ FLAGS ]]--
-	for i, tab_lang in pairs( GetAllLanguages() ) do
-		if tab_lang.short != nil then
-			AddDesignIcon( tab_lang.short, "vgui/flags/lang_" .. tab_lang.short .. ".png" )
+	for i, short in pairs( yrp_shorts ) do
+		if short != nil then
+			AddDesignIcon( short, "vgui/flags/lang_" .. short .. ".png" )
 		end
 	end
 end
@@ -234,7 +250,6 @@ end
 function initLang()
 	hr_pre()
 	printGM( "lang", "... SEARCHING FOR LANGUAGE ..." )
-	get_translation_progress()
 	LoadLanguage( "auto" , false )
 	hr_pos()
 end

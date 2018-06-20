@@ -8,7 +8,7 @@ function RemoveUnallowedSymbols( input )
 	return output
 end
 
-function read_lang( filepath, default, init )
+function read_lang( filepath )
 	if file.Exists( filepath, "GAME" ) then
 		local _langFile = file.Read( filepath, "GAME" )
 		if(!_langFile) then return end
@@ -21,7 +21,7 @@ function read_lang( filepath, default, init )
 					local str_id = _splitLine[1]
 					local str_trans = _splitLine[2]
 					str_trans = RemoveUnallowedSymbols( str_trans )
-					set_lang_string( str_id, str_trans, default, init )
+					set_lang_string( str_id, str_trans)
 				end
 			end
 		end

@@ -229,7 +229,7 @@ net.Receive( "getsitecommunitywebsite", function( len )
 end)
 
 net.Receive( "getsitecommunityforum", function( len )
-  if pa( HELPMENU.mainmenu.site ) then
+	if pa( HELPMENU.mainmenu.site ) then
     local link = net.ReadString()
 
     if link != "" then
@@ -485,24 +485,25 @@ net.Receive( "getsiteyourrptranslations", function( len )
 
       page.panellist = createD( "DPanelList", page, ctr( 1400 ), page:GetTall(), 0, 0 )
 
-      for i, language in pairs( GetAllLanguages() ) do
+      for i, language in SortedPairs( GetAllLanguages() ) do
         local lan = createD( "DButton", page, page.panellist:GetWide(), ctr( 50 ), 0, 0 )
         lan:SetText( "" )
         lan.language = language
         function lan:Paint( pw, ph )
-          local text = self.language.lang .. "/" .. self.language.ineng .. " ( "
-          if self.language.percentage != nil then
-            text = text .. self.language.percentage .. "% "
-            if tonumber( self.language.percentage ) < 100 then
-              text = text .. "currently being translated by " .. self.language.author .. " )"
-            else
-              text = text .. "translated by " .. self.language.author .. " )"
-            end
-          else
-            text = text .. "translated by " .. self.language.author .. " )"
-          end
-          surfaceButton( self, pw, ph, text, nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
-          DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
+					local text = self.language.lang .. "/" .. self.language.ineng .. " ( "
+					if self.language.percentage != nil then
+						text = text .. self.language.percentage .. "% "
+					end
+					text = text .. "translated by "
+					if self.language.author != "" then
+						text = text .. self.language.author
+					else
+						text = text .. "... you?"
+					end
+					text = text .. " )"
+			
+					surfaceButton( self, pw, ph, text, nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
+					DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
         end
         function lan:DoClick()
           LoadLanguage( self.language.short )
