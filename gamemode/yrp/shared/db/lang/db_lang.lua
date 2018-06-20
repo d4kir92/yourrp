@@ -136,7 +136,6 @@ function read_language( short, init )
 		read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
 		read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
 	else
-		print("TESTESTET")
 		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
 	end
 	yrp_cur_lang = short
@@ -192,8 +191,8 @@ function fetch_translation_progress()
 	http.Fetch( "https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json",
 		function( body, len, headers, code )
 			-- The first argument is the HTML we asked for.
-			print(tonumber(code))
-			PrintTable(util.JSONToTable( body ))
+			--print(tonumber(code))
+			--PrintTable(util.JSONToTable( body ))
 			if tonumber(code) == 200 then
 				for key,value in pairs(util.JSONToTable( body )) do
 					if yrp_button_info[string.lower(value.code)] == nil then
@@ -201,16 +200,18 @@ function fetch_translation_progress()
 					end
 					yrp_button_info[string.lower(value.code)]["percentage"]=value.translated_percent
 				end
+				printGM("lang", "Fetched translation progress")
+			else
+				printGM("lang", "Could not fetch translation progress: " .. code)
 			end
-			
 			--PrintTable(util.JSONToTable( body ))
 			--PrintTable(yrp_button_info)
 		end,
 		function( error )
-			print("http.fetch error:" .. error)
+			printGM("lang","http.fetch error:" .. error)
 			-- We failed. =(
 		end,
-		{Authorization="Token BcDpAAbYBYTieW9tB63U1EGWeOYsjl9M3EV4kNDF"}
+		{Authorization="Token WmgbTcBqV7oS4KgxegwzWfvdfJZZk90b1KRafwej"}
 	)
 end
 

@@ -136,7 +136,6 @@ function DChangeLanguage( parent, x, y, size )
 
     local languages = GetAllLanguages()
     AddLanguageChangerLine( window.dpanellist, GetLanguageAutoInfo(), window )
-	PrintTable(languages)
     for k, lang in SortedPairs( languages ) do
       AddLanguageChangerLine( window.dpanellist, lang, window )
     end
