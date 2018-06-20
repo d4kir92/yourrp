@@ -710,32 +710,45 @@ function Entity:YRPRemoveOwner()
 	self:SetNWEntity( "yrp_owner", NULL )
 end
 
+function HasUseFunction( ent )
+	if ent.Use != nil then
+		ent:SetNWBool( "yrp_has_use", true )
+	end
+end
+
 hook.Add( "PlayerSpawnedVehicle", "yrp_vehicles_spawned", function( pl, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnedSWEP", "yrp_entities_spawned", function( pl, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnedSENT", "yrp_entities_spawned", function( pl, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnedEffect", "yrp_effects_spawned", function( pl, model, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnedNPC", "yrp_npcs_spawned", function( pl, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnedProp", "yrp_props_spawned", function( pl, model, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function( pl, model, ent )
 	ent:YRPSetOwner( pl )
+	HasUseFunction( ent )
 end)
 
 hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( pl )

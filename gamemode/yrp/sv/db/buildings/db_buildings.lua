@@ -103,6 +103,7 @@ function loadDoors()
 				if worked( _tmpDoors[_count], "loadDoors 2" ) then
 					door:SetNWString( "buildingID", _tmpDoors[_count].buildingID )
 					door:SetNWString( "uniqueID", _count )
+					HasUseFunction( door )
 				else
 					printGM( "note", "[Buildings] more doors, then in list!" )
 				end
@@ -113,6 +114,7 @@ function loadDoors()
 				if wk( _tmpDoors[_count] ) then
 					door:SetNWString( "buildingID", _tmpDoors[_count].buildingID )
 					door:SetNWString( "uniqueID", _count )
+					HasUseFunction( door )
 				else
 					printGM( "note", "[Buildings] more doors, then in list!" )
 				end
@@ -123,6 +125,7 @@ function loadDoors()
 				if wk( _tmpDoors[_count] ) then
 					door:SetNWString( "buildingID", _tmpDoors[_count].buildingID )
 					door:SetNWString( "uniqueID", _count )
+					HasUseFunction( door )
 
 				else
 					printGM( "note", "[Buildings] more doors, then in list!" )

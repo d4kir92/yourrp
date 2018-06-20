@@ -34,6 +34,38 @@ function OpenAddLanguageWindow()
 	end
 end
 
+function OpenHelpTranslatingWindow()
+	local window = createD( "DFrame", nil, ctr( 1200 ), ctr( 500 ), 0, 0 )
+	window:SetTitle( "" )
+	window:Center()
+	window:MakePopup()
+
+	function window:Paint( pw, ph )
+		surfaceWindow( self, pw, ph, "Helping with translation" )
+		draw.SimpleTextOutlined( "First go to the translation-website and register there:", "mat1text", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+
+		draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "mat1text", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+	end
+
+	window.translationsite = createD( "DButton", window, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 100 ) )
+	window.translationsite:SetText( "" )
+	function window.translationsite:Paint( pw, ph )
+		surfaceButton( self, pw, ph, "Translation Website" )
+	end
+	function window.translationsite:DoClick()
+		gui.OpenURL( "https://yourrp.noserver4u.de/engage/yourrp/" )
+	end
+
+	window.discordserver = createD( "DButton", window, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 200 ) )
+	window.discordserver:SetText( "" )
+	function window.discordserver:Paint( pw, ph )
+		surfaceButton( self, pw, ph, "YourRP Discord Server" )
+	end
+	function window.discordserver:DoClick()
+		gui.OpenURL( "https://discord.gg/CXXDCMJ" )
+	end
+end
+
 function AddLanguageChangerLine( parent, tab, mainparent )
 	local lang = createD( "DButton", parent, parent:GetWide(), ctr( 40 ), 0, 0 )
 	lang:SetText( "" )
@@ -95,7 +127,7 @@ function DChangeLanguage( parent, x, y, size )
 		DrawIcon( GetDesignIcon( GetCurrentLanguage() ), size, size*0.671, ( pw - size ) / 2, ( ph - size*0.671 ) / 2, Color( 255, 255, 255, 255 ) )
 	end
 	function LanguageChanger:DoClick()
-		local window = createD( "DFrame", nil, ctr( 420 ), ctr( 400 ), 0, 0 )
+		local window = createD( "DFrame", nil, ctr( 430 ), ctr( 400 ), 0, 0 )
 		window:SetTitle( "" )
 		window:ShowCloseButton( false )
 		window:SetDraggable( false )

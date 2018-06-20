@@ -90,16 +90,35 @@ function PANEL:AddTab( name, netstr, starttab )
 	TAB:SetText( "" )
 	TAB.subtabs = {}
 
+	function TAB:HideSubTabs()
+		if self.stabs != nil then
+			self.stabs:Remove()
+			self.stabs = nil
+		end
+	end
+
 	function TAB:ShowSubTabs()
 		if self.stabs == nil then
 			local posx, posy = self:LocalToScreen( 0, 0 )
-			self.stabs = createD( "DFrame", self, ctr( 400 ), self:GetTall() * #self.subtabs, posx, posy + self:GetTall() )
+			self.stabs = createD( "DFrame", self, ctr( 400 ), self:GetTall() * table.Count( self.subtabs ), posx, posy + self:GetTall() )
 			self.stabs:SetTitle( "" )
 			self.stabs:ShowCloseButton( false )
 			self.stabs:SetDraggable( false )
 			function self.stabs:Paint( pw, ph )
 				if !pa( self:GetParent() ) then
-					self:Remove()
+					self:HideSubTabs()
+				end
+
+				local mx, my = gui.MousePos()
+				local px, py = self:GetPos()
+				if mx > px + pw then
+					self:GetParent():HideSubTabs()
+				elseif mx < px then
+					self:GetParent():HideSubTabs()
+				elseif my > py + ph then
+					self:GetParent():HideSubTabs()
+				elseif my < py and mx > px + self:GetParent():GetWide() then
+					self:GetParent():HideSubTabs()
 				end
 				--surfaceBox( 0, ctr( 4 ), pw, ph - ctr( 8 ), Color( 0, 0, 255, 255 ) )
 			end
@@ -145,13 +164,6 @@ function PANEL:AddTab( name, netstr, starttab )
 		end
 	end
 
-	function TAB:HideSubTabs()
-		if self.stabs != nil then
-			self.stabs:Remove()
-			self.stabs = nil
-		end
-	end
-
 	function TAB:Paint( pw, ph )
 		if self.menu.current_site == self.name then
 			self.selected = true
@@ -164,7 +176,7 @@ function PANEL:AddTab( name, netstr, starttab )
 			self:GetParent().hovered = TAB.name
 			self:ShowSubTabs()
 		elseif self:GetParent().hovered != TAB.name then
-			self:HideSubTabs()
+			-- self:HideSubTabs()
 		end
 	end
 
@@ -174,6 +186,12 @@ function PANEL:AddTab( name, netstr, starttab )
 			self.menu:ClearSite()
 			net.Start( self.netstr )
 			net.SendToServer()
+		else
+			self:HideSubTabs()
+			if self.subtabs[1].netstr != "" then
+				net.Start( self.subtabs[1].netstr )
+				net.SendToServer()
+			end
 		end
 	end
 

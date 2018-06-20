@@ -99,6 +99,8 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
+	self:SetNWString( "yrp_use_message", "Open Moneyprinter Settings" )
+
 	self:SetNWBool( "working", false )
 
 	self:SetNWInt( "cpu", 1 )

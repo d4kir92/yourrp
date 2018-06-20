@@ -190,26 +190,20 @@ end
 function fetch_translation_progress()
 	http.Fetch( "https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json",
 		function( body, len, headers, code )
-			-- The first argument is the HTML we asked for.
-			--print(tonumber(code))
-			--PrintTable(util.JSONToTable( body ))
-			if tonumber(code) == 200 then
+			if tonumber( code ) == 200 then
 				for key,value in pairs(util.JSONToTable( body )) do
 					if yrp_button_info[string.lower(value.code)] == nil then
 						yrp_button_info[string.lower(value.code)] = {}
 					end
 					yrp_button_info[string.lower(value.code)]["percentage"]=value.translated_percent
 				end
-				printGM("lang", "Fetched translation progress")
+				printGM( "lang", "Fetched translation progress" )
 			else
-				printGM("lang", "Could not fetch translation progress: " .. code)
+				printGM( "lang", "Could not fetch translation progress: " .. code )
 			end
-			--PrintTable(util.JSONToTable( body ))
-			--PrintTable(yrp_button_info)
 		end,
 		function( error )
-			printGM("lang","http.fetch error:" .. error)
-			-- We failed. =(
+			printGM( "lang", "http.fetch error:" .. error )
 		end,
 		{Authorization="Token WmgbTcBqV7oS4KgxegwzWfvdfJZZk90b1KRafwej"}
 	)

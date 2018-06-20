@@ -501,11 +501,14 @@ net.Receive( "getsiteyourrptranslations", function( len )
 						text = text .. "... you?"
 					end
 					text = text .. " )"
-			
+
 					surfaceButton( self, pw, ph, text, nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
 					DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
 				end
 				function lan:DoClick()
+					if self.language.author == "" then
+						OpenHelpTranslatingWindow()
+					end
 					LoadLanguage( self.language.short )
 				end
 
@@ -520,6 +523,16 @@ net.Receive( "getsiteyourrptranslations", function( len )
 			end
 			function addlan:DoClick()
 				OpenAddLanguageWindow()
+			end
+
+			local helplan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), ctr( 1450 + 20 + 400 ), 0 )
+			helplan:SetText( "" )
+			function helplan:Paint( pw, ph )
+				local text = "Helping with translation"
+				surfaceButton( self, pw, ph, text )
+			end
+			function helplan:DoClick()
+				OpenHelpTranslatingWindow()
 			end
 		end
 	end

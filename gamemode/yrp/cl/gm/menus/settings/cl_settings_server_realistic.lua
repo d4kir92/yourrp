@@ -6,7 +6,7 @@ net.Receive( "Connect_Settings_Realistic", function( len )
 			function settingsWindow.window.site:Paint( pw, ph )
 				draw.RoundedBox( 4, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
 
-				surfaceText( lang_string( "wip" ), "mat1text", pw - ctr( 400 ), ph - ctr( 100 ), Color( 255, 255, 255 ), 1, 1 )
+				surfaceText( lang_string( "wip" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 			end
 
 			local PARENT = settingsWindow.window.site
