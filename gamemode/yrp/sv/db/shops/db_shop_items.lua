@@ -289,12 +289,14 @@ function spawnItem( ply, item, duid )
 		ent:SetOwner( ply )
 		ent:SetCreator( ply )
 	end
-	ent:YRPSetOwner( ply )
 
 	if item.type == "weapons" then
-		ply:Give( item.ClassName )
+		ent = ply:Give( item.ClassName )
+		ent:YRPSetOwner( ply )
 		return true
 	else
+		ent:YRPSetOwner( ply )
+
 		local _sps = SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
 		if _sps != nil and _sps != false then
 			_sps = _sps[1].storagepoints

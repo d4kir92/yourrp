@@ -308,18 +308,19 @@ function Player:PutInInventory( cname, noammo )
 		if item.entity:IsWeapon() then
 			local _worked = self:PutInWeaponSlot( item )
 			if _worked then
-				return true
+				return ent
 			end
 		end
 		local _worked = self:PutInBackpack( item )
 		if _worked then
-			return true
+			return ent
 		end
 
 		net.Start( "yrp_message" )
 			net.WriteString( "yourinventoryisfull" )
 		net.Send( self )
 		self:DropSWEP( item.ClassName )
+		return ent
 	end
 end
 
