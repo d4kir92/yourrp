@@ -27,7 +27,7 @@ function Player:getDarkRPVar( var )
 	elseif var == "job" then
 		return self:GetNWString( "roleName", "NO ROLE SELECTED" )
 	elseif var == "rpname" then
-		return self:RPName() or "NO CHARACTER SELECTED"
+		return self:RPName() or self:SteamName()
 	elseif var == "HasGunlicense" then
 		return true
 	else

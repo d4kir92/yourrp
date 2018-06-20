@@ -22,7 +22,7 @@ function reset_tutorial( str )
 end
 
 function get_tutorial( str )
-	return tobool( yrp_tutorials[str] )
+	return tobool( yrp_tutorials[str] ) or false
 end
 
 --db_drop_table( _db_name )

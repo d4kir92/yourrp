@@ -611,293 +611,297 @@ end
 local curChar = "-1"
 local _cur = ""
 function openCharacterSelection()
-	openMenu()
-	local ply = LocalPlayer()
+	if true then
+		openMenu()
+		local ply = LocalPlayer()
 
-	local cache = {}
+		local cache = {}
 
-	_cs.frame = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
-	_cs.frame:SetTitle( "" )
-	_cs.frame:ShowCloseButton( false )
-	_cs.frame:SetDraggable( false )
-	_cs.frame:Center()
-	function _cs.frame:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
+		_cs.frame = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
+		_cs.frame:SetTitle( "" )
+		_cs.frame:ShowCloseButton( false )
+		_cs.frame:SetDraggable( false )
+		_cs.frame:Center()
+		function _cs.frame:Paint( pw, ph )
+			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
 
-		draw.SimpleTextOutlined( lang_string( "characterselection" ) .. " [PROTOTYPE]", "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined( _cur, "HudHeader", pw/2, ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function _cs.frame:OnClose()
-		closeMenu()
-	end
-	function _cs.frame:OnRemove()
-		closeMenu()
-	end
+			draw.SimpleTextOutlined( lang_string( "characterselection" ) .. " [PROTOTYPE]", "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( _cur, "HudHeader", pw/2, ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+		function _cs.frame:OnClose()
+			closeMenu()
+		end
+		function _cs.frame:OnRemove()
+			closeMenu()
+		end
 
-	local _close = createD( "DButton", _cs.frame, ctr( 50 ), ctr( 50 ), BScrW() - ctr( 60 ), ctr( 10 ) )
-	_close:SetText( "" )
-	function _close:Paint( pw, ph )
-		surfaceButton( self, pw, ph, "X" )
-	end
-	function _close:DoClick()
-		closeCharacterSelection()
-	end
+		local _close = createD( "DButton", _cs.frame, ctr( 50 ), ctr( 50 ), BScrW() - ctr( 60 ), ctr( 10 ) )
+		_close:SetText( "" )
+		function _close:Paint( pw, ph )
+			surfaceButton( self, pw, ph, "X" )
+		end
+		function _close:DoClick()
+			closeCharacterSelection()
+		end
 
-	local feedback = createD( "DButton", _cs.frame, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 510 ), ScrH() - ctr( 60 ) )
-	feedback:SetText( "" )
-	function feedback:Paint( pw, ph )
-		surfaceButton( self, pw, ph, lang_string( "givefeedback" ) )
-	end
-	function feedback:DoClick()
-		closeCharacterSelection()
-		openFeedbackMenu()
-	end
+		local feedback = createD( "DButton", _cs.frame, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 510 ), ScrH() - ctr( 60 ) )
+		feedback:SetText( "" )
+		function feedback:Paint( pw, ph )
+			surfaceButton( self, pw, ph, lang_string( "givefeedback" ) )
+		end
+		function feedback:DoClick()
+			closeCharacterSelection()
+			openFeedbackMenu()
+		end
 
-	DChangeLanguage( _cs.frame, _cs.frame:GetWide() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 100 ) )
+		DChangeLanguage( _cs.frame, _cs.frame:GetWide() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 100 ) )
 
-	local border = ctr( 50 )
-	local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), border, border )
-	charactersBackground.text = lang_string( "siteisloading" )
-	function charactersBackground:Paint( pw, ph )
-		paintMD( pw, ph, nil, get_dp_col() )
-		draw.SimpleTextOutlined( self.text, "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-	end
+		local border = ctr( 50 )
+		local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), border, border )
+		charactersBackground.text = lang_string( "siteisloading" )
+		function charactersBackground:Paint( pw, ph )
+			paintMD( pw, ph, nil, get_dp_col() )
+			draw.SimpleTextOutlined( self.text, "HudHeader", pw/2, ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+		end
 
-	local charplayermodel = createD( "DModelPanel", _cs.frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )
-	charplayermodel:SetModel( "models/player/skeleton.mdl" )
-	charplayermodel:SetAnimated( true )
-	charplayermodel.Angles = Angle( 0, 0, 0 )
-	charplayermodel:RunAnimation()
+		local charplayermodel = createD( "DModelPanel", _cs.frame, ScrH() - ctr( 200 ), ScrH() - ctr( 200 ), ScrW2() - ( ScrH() - ctr( 200 ) )/2, 0 )
+		charplayermodel:SetModel( "models/player/skeleton.mdl" )
+		charplayermodel:SetAnimated( true )
+		charplayermodel.Angles = Angle( 0, 0, 0 )
+		charplayermodel:RunAnimation()
 
-	function charplayermodel:DragMousePress()
-		self.PressX, self.PressY = gui.MousePos()
-		self.Pressed = true
-	end
-	function charplayermodel:DragMouseRelease() self.Pressed = false end
-
-	function charplayermodel:LayoutEntity( ent )
-
-		if ( self.bAnimated ) then self:RunAnimation() end
-
-		if ( self.Pressed ) then
-			local mx, my = gui.MousePos()
-			self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
-
+		function charplayermodel:DragMousePress()
 			self.PressX, self.PressY = gui.MousePos()
-			if ent != nil then
-				ent:SetAngles( self.Angles )
+			self.Pressed = true
+		end
+		function charplayermodel:DragMouseRelease() self.Pressed = false end
+
+		function charplayermodel:LayoutEntity( ent )
+
+			if ( self.bAnimated ) then self:RunAnimation() end
+
+			if ( self.Pressed ) then
+				local mx, my = gui.MousePos()
+				self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
+
+				self.PressX, self.PressY = gui.MousePos()
+				if ent != nil then
+					ent:SetAngles( self.Angles )
+				end
 			end
 		end
-	end
 
-	local characterList = createD( "DScrollPanel", charactersBackground, ctr( 800 ), ScrH() - (2*border), 0, 0 )
+		local characterList = createD( "DScrollPanel", charactersBackground, ctr( 800 ), ScrH() - (2*border), 0, 0 )
 
-	net.Receive( "yrp_get_characters", function( len )
-		printGM( "gm", "received characterlist" )
-		local _characters = net.ReadTable()
-		if pa( charactersBackground ) then
-			charactersBackground.text = ""
-			if _characters != nil and pa( _characters ) then
-				character.amount = #_characters or 0
+		net.Receive( "yrp_get_characters", function( len )
+			printGM( "gm", "received characterlist" )
+			local _characters = net.ReadTable()
+			if pa( charactersBackground ) then
+				charactersBackground.text = ""
+				if _characters != nil and pa( _characters ) then
+					character.amount = #_characters or 0
 
-				if #_characters < 1 then
-					if pa( _cs.frame ) then
-						_cs.frame:Close()
-					end
-					openCharacterCreation()
-					return false
-				end
-				local y = 0
-				for k, v in pairs( cache ) do
-					if v.tmpChar.shadow != nil then
-						v.tmpChar.shadow:Remove()
-					end
-					v.tmpChar:Remove()
-				end
-				for i = 1, #_characters do
-					if _characters[i].char != nil then
-						cache[i] = {}
-						cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
-						local tmpChar = cache[i].tmpChar
-						tmpChar:SetText( "" )
-						tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
-						tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
-						tmpChar.roleID = _characters[i].role.roleID or "ROLE INVALID"
-						tmpChar.groupID = _characters[i].group.groupID or "GROUP INVALID"
-						tmpChar.map = _characters[i].char.map
-						tmpChar.playermodelID = _characters[i].char.playermodelID
-
-						tmpChar.playermodels = combineStringTables( _characters[i].role.playermodels, _characters[i].role.playermodelsnone )
-
-						tmpChar.playermodelsize = _characters[i].role.playermodelsize
-						tmpChar.skin = _characters[i].char.skin
-						tmpChar.bg0 = _characters[i].char.bg0 or 0
-						tmpChar.bg1 = _characters[i].char.bg1 or 0
-						tmpChar.bg2 = _characters[i].char.bg2 or 0
-						tmpChar.bg3 = _characters[i].char.bg3 or 0
-						tmpChar.bg4 = _characters[i].char.bg4 or 0
-						tmpChar.bg5 = _characters[i].char.bg5 or 0
-						tmpChar.bg6 = _characters[i].char.bg6 or 0
-						tmpChar.bg7 = _characters[i].char.bg7 or 0
-
-						function tmpChar:Paint( pw, ph )
-							if tmpChar:IsHovered() then
-								paintMD( pw, ph, nil, Color( 255, 255, 0, 255 ) )
-							else
-								paintMD( pw, ph, nil, get_ds_col() )
-							end
-							if curChar == self.charid then
-								paintMD( pw, ph, nil, Color( 255, 255, 100, 255 ) )
-								local _br = 4
-								local _w = 50
-								local _h = 10
-								draw.RoundedBox( 0, ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-								draw.RoundedBox( 0, ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
-
-								draw.RoundedBox( 0, ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-								draw.RoundedBox( 0, ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
-
-								draw.RoundedBox( 0, pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-								draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
-
-								draw.RoundedBox( 0, pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-								draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
-							end
-							draw.SimpleTextOutlined( self.rpname, "HudBars", ctr( 30 ), ctr( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-							draw.SimpleTextOutlined( lang_string( "level" ) .. " 1 " .. self.roleID, "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-							draw.SimpleTextOutlined( self.map, "HudBars", ctr( 30 ), ctr( 155 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					if #_characters < 1 then
+						if pa( _cs.frame ) then
+							_cs.frame:Close()
 						end
-						function tmpChar:DoClick()
-							curChar = self.charid
-							_cur = self.rpname
-							if self.playermodels != nil and self.playermodelID != nil then
-								local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
-								if _playermodel != nil and charplayermodel != NULL and pa( charplayermodel ) then
-									charplayermodel:SetModel( _playermodel )
-									if charplayermodel.Entity != nil then
-										charplayermodel.Entity:SetModelScale( self.playermodelsize )
-										charplayermodel.Entity:SetSkin( self.skin )
-										charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
-										charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
-										charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
-										charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
-										charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
-										charplayermodel.Entity:SetBodygroup( 5, self.bg5 )
-										charplayermodel.Entity:SetBodygroup( 6, self.bg6 )
-										charplayermodel.Entity:SetBodygroup( 7, self.bg7 )
+						openCharacterCreation()
+						return false
+					end
+					local y = 0
+					for k, v in pairs( cache ) do
+						if v.tmpChar.shadow != nil then
+							v.tmpChar.shadow:Remove()
+						end
+						v.tmpChar:Remove()
+					end
+					for i = 1, #_characters do
+						if _characters[i].char != nil then
+							cache[i] = {}
+							cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
+							local tmpChar = cache[i].tmpChar
+							tmpChar:SetText( "" )
+							tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
+							tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
+							tmpChar.roleID = _characters[i].role.roleID or "ROLE INVALID"
+							tmpChar.groupID = _characters[i].group.groupID or "GROUP INVALID"
+							tmpChar.map = _characters[i].char.map
+							tmpChar.playermodelID = _characters[i].char.playermodelID
+
+							tmpChar.playermodels = combineStringTables( _characters[i].role.playermodels, _characters[i].role.playermodelsnone )
+
+							tmpChar.playermodelsize = _characters[i].role.playermodelsize
+							tmpChar.skin = _characters[i].char.skin
+							tmpChar.bg0 = _characters[i].char.bg0 or 0
+							tmpChar.bg1 = _characters[i].char.bg1 or 0
+							tmpChar.bg2 = _characters[i].char.bg2 or 0
+							tmpChar.bg3 = _characters[i].char.bg3 or 0
+							tmpChar.bg4 = _characters[i].char.bg4 or 0
+							tmpChar.bg5 = _characters[i].char.bg5 or 0
+							tmpChar.bg6 = _characters[i].char.bg6 or 0
+							tmpChar.bg7 = _characters[i].char.bg7 or 0
+
+							function tmpChar:Paint( pw, ph )
+								if tmpChar:IsHovered() then
+									paintMD( pw, ph, nil, Color( 255, 255, 0, 255 ) )
+								else
+									paintMD( pw, ph, nil, get_ds_col() )
+								end
+								if curChar == self.charid then
+									paintMD( pw, ph, nil, Color( 255, 255, 100, 255 ) )
+									local _br = 4
+									local _w = 50
+									local _h = 10
+									draw.RoundedBox( 0, ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+									draw.RoundedBox( 0, ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+									draw.RoundedBox( 0, ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+									draw.RoundedBox( 0, ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+									draw.RoundedBox( 0, pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+									draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+
+									draw.RoundedBox( 0, pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+									draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+								end
+								draw.SimpleTextOutlined( self.rpname, "HudBars", ctr( 30 ), ctr( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+								draw.SimpleTextOutlined( lang_string( "level" ) .. " 1 " .. self.roleID, "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+								draw.SimpleTextOutlined( self.map, "HudBars", ctr( 30 ), ctr( 155 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+							end
+							function tmpChar:DoClick()
+								curChar = self.charid
+								_cur = self.rpname
+								if self.playermodels != nil and self.playermodelID != nil then
+									local _playermodel = self.playermodels[tonumber( self.playermodelID )] or nil
+									if _playermodel != nil and charplayermodel != NULL and pa( charplayermodel ) then
+										if _playermodel != "" then
+											charplayermodel:SetModel( _playermodel )
+										end
+										if charplayermodel.Entity != nil then
+											charplayermodel.Entity:SetModelScale( self.playermodelsize )
+											charplayermodel.Entity:SetSkin( self.skin )
+											charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
+											charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
+											charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
+											charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
+											charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
+											charplayermodel.Entity:SetBodygroup( 5, self.bg5 )
+											charplayermodel.Entity:SetBodygroup( 6, self.bg6 )
+											charplayermodel.Entity:SetBodygroup( 7, self.bg7 )
+										end
 									end
 								end
 							end
-						end
 
-						if _characters[i].char.uniqueID == _characters.plytab.CurrentCharacter then
-							curChar = tmpChar.charid
-							tmpChar:DoClick()
+							if _characters[i].char.uniqueID == _characters.plytab.CurrentCharacter then
+								curChar = tmpChar.charid
+								tmpChar:DoClick()
+							end
+							y = y + 1
 						end
-						y = y + 1
 					end
 				end
 			end
-		end
-	end)
+		end)
 
-	printGM( "gm", "ask for characterlist" )
-	timer.Simple( 0.1, function()
-		net.Start( "yrp_get_characters" )
-		net.SendToServer()
-	end)
-
-	local deleteChar = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() - ctr( 400 + 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
-	deleteChar:SetText( "" )
-	function deleteChar:Paint( pw, ph )
-		surfaceButton( self, pw, ph, lang_string( "deletecharacter" ), Color( 255, 0, 0 ) )
-	end
-	function deleteChar:DoClick()
-		local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
-		_window:Center()
-		_window:SetTitle( lang_string( "areyousure" ) )
-
-		local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60 )
-		_yesButton:SetText( lang_string( "yes" ) )
-		function _yesButton:DoClick()
-
-			net.Start( "DeleteCharacter" )
-				net.WriteString( curChar )
+		printGM( "gm", "ask for characterlist" )
+		timer.Simple( 0.1, function()
+			net.Start( "yrp_get_characters" )
 			net.SendToServer()
+		end)
 
-			_window:Close()
+		local deleteChar = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() - ctr( 400 + 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
+		deleteChar:SetText( "" )
+		function deleteChar:Paint( pw, ph )
+			surfaceButton( self, pw, ph, lang_string( "deletecharacter" ), Color( 255, 0, 0 ) )
 		end
+		function deleteChar:DoClick()
+			local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			_window:Center()
+			_window:SetTitle( lang_string( "areyousure" ) )
 
-		local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-		_noButton:SetText( lang_string( "no" ) )
-		function _noButton:DoClick()
-			_window:Close()
-		end
+			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60 )
+			_yesButton:SetText( lang_string( "yes" ) )
+			function _yesButton:DoClick()
 
-		_window:MakePopup()
-	end
+				net.Start( "DeleteCharacter" )
+					net.WriteString( curChar )
+				net.SendToServer()
 
---[[
-	local backB = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() + ctr( 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
-	backB:SetText( "" )
-	function backB:Paint( pw, ph )
-		surfaceButton( self, pw, ph, lang_string( "back" ) )
-	end
-	function backB:DoClick()
-		if curChar != "-1" then
-			if _cs.frame != nil then
-				_cs.frame:Close()
+				_window:Close()
 			end
-		end
-	end
-]]--
 
-	local button = {}
-	button.size = ctr( 100 )
-	button.x = ctr( 720 )
-	button.y = ScrH() - button.size - border - ctr( 30 )
-	local charactersCreate = createMDPlus( _cs.frame, button.size, button.x, button.y, ctr( 5 ) )
-	charactersCreate:SetText( "" )
-	function charactersCreate:DoClick()
-		_cs.frame:Close()
-
-		openCharacterCreation()
-	end
-
-	button.w = ctr( 800 )
-	button.h = ctr( 100 )
-	button.x = ScrW2() - button.w/2
-	button.y = ScrH() - button.h - border
-	local confirmColor = Color( 255, 0, 0, 255 )
-	local charactersEnter = createMDButton( _cs.frame, button.w, button.h, button.x, button.y, ctr( 0 ), lang_string( "enterworld" ) )
-	function charactersEnter:Paint( pw, ph )
-		local text = lang_string( "enterworld" ) .. " (" .. _cur .. ")"
-		if LocalPlayer() != nil then
-			if LocalPlayer():Alive() then
-				text = lang_string( "suicide" ) .. " (" .. LocalPlayer():RPName() .. ")"
+			local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60 )
+			_noButton:SetText( lang_string( "no" ) )
+			function _noButton:DoClick()
+				_window:Close()
 			end
-		end
-		surfaceButton( self, pw, ph, lang_string( text ) )
-	end
 
-	charactersEnter:SetText( "" )
-	function charactersEnter:DoClick()
-		if LocalPlayer() != nil then
+			_window:MakePopup()
+		end
+
+	--[[
+		local backB = createMD( "DButton", _cs.frame, ctr( 400 ), ctr( 100 ), ScrW2() + ctr( 800/2 + 10 ), ScrH() - ctr( 150 ), ctr( 5 ) )
+		backB:SetText( "" )
+		function backB:Paint( pw, ph )
+			surfaceButton( self, pw, ph, lang_string( "back" ) )
+		end
+		function backB:DoClick()
 			if curChar != "-1" then
-				if LocalPlayer():Alive() then
-					net.Start( "LogOut" )
-					net.SendToServer()
-				else
-					net.Start( "EnterWorld" )
-						net.WriteString( curChar )
-					net.SendToServer()
+				if _cs.frame != nil then
 					_cs.frame:Close()
 				end
 			end
 		end
-	end
+	]]--
 
-	_cs.frame:MakePopup()
+		local button = {}
+		button.size = ctr( 100 )
+		button.x = ctr( 720 )
+		button.y = ScrH() - button.size - border - ctr( 30 )
+		local charactersCreate = createMDPlus( _cs.frame, button.size, button.x, button.y, ctr( 5 ) )
+		charactersCreate:SetText( "" )
+		function charactersCreate:DoClick()
+			_cs.frame:Close()
+
+			openCharacterCreation()
+		end
+
+		button.w = ctr( 800 )
+		button.h = ctr( 100 )
+		button.x = ScrW2() - button.w/2
+		button.y = ScrH() - button.h - border
+		local confirmColor = Color( 255, 0, 0, 255 )
+		local charactersEnter = createMDButton( _cs.frame, button.w, button.h, button.x, button.y, ctr( 0 ), lang_string( "enterworld" ) )
+		function charactersEnter:Paint( pw, ph )
+			local text = lang_string( "enterworld" ) .. " (" .. _cur .. ")"
+			if LocalPlayer() != nil then
+				if LocalPlayer():Alive() then
+					text = lang_string( "suicide" ) .. " (" .. LocalPlayer():RPName() .. ")"
+				end
+			end
+			surfaceButton( self, pw, ph, lang_string( text ) )
+		end
+
+		charactersEnter:SetText( "" )
+		function charactersEnter:DoClick()
+			if LocalPlayer() != nil then
+				if curChar != "-1" then
+					if LocalPlayer():Alive() then
+						net.Start( "LogOut" )
+						net.SendToServer()
+					else
+						net.Start( "EnterWorld" )
+							net.WriteString( curChar )
+						net.SendToServer()
+						_cs.frame:Close()
+					end
+				end
+			end
+		end
+
+		_cs.frame:MakePopup()
+	end
 end
 
 net.Receive( "openCharacterMenu", function( len, ply )
