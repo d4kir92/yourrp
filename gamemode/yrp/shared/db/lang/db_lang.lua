@@ -187,26 +187,68 @@ function LoadLanguage( short , init )
 	return true
 end
 
+function sendTranslationProgress(player)
+	if ( IsValid( player ) and player:IsPlayer() ) then
+		net.Start( "receiveTranslationProgress" )
+		local percentages = {}
+		for key, value in pairs(yrp_button_info) do
+			percentages[key]=value.percentage
+		end
+		net.WriteTable(percentages)
+		printGM( "lang", "Send translation progress to " .. player:GetName())
+		net.Send(player)
+	end
+end
+
+if SERVER then
+	util.AddNetworkString( "requestTranslationProgress" )
+	local requestTranslationProgress = function( len, player )
+		sendTranslationProgress(player)
+	end
+	net.Receive( "requestTranslationProgress", requestTranslationProgress)
+
+	util.AddNetworkString( "receiveTranslationProgress" )
+elseif CLIENT then
+	local receiveTranslationProgress = function( len )
+		local percentages=net.ReadTable()
+		--print("TESTEST")
+		--PrintTable(percentages)
+		for key,value in pairs(percentages) do
+			yrp_button_info[key]["percentage"]=value
+		end
+		printGM("lang","Received translation progress from server.")
+	end
+	net.Receive( "receiveTranslationProgress", receiveTranslationProgress)
+end
+
 function fetch_translation_progress()
-	http.Fetch( "https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json",
-		function( body, len, headers, code )
-			if tonumber( code ) == 200 then
-				for key,value in pairs(util.JSONToTable( body )) do
-					if yrp_button_info[string.lower(value.code)] == nil then
-						yrp_button_info[string.lower(value.code)] = {}
+	hook.Remove( "Tick", "translation_progress_fetch" )
+	if SERVER then
+		printGM("lang", "Trying to fetch translation progress from weblate server...")
+		http.Fetch( "https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json",
+			function( body, len, headers, code )
+				if tonumber( code ) == 200 then
+					for key,value in pairs(util.JSONToTable( body )) do
+						if yrp_button_info[string.lower(value.code)] == nil then
+							yrp_button_info[string.lower(value.code)] = {}
+						end
+						yrp_button_info[string.lower(value.code)]["percentage"]=value.translated_percent
 					end
-					yrp_button_info[string.lower(value.code)]["percentage"]=value.translated_percent
+					printGM( "lang", "Fetched translation progress successfully!" )
+				else
+					printGM( "lang", "Could not fetch translation progress: " .. code )
 				end
-				printGM( "lang", "Fetched translation progress" )
-			else
-				printGM( "lang", "Could not fetch translation progress: " .. code )
-			end
-		end,
-		function( error )
-			printGM( "lang", "http.fetch error:" .. error )
-		end,
-		{Authorization="Token WmgbTcBqV7oS4KgxegwzWfvdfJZZk90b1KRafwej"}
-	)
+			end,
+			function( error )
+				printGM( "lang", "http.fetch error:" .. error )
+			end,
+			{Authorization="Token WmgbTcBqV7oS4KgxegwzWfvdfJZZk90b1KRafwej"}
+		)
+	elseif CLIENT then
+		printGM( "lang", "Request translation progress from server.")
+		net.Start( "requestTranslationProgress" )
+		net.SendToServer()
+	end
 end
 
 function add_language( short )
@@ -226,8 +268,6 @@ function add_language( short )
 	end
 end
 
-fetch_translation_progress()
-
 for i, short in pairs( yrp_shorts ) do
 	LoadLanguage( short , true )
 	add_language( short )
@@ -241,6 +281,8 @@ if CLIENT then
 		end
 	end
 end
+
+hook.Add( "Tick", "translation_progress_fetch", fetch_translation_progress )
 
 function initLang()
 	hr_pre()
