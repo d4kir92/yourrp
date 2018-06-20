@@ -1,5 +1,4 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
-local _wide = 800
 function createDKeybinder( parent, w, h, x, y, keybind )
 	local _tmp = createD( "DBinder", parent, w, h, x, y )
 	_tmp:SetValue( get_keybind( keybind ) )
@@ -21,7 +20,7 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
 
-
+	local _wide = 800
 
 	settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 	--sheet:AddSheet( lang_string( "character" ), cl_charPanel, "icon16/user_edit.png" )
