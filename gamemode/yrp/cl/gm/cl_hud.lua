@@ -195,10 +195,6 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 	show_voice_info( ply )
 	show_global_voice_info( ply )
 
-	if tobool( get_tutorial( "tut_hudhelp" ) ) then
-		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "helppre" ) .. " [F1] " .. lang_string( "helppos" ), "HudBars", ScrW2(), ctr( 300 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-	end
-
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	elseif ply:GetNWBool( "warning_dedicated", false ) then
