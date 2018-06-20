@@ -468,11 +468,11 @@ function Player:SteamName()
 end
 
 function Player:YRPRPName()
-	return tostring( self:GetNWString( "rpname", "NO CHARACTER SELECTED" ) )
+	return tostring( self:GetNWString( "rpname", self:SteamName() ) )
 end
 
 function Player:Name()
-	return tostring( self:GetNWString( "rpname", "NO CHARACTER SELECTED" ) )
+	return tostring( self:GetNWString( "rpname", self:SteamName() ) )
 end
 
 function Player:Nick()

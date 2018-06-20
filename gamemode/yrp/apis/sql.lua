@@ -223,11 +223,18 @@ function SQL_TABLE_EXISTS( db_table )
 end
 
 function SQL_QUERY( query )
+	query = tostring( query )
 	--printGM( "db", "SQL_QUERY( " .. tostring( query ) .. " )" )
+	if !string.find( query, ";" ) then
+		printGM( "error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]" )
+		return false
+	end
 	if YRPSQL.mode == 0 then
 		local _result = sql.Query( query )
 		if _result == nil then
-			--printGM( "db", "SQL_QUERY TABLE EMPTY" )
+			if string.find( query, "SELECT" ) then
+				printGM( "note", GetSQLModeName() .. ": " .. "SQL_QUERY TABLE Empty/No Entry [" .. query .. "]" )
+			end
 			return _result
 		elseif _result == false then
 			printGM( "db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query )
@@ -353,7 +360,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES( db_table )
 		if SQL_TABLE_EXISTS( db_table ) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
-			_q = _q .. " DEFAULT VALUES"
+			_q = _q .. " DEFAULT VALUES;"
 			local _result = SQL_QUERY( _q )
 			if _result != nil then
 				printGM( "error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
@@ -392,7 +399,7 @@ function SQL_INSERT_INTO( db_table, db_columns, db_values )
 			_q = _q .. db_columns
 			_q = _q .. " ) VALUES ( "
 			_q = _q .. db_values
-			_q = _q .. " )"
+			_q = _q .. " );"
 			local _result = SQL_QUERY( _q )
 			if _result != nil then
 				printGM( "error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
@@ -433,7 +440,7 @@ function SQL_INSERT_INTO( db_table, db_columns, db_values )
 			_q = _q .. db_columns
 			_q = _q .. " ) VALUES ( "
 			_q = _q .. db_values
-			_q = _q .. " )"
+			_q = _q .. " );"
 
 			local _result = SQL_QUERY( _q )
 			if _result != nil then
@@ -452,6 +459,7 @@ function SQL_DELETE_FROM( db_table, db_where )
 			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
+				_q = _q .. " );"
 			end
 			local _result = SQL_QUERY( _q )
 			if _result != nil then
@@ -465,6 +473,7 @@ function SQL_DELETE_FROM( db_table, db_where )
 			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
+				_q = _q .. " );"
 			end
 			local _result = SQL_QUERY( _q )
 			if _result != nil then
@@ -498,7 +507,7 @@ function SQL_ADD_COLUMN( table_name, column_name, datatype )
 	local _result = SQL_CHECK_IF_COLUMN_EXISTS( table_name, column_name )
 	if YRPSQL.mode == 0 then
 		if !_result then
-			local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
+			local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
 			local _r = SQL_QUERY( _q )
 			if _r != nil then
 				printGM( "error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring( _q ) .. " result: " .. tostring( _result ) .. " lastError: " .. sql_show_last_error() )
@@ -525,7 +534,7 @@ function SQL_ADD_COLUMN( table_name, column_name, datatype )
 			if string.find( datatype, "TEXT" ) then
 				datatype = "TEXT"
 			end
-			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
+			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
 			local _r = SQL_QUERY( _q )
 			if _r != nil then
 				printGM( "error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring( _q ) .. " result: " .. tostring( _r ) )

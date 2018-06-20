@@ -466,30 +466,28 @@ net.Receive( "DeleteCharacter", function( len, ply )
 	send_characters( ply )
 end)
 
-net.Receive( "CreateCharacter", function( len, ply )
-	local ch = net.ReadTable()
-
-	local role = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tonumber( ch.roleID ) )
+function CreateCharacter( ply, tab )
+	local role = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tonumber( tab.roleID ) )
 
 	local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
 	local vals = "'" .. ply:SteamID() .. "', "
-	vals = vals .. "'" .. db_sql_str( ch.rpname ) .. "', "
-	vals = vals .. "'" .. db_sql_str( ch.gender ) .. "', "
+	vals = vals .. "'" .. db_sql_str( tab.rpname ) .. "', "
+	vals = vals .. "'" .. db_sql_str( tab.gender ) .. "', "
 	vals = vals .. tonumber( role[1].uniqueID ) .. ", "
 	vals = vals .. tonumber( role[1].groupID ) .. ", "
-	vals = vals .. tonumber( ch.playermodelID ) .. ", "
+	vals = vals .. tonumber( tab.playermodelID ) .. ", "
 	vals = vals .. 250 .. ", "
 	vals = vals .. 500 .. ", "
 	vals = vals .. "'" .. GetMapNameDB() .. "', "
-	vals = vals .. tonumber( ch.skin ) .. ", "
-	vals = vals .. tonumber( ch.bg[0] ) .. ", "
-	vals = vals .. tonumber( ch.bg[1] ) .. ", "
-	vals = vals .. tonumber( ch.bg[2] ) .. ", "
-	vals = vals .. tonumber( ch.bg[3] ) .. ", "
-	vals = vals .. tonumber( ch.bg[4] ) .. ", "
-	vals = vals .. tonumber( ch.bg[5] ) .. ", "
-	vals = vals .. tonumber( ch.bg[6] ) .. ", "
-	vals = vals .. tonumber( ch.bg[7] )
+	vals = vals .. tonumber( tab.skin ) .. ", "
+	vals = vals .. tonumber( tab.bg[0] ) .. ", "
+	vals = vals .. tonumber( tab.bg[1] ) .. ", "
+	vals = vals .. tonumber( tab.bg[2] ) .. ", "
+	vals = vals .. tonumber( tab.bg[3] ) .. ", "
+	vals = vals .. tonumber( tab.bg[4] ) .. ", "
+	vals = vals .. tonumber( tab.bg[5] ) .. ", "
+	vals = vals .. tonumber( tab.bg[6] ) .. ", "
+	vals = vals .. tonumber( tab.bg[7] )
 	SQL_INSERT_INTO( "yrp_characters", cols, vals )
 
 	local chars = SQL_SELECT( "yrp_characters", "*", nil )
@@ -497,6 +495,11 @@ net.Receive( "CreateCharacter", function( len, ply )
 		local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( chars[#chars].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
 	end
 	send_characters( ply )
+end
+
+net.Receive( "CreateCharacter", function( len, ply )
+	local tab = net.ReadTable()
+	CreateCharacter( ply, tab )
 end)
 
 util.AddNetworkString( "LogOut" )
