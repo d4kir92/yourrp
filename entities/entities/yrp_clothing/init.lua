@@ -16,7 +16,7 @@ function ENT:Initialize()
 
 	self:SetPos(self:GetPos()+Vector(0,0,100))
 	self:DropToFloor()
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
@@ -26,7 +26,7 @@ util.AddNetworkString( "openAM" )
 function ENT:Use( activator, caller )
 	if !activator:GetNWBool( "clicked", false ) then
 		activator:SetNWBool( "clicked", true )
-	  net.Start( "openAM" )
+		net.Start( "openAM" )
 		net.Send( activator )
 		timer.Simple( 0.4, function()
 			activator:SetNWBool( "clicked", false )

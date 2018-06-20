@@ -31,5 +31,5 @@ end
 
 function ENT:Use( activator, caller )
 	activator:addMoney( self:GetMoney() )
-  self:Remove()
+	self:Remove()
 end

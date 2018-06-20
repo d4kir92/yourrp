@@ -107,10 +107,10 @@ end
 function GM:PlayerStartVoice( ply )
 
 	if ply == LocalPlayer() then
-    _showVoice = true
+		_showVoice = true
 		net.Start( "yrp_voice_start" )
 		net.SendToServer()
-  end
+	end
 	if ply:SteamID() == LocalPlayer():GetNWString( "voice_global_steamid" ) and ply:GetNWInt( "speak_channel", 0 ) == 2 then
 		_showGlobalVoice = true
 	end
@@ -118,10 +118,10 @@ end
 
 function GM:PlayerEndVoice( ply )
 	if ply == LocalPlayer() then
-    _showVoice = false
+		_showVoice = false
 		net.Start( "yrp_voice_end" )
 		net.SendToServer()
-  end
+	end
 	if ply:SteamID() == LocalPlayer():GetNWString( "voice_global_steamid" ) then
 		_showGlobalVoice = false
 	end

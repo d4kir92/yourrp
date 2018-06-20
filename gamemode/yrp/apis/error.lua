@@ -8,30 +8,30 @@ end
 concommand.Add( "yrp__debug", function( ply, cmd, args )
 	_debug = !_debug
 	ply:SetNWBool( "yrp_debug", _debug )
-  if _debug then
-    printGM( "note", "Debug ON" )
-  elseif !_debug then
-    printGM( "note", "Debug OFF" )
-  end
+	if _debug then
+		printGM( "note", "Debug ON" )
+	elseif !_debug then
+		printGM( "note", "Debug OFF" )
+	end
 end )
 
 function wk( obj )
-  if obj != nil and obj != false then
-    return true
-  else
-    return false
-  end
+	if obj != nil and obj != false then
+		return true
+	else
+		return false
+	end
 end
 
 function worked( obj, name, _silence )
-  if obj != nil and obj != false then
-    return true
-  else
-    if _debug and !_silence then
-      printGM( "note", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
-    end
-    return false
-  end
+	if obj != nil and obj != false then
+		return true
+	else
+		if _debug and !_silence then
+			printGM( "note", "NOT WORKED: " .. tostring( obj ) .. " " .. tostring( name ) )
+		end
+		return false
+	end
 end
 
 function ea( ent )
@@ -53,26 +53,26 @@ end
 function check_yrp_sv_errors( str )
 	if !file.Exists( "yrp/sv_errors.txt", "DATA" ) then
 		if !file.Exists( "yrp", "DATA" ) then
-	    printGM( "db", "yrp existiert nicht" )
-	    file.CreateDir( "yrp" )
-	  end
-    printGM( "db", "yrp/sv_errors.txt existiert nicht" )
+			printGM( "db", "yrp existiert nicht" )
+			file.CreateDir( "yrp" )
+		end
+		printGM( "db", "yrp/sv_errors.txt existiert nicht" )
 		file.Write( "yrp/sv_errors.txt", str )
 		return false
-  end
+	end
 	return true
 end
 
 function check_yrp_cl_errors( str )
 	if !file.Exists( "yrp/cl_errors.txt", "DATA" ) then
 		if !file.Exists( "yrp", "DATA" ) then
-	    printGM( "db", "yrp existiert nicht" )
-	    file.CreateDir( "yrp" )
-	  end
-    printGM( "db", "yrp/cl_errors.txt existiert nicht" )
+			printGM( "db", "yrp existiert nicht" )
+			file.CreateDir( "yrp" )
+		end
+		printGM( "db", "yrp/cl_errors.txt existiert nicht" )
 		file.Write( "yrp/cl_errors.txt", str )
 		return false
-  end
+	end
 	return true
 end
 
@@ -91,7 +91,7 @@ end
 local first_time_error = false
 local _sv_errors = {}
 function update_error_table_sv()
-  local _read = file.Read( "lua_errors_server.txt", "GAME" )
+	local _read = file.Read( "lua_errors_server.txt", "GAME" )
 
 	if worked( _read, "_read failed", true ) then
 		local _file_exists = check_yrp_sv_errors( _read )
@@ -101,59 +101,59 @@ function update_error_table_sv()
 			first_time_error = false
 		end
 
-	  local _yrp_read = file.Read( "yrp/sv_errors.txt", "DATA" )
+		local _yrp_read = file.Read( "yrp/sv_errors.txt", "DATA" )
 		if worked( _yrp_read, "_yrp_read failed" ) then
 
-		  local _explode_yrp_read = string.Explode( "\n", _yrp_read )
-		  local _explode = string.Explode( "\n", _read )
+			local _explode_yrp_read = string.Explode( "\n", _yrp_read )
+			local _explode = string.Explode( "\n", _read )
 
-		  if #_explode < #_explode_yrp_read then
+			if #_explode < #_explode_yrp_read then
 				--if error file is smaller, update data
-		    file.Write( "yrp/sv_errors.txt", _read )
+				file.Write( "yrp/sv_errors.txt", _read )
 
-		  elseif #_explode > #_explode_yrp_read then
+			elseif #_explode > #_explode_yrp_read then
 				--if error file is bigger, get all errors
 
-		    local _errors = {}
-		    for k, v in pairs( _explode ) do
-		      if k > #_explode_yrp_read then
-		        if !table.HasValue( _errors, v ) and !first_time_error then
+				local _errors = {}
+				for k, v in pairs( _explode ) do
+					if k > #_explode_yrp_read then
+						if !table.HasValue( _errors, v ) and !first_time_error then
 							if ErrorValidToSend( v ) then
-		          	table.insert( _errors, v )
+								table.insert( _errors, v )
 							end
-		        end
-		      end
-		    end
+						end
+					end
+				end
 
 				--update data file
-		    file.Write( "yrp/sv_errors.txt", _read )
+				file.Write( "yrp/sv_errors.txt", _read )
 
-		    return _errors
+				return _errors
 			elseif first_time_error then
 				local _errors = {}
-		    for k, v in pairs( _explode ) do
+				for k, v in pairs( _explode ) do
 					if !table.HasValue( _errors, v ) then
 						if ErrorValidToSend( v ) then
 							table.insert( _errors, v )
 						end
 					end
-		    end
+				end
 
 				--update data file
-		    file.Write( "yrp/sv_errors.txt", _read )
+				file.Write( "yrp/sv_errors.txt", _read )
 
-		    return _errors
+				return _errors
 			else
 				--printGM( "gm", "No new error" )
 			end
-	  end
+		end
 	end
-  return {}
+	return {}
 end
 
 local _cl_errors = {}
 function update_error_table_cl()
-  local _read = file.Read( "clientside_errors.txt", "GAME" )
+	local _read = file.Read( "clientside_errors.txt", "GAME" )
 
 	if worked( _read, "_read failed", true ) then
 		local _file_exists = check_yrp_cl_errors( _read )
@@ -163,54 +163,54 @@ function update_error_table_cl()
 			first_time_error = false
 		end
 
-	  local _yrp_read = file.Read( "yrp/cl_errors.txt", "DATA" )
+		local _yrp_read = file.Read( "yrp/cl_errors.txt", "DATA" )
 		if worked( _yrp_read, "_yrp_read failed" ) then
 
-		  local _explode_yrp_read = string.Explode( "\n", _yrp_read )
-		  local _explode = string.Explode( "\n", _read )
+			local _explode_yrp_read = string.Explode( "\n", _yrp_read )
+			local _explode = string.Explode( "\n", _read )
 
-		  if #_explode < #_explode_yrp_read then
+			if #_explode < #_explode_yrp_read then
 				--if error file is smaller, update data
-		    file.Write( "yrp/cl_errors.txt", _read )
+				file.Write( "yrp/cl_errors.txt", _read )
 
-		  elseif #_explode > #_explode_yrp_read then
+			elseif #_explode > #_explode_yrp_read then
 				--if error file is bigger, get all errors
 
-		    local _errors = {}
-		    for k, v in pairs( _explode ) do
-		      if k > #_explode_yrp_read then
-		        if !table.HasValue( _errors, v ) and !first_time_error then
+				local _errors = {}
+				for k, v in pairs( _explode ) do
+					if k > #_explode_yrp_read then
+						if !table.HasValue( _errors, v ) and !first_time_error then
 							if ErrorValidToSend( v ) then
-		          	table.insert( _errors, v )
+								table.insert( _errors, v )
 							end
-		        end
-		      end
-		    end
+						end
+					end
+				end
 
 				--update data file
-		    file.Write( "yrp/cl_errors.txt", _read )
+				file.Write( "yrp/cl_errors.txt", _read )
 
-		    return _errors
+				return _errors
 			elseif first_time_error then
 				local _errors = {}
-		    for k, v in pairs( _explode ) do
+				for k, v in pairs( _explode ) do
 					if !table.HasValue( _errors, v ) then
 						if ErrorValidToSend( v ) then
 							table.insert( _errors, v )
 						end
 					end
-		    end
+				end
 
 				--update data file
-		    file.Write( "yrp/cl_errors.txt", _read )
+				file.Write( "yrp/cl_errors.txt", _read )
 
-		    return _errors
+				return _errors
 			else
 				--printGM( "gm", "No new error" )
 			end
-	  end
+		end
 	end
-  return {}
+	return {}
 end
 
 function isdbfull( str )
@@ -241,13 +241,13 @@ function ismalformed( str )
 			end
 
 			FRAME.discord = createD( "DButton", FRAME, ctr( 400 ), ctr( 50 ), ctr( 900-200 ), ctr( 200 ) )
-		  FRAME.discord:SetText( "" )
-		  function FRAME.discord:Paint( pw, ph )
-		    surfaceButton( self, pw, ph, "JOIN DISCORD" )
-		  end
-		  function FRAME.discord:DoClick()
-		    gui.OpenURL( "https://discord.gg/sEgNZxg" )
-		  end
+			FRAME.discord:SetText( "" )
+			function FRAME.discord:Paint( pw, ph )
+				surfaceButton( self, pw, ph, "JOIN DISCORD" )
+			end
+			function FRAME.discord:DoClick()
+				gui.OpenURL( "https://discord.gg/sEgNZxg" )
+			end
 		end
 	end
 end
@@ -255,19 +255,19 @@ end
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
-  local entry = {}
+	local entry = {}
 	timer.Create( "wait_for_gamemode"..str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
 			isdbfull( str )
 			ismalformed( str )
 			entry["entry.956735581"] = string.upper( tostring( game.IsDedicated() ) )
-		  entry["entry.915525654"] = tostring( str )
-		  entry["entry.58745995"] = tostring( realm )
-		  entry["entry.1306533151"] = GetMapName() or "MAPNAME"
-		  entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
-		  entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
-		  entry["entry.1883727441"] = gmod.GetGamemode().Version or "0.0.0"
-		  entry["entry.2045173320"] = string.upper( gmod.GetGamemode().VersionSort ) or "UNKNOWN"
+			entry["entry.915525654"] = tostring( str )
+			entry["entry.58745995"] = tostring( realm )
+			entry["entry.1306533151"] = GetMapName() or "MAPNAME"
+			entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
+			entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
+			entry["entry.1883727441"] = gmod.GetGamemode().Version or "0.0.0"
+			entry["entry.2045173320"] = string.upper( gmod.GetGamemode().VersionSort ) or "UNKNOWN"
 			entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
 			if CLIENT then
 				local ply = LocalPlayer()
@@ -290,25 +290,25 @@ function send_error( realm, str )
 			entry["entry.471979789"] = string.upper( tostring( !game.SinglePlayer() ) )
 
 			if realm != "server_all" then
-			  http.Post( _url, entry, function( result )
-			    if result then
+				http.Post( _url, entry, function( result )
+					if result then
 						printGM( "gm", "[SENT ERROR TO DEVELOPER] " .. str )
 					end
-			  end, function( failed )
+				end, function( failed )
 					if tostring( failed ) != "unsuccessful" then
-			    	printGM( "error", "ERROR1-API: " .. tostring( failed ) )
+						printGM( "error", "ERROR1-API: " .. tostring( failed ) )
 					end
-			  end )
+				end )
 			else
 				http.Post( _url2, entry, function( result )
-			    if result then
+					if result then
 						printGM( "gm", "[SENT ERROR TO DEVELOPER 2] " .. str )
 					end
-			  end, function( failed )
+				end, function( failed )
 					if tostring( failed ) != "unsuccessful" then
-			    	printGM( "error", "ERROR2-API: " .. tostring( failed ) )
+						printGM( "error", "ERROR2-API: " .. tostring( failed ) )
 					end
-			  end )
+				end )
 			end
 
 			timer.Remove( "wait_for_gamemode"..str )
@@ -318,15 +318,15 @@ end
 
 local _sended = {}
 function send_errors( realm, tbl )
-  if _sended[realm] == nil then
-     _sended[realm] = {}
-  end
-  for k, v in pairs( tbl ) do
-    if !table.HasValue( _sended[realm], v ) then
-      send_error( realm, v )
-      table.insert( _sended[realm], v )
-    end
-  end
+	if _sended[realm] == nil then
+		 _sended[realm] = {}
+	end
+	for k, v in pairs( tbl ) do
+		if !table.HasValue( _sended[realm], v ) then
+			send_error( realm, v )
+			table.insert( _sended[realm], v )
+		end
+	end
 end
 
 function IsNearVersion( distance )

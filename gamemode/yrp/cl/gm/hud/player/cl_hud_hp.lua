@@ -3,10 +3,10 @@
 local health = Material( "icon16/heart.png" )
 
 function hudHP( ply, color )
-  local _hptext = math.Round( ply:Health(), 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( ply:Health(), 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. "%"
-  drawHUDElement( "hp", ply:Health(), ply:GetMaxHealth(), _hptext, health, color )
+	local _hptext = math.Round( ply:Health(), 0 ) .. "/" .. ply:GetMaxHealth() .. "|" .. math.Round( ( math.Round( ply:Health(), 0 ) / ply:GetMaxHealth() ) * 100, 0 ) .. "%"
+	drawHUDElement( "hp", ply:Health(), ply:GetMaxHealth(), _hptext, health, color )
 end
 
 function hudHPBR()
-  drawHUDElementBr( "hp" )
+	drawHUDElementBr( "hp" )
 end

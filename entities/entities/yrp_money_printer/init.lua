@@ -94,7 +94,7 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
 
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
@@ -170,6 +170,6 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-  self:StopSound( "moneyprintersound" )
+	self:StopSound( "moneyprintersound" )
 	self:SetNWBool( "working", false )
 end

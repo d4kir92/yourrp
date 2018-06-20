@@ -79,13 +79,13 @@ end
 
 concommand.Add( "yrp_status", function( ply, cmd, args )
 	hr_pre()
-	printGM( "gm", "   Version:\t" .. GAMEMODE.Version )
-	printGM( "gm", "   Channel:\t" .. string.upper( GAMEMODE.VersionSort ) )
+	printGM( "gm", "	 Version:\t" .. GAMEMODE.Version )
+	printGM( "gm", "	 Channel:\t" .. string.upper( GAMEMODE.VersionSort ) )
 	printGM( "gm", "Servername:\t" .. GetHostName() )
-	printGM( "gm", "        IP:\t" .. game.GetIPAddress() )
+	printGM( "gm", "				IP:\t" .. game.GetIPAddress() )
 
-	printGM( "gm", "       Map:\t" .. GetMapNameDB() )
-	printGM( "gm", "   Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
+	printGM( "gm", "			 Map:\t" .. GetMapNameDB() )
+	printGM( "gm", "	 Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
 	hr_pos()
 end )
 
@@ -106,7 +106,7 @@ end
 concommand.Add( "yrp_players", function( ply, cmd, args )
 	hr_pre()
 	printGM( "gm", "Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
-	printGM( "gm", "ID   SteamID              Name                     Money")
+	printGM( "gm", "ID	 SteamID							Name										 Money")
 	for i, pl in pairs( player.GetAll() ) do
 		local _id = makeString( string.ToTable( pl:UserID() ), 4, false )
 		local _steamid = makeString( string.ToTable( pl:SteamID() ), 20, false )
@@ -120,15 +120,15 @@ end )
 
 concommand.Add( "yrp__help", function( ply, cmd, args )
 	hr_pre()
-  printGM( "note", "yrp_status - shows gamemode version" )
+	printGM( "note", "yrp_status - shows gamemode version" )
 	printGM( "note", "yrp_players - shows all players" )
 	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
 	printGM( "note", "yrp_togglesettings - toggle settings menu" )
-  hr_pos()
+	hr_pos()
 
-  hr_pre()
-  printGM( "note", "yrp_cl_hud X - 1: shows hud, 0: hide hud" )
-  hr_pos()
+	hr_pre()
+	printGM( "note", "yrp_cl_hud X - 1: shows hud, 0: hide hud" )
+	hr_pos()
 end )
 
 hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
@@ -182,21 +182,21 @@ if SERVER then
 				local _weapon = ply:GetActiveWeapon()
 				if ea( _weapon ) then
 					if _weapon:IsScripted() then
-					  if ply:GetNWBool( "weaponlowered", true ) then
-					    ply:SetNWBool( "weaponlowered", false )
-					    _weapon:SetHoldType( _weapon:GetNWString( "swep_holdtype" ) )
+						if ply:GetNWBool( "weaponlowered", true ) then
+							ply:SetNWBool( "weaponlowered", false )
+							_weapon:SetHoldType( _weapon:GetNWString( "swep_holdtype" ) )
 							_weapon.HoldType = _weapon:GetNWString( "swep_holdtype" )
-					  else
-					    ply:SetNWBool( "weaponlowered", true )
+						else
+							ply:SetNWBool( "weaponlowered", true )
 							local _w_ht = _weapon:GetNWString( "swep_holdtype" )
 							if _w_ht == "melee" or _w_ht == "melee2" or _w_ht == "pistol" or _w_ht == "grenade" or _w_ht == "rpg" or _w_ht == "slam" or _w_ht == "fist" or _w_ht == "knife" or _w_ht == "duel" or _w_ht == "camera" or _w_ht == "magic" or _w_ht == "revolver" then
 								_weapon:SetHoldType( "normal" )
 							elseif _w_ht == "smg" or _w_ht == "ar2" or _w_ht == "shotgun" or _w_ht == "physgun" or _w_ht == "crossbow" then
 								_weapon:SetHoldType( "passive" )
 							else
-						    _weapon:SetHoldType( "normal" )
+								_weapon:SetHoldType( "normal" )
 							end
-					  end
+						end
 					end
 				end
 			end
@@ -221,28 +221,28 @@ if SERVER then
 	end )
 
 	net.Receive( "yrp_weaponlowering", function( len, ply )
-	  lowering_weapon( ply )
+		lowering_weapon( ply )
 	end)
 end
 
 function IsEntityAlive( ply, uid )
-  for i, ent in pairs( ents.GetAll() ) do
-    if tostring( ent:GetNWString( "item_uniqueID", "" ) ) == tostring( uid ) and ent:GetRPOwner() == ply then
-      return true, ent
-    end
-  end
-  return false
+	for i, ent in pairs( ents.GetAll() ) do
+		if tostring( ent:GetNWString( "item_uniqueID", "" ) ) == tostring( uid ) and ent:GetRPOwner() == ply then
+			return true, ent
+		end
+	end
+	return false
 end
 
 if CLIENT then
-  timer.Simple( 1, function()
-    net.Start( "getGamemodename" )
-    net.SendToServer()
-  end)
+	timer.Simple( 1, function()
+		net.Start( "getGamemodename" )
+		net.SendToServer()
+	end)
 
-  net.Receive( "getGamemodename", function( len, ply )
-    GAMEMODE.BaseName = net.ReadString()
-  end)
+	net.Receive( "getGamemodename", function( len, ply )
+		GAMEMODE.BaseName = net.ReadString()
+	end)
 end
 
 -- Multicore (Shared) enable:

@@ -6,42 +6,42 @@
 local Player = FindMetaTable( "Player" )
 
 function Player:GetLanguage() -- The Language the player selected
-  return self:YRPGetLanguage() -- return string
+	return self:YRPGetLanguage() -- return string
 end
 
 --[[ Metabolism ]]--
 function Player:Eat( num ) -- Add num to hunger
-  self:YRPEat( num )
+	self:YRPEat( num )
 end
 
 function Player:Drink( num ) -- Add num to thirst
-  self:YRPDrink( num )
+	self:YRPDrink( num )
 end
 
 --[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
-  return self:YRPGetMoney() -- return float
+	return self:YRPGetMoney() -- return float
 end
 
 function Player:GetMoneyBank() -- Money that the bank is holding
-  return self:YRPGetMoneyBank() -- return float
+	return self:YRPGetMoneyBank() -- return float
 end
 
 --[[ Role ]]--
 function Player:GetRoleName() -- Role Name / "Job" Name
-  return self:YRPGetRoleName() -- return string
+	return self:YRPGetRoleName() -- return string
 end
 
 --[[ Group ]]--
 function Player:GetGroupName() -- Group Name / "Category" Name
-  return self:YRPGetGroupName() -- return string
+	return self:YRPGetGroupName() -- return string
 end
 
 function Player:GetGroupColor() -- Group Color
-  return self:YRPGetGroupColor() -- return Color( int r, int g, int b, int a )
+	return self:YRPGetGroupColor() -- return Color( int r, int g, int b, int a )
 end
 
 --[[ Name ]]--
 function Player:RPName() -- Character Name / Roleplay Name
-  return self:YRPRPName() -- return string
+	return self:YRPRPName() -- return string
 end

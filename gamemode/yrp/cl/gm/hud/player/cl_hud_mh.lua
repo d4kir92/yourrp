@@ -3,18 +3,18 @@
 local hunger = Material( "icon16/cake.png" )
 
 function showMH( ply )
-  return ply:GetNWBool( "bool_hunger", false )
+	return ply:GetNWBool( "bool_hunger", false )
 end
 
 function hudMH( ply, color )
-  if showMH( ply ) then
-    local _mhtext = math.Round( ( math.Round( ply:GetNWFloat( "hunger", 0.0 ), 1 ) / 100 ) * 100, 1 ) .. "%"
-    drawHUDElement( "mh", ply:GetNWFloat( "hunger", 0.0 ), 100, _mhtext, hunger, color )
-  end
+	if showMH( ply ) then
+		local _mhtext = math.Round( ( math.Round( ply:GetNWFloat( "hunger", 0.0 ), 1 ) / 100 ) * 100, 1 ) .. "%"
+		drawHUDElement( "mh", ply:GetNWFloat( "hunger", 0.0 ), 100, _mhtext, hunger, color )
+	end
 end
 
 function hudMHBR( ply )
-  if showMH( ply ) then
-    drawHUDElementBr( "mh" )
-  end
+	if showMH( ply ) then
+		drawHUDElementBr( "mh" )
+	end
 end

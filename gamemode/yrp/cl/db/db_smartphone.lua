@@ -28,15 +28,15 @@ end
 
 --db_drop_table( _db_name )
 function check_yrp_smartphone()
-  SQL_INIT_DATABASE( _db_name )
+	SQL_INIT_DATABASE( _db_name )
 
-  SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'name'" )
-  SQL_ADD_COLUMN( _db_name, "value", "TEXT DEFAULT 'value'" )
+	SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'name'" )
+	SQL_ADD_COLUMN( _db_name, "value", "TEXT DEFAULT 'value'" )
 
-  local _sp = SQL_SELECT( _db_name, "*", nil )
-  if _sp != nil and _sp != false then
-    yrp_smartphone = _sp[1]
-  end
+	local _sp = SQL_SELECT( _db_name, "*", nil )
+	if _sp != nil and _sp != false then
+		yrp_smartphone = _sp[1]
+	end
 
 	if SQL_SELECT( _db_name, "*", "name = '" .. "color_case" .. "'" ) == nil then
 		SQL_INSERT_INTO( _db_name, "name, value", "'" .. "color_case" .. "', '0,0,0,255'" )

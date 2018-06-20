@@ -12,7 +12,7 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS )
 
 	self:SetPos(self:GetPos()+Vector(0,0,100))
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end

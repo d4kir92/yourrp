@@ -15,7 +15,7 @@ function ENT:Initialize()
 
 	self:SetPos(self:GetPos()+Vector(0,0,100))
 	self:DropToFloor()
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end

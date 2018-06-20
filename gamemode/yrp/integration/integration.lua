@@ -31,26 +31,26 @@ include( "darkrp/config/jobrelated.lua" )
 --include( "darkrp/scoreboard/sh_scoreboard.lua" )
 
 if CLIENT then
-  include( "darkrp/drawfunction.lua" )
+	include( "darkrp/drawfunction.lua" )
 end
 
 local Vector = FindMetaTable( "Vector" )
 
 function Vector:isInSight( filter, ply )
-  --Description: Decides whether the vector could be seen by the player if they
-  --             were to look at it.
-  ply = ply or LocalPlayer()
-  local trace = {}
-  trace.start = ply:EyePos()
-  trace.endpos = self
-  trace.filter = filter
-  trace.mask = -1
-  local TheTrace = util.TraceLine(trace)
+	--Description: Decides whether the vector could be seen by the player if they
+	--						 were to look at it.
+	ply = ply or LocalPlayer()
+	local trace = {}
+	trace.start = ply:EyePos()
+	trace.endpos = self
+	trace.filter = filter
+	trace.mask = -1
+	local TheTrace = util.TraceLine(trace)
 
-  return not TheTrace.Hit, TheTrace.HitPos
+	return not TheTrace.Hit, TheTrace.HitPos
 end
 
 -- Neurotec fix
 if SERVER then
-  include( "neurotanks/sv_fix.lua" )
+	include( "neurotanks/sv_fix.lua" )
 end

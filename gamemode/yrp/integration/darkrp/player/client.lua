@@ -3,38 +3,38 @@
 local Player = FindMetaTable( "Player" )
 
 function Player:drawHitInfo()
-  --Description: Start drawing the hit information above a hitman.
-  --
+	--Description: Start drawing the hit information above a hitman.
+	--
 end
 
 function Player:drawPlayerInfo()
-  --Description: Draw player info above a player's head (name, health job). Override this function to disable or change drawing behaviour in DarkRP.
-  --
+	--Description: Draw player info above a player's head (name, health job). Override this function to disable or change drawing behaviour in DarkRP.
+	--
 end
 
 function Player:drawWantedInfo()
-  --Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-  --
+	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
+	--
 end
 
 function Player:getPreferredJobModel( teamNr )
-  --Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-  printGM( "darkrp", "getPreferredJobModel( " .. tostring( teamNr ) .. " )" )
-  printGM( "darkrp", DarkRP._not )
-  return ""
+	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
+	printGM( "darkrp", "getPreferredJobModel( " .. tostring( teamNr ) .. " )" )
+	printGM( "darkrp", DarkRP._not )
+	return ""
 end
 
 function Player:isInRoom()
-  --Description: Whether the player is in the same room as the LocalPlayer.
-  local tracedata = {}
-  tracedata.start = LocalPlayer():GetShootPos()
-  tracedata.endpos = self:GetShootPos()
-  local trace = util.TraceLine(tracedata)
+	--Description: Whether the player is in the same room as the LocalPlayer.
+	local tracedata = {}
+	tracedata.start = LocalPlayer():GetShootPos()
+	tracedata.endpos = self:GetShootPos()
+	local trace = util.TraceLine(tracedata)
 
-  return not trace.HitWorld
+	return not trace.HitWorld
 end
 
 function Player:stopHitInfo()
-  --Description: Stop drawing the hit information above a hitman.
-  --
+	--Description: Stop drawing the hit information above a hitman.
+	--
 end

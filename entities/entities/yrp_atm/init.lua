@@ -16,7 +16,7 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_VPHYSICS )
 
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
@@ -46,12 +46,12 @@ end
 
 function ENT:OnRemove()
 	if self.withdraw != nil then
-  	self.withdraw:Remove()
+		self.withdraw:Remove()
 	end
 end
 
 function ENT:Use( activator, caller )
-  return
+	return
 end
 
 local pressed = false

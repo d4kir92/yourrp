@@ -7,9 +7,9 @@ include( "shared.lua" )
 
 function ENT:Initialize()
 	if table.HasValue( GetWorkshopIDs(), "1189643820" ) then
-	  self:SetModel( "models/props/cs_assault/money.mdl" )
+		self:SetModel( "models/props/cs_assault/money.mdl" )
 	else
-	  self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
+		self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
 	end
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
@@ -31,5 +31,5 @@ end
 
 function ENT:Use( activator, caller )
 	activator:addMoney( self:GetMoney() )
-  self:Remove()
+	self:Remove()
 end

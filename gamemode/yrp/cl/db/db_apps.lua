@@ -16,7 +16,7 @@ end
 vgui.Register( "YRPAPP", APP, "DButton" )
 
 function appSize()
-  return 64
+	return 64
 end
 
 function addApp( app )
@@ -35,12 +35,12 @@ function addApp( app )
 end
 
 function getAllApps()
-  return list.Get( "yrp_apps" ) --yrp_apps
+	return list.Get( "yrp_apps" ) --yrp_apps
 end
 
 function createApp( app, parent, x, y )
 	local _tmp = createD( "YRPAPP", parent, ctrb( 64 ), ctrb( 64 ), x, y )
-  _tmp.tbl = app
+	_tmp.tbl = app
 	_tmp.oldpaint = _tmp.Paint
 	function _tmp:Paint( pw, ph )
 		if app.AppIcon == nil then
@@ -63,7 +63,7 @@ function createApp( app, parent, x, y )
 		end
 	end
 
-  _tmp:Droppable( "APP" )
+	_tmp:Droppable( "APP" )
 
 	return _tmp
 end
@@ -74,53 +74,53 @@ local yrp_apps = {}
 local _db_name = "yrp_apps"
 
 function changeAppPosition( cname, nr )
-  local _upt = SQL_UPDATE( _db_name, "Position = " .. nr, "ClassName = '" .. cname .. "'" )
+	local _upt = SQL_UPDATE( _db_name, "Position = " .. nr, "ClassName = '" .. cname .. "'" )
 end
 
 function getAllDBApps()
-  for i, app in pairs( getAllApps() ) do
-    local _sel = SQL_SELECT( _db_name, "*", "ClassName = '" .. tostring( app.ClassName ) .. "'" )
-    if _sel == nil then
-      local _pos = 1
-      for i=0, 200 do
-        local _p = SQL_SELECT( _db_name, "*", "Position = " .. i )
-        if _p == nil then
-          _pos = i
-          break
-        end
-      end
-      local _ins = SQL_INSERT_INTO( _db_name, "ClassName, Position", "'" .. tostring( app.ClassName ) .. "', " .. _pos )
-    end
-  end
+	for i, app in pairs( getAllApps() ) do
+		local _sel = SQL_SELECT( _db_name, "*", "ClassName = '" .. tostring( app.ClassName ) .. "'" )
+		if _sel == nil then
+			local _pos = 1
+			for i=0, 200 do
+				local _p = SQL_SELECT( _db_name, "*", "Position = " .. i )
+				if _p == nil then
+					_pos = i
+					break
+				end
+			end
+			local _ins = SQL_INSERT_INTO( _db_name, "ClassName, Position", "'" .. tostring( app.ClassName ) .. "', " .. _pos )
+		end
+	end
 
-  local _apps = SQL_SELECT( _db_name, "*", nil )
-  local apps = {}
+	local _apps = SQL_SELECT( _db_name, "*", nil )
+	local apps = {}
 
-  for i, app in pairs( _apps ) do
-    local _app = nil
-    for j, a in pairs( getAllApps() ) do
-      if a.ClassName == app.ClassName then
-        _app = a
-        _app.Position = app.Position
-        break
-      end
-    end
-    table.insert( apps, app.Position, _app )
-  end
+	for i, app in pairs( _apps ) do
+		local _app = nil
+		for j, a in pairs( getAllApps() ) do
+			if a.ClassName == app.ClassName then
+				_app = a
+				_app.Position = app.Position
+				break
+			end
+		end
+		table.insert( apps, app.Position, _app )
+	end
 
-  return apps
+	return apps
 end
 
 --db_drop_table( _db_name )
 function check_yrp_apps()
-  SQL_INIT_DATABASE( _db_name )
+	SQL_INIT_DATABASE( _db_name )
 
-  SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT 'new'" )
-  SQL_ADD_COLUMN( _db_name, "Position", "INT DEFAULT '0'" )
+	SQL_ADD_COLUMN( _db_name, "ClassName", "TEXT DEFAULT 'new'" )
+	SQL_ADD_COLUMN( _db_name, "Position", "INT DEFAULT '0'" )
 
-  local _sp = SQL_SELECT( _db_name, "*", nil )
-  if _sp != nil and _sp != false then
-    yrp_apps = _sp[1]
-  end
+	local _sp = SQL_SELECT( _db_name, "*", nil )
+	if _sp != nil and _sp != false then
+		yrp_apps = _sp[1]
+	end
 end
 check_yrp_apps()

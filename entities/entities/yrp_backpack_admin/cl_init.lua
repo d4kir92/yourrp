@@ -3,7 +3,7 @@
 include("shared.lua")
 
 function ENT:Draw()
-  if LocalPlayer():GetPos():Distance( self:GetPos() ) < 2000 then
-    self:DrawModel()
-  end
+	if LocalPlayer():GetPos():Distance( self:GetPos() ) < 2000 then
+		self:DrawModel()
+	end
 end

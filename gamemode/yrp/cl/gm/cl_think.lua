@@ -5,7 +5,7 @@
 local _cmdpre = "[COMMAND] "
 local _cmdsv = "This command is adminonly/serversided!"
 concommand.Add( "yrp_usergroup", function( ply, cmd, args )
-  printGM( "note", _cmdpre .. _cmdsv )
+	printGM( "note", _cmdpre .. _cmdsv )
 end )
 
 local chatisopen = false
@@ -55,10 +55,10 @@ hook.Add( "HUDWeaponPickedUp", "yrp_translate_weaponname", function( wep )
 end)
 
 function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
-  --[[ Change language ]]--
-  if newWeapon.LanguageString != nil then
-    newWeapon.PrintName = lang_string( newWeapon.LanguageString )
-  end
+	--[[ Change language ]]--
+	if newWeapon.LanguageString != nil then
+		newWeapon.PrintName = lang_string( newWeapon.LanguageString )
+	end
 end
 
 
@@ -77,10 +77,10 @@ function useFunction( string )
 			closeSP()
 		elseif string == "openHelpMenu" then
 			done_tutorial( "tut_feedback" )
-      done_tutorial( "tut_f1info", 10 )
+			done_tutorial( "tut_f1info", 10 )
 			toggleHelpMenu()
-    elseif string == "ToggleEmotesMenu" then
-      ToggleEmotesMenu()
+		elseif string == "ToggleEmotesMenu" then
+			ToggleEmotesMenu()
 		elseif string == "openFeedbackMenu" then
 			toggleFeedbackMenu()
 		elseif string == "openCharMenu" then
@@ -124,14 +124,14 @@ function useFunction( string )
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or lang_string( "weapon" )
 				if _weapon.notdropable == nil then
-          net.Receive( "dropswep", function( len )
-  					local _b = net.ReadBool()
-            if _b then
-              notification.AddLegacy( _pname .. " " .. lang_string( "hasbeendropped" ), 0, 3 )
-            else
-              notification.AddLegacy( _pname .. " " .. string.lower( lang_string( "cannotbedropped" ) ), 0, 3 )
-            end
-          end)
+					net.Receive( "dropswep", function( len )
+						local _b = net.ReadBool()
+						if _b then
+							notification.AddLegacy( _pname .. " " .. lang_string( "hasbeendropped" ), 0, 3 )
+						else
+							notification.AddLegacy( _pname .. " " .. string.lower( lang_string( "cannotbedropped" ) ), 0, 3 )
+						end
+					end)
 					net.Start( "dropswep" )
 					net.SendToServer()
 				else
@@ -379,7 +379,7 @@ function KeyPress()
 	keyPressed( KEY_F1, "openHelpMenu", nil, nil )
 	keyPressed( KEY_F7, "openFeedbackMenu", nil, nil )
 
-  keyPressed( get_keybind("menu_emotes"), "ToggleEmotesMenu", nil, nil )
+	keyPressed( get_keybind("menu_emotes"), "ToggleEmotesMenu", nil, nil )
 
 	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
 

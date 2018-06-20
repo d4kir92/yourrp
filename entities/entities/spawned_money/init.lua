@@ -9,15 +9,15 @@ resource.AddFile( "models/props/cs_assault/money.mdl" )
 
 function ENT:Initialize()
 	if table.HasValue( GetWorkshopIDs(), "1189643820" ) then
-	  self:SetModel( "models/props/cs_assault/money.mdl" )
+		self:SetModel( "models/props/cs_assault/money.mdl" )
 	else
-	  self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
+		self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
 	end
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
 
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
@@ -33,7 +33,7 @@ end
 
 function ENT:Use( activator, caller )
 	caller:addMoney( self:Getamount() )
-  self:Remove()
+	self:Remove()
 end
 
 function ENT:Think()

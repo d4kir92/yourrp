@@ -47,7 +47,7 @@ function Meta:TankExitVehicle()
 
 		self.Flamethrower:StopParticles()
 		self.IsBurning = false
-		self.FlameTime =  0
+		self.FlameTime =	0
 
 	end
 
@@ -59,14 +59,14 @@ function Meta:TankExitVehicle()
 
 	end
 
-    if self.HasCVol then
+		if self.HasCVol then
 
-        self.CEngSound:Stop()
+				self.CEngSound:Stop()
 
-    end
+		end
 
 	--[[ uncomment this if you want headlights to turn off when you exit the tank.
-	if( type( self.HeadLights ) == "table"  && GetConVarNumber("tank_allowheadlights", 0 ) > 0 ) then
+	if( type( self.HeadLights ) == "table"	&& GetConVarNumber("tank_allowheadlights", 0 ) > 0 ) then
 
 		for i=1,#self.HeadLights.Lamps do
 
@@ -107,7 +107,7 @@ function Meta:TankExitVehicle()
 	local p = trace.HitPos + trace.HitNormal * 50
 
 	if( self.ExitPos ) then
-		p = self:LocalToWorld( self.ExitPos  )
+		p = self:LocalToWorld( self.ExitPos	)
 	end
 
 	-- self.Pilot:SetColor( self.Pilot.Col )
@@ -135,11 +135,11 @@ function Meta:TankExitVehicle()
 
 	self.Pilot:SetScriptedVehicle( NULL )
 
-    if( TankNeuroWar == 1 ) then
+		if( TankNeuroWar == 1 ) then
 
-        self.Pilot:Kill()
+				self.Pilot:Kill()
 
-    end
+		end
 
 	self.Speed = 0
 	self.IsDriving = false
@@ -156,8 +156,8 @@ function Meta:TankExitVehicle()
 	end
 
 
-	if IsValid(  self.PilotModel ) then self.PilotModel:Remove() end
+	if IsValid(	self.PilotModel ) then self.PilotModel:Remove() end
 
-    self.PilotModel = NULL
+		self.PilotModel = NULL
 
 end

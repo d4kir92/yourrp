@@ -1,120 +1,120 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
 function GetTextLength( text, font )
-  surface.SetFont( font )
-  local l, h = surface.GetTextSize( text )
-  return l
+	surface.SetFont( font )
+	local l, h = surface.GetTextSize( text )
+	return l
 end
 
 local yrp_if = {}
 
 function GetHTMLImage( url, w, h )
-  return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\"width=\"" .. w .. "\" height=\"" .. h .. "\" /> </body>"
+	return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\"width=\"" .. w .. "\" height=\"" .. h .. "\" /> </body>"
 end
 
 function TableToColorStr( tbl )
-  return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
+	return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
 end
 
 function StringToColor( str )
-  local _col = string.Explode( ",", str )
-  return Color( _col[1], _col[2], _col[3], _col[4] or 255 )
+	local _col = string.Explode( ",", str )
+	return Color( _col[1], _col[2], _col[3], _col[4] or 255 )
 end
 
 function RegisterDesign( tab )
-  if tab.name != nil then
-    yrp_if[tab.name] = {}
-    yrp_if[tab.name].author = tab.author or "NO AUTHOR"
-    yrp_if[tab.name].name = tab.name or "NO Name"
-  end
+	if tab.name != nil then
+		yrp_if[tab.name] = {}
+		yrp_if[tab.name].author = tab.author or "NO AUTHOR"
+		yrp_if[tab.name].name = tab.name or "NO Name"
+	end
 end
 
 function RegisterPanelFunction( name, func )
-  yrp_if[name]["DPanel"] = func
+	yrp_if[name]["DPanel"] = func
 end
 
 function RegisterButtonFunction( name, func )
-  yrp_if[name]["DButton"] = func
+	yrp_if[name]["DButton"] = func
 end
 
 function RegisterWindowFunction( name, func )
-  yrp_if[name]["DFrame"] = func
+	yrp_if[name]["DFrame"] = func
 end
 
 function GetDesigns()
-  return yrp_if
+	return yrp_if
 end
 
 function interfaceDesign()
-  local ply = LocalPlayer()
-  local design = ply:GetNWString( "interface_design", "Material Design 1" )
-  if yrp_if[design] != nil then
-    return design
-  else
-    return "Material Design 1"
-  end
+	local ply = LocalPlayer()
+	local design = ply:GetNWString( "interface_design", "Material Design 1" )
+	if yrp_if[design] != nil then
+		return design
+	else
+		return "Material Design 1"
+	end
 end
 
 function InterfaceBorder()
-  local ply = LocalPlayer()
-  return ply:GetNWBool( "interface_border", true )
+	local ply = LocalPlayer()
+	return ply:GetNWBool( "interface_border", true )
 end
 
 function InterfaceRounded()
-  local ply = LocalPlayer()
-  return ply:GetNWBool( "interface_rounded", true )
+	local ply = LocalPlayer()
+	return ply:GetNWBool( "interface_rounded", true )
 end
 
 function InterfaceTransparent()
-  local ply = LocalPlayer()
-  return ply:GetNWBool( "interface_transparent", true )
+	local ply = LocalPlayer()
+	return ply:GetNWBool( "interface_transparent", true )
 end
 
 function InterfaceColor()
-  local ply = LocalPlayer()
-  return ply:GetNWString( "interface_color", "blue" )
+	local ply = LocalPlayer()
+	return ply:GetNWString( "interface_color", "blue" )
 end
 
 function InterfaceStyle()
-  local ply = LocalPlayer()
-  return ply:GetNWString( "interface_style", "dark" )
+	local ply = LocalPlayer()
+	return ply:GetNWString( "interface_style", "dark" )
 end
 
 local yrp_colors = {}
 function YRPGetColor( nr )
-  if wk( yrp_colors[interfaceDesign()] ) then
-    if wk( yrp_colors[interfaceDesign()][InterfaceColor()] ) then
-      if wk( yrp_colors[interfaceDesign()][InterfaceColor()][nr] ) then
-        return yrp_colors[interfaceDesign()][InterfaceColor()][nr]
-      end
-    end
-  end
-  return Color( 255, 0, 0, 255 )
+	if wk( yrp_colors[interfaceDesign()] ) then
+		if wk( yrp_colors[interfaceDesign()][InterfaceColor()] ) then
+			if wk( yrp_colors[interfaceDesign()][InterfaceColor()][nr] ) then
+				return yrp_colors[interfaceDesign()][InterfaceColor()][nr]
+			end
+		end
+	end
+	return Color( 255, 0, 0, 255 )
 end
 
 function YRPAddColor( design, color, nr, col )
-  yrp_colors[design] = yrp_colors[design] or {}
-  yrp_colors[design][color] = yrp_colors[design][color] or {}
-  yrp_colors[design][color][nr] = col
+	yrp_colors[design] = yrp_colors[design] or {}
+	yrp_colors[design][color] = yrp_colors[design][color] or {}
+	yrp_colors[design][color][nr] = col
 end
 
 local _icons = {}
 function AddDesignIcon( name, path )
-  _icons[name] = Material( path )
+	_icons[name] = Material( path )
 end
 function GetDesignIcon( name )
-  if _icons[name] != nil then
-    return _icons[name]
-  else
-    return _icons["clear"]
-  end
+	if _icons[name] != nil then
+		return _icons[name]
+	else
+		return _icons["clear"]
+	end
 end
 
 function DrawIcon( material, w, h, x, y, color )
-  local col = color or YRPGetColor( "6" )
-  surface.SetDrawColor( col )
-  surface.SetMaterial( material )
-  surface.DrawTexturedRect( x or 0, y or 0, w or 64, h or 64 )
+	local col = color or YRPGetColor( "6" )
+	surface.SetDrawColor( col )
+	surface.SetMaterial( material )
+	surface.DrawTexturedRect( x or 0, y or 0, w or 64, h or 64 )
 end
 
 AddDesignIcon( "auto", "vgui/flags/lang_" .. "auto" .. ".png" )
@@ -168,195 +168,195 @@ AddDesignIcon( "steam", "vgui/material/icon_steam.png" )
 local _delay = 1
 local _get_design = true
 function GetDesign()
-  if _get_design then
-    _get_design = !_get_design
-    net.Start( "get_design" )
-    net.SendToServer()
-  end
+	if _get_design then
+		_get_design = !_get_design
+		net.Start( "get_design" )
+		net.SendToServer()
+	end
 end
 
 function surfaceWindow( derma, pw, ph, title )
-  local _title = title or ""
-  if yrp_if[interfaceDesign()] != nil then
-    yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title )
-  else
-    GetDesign()
-  end
+	local _title = title or ""
+	if yrp_if[interfaceDesign()] != nil then
+		yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title )
+	else
+		GetDesign()
+	end
 end
 
 function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay )
-  local _text = text or ""
-  if yrp_if[interfaceDesign()] != nil then
-    yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay )
-  else
-    GetDesign()
-  end
+	local _text = text or ""
+	if yrp_if[interfaceDesign()] != nil then
+		yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay )
+	else
+		GetDesign()
+	end
 end
 
 function surfacePanel( derma, pw, ph, text, color, px, py, ax, ay )
-  local _text = text or ""
-  if yrp_if[interfaceDesign()] != nil then
-    yrp_if[interfaceDesign()]["DPanel"]( derma, pw, ph, _text, color, px, py, ax, ay )
-  else
-    GetDesign()
-  end
+	local _text = text or ""
+	if yrp_if[interfaceDesign()] != nil then
+		yrp_if[interfaceDesign()]["DPanel"]( derma, pw, ph, _text, color, px, py, ax, ay )
+	else
+		GetDesign()
+	end
 end
 
 function surfaceCheckBox( derma, pw, ph, icon )
-  if yrp_if[interfaceDesign()] != nil then
-    if yrp_if[interfaceDesign()]["Selected"] != nil then
-      yrp_if[interfaceDesign()]["DCheckBox"]( derma, pw, ph, icon )
-    else
-      local th = 4
-      local br = 8
-      local color = Color( 0, 0, 0, 255 )
-      surfaceBox( ctr( br ), ctr( br ), pw - ctr( br*2 ), ctr( th ), color )
-      surfaceBox( ctr( br ), ctr( br ), ctr( th ), ph - ctr( br*2 ), color )
-      surfaceBox( ctr( br ), ph - ctr( br+th ), pw - ctr( br*2 ), ctr( th ), color )
-      surfaceBox( pw - ctr( br+th ), ctr( br ), ctr( th ), ph - ctr( br*2 ), color )
-      if derma:GetChecked() then
-        br = 4
-        surface.SetDrawColor( 255, 255, 255, 255 )
-      	surface.SetMaterial( GetDesignIcon( icon ) )
-      	surface.DrawTexturedRect( ctr( br ), ctr( br ), pw - ctr( br*2 ), ph - ctr( 8 ) )
-      end
-    end
-  else
-    GetDesign()
-  end
+	if yrp_if[interfaceDesign()] != nil then
+		if yrp_if[interfaceDesign()]["Selected"] != nil then
+			yrp_if[interfaceDesign()]["DCheckBox"]( derma, pw, ph, icon )
+		else
+			local th = 4
+			local br = 8
+			local color = Color( 0, 0, 0, 255 )
+			surfaceBox( ctr( br ), ctr( br ), pw - ctr( br*2 ), ctr( th ), color )
+			surfaceBox( ctr( br ), ctr( br ), ctr( th ), ph - ctr( br*2 ), color )
+			surfaceBox( ctr( br ), ph - ctr( br+th ), pw - ctr( br*2 ), ctr( th ), color )
+			surfaceBox( pw - ctr( br+th ), ctr( br ), ctr( th ), ph - ctr( br*2 ), color )
+			if derma:GetChecked() then
+				br = 4
+				surface.SetDrawColor( 255, 255, 255, 255 )
+				surface.SetMaterial( GetDesignIcon( icon ) )
+				surface.DrawTexturedRect( ctr( br ), ctr( br ), pw - ctr( br*2 ), ph - ctr( 8 ) )
+			end
+		end
+	else
+		GetDesign()
+	end
 end
 
 function surfaceSelected( derma, pw, ph, px, py )
-  local px = px or 0
-  local py = py or 0
-  local _text = text or ""
-  local ply = LocalPlayer()
-  if yrp_if[interfaceDesign()] != nil then
-    if yrp_if[interfaceDesign()]["Selected"] != nil then
-      yrp_if[interfaceDesign()]["Selected"]( derma, pw, ph, px, py )
-    else
-      local _br = 4
-      local _w = 32
-      local _h = 12
-      --Outter
-      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+	local px = px or 0
+	local py = py or 0
+	local _text = text or ""
+	local ply = LocalPlayer()
+	if yrp_if[interfaceDesign()] != nil then
+		if yrp_if[interfaceDesign()]["Selected"] != nil then
+			yrp_if[interfaceDesign()]["Selected"]( derma, pw, ph, px, py )
+		else
+			local _br = 4
+			local _w = 32
+			local _h = 12
+			--Outter
+			surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      surfaceBox( px + ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( px + ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
-      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 0, 0, 0, 255 ) )
+			surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 
-      _br = 8
-      _w = 32-2*4
-      _h = 12-2*4
-      --Inner
-      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
-      surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+			_br = 8
+			_w = 32-2*4
+			_h = 12-2*4
+			--Inner
+			surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+			surfaceBox( px + ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
 
-      surfaceBox( px + ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
-      surfaceBox( px + ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+			surfaceBox( px + ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+			surfaceBox( px + ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
 
-      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
-      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+			surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+			surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
 
-      surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
-      surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
-    end
-  else
-    GetDesign()
-  end
+			surfaceBox( px + pw - ctr( _w ) - ctr( _br ), ph - ctr( _h ) - ctr( _br ), ctr( _w ), ctr( _h ), Color( 255, 255, 255, 255 ) )
+			surfaceBox( px + pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 255, 255, 255, 255 ) )
+		end
+	else
+		GetDesign()
+	end
 end
 
 function mouseVisible()
-  return vgui.CursorVisible()
+	return vgui.CursorVisible()
 end
 
 --[[ OLD ]]--
 local _menuOpen = false
 function isNoMenuOpen()
-  if !vgui.CursorVisible() then -- and !_menuOpen then
-    return true
-  else
-    return false
-  end
+	if !vgui.CursorVisible() then -- and !_menuOpen then
+		return true
+	else
+		return false
+	end
 end
 
 function closeMenu()
-  _menuOpen = false
-  gui.EnableScreenClicker( false )
+	_menuOpen = false
+	gui.EnableScreenClicker( false )
 end
 
 function openMenu()
-  _menuOpen = true
+	_menuOpen = true
 end
 
 function paintBr( pw, ph, color )
-  local _br = ctr( 2 )
-  --links
-  draw.RoundedBox( 0, _br, _br, _br, ph - 2 *_br, color )
-  --oben
-  draw.RoundedBox( 0, _br, _br, pw - 2 * _br, _br, color )
-  --rechts
-  draw.RoundedBox( 0, pw - 2*_br, _br, _br, ph-2*_br, color )
-  --unten
-  draw.RoundedBox( 0, _br, ph - 2*_br, pw-2*_br, _br, color )
+	local _br = ctr( 2 )
+	--links
+	draw.RoundedBox( 0, _br, _br, _br, ph - 2 *_br, color )
+	--oben
+	draw.RoundedBox( 0, _br, _br, pw - 2 * _br, _br, color )
+	--rechts
+	draw.RoundedBox( 0, pw - 2*_br, _br, _br, ph-2*_br, color )
+	--unten
+	draw.RoundedBox( 0, _br, ph - 2*_br, pw-2*_br, _br, color )
 end
 
 function paintWindow( derma, pw, ph, title )
-  yrp_if["Material Design 1"]["DFrame"]( derma, pw, ph, title )
+	yrp_if["Material Design 1"]["DFrame"]( derma, pw, ph, title )
 end
 
 function paintButton( derma, pw, ph, text )
-  local _color = Color( 255, 255, 255, 150 )
-  if derma:IsHovered() then
-    _color = Color( 255, 255, 100, 150 )
-  end
-  draw.RoundedBox( 0, 0, 0, pw, ph, _color )
+	local _color = Color( 255, 255, 255, 150 )
+	if derma:IsHovered() then
+		_color = Color( 255, 255, 100, 150 )
+	end
+	draw.RoundedBox( 0, 0, 0, pw, ph, _color )
 
-  local _brC = Color( 0, 0, 0, 255 )
-  paintBr( pw, ph, _brC )
+	local _brC = Color( 0, 0, 0, 255 )
+	paintBr( pw, ph, _brC )
 
-  draw.SimpleTextOutlined( lang_string( text ), "windowTitle", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+	draw.SimpleTextOutlined( lang_string( text ), "windowTitle", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 end
 
 function paintPanel( derma, pw, ph, color )
-  local _c = color
-  if _c == nil then
-    _c = Color( 0, 0, 0, 250 )
-  end
-  draw.RoundedBox( 0, 0, 0, pw, ph, _c )
+	local _c = color
+	if _c == nil then
+		_c = Color( 0, 0, 0, 250 )
+	end
+	draw.RoundedBox( 0, 0, 0, pw, ph, _c )
 
-  local _brC = Color( 255, 255, 255, 255 )
-  paintBr( pw, ph, _brC )
+	local _brC = Color( 255, 255, 255, 255 )
+	paintBr( pw, ph, _brC )
 end
 
 function paintInv( derma, pw, ph, text, text2 )
-  draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 190 ) )
+	draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 190 ) )
 
-  local _brC = Color( 255, 255, 255, 255 )
-  paintBr( pw, ph, _brC )
+	local _brC = Color( 255, 255, 255, 255 )
+	paintBr( pw, ph, _brC )
 
-  draw.SimpleTextOutlined( lang_string( text ), "DermaDefault", ctr( 15 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-  if text2 != nil then
-    draw.SimpleTextOutlined( lang_string( text2 ), "DermaDefault", ctr( 15 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-  end
+	draw.SimpleTextOutlined( lang_string( text ), "DermaDefault", ctr( 15 ), ph - ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+	if text2 != nil then
+		draw.SimpleTextOutlined( lang_string( text2 ), "DermaDefault", ctr( 15 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+	end
 end
 
 function createD( derma, parent, w, h, x, y )
-  local _parent = parent or nil
-  local _w = w or 100
-  local _h = h or 100
-  local _x = x or 0
-  local _y = y or 0
-  local tmpD = vgui.Create( derma, parent )
-  tmpD:SetSize( _w, _h )
-  tmpD:SetPos( _x, _y )
-  return tmpD
+	local _parent = parent or nil
+	local _w = w or 100
+	local _h = h or 100
+	local _x = x or 0
+	local _y = y or 0
+	local tmpD = vgui.Create( derma, parent )
+	tmpD:SetSize( _w, _h )
+	tmpD:SetPos( _x, _y )
+	return tmpD
 end
 
 local _yrp_derma = {}
@@ -370,94 +370,94 @@ _yrp_derma.colors.header = Color( 0, 255, 0, 200 )
 _yrp_derma.colors.font = Color( 255, 255, 255, 255 )
 
 function get_dbg_col()
-  return _yrp_derma.colors.dbackground
+	return _yrp_derma.colors.dbackground
 end
 function get_dp_col()
-  return _yrp_derma.colors.dprimary
+	return _yrp_derma.colors.dprimary
 end
 function get_dpbg_col()
-  return _yrp_derma.colors.dprimaryBG
+	return _yrp_derma.colors.dprimaryBG
 end
 function get_ds_col()
-  return _yrp_derma.colors.dsecondary or Color( 0, 0, 0, 255 )
+	return _yrp_derma.colors.dsecondary or Color( 0, 0, 0, 255 )
 end
 function get_dsbg_col()
-  return _yrp_derma.colors.dsecondaryH
+	return _yrp_derma.colors.dsecondaryH
 end
 function get_header_col()
-  return _yrp_derma.colors.header
+	return _yrp_derma.colors.header
 end
 function get_font_col()
-  return _yrp_derma.colors.font
+	return _yrp_derma.colors.font
 end
 
 function getMDMode()
-  if tonumber( HudV("mdpm") ) == 0 then
-    return "dark"
-  elseif tonumber( HudV("mdpm") ) == 1 then
-    return "light"
-  end
-  return -1
+	if tonumber( HudV("mdpm") ) == 0 then
+		return "dark"
+	elseif tonumber( HudV("mdpm") ) == 1 then
+		return "light"
+	end
+	return -1
 end
 
 function colorH( colTab )
-  local tmp = colTab
-  local col = {}
-  local def = 40
-  for k, v in pairs( tmp ) do
-    if tostring( k ) == "a" then
-      col[k] = v
-    else
-  		col[k] = v + def
-  		if col[k] > 255 then
-  			col[k] = 255
-  		end
-    end
+	local tmp = colTab
+	local col = {}
+	local def = 40
+	for k, v in pairs( tmp ) do
+		if tostring( k ) == "a" then
+			col[k] = v
+		else
+			col[k] = v + def
+			if col[k] > 255 then
+				col[k] = 255
+			end
+		end
 	end
 	return Color( col.r, col.g, col.b, col.a )
 end
 
 function colorBG( colTab )
-  local tmp = colTab
-  local col = {}
-  local def = 40
-  for k, v in pairs( tmp ) do
-    if tostring( k ) == "a" then
-      col[k] = v
-    else
-  		col[k] = v - def
-  		if col[k] < 0 then
-  			col[k] = 0
-  		end
-    end
+	local tmp = colTab
+	local col = {}
+	local def = 40
+	for k, v in pairs( tmp ) do
+		if tostring( k ) == "a" then
+			col[k] = v
+		else
+			col[k] = v - def
+			if col[k] < 0 then
+				col[k] = 0
+			end
+		end
 	end
 	return Color( col.r, col.g, col.b, col.a )
 end
 
 function colorToMode( colTab )
-  local tmp = colTab
-  local col = {}
-  local def = 40
-  for k, v in pairs( tmp ) do
-    if tostring( k ) == "a" then
-      col[k] = v
-    elseif getMDMode() == "light" then
-  		col[k] = v + def
-  		if col[k] > 255 then
-  			col[k] = 255
-  		end
-    elseif getMDMode() == "dark" then
-      col[k] = v - def
-  		if col[k] < 0 then
-  			col[k] = 0
-  		end
-    end
+	local tmp = colTab
+	local col = {}
+	local def = 40
+	for k, v in pairs( tmp ) do
+		if tostring( k ) == "a" then
+			col[k] = v
+		elseif getMDMode() == "light" then
+			col[k] = v + def
+			if col[k] > 255 then
+				col[k] = 255
+			end
+		elseif getMDMode() == "dark" then
+			col[k] = v - def
+			if col[k] < 0 then
+				col[k] = 0
+			end
+		end
 	end
 	return Color( col.r, col.g, col.b, col.a )
 end
 
 function addMDColor( name, _color )
-  _yrp_derma.colors[name] = _color
+	_yrp_derma.colors[name] = _color
 end
 
 function getMDPCol()
@@ -470,16 +470,16 @@ end
 
 function getMDPColor()
 	local tmp = getMDPCol()
-  return colorToMode( tmp )
+	return colorToMode( tmp )
 end
 
 function getMDSColor()
 	local tmp = getMDSCol()
-  return colorToMode( tmp )
+	return colorToMode( tmp )
 end
 
 function get_color( string )
-  return _yrp_derma.colors[string]
+	return _yrp_derma.colors[string]
 end
 
 function addColor( string, r, g, b, a )
@@ -520,9 +520,9 @@ end
 
 function drawRBoxBr( r, x, y, w, h, col, br )
 	draw.RoundedBox( ctr(r), ctr(x-br), ctr(y-br), ctr(w+2*br-1), ctr(2*br), col )
-  draw.RoundedBox( ctr(r), ctr(x-br), ctr(y+h-br), ctr(w+2*br-1), ctr(2*br), col )
-  draw.RoundedBox( ctr(r), ctr(x-br), ctr(y), ctr(2*br), ctr(h), col )
-  draw.RoundedBox( ctr(r), ctr(x+w-br), ctr(y), ctr(2*br), ctr(h), col )
+	draw.RoundedBox( ctr(r), ctr(x-br), ctr(y+h-br), ctr(w+2*br-1), ctr(2*br), col )
+	draw.RoundedBox( ctr(r), ctr(x-br), ctr(y), ctr(2*br), ctr(h), col )
+	draw.RoundedBox( ctr(r), ctr(x+w-br), ctr(y), ctr(2*br), ctr(h), col )
 end
 
 function drawRBoxCr( x, y, size, col )
@@ -530,16 +530,16 @@ function drawRBoxCr( x, y, size, col )
 end
 
 function surfaceText( text, font, x, y, color, ax, ay, br )
-  br = br or true
-  local col_br = Color( 0, 0, 0, color.a )
-  if color == Color( 0, 0, 0, 255 ) then
-    col_br = Color( 255, 255, 255, color.a )
-  end
-  if !br then
-    draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 0 ), Color( 0, 0, 0, 0 ) )
-  else
-    draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 1 ), col_br )
-  end
+	br = br or true
+	local col_br = Color( 0, 0, 0, color.a )
+	if color == Color( 0, 0, 0, 255 ) then
+		col_br = Color( 255, 255, 255, color.a )
+	end
+	if !br then
+		draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 0 ), Color( 0, 0, 0, 0 ) )
+	else
+		draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 1 ), col_br )
+	end
 end
 
 function drawText( text, font, x, y, col, ax, ay )
@@ -547,14 +547,14 @@ function drawText( text, font, x, y, col, ax, ay )
 end
 
 function createVGUI( art, parent, w, h, x, y )
-  local tmp = vgui.Create( art, parent, nil )
-  if w != nil and h != nil then
-    tmp:SetSize( ctr(w), ctr(h) )
-  end
-  if x != nil and y != nil then
-    tmp:SetPos( ctr(x), ctr(y) )
-  end
-  return tmp
+	local tmp = vgui.Create( art, parent, nil )
+	if w != nil and h != nil then
+		tmp:SetSize( ctr(w), ctr(h) )
+	end
+	if x != nil and y != nil then
+		tmp:SetPos( ctr(x), ctr(y) )
+	end
+	return tmp
 end
 
 function paintMDBackground( derma, pw, ph )
@@ -567,25 +567,25 @@ end
 
 function createMDMenu( parent, w, h, x, y )
 	local tmp = createD( "DFrame", parent, w, h, x, y )
-  tmp:ShowCloseButton( true )
-  tmp:SetDraggable( true )
-  tmp:SetTitle( "" )
-  tmp.sites = {}
-  tmp.cat = {}
-  function tmp:AddCategory( cat )
-    local tmpNr = #tmp.cat+1
-    self.cat[tmpNr] = cat
-    self.sites[cat] = {}
-  end
-  function tmp:AddSite( hook, site, cat, icon )
-    local material = Material( icon )
-    local tmpNrMax = #tmp.sites[cat]
-    local tmpNr = tmpNrMax + 1
-    self.sites[cat][tmpNr] = {}
-    self.sites[cat][tmpNr].hook = hook
-    self.sites[cat][tmpNr].site = site
-    self.sites[cat][tmpNr].material = material
-  end
+	tmp:ShowCloseButton( true )
+	tmp:SetDraggable( true )
+	tmp:SetTitle( "" )
+	tmp.sites = {}
+	tmp.cat = {}
+	function tmp:AddCategory( cat )
+		local tmpNr = #tmp.cat+1
+		self.cat[tmpNr] = cat
+		self.sites[cat] = {}
+	end
+	function tmp:AddSite( hook, site, cat, icon )
+		local material = Material( icon )
+		local tmpNrMax = #tmp.sites[cat]
+		local tmpNr = tmpNrMax + 1
+		self.sites[cat][tmpNr] = {}
+		self.sites[cat][tmpNr].hook = hook
+		self.sites[cat][tmpNr].site = site
+		self.sites[cat][tmpNr].material = material
+	end
 
 	tmp.sitepanel = createD( "DPanel", tmp, BScrW(), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
@@ -593,16 +593,16 @@ function createMDMenu( parent, w, h, x, y )
 	end
 
 	function tmp:SwitchToSite( _hook )
-    self.lastsite = _hook
-	  if self.site != nil then
-	    self.site:Remove()
-	  end
-	  hook.Call( _hook )
+		self.lastsite = _hook
+		if self.site != nil then
+			self.site:Remove()
+		end
+		hook.Call( _hook )
 	end
 
 	function tmp:openMenu()
 		self.menu = createD( "DPanelList", self, ctr( 600 ), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
-    self.menu:EnableVerticalScrollbar( true )
+		self.menu:EnableVerticalScrollbar( true )
 		function self.menu:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, YRPGetColor( "5" ) )
 
@@ -618,7 +618,7 @@ function createMDMenu( parent, w, h, x, y )
 			function tmpCat:Paint( pw, ph )
 				draw.SimpleTextOutlined( string.upper( lang_string( v ) ), "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
-      self.menu:AddItem( tmpCat )
+			self.menu:AddItem( tmpCat )
 
 			--posY = posY + 50 + 10
 			if self.sites[v] != nil then
@@ -628,13 +628,13 @@ function createMDMenu( parent, w, h, x, y )
 					tmp2.hook = string.lower( w.hook )
 					tmp2.site = string.upper( w.site )
 					function tmp2:Paint( pw, ph )
-            local color = YRPGetColor( "2" )
+						local color = YRPGetColor( "2" )
 						if tmp.cursite == self.site then
-              color = YRPGetColor( "3" )
+							color = YRPGetColor( "3" )
 						elseif self:IsHovered() then
-              color = YRPGetColor( "1" )
-            end
-            draw.RoundedBox( 0, 0, 0, pw, ph, color )
+							color = YRPGetColor( "1" )
+						end
+						draw.RoundedBox( 0, 0, 0, pw, ph, color )
 
 						if w.material != nil then
 							surface.SetDrawColor( 255, 255, 255, 255 )
@@ -647,23 +647,23 @@ function createMDMenu( parent, w, h, x, y )
 					function tmp2:DoClick()
 						tmp.cursite = self.site
 						tmp:SwitchToSite( self.hook )
-            tmp.menu:Remove()
+						tmp.menu:Remove()
 					end
-          self.menu:AddItem( tmp2 )
+					self.menu:AddItem( tmp2 )
 
-          local tmpHr2 = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 6 ), ctr( 10 ), ctr( posY ) )
-    			function tmpHr2:Paint( pw, ph )
+					local tmpHr2 = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 6 ), ctr( 10 ), ctr( posY ) )
+					function tmpHr2:Paint( pw, ph )
 
-    			end
-          self.menu:AddItem( tmpHr2 )
+					end
+					self.menu:AddItem( tmpHr2 )
 
 					--posY = posY + 80 + 10
 				end
-        local tmpHr = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 20 ), ctr( 10 ), ctr( posY ) )
-  			function tmpHr:Paint( pw, ph )
-  				--draw.SimpleTextOutlined( "test", "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-  			end
-        self.menu:AddItem( tmpHr )
+				local tmpHr = createD( "DPanel", self.menu, ctr( 600-20 ), ctr( 20 ), ctr( 10 ), ctr( posY ) )
+				function tmpHr:Paint( pw, ph )
+					--draw.SimpleTextOutlined( "test", "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				end
+				self.menu:AddItem( tmpHr )
 			end
 		end
 	end
@@ -680,7 +680,7 @@ function createMDSwitch( parent, w, h, x, y, opt1, opt2, _hook )
 	elseif tonumber( HudV("mdpm") ) == 1 then
 		tmp.value = "light"
 	end
-  tmp:SetText( "" )
+	tmp:SetText( "" )
 	function tmp:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, get_ds_col() )
 		if tmp.value == opt1 then
@@ -755,23 +755,23 @@ function addSColorField( parent, col, x, y )
 end
 
 function anchorW( num )
-  if num == 0 then
-    return 0
-  elseif num == 1 then
-    return ScrW2()
-  elseif num == 2 then
-    return ScrW()
-  end
+	if num == 0 then
+		return 0
+	elseif num == 1 then
+		return ScrW2()
+	elseif num == 2 then
+		return ScrW()
+	end
 end
 
 function anchorH( num )
-  if num == 0 then
-    return 0
-  elseif num == 1 then
-    return ScrH2()
-  elseif num == 2 then
-    return ScrH()
-  end
+	if num == 0 then
+		return 0
+	elseif num == 1 then
+		return ScrH2()
+	elseif num == 2 then
+		return ScrH()
+	end
 end
 
 function createCircle( x, y, radius, seg )
@@ -786,7 +786,7 @@ function createCircle( x, y, radius, seg )
 	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
 	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
 
-  return cir
+	return cir
 end
 
 function drawCircle( x, y, radius, seg )
@@ -835,77 +835,77 @@ function drawCircleR( x, y, radius, seg )
 end
 
 function drawRoundedBox( r, x, y, w, h, color )
-  draw.RoundedBox( 0, x+h/2, y, w-h, h, color )
-  surface.SetDrawColor( color )
-  draw.NoTexture()
+	draw.RoundedBox( 0, x+h/2, y, w-h, h, color )
+	surface.SetDrawColor( color )
+	draw.NoTexture()
 
-  drawCircleL( x+h/2, y+h/2, h/2, 64 )
+	drawCircleL( x+h/2, y+h/2, h/2, 64 )
 
-  if w >= h then
-    drawCircleR( x+w-h/2, y+h/2, h/2, 64 )
-  end
+	if w >= h then
+		drawCircleR( x+w-h/2, y+h/2, h/2, 64 )
+	end
 end
 
 function drawRoundedBoxStencil( r, x, y, w, h, color, max )
 
-  --drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 255, 100 ) )
+	--drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 255, 100 ) )
 
-  if true then
-    render.ClearStencil()
-    render.SetStencilEnable( true )
+	if true then
+		render.ClearStencil()
+		render.SetStencilEnable( true )
 
-      render.SetStencilWriteMask( 99 )
-  		render.SetStencilTestMask( 99 )
+			render.SetStencilWriteMask( 99 )
+			render.SetStencilTestMask( 99 )
 
-      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+			render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
 
-      render.SetStencilFailOperation( STENCILOPERATION_INCR )
-      render.SetStencilPassOperation( STENCILOPERATION_KEEP )
-      render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
+			render.SetStencilFailOperation( STENCILOPERATION_INCR )
+			render.SetStencilPassOperation( STENCILOPERATION_KEEP )
+			render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
 
-      drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 0, 255 ) )
+			drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 0, 255 ) )
 
-      render.SetStencilReferenceValue( 1 )
-      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+			render.SetStencilReferenceValue( 1 )
+			render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
 
-      draw.RoundedBox( 0, x, y, w, h, color )
+			draw.RoundedBox( 0, x, y, w, h, color )
 
-    render.SetStencilEnable( false )
-  end
+		render.SetStencilEnable( false )
+	end
 end
 
 function drawRBBR( r, x, y, w, h, color, br )
-  local _br = br or 0
-  draw.RoundedBox( 0, x, y, w, br, color )
-  draw.RoundedBox( 0, x, y+h-br, w, br, color )
-  draw.RoundedBox( 0, x, y, br, h, color )
-  draw.RoundedBox( 0, x+w-br, y, br, h, color )
+	local _br = br or 0
+	draw.RoundedBox( 0, x, y, w, br, color )
+	draw.RoundedBox( 0, x, y+h-br, w, br, color )
+	draw.RoundedBox( 0, x, y, br, h, color )
+	draw.RoundedBox( 0, x+w-br, y, br, h, color )
 
 end
 
 function drawRoundedBoxBR( r, x, y, w, h, color, br )
-  local _br = br or 0
-  --drawRoundedBox( 0, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 255 ) )
-  --drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 0, 100 ) )
-  --drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, Color( 0, 255, 0, 100 ) )
-  if true then
-    render.ClearStencil()
-    render.SetStencilEnable( true )
-      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+	local _br = br or 0
+	--drawRoundedBox( 0, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 255 ) )
+	--drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 0, 100 ) )
+	--drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, Color( 0, 255, 0, 100 ) )
+	if true then
+		render.ClearStencil()
+		render.SetStencilEnable( true )
+			render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
 
-      render.SetStencilFailOperation( STENCILOPERATION_INCR )
-    	render.SetStencilPassOperation( STENCILOPERATION_INCR )
-    	render.SetStencilZFailOperation( STENCILOPERATION_INCR )
+			render.SetStencilFailOperation( STENCILOPERATION_INCR )
+			render.SetStencilPassOperation( STENCILOPERATION_INCR )
+			render.SetStencilZFailOperation( STENCILOPERATION_INCR )
 
-      render.SetStencilTestMask( 1 )
-      drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 200 ) )
+			render.SetStencilTestMask( 1 )
+			drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 200 ) )
 
-      render.SetStencilReferenceValue( 1 )
-      render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NOTEQUAL )
+			render.SetStencilReferenceValue( 1 )
+			render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NOTEQUAL )
 
-      render.SetStencilWriteMask( 1 )
-      drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, color )
+			render.SetStencilWriteMask( 1 )
+			drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, color )
 
-    render.SetStencilEnable( false )
-  end
+		render.SetStencilEnable( false )
+	end
 end

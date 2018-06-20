@@ -11,7 +11,7 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
 
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
@@ -20,7 +20,7 @@ end
 function ENT:Use( activator, caller )
 
 	activator:GiveAmmo( 1, activator:GetActiveWeapon():GetPrimaryAmmoType() )
-  self:Remove()
+	self:Remove()
 end
 
 function ENT:Think()

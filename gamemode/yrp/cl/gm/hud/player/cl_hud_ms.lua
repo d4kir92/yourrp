@@ -3,18 +3,18 @@
 local stamina = Material( "icon16/lightning.png" )
 
 function showMS( ply )
-  return ply:GetNWBool( "bool_stamina", false )
+	return ply:GetNWBool( "bool_stamina", false )
 end
 
 function hudMS( ply, color )
-  if showMS( ply ) then
-    local _mstext = math.Round( ( math.Round( ply:GetNWInt( "GetCurStamina", 0 ), 0 ) / ply:GetNWInt( "GetMaxStamina", 0 ) ) * 100, 0 ) .. "%"
-    drawHUDElement( "ms", ply:GetNWInt( "GetCurStamina", 0 ), ply:GetNWInt( "GetMaxStamina", 0 ), _mstext, stamina, color )
-  end
+	if showMS( ply ) then
+		local _mstext = math.Round( ( math.Round( ply:GetNWInt( "GetCurStamina", 0 ), 0 ) / ply:GetNWInt( "GetMaxStamina", 0 ) ) * 100, 0 ) .. "%"
+		drawHUDElement( "ms", ply:GetNWInt( "GetCurStamina", 0 ), ply:GetNWInt( "GetMaxStamina", 0 ), _mstext, stamina, color )
+	end
 end
 
 function hudMSBR( ply )
-  if showMS( ply ) then
-    drawHUDElementBr( "ms" )
-  end
+	if showMS( ply ) then
+		drawHUDElementBr( "ms" )
+	end
 end

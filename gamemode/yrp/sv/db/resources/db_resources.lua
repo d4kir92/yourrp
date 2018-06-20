@@ -31,7 +31,7 @@ for k, ws in pairs( _wsitems ) do
 		printGM( "db", "+[" .. k .. "]\t[" .. tostring( ws.title ) .. "]" )
 		--printGM( "note", "+[" .. k .. "]\t[" .. tostring( ws.wsid ) .. "]\t[" .. tostring( ws.title ) .. "]" )
 
-    resource.AddWorkshop( tostring( ws.wsid ) )
+		resource.AddWorkshop( tostring( ws.wsid ) )
 		_mounted = _mounted + 1
 	end
 end
