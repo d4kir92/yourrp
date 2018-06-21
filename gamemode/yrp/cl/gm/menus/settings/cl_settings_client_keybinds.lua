@@ -5,7 +5,7 @@ function createDKeybinder( parent, w, h, x, y, keybind )
 	function _tmp:OnChange( num )
 		if !set_keybind( keybind, num ) then
 			_tmp:SetSelectedNumber(get_keybind( keybind ))
-			Derma_Message( lang_string("hotkeyinuse"), lang_string("error"), lang_string("ok") )
+			Derma_Message( lang_string( "hotkeyinuse" ) .. "!", lang_string( "error" ), lang_string( "ok" ) )
 		end
 	end
 	function _tmp:Paint( pw, ph )
