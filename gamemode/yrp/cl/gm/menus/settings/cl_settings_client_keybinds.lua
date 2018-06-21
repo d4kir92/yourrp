@@ -1,10 +1,12 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
-
 function createDKeybinder( parent, w, h, x, y, keybind )
 	local _tmp = createD( "DBinder", parent, w, h, x, y )
 	_tmp:SetValue( get_keybind( keybind ) )
 	function _tmp:OnChange( num )
-		set_keybind( keybind, num )
+		if !set_keybind( keybind, num ) then
+			_tmp:SetSelectedNumber(get_keybind( keybind ))
+			Derma_Message( lang_string("hotkeyinuse"), lang_string("error"), lang_string("ok") )
+		end
 	end
 	function _tmp:Paint( pw, ph )
 		paintButton( self, pw, ph, "" )
