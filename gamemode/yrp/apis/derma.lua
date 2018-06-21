@@ -148,6 +148,10 @@ AddDesignIcon( "rotate_right", "vgui/material/icon_rotate_right.png" )
 AddDesignIcon( "smartphone", "vgui/material/icon_smartphone.png" )
 AddDesignIcon( "system_update", "vgui/material/icon_system_update.png" )
 
+AddDesignIcon( "os_windows", "vgui/material/icon_os_windows.png" )
+AddDesignIcon( "os_linux", "vgui/material/icon_os_linux.png" )
+AddDesignIcon( "os_osx", "vgui/material/icon_os_osx.png" )
+
 AddDesignIcon( "work", "vgui/material/icon_work.png" )
 
 AddDesignIcon( "done", "vgui/material/icon_done_outline.png" )
@@ -587,7 +591,7 @@ function createMDMenu( parent, w, h, x, y )
 		self.sites[cat][tmpNr].material = material
 	end
 
-	tmp.sitepanel = createD( "DPanel", tmp, BScrW(), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
+	tmp.sitepanel = createD( "DPanel", tmp, w, h - ctr( 100 ), 0, ctr( 100 ) )
 	function tmp.sitepanel:Paint( pw, ph )
 		--
 	end
@@ -601,7 +605,7 @@ function createMDMenu( parent, w, h, x, y )
 	end
 
 	function tmp:openMenu()
-		self.menu = createD( "DPanelList", self, ctr( 600 ), ScrH() - ctr( 100 ), 0, ctr( 100 ) )
+		self.menu = createD( "DPanelList", self, ctr( 600 ), h - ctr( 100 ), 0, ctr( 100 ) )
 		self.menu:EnableVerticalScrollbar( true )
 		function self.menu:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, ctr( 600 ), ph, YRPGetColor( "5" ) )

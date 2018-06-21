@@ -84,6 +84,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_scoreboard_show_language", "INT DEFAULT
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_scoreboard_show_frags", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_scoreboard_show_deaths", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_scoreboard_show_playtime", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_scoreboard_show_operating_system", "INT DEFAULT 0" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_tag_on_head", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_tag_on_head_clan", "INT DEFAULT 1" )
@@ -172,12 +173,12 @@ end)
 
 local yrp_general = {}
 
-if SQL_SELECT( DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
+if SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '1'" ) == nil then
 	SQL_INSERT_INTO_DEFAULTVALUES( DATABASE_NAME )
 end
 
 local _init_general = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '1'" )
-if _init_general != false and _init_general != nil then
+if wk( _init_general ) then
 	yrp_general = _init_general[1]
 
 	RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug )
@@ -665,6 +666,12 @@ net.Receive( "update_bool_yrp_scoreboard_show_deaths", function( len, ply )
 	GeneralUpdateBool( ply, "update_bool_yrp_scoreboard_show_deaths", "bool_yrp_scoreboard_show_deaths", b )
 end)
 
+util.AddNetworkString( "update_bool_yrp_scoreboard_show_operating_system" )
+net.Receive( "update_bool_yrp_scoreboard_show_operating_system", function( len, ply )
+	local b = btn( net.ReadBool() )
+	GeneralUpdateBool( ply, "update_bool_yrp_scoreboard_show_operating_system", "bool_yrp_scoreboard_show_operating_system", b )
+end)
+
 
 util.AddNetworkString( "update_bool_tag_on_head" )
 net.Receive( "update_bool_tag_on_head", function( len, ply )
@@ -908,6 +915,9 @@ net.Receive( "gethelpmenu", function( len, ply )
 
 		AddTab( tabs, "help", "getsitehelp" )
 		AddTab( tabs, "staff", "getsitestaff" )
+		if info.text_server_rules != "" then
+			AddTab( tabs, "rules", "getsiteserverrules" )
+		end
 		if info.text_server_collectionid != "" then
 			if tonumber( info.text_server_collectionid ) > 0 then
 				AddTab( tabs, "collection", "getsitecollection" )
@@ -971,6 +981,8 @@ end)
 util.AddNetworkString( "getsitehelp" )
 net.Receive( "getsitehelp", function( len, ply )
 	net.Start( "getsitehelp" )
+		net.WriteString( yrp_general.text_server_welcome_message )
+		net.WriteString( yrp_general.text_server_message_of_the_day )
 	net.Send( ply )
 end)
 
@@ -984,6 +996,19 @@ net.Receive( "getsitestaff", function( len, ply )
 	end
 	net.Start( "getsitestaff" )
 		net.WriteTable( staff )
+	net.Send( ply )
+end)
+
+util.AddNetworkString( "getsiteserverrules" )
+net.Receive( "getsiteserverrules", function( len, ply )
+	local server_rules = SQL_SELECT( "yrp_general", "text_server_rules", "uniqueID = '1'" )
+	if wk( server_rules ) then
+		server_rules = server_rules[1].text_server_rules
+	else
+		server_rules = ""
+	end
+	net.Start( "getsiteserverrules" )
+		net.WriteString( server_rules )
 	net.Send( ply )
 end)
 

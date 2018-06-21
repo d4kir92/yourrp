@@ -1142,6 +1142,9 @@ function GM:InitPostEntity()
 	playerready = true
 
 	net.Start( "player_is_ready" )
+		net.WriteBool( system.IsWindows() )
+		net.WriteBool( system.IsLinux() )
+		net.WriteBool( system.IsOSX() )
 	net.SendToServer()
 
 	initLang()

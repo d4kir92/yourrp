@@ -238,8 +238,6 @@ function SQL_QUERY( query )
 			return _result
 		elseif _result == false then
 			printGM( "db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query )
-			sql.Query( "REINDEX nodes;" )
-			sql.Query( "REINDEX pristine;" )
 			return _result
 		else
 			--printGM( "db", "ELSE" )
@@ -459,7 +457,7 @@ function SQL_DELETE_FROM( db_table, db_where )
 			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
-				_q = _q .. " );"
+				_q = _q .. " ;"
 			end
 			local _result = SQL_QUERY( _q )
 			if _result != nil then

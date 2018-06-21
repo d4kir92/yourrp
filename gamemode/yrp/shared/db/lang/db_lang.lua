@@ -39,7 +39,7 @@ AddCSLuaFile( "read_lang.lua" )
 include( "read_lang.lua" )
 
 function set_lang_string( var, str)
-	yrp_current_lang[var] = str
+	yrp_current_lang[string.lower( var )] = str
 end
 
 function get_language_name( ls )
@@ -70,7 +70,7 @@ function lang_string( var, failed )
 	--[[ string var, string failed ]]--
 	--[[ returns translated string, when worked ]]--
 	--[[ if failed it uses failed string ]]--
-	local _string = yrp_current_lang[var]
+	local _string = yrp_current_lang[string.lower( var )]
 	if _string == nil then
 		_string = var
 		if CLIENT then
@@ -211,8 +211,6 @@ if SERVER then
 elseif CLIENT then
 	local receiveTranslationProgress = function( len )
 		local percentages=net.ReadTable()
-		--print("TESTEST")
-		--PrintTable(percentages)
 		for key,value in pairs(percentages) do
 			yrp_button_info[key]["percentage"]=value
 		end

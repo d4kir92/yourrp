@@ -4,7 +4,6 @@
 include( "cl_settings_client_hud.lua" )
 include( "cl_settings_client_charakter.lua" )
 include( "cl_settings_client_keybinds.lua" )
-include( "cl_settings_server_realistic.lua" )
 
 include( "cl_settings_server_interface.lua" )
 include( "cl_settings_server_roles.lua" )
@@ -17,14 +16,12 @@ include( "cl_settings_server_whitelist.lua" )
 --[[ CLIENT ]]--
 
 
---[[ SERVER Public ]]--
-
-
 --[[ WIP ]]--
-include( "cl_settings_server_usergroups.lua" )
-include( "cl_settings_server_general.lua" )
+include( "cl_settings_server_realistic.lua" )
 
 --[[ SERVER ]]--
+include( "cl_settings_server_usergroups.lua" )
+include( "cl_settings_server_general.lua" )
 include( "cl_settings_server_feedback.lua" )
 
 
@@ -57,7 +54,7 @@ function F8RequireUG( site, usergroups )
 	tab[1] = usergroups
 
 	function settingsWindow.window.site:Paint( w, h )
-		draw.RoundedBox( h/2, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+		draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
 		surfaceText( lang_string( "settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "roleInfoHeader", w/2, h/2, Color( 255, 0, 0 ), 1, 1 )
 		if site != lang_string( "usergroups" ) then
 			surfaceText( lang_string( "settings_gotof8usergroups" ), "roleInfoHeader", w/2, h/2 + ctr( 100 ), Color( 255, 255, 0 ), 1, 1 )
@@ -186,7 +183,7 @@ function openSettings()
 			_singleplayer = "Singleplayer"
 		end
 		local _color = version_color()
-		draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", ctr( 610 + 400*0.6 + 10 ), ph/2, Color( _color.r, _color.g, _color.b, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( _singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", ctr( 610 + 400*0.6 + 10 ), ph/2, Color( _color.r, _color.g, _color.b, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 
 	local lc = DChangeLanguage( settingsWindow.window, ScrW() - ctr( 310 ), ctr( 10 ), ctr( 120 ) )

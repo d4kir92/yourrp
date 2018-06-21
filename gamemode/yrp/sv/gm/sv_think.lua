@@ -231,6 +231,7 @@ timer.Create( "ServerThink", 1, 0, function()
 			for i, dealer in pairs( _dealers ) do
 				if tostring( dealer.uniqueID ) != "1" then
 					if !dealerAlive( dealer.uniqueID ) then
+						printTab(dealer)
 						local _del = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'" )
 						if _del != nil then
 							printGM( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )

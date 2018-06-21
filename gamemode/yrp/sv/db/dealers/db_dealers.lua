@@ -18,6 +18,11 @@ if SQL_SELECT( _db_name, "*", "uniqueID = 1" ) == nil then
 	local _global_shop = SQL_INSERT_INTO( _db_name, "name, uniqueID", "'Buy menu', 1" )
 end
 
+local _minus = SQL_SELECT( _db_name, "*", "uniqueID = '-1'" )
+if _minus != nil then
+	SQL_DELETE_FROM( _db_name, "uniqueID = '-1'" )
+end
+
 util.AddNetworkString( "dealer_add" )
 
 function dealer_rem( uid )

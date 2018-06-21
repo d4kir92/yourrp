@@ -516,6 +516,9 @@ end
 util.AddNetworkString( "player_is_ready" )
 net.Receive( "player_is_ready", function( len, ply )
 	printGM( "note", ply:YRPName() .. " finished loading." )
+	local OS_Windows = net.ReadBool()
+	local OS_Linux = net.ReadBool()
+	local OS_OSX = net.ReadBool()
 
 	open_character_selection( ply )
 
@@ -527,6 +530,16 @@ net.Receive( "player_is_ready", function( len, ply )
 	end
 
 	ply:SetNWBool( "finishedloading", true )
+
+	if OS_Windows then
+		ply:SetNWString( "yrp_os", "windows" )
+	elseif OS_Linux then
+		ply:SetNWString( "yrp_os", "linux" )
+	elseif OS_OSX then
+		ply:SetNWString( "yrp_os", "osx" )
+	else
+		ply:SetNWString( "yrp_os", "other" )
+	end
 
 	ply:KillSilent()
 

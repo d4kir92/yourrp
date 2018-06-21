@@ -28,12 +28,12 @@ net.Receive( "get_feedback", function()
 			surfaceBox( 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
 		end
 
-		local _fbh = createD( "DPanel", settingsWindow.window.site, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 10 ) )
+		local _fbh = createD( "DPanel", settingsWindow.window.site, ScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 10 ) )
 		function _fbh:Paint( pw, ph )
 			surfacePanel( self, pw, ph, lang_string( "settings_fb_feedbacks" ) )
 		end
 
-		local _fbl = createD( "DPanelList", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 10 + 50 ) )
+		local _fbl = createD( "DPanelList", settingsWindow.window.site, ScrW() - ctr( 20 ), ScrH() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 10 + 50 ) )
 		_fbl:EnableVerticalScrollbar( true )
 		function _fbl:Paint( pw, ph )
 			surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )

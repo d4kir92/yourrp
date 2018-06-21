@@ -523,7 +523,7 @@ function openCharacterCreation()
 		character.rpname = charactersNameText:GetValue()
 	end
 
-	DChangeLanguage( frame, ScrW() - ctr( 100 + 10 ), ctr( 10 ), ctr( 100 ) )
+	DChangeLanguage( frame, BScrW() - ctr( 100 + 10 ), ctr( 10 ), ctr( 100 ) )
 
 	if character.amount > 0 then
 		local button = {}
@@ -617,7 +617,7 @@ function openCharacterSelection()
 
 		local cache = {}
 
-		_cs.frame = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
+		_cs.frame = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )
 		_cs.frame:SetTitle( "" )
 		_cs.frame:ShowCloseButton( false )
 		_cs.frame:SetDraggable( false )
@@ -654,10 +654,10 @@ function openCharacterSelection()
 			openFeedbackMenu()
 		end
 
-		DChangeLanguage( _cs.frame, _cs.frame:GetWide() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 100 ) )
+		DChangeLanguage( _cs.frame, BScrW() - ctr( 100 + 10 + 50 + 10 ), ctr( 10 ), ctr( 100 ) )
 
 		local border = ctr( 50 )
-		local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), border, border )
+		local charactersBackground = createD( "DPanel", _cs.frame, ctr( 800 ), ScrH() - (2*border), (ScrW() - BScrW())/2 + border, border )
 		charactersBackground.text = lang_string( "siteisloading" )
 		function charactersBackground:Paint( pw, ph )
 			paintMD( pw, ph, nil, get_dp_col() )

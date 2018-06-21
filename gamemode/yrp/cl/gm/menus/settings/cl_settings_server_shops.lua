@@ -399,20 +399,14 @@ hook.Add( "open_server_shops", "open_server_shops", function()
 	local h = settingsWindow.window.sitepanel:GetTall()
 
 	settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-
-	if ply:HasAccess() then
-		function settingsWindow.window.site:Paint( w, h )
-			--
-		end
-
-		_sh.ea = createD( "DPanel", settingsWindow.window.site, BScrW() - ctr( 40 + 480 + 40 + 40 ), h - ctr( 80 ), ctr( 40 + 480 + 40 ), ctr( 40 )	)
-		function _sh.ea:Paint( pw, ph )
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
-		end
-
-		net.Start( "get_shops" )
-		net.SendToServer()
-	else
-		F8RequireUG( lang_string( "shops" ), "superadmin or admin" )
+	function settingsWindow.window.site:Paint( w, h )
+		--
 	end
+	_sh.ea = createD( "DPanel", settingsWindow.window.site, BScrW() - ctr( 40 + 480 + 40 + 40 ), h - ctr( 80 ), ctr( 40 + 480 + 40 ), ctr( 40 )	)
+	function _sh.ea:Paint( pw, ph )
+		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
+	end
+	
+	net.Start( "get_shops" )
+	net.SendToServer()
 end)

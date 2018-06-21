@@ -89,6 +89,7 @@ function drawGroupPlayers( id )
 				_tmpPly.lang = ply:GetLanguage() or ""
 				_tmpPly.money = ply:GetNWString( "money" )
 				_tmpPly.moneybank = ply:GetNWString( "moneybank" )
+				_tmpPly.os = ply:GetNWString( "yrp_os", "other" )
 				local _pt = string.FormattedTime( ply:GetNWFloat( "uptime_current", 0 ) )
 				if _pt.m < 10 then
 					_pt.m = "0" .. _pt.m
@@ -199,6 +200,10 @@ function drawGroupPlayers( id )
 						draw.SimpleTextOutlined( self.playtime, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
 
+					if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
+						local icon_size = ctr( 100 )
+						DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
+					end
 					draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
 
@@ -488,6 +493,10 @@ function drawGroup( id, name, color )
 				draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
+				draw.SimpleTextOutlined( lang_string( "os" ), "sef", pw - ctr( 150 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			end
+
 			draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			--draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
@@ -573,7 +582,7 @@ end
 
 function BScrW()
 	--[[ give ScrW() only when under 21:9 ]]--
-	if ScrW() > ScrH()*2.5 then
+	if ScrW() > ScrH()/9*16 then
 		return ctr( 3840 )
 	else
 		return ScrW()
