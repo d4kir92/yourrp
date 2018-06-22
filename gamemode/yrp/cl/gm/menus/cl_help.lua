@@ -16,9 +16,9 @@ function replaceKeyName(str)
 		return "-"
 	elseif str == "ins" then
 		return lang_string("keyinsert")
+	else
+		return str
 	end
-
-	return str
 end
 
 function nicekey(key_str)
@@ -67,11 +67,9 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
-		if disabled ~= nil then
-			if not LocalPlayer():GetNWBool(disabled) then
-				text = "[" .. lang_string("disabled") .. "] "
-				color = Color(255, 0, 0, 255)
-			end
+		if disabled ~= nil and not LocalPlayer():GetNWBool(disabled) then
+			text = "[" .. lang_string("disabled") .. "] "
+			color = Color(255, 0, 0, 255)
 		end
 
 		text = text .. lang_string(lstr)
@@ -619,10 +617,8 @@ net.Receive("getsiteyourrptranslations", function(len)
 			function lan:Paint(pw, ph)
 				self.textcol = Color(255, 255, 255)
 
-				if language.percentage ~= nil then
-					if language.percentage == 100 then
+				if language.percentage ~= nil and language.percentage == 100 then
 						self.textcol = Color(0, 255, 0)
-					end
 				end
 
 				if language.author == "" then
