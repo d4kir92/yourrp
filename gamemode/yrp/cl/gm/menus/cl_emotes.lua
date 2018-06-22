@@ -121,7 +121,12 @@ function OpenEmotesMenu()
 
 		local _multi = _mp.x*_mid.x + _mp.y*_mid.y
 
-		local _cos_a = _multi / ( _abs_a * _abs_b )
+		local _cos_a = 0
+		if (_abs_a or _abs_b) == 0 then
+			_cos_a = 0
+		else
+			_cos_a = _multi / ( _abs_a * _abs_b )
+		end
 
 		local _ang = 0
 		if _mp.x >= 0 then
@@ -130,7 +135,7 @@ function OpenEmotesMenu()
 			_ang = 180 + math.deg( math.acos( _cos_a ) )
 		end
 
-		_em.emotes.select = 1 + _ang/(360/#_test) - _ang/(360/#_test)%1
+		_em.emotes.select = math.Round(1 + _ang/(360/#_test) - _ang/(360/#_test)%1)
 
 		for e = 1, _seg do
 			for i = 1, #_test[e]/2 do

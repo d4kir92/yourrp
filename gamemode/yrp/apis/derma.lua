@@ -26,6 +26,7 @@ function RegisterDesign( tab )
 		yrp_if[tab.name] = {}
 		yrp_if[tab.name].author = tab.author or "NO AUTHOR"
 		yrp_if[tab.name].name = tab.name or "NO Name"
+		yrp_if[tab.name].textFont = tab.textFont or "mat1text"
 	end
 end
 
@@ -43,6 +44,10 @@ end
 
 function GetDesigns()
 	return yrp_if
+end
+
+function GetFont()
+	return yrp_if[interfaceDesign()].textFont
 end
 
 function interfaceDesign()
@@ -540,9 +545,9 @@ function surfaceText( text, font, x, y, color, ax, ay, br )
 		col_br = Color( 255, 255, 255, color.a )
 	end
 	if !br then
-		draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 0 ), Color( 0, 0, 0, 0 ) )
+		draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, 0, Color( 0, 0, 0, 0 ) )
 	else
-		draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, ctr( 1 ), col_br )
+		draw.SimpleTextOutlined( text, font, x, y, color, ax, ay, 1, col_br )
 	end
 end
 
