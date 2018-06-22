@@ -3,6 +3,7 @@
 local _fut = {}
 _fut.author = "D4KiR"
 _fut.name = "Futuristic"
+_fut.textFont = "mat1text"
 RegisterDesign( _fut )
 
 function _fut.GetAlpha()
@@ -185,7 +186,7 @@ function _fut.DrawButton( btn, pw, ph, text, color )
 	end
 
 	--[[ text ]]--
-	surfaceText( _text, "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+	surfaceText( _text, _fut.textFont, pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 end
 RegisterButtonFunction( _fut.name, _fut.DrawButton )
 
@@ -206,6 +207,6 @@ function _fut.DrawPanel( pnl, pw, ph, text, color, px, py, ax, ah )
 	end
 
 	--[[ text ]]--
-	surfaceText( _text, "mat1text", px or pw/2, py or ph/2, color or Color( 255, 255, 255 ), ax or 1, ay or 1, 1 )
+	surfaceText( _text, _fut.textFont, px or pw/2, py or ph/2, color or Color( 255, 255, 255 ), ax or 1, ay or 1, 1 )
 end
 RegisterPanelFunction( _fut.name, _fut.DrawPanel )
