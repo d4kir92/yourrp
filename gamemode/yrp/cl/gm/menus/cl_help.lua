@@ -565,7 +565,7 @@ net.Receive("getsiteyourrpdiscord", function(len)
 end)
 
 net.Receive("getsiteyourrptranslations", function(len)
-	if pa(HELPMENU.mainmenu.site) and link ~= "" then
+	if pa(HELPMENU.mainmenu.site) then
 		local page = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
@@ -601,16 +601,33 @@ net.Receive("getsiteyourrptranslations", function(len)
 			end
 		end
 
-		page.panellist = createD("DPanelList", page, _longestProgressText + ctr(2 * (68 + 4 + 10)), page:GetTall(), 0, 0)
+		local _br = 4
+		local _h = 74
+		local _icon_h = _h - _br
+		local _icon_w = _icon_h * 1.478
+		local _w = _longestProgressText + ctr(_icon_w + 20 + 20)
+		page.panellist = createD("DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, ctr(100))
+		page.panellist:SetSpacing(_br)
 
 		for sho, language in SortedPairs(GetAllLanguages()) do
-			local lan = createD("DButton", page, page.panellist:GetWide(), ctr(50), 0, 0)
+			local lan = createD("DButton", page, page.panellist:GetWide(), ctr(_h), 0, 0)
 			lan:SetText("")
 			lan.language = language
 
 			function lan:Paint(pw, ph)
-				surfaceButton(self, pw, ph, _allProgressTexts[sho], nil, ctr(68 + 4 + 10), ph / 2, 0, 1)
-				DrawIcon(GetDesignIcon(tostring(self.language.short)), ctr(68), ctr(46), ctr(4), ctr((50 - 46) / 2), Color(255, 255, 255, 255))
+				self.textcol = Color(255, 255, 255)
+
+				if language.percentage ~= nil and language.percentage == 100 then
+						self.textcol = Color(0, 255, 0)
+				end
+
+				if language.author == "" then
+					self.textcol = Color(255, 255, 0)
+				end
+
+				surfaceButton(self, pw, ph, "")
+				surfaceText(_allProgressTexts[sho], "mat1text", ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
+				DrawIcon(GetDesignIcon(tostring(self.language.short)), ctr(_icon_w), ctr(_icon_h), ctr(_br), ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 			end
 
 			function lan:DoClick()
@@ -638,7 +655,8 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 		function helplan:Paint(pw, ph)
 			local text = "Help translating"
-			surfaceButton(self, pw, ph, text)
+			surfaceButton(self, pw, ph, "")
+			surfaceText(text, "mat1text", pw / 2, ph / 2, Color(255, 255, 0), 1, 1)
 		end
 
 		function helplan:DoClick()
