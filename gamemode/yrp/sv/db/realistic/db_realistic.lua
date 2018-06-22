@@ -9,12 +9,15 @@ local DATABASE_NAME = "yrp_realistic"
 --db_is_empty( DATABASE_NAME )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_bonefracturing", "INT DEFAULT 1" )
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_bleeding", "INT DEFAULT 1" )
-
-SQL_ADD_COLUMN( DATABASE_NAME, "float_bleedingchance", "INT DEFAULT 20" )
-
 SQL_ADD_COLUMN( DATABASE_NAME, "float_bonechance_legs", "INT DEFAULT 15" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_bonechance_arms", "INT DEFAULT 15" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_bleeding", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_bleedingchance", "INT DEFAULT 20" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_custom_falldamage", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_custom_falldamage_percentage", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_custom_falldamage_muliplier", "INT DEFAULT 0.125" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_headshotdeadly_player", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_player_head", "INT DEFAULT 10" )
@@ -30,8 +33,8 @@ SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_npc_stom", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_npc_arms", "INT DEFAULT 0.6" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_npc_legs", "INT DEFAULT 0.6" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_entity", "INT DEFAULT 1" )
-SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_vehicle", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_entities", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_hitfactor_vehicles", "INT DEFAULT 1" )
 
 local HANDLER_REALISTIC = {}
 
@@ -84,8 +87,64 @@ if _init_realistic != false and _init_realistic != nil then
 	yrp_realistic = _init_realistic[1]
 end
 
+function YRPSendToOthers( handler, ply, netstr, str )
+	for i, pl in pairs( handler ) do
+		if ply != pl then
+			net.Start( netstr )
+				net.WriteString( str )
+			net.Send( pl )
+		end
+	end
+end
+
+function YRPUpdateValue( handler, db_name, ply, netstr, str, l_db, value )
+	l_db[str] = value
+	SQL_UPDATE( db_name, str .. " = '" .. l_db[str] .. "'", "uniqueID = '1'" )
+	YRPSendToOthers( handler, ply, netstr, l_db[str] )
+end
+
+function YRPUpdateBool( handler, db_name, ply, netstr, str, l_db, value )
+	printGM( "db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring( tobool( value ) ) )
+	YRPUpdateValue( handler, db_name, ply, netstr, str, l_db, value )
+	for i, pl in pairs( player.GetAll() ) do
+		pl:SetNWBool( str, tobool( value ) )
+	end
+end
+
+function YRPUpdateFloat( handler, db_name, ply, netstr, str, l_db, value )
+	printGM( "db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring( value ) )
+	YRPUpdateValue( handler, db_name, ply, netstr, str, l_db, value )
+	for i, pl in pairs( player.GetAll() ) do
+		pl:SetNWFloat( str, value )
+	end
+end
+
+for str, val in pairs( yrp_realistic ) do
+	if string.find( str, "bool_" ) then
+		util.AddNetworkString( "update_" .. str )
+		net.Receive( "update_" .. str, function( len, ply )
+			local b = btn( net.ReadBool() )
+			YRPUpdateBool( HANDLER_REALISTIC, DATABASE_NAME, ply, "update_" .. str, str, yrp_realistic, b )
+		end)
+	elseif string.find( str, "float_" ) then
+		util.AddNetworkString( "update_" .. str )
+		net.Receive( "update_" .. str, function( len, ply )
+			local f = net.ReadFloat()
+			YRPUpdateFloat( HANDLER_REALISTIC, DATABASE_NAME, ply, "update_" .. str, str, yrp_realistic, f )
+		end)
+	end
+end
+
 function IsCustomFalldamageEnabled()
 	return tobool( yrp_realistic.bool_custom_falldamage )
+end
+
+function IsCustomFalldamagePercentageEnabled()
+	return tobool( yrp_realistic.bool_custom_falldamage_percentage )
+end
+
+function CustomFalldamageMultiplier()
+	return yrp_realistic.float_custom_falldamage_muliplier
 end
 
 function IsBleedingEnabled()
@@ -144,12 +203,12 @@ function GetHitFactorNpcLegs()
 	return tonumber( yrp_realistic.float_hitfactor_npc_legs )
 end
 
-function GetHitFactorEntity()
-	return tonumber( yrp_realistic.float_hitfactor_entity )
+function GetHitFactorEntities()
+	return tonumber( yrp_realistic.float_hitfactor_entities )
 end
 
-function GetHitFactorVehicle()
-	return tonumber( yrp_realistic.float_hitfactor_vehicle )
+function GetHitFactorVehicles()
+	return tonumber( yrp_realistic.float_hitfactor_vehicles )
 end
 
 function GetBrokeChanceLegs()

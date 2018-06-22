@@ -546,10 +546,6 @@ function surfaceText( text, font, x, y, color, ax, ay, br )
 	end
 end
 
-function drawText( text, font, x, y, col, ax, ay )
-	draw.SimpleTextOutlined( text, font, ctr(x), ctr(y), col, ax, ay, 0.5, Color( 0, 0, 0 ) )
-end
-
 function createVGUI( art, parent, w, h, x, y )
 	local tmp = vgui.Create( art, parent, nil )
 	if w != nil and h != nil then

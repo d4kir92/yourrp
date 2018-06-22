@@ -229,8 +229,8 @@ function GM:ShutDown()
 end
 
 function GM:GetFallDamage( ply, speed )
-	local _damage = speed * ply:GetNWFloat( "float_falldamage_multiplier", 0.125 )
-	if IsCustomFalldamageEnabled() or true then
+	local _damage = speed * CustomFalldamageMultiplier()
+	if IsCustomFalldamageEnabled() then
 		if speed > ply:GetModelScale()*120 then
 			if IsBonefracturingEnabled() then
 				local _rand = math.Round( math.Rand( 0, 1 ), 0 )
@@ -240,7 +240,7 @@ function GM:GetFallDamage( ply, speed )
 					ply:SetNWBool( "broken_leg_left", true )
 				end
 			end
-			if ply:GetNWBool( "bool_falldamage_percentage", false ) then
+			if IsCustomFalldamagePercentageEnabled() then
 				return _damage*ply:GetMaxHealth()/100
 			else
 				return _damage
@@ -296,10 +296,10 @@ end
 
 hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( ent, dmginfo )
 	if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
-		dmginfo:ScaleDamage( GetHitFactorEntity() )
+		dmginfo:ScaleDamage( GetHitFactorEntities() )
 	end
 	if ent:IsVehicle() then
-		dmginfo:ScaleDamage( GetHitFactorVehicle() )
+		dmginfo:ScaleDamage( GetHitFactorVehicles() )
 	end
 end)
 
