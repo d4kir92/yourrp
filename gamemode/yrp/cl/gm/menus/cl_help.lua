@@ -534,7 +534,7 @@ net.Receive( "getsiteyourrptranslations", function( len )
 			local _longestProgressText = 0
 			local _allProgressTexts = {}
 
-			for i, language in SortedPairs( GetAllLanguages() ) do
+			for sho, language in SortedPairs( GetAllLanguages() ) do
 				--PrintTable(language)
 				local text = language.lang .. "/" .. language.ineng .. " ( "
 				if language.percentage != nil then
@@ -548,7 +548,7 @@ net.Receive( "getsiteyourrptranslations", function( len )
 				end
 				text = text .. " )"
 
-				_allProgressTexts[language]=text
+				_allProgressTexts[sho]=text
 				surface.SetFont(GetFont())
 				local width = surface.GetTextSize(text)
 				if (width>_longestProgressText) then
@@ -557,13 +557,13 @@ net.Receive( "getsiteyourrptranslations", function( len )
 			end
 			page.panellist = createD( "DPanelList", page, _longestProgressText + ctr( 2*(68 + 4 + 10) ), page:GetTall(), 0, 0 )
 
-			for i, language in SortedPairs( GetAllLanguages() ) do
+			for sho, language in SortedPairs( GetAllLanguages() ) do
 				local lan = createD( "DButton", page, page.panellist:GetWide(), ctr( 50 ), 0, 0 )
 				lan:SetText( "" )
 				lan.language = language
 
 				function lan:Paint( pw, ph )
-					surfaceButton( self, pw, ph, _allProgressTexts[language], nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
+					surfaceButton( self, pw, ph, _allProgressTexts[sho], nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
 					DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
 				end
 

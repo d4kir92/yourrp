@@ -17,11 +17,12 @@ include( "cl_settings_server_whitelist.lua" )
 
 
 --[[ WIP ]]--
-include( "cl_settings_server_realistic.lua" )
+--DATABASE.lua
 
 --[[ SERVER ]]--
 include( "cl_settings_server_usergroups.lua" )
 include( "cl_settings_server_general.lua" )
+include( "cl_settings_server_realistic.lua" )
 include( "cl_settings_server_feedback.lua" )
 
 
@@ -122,7 +123,7 @@ function openSettings()
 	end
 
 	--Sites
-	local _client = "settings_client"
+	local _client = lang_string( "settings_client" ) .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory( _client )
 	settingsWindow.window:AddSite( "open_client_character", "settings_character", _client, "icon16/user_edit.png" )
 	settingsWindow.window:AddSite( "open_client_hud", "settings_hud", _client, "icon16/photo.png" )
@@ -130,7 +131,7 @@ function openSettings()
 
 
 
-	local _server_admin = lang_string( "settings_server" ) .. " [OLD]"
+	local _server_admin = lang_string( "settings_server" ) .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory( _server_admin )
 	--settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
 	settingsWindow.window:AddSite( "open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png" )
@@ -146,21 +147,17 @@ function openSettings()
 	local _wip = "wip"
 	settingsWindow.window:AddCategory( _wip )
 
-	settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _wip, "icon16/bomb.png" )
-
 
 
 	local _server = "settings_server"
 	settingsWindow.window:AddCategory( _server )
 
 	settingsWindow.window:AddSite( "open_server_general", "settings_general", _server, "icon16/server_database.png" )
+	settingsWindow.window:AddSite( "open_server_realistic", "settings_realistic", _server, "icon16/bomb.png" )
 	settingsWindow.window:AddSite( "open_server_usergroups", "settings_usergroups", _server, "icon16/group_go.png" )
 	settingsWindow.window:AddSite( "open_server_feedback", "settings_feedback", _server, "icon16/page_lightning.png" )
 
 
-
-	settingsWindow.window:AddCategory( "settings" )
-	settingsWindow.window:AddSite( "open_menu_settings", "settings", "settings", "vgui/yrp/dark_settings.png" )
 
 	--StartSite
 	settingsWindow.window.cursite = "character"
