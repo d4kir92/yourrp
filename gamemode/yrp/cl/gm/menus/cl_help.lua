@@ -530,28 +530,43 @@ net.Receive( "getsiteyourrptranslations", function( len )
 				--surfacePanel( self, pw, ph, "" )
 			end
 
-			page.panellist = createD( "DPanelList", page, ctr( 1400 ), page:GetTall(), 0, 0 )
+
+			local _longestProgressText = 0
+			local _allProgressTexts = {}
+
+			for i, language in SortedPairs( GetAllLanguages() ) do
+				--PrintTable(language)
+				local text = language.lang .. "/" .. language.ineng .. " ( "
+				if language.percentage != nil then
+					text = text .. language.percentage .. "% "
+				end
+				text = text .. "translated by "
+				if language.author != "" then
+					text = text .. language.author
+				else
+					text = text .. "... you?"
+				end
+				text = text .. " )"
+
+				_allProgressTexts[language]=text
+				surface.SetFont(GetFont())
+				local width = surface.GetTextSize(text)
+				if (width>_longestProgressText) then
+					_longestProgressText=width
+				end
+			end
+			page.panellist = createD( "DPanelList", page, _longestProgressText + ctr( 2*(68 + 4 + 10) ), page:GetTall(), 0, 0 )
 
 			for i, language in SortedPairs( GetAllLanguages() ) do
 				local lan = createD( "DButton", page, page.panellist:GetWide(), ctr( 50 ), 0, 0 )
 				lan:SetText( "" )
 				lan.language = language
-				function lan:Paint( pw, ph )
-					local text = self.language.lang .. "/" .. self.language.ineng .. " ( "
-					if self.language.percentage != nil then
-						text = text .. self.language.percentage .. "% "
-					end
-					text = text .. "translated by "
-					if self.language.author != "" then
-						text = text .. self.language.author
-					else
-						text = text .. "... you?"
-					end
-					text = text .. " )"
 
-					surfaceButton( self, pw, ph, text, nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
+				function lan:Paint( pw, ph )
+					surfaceButton( self, pw, ph, _allProgressTexts[language], nil, ctr( 68 + 4 + 10 ), ph/2, 0, 1 )
 					DrawIcon( GetDesignIcon( tostring( self.language.short ) ), ctr( 68 ), ctr( 46 ), ctr( 4 ), ctr( (50-46)/2 ), Color( 255, 255, 255, 255 ) )
 				end
+
 				function lan:DoClick()
 					if self.language.author == "" then
 						OpenHelpTranslatingWindow()
@@ -562,22 +577,23 @@ net.Receive( "getsiteyourrptranslations", function( len )
 				page.panellist:AddItem( lan )
 			end
 
-			local addlan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), ctr( 1450 ), 0 )
-			addlan:SetText( "" )
-			function addlan:Paint( pw, ph )
-				local text = "Add Your Language"
-				surfaceButton( self, pw, ph, text )
-			end
-			function addlan:DoClick()
-				OpenAddLanguageWindow()
+			local _helplanWidth=ctr(400)
+			local _helplanX=0
+
+			if ((_longestProgressText + ctr( 2*(68 + 4 + 10))) > (ScrW()/2-_helplanWidth/2)) then
+				_helplanX=(_longestProgressText + 30) + ctr( 2*(68 + 4 + 10))
+			else
+				_helplanX=ScrW()/2-_helplanWidth/2
 			end
 
-			local helplan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), ctr( 1450 + 20 + 400 ), 0 )
+			local helplan = createD( "DButton", page, ctr( 400 ), ctr( 50 ), _helplanX, 0 )
 			helplan:SetText( "" )
+
 			function helplan:Paint( pw, ph )
-				local text = "Helping with translation"
+				local text = "Help translating"
 				surfaceButton( self, pw, ph, text )
 			end
+
 			function helplan:DoClick()
 				OpenHelpTranslatingWindow()
 			end

@@ -7,21 +7,21 @@ local yrp_shorts = {}
 local _translationProgress = {}
 table.insert( yrp_shorts, "en" )
 table.insert( yrp_shorts, "de" )
-table.insert( yrp_shorts, "bg" )
-table.insert( yrp_shorts, "ca" )
+--table.insert( yrp_shorts, "bg" )
+--table.insert( yrp_shorts, "ca" )
 table.insert( yrp_shorts, "cs" )
-table.insert( yrp_shorts, "es" )
+--table.insert( yrp_shorts, "es" )
 table.insert( yrp_shorts, "fr" )
-table.insert( yrp_shorts, "hu" )
+--table.insert( yrp_shorts, "hu" )
 table.insert( yrp_shorts, "it" )
-table.insert( yrp_shorts, "ko" )
+--table.insert( yrp_shorts, "ko" )
 table.insert( yrp_shorts, "lt" )
 table.insert( yrp_shorts, "pl" )
 table.insert( yrp_shorts, "pt_br" )
 table.insert( yrp_shorts, "ro" )
 table.insert( yrp_shorts, "ru" )
-table.insert( yrp_shorts, "sv" )
-table.insert( yrp_shorts, "th" )
+--table.insert( yrp_shorts, "sv" )
+--table.insert( yrp_shorts, "th" )
 table.insert( yrp_shorts, "tr" )
 table.insert( yrp_shorts, "uk" )
 
@@ -212,7 +212,9 @@ elseif CLIENT then
 	local receiveTranslationProgress = function( len )
 		local percentages=net.ReadTable()
 		for key,value in pairs(percentages) do
-			yrp_button_info[key]["percentage"]=value
+			if(yrp_button_info[key] != nil) then
+				yrp_button_info[key]["percentage"]=value
+			end
 		end
 		printGM("lang","Received translation progress from server.")
 	end
