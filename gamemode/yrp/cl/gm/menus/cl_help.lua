@@ -536,7 +536,7 @@ net.Receive( "getsiteyourrptranslations", function( len )
 
 			for sho, language in SortedPairs( GetAllLanguages() ) do
 				--PrintTable(language)
-				local text = language.lang .. "/" .. language.ineng .. " ( "
+				local text = language.language .. "/" .. language.inenglish .. " ( "
 				if language.percentage != nil then
 					text = text .. language.percentage .. "% "
 				end

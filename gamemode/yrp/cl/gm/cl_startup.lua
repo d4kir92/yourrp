@@ -50,7 +50,7 @@ function AddLanguageChangerLine( parent, tab, mainparent )
 		surfaceBox( 0, 0, pw, ph, color )
 		DrawIcon( GetDesignIcon( tostring( self.lang.short ) ), ctr( 46 ), ctr( 31 ), ctr( 4 ), ctr( (40-31)/2 ), Color( 255, 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( constructLanguageText(self.lang.lang, self.lang.ineng, self.lang.percentage), GetFont(), ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), ctr( 4 + 46 + 8 ), ph/2, Color( 255, 255, 255, 255 ), 0, 1, 1, Color( 0, 0, 0, 255 ) )
 	end
 	function lang:DoClick()
 		LoadLanguage( self.lang.short )
@@ -60,11 +60,11 @@ function AddLanguageChangerLine( parent, tab, mainparent )
 	parent:AddItem( lang )
 end
 
-function constructLanguageText(lang, ineng, percentage)
+function constructLanguageText( lang, inenglish, percentage )
 	if percentage != nil then
-		return  tostring( lang ) .. "/" .. tostring( ineng ) .. " (" .. percentage .. "%)"
+		return  tostring( lang ) .. "/" .. tostring( inenglish ) .. " (" .. percentage .. "%)"
 	else
-		return tostring( lang ) .. "/" .. tostring( ineng )
+		return tostring( lang ) .. "/" .. tostring( inenglish )
 	end
 end
 
@@ -107,12 +107,12 @@ function DChangeLanguage( parent, x, y, size )
 		surface.SetFont(GetFont())
 		local _longestLanguageString = 0
 		for k, lang in SortedPairs( languages ) do
-			local testString = surface.GetTextSize(constructLanguageText(lang.lang, lang.ineng, lang.percentage))
+			local testString = surface.GetTextSize( constructLanguageText( lang["language"], lang["inenglish"], lang.percentage ) )
 			if testString > _longestLanguageString then
 				_longestLanguageString = testString
 			end
 		end
-		
+
 		local window = createD( "DFrame", nil, _longestLanguageString + ctr(78), ctr( 400 ), 0, 0 )
 		window:SetTitle( "" )
 		window:ShowCloseButton( false )

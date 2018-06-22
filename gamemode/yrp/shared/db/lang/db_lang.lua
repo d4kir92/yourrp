@@ -2,9 +2,16 @@
 
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
+yrp_current_lang.get_language = "Unknown"
+yrp_current_lang.not_found = "not found, using default one."
+yrp_current_lang["language"] = "Unknown"
+
 local yrp_button_info = {}
+
 local yrp_shorts = {}
+
 local _translationProgress = {}
+
 table.insert( yrp_shorts, "en" )
 table.insert( yrp_shorts, "de" )
 --table.insert( yrp_shorts, "bg" )
@@ -27,9 +34,9 @@ table.insert( yrp_shorts, "uk" )
 
 function GetLanguageAutoInfo()
 	local auto = {}
-	auto.ineng = "Automatic"
-	auto.lang = "Automatic"
-	auto.translated_by_name = "D4KiR"
+	auto.inenglish = "Automatic"
+	auto.language = "Automatic"
+	auto.author = "D4KiR"
 	auto.short = "auto"
 	return auto
 end
@@ -38,22 +45,20 @@ AddCSLuaFile( "read_lang.lua" )
 
 include( "read_lang.lua" )
 
-function set_lang_string( var, str)
+function set_lang_string( var, str )
+	var = tostring( var )
+	str = tostring( str )
 	yrp_current_lang[string.lower( var )] = str
 end
 
 function get_language_name( ls )
 	for k, lang in pairs( yrp_button_info ) do
 		if lang.short == ls then
-			return lang.ineng
+			return lang["inenglish"]
 		end
 	end
 	return "FAILED"
 end
-
-yrp_current_lang.get_language = "Unknown"
-yrp_current_lang.not_found = "not found, using default one."
-yrp_current_lang.language = "Unknown"
 
 function search_language()
 	yrp_current_lang.get_language = string.lower( GetConVar( "gmod_language" ):GetString() )
@@ -66,27 +71,24 @@ function replace_string( in_str, tab )
 	return in_str
 end
 
-function lang_string( var, failed )
+function lang_string( var )
+	var = tostring( var )
 	--[[ string var, string failed ]]--
 	--[[ returns translated string, when worked ]]--
 	--[[ if failed it uses failed string ]]--
-	local _string = yrp_current_lang[string.lower( var )]
-	if _string == nil then
-		_string = var
-		if CLIENT then
-			if LocalPlayer():GetNWBool( "yrp_debug", false ) then
-				printGM( "note", "lang_string failed! string " .. var .. " not found" )
-			end
+	local _string = yrp_current_lang[string.lower( var )] or var
+	if CLIENT then
+		if LocalPlayer():GetNWBool( "yrp_debug", false ) then
+			printGM( "note", "lang_string failed! string " .. var .. " not found" )
 		end
-		return failed or _string
 	end
 	return _string
 end
 
 local auto = {}
 auto.short = "auto"
-auto.lang = "Automatic"
-auto.ineng = "Automatic"
+auto.language = "Automatic"
+auto.inenglish = "Automatic"
 
 function GetAllLanguages()
 	return yrp_button_info
@@ -116,6 +118,7 @@ function send_lang( short )
 end
 
 function read_language( short, init )
+	short = tostring( short )
 	local default = false
 	if short == "en" then
 		default = true
@@ -125,7 +128,7 @@ function read_language( short, init )
 		read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
 
 		if !default then
-			printGM( "lang", "Get Language-Pack [" .. lang_string( "short" ) .. "] " .. lang_string( "language" ) .. "/" .. lang_string( "ineng" ) )
+			printGM( "lang", "Get Language-Pack [" .. lang_string( "short" ) .. "] " .. lang_string( "language" ) .. "/" .. lang_string( "inenglish" ) )
 		end
 
 		read_lang( "resource/localization/yrp/_old/lang_" .. "en" .. ".properties" )
@@ -147,6 +150,7 @@ function LoadLanguage( short , init )
 		printGM( "note", "LoadLanguage ERROR!" )
 		return false
 	end
+	short = tostring( short )
 	if ( init ) then
 		read_language( short, init )
 	else
@@ -179,7 +183,7 @@ function LoadLanguage( short , init )
 			read_language( "en", init )
 			read_language( short, init )
 		end
-		printGM( "lang", "Language changed to [" .. tostring( yrp_current_lang.short ) .. "] " .. tostring( yrp_current_lang.language ) )
+		printGM( "lang", "Language changed to [" .. lang_string( "short" ) .. "] " .. lang_string( "language" ) )
 		send_lang( short ) -- Send To Server
 		hook.Run( "yrp_current_language_changed" )	-- Update Chat
 
@@ -188,38 +192,40 @@ function LoadLanguage( short , init )
 	return true
 end
 
-function sendTranslationProgress(player)
+function sendTranslationProgress( player )
 	if ( IsValid( player ) and player:IsPlayer() ) then
 		net.Start( "receiveTranslationProgress" )
-		local percentages = {}
-		for key, value in pairs(yrp_button_info) do
-			percentages[key]=value.percentage
-		end
-		net.WriteTable(percentages)
-		printGM( "lang", "Send translation progress to " .. player:GetName())
-		net.Send(player)
+			local percentages = {}
+			for key, value in pairs( yrp_button_info ) do
+				key = tostring( key )
+				percentages[key] = value.percentage
+			end
+			net.WriteTable( percentages )
+			printGM( "lang", "Send translation progress to " .. player:GetName() )
+		net.Send( player )
 	end
 end
 
 if SERVER then
 	util.AddNetworkString( "requestTranslationProgress" )
 	local requestTranslationProgress = function( len, player )
-		sendTranslationProgress(player)
+		sendTranslationProgress( player )
 	end
-	net.Receive( "requestTranslationProgress", requestTranslationProgress)
+	net.Receive( "requestTranslationProgress", requestTranslationProgress )
 
 	util.AddNetworkString( "receiveTranslationProgress" )
 elseif CLIENT then
 	local receiveTranslationProgress = function( len )
 		local percentages=net.ReadTable()
 		for key,value in pairs(percentages) do
+			key = tostring( key )
 			if(yrp_button_info[key] != nil) then
-				yrp_button_info[key]["percentage"]=value
+				yrp_button_info[key]["percentage"] = value
 			end
 		end
 		printGM("lang","Received translation progress from server.")
 	end
-	net.Receive( "receiveTranslationProgress", receiveTranslationProgress)
+	net.Receive( "receiveTranslationProgress", receiveTranslationProgress )
 end
 
 function fetch_translation_progress()
@@ -229,11 +235,11 @@ function fetch_translation_progress()
 		http.Fetch( "https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json",
 			function( body, len, headers, code )
 				if tonumber( code ) == 200 then
-					for key,value in pairs(util.JSONToTable( body )) do
+					for key, value in pairs(util.JSONToTable( body )) do
 						if yrp_button_info[string.lower(value.code)] == nil then
 							yrp_button_info[string.lower(value.code)] = {}
 						end
-						yrp_button_info[string.lower(value.code)]["percentage"]=value.translated_percent
+						yrp_button_info[string.lower(value.code)]["percentage"] = value.translated_percent
 					end
 					printGM( "lang", "Fetched translation progress successfully!" )
 				else
@@ -253,19 +259,20 @@ function fetch_translation_progress()
 end
 
 function add_language( short )
+	short = tostring( short )
 	if yrp_button_info[short] == nil then
 		yrp_button_info[short] = {}
 	end
 	if short == "auto" then
-		yrp_button_info[short].ineng = "Automatic"
-		yrp_button_info[short].lang = "Automatic"
-		yrp_button_info[short].short = short
-		yrp_button_info[short].author = "D4KiR"
+		yrp_button_info[short]["inenglish"] = "Automatic"
+		yrp_button_info[short]["language"] = "Automatic"
+		yrp_button_info[short]["short"] = short
+		yrp_button_info[short]["author"] = "D4KiR"
 	else
-		yrp_button_info[short].ineng = yrp_current_lang.ineng
-		yrp_button_info[short].lang = yrp_current_lang.language
-		yrp_button_info[short].short = yrp_current_lang.short
-		yrp_button_info[short].author = yrp_current_lang.translated_by_name
+		yrp_button_info[short]["inenglish"] = lang_string( "inenglish" )
+		yrp_button_info[short]["language"] = lang_string( "language" )
+		yrp_button_info[short]["short"] = lang_string( "short" )
+		yrp_button_info[short]["author"] = lang_string( "author" )
 	end
 end
 
