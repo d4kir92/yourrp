@@ -67,9 +67,17 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
+<<<<<<< HEAD
 		if disabled ~= nil and not LocalPlayer():GetNWBool(disabled) then
 			text = "[" .. lang_string("disabled") .. "] "
 			color = Color(255, 0, 0, 255)
+=======
+		if disabled ~= nil then
+			if not LocalPlayer():GetNWBool(disabled) then
+				text = "[" .. lang_string("disabled") .. "] "
+				color = Color(255, 0, 0, 255)
+			end
+>>>>>>> upstream/beta
 		end
 
 		text = text .. lang_string(lstr)
@@ -565,7 +573,11 @@ net.Receive("getsiteyourrpdiscord", function(len)
 end)
 
 net.Receive("getsiteyourrptranslations", function(len)
+<<<<<<< HEAD
 	if pa(HELPMENU.mainmenu.site) and link ~= "" then
+=======
+	if pa(HELPMENU.mainmenu.site) then
+>>>>>>> upstream/beta
 		local page = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
@@ -590,6 +602,16 @@ net.Receive("getsiteyourrptranslations", function(len)
 			else
 				text = text .. "... you?"
 			end
+<<<<<<< HEAD
+
+			text = text .. " )"
+			_allProgressTexts[sho] = text
+			surface.SetFont(GetFont())
+			local width = surface.GetTextSize(text)
+
+			if (width > _longestProgressText) then
+				_longestProgressText = width
+=======
 
 			text = text .. " )"
 			_allProgressTexts[sho] = text
@@ -601,6 +623,40 @@ net.Receive("getsiteyourrptranslations", function(len)
 			end
 		end
 
+		local _br = 4
+		local _h = 74
+		local _icon_h = _h - _br
+		local _icon_w = _icon_h * 1.478
+		local _w = _longestProgressText + ctr(_icon_w + 20 + 20)
+		page.panellist = createD("DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, ctr(100))
+		page.panellist:SetSpacing(_br)
+
+		for sho, language in SortedPairs(GetAllLanguages()) do
+			local lan = createD("DButton", page, page.panellist:GetWide(), ctr(_h), 0, 0)
+			lan:SetText("")
+			lan.language = language
+
+			function lan:Paint(pw, ph)
+				self.textcol = Color(255, 255, 255)
+
+				if language.percentage ~= nil then
+					if language.percentage == 100 then
+						self.textcol = Color(0, 255, 0)
+					end
+				end
+
+				if language.author == "" then
+					self.textcol = Color(255, 255, 0)
+				end
+
+				surfaceButton(self, pw, ph, "")
+				surfaceText(_allProgressTexts[sho], "mat1text", ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
+				DrawIcon(GetDesignIcon(tostring(self.language.short)), ctr(_icon_w), ctr(_icon_h), ctr(_br), ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
+>>>>>>> upstream/beta
+			end
+		end
+
+<<<<<<< HEAD
 		page.panellist = createD("DPanelList", page, _longestProgressText + ctr(2 * (68 + 4 + 10)), page:GetTall(), 0, 0)
 
 		for sho, language in SortedPairs(GetAllLanguages()) do
@@ -627,6 +683,22 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _helplanWidth = ctr(400)
 		local _helplanX = 0
 
+=======
+			function lan:DoClick()
+				if self.language.author == "" then
+					OpenHelpTranslatingWindow()
+				end
+
+				LoadLanguage(self.language.short)
+			end
+
+			page.panellist:AddItem(lan)
+		end
+
+		local _helplanWidth = ctr(400)
+		local _helplanX = 0
+
+>>>>>>> upstream/beta
 		if ((_longestProgressText + ctr(2 * (68 + 4 + 10))) > (ScrW() / 2 - _helplanWidth / 2)) then
 			_helplanX = (_longestProgressText + 30) + ctr(2 * (68 + 4 + 10))
 		else
@@ -638,7 +710,12 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 		function helplan:Paint(pw, ph)
 			local text = "Help translating"
+<<<<<<< HEAD
 			surfaceButton(self, pw, ph, text)
+=======
+			surfaceButton(self, pw, ph, "")
+			surfaceText(text, "mat1text", pw / 2, ph / 2, Color(255, 255, 0), 1, 1)
+>>>>>>> upstream/beta
 		end
 
 		function helplan:DoClick()
