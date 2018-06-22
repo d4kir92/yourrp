@@ -11,323 +11,206 @@ function OpenHelpTranslatingWindow()
 		surfaceWindow(self, pw, ph, "Help translating")
 		draw.SimpleTextOutlined("If you want to add a new language or help translating an existing language,", "mat1text", ctr(10), ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 		draw.SimpleTextOutlined("please do this:", "mat1text", ctr(10), ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined("First go to the translation-website and register there:", "mat1text", ctr(10), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined("Then write D4KiR on the discord server to get rights for translating:", "mat1text", ctr(10), ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-		end
-
-		window.translationsite = createD("DButton", window, ctr(400), ctr(50), ctr(10), ctr(200))
-		window.translationsite:SetText("")
-
-		function window.translationsite:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "Translation website")
-		end
-
-		function window.translationsite:DoClick()
-			gui.OpenURL("https://yourrp.noserver4u.de/engage/yourrp/")
-		end
-
-		window.discordserver = createD("DButton", window, ctr(400), ctr(50), ctr(10), ctr(300))
-		window.discordserver:SetText("")
-
-		function window.discordserver:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "YourRP Discord server")
-		end
-
-		function window.discordserver:DoClick()
-			gui.OpenURL("https://discord.gg/CXXDCMJ")
-		end
+		draw.SimpleTextOutlined("First go to the translation-website and register there:", "mat1text", ctr(10), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("Then write D4KiR on the discord server to get rights for translating:", "mat1text", ctr(10), ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 	end
 
-	function AddLanguageChangerLine(parent, tab, mainparent)
-		local lang = createD("DButton", parent, parent:GetWide(), ctr(40), 0, 0)
-		lang:SetText("")
-		lang.lang = tab
+	window.translationsite = createD("DButton", window, ctr(400), ctr(50), ctr(10), ctr(200))
+	window.translationsite:SetText("")
 
-		function lang:Paint(pw, ph)
-			local color = YRPGetColor("2")
-
-			if self:IsHovered() then
-				color = YRPGetColor("1")
-			end
-
-			surfaceBox(0, 0, pw, ph, color)
-			DrawIcon(GetDesignIcon(tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
-			self.textcol = Color(255, 255, 255)
-
-			if self.lang.percentage ~= nil then
-				if self.lang.percentage == 100 then
-					self.textcol = Color(0, 255, 0)
-				end
-			end
-
-			draw.SimpleTextOutlined(constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color(0, 0, 0, 255))
-		end
-
-		function lang:DoClick()
-			LoadLanguage(self.lang.short)
-			mainparent:Remove()
-		end
-
-		parent:AddItem(lang)
+	function window.translationsite:Paint(pw, ph)
+		surfaceButton(self, pw, ph, "Translation website")
 	end
 
-	function constructLanguageText(lang, inenglish, percentage)
-		if percentage ~= nil then
-			return tostring(lang) .. "/" .. tostring(inenglish) .. " (" .. percentage .. "%)"
-		else
-			return tostring(lang) .. "/" .. tostring(inenglish)
-		end
+	function window.translationsite:DoClick()
+		gui.OpenURL("https://yourrp.noserver4u.de/engage/yourrp/")
 	end
 
-	function AddLanguageAddLine(parent, mainparent)
-		local lang = createD("DButton", parent, parent:GetWide(), ctr(40), 0, 0)
-		lang:SetText("")
+	window.discordserver = createD("DButton", window, ctr(400), ctr(50), ctr(10), ctr(300))
+	window.discordserver:SetText("")
 
-		function lang:Paint(pw, ph)
-			local color = YRPGetColor("2")
-
-			if self:IsHovered() then
-				color = YRPGetColor("1")
-			end
-
-			surfaceBox(0, 0, pw, ph, color)
-			local text = "Help translating"
-			draw.SimpleTextOutlined(text, "DermaDefault", ctr(4 + 46 + 8), ph / 2, Color(255, 255, 0, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
-		end
-
-		function lang:DoClick()
-			OpenHelpTranslatingWindow()
-			mainparent:Remove()
-		end
-
-		parent:AddItem(lang)
+	function window.discordserver:Paint(pw, ph)
+		surfaceButton(self, pw, ph, "YourRP Discord server")
 	end
 
-	function DChangeLanguage(parent, x, y, size)
-		local LanguageChanger = createD("DButton", parent, size, size * 0.671, x, y)
-		LanguageChanger:SetText("")
-
-		function LanguageChanger:Paint(pw, ph)
-			local color = YRPGetColor("2")
-
-			if self:IsHovered() then
-				color = YRPGetColor("1")
-			end
-
-			draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-			local size = ph
-			DrawIcon(GetDesignIcon(GetCurrentLanguage()), size, size * 0.671, (pw - size) / 2, (ph - size * 0.671) / 2, Color(255, 255, 255, 255))
-		end
-
-		function LanguageChanger:DoClick()
-			local languages = GetAllLanguages()
-			surface.SetFont(GetFont())
-			local _longestLanguageString = 0
-
-			for k, lang in SortedPairs(languages) do
-				local testString = surface.GetTextSize(constructLanguageText(lang["language"], lang["inenglish"], lang.percentage))
-
-				if testString > _longestLanguageString then
-					_longestLanguageString = testString
-				end
-			end
-
-			local window = createD("DFrame", nil, _longestLanguageString + ctr(78), ctr(400), 0, 0)
-			window:SetTitle("")
-			window:ShowCloseButton(false)
-			window:SetDraggable(false)
-
-			function window:Paint(pw, ph)
-				local px, py = self:GetPos()
-
-				if px > ScrW() - pw then
-					self:SetPos(ScrW() - pw, py)
-				elseif py > ScrH() - ph then
-					self:SetPos(px, ScrH() - ph)
-				end
-
-				if self.startup == nil then
-					if self:IsHovered() then
-						self.startup = true
-					else
-						for i, child in pairs(window.dpanellist:GetItems()) do
-							if child:IsHovered() then
-								self.startup = true
-							end
-						end
-					end
-				elseif self.startup and not self:IsHovered() then
-					for i, child in pairs(window.dpanellist:GetItems()) do
-						if child:IsHovered() then return true end
-					end
-
-					self:Remove()
-				end
-			end
-
-			window:MakePopup()
-			local mx, my = gui.MousePos()
-			mx = mx - window:GetWide() / 2
-			my = my - ctr(25)
-			window:SetPos(mx, my)
-			window.dpanellist = createD("DPanelList", window, window:GetWide(), ctr(400), 0, 0)
-			AddLanguageChangerLine(window.dpanellist, GetLanguageAutoInfo(), window)
-
-			for k, lang in SortedPairs(languages) do
-				AddLanguageChangerLine(window.dpanellist, lang, window)
-			end
-
-			AddLanguageAddLine(window.dpanellist, window)
-			window.dpanellist:SetTall(ctr(40 * (table.Count(languages) + 2)))
-			window:SetTall(ctr(40 * (table.Count(languages) + 2)))
-		end
-
-		return LanguageChanger
-	end
-
-	function isInTable(table, item)
-		for k, v in pairs(table) do
-			if string.lower(tostring(v)) == string.lower(tostring(item.ClassName)) then return true end
-		end
-
-		return false
-	end
-
-	function GetSWEPsList()
-		local SWEPS = weapons.GetList()
-		local list_weapon = list.Get("Weapon")
-
-		for k, v in pairs(list_weapon) do
-			if v.Category == "Half-Life 2" or string.find(v.ClassName, "weapon_physgun") then
-				table.insert(SWEPS, v)
-			end
-		end
-
-		return SWEPS
-	end
-
-	function GetSWEPWorldModel(ClassName)
-		local sweps = weapons.GetList()
-		local _weaplist = list.Get("Weapon")
-
-		for k, v in pairs(_weaplist) do
-			table.insert(sweps, v)
-		end
-
-		for k, v in pairs(sweps) do
-			if v.WorldModel == nil then
-				v.WorldModel = v.Model or ""
-			end
-
-			if v.PrintName == nil then
-				v.PrintName = v.Name or ""
-			end
-
-			if v.ClassName == nil then
-				v.ClassName = v.Class or ""
-			end
-
-			if tostring(v.ClassName) == tostring(ClassName) then
-				if v.WorldModel ~= nil then return v.WorldModel end
-			end
-		end
-
-		return ""
-	end
-
-	function GetSENTsList()
-		local list_entities = list.Get("SpawnableEntities")
-
-		return list_entities
-	end
-
-	function OpenSelector(tbl_list, tbl_sele, closeF)
-		local ply = LocalPlayer()
-		ply:SetNWString("global_working", table.concat(tbl_sele, ","))
-		local site = {}
-		site.cur = 1
-		site.max = 1
-		site.count = #tbl_list
-		local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
-		frame:SetDraggable(false)
-		frame:Center()
-		frame:SetTitle("")
-
-		function frame:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
-			draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "sef", pw / 2, ph - ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		end
-
-		function frame:OnClose()
-			hook.Call(closeF)
-		end
-
-		local item = {}
-		item.w = 740
-		item.h = 370
-		local _w = BScrW() - ctr(20)
-		local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
-		local _x = ctr(10)
-		local _y = ctr(50 + 10 + 50 + 10)
-		local _cw = (_w) / ctr(item.w + 10)
-		_cw = _cw - _cw % 1
-		local _ch = (_h) / ctr(item.h + 10)
-		_ch = _ch - _ch % 1
-		local _cs = _cw * _ch
-		local searchButton = createD("DButton", frame, ctr(50), ctr(50), ctr(10), ctr(50 + 10))
-		searchButton:SetText("")
-
-		function searchButton:Paint(pw, ph)
-			local _br = 4
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(searchIcon)
-			surface.DrawTexturedRect(ctr(5), ctr(5), ctr(40), ctr(40))
-			draw.SimpleText(lang_string("search") .. ":", "DermaDefault", ctr(_but_len), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-		end
-
-		local search = createD("DTextEntry", frame, _w - ctr(50), ctr(50), ctr(10 + 50), ctr(50 + 10))
-
-		--[[function search:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
-		local _string = search:GetText()
-		if _string == "" then
-		_string = lang_string( "search" )
-	end
-	draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-end]]
---
-function getMaxSite()
-	site.max = site.count / _cs
-	local _mod = site.max % 1
-	site.max = site.max - _mod
-
-	if site.max + _mod > site.max then
-		site.max = site.max + 1
+	function window.discordserver:DoClick()
+		gui.OpenURL("https://discord.gg/CXXDCMJ")
 	end
 end
 
-getMaxSite()
-local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
+function AddLanguageChangerLine(parent, tab, mainparent)
+	local lang = createD("DButton", parent, parent:GetWide(), ctr(40), 0, 0)
+	lang:SetText("")
+	lang.lang = tab
 
-function scrollpanel:Paint(pw, ph)
-	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
-end
+	function lang:Paint(pw, ph)
+		local color = YRPGetColor("2")
 
-local tmpCache = {}
-local tmpSelected = {}
+		if self:IsHovered() then
+			color = YRPGetColor("1")
+		end
 
-function showList()
-	for k, v in pairs(tmpCache) do
-		v:Remove()
+		surfaceBox(0, 0, pw, ph, color)
+		DrawIcon(GetDesignIcon(tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
+		self.textcol = Color(255, 255, 255)
+
+		if self.lang.percentage ~= nil and self.lang.percentage == 100 then
+			self.textcol = Color(0, 255, 0)
+		end
+
+		draw.SimpleTextOutlined(constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color(0, 0, 0, 255))
 	end
 
-	local tmpBr = 10
-	local tmpX = 0
-	local tmpY = 0
-	site.count = 0
-	local count = 0
+	function lang:DoClick()
+		LoadLanguage(self.lang.short)
+		mainparent:Remove()
+	end
 
-	for k, v in pairs(tbl_list) do
+	parent:AddItem(lang)
+end
+
+function constructLanguageText(lang, inenglish, percentage)
+	if percentage ~= nil then
+		return tostring(lang) .. "/" .. tostring(inenglish) .. " (" .. percentage .. "%)"
+	else
+		return tostring(lang) .. "/" .. tostring(inenglish)
+	end
+end
+
+function AddLanguageAddLine(parent, mainparent)
+	local lang = createD("DButton", parent, parent:GetWide(), ctr(40), 0, 0)
+	lang:SetText("")
+
+	function lang:Paint(pw, ph)
+		local color = YRPGetColor("2")
+
+		if self:IsHovered() then
+			color = YRPGetColor("1")
+		end
+
+		surfaceBox(0, 0, pw, ph, color)
+		local text = "Help translating"
+		draw.SimpleTextOutlined(text, "DermaDefault", ctr(4 + 46 + 8), ph / 2, Color(255, 255, 0, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+	end
+
+	function lang:DoClick()
+		OpenHelpTranslatingWindow()
+		mainparent:Remove()
+	end
+
+	parent:AddItem(lang)
+end
+
+function DChangeLanguage(parent, x, y, size)
+	local LanguageChanger = createD("DButton", parent, size, size * 0.671, x, y)
+	LanguageChanger:SetText("")
+
+	function LanguageChanger:Paint(pw, ph)
+		local color = YRPGetColor("2")
+
+		if self:IsHovered() then
+			color = YRPGetColor("1")
+		end
+
+		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
+		DrawIcon(GetDesignIcon(GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
+	end
+
+	function LanguageChanger:DoClick()
+		local languages = GetAllLanguages()
+		surface.SetFont(GetFont())
+		local _longestLanguageString = 0
+
+		for k, lang in SortedPairs(languages) do
+			local testString = surface.GetTextSize(constructLanguageText(lang["language"], lang["inenglish"], lang.percentage))
+
+			if testString > _longestLanguageString then
+				_longestLanguageString = testString
+			end
+		end
+
+		local window = createD("DFrame", nil, _longestLanguageString + ctr(78), ctr(400), 0, 0)
+		window:SetTitle("")
+		window:ShowCloseButton(false)
+		window:SetDraggable(false)
+
+		function window:Paint(pw, ph)
+			local px, py = self:GetPos()
+
+			if px > ScrW() - pw then
+				self:SetPos(ScrW() - pw, py)
+			elseif py > ScrH() - ph then
+				self:SetPos(px, ScrH() - ph)
+			end
+
+			if self:IsHovered() then
+				self.startup = true
+			end
+
+			for i, child in pairs(window.dpanellist:GetItems()) do
+				if self.startup == nil and child:IsHovered() then
+					self.startup = true
+				end
+				if self.startup and not self:IsHovered() and child:IsHovered() then
+
+					return true
+				end
+			end
+			if self.startup and not self:IsHovered() then
+				self:Remove()
+			end
+		end
+
+		window:MakePopup()
+		local mx, my = gui.MousePos()
+		mx = mx - window:GetWide() / 2
+		my = my - ctr(25)
+		window:SetPos(mx, my)
+		window.dpanellist = createD("DPanelList", window, window:GetWide(), ctr(400), 0, 0)
+		AddLanguageChangerLine(window.dpanellist, GetLanguageAutoInfo(), window)
+
+		for k, lang in SortedPairs(languages) do
+			AddLanguageChangerLine(window.dpanellist, lang, window)
+		end
+
+		AddLanguageAddLine(window.dpanellist, window)
+		window.dpanellist:SetTall(ctr(40 * (table.Count(languages) + 2)))
+		window:SetTall(ctr(40 * (table.Count(languages) + 2)))
+	end
+
+	return LanguageChanger
+end
+
+function isInTable(mytable, item)
+	for k, v in pairs(mytable) do
+		if string.lower(tostring(v)) == string.lower(tostring(item.ClassName)) then return true end
+	end
+
+	return false
+end
+
+function GetSWEPsList()
+	local SWEPS = weapons.GetList()
+	local list_weapon = list.Get("Weapon")
+
+	for k, v in pairs(list_weapon) do
+		if v.Category == "Half-Life 2" or string.find(v.ClassName, "weapon_physgun") then
+			table.insert(SWEPS, v)
+		end
+	end
+
+	return SWEPS
+end
+
+function GetSWEPWorldModel(ClassName)
+	local sweps = weapons.GetList()
+	local _weaplist = list.Get("Weapon")
+
+	for k, v in pairs(_weaplist) do
+		table.insert(sweps, v)
+	end
+
+	for k, v in pairs(sweps) do
 		if v.WorldModel == nil then
 			v.WorldModel = v.Model or ""
 		end
@@ -340,197 +223,299 @@ function showList()
 			v.ClassName = v.Class or ""
 		end
 
-		if tmpSelected[k] == nil then
-			tmpSelected[k] = {}
-			tmpSelected[k].ClassName = v.ClassName
+		if tostring(v.ClassName) == tostring(ClassName) and v.WorldModel ~= nil then return v.WorldModel end
+	end
 
-			if isInTable(tbl_sele, v) then
-				tmpSelected[k].selected = true
-			else
-				tmpSelected[k].selected = false
-			end
+	return ""
+end
+
+function GetSENTsList()
+	local list_entities = list.Get("SpawnableEntities")
+
+	return list_entities
+end
+
+function OpenSelector(tbl_list, tbl_sele, closeF)
+	local ply = LocalPlayer()
+	ply:SetNWString("global_working", table.concat(tbl_sele, ","))
+	local site = {}
+	site.cur = 1
+	site.max = 1
+	site.count = #tbl_list
+	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	frame:SetDraggable(false)
+	frame:Center()
+	frame:SetTitle("")
+
+	function frame:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
+		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "sef", pw / 2, ph - ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+
+	function frame:OnClose()
+		hook.Call(closeF)
+	end
+
+	local item = {}
+	item.w = 740
+	item.h = 370
+	local _w = BScrW() - ctr(20)
+	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
+	local _x = ctr(10)
+	local _y = ctr(50 + 10 + 50 + 10)
+	local _cw = _w / ctr(item.w + 10)
+	_cw = _cw - _cw % 1
+	local _ch = _h / ctr(item.h + 10)
+	_ch = _ch - _ch % 1
+	local _cs = _cw * _ch
+	local searchButton = createD("DButton", frame, ctr(50), ctr(50), ctr(10), ctr(50 + 10))
+	searchButton:SetText("")
+
+	function searchButton:Paint(pw, ph)
+		local _br = 4
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(searchIcon)
+		surface.DrawTexturedRect(ctr(5), ctr(5), ctr(40), ctr(40))
+		draw.SimpleText(lang_string("search") .. ":", "DermaDefault", ctr(_but_len), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	end
+
+	local search = createD("DTextEntry", frame, _w - ctr(50), ctr(50), ctr(10 + 50), ctr(50 + 10))
+
+	function getMaxSite()
+		site.max = site.count / _cs
+		local _mod = site.max % 1
+		site.max = site.max - _mod
+
+		if site.max + _mod > site.max then
+			site.max = site.max + 1
+		end
+	end
+
+	getMaxSite()
+	local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
+
+	function scrollpanel:Paint(pw, ph)
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+	end
+
+	local tmpCache = {}
+	local tmpSelected = {}
+
+	function showList()
+		for k, v in pairs(tmpCache) do
+			v:Remove()
 		end
 
-		if string.find(string.lower(v.WorldModel), search:GetText()) or string.find(string.lower(v.PrintName), search:GetText()) or string.find(string.lower(v.ClassName), search:GetText()) then
-			site.count = site.count + 1
+		local tmpBr = 10
+		local tmpX = 0
+		local tmpY = 0
+		site.count = 0
+		local count = 0
 
-			if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < (site.cur) * _cs then
-				count = count + 1
-				tmpCache[k] = createD("DPanel", scrollpanel, ctr(item.w), ctr(item.h), tmpX, tmpY)
-				local tmpPointer = tmpCache[k]
+		for k, v in pairs(tbl_list) do
+			if v.WorldModel == nil then
+				v.WorldModel = v.Model or ""
+			end
 
-				function tmpPointer:Paint(pw, ph)
-					self.text = ""
-					self.color = Color(0, 0, 0)
+			if v.PrintName == nil then
+				v.PrintName = v.Name or ""
+			end
 
-					if tmpSelected[k].selected then
-						self.color = Color(0, 255, 0)
-						self.tcolor = Color(255, 255, 255, 255)
+			if v.ClassName == nil then
+				v.ClassName = v.Class or ""
+			end
 
-						if string.find(v.ClassName, "npc_") then
-							self.text = lang_string("npcswep")
-							self.color = Color(255, 255, 0, 255)
-							self.tcolor = Color(255, 0, 0, 255)
-						elseif string.find(v.ClassName, "base") then
-							self.text = lang_string("baseentity")
-							self.color = Color(255, 255, 0, 255)
-							self.tcolor = Color(255, 0, 0, 255)
-						elseif v.WorldModel == "" then
-							self.text = lang_string("hasnoworldmodel")
-							self.color = Color(255, 255, 0, 255)
-							self.tcolor = Color(255, 255, 0, 255)
-						end
+			if tmpSelected[k] == nil then
+				tmpSelected[k] = {}
+				tmpSelected[k].ClassName = v.ClassName
 
-						draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-					else
-						if string.find(v.ClassName, "npc_") then
-							self.text = lang_string("npcswep")
-							self.color = Color(255, 0, 0, 255)
-						elseif string.find(v.ClassName, "base") then
-							self.text = lang_string("baseentity")
-							self.color = Color(255, 0, 0, 255)
-						elseif v.WorldModel == "" then
-							self.text = lang_string("hasnoworldmodel")
-							self.color = Color(255, 255, 0, 255)
-						end
-
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
-
-						if self.text ~= "" then
-							surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
-						end
-					end
+				if isInTable(tbl_sele, v) then
+					tmpSelected[k].selected = true
+				else
+					tmpSelected[k].selected = false
 				end
+			end
 
-				if v.WorldModel ~= nil and v.WorldModel ~= "" then
-					local icon = createD("SpawnIcon", tmpPointer, ctr(item.h), ctr(item.h), 0, 0)
-					icon.item = v
-					icon:SetText("")
+			if string.find(string.lower(v.WorldModel), search:GetText()) or string.find(string.lower(v.PrintName), search:GetText()) or string.find(string.lower(v.ClassName), search:GetText()) then
+				site.count = site.count + 1
 
-					timer.Create("shop" .. count, 0.002 * count, 1, function()
-						if icon ~= nil and icon ~= NULL and icon.item ~= nil then
-							icon:SetModel(icon.item.WorldModel)
+				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
+					count = count + 1
+					tmpCache[k] = createD("DPanel", scrollpanel, ctr(item.w), ctr(item.h), tmpX, tmpY)
+					local tmpPointer = tmpCache[k]
 
-							if icon.Entity ~= nil then
-								icon.Entity:SetModelScale(1, 0)
-								icon:SetLookAt(Vector(0, 0, 0))
-								icon:SetCamPos(Vector(0, -30, 15))
+					function tmpPointer:Paint(pw, ph)
+						self.text = ""
+						self.color = Color(0, 0, 0)
+
+						if tmpSelected[k].selected then
+							self.color = Color(0, 255, 0)
+							self.tcolor = Color(255, 255, 255, 255)
+
+							if string.find(v.ClassName, "npc_") then
+								self.text = lang_string("npcswep")
+								self.color = Color(255, 255, 0, 255)
+								self.tcolor = Color(255, 0, 0, 255)
+							elseif string.find(v.ClassName, "base") then
+								self.text = lang_string("baseentity")
+								self.color = Color(255, 255, 0, 255)
+								self.tcolor = Color(255, 0, 0, 255)
+							elseif v.WorldModel == "" then
+								self.text = lang_string("hasnoworldmodel")
+								self.color = Color(255, 255, 0, 255)
+								self.tcolor = Color(255, 255, 0, 255)
 							end
-						end
-					end)
-				end
 
-				local tmpButton = createD("DButton", tmpPointer, ctr(item.w), ctr(item.h), 0, 0)
-				tmpButton:SetText("")
+							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
+						else
+							if string.find(v.ClassName, "npc_") then
+								self.text = lang_string("npcswep")
+								self.color = Color(255, 0, 0, 255)
+							elseif string.find(v.ClassName, "base") then
+								self.text = lang_string("baseentity")
+								self.color = Color(255, 0, 0, 255)
+							elseif v.WorldModel == "" then
+								self.text = lang_string("hasnoworldmodel")
+								self.color = Color(255, 255, 0, 255)
+							end
 
-				function tmpButton:Paint(pw, ph)
-					--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-					local text = "" --lang_string( "notadded" )
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
 
-					if tmpSelected[k].selected then
-						text = lang_string("added")
-
-						if tmpPointer.text ~= "" then
-							text = text .. " (" .. tmpPointer.text .. ")"
-						end
-					end
-
-					local _test = "HAS NO NAME"
-
-					if v.PrintName ~= nil and v.PrintName ~= "" then
-						_test = v.PrintName
-					elseif v.ClassName ~= nil and v.ClassName ~= "" then
-						_test = v.ClassName
-					elseif v.WorldModel ~= nil and v.WorldModel ~= "" then
-						_test = v.WorldModel
-					elseif v.ViewModel ~= nil and v.ViewModel ~= "" then
-						_test = v.ViewModel
-					end
-
-					surface.SetFont("DermaDefaultBold")
-					local _tw, _th = surface.GetTextSize(_test)
-					local _x = ctr(4)
-					local _y = ctr(4)
-					surfaceBox(_x, _y, _tw + ctr(8), _th + ctr(8), Color(0, 0, 0))
-					surfaceText(_test, "DermaDefaultBold", _x + ctr(4), _y + ctr(15), Color(255, 255, 255, 255), 0, 1)
-					--draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
-					draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				end
-
-				function tmpButton:DoClick()
-					if tmpSelected[k].selected then
-						tmpSelected[k].selected = false
-					else
-						tmpSelected[k].selected = true
-					end
-
-					local tmpString = ""
-
-					for k, v in pairs(tmpSelected) do
-						if v.selected and v.ClassName ~= nil then
-							if tmpString == "" then
-								tmpString = v.ClassName
-							else
-								tmpString = tmpString .. "," .. v.ClassName
+							if self.text ~= "" then
+								surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
 							end
 						end
 					end
 
-					ply:SetNWString("global_working", tmpString)
-				end
+					if v.WorldModel ~= nil and v.WorldModel ~= "" then
+						local icon = createD("SpawnIcon", tmpPointer, ctr(item.h), ctr(item.h), 0, 0)
+						icon.item = v
+						icon:SetText("")
 
-				tmpX = tmpX + ctr(item.w) + tmpBr
+						timer.Create("shop" .. count, 0.002 * count, 1, function()
+							if icon ~= nil and icon ~= NULL and icon.item ~= nil then
+								icon:SetModel(icon.item.WorldModel)
 
-				if tmpX > _w - ctr(item.w) then
-					tmpX = 0
-					tmpY = tmpY + ctr(item.h) + tmpBr
+								if icon.Entity ~= nil then
+									icon.Entity:SetModelScale(1, 0)
+									icon:SetLookAt(Vector(0, 0, 0))
+									icon:SetCamPos(Vector(0, -30, 15))
+								end
+							end
+						end)
+					end
+
+					local tmpButton = createD("DButton", tmpPointer, ctr(item.w), ctr(item.h), 0, 0)
+					tmpButton:SetText("")
+
+					function tmpButton:Paint(pw, ph)
+						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+						local text = "" --lang_string( "notadded" )
+
+						if tmpSelected[k].selected then
+							text = lang_string("added")
+
+							if tmpPointer.text ~= "" then
+								text = text .. " (" .. tmpPointer.text .. ")"
+							end
+						end
+
+						local _test = "HAS NO NAME"
+
+						if v.PrintName ~= nil and v.PrintName ~= "" then
+							_test = v.PrintName
+						elseif v.ClassName ~= nil and v.ClassName ~= "" then
+							_test = v.ClassName
+						elseif v.WorldModel ~= nil and v.WorldModel ~= "" then
+							_test = v.WorldModel
+						elseif v.ViewModel ~= nil and v.ViewModel ~= "" then
+							_test = v.ViewModel
+						end
+
+						surface.SetFont("DermaDefaultBold")
+						local _tw, _th = surface.GetTextSize(_test)
+						local _x = ctr(4)
+						local _y = ctr(4)
+						surfaceBox(_x, _y, _tw + ctr(8), _th + ctr(8), Color(0, 0, 0))
+						surfaceText(_test, "DermaDefaultBold", _x + ctr(4), _y + ctr(15), Color(255, 255, 255, 255), 0, 1)
+						--draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
+						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+					end
+
+					function tmpButton:DoClick()
+						if tmpSelected[k].selected then
+							tmpSelected[k].selected = false
+						else
+							tmpSelected[k].selected = true
+						end
+
+						local tmpString = ""
+
+						for k, v in pairs(tmpSelected) do
+							if v.selected and v.ClassName ~= nil then
+								if tmpString == "" then
+									tmpString = v.ClassName
+								else
+									tmpString = tmpString .. "," .. v.ClassName
+								end
+							end
+						end
+
+						ply:SetNWString("global_working", tmpString)
+					end
+
+					tmpX = tmpX + ctr(item.w) + tmpBr
+
+					if tmpX > _w - ctr(item.w) then
+						tmpX = 0
+						tmpY = tmpY + ctr(item.h) + tmpBr
+					end
 				end
 			end
 		end
 	end
-end
 
-local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
-nextB:SetText("")
+	local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
+	nextB:SetText("")
 
-function nextB:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-	draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-end
+	function nextB:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
 
-function nextB:DoClick()
-	if site.max > site.cur then
-		site.cur = site.cur + 1
+	function nextB:DoClick()
+		if site.max > site.cur then
+			site.cur = site.cur + 1
+			showList()
+		end
+	end
+
+	local prevB = createD("DButton", frame, ctr(200), ctr(50), ctr(10 + 10), ScrH() - ctr(50 + 10))
+	prevB:SetText("")
+
+	function prevB:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+
+	function prevB:DoClick()
+		site.cur = site.cur - 1
+
+		if site.cur < 1 then
+			site.cur = 1
+		end
+
 		showList()
 	end
-end
 
-local prevB = createD("DButton", frame, ctr(200), ctr(50), ctr(10 + 10), ScrH() - ctr(50 + 10))
-prevB:SetText("")
-
-function prevB:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-	draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-end
-
-function prevB:DoClick()
-	site.cur = site.cur - 1
-
-	if site.cur < 1 then
+	function search:OnChange()
 		site.cur = 1
+		showList()
+		getMaxSite()
 	end
 
 	showList()
-end
-
-function search:OnChange()
-	site.cur = 1
-	showList()
-	getMaxSite()
-end
-
-showList()
-frame:MakePopup()
+	frame:MakePopup()
 end
 
 function OpenSingleSelector(table, closeF)
@@ -545,9 +530,9 @@ function OpenSingleSelector(table, closeF)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
-	local _cw = (_w) / ctr(_item.w + 10)
+	local _cw = _w / ctr(_item.w + 10)
 	_cw = _cw - _cw % 1
-	local _ch = (_h) / ctr(_item.h + 10)
+	local _ch = _h / ctr(_item.h + 10)
 	_ch = _ch - _ch % 1
 	local _cs = _cw * _ch
 
@@ -561,7 +546,6 @@ function OpenSingleSelector(table, closeF)
 	end
 
 	getMaxSite()
-	local shopsize = ScrH()
 	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(lang_string("itemMenu"))
@@ -628,7 +612,7 @@ function OpenSingleSelector(table, closeF)
 			if string.find(string.lower(item.WorldModel or ""), search:GetText()) or string.find(string.lower(item.PrintName or ""), search:GetText()) or string.find(string.lower(item.ClassName or ""), search:GetText()) then
 				site.count = site.count + 1
 
-				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < (site.cur) * _cs then
+				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
 					count = count + 1
 
 					if item.WorldModel == nil then
@@ -756,9 +740,9 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
-	local _cw = (_w) / ctr(item.w + 10)
+	local _cw = _w / ctr(item.w + 10)
 	_cw = _cw - _cw % 1
-	local _ch = (_h) / ctr(item.h + 10)
+	local _ch = _h / ctr(item.h + 10)
 	_ch = _ch - _ch % 1
 	local _cs = _cw * _ch
 	local searchButton = createD("DButton", frame, ctr(50), ctr(50), ctr(10), ctr(50 + 10))
@@ -775,254 +759,254 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 	local search = createD("DTextEntry", frame, _w - ctr(50), ctr(50), ctr(10 + 50), ctr(50 + 10))
 
 	--[[function search:Paint( pw, ph )
-	draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
-	local _string = search:GetText()
-	if _string == "" then
-	_string = lang_string( "search" )
-end
-draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-end]]
---
-function getMaxSite()
-	site.max = site.count / _cs
-	local _mod = site.max % 1
-	site.max = site.max - _mod
+		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+		local _string = search:GetText()
+		if _string == "" then
+			_string = lang_string( "search" )
+		end
+		draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+	end]]
+	--
+	function getMaxSite()
+		site.max = site.count / _cs
+		local _mod = site.max % 1
+		site.max = site.max - _mod
 
-	if site.max + _mod > site.max then
-		site.max = site.max + 1
-	end
-end
-
-getMaxSite()
-local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
-
-function scrollpanel:Paint(pw, ph)
-	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
-end
-
-local tmpCache = {}
-local tmpSelected = {}
-
-function showList()
-	for k, v in pairs(tmpCache) do
-		v:Remove()
+		if site.max + _mod > site.max then
+			site.max = site.max + 1
+		end
 	end
 
-	local tmpBr = 10
-	local tmpX = 0
-	local tmpY = 0
-	site.count = 0
-	local count = 0
+	getMaxSite()
+	local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
 
-	for k, v in pairs(table) do
-		if v.WorldModel == nil then
-			v.WorldModel = v.Model or ""
+	function scrollpanel:Paint(pw, ph)
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+	end
+
+	local tmpCache = {}
+	local tmpSelected = {}
+
+	function showList()
+		for k, v in pairs(tmpCache) do
+			v:Remove()
 		end
 
-		if v.PrintName == nil then
-			v.PrintName = v.Name or ""
-		end
+		local tmpBr = 10
+		local tmpX = 0
+		local tmpY = 0
+		site.count = 0
+		local count = 0
 
-		if v.ClassName == nil then
-			v.ClassName = v.Class or ""
-		end
-
-		if tmpSelected[k] == nil then
-			tmpSelected[k] = {}
-			tmpSelected[k].ClassName = v.ClassName
-
-			if isInTable(table2, v) then
-				tmpSelected[k].selected = true
-			else
-				tmpSelected[k].selected = false
+		for k, v in pairs(table) do
+			if v.WorldModel == nil then
+				v.WorldModel = v.Model or ""
 			end
-		end
 
-		if string.find(string.lower(v.WorldModel), search:GetText()) or string.find(string.lower(v.PrintName), search:GetText()) or string.find(string.lower(v.ClassName), search:GetText()) then
-			site.count = site.count + 1
+			if v.PrintName == nil then
+				v.PrintName = v.Name or ""
+			end
 
-			if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < (site.cur) * _cs then
-				count = count + 1
-				tmpCache[k] = createD("DPanel", scrollpanel, ctr(item.w), ctr(item.h), tmpX, tmpY)
-				local tmpPointer = tmpCache[k]
+			if v.ClassName == nil then
+				v.ClassName = v.Class or ""
+			end
 
-				function tmpPointer:Paint(pw, ph)
-					self.text = ""
-					self.color = Color(0, 0, 0)
+			if tmpSelected[k] == nil then
+				tmpSelected[k] = {}
+				tmpSelected[k].ClassName = v.ClassName
 
-					if tmpSelected[k].selected then
-						self.color = Color(0, 255, 0)
-						self.tcolor = Color(255, 255, 255, 255)
-
-						if string.find(v.ClassName, "npc_") then
-							self.text = lang_string("npcswep")
-							self.color = Color(255, 255, 0, 255)
-							self.tcolor = Color(255, 0, 0, 255)
-						elseif string.find(v.ClassName, "base") then
-							self.text = lang_string("baseentity")
-							self.color = Color(255, 255, 0, 255)
-							self.tcolor = Color(255, 0, 0, 255)
-						elseif v.WorldModel == "" then
-							self.text = lang_string("hasnoworldmodel")
-							self.color = Color(255, 255, 0, 255)
-							self.tcolor = Color(255, 255, 0, 255)
-						end
-
-						draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-					else
-						if string.find(v.ClassName, "npc_") then
-							self.text = lang_string("npcswep")
-							self.color = Color(255, 0, 0, 255)
-						elseif string.find(v.ClassName, "base") then
-							self.text = lang_string("baseentity")
-							self.color = Color(255, 0, 0, 255)
-						elseif v.WorldModel == "" then
-							self.text = lang_string("hasnoworldmodel")
-							self.color = Color(255, 255, 0, 255)
-						end
-
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
-
-						if self.text ~= "" then
-							surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
-						end
-					end
+				if isInTable(table2, v) then
+					tmpSelected[k].selected = true
+				else
+					tmpSelected[k].selected = false
 				end
+			end
 
-				if v.WorldModel ~= nil and v.WorldModel ~= "" then
-					local icon = createD("SpawnIcon", tmpPointer, ctr(item.h), ctr(item.h), 0, 0)
-					icon.item = v
-					icon:SetText("")
+			if string.find(string.lower(v.WorldModel), search:GetText()) or string.find(string.lower(v.PrintName), search:GetText()) or string.find(string.lower(v.ClassName), search:GetText()) then
+				site.count = site.count + 1
 
-					timer.Create("shop" .. count, 0.002 * count, 1, function()
-						if icon ~= nil and icon ~= NULL and icon.item ~= nil then
-							icon:SetModel(icon.item.WorldModel)
+				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
+					count = count + 1
+					tmpCache[k] = createD("DPanel", scrollpanel, ctr(item.w), ctr(item.h), tmpX, tmpY)
+					local tmpPointer = tmpCache[k]
 
-							if icon.Entity ~= nil then
-								icon.Entity:SetModelScale(1, 0)
-								icon:SetLookAt(Vector(0, 0, 0))
-								icon:SetCamPos(Vector(0, -30, 15))
+					function tmpPointer:Paint(pw, ph)
+						self.text = ""
+						self.color = Color(0, 0, 0)
+
+						if tmpSelected[k].selected then
+							self.color = Color(0, 255, 0)
+							self.tcolor = Color(255, 255, 255, 255)
+
+							if string.find(v.ClassName, "npc_") then
+								self.text = lang_string("npcswep")
+								self.color = Color(255, 255, 0, 255)
+								self.tcolor = Color(255, 0, 0, 255)
+							elseif string.find(v.ClassName, "base") then
+								self.text = lang_string("baseentity")
+								self.color = Color(255, 255, 0, 255)
+								self.tcolor = Color(255, 0, 0, 255)
+							elseif v.WorldModel == "" then
+								self.text = lang_string("hasnoworldmodel")
+								self.color = Color(255, 255, 0, 255)
+								self.tcolor = Color(255, 255, 0, 255)
 							end
-						end
-					end)
-				end
 
-				local tmpButton = createD("DButton", tmpPointer, ctr(item.w), ctr(item.h), 0, 0)
-				tmpButton:SetText("")
+							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
+						else
+							if string.find(v.ClassName, "npc_") then
+								self.text = lang_string("npcswep")
+								self.color = Color(255, 0, 0, 255)
+							elseif string.find(v.ClassName, "base") then
+								self.text = lang_string("baseentity")
+								self.color = Color(255, 0, 0, 255)
+							elseif v.WorldModel == "" then
+								self.text = lang_string("hasnoworldmodel")
+								self.color = Color(255, 255, 0, 255)
+							end
 
-				function tmpButton:Paint(pw, ph)
-					--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-					local text = "" --lang_string( "notadded" )
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
 
-					if tmpSelected[k].selected then
-						text = lang_string("added")
-
-						if tmpPointer.text ~= "" then
-							text = text .. " (" .. tmpPointer.text .. ")"
-						end
-					end
-
-					local _test = "HAS NO NAME"
-
-					if v.PrintName ~= nil and v.PrintName ~= "" then
-						_test = v.PrintName
-					elseif v.ClassName ~= nil and v.ClassName ~= "" then
-						_test = v.ClassName
-					elseif v.WorldModel ~= nil and v.WorldModel ~= "" then
-						_test = v.WorldModel
-					elseif v.ViewModel ~= nil and v.ViewModel ~= "" then
-						_test = v.ViewModel
-					end
-
-					surface.SetFont("DermaDefaultBold")
-					local _tw, _th = surface.GetTextSize(_test)
-					local _x = ctr(4)
-					local _y = ctr(4)
-					surfaceBox(_x, _y, _tw + ctr(8), _th + ctr(8), Color(0, 0, 0))
-					surfaceText(_test, "DermaDefaultBold", _x + ctr(4), _y + ctr(15), Color(255, 255, 255, 255), 0, 1)
-					--draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
-					draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				end
-
-				function tmpButton:DoClick()
-					if tmpSelected[k].selected then
-						tmpSelected[k].selected = false
-					else
-						tmpSelected[k].selected = true
-					end
-
-					local tmpString = ""
-
-					for k, v in pairs(tmpSelected) do
-						if v.selected and v.ClassName ~= nil then
-							if tmpString == "" then
-								tmpString = v.ClassName
-							else
-								tmpString = tmpString .. "," .. v.ClassName
+							if self.text ~= "" then
+								surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
 							end
 						end
 					end
 
-					net.Start("dbUpdate")
-					net.WriteString(dbTable)
-					net.WriteString(dbSets .. " = '" .. tmpString .. "'")
-					net.WriteString(dbWhile)
-					net.SendToServer()
-					_globalWorking = tmpString
-				end
+					if v.WorldModel ~= nil and v.WorldModel ~= "" then
+						local icon = createD("SpawnIcon", tmpPointer, ctr(item.h), ctr(item.h), 0, 0)
+						icon.item = v
+						icon:SetText("")
 
-				tmpX = tmpX + ctr(item.w) + tmpBr
+						timer.Create("shop" .. count, 0.002 * count, 1, function()
+							if icon ~= nil and icon ~= NULL and icon.item ~= nil then
+								icon:SetModel(icon.item.WorldModel)
 
-				if tmpX > _w - ctr(item.w) then
-					tmpX = 0
-					tmpY = tmpY + ctr(item.h) + tmpBr
+								if icon.Entity ~= nil then
+									icon.Entity:SetModelScale(1, 0)
+									icon:SetLookAt(Vector(0, 0, 0))
+									icon:SetCamPos(Vector(0, -30, 15))
+								end
+							end
+						end)
+					end
+
+					local tmpButton = createD("DButton", tmpPointer, ctr(item.w), ctr(item.h), 0, 0)
+					tmpButton:SetText("")
+
+					function tmpButton:Paint(pw, ph)
+						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
+						local text = "" --lang_string( "notadded" )
+
+						if tmpSelected[k].selected then
+							text = lang_string("added")
+
+							if tmpPointer.text ~= "" then
+								text = text .. " (" .. tmpPointer.text .. ")"
+							end
+						end
+
+						local _test = "HAS NO NAME"
+
+						if v.PrintName ~= nil and v.PrintName ~= "" then
+							_test = v.PrintName
+						elseif v.ClassName ~= nil and v.ClassName ~= "" then
+							_test = v.ClassName
+						elseif v.WorldModel ~= nil and v.WorldModel ~= "" then
+							_test = v.WorldModel
+						elseif v.ViewModel ~= nil and v.ViewModel ~= "" then
+							_test = v.ViewModel
+						end
+
+						surface.SetFont("DermaDefaultBold")
+						local _tw, _th = surface.GetTextSize(_test)
+						local _x = ctr(4)
+						local _y = ctr(4)
+						surfaceBox(_x, _y, _tw + ctr(8), _th + ctr(8), Color(0, 0, 0))
+						surfaceText(_test, "DermaDefaultBold", _x + ctr(4), _y + ctr(15), Color(255, 255, 255, 255), 0, 1)
+						--draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
+						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+					end
+
+					function tmpButton:DoClick()
+						if tmpSelected[k].selected then
+							tmpSelected[k].selected = false
+						else
+							tmpSelected[k].selected = true
+						end
+
+						local tmpString = ""
+
+						for k, v in pairs(tmpSelected) do
+							if v.selected and v.ClassName ~= nil then
+								if tmpString == "" then
+									tmpString = v.ClassName
+								else
+									tmpString = tmpString .. "," .. v.ClassName
+								end
+							end
+						end
+
+						net.Start("dbUpdate")
+						net.WriteString(dbTable)
+						net.WriteString(dbSets .. " = '" .. tmpString .. "'")
+						net.WriteString(dbWhile)
+						net.SendToServer()
+						_globalWorking = tmpString
+					end
+
+					tmpX = tmpX + ctr(item.w) + tmpBr
+
+					if tmpX > _w - ctr(item.w) then
+						tmpX = 0
+						tmpY = tmpY + ctr(item.h) + tmpBr
+					end
 				end
 			end
 		end
 	end
-end
 
-local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
-nextB:SetText("")
+	local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
+	nextB:SetText("")
 
-function nextB:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-	draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-end
+	function nextB:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
 
-function nextB:DoClick()
-	if site.max > site.cur then
-		site.cur = site.cur + 1
+	function nextB:DoClick()
+		if site.max > site.cur then
+			site.cur = site.cur + 1
+			showList()
+		end
+	end
+
+	local prevB = createD("DButton", frame, ctr(200), ctr(50), ctr(10 + 10), ScrH() - ctr(50 + 10))
+	prevB:SetText("")
+
+	function prevB:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+
+	function prevB:DoClick()
+		site.cur = site.cur - 1
+
+		if site.cur < 1 then
+			site.cur = 1
+		end
+
 		showList()
 	end
-end
 
-local prevB = createD("DButton", frame, ctr(200), ctr(50), ctr(10 + 10), ScrH() - ctr(50 + 10))
-prevB:SetText("")
-
-function prevB:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-	draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-end
-
-function prevB:DoClick()
-	site.cur = site.cur - 1
-
-	if site.cur < 1 then
+	function search:OnChange()
 		site.cur = 1
+		showList()
+		getMaxSite()
 	end
 
 	showList()
-end
-
-function search:OnChange()
-	site.cur = 1
-	showList()
-	getMaxSite()
-end
-
-showList()
-frame:MakePopup()
+	frame:MakePopup()
 end
 
 function openSingleSelector(table, closeF)
@@ -1037,9 +1021,9 @@ function openSingleSelector(table, closeF)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
-	local _cw = (_w) / ctr(_item.w + 10)
+	local _cw = _w / ctr(_item.w + 10)
 	_cw = _cw - _cw % 1
-	local _ch = (_h) / ctr(_item.h + 10)
+	local _ch = _h / ctr(_item.h + 10)
 	_ch = _ch - _ch % 1
 	local _cs = _cw * _ch
 
@@ -1053,7 +1037,6 @@ function openSingleSelector(table, closeF)
 	end
 
 	getMaxSite()
-	local shopsize = ScrH()
 	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(lang_string("itemMenu"))
@@ -1120,7 +1103,7 @@ function openSingleSelector(table, closeF)
 			if string.find(string.lower(item.WorldModel or ""), search:GetText()) or string.find(string.lower(item.PrintName or ""), search:GetText()) or string.find(string.lower(item.ClassName or ""), search:GetText()) then
 				site.count = site.count + 1
 
-				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < (site.cur) * _cs then
+				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
 					count = count + 1
 
 					if item.WorldModel == nil then
@@ -1305,10 +1288,8 @@ end
 function RemoveDeadRag(ent)
 	if (ent == NULL) or (ent == nil) then return end
 
-	if (ent:GetClass() == "class C_ClientRagdoll") then
-		if ent:IsValid() and not (ent == NULL) then
+	if (ent:GetClass() == "class C_ClientRagdoll") and ent:IsValid() and ent ~= NULL then
 			SafeRemoveEntityDelayed(ent, 60)
-		end
 	end
 end
 
@@ -1350,7 +1331,6 @@ function drawString(ply, string, z, color)
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
 	local str = string
-	local strSize = string.len(str) + 3
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetFont("3d2d_string")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1370,7 +1350,6 @@ function drawBar(ply, string, z, color, cur, max, barcolor)
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
 	local str = string
-	local strSize = string.len(str) + 3
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetFont("3d2d_string")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1393,7 +1372,6 @@ function drawPlate(ply, string, z, color)
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
 	local str = string
-	local strSize = string.len(str) + 3
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetFont("plates")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1413,14 +1391,12 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	local h = tonumber(_h)
 	local h = tonumber(_h)
 	local alpha = tonumber(_alpha)
-	local max = tonumber(_max)
 	local pos = ply:GetPos()
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = 0.1
 	x = x * (0.75 + ply:GetModelScale() * 0.25)
 	y = y * (0.75 + ply:GetModelScale() * 0.25)
 	local str = _str
-	local strSize = string.len(str) + 3
 	--cam.Start3D2D( pos + Vector( 0, 0, z ) + ply:GetRight() * y + ply:GetForward() * x, ang, sca )
 	cam.Start3D2D(pos + Vector(0, 0, z) + LocalPlayer():GetRight() * y + LocalPlayer():GetForward() * x, ang, sca)
 	surface.SetFont("plyinfo")
@@ -1525,18 +1501,14 @@ function drawPlates(ply)
 
 		_height = _height + 2
 
-		if ply:GetNWBool("tag_ug", false) or (ply:GetNWBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and not ply:InVehicle()) then
-			if ply:GetColor().a > 10 then
+		if ply:GetNWBool("tag_ug", false) or (ply:GetNWBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and not ply:InVehicle()) and ply:GetColor().a > 10 then
 				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
 				_height = _height + 9
-			end
 		end
 
-		if ply:GetNWBool("tag_dev", false) then
-			if tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
+		if ply:GetNWBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
 				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
 				_height = _height + 9
-			end
 		end
 
 		if ply:GetNWBool("bool_tag_on_side", false) then
@@ -1625,33 +1597,31 @@ net.Receive("yrp_noti", function(len)
 	if playerready then
 		local ply = LocalPlayer()
 
-		if ply ~= nil then
-			if ply:HasAccess() then
-				local _str_lang = net.ReadString()
-				local _time = 4
-				local _channel = NOTIFY_GENERIC
-				local _str = "[" .. lang_string("adminnotification") .. "] "
+		if ply ~= nil and ply:HasAccess() then
+			local _str_lang = net.ReadString()
+			local _time = 4
+			local _channel = NOTIFY_GENERIC
+			local _str = "[" .. lang_string("adminnotification") .. "] "
 
-				if _str_lang == "noreleasepoint" then
-					_str = _str .. lang_string(_str_lang)
-				elseif _str_lang == "nojailpoint" then
-					_str = _str .. lang_string(_str_lang)
-				elseif _str_lang == "nogroupspawn" then
-					_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. lang_string(_str_lang) .. "!"
-				elseif _str_lang == "inventoryclearing" then
-					_str = _str .. lang_string(_str_lang) .. " (" .. lang_string(net.ReadString()) .. ")"
-				elseif _str_lang == "playerisready" then
-					_str = _str .. lang_string("finishedloadingthegamepre") .. " " .. net.ReadString() .. " " .. lang_string("finishedloadingthegamepos")
-				elseif _str_lang == "newfeedback" then
-					_str = _str .. lang_string("newfeedback")
-				elseif _str_lang == "database_full_server" then
-					_str = _str .. "SERVER: Database or disk is full, please make more space!"
-					_time = 40
-					_channel = NOTIFY_ERROR
-				end
-
-				notification.AddLegacy(_str, _channel, _time)
+			if _str_lang == "noreleasepoint" then
+				_str = _str .. lang_string(_str_lang)
+			elseif _str_lang == "nojailpoint" then
+				_str = _str .. lang_string(_str_lang)
+			elseif _str_lang == "nogroupspawn" then
+				_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. lang_string(_str_lang) .. "!"
+			elseif _str_lang == "inventoryclearing" then
+				_str = _str .. lang_string(_str_lang) .. " (" .. lang_string(net.ReadString()) .. ")"
+			elseif _str_lang == "playerisready" then
+				_str = _str .. lang_string("finishedloadingthegamepre") .. " " .. net.ReadString() .. " " .. lang_string("finishedloadingthegamepos")
+			elseif _str_lang == "newfeedback" then
+				_str = _str .. lang_string("newfeedback")
+			elseif _str_lang == "database_full_server" then
+				_str = _str .. "SERVER: Database or disk is full, please make more space!"
+				_time = 40
+				_channel = NOTIFY_ERROR
 			end
+
+			notification.AddLegacy(_str, _channel, _time)
 		end
 	end
 end)
