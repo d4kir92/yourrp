@@ -256,19 +256,6 @@ function SQL_QUERY(query)
 		if _result == nil then
 			return _result
 		elseif _result == false then
-			local _debug_ms = false
-			if CLIENT then
-				if LocalPlayer():SetNWBool( "yrp_debug", false ) then
-					_debug_ms = true
-				end
-			elseif SERVER then
-				if YRPDebug() then
-					_debug_ms = true
-				end
-			end
-			if _debug_ms then
-				printGM("db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query)
-			end
 			return _result
 		else
 			--printGM( "db", "ELSE" )
