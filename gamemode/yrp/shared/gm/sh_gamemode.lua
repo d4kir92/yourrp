@@ -16,7 +16,7 @@ GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.128" --do NOT change this!
+GM.Version = "0.9.129" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -48,7 +48,7 @@ function GetNiceMapName()
 	local map = game.GetMap()
 	local _first = string.find( map, "_", 1, false )
 	if _first != nil then
-		map = string.sub( map, _first+1 )
+		map = string.sub( map, _first + 1 )
 	end
 	map = string.Explode( "_", map )
 	local _new_map = {}
@@ -132,10 +132,8 @@ concommand.Add( "yrp__help", function( ply, cmd, args )
 end )
 
 hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
-	if ply:GetNWBool( "bool_anti_bhop", false ) then
-		if !ply:GetNWBool( "canjump", false ) and ply:GetMoveType() != MOVETYPE_NOCLIP then
-			cmd:RemoveKey(IN_JUMP)
-		end
+	if ply:GetNWBool( "bool_anti_bhop", false ) and !ply:GetNWBool( "canjump", false ) and ply:GetMoveType() != MOVETYPE_NOCLIP then
+		cmd:RemoveKey(IN_JUMP)
 	end
 end)
 
@@ -163,10 +161,10 @@ if CLIENT then
 					_ply.lerp_ang_up = 0
 				end
 			end
-			pos = pos + ang:Right() * _ply.lerp_ang_up/90*10 + ang:Forward() * 0 + ang:Up() * -_ply.lerp_ang_up/90*2
+			pos = pos + ang:Right() * _ply.lerp_ang_up / 90 * 10 + ang:Forward() * 0 + ang:Up() * -_ply.lerp_ang_up / 90 * 2
 
-			ang:RotateAroundAxis( ang:Up(), _ply.lerp_ang_up*0.5 )
-			ang:RotateAroundAxis( ang:Right(), -_ply.lerp_ang_up*0.1 )
+			ang:RotateAroundAxis( ang:Up(), _ply.lerp_ang_up * 0.5 )
+			ang:RotateAroundAxis( ang:Right(), -_ply.lerp_ang_up * 0.1 )
 			--ang:RotateAroundAxis( ang:Forward(), -_ply.lerp_ang_up/2 )
 
 			wep:SetPos( pos )
@@ -178,25 +176,21 @@ end
 if SERVER then
 	function lowering_weapon( ply )
 		if IsWeaponLoweringEnabled() then
-			if ea( ply ) then
-				local _weapon = ply:GetActiveWeapon()
-				if ea( _weapon ) then
-					if _weapon:IsScripted() then
-						if ply:GetNWBool( "weaponlowered", true ) then
-							ply:SetNWBool( "weaponlowered", false )
-							_weapon:SetHoldType( _weapon:GetNWString( "swep_holdtype" ) )
-							_weapon.HoldType = _weapon:GetNWString( "swep_holdtype" )
-						else
-							ply:SetNWBool( "weaponlowered", true )
-							local _w_ht = _weapon:GetNWString( "swep_holdtype" )
-							if _w_ht == "melee" or _w_ht == "melee2" or _w_ht == "pistol" or _w_ht == "grenade" or _w_ht == "rpg" or _w_ht == "slam" or _w_ht == "fist" or _w_ht == "knife" or _w_ht == "duel" or _w_ht == "camera" or _w_ht == "magic" or _w_ht == "revolver" then
-								_weapon:SetHoldType( "normal" )
-							elseif _w_ht == "smg" or _w_ht == "ar2" or _w_ht == "shotgun" or _w_ht == "physgun" or _w_ht == "crossbow" then
-								_weapon:SetHoldType( "passive" )
-							else
-								_weapon:SetHoldType( "normal" )
-							end
-						end
+			local _weapon = ply:GetActiveWeapon()
+			if ea( _weapon ) then
+				if _weapon:IsScripted() and ply:GetNWBool( "weaponlowered", true ) then
+					ply:SetNWBool( "weaponlowered", false )
+					_weapon:SetHoldType( _weapon:GetNWString( "swep_holdtype" ) )
+					_weapon.HoldType = _weapon:GetNWString( "swep_holdtype" )
+				else
+					ply:SetNWBool( "weaponlowered", true )
+					local _w_ht = _weapon:GetNWString( "swep_holdtype" )
+					if _w_ht == "melee" or _w_ht == "melee2" or _w_ht == "pistol" or _w_ht == "grenade" or _w_ht == "rpg" or _w_ht == "slam" or _w_ht == "fist" or _w_ht == "knife" or _w_ht == "duel" or _w_ht == "camera" or _w_ht == "magic" or _w_ht == "revolver" then
+						_weapon:SetHoldType( "normal" )
+					elseif _w_ht == "smg" or _w_ht == "ar2" or _w_ht == "shotgun" or _w_ht == "physgun" or _w_ht == "crossbow" then
+						_weapon:SetHoldType( "passive" )
+					else
+						_weapon:SetHoldType( "normal" )
 					end
 				end
 			end
