@@ -15,6 +15,9 @@ SQL_ADD_COLUMN( DATABASE_NAME, "sents", "TEXT DEFAULT ' '" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "adminaccess", "INT DEFAULT 0" )
 
+SQL_ADD_COLUMN( DATABASE_NAME, "database", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "status", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "yourrp_addons", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "interface", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "general", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "realistic", "INT DEFAULT 0" )
@@ -54,7 +57,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickupplayer", "INT DEFAULT 0" )
 if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 	local _str = "name, vehicles, weapons, entities, effects, npcs, props, ragdolls, noclip"
 	_str = _str .. ", removetool, dynamitetool, ignite, drive, collision, gravity, keepupright, bodygroups, physgunpickup, physgunpickupplayer"
-	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups"
+	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups, database, status, yourrp_addons"
 	local _str2 = "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
@@ -64,11 +67,11 @@ end
 if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
 	local _str = "name, vehicles, weapons, entities, effects, npcs, props, ragdolls, noclip"
 	_str = _str .. ", removetool, dynamitetool, ignite, drive, collision, gravity, keepupright, bodygroups, physgunpickup, physgunpickupplayer"
-	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups"
+	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups, database, status, yourrp_addons"
 	_str = _str .. ", removeable"
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0"
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
@@ -442,6 +445,27 @@ function UGCheckBox( ply, uid, name, value )
 	end
 end
 
+util.AddNetworkString( "usergroup_update_database" )
+net.Receive( "usergroup_update_database", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local database = net.ReadString()
+	UGCheckBox( ply, uid, "database", database )
+end)
+
+util.AddNetworkString( "usergroup_update_status" )
+net.Receive( "usergroup_update_status", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local status = net.ReadString()
+	UGCheckBox( ply, uid, "status", status )
+end)
+
+util.AddNetworkString( "usergroup_update_yourrp_addons" )
+net.Receive( "usergroup_update_yourrp_addons", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local yourrp_addons = net.ReadString()
+	UGCheckBox( ply, uid, "yourrp_addons", yourrp_addons )
+end)
+
 util.AddNetworkString( "usergroup_update_adminaccess" )
 net.Receive( "usergroup_update_adminaccess", function( len, ply )
 	local uid = tonumber( net.ReadString() )
@@ -659,9 +683,8 @@ net.Receive( "usergroup_update_physgunpickupplayer", function( len, ply )
 	UGCheckBox( ply, uid, "physgunpickupplayer", physgunpickupplayer )
 end)
 
---[[ Functions ]]--
-
-hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( pl, model, name, table )
+-- Functions
+hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( pl, model, name, tab )
 	if ea( pl ) then
 		local _tmp = SQL_SELECT( DATABASE_NAME, "vehicles", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerSpawnVehicle failed" ) then
@@ -967,7 +990,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 			if _t.Hit then
 				-- Up
 				local trup = {
-					start = _pos+Vector(0,0,100),
+					start = _pos + Vector(0,0,100),
 					endpos = _pos,
 					mins = Vector(1,1,0),
 					maxs = Vector(-1,-1,0),
@@ -978,7 +1001,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 				-- Down
 				local trdn = {
 					start = _pos,
-					endpos = _pos+Vector(0,0,100),
+					endpos = _pos + Vector(0,0,100),
 					mins = Vector(1,1,0),
 					maxs = Vector(-1,-1,0),
 					filter = pl
@@ -989,13 +1012,13 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 					if !_tup.StartSolid and _tdn.StartSolid then
 						pl:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
 					elseif _tup.StartSolid and !_tdn.StartSolid then
-						pl:SetPos( _tdn.HitPos - Vector( 0, 0, 72+1 ) )
+						pl:SetPos( _tdn.HitPos - Vector( 0, 0, 72 + 1 ) )
 					elseif !_tup.StartSolid and !_tdn.StartSolid then
 						_pos = _pos + Vector( 0, 0, 36 )
 						if _pos:Distance( _tup.HitPos ) < _pos:Distance( _tdn.HitPos ) then
-							pl:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
+							pl:SetPos(_tup.HitPos + Vector( 0, 0, 1 ))
 						elseif _pos:Distance( _tup.HitPos ) > _pos:Distance( _tdn.HitPos ) then
-							pl:SetPos( _tdn.HitPos - Vector( 0, 0, 72+6 ) )
+							pl:SetPos(_tdn.HitPos - Vector( 0, 0, 72+6 ))
 						end
 					end
 				end)
@@ -1010,7 +1033,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 					if IsNoClipModelEnabled() then
 						local mdl = pl:GetNWString( "text_noclip_mdl", "" )
 						if mdl != "" then
-							pl:SetModel( mdl )
+							pl:SetModel(mdl)
 						end
 					end
 

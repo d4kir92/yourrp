@@ -254,14 +254,21 @@ function SQL_QUERY(query)
 		local _result = sql.Query(query)
 
 		if _result == nil then
-			if string.find(query, "SELECT") then
-				printGM("note", GetSQLModeName() .. ": " .. "SQL_QUERY TABLE Empty/No Entry [" .. query .. "]")
-			end
-
 			return _result
 		elseif _result == false then
-			printGM("db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query)
-
+			local _debug_ms = false
+			if CLIENT then
+				if LocalPlayer():SetNWBool( "yrp_debug", false ) then
+					_debug_ms = true
+				end
+			elseif SERVER then
+				if YRPDebug() then
+					_debug_ms = true
+				end
+			end
+			if _debug_ms then
+				printGM("db", "SQL_QUERY TABLE MISSING OR NOTHING FOUND: " .. query)
+			end
 			return _result
 		else
 			--printGM( "db", "ELSE" )

@@ -11,7 +11,7 @@ function DrawText( tab )
 	tab.ay = tab.ay or 1
 	tab.text = tab.text or "NoText"
 	tab.font = tab.font or "DermaDefault"
-	draw.SimpleTextOutlined( tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, tab.br, tab.brcolor )
+	draw.SimpleTextOutlined( lang_string( tab.text ), tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, tab.br, tab.brcolor )
 end
 
 function DHorizontalScroller( tab )

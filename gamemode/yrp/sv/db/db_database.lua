@@ -126,6 +126,10 @@ include( "resources/db_resources.lua" )
 
 include( "sql/db_sql.lua" )
 
+include( "database/db_database.lua" )
+include( "status/db_status.lua" )
+include( "yourrp_addons/db_yourrp_addons.lua" )
+
 include( "usergroups/db_usergroups.lua" )
 
 include( "general/db_general.lua" )

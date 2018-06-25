@@ -8,7 +8,7 @@ local CURRENT_USERGROUP = nil
 
 local DUGS = DUGS or {}
 
-net.Receive( "Connect_Settings_UserGroup", function( len )
+net.Receive( "Connect_Settings_UserGroup", function(len)
 	local ug = net.ReadTable()
 	CURRENT_USERGROUP = tonumber( ug.uniqueID )
 	UGS[CURRENT_USERGROUP] = ug
@@ -38,7 +38,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 			net.WriteString( self:GetText() )
 		net.SendToServer()
 	end
-	net.Receive( "usergroup_update_name", function( len )
+	net.Receive( "usergroup_update_name", function(len2)
 		local name = net.ReadString()
 		UGS[CURRENT_USERGROUP].name = name
 		NAME:SetText( UGS[CURRENT_USERGROUP].name )
@@ -72,7 +72,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 			net.SendToServer()
 		end
 	end
-	net.Receive( "usergroup_update_color", function( len )
+	net.Receive( "usergroup_update_color", function(len2)
 		local color = net.ReadString()
 		UGS[CURRENT_USERGROUP].color = color
 	end)
@@ -89,7 +89,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 			net.WriteString( self:GetText() )
 		net.SendToServer()
 	end
-	net.Receive( "usergroup_update_icon", function( len )
+	net.Receive( "usergroup_update_icon", function(len2)
 		local icon = net.ReadString()
 		UGS[CURRENT_USERGROUP].icon = icon
 		ICON:SetText( UGS[CURRENT_USERGROUP].icon )
@@ -129,7 +129,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 	function SWEPS.preview:LayoutEntity( ent )
 		if ( self.bAnimated ) then self:RunAnimation() end
 		if ( self.Pressed ) then
-			local mx, my = gui.MousePos()
+			local mx = gui.MousePos()
 			self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
 			self.PressX, self.PressY = gui.MousePos()
 			if ent != nil then
@@ -142,10 +142,10 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 			self.oldcur = self.cur
 			self:SetModel( GetSWEPWorldModel( UGS[CURRENT_USERGROUP].sweps[self.cur] ) )
 		end
-		surfaceText( self.cur .. "/" .. self.max, "mat1text", pw/2, ph - ctr( 25 ), Color( 255, 255, 255 ), 1, 1 )
+		surfaceText( self.cur .. "/" .. self.max, "mat1text", pw / 2, ph - ctr( 25 ), Color( 255, 255, 255 ), 1, 1 )
 	end
 
-	SWEPS.preview.prev = createD( "DButton", SWEPS.preview, ctr( 50 ), ctr( 50 ), ctr( 0 ), ctr( 500 - 50 )/2 )
+	SWEPS.preview.prev = createD( "DButton", SWEPS.preview, ctr( 50 ), ctr( 50 ), ctr( 0 ), ctr( 500 - 50 ) / 2 )
 	SWEPS.preview.prev:SetText( "" )
 	function SWEPS.preview.prev:Paint( pw, ph )
 		if SWEPS.preview.cur > 1 then
@@ -158,7 +158,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 		end
 	end
 
-	SWEPS.preview.next = createD( "DButton", SWEPS.preview, ctr( 50 ), ctr( 50 ), ctr( 500 - 50 ), ctr( 500 - 50 )/2 )
+	SWEPS.preview.next = createD( "DButton", SWEPS.preview, ctr( 50 ), ctr( 50 ), ctr( 500 - 50 ), ctr( 500 - 50 ) / 2 )
 	SWEPS.preview.next:SetText( "" )
 	function SWEPS.preview.next:Paint( pw, ph )
 		if SWEPS.preview.cur < SWEPS.preview.max then
@@ -188,7 +188,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 		end)
 	end
 
-	net.Receive( "usergroup_update_sweps", function( len )
+	net.Receive( "usergroup_update_sweps", function(len2)
 		if pa( SWEPS ) then
 			local sweps = net.ReadString()
 			UGS[CURRENT_USERGROUP].sweps = string.Explode( ",", sweps )
@@ -230,7 +230,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 				SENT.cname = cname
 				SENT.amount = amount
 				function SENT:Paint( pw, ph )
-					surfaceButton( self, pw, ph, "[" .. self.amount .. "x] " .. self.cname, nil, ctr( 50 + 10 + 10 ), ph/2, 0, 1 )
+					surfaceButton( self, pw, ph, "[" .. self.amount .. "x] " .. self.cname, nil, ctr( 50 + 10 + 10 ), ph / 2, 0, 1 )
 					if self.cname == ug.cur_sent then
 						surfaceSelected( self, pw - ctr( 50 ), ph, ctr( 50 ) )
 					end
@@ -254,7 +254,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 						net.SendToServer()
 					end
 				end
-				net.Receive( "usergroup_sent_up", function( len )
+				net.Receive( "usergroup_sent_up", function(len2)
 					local sents = net.ReadString()
 					sents = SENTSTable( sents )
 					for cname, amount in pairs( sents ) do
@@ -277,7 +277,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 						net.SendToServer()
 					end
 				end
-				net.Receive( "usergroup_sent_dn", function( len )
+				net.Receive( "usergroup_sent_dn", function(len2)
 					local sents = net.ReadString()
 					sents = SENTSTable( sents )
 					for cname, amount in pairs( sents ) do
@@ -313,7 +313,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 			net.SendToServer()
 		end)
 	end
-	net.Receive( "usergroup_add_sent", function( len )
+	net.Receive( "usergroup_add_sent", function(len2)
 		local sents = net.ReadString()
 		sents = string.Explode( ";", sents )
 		for i, sent in pairs( sents ) do
@@ -337,7 +337,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 			net.SendToServer()
 		end
 	end
-	net.Receive( "usergroup_rem_sent", function( len )
+	net.Receive( "usergroup_rem_sent", function(len2)
 		local cname = net.ReadString()
 		ug.dsents[cname]:Remove()
 	end)
@@ -368,7 +368,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 				net.SendToServer()
 			end
 		end
-		net.Receive( "usergroup_update_" .. name, function( len )
+		net.Receive( "usergroup_update_" .. name, function(len2)
 			local b = net.ReadString()
 			if pa( tmp.cb ) then
 				tmp.cb.serverside = true
@@ -389,9 +389,7 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 	end
 	ACCESSAddCheckBox( "adminaccess", "yrp_adminaccess", Color( 255, 255, 0, 255 ) )
 	ACCESSAddHr()
-	ACCESSAddCheckBox( "general", "settings_general" )
 	ACCESSAddCheckBox( "interface", "settings_surface" )
-	ACCESSAddCheckBox( "realistic", "settings_realistic" )
 	ACCESSAddCheckBox( "money", "settings_money" )
 	ACCESSAddCheckBox( "licenses", "settings_licenses" )
 	ACCESSAddCheckBox( "shops", "settings_shops" )
@@ -399,6 +397,12 @@ net.Receive( "Connect_Settings_UserGroup", function( len )
 	ACCESSAddHr()
 	ACCESSAddCheckBox( "feedback", "settings_feedback" )
 	ACCESSAddHr()
+	ACCESSAddCheckBox( "database", "settings_database", Color( 255, 0, 0, 255 ) )
+	ACCESSAddCheckBox( "status", "settings_status" )
+	ACCESSAddCheckBox( "yourrp_addons", "settings_yourrp_addons" )
+	ACCESSAddHr()
+	ACCESSAddCheckBox( "general", "settings_general" )
+	ACCESSAddCheckBox( "realistic", "settings_realistic" )
 	ACCESSAddCheckBox( "usergroups", "settings_usergroups", Color( 255, 0, 0, 255 ) )
 	ACCESSAddCheckBox( "groupsandroles", "settings_groupsandroles" )
 	ACCESSAddCheckBox( "players", "settings_players" )
@@ -505,8 +509,6 @@ function AddUG( tbl )
 end
 
 function RemUG( uid )
-	local PARENT = settingsWindow.window.site
-
 	if CURRENT_USERGROUP != nil then
 		net.Start( "Disconnect_Settings_UserGroup" )
 			net.WriteString( CURRENT_USERGROUP )
@@ -516,14 +518,14 @@ function RemUG( uid )
 	DUGS[tonumber( uid )]:Remove()
 end
 
-net.Receive( "usergroup_rem", function( len )
+net.Receive( "usergroup_rem", function(len)
 	local uid = tonumber( net.ReadString() )
 	if DUGS[uid] != nil then
 		RemUG( uid )
 	end
 end)
 
-net.Receive( "usergroup_add", function( len )
+net.Receive( "usergroup_add", function(len)
 	local ugs = net.ReadTable()
 	for i, ug in pairs( ugs ) do
 		if DUGS[tonumber( ug.uniqueID )] == nil and tobool( ug.removeable ) then
@@ -532,71 +534,69 @@ net.Receive( "usergroup_add", function( len )
 	end
 end)
 
-net.Receive( "Connect_Settings_UserGroups", function( len )
+net.Receive( "Connect_Settings_UserGroups", function(len)
 	if pa( settingsWindow ) then
-		if pa( settingsWindow.window ) then
-			function settingsWindow.window.site:Paint( pw, ph )
-				draw.RoundedBox( 4, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
-			end
+		function settingsWindow.window.site:Paint( pw, ph )
+			draw.RoundedBox( 4, 0, 0, pw, ph, Color( 0, 0, 0, 254 ) )
+		end
 
-			CURRENT_USERGROUP = nil
+		CURRENT_USERGROUP = nil
 
-			local ugs = net.ReadTable()
+		local ugs = net.ReadTable()
 
-			local PARENT = settingsWindow.window.site
+		local PARENT = settingsWindow.window.site
 
-			function PARENT:OnRemove()
-				net.Start( "Disconnect_Settings_UserGroups" )
-				net.SendToServer()
-			end
+		function PARENT:OnRemove()
+			net.Start( "Disconnect_Settings_UserGroups" )
+			net.SendToServer()
+		end
 
-			--[[ UserGroups Action Buttons ]]--
-			local _ug_add = createD( "DButton", PARENT, ctr( 50 ), ctr( 50 ), ctr( 20 ), ctr( 20 ) )
-			_ug_add:SetText( "" )
-			function _ug_add:Paint( pw, ph )
-				surfaceButton( self, pw, ph, "+", Color( 0, 255, 0, 255 ) )
-			end
-			function _ug_add:DoClick()
-				net.Start( "usergroup_add" )
-				net.SendToServer()
-			end
+		--[[ UserGroups Action Buttons ]]--
+		local _ug_add = createD( "DButton", PARENT, ctr( 50 ), ctr( 50 ), ctr( 20 ), ctr( 20 ) )
+		_ug_add:SetText( "" )
+		function _ug_add:Paint( pw, ph )
+			surfaceButton( self, pw, ph, "+", Color( 0, 255, 0, 255 ) )
+		end
+		function _ug_add:DoClick()
+			net.Start( "usergroup_add" )
+			net.SendToServer()
+		end
 
-			local _ug_rem = createD( "DButton", PARENT, ctr( 50 ), ctr( 50 ), ctr( 20 + 500 - 50 ), ctr( 20 ) )
-			_ug_rem:SetText( "" )
-			function _ug_rem:Paint( pw, ph )
-				if CURRENT_USERGROUP != nil then
-					if tobool( UGS[CURRENT_USERGROUP].removeable ) then
-						surfaceButton( self, pw, ph, "-", Color( 255, 0, 0, 255 ) )
-					end
+		local _ug_rem = createD( "DButton", PARENT, ctr( 50 ), ctr( 50 ), ctr( 20 + 500 - 50 ), ctr( 20 ) )
+		_ug_rem:SetText( "" )
+		function _ug_rem:Paint( pw, ph )
+			if CURRENT_USERGROUP != nil then
+				if tobool( UGS[CURRENT_USERGROUP].removeable ) then
+					surfaceButton( self, pw, ph, "-", Color( 255, 0, 0, 255 ) )
 				end
 			end
-			function _ug_rem:DoClick()
-				if CURRENT_USERGROUP != nil then
-					if tobool( UGS[CURRENT_USERGROUP].removeable ) then
-						net.Start( "usergroup_rem" )
-							net.WriteString( CURRENT_USERGROUP )
-						net.SendToServer()
-					end
+		end
+		function _ug_rem:DoClick()
+			if CURRENT_USERGROUP != nil then
+				if tobool( UGS[CURRENT_USERGROUP].removeable ) then
+					net.Start( "usergroup_rem" )
+						net.WriteString( CURRENT_USERGROUP )
+					net.SendToServer()
 				end
 			end
+		end
 
-			local _ugs_title = createD( "DPanel", PARENT, ctr( 500 ), ctr( 50 ), ctr( 20 ), ctr( 20 + 50 + 20 ) )
-			function _ugs_title:Paint( pw, ph )
-				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-				surfaceText( lang_string( "usergroups" ), "Settings_Header", pw/2, ph/2, Color( 0, 0, 0 ), 1, 1 )
-			end
+		local _ugs_title = createD( "DPanel", PARENT, ctr( 500 ), ctr( 50 ), ctr( 20 ), ctr( 20 + 50 + 20 ) )
+		function _ugs_title:Paint( pw, ph )
+			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+			surfaceText( lang_string( "usergroups" ), "Settings_Header", pw / 2, ph / 2, Color( 0, 0, 0 ), 1, 1 )
+		end
 
-			--[[ UserGroupsList ]]--
-			PARENT.ugs = createD( "DPanelList", PARENT, ctr( 500 ), ScrH() - ctr( 20 + 150 + 20 + 50 + 20 ), ctr( 20 ), ctr( 20 + 50 + 20 + 50 ) )
-			function PARENT.ugs:Paint( pw, ph )
-				surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
-			end
-			PARENT.ugs:EnableVerticalScrollbar( true )
+		--[[ UserGroupsList ]]--
+		PARENT.ugs = createD( "DPanelList", PARENT, ctr( 500 ), ScrH() - ctr( 20 + 150 + 20 + 50 + 20 ), ctr( 20 ), ctr( 20 + 50 + 20 + 50 ) )
+		function PARENT.ugs:Paint( pw, ph )
+			surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		end
+		PARENT.ugs:EnableVerticalScrollbar( true )
 
-			for i, ug in pairs( ugs ) do
-				if tobool( ug.removeable ) then
-					AddUG( ug )
-				end
+		for i, ug in pairs( ugs ) do
+			if tobool( ug.removeable ) then
+				AddUG( ug )
 			end
 		end
 	end
@@ -605,14 +605,12 @@ end)
 hook.Add( "open_server_usergroups", "open_server_usergroups", function()
 	SaveLastSite()
 	if pa( settingsWindow ) then
-		if pa( settingsWindow.window ) then
-			local w = settingsWindow.window.sitepanel:GetWide()
-			local h = settingsWindow.window.sitepanel:GetTall()
+		local w = settingsWindow.window.sitepanel:GetWide()
+		local h = settingsWindow.window.sitepanel:GetTall()
 
-			settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+		settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-			net.Start( "Connect_Settings_UserGroups" )
-			net.SendToServer()
-		end
+		net.Start( "Connect_Settings_UserGroups" )
+		net.SendToServer()
 	end
 end)
