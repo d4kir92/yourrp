@@ -11,10 +11,7 @@ end )
 local chatisopen = false
 _thirdperson = 0
 local _thirdpersonC = 0
-local keyCooldown = 0.08
-local pressedKey = CurTime() + keyCooldown
 local _lastkey = nil
-local GUIToggled = false
 ch_attack1 = 0
 
 function isChatOpen()
@@ -61,6 +58,20 @@ function GM:PlayerSwitchWeapon( ply, oldWeapon, newWeapon )
 	end
 end
 
+function close_all()
+	closeHelpMenu()
+	CloseEmotesMenu()
+	closeFeedbackMenu()
+	closeCharacterSelection()
+	close_appearance()
+	CloseInventory()
+	closeRoleMenu()
+	closeBuyMenu()
+	closeSettings()
+	closeMap()
+	closeInteractMenu()
+	closeSP()
+end
 
 function useFunction( string )
 	if string == nil then
@@ -68,6 +79,10 @@ function useFunction( string )
 	end
 	local ply = LocalPlayer()
 	local eyeTrace = ply:GetEyeTrace()
+
+	if string == "close_all" then
+		close_all()
+	end
 
 	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
 		--Menues
@@ -197,11 +212,9 @@ function keyPressed( key, string, string2, distance )
 	local ply = LocalPlayer()
 	local plyTrace = ply:GetEyeTrace()
 	local _return = false
-	if distance != nil then
-		if ea( plyTrace.Entity ) then
-			if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
-				_return = true
-			end
+	if distance and ea( plyTrace.Entity ) then
+		if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
+			_return = true
 		end
 	end
 	if !_return then
@@ -273,7 +286,7 @@ function KeyPress()
 		else
 			--[[ smoothing ]]--
 			if tonumber( ply:GetNWInt( "view_range", 0 ) ) < tonumber( ply:GetNWInt( "view_range_view", 0 ) ) then
-				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + ply:GetNWInt( "view_range_view" )/16 )
+				ply:SetNWInt( "view_range", ply:GetNWInt( "view_range" ) + ply:GetNWInt( "view_range_view" ) / 16 )
 			else
 
 				if input.IsKeyDown( get_keybind( "view_zoom_out" ) ) then
@@ -374,6 +387,8 @@ function KeyPress()
 			end
 		end
 	end
+
+	keyPressed( KEY_ESCAPE, "close_all", nil, nil )
 
 	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
 

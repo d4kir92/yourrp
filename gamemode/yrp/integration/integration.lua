@@ -8,12 +8,13 @@ DarkRP.disabledDefaults.modules.hitmenu = true
 DarkRP._not = "If you see this, please test all your darkrp addons, if some addon is not fully working, please tell D4KiR!"
 
 AddCSLuaFile( "darkrp/fn.lua" )
-AddCSLuaFile( "darkrp/config/config.lua" )
-AddCSLuaFile( "darkrp/config/jobrelated.lua" )
 
 AddCSLuaFile( "darkrp/gamemode/shared.lua" )
 AddCSLuaFile( "darkrp/player/shared.lua" )
 AddCSLuaFile( "darkrp/entity/shared.lua" )
+
+AddCSLuaFile( "darkrp/config/config.lua" )
+AddCSLuaFile( "darkrp/config/jobrelated.lua" )
 
 AddCSLuaFile( "darkrp/drawfunction.lua" )
 
