@@ -61,29 +61,6 @@ function IsScreenshotting()
 	end
 end
 
---##############################################################################
-function hudVersion()
-	if !version_tested() then
-		testVersion()
-	elseif IsScreenshotting() then
-		local _singleplayer = ""
-		if game.SinglePlayer() then
-			_singleplayer = "Singleplayer"
-		end
-
-		--[[ Version Color ]]--
-		local _color1 = version_color() or Color( 0, 0, 0, 255 )
-		local _color2 = Color( 0, 0, 0, 255 )
-		local _alpha = 50
-		_color1.a = _alpha
-		_color2.a = _alpha
-
-		local _text = tostring( _singleplayer ) .. " [" .. string.upper( tostring( VERSIONART ) ) .. "] " .. "YourRP Version:" .. " " .. GAMEMODE.Version .. " " .. string.upper( tostring( GAMEMODE.VersionSort ) ) .. " (on " .. GAMEMODE.dedicated .. " Server)"
-		draw.SimpleTextOutlined( _text, "HudVersion", ScrW() - ctr( 70 ), ctr( 60 ), _color1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), _color2 )
-	end
-end
---##############################################################################
-
 function hudUpTime()
 	local ply = LocalPlayer()
 	--UpTime
@@ -198,7 +175,7 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	elseif ply:GetNWBool( "warning_dedicated", false ) then
-		surfaceText( "[YourRP] PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "SettingsHeader", ScrW()/2, ScrH()/4, Color( 255, 255, 0, 255 ), 1, 1 )
+		surfaceText( "[YourRP] PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "SettingsHeader", ScrW() / 2, ScrH() / 4, Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 
 	if tobool( HudV( "utto" ) ) then
@@ -220,13 +197,11 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 
 		local _sp = GetSpTable()
 
-		draw.RoundedBox( ctrb( _r ), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2*_br.x, _sp.h + 2*_br.y, getSpCaseColor() )
+		draw.RoundedBox( ctrb( _r ), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, getSpCaseColor() )
 
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.SetMaterial( _yrp_icon	)
-		surface.DrawTexturedRect( _sp.x + _sp.w/2 - ctrb( 246 )/2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
+		surface.DrawTexturedRect( _sp.x + _sp.w / 2 - ctrb( 246 ) / 2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
 	end
-
-	hudVersion()
 end)
 --##############################################################################

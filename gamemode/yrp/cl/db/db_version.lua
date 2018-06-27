@@ -18,7 +18,7 @@ function testVersion()
 	end
 end
 
-timer.Create( "check_yrp_version", 3600, 0, function()
+timer.Create( "check_yrp_version", 3600 * 4, 0, function()
 	testVersion()
 end)
 
@@ -40,7 +40,7 @@ function showVersion()
 		function( body, len, headers, code )
 			local StartPos = string.find( body, "#", 1, false )
 			local EndPos = string.find( body, "*", 1, false )
-			local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
+			local versionOnline = string.sub( body, StartPos + 1, EndPos - 1 )
 
 			--Client
 			local _v_off = string.Replace( GAMEMODE.Version, "V.: ", "" )
@@ -65,7 +65,6 @@ function showVersion()
 			local _v_on2 = string.Replace( versionOnline, "V.: ", "" )
 			local cur2num2 = string.Explode( ".", _v_off2 )
 			local new2num2 = string.Explode( ".", _v_on2 )
-			local verart2 = "Up-To-Date"
 			local outcol2 = Color( 0, 255, 0, 255 )
 			for k, v in pairs( cur2num2 ) do
 				if tonumber( cur2num2[k] ) < tonumber( new2num2[k] ) then
@@ -94,7 +93,6 @@ function showVersion()
 				_serverSort = lang_string( "serverlocal" )
 			end
 
-			local s_sort = ""
 			if string.lower( GAMEMODE.VersionSort ) == "canary" then
 				s_sort = lang_string( "canarychannel" )
 			elseif string.lower( GAMEMODE.VersionSort ) == "beta" then
@@ -103,7 +101,7 @@ function showVersion()
 				s_sort = lang_string( "stable" )
 			end
 
-			if LocalPlayer():GetNWBool( "version_outdated", false ) then
+			if LocalPlayer():GetNWBool( "version_outdated", false ) and LocalPlayer():HasAccess() then
 				local frame = createVGUI( "DFrame", nil, 1200, 570, 0, 0 )
 				frame:Center()
 				frame:SetTitle( "" )
@@ -112,18 +110,18 @@ function showVersion()
 
 					surfaceWindow( self, pw, ph, lang_string( "about" ) )
 
-					draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 400 ), ctr( 50+30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-					draw.SimpleTextOutlined( tostring( verart ) .. "! (" .. tostring( s_sort ) .. ")", "HudBars", pw/2, ctr( 140 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-					draw.SimpleTextOutlined( lang_string( "currentversion" ) .. ":", "HudBars", pw/2, ctr( 215 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( "Language:", "HudBars", ctr( 400 ), ctr( 50 + 30 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( tostring( verart ) .. "! (" .. tostring( s_sort ) .. ")", "HudBars", pw / 2, ctr( 140 ), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( lang_string( "currentversion" ) .. ":", "HudBars", pw / 2, ctr( 215 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-					draw.SimpleTextOutlined( lang_string( "client" ) .. ": ", "HudBars", pw/2, ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-					draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw/2, ctr( 265 ), v_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( lang_string( "client" ) .. ": ", "HudBars", pw / 2, ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( GAMEMODE.Version, "HudBars", pw / 2, ctr( 265 ), v_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-					draw.SimpleTextOutlined( "(" .. tostring( _serverSort ) .. ") " .. lang_string( "server" ) .. ": ", "HudBars", pw/2, ctr( 315 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-					draw.SimpleTextOutlined( tostring( serverVersion ), "HudBars", pw/2, ctr( 315 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( "(" .. tostring( _serverSort ) .. ") " .. lang_string( "server" ) .. ": ", "HudBars", pw / 2, ctr( 315 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( tostring( serverVersion ), "HudBars", pw / 2, ctr( 315 ), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-					draw.SimpleTextOutlined( lang_string( "workshopversion" ) .. ": ", "HudBars", pw/2, ctr( 415 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-					draw.SimpleTextOutlined( tostring( versionOnline ) .. " (" .. tostring( s_sort ) .. ")", "HudBars", pw/2, ctr( 415 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( lang_string( "workshopversion" ) .. ": ", "HudBars", pw / 2, ctr( 415 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( tostring( versionOnline ) .. " (" .. tostring( s_sort ) .. ")", "HudBars", pw / 2, ctr( 415 ), Color( 0, 255, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
 
 				local _langu = DChangeLanguage( frame, ctr( 400 + 10 ), ctr( 60 ), ctr( 72 ) )
@@ -148,7 +146,7 @@ function showVersion()
 						function restartServer:Paint( pw, ph )
 							surfaceButton( self, pw, ph, lang_string( "updateserver" ) )
 						end
-						restartServer:SetPos( ctr( 600+10 ), ctr( 460 ) )
+						restartServer:SetPos( ctr( 600 + 10 ), ctr( 460 ) )
 					else
 						local download_latest_git = createVGUI( "DButton", frame, 520, 80, 0, 0 )
 						download_latest_git:SetText( "" )
@@ -158,7 +156,7 @@ function showVersion()
 						function download_latest_git:Paint( pw, ph )
 							surfaceButton( self, pw, ph, "Download Latest Version" )
 						end
-						download_latest_git:SetPos( ctr( 600+10 ), ctr( 460 ) )
+						download_latest_git:SetPos( ctr( 600 + 10 ), ctr( 460 ) )
 					end
 					showChanges:SetPos( ctr( 600-520-10 ), ctr( 460 ) )
 				else

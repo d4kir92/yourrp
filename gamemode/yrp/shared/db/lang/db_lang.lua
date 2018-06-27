@@ -131,6 +131,7 @@ function read_language(short, init)
 		read_lang("resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties")
 		read_lang("resource/localization/yrp/settingsrealistic/lang_" .. short .. ".properties")
 		read_lang("resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties")
+		read_lang("resource/localization/yrp/settingsdatabase/lang_" .. short .. ".properties")
 	else
 		read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end

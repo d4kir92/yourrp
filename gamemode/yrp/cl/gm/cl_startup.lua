@@ -1245,9 +1245,7 @@ function GM:InitPostEntity()
 		printGM("note", " Nr.\tID\t\tName Mounted")
 
 		for k, ws in pairs(_wsitems) do
-			if ws.mounted then
-				--printGM( "note", "+[" .. k .. "]\t[" ..ws.wsid .. "]\t[" .. ws.title .. "] is Mounted" )
-			else
+			if not ws.mounted then
 				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
 				game.MountGMA(tostring(ws.path))
 			end
@@ -1281,7 +1279,6 @@ function GM:InitPostEntity()
 	end)
 
 	loadCompleteHUD()
-	testVersion()
 end
 
 --Remove Ragdolls after 60 sec

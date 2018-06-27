@@ -60,7 +60,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups, database, status, yourrp_addons"
 	local _str2 = "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
 
@@ -734,8 +734,10 @@ function Entity:YRPRemoveOwner()
 end
 
 function HasUseFunction( ent )
-	if ent.Use != nil then
-		ent:SetNWBool( "yrp_has_use", true )
+	if IsEntity(ent) then
+		if ent.Use != nil then
+			ent:SetNWBool( "yrp_has_use", true )
+		end
 	end
 end
 

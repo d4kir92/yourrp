@@ -48,15 +48,15 @@ function DGroup( tab )
 		ph = ctr( 50 )
 		local text = {}
 		text.text = lang_string( tab.name )
-		text.x = pw/2
-		text.y = ph/2
+		text.x = pw / 2
+		text.y = ph / 2
 		text.font = "mat1header"
 		text.color = Color( 0, 0, 0, 255 )
 		text.br = 0
 		DrawText( text )
 	end
 
-	dgroup.content = createD( "DPanelList", tab.parent, tab.w - 2*tab.br, tab.h - 2*tab.br - ctr( 50 ), tab.x + tab.br, tab.y + tab.br + ctr( 50 ) )
+	dgroup.content = createD( "DPanelList", tab.parent, tab.w - 2 * tab.br, tab.h - 2 * tab.br - ctr( 50 ), tab.x + tab.br, tab.y + tab.br + ctr( 50 ) )
 	function dgroup.content:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.bgcolor )
 	end
@@ -86,7 +86,7 @@ function DBoolLine( tab, value, str, netstr )
 		local text = {}
 		text.text = lang_string( str )
 		text.x = tab.brx + tab.h + ctr( 10 )
-		text.y = ph/2
+		text.y = ph / 2
 		text.font = "mat1header"
 		text.color = Color( 0, 0, 0, 255 )
 		text.br = 0
@@ -101,12 +101,10 @@ function DBoolLine( tab, value, str, netstr )
 	end
 	dboolline.dcheckbox.serverside = false
 	function dboolline.dcheckbox:OnChange( bVal )
-		if !self.serverside then
-			if netstr != "" then
-				net.Start( netstr )
-					net.WriteBool( bVal )
-				net.SendToServer()
-			end
+		if !self.serverside and netstr != "" then
+			net.Start( netstr )
+				net.WriteBool( bVal )
+			net.SendToServer()
 		end
 	end
 	net.Receive( netstr, function( len )
@@ -146,25 +144,23 @@ function DFloatLine( tab, value, name, netstr, max, min, dmg )
 		local text = {}
 		text.text = lang_string( name )
 		text.x = tab.brx + ctr( 200 ) + ctr( 10 )
-		text.y = ph/2
+		text.y = ph / 2
 		text.font = "mat1header"
 		text.color = Color( 0, 0, 0, 255 )
 		text.br = 0
 		text.ax = 0
 		DrawText( text )
 
-		if dmg != nil then
-			if dmg:GetValue() != nil and dfloatline.dnumberwang != nil then
-				local DMG = {}
-				DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. lang_string( "damage" )
-				DMG.x = pw - ctr( 10 )
-				DMG.y = ph/2
-				DMG.font = "mat1header"
-				DMG.color = Color( 0, 0, 0, 255 )
-				DMG.br = 0
-				DMG.ax = 2
-				DrawText( DMG )
-			end
+		if dmg != nil and dfloatline.dnumberwang != nil then
+			local DMG = {}
+			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. lang_string( "damage" )
+			DMG.x = pw - ctr( 10 )
+			DMG.y = ph / 2
+			DMG.font = "mat1header"
+			DMG.color = Color( 0, 0, 0, 255 )
+			DMG.br = 0
+			DMG.ax = 2
+			DrawText( DMG )
 		end
 	end
 
@@ -175,15 +171,13 @@ function DFloatLine( tab, value, name, netstr, max, min, dmg )
 	dfloatline.dnumberwang:SetValue( value )
 	dfloatline.dnumberwang.serverside = false
 	function dfloatline.dnumberwang:OnChange()
-		local value = self:GetValue()
-		if value >= self:GetMin() then
-			if value <= self:GetMax() then
-				if !self.serverside then
-					if netstr != "" then
-						net.Start( netstr )
-							net.WriteFloat( value )
-						net.SendToServer()
-					end
+		local val = self:GetValue()
+		if val >= self:GetMin() then
+			if val <= self:GetMax() then
+				if !self.serverside and netstr != "" then
+					net.Start( netstr )
+						net.WriteFloat( val )
+					net.SendToServer()
 				end
 			else
 				dfloatline.dnumberwang:SetText( self:GetMax() )
@@ -207,6 +201,138 @@ function DFloatLine( tab, value, name, netstr, max, min, dmg )
 	return dfloatline.dnumberwang
 end
 
+function DIntBox( tab, value, name, netstr, max, min )
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	if tab.parent != nil then
+		tab.w = tab.w or tab.parent:GetWide() or 300
+	else
+		tab.w = tab.w or 300
+	end
+	tab.h = tab.h or ctr( 100 )
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.color = tab.color or Color( 255, 255, 255 )
+
+	local dintline = {}
+
+	dintline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
+	function dintline.line:Paint( pw, ph )
+		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+		local text = {}
+		text.text = lang_string( name ) .. ":"
+		text.x = ctr( 10 )
+		text.y = ph / 4
+		text.font = "mat1text"
+		text.color = Color( 255, 255, 255, 255 )
+		text.br = 1
+		text.ax = 0
+		DrawText( text )
+	end
+
+	dintline.dnumberwang = createD( "DNumberWang", dintline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	dintline.dnumberwang:SetMax(max or 100)
+	dintline.dnumberwang:SetMin(min or 0)
+	dintline.dnumberwang:SetDecimals(0)
+	dintline.dnumberwang:SetValue( value )
+	dintline.dnumberwang.serverside = false
+	function dintline.dnumberwang:OnChange()
+		local val = self:GetValue()
+		if val >= self:GetMin() then
+			if val <= self:GetMax() then
+				if !self.serverside and netstr != "" then
+					net.Start(netstr)
+						net.WriteInt(val, 32)
+					net.SendToServer()
+				end
+			else
+				dintline.dnumberwang:SetText( self:GetMax() )
+			end
+		else
+			dintline.dnumberwang:SetText( self:GetMin() )
+		end
+	end
+	net.Receive( netstr, function( len )
+		local f = net.ReadInt(32)
+		if pa( dintline.dnumberwang ) then
+			dintline.dnumberwang.serverside = true
+			dintline.dnumberwang:SetValue( f )
+			dintline.dnumberwang.serverside = false
+		end
+	end)
+
+	if tab.parent != nil then
+		tab.parent:AddItem( dintline.line )
+	end
+	return dintline.dnumberwang
+end
+
+function DStringBox( tab, str, name, netstr )
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	if tab.parent != nil then
+		tab.w = tab.w or tab.parent:GetWide() or 300
+	else
+		tab.w = tab.w or 300
+	end
+	tab.h = tab.h or ctr( 100 )
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.color = tab.color or Color( 255, 255, 255 )
+
+	str = str or ""
+
+	local dstringline = {}
+
+	dstringline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
+	function dstringline.line:Paint( pw, ph )
+		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+		local text = {}
+		text.text = lang_string( name ) .. ":"
+		text.x = ctr( 10 )
+		text.y = ph / 4
+		text.font = "mat1text"
+		text.color = Color( 255, 255, 255, 255 )
+		text.br = 1
+		text.ax = 0
+		DrawText( text )
+
+		if dmg != nil and dstringline.dtextentry != nil then
+			local DMG = {}
+			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. lang_string( "damage" )
+			DMG.x = pw - ctr( 10 )
+			DMG.y = ph / 2
+			DMG.font = "mat1header"
+			DMG.color = Color( 0, 0, 0, 255 )
+			DMG.br = 1
+			DMG.ax = 2
+			DrawText( DMG )
+		end
+	end
+
+	dstringline.dtextentry = createD( "DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	dstringline.dtextentry:SetText( str )
+	dstringline.dtextentry.serverside = false
+	function dstringline.dtextentry:OnChange()
+		net.Start( netstr )
+			net.WriteString( self:GetText() )
+		net.SendToServer()
+	end
+	net.Receive( netstr, function( len )
+		local t = net.ReadString()
+		if pa( dstringline.dtextentry ) then
+			dstringline.dtextentry.serverside = true
+			dstringline.dtextentry:SetText( t )
+			dstringline.dtextentry.serverside = false
+		end
+	end)
+
+	if tab.parent != nil then
+		tab.parent:AddItem( dstringline.line )
+	end
+	return dstringline.dtextentry
+end
+
 function DHR( tab )
 	tab = tab or {}
 	tab.parent = tab.parent or nil
@@ -223,7 +349,7 @@ function DHR( tab )
 	local hr = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
 	function hr:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
-		draw.RoundedBox( 0, 0, ph/3, pw, ph/3, Color( 0, 0, 0, 255 ) )
+		draw.RoundedBox( 0, 0, ph / 3, pw, ph / 3, Color( 0, 0, 0, 255 ) )
 	end
 
 	if tab.parent != nil then
@@ -251,7 +377,7 @@ function DHeader( tab, header )
 		local head = {}
 		head.text = lang_string( header )
 		head.x = ctr( 10 )
-		head.y = ph/2
+		head.y = ph / 2
 		head.font = "mat1header"
 		head.color = Color( 0, 0, 0, 255 )
 		head.br = 0

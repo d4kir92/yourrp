@@ -5,13 +5,7 @@
 
 util.AddNetworkString( "get_sql_info" )
 
-util.AddNetworkString( "set_host" )
-util.AddNetworkString( "set_port" )
-util.AddNetworkString( "set_database" )
-util.AddNetworkString( "set_username" )
-util.AddNetworkString( "set_password" )
-
-local _db_name = "yrp_sql"
+local DATABASE_NAME = "yrp_sql"
 
 function SQLITE_CHECK_IF_COLUMN_EXISTS( db_name, column_name )
 	--printGM( "db", "SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_name ) .. ", " .. tostring( column_name ) .. " )" )
@@ -36,20 +30,69 @@ function SQLITE_ADD_COLUMN( table_name, column_name, datatype )
 	end
 end
 
-SQLITE_ADD_COLUMN( _db_name, "mode", "INT DEFAULT '0'", true )
-SQLITE_ADD_COLUMN( _db_name, "host", "TEXT DEFAULT 'UNKNOWN HOST'", true )
-SQLITE_ADD_COLUMN( _db_name, "database", "TEXT DEFAULT 'UNKNOWN DATABASE'", true )
-SQLITE_ADD_COLUMN( _db_name, "username", "TEXT DEFAULT 'UNKNOWN USERNAME'", true )
-SQLITE_ADD_COLUMN( _db_name, "password", "TEXT DEFAULT 'ADMIN'", true )
-SQLITE_ADD_COLUMN( _db_name, "port", "INT DEFAULT '12345'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "int_mode", "INT DEFAULT '0'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "string_host", "TEXT DEFAULT 'UNKNOWN HOST'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "string_database", "TEXT DEFAULT 'UNKNOWN DATABASE'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "string_username", "TEXT DEFAULT 'UNKNOWN USERNAME'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "string_password", "TEXT DEFAULT 'ADMIN'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "int_port", "INT DEFAULT '12345'", true )
 
 if sql.Query( "SELECT * FROM yrp_sql" ) == nil then
 	printGM( "db", "Missing first entry, insert it now!" )
 	sql.Query( "INSERT INTO yrp_sql DEFAULT VALUES" )
 end
 
+local yrp_sql = {}
+
+local _init_yrp_sql = SQL_SELECT( DATABASE_NAME, "*", nil )
+if wk(_init_yrp_sql) then
+	yrp_sql = _init_yrp_sql[1]
+end
+
+function DBUpdateValue(db_name, str, l_db, value)
+	l_db[str] = value
+	SQL_UPDATE( db_name, str .. " = '" .. l_db[str] .. "'", "uniqueID = '1'" )
+end
+
+function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)
+	printGM( "db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring( value ) )
+	DBUpdateValue(db_name, str, l_db, value)
+end
+
+function DBUpdateInt(db_name, ply, netstr, str, l_db, value)
+	printGM( "db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring( value ) )
+	DBUpdateValue(db_name, str, l_db, value)
+end
+
+function DBUpdateString(db_name, ply, netstr, str, l_db, value)
+	printGM( "db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring( value ) )
+	DBUpdateValue(db_name, str, l_db, value)
+end
+
+for str, val in pairs( yrp_sql ) do
+	if string.find( str, "int_" ) then
+		util.AddNetworkString( "update_" .. str )
+		net.Receive( "update_" .. str, function( len, ply )
+			local i = net.ReadInt(32)
+			DBUpdateInt( DATABASE_NAME, ply, "update_" .. str, str, yrp_sql, i )
+		end)
+	elseif string.find( str, "float_" ) then
+		util.AddNetworkString( "update_" .. str )
+		net.Receive( "update_" .. str, function( len, ply )
+			local f = net.ReadFloat()
+			DBUpdateFloat( DATABASE_NAME, ply, "update_" .. str, str, yrp_sql, f )
+		end)
+	elseif string.find( str, "string_" ) then
+		util.AddNetworkString( "update_" .. str )
+		net.Receive( "update_" .. str, function( len, ply )
+			local s = net.ReadString()
+			DBUpdateString( DATABASE_NAME, ply, "update_" .. str, str, yrp_sql, s )
+		end)
+	end
+end
+
 net.Receive( "get_sql_info", function( len, ply )
-	local _sql_info = sql.Query( "SELECT * FROM " .. _db_name )
+	local _sql_info = sql.Query( "SELECT * FROM " .. DATABASE_NAME )
 
 	if _sql_info != nil and _sql_info != false then
 		_sql_info = _sql_info[1]
@@ -57,71 +100,6 @@ net.Receive( "get_sql_info", function( len, ply )
 			net.WriteTable( _sql_info )
 		net.Send( ply )
 	end
-end)
-
-net.Receive( "set_host", function( len, ply )
-	local _host = net.ReadString()
-
-	local _q = "UPDATE "
-	_q = _q .. _db_name
-	_q = _q .. " SET " .. "host = '" .. _host .. "'"
-	_q = _q .. " WHERE "
-	_q = _q .. "uniqueID = 1"
-	_q = _q .. ";"
-
-	local test = sql.Query( _q )
-end)
-
-net.Receive( "set_port", function( len, ply )
-	local _port = net.ReadString()
-
-	local _q = "UPDATE "
-	_q = _q .. _db_name
-	_q = _q .. " SET " .. "port = '" .. _port .. "'"
-	_q = _q .. " WHERE "
-	_q = _q .. "uniqueID = 1"
-	_q = _q .. ";"
-
-	local test = sql.Query( _q )
-end)
-
-net.Receive( "set_database", function( len, ply )
-	local _database = net.ReadString()
-
-	local _q = "UPDATE "
-	_q = _q .. _db_name
-	_q = _q .. " SET " .. "database = '" .. _database .. "'"
-	_q = _q .. " WHERE "
-	_q = _q .. "uniqueID = 1"
-	_q = _q .. ";"
-
-	local test = sql.Query( _q )
-end)
-
-net.Receive( "set_username", function( len, ply )
-	local _username = net.ReadString()
-
-	local _q = "UPDATE "
-	_q = _q .. _db_name
-	_q = _q .. " SET " .. "username = '" .. _username .. "'"
-	_q = _q .. " WHERE "
-	_q = _q .. "uniqueID = 1"
-	_q = _q .. ";"
-
-	local test = sql.Query( _q )
-end)
-
-net.Receive( "set_password", function( len, ply )
-	local _password = net.ReadString()
-
-	local _q = "UPDATE "
-	_q = _q .. _db_name
-	_q = _q .. " SET " .. "password = '" .. _password .. "'"
-	_q = _q .. " WHERE "
-	_q = _q .. "uniqueID = 1"
-	_q = _q .. ";"
-
-	local test = sql.Query( _q )
 end)
 
 util.AddNetworkString( "change_to_sql_mode" )

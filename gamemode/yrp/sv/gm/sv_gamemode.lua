@@ -501,7 +501,7 @@ end
 
 function setPlayerModel( ply )
 	local tmpRolePlayermodel = ply:GetPlayerModel()
-	if tmpRolePlayermodel != nil and tmpRolePlayermodel != false and tmpRolePlayermodel != "" then
+	if wk(tmpRolePlayermodel) and tmpRolePlayermodel != "" and tmpRolePlayermodel != " " then
 		ply:SetModel( tmpRolePlayermodel )
 	else
 		ply:SetModel( "models/player/skeleton.mdl" )

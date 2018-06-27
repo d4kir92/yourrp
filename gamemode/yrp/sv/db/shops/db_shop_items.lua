@@ -291,13 +291,12 @@ function spawnItem(ply, item, duid)
 	if item.type == "weapons" then
 		ent = ply:Give(item.ClassName)
 
-		if ea(ent) then
-			ent:YRPSetOwner(ply)
+		ent:YRPSetOwner(ply)
 
+		if ent ~= nil then
 			return true
 		else
 			printGM("note", "[spawnItem] " .. tostring(item.ClassName) .. " is not valid? Is it in collection?")
-
 			return false
 		end
 	else
