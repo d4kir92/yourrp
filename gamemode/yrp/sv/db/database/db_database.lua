@@ -67,3 +67,18 @@ net.Receive( "Disconnect_Settings_Database", function( len, ply )
 end)
 
 util.AddNetworkString( "get_sql_info" )
+
+util.AddNetworkString("yrp_drop_tables")
+net.Receive("yrp_drop_tables", function(len, ply)
+	local _drop_tables = net.ReadTable()
+	local _can = SQL_SELECT( "yrp_usergroups", "database", "name = '" .. string.lower( ply:GetUserGroup() ) .. "'")
+	if wk(_can) then
+		_can = _can[1]
+		if tobool(_can.database) then
+			for i, tab in pairs(_drop_tables) do
+				SQL_DROP_TABLE(tab)
+			end
+			game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
+		end
+	end
+end)

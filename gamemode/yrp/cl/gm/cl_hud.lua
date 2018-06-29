@@ -141,9 +141,21 @@ function DrawEquipment( ply, name )
 	end
 end
 
---##############################################################################
+local fps = 0
+local delay = 0
+function HUD_Stats( ply, time )
+	if CurTime() > delay then
+		delay = CurTime() + 1
+		fps = math.Round(1 / FrameTime(), 0)
+	end
+	draw.SimpleTextOutlined(lang_string("ping") .. ": " .. ply:Ping() .. "ms", "DermaDefault", ctr(10), ctr(4), Color( 255, 255, 255, 255 ), 0, 0, 1, Color( 0, 0, 0, 255 ))
+	draw.SimpleTextOutlined("FPS" .. ": " .. fps, "DermaDefault", ctr(10), ctr(34), Color( 255, 255, 255, 255 ), 0, 0, 1, Color( 0, 0, 0, 255 ))
+end
+
 hook.Add( "HUDPaint", "yrp_hud", function( )
 	local ply = LocalPlayer()
+
+	--HUD_Stats( ply, CurTime() )
 
 	if ply:GetNWBool( "blinded", false ) then
 		surfaceBox( 0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255 ) )

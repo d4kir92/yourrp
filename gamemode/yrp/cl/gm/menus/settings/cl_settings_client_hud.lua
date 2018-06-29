@@ -366,7 +366,8 @@ end
 
 hook.Add( "open_client_hud", "open_client_hud", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+
+	HudRefreshEnable()
 
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
@@ -413,6 +414,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 		local changeHudWindowCloseButton = createDerma( "DButton", changeHudWindow, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), 0, 0 )
 		changeHudWindowCloseButton:SetText( "" )
 		function changeHudWindowCloseButton:DoClick()
+			HudRefreshDisable()
 			changeHudWindow:Close()
 		end
 		function changeHudWindowCloseButton:Paint( pw, ph )

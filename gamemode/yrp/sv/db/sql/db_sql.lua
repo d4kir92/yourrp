@@ -37,6 +37,9 @@ SQLITE_ADD_COLUMN( DATABASE_NAME, "string_username", "TEXT DEFAULT 'UNKNOWN USER
 SQLITE_ADD_COLUMN( DATABASE_NAME, "string_password", "TEXT DEFAULT 'ADMIN'", true )
 SQLITE_ADD_COLUMN( DATABASE_NAME, "int_port", "INT DEFAULT '12345'", true )
 
+SQLITE_ADD_COLUMN( DATABASE_NAME, "int_backup_create", "INT DEFAULT '1'", true )
+SQLITE_ADD_COLUMN( DATABASE_NAME, "int_backup_delete", "INT DEFAULT '30'", true )
+
 if sql.Query( "SELECT * FROM yrp_sql" ) == nil then
 	printGM( "db", "Missing first entry, insert it now!" )
 	sql.Query( "INSERT INTO yrp_sql DEFAULT VALUES" )
@@ -104,8 +107,9 @@ end)
 
 util.AddNetworkString( "change_to_sql_mode" )
 net.Receive( "change_to_sql_mode", function( len, ply )
-	local _mode = tonumber( net.ReadString() )
+	local _mode = net.ReadInt(32)
 	if ply:HasAccess() then
+		DBUpdateInt( DATABASE_NAME, ply, "update_" .. "int_mode", "int_mode", yrp_sql, _mode )
 		SetSQLMode( _mode )
 		printGM( "note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName() )
 		timer.Simple( 1, function()

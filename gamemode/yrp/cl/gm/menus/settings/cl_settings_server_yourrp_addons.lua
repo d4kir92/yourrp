@@ -20,8 +20,8 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 			net.SendToServer()
 		end
 
-		local ST = net.ReadTable()
-		printTab(ST)
+		local YRPA = net.ReadTable()
+		printTab(YRPA)
 	end
 end)
 

@@ -256,7 +256,7 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error( realm, str )
 	local entry = {}
-	timer.Create( "wait_for_gamemode"..str, 1, 0, function()
+	timer.Create( "wait_for_gamemode" .. str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
 			isdbfull( str )
 			ismalformed( str )
@@ -355,24 +355,26 @@ function ErrorMod()
 end
 
 function CanSendError()
-	if CLIENT then
-		if LocalPlayer():GetNWBool( "bool_server_debug", true ) then
-			if tick%LocalPlayer():GetNWInt( "int_server_debug_tick", 60 ) == 0 then
-				return true
+	if game.IsDedicated() then
+		if CLIENT then
+			if LocalPlayer():GetNWBool( "bool_server_debug", true ) then
+				if tick % LocalPlayer():GetNWInt( "int_server_debug_tick", 60 ) == 0 then
+					return true
+				end
+			else
+				if tick % 3600 == 0 then
+					return true
+				end
 			end
-		else
-			if tick%3600 == 0 then
-				return true
-			end
-		end
-	elseif SERVER then
-		if YRPDebug() then
-			if tick%ErrorMod() == 0 then
-				return true
-			end
-		else
-			if tick%3600 == 0 then
-				return true
+		elseif SERVER then
+			if YRPDebug() then
+				if tick % ErrorMod() == 0 then
+					return true
+				end
+			else
+				if tick % 3600 == 0 then
+					return true
+				end
 			end
 		end
 	end

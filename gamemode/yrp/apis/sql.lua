@@ -295,6 +295,17 @@ function SQL_QUERY(query)
 	end
 end
 
+function SQL_DROP_TABLE(db_table)
+	local _result = SQL_QUERY("DROP TABLE " .. db_table .. ";")
+
+	if _result ~= nil then
+		printGM("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! ( result: " .. tostring(_result) .. " )")
+		sql_show_last_error()
+	else
+		printGM("db", "DROPPED " .. tostring(db_table) .. " TABLE")
+	end
+end
+
 function SQL_CREATE_TABLE(db_table)
 	printGM("db", "SQL_CREATE_TABLE( " .. tostring(db_table) .. " )")
 
@@ -600,35 +611,8 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 	end
 end
 
-function SQL_INIT_DATABASE(db_name)
-	printGM("db", "SQL_INIT_DATABASE( " .. tostring(db_name) .. " )")
-
-	if YRPSQL.mode == 0 then
-		if not SQL_TABLE_EXISTS(db_name) then
-			--printGM( "note", tostring( db_name ) .. " not exists" )
-			local _result = SQL_CREATE_TABLE(db_name)
-
-			if _result ~= nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! query: " .. tostring(_query) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
-			end
-
-			if not sql.TableExists(tostring(db_name)) then
-				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
-				sql_show_last_error()
-				retry_load_database(db_name)
-			end
-		end
-	elseif YRPSQL.mode == 1 then
-		if not SQL_TABLE_EXISTS(db_name) then
-			--printGM( "note", tostring( db_name ) .. " not exists" )
-			local _result = SQL_CREATE_TABLE(db_name)
-		end
-	end
-end
-
 if SERVER then
-	--[[ SQLMODE ]]
-	--
+	-- SQLMODE
 	if not sql.TableExists("yrp_sql") then
 		local _q = "CREATE TABLE "
 		_q = _q .. "yrp_sql" .. " ( "
@@ -638,11 +622,12 @@ if SERVER then
 		sql.Query(_q)
 	end
 
+	SetSQLMode(0)
+
 	local _sql_settings = sql.Query("SELECT * FROM yrp_sql")
 
 	if wk(_sql_settings) then
 		_sql_settings = _sql_settings[1]
-		SetSQLMode(tonumber(_sql_settings.mode))
 		YRPSQL.schema = _sql_settings.database
 	end
 
@@ -677,5 +662,30 @@ if SERVER then
 	end
 	--
 end
-
 printGM("db", "Current SQL Mode: " .. GetSQLModeName())
+
+function SQL_INIT_DATABASE(db_name)
+	printGM("db", "SQL_INIT_DATABASE( " .. tostring(db_name) .. " )")
+
+	if YRPSQL.mode == 0 then
+		if not SQL_TABLE_EXISTS(db_name) then
+			--printGM( "note", tostring( db_name ) .. " not exists" )
+			local _result = SQL_CREATE_TABLE(db_name)
+
+			if _result ~= nil then
+				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! query: " .. tostring(_query) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+			end
+
+			if not sql.TableExists(tostring(db_name)) then
+				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
+				sql_show_last_error()
+				retry_load_database(db_name)
+			end
+		end
+	elseif YRPSQL.mode == 1 then
+		if not SQL_TABLE_EXISTS(db_name) then
+			--printGM( "note", tostring( db_name ) .. " not exists" )
+			local _result = SQL_CREATE_TABLE(db_name)
+		end
+	end
+end

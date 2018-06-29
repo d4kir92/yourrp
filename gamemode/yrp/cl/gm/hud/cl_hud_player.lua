@@ -54,13 +54,13 @@ end)
 function sText( text, font, x, y, color, ax, ay )
 	surface.SetFont( font )
 
-	local w, h = surface.GetTextSize( text )
+	local _, h = surface.GetTextSize( text )
 
 	local _ax = 0
 	local _ay = 0
 
 	if ay == 1 then
-		_ay = h/2
+		_ay = h / 2
 	end
 
 	surface.SetTextColor( color or Color( 255, 255, 255, 255 ) )
@@ -83,82 +83,99 @@ function drawMenuInfo()
 		surface.DrawTexturedRect( x, y, isize, isize )
 		x = x + isize + ibr
 		local text = "[" .. "F1" .. "] " .. lang_string( "help" )
-		sText( text, "mat1text", x, y + isize/2, color, 0, 1 )
+		sText( text, "mat1text", x, y + isize / 2, color, 0, 1 )
 	end
 end
 
 local _alpha = 130
+local HUD = {}
+HUD.count = 0
+HUD.refresh = false
+
+function HudRefreshEnable()
+	HUD.refresh = true
+end
+
+function HudRefreshDisable()
+	HUD.refresh = false
+end
+
 function drawHUDElement( dbV, cur, max, text, icon, color )
-	local _r = 0
 	if tobool( HudV( dbV .. "to" ) ) then
-
-		drawMenuInfo()
-
-		if cur != nil and max != nil then
-			hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
-		end
-		if tobool( HudV( dbV .. "tr" ) ) then
-			_r = ctr( HudV( dbV .. "sh" ) )/2
-		end
-		draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ), ctr( HudV( dbV .. "sw" ) ), ctr( HudV( dbV .. "sh" ) ), Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
+		local _r = 0
 		if color != nil and cur != nil and max != nil then
+			if tonumber(cur) > tonumber(max) then
+				cur = max
+			end
+			if cur != nil and max != nil then
+				hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
+			end
+			if HUD[dbV] == nil or HUD.refresh then
+				HUD.count = HUD.count + 1
+				HUD[dbV] = {}
+				HUD[dbV].id = HUD.count
+				HUD[dbV].delay = CurTime()
+				HUD[dbV].x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") )
+				HUD[dbV].y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") )
+				HUD[dbV].w = ctr( HudV(dbV .. "sw") )
+				HUD[dbV].barw = hud[dbV] / max * HUD[dbV].w
+				HUD[dbV].h = ctr( HudV(dbV .. "sh") )
+				HUD[dbV].r = HUD[dbV].h / 2
+			end
+			if CurTime() > HUD[dbV].delay then
+				HUD[dbV].delay = CurTime() + 1 / HUD.count * HUD[dbV].id
+				HUD[dbV].barw = hud[dbV] / max * HUD[dbV].w
+			end
+
+			if tobool( HudV( dbV .. "tr" ) ) then
+				_r = ctr( HudV( dbV .. "sh" ) ) / 2
+			end
+			draw.RoundedBox( _r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
 			if tonumber( max ) >= 0 then
-				if tonumber(cur) > tonumber(max) then
-					cur = max
-				end
 				if !tobool( HudV( dbV .. "tr" ) ) then
-					draw.RoundedBox( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") ), ( hud[dbV] / max ) * ( ctr( HudV(dbV .. "sw") ) ), ctr( HudV(dbV .. "sh") ), color )
+					draw.RoundedBox( _r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color )
 				else
-					drawRoundedBoxStencil( _r, anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") ), anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") ), ( hud[dbV] / max ) * ( ctr( HudV(dbV .. "sw") ) ), ctr( HudV(dbV .. "sh") ), color, ctr( HudV(dbV .. "sw") ) )
+					drawRoundedBoxStencil( _r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, ctr( HudV(dbV .. "sw") ) )
 				end
 			end
-		end
 
-		local _st = {}
-		if text != nil and HudV( dbV .. "tt" ) == 1 then
-			_st.br = 10
-			local _pw = 0
-			if HudV( dbV .. "tx" ) == 0 then
-				_pw = ctr( _st.br )
-			elseif HudV( dbV .. "tx" ) == 1 then
-				_pw = ctr( HudV( dbV .. "sw" ) ) / 2
-			elseif HudV( dbV .. "tx" ) == 2 then
-				_pw = ctr( HudV( dbV .. "sw" ) ) - ctr( _st.br )
+			local _st = {}
+			if text != nil and HudV( dbV .. "tt" ) == 1 then
+				_st.br = 10
+				local _pw = 0
+				if HudV( dbV .. "tx" ) == 0 then
+					_pw = ctr( _st.br )
+				elseif HudV( dbV .. "tx" ) == 1 then
+					_pw = ctr( HudV( dbV .. "sw" ) ) / 2
+				elseif HudV( dbV .. "tx" ) == 2 then
+					_pw = ctr( HudV( dbV .. "sw" ) ) - ctr( _st.br )
+				end
+				local _ph = 0
+				if HudV( dbV .. "ty" ) == 3 then
+					_ph = ctr( _st.br )
+				elseif HudV( dbV .. "ty" ) == 1 then
+					_ph = ctr( HudV( dbV .. "sh" ) ) / 2
+				elseif HudV( dbV .. "ty" ) == 4 then
+					_ph = ctr( HudV( dbV .. "sh" ) ) - ctr( _st.br )
+				end
+				_st.x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ) + _pw
+				_st.y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ) + _ph
+				draw.SimpleTextOutlined( text, dbV .. "sf", _st.x, _st.y, Color( 255, 255, 255, 255 ), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color( 0, 0, 0 ) )
 			end
-			local _ph = 0
-			if HudV( dbV .. "ty" ) == 3 then
-				_ph = ctr( _st.br )
-			elseif HudV( dbV .. "ty" ) == 1 then
-				_ph = ctr( HudV( dbV .. "sh" ) ) / 2
-			elseif HudV( dbV .. "ty" ) == 4 then
-				_ph = ctr( HudV( dbV .. "sh" ) ) - ctr( _st.br )
-			end
-			_st.x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV( dbV .. "px" ) ) + _pw
-			_st.y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV( dbV .. "py" ) ) + _ph
-			draw.SimpleTextOutlined( text, dbV .. "sf", _st.x, _st.y, Color( 255, 255, 255, 255 ), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color( 0, 0, 0 ) )
-		end
 
-		if icon != nil and HudV( dbV .. "it" ) == 1	then
-			showIcon( dbV, icon )
+			if icon != nil and HudV( dbV .. "it" ) == 1	then
+				showIcon( dbV, icon )
+			end
 		end
 	end
 end
 
 function drawHUDElementBr( dbV )
-	if tobool( HudV( dbV .. "to" ) ) then
+	if tobool( HudV( dbV .. "to" ) ) and HUD[dbV] != nil then
 		if !tobool( HudV( dbV .. "tr" ) ) then
-			drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( dbV .. "aw" ) ) + HudV( dbV .. "px" ), ctrF( ScrH() ) * anchorH( HudV( dbV .. "ah" ) ) + HudV( dbV .. "py" ), HudV( dbV .. "sw" ), HudV( dbV .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+			drawRBoxBr( 0, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
 		else
-			_r = ctr( HudV( dbV .. "sh" ) )/2
-
-			local _br = {}
-			_br.r = _r
-			_br.x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") )
-			_br.y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") )
-			_br.w = ctr( HudV(dbV .. "sw") )
-			_br.h = ctr( HudV(dbV .. "sh") )
-
-			drawRoundedBoxBR( _br.r, _br.x, _br.y, _br.w, _br.h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), 1 )
+			drawRoundedBoxBR( HUD[dbV].r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), 1 )
 		end
 	end
 end
@@ -194,7 +211,7 @@ end
 function HudPlayer( ply )
 	local weapon = ply:GetActiveWeapon()
 	if is_hud_db_loaded() then
-		local br = 2
+		drawMenuInfo()
 
 		if ply:Alive() then
 			if !contextMenuOpen then
@@ -254,13 +271,11 @@ function HudPlayer( ply )
 					hudRTBR( ply )
 				end
 
-
-				--[[ Extras ]]--
 				hudThirdperson( ply )
 			end
 		else
 			drawRBox( 0, 0, 0, ScrW() * ctrF( ScrH() ), ScrH() * ctrF( ScrH() ), Color( 255, 0, 0, 100 ) )
-			draw.SimpleTextOutlined( lang_string( "dead" ) .. "! " .. lang_string( "respawning" ) .. "...", "HudBars", ScrW()/2, ScrH()/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( lang_string( "dead" ) .. "! " .. lang_string( "respawning" ) .. "...", "HudBars", ScrW2(), ScrH2(), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 	else
 		draw.SimpleTextOutlined( "Loading HUD", "DermaDefault", ScrW2(), ScrH2(), Color( 255, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )

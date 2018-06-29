@@ -21,11 +21,13 @@ function DHorizontalScroller( tab )
 	tab.y = tab.y or 0
 	tab.w = tab.w or 100
 	tab.h = tab.h or 100
+	tab.br = tab.br or 10
 	tab.color = tab.color or Color( 255, 0, 0, 0 )
 	local dhorizontalscroller = createD( "DHorizontalScroller", tab.parent, tab.w, tab.h, tab.x, tab.y )
 	function dhorizontalscroller:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 	end
+	dhorizontalscroller:SetOverlap( -tab.br )
 
 	return dhorizontalscroller
 end
@@ -56,12 +58,104 @@ function DGroup( tab )
 		DrawText( text )
 	end
 
-	dgroup.content = createD( "DPanelList", tab.parent, tab.w - 2 * tab.br, tab.h - 2 * tab.br - ctr( 50 ), tab.x + tab.br, tab.y + tab.br + ctr( 50 ) )
+	dgroup.content = createD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 2 * tab.br - ctr( 50 ), tab.x + tab.br, tab.y + tab.br + ctr( 50 ) )
 	function dgroup.content:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.bgcolor )
 	end
 
+	if tab.parent != nil then
+		if tab.parent.AddPanel != nil then
+			tab.parent:AddPanel( dgroup.header )
+		else
+			tab.parent:AddItem( dgroup.header )
+		end
+	end
 	return dgroup.content
+end
+
+function DName( tab )
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.w = tab.w or ctr( 50 )
+	tab.h = tab.h or ctr( 50 )
+	tab.br = tab.br or 0
+	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.bgcolor = tab.bgcolor or Color( 80, 80, 80 )
+	tab.name = tab.name or "Unnamed"
+	local dname = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y )
+	function dname:Paint( pw, ph )
+		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+		local text = {}
+		text.text = lang_string( tab.name )
+		text.x = ctr(10)
+		text.y = ph / 2
+		text.font = "mat1text"
+		text.color = Color( 255, 255, 255, 255 )
+		text.br = 1
+		text.ax = 0
+		DrawText( text )
+	end
+
+	if tab.parent != nil then
+		tab.parent:AddItem( dname )
+	end
+	return dname
+end
+
+function DIntComboBoxBox( tab, choices, name, netstr, selected )
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	if tab.parent != nil then
+		tab.w = tab.w or tab.parent:GetWide() or 300
+	else
+		tab.w = tab.w or 300
+	end
+	tab.h = tab.h or ctr( 100 )
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.color = tab.color or Color( 255, 255, 255 )
+
+	local dintcomboboxbox = {}
+
+	dintcomboboxbox.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
+	function dintcomboboxbox.line:Paint( pw, ph )
+		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+		local text = {}
+		text.text = lang_string( name ) .. ":"
+		text.x = ctr( 10 )
+		text.y = ph / 4
+		text.font = "mat1text"
+		text.color = Color( 255, 255, 255, 255 )
+		text.br = 1
+		text.ax = 0
+		DrawText( text )
+	end
+
+	dintcomboboxbox.dcombobox = createD( "DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	dintcomboboxbox.dcombobox.serverside = false
+	if choices != nil then
+		for i, choice in pairs(choices) do
+			local _sel = false
+			if selected == choice.data then
+				_sel = true
+			end
+			dintcomboboxbox.dcombobox:AddChoice( choice.name, choice.data, _sel )
+		end
+	end
+	function dintcomboboxbox.dcombobox:OnSelect( index, value, data )
+		if netstr != nil then
+			net.Start( netstr )
+				net.WriteInt( data, 32 )
+			net.SendToServer()
+		end
+	end
+
+	if tab.parent != nil then
+		tab.parent:AddItem( dintcomboboxbox.line )
+	end
+	return dintcomboboxbox.dcombobox
 end
 
 function DBoolLine( tab, value, str, netstr )
@@ -100,21 +194,23 @@ function DBoolLine( tab, value, str, netstr )
 		surfaceCheckBox( self, ph, ph, "done" )
 	end
 	dboolline.dcheckbox.serverside = false
-	function dboolline.dcheckbox:OnChange( bVal )
-		if !self.serverside and netstr != "" then
-			net.Start( netstr )
-				net.WriteBool( bVal )
-			net.SendToServer()
+	if netstr != nil then
+		function dboolline.dcheckbox:OnChange( bVal )
+			if !self.serverside and netstr != "" then
+				net.Start( netstr )
+					net.WriteBool( bVal )
+				net.SendToServer()
+			end
 		end
+		net.Receive( netstr, function( len )
+			local b = btn( net.ReadString() )
+			if pa( dboolline.dcheckbox ) then
+				dboolline.dcheckbox.serverside = true
+				dboolline.dcheckbox:SetValue( b )
+				dboolline.dcheckbox.serverside = false
+			end
+		end)
 	end
-	net.Receive( netstr, function( len )
-		local b = btn( net.ReadString() )
-		if pa( dboolline.dcheckbox ) then
-			dboolline.dcheckbox.serverside = true
-			dboolline.dcheckbox:SetValue( b )
-			dboolline.dcheckbox.serverside = false
-		end
-	end)
 
 	if tab.parent != nil then
 		tab.parent:AddItem( dboolline.line )
