@@ -4,13 +4,6 @@ net.Receive("Connect_Settings_Database", function(len)
 	if pa(settingsWindow) then
 		function settingsWindow.window.site:Paint(pw, ph)
 			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-
-			local wip = {}
-			wip.text = "wip"
-			wip.x = pw / 2
-			wip.y = ph / 2
-			wip.font = "mat1header"
-			DrawText(wip)
 		end
 
 		local PARENT = settingsWindow.window.site
@@ -21,13 +14,9 @@ net.Receive("Connect_Settings_Database", function(len)
 		end
 
 		local NW_YRP = net.ReadTable()
-		printTab(NW_YRP)
 		local NW_YRP_RELATED = net.ReadTable()
-		printTab(NW_YRP_RELATED)
 		local NW_YRP_OTHER = net.ReadTable()
-		printTab(NW_YRP_OTHER)
 		local YRP_SQL = net.ReadTable()
-		printTab(YRP_SQL)
 
 		local br = ctr(20)
 		local scroller = {}
@@ -45,36 +34,17 @@ net.Receive("Connect_Settings_Database", function(len)
 		yourrpdatabase.h = Scroller:GetTall()
 		yourrpdatabase.br = br / 2
 		yourrpdatabase.name = "yourrpdatabase"
-		local YourRPDatabase = DGroup(yourrpdatabase)
+		Scroller.YourRPDatabase = DGroup(yourrpdatabase)
 		local dhr = {}
-		dhr.parent = YourRPDatabase
+		dhr.parent = Scroller.YourRPDatabase
 		dhr.color = YRPGetColor("2")
 		local bl = {}
-		bl.parent = YourRPDatabase
+		bl.parent = Scroller.YourRPDatabase
 		bl.color = YRPGetColor("2")
 		local ble = {}
-		ble.parent = YourRPDatabase
+		ble.parent = Scroller.YourRPDatabase
 		ble.color = YRPGetColor("2")
 		ble.brx = ctr(50)
-
-		local create = {}
-		for i = 1, 6 do
-			create[i] = {}
-			create[i].name = i .. " " .. lang_string("hour")
-			create[i].data = i
-		end
-		--DIntComboBoxBox(bl, create, "createbackupevery", "update_int_backup_create", tonumber(YRP_SQL.int_backup_create))
-
-		local delete = {}
-		for i = 1, 60 do
-			delete[i] = {}
-			delete[i].name = i .. " " .. lang_string("days")
-			delete[i].data = i
-		end
-		--DIntComboBoxBox(bl, delete, "removebackolderthen", "update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete))
-		--Button make backup now
-
-		DHR(dhr)
 
 		local sqlmode = DIntComboBoxBox(bl, nil, "sqlmode", nil)
 		if tonumber(YRP_SQL.int_mode) == 0 then
@@ -90,39 +60,94 @@ net.Receive("Connect_Settings_Database", function(len)
 
 		DHR(dhr)
 
-		local host = DStringBox(bl, YRP_SQL.string_host, "hostname", "update_string_host")
-		local port = DIntBox(bl, YRP_SQL.int_port, "port", "update_int_port", 99999)
-		local data = DStringBox(bl, YRP_SQL.database, "database", "update_string_database")
-		local user = DStringBox(bl, YRP_SQL.username, "username", "update_string_username")
-		local pass = DStringBox(bl, YRP_SQL.password, "password", "update_string_password")
-		local change_to_sqlmode = createD("DButton", nil, YourRPDatabase:GetWide(), ctr(50), 0, 0)
-		change_to_sqlmode:SetText("")
-		function change_to_sqlmode:Paint(pw, ph)
+		Scroller.YourRPDatabase.host = DStringBox(bl, YRP_SQL.string_host, "hostname", "update_string_host")
+		Scroller.YourRPDatabase.port = DIntBox(bl, YRP_SQL.int_port, "port", "update_int_port", 99999)
+		Scroller.YourRPDatabase.data = DStringBox(bl, YRP_SQL.database, "database", "update_string_database")
+		Scroller.YourRPDatabase.user = DStringBox(bl, YRP_SQL.username, "username", "update_string_username")
+		Scroller.YourRPDatabase.pass = DStringBox(bl, YRP_SQL.password, "password", "update_string_password")
+		Scroller.YourRPDatabase.change_to_sqlmode = createD("DButton", nil, Scroller.YourRPDatabase:GetWide(), ctr(50), 0, 0)
+
+		Scroller.YourRPDatabase:AddItem(Scroller.YourRPDatabase.change_to_sqlmode)
+
+		local create = {}
+		for i = 1, 6 do
+			create[i] = {}
+			local vals = {}
+			vals["amount"] = i
+			if i > 1 then
+				create[i].name = lang_string("xhours", vals)
+				create[i].data = i
+			else
+				create[i].name = lang_string("1hour", vals)
+				create[i].data = i
+			end
+		end
+		Scroller.YourRPDatabase.crea = DIntComboBoxBox(bl, create, "createbackupevery", "update_int_backup_create", tonumber(YRP_SQL.int_backup_create))
+
+		local delete = {}
+		for i = 1, 60 do
+			delete[i] = {}
+			local vals = {}
+			vals["amount"] = i
+			if i > 1 then
+				delete[i].name = lang_string("xdays", vals)
+				delete[i].data = i
+			else
+				delete[i].name = lang_string("1day", vals)
+				delete[i].data = i
+			end
+		end
+		Scroller.YourRPDatabase.dele = DIntComboBoxBox(bl, delete, "removebackupolderthen", "update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete))
+		Scroller.YourRPDatabase.createbackupnow = createD("DButton", nil, Scroller.YourRPDatabase:GetWide(), ctr(50), 0, 0)
+		Scroller.YourRPDatabase.createbackupnow:SetText("")
+		function Scroller.YourRPDatabase.createbackupnow:Paint(pw, ph)
+			surfaceButton(self, pw, ph, lang_string("createbackupnow") .. " (data/yrp_backups/)")
+		end
+		function Scroller.YourRPDatabase.createbackupnow:DoClick()
+			net.Start("makebackup")
+			net.SendToServer()
+		end
+		Scroller.YourRPDatabase:AddItem(Scroller.YourRPDatabase.createbackupnow)
+
+		Scroller.YourRPDatabase.change_to_sqlmode:SetText("")
+		function Scroller.YourRPDatabase.change_to_sqlmode:Paint(pw, ph)
 			local tex, dat = sqlmode:GetSelected()
 			surfaceButton(self, pw, ph, lang_string("changetosqlmode") .. ": " .. tex)
 			dat = tonumber(dat)
 			if dat == 0 then
-				host:GetParent():SetSize(0, 0)
-				port:GetParent():SetSize(0, 0)
-				data:GetParent():SetSize(0, 0)
-				user:GetParent():SetSize(0, 0)
-				pass:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.host:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.port:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.data:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.user:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.pass:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.crea:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.dele:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.createbackupnow:SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(50))
+				Scroller.YourRPTables:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPRelatedTables:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller:SetOverlap(-9)
 			elseif dat == 1 then
-				host:GetParent():SetSize(change_to_sqlmode:GetWide(), ctr(100))
-				port:GetParent():SetSize(change_to_sqlmode:GetWide(), ctr(100))
-				data:GetParent():SetSize(change_to_sqlmode:GetWide(), ctr(100))
-				user:GetParent():SetSize(change_to_sqlmode:GetWide(), ctr(100))
-				pass:GetParent():SetSize(change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.host:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.port:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.data:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.user:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.pass:GetParent():SetSize(Scroller.YourRPDatabase.change_to_sqlmode:GetWide(), ctr(100))
+				Scroller.YourRPDatabase.crea:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.dele:GetParent():SetSize(0, 0)
+				Scroller.YourRPDatabase.createbackupnow:SetSize(0, 0)
+				Scroller.YourRPTables:GetParent():SetSize(0, 0)
+				Scroller.YourRPRelatedTables:GetParent():SetSize(0, 0)
+				Scroller:SetOverlap(-3)
 			end
-			YourRPDatabase:Rebuild()
+			Scroller:InvalidateLayout( true )
+			Scroller.YourRPDatabase:Rebuild()
 		end
-		function change_to_sqlmode:DoClick()
+		function Scroller.YourRPDatabase.change_to_sqlmode:DoClick()
 			local _, dat = sqlmode:GetSelected()
-			net.Start( "change_to_sql_mode" )
+			net.Start("change_to_sql_mode")
 				net.WriteInt(dat, 32)
 			net.SendToServer()
 		end
-		YourRPDatabase:AddItem(change_to_sqlmode)
 
 		local yourrptables = {}
 		yourrptables.parent = Scroller
@@ -132,18 +157,18 @@ net.Receive("Connect_Settings_Database", function(len)
 		yourrptables.h = Scroller:GetTall()
 		yourrptables.br = br / 2
 		yourrptables.name = "yourrptables"
-		local YourRPTables = DGroup(yourrptables)
-		YourRPTables:SetTall(YourRPTables:GetTall() - ctr(60))
+		Scroller.YourRPTables = DGroup(yourrptables)
+		Scroller.YourRPTables:SetTall(Scroller.YourRPTables:GetTall() - ctr(60))
 		local dbtab = {}
-		dbtab.parent = YourRPTables
+		dbtab.parent = Scroller.YourRPTables
 		dbtab.color = YRPGetColor("2")
 		local yrp_tabs = {}
 		for i, tab in pairs(NW_YRP) do
 			yrp_tabs[tab.name] = DBoolLine( dbtab, 0, tab.name, nil )
 		end
-		local _x, _y = YourRPTables:GetPos()
-		local _w, _h = YourRPTables:GetSize()
-		local _rem_and_change = createD("DButton", YourRPTables:GetParent(), YourRPTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
+		local _x, _y = Scroller.YourRPTables:GetPos()
+		local _w, _h = Scroller.YourRPTables:GetSize()
+		local _rem_and_change = createD("DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change:SetText("")
 		function _rem_and_change:Paint(pw, ph)
 			surfaceButton(self, pw, ph, "droptablesandchangelevel")
@@ -188,15 +213,15 @@ net.Receive("Connect_Settings_Database", function(len)
 		yourrprelatedtables.h = Scroller:GetTall()
 		yourrprelatedtables.br = br / 2
 		yourrprelatedtables.name = "yourrprelatedtables"
-		local YourRPRelatedTables = DGroup(yourrprelatedtables)
-		YourRPRelatedTables:SetTall(YourRPRelatedTables:GetTall() - ctr(60))
-		dbtab.parent = YourRPRelatedTables
+		Scroller.YourRPRelatedTables = DGroup(yourrprelatedtables)
+		Scroller.YourRPRelatedTables:SetTall(Scroller.YourRPRelatedTables:GetTall() - ctr(60))
+		dbtab.parent = Scroller.YourRPRelatedTables
 		dbtab.color = YRPGetColor("2")
 		local yrp_r_tabs = {}
 		for i, tab in pairs(NW_YRP_RELATED) do
 			yrp_r_tabs[tab.name] = DBoolLine( dbtab, 0, tab.name, nil )
 		end
-		local _rem_and_change2 = createD("DButton", YourRPRelatedTables:GetParent(), YourRPRelatedTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
+		local _rem_and_change2 = createD("DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change2:SetText("")
 		function _rem_and_change2:Paint(pw, ph)
 			surfaceButton(self, pw, ph, "droptablesandchangelevel")

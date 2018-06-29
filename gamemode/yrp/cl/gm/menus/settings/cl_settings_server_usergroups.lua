@@ -257,8 +257,8 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				net.Receive( "usergroup_sent_up", function(len2)
 					local sents = net.ReadString()
 					sents = SENTSTable( sents )
-					for cname, amount in pairs( sents ) do
-						ug.dsents[cname].amount = tonumber( amount )
+					for cna, amo in pairs( sents ) do
+						ug.dsents[cna].amount = tonumber( amo )
 					end
 				end)
 
@@ -280,8 +280,8 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				net.Receive( "usergroup_sent_dn", function(len2)
 					local sents = net.ReadString()
 					sents = SENTSTable( sents )
-					for cname, amount in pairs( sents ) do
-						ug.dsents[cname].amount = tonumber( amount )
+					for cna, amo in pairs( sents ) do
+						ug.dsents[cna].amount = tonumber( amo )
 					end
 				end)
 
@@ -380,7 +380,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		ACCESS.plus:AddItem( tmp )
 	end
 	function ACCESSAddHr()
-		local tmp = createD( "DPanel", PARENT, ctr( 800 ), ctr( 4+4+4 ), 0, 0 )
+		local tmp = createD( "DPanel", PARENT, ctr( 800 ), ctr( 4 + 4 + 4 ), 0, 0 )
 		function tmp:Paint( pw, ph )
 			surfacePanel( self, pw, ph, "" )
 			surfaceBox( 0, ctr( 4 ), pw, ctr( 4 ), Color( 0, 0, 0, 255 ) )
@@ -389,23 +389,27 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end
 	ACCESSAddCheckBox( "adminaccess", "yrp_adminaccess", Color( 255, 255, 0, 255 ) )
 	ACCESSAddHr()
+	-- OLD
 	ACCESSAddCheckBox( "interface", "settings_surface" )
 	ACCESSAddCheckBox( "money", "settings_money" )
 	ACCESSAddCheckBox( "licenses", "settings_licenses" )
 	ACCESSAddCheckBox( "shops", "settings_shops" )
 	ACCESSAddCheckBox( "map", "settings_map" )
 	ACCESSAddHr()
-	ACCESSAddCheckBox( "feedback", "settings_feedback" )
-	ACCESSAddHr()
-	ACCESSAddCheckBox( "database", "settings_database", Color( 255, 0, 0, 255 ) )
+	-- WIP
 	ACCESSAddCheckBox( "status", "settings_status" )
 	ACCESSAddCheckBox( "yourrp_addons", "settings_yourrp_addons" )
 	ACCESSAddHr()
+	-- SERVER
+	ACCESSAddCheckBox( "feedback", "settings_feedback" )
 	ACCESSAddCheckBox( "general", "settings_general" )
 	ACCESSAddCheckBox( "realistic", "settings_realistic" )
-	ACCESSAddCheckBox( "usergroups", "settings_usergroups", Color( 255, 0, 0, 255 ) )
-	ACCESSAddCheckBox( "groupsandroles", "settings_groupsandroles" )
 	ACCESSAddCheckBox( "players", "settings_players" )
+	ACCESSAddCheckBox( "groupsandroles", "settings_groupsandroles" )
+	ACCESSAddHr()
+	-- "OWNER"
+	ACCESSAddCheckBox( "database", "settings_database", Color( 255, 0, 0, 255 ) )
+	ACCESSAddCheckBox( "usergroups", "settings_usergroups", Color( 255, 0, 0, 255 ) )
 
 	local GAMEPLAY = createD( "DYRPPanelPlus", PARENT, ctr( 800 ), ScrH() - ctr( 100 + 10 + 10 ), ctr( 20 + 500 + 20 + 800 + 20 ), ctr( 20 ) )
 	GAMEPLAY:INITPanel( "DPanelList" )
@@ -435,7 +439,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		GAMEPLAY.plus:AddItem( tmp )
 	end
 	function GAMEPLAYAddHr()
-		local tmp = createD( "DPanel", PARENT, ctr( 800 ), ctr( 4+4+4 ), 0, 0 )
+		local tmp = createD( "DPanel", PARENT, ctr( 800 ), ctr( 4 + 4 + 4 ), 0, 0 )
 		function tmp:Paint( pw, ph )
 			surfacePanel( self, pw, ph, "" )
 			surfaceBox( 0, ctr( 4 ), pw, ctr( 4 ), Color( 0, 0, 0, 255 ) )
@@ -476,7 +480,7 @@ function AddUG( tbl )
 	_ug:SetText( "" )
 	function _ug:Paint( pw, ph )
 		self.color = StringToColor( UGS[self.uid].color )
-		surfaceButton( self, pw, ph, string.upper( UGS[self.uid].name ), self.color, ph + ctr( 20 ), ph/2, 0, 1 )
+		surfaceButton( self, pw, ph, string.upper( UGS[self.uid].name ), self.color, ph + ctr( 20 ), ph / 2, 0, 1 )
 
 		if UGS[tonumber( tbl.uniqueID )].icon == "" then
 			surfaceBox( ctr( 4 ), ctr( 4 ), ph - ctr( 8 ), ph - ctr( 8 ), Color( 255, 255, 255, 255 ) )

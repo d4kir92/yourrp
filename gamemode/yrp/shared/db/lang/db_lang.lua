@@ -66,12 +66,14 @@ function replace_string(in_str, tab)
 	return in_str
 end
 
-function lang_string(var)
+function lang_string(var, vals)
 	var = tostring(var)
 	local _string = yrp_current_lang[string.lower(var)] or var
 
-	if CLIENT and LocalPlayer():GetNWBool("yrp_debug", false) then
-		printGM("note", "lang_string failed! string " .. var .. " not found")
+	if vals != nil then
+		for id, val in pairs(vals) do
+			_string = string.Replace(_string, "%" .. id .. "%", val)
+		end
 	end
 
 	return _string

@@ -82,3 +82,53 @@ net.Receive("yrp_drop_tables", function(len, ply)
 		end
 	end
 end)
+
+function GetBackupCreateTime()
+	local _create = SQL_SELECT("yrp_sql", "int_backup_create", "uniqueID = 1")
+	_create = tonumber(_create[1].int_backup_create) * 60 * 60
+	return _create
+end
+
+function CreateYRPBackupsFolder()
+	if !file.Exists("yrp_backups", "DATA") then
+		file.CreateDir("yrp_backups")
+		if file.Exists("yrp_backups", "DATA") then
+			return true
+		else
+			printGM("note", "yrp_backups folder failed to create")
+			return false
+		end
+	else
+		return true
+	end
+end
+
+function RemoveOldBackups()
+	printGM("db", "[BACKUP] Remove old backups")
+	if CreateYRPBackupsFolder() then
+		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
+		local _remove_after = SQL_SELECT("yrp_sql", "int_backup_delete", "uniqueID = 1")
+		_remove_after = tonumber(_remove_after[1].int_backup_delete)
+		for i, fi in pairs(backups) do
+			if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
+				printGM("note", "[BACKUP] " .. "Remove old backup: " .. fi)
+			end
+		end
+	end
+end
+
+function CreateBackup()
+	printGM("db", "[BACKUP] Create backup")
+	if CreateYRPBackupsFolder() then
+		local _fi = "yrp_backups/" .. "sv" .. "_" .. "backup" .. "_" .. os.time() .. "___" ..  os.date( "%Y_%m_%d___%H_%M_%S", os.time() ) .. ".txt"
+		file.Write(_fi, file.Read("sv.db", "GAME") )
+		if !file.Exists(_fi, "DATA") then
+			printGM("note", "Failed to create")
+		end
+	end
+end
+
+util.AddNetworkString("makebackup")
+net.Receive("makebackup", function(len, ply)
+	CreateBackup()
+end)

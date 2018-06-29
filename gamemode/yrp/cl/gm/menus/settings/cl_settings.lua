@@ -132,15 +132,15 @@ function openSettings()
 	settingsWindow.window:AddSite("open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png")
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
-	settingsWindow.window:AddSite("open_server_database", "settings_database", _wip, "icon16/database.png")
 	settingsWindow.window:AddSite("open_server_status", "settings_status", _wip, "icon16/error.png")
 	settingsWindow.window:AddSite("open_server_yourrp_addons", "settings_yourrp_addons", _wip, "icon16/plugin.png")
 	local _server = "settings_server"
 	settingsWindow.window:AddCategory(_server)
+	settingsWindow.window:AddSite("open_server_feedback", "settings_feedback", _server, "icon16/page_lightning.png")
 	settingsWindow.window:AddSite("open_server_general", "settings_general", _server, "icon16/server.png")
 	settingsWindow.window:AddSite("open_server_realistic", "settings_realistic", _server, "icon16/bomb.png")
+	settingsWindow.window:AddSite("open_server_database", "settings_database", _server, "icon16/database.png")
 	settingsWindow.window:AddSite("open_server_usergroups", "settings_usergroups", _server, "icon16/group_go.png")
-	settingsWindow.window:AddSite("open_server_feedback", "settings_feedback", _server, "icon16/page_lightning.png")
 	--StartSite
 	settingsWindow.window.cursite = "character"
 	settingsWindow.window:SwitchToSite(_save_site)

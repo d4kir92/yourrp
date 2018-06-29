@@ -134,6 +134,7 @@ function DIntComboBoxBox( tab, choices, name, netstr, selected )
 	end
 
 	dintcomboboxbox.dcombobox = createD( "DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	dintcomboboxbox.dcombobox:SetSortItems( false )
 	dintcomboboxbox.dcombobox.serverside = false
 	if choices != nil then
 		for i, choice in pairs(choices) do

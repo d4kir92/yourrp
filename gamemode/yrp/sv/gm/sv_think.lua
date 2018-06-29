@@ -264,6 +264,11 @@ timer.Create( "ServerThink", 1, 0, function()
 		end
 	end
 
+	if _time % GetBackupCreateTime() == 0 then
+		RemoveOldBackups()
+		CreateBackup()
+	end
+
 	local _auto_save = 300
 	if _time % _auto_save == 0 then
 		local _mod = _time%60
