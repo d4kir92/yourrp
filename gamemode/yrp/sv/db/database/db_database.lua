@@ -74,6 +74,7 @@ net.Receive("yrp_drop_tables", function(len, ply)
 	local _can = SQL_SELECT( "yrp_usergroups", "database", "name = '" .. string.lower( ply:GetUserGroup() ) .. "'")
 	if wk(_can) then
 		_can = _can[1]
+		CreateBackup()
 		if tobool(_can.database) then
 			for i, tab in pairs(_drop_tables) do
 				SQL_DROP_TABLE(tab)
@@ -111,7 +112,8 @@ function RemoveOldBackups()
 		_remove_after = tonumber(_remove_after[1].int_backup_delete)
 		for i, fi in pairs(backups) do
 			if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
-				printGM("note", "[BACKUP] " .. "Remove old backup: " .. fi)
+				file.Delete("yrp_backups/" .. fi, "DATA")
+				printGM("note", "[BACKUP] " .. "Removed old backup: " .. fi)
 			end
 		end
 	end

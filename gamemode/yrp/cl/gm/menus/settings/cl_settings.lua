@@ -16,10 +16,10 @@ include("cl_settings_server_whitelist.lua")
 
 -- WIP
 include("cl_settings_server_yourrp_addons.lua")
-include("cl_settings_server_status.lua")
-include("cl_settings_server_database.lua")
 
 --SERVER
+include("cl_settings_server_status.lua")
+include("cl_settings_server_database.lua")
 include("cl_settings_server_usergroups.lua")
 include("cl_settings_server_general.lua")
 include("cl_settings_server_realistic.lua")
@@ -120,6 +120,7 @@ function openSettings()
 	settingsWindow.window:AddSite("open_client_character", "settings_character", _client, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_client_hud", "settings_hud", _client, "icon16/photo.png")
 	settingsWindow.window:AddSite("open_client_keybinds", "settings_keybinds", _client, "icon16/keyboard.png")
+
 	local _server_admin = lang_string("settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)
 	--settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
@@ -130,17 +131,30 @@ function openSettings()
 	settingsWindow.window:AddSite("open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png")
 	settingsWindow.window:AddSite("open_server_map", "settings_map", _server_admin, "icon16/map.png")
 	settingsWindow.window:AddSite("open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png")
-	local _wip = "wip"
-	settingsWindow.window:AddCategory(_wip)
-	settingsWindow.window:AddSite("open_server_status", "settings_status", _wip, "icon16/error.png")
-	settingsWindow.window:AddSite("open_server_yourrp_addons", "settings_yourrp_addons", _wip, "icon16/plugin.png")
-	local _server = "settings_server"
-	settingsWindow.window:AddCategory(_server)
-	settingsWindow.window:AddSite("open_server_feedback", "settings_feedback", _server, "icon16/page_lightning.png")
-	settingsWindow.window:AddSite("open_server_general", "settings_general", _server, "icon16/server.png")
-	settingsWindow.window:AddSite("open_server_realistic", "settings_realistic", _server, "icon16/bomb.png")
-	settingsWindow.window:AddSite("open_server_database", "settings_database", _server, "icon16/database.png")
-	settingsWindow.window:AddSite("open_server_usergroups", "settings_usergroups", _server, "icon16/group_go.png")
+
+	--local _wip = "wip"
+	--settingsWindow.window:AddCategory(_wip)
+	--settingsWindow.window:AddSite("open_server_yourrp_addons", "settings_yourrp_addons", _wip, "icon16/plugin.png")
+
+	local _settings_server_maintance = "settings_server_maintance"
+	settingsWindow.window:AddCategory(_settings_server_maintance)
+	settingsWindow.window:AddSite("open_server_status", "settings_status", _settings_server_maintance, "icon16/error.png")
+	settingsWindow.window:AddSite("open_server_feedback", "settings_feedback", _settings_server_maintance, "icon16/page_lightning.png")
+
+	local _settings_server_gameplay = "settings_server_gameplay"
+	settingsWindow.window:AddCategory(_settings_server_gameplay)
+	settingsWindow.window:AddSite("open_server_realistic", "settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
+
+	local _settings_server_management = "settings_server_management"
+	settingsWindow.window:AddCategory(_settings_server_management)
+	settingsWindow.window:AddSite("open_server_general", "settings_general", _settings_server_management, "icon16/server.png")
+	settingsWindow.window:AddSite("open_server_database", "settings_database", _settings_server_management, "icon16/database.png")
+	settingsWindow.window:AddSite("open_server_usergroups", "settings_usergroups", _settings_server_management, "icon16/group_go.png")
+
+	local _server_addons = "settings_server_addons"
+	settingsWindow.window:AddCategory(_server_addons)
+	settingsWindow.window:AddSite("open_server_yourrp_addons", "settings_yourrp_addons", _server_addons, "icon16/plugin.png")
+
 	--StartSite
 	settingsWindow.window.cursite = "character"
 	settingsWindow.window:SwitchToSite(_save_site)

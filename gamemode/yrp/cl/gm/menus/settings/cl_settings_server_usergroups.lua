@@ -395,21 +395,25 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	ACCESSAddCheckBox( "licenses", "settings_licenses" )
 	ACCESSAddCheckBox( "shops", "settings_shops" )
 	ACCESSAddCheckBox( "map", "settings_map" )
-	ACCESSAddHr()
-	-- WIP
-	ACCESSAddCheckBox( "status", "settings_status" )
-	ACCESSAddCheckBox( "yourrp_addons", "settings_yourrp_addons" )
-	ACCESSAddHr()
-	-- SERVER
-	ACCESSAddCheckBox( "feedback", "settings_feedback" )
-	ACCESSAddCheckBox( "general", "settings_general" )
-	ACCESSAddCheckBox( "realistic", "settings_realistic" )
 	ACCESSAddCheckBox( "players", "settings_players" )
 	ACCESSAddCheckBox( "groupsandroles", "settings_groupsandroles" )
 	ACCESSAddHr()
-	-- "OWNER"
+	ACCESSAddHr()
+	ACCESSAddHr()
+	-- Maintance
+	ACCESSAddCheckBox( "status", "settings_status" )
+	ACCESSAddCheckBox( "feedback", "settings_feedback" )
+	ACCESSAddHr()
+	-- Gameplay
+	ACCESSAddCheckBox( "realistic", "settings_realistic" )
+	ACCESSAddHr()
+	-- Management
+	ACCESSAddCheckBox( "general", "settings_general" )
 	ACCESSAddCheckBox( "database", "settings_database", Color( 255, 0, 0, 255 ) )
 	ACCESSAddCheckBox( "usergroups", "settings_usergroups", Color( 255, 0, 0, 255 ) )
+	ACCESSAddHr()
+	-- Addons
+	ACCESSAddCheckBox( "yourrp_addons", "settings_yourrp_addons" )
 
 	local GAMEPLAY = createD( "DYRPPanelPlus", PARENT, ctr( 800 ), ScrH() - ctr( 100 + 10 + 10 ), ctr( 20 + 500 + 20 + 800 + 20 ), ctr( 20 ) )
 	GAMEPLAY:INITPanel( "DPanelList" )

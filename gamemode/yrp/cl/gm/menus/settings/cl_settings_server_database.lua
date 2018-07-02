@@ -85,7 +85,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		Scroller.YourRPDatabase.crea = DIntComboBoxBox(bl, create, "createbackupevery", "update_int_backup_create", tonumber(YRP_SQL.int_backup_create))
 
 		local delete = {}
-		for i = 1, 60 do
+		for i = 1, 180 do
 			delete[i] = {}
 			local vals = {}
 			vals["amount"] = i

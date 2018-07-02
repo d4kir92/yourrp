@@ -14,7 +14,7 @@ table.insert(yrp_shorts, "de")
 table.insert(yrp_shorts, "cs")
 --table.insert( yrp_shorts, "es" )
 table.insert(yrp_shorts, "fr")
---table.insert( yrp_shorts, "hu" )
+table.insert(yrp_shorts, "hu")
 table.insert(yrp_shorts, "it")
 --table.insert( yrp_shorts, "ko" )
 table.insert(yrp_shorts, "lt")
@@ -68,11 +68,18 @@ end
 
 function lang_string(var, vals)
 	var = tostring(var)
-	local _string = yrp_current_lang[string.lower(var)] or var
+	local _string = yrp_current_lang[string.lower(var)]
+	if yrp_current_lang[string.lower(var)] == nil then
+		return var
+	end
 
-	if vals != nil then
-		for id, val in pairs(vals) do
-			_string = string.Replace(_string, "%" .. id .. "%", val)
+	if wk(vals) then
+		if type(vals) == "string" then
+			return lang_string(var)
+		else
+			for id, val in pairs(vals) do
+				_string = string.Replace(_string, "%" .. id .. "%", val)
+			end
 		end
 	end
 
@@ -134,6 +141,8 @@ function read_language(short, init)
 		read_lang("resource/localization/yrp/settingsrealistic/lang_" .. short .. ".properties")
 		read_lang("resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties")
 		read_lang("resource/localization/yrp/settingsdatabase/lang_" .. short .. ".properties")
+		read_lang("resource/localization/yrp/settingsstatus/lang_" .. short .. ".properties")
+		read_lang("resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties")
 	else
 		read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end

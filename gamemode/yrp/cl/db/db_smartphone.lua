@@ -10,9 +10,12 @@ end
 
 function getSpBackColor()
 	local _color = SQL_SELECT( _db_name, "*", "name = 'color_back'" )
-	_color = string.Explode( ",", _color[1].value )
-
-	return Color( _color[1], _color[2], _color[3], 255 )
+	if wk(_color) then
+		_color = string.Explode( ",", _color[1].value )
+		return Color(_color[1], _color[2], _color[3], 255)
+	else
+		return Color(255, 255, 255)
+	end
 end
 
 function setSpCaseColor( color )

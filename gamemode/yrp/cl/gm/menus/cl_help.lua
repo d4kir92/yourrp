@@ -510,33 +510,6 @@ net.Receive("getsiteyourrpnews", function(len)
 	end
 end)
 
-net.Receive("getsiteyourrpwebsite", function(len)
-	if pa(HELPMENU.mainmenu.site) then
-		local link = "https://sites.google.com/view/yrp"
-
-		if link ~= "" then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
-
-			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
-			end
-
-			page:OpenURL(link)
-			local openLink = createD("DButton", page, ctr(100), ctr(100), BScrW() - ctr(100 + 20 + 20), 0)
-			openLink:SetText("")
-
-			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-			end
-
-			function openLink:DoClick()
-				gui.OpenURL(link)
-			end
-		end
-	end
-end)
-
 net.Receive("getsiteyourrpdiscord", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://discord.gg/CXXDCMJ"

@@ -53,7 +53,7 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		DFloatLine(ble, REL.float_custom_falldamage_muliplier, "multiplier", "update_float_custom_falldamage_muliplier")
 		local damage = {}
 		damage.parent = Scroller
-		damage.x = ctr(800) + br
+		damage.x = 0
 		damage.y = 0
 		damage.w = ctr(1000)
 		damage.h = Scroller:GetTall()

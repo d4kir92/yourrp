@@ -1,4 +1,31 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+
+function DrawBox(tab)
+	tab.r = tab.r or 0
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.w = tab.w or 100
+	tab.h = tab.h or 100
+	tab.color = tab.color or Color(200, 200, 200)
+	draw.RoundedBox( tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
+end
+
+function DrawButton(button, tab)
+	tab.r = tab.r or 0
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.w = tab.w or button:GetWide()
+	tab.h = tab.h or button:GetTall()
+	tab.color = tab.color or Color(200, 200, 200)
+	if button:IsHovered() then
+		tab.color = tab.hovercolor or Color(255, 255, 255)
+	end
+	DrawBox(tab)
+	tab.text = tab.text or {}
+	tab.text.text = tab.text.text or "NOTEXT"
+	DrawText(tab.text)
+end
+
 function GetTextLength(text, font)
 	surface.SetFont(font)
 	local l = select(1, surface.GetTextSize(text))

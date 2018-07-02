@@ -965,7 +965,6 @@ net.Receive( "gethelpmenu", function( len, ply )
 
 		AddTab( tabs, "YourRP", "" )
 		AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
-		AddSubTab( subtabs, "YourRP", "website", "getsiteyourrpwebsite" )
 		AddSubTab( subtabs, "YourRP", "discord", "getsiteyourrpdiscord" )
 		AddSubTab( subtabs, "YourRP", "Translations", "getsiteyourrptranslations", "" )
 
@@ -1141,12 +1140,6 @@ end)
 util.AddNetworkString( "getsiteyourrpnews" )
 net.Receive( "getsiteyourrpnews", function( len, ply )
 	net.Start( "getsiteyourrpnews" )
-	net.Send( ply )
-end)
-
-util.AddNetworkString( "getsiteyourrpwebsite" )
-net.Receive( "getsiteyourrpwebsite", function( len, ply )
-	net.Start( "getsiteyourrpwebsite" )
 	net.Send( ply )
 end)
 
