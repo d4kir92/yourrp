@@ -16,7 +16,7 @@ GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.137" --do NOT change this!
+GM.Version = "0.9.138" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -77,7 +77,27 @@ function GetMapNameDB()
 	return string.lower( SQL_STR_IN( game.GetMap() ) )
 end
 
+concommand.Add( "yrp_version", function( ply, cmd, args )
+	hr_pre()
+	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version
+	if IsYRPOutdated() == nil then
+		_text = _text .. " (Checking)"
+	elseif IsYRPOutdated() then
+		_text = _text .. " (OUTDATED!)"
+	end
+	printGM( "gm", _text )
+	hr_pos()
+end )
+
 concommand.Add( "yrp_status", function( ply, cmd, args )
+
+	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version
+	if IsYRPOutdated() == nil then
+		_text = _text .. " (Checking)"
+	elseif IsYRPOutdated() then
+		_text = _text .. " (OUTDATED!)"
+	end
+
 	hr_pre()
 	printGM( "gm", "	 Version:\t" .. GAMEMODE.Version )
 	printGM( "gm", "	 Channel:\t" .. string.upper( GAMEMODE.VersionSort ) )
@@ -120,7 +140,8 @@ end )
 
 concommand.Add( "yrp__help", function( ply, cmd, args )
 	hr_pre()
-	printGM( "note", "yrp_status - shows gamemode version" )
+	printGM( "note", "yrp_status - shows info" )
+	printGM( "note", "yrp_version - shows gamemode version" )
 	printGM( "note", "yrp_players - shows all players" )
 	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
 	printGM( "note", "yrp_togglesettings - toggle settings menu" )

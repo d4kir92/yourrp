@@ -1,5 +1,10 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
+local _sv_outdated = nil
+local _cl_outdated = nil
+local _version_client = {}
+local _version_server = {}
+
 local _version_online = {}
 function YRPOnlineVersion()
 	return _version_online
@@ -56,11 +61,6 @@ function YRPCheckVersion()
 	)
 end
 YRPCheckVersion()
-
-local _sv_outdated = false
-local _cl_outdated = false
-local _version_client = {}
-local _version_server = {}
 
 function YRPVersion()
 	if SERVER then

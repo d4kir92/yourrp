@@ -59,6 +59,8 @@ net.Receive( "cancelRestartServer", function( len, ply )
 end)
 
 function changeUserGroup( ply, cmd, args )
+	printGM("note", "This Command (yrp_usergroup) is only for this round!")
+	printGM("note", "Use an admin tool to make yourself permanent to an UserGroup")
 	local _cmdpre = "[" .. string.upper( "yrp_usergroup" ) .. "] "
 	local message = ""
 	if #args == 2 then

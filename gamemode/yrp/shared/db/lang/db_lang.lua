@@ -27,6 +27,7 @@ table.insert(yrp_shorts, "ru")
 table.insert(yrp_shorts, "tr")
 table.insert(yrp_shorts, "uk")
 table.insert(yrp_shorts, "zh_cn")
+table.insert(yrp_shorts, "zh_tw")
 
 function GetLanguageAutoInfo()
 	local auto = {}
