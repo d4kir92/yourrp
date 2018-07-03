@@ -646,10 +646,11 @@ if SERVER then
 		printGM("db", "Connection info:")
 		printGM("db", "Hostname: " .. _sql_settings.string_host)
 		printGM("db", "Username: " .. _sql_settings.string_username)
-		printGM("db", "Password: " .. _sql_settings.string_password)
+		printGM("note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
 		printGM("db", "Database/Schema: " .. _sql_settings.string_database)
 		printGM("db", "Port: " .. _sql_settings.int_port)
-		printGM("db", "CONNECT TO MYSQL DATABASE")
+
+		printGM("db", "Setup MYSQL Connection-Table")
 		YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 
 		YRPSQL.db.onConnected = function()
