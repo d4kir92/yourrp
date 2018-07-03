@@ -26,6 +26,10 @@ function Player:YRPGetLanguage()
 	return get_language_name( self:GetNWString( "client_lang", lang_string( "none" ) ) )
 end
 
+function Player:YRPGetLanguageShort()
+	return self:GetNWString( "client_lang", lang_string( "none" ) )
+end
+
 function Player:GetBackpack()
 	return self:GetNWEntity( "backpack" )
 end

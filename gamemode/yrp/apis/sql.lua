@@ -193,33 +193,36 @@ end
 
 -- NEW SQL API
 YRPSQL = YRPSQL or {}
-YRPSQL.mode = 0
+YRPSQL.int_mode = 0
 
 function GetSQLMode()
-	return YRPSQL.mode
+	return tonumber(YRPSQL.int_mode)
 end
 
 function GetSQLModeName()
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		return "SQLITE"
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		return "MYSQL"
 	end
 end
 
-function SetSQLMode(sqlmode)
-	YRPSQL.mode = tonumber(sqlmode)
-	local _q = "UPDATE "
-	_q = _q .. "yrp_sql"
-	_q = _q .. " SET " .. "mode = " .. sqlmode
-	_q = _q .. " WHERE uniqueID = 1"
-	_q = _q .. ";"
-	sql.Query(_q)
+function SetSQLMode(sqlmode, force)
+	YRPSQL.int_mode = tonumber(sqlmode)
+	if force then
+		printGM("db", "Update SQLMODE to: " .. YRPSQL.int_mode)
+		local _q = "UPDATE "
+		_q = _q .. "yrp_sql"
+		_q = _q .. " SET " .. "int_mode = " .. YRPSQL.int_mode
+		_q = _q .. " WHERE uniqueID = 1"
+		_q = _q .. ";"
+		sql.Query(_q)
+	end
 end
 
 function SQL_TABLE_EXISTS(db_table)
 	--printGM( "db", "SQL_TABLE_EXISTS( " .. tostring( db_table ) .. " )" )
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		if sql.TableExists(db_table) then
 			return true
 		else
@@ -227,7 +230,7 @@ function SQL_TABLE_EXISTS(db_table)
 
 			return false
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		local _r = SQL_SELECT(db_table, "*", nil)
 
 		if _r == nil or istable(_r) then
@@ -250,7 +253,7 @@ function SQL_QUERY(query)
 		return false
 	end
 
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		local _result = sql.Query(query)
 
 		if _result == nil then
@@ -261,7 +264,7 @@ function SQL_QUERY(query)
 			--printGM( "db", "ELSE" )
 			return _result
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		if YRPSQL.db ~= nil then
 			local que = YRPSQL.db:query(query)
 
@@ -309,7 +312,7 @@ end
 function SQL_CREATE_TABLE(db_table)
 	printGM("db", "SQL_CREATE_TABLE( " .. tostring(db_table) .. " )")
 
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		local _q = "CREATE TABLE "
 		_q = _q .. db_table .. " ( "
 		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY autoincrement"
@@ -318,7 +321,7 @@ function SQL_CREATE_TABLE(db_table)
 		local _result = SQL_QUERY(_q)
 
 		return _result
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		local _q = "CREATE TABLE "
 		_q = _q .. YRPSQL.schema .. "." .. db_table .. " ( "
 		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY AUTO_INCREMENT"
@@ -332,7 +335,7 @@ end
 
 function SQL_SELECT(db_table, db_columns, db_where)
 	--printGM( "db", "SQL_SELECT( " .. tostring( db_table ) .. ", " .. tostring( db_columns ) .. ", " .. tostring( db_where ) .. " )" )
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		local _q = "SELECT "
 		_q = _q .. db_columns
 		_q = _q .. " FROM " .. tostring(db_table)
@@ -345,7 +348,7 @@ function SQL_SELECT(db_table, db_columns, db_where)
 		_q = _q .. ";"
 
 		return SQL_QUERY(_q)
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		local _q = "SELECT "
 		_q = _q .. db_columns
 		_q = _q .. " FROM " .. YRPSQL.schema .. "." .. tostring(db_table)
@@ -363,7 +366,7 @@ end
 
 function SQL_UPDATE(db_table, db_sets, db_where)
 	--printGM( "db", "SQL_UPDATE( " .. tostring( db_table ) .. ", " .. tostring( db_sets ) .. ", " .. tostring( db_where ) .. " )" )
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		local _q = "UPDATE "
 		_q = _q .. db_table
 		_q = _q .. " SET " .. db_sets
@@ -374,9 +377,8 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 		end
 
 		_q = _q .. ";"
-
 		return SQL_QUERY(_q)
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		local _q = "UPDATE "
 		_q = _q .. YRPSQL.schema .. "." .. db_table
 		_q = _q .. " SET " .. db_sets
@@ -394,7 +396,7 @@ end
 
 function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 	--printGM( "db", "SQL_INSERT_INTO_DEFAULTVALUES( " .. tostring( db_table ) .. " )" )
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
@@ -407,7 +409,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 
 			return _result
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. "'" .. YRPSQL.schema .. "." .. db_table .. "'"
@@ -433,8 +435,8 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 end
 
 function SQL_INSERT_INTO(db_table, db_columns, db_values)
-	--printGM( "db", "SQL_INSERT_INTO( " .. tostring( db_table ) .. " | " .. tostring( db_columns ) .. " | " .. tostring( db_values ) .. " )" )
-	if YRPSQL.mode == 0 then
+	printGM( "db", "SQL_INSERT_INTO( " .. tostring( db_table ) .. " | " .. tostring( db_columns ) .. " | " .. tostring( db_values ) .. " )" )
+	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
@@ -451,7 +453,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 
 			return _result
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _v = string.Explode(", ", db_values)
 			local _ins = {}
@@ -501,7 +503,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 end
 
 function SQL_DELETE_FROM(db_table, db_where)
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "DELETE FROM "
 			_q = _q .. db_table
@@ -518,7 +520,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "DELETE FROM "
 			_q = _q .. db_table
@@ -540,7 +542,7 @@ end
 
 function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	--printGM( "db", "SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_name ) .. ", " .. tostring( column_name ) .. " )" )
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		local _result = SQL_SELECT(db_name, column_name, nil)
 
 		if _result == false then
@@ -548,7 +550,7 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 		else
 			return true
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		local _result = SQL_SELECT(db_name, column_name, nil)
 
 		if _result == false then
@@ -563,7 +565,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 	--printGM( "db", "SQL_ADD_COLUMN( " .. tostring( table_name ) .. ", " .. tostring( column_name ) .. ", " .. tostring( datatype ) .. " )" )
 	local _result = SQL_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		if not _result then
 			local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
 			local _r = SQL_QUERY(_q)
@@ -574,7 +576,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 
 			return _r
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		--[[ MYSQL DEFAULT VALUES FIX ]]
 		--
 		if YRPSQL[table_name] == nil then
@@ -588,7 +590,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 				local _default_value = string.sub(datatype, _end + 1)
 				YRPSQL[table_name][column_name] = _default_value
 			elseif string.find(datatype, "TEXT") ~= nil then
-				YRPSQL[table_name][column_name] = "''"
+				YRPSQL[table_name][column_name] = "' '"
 			elseif string.find(datatype, "INT") ~= nil then
 				YRPSQL[table_name][column_name] = "1"
 			end
@@ -612,28 +614,17 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 end
 
 if SERVER then
-	-- SQLMODE
-	if not sql.TableExists("yrp_sql") then
-		local _q = "CREATE TABLE "
-		_q = _q .. "yrp_sql" .. " ( "
-		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY autoincrement"
-		_q = _q .. " )"
-		_q = _q .. ";"
-		sql.Query(_q)
-	end
-
-	SetSQLMode(0)
-
+	printGM("db", "Connect to Database")
 	local _sql_settings = sql.Query("SELECT * FROM yrp_sql")
 
 	if wk(_sql_settings) then
 		_sql_settings = _sql_settings[1]
-		YRPSQL.schema = _sql_settings.database
+		YRPSQL.schema = _sql_settings.string_database
+		YRPSQL.int_mode = tonumber(_sql_settings.int_mode)
 	end
 
-	if YRPSQL.mode == 1 then
-		--[[ MYSQL ]]
-		--
+	if GetSQLMode() == 1 then
+		-- MYSQL
 		require("mysqloo")
 
 		if (mysqloo.VERSION ~= "9" or not mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
@@ -645,17 +636,26 @@ if SERVER then
 		end
 
 		printGM("db", "CONNECT TO MYSQL DATABASE")
-		YRPSQL.db = mysqloo.connect(_sql_settings.host, _sql_settings.username, _sql_settings.password, _sql_settings.database, tonumber(_sql_settings.port))
+		YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
+
+		YRPSQL.mysql_worked = false
+
+		timer.Simple( 10, function()
+			if not YRPSQL.mysql_worked then
+				SetSQLMode(0, true)
+			end
+		end)
 
 		YRPSQL.db.onConnected = function()
 			printGM("note", "CONNECTED!")
+			YRPSQL.mysql_worked = true
 			SetSQLMode(1)
 		end
 
 		--SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
 		YRPSQL.db.onConnectionFailed = function()
 			printGM("note", "CONNECTION failed, changing to SQLITE!")
-			SetSQLMode(0)
+			SetSQLMode(0, true)
 		end
 
 		YRPSQL.db:connect()
@@ -667,7 +667,7 @@ printGM("db", "Current SQL Mode: " .. GetSQLModeName())
 function SQL_INIT_DATABASE(db_name)
 	printGM("db", "SQL_INIT_DATABASE( " .. tostring(db_name) .. " )")
 
-	if YRPSQL.mode == 0 then
+	if GetSQLMode() == 0 then
 		if not SQL_TABLE_EXISTS(db_name) then
 			--printGM( "note", tostring( db_name ) .. " not exists" )
 			local _result = SQL_CREATE_TABLE(db_name)
@@ -682,7 +682,7 @@ function SQL_INIT_DATABASE(db_name)
 				retry_load_database(db_name)
 			end
 		end
-	elseif YRPSQL.mode == 1 then
+	elseif GetSQLMode() == 1 then
 		if not SQL_TABLE_EXISTS(db_name) then
 			--printGM( "note", tostring( db_name ) .. " not exists" )
 			local _result = SQL_CREATE_TABLE(db_name)

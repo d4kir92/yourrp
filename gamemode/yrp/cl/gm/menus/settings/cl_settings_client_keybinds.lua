@@ -16,7 +16,6 @@ end
 
 hook.Add( "open_client_keybinds", "open_client_keybinds", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
 
@@ -24,7 +23,7 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
 
 	settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 	--sheet:AddSheet( lang_string( "character" ), cl_charPanel, "icon16/user_edit.png" )
-	function settingsWindow.window.site:Paint( w, h )
+	function settingsWindow.window.site:Paint( pw, ph )
 		--draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), _yrp.colors.panel )
 		draw.SimpleTextOutlined( lang_string("characterselection"), "sef", ctr( _wide ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 		draw.SimpleTextOutlined( lang_string("rolemenu"), "sef", ctr( _wide ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
@@ -54,35 +53,68 @@ hook.Add( "open_client_keybinds", "open_client_keybinds", function()
 
 		draw.SimpleTextOutlined( lang_string("opensmartphone"), "sef", ctr( _wide ), ctr( 1500 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 		draw.SimpleTextOutlined( lang_string("closesmartphone"), "sef", ctr( _wide ), ctr( 1560 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-end
+	end
 
 	local _k = {}
-	_k._cs = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 60 ), "menu_character_selection" )
-	_k._mr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 120 ), "menu_role" )
-	_k._mb = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 180 ), "menu_buy" )
-	_k._ms = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 240 ), "menu_settings" )
-	_k._tm = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 300 ), "toggle_mouse" )
-	_k._tm = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 360 ), "toggle_map" )
-	_k._mi = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 420 ), "menu_inventory" )
-	_k._mv = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 480 ), "menu_options_vehicle" )
-	_k._md = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 540 ), "menu_options_door" )
-	_k._sgr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 600 ), "speak_next" )
-	_k._sgl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 660 ), "speak_prev" )
-	_k._vzo = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 720 ), "view_zoom_out" )
-	_k._vzi = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 780 ), "view_zoom_in" )
-	_k._di = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 840 ), "drop_item" )
-	_k._wl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 900 ), "weaponlowering" )
-	_k._ap = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 960 ), "menu_appearance" )
-	_k._me = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1020 ), "menu_emotes" )
+	_k._cs = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 60 ), "menu_character_selection" )
+	_k._mr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 120 ), "menu_role" )
+	_k._mb = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 180 ), "menu_buy" )
+	_k._ms = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 240 ), "menu_settings" )
+	_k._tm = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 300 ), "toggle_mouse" )
+	_k._tm = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 360 ), "toggle_map" )
+	_k._mi = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 420 ), "menu_inventory" )
+	_k._mv = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 480 ), "menu_options_vehicle" )
+	_k._md = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 540 ), "menu_options_door" )
+	_k._sgr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 600 ), "speak_next" )
+	_k._sgl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 660 ), "speak_prev" )
+	_k._vzo = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 720 ), "view_zoom_out" )
+	_k._vzi = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 780 ), "view_zoom_in" )
+	_k._di = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 840 ), "drop_item" )
+	_k._wl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 900 ), "weaponlowering" )
+	_k._ap = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 960 ), "menu_appearance" )
+	_k._me = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1020 ), "menu_emotes" )
 
-	_k._vs = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1080 ), "view_switch" )
-	_k._vu = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1140 ), "view_up" )
-	_k._vd = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1200 ), "view_down" )
-	_k._vr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1260 ), "view_right" )
-	_k._vl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1320 ), "view_left" )
-	_k._vsr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1380 ), "view_spin_right" )
-	_k._vsl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1440 ), "view_spin_left" )
+	_k._vs = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1080 ), "view_switch" )
+	_k._vu = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1140 ), "view_up" )
+	_k._vd = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1200 ), "view_down" )
+	_k._vr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1260 ), "view_right" )
+	_k._vl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1320 ), "view_left" )
+	_k._vsr = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1380 ), "view_spin_right" )
+	_k._vsl = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1440 ), "view_spin_left" )
 
-	_k._osp = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1500 ), "sp_open" )
-	_k._csp = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide+10 ), ctr( 1560 ), "sp_close" )
+	_k._osp = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1500 ), "sp_open" )
+	_k._csp = createDKeybinder( settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1560 ), "sp_close" )
+
+	_k.reset = createD("DButton", settingsWindow.window.site, ctr( 400 ), ctr( 50 ), ctr( _wide + 10 ), ctr( 1800 ) )
+	_k.reset:SetText("")
+	function _k.reset:Paint(pw, ph)
+		local tab = {}
+		tab.color = Color(255, 0, 0)
+		tab.hovercolor = Color(255, 100, 100)
+		tab.text = {}
+		tab.text.text = "settodefault"
+		DrawButton(self, tab)
+	end
+	function _k.reset:DoClick()
+		local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+		_window:Center()
+		_window:SetTitle( lang_string( "areyousure" ) )
+
+		local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60 )
+		_yesButton:SetText( lang_string( "yes" ) )
+		function _yesButton:DoClick()
+			ResetKeybinds()
+			CloseSettings()
+			OpenSettings()
+			_window:Close()
+		end
+
+		local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60 )
+		_noButton:SetText( lang_string( "no" ) )
+		function _noButton:DoClick()
+			_window:Close()
+		end
+
+		_window:MakePopup()
+	end
 end)

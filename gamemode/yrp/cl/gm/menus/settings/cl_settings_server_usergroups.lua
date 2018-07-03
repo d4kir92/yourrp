@@ -409,7 +409,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	ACCESSAddHr()
 	-- Management
 	ACCESSAddCheckBox( "general", "settings_general" )
-	ACCESSAddCheckBox( "database", "settings_database", Color( 255, 0, 0, 255 ) )
+	ACCESSAddCheckBox( "ac_database", "settings_database", Color( 255, 0, 0, 255 ) )
 	ACCESSAddCheckBox( "usergroups", "settings_usergroups", Color( 255, 0, 0, 255 ) )
 	ACCESSAddHr()
 	-- Addons

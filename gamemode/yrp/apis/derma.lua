@@ -16,13 +16,21 @@ function DrawButton(button, tab)
 	tab.y = tab.y or 0
 	tab.w = tab.w or button:GetWide()
 	tab.h = tab.h or button:GetTall()
-	tab.color = tab.color or Color(200, 200, 200)
+	tab.color = tab.color or YRPGetColor("2")
+	tab.hovercolor = tab.hovercolor or YRPGetColor("1")
+	if InterfaceTransparent() then
+		tab.color.a = 200
+		tab.hovercolor.a = 200
+	end
 	if button:IsHovered() then
 		tab.color = tab.hovercolor or Color(255, 255, 255)
 	end
 	DrawBox(tab)
 	tab.text = tab.text or {}
 	tab.text.text = tab.text.text or "NOTEXT"
+	tab.text.x = tab.text.x or tab.w / 2
+	tab.text.y = tab.text.y or tab.h / 2
+	tab.text.color = tab.text.color or Color(255, 255, 255, 255)
 	DrawText(tab.text)
 end
 
@@ -123,7 +131,11 @@ local yrp_colors = {}
 
 function YRPGetColor(nr)
 	if wk(yrp_colors[interfaceDesign()]) and wk(yrp_colors[interfaceDesign()][InterfaceColor()]) and wk(yrp_colors[interfaceDesign()][InterfaceColor()][nr]) then
-		 return yrp_colors[interfaceDesign()][InterfaceColor()][nr]
+		 local color = yrp_colors[interfaceDesign()][InterfaceColor()][nr]
+		 if InterfaceTransparent() then
+			 color.a = 200
+		 end
+		 return color
 	end
 
 	return Color(255, 0, 0, 255)

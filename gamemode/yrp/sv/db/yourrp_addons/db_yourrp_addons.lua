@@ -52,4 +52,3 @@ function AddYRPAddon(tab)
 		return true
 	end
 end
-printTab(yrp_addons)

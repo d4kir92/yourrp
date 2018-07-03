@@ -15,7 +15,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "sents", "TEXT DEFAULT ' '" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "adminaccess", "INT DEFAULT 0" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "database", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "ac_database", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "status", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "yourrp_addons", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "interface", "INT DEFAULT 0" )
@@ -55,25 +55,94 @@ SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickupplayer", "INT DEFAULT 0" )
 --db_is_empty( DATABASE_NAME )
 
 if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
-	local _str = "name, vehicles, weapons, entities, effects, npcs, props, ragdolls, noclip"
-	_str = _str .. ", removetool, dynamitetool, ignite, drive, collision, gravity, keepupright, bodygroups, physgunpickup, physgunpickupplayer"
-	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups, database, status, yourrp_addons"
-	local _str2 = "'superadmin', 1, 1, 1, 1, 1, 1, 1, 1"
+	local _str = "name, "
+	_str = _str .. "vehicles, "
+	_str = _str .. "weapons, "
+	_str = _str .. "entities, "
+	_str = _str .. "effects, "
+	_str = _str .. "npcs, "
+	_str = _str .. "props, "
+	_str = _str .. "ragdolls, "
+	_str = _str .. "noclip, "
+	_str = _str .. "removetool, "
+	_str = _str .. "dynamitetool, "
+	_str = _str .. "ignite, "
+	_str = _str .. "drive, "
+	_str = _str .. "collision, "
+	_str = _str .. "gravity, "
+	_str = _str .. "keepupright, "
+	_str = _str .. "bodygroups, "
+	_str = _str .. "physgunpickup, "
+	_str = _str .. "physgunpickupplayer, "
+	_str = _str .. "adminaccess, "
+	_str = _str .. "interface, "
+	_str = _str .. "general, "
+	_str = _str .. "realistic, "
+	_str = _str .. "groupsandroles, "
+	_str = _str .. "players, "
+	_str = _str .. "money, "
+	_str = _str .. "licenses, "
+	_str = _str .. "shops, "
+	_str = _str .. "map, "
+	_str = _str .. "whitelist, "
+	_str = _str .. "feedback, "
+	_str = _str .. "usergroups, "
+	_str = _str .. "ac_database, "
+	_str = _str .. "status, "
+	_str = _str .. "yourrp_addons"
+
+	local _str2 = "'superadmin', "
+	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
 
 if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
-	local _str = "name, vehicles, weapons, entities, effects, npcs, props, ragdolls, noclip"
-	_str = _str .. ", removetool, dynamitetool, ignite, drive, collision, gravity, keepupright, bodygroups, physgunpickup, physgunpickupplayer"
-	_str = _str .. ", adminaccess, interface, general, realistic, groupsandroles, players, money, licenses, shops, map, whitelist, feedback, usergroups, database, status, yourrp_addons"
-	_str = _str .. ", removeable"
+	local _str = "name, "
+	_str = _str .. "vehicles, "
+	_str = _str .. "weapons, "
+	_str = _str .. "entities, "
+	_str = _str .. "effects, "
+	_str = _str .. "npcs, "
+	_str = _str .. "props, "
+	_str = _str .. "ragdolls, "
+	_str = _str .. "noclip, "
+	_str = _str .. "removetool, "
+	_str = _str .. "dynamitetool, "
+	_str = _str .. "ignite, "
+	_str = _str .. "drive, "
+	_str = _str .. "collision, "
+	_str = _str .. "gravity, "
+	_str = _str .. "keepupright, "
+	_str = _str .. "bodygroups, "
+	_str = _str .. "physgunpickup, "
+	_str = _str .. "physgunpickupplayer, "
+	_str = _str .. "adminaccess, "
+	_str = _str .. "interface, "
+	_str = _str .. "general, "
+	_str = _str .. "realistic, "
+	_str = _str .. "groupsandroles, "
+	_str = _str .. "players, "
+	_str = _str .. "money, "
+	_str = _str .. "licenses, "
+	_str = _str .. "shops, "
+	_str = _str .. "map, "
+	_str = _str .. "whitelist, "
+	_str = _str .. "feedback, "
+	_str = _str .. "usergroups, "
+	_str = _str .. "ac_database, "
+	_str = _str .. "status, "
+	_str = _str .. "yourrp_addons, "
+	_str = _str .. "removeable"
+
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0"
-	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
+
+	SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
 end
 
 --[[ Global Handler ]]--
@@ -445,11 +514,11 @@ function UGCheckBox( ply, uid, name, value )
 	end
 end
 
-util.AddNetworkString( "usergroup_update_database" )
-net.Receive( "usergroup_update_database", function( len, ply )
+util.AddNetworkString( "usergroup_update_ac_database" )
+net.Receive( "usergroup_update_ac_database", function( len, ply )
 	local uid = tonumber( net.ReadString() )
-	local database = net.ReadString()
-	UGCheckBox( ply, uid, "database", database )
+	local ac_database = net.ReadString()
+	UGCheckBox( ply, uid, "ac_database", ac_database )
 end)
 
 util.AddNetworkString( "usergroup_update_status" )

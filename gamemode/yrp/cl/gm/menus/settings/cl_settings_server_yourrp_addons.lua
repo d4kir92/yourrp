@@ -65,7 +65,7 @@ function AddYRPAddon(parent, tab)
 		end
 		function _add_on.settings:DoClick()
 			hook.Call(tab.settings)
-			closeSettings()
+			CloseSettings()
 		end
 	end
 

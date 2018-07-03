@@ -47,14 +47,14 @@ end
 
 local yrp_sql = {}
 
-local _init_yrp_sql = SQL_SELECT( DATABASE_NAME, "*", nil )
+local _init_yrp_sql = sql.Query("SELECT * FROM " .. DATABASE_NAME)
 if wk(_init_yrp_sql) then
 	yrp_sql = _init_yrp_sql[1]
 end
 
 function DBUpdateValue(db_name, str, l_db, value)
 	l_db[str] = value
-	SQL_UPDATE( db_name, str .. " = '" .. l_db[str] .. "'", "uniqueID = '1'" )
+	sql.Query( "UPDATE " .. db_name .. " SET " .. str .. " = '" .. l_db[str] .. "' WHERE uniqueID = '1'")
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)

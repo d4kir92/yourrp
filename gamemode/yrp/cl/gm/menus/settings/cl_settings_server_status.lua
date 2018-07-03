@@ -36,6 +36,7 @@ net.Receive("Connect_Settings_Status", function(len)
 			net.SendToServer()
 		end
 
+		local TAB_YOURRP = net.ReadTable()
 		local TAB_ROLES = net.ReadTable()
 		local TAB_GROUPS = net.ReadTable()
 		local TAB_MAP = net.ReadTable()
@@ -48,6 +49,21 @@ net.Receive("Connect_Settings_Status", function(len)
 		scroller.w = BScrW() - 2 * br
 		scroller.h = ScrH() - ctr(100) - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
+
+		local tab_yourrp = {}
+		tab_yourrp.parent = Scroller
+		tab_yourrp.x = 0
+		tab_yourrp.y = 0
+		tab_yourrp.w = ctr(800)
+		tab_yourrp.h = Scroller:GetTall()
+		tab_yourrp.br = br / 2
+		tab_yourrp.name = "YourRP"
+		local Group_YourRP = DGroup(tab_yourrp)
+		for yourrpID, yourrp in pairs(TAB_YOURRP) do
+			for str_id, color in pairs(yourrp) do
+				AddStatusLine(Group_YourRP, "content", yourrpID, str_id, color)
+			end
+		end
 
 		local tab_roles = {}
 		tab_roles.parent = Scroller

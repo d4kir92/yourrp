@@ -172,9 +172,12 @@ net.Receive("getsitehelp", function(len)
 			gui.OpenURL("https://discord.gg/sEgNZxg")
 		end
 
-		local version = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(2 * 20), ctr(60), 0, HELPMENU.mainmenu.site:GetTall() - ctr(60))
+		local version = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(2 * 20), ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - ctr(50))
 
 		function version:Paint(pw, ph)
+			if not version_tested() then
+				testVersion()
+			end
 			draw.SimpleTextOutlined("(" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, version_color(), 2, 1, 1, Color(0, 0, 0, 255))
 		end
 	end
@@ -553,6 +556,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 			local text = language.language .. "/" .. language.inenglish .. " ( "
 
 			if language.percentage ~= nil then
+				language.percentage = tonumber(language.percentage)
 				text = text .. language.percentage .. "% "
 			end
 
@@ -590,8 +594,12 @@ net.Receive("getsiteyourrptranslations", function(len)
 			function lan:Paint(pw, ph)
 				self.textcol = Color(255, 255, 255)
 
-				if language.percentage ~= nil and language.percentage == 100 then
+				if language.percentage ~= nil then
+					if language.percentage == 100 then
 						self.textcol = Color(0, 255, 0)
+					elseif language.percentage > 90 then
+						self.textcol = Color(160, 255, 160)
+					end
 				end
 
 				if language.author == "" then

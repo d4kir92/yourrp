@@ -27,10 +27,10 @@ end
 
 util.AddNetworkString( "Connect_Settings_Database" )
 net.Receive( "Connect_Settings_Database", function( len, ply )
-	if ply:CanAccess( "database" ) then
+	if ply:CanAccess( "ac_database" ) then
 		AddToHandler_Database( ply )
 
-		local tables = SQL_QUERY("SELECT name FROM sqlite_master WHERE type='table';")
+		local tables = sql.Query("SELECT name FROM sqlite_master WHERE type='table';")
 
 		local nw_yrp = {}
 		local nw_yrp_related = {}
@@ -47,7 +47,7 @@ net.Receive( "Connect_Settings_Database", function( len, ply )
 			end
 		end
 
-		local nw_sql = SQL_SELECT( "yrp_sql", "*", nil )
+		local nw_sql = sql.Query("SELECT * FROM yrp_sql WHERE uniqueID = 1;")
 		if wk(nw_sql) then
 			nw_sql = nw_sql[1]
 		end
@@ -71,11 +71,11 @@ util.AddNetworkString( "get_sql_info" )
 util.AddNetworkString("yrp_drop_tables")
 net.Receive("yrp_drop_tables", function(len, ply)
 	local _drop_tables = net.ReadTable()
-	local _can = SQL_SELECT( "yrp_usergroups", "database", "name = '" .. string.lower( ply:GetUserGroup() ) .. "'")
+	local _can = SQL_SELECT( "yrp_usergroups", "ac_database", "name = '" .. string.lower( ply:GetUserGroup() ) .. "'")
 	if wk(_can) then
 		_can = _can[1]
 		CreateBackup()
-		if tobool(_can.database) then
+		if tobool(_can.ac_database) then
 			for i, tab in pairs(_drop_tables) do
 				SQL_DROP_TABLE(tab)
 			end
@@ -85,9 +85,15 @@ net.Receive("yrp_drop_tables", function(len, ply)
 end)
 
 function GetBackupCreateTime()
-	local _create = SQL_SELECT("yrp_sql", "int_backup_create", "uniqueID = 1")
-	_create = tonumber(_create[1].int_backup_create) * 60 * 60
-	return _create
+	local _create = sql.Query("SELECT int_backup_create FROM yrp_sql WHERE uniqueID = 1;")
+	if wk(_create) then
+		_create = tonumber(_create[1].int_backup_create)
+		_create = _create * 60 * 60
+		return _create
+	else
+		printGM("error", "GetBackupCreateTime FAILED")
+		return 60
+	end
 end
 
 function CreateYRPBackupsFolder()
@@ -108,7 +114,7 @@ function RemoveOldBackups()
 	printGM("db", "[BACKUP] Remove old backups")
 	if CreateYRPBackupsFolder() then
 		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
-		local _remove_after = SQL_SELECT("yrp_sql", "int_backup_delete", "uniqueID = 1")
+		local _remove_after = sql.Query("SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;")
 		_remove_after = tonumber(_remove_after[1].int_backup_delete)
 		for i, fi in pairs(backups) do
 			if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then

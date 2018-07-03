@@ -93,10 +93,39 @@ function check_yrp_keybinds()
 	end
 
 	if !db_is_empty( _db_name ) then
-		local _tmp = SQL_SELECT( _db_name, "*", nil )
-		_tmp = _tmp[1]
+		local _tmp2 = SQL_SELECT( _db_name, "*", nil )
+		_tmp2 = _tmp2[1]
 
-		yrp_keybinds = _tmp
+		yrp_keybinds = _tmp2
 	end
 end
 check_yrp_keybinds()
+
+function ResetKeybinds()
+	set_keybind( "menu_character_selection", KEY_F2 )
+	set_keybind( "menu_role", KEY_F4 )
+	set_keybind( "menu_buy", KEY_F11 )
+	set_keybind( "menu_settings", KEY_F8 )
+	set_keybind( "toggle_mouse", KEY_F3 )
+	set_keybind( "toggle_map", KEY_M )
+	set_keybind( "menu_inventory", KEY_I )
+	set_keybind( "menu_options_vehicle", KEY_B )
+	set_keybind( "menu_options_door", KEY_B )
+	set_keybind( "speak_next", KEY_PAGEUP )
+	set_keybind( "speak_prev", KEY_PAGEDOWN )
+	set_keybind( "drop_item", KEY_G )
+	set_keybind( "weaponlowering", KEY_H )
+	set_keybind( "menu_appearance", KEY_O )
+	set_keybind( "menu_emotes", KEY_N )
+	set_keybind( "view_switch", KEY_T )
+	set_keybind( "view_zoom_out", KEY_PAD_PLUS )
+	set_keybind( "view_zoom_in", KEY_PAD_MINUS )
+	set_keybind( "view_up", KEY_PAD_8 )
+	set_keybind( "view_down", KEY_PAD_5 )
+	set_keybind( "view_right", KEY_PAD_6 )
+	set_keybind( "view_left", KEY_PAD_4 )
+	set_keybind( "view_spin_right", KEY_PAD_9 )
+	set_keybind( "view_spin_left", KEY_PAD_7 )
+	set_keybind( "sp_open", KEY_UP )
+	set_keybind( "sp_close", KEY_DOWN )
+end

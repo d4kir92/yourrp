@@ -9,6 +9,10 @@ function Player:GetLanguage() -- The Language the player selected
 	return self:YRPGetLanguage() -- return string
 end
 
+function Player:GetLanguageShort() -- The Language the player selected (shortkey)
+	return self:YRPGetLanguageShort() -- return string
+end
+
 --[[ Metabolism ]]--
 function Player:Eat( num ) -- Add num to hunger
 	self:YRPEat( num )

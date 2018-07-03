@@ -59,6 +59,7 @@ function DGroup( tab )
 	end
 
 	dgroup.content = createD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 2 * tab.br - ctr( 50 ), tab.x + tab.br, tab.y + tab.br + ctr( 50 ) )
+	dgroup.content:EnableVerticalScrollbar(true)
 	function dgroup.content:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.bgcolor )
 	end

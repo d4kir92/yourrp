@@ -23,11 +23,23 @@ util.AddNetworkString( "Connect_Settings_Status" )
 net.Receive( "Connect_Settings_Status", function( len, ply )
 	if ply:CanAccess( "status" ) then
 		AddToHandler_Status( ply )
-
+		local _nw_yourrp = {}
 		local _nw_roles = {}
 		local _nw_groups = {}
 		local _nw_map = {}
 		_nw_map["jail"] = {}
+
+		local _yourrp_content_found = false
+		for i, addon in pairs(engine.GetAddons()) do
+			if addon.wsid == "1189643820" then
+				_yourrp_content_found = true
+			end
+		end
+		if !_yourrp_content_found then
+			_nw_yourrp["YourRP Content"] = {}
+			_nw_yourrp["YourRP Content"]["missingx"] = Color(255, 0, 0)
+		end
+
 		local _roles = SQL_SELECT("yrp_roles", "*", nil)
 		local _groups = SQL_SELECT("yrp_groups", "*", nil)
 		local _map = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
@@ -74,6 +86,7 @@ net.Receive( "Connect_Settings_Status", function( len, ply )
 		end
 
 		net.Start( "Connect_Settings_Status" )
+			net.WriteTable(_nw_yourrp)
 			net.WriteTable(_nw_roles)
 			net.WriteTable(_nw_groups)
 			net.WriteTable(_nw_map)

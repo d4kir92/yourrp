@@ -70,18 +70,18 @@ end
 
 function toggleSettings()
 	if isNoMenuOpen() then
-		openSettings()
+		OpenSettings()
 	else
-		closeSettings()
+		CloseSettings()
 	end
 end
 
 concommand.Add("yrp_open_settings", function(ply, cmd, args)
 	printGM("gm", "Open settings window")
-	openSettings()
+	OpenSettings()
 end)
 
-function closeSettings()
+function CloseSettings()
 	if settingsWindow.window ~= NULL and settingsWindow.window ~= nil then
 		closeMenu()
 		settingsWindow.window:Remove()
@@ -97,8 +97,10 @@ function SaveLastSite()
 	end
 end
 
-function openSettings()
+function OpenSettings()
 	openMenu()
+
+	testVersion()
 
 	settingsWindow.window = createMDMenu(nil, ScrW(), ScrH(), 0, 0)
 
@@ -143,11 +145,11 @@ function openSettings()
 
 	local _settings_server_gameplay = "settings_server_gameplay"
 	settingsWindow.window:AddCategory(_settings_server_gameplay)
+	settingsWindow.window:AddSite("open_server_general", "settings_general", _settings_server_gameplay, "icon16/server.png")
 	settingsWindow.window:AddSite("open_server_realistic", "settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
 
 	local _settings_server_management = "settings_server_management"
 	settingsWindow.window:AddCategory(_settings_server_management)
-	settingsWindow.window:AddSite("open_server_general", "settings_general", _settings_server_management, "icon16/server.png")
 	settingsWindow.window:AddSite("open_server_database", "settings_database", _settings_server_management, "icon16/database.png")
 	settingsWindow.window:AddSite("open_server_usergroups", "settings_usergroups", _settings_server_management, "icon16/group_go.png")
 
@@ -198,7 +200,7 @@ function openSettings()
 	end
 
 	function feedback:DoClick()
-		closeSettings()
+		CloseSettings()
 		openFeedbackMenu()
 	end
 
