@@ -631,44 +631,44 @@ if SERVER then
 			MsgC(Color(255, 0, 0), "You are using an outdated mysqloo version\n")
 			MsgC(Color(255, 0, 0), "Download the latest mysqloo9 from here\n")
 			MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
-
-			return
+			YRPSQL.outdated = true
 		end
+		if not YRPSQL.outdated then
+			YRPSQL.mysql_worked = false
 
-		YRPSQL.mysql_worked = false
+			timer.Simple( 10, function()
+				if not YRPSQL.mysql_worked then
+					printGM("note", "Took to long to connect to mysql server, switch back to sqlite")
+					SetSQLMode(0, true)
+				end
+			end)
 
-		timer.Simple( 10, function()
-			if not YRPSQL.mysql_worked then
+			printGM("db", "Connection info:")
+			printGM("db", "Hostname: " .. _sql_settings.string_host)
+			printGM("db", "Username: " .. _sql_settings.string_username)
+			printGM("note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
+			printGM("db", "Database/Schema: " .. _sql_settings.string_database)
+			printGM("db", "Port: " .. _sql_settings.int_port)
+
+			printGM("db", "Setup MYSQL Connection-Table")
+			YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
+
+			YRPSQL.db.onConnected = function()
+				printGM("note", "onConnected => CONNECTED!")
+				YRPSQL.mysql_worked = true
+				SetSQLMode(1)
+			end
+
+			--SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
+			YRPSQL.db.onConnectionFailed = function()
+				printGM("note", "onConnectionFailed => CONNECTION failed, changing to SQLITE!")
 				SetSQLMode(0, true)
 			end
-		end)
 
-		printGM("db", "Connection info:")
-		printGM("db", "Hostname: " .. _sql_settings.string_host)
-		printGM("db", "Username: " .. _sql_settings.string_username)
-		printGM("note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
-		printGM("db", "Database/Schema: " .. _sql_settings.string_database)
-		printGM("db", "Port: " .. _sql_settings.int_port)
-
-		printGM("db", "Setup MYSQL Connection-Table")
-		YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
-
-		YRPSQL.db.onConnected = function()
-			printGM("note", "onConnected => CONNECTED!")
-			YRPSQL.mysql_worked = true
-			SetSQLMode(1)
+			printGM("note", "Connect to MYSQL Server, if stuck => wrong mysql info or server offline")
+			YRPSQL.db:connect()
 		end
-
-		--SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
-		YRPSQL.db.onConnectionFailed = function()
-			printGM("note", "onConnectionFailed => CONNECTION failed, changing to SQLITE!")
-			SetSQLMode(0, true)
-		end
-
-		printGM("note", "Connect to MYSQL Server, if stuck => wrong mysql info or server down")
-		YRPSQL.db:connect()
 	end
-	--
 end
 printGM("db", "Current SQL Mode: " .. GetSQLModeName())
 
@@ -677,11 +677,11 @@ function SQL_INIT_DATABASE(db_name)
 
 	if GetSQLMode() == 0 then
 		if not SQL_TABLE_EXISTS(db_name) then
-			--printGM( "note", tostring( db_name ) .. " not exists" )
+			printGM( "note", tostring( db_name ) .. " not exists" )
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if _result ~= nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! query: " .. tostring(_query) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			if not sql.TableExists(tostring(db_name)) then
@@ -689,11 +689,25 @@ function SQL_INIT_DATABASE(db_name)
 				sql_show_last_error()
 				retry_load_database(db_name)
 			end
+		else
+			printGM("db", "Table " .. db_name .. " already exists.")
 		end
 	elseif GetSQLMode() == 1 then
 		if not SQL_TABLE_EXISTS(db_name) then
-			--printGM( "note", tostring( db_name ) .. " not exists" )
+			printGM( "note", tostring( db_name ) .. " not exists" )
 			local _result = SQL_CREATE_TABLE(db_name)
+
+			if _result ~= nil then
+				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+			end
+
+			if not sql.TableExists(tostring(db_name)) then
+				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
+				sql_show_last_error()
+				retry_load_database(db_name)
+			end
+		else
+			printGM("db", "Table " .. db_name .. " already exists.")
 		end
 	end
 end
