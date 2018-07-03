@@ -635,9 +635,6 @@ if SERVER then
 			return
 		end
 
-		printGM("db", "CONNECT TO MYSQL DATABASE")
-		YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
-
 		YRPSQL.mysql_worked = false
 
 		timer.Simple( 10, function()
@@ -645,6 +642,9 @@ if SERVER then
 				SetSQLMode(0, true)
 			end
 		end)
+
+		printGM("db", "CONNECT TO MYSQL DATABASE")
+		YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 
 		YRPSQL.db.onConnected = function()
 			printGM("note", "CONNECTED!")
