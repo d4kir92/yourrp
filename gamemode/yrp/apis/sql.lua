@@ -221,7 +221,7 @@ function SetSQLMode(sqlmode, force)
 end
 
 function SQL_TABLE_EXISTS(db_table)
-	--printGM( "db", "SQL_TABLE_EXISTS( " .. tostring( db_table ) .. " )" )
+	-- printGM( "db", "SQL_TABLE_EXISTS( " .. tostring( db_table ) .. " )" )
 	if GetSQLMode() == 0 then
 		if sql.TableExists(db_table) then
 			return true
@@ -654,19 +654,20 @@ if SERVER then
 			YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 
 			YRPSQL.db.onConnected = function()
-				printGM("note", "onConnected => CONNECTED!")
+				printGM("note", "CONNECTED!")
 				YRPSQL.mysql_worked = true
 				SetSQLMode(1)
 			end
 
 			--SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
 			YRPSQL.db.onConnectionFailed = function()
-				printGM("note", "onConnectionFailed => CONNECTION failed, changing to SQLITE!")
+				printGM("note", "CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
 				SetSQLMode(0, true)
 			end
 
-			printGM("note", "Connect to MYSQL Server, if stuck => wrong mysql info or server offline")
+			printGM("db", "Connect to MYSQL Server")
 			YRPSQL.db:connect()
+			YRPSQL.db:wait()
 		end
 	end
 end
