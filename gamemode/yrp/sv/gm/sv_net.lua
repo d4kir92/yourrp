@@ -101,6 +101,10 @@ function changeUserGroup( ply, cmd, args )
 	end
 end
 
+concommand.Add( "yrp_force_sqlite", function( ply, cmd, args )
+	SetSQLMode(0, true)
+end )
+
 concommand.Add( "yrp_usergroup", function( ply, cmd, args )
 	changeUserGroup( ply, cmd, args )
 end )

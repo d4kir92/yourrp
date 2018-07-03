@@ -643,21 +643,28 @@ if SERVER then
 			end
 		end)
 
+		printGM("db", "Connection info:")
+		printGM("db", "Hostname: " .. _sql_settings.string_host)
+		printGM("db", "Username: " .. _sql_settings.string_username)
+		printGM("db", "Password: " .. _sql_settings.string_password)
+		printGM("db", "Database/Schema: " .. _sql_settings.string_database)
+		printGM("db", "Port: " .. _sql_settings.int_port)
 		printGM("db", "CONNECT TO MYSQL DATABASE")
 		YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 
 		YRPSQL.db.onConnected = function()
-			printGM("note", "CONNECTED!")
+			printGM("note", "onConnected => CONNECTED!")
 			YRPSQL.mysql_worked = true
 			SetSQLMode(1)
 		end
 
 		--SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
 		YRPSQL.db.onConnectionFailed = function()
-			printGM("note", "CONNECTION failed, changing to SQLITE!")
+			printGM("note", "onConnectionFailed => CONNECTION failed, changing to SQLITE!")
 			SetSQLMode(0, true)
 		end
 
+		printGM("note", "Connect to MYSQL Server, if stuck => wrong mysql info or server down")
 		YRPSQL.db:connect()
 	end
 	--
