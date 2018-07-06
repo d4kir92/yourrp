@@ -26,6 +26,10 @@ net.Receive( "Connect_Settings_YourRP_Addons", function( len, ply )
 	if ply:CanAccess( "yourrp_addons" ) then
 		AddToHandler_YourRP_Addons( ply )
 
+		if table.Count(yrp_addons) == 0 then
+			hook.Call("get_yourrp_addons")
+		end
+
 		net.Start( "Connect_Settings_YourRP_Addons" )
 			net.WriteTable( yrp_addons )
 		net.Send( ply )
@@ -40,7 +44,7 @@ end)
 YRP = YRP or {}
 
 function YRP:AddYRPAddon(tab)
-	printGM("db", "Add YourRP Addon")
+	printGM("db", "Add YourRP Addon(" .. tostring(tab.name) .. " by " .. tostring(tab.author) .. ")")
 	if type(tab) != "table" then return false end
 	tab.name = tab.name or ""
 	tab.author = tab.author or "NO AUTHOR"

@@ -44,6 +44,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "removetool", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "dynamitetool", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "ignite", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "drive", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "flashlight", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "collision", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "gravity", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "keepupright", "INT DEFAULT 0" )
@@ -68,6 +69,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 	_str = _str .. "dynamitetool, "
 	_str = _str .. "ignite, "
 	_str = _str .. "drive, "
+	_str = _str .. "flashlight, "
 	_str = _str .. "collision, "
 	_str = _str .. "gravity, "
 	_str = _str .. "keepupright, "
@@ -93,7 +95,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 
 	local _str2 = "'superadmin', "
 	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
@@ -113,6 +115,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
 	_str = _str .. "dynamitetool, "
 	_str = _str .. "ignite, "
 	_str = _str .. "drive, "
+	_str = _str .. "flashlight, "
 	_str = _str .. "collision, "
 	_str = _str .. "gravity, "
 	_str = _str .. "keepupright, "
@@ -138,7 +141,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
 	_str = _str .. "removeable"
 
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0"
 
@@ -712,6 +715,13 @@ net.Receive( "usergroup_update_drive", function( len, ply )
 	local uid = tonumber( net.ReadString() )
 	local drive = net.ReadString()
 	UGCheckBox( ply, uid, "drive", drive )
+end)
+
+util.AddNetworkString( "usergroup_update_flashlight" )
+net.Receive( "usergroup_update_flashlight", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local flashlight = net.ReadString()
+	UGCheckBox( ply, uid, "flashlight", flashlight )
 end)
 
 util.AddNetworkString( "usergroup_update_collision" )

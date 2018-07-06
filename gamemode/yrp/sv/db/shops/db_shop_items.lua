@@ -272,7 +272,7 @@ function spawnItem(ply, item, duid)
 		if not ent:IsValid() then
 			printGM("note", "[spawnItem] Vehicle is not valid: Vehicle not exists anymore on server!")
 
-			return "ent isnt valid"
+			return false
 		end
 
 		SQL_INSERT_INTO("yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. db_sql_str(item.ClassName) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'")
@@ -289,16 +289,8 @@ function spawnItem(ply, item, duid)
 	end
 
 	if item.type == "weapons" then
-		ent = ply:Give(item.ClassName)
-
-		ent:YRPSetOwner(ply)
-
-		if ent ~= nil then
-			return true
-		else
-			printGM("note", "[spawnItem] " .. tostring(item.ClassName) .. " is not valid? Is it in collection?")
-			return false
-		end
+		ply:Give(item.ClassName)
+		return true
 	else
 		ent:YRPSetOwner(ply)
 		local _sps = SQL_SELECT("yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'")
