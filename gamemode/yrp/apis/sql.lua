@@ -665,7 +665,7 @@ if SERVER then
 				SetSQLMode(0, true)
 			end
 
-			printGM("db", "Connect to MYSQL Server")
+			printGM("db", "Connect to MYSQL Server, if stuck => connection info is wrong or server offline! (default mysql port: 3306)")
 			YRPSQL.db:connect()
 			YRPSQL.db:wait()
 		end

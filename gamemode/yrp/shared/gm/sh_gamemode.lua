@@ -223,10 +223,8 @@ if SERVER then
 			for k, ply in pairs( player.GetAll() ) do
 				local _weapon = ply:GetActiveWeapon()
 				if ea( _weapon ) then
-					if _weapon:IsScripted() then
-						if ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) then
-							lowering_weapon( ply )
-						end
+					if _weapon:IsScripted() and ( ( ( ply:KeyDown( IN_SPEED ) and ply:KeyDown( IN_FORWARD ) ) or ply:KeyDown( IN_ATTACK ) or ply:KeyDown( IN_ATTACK2 ) ) and ply:GetNWBool( "weaponlowered", true ) ) then
+						lowering_weapon( ply )
 					end
 				end
 			end

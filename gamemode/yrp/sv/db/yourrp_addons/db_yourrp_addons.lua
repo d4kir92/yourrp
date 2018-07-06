@@ -37,7 +37,9 @@ net.Receive( "Disconnect_Settings_YourRP_Addons", function( len, ply )
 	RemFromHandler_YourRP_Addons( ply )
 end)
 
-function AddYRPAddon(tab)
+YRP = YRP or {}
+
+function YRP:AddYRPAddon(tab)
 	printGM("db", "Add YourRP Addon")
 	if type(tab) != "table" then return false end
 	tab.name = tab.name or ""

@@ -3,12 +3,10 @@
 local Player = FindMetaTable( "Player" )
 
 function Player:YRPEat( num )
-	if !isbool( num ) then
-		if isnumber( num ) then
-			self:SetNWFloat( "hunger", self:GetNWFloat( "hunger", 0.0 ) + num )
-			if self:GetNWFloat( "hunger", 0.0 ) > 100.0 then
-				self:SetNWFloat( "hunger", 100.0 )
-			end
+	if isnumber( num ) then
+		self:SetNWFloat( "hunger", self:GetNWFloat( "hunger", 0.0 ) + num )
+		if self:GetNWFloat( "hunger", 0.0 ) > 100.0 then
+			self:SetNWFloat( "hunger", 100.0 )
 		end
 	end
 end
@@ -93,7 +91,7 @@ function Player:GetChaTab()
 	if SERVER then
 		if self:LoadedGamemode() then
 			local _tmp = self:GetPlyTab()
-			if self:HasCharacterSelected() then
+			if self:HasCharacterSelected() and tostring(_tmp.CurrentCharacter) != "" then
 				local yrp_characters = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter )
 				if worked( yrp_characters, "yrp_characters GetChaTab", true ) then
 					self.chatab = yrp_characters[1]
