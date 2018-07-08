@@ -86,6 +86,7 @@ function drawGroupPlayers( id )
 			_tmpPly.usergroup = ply:GetUserGroup() or ""
 			_tmpPly.steamname = ply:SteamName() or ""
 			_tmpPly.lang = ply:GetLanguageShort() or ""
+			_tmpPly.language = ply:GetLanguage() or ""
 			_tmpPly.money = ply:GetNWString( "money" )
 			_tmpPly.moneybank = ply:GetNWString( "moneybank" )
 			_tmpPly.os = ply:GetNWString( "yrp_os", "other" )
@@ -175,16 +176,16 @@ function drawGroupPlayers( id )
 				end
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-					local y = ph/4
+					local y = ph / 4
 					if !ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-						y = ph/2
+						y = ph / 2
 					end
 					draw.SimpleTextOutlined( self.frags, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-					local y = ph*3/4
+					local y = ph * 3 / 4
 					if !ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-						y = ph/2
+						y = ph / 2
 					end
 					draw.SimpleTextOutlined( self.deaths, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
@@ -193,18 +194,21 @@ function drawGroupPlayers( id )
 					local icon_size = ctr( 100 )
 					_w = _w + ctr( 400 )
 					DrawIcon( GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+					if self:IsHovered() then
+						draw.SimpleTextOutlined( string.upper(self.lang), "sef", _w + ( icon_size * 1.49 ) / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					end
 				end
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
 					_w = _w + ctr( 400 )
-					draw.SimpleTextOutlined( self.playtime, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					draw.SimpleTextOutlined( self.playtime, "sef", _w, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
 					local icon_size = ctr( 100 )
 					DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
 				end
-				draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			function _tmpPly:DoClick()
@@ -239,6 +243,9 @@ function drawGroupPlayers( id )
 					SetClipboardText( ply:SteamName() )
 					_menu:Remove()
 				end
+				_menu:AddSpacer()
+
+				_menu:AddOption( "Language: " .. self.language, "icon16/map.png" )
 				_menu:AddSpacer()
 
 				if LocalPlayer():HasAccess() and notself( ply ) then
