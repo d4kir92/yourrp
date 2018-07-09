@@ -220,7 +220,7 @@ net.Receive("getsitestaff", function(len)
 end)
 
 net.Receive("getsiteserverrules", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if pa(HELPMENU) then
 		local serverrules = net.ReadString()
 		local page = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 

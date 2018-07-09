@@ -107,9 +107,6 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
 			if tonumber(cur) > tonumber(max) then
 				cur = max
 			end
-			if cur != nil and max != nil then
-				hud[dbV] = Lerp( 10 * FrameTime(), hud[dbV], cur )
-			end
 			if HUD[dbV] == nil or HUD.refresh then
 				HUD.count = HUD.count + 1
 				HUD[dbV] = {}
@@ -118,13 +115,13 @@ function drawHUDElement( dbV, cur, max, text, icon, color )
 				HUD[dbV].x = anchorW( HudV( dbV .. "aw" ) ) + ctr( HudV(dbV .. "px") )
 				HUD[dbV].y = anchorH( HudV( dbV .. "ah" ) ) + ctr( HudV(dbV .. "py") )
 				HUD[dbV].w = ctr( HudV(dbV .. "sw") )
-				HUD[dbV].barw = hud[dbV] / max * HUD[dbV].w
+				HUD[dbV].barw = cur / max * HUD[dbV].w
 				HUD[dbV].h = ctr( HudV(dbV .. "sh") )
 				HUD[dbV].r = HUD[dbV].h / 2
 			end
 			if CurTime() > HUD[dbV].delay then
-				HUD[dbV].delay = CurTime() + 1 / HUD.count * HUD[dbV].id
-				HUD[dbV].barw = hud[dbV] / max * HUD[dbV].w
+				HUD[dbV].delay = CurTime() + 1 / HUD.count * HUD[dbV].id * 0.1
+				HUD[dbV].barw = cur / max * HUD[dbV].w
 			end
 
 			if tobool( HudV( dbV .. "tr" ) ) then

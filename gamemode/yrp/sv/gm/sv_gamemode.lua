@@ -488,14 +488,9 @@ function setbodygroups( ply )
 	local chaTab = ply:GetChaTab()
 	if chaTab != nil then
 		ply:SetSkin( chaTab.skin )
-		ply:SetBodygroup( 0, chaTab.bg0 )
-		ply:SetBodygroup( 1, chaTab.bg1 )
-		ply:SetBodygroup( 2, chaTab.bg2 )
-		ply:SetBodygroup( 3, chaTab.bg3 )
-		ply:SetBodygroup( 4, chaTab.bg4 )
-		ply:SetBodygroup( 5, chaTab.bg5 )
-		ply:SetBodygroup( 6, chaTab.bg6 )
-		ply:SetBodygroup( 7, chaTab.bg7 )
+		for i = 0, 19 do
+			ply:SetBodygroup( i, chaTab["bg" .. i] )
+		end
 	end
 end
 

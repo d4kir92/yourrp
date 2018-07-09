@@ -740,6 +740,18 @@ function openCharacterSelection()
 							tmpChar.bg5 = _characters[i].char.bg5 or 0
 							tmpChar.bg6 = _characters[i].char.bg6 or 0
 							tmpChar.bg7 = _characters[i].char.bg7 or 0
+							tmpChar.bg8 = _characters[i].char.bg8 or 0
+							tmpChar.bg9 = _characters[i].char.bg9 or 0
+							tmpChar.bg10 = _characters[i].char.bg10 or 0
+							tmpChar.bg11 = _characters[i].char.bg11 or 0
+							tmpChar.bg12 = _characters[i].char.bg12 or 0
+							tmpChar.bg13 = _characters[i].char.bg13 or 0
+							tmpChar.bg14 = _characters[i].char.bg14 or 0
+							tmpChar.bg15 = _characters[i].char.bg15 or 0
+							tmpChar.bg16 = _characters[i].char.bg16 or 0
+							tmpChar.bg17 = _characters[i].char.bg17 or 0
+							tmpChar.bg18 = _characters[i].char.bg18 or 0
+							tmpChar.bg19 = _characters[i].char.bg19 or 0
 
 							function tmpChar:Paint( pw, ph )
 								if tmpChar:IsHovered() then
@@ -780,14 +792,9 @@ function openCharacterSelection()
 										if charplayermodel.Entity != nil then
 											charplayermodel.Entity:SetModelScale( self.playermodelsize )
 											charplayermodel.Entity:SetSkin( self.skin )
-											charplayermodel.Entity:SetBodygroup( 0, self.bg0 )
-											charplayermodel.Entity:SetBodygroup( 1, self.bg1 )
-											charplayermodel.Entity:SetBodygroup( 2, self.bg2 )
-											charplayermodel.Entity:SetBodygroup( 3, self.bg3 )
-											charplayermodel.Entity:SetBodygroup( 4, self.bg4 )
-											charplayermodel.Entity:SetBodygroup( 5, self.bg5 )
-											charplayermodel.Entity:SetBodygroup( 6, self.bg6 )
-											charplayermodel.Entity:SetBodygroup( 7, self.bg7 )
+											for bgx = 0, 19 do
+												charplayermodel.Entity:SetBodygroup( bgx, self["bg" .. bgx] )
+											end
 										end
 									end
 								end

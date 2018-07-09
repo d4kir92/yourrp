@@ -12,14 +12,10 @@ SQL_ADD_COLUMN( _db_name, "groupID", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( _db_name, "playermodelID", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "skin", "INT DEFAULT 1" )
-SQL_ADD_COLUMN( _db_name, "bg0", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg1", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg2", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg3", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg4", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg5", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg6", "INT DEFAULT 0" )
-SQL_ADD_COLUMN( _db_name, "bg7", "INT DEFAULT 0" )
+
+for i = 0, 19 do
+	SQL_ADD_COLUMN( _db_name, "bg" .. i, "INT DEFAULT 0" )
+end
 
 SQL_ADD_COLUMN( _db_name, "storage", "TEXT DEFAULT ' '" )
 
@@ -518,9 +514,7 @@ net.Receive( "EnterWorld", function( len, ply )
 	end
 end)
 
-util.AddNetworkString( "get_menu_bodygroups" )
-
-net.Receive( "get_menu_bodygroups", function( len, ply )
+function SendBodyGroups( ply )
 	local _charid = ply:CharID()
 	local _result = SQL_SELECT( "yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber( _charid ) )
 	if wk( _result ) then
@@ -528,9 +522,7 @@ net.Receive( "get_menu_bodygroups", function( len, ply )
 		local _role = ply:GetRolTab()
 		_result.playermodels = _role.playermodels
 		_result.playermodelsnone = _role.playermodelsnone
-		if _result.playermodels == "" and _result.playermodelsnone == "" then
-			-- nothing
-		else
+		if _result.playermodels != "" and _result.playermodelsnone != "" then
 			net.Start( "get_menu_bodygroups" )
 				net.WriteTable( _result )
 			net.Send( ply )
@@ -538,6 +530,11 @@ net.Receive( "get_menu_bodygroups", function( len, ply )
 	else
 		printGM( "note", "get_menu_bodygroups failed!" )
 	end
+end
+
+util.AddNetworkString( "get_menu_bodygroups" )
+net.Receive( "get_menu_bodygroups", function( len, ply )
+	SendBodyGroups( ply )
 end)
 
 util.AddNetworkString( "inv_bg_up" )
@@ -587,6 +584,7 @@ net.Receive( "inv_pm_up", function( len, ply )
 	local _charid = ply:CharID()
 	SQL_UPDATE( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
 	ply:UpdateBackpack()
+	SendBodyGroups( ply )
 end)
 
 util.AddNetworkString( "inv_pm_do" )
@@ -598,4 +596,5 @@ net.Receive( "inv_pm_do", function( len, ply )
 	local _charid = ply:CharID()
 	SQL_UPDATE( "yrp_characters", "playermodelID" .. " = " .. tonumber( _cur ), "uniqueID = " .. tonumber( _charid ) )
 	ply:UpdateBackpack()
+	SendBodyGroups( ply )
 end)

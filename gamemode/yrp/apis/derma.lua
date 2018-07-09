@@ -209,6 +209,10 @@ AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
 AddDesignIcon("clear", "vgui/material/icon_clear.png")
 AddDesignIcon("launch", "vgui/material/icon_launch.png")
 AddDesignIcon("steam", "vgui/material/icon_steam.png")
+AddDesignIcon("play", "vgui/material/icon_play.png")
+AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
+AddDesignIcon("pause", "vgui/material/icon_pause.png")
+AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
 local _delay = 1
 local _get_design = true
 
