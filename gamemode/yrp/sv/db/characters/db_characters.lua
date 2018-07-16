@@ -526,6 +526,10 @@ function SendBodyGroups( ply )
 			net.Start( "get_menu_bodygroups" )
 				net.WriteTable( _result )
 			net.Send( ply )
+		else
+			net.Start( "get_menu_bodygroups" )
+				net.WriteTable( {} )
+			net.Send( ply )
 		end
 	else
 		printGM( "note", "get_menu_bodygroups failed!" )

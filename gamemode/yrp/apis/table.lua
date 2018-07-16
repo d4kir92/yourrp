@@ -5,9 +5,8 @@ function combineTables( tab1, tab2 )
 		table.insert( tab1, item )
 	end
 	for i, item in pairs( tab1 ) do
-		if item == "" then
-			table.RemoveByValue( tab1, "" )
-		end
+		table.RemoveByValue( tab1, "" )
+		table.RemoveByValue( tab1, " " )
 	end
 	return tab1
 end

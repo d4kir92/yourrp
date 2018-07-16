@@ -36,9 +36,9 @@ function addDPanel( parent, w, h, x, y, string, dbTable, help )
 	local tmp = createVGUI( "DPanel", parent, w, h, x, y )
 	function tmp:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, color )
-		draw.SimpleTextOutlined( string, "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( string, "sef", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
-	local tmp2 = addInfoBox( tmp, ctr(w)-ctr( 40 ), 0, help )
+	local tmp2 = addInfoBox( tmp, ctr(w) - ctr( 40 ), 0, help )
 	return tmp
 end
 
@@ -293,9 +293,9 @@ function pmIsFromRole( id, playermodel )
 	return false
 end
 
-function updatePlayermodels( table, id, uniqueID )
+function updatePlayermodels( tab, id, uniqueID )
 	local tmpString = ""
-	for k, v in pairs( table ) do
+	for k, v in pairs( tab ) do
 		if v.selected then
 			if tmpString == "" then
 				tmpString = v.model

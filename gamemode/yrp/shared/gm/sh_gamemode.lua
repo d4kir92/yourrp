@@ -16,9 +16,13 @@ GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.141" --do NOT change this!
+GM.Version = "0.9.142" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
+
+function GetRPBase()
+	return GAMEMODE.rpbase
+end
 
 VERSIONART = "github"
 for i, wsi in pairs( engine.GetAddons() ) do
@@ -245,14 +249,37 @@ function IsEntityAlive( ply, uid )
 	return false
 end
 
+if SERVER then
+	util.AddNetworkString( "getServerVersion" )
+	net.Receive( "getServerVersion", function( len, ply )
+		net.Start( "getServerVersion" )
+			net.WriteString( GAMEMODE.Version )
+			net.WriteBool( game.IsDedicated() )
+		net.Send( ply )
+	end)
+
+	local tmp = SQL_SELECT( "yrp_general", "text_gamemode_name", nil )
+	if wk(tmp) then
+		tmp = tmp[1]
+		GM.BaseName = SQL_STR_OUT( tmp.text_gamemode_name )
+	end
+
+	util.AddNetworkString( "getGamemodename" )
+	net.Receive( "getGamemodename", function( len, ply )
+		net.Start("getGamemodename")
+			net.WriteString( GAMEMODE.BaseName )
+		net.Send(ply)
+	end)
+end
+
 if CLIENT then
+	net.Receive( "getGamemodename", function( len )
+		GAMEMODE.BaseName = net.ReadString()
+	end)
+
 	timer.Simple( 1, function()
 		net.Start( "getGamemodename" )
 		net.SendToServer()
-	end)
-
-	net.Receive( "getGamemodename", function( len, ply )
-		GAMEMODE.BaseName = net.ReadString()
 	end)
 end
 

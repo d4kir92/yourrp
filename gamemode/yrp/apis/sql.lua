@@ -205,6 +205,7 @@ function GetSQLModeName()
 	elseif GetSQLMode() == 1 then
 		return "MYSQL"
 	end
+	return "!BROKEN!"
 end
 
 function SetSQLMode(sqlmode, force)
@@ -620,7 +621,7 @@ if SERVER then
 	if wk(_sql_settings) then
 		_sql_settings = _sql_settings[1]
 		YRPSQL.schema = _sql_settings.string_database
-		YRPSQL.int_mode = tonumber(_sql_settings.int_mode)
+		SetSQLMode(_sql_settings.int_mode)
 	end
 
 	if GetSQLMode() == 1 then

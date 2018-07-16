@@ -1269,7 +1269,7 @@ function GM:InitPostEntity()
 			end
 
 			_warning:MakePopup()
-		elseif not serverIsDedicated and serverIsDedicated ~= nil and LocalPlayer():HasAccess() then
+		elseif not ServerIsDedicated and ServerIsDedicated ~= nil and LocalPlayer():HasAccess() then
 			LocalPlayer():SetNWBool("warning_dedicated", true)
 
 			timer.Create("yrp_warning_dedicated_server", 10, 0, function()

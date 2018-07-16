@@ -100,6 +100,8 @@ function SetRole( ply, rid, force )
 end
 
 function set_role( ply, rid )
+	ply:SetNWBool("serverdedicated", game.IsDedicated())
+
 	if ply:HasCharacterSelected() then
 		local _char_id = ply:CharID()
 		if _char_id != nil then

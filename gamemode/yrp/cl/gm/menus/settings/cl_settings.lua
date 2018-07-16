@@ -15,15 +15,19 @@ include("cl_settings_server_whitelist.lua")
 -- CLIENT
 
 -- WIP
-include("cl_settings_server_yourrp_addons.lua")
+include("cl_settings_server_groups_and_roles.lua")
 
 --SERVER
 include("cl_settings_server_status.lua")
-include("cl_settings_server_database.lua")
-include("cl_settings_server_usergroups.lua")
+include("cl_settings_server_feedback.lua")
+
 include("cl_settings_server_general.lua")
 include("cl_settings_server_realistic.lua")
-include("cl_settings_server_feedback.lua")
+
+include("cl_settings_server_database.lua")
+include("cl_settings_server_usergroups.lua")
+
+include("cl_settings_server_yourrp_addons.lua")
 
 local _yrp_settings = {}
 _yrp_settings.design = {}
@@ -127,16 +131,16 @@ function OpenSettings()
 	settingsWindow.window:AddCategory(_server_admin)
 	--settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
 	settingsWindow.window:AddSite("open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png")
-	settingsWindow.window:AddSite("open_server_roles", "settings_groupsandroles", _server_admin, "icon16/group_edit.png")
+	settingsWindow.window:AddSite("open_server_roles", "Groups and Roles [OLD]", _server_admin, "icon16/group_edit.png")
 	settingsWindow.window:AddSite("open_server_give", "settings_players", _server_admin, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "settings_licenses", _server_admin, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png")
 	settingsWindow.window:AddSite("open_server_map", "settings_map", _server_admin, "icon16/map.png")
 	settingsWindow.window:AddSite("open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png")
 
-	--local _wip = "wip"
-	--settingsWindow.window:AddCategory(_wip)
-	--settingsWindow.window:AddSite("open_server_yourrp_addons", "settings_yourrp_addons", _wip, "icon16/plugin.png")
+	local _wip = "wip"
+	settingsWindow.window:AddCategory(_wip)
+	--settingsWindow.window:AddSite("open_server_groups_and_roles", "settings_groupsandroles", _wip, "icon16/group.png")
 
 	local _settings_server_maintance = "settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)

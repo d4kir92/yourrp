@@ -130,7 +130,7 @@ function createStorageItem( item, duid )
 		else
 			_i.model = createD( "DModelPanel", _i, ctrb( _w - 50 ), ctrb( _h ), ctrb( 0 ), ctrb( 0 ) )
 			_i.model:SetModel( item.WorldModel )
-			if _i.model.Entity != NULL then
+			if _i.model.Entity != NULL and _i.model.Entity != nil then
 				local _mins, _maxs = _i.model.Entity:GetRenderBounds()
 				local _x = _maxs.x - _mins.x
 				local _y = _maxs.y - _mins.y

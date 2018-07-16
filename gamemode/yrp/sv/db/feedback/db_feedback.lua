@@ -33,7 +33,7 @@ util.AddNetworkString( "add_feedback" )
 
 net.Receive( "add_feedback", function( len, ply )
 	local _fb = net.ReadTable()
-	local _insert = SQL_INSERT_INTO( _db_name, "title, feedback, contact, steamid, steamname", "'" .. _fb.title .. "', '" .. _fb.feedback .. "', '" .. _fb.contact .. "', '" .. _fb.steamid .. "', '" .. _fb.steamname .. "'" )
+	local _insert = SQL_INSERT_INTO( _db_name, "title, feedback, contact, steamid, steamname", "'" .. SQL_STR_IN(_fb.title) .. "', '" .. SQL_STR_IN(_fb.feedback) .. "', '" .. SQL_STR_IN(_fb.contact) .. "', '" .. SQL_STR_IN(_fb.steamid) .. "', '" .. SQL_STR_IN(_fb.steamname) .. "'" )
 	net.Start( "yrp_noti" )
 		net.WriteString( "newfeedback" )
 		net.WriteString( "" )

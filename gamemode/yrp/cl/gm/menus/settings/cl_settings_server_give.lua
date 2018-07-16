@@ -23,7 +23,7 @@ net.Receive( "setting_players", function( len )
 		local tmpX, tmpY = gui.MousePos()
 		tmpX = tmpX - ctr( 4 )
 		tmpY = tmpY - ctr( 4 )
-		local _tmpPanel = createVGUI( "DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX*2 - 10, tmpY*2 - 10 )
+		local _tmpPanel = createVGUI( "DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10 )
 		_tmpPanel:SetPos( tmpX, tmpY )
 		_tmpPanel.ready = false
 		timer.Simple( 0.2, function()
@@ -41,10 +41,12 @@ net.Receive( "setting_players", function( len )
 
 			local _giveComboBox = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 85 )
 
-			net.Receive( "give_getGroTab", function( len )
-				local _tmpGroupList = net.ReadTable()
-				for k, v in pairs( _tmpGroupList ) do
-					_giveComboBox:AddChoice( v.groupID, v.uniqueID )
+			net.Receive( "give_getGroTab", function(le)
+				if pa(_giveComboBox) then
+					local _tmpGroupList = net.ReadTable()
+					for k, v in pairs( _tmpGroupList ) do
+						_giveComboBox:AddChoice( v.groupID, v.uniqueID )
+					end
 				end
 			end)
 			net.Start( "give_getGroTab" )
@@ -52,19 +54,21 @@ net.Receive( "setting_players", function( len )
 
 			local _giveComboBox2 = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 185 )
 			function _giveComboBox:OnSelect( panel, index, value )
-				_giveComboBox2:Clear()
-				net.Start( "give_getRolTab" )
-					net.WriteString( tostring( value ) )
-				net.SendToServer()
-				net.Receive( "give_getRolTab", function()
-					local _tmpRolTab = net.ReadTable()
-					for k, v in pairs( _tmpRolTab ) do
-						_giveComboBox2:AddChoice( v.roleID, v.uniqueID )
-					end
-				end)
+				if pa(_giveComboBox2) then
+					_giveComboBox2:Clear()
+					net.Start( "give_getRolTab" )
+						net.WriteString( tostring( value ) )
+					net.SendToServer()
+					net.Receive( "give_getRolTab", function( le)
+						local _tmpRolTab = net.ReadTable()
+						for k, v in pairs( _tmpRolTab ) do
+							_giveComboBox2:AddChoice( v.roleID, v.uniqueID )
+						end
+					end)
+				end
 			end
 
-			local _giveButton = createVGUI( "DButton", _giveFrame, 380, 50, 10, 185+10+50 )
+			local _giveButton = createVGUI( "DButton", _giveFrame, 380, 50, 10, 185 + 60 )
 			_giveButton:SetText( lang_string( "give" ) )
 			function _giveButton:DoClick()
 				if isnumber( tonumber( _giveComboBox2:GetOptionData( _giveComboBox2:GetSelectedID() ) ) ) then
@@ -80,7 +84,7 @@ net.Receive( "setting_players", function( len )
 				draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
 				draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "role" ) .. ":", "sef", ctr( 10 ), ctr( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( lang_string( "role" ) .. ":", "sef", ctr( 10 ), ctr( 85 + 65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			_giveFrame:MakePopup()
@@ -98,7 +102,6 @@ end)
 
 hook.Add( "open_server_give", "open_server_give", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
 
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()

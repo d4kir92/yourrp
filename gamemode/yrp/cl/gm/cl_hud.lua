@@ -215,5 +215,11 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 		surface.SetMaterial( _yrp_icon	)
 		surface.DrawTexturedRect( _sp.x + _sp.w / 2 - ctrb( 246 ) / 2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
 	end
+
+	if !ply:GetNWBool("serverdedicated", false) and ply:HasAccess() then
+		draw.SimpleTextOutlined("ADMIN NOTIFICATION", "mat1header", ScrW2(), ctr(50), Color( 255, 255, 0, 255 ), 1, 1, 1, Color( 0, 0, 0, 255 ))
+		draw.SimpleTextOutlined("Local/p2p Server is for testing only, use a Dedicated Server for real use!", "mat1header", ScrW2(), ctr(100), Color( 255, 255, 0, 255 ), 1, 1, 1, Color( 0, 0, 0, 255 ))
+		draw.SimpleTextOutlined("None Dedicated Server can break the database", "mat1header", ScrW2(), ctr(150), Color( 255, 255, 0, 255 ), 1, 1, 1, Color( 0, 0, 0, 255 ))
+	end
 end)
 --##############################################################################

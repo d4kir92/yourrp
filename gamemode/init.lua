@@ -68,12 +68,18 @@ AddCSLuaFile( "yrp/cl/gm/menus/cl_scoreboard.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_vehicle_options.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings.lua" )
 
-AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_general.lua" )
-AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_usergroups.lua" )
-AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_realistic.lua" )
-AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_yourrp_addons.lua" )
+AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_groups_and_roles.lua" )
+
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_status.lua" )
+AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_feedback.lua" )
+
+AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_general.lua" )
+AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_realistic.lua" )
+
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_database.lua" )
+AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_usergroups.lua" )
+
+AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_yourrp_addons.lua" )
 
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_client_charakter.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_client_hud.lua" )
@@ -85,7 +91,6 @@ AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_licenses.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_shops.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_roles.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_whitelist.lua" )
-AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings_server_feedback.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_smartphone.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_emotes.lua" )
 

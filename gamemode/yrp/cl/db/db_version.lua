@@ -85,7 +85,7 @@ function showVersion()
 			end
 
 			local _serverSort = ""
-			if serverIsDedicated then
+			if ServerIsDedicated then
 				GAMEMODE.dedicated = "Dedicated"
 				_serverSort = lang_string( "serverdedicated" )
 			else
@@ -176,6 +176,6 @@ end
 
 net.Receive( "getServerVersion", function( len )
 	serverVersion = net.ReadString()
-	serverIsDedicated = net.ReadBool()
+	ServerIsDedicated = net.ReadBool()
 	showVersion()
 end)

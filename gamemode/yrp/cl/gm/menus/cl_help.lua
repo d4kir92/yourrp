@@ -195,8 +195,10 @@ net.Receive("getsitestaff", function(len)
 
 			function tmp:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
-				draw.SimpleTextOutlined(lang_string("name") .. ": " .. pl:RPName(), "mat1text", ph + ctr(10), ctr(25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined(lang_string("usergroup") .. ": " .. pl:GetUserGroup(), "mat1text", ph + ctr(10), ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+				if ea(pl) then
+					draw.SimpleTextOutlined(lang_string("name") .. ": " .. pl:RPName(), "mat1text", ph + ctr(10), ctr(25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(lang_string("usergroup") .. ": " .. pl:GetUserGroup(), "mat1text", ph + ctr(10), ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+				end
 			end
 
 			tmp.avatar = createD("AvatarImage", tmp, ctr(200 - 8), ctr(200 - 8), ctr(4), ctr(4))
