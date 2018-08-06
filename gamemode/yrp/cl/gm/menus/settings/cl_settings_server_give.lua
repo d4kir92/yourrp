@@ -45,7 +45,7 @@ net.Receive( "setting_players", function( len )
 				if pa(_giveComboBox) then
 					local _tmpGroupList = net.ReadTable()
 					for k, v in pairs( _tmpGroupList ) do
-						_giveComboBox:AddChoice( v.groupID, v.uniqueID )
+						_giveComboBox:AddChoice( v.string_name, v.uniqueID )
 					end
 				end
 			end)

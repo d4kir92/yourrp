@@ -32,7 +32,7 @@ function allowedToUseDoor( id, ply )
 			else
 				local _tmpChaTab = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmpBuildingTable[1].ownerCharID )
 				if wk( _tmpChaTab ) then
-					local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID )
+					local _tmpGroupTable = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID )
 
 					if tostring( _tmpBuildingTable[1].ownerCharID ) == tostring( ply:CharID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
 						return true
@@ -150,7 +150,7 @@ function loadDoors()
 					end
 				else
 					if tonumber( w.groupID ) != -1 then
-						local _tmpGroupName = SQL_SELECT( "yrp_groups", "groupID", "uniqueID = " .. w.groupID )
+						local _tmpGroupName = SQL_SELECT( "yrp_ply_groups", "groupID", "uniqueID = " .. w.groupID )
 						if wk( _tmpGroupName ) then
 							_tmpGroupName = _tmpGroupName[1]
 							if wk( _tmpGroupName ) then
@@ -362,7 +362,7 @@ net.Receive( "setBuildingOwnerGroup", function( len, ply )
 
 	SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID )
 
-	local _tmpGroupName = SQL_SELECT( "yrp_groups", "groupID", "uniqueID = " .. _tmpGroupID )
+	local _tmpGroupName = SQL_SELECT( "yrp_ply_groups", "groupID", "uniqueID = " .. _tmpGroupID )
 	local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
 	for k, v in pairs( _tmpDoors ) do
 		if tonumber( v:GetNWString( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
@@ -384,7 +384,7 @@ net.Receive( "setBuildingOwnerGroup", function( len, ply )
 end)
 
 net.Receive( "getBuildingGroups", function( len, ply )
-	local _tmpTable = SQL_SELECT( "yrp_groups", "*", nil )
+	local _tmpTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
 
 	net.Start( "getBuildingGroups" )
 		net.WriteTable( _tmpTable )
@@ -470,7 +470,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
 					owner = _tmpChaTab.rpname
 				end
 			elseif _tmpTable.groupID != "" then
-				local _tmpGroTab = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _tmpTable.groupID )
+				local _tmpGroTab = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. _tmpTable.groupID )
 				if wk( _tmpGroTab ) then
 					_tmpGroTab = _tmpGroTab[1]
 					owner = _tmpGroTab.groupID

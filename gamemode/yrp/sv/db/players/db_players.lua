@@ -232,9 +232,9 @@ function set_role_values( ply )
 			end
 
 			if groTab != nil then
-				ply:SetNWString( "groupName", groTab.groupID )
+				ply:SetNWString( "groupName", groTab.string_name )
 				ply:SetNWString( "groupUniqueID", groTab.uniqueID )
-				ply:SetNWString( "groupColor", groTab.color )
+				ply:SetNWString( "groupColor", groTab.string_color )
 				ply:SetTeam( tonumber( groTab.uniqueID ) )
 			else
 				printGM( "note", "[SET ROLE VALUES] No group selected -> Suicide" )
@@ -364,7 +364,7 @@ end)
 util.AddNetworkString( "give_getGroTab" )
 
 net.Receive( "give_getGroTab", function( len, ply )
-	local _tmpGroupList = SQL_SELECT( "yrp_groups", "*", nil )
+	local _tmpGroupList = SQL_SELECT( "yrp_ply_groups", "*", nil )
 	if _tmpGroupList != nil then
 		net.Start( "give_getGroTab" )
 			net.WriteTable( _tmpGroupList )
@@ -391,7 +391,7 @@ end)
 net.Receive( "getPlyList", function( len, ply )
 	local _tmpChaList = SQL_SELECT( "yrp_characters", "*", nil )
 	local _tmpRoleList = SQL_SELECT( "yrp_roles", "*", nil )
-	local _tmpGroupList = SQL_SELECT( "yrp_groups", "*", nil )
+	local _tmpGroupList = SQL_SELECT( "yrp_ply_groups", "*", nil )
 	if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
 
 		net.Start( "getPlyList" )

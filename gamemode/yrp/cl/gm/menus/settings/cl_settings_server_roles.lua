@@ -4,8 +4,8 @@ local _w = 500
 local _br = 10
 local _lbr = 5
 
-local groupID = ""
-local groupUniqueID = -1
+local string_name = ""
+local groupUniqueID = 0
 
 local _start_role = ""
 
@@ -192,8 +192,8 @@ function addDBLicenses( parent, w, h, x, y, stringPanel, checked, tmpTable, dbTa
 end
 
 
-function toColor( string )
-	local colorTable = string.Explode( ",", string )
+function toColor( str )
+	local colorTable = string.Explode( ",", str )
 	return Color( colorTable[1], colorTable[2], colorTable[3] )
 end
 
@@ -750,7 +750,7 @@ function getCurrentRole()
 end
 
 function getCurrentGroup()
-	local id = -1
+	local id = 0
 	if yrp_groups_dbTable != nil then
 		for k, v in pairs( yrp_groups_dbTable ) do
 			if v.selected then
@@ -762,7 +762,7 @@ function getCurrentGroup()
 end
 
 function deleteDBGroup()
-	local tmp = -1
+	local tmp = 0
 	for k, v in pairs( yrp_groups_dbTable ) do
 		if v.selected and tonumber( v.removeable ) == 1 then
 			tmp = k
@@ -809,7 +809,7 @@ function deleteDBRole()
 end
 
 function dupDBGroup( uniqueID )
-	if uniqueID != -1 then
+	if uniqueID != 0 then
 		net.Start( "dupDBGroup" )
 			net.WriteString( uniqueID )
 		net.SendToServer()
@@ -818,10 +818,10 @@ function dupDBGroup( uniqueID )
 	end
 end
 
-function dupDBRole( groupID, uniqueID )
+function dupDBRole( string_name, uniqueID )
 	if uniqueID != -1 then
 		net.Start( "dupDBRole" )
-			net.WriteString( groupID )
+			net.WriteString( string_name )
 			net.WriteString( uniqueID )
 		net.SendToServer()
 	else
@@ -829,19 +829,14 @@ function dupDBRole( groupID, uniqueID )
 	end
 end
 
-function addDBRole( groupID )
-	if tonumber( groupID ) != -1 then
+function addDBRole( string_name )
+	if tonumber( string_name ) != -1 then
 		net.Start( "addDBRole" )
-			net.WriteString( groupID )
+			net.WriteString( string_name )
 		net.SendToServer()
 	else
 		printGM( "note", "no group selected!" )
 	end
-end
-
-function addDBGroup()
-	net.Start( "addDBGroup" )
-	net.SendToServer()
 end
 
 function addDBBar( parent, w, h, x, y, string, color, dbTable, tmpmin, tmpmax, tmpreg, dbTable, dbMin, dbMax, dbReg, dbWhile, tmpreg2, dbReg2, help )
@@ -959,7 +954,7 @@ net.Receive( "yrp_roles", function( len )
 			yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
 			local tmp = yrp_roles[k]
 			tmp.uniqueID = v.uniqueID
-			tmp.groupID = v.groupID
+			tmp.string_name = tostring(v.string_name) .. " [UID: " .. v.uniqueID .. "]"
 			tmp.id = k
 			function tmp:Paint( pw, ph )
 				if tmp:IsHovered() then
@@ -1029,7 +1024,7 @@ net.Receive( "yrp_roles", function( len )
 				addDBComboBox( rolesInfo, 800, 80, 810, 1830, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "", "here you need to select the role below you (lower role), needed for instructor" )
 
 				if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
-					addDBComboBox( rolesInfo, 1610, 80, 0, 1920, lang_string( "rolegroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "groupID", "uniqueID = " .. tmp.uniqueID .. "", "which group it is in" )
+					addDBComboBox( rolesInfo, 1610, 80, 0, 1920, lang_string( "rolegroup" ), yrp_groups_dbTable, "string_name", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "string_name", "uniqueID = " .. tmp.uniqueID .. "", "which group it is in" )
 				end
 
 				--3.Spalte
@@ -1042,7 +1037,7 @@ net.Receive( "yrp_roles", function( len )
 	end
 end)
 
-net.Receive( "yrp_groups", function( len )
+net.Receive( "yrp_ply_groups", function( len )
 	if yrp_groups != nil then
 		for k, v in pairs( yrp_groups ) do
 			v:Remove()
@@ -1056,7 +1051,7 @@ net.Receive( "yrp_groups", function( len )
 			yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
 			local tmp = yrp_groups[k]
 			tmp.uniqueID = v.uniqueID
-			tmp.groupID = v.groupID
+			tmp.string_name = tostring(v.string_name) .. " [UID: " .. v.uniqueID .. "]"
 			tmp.id = k
 			function tmp:Paint( pw, ph )
 				if self:IsHovered() then
@@ -1070,8 +1065,8 @@ net.Receive( "yrp_groups", function( len )
 				if tonumber( yrp_groups_dbTable[k].removeable ) == 0 then
 					_pre = "(" .. lang_string( "default" ) .. ") "
 				end
-				draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].color ) )
-				draw.SimpleTextOutlined( _pre .. yrp_groups_dbTable[k].groupID, "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.RoundedBox( 0, 0, 0, ph, ph, toColor( yrp_groups_dbTable[k].string_color ) )
+				draw.SimpleTextOutlined( _pre .. yrp_groups_dbTable[k].string_name .. " [UID: " .. yrp_groups_dbTable[k].uniqueID .. "]", "sef", ph+_lbr, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 			function tmp:DoClick()
 				groupUniqueID = v.uniqueID
@@ -1081,7 +1076,7 @@ net.Receive( "yrp_groups", function( len )
 					net.WriteString( tmp.uniqueID )
 				net.SendToServer()
 
-				groupID = yrp_groups_dbTable[tmp.id].groupID
+				string_name = yrp_groups_dbTable[tmp.id].string_name
 
 				if groupsInfo != nil then
 					groupsInfo:Remove()
@@ -1095,14 +1090,6 @@ net.Receive( "yrp_groups", function( len )
 				groupsInfo = createVGUI( "DPanel", settingsWindow.window.site, 1700, 1700, _lbr + _w + _br, 5 )
 				function groupsInfo:Paint( pw, ph )
 					draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 0 ) )
-				end
-
-				addDBTextEntry( groupsInfo, 800, 80, 0, 0, lang_string( "groupname" ), v.groupID, yrp_groups_dbTable[k], "yrp_groups", "groupID", "uniqueID = " .. tmp.uniqueID .. "", "Name of the group" )
-
-				addDBColorMixer( groupsInfo, 800, 800, 0, 80 + _br, v.color, yrp_groups_dbTable[k], "yrp_groups", "color", "uniqueID = " .. tmp.uniqueID .. "" )
-
-				if tonumber( yrp_groups_dbTable[k].removeable ) == 1 then
-					addDBComboBox( groupsInfo, 800, 80, 0, 90 + 800 + _br, lang_string( "uppergroup" ), yrp_groups_dbTable, "groupID", "uniqueID", yrp_groups_dbTable[k], "yrp_groups", "uppergroup", "uniqueID = " .. tmp.uniqueID .. "", "the group, where this group is inside" )
 				end
 			end
 			groupsList:AddItem( tmp )
@@ -1118,46 +1105,6 @@ net.Receive( "setting_getroles", function( len )
 		--draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), _yrp.colors.panel )
 	end
 
-	-- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS -- GROUPS
-	local groupsAdd = addButton( 50, 50, _lbr, _lbr, settingsWindow.window.site )
-	function groupsAdd:Paint( pw, ph )
-		if groupsAdd:IsHovered() then
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-		else
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-		end
-		draw.SimpleTextOutlined( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function groupsAdd:DoClick()
-		addDBGroup()
-	end
-
-	local groupsDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _lbr, settingsWindow.window.site )
-	function groupsDup:Paint( pw, ph )
-		if groupsDup:IsHovered() then
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-		else
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-		end
-		draw.SimpleTextOutlined( lang_string( "duplicate" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function groupsDup:DoClick()
-		dupDBGroup( getCurrentGroup() )
-	end
-
-	local groupsRem = addButton( 50, 50, _lbr + _w - 50, _lbr, settingsWindow.window.site )
-	function groupsRem:Paint( pw, ph )
-		if groupsRem:IsHovered() then
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-		else
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-		end
-		draw.SimpleTextOutlined( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function groupsRem:DoClick()
-		deleteDBGroup()
-	end
-
 	local groupsHeader = createVGUI( "DPanel", settingsWindow.window.site, _w, 40, 5, 65 )
 	function groupsHeader:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
@@ -1170,7 +1117,7 @@ net.Receive( "setting_getroles", function( len )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 	end
 
-	net.Start( "yrp_groups" )
+	net.Start( "yrp_ply_groups" )
 	net.SendToServer()
 
 	-- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
@@ -1217,7 +1164,7 @@ net.Receive( "setting_getroles", function( len )
 	local rolesHeader = createD( "DPanel", settingsWindow.window.site, ctr( _w ), ctr( 40 ), ctr( 10 ), ctr( _roles_height + 60 ) )
 	function rolesHeader:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
-		draw.SimpleTextOutlined( groupID .. " - " .. lang_string( "roles" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( string_name .. " - " .. lang_string( "roles" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 
 	local _r_l = {}

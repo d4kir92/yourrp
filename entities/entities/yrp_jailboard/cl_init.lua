@@ -49,7 +49,7 @@ net.Receive( "openLawBoard", function( len )
 				if tonumber( v.uniqueID ) == tonumber( _gAccess ) then
 					_hasaccess = true
 				end
-				_access:AddChoice( v.groupID, v.uniqueID, _hasaccess )
+				_access:AddChoice( v.string_name, v.uniqueID, _hasaccess )
 			end
 			function _access:OnSelect( index, value, data )
 				net.Start( "db_jailaccess" )

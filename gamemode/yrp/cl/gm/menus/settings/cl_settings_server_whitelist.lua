@@ -23,7 +23,7 @@ net.Receive( "getRoleWhitelist", function( len )
 				if ( w.uniqueID == v.roleID ) then
 					for m, x in pairs( _tmpGroupList ) do
 						if ( x.uniqueID == w.groupID ) then
-							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.groupID, w.roleID )
+							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.string_name, w.roleID )
 							break
 						end
 					end
@@ -31,7 +31,7 @@ net.Receive( "getRoleWhitelist", function( len )
 				elseif v.roleID == "-1" then
 					for m, x in pairs( _tmpGroupList ) do
 						if ( x.uniqueID == v.groupID ) then
-							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.groupID, "" )
+							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.string_name, "" )
 							break
 						elseif v.groupID == "-1" then
 							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, lang_string( "all" ), lang_string( "all" ) )
@@ -59,7 +59,7 @@ net.Receive( "getRoleWhitelist", function( len )
 
 			local _whitelistComboBox = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 200 )
 			for k, v in pairs( _tmpGroupList ) do
-				_whitelistComboBox:AddChoice( v.groupID, v.uniqueID )
+				_whitelistComboBox:AddChoice( v.string_name, v.uniqueID )
 			end
 
 			local _whitelistComboBox2 = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 300 )
@@ -121,7 +121,7 @@ net.Receive( "getRoleWhitelist", function( len )
 
 			local _whitelistComboBox = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 200 )
 			for k, v in pairs( _tmpGroupList ) do
-				_whitelistComboBox:AddChoice( v.groupID, v.uniqueID )
+				_whitelistComboBox:AddChoice( v.string_name, v.uniqueID )
 			end
 
 			local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 400 )

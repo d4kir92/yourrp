@@ -188,20 +188,25 @@ function getRoles( uid, parent )
 end
 
 function addGroup( grp, parent )
-	if parent != NULL and pa( parent ) then
+	if parent != NULL and pa( parent ) and tobool(grp.bool_visible) then
 		local _grp = createD( "DYRPCollapsibleCategory", parent, parent:GetWide() - ctrb( 40 ), ctrb( 200 ), ctrb( 0 ), ctrb( 0 ) )
-		_grp:SetHeader( grp.groupID )
+		_grp:SetHeader( grp.string_name )
 		_grp:SetSpacing( 30 )
-		_grp.color = string.Explode( ",", grp.color )
+		_grp.color = string.Explode( ",", grp.string_color )
 		_grp.color = Color( _grp.color[1], _grp.color[2], _grp.color[3] )
 		_grp.tbl = grp
+		_grp.locked = tobool(grp.bool_locked)
 		function _grp:PaintHeader( pw, ph )
 			local _hl = 0
 			if self.header:IsHovered() then
 				_hl = 70
 			end
 			draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r + _hl, self.color.g + _hl, self.color.b + _hl ), true, true, !self:IsOpen(), !self:IsOpen() )
-			surfaceText( self.tbl.groupID, "roleInfoHeader", ph/2, ph/2, Color( 255, 255, 255 ), 0, 1 )
+			local _x = ph / 2
+			if grp.string_icon != "" then
+				_x = ctr(10) + ph + ctr(10)
+			end
+			surfaceText( self.tbl.string_name, "roleInfoHeader", _x, ph / 2, Color( 255, 255, 255 ), 0, 1 )
 
 			local _box = ctrb( 50 )
 			local _dif = 50
@@ -212,6 +217,9 @@ function addGroup( grp, parent )
 			end
 			draw.RoundedBox( 0, pw - _box - _br, _br, _box, _box, Color( self.color.r - _dif, self.color.g - _dif, self.color.b - _dif ) )
 			surfaceText( _tog, "roleInfoHeader", pw - _box/2 - _br, _br + _box/2, Color( 255, 255, 255 ), 1, 1 )
+			if tobool(grp.bool_locked) then
+				DrawIcon(GetDesignIcon("lock"), ph - ctr(8), ph - ctr(8), pw - 2 * ph, ctr(4), Color(255, 0, 0, 200))
+			end
 		end
 		function _grp:PaintContent( pw, ph )
 			draw.RoundedBoxEx( ctrb( 30 ), 0, 0, pw, ph, Color( self.color.r+40, self.color.g+40, self.color.b+40 ), false, false, true, true )
@@ -219,14 +227,21 @@ function addGroup( grp, parent )
 		_grp:SetHeaderHeight( ctrb( 100 ) )
 
 		function _grp:DoClick()
-			if self:IsOpen() then
-				getRoles( grp.uniqueID, _grp )
-			else
-				self:ClearContent()
+			if !tobool(grp.bool_locked) then
+				if self:IsOpen() then
+					getRoles( grp.uniqueID, _grp )
+				else
+					self:ClearContent()
+				end
 			end
 		end
 
-		if tostring( grp.uppergroup ) != "-1" then
+		if grp.string_icon != "" then
+			_grp.icon = createD("DHTML", _grp, _grp:GetTall() - ctr(16), _grp:GetTall() - ctr(16), ctr(26), ctr(8))
+			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall() ) )
+		end
+
+		if tostring( grp.int_parentgroup ) != "0" then
 			parent:Add( _grp )
 		else
 			parent:AddItem( _grp )
@@ -242,7 +257,7 @@ end
 function getGroups( uid, parent )
 	net.Receive( "get_grps", function( len )
 		local _groups = net.ReadTable()
-		for i, grp in pairs( _groups ) do
+		for i, grp in SortedPairsByMemberValue(_groups, "int_position") do
 			addGroup( grp, parent )
 		end
 	end)
@@ -335,7 +350,7 @@ function openRoleMenu()
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
 		end
 
-		getGroups( -1, _rm.pl )
+		getGroups( 0, _rm.pl )
 
 
 

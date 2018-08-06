@@ -177,7 +177,7 @@ function useFunction( string )
 	end
 end
 
-function keyDown( key, string, string2, distance )
+function keyDown( key, string, distance )
 	local ply = LocalPlayer()
 	local plyTrace = ply:GetEyeTrace()
 	local _return = false
@@ -193,14 +193,8 @@ function keyDown( key, string, string2, distance )
 		if ply:KeyDown(key) and !keys[tostring(key)] then
 			keys[tostring(key)] = true
 			timer.Simple( 0.2, function()
-				if ply:KeyDown(key) then
-					if string2 != nil then
-						useFunction( string2 )
-					end
-				else
-					if string != nil then
-						useFunction( string )
-					end
+				if string != nil then
+					useFunction( string )
 				end
 				keys[tostring(key)] = false
 			end)
@@ -208,33 +202,29 @@ function keyDown( key, string, string2, distance )
 	end
 end
 
-function keyPressed( key, string, string2, distance )
-	local ply = LocalPlayer()
-	local plyTrace = ply:GetEyeTrace()
-	local _return = false
-	if distance and ea( plyTrace.Entity ) then
-		if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
-			_return = true
+function keyPressed( key, string, distance )
+	if ChatIsClosedForChat() then
+		local ply = LocalPlayer()
+		local plyTrace = ply:GetEyeTrace()
+		local _return = false
+		if distance and ea( plyTrace.Entity ) then
+			if plyTrace.Entity:GetPos():Distance( ply:GetPos() ) > distance then
+				_return = true
+			end
 		end
-	end
-	if !_return then
-		if keys[tostring(key)] == nil then
-			keys[tostring(key)] = false
-		end
-		if input.IsKeyDown(key) and !keys[tostring(key)] then
-			keys[tostring(key)] = true
-			timer.Simple( 0.14, function()
-				if input.IsKeyDown(key) then
-					if string2 != nil then
-						useFunction( string2 )
-					end
-				else
+		if !_return then
+			if keys[tostring(key)] == nil then
+				keys[tostring(key)] = false
+			end
+			if input.IsKeyDown(key) and !keys[tostring(key)] then
+				keys[tostring(key)] = true
+				timer.Simple( 0.14, function()
 					if string != nil then
 						useFunction( string )
 					end
-				end
-				keys[tostring(key)] = false
-			end)
+					keys[tostring(key)] = false
+				end)
+			end
 		end
 	end
 end
@@ -388,42 +378,42 @@ function KeyPress()
 		end
 	end
 
-	keyPressed( KEY_ESCAPE, "close_all", nil, nil )
+	keyPressed( KEY_ESCAPE, "close_all" )
 
-	keyDown( IN_ATTACK2, "scoreboard", nil, nil )
+	keyPressed( IN_ATTACK2, "scoreboard" )
 
-	keyPressed( KEY_F1, "openHelpMenu", nil, nil )
-	keyPressed( KEY_F7, "openFeedbackMenu", nil, nil )
+	keyPressed( KEY_F1, "openHelpMenu" )
+	keyPressed( KEY_F7, "openFeedbackMenu" )
 
-	keyPressed( get_keybind("menu_emotes"), "ToggleEmotesMenu", nil, nil )
+	keyPressed( get_keybind("menu_emotes"), "ToggleEmotesMenu" )
 
-	keyPressed( get_keybind("menu_settings"), "openSettings", nil, nil )
+	keyPressed( get_keybind("menu_settings"), "openSettings" )
 
-	keyPressed( get_keybind("menu_inventory"), "openInventory", nil, nil )
-	keyPressed( get_keybind("menu_appearance"), "openAppearance", nil, nil )
+	keyPressed( get_keybind("menu_inventory"), "openInventory" )
+	keyPressed( get_keybind("menu_appearance"), "openAppearance" )
 
-	keyPressed( get_keybind("menu_character_selection"), "openCharMenu", nil, nil )
-	keyPressed( get_keybind("menu_role"), "openRoleMenu", nil, nil )
-	keyPressed( get_keybind("menu_buy"), "openBuyMenu", nil, nil )
+	keyPressed( get_keybind("menu_character_selection"), "openCharMenu" )
+	keyPressed( get_keybind("menu_role"), "openRoleMenu" )
+	keyPressed( get_keybind("menu_buy"), "openBuyMenu" )
 
-	keyPressed( KEY_E, "openInteractMenu", nil, 100 )
+	keyPressed( KEY_E, "openInteractMenu", 100 )
 
-	keyPressed( get_keybind("menu_options_door"), "openOptions", nil, 100 )
-	keyPressed( get_keybind("menu_options_vehicle"), "openOptions", nil, 100 )
+	keyPressed( get_keybind("menu_options_door"), "openOptions", 100 )
+	keyPressed( get_keybind("menu_options_vehicle"), "openOptions", 100 )
 
-	keyPressed( get_keybind("toggle_map"), "openMap", nil, nil )
+	keyPressed( get_keybind("toggle_map"), "openMap" )
 
-	keyPressed( get_keybind("toggle_mouse"), "F11Toggle", nil, nil )
+	keyPressed( get_keybind("toggle_mouse"), "F11Toggle" )
 
-	keyPressed( KEY_PAGEUP, "vyes", nil )
-	keyPressed( KEY_PAGEDOWN, "vno", nil )
+	keyPressed( KEY_PAGEUP, "vyes" )
+	keyPressed( KEY_PAGEDOWN, "vno" )
 
-	keyPressed( get_keybind("drop_item"), "dropitem", nil, nil )
+	keyPressed( get_keybind("drop_item"), "dropitem" )
 
-	keyPressed( get_keybind("weaponlowering"), "weaponlowering", nil, nil )
+	keyPressed( get_keybind("weaponlowering"), "weaponlowering" )
 
-	keyPressed( KEY_UP, "openSP", nil )
-	keyPressed( KEY_DOWN, "closeSP", nil )
+	keyPressed( KEY_UP, "openSP" )
+	keyPressed( KEY_DOWN, "closeSP" )
 end
 hook.Add( "Think", "Thinker", KeyPress)
 

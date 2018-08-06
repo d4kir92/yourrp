@@ -61,7 +61,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		DHR(dhr)
 
 		Scroller.YourRPDatabase.host = DStringBox(bl, YRP_SQL.string_host, "hostname", "update_string_host")
-		Scroller.YourRPDatabase.port = DIntBox(bl, YRP_SQL.int_port, "port", "update_int_port", 99999)
+		Scroller.YourRPDatabase.port = OLDDIntBox(bl, YRP_SQL.int_port, "port", "update_int_port", 99999)
 		Scroller.YourRPDatabase.data = DStringBox(bl, YRP_SQL.string_database, "database", "update_string_database")
 		Scroller.YourRPDatabase.user = DStringBox(bl, YRP_SQL.string_username, "username", "update_string_username")
 		Scroller.YourRPDatabase.pass = DStringBox(bl, YRP_SQL.string_password, "password", "update_string_password")

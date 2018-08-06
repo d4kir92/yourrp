@@ -30,18 +30,18 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	local NAME = createD( "DYRPPanelPlus", PARENT, ctr( 500 ), ctr( 100 ), ctr( 20 ), ctr( 20 ) )
 	NAME:INITPanel( "DTextEntry" )
 	NAME:SetHeader( lang_string( "name" ) )
-	NAME:SetText( ug.name )
+	NAME:SetText( string.upper(ug.name) )
 	function NAME.plus:OnChange()
-		UGS[CURRENT_USERGROUP].name = self:GetText()
+		UGS[CURRENT_USERGROUP].name = string.upper(self:GetText())
 		net.Start( "usergroup_update_name" )
 			net.WriteString( CURRENT_USERGROUP )
-			net.WriteString( self:GetText() )
+			net.WriteString( string.upper(self:GetText()) )
 		net.SendToServer()
 	end
 	net.Receive( "usergroup_update_name", function(len2)
 		local name = net.ReadString()
-		UGS[CURRENT_USERGROUP].name = name
-		NAME:SetText( UGS[CURRENT_USERGROUP].name )
+		UGS[CURRENT_USERGROUP].name = string.upper(name)
+		NAME:SetText( string.upper(UGS[CURRENT_USERGROUP].name) )
 	end)
 
 	-- COLOR
@@ -485,7 +485,7 @@ function AddUG( tbl )
 	_ug:SetText( "" )
 	function _ug:Paint( pw, ph )
 		self.color = StringToColor( UGS[self.uid].color )
-		surfaceButton( self, pw, ph, string.upper( UGS[self.uid].name ), self.color, ph + ctr( 20 ), ph / 2, 0, 1 )
+		surfaceButton( self, pw, ph, string.upper( UGS[self.uid].name ), self.color, ph + ctr( 20 ), ph / 2, 0, 1, false )
 
 		if UGS[tonumber( tbl.uniqueID )].icon == "" then
 			surfaceBox( ctr( 4 ), ctr( 4 ), ph - ctr( 8 ), ph - ctr( 8 ), Color( 255, 255, 255, 255 ) )

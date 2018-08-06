@@ -35,7 +35,7 @@ end
 
 function hasLowerGroupPlayers( id )
 	for k, group in pairs( sb_groups ) do
-		if tonumber( group.uppergroup ) == tonumber( id ) then
+		if tonumber( group.int_parentgroup ) == tonumber( id ) then
 			if hasGroupPlayers( group.uniqueID ) then
 				return true
 			elseif hasLowerGroupPlayers( group.uniqueID ) then
@@ -428,7 +428,7 @@ function drawGroupPlayers( id )
 	end
 end
 
-function drawGroup( id, name, color )
+function drawGroup( id, name, color, icon )
 	local ply = LocalPlayer()
 
 	elePos.y = elePos.y + 50
@@ -436,16 +436,26 @@ function drawGroup( id, name, color )
 	local _color = string.Explode( ",", color )
 	local _tmpPanel = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
 	_tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
-	function _tmpPanel:Paint( pw, ph )
+	function _tmpPanel:Paint(pw, ph)
 		draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-		draw.SimpleTextOutlined( name, "sef", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		local _x = ctr(10)
+		if icon != "" then
+			_x = ctr(120)
+		end
+		draw.SimpleTextOutlined( name, "sef", _x, ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
+
+	if icon != "" then
+		local ico = createD("DHTML", _tmpPanel, ctr(84), ctr(84), ctr(8), ctr(8))
+		ico:SetHTML(GetHTMLImage(icon, ico:GetWide(), ico:GetTall()))
+	end
+
 	if hasGroupPlayers( id ) then
-		elePos.y = elePos.y + 50
+		elePos.y = elePos.y + 100
 		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
 		_tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
 		function _tmpHeader:Paint( pw, ph )
-			draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+			--draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
 			--draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local _w = ctr( 128+16 )
@@ -512,7 +522,7 @@ end
 
 function hasLowerGroup( id )
 	for k, group in pairs( sb_groups ) do
-		if tonumber( group.uppergroup ) == tonumber( id ) then
+		if tonumber( group.int_parentgroup ) == tonumber( id ) then
 			return true
 		end
 	end
@@ -522,7 +532,7 @@ end
 function drawLowerGroup( id )
 	for k, group in pairs( sb_groups ) do
 		if tonumber( id ) == tonumber( group.uniqueID ) then
-			local _tmpGroup = drawGroup( group.uniqueID, group.groupID, group.color )
+			local _tmpGroup = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon )
 			return _tmpGroup
 		end
 	end
@@ -532,7 +542,7 @@ function tryLowerGroup( id )
 	if hasLowerGroup( id ) then
 		elePos.x = elePos.x + ctr( 6 )
 		for k, group in pairs( sb_groups ) do
-			if tonumber( group.uppergroup ) == tonumber( id ) then
+			if tonumber( group.int_parentgroup ) == tonumber( id ) then
 				local tmp = drawLowerGroup( group.uniqueID )
 				tryLowerGroup( group.uniqueID )
 
@@ -549,7 +559,7 @@ function drawGroupRow( id )
 	if hasGroupRowPlayers( id ) then
 		for k, group in pairs( sb_groups ) do
 			if tonumber( id ) == tonumber( group.uniqueID ) then
-				local tmp = drawGroup( group.uniqueID, group.groupID, group.color )
+				local tmp = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon )
 				tryLowerGroup( group.uniqueID )
 
 				elePos.y = elePos.y + ctr( 6 )
@@ -564,7 +574,7 @@ end
 function drawGroups()
 	local _not_first = false
 	for k, group in pairs( sb_groups ) do
-		if tonumber( group.uppergroup ) == tonumber( -1 ) then
+		if tonumber( group.int_parentgroup ) == tonumber( 0 ) then
 			if hasGroupRowPlayers( group.uniqueID ) then
 				if _not_first then
 					elePos.y = elePos.y + 40
@@ -578,10 +588,418 @@ function drawGroups()
 	end
 end
 
+function drawRest()
+	local count = 0
+	for k, pl in pairs(player.GetAll()) do
+		if pl:GetNWString("groupName", "---") == "---" and pl:GetNWString("roleName", "---") == "---" then
+			count = count + 1
+		end
+	end
+
+	if count > 0 then
+		elePos.y = elePos.y + 100
+
+		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr(200) + count * ctr(100), ctr( elePos.x ), ctr( elePos.y ) )
+		_tmpHeader.color = Color(0, 0, 0)
+		function _tmpHeader:Paint( pw, ph )
+			draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+			draw.SimpleTextOutlined( lang_string( "unassigned" ), "sef", ctr( 10 ), ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+
+		elePos.y = elePos.y + 100
+
+		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
+		_tmpHeader.color = Color(0, 0, 0)
+		function _tmpHeader:Paint( pw, ph )
+			--draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+			--draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+			local _w = ctr( 128+16 )
+
+			local str = lang_string( "name" )
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+				str = lang_string( "name" ) .. "/" .. lang_string( "usergroup" )
+			end
+
+			draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+
+			str = ""
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
+				str = lang_string( "frags" )
+			end
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+				if str != "" then
+					str = str .. "/"
+				end
+				str = str .. lang_string( "deaths" )
+			end
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+				_w = _w + ctr( 500 )
+				draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			end
+
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
+				_w = _w + ctr( 400 )
+				draw.SimpleTextOutlined( "Language", "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			end
+
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
+				_w = _w + ctr( 400 )
+				draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			end
+
+			if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
+				draw.SimpleTextOutlined( lang_string( "os" ), "sef", pw - ctr( 150 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			end
+
+			draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			--draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+
+		elePos.y = elePos.y + 50
+		for k, pl in pairs(player.GetAll()) do
+			if pl:GetNWString("groupName", "---") == "---" and pl:GetNWString("roleName", "---") == "---" then
+				local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 128 ), ctr( elePos.x ), ctr( elePos.y ) )
+				_tmpPly:SetText( "" )
+				_tmpPly.gerade = k%2
+				_tmpPly.level = 1
+				_tmpPly.rpname = pl:RPName() or ""
+				_tmpPly.frags = pl:Frags()
+				_tmpPly.deaths = pl:Deaths()
+				_tmpPly.rank = pl:GetUserGroup() or ""
+				_tmpPly.ping = pl:Ping() or ""
+				_tmpPly.usergroup = pl:GetUserGroup() or ""
+				_tmpPly.steamname = pl:SteamName() or ""
+				_tmpPly.lang = pl:GetLanguageShort() or ""
+				_tmpPly.language = pl:GetLanguage() or ""
+				_tmpPly.money = pl:GetNWString( "money" )
+				_tmpPly.moneybank = pl:GetNWString( "moneybank" )
+				_tmpPly.os = pl:GetNWString( "yrp_os", "other" )
+				local _pt = string.FormattedTime( pl:GetNWFloat( "uptime_current", 0 ) )
+				if _pt.m < 10 then
+					_pt.m = "0" .. _pt.m
+				end
+				if _pt.h < 10 then
+					_pt.h = "0" .. _pt.h
+				end
+				_tmpPly.playtime = _pt.h .. ":" .. _pt.m
+
+				local _tmp_p_ava = createD( "DPanel", _tmpPly, ctr( 128-8 ), ctr( 128-8 ), ctr( 4 ), ctr( 4 ) )
+				_tmp_p_ava.Avatar = createD( "AvatarImage", _tmp_p_ava, ctr( 128-8 ), ctr( 128-8 ), 0, 0 )
+				_tmp_p_ava.Avatar:SetPlayer( pl, ctr( 128-8 ) )
+				_tmp_p_ava.Avatar:SetPaintedManually( true )
+				function _tmp_p_ava:Paint( pw, ph )
+					render.ClearStencil()
+					render.SetStencilEnable( true )
+
+						render.SetStencilWriteMask( 1 )
+						render.SetStencilTestMask( 1 )
+
+						render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+
+						render.SetStencilFailOperation( STENCILOPERATION_INCR )
+						render.SetStencilPassOperation( STENCILOPERATION_KEEP )
+						render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
+
+						render.SetStencilReferenceValue( 1 )
+
+						drawRoundedBox( ph/2, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
+
+						render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+
+						self.Avatar:SetPaintedManually(false)
+						self.Avatar:PaintManual()
+						self.Avatar:SetPaintedManually(true)
+
+					render.SetStencilEnable( false )
+				end
+
+				function _tmpPly:Paint( pw, ph )
+					local _extra = 0
+					if self.gerade == 0 then
+						_extra = 50
+					end
+					if self:IsHovered() then
+						if self.gerade == 1 then
+						end
+						draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( 255, 255, 0, 200 ), true, false, true, false )
+					else
+						draw.RoundedBoxEx( ph/2, 0, 0, pw, ph, Color( _extra, _extra, _extra, 200 ), true, false, true, false )
+					end
+
+					local _w = ctr( 128+16 )
+					local namey = ph/4
+					if !pl:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+						namey = ph/2
+					end
+					draw.SimpleTextOutlined( self.rpname, "sef", _w, namey, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+						draw.SimpleTextOutlined( string.upper( self.rank ), "sef", _w, ph*3/4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					end
+
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+						_w = _w + ctr( 500 )
+					end
+
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
+						local y = ph / 4
+						if !pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+							y = ph / 2
+						end
+						draw.SimpleTextOutlined( self.frags, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					end
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+						local y = ph * 3 / 4
+						if !pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
+							y = ph / 2
+						end
+						draw.SimpleTextOutlined( self.deaths, "sef", _w, y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					end
+
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
+						local icon_size = ctr( 100 )
+						_w = _w + ctr( 400 )
+						DrawIcon( GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+						if self:IsHovered() then
+							draw.SimpleTextOutlined( string.upper(self.lang), "sef", _w + ( icon_size * 1.49 ) / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+						end
+					end
+
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
+						_w = _w + ctr( 400 )
+						draw.SimpleTextOutlined( self.playtime, "sef", _w, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					end
+
+					if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
+						local icon_size = ctr( 100 )
+						DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
+					end
+					draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				end
+
+				function _tmpPly:DoClick()
+					local _mx, _my = gui.MousePos()
+					local _menu = createD( "DYRPMenu", nil, ctr( 500 ), ctr( 50 ), _mx - ctr( 25 ), _my - ctr( 25 ) )
+					_menu:MakePopup()
+
+					local osp = _menu:AddOption( lang_string( "openprofile" ), "icon16/page.png" )
+					function osp:DoClick()
+						pl:ShowProfile()
+					end
+
+					_menu:AddSpacer()
+
+					local csid = _menu:AddOption( lang_string( "copysteamid" ), "icon16/page_copy.png" )
+					function csid:DoClick()
+						SetClipboardText( pl:SteamID() )
+						_menu:Remove()
+					end
+					local csid64 = _menu:AddOption( lang_string( "copysteamid64" ), "icon16/page_copy.png" )
+					function csid64:DoClick()
+						SetClipboardText( pl:SteamID64() )
+						_menu:Remove()
+					end
+					local crpname = _menu:AddOption( lang_string( "copyrpname" ), "icon16/page_copy.png" )
+					function crpname:DoClick()
+						SetClipboardText( pl:RPName() )
+						_menu:Remove()
+					end
+					local csname = _menu:AddOption( lang_string( "copysteamname" ), "icon16/page_copy.png" )
+					function csname:DoClick()
+						SetClipboardText( pl:SteamName() )
+						_menu:Remove()
+					end
+					_menu:AddSpacer()
+
+					_menu:AddOption( "Language: " .. self.language, "icon16/map.png" )
+					_menu:AddSpacer()
+
+					if LocalPlayer():HasAccess() and notself( pl ) then
+						local ban = _menu:AddOption( lang_string( "ban" ), "icon16/world_link.png" )
+						function ban:DoClick()
+							net.Start( "pl_ban" )
+								net.WriteEntity( pl )
+							net.SendToServer()
+						end
+						local kick = _menu:AddOption( lang_string( "kick" ), "icon16/world_go.png" )
+						function kick:DoClick()
+							net.Start( "pl_kick" )
+								net.WriteEntity( pl )
+							net.SendToServer()
+						end
+						_menu:AddSpacer()
+					end
+
+					if LocalPlayer():HasAccess() and notself( pl ) then
+						local tpto = _menu:AddOption( lang_string( "tpto" ), "icon16/arrow_right.png" )
+						function tpto:DoClick()
+							net.Start( "tp_tpto" )
+								net.WriteEntity( pl )
+							net.SendToServer()
+						end
+						local bring = _menu:AddOption( lang_string( "bring" ), "icon16/arrow_redo.png" )
+						function bring:DoClick()
+							net.Start( "tp_bring" )
+								net.WriteEntity( pl )
+							net.SendToServer()
+						end
+					end
+
+					if LocalPlayer():HasAccess() then
+						if !pl:GetNWBool( "injail", false ) then
+							local jail = _menu:AddOption( lang_string( "jail" ), "icon16/lock_go.png" )
+							function jail:DoClick()
+								net.Start( "tp_jail" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local unjail = _menu:AddOption( lang_string( "unjail" ), "icon16/lock_open.png" )
+							function unjail:DoClick()
+								net.Start( "tp_unjail" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+						_menu:AddSpacer()
+					end
+
+					if LocalPlayer():HasAccess() then
+						if !pl:GetNWBool( "ragdolled", false ) then
+							local ragdoll = _menu:AddOption( lang_string( "ragdoll" ), "icon16/user_red.png" )
+							function ragdoll:DoClick()
+								net.Start( "ragdoll" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local unragdoll = _menu:AddOption( lang_string( "unragdoll" ), "icon16/user_green.png" )
+							function unragdoll:DoClick()
+								net.Start( "unragdoll" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+						if !pl:IsFlagSet( FL_FROZEN ) then
+							local freeze = _menu:AddOption( lang_string( "freeze" ), "icon16/user_suit.png" )
+							function freeze:DoClick()
+								net.Start( "freeze" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local unfreeze = _menu:AddOption( lang_string( "unfreeze" ), "icon16/user_gray.png" )
+							function unfreeze:DoClick()
+								net.Start( "unfreeze" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+					end
+
+					if LocalPlayer():HasAccess() then
+						if !pl:GetNWBool( "godmode", false ) then
+							local god = _menu:AddOption( lang_string( "god" ), "icon16/star.png" )
+							function god:DoClick()
+								net.Start( "god" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local ungod = _menu:AddOption( lang_string( "ungod" ), "icon16/stop.png" )
+							function ungod:DoClick()
+								net.Start( "ungod" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+						if !pl:GetNWBool( "cloaked", false ) then
+							local cloak = _menu:AddOption( lang_string( "cloak" ), "icon16/status_offline.png" )
+							function cloak:DoClick()
+								net.Start( "cloak" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local uncloak = _menu:AddOption( lang_string( "uncloak" ), "icon16/status_online.png" )
+							function uncloak:DoClick()
+								net.Start( "uncloak" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+						if !pl:GetNWBool( "blinded", false ) then
+							local blind = _menu:AddOption( lang_string( "blind" ), "icon16/weather_sun.png" )
+							function blind:DoClick()
+								net.Start("blind")
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local unblind = _menu:AddOption( lang_string( "unblind" ), "icon16/weather_clouds.png" )
+							function unblind:DoClick()
+								net.Start( "unblind" )
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+						if !pl:IsOnFire() then
+							local ignite = _menu:AddOption( lang_string( "ignite" ), "icon16/fire.png" )
+							function ignite:DoClick()
+								net.Start("ignite")
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						else
+							local extinguish = _menu:AddOption( lang_string( "extinguish" ), "icon16/water.png" )
+							function extinguish:DoClick()
+								net.Start("extinguish")
+									net.WriteEntity( pl )
+								net.SendToServer()
+								_menu:Remove()
+							end
+						end
+
+						local slay = _menu:AddOption( lang_string( "slay" ), "icon16/delete.png" )
+						function slay:DoClick()
+							net.Start( "slay" )
+								net.WriteEntity( pl )
+							net.SendToServer()
+							_menu:Remove()
+						end
+						local slap = _menu:AddOption( lang_string( "slap" ), "icon16/heart_delete.png" )
+						function slap:DoClick()
+							net.Start( "slap" )
+								net.WriteEntity( pl )
+							net.SendToServer()
+						end
+					end
+				end
+
+				elePos.y = elePos.y + 128
+			end
+		end
+	end
+end
+
 function drawScoreboard()
 	elePos.x = ctr( 10 )
 	elePos.y = ctr( -50 )
 	drawGroups()
+	drawRest()
 end
 
 function BScrW()

@@ -5,6 +5,7 @@ yrpChat = yrpChat or {}
 local _delay = 4
 local _fadeout = CurTime() + _delay
 local _chatIsOpen = false
+local chatclosedforkeybinds = true
 _showChat = true
 
 function update_chat_choices()
@@ -25,6 +26,14 @@ end
 hook.Add( "yrp_language_changed", "chat_language_changed", function()
 	update_chat_choices()
 end)
+
+function IsChatOpen()
+	return _chatIsOpen
+end
+
+function ChatIsClosedForChat()
+	return chatclosedforkeybinds
+end
 
 function checkChatVisible()
 	if _chatIsOpen then
@@ -166,6 +175,8 @@ function InitYRPChat()
 
 			_chatIsOpen = true
 			gamemode.Call( "StartChat" )
+
+			chatclosedforkeybinds = false
 		end
 
 		function yrpChat.closeChatbox()
@@ -179,6 +190,10 @@ function InitYRPChat()
 
 			yrpChat.writeField:SetText( "" )
 			gamemode.Call( "ChatTextChanged", "" )
+
+			timer.Simple(0.1, function()
+				chatclosedforkeybinds = true
+			end)
 		end
 
 		local oldAddText = oldAddText or chat.AddText

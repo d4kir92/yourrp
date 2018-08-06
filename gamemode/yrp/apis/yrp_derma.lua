@@ -10,8 +10,11 @@ function DrawText( tab )
 	tab.ax = tab.ax or 1
 	tab.ay = tab.ay or 1
 	tab.text = tab.text or "NoText"
+	if tab.lforce or tab.lforce == nil then
+		tab.text = lang_string( tab.text )
+	end
 	tab.font = tab.font or "DermaDefault"
-	draw.SimpleTextOutlined( lang_string( tab.text ), tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, tab.br, tab.brcolor )
+	draw.SimpleTextOutlined( tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, tab.br, tab.brcolor )
 end
 
 function DrawPanel(panel, tab)
@@ -57,7 +60,7 @@ function DGroup( tab )
 	dgroup.header = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y )
 	function dgroup.header:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
-		ph = ctr( 50 )
+		ph = ctr(50)
 		local text = {}
 		text.text = lang_string( tab.name )
 		text.x = pw / 2
@@ -65,10 +68,12 @@ function DGroup( tab )
 		text.font = "mat1header"
 		text.color = Color( 0, 0, 0, 255 )
 		text.br = 0
+		text.ax = 1
+		text.ay = 1
 		DrawText( text )
 	end
 
-	dgroup.content = createD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 2 * tab.br - ctr( 50 ), tab.x + tab.br, tab.y + tab.br + ctr( 50 ) )
+	dgroup.content = createD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - ctr( 50 ), tab.br, ctr( 50 ) )
 	dgroup.content:EnableVerticalScrollbar(true)
 	function dgroup.content:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.bgcolor )
@@ -77,7 +82,7 @@ function DGroup( tab )
 	if tab.parent != nil then
 		if tab.parent.AddPanel != nil then
 			tab.parent:AddPanel( dgroup.header )
-		else
+		elseif tab.parent.AddItem != nil then
 			tab.parent:AddItem( dgroup.header )
 		end
 	end
@@ -309,7 +314,7 @@ function DFloatLine( tab, value, name, netstr, max, min, dmg )
 	return dfloatline.dnumberwang
 end
 
-function DIntBox( tab, value, name, netstr, max, min )
+function OLDDIntBox( tab, value, name, netstr, max, min )
 	tab = tab or {}
 	tab.parent = tab.parent or nil
 	if tab.parent != nil then

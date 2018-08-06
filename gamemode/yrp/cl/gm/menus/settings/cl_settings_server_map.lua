@@ -6,7 +6,7 @@ net.Receive( "getMapList", function( len )
 	local _tmpBool = net.ReadBool()
 
 	local ply = LocalPlayer()
-	
+
 	if !_tmpBool then
 		local _tmpTable = net.ReadTable()
 		_groups = net.ReadTable()
@@ -87,7 +87,7 @@ net.Receive( "getMapList", function( len )
 
 			local tmpGroup = createD( "DComboBox", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
 			for k, v in pairs( _groups ) do
-				tmpGroup:AddChoice( v.groupID, v.uniqueID )
+				tmpGroup:AddChoice( v.string_name, v.uniqueID )
 			end
 
 			local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
@@ -134,7 +134,7 @@ net.Receive( "getMapList", function( len )
 			for k, v in pairs( _roles ) do
 				for l, w in pairs( _groups ) do
 					if tonumber( v.groupID ) == tonumber( w.uniqueID ) then
-						tmpRole:AddChoice( "[" .. w.groupID .. "] " .. v.roleID, v.uniqueID )
+						tmpRole:AddChoice( "[" .. w.string_name .. "] " .. v.roleID, v.uniqueID )
 						break
 					end
 				end

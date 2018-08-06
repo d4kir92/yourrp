@@ -119,7 +119,7 @@ end
 
 RegisterWindowFunction( _mat1.name, _mat1.DrawWindow )
 
-function _mat1.DrawButton( btn, pw, ph, text, color, px, py, ax, ah )
+function _mat1.DrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 	--[[ Vars ]]--
 	local _text = text or ""
 
@@ -141,12 +141,15 @@ function _mat1.DrawButton( btn, pw, ph, text, color, px, py, ax, ah )
 		surfaceBox( 0, 0, pw, ctr( _br ), _color_br )
 		surfaceBox( 0, ph-ctr( _br ), pw, ctr( _br ), _color_br )
 
-		surfaceBox( pw - ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( 2*_br ), _color_br )
-		surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( 2*_br ), _color_br )
+		surfaceBox( pw - ctr( _br ), ctr( _br ), ctr( _br ), ph - ctr( 2 * _br ), _color_br )
+		surfaceBox( 0, ctr( _br ), ctr( _br ), ph - ctr( 2 * _br ), _color_br )
 	end
 
 	--[[ text ]]--
-	surfaceText( lang_string( _text ), _mat1.textFont, px or pw/2, py or ph/2, Color( 255, 255, 255 ), ax or 1, ay or 1, 1 )
+	if forcelang then
+		_text = lang_string(_text)
+	end
+	surfaceText( _text, _mat1.textFont, px or pw / 2, py or ph / 2, Color( 255, 255, 255 ), ax or 1, ay or 1, 1 )
 end
 RegisterButtonFunction( _mat1.name, _mat1.DrawButton )
 

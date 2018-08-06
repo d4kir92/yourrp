@@ -129,9 +129,7 @@ function OpenSettings()
 
 	local _server_admin = lang_string("settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)
-	--settingsWindow.window:AddSite( "open_server_general", "general" .. " [NEW!]", _server_admin, "icon16/server_database.png" )
 	settingsWindow.window:AddSite("open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png")
-	settingsWindow.window:AddSite("open_server_roles", "Groups and Roles [OLD]", _server_admin, "icon16/group_edit.png")
 	settingsWindow.window:AddSite("open_server_give", "settings_players", _server_admin, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "settings_licenses", _server_admin, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png")
@@ -140,7 +138,8 @@ function OpenSettings()
 
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
-	--settingsWindow.window:AddSite("open_server_groups_and_roles", "settings_groupsandroles", _wip, "icon16/group.png")
+	settingsWindow.window:AddSite("open_server_roles", lang_string("roles") .. " [OLD]", _wip, "icon16/group_edit.png")
+	settingsWindow.window:AddSite("open_server_groups_and_roles", lang_string("groups") .. " [" .. lang_string("wip") .. "]", _wip, "icon16/group.png") --"settings_groupsandroles", _wip, "icon16/group.png")
 
 	local _settings_server_maintance = "settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)

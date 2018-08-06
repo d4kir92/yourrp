@@ -130,7 +130,7 @@ function Player:GetGroTab()
 			local yrp_characters = self:GetChaTab()
 			if worked( yrp_characters, "yrp_characters in GetGroTab", true ) then
 				if worked( yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true ) then
-					local yrp_groups = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. yrp_characters.groupID )
+					local yrp_groups = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID )
 					if worked( yrp_groups, "yrp_groups GetGroTab", true ) then
 						self.grotab = yrp_groups[1]
 						return self.grotab

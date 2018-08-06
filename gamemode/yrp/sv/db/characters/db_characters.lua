@@ -328,7 +328,7 @@ util.AddNetworkString( "DeleteCharacter" )
 util.AddNetworkString( "CreateCharacter" )
 
 net.Receive( "charGetGroups", function( len, ply )
-	local tmpTable = SQL_SELECT( "yrp_groups", "*", nil )
+	local tmpTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
 	if tmpTable == nil then
 		tmpTable = {}
 	end
@@ -418,7 +418,7 @@ function send_characters( ply )
 				local tmp2 = SQL_SELECT( "yrp_roles", "*", "uniqueID = '" .. tonumber( v.roleID ) .. "'" )
 				if tmp2 != nil and tmp2 != false then
 					tmp2 = tmp2[1]
-					local tmp3 = SQL_SELECT( "yrp_groups", "*", "uniqueID = '" .. tonumber( tmp2.groupID ) .. "'" )
+					local tmp3 = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. tonumber( tmp2.groupID ) .. "'" )
 					if worked( tmp3, "charGetCharacters group" ) then
 						tmp3 = tmp3[1]
 						netTable[_charCount].group = tmp3

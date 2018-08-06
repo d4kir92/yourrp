@@ -13,46 +13,48 @@ end
 function YRPCheckVersion()
 	http.Fetch( "https://docs.google.com/document/d/1mvyVK5OzHajMuq6Od74-RFaaRV7flbR2pYBiyuWVGxA/edit?usp=sharing",
 	function( body, len, headers, code )
-		local StartPos = string.find( body, "#", 1, false )
-		local EndPos = string.find( body, "*", 1, false )
-		local versionOnline = string.sub( body, StartPos+1, EndPos-1 )
-		_version_online = string.Explode( ".", versionOnline )
+		if body != nil then
+			local StartPos = string.find( body, "#", 1, false )
+			local EndPos = string.find( body, "*", 1, false )
+			local versionOnline = string.sub( body, StartPos + 1, EndPos - 1 )
+			_version_online = string.Explode( ".", versionOnline )
 
-		if CLIENT then
-			_version_client = string.Explode( ".", GAMEMODE.Version )
-			if #_version_client == #_version_online then
-				for k, v in pairs( _version_client ) do
-					if tonumber( _version_client[k] ) < tonumber( _version_online[k] ) then
-						_cl_outdated = true
-					elseif tonumber( _version_client[k] ) > tonumber( _version_online[k] ) then
-						_cl_outdated = false
-						ChangeChannel( "canary" )
-					elseif tonumber( _version_client[k] ) == tonumber( _version_online[k] ) then
-						_cl_outdated = false
+			if CLIENT then
+				_version_client = string.Explode( ".", GAMEMODE.Version )
+				if #_version_client == #_version_online then
+					for k, v in pairs( _version_client ) do
+						if tonumber( _version_client[k] ) < tonumber( _version_online[k] ) then
+							_cl_outdated = true
+						elseif tonumber( _version_client[k] ) > tonumber( _version_online[k] ) then
+							_cl_outdated = false
+							ChangeChannel( "canary" )
+						elseif tonumber( _version_client[k] ) == tonumber( _version_online[k] ) then
+							_cl_outdated = false
+						end
 					end
+				else
+					printGM( "error", "VERSION CHECK ERROR CL" )
 				end
-			else
-				printGM( "error", "VERSION CHECK ERROR CL" )
+				return _cl_outdated
 			end
-			return _cl_outdated
-		end
-		if SERVER then
-			_version_server = string.Explode( ".", GAMEMODE.Version )
-			if #_version_server == #_version_online then
-				for k, v in pairs( _version_server ) do
-					if tonumber( _version_server[k] ) < tonumber( _version_online[k] ) then
-						_sv_outdated = true
-					elseif tonumber( _version_server[k] ) > tonumber( _version_online[k] ) then
-						_sv_outdated = false
-						ChangeChannel( "canary" )
-					elseif tonumber( _version_server[k] ) == tonumber( _version_online[k] ) then
-						_sv_outdated = false
+			if SERVER then
+				_version_server = string.Explode( ".", GAMEMODE.Version )
+				if #_version_server == #_version_online then
+					for k, v in pairs( _version_server ) do
+						if tonumber( _version_server[k] ) < tonumber( _version_online[k] ) then
+							_sv_outdated = true
+						elseif tonumber( _version_server[k] ) > tonumber( _version_online[k] ) then
+							_sv_outdated = false
+							ChangeChannel( "canary" )
+						elseif tonumber( _version_server[k] ) == tonumber( _version_online[k] ) then
+							_sv_outdated = false
+						end
 					end
+				else
+					printGM( "error", "VERSION CHECK ERROR SV" )
 				end
-			else
-				printGM( "error", "VERSION CHECK ERROR SV" )
+				return _sv_outdated
 			end
-			return _sv_outdated
 		end
 	end,
 		function( error )

@@ -231,7 +231,7 @@ function openCharacterCreation()
 				selectChoice = true
 			end
 			if pa( charactersGroupCB ) then
-				charactersGroupCB:AddChoice( v.groupID, v.uniqueID, selectChoice )
+				charactersGroupCB:AddChoice( v.string_name, v.uniqueID, selectChoice )
 			else
 				break
 			end

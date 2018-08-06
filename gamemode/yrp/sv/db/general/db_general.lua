@@ -51,6 +51,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'" )
 
 --[[ Gamemode Systems ]]--
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_hunger", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_hunger_health_regeneration", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT DEFAULT '10'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_thirst", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_stamina", "INT DEFAULT 1" )
@@ -492,6 +493,12 @@ util.AddNetworkString( "update_bool_hunger" )
 net.Receive( "update_bool_hunger", function( len, ply )
 	local b = btn( net.ReadBool() )
 	GeneralUpdateBool( ply, "update_bool_hunger", "bool_hunger", b )
+end)
+
+util.AddNetworkString( "update_bool_hunger_health_regeneration" )
+net.Receive( "update_bool_hunger_health_regeneration", function( len, ply )
+	local b = btn( net.ReadBool() )
+	GeneralUpdateBool( ply, "update_bool_hunger_health_regeneration", "bool_hunger_health_regeneration", b )
 end)
 
 util.AddNetworkString( "update_text_hunger_health_regeneration_tickrate" )
@@ -964,8 +971,8 @@ net.Receive( "gethelpmenu", function( len, ply )
 		end
 
 		AddTab( tabs, "YourRP", "" )
-		AddSubTab( subtabs, "YourRP", "news", "getsiteyourrpnews" )
-		AddSubTab( subtabs, "YourRP", "discord", "getsiteyourrpdiscord" )
+		AddSubTab( subtabs, "YourRP", "News", "getsiteyourrpnews" )
+		AddSubTab( subtabs, "YourRP", "Discord", "getsiteyourrpdiscord" )
 		AddSubTab( subtabs, "YourRP", "Translations", "getsiteyourrptranslations", "" )
 
 		net.Start( "gethelpmenu" )

@@ -14,6 +14,7 @@ function PANEL:Init()
 	self.headerheight = 30
 	self.spacing = 10
 	self.headertext = "Header"
+	self.locked = false
 
 	function self:PaintHeader(pw, ph)
 		local _hl = 0
@@ -35,6 +36,10 @@ function PANEL:Init()
 
 		draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif))
 		surfaceText(_tog, "roleInfoHeader", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
+
+		if tobool(self.locked) then
+			DrawIcon(GetDesignIcon("lock"), ph - ctr(8), ph - ctr(8), pw - 2 * ph, ctr(4), Color(255, 0, 0))
+		end
 	end
 
 	function self.header:Paint(w, h)
@@ -42,10 +47,12 @@ function PANEL:Init()
 	end
 
 	function self.header:DoClick()
-		self:GetParent().open = not self:GetParent().open
-		self:GetParent():ReSize()
-		self:GetParent():DoClick()
-		self:GetParent():ClearContent()
+		if not self:GetParent().locked then
+			self:GetParent().open = not self:GetParent().open
+			self:GetParent():ReSize()
+			self:GetParent():DoClick()
+			self:GetParent():ClearContent()
+		end
 	end
 
 	function self:PaintContent(w, h)

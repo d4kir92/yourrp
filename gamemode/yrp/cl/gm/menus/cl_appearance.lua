@@ -10,7 +10,7 @@ net.Receive( "get_menu_bodygroups", function( len )
 		local _skin = tonumber( _tbl.skin )
 		local _pms = combineStringTables( _tbl.playermodels, _tbl.playermodelsnone )
 		local ply = LocalPlayer()
-		if ply:GetNWBool( "bool_appearance_system", false ) then
+		if ply:GetNWBool( "bool_appearance_system", false ) and pa( _yrp_appearance.left ) then
 			for i, child in pairs(_yrp_appearance.left:GetChildren()) do
 				child:Remove()
 			end
@@ -23,7 +23,7 @@ net.Receive( "get_menu_bodygroups", function( len )
 			if _pm == "" or _pm == " " then
 				_pm = "models/player/skeleton.mdl"
 			end
-			if pa( _yrp_appearance.left ) and pm != "" then
+			if pm != "" then
 				local _cbg = {}
 				_cbg[1] = _tbl.bg0 or 0
 				_cbg[2] = _tbl.bg1 or 0

@@ -24,7 +24,7 @@ function sendRoleWhitelist( ply )
 	if ply:CanAccess( "players" ) then
 		local _tmpWhiteList = SQL_SELECT( "yrp_role_whitelist", "*", nil )
 		local _tmpRoleList = SQL_SELECT( "yrp_roles", "groupID, roleID, uniqueID", nil )
-		local _tmpGroupList = SQL_SELECT( "yrp_groups", "groupID, uniqueID", nil )
+		local _tmpGroupList = SQL_SELECT( "yrp_ply_groups", "string_name, uniqueID", nil )
 
 		if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
 			net.Start( "getRoleWhitelist" )
@@ -83,7 +83,7 @@ net.Receive( "whitelistPlayerGroup", function( len, ply )
 			end
 		end
 		local _groupID = net.ReadInt( 16 )
-		local _dbRole = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _groupID )
+		local _dbRole = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. _groupID )
 
 		local res = SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID )
 	end

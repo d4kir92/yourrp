@@ -24,14 +24,14 @@ end
 local _dbs = {}
 table.insert( _dbs, "yrp_usergroups" )
 table.insert( _dbs, "yrp_general" )
---table.insert( _dbs, "yrp_ply_groups" )
---table.insert( _dbs, "yrp_ply_roles" )
+table.insert( _dbs, "yrp_ply_groups" )
+table.insert( _dbs, "yrp_ply_roles" )
 table.insert( _dbs, "yrp_realistic" )
 table.insert( _dbs, "yrp_feedback" )
 table.insert( _dbs, "yrp_sql" )
 
 table.insert( _dbs, "yrp_roles" )
-table.insert( _dbs, "yrp_groups" )
+table.insert( _dbs, "yrp_ply_groups" )
 table.insert( _dbs, "yrp_players" )
 table.insert( _dbs, "yrp_" .. GetMapNameDB() )
 table.insert( _dbs, "yrp_" .. GetMapNameDB() .. "_doors" )

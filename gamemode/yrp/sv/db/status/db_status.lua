@@ -41,7 +41,7 @@ net.Receive( "Connect_Settings_Status", function( len, ply )
 		end
 
 		local _roles = SQL_SELECT("yrp_roles", "*", nil)
-		local _groups = SQL_SELECT("yrp_groups", "*", nil)
+		local _groups = SQL_SELECT("yrp_ply_groups", "*", nil)
 		local _map = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
 		if wk(_roles) then
 			for i, role in pairs(_roles) do
@@ -64,8 +64,8 @@ net.Receive( "Connect_Settings_Status", function( len, ply )
 					end
 				end
 				if _has_no_spawnpoint then
-					_nw_groups[group.groupID] = _nw_groups[group.groupID] or {}
-					_nw_groups[group.groupID]["hasnogroupspawnpoint"] = Color(220, 220, 0)
+					_nw_groups[group.string_name] = _nw_groups[group.string_name] or {}
+					_nw_groups[group.string_name]["hasnogroupspawnpoint"] = Color(220, 220, 0)
 				end
 			end
 			local _no_jailpoint = true

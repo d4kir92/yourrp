@@ -197,7 +197,7 @@ net.Receive("getsitestaff", function(len)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 				if ea(pl) then
 					draw.SimpleTextOutlined(lang_string("name") .. ": " .. pl:RPName(), "mat1text", ph + ctr(10), ctr(25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
-					draw.SimpleTextOutlined(lang_string("usergroup") .. ": " .. pl:GetUserGroup(), "mat1text", ph + ctr(10), ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(lang_string("usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "mat1text", ph + ctr(10), ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
 				end
 			end
 
@@ -559,10 +559,17 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 			if language.percentage ~= nil then
 				language.percentage = tonumber(language.percentage)
-				text = text .. language.percentage .. "% "
+				text = text .. language.percentage .. "% | "
+				if language.percentage == 100 then
+					text = text .. "Was translated by "
+				elseif language.percentage == 0 then
+					text = text .. "Will be translated soon by "
+				else
+					text = text .. "Will be translated by "
+				end
+			else
+				text = text .. "Translated by "
 			end
-
-			text = text .. "translated by "
 
 			if language.author ~= "" then
 				text = text .. language.author
@@ -597,13 +604,12 @@ net.Receive("getsiteyourrptranslations", function(len)
 				self.textcol = Color(255, 255, 255)
 
 				if language.percentage ~= nil then
-					if language.percentage == 100 then
-						self.textcol = Color(0, 255, 0)
-					elseif language.percentage > 90 then
-						self.textcol = Color(160, 255, 160)
+					local colper = 255 / 100 * language.percentage
+					if colper < 120 then
+						colper = 120
 					end
+					self.textcol = Color(255 - colper, colper, 0)
 				end
-
 				if language.author == "" then
 					self.textcol = Color(255, 255, 0)
 				end

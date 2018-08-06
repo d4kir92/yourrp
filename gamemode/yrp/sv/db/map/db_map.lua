@@ -44,7 +44,7 @@ function teleportToSpawnpoint( ply )
 					return true
 				elseif _tmpGroupSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random( _tmpGroupSpawnpoints )
-					printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( groTab.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
+					printGM( "note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring( groTab.string_name ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 
 					local _tmp = string.Explode( ",", _randomSpawnPoint.position )
 					tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
@@ -54,17 +54,17 @@ function teleportToSpawnpoint( ply )
 				else
 					local _has_ug = true
 					local _ug = {}
-					_ug.uppergroup = groTab.uppergroup
+					_ug.int_parentgroup = groTab.int_parentgroup
 
 					while (_has_ug) do
-						_ug = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. _ug.uppergroup )
+						_ug = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. _ug.int_parentgroup )
 
 						if _ug != nil then
 							_ug = _ug[1]
 							local _gs = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "linkID = " .. _ug.uniqueID )
 							if _gs != nil then
 								local _randomSpawnPoint = table.Random( _gs )
-								printGM( "note", "[" .. ply:Nick() .. "] teleported to uppergroup (" .. tostring( _ug.groupID ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
+								printGM( "note", "[" .. ply:Nick() .. "] teleported to int_parentgroup (" .. tostring( _ug.string_name ) .. ") spawnpoint " .. tostring( _randomSpawnPoint.position ) )
 								local _tmp = string.Explode( ",", _randomSpawnPoint.position )
 								tp_to( ply, Vector( _tmp[1], _tmp[2], _tmp[3] ) )
 								_tmp = string.Explode( ",", _randomSpawnPoint.angle )
@@ -75,12 +75,12 @@ function teleportToSpawnpoint( ply )
 							_has_ug = false
 						end
 					end
-					local _str = "[" .. tostring( groTab.groupID ) .. "]" .. " has NO role or group spawnpoint!"
+					local _str = "[" .. tostring( groTab.string_name ) .. "]" .. " has NO role or group spawnpoint!"
 					printGM( "note", _str )
 
 					net.Start( "yrp_noti" )
 						net.WriteString( "nogroupspawn" )
-						net.WriteString( tostring( groTab.groupID ) )
+						net.WriteString( tostring( groTab.string_name ) )
 					net.Broadcast()
 
 					tp_to( ply, ply:GetPos() )
@@ -116,7 +116,7 @@ net.Receive( "getMapList", function( len, ply )
 		if _tmpMapTable == nil or _tmpMapTable == false then
 			_tmpMapTable = {}
 		end
-		local _tmpGroupTable = SQL_SELECT( "yrp_groups", "*", nil )
+		local _tmpGroupTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
 		local _tmpRoleTable = SQL_SELECT( "yrp_roles", "*", nil )
 		local _tmpDealerTable = SQL_SELECT( "yrp_dealers", "*", nil )
 		if _tmpDealerTable == nil or _tmpDealerTable == false then

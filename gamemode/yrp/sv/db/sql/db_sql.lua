@@ -52,9 +52,50 @@ if wk(_init_yrp_sql) then
 	yrp_sql = _init_yrp_sql[1]
 end
 
+-- NEW
+function BroadcastString(tab)
+	for i, pl in pairs(tab.handler) do
+		if pl != tab.ply or tab.force then
+			net.Start(tab.netstr)
+				net.WriteString(tab.uniqueID)
+				net.WriteString(tab.value)
+			net.Send(pl)
+		end
+	end
+end
+
+function BroadcastInt(tab)
+	for i, pl in pairs(tab.handler) do
+		if pl != tab.ply or tab.force then
+			net.Start(tab.netstr)
+				net.WriteString(tab.uniqueID)
+				net.WriteString(tab.value)
+			net.Send(pl)
+		end
+	end
+end
+
+function UpdateValue(tab)
+	tab.uniqueID = tab.uniqueID or 1
+	sql.Query( "UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
+end
+
+function UpdateString(tab)
+	printGM( "db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value )
+	UpdateValue(tab)
+end
+
+function UpdateInt(tab)
+	printGM( "db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value )
+	UpdateValue(tab)
+end
+-- NEW
+
 function DBUpdateValue(db_name, str, l_db, value)
-	l_db[str] = value
-	sql.Query( "UPDATE " .. db_name .. " SET " .. str .. " = '" .. l_db[str] .. "' WHERE uniqueID = '1'")
+	if l_db != nil then
+		l_db[str] = value
+	end
+	sql.Query( "UPDATE " .. db_name .. " SET " .. str .. " = '" .. value .. "' WHERE uniqueID = '1'")
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)

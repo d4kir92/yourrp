@@ -203,8 +203,13 @@ end)
 local HANDLER_USERGROUP = {}
 
 function RemFromHandler_UserGroup( ply, uid )
-	table.RemoveByValue( HANDLER_USERGROUP[uid], ply )
-	printGM( "gm", ply:YRPName() .. " disconnected from UserGroup ( " .. uid .. " )" )
+	HANDLER_USERGROUP[uid] = HANDLER_USERGROUP[uid] or {}
+	if table.HasValue( HANDLER_USERGROUP[uid], ply ) then
+		table.RemoveByValue( HANDLER_USERGROUP[uid], ply )
+		printGM( "gm", ply:YRPName() .. " disconnected from UserGroup ( " .. uid .. " )" )
+	else
+		printGM( "gm", ply:YRPName() .. " not connected to UserGroup ( " .. uid .. " )" )
+	end
 end
 
 function AddToHandler_UserGroup( ply, uid )

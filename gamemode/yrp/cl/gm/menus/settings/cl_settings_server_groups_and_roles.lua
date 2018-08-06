@@ -1,17 +1,9 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-net.Receive("Connect_Settings_GroupsAndRoles", function(len)
+net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 	if pa(settingsWindow) then
 		function settingsWindow.window.site:Paint(pw, ph)
 			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-
-			local tab = {}
-			tab.w = pw
-			tab.h = ph
-			tab.x = pw / 2
-			tab.y = ph / 2
-			tab.text = "wip"
-			DrawText(tab)
 		end
 
 		local PARENT = settingsWindow.window.site
@@ -19,14 +11,16 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 		local cur_group = {}
 		cur_group.cur = 0
 		cur_group.par = 0
+		cur_group.edi = 0
 
 		function PARENT:OnRemove()
-			net.Start("Disconnect_Settings_GroupsAndRoles")
+			net.Start("Unsubscribe_Settings_GroupsAndRoles")
 				net.WriteString(cur_group.cur)
 			net.SendToServer()
 		end
 
-		local gs = {}
+		PARENT.gs = {}
+		local gs = PARENT.gs
 
 		gs.bac = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20), ctr(20))
 		gs.bac:SetText("")
@@ -51,14 +45,17 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 		end
 		function gs.bac:DoClick()
 			if cur_group.cur != cur_group.par then
-				net.Start("settings_get_group_list")
+				gs.gplist:ClearList()
+				net.Start("settings_unsubscribe_grouplist")
 					net.WriteString(cur_group.cur)
+				net.SendToServer()
+				net.Start("settings_subscribe_grouplist")
 					net.WriteString(cur_group.par)
 				net.SendToServer()
 			end
 		end
 
-		gs.top = createD("DPanel", PARENT, ctr(480), ctr(60), ctr(80), ctr(20))
+		gs.top = createD("DPanel", PARENT, ctr(800-120), ctr(60), ctr(80), ctr(20))
 		function gs.top:Paint(pw, ph)
 			local tab = {}
 			tab.color = YRPGetColor("3")
@@ -68,12 +65,22 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 			tab2.y = ph / 2
 			tab2.ax = 1
 			tab2.ay = 1
-			tab2.text = "groups"
 			tab2.font = "mat1text"
+			if self.group != nil then
+				if self.group != "" then
+					local inp = {}
+					inp.group = self.group
+					tab2.text = lang_string("groupsof", inp)
+				else
+					tab2.text = lang_string("maingroups")
+				end
+			else
+				tab2.text = lang_string("loading")
+			end
 			DrawText(tab2)
 		end
 
-		gs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(560), ctr(20))
+		gs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20 + 800 - 60), ctr(20))
 		gs.add:SetText("")
 		function gs.add:Paint(pw, ph)
 			local tab = {}
@@ -94,17 +101,44 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 			net.SendToServer()
 		end
 
-		gs.glist = createD("DPanel", PARENT, ctr(600), ctr(940), ctr(20), ctr(80))
+		gs.glist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(80))
 		gs.gplist = createD("DPanelList", gs.glist, gs.glist:GetWide(), gs.glist:GetTall(), 0, 0)
 		gs.gplist:EnableVerticalScrollbar(true)
 		gs.gplist:SetSpacing(ctr(10))
+		function gs.gplist:ClearList()
+			gs.top.group = nil
+			gs.gplist:Clear()
+		end
+
+		net.Receive("settings_group_update_name", function(le)
+			local _uid = tonumber(net.ReadString())
+			local name = net.ReadString()
+			gs.gplist[_uid].text = name
+		end)
+
+		net.Receive("settings_group_update_color", function(le)
+			local _uid = tonumber(net.ReadString())
+			local color = net.ReadString()
+			gs.gplist[_uid].string_color = stc(color)
+		end)
+
+		net.Receive("settings_group_update_icon", function(le)
+			local _uid = tonumber(net.ReadString())
+			local icon = net.ReadString()
+			gs.gplist[_uid].string_icon = icon
+			gs.gplist[_uid].ico:SetHTML( GetHTMLImage( gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ) )
+		end)
 
 		function CreateLineGroup(parent, group)
+			group.uniqueID = tonumber(group.uniqueID)
 			gs.gplist[group.uniqueID] = gs.gplist[group.uniqueID] or {}
-			gs.gplist[group.uniqueID] = createD("DPanel", parent, parent:GetWide() - ctr(20), ctr(120), 0, 0)
+			gs.gplist[group.uniqueID] = createD("DButton", parent, parent:GetWide() - ctr(20), ctr(120), 0, 0)
+			gs.gplist[group.uniqueID]:SetText("")
 			for i, e in pairs(group) do
 				if string.StartWith(i, "int_") then
 					gs.gplist[group.uniqueID][i] = tonumber(e)
+				elseif string.StartWith(i, "string_color") then
+					gs.gplist[group.uniqueID][i] = stc(e)
 				else
 					gs.gplist[group.uniqueID][i] = e
 				end
@@ -112,38 +146,46 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 			local pnl = gs.gplist[group.uniqueID]
 			function pnl:Paint(pw, ph)
 				local tab = {}
-				tab.color = YRPGetColor("2")
+				tab.color = gs.gplist[group.uniqueID]["string_color"]
 				DrawPanel(self, tab)
+
+				self.text = self.text or group.string_name .. " [UID: " .. group.uniqueID .. "]"
 				local tab2 = {}
-				tab2.x = ctr(40) + ph + ctr(20)
-				tab2.y = ph * 1 / 4
+				tab2.x = ctr(182)
+				tab2.y = ctr(20)
 				tab2.ax = 0
-				tab2.ay = 1
-				tab2.text = group.string_name .. " UID: " .. group.uniqueID
+				tab2.ay = 0
+				tab2.text = self.text
 				tab2.font = "mat1text"
+				tab2.lforce = false
 				DrawText(tab2)
-				local tab3 = {}
-				tab3.x = ctr(40) + ph + ctr(20)
-				tab3.y = ph * 3 / 4
+
+				--[[local tab3 = {}
+				tab3.x = ctr(182)
+				tab3.y = ctr(100)
 				tab3.ax = 0
-				tab3.ay = 1
-				tab3.text = "UP: " .. gs.gplist[group.uniqueID].int_up .. " DN: " .. gs.gplist[group.uniqueID].int_dn
+				tab3.ay = 4
+				tab3.text = "POSITION: " .. group.int_position
 				tab3.font = "mat1text"
-				DrawText(tab3)
+				DrawText(tab3)]]
+			end
+			function pnl:DoClick()
+				net.Start("settings_subscribe_group")
+					net.WriteString(group.uniqueID)
+				net.SendToServer()
 			end
 
 			gs.gplist[group.uniqueID].ico = createD("DHTML", gs.gplist[group.uniqueID], gs.gplist[group.uniqueID]:GetTall() - ctr(20), gs.gplist[group.uniqueID]:GetTall() - ctr(20), ctr(60), ctr(10))
 			local ico = gs.gplist[group.uniqueID].ico
 			function ico:Paint(pw, ph)
-				local tab = {}
-				DrawPanel(self, tab)
 			end
+			ico:SetHTML( GetHTMLImage( group.string_icon, ico:GetWide(), ico:GetTall() ) )
 
 			gs.gplist[group.uniqueID].up = createD("DButton", gs.gplist[group.uniqueID], ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), ctr(10))
 			gs.gplist[group.uniqueID].up:SetText("")
 			local up = gs.gplist[group.uniqueID].up
 			function up:Paint(pw, ph)
-				if gs.gplist[group.uniqueID].int_up != 0 then
+				if gs.gplist[group.uniqueID].int_position > 1 then
 					local tab = {}
 					tab.color = Color(255, 255, 0)
 					DrawPanel(self, tab)
@@ -167,7 +209,7 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 			gs.gplist[group.uniqueID].dn:SetText("")
 			local dn = gs.gplist[group.uniqueID].dn
 			function dn:Paint(pw, ph)
-				if gs.gplist[group.uniqueID].int_dn != 0 then
+				if gs.gplist[group.uniqueID].int_position < table.Count(gs.gplist.tab) then
 					local tab = {}
 					tab.color = Color(255, 255, 0)
 					DrawPanel(self, tab)
@@ -187,7 +229,7 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], ctr(40), ctr(40), gs.gplist[group.uniqueID]:GetWide() - ctr(50), gs.gplist[group.uniqueID]:GetTall() - ctr(50))
+			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], ctr(40), ctr(40), gs.gplist[group.uniqueID]:GetWide() - ctr(66), gs.gplist[group.uniqueID]:GetTall() - ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
 			function ch:Paint(pw, ph)
@@ -204,21 +246,35 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 			end
 			function ch:DoClick()
-				net.Start("settings_get_group_list")
+				gs.gplist:ClearList()
+				net.Start("settings_unsubscribe_grouplist")
 					net.WriteString(cur_group.cur)
-					net.WriteString(gs.gplist[group.uniqueID].uniqueID)
 				net.SendToServer()
+				timer.Simple(0.1, function()
+					net.Start("settings_subscribe_grouplist")
+						net.WriteString(gs.gplist[group.uniqueID].uniqueID)
+					net.SendToServer()
+				end)
 			end
 
 			parent:AddItem(gs.gplist[group.uniqueID])
 		end
-		net.Receive("settings_get_group_list", function(le)
-			local groups = net.ReadTable()
+		net.Receive("settings_subscribe_grouplist", function(le)
+			gs.gplist:ClearList()
 
-			gs.gplist:Clear()
+			local parentgroup = net.ReadTable()
+
+			if parentgroup.uniqueID != nil then
+				gs.top.group = parentgroup.string_name
+			else
+				gs.top.group = ""
+			end
+
+			local groups = net.ReadTable()
 
 			cur_group.cur = tonumber(net.ReadString())
 			cur_group.par = tonumber(net.ReadString())
+			gs.gplist.tab = groups
 			for i, group in pairs(groups) do
 				CreateLineGroup(gs.gplist, group)
 				group["int_position"] = tonumber(group["int_position"])
@@ -227,63 +283,356 @@ net.Receive("Connect_Settings_GroupsAndRoles", function(len)
 			gs.gplist:SortByMember("int_position", true)
 			gs.gplist:Rebuild()
 		end)
-		net.Start("settings_get_group_list")
-			net.WriteString(cur_group.cur)
+
+		net.Start("settings_subscribe_grouplist")
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
-		net.Receive("settings_group_position_up", function(le)
-			local uid = tonumber(net.ReadString())
-			for i, group in pairs(gs.gplist:GetItems()) do
-				if tonumber(group.uniqueID) == uid then
-					group["int_position"] = group["int_position"] - 1
+		PARENT.rs = {}
+		local rs = PARENT.rs
+
+		rs.top = createD("DPanel", PARENT, ctr(800), ctr(60), ctr(20), ctr(1040))
+		function rs.top:Paint(pw, ph)
+			local tab = {}
+			tab.color = YRPGetColor("3")
+			DrawPanel(self, tab)
+			local tab2 = {}
+			tab2.x = pw / 2
+			tab2.y = ph / 2
+			tab2.ax = 1
+			tab2.ay = 1
+			tab2.font = "mat1text"
+			if self.group != nil then
+				if self.group != "" then
+					local inp = {}
+					inp.group = self.group
+					tab2.text = lang_string("groupsof", inp)
+				else
+					tab2.text = lang_string("maingroups")
 				end
-				group["int_position"] = tonumber(group["int_position"])
+			else
+				tab2.text = "NEW ROLES WILL BE HERE, LATER" --lang_string("loading")
 			end
-			gs.gplist:SortByMember("int_position", true)
-			gs.gplist:Rebuild()
-		end)
-		net.Receive("settings_group_position_dn", function(le)
-			local uid = tonumber(net.ReadString())
-			for i, group in pairs(gs.gplist:GetItems()) do
-				if tonumber(group.uniqueID) == uid then
-					group["int_position"] = group["int_position"] + 1
+			DrawText(tab2)
+		end
+
+		rs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20 + 800 - 60), ctr(1040))
+		rs.add:SetText("")
+		function rs.add:Paint(pw, ph)
+			local tab = {}
+			tab.color = Color(0, 255, 0)
+			DrawPanel(self, tab)
+			local tab2 = {}
+			tab2.x = pw / 2
+			tab2.y = ph / 2
+			tab2.ax = 1
+			tab2.ay = 1
+			tab2.text = "+"
+			tab2.font = "mat1text"
+			DrawText(tab2)
+		end
+		function rs.add:DoClick()
+			--net.Start("settings_add_role")
+				--net.WriteString(cur_group.cur)
+			--net.SendToServer()
+		end
+
+		rs.rlist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(1100))
+
+		PARENT.ea = {}
+		local ea = PARENT.ea
+
+		ea.background = createD("DPanel", PARENT, ScrW() - ctr(860), ScrH() - ctr(200), ctr(840), ctr(80))
+		function ea.background:Paint(pw, ph)
+			if ea.typ != nil then
+				local tab = {}
+				tab.color = YRPGetColor("4")
+				DrawPanel(self, tab)
+			end
+		end
+
+		ea.del = createD("DButton", PARENT, ctr(60), ctr(60), ctr(840), ctr(20))
+		ea.del:SetText("")
+		function ea.del:Paint(pw, ph)
+			if ea.typ != nil and tobool(ea.tab.bool_removeable) then
+				local tab = {}
+				tab.color = Color(255, 0, 0, 255)
+				DrawPanel(self, tab)
+
+				local tab2 = {}
+				tab2.w = pw
+				tab2.h = ph
+				tab2.x = ctr(20)
+				tab2.y = ph / 2
+				tab2.ax = 0
+				tab2.text = "-"
+				tab2.font = "mat1text"
+				DrawText(tab2)
+			elseif ea.typ != nil then
+				local tab = {}
+				tab.color = YRPGetColor("3")
+				DrawPanel(self, tab)
+			end
+		end
+		function ea.del:DoClick()
+			if ea.typ == "group" and tobool(ea.tab.bool_removeable) then
+				net.Start("settings_delete_group")
+					net.WriteString(ea.tab.uniqueID)
+				net.SendToServer()
+				for i, pnl in pairs(ea.background:GetChildren()) do
+					pnl:Remove()
 				end
-				group["int_position"] = tonumber(group["int_position"])
+				ea.typ = nil
+				ea.tab = nil
 			end
-			gs.gplist:SortByMember("int_position", true)
-			gs.gplist:Rebuild()
+		end
+
+		ea.dup = createD("DButton", PARENT, ctr(60), ctr(60), ctr(900), ctr(20))
+		ea.dup:SetText("")
+		function ea.dup:Paint(pw, ph)
+			if ea.typ != nil and false then
+				local tab = {}
+				tab.color = Color(255, 255, 0, 255)
+				DrawPanel(self, tab)
+
+				local tab2 = {}
+				tab2.w = pw
+				tab2.h = ph
+				tab2.x = ctr(20)
+				tab2.y = ph / 2
+				tab2.ax = 0
+				tab2.text = "[ ]"
+				tab2.font = "mat1text"
+				DrawText(tab2)
+			elseif ea.typ != nil then
+				local tab = {}
+				tab.color = YRPGetColor("3")
+				DrawPanel(self, tab)
+			end
+		end
+
+		ea.top = createD("DPanel", PARENT, ScrW() - ctr(980), ctr(60), ctr(960), ctr(20))
+		function ea.top:Paint(pw, ph)
+			if ea.typ != nil then
+				local tab = {}
+				tab.color = YRPGetColor("3")
+				DrawPanel(self, tab)
+
+				local tab2 = {}
+				tab2.w = pw
+				tab2.h = ph
+				tab2.x = ctr(20)
+				tab2.y = ph / 2
+				tab2.ax = 0
+				tab2.text = lang_string(ea.typ) .. ": " .. tostring(ea.tab.string_name)
+				tab2.font = "mat1text"
+				DrawText(tab2)
+			end
+		end
+		net.Receive("settings_subscribe_group", function(le)
+			local group = net.ReadTable()
+			local groups = net.ReadTable()
+			local db_ugs = net.ReadTable()
+
+			group.uniqueID = tonumber(group.uniqueID)
+			cur_group.edi = group.uniqueID
+
+			ea.typ = "group"
+			ea.tab = group
+
+			for i, pnl in pairs(ea.background:GetChildren()) do
+				pnl:Remove()
+			end
+
+			ea[group.uniqueID] = ea[group.uniqueID] or {}
+
+			local info = {}
+			info.parent = ea.background
+			info.x = ctr(20)
+			info.y = ctr(20)
+			info.w = ctr(1000)
+			info.h = ctr(530)
+			info.br = ctr(20)
+			info.color = Color( 255, 255, 255 )
+			info.bgcolor = Color( 80, 80, 80 )
+			info.name = "general"
+			ea[group.uniqueID].info = DGroup(info)
+			ea.info = ea[group.uniqueID].info
+			function ea.info:OnRemove()
+				if cur_group.edi != group.uniqueID then
+					net.Start("settings_unsubscribe_group")
+						net.WriteString(group.uniqueID)
+					net.SendToServer()
+				end
+			end
+
+			local name = {}
+			name.parent = ea.info
+			name.uniqueID = group.uniqueID
+			name.header = "name"
+			name.netstr = "update_string_name"
+			name.value = group.string_name
+			name.uniqueID = group.uniqueID
+			name.lforce = false
+			ea[group.uniqueID].name = DTextBox(name)
+
+			local hr = {}
+			hr.h = ctr(20)
+			hr.parent = ea.info
+			DHr(hr)
+
+			local color = {}
+			color.parent = ea.info
+			color.uniqueID = group.uniqueID
+			color.header = "color"
+			color.netstr = "update_string_color"
+			color.value = group.string_color
+			color.uniqueID = group.uniqueID
+			color.lforce = false
+			ea[group.uniqueID].color = DColor(color)
+
+			DHr(hr)
+
+			local icon = {}
+			icon.parent = ea.info
+			icon.uniqueID = group.uniqueID
+			icon.header = "icon"
+			icon.netstr = "update_string_icon"
+			icon.value = group.string_icon
+			icon.uniqueID = group.uniqueID
+			icon.lforce = false
+			ea[group.uniqueID].icon = DTextBox(icon)
+
+			DHr(hr)
+
+			local othergroups = {}
+			othergroups[0] = lang_string("maingroup")
+			for i, tab in pairs(groups) do
+				othergroups[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+			end
+
+			local parentgroup = {}
+			parentgroup.parent = ea.info
+			parentgroup.uniqueID = group.uniqueID
+			parentgroup.header = "parentgroup"
+			parentgroup.netstr = "update_int_parentgroup"
+			parentgroup.value = group.int_parentgroup
+			parentgroup.uniqueID = group.uniqueID
+			parentgroup.lforce = false
+			parentgroup.choices = othergroups
+			ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
+
+			local restriction = {}
+			restriction.parent = ea.background
+			restriction.x = ctr(1040)
+			restriction.y = ctr(20)
+			restriction.w = ctr(1000)
+			restriction.h = ctr(570)
+			restriction.br = ctr(20)
+			restriction.color = Color( 255, 255, 255 )
+			restriction.bgcolor = Color( 80, 80, 80 )
+			restriction.name = "restriction"
+			ea[group.uniqueID].restriction = DGroup(restriction)
+			ea.restriction = ea[group.uniqueID].restriction
+
+			local gugs = string.Explode(",", group.string_usergroups)
+
+			local ugs = {}
+			ugs["ALL"] = {}
+			ugs["ALL"].checked = table.HasValue(gugs, "ALL")
+			ugs["ALL"]["choices"] = {}
+			for i, pl in pairs(player.GetAll()) do
+				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
+				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+			end
+
+			for i, ug in pairs(db_ugs) do
+				ugs["ALL"]["choices"][string.upper(ug.name)] = ugs["ALL"]["choices"][string.upper(ug.name)] or {}
+				ugs["ALL"]["choices"][string.upper(ug.name)].checked = table.HasValue(gugs, string.upper(ug.name))
+			end
+
+			local usergroups = {}
+			usergroups.parent = ea.restriction
+			usergroups.uniqueID = group.uniqueID
+			usergroups.header = "usergroups"
+			usergroups.netstr = "update_string_usergroups"
+			usergroups.value = group.string_usergroups
+			usergroups.uniqueID = group.uniqueID
+			usergroups.lforce = false
+			usergroups.choices = ugs
+			ea[group.uniqueID].usergroups = DCheckBoxes(usergroups)
+
+			hr.parent = ea.restriction
+			DHr(hr)
+
+			local requireslevel = {}
+			requireslevel.parent = ea.restriction
+			requireslevel.uniqueID = group.uniqueID
+			requireslevel.header = "requireslevel"
+			requireslevel.netstr = "update_int_requireslevel"
+			requireslevel.value = group.int_requireslevel
+			requireslevel.uniqueID = group.uniqueID
+			requireslevel.lforce = false
+			requireslevel.min = 1
+			requireslevel.max = 100
+			ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
+
+			DHr(hr)
+
+			local groupvoicechat = {}
+			groupvoicechat.parent = ea.restriction
+			groupvoicechat.uniqueID = group.uniqueID
+			groupvoicechat.header = "canusegroupvoicechat"
+			groupvoicechat.netstr = "update_bool_groupvoicechat"
+			groupvoicechat.value = group.bool_groupvoicechat
+			groupvoicechat.uniqueID = group.uniqueID
+			groupvoicechat.lforce = false
+			ea[group.uniqueID].groupvoicechat = DCheckBox(groupvoicechat)
+
+			DHr(hr)
+
+			local whitelist = {}
+			whitelist.parent = ea.restriction
+			whitelist.uniqueID = group.uniqueID
+			whitelist.header = "useswhitelist"
+			whitelist.netstr = "update_bool_whitelist"
+			whitelist.value = group.bool_whitelist
+			whitelist.uniqueID = group.uniqueID
+			whitelist.lforce = false
+			ea[group.uniqueID].whitelist = DCheckBox(whitelist)
+
+			DHr(hr)
+
+			local locked = {}
+			locked.parent = ea.restriction
+			locked.uniqueID = group.uniqueID
+			locked.header = "locked"
+			locked.netstr = "update_bool_locked"
+			locked.value = group.bool_locked
+			locked.uniqueID = group.uniqueID
+			locked.lforce = false
+			ea[group.uniqueID].locked = DCheckBox(locked)
+
+			DHr(hr)
+
+			local visible = {}
+			visible.parent = ea.restriction
+			visible.uniqueID = group.uniqueID
+			visible.header = "visible"
+			visible.netstr = "update_bool_visible"
+			visible.value = group.bool_visible
+			visible.uniqueID = group.uniqueID
+			visible.lforce = false
+			ea[group.uniqueID].visible = DCheckBox(visible)
 		end)
-
-		local rs = {}
-		rs.top = createD("DPanel", PARENT, ctr(600), ctr(60), ctr(20), ctr(1040))
-
-		rs.rlist = createD("DPanel", PARENT, ctr(600), ctr(940), ctr(20), ctr(1100))
-
-		--[[
-		bool_groupvoicechat	=	1
-		bool_locked	=	0
-		bool_removeable	=	1
-		bool_whitelist	=	0
-		int_parentgroup	=	0
-		int_requiredlevel	=	1
-		int_requirelevel	=	1
-		int_uppergroup	=	0
-		string_color	=	0,0,0
-		string_ents	=
-		string_icon	=
-		string_name	=	GroupName
-		string_requireusergroups	=	all
-		string_sweps	=
-		]]--
 	end
 end)
 
-hook.Add( "open_server_groups_and_roles", "open_server_groups_and_roles", function()
+hook.Add("open_server_groups_and_roles", "open_server_groups_and_roles", function()
 	SaveLastSite()
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
 	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-	net.Start("Connect_Settings_GroupsAndRoles")
+	net.Start("Subscribe_Settings_GroupsAndRoles")
 	net.SendToServer()
 end)

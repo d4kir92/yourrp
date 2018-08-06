@@ -69,7 +69,7 @@ util.AddNetworkString( "openInteractMenu" )
 util.AddNetworkString( "promotePlayer" )
 util.AddNetworkString( "demotePlayer" )
 
-util.AddNetworkString( "yrp_groups" )
+util.AddNetworkString( "yrp_ply_groups" )
 util.AddNetworkString( "yrp_roles" )
 
 util.AddNetworkString( "removeDBGroup" )
@@ -92,8 +92,8 @@ net.Receive( "setting_getroles", function( len, ply )
 end)
 
 function sendDBGroups( ply )
-	local tmp = SQL_SELECT( "yrp_groups", "*", nil )
-	net.Start( "yrp_groups" )
+	local tmp = SQL_SELECT( "yrp_ply_groups", "*", nil )
+	net.Start( "yrp_ply_groups" )
 		net.WriteTable( tmp )
 	net.Send( ply )
 end
@@ -109,7 +109,7 @@ function sendDBRoles( ply, groupID )
 end
 
 net.Receive( "getScoreboardGroups", function( len, ply )
-	local _tmpGroups = SQL_SELECT( "yrp_groups", "*", nil )
+	local _tmpGroups = SQL_SELECT( "yrp_ply_groups", "*", nil )
 	if _tmpGroups != nil then
 		net.Start( "getScoreboardGroups" )
 			net.WriteTable( _tmpGroups )
@@ -144,35 +144,6 @@ net.Receive( "dupDBRole", function( len, ply )
 	sendDBRoles( ply, _tmpGroupID )
 end)
 
-function duplicateGroup( uniqueID )
-	local _dR = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. uniqueID )
-	_dR = _dR[1]
-	if tonumber( _dR.removeable ) == 1 then
-		local _dbColumns = "groupID, color, uppergroup"
-		local _dbValues = "'" .. _dR.groupID .. "', '" .. _dR.color .. "' , " .. _dR.uppergroup
-
-		SQL_INSERT_INTO( "yrp_groups", _dbColumns, _dbValues )
-
-		local _lastGroup = SQL_SELECT( "yrp_groups", "uniqueID", nil )
-
-		local _allRolesFromGroup = SQL_SELECT( "yrp_roles", "*", "groupID = " .. uniqueID )
-		if _allRolesFromGroup != nil then
-			for k, v in pairs( _allRolesFromGroup ) do
-				duplicateRole( ply, v.uniqueID, _lastGroup[#_lastGroup].uniqueID )
-			end
-		end
-	else
-		printGM( "note", "not duplicateable!" )
-	end
-end
-
-net.Receive( "dupDBGroup", function( len, ply )
-	local _tmpUniqueID = net.ReadString()
-
-	duplicateGroup( _tmpUniqueID )
-	sendDBGroups( ply )
-end)
-
 net.Receive( "addDBRole", function( len, ply )
 	printGM( "db", "addDBRole" )
 	local _tmpUniqueID = net.ReadString()
@@ -180,12 +151,6 @@ net.Receive( "addDBRole", function( len, ply )
 	printGM( "db", result)
 
 	sendDBRoles( ply, _tmpUniqueID )
-end)
-
-net.Receive( "addDBGroup", function( len, ply )
-	SQL_INSERT_INTO( "yrp_groups", "groupID, uppergroup, removeable", "'" .. lang_string( "newgroup" ) .. "', -1, 1" )
-
-	sendDBGroups( ply )
 end)
 
 function changeToDefault( table )
@@ -218,12 +183,12 @@ function DeleteRolesFromGroup( uid )
 end
 
 net.Receive( "removeDBGroup", function( len, ply )
-	local _dbSelect = SQL_SELECT( "yrp_groups", "*", nil )
+	local _dbSelect = SQL_SELECT( "yrp_ply_groups", "*", nil )
 	local tmp = net.ReadString()
 	for k, v in pairs( _dbSelect ) do
 		if tonumber( v.uniqueID ) == tonumber( tmp ) then
 			if tonumber( v.removeable ) == 1 then
-				SQL_DELETE_FROM( "yrp_groups", "uniqueID = " .. tmp )
+				SQL_DELETE_FROM( "yrp_ply_groups", "uniqueID = " .. tmp )
 				DeleteRolesFromGroup( tmp )
 			end
 		end
@@ -237,7 +202,7 @@ net.Receive( "yrp_roles", function( len, ply )
 	sendDBRoles( ply, _tmpGroupID )
 end)
 
-net.Receive( "yrp_groups", function( len, ply )
+net.Receive( "yrp_ply_groups", function( len, ply )
 	sendDBGroups( ply )
 end)
 
@@ -261,7 +226,7 @@ net.Receive( "demotePlayer", function( len, ply )
 
 		local tmpTableTargetRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 		local tmpTableTargetDemoteRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].prerole )
-		local tmpTableTargetGroup = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].groupID )
+		local tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].groupID )
 
 		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
@@ -311,7 +276,7 @@ net.Receive( "promotePlayer", function( len, ply )
 		local tmpTableTargetRole = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 		local tmpTableTargetPromoteRole = SQL_SELECT( "yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID .. " AND groupID = " .. tmpTableInstructorRole.groupID )
 
-		local tmpTableTargetGroup = SQL_SELECT( "yrp_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].groupID )
+		local tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].groupID )
 
 		tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
@@ -412,7 +377,7 @@ end)
 net.Receive( "getAllGroups", function( len, ply )
 	local tmpUpperGroup = net.ReadInt( 16 )
 
-	local tmpTable = SQL_SELECT( "yrp_groups", "*", nil )
+	local tmpTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
 	local tmpTable2 = SQL_SELECT( "yrp_roles", "*", nil )
 	local tmpTable3 = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'" )
 	if tmpTable3 == nil then
