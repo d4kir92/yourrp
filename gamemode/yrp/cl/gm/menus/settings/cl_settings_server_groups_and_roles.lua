@@ -111,22 +111,28 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 		net.Receive("settings_group_update_name", function(le)
-			local _uid = tonumber(net.ReadString())
-			local name = net.ReadString()
-			gs.gplist[_uid].text = name
+			if pa(gs) then
+				local _uid = tonumber(net.ReadString())
+				local name = net.ReadString()
+				gs.gplist[_uid].text = name
+			end
 		end)
 
 		net.Receive("settings_group_update_color", function(le)
-			local _uid = tonumber(net.ReadString())
-			local color = net.ReadString()
-			gs.gplist[_uid].string_color = stc(color)
+			if pa(gs) then
+				local _uid = tonumber(net.ReadString())
+				local color = net.ReadString()
+				gs.gplist[_uid].string_color = stc(color)
+			end
 		end)
 
 		net.Receive("settings_group_update_icon", function(le)
-			local _uid = tonumber(net.ReadString())
-			local icon = net.ReadString()
-			gs.gplist[_uid].string_icon = icon
-			gs.gplist[_uid].ico:SetHTML( GetHTMLImage( gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ) )
+			if pa(gs.gplist) then
+				local _uid = tonumber(net.ReadString())
+				local icon = net.ReadString()
+				gs.gplist[_uid].string_icon = icon
+				gs.gplist[_uid].ico:SetHTML( GetHTMLImage( gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ) )
+			end
 		end)
 
 		function CreateLineGroup(parent, group)
@@ -260,28 +266,30 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			parent:AddItem(gs.gplist[group.uniqueID])
 		end
 		net.Receive("settings_subscribe_grouplist", function(le)
-			gs.gplist:ClearList()
+			if pa(gs.gplist) then
+				gs.gplist:ClearList()
 
-			local parentgroup = net.ReadTable()
+				local parentgroup = net.ReadTable()
 
-			if parentgroup.uniqueID != nil then
-				gs.top.group = parentgroup.string_name
-			else
-				gs.top.group = ""
+				if parentgroup.uniqueID != nil then
+					gs.top.group = parentgroup.string_name
+				else
+					gs.top.group = ""
+				end
+
+				local groups = net.ReadTable()
+
+				cur_group.cur = tonumber(net.ReadString())
+				cur_group.par = tonumber(net.ReadString())
+				gs.gplist.tab = groups
+				for i, group in pairs(groups) do
+					CreateLineGroup(gs.gplist, group)
+					group["int_position"] = tonumber(group["int_position"])
+				end
+
+				gs.gplist:SortByMember("int_position", true)
+				gs.gplist:Rebuild()
 			end
-
-			local groups = net.ReadTable()
-
-			cur_group.cur = tonumber(net.ReadString())
-			cur_group.par = tonumber(net.ReadString())
-			gs.gplist.tab = groups
-			for i, group in pairs(groups) do
-				CreateLineGroup(gs.gplist, group)
-				group["int_position"] = tonumber(group["int_position"])
-			end
-
-			gs.gplist:SortByMember("int_position", true)
-			gs.gplist:Rebuild()
 		end)
 
 		net.Start("settings_subscribe_grouplist")
@@ -311,7 +319,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.text = lang_string("maingroups")
 				end
 			else
-				tab2.text = "NEW ROLES WILL BE HERE, LATER" --lang_string("loading")
+				tab2.text = lang_string("loading")
 			end
 			DrawText(tab2)
 		end

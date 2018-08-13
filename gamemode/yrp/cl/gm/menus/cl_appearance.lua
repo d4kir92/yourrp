@@ -10,9 +10,11 @@ net.Receive( "get_menu_bodygroups", function( len )
 		local _skin = tonumber( _tbl.skin )
 		local _pms = combineStringTables( _tbl.playermodels, _tbl.playermodelsnone )
 		local ply = LocalPlayer()
-		if ply:GetNWBool( "bool_appearance_system", false ) and pa( _yrp_appearance.left ) then
-			for i, child in pairs(_yrp_appearance.left:GetChildren()) do
-				child:Remove()
+		if ply:GetNWBool( "bool_appearance_system", false ) and pa(_yrp_appearance.left) then
+			if _yrp_appearance.left.GetChildren != nil then
+				for i, child in pairs(_yrp_appearance.left:GetChildren()) do
+					child:Remove()
+				end
 			end
 
 			local _pmid = tonumber( _tbl.playermodelID )

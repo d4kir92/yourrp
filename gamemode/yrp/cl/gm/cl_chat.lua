@@ -20,6 +20,7 @@ function update_chat_choices()
 		yrpChat.comboBox:AddChoice( lang_string( "admin" ) .. " /ADMIN", "admin", false )
 		yrpChat.comboBox:AddChoice( lang_string( "group" ) .. " /GROUP", "group", false )
 		yrpChat.comboBox:AddChoice( lang_string( "role" ) .. " /ROLE", "role", false )
+		yrpChat.comboBox:AddChoice( lang_string( "service" ) .. " /SERVICE", "service", false )
 	end
 end
 
@@ -69,6 +70,8 @@ function niceCommand( com )
 		return lang_string( "group" )
 	elseif com == "role" then
 		return lang_string( "role" )
+	elseif com == "service" then
+		return lang_string( "service" )
 	end
 	return com
 end
@@ -153,6 +156,9 @@ function InitYRPChat()
 					elseif isFullyCommand( _com, "srole", lang_string( "role" ) ) then
 						yrpChat.writeField:SetText("")
 						yrpChat.comboBox:ChooseOption( lang_string( "role" ), 9 )
+					elseif isFullyCommand( _com, "sservice", lang_string( "service" ) ) then
+						yrpChat.writeField:SetText("")
+						yrpChat.comboBox:ChooseOption( lang_string( "service" ), 10 )
 					end
 				end
 			end
@@ -320,7 +326,7 @@ end )
 net.Receive( "yrp_player_say", function( len )
 	local _tmp = net.ReadTable()
 	local _write = false
-	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" then
+	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
 		_write = true
 
 		_tmp.name = ""

@@ -7,7 +7,7 @@ net.Receive( "getMapList", function( len )
 
 	local ply = LocalPlayer()
 
-	if !_tmpBool then
+	if !_tmpBool and pa(settingsWindow) then
 		local _tmpTable = net.ReadTable()
 		_groups = net.ReadTable()
 		_roles = net.ReadTable()

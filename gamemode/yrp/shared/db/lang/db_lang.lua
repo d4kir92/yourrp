@@ -71,10 +71,9 @@ end
 function lang_string(var, vals)
 	var = tostring(var)
 	local _string = yrp_current_lang[string.lower(var)]
-	if yrp_current_lang[string.lower(var)] == nil then
+	if not wk(_string) then
 		return var
 	end
-
 	if wk(vals) then
 		if type(vals) == "string" then
 			return lang_string(var)
@@ -84,7 +83,6 @@ function lang_string(var, vals)
 			end
 		end
 	end
-
 	return _string
 end
 

@@ -150,11 +150,11 @@ function loadDoors()
 					end
 				else
 					if tonumber( w.groupID ) != -1 then
-						local _tmpGroupName = SQL_SELECT( "yrp_ply_groups", "groupID", "uniqueID = " .. w.groupID )
+						local _tmpGroupName = SQL_SELECT( "yrp_ply_groups", "string_name", "uniqueID = " .. w.groupID )
 						if wk( _tmpGroupName ) then
 							_tmpGroupName = _tmpGroupName[1]
 							if wk( _tmpGroupName ) then
-								v:SetNWString( "ownerGroup", tostring( _tmpGroupName.groupID ) )
+								v:SetNWString( "ownerGroup", tostring( _tmpGroupName.string_name ) )
 							end
 						end
 					end
@@ -358,27 +358,27 @@ end)
 
 net.Receive( "setBuildingOwnerGroup", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
-	local _tmpGroupID = net.ReadInt( 16 )
+	local _tmpGroupID = net.ReadInt( 32 )
 
 	SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID )
 
-	local _tmpGroupName = SQL_SELECT( "yrp_ply_groups", "groupID", "uniqueID = " .. _tmpGroupID )
+	local _tmpGroupName = SQL_SELECT( "yrp_ply_groups", "string_name", "uniqueID = " .. _tmpGroupID )
 	local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
 	for k, v in pairs( _tmpDoors ) do
 		if tonumber( v:GetNWString( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-			v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
+			v:SetNWString( "ownerGroup", _tmpGroupName[1].string_name )
 		end
 	end
 	local _tmpFDoors = ents.FindByClass( "func_door" )
 	for k, v in pairs( _tmpFDoors ) do
 		if tonumber( v:GetNWString( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-			v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
+			v:SetNWString( "ownerGroup", _tmpGroupName[1].string_name )
 		end
 	end
 	local _tmpFRDoors = ents.FindByClass( "func_door_rotating" )
 	for k, v in pairs( _tmpFRDoors ) do
 		if tonumber( v:GetNWString( "buildingID" ) ) == tonumber( _tmpBuildingID ) then
-			v:SetNWString( "ownerGroup", _tmpGroupName[1].groupID )
+			v:SetNWString( "ownerGroup", _tmpGroupName[1].string_name )
 		end
 	end
 end)
@@ -473,7 +473,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
 				local _tmpGroTab = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. _tmpTable.groupID )
 				if wk( _tmpGroTab ) then
 					_tmpGroTab = _tmpGroTab[1]
-					owner = _tmpGroTab.groupID
+					owner = _tmpGroTab.string_name
 				end
 			end
 

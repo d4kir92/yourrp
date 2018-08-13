@@ -942,28 +942,28 @@ net.Receive( "gethelpmenu", function( len, ply )
 			--info.text_social_servers != "" then
 			AddTab( tabs, "community", "" )
 			if info.text_social_website != "" then
-				AddSubTab( subtabs, "community", "website", "getsitecommunitywebsite" )
+				AddSubTab( subtabs, "community", "Website", "getsitecommunitywebsite" )
 			end
 			if info.text_social_forum != "" then
-				AddSubTab( subtabs, "community", "forum", "getsitecommunityforum" )
+				AddSubTab( subtabs, "community", "Forum", "getsitecommunityforum" )
 			end
 			if info.text_social_discord != "" then
-				AddSubTab( subtabs, "community", "discord", "getsitecommunitydiscord" )
+				AddSubTab( subtabs, "community", "Discord", "getsitecommunitydiscord" )
 			end
 			if info.text_social_teamspeak_ip != "" then
-				AddSubTab( subtabs, "community", "teamspeak", "getsitecommunityteamspeak" )
+				AddSubTab( subtabs, "community", "Teamspeak", "getsitecommunityteamspeak" )
 			end
 			if info.text_social_twitter != "" then
-				AddSubTab( subtabs, "community", "twitter", "getsitecommunitytwitter" )
+				AddSubTab( subtabs, "community", "Twitter", "getsitecommunitytwitter" )
 			end
 			if info.text_social_youtube != "" then
-				AddSubTab( subtabs, "community", "youtube", "getsitecommunityyoutube" )
+				AddSubTab( subtabs, "community", "Youtube", "getsitecommunityyoutube" )
 			end
 			if info.text_social_facebook != "" then
-				AddSubTab( subtabs, "community", "facebook", "getsitecommunityfacebook" )
+				AddSubTab( subtabs, "community", "Facebook", "getsitecommunityfacebook" )
 			end
 			if info.text_social_steamgroup != "" then
-				AddSubTab( subtabs, "community", "steamgroup", "getsitecommunitysteamgroup" )
+				AddSubTab( subtabs, "community", "SteamGroup", "getsitecommunitysteamgroup" )
 			end
 			--if info.text_social_servers != "" then
 				--AddSubTab( subtabs, "community", "servers", "getsitecommunityservers" )

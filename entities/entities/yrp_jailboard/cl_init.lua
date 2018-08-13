@@ -113,7 +113,7 @@ net.Receive( "openLawBoard", function( len )
 			end
 		end
 
-		local _tmpGroupID = net.ReadInt( 16 )
+		local _tmpGroupID = net.ReadInt( 32 )
 		if _gAccess == _tmpGroupID then
 			local addButton = createVGUI( "DButton", scrollpanel, _size, _size )
 			addButton:SetText( "" )

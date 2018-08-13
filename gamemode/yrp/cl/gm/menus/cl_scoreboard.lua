@@ -431,14 +431,14 @@ end
 function drawGroup( id, name, color, icon )
 	local ply = LocalPlayer()
 
-	elePos.y = elePos.y + 50
+	elePos.y = elePos.y + 120
 
 	local _color = string.Explode( ",", color )
 	local _tmpPanel = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
 	_tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
 	function _tmpPanel:Paint(pw, ph)
 		draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-		local _x = ctr(10)
+		local _x = ctr(20)
 		if icon != "" then
 			_x = ctr(120)
 		end
@@ -540,13 +540,13 @@ end
 
 function tryLowerGroup( id )
 	if hasLowerGroup( id ) then
-		elePos.x = elePos.x + ctr( 6 )
+		elePos.x = elePos.x + 10
 		for k, group in pairs( sb_groups ) do
 			if tonumber( group.int_parentgroup ) == tonumber( id ) then
 				local tmp = drawLowerGroup( group.uniqueID )
 				tryLowerGroup( group.uniqueID )
 
-				elePos.y = elePos.y + ctr( 6 )
+				elePos.y = elePos.y + 10
 
 				local tmpX, tmpY = tmp:GetPos()
 				tmp:SetSize( tmp:GetWide(), ctr( elePos.y + 50 ) - tmpY )
@@ -562,7 +562,7 @@ function drawGroupRow( id )
 				local tmp = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon )
 				tryLowerGroup( group.uniqueID )
 
-				elePos.y = elePos.y + ctr( 6 )
+				elePos.y = elePos.y + 10
 
 				local tmpX, tmpY = tmp:GetPos()
 				tmp:SetSize( tmp:GetWide(), ctr( elePos.y+50 ) - tmpY )
@@ -577,7 +577,7 @@ function drawGroups()
 		if tonumber( group.int_parentgroup ) == tonumber( 0 ) then
 			if hasGroupRowPlayers( group.uniqueID ) then
 				if _not_first then
-					elePos.y = elePos.y + 40
+					elePos.y = elePos.y + 100
 				end
 				_not_first = true
 			end
@@ -596,6 +596,7 @@ function drawRest()
 		end
 	end
 
+	local ply = LocalPlayer()
 	if count > 0 then
 		elePos.y = elePos.y + 100
 
@@ -997,7 +998,7 @@ end
 
 function drawScoreboard()
 	elePos.x = ctr( 10 )
-	elePos.y = ctr( -50 )
+	elePos.y = -100
 	drawGroups()
 	drawRest()
 end

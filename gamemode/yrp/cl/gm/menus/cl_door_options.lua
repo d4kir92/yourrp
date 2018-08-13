@@ -176,7 +176,7 @@ function buyWindow( buildingID, name, price, door )
 			if _ComboBoxGroupName != NULL then
 				for k, v in pairs( _tmpGroups ) do
 					if pa( _ComboBoxGroupName ) then
-						_ComboBoxGroupName:AddChoice( v.groupID, v.uniqueID, false )
+						_ComboBoxGroupName:AddChoice( v.string_name, v.uniqueID, false )
 					else
 						break
 					end
@@ -188,7 +188,7 @@ function buyWindow( buildingID, name, price, door )
 			if _tmpData != nil then
 				net.Start( "setBuildingOwnerGroup" )
 					net.WriteString( _buildingID )
-					net.WriteInt( _tmpData, 16 )
+					net.WriteInt( _tmpData, 32 )
 				net.SendToServer()
 				yrp_door.window:Close()
 			end

@@ -35,7 +35,7 @@ function ENT:Use( activator, caller )
 		net.WriteTable( tmpTable )
 		net.WriteTable( tmpGroups )
 		net.WriteTable( tmpGeneral )
-		net.WriteInt( tmpRoles[1].string_name, 16 )
+		net.WriteInt( tmpRoles[1].groupID, 32 )
 	net.Send( caller )
 end
 

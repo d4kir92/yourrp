@@ -312,7 +312,7 @@ function updatePlayermodels( tab, id, uniqueID )
 	net.SendToServer()
 end
 
-local function AddToTabRecursive( tab, folder, path, wildcard )
+function AddToTabRecursive( tab, folder, path, wildcard )
 	local files, folders = file.Find( folder .. "*", path )
 	for k, v in pairs( files ) do
 		if ( !string.EndsWith( v, ".mdl" ) ) then continue end
@@ -949,7 +949,7 @@ net.Receive( "yrp_roles", function( len )
 	yrp_roles_dbTable = net.ReadTable()
 
 	for k, v in pairs( yrp_roles_dbTable ) do
-		if settingsWindow != nil then
+		if pa(settingsWindow) then
 			v.selected = false
 			yrp_roles[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
 			local tmp = yrp_roles[k]
@@ -1046,7 +1046,7 @@ net.Receive( "yrp_ply_groups", function( len )
 	yrp_groups = {}
 	yrp_groups_dbTable = net.ReadTable()
 	for k, v in pairs( yrp_groups_dbTable ) do
-		if pa( settingsWindow.window.site ) then
+		if pa(settingsWindow) then
 			v.selected = false
 			yrp_groups[k] = addButton( _w, 40, 0, (k-1)*40, settingsWindow.window.site )
 			local tmp = yrp_groups[k]

@@ -52,6 +52,7 @@ function print_help( sender )
 	sender:ChatPrint( "ooc or / - Out of character chat" )
 	sender:ChatPrint( "looc or . - Local out of character chat" )
 	sender:ChatPrint( "advert - Advert chat" )
+	sender:ChatPrint( "service - Service chat" )
 	sender:ChatPrint( "dropweapon - Drops the current weapon" )
 	sender:ChatPrint( "dropmoney AMOUNT - drop money to ground" )
 	sender:ChatPrint( "roll - roll a number between 0 and 100" )
@@ -267,6 +268,9 @@ function unpack_paket( sender, text, iscommand )
 	elseif paket.command == "roll" then
 		paket.command_color = Color( 100, 100, 255 )
 		paket.text_color = Color( 100, 100, 255 )
+	elseif paket.command == "service" then
+		paket.command_color = Color( 255, 165, 0 )
+		paket.text_color = Color( 255, 165, 0 )
 	else
 		paket.command_color = Color( 255, 0, 0 )
 	end
@@ -392,6 +396,17 @@ function GM:PlayerSay( sender, text, teamChat )
 	if paket.command == "role" then
 		for k, receiver in pairs( player.GetAll() ) do
 			if receiver:GetNWString( "roleName" ) == sender:GetNWString( "roleName" ) then
+				net.Start( "yrp_player_say" )
+					net.WriteTable( pk )
+				net.Send( receiver )
+			end
+		end
+		return ""
+	end
+
+	if paket.command == "service" then
+		for k, receiver in pairs( player.GetAll() ) do
+			if receiver:GetNWBool("iscivil", false) or receiver == sender then
 				net.Start( "yrp_player_say" )
 					net.WriteTable( pk )
 				net.Send( receiver )
