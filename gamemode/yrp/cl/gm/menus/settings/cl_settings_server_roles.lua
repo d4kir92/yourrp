@@ -1101,79 +1101,81 @@ net.Receive( "yrp_ply_groups", function( len )
 end)
 
 net.Receive( "setting_getroles", function( len )
-	function settingsWindow.window.site:Paint()
-		--draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), _yrp.colors.panel )
-	end
+	if pa(settingsWindow) then
+		function settingsWindow.window.site:Paint()
+			--draw.RoundedBox( 0, 0, 0, sv_rolesPanel:GetWide(), sv_rolesPanel:GetTall(), _yrp.colors.panel )
+		end
 
-	local groupsHeader = createVGUI( "DPanel", settingsWindow.window.site, _w, 40, 5, 65 )
-	function groupsHeader:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
-		draw.SimpleTextOutlined( lang_string( "groups" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
+		local groupsHeader = createVGUI( "DPanel", settingsWindow.window.site, _w, 40, 5, 65 )
+		function groupsHeader:Paint( pw, ph )
+			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 100, 255, 200 ) )
+			draw.SimpleTextOutlined( lang_string( "groups" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
 
-	local _group_height = 820
-	groupsList = createVGUI( "DScrollPanel", settingsWindow.window.site, _w, _group_height-40, 5, 65+40 )
-	function groupsList:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-	end
-
-	net.Start( "yrp_ply_groups" )
-	net.SendToServer()
-
-	-- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
-	local _roles_height = _group_height + 80
-	local rolesAdd = addButton( 50, 50, _lbr, _roles_height, settingsWindow.window.site )
-	function rolesAdd:Paint( pw, ph )
-		if rolesAdd:IsHovered() then
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-		else
+		local _group_height = 820
+		groupsList = createVGUI( "DScrollPanel", settingsWindow.window.site, _w, _group_height-40, 5, 65+40 )
+		function groupsList:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 		end
-		draw.SimpleTextOutlined( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function rolesAdd:DoClick()
-		addDBRole( groupUniqueID )
-	end
 
-	local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _roles_height, settingsWindow.window.site )
-	function rolesDup:Paint( pw, ph )
-		if rolesDup:IsHovered() then
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-		else
+		net.Start( "yrp_ply_groups" )
+		net.SendToServer()
+
+		-- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES -- ROLES
+		local _roles_height = _group_height + 80
+		local rolesAdd = addButton( 50, 50, _lbr, _roles_height, settingsWindow.window.site )
+		function rolesAdd:Paint( pw, ph )
+			if rolesAdd:IsHovered() then
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+			else
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+			end
+			draw.SimpleTextOutlined( "+", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+		function rolesAdd:DoClick()
+			addDBRole( groupUniqueID )
+		end
+
+		local rolesDup = addButton( _w - 50 - _br - 50 - _br, 50, _lbr + 50 + _br, _roles_height, settingsWindow.window.site )
+		function rolesDup:Paint( pw, ph )
+			if rolesDup:IsHovered() then
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+			else
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+			end
+			draw.SimpleTextOutlined( lang_string( "duplicate" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+		function rolesDup:DoClick()
+			dupDBRole( groupUniqueID, getCurrentRole() )
+		end
+
+		local rolesRem = addButton( 50, 50, _lbr + _w - 50, _roles_height, settingsWindow.window.site )
+		function rolesRem:Paint( pw, ph )
+			if rolesRem:IsHovered() then
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+			else
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
+			end
+			draw.SimpleTextOutlined( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+		function rolesRem:DoClick()
+			deleteDBRole()
+		end
+
+		local rolesHeader = createD( "DPanel", settingsWindow.window.site, ctr( _w ), ctr( 40 ), ctr( 10 ), ctr( _roles_height + 60 ) )
+		function rolesHeader:Paint( pw, ph )
+			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
+			draw.SimpleTextOutlined( string_name .. " - " .. lang_string( "roles" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		end
+
+		local _r_l = {}
+		_r_l.w = ctr( _w )
+		_r_l.h = ScrH() - ctr( _roles_height + 200+10 )
+
+		rolesList = createD( "DScrollPanel", settingsWindow.window.site, _r_l.w, _r_l.h, ctr( 10 ), ctr( _roles_height + 60 + 40 ) )
+		function rolesList:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 		end
-		draw.SimpleTextOutlined( lang_string( "duplicate" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function rolesDup:DoClick()
-		dupDBRole( groupUniqueID, getCurrentRole() )
-	end
-
-	local rolesRem = addButton( 50, 50, _lbr + _w - 50, _roles_height, settingsWindow.window.site )
-	function rolesRem:Paint( pw, ph )
-		if rolesRem:IsHovered() then
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
-		else
-			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
-		end
-		draw.SimpleTextOutlined( "-", "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-	function rolesRem:DoClick()
-		deleteDBRole()
-	end
-
-	local rolesHeader = createD( "DPanel", settingsWindow.window.site, ctr( _w ), ctr( 40 ), ctr( 10 ), ctr( _roles_height + 60 ) )
-	function rolesHeader:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 100, 255, 100, 200 ) )
-		draw.SimpleTextOutlined( string_name .. " - " .. lang_string( "roles" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-	end
-
-	local _r_l = {}
-	_r_l.w = ctr( _w )
-	_r_l.h = ScrH() - ctr( _roles_height + 200+10 )
-
-	rolesList = createD( "DScrollPanel", settingsWindow.window.site, _r_l.w, _r_l.h, ctr( 10 ), ctr( _roles_height + 60 + 40 ) )
-	function rolesList:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 200 ) )
 	end
 end)
 

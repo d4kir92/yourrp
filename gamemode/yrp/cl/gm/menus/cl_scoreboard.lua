@@ -172,7 +172,7 @@ function drawGroupPlayers( id )
 				end
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-					_w = _w + ctr( 500 )
+					_w = _w + ctr( 600 )
 				end
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
@@ -192,7 +192,7 @@ function drawGroupPlayers( id )
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
 					local icon_size = ctr( 100 )
-					_w = _w + ctr( 400 )
+					_w = _w + ctr( 600 )
 					DrawIcon( GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
 					if self:IsHovered() then
 						draw.SimpleTextOutlined( string.upper(self.lang), "sef", _w + ( icon_size * 1.49 ) / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -200,7 +200,7 @@ function drawGroupPlayers( id )
 				end
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
-					_w = _w + ctr( 400 )
+					_w = _w + ctr( 500 )
 					draw.SimpleTextOutlined( self.playtime, "sef", _w, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
 
@@ -493,17 +493,17 @@ function drawGroup( id, name, color, icon )
 				str = str .. lang_string( "deaths" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-				_w = _w + ctr( 500 )
+				_w = _w + ctr( 600 )
 				draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
-				_w = _w + ctr( 400 )
+				_w = _w + ctr( 600 )
 				draw.SimpleTextOutlined( "Language", "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
-				_w = _w + ctr( 400 )
+				_w = _w + ctr( 500 )
 				draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
@@ -546,7 +546,7 @@ function tryLowerGroup( id )
 				local tmp = drawLowerGroup( group.uniqueID )
 				tryLowerGroup( group.uniqueID )
 
-				elePos.y = elePos.y + 10
+				elePos.y = elePos.y + 50
 
 				local tmpX, tmpY = tmp:GetPos()
 				tmp:SetSize( tmp:GetWide(), ctr( elePos.y + 50 ) - tmpY )
@@ -577,7 +577,7 @@ function drawGroups()
 		if tonumber( group.int_parentgroup ) == tonumber( 0 ) then
 			if hasGroupRowPlayers( group.uniqueID ) then
 				if _not_first then
-					elePos.y = elePos.y + 100
+					elePos.y = elePos.y + 50
 				end
 				_not_first = true
 			end
@@ -635,17 +635,17 @@ function drawRest()
 				str = str .. lang_string( "deaths" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-				_w = _w + ctr( 500 )
+				_w = _w + ctr( 600 )
 				draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
-				_w = _w + ctr( 400 )
+				_w = _w + ctr( 600 )
 				draw.SimpleTextOutlined( "Language", "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
-				_w = _w + ctr( 400 )
+				_w = _w + ctr( 500 )
 				draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
@@ -739,7 +739,7 @@ function drawRest()
 					end
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-						_w = _w + ctr( 500 )
+						_w = _w + ctr( 600 )
 					end
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
@@ -759,7 +759,7 @@ function drawRest()
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
 						local icon_size = ctr( 100 )
-						_w = _w + ctr( 400 )
+						_w = _w + ctr( 600 )
 						DrawIcon( GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
 						if self:IsHovered() then
 							draw.SimpleTextOutlined( string.upper(self.lang), "sef", _w + ( icon_size * 1.49 ) / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
@@ -767,7 +767,7 @@ function drawRest()
 					end
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
-						_w = _w + ctr( 400 )
+						_w = _w + ctr( 500 )
 						draw.SimpleTextOutlined( self.playtime, "sef", _w, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
 
