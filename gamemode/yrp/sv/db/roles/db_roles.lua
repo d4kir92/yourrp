@@ -3,6 +3,319 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
+local DATABASE_NAME = "yrp_ply_roles"
+
+SQL_ADD_COLUMN( DATABASE_NAME, "string_name", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_icon", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_description", "TEXT DEFAULT '-'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT -1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_hpreg", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_ar", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_armax", "INTEGER DEFAULT 100" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_arreg", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_st", "INTEGER DEFAULT 50" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_stregup", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_stregdn", "INTEGER DEFAULT 0.5" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "string_abart", "TEXT DEFAULT 'mana'" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_ab", "INTEGER DEFAULT 50" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 1000" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_abreg", "INTEGER DEFAULT 5" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 150" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_powerjump", "INTEGER DEFAULT 200" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_preroles", "INTEGER DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_instructor", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_voiceglobal", "INTEGER DEFAULT 0" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_iscivil", "INTEGER DEFAULT 0" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "string_licenses", "TEXT DEFAULT ' '" )
+
+SQL_ADD_COLUMN( DATABASE_NAME, "int_position", "INTEGER DEFAULT 1" )
+
+SQL_UPDATE( DATABASE_NAME, "uses = 0", nil )
+
+local yrp_ply_roles = {}
+local _init_ply_roles = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '1'" )
+if wk(_init_ply_roles) then
+	yrp_ply_roles = _init_ply_roles[1]
+end
+
+local HANDLER_GROUPSANDROLES = {}
+HANDLER_GROUPSANDROLES["roleslist"] = {}
+HANDLER_GROUPSANDROLES["roles"] = {}
+HANDLER_GROUPSANDROLES["roles"] = {}
+
+for str, val in pairs( yrp_ply_roles ) do
+	if string.find( str, "string_" ) then
+		util.AddNetworkString( "update_" .. str )
+		net.Receive( "update_" .. str, function( len, ply )
+
+		end)
+	end
+end
+
+function SubscribeRoleList(ply, uid)
+	if HANDLER_GROUPSANDROLES["roleslist"][uid] == nil then
+		HANDLER_GROUPSANDROLES["roleslist"][uid] = {}
+	end
+	if !table.HasValue( HANDLER_GROUPSANDROLES["roleslist"][uid], ply ) then
+		table.insert( HANDLER_GROUPSANDROLES["roleslist"][uid], ply )
+		printGM( "gm", ply:YRPName() .. " subscribed to RoleList " .. uid )
+	else
+		printGM( "gm", ply:YRPName() .. " already subscribed to RoleList " .. uid )
+	end
+end
+
+function UnsubscribeRoleList(ply, uid)
+	if HANDLER_GROUPSANDROLES["roleslist"][uid] == nil then
+		HANDLER_GROUPSANDROLES["roleslist"][uid] = {}
+	end
+	if table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][uid], ply) then
+		table.RemoveByValue(HANDLER_GROUPSANDROLES["roleslist"][uid], ply)
+		printGM("gm", ply:YRPName() .. " unsubscribed from RoleList " .. uid)
+	end
+end
+
+function SubscribeRole(ply, uid)
+	if HANDLER_GROUPSANDROLES["roles"][uid] == nil then
+		HANDLER_GROUPSANDROLES["roles"][uid] = {}
+	end
+	if !table.HasValue( HANDLER_GROUPSANDROLES["roles"][uid], ply ) then
+		table.insert( HANDLER_GROUPSANDROLES["roles"][uid], ply )
+		printGM( "gm", ply:YRPName() .. " subscribed to Role " .. uid )
+	else
+		printGM( "gm", ply:YRPName() .. " already subscribed to Role " .. uid )
+	end
+end
+
+function UnsubscribeRole(ply, uid)
+	if HANDLER_GROUPSANDROLES["roles"][uid] == nil then
+		HANDLER_GROUPSANDROLES["roles"][uid] = {}
+	end
+	if table.HasValue(HANDLER_GROUPSANDROLES["roles"][uid], ply) then
+		table.RemoveByValue(HANDLER_GROUPSANDROLES["roles"][uid], ply)
+		printGM("gm", ply:YRPName() .. " unsubscribed from Role " .. uid)
+	end
+end
+
+function SortRoles(uid)
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
+
+	if wk(siblings) then
+		for i, sibling in pairs(siblings) do
+			sibling.int_position = tonumber(sibling.int_position)
+		end
+
+		local count = 0
+		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+			count = count + 1
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+		end
+	end
+end
+
+function SendRoleList(uid)
+	print("SendRoleList", uid)
+	SortRoles(uid)
+
+	local tbl_parentgroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'" )
+	if !wk( tbl_parentgroup ) then
+		tbl_parentgroup = {}
+	else
+		tbl_parentgroup = tbl_parentgroup[1]
+	end
+
+	local tbl_roles = SQL_SELECT( DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'" )
+	if !wk( tbl_roles ) then
+		print("HAS NO ROLES")
+		tbl_roles = {}
+	end
+	local currentuid = uid
+	local parentuid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+	if wk(parentuid) then
+		printTab(parentuid)
+		parentuid = parentuid[1].int_groupID
+	else
+		parentuid = 0
+	end
+
+	HANDLER_GROUPSANDROLES["roleslist"][uid] = HANDLER_GROUPSANDROLES["roleslist"][uid] or {}
+	for i, pl in pairs(HANDLER_GROUPSANDROLES["roleslist"][uid]) do
+		net.Start("settings_subscribe_rolelist")
+			net.WriteTable(tbl_parentgroup)
+			net.WriteTable(tbl_roles)
+			net.WriteString(currentuid)
+			net.WriteString(parentuid)
+		net.Send(pl)
+	end
+end
+
+util.AddNetworkString("settings_subscribe_rolelist")
+net.Receive("settings_subscribe_rolelist", function(len, ply)
+	local par = tonumber(net.ReadString())
+	SubscribeRoleList(ply, par)
+	SendRoleList(par)
+end)
+
+util.AddNetworkString("settings_add_role")
+net.Receive("settings_add_role", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	SQL_INSERT_INTO(DATABASE_NAME, "int_groupID", "'" .. uid .. "'")
+
+	local roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
+
+	local count = tonumber(table.Count(roles))
+	local new_role = roles[count]
+	local up = roles[count - 1]
+	if count == 1 then
+		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+	else
+		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', int_up = '" .. up.uniqueID .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_role.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
+	end
+
+	printGM("db", "Added new role: " .. new_role.uniqueID)
+
+	SendRoleList(uid)
+end)
+
+util.AddNetworkString("settings_role_position_up")
+net.Receive("settings_role_position_up", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	role = role[1]
+
+	role.int_position = tonumber(role.int_position)
+
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
+
+	for i, sibling in pairs(siblings) do
+		sibling.int_position = tonumber(sibling.int_position)
+	end
+
+	local count = 0
+	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+		count = count + 1
+		if tonumber(sibling.int_position) == role.int_position - 1 then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. role.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+		end
+	end
+
+	role.int_groupID = tonumber(role.int_groupID)
+	SendRoleList(role.int_groupID)
+end)
+
+util.AddNetworkString("settings_role_position_dn")
+net.Receive("settings_role_position_dn", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	role = role[1]
+
+	role.int_position = tonumber(role.int_position)
+
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
+
+	for i, sibling in pairs(siblings) do
+		sibling.int_position = tonumber(sibling.int_position)
+	end
+
+	local count = 0
+	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+		count = count + 1
+		if tonumber(sibling.int_position) == role.int_position + 1 then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. role.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+		end
+	end
+
+	role.int_groupID = tonumber(role.int_groupID)
+	SendRoleList(role.int_groupID)
+end)
+
+util.AddNetworkString("settings_subscribe_role")
+net.Receive("settings_subscribe_role", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	SubscribeRole(ply, uid)
+
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	if !wk(role) then
+		role = {}
+	else
+		role = role[1]
+	end
+
+	local roles = SQL_SELECT(DATABASE_NAME, "string_name, uniqueID", nil)
+	if !wk(roles) then
+		roles = {}
+	end
+
+	local usergroups = SQL_SELECT("yrp_usergroups", "*", nil)
+
+	net.Start("settings_subscribe_role")
+		net.WriteTable(role)
+		net.WriteTable(roles)
+		net.WriteTable(usergroups)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("settings_unsubscribe_role")
+net.Receive("settings_unsubscribe_role", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	UnsubscribeRole(ply, uid)
+end)
+
+util.AddNetworkString("settings_unsubscribe_rolelist")
+net.Receive("settings_unsubscribe_rolelist", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	UnsubscribeRoleList(ply, uid)
+end)
+
+util.AddNetworkString("settings_delete_role")
+net.Receive("settings_delete_role", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	if wk(role) then
+		role = role[1]
+		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+
+		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
+		if wk(siblings) then
+			for i, sibling in pairs(siblings) do
+				sibling.int_position = tonumber(sibling.int_position)
+			end
+			local count = 0
+			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+				count = count + 1
+				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			end
+		end
+
+		role.int_groupID = tonumber(role.int_groupID)
+		SendrpList(role.int_groupID)
+	end
+end)
+
+-- OLD
 local _db_name = "yrp_roles"
 
 SQL_ADD_COLUMN( _db_name, "roleID", "TEXT DEFAULT ' '" )
@@ -11,7 +324,7 @@ SQL_ADD_COLUMN( _db_name, "playermodels", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "playermodelsnone", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "playermodelsize", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "salary", "INTEGER DEFAULT 50" )
-SQL_ADD_COLUMN( _db_name, "groupID", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN( _db_name, "roleID", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( _db_name, "color", "TEXT DEFAULT '0,0,0'" )
 SQL_ADD_COLUMN( _db_name, "sweps", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( _db_name, "ammunation", "TEXT DEFAULT ' '" )

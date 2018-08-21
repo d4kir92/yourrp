@@ -13,6 +13,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		cur_group.par = 0
 		cur_group.edi = 0
 
+		local cur_role = {}
+		cur_role.cur = 0
+		cur_role.par = 0
+		cur_role.edi = 0
+
 		function PARENT:OnRemove()
 			net.Start("Unsubscribe_Settings_GroupsAndRoles")
 				net.WriteString(cur_group.cur)
@@ -21,6 +26,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 		PARENT.gs = {}
 		local gs = PARENT.gs
+
+		PARENT.rs = {}
+		local rs = PARENT.rs
 
 		gs.bac = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20), ctr(20))
 		gs.bac:SetText("")
@@ -296,9 +304,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
-		PARENT.rs = {}
-		local rs = PARENT.rs
-
 		rs.top = createD("DPanel", PARENT, ctr(800), ctr(60), ctr(20), ctr(1040))
 		function rs.top:Paint(pw, ph)
 			local tab = {}
@@ -314,9 +319,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if self.group != "" then
 					local inp = {}
 					inp.group = self.group
-					tab2.text = lang_string("groupsof", inp)
-				else
-					tab2.text = lang_string("maingroups")
+					tab2.text = "[" .. lang_string("wip") .. "] " .. lang_string("rolesof", inp)
 				end
 			else
 				tab2.text = lang_string("loading")
@@ -340,12 +343,19 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DrawText(tab2)
 		end
 		function rs.add:DoClick()
-			--net.Start("settings_add_role")
-				--net.WriteString(cur_group.cur)
-			--net.SendToServer()
+			net.Start("settings_add_role")
+				net.WriteString(cur_role.cur)
+			net.SendToServer()
 		end
 
 		rs.rlist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(1100))
+		rs.rplist = createD("DPanelList", rs.rlist, rs.rlist:GetWide(), rs.rlist:GetTall(), 0, 0)
+		rs.rplist:EnableVerticalScrollbar(true)
+		rs.rplist:SetSpacing(ctr(10))
+		function rs.rplist:ClearList()
+			rs.top.group = nil
+			rs.rplist:Clear()
+		end
 
 		PARENT.ea = {}
 		local ea = PARENT.ea
@@ -437,10 +447,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 			end
 		end
+
 		net.Receive("settings_subscribe_group", function(le)
 			local group = net.ReadTable()
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
+
+			net.Start("settings_subscribe_rolelist")
+				net.WriteString(group.uniqueID)
+			net.SendToServer()
 
 			group.uniqueID = tonumber(group.uniqueID)
 			cur_group.edi = group.uniqueID
@@ -632,6 +647,164 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			visible.uniqueID = group.uniqueID
 			visible.lforce = false
 			ea[group.uniqueID].visible = DCheckBox(visible)
+		end)
+
+		function CreateLineRole(parent, role)
+			role.uniqueID = tonumber(role.uniqueID)
+			rs.rplist[role.uniqueID] = rs.rplist[role.uniqueID] or {}
+			rs.rplist[role.uniqueID] = createD("DButton", parent, parent:GetWide() - ctr(20), ctr(120), 0, 0)
+			rs.rplist[role.uniqueID]:SetText("")
+			for i, e in pairs(role) do
+				if string.StartWith(i, "int_") then
+					rs.rplist[role.uniqueID][i] = tonumber(e)
+				elseif string.StartWith(i, "string_color") then
+					rs.rplist[role.uniqueID][i] = stc(e)
+				else
+					rs.rplist[role.uniqueID][i] = e
+				end
+			end
+			local pnl = rs.rplist[role.uniqueID]
+			function pnl:Paint(pw, ph)
+				local tab = {}
+				tab.color = rs.rplist[role.uniqueID]["string_color"]
+				DrawPanel(self, tab)
+
+				self.text = self.text or role.string_name .. " [UID: " .. role.uniqueID .. "]"
+				local tab2 = {}
+				tab2.x = ctr(182)
+				tab2.y = ctr(20)
+				tab2.ax = 0
+				tab2.ay = 0
+				tab2.text = self.text
+				tab2.font = "mat1text"
+				tab2.lforce = false
+				DrawText(tab2)
+
+				--[[local tab3 = {}
+				tab3.x = ctr(182)
+				tab3.y = ctr(100)
+				tab3.ax = 0
+				tab3.ay = 4
+				tab3.text = "POSITION: " .. role.int_position
+				tab3.font = "mat1text"
+				DrawText(tab3)]]
+			end
+			function pnl:DoClick()
+				net.Start("settings_subscribe_role")
+					net.WriteString(role.uniqueID)
+				net.SendToServer()
+			end
+
+			rs.rplist[role.uniqueID].ico = createD("DHTML", rs.rplist[role.uniqueID], rs.rplist[role.uniqueID]:GetTall() - ctr(20), rs.rplist[role.uniqueID]:GetTall() - ctr(20), ctr(60), ctr(10))
+			local ico = rs.rplist[role.uniqueID].ico
+			function ico:Paint(pw, ph)
+			end
+			ico:SetHTML( GetHTMLImage( role.string_icon, ico:GetWide(), ico:GetTall() ) )
+
+			rs.rplist[role.uniqueID].up = createD("DButton", rs.rplist[role.uniqueID], ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), ctr(10))
+			rs.rplist[role.uniqueID].up:SetText("")
+			local up = rs.rplist[role.uniqueID].up
+			function up:Paint(pw, ph)
+				if rs.rplist[role.uniqueID].int_position > 1 then
+					local tab = {}
+					tab.color = Color(255, 255, 0)
+					DrawPanel(self, tab)
+					local tab2 = {}
+					tab2.x = pw / 2
+					tab2.y = ph / 2
+					tab2.ax = 1
+					tab2.ay = 1
+					tab2.text = "▲"
+					tab2.font = "mat1text"
+					DrawText(tab2)
+				end
+			end
+			function up:DoClick()
+				net.Start("settings_role_position_up")
+					net.WriteString(rs.rplist[role.uniqueID].uniqueID)
+				net.SendToServer()
+			end
+
+			rs.rplist[role.uniqueID].dn = createD("DButton", rs.rplist[role.uniqueID], ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), rs.rplist[role.uniqueID]:GetTall() / 2 + ctr(5))
+			rs.rplist[role.uniqueID].dn:SetText("")
+			local dn = rs.rplist[role.uniqueID].dn
+			function dn:Paint(pw, ph)
+				if rs.rplist[role.uniqueID].int_position < table.Count(rs.rplist.tab) then
+					local tab = {}
+					tab.color = Color(255, 255, 0)
+					DrawPanel(self, tab)
+					local tab2 = {}
+					tab2.x = pw / 2
+					tab2.y = ph / 2
+					tab2.ax = 1
+					tab2.ay = 1
+					tab2.text = "▼"
+					tab2.font = "mat1text"
+					DrawText(tab2)
+				end
+			end
+			function dn:DoClick()
+				net.Start("settings_role_position_dn")
+					net.WriteString(rs.rplist[role.uniqueID].uniqueID)
+				net.SendToServer()
+			end
+
+			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], ctr(40), ctr(40), rs.rplist[role.uniqueID]:GetWide() - ctr(66), rs.rplist[role.uniqueID]:GetTall() - ctr(60))
+			rs.rplist[role.uniqueID].ch:SetText("")
+			local ch = rs.rplist[role.uniqueID].ch
+			function ch:Paint(pw, ph)
+				local tab = {}
+				tab.color = Color(255, 255, 0)
+				DrawPanel(self, tab)
+				local tab2 = {}
+				tab2.x = pw / 2
+				tab2.y = ph / 2
+				tab2.ax = 1
+				tab2.ay = 1
+				tab2.text = "▶"
+				tab2.font = "mat1text"
+				DrawText(tab2)
+			end
+			function ch:DoClick()
+				rs.rplist:ClearList()
+				net.Start("settings_unsubscribe_rolelist")
+					net.WriteString(cur_role.cur)
+				net.SendToServer()
+				timer.Simple(0.1, function()
+					net.Start("settings_subscribe_rolelist")
+						net.WriteString(rs.rplist[role.uniqueID].uniqueID)
+					net.SendToServer()
+				end)
+			end
+
+			parent:AddItem(rs.rplist[role.uniqueID])
+		end
+		net.Receive("settings_subscribe_rolelist", function(le)
+			if pa(rs.rplist) then
+				rs.rplist:ClearList()
+
+				local parentrole = net.ReadTable()
+				printTab(parentrole)
+				if parentrole.uniqueID != nil then
+					rs.top.group = parentrole.string_name
+				else
+					rs.top.group = ""
+				end
+
+				local roles = net.ReadTable()
+				printTab(roles, "ROLES")
+
+				cur_role.cur = tonumber(net.ReadString())
+				cur_role.par = tonumber(net.ReadString())
+				rs.rplist.tab = roles
+				for i, role in pairs(roles) do
+					CreateLineRole(rs.rplist, role)
+					role["int_position"] = tonumber(role["int_position"])
+				end
+
+				rs.rplist:SortByMember("int_position", true)
+				rs.rplist:Rebuild()
+			end
 		end)
 	end
 end)

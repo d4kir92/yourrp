@@ -139,7 +139,7 @@ function OpenSettings()
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
 	settingsWindow.window:AddSite("open_server_roles", lang_string("roles") .. " [OLD]", _wip, "icon16/group_edit.png")
-	settingsWindow.window:AddSite("open_server_groups_and_roles", lang_string("groups") .. " [" .. lang_string("wip") .. "]", _wip, "icon16/group.png") --"settings_groupsandroles", _wip, "icon16/group.png")
+	settingsWindow.window:AddSite("open_server_groups_and_roles", "settings_groupsandroles", _wip, "icon16/group.png")
 
 	local _settings_server_maintance = "settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)

@@ -81,25 +81,29 @@ function hudUpTime()
 	drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "ut" .. "aw" ) ) + HudV( "ut" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "ut" .. "ah" ) ) + HudV( "ut" .. "py" ), HudV( "ut" .. "sw" ), HudV( "ut" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
 end
 
-function GM:PlayerStartVoice( ply )
+function GM:PlayerStartVoice( pl )
 
-	if ply == LocalPlayer() then
+	if pl == LocalPlayer() then
 		_showVoice = true
 		net.Start( "yrp_voice_start" )
 		net.SendToServer()
 	end
-	if ply:SteamID() == LocalPlayer():GetNWString( "voice_global_steamid" ) and ply:GetNWInt( "speak_channel", 0 ) == 2 then
+	local stid = pl:SteamID()
+	stid = stid or ""
+	if stid == LocalPlayer():GetNWString( "voice_global_steamid" ) and pl:GetNWInt( "speak_channel", 0 ) == 2 then
 		_showGlobalVoice = true
 	end
 end
 
-function GM:PlayerEndVoice( ply )
-	if ply == LocalPlayer() then
+function GM:PlayerEndVoice( pl )
+	if pl == LocalPlayer() then
 		_showVoice = false
 		net.Start( "yrp_voice_end" )
 		net.SendToServer()
 	end
-	if ply:SteamID() == LocalPlayer():GetNWString( "voice_global_steamid" ) then
+	local stid = pl:SteamID()
+	stid = stid or ""
+	if stid == LocalPlayer():GetNWString( "voice_global_steamid" ) then
 		_showGlobalVoice = false
 	end
 end
