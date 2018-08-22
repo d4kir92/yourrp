@@ -249,7 +249,7 @@ function GM:GetFallDamage( ply, speed )
 			return 0
 		end
 	else
-		-- Disabled
+		return 10
 	end
 end
 

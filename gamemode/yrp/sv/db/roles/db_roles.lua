@@ -5,8 +5,9 @@
 
 local DATABASE_NAME = "yrp_ply_roles"
 
-SQL_ADD_COLUMN( DATABASE_NAME, "string_name", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "string_icon", "TEXT DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "string_description", "TEXT DEFAULT '-'" )
 SQL_ADD_COLUMN( DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50" )
@@ -37,15 +38,18 @@ SQL_ADD_COLUMN( DATABASE_NAME, "float_abreg", "INTEGER DEFAULT 5" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 150" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_powerjump", "INTEGER DEFAULT 200" )
-SQL_ADD_COLUMN( DATABASE_NAME, "string_preroles", "INTEGER DEFAULT ' '" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_prerole", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_instructor", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_voiceglobal", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_iscivil", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "string_licenses", "TEXT DEFAULT ' '" )
 
@@ -66,9 +70,102 @@ HANDLER_GROUPSANDROLES["roles"] = {}
 
 for str, val in pairs( yrp_ply_roles ) do
 	if string.find( str, "string_" ) then
-		util.AddNetworkString( "update_" .. str )
-		net.Receive( "update_" .. str, function( len, ply )
-
+		local tab = {}
+		tab.netstr = "update_role_" .. str
+		util.AddNetworkString( tab.netstr )
+		net.Receive( tab.netstr, function( len, ply )
+			local uid = tonumber(net.ReadString())
+			local s = net.ReadString()
+			tab.ply = ply
+			tab.id = str
+			tab.value = s
+			tab.db = DATABASE_NAME
+			tab.uniqueID = uid
+			UpdateString(tab)
+			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+			BroadcastString(tab)
+			if tab.netstr == "update_role_string_name" then
+				util.AddNetworkString("settings_role_update_name")
+				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+				if wk(puid) then
+					puid = puid[1]
+					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+					tab.netstr = "settings_role_update_name"
+					tab.uniqueID = tonumber(puid.uniqueID)
+					tab.force = true
+					BroadcastString(tab)
+				end
+			elseif tab.netstr == "update_role_string_color" then
+				util.AddNetworkString("settings_role_update_color")
+				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+				if wk(puid) then
+					puid = puid[1]
+					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+					tab.netstr = "settings_role_update_color"
+					tab.uniqueID = tonumber(puid.uniqueID)
+					tab.force = true
+					BroadcastString(tab)
+				end
+			elseif tab.netstr == "update_role_string_icon" then
+				util.AddNetworkString("settings_role_update_icon")
+				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+				if wk(puid) then
+					puid = puid[1]
+					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+					tab.netstr = "settings_role_update_icon"
+					tab.uniqueID = tonumber(puid.uniqueID)
+					tab.force = true
+					BroadcastString(tab)
+				end
+			end
+		end)
+	elseif string.find( str, "int_" ) then
+		local tab = {}
+		tab.netstr = "update_role_" .. str
+		util.AddNetworkString( tab.netstr )
+		net.Receive( tab.netstr, function( len, ply )
+			local uid = tonumber(net.ReadString())
+			local int = tonumber(net.ReadString())
+			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			tab.ply = ply
+			tab.id = str
+			tab.value = int
+			tab.db = DATABASE_NAME
+			tab.uniqueID = uid
+			UpdateInt(tab)
+			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+			BroadcastInt(tab)
+			if tab.netstr == "update_int_parentrole" then
+				if wk(cur) then
+					cur = cur[1]
+					SendGroupList(tonumber(cur.int_parentrole))
+				end
+				SendGroupList(int)
+			end
+		end)
+	elseif string.find( str, "bool_" ) then
+		local tab = {}
+		tab.netstr = "update_role_" .. str
+		util.AddNetworkString( tab.netstr )
+		net.Receive( tab.netstr, function( len, ply )
+			local uid = tonumber(net.ReadString())
+			local int = tonumber(net.ReadString())
+			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			tab.ply = ply
+			tab.id = str
+			tab.value = int
+			tab.db = DATABASE_NAME
+			tab.uniqueID = uid
+			UpdateInt(tab)
+			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+			BroadcastInt(tab)
+			if tab.netstr == "update_int_parentrole" then
+				if wk(cur) then
+					cur = cur[1]
+					SendGroupList(tonumber(cur.int_parentrole))
+				end
+				SendGroupList(int)
+			end
 		end)
 	end
 end

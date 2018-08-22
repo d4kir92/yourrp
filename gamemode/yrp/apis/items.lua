@@ -150,7 +150,9 @@ function GetSurroundingItems( ply )
 	local _ents = GetSurroundingEntities( ply )
 	local _items = {}
 	for i, ent in pairs( _ents ) do
-		table.insert( _items, FormatEntityToItem( ent ) )
+		if ent:GetClass() != "prop_dynamic" then
+			table.insert( _items, FormatEntityToItem( ent ) )
+		end
 	end
 	return _items
 end

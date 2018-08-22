@@ -1019,72 +1019,70 @@ function scoreboard:show_sb()
 		net.SendToServer()
 
 		isScoreboardOpen = true
-		if _SBFrame != nil then
-			_SBFrame:Remove()
-			_SBFrame = nil
-		end
 		local _w = BScrW() - ctr( 400 )
-		_SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
-		_SBFrame:SetTitle( "" )
-		_SBFrame:ShowCloseButton( false )
-		_SBFrame:SetDraggable( false )
-		_SBFrame:Center()
+		if _SBFrame == nil then
+			local _w = BScrW() - ctr( 400 )
+			_SBFrame = createD( "DFrame", nil, _w, ScrH(), 10, 10 )
+			_SBFrame:SetTitle( "" )
+			_SBFrame:ShowCloseButton( false )
+			_SBFrame:SetDraggable( false )
+			_SBFrame:Center()
 
-		_SBFrame:MakePopup()
+			_SBFrame:MakePopup()
 
-		local _mapPNG = getMapPNG()
+			local _mapPNG = getMapPNG()
 
-		local _server_logo = LocalPlayer():GetNWString( "text_server_logo", "" )
-		text_server_logo = GetHTMLImage( LocalPlayer():GetNWString( "text_server_logo", "" ), ctr( 256 ), ctr( 256 ) )
+			local _server_logo = LocalPlayer():GetNWString( "text_server_logo", "" )
+			text_server_logo = GetHTMLImage( LocalPlayer():GetNWString( "text_server_logo", "" ), ctr( 256 ), ctr( 256 ) )
 
-		function _SBFrame:Paint( pw, ph )
-			draw.RoundedBox( 0, ctr( 256 ), ctr( _br ), pw - ctr( 256*2 ), ctr( 125 ), get_color( "epicBlue" ) )
+			function _SBFrame:Paint( pw, ph )
+				draw.RoundedBox( 0, ctr( 256 ), ctr( _br ), pw - ctr( 256*2 ), ctr( 125 ), get_color( "epicBlue" ) )
 
-			draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, get_color( "darkBG" ) )
+				draw.RoundedBox( 0, ctr( _br ), ctr( 256 - _br ), pw - ctr( _br*2 ), ph, get_color( "darkBG" ) )
 
-			draw.SimpleTextOutlined( GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-			draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-			if _server_logo == "" then
-				surface.SetDrawColor( 255, 255, 255, 255 )
-				surface.SetMaterial( _yrpIcon	)
-				surface.DrawTexturedRect( 0, ctr( 4 ), ctr( 256 ), ctr( 256 ) )
-			end
-
-			if _mapPNG != false then
-				draw.RoundedBox( 0, pw-ctr( 256+8 ), 0, ctr( 256+8 ), ctr( 256+8 ), Color( 0, 0, 0, 255 ) )
-
-				surface.SetDrawColor( 255, 255, 255, 255 )
-				surface.SetMaterial( _mapPNG	)
-				surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
-			else
 				if _server_logo == "" then
 					surface.SetDrawColor( 255, 255, 255, 255 )
 					surface.SetMaterial( _yrpIcon	)
+					surface.DrawTexturedRect( 0, ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+				end
+
+				if _mapPNG != false then
+					draw.RoundedBox( 0, pw-ctr( 256+8 ), 0, ctr( 256+8 ), ctr( 256+8 ), Color( 0, 0, 0, 255 ) )
+
+					surface.SetDrawColor( 255, 255, 255, 255 )
+					surface.SetMaterial( _mapPNG	)
 					surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+				else
+					if _server_logo == "" then
+						surface.SetDrawColor( 255, 255, 255, 255 )
+						surface.SetMaterial( _yrpIcon	)
+						surface.DrawTexturedRect( pw-ctr( 256+4 ), ctr( 4 ), ctr( 256 ), ctr( 256 ) )
+					end
 				end
 			end
-		end
 
-		if _server_logo != "" then
-			local ServerLogo = createD( "DHTML", _SBFrame, ctr( 256 ), ctr( 256 ), 0, ctr( 4 ) )
-			ServerLogo:SetHTML( text_server_logo )
-			if _mapPNG == false then
-				local ServerLogo2 = createD( "DHTML", _SBFrame, ctr( 256 ), ctr( 256 ), _SBFrame:GetWide()-ctr( 256+4 ), ctr( 4 ) )
-				ServerLogo2:SetHTML( text_server_logo )
+			if _server_logo != "" then
+				local ServerLogo = createD( "DHTML", _SBFrame, ctr( 256 ), ctr( 256 ), 0, ctr( 4 ) )
+				ServerLogo:SetHTML( text_server_logo )
+				if _mapPNG == false then
+					local ServerLogo2 = createD( "DHTML", _SBFrame, ctr( 256 ), ctr( 256 ), _SBFrame:GetWide()-ctr( 256+4 ), ctr( 4 ) )
+					ServerLogo2:SetHTML( text_server_logo )
+				end
+			end
+
+			_SBSP = createD( "DScrollPanel", _SBFrame, _w-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
+
+			local _DPanelHeader = createD( "DPanel", _SBSP, ScrH(), ScrH(), 0, 0 )
+			function _DPanelHeader:Paint( pw, ph )
+				--draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "darkBG" ) )
 			end
 		end
-
-		_SBSP = createD( "DScrollPanel", _SBFrame, _w-ctr( 80 ), ScrH() - ctr( 256+48-50 ) - ctr( 10 ), ctr( 40 ), ctr( 256+48-50+10 ) )
-
-		local _DPanelHeader = createD( "DPanel", _SBSP, ScrH(), ScrH(), 0, 0 )
-		function _DPanelHeader:Paint( pw, ph )
-			--draw.RoundedBox( 0, 0, 0, pw, ph, get_color( "darkBG" ) )
-		end
-
 		drawScoreboard()
 	end
 end

@@ -1100,15 +1100,15 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 
 				timer.Simple( 0.001, function()
 					if !_tup.StartSolid and _tdn.StartSolid then
-						pl:SetPos( _tup.HitPos + Vector( 0, 0, 1 ) )
+						pl:SetPos( _tup.HitPos + Vector(0, 0, 6) )
 					elseif _tup.StartSolid and !_tdn.StartSolid then
-						pl:SetPos( _tdn.HitPos - Vector( 0, 0, 72 + 1 ) )
+						pl:SetPos( _tdn.HitPos - Vector(0, 0, 72 + 6) )
 					elseif !_tup.StartSolid and !_tdn.StartSolid then
-						_pos = _pos + Vector( 0, 0, 36 )
+						_pos = _pos + Vector(0, 0, 36) -- Mid of Player
 						if _pos:Distance( _tup.HitPos ) < _pos:Distance( _tdn.HitPos ) then
-							pl:SetPos(_tup.HitPos + Vector( 0, 0, 1 ))
+							pl:SetPos(_tup.HitPos + Vector(0, 0, 6))
 						elseif _pos:Distance( _tup.HitPos ) > _pos:Distance( _tdn.HitPos ) then
-							pl:SetPos(_tdn.HitPos - Vector( 0, 0, 72+6 ))
+							pl:SetPos(_tdn.HitPos - Vector(0, 0, 72 + 6))
 						end
 					end
 				end)

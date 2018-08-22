@@ -306,49 +306,62 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 		rs.top = createD("DPanel", PARENT, ctr(800), ctr(60), ctr(20), ctr(1040))
 		function rs.top:Paint(pw, ph)
-			local tab = {}
-			tab.color = YRPGetColor("3")
-			DrawPanel(self, tab)
-			local tab2 = {}
-			tab2.x = pw / 2
-			tab2.y = ph / 2
-			tab2.ax = 1
-			tab2.ay = 1
-			tab2.font = "mat1text"
-			if self.group != nil then
-				if self.group != "" then
-					local inp = {}
-					inp.group = self.group
-					tab2.text = "[" .. lang_string("wip") .. "] " .. lang_string("rolesof", inp)
+			if rs.top.group != nil then
+				local tab = {}
+				tab.color = YRPGetColor("3")
+				DrawPanel(self, tab)
+				local tab2 = {}
+				tab2.x = pw / 2
+				tab2.y = ph / 2
+				tab2.ax = 1
+				tab2.ay = 1
+				tab2.font = "mat1text"
+				if self.group != nil then
+					if self.group != "" then
+						local inp = {}
+						inp.group = self.group
+						tab2.text = "[" .. lang_string("wip") .. "] " .. lang_string("rolesof", inp)
+					end
+				else
+					tab2.text = lang_string("loading")
 				end
-			else
-				tab2.text = lang_string("loading")
+				DrawText(tab2)
 			end
-			DrawText(tab2)
 		end
 
 		rs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20 + 800 - 60), ctr(1040))
 		rs.add:SetText("")
 		function rs.add:Paint(pw, ph)
-			local tab = {}
-			tab.color = Color(0, 255, 0)
-			DrawPanel(self, tab)
-			local tab2 = {}
-			tab2.x = pw / 2
-			tab2.y = ph / 2
-			tab2.ax = 1
-			tab2.ay = 1
-			tab2.text = "+"
-			tab2.font = "mat1text"
-			DrawText(tab2)
+			if rs.top.group != nil then
+				local tab = {}
+				tab.color = Color(0, 255, 0)
+				DrawPanel(self, tab)
+				local tab2 = {}
+				tab2.x = pw / 2
+				tab2.y = ph / 2
+				tab2.ax = 1
+				tab2.ay = 1
+				tab2.text = "+"
+				tab2.font = "mat1text"
+				DrawText(tab2)
+			end
 		end
 		function rs.add:DoClick()
-			net.Start("settings_add_role")
-				net.WriteString(cur_role.cur)
-			net.SendToServer()
+			if rs.top.group != nil then
+				net.Start("settings_add_role")
+					net.WriteString(cur_role.cur)
+				net.SendToServer()
+			end
 		end
 
 		rs.rlist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(1100))
+		function rs.rlist:Paint(pw, ph)
+			if rs.top.group != nil then
+				local tab = {}
+				tab.color = Color(255, 255, 255)
+				DrawPanel(self, tab)
+			end
+		end
 		rs.rplist = createD("DPanelList", rs.rlist, rs.rlist:GetWide(), rs.rlist:GetTall(), 0, 0)
 		rs.rplist:EnableVerticalScrollbar(true)
 		rs.rplist:SetSpacing(ctr(10))
@@ -749,6 +762,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
+			--[[
 			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], ctr(40), ctr(40), rs.rplist[role.uniqueID]:GetWide() - ctr(66), rs.rplist[role.uniqueID]:GetTall() - ctr(60))
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
@@ -776,9 +790,210 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					net.SendToServer()
 				end)
 			end
+			]]--
 
 			parent:AddItem(rs.rplist[role.uniqueID])
 		end
+
+		net.Receive("settings_subscribe_role", function(le)
+			local role = net.ReadTable()
+			local roles = net.ReadTable()
+			local db_ugs = net.ReadTable()
+			printTab(role)
+			printTab(roles)
+			printTab(db_ugs)
+
+			role.uniqueID = tonumber(role.uniqueID)
+
+			--net.Start("settings_subscribe_rolelist")
+				--net.WriteString(role.uniqueID)
+			--net.SendToServer()
+
+			role.uniqueID = tonumber(role.uniqueID)
+			cur_role.edi = role.uniqueID
+
+			ea.typ = "role"
+			ea.tab = role
+
+			for i, pnl in pairs(ea.background:GetChildren()) do
+				pnl:Remove()
+			end
+
+			ea[role.uniqueID] = ea[role.uniqueID] or {}
+
+			local info = {}
+			info.parent = ea.background
+			info.x = ctr(20)
+			info.y = ctr(20)
+			info.w = ctr(1000)
+			info.h = ctr(530)
+			info.br = ctr(20)
+			info.color = Color( 255, 255, 255 )
+			info.bgcolor = Color( 80, 80, 80 )
+			info.name = "general"
+			ea[role.uniqueID].info = DGroup(info)
+			ea.info = ea[role.uniqueID].info
+			function ea.info:OnRemove()
+				if cur_role.edi != role.uniqueID then
+					net.Start("settings_unsubscribe_role")
+						net.WriteString(role.uniqueID)
+					net.SendToServer()
+				end
+			end
+
+			local name = {}
+			name.parent = ea.info
+			name.uniqueID = role.uniqueID
+			name.header = "name"
+			name.netstr = "update_role_string_name"
+			name.value = role.string_name
+			name.uniqueID = role.uniqueID
+			name.lforce = false
+			ea[role.uniqueID].name = DTextBox(name)
+
+			local hr = {}
+			hr.h = ctr(20)
+			hr.parent = ea.info
+			DHr(hr)
+
+			local color = {}
+			color.parent = ea.info
+			color.uniqueID = role.uniqueID
+			color.header = "color"
+			color.netstr = "update_role_string_color"
+			color.value = role.string_color
+			color.uniqueID = role.uniqueID
+			color.lforce = false
+			ea[role.uniqueID].color = DColor(color)
+
+			DHr(hr)
+
+			local icon = {}
+			icon.parent = ea.info
+			icon.uniqueID = role.uniqueID
+			icon.header = "icon"
+			icon.netstr = "update_role_string_icon"
+			icon.value = role.string_icon
+			icon.uniqueID = role.uniqueID
+			icon.lforce = false
+			ea[role.uniqueID].icon = DTextBox(icon)
+
+			DHr(hr)
+
+			local otherroles = {}
+			otherroles[0] = lang_string("none")
+			printTab(roles, "ROLES")
+			for i, tab in pairs(roles) do
+				print(tab.uniqueID, role.uniqueID)
+				tab.uniqueID = tonumber(tab.uniqueID)
+				if tab.uniqueID != role.uniqueID then
+					otherroles[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+				end
+			end
+
+			local prerole = {}
+			prerole.parent = ea.info
+			prerole.uniqueID = role.uniqueID
+			prerole.header = "prerole"
+			prerole.netstr = "update_role_int_prerole"
+			prerole.value = role.int_prerole
+			prerole.uniqueID = role.uniqueID
+			prerole.lforce = false
+			prerole.choices = otherroles
+			ea[role.uniqueID].prerole = DComboBox(prerole)
+
+			local restriction = {}
+			restriction.parent = ea.background
+			restriction.x = ctr(1040)
+			restriction.y = ctr(20)
+			restriction.w = ctr(1000)
+			restriction.h = ctr(570)
+			restriction.br = ctr(20)
+			restriction.color = Color( 255, 255, 255 )
+			restriction.bgcolor = Color( 80, 80, 80 )
+			restriction.name = "restriction"
+			ea[role.uniqueID].restriction = DGroup(restriction)
+			ea.restriction = ea[role.uniqueID].restriction
+
+			local gugs = string.Explode(",", role.string_usergroups)
+
+			local ugs = {}
+			ugs["ALL"] = {}
+			ugs["ALL"].checked = table.HasValue(gugs, "ALL")
+			ugs["ALL"]["choices"] = {}
+			for i, pl in pairs(player.GetAll()) do
+				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
+				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+			end
+
+			for i, ug in pairs(db_ugs) do
+				ugs["ALL"]["choices"][string.upper(ug.name)] = ugs["ALL"]["choices"][string.upper(ug.name)] or {}
+				ugs["ALL"]["choices"][string.upper(ug.name)].checked = table.HasValue(gugs, string.upper(ug.name))
+			end
+
+			local usergroups = {}
+			usergroups.parent = ea.restriction
+			usergroups.uniqueID = role.uniqueID
+			usergroups.header = "usergroups"
+			usergroups.netstr = "update_role_string_usergroups"
+			usergroups.value = role.string_usergroups
+			usergroups.uniqueID = role.uniqueID
+			usergroups.lforce = false
+			usergroups.choices = ugs
+			ea[role.uniqueID].usergroups = DCheckBoxes(usergroups)
+
+			hr.parent = ea.restriction
+			DHr(hr)
+
+			local requireslevel = {}
+			requireslevel.parent = ea.restriction
+			requireslevel.uniqueID = role.uniqueID
+			requireslevel.header = "requireslevel"
+			requireslevel.netstr = "update_role_int_requireslevel"
+			requireslevel.value = role.int_requireslevel
+			requireslevel.uniqueID = role.uniqueID
+			requireslevel.lforce = false
+			requireslevel.min = 1
+			requireslevel.max = 100
+			ea[role.uniqueID].requireslevel = DIntBox(requireslevel)
+
+			DHr(hr)
+
+			local whitelist = {}
+			whitelist.parent = ea.restriction
+			whitelist.uniqueID = role.uniqueID
+			whitelist.header = "useswhitelist"
+			whitelist.netstr = "update_role_bool_whitelist"
+			whitelist.value = role.bool_whitelist
+			whitelist.uniqueID = role.uniqueID
+			whitelist.lforce = false
+			ea[role.uniqueID].whitelist = DCheckBox(whitelist)
+
+			DHr(hr)
+
+			local locked = {}
+			locked.parent = ea.restriction
+			locked.uniqueID = role.uniqueID
+			locked.header = "locked"
+			locked.netstr = "update_role_bool_locked"
+			locked.value = role.bool_locked
+			locked.uniqueID = role.uniqueID
+			locked.lforce = false
+			ea[role.uniqueID].locked = DCheckBox(locked)
+
+			DHr(hr)
+
+			local visible = {}
+			visible.parent = ea.restriction
+			visible.uniqueID = role.uniqueID
+			visible.header = "visible"
+			visible.netstr = "update_role_bool_visible"
+			visible.value = role.bool_visible
+			visible.uniqueID = role.uniqueID
+			visible.lforce = false
+			ea[role.uniqueID].visible = DCheckBox(visible)
+		end)
+
 		net.Receive("settings_subscribe_rolelist", function(le)
 			if pa(rs.rplist) then
 				rs.rplist:ClearList()

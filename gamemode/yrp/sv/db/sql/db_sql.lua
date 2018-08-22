@@ -54,12 +54,14 @@ end
 
 -- NEW
 function BroadcastString(tab)
-	for i, pl in pairs(tab.handler) do
-		if pl != tab.ply or tab.force then
-			net.Start(tab.netstr)
-				net.WriteString(tab.uniqueID)
-				net.WriteString(tab.value)
-			net.Send(pl)
+	if tab.handler != nil then
+		for i, pl in pairs(tab.handler) do
+			if pl != tab.ply or tab.force then
+				net.Start(tab.netstr)
+					net.WriteString(tab.uniqueID)
+					net.WriteString(tab.value)
+				net.Send(pl)
+			end
 		end
 	end
 end

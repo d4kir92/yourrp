@@ -43,13 +43,13 @@ HANDLER_GROUPSANDROLES["roles"] = {}
 
 for str, val in pairs( yrp_ply_groups ) do
 	if string.find( str, "string_" ) then
-		util.AddNetworkString( "update_" .. str )
-		net.Receive( "update_" .. str, function( len, ply )
+		local tab = {}
+		tab.netstr = "update_group_" .. str
+		util.AddNetworkString( tab.netstr )
+		net.Receive( tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString())
 			local s = net.ReadString()
-			local tab = {}
 			tab.ply = ply
-			tab.netstr = "update_" .. str
 			tab.id = str
 			tab.value = s
 			tab.db = DATABASE_NAME
@@ -57,7 +57,7 @@ for str, val in pairs( yrp_ply_groups ) do
 			UpdateString(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 			BroadcastString(tab)
-			if tab.netstr == "update_string_name" then
+			if tab.netstr == "update_group_string_name" then
 				util.AddNetworkString("settings_group_update_name")
 				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if wk(puid) then
@@ -68,7 +68,7 @@ for str, val in pairs( yrp_ply_groups ) do
 					tab.force = true
 					BroadcastString(tab)
 				end
-			elseif tab.netstr == "update_string_color" then
+			elseif tab.netstr == "update_group_string_color" then
 				util.AddNetworkString("settings_group_update_color")
 				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if wk(puid) then
@@ -79,7 +79,7 @@ for str, val in pairs( yrp_ply_groups ) do
 					tab.force = true
 					BroadcastString(tab)
 				end
-			elseif tab.netstr == "update_string_icon" then
+			elseif tab.netstr == "update_group_string_icon" then
 				util.AddNetworkString("settings_group_update_icon")
 				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if wk(puid) then
@@ -93,14 +93,14 @@ for str, val in pairs( yrp_ply_groups ) do
 			end
 		end)
 	elseif string.find( str, "int_" ) then
-		util.AddNetworkString( "update_" .. str )
-		net.Receive( "update_" .. str, function( len, ply )
+		local tab = {}
+		tab.netstr = "update_group_" .. str
+		util.AddNetworkString( tab.netstr )
+		net.Receive( tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
 			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-			local tab = {}
 			tab.ply = ply
-			tab.netstr = "update_" .. str
 			tab.id = str
 			tab.value = int
 			tab.db = DATABASE_NAME
@@ -108,7 +108,7 @@ for str, val in pairs( yrp_ply_groups ) do
 			UpdateInt(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
-			if tab.netstr == "update_int_parentgroup" then
+			if tab.netstr == "update_group_int_parentgroup" then
 				if wk(cur) then
 					cur = cur[1]
 					SendGroupList(tonumber(cur.int_parentgroup))
@@ -117,14 +117,14 @@ for str, val in pairs( yrp_ply_groups ) do
 			end
 		end)
 	elseif string.find( str, "bool_" ) then
-		util.AddNetworkString( "update_" .. str )
-		net.Receive( "update_" .. str, function( len, ply )
+		local tab = {}
+		tab.netstr = "update_group_" .. str
+		util.AddNetworkString( tab.netstr )
+		net.Receive( tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
 			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-			local tab = {}
 			tab.ply = ply
-			tab.netstr = "update_" .. str
 			tab.id = str
 			tab.value = int
 			tab.db = DATABASE_NAME
@@ -132,7 +132,7 @@ for str, val in pairs( yrp_ply_groups ) do
 			UpdateInt(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
-			if tab.netstr == "update_int_parentgroup" then
+			if tab.netstr == "update_group_int_parentgroup" then
 				if wk(cur) then
 					cur = cur[1]
 					SendGroupList(tonumber(cur.int_parentgroup))
