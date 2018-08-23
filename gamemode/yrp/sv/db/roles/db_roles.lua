@@ -243,13 +243,11 @@ function SendRoleList(uid)
 
 	local tbl_roles = SQL_SELECT( DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'" )
 	if !wk( tbl_roles ) then
-		print("HAS NO ROLES")
 		tbl_roles = {}
 	end
 	local currentuid = uid
 	local parentuid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	if wk(parentuid) then
-		printTab(parentuid)
 		parentuid = parentuid[1].int_groupID
 	else
 		parentuid = 0

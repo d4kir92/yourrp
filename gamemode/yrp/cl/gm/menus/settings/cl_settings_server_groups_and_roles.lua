@@ -506,7 +506,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			name.parent = ea.info
 			name.uniqueID = group.uniqueID
 			name.header = "name"
-			name.netstr = "update_string_name"
+			name.netstr = "update_group_string_name"
 			name.value = group.string_name
 			name.uniqueID = group.uniqueID
 			name.lforce = false
@@ -521,7 +521,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			color.parent = ea.info
 			color.uniqueID = group.uniqueID
 			color.header = "color"
-			color.netstr = "update_string_color"
+			color.netstr = "update_group_string_color"
 			color.value = group.string_color
 			color.uniqueID = group.uniqueID
 			color.lforce = false
@@ -533,7 +533,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			icon.parent = ea.info
 			icon.uniqueID = group.uniqueID
 			icon.header = "icon"
-			icon.netstr = "update_string_icon"
+			icon.netstr = "update_group_string_icon"
 			icon.value = group.string_icon
 			icon.uniqueID = group.uniqueID
 			icon.lforce = false
@@ -551,7 +551,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			parentgroup.parent = ea.info
 			parentgroup.uniqueID = group.uniqueID
 			parentgroup.header = "parentgroup"
-			parentgroup.netstr = "update_int_parentgroup"
+			parentgroup.netstr = "update_group_int_parentgroup"
 			parentgroup.value = group.int_parentgroup
 			parentgroup.uniqueID = group.uniqueID
 			parentgroup.lforce = false
@@ -591,7 +591,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			usergroups.parent = ea.restriction
 			usergroups.uniqueID = group.uniqueID
 			usergroups.header = "usergroups"
-			usergroups.netstr = "update_string_usergroups"
+			usergroups.netstr = "update_group_string_usergroups"
 			usergroups.value = group.string_usergroups
 			usergroups.uniqueID = group.uniqueID
 			usergroups.lforce = false
@@ -605,7 +605,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			requireslevel.parent = ea.restriction
 			requireslevel.uniqueID = group.uniqueID
 			requireslevel.header = "requireslevel"
-			requireslevel.netstr = "update_int_requireslevel"
+			requireslevel.netstr = "update_group_int_requireslevel"
 			requireslevel.value = group.int_requireslevel
 			requireslevel.uniqueID = group.uniqueID
 			requireslevel.lforce = false
@@ -619,7 +619,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			groupvoicechat.parent = ea.restriction
 			groupvoicechat.uniqueID = group.uniqueID
 			groupvoicechat.header = "canusegroupvoicechat"
-			groupvoicechat.netstr = "update_bool_groupvoicechat"
+			groupvoicechat.netstr = "update_group_bool_groupvoicechat"
 			groupvoicechat.value = group.bool_groupvoicechat
 			groupvoicechat.uniqueID = group.uniqueID
 			groupvoicechat.lforce = false
@@ -631,7 +631,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			whitelist.parent = ea.restriction
 			whitelist.uniqueID = group.uniqueID
 			whitelist.header = "useswhitelist"
-			whitelist.netstr = "update_bool_whitelist"
+			whitelist.netstr = "update_group_bool_whitelist"
 			whitelist.value = group.bool_whitelist
 			whitelist.uniqueID = group.uniqueID
 			whitelist.lforce = false
@@ -643,7 +643,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			locked.parent = ea.restriction
 			locked.uniqueID = group.uniqueID
 			locked.header = "locked"
-			locked.netstr = "update_bool_locked"
+			locked.netstr = "update_group_bool_locked"
 			locked.value = group.bool_locked
 			locked.uniqueID = group.uniqueID
 			locked.lforce = false
@@ -655,7 +655,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			visible.parent = ea.restriction
 			visible.uniqueID = group.uniqueID
 			visible.header = "visible"
-			visible.netstr = "update_bool_visible"
+			visible.netstr = "update_group_bool_visible"
 			visible.value = group.bool_visible
 			visible.uniqueID = group.uniqueID
 			visible.lforce = false
@@ -799,9 +799,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local role = net.ReadTable()
 			local roles = net.ReadTable()
 			local db_ugs = net.ReadTable()
-			printTab(role)
-			printTab(roles)
-			printTab(db_ugs)
 
 			role.uniqueID = tonumber(role.uniqueID)
 
@@ -882,7 +879,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local otherroles = {}
 			otherroles[0] = lang_string("none")
-			printTab(roles, "ROLES")
 			for i, tab in pairs(roles) do
 				print(tab.uniqueID, role.uniqueID)
 				tab.uniqueID = tonumber(tab.uniqueID)
@@ -999,7 +995,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				rs.rplist:ClearList()
 
 				local parentrole = net.ReadTable()
-				printTab(parentrole)
 				if parentrole.uniqueID != nil then
 					rs.top.group = parentrole.string_name
 				else
@@ -1007,7 +1002,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				local roles = net.ReadTable()
-				printTab(roles, "ROLES")
 
 				cur_role.cur = tonumber(net.ReadString())
 				cur_role.par = tonumber(net.ReadString())
