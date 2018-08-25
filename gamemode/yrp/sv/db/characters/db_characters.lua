@@ -341,7 +341,7 @@ net.Receive( "charGetRoles", function( len, ply )
 	local groupID = net.ReadString()
 	local netTable = {}
 	local tmpTable = SQL_SELECT( "yrp_roles", "*", "groupID = " .. tonumber( groupID ) )
-	if tmpTable != nil then
+	if wk(tmpTable) then
 		local count = 1
 		for k, v in pairs( tmpTable ) do
 			local insert = true
@@ -464,33 +464,37 @@ end)
 
 function CreateCharacter( ply, tab )
 	local role = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tonumber( tab.roleID ) )
+	if wk(role) then
+		printTab(role)
+		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
+		local vals = "'" .. ply:SteamID() .. "', "
+		vals = vals .. "'" .. db_sql_str( tab.rpname ) .. "', "
+		vals = vals .. "'" .. db_sql_str( tab.gender ) .. "', "
+		vals = vals .. tonumber( role[1].uniqueID ) .. ", "
+		vals = vals .. tonumber( role[1].groupID ) .. ", "
+		vals = vals .. tonumber( tab.playermodelID ) .. ", "
+		vals = vals .. 250 .. ", "
+		vals = vals .. 500 .. ", "
+		vals = vals .. "'" .. GetMapNameDB() .. "', "
+		vals = vals .. tonumber( tab.skin ) .. ", "
+		vals = vals .. tonumber( tab.bg[0] ) .. ", "
+		vals = vals .. tonumber( tab.bg[1] ) .. ", "
+		vals = vals .. tonumber( tab.bg[2] ) .. ", "
+		vals = vals .. tonumber( tab.bg[3] ) .. ", "
+		vals = vals .. tonumber( tab.bg[4] ) .. ", "
+		vals = vals .. tonumber( tab.bg[5] ) .. ", "
+		vals = vals .. tonumber( tab.bg[6] ) .. ", "
+		vals = vals .. tonumber( tab.bg[7] )
+		SQL_INSERT_INTO( "yrp_characters", cols, vals )
 
-	local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
-	local vals = "'" .. ply:SteamID() .. "', "
-	vals = vals .. "'" .. db_sql_str( tab.rpname ) .. "', "
-	vals = vals .. "'" .. db_sql_str( tab.gender ) .. "', "
-	vals = vals .. tonumber( role[1].uniqueID ) .. ", "
-	vals = vals .. tonumber( role[1].groupID ) .. ", "
-	vals = vals .. tonumber( tab.playermodelID ) .. ", "
-	vals = vals .. 250 .. ", "
-	vals = vals .. 500 .. ", "
-	vals = vals .. "'" .. GetMapNameDB() .. "', "
-	vals = vals .. tonumber( tab.skin ) .. ", "
-	vals = vals .. tonumber( tab.bg[0] ) .. ", "
-	vals = vals .. tonumber( tab.bg[1] ) .. ", "
-	vals = vals .. tonumber( tab.bg[2] ) .. ", "
-	vals = vals .. tonumber( tab.bg[3] ) .. ", "
-	vals = vals .. tonumber( tab.bg[4] ) .. ", "
-	vals = vals .. tonumber( tab.bg[5] ) .. ", "
-	vals = vals .. tonumber( tab.bg[6] ) .. ", "
-	vals = vals .. tonumber( tab.bg[7] )
-	SQL_INSERT_INTO( "yrp_characters", cols, vals )
-
-	local chars = SQL_SELECT( "yrp_characters", "*", nil )
-	if worked( chars, "CreateCharacter" ) then
-		local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( chars[#chars].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
+		local chars = SQL_SELECT( "yrp_characters", "*", nil )
+		if worked( chars, "CreateCharacter" ) then
+			local result = SQL_UPDATE( "yrp_players", "CurrentCharacter = " .. tonumber( chars[#chars].uniqueID ), "SteamID = '" .. ply:SteamID() .. "'" )
+		end
+		send_characters( ply )
+	else
+		print("note", "role not found!")
 	end
-	send_characters( ply )
 end
 
 net.Receive( "CreateCharacter", function( len, ply )
