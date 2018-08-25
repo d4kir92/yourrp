@@ -453,6 +453,8 @@ SQL_ADD_COLUMN( _db_name, "uses", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "salarytime", "INTEGER DEFAULT 120" )
 SQL_ADD_COLUMN( _db_name, "voiceglobal", "INTEGER DEFAULT 0" )
 
+SQL_ADD_COLUMN( _db_name, "groupID", "INTEGER DEFAULT 1" )
+
 SQL_ADD_COLUMN( _db_name, "canbeagent", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( _db_name, "iscivil", "INTEGER DEFAULT 0" )
 
@@ -463,7 +465,9 @@ SQL_UPDATE( _db_name, "uses = 0", nil )
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
-if SQL_SELECT( _db_name, "*", "uniqueID = 1" ) == nil then
+local _default_role = SQL_SELECT( _db_name, "*", "uniqueID = 1" )
+printTab(_default_role)
+if !wk(_default_role) then
 	printGM( "note", _db_name .. " has not the default role" )
 	local _result = SQL_INSERT_INTO( _db_name, "uniqueID, roleID, color, playermodels, removeable", "1, 'Civilian', '0,0,0', '', 0" )
 	printGM( "note", _result )

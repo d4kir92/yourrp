@@ -304,6 +304,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
+		--[[
 		rs.top = createD("DPanel", PARENT, ctr(800), ctr(60), ctr(20), ctr(1040))
 		function rs.top:Paint(pw, ph)
 			if rs.top.group != nil then
@@ -369,6 +370,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.top.group = nil
 			rs.rplist:Clear()
 		end
+		]]--
 
 		PARENT.ea = {}
 		local ea = PARENT.ea
