@@ -15,6 +15,10 @@ SQL_ADD_COLUMN( DATABASE_NAME, "float_bonechance_arms", "INT DEFAULT 15" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_bleeding", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_bleedingchance", "INT DEFAULT 20" )
 
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_slowing", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_slowingfactor", "INT DEFAULT 0.4" )
+SQL_ADD_COLUMN( DATABASE_NAME, "float_slowingtime", "INT DEFAULT 1" )
+
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_custom_falldamage", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_custom_falldamage_percentage", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_custom_falldamage_muliplier", "INT DEFAULT 0.125" )
@@ -145,6 +149,18 @@ end
 
 function CustomFalldamageMultiplier()
 	return yrp_realistic.float_custom_falldamage_muliplier
+end
+
+function IsSlowingEnabled()
+	return tobool( yrp_realistic.bool_slowing )
+end
+
+function GetSlowingTime()
+	return tonumber( yrp_realistic.float_slowingtime )
+end
+
+function GetSlowingFactor()
+	return tonumber( yrp_realistic.float_slowingfactor )
 end
 
 function IsBleedingEnabled()

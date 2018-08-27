@@ -465,7 +465,6 @@ end)
 function CreateCharacter( ply, tab )
 	local role = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tonumber( tab.roleID ) )
 	if wk(role) then
-		printTab(role)
 		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
 		local vals = "'" .. ply:SteamID() .. "', "
 		vals = vals .. "'" .. db_sql_str( tab.rpname ) .. "', "

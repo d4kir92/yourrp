@@ -13,6 +13,10 @@ function Player:GetLanguageShort() -- The Language the player selected (shortkey
 	return self:YRPGetLanguageShort() -- return string
 end
 
+function Player:Slowed()
+	return self:GetNWBool("slowed", false)
+end
+
 --[[ Metabolism ]]--
 function Player:Eat( num ) -- Add num to hunger
 	self:YRPEat( num )
