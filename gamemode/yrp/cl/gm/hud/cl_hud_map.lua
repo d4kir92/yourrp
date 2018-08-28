@@ -34,7 +34,8 @@ end
 
 local CamDataMap = {}
 function openMap()
-	if LocalPlayer():GetNWBool( "bool_map_system", false ) then
+	local lply = LocalPlayer()
+	if lply:GetNWBool( "bool_map_system", false ) then
 		map.open = true
 
 		_map.window = vgui.Create( "DFrame" )
@@ -45,7 +46,7 @@ function openMap()
 		_map.window:SetDraggable( false )
 		function _map.window:Paint( pw, ph )
 			if map != nil then
-				local ply = LocalPlayer()
+				local ply = lply
 				draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 254 ) )					 --_map.window of Map
 
 				local win = {}
@@ -106,14 +107,14 @@ function openMap()
 				plyPos.xMax = map.sizeX
 				plyPos.yMax = map.sizeY
 				if map.sizeW < 0 then
-					plyPos.xtmp = ( LocalPlayer():GetPos().x - map.sizeW )
+					plyPos.xtmp = ( lply:GetPos().x - map.sizeW )
 				else
-					plyPos.xtmp = ( LocalPlayer():GetPos().x + map.sizeE )
+					plyPos.xtmp = ( lply:GetPos().x + map.sizeE )
 				end
 				if map.sizeS < 0 then
-					plyPos.ytmp = ( LocalPlayer():GetPos().y - map.sizeS )
+					plyPos.ytmp = ( lply:GetPos().y - map.sizeS )
 				else
-					plyPos.ytmp = ( LocalPlayer():GetPos().y + map.sizeN )
+					plyPos.ytmp = ( lply:GetPos().y + map.sizeN )
 				end
 				plyPos.x = win.x + win.w * ( plyPos.xtmp / plyPos.xMax )
 				plyPos.y = win.y + win.h - win.h * ( plyPos.ytmp / plyPos.yMax )
@@ -136,9 +137,9 @@ function openMap()
 
 				draw.SimpleTextOutlined( "[M] - " .. lang_string( "map" ) .. ": " .. _mapName, "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
-				if LocalPlayer():HasAccess() and true then
+				if lply:GetNWBool("canseeteammatesonmap", false) or lply:GetNWBool("canseeenemiesonmap", false) then
 					for k, pl in pairs( player.GetAll() ) do
-						if pl != LocalPlayer() then
+						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNWBool("canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNWBool("canseeenemiesonmap", false)) then
 							local tmp = {}
 							tmp.xMax = map.sizeX
 							tmp.yMax = map.sizeY
@@ -162,8 +163,14 @@ function openMap()
 							local psh = ctr( 50 )
 							local prot = pl:EyeAngles().y - 90
 
-							surface.SetDrawColor( 100, 100, 255, 255 )
-							surface.SetMaterial( GetDesignIcon( "navigation" ) )
+							local pl_col = Color(100, 100, 255, 255)
+							if pl:GetGroupName() == lply:GetGroupName() then
+								pl_col = Color(100, 255, 100, 255)
+							elseif pl:GetGroupName() != lply:GetGroupName() then
+								pl_col = Color(255, 100, 100, 255)
+							end
+							surface.SetDrawColor(pl_col)
+							surface.SetMaterial(GetDesignIcon("navigation"))
 							surface.DrawTexturedRectRotated( ppx, ppy, psw, psh, prot )
 							draw.SimpleTextOutlined( pl:Nick(), "sef", tmp.x, tmp.y - ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 						end
