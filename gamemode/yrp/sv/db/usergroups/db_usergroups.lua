@@ -51,6 +51,8 @@ SQL_ADD_COLUMN( DATABASE_NAME, "keepupright", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bodygroups", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickup", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickupplayer", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canseeteammatesonmap", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "canseeenemiesonmap", "INT DEFAULT 0" )
 
 --db_drop_table( DATABASE_NAME )
 --db_is_empty( DATABASE_NAME )
@@ -524,6 +526,17 @@ function UGCheckBox( ply, uid, name, value )
 			net.WriteString( value )
 		net.Send( pl )
 	end
+
+	local ug = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+	if wk(ug) then
+		ug = ug[1]
+		ug.name = string.upper(ug.name)
+		for i, pl in pairs(player.GetAll()) do
+			if string.upper(pl:GetUserGroup()) == ug.name then
+				pl:SetNWBool(name,tobool(value))
+			end
+		end
+	end
 end
 
 util.AddNetworkString( "usergroup_update_ac_database" )
@@ -769,6 +782,20 @@ net.Receive( "usergroup_update_physgunpickupplayer", function( len, ply )
 	local uid = tonumber( net.ReadString() )
 	local physgunpickupplayer = net.ReadString()
 	UGCheckBox( ply, uid, "physgunpickupplayer", physgunpickupplayer )
+end)
+
+util.AddNetworkString( "usergroup_update_canseeteammatesonmap" )
+net.Receive( "usergroup_update_canseeteammatesonmap", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local canseeteammatesonmap = net.ReadString()
+	UGCheckBox( ply, uid, "canseeteammatesonmap", canseeteammatesonmap )
+end)
+
+util.AddNetworkString( "usergroup_update_canseeenemiesonmap" )
+net.Receive( "usergroup_update_canseeenemiesonmap", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local canseeenemiesonmap = net.ReadString()
+	UGCheckBox( ply, uid, "canseeenemiesonmap", canseeenemiesonmap )
 end)
 
 -- Functions
@@ -1363,5 +1390,7 @@ function Player:UserGroupLoadout()
 			self:Give( swep )
 		end
 		self:SetNWBool( "adminaccess", tobool( UG.adminaccess ) )
+		self:SetNWBool( "canseeteammatesonmap", tobool(UG.canseeteammatesonmap) )
+		self:SetNWBool( "canseeenemiesonmap", tobool(UG.canseeenemiesonmap) )
 	end
 end

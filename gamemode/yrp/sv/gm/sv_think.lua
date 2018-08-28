@@ -73,14 +73,16 @@ function con_st( ply )
 		end
 	end
 
-	if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWFloat( "thirst", 0 ) < 20 then
-		ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.6 )
-		ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.6 )
-		ply:SetCanWalk( false )
-	else
-		ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
-		ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
-		ply:SetCanWalk( true )
+	if !ply:Slowed() then
+		if ply:GetNWInt( "GetCurStamina", 0 ) < 20 or ply:GetNWFloat( "thirst", 0 ) < 20 then
+			ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) * 0.6 )
+			ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) * 0.6 )
+			ply:SetCanWalk( false )
+		else
+			ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
+			ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+			ply:SetCanWalk( true )
+		end
 	end
 end
 
@@ -103,20 +105,22 @@ function anti_bunnyhop( ply )
 end
 
 function broken( ply )
-	if ply:GetNWBool( "broken_leg_left" ) and ply:GetNWBool( "broken_leg_right" ) then
-		--[[ Both legs broken ]]--
-		ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
-		ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
-		ply:SetCanWalk( false )
-	elseif ply:GetNWBool( "broken_leg_left" ) or ply:GetNWBool( "broken_leg_right" ) then
-		--[[ One leg broken ]]--
-		ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.25 )
-		ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.25 )
-		ply:SetCanWalk( false )
-	else
-		ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
-		ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
-		ply:SetCanWalk( true )
+	if IsBonefracturingEnabled() and !ply:Slowed() then
+		if ply:GetNWBool( "broken_leg_left" ) and ply:GetNWBool( "broken_leg_right" ) then
+			--[[ Both legs broken ]]--
+			ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.5 )
+			ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.5 )
+			ply:SetCanWalk( false )
+		elseif ply:GetNWBool( "broken_leg_left" ) or ply:GetNWBool( "broken_leg_right" ) then
+			--[[ One leg broken ]]--
+			ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 )*0.25 )
+			ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 )*0.25 )
+			ply:SetCanWalk( false )
+		else
+			ply:SetRunSpeed( ply:GetNWInt( "speedrun", 0 ) )
+			ply:SetWalkSpeed( ply:GetNWInt( "speedwalk", 0 ) )
+			ply:SetCanWalk( true )
+		end
 	end
 end
 

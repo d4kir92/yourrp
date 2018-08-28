@@ -466,7 +466,6 @@ SQL_UPDATE( _db_name, "uses = 0", nil )
 --db_is_empty( _db_name )
 
 local _default_role = SQL_SELECT( _db_name, "*", "uniqueID = 1" )
-printTab(_default_role)
 if !wk(_default_role) then
 	printGM( "note", _db_name .. " has not the default role" )
 	local _result = SQL_INSERT_INTO( _db_name, "uniqueID, roleID, color, playermodels, removeable", "1, 'Civilian', '0,0,0', '', 0" )

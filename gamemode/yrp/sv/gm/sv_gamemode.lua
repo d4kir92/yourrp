@@ -294,7 +294,7 @@ function GM:CanPlayerSuicide( ply )
 	return IsAllowedToSuicide( ply )
 end
 
-hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( ent, dmginfo )
+hook.Add( "EntityTakeDamage", "YRP_EntityTakeDamage", function( ent, dmginfo )
 	if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
 		dmginfo:ScaleDamage( GetHitFactorEntities() )
 	end
@@ -303,7 +303,24 @@ hook.Add( "EntityTakeDamage", "yrp_entity_take_damage", function( ent, dmginfo )
 	end
 end)
 
-function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
+function SlowThink(ent)
+	if IsSlowingEnabled() then
+		local speedrun = tonumber(ent:GetNWInt("speedrun", 0))
+		local speedwalk = tonumber(ent:GetNWInt("speedwalk", 0))
+		if speedrun == tonumber(ent:GetRunSpeed()) or speedwalk == tonumber(ent:GetWalkSpeed()) then
+			ent:SetRunSpeed( speedrun * GetSlowingFactor() )
+			ent:SetWalkSpeed( speedwalk * GetSlowingFactor() )
+			ent:SetNWBool("slowed", true)
+			timer.Simple(GetSlowingTime(), function()
+				ent:SetRunSpeed( speedrun )
+				ent:SetWalkSpeed( speedwalk )
+				ent:SetNWBool("slowed", false)
+			end)
+		end
+	end
+end
+
+hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function( ply, hitgroup, dmginfo )
 	if dmginfo:GetAttacker() != ply then
 		ply:SetNWBool( "inCombat", true )
 		if timer.Exists( ply:SteamID() .. " outOfCombat" ) then
@@ -317,6 +334,8 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 			end
 		end)
 	end
+
+	SlowThink(ply)
 
 	if true then
 		if IsBleedingEnabled() then
@@ -372,9 +391,9 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	else
 		dmginfo:ScaleDamage( 1 )
 	end
-end
+end)
 
-function GM:ScaleNPCDamage( npc, hitgroup, dmginfo )
+hook.Add( "ScaleNPCDamage", "YRP_ScaleNPCDamage", function( npc, hitgroup, dmginfo )
 	if true then
 		if hitgroup == HITGROUP_HEAD then
 			if IsHeadshotDeadlyNpc() then
@@ -396,7 +415,7 @@ function GM:ScaleNPCDamage( npc, hitgroup, dmginfo )
 	else
 		dmginfo:ScaleDamage( 1 )
 	end
-end
+end)
 
 
 --[[ SPEAK Channels ]] --
