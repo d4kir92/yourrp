@@ -16,7 +16,7 @@ GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.150" --do NOT change this!
+GM.Version = "0.9.151" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -103,13 +103,12 @@ concommand.Add( "yrp_status", function( ply, cmd, args )
 	end
 
 	hr_pre()
-	printGM( "gm", "	 Version:\t" .. GAMEMODE.Version )
-	printGM( "gm", "	 Channel:\t" .. string.upper( GAMEMODE.VersionSort ) )
-	printGM( "gm", "Servername:\t" .. GetHostName() )
-	printGM( "gm", "				IP:\t" .. game.GetIPAddress() )
-
-	printGM( "gm", "			 Map:\t" .. GetMapNameDB() )
-	printGM( "gm", "	 Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
+	printGM( "gm", "    Version:\t" .. GAMEMODE.Version )
+	printGM( "gm", "    Channel:\t" .. string.upper( GAMEMODE.VersionSort ) )
+	printGM( "gm", " Servername:\t" .. GetHostName() )
+	printGM( "gm", "         IP:\t" .. game.GetIPAddress() )
+	printGM( "gm", "        Map:\t" .. GetMapNameDB() )
+	printGM( "gm", "    Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
 	hr_pos()
 end )
 
@@ -130,7 +129,7 @@ end
 concommand.Add( "yrp_players", function( ply, cmd, args )
 	hr_pre()
 	printGM( "gm", "Players:\t" .. tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) )
-	printGM( "gm", "ID	 SteamID							Name										 Money")
+	printGM( "gm", "ID   SteamID              Name                     Money")
 	for i, pl in pairs( player.GetAll() ) do
 		local _id = makeString( string.ToTable( pl:UserID() ), 4, false )
 		local _steamid = makeString( string.ToTable( pl:SteamID() ), 20, false )
@@ -144,15 +143,23 @@ end )
 
 concommand.Add( "yrp__help", function( ply, cmd, args )
 	hr_pre()
-	printGM( "note", "yrp_status - shows info" )
-	printGM( "note", "yrp_version - shows gamemode version" )
-	printGM( "note", "yrp_players - shows all players" )
-	printGM( "note", "yrp_usergroup RPNAME UserGroup - put a player with the RPNAME to the UserGroup" )
-	printGM( "note", "yrp_togglesettings - toggle settings menu" )
+	printGM( "note", "Shared Commands:" )
+	printGM( "note", "yrp_status" )
+	printGM( "note", "	Shows info" )
+	printGM( "note", "yrp_version" )
+	printGM( "note", "	Shows gamemode version" )
+	printGM( "note", "yrp_players" )
+	printGM( "note", "	Shows all players" )
+	printGM( "note", "yrp_usergroup RPNAME UserGroup" )
+	printGM( "note", "	Put a player with the RPNAME to the UserGroup" )
 	hr_pos()
 
 	hr_pre()
-	printGM( "note", "yrp_cl_hud X - 1: shows hud, 0: hide hud" )
+	printGM( "note", "Client Commands:" )
+	printGM( "note", "yrp_cl_hud X" )
+	printGM( "note", "	1: Shows hud, 0: Hide hud" )
+	printGM( "note", "yrp_togglesettings" )
+	printGM( "note", "	Toggle settings menu" )
 	hr_pos()
 end )
 

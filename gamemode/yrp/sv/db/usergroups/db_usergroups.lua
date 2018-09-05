@@ -51,6 +51,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "keepupright", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bodygroups", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickup", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickupplayer", "INT DEFAULT 0" )
+SQL_ADD_COLUMN( DATABASE_NAME, "physgunpickupworld", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "canseeteammatesonmap", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "canseeenemiesonmap", "INT DEFAULT 0" )
 
@@ -78,6 +79,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 	_str = _str .. "bodygroups, "
 	_str = _str .. "physgunpickup, "
 	_str = _str .. "physgunpickupplayer, "
+	_str = _str .. "physgunpickupworld, "
 	_str = _str .. "adminaccess, "
 	_str = _str .. "interface, "
 	_str = _str .. "general, "
@@ -97,8 +99,24 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 
 	local _str2 = "'superadmin', "
 	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+
+	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
+end
+
+if SQL_SELECT( DATABASE_NAME, "*", "name = 'user'" ) == nil then
+	local _str = "name"
+
+	local _str2 = "'user'"
+
+	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
+end
+
+if SQL_SELECT( DATABASE_NAME, "*", "name = 'admin'" ) == nil then
+	local _str = "name"
+
+	local _str2 = "'admin'"
 
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
@@ -124,6 +142,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
 	_str = _str .. "bodygroups, "
 	_str = _str .. "physgunpickup, "
 	_str = _str .. "physgunpickupplayer, "
+	_str = _str .. "physgunpickupworld, "
 	_str = _str .. "adminaccess, "
 	_str = _str .. "interface, "
 	_str = _str .. "general, "
@@ -143,7 +162,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
 	_str = _str .. "removeable"
 
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0"
 
@@ -784,6 +803,13 @@ net.Receive( "usergroup_update_physgunpickupplayer", function( len, ply )
 	UGCheckBox( ply, uid, "physgunpickupplayer", physgunpickupplayer )
 end)
 
+util.AddNetworkString( "usergroup_update_physgunpickupworld" )
+net.Receive( "usergroup_update_physgunpickupworld", function( len, ply )
+	local uid = tonumber( net.ReadString() )
+	local physgunpickupworld = net.ReadString()
+	UGCheckBox( ply, uid, "physgunpickupworld", physgunpickupworld )
+end)
+
 util.AddNetworkString( "usergroup_update_canseeteammatesonmap" )
 net.Receive( "usergroup_update_canseeteammatesonmap", function( len, ply )
 	local uid = tonumber( net.ReadString() )
@@ -1174,11 +1200,12 @@ end)
 
 hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
 	if ea( pl ) then
-		--printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
-		local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup, physgunpickupworld", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
 		if wk( _tmp ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.physgunpickup ) then
+				print("world", _tmp.physgunpickupworld)
 				if ent:IsPlayer() then
 					local _tmp2 = SQL_SELECT( DATABASE_NAME, "physgunpickupplayer", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
 					if wk( _tmp2 ) then
@@ -1194,7 +1221,16 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
 					else
 						return false
 					end
+				elseif ent:CreatedByMap() then
+					if tobool(_tmp.physgunpickupworld) then
+						print("allowed to pickup world")
+						return true
+					else
+						print("not allowed to pickup world")
+						return false
+					end
 				else
+					print("allowed to pickup ent")
 					return true
 				end
 			elseif ent:GetRPOwner() == pl then

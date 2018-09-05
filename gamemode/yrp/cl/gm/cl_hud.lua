@@ -82,16 +82,17 @@ function hudUpTime()
 end
 
 function GM:PlayerStartVoice( pl )
-
-	if pl == LocalPlayer() then
-		_showVoice = true
-		net.Start( "yrp_voice_start" )
-		net.SendToServer()
-	end
-	local stid = pl:SteamID()
-	stid = stid or ""
-	if stid == LocalPlayer():GetNWString( "voice_global_steamid" ) and pl:GetNWInt( "speak_channel", 0 ) == 2 then
-		_showGlobalVoice = true
+	if pl != nil then
+		if pl == LocalPlayer() then
+			_showVoice = true
+			net.Start( "yrp_voice_start" )
+			net.SendToServer()
+		end
+		local stid = pl:SteamID()
+		stid = stid or ""
+		if stid == LocalPlayer():GetNWString( "voice_global_steamid" ) and pl:GetNWInt( "speak_channel", 0 ) == 2 then
+			_showGlobalVoice = true
+		end
 	end
 end
 

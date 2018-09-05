@@ -557,3 +557,118 @@ function DTextBox(tab)
 	end
 	return pnl
 end
+
+function DNumberWang(tab)
+	local dnw = createD( "DNumberWang", tab.parent, tab.w / tab.len, tab.h / 2, tab.x, tab.h / 2 )
+	dnw:SetValue(tab.value)
+	dnw:SetMin(tab.min)
+	dnw:SetMax(tab.max)
+	dnw.serverside = false
+	if tab.netstr != nil and tab.uniqueID != nil then
+		function dnw:OnValueChanged(val)
+			val = tonumber(val)
+			if val <= tab.max and val >= tab.min then
+				net.Start(tab.netstr)
+					net.WriteString(tab.uniqueID)
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val > tab.max then
+				self:SetValue(tab.max)
+				self:SetText(tab.max)
+			elseif val < tab.min then
+				self:SetValue(tab.min)
+				self:SetText(tab.min)
+			end
+		end
+		net.Receive(tab.netstr, function( len )
+			local _uid = tonumber(net.ReadString())
+			local _val = tonumber(net.ReadString())
+			if pa( dnw ) then
+				dnw.serverside = true
+				dnw:SetValue( _val )
+				dnw.serverside = false
+			end
+		end)
+	end
+	return dnw
+end
+
+function DAttributeBar(tab)
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	if tab.parent != nil then
+		tab.w = tab.w or tab.parent:GetWide() or 300
+	else
+		tab.w = tab.w or 300
+	end
+	tab.h = tab.h or ctr( 100 )
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.color = tab.color or Color( 255, 255, 255 )
+
+	tab.header = tab.header or "NOHEADER"
+	tab.value = tab.value or "NOTEXT"
+	tab.lforce = tab.lforce or true
+
+	tab.min = tonumber(tab.min) or 0
+	tab.max = tonumber(tab.max) or 100
+
+	local pnl = {}
+
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
+	function pnl.line:Paint( pw, ph )
+		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+		local text = {}
+		if tab.lforce then
+			text.text = lang_string( tab.header ) .. ":"
+		else
+			text.text = tab.header .. ":"
+		end
+		text.x = ctr( 10 )
+		text.y = ph / 4
+		text.font = "mat1text"
+		text.color = Color( 255, 255, 255, 255 )
+		text.br = 1
+		text.ax = 0
+		DrawText( text )
+	end
+
+	tab.cur = tonumber(tab.cur) or nil
+
+	tab.max = tonumber(tab.max) or nil
+
+	tab.up = tonumber(tab.up) or nil
+
+	tab.dn = tonumber(tab.dn) or nil
+	print(tab.dn)
+
+	tab.len = 3
+	if tab.dn != nil then
+		tab.len = 4
+	end
+
+	tab.par = tab.parent
+
+	tab.parent = pnl.line
+
+	tab.nstr = tab.netstr
+	tab.netstr = "int_" .. tab.nstr
+	pnl.cur = DNumberWang(tab)
+
+	tab.netstr = "int_" .. tab.nstr .. "max"
+	tab.x = tab.w / tab.len
+	pnl.max = DNumberWang(tab)
+
+	tab.netstr = "float_" .. tab.nstr .. "reg"
+	tab.x = tab.w / tab.len * 2
+	pnl.up = DNumberWang(tab)
+
+	if tab.dn != nil then
+		pnl.dn = DNumberWang(tab)
+	end
+
+	if tab.par != nil and tab.par.AddItem != nil then
+		tab.par:AddItem( pnl.line )
+	end
+	return pnl
+end

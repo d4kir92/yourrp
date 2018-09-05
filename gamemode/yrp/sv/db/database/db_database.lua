@@ -111,7 +111,7 @@ function CreateYRPBackupsFolder()
 end
 
 function RemoveOldBackups()
-	printGM("db", "[BACKUP] Remove old backups")
+	printGM("db", "[BACKUP] Remove old ones")
 	if CreateYRPBackupsFolder() then
 		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
 		local _remove_after = sql.Query("SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;")
@@ -119,7 +119,7 @@ function RemoveOldBackups()
 		for i, fi in pairs(backups) do
 			if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
 				file.Delete("yrp_backups/" .. fi, "DATA")
-				printGM("note", "[BACKUP] " .. "Removed old backup: " .. fi)
+				printGM("note", "[BACKUP] " .. "Removed: " .. fi)
 			end
 		end
 	end

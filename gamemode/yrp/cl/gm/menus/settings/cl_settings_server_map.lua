@@ -143,20 +143,22 @@ net.Receive( "getMapList", function( len )
 			local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
 			tmpButton:SetText( lang_string( "add" ) )
 			function tmpButton:DoClick()
-				net.Start( "dbInsertIntoMap" )
-					net.WriteString( "yrp_" .. GetMapNameDB() )
-					net.WriteString( "position, angle, linkID, type" )
-					local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
-					local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
-					local tmpRoleID = tostring( tmpRole:GetOptionData( tmpRole:GetSelectedID() ) )
-					local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', " .. tmpRoleID .. ", 'RoleSpawnpoint'"
-					net.WriteString( tmpString )
-				net.SendToServer()
+				local tmpRoleID = tostring( tmpRole:GetOptionData( tmpRole:GetSelectedID() ) )
+				if tmpRoleID != nil then
+					net.Start( "dbInsertIntoMap" )
+						net.WriteString( "yrp_" .. GetMapNameDB() )
+						net.WriteString( "position, angle, linkID, type" )
+						local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
+						local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
+						local tmpString = "'" .. tonumber( tmpPos[1] ) .. "," .. tonumber( tmpPos[2] ) .. "," .. tonumber( tmpPos[3] + 4 ) .. "', '" .. tonumber( tmpAng[1] ) .. "," .. tonumber( tmpAng[2] ) .. "," .. tonumber( tmpAng[3] ) .. "', " .. tmpRoleID .. ", 'RoleSpawnpoint'"
+						net.WriteString( tmpString )
+					net.SendToServer()
 
-				_mapListView:Clear()
-				net.Start( "getMapList" )
-				net.SendToServer()
-				tmpFrame:Close()
+					_mapListView:Clear()
+					net.Start( "getMapList" )
+					net.SendToServer()
+					tmpFrame:Close()
+				end
 			end
 
 			tmpFrame:MakePopup()

@@ -472,6 +472,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox( "physgunpickup", "gp_physgunpickup" )
 	GAMEPLAYAddCheckBox( "physgunpickupplayer", "gp_physgunpickupplayers" )
+	GAMEPLAYAddCheckBox( "physgunpickupworld", "gp_physgunpickupworld" )
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox( "canseeteammatesonmap", "gp_canseeteammatesonmap" )
 	GAMEPLAYAddCheckBox( "canseeenemiesonmap", "gp_canseeenemiesonmap" )
@@ -539,7 +540,7 @@ end)
 
 net.Receive( "usergroup_add", function(len)
 	local ugs = net.ReadTable()
-	for i, ug in pairs( ugs ) do
+	for i, ug in SortedPairsByMemberValue( ugs, "name", false ) do
 		if DUGS[tonumber( ug.uniqueID )] == nil and tobool( ug.removeable ) then
 			AddUG( ug )
 		end
@@ -606,7 +607,7 @@ net.Receive( "Connect_Settings_UserGroups", function(len)
 		end
 		PARENT.ugs:EnableVerticalScrollbar( true )
 
-		for i, ug in pairs( ugs ) do
+		for i, ug in SortedPairsByMemberValue( ugs, "name", false ) do
 			if tobool( ug.removeable ) then
 				AddUG( ug )
 			end

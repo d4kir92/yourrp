@@ -18,7 +18,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ' '" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0" )
-SQL_ADD_COLUMN( DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT -1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100" )
 SQL_ADD_COLUMN( DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100" )
 SQL_ADD_COLUMN( DATABASE_NAME, "float_hpreg", "INTEGER DEFAULT 0" )
@@ -72,8 +72,8 @@ for str, val in pairs( yrp_ply_roles ) do
 	if string.find( str, "string_" ) then
 		local tab = {}
 		tab.netstr = "update_role_" .. str
-		util.AddNetworkString( tab.netstr )
-		net.Receive( tab.netstr, function( len, ply )
+		util.AddNetworkString(tab.netstr)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString())
 			local s = net.ReadString()
 			tab.ply = ply
@@ -366,10 +366,13 @@ net.Receive("settings_subscribe_role", function(len, ply)
 
 	local usergroups = SQL_SELECT("yrp_usergroups", "*", nil)
 
+	local groups = SQL_SELECT("yrp_ply_groups", "*", nil)
+
 	net.Start("settings_subscribe_role")
 		net.WriteTable(role)
 		net.WriteTable(roles)
 		net.WriteTable(usergroups)
+		net.WriteTable(groups)
 	net.Send(ply)
 end)
 
