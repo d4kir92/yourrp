@@ -515,7 +515,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[group.uniqueID].name = DTextBox(name)
 
 			local hr = {}
-			hr.h = ctr(20)
+			hr.h = ctr(16)
 			hr.parent = ea.info
 			DHr(hr)
 
@@ -801,6 +801,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local role = net.ReadTable()
 			local roles = net.ReadTable()
 			local db_ugs = net.ReadTable()
+			local db_groups = net.ReadTable()
 
 			role.uniqueID = tonumber(role.uniqueID)
 
@@ -825,7 +826,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			info.x = ctr(20)
 			info.y = ctr(20)
 			info.w = ctr(1000)
-			info.h = ctr(530)
+			info.h = ctr(890)
 			info.br = ctr(20)
 			info.color = Color( 255, 255, 255 )
 			info.bgcolor = Color( 80, 80, 80 )
@@ -851,7 +852,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].name = DTextBox(name)
 
 			local hr = {}
-			hr.h = ctr(20)
+			hr.h = ctr(16)
 			hr.parent = ea.info
 			DHr(hr)
 
@@ -882,7 +883,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local otherroles = {}
 			otherroles[0] = lang_string("none")
 			for i, tab in pairs(roles) do
-				print(tab.uniqueID, role.uniqueID)
 				tab.uniqueID = tonumber(tab.uniqueID)
 				if tab.uniqueID != role.uniqueID then
 					otherroles[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
@@ -894,11 +894,60 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			prerole.uniqueID = role.uniqueID
 			prerole.header = "prerole"
 			prerole.netstr = "update_role_int_prerole"
-			prerole.value = role.int_prerole
+			prerole.value = tonumber(role.int_prerole)
 			prerole.uniqueID = role.uniqueID
 			prerole.lforce = false
 			prerole.choices = otherroles
 			ea[role.uniqueID].prerole = DComboBox(prerole)
+
+			DHr(hr)
+
+			local maxa = {}
+			maxa[0] = lang_string("disabled")
+			for i = 1, game.MaxPlayers() do
+				maxa[i] = i
+			end
+
+			local maxamount = {}
+			maxamount.parent = ea.info
+			maxamount.uniqueID = role.uniqueID
+			maxamount.header = "maxamount"
+			maxamount.netstr = "update_role_int_maxamount"
+			maxamount.value = tonumber(role.int_maxamount)
+			maxamount.uniqueID = role.uniqueID
+			maxamount.lforce = false
+			maxamount.choices = maxa
+			ea[role.uniqueID].maxamount = DComboBox(maxamount)
+
+			DHr(hr)
+
+			local grps = {}
+			for i, tab in pairs(db_groups) do
+				grps[i] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+			end
+
+			local int_groupID = {}
+			int_groupID.parent = ea.info
+			int_groupID.uniqueID = role.uniqueID
+			int_groupID.header = "group"
+			int_groupID.netstr = "update_role_int_groupID"
+			int_groupID.value = tonumber(role.int_groupID)
+			int_groupID.uniqueID = role.uniqueID
+			int_groupID.lforce = false
+			int_groupID.choices = grps
+			ea[role.uniqueID].int_groupID = DComboBox(int_groupID)
+
+			DHr(hr)
+
+			local string_description = {}
+			string_description.parent = ea.info
+			string_description.uniqueID = role.uniqueID
+			string_description.header = "description"
+			string_description.netstr = "update_role_string_description"
+			string_description.value = role.string_description
+			string_description.uniqueID = role.uniqueID
+			string_description.lforce = false
+			ea[role.uniqueID].string_description = DTextBox(string_description)
 
 			local restriction = {}
 			restriction.parent = ea.background
@@ -957,6 +1006,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
+			local bool_voiceglobal = {}
+			bool_voiceglobal.parent = ea.restriction
+			bool_voiceglobal.uniqueID = role.uniqueID
+			bool_voiceglobal.header = "canuserolevoicechat"
+			bool_voiceglobal.netstr = "update_role_bool_voiceglobal"
+			bool_voiceglobal.value = role.bool_voiceglobal
+			bool_voiceglobal.uniqueID = role.uniqueID
+			bool_voiceglobal.lforce = false
+			ea[role.uniqueID].bool_voiceglobal = DCheckBox(bool_voiceglobal)
+
+			DHr(hr)
+
 			local whitelist = {}
 			whitelist.parent = ea.restriction
 			whitelist.uniqueID = role.uniqueID
@@ -990,6 +1051,50 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			visible.uniqueID = role.uniqueID
 			visible.lforce = false
 			ea[role.uniqueID].visible = DCheckBox(visible)
+
+			local attributes = {}
+			attributes.parent = ea.background
+			attributes.x = ctr(1040)
+			attributes.y = ctr(610)
+			attributes.w = ctr(1000)
+			attributes.h = ctr(570)
+			attributes.br = ctr(20)
+			attributes.color = Color( 255, 255, 255 )
+			attributes.bgcolor = Color( 80, 80, 80 )
+			attributes.name = "attributes"
+			ea[role.uniqueID].attributes = DGroup(attributes)
+			ea.attributes = ea[role.uniqueID].attributes
+
+			local health = {}
+			health.parent = ea.attributes
+			health.uniqueID = role.uniqueID
+			health.header = "health"
+			health.netstr = "hp"
+			health.uniqueID = role.uniqueID
+			health.lforce = false
+			health.cur = role.int_hp
+			health.max = role.int_hpmax
+			health.up = role.float_hpreg
+			health.color = Color(0, 255, 0)
+			ea[role.uniqueID].health = DAttributeBar(health)
+
+			hr.parent = ea.attributes
+			DHr(hr)
+
+			local armor = {}
+			armor.parent = ea.attributes
+			armor.uniqueID = role.uniqueID
+			armor.header = "armor"
+			armor.netstr = "ar"
+			armor.uniqueID = role.uniqueID
+			armor.lforce = false
+			armor.cur = role.int_ar
+			armor.max = role.int_armax
+			armor.up = role.float_arreg
+			armor.color = Color(0, 0, 255)
+			ea[role.uniqueID].armor = DAttributeBar(armor)
+
+			DHr(hr)
 		end)
 
 		net.Receive("settings_subscribe_rolelist", function(le)
