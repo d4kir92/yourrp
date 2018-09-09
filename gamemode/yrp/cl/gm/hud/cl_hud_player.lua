@@ -170,7 +170,7 @@ end
 function drawHUDElementBr( dbV )
 	if tobool( HudV( dbV .. "to" ) ) and HUD[dbV] != nil then
 		if !tobool( HudV( dbV .. "tr" ) ) then
-			drawRBoxBr( 0, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
+			drawRBoxBr2( 0, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), 1 )
 		else
 			drawRoundedBoxBR( HUD[dbV].r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), 1 )
 		end

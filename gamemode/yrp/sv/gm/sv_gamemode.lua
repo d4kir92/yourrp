@@ -478,10 +478,10 @@ function canhear( talker, listener )
 	if talker:GetNWInt( "speak_channel" ) == 2 then
 		--printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear global" )
 		return true
-	elseif talker:GetNWInt( "speak_channel" ) == 1 and talker:GetNWString( "groupUniqueID" ) == listener:GetNWInt( "groupUniqueID" ) then
+	elseif talker:GetNWInt( "speak_channel" ) == 1 and talker:GetNWString( "groupUniqueID" ) == listener:GetNWInt( "groupUniqueID" ) or talker:GetPos():Distance( listener:GetPos() ) < GetGroupVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled() then
 		--printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear group")
 		return true
-	elseif talker:GetPos():Distance( listener:GetPos() ) < 300 then
+	elseif talker:GetPos():Distance( listener:GetPos() ) < GetVoiceChatLocalRange() then
 		--printGM( "note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear local ")
 		return true
 	else

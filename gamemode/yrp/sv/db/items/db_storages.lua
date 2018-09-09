@@ -57,7 +57,7 @@ function SaveStorages( str )
 	printGM( "db", "SaveStorages( " .. string.upper( tostring( str ) ) .. " )" )
 	local _ents = ents.GetAll()
 	for i, ent in pairs( _ents ) do
-		if ent:GetNWString( "storage_uid", "" ) != "" and ent:IsWorldStorage() then
+		if ent:IsValid() and ent:GetNWString( "storage_uid", "" ) != "" and ent:IsWorldStorage() then
 			local _pos = string.Explode( " ", tostring( ent:GetPos() ) )
 			local _posx = _pos[1]
 			local _posy = _pos[2]

@@ -23,10 +23,15 @@ net.Receive( "getBuildingInfo", function( len )
 		local _tmpBuilding = net.ReadTable()
 		local owner = net.ReadString()
 
+		print(_door)
+		print(_building)
+		printTab(_tmpBuilding)
+		print(owner)
+
 		local ply = LocalPlayer()
 		if ply:GetNWBool( "bool_building_system", false ) then
 			if _building != nil and _tmpBuilding != nil then
-				if _tmpBuilding.ownerCharID == "" and tonumber( _tmpBuilding.groupID ) == -1 then
+				if (_tmpBuilding.ownerCharID == "" or _tmpBuilding.ownerCharID == " ") and tonumber( _tmpBuilding.groupID ) == -1 then
 					buyWindow( _building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door )
 				elseif _tmpBuilding.ownerCharID == ply:CharID() or _tmpBuilding.groupID != -1 then
 					optionWindow( _building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door, owner )
