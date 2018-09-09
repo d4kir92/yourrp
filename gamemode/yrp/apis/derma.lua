@@ -598,6 +598,13 @@ function drawRBox(r, x, y, w, h, col)
 	draw.RoundedBox(ctr(r), ctr(x), ctr(y), ctr(w), ctr(h), col)
 end
 
+function drawRBoxBr2(r, x, y, w, h, col, br)
+	draw.RoundedBox(r, x - br, y - br, w + 2 * br - 1, 2 * br, col)
+	draw.RoundedBox(r, x - br, y + h - br, w + 2 * br - 1, 2 * br, col)
+	draw.RoundedBox(r, x - br, y, 2 * br, h, col)
+	draw.RoundedBox(r, x + w - br, y, 2 * br, h, col)
+end
+
 function drawRBoxBr(r, x, y, w, h, col, br)
 	draw.RoundedBox(ctr(r), ctr(x - br), ctr(y - br), ctr(w + 2 * br - 1), ctr(2 * br), col)
 	draw.RoundedBox(ctr(r), ctr(x - br), ctr(y + h - br), ctr(w + 2 * br - 1), ctr(2 * br), col)

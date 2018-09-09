@@ -30,7 +30,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT '
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_server_debug", "INT DEFAULT 1" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "int_server_debug_tick", "INT DEFAULT 60" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_voice_group_local_range", "INT DEFAULT 60" )
 
 --[[ Gamemode Settings ]]--
 SQL_ADD_COLUMN( DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'" )
@@ -66,8 +66,11 @@ SQL_ADD_COLUMN( DATABASE_NAME, "bool_weapon_lowering_system", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_3d_voice", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_3d", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_voice_local_range", "INT DEFAULT 300" )
+SQL_ADD_COLUMN( DATABASE_NAME, "int_voice_group_local_range", "INT DEFAULT 100" )
 
 --[[ Gamemode Visuals ]]--
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1" )
@@ -265,13 +268,24 @@ end
 
 
 function Is3DVoiceEnabled()
-	return tobool( yrp_general.bool_3d_voice )
+	return tobool( yrp_general.bool_voice_3d )
 end
 
 function IsVoiceChannelsEnabled()
 	return tobool( yrp_general.bool_voice_channels )
 end
 
+function IsLocalGroupVoiceChatEnabled()
+	return tobool( yrp_general.bool_voice_group_local )
+end
+
+function GetVoiceChatLocalRange()
+	return tonumber( yrp_general.int_voice_local_range )
+end
+
+function GetGroupVoiceChatLocalRange()
+	return tonumber( yrp_general.int_voice_group_local_range )
+end
 
 function GetMaxAmountOfDroppedMoney()
 	return tonumber( yrp_general.text_money_max_amount_of_dropped_money )
@@ -571,16 +585,38 @@ net.Receive( "update_bool_players_can_switch_role", function( len, ply )
 end)
 
 
-util.AddNetworkString( "update_bool_3d_voice" )
-net.Receive( "update_bool_3d_voice", function( len, ply )
+util.AddNetworkString( "update_bool_voice_3d" )
+net.Receive( "update_bool_voice_3d", function( len, ply )
 	local b = btn( net.ReadBool() )
-	GeneralUpdateBool( ply, "update_bool_3d_voice", "bool_3d_voice", b )
+	GeneralUpdateBool( ply, "update_bool_voice_3d", "bool_voice_3d", b )
 end)
 
 util.AddNetworkString( "update_bool_voice_channels" )
 net.Receive( "update_bool_voice_channels", function( len, ply )
 	local b = btn( net.ReadBool() )
 	GeneralUpdateBool( ply, "update_bool_voice_channels", "bool_voice_channels", b )
+end)
+
+util.AddNetworkString( "update_bool_voice_group_local" )
+net.Receive( "update_bool_voice_group_local", function( len, ply )
+	local b = btn( net.ReadBool() )
+	GeneralUpdateBool( ply, "update_bool_voice_group_local", "bool_voice_group_local", b )
+end)
+
+util.AddNetworkString( "update_int_voice_local_range" )
+net.Receive( "update_int_voice_local_range", function( len, ply )
+	local int = net.ReadString()
+	if isnumber( tonumber( int ) ) then
+		GeneralUpdateInt( ply, "update_int_voice_local_range", "int_voice_local_range", int )
+	end
+end)
+
+util.AddNetworkString( "update_int_voice_group_local_range" )
+net.Receive( "update_int_voice_group_local_range", function( len, ply )
+	local int = net.ReadString()
+	if isnumber( tonumber( int ) ) then
+		GeneralUpdateInt( ply, "update_int_voice_group_local_range", "int_voice_group_local_range", int )
+	end
 end)
 
 

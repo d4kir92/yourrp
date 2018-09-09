@@ -27,7 +27,7 @@ function allowedToUseDoor( id, ply )
 		local _tmpBuildingTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
 		if wk( _tmpBuildingTable ) then
 
-			if tostring( _tmpBuildingTable[1].ownerCharID ) == "" and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
+			if (tostring( _tmpBuildingTable[1].ownerCharID ) == "" or tostring( _tmpBuildingTable[1].ownerCharID ) == " ") and tonumber( _tmpBuildingTable[1].groupID ) == -1 then
 				return true
 			else
 				local _tmpChaTab = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmpBuildingTable[1].ownerCharID )
@@ -139,7 +139,7 @@ function loadDoors()
 	for k, v in pairs( _allPropDoors ) do
 		for l, w in pairs( _tmpBuildings ) do
 			if tonumber( w.uniqueID ) == tonumber( v:GetNWString( "buildingID" ) ) then
-				if w.ownerCharID != "" then
+				if w.ownerCharID != "" and w.ownerCharID != " " then
 
 					local _tmpRPName = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. w.ownerCharID )
 					if wk( _tmpRPName ) then
@@ -205,7 +205,7 @@ util.AddNetworkString( "sellBuilding" )
 util.AddNetworkString( "lockDoor" )
 
 function canLock( ply, tab )
-	if tab.ownerCharID != "" then
+	if tab.ownerCharID != "" and tab.ownerCharID != " " then
 		if tostring( ply:CharID() ) == tostring( tab.ownerCharID ) then
 			return true
 		end
@@ -215,7 +215,7 @@ function canLock( ply, tab )
 			return true
 		end
 		return false
-	elseif tab.ownerCharID == "" and tab.groupID == "-1" then
+	elseif (tab.ownerCharID == "" or tab.ownerCharID == " ") and tab.groupID == "-1" then
 		return false
 	else
 		printGM( "error", "canLock ELSE" )
@@ -324,7 +324,7 @@ net.Receive( "buyBuilding", function( len, ply )
 		local _tmpBuildingID = net.ReadString()
 		local _tmpTable = SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
-		if ply:canAfford( _tmpTable[1].buildingprice ) and _tmpTable[1].ownerCharID == "" and tonumber( _tmpTable[1].groupID ) == -1 then
+		if ply:canAfford( _tmpTable[1].buildingprice ) and (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber( _tmpTable[1].groupID ) == -1 then
 			ply:addMoney( - ( _tmpTable[1].buildingprice ) )
 			SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'" )
 			local _tmpDoors = ents.FindByClass( "prop_door_rotating" )
@@ -463,7 +463,7 @@ net.Receive( "getBuildingInfo", function( len, ply )
 		if wk( _tmpTable ) then
 			_tmpTable = _tmpTable[1]
 			_tmpTable.name = SQL_STR_OUT( _tmpTable.name )
-			if _tmpTable.ownerCharID != "" then
+			if _tmpTable.ownerCharID != "" and _tmpTable.ownerCharID != " " then
 				local _tmpChaTab = SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID )
 				if wk( _tmpChaTab ) then
 					_tmpChaTab = _tmpChaTab[1]
