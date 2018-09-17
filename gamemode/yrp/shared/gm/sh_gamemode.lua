@@ -77,8 +77,12 @@ function GetMapName()
 	return game.GetMap()
 end
 
+function RSWU(str) -- Replace Space With Underline
+	return string.Replace(str, " ", "_")
+end
+
 function GetMapNameDB()
-	return string.lower( SQL_STR_IN( game.GetMap() ) )
+	return string.lower(SQL_STR_IN(RSWU(game.GetMap())))
 end
 
 concommand.Add( "yrp_version", function( ply, cmd, args )
