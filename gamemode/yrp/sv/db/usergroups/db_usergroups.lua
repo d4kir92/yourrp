@@ -58,7 +58,13 @@ SQL_ADD_COLUMN( DATABASE_NAME, "canseeenemiesonmap", "INT DEFAULT 0" )
 --db_drop_table( DATABASE_NAME )
 --db_is_empty( DATABASE_NAME )
 
-if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
+local yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
+for _i, _ug in pairs(yrp_usergroups) do
+	printTab(_ug)
+	SQL_UPDATE("name = '" .. string.upper(_ug.name) .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
+end
+
+if SQL_SELECT(DATABASE_NAME, "*", "name = 'SUPERADMIN'") == nil then
 	local _str = "name, "
 	_str = _str .. "vehicles, "
 	_str = _str .. "weapons, "
@@ -97,7 +103,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 	_str = _str .. "status, "
 	_str = _str .. "yourrp_addons"
 
-	local _str2 = "'superadmin', "
+	local _str2 = "'SUPERADMIN', "
 	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
@@ -105,23 +111,23 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'superadmin'" ) == nil then
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
 
-if SQL_SELECT( DATABASE_NAME, "*", "name = 'user'" ) == nil then
+if SQL_SELECT( DATABASE_NAME, "*", "name = 'USER'" ) == nil then
 	local _str = "name"
 
-	local _str2 = "'user'"
+	local _str2 = "'USER'"
 
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
 
-if SQL_SELECT( DATABASE_NAME, "*", "name = 'admin'" ) == nil then
+if SQL_SELECT( DATABASE_NAME, "*", "name = 'ADMIN'" ) == nil then
 	local _str = "name"
 
-	local _str2 = "'admin'"
+	local _str2 = "'ADMIN'"
 
 	SQL_INSERT_INTO( DATABASE_NAME, _str , _str2 )
 end
 
-if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
+if SQL_SELECT( DATABASE_NAME, "*", "name = 'YRP_USERGROUPS'" ) == nil then
 	local _str = "name, "
 	_str = _str .. "vehicles, "
 	_str = _str .. "weapons, "
@@ -161,7 +167,7 @@ if SQL_SELECT( DATABASE_NAME, "*", "name = 'yrp_usergroups'" ) == nil then
 	_str = _str .. "yourrp_addons, "
 	_str = _str .. "removeable"
 
-	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
+	local _str2 = "'YRP_USERGROUPS', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0"
@@ -198,7 +204,7 @@ net.Receive( "Connect_Settings_UserGroups", function( len, ply )
 		AddToHandler_UserGroups( ply )
 		local _usergroups = {}
 		for k, v in pairs( player.GetAll() ) do
-			local _ug = v:GetUserGroup()
+			local _ug = string.upper(v:GetUserGroup())
 			if SQL_SELECT( DATABASE_NAME, "*", "name = '" .. _ug .. "'" ) == nil then
 				printGM( "note", "usergroup: " .. _ug .. " not found, adding to db" )
 				SQL_INSERT_INTO( DATABASE_NAME, "name", "'" .. _ug .. "'" )
@@ -311,24 +317,21 @@ end
 
 util.AddNetworkString( "setting_hasnoaccess" )
 function Player:CanAccess( site )
-	local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
+	local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.upper(self:GetUserGroup()) .. "'" )
+	printTab(_b)
 	local _ugs = SQL_SELECT( DATABASE_NAME, "name", "usergroups = '1'" )
 	if wk( _b ) then
 		_b = tobool( _b[1][site] )
 		local usergroups = ""
 		for i, ug in pairs( _ugs ) do
 			if usergroups == "" then
-				usergroups = usergroups .. ug.name
+				usergroups = usergroups .. string.upper(ug.name)
 			else
-				usergroups = usergroups .. ", " .. ug.name
+				usergroups = usergroups .. ", " .. string.upper(ug.name)
 			end
 		end
 		if !_b then
 			self:NoAccess( site, usergroups )
-		end
-		if _b then
-			--printGM( "db", self:YRPName() .. " can access " .. site .. "" )
-		else
 			printGM( "note", self:YRPName() .. " can NOT access " .. site .. "" )
 		end
 		return tobool( _b )
@@ -342,7 +345,7 @@ end
 util.AddNetworkString( "usergroup_update_name" )
 net.Receive( "usergroup_update_name", function( len, ply )
 	local uid = tonumber( net.ReadString() )
-	local name = string.lower( net.ReadString() )
+	local name = string.upper( net.ReadString() )
 	SQL_UPDATE( DATABASE_NAME, "name = '" .. name .. "'", "uniqueID = '" .. uid .. "'" )
 
 	printGM( "db", ply:YRPName() .. " updated name of usergroup ( " .. uid .. " ) to [" .. name .. "]" )
@@ -536,6 +539,8 @@ net.Receive( "usergroup_sent_dn", function( len, ply )
 end)
 
 function UGCheckBox( ply, uid, name, value )
+	name = name or "UNNAMED"
+	name = string.upper(name)
 	SQL_UPDATE( DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. uid .. "'" )
 
 	printGM( "db", ply:YRPName() .. " updated " .. name .. " of usergroup ( " .. uid .. " ) to [" .. value .. "]" )
@@ -827,13 +832,13 @@ end)
 -- Functions
 hook.Add( "PlayerSpawnVehicle", "yrp_vehicles_restriction", function( pl, model, name, tab )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "vehicles", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "vehicles", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerSpawnVehicle failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.vehicles ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn a vehicle." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn a vehicle." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "vehicles" )
@@ -847,13 +852,13 @@ end)
 
 hook.Add( "PlayerGiveSWEP", "yrp_weapons_restriction", function( pl )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "weapons", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "weapons", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerGiveSWEP failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.weapons ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn a weapon." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn a weapon." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "weapon" )
@@ -919,13 +924,13 @@ end)
 
 hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function( pl )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "entities", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "entities", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerSpawnSENT failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.entities ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn an entity." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn an entity." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "entities" )
@@ -939,13 +944,13 @@ end)
 
 hook.Add( "PlayerSpawnEffect", "yrp_effects_restriction", function( pl )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "effects", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "effects", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerSpawnEffect failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.effects ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn an effect." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn an effect." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "effects" )
@@ -959,13 +964,13 @@ end)
 
 hook.Add( "PlayerSpawnNPC", "yrp_npcs_restriction", function( pl )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "npcs", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "npcs", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerSpawnNPC failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.npcs ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn a npc." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn a npc." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "npcs" )
@@ -979,13 +984,13 @@ end)
 
 hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( pl )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "props", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "props", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if worked( _tmp, "PlayerSpawnProp failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.props ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn a prop." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn a prop." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "props" )
@@ -999,13 +1004,13 @@ end)
 
 hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function( pl, model )
 	if ea( pl ) then
-		local _tmp = SQL_SELECT( DATABASE_NAME, "ragdolls", "name = '" .. tostring( string.lower( pl:GetUserGroup() ) ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "ragdolls", "name = '" .. tostring( string.upper( pl:GetUserGroup() ) ) .. "'" )
 		if wk( _tmp ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.ragdolls ) then
 				return true
 			else
-				printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to spawn a ragdoll." )
+				printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to spawn a ragdoll." )
 
 				net.Start( "yrp_info" )
 					net.WriteString( "ragdolls" )
@@ -1168,7 +1173,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 			end
 		else
 			-- TURNED ON
-			local _tmp = SQL_SELECT( DATABASE_NAME, "noclip", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "noclip", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if wk( _tmp ) then
 				_tmp = _tmp[1]
 				if tobool( _tmp.noclip ) then
@@ -1183,7 +1188,7 @@ hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function( pl, bool )
 					RenderNoClip( pl )
 					return true
 				else
-					printGM( "note", pl:Nick() .. " [" .. string.lower( pl:GetUserGroup() ) .. "] tried to noclip." )
+					printGM( "note", pl:Nick() .. " [" .. string.upper( pl:GetUserGroup() ) .. "] tried to noclip." )
 
 					net.Start( "yrp_info" )
 						net.WriteString( "noclip" )
@@ -1201,13 +1206,13 @@ end)
 hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
 	if ea( pl ) then
 		printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
-		local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup, physgunpickupworld", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+		local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup, physgunpickupworld", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if wk( _tmp ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.physgunpickup ) then
 				print("world", _tmp.physgunpickupworld)
 				if ent:IsPlayer() then
-					local _tmp2 = SQL_SELECT( DATABASE_NAME, "physgunpickupplayer", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+					local _tmp2 = SQL_SELECT( DATABASE_NAME, "physgunpickupplayer", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 					if wk( _tmp2 ) then
 						_tmp2 = _tmp2[1]
 						if tobool( _tmp2.physgunpickupplayer ) then
@@ -1252,7 +1257,7 @@ hook.Add( "CanTool", "yrp_can_tool", function( pl, tr, tool )
 	if ea( pl ) then
 		printGM( "gm", "CanTool: " .. tool )
 		if tool == "remover" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "removetool", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "removetool", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.removetool ) then
@@ -1268,7 +1273,7 @@ hook.Add( "CanTool", "yrp_can_tool", function( pl, tr, tool )
 				return false
 			end
 		elseif tool == "dynamite" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "dynamitetool", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "dynamitetool", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.dynamitetool ) then
@@ -1291,7 +1296,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 	if ea( pl ) then
 		printGM( "gm", "CanProperty: " .. property )
 		if property == "ignite" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "ignite", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "ignite", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.ignite ) then
@@ -1307,7 +1312,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 				return false
 			end
 		elseif property == "remover" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "removetool", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "removetool", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.removetool ) then
@@ -1323,7 +1328,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 				return false
 			end
 		elseif property == "drive" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "drive", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "drive", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.drive ) then
@@ -1339,7 +1344,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 				return false
 			end
 		elseif property == "collision" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "collision", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "collision", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.collision ) then
@@ -1355,7 +1360,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 				return false
 			end
 		elseif property == "keepupright" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "keepupright", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "keepupright", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.keepupright ) then
@@ -1371,7 +1376,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 				return false
 			end
 		elseif property == "bodygroups" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "bodygroups", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "bodygroups", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.bodygroups ) then
@@ -1387,7 +1392,7 @@ hook.Add( "CanProperty", "yrp_canproperty", function( pl, property, ent )
 				return false
 			end
 		elseif property == "gravity" then
-			local _tmp = SQL_SELECT( DATABASE_NAME, "gravity", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+			local _tmp = SQL_SELECT( DATABASE_NAME, "gravity", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
 				if tobool( _tmp.gravity ) then
@@ -1417,7 +1422,7 @@ end)
 
 function Player:UserGroupLoadout()
 	printGM( "gm", self:SteamName() .. " UserGroupLoadout" )
-	local UG = SQL_SELECT( DATABASE_NAME, "*", "name = '" .. self:GetUserGroup() .. "'" )
+	local UG = SQL_SELECT( DATABASE_NAME, "*", "name = '" .. string.upper(self:GetUserGroup()) .. "'" )
 	if wk( UG ) then
 		UG = UG[1]
 		self:SetNWString( "usergroup_sweps", UG.sweps )
