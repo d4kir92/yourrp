@@ -640,7 +640,6 @@ function DAttributeBar(tab)
 	tab.up = tonumber(tab.up) or nil
 
 	tab.dn = tonumber(tab.dn) or nil
-	print(tab.dn)
 
 	tab.len = 3
 	if tab.dn != nil then
