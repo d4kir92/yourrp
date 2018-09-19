@@ -23,11 +23,6 @@ net.Receive( "getBuildingInfo", function( len )
 		local _tmpBuilding = net.ReadTable()
 		local owner = net.ReadString()
 
-		print(_door)
-		print(_building)
-		printTab(_tmpBuilding)
-		print(owner)
-
 		local ply = LocalPlayer()
 		if ply:GetNWBool( "bool_building_system", false ) then
 			if _building != nil and _tmpBuilding != nil then

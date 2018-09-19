@@ -492,7 +492,7 @@ function CreateCharacter( ply, tab )
 		end
 		send_characters( ply )
 	else
-		print("note", "role not found!")
+		printGM("note", "role not found!")
 	end
 end
 

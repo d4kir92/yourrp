@@ -60,8 +60,9 @@ SQL_ADD_COLUMN( DATABASE_NAME, "canseeenemiesonmap", "INT DEFAULT 0" )
 
 local yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
 for _i, _ug in pairs(yrp_usergroups) do
-	printTab(_ug)
-	SQL_UPDATE("name = '" .. string.upper(_ug.name) .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
+	_ug.name = _ug.name or "failed"
+	_ug.name = string.upper(_ug.name)
+	SQL_UPDATE("name = '" .. _ug.name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
 end
 
 if SQL_SELECT(DATABASE_NAME, "*", "name = 'SUPERADMIN'") == nil then
@@ -316,11 +317,12 @@ function Player:NoAccess( site, usergroups )
 end
 
 util.AddNetworkString( "setting_hasnoaccess" )
-function Player:CanAccess( site )
-	local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. string.upper(self:GetUserGroup()) .. "'" )
-	printTab(_b)
+function Player:CanAccess(site)
+	local _ug = self:GetUserGroup() or "failed"
+	_ug = string.upper(_ug)
+	local _b = SQL_SELECT( DATABASE_NAME, site, "name = '" .. _ug .. "'" )
 	local _ugs = SQL_SELECT( DATABASE_NAME, "name", "usergroups = '1'" )
-	if wk( _b ) then
+	if wk(_b) then
 		_b = tobool( _b[1][site] )
 		local usergroups = ""
 		for i, ug in pairs( _ugs ) do
@@ -332,7 +334,9 @@ function Player:CanAccess( site )
 		end
 		if !_b then
 			self:NoAccess( site, usergroups )
-			printGM( "note", self:YRPName() .. " can NOT access " .. site .. "" )
+			printGM("note", self:YRPName() .. " can NOT access " .. site .. "")
+		elseif _b then
+			printGM("db", self:YRPName() .. " can access " .. site .. "")
 		end
 		return tobool( _b )
 	end
@@ -1210,7 +1214,6 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
 		if wk( _tmp ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.physgunpickup ) then
-				print("world", _tmp.physgunpickupworld)
 				if ent:IsPlayer() then
 					local _tmp2 = SQL_SELECT( DATABASE_NAME, "physgunpickupplayer", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 					if wk( _tmp2 ) then
@@ -1228,14 +1231,11 @@ hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
 					end
 				elseif ent:CreatedByMap() then
 					if tobool(_tmp.physgunpickupworld) then
-						print("allowed to pickup world")
 						return true
 					else
-						print("not allowed to pickup world")
 						return false
 					end
 				else
-					print("allowed to pickup ent")
 					return true
 				end
 			elseif ent:GetRPOwner() == pl then
