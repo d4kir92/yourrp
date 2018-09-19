@@ -59,10 +59,12 @@ SQL_ADD_COLUMN( DATABASE_NAME, "canseeenemiesonmap", "INT DEFAULT 0" )
 --db_is_empty( DATABASE_NAME )
 
 local yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
-for _i, _ug in pairs(yrp_usergroups) do
-	_ug.name = _ug.name or "failed"
-	_ug.name = string.upper(_ug.name)
-	SQL_UPDATE("name = '" .. _ug.name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
+if wk(yrp_usergroups) then
+	for _i, _ug in pairs(yrp_usergroups) do
+		_ug.name = _ug.name or "failed"
+		_ug.name = string.upper(_ug.name)
+		SQL_UPDATE("name = '" .. _ug.name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
+	end
 end
 
 if SQL_SELECT(DATABASE_NAME, "*", "name = 'SUPERADMIN'") == nil then
