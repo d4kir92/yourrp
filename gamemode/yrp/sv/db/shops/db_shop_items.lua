@@ -290,6 +290,7 @@ function spawnItem(ply, item, duid)
 
 	if item.type == "weapons" then
 		ply:Give(item.ClassName)
+
 		return true
 	else
 		ent:YRPSetOwner(ply)
@@ -302,8 +303,7 @@ function spawnItem(ply, item, duid)
 			if _storagepoint ~= nil and _storagepoint ~= false then
 				_storagepoint = _storagepoint[1]
 				printGM("gm", "[spawnItem] Item To Storagepoint")
-				--[[ Position ]]
-				--
+				-- Position
 				local _pos = string.Explode(",", _storagepoint.position)
 				local _edit = Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 4)
 				local _height = Vector(0, 0, 14)
@@ -316,8 +316,7 @@ function spawnItem(ply, item, duid)
 				_pos_end = _pos
 				ent:SetPos(_pos_end)
 
-				--[[ Angle ]]
-				--
+				-- Angle
 				if ent.Custom ~= "simfphys" then
 					local _ang = string.Explode(",", _storagepoint.angle)
 					_ang = Angle(0, _ang[2], 0)
@@ -326,106 +325,104 @@ function spawnItem(ply, item, duid)
 
 				local _mins = ent:OBBMins() + _edit
 				local _maxs = ent:OBBMaxs() + _edit
+				local tr = {}
+				tr.start = _pos
+				tr.endpos = _pos
+				tr.mins = _mins
+				tr.maxs = _maxs
+				tr.filter = {ent, ent:GetChildren()}
+				local hullTrace = util.TraceHull(tr)
 
-				local tr = {
-					start = _pos,
-				endpos = _pos,
-				mins = _mins,
-				maxs = _maxs,
-				filter = {ent, ent:GetChildren()}
-			}
+				if hullTrace.Hit then
+					printGM("note", "[spawnItem] NOT ENOUGH SPACE")
+					net.Start("yrp_info2")
+					net.WriteString("notenoughspace")
+					net.WriteString("(" .. tostring(hullTrace.Entity) .. ")")
+					net.Send(ply)
+					ent:Remove()
 
-			local hullTrace = util.TraceHull(tr)
-
-			if hullTrace.Hit then
-				printGM("note", "[spawnItem] NOT ENOUGH SPACE")
-				net.Start("yrp_info2")
-				net.WriteString("notenoughspace")
-				net.WriteString("(" .. tostring(hullTrace.Entity) .. ")")
-				net.Send(ply)
-				ent:Remove()
-
-				return false
-			end
-
-			if ent.Custom ~= "simfphys" then
-				local tr2 = util.TraceHull({
-					start = _pos_end + Vector(0, 0, 128),
-				endpos = _pos_end - Vector(0, 0, 128),
-				maxs = maxs,
-				mins = mins,
-				filter = ent
-			})
-
-			if ent.SpawnFunction ~= nil then
-				ent:SpawnFunction(ply, tr2, ent:GetClass())
-			else
-				ent:Spawn()
-			end
-
-			ent:Activate()
-			ent:SetPos(_pos_end)
-		end
-
-		return true
-	end
-end
-
-printGM("gm", "[spawnItem] Item To Player")
-_angle = ply:EyeAngles()
-ent:SetPos(ply:GetPos() + Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 32))
-
-for dist = 0, _distMax, _distSpace do
-	for ang = 0, 360, 45 do
-		if ang ~= 0 then
-			_angle = _angle + Angle(0, 45, 0)
-		end
-
-		local tr = {}
-		tr.start = ent:GetPos() + _angle:Forward() * dist
-		tr.endpos = ent:GetPos() + _angle:Forward() * dist
-		tr.filter = ent
-		tr.mins = ent:OBBMins() * 1.1 --1.1 because so that no one get stuck
-		tr.maxs = ent:OBBMaxs() * 1.1 --1.1 because so that no one get stuck
-		tr.mask = MASK_SHOT_HULL
-		local _result = util.TraceHull(tr)
-
-		if not _result.Hit then
-			_pos_end = ent:GetPos() + _angle:Forward() * dist
-			ent:SetPos(_pos_end)
-
-			if item.type ~= "vehicles" then
-				printGM("gm", "[spawnItem] Spawn Item")
-
-				local tr2 = util.TraceHull({
-					start = _pos_end + Vector(0, 0, 128),
-					endpos = _pos_end - Vector(0, 0, 128),
-					maxs = maxs,
-					mins = mins,
-					filter = ent
-				})
-
-				if ent.SpawnFunction ~= nil then
-					ent:SpawnFunction(ply, tr2, ent:GetClass())
-				else
-					ent:Spawn()
+					return false
 				end
 
-				ent:Activate()
-				ent:SetPos(_pos_end)
+				if ent.Custom ~= "simfphys" then
+					local tr2 = util.TraceHull({
+						start = _pos_end + Vector(0, 0, 128),
+						endpos = _pos_end - Vector(0, 0, 128),
+						maxs = maxs,
+						mins = mins,
+						filter = ent
+					})
+
+					if ent.SpawnFunction ~= nil then
+						ClassName = ent:GetClass()
+						ent:SpawnFunction(ply, tr2, ent:GetClass())
+					else
+						ent:Spawn()
+					end
+
+					ent:Activate()
+					ent:SetPos(_pos_end)
+				end
+
+				return true
 			end
-
-			printGM("gm", "[spawnItem] Enough Space")
-
-			return true
 		end
+
+		printGM("gm", "[spawnItem] Item To Player")
+		_angle = ply:EyeAngles()
+		ent:SetPos(ply:GetPos() + Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 4))
+
+		for dist = 0, _distMax, _distSpace do
+			for ang = 0, 360, 45 do
+				if ang ~= 0 then
+					_angle = _angle + Angle(0, 45, 0)
+				end
+
+				local tr = {}
+				tr.start = ent:GetPos() + _angle:Forward() * dist
+				tr.endpos = ent:GetPos() + _angle:Forward() * dist
+				tr.filter = ent
+				tr.mins = ent:OBBMins() * 1.1 --1.1 because so that no one get stuck
+				tr.maxs = ent:OBBMaxs() * 1.1 --1.1 because so that no one get stuck
+				tr.mask = MASK_SHOT_HULL
+				local _result = util.TraceHull(tr)
+
+				if not _result.Hit then
+					_pos_end = ent:GetPos() + _angle:Forward() * dist
+					ent:SetPos(_pos_end)
+
+					if item.type ~= "vehicles" then
+						printGM("gm", "[spawnItem] Spawn Item")
+
+						local tr2 = util.TraceHull({
+							start = _pos_end + Vector(0, 0, 128),
+							endpos = _pos_end - Vector(0, 0, 128),
+							maxs = maxs,
+							mins = mins,
+							filter = ent
+						})
+
+						if ent.SpawnFunction ~= nil then
+							ent:SpawnFunction(ply, tr2, ent:GetClass())
+						else
+							ent:Spawn()
+						end
+
+						ent:Activate()
+						ent:SetPos(_pos_end)
+					end
+
+					printGM("gm", "[spawnItem] Enough Space")
+
+					return true
+				end
+			end
+		end
+
+		printGM("note", "[spawnItem] Not Enough Space")
+
+		return false
 	end
-end
-
-printGM("note", "[spawnItem] Not Enough Space")
-
-return false
-end
 end
 
 util.AddNetworkString("item_buy")
