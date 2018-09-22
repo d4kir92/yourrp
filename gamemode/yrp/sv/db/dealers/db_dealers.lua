@@ -26,12 +26,33 @@ end
 util.AddNetworkString( "dealer_add" )
 
 function dealer_rem( uid )
+	uid = tonumber(uid)
 	local _del = SQL_DELETE_FROM( _db_name, "uniqueID = '" .. uid .. "'" )
 end
 
+function CleanUpDealers()
+	local _dealers = SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
+	local _map_dealers = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'dealer'" )
+	if wk(_map_dealers) and wk(_dealers) then
+		for i, dealer in pairs(_dealers) do
+			local found = false
+			for j, map_dealer in pairs(_map_dealers) do
+				if dealer.uniqueID == map_dealer.linkID then
+					found = true
+				end
+			end
+			if !found then
+				printGM("db", "Removed unused dealer: " .. dealer.name .. " [UID: " .. dealer.uniqueID .. "]")
+				dealer_rem(dealer.uniqueID)
+			end
+		end
+	end
+end
+CleanUpDealers()
+
 function dealer_add( ply )
 	local _uid = math.Round( math.Rand( 1, 999999 ), 0 )
-	local _insert = SQL_INSERT_INTO(	_db_name, "name, map", "'" .. _uid .. "', '" .. GetMapNameDB() .. "'" )
+	local _insert = SQL_INSERT_INTO( _db_name, "name, map", "'" .. _uid .. "', '" .. GetMapNameDB() .. "'" )
 	local _db_sel = SQL_SELECT( _db_name, "uniqueID", "name = '" .. _uid .. "'" )
 
 	if _db_sel != nil then

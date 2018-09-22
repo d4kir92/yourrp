@@ -772,7 +772,15 @@ net.Receive( "openInteractMenu", function( len, ply )
 						end
 					end
 
+					local tmpidcard = SQL_SELECT("yrp_general", "bool_identity_card", nil)
+					if wk(tmpidcard) then
+						tmpidcard = tmpidcard[1]
+					end
+					tmpidcard = tmpidcard.bool_identity_card or false
+					tmpidcard = tobool(tmpidcard)
+
 					net.Start( "openInteractMenu" )
+						net.WriteBool( tmpidcard )
 						net.WriteBool( tmpBool )
 
 						net.WriteBool( tmpPromote )
