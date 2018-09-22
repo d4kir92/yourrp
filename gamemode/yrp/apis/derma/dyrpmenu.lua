@@ -35,6 +35,10 @@ function PANEL:UpdateMenu()
 	end
 
 	self:SetTall(ctr(Height))
+	local _x, _y = self:GetPos()
+	if _y + self:GetTall() > ScrH() then
+		self:SetPos(_x, ScrH() - self:GetTall())
+	end
 end
 
 function PANEL:AddSpacer()

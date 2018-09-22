@@ -71,7 +71,7 @@ util.AddNetworkString( "get_sql_info" )
 util.AddNetworkString("yrp_drop_tables")
 net.Receive("yrp_drop_tables", function(len, ply)
 	local _drop_tables = net.ReadTable()
-	local _can = SQL_SELECT( "yrp_usergroups", "ac_database", "name = '" .. string.lower( ply:GetUserGroup() ) .. "'")
+	local _can = SQL_SELECT( "yrp_usergroups", "ac_database", "name = '" .. string.upper( ply:GetUserGroup() ) .. "'")
 	if wk(_can) then
 		_can = _can[1]
 		CreateBackup()

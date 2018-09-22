@@ -69,12 +69,11 @@ function notself( ply )
 end
 
 function drawGroupPlayers( id )
-	elePos.y = elePos.y + 50
 	for k, ply in pairs( player.GetAll() ) do
 		if tonumber( id ) == tonumber( ply:GetNWString( "groupUniqueID" ) ) then
-			local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 128 ), ctr( elePos.x ), ctr( elePos.y ) )
+			local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr(128), ctr( elePos.x + 10 ), ctr( elePos.y ) )
 			_tmpPly:SetText( "" )
-			_tmpPly.gerade = k%2
+			_tmpPly.gerade = k % 2
 			_tmpPly.level = 1
 			_tmpPly.rpname = ply:RPName() or ""
 			_tmpPly.rolename = ply:GetRoleName()
@@ -426,36 +425,39 @@ function drawGroupPlayers( id )
 			elePos.y = elePos.y + 128
 		end
 	end
+	--elePos.y = elePos.y + 10
 end
 
-function drawGroup( id, name, color, icon )
+function drawGroup( id, name, color, icon, iter )
 	local ply = LocalPlayer()
 
-	elePos.y = elePos.y + 120
+	elePos.y = elePos.y + 50
 
+	local starty = elePos.y
 	local _color = string.Explode( ",", color )
 	local _tmpPanel = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
 	_tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )
 	function _tmpPanel:Paint(pw, ph)
 		draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-		local _x = ctr(20)
+		draw.RoundedBox( 0, 0, 0, pw, ctr(50), Color(0,0,0,40) )
+		local _x = ctr(10)
 		if icon != "" then
-			_x = ctr(120)
+			_x = ctr(50)
 		end
-		draw.SimpleTextOutlined( name, "sef", _x, ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( name .. "[ITER: " .. iter .. "]", "sef", _x, ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 
 	if icon != "" then
-		local ico = createD("DHTML", _tmpPanel, ctr(84), ctr(84), ctr(8), ctr(8))
+		local ico = createD("DHTML", _tmpPanel, ctr(34), ctr(34), ctr(8), ctr(8))
 		ico:SetHTML(GetHTMLImage(icon, ico:GetWide(), ico:GetTall()))
 	end
 
 	if hasGroupPlayers( id ) then
-		elePos.y = elePos.y + 100
+		elePos.y = elePos.y + 50
 		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
 		_tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
 		function _tmpHeader:Paint( pw, ph )
-			--draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
+			--draw.RoundedBox( 0, 0, 0, pw, ph, Color(0,0,0,100))
 			--draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local _w = ctr( 128+16 )
@@ -514,9 +516,11 @@ function drawGroup( id, name, color, icon )
 			draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			--draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
-
+		elePos.y = elePos.y + 50
 		drawGroupPlayers( id )
 	end
+	_tmpPanel:SetTall(elePos.y - starty)
+
 	return _tmpPanel
 end
 
@@ -529,27 +533,25 @@ function hasLowerGroup( id )
 	return false
 end
 
-function drawLowerGroup( id )
+function drawLowerGroup( id, iter )
 	for k, group in pairs( sb_groups ) do
 		if tonumber( id ) == tonumber( group.uniqueID ) then
-			local _tmpGroup = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon )
+			local _tmpGroup = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon, iter )
 			return _tmpGroup
 		end
 	end
 end
 
-function tryLowerGroup( id )
-	if hasLowerGroup( id ) then
+function tryLowerGroup( id, iter )
+	if hasLowerGroup( id ) and hasLowerGroupPlayers( id ) then
 		elePos.x = elePos.x + 10
 		for k, group in pairs( sb_groups ) do
 			if tonumber( group.int_parentgroup ) == tonumber( id ) then
-				local tmp = drawLowerGroup( group.uniqueID )
-				tryLowerGroup( group.uniqueID )
-
-				elePos.y = elePos.y + 50
-
+				local tmp = drawLowerGroup( group.uniqueID, iter + 1 )
+				tryLowerGroup( group.uniqueID, iter + 1 )
+				elePos.y = elePos.y + 10
 				local tmpX, tmpY = tmp:GetPos()
-				tmp:SetSize( tmp:GetWide(), ctr( elePos.y + 50 ) - tmpY )
+				tmp:SetSize( tmp:GetWide(), ctr( elePos.y ) - tmpY )
 			end
 		end
 	end
@@ -559,27 +561,25 @@ function drawGroupRow( id )
 	if hasGroupRowPlayers( id ) then
 		for k, group in pairs( sb_groups ) do
 			if tonumber( id ) == tonumber( group.uniqueID ) then
-				local tmp = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon )
-				tryLowerGroup( group.uniqueID )
-
+				local tmp = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon, 1 )
+				tryLowerGroup( group.uniqueID, 1 )
 				elePos.y = elePos.y + 10
-
 				local tmpX, tmpY = tmp:GetPos()
-				tmp:SetSize( tmp:GetWide(), ctr( elePos.y+50 ) - tmpY )
+				tmp:SetSize( tmp:GetWide(), ctr( elePos.y ) - tmpY )
 			end
 		end
 	end
 end
 
 function drawGroups()
-	local _not_first = false
+	local first = true
+	elePos.y = elePos.y + 50
 	for k, group in pairs( sb_groups ) do
 		if tonumber( group.int_parentgroup ) == tonumber( 0 ) then
-			if hasGroupRowPlayers( group.uniqueID ) then
-				if _not_first then
-					elePos.y = elePos.y + 50
-				end
-				_not_first = true
+			if hasGroupRowPlayers( group.uniqueID ) and !first then
+				elePos.y = elePos.y + 10
+			else
+				first = false
 			end
 
 			elePos.x = ctr( 10 )
@@ -598,16 +598,16 @@ function drawRest()
 
 	local ply = LocalPlayer()
 	if count > 0 then
-		elePos.y = elePos.y + 100
+		elePos.y = elePos.y + 50
 
-		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr(200) + count * ctr(100), ctr( elePos.x ), ctr( elePos.y ) )
+		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr(200) + count * ctr(50), ctr( elePos.x ), ctr( elePos.y ) )
 		_tmpHeader.color = Color(0, 0, 0)
 		function _tmpHeader:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-			draw.SimpleTextOutlined( lang_string( "unassigned" ), "sef", ctr( 10 ), ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( lang_string( "unassigned" ), "sef", ctr( 10 ), ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 
-		elePos.y = elePos.y + 100
+		elePos.y = elePos.y + 50
 
 		local _tmpHeader = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 50 ), ctr( elePos.x ), ctr( elePos.y ) )
 		_tmpHeader.color = Color(0, 0, 0)
@@ -657,12 +657,12 @@ function drawRest()
 			--draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 
-		elePos.y = elePos.y + 50
+		elePos.y = elePos.y + 64
 		for k, pl in pairs(player.GetAll()) do
 			if pl:GetNWString("groupName", "---") == "---" and pl:GetNWString("roleName", "---") == "---" then
 				local _tmpPly = createD( "DButton", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), ctr( 128 ), ctr( elePos.x ), ctr( elePos.y ) )
 				_tmpPly:SetText( "" )
-				_tmpPly.gerade = k%2
+				_tmpPly.gerade = k % 2
 				_tmpPly.level = 1
 				_tmpPly.rpname = pl:RPName() or ""
 				_tmpPly.frags = pl:Frags()
@@ -1000,12 +1000,15 @@ function drawScoreboard()
 	elePos.x = ctr( 10 )
 	elePos.y = -100
 	drawGroups()
+
+	elePos.x = ctr( 10 )
+	elePos.y = elePos.y + 20
 	drawRest()
 end
 
 function BScrW()
 	--[[ give ScrW() only when under 21:9 ]]--
-	if ScrW() > ScrH()/9*16 then
+	if ScrW() > ScrH() / 9 * 16 then
 		return ctr( 3840 )
 	else
 		return ScrW()

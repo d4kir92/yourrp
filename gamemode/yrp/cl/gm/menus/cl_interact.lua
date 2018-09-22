@@ -30,6 +30,8 @@ function openInteractMenu( SteamID )
 end
 
 net.Receive( "openInteractMenu", function ()
+	local idcard = net.ReadBool()
+
 	local isInstructor = net.ReadBool()
 
 	local promoteable = net.ReadBool()
@@ -45,6 +47,7 @@ net.Receive( "openInteractMenu", function ()
 	function _windowInteract:OnRemove()
 		closeMenu()
 	end
+
 	local tmpTargetName = ""
 	local tmpRPName = ""
 	local tmpPly = NULL
@@ -63,39 +66,43 @@ net.Receive( "openInteractMenu", function ()
 	function _windowInteract:Paint( pw, ph )
 		surfaceWindow( self, pw, ph, "")
 
-		draw.RoundedBox( ctr( 30 ), ctr( 10 ), ctr( 50 ), ctr( 750 ), ctr( 350 ), Color( 255, 255, 255, 255 ) )
+		if idcard then
+			draw.RoundedBox( ctr( 30 ), ctr( 10 ), ctr( 50 ), ctr( 750 ), ctr( 350 ), Color( 255, 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( lang_string( "identifycard" ), "charTitle", ctr( 10 + 10 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
-		draw.SimpleTextOutlined( GetHostName(), "charTitle", ctr( 10 + 10 ), ctr( 60+30 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
-		draw.SimpleTextOutlined( LocalPlayer():SteamID(), "charTitle", ctr( 745 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( lang_string( "identifycard" ), "charTitle", ctr( 10 + 10 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( GetHostName(), "charTitle", ctr( 10 + 10 ), ctr( 60+30 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( LocalPlayer():SteamID(), "charTitle", ctr( 745 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
-		draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 70 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 70 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
-		draw.SimpleTextOutlined( tmpRPName, "charText", ctr( 280 ), ctr( 60 + 100 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( tmpRPName, "charText", ctr( 280 ), ctr( 60 + 100 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
-		draw.SimpleTextOutlined( lang_string( "gender" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 210 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
-		local gender = lang_string( "genderother" )
-		if tmpGender == "gendermale" then
-			gender = lang_string( "gendermale" )
-		elseif tmpGender == "genderfemale" then
-			gender = lang_string( "genderfemale" )
-		elseif tmpGender == "genderother" then
-			gender = lang_string( "genderother" )
+			draw.SimpleTextOutlined( lang_string( "gender" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 210 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			local gender = lang_string( "genderother" )
+			if tmpGender == "gendermale" then
+				gender = lang_string( "gendermale" )
+			elseif tmpGender == "genderfemale" then
+				gender = lang_string( "genderfemale" )
+			elseif tmpGender == "genderother" then
+				gender = lang_string( "genderother" )
+			end
+			draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+
+			--[[ Description ]]--
+			draw.RoundedBox( 0, ctr( 10 ), ctr( 50 + 350 + 10 ), ctr( 1070 ), ctr( 400 ), Color( 255, 255, 255, 255 ) )
+			draw.SimpleTextOutlined( lang_string( "description" ), "charTitle", ctr( 10 + 10 ), ctr( 400 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
 		end
-		draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
-
-		--[[ Description ]]--
-		draw.RoundedBox( 0, ctr( 10 ), ctr( 50 + 350 + 10 ), ctr( 1070 ), ctr( 400 ), Color( 255, 255, 255, 255 ) )
-		draw.SimpleTextOutlined( lang_string( "description" ), "charTitle", ctr( 10 + 10 ), ctr( 400 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
 	end
 
-	local _tmpDescription = createD( "DTextEntry", _windowInteract, ctr( 1070 ), ctr( 400 - 50 ), ctr( 10 ), ctr( 50 + 350 + 10 + 50 ) )
-	_tmpDescription:SetMultiline( true )
-	_tmpDescription:SetEditable( false )
-	_tmpDescription:SetText( tmpRPDescription )
+	if idcard then
+		local _tmpDescription = createD( "DTextEntry", _windowInteract, ctr( 1070 ), ctr( 400 - 50 ), ctr( 10 ), ctr( 50 + 350 + 10 + 50 ) )
+		_tmpDescription:SetMultiline( true )
+		_tmpDescription:SetEditable( false )
+		_tmpDescription:SetText( tmpRPDescription )
 
-	local tmpAvatarI = createVGUI( "AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70 )
-	tmpAvatarI:SetPlayer( tmpPly, ctr( 256 ) )
+		local tmpAvatarI = createVGUI( "AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70 )
+		tmpAvatarI:SetPlayer( tmpPly, ctr( 256 ) )
+	end
 
 	local buttonTrade = createVGUI( "DButton", _windowInteract, 530, 50, 10, 820 )
 	buttonTrade:SetText( "" )

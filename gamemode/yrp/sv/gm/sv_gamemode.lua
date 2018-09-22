@@ -572,7 +572,7 @@ function GM:PlayerSpray( ply )
 end
 
 function GM:PlayerSwitchFlashlight( pl, enabled )
-	local _tmp = SQL_SELECT( "yrp_usergroups", "*", "name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+	local _tmp = SQL_SELECT( "yrp_usergroups", "*", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 	if wk( _tmp ) then
 		_tmp = _tmp[1]
 		if tobool( _tmp.flashlight ) then

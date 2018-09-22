@@ -353,8 +353,8 @@ function spawnItem(ply, item, duid)
 						filter = ent
 					})
 
+					ClassName = ent:GetClass()
 					if ent.SpawnFunction ~= nil then
-						ClassName = ent:GetClass()
 						ent:SpawnFunction(ply, tr2, ent:GetClass())
 					else
 						ent:Spawn()
@@ -402,6 +402,7 @@ function spawnItem(ply, item, duid)
 							filter = ent
 						})
 
+						ClassName = ent:GetClass()
 						if ent.SpawnFunction ~= nil then
 							ent:SpawnFunction(ply, tr2, ent:GetClass())
 						else
@@ -499,10 +500,9 @@ net.Receive("item_despawn", function(len, ply)
 
 	if _item ~= nil then
 		_item = _item[1]
-		local _alive, _ent = IsEntityAlive(ply, _item.uniqueID)
-
+		local _alive, ent = IsEntityAlive(ply, _item.uniqueID)
 		if _alive then
-			_ent:Remove()
+			ent:Remove()
 		end
 	end
 end)

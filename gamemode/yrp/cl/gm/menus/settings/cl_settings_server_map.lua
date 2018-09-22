@@ -264,7 +264,7 @@ net.Receive( "getMapList", function( len )
 				for i, dealer in pairs( _dealers ) do
 					if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
 						if pa( _mapListView ) then
-							_mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, dealer.name )
+							_mapListView:AddLine(v.uniqueID, v.position, v.angle, v.type, dealer.name)
 						end
 						break
 					end
