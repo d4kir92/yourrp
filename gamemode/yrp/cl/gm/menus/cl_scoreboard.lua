@@ -431,7 +431,7 @@ end
 function drawGroup( id, name, color, icon, iter )
 	local ply = LocalPlayer()
 
-	elePos.y = elePos.y + 50
+	elePos.y = elePos.y + 10
 
 	local starty = elePos.y
 	local _color = string.Explode( ",", color )
@@ -444,7 +444,7 @@ function drawGroup( id, name, color, icon, iter )
 		if icon != "" then
 			_x = ctr(50)
 		end
-		draw.SimpleTextOutlined( name .. "[ITER: " .. iter .. "]", "sef", _x, ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( name, "sef", _x, ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 
 	if icon != "" then
@@ -543,17 +543,24 @@ function drawLowerGroup( id, iter )
 end
 
 function tryLowerGroup( id, iter )
+	local tab = {}
 	if hasLowerGroup( id ) and hasLowerGroupPlayers( id ) then
 		elePos.x = elePos.x + 10
 		for k, group in pairs( sb_groups ) do
-			if tonumber( group.int_parentgroup ) == tonumber( id ) then
-				local tmp = drawLowerGroup( group.uniqueID, iter + 1 )
-				tryLowerGroup( group.uniqueID, iter + 1 )
-				elePos.y = elePos.y + 10
-				local tmpX, tmpY = tmp:GetPos()
-				tmp:SetSize( tmp:GetWide(), ctr( elePos.y ) - tmpY )
+			if tonumber( group.int_parentgroup ) == tonumber( id ) and (hasGroupPlayers(group.uniqueID) or hasLowerGroupPlayers( group.uniqueID )) then
+				table.insert(tab, group)
 			end
 		end
+	end
+	for k, group in pairs(tab) do
+		if k < #tab or #tab == 1 then
+			elePos.y = elePos.y + 50
+		end
+		local tmp = drawLowerGroup( group.uniqueID, iter + 1 )
+		tryLowerGroup( group.uniqueID, iter + 1 )
+		elePos.y = elePos.y + 10
+		local tmpX, tmpY = tmp:GetPos()
+		tmp:SetSize( tmp:GetWide(), ctr( elePos.y ) - tmpY )
 	end
 end
 
@@ -561,6 +568,7 @@ function drawGroupRow( id )
 	if hasGroupRowPlayers( id ) then
 		for k, group in pairs( sb_groups ) do
 			if tonumber( id ) == tonumber( group.uniqueID ) then
+				elePos.y = elePos.y + 50
 				local tmp = drawGroup( group.uniqueID, group.string_name, group.string_color, group.string_icon, 1 )
 				tryLowerGroup( group.uniqueID, 1 )
 				elePos.y = elePos.y + 10
@@ -576,14 +584,15 @@ function drawGroups()
 	elePos.y = elePos.y + 50
 	for k, group in pairs( sb_groups ) do
 		if tonumber( group.int_parentgroup ) == tonumber( 0 ) then
-			if hasGroupRowPlayers( group.uniqueID ) and !first then
-				elePos.y = elePos.y + 10
-			else
-				first = false
+			if hasGroupRowPlayers( group.uniqueID ) then
+				elePos.x = ctr( 10 )
+				drawGroupRow( group.uniqueID )
+				if !first then
+					elePos.y = elePos.y + 10
+				else
+					first = false
+				end
 			end
-
-			elePos.x = ctr( 10 )
-			drawGroupRow( group.uniqueID )
 		end
 	end
 end

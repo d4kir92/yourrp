@@ -152,7 +152,7 @@ net.Receive("getsitehelp", function(len)
 		HELPMENU.feedback:SetText("")
 
 		function HELPMENU.feedback:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "givefeedback")
+			surfaceButton(self, pw, ph, lang_string("givefeedback"))
 		end
 
 		function HELPMENU.feedback:DoClick()
@@ -165,7 +165,7 @@ net.Receive("getsitehelp", function(len)
 		HELPMENU.discord:SetText("")
 
 		function HELPMENU.discord:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "getlivesupport")
+			surfaceButton(self, pw, ph, "Get Live Support")
 		end
 
 		function HELPMENU.discord:DoClick()
