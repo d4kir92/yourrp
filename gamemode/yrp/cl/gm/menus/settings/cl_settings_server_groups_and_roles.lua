@@ -80,7 +80,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					inp.group = self.group
 					tab2.text = lang_string("groupsof", inp)
 				else
-					tab2.text = lang_string("maingroups")
+					tab2.text = lang_string("factions")
 				end
 			else
 				tab2.text = lang_string("loading")
@@ -544,7 +544,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local othergroups = {}
-			othergroups[0] = lang_string("maingroup")
+			othergroups[0] = lang_string("factions")
 			for i, tab in pairs(groups) do
 				othergroups[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
 			end
@@ -892,7 +892,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local prerole = {}
 			prerole.parent = ea.info
 			prerole.uniqueID = role.uniqueID
-			prerole.header = "prerole"
+			prerole.header = lang_string("prerole") .. " | " .. lang_string("prerank")
 			prerole.netstr = "update_role_int_prerole"
 			prerole.value = tonumber(role.int_prerole)
 			prerole.uniqueID = role.uniqueID

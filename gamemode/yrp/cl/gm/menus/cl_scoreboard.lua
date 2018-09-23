@@ -432,8 +432,12 @@ function drawGroup( id, name, color, icon, iter )
 	local ply = LocalPlayer()
 
 	elePos.y = elePos.y + 10
-
 	local starty = elePos.y
+
+	if iter == 1 then
+		name = lang_string("faction") .. ": " .. name
+	end
+
 	local _color = string.Explode( ",", color )
 	local _tmpPanel = createD( "DPanel", _SBSP, BScrW() - ctr(400) - ctr( 110 ) - ctr( elePos.x ), 9999, ctr( elePos.x ), ctr( elePos.y ) )
 	_tmpPanel.color = Color( _color[1], _color[2], _color[3], 200 )

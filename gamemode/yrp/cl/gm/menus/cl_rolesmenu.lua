@@ -206,7 +206,11 @@ function addGroup( grp, parent )
 			if grp.string_icon != "" then
 				_x = ctr(10) + ph + ctr(10)
 			end
-			surfaceText( self.tbl.string_name, "roleInfoHeader", _x, ph / 2, Color( 255, 255, 255 ), 0, 1 )
+			local name = self.tbl.string_name
+			if tonumber(self.tbl.int_parentgroup) == 0 then
+				name = lang_string("faction") .. ": " .. name
+			end
+			surfaceText( name, "roleInfoHeader", _x, ph / 2, Color( 255, 255, 255 ), 0, 1 )
 
 			local _box = ctrb( 50 )
 			local _dif = 50

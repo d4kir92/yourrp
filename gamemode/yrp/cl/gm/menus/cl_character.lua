@@ -724,7 +724,8 @@ function openCharacterSelection()
 							tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
 							tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
 							tmpChar.roleID = _characters[i].role.roleID or "ROLE INVALID"
-							tmpChar.groupID = _characters[i].group.groupID or "GROUP INVALID"
+							tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
+							tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
 							tmpChar.map = _characters[i].char.map
 							tmpChar.playermodelID = _characters[i].char.playermodelID
 
@@ -777,7 +778,7 @@ function openCharacterSelection()
 									draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 								end
 								draw.SimpleTextOutlined( self.rpname, "HudBars", ctr( 30 ), ctr( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-								draw.SimpleTextOutlined( lang_string( "level" ) .. " 1 " .. self.roleID, "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+								draw.SimpleTextOutlined( lang_string( "level" ) .. " 1 " .. self.roleID .. " " .. self.groupID .. " [" .. self.factionID .. "]", "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 								draw.SimpleTextOutlined( self.map, "HudBars", ctr( 30 ), ctr( 155 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 							end
 							function tmpChar:DoClick()

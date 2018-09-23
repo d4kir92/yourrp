@@ -256,6 +256,9 @@ function unpack_paket( sender, text, iscommand )
 	elseif paket.command == "admin" then
 		paket.command_color = Color( 255, 255, 0 )
 		paket.text_color = Color( 255, 255, 20 )
+	elseif paket.command == "faction" then
+		paket.command_color = Color( 100, 100, 255 )
+		paket.text_color = Color( 160, 160, 255 )
 	elseif paket.command == "group" then
 		paket.command_color = Color( 160, 160, 255 )
 		paket.text_color = Color( 160, 160, 255 )
@@ -282,6 +285,9 @@ function unpack_paket( sender, text, iscommand )
 	end
 	if sender:GetNWBool( "bool_yrp_chat_show_rolename", false ) then
 		paket.role = sender:GetNWString( "roleName" )
+	end
+	if sender:GetNWBool( "bool_yrp_chat_show_factionname", false ) then
+		paket.faction = sender:GetNWString( "factionName" )
 	end
 	if sender:GetNWBool( "bool_yrp_chat_show_groupname", false ) then
 		paket.group = sender:GetNWString( "groupName" )
@@ -361,6 +367,7 @@ function GM:PlayerSay( sender, text, teamChat )
 	pk.steamname = paket.steamname or ""
 	pk.usergroup = paket.usergroup or ""
 	pk.rolename = paket.role or ""
+	pk.factionname = paket.faction or ""
 	pk.groupname = paket.group or ""
 
 	if paket.command == "roll" then
@@ -380,6 +387,17 @@ function GM:PlayerSay( sender, text, teamChat )
 		else
 			return ""
 		end
+	end
+
+	if paket.command == "faction" then
+		for k, receiver in pairs( player.GetAll() ) do
+			if receiver:GetNWString( "factionName" ) == sender:GetNWString( "factionName" ) then
+				net.Start( "yrp_player_say" )
+					net.WriteTable( pk )
+				net.Send( receiver )
+			end
+		end
+		return ""
 	end
 
 	if paket.command == "group" then
