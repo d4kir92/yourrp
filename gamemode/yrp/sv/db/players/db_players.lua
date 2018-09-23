@@ -120,6 +120,19 @@ function set_role( ply, rid )
 	end
 end
 
+function GetFactionTable(uid)
+	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
+	if wk(group) then
+		group = group[1]
+		local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+		if wk(undergroup) then
+			undergroup = undergroup[1]
+			return GetFactionTable(undergroup.uniqueID)
+		end
+		return group
+	end
+end
+
 function set_role_values( ply )
 	if ply:HasCharacterSelected() then
 		hitquit( ply )
@@ -236,6 +249,11 @@ function set_role_values( ply )
 				ply:SetNWString( "groupUniqueID", groTab.uniqueID )
 				ply:SetNWString( "groupColor", groTab.string_color )
 				ply:SetTeam( tonumber( groTab.uniqueID ) )
+
+				local faction = GetFactionTable(groTab.uniqueID)
+				ply:SetNWString( "factionName", faction.string_name )
+				ply:SetNWString( "factionUniqueID", faction.uniqueID )
+				ply:SetNWString( "factionColor", faction.string_color )
 			else
 				printGM( "note", "[SET ROLE VALUES] No group selected -> Suicide" )
 				if !ply:IsBot() then

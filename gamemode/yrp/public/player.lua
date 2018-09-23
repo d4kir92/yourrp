@@ -40,6 +40,15 @@ function Player:GetRoleName() -- Role Name / "Job" Name
 	return self:YRPGetRoleName() -- return string
 end
 
+--[[ Faction ]]--
+function Player:GetFactionName() -- Faction Name
+	return self:YRPGetFactionName() -- return string
+end
+
+function Player:GetFactionColor() -- Faction Color
+	return self:YRPGetFactionColor() -- return Color( int r, int g, int b, int a )
+end
+
 --[[ Group ]]--
 function Player:GetGroupName() -- Group Name / "Category" Name
 	return self:YRPGetGroupName() -- return string

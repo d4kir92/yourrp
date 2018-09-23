@@ -516,6 +516,18 @@ function Player:YRPGetRoleName()
 	return _rn
 end
 
+function Player:YRPGetFactionName()
+	local _gn = self:GetNWString( "factionName", "NO Faction SELECTED" )
+	return _gn
+end
+
+function Player:YRPGetFactionColor()
+	local _gc = self:GetNWString( "factionColor", "255,0,0" )
+	_gc = string.Explode( ",", _gc )
+	_gc = Color( _gc[1], _gc[2], _gc[3], _gc[4] or 255 )
+	return _gc
+end
+
 function Player:YRPGetGroupName()
 	local _gn = self:GetNWString( "groupName", "NO GROUP SELECTED" )
 	return _gn

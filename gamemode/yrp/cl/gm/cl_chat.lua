@@ -21,6 +21,7 @@ function update_chat_choices()
 		yrpChat.comboBox:AddChoice( lang_string( "group" ) .. " /GROUP", "group", false )
 		yrpChat.comboBox:AddChoice( lang_string( "role" ) .. " /ROLE", "role", false )
 		yrpChat.comboBox:AddChoice( lang_string( "service" ) .. " /SERVICE", "service", false )
+		yrpChat.comboBox:AddChoice( lang_string( "faction" ) .. " /FACTION", "faction", false )
 	end
 end
 
@@ -66,6 +67,8 @@ function niceCommand( com )
 		return LocalPlayer():GetNWString( "text_chat_advert", lang_string( "advert" ) )
 	elseif com == "admin" then
 		return lang_string( "admin" )
+	elseif com == "faction" then
+		return lang_string( "faction" )
 	elseif com == "group" then
 		return lang_string( "group" )
 	elseif com == "role" then
@@ -159,6 +162,9 @@ function InitYRPChat()
 					elseif isFullyCommand( _com, "sservice", lang_string( "service" ) ) then
 						yrpChat.writeField:SetText("")
 						yrpChat.comboBox:ChooseOption( lang_string( "service" ), 10 )
+					elseif isFullyCommand( _com, "sfaction", lang_string( "faction" ) ) then
+						yrpChat.writeField:SetText("")
+						yrpChat.comboBox:ChooseOption( lang_string( "faction" ), 11 )
 					end
 				end
 			end
@@ -326,11 +332,14 @@ end )
 net.Receive( "yrp_player_say", function( len )
 	local _tmp = net.ReadTable()
 	local _write = false
-	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
+	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
 		_write = true
 
 		_tmp.name = ""
 
+		if _tmp.factionname != "" then
+			_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
+		end
 		if _tmp.groupname != "" then
 			_tmp.name = _tmp.name .. _tmp.groupname .. " "
 		end

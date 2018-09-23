@@ -422,6 +422,7 @@ function send_characters( ply )
 					if worked( tmp3, "charGetCharacters group" ) then
 						tmp3 = tmp3[1]
 						netTable[_charCount].group = tmp3
+						netTable[_charCount].faction = GetFactionTable(tmp3.uniqueID)
 					end
 				end
 			end

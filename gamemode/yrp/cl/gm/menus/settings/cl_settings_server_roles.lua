@@ -1021,7 +1021,7 @@ net.Receive( "yrp_roles", function( len )
 					table.insert( yrp_roles_dbTable, _start_role )
 				end
 
-				addDBComboBox( rolesInfo, 800, 80, 810, 1830, lang_string( "roleprerole" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "prerole", "uniqueID = " .. tmp.uniqueID .. "", "here you need to select the role below you (lower role), needed for instructor" )
+				addDBComboBox( rolesInfo, 800, 80, 810, 1830, lang_string( "prerole" ) .. " | " .. lang_string( "prerank" ), yrp_roles_dbTable, "roleID", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", lang_string("prerole") .. " | " .. lang_string("prerank"), "uniqueID = " .. tmp.uniqueID .. "", "here you need to select the role below you (lower role), needed for instructor" )
 
 				if tonumber( yrp_roles_dbTable[k].removeable ) == 1 then
 					addDBComboBox( rolesInfo, 1610, 80, 0, 1920, lang_string( "rolegroup" ), yrp_groups_dbTable, "string_name", "uniqueID", yrp_roles_dbTable[k], "yrp_roles", "string_name", "uniqueID = " .. tmp.uniqueID .. "", "which group it is in" )

@@ -1476,6 +1476,11 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
+			if ply:GetNWBool("bool_tag_on_head_factionname", false) then
+				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, color)
+				_height = _height + 5
+			end
+
 			if ply:GetNWBool("bool_tag_on_head_armor", false) then
 				_height = _height + 1
 				local str = ply:Armor() .. "/" .. ply:GetNWString("GetMaxArmor", "100") .. " " .. lang_string("armor")
@@ -1540,6 +1545,14 @@ function drawPlates(ply)
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
+					_z = _z + _d
+				end
+
+				if ply:GetNWBool("bool_tag_on_side_factionname", false) then
+					local _color = ply:GetNWString("factionColor", "255,0,0")
+					_color = string.Explode(",", _color)
+					_color = Color(_color[1], _color[2], _color[3])
+					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
 					_z = _z + _d
 				end
 
