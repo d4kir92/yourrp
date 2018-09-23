@@ -66,6 +66,20 @@ if wk(yrp_usergroups) then
 		SQL_UPDATE("name = '" .. _ug.name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
 	end
 end
+yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
+if wk(yrp_usergroups) then
+	for _i, _ug in pairs(yrp_usergroups) do
+		local tmp = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _ug.name .. "'")
+		if wk(tmp) and #tmp > 1 then
+			for i, ug in pairs(tmp) do
+				if i > 1 then
+					print(ug.uniqueID)
+					SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
+				end
+			end
+		end
+	end
+end
 
 if SQL_SELECT(DATABASE_NAME, "*", "name = 'SUPERADMIN'") == nil then
 	local _str = "name, "
@@ -991,7 +1005,7 @@ end)
 hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( pl )
 	if ea( pl ) then
 		local _tmp = SQL_SELECT( DATABASE_NAME, "props", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
-		if worked( _tmp, "PlayerSpawnProp failed" ) then
+		if wk( _tmp, "PlayerSpawnProp failed" ) then
 			_tmp = _tmp[1]
 			if tobool( _tmp.props ) then
 				return true
@@ -1001,9 +1015,11 @@ hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function( pl )
 				net.Start( "yrp_info" )
 					net.WriteString( "props" )
 				net.Send( pl )
-
 				return false
 			end
+		else
+			printGM( "db", "[PlayerSpawnProp] failed! UserGroup not found in database." )
+			return false
 		end
 	end
 end)
@@ -1211,7 +1227,6 @@ end)
 
 hook.Add( "PhysgunPickup", "yrp_physgun_pickup", function( pl, ent )
 	if ea( pl ) then
-		printGM( "gm", "PhysgunPickup: " .. pl:YRPName() )
 		local _tmp = SQL_SELECT( DATABASE_NAME, "physgunpickup, physgunpickupworld", "name = '" .. string.upper( pl:GetUserGroup() ) .. "'" )
 		if wk( _tmp ) then
 			_tmp = _tmp[1]
