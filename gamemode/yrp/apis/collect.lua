@@ -1,87 +1,92 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
---local _url1 = "https://docs.google.com/forms/d/e/1FAIpQLSe9L51y9uV7EExUuxE2VWuwWagVpLMO-BDD8OXEaXTr2u1rUw/formResponse"
---local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSfJfrnPqXh91wYsWUByr1S1lAQjfNH047NA12CEDCMINdwnhw/formResponse"
 
 if SERVER then
 	function ServerHasPassword()
-		if GetConVar("sv_password"):GetString() ~= "" then
+		if GetConVar("sv_password"):GetString() != "" then
 			return true
 		else
 			return false
 		end
 	end
 
-	--[[
-	function send_server_info(status, time)
-		if isnumber(time) then
-			local _sec = time % 60
-			local _min = (time - _sec) / 60
-			status = status .. " ("
+	function SendServerInfo(sv)
+		if game.IsDedicated() and !game.SinglePlayer() then
+			printGM( "db", "[ServerInfo] Sending" )
 
-			if _min > 0 then
-				status = status .. " " .. tostring(_min) .. " " .. lang_string("minutes")
+			if true then
+				local entry = {}
+				entry["entry.1546304774"] = sv.ip
+				entry["entry.701722785"] = sv.name
+				entry["entry.2033271728"] = sv.game
+				entry["entry.10628146"] = sv.maxplayers
+				entry["entry.1940143037"] = sv.version
+				entry["entry.398751929"] = sv.art
+
+				local url = "https://docs.google.com/forms/d/e/1FAIpQLSdmM5ZkekAXvtf1RMsPI7ZJeetqyFb5L06vjAuFmHNx96_MEQ/formResponse"
+				http.Post(url, entry, function(result)
+					printGM("db", "[ServerInfo] Success")
+				end, function(failed)
+					printGM("note", "[ServerInfo] FAILED: " .. tostring(failed))
+				end)
 			end
-
-			if _sec ~= 0 then
-				status = status .. " " .. tostring(_sec) .. " " .. lang_string("seconds")
-			end
-
-			status = status .. " )"
 		end
-
-		--printGM( "db", "[Send Server Info: " .. tostring( status ) .. "]" )
-		local entry = {}
-
-		timer.Create("wait_for_server", 1, 0, function()
-			if gmod.GetGamemode() ~= nil and game.GetIPAddress() ~= "0.0.0.0:0" and not game.SinglePlayer() then
-				if game.IsDedicated() then
-					entry["entry.1233170431"] = GetHostName() or "UNKNOWN"
-					entry["entry.524147216"] = game.GetIPAddress() or "UNKNOWN"
-					entry["entry.1924789651"] = gmod.GetGamemode().rpbase or "UNKNOWN"
-					entry["entry.2036955482"] = gmod.GetGamemode().Version or "UNKNOWN"
-					entry["entry.1879186298"] = string.upper(tostring(gmod.GetGamemode().VersionSort)) or "UNKNOWN"
-					entry["entry.989542136"] = GetMapName() or "UNKNOWN"
-					entry["entry.1836113647"] = gmod.GetGamemode():GetGameDescription() or "UNKNOWN"
-					entry["entry.1862304741"] = tostring(game.MaxPlayers()) or "UNKNOWN"
-					entry["entry.1969171778"] = tostring(#player.GetAll()) or "UNKNOWN"
-					entry["entry.1821263531"] = string.upper(tostring(game.IsDedicated())) or "UNKNOWN"
-					entry["entry.452849918"] = string.upper(tostring(ServerHasPassword()))
-
-					http.Post(_url1, entry, function(result)
-					end, function(failed)
-						printGM("note", "Collect-API 1: " .. tostring(failed))
-					end)
-				else
-					entry["entry.1233170431"] = GetHostName() or "UNKNOWN"
-					entry["entry.524147216"] = game.GetIPAddress() or "UNKNOWN"
-					entry["entry.1924789651"] = gmod.GetGamemode().rpbase or "UNKNOWN"
-					entry["entry.2036955482"] = gmod.GetGamemode().Version or "UNKNOWN"
-					entry["entry.1879186298"] = string.upper(tostring(gmod.GetGamemode().VersionSort)) or "UNKNOWN"
-					entry["entry.989542136"] = GetMapName() or "UNKNOWN"
-					entry["entry.1836113647"] = gmod.GetGamemode():GetGameDescription() or "UNKNOWN"
-					entry["entry.1862304741"] = tostring(game.MaxPlayers()) or "UNKNOWN"
-					entry["entry.1969171778"] = tostring(#player.GetAll()) or "UNKNOWN"
-					entry["entry.1821263531"] = string.upper(tostring(game.IsDedicated())) or "UNKNOWN"
-
-					http.Post(_url2, entry, function(result)
-					end, function(failed)
-						printGM("note", "Collect-API 2: " .. tostring(failed))
-					end)
-				end
-
-				timer.Remove("wait_for_server")
-			end
-		end)
 	end
 
-	local _tick = 5 * 60 - 1
+	function IsServerInfoOutdated()
+		printGM("db", "[ServerInfo] IsServerInfoOutdated")
+		local url = "https://docs.google.com/spreadsheets/d/16REluG2RFpoHry-S8nQWyO2jRs7ju_yyJFqQqKJ_xQM/edit?usp=sharing"
+		http.Fetch(url,
+		function(body, len, headers, code)
+			local b = body
+			b = string.Explode("\n", b)
 
-	timer.Create("update_server_info", _tick, 0, function()
-		send_server_info("auto", _tick)
-	end)
+			local sv = {}
+			sv.ip = game.GetIPAddress() or "UNKNOWN"
+			sv.name = GetHostName() or "UNKNOWN"
+			sv.game = gmod.GetGamemode():GetGameDescription() or "UNKNOWN"
+			sv.maxplayers = tostring(game.MaxPlayers()) or "UNKNOWN"
+			sv.version = gmod.GetGamemode().Version or "UNKNOWN"
+			sv.art = string.upper(tostring(gmod.GetGamemode().VersionSort)) or "UNKNOWN"
 
-	timer.Simple(10, function()
-		send_server_info("startup")
-	end)
-	]]--
+			local utd = {}
+			for i, val in pairs(sv) do
+				utd[i] = false
+			end
+			local found = false
+			for i, line in pairs(b) do
+				if !found then
+					for j, val in pairs(sv) do
+						local test = string.find(line, val)
+						if test != nil then
+							local ssub = string.sub(line, test, test + #sv[j] - 1)
+							if ssub == sv.ip then
+								found = true
+								break
+							end
+						end
+					end
+					if found then
+						for j, val in pairs(sv) do
+							local test = string.find(line, val)
+							if test != nil then
+								local ssub = string.sub(line, test, test + #sv[j] - 1)
+								utd[j] = true
+							end
+						end
+						break
+					end
+				end
+			end
+			for i, val in pairs(utd) do
+				if !val then
+					SendServerInfo(sv)
+					return false
+				end
+			end
+			printGM("db", "[ServerInfo] up to date!")
+		end,
+		function(e)
+			printGM("error", "UpdateServerInfo ERROR: " .. tostring(e))
+		end)
+	end
 end

@@ -721,6 +721,12 @@ function openCharacterSelection()
 							cache[i].tmpChar = createMD( "DButton", characterList, ctr( 800-20 ), ctr( 200 ), ctr( 10 ), ctr( 10 ) + y * ctr( 200 ) + y * ctr( 10 ), ctr( 5 ) )
 							local tmpChar = cache[i].tmpChar
 							tmpChar:SetText( "" )
+
+							_characters[i].char = _characters[i].char or {}
+							_characters[i].role = _characters[i].role or {}
+							_characters[i].group = _characters[i].group or {}
+							_characters[i].faction = _characters[i].faction or {}
+
 							tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
 							tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
 							tmpChar.roleID = _characters[i].role.roleID or "ROLE INVALID"
@@ -754,6 +760,13 @@ function openCharacterSelection()
 							tmpChar.bg18 = _characters[i].char.bg18 or 0
 							tmpChar.bg19 = _characters[i].char.bg19 or 0
 
+							tmpChar.grp = lang_string( "level" ) .. " 1 " .. tmpChar.roleID
+							if tmpChar.groupID == tmpChar.factionID then
+								tmpChar.grp = tmpChar.grp .. " [" .. tmpChar.factionID .. "]"
+							else
+								tmpChar.grp = tmpChar.grp .. " " .. tmpChar.groupID .. " [" .. tmpChar.factionID .. "]"
+							end
+
 							function tmpChar:Paint( pw, ph )
 								if tmpChar:IsHovered() then
 									paintMD( pw, ph, nil, Color( 255, 255, 0, 255 ) )
@@ -778,7 +791,7 @@ function openCharacterSelection()
 									draw.RoundedBox( 0, pw - ctr( _h ) - ctr( _br ), ph - ctr( _w ) - ctr( _br ), ctr( _h ), ctr( _w ), Color( 0, 0, 0, 255 ) )
 								end
 								draw.SimpleTextOutlined( self.rpname, "HudBars", ctr( 30 ), ctr( 45 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-								draw.SimpleTextOutlined( lang_string( "level" ) .. " 1 " .. self.roleID .. " " .. self.groupID .. " [" .. self.factionID .. "]", "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+								draw.SimpleTextOutlined( self.grp, "HudBars", ctr( 30 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 								draw.SimpleTextOutlined( self.map, "HudBars", ctr( 30 ), ctr( 155 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 							end
 							function tmpChar:DoClick()

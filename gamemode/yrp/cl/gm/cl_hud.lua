@@ -134,6 +134,7 @@ function show_voice_info( ply )
 end
 
 local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
+local _yrp_testing = Material( "yrp/testing.png" )
 
 function DrawEquipment( ply, name )
 	local _tmp = ply:GetNWEntity( name, NULL )
@@ -191,8 +192,6 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
-	elseif ply:GetNWBool( "warning_dedicated", false ) then
-		surfaceText( "[YourRP] PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "SettingsHeader", ScrW() / 2, ScrH() / 4, Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 
 	if tobool( HudV( "utto" ) ) then
@@ -221,10 +220,10 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 		surface.DrawTexturedRect( _sp.x + _sp.w / 2 - ctrb( 246 ) / 2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
 	end
 
-	if !ply:GetNWBool("serverdedicated", false) and ply:HasAccess() then
-		draw.SimpleTextOutlined("ADMIN NOTIFICATION", "mat1header", ScrW2(), ctr(50), Color( 255, 255, 0, 255 ), 1, 1, 1, Color( 0, 0, 0, 255 ))
-		draw.SimpleTextOutlined("Local/p2p Server is for testing only, use a Dedicated Server for real use!", "mat1header", ScrW2(), ctr(100), Color( 255, 255, 0, 255 ), 1, 1, 1, Color( 0, 0, 0, 255 ))
-		draw.SimpleTextOutlined("None Dedicated Server can break the database", "mat1header", ScrW2(), ctr(150), Color( 255, 255, 0, 255 ), 1, 1, 1, Color( 0, 0, 0, 255 ))
+	if !ply:GetNWBool("serverdedicated", false) then
+		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.SetMaterial( _yrp_testing	)
+		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
 	end
 end)
 --##############################################################################

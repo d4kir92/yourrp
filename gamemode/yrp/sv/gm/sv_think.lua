@@ -296,5 +296,8 @@ timer.Create( "ServerThink", 1, 0, function()
 		end
 	end
 
+	if _time == 60 then
+		IsServerInfoOutdated()
+	end
 	_time = _time + 1
 end)
