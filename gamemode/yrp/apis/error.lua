@@ -238,6 +238,7 @@ function ismalformed( str )
 			function FRAME:Paint( pw, ph )
 				surfaceWindow( self, pw, ph, "INFO" )
 				surfaceText( "YOUR DATABASE IS MALFORMED, please join the Discord and tell the DEVs!", "mat1header", pw/2, ctr( 100 ), Color( 255, 255, 255, 255 ), 1, 1 )
+				surfaceText( "Stop Game, delete .../garrysmod/garrysmod/cl.db to fix this problem", "mat1header", pw/2, ctr( 150 ), Color( 255, 255, 255, 255 ), 1, 1 )
 			end
 
 			FRAME.discord = createD( "DButton", FRAME, ctr( 400 ), ctr( 50 ), ctr( 900-200 ), ctr( 200 ) )

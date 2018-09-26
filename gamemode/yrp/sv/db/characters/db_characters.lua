@@ -403,6 +403,10 @@ function send_characters( ply )
 
 				netTable[_charCount].role = {}
 				netTable[_charCount].group = {}
+				netTable[_charCount].group.string_name = "INVALID GROUP"
+
+				netTable[_charCount].faction = {}
+				netTable[_charCount].faction.string_name = "INVALID FACTION"
 
 				local tmp = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. tonumber( v.roleID ) )
 				if worked( tmp, "charGetCharacters role" ) then

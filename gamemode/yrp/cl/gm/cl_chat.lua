@@ -340,7 +340,7 @@ net.Receive( "yrp_player_say", function( len )
 		if _tmp.factionname != "" then
 			_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
 		end
-		if _tmp.groupname != "" then
+		if _tmp.groupname != "" and _tmp.groupname != _tmp.factionname then
 			_tmp.name = _tmp.name .. _tmp.groupname .. " "
 		end
 		if _tmp.rolename != "" then

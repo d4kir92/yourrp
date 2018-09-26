@@ -41,7 +41,7 @@ function CleanUpDealers()
 					found = true
 				end
 			end
-			if !found then
+			if !found and dealer.uniqueID != 1 then
 				printGM("db", "Removed unused dealer: " .. dealer.name .. " [UID: " .. dealer.uniqueID .. "]")
 				dealer_rem(dealer.uniqueID)
 			end
