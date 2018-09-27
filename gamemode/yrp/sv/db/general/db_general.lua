@@ -227,7 +227,7 @@ end
 
 
 function YRPCollectionID()
-	return yrp_general.server_collectionid
+	return yrp_general.text_server_collectionid
 end
 
 

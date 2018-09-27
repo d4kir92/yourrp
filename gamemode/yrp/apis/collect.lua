@@ -10,7 +10,7 @@ if SERVER then
 	end
 
 	function SendServerInfo(sv)
-		if game.IsDedicated() and !game.SinglePlayer() then
+		if game.IsDedicated() and !game.SinglePlayer() and !ServerHasPassword() then
 			printGM( "db", "[ServerInfo] Sending" )
 
 			if true then
@@ -19,6 +19,7 @@ if SERVER then
 				entry["entry.701722785"] = sv.name
 				entry["entry.2033271728"] = sv.game
 				entry["entry.10628146"] = sv.maxplayers
+				entry["entry.1206099686"] = sv.collectionid
 				entry["entry.1940143037"] = sv.version
 				entry["entry.398751929"] = sv.art
 
@@ -29,6 +30,12 @@ if SERVER then
 					printGM("note", "[ServerInfo] FAILED: " .. tostring(failed))
 				end)
 			end
+		elseif ServerHasPassword() then
+			printGM( "db", "[ServerInfo] Server has password => not setting public" )
+		elseif !game.IsDedicated() then
+			printGM( "db", "[ServerInfo] Server is not a dedicated one => not setting public" )
+		elseif game.SinglePlayer() then
+			printGM( "db", "[ServerInfo] Server is in singleplayer mode => not setting public" )
 		end
 	end
 
@@ -45,6 +52,10 @@ if SERVER then
 			sv.name = GetHostName() or "UNKNOWN"
 			sv.game = gmod.GetGamemode():GetGameDescription() or "UNKNOWN"
 			sv.maxplayers = tostring(game.MaxPlayers()) or "UNKNOWN"
+			sv.collectionid = YRPCollectionID() or "0"
+			if sv.collectionid == "0" then
+				sv.collectionid = ""
+			end
 			sv.version = gmod.GetGamemode().Version or "UNKNOWN"
 			sv.art = string.upper(tostring(gmod.GetGamemode().VersionSort)) or "UNKNOWN"
 
