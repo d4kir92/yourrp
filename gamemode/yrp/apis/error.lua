@@ -356,26 +356,24 @@ function ErrorMod()
 end
 
 function CanSendError()
-	if game.IsDedicated() then
-		if CLIENT then
-			if LocalPlayer():GetNWBool( "bool_server_debug", true ) then
-				if tick % LocalPlayer():GetNWInt( "int_server_debug_tick", 60 ) == 0 then
-					return true
-				end
-			else
-				if tick % 3600 == 0 then
-					return true
-				end
+	if CLIENT then
+		if LocalPlayer():GetNWBool( "bool_server_debug", true ) then
+			if tick % LocalPlayer():GetNWInt( "int_server_debug_tick", 60 ) == 0 then
+				return true
 			end
-		elseif SERVER then
-			if YRPDebug() then
-				if tick % ErrorMod() == 0 then
-					return true
-				end
-			else
-				if tick % 3600 == 0 then
-					return true
-				end
+		else
+			if tick % 3600 == 0 then
+				return true
+			end
+		end
+	elseif SERVER and game.IsDedicated() then
+		if YRPDebug() then
+			if tick % ErrorMod() == 0 then
+				return true
+			end
+		else
+			if tick % 3600 == 0 then
+				return true
 			end
 		end
 	end
