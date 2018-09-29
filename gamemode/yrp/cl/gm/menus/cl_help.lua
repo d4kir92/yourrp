@@ -148,7 +148,8 @@ net.Receive("getsitehelp", function(len)
 		AddKeybindBr(keybinds)
 		AddKeybind(keybinds, GetKeybindName("speak_next"), "nextvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("speak_prev"), "previousvoicechannel", "record_voice_over", "bool_voice_channels")
-		HELPMENU.feedback = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), ctr(1210), posy)
+
+		HELPMENU.feedback = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(510), ctr(10))
 		HELPMENU.feedback:SetText("")
 
 		function HELPMENU.feedback:Paint(pw, ph)
@@ -161,7 +162,7 @@ net.Receive("getsitehelp", function(len)
 			--gui.OpenURL( "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link" )
 		end
 
-		HELPMENU.discord = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), ctr(1210), posy + ctr(50 + 10))
+		HELPMENU.discord = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(510), ctr(10 + 50 + 20))
 		HELPMENU.discord:SetText("")
 
 		function HELPMENU.discord:Paint(pw, ph)
@@ -538,6 +539,31 @@ net.Receive("getsiteyourrpdiscord", function(len)
 			function openLink:DoClick()
 				gui.OpenURL(link)
 			end
+		end
+	end
+end)
+
+net.Receive("getsiteyourrpserverlist", function(len)
+	if pa(HELPMENU.mainmenu.site) then
+		local link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQjN_z15gn7zQo-t6om2xArokvemGMs4pN2VasSuBNmzbEc7a0eUxG8lF5JZlT1l844LDhgJgrW52SJ/pubhtml?gid=0&single=true"
+
+		local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH(), 0, 0)
+
+		function page:Paint(pw, ph)
+			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		end
+
+		page:OpenURL(link)
+		local openLink = createD("DButton", page, ctr(100), ctr(100), BScrW() - ctr(100 + 20 + 20), 0)
+		openLink:SetText("")
+
+		function openLink:Paint(pw, ph)
+			surfaceButton(self, pw, ph, "")
+			DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
+
+		function openLink:DoClick()
+			gui.OpenURL(link)
 		end
 	end
 end)
