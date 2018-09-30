@@ -420,6 +420,24 @@ net.Receive( "Connect_Settings_General", function( len )
 		local bool_yrp_crosshair = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_crosshair, "yourrpcrosshair", "update_bool_yrp_crosshair" )
 		local bool_yrp_hud = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_hud, "yourrphud", "update_bool_yrp_hud" )
 		local bool_yrp_scoreboard = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard, "yourrpscoreboard", "update_bool_yrp_scoreboard" )
+
+		local sbs = {}
+		sbs["advanced"] = lang_string("advanced")
+		sbs["simple"] = lang_string("simple")
+		local sbspanel = {}
+		sbspanel.parent = GAMEMODE_VISUALS.plus
+		sbspanel.header = lang_string("scoreboard")
+		sbspanel.netstr = "update_text_yrp_scoreboard_style"
+		sbspanel.value = GEN.text_yrp_scoreboard_style
+		sbspanel.uniqueID = "1"
+		sbspanel.choices = sbs
+		local text_yrp_scoreboard_style = DComboBox(sbspanel)
+		function text_yrp_scoreboard_style.DComboBox:OnSelect(index, value, data)
+			net.Start("update_text_yrp_scoreboard_style")
+				net.WriteString(data)
+			net.SendToServer()
+		end
+
 		local bool_yrp_scoreboard_show_usergroup = CreateCheckBoxLineTab( GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard_show_usergroup, "showusergroup", "update_bool_yrp_scoreboard_show_usergroup" )
 		local bool_yrp_scoreboard_show_rolename = CreateCheckBoxLineTab( GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard_show_rolename, "showrolename", "update_bool_yrp_scoreboard_show_rolename" )
 		local bool_yrp_scoreboard_show_groupname = CreateCheckBoxLineTab( GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard_show_groupname, "showgroupname", "update_bool_yrp_scoreboard_show_groupname" )
