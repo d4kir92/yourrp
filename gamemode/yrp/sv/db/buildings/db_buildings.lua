@@ -20,6 +20,40 @@ SQL_ADD_COLUMN( _db_name, "name", "TEXT DEFAULT 'Building'" )
 --db_drop_table( _db_name )
 --db_is_empty( _db_name )
 
+function IsUnderGroup(uid, tuid)
+	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
+	group = group[1]
+	local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+	if wk(undergroup) then
+		undergroup = undergroup[1]
+		if undergroup.uniqueID == tuid then
+			return true
+		else
+			return IsUnderGroup(undergroup.uniqueID, tuid)
+		end
+	end
+	return false
+end
+
+function IsUnderGroupOf(ply, uid)
+	local ply_group = SQL_SELECT( "yrp_ply_groups", "*", "string_name = '" .. ply:GetGroupName() .. "'" )
+	ply_group = ply_group[1]
+	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'")
+	group = group[1]
+	return IsUnderGroup(group.uniqueID, uid)
+end
+--[[
+if wk(group) then
+	group = group[1]
+	local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+	if wk(undergroup) then
+		undergroup = undergroup[1]
+		return GetFactionTable(undergroup.uniqueID)
+	end
+	return group
+end
+]]--
+
 function allowedToUseDoor( id, ply )
 	if ply:HasAccess() then
 		return true
@@ -36,7 +70,10 @@ function allowedToUseDoor( id, ply )
 
 					if tostring( _tmpBuildingTable[1].ownerCharID ) == tostring( ply:CharID() ) or tonumber( _tmpBuildingTable[1].groupID ) == tonumber( _tmpGroupTable[1].uniqueID ) then
 						return true
+					elseif IsUnderGroupOf(ply, _tmpBuildingTable[1].groupID) then
+						return true
 					else
+						printGM( "note", "[allowedToUseDoor] not allowed" )
 						return false
 					end
 				else
@@ -45,6 +82,7 @@ function allowedToUseDoor( id, ply )
 				end
 			end
 		else
+			printGM( "note", "[allowedToUseDoor] not allowed 2" )
 			return false
 		end
 	end
@@ -212,6 +250,8 @@ function canLock( ply, tab )
 		return false
 	elseif tab.groupID != "-1" then
 		if ply:GetNWString( "GroupUniqueID", "Failed" ) == tab.groupID then
+			return true
+		elseif IsUnderGroupOf(ply, tab.groupID) then
 			return true
 		end
 		return false

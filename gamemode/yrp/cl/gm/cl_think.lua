@@ -131,7 +131,7 @@ function useFunction( string )
 			end
 
 		--When scoreboard open, enable mouse
-		elseif string == "scoreboard" and isScoreboardOpen then
+		elseif string == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker( true )
 
 		--Inventory
@@ -171,7 +171,7 @@ function useFunction( string )
 		elseif string == "vno" and !mouseVisible() then
 			net.Start( "voteNo" )
 			net.SendToServer()
-		elseif string == "scoreboard" and isScoreboardOpen then
+		elseif string == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker( true )
 		end
 	end

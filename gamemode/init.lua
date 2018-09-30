@@ -65,6 +65,7 @@ AddCSLuaFile( "yrp/cl/gm/menus/cl_inventory.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_appearance.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_rolesmenu.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_scoreboard.lua" )
+AddCSLuaFile( "yrp/cl/gm/menus/cl_scoreboard_simple.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_vehicle_options.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/settings/cl_settings.lua" )
 

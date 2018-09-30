@@ -73,7 +73,6 @@ if wk(yrp_usergroups) then
 		if wk(tmp) and #tmp > 1 then
 			for i, ug in pairs(tmp) do
 				if i > 1 then
-					print(ug.uniqueID)
 					SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
 				end
 			end
