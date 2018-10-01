@@ -1301,7 +1301,7 @@ function surfaceBox(x, y, w, h, color)
 	surface.DrawRect(x, y, w, h)
 end
 
-function drawIcon(ply, string, z, color)
+function drawIcon(ply, str, z, color)
 	local _size = 32
 	local pos = ply:GetPos() + Vector(0, 0, 86)
 
@@ -1313,12 +1313,12 @@ function drawIcon(ply, string, z, color)
 	local sca = ply:GetModelScale() / 4
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetDrawColor(color)
-	surface.SetMaterial(GetDesignIcon(string))
+	surface.SetMaterial(GetDesignIcon(str))
 	surface.DrawTexturedRect(-_size / 2, 0, _size, _size)
 	cam.End3D2D()
 end
 
-function drawString(ply, string, z, color)
+function drawString(ply, instr, z, color)
 	local pos = ply:GetPos() + Vector(0, 0, 86)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
@@ -1327,7 +1327,7 @@ function drawString(ply, string, z, color)
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
-	local str = string
+	local str = instr
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetFont("3d2d_string")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1448,11 +1448,13 @@ function drawPlates(ply)
 		end
 
 		if ply:GetNWBool("bool_tag_on_head", false) then
-			if ply:GetNWBool("bool_tag_on_head_voice", false) and ply:IsSpeaking() then
-				drawIcon(ply, "voice", 26, color)
+			if ply:GetNWBool("bool_tag_on_head_voice", false) and ply:GetNWBool("yrp_speaking", false) then
+				local plyvol = ply:VoiceVolume() * 200
+				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
+				drawIcon(ply, "voice", 26, voicecolor)
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_chat", false) and isChatOpen() then
+			if ply:GetNWBool("bool_tag_on_head_chat", false) and ply:GetNWBool("istyping", false) then
 				drawIcon(ply, "chat", 26, color)
 			end
 

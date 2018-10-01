@@ -149,7 +149,7 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, GetKeybindName("speak_next"), "nextvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("speak_prev"), "previousvoicechannel", "record_voice_over", "bool_voice_channels")
 
-		HELPMENU.feedback = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(510), ctr(10))
+		HELPMENU.feedback = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20))
 		HELPMENU.feedback:SetText("")
 
 		function HELPMENU.feedback:Paint(pw, ph)
@@ -162,7 +162,7 @@ net.Receive("getsitehelp", function(len)
 			--gui.OpenURL( "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link" )
 		end
 
-		HELPMENU.discord = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(510), ctr(10 + 50 + 20))
+		HELPMENU.discord = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20 + 50 + 20))
 		HELPMENU.discord:SetText("")
 
 		function HELPMENU.discord:Paint(pw, ph)

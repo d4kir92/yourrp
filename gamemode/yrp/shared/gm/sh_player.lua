@@ -462,27 +462,30 @@ function Player:canAffordBank( money )
 			return false
 		end
 	end
-
 end
 
 function Player:SteamName()
-	return tostring( self:GetName() )
+	if self:IsValid() then
+		return self:GetName() or "FAILED"
+	else
+		return "FAILED"
+	end
 end
 
 function Player:YRPRPName()
-	return tostring( self:GetNWString( "rpname", self:SteamName() ) )
+	return self:GetNWString("rpname", self:SteamName())
 end
 
 function Player:Name()
-	return tostring( self:GetNWString( "rpname", self:SteamName() ) )
+	return self:GetNWString("rpname", self:SteamName())
 end
 
 function Player:Nick()
-	return tostring( self:YRPRPName() )
+	return self:YRPRPName() or "FAILED"
 end
 
 function Player:YRPName()
-	return "[" .. self:SteamName() .. " (".. self:RPName() .. ")]" -- " {Alive: " .. string.upper( tostring(self:Alive()) ) .. "}"
+	return "[" .. self:SteamName() .. " (" .. self:RPName() .. ")]"
 end
 
 function Player:Team()

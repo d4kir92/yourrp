@@ -2,6 +2,16 @@
 
 util.AddNetworkString( "yrp_player_say" )
 
+util.AddNetworkString("startchat")
+net.Receive("startchat", function(len, ply)
+	ply:SetNWBool("istyping", true)
+end)
+
+util.AddNetworkString("finishchat")
+net.Receive("finishchat", function(len, ply)
+	ply:SetNWBool("istyping", false)
+end)
+
 local paket = {}
 paket.lokal = true
 paket.command = "/test"
@@ -12,8 +22,8 @@ paket.usergroup = ""
 function is_chat_command( string, command )
 	if string != nil and command != nil then
 		local _size = string.len( string.lower( command ) )
-		local _slash = string.sub( string.lower( string ), 1, 1+_size ) == "/" .. string.lower( command )
-		local _call = string.sub( string.lower( string ), 1, 1+_size ) == "!" .. string.lower( command )
+		local _slash = string.sub( string.lower( string ), 1, 1 + _size ) == "/" .. string.lower( command )
+		local _call = string.sub( string.lower( string ), 1, 1 + _size ) == "!" .. string.lower( command )
 		if _slash or _call then
 			paket.iscommand = true
 			return true
