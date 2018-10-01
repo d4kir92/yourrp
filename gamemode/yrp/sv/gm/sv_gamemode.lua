@@ -447,7 +447,6 @@ net.Receive( "press_speak_prev", function( len, ply )
 end)
 
 util.AddNetworkString( "yrp_voice_start" )
-
 net.Receive( "yrp_voice_start", function( len, ply )
 	ply:SetNWBool( "yrp_speaking", true )
 	if ply:GetNWString( "speak_channel" ) == 2 then
@@ -459,7 +458,6 @@ net.Receive( "yrp_voice_start", function( len, ply )
 end)
 
 util.AddNetworkString( "yrp_voice_end" )
-
 net.Receive( "yrp_voice_end", function( len, ply )
 	ply:SetNWBool( "yrp_speaking", false )
 end)

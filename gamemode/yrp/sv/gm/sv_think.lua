@@ -218,7 +218,7 @@ timer.Create( "ServerThink", 1, 0, function()
 		end
 	end
 
-	if _time % 10 == 0 then
+	if _time % 30 == 0 then
 		for i, ply in pairs( _all_players ) do
 			if ply:GetRoleName() == nil and ply:Alive() then
 				if !ply:IsBot() then
@@ -278,21 +278,19 @@ timer.Create( "ServerThink", 1, 0, function()
 		SaveStorages( _str )
 	end
 
-	local _changelevel = 21600
 	if GAMEMODE:IsAutomaticServerReloadingEnabled() then
-		if _time >= _changelevel-30 then
-			if _time >= _changelevel then
-				printGM( "gm", "Auto Reload" )
-				timer.Simple( 1, function()
-					game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
-				end)
-			else
-				local _str = "Auto Reload in " .. _changelevel-_time .. " sec"
-				printGM( "gm", _str )
-				net.Start( "yrp_info2" )
-					net.WriteString( _str )
-				net.Broadcast()
-			end
+		local _changelevel = 21600
+		if _time >= _changelevel then
+			printGM( "gm", "Auto Reload" )
+			timer.Simple( 1, function()
+				game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
+			end)
+		elseif _time >= _changelevel-30 then
+			local _str = "Auto Reload in " .. _changelevel-_time .. " sec"
+			printGM( "gm", _str )
+			net.Start( "yrp_info2" )
+				net.WriteString( _str )
+			net.Broadcast()
 		end
 	end
 

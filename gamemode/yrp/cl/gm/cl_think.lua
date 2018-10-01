@@ -28,10 +28,14 @@ end
 
 hook.Add( "StartChat", "HasStartedTyping", function( isTeamChat )
 	chatisopen = true
+	net.Start("startchat")
+	net.SendToServer()
 end )
 
 hook.Add( "FinishChat", "ClientFinishTyping", function()
 	chatisopen = false
+	net.Start("finishchat")
+	net.SendToServer()
 end )
 
 local keys = {}
