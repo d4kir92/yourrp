@@ -62,3 +62,8 @@ end
 function Player:RPName() -- Character Name / Roleplay Name
 	return self:YRPRPName() -- return string
 end
+
+--[[ UserGroup ]]--
+function Player:GetUserGroupColor() -- UserGroup Color
+	return self:YRPGetUserGroupColor() -- return Color( int r, int g, int b, int a )
+end

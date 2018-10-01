@@ -543,6 +543,13 @@ function Player:YRPGetGroupColor()
 	return _gc
 end
 
+function Player:YRPGetUserGroupColor()
+	local _gc = self:GetNWString( "usergroupColor", "255,0,0" )
+	_gc = string.Explode( ",", _gc )
+	_gc = Color( _gc[1], _gc[2], _gc[3], _gc[4] or 255 )
+	return _gc
+end
+
 function Player:HasLicense( license )
 	local _licenseIDs = self:GetNWString( "licenseIDs", "" )
 

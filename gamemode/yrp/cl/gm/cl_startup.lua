@@ -1468,6 +1468,21 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
+			if ply:GetNWBool("isafk", false) or ply:GetNWBool("isdnd", false) then
+				local onlinestatus = ""
+				local onlinecolor = Color(255, 255, 255, 255)
+				if ply:GetNWBool("isdnd", false) then
+					onlinestatus = lang_string("dnd")
+					onlinecolor = Color(255, 0, 0, 255)
+				elseif ply:GetNWBool("isafk", false) then
+					onlinestatus = lang_string("afk")
+					onlinecolor = Color(255, 255, 0, 255)
+				end
+				onlinecolor.a = color.a
+				drawString(ply, "<" .. string.upper(onlinestatus) .. ">", _height, onlinecolor)
+				_height = _height + 5
+			end
+
 			if ply:GetNWBool("bool_tag_on_head_rolename", false) then
 				drawString(ply, ply:GetRoleName(), _height, color)
 				_height = _height + 5
@@ -1498,7 +1513,9 @@ function drawPlates(ply)
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_usergroup", false) then
-				drawString(ply, string.upper(ply:GetUserGroup()), _height, color)
+				local ugcolor = ply:GetUserGroupColor()
+				ugcolor.a = color.a
+				drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
 				_height = _height + 5
 			end
 		end

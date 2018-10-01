@@ -252,9 +252,41 @@ LocalPlayer():SetNWInt( "view_z", 0 )
 LocalPlayer():SetNWInt( "view_x", 0 )
 LocalPlayer():SetNWInt( "view_s", 0 )
 
+local afktime = CurTime()
 local _view_delay = true
 function KeyPress()
 	local ply = LocalPlayer()
+
+	if ply:GetNWBool("isafk", false) then
+		for i = 107, 113 do
+			if input.IsMouseDown(i) then
+				net.Start("notafk")
+				net.SendToServer()
+			end
+		end
+		for i = 0, 159 do
+			if ply:KeyDown(i) then
+				net.Start("notafk")
+				net.SendToServer()
+			end
+		end
+	else
+		for i = 107, 113 do
+			if input.IsMouseDown(i) then
+				afktime = CurTime()
+			end
+		end
+		for i = 0, 159 do
+			if ply:KeyDown(i) then
+				afktime = CurTime()
+			end
+		end
+		if afktime + 300 < CurTime() then
+			net.Start("setafk")
+			net.SendToServer()
+		end
+	end
+
 	if isNoMenuOpen() then
 		if input.IsKeyDown( get_keybind( "view_switch" ) ) then
 			--[[ When toggle view ]]--
@@ -425,8 +457,18 @@ local _savePos = Vector( 0, 0, 0 )
 _lookAtEnt = nil
 _drawViewmodel = false
 
+local oldang = Angle(0, 0, 0)
 local function yrpCalcView( ply, pos, angles, fov )
 	if ply:Alive() and !ply:IsPlayingTaunt() then
+
+		if ply:GetNWBool("isafk", false) then
+			if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
+				net.Start("notafk")
+				net.SendToServer()
+			end
+		end
+		oldang = angles
+
 		local weapon = ply:GetActiveWeapon()
 		if weapon != NULL then
 			if weapon:GetClass() != nil then

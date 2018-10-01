@@ -57,6 +57,8 @@ end
 function print_help( sender )
 	sender:ChatPrint( "" )
 	sender:ChatPrint( "[HELP]" )
+	sender:ChatPrint( "afk - Away from keyboard" )
+	sender:ChatPrint( "dnd - Do not disturb" )
 	sender:ChatPrint( "me - Emote chat" )
 	sender:ChatPrint( "yell - Yell locally" )
 	sender:ChatPrint( "ooc or / - Out of character chat" )
@@ -304,6 +306,16 @@ function unpack_paket( sender, text, iscommand )
 	end
 end
 
+util.AddNetworkString("notafk")
+net.Receive("notafk", function(len, ply)
+	ply:SetNWBool("isafk", false)
+end)
+
+util.AddNetworkString("setafk")
+net.Receive("setafk", function(len, ply)
+	ply:SetNWBool("isafk", true)
+end)
+
 function GM:PlayerSay( sender, text, teamChat )
 
 	unpack_paket( sender, text )
@@ -314,6 +326,16 @@ function GM:PlayerSay( sender, text, teamChat )
 		paket.lokal = false
 	else
 		paket.lokal = true
+	end
+
+	if paket.command == "afk" then
+		sender:SetNWBool("isafk", !sender:GetNWBool("isafk", false))
+		return ""
+	end
+
+	if paket.command == "dnd" then
+		sender:SetNWBool("isdnd", !sender:GetNWBool("isdnd", false))
+		return ""
 	end
 
 	if paket.command == "help" then

@@ -779,6 +779,22 @@ net.Receive( "openInteractMenu", function( len, ply )
 					tmpidcard = tmpidcard.bool_identity_card or false
 					tmpidcard = tobool(tmpidcard)
 
+					local licenses = {}
+					if wk(tmpTargetRole) then
+						local lids = tmpTarget:GetNWString( "licenseIDs", "" )
+						if lids != "" then
+							lids = string.Explode(",", lids)
+							for i, lic in pairs(lids) do
+								local li = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. lic .. "'")
+								if wk(li) then
+									li = li[1]
+									table.insert(licenses, li.name)
+								end
+							end
+						end
+						licenses = table.concat(licenses, ", ")
+					end
+
 					net.Start( "openInteractMenu" )
 						net.WriteBool( tmpidcard )
 						net.WriteBool( tmpBool )
@@ -789,6 +805,7 @@ net.Receive( "openInteractMenu", function( len, ply )
 						net.WriteBool( tmpDemote )
 						net.WriteString( tmpDemoteName )
 
+						net.WriteString( licenses )
 					net.Send( ply )
 				end
 			end

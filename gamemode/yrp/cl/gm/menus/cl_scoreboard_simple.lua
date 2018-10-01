@@ -278,171 +278,173 @@ function OpenSBS()
 			--sbs.stab:Rebuild()
 		end
 
-		sbs.hr = createD( "DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
-		function sbs.hr:Paint(pw, ph)
-		end
-		sbs.stab:AddItem(sbs.hr)
+		if #uplys > 0 then
+			sbs.hr = createD( "DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+			function sbs.hr:Paint(pw, ph)
+			end
+			sbs.stab:AddItem(sbs.hr)
 
-		sbs.charsel = createD( "DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
-		function sbs.charsel:Paint(pw, ph)
-			local pl = LocalPlayer()
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
+			sbs.charsel = createD( "DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+			function sbs.charsel:Paint(pw, ph)
+				local pl = LocalPlayer()
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
-			local x = 128 + 10
-			draw.SimpleTextOutlined(lang_string("characterselection"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		end
-		sbs.stab:AddItem(sbs.charsel)
+				local x = 128 + 10
+				draw.SimpleTextOutlined(lang_string("characterselection"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			end
+			sbs.stab:AddItem(sbs.charsel)
 
-		sbs.header2 = createD( "DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
-		function sbs.header2:Paint(pw, ph)
-			local pl = LocalPlayer()
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
+			sbs.header2 = createD( "DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+			function sbs.header2:Paint(pw, ph)
+				local pl = LocalPlayer()
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
-			local x = 128 + 10
-			local naugname = lang_string("name")
-			draw.SimpleTextOutlined(naugname, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			x = x + 700
-
-			if pl:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+				local x = 128 + 10
+				local naugname = lang_string("name")
+				draw.SimpleTextOutlined(naugname, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 700
-			end
 
-			if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-				x = x + 400
-			end
-
-			draw.SimpleTextOutlined("Language", "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			x = x + 300
-
-			draw.SimpleTextOutlined(lang_string("playtime"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			x = x + 300
-
-			if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
-				draw.SimpleTextOutlined(lang_string("os"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 300
-			end
-
-			draw.SimpleTextOutlined(lang_string("ping"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		end
-		sbs.stab:AddItem(sbs.header2)
-
-		for i, pl in SortedPairsByMemberValue(uplys, "group") do
-			local _p = createD( "DButton", sbs.stab, BScrW(), ctr(128), 0, 0)
-			_p:SetText("")
-			function _p:DoClick()
-				OpenPlayerOptions(pl)
-			end
-			_p.col = i % 2 * 100
-			_p.color = Color(255, 255, 255, 255)
-			if _p.color.r >= 240 then
-				_p.color = Color(_p.color.r - 20, _p.color.g - 20, _p.color.b - 20, 100)
-			else
-				_p.color = Color(_p.color.r + 20, _p.color.g + 20, _p.color.b + 20, 100)
-			end
-
-			_p.pt = string.FormattedTime( pl:GetNWFloat( "uptime_current", 0 ) )
-			if _p.pt.m < 10 then
-				_p.pt.m = "0" .. _p.pt.m
-			end
-			if _p.pt.h < 10 then
-				_p.pt.h = "0" .. _p.pt.h
-			end
-			_p.playtime = _p.pt.h .. ":" .. _p.pt.m
-			_p.os = pl:GetNWString( "yrp_os", "other" )
-			_p.lang = pl:GetLanguageShort()
-
-			function _p:Paint(pw, ph)
-				if !pl:IsValid() then
-					self:Remove()
-				else
-					local lply = LocalPlayer()
-					self.bg = self.color
-					if self:IsHovered() then
-						self.bg = Color(255, 255, 0, 200)
-					end
-					draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
-
-					local x = 128 + 10
-					if true then
-						local nay = ph / 4 * 1
-						local ugy = ph / 4 * 3
-						if !lply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
-							nay = ph / 2
-						end
-						draw.SimpleTextOutlined(pl:RPName(), "sef", ctr(x), nay, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						if pl:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
-							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", ctr(x), ugy, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						end
-						x = x + 700
-					end
-
-					if lply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or lply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
-						x = x + 700
-					end
-
-					if lply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or lply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-						x = x + 400
-					end
-
-					if lply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
-						local icon_size = ctr( 100 )
-						DrawIcon(GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
-						if self:IsHovered() then
-							draw.SimpleTextOutlined(string.upper(self.lang), "sef", ctr(x) + icon_size / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						end
-						x = x + 300
-					end
-
-					if lply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
-						draw.SimpleTextOutlined(self.playtime, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						x = x + 300
-					end
-
-					if lply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
-						local icon_size = ctr( 100 )
-						DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, ctr(x), (ph - icon_size) / 2, Color( 255, 255, 255, 255 ) )
-						if self:IsHovered() then
-							draw.SimpleTextOutlined(string.upper(self.os), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						end
-						x = x + 300
-					end
-
-					draw.SimpleTextOutlined(pl:Ping(), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				if pl:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+					x = x + 700
 				end
+
+				if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+					x = x + 400
+				end
+
+				draw.SimpleTextOutlined("Language", "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				x = x + 300
+
+				draw.SimpleTextOutlined(lang_string("playtime"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				x = x + 300
+
+				if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
+					draw.SimpleTextOutlined(lang_string("os"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					x = x + 300
+				end
+
+				draw.SimpleTextOutlined(lang_string("ping"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
+			sbs.stab:AddItem(sbs.header2)
 
-			_p.avap = createD( "DPanel", _p, ctr( 128-8 ), ctr( 128-8 ), ctr( 4 ), ctr( 4 ) )
-			_p.avap.Avatar = createD( "AvatarImage", _p.avap, ctr( 128-8 ), ctr( 128-8 ), 0, 0 )
-			_p.avap.Avatar:SetPlayer( pl, ctr( 128-8 ) )
-			_p.avap.Avatar:SetPaintedManually( true )
-			function _p.avap:Paint( pw, ph )
-				render.ClearStencil()
-				render.SetStencilEnable( true )
+			for i, pl in SortedPairsByMemberValue(uplys, "group") do
+				local _p = createD( "DButton", sbs.stab, BScrW(), ctr(128), 0, 0)
+				_p:SetText("")
+				function _p:DoClick()
+					OpenPlayerOptions(pl)
+				end
+				_p.col = i % 2 * 100
+				_p.color = Color(255, 255, 255, 255)
+				if _p.color.r >= 240 then
+					_p.color = Color(_p.color.r - 20, _p.color.g - 20, _p.color.b - 20, 100)
+				else
+					_p.color = Color(_p.color.r + 20, _p.color.g + 20, _p.color.b + 20, 100)
+				end
 
-					render.SetStencilWriteMask( 1 )
-					render.SetStencilTestMask( 1 )
+				_p.pt = string.FormattedTime( pl:GetNWFloat( "uptime_current", 0 ) )
+				if _p.pt.m < 10 then
+					_p.pt.m = "0" .. _p.pt.m
+				end
+				if _p.pt.h < 10 then
+					_p.pt.h = "0" .. _p.pt.h
+				end
+				_p.playtime = _p.pt.h .. ":" .. _p.pt.m
+				_p.os = pl:GetNWString( "yrp_os", "other" )
+				_p.lang = pl:GetLanguageShort()
 
-					render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+				function _p:Paint(pw, ph)
+					if !pl:IsValid() then
+						self:Remove()
+					else
+						local lply = LocalPlayer()
+						self.bg = self.color
+						if self:IsHovered() then
+							self.bg = Color(255, 255, 0, 200)
+						end
+						draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
 
-					render.SetStencilFailOperation( STENCILOPERATION_INCR )
-					render.SetStencilPassOperation( STENCILOPERATION_KEEP )
-					render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
+						local x = 128 + 10
+						if true then
+							local nay = ph / 4 * 1
+							local ugy = ph / 4 * 3
+							if !lply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+								nay = ph / 2
+							end
+							draw.SimpleTextOutlined(pl:RPName(), "sef", ctr(x), nay, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							if pl:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
+								draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", ctr(x), ugy, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							end
+							x = x + 700
+						end
 
-					render.SetStencilReferenceValue( 1 )
+						if lply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or lply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
+							x = x + 700
+						end
 
-					drawRoundedBox( ph / 2, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+						if lply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or lply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
+							x = x + 400
+						end
 
-					render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+						if lply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
+							local icon_size = ctr( 100 )
+							DrawIcon(GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+							if self:IsHovered() then
+								draw.SimpleTextOutlined(string.upper(self.lang), "sef", ctr(x) + icon_size / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							end
+							x = x + 300
+						end
 
-					self.Avatar:SetPaintedManually(false)
-					self.Avatar:PaintManual()
-					self.Avatar:SetPaintedManually(true)
+						if lply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
+							draw.SimpleTextOutlined(self.playtime, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							x = x + 300
+						end
 
-				render.SetStencilEnable( false )
+						if lply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
+							local icon_size = ctr( 100 )
+							DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, ctr(x), (ph - icon_size) / 2, Color( 255, 255, 255, 255 ) )
+							if self:IsHovered() then
+								draw.SimpleTextOutlined(string.upper(self.os), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							end
+							x = x + 300
+						end
+
+						draw.SimpleTextOutlined(pl:Ping(), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					end
+				end
+
+				_p.avap = createD( "DPanel", _p, ctr( 128-8 ), ctr( 128-8 ), ctr( 4 ), ctr( 4 ) )
+				_p.avap.Avatar = createD( "AvatarImage", _p.avap, ctr( 128-8 ), ctr( 128-8 ), 0, 0 )
+				_p.avap.Avatar:SetPlayer( pl, ctr( 128-8 ) )
+				_p.avap.Avatar:SetPaintedManually( true )
+				function _p.avap:Paint( pw, ph )
+					render.ClearStencil()
+					render.SetStencilEnable( true )
+
+						render.SetStencilWriteMask( 1 )
+						render.SetStencilTestMask( 1 )
+
+						render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+
+						render.SetStencilFailOperation( STENCILOPERATION_INCR )
+						render.SetStencilPassOperation( STENCILOPERATION_KEEP )
+						render.SetStencilZFailOperation( STENCILOPERATION_KEEP )
+
+						render.SetStencilReferenceValue( 1 )
+
+						drawRoundedBox( ph / 2, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+
+						render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+
+						self.Avatar:SetPaintedManually(false)
+						self.Avatar:PaintManual()
+						self.Avatar:SetPaintedManually(true)
+
+					render.SetStencilEnable( false )
+				end
+
+				sbs.stab:AddItem(_p)
+				--sbs.stab:Rebuild()
 			end
-
-			sbs.stab:AddItem(_p)
-			--sbs.stab:Rebuild()
 		end
 	end
 end

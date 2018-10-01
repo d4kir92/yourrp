@@ -1446,6 +1446,7 @@ function Player:UserGroupLoadout()
 		for i, swep in pairs( SWEPS ) do
 			self:Give( swep )
 		end
+		self:SetNWString( "usergroupColor", UG.color )
 		self:SetNWBool( "adminaccess", tobool( UG.adminaccess ) )
 		self:SetNWBool( "canseeteammatesonmap", tobool(UG.canseeteammatesonmap) )
 		self:SetNWBool( "canseeenemiesonmap", tobool(UG.canseeenemiesonmap) )
