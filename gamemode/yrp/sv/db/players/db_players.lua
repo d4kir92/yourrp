@@ -221,7 +221,9 @@ function set_role_values( ply )
 
 				local _licenseIDs = string.Explode( ",", rolTab.licenseIDs )
 				for i, lic in pairs( _licenseIDs ) do
-					ply:AddLicense( lic )
+					if tonumber(lic) != nil then
+						ply:AddLicense( lic )
+					end
 				end
 
 				ply:SetNWString( "maxamount", rolTab.maxamount )

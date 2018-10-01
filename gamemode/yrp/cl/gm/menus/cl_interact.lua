@@ -40,7 +40,9 @@ net.Receive( "openInteractMenu", function ()
 	local demoteable = net.ReadBool()
 	local demoteName = net.ReadString()
 
-	_windowInteract = createVGUI( "DFrame", nil, 1090, 1090, ScrW() - 160, ScrH() - 200 )
+	local licenses = net.ReadString() or "FAILED"
+
+	_windowInteract = createVGUI( "DFrame", nil, 1090, 1090, ScrW() - 160, ScrH() - 100 )
 	function _windowInteract:OnClose()
 		closeMenu()
 	end
@@ -88,14 +90,19 @@ net.Receive( "openInteractMenu", function ()
 			end
 			draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
+			--[[ Licenses ]]--
+			draw.RoundedBox(0, ctr( 10 ), ctr( 420 ), ctr( 1070 ), ctr( 100 ), Color( 255, 255, 255, 255 ) )
+			draw.SimpleTextOutlined( lang_string( "licenses" ) .. ":", "charTitle", ctr( 10 + 10 ), ctr( 420 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( licenses, "charTitle", ctr( 10 + 10 ), ctr( 460 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
+
 			--[[ Description ]]--
-			draw.RoundedBox( 0, ctr( 10 ), ctr( 50 + 350 + 10 ), ctr( 1070 ), ctr( 400 ), Color( 255, 255, 255, 255 ) )
-			draw.SimpleTextOutlined( lang_string( "description" ), "charTitle", ctr( 10 + 10 ), ctr( 400 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
+			draw.RoundedBox(0, ctr( 10 ), ctr( 530 ), ctr( 1070 ), ctr( 100 ), Color( 255, 255, 255, 255 ) )
+			draw.SimpleTextOutlined( lang_string( "description" ) .. ":", "charTitle", ctr( 10 + 10 ), ctr( 560 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
 		end
 	end
 
 	if idcard then
-		local _tmpDescription = createD( "DTextEntry", _windowInteract, ctr( 1070 ), ctr( 400 - 50 ), ctr( 10 ), ctr( 50 + 350 + 10 + 50 ) )
+		local _tmpDescription = createD( "DTextEntry", _windowInteract, ctr( 1070 ), ctr( 400 - 50 ), ctr( 10 ), ctr( 590 ) )
 		_tmpDescription:SetMultiline( true )
 		_tmpDescription:SetEditable( false )
 		_tmpDescription:SetText( tmpRPDescription )
@@ -104,7 +111,7 @@ net.Receive( "openInteractMenu", function ()
 		tmpAvatarI:SetPlayer( tmpPly, ctr( 256 ) )
 	end
 
-	local buttonTrade = createVGUI( "DButton", _windowInteract, 530, 50, 10, 820 )
+	local buttonTrade = createVGUI( "DButton", _windowInteract, 530, 50, 10, 950 )
 	buttonTrade:SetText( "" )
 	function buttonTrade:Paint( pw, ph )
 		surfaceButton( self, pw, ph, lang_string( "trade" ) .. " (in future update)" )
@@ -112,7 +119,7 @@ net.Receive( "openInteractMenu", function ()
 
 	if isInstructor then
 		if promoteable then
-			local buttonPromote = createVGUI( "DButton", _windowInteract, 530, 50, 545, 820 )
+			local buttonPromote = createVGUI( "DButton", _windowInteract, 530, 50, 545, 950 )
 			buttonPromote:SetText( "" )
 			function buttonPromote:DoClick()
 				net.Start( "promotePlayer" )
@@ -126,7 +133,7 @@ net.Receive( "openInteractMenu", function ()
 		end
 
 		if demoteable then
-			local buttonDemote = createVGUI( "DButton", _windowInteract, 530, 50, 545, 820 + 10 + 50 )
+			local buttonDemote = createVGUI( "DButton", _windowInteract, 530, 50, 545, 950 + 10 + 50 )
 			buttonDemote:SetText( "" )
 			function buttonDemote:DoClick()
 				net.Start( "demotePlayer" )

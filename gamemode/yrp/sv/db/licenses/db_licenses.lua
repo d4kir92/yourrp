@@ -168,16 +168,18 @@ end)
 
 local Player = FindMetaTable( "Player" )
 function Player:AddLicense( license )
-	local _licenseIDs = self:GetNWString( "licenseIDs", "" )
+	if tonumber(license) != nil then
+		local _licenseIDs = self:GetNWString( "licenseIDs", "" )
 
-	_licenseIDs = string.Explode( ",", _licenseIDs )
-	if !table.HasValue( _licenseIDs, license ) then
-		table.insert( _licenseIDs, license )
-	end
-	if table.HasValue( _licenseIDs, "" ) then
-		table.RemoveByValue( _licenseIDs, "" )
-	end
-	_licenseIDs = string.Implode( ",", _licenseIDs )
+		_licenseIDs = string.Explode( ",", _licenseIDs )
+		if !table.HasValue( _licenseIDs, license ) then
+			table.insert( _licenseIDs, license )
+		end
+		if table.HasValue( _licenseIDs, "" ) then
+			table.RemoveByValue( _licenseIDs, "" )
+		end
+		_licenseIDs = string.Implode( ",", _licenseIDs )
 
-	self:SetNWString( "licenseIDs", tostring( _licenseIDs ) )
+		self:SetNWString( "licenseIDs", tostring( _licenseIDs ) )
+	end
 end
