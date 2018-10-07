@@ -260,6 +260,8 @@ net.Receive( "getMapList", function( len )
 		end
 
 		for k, v in pairs( _tmpTable ) do
+			print(k, v)
+			printTab(v)
 			if tostring( v.type ) == "dealer" then
 				for i, dealer in pairs( _dealers ) do
 					if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then

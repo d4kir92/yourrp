@@ -252,7 +252,7 @@ function IsWeaponLoweringEnabled()
 end
 
 function IsDealerImmortal()
-	return tobool( yrp_general.bool_dealers_can_take_damage )
+	return !tobool( yrp_general.bool_dealers_can_take_damage )
 end
 
 function IsRealisticEnabled()
