@@ -59,7 +59,7 @@ SQL_ADD_COLUMN( DATABASE_NAME, "bool_stamina", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_map_system", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_building_system", "INT DEFAULT 1" )
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 1" )
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1" )
@@ -252,7 +252,7 @@ function IsWeaponLoweringEnabled()
 end
 
 function IsDealerImmortal()
-	return tobool( yrp_general.bool_dealers_can_take_damage )
+	return !tobool( yrp_general.bool_dealers_can_take_damage )
 end
 
 function IsRealisticEnabled()

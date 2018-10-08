@@ -3,11 +3,13 @@
 local _groups = {}
 local _roles = {}
 net.Receive( "getMapList", function( len )
-	local _tmpBool = net.ReadBool()
-
+	if len > 512000 then
+		printGM("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
+	else
+		printGM("gm", "getMapList - len: " .. len .. "/" .. "512000")
+	end
 	local ply = LocalPlayer()
-
-	if !_tmpBool and pa(settingsWindow) then
+	if pa(settingsWindow) then
 		local _tmpTable = net.ReadTable()
 		_groups = net.ReadTable()
 		_roles = net.ReadTable()

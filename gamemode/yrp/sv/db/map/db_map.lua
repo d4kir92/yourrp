@@ -118,13 +118,12 @@ net.Receive( "getMapList", function( len, ply )
 		end
 		local _tmpGroupTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
 		local _tmpRoleTable = SQL_SELECT( "yrp_roles", "*", nil )
-		local _tmpDealerTable = SQL_SELECT( "yrp_dealers", "*", nil )
-		if _tmpDealerTable == nil or _tmpDealerTable == false then
+		local _tmpDealerTable = SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
+		if !wk(_tmpDealerTable) then
 			_tmpDealerTable = {}
 		end
 
 		net.Start( "getMapList" )
-			net.WriteBool( false )
 			net.WriteTable( _tmpMapTable )
 			net.WriteTable( _tmpGroupTable )
 			net.WriteTable( _tmpRoleTable )
