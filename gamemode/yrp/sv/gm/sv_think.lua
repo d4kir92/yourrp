@@ -302,14 +302,5 @@ timer.Create( "ServerThink", 1, 0, function()
 end)
 
 function RestartServer()
-	if !system.IsWindows() then
-		local ShutDown = GAMEMODE.ShutDown
-		function GAMEMODE:ShutDown()
-			ShutDown(self)
-			game.ConsoleCommand( "_restart\n" )
-		end
-		game.ConsoleCommand( "disconnect\n" )
-	else
-		game.ConsoleCommand( "_restart\n" )
-	end
+	game.ConsoleCommand("_restart")
 end
