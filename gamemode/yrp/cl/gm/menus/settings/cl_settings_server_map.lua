@@ -3,11 +3,13 @@
 local _groups = {}
 local _roles = {}
 net.Receive( "getMapList", function( len )
-	local _tmpBool = net.ReadBool()
-
+	if len > 512000 then
+		printGM("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
+	else
+		printGM("gm", "getMapList - len: " .. len .. "/" .. "512000")
+	end
 	local ply = LocalPlayer()
-
-	if !_tmpBool and pa(settingsWindow) then
+	if pa(settingsWindow) then
 		local _tmpTable = net.ReadTable()
 		_groups = net.ReadTable()
 		_roles = net.ReadTable()
@@ -260,8 +262,6 @@ net.Receive( "getMapList", function( len )
 		end
 
 		for k, v in pairs( _tmpTable ) do
-			print(k, v)
-			printTab(v)
 			if tostring( v.type ) == "dealer" then
 				for i, dealer in pairs( _dealers ) do
 					if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
