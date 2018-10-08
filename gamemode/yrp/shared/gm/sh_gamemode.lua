@@ -165,7 +165,7 @@ concommand.Add( "yrp__help", function( ply, cmd, args )
 	printGM( "note", "yrp_togglesettings" )
 	printGM( "note", "	Toggle settings menu" )
 	hr_pos()
-end )
+end)
 
 hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
 	if ply:GetNWBool( "bool_anti_bhop", false ) and !ply:GetNWBool( "canjump", false ) and ply:GetMoveType() != MOVETYPE_NOCLIP then

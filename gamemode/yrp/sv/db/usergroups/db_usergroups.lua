@@ -1452,3 +1452,10 @@ function Player:UserGroupLoadout()
 		self:SetNWBool( "canseeenemiesonmap", tobool(UG.canseeenemiesonmap) )
 	end
 end
+
+util.AddNetworkString("yrp_restartserver")
+net.Receive("yrp_restartserver", function(len, ply)
+	if ply:HasAccess() then
+		RestartServer()
+	end
+end)

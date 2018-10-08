@@ -137,7 +137,32 @@ hook.Add( "PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function( ply )
 	printGM( "gm", "[PostPlayerDeath] " .. tostring( ply:YRPName() ) .. " is dead." )
 	ply:StopBleeding()
 
+	ply:SetNWInt("yrp_stars", 0)
+
 	ply:SetNWBool( "can_respawn", true )
+end)
+
+function AddStar(ply)
+	StartCombat(ply)
+	local stars = ply:GetNWInt("yrp_stars", 0) + 1
+	local rand = math.random(0,100)
+	local chance = 100 / stars
+	if rand <= chance then
+		ply:SetNWInt("yrp_stars", ply:GetNWInt("yrp_stars", 0) + 1)
+		if ply:GetNWInt("yrp_stars", 0) > 5 then
+			ply:SetNWInt("yrp_stars", 5)
+		end
+	end
+end
+
+hook.Add( "PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, attacker)
+	if attacker:IsPlayer() then
+		AddStar(attacker)
+	end
+end)
+
+hook.Add( "OnNPCKilled", "yrp_stars_onnpckilled", function(npc, attacker, inflictor)
+	AddStar(attacker)
 end)
 
 function IsNoDefaultWeapon( cname )
@@ -320,19 +345,23 @@ function SlowThink(ent)
 	end
 end
 
-hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function( ply, hitgroup, dmginfo )
-	if dmginfo:GetAttacker() != ply then
-		ply:SetNWBool( "inCombat", true )
-		if timer.Exists( ply:SteamID() .. " outOfCombat" ) then
+function StartCombat(ply)
+	ply:SetNWBool( "inCombat", true )
+	if timer.Exists( ply:SteamID() .. " outOfCombat" ) then
+		timer.Remove( ply:SteamID() .. " outOfCombat" )
+	end
+	timer.Create( ply:SteamID() .. " outOfCombat", 25, 1, function()
+		if ea( ply ) then
+			ply:SetNWBool( "inCombat", false )
+			lowering_weapon( ply )
 			timer.Remove( ply:SteamID() .. " outOfCombat" )
 		end
-		timer.Create( ply:SteamID() .. " outOfCombat", 6, 1, function()
-			if ea( ply ) then
-				ply:SetNWBool( "inCombat", false )
-				lowering_weapon( ply )
-				timer.Remove( ply:SteamID() .. " outOfCombat" )
-			end
-		end)
+	end)
+end
+
+hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function( ply, hitgroup, dmginfo )
+	if dmginfo:GetAttacker() != ply then
+		StartCombat(ply)
 	end
 
 	SlowThink(ply)
