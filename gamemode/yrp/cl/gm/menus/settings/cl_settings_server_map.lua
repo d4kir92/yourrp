@@ -11,8 +11,6 @@ net.Receive( "getMapList", function( len )
 	local ply = LocalPlayer()
 	if pa(settingsWindow) then
 		local _tmpTable = net.ReadTable()
-		_groups = net.ReadTable()
-		_roles = net.ReadTable()
 		_dealers = net.ReadTable()
 
 		function settingsWindow.window.site:Paint( pw, ph )
@@ -262,11 +260,13 @@ net.Receive( "getMapList", function( len )
 		end
 
 		for k, v in pairs( _tmpTable ) do
+			local found = false
 			if tostring( v.type ) == "dealer" then
 				for i, dealer in pairs( _dealers ) do
 					if tonumber( dealer.uniqueID ) == tonumber( v.linkID ) then
 						if pa( _mapListView ) then
 							_mapListView:AddLine(v.uniqueID, v.position, v.angle, v.type, dealer.name)
+							found = true
 						end
 						break
 					end
@@ -275,22 +275,27 @@ net.Receive( "getMapList", function( len )
 				for l, w in pairs( _groups ) do
 					if tostring( v.linkID ) == tostring( w.uniqueID ) then
 						if pa( _mapListView ) then
-							_mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.groupID )
+							_mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.string_name )
+							found = true
 						end
 						break
 					end
 				end
 			elseif tostring( v.type ) == "RoleSpawnpoint" then
-				for l, w in pairs( _roles ) do
+				for l, w in pairs(_roles) do
 					if tostring( v.linkID ) == tostring( w.uniqueID ) then
 						if pa( _mapListView ) then
 							_mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, w.roleID )
+							found = true
 						end
 						break
 					end
 				end
-			else
-				if pa( _mapListView ) then
+			end
+			if !found and pa( _mapListView ) then
+				if v.type != "Storagepoint" then
+					_mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, "[NOT FOUND] " .. v.name )
+				else
 					_mapListView:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name )
 				end
 			end
@@ -359,6 +364,15 @@ function getCopyMapPNG()
 	return _mapPNG
 end
 
+local gar = {}
+
+function GetMapList()
+	if gar.g and gar.r then
+		net.Start( "getMapList" )
+		net.SendToServer()
+	end
+end
+
 hook.Add( "open_server_map", "open_server_map", function()
 	SaveLastSite()
 
@@ -367,6 +381,22 @@ hook.Add( "open_server_map", "open_server_map", function()
 
 	settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
 
-	net.Start( "getMapList" )
+	gar.g = false
+	gar.r = false
+
+	net.Receive( "getMapListGroups", function( len )
+		_groups = net.ReadTable()
+		gar.g = true
+		GetMapList()
+	end)
+	net.Start("getMapListGroups")
+	net.SendToServer()
+
+	net.Receive( "getMapListRoles", function( len )
+		_roles = net.ReadTable()
+		gar.r = true
+		GetMapList()
+	end)
+	net.Start("getMapListRoles")
 	net.SendToServer()
 end)

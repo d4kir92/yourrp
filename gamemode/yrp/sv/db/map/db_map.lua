@@ -113,11 +113,10 @@ end)
 net.Receive( "getMapList", function( len, ply )
 	if ply:CanAccess( "map" ) then
 		local _tmpMapTable = SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", nil )
-		if _tmpMapTable == nil or _tmpMapTable == false then
+		if !wk(_tmpMapTable) then
 			_tmpMapTable = {}
 		end
-		local _tmpGroupTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
-		local _tmpRoleTable = SQL_SELECT( "yrp_roles", "*", nil )
+
 		local _tmpDealerTable = SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
 		if !wk(_tmpDealerTable) then
 			_tmpDealerTable = {}
@@ -125,11 +124,25 @@ net.Receive( "getMapList", function( len, ply )
 
 		net.Start( "getMapList" )
 			net.WriteTable( _tmpMapTable )
-			net.WriteTable( _tmpGroupTable )
-			net.WriteTable( _tmpRoleTable )
 			net.WriteTable( _tmpDealerTable )
 		net.Send( ply )
 	end
+end)
+
+util.AddNetworkString("getMapListGroups")
+net.Receive( "getMapListGroups", function( len, ply )
+	local _tmpGroupTable = SQL_SELECT( "yrp_ply_groups", "*", nil )
+	net.Start( "getMapListGroups" )
+		net.WriteTable( _tmpGroupTable )
+	net.Send( ply )
+end)
+
+util.AddNetworkString("getMapListRoles")
+net.Receive( "getMapListRoles", function( len, ply )
+	local _tmpRolesTable = SQL_SELECT( "yrp_roles", "*", nil )
+	net.Start( "getMapListRoles" )
+		net.WriteTable( _tmpRolesTable )
+	net.Send( ply )
 end)
 
 net.Receive( "dbInsertIntoMap", function( len, ply )
