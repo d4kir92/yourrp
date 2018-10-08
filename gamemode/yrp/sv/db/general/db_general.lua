@@ -67,6 +67,8 @@ SQL_ADD_COLUMN( DATABASE_NAME, "bool_weapon_lowering_system", "INT DEFAULT 1" )
 
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1" )
 
+SQL_ADD_COLUMN( DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0" )
+
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_3d", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1" )
 SQL_ADD_COLUMN( DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1" )
@@ -594,6 +596,13 @@ util.AddNetworkString( "update_bool_players_can_switch_role" )
 net.Receive( "update_bool_players_can_switch_role", function( len, ply )
 	local b = btn( net.ReadBool() )
 	GeneralUpdateBool( ply, "update_bool_players_can_switch_role", "bool_players_can_switch_role", b )
+end)
+
+
+util.AddNetworkString( "update_bool_wanted_system" )
+net.Receive( "update_bool_wanted_system", function( len, ply )
+	local b = btn( net.ReadBool() )
+	GeneralUpdateBool( ply, "update_bool_wanted_system", "bool_wanted_system", b )
 end)
 
 

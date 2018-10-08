@@ -191,6 +191,7 @@ timer.Create( "ServerThink", 1, 0, function()
 			if !ply:GetNWBool( "inCombat" ) then
 				reg_hp( ply )	 --HealthReg
 				reg_ar( ply )	 --ArmorReg
+				ply:SetNWInt("yrp_stars", 0)
 			end
 
 			if ply:IsBleeding() then
@@ -299,3 +300,16 @@ timer.Create( "ServerThink", 1, 0, function()
 	end
 	_time = _time + 1
 end)
+
+function RestartServer()
+	if not system.IsWindows() then
+		local ShutDown = GAMEMODE.ShutDown
+		function GAMEMODE:ShutDown()
+			ShutDown(self)
+			game.ConsoleCommand( "escape\n" )
+		end
+		game.ConsoleCommand( "disconnect\n" )
+	else
+		game.ConsoleCommand( "_restart\n" )
+	end
+end

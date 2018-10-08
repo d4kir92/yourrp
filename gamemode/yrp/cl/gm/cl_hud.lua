@@ -137,6 +137,7 @@ end
 
 local _yrp_icon = Material( "vgui/yrp/logo100_beta.png" )
 local _yrp_testing = Material( "yrp/warn_testing.png" )
+local star = Material("vgui/material/icon_star.png")
 
 function DrawEquipment( ply, name )
 	local _tmp = ply:GetNWEntity( name, NULL )
@@ -220,6 +221,36 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.SetMaterial( _yrp_icon	)
 		surface.DrawTexturedRect( _sp.x + _sp.w / 2 - ctrb( 246 ) / 2, _sp.y - ctrb( 80 + 10 ), ctrb( 246 ), ctrb( 80 ) )
+	end
+
+	if ply:GetNWBool("bool_wanted_system", false) then
+		local stars = {}
+		stars.size = ctr(80)
+		stars.cur = stars.size
+		stars.x = -ctr(32) + ScrW() - 6 * stars.size
+		stars.y = ctr(32)
+
+		-- Slot
+		surface.SetDrawColor(0, 0, 0, 255)
+		surface.SetMaterial(star)
+		for x = 1, 5 do
+			surface.DrawTexturedRect(stars.x + x * stars.size, stars.y, stars.cur, stars.cur)
+		end
+
+		stars.cur = ctr(60)
+		stars.br = (stars.size - stars.cur) / 2
+		surface.SetDrawColor(100, 100, 100, 255)
+		for x = 1, 5 do
+			surface.DrawTexturedRect(stars.x + x * stars.size + stars.br, stars.y + stars.br, stars.cur, stars.cur)
+		end
+
+		-- Current Stars
+		surface.SetDrawColor(255, 255, 255, 255)
+		for x = 1, 5 do
+			if ply:GetNWInt("yrp_stars", 0) >= x then
+				surface.DrawTexturedRect(stars.x + x * stars.size + stars.br, stars.y + stars.br, stars.cur, stars.cur)
+			end
+		end
 	end
 
 	if !ply:GetNWBool("serverdedicated", false) then

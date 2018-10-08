@@ -149,6 +149,16 @@ net.Receive("Connect_Settings_Database", function(len)
 			net.SendToServer()
 		end
 
+		DHR(dhr)
+
+		local restartServer = createD("DButton", yourrpdatabase.parent, ctr(400), ctr(50), ctr(3000), ctr(900))
+		restartServer:SetText("RESTART SERVER")
+		function restartServer:DoClick()
+			net.Start("yrp_restartserver")
+			net.SendToServer()
+		end
+		Scroller.YourRPDatabase:AddItem(restartServer)
+
 		local yourrptables = {}
 		yourrptables.parent = Scroller
 		yourrptables.x = 0

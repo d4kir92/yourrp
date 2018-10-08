@@ -20,6 +20,8 @@ function OpenSBS()
 	if sbs.frame == nil then
 		SetIsScoreboardOpen(true)
 		sbs.frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+		sbs.frame:SetDraggable(false)
+		sbs.frame:ShowCloseButton(false)
 		sbs.frame:MakePopup()
 
 		local _mapPNG = getMapPNG()

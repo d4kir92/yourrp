@@ -16,7 +16,7 @@ GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.167" --do NOT change this!
+GM.Version = "0.9.168" --do NOT change this!
 GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
 
@@ -165,7 +165,7 @@ concommand.Add( "yrp__help", function( ply, cmd, args )
 	printGM( "note", "yrp_togglesettings" )
 	printGM( "note", "	Toggle settings menu" )
 	hr_pos()
-end )
+end)
 
 hook.Add("StartCommand", "NoJumpGuns", function( ply, cmd )
 	if ply:GetNWBool( "bool_anti_bhop", false ) and !ply:GetNWBool( "canjump", false ) and ply:GetMoveType() != MOVETYPE_NOCLIP then
