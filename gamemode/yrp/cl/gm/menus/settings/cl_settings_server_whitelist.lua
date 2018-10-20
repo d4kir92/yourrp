@@ -4,7 +4,7 @@ net.Receive( "getRoleWhitelist", function( len )
 	if pa( settingsWindow.window ) then
 		function settingsWindow.window.site:Paint( pw, ph )
 			--draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
-			surfaceText( lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+			surfaceText( YRP.lang_string( "whitelist" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 		end
 
 		local _tmpWhiteList = net.ReadTable()
@@ -14,9 +14,9 @@ net.Receive( "getRoleWhitelist", function( len )
 		local _whitelistListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 + 10 + 500 ), ScrH() - ctr( 180 ), ctr( 10 ), ctr( 10 + 50 ) )
 		_whitelistListView:AddColumn( "uniqueID" )
 		_whitelistListView:AddColumn( "SteamID" )
-		_whitelistListView:AddColumn( lang_string( "nick" ) )
-		_whitelistListView:AddColumn( lang_string( "group" ) )
-		_whitelistListView:AddColumn( lang_string( "role" ) )
+		_whitelistListView:AddColumn( YRP.lang_string( "nick" ) )
+		_whitelistListView:AddColumn( YRP.lang_string( "group" ) )
+		_whitelistListView:AddColumn( YRP.lang_string( "role" ) )
 
 		for k, v in pairs( _tmpWhiteList ) do
 			for l, w in pairs( _tmpRoleList ) do
@@ -34,7 +34,7 @@ net.Receive( "getRoleWhitelist", function( len )
 							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, x.string_name, "" )
 							break
 						elseif v.groupID == "-1" then
-							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, lang_string( "all" ), lang_string( "all" ) )
+							_whitelistListView:AddLine( v.uniqueID, v.SteamID, v.nick, YRP.lang_string( "all" ), YRP.lang_string( "all" ) )
 							break
 						end
 					end
@@ -44,7 +44,7 @@ net.Receive( "getRoleWhitelist", function( len )
 		end
 
 		local _buttonAdd = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 60 ) )
-		_buttonAdd:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "role" ) .. ")" )
+		_buttonAdd:SetText( YRP.lang_string( "addentry" ) .. " (" .. YRP.lang_string( "role" ) .. ")" )
 		function _buttonAdd:DoClick()
 			local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
 			_whitelistFrame:Center()
@@ -76,7 +76,7 @@ net.Receive( "getRoleWhitelist", function( len )
 			end
 
 			local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 400 )
-			_whitelistButton:SetText( lang_string( "whitelistplayer" ) )
+			_whitelistButton:SetText( YRP.lang_string( "whitelistplayer" ) )
 			function _whitelistButton:DoClick()
 				if _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) != nil then
 					net.Start( "whitelistPlayer" )
@@ -97,16 +97,16 @@ net.Receive( "getRoleWhitelist", function( len )
 			function _whitelistFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined( lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "role" ) .. ":", "sef", ctr( 10 ), ctr( 185+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "role" ) .. ":", "sef", ctr( 10 ), ctr( 185+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			_whitelistFrame:MakePopup()
 		end
 
 		local _buttonAddGroup = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 120 ) )
-		_buttonAddGroup:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "group" ) .. ")" )
+		_buttonAddGroup:SetText( YRP.lang_string( "addentry" ) .. " (" .. YRP.lang_string( "group" ) .. ")" )
 		function _buttonAddGroup:DoClick()
 			local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
 			_whitelistFrame:Center()
@@ -125,7 +125,7 @@ net.Receive( "getRoleWhitelist", function( len )
 			end
 
 			local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 400 )
-			_whitelistButton:SetText( lang_string( "whitelistplayer" ) )
+			_whitelistButton:SetText( YRP.lang_string( "whitelistplayer" ) )
 			function _whitelistButton:DoClick()
 				if _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) != nil then
 					net.Start( "whitelistPlayerGroup" )
@@ -140,15 +140,15 @@ net.Receive( "getRoleWhitelist", function( len )
 			function _whitelistFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined( lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 85+65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			_whitelistFrame:MakePopup()
 		end
 
 		local _buttonAddAll = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 180 ) )
-		_buttonAddAll:SetText( lang_string( "addentry" ) .. " (" .. lang_string( "all" ) .. " [" .. lang_string( "roles" ) .. "|".. lang_string( "groups" ) .. "] " .. ")" )
+		_buttonAddAll:SetText( YRP.lang_string( "addentry" ) .. " (" .. YRP.lang_string( "all" ) .. " [" .. YRP.lang_string( "roles" ) .. "|".. YRP.lang_string( "groups" ) .. "] " .. ")" )
 		function _buttonAddAll:DoClick()
 			local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0 )
 			_whitelistFrame:Center()
@@ -162,7 +162,7 @@ net.Receive( "getRoleWhitelist", function( len )
 			end
 
 			local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 400 )
-			_whitelistButton:SetText( lang_string( "whitelistplayer" ) )
+			_whitelistButton:SetText( YRP.lang_string( "whitelistplayer" ) )
 			function _whitelistButton:DoClick()
 				if _whitelistComboBoxPlys:GetOptionData( _whitelistComboBoxPlys:GetSelectedID() ) != nil then
 					net.Start( "whitelistPlayerAll" )
@@ -176,14 +176,14 @@ net.Receive( "getRoleWhitelist", function( len )
 			function _whitelistFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined( lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "player" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			_whitelistFrame:MakePopup()
 		end
 
 		local _buttonRem = createD( "DButton", settingsWindow.window.site, ctr( 500 ), ctr( 50 ), BScrW() - ctr( 10 + 500 ), ctr( 240 ) )
-		_buttonRem:SetText( lang_string( "removeentry" ) )
+		_buttonRem:SetText( YRP.lang_string( "removeentry" ) )
 		function _buttonRem:DoClick()
 			if _whitelistListView:GetSelectedLine() != "" and _whitelistListView:GetSelectedLine() != nil then
 				if _whitelistListView:GetLine( _whitelistListView:GetSelectedLine() ):GetValue( 1 ) != nil then

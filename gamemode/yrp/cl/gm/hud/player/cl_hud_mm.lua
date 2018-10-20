@@ -185,7 +185,7 @@ function hudMM( ply, color )
 		local rot = ply:EyeAngles().y - 90
 
 		surface.SetDrawColor( 100, 100, 255, 255 )
-		surface.SetMaterial( GetDesignIcon( "navigation" ) )
+		surface.SetMaterial( YRP.GetDesignIcon( "navigation" ) )
 		surface.DrawTexturedRectRotated( x, y, w, h, rot )
 
 		--Coords

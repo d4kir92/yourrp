@@ -11,7 +11,7 @@ function DrawText( tab )
 	tab.ay = tab.ay or 1
 	tab.text = tab.text or "NoText"
 	if tab.lforce or tab.lforce == nil then
-		tab.text = lang_string( tab.text )
+		tab.text = YRP.lang_string( tab.text )
 	end
 	tab.font = tab.font or "DermaDefault"
 	draw.SimpleTextOutlined( tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, tab.br, tab.brcolor )
@@ -62,7 +62,7 @@ function DGroup( tab )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		ph = ctr(50)
 		local text = {}
-		text.text = lang_string( tab.name )
+		text.text = YRP.lang_string( tab.name )
 		text.x = pw / 2
 		text.y = ph / 2
 		text.font = "mat1header"
@@ -104,7 +104,7 @@ function DName( tab )
 	function dname:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
-		text.text = lang_string( tab.name )
+		text.text = YRP.lang_string( tab.name )
 		text.x = ctr(10)
 		text.y = ph / 2
 		text.font = "mat1text"
@@ -139,7 +139,7 @@ function DIntComboBoxBox( tab, choices, name, netstr, selected )
 	function dintcomboboxbox.line:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
-		text.text = lang_string( name ) .. ":"
+		text.text = YRP.lang_string( name ) .. ":"
 		text.x = ctr( 10 )
 		text.y = ph / 4
 		text.font = "mat1text"
@@ -195,7 +195,7 @@ function DBoolLine( tab, value, str, netstr )
 	function dboolline.line:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
-		text.text = lang_string( str )
+		text.text = YRP.lang_string( str )
 		text.x = tab.brx + tab.h + ctr( 10 )
 		text.y = ph / 2
 		text.font = "mat1header"
@@ -255,7 +255,7 @@ function DFloatLine( tab, value, name, netstr, max, min, dmg )
 	function dfloatline.line:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
-		text.text = lang_string( name )
+		text.text = YRP.lang_string( name )
 		text.x = tab.brx + ctr( 200 ) + ctr( 10 )
 		text.y = ph / 2
 		text.font = "mat1header"
@@ -266,7 +266,7 @@ function DFloatLine( tab, value, name, netstr, max, min, dmg )
 
 		if dmg != nil and dfloatline.dnumberwang != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. lang_string( "damage" )
+			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string( "damage" )
 			DMG.x = pw - ctr( 10 )
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
@@ -333,7 +333,7 @@ function OLDDIntBox( tab, value, name, netstr, max, min )
 	function dintline.line:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
-		text.text = lang_string( name ) .. ":"
+		text.text = YRP.lang_string( name ) .. ":"
 		text.x = ctr( 10 )
 		text.y = ph / 4
 		text.font = "mat1text"
@@ -401,7 +401,7 @@ function DStringBox( tab, str, name, netstr )
 	function dstringline.line:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
-		text.text = lang_string( name ) .. ":"
+		text.text = YRP.lang_string( name ) .. ":"
 		text.x = ctr( 10 )
 		text.y = ph / 4
 		text.font = "mat1text"
@@ -412,7 +412,7 @@ function DStringBox( tab, str, name, netstr )
 
 		if dmg != nil and dstringline.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. lang_string( "damage" )
+			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string( "damage" )
 			DMG.x = pw - ctr( 10 )
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
@@ -488,7 +488,7 @@ function DHeader( tab, header )
 	function hea:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local head = {}
-		head.text = lang_string( header )
+		head.text = YRP.lang_string( header )
 		head.x = ctr( 10 )
 		head.y = ph / 2
 		head.font = "mat1header"

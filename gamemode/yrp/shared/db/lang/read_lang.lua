@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
 
-function RemoveUnallowedSymbols( input )
+function YRP.RemoveUnallowedSymbols( input )
 	local output = input
 	output = string.Replace( output, "\"", "" )
 	output = string.Replace( output, "\'", "" )
@@ -9,7 +9,7 @@ function RemoveUnallowedSymbols( input )
 	return output
 end
 
-function read_lang( filepath )
+function YRP.read_lang( filepath )
 	if file.Exists( filepath, "GAME" ) then
 		local _langFile = file.Read( filepath, "GAME" )
 		if (!_langFile) then return end
@@ -21,9 +21,9 @@ function read_lang( filepath )
 				if #_splitLine > 1 then
 					local str_id = _splitLine[1]
 					local str_trans = _splitLine[2]
-					str_id = RemoveUnallowedSymbols( str_id )
-					str_trans = RemoveUnallowedSymbols( str_trans )
-					set_lang_string( str_id, str_trans)
+					str_id = YRP.RemoveUnallowedSymbols( str_id )
+					str_trans = YRP.RemoveUnallowedSymbols( str_trans )
+					YRP.set_lang_string( str_id, str_trans)
 				end
 			end
 		end

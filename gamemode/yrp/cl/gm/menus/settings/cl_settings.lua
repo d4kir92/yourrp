@@ -55,17 +55,17 @@ function F8RequireUG(site, usergroups)
 
 	function settingsWindow.window.site:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
-		surfaceText(lang_string("settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "roleInfoHeader", w / 2, h / 2, Color(255, 0, 0), 1, 1)
+		surfaceText(YRP.lang_string("settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "roleInfoHeader", w / 2, h / 2, Color(255, 0, 0), 1, 1)
 
-		if site ~= lang_string("usergroups") then
-			surfaceText(lang_string("settings_gotof8usergroups"), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
+		if site ~= YRP.lang_string("usergroups") then
+			surfaceText(YRP.lang_string("settings_gotof8usergroups"), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
 		else
-			surfaceText(replace_string(lang_string("settings_giveyourselftheusergroup"), tab), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.replace_string(YRP.lang_string("settings_giveyourselftheusergroup"), tab), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
 			surfaceText("(In Server Console) Example:", "roleInfoHeader", w / 2, h / 2 + ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
 
-	if site == lang_string("usergroups") then
+	if site == YRP.lang_string("usergroups") then
 		local first_usergroup = string.Explode(",", tab[1])
 		local example = createD("DTextEntry", settingsWindow.window.site, ctr(1000), ctr(50), settingsWindow.window.site:GetWide() / 2 - ctr(1000 / 2), settingsWindow.window.site:GetTall() / 2 + ctr(300))
 		example:SetText("yrp_usergroup \"" .. ply:SteamName() .. "\" " .. first_usergroup[1])
@@ -121,13 +121,13 @@ function OpenSettings()
 	end
 
 	--Sites
-	local _client = lang_string("settings_client") .. " [PROTOTYPES]"
+	local _client = YRP.lang_string("settings_client") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_client)
 	settingsWindow.window:AddSite("open_client_character", "settings_character", _client, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_client_hud", "settings_hud", _client, "icon16/photo.png")
 	settingsWindow.window:AddSite("open_client_keybinds", "settings_keybinds", _client, "icon16/keyboard.png")
 
-	local _server_admin = lang_string("settings_server") .. " [PROTOTYPES]"
+	local _server_admin = YRP.lang_string("settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)
 	settingsWindow.window:AddSite("open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png")
 	settingsWindow.window:AddSite("open_server_give", "settings_players", _server_admin, "icon16/user_edit.png")
@@ -138,8 +138,8 @@ function OpenSettings()
 
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
-	settingsWindow.window:AddSite("open_server_roles", lang_string("roles") .. " [OLD]", _wip, "icon16/group_edit.png")
-	settingsWindow.window:AddSite("open_server_groups_and_roles", lang_string("groups"), _wip, "icon16/group.png") --"settings_groupsandroles", _wip, "icon16/group.png")
+	settingsWindow.window:AddSite("open_server_roles", YRP.lang_string("roles") .. " [OLD]", _wip, "icon16/group_edit.png")
+	settingsWindow.window:AddSite("open_server_groups_and_roles", YRP.lang_string("groups"), _wip, "icon16/group.png") --"settings_groupsandroles", _wip, "icon16/group.png")
 
 	local _settings_server_maintance = "settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)
@@ -186,7 +186,7 @@ function OpenSettings()
 		draw.SimpleTextOutlined(_singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
-	DChangeLanguage(settingsWindow.window, ScrW() - ctr(310), ctr(10), ctr(120))
+	YRP.DChangeLanguage(settingsWindow.window, ScrW() - ctr(310), ctr(10), ctr(120))
 	local feedback = createD("DButton", settingsWindow.window, ctr(500), ctr(80), ScrW() - ctr(820), ctr(10))
 	feedback:SetText("")
 
@@ -199,7 +199,7 @@ function OpenSettings()
 
 		color.a = 200
 		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		draw.SimpleTextOutlined(lang_string("givefeedback"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("givefeedback"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function feedback:DoClick()
@@ -225,7 +225,7 @@ function OpenSettings()
 
 		color.a = 200
 		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		draw.SimpleTextOutlined(lang_string("livesupport"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("livesupport"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	local settingsButton = createD("DButton", mainBar, ctr(80), ctr(80), ScrW() - ctr(180), ctr(10))
@@ -252,7 +252,7 @@ function OpenSettings()
 
 			function settingsWindow.window.site:Paint(pw, ph)
 				--
-				draw.SimpleTextOutlined(lang_string("color"), "mat1text", ctr(10), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("color"), "mat1text", ctr(10), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 			end
 
 			createMDSwitch(settingsWindow.window.site, ctr(400), ctr(80), ctr(10), ctr(10), "dark", "light", "cl_mode")
@@ -330,7 +330,7 @@ function OpenSettings()
 		surface.SetDrawColor(YRPGetColor("6"))
 		surface.SetMaterial(_yrp_settings.materials[_yrp_settings.design.mode].burger)
 		surface.DrawTexturedRect(ctr(15), ctr(15), ctr(50), ctr(50))
-		draw.SimpleTextOutlined(string.upper(lang_string("menu")), "mat1text", ctr(90), ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(string.upper(YRP.lang_string("menu")), "mat1text", ctr(90), ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	function burgerMenu:DoClick()
@@ -345,5 +345,5 @@ end
 net.Receive("setting_hasnoaccess", function(len)
 	local site = net.ReadString()
 	local usergroups = net.ReadString()
-	F8RequireUG(lang_string(site), usergroups)
+	F8RequireUG(YRP.lang_string(site), usergroups)
 end)

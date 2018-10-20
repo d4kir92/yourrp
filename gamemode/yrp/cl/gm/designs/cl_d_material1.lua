@@ -114,7 +114,7 @@ function _mat1.DrawWindow( window, pw, ph, title )
 	end
 
 	--[[ Title ]]--
-	surfaceText( lang_string( _title ), "mat1header", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255 ), 0, 1, 1 )
+	surfaceText( YRP.lang_string( _title ), "mat1header", ctr( 10 ), ctr( 25 ), Color( 255, 255, 255 ), 0, 1, 1 )
 end
 
 RegisterWindowFunction( _mat1.name, _mat1.DrawWindow )
@@ -147,7 +147,7 @@ function _mat1.DrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 
 	--[[ text ]]--
 	if forcelang then
-		_text = lang_string(_text)
+		_text = YRP.lang_string(_text)
 	end
 	surfaceText( _text, _mat1.textFont, px or pw / 2, py or ph / 2, Color( 255, 255, 255 ), ax or 1, ay or 1, 1 )
 end
@@ -176,6 +176,6 @@ function _mat1.DrawPanel( pnl, pw, ph, text, color, px, py, ax, ah )
 	end
 
 	--[[ text ]]--
-	surfaceText( lang_string( _text ), _mat1.textFont, px or pw/2, py or ph/2, color or Color( 255, 255, 255, 255 ), ax or 1, ay or 1, 1 )
+	surfaceText( YRP.lang_string( _text ), _mat1.textFont, px or pw/2, py or ph/2, color or Color( 255, 255, 255, 255 ), ax or 1, ay or 1, 1 )
 end
 RegisterPanelFunction( _mat1.name, _mat1.DrawPanel )

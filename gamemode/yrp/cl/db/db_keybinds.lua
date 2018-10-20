@@ -29,7 +29,7 @@ function GetKeybindName( kbname )
 		_kb = input.GetKeyName( _kb )
 	end
 	if string.StartWith( kbname, "in_" ) then
-		_kb = lang_string( kbname )
+		_kb = YRP.lang_string( kbname )
 	end
 	return tostring( _kb )
 end

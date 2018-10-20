@@ -80,7 +80,7 @@ function createRoleBox( rol, parent )
 		--[[ Role Button ]]--
 		_rol.gr = createD( "DButton", _rol, _rol:GetWide(), ctrb( 60 ), 0, _rol:GetTall()-ctrb( 60 ) )
 		function _rol.gr:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "moreinfo" ) )
+			surfaceButton( self, pw, ph, YRP.lang_string( "moreinfo" ) )
 		end
 		_rol.gr:SetText( "" )
 		function _rol.gr:DoClick()
@@ -208,7 +208,7 @@ function addGroup( grp, parent )
 			end
 			local name = self.tbl.string_name
 			if tonumber(self.tbl.int_parentgroup) == 0 then
-				name = lang_string("faction") .. ": " .. name
+				name = YRP.lang_string("faction") .. ": " .. name
 			end
 			surfaceText( name, "roleInfoHeader", _x, ph / 2, Color( 255, 255, 255 ), 0, 1 )
 
@@ -222,7 +222,7 @@ function addGroup( grp, parent )
 			draw.RoundedBox( 0, pw - _box - _br, _br, _box, _box, Color( self.color.r - _dif, self.color.g - _dif, self.color.b - _dif ) )
 			surfaceText( _tog, "roleInfoHeader", pw - _box/2 - _br, _br + _box/2, Color( 255, 255, 255 ), 1, 1 )
 			if tobool(grp.bool_locked) then
-				DrawIcon(GetDesignIcon("lock"), ph - ctr(8), ph - ctr(8), pw - 2 * ph, ctr(4), Color(255, 0, 0, 200))
+				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - ctr(8), ph - ctr(8), pw - 2 * ph, ctr(4), Color(255, 0, 0, 200))
 			end
 		end
 		function _grp:PaintContent( pw, ph )
@@ -280,38 +280,38 @@ function openRoleMenu()
 		_rm:SetDraggable( false )
 		_rm:SetTitle( "" )
 		function _rm:Paint( pw, ph )
-			surfaceWindow( self, pw, ph, lang_string( "rolemenu" ) .. " [PROTOTYPE]" )
+			surfaceWindow( self, pw, ph, YRP.lang_string( "rolemenu" ) .. " [PROTOTYPE]" )
 		end
 
 		_rm.info = createD( "DPanel", _rm, ctrb( 800 ), ScrH() - ctrb( 60 ), BScrW() - ctrb( 10 ) - ctrb( 800 ), ctrb( 50 ) )
-		_rm.info.rolename = lang_string( "none" )
-		_rm.info.rolesala = lang_string( "none" )
+		_rm.info.rolename = YRP.lang_string( "none" )
+		_rm.info.rolesala = YRP.lang_string( "none" )
 		function _rm.info:Paint( pw, ph )
-			if _rm.info.rolename == lang_string( "none" ) then return end
+			if _rm.info.rolename == YRP.lang_string( "none" ) then return end
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 180 ) )
 
 			--[[ Role Appearance ]]--
 			draw.RoundedBox( 0, 0, 0, pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-			surfaceText( lang_string( "appearance" ), "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
+			surfaceText( YRP.lang_string( "appearance" ), "roleInfoHeader", ctrb( 25 ), ctrb( 25 ), Color( 255, 255, 255 ), 0, 1 )
 			--draw.RoundedBox( 0, 0, ctrb( 50 ), pw, pw, Color( 0, 0, 0, 200 ) )
 
 			--[[ Role Name ]]--
 			draw.RoundedBox( 0, 0, ctrb( 900 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-			surfaceText( lang_string( "role" ), "roleInfoHeader", ctrb( 25 ), ctrb( 900 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+			surfaceText( YRP.lang_string( "role" ), "roleInfoHeader", ctrb( 25 ), ctrb( 900 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 			draw.RoundedBox( 0, 0, ctrb( 900+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
 			surfaceText( self.rolename, "roleInfoText", ctrb( 25 ), ctrb( 900 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 
 			--[[ Role Description ]]--
 			draw.RoundedBox( 0, 0, ctrb( 1050 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-			surfaceText( lang_string( "description" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1050 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+			surfaceText( YRP.lang_string( "description" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1050 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 
 			--[[ Role Equipment ]]--
 			draw.RoundedBox( 0, 0, ctrb( 1450 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-			surfaceText( lang_string( "sweps" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1450 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+			surfaceText( YRP.lang_string( "sweps" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1450 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 
 			--[[ Role Salary ]]--
 			draw.RoundedBox( 0, 0, ctrb( 1850 ), pw, ctrb( 50 ), Color( 0, 255, 0, 255 ) )
-			surfaceText( lang_string( "salary" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1850 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+			surfaceText( YRP.lang_string( "salary" ), "roleInfoHeader", ctrb( 25 ), ctrb( 1850 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 			draw.RoundedBox( 0, 0, ctrb( 1850+50 ), pw, ctrb( 50 ), Color( 0, 0, 0, 200 ) )
 			surfaceText( self.rolesala, "roleInfoText", ctrb( 25 ), ctrb( 1850 + 50 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 		end
@@ -319,13 +319,13 @@ function openRoleMenu()
 
 		_rm.infodesc = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1050+50 ) )
 		function _rm.infodesc:Paint( pw, ph )
-			if _rm.info.rolename == lang_string( "none" ) then return end
+			if _rm.info.rolename == YRP.lang_string( "none" ) then return end
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
 		end
 
 		_rm.infosweps = createD( "RichText", _rm.info, ctrb( 800 ), ctrb( 300 ), 0, ctrb( 1450+50 ) )
 		function _rm.infosweps:Paint( pw, ph )
-			if _rm.info.rolename == lang_string( "none" ) then return end
+			if _rm.info.rolename == YRP.lang_string( "none" ) then return end
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 200 ) )
 		end
 
@@ -333,8 +333,8 @@ function openRoleMenu()
 		_rm.infobutton:SetText( "" )
 		_rm.infobutton.rolename = ""
 		function _rm.infobutton:Paint( pw, ph )
-			if _rm.info.rolename == lang_string( "none" ) then return end
-			surfaceButton( self, pw, ph, lang_string( "getrole" ) )
+			if _rm.info.rolename == YRP.lang_string( "none" ) then return end
+			surfaceButton( self, pw, ph, YRP.lang_string( "getrole" ) )
 		end
 		function _rm.infobutton:DoClick()
 			if self.uniqueID != nil then
@@ -364,7 +364,7 @@ function openRoleMenu()
 		_info:SetTitle( "" )
 		function _info:Paint( pw, ph )
 			surfaceWindow( self, pw, ph, "rolemenu" )
-			surfaceText( lang_string( "disabled" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+			surfaceText( YRP.lang_string( "disabled" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 		end
 		_info:MakePopup()
 		_info:Center()

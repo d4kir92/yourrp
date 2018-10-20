@@ -300,7 +300,7 @@ function DarkRP.getPhrase( key, parameters )
 	elseif key == "wallet" then
 		key = "money"
 	end
-	local _translation = lang_string( key )
+	local _translation = YRP.lang_string( key )
 	return _translation
 end
 

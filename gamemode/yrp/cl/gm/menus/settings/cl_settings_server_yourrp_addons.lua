@@ -53,7 +53,7 @@ function AddYRPAddon(parent, tab)
 		_add_on.settings:SetText("")
 		function _add_on.settings:Paint(pw, ph)
 			surface.SetDrawColor(0, 0, 0, 255)
-			surface.SetMaterial(GetDesignIcon("settings"))
+			surface.SetMaterial(YRP.GetDesignIcon("settings"))
 			surface.DrawTexturedRect(0, 0, pw, ph)
 
 			local box = {}
@@ -72,20 +72,20 @@ function AddYRPAddon(parent, tab)
 	if tab.name != "" then
 		_add_on.name = createD("DTextEntry", _add_on, _add_on:GetWide() - ctr(160), ctr(100), ctr(140), ctr(20))
 		_add_on.name:SetEditable(false)
-		_add_on.name:SetText(lang_string("name") .. ": " .. tab.name)
+		_add_on.name:SetText(YRP.lang_string("name") .. ": " .. tab.name)
 	end
 
 	if tab.author != "" then
 		_add_on.author = createD("DTextEntry", _add_on, _add_on:GetWide() - ctr(160), ctr(100), ctr(140), ctr(140))
 		_add_on.author:SetEditable(false)
-		_add_on.author:SetText(lang_string("s_author") .. ": " .. tab.author)
+		_add_on.author:SetText(YRP.lang_string("s_author") .. ": " .. tab.author)
 	end
 
 	if tab.description != "" then
 		_add_on.description = createD("DTextEntry", _add_on, _add_on:GetWide() - ctr(160), ctr(220), ctr(140), ctr(260))
 		_add_on.description:SetEditable(false)
 		_add_on.description:SetMultiline(true)
-		_add_on.description:SetText(lang_string("description") .. ":\n" .. tab.description)
+		_add_on.description:SetText(YRP.lang_string("description") .. ":\n" .. tab.description)
 	end
 
 	parent:AddItem(_add_on)

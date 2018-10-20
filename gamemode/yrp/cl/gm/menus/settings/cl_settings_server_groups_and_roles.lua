@@ -78,12 +78,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if self.group != "" then
 					local inp = {}
 					inp.group = self.group
-					tab2.text = lang_string("groupsof", inp)
+					tab2.text = YRP.lang_string("groupsof", inp)
 				else
-					tab2.text = lang_string("factions")
+					tab2.text = YRP.lang_string("factions")
 				end
 			else
-				tab2.text = lang_string("loading")
+				tab2.text = YRP.lang_string("loading")
 			end
 			DrawText(tab2)
 		end
@@ -321,10 +321,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					if self.group != "" then
 						local inp = {}
 						inp.group = self.group
-						tab2.text = "[" .. lang_string("wip") .. "] " .. lang_string("rolesof", inp)
+						tab2.text = "[" .. YRP.lang_string("wip") .. "] " .. YRP.lang_string("rolesof", inp)
 					end
 				else
-					tab2.text = lang_string("loading")
+					tab2.text = YRP.lang_string("loading")
 				end
 				DrawText(tab2)
 			end
@@ -457,7 +457,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.x = ctr(20)
 				tab2.y = ph / 2
 				tab2.ax = 0
-				tab2.text = lang_string(ea.typ) .. ": " .. tostring(ea.tab.string_name)
+				tab2.text = YRP.lang_string(ea.typ) .. ": " .. tostring(ea.tab.string_name)
 				tab2.font = "mat1text"
 				DrawText(tab2)
 			end
@@ -544,7 +544,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local othergroups = {}
-			othergroups[0] = lang_string("factions")
+			othergroups[0] = YRP.lang_string("factions")
 			for i, tab in pairs(groups) do
 				othergroups[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
 			end
@@ -881,7 +881,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local otherroles = {}
-			otherroles[0] = lang_string("none")
+			otherroles[0] = YRP.lang_string("none")
 			for i, tab in pairs(roles) do
 				tab.uniqueID = tonumber(tab.uniqueID)
 				if tab.uniqueID != role.uniqueID then
@@ -892,7 +892,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local prerole = {}
 			prerole.parent = ea.info
 			prerole.uniqueID = role.uniqueID
-			prerole.header = lang_string("prerole") .. " | " .. lang_string("prerank")
+			prerole.header = YRP.lang_string("prerole") .. " | " .. YRP.lang_string("prerank")
 			prerole.netstr = "update_role_int_prerole"
 			prerole.value = tonumber(role.int_prerole)
 			prerole.uniqueID = role.uniqueID
@@ -903,7 +903,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local maxa = {}
-			maxa[0] = lang_string("disabled")
+			maxa[0] = YRP.lang_string("disabled")
 			for i = 1, game.MaxPlayers() do
 				maxa[i] = i
 			end

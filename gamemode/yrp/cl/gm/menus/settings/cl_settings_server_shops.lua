@@ -35,7 +35,7 @@ net.Receive( "get_shops", function()
 			--[[ NAME ]]--
 			_sh._sho._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
 			_sh._sho._name.textentry.tbl = tbl
-			_sh._sho._name:SetHeader( lang_string( "name" ) )
+			_sh._sho._name:SetHeader( YRP.lang_string( "name" ) )
 			_sh._sho._name:SetText( SQL_STR_OUT( tbl.name ) )
 			function _sh._sho._name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
@@ -92,7 +92,7 @@ net.Receive( "get_shop_categories", function()
 				if pa( _sh._cat ) then
 					_sh._cat._name = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
 					_sh._cat._name.textentry.tbl = tbl
-					_sh._cat._name:SetHeader( lang_string( "name" ) )
+					_sh._cat._name:SetHeader( YRP.lang_string( "name" ) )
 					_sh._cat._name:SetText( SQL_STR_OUT( tbl.name ) )
 					function _sh._cat._name.textentry:OnChange()
 						self.tbl.name = self:GetValue()
@@ -148,7 +148,7 @@ net.Receive( "get_shop_items", function()
 			if pa( _sh.ea ) and pa( _sh._sit ) then
 				_sh._sit.itemname = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 150 ) )
 				_sh._sit.itemname.textentry.tbl = tbl
-				_sh._sit.itemname:SetHeader( lang_string( "name" ) )
+				_sh._sit.itemname:SetHeader( YRP.lang_string( "name" ) )
 				_sh._sit.itemname:SetText( SQL_STR_OUT( tbl.name ) )
 				function _sh._sit.itemname.textentry:SendNewName()
 					if _sh._cat.uid != nil then
@@ -171,7 +171,7 @@ net.Receive( "get_shop_items", function()
 				--[[ Description ]]--
 				_sh._sit.itemdesc = createD( "DYRPTextEntry", _sh.ea, ctr( 800 ), ctr( 400 ), 0, ctr( 300 ) )
 				_sh._sit.itemdesc.textentry.tbl = tbl
-				_sh._sit.itemdesc:SetHeader( lang_string( "description" ) )
+				_sh._sit.itemdesc:SetHeader( YRP.lang_string( "description" ) )
 				_sh._sit.itemdesc:SetText( SQL_STR_OUT( tbl.description ) )
 				_sh._sit.itemdesc.textentry:SetMultiline( true )
 				function _sh._sit.itemdesc.textentry:SendNewDesc()
@@ -194,7 +194,7 @@ net.Receive( "get_shop_items", function()
 
 				--[[ Price ]]--
 				_sh._sit.itemprice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 750 ) )
-				_sh._sit.itemprice:SetHeader( lang_string( "price" ) )
+				_sh._sit.itemprice:SetHeader( YRP.lang_string( "price" ) )
 				_sh._sit.itemprice:INITPanel( "DNumberWang" )
 				_sh._sit.itemprice.plus.tbl = tbl
 				_sh._sit.itemprice.plus:SetMin( 0 )
@@ -213,15 +213,15 @@ net.Receive( "get_shop_items", function()
 
 				--[[ Quantity ]]--
 				_sh._sit.itemquan = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 900 ) )
-				_sh._sit.itemquan:SetHeader( lang_string( "quantity" ) .. " (" .. lang_string( "wip" ) .. ")" )
+				_sh._sit.itemquan:SetHeader( YRP.lang_string( "quantity" ) .. " (" .. YRP.lang_string( "wip" ) .. ")" )
 				_sh._sit.itemquan:INITPanel( "DComboBox" )
 				_sh._sit.itemquan.plus.tbl = tbl
-				_sh._sit.itemquan.plus:AddChoice( lang_string( "disabled" ), -1 )
+				_sh._sit.itemquan.plus:AddChoice( YRP.lang_string( "disabled" ), -1 )
 				for i=1, 32 do
 					_sh._sit.itemquan.plus:AddChoice( i, i )
 				end
 				if tonumber( tbl.quantity ) == -1 then
-					_sh._sit.itemquan.plus:ChooseOption( lang_string( "disabled" ), tonumber( tbl.quantity ) )
+					_sh._sit.itemquan.plus:ChooseOption( YRP.lang_string( "disabled" ), tonumber( tbl.quantity ) )
 				else
 					_sh._sit.itemquan.plus:ChooseOption( tbl.quantity, tonumber( tbl.quantity ) )
 				end
@@ -238,7 +238,7 @@ net.Receive( "get_shop_items", function()
 
 				--[[ Cooldown ]]--
 				_sh._sit.itemcool = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1050 ) )
-				_sh._sit.itemcool:SetHeader( lang_string( "cooldown" ) .. " (" .. lang_string( "wip" ) .. ")" )
+				_sh._sit.itemcool:SetHeader( YRP.lang_string( "cooldown" ) .. " (" .. YRP.lang_string( "wip" ) .. ")" )
 				_sh._sit.itemcool:INITPanel( "DNumberWang" )
 				_sh._sit.itemcool.plus.tbl = tbl
 				_sh._sit.itemcool.plus:SetMin( 0 )
@@ -257,7 +257,7 @@ net.Receive( "get_shop_items", function()
 
 				--[[ License ]]--
 				_sh._sit.itemlice = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1200 ) )
-				_sh._sit.itemlice:SetHeader( lang_string( "licenses" ) )
+				_sh._sit.itemlice:SetHeader( YRP.lang_string( "licenses" ) )
 				_sh._sit.itemlice:INITPanel( "DComboBox" )
 				_sh._sit.itemlice.plus.tbl = tbl
 				net.Start( "get_all_licenses_simple" )
@@ -265,7 +265,7 @@ net.Receive( "get_shop_items", function()
 				net.Receive( "get_all_licenses_simple", function( len )
 					local _licenses = net.ReadTable()
 					if pa( _sh._sit ) then
-						_sh._sit.itemlice.plus:AddChoice( lang_string( "none" ), -1 )
+						_sh._sit.itemlice.plus:AddChoice( YRP.lang_string( "none" ), -1 )
 						for i, lic in pairs( _licenses ) do
 							local _b = false
 							if tonumber( lic.uniqueID ) == tonumber( tbl.licenseID ) then
@@ -288,7 +288,7 @@ net.Receive( "get_shop_items", function()
 
 				--[[ Permanent ]]--
 				_sh._sit.itemperm = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, ctr( 1350 ) )
-				_sh._sit.itemperm:SetHeader( lang_string( "permanent" ) .. " (" .. lang_string( "wip" ) .. ")" )
+				_sh._sit.itemperm:SetHeader( YRP.lang_string( "permanent" ) .. " (" .. YRP.lang_string( "wip" ) .. ")" )
 				_sh._sit.itemperm:INITPanel( "DCheckBox" )
 				_sh._sit.itemperm.plus.tbl = tbl
 				_sh._sit.itemperm.plus:SetChecked( tobool( tbl.permanent ) )
@@ -309,12 +309,12 @@ net.Receive( "get_shop_items", function()
 
 				--[[ TYPE ]]--
 				_sh._sit.type = createD( "DYRPPanelPlus", _sh.ea, ctr( 800 ), ctr( 100 ), 0, 0 )
-				_sh._sit.type:SetHeader( lang_string( "type" ) )
+				_sh._sit.type:SetHeader( YRP.lang_string( "type" ) )
 				_sh._sit.type:INITPanel( "DComboBox" )
-				_sh._sit.type.plus:AddChoice( lang_string( "weapons" ), "weapons" )
-				_sh._sit.type.plus:AddChoice( lang_string( "entities" ), "entities" )
-				_sh._sit.type.plus:AddChoice( lang_string( "vehicles" ), "vehicles" )
-				_sh._sit.type.plus:AddChoice( lang_string( "licenses" ), "licenses" )
+				_sh._sit.type.plus:AddChoice( YRP.lang_string( "weapons" ), "weapons" )
+				_sh._sit.type.plus:AddChoice( YRP.lang_string( "entities" ), "entities" )
+				_sh._sit.type.plus:AddChoice( YRP.lang_string( "vehicles" ), "vehicles" )
+				_sh._sit.type.plus:AddChoice( YRP.lang_string( "licenses" ), "licenses" )
 				_sh._sit.type.plus.tbl = tbl
 				function _sh._sit.type.plus:OnSelect( panel, index, value )
 					local _itemlist = {}

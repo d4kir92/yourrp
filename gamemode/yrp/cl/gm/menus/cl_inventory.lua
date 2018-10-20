@@ -108,7 +108,7 @@ net.Receive( "openStorage", function( len )
 		inv.window:Center()
 		inv.window:MakePopup()
 		function inv.window:Paint( pw, ph )
-			surfaceWindow( self, pw, ph, lang_string( "inventory" ) .. " [PROTOTYPE]" )
+			surfaceWindow( self, pw, ph, YRP.lang_string( "inventory" ) .. " [PROTOTYPE]" )
 		end
 		function inv.window:OnClose()
 			CloseInventory()
@@ -120,7 +120,7 @@ net.Receive( "openStorage", function( len )
 		-- Header
 		inv.sur_header = createD( "DPanel", inv.window, ctr(ICON_SIZE*8) + ctr( 25 ), ctr( 50 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2*3 - ctr( 10 ), ctr( 50 + 10 ) )
 		function inv.sur_header:Paint( pw, ph )
-			local _str = string.upper( lang_string( string.lower( inv.sur_tab.name ) ) ) -- .. " [DEBUG] UID: " .. stor.uniqueID
+			local _str = string.upper( YRP.lang_string( string.lower( inv.sur_tab.name ) ) ) -- .. " [DEBUG] UID: " .. stor.uniqueID
 			surfacePanel( self, pw, ph, _str )
 		end
 
@@ -188,7 +188,7 @@ net.Receive( "openStorage", function( len )
 				inv.db_remove.uid = _stor.uniqueID
 				function inv.db_remove:Paint( pw, ph )
 					if self.uid != "" then
-						surfaceButton( self, pw, ph, string.upper( lang_string( "remove" ) ), Color( 200, 0, 0 ) )
+						surfaceButton( self, pw, ph, string.upper( YRP.lang_string( "remove" ) ), Color( 200, 0, 0 ) )
 					end
 				end
 				function inv.db_remove:DoClick()
@@ -228,7 +228,7 @@ net.Receive( "openStorage", function( len )
 		local _bps = {}
 		_bps.bpheader = createD( "DPanel", inv.window, ctr( ICON_SIZE*8 + 25 ), ctr( 50 ), ScrW2() - (ctr( ICON_SIZE*8 + 25 ))/2, ctr( 50 + 10 ) )
 		function _bps.bpheader:Paint( pw, ph )
-			local _str = string.upper( lang_string( "backpack" ) )
+			local _str = string.upper( YRP.lang_string( "backpack" ) )
 			surfacePanel( self, pw, ph, _str )
 		end
 
@@ -433,7 +433,7 @@ function OpenInventory()
 		_info:SetTitle( "" )
 		function _info:Paint( pw, ph )
 			surfaceWindow( self, pw, ph, "inventory" )
-			surfaceText( lang_string( "disabled" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+			surfaceText( YRP.lang_string( "disabled" ), "mat1text", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 		end
 		_info:MakePopup()
 		_info:Center()

@@ -93,7 +93,7 @@ function createSmartphone( parent, w, h, x, y )
 
 				local _appName = app.PrintName
 				if app.LangName != nil then
-					local _name = lang_string( app.LangName, app.PrintName )
+					local _name = YRP.lang_string( app.LangName, app.PrintName )
 					_appName = _name
 				end
 
@@ -151,7 +151,7 @@ function createSmartphone( parent, w, h, x, y )
 		else
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 		end
-		draw.SimpleTextOutlined( lang_string( "wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb( 1 ), Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb( 1 ), Color( 0, 0, 0, 255 ) )
 	end
 
 	_tmp.botbar.buttonapps = createD( "DButton", _tmp.botbar, w/3, ctrb( 40 ), 0, 0 )
@@ -162,7 +162,7 @@ function createSmartphone( parent, w, h, x, y )
 		else
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 		end
-		draw.SimpleTextOutlined( lang_string( "wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb( 1 ), Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb( 1 ), Color( 0, 0, 0, 255 ) )
 	end
 
 	--[[ Clear Display ]]--

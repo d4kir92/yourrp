@@ -37,8 +37,8 @@ function OpenSBS()
 			draw.SimpleTextOutlined( GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 128-20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr(128 + 20), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-			draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 128-20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 128 + 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 128-20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 128 + 20 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			if _server_logo == "" then
 				surface.SetDrawColor( 255, 255, 255, 255 )
@@ -76,30 +76,30 @@ function OpenSBS()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 			local x = 128 + 10
-			local naugname = lang_string("name") .. "/" .. lang_string("usergroup")
+			local naugname = YRP.lang_string("name") .. "/" .. YRP.lang_string("usergroup")
 			if !pl:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
-				naugname = lang_string("name")
+				naugname = YRP.lang_string("name")
 			end
 			draw.SimpleTextOutlined(naugname, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			x = x + 700
 
 			if pl:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
-				local rgname = lang_string("role") .. "/" .. lang_string("group")
+				local rgname = YRP.lang_string("role") .. "/" .. YRP.lang_string("group")
 				if !pl:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) then
-					rgname = lang_string("group")
+					rgname = YRP.lang_string("group")
 				elseif !pl:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
-					rgname = lang_string("role")
+					rgname = YRP.lang_string("role")
 				end
 				draw.SimpleTextOutlined(rgname, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 700
 			end
 
 			if pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-				local fdname = lang_string("frags") .. "/" .. lang_string("deaths")
+				local fdname = YRP.lang_string("frags") .. "/" .. YRP.lang_string("deaths")
 				if !pl:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-					fdname = lang_string("deaths")
+					fdname = YRP.lang_string("deaths")
 				elseif !pl:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
-					fdname = lang_string("frags")
+					fdname = YRP.lang_string("frags")
 				end
 				draw.SimpleTextOutlined(fdname, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 400
@@ -108,15 +108,15 @@ function OpenSBS()
 			draw.SimpleTextOutlined("Language", "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			x = x + 300
 
-			draw.SimpleTextOutlined(lang_string("playtime"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("playtime"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			x = x + 300
 
 			if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
-				draw.SimpleTextOutlined(lang_string("os"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.lang_string("os"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 			end
 
-			draw.SimpleTextOutlined(lang_string("ping"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("ping"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 
 		sbs.stab = createD( "DPanelList", sbs.frame, BScrW(), ScrH() - ctr(512 + 64), 0, ctr(256 + 10 + 64))
@@ -221,7 +221,7 @@ function OpenSBS()
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
 						local icon_size = ctr( 100 )
-						DrawIcon(GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+						YRP.DrawIcon(YRP.GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.lang), "sef", ctr(x) + icon_size / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
@@ -235,7 +235,7 @@ function OpenSBS()
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
 						local icon_size = ctr( 100 )
-						DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, ctr(x), (ph - icon_size) / 2, Color( 255, 255, 255, 255 ) )
+						YRP.DrawIcon( YRP.GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, ctr(x), (ph - icon_size) / 2, Color( 255, 255, 255, 255 ) )
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.os), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
@@ -292,7 +292,7 @@ function OpenSBS()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 				local x = 128 + 10
-				draw.SimpleTextOutlined(lang_string("characterselection"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.lang_string("characterselection"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
 			sbs.stab:AddItem(sbs.charsel)
 
@@ -302,7 +302,7 @@ function OpenSBS()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 				local x = 128 + 10
-				local naugname = lang_string("name")
+				local naugname = YRP.lang_string("name")
 				draw.SimpleTextOutlined(naugname, "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 700
 
@@ -317,15 +317,15 @@ function OpenSBS()
 				draw.SimpleTextOutlined("Language", "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 
-				draw.SimpleTextOutlined(lang_string("playtime"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.lang_string("playtime"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 
 				if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
-					draw.SimpleTextOutlined(lang_string("os"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.lang_string("os"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 					x = x + 300
 				end
 
-				draw.SimpleTextOutlined(lang_string("ping"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.lang_string("ping"), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
 			sbs.stab:AddItem(sbs.header2)
 
@@ -389,7 +389,7 @@ function OpenSBS()
 
 						if lply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
 							local icon_size = ctr( 100 )
-							DrawIcon(GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+							YRP.DrawIcon(YRP.GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.lang), "sef", ctr(x) + icon_size / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
@@ -403,7 +403,7 @@ function OpenSBS()
 
 						if lply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
 							local icon_size = ctr( 100 )
-							DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, ctr(x), (ph - icon_size) / 2, Color( 255, 255, 255, 255 ) )
+							YRP.DrawIcon( YRP.GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, ctr(x), (ph - icon_size) / 2, Color( 255, 255, 255, 255 ) )
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.os), "sef", ctr(x), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end

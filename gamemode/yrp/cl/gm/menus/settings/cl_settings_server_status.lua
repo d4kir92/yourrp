@@ -4,7 +4,7 @@ function AddStatusLine(parent, cat, entry, str_id, color)
 	local sl = createD("DPanel", parent, parent:GetWide(), ctr(50), 0, 0)
 	local _t = {}
 	_t[cat] = entry
-	sl.text = lang_string(str_id, _t)
+	sl.text = YRP.lang_string(str_id, _t)
 	function sl:Paint(pw, ph)
 		local tab = {}
 		tab.color = Color(color.r, color.g, color.b)

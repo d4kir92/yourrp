@@ -21,11 +21,11 @@ function Player:YRPDrink( num )
 end
 
 function Player:YRPGetLanguage()
-	return get_language_name( self:GetNWString( "client_lang", lang_string( "none" ) ) )
+	return YRP.get_language_name( self:GetNWString( "client_lang", YRP.lang_string( "none" ) ) )
 end
 
 function Player:YRPGetLanguageShort()
-	return self:GetNWString( "client_lang", lang_string( "none" ) )
+	return self:GetNWString( "client_lang", YRP.lang_string( "none" ) )
 end
 
 function Player:GetBackpack()

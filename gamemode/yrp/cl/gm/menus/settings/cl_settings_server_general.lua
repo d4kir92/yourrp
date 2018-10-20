@@ -4,7 +4,7 @@ function CreateCheckBoxLine( dpanellist, val, lstr, netstr )
 	local background = createD( "DPanel", nil, ctr( 800 ), ctr( 50 ), 0, 0 )
 	background.text_posx = ctr( 50 + 10 )
 	function background:Paint( pw, ph )
-		surfacePanel( self, pw, ph, lang_string( lstr ), nil, self.text_posx, nil, 0, 1 )
+		surfacePanel( self, pw, ph, YRP.lang_string( lstr ), nil, self.text_posx, nil, 0, 1 )
 	end
 
 	background.checkbox = createD( "DCheckBox", background, ctr( 50 ), ctr( 50 ), 0, 0 )
@@ -44,7 +44,7 @@ end
 function CreateButtonLine( dpanellist, lstr, netstr, lstr2 )
 	local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
 	function background:Paint( pw, ph )
-		surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
+		surfacePanel( self, pw, ph, YRP.lang_string( lstr ) .. ":", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
 	end
 
 	background.button = createD( "DButton", background, ctr( 800 ) - ctr( 10 * 2 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
@@ -66,7 +66,7 @@ end
 function CreateTextBoxLine( dpanellist, text, lstr, netstr )
 	local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
 	function background:Paint( pw, ph )
-		surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
+		surfacePanel( self, pw, ph, YRP.lang_string( lstr ) .. ":", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
 	end
 
 	local textbox = createD( "DTextEntry", background, ctr( 800 ) - ctr( 10 * 2 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
@@ -98,7 +98,7 @@ end
 function CreateTextBoxBox( dpanellist, text, lstr, netstr )
 	local background = createD( "DPanel", nil, ctr( 800 ), ctr( 50 + 400 + 10 ), 0, 0 )
 	function background:Paint( pw, ph )
-		surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ctr( 25 ), 0, 1 )
+		surfacePanel( self, pw, ph, YRP.lang_string( lstr ) .. ":", nil, ctr( 10 ), ctr( 25 ), 0, 1 )
 	end
 
 	local textbox = createD( "DTextEntry", background, ctr( 800 ) - ctr( 10 * 2 ), ctr( 400 ), ctr( 10 ), ctr( 50 ) )
@@ -132,7 +132,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 	local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
 	function background:Paint( pw, ph )
 		local ply = LocalPlayer()
-		surfacePanel( self, pw, ph, lang_string( lstr ) .. ": (" .. ply:GetNWString( "text_money_pre", "" ) .. "100" .. ply:GetNWString( "text_money_pos", "" ) .. ")", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
+		surfacePanel( self, pw, ph, YRP.lang_string( lstr ) .. ": (" .. ply:GetNWString( "text_money_pre", "" ) .. "100" .. ply:GetNWString( "text_money_pos", "" ) .. ")", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
 	end
 
 	background.textbox = createD( "DTextEntry", background, ctr( 400 ) - ctr( 10 * 2 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
@@ -185,7 +185,7 @@ end
 function CreateNumberWangLine( dpanellist, value, lstr, netstr )
 	local background = createD( "DPanel", nil, ctr( 800 ), ctr( 100 + 10 ), 0, 0 )
 	function background:Paint( pw, ph )
-		surfacePanel( self, pw, ph, lang_string( lstr ) .. ":", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
+		surfacePanel( self, pw, ph, YRP.lang_string( lstr ) .. ":", nil, ctr( 10 ), ph * 1 / 4, 0, 1 )
 	end
 
 	background.numberwang = createD( "DNumberWang", background, ctr( 800 ) - ctr( 10 * 2 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
@@ -424,11 +424,11 @@ net.Receive( "Connect_Settings_General", function( len )
 		local bool_yrp_scoreboard = CreateCheckBoxLine( GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard, "yourrpscoreboard", "update_bool_yrp_scoreboard" )
 
 		local sbs = {}
-		sbs["advanced"] = lang_string("advanced")
-		sbs["simple"] = lang_string("simple")
+		sbs["advanced"] = YRP.lang_string("advanced")
+		sbs["simple"] = YRP.lang_string("simple")
 		local sbspanel = {}
 		sbspanel.parent = GAMEMODE_VISUALS.plus
-		sbspanel.header = lang_string("scoreboard")
+		sbspanel.header = YRP.lang_string("scoreboard")
 		sbspanel.netstr = "update_text_yrp_scoreboard_style"
 		sbspanel.value = GEN.text_yrp_scoreboard_style
 		sbspanel.uniqueID = "1"
@@ -492,9 +492,9 @@ net.Receive( "Connect_Settings_General", function( len )
 		function money_reset.button:DoClick()
 			local win = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
 			win:Center()
-			win:SetTitle( lang_string( "areyousure" ) )
+			win:SetTitle( YRP.lang_string( "areyousure" ) )
 			local _yesButton = createVGUI( "DButton", win, 200, 50, 10, 60 )
-			_yesButton:SetText( lang_string( "yes" ) )
+			_yesButton:SetText( YRP.lang_string( "yes" ) )
 			function _yesButton:DoClick()
 
 				net.Start( "moneyreset" )
@@ -503,7 +503,7 @@ net.Receive( "Connect_Settings_General", function( len )
 				win:Close()
 			end
 			local _noButton = createVGUI( "DButton", win, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText( lang_string( "no" ) )
+			_noButton:SetText( YRP.lang_string( "no" ) )
 			function _noButton:DoClick()
 				win:Close()
 			end
@@ -526,10 +526,10 @@ net.Receive( "Connect_Settings_General", function( len )
 		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_forum, "forum", "update_text_social_forum" )
 		CreateHRLine( SOCIAL_SETTINGS.plus )
 		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_discord, "discord", "update_text_social_discord" )
-		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_discord_widgetid, lang_string( "discord" ) .. " " .. lang_string( "serverid" ), "update_text_social_discord_widgetid" )
-		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_ip, lang_string( "teamspeak" ) .. " [" .. lang_string( "ip" ) .. "/" .. lang_string( "hostname" ) .. "]", "update_text_social_teamspeak_ip" )
-		CreateNumberWangLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_port, lang_string( "teamspeak" ) .. " [" .. lang_string( "port" ) .. "]", "update_text_social_teamspeak_port" )
-		CreateNumberWangLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_query_port, lang_string( "teamspeak" ) .. " [" .. lang_string( "queryport" ) .. "]", "update_text_social_teamspeak_query_port" )
+		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_discord_widgetid, YRP.lang_string( "discord" ) .. " " .. YRP.lang_string( "serverid" ), "update_text_social_discord_widgetid" )
+		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_ip, YRP.lang_string( "teamspeak" ) .. " [" .. YRP.lang_string( "ip" ) .. "/" .. YRP.lang_string( "hostname" ) .. "]", "update_text_social_teamspeak_ip" )
+		CreateNumberWangLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_port, YRP.lang_string( "teamspeak" ) .. " [" .. YRP.lang_string( "port" ) .. "]", "update_text_social_teamspeak_port" )
+		CreateNumberWangLine( SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_query_port, YRP.lang_string( "teamspeak" ) .. " [" .. YRP.lang_string( "queryport" ) .. "]", "update_text_social_teamspeak_query_port" )
 		CreateHRLine( SOCIAL_SETTINGS.plus )
 		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_youtube, "Youtube", "update_text_social_youtube" )
 		CreateTextBoxLine( SOCIAL_SETTINGS.plus, GEN.text_social_twitter, "Twitter", "update_text_social_twitter" )

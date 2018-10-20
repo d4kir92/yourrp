@@ -403,7 +403,7 @@ function GM:PlayerSay( sender, text, teamChat )
 	pk.groupname = paket.group or ""
 
 	if paket.command == "roll" then
-		pk.text = lang_string( "rolledpre" ) .. " " .. tostring( roll_number( sender ) ) .. " " .. lang_string( "rolledpos" ) .. "!"
+		pk.text = YRP.lang_string( "rolledpre" ) .. " " .. tostring( roll_number( sender ) ) .. " " .. YRP.lang_string( "rolledpos" ) .. "!"
 	end
 
 	if paket.command == "admin" then
