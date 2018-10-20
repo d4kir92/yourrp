@@ -85,7 +85,7 @@ function PANEL:SiteNotFound()
 
 	function self.site:Paint(pw, ph)
 		draw.SimpleTextOutlined("[Site Not Found]", "mat1text", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1, ctr(1), Color(0, 0, 0))
-		draw.SimpleTextOutlined("[" .. lang_string("wip") .. "]", "mat1text", pw / 2, ph / 2 + ctr(50), Color(255, 255, 0, 255), 1, 1, ctr(1), Color(0, 0, 0))
+		draw.SimpleTextOutlined("[" .. YRP.lang_string("wip") .. "]", "mat1text", pw / 2, ph / 2 + ctr(50), Color(255, 255, 0, 255), 1, 1, ctr(1), Color(0, 0, 0))
 	end
 end
 
@@ -94,7 +94,7 @@ function PANEL:AddTab(name, netstr, starttab)
 		self:MakeSpacer()
 	end
 
-	local TAB = createD("DButton", self, GetTextLength(lang_string(name), "mat1header") + ctr(30 * 2), ctr(100), ctr(400), 0)
+	local TAB = createD("DButton", self, GetTextLength(YRP.lang_string(name), "mat1header") + ctr(30 * 2), ctr(100), ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr
@@ -153,7 +153,7 @@ function PANEL:AddTab(name, netstr, starttab)
 					if self.url ~= "" or self.func ~= nil then
 						local br = ctr(10)
 						local size = ph - 2 * ctr(20)
-						DrawIcon(GetDesignIcon("launch"), size, size, pw - size - br, ph / 2 - size / 2, YRPGetColor("6"))
+						YRP.DrawIcon(YRP.GetDesignIcon("launch"), size, size, pw - size - br, ph / 2 - size / 2, YRPGetColor("6"))
 					end
 				end
 
@@ -185,7 +185,7 @@ function PANEL:AddTab(name, netstr, starttab)
 			self.selected = false
 		end
 
-		DrawSelector(self, pw, ph, lang_string(self.name), self.selected)
+		DrawSelector(self, pw, ph, YRP.lang_string(self.name), self.selected)
 
 		if self:IsHovered() then
 			self:GetParent().hovered = TAB.name

@@ -38,7 +38,7 @@ function PANEL:Init()
 		surfaceText(_tog, "roleInfoHeader", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
 
 		if tobool(self.locked) then
-			DrawIcon(GetDesignIcon("lock"), ph - ctr(8), ph - ctr(8), pw - 2 * ph, ctr(4), Color(255, 0, 0))
+			YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - ctr(8), ph - ctr(8), pw - 2 * ph, ctr(4), Color(255, 0, 0))
 		end
 	end
 

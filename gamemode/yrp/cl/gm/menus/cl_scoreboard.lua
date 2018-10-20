@@ -75,29 +75,29 @@ function OpenPlayerOptions(ply)
 		local _menu = createD( "DYRPMenu", nil, ctr( 800 ), ctr( 50 ), _mx - ctr( 25 ), _my - ctr( 25 ) )
 		_menu:MakePopup()
 
-		local osp = _menu:AddOption( lang_string( "openprofile" ), "icon16/page.png" )
+		local osp = _menu:AddOption( YRP.lang_string( "openprofile" ), "icon16/page.png" )
 		function osp:DoClick()
 			ply:ShowProfile()
 		end
 
 		_menu:AddSpacer()
 
-		local csid = _menu:AddOption( lang_string( "copysteamid" ) .. ": " .. ply:SteamID(), "icon16/page_copy.png" )
+		local csid = _menu:AddOption( YRP.lang_string( "copysteamid" ) .. ": " .. ply:SteamID(), "icon16/page_copy.png" )
 		function csid:DoClick()
 			SetClipboardText( ply:SteamID() )
 			_menu:Remove()
 		end
-		local csid64 = _menu:AddOption( lang_string( "copysteamid64" ) .. ": " .. ply:SteamID64(), "icon16/page_copy.png" )
+		local csid64 = _menu:AddOption( YRP.lang_string( "copysteamid64" ) .. ": " .. ply:SteamID64(), "icon16/page_copy.png" )
 		function csid64:DoClick()
 			SetClipboardText( ply:SteamID64() )
 			_menu:Remove()
 		end
-		local crpname = _menu:AddOption( lang_string( "copyrpname" ) .. ": " .. ply:RPName(), "icon16/page_copy.png" )
+		local crpname = _menu:AddOption( YRP.lang_string( "copyrpname" ) .. ": " .. ply:RPName(), "icon16/page_copy.png" )
 		function crpname:DoClick()
 			SetClipboardText( ply:RPName() )
 			_menu:Remove()
 		end
-		local csname = _menu:AddOption( lang_string( "copysteamname" ) .. ": " .. ply:SteamName(), "icon16/page_copy.png" )
+		local csname = _menu:AddOption( YRP.lang_string( "copysteamname" ) .. ": " .. ply:SteamName(), "icon16/page_copy.png" )
 		function csname:DoClick()
 			SetClipboardText( ply:SteamName() )
 			_menu:Remove()
@@ -108,13 +108,13 @@ function OpenPlayerOptions(ply)
 		_menu:AddSpacer()
 
 		if notself( ply ) then
-			local ban = _menu:AddOption( lang_string( "ban" ), "icon16/world_link.png" )
+			local ban = _menu:AddOption( YRP.lang_string( "ban" ), "icon16/world_link.png" )
 			function ban:DoClick()
 				net.Start( "ply_ban" )
 					net.WriteEntity( ply )
 				net.SendToServer()
 			end
-			local kick = _menu:AddOption( lang_string( "kick" ), "icon16/world_go.png" )
+			local kick = _menu:AddOption( YRP.lang_string( "kick" ), "icon16/world_go.png" )
 			function kick:DoClick()
 				net.Start( "ply_kick" )
 					net.WriteEntity( ply )
@@ -124,13 +124,13 @@ function OpenPlayerOptions(ply)
 		end
 
 		if notself( ply ) then
-			local tpto = _menu:AddOption( lang_string( "tpto" ), "icon16/arrow_right.png" )
+			local tpto = _menu:AddOption( YRP.lang_string( "tpto" ), "icon16/arrow_right.png" )
 			function tpto:DoClick()
 				net.Start( "tp_tpto" )
 					net.WriteEntity( ply )
 				net.SendToServer()
 			end
-			local bring = _menu:AddOption( lang_string( "bring" ), "icon16/arrow_redo.png" )
+			local bring = _menu:AddOption( YRP.lang_string( "bring" ), "icon16/arrow_redo.png" )
 			function bring:DoClick()
 				net.Start( "tp_bring" )
 					net.WriteEntity( ply )
@@ -140,7 +140,7 @@ function OpenPlayerOptions(ply)
 
 		if true then
 			if !ply:GetNWBool( "injail", false ) then
-				local jail = _menu:AddOption( lang_string( "jail" ), "icon16/lock_go.png" )
+				local jail = _menu:AddOption( YRP.lang_string( "jail" ), "icon16/lock_go.png" )
 				function jail:DoClick()
 					net.Start( "tp_jail" )
 						net.WriteEntity( ply )
@@ -148,7 +148,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local unjail = _menu:AddOption( lang_string( "unjail" ), "icon16/lock_open.png" )
+				local unjail = _menu:AddOption( YRP.lang_string( "unjail" ), "icon16/lock_open.png" )
 				function unjail:DoClick()
 					net.Start( "tp_unjail" )
 						net.WriteEntity( ply )
@@ -161,7 +161,7 @@ function OpenPlayerOptions(ply)
 
 		if true then
 			if !ply:GetNWBool( "ragdolled", false ) then
-				local ragdoll = _menu:AddOption( lang_string( "ragdoll" ), "icon16/user_red.png" )
+				local ragdoll = _menu:AddOption( YRP.lang_string( "ragdoll" ), "icon16/user_red.png" )
 				function ragdoll:DoClick()
 					net.Start( "ragdoll" )
 						net.WriteEntity( ply )
@@ -169,7 +169,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local unragdoll = _menu:AddOption( lang_string( "unragdoll" ), "icon16/user_green.png" )
+				local unragdoll = _menu:AddOption( YRP.lang_string( "unragdoll" ), "icon16/user_green.png" )
 				function unragdoll:DoClick()
 					net.Start( "unragdoll" )
 						net.WriteEntity( ply )
@@ -178,7 +178,7 @@ function OpenPlayerOptions(ply)
 				end
 			end
 			if !ply:IsFlagSet( FL_FROZEN ) then
-				local freeze = _menu:AddOption( lang_string( "freeze" ), "icon16/user_suit.png" )
+				local freeze = _menu:AddOption( YRP.lang_string( "freeze" ), "icon16/user_suit.png" )
 				function freeze:DoClick()
 					net.Start( "freeze" )
 						net.WriteEntity( ply )
@@ -186,7 +186,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local unfreeze = _menu:AddOption( lang_string( "unfreeze" ), "icon16/user_gray.png" )
+				local unfreeze = _menu:AddOption( YRP.lang_string( "unfreeze" ), "icon16/user_gray.png" )
 				function unfreeze:DoClick()
 					net.Start( "unfreeze" )
 						net.WriteEntity( ply )
@@ -198,7 +198,7 @@ function OpenPlayerOptions(ply)
 
 		if true then
 			if !ply:GetNWBool( "godmode", false ) then
-				local god = _menu:AddOption( lang_string( "god" ), "icon16/star.png" )
+				local god = _menu:AddOption( YRP.lang_string( "god" ), "icon16/star.png" )
 				function god:DoClick()
 					net.Start( "god" )
 						net.WriteEntity( ply )
@@ -206,7 +206,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local ungod = _menu:AddOption( lang_string( "ungod" ), "icon16/stop.png" )
+				local ungod = _menu:AddOption( YRP.lang_string( "ungod" ), "icon16/stop.png" )
 				function ungod:DoClick()
 					net.Start( "ungod" )
 						net.WriteEntity( ply )
@@ -215,7 +215,7 @@ function OpenPlayerOptions(ply)
 				end
 			end
 			if !ply:GetNWBool( "cloaked", false ) then
-				local cloak = _menu:AddOption( lang_string( "cloak" ), "icon16/status_offline.png" )
+				local cloak = _menu:AddOption( YRP.lang_string( "cloak" ), "icon16/status_offline.png" )
 				function cloak:DoClick()
 					net.Start( "cloak" )
 						net.WriteEntity( ply )
@@ -223,7 +223,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local uncloak = _menu:AddOption( lang_string( "uncloak" ), "icon16/status_online.png" )
+				local uncloak = _menu:AddOption( YRP.lang_string( "uncloak" ), "icon16/status_online.png" )
 				function uncloak:DoClick()
 					net.Start( "uncloak" )
 						net.WriteEntity( ply )
@@ -232,7 +232,7 @@ function OpenPlayerOptions(ply)
 				end
 			end
 			if !ply:GetNWBool( "blinded", false ) then
-				local blind = _menu:AddOption( lang_string( "blind" ), "icon16/weather_sun.png" )
+				local blind = _menu:AddOption( YRP.lang_string( "blind" ), "icon16/weather_sun.png" )
 				function blind:DoClick()
 					net.Start("blind")
 						net.WriteEntity( ply )
@@ -240,7 +240,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local unblind = _menu:AddOption( lang_string( "unblind" ), "icon16/weather_clouds.png" )
+				local unblind = _menu:AddOption( YRP.lang_string( "unblind" ), "icon16/weather_clouds.png" )
 				function unblind:DoClick()
 					net.Start( "unblind" )
 						net.WriteEntity( ply )
@@ -249,7 +249,7 @@ function OpenPlayerOptions(ply)
 				end
 			end
 			if !ply:IsOnFire() then
-				local ignite = _menu:AddOption( lang_string( "ignite" ), "icon16/fire.png" )
+				local ignite = _menu:AddOption( YRP.lang_string( "ignite" ), "icon16/fire.png" )
 				function ignite:DoClick()
 					net.Start("ignite")
 						net.WriteEntity( ply )
@@ -257,7 +257,7 @@ function OpenPlayerOptions(ply)
 					_menu:Remove()
 				end
 			else
-				local extinguish = _menu:AddOption( lang_string( "extinguish" ), "icon16/water.png" )
+				local extinguish = _menu:AddOption( YRP.lang_string( "extinguish" ), "icon16/water.png" )
 				function extinguish:DoClick()
 					net.Start("extinguish")
 						net.WriteEntity( ply )
@@ -266,14 +266,14 @@ function OpenPlayerOptions(ply)
 				end
 			end
 
-			local slay = _menu:AddOption( lang_string( "slay" ), "icon16/delete.png" )
+			local slay = _menu:AddOption( YRP.lang_string( "slay" ), "icon16/delete.png" )
 			function slay:DoClick()
 				net.Start( "slay" )
 					net.WriteEntity( ply )
 				net.SendToServer()
 				_menu:Remove()
 			end
-			local slap = _menu:AddOption( lang_string( "slap" ), "icon16/heart_delete.png" )
+			local slap = _menu:AddOption( YRP.lang_string( "slap" ), "icon16/heart_delete.png" )
 			function slap:DoClick()
 				net.Start( "slap" )
 					net.WriteEntity( ply )
@@ -407,7 +407,7 @@ function drawGroupPlayers( id )
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
 					local icon_size = ctr( 100 )
 					_w = _w + ctr( 600 )
-					DrawIcon( GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+					YRP.DrawIcon( YRP.GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
 					if self:IsHovered() then
 						draw.SimpleTextOutlined( string.upper(self.lang), "sef", _w + ( icon_size * 1.49 ) / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 					end
@@ -420,7 +420,7 @@ function drawGroupPlayers( id )
 
 				if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
 					local icon_size = ctr( 100 )
-					DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
+					YRP.DrawIcon( YRP.GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
 				end
 				draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
@@ -442,7 +442,7 @@ function drawGroup( id, name, color, icon, iter )
 	local starty = elePos.y
 
 	if iter == 1 then
-		name = lang_string("faction") .. ": " .. name
+		name = YRP.lang_string("faction") .. ": " .. name
 	end
 
 	local _color = string.Explode( ",", color )
@@ -469,26 +469,26 @@ function drawGroup( id, name, color, icon, iter )
 		_tmpHeader.color = Color( _color[1], _color[2], _color[3], 200 )
 		function _tmpHeader:Paint( pw, ph )
 			--draw.RoundedBox( 0, 0, 0, pw, ph, Color(0,0,0,100))
-			--draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			--draw.SimpleTextOutlined( YRP.lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local _w = ctr( 128+16 )
 
-			local str = lang_string( "name" )
+			local str = YRP.lang_string( "name" )
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
-				str = lang_string( "name" ) .. "/" .. lang_string( "usergroup" )
+				str = YRP.lang_string( "name" ) .. "/" .. YRP.lang_string( "usergroup" )
 			end
 
 			draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			str = ""
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) then
-				str = lang_string( "role" )
+				str = YRP.lang_string( "role" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
 				if str != "" then
 					str = str .. "/"
 				end
-				str = str .. lang_string( "group" )
+				str = str .. YRP.lang_string( "group" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_rolename", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_groupname", false ) then
 				_w = _w + ctr( 600 )
@@ -497,13 +497,13 @@ function drawGroup( id, name, color, icon, iter )
 
 			str = ""
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-				str = lang_string( "frags" )
+				str = YRP.lang_string( "frags" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
 				if str != "" then
 					str = str .. "/"
 				end
-				str = str .. lang_string( "deaths" )
+				str = str .. YRP.lang_string( "deaths" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
 				_w = _w + ctr( 600 )
@@ -517,15 +517,15 @@ function drawGroup( id, name, color, icon, iter )
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
 				_w = _w + ctr( 500 )
-				draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
-				draw.SimpleTextOutlined( lang_string( "os" ), "sef", pw - ctr( 150 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "os" ), "sef", pw - ctr( 150 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
-			draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-			--draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			--draw.SimpleTextOutlined( YRP.lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 		elePos.y = elePos.y + 50
 		drawGroupPlayers( id )
@@ -624,7 +624,7 @@ function drawRest()
 		_tmpHeader.color = Color(0, 0, 0)
 		function _tmpHeader:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-			draw.SimpleTextOutlined( lang_string( "unassigned" ), "sef", ctr( 10 ), ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "unassigned" ), "sef", ctr( 10 ), ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 
 		elePos.y = elePos.y + 50
@@ -633,26 +633,26 @@ function drawRest()
 		_tmpHeader.color = Color(0, 0, 0)
 		function _tmpHeader:Paint( pw, ph )
 			--draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-			--draw.SimpleTextOutlined( lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			--draw.SimpleTextOutlined( YRP.lang_string( "level" ), "sef", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			local _w = ctr( 128+16 )
 
-			local str = lang_string( "name" )
+			local str = YRP.lang_string( "name" )
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_usergroup", false ) then
-				str = lang_string( "name" ) .. "/" .. lang_string( "usergroup" )
+				str = YRP.lang_string( "name" ) .. "/" .. YRP.lang_string( "usergroup" )
 			end
 
 			draw.SimpleTextOutlined( str, "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 			str = ""
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) then
-				str = lang_string( "frags" )
+				str = YRP.lang_string( "frags" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
 				if str != "" then
 					str = str .. "/"
 				end
-				str = str .. lang_string( "deaths" )
+				str = str .. YRP.lang_string( "deaths" )
 			end
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_frags", false ) or ply:GetNWBool( "bool_yrp_scoreboard_show_deaths", false ) then
 				_w = _w + ctr( 600 )
@@ -666,15 +666,15 @@ function drawRest()
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_playtime", false ) then
 				_w = _w + ctr( 500 )
-				draw.SimpleTextOutlined( lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "playtime" ), "sef", _w, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
 			if ply:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
-				draw.SimpleTextOutlined( lang_string( "os" ), "sef", pw - ctr( 150 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "os" ), "sef", pw - ctr( 150 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 			end
 
-			draw.SimpleTextOutlined( lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-			--draw.SimpleTextOutlined( lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "ping" ), "sef", pw - ctr( 20 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			--draw.SimpleTextOutlined( YRP.lang_string( "mute" ), "sef", pw - ctr( 100 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 
 		elePos.y = elePos.y + 64
@@ -780,7 +780,7 @@ function drawRest()
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_language", false ) then
 						local icon_size = ctr( 100 )
 						_w = _w + ctr( 600 )
-						DrawIcon( GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
+						YRP.DrawIcon( YRP.GetDesignIcon( self.lang ), icon_size * 1.49, icon_size, _w, ph / 2 - icon_size / 2, Color( 255, 255, 255, 255 ) )
 						if self:IsHovered() then
 							draw.SimpleTextOutlined( string.upper(self.lang), "sef", _w + ( icon_size * 1.49 ) / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 						end
@@ -793,7 +793,7 @@ function drawRest()
 
 					if pl:GetNWBool( "bool_yrp_scoreboard_show_operating_system", false ) then
 						local icon_size = ctr( 100 )
-						DrawIcon( GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
+						YRP.DrawIcon( YRP.GetDesignIcon( "os_" .. self.os ), icon_size, icon_size, pw - ctr( 150 ) - icon_size, ph/2 - icon_size/2, Color( 255, 255, 255, 255 ) )
 					end
 					draw.SimpleTextOutlined( self.ping, "sef", pw - ctr( 20 ), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				end
@@ -866,8 +866,8 @@ function scoreboard:show_sb()
 				draw.SimpleTextOutlined( GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "ScoreBoardNormal", ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 				draw.SimpleTextOutlined( GetHostName(), "ScoreBoardTitle", ctr( 256 + 20 ), ctr( 120 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-				draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "map" ) .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 75 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "players" ) .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr( 256 + 20 ), ctr( 125 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
 				if _server_logo == "" then
 					surface.SetDrawColor( 255, 255, 255, 255 )

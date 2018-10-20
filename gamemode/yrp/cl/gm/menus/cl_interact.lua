@@ -63,7 +63,7 @@ net.Receive( "openInteractMenu", function ()
 			break
 		end
 	end
-	_windowInteract:SetTitle( lang_string( "interactmenu" ) )
+	_windowInteract:SetTitle( YRP.lang_string( "interactmenu" ) )
 
 	function _windowInteract:Paint( pw, ph )
 		surfaceWindow( self, pw, ph, "")
@@ -71,33 +71,33 @@ net.Receive( "openInteractMenu", function ()
 		if idcard then
 			draw.RoundedBox( ctr( 30 ), ctr( 10 ), ctr( 50 ), ctr( 750 ), ctr( 350 ), Color( 255, 255, 255, 255 ) )
 
-			draw.SimpleTextOutlined( lang_string( "identifycard" ), "charTitle", ctr( 10 + 10 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "identifycard" ), "charTitle", ctr( 10 + 10 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 			draw.SimpleTextOutlined( GetHostName(), "charTitle", ctr( 10 + 10 ), ctr( 60+30 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 			draw.SimpleTextOutlined( LocalPlayer():SteamID(), "charTitle", ctr( 745 ), ctr( 55 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
-			draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 70 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "name" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 70 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
 			draw.SimpleTextOutlined( tmpRPName, "charText", ctr( 280 ), ctr( 60 + 100 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
-			draw.SimpleTextOutlined( lang_string( "gender" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 210 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
-			local gender = lang_string( "genderother" )
+			draw.SimpleTextOutlined( YRP.lang_string( "gender" ) .. ":", "charHeader", ctr( 280 ), ctr( 60 + 210 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
+			local gender = YRP.lang_string( "genderother" )
 			if tmpGender == "gendermale" then
-				gender = lang_string( "gendermale" )
+				gender = YRP.lang_string( "gendermale" )
 			elseif tmpGender == "genderfemale" then
-				gender = lang_string( "genderfemale" )
+				gender = YRP.lang_string( "genderfemale" )
 			elseif tmpGender == "genderother" then
-				gender = lang_string( "genderother" )
+				gender = YRP.lang_string( "genderother" )
 			end
 			draw.SimpleTextOutlined( gender, "charText", ctr( 280 ), ctr( 60 + 240 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 0 ) )
 
 			--[[ Licenses ]]--
 			draw.RoundedBox(0, ctr( 10 ), ctr( 420 ), ctr( 1070 ), ctr( 100 ), Color( 255, 255, 255, 255 ) )
-			draw.SimpleTextOutlined( lang_string( "licenses" ) .. ":", "charTitle", ctr( 10 + 10 ), ctr( 420 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "licenses" ) .. ":", "charTitle", ctr( 10 + 10 ), ctr( 420 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
 			draw.SimpleTextOutlined( licenses, "charTitle", ctr( 10 + 10 ), ctr( 460 + 5 + 25 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
 
 			--[[ Description ]]--
 			draw.RoundedBox(0, ctr( 10 ), ctr( 530 ), ctr( 1070 ), ctr( 100 ), Color( 255, 255, 255, 255 ) )
-			draw.SimpleTextOutlined( lang_string( "description" ) .. ":", "charTitle", ctr( 10 + 10 ), ctr( 560 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "description" ) .. ":", "charTitle", ctr( 10 + 10 ), ctr( 560 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0 ) )
 		end
 	end
 
@@ -114,7 +114,7 @@ net.Receive( "openInteractMenu", function ()
 	local buttonTrade = createVGUI( "DButton", _windowInteract, 530, 50, 10, 950 )
 	buttonTrade:SetText( "" )
 	function buttonTrade:Paint( pw, ph )
-		surfaceButton( self, pw, ph, lang_string( "trade" ) .. " (in future update)" )
+		surfaceButton( self, pw, ph, YRP.lang_string( "trade" ) .. " (in future update)" )
 	end
 
 	if isInstructor then
@@ -128,7 +128,7 @@ net.Receive( "openInteractMenu", function ()
 				_windowInteract:Close()
 			end
 			function buttonPromote:Paint( pw, ph )
-				surfaceButton( self, pw, ph, lang_string( "promote" ) .. ": " .. promoteName )
+				surfaceButton( self, pw, ph, YRP.lang_string( "promote" ) .. ": " .. promoteName )
 			end
 		end
 
@@ -142,7 +142,7 @@ net.Receive( "openInteractMenu", function ()
 				_windowInteract:Close()
 			end
 			function buttonDemote:Paint( pw, ph )
-				surfaceButton( self, pw, ph, lang_string( "demote" ) .. ": " .. demoteName )
+				surfaceButton( self, pw, ph, YRP.lang_string( "demote" ) .. ": " .. demoteName )
 			end
 		end
 	end

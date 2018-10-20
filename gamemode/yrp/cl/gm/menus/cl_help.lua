@@ -9,13 +9,13 @@ function replaceKeyName(str)
 	elseif str == "leftarrow" then
 		return "←"
 	elseif str == "home" then
-		return lang_string("numpadhome")
+		return YRP.lang_string("numpadhome")
 	elseif str == "plus" then
 		return "+"
 	elseif str == "minus" then
 		return "-"
 	elseif str == "ins" then
-		return lang_string("keyinsert")
+		return YRP.lang_string("keyinsert")
 	else
 		return str
 	end
@@ -29,9 +29,9 @@ function nicekey(key_str)
 			local _end = string.sub(_str, 4)
 			_end = replaceKeyName(_end)
 
-			return lang_string("keynumpad") .. " " .. _end
+			return YRP.lang_string("keynumpad") .. " " .. _end
 		elseif string.find(_str, "pg") then
-			return lang_string("keypage") .. " " .. replaceKeyName(_str)
+			return YRP.lang_string("keypage") .. " " .. replaceKeyName(_str)
 		end
 
 		_str = replaceKeyName(_str)
@@ -68,14 +68,14 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local color = Color(255, 255, 255, 255)
 
 		if disabled ~= nil and not LocalPlayer():GetNWBool(disabled) then
-			text = "[" .. lang_string("disabled") .. "] "
+			text = "[" .. YRP.lang_string("disabled") .. "] "
 			color = Color(255, 0, 0, 255)
 		end
 
-		text = text .. lang_string(lstr)
+		text = text .. YRP.lang_string(lstr)
 		draw.SimpleTextOutlined(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + ctr(10), ph / 2, color, 0, 1, ctr(1), Color(0, 0, 0, 255))
 		draw.SimpleTextOutlined(text, "mat1text", ph + ctr(300), ph / 2, color, 0, 1, ctr(1), Color(0, 0, 0, 255))
-		DrawIcon(GetDesignIcon(icon), ph - ctr(4), ph - ctr(4), ctr(2), ctr(2), color)
+		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - ctr(4), ph - ctr(4), ctr(2), ctr(2), color)
 	end
 
 	plist:AddItem(kb)
@@ -111,7 +111,7 @@ net.Receive("getsitehelp", function(len)
 			local mo = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(2 * 20), ctr(60), 0, posy)
 
 			function mo:Paint(pw, ph)
-				draw.SimpleText(lang_string("motd") .. ": " .. motd, "mat1header", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+				draw.SimpleText(YRP.lang_string("motd") .. ": " .. motd, "mat1header", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
 			end
 
 			posy = posy + mo:GetTall() + ctr(20)
@@ -153,7 +153,7 @@ net.Receive("getsitehelp", function(len)
 		HELPMENU.feedback:SetText("")
 
 		function HELPMENU.feedback:Paint(pw, ph)
-			surfaceButton(self, pw, ph, lang_string("givefeedback"))
+			surfaceButton(self, pw, ph, YRP.lang_string("givefeedback"))
 		end
 
 		function HELPMENU.feedback:DoClick()
@@ -197,8 +197,8 @@ net.Receive("getsitestaff", function(len)
 			function tmp:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 				if ea(pl) then
-					draw.SimpleTextOutlined(lang_string("name") .. ": " .. pl:RPName(), "mat1text", ph + ctr(10), ctr(25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
-					draw.SimpleTextOutlined(lang_string("usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "mat1text", ph + ctr(10), ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.lang_string("name") .. ": " .. pl:RPName(), "mat1text", ph + ctr(10), ctr(25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.lang_string("usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "mat1text", ph + ctr(10), ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, ctr(1), Color(0, 0, 0, 255))
 				end
 			end
 
@@ -210,7 +210,7 @@ net.Receive("getsitestaff", function(len)
 
 			function tmp.steam:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("steam"), pw - ctr(4), ph - ctr(4), ctr(2), ctr(2), YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("steam"), pw - ctr(4), ph - ctr(4), ctr(2), ctr(2), YRPGetColor("6"))
 			end
 
 			function tmp.steam:DoClick()
@@ -228,7 +228,7 @@ net.Receive("getsiteserverrules", function(len)
 		local page = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
-			draw.SimpleText(lang_string("rules"), "mat1header", 0, 0, Color(255, 255, 255, 255), 0, 0)
+			draw.SimpleText(YRP.lang_string("rules"), "mat1header", 0, 0, Color(255, 255, 255, 255), 0, 0)
 		end
 
 		page.serverrules = createD("RichText", page, page:GetWide(), page:GetTall() - ctr(50), 0, ctr(50))
@@ -260,7 +260,7 @@ net.Receive("getsitecollection", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -287,7 +287,7 @@ net.Receive("getsitecommunitywebsite", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -314,7 +314,7 @@ net.Receive("getsitecommunityforum", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -343,7 +343,7 @@ net.Receive("getsitecommunitydiscord", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -397,7 +397,7 @@ net.Receive("getsitecommunitytwitter", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -424,7 +424,7 @@ net.Receive("getsitecommunityyoutube", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -451,7 +451,7 @@ net.Receive("getsitecommunityfacebook", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -478,7 +478,7 @@ net.Receive("getsitecommunitysteamgroup", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -506,7 +506,7 @@ net.Receive("getsiteyourrpnews", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -533,7 +533,7 @@ net.Receive("getsiteyourrpdiscord", function(len)
 
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
-				DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -559,7 +559,7 @@ net.Receive("getsiteyourrpserverlist", function(len)
 
 		function openLink:Paint(pw, ph)
 			surfaceButton(self, pw, ph, "")
-			DrawIcon(GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 
 		function openLink:DoClick()
@@ -579,7 +579,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _longestProgressText = 0
 		local _allProgressTexts = {}
 
-		for sho, language in SortedPairs(GetAllLanguages()) do
+		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
 			--PrintTable(language)
 			local text = language.language .. "/" .. language.inenglish .. " ( "
 
@@ -621,7 +621,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		page.panellist = createD("DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, ctr(100))
 		page.panellist:SetSpacing(_br)
 
-		for sho, language in SortedPairs(GetAllLanguages()) do
+		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
 			local lan = createD("DButton", page, page.panellist:GetWide(), ctr(_h), 0, 0)
 			lan:SetText("")
 			lan.language = language
@@ -642,7 +642,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 				surfaceButton(self, pw, ph, "")
 				surfaceText(_allProgressTexts[sho], "mat1text", ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
-				DrawIcon(GetDesignIcon(tostring(self.language.short)), ctr(_icon_w), ctr(_icon_h), ctr(_br), ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
+				YRP.DrawIcon(YRP.GetDesignIcon(tostring(self.language.short)), ctr(_icon_w), ctr(_icon_h), ctr(_br), ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 			end
 
 			function lan:DoClick()
@@ -650,7 +650,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 					OpenHelpTranslatingWindow()
 				end
 
-				LoadLanguage(self.language.short)
+				YRP.LoadLanguage(self.language.short)
 			end
 
 			page.panellist:AddItem(lan)
@@ -696,7 +696,7 @@ function openHelpMenu()
 	HELPMENU.mainmenu = createD("DYRPHorizontalMenu", HELPMENU.window, BScrW(), ScrH(), 0, 0)
 	HELPMENU.mainmenu:GetMenuInfo("gethelpmenu")
 	HELPMENU.mainmenu:SetStartTab("help")
-	HELPMENU.changelanguage = DChangeLanguage(HELPMENU.window, BScrW() - ctr(20 + 64 + 20 + 100), ctr(20), ctr(100))
+	HELPMENU.changelanguage = YRP.DChangeLanguage(HELPMENU.window, BScrW() - ctr(20 + 64 + 20 + 100), ctr(20), ctr(100))
 	HELPMENU.close = createD("DButton", HELPMENU.window, ctr(64), ctr(64), BScrW() - ctr(64 + 20), ctr(20))
 	HELPMENU.close:SetText("")
 
@@ -708,7 +708,7 @@ function openHelpMenu()
 		end
 
 		draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
-		DrawIcon(GetDesignIcon("close"), ph, ph, 0, 0, YRPGetColor("6"))
+		YRP.DrawIcon(YRP.GetDesignIcon("close"), ph, ph, 0, 0, YRPGetColor("6"))
 	end
 
 	function HELPMENU.close:DoClick()

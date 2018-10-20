@@ -38,7 +38,7 @@ function OpenHelpTranslatingWindow()
 	end
 end
 
-function AddLanguageChangerLine(parent, tab, mainparent)
+function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 	local lang = createD("DButton", parent, parent:GetWide(), ctr(40), 0, 0)
 	lang:SetText("")
 	lang.lang = tab
@@ -51,7 +51,7 @@ function AddLanguageChangerLine(parent, tab, mainparent)
 		end
 
 		surfaceBox(0, 0, pw, ph, color)
-		DrawIcon(GetDesignIcon(tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
+		YRP.DrawIcon(YRP.GetDesignIcon(tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
 		self.textcol = Color(255, 255, 255)
 
 		if self.lang.percentage ~= nil and self.lang.percentage == 100 then
@@ -62,7 +62,7 @@ function AddLanguageChangerLine(parent, tab, mainparent)
 	end
 
 	function lang:DoClick()
-		LoadLanguage(self.lang.short)
+		YRP.LoadLanguage(self.lang.short)
 		mainparent:Remove()
 	end
 
@@ -77,7 +77,7 @@ function constructLanguageText(lang, inenglish, percentage)
 	end
 end
 
-function AddLanguageAddLine(parent, mainparent)
+function YRP.AddLanguageAddLine(parent, mainparent)
 	local lang = createD("DButton", parent, parent:GetWide(), ctr(40), 0, 0)
 	lang:SetText("")
 
@@ -101,7 +101,7 @@ function AddLanguageAddLine(parent, mainparent)
 	parent:AddItem(lang)
 end
 
-function DChangeLanguage(parent, x, y, size)
+function YRP.DChangeLanguage(parent, x, y, size)
 	local LanguageChanger = createD("DButton", parent, size, size * 0.671, x, y)
 	LanguageChanger:SetText("")
 
@@ -113,11 +113,11 @@ function DChangeLanguage(parent, x, y, size)
 		end
 
 		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		DrawIcon(GetDesignIcon(GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
+		YRP.DrawIcon(YRP.GetDesignIcon(YRP.GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
 	end
 
 	function LanguageChanger:DoClick()
-		local languages = GetAllLanguages()
+		local languages = YRP.GetAllLanguages()
 		surface.SetFont(GetFont())
 		local _longestLanguageString = 0
 
@@ -167,13 +167,13 @@ function DChangeLanguage(parent, x, y, size)
 		my = my - ctr(25)
 		window:SetPos(mx, my)
 		window.dpanellist = createD("DPanelList", window, window:GetWide(), ctr(400), 0, 0)
-		AddLanguageChangerLine(window.dpanellist, GetLanguageAutoInfo(), window)
+		YRP.AddLanguageChangerLine(window.dpanellist, YRP.GetLanguageAutoInfo(), window)
 
 		for k, lang in SortedPairs(languages) do
-			AddLanguageChangerLine(window.dpanellist, lang, window)
+			YRP.AddLanguageChangerLine(window.dpanellist, lang, window)
 		end
 
-		AddLanguageAddLine(window.dpanellist, window)
+		YRP.AddLanguageAddLine(window.dpanellist, window)
 		window.dpanellist:SetTall(ctr(40 * (table.Count(languages) + 2)))
 		window:SetTall(ctr(40 * (table.Count(languages) + 2)))
 	end
@@ -276,7 +276,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(searchIcon)
 		surface.DrawTexturedRect(ctr(5), ctr(5), ctr(40), ctr(40))
-		draw.SimpleText(lang_string("search") .. ":", "DermaDefault", ctr(_but_len), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("search") .. ":", "DermaDefault", ctr(_but_len), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	local search = createD("DTextEntry", frame, _w - ctr(50), ctr(50), ctr(10 + 50), ctr(50 + 10))
@@ -353,15 +353,15 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							self.tcolor = Color(255, 255, 255, 255)
 
 							if string.find(v.ClassName, "npc_") then
-								self.text = lang_string("npcswep")
+								self.text = YRP.lang_string("npcswep")
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = lang_string("baseentity")
+								self.text = YRP.lang_string("baseentity")
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = lang_string("hasnoworldmodel")
+								self.text = YRP.lang_string("hasnoworldmodel")
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 255, 0, 255)
 							end
@@ -369,13 +369,13 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 						else
 							if string.find(v.ClassName, "npc_") then
-								self.text = lang_string("npcswep")
+								self.text = YRP.lang_string("npcswep")
 								self.color = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = lang_string("baseentity")
+								self.text = YRP.lang_string("baseentity")
 								self.color = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = lang_string("hasnoworldmodel")
+								self.text = YRP.lang_string("hasnoworldmodel")
 								self.color = Color(255, 255, 0, 255)
 							end
 
@@ -410,10 +410,10 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 					function tmpButton:Paint(pw, ph)
 						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-						local text = "" --lang_string( "notadded" )
+						local text = "" --YRP.lang_string( "notadded" )
 
 						if tmpSelected[k].selected then
-							text = lang_string("added")
+							text = YRP.lang_string("added")
 
 							if tmpPointer.text ~= "" then
 								text = text .. " (" .. tmpPointer.text .. ")"
@@ -480,7 +480,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -495,7 +495,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -548,7 +548,7 @@ function OpenSingleSelector(table, closeF)
 	getMaxSite()
 	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
-	frame:SetTitle(lang_string("itemMenu"))
+	frame:SetTitle(YRP.lang_string("itemMenu"))
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
@@ -584,7 +584,7 @@ function OpenSingleSelector(table, closeF)
 		local _string = search:GetText()
 
 		if _string == "" then
-			_string = lang_string("search")
+			_string = YRP.lang_string("search")
 		end
 
 		draw.SimpleTextOutlined(_string, "DermaDefault", ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
@@ -675,7 +675,7 @@ function OpenSingleSelector(table, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -690,7 +690,7 @@ function OpenSingleSelector(table, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -753,7 +753,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(searchIcon)
 		surface.DrawTexturedRect(ctr(5), ctr(5), ctr(40), ctr(40))
-		draw.SimpleText(lang_string("search") .. ":", "DermaDefault", ctr(_but_len), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("search") .. ":", "DermaDefault", ctr(_but_len), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	local search = createD("DTextEntry", frame, _w - ctr(50), ctr(50), ctr(10 + 50), ctr(50 + 10))
@@ -762,7 +762,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 		local _string = search:GetText()
 		if _string == "" then
-			_string = lang_string( "search" )
+			_string = YRP.lang_string( "search" )
 		end
 		draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	end]]
@@ -839,15 +839,15 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 							self.tcolor = Color(255, 255, 255, 255)
 
 							if string.find(v.ClassName, "npc_") then
-								self.text = lang_string("npcswep")
+								self.text = YRP.lang_string("npcswep")
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = lang_string("baseentity")
+								self.text = YRP.lang_string("baseentity")
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = lang_string("hasnoworldmodel")
+								self.text = YRP.lang_string("hasnoworldmodel")
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 255, 0, 255)
 							end
@@ -855,13 +855,13 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 						else
 							if string.find(v.ClassName, "npc_") then
-								self.text = lang_string("npcswep")
+								self.text = YRP.lang_string("npcswep")
 								self.color = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = lang_string("baseentity")
+								self.text = YRP.lang_string("baseentity")
 								self.color = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = lang_string("hasnoworldmodel")
+								self.text = YRP.lang_string("hasnoworldmodel")
 								self.color = Color(255, 255, 0, 255)
 							end
 
@@ -896,10 +896,10 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 
 					function tmpButton:Paint(pw, ph)
 						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-						local text = "" --lang_string( "notadded" )
+						local text = "" --YRP.lang_string( "notadded" )
 
 						if tmpSelected[k].selected then
-							text = lang_string("added")
+							text = YRP.lang_string("added")
 
 							if tmpPointer.text ~= "" then
 								text = text .. " (" .. tmpPointer.text .. ")"
@@ -971,7 +971,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -986,7 +986,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -1039,7 +1039,7 @@ function openSingleSelector(table, closeF)
 	getMaxSite()
 	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
-	frame:SetTitle(lang_string("itemMenu"))
+	frame:SetTitle(YRP.lang_string("itemMenu"))
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
@@ -1075,7 +1075,7 @@ function openSingleSelector(table, closeF)
 		local _string = search:GetText()
 
 		if _string == "" then
-			_string = lang_string("search")
+			_string = YRP.lang_string("search")
 		end
 
 		draw.SimpleTextOutlined(_string, "DermaDefault", ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
@@ -1166,7 +1166,7 @@ function openSingleSelector(table, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("nextsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -1181,7 +1181,7 @@ function openSingleSelector(table, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("prevsite"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -1233,7 +1233,7 @@ function GM:InitPostEntity()
 	net.WriteBool(system.IsLinux())
 	net.WriteBool(system.IsOSX())
 	net.SendToServer()
-	initLang()
+	YRP.initLang()
 
 	if tobool(get_tutorial("tut_welcome")) then
 		openHelpMenu()
@@ -1301,7 +1301,7 @@ function surfaceBox(x, y, w, h, color)
 	surface.DrawRect(x, y, w, h)
 end
 
-function drawIcon(ply, str, z, color)
+function YRP.DrawSymbol(ply, str, z, color)
 	local _size = 32
 	local pos = ply:GetPos() + Vector(0, 0, 86)
 
@@ -1313,7 +1313,7 @@ function drawIcon(ply, str, z, color)
 	local sca = ply:GetModelScale() / 4
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetDrawColor(color)
-	surface.SetMaterial(GetDesignIcon(str))
+	surface.SetMaterial(YRP.GetDesignIcon(str))
 	surface.DrawTexturedRect(-_size / 2, 0, _size, _size)
 	cam.End3D2D()
 end
@@ -1451,11 +1451,11 @@ function drawPlates(ply)
 			if ply:GetNWBool("bool_tag_on_head_voice", false) and ply:GetNWBool("yrp_speaking", false) then
 				local plyvol = ply:VoiceVolume() * 200
 				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
-				drawIcon(ply, "voice", 26, voicecolor)
+				YRP.DrawSymbol(ply, "voice", 26, voicecolor)
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_chat", false) and ply:GetNWBool("istyping", false) then
-				drawIcon(ply, "chat", 26, color)
+				YRP.DrawSymbol(ply, "chat", 26, color)
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_clan", false) then
@@ -1472,10 +1472,10 @@ function drawPlates(ply)
 				local onlinestatus = ""
 				local onlinecolor = Color(255, 255, 255, 255)
 				if ply:GetNWBool("isdnd", false) then
-					onlinestatus = lang_string("dnd")
+					onlinestatus = YRP.lang_string("dnd")
 					onlinecolor = Color(255, 0, 0, 255)
 				elseif ply:GetNWBool("isafk", false) then
-					onlinestatus = lang_string("afk")
+					onlinestatus = YRP.lang_string("afk")
 					onlinecolor = Color(255, 255, 0, 255)
 				end
 				onlinecolor.a = color.a
@@ -1500,14 +1500,14 @@ function drawPlates(ply)
 
 			if ply:GetNWBool("bool_tag_on_head_armor", false) then
 				_height = _height + 1
-				local str = ply:Armor() .. "/" .. ply:GetNWString("GetMaxArmor", "100") .. " " .. lang_string("armor")
+				local str = ply:Armor() .. "/" .. ply:GetNWString("GetMaxArmor", "100") .. " " .. YRP.lang_string("armor")
 				drawBar(ply, str, _height, color, ply:Armor(), tonumber(ply:GetNWString("GetMaxArmor", "100")), Color(0, 0, 255, color.a))
 				_height = _height + 6
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_health", false) then
 				_height = _height + 1
-				local str = ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. lang_string("health")
+				local str = ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. YRP.lang_string("health")
 				drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(0, 255, 0, color.a))
 				_height = _height + 6
 			end
@@ -1616,7 +1616,7 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	if ply:GetNWBool("tag_immortal", false) then
 		for i, ent in pairs(ents.GetAll()) do
 			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetNWBool("immortal", false) or ent:GetNWBool("godmode", false)) then
-				drawPlate(ent, string.upper("[" .. lang_string("immortal") .. "]"), 0, Color(0, 0, 100, ent:GetColor().a))
+				drawPlate(ent, string.upper("[" .. YRP.lang_string("immortal") .. "]"), 0, Color(0, 0, 100, ent:GetColor().a))
 			end
 		end
 	end
@@ -1630,20 +1630,20 @@ net.Receive("yrp_noti", function(len)
 			local _str_lang = net.ReadString()
 			local _time = 4
 			local _channel = NOTIFY_GENERIC
-			local _str = "[" .. lang_string("adminnotification") .. "] "
+			local _str = "[" .. YRP.lang_string("adminnotification") .. "] "
 
 			if _str_lang == "noreleasepoint" then
-				_str = _str .. lang_string(_str_lang)
+				_str = _str .. YRP.lang_string(_str_lang)
 			elseif _str_lang == "nojailpoint" then
-				_str = _str .. lang_string(_str_lang)
+				_str = _str .. YRP.lang_string(_str_lang)
 			elseif _str_lang == "nogroupspawn" then
-				_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. lang_string(_str_lang) .. "!"
+				_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. YRP.lang_string(_str_lang) .. "!"
 			elseif _str_lang == "inventoryclearing" then
-				_str = _str .. lang_string(_str_lang) .. " (" .. lang_string(net.ReadString()) .. ")"
+				_str = _str .. YRP.lang_string(_str_lang) .. " (" .. YRP.lang_string(net.ReadString()) .. ")"
 			elseif _str_lang == "playerisready" then
-				_str = _str .. lang_string("finishedloadingthegamepre") .. " " .. net.ReadString() .. " " .. lang_string("finishedloadingthegamepos")
+				_str = _str .. YRP.lang_string("finishedloadingthegamepre") .. " " .. net.ReadString() .. " " .. YRP.lang_string("finishedloadingthegamepos")
 			elseif _str_lang == "newfeedback" then
-				_str = _str .. lang_string("newfeedback")
+				_str = _str .. YRP.lang_string("newfeedback")
 			elseif _str_lang == "database_full_server" then
 				_str = _str .. "SERVER: Database or disk is full, please make more space!"
 				_time = 40
@@ -1661,7 +1661,7 @@ net.Receive("yrp_info", function(len)
 
 		if ply ~= nil then
 			local _str = net.ReadString()
-			_str = lang_string("notallowed") .. " ( " .. lang_string(_str) .. " )"
+			_str = YRP.lang_string("notallowed") .. " ( " .. YRP.lang_string(_str) .. " )"
 			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 		end
 	end
@@ -1673,11 +1673,11 @@ net.Receive("yrp_info2", function(len)
 
 		if ply ~= nil then
 			local _str = net.ReadString()
-			_str = lang_string(_str)
+			_str = YRP.lang_string(_str)
 			local _str2 = net.ReadString()
 
 			if _str2 ~= nil then
-				_str2 = " " .. lang_string(_str2)
+				_str2 = " " .. YRP.lang_string(_str2)
 			else
 				_str2 = ""
 			end
@@ -1692,7 +1692,7 @@ net.Receive("yrp_message", function(len)
 		local ply = LocalPlayer()
 
 		if ply ~= nil then
-			local _str = lang_string(net.ReadString())
+			local _str = YRP.lang_string(net.ReadString())
 			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 		end
 	end

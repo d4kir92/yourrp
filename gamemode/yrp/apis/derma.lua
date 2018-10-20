@@ -159,11 +159,11 @@ end
 
 local _icons = {}
 
-function AddDesignIcon(name, path)
+function YRP.AddDesignIcon(name, path)
 	_icons[name] = Material(path)
 end
 
-function GetDesignIcon(name)
+function YRP.GetDesignIcon(name)
 	if _icons[name] ~= nil then
 		return _icons[name]
 	else
@@ -171,59 +171,59 @@ function GetDesignIcon(name)
 	end
 end
 
-function DrawIcon(material, w, h, x, y, color)
+function YRP.DrawIcon(material, w, h, x, y, color)
 	local col = color or YRPGetColor("6")
 	surface.SetDrawColor(col)
 	surface.SetMaterial(material)
 	surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
 end
 
-AddDesignIcon("auto", "vgui/flags/lang_" .. "auto" .. ".png")
-AddDesignIcon("group", "vgui/material/icon_group.png")
-AddDesignIcon("role", "vgui/material/icon_person.png")
-AddDesignIcon("help", "vgui/material/icon_help.png")
-AddDesignIcon("keyboard", "vgui/material/icon_keyboard.png")
-AddDesignIcon("mouse", "vgui/material/icon_mouse.png")
-AddDesignIcon("security", "vgui/material/icon_security.png")
-AddDesignIcon("usergroup", "vgui/material/icon_usergroup.png")
-AddDesignIcon("character", "vgui/material/icon_character.png")
-AddDesignIcon("shop", "vgui/material/icon_shop.png")
-AddDesignIcon("settings", "vgui/material/icon_settings.png")
-AddDesignIcon("feedback", "vgui/material/icon_feedback.png")
-AddDesignIcon("map", "vgui/material/icon_map.png")
-AddDesignIcon("color_lens", "vgui/material/icon_color_lens.png")
-AddDesignIcon("pin_drop", "vgui/material/icon_pin_drop.png")
-AddDesignIcon("face", "vgui/material/icon_face.png")
-AddDesignIcon("smile", "vgui/material/icon_insert_emoticon.png")
-AddDesignIcon("keyboard_arrow_down", "vgui/material/icon_keyboard_arrow_down.png")
-AddDesignIcon("keyboard_arrow_up", "vgui/material/icon_keyboard_arrow_up.png")
-AddDesignIcon("keyboard_arrow_right", "vgui/material/icon_keyboard_arrow_right.png")
-AddDesignIcon("keyboard_arrow_left", "vgui/material/icon_keyboard_arrow_left.png")
-AddDesignIcon("unfold_less", "vgui/material/icon_unfold_less.png")
-AddDesignIcon("unfold_more", "vgui/material/icon_unfold_more.png")
-AddDesignIcon("record_voice_over", "vgui/material/icon_record_voice_over.png")
-AddDesignIcon("3d_rotation", "vgui/material/icon_3d_rotation.png")
-AddDesignIcon("rotate_left", "vgui/material/icon_rotate_left.png")
-AddDesignIcon("rotate_right", "vgui/material/icon_rotate_right.png")
-AddDesignIcon("smartphone", "vgui/material/icon_smartphone.png")
-AddDesignIcon("system_update", "vgui/material/icon_system_update.png")
-AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
-AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
-AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
-AddDesignIcon("work", "vgui/material/icon_work.png")
-AddDesignIcon("done", "vgui/material/icon_done_outline.png")
-AddDesignIcon("navigation", "vgui/material/icon_navigation.png")
-AddDesignIcon("chat", "vgui/material/icon_chat.png")
-AddDesignIcon("voice", "vgui/material/icon_voice.png")
-AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
-AddDesignIcon("clear", "vgui/material/icon_clear.png")
-AddDesignIcon("launch", "vgui/material/icon_launch.png")
-AddDesignIcon("lock", "vgui/material/icon_lock.png")
-AddDesignIcon("steam", "vgui/material/icon_steam.png")
-AddDesignIcon("play", "vgui/material/icon_play.png")
-AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
-AddDesignIcon("pause", "vgui/material/icon_pause.png")
-AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
+YRP.AddDesignIcon("auto", "vgui/flags/lang_" .. "auto" .. ".png")
+YRP.AddDesignIcon("group", "vgui/material/icon_group.png")
+YRP.AddDesignIcon("role", "vgui/material/icon_person.png")
+YRP.AddDesignIcon("help", "vgui/material/icon_help.png")
+YRP.AddDesignIcon("keyboard", "vgui/material/icon_keyboard.png")
+YRP.AddDesignIcon("mouse", "vgui/material/icon_mouse.png")
+YRP.AddDesignIcon("security", "vgui/material/icon_security.png")
+YRP.AddDesignIcon("usergroup", "vgui/material/icon_usergroup.png")
+YRP.AddDesignIcon("character", "vgui/material/icon_character.png")
+YRP.AddDesignIcon("shop", "vgui/material/icon_shop.png")
+YRP.AddDesignIcon("settings", "vgui/material/icon_settings.png")
+YRP.AddDesignIcon("feedback", "vgui/material/icon_feedback.png")
+YRP.AddDesignIcon("map", "vgui/material/icon_map.png")
+YRP.AddDesignIcon("color_lens", "vgui/material/icon_color_lens.png")
+YRP.AddDesignIcon("pin_drop", "vgui/material/icon_pin_drop.png")
+YRP.AddDesignIcon("face", "vgui/material/icon_face.png")
+YRP.AddDesignIcon("smile", "vgui/material/icon_insert_emoticon.png")
+YRP.AddDesignIcon("keyboard_arrow_down", "vgui/material/icon_keyboard_arrow_down.png")
+YRP.AddDesignIcon("keyboard_arrow_up", "vgui/material/icon_keyboard_arrow_up.png")
+YRP.AddDesignIcon("keyboard_arrow_right", "vgui/material/icon_keyboard_arrow_right.png")
+YRP.AddDesignIcon("keyboard_arrow_left", "vgui/material/icon_keyboard_arrow_left.png")
+YRP.AddDesignIcon("unfold_less", "vgui/material/icon_unfold_less.png")
+YRP.AddDesignIcon("unfold_more", "vgui/material/icon_unfold_more.png")
+YRP.AddDesignIcon("record_voice_over", "vgui/material/icon_record_voice_over.png")
+YRP.AddDesignIcon("3d_rotation", "vgui/material/icon_3d_rotation.png")
+YRP.AddDesignIcon("rotate_left", "vgui/material/icon_rotate_left.png")
+YRP.AddDesignIcon("rotate_right", "vgui/material/icon_rotate_right.png")
+YRP.AddDesignIcon("smartphone", "vgui/material/icon_smartphone.png")
+YRP.AddDesignIcon("system_update", "vgui/material/icon_system_update.png")
+YRP.AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
+YRP.AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
+YRP.AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
+YRP.AddDesignIcon("work", "vgui/material/icon_work.png")
+YRP.AddDesignIcon("done", "vgui/material/icon_done_outline.png")
+YRP.AddDesignIcon("navigation", "vgui/material/icon_navigation.png")
+YRP.AddDesignIcon("chat", "vgui/material/icon_chat.png")
+YRP.AddDesignIcon("voice", "vgui/material/icon_voice.png")
+YRP.AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
+YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
+YRP.AddDesignIcon("launch", "vgui/material/icon_launch.png")
+YRP.AddDesignIcon("lock", "vgui/material/icon_lock.png")
+YRP.AddDesignIcon("steam", "vgui/material/icon_steam.png")
+YRP.AddDesignIcon("play", "vgui/material/icon_play.png")
+YRP.AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
+YRP.AddDesignIcon("pause", "vgui/material/icon_pause.png")
+YRP.AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
 local _delay = 1
 local _get_design = true
 
@@ -281,7 +281,7 @@ function surfaceCheckBox(derma, pw, ph, icon)
 			if derma:GetChecked() then
 				br = 4
 				surface.SetDrawColor(0, 255, 0, 255)
-				surface.SetMaterial(GetDesignIcon(icon))
+				surface.SetMaterial(YRP.GetDesignIcon(icon))
 				surface.DrawTexturedRect(ctr(br), ctr(br), pw - ctr(br * 2), ph - ctr(8))
 			end
 		end
@@ -380,7 +380,7 @@ function paintButton(derma, pw, ph, mytext)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(lang_string(mytext), "windowTitle", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.lang_string(mytext), "windowTitle", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 end
 
 function paintPanel(derma, pw, ph, color)
@@ -399,10 +399,10 @@ function paintInv(derma, pw, ph, text1, text2)
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 190))
 	local _brC = Color(255, 255, 255, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(lang_string(text1), "DermaDefault", ctr(15), ph - ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.lang_string(text1), "DermaDefault", ctr(15), ph - ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr(1), Color(0, 0, 0, 255))
 
 	if text2 ~= nil then
-		draw.SimpleTextOutlined(lang_string(text2), "DermaDefault", ctr(15), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.lang_string(text2), "DermaDefault", ctr(15), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr(1), Color(0, 0, 0, 255))
 	end
 end
 
@@ -712,7 +712,7 @@ function createMDMenu(parent, w, h, x, y)
 			local tmpCat = createD("DPanel", self.menu, ctr(600 - 20), ctr(50), ctr(10), ctr(posY))
 
 			function tmpCat:Paint(pw, ph)
-				draw.SimpleTextOutlined(string.upper(lang_string(v)), "windowTitle", ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "windowTitle", ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 
 			self.menu:AddItem(tmpCat)
@@ -742,7 +742,7 @@ function createMDMenu(parent, w, h, x, y)
 							surface.DrawTexturedRect(ctr(24), ctr(24), ctr(32), ctr(32))
 						end
 
-						draw.SimpleTextOutlined(string.upper(lang_string(_w.site)), "mat1text", ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+						draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "mat1text", ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					end
 
 					function tmp2:DoClick()
@@ -797,8 +797,8 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 			draw.RoundedBox(0, pw / 2, 0, pw / 2, ph, get_dsbg_col())
 		end
 
-		draw.SimpleTextOutlined(lang_string("dark"), "HudBars", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(lang_string("light"), "HudBars", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("dark"), "HudBars", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("light"), "HudBars", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function tmp:DoClick()

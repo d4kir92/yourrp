@@ -561,7 +561,7 @@ end)
 net.Receive( "addDBRole", function( len, ply )
 	printGM( "db", "addDBRole" )
 	local _tmpUniqueID = net.ReadString()
-	local result = SQL_INSERT_INTO( "yrp_roles", "roleID, groupID", "'" .. lang_string( "newrole" ) .. "', " .. _tmpUniqueID )
+	local result = SQL_INSERT_INTO( "yrp_roles", "roleID, groupID", "'" .. YRP.lang_string( "newrole" ) .. "', " .. _tmpUniqueID )
 	printGM( "db", result)
 
 	sendDBRoles( ply, _tmpUniqueID )

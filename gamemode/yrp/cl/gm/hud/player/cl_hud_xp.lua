@@ -3,7 +3,7 @@
 local xp = Material( "icon16/user.png" )
 
 function hudXP( ply, color )
-	local _xptext = "" --lang_string( "level" ) .. " " .. 1 .. " (" .. 0 .. "%) " ..
+	local _xptext = "" --YRP.lang_string( "level" ) .. " " .. 1 .. " (" .. 0 .. "%) " ..
 	_xptext = ply:GetNWString( "groupName" ) .. " " .. ply:GetNWString( "roleName" )
 	drawHUDElement( "xp", 0, 100, _xptext, xp, color )
 end

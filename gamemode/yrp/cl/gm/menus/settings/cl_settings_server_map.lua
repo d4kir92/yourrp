@@ -20,7 +20,7 @@ net.Receive( "getMapList", function( len )
 		local _mapName = createD( "DPanel", settingsWindow.window.site, BScrW() - ctr( 20 + 256 ), ctr( 256 ), ctr( 10 + 256 ), ctr( 10 ) )
 		function _mapName:Paint( pw, ph )
 			draw.RoundedBox( 0, 0,0, pw, ph, get_dp_col() )
-			draw.SimpleTextOutlined( lang_string( "map" ) .. ": " .. GetMapNameDB(), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "map" ) .. ": " .. GetMapNameDB(), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 		end
 
 		local _mapPanel = createD( "DPanel", settingsWindow.window.site, ctr( 256 ), ctr( 256 ), ctr( 10 ), ctr( 10 ) )
@@ -35,10 +35,10 @@ net.Receive( "getMapList", function( len )
 
 		_mapListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 + 10 + 700 ), ScrH() - ctr( 180 + 256 + 20 ), ctr( 10 ), ctr( 10 + 256 + 10 ) )
 		_mapListView:AddColumn( "uniqueID" )
-		_mapListView:AddColumn( lang_string( "position" ) )
-		_mapListView:AddColumn( lang_string( "angle" ) )
-		_mapListView:AddColumn( lang_string( "type" ) )
-		_mapListView:AddColumn( lang_string( "name" ) )
+		_mapListView:AddColumn( YRP.lang_string( "position" ) )
+		_mapListView:AddColumn( YRP.lang_string( "angle" ) )
+		_mapListView:AddColumn( YRP.lang_string( "type" ) )
+		_mapListView:AddColumn( YRP.lang_string( "name" ) )
 
 		local _buttonDelete = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 10+256+10 ) )
 		_buttonDelete:SetText( "" )
@@ -52,7 +52,7 @@ net.Receive( "getMapList", function( len )
 		end
 		function _buttonDelete:Paint( pw, ph )
 			if _mapListView:GetSelectedLine() != nil then
-				surfaceButton( self, pw, ph, lang_string( "deleteentry" ), Color( 255, 0, 0 ) )
+				surfaceButton( self, pw, ph, YRP.lang_string( "deleteentry" ), Color( 255, 0, 0 ) )
 			end
 		end
 
@@ -68,7 +68,7 @@ net.Receive( "getMapList", function( len )
 		end
 		function _buttonTeleport:Paint( pw, ph )
 			if _mapListView:GetSelectedLine() != nil then
-				surfaceButton( self, pw, ph, lang_string( "tpto" ) )
+				surfaceButton( self, pw, ph, YRP.lang_string( "tpto" ) )
 			end
 		end
 
@@ -80,9 +80,9 @@ net.Receive( "getMapList", function( len )
 			tmpFrame:SetTitle( "" )
 			function tmpFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
-				draw.SimpleTextOutlined( lang_string( "groupspawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "creategroupspawnpoint" ), "sef", ctr( 10 ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "selectgroup" ) .. ":", "sef", ctr( 10 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "groupspawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "creategroupspawnpoint" ), "sef", ctr( 10 ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "selectgroup" ) .. ":", "sef", ctr( 10 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			local tmpGroup = createD( "DComboBox", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
@@ -91,7 +91,7 @@ net.Receive( "getMapList", function( len )
 			end
 
 			local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
-			tmpButton:SetText( lang_string( "add" ) )
+			tmpButton:SetText( YRP.lang_string( "add" ) )
 			function tmpButton:DoClick()
 				local tmpPos = string.Explode( " ", tostring( ply:GetPos() ) )
 				local tmpAng = string.Explode( " ", tostring( ply:GetAngles() ) )
@@ -114,7 +114,7 @@ net.Receive( "getMapList", function( len )
 			tmpFrame:MakePopup()
 		end
 		function _buttonAddGroupSpawnPoint:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "addgroupspawnpoint" ) )
+			surfaceButton( self, pw, ph, YRP.lang_string( "addgroupspawnpoint" ) )
 		end
 
 		local _buttonAddRoleSpawnPoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 456 ) )
@@ -125,9 +125,9 @@ net.Receive( "getMapList", function( len )
 			tmpFrame:SetTitle( "" )
 			function tmpFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
-				draw.SimpleTextOutlined( lang_string( "rolespawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "createrolespawnpoint" ), "sef", ctr( 10 ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "selectrole" ) .. ":", "sef", ctr( 10 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "rolespawnpointcreator" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "createrolespawnpoint" ), "sef", ctr( 10 ), ctr( 60 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "selectrole" ) .. ":", "sef", ctr( 10 ), ctr( 110 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			local tmpRole = createD( "DComboBox", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
@@ -141,7 +141,7 @@ net.Receive( "getMapList", function( len )
 			end
 
 			local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
-			tmpButton:SetText( lang_string( "add" ) )
+			tmpButton:SetText( YRP.lang_string( "add" ) )
 			function tmpButton:DoClick()
 				local tmpRoleID = tostring( tmpRole:GetOptionData( tmpRole:GetSelectedID() ) )
 				if tmpRoleID != nil then
@@ -164,7 +164,7 @@ net.Receive( "getMapList", function( len )
 			tmpFrame:MakePopup()
 		end
 		function _buttonAddRoleSpawnPoint:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "addrolespawnpoint" ) )
+			surfaceButton( self, pw, ph, YRP.lang_string( "addrolespawnpoint" ) )
 		end
 
 		local _buttonAddJailPoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 516 ) )
@@ -184,7 +184,7 @@ net.Receive( "getMapList", function( len )
 			net.SendToServer()
 		end
 		function _buttonAddJailPoint:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "addjailpoint" ) )
+			surfaceButton( self, pw, ph, YRP.lang_string( "addjailpoint" ) )
 		end
 
 		local _buttonAddReleasePoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 576 ) )
@@ -204,7 +204,7 @@ net.Receive( "getMapList", function( len )
 			net.SendToServer()
 		end
 		function _buttonAddReleasePoint:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "addjailfreepoint" ) )
+			surfaceButton( self, pw, ph, YRP.lang_string( "addjailfreepoint" ) )
 		end
 
 		local _buttonAddDealer = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 636 ) )
@@ -218,7 +218,7 @@ net.Receive( "getMapList", function( len )
 			net.SendToServer()
 		end
 		function _buttonAddDealer:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "add" ) .. " [" .. lang_string( "dealer" ) .. "]" )
+			surfaceButton( self, pw, ph, YRP.lang_string( "add" ) .. " [" .. YRP.lang_string( "dealer" ) .. "]" )
 		end
 
 		local _buttonAddStoragepoint = createD( "DButton", settingsWindow.window.site, ctr( 700 ), ctr( 50 ), BScrW() - ctr( 10 + 700 ), ctr( 696 ) )
@@ -229,14 +229,14 @@ net.Receive( "getMapList", function( len )
 			tmpFrame:SetTitle( "" )
 			function tmpFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0,0, pw, ph, get_dbg_col() )
-				draw.SimpleTextOutlined( lang_string( "storagepoint" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "name" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "storagepoint" ), "sef", ctr( 10 ), ctr( 10 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "name" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			local tmpName = createD( "DTextEntry", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 10 ), ctr( 100 ) )
 
 			local tmpButton = createD( "DButton", tmpFrame, ctr( 400 ), ctr( 50 ), ctr( 600-200 ), ctr( 230 ) )
-			tmpButton:SetText( lang_string( "add" ) )
+			tmpButton:SetText( YRP.lang_string( "add" ) )
 			function tmpButton:DoClick()
 				net.Start( "dbInsertIntoMap" )
 					net.WriteString( "yrp_" .. GetMapNameDB() )
@@ -256,7 +256,7 @@ net.Receive( "getMapList", function( len )
 			tmpFrame:MakePopup()
 		end
 		function _buttonAddStoragepoint:Paint( pw, ph )
-			surfaceButton( self, pw, ph, lang_string( "add" ) .. " [" .. lang_string( "storagepoint" ) .. "]" )
+			surfaceButton( self, pw, ph, YRP.lang_string( "add" ) .. " [" .. YRP.lang_string( "storagepoint" ) .. "]" )
 		end
 
 		for k, v in pairs( _tmpTable ) do

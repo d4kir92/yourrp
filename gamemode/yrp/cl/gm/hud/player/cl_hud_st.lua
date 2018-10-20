@@ -17,7 +17,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "youarebleeding" )
+		_sttext = _sttext .. YRP.lang_string( "youarebleeding" )
 		if _st_m < 3 then
 			_st_m = 3
 		end
@@ -26,7 +26,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "cuffed" )
+		_sttext = _sttext .. YRP.lang_string( "cuffed" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -35,7 +35,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "weaponlowered" )
+		_sttext = _sttext .. YRP.lang_string( "weaponlowered" )
 		if _st_m < 1 then
 			_st_m = 1
 		end
@@ -44,7 +44,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "hungry" )
+		_sttext = _sttext .. YRP.lang_string( "hungry" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -53,7 +53,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "thirsty" )
+		_sttext = _sttext .. YRP.lang_string( "thirsty" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -62,7 +62,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "yourrightlegisbroken" )
+		_sttext = _sttext .. YRP.lang_string( "yourrightlegisbroken" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -71,7 +71,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "yourleftlegisbroken" )
+		_sttext = _sttext .. YRP.lang_string( "yourleftlegisbroken" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -80,7 +80,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "yourrightarmisbroken" )
+		_sttext = _sttext .. YRP.lang_string( "yourrightarmisbroken" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -89,7 +89,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "yourleftarmisbroken" )
+		_sttext = _sttext .. YRP.lang_string( "yourleftarmisbroken" )
 		if _st_m < 2 then
 			_st_m = 2
 		end
@@ -98,7 +98,7 @@ function hudST( ply, color )
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. lang_string( "jail" ) .. ": " .. ply:GetNWInt( "jailtime", 0 )
+		_sttext = _sttext .. YRP.lang_string( "jail" ) .. ": " .. ply:GetNWInt( "jailtime", 0 )
 		if _st_m < 2 then
 			_st_m = 2
 		end

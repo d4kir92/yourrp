@@ -32,16 +32,16 @@ function openFeedbackMenu()
 		closeMenu()
 	end
 
-	_fb.langu = DChangeLanguage( _fb.window, BScrW()/2, ctr( 50 ), ctr( 100 ) )
+	_fb.langu = YRP.DChangeLanguage( _fb.window, BScrW()/2, ctr( 50 ), ctr( 100 ) )
 
 	function _fb.window:Paint( pw, ph )
-		surfaceWindow( self, pw, ph, lang_string( "givefeedback" ) .. " [PROTOTYPE]" )
+		surfaceWindow( self, pw, ph, YRP.lang_string( "givefeedback" ) .. " [PROTOTYPE]" )
 	end
 
 	_fb.discord = createD( "DButton", _fb.window, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
 	_fb.discord:SetText( "" )
 	function _fb.discord:Paint( pw, ph )
-		surfaceButton( self, pw, ph, lang_string( "livesupport" ) )
+		surfaceButton( self, pw, ph, YRP.lang_string( "livesupport" ) )
 	end
 	function _fb.discord:DoClick()
 		gui.OpenURL( "https://discord.gg/sEgNZxg" )
@@ -49,27 +49,27 @@ function openFeedbackMenu()
 
 	_fb.titleP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 120 ) )
 	function _fb.titleP:Paint( pw, ph )
-		surfaceText( lang_string( "title" ), "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+		surfaceText( YRP.lang_string( "title" ), "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
 	end
 	_fb.titleT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
 
 	_fb.feedbackP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 250 ) )
 	function _fb.feedbackP:Paint( pw, ph )
-		surfaceText( lang_string( "feedback" ) .. " (" .. lang_string( "problems" ) .. ", " .. lang_string( "suggestions" ) .. ", ...)", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+		surfaceText( YRP.lang_string( "feedback" ) .. " (" .. YRP.lang_string( "problems" ) .. ", " .. YRP.lang_string( "suggestions" ) .. ", ...)", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
 	end
 	_fb.feedbackT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 500 ), ctr( 10 ), ctr( 300 ) )
 	_fb.feedbackT:SetMultiline( true )
 
 	_fb.contactP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 850 ) )
 	function _fb.contactP:Paint( pw, ph )
-		surfaceText( lang_string( "contact" ) .. " (" .. lang_string( "notrequired" ) .. ")", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
+		surfaceText( YRP.lang_string( "contact" ) .. " (" .. YRP.lang_string( "notrequired" ) .. ")", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
 	end
 	_fb.contactT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 900 ) )
 
 	_fb.send = createD( "DButton", _fb.window, ctr( 600 ), ctr( 50 ), ctr( 10 ), ctr( 1000 ) )
 	_fb.send:SetText( "" )
 	function _fb.send:Paint( pw, ph )
-		surfaceButton( self, pw, ph, string.upper( lang_string( "sendfeedback" ) ) )
+		surfaceButton( self, pw, ph, string.upper( YRP.lang_string( "sendfeedback" ) ) )
 	end
 	function _fb.send:DoClick()
 		printGM( "gm", "send feedback" )

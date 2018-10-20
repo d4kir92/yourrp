@@ -22,9 +22,9 @@ end
 
 function bool_status( b )
 	if tobool(b) then
-		return lang_string( "enabled" )
+		return YRP.lang_string( "enabled" )
 	elseif !tobool(b) then
-		return lang_string( "disabled" )
+		return YRP.lang_string( "disabled" )
 	end
 end
 

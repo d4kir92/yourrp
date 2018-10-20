@@ -51,7 +51,7 @@ function DCheckBoxes(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string( tab.header ) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -70,7 +70,7 @@ function DCheckBoxes(tab)
 	function pnl.DButton:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 		local change = {}
-		change.text = "[" .. lang_string("change") .. "] (" .. tab.value .. ")"
+		change.text = "[" .. YRP.lang_string("change") .. "] (" .. tab.value .. ")"
 		change.font = "mat1header"
 		change.x = ctr(10)
 		change.y = ph / 2
@@ -84,7 +84,7 @@ function DCheckBoxes(tab)
 			window:MakePopup()
 			window:SetTitle( "" )
 			function window:Paint( pw, ph )
-				surfaceWindow( self, pw, ph, lang_string( "usergroups" ) )
+				surfaceWindow( self, pw, ph, YRP.lang_string( "usergroups" ) )
 			end
 			window.cm = createD("DPanelList", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
 
@@ -201,7 +201,7 @@ function DCheckBox(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header )
+			text.text = YRP.lang_string( tab.header )
 		else
 			text.text = tab.header
 		end
@@ -272,7 +272,7 @@ function DComboBox(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string( tab.header ) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -342,7 +342,7 @@ function DColor(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string( tab.header ) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -375,7 +375,7 @@ function DColor(tab)
 			window:MakePopup()
 			window:SetTitle( "" )
 			function window:Paint( pw, ph )
-				surfaceWindow( self, pw, ph, lang_string( "color" ) )
+				surfaceWindow( self, pw, ph, YRP.lang_string( "color" ) )
 			end
 			window.cm = createD( "DColorMixer", window, ctr( 500 ), ctr( 500 ), ctr( 20 ), ctr( 50 + 20 ) )
 			function window.cm:ValueChanged(col)
@@ -431,7 +431,7 @@ function DIntBox(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string( tab.header ) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -506,7 +506,7 @@ function DTextBox(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string( tab.header ) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -520,7 +520,7 @@ function DTextBox(tab)
 
 		if dmg != nil and pnl.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. lang_string( "damage" )
+			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string( "damage" )
 			DMG.x = pw - ctr( 10 )
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
@@ -620,7 +620,7 @@ function DAttributeBar(tab)
 		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
 		local text = {}
 		if tab.lforce then
-			text.text = lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string( tab.header ) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end

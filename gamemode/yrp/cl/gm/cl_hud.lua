@@ -71,11 +71,11 @@ function hudUpTime()
 	_ut.h = ctr( HudV( "utsh" ) )
 	draw.RoundedBox( 0, _ut.x, _ut.y, _ut.w, _ut.h, Color( HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga") ) )
 
-	draw.SimpleTextOutlined( lang_string( "totaluptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined( YRP.lang_string( "totaluptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWFloat( "uptime_total", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 2, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined( lang_string( "currentuptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 3, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined( YRP.lang_string( "currentuptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 3, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWFloat( "uptime_current", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 4, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined( lang_string( "serveruptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 5, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined( YRP.lang_string( "serveruptime" ) .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 5, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 	draw.SimpleTextOutlined( string.FormattedTime( ply:GetNWFloat( "uptime_server", 0 ), "%02i:%02i" ), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 6, Color( 255, 255, 255, 255 ), HudV( "uttx" ), HudV( "utty" ), 1, Color( 0, 0, 0 ) )
 
 	drawRBoxBr( 0, ctrF( ScrH() ) * anchorW( HudV( "ut" .. "aw" ) ) + HudV( "ut" .. "px" ), ctrF( ScrH() ) * anchorH( HudV( "ut" .. "ah" ) ) + HudV( "ut" .. "py" ), HudV( "ut" .. "sw" ), HudV( "ut" .. "sh" ), Color( HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra") ), ctr( 4 ) )
@@ -114,20 +114,20 @@ end
 function show_global_voice_info( ply )
 	if _showGlobalVoice then
 		local _role_name = ply:GetNWString( "voice_global_rolename", "" )
-		draw.SimpleTextOutlined( lang_string( "makesanannoucmentpre" ) .. " " .. _role_name .. " " .. lang_string( "makesanannoucmentpos" ) .. "!", "HudBars", ScrW2(), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "makesanannoucmentpre" ) .. " " .. _role_name .. " " .. YRP.lang_string( "makesanannoucmentpos" ) .. "!", "HudBars", ScrW2(), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 end
 
 function show_voice_info( ply )
 	--Voice
 	if _showVoice then
-		local _voice_text = lang_string( "youarespeaking" ) .. " ("
+		local _voice_text = YRP.lang_string( "youarespeaking" ) .. " ("
 		if ply:GetNWInt( "speak_channel", -1 ) == 1 then
-			_voice_text = _voice_text .. lang_string( "speakgroup" )
+			_voice_text = _voice_text .. YRP.lang_string( "speakgroup" )
 		elseif ply:GetNWInt( "speak_channel", -1 ) == 2 then
-			_voice_text = _voice_text .. lang_string( "speakglobal" )
+			_voice_text = _voice_text .. YRP.lang_string( "speakglobal" )
 		else
-			_voice_text = _voice_text .. lang_string( "speaklocal" )
+			_voice_text = _voice_text .. YRP.lang_string( "speaklocal" )
 		end
 		_voice_text = _voice_text .. ")"
 
@@ -157,7 +157,7 @@ function HUD_Stats( ply, time )
 		delay = CurTime() + 1
 		fps = math.Round(1 / FrameTime(), 0)
 	end
-	draw.SimpleTextOutlined(lang_string("ping") .. ": " .. ply:Ping() .. "ms", "DermaDefault", ctr(10), ctr(4), Color( 255, 255, 255, 255 ), 0, 0, 1, Color( 0, 0, 0, 255 ))
+	draw.SimpleTextOutlined(YRP.lang_string("ping") .. ": " .. ply:Ping() .. "ms", "DermaDefault", ctr(10), ctr(4), Color( 255, 255, 255, 255 ), 0, 0, 1, Color( 0, 0, 0, 255 ))
 	draw.SimpleTextOutlined("FPS" .. ": " .. fps, "DermaDefault", ctr(10), ctr(34), Color( 255, 255, 255, 255 ), 0, 0, 1, Color( 0, 0, 0, 255 ))
 end
 
@@ -168,13 +168,13 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 
 	if ply:GetNWBool( "blinded", false ) then
 		surfaceBox( 0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255 ) )
-		surfaceText( lang_string( "blinded" ), "SettingsHeader", ScrW2(), ScrH2() + ctr( 100 ), Color( 255, 255, 0, 255 ), 1, 1 )
+		surfaceText( YRP.lang_string( "blinded" ), "SettingsHeader", ScrW2(), ScrH2() + ctr( 100 ), Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 	if ply:IsFlagSet( FL_FROZEN ) then
-		surfaceText( lang_string( "frozen" ), "SettingsHeader", ScrW2(), ScrH2() + ctr( 150 ), Color( 255, 255, 0, 255 ), 1, 1 )
+		surfaceText( YRP.lang_string( "frozen" ), "SettingsHeader", ScrW2(), ScrH2() + ctr( 150 ), Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 	if ply:GetNWBool( "cloaked", false ) then
-		surfaceText( lang_string( "cloaked" ), "SettingsHeader", ScrW2(), ScrH2() - ctr( 400 ), Color( 255, 255, 0, 255 ), 1, 1 )
+		surfaceText( YRP.lang_string( "cloaked" ), "SettingsHeader", ScrW2(), ScrH2() - ctr( 400 ), Color( 255, 255, 0, 255 ), 1, 1 )
 	end
 
 	DrawEquipment( ply, "backpack" )
@@ -194,7 +194,7 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 	show_global_voice_info( ply )
 
 	if game.SinglePlayer() then
-		draw.SimpleTextOutlined( "[YourRP] " .. lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "[YourRP] " .. YRP.lang_string( "donotusesingleplayer" ) .. "!", "72", ScrW2(), ScrH2(), Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
 	end
 
 	if tobool( HudV( "utto" ) ) then
@@ -203,7 +203,7 @@ hook.Add( "HUDPaint", "yrp_hud", function( )
 
 	local _target = LocalPlayer():GetNWString( "hittargetName", "" )
 	if _target != "" then
-		surfaceText( lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
+		surfaceText( YRP.lang_string( "target" ) .. ": " .. LocalPlayer():GetNWString( "hittargetName", "" ), "HudBars", ctr( 10 ), ctr( 10 ), Color( 255, 0, 0, 255 ), 0, 0 )
 		LocalPlayer():drawHitInfo()
 	end
 

@@ -8,7 +8,7 @@ end
 
 function hudCA( ply, color )
 	if showCA( ply ) then
-		local _catext = lang_string( ply:GetNWString( "castname", "" ) ) .. " (" .. math.Round( ( math.Round( ply:GetNWFloat( "castcur", 0.0 ), 1 ) / ply:GetNWFloat( "castmax", 0.0 ) ) * 100, 0 ) .. "%)"
+		local _catext = YRP.lang_string( ply:GetNWString( "castname", "" ) ) .. " (" .. math.Round( ( math.Round( ply:GetNWFloat( "castcur", 0.0 ), 1 ) / ply:GetNWFloat( "castmax", 0.0 ) ) * 100, 0 ) .. "%)"
 		drawHUDElement( "ca", ply:GetNWFloat( "castcur", 0.0 ), ply:GetNWFloat( "castmax", 0.0 ), _catext, cast, color )
 	end
 end

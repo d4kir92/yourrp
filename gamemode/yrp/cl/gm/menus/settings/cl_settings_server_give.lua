@@ -3,16 +3,16 @@
 net.Receive( "setting_players", function( len )
 	function settingsWindow.window.site:Paint( pw, ph )
 		--draw.RoundedBox( 4, 0, 0, pw, ph, get_dbg_col() )
-		surfaceText( lang_string( "players" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
+		surfaceText( YRP.lang_string( "players" ), "roleInfoHeader", ctr( 10 ), ctr( 10 + 25 ), Color( 255, 255, 255 ), 0, 1 )
 	end
 
 	local _giveListView = createD( "DListView", settingsWindow.window.site, BScrW() - ctr( 20 ), ScrH() - ctr( 180 ), ctr( 10 ), ctr( 10 + 50 ) )
 	_giveListView:AddColumn( "SteamID" )
-	_giveListView:AddColumn( lang_string( "nick" ) )
-	_giveListView:AddColumn( lang_string( "name" ) )
-	_giveListView:AddColumn( lang_string( "group" ) )
-	_giveListView:AddColumn( lang_string( "role" ) )
-	_giveListView:AddColumn( lang_string( "money" ) )
+	_giveListView:AddColumn( YRP.lang_string( "nick" ) )
+	_giveListView:AddColumn( YRP.lang_string( "name" ) )
+	_giveListView:AddColumn( YRP.lang_string( "group" ) )
+	_giveListView:AddColumn( YRP.lang_string( "role" ) )
+	_giveListView:AddColumn( YRP.lang_string( "money" ) )
 
 	for n, y in pairs( player.GetAll() ) do
 		_giveListView:AddLine( y:SteamID(), y:SteamName(), y:RPName(), y:GetNWString( "groupName" ), y:GetNWString( "roleName" ), y:GetNWInt( "money" ) )
@@ -31,13 +31,13 @@ net.Receive( "setting_players", function( len )
 		end)
 
 		local _buttonRole = createVGUI( "DButton", _tmpPanel, 400, 50, 10, 10 )
-		_buttonRole:SetText( lang_string( "giverole" ) )
+		_buttonRole:SetText( YRP.lang_string( "giverole" ) )
 		function _buttonRole:DoClick()
 			local _giveFrame = createVGUI( "DFrame", nil, 400, 305, 0, 0 )
 			_giveFrame:Center()
 			_giveFrame:ShowCloseButton( true )
 			_giveFrame:SetDraggable( true )
-			_giveFrame:SetTitle( lang_string( "giverole" ) )
+			_giveFrame:SetTitle( YRP.lang_string( "giverole" ) )
 
 			local _giveComboBox = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 85 )
 
@@ -69,7 +69,7 @@ net.Receive( "setting_players", function( len )
 			end
 
 			local _giveButton = createVGUI( "DButton", _giveFrame, 380, 50, 10, 185 + 60 )
-			_giveButton:SetText( lang_string( "give" ) )
+			_giveButton:SetText( YRP.lang_string( "give" ) )
 			function _giveButton:DoClick()
 				if isnumber( tonumber( _giveComboBox2:GetOptionData( _giveComboBox2:GetSelectedID() ) ) ) then
 					net.Start( "giveRole" )
@@ -83,8 +83,8 @@ net.Receive( "setting_players", function( len )
 			function _giveFrame:Paint( pw, ph )
 				draw.RoundedBox( 0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined( lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-				draw.SimpleTextOutlined( lang_string( "role" ) .. ":", "sef", ctr( 10 ), ctr( 85 + 65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "group" ) .. ":", "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined( YRP.lang_string( "role" ) .. ":", "sef", ctr( 10 ), ctr( 85 + 65 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 			end
 
 			_giveFrame:MakePopup()

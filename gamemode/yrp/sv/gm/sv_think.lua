@@ -274,7 +274,7 @@ timer.Create( "ServerThink", 1, 0, function()
 	if _time % _auto_save == 0 then
 		local _mod = _time%60
 		local _left = _time/60 - _mod
-		local _str = "Auto-Save ( Uptime: " .. _left .. " " .. lang_string( "minutes" ) .. " )"
+		local _str = "Auto-Save ( Uptime: " .. _left .. " " .. YRP.lang_string( "minutes" ) .. " )"
 		save_clients( _str )
 		SaveStorages( _str )
 	end
@@ -295,7 +295,9 @@ timer.Create( "ServerThink", 1, 0, function()
 		end
 	end
 
-	if _time == 30 then
+	if _time == 10 then
+		YRPCheckVersion()
+	elseif _time == 30 then
 		IsServerInfoOutdated()
 	end
 	_time = _time + 1

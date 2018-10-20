@@ -57,7 +57,7 @@ function createShopItem( item, duid )
 		_i.name = createD( "DPanel", _i, ctrb( _w/2 ), ctrb( 50 ), 0, 0 )
 		_i.name.name = SQL_STR_OUT( item.name )
 		if item.type == "licenses" then
-			_i.name.name = lang_string( "license" ) .. ": " .. _i.name.name
+			_i.name.name = YRP.lang_string( "license" ) .. ": " .. _i.name.name
 		end
 		function _i.name:Paint( pw, ph )
 			surfaceText( self.name, "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
@@ -72,7 +72,7 @@ function createShopItem( item, duid )
 	if tonumber( item.permanent ) == 1 then
 		_i.price = createD( "DPanel", _i, ctrb( _w/2 ), ctrb( 50 ), 0, ctrb( 50 ) )
 		function _i.price:Paint( pw, ph )
-			surfaceText( "[" .. lang_string( "permanent" ) .. "]", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+			surfaceText( "[" .. YRP.lang_string( "permanent" ) .. "]", "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 		end
 	end
 
@@ -96,7 +96,7 @@ function createShopItem( item, duid )
 				_color = Color( 255, 255, 0 )
 			end
 			draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-			surfaceText( lang_string( "buy" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+			surfaceText( YRP.lang_string( "buy" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 		end
 		function _i.buy:DoClick()
 			net.Start( "item_buy" )
@@ -110,7 +110,7 @@ function createShopItem( item, duid )
 		function _i.require:Paint( pw, ph )
 			local _color = Color( 255, 0, 0 )
 			draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-			surfaceText( lang_string( "requirespre" ) .. " " .. lang_string( "license" ) .. " " .. lang_string( "requirespos" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+			surfaceText( YRP.lang_string( "requirespre" ) .. " " .. YRP.lang_string( "license" ) .. " " .. YRP.lang_string( "requirespos" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 		end
 	end
 	return _i
@@ -177,7 +177,7 @@ function createStorageItem( item, duid )
 				_color = Color( 255, 255, 0 )
 			end
 			draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-			surfaceText( lang_string( self.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+			surfaceText( YRP.lang_string( self.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 		end
 		function _i.spawn:DoClick()
 			if self.action == 0 then
@@ -219,7 +219,7 @@ net.Receive( "shop_get_tabs", function( len )
 		closeMenu()
 	end
 	function _bm.window:Paint( pw, ph )
-		surfaceWindow( self, pw, ph, lang_string( _dealer.name ) .. " [PROTOTYPE]" )
+		surfaceWindow( self, pw, ph, YRP.lang_string( _dealer.name ) .. " [PROTOTYPE]" )
 	end
 
 	--[[ Settings ]]--
@@ -252,7 +252,7 @@ net.Receive( "shop_get_tabs", function( len )
 
 				_set.name = createD( "DYRPPanelPlus", _set, ctrb( 580 ), ctrb( 100 ), ctrb( 10 ), ctrb( 60 ) )
 				_set.name:INITPanel( "DTextEntry" )
-				_set.name:SetHeader( lang_string( "name" ) )
+				_set.name:SetHeader( YRP.lang_string( "name" ) )
 				_set.name:SetText( _dealer.name )
 				function _set.name.plus:OnChange()
 					_dealer.name = self:GetText()
@@ -264,7 +264,7 @@ net.Receive( "shop_get_tabs", function( len )
 
 				_set.name = createD( "DYRPPanelPlus", _set, ctrb( 580 ), ctrb( 100 ), ctrb( 10 ), ctrb( 170 ) )
 				_set.name:INITPanel( "DButton" )
-				_set.name:SetHeader( lang_string( "appearance" ) )
+				_set.name:SetHeader( YRP.lang_string( "appearance" ) )
 				_set.name.plus:SetText( "" )
 				function _set.name.plus:Paint( pw, ph )
 					self.color = Color( 200, 200, 200 )
@@ -272,7 +272,7 @@ net.Receive( "shop_get_tabs", function( len )
 						self.color = Color( 200, 200, 0 )
 					end
 					draw.RoundedBox( 0, 0, 0, pw, ph, self.color )
-					surfaceText( lang_string( "change" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+					surfaceText( YRP.lang_string( "change" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 				end
 				function _set.name.plus:DoClick()
 					local playermodels = player_manager.AllValidModels()
@@ -300,7 +300,7 @@ net.Receive( "shop_get_tabs", function( len )
 				local _storages = net.ReadTable()
 				_set.storagepoint = createD( "DYRPPanelPlus", _set, ctrb( 580 ), ctrb( 100 ), ctrb( 10 ), ctrb( 280 ) )
 				_set.storagepoint:INITPanel( "DComboBox" )
-				_set.storagepoint:SetHeader( lang_string( "storagepoint" ) )
+				_set.storagepoint:SetHeader( YRP.lang_string( "storagepoint" ) )
 				for i, storage in pairs( _storages ) do
 					local _sp = false
 					if tonumber( storage.uniqueID ) == tonumber( _dealer.storagepoints ) then
@@ -377,7 +377,7 @@ net.Receive( "shop_get_tabs", function( len )
 					_remove.uid = _uid
 					function _remove:Paint( pw, ph )
 						draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0 ) )
-						surfaceText( lang_string( "remove" ) .. " [" .. lang_string( "tab" ) .. "] => " .. SQL_STR_OUT( tab.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+						surfaceText( YRP.lang_string( "remove" ) .. " [" .. YRP.lang_string( "tab" ) .. "] => " .. SQL_STR_OUT( tab.name ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 					end
 					function _remove:DoClick()
 						net.Start( "dealer_rem_tab" )
@@ -398,7 +398,7 @@ net.Receive( "shop_get_tabs", function( len )
 			_tab.GetCategories()
 		end
 
-		local _tab2 = _bm.tabs:AddTab( lang_string( "mystorage" ) .. ": " .. SQL_STR_OUT( tab.name ), tab.uniqueID )
+		local _tab2 = _bm.tabs:AddTab( YRP.lang_string( "mystorage" ) .. ": " .. SQL_STR_OUT( tab.name ), tab.uniqueID )
 		function _tab2:GetCategories()
 			net.Receive( "shop_get_categories", function( len )
 				local _uid = net.ReadString()
@@ -480,7 +480,7 @@ net.Receive( "shop_get_tabs", function( len )
 
 			_tmp.tabs = createD( "DYRPPanelPlus", _tmp, ctr( 400 ), ctr( 100 ), ctr( 10 ), ctr( 50 + 10 ) )
 			_tmp.tabs:INITPanel( "DComboBox" )
-			_tmp.tabs:SetHeader( lang_string( "tabs" ) )
+			_tmp.tabs:SetHeader( YRP.lang_string( "tabs" ) )
 
 			net.Receive( "shop_get_all_tabs", function( len )
 				local _tabs = net.ReadTable()
@@ -500,7 +500,7 @@ net.Receive( "shop_get_tabs", function( len )
 					_color = Color( 255, 255, 0, 255 )
 				end
 				draw.RoundedBox( 0, 0, 0, pw, ph, _color )
-				surfaceText( lang_string( "add" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
+				surfaceText( YRP.lang_string( "add" ), "roleInfoHeader", pw/2, ph/2, Color( 255, 255, 255 ), 1, 1 )
 			end
 			function _tmp.addtab:DoClick()
 				local _name, _uid = _tmp.tabs.plus:GetSelected()

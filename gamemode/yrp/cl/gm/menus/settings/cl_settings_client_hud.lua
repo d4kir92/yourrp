@@ -133,13 +133,13 @@ function changeHudElement( parent, tmp, textPre )
 
 			draw.SimpleText( textPre, "DermaDefault", ctr( 10 ),	ctr( 25 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-			draw.SimpleText( lang_string( "isvisible" ), "DermaDefault", ctr( 70 ),	ctr( 85 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-			draw.SimpleText( lang_string( "anchor" ), "DermaDefault", ctr( 70 ),	ctr( 145 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-			draw.SimpleText( lang_string( "textsize" ), "DermaDefault", ctr( 110 ),	ctr( 205 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-			draw.SimpleText( lang_string( "textposition" ), "DermaDefault", ctr( 70 ),	ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-			draw.SimpleText( lang_string( "istextvisible" ), "DermaDefault", ctr( 70 ),	ctr( 325 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-			draw.SimpleText( lang_string( "isiconvisible" ), "DermaDefault", ctr( 70 ),	ctr( 385 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-			draw.SimpleText( lang_string( "isrounded" ), "DermaDefault", ctr( 70 ),	ctr( 445 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "isvisible" ), "DermaDefault", ctr( 70 ),	ctr( 85 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "anchor" ), "DermaDefault", ctr( 70 ),	ctr( 145 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "textsize" ), "DermaDefault", ctr( 110 ),	ctr( 205 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "textposition" ), "DermaDefault", ctr( 70 ),	ctr( 265 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "istextvisible" ), "DermaDefault", ctr( 70 ),	ctr( 325 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "isiconvisible" ), "DermaDefault", ctr( 70 ),	ctr( 385 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "isrounded" ), "DermaDefault", ctr( 70 ),	ctr( 445 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 		end
 		local tmpToggle = createD( "DCheckBox", _settingsFrame, ctr( 50 ), ctr( 50 ), ctr( 10 ), ctr( 60 ) )
 		local tmpToggleChecked = -1
@@ -373,13 +373,13 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	local h = settingsWindow.window.sitepanel:GetTall()
 
 	settingsWindow.window.site = createD( "DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
-	--sheet:AddSheet( lang_string( "hud" ), cl_hudPanel, "icon16/photo.png" )
+	--sheet:AddSheet( YRP.lang_string( "hud" ), cl_hudPanel, "icon16/photo.png" )
 	function settingsWindow.window.site:Paint( w, h )
 		--draw.RoundedBox( 0, 0, 0, sv_generalPanel:GetWide(), sv_generalPanel:GetTall(), _yrp.colors.panel )
 	end
 
 	local changeHudButton = createD( "DButton", settingsWindow.window.site, ctr( 470 ), ctr( 50 ), 0, 0 )
-	changeHudButton:SetText( lang_string( "changehud" ) )
+	changeHudButton:SetText( YRP.lang_string( "changehud" ) )
 	function changeHudButton:DoClick()
 		settingsWindow.window:Close()
 
@@ -418,35 +418,35 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 			changeHudWindow:Close()
 		end
 		function changeHudWindowCloseButton:Paint( pw, ph )
-			draw.SimpleTextOutlined( lang_string( "helpclose" ), "HudSettings", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "helpclose" ), "HudSettings", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 
-			draw.SimpleTextOutlined( lang_string( "helpmove" ), "HudSettings", pw/2, ph/2+20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( lang_string( "helpresize" ), "HudSettings", pw/2, ph/2+40, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "helpmove" ), "HudSettings", pw/2, ph/2+20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( YRP.lang_string( "helpresize" ), "HudSettings", pw/2, ph/2+40, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 		end
 
-		changeHudElement( changeHudWindow, "hp", lang_string( "health" ) )
-		changeHudElement( changeHudWindow, "ar", lang_string( "armor" ) )
-		changeHudElement( changeHudWindow, "mh", lang_string( "hunger" ) )
-		changeHudElement( changeHudWindow, "mt", lang_string( "thirst" ) )
-		changeHudElement( changeHudWindow, "ms", lang_string( "stamina" ) )
-		changeHudElement( changeHudWindow, "ma", lang_string( "abilitybar" ) )
-		changeHudElement( changeHudWindow, "ca", lang_string( "castbar" ) )
-		changeHudElement( changeHudWindow, "mo", lang_string( "money" ) )
-		changeHudElement( changeHudWindow, "xp", lang_string( "xpbar" ) )
+		changeHudElement( changeHudWindow, "hp", YRP.lang_string( "health" ) )
+		changeHudElement( changeHudWindow, "ar", YRP.lang_string( "armor" ) )
+		changeHudElement( changeHudWindow, "mh", YRP.lang_string( "hunger" ) )
+		changeHudElement( changeHudWindow, "mt", YRP.lang_string( "thirst" ) )
+		changeHudElement( changeHudWindow, "ms", YRP.lang_string( "stamina" ) )
+		changeHudElement( changeHudWindow, "ma", YRP.lang_string( "abilitybar" ) )
+		changeHudElement( changeHudWindow, "ca", YRP.lang_string( "castbar" ) )
+		changeHudElement( changeHudWindow, "mo", YRP.lang_string( "money" ) )
+		changeHudElement( changeHudWindow, "xp", YRP.lang_string( "xpbar" ) )
 
-		changeHudElement( changeHudWindow, "mm", lang_string( "minimap" ) )
-		changeHudElement( changeHudWindow, "wn", lang_string( "wname" ) )
-		changeHudElement( changeHudWindow, "wp", lang_string( "wprimary" ) )
-		changeHudElement( changeHudWindow, "ws", lang_string( "wsecondary" ) )
-		changeHudElement( changeHudWindow, "st", lang_string( "statusbar" ) )
-		local votes = changeHudElement( changeHudWindow, "vt", lang_string( "votes" ) )
+		changeHudElement( changeHudWindow, "mm", YRP.lang_string( "minimap" ) )
+		changeHudElement( changeHudWindow, "wn", YRP.lang_string( "wname" ) )
+		changeHudElement( changeHudWindow, "wp", YRP.lang_string( "wprimary" ) )
+		changeHudElement( changeHudWindow, "ws", YRP.lang_string( "wsecondary" ) )
+		changeHudElement( changeHudWindow, "st", YRP.lang_string( "statusbar" ) )
+		local votes = changeHudElement( changeHudWindow, "vt", YRP.lang_string( "votes" ) )
 		votes:SetSizable( false )
-		changeHudElement( changeHudWindow, "cb", lang_string( "chatbox" ) )
+		changeHudElement( changeHudWindow, "cb", YRP.lang_string( "chatbox" ) )
 
-		changeHudElement( changeHudWindow, "ut", lang_string( "uptime" ) )
+		changeHudElement( changeHudWindow, "ut", YRP.lang_string( "uptime" ) )
 
-		changeHudElement( changeHudWindow, "bl", lang_string( "batterylife" ) )
-		changeHudElement( changeHudWindow, "rt", lang_string( "realtime" ) )
+		changeHudElement( changeHudWindow, "bl", YRP.lang_string( "batterylife" ) )
+		changeHudElement( changeHudWindow, "rt", YRP.lang_string( "realtime" ) )
 
 		changeHudWindow:MakePopup()
 	end
@@ -460,14 +460,14 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	end
 
 	local toggleHud = createVGUI( "DButton", settingsWindow.window.site, 470, 50, 0, 50 + 10 )
-	toggleHud:SetText( lang_string( "togglehud" ) .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang_string( "on" ), lang_string( "off" ) ) .. ")" )
+	toggleHud:SetText( YRP.lang_string( "togglehud" ) .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), YRP.lang_string( "on" ), YRP.lang_string( "off" ) ) .. ")" )
 	function toggleHud:DoClick()
 		if GetConVar( "yrp_cl_hud" ):GetInt() == 1 then
 			GetConVar( "yrp_cl_hud" ):SetInt( 0 )
 		elseif GetConVar( "yrp_cl_hud" ):GetInt() == 0 then
 			GetConVar( "yrp_cl_hud" ):SetInt( 1 )
 		end
-		toggleHud:SetText( lang_string( "togglehud" ) .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), lang_string( "on" ), lang_string( "off" ) ) .. ")" )
+		toggleHud:SetText( YRP.lang_string( "togglehud" ) .. " (" .. testIf( GetConVar( "yrp_cl_hud" ):GetInt(), YRP.lang_string( "on" ), YRP.lang_string( "off" ) ) .. ")" )
 	end
 
 	local resetHudButton = createDerma( "DColorButton", settingsWindow.window.site, 470, 50, 470 + 10, 50 + 10 )
@@ -479,22 +479,22 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 			draw.RoundedBox( 0, 0,0, pw, ph, Color( 255, 0, 0 ) )
 		end
 
-		draw.SimpleTextOutlined( lang_string( "resethud" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "resethud" ), "sef", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
 	end
 	function resetHudButton:DoClick()
 		local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
 		_window:Center()
-		_window:SetTitle( lang_string( "areyousure" ) )
+		_window:SetTitle( YRP.lang_string( "areyousure" ) )
 
 		local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60 )
-		_yesButton:SetText( lang_string( "yes" ) )
+		_yesButton:SetText( YRP.lang_string( "yes" ) )
 		function _yesButton:DoClick()
 			resetHud()
 			_window:Close()
 		end
 
 		local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-		_noButton:SetText( lang_string( "no" ) )
+		_noButton:SetText( YRP.lang_string( "no" ) )
 		function _noButton:DoClick()
 			_window:Close()
 		end
@@ -506,7 +506,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	function _colorBackgroundPanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( lang_string( "hudbackground" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "hudbackground" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 	end
 
 	local _colorBackground = createVGUI( "DColorMixer", _colorBackgroundPanel, 450, 450, 10, 50 )
@@ -527,7 +527,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	function _colorBorderPanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( lang_string( "hudborder" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "hudborder" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 	end
 
 	local _colorBorder = createVGUI( "DColorMixer", _colorBorderPanel, 450, 450, 10, 50 )
@@ -546,7 +546,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	function _colorCrosshairPanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( lang_string( "crosshaircolor" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "crosshaircolor" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 	end
 
 	local _colorCrosshair = createVGUI( "DColorMixer", _colorCrosshairPanel, 450, 450, 10, 50 )
@@ -565,7 +565,7 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	function _colorCrosshairBorderPanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( lang_string( "crosshairborder" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "crosshairborder" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 	end
 
 	local _colorCrosshairBorder = createVGUI( "DColorMixer", _colorCrosshairBorderPanel, 450, 450, 10, 50 )
@@ -584,12 +584,12 @@ hook.Add( "open_client_hud", "open_client_hud", function()
 	function _settingCrosshairPanel:Paint( pw, ph )
 		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
 
-		draw.SimpleTextOutlined( lang_string( "crosshairsettings" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "crosshairsettings" ), "sef", ctr( 10 ), ctr( 50 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 
-		draw.SimpleTextOutlined( lang_string( "length" ) .. ":", "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined( lang_string( "gap" ) .. ":", "sef", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined( lang_string( "thickness" ) .. ":", "sef", ctr( 10 ), ctr( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined( lang_string( "border" ) .. ":", "sef", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "length" ) .. ":", "sef", ctr( 10 ), ctr( 100 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "gap" ) .. ":", "sef", ctr( 10 ), ctr( 200 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "thickness" ) .. ":", "sef", ctr( 10 ), ctr( 300 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined( YRP.lang_string( "border" ) .. ":", "sef", ctr( 10 ), ctr( 400 ), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0 ) )
 	end
 
 	local _settingCrosshairLength = createVGUI( "DNumberWang", _settingCrosshairPanel, 450, 50, 10, 100 )

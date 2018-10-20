@@ -9,7 +9,7 @@ printGM( "db", "Loading Resources" )
 printGM( "db", "" )
 
 -- yourrp content
--- resource.AddWorkshop( "1189643820" )
+resource.AddWorkshop( "1189643820" )
 
 -- FONTS
 resource.AddFile( "resource/fonts/Roboto-Regular.ttf" )
