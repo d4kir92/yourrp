@@ -368,8 +368,6 @@ function CanSendError()
 						return true
 					end
 				end
-			else
-				return false
 			end
 		elseif SERVER and game.IsDedicated() then
 			if YRPDebug() then
