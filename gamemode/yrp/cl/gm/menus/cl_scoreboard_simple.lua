@@ -22,6 +22,7 @@ function OpenSBS()
 		sbs.frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
 		sbs.frame:SetDraggable(false)
 		sbs.frame:ShowCloseButton(false)
+		sbs.frame:SetTitle("")
 		sbs.frame:MakePopup()
 
 		local _mapPNG = getMapPNG()
