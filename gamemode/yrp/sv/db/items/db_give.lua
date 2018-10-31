@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local Entity = FindMetaTable("Entity")
@@ -115,7 +115,7 @@ function Player:EquipWeapon(slot, item)
 end
 
 function Player:PutInWeaponSlot(item)
-	printGM("db", "Player:PutInWeaponSlot( item )")
+	printGM("db", "Player:PutInWeaponSlot(item )")
 	local _wpp1 = self:EquipWeapon("eqwpp1", item)
 	if _wpp1 then return true end
 	local _wpp2 = self:EquipWeapon("eqwpp2", item)
@@ -131,7 +131,7 @@ function Player:PutInWeaponSlot(item)
 end
 
 function Player:PutInBackpack(item)
-	printGM("db", "Player:PutInBackpack( item )")
+	printGM("db", "Player:PutInBackpack(item )")
 	local _slot = SQL_SELECT("yrp_characters", "eqbp", "uniqueID = '" .. self:CharID() .. "'")
 
 	if wk(_slot) then
@@ -314,11 +314,11 @@ end
 util.AddNetworkString("yrp_message")
 
 function Player:PutInInventory(cname, noammo)
-	printGM("db", "Player:PutInInventory( " .. cname .. ", " .. tostring(noammo) .. " )")
+	printGM("db", "Player:PutInInventory(" .. cname .. ", " .. tostring(noammo) .. " )")
 	local ent = ents.Create(cname)
 	if ea(ent) then
 		ent:Spawn()
-		--local sizew, sizeh = GetEntityItemSize( ent )
+		--local sizew, sizeh = GetEntityItemSize(ent )
 		local item = FormatEntityToItem(ent)
 		item.posx = 1
 		item.posy = 1
@@ -341,7 +341,7 @@ function Player:PutInInventory(cname, noammo)
 end
 
 function Player:ForceEquip(cname, noammo)
-	printGM("gm", "ForceEquip( " .. cname .. " )")
+	printGM("gm", "ForceEquip(" .. cname .. " )")
 	self.canpickup = true
 	local weapon = self:LegacyGive(cname, noammo)
 
@@ -353,7 +353,7 @@ function Player:ForceEquip(cname, noammo)
 end
 
 function Player:Give(cname, noammo)
-	printGM("gm", "Give( " .. cname .. " )")
+	printGM("gm", "Give(" .. cname .. " )")
 	local _noAmmo = noammo
 
 	if _noAmmo == nil then
@@ -380,7 +380,7 @@ function Player:GiveAmmo(amount, atype, hidePopup)
 
 	if self:GetNWBool("bool_inventory_system", false) then
 		self:LegacyGiveAmmo(amount, atype)
-		--self:AddItemAmmo( amount, atype )
+		--self:AddItemAmmo(amount, atype )
 	else
 		self:LegacyGiveAmmo(amount, atype)
 	end
@@ -402,7 +402,7 @@ if Player.LegacyStripWeapon == nil then
 end
 
 function Player:ForceStripWeapon(weapon)
-	printGM("gm", "ForceStripWeapon( " .. weapon .. " )")
+	printGM("gm", "ForceStripWeapon(" .. weapon .. " )")
 
 	return self:LegacyStripWeapon(weapon)
 end
@@ -444,7 +444,7 @@ function Player:RemoveWeaponFromInventory(cname)
 end
 
 function Player:StripWeapon(weapon)
-	printGM("note", "StripWeapon( " .. tostring(weapon) .. " )")
+	printGM("note", "StripWeapon(" .. tostring(weapon) .. " )")
 
 	if self:GetNWBool("bool_inventory_system", false) then
 		self:RemoveWeaponFromInventory(weapon)

@@ -1,10 +1,10 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function stc(str)
 	if str != nil then
 		str = string.Explode(",", str)
 		if table.Count(str) >= 3 then
-			return Color(str[1] or 0, str[2] or 0, str[3] or 0, str[4] or 255 )
+			return Color(str[1] or 0, str[2] or 0, str[3] or 0, str[4] or 255)
 		end
 	end
 	return Color(255, 255, 255)
@@ -17,7 +17,7 @@ function DrawBox(tab)
 	tab.w = tab.w or 100
 	tab.h = tab.h or 100
 	tab.color = tab.color or Color(200, 200, 200)
-	draw.RoundedBox( tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
+	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
 end
 
 function DrawButton(button, tab)
@@ -764,7 +764,7 @@ function createMDMenu(parent, w, h, x, y)
 				local tmpHr = createD("DPanel", self.menu, ctr(600 - 20), ctr(20), ctr(10), ctr(posY))
 
 				function tmpHr:Paint(pw, ph)
-					--draw.SimpleTextOutlined( "test", "windowTitle", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+					--draw.SimpleTextOutlined("test", "windowTitle", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
 				self.menu:AddItem(tmpHr)
@@ -1035,7 +1035,7 @@ function drawRoundedBox(r, x, y, w, h, color)
 end
 
 function drawRoundedBoxStencil(r, x, y, w, h, color, max)
-	--drawRoundedBox( 0, x, y, max, h, Color( 255, 0, 255, 100 ) )
+	--drawRoundedBox(0, x, y, max, h, Color(255, 0, 255, 100))
 	if true then
 		render.ClearStencil()
 		render.SetStencilEnable(true)
@@ -1064,9 +1064,9 @@ end
 function drawRoundedBoxBR(r, x, y, w, h, color, br)
 	local _br = br or 0
 
-	--drawRoundedBox( 0, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 255, 255 ) )
-	--drawRoundedBox( r, x+_br, y+_br, w-_br*2, h-_br*2, Color( 255, 0, 0, 100 ) )
-	--drawRoundedBox( r, x-_br, y-_br, w+_br*2, h+_br*2, Color( 0, 255, 0, 100 ) )
+	--drawRoundedBox(0, x+_br, y+_br, w-_br*2, h-_br*2, Color(255, 0, 255, 255))
+	--drawRoundedBox(r, x+_br, y+_br, w-_br*2, h-_br*2, Color(255, 0, 0, 100))
+	--drawRoundedBox(r, x-_br, y-_br, w+_br*2, h+_br*2, Color(0, 255, 0, 100))
 	if true then
 		render.ClearStencil()
 		render.SetStencilEnable(true)

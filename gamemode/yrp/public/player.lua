@@ -1,9 +1,9 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
 --[[ Player Functions ]]--
-local Player = FindMetaTable( "Player" )
+local Player = FindMetaTable("Player")
 
 function Player:GetLanguage() -- The Language the player selected
 	return self:YRPGetLanguage() -- return string
@@ -18,12 +18,12 @@ function Player:Slowed()
 end
 
 --[[ Metabolism ]]--
-function Player:Eat( num ) -- Add num to hunger
-	self:YRPEat( num )
+function Player:Eat(num) -- Add num to hunger
+	self:YRPEat(num)
 end
 
-function Player:Drink( num ) -- Add num to thirst
-	self:YRPDrink( num )
+function Player:Drink(num) -- Add num to thirst
+	self:YRPDrink(num)
 end
 
 --[[ Money ]]--
@@ -46,7 +46,7 @@ function Player:GetFactionName() -- Faction Name
 end
 
 function Player:GetFactionColor() -- Faction Color
-	return self:YRPGetFactionColor() -- return Color( int r, int g, int b, int a )
+	return self:YRPGetFactionColor() -- return Color(int r, int g, int b, int a)
 end
 
 --[[ Group ]]--
@@ -55,7 +55,7 @@ function Player:GetGroupName() -- Group Name / "Category" Name
 end
 
 function Player:GetGroupColor() -- Group Color
-	return self:YRPGetGroupColor() -- return Color( int r, int g, int b, int a )
+	return self:YRPGetGroupColor() -- return Color(int r, int g, int b, int a)
 end
 
 --[[ Name ]]--
@@ -65,5 +65,5 @@ end
 
 --[[ UserGroup ]]--
 function Player:GetUserGroupColor() -- UserGroup Color
-	return self:YRPGetUserGroupColor() -- return Color( int r, int g, int b, int a )
+	return self:YRPGetUserGroupColor() -- return Color(int r, int g, int b, int a)
 end

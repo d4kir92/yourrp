@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 
 function PANEL:Init()
@@ -79,7 +79,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 0, 0 ) )
+	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0))
 end
 
 vgui.Register("DYRPTabs", PANEL, "Panel")

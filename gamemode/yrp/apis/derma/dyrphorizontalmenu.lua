@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 function DrawSelector(btn, w, h, text, selected)
 	draw.SimpleTextOutlined(text, "mat1header", w / 2, h / 2, Color(255, 255, 255, 255), 1, 1, ctr(1), Color(0, 0, 0, 255))
 
@@ -34,7 +34,7 @@ function PANEL:Init()
 	self.hscroller = createD("DHorizontalScroller", self, self:GetWide(), ctr(100), 0, 0)
 
 	function self.hscroller:Paint(pw, ph)
-		--surfaceBox( 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 	end
 
 	self.w = 0
@@ -133,7 +133,7 @@ function PANEL:AddTab(name, netstr, starttab)
 				elseif my < py and mx > px + self:GetParent():GetWide() then
 					self:GetParent():HideSubTabs()
 				end
-				--surfaceBox( 0, ctr( 4 ), pw, ph - ctr( 8 ), Color( 0, 0, 255, 255 ) )
+				--surfaceBox(0, ctr(4), pw, ph - ctr(8), Color(0, 0, 255, 255))
 			end
 
 			self.stabs.pl = createD("DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
@@ -282,7 +282,7 @@ end
 
 function PANEL:Paint(w, h)
 	surfaceBox(0, 0, w, ctr(100), Color(255, 255, 255, 10))
-	--surfaceBox( 0, 0, w, h, Color( 255, 255, 0, 100 ) )
+	--surfaceBox(0, 0, w, h, Color(255, 255, 0, 100))
 end
 
 vgui.Register("DYRPHorizontalMenu", PANEL, "Panel")

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 if SERVER then
 	function ServerHasPassword()
@@ -11,7 +11,7 @@ if SERVER then
 
 	function SendServerInfo(sv)
 		if game.IsDedicated() and !game.SinglePlayer() and !ServerHasPassword() then
-			printGM( "db", "[ServerInfo] Sending" )
+			printGM("db", "[ServerInfo] Sending")
 
 			if true then
 				local entry = {}
@@ -31,11 +31,11 @@ if SERVER then
 				end)
 			end
 		elseif ServerHasPassword() then
-			printGM( "db", "[ServerInfo] Server has password => not setting public" )
+			printGM("db", "[ServerInfo] Server has password => not setting public")
 		elseif !game.IsDedicated() then
-			printGM( "db", "[ServerInfo] Server is not a dedicated one => not setting public" )
+			printGM("db", "[ServerInfo] Server is not a dedicated one => not setting public")
 		elseif game.SinglePlayer() then
-			printGM( "db", "[ServerInfo] Server is in singleplayer mode => not setting public" )
+			printGM("db", "[ServerInfo] Server is in singleplayer mode => not setting public")
 		end
 	end
 

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
 function AddStatusLine(parent, cat, entry, str_id, color)
 	local sl = createD("DPanel", parent, parent:GetWide(), ctr(50), 0, 0)

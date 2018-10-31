@@ -1,9 +1,9 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
 function AddYRPAddon(parent, tab)
 	local _add_on = createD("DPanel", parent, ctr(1600), ctr(4 * 100 + 5 * 20), 0, 0)
 	function _add_on:Paint(pw, ph)
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color(255, 255, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 	end
 
 	_add_on.icon = createD("DHTML", _add_on, ctr(100), ctr(100), ctr(20), ctr(20))
@@ -125,7 +125,7 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 		else
 			local _empty = createD("DPanel", yrp_addons, ctr(1600), ctr(4 * 100 + 5 * 20), 0, 0)
 			function _empty:Paint(pw, ph)
-				draw.RoundedBox( 0, 0, 0, pw, ph, Color(255, 255, 255))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 				local tab = {}
 				tab.x = pw / 2
 				tab.y = ph / 2

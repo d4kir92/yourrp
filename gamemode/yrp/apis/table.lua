@@ -1,38 +1,38 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-function combineTables( tab1, tab2 )
-	for i, item in pairs( tab2 ) do
-		table.insert( tab1, item )
+function combineTables(tab1, tab2)
+	for i, item in pairs(tab2) do
+		table.insert(tab1, item)
 	end
-	for i, item in pairs( tab1 ) do
-		table.RemoveByValue( tab1, "" )
-		table.RemoveByValue( tab1, " " )
+	for i, item in pairs(tab1) do
+		table.RemoveByValue(tab1, "")
+		table.RemoveByValue(tab1, " ")
 	end
 	return tab1
 end
 
-function combineStringTables( str1, str2 )
-	local _tab1 = string.Explode( ",", str1 )
-	local _tab2 = string.Explode( ",", str2 )
-	return combineTables( _tab1, _tab2 )
+function combineStringTables(str1, str2)
+	local _tab1 = string.Explode(",", str1)
+	local _tab2 = string.Explode(",", str2)
+	return combineTables(_tab1, _tab2)
 end
 
 local _addons = engine.GetAddons()
 local _wsids = {}
-for i, add in pairs( _addons ) do
-	table.insert( _wsids, add.wsid )
+for i, add in pairs(_addons) do
+	table.insert(_wsids, add.wsid)
 end
 
 function GetWorkshopIDs()
 	return _wsids
 end
 
-function SENTSTable( str )
-	local se = string.Explode( ";", str )
+function SENTSTable(str)
+	local se = string.Explode(";", str)
 	local tbl = {}
-	for i, senttbl in pairs( se ) do
+	for i, senttbl in pairs(se) do
 		if senttbl != "" then
-			senttbl = string.Explode( ",", senttbl )
+			senttbl = string.Explode(",", senttbl)
 			if senttbl[1] != nil and senttbl[2] != nil then
 				tbl[senttbl[2]] = senttbl[1]
 			end
@@ -41,10 +41,10 @@ function SENTSTable( str )
 	return tbl
 end
 
-function SENTSString( tbl )
+function SENTSString(tbl)
 	local str = ""
 	local count = 0
-	for cname, amount in pairs( tbl ) do
+	for cname, amount in pairs(tbl) do
 		if count < 1 then
 			str = str .. amount .. "," .. cname
 		else
