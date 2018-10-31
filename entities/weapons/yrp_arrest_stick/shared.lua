@@ -36,7 +36,7 @@ SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "melee"
 function SWEP:Initialize()
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Reload()
@@ -47,8 +47,8 @@ function SWEP:Think()
 
 end
 
-local swingsound = Sound( "Weapon_Stunstick.Single" )
-local hitsound = Sound( "Weapon_Stunstick.Melee_Hit" )
+local swingsound = Sound("Weapon_Stunstick.Single")
+local hitsound = Sound("Weapon_Stunstick.Melee_Hit")
 
 SWEP.delay = 0
 SWEP.cooldown = 0.4
@@ -63,24 +63,24 @@ function SWEP:PrimaryAttack()
 	self.delay = CurTime() + self.cooldown
 
 	local ply = self:GetOwner()
-	local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
+	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 	if tr.Hit then
-		self.Weapon:SendWeaponAnim( ACT_VM_HITCENTER )
-		ply:SetAnimation( PLAYER_ATTACK1 )
+		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+		ply:SetAnimation(PLAYER_ATTACK1)
 
-		ply:EmitSound( hitsound )
+		ply:EmitSound(hitsound)
 		if tr.Entity:IsPlayer() then
 			if SERVER then
-				teleportToJailpoint( tr.Entity )
-				tr.Entity:SetNWBool( "injail", true )
-				tr.Entity:SetNWInt( "jailtime", 5*60 )
+				teleportToJailpoint(tr.Entity)
+				tr.Entity:SetNWBool("injail", true)
+				tr.Entity:SetNWInt("jailtime", 5*60)
 			end
 		end
 	else
-		self.Weapon:SendWeaponAnim( ACT_VM_MISSCENTER )
-		ply:SetAnimation( PLAYER_ATTACK1 )
+		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+		ply:SetAnimation(PLAYER_ATTACK1)
 
-		ply:EmitSound( swingsound )
+		ply:EmitSound(swingsound)
 	end
 end
 
@@ -91,22 +91,22 @@ function SWEP:SecondaryAttack()
 	self.delay = CurTime() + self.cooldown
 
 	local ply = self:GetOwner()
-	local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
+	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 	if tr.Hit then
-		self.Weapon:SendWeaponAnim( ACT_VM_HITCENTER )
-		ply:SetAnimation( PLAYER_ATTACK1 )
+		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+		ply:SetAnimation(PLAYER_ATTACK1)
 
-		ply:EmitSound( hitsound )
+		ply:EmitSound(hitsound)
 		if tr.Entity:IsPlayer() then
 			if SERVER then
-				teleportToReleasepoint( tr.Entity )
-				tr.Entity:SetNWBool( "injail", false )
+				teleportToReleasepoint(tr.Entity)
+				tr.Entity:SetNWBool("injail", false)
 			end
 		end
 	else
-		self.Weapon:SendWeaponAnim( ACT_VM_MISSCENTER )
-		ply:SetAnimation( PLAYER_ATTACK1 )
+		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+		ply:SetAnimation(PLAYER_ATTACK1)
 
-		ply:EmitSound( swingsound )
+		ply:EmitSound(swingsound)
 	end
 end

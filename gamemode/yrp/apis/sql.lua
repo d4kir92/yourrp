@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function disk_full(error)
 	if string.find(error, "database or disk is full") then
@@ -18,7 +18,7 @@ function disk_full(error)
 end
 
 function sql_show_last_error()
-	--printGM( "db", "sql_show_last_error()" )
+	--printGM("db", "sql_show_last_error()")
 	local _last_error = tostring(sql.LastError()) or ""
 
 	if SERVER then
@@ -129,7 +129,7 @@ function db_drop_table(db_table)
 	local _result = sql.Query("DROP TABLE " .. db_table)
 
 	if _result ~= nil then
-		printGM("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! ( result: " .. tostring(_result) .. " )")
+		printGM("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	end
 end
@@ -161,7 +161,7 @@ end
 
 function retry_load_database(db_name)
 	printGM("error", GetSQLModeName() .. ": " .. "retry_load_database " .. tostring(db_name))
-	--SQL_INIT_DATABASE( db_name )
+	--SQL_INIT_DATABASE(db_name)
 end
 
 local _show_db_if_not_empty = false
@@ -222,7 +222,7 @@ function SetSQLMode(sqlmode, force)
 end
 
 function SQL_TABLE_EXISTS(db_table)
-	-- printGM( "db", "SQL_TABLE_EXISTS( " .. tostring( db_table ) .. " )" )
+	-- printGM("db", "SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
 		if sql.TableExists(db_table) then
 			return true
@@ -247,7 +247,7 @@ end
 function SQL_QUERY(query)
 	query = tostring(query)
 
-	--printGM( "db", "SQL_QUERY( " .. tostring( query ) .. " )" )
+	--printGM("db", "SQL_QUERY(" .. tostring(query) .. ")")
 	if not string.find(query, ";") then
 		printGM("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
 
@@ -262,7 +262,7 @@ function SQL_QUERY(query)
 		elseif _result == false then
 			return _result
 		else
-			--printGM( "db", "ELSE" )
+			--printGM("db", "ELSE")
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
@@ -282,11 +282,11 @@ function SQL_QUERY(query)
 			local _test = que:getData()
 
 			if istable(_test) then
-				if #_test == 0 then return nil end --printGM( "db", "SQL_QUERY TABLE EMPTY 1" )
+				if #_test == 0 then return nil end --printGM("db", "SQL_QUERY TABLE EMPTY 1")
 
 				return _test
 			elseif _test == nil then
-				--printGM( "db", "SQL_QUERY TABLE EMPTY 2" )
+				--printGM("db", "SQL_QUERY TABLE EMPTY 2")
 				return false
 			else
 				printGM("db", "SQL_QUERY TABLE MISSING (" .. tostring(_test) .. ")")
@@ -303,7 +303,7 @@ function SQL_DROP_TABLE(db_table)
 	local _result = SQL_QUERY("DROP TABLE " .. db_table .. ";")
 
 	if _result ~= nil then
-		printGM("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! ( result: " .. tostring(_result) .. " )")
+		printGM("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	else
 		printGM("db", "DROPPED " .. tostring(db_table) .. " TABLE")
@@ -311,22 +311,22 @@ function SQL_DROP_TABLE(db_table)
 end
 
 function SQL_CREATE_TABLE(db_table)
-	printGM("db", "SQL_CREATE_TABLE( " .. tostring(db_table) .. " )")
+	printGM("db", "SQL_CREATE_TABLE(" .. tostring(db_table) .. ")")
 
 	if GetSQLMode() == 0 then
 		local _q = "CREATE TABLE "
-		_q = _q .. db_table .. " ( "
+		_q = _q .. db_table .. " ("
 		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY autoincrement"
-		_q = _q .. " )"
+		_q = _q .. ")"
 		_q = _q .. ";"
 		local _result = SQL_QUERY(_q)
 
 		return _result
 	elseif GetSQLMode() == 1 then
 		local _q = "CREATE TABLE "
-		_q = _q .. YRPSQL.schema .. "." .. db_table .. " ( "
+		_q = _q .. YRPSQL.schema .. "." .. db_table .. " ("
 		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY AUTO_INCREMENT"
-		_q = _q .. " )"
+		_q = _q .. ")"
 		_q = _q .. ";"
 		local _result = SQL_QUERY(_q)
 
@@ -335,7 +335,7 @@ function SQL_CREATE_TABLE(db_table)
 end
 
 function SQL_SELECT(db_table, db_columns, db_where)
-	--printGM( "db", "SQL_SELECT( " .. tostring( db_table ) .. ", " .. tostring( db_columns ) .. ", " .. tostring( db_where ) .. " )" )
+	--printGM("db", "SQL_SELECT(" .. tostring(db_table) .. ", " .. tostring(db_columns) .. ", " .. tostring(db_where) .. ")")
 	if GetSQLMode() == 0 then
 		local _q = "SELECT "
 		_q = _q .. db_columns
@@ -366,7 +366,7 @@ function SQL_SELECT(db_table, db_columns, db_where)
 end
 
 function SQL_UPDATE(db_table, db_sets, db_where)
-	--printGM( "db", "SQL_UPDATE( " .. tostring( db_table ) .. ", " .. tostring( db_sets ) .. ", " .. tostring( db_where ) .. " )" )
+	--printGM("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
 	if GetSQLMode() == 0 then
 		local _q = "UPDATE "
 		_q = _q .. db_table
@@ -396,7 +396,7 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 end
 
 function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
-	--printGM( "db", "SQL_INSERT_INTO_DEFAULTVALUES( " .. tostring( db_table ) .. " )" )
+	--printGM("db", "SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
@@ -436,16 +436,16 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 end
 
 function SQL_INSERT_INTO(db_table, db_columns, db_values)
-	printGM( "db", "SQL_INSERT_INTO( " .. tostring( db_table ) .. " | " .. tostring( db_columns ) .. " | " .. tostring( db_values ) .. " )" )
+	printGM("db", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
 	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
-			_q = _q .. " ( "
+			_q = _q .. " ("
 			_q = _q .. db_columns
-			_q = _q .. " ) VALUES ( "
+			_q = _q .. ") VALUES ("
 			_q = _q .. db_values
-			_q = _q .. " );"
+			_q = _q .. ");"
 			local _result = SQL_QUERY(_q)
 
 			if _result ~= nil then
@@ -487,11 +487,11 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 
 			local _q = "INSERT INTO "
 			_q = _q .. YRPSQL.schema .. "." .. db_table
-			_q = _q .. " ( "
+			_q = _q .. " ("
 			_q = _q .. db_columns
-			_q = _q .. " ) VALUES ( "
+			_q = _q .. ") VALUES ("
 			_q = _q .. db_values
-			_q = _q .. " );"
+			_q = _q .. ");"
 			local _result = SQL_QUERY(_q)
 
 			if _result ~= nil then
@@ -529,7 +529,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 			if db_where ~= nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
-				_q = _q .. " );"
+				_q = _q .. ");"
 			end
 
 			local _result = SQL_QUERY(_q)
@@ -542,7 +542,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 end
 
 function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
-	--printGM( "db", "SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_name ) .. ", " .. tostring( column_name ) .. " )" )
+	--printGM("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
 	if GetSQLMode() == 0 then
 		local _result = SQL_SELECT(db_name, column_name, nil)
 
@@ -563,7 +563,7 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 end
 
 function SQL_ADD_COLUMN(table_name, column_name, datatype)
-	--printGM( "db", "SQL_ADD_COLUMN( " .. tostring( table_name ) .. ", " .. tostring( column_name ) .. ", " .. tostring( datatype ) .. " )" )
+	--printGM("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
 	local _result = SQL_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 
 	if GetSQLMode() == 0 then
@@ -637,7 +637,7 @@ if SERVER then
 		if not YRPSQL.outdated then
 			YRPSQL.mysql_worked = false
 
-			timer.Simple( 10, function()
+			timer.Simple(10, function()
 				if not YRPSQL.mysql_worked then
 					printGM("note", "Took to long to connect to mysql server, switch back to sqlite")
 					SetSQLMode(0, true)
@@ -660,7 +660,7 @@ if SERVER then
 				SetSQLMode(1)
 			end
 
-			--SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
+			--SQL_QUERY("SET @@global.sql_mode='MYSQL40'")
 			YRPSQL.db.onConnectionFailed = function()
 				printGM("note", "CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
 				SetSQLMode(0, true)
@@ -675,11 +675,11 @@ end
 printGM("db", "Current SQL Mode: " .. GetSQLModeName())
 
 function SQL_INIT_DATABASE(db_name)
-	printGM("db", "SQL_INIT_DATABASE( " .. tostring(db_name) .. " )")
+	printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then
 		if not SQL_TABLE_EXISTS(db_name) then
-			printGM( "note", tostring( db_name ) .. " not exists" )
+			printGM("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if _result ~= nil then
@@ -696,7 +696,7 @@ function SQL_INIT_DATABASE(db_name)
 		end
 	elseif GetSQLMode() == 1 then
 		if not SQL_TABLE_EXISTS(db_name) then
-			printGM( "note", tostring( db_name ) .. " not exists" )
+			printGM("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if _result ~= nil then

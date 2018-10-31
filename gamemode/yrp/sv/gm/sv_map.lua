@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
 local _map_size = {}
 _map_size.size = 9999999999
@@ -27,50 +27,50 @@ _map_size.error = 0
 
 local skyCamera = nil
 
-util.AddNetworkString( "askCoords" )
-util.AddNetworkString( "sendCoords" )
-util.AddNetworkString( "askCoordsMM" )
-util.AddNetworkString( "sendCoordsMM" )
+util.AddNetworkString("askCoords" )
+util.AddNetworkString("sendCoords" )
+util.AddNetworkString("askCoordsMM" )
+util.AddNetworkString("sendCoordsMM" )
 
-net.Receive( "askCoords", function( len, ply )
+net.Receive("askCoords", function(len, ply )
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start( "sendCoords" )
-			net.WriteBool( false )
-			net.WriteTable( _map_size )
-		net.Send( ply )
+		net.Start("sendCoords" )
+			net.WriteBool(false )
+			net.WriteTable(_map_size )
+		net.Send(ply )
 
 		get_map_coords()
 	else
-		net.Start( "sendCoords" )
-			net.WriteBool( true )
-			net.WriteTable( _map_size )
-		net.Send( ply )
+		net.Start("sendCoords" )
+			net.WriteBool(true )
+			net.WriteTable(_map_size )
+		net.Send(ply )
 	end
 end)
 
-net.Receive( "askCoordsMM", function( len, ply )
+net.Receive("askCoordsMM", function(len, ply )
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start( "sendCoordsMM" )
-			net.WriteBool( false )
-			net.WriteTable( _map_size )
-		net.Send( ply )
+		net.Start("sendCoordsMM" )
+			net.WriteBool(false )
+			net.WriteTable(_map_size )
+		net.Send(ply )
 
 		get_map_coords()
 	else
-		net.Start( "sendCoordsMM" )
-			net.WriteBool( true )
-			net.WriteTable( _map_size )
-		net.Send( ply )
+		net.Start("sendCoordsMM" )
+			net.WriteBool(true )
+			net.WriteTable(_map_size )
+		net.Send(ply )
 	end
 end)
 
-function try_new_pos( dir, size, space, tmpX, tmpY, tmpZ )
+function try_new_pos(dir, size, space, tmpX, tmpY, tmpZ )
 	local _fails = 3
 	local _tmpEnd = 0
 	local _result = dir
 
 	for i = dir, size, space do
-		if util.IsInWorld( Vector( tmpX or i, tmpY or i, tmpZ or i ) ) and _tmpEnd < _fails then
+		if util.IsInWorld(Vector(tmpX or i, tmpY or i, tmpZ or i ) ) and _tmpEnd < _fails then
 			_result = i
 			if _tmpEnd > 0 then
 				_tmpEnd = 0
@@ -83,7 +83,7 @@ function try_new_pos( dir, size, space, tmpX, tmpY, tmpZ )
 		end
 	end
 	if skyCamera != nil then
-		if skyCamera:GetPos():Distance( Vector( tmpX, tmpY, _result ) ) < 500 then
+		if skyCamera:GetPos():Distance(Vector(tmpX, tmpY, _result ) ) < 500 then
 			if _result != nil then
 				return _result
 			end
@@ -92,7 +92,7 @@ function try_new_pos( dir, size, space, tmpX, tmpY, tmpZ )
 	return _result
 end
 
-function search_coords( ent )
+function search_coords(ent )
 	local _size = 1000000
 	local _space = 8
 
@@ -100,25 +100,25 @@ function search_coords( ent )
 		_map_size.spawnPointsH = ent:GetPos().z - 64
 	end
 
-	local testUp = try_new_pos( ent:GetPos().z, _size, _space, ent:GetPos().x, ent:GetPos().y, nil )
+	local testUp = try_new_pos(ent:GetPos().z, _size, _space, ent:GetPos().x, ent:GetPos().y, nil )
 	if testUp > _map_size.sizeUp then
 		_map_size.sizeUp = testUp
 	end
 
-	local testE = try_new_pos( ent:GetPos().x, _size, _space, nil, ent:GetPos().y, _map_size.sizeUp )
+	local testE = try_new_pos(ent:GetPos().x, _size, _space, nil, ent:GetPos().y, _map_size.sizeUp )
 	if testE > _map_size.sizeE then
 		_map_size.sizeE = testE
 	end
-	local testW = try_new_pos( ent:GetPos().x, -_size, -_space, nil, ent:GetPos().y, _map_size.sizeUp )
+	local testW = try_new_pos(ent:GetPos().x, -_size, -_space, nil, ent:GetPos().y, _map_size.sizeUp )
 	if testW < _map_size.sizeW then
 		_map_size.sizeW = testW
 	end
 
-	local testN = try_new_pos( ent:GetPos().y, _size, _space, ent:GetPos().x, nil, _map_size.sizeUp )
+	local testN = try_new_pos(ent:GetPos().y, _size, _space, ent:GetPos().x, nil, _map_size.sizeUp )
 	if testN > _map_size.sizeN then
 		_map_size.sizeN = testN
 	end
-	local testS = try_new_pos( ent:GetPos().y, -_size, -_space, ent:GetPos().x, nil, _map_size.sizeUp )
+	local testS = try_new_pos(ent:GetPos().y, -_size, -_space, ent:GetPos().x, nil, _map_size.sizeUp )
 	if testS < _map_size.sizeS then
 		_map_size.sizeS = testS
 	end
@@ -126,12 +126,12 @@ end
 
 function get_coords()
 	if skyCamera == nil then
-		skyCamera = ents.FindByClass( "sky_camera" )
+		skyCamera = ents.FindByClass("sky_camera" )
 		skyCamera = skyCamera[1]
 	end
 
 	if _map_size.hasFog == nil then
-		local tmpTable = ents.FindByClass( "fog_controller" )
+		local tmpTable = ents.FindByClass("fog_controller" )
 		if tmpTable[1] != nil then
 			_map_size.hasFog = true
 		else
@@ -140,7 +140,7 @@ function get_coords()
 	end
 
 	local _hasNoSpawnpoints = true
-	for k, v in pairs( ents.GetAll() ) do
+	for k, v in pairs(ents.GetAll() ) do
 		if v:GetClass() == "info_player_teamspawn"
 			or v:GetClass() == "info_player_terrorist"
 			or v:GetClass() == "info_player_counterterrorist"
@@ -149,29 +149,29 @@ function get_coords()
 		end
 	end
 
-	for k, v in pairs( ents.GetAll() ) do
+	for k, v in pairs(ents.GetAll() ) do
 		if _hasNoSpawnpoints then
 			if v:GetClass() == "info_player_start" then
-				search_coords( v )
+				search_coords(v )
 			end
 		else
 			if v:GetClass() == "info_player_teamspawn" then
-				search_coords( v )
+				search_coords(v )
 			elseif v:GetClass() == "info_player_terrorist" then
-				search_coords( v )
+				search_coords(v )
 			elseif v:GetClass() == "info_player_counterterrorist" then
-				search_coords( v )
+				search_coords(v )
 			end
 		end
 
 		if v:GetClass() == "prop_door_rotating" then
-			search_coords( v )
+			search_coords(v )
 		end
 		if v:GetClass() == "func_door" then
-			search_coords( v )
+			search_coords(v )
 		end
 		if v:GetClass() == "func_door_rotating" then
-			search_coords( v )
+			search_coords(v )
 		end
 	end
 
@@ -189,16 +189,16 @@ function get_coords()
 	end
 	_map_size.eventH = _map_size.eventH - 256
 
-	_map_size.sizeX = _map_size.sizeE + math.abs( _map_size.sizeW )
-	_map_size.sizeY = _map_size.sizeN + math.abs( _map_size.sizeS )
+	_map_size.sizeX = _map_size.sizeE + math.abs(_map_size.sizeW )
+	_map_size.sizeY = _map_size.sizeN + math.abs(_map_size.sizeS )
 
-	_map_size.sizeX = math.abs( _map_size.sizeX )
-	_map_size.sizeY = math.abs( _map_size.sizeY )
+	_map_size.sizeX = math.abs(_map_size.sizeX )
+	_map_size.sizeY = math.abs(_map_size.sizeY )
 
 	_map_size.sizeFE = _map_size.sizeX * _map_size.sizeY
 
-	_map_size.midX = _map_size.sizeE - ( _map_size.sizeX / 2 )
-	_map_size.midY = _map_size.sizeN - ( _map_size.sizeY / 2 )
+	_map_size.midX = _map_size.sizeE - (_map_size.sizeX / 2 )
+	_map_size.midY = _map_size.sizeN - (_map_size.sizeY / 2 )
 
 	if _map_size.sizeX >= _map_size.sizeY then
 		_map_size.facX = 1
@@ -212,8 +212,8 @@ function get_coords()
 	_map_size.error = 0
 
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		timer.Simple( 5, function()
-			printGM( "note", "get_map_coords() retry" )
+		timer.Simple(5, function()
+			printGM("note", "get_map_coords() retry" )
 			get_map_coords()
 		end)
 	end

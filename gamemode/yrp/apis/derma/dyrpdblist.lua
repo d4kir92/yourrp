@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 
 function paintDBButton(self, pw, ph, color, text)
@@ -19,7 +19,7 @@ function PANEL:Init()
 	self.header = createD("DPanel", self, self:GetWide(), ctr(50), 0, 0)
 
 	function self.header:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
 	end
 
 	self.panels = {}
@@ -93,7 +93,7 @@ function PANEL:Init()
 	self.list:EnableVerticalScrollbar(true)
 	self.list:SetSpacing(2)
 
-	--self.list:SetNoSizing( true )
+	--self.list:SetNoSizing(true)
 	function self.list:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100))
 	end
@@ -205,7 +205,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 0, 0 ) )
+	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0))
 end
 
 vgui.Register("DYRPDBList", PANEL, "Panel")

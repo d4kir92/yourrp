@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function fp(tbl)
 		local func = tbl[1]
@@ -109,7 +109,7 @@ end
 Partial = function(func, ...)
 		local args = {...}
 		return function(...)
-				return func(unpack(table.Add( args, {...})))
+				return func(unpack(table.Add(args, {...})))
 		end
 end
 

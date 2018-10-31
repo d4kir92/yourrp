@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
 net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 	if pa(settingsWindow) then
@@ -139,7 +139,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local _uid = tonumber(net.ReadString())
 				local icon = net.ReadString()
 				gs.gplist[_uid].string_icon = icon
-				gs.gplist[_uid].ico:SetHTML( GetHTMLImage( gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ) )
+				gs.gplist[_uid].ico:SetHTML(GetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ) )
 			end
 		end)
 
@@ -193,7 +193,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local ico = gs.gplist[group.uniqueID].ico
 			function ico:Paint(pw, ph)
 			end
-			ico:SetHTML( GetHTMLImage( group.string_icon, ico:GetWide(), ico:GetTall() ) )
+			ico:SetHTML(GetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall() ) )
 
 			gs.gplist[group.uniqueID].up = createD("DButton", gs.gplist[group.uniqueID], ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), ctr(10))
 			gs.gplist[group.uniqueID].up:SetText("")
@@ -491,8 +491,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			info.w = ctr(1000)
 			info.h = ctr(530)
 			info.br = ctr(20)
-			info.color = Color( 255, 255, 255 )
-			info.bgcolor = Color( 80, 80, 80 )
+			info.color = Color(255, 255, 255 )
+			info.bgcolor = Color(80, 80, 80 )
 			info.name = "general"
 			ea[group.uniqueID].info = DGroup(info)
 			ea.info = ea[group.uniqueID].info
@@ -567,8 +567,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			restriction.w = ctr(1000)
 			restriction.h = ctr(570)
 			restriction.br = ctr(20)
-			restriction.color = Color( 255, 255, 255 )
-			restriction.bgcolor = Color( 80, 80, 80 )
+			restriction.color = Color(255, 255, 255 )
+			restriction.bgcolor = Color(80, 80, 80 )
 			restriction.name = "restriction"
 			ea[group.uniqueID].restriction = DGroup(restriction)
 			ea.restriction = ea[group.uniqueID].restriction
@@ -714,7 +714,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local ico = rs.rplist[role.uniqueID].ico
 			function ico:Paint(pw, ph)
 			end
-			ico:SetHTML( GetHTMLImage( role.string_icon, ico:GetWide(), ico:GetTall() ) )
+			ico:SetHTML(GetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall() ) )
 
 			rs.rplist[role.uniqueID].up = createD("DButton", rs.rplist[role.uniqueID], ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), ctr(10))
 			rs.rplist[role.uniqueID].up:SetText("")
@@ -828,8 +828,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			info.w = ctr(1000)
 			info.h = ctr(890)
 			info.br = ctr(20)
-			info.color = Color( 255, 255, 255 )
-			info.bgcolor = Color( 80, 80, 80 )
+			info.color = Color(255, 255, 255 )
+			info.bgcolor = Color(80, 80, 80 )
 			info.name = "general"
 			ea[role.uniqueID].info = DGroup(info)
 			ea.info = ea[role.uniqueID].info
@@ -956,8 +956,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			restriction.w = ctr(1000)
 			restriction.h = ctr(570)
 			restriction.br = ctr(20)
-			restriction.color = Color( 255, 255, 255 )
-			restriction.bgcolor = Color( 80, 80, 80 )
+			restriction.color = Color(255, 255, 255 )
+			restriction.bgcolor = Color(80, 80, 80 )
 			restriction.name = "restriction"
 			ea[role.uniqueID].restriction = DGroup(restriction)
 			ea.restriction = ea[role.uniqueID].restriction
@@ -1059,8 +1059,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			attributes.w = ctr(1000)
 			attributes.h = ctr(570)
 			attributes.br = ctr(20)
-			attributes.color = Color( 255, 255, 255 )
-			attributes.bgcolor = Color( 80, 80, 80 )
+			attributes.color = Color(255, 255, 255 )
+			attributes.bgcolor = Color(80, 80, 80 )
 			attributes.name = "attributes"
 			ea[role.uniqueID].attributes = DGroup(attributes)
 			ea.attributes = ea[role.uniqueID].attributes

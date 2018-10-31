@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function DHr(tab)
 	tab = tab or {}
@@ -8,21 +8,21 @@ function DHr(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 0, 0, 0 )
+	tab.color = tab.color or Color(0, 0, 0)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color(255, 255, 255) )
-		draw.RoundedBox( 0, 0, ph / 4, pw, ph / 2, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, tab.color)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
@@ -35,10 +35,10 @@ function DCheckBoxes(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -46,22 +46,22 @@ function DCheckBoxes(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr( 10 )
+		text.x = ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 	end
 
 	pnl.DButton = createD("DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -75,16 +75,16 @@ function DCheckBoxes(tab)
 		change.x = ctr(10)
 		change.y = ph / 2
 		change.ax = 0
-		DrawText( change )
+		DrawText(change)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DButton:DoClick()
-			local window = createD("DFrame", nil, ctr( 20 + 500 + 20 ), ctr( 50 + 20 + 500 + 20 ), 0, 0)
+			local window = createD("DFrame", nil, ctr(20 + 500 + 20), ctr(50 + 20 + 500 + 20), 0, 0)
 			window:Center()
 			window:MakePopup()
-			window:SetTitle( "" )
-			function window:Paint( pw, ph )
-				surfaceWindow( self, pw, ph, YRP.lang_string( "usergroups" ) )
+			window:SetTitle("")
+			function window:Paint(pw, ph)
+				surfaceWindow(self, pw, ph, YRP.lang_string("usergroups"))
 			end
 			window.cm = createD("DPanelList", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
 
@@ -160,10 +160,10 @@ function DCheckBoxes(tab)
 				end
 			end
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _str = net.ReadString()
-			if pa( pnl.DButton ) then
+			if pa(pnl.DButton) then
 				pnl.DButton.serverside = true
 				tab.value = _str
 				pnl.DButton.serverside = false
@@ -172,7 +172,7 @@ function DCheckBoxes(tab)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
@@ -185,10 +185,10 @@ function DCheckBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 50 )
+	tab.h = tab.h or ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tonumber(tab.value) or 1
@@ -196,22 +196,22 @@ function DCheckBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header )
+			text.text = YRP.lang_string(tab.header)
 		else
 			text.text = tab.header
 		end
-		text.x = ctr( 60 )
+		text.x = ctr(60)
 		text.y = ph / 2
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 	end
 
 	pnl.DCheckBox = createD("DCheckBox", pnl.line, tab.h, tab.h, 0, 0)
@@ -231,10 +231,10 @@ function DCheckBox(tab)
 				net.WriteString(int)
 			net.SendToServer()
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _int = tonumber(net.ReadString())
-			if pa( pnl.DButton ) then
+			if pa(pnl.DButton) then
 				pnl.DButton.serverside = true
 				tab.value = _int
 				pnl.DButton.serverside = false
@@ -243,7 +243,7 @@ function DCheckBox(tab)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
@@ -256,10 +256,10 @@ function DComboBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -267,25 +267,25 @@ function DComboBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr( 10 )
+		text.x = ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 	end
 
-	pnl.DComboBox = createD( "DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	pnl.DComboBox = createD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	for i, v in pairs(tab.choices) do
 		if tab.value == i then
 			pnl.DComboBox:AddChoice(v, i, true)
@@ -301,19 +301,19 @@ function DComboBox(tab)
 				net.WriteString(pnl.DComboBox:GetOptionData(pnl.DComboBox:GetSelectedID()))
 			net.SendToServer()
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _str = net.ReadString()
-			if pa( pnl.DComboBox ) then
+			if pa(pnl.DComboBox) then
 				pnl.DComboBox.serverside = true
-				pnl.DComboBox:SetText( _str )
+				pnl.DComboBox:SetText(_str)
 				pnl.DComboBox.serverside = false
 			end
 		end)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
@@ -326,10 +326,10 @@ function DColor(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -337,25 +337,25 @@ function DColor(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr( 10 )
+		text.x = ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 	end
 
-	pnl.DButton = createD( "DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	pnl.DButton = createD("DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	pnl.DButton:SetText("")
 	pnl.DButton.serverside = false
 	pnl.DButton.color = stc(tab.value)
@@ -366,18 +366,18 @@ function DColor(tab)
 		change.font = "mat1header"
 		change.x = pw / 2
 		change.y = ph / 2
-		DrawText( change )
+		DrawText(change)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DButton:DoClick()
-			local window = createD( "DFrame", nil, ctr( 20 + 500 + 20 ), ctr( 50 + 20 + 500 + 20 ), 0, 0 )
+			local window = createD("DFrame", nil, ctr(20 + 500 + 20), ctr(50 + 20 + 500 + 20), 0, 0)
 			window:Center()
 			window:MakePopup()
-			window:SetTitle( "" )
-			function window:Paint( pw, ph )
-				surfaceWindow( self, pw, ph, YRP.lang_string( "color" ) )
+			window:SetTitle("")
+			function window:Paint(pw, ph)
+				surfaceWindow(self, pw, ph, YRP.lang_string("color"))
 			end
-			window.cm = createD( "DColorMixer", window, ctr( 500 ), ctr( 500 ), ctr( 20 ), ctr( 50 + 20 ) )
+			window.cm = createD("DColorMixer", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
 			function window.cm:ValueChanged(col)
 				pnl.DButton.tabcolor = TableToColorStr(col)
 				pnl.DButton.color = StringToColor(pnl.DButton.tabcolor)
@@ -387,10 +387,10 @@ function DColor(tab)
 				net.SendToServer()
 			end
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _str = net.ReadString()
-			if pa( pnl.DButton ) then
+			if pa(pnl.DButton) then
 				pnl.DButton.serverside = true
 				pnl.DButton.color = stc(_str)
 				pnl.DButton.serverside = false
@@ -399,7 +399,7 @@ function DColor(tab)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
@@ -412,10 +412,10 @@ function DIntBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -426,25 +426,25 @@ function DIntBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr( 10 )
+		text.x = ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 	end
 
-	pnl.DNumberWang = createD( "DNumberWang", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
+	pnl.DNumberWang = createD("DNumberWang", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	pnl.DNumberWang:SetValue(tab.value)
 	pnl.DNumberWang:SetMin(tab.min)
 	pnl.DNumberWang:SetMax(tab.max)
@@ -465,19 +465,19 @@ function DIntBox(tab)
 				self:SetText(tab.min)
 			end
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _val = tonumber(net.ReadString())
-			if pa( pnl.DNumberWang ) then
+			if pa(pnl.DNumberWang) then
 				pnl.DNumberWang.serverside = true
-				pnl.DNumberWang:SetValue( _val )
+				pnl.DNumberWang:SetValue(_val)
 				pnl.DNumberWang.serverside = false
 			end
 		end)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
@@ -490,10 +490,10 @@ function DTextBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -501,38 +501,38 @@ function DTextBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr( 10 )
+		text.x = ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 
 		if dmg != nil and pnl.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string( "damage" )
-			DMG.x = pw - ctr( 10 )
+			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("damage")
+			DMG.x = pw - ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
-			DMG.color = Color( 0, 0, 0, 255 )
+			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
-			DrawText( DMG )
+			DrawText(DMG)
 		end
 	end
 
-	pnl.DTextEntry = createD( "DTextEntry", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2 )
-	pnl.DTextEntry:SetText( tab.value )
+	pnl.DTextEntry = createD("DTextEntry", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DTextEntry:SetText(tab.value)
 	pnl.DTextEntry.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DTextEntry:OnChange()
@@ -541,25 +541,25 @@ function DTextBox(tab)
 				net.WriteString(self:GetText())
 			net.SendToServer()
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _str = net.ReadString()
-			if pa( pnl.DTextEntry ) then
+			if pa(pnl.DTextEntry) then
 				pnl.DTextEntry.serverside = true
-				pnl.DTextEntry:SetText( _str )
+				pnl.DTextEntry:SetText(_str)
 				pnl.DTextEntry.serverside = false
 			end
 		end)
 	end
 
 	if tab.parent != nil and tab.parent.AddItem != nil then
-		tab.parent:AddItem( pnl.line )
+		tab.parent:AddItem(pnl.line)
 	end
 	return pnl
 end
 
 function DNumberWang(tab)
-	local dnw = createD( "DNumberWang", tab.parent, tab.w / tab.len, tab.h / 2, tab.x, tab.h / 2 )
+	local dnw = createD("DNumberWang", tab.parent, tab.w / tab.len, tab.h / 2, tab.x, tab.h / 2)
 	dnw:SetValue(tab.value)
 	dnw:SetMin(tab.min)
 	dnw:SetMax(tab.max)
@@ -580,12 +580,12 @@ function DNumberWang(tab)
 				self:SetText(tab.min)
 			end
 		end
-		net.Receive(tab.netstr, function( len )
+		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
 			local _val = tonumber(net.ReadString())
-			if pa( dnw ) then
+			if pa(dnw) then
 				dnw.serverside = true
-				dnw:SetValue( _val )
+				dnw:SetValue(_val)
 				dnw.serverside = false
 			end
 		end)
@@ -601,10 +601,10 @@ function DAttributeBar(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr( 100 )
+	tab.h = tab.h or ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color( 255, 255, 255 )
+	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -615,22 +615,22 @@ function DAttributeBar(tab)
 
 	local pnl = {}
 
-	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x )
-	function pnl.line:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, tab.color )
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
-			text.text = YRP.lang_string( tab.header ) .. ":"
+			text.text = YRP.lang_string(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr( 10 )
+		text.x = ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
-		text.color = Color( 255, 255, 255, 255 )
+		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText( text )
+		DrawText(text)
 	end
 
 	tab.cur = tonumber(tab.cur) or nil
@@ -667,7 +667,7 @@ function DAttributeBar(tab)
 	end
 
 	if tab.par != nil and tab.par.AddItem != nil then
-		tab.par:AddItem( pnl.line )
+		tab.par:AddItem(pnl.line)
 	end
 	return pnl
 end

@@ -19,17 +19,17 @@ YRP = YRP or {}
 
 _yrp = {}
 
-function add_luas( string )
-	AddCSLuaFile( string )
-	include( string )
+function add_luas(string)
+	AddCSLuaFile(string)
+	include(string)
 end
 
-add_luas( "yrp/apis/api_includes.lua" )
+add_luas("yrp/apis/api_includes.lua")
 
-add_luas( "yrp/shared/sh_includes.lua" )
+add_luas("yrp/shared/sh_includes.lua")
 
-add_luas( "yrp/integration/integration.lua" )
+add_luas("yrp/integration/integration.lua")
 
-add_luas( "yrp/public/player.lua" )
-add_luas( "yrp/public/entity.lua" )
-add_luas( "yrp/public/gamemode.lua" )
+add_luas("yrp/public/player.lua")
+add_luas("yrp/public/entity.lua")
+add_luas("yrp/public/gamemode.lua")

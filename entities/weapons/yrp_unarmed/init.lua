@@ -2,7 +2,7 @@
 AddCSLuaFile ("shared.lua")
 AddCSLuaFile ("cl_init.lua")
 
-include( "shared.lua" )
+include("shared.lua")
 
 --How heavy the SWEP is
 SWEP.Weight = 5

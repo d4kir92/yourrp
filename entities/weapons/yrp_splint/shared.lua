@@ -33,11 +33,11 @@ SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "normal"
 function SWEP:Initialize()
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Reload()
-	self:DefaultReload( ACT_VM_RELOAD )
+	self:DefaultReload(ACT_VM_RELOAD)
 end
 
 function SWEP:Think()
@@ -49,11 +49,11 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
-			local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 100, ply )
+			local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 100, ply)
 			if tr.Hit then
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
-					ply:StartCasting( "splint", "splinting", 0, self.target, 3, 100, 1, false )
+					ply:StartCasting("splint", "splinting", 0, self.target, 3, 100, 1, false)
 				end
 			end
 		end
@@ -61,10 +61,10 @@ function SWEP:PrimaryAttack()
 end
 
 if SERVER then
-	hook.Add( "yrp_castdone_splint", "splint", function( args )
-		args.target:Heal( 10 )
+	hook.Add("yrp_castdone_splint", "splint", function(args)
+		args.target:Heal(10)
 		args.target:Unbroke()
-		args.attacker:GetActiveWeapon():TakePrimaryAmmo( 1 )
+		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
 	end)
 end
 
@@ -73,7 +73,7 @@ function SWEP:SecondaryAttack()
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
 			_target = ply
-			ply:StartCasting( "splint", "splinting", 0, _target, 3, 100, 1, false )
+			ply:StartCasting("splint", "splinting", 0, _target, 3, 100, 1, false)
 		end
 	end
 end

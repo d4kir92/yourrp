@@ -33,7 +33,7 @@ SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "normal"
 function SWEP:Initialize()
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Reload()
@@ -46,11 +46,11 @@ end
 
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
-	local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
+	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 	if tr.Hit then
 		self.target = tr.Entity
 		if tr.Entity:IsPlayer() then
-			--printGM( "note", "bandaging" )
+			--printGM("note", "bandaging")
 		end
 	end
 end

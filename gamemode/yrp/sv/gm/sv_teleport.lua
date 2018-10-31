@@ -1,15 +1,15 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
-function enough_space( ply, pos )
+function enough_space(ply, pos )
 	local tr = {
 		start = pos,
 		endpos = pos,
-		mins = Vector( -18, -18, 0 ),
-		maxs = Vector( 18, 18, 75 ),
+		mins = Vector(-18, -18, 0 ),
+		maxs = Vector(18, 18, 75 ),
 		filter = ply
 	}
 
-	local hullTrace = util.TraceHull( tr )
+	local hullTrace = util.TraceHull(tr )
 	if !hullTrace.Hit then
 		return true
 	else
@@ -17,42 +17,42 @@ function enough_space( ply, pos )
 	end
 end
 
-function get_ground_pos( ply, pos )
+function get_ground_pos(ply, pos )
 	local tr = {
 		start = pos,
-		endpos = pos-Vector( 0, 0, 9999 ),
-		mins = Vector( -18, -18, 0 ),
-		maxs = Vector( 18, 18, 75 )
+		endpos = pos-Vector(0, 0, 9999 ),
+		mins = Vector(-18, -18, 0 ),
+		maxs = Vector(18, 18, 75 )
 	}
 
-	local hullTrace = util.TraceHull( tr )
+	local hullTrace = util.TraceHull(tr )
 	if hullTrace.Hit then
-		return hullTrace.HitPos + Vector( 0, 0, 2 )
+		return hullTrace.HitPos + Vector(0, 0, 2 )
 	else
 		return pos
 	end
 end
 
-function tp_to( ply, pos )
-	local _pos = Vector( pos[1], pos[2], pos[3] )
-	local _angle = Angle( 0, 0, 0 )
+function tp_to(ply, pos )
+	local _pos = Vector(pos[1], pos[2], pos[3] )
+	local _angle = Angle(0, 0, 0 )
 	local _tmpAngle = ply:EyeAngles()
-	ply:SetEyeAngles( _angle )
+	ply:SetEyeAngles(_angle )
 
-	if enough_space( ply, _pos + Vector( 0, 0, 2 ) ) then
-		local __pos = get_ground_pos( ply, _pos + Vector( 0, 0, 2 ) )
+	if enough_space(ply, _pos + Vector(0, 0, 2 ) ) then
+		local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2 ) )
 
-		ply:SetPos( __pos )
-		ply:SetEyeAngles( _tmpAngle )
+		ply:SetPos(__pos )
+		ply:SetEyeAngles(_tmpAngle )
 	else
 		for i = 1, 3 do
 			for j = 0, 360, 45 do
-				_angle:RotateAroundAxis( ply:GetForward(), 45 )
-				local _enough_space = enough_space( ply, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
+				_angle:RotateAroundAxis(ply:GetForward(), 45 )
+				local _enough_space = enough_space(ply, _pos + Vector(0, 0, 2 ) + _angle:Forward() * 44 * i )
 				if _enough_space then
-					local __pos = get_ground_pos( ply, _pos + Vector( 0, 0, 2 ) + _angle:Forward() * 44 * i )
-					ply:SetPos( __pos )
-					ply:SetEyeAngles( _tmpAngle )
+					local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2 ) + _angle:Forward() * 44 * i )
+					ply:SetPos(__pos )
+					ply:SetEyeAngles(_tmpAngle )
 					return
 				end
 			end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 function replaceKeyName(str)
 	if str == "uparrow" or str == "pgup" then
 		return "↑"
@@ -159,7 +159,7 @@ net.Receive("getsitehelp", function(len)
 		function HELPMENU.feedback:DoClick()
 			closeHelpMenu()
 			openFeedbackMenu()
-			--gui.OpenURL( "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link" )
+			--gui.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link" )
 		end
 
 		HELPMENU.discord = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20 + 50 + 20))
@@ -488,6 +488,62 @@ net.Receive("getsitecommunitysteamgroup", function(len)
 	end
 end)
 
+net.Receive("getsiteyourrpwhatsnew", function(len)
+	if pa(HELPMENU.mainmenu.site) then
+		local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
+
+		if link ~= "" then
+			local posy = ctr(220)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20) + posy, 0, -posy)
+
+			function page:Paint(pw, ph)
+				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+			end
+
+			page:OpenURL(link)
+			local openLink = createD("DButton", page, ctr(100), ctr(100), BScrW() - ctr(100 + 20 + 20), 0)
+			openLink:SetText("")
+
+			function openLink:Paint(pw, ph)
+				surfaceButton(self, pw, ph, "")
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			end
+
+			function openLink:DoClick()
+				gui.OpenURL(link)
+			end
+		end
+	end
+end)
+
+net.Receive("getsiteyourrproadmap", function(len)
+	if pa(HELPMENU.mainmenu.site) then
+		local link = "https://docs.google.com/document/d/1H5fIodzYhj5NA9ggFVnGEOom5rRpP01c7qCAyjoNgZA/edit?usp=sharing"
+
+		if link ~= "" then
+			local posy = ctr(220)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20) + posy, 0, -posy)
+
+			function page:Paint(pw, ph)
+				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+			end
+
+			page:OpenURL(link)
+			local openLink = createD("DButton", page, ctr(100), ctr(100), BScrW() - ctr(100 + 20 + 20), 0)
+			openLink:SetText("")
+
+			function openLink:Paint(pw, ph)
+				surfaceButton(self, pw, ph, "")
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			end
+
+			function openLink:DoClick()
+				gui.OpenURL(link)
+			end
+		end
+	end
+end)
+
 net.Receive("getsiteyourrpnews", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://docs.google.com/document/d/1s9lqfYeTbTW7YOgyvg3F2gNx4LBvNpt9fA8eGUYfpTI/edit?usp=sharing"
@@ -573,7 +629,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local page = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
-			--surfacePanel( self, pw, ph, "" )
+			--surfacePanel(self, pw, ph, "" )
 		end
 
 		local _longestProgressText = 0
@@ -581,7 +637,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
 			--PrintTable(language)
-			local text = language.language .. "/" .. language.inenglish .. " ( "
+			local text = language.language .. "/" .. language.inenglish .. " ("
 
 			if language.percentage ~= nil then
 				language.percentage = tonumber(language.percentage)

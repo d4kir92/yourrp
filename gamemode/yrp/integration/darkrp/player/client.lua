@@ -1,6 +1,6 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
-local Player = FindMetaTable( "Player" )
+local Player = FindMetaTable("Player" )
 
 function Player:drawHitInfo()
 	--Description: Start drawing the hit information above a hitman.
@@ -17,10 +17,10 @@ function Player:drawWantedInfo()
 	--
 end
 
-function Player:getPreferredJobModel( teamNr )
+function Player:getPreferredJobModel(teamNr )
 	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-	printGM( "darkrp", "getPreferredJobModel( " .. tostring( teamNr ) .. " )" )
-	printGM( "darkrp", DarkRP._not )
+	printGM("darkrp", "getPreferredJobModel(" .. tostring(teamNr ) .. " )" )
+	printGM("darkrp", DarkRP._not )
 	return ""
 end
 

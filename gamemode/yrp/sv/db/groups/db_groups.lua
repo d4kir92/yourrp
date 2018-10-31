@@ -1,37 +1,37 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
 local DATABASE_NAME = "yrp_ply_groups"
 
-SQL_ADD_COLUMN( DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'" )
-SQL_ADD_COLUMN( DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'" )
-SQL_ADD_COLUMN( DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'" )
-SQL_ADD_COLUMN( DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'" )
-SQL_ADD_COLUMN( DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''" )
-SQL_ADD_COLUMN( DATABASE_NAME, "string_ents", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'" )
+SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'" )
+SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'" )
+SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'" )
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''" )
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ''" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0" )
-SQL_ADD_COLUMN( DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1" )
-SQL_ADD_COLUMN( DATABASE_NAME, "int_position", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN(DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 0" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0" )
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_groupvoicechat", "INTEGER DEFAULT 1" )
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1" )
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0" )
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupvoicechat", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0" )
 
-SQL_ADD_COLUMN( DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1" )
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1" )
 
-if SQL_SELECT( DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
-	printGM( "note", DATABASE_NAME .. " has not the default group" )
-	local _result = SQL_INSERT_INTO( DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0" )
+if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
+	printGM("note", DATABASE_NAME .. " has not the default group" )
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0" )
 end
 
---db_drop_table( DATABASE_NAME )
+--db_drop_table(DATABASE_NAME )
 
 local yrp_ply_groups = {}
-local _init_ply_groups = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '1'" )
+local _init_ply_groups = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 if wk(_init_ply_groups) then
 	yrp_ply_groups = _init_ply_groups[1]
 end
@@ -41,12 +41,12 @@ HANDLER_GROUPSANDROLES["groupslist"] = {}
 HANDLER_GROUPSANDROLES["groups"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 
-for str, val in pairs( yrp_ply_groups ) do
-	if string.find( str, "string_" ) then
+for str, val in pairs(yrp_ply_groups ) do
+	if string.find(str, "string_" ) then
 		local tab = {}
 		tab.netstr = "update_group_" .. str
-		util.AddNetworkString( tab.netstr )
-		net.Receive( tab.netstr, function( len, ply )
+		util.AddNetworkString(tab.netstr )
+		net.Receive(tab.netstr, function(len, ply )
 			local uid = tonumber(net.ReadString())
 			local s = net.ReadString()
 			tab.ply = ply
@@ -59,7 +59,7 @@ for str, val in pairs( yrp_ply_groups ) do
 			BroadcastString(tab)
 			if tab.netstr == "update_group_string_name" then
 				util.AddNetworkString("settings_group_update_name")
-				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
@@ -70,7 +70,7 @@ for str, val in pairs( yrp_ply_groups ) do
 				end
 			elseif tab.netstr == "update_group_string_color" then
 				util.AddNetworkString("settings_group_update_color")
-				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
@@ -81,7 +81,7 @@ for str, val in pairs( yrp_ply_groups ) do
 				end
 			elseif tab.netstr == "update_group_string_icon" then
 				util.AddNetworkString("settings_group_update_icon")
-				local puid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
@@ -92,11 +92,11 @@ for str, val in pairs( yrp_ply_groups ) do
 				end
 			end
 		end)
-	elseif string.find( str, "int_" ) then
+	elseif string.find(str, "int_" ) then
 		local tab = {}
 		tab.netstr = "update_group_" .. str
-		util.AddNetworkString( tab.netstr )
-		net.Receive( tab.netstr, function( len, ply )
+		util.AddNetworkString(tab.netstr )
+		net.Receive(tab.netstr, function(len, ply )
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
 			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
@@ -116,11 +116,11 @@ for str, val in pairs( yrp_ply_groups ) do
 				SendGroupList(int)
 			end
 		end)
-	elseif string.find( str, "bool_" ) then
+	elseif string.find(str, "bool_" ) then
 		local tab = {}
 		tab.netstr = "update_group_" .. str
-		util.AddNetworkString( tab.netstr )
-		net.Receive( tab.netstr, function( len, ply )
+		util.AddNetworkString(tab.netstr )
+		net.Receive(tab.netstr, function(len, ply )
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
 			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
@@ -143,17 +143,17 @@ for str, val in pairs( yrp_ply_groups ) do
 	end
 end
 
-function RemFromHandler_GroupsAndRoles( ply )
-	table.RemoveByValue( HANDLER_GROUPSANDROLES, ply )
-	printGM( "gm", ply:YRPName() .. " unsubscribed from GroupsAndRoles" )
+function RemFromHandler_GroupsAndRoles(ply )
+	table.RemoveByValue(HANDLER_GROUPSANDROLES, ply )
+	printGM("gm", ply:YRPName() .. " unsubscribed from GroupsAndRoles" )
 end
 
-function AddToHandler_GroupsAndRoles( ply )
-	if !table.HasValue( HANDLER_GROUPSANDROLES, ply ) then
-		table.insert( HANDLER_GROUPSANDROLES, ply )
-		printGM( "gm", ply:YRPName() .. " subscribed to GroupsAndRoles" )
+function AddToHandler_GroupsAndRoles(ply )
+	if !table.HasValue(HANDLER_GROUPSANDROLES, ply ) then
+		table.insert(HANDLER_GROUPSANDROLES, ply )
+		printGM("gm", ply:YRPName() .. " subscribed to GroupsAndRoles" )
 	else
-		printGM( "gm", ply:YRPName() .. " already subscribed to GroupsAndRoles" )
+		printGM("gm", ply:YRPName() .. " already subscribed to GroupsAndRoles" )
 	end
 end
 
@@ -161,11 +161,11 @@ function SubscribeGroupList(ply, uid)
 	if HANDLER_GROUPSANDROLES["groupslist"][uid] == nil then
 		HANDLER_GROUPSANDROLES["groupslist"][uid] = {}
 	end
-	if !table.HasValue( HANDLER_GROUPSANDROLES["groupslist"][uid], ply ) then
-		table.insert( HANDLER_GROUPSANDROLES["groupslist"][uid], ply )
-		printGM( "gm", ply:YRPName() .. " subscribed to GroupList " .. uid )
+	if !table.HasValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply ) then
+		table.insert(HANDLER_GROUPSANDROLES["groupslist"][uid], ply )
+		printGM("gm", ply:YRPName() .. " subscribed to GroupList " .. uid )
 	else
-		printGM( "gm", ply:YRPName() .. " already subscribed to GroupList " .. uid )
+		printGM("gm", ply:YRPName() .. " already subscribed to GroupList " .. uid )
 	end
 end
 
@@ -183,11 +183,11 @@ function SubscribeGroup(ply, uid)
 	if HANDLER_GROUPSANDROLES["groups"][uid] == nil then
 		HANDLER_GROUPSANDROLES["groups"][uid] = {}
 	end
-	if !table.HasValue( HANDLER_GROUPSANDROLES["groups"][uid], ply ) then
-		table.insert( HANDLER_GROUPSANDROLES["groups"][uid], ply )
-		printGM( "gm", ply:YRPName() .. " subscribed to Group " .. uid )
+	if !table.HasValue(HANDLER_GROUPSANDROLES["groups"][uid], ply ) then
+		table.insert(HANDLER_GROUPSANDROLES["groups"][uid], ply )
+		printGM("gm", ply:YRPName() .. " subscribed to Group " .. uid )
 	else
-		printGM( "gm", ply:YRPName() .. " already subscribed to Group " .. uid )
+		printGM("gm", ply:YRPName() .. " already subscribed to Group " .. uid )
 	end
 end
 
@@ -201,19 +201,19 @@ function UnsubscribeGroup(ply, uid)
 	end
 end
 
-util.AddNetworkString( "Subscribe_Settings_GroupsAndRoles" )
-net.Receive( "Subscribe_Settings_GroupsAndRoles", function( len, ply )
-	if ply:CanAccess( "groupsandroles" ) then
-		AddToHandler_GroupsAndRoles( ply )
+util.AddNetworkString("Subscribe_Settings_GroupsAndRoles" )
+net.Receive("Subscribe_Settings_GroupsAndRoles", function(len, ply )
+	if ply:CanAccess("groupsandroles" ) then
+		AddToHandler_GroupsAndRoles(ply )
 
-		net.Start( "Subscribe_Settings_GroupsAndRoles" )
-		net.Send( ply )
+		net.Start("Subscribe_Settings_GroupsAndRoles" )
+		net.Send(ply )
 	end
 end)
 
-util.AddNetworkString( "Unsubscribe_Settings_GroupsAndRoles" )
-net.Receive( "Unsubscribe_Settings_GroupsAndRoles", function( len, ply )
-	RemFromHandler_GroupsAndRoles( ply )
+util.AddNetworkString("Unsubscribe_Settings_GroupsAndRoles" )
+net.Receive("Unsubscribe_Settings_GroupsAndRoles", function(len, ply )
+	RemFromHandler_GroupsAndRoles(ply )
 	local cur = tonumber(net.ReadString())
 	UnsubscribeGroup(ply, cur)
 end)
@@ -237,19 +237,19 @@ end
 function SendGroupList(uid)
 	SortGroups(uid)
 
-	local tbl_parentgroup = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if !wk( tbl_parentgroup ) then
+	local tbl_parentgroup = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+	if !wk(tbl_parentgroup ) then
 		tbl_parentgroup = {}
 	else
 		tbl_parentgroup = tbl_parentgroup[1]
 	end
 
-	local tbl_groups = SQL_SELECT( DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'" )
-	if !wk( tbl_groups ) then
+	local tbl_groups = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'" )
+	if !wk(tbl_groups ) then
 		tbl_groups = {}
 	end
 	local currentuid = uid
-	local parentuid = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
+	local parentuid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	if wk(parentuid) then
 		parentuid = parentuid[1].int_parentgroup
 	else
@@ -410,17 +410,17 @@ net.Receive("settings_delete_group", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "get_grps" )
+util.AddNetworkString("get_grps" )
 
-net.Receive( "get_grps", function( len, ply )
-	local _uid = tonumber( net.ReadString() )
+net.Receive("get_grps", function(len, ply )
+	local _uid = tonumber(net.ReadString() )
 
-	local _get_grps = SQL_SELECT( "yrp_ply_groups", "*", "int_parentgroup = " .. _uid )
+	local _get_grps = SQL_SELECT("yrp_ply_groups", "*", "int_parentgroup = " .. _uid )
 	if _get_grps != nil then
 
-		net.Start( "get_grps" )
-			net.WriteTable( _get_grps )
-		net.Send( ply )
+		net.Start("get_grps" )
+			net.WriteTable(_get_grps )
+		net.Send(ply )
 	end
 end)
 

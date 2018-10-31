@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local _db_name = "yrp_shop_items"
@@ -14,8 +14,8 @@ SQL_ADD_COLUMN(_db_name, "type", "TEXT DEFAULT 'weapons'")
 SQL_ADD_COLUMN(_db_name, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
 SQL_ADD_COLUMN(_db_name, "PrintName", "TEXT DEFAULT 'unnamed item'")
 SQL_ADD_COLUMN(_db_name, "WorldModel", "TEXT DEFAULT ' '")
---db_drop_table( _db_name )
---db_is_empty( _db_name )
+--db_drop_table(_db_name )
+--db_is_empty(_db_name )
 util.AddNetworkString("get_shop_items")
 
 function send_shop_items(ply, uid)
@@ -180,7 +180,7 @@ net.Receive("shop_item_edit_base", function(len, ply)
 end)
 
 function SpawnVehicle(item, pos, ang)
-	printGM("gm", "SpawnVehicle( " .. tostring(item) .. ", " .. tostring(pos) .. ", " .. tostring(ang) .. " )")
+	printGM("gm", "SpawnVehicle(" .. tostring(item) .. ", " .. tostring(pos) .. ", " .. tostring(ang) .. " )")
 	local vehicles = get_all_vehicles()
 	local vehicle = {}
 	local _custom = ""

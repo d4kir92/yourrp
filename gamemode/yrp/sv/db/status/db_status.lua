@@ -1,28 +1,28 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
 local HANDLER_STATUS = {}
 
-function RemFromHandler_Status( ply )
-	table.RemoveByValue( HANDLER_STATUS, ply )
-	printGM( "gm", ply:YRPName() .. " disconnected from Status" )
+function RemFromHandler_Status(ply )
+	table.RemoveByValue(HANDLER_STATUS, ply )
+	printGM("gm", ply:YRPName() .. " disconnected from Status" )
 end
 
-function AddToHandler_Status( ply )
-	if !table.HasValue( HANDLER_STATUS, ply ) then
-		table.insert( HANDLER_STATUS, ply )
-		printGM( "gm", ply:YRPName() .. " connected to Status" )
+function AddToHandler_Status(ply )
+	if !table.HasValue(HANDLER_STATUS, ply ) then
+		table.insert(HANDLER_STATUS, ply )
+		printGM("gm", ply:YRPName() .. " connected to Status" )
 	else
-		printGM( "gm", ply:YRPName() .. " already connected to Status" )
+		printGM("gm", ply:YRPName() .. " already connected to Status" )
 	end
 end
 
-util.AddNetworkString( "Connect_Settings_Status" )
-net.Receive( "Connect_Settings_Status", function( len, ply )
-	if ply:CanAccess( "status" ) then
-		AddToHandler_Status( ply )
+util.AddNetworkString("Connect_Settings_Status" )
+net.Receive("Connect_Settings_Status", function(len, ply )
+	if ply:CanAccess("status" ) then
+		AddToHandler_Status(ply )
 		local _nw_yourrp = {}
 		local _nw_roles = {}
 		local _nw_groups = {}
@@ -85,16 +85,16 @@ net.Receive( "Connect_Settings_Status", function( len, ply )
 			end
 		end
 
-		net.Start( "Connect_Settings_Status" )
+		net.Start("Connect_Settings_Status" )
 			net.WriteTable(_nw_yourrp)
 			net.WriteTable(_nw_roles)
 			net.WriteTable(_nw_groups)
 			net.WriteTable(_nw_map)
-		net.Send( ply )
+		net.Send(ply )
 	end
 end)
 
-util.AddNetworkString( "Disconnect_Settings_Status" )
-net.Receive( "Disconnect_Settings_Status", function( len, ply )
-	RemFromHandler_Status( ply )
+util.AddNetworkString("Disconnect_Settings_Status" )
+net.Receive("Disconnect_Settings_Status", function(len, ply )
+	RemFromHandler_Status(ply )
 end)

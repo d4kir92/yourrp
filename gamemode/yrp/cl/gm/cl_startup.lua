@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -295,7 +295,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
 
 	function scrollpanel:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 	end
 
 	local tmpCache = {}
@@ -409,8 +409,8 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 					tmpButton:SetText("")
 
 					function tmpButton:Paint(pw, ph)
-						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-						local text = "" --YRP.lang_string( "notadded" )
+						--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 0))
+						local text = "" --YRP.lang_string("notadded")
 
 						if tmpSelected[k].selected then
 							text = YRP.lang_string("added")
@@ -438,7 +438,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 						local _y = ctr(4)
 						surfaceBox(_x, _y, _tw + ctr(8), _th + ctr(8), Color(0, 0, 0))
 						surfaceText(_test, "DermaDefaultBold", _x + ctr(4), _y + ctr(15), Color(255, 255, 255, 255), 0, 1)
-						--draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
+						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - ctr(10), ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr(1), Color(255, 255, 255, 255))
 						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 					end
 
@@ -563,14 +563,14 @@ function OpenSingleSelector(table, closeF)
 	PanelSelect:SetText("")
 
 	function PanelSelect:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 	end
 
 	local searchButton = createD("DButton", frame, ctr(50), ctr(50), ctr(10), ctr(50 + 10))
 	searchButton:SetText("")
 
 	function searchButton:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 		local _br = 4
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(searchIcon)
@@ -758,13 +758,13 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 
 	local search = createD("DTextEntry", frame, _w - ctr(50), ctr(50), ctr(10 + 50), ctr(50 + 10))
 
-	--[[function search:Paint( pw, ph )
-		draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255 ) )
+	--[[function search:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 		local _string = search:GetText()
 		if _string == "" then
-			_string = YRP.lang_string( "search" )
+			_string = YRP.lang_string("search")
 		end
-		draw.SimpleTextOutlined( _string, "DermaDefault", ctr( 10 ), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr( 1 ), Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined(_string, "DermaDefault", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 	end]]
 	--
 	function getMaxSite()
@@ -781,7 +781,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 	local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
 
 	function scrollpanel:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 	end
 
 	local tmpCache = {}
@@ -895,8 +895,8 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 					tmpButton:SetText("")
 
 					function tmpButton:Paint(pw, ph)
-						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 0 ) )
-						local text = "" --YRP.lang_string( "notadded" )
+						--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 0))
+						local text = "" --YRP.lang_string("notadded")
 
 						if tmpSelected[k].selected then
 							text = YRP.lang_string("added")
@@ -924,7 +924,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 						local _y = ctr(4)
 						surfaceBox(_x, _y, _tw + ctr(8), _th + ctr(8), Color(0, 0, 0))
 						surfaceText(_test, "DermaDefaultBold", _x + ctr(4), _y + ctr(15), Color(255, 255, 255, 255), 0, 1)
-						--draw.SimpleTextOutlined( _test, "DermaDefaultBold", pw - ctr( 10 ), ctr( 10 ), Color( 0, 0, 0, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr( 1 ), Color( 255, 255, 255, 255 ) )
+						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - ctr(10), ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, ctr(1), Color(255, 255, 255, 255))
 						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 					end
 
@@ -1054,14 +1054,14 @@ function openSingleSelector(table, closeF)
 	PanelSelect:SetText("")
 
 	function PanelSelect:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 	end
 
 	local searchButton = createD("DButton", frame, ctr(50), ctr(50), ctr(10), ctr(50 + 10))
 	searchButton:SetText("")
 
 	function searchButton:Paint(pw, ph)
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255 ) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 		local _br = 4
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(searchIcon)
@@ -1394,7 +1394,7 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	x = x * (0.75 + ply:GetModelScale() * 0.25)
 	y = y * (0.75 + ply:GetModelScale() * 0.25)
 	local str = _str
-	--cam.Start3D2D( pos + Vector( 0, 0, z ) + ply:GetRight() * y + ply:GetForward() * x, ang, sca )
+	--cam.Start3D2D(pos + Vector(0, 0, z) + ply:GetRight() * y + ply:GetForward() * x, ang, sca)
 	cam.Start3D2D(pos + Vector(0, 0, z) + LocalPlayer():GetRight() * y + LocalPlayer():GetForward() * x, ang, sca)
 	surface.SetFont("plyinfo")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1661,7 +1661,7 @@ net.Receive("yrp_info", function(len)
 
 		if ply ~= nil then
 			local _str = net.ReadString()
-			_str = YRP.lang_string("notallowed") .. " ( " .. YRP.lang_string(_str) .. " )"
+			_str = YRP.lang_string("notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
 			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 		end
 	end
