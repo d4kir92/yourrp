@@ -223,7 +223,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80))
 	end
 
-	if ply:GetNWBool("bool_wanted_system", false) then
+	if ply:GetNWBool("bool_wanted_system", false) and false then
 		local stars = {}
 		stars.size = ctr(80)
 		stars.cur = stars.size

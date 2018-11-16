@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Connect_Settings_Database", function(len)
 	if pa(settingsWindow) then
@@ -139,7 +139,7 @@ net.Receive("Connect_Settings_Database", function(len)
 				Scroller.YourRPRelatedTables:GetParent():SetSize(0, 0)
 				Scroller:SetOverlap(-3)
 			end
-			Scroller:InvalidateLayout(true )
+			Scroller:InvalidateLayout(true)
 			Scroller.YourRPDatabase:Rebuild()
 		end
 		function Scroller.YourRPDatabase.change_to_sqlmode:DoClick()
@@ -174,7 +174,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.color = YRPGetColor("2")
 		local yrp_tabs = {}
 		for i, tab in pairs(NW_YRP) do
-			yrp_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil )
+			yrp_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _x, _y = Scroller.YourRPTables:GetPos()
 		local _w, _h = Scroller.YourRPTables:GetSize()
@@ -193,12 +193,12 @@ net.Receive("Connect_Settings_Database", function(len)
 				end
 			end
 
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure" ) )
+			_window:SetTitle(YRP.lang_string("areyousure"))
 
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60 )
-			_yesButton:SetText(YRP.lang_string("yes" ) )
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -206,8 +206,8 @@ net.Receive("Connect_Settings_Database", function(len)
 				_window:Close()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText(YRP.lang_string("no" ) )
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -229,7 +229,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.color = YRPGetColor("2")
 		local yrp_r_tabs = {}
 		for i, tab in pairs(NW_YRP_RELATED) do
-			yrp_r_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil )
+			yrp_r_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _rem_and_change2 = createD("DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change2:SetText("")
@@ -246,12 +246,12 @@ net.Receive("Connect_Settings_Database", function(len)
 				end
 			end
 
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure" ) )
+			_window:SetTitle(YRP.lang_string("areyousure"))
 
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60 )
-			_yesButton:SetText(YRP.lang_string("yes" ) )
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -259,8 +259,8 @@ net.Receive("Connect_Settings_Database", function(len)
 				_window:Close()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText(YRP.lang_string("no" ) )
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -282,7 +282,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.color = YRPGetColor("2")
 		local other_tabs = {}
 		for i, tab in pairs(NW_YRP_OTHER) do
-			other_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil )
+			other_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _rem_and_change3 = createD("DButton", OtherTables:GetParent(), OtherTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change3:SetText("")
@@ -299,12 +299,12 @@ net.Receive("Connect_Settings_Database", function(len)
 				end
 			end
 
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure" ) )
+			_window:SetTitle(YRP.lang_string("areyousure"))
 
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60 )
-			_yesButton:SetText(YRP.lang_string("yes" ) )
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -312,8 +312,8 @@ net.Receive("Connect_Settings_Database", function(len)
 				_window:Close()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText(YRP.lang_string("no" ) )
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end

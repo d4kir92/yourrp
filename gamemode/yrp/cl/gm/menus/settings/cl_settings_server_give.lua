@@ -1,97 +1,97 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive("setting_players", function(len )
-	function settingsWindow.window.site:Paint(pw, ph )
-		--draw.RoundedBox(4, 0, 0, pw, ph, get_dbg_col() )
-		surfaceText(YRP.lang_string("players" ), "roleInfoHeader", ctr(10 ), ctr(10 + 25 ), Color(255, 255, 255 ), 0, 1 )
+net.Receive("setting_players", function(len)
+	function settingsWindow.window.site:Paint(pw, ph)
+		--draw.RoundedBox(4, 0, 0, pw, ph, get_dbg_col())
+		surfaceText(YRP.lang_string("players"), "roleInfoHeader", ctr(10), ctr(10 + 25), Color(255, 255, 255), 0, 1)
 	end
 
-	local _giveListView = createD("DListView", settingsWindow.window.site, BScrW() - ctr(20 ), ScrH() - ctr(180 ), ctr(10 ), ctr(10 + 50 ) )
-	_giveListView:AddColumn("SteamID" )
-	_giveListView:AddColumn(YRP.lang_string("nick" ) )
-	_giveListView:AddColumn(YRP.lang_string("name" ) )
-	_giveListView:AddColumn(YRP.lang_string("group" ) )
-	_giveListView:AddColumn(YRP.lang_string("role" ) )
-	_giveListView:AddColumn(YRP.lang_string("money" ) )
+	local _giveListView = createD("DListView", settingsWindow.window.site, BScrW() - ctr(20), ScrH() - ctr(180), ctr(10), ctr(10 + 50))
+	_giveListView:AddColumn("SteamID")
+	_giveListView:AddColumn(YRP.lang_string("nick"))
+	_giveListView:AddColumn(YRP.lang_string("name"))
+	_giveListView:AddColumn(YRP.lang_string("group"))
+	_giveListView:AddColumn(YRP.lang_string("role"))
+	_giveListView:AddColumn(YRP.lang_string("money"))
 
-	for n, y in pairs(player.GetAll() ) do
-		_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:GetNWString("groupName" ), y:GetNWString("roleName" ), y:GetNWInt("money" ) )
+	for n, y in pairs(player.GetAll()) do
+		_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:GetNWString("groupName"), y:GetNWString("roleName"), y:GetNWInt("money"))
 	end
 
-	function _giveListView:OnRowRightClick(lineID, line )
+	function _giveListView:OnRowRightClick(lineID, line)
 		local _tmpSteamID = line:GetValue(1)
 		local tmpX, tmpY = gui.MousePos()
-		tmpX = tmpX - ctr(4 )
-		tmpY = tmpY - ctr(4 )
-		local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10 )
-		_tmpPanel:SetPos(tmpX, tmpY )
+		tmpX = tmpX - ctr(4)
+		tmpY = tmpY - ctr(4)
+		local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+		_tmpPanel:SetPos(tmpX, tmpY)
 		_tmpPanel.ready = false
 		timer.Simple(0.2, function()
 			_tmpPanel.ready = true
 		end)
 
-		local _buttonRole = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10 )
-		_buttonRole:SetText(YRP.lang_string("giverole" ) )
+		local _buttonRole = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10)
+		_buttonRole:SetText(YRP.lang_string("giverole"))
 		function _buttonRole:DoClick()
-			local _giveFrame = createVGUI("DFrame", nil, 400, 305, 0, 0 )
+			local _giveFrame = createVGUI("DFrame", nil, 400, 305, 0, 0)
 			_giveFrame:Center()
-			_giveFrame:ShowCloseButton(true )
-			_giveFrame:SetDraggable(true )
-			_giveFrame:SetTitle(YRP.lang_string("giverole" ) )
+			_giveFrame:ShowCloseButton(true)
+			_giveFrame:SetDraggable(true)
+			_giveFrame:SetTitle(YRP.lang_string("giverole"))
 
-			local _giveComboBox = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 85 )
+			local _giveComboBox = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 85)
 
 			net.Receive("give_getGroTab", function(le)
 				if pa(_giveComboBox) then
 					local _tmpGroupList = net.ReadTable()
-					for k, v in pairs(_tmpGroupList ) do
-						_giveComboBox:AddChoice(v.string_name, v.uniqueID )
+					for k, v in pairs(_tmpGroupList) do
+						_giveComboBox:AddChoice(v.string_name, v.uniqueID)
 					end
 				end
 			end)
-			net.Start("give_getGroTab" )
+			net.Start("give_getGroTab")
 			net.SendToServer()
 
-			local _giveComboBox2 = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 185 )
-			function _giveComboBox:OnSelect(panel, index, value )
+			local _giveComboBox2 = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 185)
+			function _giveComboBox:OnSelect(panel, index, value)
 				if pa(_giveComboBox2) then
 					_giveComboBox2:Clear()
-					net.Start("give_getRolTab" )
-						net.WriteString(tostring(value ) )
+					net.Start("give_getRolTab")
+						net.WriteString(tostring(value))
 					net.SendToServer()
 					net.Receive("give_getRolTab", function(le)
 						local _tmpRolTab = net.ReadTable()
-						for k, v in pairs(_tmpRolTab ) do
-							_giveComboBox2:AddChoice(v.roleID, v.uniqueID )
+						for k, v in pairs(_tmpRolTab) do
+							_giveComboBox2:AddChoice(v.roleID, v.uniqueID)
 						end
 					end)
 				end
 			end
 
-			local _giveButton = createVGUI("DButton", _giveFrame, 380, 50, 10, 185 + 60 )
-			_giveButton:SetText(YRP.lang_string("give" ) )
+			local _giveButton = createVGUI("DButton", _giveFrame, 380, 50, 10, 185 + 60)
+			_giveButton:SetText(YRP.lang_string("give"))
 			function _giveButton:DoClick()
-				if isnumber(tonumber(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID() ) ) ) then
-					net.Start("giveRole" )
-						net.WriteString(_tmpSteamID )
-						net.WriteInt(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID() ), 16 )
+				if isnumber(tonumber(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID()))) then
+					net.Start("giveRole")
+						net.WriteString(_tmpSteamID)
+						net.WriteInt(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID()), 16)
 					net.SendToServer()
 					_giveFrame:Close()
 				end
 			end
 
-			function _giveFrame:Paint(pw, ph )
-				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col() )
+			function _giveFrame:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
 
-				draw.SimpleTextOutlined(YRP.lang_string("group" ) .. ":", "sef", ctr(10 ), ctr(50 ), Color(255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0 ) )
-				draw.SimpleTextOutlined(YRP.lang_string("role" ) .. ":", "sef", ctr(10 ), ctr(85 + 65 ), Color(255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0 ) )
+				draw.SimpleTextOutlined(YRP.lang_string("group") .. ":", "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("role") .. ":", "sef", ctr(10), ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 			end
 
 			_giveFrame:MakePopup()
 		end
 
-		function _tmpPanel:Paint(pw, ph )
-			draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col() )
+		function _tmpPanel:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
 			if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and _tmpPanel.ready == true then
 				_tmpPanel:Remove()
 			end
@@ -106,8 +106,8 @@ hook.Add("open_server_give", "open_server_give", function()
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
 
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0 )
+	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 
-	net.Start("setting_players" )
+	net.Start("setting_players")
 	net.SendToServer()
 end)

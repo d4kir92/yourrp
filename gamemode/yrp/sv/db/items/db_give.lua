@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local Entity = FindMetaTable("Entity")
@@ -16,7 +16,7 @@ end
 function Player:GetEQ(slot)
 	local _char_id = self:CharID()
 
-	if _char_id ~= nil then
+	if _char_id != nil then
 		local _slot_uid = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. _char_id .. "'")
 
 		if wk(_slot_uid) then
@@ -37,7 +37,7 @@ end
 function Player:EquipWeapons()
 	local _char_id = self:CharID()
 
-	if _char_id ~= nil then
+	if _char_id != nil then
 		local _char = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _char_id .. "'")
 
 		if wk(_char) then
@@ -78,7 +78,7 @@ function Player:EquipWeapons()
 end
 
 function Player:EquipWeapon(slot, item)
-	if self:CharID() ~= nil then
+	if self:CharID() != nil then
 		local _slot = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. self:CharID() .. "'")
 
 		if wk(_slot) then
@@ -115,7 +115,7 @@ function Player:EquipWeapon(slot, item)
 end
 
 function Player:PutInWeaponSlot(item)
-	printGM("db", "Player:PutInWeaponSlot(item )")
+	printGM("db", "Player:PutInWeaponSlot(item)")
 	local _wpp1 = self:EquipWeapon("eqwpp1", item)
 	if _wpp1 then return true end
 	local _wpp2 = self:EquipWeapon("eqwpp2", item)
@@ -131,7 +131,7 @@ function Player:PutInWeaponSlot(item)
 end
 
 function Player:PutInBackpack(item)
-	printGM("db", "Player:PutInBackpack(item )")
+	printGM("db", "Player:PutInBackpack(item)")
 	local _slot = SQL_SELECT("yrp_characters", "eqbp", "uniqueID = '" .. self:CharID() .. "'")
 
 	if wk(_slot) then
@@ -150,7 +150,7 @@ function Player:PutInBackpack(item)
 					_slot = _slot[1]
 					local _items = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'")
 
-					if _items ~= false then
+					if _items != false then
 						local _inv = {}
 
 						for y = 1, _slot.sizeh do
@@ -162,7 +162,7 @@ function Player:PutInBackpack(item)
 							end
 						end
 
-						if _items ~= nil then
+						if _items != nil then
 							for i, it in pairs(_items) do
 								for _y = it.posy, it.posy + it.sizeh - 1 do
 									for _x = it.posx, it.posx + it.sizew - 1 do
@@ -213,7 +213,7 @@ end
 function Player:RemoveSwep(cname, slot)
 	local _eq = self:GetEQ(slot)
 
-	if _eq ~= nil and cname == _eq.ClassName then
+	if _eq != nil and cname == _eq.ClassName then
 		SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. _eq.uniqueID .. "'")
 		return true
 	end
@@ -275,7 +275,7 @@ function Player:DropBackpackStorage()
 	if not rv then
 		local _char_id = self:CharID()
 
-		if _char_id ~= nil then
+		if _char_id != nil then
 			local _slot = SQL_SELECT("yrp_characters", "eqbp", "uniqueID = '" .. _char_id .. "'")
 
 			if wk(_slot) then
@@ -298,9 +298,14 @@ function Player:DropBackpackStorage()
 								for i, item in pairs(_items) do
 									local _item = ents.Create(item.ClassName)
 									if item == NULL then return NULL end
-									_item:SetPos(self:GetPos())
-									_item:Spawn()
-									SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. item.uniqueID .. "'")
+									if tostring(_item) != "[NULL Entity]" then
+										_item:SetPos(self:GetPos())
+										_item:Spawn()
+										SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. item.uniqueID .. "'")
+									else
+										printGM("note", "Player has an item that not exists anymore. (" .. item.ClassName .. ")")
+										SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. item.uniqueID .. "'")
+									end
 								end
 							end
 						end
@@ -314,11 +319,11 @@ end
 util.AddNetworkString("yrp_message")
 
 function Player:PutInInventory(cname, noammo)
-	printGM("db", "Player:PutInInventory(" .. cname .. ", " .. tostring(noammo) .. " )")
+	printGM("db", "Player:PutInInventory(" .. cname .. ", " .. tostring(noammo) .. ")")
 	local ent = ents.Create(cname)
 	if ea(ent) then
 		ent:Spawn()
-		--local sizew, sizeh = GetEntityItemSize(ent )
+		--local sizew, sizeh = GetEntityItemSize(ent)
 		local item = FormatEntityToItem(ent)
 		item.posx = 1
 		item.posy = 1
@@ -341,7 +346,7 @@ function Player:PutInInventory(cname, noammo)
 end
 
 function Player:ForceEquip(cname, noammo)
-	printGM("gm", "ForceEquip(" .. cname .. " )")
+	printGM("gm", "ForceEquip(" .. cname .. ")")
 	self.canpickup = true
 	local weapon = self:LegacyGive(cname, noammo)
 
@@ -353,7 +358,7 @@ function Player:ForceEquip(cname, noammo)
 end
 
 function Player:Give(cname, noammo)
-	printGM("gm", "Give(" .. cname .. " )")
+	printGM("gm", "Give(" .. cname .. ")")
 	local _noAmmo = noammo
 
 	if _noAmmo == nil then
@@ -380,7 +385,7 @@ function Player:GiveAmmo(amount, atype, hidePopup)
 
 	if self:GetNWBool("bool_inventory_system", false) then
 		self:LegacyGiveAmmo(amount, atype)
-		--self:AddItemAmmo(amount, atype )
+		--self:AddItemAmmo(amount, atype)
 	else
 		self:LegacyGiveAmmo(amount, atype)
 	end
@@ -402,7 +407,7 @@ if Player.LegacyStripWeapon == nil then
 end
 
 function Player:ForceStripWeapon(weapon)
-	printGM("gm", "ForceStripWeapon(" .. weapon .. " )")
+	printGM("gm", "ForceStripWeapon(" .. weapon .. ")")
 
 	return self:LegacyStripWeapon(weapon)
 end
@@ -444,7 +449,7 @@ function Player:RemoveWeaponFromInventory(cname)
 end
 
 function Player:StripWeapon(weapon)
-	printGM("note", "StripWeapon(" .. tostring(weapon) .. " )")
+	printGM("note", "StripWeapon(" .. tostring(weapon) .. ")")
 
 	if self:GetNWBool("bool_inventory_system", false) then
 		self:RemoveWeaponFromInventory(weapon)
@@ -489,7 +494,7 @@ util.AddNetworkString("drop_item")
 net.Receive("drop_item", function(len, ply)
 	local _weapon = ply:GetActiveWeapon()
 
-	if _weapon ~= NULL and _weapon ~= nil and _weapon.notdropable == nil then
+	if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
 		local _wclass = _weapon:GetClass() or ""
 		ply:DropSWEP(_wclass)
 		ply:StripWeapon(_wclass)
@@ -505,7 +510,7 @@ net.Receive("dropswep", function(len, ply)
 	if _enabled then
 		local _weapon = ply:GetActiveWeapon()
 
-		if _weapon ~= NULL and _weapon ~= nil and _weapon.notdropable == nil then
+		if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
 			local _wclass = _weapon:GetClass() or ""
 			ply:DropSWEP(_wclass)
 			_dropped = true

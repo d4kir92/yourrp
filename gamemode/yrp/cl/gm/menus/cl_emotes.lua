@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local _em = {}
 
 function ToggleEmotesMenu()
@@ -105,7 +105,7 @@ function OpenEmotesMenu()
 	end
 
 	function _em.window:Paint(pw, ph)
-		--surfaceWindow(self, pw, ph, "" )
+		--surfaceWindow(self, pw, ph, "")
 		local _mx, _my = gui.MousePos()
 		local _px, _py = _em.window:GetPos()
 		_mx = _mx - self:GetWide() / 2 - _px
@@ -156,7 +156,7 @@ function OpenEmotesMenu()
 			end
 		end
 
-		--surfaceText("WINKEL: " .. tostring(math.Round(_ang, 0 ) ) .. " SELECT: " .. _em.emotes.select, "HudBars", _mx+self:GetWide()/2, _my+self:GetTall()/2, Color(0, 0, 255 ), 1, 1 )
+		--surfaceText("WINKEL: " .. tostring(math.Round(_ang, 0)) .. " SELECT: " .. _em.emotes.select, "HudBars", _mx+self:GetWide()/2, _my+self:GetTall()/2, Color(0, 0, 255), 1, 1)
 		for e = 1, _seg do
 			surfaceText(YRP.lang_string(GetEmotes()[e].name), "emotes", _vec_emo[e].x, _vec_emo[e].y, Color(255, 255, 255), 1, 1)
 		end

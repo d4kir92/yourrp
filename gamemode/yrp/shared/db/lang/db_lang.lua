@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
 yrp_current_lang.get_language = "Unknown"
@@ -16,7 +16,7 @@ table.insert(yrp_shorts, "es")
 table.insert(yrp_shorts, "fr")
 table.insert(yrp_shorts, "hu")
 table.insert(yrp_shorts, "it")
-table.insert(yrp_shorts, "ko" )
+table.insert(yrp_shorts, "ko")
 table.insert(yrp_shorts, "lt")
 table.insert(yrp_shorts, "pl")
 table.insert(yrp_shorts, "pt_br")

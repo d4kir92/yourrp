@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local sp = sp or {}
 
@@ -11,14 +11,14 @@ function GetSpTable()
 end
 
 function openSP()
-	if LocalPlayer():GetNWBool("bool_smartphone_system" ) then
-		if isNoMenuOpen() and (!sp.visible or sp.visible == nil ) then
+	if LocalPlayer():GetNWBool("bool_smartphone_system") then
+		if isNoMenuOpen() and (!sp.visible or sp.visible == nil) then
 			openMenu()
-			local _w = ctrb(560 )
-			local _h = ctrb(1000 )
-			local _x = ScrW() - (_w + ctrb(25 ) )
-			local _y = ScrH() - (_h )
-			sp = createSmartphone(nil, _w, _h, _x, _y )
+			local _w = ctrb(560)
+			local _h = ctrb(1000)
+			local _x = ScrW() - (_w + ctrb(25))
+			local _y = ScrH() - (_h)
+			sp = createSmartphone(nil, _w, _h, _x, _y)
 			sp.visible = true
 		end
 	end
