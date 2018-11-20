@@ -304,7 +304,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
-		--[[
 		rs.top = createD("DPanel", PARENT, ctr(800), ctr(60), ctr(20), ctr(1040))
 		function rs.top:Paint(pw, ph)
 			if rs.top.group != nil then
@@ -370,7 +369,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.top.group = nil
 			rs.rplist:Clear()
 		end
-		]]--
 
 		PARENT.ea = {}
 		local ea = PARENT.ea
@@ -764,7 +762,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			--[[
 			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], ctr(40), ctr(40), rs.rplist[role.uniqueID]:GetWide() - ctr(66), rs.rplist[role.uniqueID]:GetTall() - ctr(60))
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
@@ -792,7 +789,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					net.SendToServer()
 				end)
 			end
-			]]--
 
 			parent:AddItem(rs.rplist[role.uniqueID])
 		end
@@ -974,8 +970,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			for i, ug in pairs(db_ugs) do
-				ugs["ALL"]["choices"][string.upper(ug.name)] = ugs["ALL"]["choices"][string.upper(ug.name)] or {}
-				ugs["ALL"]["choices"][string.upper(ug.name)].checked = table.HasValue(gugs, string.upper(ug.name))
+				ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+				ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 			end
 
 			local usergroups = {}
