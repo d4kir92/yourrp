@@ -126,7 +126,7 @@ net.Receive("role_add_license", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _license_uid = net.ReadString()
 
-	local _role = SQL_SELECT("yrp_roles", "licenseIDs", "uniqueID = " .. _role_uid)
+	local _role = SQL_SELECT("yrp_ply_roles", "licenseIDs", "uniqueID = " .. _role_uid)
 	if _role != nil then
 		_role = _role[1]
 		local _licenseIDs = {}
@@ -137,7 +137,7 @@ net.Receive("role_add_license", function(len, ply)
 			table.insert(_licenseIDs, _license_uid)
 			_licenseIDs = string.Implode(",", _licenseIDs)
 
-			SQL_UPDATE("yrp_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid)
+			SQL_UPDATE("yrp_ply_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -148,7 +148,7 @@ net.Receive("role_rem_license", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _license_uid = net.ReadString()
 
-	local _role = SQL_SELECT("yrp_roles", "licenseIDs", "uniqueID = " .. _role_uid)
+	local _role = SQL_SELECT("yrp_ply_roles", "licenseIDs", "uniqueID = " .. _role_uid)
 	if _role != nil then
 		_role = _role[1]
 		local _licenseIDs = {}
@@ -161,7 +161,7 @@ net.Receive("role_rem_license", function(len, ply)
 
 			_licenseIDs = string.Implode(",", _licenseIDs)
 
-			SQL_UPDATE("yrp_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid)
+			SQL_UPDATE("yrp_ply_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid)
 		end
 	end
 end)

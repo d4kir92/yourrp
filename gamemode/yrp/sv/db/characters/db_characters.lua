@@ -342,27 +342,27 @@ end)
 net.Receive("charGetRoles", function(len, ply)
 	local groupID = net.ReadString()
 	local netTable = {}
-	local tmpTable = SQL_SELECT("yrp_roles", "*", "groupID = " .. tonumber(groupID))
+	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "groupID = " .. tonumber(groupID))
 	if wk(tmpTable) then
 		local count = 1
 		for k, v in pairs(tmpTable) do
 			local insert = true
-			if tonumber(v.adminonly) == 1 then
+			if tonumber(v.bool_adminonly) == 1 then
 				if ply:HasAccess() then
 					insert = true
 				else
 					insert = false
 				end
 			else
-				if tonumber(v.maxamount) > 0 then
-					if tonumber(v.uses) < tonumber(v.maxamount) then
+				if tonumber(v.int_maxamount) > 0 then
+					if tonumber(v.int_uses) < tonumber(v.int_maxamount) then
 						insert = true
 					else
 						insert = false
 					end
 				end
 				if insert then
-					if tonumber(v.whitelist) == 1 then
+					if tonumber(v.int_whitelist) == 1 then
 						insert = isWhitelisted(ply, v.uniqueID)
 					end
 				end
@@ -381,7 +381,7 @@ end)
 
 net.Receive("charGetRoleInfo", function(len, ply)
 	local roleID = net.ReadString()
-	local tmpTable = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tonumber(roleID))
+	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(roleID))
 	if tmpTable == nil then
 		tmpTable = {}
 	end
@@ -410,21 +410,21 @@ function send_characters(ply)
 				netTable[_charCount].faction = {}
 				netTable[_charCount].faction.string_name = "INVALID FACTION"
 
-				local tmp = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tonumber(v.roleID))
+				local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(v.roleID))
 				if worked(tmp, "charGetCharacters role") then
 					tmp = tmp[1]
 					netTable[_charCount].role = tmp
 				else
-					local tmpDefault = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. "1")
+					local tmpDefault = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. "1")
 					if worked(tmpDefault, "charGetCharacters tmpDefault") then
 						tmpDefault = tmpDefault[1]
 						netTable[_charCount].role = tmpDefault
 					end
 				end
-				local tmp2 = SQL_SELECT("yrp_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
+				local tmp2 = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
 				if tmp2 != nil and tmp2 != false then
 					tmp2 = tmp2[1]
-					local tmp3 = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.groupID) .. "'")
+					local tmp3 = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.int_groupID) .. "'")
 					if worked(tmp3, "charGetCharacters group") then
 						tmp3 = tmp3[1]
 						netTable[_charCount].group = tmp3
@@ -470,7 +470,7 @@ net.Receive("DeleteCharacter", function(len, ply)
 end)
 
 function CreateCharacter(ply, tab)
-	local role = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
+	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
 		local vals = "'" .. ply:SteamID() .. "', "

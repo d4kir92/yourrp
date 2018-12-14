@@ -254,6 +254,7 @@ function unpack_paket(sender, text, iscommand)
 
 	paket.text_color = Color(255, 255, 255)
 
+	paket.isyrpcommand = true
 	if paket.command == "advert" then
 		paket.command_color = Color(255, 255, 0)
 		paket.text_color = Color(255, 255, 0)
@@ -287,6 +288,7 @@ function unpack_paket(sender, text, iscommand)
 		paket.command_color = Color(255, 165, 0)
 		paket.text_color = Color(255, 165, 0)
 	else
+		paket.isyrpcommand = false
 		paket.command_color = Color(255, 0, 0)
 	end
 
@@ -401,9 +403,10 @@ function GM:PlayerSay(sender, text, teamChat)
 	pk.rolename = paket.role or ""
 	pk.factionname = paket.faction or ""
 	pk.groupname = paket.group or ""
+	pk.isyrpcommand = paket.isyrpcommand or false
 
 	if paket.command == "roll" then
-		pk.text = YRP.lang_string("rolledpre") .. " " .. tostring(roll_number(sender)) .. " " .. YRP.lang_string("rolledpos") .. "!"
+		pk.text = YRP.lang_string("LID_rolledpre") .. " " .. tostring(roll_number(sender)) .. " " .. YRP.lang_string("LID_rolledpos") .. "!"
 	end
 
 	if paket.command == "admin" then

@@ -19,13 +19,13 @@ function hudVT(ply, color)
 		end
 
 		local _x2 = _x + ctr(HudV("vtsw"))/2
-		draw.SimpleTextOutlined(YRP.lang_string("wantstherolepre") .. " " .. ply:GetNWString("voteName", "") .. " " .. YRP.lang_string("wantstherolemid") .. " " .. ply:GetNWString("voteRole", "") .. " " .. YRP.lang_string("wantstherolepos"), "HudBars", _x2, _y + ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_wantstherolepre") .. " " .. ply:GetNWString("voteName", "") .. " " .. YRP.lang_string("LID_wantstherolemid") .. " " .. ply:GetNWString("voteRole", "") .. " " .. YRP.lang_string("LID_wantstherolepos"), "HudBars", _x2, _y + ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
 		if ply:GetNWString("voteStatus") != "yes" and ply:GetNWString("voteStatus") != "no" then
-			draw.SimpleTextOutlined(YRP.lang_string("yes") .. " - [Picture Up] | " .. YRP.lang_string("no") .. " - [Picture Down]", "vtsf", _x2, _y + 2*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_yes") .. " - [Picture Up] | " .. YRP.lang_string("LID_no") .. " - [Picture Down]", "vtsf", _x2, _y + 2*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
 		elseif ply:GetNWString("voteStatus") == "yes" then
-			draw.SimpleTextOutlined(YRP.lang_string("yes"), "vtsf", _x2, _y + 2*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_yes"), "vtsf", _x2, _y + 2*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
 		elseif ply:GetNWString("voteStatus") == "no" then
-			draw.SimpleTextOutlined(YRP.lang_string("no"), "vtsf", _x2, _y + 2*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_no"), "vtsf", _x2, _y + 2*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
 		end
 		draw.SimpleTextOutlined(ply:GetNWInt("voteCD", "Loading"), "vtsf", _x2, _y + 3*ctr(HudV("vtsh"))/4, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(2), Color(0, 0, 0))
 	end

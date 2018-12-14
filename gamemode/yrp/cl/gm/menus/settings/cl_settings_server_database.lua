@@ -53,9 +53,9 @@ net.Receive("Connect_Settings_Database", function(len)
 			sqlmode:AddChoice("SQLite", 0)
 		end
 		if tonumber(YRP_SQL.int_mode) == 1 then
-			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("external") .. ")", 1, true)
+			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("LID_external") .. ")", 1, true)
 		else
-			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("external") .. ")", 1)
+			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("LID_external") .. ")", 1)
 		end
 
 		DHR(dhr)
@@ -75,10 +75,10 @@ net.Receive("Connect_Settings_Database", function(len)
 			local vals = {}
 			vals["amount"] = i
 			if i > 1 then
-				create[i].name = YRP.lang_string("xhours", vals)
+				create[i].name = YRP.lang_string("LID_xhours", vals)
 				create[i].data = i
 			else
-				create[i].name = YRP.lang_string("1hour", vals)
+				create[i].name = YRP.lang_string("LID_1hour", vals)
 				create[i].data = i
 			end
 		end
@@ -90,10 +90,10 @@ net.Receive("Connect_Settings_Database", function(len)
 			local vals = {}
 			vals["amount"] = i
 			if i > 1 then
-				delete[i].name = YRP.lang_string("xdays", vals)
+				delete[i].name = YRP.lang_string("LID_xdays", vals)
 				delete[i].data = i
 			else
-				delete[i].name = YRP.lang_string("1day", vals)
+				delete[i].name = YRP.lang_string("LID_1day", vals)
 				delete[i].data = i
 			end
 		end
@@ -101,7 +101,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		Scroller.YourRPDatabase.createbackupnow = createD("DButton", nil, Scroller.YourRPDatabase:GetWide(), ctr(50), 0, 0)
 		Scroller.YourRPDatabase.createbackupnow:SetText("")
 		function Scroller.YourRPDatabase.createbackupnow:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("createbackupnow") .. " (data/yrp_backups/)")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_createbackupnow") .. " (data/yrp_backups/)")
 		end
 		function Scroller.YourRPDatabase.createbackupnow:DoClick()
 			net.Start("makebackup")
@@ -112,7 +112,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		Scroller.YourRPDatabase.change_to_sqlmode:SetText("")
 		function Scroller.YourRPDatabase.change_to_sqlmode:Paint(pw, ph)
 			local tex, dat = sqlmode:GetSelected()
-			surfaceButton(self, pw, ph, YRP.lang_string("changetosqlmode") .. ": " .. tex)
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_changetosqlmode") .. ": " .. tex)
 			dat = tonumber(dat)
 			if dat == 0 then
 				Scroller.YourRPDatabase.host:GetParent():SetSize(0, 0)
@@ -195,10 +195,10 @@ net.Receive("Connect_Settings_Database", function(len)
 
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure"))
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
 			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("yes"))
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -207,7 +207,7 @@ net.Receive("Connect_Settings_Database", function(len)
 			end
 
 			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("no"))
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -248,10 +248,10 @@ net.Receive("Connect_Settings_Database", function(len)
 
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure"))
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
 			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("yes"))
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -260,7 +260,7 @@ net.Receive("Connect_Settings_Database", function(len)
 			end
 
 			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("no"))
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -301,10 +301,10 @@ net.Receive("Connect_Settings_Database", function(len)
 
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure"))
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
 			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("yes"))
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -313,7 +313,7 @@ net.Receive("Connect_Settings_Database", function(len)
 			end
 
 			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("no"))
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end

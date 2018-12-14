@@ -6,7 +6,7 @@ function GM:PlayerDisconnected(ply)
 
 	local _rol_tab = ply:GetRolTab()
 	if _rol_tab != nil then
-		if tonumber(_rol_tab.maxamount) > 0 then
+		if tonumber(_rol_tab.int_maxamount) > 0 then
 			ply:SetNWString("roleUniqueID", "1")
 			updateRoleUses(_rol_tab.uniqueID)
 		end

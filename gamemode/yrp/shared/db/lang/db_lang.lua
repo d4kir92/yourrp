@@ -129,7 +129,7 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 
 		if not default then
-			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("short") .. "] " .. YRP.lang_string("language") .. "/" .. YRP.lang_string("inenglish"))
+			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language") .. "/" .. YRP.lang_string("LID_inenglish"))
 		end
 
 		YRP.read_lang("resource/localization/yrp/_old/lang_" .. "en" .. ".properties")
@@ -143,6 +143,8 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/settingsstatus/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsgroupsandroles/lang_" .. short .. ".properties")
+
+		pTab(yrp_current_lang)
 	else
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end
@@ -193,7 +195,7 @@ function YRP.LoadLanguage(short, init)
 			YRP.read_language(short, init)
 		end
 
-		printGM("lang", "Language changed to [" .. YRP.lang_string("short") .. "] " .. YRP.lang_string("language"))
+		printGM("lang", "Language changed to [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language"))
 		YRP.send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
 		hr_pos()
@@ -290,10 +292,10 @@ function YRP.add_language(short)
 		yrp_button_info[short]["short"] = short
 		yrp_button_info[short]["author"] = "D4KiR"
 	else
-		yrp_button_info[short]["inenglish"] = YRP.lang_string("inenglish")
-		yrp_button_info[short]["language"] = YRP.lang_string("language")
-		yrp_button_info[short]["short"] = YRP.lang_string("short")
-		yrp_button_info[short]["author"] = YRP.lang_string("author")
+		yrp_button_info[short]["inenglish"] = YRP.lang_string("LID_inenglish")
+		yrp_button_info[short]["language"] = YRP.lang_string("LID_language")
+		yrp_button_info[short]["short"] = YRP.lang_string("LID_short")
+		yrp_button_info[short]["author"] = YRP.lang_string("LID_author")
 	end
 end
 

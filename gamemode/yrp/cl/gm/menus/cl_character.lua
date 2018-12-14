@@ -80,7 +80,7 @@ character.amount = 0
 function openCharacterCreation()
 	openMenu()
 	local ply = LocalPlayer()
-	character.cause = YRP.lang_string("enteraname")
+	character.cause = YRP.lang_string("LID_enteraname")
 	character.rpname = ""
 	character.gender = "gendermale"
 	character.groupID = 1
@@ -109,7 +109,7 @@ function openCharacterCreation()
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 250))
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 250))
 
-		draw.SimpleTextOutlined(YRP.lang_string("charactercreation") .. " [PROTOTYPE]", "HudHeader", pw/2, ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_charactercreation") .. " [PROTOTYPE]", "HudHeader", pw/2, ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	function frame:OnClose()
 		closeMenu()
@@ -123,15 +123,15 @@ function openCharacterCreation()
 	function identification:Paint(pw, ph)
 		draw.RoundedBox(ctr(15), 0, 0, pw, ph, Color(255, 255, 255, 255))
 
-		draw.SimpleTextOutlined(YRP.lang_string("identifycard"), "charText", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charText", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(GetHostName(), "charText", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		draw.SimpleTextOutlined(ply:SteamID(), "charText", pw - ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined(YRP.lang_string("name"), "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_name"), "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(character.rpname, "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined(YRP.lang_string("gender"), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string(character.gender), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 	end
@@ -153,7 +153,7 @@ function openCharacterCreation()
 	local charactersGender = createMD("DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr(5))
 	function charactersGender:Paint(pw, ph)
 		paintMD(pw, ph, nil, get_ds_col())
-		draw.SimpleTextOutlined(YRP.lang_string("gender"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	local charactersGenderMale = createMD("DButton", charactersGender, ctr(100), ctr(100), ctr((760/2)-50-100-20), ctr(70), ctr(5))
@@ -212,12 +212,12 @@ function openCharacterCreation()
 
 	data.x = border
 	data.y = data.y + data.h + border
-	data.w = ctr(800) - 2*border
+	data.w = ctr(800) - 2 * border
 	data.h = ctr(140)
 	local charactersGroup = createMD("DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr(5))
 	function charactersGroup:Paint(pw, ph)
 		paintMD(pw, ph, nil, get_ds_col())
-		draw.SimpleTextOutlined(YRP.lang_string("group"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_group"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	local charactersGroupCB = createMD("DComboBox", charactersGroup, ctr(600), ctr(50), ctr((760-600)/2), ctr(70), ctr(5))
@@ -246,16 +246,16 @@ function openCharacterCreation()
 
 	data.x = border
 	data.y = data.y + data.h + border
-	data.w = ctr(800) - 2*border
+	data.w = ctr(800) - 2 * border
 	data.h = ctr(740)
 	local charactersRole = createMD("DPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr(5))
 	function charactersRole:Paint(pw, ph)
 		paintMD(pw, ph, nil, get_ds_col())
-		draw.SimpleTextOutlined(YRP.lang_string("role"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("health") .. ": " .. character.hp .. "/" .. character.hpmax, "HudBars", ctr(10), ctr(160), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("armor") .. ": " .. character.ar .. "/" .. character.armax, "HudBars", ctr(10), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("salary") .. ": " .. character.salary, "HudBars", ctr(10), ctr(280), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("description") .. ":", "HudBars", ctr(10), ctr(340), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_role"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_health") .. ": " .. character.hp .. "/" .. character.hpmax, "HudBars", ctr(10), ctr(160), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_armor") .. ": " .. character.ar .. "/" .. character.armax, "HudBars", ctr(10), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_salary") .. ": " .. character.salary, "HudBars", ctr(10), ctr(280), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "HudBars", ctr(10), ctr(340), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(character.description[1], "HudBars", ctr(10), ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(character.description[2] , "HudBars", ctr(10), ctr(460), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(character.description[3], "HudBars", ctr(10), ctr(520), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -299,18 +299,18 @@ function openCharacterCreation()
 	local charactersBodygroups = createMD("DScrollPanel", charactersBackground, data.w, data.h, data.x, data.y, ctr(5))
 	function charactersBodygroups:Paint(pw, ph)
 		paintMD(pw, ph, nil, get_ds_col())
-		draw.SimpleTextOutlined(YRP.lang_string("appearance"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_appearance"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	local _skins = createD("DPanel", charactersBodygroups, ctr(600), ctr(100), ctr(10), ctr(60))
 	function _skins:Paint(pw, ph)
 		if characterPlayermodel.skin != nil and characterPlayermodel.skinmax != nil then
-			draw.SimpleTextOutlined(YRP.lang_string("skin") .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr(80), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_skin") .. ": " .. characterPlayermodel.skin+1 .. "/" .. characterPlayermodel.skinmax+1, "HudBars", ctr(80), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 	end
 
 	character.bg = {}
-	for i=0, 20 do
+	for i = 0, 20 do
 		character.bg[i] = 0
 	end
 
@@ -441,10 +441,10 @@ function openCharacterCreation()
 			if tonumber(v.uniqueID) == tonumber(character.roleID) then
 				selectChoice = true
 			end
-			charactersRoleCB:AddChoice(v.roleID, v.uniqueID, selectChoice)
+			charactersRoleCB:AddChoice(v.string_name, v.uniqueID, selectChoice)
 		end
 	end)
-	function charactersRoleCB:OnSelect(index, value, data	)
+	function charactersRoleCB:OnSelect(index, value, data)
 		character.roleID = tonumber(data)
 		net.Start("charGetRoleInfo")
 			net.WriteString(character.roleID)
@@ -465,7 +465,7 @@ function openCharacterCreation()
 				if characterPlayermodel != nil and characterPlayermodel != NULL then
 					characterPlayermodel:SetModel(character.playermodels[tonumber(character.playermodelID)])
 					if characterPlayermodel.Entity != nil then
-						characterPlayermodel.Entity:SetModelScale(tonumber(character.playermodelsize))
+						characterPlayermodel.Entity:SetModelScale(character.playermodelsize or 1)
 					end
 					characterPlayermodel:UpdateBodyGroups()
 				end
@@ -534,7 +534,7 @@ function openCharacterCreation()
 		local charactersBack = createMD("DButton", frame, button.w, button.h, button.x, button.y, ctr(10))
 		charactersBack:SetText("")
 		function charactersBack:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("back"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_back"))
 		end
 		function charactersBack:DoClick()
 			frame:Close()
@@ -556,11 +556,11 @@ function openCharacterCreation()
 				character.cause = "OK"
 				return true
 			else
-				character.cause = YRP.lang_string("nameistolong")
+				character.cause = YRP.lang_string("LID_nameistolong")
 				return false
 			end
 		else
-			character.cause = YRP.lang_string("nameistoshort")
+			character.cause = YRP.lang_string("LID_nameistoshort")
 			return false
 		end
 	end
@@ -568,7 +568,7 @@ function openCharacterCreation()
 		local text = "Fill out more"
 		local color = Color(255, 255, 0, 255)
 		if testName() then
-			text = YRP.lang_string("confirm")
+			text = YRP.lang_string("LID_confirm")
 			color = get_dp_col()
 		else
 			text = character.cause
@@ -625,7 +625,7 @@ function openCharacterSelection()
 		function _cs.frame:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
 
-			draw.SimpleTextOutlined(YRP.lang_string("characterselection") .. " [PROTOTYPE]", "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection") .. " [PROTOTYPE]", "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined(_cur, "HudHeader", pw/2, ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 		function _cs.frame:OnClose()
@@ -647,7 +647,7 @@ function openCharacterSelection()
 		local feedback = createD("DButton", _cs.frame, ctr(500), ctr(50), BScrW() - ctr(510), ScrH() - ctr(60))
 		feedback:SetText("")
 		function feedback:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("givefeedback"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_givefeedback"))
 		end
 		function feedback:DoClick()
 			closeCharacterSelection()
@@ -658,7 +658,7 @@ function openCharacterSelection()
 
 		local border = ctr(50)
 		local charactersBackground = createD("DPanel", _cs.frame, ctr(800), ScrH() - (2*border), (ScrW() - BScrW())/2 + border, border)
-		charactersBackground.text = YRP.lang_string("siteisloading")
+		charactersBackground.text = YRP.lang_string("LID_siteisloading")
 		function charactersBackground:Paint(pw, ph)
 			paintMD(pw, ph, nil, get_dp_col())
 			draw.SimpleTextOutlined(self.text, "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
@@ -696,6 +696,7 @@ function openCharacterSelection()
 		net.Receive("yrp_get_characters", function(len)
 			printGM("gm", "received characterlist")
 			local _characters = net.ReadTable()
+			printTab(_characters)
 			if pa(charactersBackground) then
 				charactersBackground.text = ""
 				if _characters != nil and pa(_characters) then
@@ -729,7 +730,7 @@ function openCharacterSelection()
 
 							tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
 							tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
-							tmpChar.roleID = _characters[i].role.roleID or "ROLE INVALID"
+							tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
 							tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
 							tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
 							tmpChar.map = _characters[i].char.map
@@ -760,7 +761,7 @@ function openCharacterSelection()
 							tmpChar.bg18 = _characters[i].char.bg18 or 0
 							tmpChar.bg19 = _characters[i].char.bg19 or 0
 
-							tmpChar.grp = YRP.lang_string("level") .. " 1 " .. tmpChar.roleID
+							tmpChar.grp = YRP.lang_string("LID_level") .. " 1 " .. tmpChar.rolename
 							if tmpChar.groupID == tmpChar.factionID then
 								tmpChar.grp = tmpChar.grp .. " [" .. tmpChar.factionID .. "]"
 							else
@@ -804,7 +805,7 @@ function openCharacterSelection()
 											charplayermodel:SetModel(_playermodel)
 										end
 										if charplayermodel.Entity != nil then
-											charplayermodel.Entity:SetModelScale(self.playermodelsize)
+											charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
 											charplayermodel.Entity:SetSkin(self.skin)
 											for bgx = 0, 19 do
 												charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
@@ -834,15 +835,15 @@ function openCharacterSelection()
 		local deleteChar = createMD("DButton", _cs.frame, ctr(400), ctr(100), ScrW2() - ctr(400 + 800/2 + 10), ScrH() - ctr(150), ctr(5))
 		deleteChar:SetText("")
 		function deleteChar:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("deletecharacter"), Color(255, 0, 0))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_deletecharacter"), Color(255, 0, 0))
 		end
 		function deleteChar:DoClick()
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure"))
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
 			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("yes"))
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 
 				net.Start("DeleteCharacter")
@@ -853,7 +854,7 @@ function openCharacterSelection()
 			end
 
 			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("no"))
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -865,7 +866,7 @@ function openCharacterSelection()
 		local backB = createMD("DButton", _cs.frame, ctr(400), ctr(100), ScrW2() + ctr(800/2 + 10), ScrH() - ctr(150), ctr(5))
 		backB:SetText("")
 		function backB:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("back"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_back"))
 		end
 		function backB:DoClick()
 			if curChar != "-1" then
@@ -893,12 +894,12 @@ function openCharacterSelection()
 		button.x = ScrW2() - button.w/2
 		button.y = ScrH() - button.h - border
 		local confirmColor = Color(255, 0, 0, 255)
-		local charactersEnter = createMDButton(_cs.frame, button.w, button.h, button.x, button.y, ctr(0), YRP.lang_string("enterworld"))
+		local charactersEnter = createMDButton(_cs.frame, button.w, button.h, button.x, button.y, ctr(0), YRP.lang_string("LID_enterworld"))
 		function charactersEnter:Paint(pw, ph)
-			local text = YRP.lang_string("enterworld") .. " (" .. _cur .. ")"
+			local text = YRP.lang_string("LID_enterworld") .. " (" .. _cur .. ")"
 			if LocalPlayer() != nil then
 				if LocalPlayer():Alive() then
-					text = YRP.lang_string("suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+					text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
 				end
 			end
 			surfaceButton(self, pw, ph, YRP.lang_string(text))

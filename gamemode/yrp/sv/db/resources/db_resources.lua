@@ -8,8 +8,8 @@ hr_pre()
 printGM("db", "Loading Resources")
 printGM("db", "")
 
--- yourrp content
-resource.AddWorkshop("1189643820")
+-- YourRP Content
+--resource.AddWorkshop("1189643820")
 
 -- FONTS
 resource.AddFile("resource/fonts/Roboto-Regular.ttf")

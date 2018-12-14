@@ -15,19 +15,25 @@ net.Receive("client_lang", function(len, ply)
 end)
 
 function reg_hp(ply)
-	if ply:GetNWInt("GetHealthReg") != nil then
-		ply:Heal(ply:GetNWInt("GetHealthReg"))
+	local hpreg = ply:GetNWInt("HealthReg")
+	if hpreg != nil then
+		ply:Heal(hpreg)
 		if ply:Health() > ply:GetMaxHealth() then
 			ply:SetHealth(ply:GetMaxHealth())
+		elseif ply:Health() < 0 then
+			ply:Kill()
 		end
 	end
 end
 
 function reg_ar(ply)
-	if ply:GetNWInt("GetArmorReg") != nil then
-		ply:SetArmor(ply:Armor() + ply:GetNWInt("GetArmorReg"))
-		if ply:Armor() > ply:GetNWInt("GetMaxArmor") then
-			ply:SetArmor(ply:GetNWInt("GetMaxArmor"))
+	local arreg = ply:GetNWInt("ArmorReg")
+	if arreg != nil then
+		ply:SetArmor(ply:Armor() + arreg)
+		if ply:Armor() > ply:GetNWInt("MaxArmor") then
+			ply:SetArmor(ply:GetNWInt("MaxArmor"))
+		elseif ply:Armor() < 0 then
+			ply:SetArmor(0)
 		end
 	end
 end
@@ -274,7 +280,7 @@ timer.Create("ServerThink", 1, 0, function()
 	if _time % _auto_save == 0 then
 		local _mod = _time%60
 		local _left = _time/60 - _mod
-		local _str = "Auto-Save (Uptime: " .. _left .. " " .. YRP.lang_string("minutes") .. ")"
+		local _str = "Auto-Save (Uptime: " .. _left .. " " .. YRP.lang_string("LID_minutes") .. ")"
 		save_clients(_str)
 		SaveStorages(_str)
 	end

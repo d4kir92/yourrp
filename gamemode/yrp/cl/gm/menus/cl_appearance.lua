@@ -50,7 +50,7 @@ net.Receive("get_menu_bodygroups", function(len)
 
 				function _yrp_appearance.left:Paint(pw, ph)
 					--surfacePanel(self, pw, ph)
-					--draw.SimpleTextOutlined(YRP.lang_string("appearance"), "HudBars", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+					--draw.SimpleTextOutlined(YRP.lang_string("LID_appearance"), "HudBars", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 				end
 
 				_appe.r.play = createD("DButton", _yrp_appearance.left, ctr(100), ctr(100), BScrW() / 4, ScrH() - ctr(200))
@@ -108,7 +108,7 @@ net.Receive("get_menu_bodygroups", function(len)
 				local _tmpPM = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(80), BScrW() / 2, ctr(50))
 				_tmpPM.cur = _pmid
 				_tmpPM.max = #_pms
-				_tmpPM.name = YRP.lang_string("appearance")
+				_tmpPM.name = YRP.lang_string("LID_appearance")
 				function _tmpPM:Paint(pw, ph)
 					surfacePanel(self, pw, ph)
 					draw.SimpleTextOutlined(self.name .. " (" .. _tmpPM.cur .. "/" .. _tmpPM.max .. ")", "DermaDefault", ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
@@ -154,7 +154,7 @@ net.Receive("get_menu_bodygroups", function(len)
 				local _tmpSkin = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(80), BScrW() / 2, ctr(200))
 				_tmpSkin.cur = _appe.r.pm.Entity:GetSkin()
 				_tmpSkin.max = _appe.r.pm.Entity:SkinCount()
-				_tmpSkin.name = YRP.lang_string("skin")
+				_tmpSkin.name = YRP.lang_string("LID_skin")
 				function _tmpSkin:Paint(pw, ph)
 					surfacePanel(self, pw, ph)
 					draw.SimpleTextOutlined(self.name .. " (" .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. ")", "DermaDefault", ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
@@ -252,7 +252,7 @@ net.Receive("get_menu_bodygroups", function(len)
 		end
 	else
 		function _yrp_appearance.window:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("appearance") .. " - " .. YRP.lang_string("menu") .. " [PROTOTYPE]")
+			surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 			local tab = {}
 			tab.x = pw / 2
 			tab.y = ph / 2
@@ -301,7 +301,7 @@ function open_appearance()
 		_yrp_appearance.window:Remove()
 	end
 	function _yrp_appearance.window:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, YRP.lang_string("appearance") .. " - " .. YRP.lang_string("menu") .. " [PROTOTYPE]")
+		surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 	end
 
 	_yrp_appearance.left = createD("DPanel", _yrp_appearance.window, BScrW(), ScrH() - ctr(50), 0, ctr(50))
@@ -315,7 +315,7 @@ function open_appearance()
 		net.SendToServer()
 	else
 		function _yrp_appearance.left:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string("disabled"))
+			surfacePanel(self, pw, ph, YRP.lang_string("LID_disabled"))
 		end
 	end
 

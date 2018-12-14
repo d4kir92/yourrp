@@ -424,11 +424,11 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_yrp_scoreboard = CreateCheckBoxLine(GAMEMODE_VISUALS.plus, GEN.bool_yrp_scoreboard, "yourrpscoreboard", "update_bool_yrp_scoreboard")
 
 		local sbs = {}
-		sbs["advanced"] = YRP.lang_string("advanced")
-		sbs["simple"] = YRP.lang_string("simple")
+		sbs["advanced"] = YRP.lang_string("LID_advanced")
+		sbs["simple"] = YRP.lang_string("LID_simple")
 		local sbspanel = {}
 		sbspanel.parent = GAMEMODE_VISUALS.plus
-		sbspanel.header = YRP.lang_string("scoreboard")
+		sbspanel.header = YRP.lang_string("LID_scoreboard")
 		sbspanel.netstr = "update_text_yrp_scoreboard_style"
 		sbspanel.value = GEN.text_yrp_scoreboard_style
 		sbspanel.uniqueID = "1"
@@ -492,9 +492,9 @@ net.Receive("Connect_Settings_General", function(len)
 		function money_reset.button:DoClick()
 			local win = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			win:Center()
-			win:SetTitle(YRP.lang_string("areyousure"))
+			win:SetTitle(YRP.lang_string("LID_areyousure"))
 			local _yesButton = createVGUI("DButton", win, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("yes"))
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 
 				net.Start("moneyreset")
@@ -503,7 +503,7 @@ net.Receive("Connect_Settings_General", function(len)
 				win:Close()
 			end
 			local _noButton = createVGUI("DButton", win, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("no"))
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				win:Close()
 			end
@@ -526,10 +526,10 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_forum, "forum", "update_text_social_forum")
 		CreateHRLine(SOCIAL_SETTINGS.plus)
 		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_discord, "discord", "update_text_social_discord")
-		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_discord_widgetid, YRP.lang_string("discord") .. " " .. YRP.lang_string("serverid"), "update_text_social_discord_widgetid")
-		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_ip, YRP.lang_string("teamspeak") .. " [" .. YRP.lang_string("ip") .. "/" .. YRP.lang_string("hostname") .. "]", "update_text_social_teamspeak_ip")
-		CreateNumberWangLine(SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_port, YRP.lang_string("teamspeak") .. " [" .. YRP.lang_string("port") .. "]", "update_text_social_teamspeak_port")
-		CreateNumberWangLine(SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_query_port, YRP.lang_string("teamspeak") .. " [" .. YRP.lang_string("queryport") .. "]", "update_text_social_teamspeak_query_port")
+		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_discord_widgetid, YRP.lang_string("LID_discord") .. " " .. YRP.lang_string("LID_serverid"), "update_text_social_discord_widgetid")
+		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_ip, YRP.lang_string("LID_teamspeak") .. " [" .. YRP.lang_string("LID_ip") .. "/" .. YRP.lang_string("LID_hostname") .. "]", "update_text_social_teamspeak_ip")
+		CreateNumberWangLine(SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_port, YRP.lang_string("LID_teamspeak") .. " [" .. YRP.lang_string("LID_port") .. "]", "update_text_social_teamspeak_port")
+		CreateNumberWangLine(SOCIAL_SETTINGS.plus, GEN.text_social_teamspeak_query_port, YRP.lang_string("LID_teamspeak") .. " [" .. YRP.lang_string("LID_queryport") .. "]", "update_text_social_teamspeak_query_port")
 		CreateHRLine(SOCIAL_SETTINGS.plus)
 		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_youtube, "Youtube", "update_text_social_youtube")
 		CreateTextBoxLine(SOCIAL_SETTINGS.plus, GEN.text_social_twitter, "Twitter", "update_text_social_twitter")

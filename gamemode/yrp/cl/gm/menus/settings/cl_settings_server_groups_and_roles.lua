@@ -78,12 +78,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if self.group != "" then
 					local inp = {}
 					inp.group = self.group
-					tab2.text = YRP.lang_string("groupsof", inp)
+					tab2.text = YRP.lang_string("LID_groupsof", inp)
 				else
-					tab2.text = YRP.lang_string("factions")
+					tab2.text = YRP.lang_string("LID_factions")
 				end
 			else
-				tab2.text = YRP.lang_string("loading")
+				tab2.text = YRP.lang_string("LID_loading")
 			end
 			DrawText(tab2)
 		end
@@ -320,10 +320,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					if self.group != "" then
 						local inp = {}
 						inp.group = self.group
-						tab2.text = "[" .. YRP.lang_string("wip") .. "] " .. YRP.lang_string("rolesof", inp)
+						tab2.text = "[" .. YRP.lang_string("LID_wip") .. "] " .. YRP.lang_string("LID_rolesof", inp)
 					end
 				else
-					tab2.text = YRP.lang_string("loading")
+					tab2.text = YRP.lang_string("LID_loading")
 				end
 				DrawText(tab2)
 			end
@@ -491,7 +491,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			info.br = ctr(20)
 			info.color = Color(255, 255, 255)
 			info.bgcolor = Color(80, 80, 80)
-			info.name = "general"
+			info.name = "LID_general"
 			ea[group.uniqueID].info = DGroup(info)
 			ea.info = ea[group.uniqueID].info
 			function ea.info:OnRemove()
@@ -505,7 +505,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local name = {}
 			name.parent = ea.info
 			name.uniqueID = group.uniqueID
-			name.header = "name"
+			name.header = "LID_name"
 			name.netstr = "update_group_string_name"
 			name.value = group.string_name
 			name.uniqueID = group.uniqueID
@@ -520,7 +520,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local color = {}
 			color.parent = ea.info
 			color.uniqueID = group.uniqueID
-			color.header = "color"
+			color.header = "LID_color"
 			color.netstr = "update_group_string_color"
 			color.value = group.string_color
 			color.uniqueID = group.uniqueID
@@ -532,7 +532,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local icon = {}
 			icon.parent = ea.info
 			icon.uniqueID = group.uniqueID
-			icon.header = "icon"
+			icon.header = "LID_icon"
 			icon.netstr = "update_group_string_icon"
 			icon.value = group.string_icon
 			icon.uniqueID = group.uniqueID
@@ -542,7 +542,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local othergroups = {}
-			othergroups[0] = YRP.lang_string("factions")
+			othergroups[0] = YRP.lang_string("LID_factions")
 			for i, tab in pairs(groups) do
 				othergroups[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
 			end
@@ -550,7 +550,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local parentgroup = {}
 			parentgroup.parent = ea.info
 			parentgroup.uniqueID = group.uniqueID
-			parentgroup.header = "parentgroup"
+			parentgroup.header = "LID_parentgroup"
 			parentgroup.netstr = "update_group_int_parentgroup"
 			parentgroup.value = group.int_parentgroup
 			parentgroup.uniqueID = group.uniqueID
@@ -563,11 +563,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			restriction.x = ctr(1040)
 			restriction.y = ctr(20)
 			restriction.w = ctr(1000)
-			restriction.h = ctr(570)
+			restriction.h = ctr(550)
 			restriction.br = ctr(20)
 			restriction.color = Color(255, 255, 255)
 			restriction.bgcolor = Color(80, 80, 80)
-			restriction.name = "restriction"
+			restriction.name = "LID_restriction"
 			ea[group.uniqueID].restriction = DGroup(restriction)
 			ea.restriction = ea[group.uniqueID].restriction
 
@@ -590,7 +590,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local usergroups = {}
 			usergroups.parent = ea.restriction
 			usergroups.uniqueID = group.uniqueID
-			usergroups.header = "usergroups"
+			usergroups.header = "LID_usergroups"
 			usergroups.netstr = "update_group_string_usergroups"
 			usergroups.value = group.string_usergroups
 			usergroups.uniqueID = group.uniqueID
@@ -603,8 +603,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local requireslevel = {}
 			requireslevel.parent = ea.restriction
-			requireslevel.uniqueID = group.uniqueID
-			requireslevel.header = "requireslevel"
+			requireslevel.header = "LID_requireslevel"
 			requireslevel.netstr = "update_group_int_requireslevel"
 			requireslevel.value = group.int_requireslevel
 			requireslevel.uniqueID = group.uniqueID
@@ -618,7 +617,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local groupvoicechat = {}
 			groupvoicechat.parent = ea.restriction
 			groupvoicechat.uniqueID = group.uniqueID
-			groupvoicechat.header = "canusegroupvoicechat"
+			groupvoicechat.header = "LID_canusegroupvoicechat"
 			groupvoicechat.netstr = "update_group_bool_groupvoicechat"
 			groupvoicechat.value = group.bool_groupvoicechat
 			groupvoicechat.uniqueID = group.uniqueID
@@ -630,7 +629,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local whitelist = {}
 			whitelist.parent = ea.restriction
 			whitelist.uniqueID = group.uniqueID
-			whitelist.header = "useswhitelist"
+			whitelist.header = "LID_useswhitelist"
 			whitelist.netstr = "update_group_bool_whitelist"
 			whitelist.value = group.bool_whitelist
 			whitelist.uniqueID = group.uniqueID
@@ -642,7 +641,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local locked = {}
 			locked.parent = ea.restriction
 			locked.uniqueID = group.uniqueID
-			locked.header = "locked"
+			locked.header = "LID_locked"
 			locked.netstr = "update_group_bool_locked"
 			locked.value = group.bool_locked
 			locked.uniqueID = group.uniqueID
@@ -654,7 +653,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local visible = {}
 			visible.parent = ea.restriction
 			visible.uniqueID = group.uniqueID
-			visible.header = "visible"
+			visible.header = "LID_visible"
 			visible.netstr = "update_group_bool_visible"
 			visible.value = group.bool_visible
 			visible.uniqueID = group.uniqueID
@@ -821,12 +820,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			info.parent = ea.background
 			info.x = ctr(20)
 			info.y = ctr(20)
-			info.w = ctr(1000)
-			info.h = ctr(890)
+			info.w = ctr(800)
+			info.h = ctr(866)
 			info.br = ctr(20)
 			info.color = Color(255, 255, 255)
 			info.bgcolor = Color(80, 80, 80)
-			info.name = "general"
+			info.name = "LID_general"
 			ea[role.uniqueID].info = DGroup(info)
 			ea.info = ea[role.uniqueID].info
 			function ea.info:OnRemove()
@@ -840,7 +839,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local name = {}
 			name.parent = ea.info
 			name.uniqueID = role.uniqueID
-			name.header = "name"
+			name.header = "LID_name"
 			name.netstr = "update_role_string_name"
 			name.value = role.string_name
 			name.uniqueID = role.uniqueID
@@ -855,7 +854,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local color = {}
 			color.parent = ea.info
 			color.uniqueID = role.uniqueID
-			color.header = "color"
+			color.header = "LID_color"
 			color.netstr = "update_role_string_color"
 			color.value = role.string_color
 			color.uniqueID = role.uniqueID
@@ -867,7 +866,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local icon = {}
 			icon.parent = ea.info
 			icon.uniqueID = role.uniqueID
-			icon.header = "icon"
+			icon.header = "LID_icon"
 			icon.netstr = "update_role_string_icon"
 			icon.value = role.string_icon
 			icon.uniqueID = role.uniqueID
@@ -877,7 +876,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local otherroles = {}
-			otherroles[0] = YRP.lang_string("none")
+			otherroles[0] = YRP.lang_string("LID_none")
 			for i, tab in pairs(roles) do
 				tab.uniqueID = tonumber(tab.uniqueID)
 				if tab.uniqueID != role.uniqueID then
@@ -888,7 +887,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local prerole = {}
 			prerole.parent = ea.info
 			prerole.uniqueID = role.uniqueID
-			prerole.header = YRP.lang_string("prerole") .. " | " .. YRP.lang_string("prerank")
+			prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
 			prerole.netstr = "update_role_int_prerole"
 			prerole.value = tonumber(role.int_prerole)
 			prerole.uniqueID = role.uniqueID
@@ -899,7 +898,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local maxa = {}
-			maxa[0] = YRP.lang_string("disabled")
+			maxa[0] = YRP.lang_string("LID_disabled")
 			for i = 1, 128 do
 				maxa[i] = i
 			end
@@ -907,7 +906,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local maxamount = {}
 			maxamount.parent = ea.info
 			maxamount.uniqueID = role.uniqueID
-			maxamount.header = "maxamount"
+			maxamount.header = "LID_maxamount"
 			maxamount.netstr = "update_role_int_maxamount"
 			maxamount.value = tonumber(role.int_maxamount)
 			maxamount.uniqueID = role.uniqueID
@@ -925,7 +924,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local int_groupID = {}
 			int_groupID.parent = ea.info
 			int_groupID.uniqueID = role.uniqueID
-			int_groupID.header = "group"
+			int_groupID.header = "LID_group"
 			int_groupID.netstr = "update_role_int_groupID"
 			int_groupID.value = tonumber(role.int_groupID)
 			int_groupID.uniqueID = role.uniqueID
@@ -938,23 +937,258 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local string_description = {}
 			string_description.parent = ea.info
 			string_description.uniqueID = role.uniqueID
-			string_description.header = "description"
+			string_description.header = "LID_description"
 			string_description.netstr = "update_role_string_description"
 			string_description.value = role.string_description
 			string_description.uniqueID = role.uniqueID
 			string_description.lforce = false
 			ea[role.uniqueID].string_description = DTextBox(string_description)
 
+			DHr(hr)
+
+			local salary = {}
+			salary.parent = ea.info
+			salary.header = "LID_salary"
+			salary.netstr = "update_role_int_salary"
+			salary.value = role.int_salary
+			salary.uniqueID = role.uniqueID
+			salary.lforce = false
+			salary.min = 0
+			salary.max = GetMaxInt()
+			ea[role.uniqueID].salary = DIntBox(salary)
+
+			DHr(hr)
+
+			local salarytime = {}
+			salarytime.parent = ea.info
+			salarytime.header = "LID_timesalary"
+			salarytime.netstr = "update_role_int_salarytime"
+			salarytime.value = role.int_requireslevel
+			salarytime.uniqueID = role.uniqueID
+			salarytime.lforce = false
+			salarytime.min = 1
+			salarytime.max = 9999
+			ea[role.uniqueID].requireslevel = DIntBox(salarytime)
+
+			ea.info:AutoSize()
+
+			-- FLAGS
+			local flags = {}
+			flags.parent = ea.background
+			flags.x = ea.info:GetParent().x
+			flags.y = ea.info:GetParent().y + ea.info:GetParent():GetTall() + ctr(20)
+			flags.w = ea.info:GetParent():GetWide()
+			flags.h = ctr(800)
+			flags.br = ctr(20)
+			flags.color = Color(255, 255, 255)
+			flags.bgcolor = Color(80, 80, 80)
+			flags.name = "LID_flags"
+			ea[role.uniqueID].flags = DGroup(flags)
+			ea.flags = ea[role.uniqueID].flags
+
+			local bool_instructor = {}
+			bool_instructor.parent = ea.flags
+			bool_instructor.uniqueID = role.uniqueID
+			bool_instructor.header = "LID_isinstructor"
+			bool_instructor.netstr = "update_role_bool_instructor"
+			bool_instructor.value = role.bool_instructor
+			bool_instructor.uniqueID = role.uniqueID
+			bool_instructor.lforce = false
+			ea[role.uniqueID].bool_instructor = DCheckBox(bool_instructor)
+
+			hr.parent = ea.flags
+			DHr(hr)
+
+			local custom_flags = {}
+			custom_flags.parent = ea.flags
+			custom_flags.uniqueID = role.uniqueID
+			custom_flags.header = "LID_customflags"
+			custom_flags.netstr = "update_role_string_customflags"
+			custom_flags.value = role.string_customflags
+			custom_flags.uniqueID = role.uniqueID
+			custom_flags.w = ea.flags:GetWide()
+			custom_flags.h = ctr(225)
+			custom_flags.doclick = function()
+				net.Receive("get_all_role_customflags", function()
+					local cf = net.ReadTable()
+
+					local win = createD("DFrame", nil, ctr(800), ctr(800), 0, 0)
+					win:SetTitle("")
+					win:Center()
+					win:MakePopup()
+
+					win.dpl = createD("DPanelList", win, ctr(800), ctr(750), 0, ctr(50))
+					for i, flag in pairs(cf) do
+						local line = createD("DButton", nil, ctr(800), ctr(50), 0, 0)
+						line:SetText(flag.string_name)
+						function line:DoClick()
+							net.Start("add_role_flag")
+								net.WriteInt(role.uniqueID, 32)
+								net.WriteInt(flag.uniqueID, 32)
+							net.SendToServer()
+							win:Close()
+						end
+
+						win.dpl:AddItem(line)
+					end
+				end)
+				net.Start("get_all_role_customflags")
+				net.SendToServer()
+			end
+			ea[role.uniqueID].custom_flags = DStringListBox(custom_flags)
+			net.Receive("get_role_customflags", function()
+				local tab_cf = net.ReadTable()
+				for i, v in pairs(tab_cf) do
+					v.doclick = function()
+						net.Start("rem_role_flag")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteInt(v.uniqueID, 32)
+						net.SendToServer()
+					end
+				end
+				ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
+			end)
+			net.Start("get_role_customflags")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
+			ea.flags:AutoSize()
+
+			local appearance = {}
+			appearance.parent = ea.background
+			appearance.x = ctr(840)
+			appearance.y = ctr(20)
+			appearance.w = ctr(800)
+			appearance.h = ctr(800)
+			appearance.br = ctr(20)
+			appearance.color = Color(255, 255, 255)
+			appearance.bgcolor = Color(80, 80, 80)
+			appearance.name = "LID_appearance"
+			ea[role.uniqueID].appearance = DGroup(appearance)
+			ea.appearance = ea[role.uniqueID].appearance
+
+			local playermodels = {}
+			playermodels.parent = ea.appearance
+			playermodels.uniqueID = role.uniqueID
+			playermodels.header = "LID_playermodels"
+			playermodels.netstr = "update_role_string_playermodels"
+			playermodels.value = role.string_playermodels
+			playermodels.uniqueID = role.uniqueID
+			playermodels.w = ea.appearance:GetWide()
+			playermodels.h = ctr(425)
+			playermodels.doclick = function()
+				net.Receive("get_all_playermodels", function()
+					local pms = net.ReadTable()
+
+					local win = createD("DFrame", nil, ctr(800), ctr(800), 0, 0)
+					win:SetTitle("")
+					win:Center()
+					win:MakePopup()
+
+					win.add = createD("DButton", win, ctr(50), ctr(50), ctr(20), ctr(50 + 20))
+					win.add:SetText("+")
+					function win.add:DoClick()
+						win:Close()
+
+						local pmwin = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+						pmwin:SetTitle("")
+						pmwin:Center()
+						pmwin:MakePopup()
+
+						local allvalidmodels = player_manager.AllValidModels()
+						local cl_pms = {}
+						local count = 0
+						for k, v in pairs(allvalidmodels) do
+							count = count + 1
+							cl_pms[count] = {}
+							cl_pms[count].WorldModel = v
+							cl_pms[count].ClassName = v
+							cl_pms[count].PrintName = player_manager.TranslateToPlayerModelName(v)
+						end
+
+						pmwin.dpl = createD("DPanelList", pmwin, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+						for i, v in pairs(cl_pms) do
+							local d_pm = createD("DButton", nil, pmwin.dpl:GetWide(), ctr(100), 0, 0)
+							d_pm:SetText(v.PrintName)
+							function d_pm:DoClick()
+								net.Start("add_playermodel")
+									net.WriteInt(role.uniqueID, 32)
+									net.WriteString(v.WorldModel)
+								net.SendToServer()
+							end
+
+							pmwin.dpl:AddItem(d_pm)
+						end
+					end
+
+					win.dpl = createD("DPanelList", win, ctr(800), ctr(800 - 140), 0, ctr(50 + 20 + 50 + 20))
+					win.dpl:EnableVerticalScrollbar(true)
+					function win.dpl:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+					end
+					for i, pm in pairs(pms) do
+						local line = createD("DButton", nil, ctr(800), ctr(50), 0, 0)
+						local name = pm.string_name
+						if name == "" or name == " " then
+							name = pm.string_model
+						end
+						line:SetText(name)
+						function line:DoClick()
+							net.Start("add_role_playermodel")
+								net.WriteInt(role.uniqueID, 32)
+								net.WriteInt(pm.uniqueID, 32)
+							net.SendToServer()
+							win:Close()
+						end
+
+						win.dpl:AddItem(line)
+					end
+				end)
+				net.Start("get_all_playermodels")
+				net.SendToServer()
+			end
+			ea[role.uniqueID].playermodels = DStringListBox(playermodels)
+			net.Receive("get_role_playermodels", function()
+				local tab_pm = net.ReadTable()
+				for i, v in pairs(tab_pm) do
+					v.doclick = function()
+						net.Start("rem_role_playermodel")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteInt(v.uniqueID, 32)
+						net.SendToServer()
+					end
+				end
+				ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
+			end)
+			net.Start("get_role_playermodels")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
+			ea.appearance:AutoSize()
+
+			local equipment = {}
+			equipment.parent = ea.background
+			equipment.x = ea.appearance:GetParent().x
+			equipment.y = ea.appearance:GetParent().y + ea.appearance:GetParent():GetTall() + ctr(20)
+			equipment.w = ctr(800)
+			equipment.h = ctr(1050)
+			equipment.br = ctr(20)
+			equipment.color = Color(255, 255, 255)
+			equipment.bgcolor = Color(80, 80, 80)
+			equipment.name = "LID_equipment"
+			ea[role.uniqueID].equipment = DGroup(equipment)
+			ea.equipment = ea[role.uniqueID].equipment
+
 			local restriction = {}
 			restriction.parent = ea.background
-			restriction.x = ctr(1040)
+			restriction.x = ctr(1660)
 			restriction.y = ctr(20)
-			restriction.w = ctr(1000)
-			restriction.h = ctr(570)
+			restriction.w = ctr(800)
+			restriction.h = ctr(800)
 			restriction.br = ctr(20)
 			restriction.color = Color(255, 255, 255)
 			restriction.bgcolor = Color(80, 80, 80)
-			restriction.name = "restriction"
+			restriction.name = "LID_restriction"
 			ea[role.uniqueID].restriction = DGroup(restriction)
 			ea.restriction = ea[role.uniqueID].restriction
 
@@ -977,7 +1211,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local usergroups = {}
 			usergroups.parent = ea.restriction
 			usergroups.uniqueID = role.uniqueID
-			usergroups.header = "usergroups"
+			usergroups.header = "LID_usergroups"
 			usergroups.netstr = "update_role_string_usergroups"
 			usergroups.value = role.string_usergroups
 			usergroups.uniqueID = role.uniqueID
@@ -990,8 +1224,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local requireslevel = {}
 			requireslevel.parent = ea.restriction
-			requireslevel.uniqueID = role.uniqueID
-			requireslevel.header = "requireslevel"
+			requireslevel.header = "LID_requireslevel"
 			requireslevel.netstr = "update_role_int_requireslevel"
 			requireslevel.value = role.int_requireslevel
 			requireslevel.uniqueID = role.uniqueID
@@ -1005,7 +1238,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local bool_voiceglobal = {}
 			bool_voiceglobal.parent = ea.restriction
 			bool_voiceglobal.uniqueID = role.uniqueID
-			bool_voiceglobal.header = "canuserolevoicechat"
+			bool_voiceglobal.header = "LID_canuserolevoicechat"
 			bool_voiceglobal.netstr = "update_role_bool_voiceglobal"
 			bool_voiceglobal.value = role.bool_voiceglobal
 			bool_voiceglobal.uniqueID = role.uniqueID
@@ -1017,7 +1250,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local whitelist = {}
 			whitelist.parent = ea.restriction
 			whitelist.uniqueID = role.uniqueID
-			whitelist.header = "useswhitelist"
+			whitelist.header = "LID_useswhitelist"
 			whitelist.netstr = "update_role_bool_whitelist"
 			whitelist.value = role.bool_whitelist
 			whitelist.uniqueID = role.uniqueID
@@ -1029,7 +1262,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local locked = {}
 			locked.parent = ea.restriction
 			locked.uniqueID = role.uniqueID
-			locked.header = "locked"
+			locked.header = "LID_locked"
 			locked.netstr = "update_role_bool_locked"
 			locked.value = role.bool_locked
 			locked.uniqueID = role.uniqueID
@@ -1041,37 +1274,70 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local visible = {}
 			visible.parent = ea.restriction
 			visible.uniqueID = role.uniqueID
-			visible.header = "visible"
+			visible.header = "LID_visible"
 			visible.netstr = "update_role_bool_visible"
 			visible.value = role.bool_visible
 			visible.uniqueID = role.uniqueID
 			visible.lforce = false
 			ea[role.uniqueID].visible = DCheckBox(visible)
 
+			DHr(hr)
+
+			local bool_voteable = {}
+			bool_voteable.parent = ea.restriction
+			bool_voteable.uniqueID = role.uniqueID
+			bool_voteable.header = "LID_voteable"
+			bool_voteable.netstr = "update_role_bool_voteable"
+			bool_voteable.value = role.bool_voteable
+			bool_voteable.uniqueID = role.uniqueID
+			bool_voteable.lforce = false
+			ea[role.uniqueID].bool_voteable = DCheckBox(bool_voteable)
+
+			ea.restriction:AutoSize()
+
 			local attributes = {}
 			attributes.parent = ea.background
-			attributes.x = ctr(1040)
-			attributes.y = ctr(610)
-			attributes.w = ctr(1000)
-			attributes.h = ctr(570)
+			attributes.x = ea.restriction:GetParent().x
+			attributes.y = ea.restriction:GetParent().y + ea.restriction:GetParent():GetTall() + ctr(20)
+			attributes.w = ctr(800)
+			attributes.h = ctr(1000)
 			attributes.br = ctr(20)
 			attributes.color = Color(255, 255, 255)
 			attributes.bgcolor = Color(80, 80, 80)
-			attributes.name = "attributes"
+			attributes.name = "LID_attributes"
 			ea[role.uniqueID].attributes = DGroup(attributes)
 			ea.attributes = ea[role.uniqueID].attributes
 
 			local health = {}
 			health.parent = ea.attributes
 			health.uniqueID = role.uniqueID
-			health.header = "health"
+			health.header = "LID_health"
 			health.netstr = "hp"
 			health.uniqueID = role.uniqueID
 			health.lforce = false
-			health.cur = role.int_hp
-			health.max = role.int_hpmax
-			health.up = role.float_hpreg
+
+			health.dnw = {}
+
+			health.dnw[1] = {}
+			health.dnw[1].value = role.int_hp
+			health.dnw[1].min = 1
+			health.dnw[1].max = GetMaxInt()
+			health.dnw[1].netstr = "update_role_" .. "int_" .. "hp"
+
+			health.dnw[2] = {}
+			health.dnw[2].value = role.int_hpmax
+			health.dnw[2].min = 1
+			health.dnw[2].max = GetMaxInt()
+			health.dnw[2].netstr = "update_role_" .. "int_" .. "hpmax"
+
+			health.dnw[3] = {}
+			health.dnw[3].value = role.int_hpup
+			health.dnw[3].min = -GetMaxInt()
+			health.dnw[3].max = GetMaxInt()
+			health.dnw[3].netstr = "update_role_" .. "int_" .. "hpup"
+
 			health.color = Color(0, 255, 0)
+			health.color2 = Color(100, 255, 100)
 			ea[role.uniqueID].health = DAttributeBar(health)
 
 			hr.parent = ea.attributes
@@ -1080,17 +1346,117 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local armor = {}
 			armor.parent = ea.attributes
 			armor.uniqueID = role.uniqueID
-			armor.header = "armor"
+			armor.header = "LID_armor"
 			armor.netstr = "ar"
 			armor.uniqueID = role.uniqueID
 			armor.lforce = false
-			armor.cur = role.int_ar
-			armor.max = role.int_armax
-			armor.up = role.float_arreg
+
+			armor.dnw = {}
+
+			armor.dnw[1] = {}
+			armor.dnw[1].value = role.int_ar
+			armor.dnw[1].min = 1
+			armor.dnw[1].max = GetMaxInt()
+			armor.dnw[1].netstr = "update_role_" .. "int_" .. "ar"
+
+			armor.dnw[2] = {}
+			armor.dnw[2].value = role.int_armax
+			armor.dnw[2].min = 1
+			armor.dnw[2].max = GetMaxInt()
+			armor.dnw[2].netstr = "update_role_" .. "int_" .. "armax"
+
+			armor.dnw[3] = {}
+			armor.dnw[3].value = role.int_arup
+			armor.dnw[3].min = -GetMaxInt()
+			armor.dnw[3].max = GetMaxInt()
+			armor.dnw[3].netstr = "update_role_" .. "int_" .. "arup"
+
 			armor.color = Color(0, 0, 255)
+			armor.color2 = Color(100, 100, 255)
 			ea[role.uniqueID].armor = DAttributeBar(armor)
 
 			DHr(hr)
+
+			printGM("note", role.int_st .. " " .. role.int_stmax .. " " .. role.float_stup)
+			local stamina = {}
+			stamina.parent = ea.attributes
+			stamina.uniqueID = role.uniqueID
+			stamina.header = "LID_stamina"
+			stamina.netstr = "st"
+			stamina.uniqueID = role.uniqueID
+			stamina.lforce = false
+
+			stamina.dnw = {}
+
+			stamina.dnw[1] = {}
+			stamina.dnw[1].value = role.int_st
+			stamina.dnw[1].min = 1
+			stamina.dnw[1].max = GetMaxInt()
+			stamina.dnw[1].netstr = "update_role_" .. "int_" .. "st"
+
+			stamina.dnw[2] = {}
+			stamina.dnw[2].value = role.int_stmax
+			stamina.dnw[2].min = 1
+			stamina.dnw[2].max = GetMaxInt()
+			stamina.dnw[2].netstr = "update_role_" .. "int_" .. "stmax"
+
+			stamina.dnw[3] = {}
+			stamina.dnw[3].value = role.float_stup
+			stamina.dnw[3].min = -GetMaxFloat()
+			stamina.dnw[3].max = GetMaxFloat()
+			stamina.dnw[3].netstr = "update_role_" .. "float_" .. "stup"
+
+			stamina.dnw[4] = {}
+			stamina.dnw[4].value = role.float_stdn
+			stamina.dnw[4].min = -GetMaxFloat()
+			stamina.dnw[4].max = GetMaxFloat()
+			stamina.dnw[4].netstr = "update_role_" .. "float_" .. "stdn"
+
+			stamina.color = Color(255, 255, 0)
+			stamina.color2 = Color(200, 200, 0)
+			stamina.color3 = Color(160, 160, 0)
+			ea[role.uniqueID].stamina = DAttributeBar(stamina)
+
+			DHr(hr)
+
+			local speedwalk = {}
+			speedwalk.parent = ea.attributes
+			speedwalk.header = "LID_walkspeed"
+			speedwalk.netstr = "update_role_int_speedwalk"
+			speedwalk.value = role.int_speedwalk or -1
+			speedwalk.uniqueID = role.uniqueID
+			speedwalk.lforce = false
+			speedwalk.min = 1
+			speedwalk.max = 999999
+			ea[role.uniqueID].speedwalk = DIntBox(speedwalk)
+
+			DHr(hr)
+
+			local speedrun = {}
+			speedrun.parent = ea.attributes
+			speedrun.header = "LID_runspeed"
+			speedrun.netstr = "update_role_int_speedrun"
+			speedrun.value = role.int_speedrun or -1
+			speedrun.uniqueID = role.uniqueID
+			speedrun.lforce = false
+			speedrun.min = 1
+			speedrun.max = 999999
+			ea[role.uniqueID].speedrun = DIntBox(speedrun)
+
+			DHr(hr)
+
+			local powerjump = {}
+			powerjump.parent = ea.attributes
+			powerjump.header = "LID_jumppower"
+			powerjump.netstr = "update_role_int_powerjump"
+			powerjump.value = role.int_powerjump or -1
+			powerjump.uniqueID = role.uniqueID
+			powerjump.lforce = false
+			powerjump.min = 1
+			powerjump.max = 999999
+			ea[role.uniqueID].powerjump = DIntBox(powerjump)
+
+			ea.attributes:AutoSize()
 		end)
 
 		net.Receive("settings_subscribe_rolelist", function(le)

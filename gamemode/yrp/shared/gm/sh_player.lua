@@ -21,11 +21,11 @@ function Player:YRPDrink(num)
 end
 
 function Player:YRPGetLanguage()
-	return YRP.get_language_name(self:GetNWString("client_lang", YRP.lang_string("none")))
+	return YRP.get_language_name(self:GetNWString("client_lang", YRP.lang_string("LID_none")))
 end
 
 function Player:YRPGetLanguageShort()
-	return self:GetNWString("client_lang", YRP.lang_string("none"))
+	return self:GetNWString("client_lang", YRP.lang_string("LID_none"))
 end
 
 function Player:GetBackpack()
@@ -110,7 +110,7 @@ function Player:GetRolTab()
 				local yrp_characters = self:GetChaTab()
 				if worked(yrp_characters, "yrp_characters in GetRolTab", true) then
 					if worked(yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true) then
-						local yrp_roles = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. yrp_characters.roleID)
+						local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
 						if worked(yrp_roles, "yrp_roles GetRolTab", true) then
 							self.roltab = yrp_roles[1]
 
@@ -215,26 +215,7 @@ end
 
 function Player:GetPlayerModel()
 	if SERVER then
-		local yrp_characters = self:GetChaTab()
-		if worked(yrp_characters, "yrp_characters (GetPlayerModel)", true) then
-			local pmID = tonumber(yrp_characters.playermodelID)
-
-			local yrp_role = self:GetRolTab()
-			if yrp_role != nil then
-				local tmp = combineStringTables(yrp_role.playermodels, yrp_role.playermodelsnone)
-				if pmID > #tmp then
-					pmID = 1
-				end
-				local pm = tmp[pmID]
-
-				if pm == "" then
-					self.pm = "models/player/skeleton.mdl"
-				elseif pm != "" then
-					self.pm = pm
-				end
-				return self.pm
-			end
-		end
+		return self:GetNWString("string_playermodel", "models/player/skeleton.mdl")
 	end
 	return nil
 end

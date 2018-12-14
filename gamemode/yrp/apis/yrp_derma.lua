@@ -62,7 +62,7 @@ function DGroup(tab)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		ph = ctr(50)
 		local text = {}
-		text.text = YRP.lang_string(tab.name)
+		text.text = tab.name
 		text.x = pw / 2
 		text.y = ph / 2
 		text.font = "mat1header"
@@ -85,6 +85,15 @@ function DGroup(tab)
 		elseif tab.parent.AddItem != nil then
 			tab.parent:AddItem(dgroup.header)
 		end
+	end
+
+	function dgroup.content:AutoSize()
+		dgroup.content.height = 0
+		for i, child in pairs(dgroup.content:GetItems()) do
+			dgroup.content.height = dgroup.content.height + child:GetTall()
+		end
+		dgroup.header:SetTall(dgroup.content.height + ctr(50 + 20))
+		dgroup.content:SetTall(dgroup.content.height)
 	end
 	return dgroup.content
 end
@@ -266,7 +275,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 
 		if dmg != nil and dfloatline.dnumberwang != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string("damage")
+			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
@@ -412,7 +421,7 @@ function DStringBox(tab, str, name, netstr)
 
 		if dmg != nil and dstringline.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string("damage")
+			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "mat1header"

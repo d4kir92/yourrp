@@ -29,7 +29,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	-- NAME
 	local NAME = createD("DYRPPanelPlus", PARENT, ctr(500), ctr(100), ctr(20), ctr(20))
 	NAME:INITPanel("DTextEntry")
-	NAME:SetHeader(YRP.lang_string("name"))
+	NAME:SetHeader(YRP.lang_string("ID_name"))
 	NAME:SetText(string.upper(ug.string_name))
 	function NAME.plus:OnChange()
 		UGS[CURRENT_USERGROUP].string_name = string.upper(self:GetText())
@@ -47,10 +47,10 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	-- COLOR
 	local COLOR = createD("DYRPPanelPlus", PARENT, ctr(500), ctr(100), ctr(20), ctr(20 + 100 + 20))
 	COLOR:INITPanel("DButton")
-	COLOR:SetHeader(YRP.lang_string("color"))
+	COLOR:SetHeader(YRP.lang_string("ID_color"))
 	COLOR.plus:SetText("")
 	function COLOR.plus:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("change"), StringToColor(UGS[CURRENT_USERGROUP].string_color))
+		surfaceButton(self, pw, ph, YRP.lang_string("ID_change"), StringToColor(UGS[CURRENT_USERGROUP].string_color))
 	end
 	function COLOR.plus:DoClick()
 		local window = createD("DFrame", nil, ctr(20 + 500 + 20), ctr(50 + 20 + 500 + 20), 0, 0)
@@ -58,7 +58,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		window:MakePopup()
 		window:SetTitle("")
 		function window:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("color"))
+			surfaceWindow(self, pw, ph, YRP.lang_string("ID_color"))
 			if !pa(PARENT) then
 				self:Remove()
 			end
@@ -80,7 +80,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	-- ICON
 	local ICON = createD("DYRPPanelPlus", PARENT, ctr(500), ctr(100), ctr(20), ctr(20 + 100 + 20 + 100 + 20))
 	ICON:INITPanel("DTextEntry")
-	ICON:SetHeader(YRP.lang_string("icon"))
+	ICON:SetHeader(YRP.lang_string("ID_icon"))
 	ICON:SetText(ug.string_icon)
 	function ICON.plus:OnChange()
 		UGS[CURRENT_USERGROUP].string_icon = self:GetText()
@@ -100,7 +100,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	local SWEPS = createD("DYRPPanelPlus", PARENT, ctr(500), ctr(50 + 500 + 50), ctr(20), ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
 	SWEPS:INITPanel("DPanel")
-	SWEPS:SetHeader(YRP.lang_string("weapons"))
+	SWEPS:SetHeader(YRP.lang_string("ID_weapons"))
 	SWEPS:SetText(ug.string_icon)
 	function SWEPS.plus:Paint(pw, ph)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
@@ -149,7 +149,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	SWEPS.preview.prev:SetText("")
 	function SWEPS.preview.prev:Paint(pw, ph)
 		if SWEPS.preview.cur > 1 then
-			surfaceButton(self, pw, ph, YRP.lang_string("<"))
+			surfaceButton(self, pw, ph, YRP.lang_string("ID_<"))
 		end
 	end
 	function SWEPS.preview.prev:DoClick()
@@ -162,7 +162,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	SWEPS.preview.next:SetText("")
 	function SWEPS.preview.next:Paint(pw, ph)
 		if SWEPS.preview.cur < SWEPS.preview.max then
-			surfaceButton(self, pw, ph, YRP.lang_string(">"))
+			surfaceButton(self, pw, ph, YRP.lang_string("ID_>"))
 		end
 	end
 	function SWEPS.preview.next:DoClick()
@@ -174,7 +174,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	SWEPS.button = createD("DButton", SWEPS, ctr(500), ctr(50), ctr(0), ctr(50 + 500))
 	SWEPS.button:SetText("")
 	function SWEPS.button:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("change"))
+		surfaceButton(self, pw, ph, YRP.lang_string("ID_change"))
 	end
 	function SWEPS.button:DoClick()
 		OpenSelector(GetSWEPsList(), ug.string_sweps, "selector_usergroup_string_sweps")
@@ -212,7 +212,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	local ENTITIES = createD("DYRPPanelPlus", PARENT, ctr(500), ctr(50 + 500), ctr(20), ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 600 + 20))
 	ENTITIES:INITPanel("DPanelList")
-	ENTITIES:SetHeader(YRP.lang_string("entities") .. " [" .. YRP.lang_string("wip") .. "]")
+	ENTITIES:SetHeader(YRP.lang_string("ID_entities") .. " [" .. YRP.lang_string("ID_wip") .. "]")
 	ENTITIES:SetText(ug.string_icon)
 	function ENTITIES.plus:Paint(pw, ph)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
@@ -344,7 +344,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	local ACCESS = createD("DYRPPanelPlus", PARENT, ctr(800), ScrH() - ctr(100 + 10 + 10), ctr(20 + 500 + 20), ctr(20))
 	ACCESS:INITPanel("DPanelList")
-	ACCESS:SetHeader(YRP.lang_string("accesssettings"))
+	ACCESS:SetHeader(YRP.lang_string("ID_accesssettings"))
 	function ACCESS.plus:Paint(pw, ph)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
 	end
@@ -417,7 +417,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	local GAMEPLAY = createD("DYRPPanelPlus", PARENT, ctr(800), ScrH() - ctr(100 + 10 + 10), ctr(20 + 500 + 20 + 800 + 20), ctr(20))
 	GAMEPLAY:INITPanel("DPanelList")
-	GAMEPLAY:SetHeader(YRP.lang_string("gameplayrestrictions"))
+	GAMEPLAY:SetHeader(YRP.lang_string("ID_gameplayrestrictions"))
 	function GAMEPLAY.plus:Paint(pw, ph)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
 	end
@@ -597,7 +597,7 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 		local _ugs_title = createD("DPanel", PARENT, ctr(500), ctr(50), ctr(20), ctr(20 + 50 + 20))
 		function _ugs_title:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-			surfaceText(YRP.lang_string("usergroups"), "Settings_Header", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+			surfaceText(YRP.lang_string("ID_usergroups"), "Settings_Header", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 		end
 
 		--[[ UserGroupsList ]]--

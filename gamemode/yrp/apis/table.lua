@@ -1,20 +1,38 @@
 --Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function combineTables(tab1, tab2)
-	for i, item in pairs(tab2) do
-		table.insert(tab1, item)
+	if istable(tab1) and istable(tab2) then
+		for i, item in pairs(tab2) do
+			if item != nil and item != "nil" then
+				table.insert(tab1, item)
+			else
+				printGM("note", "combineTables: i: " .. tostring(i) .. " " .. tostring(item) .. " is nil")
+			end
+		end
+		for i, item in pairs(tab1) do
+			table.RemoveByValue(tab1, "")
+			table.RemoveByValue(tab1, " ")
+		end
+		return tab1
+	else
+		printGM("note", tostring(tab1) .. " and " .. tostring(tab2) .. " are not tables")
+		return {}
 	end
-	for i, item in pairs(tab1) do
-		table.RemoveByValue(tab1, "")
-		table.RemoveByValue(tab1, " ")
-	end
-	return tab1
 end
 
 function combineStringTables(str1, str2)
-	local _tab1 = string.Explode(",", str1)
-	local _tab2 = string.Explode(",", str2)
-	return combineTables(_tab1, _tab2)
+	if str1 != nil and str2 != nil then
+		local _tab1 = string.Explode(",", str1)
+		local _tab2 = string.Explode(",", str2)
+		return combineTables(_tab1, _tab2)
+	else
+		local _tab1 = string.Explode(",", tostring(str1))
+		local _tab2 = string.Explode(",", tostring(str2))
+		local tab = combineTables(_tab1, _tab2)
+		printGM("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2) )
+		pTab(tab)
+		return ""
+	end
 end
 
 local _addons = engine.GetAddons()

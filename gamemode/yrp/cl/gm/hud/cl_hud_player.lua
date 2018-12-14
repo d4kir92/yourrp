@@ -82,7 +82,7 @@ function drawMenuInfo()
 		surface.SetMaterial(YRP.GetDesignIcon("help")	)
 		surface.DrawTexturedRect(x, y, isize, isize)
 		x = x + isize + ibr
-		local text = "[" .. "F1" .. "] " .. YRP.lang_string("help")
+		local text = "[" .. "F1" .. "] " .. YRP.lang_string("LID_help")
 		sText(text, "mat1text", x, y + isize / 2, color, 0, 1)
 	end
 end
@@ -272,7 +272,7 @@ function HudPlayer(ply)
 			end
 		else
 			drawRBox(0, 0, 0, ScrW() * ctrF(ScrH()), ScrH() * ctrF(ScrH()), Color(255, 0, 0, 100))
-			draw.SimpleTextOutlined(YRP.lang_string("dead") .. "! " .. YRP.lang_string("respawning") .. "...", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_dead") .. "! " .. YRP.lang_string("LID_respawning") .. "...", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 	else
 		draw.SimpleTextOutlined("Loading HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))

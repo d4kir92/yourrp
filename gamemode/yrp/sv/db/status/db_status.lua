@@ -40,7 +40,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 			_nw_yourrp["YourRP Content"]["missingx"] = Color(255, 0, 0)
 		end
 
-		local _roles = SQL_SELECT("yrp_roles", "*", nil)
+		local _roles = SQL_SELECT("yrp_ply_roles", "*", nil)
 		local _groups = SQL_SELECT("yrp_ply_groups", "*", nil)
 		local _map = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
 		if wk(_roles) then

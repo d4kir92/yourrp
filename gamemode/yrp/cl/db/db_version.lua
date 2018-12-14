@@ -51,11 +51,11 @@ function showVersion()
 			v_color = Color(0, 255, 0, 255)
 			for k, v in pairs(cur2num) do
 				if tonumber(cur2num[k]) < tonumber(new2num[k]) then
-					verart = YRP.lang_string("versionnewpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("versionnewpos")
+					verart = YRP.lang_string("LID_versionnewpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("LID_versionnewpos")
 					v_color = Color(255, 0, 0, 255)
 					ChangeChannel("canary")
 				elseif tonumber(cur2num[k]) > tonumber(new2num[k]) then
-					verart = YRP.lang_string("versionoldpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("versionoldpos")
+					verart = YRP.lang_string("LID_versionoldpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("LID_versionoldpos")
 					v_color = Color(100, 100, 255, 255)
 				end
 			end
@@ -68,16 +68,16 @@ function showVersion()
 			local outcol2 = Color(0, 255, 0, 255)
 			for k, v in pairs(cur2num2) do
 				if tonumber(cur2num2[k]) < tonumber(new2num2[k]) then
-					verart2 = YRP.lang_string("versionnewpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("versionnewpos")
+					verart2 = YRP.lang_string("LID_versionnewpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("LID_versionnewpos")
 					outcol2 = Color(255, 0, 0, 255)
 					LocalPlayer():SetNWBool("version_outdated", true)
 				elseif tonumber(cur2num2[k]) > tonumber(new2num2[k]) then
-					verart2 = YRP.lang_string("versionoldpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("versionoldpos")
+					verart2 = YRP.lang_string("LID_versionoldpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("LID_versionoldpos")
 					outcol2 = Color(100, 100, 255, 255)
 					ChangeChannel("canary")
 					printGM("note", "YourRP is on a newer version (" .. tostring(GAMEMODE.VersionSort) .. ")")
 				elseif tonumber(cur2num2[k]) == tonumber(new2num2[k]) then
-					verart2 = YRP.lang_string("versionoldpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("versionoldpos")
+					verart2 = YRP.lang_string("LID_versionoldpre") .. " " .. GAMEMODE.BaseName .. " " .. YRP.lang_string("LID_versionoldpos")
 					outcol2 = Color(100, 255, 0, 255)
 
 					printGM("note", "YourRP is on the newest version (" .. tostring(GAMEMODE.VersionSort) .. ")")
@@ -87,18 +87,18 @@ function showVersion()
 			local _serverSort = ""
 			if ServerIsDedicated then
 				GAMEMODE.dedicated = "Dedicated"
-				_serverSort = YRP.lang_string("serverdedicated")
+				_serverSort = YRP.lang_string("LID_serverdedicated")
 			else
 				GAMEMODE.dedicated = "Local"
-				_serverSort = YRP.lang_string("serverlocal")
+				_serverSort = YRP.lang_string("LID_serverlocal")
 			end
 
 			if string.lower(GAMEMODE.VersionSort) == "canary" then
-				s_sort = YRP.lang_string("canarychannel")
+				s_sort = YRP.lang_string("LID_canarychannel")
 			elseif string.lower(GAMEMODE.VersionSort) == "beta" then
-				s_sort = YRP.lang_string("betachannel")
+				s_sort = YRP.lang_string("LID_betachannel")
 			elseif string.lower(GAMEMODE.VersionSort) == "stable" then
-				s_sort = YRP.lang_string("stable")
+				s_sort = YRP.lang_string("LID_stable")
 			end
 
 			if LocalPlayer():GetNWBool("version_outdated", false) and LocalPlayer():HasAccess() then
@@ -108,19 +108,19 @@ function showVersion()
 				function frame:Paint(pw, ph)
 					--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-					surfaceWindow(self, pw, ph, YRP.lang_string("about"))
+					surfaceWindow(self, pw, ph, YRP.lang_string("LID_about"))
 
 					draw.SimpleTextOutlined("Language:", "HudBars", ctr(400), ctr(50 + 30), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					draw.SimpleTextOutlined(tostring(verart) .. "! (" .. tostring(s_sort) .. ")", "HudBars", pw / 2, ctr(140), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string("currentversion") .. ":", "HudBars", pw / 2, ctr(215), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_currentversion") .. ":", "HudBars", pw / 2, ctr(215), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-					draw.SimpleTextOutlined(YRP.lang_string("client") .. ": ", "HudBars", pw / 2, ctr(265), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_client") .. ": ", "HudBars", pw / 2, ctr(265), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					draw.SimpleTextOutlined(GAMEMODE.Version, "HudBars", pw / 2, ctr(265), v_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-					draw.SimpleTextOutlined("(" .. tostring(_serverSort) .. ") " .. YRP.lang_string("server") .. ": ", "HudBars", pw / 2, ctr(315), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined("(" .. tostring(_serverSort) .. ") " .. YRP.lang_string("LID_server") .. ": ", "HudBars", pw / 2, ctr(315), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					draw.SimpleTextOutlined(tostring(serverVersion), "HudBars", pw / 2, ctr(315), outcol2, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-					draw.SimpleTextOutlined(YRP.lang_string("workshopversion") .. ": ", "HudBars", pw / 2, ctr(415), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_workshopversion") .. ": ", "HudBars", pw / 2, ctr(415), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					draw.SimpleTextOutlined(tostring(versionOnline) .. " (" .. tostring(s_sort) .. ")", "HudBars", pw / 2, ctr(415), Color(0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
@@ -132,7 +132,7 @@ function showVersion()
 					gui.OpenURL("http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152")
 				end
 				function showChanges:Paint(pw, ph)
-					surfaceButton(self, pw, ph, YRP.lang_string("showchanges"))
+					surfaceButton(self, pw, ph, YRP.lang_string("LID_showchanges"))
 				end
 
 				if ply:HasAccess() then
@@ -144,7 +144,7 @@ function showVersion()
 							net.SendToServer()
 						end
 						function restartServer:Paint(pw, ph)
-							surfaceButton(self, pw, ph, YRP.lang_string("updateserver"))
+							surfaceButton(self, pw, ph, YRP.lang_string("LID_updateserver"))
 						end
 						restartServer:SetPos(ctr(600 + 10), ctr(460))
 					else

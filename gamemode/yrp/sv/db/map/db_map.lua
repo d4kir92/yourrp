@@ -139,7 +139,7 @@ end)
 
 util.AddNetworkString("getMapListRoles")
 net.Receive("getMapListRoles", function(len, ply)
-	local _tmpRolesTable = SQL_SELECT("yrp_roles", "*", nil)
+	local _tmpRolesTable = SQL_SELECT("yrp_ply_roles", "*", nil)
 	net.Start("getMapListRoles")
 		net.WriteTable(_tmpRolesTable)
 	net.Send(ply)

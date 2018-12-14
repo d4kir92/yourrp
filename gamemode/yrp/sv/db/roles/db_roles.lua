@@ -6,34 +6,34 @@
 local DATABASE_NAME = "yrp_ply_roles"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hpreg", "INTEGER DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_hpup", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_ar", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_armax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_arreg", "INTEGER DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_arup", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_st", "INTEGER DEFAULT 50")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_stregup", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_stregdn", "INTEGER DEFAULT 0.5")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_stup", "INTEGER DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_stdn", "INTEGER DEFAULT 0.5")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_abart", "TEXT DEFAULT 'mana'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 50")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 1000")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_abreg", "INTEGER DEFAULT 5")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "INTEGER DEFAULT 5")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 150")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240")
@@ -51,7 +51,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscivil", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
 
@@ -65,7 +67,6 @@ end
 
 local HANDLER_GROUPSANDROLES = {}
 HANDLER_GROUPSANDROLES["roleslist"] = {}
-HANDLER_GROUPSANDROLES["roles"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 
 for str, val in pairs(yrp_ply_roles) do
@@ -141,6 +142,30 @@ for str, val in pairs(yrp_ply_roles) do
 					SendGroupList(tonumber(cur.int_parentrole))
 				end
 				SendGroupList(int)
+			end
+		end)
+	elseif string.find(str, "float_") then
+		local tab = {}
+		tab.netstr = "update_role_" .. str
+		util.AddNetworkString(tab.netstr)
+		net.Receive(tab.netstr, function(len, ply)
+			local uid = tonumber(net.ReadString())
+			local float = tonumber(net.ReadString())
+			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			tab.ply = ply
+			tab.id = str
+			tab.value = float
+			tab.db = DATABASE_NAME
+			tab.uniqueID = uid
+			UpdateFloat(tab)
+			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+			BroadcastFloat(tab)
+			if tab.netstr == "update_float_parentrole" then
+				if wk(cur) then
+					cur = cur[1]
+					SendGroupList(tonumber(cur.float_parentrole))
+				end
+				SendGroupList(float)
 			end
 		end)
 	elseif string.find(str, "bool_") then
@@ -231,7 +256,6 @@ function SortRoles(uid)
 end
 
 function SendRoleList(uid)
-	print("SendRoleList", uid)
 	SortRoles(uid)
 
 	local tbl_parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
@@ -264,6 +288,31 @@ function SendRoleList(uid)
 	end
 end
 
+-- Role menu
+util.AddNetworkString("get_grp_roles")
+net.Receive("get_grp_roles", function(len, ply)
+	local _uid = net.ReadString()
+	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = " .. _uid)
+	if _roles != nil then
+		net.Start("get_grp_roles")
+			net.WriteTable(_roles)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("get_rol_prerole")
+net.Receive("get_rol_prerole", function(len, ply)
+	local _uid = net.ReadString()
+	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = " .. _uid)
+	if _roles != nil then
+		_roles = _roles[1]
+		net.Start("get_rol_prerole")
+			net.WriteTable(_roles)
+		net.Send(ply)
+	end
+end)
+
+-- Role Settings
 util.AddNetworkString("settings_subscribe_rolelist")
 net.Receive("settings_subscribe_rolelist", function(len, ply)
 	local par = tonumber(net.ReadString())
@@ -413,446 +462,230 @@ net.Receive("settings_delete_role", function(len, ply)
 	end
 end)
 
--- OLD
-local _db_name = "yrp_roles"
-
-SQL_ADD_COLUMN(_db_name, "roleID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "description", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(_db_name, "playermodels", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "playermodelsnone", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "playermodelsize", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "salary", "INTEGER DEFAULT 50")
-SQL_ADD_COLUMN(_db_name, "roleID", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "color", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(_db_name, "sweps", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "ammunation", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "voteable", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "adminonly", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "whitelist", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "maxamount", "INTEGER DEFAULT -1")
-SQL_ADD_COLUMN(_db_name, "hp", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(_db_name, "hpmax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(_db_name, "hpreg", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "ar", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "armax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(_db_name, "arreg", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "st", "INTEGER DEFAULT 50")
-SQL_ADD_COLUMN(_db_name, "stmax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(_db_name, "stregup", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "stregdn", "INTEGER DEFAULT 0.5")
-
-SQL_ADD_COLUMN(_db_name, "abart", "TEXT DEFAULT 'mana'")
-SQL_ADD_COLUMN(_db_name, "ab", "INTEGER DEFAULT 50")
-SQL_ADD_COLUMN(_db_name, "abmax", "INTEGER DEFAULT 1000")
-SQL_ADD_COLUMN(_db_name, "abreg", "INTEGER DEFAULT 5")
-
-SQL_ADD_COLUMN(_db_name, "speedwalk", "INTEGER DEFAULT 150")
-SQL_ADD_COLUMN(_db_name, "speedrun", "INTEGER DEFAULT 240")
-SQL_ADD_COLUMN(_db_name, "powerjump", "INTEGER DEFAULT 200")
-SQL_ADD_COLUMN(_db_name, "prerole", "INTEGER DEFAULT -1")
-SQL_ADD_COLUMN(_db_name, "instructor", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "removeable", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "uses", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "salarytime", "INTEGER DEFAULT 120")
-SQL_ADD_COLUMN(_db_name, "voiceglobal", "INTEGER DEFAULT 0")
-
-SQL_ADD_COLUMN(_db_name, "groupID", "INTEGER DEFAULT 1")
-
-SQL_ADD_COLUMN(_db_name, "canbeagent", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(_db_name, "iscivil", "INTEGER DEFAULT 0")
-
-SQL_ADD_COLUMN(_db_name, "licenseIDs", "TEXT DEFAULT ' '")
-
-SQL_UPDATE(_db_name, "uses = 0", nil)
-
---db_drop_table(_db_name)
---db_is_empty(_db_name)
-
-local _default_role = SQL_SELECT(_db_name, "*", "uniqueID = 1")
-if !wk(_default_role) then
-	printGM("note", _db_name .. " has not the default role")
-	local _result = SQL_INSERT_INTO(_db_name, "uniqueID, roleID, color, playermodels, removeable", "1, 'Civilian', '0,0,0', '', 0")
-	printGM("note", _result)
-end
-
-util.AddNetworkString("getAllGroups")
-
-util.AddNetworkString("wantRole")
-
-util.AddNetworkString("openInteractMenu")
-util.AddNetworkString("promotePlayer")
-util.AddNetworkString("demotePlayer")
-
-util.AddNetworkString("yrp_ply_groups")
-util.AddNetworkString("yrp_roles")
-
-util.AddNetworkString("removeDBGroup")
-util.AddNetworkString("removeDBRole")
-
-util.AddNetworkString("addDBGroup")
-util.AddNetworkString("addDBRole")
-
-util.AddNetworkString("dupDBGroup")
-util.AddNetworkString("dupDBRole")
-
 util.AddNetworkString("getScoreboardGroups")
-
-util.AddNetworkString("setting_getroles")
-net.Receive("setting_getroles", function(len, ply)
-	if ply:CanAccess("bool_groupsandroles") then
-		net.Start("setting_getroles")
-		net.Send(ply)
-	end
-end)
-
-function sendDBGroups(ply)
-	local tmp = SQL_SELECT("yrp_ply_groups", "*", nil)
-	net.Start("yrp_ply_groups")
-		net.WriteTable(tmp)
-	net.Send(ply)
-end
-
-function sendDBRoles(ply, groupID)
-	local tmp = SQL_SELECT("yrp_roles", "*", "groupID = " .. groupID .. "")
-	if tmp == nil then
-		tmp = {}
-	end
-	net.Start("yrp_roles")
-		net.WriteTable(tmp)
-	net.Send(ply)
-end
-
-net.Receive("getScoreboardGroups", function(len, ply)
-	local _tmpGroups = SQL_SELECT("yrp_ply_groups", "*", nil)
-	if _tmpGroups != nil then
-		net.Start("getScoreboardGroups")
-			net.WriteTable(_tmpGroups)
+net.Receive( "getScoreboardGroups", function( len, ply )
+	local _tmpGroups = SQL_SELECT( "yrp_ply_groups", "*", nil )
+	if wk(_tmpGroups) then
+		net.Start( "getScoreboardGroups" )
+			net.WriteTable( _tmpGroups )
 		net.Broadcast()
-	end
-end)
-
-function duplicateRole(ply, uniqueID, newGroupID)
-	if newGroupID != nil then
-	end
-	local _dR = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. uniqueID)
-	_dR = _dR[1]
-	if newGroupID != nil then
-		_dR.groupID = newGroupID
-	end
-	if tonumber(_dR.removeable) == 1 then
-		local _dbColumns = "adminonly, ar, armax, arreg, salary, color, description, groupID, hp, hpmax, hpreg, instructor, maxamount, playermodels, playermodelsnone, playermodelsize, powerjump, prerole, removeable, roleID, speedrun, speedwalk, sweps, whitelist"
-		local _dbValues = _dR.adminonly .. ", " .. _dR.ar .. ", " .. _dR.armax .. ", " .. _dR.arreg .. ", " .. _dR.salary .. ", '" .. _dR.color .. "', '" .. _dR.description .. "', "
-		_dbValues = _dbValues .. _dR.groupID .. ", " .. _dR.hp .. ", " .. _dR.hpmax .. ", " .. _dR.hpreg .. ", " .. _dR.instructor .. ", " .. _dR.maxamount .. ", "
-		_dbValues = _dbValues .. "'" .. _dR.playermodels .. "', '" .. _dR.playermodelsnone .. "', " .. _dR.playermodelsize .. ", " .. _dR.powerjump .. ", " .. _dR.prerole .. ", " .. _dR.removeable .. ", '" .. _dR.roleID .. "', "
-		_dbValues = _dbValues .. _dR.speedrun .. ", " .. _dR.speedwalk .. ", '" .. SQL_STR_IN(_dR.sweps) .. "', " .. _dR.whitelist
-		SQL_INSERT_INTO("yrp_roles", _dbColumns, _dbValues)
 	else
-		printGM("note", "not duplicateable!")
+		printGM("note", "getScoreboardGroups failed!")
+		pTab(_tmpGroups)
+	end
+end)
+
+function GetRole(uid)
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	if wk(role) then
+		return role[1]
+	end
+	return nil
+end
+
+function SendCustomFlags(uid)
+	local cf = SQL_SELECT("yrp_flags", "*", "type = 'role' AND int_uid = '" .. uid .. "'")
+	if !wk(cf) then
+		cf = {}
+	end
+	local role = GetRole(uid)
+	if wk(role) then
+		local nettab = {}
+		local flags = string.Explode(",", role.string_customflags)
+		for i, val in pairs(flags) do
+			local flag = SQL_SELECT("yrp_flags", "*", "uniqueID = '" .. val .. "'")
+			if wk(flag) then
+				flag = flag[1]
+				local entry = {}
+				entry.uniqueID = flag.uniqueID
+				entry.string_name = flag.string_name
+				table.insert(nettab, entry)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+			net.Start("get_role_customflags")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
 	end
 end
 
-net.Receive("dupDBRole", function(len, ply)
-	local _tmpGroupID = net.ReadString()
-	local _tmpUniqueID = net.ReadString()
-	duplicateRole(ply, _tmpUniqueID, nil)
-	sendDBRoles(ply, _tmpGroupID)
+util.AddNetworkString("get_role_customflags")
+net.Receive("get_role_customflags", function(len, ply)
+	local uid = net.ReadInt(32)
+	SendCustomFlags(uid)
 end)
 
-net.Receive("addDBRole", function(len, ply)
-	printGM("db", "addDBRole")
-	local _tmpUniqueID = net.ReadString()
-	local result = SQL_INSERT_INTO("yrp_roles", "roleID, groupID", "'" .. YRP.lang_string("newrole") .. "', " .. _tmpUniqueID)
-	printGM("db", result)
-
-	sendDBRoles(ply, _tmpUniqueID)
-end)
-
-function changeToDefault(table)
-	for k, v in pairs(table) do
-		local _result = SQL_UPDATE("yrp_characters", "roleID = 1, groupID = 1" ,"uniqueID = " .. v.uniqueID)
+util.AddNetworkString("get_all_role_customflags")
+net.Receive("get_all_role_customflags", function(len, ply)
+	local allflags = SQL_SELECT("yrp_flags", "*", "string_type = 'role'")
+	if !wk(allflags) then
+		allflags = {}
 	end
-end
+	net.Start("get_all_role_customflags")
+		net.WriteTable(allflags)
+	net.Send(ply)
+end)
 
-net.Receive("removeDBRole", function(len, ply)
-	local _dbSelect = SQL_SELECT("yrp_roles", "*", nil)
-	local tmp = net.ReadString()
-	local _tmpUniqueID = net.ReadString()
-	for k, v in pairs(_dbSelect) do
-		if tonumber(v.uniqueID) == tonumber(tmp) then
-			if tonumber(v.removeable) == 1 then
-				local _result = SQL_DELETE_FROM("yrp_roles", "uniqueID = " .. tmp)
-				local _changeToDefault = SQL_SELECT("yrp_characters", "*", "roleID = " .. v.uniqueID)
-				if _changeToDefault != nil then
-					changeToDefault(_changeToDefault)
+util.AddNetworkString("add_role_flag")
+net.Receive("add_role_flag", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local fuid = net.ReadInt(32)
+	role = GetRole(ruid)
+
+	local customflags = string.Explode(",", role.string_customflags)
+	if !table.HasValue(customflags, tostring(fuid)) then
+		local oldflags = {}
+		for i, v in pairs(customflags) do
+			if v != "" then
+				table.insert(oldflags, v)
+			end
+		end
+
+		local newflags = oldflags
+		table.insert(newflags, fuid)
+		newflags = string.Implode(",", newflags)
+
+		SQL_UPDATE(DATABASE_NAME, "string_customflags = '" .. newflags .. "'", "uniqueID = '" .. ruid .. "'")
+		SendCustomFlags(ruid)
+	end
+end)
+
+util.AddNetworkString("rem_role_flag")
+net.Receive("rem_role_flag", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local fuid = net.ReadInt(32)
+	role = GetRole(ruid)
+
+	local customflags = string.Explode(",", role.string_customflags)
+	local oldflags = {}
+	for i, v in pairs(customflags) do
+		if v != "" then
+			table.insert(oldflags, v)
+		end
+	end
+
+	local newflags = oldflags
+	table.RemoveByValue(newflags, tostring(fuid))
+	newflags = string.Implode(",", newflags)
+
+	print(newflags)
+
+	SQL_UPDATE(DATABASE_NAME, "string_customflags = '" .. newflags .. "'", "uniqueID = '" .. ruid .. "'")
+	SendCustomFlags(ruid)
+end)
+
+function SendPlayermodels(uid)
+	local pm = SQL_SELECT("yrp_playermodels", "*", nil)
+	if !wk(pm) then
+		pm = {}
+	end
+	local role = GetRole(uid)
+	if wk(role) then
+		local nettab = {}
+		local flags = string.Explode(",", role.string_playermodels)
+		for i, val in pairs(flags) do
+			local pm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
+			if wk(pm) then
+				pm = pm[1]
+				local entry = {}
+				entry.uniqueID = pm.uniqueID
+				local name = pm.string_name
+				if name == "" or  name == " " then
+					name = pm.string_model
 				end
+				entry.string_name = name
+				table.insert(nettab, entry)
 			end
 		end
-	end
 
-	sendDBRoles(ply, _tmpUniqueID)
-end)
-
-function DeleteRolesFromGroup(uid)
-	SQL_DELETE_FROM("yrp_roles", "groupID = '" .. uid .. "' AND removeable = '1'")
-end
-
-net.Receive("removeDBGroup", function(len, ply)
-	local _dbSelect = SQL_SELECT("yrp_ply_groups", "*", nil)
-	local tmp = net.ReadString()
-	for k, v in pairs(_dbSelect) do
-		if tonumber(v.uniqueID) == tonumber(tmp) then
-			if tonumber(v.removeable) == 1 then
-				SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = " .. tmp)
-				DeleteRolesFromGroup(tmp)
-			end
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+			net.Start("get_role_playermodels")
+				net.WriteTable(nettab)
+			net.Send(pl)
 		end
-	end
-
-	sendDBGroups(ply)
-end)
-
-net.Receive("yrp_roles", function(len, ply)
-	local _tmpGroupID = net.ReadString()
-	sendDBRoles(ply, _tmpGroupID)
-end)
-
-net.Receive("yrp_ply_groups", function(len, ply)
-	sendDBGroups(ply)
-end)
-
-net.Receive("demotePlayer", function(len, ply)
-	local tmpTargetSteamID = net.ReadString()
-
-	local tmpTarget = nil
-	for k, v in pairs(player.GetAll()) do
-		if v:SteamID() == tmpTargetSteamID then
-			tmpTarget = v
-		end
-	end
-
-	local tmpTableInstructor = ply:GetChaTab()
-	local tmpTableInstructorRole = ply:GetRolTab()
-
-	local tmpTargetChaTab = tmpTarget:GetChaTab()
-
-	if tonumber(tmpTableInstructorRole.instructor) == 1 then
-
-
-		local tmpTableTargetRole = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
-		local tmpTableTargetDemoteRole = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].prerole)
-		local tmpTableTargetGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].groupID)
-
-		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
-		tmpTableTargetGroup = tmpTableTargetGroup[1]
-
-		removeFromWhitelist(tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID)
-		SetRole(tmpTarget, tmpTableTargetDemoteRole.uniqueID)
-
-		printGM("instructor", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.roleID)
-	elseif tonumber(tmpTableInstructorRole.instructor) == 0 then
-		printGM("error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!")
-	else
-		printGM("error", "ELSE demote: " .. tostring(tmpTableInstructorRole.instructor))
-	end
-end)
-
-function removeFromWhitelist(SteamID, roleID)
-	local _result = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID)
-	if _result != nil then
-		SQL_DELETE_FROM("yrp_role_whitelist", "uniqueID = " .. _result[1].uniqueID)
 	end
 end
 
-function addToWhitelist(SteamID, roleID, groupID, nick)
-	if SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID) == nil then
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID)
-	else
-		printGM("note", "is already in whitelist")
+util.AddNetworkString("get_role_playermodels")
+net.Receive("get_role_playermodels", function(len, ply)
+	local uid = net.ReadInt(32)
+	SendPlayermodels(uid)
+end)
+
+util.AddNetworkString("get_all_playermodels")
+net.Receive("get_all_playermodels", function(len, ply)
+	local allpms = SQL_SELECT("yrp_playermodels", "*", nil)
+	if !wk(allpms) then
+		allpms = {}
+	end
+	net.Start("get_all_playermodels")
+		net.WriteTable(allpms)
+	net.Send(ply)
+end)
+
+function AddPlayermodelToRole(ruid, muid)
+	role = GetRole(ruid)
+	local pms = string.Explode(",", role.string_playermodels)
+	if !table.HasValue(pms, tostring(muid)) then
+		local oldpms = {}
+		for i, v in pairs(pms) do
+			if v != "" and v != " " then
+				table.insert(oldpms, v)
+			end
+		end
+
+		local newpms = oldpms
+		table.insert(newpms, tostring(muid))
+		newpms = string.Implode(",", newpms)
+
+		SQL_UPDATE(DATABASE_NAME, "string_playermodels = '" .. newpms .. "'", "uniqueID = '" .. ruid .. "'")
+		SendPlayermodels(ruid)
 	end
 end
 
-net.Receive("promotePlayer", function(len, ply)
-	local tmpTargetSteamID = net.ReadString()
+util.AddNetworkString("add_role_playermodel")
+net.Receive("add_role_playermodel", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local muid = net.ReadInt(32)
 
-	local tmpTarget = nil
-	for k, v in pairs(player.GetAll()) do
-		if v:SteamID() == tmpTargetSteamID then
-			tmpTarget = v
+	AddPlayermodelToRole(ruid, muid)
+end)
+
+util.AddNetworkString("add_playermodel")
+net.Receive("add_playermodel", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local WorldModel = net.ReadString()
+	SQL_INSERT_INTO("yrp_playermodels", "string_model", "'" .. WorldModel .. "'")
+
+	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)
+	lastentry = lastentry[table.Count(lastentry)]
+	AddPlayermodelToRole(ruid, lastentry.uniqueID)
+end)
+
+function RemPlayermodelToRole(ruid, muid)
+	role = GetRole(ruid)
+	local pms = string.Explode(",", role.string_playermodels)
+	local oldpms = {}
+	for i, v in pairs(pms) do
+		if v != "" and v != " " then
+			table.insert(oldpms, v)
 		end
 	end
 
-	local tmpTableInstructor = ply:GetChaTab()
-	local tmpTableInstructorRole = ply:GetRolTab() --SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID)
+	local newpms = oldpms
+	table.RemoveByValue(newpms, tostring(muid))
+	newpms = string.Implode(",", newpms)
 
-	local tmpTargetChaTab = tmpTarget:GetChaTab()
+	SQL_UPDATE(DATABASE_NAME, "string_playermodels = '" .. newpms .. "'", "uniqueID = '" .. ruid .. "'")
+	SendPlayermodels(ruid)
+end
 
-	if tonumber(tmpTableInstructorRole.instructor) == 1 then
-		local tmpTableTargetRole = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
-		local tmpTableTargetPromoteRole = SQL_SELECT("yrp_roles", "*", "prerole = " .. tmpTableTargetRole[1].uniqueID .. " AND groupID = " .. tmpTableInstructorRole.groupID)
+util.AddNetworkString("rem_role_playermodel")
+net.Receive("rem_role_playermodel", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local muid = net.ReadInt(32)
 
-		local tmpTableTargetGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].groupID)
-
-		tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
-		tmpTableTargetGroup = tmpTableTargetGroup[1]
-
-		for k, v in pairs(player.GetAll()) do
-			if tostring(v:SteamID()) == tostring(tmpTargetSteamID) then
-				addToWhitelist(tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick())
-				break
-			end
-		end
-
-		SetRole(tmpTarget, tmpTableTargetPromoteRole.uniqueID, true)
-
-		printGM("instructor", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.roleID)
-	elseif tonumber(tmpTableInstructorRole.instructor) == 0 then
-		printGM("error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!")
-	else
-		printGM("error", "ELSE promote: " .. tostring(tmpTableInstructorRole.instructor))
-	end
-end)
-
-net.Receive("openInteractMenu", function(len, ply)
-	local tmpTargetSteamID = net.ReadString()
-
-	local tmpTarget = nil
-	for k, v in pairs(player.GetAll()) do
-		if v:SteamID() == tmpTargetSteamID then
-			tmpTarget = v
-		end
-	end
-	if ea(tmpTarget) then
-		if tmpTarget:IsPlayer() then
-			local tmpTargetChaTab = tmpTarget:GetChaTab()
-			if tmpTargetChaTab != nil then
-				local tmpTargetRole = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
-
-				local tmpT = ply:GetChaTab()
-				local tmpTable = ply:GetRolTab()
-				if wk(tmpT) and wk(tmpTable) then
-					local tmpBool = false
-
-					local tmpPromote = false
-					local tmpPromoteName = ""
-
-					local tmpDemote = false
-					local tmpDemoteName = ""
-
-					if tonumber(tmpTable.instructor) == 1 then
-						tmpBool = true
-
-						local tmpSearch = true	--tmpTargetSteamID
-						local tmpTableSearch = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTable.prerole)
-						if tmpTableSearch != nil then
-							local tmpSearchUniqueID = tmpTableSearch[1].prerole
-							local tmpCounter = 0
-							while (tmpSearch) do
-								tmpSearchUniqueID = tonumber(tmpTableSearch[1].prerole)
-
-								if tonumber(tmpTargetRole[1].prerole) != -1 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
-									tmpDemote = true
-									local tmp = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpTargetRole[1].prerole)
-									tmpDemoteName = tmp[1].roleID
-								end
-
-								if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
-									tmpPromote = true
-									tmpPromoteName = tmpTableSearch[1].roleID
-								end
-								if tmpSearchUniqueID == -1 then
-									tmpSearch = false
-								end
-								if tmpCounter >= 100 then
-									printGM("note", "You have a loop in your preroles!")
-									tmpSearch = false
-								end
-								tmpCounter = tmpCounter + 1
-								tmpTableSearch = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
-							end
-						end
-					end
-
-					local tmpidcard = SQL_SELECT("yrp_general", "bool_identity_card", nil)
-					if wk(tmpidcard) then
-						tmpidcard = tmpidcard[1]
-					end
-					tmpidcard = tmpidcard.bool_identity_card or false
-					tmpidcard = tobool(tmpidcard)
-
-					local licenses = {}
-					if wk(tmpTargetRole) then
-						local lids = tmpTarget:GetNWString("licenseIDs", "")
-						if lids != "" then
-							lids = string.Explode(",", lids)
-							for i, lic in pairs(lids) do
-								local li = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. lic .. "'")
-								if wk(li) then
-									li = li[1]
-									table.insert(licenses, li.name)
-								end
-							end
-						end
-						licenses = table.concat(licenses, ", ")
-					end
-
-					net.Start("openInteractMenu")
-						net.WriteBool(tmpidcard)
-						net.WriteBool(tmpBool)
-
-						net.WriteBool(tmpPromote)
-						net.WriteString(tmpPromoteName)
-
-						net.WriteBool(tmpDemote)
-						net.WriteString(tmpDemoteName)
-
-						net.WriteString(licenses)
-					net.Send(ply)
-				end
-			end
-		end
-	end
-end)
-
-net.Receive("getAllGroups", function(len, ply)
-	local tmpUpperGroup = net.ReadInt(16)
-
-	local tmpTable = SQL_SELECT("yrp_ply_groups", "*", nil)
-	local tmpTable2 = SQL_SELECT("yrp_roles", "*", nil)
-	local tmpTable3 = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'")
-	if tmpTable3 == nil then
-		tmpTable3 = {}
-	end
-	if tmpTable != nil then
-		net.Start("getAllGroups")
-			net.WriteTable(tmpTable)
-			net.WriteTable(tmpTable2)
-			net.WriteTable(tmpTable3)
-		net.Send(ply)
-	end
-end)
-
---[[ Role menu ]]--
-util.AddNetworkString("get_grp_roles")
-
-net.Receive("get_grp_roles", function(len, ply)
-	local _uid = net.ReadString()
-	local _roles = SQL_SELECT(_db_name, "*", "groupID = " .. _uid)
-	if _roles != nil then
-		net.Start("get_grp_roles")
-			net.WriteTable(_roles)
-		net.Send(ply)
-	end
-end)
-
-util.AddNetworkString("get_rol_prerole")
-
-net.Receive("get_rol_prerole", function(len, ply)
-	local _uid = net.ReadString()
-	local _roles = SQL_SELECT(_db_name, "*", "prerole = " .. _uid)
-	if _roles != nil then
-		_roles = _roles[1]
-		net.Start("get_rol_prerole")
-			net.WriteTable(_roles)
-		net.Send(ply)
-	end
+	RemPlayermodelToRole(ruid, muid)
 end)

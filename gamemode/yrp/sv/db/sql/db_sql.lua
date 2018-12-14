@@ -77,6 +77,17 @@ function BroadcastInt(tab)
 	end
 end
 
+function BroadcastFloat(tab)
+	for i, pl in pairs(tab.handler) do
+		if pl != tab.ply or tab.force then
+			net.Start(tab.netstr)
+				net.WriteString(tab.uniqueID)
+				net.WriteString(tab.value)
+			net.Send(pl)
+		end
+	end
+end
+
 function UpdateValue(tab)
 	tab.uniqueID = tab.uniqueID or 1
 	sql.Query("UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
@@ -91,8 +102,13 @@ function UpdateInt(tab)
 	printGM("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value)
 	UpdateValue(tab)
 end
--- NEW
 
+function UpdateFloat(tab)
+	printGM("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
+	UpdateValue(tab)
+end
+
+-- NEW
 function DBUpdateValue(db_name, str, l_db, value)
 	if l_db != nil then
 		l_db[str] = value

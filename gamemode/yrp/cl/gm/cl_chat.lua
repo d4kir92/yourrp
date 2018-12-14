@@ -11,17 +11,17 @@ _showChat = true
 function update_chat_choices()
 	if yrpChat.comboBox != nil then
 		yrpChat.comboBox:Clear()
-		yrpChat.comboBox:AddChoice(YRP.lang_string("ooc") .. " /OOC", "ooc", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("looc") .. " /LOOC", "looc", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("say") .. " /SAY", "say", true)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("advert") .. " /ADVERT", "advert", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("yell") .. " /YELL", "yell", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("me") .. " /ME", "me", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("admin") .. " /ADMIN", "admin", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("group") .. " /GROUP", "group", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("role") .. " /ROLE", "role", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("service") .. " /SERVICE", "service", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("faction") .. " /FACTION", "faction", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_ooc") .. " /OOC", "ooc", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_looc") .. " /LOOC", "looc", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_say") .. " /SAY", "say", true)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_advert") .. " /ADVERT", "advert", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_yell") .. " /YELL", "yell", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_me") .. " /ME", "me", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_admin") .. " /ADMIN", "admin", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_group") .. " /GROUP", "group", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_role") .. " /ROLE", "role", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_service") .. " /SERVICE", "service", false)
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_faction") .. " /FACTION", "faction", false)
 	end
 end
 
@@ -60,21 +60,21 @@ end
 
 function niceCommand(com)
 	if com == "say" then
-		return YRP.lang_string("say")
+		return YRP.lang_string("LID_say")
 	elseif com == "yell" then
-		return YRP.lang_string("yell")
+		return YRP.lang_string("LID_yell")
 	elseif com == "advert" then
-		return LocalPlayer():GetNWString("text_chat_advert", YRP.lang_string("advert"))
+		return LocalPlayer():GetNWString("text_chat_advert", YRP.lang_string("LID_advert"))
 	elseif com == "admin" then
-		return YRP.lang_string("admin")
+		return YRP.lang_string("LID_admin")
 	elseif com == "faction" then
-		return YRP.lang_string("faction")
+		return YRP.lang_string("LID_faction")
 	elseif com == "group" then
-		return YRP.lang_string("group")
+		return YRP.lang_string("LID_group")
 	elseif com == "role" then
-		return YRP.lang_string("role")
+		return YRP.lang_string("LID_role")
 	elseif com == "service" then
-		return YRP.lang_string("service")
+		return YRP.lang_string("LID_service")
 	end
 	return com
 end
@@ -132,39 +132,39 @@ function InitYRPChat()
 					end
 
 					local _com = yrpChat.writeField:GetText()
-					if isFullyCommand(_com, "sooc", YRP.lang_string("ooc")) then
+					if isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("ooc"), 1)
-					elseif isFullyCommand(_com, "slooc", YRP.lang_string("looc")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), 1)
+					elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("looc"), 2)
-					elseif isFullyCommand(_com, "ssay", YRP.lang_string("say")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), 2)
+					elseif isFullyCommand(_com, "ssay", YRP.lang_string("LID_say")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("say"), 3)
-					elseif isFullyCommand(_com, "sme", YRP.lang_string("me")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), 3)
+					elseif isFullyCommand(_com, "sme", YRP.lang_string("LID_me")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("me"), 6)
-					elseif isFullyCommand(_com, "syell", YRP.lang_string("yell")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), 6)
+					elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("yell"), 5)
-					elseif isFullyCommand(_com, "sadvert", YRP.lang_string("advert")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), 5)
+					elseif isFullyCommand(_com, "sadvert", YRP.lang_string("LID_advert")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("advert"), 4)
-					elseif isFullyCommand(_com, "sadmin", YRP.lang_string("admin")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), 4)
+					elseif isFullyCommand(_com, "sadmin", YRP.lang_string("LID_admin")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("admin"), 7)
-					elseif isFullyCommand(_com, "sgroup", YRP.lang_string("group")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), 7)
+					elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("group"), 8)
-					elseif isFullyCommand(_com, "srole", YRP.lang_string("role")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), 8)
+					elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("role"), 9)
-					elseif isFullyCommand(_com, "sservice", YRP.lang_string("service")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), 9)
+					elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("service"), 10)
-					elseif isFullyCommand(_com, "sfaction", YRP.lang_string("faction")) then
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), 10)
+					elseif isFullyCommand(_com, "sfaction", YRP.lang_string("LID_faction")) then
 						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("faction"), 11)
+						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), 11)
 					end
 				end
 			end
@@ -332,6 +332,7 @@ end)
 net.Receive("yrp_player_say", function(len)
 	local _tmp = net.ReadTable()
 	local _write = false
+	pTab(_tmp)
 	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
 		_write = true
 
@@ -361,7 +362,7 @@ net.Receive("yrp_player_say", function(len)
 		_tmp._lokal = ""
 		_tmp.lokal_color = Color(255, 100, 100)
 		if !_tmp.lokal then
-			_tmp._lokal = YRP.lang_string("globalchat")
+			_tmp._lokal = YRP.lang_string("LID_globalchat")
 			_tmp.lokal_color = Color(255, 165, 0)
 
 			table.insert(_unpack, _tmp.lokal_color)
@@ -383,6 +384,14 @@ net.Receive("yrp_player_say", function(len)
 			end
 		end
 
+		if !_tmp.isyrpcommand then
+			table.insert(_unpack, Color(255, 0, 0))
+			table.insert(_unpack, "[")
+			table.insert(_unpack, YRP.lang_string("LID_command"))
+			table.insert(_unpack, "]")
+			table.insert(_unpack, " ")
+		end
+
 		if _tmp.command != "me" then
 			table.insert(_unpack, _tmp.command_color)
 			table.insert(_unpack, "[")
@@ -390,7 +399,6 @@ net.Receive("yrp_player_say", function(len)
 			table.insert(_unpack, "]")
 			table.insert(_unpack, " ")
 		end
-
 
 		table.insert(_unpack, _tmp.command_color)
 		table.insert(_unpack, _tmp.name)

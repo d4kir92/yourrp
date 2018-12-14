@@ -30,7 +30,7 @@ net.Receive("get_feedback", function()
 
 		local _fbh = createD("DPanel", settingsWindow.window.site, ScrW() - ctr(20), ctr(50), ctr(10), ctr(10))
 		function _fbh:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string("settings_fb_feedbacks"))
+			surfacePanel(self, pw, ph, YRP.lang_string("LID_settings_fb_feedbacks"))
 		end
 
 		local _fbl = createD("DPanelList", settingsWindow.window.site, ScrW() - ctr(20), ScrH() - ctr(100 + 10 + 50 + 10), ctr(10), ctr(10 + 50))

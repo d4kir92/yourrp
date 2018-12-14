@@ -28,6 +28,7 @@ local _pr = {}
 local _adminonly = Material("icon16/shield.png")
 
 function createRoleBox(rol, parent)
+	printGM("note", "createRoleBox")
 	if rol != nil then
 		local _rol = createD("DPanel", parent, ctrb(400), ctrb(400), 0, 0)
 		function _rol:Paint(pw, ph)
@@ -38,16 +39,16 @@ function createRoleBox(rol, parent)
 
 		--[[ Role Playermodel ]]--
 		_rol.pm = createD("DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
-		_rol.pm:SetModel(string.Explode(",", _rol.tbl.playermodels)[1] or "")
+		_rol.pm:SetModel(string.Explode(",", _rol.tbl.string_playermodels)[1] or "")
 
 		--[[ Role Name ]]--
 		_rol.rn = createD("DPanel", _rol, _rol:GetWide(), ctrb(60), 0, 0)
 		function _rol.rn:Paint(pw, ph)
-			surfaceText(self:GetParent().tbl.roleID, "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+			surfaceText(self:GetParent().tbl.string_name, "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
 		end
 
 		--[[ Role MaxAmount ]]--
-		if tonumber(rol.maxamount) > 0 then
+		if tonumber(rol.int_maxamount) > 0 then
 			_rol.ma = createD("DPanel", _rol, _rol:GetWide(), ctrb(60), 0, _rol:GetTall()-ctrb(60 + 60))
 			function _rol.ma:Paint(pw, ph)
 				local _br = 4
@@ -58,8 +59,8 @@ function createRoleBox(rol, parent)
 				draw.RoundedBox(0, ctrb(_br), 0, pw, ph, Color(255, 255, 255, 100))
 
 				--Maxamount
-				draw.RoundedBox(0, ctrb(_br), 0, (rol.uses/rol.maxamount) * (pw), ph, Color(255, 0, 0, 255))
-				surfaceText(self:GetParent().tbl.uses .. "/" .. self:GetParent().tbl.maxamount, "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+				draw.RoundedBox(0, ctrb(_br), 0, (rol.int_uses/rol.int_maxamount) * (pw), ph, Color(255, 0, 0, 255))
+				surfaceText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
 
 				--BR
 				drawRBBR(0, ctrb(_br), 0, pw, ph, Color(0, 0, 0, 255), ctrb(4))
@@ -67,7 +68,7 @@ function createRoleBox(rol, parent)
 		end
 
 		--[[ Role Adminonly ]]--
-		if tobool(rol.adminonly) then
+		if tobool(rol.bool_adminonly) then
 			_rol.aoicon = 64
 			_rol.ao = createD("DPanel", _rol, ctrb(_rol.aoicon), ctrb(_rol.aoicon), _rol:GetWide()/2-ctrb(_rol.aoicon/2), _rol:GetTall()/2-ctrb(_rol.aoicon/2))
 			function _rol.ao:Paint(pw, ph)
@@ -80,30 +81,30 @@ function createRoleBox(rol, parent)
 		--[[ Role Button ]]--
 		_rol.gr = createD("DButton", _rol, _rol:GetWide(), ctrb(60), 0, _rol:GetTall()-ctrb(60))
 		function _rol.gr:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("moreinfo"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinfo"))
 		end
 		_rol.gr:SetText("")
 		function _rol.gr:DoClick()
-			local _pm = combineStringTables(rol.playermodels, rol.playermodelsnone)
+			local _pm = combineStringTables(rol.string_playermodels, rol.string_playermodelsnone)
 
 			_rm.infopm:SetModel(_pm[1] or "")
 
-			_rm.info.rolename = rol.roleID
+			_rm.info.rolename = rol.string_name
 
 			_rm.infodesc:SetText("")
 			_rm.infodesc:SetFontInternal("roleInfoText")
 			_rm.infodesc:InsertColorChange(255, 255, 255, 255)
-			_rm.infodesc:AppendText(rol.description)
+			_rm.infodesc:AppendText(rol.string_description)
 
 			_rm.infosweps:SetText("")
 			_rm.infosweps:SetFontInternal("roleInfoText")
 			_rm.infosweps:InsertColorChange(255, 255, 255, 255)
-			_rm.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.sweps)))
+			_rm.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.string_sweps)))
 
-			_rm.info.rolesala = rol.salary
-			_rm.info.roleswep = rol.sweps
+			_rm.info.rolesala = rol.int_salary
+			_rm.info.roleswep = rol.string_sweps
 
-			_rm.infobutton.rolename = rol.roleID
+			_rm.infobutton.rolename = rol.string_name
 			_rm.infobutton.uniqueID = rol.uniqueID
 		end
 
@@ -153,17 +154,15 @@ end
 
 function addRoleRow(rol, parent)
 	if pa(parent) then
-		if pa(parent.content) then
-			local _rr = createD("DHorizontalScroller", parent.content, parent:GetWide() - 2*ctrb(parent:GetSpacing()), ctrb(400), 0, 0)
-			_rr:SetOverlap(ctrb(-30))
-			function _rr:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
-			end
-
-			addRole(rol, _rr)
-
-			parent:Add(_rr)
+		local _rr = createD("DHorizontalScroller", parent.content, ctrb(400), ctrb(400), 0, 0) --parent:GetWide() - 2*ctrb(parent:GetSpacing()), ctrb(400), 0, 0)
+		_rr:SetOverlap(ctrb(-30))
+		function _rr:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
 		end
+
+		addRole(rol, _rr)
+
+		parent:Add(_rr)
 	end
 end
 
@@ -171,9 +170,9 @@ function getRoles(uid, parent)
 	net.Receive("get_grp_roles", function(len)
 		local _roles = net.ReadTable()
 		for i, rol in pairs(_roles) do
-			if tostring(rol.prerole) == "-1" then
+			if tostring(rol.int_prerole) == "0" then
 				addRoleRow(rol, parent)
-			elseif tostring(rol.prerole) == "1" then
+			elseif tostring(rol.int_prerole) == "1" then
 				addRoleRow(rol, parent)
 			end
 		end
@@ -208,7 +207,7 @@ function addGroup(grp, parent)
 			end
 			local name = self.tbl.string_name
 			if tonumber(self.tbl.int_parentgroup) == 0 then
-				name = YRP.lang_string("faction") .. ": " .. name
+				name = YRP.lang_string("LID_faction") .. ": " .. name
 			end
 			surfaceText(name, "roleInfoHeader", _x, ph / 2, Color(255, 255, 255), 0, 1)
 
@@ -280,38 +279,38 @@ function openRoleMenu()
 		_rm:SetDraggable(false)
 		_rm:SetTitle("")
 		function _rm:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("rolemenu") .. " [PROTOTYPE]")
+			surfaceWindow(self, pw, ph, YRP.lang_string("LID_rolemenu") .. " [PROTOTYPE]")
 		end
 
 		_rm.info = createD("DPanel", _rm, ctrb(800), ScrH() - ctrb(60), BScrW() - ctrb(10) - ctrb(800), ctrb(50))
-		_rm.info.rolename = YRP.lang_string("none")
-		_rm.info.rolesala = YRP.lang_string("none")
+		_rm.info.rolename = YRP.lang_string("LID_none")
+		_rm.info.rolesala = YRP.lang_string("LID_none")
 		function _rm.info:Paint(pw, ph)
-			if _rm.info.rolename == YRP.lang_string("none") then return end
+			if _rm.info.rolename == YRP.lang_string("LID_none") then return end
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 180))
 
 			--[[ Role Appearance ]]--
 			draw.RoundedBox(0, 0, 0, pw, ctrb(50), Color(0, 255, 0, 255))
-			surfaceText(YRP.lang_string("appearance"), "roleInfoHeader", ctrb(25), ctrb(25), Color(255, 255, 255), 0, 1)
+			surfaceText(YRP.lang_string("LID_appearance"), "roleInfoHeader", ctrb(25), ctrb(25), Color(255, 255, 255), 0, 1)
 			--draw.RoundedBox(0, 0, ctrb(50), pw, pw, Color(0, 0, 0, 200))
 
 			--[[ Role Name ]]--
 			draw.RoundedBox(0, 0, ctrb(900), pw, ctrb(50), Color(0, 255, 0, 255))
-			surfaceText(YRP.lang_string("role"), "roleInfoHeader", ctrb(25), ctrb(900 + 25), Color(255, 255, 255), 0, 1)
+			surfaceText(YRP.lang_string("LID_role"), "roleInfoHeader", ctrb(25), ctrb(900 + 25), Color(255, 255, 255), 0, 1)
 			draw.RoundedBox(0, 0, ctrb(900+50), pw, ctrb(50), Color(0, 0, 0, 200))
 			surfaceText(self.rolename, "roleInfoText", ctrb(25), ctrb(900 + 50 + 25), Color(255, 255, 255), 0, 1)
 
 			--[[ Role Description ]]--
 			draw.RoundedBox(0, 0, ctrb(1050), pw, ctrb(50), Color(0, 255, 0, 255))
-			surfaceText(YRP.lang_string("description"), "roleInfoHeader", ctrb(25), ctrb(1050 + 25), Color(255, 255, 255), 0, 1)
+			surfaceText(YRP.lang_string("LID_description"), "roleInfoHeader", ctrb(25), ctrb(1050 + 25), Color(255, 255, 255), 0, 1)
 
 			--[[ Role Equipment ]]--
 			draw.RoundedBox(0, 0, ctrb(1450), pw, ctrb(50), Color(0, 255, 0, 255))
-			surfaceText(YRP.lang_string("sweps"), "roleInfoHeader", ctrb(25), ctrb(1450 + 25), Color(255, 255, 255), 0, 1)
+			surfaceText(YRP.lang_string("LID_sweps"), "roleInfoHeader", ctrb(25), ctrb(1450 + 25), Color(255, 255, 255), 0, 1)
 
 			--[[ Role Salary ]]--
 			draw.RoundedBox(0, 0, ctrb(1850), pw, ctrb(50), Color(0, 255, 0, 255))
-			surfaceText(YRP.lang_string("salary"), "roleInfoHeader", ctrb(25), ctrb(1850 + 25), Color(255, 255, 255), 0, 1)
+			surfaceText(YRP.lang_string("LID_salary"), "roleInfoHeader", ctrb(25), ctrb(1850 + 25), Color(255, 255, 255), 0, 1)
 			draw.RoundedBox(0, 0, ctrb(1850+50), pw, ctrb(50), Color(0, 0, 0, 200))
 			surfaceText(self.rolesala, "roleInfoText", ctrb(25), ctrb(1850 + 50 + 25), Color(255, 255, 255), 0, 1)
 		end
@@ -319,13 +318,13 @@ function openRoleMenu()
 
 		_rm.infodesc = createD("RichText", _rm.info, ctrb(800), ctrb(300), 0, ctrb(1050+50))
 		function _rm.infodesc:Paint(pw, ph)
-			if _rm.info.rolename == YRP.lang_string("none") then return end
+			if _rm.info.rolename == YRP.lang_string("LID_none") then return end
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end
 
 		_rm.infosweps = createD("RichText", _rm.info, ctrb(800), ctrb(300), 0, ctrb(1450+50))
 		function _rm.infosweps:Paint(pw, ph)
-			if _rm.info.rolename == YRP.lang_string("none") then return end
+			if _rm.info.rolename == YRP.lang_string("LID_none") then return end
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end
 
@@ -333,8 +332,8 @@ function openRoleMenu()
 		_rm.infobutton:SetText("")
 		_rm.infobutton.rolename = ""
 		function _rm.infobutton:Paint(pw, ph)
-			if _rm.info.rolename == YRP.lang_string("none") then return end
-			surfaceButton(self, pw, ph, YRP.lang_string("getrole"))
+			if _rm.info.rolename == YRP.lang_string("LID_none") then return end
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_getrole"))
 		end
 		function _rm.infobutton:DoClick()
 			if self.uniqueID != nil then
@@ -364,7 +363,7 @@ function openRoleMenu()
 		_info:SetTitle("")
 		function _info:Paint(pw, ph)
 			surfaceWindow(self, pw, ph, "rolemenu")
-			surfaceText(YRP.lang_string("disabled"), "mat1text", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+			surfaceText(YRP.lang_string("LID_disabled"), "mat1text", pw/2, ph/2, Color(255, 255, 255), 1, 1)
 		end
 		_info:MakePopup()
 		_info:Center()

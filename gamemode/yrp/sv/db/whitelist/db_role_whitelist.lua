@@ -23,7 +23,7 @@ util.AddNetworkString("yrpInfoBox")
 function sendRoleWhitelist(ply)
 	if ply:CanAccess("bool_players") then
 		local _tmpWhiteList = SQL_SELECT("yrp_role_whitelist", "*", nil)
-		local _tmpRoleList = SQL_SELECT("yrp_roles", "groupID, roleID, uniqueID", nil)
+		local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
 		local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "string_name, uniqueID", nil)
 
 		if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
@@ -61,7 +61,7 @@ net.Receive("whitelistPlayer", function(len, ply)
 			end
 		end
 		local _roleID = net.ReadInt(16)
-		local _dbRole = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. _roleID)
+		local _dbRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. _roleID)
 		if wk(_dbRole) then
 			local _groupID = _dbRole[1].groupID
 

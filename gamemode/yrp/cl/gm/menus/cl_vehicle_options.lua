@@ -47,9 +47,9 @@ function optionVehicleWindow(vehicle, vehicleTab)
 
 
 	function yrp_vehicle.window:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, YRP.lang_string("settings"))
+		surfaceWindow(self, pw, ph, YRP.lang_string("LID_settings"))
 
-		draw.SimpleTextOutlined(YRP.lang_string("owner") .. ": " .. owner, "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		draw.RoundedBox(0, ctr(4), ctr(160), pw - ctr(8), ctr(70-4), Color(255, 255, 0, 200))
 	end
@@ -64,7 +64,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 			yrp_vehicle.window:Close()
 		end
 		function _buttonRemoveOwner:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("removeowner"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_removeowner"))
 		end
 
 

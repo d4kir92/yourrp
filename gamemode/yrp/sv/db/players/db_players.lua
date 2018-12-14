@@ -86,7 +86,7 @@ function updateRoleUses(rid)
 			_count = _count + 1
 		end
 	end
-	SQL_UPDATE("yrp_roles", "uses = " .. _count, "uniqueID = " .. rid)
+	SQL_UPDATE("yrp_ply_roles", "int_uses = " .. _count, "uniqueID = " .. rid)
 end
 
 function SetRole(ply, rid, force)
@@ -106,13 +106,17 @@ function set_role(ply, rid)
 		local _char_id = ply:CharID()
 		if _char_id != nil then
 			local _result = SQL_UPDATE("yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID())
-			local _gid = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. rid)
+			local _gid = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
 			local _old_uid = ply:GetNWString("roleUniqueID", "1")
 			ply:SetNWString("roleUniqueID", rid)
 			if _gid != nil then
-				_gid = _gid[1].groupID
-				local _result2 = SQL_UPDATE("yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID())
-				ply:SetNWString("groupUniqueID", _gid)
+				_gid = tonumber(_gid[1].int_groupID)
+				if isnumber(_gid) then
+					local _result2 = SQL_UPDATE("yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID())
+					ply:SetNWString("groupUniqueID", _gid)
+				else
+					printGM("note", "_gid = " .. _gid)
+				end
 			end
 			updateRoleUses(_old_uid)
 			updateRoleUses(rid)
@@ -161,10 +165,13 @@ function set_role_values(ply)
 
 				if ChaTab.playermodelID != nil then
 					local tmpID = tonumber(ChaTab.playermodelID)
-					if rolTab.playermodels != nil and rolTab.playermodels != "" then
-						local tmp = combineStringTables(rolTab.playermodels, rolTab.playermodelsnone)
-						if worked(tmp[tmpID], "set_role_values playermodel") then
-							ply:SetModel(tmp[tmpID])
+					local tmp = string.Explode(",", rolTab.string_playermodels)
+					if worked(tmp[tmpID], "set_role_values playermodel") then
+						local pm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. tmp[tmpID] .. "'")
+						if wk(pm) then
+							pm = pm[1]
+							ply:SetNWString("string_playermodel", pm.string_model)
+							ply:SetModel(pm.string_model)
 						end
 					end
 				end
@@ -180,60 +187,59 @@ function set_role_values(ply)
 
 			if worked(rolTab, "set_role_values rolTab") then
 
-				ply:SetModelScale(rolTab.playermodelsize, 0)
-				ply:SetNWInt("speedwalk", rolTab.speedwalk*rolTab.playermodelsize)
-				ply:SetNWInt("speedrun", rolTab.speedrun*rolTab.playermodelsize)
+				local pmsize = rolTab.int_playermodelsize or 1
+				ply:SetModelScale(pmsize, 0)
+				ply:SetNWInt("speedwalk", rolTab.int_speedwalk * pmsize)
+				ply:SetNWInt("speedrun", rolTab.int_speedrun * pmsize)
 				ply:SetWalkSpeed(ply:GetNWInt("speedwalk"))
 				ply:SetRunSpeed(ply:GetNWInt("speedrun"))
 
-				ply:SetMaxHealth(tonumber(rolTab.hpmax))
-				ply:SetHealth(tonumber(rolTab.hp))
-				ply:SetNWInt("GetHealthReg", tonumber(rolTab.hpreg))
+				ply:SetMaxHealth(tonumber(rolTab.int_hpmax))
+				ply:SetHealth(tonumber(rolTab.int_hp))
+				ply:SetNWInt("HealthReg", tonumber(rolTab.int_hpup))
 
-				ply:SetNWInt("GetMaxArmor", tonumber(rolTab.armax))
-				ply:SetNWInt("GetArmorReg", tonumber(rolTab.arreg))
-				ply:SetArmor(tonumber(rolTab.ar))
+				ply:SetNWInt("MaxArmor", tonumber(rolTab.int_armax))
+				ply:SetNWInt("ArmorReg", tonumber(rolTab.int_arup))
+				ply:SetArmor(tonumber(rolTab.int_ar))
 
-				ply:SetNWInt("GetMaxStamina", tonumber(rolTab.stmax))
-				ply:SetNWInt("GetCurStamina", tonumber(rolTab.st))
-				ply:SetNWInt("staminup", tonumber(rolTab.stregup))
-				ply:SetNWInt("stamindown", tonumber(rolTab.stregdn))
+				ply:SetNWInt("GetMaxStamina", tonumber(rolTab.int_stmax))
+				ply:SetNWInt("GetCurStamina", tonumber(rolTab.int_st))
+				ply:SetNWInt("staminup", tonumber(rolTab.int_stregup))
+				ply:SetNWInt("stamindown", tonumber(rolTab.int_stregdn))
 
-				ply:SetNWInt("GetMaxAbility", tonumber(rolTab.abmax))
-				ply:SetNWInt("GetRegAbility", tonumber(rolTab.abreg))
-				ply:SetNWInt("GetCurAbility", tonumber(rolTab.ab))
+				ply:SetNWInt("GetMaxAbility", tonumber(rolTab.int_abmax))
+				ply:SetNWInt("GetRegAbility", tonumber(rolTab.int_abreg))
+				ply:SetNWInt("GetCurAbility", tonumber(rolTab.int_ab))
 
-				ply:SetJumpPower(tonumber(rolTab.powerjump)) -- * rolTab.playermodelsize)
-				ply:SetNWString("salary", rolTab.salary)
-				ply:SetNWString("roleName", rolTab.roleID)
-				ply:SetNWBool("isInstructor", tobool(rolTab.instructor))
-				ply:SetNWString("roleDescription", rolTab.description)
+				ply:SetJumpPower(tonumber(rolTab.int_powerjump)) -- * rolTab.playermodelsize)
+				ply:SetNWString("salary", rolTab.int_salary)
+				ply:SetNWString("roleName", rolTab.string_name)
+				ply:SetNWBool("isInstructor", tobool(rolTab.bool_instructor))
+				ply:SetNWString("roleDescription", rolTab.string_description)
 
-				ply:SetNWBool("isVoteable", tobool(rolTab.voteable))
+				ply:SetNWBool("isVoteable", tobool(rolTab.bool_voteable))
 
-				ply:SetNWInt("salarytime", rolTab.salarytime)
-				ply:SetNWInt("nextsalarytime", CurTime() + rolTab.salarytime)
-				ply:SetNWBool("yrp_voice_global", tobool(rolTab.voiceglobal))
+				ply:SetNWInt("salarytime", rolTab.int_salarytime)
+				ply:SetNWInt("nextsalarytime", CurTime() + rolTab.int_salarytime)
+				ply:SetNWBool("yrp_voice_global", tobool(rolTab.bool_voiceglobal))
 
-				ply:SetNWBool("canbeagent", tobool(rolTab.canbeagent))
-				ply:SetNWBool("iscivil", tobool(rolTab.iscivil))
-				ply:SetNWBool("isadminonly", tobool(rolTab.adminonly))
+				ply:SetNWBool("canbeagent", tobool(rolTab.bool_canbeagent))
+				ply:SetNWBool("iscivil", tobool(rolTab.bool_iscivil))
+				ply:SetNWBool("isadminonly", tobool(rolTab.bool_adminonly))
 
-				local _licenseIDs = string.Explode(",", rolTab.licenseIDs)
+				local _licenseIDs = string.Explode(",", rolTab.string_licenses)
 				for i, lic in pairs(_licenseIDs) do
 					if tonumber(lic) != nil then
 						ply:AddLicense(lic)
 					end
 				end
 
-				ply:SetNWString("maxamount", rolTab.maxamount)
+				ply:SetNWString("maxamount", rolTab.int_maxamount)
 
-				ply:SetNWString("sweps", rolTab.sweps)
-				ply:SetNWString("playermodels", rolTab.playermodels)
-				ply:SetNWString("playermodelsnone", rolTab.playermodelsnone)
+				ply:SetNWString("sweps", rolTab.string_sweps)
 
 				--sweps
-				local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.sweps))
+				local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps))
 				for k, swep in pairs(tmpSWEPTable) do
 					if swep != nil and swep != NULL and swep != "" then
 						ply:Give(swep)
@@ -401,7 +407,7 @@ util.AddNetworkString("give_getRolTab")
 
 net.Receive("give_getRolTab", function(len, ply)
 	local _groupID = net.ReadString()
-	local _tmpRolTab = SQL_SELECT("yrp_roles", "*", "groupID = " .. tonumber(_groupID))
+	local _tmpRolTab = SQL_SELECT("yrp_ply_roles", "*", "groupID = " .. tonumber(_groupID))
 	if _tmpRolTab != nil then
 		net.Start("give_getRolTab")
 			net.WriteTable(_tmpRolTab)
@@ -413,7 +419,7 @@ end)
 
 net.Receive("getPlyList", function(len, ply)
 	local _tmpChaList = SQL_SELECT("yrp_characters", "*", nil)
-	local _tmpRoleList = SQL_SELECT("yrp_roles", "*", nil)
+	local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "*", nil)
 	local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "*", nil)
 	if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
 
@@ -444,7 +450,7 @@ net.Receive("giveRole", function(len, ply)
 end)
 
 function isWhitelisted(ply, id)
-	local _role = SQL_SELECT("yrp_roles", "*", "uniqueID = " .. id)
+	local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. id)
 	if _role != nil then
 		_role = _role[1]
 
@@ -459,7 +465,7 @@ function isWhitelisted(ply, id)
 
 		local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id)
 
-		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.groupID .. " AND roleID = -1")
+		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
 
 		if ply:HasAccess() then
 			printGM("gm", ply:RPName() .. " has access.")
@@ -533,28 +539,23 @@ function startVote(ply, table)
 end
 
 function canGetRole(ply, roleID)
-	local tmpTableRole = SQL_SELECT("yrp_roles" , "*", "uniqueID = " .. roleID)
+	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
 
 	if worked(tmpTableRole, "tmpTableRole") then
 		if tonumber(ply:GetNWString("roleUniqueID", "0")) == tonumber(roleID) then
 			return true
 		else
-			if tonumber(tmpTableRole[1].uses) < tonumber(tmpTableRole[1].maxamount) or tonumber(tmpTableRole[1].maxamount) == -1 then
-				if tonumber(tmpTableRole[1].adminonly) == 1 then
-					if ply:HasAccess() then
-						-- printGM("note", ply:YRPName() .. " is admin")
-						-- continue
-					else
+			if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].int_maxamount) == -1  then
+				if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
+					if !ply:HasAccess() then
 						printGM("gm", "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin")
 						return false
 					end
-				elseif tonumber(tmpTableRole[1].whitelist) == 1 or tonumber(tmpTableRole[1].prerole) != -1 then
+				elseif tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) != -1 then
 					printGM("gm", "Whitelist-Role or Prerole-Role")
 					if !isWhitelisted(ply, roleID) then
 						printGM("gm", ply:YRPName() .. " is not whitelisted")
 						return false
-					else
-						-- printGM("gm", ply:SteamName() .. " is whitelisted")
 					end
 				end
 				return true
@@ -570,7 +571,7 @@ end
 function RemRolVals(ply)
 	local rolTab = ply:GetRolTab()
 	if rolTab != nil then
-		local _sweps = string.Explode(",", SQL_STR_OUT(rolTab.sweps))
+		local _sweps = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps))
 		for k, v in pairs(_sweps) do
 			ply:StripWeapon(v)
 		end
@@ -578,11 +579,11 @@ function RemRolVals(ply)
 end
 
 function canVoteRole(ply, roleID)
-	local tmpTableRole = SQL_SELECT("yrp_roles" , "*", "uniqueID = " .. roleID)
+	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		if tmpTableRole[1].uses < tmpTableRole[1].maxamount or tonumber(tmpTableRole[1].maxamount) == -1 then
-			if tonumber(tmpTableRole[1].voteable) == 1 then
+		if tmpTableRole[1].int_uses < tmpTableRole[1].int_maxamount or tonumber(tmpTableRole[1].int_maxamount) == -1 or tonumber(tmpTableRole[1].int_maxamount) == 0 then
+			if tonumber(tmpTableRole[1].bool_voteable) == 1 then
 				return true
 			end
 		end
@@ -590,6 +591,7 @@ function canVoteRole(ply, roleID)
 	return false
 end
 
+util.AddNetworkString("wantRole")
 net.Receive("wantRole", function(len, ply)
 	local uniqueIDRole = net.ReadInt(16)
 
@@ -600,7 +602,7 @@ net.Receive("wantRole", function(len, ply)
 		--New role
 		SetRole(ply, uniqueIDRole)
 	elseif canVoteRole(ply, uniqueIDRole) then
-		local _role = SQL_SELECT("yrp_roles" , "*", "uniqueID = " .. uniqueIDRole)
+		local _role = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
 		startVote(ply, _role)
 	else
 		net.Start("yrp_info2")
