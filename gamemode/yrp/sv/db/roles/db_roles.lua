@@ -57,6 +57,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
 
+if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+	printGM("note", DATABASE_NAME .. " has not the default role")
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "1, 'Civilian', '0,0,255', 1, 0")
+end
+
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
 local yrp_ply_roles = {}
@@ -596,6 +601,7 @@ function SendPlayermodels(uid)
 					name = pm.string_model
 				end
 				entry.string_name = name
+				entry.string_model = pm.string_model
 				table.insert(nettab, entry)
 			end
 		end

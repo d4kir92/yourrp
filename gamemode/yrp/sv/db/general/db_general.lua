@@ -1001,14 +1001,14 @@ net.Receive("gethelpmenu", function(len, ply)
 		local tabs = {}
 		local subtabs = {}
 
-		AddTab(tabs, "help", "getsitehelp")
-		AddTab(tabs, "staff", "getsitestaff")
+		AddTab(tabs, "LID_help", "getsitehelp")
+		AddTab(tabs, "LID_staff", "getsitestaff")
 		if info.text_server_rules != "" then
-			AddTab(tabs, "rules", "getsiteserverrules")
+			AddTab(tabs, "LID_rules", "getsiteserverrules")
 		end
 		if info.text_server_collectionid != "" then
 			if tonumber(info.text_server_collectionid) > 0 then
-				AddTab(tabs, "collection", "getsitecollection")
+				AddTab(tabs, "LID_collection", "getsitecollection")
 			end
 		end
 

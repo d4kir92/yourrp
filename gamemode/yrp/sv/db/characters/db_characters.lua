@@ -42,6 +42,10 @@ SQL_ADD_COLUMN(_db_name, "eqwps1", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "eqwps2", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "eqwpg", "TEXT DEFAULT ' '")
 
+if SQL_SELECT(_db_name, "*", "uniqueID = 1") == nil then
+	local _result = SQL_INSERT_INTO(_db_name, "uniqueID", "1")
+end
+
 --db_drop_table(_db_name)
 --db_is_empty(_db_name)
 
@@ -477,7 +481,7 @@ function CreateCharacter(ply, tab)
 		vals = vals .. "'" .. db_sql_str(tab.rpname) .. "', "
 		vals = vals .. "'" .. db_sql_str(tab.gender) .. "', "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
-		vals = vals .. tonumber(role[1].groupID) .. ", "
+		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
 		vals = vals .. 250 .. ", "
 		vals = vals .. 500 .. ", "

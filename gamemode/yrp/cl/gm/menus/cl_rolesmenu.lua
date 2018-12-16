@@ -81,7 +81,7 @@ function createRoleBox(rol, parent)
 		--[[ Role Button ]]--
 		_rol.gr = createD("DButton", _rol, _rol:GetWide(), ctrb(60), 0, _rol:GetTall()-ctrb(60))
 		function _rol.gr:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinfo"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinformation"))
 		end
 		_rol.gr:SetText("")
 		function _rol.gr:DoClick()

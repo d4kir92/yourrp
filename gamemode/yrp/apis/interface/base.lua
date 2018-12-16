@@ -780,24 +780,45 @@ function DStringListBox(tab)
 
 	pnl.dpl = createD("DPanelList", pnl.bg, tab.w, tab.h - ctr(50), 0, ctr(50))
 	pnl.dpl:EnableVerticalScrollbar(true)
-	pnl.dpl:SetSpacing(0)
+	pnl.dpl:SetSpacing(1)
 	function pnl.dpl:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
 	end
 	function pnl.dpl:AddLines(t)
 		pnl.dpl:Clear()
+
 		for i, v in pairs(t) do
-			local line = createD("DButton", nil, pnl.dpl:GetWide(), ctr(70), 0, 0)
-			line:SetText(v.string_name)
-			line.uniqueID = v.uniqueID
+			if type(v) == "table" then
+				v.h = v.h or ctr(70)
+				v.br = v.br or ctr(10)
 
-			line.rem = createD("DButton", line, ctr(50), ctr(50), line:GetWide() - ctr(60 + 25), ctr(10))
-			line.rem:SetText("-")
-			function line.rem:DoClick()
-				v.doclick()
+				pTab(v)
+
+				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
+				line:SetText("")
+				function line:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleText(v.string_name, "DermaDefault", v.h, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+				line.uniqueID = v.uniqueID
+
+				line.rem = createD("DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
+				line.rem:SetText("")
+				function line.rem:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+					draw.SimpleText("-", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+				function line.rem:DoClick()
+					v.doclick()
+				end
+
+				if v.string_model != nil then
+					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, v.br, v.br)
+					line.mod:SetModel(v.string_model)
+				end
+
+				self:AddItem(line)
 			end
-
-			self:AddItem(line)
 		end
 	end
 

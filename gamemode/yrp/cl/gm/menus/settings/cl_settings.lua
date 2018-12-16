@@ -123,42 +123,42 @@ function OpenSettings()
 	--Sites
 	local _client = YRP.lang_string("LID_settings_client") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_client)
-	settingsWindow.window:AddSite("open_client_character", "settings_character", _client, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_client_hud", "settings_hud", _client, "icon16/photo.png")
-	settingsWindow.window:AddSite("open_client_keybinds", "settings_keybinds", _client, "icon16/keyboard.png")
+	settingsWindow.window:AddSite("open_client_character", "LID_settings_character", _client, "icon16/user_edit.png")
+	settingsWindow.window:AddSite("open_client_hud", "LID_settings_hud", _client, "icon16/photo.png")
+	settingsWindow.window:AddSite("open_client_keybinds", "LID_settings_keybinds", _client, "icon16/keyboard.png")
 
 	local _server_admin = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)
-	settingsWindow.window:AddSite("open_server_interface", "settings_surface", _server_admin, "icon16/application_view_gallery.png")
-	settingsWindow.window:AddSite("open_server_give", "settings_players", _server_admin, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_server_licenses", "settings_licenses", _server_admin, "icon16/vcard_edit.png")
-	settingsWindow.window:AddSite("open_server_shops", "settings_shops", _server_admin, "icon16/basket_edit.png")
-	settingsWindow.window:AddSite("open_server_map", "settings_map", _server_admin, "icon16/map.png")
-	settingsWindow.window:AddSite("open_server_whitelist", "whitelist", _server_admin, "icon16/page_white_key.png")
+	settingsWindow.window:AddSite("open_server_interface", "LID_settings_surface", _server_admin, "icon16/application_view_gallery.png")
+	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_admin, "icon16/user_edit.png")
+	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_admin, "icon16/vcard_edit.png")
+	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_admin, "icon16/basket_edit.png")
+	settingsWindow.window:AddSite("open_server_map", "LID_settings_map", _server_admin, "icon16/map.png")
+	settingsWindow.window:AddSite("open_server_whitelist", "Whitelist", _server_admin, "icon16/page_white_key.png")
 
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
 	--settingsWindow.window:AddSite("open_server_roles", YRP.lang_string("LID_roles") .. " [OLD]", _wip, "icon16/group_edit.png")
-	settingsWindow.window:AddSite("open_server_groups_and_roles", "settings_groupsandroles", _wip, "icon16/group.png")
+	settingsWindow.window:AddSite("open_server_groups_and_roles", "LID_settings_groupsandroles", _wip, "icon16/group.png")
 
-	local _settings_server_maintance = "settings_server_maintance"
+	local _settings_server_maintance = "LID_settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)
-	settingsWindow.window:AddSite("open_server_status", "settings_status", _settings_server_maintance, "icon16/error.png")
-	settingsWindow.window:AddSite("open_server_feedback", "settings_feedback", _settings_server_maintance, "icon16/page_lightning.png")
+	settingsWindow.window:AddSite("open_server_status", "LID_settings_status", _settings_server_maintance, "icon16/error.png")
+	settingsWindow.window:AddSite("open_server_feedback", "LID_settings_feedback", _settings_server_maintance, "icon16/page_lightning.png")
 
-	local _settings_server_gameplay = "settings_server_gameplay"
+	local _settings_server_gameplay = "LID_settings_server_gameplay"
 	settingsWindow.window:AddCategory(_settings_server_gameplay)
-	settingsWindow.window:AddSite("open_server_general", "settings_general", _settings_server_gameplay, "icon16/server.png")
-	settingsWindow.window:AddSite("open_server_realistic", "settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
+	settingsWindow.window:AddSite("open_server_general", "LID_settings_general", _settings_server_gameplay, "icon16/server.png")
+	settingsWindow.window:AddSite("open_server_realistic", "LID_settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
 
-	local _settings_server_management = "settings_server_management"
+	local _settings_server_management = "LID_settings_server_management"
 	settingsWindow.window:AddCategory(_settings_server_management)
-	settingsWindow.window:AddSite("open_server_database", "settings_database", _settings_server_management, "icon16/database.png")
-	settingsWindow.window:AddSite("open_server_usergroups", "settings_usergroups", _settings_server_management, "icon16/group_go.png")
+	settingsWindow.window:AddSite("open_server_database", "LID_settings_database", _settings_server_management, "icon16/database.png")
+	settingsWindow.window:AddSite("open_server_usergroups", "LID_settings_usergroups", _settings_server_management, "icon16/group_go.png")
 
-	local _server_addons = "settings_server_addons"
+	local _server_addons = "LID_settings_server_addons"
 	settingsWindow.window:AddCategory(_server_addons)
-	settingsWindow.window:AddSite("open_server_yourrp_addons", "settings_yourrp_addons", _server_addons, "icon16/plugin.png")
+	settingsWindow.window:AddSite("open_server_yourrp_addons", "LID_settings_yourrp_addons", _server_addons, "icon16/plugin.png")
 
 	--StartSite
 	settingsWindow.window.cursite = "character"

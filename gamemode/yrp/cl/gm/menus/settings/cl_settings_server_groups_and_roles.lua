@@ -1157,6 +1157,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							net.WriteInt(v.uniqueID, 32)
 						net.SendToServer()
 					end
+					v.h = ctr(120)
 				end
 				ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
 			end)
