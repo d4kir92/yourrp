@@ -143,8 +143,6 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/settingsstatus/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsgroupsandroles/lang_" .. short .. ".properties")
-
-		pTab(yrp_current_lang)
 	else
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end

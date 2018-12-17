@@ -332,7 +332,7 @@ end)
 net.Receive("yrp_player_say", function(len)
 	local _tmp = net.ReadTable()
 	local _write = false
-	pTab(_tmp)
+
 	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
 		_write = true
 

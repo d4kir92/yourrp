@@ -792,8 +792,6 @@ function DStringListBox(tab)
 				v.h = v.h or ctr(70)
 				v.br = v.br or ctr(10)
 
-				pTab(v)
-
 				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
 				line:SetText("")
 				function line:Paint(pw, ph)

@@ -129,7 +129,6 @@ function OpenSettings()
 
 	local _server_admin = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)
-	settingsWindow.window:AddSite("open_server_interface", "LID_settings_surface", _server_admin, "icon16/application_view_gallery.png")
 	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_admin, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_admin, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_admin, "icon16/basket_edit.png")
@@ -138,8 +137,7 @@ function OpenSettings()
 
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
-	--settingsWindow.window:AddSite("open_server_roles", YRP.lang_string("LID_roles") .. " [OLD]", _wip, "icon16/group_edit.png")
-	settingsWindow.window:AddSite("open_server_groups_and_roles", "LID_settings_groupsandroles", _wip, "icon16/group.png")
+	settingsWindow.window:AddSite("open_server_interface", "LID_settings_surface", _wip, "icon16/application_view_gallery.png")
 
 	local _settings_server_maintance = "LID_settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)
@@ -150,6 +148,7 @@ function OpenSettings()
 	settingsWindow.window:AddCategory(_settings_server_gameplay)
 	settingsWindow.window:AddSite("open_server_general", "LID_settings_general", _settings_server_gameplay, "icon16/server.png")
 	settingsWindow.window:AddSite("open_server_realistic", "LID_settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
+	settingsWindow.window:AddSite("open_server_groups_and_roles", "LID_settings_groupsandroles", _settings_server_gameplay, "icon16/group.png")
 
 	local _settings_server_management = "LID_settings_server_management"
 	settingsWindow.window:AddCategory(_settings_server_management)
