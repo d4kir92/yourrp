@@ -52,23 +52,23 @@ net.Receive("getMoneyPrintMenu", function(len)
 		function upgradeframe:Paint(pw, ph)
 			draw.RoundedBox(ctr(30), 0, 0, pw, ph, Color(40, 40, 40, 200))
 
-			draw.SimpleTextOutlined(lang_string("money_printer"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_money_printer"), "HudBars", pw/2, ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 
 		--CPU
-		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60), "cpu", "upgradeCPU", lang_string("cpu"), lang_string("upgrade"), lang_string("max"))
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60), "cpu", "upgradeCPU",YRP.lang_string("LID_cpu"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Cooler
-		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 70), "cooler", "upgradeCooler", lang_string("cooler"), lang_string("upgrade"), lang_string("max"))
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 70), "cooler", "upgradeCooler",YRP.lang_string("LID_cooler"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Printer
-		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 140), "printer", "upgradePrinter", lang_string("printer"), lang_string("upgrade"), lang_string("max"))
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 140), "printer", "upgradePrinter",YRP.lang_string("LID_printer"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Printer
-		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 210), "storage", "upgradeStorage", lang_string("storage"), lang_string("upgrade"), lang_string("max"))
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 210), "storage", "upgradeStorage",YRP.lang_string("LID_storage"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Fuel
-		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 280), "fuel", "fuelUP", lang_string("fuel"), lang_string("fuelup"), lang_string("full"))
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 280), "fuel", "fuelUP",YRP.lang_string("LID_fuel"),YRP.lang_string("LID_fuelup"),YRP.lang_string("LID_full"))
 
 		--gather
 		local moneyInfo = createD("DPanel", upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 390))
@@ -85,10 +85,10 @@ net.Receive("getMoneyPrintMenu", function(len)
 		function gatherMoney:Paint(pw, ph)
 			if self:IsHovered() then
 				draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
-				draw.SimpleTextOutlined(lang_string("gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			else
 				draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 200))
-				draw.SimpleTextOutlined(lang_string("gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		end
 		function gatherMoney:DoClick()
@@ -101,13 +101,13 @@ net.Receive("getMoneyPrintMenu", function(len)
 		local workingB = createD("DButton", upgradeframe, ctr(360), ctr(60), ctr(10), ctr(520))
 		workingB:SetText("")
 		function workingB:Paint(pw, ph)
-			local working = lang_string("off")
+			local working =YRP.lang_string("LID_off")
 			if mp:GetNWBool("working") then
-				working = lang_string("on")
+				working =YRP.lang_string("LID_on")
 			end
 			if self:IsHovered() then
 				draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
-				draw.SimpleTextOutlined(lang_string("toggle"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_toggle"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			else
 				if mp:GetNWBool("working") then
 					draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 255, 0, 200))

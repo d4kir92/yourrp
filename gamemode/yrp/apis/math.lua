@@ -1,5 +1,15 @@
 --Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+function GetMaxInt()
+	-- "Max" Int Value
+	return 999999999
+end
+
+function GetMaxFloat()
+	-- "Max" Int Value
+	return 999999999.0
+end
+
 function btn(bool)
 	if bool then
 		return 1

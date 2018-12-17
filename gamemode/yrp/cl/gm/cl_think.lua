@@ -142,20 +142,20 @@ function useFunction(string)
 		elseif string == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
-				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.lang_string("weapon")
+				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.lang_string("LID_weapon")
 				if _weapon.notdropable == nil then
 					net.Receive("dropswep", function(len)
 						local _b = net.ReadBool()
 						if _b then
-							notification.AddLegacy(_pname .. " " .. YRP.lang_string("hasbeendropped"), 0, 3)
+							notification.AddLegacy(_pname .. " " .. YRP.lang_string("LID_hasbeendropped"), 0, 3)
 						else
-							notification.AddLegacy(_pname .. " " .. string.lower(YRP.lang_string("cannotbedropped")), 0, 3)
+							notification.AddLegacy(_pname .. " " .. string.lower(YRP.lang_string("LID_cannotbedropped")), 0, 3)
 						end
 					end)
 					net.Start("dropswep")
 					net.SendToServer()
 				else
-					notification.AddLegacy(_pname .. " " .. string.lower(YRP.lang_string("cannotbedropped")), 0, 3)
+					notification.AddLegacy(_pname .. " " .. string.lower(YRP.lang_string("LID_cannotbedropped")), 0, 3)
 				end
 			end
 
@@ -237,11 +237,11 @@ local clicked = false
 
 function get_speak_channel_name(id)
 	if id == 0 then
-		return YRP.lang_string("speaklocal")
+		return YRP.lang_string("LID_speaklocal")
 	elseif id == 1 then
-		return YRP.lang_string("speakgroup")
+		return YRP.lang_string("LID_speakgroup")
 	elseif id == 2 then
-		return YRP.lang_string("speakglobal")
+		return YRP.lang_string("LID_speakglobal")
 	end
 end
 

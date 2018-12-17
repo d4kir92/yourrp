@@ -797,8 +797,8 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 			draw.RoundedBox(0, pw / 2, 0, pw / 2, ph, get_dsbg_col())
 		end
 
-		draw.SimpleTextOutlined(YRP.lang_string("dark"), "HudBars", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("light"), "HudBars", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_dark"), "HudBars", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_light"), "HudBars", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function tmp:DoClick()

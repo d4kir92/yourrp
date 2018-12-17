@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local _em = {}
 
 function ToggleEmotesMenu()
@@ -55,22 +55,22 @@ function AddEmote(name, cmd)
 	table.insert(_emotes, _new)
 end
 
-AddEmote("emotedancenormal", "dance")
-AddEmote("emotedancesexy", "muscle")
-AddEmote("emotedancerobot", "robot")
-AddEmote("emoteimitiationzombie", "zombie")
-AddEmote("emotewave", "wave")
-AddEmote("emotesalute", "salute")
-AddEmote("emotebow", "bow")
-AddEmote("emotebecon", "becon")
-AddEmote("emotelaugh", "laugh")
-AddEmote("emotepers", "pers")
-AddEmote("emotecheer", "cheer")
-AddEmote("emoteagree", "agree")
-AddEmote("emotedisagree", "disagree")
-AddEmote("emotehalt", "halt")
-AddEmote("emotegroup", "group")
-AddEmote("emoteforward", "forward")
+AddEmote("LID_emotedancenormal", "dance")
+AddEmote("LID_emotedancesexy", "muscle")
+AddEmote("LID_emotedancerobot", "robot")
+AddEmote("LID_emoteimitiationzombie", "zombie")
+AddEmote("LID_emotewave", "wave")
+AddEmote("LID_emotesalute", "salute")
+AddEmote("LID_emotebow", "bow")
+AddEmote("LID_emotebecon", "becon")
+AddEmote("LID_emotelaugh", "laugh")
+AddEmote("LID_emotepers", "pers")
+AddEmote("LID_emotecheer", "cheer")
+AddEmote("LID_emoteagree", "agree")
+AddEmote("LID_emotedisagree", "disagree")
+AddEmote("LID_emotehalt", "halt")
+AddEmote("LID_emotegroup", "group")
+AddEmote("LID_emoteforward", "forward")
 local _vec_emo = {}
 local _seg = #GetEmotes()
 
@@ -105,7 +105,7 @@ function OpenEmotesMenu()
 	end
 
 	function _em.window:Paint(pw, ph)
-		--surfaceWindow(self, pw, ph, "" )
+		--surfaceWindow(self, pw, ph, "")
 		local _mx, _my = gui.MousePos()
 		local _px, _py = _em.window:GetPos()
 		_mx = _mx - self:GetWide() / 2 - _px
@@ -156,7 +156,7 @@ function OpenEmotesMenu()
 			end
 		end
 
-		--surfaceText("WINKEL: " .. tostring(math.Round(_ang, 0 ) ) .. " SELECT: " .. _em.emotes.select, "HudBars", _mx+self:GetWide()/2, _my+self:GetTall()/2, Color(0, 0, 255 ), 1, 1 )
+		--surfaceText("WINKEL: " .. tostring(math.Round(_ang, 0)) .. " SELECT: " .. _em.emotes.select, "HudBars", _mx+self:GetWide()/2, _my+self:GetTall()/2, Color(0, 0, 255), 1, 1)
 		for e = 1, _seg do
 			surfaceText(YRP.lang_string(GetEmotes()[e].name), "emotes", _vec_emo[e].x, _vec_emo[e].y, Color(255, 255, 255), 1, 1)
 		end

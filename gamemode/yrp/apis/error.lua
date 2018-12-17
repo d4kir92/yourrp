@@ -81,7 +81,7 @@ function yts(str , str2)
 end
 
 function ErrorValidToSend(str)
-	if (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
+	if string.find(str, "  ") == nil and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
 		return true
 	else
 		return false

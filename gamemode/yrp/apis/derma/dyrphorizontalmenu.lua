@@ -85,7 +85,7 @@ function PANEL:SiteNotFound()
 
 	function self.site:Paint(pw, ph)
 		draw.SimpleTextOutlined("[Site Not Found]", "mat1text", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1, ctr(1), Color(0, 0, 0))
-		draw.SimpleTextOutlined("[" .. YRP.lang_string("wip") .. "]", "mat1text", pw / 2, ph / 2 + ctr(50), Color(255, 255, 0, 255), 1, 1, ctr(1), Color(0, 0, 0))
+		draw.SimpleTextOutlined("[" .. YRP.lang_string("LID_wip") .. "]", "mat1text", pw / 2, ph / 2 + ctr(50), Color(255, 255, 0, 255), 1, 1, ctr(1), Color(0, 0, 0))
 	end
 end
 

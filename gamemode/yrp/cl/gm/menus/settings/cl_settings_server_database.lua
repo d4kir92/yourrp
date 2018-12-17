@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Connect_Settings_Database", function(len)
 	if pa(settingsWindow) then
@@ -33,7 +33,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		yourrpdatabase.w = ctr(1000)
 		yourrpdatabase.h = Scroller:GetTall()
 		yourrpdatabase.br = br / 2
-		yourrpdatabase.name = "yourrpdatabase"
+		yourrpdatabase.name = "LID_yourrpdatabase"
 		Scroller.YourRPDatabase = DGroup(yourrpdatabase)
 		local dhr = {}
 		dhr.parent = Scroller.YourRPDatabase
@@ -46,25 +46,25 @@ net.Receive("Connect_Settings_Database", function(len)
 		ble.color = YRPGetColor("2")
 		ble.brx = ctr(50)
 
-		local sqlmode = DIntComboBoxBox(bl, nil, "sqlmode", nil)
+		local sqlmode = DIntComboBoxBox(bl, nil, "LID_sqlmode", nil)
 		if tonumber(YRP_SQL.int_mode) == 0 then
 			sqlmode:AddChoice("SQLite", 0, true)
 		else
 			sqlmode:AddChoice("SQLite", 0)
 		end
 		if tonumber(YRP_SQL.int_mode) == 1 then
-			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("external") .. ")", 1, true)
+			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("LID_external") .. ")", 1, true)
 		else
-			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("external") .. ")", 1)
+			sqlmode:AddChoice("MySQL (" .. YRP.lang_string("LID_external") .. ")", 1)
 		end
 
 		DHR(dhr)
 
-		Scroller.YourRPDatabase.host = DStringBox(bl, YRP_SQL.string_host, "hostname", "update_string_host")
-		Scroller.YourRPDatabase.port = OLDDIntBox(bl, YRP_SQL.int_port, "port", "update_int_port", 99999)
-		Scroller.YourRPDatabase.data = DStringBox(bl, YRP_SQL.string_database, "database", "update_string_database")
-		Scroller.YourRPDatabase.user = DStringBox(bl, YRP_SQL.string_username, "username", "update_string_username")
-		Scroller.YourRPDatabase.pass = DStringBox(bl, YRP_SQL.string_password, "password", "update_string_password")
+		Scroller.YourRPDatabase.host = DStringBox(bl, YRP_SQL.string_host, "LID_hostname", "update_string_host")
+		Scroller.YourRPDatabase.port = OLDDIntBox(bl, YRP_SQL.int_port, "LID_port", "update_int_port", 99999)
+		Scroller.YourRPDatabase.data = DStringBox(bl, YRP_SQL.string_database, "LID_database", "update_string_database")
+		Scroller.YourRPDatabase.user = DStringBox(bl, YRP_SQL.string_username, "LID_username", "update_string_username")
+		Scroller.YourRPDatabase.pass = DStringBox(bl, YRP_SQL.string_password, "LID_password", "update_string_password")
 		Scroller.YourRPDatabase.change_to_sqlmode = createD("DButton", nil, Scroller.YourRPDatabase:GetWide(), ctr(50), 0, 0)
 
 		Scroller.YourRPDatabase:AddItem(Scroller.YourRPDatabase.change_to_sqlmode)
@@ -75,14 +75,14 @@ net.Receive("Connect_Settings_Database", function(len)
 			local vals = {}
 			vals["amount"] = i
 			if i > 1 then
-				create[i].name = YRP.lang_string("xhours", vals)
+				create[i].name = YRP.lang_string("LID_xhours", vals)
 				create[i].data = i
 			else
-				create[i].name = YRP.lang_string("1hour", vals)
+				create[i].name = YRP.lang_string("LID_1hour", vals)
 				create[i].data = i
 			end
 		end
-		Scroller.YourRPDatabase.crea = DIntComboBoxBox(bl, create, "createbackupevery", "update_int_backup_create", tonumber(YRP_SQL.int_backup_create))
+		Scroller.YourRPDatabase.crea = DIntComboBoxBox(bl, create, "LID_createbackupevery", "update_int_backup_create", tonumber(YRP_SQL.int_backup_create))
 
 		local delete = {}
 		for i = 1, 180 do
@@ -90,18 +90,18 @@ net.Receive("Connect_Settings_Database", function(len)
 			local vals = {}
 			vals["amount"] = i
 			if i > 1 then
-				delete[i].name = YRP.lang_string("xdays", vals)
+				delete[i].name = YRP.lang_string("LID_xdays", vals)
 				delete[i].data = i
 			else
-				delete[i].name = YRP.lang_string("1day", vals)
+				delete[i].name = YRP.lang_string("LID_1day", vals)
 				delete[i].data = i
 			end
 		end
-		Scroller.YourRPDatabase.dele = DIntComboBoxBox(bl, delete, "removebackupolderthen", "update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete))
+		Scroller.YourRPDatabase.dele = DIntComboBoxBox(bl, delete, "LID_removebackupolderthen", "update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete))
 		Scroller.YourRPDatabase.createbackupnow = createD("DButton", nil, Scroller.YourRPDatabase:GetWide(), ctr(50), 0, 0)
 		Scroller.YourRPDatabase.createbackupnow:SetText("")
 		function Scroller.YourRPDatabase.createbackupnow:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("createbackupnow") .. " (data/yrp_backups/)")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_createbackupnow") .. " (data/yrp_backups/)")
 		end
 		function Scroller.YourRPDatabase.createbackupnow:DoClick()
 			net.Start("makebackup")
@@ -112,7 +112,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		Scroller.YourRPDatabase.change_to_sqlmode:SetText("")
 		function Scroller.YourRPDatabase.change_to_sqlmode:Paint(pw, ph)
 			local tex, dat = sqlmode:GetSelected()
-			surfaceButton(self, pw, ph, YRP.lang_string("changetosqlmode") .. ": " .. tex)
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_changetosqlmode") .. ": " .. tex)
 			dat = tonumber(dat)
 			if dat == 0 then
 				Scroller.YourRPDatabase.host:GetParent():SetSize(0, 0)
@@ -139,7 +139,7 @@ net.Receive("Connect_Settings_Database", function(len)
 				Scroller.YourRPRelatedTables:GetParent():SetSize(0, 0)
 				Scroller:SetOverlap(-3)
 			end
-			Scroller:InvalidateLayout(true )
+			Scroller:InvalidateLayout(true)
 			Scroller.YourRPDatabase:Rebuild()
 		end
 		function Scroller.YourRPDatabase.change_to_sqlmode:DoClick()
@@ -166,7 +166,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		yourrptables.w = ctr(1000)
 		yourrptables.h = Scroller:GetTall()
 		yourrptables.br = br / 2
-		yourrptables.name = "yourrptables"
+		yourrptables.name = "LID_yourrptables"
 		Scroller.YourRPTables = DGroup(yourrptables)
 		Scroller.YourRPTables:SetTall(Scroller.YourRPTables:GetTall() - ctr(60))
 		local dbtab = {}
@@ -174,14 +174,14 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.color = YRPGetColor("2")
 		local yrp_tabs = {}
 		for i, tab in pairs(NW_YRP) do
-			yrp_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil )
+			yrp_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _x, _y = Scroller.YourRPTables:GetPos()
 		local _w, _h = Scroller.YourRPTables:GetSize()
 		local _rem_and_change = createD("DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change:SetText("")
 		function _rem_and_change:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "droptablesandchangelevel")
+			surfaceButton(self, pw, ph, "LID_droptablesandchangelevel")
 		end
 		function _rem_and_change:DoClick()
 			local _nw_tab = {}
@@ -193,12 +193,12 @@ net.Receive("Connect_Settings_Database", function(len)
 				end
 			end
 
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure" ) )
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60 )
-			_yesButton:SetText(YRP.lang_string("yes" ) )
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -206,8 +206,8 @@ net.Receive("Connect_Settings_Database", function(len)
 				_window:Close()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText(YRP.lang_string("no" ) )
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -222,19 +222,19 @@ net.Receive("Connect_Settings_Database", function(len)
 		yourrprelatedtables.w = ctr(1000)
 		yourrprelatedtables.h = Scroller:GetTall()
 		yourrprelatedtables.br = br / 2
-		yourrprelatedtables.name = "yourrprelatedtables"
+		yourrprelatedtables.name = "LID_yourrprelatedtables"
 		Scroller.YourRPRelatedTables = DGroup(yourrprelatedtables)
 		Scroller.YourRPRelatedTables:SetTall(Scroller.YourRPRelatedTables:GetTall() - ctr(60))
 		dbtab.parent = Scroller.YourRPRelatedTables
 		dbtab.color = YRPGetColor("2")
 		local yrp_r_tabs = {}
 		for i, tab in pairs(NW_YRP_RELATED) do
-			yrp_r_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil )
+			yrp_r_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _rem_and_change2 = createD("DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change2:SetText("")
 		function _rem_and_change2:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "droptablesandchangelevel")
+			surfaceButton(self, pw, ph, "LID_droptablesandchangelevel")
 		end
 		function _rem_and_change2:DoClick()
 			local _nw_tab = {}
@@ -246,12 +246,12 @@ net.Receive("Connect_Settings_Database", function(len)
 				end
 			end
 
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure" ) )
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60 )
-			_yesButton:SetText(YRP.lang_string("yes" ) )
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -259,8 +259,8 @@ net.Receive("Connect_Settings_Database", function(len)
 				_window:Close()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText(YRP.lang_string("no" ) )
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end
@@ -275,19 +275,19 @@ net.Receive("Connect_Settings_Database", function(len)
 		othertables.w = ctr(1000)
 		othertables.h = Scroller:GetTall()
 		othertables.br = br / 2
-		othertables.name = "othertables"
+		othertables.name = "LID_othertables"
 		local OtherTables = DGroup(othertables)
 		OtherTables:SetTall(OtherTables:GetTall() - ctr(60))
 		dbtab.parent = OtherTables
 		dbtab.color = YRPGetColor("2")
 		local other_tabs = {}
 		for i, tab in pairs(NW_YRP_OTHER) do
-			other_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil )
+			other_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _rem_and_change3 = createD("DButton", OtherTables:GetParent(), OtherTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change3:SetText("")
 		function _rem_and_change3:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "droptablesandchangelevel")
+			surfaceButton(self, pw, ph, "LID_droptablesandchangelevel")
 		end
 		function _rem_and_change3:DoClick()
 			local _nw_tab = {}
@@ -299,12 +299,12 @@ net.Receive("Connect_Settings_Database", function(len)
 				end
 			end
 
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0 )
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("areyousure" ) )
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
 
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60 )
-			_yesButton:SetText(YRP.lang_string("yes" ) )
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
 			function _yesButton:DoClick()
 				net.Start("yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -312,8 +312,8 @@ net.Receive("Connect_Settings_Database", function(len)
 				_window:Close()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60 )
-			_noButton:SetText(YRP.lang_string("no" ) )
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("LID_no"))
 			function _noButton:DoClick()
 				_window:Close()
 			end

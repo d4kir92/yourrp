@@ -70,7 +70,7 @@ function DCheckBoxes(tab)
 	function pnl.DButton:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 		local change = {}
-		change.text = "[" .. YRP.lang_string("change") .. "] (" .. tab.value .. ")"
+		change.text = "[" .. YRP.lang_string("LID_change") .. "] (" .. tab.value .. ")"
 		change.font = "mat1header"
 		change.x = ctr(10)
 		change.y = ph / 2
@@ -84,7 +84,7 @@ function DCheckBoxes(tab)
 			window:MakePopup()
 			window:SetTitle("")
 			function window:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("usergroups"))
+				surfaceWindow(self, pw, ph, YRP.lang_string("LID_usergroups"))
 			end
 			window.cm = createD("DPanelList", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
 
@@ -375,7 +375,7 @@ function DColor(tab)
 			window:MakePopup()
 			window:SetTitle("")
 			function window:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("color"))
+				surfaceWindow(self, pw, ph, YRP.lang_string("LID_color"))
 			end
 			window.cm = createD("DColorMixer", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
 			function window.cm:ValueChanged(col)
@@ -418,7 +418,7 @@ function DIntBox(tab)
 	tab.color = tab.color or Color(255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
-	tab.value = tab.value or "NOTEXT"
+	tab.value = tab.value or -1
 	tab.lforce = tab.lforce or true
 
 	tab.min = tonumber(tab.min) or 0
@@ -445,24 +445,24 @@ function DIntBox(tab)
 	end
 
 	pnl.DNumberWang = createD("DNumberWang", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
-	pnl.DNumberWang:SetValue(tab.value)
 	pnl.DNumberWang:SetMin(tab.min)
 	pnl.DNumberWang:SetMax(tab.max)
+	pnl.DNumberWang:SetValue(tab.value)
 	pnl.DNumberWang.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DNumberWang:OnValueChanged(val)
 			val = tonumber(val)
-			if val <= tab.max and val >= tab.min then
+			if val <= self:GetMax() and val >= self:GetMin() then
 				net.Start(tab.netstr)
 					net.WriteString(tab.uniqueID)
 					net.WriteString(val)
 				net.SendToServer()
-			elseif val > tab.max then
-				self:SetValue(tab.max)
-				self:SetText(tab.max)
-			elseif val < tab.min then
-				self:SetValue(tab.min)
-				self:SetText(tab.min)
+			elseif val > self:GetMax() then
+				self:SetValue(self:GetMax())
+				self:SetText(self:GetMax())
+			elseif val < self:GetMin() then
+				self:SetValue(self:GetMin())
+				self:SetText(self:GetMin())
 			end
 		end
 		net.Receive(tab.netstr, function(len)
@@ -520,7 +520,7 @@ function DTextBox(tab)
 
 		if dmg != nil and pnl.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("damage")
+			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
@@ -559,10 +559,15 @@ function DTextBox(tab)
 end
 
 function DNumberWang(tab)
-	local dnw = createD("DNumberWang", tab.parent, tab.w / tab.len, tab.h / 2, tab.x, tab.h / 2)
-	dnw:SetValue(tab.value)
+	tab = tab or {}
+	tab.w = tab.w or 10
+	tab.h = tab.h or 10
+	tab.min = tonumber(tab.min) or 0
+	tab.max = tonumber(tab.max) or 100
+	local dnw = createD("DNumberWang", tab.parent, tab.w, tab.h / 2, tab.x, tab.h / 2)
 	dnw:SetMin(tab.min)
 	dnw:SetMax(tab.max)
+	dnw:SetValue(tab.value)
 	dnw.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function dnw:OnValueChanged(val)
@@ -601,10 +606,11 @@ function DAttributeBar(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or ctr(120)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
+	tab.len = table.Count(tab.dnw)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -616,7 +622,132 @@ function DAttributeBar(tab)
 	local pnl = {}
 
 	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.val3 = 0
+	pnl.val4 = 0
+	pnl.delay = 0
 	function pnl.line:Paint(pw, ph)
+		ph = ph / 2
+		pnl.refresh = false
+		if CurTime() > pnl.delay then
+		 	pnl.delay = CurTime() + 1
+			pnl.refresh = true
+		end
+
+		if pnl.cu != nil and pnl.ma != nil then
+			tab.dnw[1].value = pnl.cu:GetValue() or tab.dnw[1].value
+			tab.dnw[2].value = pnl.ma:GetValue() or tab.dnw[2].value
+			if tab.dnw[3] != nil then
+				tab.dnw[3].value = pnl.up:GetValue() or tab.dnw[3].value
+				if pnl.refresh then
+					pnl.val3 = pnl.val3 + tab.dnw[3].value
+					if pnl.val3 > tab.dnw[2].value then
+						pnl.val3 = 0
+					elseif pnl.val3 < 0 then
+						pnl.val3 = tab.dnw[4].value
+					end
+				end
+				if tab.dnw[4] != nil then
+					tab.dnw[4].value = pnl.dn:GetValue() or tab.dnw[4].value
+					if pnl.refresh then
+						pnl.val4 = pnl.val4 + tab.dnw[4].value
+						if pnl.val4 > tab.dnw[2].value then
+							pnl.val4 = 0
+						elseif pnl.val4 < 0 then
+							pnl.val4 = tab.dnw[2].value
+						end
+					end
+				end
+			end
+			draw.RoundedBox(0, 0, 0, pw * tab.dnw[1].value / tab.dnw[2].value, ph, tab.color)
+			if tab.dnw[3] != nil then
+				draw.RoundedBox(0, 0, ph / 4 * 3, pw * pnl.val3 / tab.dnw[2].value, ph / 4, tab.color2)
+				if tab.dnw[4] != nil then
+					draw.RoundedBox(0, 0, ph / 4 * 2, pw * pnl.val4 / tab.dnw[2].value, ph / 4, tab.color3)
+				end
+			end
+			local text = {}
+			if tab.lforce then
+				text.text = YRP.lang_string(tab.header) .. ": " .. tab.dnw[1].value .. "/" .. tab.dnw[2].value
+				if tab.dnw[3] != nil then
+					text.text = text.text .. " (" .. tab.dnw[3].value
+					if tab.dnw[4] != nil then
+						text.text = text.text .. " | " .. tab.dnw[4].value
+					end
+				end
+				text.text = text.text .. ")"
+			else
+				text.text = tab.header .. ":"
+			end
+			text.x = ctr(10)
+			text.y = ph / 2
+			text.font = "mat1text"
+			text.color = Color(255, 255, 255, 255)
+			text.br = 1
+			text.ax = 0
+			DrawText(text)
+		end
+
+	end
+
+	tab.par = tab.parent
+
+	tab.parent = pnl.line
+
+	tab.dnw[1].uniqueID = tab.uniqueID
+	tab.dnw[1].parent = tab.parent
+	tab.dnw[1].w = tab.w / tab.len
+	tab.dnw[1].h = tab.h
+	tab.dnw[1].len = tab.len
+	pnl.cu = DNumberWang(tab.dnw[1])
+
+	tab.dnw[2].uniqueID = tab.uniqueID
+	tab.dnw[2].parent = tab.parent
+	tab.dnw[2].w = tab.w / tab.len
+	tab.dnw[2].h = tab.h
+	tab.dnw[2].len = tab.len
+	tab.dnw[2].x = tab.w / tab.len
+	pnl.ma = DNumberWang(tab.dnw[2])
+
+	tab.dnw[3].uniqueID = tab.uniqueID
+	tab.dnw[3].parent = tab.parent
+	tab.dnw[3].w = tab.w / tab.len
+	tab.dnw[3].h = tab.h
+	tab.dnw[3].len = tab.len
+	tab.dnw[3].x = tab.w / tab.len * 2
+	pnl.up = DNumberWang(tab.dnw[3])
+
+	if tab.dnw[4] != nil then
+		tab.dnw[4].uniqueID = tab.uniqueID
+		tab.dnw[4].parent = tab.parent
+		tab.dnw[4].w = tab.w / tab.len
+		tab.dnw[4].h = tab.h
+		tab.dnw[4].len = tab.len
+		tab.dnw[4].x = tab.w / tab.len * 3
+		pnl.dn = DNumberWang(tab.dnw[4])
+	end
+
+	if tab.par != nil and tab.par.AddItem != nil then
+		tab.par:AddItem(pnl.line)
+	end
+	return pnl
+end
+
+function DStringListBox(tab)
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	tab.w = tab.w or ctr(300)
+	tab.h = tab.h or ctr(120)
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.color = tab.color or Color(255, 255, 255)
+
+	tab.header = tab.header or "NOHEADER"
+	tab.value = tab.value or "NOTEXT"
+	tab.lforce = tab.lforce or true
+
+	local pnl = {}
+	pnl.bg = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	function pnl.bg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
 		if tab.lforce then
@@ -625,7 +756,7 @@ function DAttributeBar(tab)
 			text.text = tab.header .. ":"
 		end
 		text.x = ctr(10)
-		text.y = ph / 4
+		text.y = ctr(25)
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
@@ -633,41 +764,68 @@ function DAttributeBar(tab)
 		DrawText(text)
 	end
 
-	tab.cur = tonumber(tab.cur) or nil
+	pnl.add = createD("DButton", pnl.bg, ctr(50), ctr(50), tab.w - ctr(50), 0)
+	pnl.add:SetText("")
+	function pnl.add:Paint(pw, ph)
+		self.color = Color(0, 255, 0)
+		if self:IsHovered() then
+			self.color = Color(100, 255, 100)
+		end
+		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
+		draw.SimpleText("+", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+	function pnl.add:DoClick()
+		tab.doclick()
+	end
 
-	tab.max = tonumber(tab.max) or nil
+	pnl.dpl = createD("DPanelList", pnl.bg, tab.w, tab.h - ctr(50), 0, ctr(50))
+	pnl.dpl:EnableVerticalScrollbar(true)
+	pnl.dpl:SetSpacing(1)
+	function pnl.dpl:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+	end
+	function pnl.dpl:AddLines(t)
+		pnl.dpl:Clear()
 
-	tab.up = tonumber(tab.up) or nil
+		for i, v in pairs(t) do
+			if type(v) == "table" then
+				v.h = v.h or ctr(70)
+				v.br = v.br or ctr(10)
 
-	tab.dn = tonumber(tab.dn) or nil
+				pTab(v)
 
-	tab.len = 3
-	if tab.dn != nil then
-		tab.len = 4
+				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
+				line:SetText("")
+				function line:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleText(v.string_name, "DermaDefault", v.h, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+				line.uniqueID = v.uniqueID
+
+				line.rem = createD("DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
+				line.rem:SetText("")
+				function line.rem:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+					draw.SimpleText("-", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+				function line.rem:DoClick()
+					v.doclick()
+				end
+
+				if v.string_model != nil then
+					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, v.br, v.br)
+					line.mod:SetModel(v.string_model)
+				end
+
+				self:AddItem(line)
+			end
+		end
 	end
 
 	tab.par = tab.parent
 
-	tab.parent = pnl.line
-
-	tab.nstr = tab.netstr
-	tab.netstr = "int_" .. tab.nstr
-	pnl.cur = DNumberWang(tab)
-
-	tab.netstr = "int_" .. tab.nstr .. "max"
-	tab.x = tab.w / tab.len
-	pnl.max = DNumberWang(tab)
-
-	tab.netstr = "float_" .. tab.nstr .. "reg"
-	tab.x = tab.w / tab.len * 2
-	pnl.up = DNumberWang(tab)
-
-	if tab.dn != nil then
-		pnl.dn = DNumberWang(tab)
-	end
-
 	if tab.par != nil and tab.par.AddItem != nil then
-		tab.par:AddItem(pnl.line)
+		tab.par:AddItem(pnl.bg)
 	end
 	return pnl
 end
