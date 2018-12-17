@@ -1,5 +1,21 @@
 --Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+function pTab(table, name)
+	local _header = "PrintTable: "
+	name = name or ""
+	if name != "" then
+		name = name .. " "
+	end
+	_header = _header .. name .. "(" .. tostring( table ) .. ")"
+	printGM("gm", _header)
+
+	if istable( table ) then
+		PrintTable( table )
+	else
+		printGM("gm", "printTab " .. tostring( table ) .. " is not a table!" )
+	end
+end
+
 function combineTables(tab1, tab2)
 	if istable(tab1) and istable(tab2) then
 		for i, item in pairs(tab2) do
