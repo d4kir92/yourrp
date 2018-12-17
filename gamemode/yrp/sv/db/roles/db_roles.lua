@@ -629,8 +629,6 @@ net.Receive("rem_role_flag", function(len, ply)
 	table.RemoveByValue(newflags, tostring(fuid))
 	newflags = string.Implode(",", newflags)
 
-	print(newflags)
-
 	SQL_UPDATE(DATABASE_NAME, "string_customflags = '" .. newflags .. "'", "uniqueID = '" .. ruid .. "'")
 	SendCustomFlags(ruid)
 end)
@@ -786,7 +784,6 @@ function AddSwepToRole(ruid, swepcn)
 		table.insert(newsweps, tostring(swepcn))
 		newsweps = string.Implode(",", newsweps)
 
-		print(newsweps)
 		SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
 		SendSweps(ruid)
 	end

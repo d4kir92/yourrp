@@ -181,7 +181,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		local _rem_and_change = createD("DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change:SetText("")
 		function _rem_and_change:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "LID_droptablesandchangelevel")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_droptablesandchangelevel"))
 		end
 		function _rem_and_change:DoClick()
 			local _nw_tab = {}
@@ -234,7 +234,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		local _rem_and_change2 = createD("DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change2:SetText("")
 		function _rem_and_change2:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "LID_droptablesandchangelevel")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_droptablesandchangelevel"))
 		end
 		function _rem_and_change2:DoClick()
 			local _nw_tab = {}
@@ -287,7 +287,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		local _rem_and_change3 = createD("DButton", OtherTables:GetParent(), OtherTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
 		_rem_and_change3:SetText("")
 		function _rem_and_change3:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "LID_droptablesandchangelevel")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_droptablesandchangelevel"))
 		end
 		function _rem_and_change3:DoClick()
 			local _nw_tab = {}
