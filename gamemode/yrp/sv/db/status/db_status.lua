@@ -37,7 +37,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 		end
 		if !_yourrp_content_found then
 			_nw_yourrp["YourRP Content"] = {}
-			_nw_yourrp["YourRP Content"]["missingx"] = Color(255, 0, 0)
+			_nw_yourrp["YourRP Content"]["LID_missingx"] = Color(255, 0, 0)
 		end
 
 		local _roles = SQL_SELECT("yrp_ply_roles", "*", nil)
@@ -45,15 +45,19 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 		local _map = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
 		if wk(_roles) then
 			for i, role in pairs(_roles) do
-				if (role.playermodels == "" or role.playermodels == " ") and (role.playermodelsnone == "" or role.playermodelsnone == " ") then
-					_nw_roles[role.roleID] = _nw_roles[role.roleID] or {}
-					_nw_roles[role.roleID]["hasnoplayermodel"] = Color(220, 220, 0)
+				if role.string_playermodels == "" or role.string_playermodels == " " then
+					_nw_roles[role.string_name] = _nw_roles[role.string_name] or {}
+					_nw_roles[role.string_name]["LID_hasnoplayermodel"] = Color(220, 220, 0)
 				end
-				if (role.sweps == "" or role.sweps == " ") then
-					_nw_roles[role.roleID] = _nw_roles[role.roleID] or {}
-					_nw_roles[role.roleID]["hasnoswep"] = Color(220, 220, 0)
+				if role.string_sweps == "" or role.string_sweps == " " then
+					_nw_roles[role.string_name] = _nw_roles[role.string_name] or {}
+					_nw_roles[role.string_name]["LID_hasnoswep"] = Color(220, 220, 0)
 				end
 			end
+		end
+
+		if _map == nil then
+			_map = {}
 		end
 		if wk(_map) then
 			for i, group in pairs(_groups) do
@@ -65,7 +69,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 				end
 				if _has_no_spawnpoint then
 					_nw_groups[group.string_name] = _nw_groups[group.string_name] or {}
-					_nw_groups[group.string_name]["hasnogroupspawnpoint"] = Color(220, 220, 0)
+					_nw_groups[group.string_name]["LID_hasnogroupspawnpoint"] = Color(220, 220, 0)
 				end
 			end
 			local _no_jailpoint = true
@@ -78,10 +82,10 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 				end
 			end
 			if _no_jailpoint then
-				_nw_map["jail"]["nojailpoint"] = Color(220, 0, 0)
+				_nw_map["jail"]["LID_nojailpointfound"] = Color(220, 0, 0)
 			end
 			if _no_releasepoint then
-				_nw_map["jail"]["noreleasepoint"] = Color(220, 0, 0)
+				_nw_map["jail"]["LID_noreleasepointfound"] = Color(220, 0, 0)
 			end
 		end
 

@@ -64,6 +64,60 @@ end
 
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
+-- CONVERTING
+if wk(SQL_SELECT("yrp_roles", "*", nil)) then
+	local oldroles = SQL_SELECT("yrp_roles", "*", nil)
+	for i, role in pairs(oldroles) do
+		if tonumber(role.uniqueID) > 1 then
+			local cols = "string_name,"
+			cols = cols .. "string_description,"
+			cols = cols .. "int_salary,"
+			cols = cols .. "int_groupID,"
+			cols = cols .. "string_sweps,"
+			cols = cols .. "bool_voteable,"
+			cols = cols .. "bool_adminonly,"
+			cols = cols .. "bool_whitelist,"
+			cols = cols .. "int_maxamount,"
+			cols = cols .. "int_hp,"
+			cols = cols .. "int_hpmax,"
+			cols = cols .. "int_ar,"
+			cols = cols .. "int_armax,"
+			cols = cols .. "int_speedwalk,"
+			cols = cols .. "int_speedrun,"
+			cols = cols .. "int_powerjump,"
+			cols = cols .. "int_prerole,"
+			cols = cols .. "bool_instructor,"
+			cols = cols .. "int_salarytime,"
+			cols = cols .. "string_licenses"
+
+			local vals = "'" .. role.roleID .. "', "
+			vals = vals .. "'" .. role.description .. "', "
+			vals = vals .. "'" .. role.salary .. "', "
+			vals = vals .. "'" .. role.groupID .. "', "
+			vals = vals .. "'" .. role.sweps .. "', "
+			vals = vals .. "'" .. role.voteable .. "', "
+			vals = vals .. "'" .. role.adminonly .. "', "
+			vals = vals .. "'" .. role.whitelist .. "', "
+			vals = vals .. "'" .. role.maxamount .. "', "
+			vals = vals .. "'" .. role.hp .. "', "
+			vals = vals .. "'" .. role.hpmax .. "', "
+			vals = vals .. "'" .. role.ar .. "', "
+			vals = vals .. "'" .. role.armax .. "', "
+			vals = vals .. "'" .. role.speedwalk .. "', "
+			vals = vals .. "'" .. role.speedrun .. "', "
+			vals = vals .. "'" .. role.powerjump .. "', "
+			vals = vals .. "'" .. role.prerole .. "', "
+			vals = vals .. "'" .. role.instructor .. "', "
+			vals = vals .. "'" .. role.salarytime ..  "', "
+			vals = vals .. "'" .. role.licenseIDs .. "' "
+
+			SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+			SQL_DELETE_FROM("yrp_roles", "uniqueID = '" .. role.uniqueID .. "'")
+		end
+	end
+end
+-- CONVERTING
+
 local yrp_ply_roles = {}
 local _init_ply_roles = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_ply_roles) then
@@ -582,10 +636,6 @@ net.Receive("rem_role_flag", function(len, ply)
 end)
 
 function SendPlayermodels(uid)
-	local pm = SQL_SELECT("yrp_playermodels", "*", nil)
-	if !wk(pm) then
-		pm = {}
-	end
 	local role = GetRole(uid)
 	if wk(role) then
 		local nettab = {}
@@ -670,7 +720,7 @@ net.Receive("add_playermodel", function(len, ply)
 	AddPlayermodelToRole(ruid, lastentry.uniqueID)
 end)
 
-function RemPlayermodelToRole(ruid, muid)
+function RemPlayermodelFromRole(ruid, muid)
 	role = GetRole(ruid)
 	local pms = string.Explode(",", role.string_playermodels)
 	local oldpms = {}
@@ -693,5 +743,85 @@ net.Receive("rem_role_playermodel", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local muid = net.ReadInt(32)
 
-	RemPlayermodelToRole(ruid, muid)
+	RemPlayermodelFromRole(ruid, muid)
+end)
+
+function SendSweps(uid)
+	local role = GetRole(uid)
+	if wk(role) then
+		local nettab = {}
+		local sweps = string.Explode(",", role.string_sweps)
+		for i, swep in pairs(sweps) do
+			if swep != "" and swep != " " then
+				table.insert(nettab, swep)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+			net.Start("get_role_sweps")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
+	end
+end
+
+util.AddNetworkString("get_role_sweps")
+net.Receive("get_role_sweps", function(len, ply)
+	local uid = net.ReadInt(32)
+	SendSweps(uid)
+end)
+
+function AddSwepToRole(ruid, swepcn)
+	role = GetRole(ruid)
+	local sweps = string.Explode(",", role.string_sweps)
+	if !table.HasValue(sweps, tostring(swepcn)) then
+		local oldsweps = {}
+		for i, v in pairs(sweps) do
+			if v != "" and v != " " then
+				table.insert(oldsweps, v)
+			end
+		end
+
+		local newsweps = oldsweps
+		table.insert(newsweps, tostring(swepcn))
+		newsweps = string.Implode(",", newsweps)
+
+		print(newsweps)
+		SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+		SendSweps(ruid)
+	end
+end
+
+util.AddNetworkString("add_role_swep")
+net.Receive("add_role_swep", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local swepcn = net.ReadString()
+
+	AddSwepToRole(ruid, swepcn)
+end)
+
+function RemSwepFromRole(ruid, swepcn)
+	role = GetRole(ruid)
+	local sweps = string.Explode(",", role.string_sweps)
+	local oldsweps = {}
+	for i, v in pairs(sweps) do
+		if v != "" and v != " " then
+			table.insert(oldsweps, v)
+		end
+	end
+
+	local newsweps = oldsweps
+	table.RemoveByValue(newsweps, tostring(swepcn))
+	newsweps = string.Implode(",", newsweps)
+
+	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+	SendSweps(ruid)
+end
+
+util.AddNetworkString("rem_role_swep")
+net.Receive("rem_role_swep", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local swepcn = net.ReadString()
+
+	RemSwepFromRole(ruid, swepcn)
 end)

@@ -41,7 +41,7 @@ function openFeedbackMenu()
 	_fb.discord = createD("DButton", _fb.window, ctr(800), ctr(50), ctr(10), ctr(50))
 	_fb.discord:SetText("")
 	function _fb.discord:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("LID_livesupport"))
+		surfaceButton(self, pw, ph, YRP.lang_string("LID_getlivesupport"))
 	end
 	function _fb.discord:DoClick()
 		gui.OpenURL("https://discord.gg/sEgNZxg")

@@ -278,8 +278,8 @@ timer.Create("ServerThink", 1, 0, function()
 
 	local _auto_save = 300
 	if _time % _auto_save == 0 then
-		local _mod = _time%60
-		local _left = _time/60 - _mod
+		local _mod = _time % 60
+		local _left = _time / 60 - _mod
 		local _str = "Auto-Save (Uptime: " .. _left .. " " .. YRP.lang_string("LID_minutes") .. ")"
 		save_clients(_str)
 		SaveStorages(_str)

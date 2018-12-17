@@ -205,7 +205,15 @@ function server_toggled(ply)
 	return ply:GetNWBool("bool_yrp_hud", false)
 end
 
+local delay = 0
+local fps = 0
 function HudPlayer(ply)
+	if CurTime() > delay then
+	 	delay = CurTime() + 0.4
+		fps = math.Round(1 / RealFrameTime())
+	end
+	draw.SimpleText("FPS: " .. fps, "DermaDefault", ScrW() - 60, 30, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+
 	local weapon = ply:GetActiveWeapon()
 	if is_hud_db_loaded() then
 		drawMenuInfo()

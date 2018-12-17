@@ -33,7 +33,7 @@ function Player:GetBackpack()
 end
 
 function Player:HasAccess()
-	return self:GetNWBool("adminaccess", false)
+	return self:GetNWBool("bool_adminaccess", false)
 end
 
 function Player:LoadedGamemode()

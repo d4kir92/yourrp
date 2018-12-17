@@ -1180,6 +1180,83 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].equipment = DGroup(equipment)
 			ea.equipment = ea[role.uniqueID].equipment
 
+			local sweps = {}
+			sweps.parent = ea.equipment
+			sweps.uniqueID = role.uniqueID
+			sweps.header = "LID_sweps"
+			sweps.netstr = "update_role_string_sweps"
+			sweps.value = role.string_sweps
+			sweps.uniqueID = role.uniqueID
+			sweps.w = ea.equipment:GetWide()
+			sweps.h = ctr(425)
+			sweps.doclick = function()
+				local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+				winswep:SetTitle("")
+				winswep:Center()
+				winswep:MakePopup()
+
+				local allsweps = GetSWEPsList()
+				local cl_sweps = {}
+				local count = 0
+				for k, v in pairs(allsweps) do
+					count = count + 1
+					cl_sweps[count] = {}
+					cl_sweps[count].WorldModel = v.WorldModel or ""
+					cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+					cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+				end
+
+				winswep.dpl = createD("DPanelList", winswep, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+				winswep.dpl:EnableVerticalScrollbar(true)
+				for i, v in pairs(cl_sweps) do
+					local d_swep = createD("DButton", nil, winswep.dpl:GetWide(), ctr(100), 0, 0)
+					d_swep:SetText(v.PrintName)
+					function d_swep:DoClick()
+						net.Start("add_role_swep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(v.ClassName)
+						net.SendToServer()
+						winswep:Close()
+					end
+
+					if v.WorldModel != "" then
+						d_swep.model = createD("DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+						d_swep.model:SetModel(v.WorldModel)
+					else
+						d_swep.model = createD("DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+						function d_swep.model:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+							draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						end
+					end
+
+					winswep.dpl:AddItem(d_swep)
+				end
+			end
+			ea[role.uniqueID].sweps = DStringListBox(sweps)
+			net.Receive("get_role_sweps", function()
+				local tab_pm = net.ReadTable()
+				local cl_sweps = {}
+				for i, v in pairs(tab_pm) do
+					local swep = {}
+					swep.string_model = GetSwepWorldModel(v)
+					swep.string_classname = v
+					swep.string_name = v
+					swep.doclick = function()
+						net.Start("rem_role_swep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(swep.string_classname)
+						net.SendToServer()
+					end
+					swep.h = ctr(120)
+					table.insert(cl_sweps, swep)
+				end
+				ea[role.uniqueID].sweps.dpl:AddLines(cl_sweps)
+			end)
+			net.Start("get_role_sweps")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
 			local restriction = {}
 			restriction.parent = ea.background
 			restriction.x = ctr(1660)

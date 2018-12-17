@@ -137,9 +137,9 @@ function openMap()
 
 				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "HudBars", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-				if lply:GetNWBool("canseeteammatesonmap", false) or lply:GetNWBool("canseeenemiesonmap", false) then
+				if lply:GetNWBool("bool_canseeteammatesonmap", false) or lply:GetNWBool("bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll()) do
-						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNWBool("canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNWBool("canseeenemiesonmap", false)) then
+						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNWBool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNWBool("bool_canseeenemiesonmap", false)) then
 							local tmp = {}
 							tmp.xMax = map.sizeX
 							tmp.yMax = map.sizeY

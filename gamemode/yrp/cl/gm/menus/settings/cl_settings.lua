@@ -225,7 +225,7 @@ function OpenSettings()
 
 		color.a = 200
 		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		draw.SimpleTextOutlined(YRP.lang_string("LID_livesupport"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_getlivesupport"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	local settingsButton = createD("DButton", mainBar, ctr(80), ctr(80), ScrW() - ctr(180), ctr(10))

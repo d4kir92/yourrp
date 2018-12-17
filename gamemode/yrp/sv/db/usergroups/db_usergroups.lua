@@ -1441,9 +1441,9 @@ function Player:UserGroupLoadout()
 			self:Give(swep)
 		end
 		self:SetNWString("usergroupColor", UG.string_color)
-		self:SetNWBool("adminaccess", tobool(UG.bool_adminaccess))
-		self:SetNWBool("canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
-		self:SetNWBool("canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
+		self:SetNWBool("bool_adminaccess", tobool(UG.bool_adminaccess))
+		self:SetNWBool("bool_canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
+		self:SetNWBool("bool_canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
 	end
 end
 

@@ -202,6 +202,15 @@ function GetSWEPsList()
 	return SWEPS
 end
 
+function GetSwepWorldModel(swepcn)
+	local allsweps = GetSWEPsList()
+	for i, swep in pairs(allsweps) do
+		if swep.ClassName == swepcn then
+			return swep.WorldModel
+		end
+	end
+end
+
 function GetSWEPWorldModel(ClassName)
 	local sweps = weapons.GetList()
 	local _weaplist = list.Get("Weapon")

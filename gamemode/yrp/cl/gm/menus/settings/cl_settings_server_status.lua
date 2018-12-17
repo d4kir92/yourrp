@@ -72,7 +72,7 @@ net.Receive("Connect_Settings_Status", function(len)
 		tab_roles.w = ctr(800)
 		tab_roles.h = Scroller:GetTall()
 		tab_roles.br = br / 2
-		tab_roles.name = "roles"
+		tab_roles.name = "LID_roles"
 		local Group_Roles = DGroup(tab_roles)
 		for roleID, role in pairs(TAB_ROLES) do
 			for str_id, color in pairs(role) do
@@ -87,7 +87,7 @@ net.Receive("Connect_Settings_Status", function(len)
 		tab_groups.w = ctr(800)
 		tab_groups.h = Scroller:GetTall()
 		tab_groups.br = br / 2
-		tab_groups.name = "groups"
+		tab_groups.name = "LID_groups"
 		local Group_Groups = DGroup(tab_groups)
 		for groupID, group in pairs(TAB_GROUPS) do
 			for str_id, color in pairs(group) do
@@ -102,7 +102,7 @@ net.Receive("Connect_Settings_Status", function(len)
 		tab_map.w = ctr(800)
 		tab_map.h = Scroller:GetTall()
 		tab_map.br = br / 2
-		tab_map.name = "map"
+		tab_map.name = "LID_map"
 		local Group_Map = DGroup(tab_map)
 		for mapID, map in pairs(TAB_MAP) do
 			for str_id, color in pairs(map) do
