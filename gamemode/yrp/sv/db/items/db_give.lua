@@ -468,6 +468,19 @@ function Player:StripWeapons()
 	self:LegacyStripWeapons()
 end
 
+function Player:IsAllowedToDropSWEP(cname)
+	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNWString("roleUniqueID", "0") .. "'")
+	if wk(ndsweps) then
+		ndsweps = ndsweps[1]
+		ndsweps = string.Explode(",", ndsweps.string_ndsweps)
+		if table.HasValue(ndsweps, cname) then
+			return false
+		else
+			return true
+		end
+	end
+end
+
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if not ply:GetNWBool("bool_inventory_system", false) then
 		--[[ Inventory OFF ]]
@@ -493,7 +506,6 @@ util.AddNetworkString("drop_item")
 
 net.Receive("drop_item", function(len, ply)
 	local _weapon = ply:GetActiveWeapon()
-
 	if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
 		local _wclass = _weapon:GetClass() or ""
 		ply:DropSWEP(_wclass)
@@ -512,8 +524,10 @@ net.Receive("dropswep", function(len, ply)
 
 		if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
 			local _wclass = _weapon:GetClass() or ""
-			ply:DropSWEP(_wclass)
-			_dropped = true
+			if ply:IsAllowedToDropSWEP(_wclass) then
+				ply:DropSWEP(_wclass)
+				_dropped = true
+			end
 		end
 	else
 		printGM("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
