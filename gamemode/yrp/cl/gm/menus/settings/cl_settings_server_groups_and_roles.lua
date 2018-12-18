@@ -163,7 +163,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab.color = gs.gplist[group.uniqueID]["string_color"]
 				DrawPanel(self, tab)
 
-				self.text = self.text or group.string_name .. " [UID: " .. group.uniqueID .. "]"
+				self.text = self.text or group.string_name --.. " [UID: " .. group.uniqueID .. "]"
 				local tab2 = {}
 				tab2.x = ctr(182)
 				tab2.y = ctr(20)
@@ -320,7 +320,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					if self.group != "" then
 						local inp = {}
 						inp.group = self.group
-						tab2.text = "[" .. YRP.lang_string("LID_wip") .. "] " .. YRP.lang_string("LID_rolesof", inp)
+						tab2.text = YRP.lang_string("LID_rolesof", inp)
 					end
 				else
 					tab2.text = YRP.lang_string("LID_loading")
@@ -408,6 +408,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function ea.del:DoClick()
 			if ea.typ == "group" and tobool(ea.tab.bool_removeable) then
 				net.Start("settings_delete_group")
+					net.WriteString(ea.tab.uniqueID)
+				net.SendToServer()
+				for i, pnl in pairs(ea.background:GetChildren()) do
+					pnl:Remove()
+				end
+				ea.typ = nil
+				ea.tab = nil
+			elseif ea.typ == "role" and tobool(ea.tab.bool_removeable) then
+				net.Start("settings_delete_role")
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
 				for i, pnl in pairs(ea.background:GetChildren()) do
@@ -544,7 +553,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local othergroups = {}
 			othergroups[0] = YRP.lang_string("LID_factions")
 			for i, tab in pairs(groups) do
-				othergroups[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+				othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 			end
 
 			local parentgroup = {}
@@ -681,7 +690,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab.color = rs.rplist[role.uniqueID]["string_color"]
 				DrawPanel(self, tab)
 
-				self.text = self.text or role.string_name .. " [UID: " .. role.uniqueID .. "]"
+				self.text = self.text or role.string_name --.. " [UID: " .. role.uniqueID .. "]"
 				local tab2 = {}
 				tab2.x = ctr(182)
 				tab2.y = ctr(20)
@@ -880,7 +889,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			for i, tab in pairs(roles) do
 				tab.uniqueID = tonumber(tab.uniqueID)
 				if tab.uniqueID != role.uniqueID then
-					otherroles[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+					otherroles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 				end
 			end
 
@@ -916,9 +925,22 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
+			local amountpercentage = {}
+			amountpercentage.parent = ea.info
+			amountpercentage.header = "LID_amountpercentage"
+			amountpercentage.netstr = "update_role_int_amountpercentage"
+			amountpercentage.value = role.int_amountpercentage
+			amountpercentage.uniqueID = role.uniqueID
+			amountpercentage.lforce = false
+			amountpercentage.min = 0
+			amountpercentage.max = GetMaxInt()
+			ea[role.uniqueID].amountpercentage = DIntBox(amountpercentage)
+
+			DHr(hr)
+
 			local grps = {}
 			for i, tab in pairs(db_groups) do
-				grps[i] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+				grps[i] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 			end
 
 			local int_groupID = {}
@@ -1254,6 +1276,84 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				ea[role.uniqueID].sweps.dpl:AddLines(cl_sweps)
 			end)
 			net.Start("get_role_sweps")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
+			-- Not droppable
+			local ndsweps = {}
+			ndsweps.parent = ea.equipment
+			ndsweps.uniqueID = role.uniqueID
+			ndsweps.header = "LID_ndsweps"
+			ndsweps.netstr = "update_role_string_ndsweps"
+			ndsweps.value = role.string_ndsweps
+			ndsweps.uniqueID = role.uniqueID
+			ndsweps.w = ea.equipment:GetWide()
+			ndsweps.h = ctr(425)
+			ndsweps.doclick = function()
+				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+				winndswep:SetTitle("")
+				winndswep:Center()
+				winndswep:MakePopup()
+
+				local allndsweps = GetSWEPsList()
+				local cl_ndsweps = {}
+				local count = 0
+				for k, v in pairs(allndsweps) do
+					count = count + 1
+					cl_ndsweps[count] = {}
+					cl_ndsweps[count].WorldModel = v.WorldModel or ""
+					cl_ndsweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+				end
+
+				winndswep.dpl = createD("DPanelList", winndswep, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+				winndswep.dpl:EnableVerticalScrollbar(true)
+				for i, v in pairs(cl_ndsweps) do
+					local d_ndswep = createD("DButton", nil, winndswep.dpl:GetWide(), ctr(100), 0, 0)
+					d_ndswep:SetText(v.PrintName)
+					function d_ndswep:DoClick()
+						net.Start("add_role_ndswep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(v.ClassName)
+						net.SendToServer()
+						winndswep:Close()
+					end
+
+					if v.WorldModel != "" then
+						d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+						d_ndswep.model:SetModel(v.WorldModel)
+					else
+						d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+						function d_ndswep.model:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+							draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						end
+					end
+
+					winndswep.dpl:AddItem(d_ndswep)
+				end
+			end
+			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
+			net.Receive("get_role_ndsweps", function()
+				local tab_pm = net.ReadTable()
+				local cl_ndsweps = {}
+				for i, v in pairs(tab_pm) do
+					local ndswep = {}
+					ndswep.string_model = GetSwepWorldModel(v)
+					ndswep.string_classname = v
+					ndswep.string_name = v
+					ndswep.doclick = function()
+						net.Start("rem_role_ndswep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(ndswep.string_classname)
+						net.SendToServer()
+					end
+					ndswep.h = ctr(120)
+					table.insert(cl_ndsweps, ndswep)
+				end
+				ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
+			end)
+			net.Start("get_role_ndsweps")
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 

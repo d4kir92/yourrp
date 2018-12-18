@@ -13,3 +13,18 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_type", "TEXT DEFAULT 'role'")
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_type", "'iscp', 'role'")
 end
+
+function AddCustomFlag(name, typ)
+	if name != nil and typ != nil then
+		local _found = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. name .. "' AND string_type = '" .. typ .. "'")
+		if !_found then
+			SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_type", "'" .. name .. "', '" .. typ .. "'")
+		else
+			printGM("note", "Custom Flag " .. name .. " (" .. typ .. ") already exists.")
+		end
+	end
+end
+
+AddCustomFlag("iscp", "role")
+AddCustomFlag("ismayor", "role")
+AddCustomFlag("ismedic", "role")

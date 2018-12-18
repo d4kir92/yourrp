@@ -1642,13 +1642,13 @@ net.Receive("yrp_noti", function(len)
 			local _str = "[" .. YRP.lang_string("LID_adminnotification") .. "] "
 
 			if _str_lang == "noreleasepoint" then
-				_str = _str .. YRP.lang_string(_str_lang)
+				_str = _str .. YRP.lang_string("LID_" .. _str_lang)
 			elseif _str_lang == "nojailpoint" then
-				_str = _str .. YRP.lang_string(_str_lang)
+				_str = _str .. YRP.lang_string("LID_" .. _str_lang)
 			elseif _str_lang == "nogroupspawn" then
-				_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. YRP.lang_string(_str_lang) .. "!"
+				_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. YRP.lang_string("LID_" .. _str_lang) .. "!"
 			elseif _str_lang == "inventoryclearing" then
-				_str = _str .. YRP.lang_string(_str_lang) .. " (" .. YRP.lang_string(net.ReadString()) .. ")"
+				_str = _str .. YRP.lang_string("LID_" .. _str_lang) .. " (" .. YRP.lang_string(net.ReadString()) .. ")"
 			elseif _str_lang == "playerisready" then
 				_str = _str .. YRP.lang_string("LID_finishedloadingthegamepre") .. " " .. net.ReadString() .. " " .. YRP.lang_string("LID_finishedloadingthegamepos")
 			elseif _str_lang == "newfeedback" then

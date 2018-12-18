@@ -459,7 +459,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "service" then
 		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetNWBool("iscivil", false) or receiver == sender then
+			if receiver:GetNWBool("bool_iscp", false) or receiver == sender then
 				net.Start("yrp_player_say")
 					net.WriteTable(pk)
 				net.Send(receiver)

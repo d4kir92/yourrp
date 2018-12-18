@@ -224,7 +224,6 @@ function set_role_values(ply)
 				ply:SetNWBool("yrp_voice_global", tobool(rolTab.bool_voiceglobal))
 
 				ply:SetNWBool("canbeagent", tobool(rolTab.bool_canbeagent))
-				ply:SetNWBool("iscivil", tobool(rolTab.bool_iscivil))
 				ply:SetNWBool("isadminonly", tobool(rolTab.bool_adminonly))
 
 				local _licenseIDs = string.Explode(",", rolTab.string_licenses)
@@ -243,6 +242,18 @@ function set_role_values(ply)
 				for k, swep in pairs(tmpSWEPTable) do
 					if swep != nil and swep != NULL and swep != "" then
 						ply:Give(swep)
+					end
+				end
+
+				--custom flags
+				local customflags = string.Explode(",", rolTab.string_customflags)
+				for i, flag in pairs(customflags) do
+					if wk(flag) then
+						local fl = SQL_SELECT("yrp_flags", "*", "uniqueID = '" .. flag .. "'")
+						if wk(fl) then
+							fl = fl[1]
+							ply:SetNWBool("bool_" .. fl.string_name, true)
+						end
 					end
 				end
 			else
@@ -366,6 +377,8 @@ function check_yrp_client(ply)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
 
 	check_yrp_player(ply)
+
+	SendTeamsToPlayer(ply)
 
 	save_clients("check_yrp_client")
 end
@@ -582,7 +595,7 @@ function canVoteRole(ply, roleID)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		if tmpTableRole[1].int_uses < tmpTableRole[1].int_maxamount or tonumber(tmpTableRole[1].int_maxamount) == -1 or tonumber(tmpTableRole[1].int_maxamount) == 0 then
+		if tonumber(v.int_uses) < tonumber(#player.GetAll()) * (tonumber(v.int_amountpercentage) / 100) and tmpTableRole[1].int_uses < tmpTableRole[1].int_maxamount or tonumber(tmpTableRole[1].int_maxamount) == -1 or tonumber(tmpTableRole[1].int_maxamount) == 0 then
 			if tonumber(tmpTableRole[1].bool_voteable) == 1 then
 				return true
 			end

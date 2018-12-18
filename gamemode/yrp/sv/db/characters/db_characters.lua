@@ -359,7 +359,7 @@ net.Receive("charGetRoles", function(len, ply)
 				end
 			else
 				if tonumber(v.int_maxamount) > 0 then
-					if tonumber(v.int_uses) < tonumber(v.int_maxamount) then
+					if tonumber(v.int_uses) < tonumber(v.int_maxamount) and tonumber(v.int_uses) < tonumber(#player.GetAll()) * (tonumber(v.int_amountpercentage) / 100) then
 						insert = true
 					else
 						insert = false

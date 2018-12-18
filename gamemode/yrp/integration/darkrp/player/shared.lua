@@ -147,26 +147,22 @@ end
 
 function Player:isCP()
 	--Description: Whether this player is part of the police force (mayor, cp, chief).
-	return self:GetNWBool("iscivil", false)
+	return self:GetNWBool("bool_iscp", false)
 end
 
 function Player:isHitman()
 	--Description: Whether this player is a hitman.
-	return self:GetNWBool("canbeagent", false)
+	return self:GetNWBool("bool_canbeagent", false)
 end
 
 function Player:isMayor()
 	--Description: Whether this player is a mayor.
-	printGM("darkrp", "isMayor()")
-	printGM("darkrp", DarkRP._not)
-	return false
+	return self:GetNWBool("bool_ismayor", false)
 end
 
 function Player:isMedic()
 	--Description: Whether this player is a medic.
-	printGM("darkrp", "isMedic()")
-	printGM("darkrp", DarkRP._not)
-	return false
+	return self:GetNWBool("bool_ismedic", false)
 end
 
 function Player:isWanted()

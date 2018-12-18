@@ -14,11 +14,13 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_amountpercentage", "INTEGER DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_hpup", "INTEGER DEFAULT 0")
@@ -47,7 +49,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_voiceglobal", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscivil", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
@@ -117,6 +118,57 @@ if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 	end
 end
 -- CONVERTING
+
+-- darkrp
+function ConvertToDarkRPJob(tab)
+	local _job = {}
+
+	_job.name = tab.string_name
+	local _pms = string.Explode(",", tab.string_playermodels)
+	_job.model = _pms
+	_job.description = tab.string_description
+	local _weapons = string.Explode(",", tab.string_sweps)
+	_job.weapons = _weapons
+	_job.max = tonumber(tab.int_maxamount)
+	_job.salary = tonumber(tab.int_salary)
+	_job.admin = tonumber(tab.bool_adminonly) or 0
+	_job.vote = tobool(tab.bool_voteable) or false
+	if tab.string_licenses != "" then
+		_job.hasLicense = true
+	else
+		_job.hasLicense = false
+	end
+	_job.candemote =  tobool(tab.bool_instructor) or false
+	local gname = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tab.int_groupID .. "'")
+	if wk(gname) then
+		gname = gname[1].string_name
+	end
+	_job.category = gname or "invalid group"
+
+	return _job
+end
+
+local drp_allroles = SQL_SELECT(DATABASE_NAME, "*", nil)
+local TEAMS = {}
+if wk(drp_allroles) then
+	for i, role in pairs(drp_allroles) do
+		local teamname = "TEAM_" .. role.string_name
+		teamname = string.Replace(teamname, " ", "_")
+		TEAMS[teamname] = ConvertToDarkRPJob(role)
+		_G[teamname] = TEAMS["TEAM_" .. role.string_name]
+	end
+end
+
+util.AddNetworkString("send_team")
+function SendTeamsToPlayer(ply)
+	for i, role in pairs(TEAMS) do
+		net.Start("send_team")
+			net.WriteString(i)
+			net.WriteTable(role)
+		net.Send(ply)
+	end
+end
+-- darkrp
 
 local yrp_ply_roles = {}
 local _init_ply_roles = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
@@ -517,7 +569,7 @@ net.Receive("settings_delete_role", function(len, ply)
 		end
 
 		role.int_groupID = tonumber(role.int_groupID)
-		SendrpList(role.int_groupID)
+		SendRoleList(role.int_groupID)
 	end
 end)
 
@@ -543,10 +595,6 @@ function GetRole(uid)
 end
 
 function SendCustomFlags(uid)
-	local cf = SQL_SELECT("yrp_flags", "*", "type = 'role' AND int_uid = '" .. uid .. "'")
-	if !wk(cf) then
-		cf = {}
-	end
 	local role = GetRole(uid)
 	if wk(role) then
 		local nettab = {}
@@ -582,6 +630,7 @@ net.Receive("get_all_role_customflags", function(len, ply)
 	if !wk(allflags) then
 		allflags = {}
 	end
+
 	net.Start("get_all_role_customflags")
 		net.WriteTable(allflags)
 	net.Send(ply)
@@ -821,4 +870,84 @@ net.Receive("rem_role_swep", function(len, ply)
 	local swepcn = net.ReadString()
 
 	RemSwepFromRole(ruid, swepcn)
+end)
+
+--not droppable sweps
+function SendNDSweps(uid)
+	local role = GetRole(uid)
+	if wk(role) then
+		local nettab = {}
+		local ndsweps = string.Explode(",", role.string_ndsweps)
+		for i, ndswep in pairs(ndsweps) do
+			if ndswep != "" and ndswep != " " then
+				table.insert(nettab, ndswep)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+			net.Start("get_role_ndsweps")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
+	end
+end
+
+util.AddNetworkString("get_role_ndsweps")
+net.Receive("get_role_ndsweps", function(len, ply)
+	local uid = net.ReadInt(32)
+	SendNDSweps(uid)
+end)
+
+function AddNDSwepToRole(ruid, ndswepcn)
+	role = GetRole(ruid)
+	local ndsweps = string.Explode(",", role.string_ndsweps)
+	if !table.HasValue(ndsweps, tostring(ndswepcn)) then
+		local oldndsweps = {}
+		for i, v in pairs(ndsweps) do
+			if v != "" and v != " " then
+				table.insert(oldndsweps, v)
+			end
+		end
+
+		local newndsweps = oldndsweps
+		table.insert(newndsweps, tostring(ndswepcn))
+		newndsweps = string.Implode(",", newndsweps)
+
+		SQL_UPDATE(DATABASE_NAME, "string_ndsweps = '" .. newndsweps .. "'", "uniqueID = '" .. ruid .. "'")
+		SendNDSweps(ruid)
+	end
+end
+
+util.AddNetworkString("add_role_ndswep")
+net.Receive("add_role_ndswep", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local ndswepcn = net.ReadString()
+
+	AddNDSwepToRole(ruid, ndswepcn)
+end)
+
+function RemNDSwepFromRole(ruid, ndswepcn)
+	role = GetRole(ruid)
+	local ndsweps = string.Explode(",", role.string_ndsweps)
+	local oldndsweps = {}
+	for i, v in pairs(ndsweps) do
+		if v != "" and v != " " then
+			table.insert(oldndsweps, v)
+		end
+	end
+
+	local newndsweps = oldndsweps
+	table.RemoveByValue(newndsweps, tostring(ndswepcn))
+	newndsweps = string.Implode(",", newndsweps)
+
+	SQL_UPDATE(DATABASE_NAME, "string_ndsweps = '" .. newndsweps .. "'", "uniqueID = '" .. ruid .. "'")
+	SendNDSweps(ruid)
+end
+
+util.AddNetworkString("rem_role_ndswep")
+net.Receive("rem_role_ndswep", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local ndswepcn = net.ReadString()
+
+	RemNDSwepFromRole(ruid, ndswepcn)
 end)

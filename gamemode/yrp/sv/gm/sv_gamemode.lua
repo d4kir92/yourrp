@@ -193,7 +193,7 @@ end
 function IsNoRoleSwep(ply, cname)
 	local _rol_tab = ply:GetRolTab()
 	if wk(_rol_tab) then
-		local _sweps = string.Explode(",", _rol_tab.sweps)
+		local _sweps = string.Explode(",", _rol_tab.string_sweps)
 		if !table.HasValue(_sweps, cname) then
 			return true
 		else
