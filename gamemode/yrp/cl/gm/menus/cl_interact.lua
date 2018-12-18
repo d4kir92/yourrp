@@ -29,7 +29,7 @@ function openInteractMenu(SteamID)
 	end
 end
 
-net.Receive("openInteractMenu", function ()
+net.Receive("openInteractMenu", function(len)
 	local idcard = net.ReadBool()
 
 	local isInstructor = net.ReadBool()

@@ -6,13 +6,13 @@ function pTab(table, name)
 	if name != "" then
 		name = name .. " "
 	end
-	_header = _header .. name .. "(" .. tostring( table ) .. ")"
+	_header = _header .. name .. "(" .. tostring(table) .. ")"
 	printGM("gm", _header)
 
-	if istable( table ) then
-		PrintTable( table )
+	if istable(table) then
+		PrintTable(table)
 	else
-		printGM("gm", "printTab " .. tostring( table ) .. " is not a table!" )
+		printGM("gm", "printTab " .. tostring(table) .. " is not a table!")
 	end
 end
 
@@ -45,7 +45,7 @@ function combineStringTables(str1, str2)
 		local _tab1 = string.Explode(",", tostring(str1))
 		local _tab2 = string.Explode(",", tostring(str2))
 		local tab = combineTables(_tab1, _tab2)
-		printGM("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2) )
+		printGM("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2))
 		pTab(tab)
 		return ""
 	end
