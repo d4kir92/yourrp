@@ -49,8 +49,9 @@ function CreateButtonLine(dpanellist, lstr, netstr, lstr2)
 
 	background.button = createD("DButton", background, ctr(800) - ctr(10 * 2), ctr(50), ctr(10), ctr(50))
 	background.button:SetText("")
+	background.button.text = lstr2 or lstr
 	function background.button:Paint(pw, ph)
-		surfaceButton(self, pw, ph, lstr2 or lstr, Color(200, 200, 200, 255))
+		surfaceButton(self, pw, ph, YRP.lang_string(self.text), Color(200, 200, 200, 255))
 	end
 
 	function background.button:DoClick()
@@ -488,7 +489,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(MONEY_SETTINGS.plus)
 		CreateTextBoxLineSpecial(MONEY_SETTINGS.plus, GEN.text_money_pre, GEN.text_money_pos, "LID_visual", "update_text_money_pre", "update_text_money_pos")
 		CreateHRLine(MONEY_SETTINGS.plus)
-		local money_reset = CreateButtonLine(MONEY_SETTINGS.plus, "LID_moneyreset", "update_money_reset", "moneyreset")
+		local money_reset = CreateButtonLine(MONEY_SETTINGS.plus, "LID_moneyreset", "update_money_reset")
 		function money_reset.button:DoClick()
 			local win = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			win:Center()

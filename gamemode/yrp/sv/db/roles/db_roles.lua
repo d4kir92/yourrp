@@ -109,7 +109,7 @@ if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 			vals = vals .. "'" .. role.powerjump .. "', "
 			vals = vals .. "'" .. role.prerole .. "', "
 			vals = vals .. "'" .. role.instructor .. "', "
-			vals = vals .. "'" .. role.salarytime ..  "', "
+			vals = vals .. "'" .. role.salarytime ..	"', "
 			vals = vals .. "'" .. role.licenseIDs .. "' "
 
 			SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
@@ -138,7 +138,7 @@ function ConvertToDarkRPJob(tab)
 	else
 		_job.hasLicense = false
 	end
-	_job.candemote =  tobool(tab.bool_instructor) or false
+	_job.candemote =	tobool(tab.bool_instructor) or false
 	local gname = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tab.int_groupID .. "'")
 	if wk(gname) then
 		gname = gname[1].string_name
@@ -574,11 +574,11 @@ net.Receive("settings_delete_role", function(len, ply)
 end)
 
 util.AddNetworkString("getScoreboardGroups")
-net.Receive( "getScoreboardGroups", function( len, ply )
-	local _tmpGroups = SQL_SELECT( "yrp_ply_groups", "*", nil )
+net.Receive("getScoreboardGroups", function(len, ply)
+	local _tmpGroups = SQL_SELECT("yrp_ply_groups", "*", nil)
 	if wk(_tmpGroups) then
-		net.Start( "getScoreboardGroups" )
-			net.WriteTable( _tmpGroups )
+		net.Start("getScoreboardGroups")
+			net.WriteTable(_tmpGroups)
 		net.Broadcast()
 	else
 		printGM("note", "getScoreboardGroups failed!")
@@ -694,7 +694,7 @@ function SendPlayermodels(uid)
 				local entry = {}
 				entry.uniqueID = pm.uniqueID
 				local name = pm.string_name
-				if name == "" or  name == " " then
+				if name == "" or	name == " " then
 					name = pm.string_model
 				end
 				entry.string_name = name
@@ -950,4 +950,81 @@ net.Receive("rem_role_ndswep", function(len, ply)
 	local ndswepcn = net.ReadString()
 
 	RemNDSwepFromRole(ruid, ndswepcn)
+end)
+
+util.AddNetworkString("openInteractMenu")
+net.Receive("openInteractMenu", function(len, ply)
+	local tmpTargetSteamID = net.ReadString()
+
+	local tmpTarget = nil
+	for k, v in pairs(player.GetAll()) do
+		if v:SteamID() == tmpTargetSteamID then
+			tmpTarget = v
+		end
+	end
+	if ea(tmpTarget) then
+		if tmpTarget:IsPlayer() then
+			local tmpTargetChaTab = tmpTarget:GetChaTab()
+			if tmpTargetChaTab != nil then
+				local tmpTargetRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
+
+				local tmpT = ply:GetChaTab()
+				local tmpTable = ply:GetRolTab()
+				if wk(tmpT) and wk(tmpTable) then
+					local tmpBool = false
+
+					local tmpPromote = false
+					local tmpPromoteName = ""
+
+					local tmpDemote = false
+					local tmpDemoteName = ""
+
+					if tonumber(tmpTable.instructor) == 1 then
+						tmpBool = true
+
+						local tmpSearch = true	--tmpTargetSteamID
+						local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
+						if tmpTableSearch != nil then
+							local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
+							local tmpCounter = 0
+							while (tmpSearch) do
+								tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
+
+								if tonumber(tmpTargetRole[1].int_prerole) != -1 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
+									tmpDemote = true
+									local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
+									tmpDemoteName = tmp[1].string_name
+								end
+
+								if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
+									tmpPromote = true
+									tmpPromoteName = tmpTableSearch[1].string_name
+								end
+								if tmpSearchUniqueID == -1 then
+									tmpSearch = false
+								end
+								if tmpCounter >= 100 then
+									printGM("note", "You have a loop in your preroles!")
+									tmpSearch = false
+								end
+								tmpCounter = tmpCounter + 1
+								tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
+							end
+						end
+					end
+
+					net.Start("openInteractMenu")
+						net.WriteBool(tmpBool)
+
+						net.WriteBool(tmpPromote)
+						net.WriteString(tmpPromoteName)
+
+						net.WriteBool(tmpDemote)
+						net.WriteString(tmpDemoteName)
+
+					net.Send(ply)
+				end
+			end
+		end
+	end
 end)

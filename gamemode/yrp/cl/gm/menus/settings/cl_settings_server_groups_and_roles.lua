@@ -1129,14 +1129,28 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						end
 
 						pmwin.dpl = createD("DPanelList", pmwin, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+						pmwin.dpl:EnableVerticalScrollbar(true)
+						local height = ScrH() - ctr(100)
 						for i, v in pairs(cl_pms) do
-							local d_pm = createD("DButton", nil, pmwin.dpl:GetWide(), ctr(100), 0, 0)
+							local d_pm = createD("DButton", nil, pmwin.dpl:GetWide(), height / 4, 0, 0)
 							d_pm:SetText(v.PrintName)
 							function d_pm:DoClick()
 								net.Start("add_playermodel")
 									net.WriteInt(role.uniqueID, 32)
 									net.WriteString(v.WorldModel)
 								net.SendToServer()
+								pmwin:Close()
+							end
+
+							if v.WorldModel != "" then
+								d_pm.model = createD("DModelPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
+								d_pm.model:SetModel(v.WorldModel)
+							else
+								d_pm.model = createD("DPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
+								function d_pm.model:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
 							end
 
 							pmwin.dpl:AddItem(d_pm)
@@ -1148,8 +1162,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					function win.dpl:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
 					end
+
 					for i, pm in pairs(pms) do
-						local line = createD("DButton", nil, ctr(800), ctr(50), 0, 0)
+						local line = createD("DButton", nil, ctr(800), ctr(200), 0, 0)
 						local name = pm.string_name
 						if name == "" or name == " " then
 							name = pm.string_model
@@ -1161,6 +1176,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								net.WriteInt(pm.uniqueID, 32)
 							net.SendToServer()
 							win:Close()
+						end
+
+						if pm.WorldModel != "" then
+							line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+							line.model:SetModel(pm.WorldModel or pm.string_model)
+						else
+							line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+							function line.model:Paint(pw, ph)
+								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+								draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							end
 						end
 
 						win.dpl:AddItem(line)
@@ -1278,6 +1304,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.Start("get_role_sweps")
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
+
+			hr.parent = ea.equipment
+			DHr(hr)
 
 			-- Not droppable
 			local ndsweps = {}
