@@ -68,10 +68,15 @@ function YRP.replace_string(in_str, tab)
 	return in_str
 end
 
+local nf = {}
 function YRP.lang_string(var, vals)
 	var = tostring(var)
 	local _string = yrp_current_lang[string.lower(var)]
 	if not wk(_string) then
+		if nf[var] == nil and string.StartWith(var, "lid_") then
+			nf[var] = var
+			printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+		end
 		return var
 	end
 	if wk(vals) then

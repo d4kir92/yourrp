@@ -16,9 +16,13 @@ GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
-GM.Version = "0.9.187" --do NOT change this!
-GM.VersionSort = "beta" --do NOT change this! --stable, beta, canary
+GM.VersionStable = 0 --do NOT change this!
+GM.VersionBeta = 1 --do NOT change this!
+GM.VersionCanary = 1 --do NOT change this!
+GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
+GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
+GM.ServerIsDedicated = game.IsDedicated()
 
 function GetRPBase()
 	return GAMEMODE.rpbase
@@ -87,18 +91,12 @@ end
 
 concommand.Add("yrp_version", function(ply, cmd, args)
 	hr_pre()
-	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version
-	if IsYRPOutdated() == nil then
-		_text = _text .. " (Checking)"
-	elseif IsYRPOutdated() then
-		_text = _text .. " (OUTDATED!)"
-	end
+	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")"
 	printGM("gm", _text)
 	hr_pos()
 end)
 
 concommand.Add("yrp_status", function(ply, cmd, args)
-
 	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version
 	if IsYRPOutdated() == nil then
 		_text = _text .. " (Checking)"
@@ -107,12 +105,23 @@ concommand.Add("yrp_status", function(ply, cmd, args)
 	end
 
 	hr_pre()
-	printGM("gm", "    Version:\t" .. GAMEMODE.Version)
-	printGM("gm", "    Channel:\t" .. string.upper(GAMEMODE.VersionSort))
-	printGM("gm", " Servername:\t" .. GetHostName())
-	printGM("gm", "         IP:\t" .. game.GetIPAddress())
-	printGM("gm", "        Map:\t" .. GetMapNameDB())
-	printGM("gm", "    Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
+	printGM("gm", "    Version: " .. GAMEMODE.Version)
+	printGM("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
+	printGM("gm", " Servername: " .. GetHostName())
+	printGM("gm", "         IP: " .. game.GetIPAddress())
+	printGM("gm", "        Map: " .. GetMapNameDB())
+	printGM("gm", "    Players: " .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
+	hr_pos()
+end)
+
+concommand.Add("yrp_maps", function(ply, cmd, args)
+	hr_pre()
+	printGM("gm", "[MAPS ON SERVER]")
+	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
+	for i, map in pairs(allmaps) do
+		local mapname = string.Replace(map, ".bsp", "")
+		printGM("gm", mapname)
+	end
 	hr_pos()
 end)
 
@@ -145,7 +154,7 @@ concommand.Add("yrp_players", function(ply, cmd, args)
 	hr_pos()
 end)
 
-concommand.Add("yrp__help", function(ply, cmd, args)
+function PrintHelp()
 	hr_pre()
 	printGM("note", "Shared Commands:")
 	printGM("note", "yrp_status")
@@ -156,6 +165,8 @@ concommand.Add("yrp__help", function(ply, cmd, args)
 	printGM("note", "	Shows all players")
 	printGM("note", "yrp_usergroup RPNAME UserGroup")
 	printGM("note", "	Put a player with the RPNAME to the UserGroup")
+	printGM("note", "yrp_maps")
+	printGM("note", "	Shows all maps on server")
 	hr_pos()
 
 	hr_pre()
@@ -165,6 +176,14 @@ concommand.Add("yrp__help", function(ply, cmd, args)
 	printGM("note", "yrp_togglesettings")
 	printGM("note", "	Toggle settings menu")
 	hr_pos()
+end
+
+concommand.Add("yrp_help", function(ply, cmd, args)
+	PrintHelp()
+end)
+
+concommand.Add("yrp__help", function(ply, cmd, args)
+	PrintHelp()
 end)
 
 hook.Add("StartCommand", "NoJumpGuns", function(ply, cmd)
@@ -261,11 +280,16 @@ function IsEntityAlive(ply, uid)
 end
 
 if SERVER then
-	util.AddNetworkString("getServerVersion")
-	net.Receive("getServerVersion", function(len, ply)
-		net.Start("getServerVersion")
-			net.WriteString(GAMEMODE.Version)
-			net.WriteBool(game.IsDedicated())
+	util.AddNetworkString("GetServerInfo")
+	net.Receive("GetServerInfo", function(len, ply)
+		local tab = {}
+		tab.Version = GAMEMODE.Version
+		tab.VersionStable = GAMEMODE.VersionStable
+		tab.VersionBeta = GAMEMODE.VersionBeta
+		tab.VersionCanary = GAMEMODE.VersionCanary
+		tab.isdedicated = game.IsDedicated()
+		net.Start("GetServerInfo")
+			net.WriteTable(tab)
 		net.Send(ply)
 	end)
 

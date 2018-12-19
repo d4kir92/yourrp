@@ -20,13 +20,21 @@ function HudView()
 		end
 
 		if ply:GetNWBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
-			draw.SimpleTextOutlined(YRP.lang_string("LID_pressepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_pressepos"), "sef", ScrW()/2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_holdepre") .. " [" .. string.upper(GetKeybindName("menu_options_door")) .. "] " .. YRP.lang_string("LID_holdepos"), "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			local tab = {}
+			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopen", tab), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			local tab2 = {}
+			tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
+			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			showOwner(_eyeTrace)
 		elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
-			draw.SimpleTextOutlined(YRP.lang_string("LID_pressevehpre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_pressevehpos"), "sef", ScrW()/2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			local tab = {}
+			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoenter", tab), "sef", ScrW()/2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			if _eyeTrace.Entity:GetNWString("ownerRPName") == ply:Nick() then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_holdevehpre") .. " [" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "] " .. YRP.lang_string("LID_holdevehpos"), "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				local tab2 = {}
+				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "]"
+				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			showOwner(_eyeTrace)
 		elseif _eyeTrace.Entity:IsPlayer() then

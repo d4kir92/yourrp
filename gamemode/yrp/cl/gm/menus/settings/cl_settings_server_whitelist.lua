@@ -22,7 +22,7 @@ net.Receive("getRoleWhitelist", function(len)
 			for l, w in pairs(_tmpRoleList) do
 				if (w.uniqueID == v.roleID) then
 					for m, x in pairs(_tmpGroupList) do
-						if (x.uniqueID == w.groupID) then
+						if (x.uniqueID == w.int_groupID) then
 							_whitelistListView:AddLine(v.uniqueID, v.SteamID, v.nick, x.string_name, w.roleID)
 							break
 						end
@@ -67,8 +67,8 @@ net.Receive("getRoleWhitelist", function(len)
 				_whitelistComboBox2:Clear()
 				for k, v in pairs(_tmpRoleList) do
 					for l, w in pairs(_tmpGroupList) do
-						if (_whitelistComboBox:GetOptionData(_whitelistComboBox:GetSelectedID()) == v.groupID) then
-							_whitelistComboBox2:AddChoice(v.roleID, v.uniqueID)
+						if (_whitelistComboBox:GetOptionData(_whitelistComboBox:GetSelectedID()) == v.int_groupID) then
+							_whitelistComboBox2:AddChoice(v.string_name, v.uniqueID)
 							break
 						end
 					end

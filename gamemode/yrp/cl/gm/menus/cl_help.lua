@@ -176,11 +176,9 @@ net.Receive("getsitehelp", function(len)
 		local version = createD("DPanel", HELPMENU.mainmenu.site, BScrW() - ctr(2 * 20), ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - ctr(50))
 
 		function version:Paint(pw, ph)
-			if not version_tested() then
-				testVersion()
-			end
-			draw.SimpleTextOutlined("(" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, version_color(), 2, 1, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1, 1, Color(0, 0, 0, 255))
 		end
+		YRPCheckVersion()
 	end
 end)
 
