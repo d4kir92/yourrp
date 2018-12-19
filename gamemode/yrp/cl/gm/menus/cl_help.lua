@@ -618,7 +618,6 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _allProgressTexts = {}
 
 		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
-			--PrintTable(language)
 			local text = language.language .. "/" .. language.inenglish .. " ("
 
 			if language.percentage ~= nil then

@@ -696,7 +696,7 @@ function openCharacterSelection()
 		net.Receive("yrp_get_characters", function(len)
 			printGM("gm", "received characterlist")
 			local _characters = net.ReadTable()
-			printTab(_characters)
+
 			if pa(charactersBackground) then
 				charactersBackground.text = ""
 				if _characters != nil and pa(_characters) then
