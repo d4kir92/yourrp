@@ -67,6 +67,7 @@ SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
 -- CONVERTING
 if wk(SQL_SELECT("yrp_roles", "*", nil)) then
+	printGM("note", "Converting OLD Roles into NEW Roles")
 	local oldroles = SQL_SELECT("yrp_roles", "*", nil)
 	for i, role in pairs(oldroles) do
 		if tonumber(role.uniqueID) > 1 then
@@ -116,6 +117,7 @@ if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 			SQL_DELETE_FROM("yrp_roles", "uniqueID = '" .. role.uniqueID .. "'")
 		end
 	end
+	SQL_DROP_TABLE("yrp_roles")
 end
 -- CONVERTING
 
@@ -408,6 +410,8 @@ net.Receive("get_grp_roles", function(len, ply)
 		net.Start("get_grp_roles")
 			net.WriteTable(_roles)
 		net.Send(ply)
+	else
+		printGM("note", "Group [" .. _uid .. "] has no roles.")
 	end
 end)
 

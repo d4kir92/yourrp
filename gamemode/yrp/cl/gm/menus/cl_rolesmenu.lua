@@ -134,8 +134,8 @@ end
 function getPreRole(uid, parent)
 	net.Receive("get_rol_prerole", function(len)
 		local _prerole = net.ReadTable()
-		if _prerole.prerole != nil then
-			addPreRole(_prerole, _pr[_prerole.prerole])
+		if _prerole.int_prerole != nil then
+			addPreRole(_prerole, _pr[_prerole.int_prerole])
 		end
 	end)
 
@@ -169,10 +169,11 @@ end
 function getRoles(uid, parent)
 	net.Receive("get_grp_roles", function(len)
 		local _roles = net.ReadTable()
+
 		for i, rol in pairs(_roles) do
-			if tostring(rol.int_prerole) == "0" then
+			if tonumber(rol.int_prerole) <= 0 then
 				addRoleRow(rol, parent)
-			elseif tostring(rol.int_prerole) == "1" then
+			elseif tonumber(rol.int_prerole) == 1 then
 				addRoleRow(rol, parent)
 			end
 		end

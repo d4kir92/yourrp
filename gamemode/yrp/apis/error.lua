@@ -261,13 +261,14 @@ function send_error(realm, str)
 		if gmod.GetGamemode() != nil then
 			isdbfull(str)
 			ismalformed(str)
-			entry["entry.956735581"] = string.upper(tostring(game.IsDedicated()))
+
 			entry["entry.915525654"] = tostring(str)
 			entry["entry.58745995"] = tostring(realm)
 			entry["entry.1306533151"] = GetMapName() or "MAPNAME"
 			entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
-			entry["entry.1883727441"] = gmod.GetGamemode().rpbase or "UNKNOWN"
-			entry["entry.1883727441"] = gmod.GetGamemode().Version or "0.0.0"
+			entry["entry.1883727441"] = tostring(gmod.GetGamemode().VersionStable)
+			entry["entry.1007479965"] = tostring(gmod.GetGamemode().VersionBeta)
+			entry["entry.1274096098"] = tostring(gmod.GetGamemode().VersionCanary)
 			entry["entry.2045173320"] = string.upper(gmod.GetGamemode().VersionSort) or "UNKNOWN"
 			entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
 			if CLIENT then
@@ -330,25 +331,6 @@ function send_errors(realm, tbl)
 	end
 end
 
-function IsNearVersion(distance)
-	local _version = YRPVersion()
-	local _version_online = YRPOnlineVersion()
-
-	for k, v in pairs(_version) do
-		if k < #_version_online then
-			if tonumber(_version[k]) < tonumber(_version_online[k]) then
-				break
-			end
-		else
-			if tonumber(_version[k]) + distance >= tonumber(_version_online[k]) then
-				return true
-			end
-		end
-	end
-
-	return false
-end
-
 local tick = 0
 
 function ErrorMod()
@@ -356,11 +338,23 @@ function ErrorMod()
 end
 
 function CanSendError()
-	if game.MaxPlayers() > 1 then
-		if CLIENT then
-			if LocalPlayer():GetNWBool("serverdedicated", false) then
-				if LocalPlayer():GetNWBool("bool_server_debug", true) then
-					if tick % LocalPlayer():GetNWInt("int_server_debug_tick", 60) == 0 then
+	if !IsYRPOutdated() then
+		if game.MaxPlayers() > 1 then
+			if CLIENT then
+				if LocalPlayer():GetNWBool("serverdedicated", false) then
+					if LocalPlayer():GetNWBool("bool_server_debug", true) then
+						if tick % LocalPlayer():GetNWInt("int_server_debug_tick", 60) == 0 then
+							return true
+						end
+					else
+						if tick % 3600 == 0 then
+							return true
+						end
+					end
+				end
+			elseif SERVER and game.IsDedicated() then
+				if YRPDebug() then
+					if tick % ErrorMod() == 0 then
 						return true
 					end
 				else
@@ -369,16 +363,10 @@ function CanSendError()
 					end
 				end
 			end
-		elseif SERVER and game.IsDedicated() then
-			if YRPDebug() then
-				if tick % ErrorMod() == 0 then
-					return true
-				end
-			else
-				if tick % 3600 == 0 then
-					return true
-				end
-			end
+		end
+	else
+		if IsYRPOutdated() != nil then
+			printGM("note", "Gamemode is outdated!")
 		end
 	end
 	return false
@@ -388,13 +376,11 @@ function SendAllErrors(str)
 	if str != nil then
 		printGM("note", "[SendAllErrors] " .. str)
 	end
-	if !IsYRPOutdated() or IsNearVersion(1) then
-		_cl_errors = update_error_table_cl()
-		send_errors("client", _cl_errors)
+	_cl_errors = update_error_table_cl()
+	send_errors("client", _cl_errors)
 
-		_sv_errors = update_error_table_sv()
-		send_errors("server", _sv_errors)
-	end
+	_sv_errors = update_error_table_sv()
+	send_errors("server", _sv_errors)
 end
 
 timer.Create("update_error_tables", 1, 0, function()

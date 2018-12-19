@@ -103,7 +103,7 @@ end
 function OpenSettings()
 	openMenu()
 
-	testVersion()
+	YRPCheckVersion()
 
 	settingsWindow.window = createMDMenu(nil, ScrW(), ScrH(), 0, 0)
 
@@ -170,17 +170,13 @@ function OpenSettings()
 		surface.SetMaterial(_yrp_settings.materials.logo100)
 		surface.DrawTexturedRect(ctr(610), ctr(10), ctr(400 * 0.6), ctr(130 * 0.6))
 
-		if not version_tested() then
-			testVersion()
-		end
-
 		local _singleplayer = ""
 
 		if game.SinglePlayer() then
 			_singleplayer = "Singleplayer"
 		end
 
-		local _color = version_color()
+		local _color = GetVersionColor()
 		draw.SimpleTextOutlined(_singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 

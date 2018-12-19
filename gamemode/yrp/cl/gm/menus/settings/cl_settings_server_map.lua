@@ -133,7 +133,7 @@ net.Receive("getMapList", function(len)
 			local tmpRole = createD("DComboBox", tmpFrame, ctr(400), ctr(50), ctr(10), ctr(170))
 			for k, v in pairs(_roles) do
 				for l, w in pairs(_groups) do
-					if tonumber(v.groupID) == tonumber(w.uniqueID) then
+					if tonumber(v.int_groupID) == tonumber(w.uniqueID) then
 						tmpRole:AddChoice("[" .. w.string_name .. "] " .. v.roleID, v.uniqueID)
 						break
 					end
