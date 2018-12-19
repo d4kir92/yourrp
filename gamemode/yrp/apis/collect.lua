@@ -70,10 +70,10 @@ if SERVER then
 			if sv.collectionid == "0" then
 				sv.collectionid = ""
 			end
-			sv.version = gmod.GetGamemode().Version or "UNKNOWN"
-			sv.versionstable = gmod.GetGamemode().VersionStable or "UNKNOWN"
-			sv.versionbeta = gmod.GetGamemode().VersionBeta or "UNKNOWN"
-			sv.versioncanary = gmod.GetGamemode().VersionCanary or "UNKNOWN"
+			sv.version = tostring(gmod.GetGamemode().Version)
+			sv.versionstable = tostring(gmod.GetGamemode().VersionStable)
+			sv.versionbeta = tostring(gmod.GetGamemode().VersionBeta)
+			sv.versioncanary = tostring(gmod.GetGamemode().VersionCanary)
 			sv.art = string.upper(tostring(gmod.GetGamemode().VersionSort)) or "UNKNOWN"
 
 			local utd = {}

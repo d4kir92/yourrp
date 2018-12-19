@@ -23,7 +23,7 @@ if CLIENT then
 	net.Receive("GetServerInfo", function(len)
 		local tab = net.ReadTable()
 
-		GAMEMODE.VersionServer = tab.Version
+		GAMEMODE.VersionServer = tostring(tab.Version)
 		GAMEMODE.ServerIsDedicated = tab.isdedicated
 		if GAMEMODE.ServerIsDedicated then
 			GAMEMODE.dedicated = "dedicated"
