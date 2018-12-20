@@ -130,7 +130,7 @@ net.Receive("getMapList", function(len)
 			for k, v in pairs(_roles) do
 				for l, w in pairs(_groups) do
 					if tonumber(v.int_groupID) == tonumber(w.uniqueID) then
-						tmpRole:AddChoice("[" .. w.string_name .. "] " .. v.roleID, v.uniqueID)
+						tmpRole:AddChoice("[" .. w.string_name .. "] " .. v.string_name, v.uniqueID)
 						break
 					end
 				end
@@ -281,7 +281,7 @@ net.Receive("getMapList", function(len)
 				for l, w in pairs(_roles) do
 					if tostring(v.linkID) == tostring(w.uniqueID) then
 						if pa(_mapListView) then
-							_mapListView:AddLine(v.uniqueID, v.position, v.angle, v.type, w.roleID)
+							_mapListView:AddLine(v.uniqueID, v.position, v.angle, v.type, w.string_name)
 							found = true
 						end
 						break

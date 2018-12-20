@@ -1106,8 +1106,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					win:SetTitle("")
 					win:Center()
 					win:MakePopup()
+					function win:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+						draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					end
 
-					win.add = createD("DButton", win, ctr(50), ctr(50), ctr(20), ctr(50 + 20))
+					win.add = createD("DButton", win, ctr(50), ctr(50), ctr(0), ctr(0))
 					win.add:SetText("+")
 					function win.add:DoClick()
 						win:Close()
@@ -1116,6 +1120,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						pmwin:SetTitle("")
 						pmwin:Center()
 						pmwin:MakePopup()
+						function pmwin:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+							draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+						end
 
 						local allvalidmodels = player_manager.AllValidModels()
 						local cl_pms = {}
@@ -1128,68 +1136,90 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							cl_pms[count].PrintName = player_manager.TranslateToPlayerModelName(v)
 						end
 
-						pmwin.dpl = createD("DPanelList", pmwin, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+						pmwin.dpl = createD("DPanelList", pmwin, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
 						pmwin.dpl:EnableVerticalScrollbar(true)
 						local height = ScrH() - ctr(100)
-						for i, v in pairs(cl_pms) do
-							local d_pm = createD("DButton", nil, pmwin.dpl:GetWide(), height / 4, 0, 0)
-							d_pm:SetText(v.PrintName)
-							function d_pm:DoClick()
-								net.Start("add_playermodel")
-									net.WriteInt(role.uniqueID, 32)
-									net.WriteString(v.WorldModel)
-								net.SendToServer()
-								pmwin:Close()
-							end
+						function pmwin:Search(keyword)
+							self.dpl:Clear()
+							for i, v in pairs(cl_pms) do
+								if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
+									local d_pm = createD("DButton", nil, pmwin.dpl:GetWide(), height / 4, 0, 0)
+									d_pm:SetText(v.PrintName)
+									function d_pm:DoClick()
+										net.Start("add_playermodel")
+											net.WriteInt(role.uniqueID, 32)
+											net.WriteString(v.WorldModel)
+										net.SendToServer()
+										pmwin:Close()
+									end
 
-							if v.WorldModel != "" then
-								d_pm.model = createD("DModelPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
-								d_pm.model:SetModel(v.WorldModel)
-							else
-								d_pm.model = createD("DPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
-								function d_pm.model:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									if v.WorldModel != "" then
+										d_pm.model = createD("DModelPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
+										d_pm.model:SetModel(v.WorldModel)
+									else
+										d_pm.model = createD("DPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
+										function d_pm.model:Paint(pw, ph)
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+											draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+									end
+
+									pmwin.dpl:AddItem(d_pm)
 								end
 							end
+						end
+						pmwin:Search("")
 
-							pmwin.dpl:AddItem(d_pm)
+						pmwin.search = createD("DTextEntry", pmwin, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+						function pmwin.search:OnChange()
+							pmwin:Search(self:GetText())
 						end
 					end
 
-					win.dpl = createD("DPanelList", win, ctr(800), ctr(800 - 140), 0, ctr(50 + 20 + 50 + 20))
+					win.dpl = createD("DPanelList", win, ctr(800) - ctr(20 * 2), ctr(800) - ctr(100 + 20), ctr(20), ctr(100))
 					win.dpl:EnableVerticalScrollbar(true)
 					function win.dpl:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 					end
 
-					for i, pm in pairs(pms) do
-						local line = createD("DButton", nil, ctr(800), ctr(200), 0, 0)
-						local name = pm.string_name
-						if name == "" or name == " " then
-							name = pm.string_model
-						end
-						line:SetText(name)
-						function line:DoClick()
-							net.Start("add_role_playermodel")
-								net.WriteInt(role.uniqueID, 32)
-								net.WriteInt(pm.uniqueID, 32)
-							net.SendToServer()
-							win:Close()
-						end
+					function win:Search(keyword)
+						self.dpl:Clear()
+						for i, pm in pairs(pms) do
+							if string.find(string.lower(pm.string_name), keyword) or string.find(string.lower(pm.string_model), keyword) then
+								local line = createD("DButton", nil, ctr(800), ctr(200), 0, 0)
+								local name = pm.string_name
+								if name == "" or name == " " then
+									name = pm.string_model
+								end
+								line:SetText(name)
+								function line:DoClick()
+									net.Start("add_role_playermodel")
+										net.WriteInt(role.uniqueID, 32)
+										net.WriteInt(pm.uniqueID, 32)
+									net.SendToServer()
+									win:Close()
+								end
 
-						if pm.WorldModel != "" then
-							line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
-							line.model:SetModel(pm.WorldModel or pm.string_model)
-						else
-							line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
-							function line.model:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-								draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								if pm.WorldModel != "" then
+									line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+									line.model:SetModel(pm.WorldModel or pm.string_model)
+								else
+									line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+									function line.model:Paint(pw, ph)
+										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+										draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									end
+								end
+
+								win.dpl:AddItem(line)
 							end
 						end
+					end
+					win:Search("")
 
-						win.dpl:AddItem(line)
+					win.search = createD("DTextEntry", win, win:GetWide() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+					function win.search:OnChange()
+						win:Search(self:GetText())
 					end
 				end)
 				net.Start("get_all_playermodels")
@@ -1242,6 +1272,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winswep:SetTitle("")
 				winswep:Center()
 				winswep:MakePopup()
+				function winswep:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				end
 
 				local allsweps = GetSWEPsList()
 				local cl_sweps = {}
@@ -1254,31 +1288,43 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 				end
 
-				winswep.dpl = createD("DPanelList", winswep, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+				winswep.dpl = createD("DPanelList", winswep, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
 				winswep.dpl:EnableVerticalScrollbar(true)
-				for i, v in pairs(cl_sweps) do
-					local d_swep = createD("DButton", nil, winswep.dpl:GetWide(), ctr(100), 0, 0)
-					d_swep:SetText(v.PrintName)
-					function d_swep:DoClick()
-						net.Start("add_role_swep")
-							net.WriteInt(role.uniqueID, 32)
-							net.WriteString(v.ClassName)
-						net.SendToServer()
-						winswep:Close()
-					end
+				local height = ScrH() - ctr(100)
+				function winswep:Search(keyword)
+					self.dpl:Clear()
+					for i, v in pairs(cl_sweps) do
+						if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
+							local d_swep = createD("DButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
+							d_swep:SetText(v.PrintName)
+							function d_swep:DoClick()
+								net.Start("add_role_swep")
+									net.WriteInt(role.uniqueID, 32)
+									net.WriteString(v.ClassName)
+								net.SendToServer()
+								winswep:Close()
+							end
 
-					if v.WorldModel != "" then
-						d_swep.model = createD("DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
-						d_swep.model:SetModel(v.WorldModel)
-					else
-						d_swep.model = createD("DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
-						function d_swep.model:Paint(pw, ph)
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-							draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							if v.WorldModel != "" then
+								d_swep.model = createD("DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+								d_swep.model:SetModel(v.WorldModel)
+							else
+								d_swep.model = createD("DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+								function d_swep.model:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
+							end
+
+							winswep.dpl:AddItem(d_swep)
 						end
 					end
+				end
+				winswep:Search("")
 
-					winswep.dpl:AddItem(d_swep)
+				winswep.search = createD("DTextEntry", winswep, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+				function winswep.search:OnChange()
+					winswep:Search(self:GetText())
 				end
 			end
 			ea[role.uniqueID].sweps = DStringListBox(sweps)
@@ -1323,6 +1369,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winndswep:SetTitle("")
 				winndswep:Center()
 				winndswep:MakePopup()
+				function winndswep:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				end
 
 				local allndsweps = GetSWEPsList()
 				local cl_ndsweps = {}
@@ -1335,31 +1385,43 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 				end
 
-				winndswep.dpl = createD("DPanelList", winndswep, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
 				winndswep.dpl:EnableVerticalScrollbar(true)
-				for i, v in pairs(cl_ndsweps) do
-					local d_ndswep = createD("DButton", nil, winndswep.dpl:GetWide(), ctr(100), 0, 0)
-					d_ndswep:SetText(v.PrintName)
-					function d_ndswep:DoClick()
-						net.Start("add_role_ndswep")
-							net.WriteInt(role.uniqueID, 32)
-							net.WriteString(v.ClassName)
-						net.SendToServer()
-						winndswep:Close()
-					end
+				local height = ScrH() - ctr(100)
+				function winndswep:Search(keyword)
+					self.dpl:Clear()
+					for i, v in pairs(cl_ndsweps) do
+						if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
+							local d_ndswep = createD("DButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
+							d_ndswep:SetText(v.PrintName)
+							function d_ndswep:DoClick()
+								net.Start("add_role_ndswep")
+									net.WriteInt(role.uniqueID, 32)
+									net.WriteString(v.ClassName)
+								net.SendToServer()
+								winndswep:Close()
+							end
 
-					if v.WorldModel != "" then
-						d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
-						d_ndswep.model:SetModel(v.WorldModel)
-					else
-						d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
-						function d_ndswep.model:Paint(pw, ph)
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-							draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							if v.WorldModel != "" then
+								d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+								d_ndswep.model:SetModel(v.WorldModel)
+							else
+								d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+								function d_ndswep.model:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
+							end
+
+							winndswep.dpl:AddItem(d_ndswep)
 						end
 					end
+				end
+				winndswep:Search("")
 
-					winndswep.dpl:AddItem(d_ndswep)
+				winndswep.search = createD("DTextEntry", winndswep, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+				function winndswep.search:OnChange()
+					winndswep:Search(self:GetText())
 				end
 			end
 			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
