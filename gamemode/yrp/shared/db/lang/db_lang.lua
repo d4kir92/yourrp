@@ -72,8 +72,8 @@ local nf = {}
 function YRP.lang_string(var, vals)
 	var = tostring(var)
 	local _string = yrp_current_lang[string.lower(var)]
-	if not wk(_string) then
-		if nf[var] == nil and string.StartWith(var, "lid_") then
+	if !wk(_string) then
+		if nf[var] == nil and string.StartWith(var, "LID_") then
 			nf[var] = var
 			printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
 		end
@@ -130,15 +130,17 @@ function YRP.read_language(short, init)
 		default = true
 	end
 
-	if (not init) then
+	if !init then
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 
-		if not default then
+		if !default then
 			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language") .. "/" .. YRP.lang_string("LID_inenglish"))
 		end
 
 		YRP.read_lang("resource/localization/yrp/_old/lang_" .. "en" .. ".properties")
 		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties", default)
+		YRP.read_lang("resource/localization/yrp/menubuy/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menucharacter/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settings/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties")
@@ -177,7 +179,7 @@ function YRP.LoadLanguage(short, init)
 				short = string.lower(yrp_current_lang.get_language)
 				printGM("lang", "Found Language: " .. "[" .. short .. "]")
 
-				if not YRP.check_languagepack() then
+				if !YRP.check_languagepack() then
 					short = "en"
 					printGM("lang", "Can't find Language-Pack, using Default-Language-Pack.")
 				end

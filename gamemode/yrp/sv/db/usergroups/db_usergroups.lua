@@ -333,6 +333,7 @@ end
 
 util.AddNetworkString("setting_hasnoaccess")
 function Player:CanAccess(site)
+	local lsite = string.Replace(site, "bool_", "")
 	local _ug = self:GetUserGroup() or "failed"
 	_ug = string.lower(_ug)
 	local _b = SQL_SELECT(DATABASE_NAME, site, "string_name = '" .. _ug .. "'")
@@ -348,15 +349,15 @@ function Player:CanAccess(site)
 					usergroups = usergroups .. ", " .. string.lower(ug.string_name)
 				end
 			end
-			self:NoAccess(site, usergroups)
-			printGM("note", self:YRPName() .. " can NOT access " .. site .. "")
+			self:NoAccess(lsite, usergroups)
+			printGM("note", self:YRPName() .. " can NOT access " .. lsite .. "")
 		elseif _b then
-			printGM("db", self:YRPName() .. " can access " .. site .. "")
+			printGM("db", self:YRPName() .. " can access " .. lsite .. "")
 		end
 		return tobool(_b)
 	end
-	printGM("note", self:YRPName() .. " can NOT access " .. site .. "")
-	self:NoAccess(site)
+	printGM("note", self:YRPName() .. " can NOT access " .. lsite .. "")
+	self:NoAccess(lsite)
 	return false
 end
 
