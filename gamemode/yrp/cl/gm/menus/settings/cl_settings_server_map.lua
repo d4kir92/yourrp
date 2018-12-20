@@ -80,8 +80,6 @@ net.Receive("getMapList", function(len)
 			tmpFrame:SetTitle("")
 			function tmpFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0,0, pw, ph, get_dbg_col())
-				draw.SimpleTextOutlined(YRP.lang_string("LID_groupspawnpointcreator"), "sef", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_creategroupspawnpoint"), "sef", ctr(10), ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_selectgroup") .. ":", "sef", ctr(10), ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 			end
 
@@ -125,8 +123,6 @@ net.Receive("getMapList", function(len)
 			tmpFrame:SetTitle("")
 			function tmpFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0,0, pw, ph, get_dbg_col())
-				draw.SimpleTextOutlined(YRP.lang_string("LID_rolespawnpointcreator"), "sef", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_createrolespawnpoint"), "sef", ctr(10), ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_selectrole") .. ":", "sef", ctr(10), ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 			end
 

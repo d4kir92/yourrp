@@ -44,10 +44,14 @@ function HudView()
 		elseif _eyeTrace.Entity:IsNPC() then
 			if _eyeTrace.Entity:GetNWString("dealerID", "") != "" then
 				draw.SimpleTextOutlined(_eyeTrace.Entity:GetNWString("name", ""), "sef", ScrW() / 2, ScrH2() + ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_totradepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_totradepos"), "sef", ScrW() / 2, ScrH2() + ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				local key = {}
+				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				draw.SimpleTextOutlined(YRP.lang_string("LID_presstotrade", key), "sef", ScrW() / 2, ScrH2() + ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
-			draw.SimpleTextOutlined(YRP.lang_string("LID_toappearancepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_toappearancepos"), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			local key = {}
+			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+			draw.SimpleTextOutlined(YRP.lang_string("LID_presstochangeyourclothes", key), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		elseif _eyeTrace.Entity:HasStorage() and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
 			draw.SimpleTextOutlined(_eyeTrace.Entity:StorageName(), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_openstoragepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_openstoragepos"), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

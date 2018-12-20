@@ -188,10 +188,13 @@ function YRPCheckVersion()
 
 					if serverart == "OUTDATED" then
 						GAMEMODE.versioncolor = Color(255, 0, 0)
+						GAMEMODE.isoutdated = true
 						if CLIENT then
 							VersionWindow()
 						end
 						serverart = "CANARY"
+					else
+						GAMEMODE.isoutdated = false
 					end
 
 					on.stable = GetValue(body, "V" .. serverart .. "STABLE")

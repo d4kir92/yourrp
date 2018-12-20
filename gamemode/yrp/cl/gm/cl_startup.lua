@@ -1650,7 +1650,9 @@ net.Receive("yrp_noti", function(len)
 			elseif _str_lang == "inventoryclearing" then
 				_str = _str .. YRP.lang_string("LID_" .. _str_lang) .. " (" .. YRP.lang_string(net.ReadString()) .. ")"
 			elseif _str_lang == "playerisready" then
-				_str = _str .. YRP.lang_string("LID_finishedloadingthegamepre") .. " " .. net.ReadString() .. " " .. YRP.lang_string("LID_finishedloadingthegamepos")
+				local name = {}
+				name["NAME"] = net.ReadString()
+				_str = _str .. YRP.lang_string("LID_hasfinishedloading", name)
 			elseif _str_lang == "newfeedback" then
 				_str = _str .. YRP.lang_string("LID_newfeedback")
 			elseif _str_lang == "database_full_server" then
