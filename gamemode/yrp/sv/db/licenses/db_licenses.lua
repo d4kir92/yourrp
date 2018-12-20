@@ -143,7 +143,6 @@ net.Receive("role_add_license", function(len, ply)
 end)
 
 util.AddNetworkString("role_rem_license")
-
 net.Receive("role_rem_license", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _license_uid = net.ReadString()
@@ -183,3 +182,14 @@ function Player:AddLicense(license)
 		self:SetNWString("licenseIDs", tostring(_licenseIDs))
 	end
 end
+
+util.AddNetworkString("GetLicenseName")
+net.Receive("GetLicenseName", function(len, ply)
+	local id = net.ReadInt(32)
+	local lic = SQL_SELECT(_db_name, "name", "uniqueID = '" .. id .. "'")
+	if wk(lic) then
+		net.Start("GetLicenseName")
+			net.WriteString(lic[1].name)
+		net.Send(ply)
+	end
+end)

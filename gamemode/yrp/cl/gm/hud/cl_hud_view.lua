@@ -2,11 +2,11 @@
 
 function showOwner(eyeTrace)
 	if eyeTrace.Entity:GetRPOwner() == LocalPlayer() then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. YRP.lang_string("LID_you"), "sef", ScrW()/2, ScrH2() + ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. YRP.lang_string("LID_you"), "sef", ScrW() / 2, ScrH2() + ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	elseif eyeTrace.Entity:GetRPOwner() != NULL then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "sef", ScrW()/2, ScrH2() + ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "sef", ScrW() / 2, ScrH2() + ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	elseif eyeTrace.Entity:GetNWString("ownerRPName") != "" or eyeTrace.Entity:GetNWString("ownerGroup") != "" then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetNWString("ownerRPName", "") .. eyeTrace.Entity:GetNWString("ownerGroup", ""), "sef", ScrW()/2, ScrH2() + ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetNWString("ownerRPName", "") .. eyeTrace.Entity:GetNWString("ownerGroup", ""), "sef", ScrW() / 2, ScrH2() + ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -30,33 +30,33 @@ function HudView()
 		elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
-			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoenter", tab), "sef", ScrW()/2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_presstogetin", tab), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			if _eyeTrace.Entity:GetNWString("ownerRPName") == ply:Nick() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "]"
-				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			showOwner(_eyeTrace)
 		elseif _eyeTrace.Entity:IsPlayer() then
 			if _eyeTrace.Entity:GetColor().a != 0 or !_eyeTrace.Entity:GetNWBool("cloaked") then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_pressplypre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_pressplymid") .. " " .. tostring(_eyeTrace.Entity:RPName()) .. " " .. YRP.lang_string("LID_pressplypos"), "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_pressplypre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_pressplymid") .. " " .. tostring(_eyeTrace.Entity:RPName()) .. " " .. YRP.lang_string("LID_pressplypos"), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:IsNPC() then
 			if _eyeTrace.Entity:GetNWString("dealerID", "") != "" then
-				draw.SimpleTextOutlined(_eyeTrace.Entity:GetNWString("name", ""), "sef", ScrW()/2, ScrH2() + ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_totradepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_totradepos"), "sef", ScrW()/2, ScrH2() + ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(_eyeTrace.Entity:GetNWString("name", ""), "sef", ScrW() / 2, ScrH2() + ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_totradepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_totradepos"), "sef", ScrW() / 2, ScrH2() + ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
-			draw.SimpleTextOutlined(YRP.lang_string("LID_toappearancepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_toappearancepos"), "sef", ScrW()/2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_toappearancepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_toappearancepos"), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		elseif _eyeTrace.Entity:HasStorage() and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
-			draw.SimpleTextOutlined(_eyeTrace.Entity:StorageName(), "sef", ScrW()/2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_openstoragepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_openstoragepos"), "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(_eyeTrace.Entity:StorageName(), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_openstoragepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_openstoragepos"), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		elseif _eyeTrace.Entity:GetNWBool("yrp_has_use", false) then
 			local text = "PRESS [" .. string.upper(GetKeybindName("in_use")) .. "]"
 			if _eyeTrace.Entity:GetNWString("yrp_use_message", "") != "" then
 				text = text .. ": " .. _eyeTrace.Entity:GetNWString("yrp_use_message", "")
 			end
-			draw.SimpleTextOutlined(text, "sef", ScrW()/2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(text, "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 		showOwner(_eyeTrace)
 	end
