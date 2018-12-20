@@ -210,7 +210,7 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(bankName, "ATM_Header", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_errorsite"), "ATM_Header", pw/2, 150+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined("ERROR", "ATM_Header", pw/2, 150+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.SimpleTextOutlined("404", "ATM_Header", pw/2, ph/2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				draw.SimpleTextOutlined("Please tell the DEVs", "ATM_Header", pw/2, ph/2 + 72 + 10, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

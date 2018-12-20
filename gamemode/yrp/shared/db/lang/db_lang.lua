@@ -69,13 +69,25 @@ function YRP.replace_string(in_str, tab)
 end
 
 local nf = {}
+local hascontent = false
 function YRP.lang_string(var, vals)
 	var = tostring(var)
 	local _string = yrp_current_lang[string.lower(var)]
 	if !wk(_string) then
 		if nf[var] == nil and string.StartWith(var, "LID_") then
-			nf[var] = var
-			printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+			if !hascontent then
+				for i, addon in pairs(engine.GetAddons()) do
+					if addon.wsid == "1189643820" then
+						print("hascontent")
+						hascontent = true
+						break
+					end
+				end
+			end
+			if hascontent then
+				nf[var] = var
+				printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+			end
 		end
 		return var
 	end
@@ -137,13 +149,14 @@ function YRP.read_language(short, init)
 			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language") .. "/" .. YRP.lang_string("LID_inenglish"))
 		end
 
-		YRP.read_lang("resource/localization/yrp/_old/lang_" .. "en" .. ".properties")
 		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties", default)
 		YRP.read_lang("resource/localization/yrp/menubuy/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menucharacter/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settings/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsinterface/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsmap/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsrealistic/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsdatabase/lang_" .. short .. ".properties")
