@@ -18,18 +18,18 @@ net.Receive("get_interface_settings", function(len)
 		local _dframe = createD("DFrame", settingsWindow.window.site, ScrW2() - ctr(200), ScrH2() - ctr(200), ScrW2() + ctr(100), ctr(100))
 		_dframe:SetTitle("")
 		function _dframe:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("LID_dframe"))
+			surfaceWindow(self, pw, ph, YRP.lang_string("LID_window"))
 		end
 
 		local _dpanel = createD("DPanel", _dframe, _dframe:GetWide() - ctr(100), ctr(200), ctr(50), ctr(60))
 		function _dpanel:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string("LID_dpanel"))
+			surfacePanel(self, pw, ph, YRP.lang_string("LID_panel"))
 		end
 
 		local _dbutton = createD("DButton", _dframe, ctr(200), ctr(50), ctr(50), ctr(270))
 		_dbutton:SetText("")
 		function _dbutton:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_dbutton"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_button"))
 		end
 
 		local _parent = settingsWindow.window.site
