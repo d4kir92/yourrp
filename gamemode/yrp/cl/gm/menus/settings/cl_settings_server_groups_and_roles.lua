@@ -1068,7 +1068,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 					end
 				end
-				ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
+				if ea[role.uniqueID].custom_flags.dpl != nil then
+					ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
+				end
 			end)
 			net.Start("get_role_customflags")
 				net.WriteInt(role.uniqueID, 32)
@@ -1237,7 +1239,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 					v.h = ctr(120)
 				end
-				ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
+				if ea[role.uniqueID].playermodels.dpl != nil then
+					ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
+				end
 			end)
 			net.Start("get_role_playermodels")
 				net.WriteInt(role.uniqueID, 32)
@@ -1345,7 +1349,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					swep.h = ctr(120)
 					table.insert(cl_sweps, swep)
 				end
-				ea[role.uniqueID].sweps.dpl:AddLines(cl_sweps)
+				if ea[role.uniqueID].sweps.dpl != nil then
+					ea[role.uniqueID].sweps.dpl:AddLines(cl_sweps)
+				end
 			end)
 			net.Start("get_role_sweps")
 				net.WriteInt(role.uniqueID, 32)
@@ -1442,7 +1448,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					ndswep.h = ctr(120)
 					table.insert(cl_ndsweps, ndswep)
 				end
-				ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
+				if ea[role.uniqueID].ndsweps.dpl != nil then
+					ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
+				end
 			end)
 			net.Start("get_role_ndsweps")
 				net.WriteInt(role.uniqueID, 32)

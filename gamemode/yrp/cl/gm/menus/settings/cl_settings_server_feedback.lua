@@ -64,7 +64,7 @@ net.Receive("get_feedback", function()
 
 			_fb.steamnamep = createD("DPanel", _fb, ctr(400), ctr(60), ctr(220), ctr(10))
 			function _fb.steamnamep:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "steamname")
+				surfacePanel(self, pw, ph, YRP.lang_string("LID_steamname"))
 			end
 			_fb.steamnamete = createD("DTextEntry", _fb, ctr(400), ctr(110), ctr(220), ctr(80))
 			_fb.steamnamete:SetEditable(false)
@@ -74,7 +74,7 @@ net.Receive("get_feedback", function()
 
 			_fb.titlep = createD("DPanel", _fb, ctr(500), ctr(60), ctr(630), ctr(10))
 			function _fb.titlep:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "settings_fb_title")
+				surfacePanel(self, pw, ph, "LID_settings_fb_title")
 			end
 			_fb.titlete = createD("DTextEntry", _fb, ctr(500), ctr(110), ctr(630), ctr(80))
 			_fb.titlete:SetEditable(false)
@@ -84,7 +84,7 @@ net.Receive("get_feedback", function()
 
 			_fb.feedbackp = createD("DPanel", _fb, ctr(1200), ctr(60), ctr(1140), ctr(10))
 			function _fb.feedbackp:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "settings_fb_feedback")
+				surfacePanel(self, pw, ph, "LID_settings_fb_feedback")
 			end
 			_fb.feedbackte = createD("DTextEntry", _fb, ctr(1200), ctr(310), ctr(1140), ctr(80))
 			_fb.feedbackte:SetEditable(false)
@@ -95,7 +95,7 @@ net.Receive("get_feedback", function()
 
 			_fb.contactp = createD("DPanel", _fb, ctr(500), ctr(60), ctr(2350), ctr(10))
 			function _fb.contactp:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "settings_fb_contact")
+				surfacePanel(self, pw, ph, "LID_settings_fb_contact")
 			end
 			_fb.contactte = createD("DTextEntry", _fb, ctr(500), ctr(110), ctr(2350), ctr(80))
 			_fb.contactte:SetEditable(false)
@@ -106,7 +106,7 @@ net.Receive("get_feedback", function()
 			_fb.profile = createD("DButton", _fb, ctr(600), ctr(60), ctr(2860), ctr(10))
 			_fb.profile:SetText("")
 			function _fb.profile:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "opensteamprofile")
+				surfaceButton(self, pw, ph, YRP.lang_string("LID_openprofile"))
 			end
 			function _fb.profile:DoClick()
 				gui.OpenURL("http://steamcommunity.com/profiles/" .. _fb.steamid64)

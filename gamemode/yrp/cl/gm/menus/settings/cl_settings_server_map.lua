@@ -200,7 +200,7 @@ net.Receive("getMapList", function(len)
 			net.SendToServer()
 		end
 		function _buttonAddReleasePoint:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_addjailfreepoint"))
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_addjailreleasepoint"))
 		end
 
 		local _buttonAddDealer = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(636))

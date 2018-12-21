@@ -39,7 +39,10 @@ function HudView()
 			showOwner(_eyeTrace)
 		elseif _eyeTrace.Entity:IsPlayer() then
 			if _eyeTrace.Entity:GetColor().a != 0 or !_eyeTrace.Entity:GetNWBool("cloaked") then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_pressplypre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_pressplymid") .. " " .. tostring(_eyeTrace.Entity:RPName()) .. " " .. YRP.lang_string("LID_pressplypos"), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				local tab = {}
+				tab["NAME"] = tostring(_eyeTrace.Entity:RPName())
+				tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				draw.SimpleTextOutlined(YRP.lang_string("LID_presstointeractwith", tab), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:IsNPC() then
 			if _eyeTrace.Entity:GetNWString("dealerID", "") != "" then

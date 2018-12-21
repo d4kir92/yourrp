@@ -162,7 +162,7 @@ if CLIENT then
 					gui.OpenURL("https://github.com/d4kir92/GMOD-YourRP-unstable")
 				end
 				function download_latest_git:Paint(pw, ph)
-					surfaceButton(self, pw, ph, "Download Latest Version")
+					surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
 				end
 				download_latest_git:SetPos(ctr(600 + 10), ctr(460))
 			end
