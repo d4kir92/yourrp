@@ -105,8 +105,6 @@ if SERVER then
 							local test = string.find(line, val)
 							if test != nil then
 								utd[str] = true
-							else
-								print(str .. " NOT FOUND")
 							end
 						end
 						break
