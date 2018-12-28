@@ -78,7 +78,6 @@ function YRP.lang_string(var, vals)
 			if !hascontent then
 				for i, addon in pairs(engine.GetAddons()) do
 					if addon.wsid == "1189643820" then
-						print("hascontent")
 						hascontent = true
 						break
 					end

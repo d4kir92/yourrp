@@ -420,7 +420,7 @@ util.AddNetworkString("give_getRolTab")
 
 net.Receive("give_getRolTab", function(len, ply)
 	local _groupID = net.ReadString()
-	local _tmpRolTab = SQL_SELECT("yrp_ply_roles", "*", "groupID = " .. tonumber(_groupID))
+	local _tmpRolTab = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = " .. tonumber(_groupID))
 	if _tmpRolTab != nil then
 		net.Start("give_getRolTab")
 			net.WriteTable(_tmpRolTab)

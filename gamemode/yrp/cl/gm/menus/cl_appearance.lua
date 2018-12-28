@@ -6,9 +6,9 @@ local _yrp_appearance = {}
 local play = true
 net.Receive("get_menu_bodygroups", function(len)
 	local _tbl = net.ReadTable()
-	if _tbl.playermodels != nil and _tbl.playermodelsnone != nil then
+	if _tbl.string_playermodels != nil then
 		local _skin = tonumber(_tbl.skin)
-		local _pms = combineStringTables(_tbl.playermodels, _tbl.playermodelsnone)
+		local _pms = string.Explode(",", _tbl.string_playermodels)
 		local ply = LocalPlayer()
 		if ply:GetNWBool("bool_appearance_system", false) and pa(_yrp_appearance.left) then
 			if _yrp_appearance.left.GetChildren != nil then

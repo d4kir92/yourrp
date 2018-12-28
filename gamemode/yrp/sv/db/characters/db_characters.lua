@@ -346,7 +346,7 @@ end)
 net.Receive("charGetRoles", function(len, ply)
 	local groupID = net.ReadString()
 	local netTable = {}
-	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "groupID = " .. tonumber(groupID))
+	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = " .. tonumber(groupID))
 	if wk(tmpTable) then
 		local count = 1
 		for k, v in pairs(tmpTable) do
@@ -388,11 +388,43 @@ net.Receive("charGetRoleInfo", function(len, ply)
 	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(roleID))
 	if tmpTable == nil then
 		tmpTable = {}
+	else
+		local rpms = string.Explode(",", tmpTable[1].string_playermodels)
+		local tab = {}
+		for i, id in pairs(rpms) do
+			local tmppm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+			if wk(tmppm) then
+				tmppm = tmppm[1]
+				table.insert(tab, tmppm.string_model)
+			end
+		end
+		tmpTable[1].string_playermodels = table.concat(tab,",")
 	end
+
 	net.Start("charGetRoleInfo")
 		net.WriteTable(tmpTable)
 	net.Send(ply)
 end)
+
+function GetPlayermodelsOfRole(ruid)
+	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(ruid))
+	if wk(role) then
+		role = role[1]
+		local rpms = string.Explode(",", role.string_playermodels)
+		local tab = {}
+		for i, id in pairs(rpms) do
+			local tmppm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+			if wk(tmppm) then
+				tmppm = tmppm[1]
+				table.insert(tab, tmppm.string_model)
+			end
+		end
+		return table.concat(tab,",")
+	else
+		printGM("note", "role " .. ruid .. " has no playermodels")
+		return ""
+	end
+end
 
 function send_characters(ply)
 	local netTable = {}
@@ -425,6 +457,9 @@ function send_characters(ply)
 						netTable[_charCount].role = tmpDefault
 					end
 				end
+
+				netTable[_charCount].role.string_playermodels = GetPlayermodelsOfRole(v.roleID)
+
 				local tmp2 = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
 				if tmp2 != nil and tmp2 != false then
 					tmp2 = tmp2[1]
@@ -534,9 +569,8 @@ function SendBodyGroups(ply)
 	if wk(_result) then
 		_result = _result[1]
 		local _role = ply:GetRolTab()
-		_result.playermodels = _role.playermodels
-		_result.playermodelsnone = _role.playermodelsnone
-		if _result.playermodels != "" and _result.playermodelsnone != "" then
+		_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
+		if _result.string_playermodels != "" then
 			net.Start("get_menu_bodygroups")
 				net.WriteTable(_result)
 			net.Send(ply)
@@ -597,7 +631,7 @@ util.AddNetworkString("inv_pm_up")
 
 net.Receive("inv_pm_up", function(len, ply)
 	local _cur = net.ReadInt(16)
-	local _pms = combineStringTables(ply:GetRolTab().playermodels, ply:GetRolTab().playermodelsnone)
+	local _pms = ply:GetRolTab().playermodels
 	ply:SetModel(_pms[_cur])
 	local _charid = ply:CharID()
 	SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
@@ -609,7 +643,7 @@ util.AddNetworkString("inv_pm_do")
 
 net.Receive("inv_pm_do", function(len, ply)
 	local _cur = net.ReadInt(16)
-	local _pms = combineStringTables(ply:GetRolTab().playermodels, ply:GetRolTab().playermodelsnone)
+	local _pms = ply:GetRolTab().playermodels
 	ply:SetModel(_pms[_cur])
 	local _charid = ply:CharID()
 	SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
