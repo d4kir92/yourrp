@@ -85,7 +85,7 @@ function createRoleBox(rol, parent)
 		end
 		_rol.gr:SetText("")
 		function _rol.gr:DoClick()
-			local _pm = combineStringTables(rol.string_playermodels, rol.string_playermodelsnone)
+			local _pm = string.Explode(",", rol.string_playermodels)
 
 			_rm.infopm:SetModel(_pm[1] or "")
 

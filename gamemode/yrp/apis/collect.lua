@@ -19,7 +19,10 @@ if SERVER then
 			entry["entry.2033271728"] = sv.game
 			entry["entry.10628146"] = sv.maxplayers
 			entry["entry.1206099686"] = sv.collectionid
-			entry["entry.1940143037"] = sv.version
+			entry["entry.303744727"] = sv.versionid
+			entry["entry.1940143037"] = sv.versionstable
+			entry["entry.2104377567"] = sv.versionbeta
+			entry["entry.1969286222"] = sv.versioncanary
 			entry["entry.398751929"] = sv.art
 
 			local url = "https://docs.google.com/forms/d/e/1FAIpQLSdmM5ZkekAXvtf1RMsPI7ZJeetqyFb5L06vjAuFmHNx96_MEQ/formResponse"
@@ -28,7 +31,7 @@ if SERVER then
 			end, function(failed)
 				printGM("note", "[ServerInfo] FAILED: " .. tostring(failed))
 			end)
-		elseif ServerHasPassword() then
+		elseif game.IsDedicated() and !game.SinglePlayer() and ServerHasPassword() then
 			printGM("db", "[ServerInfo] Server has password => not setting in public list.")
 
 			local entry = {}
@@ -37,7 +40,10 @@ if SERVER then
 			entry["entry.2033271728"] = sv.game
 			entry["entry.10628146"] = sv.maxplayers
 			entry["entry.1206099686"] = sv.collectionid
-			entry["entry.1940143037"] = sv.version
+			entry["entry.1981636793"] = sv.versionid
+			entry["entry.1940143037"] = sv.versionstable
+			entry["entry.1026307624"] = sv.versionbeta
+			entry["entry.167550390"] = sv.versioncanary
 			entry["entry.398751929"] = sv.art
 
 			local url = "https://docs.google.com/forms/d/e/1FAIpQLSdGoAN4FbsiuVdhKFSr88zmHZ5DAbdFOLU7QBgDyv7TIZFduA/formResponse"
@@ -70,7 +76,7 @@ if SERVER then
 			if sv.collectionid == "0" then
 				sv.collectionid = ""
 			end
-			sv.version = tostring(gmod.GetGamemode().Version)
+			sv.versionid = tostring(gmod.GetGamemode().VersionStable) .. "|" .. tostring(gmod.GetGamemode().VersionBeta) .. "|" .. tostring(gmod.GetGamemode().VersionCanary)
 			sv.versionstable = tostring(gmod.GetGamemode().VersionStable)
 			sv.versionbeta = tostring(gmod.GetGamemode().VersionBeta)
 			sv.versioncanary = tostring(gmod.GetGamemode().VersionCanary)
@@ -95,10 +101,12 @@ if SERVER then
 						end
 					end
 					if found then
-						for j, val in pairs(sv) do
+						for str, val in pairs(sv) do
 							local test = string.find(line, val)
 							if test != nil then
-								utd[j] = true
+								utd[str] = true
+							else
+								print(str .. " NOT FOUND")
 							end
 						end
 						break

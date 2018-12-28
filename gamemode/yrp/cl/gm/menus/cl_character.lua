@@ -91,7 +91,6 @@ function openCharacterCreation()
 	character.armax = 0
 	character.salary = 0
 	character.playermodels = {}
-	character.playermodelsnone = {}
 	character.playermodelID = 1
 	character.skin = 1
 
@@ -237,8 +236,8 @@ function openCharacterCreation()
 			end
 		end
 	end)
-	function charactersGroupCB:OnSelect(index, value, data	)
-		character.groupID = tonumber(data)
+	function charactersGroupCB:OnSelect(index, value, dat)
+		character.groupID = tonumber(dat)
 		net.Start("charGetRoles")
 			net.WriteString(character.groupID)
 		net.SendToServer()
@@ -453,14 +452,15 @@ function openCharacterCreation()
 		net.Receive("charGetRoleInfo", function(len)
 			local tmpTable = net.ReadTable()
 
-			character.hp = tmpTable[1].hp
-			character.hpmax = tmpTable[1].hpmax
-			character.ar = tmpTable[1].ar
-			character.armax = tmpTable[1].armax
-			character.salary = tmpTable[1].salary
-			character.playermodels = combineStringTables(tmpTable[1].playermodels, tmpTable[1].playermodelsnone)
+			character.hp = tmpTable[1].int_hp
+			character.hpmax = tmpTable[1].int_hpmax
+			character.ar = tmpTable[1].int_ar
+			character.armax = tmpTable[1].int_armax
+			character.salary = tmpTable[1].int_salary
+			character.description = tmpTable[1].string_description
+			character.playermodels = string.Explode(",", tmpTable[1].string_playermodels)
 			character.playermodelID = 1
-			character.playermodelsize = tmpTable[1].playermodelsize
+			character.playermodelsize = tmpTable[1].int_playermodelsize or 1
 			if character.playermodels[tonumber(character.playermodelID)] != nil then
 				if characterPlayermodel != nil and characterPlayermodel != NULL then
 					characterPlayermodel:SetModel(character.playermodels[tonumber(character.playermodelID)])
@@ -736,7 +736,10 @@ function openCharacterSelection()
 							tmpChar.map = _characters[i].char.map
 							tmpChar.playermodelID = _characters[i].char.playermodelID
 
-							tmpChar.playermodels = combineStringTables(_characters[i].role.playermodels, _characters[i].role.playermodelsnone)
+							tmpChar.playermodels = string.Explode(",", _characters[i].role.string_playermodels) or {}
+							if tmpChar.playermodels == "" or tmpChar.playermodels == " " then
+								tmpChar.playermodels = {}
+							end
 
 							tmpChar.playermodelsize = _characters[i].role.playermodelsize
 							tmpChar.skin = _characters[i].char.skin
@@ -801,8 +804,10 @@ function openCharacterSelection()
 								if self.playermodels != nil and self.playermodelID != nil then
 									local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
 									if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
-										if _playermodel != "" then
+										if _playermodel != "" and _playermodel != " " then
 											charplayermodel:SetModel(_playermodel)
+										else
+											charplayermodel:SetModel("models/player/skeleton.mdl")
 										end
 										if charplayermodel.Entity != nil then
 											charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
@@ -812,6 +817,8 @@ function openCharacterSelection()
 											end
 										end
 									end
+								else
+									printGM("note", "Character role has no playermodel!")
 								end
 							end
 
