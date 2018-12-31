@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 9 --do NOT change this!
-GM.VersionCanary = 19 --do NOT change this!
+GM.VersionBeta = 10 --do NOT change this!
+GM.VersionCanary = 21 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -167,6 +167,8 @@ function PrintHelp()
 	printGM("note", "	Put a player with the RPNAME to the UserGroup")
 	printGM("note", "yrp_maps")
 	printGM("note", "	Shows all maps on server")
+	printGM("note", "yrp_collection / yrp_collectionid")
+	printGM("note", "	Shows servers collectionid")
 	hr_pos()
 
 	hr_pre()
@@ -184,6 +186,18 @@ end)
 
 concommand.Add("yrp__help", function(ply, cmd, args)
 	PrintHelp()
+end)
+
+function PrintCollectionID()
+	hr_pre()
+	printGM("note", "Server - CollectionID: " .. YRPCollectionID())
+	hr_pos()
+end
+concommand.Add("yrp_collectionid", function(ply, cmd, args)
+	PrintCollectionID()
+end)
+concommand.Add("yrp_collection", function(ply, cmd, args)
+	PrintCollectionID()
 end)
 
 hook.Add("StartCommand", "NoJumpGuns", function(ply, cmd)

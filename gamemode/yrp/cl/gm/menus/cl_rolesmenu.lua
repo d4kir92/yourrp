@@ -28,13 +28,7 @@ local _pr = {}
 local _adminonly = Material("icon16/shield.png")
 
 function createRoleBox(rol, parent, mainparent)
-	printGM("note", "createRoleBox")
 	if rol != nil then
-		parent:SetWide(parent:GetWide() + ctrb(400))
-		if parent:GetWide() > mainparent:GetWide() - ctrb(140) then
-			parent:SetWide(mainparent:GetWide() - ctrb(140))
-		end
-
 		local _rol = createD("DPanel", parent, ctrb(400), ctrb(400), 0, 0)
 		function _rol:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 100))
@@ -120,10 +114,7 @@ function createRoleBox(rol, parent, mainparent)
 end
 
 function createBouncer(parent, mainparent)
-	parent:SetWide(parent:GetWide() + ctrb(80))
-	if parent:GetWide() > mainparent:GetWide() - ctrb(140) then
-		parent:SetWide(mainparent:GetWide() - ctrb(140))
-	end
+	parent:SetWide(mainparent:GetWide() - ctrb(140))
 	local _bou = createD("DPanel", parent, ctrb(50), ctrb(200), 0, 0)
 	function _bou:Paint(pw, ph)
 		surfaceText("➔", "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
@@ -163,7 +154,7 @@ end
 
 function addRoleRow(rol, parent)
 	if pa(parent) then
-		local _rr = createD("DHorizontalScroller", parent.content, ctrb(0), ctrb(400), 0, 0) --parent:GetWide() - 2*ctrb(parent:GetSpacing()), ctrb(400), 0, 0)
+		local _rr = createD("DHorizontalScroller", parent.content, ctrb(400), ctrb(400), 0, 0) --parent:GetWide() - 2*ctrb(parent:GetSpacing()), ctrb(400), 0, 0)
 		_rr:SetOverlap(ctrb(-30))
 		function _rr:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
