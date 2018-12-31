@@ -65,6 +65,24 @@ end
 
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
+if wk(SQL_SELECT("yrp_roles", "*", nil)) then
+	local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
+	for i, role in pairs(wrongprerole) do
+		SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+	end
+end
+
+function MoveUnusedRolesToDefault()
+	printGM("note", "Move unused roles to default group")
+	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
+	for i, role in pairs(allroles) do
+		local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
+		if !wk(group) then
+			SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+		end
+	end
+end
+
 -- CONVERTING
 if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 	printGM("note", "Converting OLD Roles into NEW Roles")
@@ -308,25 +326,31 @@ for str, val in pairs(yrp_ply_roles) do
 	end
 end
 
-function SubscribeRoleList(ply, uid)
-	if HANDLER_GROUPSANDROLES["roleslist"][uid] == nil then
-		HANDLER_GROUPSANDROLES["roleslist"][uid] = {}
+function SubscribeRoleList(ply, gro, pre)
+	if HANDLER_GROUPSANDROLES["roleslist"][gro] == nil then
+		HANDLER_GROUPSANDROLES["roleslist"][gro] = {}
 	end
-	if !table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][uid], ply) then
-		table.insert(HANDLER_GROUPSANDROLES["roleslist"][uid], ply)
-		printGM("gm", ply:YRPName() .. " subscribed to RoleList " .. uid)
+	if HANDLER_GROUPSANDROLES["roleslist"][gro][pre] == nil then
+		HANDLER_GROUPSANDROLES["roleslist"][gro][pre] = {}
+	end
+	if !table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply) then
+		table.insert(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
+		printGM("gm", ply:YRPName() .. " subscribed to RoleList " .. gro .. " pre: " .. pre)
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to RoleList " .. uid)
+		printGM("gm", ply:YRPName() .. " already subscribed to RoleList " .. gro.. " pre: " .. pre)
 	end
 end
 
-function UnsubscribeRoleList(ply, uid)
-	if HANDLER_GROUPSANDROLES["roleslist"][uid] == nil then
-		HANDLER_GROUPSANDROLES["roleslist"][uid] = {}
+function UnsubscribeRoleList(ply, gro, pre)
+	if HANDLER_GROUPSANDROLES["roleslist"][gro] == nil then
+		HANDLER_GROUPSANDROLES["roleslist"][gro] = {}
 	end
-	if table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][uid], ply) then
-		table.RemoveByValue(HANDLER_GROUPSANDROLES["roleslist"][uid], ply)
-		printGM("gm", ply:YRPName() .. " unsubscribed from RoleList " .. uid)
+	if HANDLER_GROUPSANDROLES["roleslist"][gro][pre] == nil then
+		HANDLER_GROUPSANDROLES["roleslist"][gro][pre] = {}
+	end
+	if table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply) then
+		table.RemoveByValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
+		printGM("gm", ply:YRPName() .. " unsubscribed from RoleList " .. gro .. " pre: " .. pre)
 	end
 end
 
@@ -352,51 +376,63 @@ function UnsubscribeRole(ply, uid)
 	end
 end
 
-function SortRoles(uid)
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
+function SortRoles(uid, mode)
+	if mode == "prerole" then
+		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'")
 
-	if wk(siblings) then
-		for i, sibling in pairs(siblings) do
-			sibling.int_position = tonumber(sibling.int_position)
+		if wk(siblings) then
+			for i, sibling in pairs(siblings) do
+				sibling.int_position = tonumber(sibling.int_position)
+			end
+
+			local count = 0
+			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+				count = count + 1
+				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			end
 		end
+	else
+		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
 
-		local count = 0
-		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
-			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+		if wk(siblings) then
+			for i, sibling in pairs(siblings) do
+				sibling.int_position = tonumber(sibling.int_position)
+			end
+
+			local count = 0
+			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+				count = count + 1
+				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			end
 		end
 	end
 end
 
-function SendRoleList(uid)
-	SortRoles(uid)
+function SendRoleList(gro, pre)
+	SortRoles(gro, pre)
 
-	local tbl_parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
-	if !wk(tbl_parentgroup) then
-		tbl_parentgroup = {}
-	else
-		tbl_parentgroup = tbl_parentgroup[1]
-	end
-
-	local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
+	print(gro, pre)
+	local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 	if !wk(tbl_roles) then
 		tbl_roles = {}
 	end
-	local currentuid = uid
-	local parentuid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-	if wk(parentuid) then
-		parentuid = parentuid[1].int_groupID
+
+	local headername = "NOT FOUND"
+	if pre > 0 then
+		headername = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+		headername = headername[1].string_name
 	else
-		parentuid = 0
+		headername = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
+		headername = headername[1].string_name
 	end
 
-	HANDLER_GROUPSANDROLES["roleslist"][uid] = HANDLER_GROUPSANDROLES["roleslist"][uid] or {}
-	for i, pl in pairs(HANDLER_GROUPSANDROLES["roleslist"][uid]) do
+	local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
+	for i, pl in pairs(tbl_bc) do
 		net.Start("settings_subscribe_rolelist")
-			net.WriteTable(tbl_parentgroup)
 			net.WriteTable(tbl_roles)
-			net.WriteString(currentuid)
-			net.WriteString(parentuid)
+			net.WriteString(headername)
+			net.WriteString(gro)
+			net.WriteString(pre)
 		net.Send(pl)
 	end
 end
@@ -406,6 +442,9 @@ util.AddNetworkString("get_grp_roles")
 net.Receive("get_grp_roles", function(len, ply)
 	local _uid = net.ReadString()
 	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = " .. _uid)
+	for i, ro in pairs(_roles) do
+		ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
+	end
 	if _roles != nil then
 		net.Start("get_grp_roles")
 			net.WriteTable(_roles)
@@ -430,17 +469,31 @@ end)
 -- Role Settings
 util.AddNetworkString("settings_subscribe_rolelist")
 net.Receive("settings_subscribe_rolelist", function(len, ply)
-	local par = tonumber(net.ReadString())
-	SubscribeRoleList(ply, par)
-	SendRoleList(par)
+	local gro = tonumber(net.ReadString())
+	local pre = tonumber(net.ReadString())
+
+	SubscribeRoleList(ply, gro, pre)
+	SendRoleList(gro, pre)
+end)
+
+util.AddNetworkString("settings_subscribe_prerolelist")
+net.Receive("settings_subscribe_prerolelist", function(len, ply)
+	local gro = tonumber(net.ReadString())
+	local pre = tonumber(net.ReadString())
+
+	pre = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+	pre = tonumber(pre[1].int_prerole)
+	SubscribeRoleList(ply, gro, pre)
+	SendRoleList(gro, pre)
 end)
 
 util.AddNetworkString("settings_add_role")
 net.Receive("settings_add_role", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	SQL_INSERT_INTO(DATABASE_NAME, "int_groupID", "'" .. uid .. "'")
+	local gro = tonumber(net.ReadString())
+	local pre = tonumber(net.ReadString())
+	SQL_INSERT_INTO(DATABASE_NAME, "int_groupID, int_prerole", "'" .. gro .. "', '" .. pre .. "'")
 
-	local roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
+	local roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 
 	local count = tonumber(table.Count(roles))
 	local new_role = roles[count]
@@ -454,7 +507,7 @@ net.Receive("settings_add_role", function(len, ply)
 
 	printGM("db", "Added new role: " .. new_role.uniqueID)
 
-	SendRoleList(uid)
+	SendRoleList(gro, pre)
 end)
 
 util.AddNetworkString("settings_role_position_up")
@@ -481,7 +534,8 @@ net.Receive("settings_role_position_up", function(len, ply)
 	end
 
 	role.int_groupID = tonumber(role.int_groupID)
-	SendRoleList(role.int_groupID)
+	role.int_prerole = tonumber(role.int_prerole)
+	SendRoleList(role.int_groupID, role.int_prerole)
 end)
 
 util.AddNetworkString("settings_role_position_dn")
@@ -508,7 +562,8 @@ net.Receive("settings_role_position_dn", function(len, ply)
 	end
 
 	role.int_groupID = tonumber(role.int_groupID)
-	SendRoleList(role.int_groupID)
+	role.int_prerole = tonumber(role.int_prerole)
+	SendRoleList(role.int_groupID, role.int_prerole)
 end)
 
 util.AddNetworkString("settings_subscribe_role")
@@ -548,8 +603,9 @@ end)
 
 util.AddNetworkString("settings_unsubscribe_rolelist")
 net.Receive("settings_unsubscribe_rolelist", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	UnsubscribeRoleList(ply, uid)
+	local gro = tonumber(net.ReadString())
+	local pre = tonumber(net.ReadString())
+	UnsubscribeRoleList(ply, gro, pre)
 end)
 
 util.AddNetworkString("settings_delete_role")
@@ -573,7 +629,8 @@ net.Receive("settings_delete_role", function(len, ply)
 		end
 
 		role.int_groupID = tonumber(role.int_groupID)
-		SendRoleList(role.int_groupID)
+		role.int_prerole = tonumber(role.int_prerole)
+		SendRoleList(role.int_groupID, role.int_prerole)
 	end
 end)
 
