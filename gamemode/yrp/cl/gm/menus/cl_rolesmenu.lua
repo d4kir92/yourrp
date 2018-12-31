@@ -27,9 +27,14 @@ local _pr = {}
 
 local _adminonly = Material("icon16/shield.png")
 
-function createRoleBox(rol, parent)
+function createRoleBox(rol, parent, mainparent)
 	printGM("note", "createRoleBox")
 	if rol != nil then
+		parent:SetWide(parent:GetWide() + ctrb(400))
+		if parent:GetWide() > mainparent:GetWide() - ctrb(140) then
+			parent:SetWide(mainparent:GetWide() - ctrb(140))
+		end
+
 		local _rol = createD("DPanel", parent, ctrb(400), ctrb(400), 0, 0)
 		function _rol:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 100))
@@ -114,7 +119,11 @@ function createRoleBox(rol, parent)
 	end
 end
 
-function createBouncer(parent)
+function createBouncer(parent, mainparent)
+	parent:SetWide(parent:GetWide() + ctrb(80))
+	if parent:GetWide() > mainparent:GetWide() - ctrb(140) then
+		parent:SetWide(mainparent:GetWide() - ctrb(140))
+	end
 	local _bou = createD("DPanel", parent, ctrb(50), ctrb(200), 0, 0)
 	function _bou:Paint(pw, ph)
 		surfaceText("➔", "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
@@ -124,18 +133,18 @@ function createBouncer(parent)
 	end
 end
 
-function addPreRole(rol, parent)
+function addPreRole(rol, parent, mainparent)
 	_pr[rol.uniqueID] = parent
-	local _tmp = createBouncer(parent)
-	createRoleBox(rol, parent)
-	getPreRole(rol.uniqueID, _pr[rol.uniqueID])
+	local _tmp = createBouncer(parent, mainparent)
+	createRoleBox(rol, parent, mainparent)
+	getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
 end
 
-function getPreRole(uid, parent)
+function getPreRole(uid, parent, mainparent)
 	net.Receive("get_rol_prerole", function(len)
 		local _prerole = net.ReadTable()
 		if _prerole.int_prerole != nil then
-			addPreRole(_prerole, _pr[_prerole.int_prerole])
+			addPreRole(_prerole, _pr[_prerole.int_prerole], mainparent)
 		end
 	end)
 
@@ -144,23 +153,23 @@ function getPreRole(uid, parent)
 	net.SendToServer()
 end
 
-function addRole(rol, parent)
-	createRoleBox(rol, parent)
+function addRole(rol, parent, mainparent)
+	createRoleBox(rol, parent, mainparent)
 	_pr[rol.uniqueID] = parent
 	if tostring(rol.uniqueID) != "1" then
-		getPreRole(rol.uniqueID, _pr[rol.uniqueID])
+		getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
 	end
 end
 
 function addRoleRow(rol, parent)
 	if pa(parent) then
-		local _rr = createD("DHorizontalScroller", parent.content, ctrb(400), ctrb(400), 0, 0) --parent:GetWide() - 2*ctrb(parent:GetSpacing()), ctrb(400), 0, 0)
+		local _rr = createD("DHorizontalScroller", parent.content, ctrb(0), ctrb(400), 0, 0) --parent:GetWide() - 2*ctrb(parent:GetSpacing()), ctrb(400), 0, 0)
 		_rr:SetOverlap(ctrb(-30))
 		function _rr:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
 		end
 
-		addRole(rol, _rr)
+		addRole(rol, _rr, parent)
 
 		parent:Add(_rr)
 	end

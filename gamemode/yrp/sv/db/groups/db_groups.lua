@@ -405,6 +405,8 @@ net.Receive("settings_delete_group", function(len, ply)
 			end
 		end
 
+		MoveUnusedRolesToDefault()
+
 		group.int_parentgroup = tonumber(group.int_parentgroup)
 		SendGroupList(group.int_parentgroup)
 	end

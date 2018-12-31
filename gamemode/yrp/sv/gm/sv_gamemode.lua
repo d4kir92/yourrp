@@ -347,7 +347,7 @@ end
 
 function StartCombat(ply)
 	ply:SetNWBool("inCombat", true)
-	if ply:IsValid() then
+	if ply:IsValid() and ply:IsFullyAuthenticated() then
 		local steamid = ply:SteamID()
 		if timer.Exists(steamid .. " outOfCombat") then
 			timer.Remove(steamid .. " outOfCombat")
@@ -365,65 +365,67 @@ function StartCombat(ply)
 end
 
 hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)
-	if dmginfo:GetAttacker() != ply then
-		StartCombat(ply)
-	end
-
-	SlowThink(ply)
-
-	if true then
-		if IsBleedingEnabled() then
-			local _rand = math.Rand(0, 100)
-			if _rand < GetBleedingChance() then
-				ply:StartBleeding()
-				ply:SetBleedingPosition(ply:GetPos() - dmginfo:GetDamagePosition())
-			end
+	if ply:IsFullyAuthenticated() then
+		if dmginfo:GetAttacker() != ply then
+			StartCombat(ply)
 		end
-		if hitgroup == HITGROUP_HEAD then
-			if IsHeadshotDeadlyPlayer() then
-				dmginfo:ScaleDamage(ply:GetMaxHealth())
+
+		SlowThink(ply)
+
+		if true then
+			if IsBleedingEnabled() then
+				local _rand = math.Rand(0, 100)
+				if _rand < GetBleedingChance() then
+					ply:StartBleeding()
+					ply:SetBleedingPosition(ply:GetPos() - dmginfo:GetDamagePosition())
+				end
+			end
+			if hitgroup == HITGROUP_HEAD then
+				if IsHeadshotDeadlyPlayer() then
+					dmginfo:ScaleDamage(ply:GetMaxHealth())
+				else
+					dmginfo:ScaleDamage(GetHitFactorPlayerHead())
+				end
+		 	elseif hitgroup == HITGROUP_CHEST then
+				dmginfo:ScaleDamage(GetHitFactorPlayerChes())
+			elseif hitgroup == HITGROUP_STOMACH then
+				dmginfo:ScaleDamage(GetHitFactorPlayerStom())
+			elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+				dmginfo:ScaleDamage(GetHitFactorPlayerArms())
+				if IsBonefracturingEnabled() then
+					local _break = math.Round(math.Rand(0, 100), 0)
+					if _break <= GetBrokeChanceArms() then
+						if hitgroup == HITGROUP_LEFTARM then
+							ply:SetNWBool("broken_arm_left", true)
+
+							ply:SetActiveWeapon("yrp_unarmed")
+							ply:SelectWeapon("yrp_unarmed")
+						elseif hitgroup == HITGROUP_RIGHTARM then
+							ply:SetNWBool("broken_arm_right", true)
+
+							ply:SetActiveWeapon("yrp_unarmed")
+							ply:SelectWeapon("yrp_unarmed")
+						end
+					end
+				end
+			elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+				dmginfo:ScaleDamage(GetHitFactorPlayerLegs())
+				if IsBonefracturingEnabled() then
+					local _break = math.Round(math.Rand(0, 100), 0)
+					if _break <= GetBrokeChanceLegs() then
+						if hitgroup == HITGROUP_LEFTLEG then
+							ply:SetNWBool("broken_leg_left", true)
+						elseif hitgroup == HITGROUP_RIGHTLEG then
+							ply:SetNWBool("broken_leg_right", true)
+						end
+					end
+				end
 			else
-				dmginfo:ScaleDamage(GetHitFactorPlayerHead())
-			end
-	 	elseif hitgroup == HITGROUP_CHEST then
-			dmginfo:ScaleDamage(GetHitFactorPlayerChes())
-		elseif hitgroup == HITGROUP_STOMACH then
-			dmginfo:ScaleDamage(GetHitFactorPlayerStom())
-		elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-			dmginfo:ScaleDamage(GetHitFactorPlayerArms())
-			if IsBonefracturingEnabled() then
-				local _break = math.Round(math.Rand(0, 100), 0)
-				if _break <= GetBrokeChanceArms() then
-					if hitgroup == HITGROUP_LEFTARM then
-						ply:SetNWBool("broken_arm_left", true)
-
-						ply:SetActiveWeapon("yrp_unarmed")
-						ply:SelectWeapon("yrp_unarmed")
-					elseif hitgroup == HITGROUP_RIGHTARM then
-						ply:SetNWBool("broken_arm_right", true)
-
-						ply:SetActiveWeapon("yrp_unarmed")
-						ply:SelectWeapon("yrp_unarmed")
-					end
-				end
-			end
-		elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-			dmginfo:ScaleDamage(GetHitFactorPlayerLegs())
-			if IsBonefracturingEnabled() then
-				local _break = math.Round(math.Rand(0, 100), 0)
-				if _break <= GetBrokeChanceLegs() then
-					if hitgroup == HITGROUP_LEFTLEG then
-						ply:SetNWBool("broken_leg_left", true)
-					elseif hitgroup == HITGROUP_RIGHTLEG then
-						ply:SetNWBool("broken_leg_right", true)
-					end
-				end
+				dmginfo:ScaleDamage(1)
 			end
 		else
 			dmginfo:ScaleDamage(1)
 		end
-	else
-		dmginfo:ScaleDamage(1)
 	end
 end)
 

@@ -14,8 +14,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		cur_group.edi = 0
 
 		local cur_role = {}
-		cur_role.cur = 0
-		cur_role.par = 0
+		cur_role.gro = 0
+		cur_role.pre = 0
 		cur_role.edi = 0
 
 		function PARENT:OnRemove()
@@ -304,9 +304,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
-		rs.top = createD("DPanel", PARENT, ctr(800), ctr(60), ctr(20), ctr(1040))
+		rs.top = createD("DPanel", PARENT, ctr(800-120), ctr(60), ctr(80), ctr(1040))
 		function rs.top:Paint(pw, ph)
-			if rs.top.group != nil then
+			if rs.top.headername != nil then
 				local tab = {}
 				tab.color = YRPGetColor("3")
 				DrawPanel(self, tab)
@@ -316,12 +316,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.font = "mat1text"
-				if self.group != nil then
-					if self.group != "" then
-						local inp = {}
-						inp.group = self.group
-						tab2.text = YRP.lang_string("LID_rolesof", inp)
-					end
+				if self.headername != nil then
+					local inp = {}
+					inp.group = self.headername
+					tab2.text = YRP.lang_string("LID_rolesof", inp)
 				else
 					tab2.text = YRP.lang_string("LID_loading")
 				end
@@ -329,10 +327,53 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
+		rs.bac = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20), ctr(1040))
+		rs.bac:SetText("")
+		function rs.bac:Paint(pw, ph)
+			if cur_role.pre > 0 then
+			--[[if rs.rplist.tab != nil then
+				if rs.rplist.tab[1] != nil then
+					if tonumber(rs.rplist.tab[1].int_prerole) > 0 then
+					]]--
+						local tab = {}
+						tab.color = Color(255, 255, 0)
+						DrawPanel(self, tab)
+						local tab2 = {}
+						tab2.x = pw / 2
+						tab2.y = ph / 2
+						tab2.ax = 1
+						tab2.ay = 1
+						tab2.text = "◀"
+						tab2.font = "mat1text"
+						DrawText(tab2)
+						--[[
+					end
+				end
+				]]--
+			else
+				local tab = {}
+				tab.color = YRPGetColor("3")
+				DrawPanel(self, tab)
+			end
+		end
+		function rs.bac:DoClick()
+			if cur_role.pre > 0 then
+				rs.rplist:ClearList()
+				net.Start("settings_unsubscribe_rolelist")
+					net.WriteString(cur_role.gro)
+					net.WriteString(cur_role.pre)
+				net.SendToServer()
+				net.Start("settings_subscribe_prerolelist")
+					net.WriteString(cur_role.gro)
+					net.WriteString(cur_role.pre)
+				net.SendToServer()
+			end
+		end
+
 		rs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20 + 800 - 60), ctr(1040))
 		rs.add:SetText("")
 		function rs.add:Paint(pw, ph)
-			if rs.top.group != nil then
+			if rs.top.headername != nil then
 				local tab = {}
 				tab.color = Color(0, 255, 0)
 				DrawPanel(self, tab)
@@ -347,16 +388,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function rs.add:DoClick()
-			if rs.top.group != nil then
+			if rs.top.headername != nil then
 				net.Start("settings_add_role")
-					net.WriteString(cur_role.cur)
+					net.WriteString(cur_role.gro)
+					net.WriteString(cur_role.pre)
 				net.SendToServer()
 			end
 		end
 
 		rs.rlist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(1100))
 		function rs.rlist:Paint(pw, ph)
-			if rs.top.group != nil then
+			if rs.top.headername != nil then
 				local tab = {}
 				tab.color = Color(255, 255, 255)
 				DrawPanel(self, tab)
@@ -366,7 +408,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		rs.rplist:EnableVerticalScrollbar(true)
 		rs.rplist:SetSpacing(ctr(10))
 		function rs.rplist:ClearList()
-			rs.top.group = nil
+			rs.top.headername = nil
 			rs.rplist:Clear()
 		end
 
@@ -477,6 +519,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			net.Start("settings_subscribe_rolelist")
 				net.WriteString(group.uniqueID)
+				net.WriteString("0")
 			net.SendToServer()
 
 			group.uniqueID = tonumber(group.uniqueID)
@@ -787,12 +830,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 			end
 			function ch:DoClick()
+				print("CHANGE TO PREROLE")
 				rs.rplist:ClearList()
 				net.Start("settings_unsubscribe_rolelist")
-					net.WriteString(cur_role.cur)
+					net.WriteString(cur_role.gro)
+					net.WriteString(cur_role.pre)
 				net.SendToServer()
 				timer.Simple(0.1, function()
 					net.Start("settings_subscribe_rolelist")
+						net.WriteString(cur_role.gro)
 						net.WriteString(rs.rplist[role.uniqueID].uniqueID)
 					net.SendToServer()
 				end)
@@ -808,12 +854,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local db_groups = net.ReadTable()
 
 			role.uniqueID = tonumber(role.uniqueID)
-
-			--net.Start("settings_subscribe_rolelist")
-				--net.WriteString(role.uniqueID)
-			--net.SendToServer()
-
-			role.uniqueID = tonumber(role.uniqueID)
+			cur_role.gro = role.int_groupID
 			cur_role.edi = role.uniqueID
 
 			ea.typ = "role"
@@ -1737,20 +1778,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive("settings_subscribe_rolelist", function(le)
+			print("settings_subscribe_rolelist")
 			if pa(rs.rplist) then
 				rs.rplist:ClearList()
 
-				local parentrole = net.ReadTable()
-				if parentrole.uniqueID != nil then
-					rs.top.group = parentrole.string_name
-				else
-					rs.top.group = ""
-				end
-
 				local roles = net.ReadTable()
+				local headername = net.ReadString()
+				rs.top.headername = headername
 
-				cur_role.cur = tonumber(net.ReadString())
-				cur_role.par = tonumber(net.ReadString())
+				cur_role.gro = tonumber(net.ReadString())
+				cur_role.pre = tonumber(net.ReadString())
+
 				rs.rplist.tab = roles
 				for i, role in pairs(roles) do
 					CreateLineRole(rs.rplist, role)
