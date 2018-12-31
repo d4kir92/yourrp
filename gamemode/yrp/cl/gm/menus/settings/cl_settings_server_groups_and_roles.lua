@@ -830,7 +830,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 			end
 			function ch:DoClick()
-				print("CHANGE TO PREROLE")
 				rs.rplist:ClearList()
 				net.Start("settings_unsubscribe_rolelist")
 					net.WriteString(cur_role.gro)

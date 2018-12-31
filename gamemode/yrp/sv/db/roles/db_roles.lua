@@ -376,34 +376,18 @@ function UnsubscribeRole(ply, uid)
 	end
 end
 
-function SortRoles(uid, mode)
-	if mode == "prerole" then
-		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'")
+function SortRoles(gro, pre)
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 
-		if wk(siblings) then
-			for i, sibling in pairs(siblings) do
-				sibling.int_position = tonumber(sibling.int_position)
-			end
-
-			local count = 0
-			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
-				count = count + 1
-				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			end
+	if wk(siblings) then
+		for i, sibling in pairs(siblings) do
+			sibling.int_position = tonumber(sibling.int_position)
 		end
-	else
-		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. uid .. "'")
 
-		if wk(siblings) then
-			for i, sibling in pairs(siblings) do
-				sibling.int_position = tonumber(sibling.int_position)
-			end
-
-			local count = 0
-			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
-				count = count + 1
-				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			end
+		local count = 0
+		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+			count = count + 1
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -411,7 +395,6 @@ end
 function SendRoleList(gro, pre)
 	SortRoles(gro, pre)
 
-	print(gro, pre)
 	local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 	if !wk(tbl_roles) then
 		tbl_roles = {}
@@ -458,7 +441,10 @@ util.AddNetworkString("get_rol_prerole")
 net.Receive("get_rol_prerole", function(len, ply)
 	local _uid = net.ReadString()
 	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = " .. _uid)
-	if _roles != nil then
+	if wk(_roles) then
+		for i, ro in pairs(_roles) do
+			ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
+		end
 		_roles = _roles[1]
 		net.Start("get_rol_prerole")
 			net.WriteTable(_roles)
