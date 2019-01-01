@@ -337,17 +337,18 @@ net.Receive("yrp_player_say", function(len)
 		_write = true
 
 		_tmp.name = ""
-
-		if _tmp.factionname != "" then
-			_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
+		if _tmp.command != "roll" then
+			if _tmp.factionname != "" then
+				_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
+			end
+			if _tmp.groupname != "" and _tmp.groupname != _tmp.factionname then
+				_tmp.name = _tmp.name .. _tmp.groupname .. " "
+			end
+			if _tmp.rolename != "" then
+				_tmp.name = _tmp.name .. _tmp.rolename .. " "
+			end
+			_tmp.name = _tmp.name .. _tmp.rpname
 		end
-		if _tmp.groupname != "" and _tmp.groupname != _tmp.factionname then
-			_tmp.name = _tmp.name .. _tmp.groupname .. " "
-		end
-		if _tmp.rolename != "" then
-			_tmp.name = _tmp.name .. _tmp.rolename .. " "
-		end
-		_tmp.name = _tmp.name .. _tmp.rpname
 	end
 
 	local _usergroup = false
@@ -392,7 +393,7 @@ net.Receive("yrp_player_say", function(len)
 			table.insert(_unpack, " ")
 		end
 
-		if _tmp.command != "me" then
+		if _tmp.command != "me" and _tmp.command != "roll" then
 			table.insert(_unpack, _tmp.command_color)
 			table.insert(_unpack, "[")
 			table.insert(_unpack, string.upper(	niceCommand(_tmp.command)))
@@ -400,17 +401,20 @@ net.Receive("yrp_player_say", function(len)
 			table.insert(_unpack, " ")
 		end
 
-		table.insert(_unpack, _tmp.command_color)
-		table.insert(_unpack, _tmp.name)
-		if _tmp.command != "me" then
+
+			table.insert(_unpack, _tmp.command_color)
+			table.insert(_unpack, _tmp.name)
+
+		if _tmp.command != "me" and _tmp.command != "roll" then
 			table.insert(_unpack, ":\n")
-		else
+		elseif _tmp.command != "roll" then
 			table.insert(_unpack, " ")
 		end
 
 		table.insert(_unpack, _tmp.text_color)
 		table.insert(_unpack, tostring(_tmp.text))
 
+		pTab(_unpack)
 		chat.AddText(unpack(_unpack))
 		chat.PlaySound()
 	end

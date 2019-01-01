@@ -425,10 +425,10 @@ util.AddNetworkString("get_grp_roles")
 net.Receive("get_grp_roles", function(len, ply)
 	local _uid = net.ReadString()
 	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = " .. _uid)
-	for i, ro in pairs(_roles) do
-		ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
-	end
-	if _roles != nil then
+	if wk(_roles) then
+		for i, ro in pairs(_roles) do
+			ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
+		end
 		net.Start("get_grp_roles")
 			net.WriteTable(_roles)
 		net.Send(ply)
@@ -807,7 +807,8 @@ util.AddNetworkString("add_playermodel")
 net.Receive("add_playermodel", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local WorldModel = net.ReadString()
-	SQL_INSERT_INTO("yrp_playermodels", "string_model", "'" .. WorldModel .. "'")
+	local name = net.ReadString()
+	SQL_INSERT_INTO("yrp_playermodels", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
 
 	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
@@ -1011,6 +1012,9 @@ net.Receive("openInteractMenu", function(len, ply)
 	end
 	if ea(tmpTarget) then
 		if tmpTarget:IsPlayer() then
+			local idcard = SQL_SELECT("yrp_general", "*", nil)
+			idcard = tobool(idcard[1].bool_identity_card)
+
 			local tmpTargetChaTab = tmpTarget:GetChaTab()
 			if tmpTargetChaTab != nil then
 				local tmpTargetRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
@@ -1018,7 +1022,7 @@ net.Receive("openInteractMenu", function(len, ply)
 				local tmpT = ply:GetChaTab()
 				local tmpTable = ply:GetRolTab()
 				if wk(tmpT) and wk(tmpTable) then
-					local tmpBool = false
+					local isInstructor = false
 
 					local tmpPromote = false
 					local tmpPromoteName = ""
@@ -1026,8 +1030,8 @@ net.Receive("openInteractMenu", function(len, ply)
 					local tmpDemote = false
 					local tmpDemoteName = ""
 
-					if tonumber(tmpTable.instructor) == 1 then
-						tmpBool = true
+					if tonumber(tmpTable.bool_instructor) == 1 then
+						isInstructor = true
 
 						local tmpSearch = true	--tmpTargetSteamID
 						local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
@@ -1061,7 +1065,9 @@ net.Receive("openInteractMenu", function(len, ply)
 					end
 
 					net.Start("openInteractMenu")
-						net.WriteBool(tmpBool)
+						net.WriteBool(idcard)
+
+						net.WriteBool(isInstructor)
 
 						net.WriteBool(tmpPromote)
 						net.WriteString(tmpPromoteName)

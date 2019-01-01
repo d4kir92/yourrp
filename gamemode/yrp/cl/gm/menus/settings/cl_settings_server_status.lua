@@ -24,7 +24,7 @@ function AddStatusLine(parent, cat, entry, str_id, color)
 end
 
 net.Receive("Connect_Settings_Status", function(len)
-	if pa(settingsWindow) then
+	if pa(settingsWindow.window) then
 		function settingsWindow.window.site:Paint(pw, ph)
 			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
 		end

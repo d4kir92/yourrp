@@ -244,6 +244,18 @@ function CreateHRLine(dpanellist)
 	return hr
 end
 
+function AddToTabRecursive(tab, folder, path, wildcard)
+	local files, folders = file.Find( folder .. "*", path )
+	for k, v in pairs( files ) do
+		if ( !string.EndsWith( v, ".mdl" ) ) then continue end
+		table.insert( tab, folder .. v )
+	end
+
+	for k, v in pairs( folders ) do
+		AddToTabRecursive(tab, folder .. v .. "/", path, wildcard)
+	end
+end
+
 net.Receive("Connect_Settings_General", function(len)
 	if pa(settingsWindow) then
 
@@ -291,19 +303,11 @@ net.Receive("Connect_Settings_General", function(len)
 			net.SendToServer()
 		end)
 		function noclip_mdl.button:DoClick()
-			local playermodels = player_manager.AllValidModels()
 			local tmpTable = {}
 			local count = 0
-			for k, v in pairs(playermodels) do
-				count = count + 1
-				tmpTable[count] = {}
-				tmpTable[count].WorldModel = v
-				tmpTable[count].ClassName = v
-				tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName(v)
-			end
 			local noneplayermodels = {}
 			for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
-				if (!addon.downloaded || !addon.mounted) then continue end
+				if (!addon.downloaded or !addon.mounted) then continue end
 				AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
 			end
 			for k, v in pairs(noneplayermodels) do
