@@ -82,7 +82,7 @@ end
 function updateRoleUses(rid)
 	local _count = 0
 	for k, p in pairs(player.GetAll()) do
-		if tonumber(p:GetNWInt("roleUniqueID")) == tonumber(rid) then
+		if tonumber(p:GetNWString("roleUniqueID")) == tonumber(rid) then
 			_count = _count + 1
 		end
 	end
@@ -552,7 +552,7 @@ function startVote(ply, table)
 end
 
 function canGetRole(ply, roleID)
-	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
+	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 
 	if worked(tmpTableRole, "tmpTableRole") then
 		if tonumber(ply:GetNWString("roleUniqueID", "0")) == tonumber(roleID) then
@@ -561,23 +561,24 @@ function canGetRole(ply, roleID)
 			if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].int_maxamount) == -1  then
 				if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
 					if !ply:HasAccess() then
-						printGM("gm", "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin")
+						printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin")
 						return false
 					end
-				elseif tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) != -1 then
-					printGM("gm", "Whitelist-Role or Prerole-Role")
+				elseif tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) > 0 then
+					printGM("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
 					if !isWhitelisted(ply, roleID) then
-						printGM("gm", ply:YRPName() .. " is not whitelisted")
+						printGM("gm", "[canGetRole] " .. ply:YRPName() .. " is not whitelisted")
 						return false
 					end
 				end
 				return true
 			else
-				printGM("gm", ply:YRPName() .. " maxamount reached.")
+				printGM("gm", "[canGetRole] " .. ply:YRPName() .. " maxamount reached.")
 				return false
 			end
 		end
 	end
+	printGM("error", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
 	return false
 end
 
@@ -601,6 +602,7 @@ function canVoteRole(ply, roleID)
 			end
 		end
 	end
+	printGM("note", "[canVoteRole] " .. "not voteable, max reached")
 	return false
 end
 

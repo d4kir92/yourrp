@@ -406,7 +406,10 @@ function GM:PlayerSay(sender, text, teamChat)
 	pk.isyrpcommand = paket.isyrpcommand or false
 
 	if paket.command == "roll" then
-		pk.text = YRP.lang_string("LID_rolledpre") .. " " .. tostring(roll_number(sender)) .. " " .. YRP.lang_string("LID_rolledpos") .. "!"
+		local tab = {}
+		tab["NAME"] = sender:RPName()
+		tab["NUMBER"] = tostring(roll_number(sender))
+		pk.text = YRP.lang_string("LID_rolled", tab)
 	end
 
 	if paket.command == "admin" then

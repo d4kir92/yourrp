@@ -194,7 +194,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	show_global_voice_info(ply)
 
 	if game.SinglePlayer() then
-		draw.SimpleTextOutlined("[YourRP] " .. YRP.lang_string("LID_donotusesingleplayer") .. "!", "72", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "72", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 	end
 
 	if tobool(HudV("utto")) then

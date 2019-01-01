@@ -35,7 +35,7 @@ function teleportToSpawnpoint(ply)
 				local _tmpGroupSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = " .. groTab.uniqueID)
 				if _tmpRoleSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
-					printGM("note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring(rolTab.roleID) .. ") spawnpoint " .. tostring(_randomSpawnPoint.position))
+					printGM("note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring(rolTab.string_name) .. ") spawnpoint " .. tostring(_randomSpawnPoint.position))
 
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
