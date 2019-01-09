@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local Player = FindMetaTable("Player")
 
@@ -236,6 +236,9 @@ if SERVER then
 		--[[ successfull casting ]]--
 		self:SetNWBool("iscasting", false)
 
+		self:SetNWString("castname", "")
+		self:SetNWFloat("castcur", 0.0)
+
 		local _args = {}
 		_args.attacker = self
 		_args.target = self:GetNWEntity("casttarget")
@@ -243,6 +246,9 @@ if SERVER then
 	end
 
 	function Player:InteruptCasting()
+		self:SetNWString("castname", "")
+		self:SetNWFloat("castcur", 0.0)
+		
 		--[[ failed casting ]]--
 		self:SetNWBool("iscasting", false)
 		if timer.Exists(self:SteamID() .. "castduration") then

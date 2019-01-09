@@ -1,6 +1,12 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 DarkRP = {}
+
+function DarkRP.stub()
+end
+function DarkRP.hookStub()
+end
+
 DarkRP.disabledDefaults = {}
 DarkRP.disabledDefaults.modules = {}
 DarkRP.disabledDefaults.modules.hitmenu = true

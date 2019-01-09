@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
 yrp_current_lang.get_language = "Unknown"
@@ -149,8 +149,10 @@ function YRP.read_language(short, init)
 		end
 
 		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties", default)
+		YRP.read_lang("resource/localization/yrp/hud/lang_" .. short .. ".properties", default)
 		YRP.read_lang("resource/localization/yrp/menuappearance/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menuatm/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menubuilding/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menubuy/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menucharacter/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menuinteract/lang_" .. short .. ".properties")

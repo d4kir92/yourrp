@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 _filterENTS = ents.GetAll()
 local _filterTime = CurTime()
@@ -38,7 +38,7 @@ end
 
 function showIcon(string, material)
 	surface.SetDrawColor(255, 255, 255, 255)
-	surface.SetMaterial(material	)
+	surface.SetMaterial(material)
 	surface.DrawTexturedRect(anchorW(HudV(string .. "aw")) + ctr(HudV(string .. "px")) + ctr(30) - ctr(16), anchorH(HudV(string .. "ah")) + ctr(HudV(string .. "py")) + ctr(HudV(string .. "sh")/2) - ctr(16), ctr(32), ctr(32))
 end
 
@@ -215,6 +215,7 @@ function HudPlayer(ply)
 				if client_toggled() then
 					--[[ Hud Bars ]]--
 					if server_toggled(ply) then
+						--[[
 						hudHP(ply, Color(150, 52, 52, _alpha))
 						hudAR(ply, Color(52, 150, 72, _alpha))
 
@@ -226,8 +227,9 @@ function HudPlayer(ply)
 						hudWS(ply, Color(255, 255, 100, _alpha), weapon)
 
 						hudMM(ply, Color(0, 0, 0))
+						]]
 					end
-					hudMA(ply, Color(58, 143, 255, _alpha))
+					--[[hudMA(ply, Color(58, 143, 255, _alpha))
 
 					hudMH(ply, Color(150, 88, 52, _alpha))
 					hudMT(ply, Color(52, 70, 150, _alpha))
@@ -240,9 +242,11 @@ function HudPlayer(ply)
 
 					hudBL(ply, Color(0, 0, 0, _alpha))
 					hudRT(ply, Color(0, 0, 0, _alpha))
+					]]
 
 					--[[ Hud Borders ]]--
 					if server_toggled(ply) then
+						--[[
 						hudHPBR(ply)
 						hudARBR(ply)
 
@@ -252,7 +256,9 @@ function HudPlayer(ply)
 						hudWNBR(ply)
 						hudWPBR(ply)
 						hudWSBR(ply, weapon)
+						]]--
 					end
+					--[[
 					hudMABR(ply)
 
 					hudMHBR(ply)
@@ -266,6 +272,7 @@ function HudPlayer(ply)
 
 					hudBLBR(ply)
 					hudRTBR(ply)
+					]]
 				end
 
 				hudThirdperson(ply)

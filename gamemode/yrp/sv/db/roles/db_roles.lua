@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -67,8 +67,10 @@ SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
 if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 	local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
-	for i, role in pairs(wrongprerole) do
-		SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+	if wk(wrongprerole) then
+		for i, role in pairs(wrongprerole) do
+			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+		end
 	end
 end
 
@@ -180,12 +182,13 @@ if wk(drp_allroles) then
 end
 
 util.AddNetworkString("send_team")
-function SendTeamsToPlayer(ply)
+local Player = FindMetaTable("Player")
+function Player:SendTeamsToPlayer()
 	for i, role in pairs(TEAMS) do
 		net.Start("send_team")
 			net.WriteString(i)
 			net.WriteTable(role)
-		net.Send(ply)
+		net.Send(self)
 	end
 end
 -- darkrp
@@ -403,10 +406,14 @@ function SendRoleList(gro, pre)
 	local headername = "NOT FOUND"
 	if pre > 0 then
 		headername = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
-		headername = headername[1].string_name
+		if worked(headername) then
+			headername = headername[1].string_name
+		end
 	else
 		headername = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
-		headername = headername[1].string_name
+		if worked(headername) then
+			headername = headername[1].string_name
+		end
 	end
 
 	local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}

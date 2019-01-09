@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function AddYRPAddon(parent, tab)
 	local _add_on = createD("DPanel", parent, ctr(1600), ctr(4 * 100 + 5 * 20), 0, 0)

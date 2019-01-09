@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -422,7 +422,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 						local text = "" --YRP.lang_string("LID_notadded")
 
 						if tmpSelected[k].selected then
-							text = YRP.lang_string("LID_added")
+							text = "Added"
 
 							if tmpPointer.text ~= "" then
 								text = text .. " (" .. tmpPointer.text .. ")"
@@ -908,7 +908,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 						local text = "" --YRP.lang_string("LID_notadded")
 
 						if tmpSelected[k].selected then
-							text = YRP.lang_string("LID_added")
+							text = "Added"
 
 							if tmpPointer.text ~= "" then
 								text = text .. " (" .. tmpPointer.text .. ")"
@@ -1654,7 +1654,7 @@ net.Receive("yrp_noti", function(len)
 				name["NAME"] = net.ReadString()
 				_str = _str .. YRP.lang_string("LID_hasfinishedloading", name)
 			elseif _str_lang == "newfeedback" then
-				_str = _str .. YRP.lang_string("LID_newfeedback")
+				_str = _str .. "New Feedback!"
 			elseif _str_lang == "database_full_server" then
 				_str = _str .. "SERVER: Database or disk is full, please make more space!"
 				_time = 40

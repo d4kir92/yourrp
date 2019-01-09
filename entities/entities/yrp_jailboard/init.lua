@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
@@ -35,7 +35,7 @@ function ENT:Use(activator, caller)
 		net.WriteTable(tmpTable)
 		net.WriteTable(tmpGroups)
 		net.WriteTable(tmpGeneral)
-		net.WriteInt(tmpRoles[1].groupID, 32)
+		net.WriteInt(tmpRoles[1].int_groupID, 32)
 	net.Send(caller)
 end
 

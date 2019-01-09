@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 CreateConVar("yrp_cl_hud", 1, {}, "")
 --##############################################################################
@@ -71,8 +71,8 @@ function hudUpTime()
 	_ut.h = ctr(HudV("utsh"))
 	draw.RoundedBox(0, _ut.x, _ut.y, _ut.w, _ut.h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
 
-	draw.SimpleTextOutlined(YRP.lang_string("LID_totaluptime") .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-	draw.SimpleTextOutlined(string.FormattedTime(ply:GetNWFloat("uptime_total", 0), "%02i:%02i"), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 2, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
+	draw.SimpleTextOutlined(YRP.lang_string("LID_totaluptime") .. ":", "utsf", _ut.x + _ut.w / 2, _ut.y + _ut.h / 7, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
+	draw.SimpleTextOutlined(string.FormattedTime(ply:GetNWFloat("uptime_total", 0), "%02i:%02i"), "utsf", _ut.x + _ut.w / 2, _ut.y + _ut.h / 7 * 2, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
 	draw.SimpleTextOutlined(YRP.lang_string("LID_currentuptime") .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 3, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
 	draw.SimpleTextOutlined(string.FormattedTime(ply:GetNWFloat("uptime_current", 0), "%02i:%02i"), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 4, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
 	draw.SimpleTextOutlined(YRP.lang_string("LID_serveruptime") .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 5, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))

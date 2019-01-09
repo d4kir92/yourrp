@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -35,7 +35,7 @@ function teleportToSpawnpoint(ply)
 				local _tmpGroupSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = " .. groTab.uniqueID)
 				if _tmpRoleSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
-					printGM("note", "[" .. ply:Nick() .. "] teleported to role (" .. tostring(rolTab.string_name) .. ") spawnpoint " .. tostring(_randomSpawnPoint.position))
+					printGM("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
@@ -44,7 +44,7 @@ function teleportToSpawnpoint(ply)
 					return true
 				elseif _tmpGroupSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
-					printGM("note", "[" .. ply:Nick() .. "] teleported to group (" .. tostring(groTab.string_name) .. ") spawnpoint " .. tostring(_randomSpawnPoint.position))
+					printGM("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
@@ -64,7 +64,7 @@ function teleportToSpawnpoint(ply)
 							local _gs = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "linkID = " .. _ug.uniqueID)
 							if _gs != nil then
 								local _randomSpawnPoint = table.Random(_gs)
-								printGM("note", "[" .. ply:Nick() .. "] teleported to int_parentgroup (" .. tostring(_ug.string_name) .. ") spawnpoint " .. tostring(_randomSpawnPoint.position))
+								printGM("note", "[" .. ply:Nick() .. "] teleported to int_parent-groupspawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 								local _tmp = string.Explode(",", _randomSpawnPoint.position)
 								tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 								_tmp = string.Explode(",", _randomSpawnPoint.angle)

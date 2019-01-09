@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 function DrawSelector(btn, w, h, text, selected)
 	draw.SimpleTextOutlined(text, "mat1header", w / 2, h / 2, Color(255, 255, 255, 255), 1, 1, ctr(1), Color(0, 0, 0, 255))
 

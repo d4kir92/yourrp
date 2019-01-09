@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 function createDKeybinder(parent, w, h, x, y, keybind)
 	local _tmp = createD("DBinder", parent, w, h, x, y)
 	_tmp:SetValue(get_keybind(keybind))
