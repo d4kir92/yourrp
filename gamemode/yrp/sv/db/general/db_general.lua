@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -303,7 +303,7 @@ end
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:GeneralLoadout()
-	printGM("gm", "[GeneralLoadout] " .. self:YRPName())
+	--printGM("gm", "[GeneralLoadout] " .. self:YRPName())
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
 			self:SetNWString(i, set)

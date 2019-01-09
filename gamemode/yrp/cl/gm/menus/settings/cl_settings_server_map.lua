@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local _groups = {}
 local _roles = {}
@@ -94,7 +94,7 @@ net.Receive("getMapList", function(len)
 				function tmpButton:DoClick()
 					local tmpPos = string.Explode(" ", tostring(ply:GetPos()))
 					local tmpAng = string.Explode(" ", tostring(ply:GetAngles()))
-					local tmpGroupID = tostring(tmpGroup:GetOptionData(tmpGroup:GetSelectedID()))
+					local tmpGroupID = tmpGroup:GetOptionData(tmpGroup:GetSelectedID())
 					if tmpGroupID != nil then
 						net.Start("dbInsertIntoMap")
 							net.WriteString("yrp_" .. GetMapNameDB())
@@ -140,7 +140,7 @@ net.Receive("getMapList", function(len)
 				local tmpButton = createD("DButton", tmpFrame, ctr(400), ctr(50), ctr(600-200), ctr(230))
 				tmpButton:SetText(YRP.lang_string("LID_add"))
 				function tmpButton:DoClick()
-					local tmpRoleID = tostring(tmpRole:GetOptionData(tmpRole:GetSelectedID()))
+					local tmpRoleID = tmpRole:GetOptionData(tmpRole:GetSelectedID())
 					if tmpRoleID != nil then
 						net.Start("dbInsertIntoMap")
 							net.WriteString("yrp_" .. GetMapNameDB())

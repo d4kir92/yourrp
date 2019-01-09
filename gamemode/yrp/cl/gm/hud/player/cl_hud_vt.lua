@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function showVT(ply)
 	if tonumber(HudV("vtto")) == 1 and ply:GetNWBool("voting", false) then

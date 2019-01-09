@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 --cl_think.lua
 
@@ -143,19 +143,23 @@ function useFunction(string)
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.lang_string("LID_weapon")
+				local tab = {}
+				tab["ITEM"] = _pname
+				local cannotbedropped = YRP.lang_string("LID_cannotbedropped", tab)
+				local hasbeendropped = YRP.lang_string("LID_hasbeendropped", tab)
 				if _weapon.notdropable == nil then
 					net.Receive("dropswep", function(len)
 						local _b = net.ReadBool()
 						if _b then
-							notification.AddLegacy(_pname .. " " .. YRP.lang_string("LID_hasbeendropped"), 0, 3)
+							notification.AddLegacy(hasbeendropped, 0, 3)
 						else
-							notification.AddLegacy(_pname .. " " .. string.lower(YRP.lang_string("LID_cannotbedropped")), 0, 3)
+							notification.AddLegacy(cannotbedropped, 0, 3)
 						end
 					end)
 					net.Start("dropswep")
 					net.SendToServer()
 				else
-					notification.AddLegacy(_pname .. " " .. string.lower(YRP.lang_string("LID_cannotbedropped")), 0, 3)
+					notification.AddLegacy(cannotbedropped, 0, 3)
 				end
 			end
 

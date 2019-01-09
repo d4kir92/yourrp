@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -1432,7 +1432,7 @@ hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 end)
 
 function Player:UserGroupLoadout()
-	printGM("gm", self:SteamName() .. " UserGroupLoadout")
+	--printGM("gm", self:SteamName() .. " UserGroupLoadout")
 	local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(UG) then
 		UG = UG[1]

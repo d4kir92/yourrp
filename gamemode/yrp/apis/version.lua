@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local _sv_outdated = nil
 local _cl_outdated = nil
@@ -216,7 +216,6 @@ function YRPCheckVersion()
 				end
 			)
 		else
-			printGM("note", "BOOP")
 			timer.Simple(4, function()
 				SetYRPChannel()
 			end)

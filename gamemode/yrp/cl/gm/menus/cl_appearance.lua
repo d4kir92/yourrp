@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local _appe = {}
 _appe.r = {}
@@ -250,7 +250,7 @@ net.Receive("get_menu_bodygroups", function(len)
 				end
 			end
 		end
-	else
+	elseif pa(_yrp_appearance.window) then
 		function _yrp_appearance.window:Paint(pw, ph)
 			surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 			local tab = {}

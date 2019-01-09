@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 yrpChat = yrpChat or {}
 
@@ -49,6 +49,10 @@ function checkChatVisible()
 	yrpChat.richText:SetVisible(_showChat)
 	yrpChat.writeField:SetVisible(_showChat)
 	yrpChat.comboBox:SetVisible(_showChat)
+end
+
+function IsChatVisible()
+	return _showChat
 end
 
 function isFullyCommand(com, iscom, iscom2)
@@ -107,28 +111,29 @@ function InitYRPChat()
 
 
 		function yrpChat.window:Paint(pw, ph)
-			if HudV("cbto") == 1 and LocalPlayer():GetNWBool("bool_yrp_chat", false) then
+			local lply = LocalPlayer()
+			if true then
 				checkChatVisible()
 				if _showChat then
-					if is_hud_db_loaded() then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
-						drawRBoxBr(	0, 0, 0, ctrF(ScrH()) * pw, ctrF(ScrH()) * ph, Color(HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra")), ctr(8))
+					local x, y = yrpChat.window:GetPos()
+					local w, h = yrpChat.window:GetSize()
 
-						local x, y = yrpChat.window:GetPos()
-						local w, h = yrpChat.window:GetSize()
-						if ctr(HudV("cbpx")) != x or ctr(HudV("cbpy")) != y or ctr(HudV("cbsw")) != w or ctr(HudV("cbsh")) != h then
-							yrpChat.window:SetPos(anchorW(HudV("cbaw")) + ctr(HudV("cbpx")), anchorH(HudV("cbah")) + ctr(HudV("cbpy")))
-							yrpChat.window:SetSize(ctr(HudV("cbsw")), ctr(HudV("cbsh")))
+					local px = lply:GetHudValue("CH", "POSI_X")
+					local py = lply:GetHudValue("CH", "POSI_Y")
+					local sw = lply:GetHudValue("CH", "SIZE_W")
+					local sh = lply:GetHudValue("CH", "SIZE_H")
+					if px != x or py != y or sw != w or sh != h then
+						yrpChat.window:SetPos(px, py)
+						yrpChat.window:SetSize(sw, sh)
 
-							yrpChat.comboBox:SetPos(ctr(10), ctr(HudV("cbsh") - 40 - 10))
-							yrpChat.comboBox:SetSize(ctr(140), ctr(40))
+						yrpChat.comboBox:SetPos(ctr(10), sh - ctr(40 + 10))
+						yrpChat.comboBox:SetSize(ctr(140), ctr(40))
 
-							yrpChat.writeField:SetPos(ctr(10 + 140), ctr(HudV("cbsh") - 40 - 10))
-							yrpChat.writeField:SetSize(ctr(HudV("cbsw") - 2*10 - 140), ctr(40))
+						yrpChat.writeField:SetPos(ctr(10 + 140), sh - ctr(40 + 10))
+						yrpChat.writeField:SetSize(sw - ctr(2 * 10 + 140), ctr(40))
 
-							yrpChat.richText:SetPos(ctr(10), ctr(10))
-							yrpChat.richText:SetSize(ctr(HudV("cbsw") - 2*10), ctr(HudV("cbsh") - 2*10 - 40 - 10))
-						end
+						yrpChat.richText:SetPos(ctr(10), ctr(10))
+						yrpChat.richText:SetSize(sw - ctr(2 * 10), sh - ctr(2 * 10 + 40 + 10))
 					end
 
 					local _com = yrpChat.writeField:GetText()
@@ -176,7 +181,7 @@ function InitYRPChat()
 				gui.HideGameUI()
 			elseif code == KEY_ENTER then
 				if string.Trim(self:GetText()) != "" then
-					LocalPlayer():ConCommand("say \""..self:GetText() .. "\"")
+					LocalPlayer():ConCommand("say \"" .. self:GetText() .. "\"")
 				end
 				yrpChat.closeChatbox()
 			end
@@ -302,10 +307,8 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 		else
 			return
 		end
-		if HudV("cbto") == 1 then
-			if pa(yrpChat) then
-				yrpChat:openChatbox(bTeam)
-			end
+		if pa(yrpChat) then
+			yrpChat:openChatbox(bTeam)
 		end
 		return true
 	end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 util.AddNetworkString("dbGetGeneral")
 util.AddNetworkString("dbGetQuestions")
@@ -31,6 +31,8 @@ table.insert(_dbs, "yrp_feedback")
 table.insert(_dbs, "yrp_sql")
 table.insert(_dbs, "yrp_flags")
 table.insert(_dbs, "yrp_playermodels")
+table.insert(_dbs, "yrp_design")
+table.insert(_dbs, "yrp_hud")
 
 table.insert(_dbs, "yrp_players")
 table.insert(_dbs, "yrp_" .. GetMapNameDB())
@@ -47,8 +49,8 @@ table.insert(_dbs, "yrp_shops")
 table.insert(_dbs, "yrp_shop_items")
 table.insert(_dbs, "yrp_shop_categories")
 table.insert(_dbs, "yrp_dealers")
-table.insert(_dbs, "yrp_interface")
 table.insert(_dbs, "yrp_jail")
+table.insert(_dbs, "yrp_interface")
 
 function GetDBNames()
 	return _dbs
@@ -123,6 +125,9 @@ include("yourrp_addons/db_yourrp_addons.lua")
 include("usergroups/db_usergroups.lua")
 include("flags/db_flags.lua")
 include("playermodels/db_playermodels.lua")
+
+include("design/db_design.lua")
+include("hud/db_hud.lua")
 
 include("general/db_general.lua")
 include("players/db_players.lua")

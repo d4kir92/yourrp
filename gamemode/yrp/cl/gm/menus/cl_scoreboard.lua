@@ -1,14 +1,10 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 --cl_scoreboard.lua
 
 local sb_groups = {}
 net.Receive("getScoreboardGroups", function()
 	sb_groups = net.ReadTable()
-end)
-timer.Simple(1, function()
-	net.Start("getScoreboardGroups")
-	net.SendToServer()
 end)
 timer.Simple(6, function()
 	net.Start("getScoreboardGroups")

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -154,7 +154,7 @@ function set_role_values(ply)
 
 			if worked(rolTab, "set_role_values rolTab") and worked(ChaTab, "set_role_values ChaTab") then
 				local _storage = string.Explode(",", ChaTab.storage)
-				printGM("note", ply:YRPName() .. " Give permanent Licenses")
+				printGM("note", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
 				for i, lic in pairs(_storage) do
 					local _lic = SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
 					if _lic != nil and _lic != false then
@@ -378,7 +378,7 @@ function check_yrp_client(ply)
 
 	check_yrp_player(ply)
 
-	SendTeamsToPlayer(ply)
+	ply:SendTeamsToPlayer()
 
 	save_clients("check_yrp_client")
 end
@@ -477,9 +477,7 @@ function isWhitelisted(ply, id)
 		end
 
 		local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id)
-
 		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
-
 		if ply:HasAccess() then
 			printGM("gm", ply:RPName() .. " has access.")
 			return true
@@ -517,7 +515,7 @@ function startVote(ply, table)
 			v:SetNWString("voteStatus", "not voted")
 			v:SetNWBool("voting", true)
 			v:SetNWString("voteName", ply:RPName())
-			v:SetNWString("voteRole", table[1].roleID)
+			v:SetNWString("voteRole", table[1].string_name)
 		end
 		votePly = ply
 		voteCount = 30
@@ -538,7 +536,7 @@ function startVote(ply, table)
 					end
 				end
 				if _yes > _no and (_yes + _no) > 1 then
-					--setRole(votePly:SteamID(), table[1].uniqueID)
+					SetRole(votePly, table[1].uniqueID)
 				else
 					printGM("note", "VOTE: not enough yes")
 				end
@@ -613,6 +611,8 @@ net.Receive("wantRole", function(len, ply)
 	if canGetRole(ply, uniqueIDRole) then
 		--Remove Sweps from old role
 		RemRolVals(ply)
+
+		ply:Kill()
 
 		--New role
 		SetRole(ply, uniqueIDRole)

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local yrp_door = {}
 
@@ -113,7 +113,7 @@ function buyWindow(buildingID, name, price, door)
 		end
 	end
 	function _buyButton:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("LID_buybuildingpre") .. " " .. _name .. " " .. YRP.lang_string("LID_buybuildingpos"))
+		surfaceButton(self, pw, ph, YRP.lang_string("LID_buy"))
 	end
 
 	if ply:HasAccess() then
@@ -268,7 +268,7 @@ function optionWindow(buildingID, name, price, door, owner)
 			yrp_door.window:Remove()
 		end
 		function _ButtonSell:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_sellbuildingpre") .. " " .. _name .. " " .. YRP.lang_string("LID_sellbuildingpos") .. " (+" .. ply:GetNWString("text_money_pre").. _price/2 .. ply:GetNWString("text_money_pos") .. ")")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. ply:GetNWString("text_money_pre").. _price/2 .. ply:GetNWString("text_money_pos") .. ")")
 		end
 	end
 

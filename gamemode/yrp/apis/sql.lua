@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function disk_full(error)
 	if string.find(error, "database or disk is full") then
@@ -675,7 +675,7 @@ end
 printGM("db", "Current SQL Mode: " .. GetSQLModeName())
 
 function SQL_INIT_DATABASE(db_name)
-	printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
+	--printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then
 		if not SQL_TABLE_EXISTS(db_name) then
@@ -691,8 +691,6 @@ function SQL_INIT_DATABASE(db_name)
 				sql_show_last_error()
 				retry_load_database(db_name)
 			end
-		else
-			printGM("db", "Table " .. db_name .. " already exists.")
 		end
 	elseif GetSQLMode() == 1 then
 		if not SQL_TABLE_EXISTS(db_name) then
@@ -708,8 +706,6 @@ function SQL_INIT_DATABASE(db_name)
 				sql_show_last_error()
 				retry_load_database(db_name)
 			end
-		else
-			printGM("db", "Table " .. db_name .. " already exists.")
 		end
 	end
 end

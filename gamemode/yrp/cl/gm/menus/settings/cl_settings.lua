@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- OLD Sites
 include("cl_settings_client_hud.lua")
@@ -14,7 +14,7 @@ include("cl_settings_server_whitelist.lua")
 -- CLIENT
 
 -- WIP
-include("cl_settings_server_groups_and_roles.lua")
+include("cl_settings_server_design.lua")
 
 --SERVER
 include("cl_settings_server_status.lua")
@@ -22,6 +22,7 @@ include("cl_settings_server_feedback.lua")
 
 include("cl_settings_server_general.lua")
 include("cl_settings_server_realistic.lua")
+include("cl_settings_server_groups_and_roles.lua")
 
 include("cl_settings_server_database.lua")
 include("cl_settings_server_usergroups.lua")
@@ -136,7 +137,7 @@ function OpenSettings()
 
 	local _wip = "wip"
 	settingsWindow.window:AddCategory(_wip)
-	settingsWindow.window:AddSite("open_server_interface", "LID_settings_surface", _wip, "icon16/application_view_gallery.png")
+	settingsWindow.window:AddSite("open_server_design", "LID_settings_design", _wip, "icon16/application_view_gallery.png")
 
 	local _settings_server_maintance = "LID_settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)

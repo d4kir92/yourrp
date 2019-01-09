@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function createFont(_name, _font, _size, __weight, _outline, _shadow)
 	--printGM("db", "createFont: " .. _name)
@@ -61,6 +61,13 @@ end
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
+	createFont("Roboto18", "Roboto", 18, _weight, false)
+	createFont("Roboto18B", "Roboto", 18, 700, false)
+	createFont("Roboto24", "Roboto", 24, _weight, false)
+	createFont("Roboto24B", "Roboto", 24, 700, false)
+	createFont("Roboto30", "Roboto", 24, _weight, false)
+	createFont("Roboto30B", "Roboto Condensed", 24, 700, false)
+	
 	--[[ DESIGNS ]]--
 	createFont("mat1header", GetYRPFont(), 22, _weight, false)
 	createFont("mat1text", GetYRPFont(), 18, 0, false)

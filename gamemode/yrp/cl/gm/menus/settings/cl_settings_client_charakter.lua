@@ -1,8 +1,8 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("getrpdescription", function()
 	local rpdescription = net.ReadString()
-	if pa(settingsWindow) then
+	if pa(settingsWindow.window) then
 		local cl_rpDescription = createVGUI("DTextEntry", settingsWindow.window.site, 1200, 400, 10, 200)
 		cl_rpDescription:SetMultiline(true)
 		if rpdescription != nil then

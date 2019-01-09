@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local money = Material("icon16/money.png")
 
@@ -12,7 +12,7 @@ function hudMO(ply, color)
 	local _salary = tonumber(ply:GetNWString("salary", "-1"))
 	if _salary != nil then
 		if tonumber(_salary) > 0 then
-			_motext = _motext .. " (+".. ply:GetNWString("text_money_pre").. roundMoney(_salary, 1) .. ply:GetNWString("text_money_pos") .. ")"
+			_motext = _motext .. " (+" .. ply:GetNWString("text_money_pre") .. roundMoney(_salary, 1) .. ply:GetNWString("text_money_pos") .. ")"
 			_salaryMin = CurTime() + ply:GetNWInt("salarytime") - 1 - ply:GetNWInt("nextsalarytime")
 			_salaryMax = ply:GetNWInt("salarytime")
 		else

@@ -1,4 +1,150 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
+local HUD = {}
+function RegisterHUDElement(design, element, func)
+	HUD[design] = HUD[design] or {}
+	HUD[design][element] = func
+end
+
+function DrawHUDElement(design, element)
+	HUD[design][element]()
+end
+
+function ScrV(dec)
+	return ScrH() * dec
+end
+
+function HudBox(tab)
+	tab = tab or {}
+	tab.r = tab.r or 0
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.w = tab.w or 100
+	tab.h = tab.h or 100
+	tab.color = tab.color or Color(255, 0, 0)
+	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
+end
+
+function HudBoxBr(tab)
+	tab.br = tab.br or 1
+
+	local up = table.Copy(tab)
+	up.h = tab.br
+	HudBox(up)
+
+	local dn = table.Copy(tab)
+	dn.h = tab.br
+	dn.y = tab.y + tab.h - tab.br
+	HudBox(dn)
+
+	local le = table.Copy(tab)
+	le.w = tab.br
+	HudBox(le)
+
+	local ri = table.Copy(tab)
+	ri.w = tab.br
+	ri.x = tab.x + tab.w - tab.br
+	HudBox(ri)
+end
+
+function HudBoxBrRounded(tab)
+	tab.br = tab.br or 1
+	-- LU
+	local center = Vector(tab.x + tab.r, tab.y + tab.r, 0)
+	local scale = Vector(tab.r, tab.r, 0)
+	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	surface.SetDrawColor(tab.color)
+	for a = 90, 90 + 90, segmentdist do
+		surface.DrawLine( center.x + math.cos( math.rad( a ) ) * scale.x, center.y - math.sin( math.rad( a ) ) * scale.y, center.x + math.cos( math.rad( a + segmentdist ) ) * scale.x, center.y - math.sin( math.rad( a + segmentdist ) ) * scale.y )
+	end
+
+	draw.RoundedBox(0, tab.x, tab.y + tab.r, tab.br, tab.h - 2 * tab.r, tab.color)
+
+	-- LD
+	local center = Vector(tab.x + tab.r, tab.y + tab.h - tab.r, 0)
+	local scale = Vector(tab.r, tab.r, 0)
+	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	surface.SetDrawColor(tab.color)
+	for a = 180, 180 + 90, segmentdist do
+		surface.DrawLine( center.x + math.cos( math.rad( a ) ) * scale.x, center.y - math.sin( math.rad( a ) ) * scale.y, center.x + math.cos( math.rad( a + segmentdist ) ) * scale.x, center.y - math.sin( math.rad( a + segmentdist ) ) * scale.y )
+	end
+
+	-- MID
+	draw.RoundedBox(0, tab.x + tab.r, tab.y, tab.w - 2 * tab.r, tab.br, tab.color)
+	draw.RoundedBox(0, tab.x + tab.r, tab.y + tab.h - tab.br, tab.w - 2 * tab.r, tab.br, tab.color)
+
+	-- RU
+	center = Vector(tab.x + tab.w - tab.r, tab.y + tab.r, 0)
+	scale = Vector(tab.r, tab.r, 0)
+	segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	surface.SetDrawColor(tab.color)
+	for a = 360, 360 + 90, segmentdist do
+		surface.DrawLine( center.x + math.cos( math.rad( a ) ) * scale.x, center.y - math.sin( math.rad( a ) ) * scale.y, center.x + math.cos( math.rad( a + segmentdist ) ) * scale.x, center.y - math.sin( math.rad( a + segmentdist ) ) * scale.y )
+	end
+
+	draw.RoundedBox(0, tab.x + tab.w - tab.br, tab.y + tab.r, tab.br, tab.h - 2 * tab.r, tab.color)
+
+	-- RD
+	center = Vector(tab.x + tab.w - tab.r, tab.y + tab.h - tab.r, 0)
+	scale = Vector(tab.r, tab.r, 0)
+	segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	surface.SetDrawColor(tab.color)
+	for a = 270, 270 + 90, segmentdist do
+		surface.DrawLine( center.x + math.cos( math.rad( a ) ) * scale.x, center.y - math.sin( math.rad( a ) ) * scale.y, center.x + math.cos( math.rad( a + segmentdist ) ) * scale.x, center.y - math.sin( math.rad( a + segmentdist ) ) * scale.y )
+	end
+end
+
+function OldHudBoxBr(tab)
+	HudBox(tab[1])
+	HudBox(tab[2])
+	HudBox(tab[3])
+	HudBox(tab[4])
+end
+
+function GetBorderTab(tab)
+	tab[1] = {}
+	tab[1].r = 0
+	tab[2] = {}
+	tab[2].r = 0
+	tab[3] = {}
+	tab[3].r = 0
+	tab[4] = {}
+	tab[4].r = 0
+
+	tab[1].w = tab.w
+	tab[1].h = tab.br
+	tab[1].x = tab.x
+	tab[1].y = tab.y
+	tab[1].color = tab.color
+
+	tab[2].w = tab.br
+	tab[2].h = tab.h
+	tab[2].x = tab.x + tab.w - tab.br
+	tab[2].y = tab.y
+	tab[2].color = tab.color
+
+	tab[3].w = tab.w
+	tab[3].h = tab.br
+	tab[3].x = tab.x
+	tab[3].y = tab.y + tab.h - tab.br
+	tab[3].color = tab.color
+
+	tab[4].w = tab.br
+	tab[4].h = tab.h
+	tab[4].x = tab.x
+	tab[4].y = tab.y
+	tab[4].color = tab.color
+
+	return tab
+end
+
+function HudText(tab)
+	draw.SimpleText(tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay)
+end
+
+function HudTextBr(tab)
+	draw.SimpleTextOutlined(tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, 1, tab.brcolor)
+end
 
 function stc(str)
 	if str != nil then

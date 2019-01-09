@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function GM:PlayerDisconnected(ply)
 	printGM("gm", "[PlayerDisconnected] " .. ply:YRPName())
@@ -19,7 +19,7 @@ function GM:PlayerConnect(name, ip)
 end
 
 function GM:PlayerInitialSpawn(ply)
-	printGM("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
+	--printGM("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 	--ply:KillSilent()
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()
@@ -34,7 +34,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerSelectSpawn(ply)
-	printGM("gm", "[PlayerSelectSpawn] " .. ply:YRPName())
+	--printGM("gm", "[PlayerSelectSpawn] " .. ply:YRPName())
 
 	local spawns = ents.FindByClass("info_player_start")
 	local random_entry = math.random(#spawns)
@@ -60,12 +60,15 @@ YRP = YRP or {}
 function YRP:Loadout(ply)
 	printGM("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
 
+	ply:DesignLoadout()
+	ply:HudLoadout()
+
 	ply:UserGroupLoadout()
 	ply:GeneralLoadout()
 end
 
 function GM:PlayerLoadout(ply)
-	printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
+	--printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
 
 	if ply:HasCharacterSelected() then
 
@@ -123,7 +126,7 @@ function GM:PlayerLoadout(ply)
 end
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
-	printGM("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
+	--printGM("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
 	if ply:GetNWBool("can_respawn", false) then
 		ply:SetNWBool("can_respawn", false)
 
@@ -134,7 +137,7 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 end)
 
 hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
-	printGM("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
+	--printGM("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
 	ply:StopBleeding()
 
 	ply:SetNWInt("yrp_stars", 0)
@@ -203,7 +206,7 @@ function IsNoRoleSwep(ply, cname)
 end
 
 hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
-	printGM("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
+	--printGM("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
 	local _reward = tonumber(ply:GetNWString("hitreward"))
 	if isnumber(_reward) and attacker:IsPlayer() then
 		if attacker:IsAgent() then

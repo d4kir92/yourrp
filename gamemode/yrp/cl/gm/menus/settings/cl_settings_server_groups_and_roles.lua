@@ -1,4 +1,4 @@
---Copyright (C) 2017-2018 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 	if pa(settingsWindow) then
@@ -1110,7 +1110,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 					end
 				end
-				if ea[role.uniqueID].custom_flags.dpl != nil then
+				if ea[role.uniqueID].custom_flags.dpl.AddLines != nil then
 					ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
 				end
 			end)
@@ -1206,8 +1206,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel.dpl:Clear()
 								local count = 0
 								local fcount = 0
+								local nothingfound = true
 								for i, v in pairs(cl_pms) do
 									if string.find(string.lower(v.PrintName), pmsel.keyword) or string.find(string.lower(v.ClassName), pmsel.keyword) or string.find(string.lower(v.WorldModel), pmsel.keyword) then
+										nothingfound = false
 										count = count + 1
 										if count > pmsel.nr and count <= pmsel.nr + 4 then
 											fcount = fcount + 1
@@ -1235,7 +1237,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 								if fcount <= 0 then
 									pmsel.nr = pmsel.nr - 4
-									self:RefreshPage()
+									if !nothingfound then
+										self:RefreshPage()
+									end
 								end
 							end
 							function pmsel:Search(keyword)
@@ -1443,7 +1447,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 					v.h = ctr(120)
 				end
-				if ea[role.uniqueID].playermodels.dpl != nil then
+				if ea[role.uniqueID].playermodels.dpl.AddLines != nil then
 					ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
 				end
 			end)
@@ -1553,7 +1557,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					swep.h = ctr(120)
 					table.insert(cl_sweps, swep)
 				end
-				if ea[role.uniqueID].sweps.dpl != nil then
+				if ea[role.uniqueID].sweps.dpl.AddLines != nil then
 					ea[role.uniqueID].sweps.dpl:AddLines(cl_sweps)
 				end
 			end)
@@ -1652,7 +1656,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					ndswep.h = ctr(120)
 					table.insert(cl_ndsweps, ndswep)
 				end
-				if ea[role.uniqueID].ndsweps.dpl != nil then
+				if ea[role.uniqueID].ndsweps.dpl.AddLines != nil then
 					ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
 				end
 			end)
@@ -1941,7 +1945,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive("settings_subscribe_rolelist", function(le)
-			print("settings_subscribe_rolelist")
 			if pa(rs.rplist) then
 				rs.rplist:ClearList()
 

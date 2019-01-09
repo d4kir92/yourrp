@@ -1,5 +1,5 @@
 --[[
-Copyright (C) 2017-2018 Arno Zura
+Copyright (C) 2017-2019 Arno Zura
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,6 +32,10 @@ AddCSLuaFile("yrp/cl/gm/cl_startup.lua")
 AddCSLuaFile("yrp/cl/gm/cl_hud.lua")
 AddCSLuaFile("yrp/cl/gm/cl_chat.lua")
 AddCSLuaFile("yrp/cl/gm/cl_think.lua")
+
+AddCSLuaFile("yrp/cl/gm/huds/cl_hud_simple.lua")
+AddCSLuaFile("yrp/cl/gm/huds/cl_hud_fallout76.lua")
+
 AddCSLuaFile("yrp/cl/gm/hud/cl_hud_crosshair.lua")
 AddCSLuaFile("yrp/cl/gm/hud/cl_hud_map.lua")
 AddCSLuaFile("yrp/cl/gm/hud/cl_hud_player.lua")
@@ -68,13 +72,14 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_scoreboard_simple.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_vehicle_options.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings.lua")
 
-AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_groups_and_roles.lua")
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_design.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_status.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_feedback.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_general.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_realistic.lua")
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_groups_and_roles.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_database.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_usergroups.lua")
