@@ -61,13 +61,21 @@ end
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
+	createFont("Roboto10", "Roboto", 10, _weight, false)
+	createFont("Roboto10B", "Roboto", 10, 700, false)
+	createFont("Roboto12", "Roboto", 12, _weight, false)
+	createFont("Roboto12B", "Roboto", 12, 700, false)
+	createFont("Roboto14", "Roboto", 14, _weight, false)
+	createFont("Roboto14B", "Roboto", 14, 700, false)
 	createFont("Roboto18", "Roboto", 18, _weight, false)
 	createFont("Roboto18B", "Roboto", 18, 700, false)
 	createFont("Roboto24", "Roboto", 24, _weight, false)
 	createFont("Roboto24B", "Roboto", 24, 700, false)
 	createFont("Roboto30", "Roboto", 24, _weight, false)
 	createFont("Roboto30B", "Roboto Condensed", 24, 700, false)
-	
+	createFont("Roboto36", "Roboto", 36, _weight, false)
+	createFont("Roboto36B", "Roboto", 36, 700, false)
+
 	--[[ DESIGNS ]]--
 	createFont("mat1header", GetYRPFont(), 22, _weight, false)
 	createFont("mat1text", GetYRPFont(), 18, 0, false)
