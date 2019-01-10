@@ -235,6 +235,7 @@ function SortGroups(uid)
 end
 
 function SendGroupList(uid)
+	uid = tonumber(uid)
 	SortGroups(uid)
 
 	local tbl_parentgroup = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
@@ -266,6 +267,47 @@ function SendGroupList(uid)
 		net.Send(pl)
 	end
 end
+
+-- Duplicate
+function DuplicateGroup(guid)
+	guid = tonumber(guid)
+	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
+	if wk(group) then
+		group = group[1]
+
+		local cols = {}
+		local vals = {}
+		for name, value in pairs(group) do
+			if name != "uniqueID" and name != "int_removeable" then
+				table.insert(cols, name)
+				table.insert(vals, "'" .. value .. "'")
+			end
+		end
+
+		cols = table.concat(cols, ", ")
+		vals = table.concat(vals, ", ")
+
+		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+		local last = SQL_SELECT(DATABASE_NAME, "*", nil)
+		last = last[table.Count(last)]
+
+		local roles = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
+		for i, role in pairs(roles) do
+			DuplicateRole(role.uniqueID, last.uniqueID)
+		end
+
+		SendGroupList(group.int_parentgroup)
+	else
+		printGM("note", "Group [" .. guid .. "] was deleted.")
+	end
+end
+
+util.AddNetworkString("duplicated_group")
+net.Receive("duplicated_group", function(len, ply)
+	local guid = tonumber(net.ReadString())
+	DuplicateGroup(guid)
+end)
+
 
 util.AddNetworkString("settings_subscribe_grouplist")
 net.Receive("settings_subscribe_grouplist", function(len, ply)
@@ -385,13 +427,18 @@ net.Receive("settings_unsubscribe_grouplist", function(len, ply)
 	UnsubscribeGroupList(ply, uid)
 end)
 
-util.AddNetworkString("settings_delete_group")
-net.Receive("settings_delete_group", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+function DeleteGroup(guid)
+	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
 	if wk(group) then
 		group = group[1]
-		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. guid .. "'")
+
+		local roles = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. group.uniqueID .. "'")
+		if wk(roles) then
+			for i, role in pairs(roles) do
+				SQL_DELETE_FROM("yrp_ply_roles", "uniqueID = '" .. role.uniqueID .. "'")
+			end
+		end
 
 		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
 		if wk(siblings) then
@@ -410,6 +457,12 @@ net.Receive("settings_delete_group", function(len, ply)
 		group.int_parentgroup = tonumber(group.int_parentgroup)
 		SendGroupList(group.int_parentgroup)
 	end
+end
+
+util.AddNetworkString("settings_delete_group")
+net.Receive("settings_delete_group", function(len, ply)
+	local guid = tonumber(net.ReadString())
+	DeleteGroup(guid)
 end)
 
 util.AddNetworkString("get_grps")

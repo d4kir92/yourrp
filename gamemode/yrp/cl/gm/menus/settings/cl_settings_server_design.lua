@@ -113,7 +113,11 @@ net.Receive("get_design_settings", function(len)
 			if design.name == setting.string_hud_design then
 				selected = true
 			end
-			hud_design_choice:AddChoice(design.name .. " by " .. design.author .. " (" .. design.progress .. "% " .. YRP.lang_string("LID_done") .. ")", design.name, selected)
+			local name = design.name .. " by " .. design.author
+			if tonumber(design.progress) < 100 then
+				name = name .. " (" .. design.progress .. "% " .. YRP.lang_string("LID_done") .. ")"
+			end
+			hud_design_choice:AddChoice(name, design.name, selected)
 		end
 		function hud_design_choice:OnSelect(panel, index, value)
 			net.Start("change_hud_design")
@@ -185,6 +189,7 @@ net.Receive("get_design_settings", function(len)
 					draw.RoundedBox(0, x-1, 0, 2, ph, color)
 					count = count + 1
 				end
+
 				-- Y
 				count = 0
 				for y = 0, ScH(), self.space do
@@ -232,7 +237,19 @@ net.Receive("get_design_settings", function(len)
 				win.h = win:GetTall()
 				function win:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
-					draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(40 + 10), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(36 + 8 + 8), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+					draw.RoundedBox(0, pw - ctr(8 + 16), ph - ctr(8 + 4), ctr(16), ctr(4), Color(255, 255, 255, 255))
+					draw.RoundedBox(0, pw - ctr(8 + 4), ph - ctr(8 + 16), ctr(4), ctr(16), Color(255, 255, 255, 255))
+
+					local tbr = {}
+					tbr.r = 0
+					tbr.w = pw
+					tbr.h = ph
+					tbr.x = 0
+					tbr.y = 0
+					tbr.color = Color(255, 255, 0, 255)
+					HudBoxBr(tbr)
 
 					local x, y = self:GetPos()
 					local modx, mody = x % HA.space, y % HA.space
@@ -302,7 +319,7 @@ net.Receive("get_design_settings", function(len)
 					end
 				end
 
-				win.setting = createD("DButton", win, ctr(40), ctr(40), 0, 0)
+				win.setting = createD("DButton", win, ctr(36), ctr(36), ctr(4), ctr(4))
 				win.setting:SetText("")
 				function win.setting:DoClick()
 					net.Receive("get_hud_element_settings", function(le)
@@ -313,7 +330,7 @@ net.Receive("get_design_settings", function(len)
 						winset:SetTitle("")
 						function winset:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
-							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(20), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(50), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 							local x, y = self:GetPos()
 							if x + self:GetWide() > ScW() + PosX() then
@@ -403,6 +420,15 @@ net.Receive("get_design_settings", function(len)
 					net.Start("get_hud_element_settings")
 						net.WriteString(tab.element)
 					net.SendToServer()
+				end
+				function win.setting:Paint(pw, ph)
+					local color = Color(255, 255, 255, 255)
+					if self:IsHovered() then
+						color = Color(255, 255, 0, 255)
+					end
+					draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
+
+					YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - ctr(4), ph - ctr(4), ctr(2), ctr(2), Color(0, 0, 0))
 				end
 
 				win:MakePopup()

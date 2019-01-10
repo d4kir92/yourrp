@@ -18,7 +18,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_status", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yourrp_addons", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_interface", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_design", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_general", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupsandroles", "INT DEFAULT 0")
@@ -103,7 +103,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	_str = _str .. "bool_physgunpickupplayer, "
 	_str = _str .. "bool_physgunpickupworld, "
 	_str = _str .. "bool_adminaccess, "
-	_str = _str .. "bool_interface, "
+	_str = _str .. "bool_design, "
 	_str = _str .. "bool_general, "
 	_str = _str .. "bool_realistic, "
 	_str = _str .. "bool_groupsandroles, "
@@ -166,7 +166,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'") == nil then
 	_str = _str .. "bool_physgunpickupplayer, "
 	_str = _str .. "bool_physgunpickupworld, "
 	_str = _str .. "bool_adminaccess, "
-	_str = _str .. "bool_interface, "
+	_str = _str .. "bool_design, "
 	_str = _str .. "bool_general, "
 	_str = _str .. "bool_realistic, "
 	_str = _str .. "bool_groupsandroles, "
@@ -618,11 +618,11 @@ net.Receive("usergroup_update_bool_general", function(len, ply)
 	UGCheckBox(ply, uid, "bool_general", bool_general)
 end)
 
-util.AddNetworkString("usergroup_update_bool_interface")
-net.Receive("usergroup_update_bool_interface", function(len, ply)
+util.AddNetworkString("usergroup_update_bool_design")
+net.Receive("usergroup_update_bool_design", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local bool_interface = net.ReadString()
-	UGCheckBox(ply, uid, "bool_interface", bool_interface)
+	local bool_design = net.ReadString()
+	UGCheckBox(ply, uid, "bool_design", bool_design)
 end)
 
 util.AddNetworkString("usergroup_update_bool_realistic")

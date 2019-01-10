@@ -7,32 +7,34 @@ end
 local Simple = {}
 function HUDSimpleBG(tab)
 	local lply = LocalPlayer()
-	tab.visiblefunc = tab.visiblefunc or fake_true
-	if lply:GetHudBool(tab.element, "VISI") and tab.visiblefunc() then
-		Simple[tab.element] = Simple[tab.element] or {}
-		Simple[tab.element]["background"] = Simple[tab.element]["background"] or {}
+	if lply:GetHudBool(tab.element, "VISI") and lply:GetHudBool(tab.element, "BACK") then
+		tab.visiblefunc = tab.visiblefunc or fake_true
+		if tab.visiblefunc() then
+			Simple[tab.element] = Simple[tab.element] or {}
+			Simple[tab.element]["background"] = Simple[tab.element]["background"] or {}
 
-		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["background"]["version"] then
-			Simple[tab.element]["background"]["version"] = lply:GetNWInt("hud_version", 0)
+			if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["background"]["version"] then
+				Simple[tab.element]["background"]["version"] = lply:GetNWInt("hud_version", 0)
 
-			local w = lply:GetHudValue(tab.element, "SIZE_W")
-			local h = lply:GetHudValue(tab.element, "SIZE_H")
-			local x = lply:GetHudValue(tab.element, "POSI_X")
-			local y = lply:GetHudValue(tab.element, "POSI_Y")
+				local w = lply:GetHudValue(tab.element, "SIZE_W")
+				local h = lply:GetHudValue(tab.element, "SIZE_H")
+				local x = lply:GetHudValue(tab.element, "POSI_X")
+				local y = lply:GetHudValue(tab.element, "POSI_Y")
 
-			Simple[tab.element]["background"].w = w
-			Simple[tab.element]["background"].h = h
-			Simple[tab.element]["background"].x = x
-			Simple[tab.element]["background"].y = y
+				Simple[tab.element]["background"].w = w
+				Simple[tab.element]["background"].h = h
+				Simple[tab.element]["background"].x = x
+				Simple[tab.element]["background"].y = y
 
-			Simple[tab.element]["background"].r = 0
-			if lply:GetHudBool(tab.element, "ROUN") then
-				Simple[tab.element]["background"].r = tab.r or Simple[tab.element]["background"].h / 2
+				Simple[tab.element]["background"].r = 0
+				if lply:GetHudBool(tab.element, "ROUN") then
+					Simple[tab.element]["background"].r = tab.r or Simple[tab.element]["background"].h / 2
+				end
+
+				Simple[tab.element]["background"].color = lply:GetHudColor(tab.element, "BG")
+			else
+				HudBox(Simple[tab.element]["background"])
 			end
-
-			Simple[tab.element]["background"].color = lply:GetHudColor(tab.element, "BG")
-		else
-			HudBox(Simple[tab.element]["background"])
 		end
 	end
 end
@@ -42,6 +44,7 @@ function HUDSimpleBAR(tab)
 	if lply:GetHudBool(tab.element, "VISI") then
 		Simple[tab.element] = Simple[tab.element] or {}
 		Simple[tab.element]["bar"] = Simple[tab.element]["bar"] or {}
+		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
 		Simple[tab.element]["text"] = Simple[tab.element]["text"] or {}
 
 		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["bar"]["version"] then
@@ -72,9 +75,19 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["text"].font = "Roboto24"
 			Simple[tab.element]["text"].color = Color(255, 255, 255, 255)
 			Simple[tab.element]["text"].brcolor = Color(0, 0, 0, 255)
+
+			Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].h * 0.6
+			Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].h * 0.6
+			Simple[tab.element]["icon"].x = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].h * 0.2
+			Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].h * 0.2
 		else
 			Simple[tab.element]["bar"].w = Simple[tab.element]["bar"].fw / tab.max * tab.cur
 			HudBox(Simple[tab.element]["bar"])
+
+			if lply:GetHudBool(tab.element, "ICON") and tab.icon != nil then
+				local ico = tab.icon
+				YRP.DrawIcon(ico, Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color(255, 255, 255))
+			end
 
 			Simple[tab.element]["text"].text = ""
 			if tab.text != nil and lply:GetHudBool(tab.element, "TEXT") then
@@ -90,37 +103,39 @@ end
 
 function HUDSimpleBR(tab)
 	local lply = LocalPlayer()
-	tab.visiblefunc = tab.visiblefunc or fake_true
-	if lply:GetHudBool(tab.element, "VISI") and tab.visiblefunc() then
-		Simple[tab.element] = Simple[tab.element] or {}
-		Simple[tab.element]["border"] = Simple[tab.element]["border"] or {}
+	if lply:GetHudBool(tab.element, "VISI") and lply:GetHudBool(tab.element, "BORD") then
+		tab.visiblefunc = tab.visiblefunc or fake_true
+		if lply:GetHudBool(tab.element, "VISI") and tab.visiblefunc() then
+			Simple[tab.element] = Simple[tab.element] or {}
+			Simple[tab.element]["border"] = Simple[tab.element]["border"] or {}
 
-		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["border"]["version"] then
-			Simple[tab.element]["border"]["version"] = lply:GetNWInt("hud_version", 0)
+			if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["border"]["version"] then
+				Simple[tab.element]["border"]["version"] = lply:GetNWInt("hud_version", 0)
 
-			local w = lply:GetHudValue(tab.element, "SIZE_W")
-			local h = lply:GetHudValue(tab.element, "SIZE_H")
-			local x = lply:GetHudValue(tab.element, "POSI_X")
-			local y = lply:GetHudValue(tab.element, "POSI_Y")
+				local w = lply:GetHudValue(tab.element, "SIZE_W")
+				local h = lply:GetHudValue(tab.element, "SIZE_H")
+				local x = lply:GetHudValue(tab.element, "POSI_X")
+				local y = lply:GetHudValue(tab.element, "POSI_Y")
 
-			Simple[tab.element]["border"].r = 0
+				Simple[tab.element]["border"].r = 0
 
-			Simple[tab.element]["border"].w = w
-			Simple[tab.element]["border"].h = h
-			Simple[tab.element]["border"].x = x
-			Simple[tab.element]["border"].y = y
+				Simple[tab.element]["border"].w = w
+				Simple[tab.element]["border"].h = h
+				Simple[tab.element]["border"].x = x
+				Simple[tab.element]["border"].y = y
 
-			Simple[tab.element]["border"].r = 0
-			if lply:GetHudBool(tab.element, "ROUN") then
-				Simple[tab.element]["border"].r = tab.r or Simple[tab.element]["border"].h / 2
+				Simple[tab.element]["border"].r = 0
+				if lply:GetHudBool(tab.element, "ROUN") then
+					Simple[tab.element]["border"].r = tab.r or Simple[tab.element]["border"].h / 2
+				end
+
+				Simple[tab.element]["border"].color = lply:GetHudColor(tab.element, "BR")
+				Simple[tab.element]["border"].br = ctr(2)
+			elseif lply:GetHudBool(tab.element, "ROUN") then
+				HudBoxBrRounded(Simple[tab.element]["border"])
+			else
+				HudBoxBr(Simple[tab.element]["border"])
 			end
-
-			Simple[tab.element]["border"].color = lply:GetHudColor(tab.element, "BR")
-			Simple[tab.element]["border"].br = ctr(2)
-		elseif lply:GetHudBool(tab.element, "ROUN") then
-			HudBoxBrRounded(Simple[tab.element]["border"])
-		else
-			HudBoxBr(Simple[tab.element]["border"])
 		end
 	end
 end
@@ -171,7 +186,7 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["north"].font = "Roboto14"
 			Simple[tab.element]["north"].color = Color(255, 255, 255)
 			Simple[tab.element]["north"].brcolor = Color(0, 0, 0)
-			Simple[tab.element]["north"].text = "N"
+			Simple[tab.element]["north"].text = YRP.lang_string("LID_north_short")
 
 			Simple[tab.element]["south"].w = w
 			Simple[tab.element]["south"].h = h
@@ -182,7 +197,7 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["south"].font = "Roboto14"
 			Simple[tab.element]["south"].color = Color(255, 255, 255)
 			Simple[tab.element]["south"].brcolor = Color(0, 0, 0)
-			Simple[tab.element]["south"].text = "S"
+			Simple[tab.element]["south"].text = YRP.lang_string("LID_south_short")
 
 			Simple[tab.element]["east"].w = w
 			Simple[tab.element]["east"].h = h
@@ -193,7 +208,7 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["east"].font = "Roboto14"
 			Simple[tab.element]["east"].color = Color(255, 255, 255)
 			Simple[tab.element]["east"].brcolor = Color(0, 0, 0)
-			Simple[tab.element]["east"].text = "E"
+			Simple[tab.element]["east"].text = YRP.lang_string("LID_east_short")
 
 			Simple[tab.element]["west"].w = w
 			Simple[tab.element]["west"].h = h
@@ -204,7 +219,7 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["west"].font = "Roboto14"
 			Simple[tab.element]["west"].color = Color(255, 255, 255)
 			Simple[tab.element]["west"].brcolor = Color(0, 0, 0)
-			Simple[tab.element]["west"].text = "W"
+			Simple[tab.element]["west"].text = YRP.lang_string("LID_west_short")
 		else
 			HudBox(Simple[tab.element]["needle"])
 
@@ -260,20 +275,26 @@ function HUDSimple()
 		local MO = {}
 		MO.element = "MO"
 		HUDSimpleBG(MO)
-		local ST = {}
-		ST.element = "ST"
-		HUDSimpleBG(ST)
+		if lply:GetNWBool("bool_stamina", false) then
+			local ST = {}
+			ST.element = "ST"
+			HUDSimpleBG(ST)
+		end
 		local CH = {}
 		CH.element = "CH"
 		CH.r = ctr(16)
 		CH.visiblefunc = IsChatVisible
 		HUDSimpleBG(CH)
-		local HU = {}
-		HU.element = "HU"
-		HUDSimpleBG(HU)
-		local TH = {}
-		TH.element = "TH"
-		HUDSimpleBG(TH)
+		if lply:GetNWBool("bool_hunger", false) then
+			local HU = {}
+			HU.element = "HU"
+			HUDSimpleBG(HU)
+		end
+		if lply:GetNWBool("bool_thirst", false) then
+			local TH = {}
+			TH.element = "TH"
+			HUDSimpleBG(TH)
+		end
 		if lply:GetNWBool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
@@ -321,6 +342,7 @@ function HUDSimple()
 		HP.max = lply:GetMaxHealth()
 		HP.text = lply:Health() .. "/" .. lply:GetMaxHealth()
 		HP.percentage = lply:Health() / lply:GetMaxHealth() * 100 .. "%"
+		HP.icon = Material("icon16/heart.png")
 		HUDSimpleBAR(HP)
 		AR = {}
 		AR.element = "AR"
@@ -328,6 +350,7 @@ function HUDSimple()
 		AR.max = lply:GetMaxArmor()
 		AR.text = lply:Armor() .. "/" .. lply:GetMaxArmor()
 		AR.percentage = lply:Armor() / lply:GetMaxArmor() * 100 .. "%"
+		AR.icon = Material("icon16/shield.png")
 		HUDSimpleBAR(AR)
 		XP = {}
 		XP.element = "XP"
@@ -340,28 +363,38 @@ function HUDSimple()
 		MO.cur = CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()
 		MO.max = lply:SalaryTime()
 		MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. ")"
+		MO.icon = Material("icon16/money.png")
 		HUDSimpleBAR(MO)
-		ST = {}
-		ST.element = "ST"
-		ST.cur = lply:Stamina()
-		ST.max = lply:GetMaxStamina()
-		ST.text = lply:Stamina() .. "/" .. lply:GetMaxStamina()
-		ST.percentage = lply:Stamina() / lply:GetMaxStamina() * 100 .. "%"
-		HUDSimpleBAR(ST)
-		HU = {}
-		HU.element = "HU"
-		HU.cur = lply:Hunger()
-		HU.max = lply:GetMaxHunger()
-		HU.text = math.Round(lply:Hunger(), 1) .. "/" .. math.Round(lply:GetMaxHunger(), 1)
-		HU.percentage = math.Round(lply:Hunger() / lply:GetMaxHunger() * 100, 1) .. "%"
-		HUDSimpleBAR(HU)
-		TH = {}
-		TH.element = "TH"
-		TH.cur = lply:Thirst()
-		TH.max = lply:GetMaxThirst()
-		TH.text = math.Round(lply:Thirst(), 1) .. "/" .. math.Round(lply:GetMaxThirst(), 1)
-		TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 1) .. "%"
-		HUDSimpleBAR(TH)
+		if lply:GetNWBool("bool_stamina", false) then
+			local ST = {}
+			ST.element = "ST"
+			ST.cur = lply:Stamina()
+			ST.max = lply:GetMaxStamina()
+			ST.text = lply:Stamina() .. "/" .. lply:GetMaxStamina()
+			ST.percentage = lply:Stamina() / lply:GetMaxStamina() * 100 .. "%"
+			ST.icon = Material("icon16/lightning.png")
+			HUDSimpleBAR(ST)
+		end
+		if lply:GetNWBool("bool_hunger", false) then
+			local HU = {}
+			HU.element = "HU"
+			HU.cur = lply:Hunger()
+			HU.max = lply:GetMaxHunger()
+			HU.text = math.Round(lply:Hunger(), 1) .. "/" .. math.Round(lply:GetMaxHunger(), 1)
+			HU.percentage = math.Round(lply:Hunger() / lply:GetMaxHunger() * 100, 1) .. "%"
+			HU.icon = Material("icon16/cake.png")
+			HUDSimpleBAR(HU)
+		end
+		if lply:GetNWBool("bool_thirst", false) then
+			local TH = {}
+			TH.element = "TH"
+			TH.cur = lply:Thirst()
+			TH.max = lply:GetMaxThirst()
+			TH.text = math.Round(lply:Thirst(), 1) .. "/" .. math.Round(lply:GetMaxThirst(), 1)
+			TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 1) .. "%"
+			TH.icon = Material("icon16/cup.png")
+			HUDSimpleBAR(TH)
+		end
 		if lply:GetNWBool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
@@ -369,6 +402,7 @@ function HUDSimple()
 			CA.max = lply:CastTimeMax()
 			CA.text = lply:GetCastName()
 			CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 1) .. "%"
+			CA.icon = Material("icon16/hourglass.png")
 			HUDSimpleBAR(CA)
 		end
 		AB = {}
@@ -377,6 +411,7 @@ function HUDSimple()
 		AB.max = lply:GetMaxAbility()
 		AB.text = math.Round(lply:Ability(), 1) .. "/" .. math.Round(lply:GetMaxAbility(), 1)
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
+		AB.icon = Material("icon16/wand.png")
 		HUDSimpleBAR(AB)
 		local weapon = lply:GetActiveWeapon()
 		if IsValid(weapon) then
@@ -410,11 +445,15 @@ function HUDSimple()
 			HUDSimpleBAR(WN)
 		end
 		if batterypower <= 100 then
+			if batterypower > 100 then
+				batterypower = 100
+			end
 			local BA = {}
 			BA.element = "BA"
 			BA.cur = batterypower
 			BA.max = 100
 			BA.text = batterypower .. "%"
+			BA.icon = Material("icon16/computer.png")
 			HUDSimpleBAR(BA)
 		end
 		if lply:Condition() != "" then
@@ -469,20 +508,26 @@ function HUDSimple()
 		MO = {}
 		MO.element = "MO"
 		HUDSimpleBR(MO)
-		ST = {}
-		ST.element = "ST"
-		HUDSimpleBR(ST)
+		if lply:GetNWBool("bool_stamina", false) then
+			local ST = {}
+			ST.element = "ST"
+			HUDSimpleBR(ST)
+		end
 		CH = {}
 		CH.element = "CH"
 		CH.r = ctr(16)
 		CH.visiblefunc = IsChatVisible
 		HUDSimpleBR(CH)
-		HU = {}
-		HU.element = "HU"
-		HUDSimpleBR(HU)
-		TH = {}
-		TH.element = "TH"
-		HUDSimpleBR(TH)
+		if lply:GetNWBool("bool_hunger", false) then
+			local HU = {}
+			HU.element = "HU"
+			HUDSimpleBR(HU)
+		end
+		if lply:GetNWBool("bool_thirst", false) then
+			local TH = {}
+			TH.element = "TH"
+			HUDSimpleBR(TH)
+		end
 		if lply:GetNWBool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"

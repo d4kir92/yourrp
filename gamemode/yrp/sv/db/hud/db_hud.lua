@@ -437,7 +437,7 @@ AddElement(COM)
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:HudLoadout()
-	printGM("gm", "[HudLoadout] " .. self:YRPName())
+	--printGM("gm", "[HudLoadout] " .. self:YRPName())
 	self:SetNWInt("hud_version", self:GetNWInt("hud_version", 0) + 1)
 	local hudeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(hudeles) then
