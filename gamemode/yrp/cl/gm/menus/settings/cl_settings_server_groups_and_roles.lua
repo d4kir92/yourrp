@@ -472,7 +472,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		ea.dup = createD("DButton", PARENT, ctr(60), ctr(60), ctr(900), ctr(20))
 		ea.dup:SetText("")
 		function ea.dup:Paint(pw, ph)
-			if ea.typ != nil and false then
+			if ea.typ != nil then
 				local tab = {}
 				tab.color = Color(255, 255, 0, 255)
 				DrawPanel(self, tab)
@@ -492,6 +492,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawPanel(self, tab)
 			end
 		end
+		function ea.dup:DoClick()
+			if ea.typ == "group" then
+				net.Start("duplicated_group")
+					net.WriteString(ea.tab.uniqueID)
+				net.SendToServer()
+			elseif ea.typ == "role" then
+				net.Start("duplicated_role")
+					net.WriteString(ea.tab.uniqueID)
+				net.SendToServer()
+			end
+		end
+
 
 		ea.top = createD("DPanel", PARENT, ScrW() - ctr(980), ctr(60), ctr(960), ctr(20))
 		function ea.top:Paint(pw, ph)
@@ -1298,74 +1310,81 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								cl_pms[c] = {}
 								cl_pms[c].WorldModel = v
 								cl_pms[c].ClassName = v
-								cl_pms[c].PrintName = player_manager.TranslateToPlayerModelName(v)
+								cl_pms[c].PrintName = v
 							end
 
-							local height = ScrH() - ctr(200)
-							pmsel.dpl = createD("DPanelList", pmsel, ScrW() - ctr(20 * 2), height, ctr(20), ctr(100))
-							pmsel.dpl:EnableVerticalScrollbar(true)
-							function pmsel:RefreshPage()
-								pmsel.dpl:Clear()
-								local count = 0
-								local fcount = 0
-								for i, v in pairs(cl_pms) do
-									if string.find(string.lower(v.PrintName), pmsel.keyword) or string.find(string.lower(v.ClassName), pmsel.keyword) or string.find(string.lower(v.WorldModel), pmsel.keyword) then
-										count = count + 1
-										if count > pmsel.nr and count <= pmsel.nr + 4 then
-											fcount = fcount + 1
-											local d_pm = createD("DButton", nil, pmsel.dpl:GetWide(), height / 4, 0, 0)
-											d_pm:SetText(v.PrintName)
-											function d_pm:DoClick()
-												pmwin.WorldModel = v.WorldModel
-												pmsel:Close()
-											end
-
-											if v.WorldModel != "" then
-												d_pm.model = createD("DModelPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
-												d_pm.model:SetModel(v.WorldModel)
-											else
-												d_pm.model = createD("DPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
-												function d_pm.model:Paint(pw, ph)
-													draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-													draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							if table.Count(cl_pms) > 0 then
+								local height = ScrH() - ctr(200)
+								pmsel.dpl = createD("DPanelList", pmsel, ScrW() - ctr(20 * 2), height, ctr(20), ctr(100))
+								pmsel.dpl:EnableVerticalScrollbar(true)
+								function pmsel:RefreshPage()
+									pmsel.dpl:Clear()
+									local count = 0
+									local fcount = 0
+									for i, v in pairs(cl_pms) do
+										if string.find(string.lower(v.PrintName), pmsel.keyword) or string.find(string.lower(v.ClassName), pmsel.keyword) or string.find(string.lower(v.WorldModel), pmsel.keyword) then
+											count = count + 1
+											if count > pmsel.nr and count <= pmsel.nr + 4 then
+												fcount = fcount + 1
+												local d_pm = createD("DButton", nil, pmsel.dpl:GetWide(), height / 4, 0, 0)
+												d_pm:SetText(v.PrintName)
+												function d_pm:DoClick()
+													pmwin.WorldModel = v.WorldModel
+													pmsel:Close()
 												end
-											end
 
-											pmsel.dpl:AddItem(d_pm)
+												if v.WorldModel != "" then
+													d_pm.model = createD("DModelPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
+													d_pm.model:SetModel(v.WorldModel)
+												else
+													d_pm.model = createD("DPanel", d_pm, d_pm:GetTall(), d_pm:GetTall(), 0, 0)
+													function d_pm.model:Paint(pw, ph)
+														draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+														draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+													end
+												end
+
+												pmsel.dpl:AddItem(d_pm)
+											end
 										end
 									end
+									if fcount <= 0 then
+										pmsel.nr = pmsel.nr - 4
+										self:RefreshPage()
+									end
 								end
-								if fcount <= 0 then
-									pmsel.nr = pmsel.nr - 4
-									self:RefreshPage()
-								end
-							end
-							function pmsel:Search(keyword)
-								pmsel.keyword = keyword
-								pmsel.nr = 0
-								pmsel:RefreshPage()
-							end
-
-							pmsel.prev = createD("DButton", pmsel, ctr(200), ctr(50), ctr(20), height + ctr(100 + 20))
-							pmsel.prev:SetText("<")
-							function pmsel.prev:DoClick()
-								if pmsel.nr >= 4 then
-									pmsel.nr = pmsel.nr - 4
+								function pmsel:Search(keyword)
+									pmsel.keyword = keyword
+									pmsel.nr = 0
 									pmsel:RefreshPage()
 								end
-							end
 
-							pmsel.next = createD("DButton", pmsel, ctr(200), ctr(50), ctr(20 + 200 + 20), height + ctr(100 + 20))
-							pmsel.next:SetText(">")
-							function pmsel.next:DoClick()
-								pmsel.nr = pmsel.nr + 4
-								pmsel:RefreshPage()
-							end
-							pmsel:Search("")
+								pmsel.prev = createD("DButton", pmsel, ctr(200), ctr(50), ctr(20), height + ctr(100 + 20))
+								pmsel.prev:SetText("<")
+								function pmsel.prev:DoClick()
+									if pmsel.nr >= 4 then
+										pmsel.nr = pmsel.nr - 4
+										pmsel:RefreshPage()
+									end
+								end
 
-							pmsel.search = createD("DTextEntry", pmsel, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
-							function pmsel.search:OnChange()
-								pmsel:Search(self:GetText())
+								pmsel.next = createD("DButton", pmsel, ctr(200), ctr(50), ctr(20 + 200 + 20), height + ctr(100 + 20))
+								pmsel.next:SetText(">")
+								function pmsel.next:DoClick()
+									pmsel.nr = pmsel.nr + 4
+									pmsel:RefreshPage()
+								end
+								pmsel:Search("")
+
+								pmsel.search = createD("DTextEntry", pmsel, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+								function pmsel.search:OnChange()
+									pmsel:Search(self:GetText())
+								end
+							else
+								pmsel.empty = createD("DPanel", pmsel, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+								function pmsel.empty:Paint(pw, ph)
+									draw.SimpleText("No models found in collection", "DermaDefault", 10, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								end
 							end
 						end
 
@@ -1462,7 +1481,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			equipment.x = ea.appearance:GetParent().x
 			equipment.y = ea.appearance:GetParent().y + ea.appearance:GetParent():GetTall() + ctr(20)
 			equipment.w = ctr(800)
-			equipment.h = ctr(1050)
+			equipment.h = ctr(1250)
 			equipment.br = ctr(20)
 			equipment.color = Color(255, 255, 255)
 			equipment.bgcolor = Color(80, 80, 80)
@@ -1478,7 +1497,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			sweps.value = role.string_sweps
 			sweps.uniqueID = role.uniqueID
 			sweps.w = ea.equipment:GetWide()
-			sweps.h = ctr(425)
+			sweps.h = ctr(325)
 			sweps.doclick = function()
 				local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 				winswep:SetTitle("")
@@ -1577,7 +1596,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ndsweps.value = role.string_ndsweps
 			ndsweps.uniqueID = role.uniqueID
 			ndsweps.w = ea.equipment:GetWide()
-			ndsweps.h = ctr(425)
+			ndsweps.h = ctr(325)
 			ndsweps.doclick = function()
 				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 				winndswep:SetTitle("")
@@ -1661,6 +1680,111 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end)
 			net.Start("get_role_ndsweps")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
+			hr.parent = ea.equipment
+			DHr(hr)
+
+			-- Licenses
+			local licenses = {}
+			licenses.parent = ea.equipment
+			licenses.uniqueID = role.uniqueID
+			licenses.header = "LID_licenses"
+			licenses.netstr = "update_role_string_licenses"
+			licenses.value = role.string_licenses
+			licenses.uniqueID = role.uniqueID
+			licenses.w = ea.equipment:GetWide()
+			licenses.h = ctr(325)
+			licenses.doclick = function()
+				local winlicenses = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+				winlicenses:SetTitle("")
+				winlicenses:Center()
+				winlicenses:MakePopup()
+				function winlicenses:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				end
+
+				net.Receive("get_all_licenses", function(l)
+					local alllicenses = net.ReadTable()
+					local cl_licenses = {}
+					local count = 0
+					for k, v in pairs(alllicenses) do
+						count = count + 1
+						cl_licenses[count] = {}
+						cl_licenses[count].WorldModel = v.WorldModel or nil
+						cl_licenses[count].ClassName = v.uniqueID
+						cl_licenses[count].PrintName = v.name
+					end
+
+					winlicenses.dpl = createD("DPanelList", winlicenses, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
+					winlicenses.dpl:EnableVerticalScrollbar(true)
+					local height = ScrH() - ctr(100)
+					function winlicenses:Search(keyword)
+						self.dpl:Clear()
+						for i, v in pairs(cl_licenses) do
+							if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
+								local d_licenses = createD("DButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
+								d_licenses:SetText(v.PrintName)
+								function d_licenses:DoClick()
+									net.Start("add_role_license")
+										net.WriteInt(role.uniqueID, 32)
+										net.WriteString(v.ClassName)
+									net.SendToServer()
+									winlicenses:Close()
+								end
+
+								if v.WorldModel != "" and v.WorldModel != nil then
+									d_licenses.model = createD("DModelPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
+									d_licenses.model:SetModel(v.WorldModel)
+								elseif v.WorldModel == "" then
+									d_licenses.model = createD("DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
+									function d_licenses.model:Paint(pw, ph)
+										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+										draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									end
+								end
+
+								winlicenses.dpl:AddItem(d_licenses)
+							end
+						end
+					end
+					winlicenses:Search("")
+
+					winlicenses.search = createD("DTextEntry", winlicenses, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+					function winlicenses.search:OnChange()
+						winlicenses:Search(self:GetText())
+					end
+				end)
+				net.Start("get_all_licenses")
+				net.SendToServer()
+			end
+			ea[role.uniqueID].licenses = DStringListBox(licenses)
+			net.Receive("get_role_licenses", function()
+				local tab_pm = net.ReadTable()
+				local cl_licenses = {}
+				for i, v in pairs(tab_pm) do
+					if istable(v) then
+						local license = {}
+						license.string_model = ""
+						license.string_classname = v.uniqueID
+						license.string_name = v.string_name
+						license.doclick = function()
+							net.Start("rem_role_license")
+								net.WriteInt(role.uniqueID, 32)
+								net.WriteString(license.string_classname)
+							net.SendToServer()
+						end
+						license.h = ctr(120)
+						table.insert(cl_licenses, license)
+					end
+				end
+				if ea[role.uniqueID].licenses.dpl.AddLines != nil then
+					ea[role.uniqueID].licenses.dpl:AddLines(cl_licenses)
+				end
+			end)
+			net.Start("get_role_licenses")
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 

@@ -396,6 +396,8 @@ function SortRoles(gro, pre)
 end
 
 function SendRoleList(gro, pre)
+	gro = tonumber(gro)
+	pre = tonumber(pre)
 	SortRoles(gro, pre)
 
 	local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
@@ -426,6 +428,45 @@ function SendRoleList(gro, pre)
 		net.Send(pl)
 	end
 end
+
+-- Duplicate
+function DuplicateRole(ruid, guid)
+	ruid = tonumber(ruid)
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
+	if wk(role) then
+		role = role[1]
+
+		guid = guid or role.int_groupID
+		guid = tonumber(guid)
+
+		local cols = {}
+		local vals = {}
+		for name, value in pairs(role) do
+			if name != "uniqueID" and name != "int_removeable" then
+				if name == "int_groupID" then
+					value = guid
+				end
+				table.insert(cols, name)
+				table.insert(vals, "'" .. value .. "'")
+			end
+		end
+
+		cols = table.concat(cols, ", ")
+		vals = table.concat(vals, ", ")
+
+		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+
+		SendRoleList(ruid, guid)
+	else
+		printGM("note", "Role [" .. ruid .. "] was deleted.")
+	end
+end
+
+util.AddNetworkString("duplicated_role")
+net.Receive("duplicated_role", function(len, ply)
+	local ruid = tonumber(net.ReadString())
+	DuplicateRole(ruid, nil)
+end)
 
 -- Role menu
 util.AddNetworkString("get_grp_roles")
@@ -694,7 +735,7 @@ util.AddNetworkString("add_role_flag")
 net.Receive("add_role_flag", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local fuid = net.ReadInt(32)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 
 	local customflags = string.Explode(",", role.string_customflags)
 	if !table.HasValue(customflags, tostring(fuid)) then
@@ -718,7 +759,7 @@ util.AddNetworkString("rem_role_flag")
 net.Receive("rem_role_flag", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local fuid = net.ReadInt(32)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 
 	local customflags = string.Explode(",", role.string_customflags)
 	local oldflags = {}
@@ -783,7 +824,7 @@ net.Receive("get_all_playermodels", function(len, ply)
 end)
 
 function AddPlayermodelToRole(ruid, muid)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 	local pms = string.Explode(",", role.string_playermodels)
 	if !table.HasValue(pms, tostring(muid)) then
 		local oldpms = {}
@@ -823,7 +864,7 @@ net.Receive("add_playermodel", function(len, ply)
 end)
 
 function RemPlayermodelFromRole(ruid, muid)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 	local pms = string.Explode(",", role.string_playermodels)
 	local oldpms = {}
 	for i, v in pairs(pms) do
@@ -874,7 +915,7 @@ net.Receive("get_role_sweps", function(len, ply)
 end)
 
 function AddSwepToRole(ruid, swepcn)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 	local sweps = string.Explode(",", role.string_sweps)
 	if !table.HasValue(sweps, tostring(swepcn)) then
 		local oldsweps = {}
@@ -902,7 +943,7 @@ net.Receive("add_role_swep", function(len, ply)
 end)
 
 function RemSwepFromRole(ruid, swepcn)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 	local sweps = string.Explode(",", role.string_sweps)
 	local oldsweps = {}
 	for i, v in pairs(sweps) do
@@ -954,7 +995,7 @@ net.Receive("get_role_ndsweps", function(len, ply)
 end)
 
 function AddNDSwepToRole(ruid, ndswepcn)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 	local ndsweps = string.Explode(",", role.string_ndsweps)
 	if !table.HasValue(ndsweps, tostring(ndswepcn)) then
 		local oldndsweps = {}
@@ -982,7 +1023,7 @@ net.Receive("add_role_ndswep", function(len, ply)
 end)
 
 function RemNDSwepFromRole(ruid, ndswepcn)
-	role = GetRole(ruid)
+	local role = GetRole(ruid)
 	local ndsweps = string.Explode(",", role.string_ndsweps)
 	local oldndsweps = {}
 	for i, v in pairs(ndsweps) do
@@ -1005,6 +1046,130 @@ net.Receive("rem_role_ndswep", function(len, ply)
 	local ndswepcn = net.ReadString()
 
 	RemNDSwepFromRole(ruid, ndswepcn)
+end)
+
+--licenses
+function SendLicenses(ruid)
+	local role = GetRole(ruid)
+	if wk(role) then
+		local nettab = {}
+		local licenses = string.Explode(",", role.string_licenses)
+		for i, val in pairs(licenses) do
+			local li = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. val .. "'")
+			if wk(li) then
+				li = li[1]
+				local entry = {}
+				entry.uniqueID = li.uniqueID
+				local name = li.name
+				entry.string_name = name
+				table.insert(nettab, entry)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][ruid]) do
+			net.Start("get_role_licenses")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
+	end
+end
+
+function RemLicenseFromRole(ruid, muid)
+	local role = GetRole(ruid)
+	local lis = string.Explode(",", role.string_licenses)
+	local oldlis = {}
+	for i, v in pairs(lis) do
+		if v != "" and v != " " then
+			table.insert(oldlis, v)
+		end
+	end
+
+	local newlis = oldlis
+	table.RemoveByValue(newlis, tostring(muid))
+	newlis = string.Implode(",", newlis)
+
+	SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+	SendLicenses(ruid)
+end
+
+function CleanUpLicenses(ruid)
+	local role = GetRole(ruid)
+	local lis = string.Explode(",", role.string_licenses)
+
+	for i, li in pairs(lis) do
+		if li != "" then
+			local found = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. li .. "'")
+			if !wk(found) then
+				RemLicenseFromRole(ruid, li)
+			end
+		end
+	end
+end
+
+util.AddNetworkString("get_role_licenses")
+net.Receive("get_role_licenses", function(len, ply)
+	local uid = net.ReadInt(32)
+	CleanUpLicenses(uid)
+	SendLicenses(uid)
+end)
+
+util.AddNetworkString("get_all_licenses")
+net.Receive("get_all_licenses", function(len, ply)
+	local alllis = SQL_SELECT("yrp_licenses", "*", nil)
+	if !wk(alllis) then
+		alllis = {}
+	end
+	net.Start("get_all_licenses")
+		net.WriteTable(alllis)
+	net.Send(ply)
+end)
+
+function AddLicenseToRole(ruid, muid)
+	local role = GetRole(ruid)
+	local lis = string.Explode(",", role.string_licenses)
+	if !table.HasValue(lis, tostring(muid)) then
+		local oldlis = {}
+		for i, v in pairs(lis) do
+			if v != "" and v != " " then
+				table.insert(oldlis, v)
+			end
+		end
+
+		local newlis = oldlis
+		table.insert(newlis, tostring(muid))
+		newlis = string.Implode(",", newlis)
+
+		SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+		SendLicenses(ruid)
+	end
+end
+
+util.AddNetworkString("add_role_license")
+net.Receive("add_role_license", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local muid = tonumber(net.ReadString())
+
+	AddLicenseToRole(ruid, muid)
+end)
+
+util.AddNetworkString("add_license")
+net.Receive("add_license", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local WorldModel = net.ReadString()
+	local name = net.ReadString()
+	SQL_INSERT_INTO("yrp_licenses", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
+
+	local lastentry = SQL_SELECT("yrp_licenses", "*", nil)
+	lastentry = lastentry[table.Count(lastentry)]
+	AddLicenseToRole(ruid, lastentry.uniqueID)
+end)
+
+util.AddNetworkString("rem_role_license")
+net.Receive("rem_role_license", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local muid = tonumber(net.ReadString())
+
+	RemLicenseFromRole(ruid, muid)
 end)
 
 util.AddNetworkString("openInteractMenu")

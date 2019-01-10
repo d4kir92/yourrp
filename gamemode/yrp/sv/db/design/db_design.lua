@@ -34,13 +34,13 @@ end
 local HUD_Simple = {}
 HUD_Simple.name = "Simple"
 HUD_Simple.author = "D4KiR"
-HUD_Simple.progress = 90
+HUD_Simple.progress = 100
 RegisterHUDDesign(HUD_Simple)
 
 local HUD_FO76 = {}
 HUD_FO76.name = "Fallout 76"
 HUD_FO76.author = "D4KiR"
-HUD_FO76.progress = 10
+HUD_FO76.progress = 40
 RegisterHUDDesign(HUD_FO76)
 
 --[[ LOADOUT ]]--
@@ -56,13 +56,15 @@ end
 
 util.AddNetworkString("get_design_settings")
 net.Receive("get_design_settings", function(len, ply)
-	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-	if wk(setting) then
-		setting = setting[1]
-		net.Start("get_design_settings")
-			net.WriteTable(setting)
-			net.WriteTable(HUDS)
-		net.Send(ply)
+	if ply:CanAccess("bool_design") then
+		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		if wk(setting) then
+			setting = setting[1]
+			net.Start("get_design_settings")
+				net.WriteTable(setting)
+				net.WriteTable(HUDS)
+			net.Send(ply)
+		end
 	end
 end)
 

@@ -23,8 +23,19 @@ function send_licenses(ply)
 	net.Send(ply)
 end
 
-util.AddNetworkString("get_licenses")
+util.AddNetworkString("get_all_licenses")
+net.Receive("get_all_licenses", function(len, ply)
+	local _all = SQL_SELECT(_db_name, "*", nil)
+	local _nm = _all
+	if _nm == nil or _nm == false then
+		_nm = {}
+	end
+	net.Start("get_all_licenses")
+		net.WriteTable(_nm)
+	net.Send(ply)
+end)
 
+util.AddNetworkString("get_licenses")
 net.Receive("get_licenses", function(len, ply)
 	if ply:CanAccess("bool_licenses") then
 		send_licenses(ply)
@@ -106,22 +117,7 @@ net.Receive("get_all_licenses_simple", function(len, ply)
 	net.Send(ply)
 end)
 
-util.AddNetworkString("get_role_licenses")
-
-net.Receive("get_role_licenses", function(len, ply)
-	local _licenses = SQL_SELECT(_db_name, "*", nil)
-
-	if _licenses == nil then
-		_licenses = {}
-	end
-
-	net.Start("get_role_licenses")
-		net.WriteTable(_licenses)
-	net.Send(ply)
-end)
-
 util.AddNetworkString("role_add_license")
-
 net.Receive("role_add_license", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _license_uid = net.ReadString()
