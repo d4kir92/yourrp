@@ -1286,8 +1286,6 @@ function GM:InitPostEntity()
 			end)
 		end
 	end)
-
-	loadCompleteHUD()
 end
 
 --Remove Ragdolls after 60 sec

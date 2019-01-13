@@ -270,6 +270,7 @@ elseif CLIENT then
 	net.Receive("receiveTranslationProgress", receiveTranslationProgress)
 end
 
+
 function YRP.fetch_translation_progress()
 	hook.Remove("Tick", "translation_progress_fetch")
 
@@ -337,7 +338,7 @@ if CLIENT then
 	end
 end
 
-hook.Add("Tick", "translation_progress_fetch", fetch_translation_progress)
+hook.Add("Tick", "translation_progress_fetch", YRP.fetch_translation_progress)
 
 function YRP.initLang()
 	hr_pre()

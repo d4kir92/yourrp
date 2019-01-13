@@ -472,7 +472,7 @@ end)
 util.AddNetworkString("get_grp_roles")
 net.Receive("get_grp_roles", function(len, ply)
 	local _uid = net.ReadString()
-	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = " .. _uid)
+	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'")
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
 			ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)

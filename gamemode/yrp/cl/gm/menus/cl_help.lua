@@ -336,6 +336,7 @@ net.Receive("getsitecommunitydiscord", function(len)
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. ctr(1000) .. "\" height=\"" .. page:GetTall() - ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 			page:SetHTML(widgetlink)
+
 			local openLink = createD("DButton", page, ctr(240), ctr(54), ctr(390), page:GetTall() - ctr(92))
 			openLink:SetText("")
 
@@ -368,6 +369,7 @@ net.Receive("getsitecommunityteamspeak", function(len)
 
 				local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
 				page:SetHTML(widgetlink)
+
 				local ipport = createD("DTextEntry", HELPMENU.mainmenu.site, ctr(400), ctr(50), page:GetWide() + ctr(20), 0)
 				ipport:SetText(ip .. ":" .. port)
 				ipport:SetEditable(false)
@@ -569,7 +571,9 @@ net.Receive("getsiteyourrpdiscord", function(len)
 				surfaceBox(0, 0, ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255))
 			end
 
-			page:SetHTML("<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. ctr(1000) .. "\" height=\"" .. page:GetTall() - ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>")
+			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. ctr(1000) .. "\" height=\"" .. page:GetTall() - ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
+			page:SetHTML(widgetlink)
+
 			local openLink = createD("DButton", page, ctr(240), ctr(54), ctr(390), page:GetTall() - ctr(92))
 			openLink:SetText("")
 

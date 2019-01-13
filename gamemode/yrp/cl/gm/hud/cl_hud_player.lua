@@ -207,7 +207,7 @@ end
 
 function HudPlayer(ply)
 	local weapon = ply:GetActiveWeapon()
-	if is_hud_db_loaded() then
+	if ply:GetNWString("string_hud_design", "notloaded") != "notloaded" then
 		drawMenuInfo()
 
 		if ply:Alive() then
@@ -282,8 +282,6 @@ function HudPlayer(ply)
 			draw.SimpleTextOutlined(YRP.lang_string("LID_dead") .. "! " .. YRP.lang_string("LID_respawning") .. "...", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 	else
-		draw.SimpleTextOutlined("Loading HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-		--printGM("note", "Try to reload hud database")
-		loadDatabaseHUD()
+		draw.SimpleTextOutlined(YRP.lang_string("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 	end
 end
