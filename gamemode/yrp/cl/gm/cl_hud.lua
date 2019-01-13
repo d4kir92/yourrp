@@ -197,10 +197,6 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "72", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 	end
 
-	if tobool(HudV("utto")) then
-		hudUpTime()
-	end
-
 	local _target = LocalPlayer():GetNWString("hittargetName", "")
 	if _target != "" then
 		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetNWString("hittargetName", ""), "HudBars", ctr(10), ctr(10), Color(255, 0, 0, 255), 0, 0)

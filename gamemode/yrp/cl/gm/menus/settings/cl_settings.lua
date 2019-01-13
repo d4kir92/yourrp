@@ -1,7 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- OLD Sites
-include("cl_settings_client_hud.lua")
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
 include("cl_settings_server_interface.lua")
@@ -124,7 +123,6 @@ function OpenSettings()
 	local _client = YRP.lang_string("LID_settings_client") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_client)
 	settingsWindow.window:AddSite("open_client_character", "LID_settings_character", _client, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_client_hud", "LID_settings_hud", _client, "icon16/photo.png")
 	settingsWindow.window:AddSite("open_client_keybinds", "LID_settings_keybinds", _client, "icon16/keyboard.png")
 
 	local _server_admin = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
@@ -149,7 +147,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_general", "LID_settings_general", _settings_server_gameplay, "icon16/server.png")
 	settingsWindow.window:AddSite("open_server_realistic", "LID_settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
 	settingsWindow.window:AddSite("open_server_groups_and_roles", "LID_settings_groupsandroles", _settings_server_gameplay, "icon16/group.png")
-	settingsWindow.window:AddSite("open_server_design", "LID_settings_design", _settings_server_gameplay, "icon16/application_view_gallery.png")
+	settingsWindow.window:AddSite("open_server_design", "LID_settings_design", _settings_server_gameplay, "icon16/photo.png")
 
 	local _settings_server_management = "LID_settings_server_management"
 	settingsWindow.window:AddCategory(_settings_server_management)

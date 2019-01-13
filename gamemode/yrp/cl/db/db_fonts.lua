@@ -35,29 +35,6 @@ function changeFontSizeOf(_font, _size)
 	createFont(_font, GetYRPFont(), _size, weight, false)
 end
 
-function update_db_fonts()
-	createFont("mmsf", GetYRPFont(), HudV("mmsf"), _weight, false)
-	createFont("hpsf", GetYRPFont(), HudV("hpsf"), _weight, false)
-	createFont("arsf", GetYRPFont(), HudV("arsf"), _weight, false)
-	createFont("wpsf", GetYRPFont(), HudV("wpsf"), _weight, false)
-	createFont("wssf", GetYRPFont(), HudV("wssf"), _weight, false)
-	createFont("wnsf", GetYRPFont(), HudV("wnsf"), _weight, false)
-	createFont("ttsf", GetYRPFont(), HudV("ttsf"), _weight, false)
-	createFont("mosf", GetYRPFont(), HudV("mosf"), _weight, false)
-	createFont("mhsf", GetYRPFont(), HudV("mhsf"), _weight, false)
-	createFont("mtsf", GetYRPFont(), HudV("mtsf"), _weight, false)
-	createFont("mssf", GetYRPFont(), HudV("mssf"), _weight, false)
-	createFont("vtsf", GetYRPFont(), HudV("vtsf"), _weight, false)
-	createFont("cbsf", GetYRPFont(), HudV("cbsf"), _weight, false)
-	createFont("masf", GetYRPFont(), HudV("masf"), _weight, false)
-	createFont("casf", GetYRPFont(), HudV("casf"), _weight, false)
-	createFont("stsf", GetYRPFont(), HudV("stsf"), _weight, false)
-	createFont("xpsf", GetYRPFont(), HudV("xpsf"), _weight, false)
-	createFont("utsf", GetYRPFont(), HudV("utsf"), _weight, false)
-	createFont("blsf", GetYRPFont(), HudV("utsf"), _weight, false)
-	createFont("rtsf", GetYRPFont(), HudV("utsf"), _weight, false)
-end
-
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
@@ -147,17 +124,6 @@ function changeFontSize()
 	createFont("rtsf", GetYRPFont(), 24, _weight, false)
 
 	createFont("sef", GetYRPFont(), 24, 1, false)
-
-	timer.Create("createFontDB", 0.1, 0, function()
-		if is_hud_db_loaded() then
-			--Changing to right values
-			update_db_fonts()
-
-			printGM("db", "HUD Fonts loaded.")
-
-			timer.Remove("createFontDB")
-		end
-	end)
 
 	createFont("ScoreBoardTitle", GetYRPFont(), 24, _weight, false)
 	createFont("ScoreBoardNormal", GetYRPFont(), 20, _weight, false)

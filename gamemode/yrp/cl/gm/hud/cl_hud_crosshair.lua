@@ -82,9 +82,9 @@ function HudCrosshair()
 						end
 					end
 
-					if is_hud_db_loaded() then
+					if ply:GetNWString("string_hud_design", "notloaded") != "notloaded" then
 						if ply:Alive() then
-							if tonumber(HudV("cht")) == 1 then
+							if true then
 
 								if weapon:GetNetworkedBool("Ironsights") then
 									alphaFade = 0
@@ -93,25 +93,24 @@ function HudCrosshair()
 								local p = ply:GetEyeTrace().HitPos:ToScreen()
 								local x,y = p.x, p.y
 
-								local gap = (HudV("chg")/2)
+								local gap = (8/2)
 								if ch_attack1 >= 1 then
 									gap = gap * ch_attack1
 								end
-								local length = gap + HudV("chl")
 
-								local w = HudV("chl")
-								local h = HudV("chh")
+								local w = 10
+								local h = 1
 
-								surface.SetDrawColor(HudV("colchbrr"), HudV("colchbrg"), HudV("colchbrb"), HudV("colchbra") * alphaFade)
+								surface.SetDrawColor(0, 0, 0, 255 * alphaFade)
 
-								local br = HudV("chbr")
+								local br = 1
 								surface.DrawRect(x-w-gap-br, y-h/2-br, w+2*br, h+2*br)
 								surface.DrawRect(x+gap-br, y-h/2-br, w+2*br, h+2*br)
 
 								surface.DrawRect(x-h/2-br, y-w-gap-br, h+2*br, w+2*br)
 								surface.DrawRect(x-h/2-br, y+gap-br, h+2*br, w+2*br)
 
-								surface.SetDrawColor(HudV("colchcr"), HudV("colchcg"), HudV("colchcb"), HudV("colchca") * alphaFade)
+								surface.SetDrawColor(0, 255, 0, 255 * alphaFade)
 
 								surface.DrawRect(x-w-gap, y-h/2, w, h)
 								surface.DrawRect(x+gap, y-h/2, w, h)

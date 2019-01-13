@@ -145,14 +145,14 @@ if CLIENT then
 
 		if LocalPlayer():HasAccess() then
 			if VERSIONART == "workshop" then
-				local restartServer = createVGUI("DButton", frame, 520, 80, 0, 0)
+				local restartServer = createVGUI("DPanel", frame, 520, 80, 0, 0)
 				restartServer:SetText("")
 				function restartServer:DoClick()
 					net.Start("restartServer")
 					net.SendToServer()
 				end
 				function restartServer:Paint(pw, ph)
-					surfaceButton(self, pw, ph, YRP.lang_string("LID_updateserver"))
+					surfacePanel(self, pw, ph, "Restart server, for update.") --YRP.lang_string("LID_updateserver"))
 				end
 				restartServer:SetPos(ctr(600 + 10), ctr(460))
 			else
