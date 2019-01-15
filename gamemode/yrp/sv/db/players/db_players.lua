@@ -154,7 +154,7 @@ function set_role_values(ply)
 
 			if worked(rolTab, "set_role_values rolTab") and worked(ChaTab, "set_role_values ChaTab") then
 				local _storage = string.Explode(",", ChaTab.storage)
-				printGM("note", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
+				printGM("debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
 				for i, lic in pairs(_storage) do
 					local _lic = SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
 					if _lic != nil and _lic != false then
@@ -340,8 +340,10 @@ function add_yrp_player(ply)
 	vals = vals .. "'" .. _ostime .. "'"
 
 	local _insert = SQL_INSERT_INTO("yrp_players", cols, vals)
-	if worked(_insert, "inserting new player failed @db_players.") then
+	if _insert == nil then
 		printGM("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
+	else
+		printGM("error", "add_yrp_player failed! _insert: " .. tostring(_insert))
 	end
 end
 
@@ -538,14 +540,14 @@ function startVote(ply, table)
 				if _yes > _no and (_yes + _no) > 1 then
 					SetRole(votePly, table[1].uniqueID)
 				else
-					printGM("note", "VOTE: not enough yes")
+					printGM("gm", "VOTE: not enough yes")
 				end
 				timer.Remove("voteRunning")
 			end
 			voteCount = voteCount - 1
 		end)
 	else
-		printGM("note", "a vote is currently running")
+		printGM("gm", "a vote is currently running")
 	end
 end
 

@@ -3,7 +3,7 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-hr_pre()
+hr_pre("db")
 
 printGM("db", "Loading Resources")
 printGM("db", "")
@@ -40,4 +40,4 @@ printGM("db", "=> " .. tostring(_mounted) .. "/" .. tostring(#_wsitems) .. " mou
 printGM("db", "")
 
 printGM("db", "Loaded Resources")
-hr_pos()
+hr_pos("db")

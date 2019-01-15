@@ -171,10 +171,10 @@ function db_is_empty(db_name)
 
 	if worked(_tmp, db_name .. " is empty!") then
 		if _show_db_if_not_empty then
-			hr_pre()
+			hr_pre("db")
 			printGM("db", db_name)
 			printTab(_tmp, db_name)
-			hr_pos()
+			hr_pos("db")
 		end
 
 		return false

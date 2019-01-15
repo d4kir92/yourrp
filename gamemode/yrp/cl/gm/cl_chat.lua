@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-yrpChat = yrpChat or {}
+local yrpChat = {}
 
 local _delay = 4
 local _fadeout = CurTime() + _delay
@@ -38,17 +38,19 @@ function ChatIsClosedForChat()
 end
 
 function checkChatVisible()
-	if _chatIsOpen then
-		_fadeout = CurTime() + _delay
+	if yrpChat.window != nil then
+		if _chatIsOpen then
+			_fadeout = CurTime() + _delay
+		end
+		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() then
+			_showChat = false
+		else
+			_showChat = true
+		end
+		yrpChat.richText:SetVisible(_showChat)
+		yrpChat.writeField:SetVisible(_showChat)
+		yrpChat.comboBox:SetVisible(_showChat)
 	end
-	if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() then
-		_showChat = false
-	else
-		_showChat = true
-	end
-	yrpChat.richText:SetVisible(_showChat)
-	yrpChat.writeField:SetVisible(_showChat)
-	yrpChat.comboBox:SetVisible(_showChat)
 end
 
 function IsChatVisible()
@@ -84,7 +86,6 @@ function niceCommand(com)
 end
 
 function InitYRPChat()
-
 	if yrpChat.window == nil then
 		yrpChat.window = createVGUI("DFrame", nil, 100, 100, 100, 100)
 		yrpChat.window:SetTitle("")
@@ -96,83 +97,80 @@ function InitYRPChat()
 		yrpChat.comboBox = createD("DComboBox", yrpChat.window, 1, 1, 1, 1)
 		update_chat_choices()
 
+		function yrpChat.window:Paint(pw, ph)
+			local lply = LocalPlayer()
+			checkChatVisible()
+			if _showChat then
+				local x, y = yrpChat.window:GetPos()
+				local w, h = yrpChat.window:GetSize()
+
+				local px = lply:GetHudValue("CH", "POSI_X")
+				local py = lply:GetHudValue("CH", "POSI_Y")
+				local sw = lply:GetHudValue("CH", "SIZE_W")
+				local sh = lply:GetHudValue("CH", "SIZE_H")
+				if px != x or py != y or sw != w or sh != h then
+					yrpChat.window:SetPos(px, py)
+					yrpChat.window:SetSize(sw, sh)
+
+					yrpChat.comboBox:SetPos(ctr(10), sh - ctr(40 + 10))
+					yrpChat.comboBox:SetSize(ctr(140), ctr(40))
+
+					yrpChat.writeField:SetPos(ctr(10 + 140), sh - ctr(40 + 10))
+					yrpChat.writeField:SetSize(sw - ctr(2 * 10 + 140), ctr(40))
+
+					yrpChat.richText:SetPos(ctr(10), ctr(10))
+					yrpChat.richText:SetSize(sw - ctr(2 * 10), sh - ctr(2 * 10 + 40 + 10))
+				end
+				local _com = yrpChat.writeField:GetText()
+				if isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), 1)
+				elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), 2)
+				elseif isFullyCommand(_com, "ssay", YRP.lang_string("LID_say")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), 3)
+				elseif isFullyCommand(_com, "sme", YRP.lang_string("LID_me")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), 6)
+				elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), 5)
+				elseif isFullyCommand(_com, "sadvert", YRP.lang_string("LID_advert")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), 4)
+				elseif isFullyCommand(_com, "sadmin", YRP.lang_string("LID_admin")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), 7)
+				elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), 8)
+				elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), 9)
+				elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), 10)
+				elseif isFullyCommand(_com, "sfaction", YRP.lang_string("LID_faction")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), 11)
+				end
+			end
+		end
+
 		function yrpChat.comboBox:OnSelect(index, value, data)
 			net.Start("set_chat_mode")
 				net.WriteString(string.lower(data))
 			net.SendToServer()
 		end
 	end
+
 	if pa(yrpChat.window) then
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.richText:PerformLayout()
 			self:SetFontInternal("cbsf")
-		end
-
-
-		function yrpChat.window:Paint(pw, ph)
-			local lply = LocalPlayer()
-			if true then
-				checkChatVisible()
-				if _showChat then
-					local x, y = yrpChat.window:GetPos()
-					local w, h = yrpChat.window:GetSize()
-
-					local px = lply:GetHudValue("CH", "POSI_X")
-					local py = lply:GetHudValue("CH", "POSI_Y")
-					local sw = lply:GetHudValue("CH", "SIZE_W")
-					local sh = lply:GetHudValue("CH", "SIZE_H")
-					if px != x or py != y or sw != w or sh != h then
-						yrpChat.window:SetPos(px, py)
-						yrpChat.window:SetSize(sw, sh)
-
-						yrpChat.comboBox:SetPos(ctr(10), sh - ctr(40 + 10))
-						yrpChat.comboBox:SetSize(ctr(140), ctr(40))
-
-						yrpChat.writeField:SetPos(ctr(10 + 140), sh - ctr(40 + 10))
-						yrpChat.writeField:SetSize(sw - ctr(2 * 10 + 140), ctr(40))
-
-						yrpChat.richText:SetPos(ctr(10), ctr(10))
-						yrpChat.richText:SetSize(sw - ctr(2 * 10), sh - ctr(2 * 10 + 40 + 10))
-					end
-
-					local _com = yrpChat.writeField:GetText()
-					if isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), 1)
-					elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), 2)
-					elseif isFullyCommand(_com, "ssay", YRP.lang_string("LID_say")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), 3)
-					elseif isFullyCommand(_com, "sme", YRP.lang_string("LID_me")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), 6)
-					elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), 5)
-					elseif isFullyCommand(_com, "sadvert", YRP.lang_string("LID_advert")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), 4)
-					elseif isFullyCommand(_com, "sadmin", YRP.lang_string("LID_admin")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), 7)
-					elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), 8)
-					elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), 9)
-					elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), 10)
-					elseif isFullyCommand(_com, "sfaction", YRP.lang_string("LID_faction")) then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), 11)
-					end
-				end
-			end
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
@@ -216,7 +214,6 @@ function InitYRPChat()
 		local oldAddText = oldAddText or chat.AddText
 		function chat.AddText(...)
 			local args = { ... }
-
 			yrpChat.richText:AppendText("\n")
 			for _, obj in pairs(args) do
 				if type(obj) == "table" then
@@ -417,7 +414,6 @@ net.Receive("yrp_player_say", function(len)
 		table.insert(_unpack, _tmp.text_color)
 		table.insert(_unpack, tostring(_tmp.text))
 
-		pTab(_unpack)
 		chat.AddText(unpack(_unpack))
 		chat.PlaySound()
 	end

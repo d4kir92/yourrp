@@ -61,26 +61,6 @@ function IsScreenshotting()
 	end
 end
 
-function hudUpTime()
-	local ply = LocalPlayer()
-	--UpTime
-	local _ut = {}
-	_ut.x = anchorW(HudV("utaw")) + ctr(HudV("utpx"))
-	_ut.y = anchorH(HudV("utah")) + ctr(HudV("utpy"))
-	_ut.w = ctr(HudV("utsw"))
-	_ut.h = ctr(HudV("utsh"))
-	draw.RoundedBox(0, _ut.x, _ut.y, _ut.w, _ut.h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
-
-	draw.SimpleTextOutlined(YRP.lang_string("LID_totaluptime") .. ":", "utsf", _ut.x + _ut.w / 2, _ut.y + _ut.h / 7, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-	draw.SimpleTextOutlined(string.FormattedTime(ply:GetNWFloat("uptime_total", 0), "%02i:%02i"), "utsf", _ut.x + _ut.w / 2, _ut.y + _ut.h / 7 * 2, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-	draw.SimpleTextOutlined(YRP.lang_string("LID_currentuptime") .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 3, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-	draw.SimpleTextOutlined(string.FormattedTime(ply:GetNWFloat("uptime_current", 0), "%02i:%02i"), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 4, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-	draw.SimpleTextOutlined(YRP.lang_string("LID_serveruptime") .. ":", "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 5, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-	draw.SimpleTextOutlined(string.FormattedTime(ply:GetNWFloat("uptime_server", 0), "%02i:%02i"), "utsf", _ut.x + _ut.w/2, _ut.y + _ut.h/7 * 6, Color(255, 255, 255, 255), HudV("uttx"), HudV("utty"), 1, Color(0, 0, 0))
-
-	drawRBoxBr(0, ctrF(ScrH()) * anchorW(HudV("ut" .. "aw")) + HudV("ut" .. "px"), ctrF(ScrH()) * anchorH(HudV("ut" .. "ah")) + HudV("ut" .. "py"), HudV("ut" .. "sw"), HudV("ut" .. "sh"), Color(HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra")), ctr(4))
-end
-
 function GM:PlayerStartVoice(pl)
 	if pl != nil then
 		if pl == LocalPlayer() then

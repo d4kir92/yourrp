@@ -67,10 +67,22 @@ function HUDSimpleBAR(tab)
 
 			Simple[tab.element]["bar"].color = lply:GetHudColor(tab.element, "BA")
 
-			Simple[tab.element]["text"].x = x + w / 2
-			Simple[tab.element]["text"].y = y + h / 2
-			Simple[tab.element]["text"].ax = 1
-			Simple[tab.element]["text"].ay = 1
+			Simple[tab.element]["text"].ax = lply:GetHudInt(tab.element, "AX")
+			Simple[tab.element]["text"].ay = lply:GetHudInt(tab.element, "AY")
+			local ax = Simple[tab.element]["text"].ax
+			local ay = Simple[tab.element]["text"].ay
+			if ay == 3 then
+				ay = 0
+			elseif ay == 4 then
+				ay = 2
+			end
+			if lply:GetHudBool(tab.element, "ROUN") then
+				Simple[tab.element]["text"].x = x + h/2 + (w - h) / 2 * ax
+				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
+			else
+				Simple[tab.element]["text"].x = x + h/16 + (w - h/8) / 2 * ax
+				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
+			end
 			Simple[tab.element]["text"].text = tab.element
 			Simple[tab.element]["text"].font = "Roboto24"
 			Simple[tab.element]["text"].color = Color(255, 255, 255, 255)

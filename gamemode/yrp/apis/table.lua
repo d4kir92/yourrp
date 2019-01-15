@@ -1,18 +1,17 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function pTab(table, name)
-	local _header = "PrintTable: "
 	name = name or ""
 	if name != "" then
 		name = name .. " "
 	end
-	_header = _header .. name .. "(" .. tostring(table) .. ")"
-	printGM("gm", _header)
+	name = name .. "(" .. tostring(table) .. ")"
+	printGM("ptab", name)
 
 	if istable(table) then
 		PrintTable(table)
 	else
-		printGM("gm", "printTab " .. tostring(table) .. " is not a table!")
+		printGM("ptab", "printTab " .. tostring(table) .. " is not a table!")
 	end
 end
 

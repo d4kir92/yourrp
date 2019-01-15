@@ -187,7 +187,7 @@ function YRP.LoadLanguage(short, init)
 	if (init) then
 		YRP.read_language(short, init)
 	else
-		hr_pre()
+		hr_pre("lang")
 
 		if short == "auto" then
 			printGM("lang", "[AUTOMATIC DETECTION]")
@@ -221,7 +221,7 @@ function YRP.LoadLanguage(short, init)
 		printGM("lang", "Language changed to [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language"))
 		YRP.send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
-		hr_pos()
+		hr_pos("lang")
 	end
 
 	return true
@@ -275,7 +275,7 @@ function YRP.fetch_translation_progress()
 	hook.Remove("Tick", "translation_progress_fetch")
 
 	if SERVER then
-		printGM("lang", "Trying to fetch translation progress from weblate server...")
+		printGM("lang", "Get Translation progress from web...")
 
 		http.Fetch("https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json", function(body, len, headers, code)
 			if tonumber(code) == 200 then
@@ -287,12 +287,12 @@ function YRP.fetch_translation_progress()
 					yrp_button_info[string.lower(value.code)]["percentage"] = value.translated_percent
 				end
 
-				printGM("lang", "Fetched translation progress successfully!")
+				printGM("lang", "Translation progress successfully received!")
 			else
-				printGM("lang", "Could not fetch translation progress: " .. code)
+				printGM("lang", "Failed to receive translation progress: " .. code)
 			end
 		end, function(error)
-			printGM("lang", "http.fetch error:" .. error)
+			printGM("lang", "[translation progress] http.fetch error:" .. error)
 		end, {
 			Authorization = "Token WmgbTcBqV7oS4KgxegwzWfvdfJZZk90b1KRafwej"
 		})
@@ -341,9 +341,9 @@ end
 hook.Add("Tick", "translation_progress_fetch", YRP.fetch_translation_progress)
 
 function YRP.initLang()
-	hr_pre()
+	hr_pre("lang")
 	printGM("lang", "... SEARCHING FOR LANGUAGE ...")
 	YRP.LoadLanguage("auto", false)
-	hr_pos()
+	hr_pos("lang")
 end
 YRP.initLang()

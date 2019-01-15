@@ -346,7 +346,7 @@ function Player:PutInInventory(cname, noammo)
 end
 
 function Player:ForceEquip(cname, noammo)
-	printGM("gm", "ForceEquip(" .. cname .. ")")
+	printGM("debug", "ForceEquip(" .. cname .. ")")
 	self.canpickup = true
 	local weapon = self:LegacyGive(cname, noammo)
 
@@ -358,7 +358,7 @@ function Player:ForceEquip(cname, noammo)
 end
 
 function Player:Give(cname, noammo)
-	printGM("gm", "Give(" .. cname .. ")")
+	printGM("debug", "Give(" .. cname .. ")")
 	local _noAmmo = noammo
 
 	if _noAmmo == nil then

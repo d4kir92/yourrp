@@ -46,7 +46,7 @@ RegisterHUDDesign(HUD_FO76)
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout()
-	printGM("gm", "[DesignLoadout] " .. self:YRPName())
+	printGM("debug", "[DesignLoadout] " .. self:YRPName())
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]

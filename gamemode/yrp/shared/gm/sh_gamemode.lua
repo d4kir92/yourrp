@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 15 --do NOT change this!
-GM.VersionCanary = 33 --do NOT change this!
+GM.VersionBeta = 16 --do NOT change this!
+GM.VersionCanary = 34 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -90,10 +90,10 @@ function GetMapNameDB()
 end
 
 concommand.Add("yrp_version", function(ply, cmd, args)
-	hr_pre()
+	hr_pre("gm")
 	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")"
 	printGM("gm", _text)
-	hr_pos()
+	hr_pos("gm")
 end)
 
 concommand.Add("yrp_status", function(ply, cmd, args)
@@ -104,25 +104,25 @@ concommand.Add("yrp_status", function(ply, cmd, args)
 		_text = _text .. " (OUTDATED!)"
 	end
 
-	hr_pre()
+	hr_pre("gm")
 	printGM("gm", "    Version: " .. GAMEMODE.Version)
 	printGM("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
 	printGM("gm", " Servername: " .. GetHostName())
 	printGM("gm", "         IP: " .. game.GetIPAddress())
 	printGM("gm", "        Map: " .. GetMapNameDB())
 	printGM("gm", "    Players: " .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
-	hr_pos()
+	hr_pos("gm")
 end)
 
 concommand.Add("yrp_maps", function(ply, cmd, args)
-	hr_pre()
+	hr_pre("gm")
 	printGM("gm", "[MAPS ON SERVER]")
 	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
 	for i, map in pairs(allmaps) do
 		local mapname = string.Replace(map, ".bsp", "")
 		printGM("gm", mapname)
 	end
-	hr_pos()
+	hr_pos("gm")
 end)
 
 function makeString(tab, str_len, cut)
@@ -140,7 +140,7 @@ function makeString(tab, str_len, cut)
 end
 
 concommand.Add("yrp_players", function(ply, cmd, args)
-	hr_pre()
+	hr_pre("gm")
 	printGM("gm", "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
 	printGM("gm", "ID   SteamID              Name                     Money")
 	for i, pl in pairs(player.GetAll()) do
@@ -151,11 +151,11 @@ concommand.Add("yrp_players", function(ply, cmd, args)
 		local _str = string.format("%s %s %s %s", _id, _steamid, _name, _money)
 		printGM("gm", _str)
 	end
-	hr_pos()
+	hr_pos("gm")
 end)
 
 function PrintHelp()
-	hr_pre()
+	hr_pre("note")
 	printGM("note", "Shared Commands:")
 	printGM("note", "yrp_status")
 	printGM("note", "	Shows info")
@@ -169,15 +169,15 @@ function PrintHelp()
 	printGM("note", "	Shows all maps on server")
 	printGM("note", "yrp_collection / yrp_collectionid")
 	printGM("note", "	Shows servers collectionid")
-	hr_pos()
+	hr_pos("note")
 
-	hr_pre()
+	hr_pre("note")
 	printGM("note", "Client Commands:")
 	printGM("note", "yrp_cl_hud X")
 	printGM("note", "	1: Shows hud, 0: Hide hud")
 	printGM("note", "yrp_togglesettings")
 	printGM("note", "	Toggle settings menu")
-	hr_pos()
+	hr_pos("note")
 end
 
 concommand.Add("yrp_help", function(ply, cmd, args)
@@ -189,9 +189,9 @@ concommand.Add("yrp__help", function(ply, cmd, args)
 end)
 
 function PrintCollectionID()
-	hr_pre()
+	hr_pre("note")
 	printGM("note", "Server - CollectionID: " .. YRPCollectionID())
-	hr_pos()
+	hr_pos("note")
 end
 concommand.Add("yrp_collectionid", function(ply, cmd, args)
 	PrintCollectionID()

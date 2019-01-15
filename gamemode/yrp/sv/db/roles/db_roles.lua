@@ -65,15 +65,6 @@ end
 
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
-if wk(SQL_SELECT("yrp_roles", "*", nil)) then
-	local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
-	if wk(wrongprerole) then
-		for i, role in pairs(wrongprerole) do
-			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
-		end
-	end
-end
-
 function MoveUnusedRolesToDefault()
 	printGM("note", "Move unused roles to default group")
 	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
@@ -140,6 +131,15 @@ if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 	SQL_DROP_TABLE("yrp_roles")
 end
 -- CONVERTING
+
+if wk(SQL_SELECT(DATABASE_NAME, "*", nil)) then
+	local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
+	if wk(wrongprerole) then
+		for i, role in pairs(wrongprerole) do
+			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+		end
+	end
+end
 
 -- darkrp
 function ConvertToDarkRPJob(tab)
@@ -1213,7 +1213,7 @@ net.Receive("openInteractMenu", function(len, ply)
 							while (tmpSearch) do
 								tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
 
-								if tonumber(tmpTargetRole[1].int_prerole) != -1 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
+								if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
 									tmpDemote = true
 									local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
 									tmpDemoteName = tmp[1].string_name
