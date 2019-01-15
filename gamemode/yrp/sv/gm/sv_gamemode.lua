@@ -59,12 +59,15 @@ YRP = YRP or {}
 
 function YRP:Loadout(ply)
 	printGM("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
+	ply:SetNWBool("bool_loadouted", false)
 
-	ply:DesignLoadout()
 	ply:HudLoadout()
+	ply:DesignLoadout()
 
 	ply:UserGroupLoadout()
 	ply:GeneralLoadout()
+
+	ply:SetNWBool("bool_loadouted", true)
 end
 
 function GM:PlayerLoadout(ply)
@@ -350,18 +353,22 @@ end
 
 function StartCombat(ply)
 	ply:SetNWBool("inCombat", true)
-	if ply:IsValid() and ply:IsFullyAuthenticated() then
-		local steamid = ply:SteamID()
-		if timer.Exists(steamid .. " outOfCombat") then
-			timer.Remove(steamid .. " outOfCombat")
-		end
-		timer.Create(steamid .. " outOfCombat", 25, 1, function()
-			if ea(ply) then
-				ply:SetNWBool("inCombat", false)
-				lowering_weapon(ply)
+	if ply:IsValid() then
+		if ply:IsFullyAuthenticated() then
+			local steamid = ply:SteamID()
+			if timer.Exists(steamid .. " outOfCombat") then
 				timer.Remove(steamid .. " outOfCombat")
 			end
-		end)
+			timer.Create(steamid .. " outOfCombat", 25, 1, function()
+				if ea(ply) then
+					ply:SetNWBool("inCombat", false)
+					lowering_weapon(ply)
+					timer.Remove(steamid .. " outOfCombat")
+				end
+			end)
+		else
+			YRP.msg("note", "ply is not valid: " .. tostring(ply))
+		end
 	else
 		printGM("note", tostring(ply) .. " is not valid!")
 	end

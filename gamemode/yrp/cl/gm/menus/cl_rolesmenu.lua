@@ -173,7 +173,7 @@ function getRoles(uid, parent)
 		for i, rol in pairs(_roles) do
 			if tonumber(rol.int_prerole) <= 0 then
 				addRoleRow(rol, parent)
-			elseif tonumber(rol.int_prerole) == 1 then
+			elseif tonumber(rol.int_prerole) >= 1 then
 				addRoleRow(rol, parent)
 			end
 		end

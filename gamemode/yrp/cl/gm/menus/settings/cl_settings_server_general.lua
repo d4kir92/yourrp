@@ -333,10 +333,13 @@ net.Receive("Connect_Settings_General", function(len)
 		local text_server_welcome_message = CreateTextBoxLine(SERVER_SETTINGS.plus, GEN.text_server_welcome_message, "LID_welcomemessage", "update_text_server_welcome_message")
 		local text_server_message_of_the_day = CreateTextBoxLine(SERVER_SETTINGS.plus, GEN.text_server_message_of_the_day, "LID_messageoftheday", "update_text_server_message_of_the_day")
 		CreateHRLine(SERVER_SETTINGS.plus)
-		local bool_server_debug = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_server_debug, "DEBUG MODE", "update_bool_server_debug")
-		local int_server_debug_tick = CreateNumberWangLine(SERVER_SETTINGS.plus, GEN.int_server_debug_tick, "DEBUG TICKRATE", "update_int_server_debug_tick")
-		int_server_debug_tick.numberwang:SetMin(1)
-		int_server_debug_tick.numberwang:SetMax(60*60)
+		local bool_msg_channel_gm = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_gm, "Console Gamemode (GM)", "update_bool_msg_channel_gm")
+		local bool_msg_channel_db = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_db, "Console Database (DB)", "update_bool_msg_channel_db")
+		local bool_msg_channel_lang = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_lang, "Console Language (LANG)", "update_bool_msg_channel_lang")
+		local bool_msg_channel_noti = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_noti, "Console Notification (NOTI)", "update_bool_msg_channel_noti")
+		local bool_msg_channel_darkrp = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_darkrp, "Console DarkRP (DarkRP)", "update_bool_msg_channel_darkrp")
+		local bool_msg_channel_debug = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_debug, "Console DEBUG (DEBUG)", "update_bool_msg_channel_debug")
+
 
 
 		--[[ GAMEMODE SETTINGS ]]--

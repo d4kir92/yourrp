@@ -604,13 +604,7 @@ function get_font_col()
 end
 
 function getMDMode()
-	if tonumber(HudV("mdpm")) == 0 then
-		return "dark"
-	elseif tonumber(HudV("mdpm")) == 1 then
-		return "light"
-	end
-
-	return -1
+	return "dark"
 end
 
 function colorH(colTab)
@@ -684,11 +678,11 @@ function addMDColor(name, _color)
 end
 
 function getMDPCol()
-	return Color(HudV("mdpr"), HudV("mdpg"), HudV("mdpb"), HudV("mdpa"))
+	return Color(80, 80, 80, 255)
 end
 
 function getMDSCol()
-	return Color(HudV("mdsr"), HudV("mdsg"), HudV("mdsb"), HudV("mdsa"))
+	return Color(40, 40, 40, 255)
 end
 
 function getMDPColor()
@@ -926,12 +920,8 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 	tmp.opt1 = opt1
 	tmp.opt2 = opt2
 
-	if tonumber(HudV("mdpm")) == 0 then
-		tmp.value = "dark"
-	elseif tonumber(HudV("mdpm")) == 1 then
-		tmp.value = "light"
-	end
-
+	tmp.value = "dark"
+	
 	tmp:SetText("")
 
 	function tmp:Paint(pw, ph)

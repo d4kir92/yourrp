@@ -100,7 +100,7 @@ function yrp_db_loaded()
 end
 
 function db_init_database()
-	hr_pre()
+	hr_pre("db")
 	printGM("db", "LOAD DATABASES")
 
 	for i, db in pairs(_dbs) do
@@ -110,7 +110,7 @@ function db_init_database()
 	yrp_db.loaded = true
 
 	printGM("db", "DONE Loading DATABASES")
-	hr_pos()
+	hr_pos("db")
 end
 db_init_database()
 

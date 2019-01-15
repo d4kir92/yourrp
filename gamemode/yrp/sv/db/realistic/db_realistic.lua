@@ -81,7 +81,7 @@ end)
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	printGM("note", DATABASE_NAME .. " has not the default values, adding them")
 	local _result = SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-	printGM("note", _result)
+	printGM("note", tostring(_result))
 end
 
 local yrp_realistic = {}

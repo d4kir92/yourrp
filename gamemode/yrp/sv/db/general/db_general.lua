@@ -30,6 +30,13 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'T
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_gm", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_db", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_noti", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_lang", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_darkrp", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_debug", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_group_local_range", "INT DEFAULT 60")
 
 --[[ Gamemode Settings ]]--
@@ -194,6 +201,14 @@ if wk(_init_general) then
 
 	RunConsoleCommand("lua_log_sv", yrp_general.bool_server_debug)
 	RunConsoleCommand("lua_log_cl", yrp_general.bool_server_debug)
+
+	for name, value in pairs(yrp_general) do
+		if string.StartWith(name, "bool_") then
+			SetGlobalBool(name, tobool(value))
+		end
+	end
+
+	SetGlobalBool("yrp_general_loaded", true)
 end
 
 
@@ -356,6 +371,19 @@ function GeneralUpdateInt(ply, netstr, str, value)
 	end
 end
 
+function GeneralUpdateGlobalValue(ply, netstr, str, value)
+	yrp_general[str] = value
+	SQL_UPDATE(DATABASE_NAME, str .. " = '" .. yrp_general[str] .. "'", "uniqueID = '1'")
+	GeneralSendToOther(ply, netstr, yrp_general[str])
+end
+
+function GeneralUpdateGlobalBool(ply, netstr, str, value)
+	printGM("db", ply:YRPName() .. " updated global " .. str .. " to: " .. tostring(tobool(value)))
+	GeneralUpdateGlobalValue(ply, netstr, str, value)
+	SetGlobalBool(str, tobool(value))
+end
+
+
 
 --[[ SERVER SETTINGS ]]--
 util.AddNetworkString("update_bool_server_reload")
@@ -442,6 +470,42 @@ net.Receive("update_int_server_debug_tick", function(len, ply)
 	if isnumber(tonumber(int)) then
 		GeneralUpdateInt(ply, "update_int_server_debug_tick", "int_server_debug_tick", int)
 	end
+end)
+
+util.AddNetworkString("update_bool_msg_channel_gm")
+net.Receive("update_bool_msg_channel_gm", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_gm", "bool_msg_channel_gm", b)
+end)
+
+util.AddNetworkString("update_bool_msg_channel_db")
+net.Receive("update_bool_msg_channel_db", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_db", "bool_msg_channel_db", b)
+end)
+
+util.AddNetworkString("update_bool_msg_channel_lang")
+net.Receive("update_bool_msg_channel_lang", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_lang", "bool_msg_channel_lang", b)
+end)
+
+util.AddNetworkString("update_bool_msg_channel_noti")
+net.Receive("update_bool_msg_channel_noti", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_noti", "bool_msg_channel_noti", b)
+end)
+
+util.AddNetworkString("update_bool_msg_channel_darkrp")
+net.Receive("update_bool_msg_channel_darkrp", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_darkrp", "bool_msg_channel_darkrp", b)
+end)
+
+util.AddNetworkString("update_bool_msg_channel_debug")
+net.Receive("update_bool_msg_channel_debug", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_debug", "bool_msg_channel_debug", b)
 end)
 
 
@@ -1021,33 +1085,33 @@ net.Receive("gethelpmenu", function(len, ply)
 			info.text_social_facebook != "" or
 			info.text_social_steamgroup != "" then
 			--info.text_social_servers != "" then
-			AddTab(tabs, "community", "")
+			AddTab(tabs, "LID_community", "")
 			if info.text_social_website != "" then
-				AddSubTab(subtabs, "community", "Website", "getsitecommunitywebsite")
+				AddSubTab(subtabs, "LID_community", "Website", "getsitecommunitywebsite")
 			end
 			if info.text_social_forum != "" then
-				AddSubTab(subtabs, "community", "Forum", "getsitecommunityforum")
+				AddSubTab(subtabs, "LID_community", "Forum", "getsitecommunityforum")
 			end
 			if info.text_social_discord != "" then
-				AddSubTab(subtabs, "community", "Discord", "getsitecommunitydiscord")
+				AddSubTab(subtabs, "LID_community", "Discord", "getsitecommunitydiscord")
 			end
 			if info.text_social_teamspeak_ip != "" then
-				AddSubTab(subtabs, "community", "Teamspeak", "getsitecommunityteamspeak")
+				AddSubTab(subtabs, "LID_community", "Teamspeak", "getsitecommunityteamspeak")
 			end
 			if info.text_social_twitter != "" then
-				AddSubTab(subtabs, "community", "Twitter", "getsitecommunitytwitter")
+				AddSubTab(subtabs, "LID_community", "Twitter", "getsitecommunitytwitter")
 			end
 			if info.text_social_youtube != "" then
-				AddSubTab(subtabs, "community", "Youtube", "getsitecommunityyoutube")
+				AddSubTab(subtabs, "LID_community", "Youtube", "getsitecommunityyoutube")
 			end
 			if info.text_social_facebook != "" then
-				AddSubTab(subtabs, "community", "Facebook", "getsitecommunityfacebook")
+				AddSubTab(subtabs, "LID_community", "Facebook", "getsitecommunityfacebook")
 			end
 			if info.text_social_steamgroup != "" then
-				AddSubTab(subtabs, "community", "SteamGroup", "getsitecommunitysteamgroup")
+				AddSubTab(subtabs, "LID_community", "SteamGroup", "getsitecommunitysteamgroup")
 			end
 			--if info.text_social_servers != "" then
-				--AddSubTab(subtabs, "community", "servers", "getsitecommunityservers")
+				--AddSubTab(subtabs, "LID_community", "servers", "getsitecommunityservers")
 			--end
 		end
 

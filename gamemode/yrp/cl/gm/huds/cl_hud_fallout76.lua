@@ -129,6 +129,7 @@ function FO76Element(tab)
 	end
 end
 
+local test = true
 function HUDFO76Compass(tab)
 	local lply = LocalPlayer()
 	if lply:GetHudBool(tab.element, "VISI") then
@@ -141,7 +142,8 @@ function HUDFO76Compass(tab)
 		FO76[tab.element]["east"] = FO76[tab.element]["east"] or {}
 		FO76[tab.element]["west"] = FO76[tab.element]["west"] or {}
 
-		if lply:GetNWInt("hud_version", 0) != FO76[tab.element]["degree"]["version"] then
+		if lply:GetNWInt("hud_version", 0) != FO76[tab.element]["degree"]["version"] or test then
+			test = false
 			FO76[tab.element]["degree"]["version"] = lply:GetNWInt("hud_version", 0)
 
 			local w = lply:GetHudValue(tab.element, "SIZE_W")
@@ -229,10 +231,10 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].x = x + (fw + w * 0.5) % w
 			FO76[tab.element]["north"].text = "N"
 			local hr_n = table.Copy(FO76[tab.element]["north"])
-			hr_n.y = hr_n.y - ScrV(0.01)
-			hr_n.x = hr_n.x + hr_n.x % 1
-			hr_n.x = hr_n.x - (hr_n.w / 2) % 1
-			hr_n.h = ScrV(0.003)
+			hr_n.y = hr_n.y - hr_n.h * 0.35
+			hr_n.x = hr_n.x - ctr(4)
+			hr_n.w = ctr(8)
+			hr_n.h = hr_n.h * 0.3
 			HudBox(hr_n)
 			HudTextBr(FO76[tab.element]["north"])
 
@@ -240,10 +242,10 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].x = x + (fw + w * 0.0) % w
 			FO76[tab.element]["south"].text = "S"
 			local hr_s = table.Copy(FO76[tab.element]["south"])
-			hr_s.y = hr_s.y - ScrV(0.01)
-			hr_s.x = hr_s.x + hr_s.x % 1
-			hr_s.x = hr_s.x - (hr_s.w / 2) % 1
-			hr_s.h = ScrV(0.003)
+			hr_s.y = hr_s.y - hr_s.h * 0.35
+			hr_s.x = hr_s.x - ctr(4)
+			hr_s.w = ctr(8)
+			hr_s.h = hr_s.h * 0.3
 			HudBox(hr_s)
 			HudTextBr(FO76[tab.element]["south"])
 
@@ -251,10 +253,10 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].x = x + (fw + w * 0.75) % w
 			FO76[tab.element]["east"].text = "E"
 			local hr_e = table.Copy(FO76[tab.element]["east"])
-			hr_e.y = hr_e.y - ScrV(0.01)
-			hr_e.x = hr_e.x + hr_e.x % 1
-			hr_e.x = hr_e.x - (hr_e.w / 2) % 1
-			hr_e.h = ScrV(0.003)
+			hr_e.y = hr_e.y - hr_e.h * 0.35
+			hr_e.x = hr_e.x - ctr(4)
+			hr_e.w = ctr(8)
+			hr_e.h = hr_e.h * 0.3
 			HudBox(hr_e)
 			HudTextBr(FO76[tab.element]["east"])
 
@@ -262,10 +264,10 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].x = x + (fw + w * 0.25) % w
 			FO76[tab.element]["west"].text = "W"
 			local hr_w = table.Copy(FO76[tab.element]["west"])
-			hr_w.y = hr_w.y - ScrV(0.01)
-			hr_w.x = hr_w.x + hr_w.x % 1
-			hr_w.x = hr_w.x - (hr_w.w / 2) % 1
-			hr_w.h = ScrV(0.003)
+			hr_w.y = hr_w.y - hr_w.h * 0.35
+			hr_w.x = hr_w.x - ctr(4)
+			hr_w.w = ctr(8)
+			hr_w.h = hr_w.h * 0.3
 			HudBox(hr_w)
 			HudTextBr(FO76[tab.element]["west"])
 		end

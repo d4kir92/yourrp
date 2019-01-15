@@ -71,6 +71,11 @@ function Player:GetHudColor(element, art)
 	return Color(ret[1], ret[2], ret[3], ret[4] or 255)
 end
 
+function Player:GetHudInt(element, art)
+	local dbval = self:GetNWInt("int_HUD_" .. element .. "_" .. art, 0)
+	return tonumber(dbval)
+end
+
 function Player:GetHudBool(element, art)
 	return self:GetNWBool("bool_HUD_" .. element .. "_" .. art, false)
 end
@@ -365,6 +370,66 @@ net.Receive("get_design_settings", function(len)
 
 							winset.dpl:AddItem(line)
 						end
+						function winset:AddTextPosition(t)
+							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							function line:Paint(pw, ph)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							end
+
+							local btn = createD("DButton", line, ctr(50), ctr(50), 0, 0)
+							function btn:DoClick()
+								local mx, my = gui.MousePos()
+								local tp = createD("DFrame", nil, ctr(300), ctr(350), mx, my)
+								tp:SetTitle("")
+								tp:MakePopup()
+								function tp:Paint(pw, ph)
+									local x, y = self:GetPos()
+									local modx, mody = x % HA.space, y % HA.space
+									if !self:IsDragging() then
+										if x + self:GetWide() > ScW() + PosX() then
+											self:SetPos(ScW() + PosX() - self:GetWide(), y)
+										elseif x < PosX() then
+											self:SetPos(PosX(), y)
+										elseif y + self:GetTall() > ScH() then
+											self:SetPos(x, ScH() - self:GetTall())
+										elseif y < 0 then
+											self:SetPos(x, 0)
+										elseif modx != 0 or mody != 0 then
+											x = x - modx
+											y = y - mody
+											self:SetPos(x, y)
+										end
+									end
+								end
+
+								for y = 0, 3 do
+									for x = 0, 3 do
+										local id = x .. "," .. y
+										local tp_btn = createD("DButton", tp, ctr(100), ctr(100), x * ctr(100), y * ctr(100) + ctr(50))
+										tp_btn:SetText("")
+										function tp_btn:Paint(pw, ph)
+											local _w = pw - ctr(8)
+											local _h = ph - ctr(8)
+											local _x = ctr(8) / 2
+											local _y = ctr(8) / 2
+											local _size = ctr(20)
+											draw.RoundedBox(0, _x, _y, _w, _h, Color(255, 255, 255))
+											draw.RoundedBox(0, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color(0, 0, 0))
+										end
+										function tp_btn:DoClick()
+											net.Start("update_hud_text_position")
+												net.WriteString(t.element)
+												net.WriteInt(x, 4)
+												net.WriteInt(y, 4)
+											net.SendToServer()
+											tp:Close()
+										end
+									end
+								end
+							end
+
+							winset.dpl:AddItem(line)
+						end
 
 						local visi = {}
 						visi.name = "LID_visible"
@@ -414,6 +479,11 @@ net.Receive("get_design_settings", function(len)
 						bord.art = "BORD"
 						bord.value = eletab["bool_HUD_" .. tab.element .. "_BORD"]
 						winset:AddCheckBox(bord)
+
+						local textposi = {}
+						textposi.name = "LID_textposition"
+						textposi.element = tab.element
+						winset:AddTextPosition(textposi)
 
 						--winset.textsize = createD("???", winset, ctr(50), ctr(50), ctr(20), ctr(50 + 20))
 					end)
@@ -525,10 +595,12 @@ net.Receive("get_design_settings", function(len)
 			COM.name = "LID_compass"
 			AddElement(COM)
 
+			--[[
 			local MI = {}
 			MI.element = "MI"
 			MI.name = "LID_minimap"
 			AddElement(MI)
+			]]--
 
 			function editarea:DoClick()
 				for i, child in pairs(self:GetChildren()) do

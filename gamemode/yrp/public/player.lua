@@ -142,7 +142,11 @@ function Player:Condition()
 end
 
 function Player:CoordAngle()
-	return ((math.Round(self:GetAngles().y - 180, 0) * -1) - 90 ) % 360
+	if CLIENT then
+		return ((math.Round(EyeAngles().y - 180, 0) * -1) - 90 ) % 360
+	else
+		return ((math.Round(self:GetAngles().y - 180, 0) * -1) - 90 ) % 360
+	end
 end
 
 --[[ Metabolism ]]--
