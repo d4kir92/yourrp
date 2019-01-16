@@ -56,8 +56,10 @@ function HudView()
 			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstochangeyourclothes", key), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		elseif _eyeTrace.Entity:HasStorage() and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
-			draw.SimpleTextOutlined(_eyeTrace.Entity:StorageName(), "sef", ScrW() / 2, ScrH2() + ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_openstoragepre") .. " [" .. string.upper(GetKeybindName("in_use")) .. "] " .. YRP.lang_string("LID_openstoragepos"), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			local key = {}
+			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+			key["NAME"] = _eyeTrace.Entity:StorageName()
+			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopenname", key), "sef", ScrW() / 2, ScrH2() + ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		elseif _eyeTrace.Entity:GetNWBool("yrp_has_use", false) then
 			local text = "PRESS [" .. string.upper(GetKeybindName("in_use")) .. "]"
 			if _eyeTrace.Entity:GetNWString("yrp_use_message", "") != "" then
