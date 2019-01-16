@@ -289,7 +289,7 @@ function InitYRPChat()
 end
 
 timer.Create("yrp_init_chat", 1, 0, function()
-	if LocalPlayer():GetNWBool("finishedloading", false) then
+	if LocalPlayer():GetNWBool("finishedloading", false) and LocalPlayer():GetNWString("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
 		timer.Remove("yrp_init_chat")
 	end
