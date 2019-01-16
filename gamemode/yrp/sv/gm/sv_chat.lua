@@ -412,6 +412,10 @@ function GM:PlayerSay(sender, text, teamChat)
 		pk.text = YRP.lang_string("LID_rolled", tab)
 	end
 
+	if GetGlobalBool("bool_msg_channel_chat", false) then
+		MsgC(GetRealmColor(), "[", Color(0, 100, 225), "YRP", GetRealmColor(), "|", Color(0, 0, 255),"CHAT", GetRealmColor(), "] ", pk.command_color, "[" .. string.upper(pk.command) .. "] ", pk.text_color, pk.groupname .. " " .. pk.rolename .. " " .. pk.steamname .. " [" .. pk.rpname .. "]", ": ", pk.text .. "\n")
+	end
+
 	if paket.command == "admin" then
 		if sender:HasAccess() then
 			for k, receiver in pairs(player.GetAll()) do

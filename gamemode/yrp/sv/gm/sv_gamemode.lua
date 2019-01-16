@@ -580,15 +580,6 @@ net.Receive("player_is_ready", function(len, ply)
 
 	open_character_selection(ply)
 
-	-- YRP Chat?
-	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
-	if _chat != nil and _chat != false then
-		_chat = _chat[1]
-		ply:SetNWBool("bool_yrp_chat", tobool(_chat.yrp_chat))
-	end
-
-	ply:SetNWBool("finishedloading", true)
-
 	if OS_Windows then
 		ply:SetNWString("yrp_os", "windows")
 	elseif OS_Linux then
@@ -598,6 +589,15 @@ net.Receive("player_is_ready", function(len, ply)
 	else
 		ply:SetNWString("yrp_os", "other")
 	end
+
+	-- YRP Chat?
+	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
+	if _chat != nil and _chat != false then
+		_chat = _chat[1]
+		ply:SetNWBool("bool_yrp_chat", tobool(_chat.yrp_chat))
+	end
+
+	ply:SetNWBool("finishedloading", true)
 
 	ply:KillSilent()
 

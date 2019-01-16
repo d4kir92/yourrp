@@ -529,10 +529,6 @@ NE.ints.AY = 1
 NE.ints.TS = 18
 AddElement(NE)
 
-for i, tab in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE 'float_HUD_NE%'")) do
-	YRP.msg("deb", tab.name .. "=" .. tab.value)
-end
-
 local COM = {}
 COM.element = "COM"
 COM.floats = {}
