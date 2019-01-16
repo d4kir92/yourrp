@@ -108,6 +108,7 @@ function InitYRPChat()
 				local py = lply:GetHudValue("CH", "POSI_Y")
 				local sw = lply:GetHudValue("CH", "SIZE_W")
 				local sh = lply:GetHudValue("CH", "SIZE_H")
+				--printGM("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
 				if px != x or py != y or sw != w or sh != h then
 					yrpChat.window:SetPos(px, py)
 					yrpChat.window:SetSize(sw, sh)

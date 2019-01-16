@@ -50,6 +50,8 @@ function GetChannelName(chan)
 		return "GM"
 	elseif chan == "lang" or chan == "language" then
 		return "LANG"
+	elseif chan == "chat" then
+		return "CHAT"
 	elseif chan == "darkrp" or chan == "drp" then
 		return "DARKRP"
 	elseif chan == "deb" or chan == "debug" then
@@ -68,6 +70,7 @@ channelcolors["noti"] = Color(255, 255, 0)
 channelcolors["db"] = Color(0, 255, 0)
 channelcolors["gm"] = Color(0, 100, 225)
 channelcolors["lang"] = Color(100, 255, 100)
+channelcolors["chat"] = Color(0, 0, 255)
 channelcolors["debug"] = Color(255, 255, 255)
 channelcolors["printtable"] = Color(255, 255, 255)
 channelcolors[">>> error <<<"] = Color(255, 0, 0)
@@ -85,6 +88,7 @@ msgchannels["noti"] = true
 msgchannels["db"] = true
 msgchannels["gm"] = true
 msgchannels["lang"] = true
+msgchannels["chat"] = true
 msgchannels["debug"] = true
 msgchannels["printtable"] = true
 msgchannels[">>> error <<<"] = true

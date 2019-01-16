@@ -275,14 +275,31 @@ net.Receive("get_design_settings", function(len)
 					if win.visible then
 						local alpha = 255
 						if table.Count(editarea["settingswindows"]) > 0 then
-							alpha = 120
+							alpha = 100
 						end
+						-- Background
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, alpha-40))
-						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(36 + 8 + 8), ctr(20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
+						-- Corner
 						draw.RoundedBox(0, pw - ctr(8 + 16), ph - ctr(8 + 4), ctr(16), ctr(4), Color(255, 255, 255, alpha))
 						draw.RoundedBox(0, pw - ctr(8 + 4), ph - ctr(8 + 16), ctr(4), ctr(16), Color(255, 255, 255, alpha))
 
+						-- Center
+						local w = ctr(16)
+						local h = ctr(4)
+						local space = ctr(8)
+						draw.RoundedBox(0, space, ph / 2 - h / 2, w, h, Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw / 2 - h / 2, space, h, w, Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw - (space + w), ph / 2 - h / 2, w, h, Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw / 2 - h / 2, ph - (space + w), h, w, Color(255, 255, 255, alpha))
+
+						-- Dragbar
+						draw.RoundedBox(0, 0, 0, pw, ctr(50), Color(0, 0, 255, alpha - 40))
+
+						-- Name
+						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(36 + 8 + 8), ctr(20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+						-- Border
 						local tbr = {}
 						tbr.r = 0
 						tbr.w = pw
@@ -686,9 +703,6 @@ net.Receive("get_design_settings", function(len)
 				function win.setting:Paint(pw, ph)
 					if win.visible then
 						local alpha = 255
-						if table.Count(editarea["settingswindows"]) > 0 then
-							alpha = 120
-						end
 						local color = Color(255, 255, 255, alpha)
 						if self:IsHovered() then
 							color = Color(255, 255, 0, alpha)

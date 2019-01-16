@@ -338,6 +338,7 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_msg_channel_lang = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_lang, "Console Language (LANG)", "update_bool_msg_channel_lang")
 		local bool_msg_channel_noti = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_noti, "Console Notification (NOTI)", "update_bool_msg_channel_noti")
 		local bool_msg_channel_darkrp = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_darkrp, "Console DarkRP (DarkRP)", "update_bool_msg_channel_darkrp")
+		local bool_msg_channel_chat = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_chat, "Console Chat (CHAT)", "update_bool_msg_channel_chat")
 		local bool_msg_channel_debug = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_debug, "Console DEBUG (DEBUG)", "update_bool_msg_channel_debug")
 
 
