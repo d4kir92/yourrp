@@ -277,6 +277,9 @@ end
 function HUD_FO76()
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_hud_design") == "Fallout 76" then
+		draw.SimpleText("Fallout76 HUD: " .. string.upper(YRP.lang_string("LID_wip")), "DermaDefault", ScW() / 2, ScH() / 2 - ctr(100), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Fallout76 HUD: " .. string.upper(YRP.lang_string("LID_wip")), "DermaDefault", ScW() / 2, ScH() / 2 + ctr(100), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
 		local HP = {}
 		HP.element = "HP"
 		HP.text = YRP.lang_string("LID_hp")

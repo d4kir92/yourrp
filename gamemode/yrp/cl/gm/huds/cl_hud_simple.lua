@@ -84,9 +84,13 @@ function HUDSimpleBAR(tab)
 				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
 			end
 			Simple[tab.element]["text"].text = tab.element
-			Simple[tab.element]["text"].font = "Roboto24"
-			Simple[tab.element]["text"].color = Color(255, 255, 255, 255)
-			Simple[tab.element]["text"].brcolor = Color(0, 0, 0, 255)
+			local fontsize = lply:GetHudInt(tab.element, "TS")
+			if fontsize <= 0 then
+				fontsize = 14
+			end
+			Simple[tab.element]["text"].font = "Roboto" .. fontsize
+			Simple[tab.element]["text"].color = lply:GetHudColor(tab.element, "TE")
+			Simple[tab.element]["text"].brcolor = lply:GetHudColor(tab.element, "TB")
 
 			Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].h * 0.6
 			Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].h * 0.6
@@ -179,15 +183,34 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["needle"].y = y + h - h / 4
 			Simple[tab.element]["needle"].color = Color(255, 255, 255)
 
+			local fontsize = lply:GetHudInt(tab.element, "TS")
+			if fontsize <= 0 then
+				fontsize = 8
+			end
+
+			local fontsizes = GetFontSizeTable()
+			local fsid = 0
+			for i, size in pairs(fontsizes) do
+				if fontsize == size then
+					fsid = i + 1
+				end
+			end
+			local nextfontsize = fontsize
+			if fontsizes[fsid + 1] != nil then
+				nextfontsize = fontsizes[fsid + 1]
+			elseif fontsizes[fsid] != nil then
+				nextfontsize = fontsizes[fsid]
+			end
+
 			Simple[tab.element]["degree"].w = w
 			Simple[tab.element]["degree"].h = h
 			Simple[tab.element]["degree"].x = x + w / 2
 			Simple[tab.element]["degree"].y = y + h * 0.30
 			Simple[tab.element]["degree"].ax = 1
 			Simple[tab.element]["degree"].ay = 1
-			Simple[tab.element]["degree"].font = "Roboto14"
-			Simple[tab.element]["degree"].color = Color(255, 255, 255)
-			Simple[tab.element]["degree"].brcolor = Color(0, 0, 0)
+			Simple[tab.element]["degree"].font = "Roboto" .. fontsize
+			Simple[tab.element]["degree"].color = lply:GetHudColor(tab.element, "TE")
+			Simple[tab.element]["degree"].brcolor = lply:GetHudColor(tab.element, "TB")
 
 			Simple[tab.element]["north"].w = w
 			Simple[tab.element]["north"].h = h
@@ -195,9 +218,9 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["north"].y = y + h * 0.70
 			Simple[tab.element]["north"].ax = 1
 			Simple[tab.element]["north"].ay = 1
-			Simple[tab.element]["north"].font = "Roboto14"
-			Simple[tab.element]["north"].color = Color(255, 255, 255)
-			Simple[tab.element]["north"].brcolor = Color(0, 0, 0)
+			Simple[tab.element]["north"].font = "Roboto" .. nextfontsize
+			Simple[tab.element]["north"].color = Color(0, 255, 0)
+			Simple[tab.element]["north"].brcolor = lply:GetHudColor(tab.element, "TB")
 			Simple[tab.element]["north"].text = YRP.lang_string("LID_north_short")
 
 			Simple[tab.element]["south"].w = w
@@ -206,9 +229,9 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["south"].y = y + h * 0.70
 			Simple[tab.element]["south"].ax = 1
 			Simple[tab.element]["south"].ay = 1
-			Simple[tab.element]["south"].font = "Roboto14"
-			Simple[tab.element]["south"].color = Color(255, 255, 255)
-			Simple[tab.element]["south"].brcolor = Color(0, 0, 0)
+			Simple[tab.element]["south"].font = "Roboto" .. fontsize
+			Simple[tab.element]["south"].color = lply:GetHudColor(tab.element, "TE")
+			Simple[tab.element]["south"].brcolor = lply:GetHudColor(tab.element, "TB")
 			Simple[tab.element]["south"].text = YRP.lang_string("LID_south_short")
 
 			Simple[tab.element]["east"].w = w
@@ -217,9 +240,9 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["east"].y = y + h * 0.70
 			Simple[tab.element]["east"].ax = 1
 			Simple[tab.element]["east"].ay = 1
-			Simple[tab.element]["east"].font = "Roboto14"
-			Simple[tab.element]["east"].color = Color(255, 255, 255)
-			Simple[tab.element]["east"].brcolor = Color(0, 0, 0)
+			Simple[tab.element]["east"].font = "Roboto" .. fontsize
+			Simple[tab.element]["east"].color = lply:GetHudColor(tab.element, "TE")
+			Simple[tab.element]["east"].brcolor = lply:GetHudColor(tab.element, "TB")
 			Simple[tab.element]["east"].text = YRP.lang_string("LID_east_short")
 
 			Simple[tab.element]["west"].w = w
@@ -228,9 +251,9 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["west"].y = y + h * 0.70
 			Simple[tab.element]["west"].ax = 1
 			Simple[tab.element]["west"].ay = 1
-			Simple[tab.element]["west"].font = "Roboto14"
-			Simple[tab.element]["west"].color = Color(255, 255, 255)
-			Simple[tab.element]["west"].brcolor = Color(0, 0, 0)
+			Simple[tab.element]["west"].font = "Roboto" .. fontsize
+			Simple[tab.element]["west"].color = lply:GetHudColor(tab.element, "TE")
+			Simple[tab.element]["west"].brcolor = lply:GetHudColor(tab.element, "TB")
 			Simple[tab.element]["west"].text = YRP.lang_string("LID_west_short")
 		else
 			HudBox(Simple[tab.element]["needle"])
@@ -495,7 +518,7 @@ function HUDSimple()
 
 		COM = {}
 		COM.element = "COM"
-		COM.text = lply:CoordAngle() .. "°"
+		COM.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
 		HUDSimpleCompass(COM)
 
 		MI = {}

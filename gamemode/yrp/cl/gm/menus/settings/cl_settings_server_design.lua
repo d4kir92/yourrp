@@ -45,7 +45,7 @@ end
 local Player = FindMetaTable("Player")
 function Player:GetHudVal(element, art)
 	local dbval = nil
-	dbval = self:GetNWFloat("float_HUD_" .. element .. "_" .. art, 0.0)
+	dbval = self:GetNWFloat("float_HUD_" .. element .. "_" .. art, -1.0)
 
 	local ret = dbval
 
@@ -72,7 +72,7 @@ function Player:GetHudColor(element, art)
 end
 
 function Player:GetHudInt(element, art)
-	local dbval = self:GetNWInt("int_HUD_" .. element .. "_" .. art, 0)
+	local dbval = self:GetNWInt("int_HUD_" .. element .. "_" .. art, -1)
 	return tonumber(dbval)
 end
 
@@ -152,9 +152,9 @@ net.Receive("get_design_settings", function(len)
 
 			local hudcustom = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			hudcustom:SetTitle("")
-			hudcustom:MakePopup()
+			--hudcustom:MakePopup()
 			function hudcustom:Paint(pw, ph)
-				--
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
 			end
 
 			local editarea = createD("DButton", hudcustom, ScW(), ScH(), 0, 0)
@@ -165,63 +165,92 @@ net.Receive("get_design_settings", function(len)
 			end
 			editarea.space = HA.space
 			editarea.hl = 5
+			editarea["windows"] = {}
+			editarea["settingswindows"] = {}
 			function editarea:Paint(pw, ph)
-				-- X
-				local count = 0
-				for x = 0, ScW(), self.space do
-					local color = Color(255, 255, 255, 160)
+				-- draw.SimpleText(table.Count(editarea["settingswindows"]), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				if table.Count(editarea["settingswindows"]) == 0 then
+					-- X
+					local count = 0
+					for x = 0, ScW(), self.space do
+						local color = Color(255, 255, 255, 160)
 
-					-- X L
-					if count % self.hl == 0 and x < ScW() / 2 then
-						color = Color(0, 0, 0, 160)
+						-- X L
+						if count % self.hl == 0 and x < ScW() / 2 then
+							color = Color(0, 0, 0, 160)
+						end
+
+						-- X R
+						if count % self.hl == ScW() / self.space % self.hl and x > ScW() / 2 then
+							color = Color(0, 0, 0, 160)
+						end
+
+						-- X C
+						if count % self.hl == ScW() / 2 / self.space % self.hl then
+							color = Color(0, 255, 0, 255)
+						end
+
+						-- X Center
+						if ScW() / 2 == x then
+							color = Color(0, 0, 255, 255)
+						end
+
+						draw.RoundedBox(0, x-1, 0, 2, ph, color)
+						count = count + 1
 					end
 
-					-- X R
-					if count % self.hl == ScW() / self.space % self.hl and x > ScW() / 2 then
-						color = Color(0, 0, 0, 160)
+					-- Y
+					count = 0
+					for y = 0, ScH(), self.space do
+						local color = Color(255, 255, 255, 160)
+
+						-- Y U
+						if count % self.hl == 0 and y < ScH() / 2 then
+							color = Color(0, 0, 0, 160)
+						end
+
+						-- Y D
+						if count % self.hl == ScH() / self.space % self.hl and y > ScH() / 2 then
+							color = Color(0, 0, 0, 160)
+						end
+
+						-- Y C
+						if count % self.hl == ScH() / 2 / self.space % self.hl then
+							color = Color(0, 255, 0, 255)
+						end
+
+						-- Y Center
+						if ScH() / 2 == y then
+							color = Color(0, 0, 255, 255)
+						end
+
+						draw.RoundedBox(0, 0, y-1, pw, 2, color)
+						count = count + 1
 					end
+				else
+					render.ClearStencil()
+					render.SetStencilEnable(true)
+					render.SetStencilWriteMask(99)
+					render.SetStencilTestMask(99)
+					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+					render.SetStencilFailOperation(STENCILOPERATION_INCR)
+					render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+					render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+					for i, window in pairs(editarea["windows"]) do
+						for j, settingswindow in pairs(editarea["settingswindows"]) do
+							if window.winset == settingswindow then
+								local x, y = window:GetPos()
+								local w, h = window:GetSize()
 
-					-- X C
-					if count % self.hl == ScW() / 2 / self.space % self.hl then
-						color = Color(0, 255, 0, 255)
+								local br = ctr(10)
+								draw.RoundedBox(0, x - br, y - br, w + 2 * br, h + 2 * br, Color(255, 0, 0, 255))
+							end
+						end
 					end
-
-					-- X Center
-					if ScW() / 2 == x then
-						color = Color(0, 0, 255, 255)
-					end
-
-					draw.RoundedBox(0, x-1, 0, 2, ph, color)
-					count = count + 1
-				end
-
-				-- Y
-				count = 0
-				for y = 0, ScH(), self.space do
-					local color = Color(255, 255, 255, 160)
-
-					-- Y U
-					if count % self.hl == 0 and y < ScH() / 2 then
-						color = Color(0, 0, 0, 160)
-					end
-
-					-- Y D
-					if count % self.hl == ScH() / self.space % self.hl and y > ScH() / 2 then
-						color = Color(0, 0, 0, 160)
-					end
-
-					-- Y C
-					if count % self.hl == ScH() / 2 / self.space % self.hl then
-						color = Color(0, 255, 0, 255)
-					end
-
-					-- Y Center
-					if ScH() / 2 == y then
-						color = Color(0, 0, 255, 255)
-					end
-
-					draw.RoundedBox(0, 0, y-1, pw, 2, color)
-					count = count + 1
+					render.SetStencilReferenceValue(1)
+					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
+					render.SetStencilEnable(false)
 				end
 			end
 
@@ -240,87 +269,95 @@ net.Receive("get_design_settings", function(len)
 				win.saved = false
 				win.w = win:GetWide()
 				win.h = win:GetTall()
+				win.visible = true
+				table.insert(editarea["windows"], win)
 				function win:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
-					draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(36 + 8 + 8), ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-					draw.RoundedBox(0, pw - ctr(8 + 16), ph - ctr(8 + 4), ctr(16), ctr(4), Color(255, 255, 255, 255))
-					draw.RoundedBox(0, pw - ctr(8 + 4), ph - ctr(8 + 16), ctr(4), ctr(16), Color(255, 255, 255, 255))
-
-					local tbr = {}
-					tbr.r = 0
-					tbr.w = pw
-					tbr.h = ph
-					tbr.x = 0
-					tbr.y = 0
-					tbr.color = Color(255, 255, 0, 255)
-					HudBoxBr(tbr)
-
-					local x, y = self:GetPos()
-					local modx, mody = x % HA.space, y % HA.space
-
-					if !self:IsDragging() or !self.saved then
-						if x + self:GetWide() > ScW() + PosX() then
-							self.saved = false
-							win:SetPos(ScW() + PosX() - self:GetWide(), y)
-						elseif x < PosX() then
-							self.saved = false
-							win:SetPos(PosX(), y)
-						elseif y + self:GetTall() > ScH() then
-							self.saved = false
-							win:SetPos(x, ScH() - self:GetTall())
-						elseif y < 0 then
-							self.saved = false
-							win:SetPos(x, 0)
-						elseif modx != 0 or mody != 0 then
-							self.saved = false
-							x = x - modx
-							y = y - mody
-							win:SetPos(x, y)
-						elseif !self.saved then
-							self.saved = true
-							local _x = (x - ScreenFix()) / ScW()
-							net.Start("update_hud_x")
-								net.WriteString(tab.element)
-								net.WriteFloat(_x)
-							net.SendToServer()
-
-							local _y = y / ScH()
-							net.Start("update_hud_y")
-								net.WriteString(tab.element)
-								net.WriteFloat(_y)
-							net.SendToServer()
+					if win.visible then
+						local alpha = 255
+						if table.Count(editarea["settingswindows"]) > 0 then
+							alpha = 120
 						end
-					end
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, alpha-40))
+						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(36 + 8 + 8), ctr(20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-					local w = pw
-					local h = ph
-					if self.w != self:GetWide() or self.h != self:GetTall() then
+						draw.RoundedBox(0, pw - ctr(8 + 16), ph - ctr(8 + 4), ctr(16), ctr(4), Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw - ctr(8 + 4), ph - ctr(8 + 16), ctr(4), ctr(16), Color(255, 255, 255, alpha))
 
-						w = w - w % HA.space
-						h = h - h % HA.space
-						if w >= win:GetMinWidth() then
-							win:SetWide(w)
+						local tbr = {}
+						tbr.r = 0
+						tbr.w = pw
+						tbr.h = ph
+						tbr.x = 0
+						tbr.y = 0
+						tbr.color = Color(255, 255, 0, alpha)
+						HudBoxBr(tbr)
 
-							local _w = w / ScW()
-							net.Start("update_hud_w")
-								net.WriteString(tab.element)
-								net.WriteFloat(_w)
-							net.SendToServer()
+						local x, y = self:GetPos()
+						local modx, mody = x % HA.space, y % HA.space
+
+						if !self:IsDragging() or !self.saved then
+							if x + self:GetWide() > ScW() + PosX() then
+								self.saved = false
+								win:SetPos(ScW() + PosX() - self:GetWide(), y)
+							elseif x < PosX() then
+								self.saved = false
+								win:SetPos(PosX(), y)
+							elseif y + self:GetTall() > ScH() then
+								self.saved = false
+								win:SetPos(x, ScH() - self:GetTall())
+							elseif y < 0 then
+								self.saved = false
+								win:SetPos(x, 0)
+							elseif modx != 0 or mody != 0 then
+								self.saved = false
+								x = x - modx
+								y = y - mody
+								win:SetPos(x, y)
+							elseif !self.saved then
+								self.saved = true
+								local _x = (x - ScreenFix()) / ScW()
+								net.Start("update_hud_x")
+									net.WriteString(tab.element)
+									net.WriteFloat(_x)
+								net.SendToServer()
+
+								local _y = y / ScH()
+								net.Start("update_hud_y")
+									net.WriteString(tab.element)
+									net.WriteFloat(_y)
+								net.SendToServer()
+							end
+
+							local w = pw
+							local h = ph
+							if self.w != self:GetWide() or self.h != self:GetTall() then
+
+								w = w - w % HA.space
+								h = h - h % HA.space
+								if w >= win:GetMinWidth() then
+									win:SetWide(w)
+
+									local _w = w / ScW()
+									net.Start("update_hud_w")
+										net.WriteString(tab.element)
+										net.WriteFloat(_w)
+									net.SendToServer()
+								end
+
+								if h >= win:GetMinHeight() then
+									win:SetTall(h)
+
+									local _h = h / ScH()
+									net.Start("update_hud_h")
+										net.WriteString(tab.element)
+										net.WriteFloat(_h)
+									net.SendToServer()
+								end
+
+								self.w = self:GetWide()
+								self.h = self:GetTall()
+							end
 						end
-
-						if h >= win:GetMinHeight() then
-							win:SetTall(h)
-
-							local _h = h / ScH()
-							net.Start("update_hud_h")
-								net.WriteString(tab.element)
-								net.WriteFloat(_h)
-							net.SendToServer()
-						end
-
-						self.w = self:GetWide()
-						self.h = self:GetTall()
 					end
 				end
 
@@ -330,14 +367,37 @@ net.Receive("get_design_settings", function(len)
 					net.Receive("get_hud_element_settings", function(le)
 						local eletab = net.ReadTable()
 						local wx, wy = win:GetPos()
-						local winset = createD("DFrame", nil, ctr(800), ctr(800), wx, wy)
-						winset:MakePopup()
-						winset:SetTitle("")
-						function winset:Paint(pw, ph)
+
+						win.visible = false
+
+						win.winset = createD("DFrame", nil, ctr(800), ctr(800), wx, wy)
+						win.winset:MakePopup()
+						win.winset:SetTitle("")
+						win.winset:Center()
+						table.insert(editarea["settingswindows"], win.winset)
+						function win.winset:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
 							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(50), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 							local x, y = self:GetPos()
+							local mx, my = gui.MousePos()
+							if input.IsMouseDown(MOUSE_FIRST) then
+								if mx < x or mx > x + pw or my < y or my > y + ph then
+									local childrens = win.winset.dpl:GetItems()
+									local open = false
+									for i, item in pairs(childrens) do
+										if item.cb != nil then
+											if item.cb:IsMenuOpen() then
+												open = true
+											end
+										end
+									end
+									if !open then
+										win.winset:Close()
+									end
+								end
+							end
+
 							if x + self:GetWide() > ScW() + PosX() then
 								self:SetPos(ScW() + PosX() - self:GetWide(), y)
 							elseif x < PosX() then
@@ -350,9 +410,15 @@ net.Receive("get_design_settings", function(len)
 								self:SetPos(x, y)
 							end
 						end
+						function win.winset:OnRemove()
+							if win.visible != nil then
+								win.visible = true
+							end
+							table.RemoveByValue(editarea["settingswindows"], win.winset)
+						end
 
-						winset.dpl = createD("DPanelList", winset, winset:GetWide() - ctr(20 + 20), winset:GetTall() - ctr(50 + 20 + 20), ctr(20), ctr(50 + 20))
-						function winset:AddCheckBox(t)
+						win.winset.dpl = createD("DPanelList", win.winset, win.winset:GetWide() - ctr(20 + 20), win.winset:GetTall() - ctr(50 + 20 + 20), ctr(20), ctr(50 + 20))
+						function win.winset:AddCheckBox(t)
 							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
 							function line:Paint(pw, ph)
 								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -368,21 +434,23 @@ net.Receive("get_design_settings", function(len)
 								net.SendToServer()
 							end
 
-							winset.dpl:AddItem(line)
+							win.winset.dpl:AddItem(line)
 						end
-						function winset:AddTextPosition(t)
+						function win.winset:AddTextPosition(t)
 							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
 							function line:Paint(pw, ph)
 								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local btn = createD("DButton", line, ctr(50), ctr(50), 0, 0)
+							btn:SetText("")
 							function btn:DoClick()
 								local mx, my = gui.MousePos()
 								local tp = createD("DFrame", nil, ctr(300), ctr(350), mx, my)
 								tp:SetTitle("")
 								tp:MakePopup()
 								function tp:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 									local x, y = self:GetPos()
 									local modx, mody = x % HA.space, y % HA.space
 									if !self:IsDragging() then
@@ -408,13 +476,17 @@ net.Receive("get_design_settings", function(len)
 										local tp_btn = createD("DButton", tp, ctr(100), ctr(100), x * ctr(100), y * ctr(100) + ctr(50))
 										tp_btn:SetText("")
 										function tp_btn:Paint(pw, ph)
-											local _w = pw - ctr(8)
-											local _h = ph - ctr(8)
-											local _x = ctr(8) / 2
-											local _y = ctr(8) / 2
+											local bw = pw - ctr(8)
+											local bh = ph - ctr(8)
+											local bx = ctr(8) / 2
+											local by = ctr(8) / 2
+											local _w = bw - ctr(8)
+											local _h = bh - ctr(8)
+											local _x = bx + ctr(8) / 2
+											local _y = by + ctr(8) / 2
 											local _size = ctr(20)
-											draw.RoundedBox(0, _x, _y, _w, _h, Color(255, 255, 255))
-											draw.RoundedBox(0, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color(0, 0, 0))
+											draw.RoundedBox(0, bx, by, bw, bh, Color(255, 255, 255))
+											draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color(0, 0, 0))
 										end
 										function tp_btn:DoClick()
 											net.Start("update_hud_text_position")
@@ -427,8 +499,97 @@ net.Receive("get_design_settings", function(len)
 									end
 								end
 							end
+							function btn:Paint(pw, ph)
+								local color = Color(255, 255, 255)
+								if self:IsHovered() then
+									color = Color(255, 255, 0, 255)
+								end
+								draw.RoundedBox(0, 0, 0, pw, ph, color)
 
-							winset.dpl:AddItem(line)
+								local ax = lply:GetHudInt(tab.element, "AX")
+								local ay = lply:GetHudInt(tab.element, "AY")
+								if ay == 3 then
+									ay = 0
+								elseif ay == 4 then
+									ay = 2
+								end
+								local _w = pw - ctr(8)
+								local _h = ph - ctr(8)
+								local _x = ctr(8) / 2
+								local _y = ctr(8) / 2
+								local _size = ctr(20)
+								draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * ax, _y + (_h - _size) / 2 * ay, _size, _size, Color(0, 0, 0))
+							end
+
+							win.winset.dpl:AddItem(line)
+						end
+						function win.winset:AddComboBox(t)
+							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							function line:Paint(pw, ph)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							end
+
+							line.cb = createD("DComboBox", line, ctr(200), ctr(50), 0, 0)
+							line.cb:SetSortItems(false)
+							for i, choice in pairs(t.choices) do
+								local selected = false
+								if choice == t.value then
+									selected = true
+								end
+								line.cb:AddChoice(choice, choice, selected)
+							end
+							function line.cb:OnSelect(index, value, data)
+								net.Start("update_hud_ts")
+									net.WriteString(t.element)
+									net.WriteInt(data, 8)
+								net.SendToServer()
+							end
+
+							win.winset.dpl:AddItem(line)
+						end
+
+						function win.winset:AddColorMixer(t)
+							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							function line:Paint(pw, ph)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							end
+
+							t.color = lply:GetHudColor(t.element, t.art)
+
+							local btn = createD("DButton", line, ctr(50), ctr(50), 0, 0)
+							btn:SetText("")
+							function btn:Paint(pw, ph)
+								draw.RoundedBox(ph / 2, 0, 0, pw, ph, t.color)
+							end
+							function btn:DoClick()
+								-- ColorMixer
+								local cmwin = createD("DFrame", nil, ctr(400 + 20 + 20), ctr(450 + 20 + 20), 0, 0)
+								cmwin:SetTitle("")
+								cmwin:Center()
+								cmwin:MakePopup()
+								function cmwin:Paint(pw, ph)
+									local x, y = self:GetPos()
+									local mx, my = gui.MousePos()
+									if input.IsMouseDown(MOUSE_FIRST) then
+										if mx < x or mx > x + pw or my < y or my > y + ph then
+											cmwin:Close()
+										end
+									end
+								end
+
+								cmwin.cm = createD("DColorMixer", cmwin, ctr(400), ctr(400), ctr(20), ctr(50 + 20))
+								cmwin.cm:SetColor(t.color)
+								function cmwin.cm:ValueChanged(col)
+									t.color = col
+									net.Start("update_hud_color")
+										net.WriteString(t.element)
+										net.WriteString(t.art)
+										net.WriteString("" .. col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a .. "")
+									net.SendToServer()
+								end
+							end
+
+							win.winset.dpl:AddItem(line)
 						end
 
 						local visi = {}
@@ -436,69 +597,106 @@ net.Receive("get_design_settings", function(len)
 						visi.element = tab.element
 						visi.art = "VISI"
 						visi.value = eletab["bool_HUD_" .. tab.element .. "_VISI"]
-						winset:AddCheckBox(visi)
+						win.winset:AddCheckBox(visi)
 
 						local roun = {}
 						roun.name = "LID_rounded"
 						roun.element = tab.element
 						roun.art = "ROUN"
 						roun.value = eletab["bool_HUD_" .. tab.element .. "_ROUN"]
-						winset:AddCheckBox(roun)
+						win.winset:AddCheckBox(roun)
 
 						local icon = {}
 						icon.name = "LID_icon"
 						icon.element = tab.element
 						icon.art = "ICON"
 						icon.value = eletab["bool_HUD_" .. tab.element .. "_ICON"]
-						winset:AddCheckBox(icon)
+						win.winset:AddCheckBox(icon)
 
 						local text = {}
 						text.name = "LID_text"
 						text.element = tab.element
 						text.art = "TEXT"
 						text.value = eletab["bool_HUD_" .. tab.element .. "_TEXT"]
-						winset:AddCheckBox(text)
+						win.winset:AddCheckBox(text)
 
 						local perc = {}
 						perc.name = "LID_percentage"
 						perc.element = tab.element
 						perc.art = "PERC"
 						perc.value = eletab["bool_HUD_" .. tab.element .. "_PERC"]
-						winset:AddCheckBox(perc)
+						win.winset:AddCheckBox(perc)
 
 						local back = {}
 						back.name = "LID_background"
 						back.element = tab.element
 						back.art = "BACK"
 						back.value = eletab["bool_HUD_" .. tab.element .. "_BACK"]
-						winset:AddCheckBox(back)
+						win.winset:AddCheckBox(back)
 
 						local bord = {}
 						bord.name = "LID_border"
 						bord.element = tab.element
 						bord.art = "BORD"
 						bord.value = eletab["bool_HUD_" .. tab.element .. "_BORD"]
-						winset:AddCheckBox(bord)
+						win.winset:AddCheckBox(bord)
 
 						local textposi = {}
 						textposi.name = "LID_textposition"
 						textposi.element = tab.element
-						winset:AddTextPosition(textposi)
+						win.winset:AddTextPosition(textposi)
 
-						--winset.textsize = createD("???", winset, ctr(50), ctr(50), ctr(20), ctr(50 + 20))
+						local textsize = {}
+						textsize.name = "LID_textsize"
+						textsize.element = tab.element
+						textsize.choices = GetFontSizeTable()
+						textsize.value = lply:GetHudInt(tab.element, "TS")
+						win.winset:AddComboBox(textsize)
+
+						local colortext = {}
+						colortext.name = "LID_textcolor"
+						colortext.element = tab.element
+						colortext.art = "TE"
+						win.winset:AddColorMixer(colortext)
+
+						local colortextborder = {}
+						colortextborder.name = "LID_textbordercolor"
+						colortextborder.element = tab.element
+						colortextborder.art = "TB"
+						win.winset:AddColorMixer(colortextborder)
+
+						local colorbackground = {}
+						colorbackground.name = "LID_backgroundcolor"
+						colorbackground.element = tab.element
+						colorbackground.art = "BG"
+						win.winset:AddColorMixer(colorbackground)
+
+						local colorborder = {}
+						colorborder.name = "LID_bordercolor"
+						colorborder.element = tab.element
+						colorborder.art = "BR"
+						win.winset:AddColorMixer(colorborder)
 					end)
-					net.Start("get_hud_element_settings")
-						net.WriteString(tab.element)
-					net.SendToServer()
+					if table.Count(editarea["settingswindows"]) == 0 then
+						net.Start("get_hud_element_settings")
+							net.WriteString(tab.element)
+						net.SendToServer()
+					end
 				end
 				function win.setting:Paint(pw, ph)
-					local color = Color(255, 255, 255, 255)
-					if self:IsHovered() then
-						color = Color(255, 255, 0, 255)
-					end
-					draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
+					if win.visible then
+						local alpha = 255
+						if table.Count(editarea["settingswindows"]) > 0 then
+							alpha = 120
+						end
+						local color = Color(255, 255, 255, alpha)
+						if self:IsHovered() then
+							color = Color(255, 255, 0, alpha)
+						end
+						draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 
-					YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - ctr(4), ph - ctr(4), ctr(2), ctr(2), Color(0, 0, 0))
+						YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - ctr(4), ph - ctr(4), ctr(2), ctr(2), Color(0, 0, 0, alpha))
+					end
 				end
 
 				win:MakePopup()
@@ -603,10 +801,16 @@ net.Receive("get_design_settings", function(len)
 			]]--
 
 			function editarea:DoClick()
-				for i, child in pairs(self:GetChildren()) do
-					child:Close()
+				if table.Count(editarea["settingswindows"]) == 0 then
+					for i, child in pairs(self:GetChildren()) do
+						child:Close()
+					end
+					hudcustom:Close()
+				else
+					for i, window in pairs(editarea["settingswindows"]) do
+						window:Remove()
+					end
 				end
-				hudcustom:Close()
 			end
 		end
 		GRP_HUD:AddItem(hud_customize_btn)
