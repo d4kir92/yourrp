@@ -185,7 +185,7 @@ function InitYRPChat()
 				yrpChat.closeChatbox()
 			end
 		end
-		function yrpChat:openChatbox()
+		function yrpChat:openChatbox(bteam)
 			yrpChat.window:MakePopup()
 			yrpChat.writeField:RequestFocus()
 
