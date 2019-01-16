@@ -289,7 +289,7 @@ function HUDSimpleCompass(tab)
 	end
 end
 
-local fps = 0
+local fps = 60
 local fps_delay = 0
 function HUDSimple()
 	local lply = LocalPlayer()

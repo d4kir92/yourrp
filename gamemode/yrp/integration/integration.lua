@@ -20,7 +20,6 @@ AddCSLuaFile("darkrp/player/shared.lua")
 AddCSLuaFile("darkrp/entity/shared.lua")
 
 AddCSLuaFile("darkrp/config/config.lua")
-AddCSLuaFile("darkrp/config/jobrelated.lua")
 
 AddCSLuaFile("darkrp/drawfunction.lua")
 
@@ -33,7 +32,6 @@ include("darkrp/player/shared.lua")
 include("darkrp/entity/shared.lua")
 
 include("darkrp/config/config.lua")
-include("darkrp/config/jobrelated.lua")
 
 --include("darkrp/scoreboard/sh_scoreboard.lua")
 

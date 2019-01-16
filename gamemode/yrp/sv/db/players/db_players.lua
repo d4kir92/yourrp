@@ -559,17 +559,32 @@ function canGetRole(ply, roleID)
 			return true
 		else
 			if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].int_maxamount) == -1  then
+				-- Admin only
 				if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
 					if !ply:HasAccess() then
-						printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not admin or superadmin")
+						printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
 						return false
+					else
+						return true
 					end
-				elseif tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) > 0 then
+				end
+
+				-- Whitelist + Prerole
+				if tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) > 0 then
 					printGM("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
 					if !isWhitelisted(ply, roleID) then
-						printGM("gm", "[canGetRole] " .. ply:YRPName() .. " is not whitelisted")
+						printGM("gm", "[canGetRole] " .. ply:YRPName() .. " is not whitelisted.")
 						return false
 					end
+				end
+
+				-- Usergroups
+				local ugs = string.Explode(",", tmpTableRole[1].string_usergroups)
+				local ug = string.upper(ply:GetUserGroup())
+				local found = table.HasValue(ugs, ug) or table.HasValue(ugs, "ALL")
+				if !found then
+					printGM("gm", "[canGetRole] " .. ply:YRPName() .. " is not allowed to use this role (UserGroup).")
+					return false
 				end
 				return true
 			else

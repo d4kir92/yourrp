@@ -40,7 +40,7 @@ RegisterHUDDesign(HUD_Simple)
 local HUD_FO76 = {}
 HUD_FO76.name = "Fallout 76"
 HUD_FO76.author = "D4KiR"
-HUD_FO76.progress = 40
+HUD_FO76.progress = 100
 RegisterHUDDesign(HUD_FO76)
 
 --[[ LOADOUT ]]--

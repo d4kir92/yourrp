@@ -7,7 +7,7 @@ local DATABASE_NAME = "yrp_usergroups"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed UserGroup'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'unnamed usergroup'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")

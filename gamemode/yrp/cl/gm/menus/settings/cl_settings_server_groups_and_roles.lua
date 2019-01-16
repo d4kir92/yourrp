@@ -1964,7 +1964,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			armor.dnw[1] = {}
 			armor.dnw[1].value = role.int_ar
-			armor.dnw[1].min = 1
+			armor.dnw[1].min = 0
 			armor.dnw[1].max = GetMaxInt()
 			armor.dnw[1].netstr = "update_role_" .. "int_" .. "ar"
 

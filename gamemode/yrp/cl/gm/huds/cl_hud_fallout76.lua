@@ -129,6 +129,88 @@ function FO76Element(tab)
 	end
 end
 
+FO76["NAME"] = {}
+function FO76Name(tab)
+	local lply = LocalPlayer()
+	FO76["NAME"][tab.element] = FO76["NAME"][tab.element] or {}
+	if lply:GetNWInt("hud_version", 0) != FO76["NAME"][tab.element]["version"] then
+		FO76["NAME"][tab.element]["version"] = lply:GetNWInt("hud_version", 0)
+
+		local w = lply:GetHudValue(tab.element, "SIZE_W")
+		local h = lply:GetHudValue(tab.element, "SIZE_H")
+		local x = lply:GetHudValue(tab.element, "POSI_X")
+		local y = lply:GetHudValue(tab.element, "POSI_Y")
+
+		local fontsize = lply:GetHudInt(tab.element, "TS")
+		if fontsize <= 0 then
+			fontsize = 14
+		end
+
+		FO76["NAME"][tab.element].x = x + w / 2
+		FO76["NAME"][tab.element].y = y + h / 2
+		FO76["NAME"][tab.element].ax = 1
+		FO76["NAME"][tab.element].ay = 1
+		FO76["NAME"][tab.element].font = "Roboto" .. fontsize .. "B"
+		FO76["NAME"][tab.element].color = FOColor()
+	else
+		FO76["NAME"][tab.element].text = tab.text
+		HudText(FO76["NAME"][tab.element])
+	end
+end
+
+FO76["NUM"] = {}
+function FO76Numbers(tab)
+	local lply = LocalPlayer()
+	FO76["NUM"][tab.element] = FO76["NUM"][tab.element] or {}
+	if lply:GetNWInt("hud_version", 0) != FO76["NUM"][tab.element]["version"] then
+		FO76["NUM"][tab.element]["version"] = lply:GetNWInt("hud_version", 0)
+
+		local w = lply:GetHudValue(tab.element, "SIZE_W")
+		local h = lply:GetHudValue(tab.element, "SIZE_H")
+		local x = lply:GetHudValue(tab.element, "POSI_X")
+		local y = lply:GetHudValue(tab.element, "POSI_Y")
+
+		local fontsize = lply:GetHudInt(tab.element, "TS")
+		if fontsize <= 0 then
+			fontsize = 14
+		end
+		FO76["NUM"][tab.element].w = w
+		FO76["NUM"][tab.element].h = h
+		FO76["NUM"][tab.element].x = x + w / 2
+		FO76["NUM"][tab.element].y = y + h / 2
+		FO76["NUM"][tab.element].ax = 1
+		FO76["NUM"][tab.element].ay = 1
+		FO76["NUM"][tab.element].font = "Roboto" .. fontsize .. "B"
+		FO76["NUM"][tab.element].color = FOColor()
+	else
+		FO76["NUM"][tab.element].text = tab.text
+		HudText(FO76["NUM"][tab.element])
+	end
+end
+
+FO76["CHAT"] = {}
+function FO76Chat(tab)
+	local lply = LocalPlayer()
+	FO76["CHAT"][tab.element] = FO76["CHAT"][tab.element] or {}
+	if lply:GetNWInt("hud_version", 0) != FO76["CHAT"][tab.element]["version"] then
+		FO76["CHAT"][tab.element]["version"] = lply:GetNWInt("hud_version", 0)
+
+		local w = lply:GetHudValue(tab.element, "SIZE_W")
+		local h = lply:GetHudValue(tab.element, "SIZE_H")
+		local x = lply:GetHudValue(tab.element, "POSI_X")
+		local y = lply:GetHudValue(tab.element, "POSI_Y")
+
+		FO76["CHAT"][tab.element].r = 0
+		FO76["CHAT"][tab.element].w = w
+		FO76["CHAT"][tab.element].h = h
+		FO76["CHAT"][tab.element].x = x
+		FO76["CHAT"][tab.element].y = y
+		FO76["CHAT"][tab.element].color = Color(0, 0, 0, 100)
+	else
+		HudBox(FO76["CHAT"][tab.element])
+	end
+end
+
 local test = true
 function HUDFO76Compass(tab)
 	local lply = LocalPlayer()
@@ -274,12 +356,11 @@ function HUDFO76Compass(tab)
 	end
 end
 
+local fps = 60
+local fps_delay = 0
 function HUD_FO76()
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_hud_design") == "Fallout 76" then
-		draw.SimpleText("Fallout76 HUD: " .. string.upper(YRP.lang_string("LID_wip")), "DermaDefault", ScW() / 2, ScH() / 2 - ctr(100), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText("Fallout76 HUD: " .. string.upper(YRP.lang_string("LID_wip")), "DermaDefault", ScW() / 2, ScH() / 2 + ctr(100), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
 		local HP = {}
 		HP.element = "HP"
 		HP.text = YRP.lang_string("LID_hp")
@@ -338,8 +419,92 @@ function HUD_FO76()
 		local COM = {}
 		COM.element = "COM"
 		HUDFO76Compass(COM)
+
+		local weapon = lply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local clip1 = weapon:Clip1()
+			local clip1max = weapon:GetMaxClip1()
+			local clip2 = weapon:Clip2()
+			local clip2max = weapon:GetMaxClip2()
+			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+			if ammo1 != nil then
+				local WP = {}
+				WP.element = "WP"
+				WP.text = YRP.lang_string("LID_weaponprimary")
+				WP.cur = clip1
+				WP.max = clip1max
+				WP.text = clip1 .. "/" .. ammo1
+				FO76Numbers(WP)
+			end
+			if ammo2 != nil then
+				local WS = {}
+				WS.element = "WS"
+				WS.text = YRP.lang_string("LID_weaponsecondary")
+				WS.cur = clip2
+				WS.max = clip2max
+				WS.text = clip2 .. "/" .. ammo2
+				FO76Numbers(WS)
+			end
+			local WN = {}
+			WN.element = "WN"
+			WN.text = weapon:GetPrintName()
+			FO76Name(WN)
+		end
+
+		local NE = {}
+		NE.element = "NE"
+		NE.text = YRP.lang_string("LID_ping") .. ": " .. lply:Ping()
+		FO76Name(NE)
+
+		local PE = {}
+		PE.element = "PE"
+		if CurTime() > fps_delay then
+			fps_delay = CurTime() + 1
+			fps = math.Round(1 / RealFrameTime())
+		end
+		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps
+		FO76Name(PE)
+
+		local MO = {}
+		MO.element = "MO"
+		MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. ")"
+		FO76Name(MO)
+
+		local batterypower = system.BatteryPower()
+		if batterypower <= 100 then
+			local BA = {}
+			BA.element = "BA"
+			BA.text = YRP.lang_string("LID_ba")
+			BA.cur = batterypower
+			BA.max = 100
+			FO76Element(BA)
+		end
+
+		if lply:Condition() != "" then
+			local CON = {}
+			CON.element = "CON"
+			CON.text = lply:Condition()
+			FO76Name(CON)
+		end
+
+		if lply:GetNWBool("iscasting", false) then
+			local CA = {}
+			CA.element = "CA"
+			CA.cur = lply:CastTimeCurrent()
+			CA.max = lply:CastTimeMax()
+			CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%"
+			CA.text = string.upper(lply:GetCastName()) .. " " .. CA.percentage
+			CA.icon = Material("icon16/hourglass.png")
+			FO76Name(CA)
+		end
+
+		if IsChatVisible() then
+			local CH = {}
+			CH.element = "CH"
+			FO76Chat(CH)
+		end
 	end
 end
-
 
 hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
