@@ -395,7 +395,7 @@ net.Receive("charGetRoleInfo", function(len, ply)
 			local tmppm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
 			if wk(tmppm) then
 				tmppm = tmppm[1]
-				table.insert(tab, tmppm.string_model)
+				table.insert(tab, tmppm.string_models)
 			end
 		end
 		tmpTable[1].string_playermodels = table.concat(tab,",")
@@ -413,10 +413,13 @@ function GetPlayermodelsOfRole(ruid)
 		local rpms = string.Explode(",", role.string_playermodels)
 		local tab = {}
 		for i, id in pairs(rpms) do
-			local tmppm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
-			if wk(tmppm) then
-				tmppm = tmppm[1]
-				table.insert(tab, tmppm.string_model)
+			local tmppms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+			if wk(tmppms) then
+				tmppms = tmppms[1]
+				tmppms = string.Explode(",", tmppms.string_models)
+				for i, pm in pairs(tmppms) do
+					table.insert(tab, pm)
+				end
 			end
 		end
 		return table.concat(tab,",")

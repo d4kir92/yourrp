@@ -794,11 +794,28 @@ function DStringListBox(tab)
 
 				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
 				line:SetText("")
+
+				line.uniqueID = v.uniqueID
+				line.models = string.Explode(",", v.string_models)
+				line.pmid = 1
+
+				line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, ctr(40) + v.br, v.br)
+
 				function line:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-					draw.SimpleText(v.string_name, "DermaDefault", v.h, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+					if self.oldpmid != self.pmid then
+						self.oldpmid = self.pmid
+						line.mod:SetModel(line.models[line.pmid])
+					end
+
+					local name = v.string_name
+					if table.Count(self.models) > 1 then
+						name = name .. " (" .. self.pmid .. "/" .. table.Count(self.models) .. ")"
+					end
+					draw.SimpleText(name, "DermaDefault", ctr(40) + v.h + ctr(40) + ctr(20), ph / 2 - ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(line.models[line.pmid], "DermaDefault", ctr(40) + v.h + ctr(40) + ctr(20), ph / 2 + ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
-				line.uniqueID = v.uniqueID
 
 				line.rem = createD("DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
 				line.rem:SetText("")
@@ -810,9 +827,32 @@ function DStringListBox(tab)
 					v.doclick()
 				end
 
-				if v.string_model != nil then
-					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, v.br, v.br)
-					line.mod:SetModel(v.string_model)
+				line.next = createD("DButton", line, ctr(40), v.h - 2 * v.br, ctr(40) + v.h, v.br)
+				line.next:SetText("")
+				function line.next:Paint(pw, ph)
+					if line.pmid < table.Count(line.models) then
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200))
+						draw.SimpleText(">", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
+				end
+				function line.next:DoClick()
+					if line.pmid < table.Count(line.models) then
+						line.pmid = line.pmid + 1
+					end
+				end
+
+				line.prev = createD("DButton", line, ctr(40), v.h - 2 * v.br, 0, v.br)
+				line.prev:SetText("")
+				function line.prev:Paint(pw, ph)
+					if line.pmid > 1 then
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200))
+						draw.SimpleText("<", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
+				end
+				function line.prev:DoClick()
+					if line.pmid > 1 then
+						line.pmid = line.pmid - 1
+					end
 				end
 
 				self:AddItem(line)
