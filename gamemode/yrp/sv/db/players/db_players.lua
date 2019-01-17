@@ -164,16 +164,13 @@ function set_role_values(ply)
 				end
 
 				if ChaTab.playermodelID != nil then
-					local tmpID = tonumber(ChaTab.playermodelID)
-					local tmp = string.Explode(",", rolTab.string_playermodels)
-					if worked(tmp[tmpID], "set_role_values playermodel") then
-						local pm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. tmp[tmpID] .. "'")
-						if wk(pm) then
-							pm = pm[1]
-							ply:SetNWString("string_playermodel", pm.string_model)
-							ply:SetModel(pm.string_model)
-						end
+					local pmid = tonumber(ChaTab.playermodelID)
+					local pms = string.Explode(",", GetPlayermodelsOfRole(rolTab.uniqueID))
+					if pms[pmid] == nil then
+						pmid = 1
 					end
+					ply:SetNWString("string_playermodel", pms[pmid])
+					ply:SetModel(pms[pmid])
 				end
 				ply:SetNWString("Gender", ChaTab.gender)
 			else

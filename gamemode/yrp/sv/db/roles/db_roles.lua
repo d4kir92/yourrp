@@ -783,17 +783,17 @@ function SendPlayermodels(uid)
 		local nettab = {}
 		local flags = string.Explode(",", role.string_playermodels)
 		for i, val in pairs(flags) do
-			local pm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
-			if wk(pm) then
-				pm = pm[1]
+			local pms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
+			if wk(pms) then
+				pms = pms[1]
 				local entry = {}
-				entry.uniqueID = pm.uniqueID
-				local name = pm.string_name
+				entry.uniqueID = pms.uniqueID
+				local name = pms.string_name
 				if name == "" or	name == " " then
-					name = pm.string_model
+					name = pms.string_models
 				end
 				entry.string_name = name
-				entry.string_model = pm.string_model
+				entry.string_models = pms.string_models
 				table.insert(nettab, entry)
 			end
 		end
@@ -851,12 +851,15 @@ net.Receive("add_role_playermodel", function(len, ply)
 	AddPlayermodelToRole(ruid, muid)
 end)
 
-util.AddNetworkString("add_playermodel")
-net.Receive("add_playermodel", function(len, ply)
+util.AddNetworkString("add_playermodels")
+net.Receive("add_playermodels", function(len, ply)
 	local ruid = net.ReadInt(32)
-	local WorldModel = net.ReadString()
+	local pms = net.ReadTable()
 	local name = net.ReadString()
-	SQL_INSERT_INTO("yrp_playermodels", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
+	local min = net.ReadString()
+	local max = net.ReadString()
+	pms = table.concat(pms, ",")
+	SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "'" .. pms .. "', '" .. name .. "', '" .. min .. "', '" .. max .. "'")
 
 	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
