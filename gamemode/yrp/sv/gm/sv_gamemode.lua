@@ -123,6 +123,8 @@ function GM:PlayerLoadout(ply)
 		ply:SetNWFloat("thirst", 100)
 	end
 
+	hook.Run("OnPlayerChangedTeam", {ply, 1, 1} )
+
 	ply:UpdateBackpack()
 
 	RenderNormal(ply)
@@ -352,9 +354,9 @@ function SlowThink(ent)
 end
 
 function StartCombat(ply)
-	ply:SetNWBool("inCombat", true)
 	if ply:IsValid() then
-		if ply:IsFullyAuthenticated() then
+		if ply:IsPlayer() then
+			ply:SetNWBool("inCombat", true)
 			local steamid = ply:SteamID()
 			if timer.Exists(steamid .. " outOfCombat") then
 				timer.Remove(steamid .. " outOfCombat")
@@ -363,15 +365,14 @@ function StartCombat(ply)
 				if ea(ply) then
 					ply:SetNWBool("inCombat", false)
 					lowering_weapon(ply)
-					timer.Remove(steamid .. " outOfCombat")
+					if timer.Exists(steamid .. " outOfCombat") then
+						timer.Remove(steamid .. " outOfCombat")
+					end
 				end
 			end)
-		else
-			YRP.msg("note", "ply is not valid: " .. tostring(ply))
 		end
-	else
-		printGM("note", tostring(ply) .. " is not valid!")
 	end
+
 end
 
 hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)

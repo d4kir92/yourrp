@@ -921,7 +921,7 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 	tmp.opt2 = opt2
 
 	tmp.value = "dark"
-	
+
 	tmp:SetText("")
 
 	function tmp:Paint(pw, ph)
@@ -942,12 +942,6 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 			self.value = self.opt2
 		elseif self.value == self.opt2 then
 			self.value = self.opt1
-		end
-
-		if tostring(self.value) == "dark" then
-			dbUpdateHUD("mdpm", 0)
-		elseif tostring(self.value) == "light" then
-			dbUpdateHUD("mdpm", 1)
 		end
 
 		addMDColor("dprimary", getMDPColor())
@@ -973,9 +967,6 @@ function addPColorField(parent, col, x, y)
 	end
 
 	function tmp:DoClick()
-		dbUpdateHUD("mdpr", self.color.r)
-		dbUpdateHUD("mdpg", self.color.g)
-		dbUpdateHUD("mdpb", self.color.b)
 		addMDColor("dprimary", getMDPColor())
 		addMDColor("dprimaryBG", colorBG(getMDPColor()))
 	end
@@ -997,9 +988,6 @@ function addSColorField(parent, col, x, y)
 	end
 
 	function tmp:DoClick()
-		dbUpdateHUD("mdsr", self.color.r)
-		dbUpdateHUD("mdsg", self.color.g)
-		dbUpdateHUD("mdsb", self.color.b)
 		addMDColor("dsecondary", getMDSColor())
 		addMDColor("dsecondaryH", colorH(getMDSColor()))
 	end

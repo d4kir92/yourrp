@@ -1184,7 +1184,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 						pmwin.float_min:SetMinMax(0.1, 100.0)
 						pmwin.float_max:SetMinMax(0.1, 100.0)
-						
+
 						pmwin.float_min:SetValue(1.0)
 						pmwin.float_max:SetValue(1.0)
 
@@ -2135,7 +2135,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			printGM("note", role.int_st .. " " .. role.int_stmax .. " " .. role.float_stup)
 			local stamina = {}
 			stamina.parent = ea.attributes
 			stamina.uniqueID = role.uniqueID

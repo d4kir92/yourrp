@@ -18,7 +18,12 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	activator:GiveAmmo(1, activator:GetActiveWeapon():GetPrimaryAmmoType())
+	if !activator:IsValid() then
+		return
+	end
+	local weap = activator:GetActiveWeapon()
+	local pram = weap:GetPrimaryAmmoType()
+	activator:GiveAmmo(1, pram)
 	self:Remove()
 end
 

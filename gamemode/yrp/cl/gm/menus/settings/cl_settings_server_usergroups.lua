@@ -549,67 +549,69 @@ end)
 
 net.Receive("Connect_Settings_UserGroups", function(len)
 	if pa(settingsWindow) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
+		if settingsWindow.window != nil then
+			function settingsWindow.window.site:Paint(pw, ph)
+				draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
+			end
 
-		CURRENT_USERGROUP = nil
+			CURRENT_USERGROUP = nil
 
-		local ugs = net.ReadTable()
+			local ugs = net.ReadTable()
 
-		local PARENT = settingsWindow.window.site
+			local PARENT = settingsWindow.window.site
 
-		function PARENT:OnRemove()
-			net.Start("Disconnect_Settings_UserGroups")
-			net.SendToServer()
-		end
+			function PARENT:OnRemove()
+				net.Start("Disconnect_Settings_UserGroups")
+				net.SendToServer()
+			end
 
-		--[[ UserGroups Action Buttons ]]--
-		local _ug_add = createD("DButton", PARENT, ctr(50), ctr(50), ctr(20), ctr(20))
-		_ug_add:SetText("")
-		function _ug_add:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "+", Color(0, 255, 0, 255))
-		end
-		function _ug_add:DoClick()
-			net.Start("usergroup_add")
-			net.SendToServer()
-		end
+			--[[ UserGroups Action Buttons ]]--
+			local _ug_add = createD("DButton", PARENT, ctr(50), ctr(50), ctr(20), ctr(20))
+			_ug_add:SetText("")
+			function _ug_add:Paint(pw, ph)
+				surfaceButton(self, pw, ph, "+", Color(0, 255, 0, 255))
+			end
+			function _ug_add:DoClick()
+				net.Start("usergroup_add")
+				net.SendToServer()
+			end
 
-		local _ug_rem = createD("DButton", PARENT, ctr(50), ctr(50), ctr(20 + 500 - 50), ctr(20))
-		_ug_rem:SetText("")
-		function _ug_rem:Paint(pw, ph)
-			if CURRENT_USERGROUP != nil then
-				if tobool(UGS[CURRENT_USERGROUP].removeable) then
-					surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
+			local _ug_rem = createD("DButton", PARENT, ctr(50), ctr(50), ctr(20 + 500 - 50), ctr(20))
+			_ug_rem:SetText("")
+			function _ug_rem:Paint(pw, ph)
+				if CURRENT_USERGROUP != nil then
+					if tobool(UGS[CURRENT_USERGROUP].removeable) then
+						surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
+					end
 				end
 			end
-		end
-		function _ug_rem:DoClick()
-			if CURRENT_USERGROUP != nil then
-				if tobool(UGS[CURRENT_USERGROUP].removeable) then
-					net.Start("usergroup_rem")
-						net.WriteString(CURRENT_USERGROUP)
-					net.SendToServer()
+			function _ug_rem:DoClick()
+				if CURRENT_USERGROUP != nil then
+					if tobool(UGS[CURRENT_USERGROUP].removeable) then
+						net.Start("usergroup_rem")
+							net.WriteString(CURRENT_USERGROUP)
+						net.SendToServer()
+					end
 				end
 			end
-		end
 
-		local _ugs_title = createD("DPanel", PARENT, ctr(500), ctr(50), ctr(20), ctr(20 + 50 + 20))
-		function _ugs_title:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-			surfaceText(YRP.lang_string("LID_usergroups"), "Settings_Header", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
-		end
+			local _ugs_title = createD("DPanel", PARENT, ctr(500), ctr(50), ctr(20), ctr(20 + 50 + 20))
+			function _ugs_title:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+				surfaceText(YRP.lang_string("LID_usergroups"), "Settings_Header", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+			end
 
-		--[[ UserGroupsList ]]--
-		PARENT.ugs = createD("DPanelList", PARENT, ctr(500), ScrH() - ctr(20 + 150 + 20 + 50 + 20), ctr(20), ctr(20 + 50 + 20 + 50))
-		function PARENT.ugs:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
-		end
-		PARENT.ugs:EnableVerticalScrollbar(true)
+			--[[ UserGroupsList ]]--
+			PARENT.ugs = createD("DPanelList", PARENT, ctr(500), ScrH() - ctr(20 + 150 + 20 + 50 + 20), ctr(20), ctr(20 + 50 + 20 + 50))
+			function PARENT.ugs:Paint(pw, ph)
+				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+			end
+			PARENT.ugs:EnableVerticalScrollbar(true)
 
-		for i, ug in SortedPairsByMemberValue(ugs, "string_name", false) do
-			if tobool(ug.bool_removeable) then
-				AddUG(ug)
+			for i, ug in SortedPairsByMemberValue(ugs, "string_name", false) do
+				if tobool(ug.bool_removeable) then
+					AddUG(ug)
+				end
 			end
 		end
 	end

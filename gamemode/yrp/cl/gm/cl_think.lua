@@ -625,5 +625,7 @@ hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
 net.Receive("send_team", function(len)
 	local teamname = net.ReadString()
 	local team = net.ReadTable()
+
 	_G[teamname] = team
+	table.insert(RPExtraTeams, team)
 end)

@@ -142,6 +142,12 @@ if wk(SQL_SELECT(DATABASE_NAME, "*", nil)) then
 end
 
 -- darkrp
+function ConvertToDarkRPJobName(name)
+	name = string.Replace(name, " ", "_")
+	local jobname = "TEAM_" .. name
+	return jobname
+end
+
 function ConvertToDarkRPJob(tab)
 	local _job = {}
 
@@ -166,6 +172,7 @@ function ConvertToDarkRPJob(tab)
 		gname = gname[1].string_name
 	end
 	_job.category = gname or "invalid group"
+	_job.command = ConvertToDarkRPJobName(tab.string_name)
 
 	return _job
 end
@@ -174,8 +181,7 @@ local drp_allroles = SQL_SELECT(DATABASE_NAME, "*", nil)
 local TEAMS = {}
 if wk(drp_allroles) then
 	for i, role in pairs(drp_allroles) do
-		local teamname = "TEAM_" .. role.string_name
-		teamname = string.Replace(teamname, " ", "_")
+		local teamname = ConvertToDarkRPJobName(role.string_name)
 		TEAMS[teamname] = ConvertToDarkRPJob(role)
 		_G[teamname] = TEAMS["TEAM_" .. role.string_name]
 	end
