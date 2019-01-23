@@ -23,7 +23,7 @@ function teleportToReleasepoint(ply)
 		ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 	else
 		local _str = YRP.lang_string("LID_noreleasepoint")
-		printGM("note", _str)
+		printGM("note", "[teleportToReleasepoint] " .. _str)
 
 		net.Start("yrp_noti")
 			net.WriteString("noreleasepoint")
@@ -44,7 +44,7 @@ function teleportToJailpoint(ply)
 		RemRolVals(ply)
 	else
 		local _str = YRP.lang_string("LID_nojailpoint")
-		printGM("note", _str)
+		printGM("note", "[teleportToJailpoint] " .. _str)
 
 		net.Start("yrp_noti")
 			net.WriteString("nojailpoint")

@@ -31,7 +31,7 @@ function Player:getDarkRPVar(var)
 	elseif var == "HasGunlicense" then
 		return true
 	else
-		local _nw_var = self:GetNWString(var, "-1")
+		local _nw_var = self:GetNWString(var, "VARIABLE NOT FOUND")
 		if tonumber(_nw_var) == nil then
 			return _nw_var
 		elseif isnumber(_nw_var) != nil then
@@ -81,6 +81,7 @@ function Player:getJobTable()
 	end
 	_job.candemote = self:GetNWBool("isInstructor") or false
 	_job.category = self:GetNWString("groupName", "INVALID")
+	_job.command = ConvertToDarkRPJobName(_job.name)
 
 	return _job
 end

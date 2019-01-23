@@ -187,8 +187,14 @@ end
 
 function Player:setDarkRPVar(variable, value, target)
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
-	printGM("darkrp", "setDarkRPVar(variable, value, target)")
-	printGM("darkrp", DarkRP._not)
+	printGM("darkrp", "setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
+	if value == nil then return false end
+	
+	if isnumber(value) then
+		self:SetNWInt(variable, value)
+	else
+		self:SetNWString(variable, value)
+	end
 end
 
 function Player:setHitCustomer(customer)

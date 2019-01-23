@@ -15,6 +15,7 @@ DarkRP._not = "If you see this, please test all your darkrp addons, if some addo
 
 AddCSLuaFile("darkrp/fn.lua")
 
+AddCSLuaFile("darkrp/darkrp/shared.lua")
 AddCSLuaFile("darkrp/gamemode/shared.lua")
 AddCSLuaFile("darkrp/player/shared.lua")
 AddCSLuaFile("darkrp/entity/shared.lua")
@@ -27,6 +28,7 @@ AddCSLuaFile("darkrp/drawfunction.lua")
 
 include("darkrp/fn.lua")
 
+include("darkrp/darkrp/shared.lua")
 include("darkrp/gamemode/shared.lua")
 include("darkrp/player/shared.lua")
 include("darkrp/entity/shared.lua")
