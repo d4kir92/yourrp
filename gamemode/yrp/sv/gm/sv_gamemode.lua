@@ -123,7 +123,7 @@ function GM:PlayerLoadout(ply)
 		ply:SetNWFloat("thirst", 100)
 	end
 
-	hook.Run("OnPlayerChangedTeam", {ply, 1, 1} )
+	hook.Run("OnPlayerChangedTeam", ply, 1, 1)
 
 	ply:UpdateBackpack()
 
@@ -578,6 +578,7 @@ net.Receive("player_is_ready", function(len, ply)
 	local OS_Windows = net.ReadBool()
 	local OS_Linux = net.ReadBool()
 	local OS_OSX = net.ReadBool()
+	local Country = net.ReadString()
 
 	open_character_selection(ply)
 
@@ -590,6 +591,8 @@ net.Receive("player_is_ready", function(len, ply)
 	else
 		ply:SetNWString("yrp_os", "other")
 	end
+
+	ply:SetNWString("yrp_country", Country or "Unknown")
 
 	-- YRP Chat?
 	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")

@@ -331,18 +331,18 @@ net.Receive("getsitecommunitydiscord", function(len)
 			local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255))
+				--surfaceBox(0, 0, ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255))
 			end
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. ctr(1000) .. "\" height=\"" .. page:GetTall() - ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 			page:SetHTML(widgetlink)
 
-			local openLink = createD("DButton", page, ctr(240), ctr(54), ctr(390), page:GetTall() - ctr(92))
+			local openLink = createD("DButton", page, ctr(240), ctr(54), ctr(760), page:GetTall() - ctr(92))
 			openLink:SetText("")
-
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
 				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 			end
 
 			function openLink:DoClick()
@@ -562,29 +562,33 @@ end)
 
 net.Receive("getsiteyourrpdiscord", function(len)
 	if pa(HELPMENU.mainmenu.site) then
-		local link = "https://discord.gg/CXXDCMJ"
+		local link = "https://discord.gg/sEgNZxg"
 
 		if link ~= "" then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, ctr(1040), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255))
+				--surfaceBox(0, 0, pw, ph, Color(255, 0, 0, 255))
 			end
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. ctr(1000) .. "\" height=\"" .. page:GetTall() - ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 			page:SetHTML(widgetlink)
 
-			local openLink = createD("DButton", page, ctr(240), ctr(54), ctr(390), page:GetTall() - ctr(92))
+			local openLink = createD("DButton", page, ctr(240), ctr(54), ctr(760), page:GetTall() - ctr(92))
 			openLink:SetText("")
-
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "")
 				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 			end
 
 			function openLink:DoClick()
 				gui.OpenURL(link)
 			end
+
+			local page2 = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(1040), ScrH() - ctr(100 + 20 + 20), ctr(1060), 0)
+			page2:OpenURL(link)
+
 		end
 	end
 end)
