@@ -289,8 +289,25 @@ function HUDSimpleCompass(tab)
 	end
 end
 
-local fps = 60
+function GetFPS()
+	return math.Round(1 / RealFrameTime())
+end
+
+local fps = 0
+local fpsmin = 9999
+local fpsmax = 0
+local fpsavg = fps
+local fpstavg = 0
+local fpscou = 0
 local fps_delay = 0
+
+local ping = 0
+local pingmin = 9999
+local pingmax = 0
+local pingavg = ping
+local pingtavg = 0
+local pingcou = 0
+local ping_delay = 0
 function HUDSimple()
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_hud_design") == "Simple" then
@@ -499,21 +516,53 @@ function HUDSimple()
 			CON.text = lply:Condition()
 			HUDSimpleBAR(CON)
 		end
+
 		PE = {}
 		PE.element = "PE"
 		PE.cur = 0
 		PE.max = 1
 		if CurTime() > fps_delay then
-			fps_delay = CurTime() + 1
-			fps = math.Round(1 / RealFrameTime())
+			fps_delay = CurTime() + 0.5
+			fps = GetFPS()
+			if fps < fpsmin then
+				fpsmin = fps
+			elseif fps > fpsmax then
+				fpsmax = fps
+			end
+
+			fpscou = fpscou + 1
+			fpstavg = fpstavg + fps
+			if fpscou > 9 then
+				fpsavg = math.Round(fpstavg / 10, 0)
+				fpscou = 0
+				fpstavg = 0
+			end
 		end
-		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps
+		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
 		HUDSimpleBAR(PE)
+
+		if CurTime() > ping_delay then
+			ping_delay = CurTime() + 0.5
+			ping = lply:Ping()
+			if ping < pingmin then
+				pingmin = ping
+			elseif ping > pingmax then
+				pingmax = ping
+			end
+
+			pingcou = pingcou + 1
+			pingtavg = pingtavg + ping
+			if pingcou > 9 then
+				pingavg = math.Round(pingtavg / 10, 0)
+				pingcou = 0
+				pingtavg = 0
+			end
+		end
 		NE = {}
 		NE.element = "NE"
 		NE.cur = 0
 		NE.max = 1
-		NE.text = YRP.lang_string("LID_ping") .. ": " .. lply:Ping()
+		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
 		HUDSimpleBAR(NE)
 
 		COM = {}

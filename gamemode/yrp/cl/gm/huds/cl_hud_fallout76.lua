@@ -140,16 +140,29 @@ function FO76Name(tab)
 		local h = lply:GetHudValue(tab.element, "SIZE_H")
 		local x = lply:GetHudValue(tab.element, "POSI_X")
 		local y = lply:GetHudValue(tab.element, "POSI_Y")
+		local ax = lply:GetHudInt(tab.element, "AX")
+		local ay = lply:GetHudInt(tab.element, "AY")
 
 		local fontsize = lply:GetHudInt(tab.element, "TS")
 		if fontsize <= 0 then
 			fontsize = 14
 		end
 
-		FO76["NAME"][tab.element].x = x + w / 2
-		FO76["NAME"][tab.element].y = y + h / 2
-		FO76["NAME"][tab.element].ax = 1
-		FO76["NAME"][tab.element].ay = 1
+		if ax == 1 then
+			x = x + w / 2
+		elseif ax == 2 then
+			x = x + w
+		end
+		if ay == 1 then
+			y = y + h / 2
+		elseif ay == 2 then
+			y = y + w
+		end
+
+		FO76["NAME"][tab.element].x = x
+		FO76["NAME"][tab.element].y = y
+		FO76["NAME"][tab.element].ax = ax or 1
+		FO76["NAME"][tab.element].ay = ay or 1
 		FO76["NAME"][tab.element].font = "Roboto" .. fontsize .. "B"
 		FO76["NAME"][tab.element].color = FOColor()
 	else
@@ -356,8 +369,21 @@ function HUDFO76Compass(tab)
 	end
 end
 
-local fps = 60
+local fps = GetFPS()
+local fpsmin = 9999
+local fpsmax = 0
+local fpsavg = fps
+local fpstavg = 0
+local fpscou = 0
 local fps_delay = 0
+
+local ping = 5
+local pingmin = 9999
+local pingmax = 0
+local pingavg = ping
+local pingtavg = 0
+local pingcou = 0
+local ping_delay = 0
 function HUD_FO76()
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_hud_design") == "Fallout 76" then
@@ -452,18 +478,48 @@ function HUD_FO76()
 			FO76Name(WN)
 		end
 
+		if CurTime() > ping_delay then
+			ping_delay = CurTime() + 0.5
+			ping = lply:Ping()
+			if ping < pingmin then
+				pingmin = ping
+			elseif ping > pingmax then
+				pingmax = ping
+			end
+
+			pingcou = pingcou + 1
+			pingtavg = pingtavg + ping
+			if pingcou > 9 then
+				pingavg = math.Round(pingtavg / 10, 0)
+				pingcou = 0
+				pingtavg = 0
+			end
+		end
 		local NE = {}
 		NE.element = "NE"
-		NE.text = YRP.lang_string("LID_ping") .. ": " .. lply:Ping()
+		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
 		FO76Name(NE)
 
 		local PE = {}
 		PE.element = "PE"
 		if CurTime() > fps_delay then
-			fps_delay = CurTime() + 1
-			fps = math.Round(1 / RealFrameTime())
+			fps_delay = CurTime() + 0.5
+			fps = GetFPS()
+			if fps < fpsmin then
+				fpsmin = fps
+			elseif fps > fpsmax then
+				fpsmax = fps
+			end
+
+			fpscou = fpscou + 1
+			fpstavg = fpstavg + fps
+			if fpscou > 9 then
+				fpsavg = math.Round(fpstavg / 10, 0)
+				fpscou = 0
+				fpstavg = 0
+			end
 		end
-		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps
+		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
 		FO76Name(PE)
 
 		local MO = {}

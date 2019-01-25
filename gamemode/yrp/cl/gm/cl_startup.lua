@@ -1237,11 +1237,14 @@ end)
 function GM:InitPostEntity()
 	printGM("note", "All entities are loaded.")
 	playerready = true
+
 	net.Start("player_is_ready")
-	net.WriteBool(system.IsWindows())
-	net.WriteBool(system.IsLinux())
-	net.WriteBool(system.IsOSX())
+		net.WriteBool(system.IsWindows())
+		net.WriteBool(system.IsLinux())
+		net.WriteBool(system.IsOSX())
+		net.WriteString(system.GetCountry())
 	net.SendToServer()
+
 	YRP.initLang()
 
 	if tobool(get_tutorial("tut_welcome")) then

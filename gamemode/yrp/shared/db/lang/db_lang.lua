@@ -50,7 +50,7 @@ end
 
 function YRP.get_language_name(ls)
 	for k, lang in pairs(yrp_button_info) do
-		if lang.short == ls then return lang["inenglish"] end
+		if lang.initshort == ls then return lang["initinenglish"] end
 	end
 
 	return "FAILED"
@@ -102,11 +102,6 @@ function YRP.lang_string(var, vals)
 	return _string
 end
 
-local auto = {}
-auto.short = "auto"
-auto.language = "Automatic"
-auto.inenglish = "Automatic"
-
 function YRP.GetAllLanguages()
 	return yrp_button_info
 end
@@ -145,11 +140,11 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 
 		if !default then
-			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language") .. "/" .. YRP.lang_string("LID_inenglish"))
+			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage") .. "/" .. YRP.lang_string("LID_initinenglish"))
 		end
 
-		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties", default)
-		YRP.read_lang("resource/localization/yrp/hud/lang_" .. short .. ".properties", default)
+		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/hud/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menuappearance/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menuatm/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/menubuilding/lang_" .. short .. ".properties")
@@ -218,7 +213,7 @@ function YRP.LoadLanguage(short, init)
 			YRP.read_language(short, init)
 		end
 
-		printGM("lang", "Language changed to [" .. YRP.lang_string("LID_short") .. "] " .. YRP.lang_string("LID_language"))
+		printGM("lang", "Language changed to [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage"))
 		YRP.send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
 		hr_pos("lang")
@@ -316,10 +311,10 @@ function YRP.add_language(short)
 		yrp_button_info[short]["short"] = short
 		yrp_button_info[short]["author"] = "D4KiR"
 	else
-		yrp_button_info[short]["inenglish"] = YRP.lang_string("LID_inenglish")
-		yrp_button_info[short]["language"] = YRP.lang_string("LID_language")
-		yrp_button_info[short]["short"] = YRP.lang_string("LID_short")
-		yrp_button_info[short]["author"] = YRP.lang_string("LID_author")
+		yrp_button_info[short]["inenglish"] = YRP.lang_string("LID_initinenglish")
+		yrp_button_info[short]["language"] = YRP.lang_string("LID_initlanguage")
+		yrp_button_info[short]["short"] = YRP.lang_string("LID_initshort")
+		yrp_button_info[short]["author"] = YRP.lang_string("LID_initauthor")
 	end
 end
 
