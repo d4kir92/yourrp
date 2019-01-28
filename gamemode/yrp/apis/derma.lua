@@ -370,6 +370,15 @@ YRP.AddDesignIcon("play", "vgui/material/icon_play.png")
 YRP.AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
 YRP.AddDesignIcon("pause", "vgui/material/icon_pause.png")
 YRP.AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
+YRP.AddDesignIcon("language", "vgui/material/icon_language.png")
+
+YRP.AddDesignIcon("discord", "vgui/material/icon_discord.png")
+YRP.AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")
+YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
+
+YRP.AddDesignIcon("ts", "vgui/material/icon_ts_bluelight.png")
+YRP.AddDesignIcon("ts_light", "vgui/material/icon_ts_light.png")
+
 local _delay = 1
 local _get_design = true
 

@@ -1,6 +1,10 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
-function DrawSelector(btn, w, h, text, selected)
-	draw.SimpleTextOutlined(text, "mat1header", w / 2, h / 2, Color(255, 255, 255, 255), 1, 1, ctr(1), Color(0, 0, 0, 255))
+function DrawSelector(btn, w, h, text, selected, hassubtabs)
+	local spacer = 0
+	if hassubtabs then
+		spacer = ctr(100)
+	end
+	draw.SimpleTextOutlined(text, "mat1header", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1, ctr(1), Color(0, 0, 0, 255))
 
 	if btn.ani_h == nil then
 		btn.ani_h = 0
@@ -89,12 +93,16 @@ function PANEL:SiteNotFound()
 	end
 end
 
-function PANEL:AddTab(name, netstr, starttab)
+function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	if #self.tabs > 0 then
 		self:MakeSpacer()
 	end
 
-	local TAB = createD("DButton", self, GetTextLength(YRP.lang_string(name), "mat1header") + ctr(30 * 2), ctr(100), ctr(400), 0)
+	local spacer = 0
+	if hassubtabs then
+		spacer = ctr(100)
+	end
+	local TAB = createD("DButton", self, GetTextLength(YRP.lang_string(name), "mat1header") + ctr(30 * 2) + spacer, ctr(100), ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr
@@ -155,6 +163,21 @@ function PANEL:AddTab(name, netstr, starttab)
 						local size = ph - 2 * ctr(20)
 						YRP.DrawIcon(YRP.GetDesignIcon("launch"), size, size, pw - size - br, ph / 2 - size / 2, YRPGetColor("6"))
 					end
+
+					local icon = ""
+					if string.find(string.lower(subtab.name), "discord") then
+						icon = "discord"
+					elseif string.find(string.lower(subtab.name), "teamspeak") then
+						icon = "ts"
+					elseif string.find(string.lower(subtab.name), "translations") then
+						icon = "language"
+					elseif string.find(string.lower(subtab.name), "steam") then
+						icon = "steam"
+					end
+					if icon != "" then
+						local br = ctr(20)
+						YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - 2 * br, ph - 2 * br, br, br, YRPGetColor("6"))
+					end
 				end
 
 				function st:DoClick()
@@ -185,7 +208,12 @@ function PANEL:AddTab(name, netstr, starttab)
 			self.selected = false
 		end
 
-		DrawSelector(self, pw, ph, YRP.lang_string(self.name), self.selected)
+		DrawSelector(self, pw, ph, YRP.lang_string(self.name), self.selected, hassubtabs)
+
+		if self.hassubtabs then
+			local br = ctr(20)
+			YRP.DrawIcon(YRP.GetDesignIcon("keyboard_arrow_down"), ph - br * 2, ph - br * 2, pw - br - ph / 2 - br, br, YRPGetColor("6"))
+		end
 
 		if self:IsHovered() then
 			self:GetParent().hovered = TAB.name
@@ -212,7 +240,7 @@ function PANEL:AddTab(name, netstr, starttab)
 		end
 	end
 
-	function TAB:AddToTab(_name,_netstr, url, func)
+	function TAB:AddToTab(_name, _netstr, url, func)
 		local entry = {}
 		entry.name = _name
 		entry.netstr = _netstr or ""
@@ -257,10 +285,17 @@ function PANEL:GetMenuInfo(netstr)
 					starttab = true
 				end
 
-				local pnl = self:AddTab(tab.name, tab.netstr, starttab)
+				local hassubtabs = false
+				for _i, subtab in pairs(subtabs) do
+					if subtab.parent == tab.name then
+						hassubtabs = true
+					end
+				end
+				local pnl = self:AddTab(tab.name, tab.netstr, starttab, hassubtabs)
 
 				for _i, subtab in pairs(subtabs) do
 					if subtab.parent == tab.name then
+						pnl.hassubtabs = true
 						pnl:AddToTab(subtab.name, subtab.netstr, subtab.url, subtab.func)
 					end
 				end
