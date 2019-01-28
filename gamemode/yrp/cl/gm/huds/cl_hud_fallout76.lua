@@ -555,7 +555,7 @@ function HUD_FO76()
 			FO76Name(CA)
 		end
 
-		if IsChatVisible() then
+		if IsChatVisible() and lply:GetNWBool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			FO76Chat(CH)

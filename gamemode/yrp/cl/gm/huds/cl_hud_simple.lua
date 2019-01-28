@@ -332,11 +332,13 @@ function HUDSimple()
 			ST.element = "ST"
 			HUDSimpleBG(ST)
 		end
-		local CH = {}
-		CH.element = "CH"
-		CH.r = ctr(16)
-		CH.visiblefunc = IsChatVisible
-		HUDSimpleBG(CH)
+		if lply:GetNWBool("bool_yrp_chat", false) then
+			local CH = {}
+			CH.element = "CH"
+			CH.r = ctr(16)
+			CH.visiblefunc = IsChatVisible
+			HUDSimpleBG(CH)
+		end
 		if lply:GetNWBool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
@@ -597,11 +599,13 @@ function HUDSimple()
 			ST.element = "ST"
 			HUDSimpleBR(ST)
 		end
-		CH = {}
-		CH.element = "CH"
-		CH.r = ctr(16)
-		CH.visiblefunc = IsChatVisible
-		HUDSimpleBR(CH)
+		if lply:GetNWBool("bool_yrp_chat", false) then
+			local CH = {}
+			CH.element = "CH"
+			CH.r = ctr(16)
+			CH.visiblefunc = IsChatVisible
+			HUDSimpleBR(CH)
+		end
 		if lply:GetNWBool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"

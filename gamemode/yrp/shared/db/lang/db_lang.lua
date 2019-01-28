@@ -50,7 +50,7 @@ end
 
 function YRP.get_language_name(ls)
 	for k, lang in pairs(yrp_button_info) do
-		if lang.initshort == ls then return lang["initinenglish"] end
+		if lang.short == ls then return lang["inenglish"] end
 	end
 
 	return "FAILED"

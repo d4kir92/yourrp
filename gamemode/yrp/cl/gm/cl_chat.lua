@@ -47,6 +47,10 @@ function checkChatVisible()
 		else
 			_showChat = true
 		end
+		lply = LocalPlayer()
+		if lply:GetNWBool("bool_yrp_chat", false) == false then
+			_showChat = false
+		end
 		yrpChat.richText:SetVisible(_showChat)
 		yrpChat.writeField:SetVisible(_showChat)
 		yrpChat.comboBox:SetVisible(_showChat)
@@ -165,9 +169,7 @@ function InitYRPChat()
 				net.WriteString(string.lower(data))
 			net.SendToServer()
 		end
-	end
 
-	if pa(yrpChat.window) then
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.richText:PerformLayout()
@@ -279,12 +281,16 @@ function InitYRPChat()
 						yrpChat.richText:AppendText(obj:Nick())
 					end
 				end
+				_fadeout = CurTime() + _delay
+
+				oldAddText (...)
 			end
-
-			_fadeout = CurTime() + _delay
-
-			oldAddText (...)
 		end
+	else
+		timer.Simple(1, function()
+			printGM("error", "Chat creation failed! " .. tostring(yrpChat) .. " " .. tostring(yrpChat.window) .. "." )
+			InitYRPChat()
+		end)
 	end
 end
 
@@ -305,7 +311,7 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 		else
 			return
 		end
-		if pa(yrpChat) then
+		if yrpChat.window != nil then
 			yrpChat:openChatbox(bTeam)
 		end
 		return true
