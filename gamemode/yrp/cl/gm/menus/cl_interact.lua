@@ -30,6 +30,8 @@ function openInteractMenu(SteamID)
 end
 
 net.Receive("openInteractMenu", function(len)
+	local ply = net.ReadEntity()
+	
 	local idcard = net.ReadBool()
 
 	local isInstructor = net.ReadBool()
@@ -40,7 +42,7 @@ net.Receive("openInteractMenu", function(len)
 	local demoteable = net.ReadBool()
 	local demoteName = net.ReadString()
 
-	local licenses = net.ReadString() or "FAILED"
+	local licenses = ply:GetLicenseNames()
 
 	_windowInteract = createVGUI("DFrame", nil, 1090, 1090, ScrW() - 160, ScrH() - 100)
 	function _windowInteract:OnClose()

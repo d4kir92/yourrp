@@ -39,11 +39,13 @@ function OpenPlayerOptions(ply)
 			SetClipboardText(ply:SteamID())
 			_menu:Remove()
 		end
+
 		local csid64 = _menu:AddOption(YRP.lang_string("LID_copysteamid64") .. ": " .. ply:SteamID64(), "icon16/page_copy.png")
 		function csid64:DoClick()
 			SetClipboardText(ply:SteamID64())
 			_menu:Remove()
 		end
+		
 		local crpname = _menu:AddOption(YRP.lang_string("LID_copyrpname") .. ": " .. ply:RPName(), "icon16/page_copy.png")
 		function crpname:DoClick()
 			SetClipboardText(ply:RPName())

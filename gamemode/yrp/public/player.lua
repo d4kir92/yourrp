@@ -163,11 +163,11 @@ end
 
 --[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
-	return tonumber(self:GetNWString("money", "0")) -- return float
+	return math.Round(tonumber(self:GetNWString("money", "0")), 2) -- return float
 end
 
 function Player:GetMoneyBank() -- Money that the bank is holding
-	return tonumber(self:GetNWString("moneybank", "0")) -- return float
+	return math.Round(tonumber(self:GetNWString("moneybank", "0")), 2) -- return float
 end
 
 function Player:Money()
@@ -179,7 +179,11 @@ function Player:MoneyBank()
 end
 
 function Player:FormattedMoney()
-	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), 1) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), 2) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
+function Player:FormattedMoneyBank()
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:MoneyBank(), 2) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 function Player:Salary()
@@ -187,12 +191,20 @@ function Player:Salary()
 end
 
 function Player:FormattedSalary()
-	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), 1) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), 2) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 --[[ Role ]]--
 function Player:GetRoleName() -- Role Name / "Job" Name
 	return self:YRPGetRoleName() -- return string
+end
+
+function Player:GetLicenseIDs()
+	return self:GetNWString("licenseIDs", "")
+end
+
+function Player:GetLicenseNames()
+	return self:GetNWString("licenseNames", "failed")
 end
 
 --[[ Faction ]]--

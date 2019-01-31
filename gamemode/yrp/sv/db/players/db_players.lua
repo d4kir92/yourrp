@@ -151,6 +151,7 @@ function set_role_values(ply)
 			local ChaTab = ply:GetChaTab()
 
 			ply:SetNWString("licenseIDs", "")
+			ply:SetNWString("licenseNames", "")
 
 			if worked(rolTab, "set_role_values rolTab") and worked(ChaTab, "set_role_values ChaTab") then
 				local _storage = string.Explode(",", ChaTab.storage)

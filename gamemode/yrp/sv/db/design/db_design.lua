@@ -23,8 +23,11 @@ end
 
 local HUDS = {}
 function RegisterHUDDesign(tab)
-	if tab.name == nil and tab.author != nil then
+	if tab.name == nil then
 		printGM("note", "RegisterDesign Failed! Missing Design Name")
+		return false
+	elseif tab.author == nil then
+		printGM("note", "RegisterDesign Failed! Missing Design Author")
 		return false
 	end
 	HUDS[tab.name] = tab

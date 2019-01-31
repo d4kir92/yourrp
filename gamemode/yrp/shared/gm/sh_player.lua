@@ -248,7 +248,7 @@ if SERVER then
 	function Player:InteruptCasting()
 		self:SetNWString("castname", "")
 		self:SetNWFloat("castcur", 0.0)
-		
+
 		--[[ failed casting ]]--
 		self:SetNWBool("iscasting", false)
 		if timer.Exists(self:SteamID() .. "castduration") then
@@ -326,17 +326,18 @@ if SERVER then
 
 	function Player:addMoney(money)
 		if isnumber(money) and self:GetNWString("money") != nil then
-			self:SetNWString("money", tonumber(self:GetNWString("money")) + math.Round(money, 2))
+			local newmoney = math.Round(tonumber(self:GetNWString("money")), 2) + math.Round(money, 2)
+			self:SetNWString("money", math.Round(newmoney, 2))
 			self:UpdateMoney()
 		end
 	end
 
 	function Player:YRPGetMoney()
-		return tonumber(self:GetNWString("money", "0"))
+		return math.Round(tonumber(self:GetNWString("money", "0")), 2)
 	end
 
 	function Player:YRPGetMoneyBank()
-		return tonumber(self:GetNWString("moneybank", "0"))
+		return math.Round(tonumber(self:GetNWString("moneybank", "0")), 2)
 	end
 
 	function Player:SetMoney(money)
@@ -356,7 +357,8 @@ if SERVER then
 	function Player:addMoneyBank(money)
 		if money != nil then
 			if isnumber(money) and self:GetNWString("moneybank") != nil then
-				self:SetNWString("moneybank", tonumber(self:GetNWString("moneybank")) + math.Round(money, 2))
+				local newmoney = math.Round(tonumber(self:GetNWString("moneybank")), 2) + math.Round(money, 2)
+				self:SetNWString("moneybank", math.Round(newmoney, 2))
 				self:UpdateMoney()
 			end
 		end

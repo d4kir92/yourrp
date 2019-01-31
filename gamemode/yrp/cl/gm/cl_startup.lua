@@ -203,12 +203,15 @@ function GetSWEPsList()
 end
 
 function GetSwepWorldModel(swepcn)
+	local result = "notfound.mdl"
 	local allsweps = GetSWEPsList()
 	for i, swep in pairs(allsweps) do
 		if swep.ClassName == swepcn then
-			return swep.WorldModel
+			result = swep.WorldModel or result
+			break
 		end
 	end
+	return result
 end
 
 function GetSWEPWorldModel(ClassName)
@@ -232,7 +235,9 @@ function GetSWEPWorldModel(ClassName)
 			v.ClassName = v.Class or ""
 		end
 
-		if tostring(v.ClassName) == tostring(ClassName) and v.WorldModel ~= nil then return v.WorldModel end
+		if tostring(v.ClassName) == tostring(ClassName) and v.WorldModel ~= nil then
+			return v.WorldModel
+		end
 	end
 
 	return ""

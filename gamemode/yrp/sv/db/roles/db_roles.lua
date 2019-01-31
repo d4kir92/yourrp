@@ -1216,7 +1216,7 @@ net.Receive("openInteractMenu", function(len, ply)
 
 						local tmpSearch = true	--tmpTargetSteamID
 						local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
-						if tmpTableSearch != nil then
+						if wk(tmpTableSearch) then
 							local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
 							local tmpCounter = 0
 							while (tmpSearch) do
@@ -1246,6 +1246,8 @@ net.Receive("openInteractMenu", function(len, ply)
 					end
 
 					net.Start("openInteractMenu")
+						net.WriteEntity(tmpTarget)
+
 						net.WriteBool(idcard)
 
 						net.WriteBool(isInstructor)
@@ -1255,7 +1257,6 @@ net.Receive("openInteractMenu", function(len, ply)
 
 						net.WriteBool(tmpDemote)
 						net.WriteString(tmpDemoteName)
-
 					net.Send(ply)
 				end
 			end
