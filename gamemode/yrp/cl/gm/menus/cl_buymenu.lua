@@ -106,10 +106,10 @@ function createShopItem(item, duid)
 		end
 	else
 		_i.require = createD("DPanel", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
-		_i.require.text = "loading"
+		_i.require.text = "[NOT FOUND]"
 		net.Receive("GetLicenseName", function(len)
 			local tmp = net.ReadString()
-			if wk(tmp) then
+			if wk(tmp) and _i.require != nil then
 				_i.require.text = tmp
 			end
 		end)
@@ -364,8 +364,10 @@ net.Receive("shop_get_tabs", function(len)
 							net.Receive("shop_get_items", function(l)
 								local _items = net.ReadTable()
 								for k, item in pairs(_items) do
-									local _item = createShopItem(item, _dealer_uid)
-									self:Add(_item)
+									timer.Simple(0.1 * k, function()
+										local _item = createShopItem(item, _dealer_uid)
+										self:Add(_item)
+									end)
 								end
 							end)
 							net.Start("shop_get_items")

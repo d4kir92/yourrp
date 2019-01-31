@@ -794,7 +794,6 @@ function DStringListBox(tab)
 
 				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
 				line:SetText("")
-
 				line.uniqueID = v.uniqueID
 				line.models = string.Explode(",", v.string_models)
 				line.pmid = 1

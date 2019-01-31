@@ -176,6 +176,18 @@ function Player:AddLicense(license)
 		_licenseIDs = string.Implode(",", _licenseIDs)
 
 		self:SetNWString("licenseIDs", tostring(_licenseIDs))
+
+		local ids = string.Explode(",", _licenseIDs)
+		local lnames = {}
+		for i, id in pairs(ids) do
+			local lic = SQL_SELECT(_db_name, "name", "uniqueID = '" .. id .. "'")
+			if wk(lic) then
+				lic = lic[1]
+				table.insert(lnames, lic.name)
+			end
+		end
+		lnames = table.concat(lnames, ", ")
+		self:SetNWString("licenseNames", lnames)
 	end
 end
 
@@ -184,8 +196,9 @@ net.Receive("GetLicenseName", function(len, ply)
 	local id = net.ReadInt(32)
 	local lic = SQL_SELECT(_db_name, "name", "uniqueID = '" .. id .. "'")
 	if wk(lic) then
+		lic = lic[1]
 		net.Start("GetLicenseName")
-			net.WriteString(lic[1].name)
+			net.WriteString(lic.name)
 		net.Send(ply)
 	end
 end)

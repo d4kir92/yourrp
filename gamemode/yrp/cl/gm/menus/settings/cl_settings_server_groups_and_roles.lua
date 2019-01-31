@@ -1713,6 +1713,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local cl_sweps = {}
 				for i, v in pairs(tab_pm) do
 					local swep = {}
+					swep.uniqueID = i
 					swep.string_models = GetSwepWorldModel(v)
 					swep.string_classname = v
 					swep.string_name = v
@@ -1812,7 +1813,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local cl_ndsweps = {}
 				for i, v in pairs(tab_pm) do
 					local ndswep = {}
-					ndswep.string_models = GetSwepWorldModel(v)
+					ndswep.string_models = GetSwepWorldModel(v) or "notfound"
 					ndswep.string_classname = v
 					ndswep.string_name = v
 					ndswep.doclick = function()
@@ -1916,6 +1917,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				for i, v in pairs(tab_li) do
 					if istable(v) then
 						local license = {}
+						license.uniqueID = i
 						license.string_models = ""
 						license.string_classname = v.uniqueID
 						license.string_name = v.string_name

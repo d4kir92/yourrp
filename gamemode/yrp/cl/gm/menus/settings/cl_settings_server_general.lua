@@ -257,7 +257,7 @@ function AddToTabRecursive(tab, folder, path, wildcard)
 end
 
 net.Receive("Connect_Settings_General", function(len)
-	if pa(settingsWindow) then
+	if pa(settingsWindow) and settingsWindow.window != nil then
 
 		function settingsWindow.window.site:Paint(pw, ph)
 			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
