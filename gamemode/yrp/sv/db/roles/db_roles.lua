@@ -462,7 +462,7 @@ function DuplicateRole(ruid, guid)
 
 		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
 
-		SendRoleList(ruid, guid)
+		SendRoleList(guid, role.int_prerole)
 	else
 		printGM("note", "Role [" .. ruid .. "] was deleted.")
 	end

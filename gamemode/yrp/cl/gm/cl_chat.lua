@@ -214,7 +214,7 @@ function InitYRPChat()
 			end)
 		end
 
-		local oldAddText = oldAddText or chat.AddText
+		local oldAddText = chat.AddText
 		function chat.AddText(...)
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
@@ -282,9 +282,8 @@ function InitYRPChat()
 					end
 				end
 				_fadeout = CurTime() + _delay
-
-				oldAddText (...)
 			end
+			oldAddText (...)
 		end
 	else
 		timer.Simple(1, function()
