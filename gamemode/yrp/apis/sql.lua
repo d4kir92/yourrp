@@ -451,7 +451,6 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			if _result ~= nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
-
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
