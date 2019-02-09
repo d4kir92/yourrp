@@ -22,6 +22,10 @@ function Player:Slowed()
 	return self:GetNWBool("slowed", false)
 end
 
+function Player:IsInCombat()
+	return self:GetNWBool("inCombat", false)
+end
+
 --[[ Stats ]]--
 function Player:GetMaxArmor()
 	return self:GetNWInt("MaxArmor", 1)
@@ -197,6 +201,18 @@ function Player:FormattedSalary()
 end
 
 --[[ Role ]]--
+function Player:GetRoleUID()
+	return tonumber(self:GetNWString("roleUniqueID", "0"))
+end
+
+function Player:GetRoleCooldown()
+	return tonumber(self:GetNWInt("int_role_cooldown", "1"))
+end
+
+function Player:GetRoleOnDeathRoleUID()
+	return tonumber(self:GetNWString("int_roleondeath", "0"))
+end
+
 function Player:GetRoleName() -- Role Name / "Job" Name
 	return self:YRPGetRoleName() -- return string
 end

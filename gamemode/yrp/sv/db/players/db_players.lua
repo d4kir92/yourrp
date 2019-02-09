@@ -90,7 +90,7 @@ function updateRoleUses(rid)
 end
 
 function SetRole(ply, rid, force)
-	if canGetRole(ply, rid) or force then
+	if canGetRole(ply, rid, false) or force then
 		set_role(ply, rid)
 		set_role_values(ply)
 	else
@@ -223,6 +223,9 @@ function set_role_values(ply)
 
 				ply:SetNWBool("canbeagent", tobool(rolTab.bool_canbeagent))
 				ply:SetNWBool("isadminonly", tobool(rolTab.bool_adminonly))
+
+				ply:SetNWInt("int_role_cooldown", tonumber(rolTab.int_cooldown))
+				ply:SetNWString("int_roleondeath", rolTab.int_roleondeath)
 
 				local _licenseIDs = string.Explode(",", rolTab.string_licenses)
 				for i, lic in pairs(_licenseIDs) do
@@ -549,46 +552,68 @@ function startVote(ply, table)
 	end
 end
 
-function canGetRole(ply, roleID)
+function canGetRole(ply, roleID, want)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		if tonumber(ply:GetNWString("roleUniqueID", "0")) == tonumber(roleID) then
-			return true
-		else
-			if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].int_maxamount) == -1  then
-				-- Admin only
-				if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
-					if !ply:HasAccess() then
-						printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
-						return false
-					else
-						return true
-					end
-				end
-
-				-- Whitelist + Prerole
-				if tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) > 0 then
-					printGM("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
-					if !isWhitelisted(ply, roleID) then
-						printGM("gm", "[canGetRole] " .. ply:YRPName() .. " is not whitelisted.")
-						return false
-					end
-				end
-
-				-- Usergroups
-				local ugs = string.Explode(",", tmpTableRole[1].string_usergroups)
-				local ug = string.upper(ply:GetUserGroup())
-				local found = table.HasValue(ugs, ug) or table.HasValue(ugs, "ALL")
-				if !found then
-					printGM("gm", "[canGetRole] " .. ply:YRPName() .. " is not allowed to use this role (UserGroup).")
+		if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].int_maxamount) == -1  then
+			-- Admin only
+			if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
+				if !ply:HasAccess() then
+					local text = "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin."
+					printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
+					net.Start("yrp_info2")
+						net.WriteString(text)
+					net.Broadcast()
 					return false
+				else
+					return true
 				end
-				return true
-			else
-				printGM("gm", "[canGetRole] " .. ply:YRPName() .. " maxamount reached.")
+			end
+
+			if tonumber(ply:GetNWInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then
+				print(tonumber(ply:GetNWInt("ts_role_" .. ply:GetRoleUID(), 0)), CurTime())
+				local text = ply:YRPName() .. " is on cooldown for this role!"
+				printGM("gm", "[canGetRole] " .. text)
+				net.Start("yrp_info2")
+					net.WriteString(text)
+				net.Broadcast()
 				return false
 			end
+
+			-- Whitelist + Prerole
+			if tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) > 0 then
+				printGM("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
+				if !isWhitelisted(ply, roleID) then
+					local text = ply:YRPName() .. " is not whitelisted."
+					printGM("gm", "[canGetRole] " .. text)
+					net.Start("yrp_info2")
+						net.WriteString(text)
+					net.Broadcast()
+					return false
+				end
+			end
+
+			-- Usergroups
+			local ugs = string.Explode(",", tmpTableRole[1].string_usergroups)
+			local ug = string.upper(ply:GetUserGroup())
+			local found = table.HasValue(ugs, ug) or table.HasValue(ugs, "ALL")
+			if !found then
+				local text = ply:YRPName() .. " is not allowed to use this role (UserGroup)."
+				printGM("gm", "[canGetRole] " .. text)
+				net.Start("yrp_info2")
+					net.WriteString(text)
+				net.Broadcast()
+				return false
+			end
+			return true
+		else
+			local text = ply:YRPName() .. " maxamount reached."
+			printGM("gm", "[canGetRole] " .. text)
+			net.Start("yrp_info2")
+				net.WriteString(text)
+			net.Broadcast()
+			return false
 		end
 	end
 	printGM("error", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
@@ -623,7 +648,7 @@ util.AddNetworkString("wantRole")
 net.Receive("wantRole", function(len, ply)
 	local uniqueIDRole = net.ReadInt(16)
 
-	if canGetRole(ply, uniqueIDRole) then
+	if canGetRole(ply, uniqueIDRole, true) then
 		--Remove Sweps from old role
 		RemRolVals(ply)
 
@@ -631,6 +656,9 @@ net.Receive("wantRole", function(len, ply)
 
 		--New role
 		SetRole(ply, uniqueIDRole)
+
+		local reusetime = math.Round(CurTime() + ply:GetRoleCooldown(), 0)
+		ply:SetNWInt("ts_role_" .. ply:GetRoleUID(), reusetime)
 	elseif canVoteRole(ply, uniqueIDRole) then
 		local _role = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
 		startVote(ply, _role)

@@ -938,28 +938,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			local otherroles = {}
-			otherroles[0] = YRP.lang_string("LID_none")
-			for i, tab in pairs(roles) do
-				tab.uniqueID = tonumber(tab.uniqueID)
-				if tab.uniqueID != role.uniqueID then
-					otherroles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
-				end
-			end
-
-			local prerole = {}
-			prerole.parent = ea.info
-			prerole.uniqueID = role.uniqueID
-			prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
-			prerole.netstr = "update_role_int_prerole"
-			prerole.value = tonumber(role.int_prerole)
-			prerole.uniqueID = role.uniqueID
-			prerole.lforce = false
-			prerole.choices = otherroles
-			ea[role.uniqueID].prerole = DComboBox(prerole)
-
-			DHr(hr)
-
 			local maxa = {}
 			maxa[0] = YRP.lang_string("LID_disabled")
 			for i = 1, 128 do
@@ -1046,7 +1024,52 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			salarytime.max = 9999
 			ea[role.uniqueID].requireslevel = DIntBox(salarytime)
 
+			DHr(hr)
+
+			local otherroles = {}
+			otherroles[0] = YRP.lang_string("LID_none")
+			for i, tab in pairs(roles) do
+				tab.uniqueID = tonumber(tab.uniqueID)
+				if tab.uniqueID != role.uniqueID then
+					otherroles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+				end
+			end
+
+			local prerole = {}
+			prerole.parent = ea.info
+			prerole.uniqueID = role.uniqueID
+			prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
+			prerole.netstr = "update_role_int_prerole"
+			prerole.value = tonumber(role.int_prerole)
+			prerole.uniqueID = role.uniqueID
+			prerole.lforce = false
+			prerole.choices = otherroles
+			ea[role.uniqueID].prerole = DComboBox(prerole)
+
+			DHr(hr)
+
+			local rod_roles = {}
+			rod_roles[0] = YRP.lang_string("LID_none")
+			for i, tab in pairs(roles) do
+				tab.uniqueID = tonumber(tab.uniqueID)
+				rod_roles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+			end
+			rod_roles[0] = YRP.lang_string("LID_none")
+
+			local roleondeath = {}
+			roleondeath.parent = ea.info
+			roleondeath.uniqueID = role.uniqueID
+			roleondeath.header = YRP.lang_string("LID_roleafterdeath")
+			roleondeath.netstr = "update_role_int_roleondeath"
+			roleondeath.value = tonumber(role.int_roleondeath)
+			roleondeath.uniqueID = role.uniqueID
+			roleondeath.lforce = false
+			roleondeath.choices = rod_roles
+			ea[role.uniqueID].roleondeath = DComboBox(roleondeath)
+
 			ea.info:AutoSize()
+
+
 
 			-- FLAGS
 			local flags = {}
@@ -1939,6 +1962,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
+			ea.equipment:AutoSize()
+
+
+
 			local restriction = {}
 			restriction.parent = ea.background
 			restriction.x = ctr(1660)
@@ -2053,7 +2080,22 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_voteable.lforce = false
 			ea[role.uniqueID].bool_voteable = DCheckBox(bool_voteable)
 
+			DHr(hr)
+
+			local cooldown = {}
+			cooldown.parent = ea.restriction
+			cooldown.header = "LID_cooldown"
+			cooldown.netstr = "update_role_int_cooldown"
+			cooldown.value = role.int_cooldown
+			cooldown.uniqueID = role.uniqueID
+			cooldown.lforce = false
+			cooldown.min = 0
+			cooldown.max = 360
+			ea[role.uniqueID].cooldown = DIntBox(cooldown)
+
 			ea.restriction:AutoSize()
+
+
 
 			local attributes = {}
 			attributes.parent = ea.background

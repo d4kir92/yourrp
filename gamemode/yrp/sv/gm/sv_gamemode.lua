@@ -218,6 +218,12 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		end
 	end
 
+	local roleondeathuid = ply:GetRoleOnDeathRoleUID()
+	print("TESTTTTTTTTTTTTT", roleondeathuid)
+	if roleondeathuid > 0 then
+		SetRole(ply, roleondeathuid, false)
+	end
+
 	if IsDropItemsOnDeathEnabled() then
 		local _weapons = ply:GetWeapons()
 		local _cooldown_item = 120
@@ -369,7 +375,6 @@ function StartCombat(ply)
 			end)
 		end
 	end
-
 end
 
 hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)

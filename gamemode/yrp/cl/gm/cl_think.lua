@@ -258,8 +258,14 @@ LocalPlayer():SetNWInt("view_s", 0)
 
 local afktime = CurTime()
 local _view_delay = true
+local blink_delay = 0
 function KeyPress()
 	local ply = LocalPlayer()
+
+	if ply:IsInCombat() and CurTime() > blink_delay and !system.HasFocus() then
+		blink_delay = CurTime() + 1
+		system.FlashWindow()
+	end
 
 	if ply:GetNWBool("isafk", false) then
 		for i = 107, 113 do
