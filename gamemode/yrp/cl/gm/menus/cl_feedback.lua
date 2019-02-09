@@ -22,9 +22,9 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-
 
 function openFeedbackMenu()
 	openMenu()
-	_fb.window = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	_fb.window = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
 	_fb.window:Center()
-	_fb.window:SetTitle("")
+	_fb.window:SetTitle("LID_givefeedback")
 	function _fb.window:OnClose()
 		closeMenu()
 	end
@@ -35,13 +35,13 @@ function openFeedbackMenu()
 	_fb.langu = YRP.DChangeLanguage(_fb.window, BScrW()/2, ctr(50), ctr(100))
 
 	function _fb.window:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, YRP.lang_string("LID_givefeedback") .. " [PROTOTYPE]")
+		hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_givefeedback") .. " [PROTOTYPE]")
 	end
 
-	_fb.discord = createD("DButton", _fb.window, ctr(800), ctr(50), ctr(10), ctr(50))
-	_fb.discord:SetText("")
+	_fb.discord = createD("YButton", _fb.window, ctr(800), ctr(50), ctr(10), ctr(50))
+	_fb.discord:SetText("LID_getlivesupport")
 	function _fb.discord:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("LID_getlivesupport"))
+		hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_getlivesupport"))
 	end
 	function _fb.discord:DoClick()
 		gui.OpenURL("https://discord.gg/sEgNZxg")
@@ -66,10 +66,10 @@ function openFeedbackMenu()
 	end
 	_fb.contactT = createD("DTextEntry", _fb.window, BScrW() - ctr(20), ctr(50), ctr(10), ctr(900))
 
-	_fb.send = createD("DButton", _fb.window, ctr(600), ctr(50), ctr(10), ctr(1000))
-	_fb.send:SetText("")
+	_fb.send = createD("YButton", _fb.window, ctr(600), ctr(50), ctr(10), ctr(1000))
+	_fb.send:SetText("LID_sendfeedback")
 	function _fb.send:Paint(pw, ph)
-		surfaceButton(self, pw, ph, string.upper(YRP.lang_string("LID_sendfeedback")))
+		hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, string.upper(YRP.lang_string("LID_sendfeedback")))
 	end
 	function _fb.send:DoClick()
 		printGM("gm", "send feedback")

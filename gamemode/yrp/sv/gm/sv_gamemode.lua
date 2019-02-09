@@ -48,8 +48,6 @@ function GM:PlayerAuthed(ply, steamid, uniqueid)
 
 	printGM("gm", "[PlayerAuthed] " .. ply:YRPName())
 
-	SetDesign(ply)
-
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply)
@@ -62,6 +60,7 @@ function YRP:Loadout(ply)
 	ply:SetNWBool("bool_loadouted", false)
 
 	ply:HudLoadout()
+	ply:InterfaceLoadout()
 	ply:DesignLoadout()
 
 	ply:UserGroupLoadout()
@@ -78,8 +77,6 @@ function GM:PlayerLoadout(ply)
 		YRP:Loadout(ply)
 
 		--ply:CheckInventory()
-
-		SetDesign(ply)
 
 		--[[ Status Reset ]]--
 		ply:SetNWBool("cuffed", false)

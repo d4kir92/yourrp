@@ -14,7 +14,7 @@ end
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 
-function AddElement(tab)
+function AddHUDElement(tab)
 	for name, value in pairs(tab.floats) do
 		local _name = "float_HUD_" .. tab.element .. "_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
@@ -68,7 +68,7 @@ HP.ints = {}
 HP.ints.AX = 1
 HP.ints.AY = 1
 HP.ints.TS = 24
-AddElement(HP)
+AddHUDElement(HP)
 
 local AR = {}
 AR.element = "AR"
@@ -95,7 +95,7 @@ AR.ints = {}
 AR.ints.AX = 1
 AR.ints.AY = 1
 AR.ints.TS = 24
-AddElement(AR)
+AddHUDElement(AR)
 
 local XP = {}
 XP.element = "XP"
@@ -122,7 +122,7 @@ XP.ints = {}
 XP.ints.AX = 1
 XP.ints.AY = 1
 XP.ints.TS = 18
-AddElement(XP)
+AddHUDElement(XP)
 
 local MO = {}
 MO.element = "MO"
@@ -149,7 +149,7 @@ MO.ints = {}
 MO.ints.AX = 1
 MO.ints.AY = 1
 MO.ints.TS = 24
-AddElement(MO)
+AddHUDElement(MO)
 
 local ST = {}
 ST.element = "ST"
@@ -176,7 +176,7 @@ ST.ints = {}
 ST.ints.AX = 1
 ST.ints.AY = 1
 ST.ints.TS = 24
-AddElement(ST)
+AddHUDElement(ST)
 
 local CH = {}
 CH.element = "CH"
@@ -203,7 +203,7 @@ CH.ints = {}
 CH.ints.AX = 1
 CH.ints.AY = 1
 CH.ints.TS = 24
-AddElement(CH)
+AddHUDElement(CH)
 
 local HU = {}
 HU.element = "HU"
@@ -230,7 +230,7 @@ HU.ints = {}
 HU.ints.AX = 1
 HU.ints.AY = 1
 HU.ints.TS = 24
-AddElement(HU)
+AddHUDElement(HU)
 
 local TH = {}
 TH.element = "TH"
@@ -257,7 +257,7 @@ TH.ints = {}
 TH.ints.AX = 1
 TH.ints.AY = 1
 TH.ints.TS = 24
-AddElement(TH)
+AddHUDElement(TH)
 
 local CA = {}
 CA.element = "CA"
@@ -284,7 +284,7 @@ CA.ints = {}
 CA.ints.AX = 1
 CA.ints.AY = 1
 CA.ints.TS = 24
-AddElement(CA)
+AddHUDElement(CA)
 
 local AB = {}
 AB.element = "AB"
@@ -311,7 +311,7 @@ AB.ints = {}
 AB.ints.AX = 1
 AB.ints.AY = 1
 AB.ints.TS = 24
-AddElement(AB)
+AddHUDElement(AB)
 
 local WP = {}
 WP.element = "WP"
@@ -338,7 +338,7 @@ WP.ints = {}
 WP.ints.AX = 1
 WP.ints.AY = 1
 WP.ints.TS = 24
-AddElement(WP)
+AddHUDElement(WP)
 
 local WS = {}
 WS.element = "WS"
@@ -365,7 +365,7 @@ WS.ints = {}
 WS.ints.AX = 1
 WS.ints.AY = 1
 WS.ints.TS = 24
-AddElement(WS)
+AddHUDElement(WS)
 
 local WN = {}
 WN.element = "WN"
@@ -392,7 +392,7 @@ WN.ints = {}
 WN.ints.AX = 1
 WN.ints.AY = 1
 WN.ints.TS = 24
-AddElement(WN)
+AddHUDElement(WN)
 
 local MI = {}
 MI.element = "MI"
@@ -419,7 +419,7 @@ MI.ints = {}
 MI.ints.AX = 1
 MI.ints.AY = 4
 MI.ints.TS = 24
-AddElement(MI)
+AddHUDElement(MI)
 
 local BA = {}
 BA.element = "BA"
@@ -446,7 +446,7 @@ BA.ints = {}
 BA.ints.AX = 1
 BA.ints.AY = 1
 BA.ints.TS = 24
-AddElement(BA)
+AddHUDElement(BA)
 
 local CON = {}
 CON.element = "CON"
@@ -473,7 +473,7 @@ CON.ints = {}
 CON.ints.AX = 1
 CON.ints.AY = 1
 CON.ints.TS = 24
-AddElement(CON)
+AddHUDElement(CON)
 
 local PE = {}
 PE.element = "PE"
@@ -500,7 +500,7 @@ PE.ints = {}
 PE.ints.AX = 0
 PE.ints.AY = 1
 PE.ints.TS = 18
-AddElement(PE)
+AddHUDElement(PE)
 
 local NE = {}
 NE.element = "NE"
@@ -527,7 +527,7 @@ NE.ints = {}
 NE.ints.AX = 0
 NE.ints.AY = 1
 NE.ints.TS = 18
-AddElement(NE)
+AddHUDElement(NE)
 
 local COM = {}
 COM.element = "COM"
@@ -554,7 +554,7 @@ COM.ints = {}
 COM.ints.AX = 1
 COM.ints.AY = 1
 COM.ints.TS = 12
-AddElement(COM)
+AddHUDElement(COM)
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")

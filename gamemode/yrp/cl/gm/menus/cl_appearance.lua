@@ -252,7 +252,7 @@ net.Receive("get_menu_bodygroups", function(len)
 		end
 	elseif pa(_yrp_appearance.window) then
 		function _yrp_appearance.window:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
+			hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 			local tab = {}
 			tab.x = pw / 2
 			tab.y = ph / 2
@@ -291,8 +291,8 @@ function open_appearance()
 
 	local ply = LocalPlayer()
 
-	_yrp_appearance.window = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
-	_yrp_appearance.window:SetTitle("")
+	_yrp_appearance.window = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
+	_yrp_appearance.window:SetTitle("LID_appearance")
 	_yrp_appearance.window:Center()
 	_yrp_appearance.window:SetDraggable(false)
 	_yrp_appearance.window:ShowCloseButton(true)
@@ -301,7 +301,7 @@ function open_appearance()
 		_yrp_appearance.window:Remove()
 	end
 	function _yrp_appearance.window:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
+		hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 	end
 
 	_yrp_appearance.left = createD("DPanel", _yrp_appearance.window, BScrW(), ScrH() - ctr(50), 0, ctr(50))

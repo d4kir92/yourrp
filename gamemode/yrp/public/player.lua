@@ -3,7 +3,9 @@
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
 AddCSLuaFile("player/hud.lua")
+AddCSLuaFile("player/interface.lua")
 include("player/hud.lua")
+include("player/interface.lua")
 
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")

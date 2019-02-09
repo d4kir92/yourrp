@@ -213,6 +213,11 @@ function StringToColor(str)
 	return Color(_col[1], _col[2], _col[3], _col[4] or 255)
 end
 
+function ColorToString(col)
+	col.a = col.a or 255
+	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
+end
+
 function RegisterDesign(tab)
 	if tab.name ~= nil then
 		yrp_if[tab.name] = {}

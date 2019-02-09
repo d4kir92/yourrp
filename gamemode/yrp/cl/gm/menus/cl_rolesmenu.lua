@@ -78,11 +78,11 @@ function createRoleBox(rol, parent, mainparent)
 		end
 
 		--[[ Role Button ]]--
-		_rol.gr = createD("DButton", _rol, _rol:GetWide(), ctrb(60), 0, _rol:GetTall()-ctrb(60))
+		_rol.gr = createD("YButton", _rol, _rol:GetWide(), ctrb(60), 0, _rol:GetTall()-ctrb(60))
 		function _rol.gr:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinformation"))
+			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinformation"))
 		end
-		_rol.gr:SetText("")
+		_rol.gr:SetText("LID_moreinformation")
 		function _rol.gr:DoClick()
 			local _pm = string.Explode(",", rol.string_playermodels)
 
@@ -274,13 +274,13 @@ end
 function openRoleMenu()
 	openMenu()
 	if LocalPlayer():GetNWBool("bool_players_can_switch_role", false) then
-		_rm = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+		_rm = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
 		_rm:Center()
 		_rm:ShowCloseButton(true)
 		_rm:SetDraggable(false)
-		_rm:SetTitle("")
+		_rm:SetTitle("LID_rolemenu")
 		function _rm:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("LID_rolemenu") .. " [PROTOTYPE]")
+			hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_rolemenu") .. " [PROTOTYPE]")
 		end
 
 		_rm.info = createD("DPanel", _rm, ctrb(800), ScrH() - ctrb(60), BScrW() - ctrb(10) - ctrb(800), ctrb(50))
@@ -329,12 +329,12 @@ function openRoleMenu()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end
 
-		_rm.infobutton = createD("DButton", _rm.info, ctrb(800-20), ctrb(100), ctrb(10), _rm.info:GetTall() - ctrb(100+10))
-		_rm.infobutton:SetText("")
+		_rm.infobutton = createD("YButton", _rm.info, ctrb(800-20), ctrb(100), ctrb(10), _rm.info:GetTall() - ctrb(100+10))
+		_rm.infobutton:SetText("LID_getrole")
 		_rm.infobutton.rolename = ""
 		function _rm.infobutton:Paint(pw, ph)
 			if _rm.info.rolename == YRP.lang_string("LID_none") then return end
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_getrole"))
+			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_getrole"))
 		end
 		function _rm.infobutton:DoClick()
 			if self.uniqueID != nil then

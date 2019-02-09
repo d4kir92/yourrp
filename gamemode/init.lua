@@ -35,6 +35,8 @@ AddCSLuaFile("yrp/cl/gm/cl_think.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_simple.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_fallout76.lua")
 
+AddCSLuaFile("yrp/cl/gm/interfaces/cl_if_simple.lua")
+
 AddCSLuaFile("yrp/cl/gm/hud/cl_hud_crosshair.lua")
 AddCSLuaFile("yrp/cl/gm/hud/cl_hud_map.lua")
 AddCSLuaFile("yrp/cl/gm/hud/cl_hud_player.lua")
@@ -86,7 +88,6 @@ AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_yourrp_addons.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_client_charakter.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_client_keybinds.lua")
-AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_interface.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_give.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_map.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_licenses.lua")
