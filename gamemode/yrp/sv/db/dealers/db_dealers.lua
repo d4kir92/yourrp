@@ -15,7 +15,7 @@ SQL_ADD_COLUMN(_db_name, "storagepoints", "TEXT DEFAULT ' '")
 --db_is_empty(_db_name)
 
 if SQL_SELECT(_db_name, "*", "uniqueID = 1") == nil then
-	local _global_shop = SQL_INSERT_INTO(_db_name, "name, uniqueID", "'Buy menu', 1")
+	local _global_shop = SQL_INSERT_INTO(_db_name, "name, uniqueID", "'LID_buymenu', 1")
 end
 
 local _minus = SQL_SELECT(_db_name, "*", "uniqueID = '-1'")
@@ -41,7 +41,7 @@ function CleanUpDealers()
 					found = true
 				end
 			end
-			if !found and dealer.uniqueID != 1 then
+			if !found and tonumber(dealer.uniqueID) != 1 then
 				printGM("db", "Removed unused dealer: " .. dealer.name .. " [UID: " .. dealer.uniqueID .. "]")
 				dealer_rem(dealer.uniqueID)
 			end

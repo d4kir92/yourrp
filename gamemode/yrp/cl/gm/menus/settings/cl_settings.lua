@@ -3,7 +3,6 @@
 -- OLD Sites
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
-include("cl_settings_server_interface.lua")
 include("cl_settings_server_give.lua")
 include("cl_settings_server_licenses.lua")
 include("cl_settings_server_shops.lua")

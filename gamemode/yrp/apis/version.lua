@@ -108,13 +108,14 @@ if CLIENT then
 	function VersionWindow()
 		if CurTime() < check_window then return end
 		check_window = CurTime() + 5
-		local frame = createVGUI("DFrame", nil, 1200, 570, 0, 0)
+		local frame = createVGUI("YFrame", nil, 1200, 570, 0, 0)
 		frame:Center()
-		frame:SetTitle("")
+		frame:SetTitle("LID_about")
 		function frame:Paint(pw, ph)
+			hook.Run("YFramePaint", self, pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-			surfaceWindow(self, pw, ph, YRP.lang_string("LID_about"))
+			--surfaceWindow(self, pw, ph, YRP.lang_string("LID_about"))
 
 			draw.SimpleTextOutlined("Language:", "HudBars", ctr(400), ctr(50 + 30), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			local tab = {}
@@ -134,13 +135,13 @@ if CLIENT then
 
 		local _langu = YRP.DChangeLanguage(frame, ctr(400 + 10), ctr(60), ctr(72))
 
-		local showChanges = createVGUI("DButton", frame, 520, 80, 0, 0)
-		showChanges:SetText("")
+		local showChanges = createVGUI("YButton", frame, 520, 80, 0, 0)
+		showChanges:SetText("LID_showchanges")
 		function showChanges:DoClick()
 			gui.OpenURL("http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152")
 		end
 		function showChanges:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_showchanges"))
+			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_showchanges"))
 		end
 
 		if LocalPlayer():HasAccess() then
@@ -156,13 +157,13 @@ if CLIENT then
 				end
 				restartServer:SetPos(ctr(600 + 10), ctr(460))
 			else
-				local download_latest_git = createVGUI("DButton", frame, 520, 80, 0, 0)
-				download_latest_git:SetText("")
+				local download_latest_git = createVGUI("YButton", frame, 520, 80, 0, 0)
+				download_latest_git:SetText("LID_downloadlatestversion")
 				function download_latest_git:DoClick()
 					gui.OpenURL("https://github.com/d4kir92/GMOD-YourRP-unstable")
 				end
 				function download_latest_git:Paint(pw, ph)
-					surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
+					hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
 				end
 				download_latest_git:SetPos(ctr(600 + 10), ctr(460))
 			end

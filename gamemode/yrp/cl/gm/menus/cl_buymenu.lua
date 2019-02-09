@@ -214,9 +214,9 @@ net.Receive("shop_get_tabs", function(len)
 	local _dealer_uid = _dealer.uniqueID
 	local _tabs = net.ReadTable()
 
-	_bm.window = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	_bm.window = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
 	_bm.window.dUID = _dealer_uid
-	_bm.window:SetTitle("")
+	_bm.window:SetTitle(_dealer.name)
 	_bm.window:Center()
 	_bm.window:ShowCloseButton(true)
 	_bm.window:SetDraggable(false)
@@ -227,22 +227,18 @@ net.Receive("shop_get_tabs", function(len)
 		closeMenu()
 	end
 	function _bm.window:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, YRP.lang_string(_dealer.name) .. " [PROTOTYPE]")
+		hook.Run("YFramePaint", self, pw, ph) -- surfaceWindow(self, pw, ph, YRP.lang_string(_dealer.name) .. " [PROTOTYPE]")
 	end
 
 	--[[ Settings ]]--
 	if LocalPlayer():HasAccess() then
-		_bm.settings = createD("DButton", _bm.window, ctrb(40), ctrb(40), _bm.window:GetWide() - ctrb(240), ctrb(5))
+		_bm.settings = createD("YButton", _bm.window, ctrb(40), ctrb(40), _bm.window:GetWide() - ctrb(240), ctrb(5))
 		_bm.settings:SetText("")
 		function _bm.settings:Paint(pw, ph)
+			hook.Run("YButtonPaint", self, pw, ph)
 			local _br = 4
-			self.color = Color(255, 255, 255)
-			if self:IsHovered() then
-				self.color = Color(255, 255, 0)
-			end
-			draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(_mat_set	)
+			surface.SetMaterial(_mat_set)
 			surface.DrawTexturedRect(ctr(_br), ctr(_br), pw-ctr(2 * _br), ph-ctr(2 * _br))
 		end
 		function _bm.settings:DoClick()
@@ -271,16 +267,11 @@ net.Receive("shop_get_tabs", function(len)
 				end
 
 				_set.name = createD("DYRPPanelPlus", _set, ctrb(580), ctrb(100), ctrb(10), ctrb(170))
-				_set.name:INITPanel("DButton")
+				_set.name:INITPanel("YButton")
 				_set.name:SetHeader(YRP.lang_string("LID_appearance"))
-				_set.name.plus:SetText("")
+				_set.name.plus:SetText("LID_change")
 				function _set.name.plus:Paint(pw, ph)
-					self.color = Color(200, 200, 200)
-					if self:IsHovered() then
-						self.color = Color(200, 200, 0)
-					end
-					draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-					surfaceText(YRP.lang_string("LID_change"), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+					hook.Run("YButtonPaint", self, pw, ph)
 				end
 				function _set.name.plus:DoClick()
 					local playermodels = player_manager.AllValidModels()
@@ -502,15 +493,10 @@ net.Receive("shop_get_tabs", function(len)
 			net.Start("shop_get_all_tabs")
 			net.SendToServer()
 
-			_tmp.addtab = createD("DButton", _tmp, ctr(400), ctr(50), ctr(10), ctr(50 + 10 + 100 + 10))
-			_tmp.addtab:SetText("")
+			_tmp.addtab = createD("YButton", _tmp, ctr(400), ctr(50), ctr(10), ctr(50 + 10 + 100 + 10))
+			_tmp.addtab:SetText("LID_add")
 			function _tmp.addtab:Paint(pw, ph)
-				local _color = Color(255, 255, 255, 255)
-				if self:IsHovered() then
-					_color = Color(255, 255, 0, 255)
-				end
-				draw.RoundedBox(0, 0, 0, pw, ph, _color)
-				surfaceText(YRP.lang_string("LID_add"), "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+				hook.Run("YButtonPaint", self, pw, ph)
 			end
 			function _tmp.addtab:DoClick()
 				local _name, _uid = _tmp.tabs.plus:GetSelected()
@@ -530,7 +516,6 @@ net.Receive("shop_get_tabs", function(len)
 end)
 
 function openBuyMenu()
-	openMenu()
 	net.Start("shop_get_tabs")
 		net.WriteString("1")
 	net.SendToServer()

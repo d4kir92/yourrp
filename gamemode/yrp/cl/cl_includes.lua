@@ -9,6 +9,8 @@ include("gm/cl_startup.lua")
 include("gm/huds/cl_hud_simple.lua")
 include("gm/huds/cl_hud_fallout76.lua")
 
+include("gm/interfaces/cl_if_simple.lua")
+
 include("gm/hud/cl_hud_crosshair.lua")
 include("gm/hud/cl_hud_map.lua")
 include("gm/hud/cl_hud_player.lua")

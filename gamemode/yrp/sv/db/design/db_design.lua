@@ -34,6 +34,12 @@ function RegisterHUDDesign(tab)
 	return true
 end
 
+local HUD_None = {}
+HUD_None.name = "Disabled"
+HUD_None.author = "YourRP"
+HUD_None.progress = 100
+RegisterHUDDesign(HUD_None)
+
 local HUD_Simple = {}
 HUD_Simple.name = "Simple"
 HUD_Simple.author = "D4KiR"
@@ -54,9 +60,51 @@ function Player:DesignLoadout()
 	if wk(setting) then
 		setting = setting[1]
 		self:SetNWString("string_hud_design", setting.string_hud_design)
+		self:SetNWString("string_interface_design", setting.string_interface_design)
 	end
 end
 
+util.AddNetworkString("change_hud_design")
+net.Receive("change_hud_design", function(len, ply)
+	local string_hud_design = net.ReadString()
+	printGM("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
+	SQL_UPDATE(DATABASE_NAME, "string_hud_design = '" .. string_hud_design .. "'", "uniqueID = '1'")
+	for i, pl in pairs(player.GetAll()) do
+		pl:SetNWString("string_hud_design", string_hud_design)
+	end
+end)
+
+-- Interface
+local INTERFACES = {}
+function RegisterInterfaceDesign(tab)
+	if tab.name == nil then
+		printGM("note", "RegisterDesign Failed! Missing Design Name")
+		return false
+	elseif tab.author == nil then
+		printGM("note", "RegisterDesign Failed! Missing Design Author")
+		return false
+	end
+	INTERFACES[tab.name] = tab
+	return true
+end
+
+local IF_Simple = {}
+IF_Simple.name = "Simple"
+IF_Simple.author = "D4KiR"
+IF_Simple.progress = 20
+RegisterInterfaceDesign(IF_Simple)
+
+util.AddNetworkString("change_interface_design")
+net.Receive("change_interface_design", function(len, ply)
+	local string_interface_design = net.ReadString()
+	printGM("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
+	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
+	for i, pl in pairs(player.GetAll()) do
+		pl:SetNWString("string_interface_design", string_interface_design)
+	end
+end)
+
+-- F8 Design Page
 util.AddNetworkString("get_design_settings")
 net.Receive("get_design_settings", function(len, ply)
 	if ply:CanAccess("bool_design") then
@@ -66,17 +114,8 @@ net.Receive("get_design_settings", function(len, ply)
 			net.Start("get_design_settings")
 				net.WriteTable(setting)
 				net.WriteTable(HUDS)
+				net.WriteTable(INTERFACES)
 			net.Send(ply)
 		end
-	end
-end)
-
-util.AddNetworkString("change_hud_design")
-net.Receive("change_hud_design", function(len, ply)
-	local string_hud_design = net.ReadString()
-	printGM("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
-	SQL_UPDATE(DATABASE_NAME, "string_hud_design = '" .. string_hud_design .. "'", "uniqueID = '1'")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWString("string_hud_design", string_hud_design)
 	end
 end)

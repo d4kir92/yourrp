@@ -84,8 +84,10 @@ net.Receive("get_design_settings", function(len)
 	local lply = LocalPlayer()
 	local setting = net.ReadTable()
 	local HUDS = net.ReadTable()
+	local INTERFACES = net.ReadTable()
 
 	if pa(settingsWindow.window) then
+		settingsWindow.window.site:SetWide(ctr(20 + 1000 + 20 + 1000 + 20))
 		function settingsWindow.window.site:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
 		end
@@ -829,6 +831,102 @@ net.Receive("get_design_settings", function(len)
 		end
 		GRP_HUD:AddItem(hud_customize_btn)
 
+		-- Interface
+		local GRP_IF = {}
+		GRP_IF.parent = Parent
+		GRP_IF.x = ctr(20 + 1000 + 20)
+		GRP_IF.y = ctr(20)
+		GRP_IF.w = ctr(1000)
+		GRP_IF.h = ctr(1600)
+		GRP_IF.br = ctr(20)
+		GRP_IF.color = Color(255, 255, 255)
+		GRP_IF.bgcolor = Color(80, 80, 80)
+		GRP_IF.name = "LID_interface"
+		GRP_IF = DGroup(GRP_IF)
+		GRP_IF.cif = {}
+
+		-- IF Design
+		local if_design_bg = createD("DPanel", nil, GRP_IF:GetWide(), ctr(100), 0, 0)
+		function if_design_bg:Paint(pw, ph)
+			--
+		end
+		local if_design_header = createD("DPanel", if_design_bg, if_design_bg:GetWide(), ctr(50), 0, 0)
+		function if_design_header:Paint(pw, ph)
+			draw.SimpleText(YRP.lang_string("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+		local if_design_choice = createD("DComboBox", if_design_bg, if_design_bg:GetWide(), ctr(50), 0, ctr(50))
+		for i, design in pairs(INTERFACES) do
+			local selected = false
+			if design.name == setting.string_interface_design then
+				selected = true
+				net.Start("get_interface_settings")
+					net.WriteString(design.name)
+				net.SendToServer()
+			end
+			local name = design.name .. " by " .. design.author
+			if tonumber(design.progress) < 100 then
+				name = name .. " (" .. design.progress .. "% " .. YRP.lang_string("LID_done") .. ")"
+			end
+			if_design_choice:AddChoice(name, design.name, selected)
+		end
+		function if_design_choice:OnSelect(panel, index, value)
+			net.Start("change_interface_design")
+				net.WriteString(value)
+			net.SendToServer()
+			net.Start("get_interface_settings")
+				net.WriteString(value)
+			net.SendToServer()
+		end
+		GRP_IF:AddItem(if_design_bg)
+
+		net.Receive("get_interface_settings", function(len)
+			for i, ele in pairs(GRP_IF.cif) do
+				ele:Remove()
+			end
+
+			local iftab = net.ReadTable()
+			for i, ift in pairs(iftab) do
+				if string.find(ift.name, "color") then
+					local _start, _end = string.find(ift.name, "_Y")
+					local name = "LID_" .. string.lower("color_" .. string.sub(ift.name, _start + 1))
+
+					local color = StringToColor(ift.value)
+
+					local ycol = createD("DPanel", nil, ctr(200), ctr(50), 0, 0)
+					function ycol:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+						draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					end
+
+					ycol.cm = createD("YColorMenuButton", ycol, ctr(50), ctr(50), 0, 0)
+					ycol.cm:SetColor(color)
+					function ycol.cm:ColorChanged(col)
+						net.Start("update_interface_color")
+							net.WriteString(ift.name)
+							net.WriteString(ColorToString(col))
+						net.SendToServer()
+					end
+
+					table.insert(GRP_IF.cif, ycol)
+					GRP_IF:AddItem(ycol)
+				end
+			end
+		end)
+
+		local pv_win = createD("YFrame", Parent, ctr(1000), ctr(1000), ctr(20 + 1000 + 20 + 1000 + 20 + 20), ctr(120))
+		pv_win:SetTitle("LID_window")
+		function pv_win:Paint(pw, ph)
+			hook.Run("YFramePaint", self, pw, ph)
+			self:MoveToFront()
+		end
+		pv_win:SetHeaderHeight(ctr(100))
+		pv_win:MakePopup()
+
+		local pv_btn = createD("YButton", pv_win, ctr(300), ctr(100), ctr(20), ctr(100 + 20))
+		pv_btn:SetText("LID_button")
+		function pv_btn:Paint(pw, ph)
+			hook.Run("YButtonPaint", self, pw, ph)
+		end
 	end
 end)
 

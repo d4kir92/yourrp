@@ -3,113 +3,105 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_interface"
+local DATABASE_NAME = "yrp_interface"
 
-SQL_ADD_COLUMN(_db_name, "color", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "style", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "design", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "rounded", "INT DEFAULT '0'")
-SQL_ADD_COLUMN(_db_name, "transparent", "INT DEFAULT '1'")
-SQL_ADD_COLUMN(_db_name, "border", "INT DEFAULT '0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--SQL_DROP_TABLE(DATABASE_NAME)
 
-if SQL_SELECT("yrp_interface", "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(_db_name, "color, style, rounded, transparent, border, design", "'blue', 'dark', '1', '1', '1', 'Material Design 1'")
+function AddIFElement(tab)
+	for name, value in pairs(tab.floats) do
+		local _name = "float_IF_" .. tab.element .. "_" .. name
+		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+		end
+	end
+	for name, value in pairs(tab.bools) do
+		local _name = "bool_IF_" .. tab.element .. "_" .. name
+		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+		end
+	end
+	for name, value in pairs(tab.colors) do
+		local _name = "color_IF_" .. tab.element .. "_" .. name
+		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+		end
+	end
+	if tab.ints != nil then
+		for name, value in pairs(tab.ints) do
+			local _name = "int_IF_" .. tab.element .. "_" .. name
+			if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+				SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+			end
+		end
+	end
+end
+
+local Simple = {}
+Simple.element = "Simple"
+Simple.floats = {}
+Simple.bools = {}
+Simple.colors = {}
+
+Simple.colors.YFrame_HT = "255, 255, 255, 255"
+Simple.colors.YFrame_HB = "0, 0, 0, 254"
+Simple.colors.YFrame_BG = "0, 0, 0, 200"
+
+Simple.colors.YButton_NC = "255, 255, 255, 255"
+Simple.colors.YButton_HC = "255, 255, 0, 255"
+Simple.colors.YButton_SC = "0, 255, 0, 255"
+Simple.colors.YButton_NT = "0, 0, 0, 255"
+Simple.colors.YButton_HT = "0, 0, 0, 255"
+Simple.colors.YButton_ST = "0, 0, 0, 255"
+
+Simple.ints = {}
+AddIFElement(Simple)
+
+--[[ LOADOUT ]]--
+local Player = FindMetaTable("Player")
+function Player:InterfaceLoadout()
+	printGM("debug", "[InterfaceLoadout] " .. self:YRPName())
+	local ifeles = SQL_SELECT(DATABASE_NAME, "*", nil)
+	if wk(ifeles) then
+		for i, ele in pairs(ifeles) do
+			if string.StartWith(ele.name, "float_") then
+				self:SetNWFloat(ele.name, tonumber(ele.value))
+			elseif string.StartWith(ele.name, "bool_") then
+				self:SetNWBool(ele.name, tobool(ele.value))
+			elseif string.StartWith(ele.name, "color_") then
+				self:SetNWString(ele.name, ele.value)
+			elseif string.StartWith(ele.name, "int_") then
+				self:SetNWInt(ele.name, ele.value)
+			end
+		end
+	end
+	self:SetNWInt("interface_version", self:GetNWInt("interface_version", 0) + 1)
+end
+
+function IFLoadoutAll()
+	for i, ply in pairs(player.GetAll()) do
+		ply:InterfaceLoadout()
+	end
 end
 
 util.AddNetworkString("get_interface_settings")
 net.Receive("get_interface_settings", function(len, ply)
-	local _tbl = SQL_SELECT("yrp_interface", "*", "uniqueID = 1")
-	if wk(_tbl) then
-		_tbl = _tbl[1]
-		if ply:CanAccess("bool_interface") then
-			net.Start("get_interface_settings")
-				net.WriteTable(_tbl)
-			net.Send(ply)
-		end
+	local element = net.ReadString()
+	local tab = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
+	if wk(tab) then
+		table.SortByMember(tab, "name", true)
+		net.Start("get_interface_settings")
+			net.WriteTable(tab)
+		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString("set_interface_design")
-net.Receive("set_interface_design", function(len, ply)
-	local _design = net.ReadString()
-	SQL_UPDATE(_db_name, "design = '" .. _design .. "'", "uniqueID = 1")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWString("interface_design", _design)
-	end
-end)
-
-util.AddNetworkString("set_interface_style")
-net.Receive("set_interface_style", function(len, ply)
-	local _style = net.ReadString()
-	SQL_UPDATE(_db_name, "style = '" .. _style .. "'", "uniqueID = 1")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWString("interface_style", _style)
-	end
-end)
-
-util.AddNetworkString("set_interface_color")
-net.Receive("set_interface_color", function(len, ply)
-	local _color = net.ReadString()
-	SQL_UPDATE(_db_name, "color = '" .. _color .. "'", "uniqueID = 1")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWString("interface_color", _color)
-	end
-end)
-
-util.AddNetworkString("set_interface_transparent")
-net.Receive("set_interface_transparent", function(len, ply)
-	local _transparent = net.ReadString()
-	SQL_UPDATE(_db_name, "transparent = '" .. _transparent .. "'", "uniqueID = 1")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWBool("interface_transparent", tobool(_transparent))
-	end
-end)
-
-util.AddNetworkString("set_interface_border")
-net.Receive("set_interface_border", function(len, ply)
-	local _border = net.ReadString()
-	SQL_UPDATE(_db_name, "border = '" .. _border .. "'", "uniqueID = 1")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWBool("interface_border", tobool(_border))
-	end
-end)
-
-util.AddNetworkString("set_interface_rounded")
-net.Receive("set_interface_rounded", function(len, ply)
-	local _rounded = net.ReadString()
-	SQL_UPDATE(_db_name, "rounded = '" .. _rounded .. "'", "uniqueID = 1")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWBool("interface_rounded", tobool(_rounded))
-	end
-end)
-
-function SetDesign(ply)
-	local _tbl = SQL_SELECT("yrp_interface", "*", "uniqueID = 1")
-	if _tbl != nil then
-		_tbl = _tbl[1]
-		local _design = _tbl.design
-		if _design == "" then
-			_design = "Material Design 1"
-		end
-		ply:SetNWString("interface_design", _design)
-		ply:SetNWString("interface_color", _tbl.color)
-		ply:SetNWString("interface_style", _tbl.style)
-		ply:SetNWBool("interface_transparent", tobool(_tbl.transparent))
-		ply:SetNWBool("interface_rounded", tobool(_tbl.rounded))
-		ply:SetNWBool("interface_border", tobool(_tbl.border))
-	end
-end
-
-util.AddNetworkString("get_design")
-net.Receive("get_design", function(len, ply)
-	if ply:GetNWString("interface_design", "") == "" then
-		printGM("db", "DESIGN IS EMPTY -> SET DEFAULT")
-		SQL_INSERT_INTO(_db_name, "color, style, design, rounded, transparent, border", "'blue', 'dark', 'Material Design 1', '1', '1', '1'")
-		SetDesign(ply)
-	else
-		SetDesign(ply)
-	end
+util.AddNetworkString("update_interface_color")
+net.Receive("update_interface_color", function(len, ply)
+	local name = net.ReadString()
+	local color = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "value = '" .. color .. "'", "name = '" .. name .. "'")
+	IFLoadoutAll()
 end)

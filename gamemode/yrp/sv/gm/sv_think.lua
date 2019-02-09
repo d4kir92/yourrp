@@ -255,15 +255,8 @@ timer.Create("ServerThink", 1, 0, function()
 							_dealer:Spawn()
 
 							local sequence = _dealer.Entity:LookupSequence("idle_all_01")
-							_dealer.Entity:ResetSequence(sequence)
-							timer.Simple(2, function()
-								if _dealer != nil then
-									if _dealer.Entity != NULL then
-										local sequence2 = _dealer.Entity:LookupSequence("idle_all_01")
-										_dealer.Entity:ResetSequence(sequence2)
-									end
-								end
-							end)
+							_dealer.Entity:ResetSequence("idle_all_01")
+							
 						end
 					end
 				end

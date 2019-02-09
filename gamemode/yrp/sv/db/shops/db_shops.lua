@@ -62,7 +62,6 @@ util.AddNetworkString("shop_get_tabs")
 function openBuyMenu(ply, uid)
 	--printGM("note", "openBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
 	local _dealer = SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
-
 	if _dealer != nil then
 		_dealer = _dealer[1]
 		local _tabs = string.Explode(",", _dealer.tabs)
@@ -81,6 +80,8 @@ function openBuyMenu(ply, uid)
 			net.WriteTable(_dealer)
 			net.WriteTable(_nw_tabs)
 		net.Send(ply)
+	else
+		printGM("note", "Dealer not found")
 	end
 end
 
