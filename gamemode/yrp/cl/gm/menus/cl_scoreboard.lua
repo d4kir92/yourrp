@@ -45,7 +45,7 @@ function OpenPlayerOptions(ply)
 			SetClipboardText(ply:SteamID64())
 			_menu:Remove()
 		end
-		
+
 		local crpname = _menu:AddOption(YRP.lang_string("LID_copyrpname") .. ": " .. ply:RPName(), "icon16/page_copy.png")
 		function crpname:DoClick()
 			SetClipboardText(ply:RPName())
@@ -253,6 +253,8 @@ local elePos = {}
 elePos.x = 0
 elePos.y = 0
 
+mc = {}
+
 function OpenSBS()
 	if sbs.frame == nil then
 		SetIsScoreboardOpen(true)
@@ -401,7 +403,13 @@ function OpenSBS()
 			_p.playtime = _p.pt.h .. ":" .. _p.pt.m
 			_p.os = pl:GetNWString("yrp_os", "other")
 			_p.lang = pl:GetLanguageShort()
-			_p.cc = string.lower(pl:GetNWString("yrp_country", ""))
+
+			local country = pl:GetNWString("yrp_country", "en")
+			_p.cc = string.lower(country)
+			if tostring(YRP.GetDesignIcon(_p.cc)) == "Material [vgui/material/icon_clear]" and mc[country] == nil then
+				mc[country] = true
+				YRP.msg("mis", "Missing Country: " .. country)
+			end
 
 			function _p:Paint(pw, ph)
 				if !pl:IsValid() then

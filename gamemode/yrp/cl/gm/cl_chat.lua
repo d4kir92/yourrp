@@ -285,6 +285,8 @@ function InitYRPChat()
 			end
 			oldAddText (...)
 		end
+
+		LocalPlayer():ConCommand("say \"" .. "!help" .. "\"")
 	else
 		timer.Simple(1, function()
 			printGM("error", "Chat creation failed! " .. tostring(yrpChat) .. " " .. tostring(yrpChat.window) .. "." )

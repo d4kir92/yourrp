@@ -572,7 +572,6 @@ function canGetRole(ply, roleID, want)
 			end
 
 			if tonumber(ply:GetNWInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then
-				print(tonumber(ply:GetNWInt("ts_role_" .. ply:GetRoleUID(), 0)), CurTime())
 				local text = ply:YRPName() .. " is on cooldown for this role!"
 				printGM("gm", "[canGetRole] " .. text)
 				net.Start("yrp_info2")

@@ -514,7 +514,7 @@ end)
 
 net.Receive("getsiteyourrproadmap", function(len)
 	if pa(HELPMENU.mainmenu.site) then
-		local link = "https://docs.google.com/document/d/e/2PACX-1vSoH8t8RH6VHWGwlPr-yxroCjapRT1bGeemkf053kvgVilN83-p_dMBg-tDSf6lFz9JCtgqT72_EXJf/pub"
+		local link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQaL9ciXYnStYesglG7-zkRr1PdLNz1rbKgp5gF2EsGNfRAKkT3fBOYrGxyRYOEOg4khoQZh88ZxrBB/pubhtml"
 
 		local page = createD("DHTML", HELPMENU.mainmenu.site, BScrW() - ctr(20 + 20), ScrH(), 0, 0)
 		function page:Paint(pw, ph)
