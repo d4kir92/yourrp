@@ -58,8 +58,10 @@ function GetChannelName(chan)
 		return "DEBUG"
 	elseif chan == "ptab" then
 		return "PRINTTABLE"
+	elseif chan == "mis" or chan == "miss" then
+		return "MISSING"
 	elseif chan == "err" or chan == "error" then
-		return ">>> ERROR <<<"
+		return "ERROR"
 	else
 		return string.upper(chan)
 	end
@@ -73,7 +75,8 @@ channelcolors["lang"] = Color(100, 255, 100)
 channelcolors["chat"] = Color(0, 0, 255)
 channelcolors["debug"] = Color(255, 255, 255)
 channelcolors["printtable"] = Color(255, 255, 255)
-channelcolors[">>> error <<<"] = Color(255, 0, 0)
+channelcolors["missing"] = Color(255, 100, 100)
+channelcolors["error"] = Color(255, 0, 0)
 function GetChannelColor(chan)
 	chan = string.lower(chan)
 	if channelcolors[chan] != nil then
@@ -91,7 +94,8 @@ msgchannels["lang"] = true
 msgchannels["chat"] = true
 msgchannels["debug"] = true
 msgchannels["printtable"] = true
-msgchannels[">>> error <<<"] = true
+msgchannels["missing"] = true
+msgchannels["error"] = true
 function IsChannelRegistered(chan)
 	chan = string.lower(chan)
 	if msgchannels[chan] then
@@ -103,7 +107,7 @@ end
 
 function MSGChannelEnabled(chan)
 	chan = string.lower(chan)
-	if GetGlobalBool("bool_msg_channel_" .. chan, false) or chan == "printtable" then
+	if GetGlobalBool("bool_msg_channel_" .. chan, false) or chan == "printtable" or chan == "missing" or chan == "error" then
 		return true
 	elseif GetGlobalBool("yrp_general_loaded", false) then
 		if !IsChannelRegistered(chan) and GetGlobalBool("bool_msg_channel_" .. chan, true) then
@@ -138,7 +142,7 @@ end
 local r = GetRealm()
 local rc = GetRealmColor()
 local _msgcache = {}
-function YRP.msg(chan, msg)
+function YRP.msg(chan, msg, tochat)
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
 		if msg == nil or msg == false then
@@ -159,13 +163,26 @@ function YRP.msg(chan, msg)
 			MsgC(rc, msg)
 
 			MsgC("\n")
+
+			if tochat and SERVER then
+				PrintMessage(3, "\n ")
+				PrintMessage(3, "[" .. _yrp .. "|" .. cn .. "] " .. msg)
+			end
+
+			if cn == "ERROR" or cn == "MISSING" then
+				local REALM = "CLIENT"
+				if SERVER then
+					REALM = "SERVER"
+				end
+				send_error(REALM, "[" .. cn .. "] " .. msg)
+			end
 		end
 	end
 end
 
 local darkrp_debug = false
-function printGM(channel, text)
-	YRP.msg(channel, text)
+function printGM(channel, text, tochat)
+	YRP.msg(channel, text, tochat)
 	--[[local _realm = "SHARED"
 	local _string = tostring(text)
 	if _string != "nil" then

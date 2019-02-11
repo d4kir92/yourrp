@@ -219,7 +219,6 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 	end
 
 	local roleondeathuid = ply:GetRoleOnDeathRoleUID()
-	print("TESTTTTTTTTTTTTT", roleondeathuid)
 	if roleondeathuid > 0 then
 		SetRole(ply, roleondeathuid, false)
 	end

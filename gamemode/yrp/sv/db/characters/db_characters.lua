@@ -151,6 +151,17 @@ function Player:UpdateWeaponGadget()
 	return self:VisualEquipment("weapongadget", "eqwpg") --,"ValveBiped.Bip01_L_Thigh", 1, Vector(0, -5, 0), Angle(0, 0, 90))
 end
 
+function Player:SetRPName(str)
+	if isstring(str) then
+		local oldname = self:Nick()
+		local newname = db_sql_str(str)
+		SQL_UPDATE("yrp_characters", "rpname = '" .. newname .. "'", "uniqueID = " .. self:CharID())
+		self:SetNWString("rpname", newname)
+
+		printGM("note", oldname .." changed name to " .. newname, true)
+	end
+end
+
 util.AddNetworkString("update_slot_weapon_primary_1")
 net.Receive("update_slot_weapon_primary_1", function(len, ply)
 	if ea(ply) then
@@ -311,8 +322,7 @@ end)
 util.AddNetworkString("change_rpname")
 net.Receive("change_rpname", function(len, ply)
 	local _new_rp_name = net.ReadString()
-	SQL_UPDATE("yrp_characters", "rpname = '" .. db_sql_str(_new_rp_name) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetNWString("rpname", db_sql_str(_new_rp_name))
+	ply:SetRPName(_new_rp_name)
 end)
 
 util.AddNetworkString("change_rpdescription")
@@ -506,7 +516,7 @@ net.Receive("DeleteCharacter", function(len, ply)
 		end
 		ply:Spawn()
 	else
-		printGM("note", "DeleteCharacter: fail"	)
+		printGM("note", "DeleteCharacter: fail")
 	end
 	send_characters(ply)
 end)

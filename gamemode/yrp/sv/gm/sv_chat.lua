@@ -56,7 +56,7 @@ end
 
 function print_help(sender)
 	sender:ChatPrint("")
-	sender:ChatPrint("[HELP]")
+	sender:ChatPrint("[HELP] (/help or !help) Any command can start with / or !")
 	sender:ChatPrint("afk - Away from keyboard")
 	sender:ChatPrint("dnd - Do not disturb")
 	sender:ChatPrint("me - Emote chat")
@@ -241,6 +241,11 @@ function unpack_paket(sender, text, iscommand)
 		end
 
 		paket.command = string.sub(text, _start, _end)
+		if paket.command == "/" then
+			paket.command = "ooc"
+		elseif paket.command == "." then
+			paket.command = "looc"
+		end
 
 		--text
 		local _start_txt = _end or 0
@@ -387,6 +392,11 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "sleep" then
 		do_sleep(sender)
+		return ""
+	end
+
+	if paket.command == "rpname" or paket.command == "name" or paket.command == "nick" then
+		sender:SetRPName(paket.text)
 		return ""
 	end
 

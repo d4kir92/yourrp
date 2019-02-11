@@ -245,7 +245,7 @@ util.AddNetworkString("yrp_info2")
 
 function spawnItem(ply, item, duid)
 	local _distSpace = 8
-	local _distMax = 2000
+	local _distMax = 800
 	local _angle = Angle(0, ply:EyeAngles().p, 0)
 	local ent = {}
 	local _pos_end = ply:GetPos()
@@ -370,7 +370,7 @@ function spawnItem(ply, item, duid)
 
 		printGM("gm", "[spawnItem] Item To Player")
 		_angle = ply:EyeAngles()
-		ent:SetPos(ply:GetPos() + Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 4))
+		ent:SetPos(ply:GetPos() + Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 32))
 
 		for dist = 0, _distMax, _distSpace do
 			for ang = 0, 360, 45 do
@@ -422,6 +422,7 @@ function spawnItem(ply, item, duid)
 
 		printGM("note", "[spawnItem] Not Enough Space")
 
+		ent:Remove()
 		return false
 	end
 end
