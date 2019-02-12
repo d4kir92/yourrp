@@ -427,7 +427,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		ea.del = createD("DButton", PARENT, ctr(60), ctr(60), ctr(840), ctr(20))
 		ea.del:SetText("")
 		function ea.del:Paint(pw, ph)
-			if ea.typ != nil and tobool(ea.tab.bool_removeable) then
+			if ea.typ != nil and tonumber(ea.tab.uniqueID) != 1 then
 				local tab = {}
 				tab.color = Color(255, 0, 0, 255)
 				DrawPanel(self, tab)
@@ -448,7 +448,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function ea.del:DoClick()
-			if ea.typ == "group" and tobool(ea.tab.bool_removeable) then
+			if ea.typ == "group" and tonumber(ea.tab.uniqueID) != 1 then
 				net.Start("settings_delete_group")
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
@@ -457,7 +457,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				ea.typ = nil
 				ea.tab = nil
-			elseif ea.typ == "role" and tobool(ea.tab.bool_removeable) then
+			elseif ea.typ == "role" and tonumber(ea.tab.uniqueID) != 1 then
 				net.Start("settings_delete_role")
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
