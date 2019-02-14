@@ -561,7 +561,8 @@ function canGetRole(ply, roleID, want)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].int_maxamount) == -1  then
+		print("TESTTTTTTTTT", tonumber(tmpTableRole[1].uniqueID), ply:GetRoleUID())
+		if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].uniqueID) == ply:GetRoleUID() then
 			-- Admin only
 			if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
 				if !ply:HasAccess() then
