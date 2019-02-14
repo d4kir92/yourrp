@@ -798,7 +798,6 @@ function DStringListBox(tab)
 				line.models = string.Explode(",", v.string_models or "")
 				line.pmid = 1
 
-				pTab(line.models)
 				if table.Count(line.models) > 1 or line.models[1] != "" then
 					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, ctr(40) + v.br, v.br)
 				end
