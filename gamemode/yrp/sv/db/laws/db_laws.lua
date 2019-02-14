@@ -1,0 +1,39 @@
+--Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
+-- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
+-- https://discord.gg/sEgNZxg
+
+local DATABASE_NAME = "yrp_laws"
+
+--SQL_DROP_TABLE(DATABASE_NAME)
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_lawsymbol", "TEXT DEFAULT '§'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_laws", "TEXT DEFAULT ''")
+
+if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_lawsymbol, string_laws", "'§', ''")
+end
+
+util.AddNetworkString("get_laws")
+net.Receive("get_laws", function(len, ply)
+	local laws = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	if wk(laws) then
+		laws = laws[1]
+		laws.string_laws = SQL_STR_OUT(laws.string_laws)
+		net.Start("get_laws")
+			net.WriteTable(laws)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("set_lawsymbol")
+net.Receive("set_lawsymbol", function(len, ply)
+	local lawsymbol = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_lawsymbol = '" .. SQL_STR_IN(lawsymbol) .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("set_laws")
+net.Receive("set_laws", function(len, ply)
+	local laws = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_laws = '" .. SQL_STR_IN(laws) .. "'", "uniqueID = '1'")
+end)

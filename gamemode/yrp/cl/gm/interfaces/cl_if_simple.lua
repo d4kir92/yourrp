@@ -1,6 +1,8 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph)
+hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_interface_design") == "Simple" then
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "HB"))
@@ -12,7 +14,9 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph)
 	end
 end)
 
-hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph)
+hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_interface_design") == "Simple" then
 		local color = lply:InterfaceValue("YButton", "NC")
@@ -27,6 +31,33 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		draw.SimpleText(YRP.lang_string(self:GetText()), "Roboto18", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		return true
+	end
+end)
+
+hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if lply:GetNWString("string_interface_design") == "Simple" then
+		local color = lply:InterfaceValue("YButton", "NC")
+		local tcolor = lply:InterfaceValue("YButton", "NT")
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+
+		local ax = tab.ax or TEXT_ALIGN_CENTER
+		local ay = tab.ay or TEXT_ALIGN_CENTER
+
+		local tx = pw / 2
+		if ax == 0 then
+			tx = ctr(20)
+		end
+		local ty = ph / 2
+		if ay == 3 then
+			ty = ctr(20)
+		end
+
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Roboto18", tx, ty, tcolor, ax, ay)
 		return true
 	end
 end)

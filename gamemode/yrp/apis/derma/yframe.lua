@@ -2,7 +2,6 @@
 
 local PANEL = {}
 
-PANEL._headerheight = 24
 function PANEL:GetHeaderHeight()
 	return self._headerheight
 end
@@ -99,6 +98,10 @@ end
 function PANEL:SetTitle(str)
 	self._text = str
 	self.lblTitle:SetText("")
+end
+
+function PANEL:Init()
+	self._headerheight = 24
 end
 
 vgui.Register("YFrame", PANEL, "DFrame")

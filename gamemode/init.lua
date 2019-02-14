@@ -95,6 +95,7 @@ AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_shops.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_whitelist.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_smartphone.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_emotes.lua")
+AddCSLuaFile("yrp/cl/gm/menus/cl_laws.lua")
 
 AddCSLuaFile("yrp/cl/gm/apps/cl_app_settings_yrp.lua")
 AddCSLuaFile("yrp/cl/gm/apps/cl_app_settings_sp.lua")
