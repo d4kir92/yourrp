@@ -376,6 +376,7 @@ YRP.AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
 YRP.AddDesignIcon("pause", "vgui/material/icon_pause.png")
 YRP.AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
 YRP.AddDesignIcon("language", "vgui/material/icon_language.png")
+YRP.AddDesignIcon("list", "vgui/material/icon_list.png")
 
 YRP.AddDesignIcon("discord", "vgui/material/icon_discord.png")
 YRP.AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")

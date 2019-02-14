@@ -247,6 +247,11 @@ function set_role_values(ply)
 				end
 
 				--custom flags
+				local allflags = SQL_SELECT("yrp_flags", "*", nil)
+				for i, flag in pairs(allflags) do
+					ply:SetNWBool("bool_" .. flag.string_name, false)
+				end
+
 				local customflags = string.Explode(",", rolTab.string_customflags)
 				for i, flag in pairs(customflags) do
 					if wk(flag) then

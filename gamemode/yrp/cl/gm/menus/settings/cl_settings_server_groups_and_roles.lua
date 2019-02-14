@@ -1137,6 +1137,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].custom_flags = DStringListBox(custom_flags)
 			net.Receive("get_role_customflags", function()
 				local tab_cf = net.ReadTable()
+				pTab(tab_cf)
 				for i, v in pairs(tab_cf) do
 					v.doclick = function()
 						net.Start("rem_role_flag")

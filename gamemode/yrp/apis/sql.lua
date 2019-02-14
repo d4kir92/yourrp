@@ -146,19 +146,6 @@ function db_sql_str(str)
 	end
 end
 
-function SQL_STR_IN(str)
-	if isstring(str) then
-		local _newString = sql.SQLStr(str, true)
-		_newString = string.Replace(_newString, "\"", "´´")
-		_newString = string.Replace(_newString, "'", "´")
-		_newString = string.Replace(_newString, "-", "_")
-
-		return _newString
-	else
-		printGM("error", GetSQLModeName() .. ": " .. "db_in_str: (" .. tostring(str) .. ") is not a string.")
-	end
-end
-
 function retry_load_database(db_name)
 	printGM("error", GetSQLModeName() .. ": " .. "retry_load_database " .. tostring(db_name))
 	--SQL_INIT_DATABASE(db_name)

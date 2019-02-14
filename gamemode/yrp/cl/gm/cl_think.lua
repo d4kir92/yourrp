@@ -101,6 +101,8 @@ function useFunction(string)
 			toggleHelpMenu()
 		elseif string == "ToggleEmotesMenu" then
 			ToggleEmotesMenu()
+		elseif string == "ToggleLawsMenu" then
+			ToggleLawsMenu()
 		elseif string == "openFeedbackMenu" then
 			toggleFeedbackMenu()
 		elseif string == "openCharMenu" then
@@ -432,6 +434,8 @@ function KeyPress()
 	keyPressed(KEY_F7, "openFeedbackMenu")
 
 	keyPressed(get_keybind("menu_emotes"), "ToggleEmotesMenu")
+
+	keyPressed(get_keybind("menu_laws"), "ToggleLawsMenu")
 
 	keyPressed(get_keybind("menu_settings"), "openSettings")
 
