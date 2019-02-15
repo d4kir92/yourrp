@@ -404,11 +404,11 @@ function OpenSBS()
 			_p.os = pl:GetNWString("yrp_os", "other")
 			_p.lang = pl:GetLanguageShort()
 
-			local country = pl:GetNWString("yrp_country", "en")
+			local country = pl:GetNWString("yrp_country", "EN")
 			_p.cc = string.lower(country)
-			if tostring(YRP.GetDesignIcon(_p.cc)) == "Material [vgui/material/icon_clear]" and mc[country] == nil then
-				mc[country] = true
-				YRP.msg("mis", "Missing Country: " .. country)
+			if tostring(YRP.GetDesignIcon("flag_" .. _p.cc)) == "Material [vgui/material/icon_clear]" and mc[_p.cc] == nil then
+				mc[_p.cc] = true
+				YRP.msg("mis", "Missing Country: " .. string.upper(_p.cc))
 			end
 
 			function _p:Paint(pw, ph)
@@ -484,7 +484,7 @@ function OpenSBS()
 
 					if pl:GetNWBool("bool_yrp_scoreboard_show_country", false) then
 						local icon_size = ctr(100)
-						YRP.DrawIcon(YRP.GetDesignIcon(self.cc), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+						YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.cc), "sef", ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
@@ -623,7 +623,7 @@ function OpenSBS()
 				_p.playtime = _p.pt.h .. ":" .. _p.pt.m
 				_p.os = pl:GetNWString("yrp_os", "other")
 				_p.lang = pl:GetLanguageShort()
-				_p.cc = string.lower(pl:GetNWString("yrp_country", ""))
+				_p.cc = string.lower(pl:GetNWString("yrp_country", "EN"))
 
 				function _p:Paint(pw, ph)
 					if !pl:IsValid() then
@@ -669,7 +669,7 @@ function OpenSBS()
 
 						if pl:GetNWBool("bool_yrp_scoreboard_show_country", false) then
 							local icon_size = ctr(100)
-							YRP.DrawIcon(YRP.GetDesignIcon(self.cc), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+							YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.cc), "sef", ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
