@@ -94,7 +94,7 @@ hook.Add("open_client_keybinds", "open_client_keybinds", function()
 		tab.color = Color(255, 0, 0)
 		tab.hovercolor = Color(255, 100, 100)
 		tab.text = {}
-		tab.text.text = "settodefault"
+		tab.text.text = YRP.lang_string("LID_settodefault")
 		DrawButton(self, tab)
 	end
 	function _k.reset:DoClick()

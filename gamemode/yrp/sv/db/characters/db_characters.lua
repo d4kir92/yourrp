@@ -154,8 +154,10 @@ end
 function Player:SetRPName(str)
 	if isstring(str) then
 		local oldname = self:Nick()
-		local newname = db_sql_str(str)
+		local newname = SQL_STR_IN(str)
 		SQL_UPDATE("yrp_characters", "rpname = '" .. newname .. "'", "uniqueID = " .. self:CharID())
+
+		newname = SQL_STR_OUT(newname)
 		self:SetNWString("rpname", newname)
 
 		printGM("note", oldname .." changed name to " .. newname, true)
@@ -328,9 +330,9 @@ end)
 util.AddNetworkString("change_rpdescription")
 net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
-	SQL_UPDATE("yrp_characters", "rpdescription = '" .. db_sql_str(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
+	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-		ply:SetNWString("rpdescription" .. i, db_sql_str(v))
+		ply:SetNWString("rpdescription" .. i, SQL_STR_IN(v))
 	end
 end)
 
@@ -450,6 +452,7 @@ function send_characters(ply)
 			if v.roleID != nil and v.groupID != nil then
 				_charCount = _charCount + 1
 				netTable[_charCount] = {}
+				v.rpname = SQL_STR_OUT(v.rpname)
 				netTable[_charCount].char = v
 
 				netTable[_charCount].role = {}
@@ -526,8 +529,8 @@ function CreateCharacter(ply, tab)
 	if wk(role) then
 		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
 		local vals = "'" .. ply:SteamID() .. "', "
-		vals = vals .. "'" .. db_sql_str(tab.rpname) .. "', "
-		vals = vals .. "'" .. db_sql_str(tab.gender) .. "', "
+		vals = vals .. "'" .. SQL_STR_IN(tab.rpname) .. "', "
+		vals = vals .. "'" .. SQL_STR_IN(tab.gender) .. "', "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "

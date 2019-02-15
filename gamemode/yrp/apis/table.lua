@@ -45,7 +45,6 @@ function combineStringTables(str1, str2)
 		local _tab2 = string.Explode(",", tostring(str2))
 		local tab = combineTables(_tab1, _tab2)
 		printGM("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2))
-		pTab(tab)
 		return ""
 	end
 end

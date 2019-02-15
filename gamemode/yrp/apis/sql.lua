@@ -108,8 +108,6 @@ function SQL_STR_OUT(str)
 		_res = string.Replace(_res, "%" .. _pre .. k, sym)
 	end
 
-	_res = string.Replace(_res, "%", "'")
-
 	return _res
 end
 
@@ -131,18 +129,6 @@ function db_drop_table(db_table)
 	if _result ~= nil then
 		printGM("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
-	end
-end
-
-function db_sql_str(str)
-	if isstring(str) then
-		local _newString = sql.SQLStr(str, true)
-		_newString = string.Replace(_newString, "\"", "´´")
-		_newString = string.Replace(_newString, "'", "´")
-
-		return _newString
-	else
-		printGM("error", GetSQLModeName() .. ": " .. "db_sql_str: (" .. tostring(str) .. ") is not a string.")
 	end
 end
 

@@ -182,6 +182,9 @@ end
 
 local darkrp_debug = false
 function printGM(channel, text, tochat)
+	if tochat then
+		YRP.msg("error", "[TOCHAT] [" .. channel .. "] " .. text)
+	end
 	YRP.msg(channel, text, tochat)
 	--[[local _realm = "SHARED"
 	local _string = tostring(text)

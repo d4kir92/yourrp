@@ -164,7 +164,7 @@ function FO76Name(tab)
 		FO76["NAME"][tab.element].ax = ax or 1
 		FO76["NAME"][tab.element].ay = ay or 1
 		FO76["NAME"][tab.element].font = "Roboto" .. fontsize .. "B"
-		FO76["NAME"][tab.element].color = FOColor()
+		FO76["NAME"][tab.element].color = tab.tcolor or FOColor()
 	else
 		FO76["NAME"][tab.element].text = tab.text
 		HudText(FO76["NAME"][tab.element])
@@ -376,6 +376,7 @@ local fpsavg = fps
 local fpstavg = 0
 local fpscou = 0
 local fps_delay = 0
+local fpscolor = Color(0, 0, 0)
 
 local ping = 5
 local pingmin = 9999
@@ -384,6 +385,7 @@ local pingavg = ping
 local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
+local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_hud_design") == "Fallout 76" then
@@ -494,10 +496,19 @@ function HUD_FO76()
 				pingcou = 0
 				pingtavg = 0
 			end
+
+			if ping > 100 then
+				pingcolor = Color(255, 0, 0)
+			elseif ping > 50 then
+				pingcolor = Color(255, 255, 0)
+			else
+				pingcolor = Color(0, 255, 0)
+			end
 		end
 		local NE = {}
 		NE.element = "NE"
 		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
+		NE.tcolor = pingcolor
 		FO76Name(NE)
 
 		local PE = {}
@@ -518,8 +529,17 @@ function HUD_FO76()
 				fpscou = 0
 				fpstavg = 0
 			end
+
+			if fps < 30 then
+				fpscolor = Color(255, 0, 0)
+			elseif fps < 60 then
+				fpscolor = Color(255, 255, 0)
+			else
+				fpscolor = Color(0, 255, 0)
+			end
 		end
 		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
+		PE.tcolor = fpscolor
 		FO76Name(PE)
 
 		local MO = {}

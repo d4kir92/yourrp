@@ -275,7 +275,7 @@ function spawnItem(ply, item, duid)
 			return false
 		end
 
-		SQL_INSERT_INTO("yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. db_sql_str(item.ClassName) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'")
+		SQL_INSERT_INTO("yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. SQL_STR_IN(item.ClassName) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'")
 		ent:SetNWString("item_uniqueID", item.uniqueID)
 		ent:SetNWString("ownerRPName", ply:RPName())
 		ent.yrpowner = ply

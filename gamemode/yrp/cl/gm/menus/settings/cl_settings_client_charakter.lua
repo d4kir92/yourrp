@@ -1,21 +1,5 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive("getrpdescription", function()
-	local rpdescription = net.ReadString()
-	if pa(settingsWindow.window) then
-		local cl_rpDescription = createVGUI("DTextEntry", settingsWindow.window.site, 1200, 400, 10, 200)
-		cl_rpDescription:SetMultiline(true)
-		if rpdescription != nil then
-			cl_rpDescription:SetText(rpdescription)
-		end
-		function cl_rpDescription:OnChange()
-			net.Start("change_rpdescription")
-				net.WriteString(cl_rpDescription:GetText())
-			net.SendToServer()
-		end
-	end
-end)
-
 net.Receive("getCharakterList", function()
 	local _charTab = net.ReadTable()
 
@@ -27,6 +11,17 @@ net.Receive("getCharakterList", function()
 		function cl_rpName:OnChange()
 			net.Start("change_rpname")
 				net.WriteString(cl_rpName:GetText())
+			net.SendToServer()
+		end
+
+		local cl_rpDescription = createVGUI("DTextEntry", settingsWindow.window.site, 1200, 400, 10, 200)
+		cl_rpDescription:SetMultiline(true)
+		if _charTab.rpdescription != nil then
+			cl_rpDescription:SetText(_charTab.rpdescription)
+		end
+		function cl_rpDescription:OnChange()
+			net.Start("change_rpdescription")
+				net.WriteString(cl_rpDescription:GetText())
 			net.SendToServer()
 		end
 	end

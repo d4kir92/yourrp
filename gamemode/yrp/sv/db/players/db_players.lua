@@ -328,7 +328,7 @@ function add_yrp_player(ply)
 
 	local _SteamID = ply:SteamID()
 	local _SteamID64 = ply:SteamID64() or ""
-	local _SteamName = tostring(db_sql_str(ply:SteamName()))
+	local _SteamName = tostring(SQL_STR_IN(ply:SteamName()))
 	local _ostime = os.time()
 
 	local cols = "SteamID, "
@@ -400,14 +400,11 @@ util.AddNetworkString("getPlyList")
 util.AddNetworkString("getCharakterList")
 util.AddNetworkString("getrpdescription")
 net.Receive("getCharakterList", function(len, ply)
-	local _tmpPlyList = ply:GetChaTab()
-	if _tmpPlyList != nil then
-		net.Start("getCharakterList")
-			net.WriteTable(_tmpPlyList)
-		net.Send(ply)
-	end
-	net.Start("getrpdescription")
-		net.WriteString(_tmpPlyList.rpdescription)
+	local _plytab = ply:GetChaTab()
+	_plytab.rpname = SQL_STR_OUT(_plytab.rpname)
+	_plytab.rpdescription = SQL_STR_OUT(_plytab.rpdescription)
+	net.Start("getCharakterList")
+		net.WriteTable(_plytab)
 	net.Send(ply)
 end)
 
@@ -561,7 +558,6 @@ function canGetRole(ply, roleID, want)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		print("TESTTTTTTTTT", tonumber(tmpTableRole[1].uniqueID), ply:GetRoleUID())
 		if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].uniqueID) == ply:GetRoleUID() then
 			-- Admin only
 			if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
