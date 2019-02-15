@@ -925,7 +925,20 @@ net.Receive("get_design_settings", function(len)
 		local pv_btn = createD("YButton", pv_win, ctr(300), ctr(100), ctr(20), ctr(100 + 20))
 		pv_btn:SetText("LID_button")
 		function pv_btn:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
+			local tab = {}
+			tab.text = YRP.lang_string(self:GetText())
+			if self:IsDown() then
+				tab.text = tab.text .. " (" .. YRP.lang_string("LID_pressed") .. ")"
+			elseif self:IsHovered() then
+				tab.text = tab.text .. " (" .. YRP.lang_string("LID_hovered") .. ")"
+			end
+			hook.Run("YButtonPaint", self, pw, ph, tab)
+		end
+
+		local pv_lbl = createD("YLabel", pv_win, ctr(300), ctr(100), ctr(20 + 300 + 20), ctr(100 + 20))
+		pv_lbl:SetText("LID_label")
+		function pv_lbl:Paint(pw, ph)
+			hook.Run("YLabelPaint", self, pw, ph)
 		end
 	end
 end)

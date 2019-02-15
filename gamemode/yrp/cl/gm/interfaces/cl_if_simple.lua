@@ -30,7 +30,7 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 		end
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Roboto18", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Roboto18", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

@@ -30,7 +30,7 @@ function OpenLawsMenu()
 	local lply = LocalPlayer()
 	net.Receive("get_laws", function(len)
 		local lawtab = net.ReadTable()
-		local lawsymbol = lawtab.string_lawsymbol
+		local lawsymbol = tostring(lawtab.string_lawsymbol)
 		local laws = lawtab.string_laws
 
 		if !lply:GetNWBool("bool_" .. "ismayor", false) then
@@ -66,7 +66,7 @@ function OpenLawsMenu()
 			end
 
 			_la.lawsymbol = createD("DTextEntry", _la.window, ctr(760), ctr(50), ctr(20), ctr(100 + 20 + 50))
-			_la.lawsymbol:SetText(lawsymbol)
+			_la.lawsymbol:SetText("#" .. lawsymbol)
 			function _la.lawsymbol:OnChange()
 				net.Start("set_lawsymbol")
 					net.WriteString(self:GetText())
@@ -83,7 +83,7 @@ function OpenLawsMenu()
 
 			_la.laws = createD("DTextEntry", _la.window, ctr(760), ctr(1200 - 100 - 20 - 20 - 100 - 20 - 50), ctr(20), ctr(100 + 20 + 50 + 50 + 20 + 50))
 			_la.laws:SetMultiline(true)
-			_la.laws:SetText(laws)
+			_la.laws:SetText("#" .. laws)
 			function _la.laws:OnChange()
 				net.Start("set_laws")
 					net.WriteString(self:GetText())

@@ -112,6 +112,9 @@ function HUDSimpleBAR(tab)
 			if tab.percentage != nil and lply:GetHudBool(tab.element, "PERC") then
 				Simple[tab.element]["text"].text = Simple[tab.element]["text"].text .. " " .. tab.percentage
 			end
+			if tab.tcolor != nil then
+				Simple[tab.element]["text"].color = tab.tcolor
+			end
 			HudTextBr(Simple[tab.element]["text"])
 		end
 	end
@@ -300,6 +303,7 @@ local fpsavg = fps
 local fpstavg = 0
 local fpscou = 0
 local fps_delay = 0
+local fpscolor = Color(0, 0, 0)
 
 local ping = 0
 local pingmin = 9999
@@ -308,6 +312,7 @@ local pingavg = ping
 local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
+local pingcolor = Color(0, 0, 0)
 function HUDSimple()
 	local lply = LocalPlayer()
 	if lply:GetNWString("string_hud_design") == "Simple" then
@@ -539,8 +544,17 @@ function HUDSimple()
 				fpscou = 0
 				fpstavg = 0
 			end
+
+			if fps < 30 then
+				fpscolor = Color(255, 0, 0)
+			elseif fps < 60 then
+				fpscolor = Color(255, 255, 0)
+			else
+				fpscolor = Color(0, 255, 0)
+			end
 		end
 		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
+		PE.tcolor = fpscolor
 		HUDSimpleBAR(PE)
 
 		if CurTime() > ping_delay then
@@ -559,12 +573,21 @@ function HUDSimple()
 				pingcou = 0
 				pingtavg = 0
 			end
+
+			if ping > 100 then
+				pingcolor = Color(255, 0, 0)
+			elseif ping > 50 then
+				pingcolor = Color(255, 255, 0)
+			else
+				pingcolor = Color(0, 255, 0)
+			end
 		end
 		NE = {}
 		NE.element = "NE"
 		NE.cur = 0
 		NE.max = 1
 		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
+		NE.tcolor = pingcolor
 		HUDSimpleBAR(NE)
 
 		COM = {}

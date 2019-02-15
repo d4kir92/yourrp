@@ -163,7 +163,7 @@ function Player:MoveItem(_slot1, _slot2, _item)
 			printGM("db", "[moveitem] FROM NEARBY TO NEARBY")
 			--
 		elseif _slot2.storageID != 0 then
-			printGM("db", "[moveitem] FROM NEARBY TO STORAGE", _slot2.storageID)
+			printGM("db", "[moveitem] FROM NEARBY TO STORAGE " .. _slot2.storageID)
 			local _storage = SQL_SELECT("yrp_storages", "*", "uniqueID = " .. _i.storageID)
 			if _storage != nil then
 				_storage = _storage[1]

@@ -104,7 +104,7 @@ function GM:PlayerLoadout(ply)
 		if chaTab != nil then
 			ply:SetNWString("money", chaTab.money)
 			ply:SetNWString("moneybank", chaTab.moneybank)
-			ply:SetNWString("rpname", chaTab.rpname)
+			ply:SetNWString("rpname", SQL_STR_OUT(chaTab.rpname))
 
 			setbodygroups(ply)
 		else
