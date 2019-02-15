@@ -385,6 +385,13 @@ YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
 YRP.AddDesignIcon("ts", "vgui/material/icon_ts_bluelight.png")
 YRP.AddDesignIcon("ts_light", "vgui/material/icon_ts_light.png")
 
+-- Flags
+local flags, folders = file.Find("materials/vgui/iso_3166_1/*.png", "GAME", "nameasc")
+for i, flag in pairs(flags) do
+	flag = string.Replace(flag, ".png", "")
+	YRP.AddDesignIcon("flag_" .. flag, "vgui/iso_3166_1/" .. flag .. ".png")
+end
+
 local _delay = 1
 local _get_design = true
 
