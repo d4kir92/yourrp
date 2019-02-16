@@ -72,6 +72,13 @@ function MoveUnusedRolesToDefault()
 	printGM("note", "Move unused roles to default group")
 	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
 	for i, role in pairs(allroles) do
+		-- If prerole not exists remove the prerole
+		local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
+		if !wk(prerole) then
+			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+		end
+
+		-- if group not exists move it to default group
 		local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 		if !wk(group) then
 			SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
@@ -658,7 +665,7 @@ net.Receive("settings_delete_role", function(len, ply)
 	if wk(role) then
 		role = role[1]
 		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
-
+		
 		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
 		if wk(siblings) then
 			for i, sibling in pairs(siblings) do
