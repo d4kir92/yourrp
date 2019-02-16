@@ -177,25 +177,28 @@ function drawHUDElementBr(dbV)
 	end
 end
 
-include("player/cl_hud_hp.lua")
-include("player/cl_hud_ar.lua")
-include("player/cl_hud_ma.lua")
-include("player/cl_hud_mh.lua")
-include("player/cl_hud_mt.lua")
-include("player/cl_hud_ms.lua")
-include("player/cl_hud_ca.lua")
-include("player/cl_hud_mo.lua")
-include("player/cl_hud_xp.lua")
-include("player/cl_hud_wn.lua")
-include("player/cl_hud_wp.lua")
-include("player/cl_hud_ws.lua")
-include("player/cl_hud_mm.lua")
-include("player/cl_hud_st.lua")
-include("player/cl_hud_vt.lua")
-include("player/cl_hud_bl.lua")
-include("player/cl_hud_rt.lua")
-
-include("player/cl_hud_thirdperson.lua")
+function hudThirdperson(ply, color)
+	if input.IsKeyDown(get_keybind("view_zoom_in")) or input.IsKeyDown(get_keybind("view_zoom_out")) then
+		local _3PText = ""
+		if ply:GetNWInt("view_range", 0) <= -200 then
+			_3PText = YRP.lang_string("LID_fppr")
+		elseif ply:GetNWInt("view_range", 0) > -200 and ply:GetNWInt("view_range", 0) < 0 then
+			_3PText = YRP.lang_string("LID_fpp")
+		elseif ply:GetNWInt("view_range", 0) > 0 then
+			_3PText = YRP.lang_string("LID_tpp")
+		end
+		draw.SimpleTextOutlined(_3PText .. " (" .. math.Round(ply:GetNWInt("view_range", 0), -1) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+	if input.IsKeyDown(get_keybind("view_up")) or input.IsKeyDown(get_keybind("view_down")) then
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply:GetNWInt("view_z", 0), 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+	if input.IsKeyDown(get_keybind("view_right")) or input.IsKeyDown(get_keybind("view_left")) then
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply:GetNWInt("view_x", 0), 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+	if input.IsKeyDown(get_keybind("view_spin_right")) or input.IsKeyDown(get_keybind("view_spin_left")) then
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply:GetNWInt("view_s", 0), 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+end
 
 function client_toggled()
 	return tobool(GetConVar("yrp_cl_hud"):GetInt())
@@ -212,69 +215,6 @@ function HudPlayer(ply)
 
 		if ply:Alive() then
 			if !contextMenuOpen then
-				if client_toggled() then
-					--[[ Hud Bars ]]--
-					if server_toggled(ply) then
-						--[[
-						hudHP(ply, Color(150, 52, 52, _alpha))
-						hudAR(ply, Color(52, 150, 72, _alpha))
-
-						hudMO(ply, Color(33, 108, 42, _alpha))
-						hudXP(ply, Color(181, 255, 107, _alpha))
-
-						hudWN(ply, Color(181, 255, 107, _alpha), weapon)
-						hudWP(ply, Color(255, 255, 100, _alpha), weapon)
-						hudWS(ply, Color(255, 255, 100, _alpha), weapon)
-
-						hudMM(ply, Color(0, 0, 0))
-						]]
-					end
-					--[[hudMA(ply, Color(58, 143, 255, _alpha))
-
-					hudMH(ply, Color(150, 88, 52, _alpha))
-					hudMT(ply, Color(52, 70, 150, _alpha))
-					hudMS(ply, Color(150, 150, 60, _alpha))
-
-					hudCA(ply, Color(132, 116, 188, _alpha))
-
-					hudVT(ply, Color(0, 0, 0, _alpha))
-					hudST(ply, Color(0, 0, 0, _alpha))
-
-					hudBL(ply, Color(0, 0, 0, _alpha))
-					hudRT(ply, Color(0, 0, 0, _alpha))
-					]]
-
-					--[[ Hud Borders ]]--
-					if server_toggled(ply) then
-						--[[
-						hudHPBR(ply)
-						hudARBR(ply)
-
-						hudMOBR(ply)
-						hudXPBR(ply)
-
-						hudWNBR(ply)
-						hudWPBR(ply)
-						hudWSBR(ply, weapon)
-						]]--
-					end
-					--[[
-					hudMABR(ply)
-
-					hudMHBR(ply)
-					hudMTBR(ply)
-					hudMSBR(ply)
-
-					hudCABR(ply)
-
-					hudVTBR(ply)
-					hudSTBR(ply)
-
-					hudBLBR(ply)
-					hudRTBR(ply)
-					]]
-				end
-
 				hudThirdperson(ply)
 			end
 		else

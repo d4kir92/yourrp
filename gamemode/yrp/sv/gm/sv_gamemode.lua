@@ -70,14 +70,10 @@ function YRP:Loadout(ply)
 end
 
 function GM:PlayerLoadout(ply)
-	--printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
+	printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
+	YRP:Loadout(ply)
 
 	if ply:HasCharacterSelected() then
-
-		YRP:Loadout(ply)
-
-		--ply:CheckInventory()
-
 		--[[ Status Reset ]]--
 		ply:SetNWBool("cuffed", false)
 		ply:SetNWBool("broken_leg_left", false)
