@@ -473,19 +473,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		ea.dup:SetText("")
 		function ea.dup:Paint(pw, ph)
 			if ea.typ != nil then
-				local tab = {}
-				tab.color = Color(255, 255, 0, 255)
-				DrawPanel(self, tab)
+				if ea.tab.uniqueID != 1 then
+					local tab = {}
+					tab.color = Color(255, 255, 0, 255)
+					DrawPanel(self, tab)
 
-				local tab2 = {}
-				tab2.w = pw
-				tab2.h = ph
-				tab2.x = ctr(20)
-				tab2.y = ph / 2
-				tab2.ax = 0
-				tab2.text = "[ ]"
-				tab2.font = "mat1text"
-				DrawText(tab2)
+					local tab2 = {}
+					tab2.w = pw
+					tab2.h = ph
+					tab2.x = ctr(20)
+					tab2.y = ph / 2
+					tab2.ax = 0
+					tab2.text = "[ ]"
+					tab2.font = "mat1text"
+					DrawText(tab2)
+				end
 			elseif ea.typ != nil then
 				local tab = {}
 				tab.color = YRPGetColor("3")
@@ -493,14 +495,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function ea.dup:DoClick()
-			if ea.typ == "group" then
-				net.Start("duplicated_group")
-					net.WriteString(ea.tab.uniqueID)
-				net.SendToServer()
-			elseif ea.typ == "role" then
-				net.Start("duplicated_role")
-					net.WriteString(ea.tab.uniqueID)
-				net.SendToServer()
+			if ea.tab.uniqueID != 1 then
+				if ea.typ == "group" then
+					net.Start("duplicated_group")
+						net.WriteString(ea.tab.uniqueID)
+					net.SendToServer()
+				elseif ea.typ == "role" then
+					net.Start("duplicated_role")
+						net.WriteString(ea.tab.uniqueID)
+					net.SendToServer()
+				end
 			end
 		end
 
@@ -518,7 +522,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.x = ctr(20)
 				tab2.y = ph / 2
 				tab2.ax = 0
-				tab2.text = YRP.lang_string(ea.typ) .. ": " .. tostring(ea.tab.string_name)
+				if ea.tab.uniqueID == 1 then
+					tab2.text = "[MAIN] " .. YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
+				else
+					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
+				end
 				tab2.font = "mat1text"
 				DrawText(tab2)
 			end
@@ -689,6 +697,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[group.uniqueID].groupvoicechat = DCheckBox(groupvoicechat)
 
 			DHr(hr)
+
 
 			local whitelist = {}
 			whitelist.parent = ea.restriction
@@ -944,49 +953,55 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				maxa[i] = i
 			end
 
-			local maxamount = {}
-			maxamount.parent = ea.info
-			maxamount.uniqueID = role.uniqueID
-			maxamount.header = "LID_maxamount"
-			maxamount.netstr = "update_role_int_maxamount"
-			maxamount.value = tonumber(role.int_maxamount)
-			maxamount.uniqueID = role.uniqueID
-			maxamount.lforce = false
-			maxamount.choices = maxa
-			ea[role.uniqueID].maxamount = DComboBox(maxamount)
+			if role.uniqueID != 1 then
+				local maxamount = {}
+				maxamount.parent = ea.info
+				maxamount.uniqueID = role.uniqueID
+				maxamount.header = "LID_maxamount"
+				maxamount.netstr = "update_role_int_maxamount"
+				maxamount.value = tonumber(role.int_maxamount)
+				maxamount.uniqueID = role.uniqueID
+				maxamount.lforce = false
+				maxamount.choices = maxa
+				ea[role.uniqueID].maxamount = DComboBox(maxamount)
 
-			DHr(hr)
-
-			local amountpercentage = {}
-			amountpercentage.parent = ea.info
-			amountpercentage.header = "LID_amountpercentage"
-			amountpercentage.netstr = "update_role_int_amountpercentage"
-			amountpercentage.value = role.int_amountpercentage
-			amountpercentage.uniqueID = role.uniqueID
-			amountpercentage.lforce = false
-			amountpercentage.min = 0
-			amountpercentage.max = GetMaxInt()
-			ea[role.uniqueID].amountpercentage = DIntBox(amountpercentage)
-
-			DHr(hr)
-
-			local grps = {}
-			for i, tab in pairs(db_groups) do
-				grps[i] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+				DHr(hr)
 			end
 
-			local int_groupID = {}
-			int_groupID.parent = ea.info
-			int_groupID.uniqueID = role.uniqueID
-			int_groupID.header = "LID_group"
-			int_groupID.netstr = "update_role_int_groupID"
-			int_groupID.value = tonumber(role.int_groupID)
-			int_groupID.uniqueID = role.uniqueID
-			int_groupID.lforce = false
-			int_groupID.choices = grps
-			ea[role.uniqueID].int_groupID = DComboBox(int_groupID)
+			if role.uniqueID != 1 then
+				local amountpercentage = {}
+				amountpercentage.parent = ea.info
+				amountpercentage.header = "LID_amountpercentage"
+				amountpercentage.netstr = "update_role_int_amountpercentage"
+				amountpercentage.value = role.int_amountpercentage
+				amountpercentage.uniqueID = role.uniqueID
+				amountpercentage.lforce = false
+				amountpercentage.min = 0
+				amountpercentage.max = 100
+				ea[role.uniqueID].amountpercentage = DIntBox(amountpercentage)
 
-			DHr(hr)
+				DHr(hr)
+			end
+
+			if role.uniqueID != 1 then
+				local grps = {}
+				for i, tab in pairs(db_groups) do
+					grps[i] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+				end
+
+				local int_groupID = {}
+				int_groupID.parent = ea.info
+				int_groupID.uniqueID = role.uniqueID
+				int_groupID.header = "LID_group"
+				int_groupID.netstr = "update_role_int_groupID"
+				int_groupID.value = tonumber(role.int_groupID)
+				int_groupID.uniqueID = role.uniqueID
+				int_groupID.lforce = false
+				int_groupID.choices = grps
+				ea[role.uniqueID].int_groupID = DComboBox(int_groupID)
+
+				DHr(hr)
+			end
 
 			local string_description = {}
 			string_description.parent = ea.info
@@ -1035,18 +1050,20 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 
-			local prerole = {}
-			prerole.parent = ea.info
-			prerole.uniqueID = role.uniqueID
-			prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
-			prerole.netstr = "update_role_int_prerole"
-			prerole.value = tonumber(role.int_prerole)
-			prerole.uniqueID = role.uniqueID
-			prerole.lforce = false
-			prerole.choices = otherroles
-			ea[role.uniqueID].prerole = DComboBox(prerole)
+			if role.uniqueID != 1 then
+				local prerole = {}
+				prerole.parent = ea.info
+				prerole.uniqueID = role.uniqueID
+				prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
+				prerole.netstr = "update_role_int_prerole"
+				prerole.value = tonumber(role.int_prerole)
+				prerole.uniqueID = role.uniqueID
+				prerole.lforce = false
+				prerole.choices = otherroles
+				ea[role.uniqueID].prerole = DComboBox(prerole)
 
-			DHr(hr)
+				DHr(hr)
+			end
 
 			local rod_roles = {}
 			rod_roles[0] = YRP.lang_string("LID_none")
@@ -1979,48 +1996,53 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].restriction = DGroup(restriction)
 			ea.restriction = ea[role.uniqueID].restriction
 
-			local gugs = string.Explode(",", role.string_usergroups)
-
-			local ugs = {}
-			ugs["ALL"] = {}
-			ugs["ALL"].checked = table.HasValue(gugs, "ALL")
-			ugs["ALL"]["choices"] = {}
-			for i, pl in pairs(player.GetAll()) do
-				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
-				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
-			end
-
-			for i, ug in pairs(db_ugs) do
-				ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
-				ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
-			end
-
-			local usergroups = {}
-			usergroups.parent = ea.restriction
-			usergroups.uniqueID = role.uniqueID
-			usergroups.header = "LID_usergroups"
-			usergroups.netstr = "update_role_string_usergroups"
-			usergroups.value = role.string_usergroups
-			usergroups.uniqueID = role.uniqueID
-			usergroups.lforce = false
-			usergroups.choices = ugs
-			ea[role.uniqueID].usergroups = DCheckBoxes(usergroups)
-
 			hr.parent = ea.restriction
-			DHr(hr)
 
-			local requireslevel = {}
-			requireslevel.parent = ea.restriction
-			requireslevel.header = "LID_requireslevel"
-			requireslevel.netstr = "update_role_int_requireslevel"
-			requireslevel.value = role.int_requireslevel
-			requireslevel.uniqueID = role.uniqueID
-			requireslevel.lforce = false
-			requireslevel.min = 1
-			requireslevel.max = 100
-			ea[role.uniqueID].requireslevel = DIntBox(requireslevel)
+			if role.uniqueID != 1 then
+				local gugs = string.Explode(",", role.string_usergroups)
 
-			DHr(hr)
+				local ugs = {}
+				ugs["ALL"] = {}
+				ugs["ALL"].checked = table.HasValue(gugs, "ALL")
+				ugs["ALL"]["choices"] = {}
+				for i, pl in pairs(player.GetAll()) do
+					ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
+					ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+				end
+
+				for i, ug in pairs(db_ugs) do
+					ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+					ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+				end
+
+				local usergroups = {}
+				usergroups.parent = ea.restriction
+				usergroups.uniqueID = role.uniqueID
+				usergroups.header = "LID_usergroups"
+				usergroups.netstr = "update_role_string_usergroups"
+				usergroups.value = role.string_usergroups
+				usergroups.uniqueID = role.uniqueID
+				usergroups.lforce = false
+				usergroups.choices = ugs
+				ea[role.uniqueID].usergroups = DCheckBoxes(usergroups)
+
+				DHr(hr)
+			end
+
+			if role.uniqueID != 1 then
+				local requireslevel = {}
+				requireslevel.parent = ea.restriction
+				requireslevel.header = "LID_requireslevel"
+				requireslevel.netstr = "update_role_int_requireslevel"
+				requireslevel.value = role.int_requireslevel
+				requireslevel.uniqueID = role.uniqueID
+				requireslevel.lforce = false
+				requireslevel.min = 1
+				requireslevel.max = 100
+				ea[role.uniqueID].requireslevel = DIntBox(requireslevel)
+
+				DHr(hr)
+			end
 
 			local bool_voiceglobal = {}
 			bool_voiceglobal.parent = ea.restriction
@@ -2034,53 +2056,61 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			local whitelist = {}
-			whitelist.parent = ea.restriction
-			whitelist.uniqueID = role.uniqueID
-			whitelist.header = "LID_useswhitelist"
-			whitelist.netstr = "update_role_bool_whitelist"
-			whitelist.value = role.bool_whitelist
-			whitelist.uniqueID = role.uniqueID
-			whitelist.lforce = false
-			ea[role.uniqueID].whitelist = DCheckBox(whitelist)
+			if role.uniqueID != 1 then
+				local whitelist = {}
+				whitelist.parent = ea.restriction
+				whitelist.uniqueID = role.uniqueID
+				whitelist.header = "LID_useswhitelist"
+				whitelist.netstr = "update_role_bool_whitelist"
+				whitelist.value = role.bool_whitelist
+				whitelist.uniqueID = role.uniqueID
+				whitelist.lforce = false
+				ea[role.uniqueID].whitelist = DCheckBox(whitelist)
 
-			DHr(hr)
+				DHr(hr)
+			end
 
-			local locked = {}
-			locked.parent = ea.restriction
-			locked.uniqueID = role.uniqueID
-			locked.header = "LID_locked"
-			locked.netstr = "update_role_bool_locked"
-			locked.value = role.bool_locked
-			locked.uniqueID = role.uniqueID
-			locked.lforce = false
-			ea[role.uniqueID].locked = DCheckBox(locked)
+			if role.uniqueID != 1 then
+				local locked = {}
+				locked.parent = ea.restriction
+				locked.uniqueID = role.uniqueID
+				locked.header = "LID_locked"
+				locked.netstr = "update_role_bool_locked"
+				locked.value = role.bool_locked
+				locked.uniqueID = role.uniqueID
+				locked.lforce = false
+				ea[role.uniqueID].locked = DCheckBox(locked)
 
-			DHr(hr)
+				DHr(hr)
+			end
 
-			local visible = {}
-			visible.parent = ea.restriction
-			visible.uniqueID = role.uniqueID
-			visible.header = "LID_visible"
-			visible.netstr = "update_role_bool_visible"
-			visible.value = role.bool_visible
-			visible.uniqueID = role.uniqueID
-			visible.lforce = false
-			ea[role.uniqueID].visible = DCheckBox(visible)
+			if role.uniqueID != 1 then
+				local visible = {}
+				visible.parent = ea.restriction
+				visible.uniqueID = role.uniqueID
+				visible.header = "LID_visible"
+				visible.netstr = "update_role_bool_visible"
+				visible.value = role.bool_visible
+				visible.uniqueID = role.uniqueID
+				visible.lforce = false
+				ea[role.uniqueID].visible = DCheckBox(visible)
 
-			DHr(hr)
+				DHr(hr)
+			end
 
-			local bool_voteable = {}
-			bool_voteable.parent = ea.restriction
-			bool_voteable.uniqueID = role.uniqueID
-			bool_voteable.header = "LID_voteable"
-			bool_voteable.netstr = "update_role_bool_voteable"
-			bool_voteable.value = role.bool_voteable
-			bool_voteable.uniqueID = role.uniqueID
-			bool_voteable.lforce = false
-			ea[role.uniqueID].bool_voteable = DCheckBox(bool_voteable)
+			if role.uniqueID != 1 then
+				local bool_voteable = {}
+				bool_voteable.parent = ea.restriction
+				bool_voteable.uniqueID = role.uniqueID
+				bool_voteable.header = "LID_voteable"
+				bool_voteable.netstr = "update_role_bool_voteable"
+				bool_voteable.value = role.bool_voteable
+				bool_voteable.uniqueID = role.uniqueID
+				bool_voteable.lforce = false
+				ea[role.uniqueID].bool_voteable = DCheckBox(bool_voteable)
 
-			DHr(hr)
+				DHr(hr)
+			end
 
 			local cooldown = {}
 			cooldown.parent = ea.restriction

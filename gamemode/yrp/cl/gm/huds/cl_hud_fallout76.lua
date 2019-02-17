@@ -459,7 +459,6 @@ function HUD_FO76()
 			if ammo1 != nil then
 				local WP = {}
 				WP.element = "WP"
-				WP.text = YRP.lang_string("LID_weaponprimary")
 				WP.cur = clip1
 				WP.max = clip1max
 				WP.text = clip1 .. "/" .. ammo1
@@ -468,7 +467,6 @@ function HUD_FO76()
 			if ammo2 != nil then
 				local WS = {}
 				WS.element = "WS"
-				WS.text = YRP.lang_string("LID_weaponsecondary")
 				WS.cur = clip2
 				WS.max = clip2max
 				WS.text = clip2 .. "/" .. ammo2

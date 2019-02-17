@@ -149,6 +149,34 @@ if wk(SQL_SELECT(DATABASE_NAME, "*", nil)) then
 			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 		end
 	end
+
+	local wrongmaxamount = SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = '-1'")
+	if wk(wrongmaxamount) then
+		for i, role in pairs(wrongmaxamount) do
+			SQL_UPDATE(DATABASE_NAME, "int_maxamount = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+		end
+	end
+
+	local wrongpercentage = SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
+	if wk(wrongpercentage) then
+		for i, role in pairs(wrongpercentage) do
+			pTab(role)
+			SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '" .. role.uniqueID .. "'")
+		end
+	end
+
+	local wrongmainrole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	if wk(wrongmainrole) then
+		SQL_UPDATE(DATABASE_NAME, "string_usergroups = 'ALL'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "int_maxamount = '0'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "bool_visible = '1'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "bool_locked = '0'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, "bool_whitelist = '0'", "uniqueID = '1'")
+	end
 end
 
 -- darkrp
@@ -665,7 +693,7 @@ net.Receive("settings_delete_role", function(len, ply)
 	if wk(role) then
 		role = role[1]
 		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
-		
+
 		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
 		if wk(siblings) then
 			for i, sibling in pairs(siblings) do

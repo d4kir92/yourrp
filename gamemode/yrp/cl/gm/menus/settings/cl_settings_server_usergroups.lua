@@ -541,7 +541,7 @@ end)
 net.Receive("usergroup_add", function(len)
 	local ugs = net.ReadTable()
 	for i, ug in SortedPairsByMemberValue(ugs, "string_name", false) do
-		if DUGS[tonumber(ug.uniqueID)] == nil and tobool(ug.removeable) then
+		if DUGS[tonumber(ug.uniqueID)] == nil and tobool(ug.bool_removeable) then
 			AddUG(ug)
 		end
 	end
@@ -580,14 +580,14 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 			_ug_rem:SetText("")
 			function _ug_rem:Paint(pw, ph)
 				if CURRENT_USERGROUP != nil then
-					if tobool(UGS[CURRENT_USERGROUP].removeable) then
+					if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
 						surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
 					end
 				end
 			end
 			function _ug_rem:DoClick()
 				if CURRENT_USERGROUP != nil then
-					if tobool(UGS[CURRENT_USERGROUP].removeable) then
+					if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
 						net.Start("usergroup_rem")
 							net.WriteString(CURRENT_USERGROUP)
 						net.SendToServer()
