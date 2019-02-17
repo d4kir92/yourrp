@@ -195,8 +195,9 @@ end
 
 function DarkRP.getCategories()
 	--Description: Get all categories for all F4 menu tabs.
-	printGM("darkrp", "getCategories()")
-	printGM("darkrp", DarkRP._not)
+	printGM("darkrp", "getCategories() not fully implemented")
+	local tab = {}
+	tab.jobs = RPExtraTeams
 	return {}
 end
 

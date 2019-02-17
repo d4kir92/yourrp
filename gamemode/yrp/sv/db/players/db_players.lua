@@ -635,7 +635,9 @@ function canVoteRole(ply, roleID)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		if tonumber(tmpTableRole[1].int_uses) < tonumber(#player.GetAll()) * (tonumber(tmpTableRole[1].int_amountpercentage) / 100) and tmpTableRole[1].int_uses < tmpTableRole[1].int_maxamount or tonumber(tmpTableRole[1].int_maxamount) == -1 or tonumber(tmpTableRole[1].int_maxamount) == 0 then
+		local uses = tonumber(tmpTableRole[1].int_uses)
+		local maxamount = tonumber(tmpTableRole[1].int_maxamount)
+		if uses < tonumber(#player.GetAll()) * (tonumber(tmpTableRole[1].int_amountpercentage) / 100) and uses < maxamount or maxamount <= 0 then
 			if tonumber(tmpTableRole[1].bool_voteable) == 1 then
 				return true
 			end

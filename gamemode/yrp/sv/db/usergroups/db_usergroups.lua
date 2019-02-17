@@ -63,7 +63,7 @@ if wk(yrp_usergroups) then
 	for _i, _ug in pairs(yrp_usergroups) do
 		_ug.string_name = _ug.string_name or "failed"
 		_ug.string_name = string.lower(_ug.string_name)
-		SQL_UPDATE("string_name'" .. _ug.string_name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, "string_name = '" .. _ug.string_name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
 	end
 end
 yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -143,7 +143,8 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
 
-if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'") == nil then
+local unremoveable = SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
+if unremoveable == nil then
 	local _str = "string_name, "
 	_str = _str .. "bool_vehicles, "
 	_str = _str .. "bool_weapons, "

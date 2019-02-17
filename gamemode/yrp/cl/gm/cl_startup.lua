@@ -375,7 +375,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = YRP.lang_string("LID_hasnoworldmodel")
+								self.text = "NO MODEL"
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 255, 0, 255)
 							end
@@ -389,7 +389,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 								self.text = YRP.lang_string("LID_baseentity")
 								self.color = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = YRP.lang_string("LID_hasnoworldmodel")
+								self.text = "NO MODEL"
 								self.color = Color(255, 255, 0, 255)
 							end
 
@@ -861,7 +861,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = YRP.lang_string("LID_hasnoworldmodel")
+								self.text = "NO MODEL"
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 255, 0, 255)
 							end
@@ -875,7 +875,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 								self.text = YRP.lang_string("LID_baseentity")
 								self.color = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
-								self.text = YRP.lang_string("LID_hasnoworldmodel")
+								self.text = "NO MODEL"
 								self.color = Color(255, 255, 0, 255)
 							end
 

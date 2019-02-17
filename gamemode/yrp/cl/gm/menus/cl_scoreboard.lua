@@ -34,204 +34,209 @@ function OpenPlayerOptions(ply)
 
 		_menu:AddSpacer()
 
-		local csid = _menu:AddOption(YRP.lang_string("LID_copysteamid") .. ": " .. ply:SteamID(), "icon16/page_copy.png")
-		function csid:DoClick()
-			SetClipboardText(ply:SteamID())
-			_menu:Remove()
-		end
+		local SteamID = ply:SteamID()
+		local SteamID64 = ply:SteamID64()
 
-		local csid64 = _menu:AddOption(YRP.lang_string("LID_copysteamid64") .. ": " .. ply:SteamID64(), "icon16/page_copy.png")
-		function csid64:DoClick()
-			SetClipboardText(ply:SteamID64())
-			_menu:Remove()
-		end
-
-		local crpname = _menu:AddOption(YRP.lang_string("LID_copyrpname") .. ": " .. ply:RPName(), "icon16/page_copy.png")
-		function crpname:DoClick()
-			SetClipboardText(ply:RPName())
-			_menu:Remove()
-		end
-		local csname = _menu:AddOption(YRP.lang_string("LID_copysteamname") .. ": " .. ply:SteamName(), "icon16/page_copy.png")
-		function csname:DoClick()
-			SetClipboardText(ply:SteamName())
-			_menu:Remove()
-		end
-		_menu:AddSpacer()
-
-		_menu:AddOption(YRP.lang_string("LID_language") .. ": " .. ply:GetLanguage(), "icon16/map.png")
-		_menu:AddSpacer()
-
-		if notself(ply) then
-			local ban = _menu:AddOption(YRP.lang_string("LID_ban"), "icon16/world_link.png")
-			function ban:DoClick()
-				net.Start("ply_ban")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			end
-			local kick = _menu:AddOption(YRP.lang_string("LID_kick"), "icon16/world_go.png")
-			function kick:DoClick()
-				net.Start("ply_kick")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			end
-			_menu:AddSpacer()
-		end
-
-		if notself(ply) then
-			local tpto = _menu:AddOption(YRP.lang_string("LID_tpto"), "icon16/arrow_right.png")
-			function tpto:DoClick()
-				net.Start("tp_tpto")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			end
-			local bring = _menu:AddOption(YRP.lang_string("LID_bring"), "icon16/arrow_redo.png")
-			function bring:DoClick()
-				net.Start("tp_bring")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			end
-		end
-
-		if true then
-			if !ply:GetNWBool("injail", false) then
-				local jail = _menu:AddOption(YRP.lang_string("LID_jail"), "icon16/lock_go.png")
-				function jail:DoClick()
-					net.Start("tp_jail")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local unjail = _menu:AddOption(YRP.lang_string("LID_unjail"), "icon16/lock_open.png")
-				function unjail:DoClick()
-					net.Start("tp_unjail")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-			_menu:AddSpacer()
-		end
-
-		if true then
-			if !ply:GetNWBool("ragdolled", false) then
-				local ragdoll = _menu:AddOption(YRP.lang_string("LID_ragdoll"), "icon16/user_red.png")
-				function ragdoll:DoClick()
-					net.Start("ragdoll")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local unragdoll = _menu:AddOption(YRP.lang_string("LID_unragdoll"), "icon16/user_green.png")
-				function unragdoll:DoClick()
-					net.Start("unragdoll")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-			if !ply:IsFlagSet(FL_FROZEN) then
-				local freeze = _menu:AddOption(YRP.lang_string("LID_freeze"), "icon16/user_suit.png")
-				function freeze:DoClick()
-					net.Start("freeze")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local unfreeze = _menu:AddOption(YRP.lang_string("LID_unfreeze"), "icon16/user_gray.png")
-				function unfreeze:DoClick()
-					net.Start("unfreeze")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-		end
-
-		if true then
-			if !ply:GetNWBool("godmode", false) then
-				local god = _menu:AddOption(YRP.lang_string("LID_god"), "icon16/star.png")
-				function god:DoClick()
-					net.Start("god")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local ungod = _menu:AddOption(YRP.lang_string("LID_ungod"), "icon16/stop.png")
-				function ungod:DoClick()
-					net.Start("ungod")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-			if !ply:GetNWBool("cloaked", false) then
-				local cloak = _menu:AddOption(YRP.lang_string("LID_cloak"), "icon16/status_offline.png")
-				function cloak:DoClick()
-					net.Start("cloak")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local uncloak = _menu:AddOption(YRP.lang_string("LID_uncloak"), "icon16/status_online.png")
-				function uncloak:DoClick()
-					net.Start("uncloak")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-			if !ply:GetNWBool("blinded", false) then
-				local blind = _menu:AddOption(YRP.lang_string("LID_blind"), "icon16/weather_sun.png")
-				function blind:DoClick()
-					net.Start("blind")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local unblind = _menu:AddOption(YRP.lang_string("LID_unblind"), "icon16/weather_clouds.png")
-				function unblind:DoClick()
-					net.Start("unblind")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-			if !ply:IsOnFire() then
-				local ignite = _menu:AddOption(YRP.lang_string("LID_ignite"), "icon16/fire.png")
-				function ignite:DoClick()
-					net.Start("ignite")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			else
-				local extinguish = _menu:AddOption(YRP.lang_string("LID_extinguish"), "icon16/water.png")
-				function extinguish:DoClick()
-					net.Start("extinguish")
-						net.WriteEntity(ply)
-					net.SendToServer()
-					_menu:Remove()
-				end
-			end
-
-			local slay = _menu:AddOption(YRP.lang_string("LID_slay"), "icon16/delete.png")
-			function slay:DoClick()
-				net.Start("slay")
-					net.WriteEntity(ply)
-				net.SendToServer()
+		if wk(SteamID) and wk(SteamID64) then
+			local csid = _menu:AddOption(YRP.lang_string("LID_copysteamid") .. ": " .. SteamID, "icon16/page_copy.png")
+			function csid:DoClick()
+				SetClipboardText(ply:SteamID())
 				_menu:Remove()
 			end
-			local slap = _menu:AddOption(YRP.lang_string("LID_slap"), "icon16/heart_delete.png")
-			function slap:DoClick()
-				net.Start("slap")
-					net.WriteEntity(ply)
-				net.SendToServer()
+
+			local csid64 = _menu:AddOption(YRP.lang_string("LID_copysteamid64") .. ": " .. SteamID64, "icon16/page_copy.png")
+			function csid64:DoClick()
+				SetClipboardText(ply:SteamID64())
+				_menu:Remove()
+			end
+
+			local crpname = _menu:AddOption(YRP.lang_string("LID_copyrpname") .. ": " .. ply:RPName(), "icon16/page_copy.png")
+			function crpname:DoClick()
+				SetClipboardText(ply:RPName())
+				_menu:Remove()
+			end
+			local csname = _menu:AddOption(YRP.lang_string("LID_copysteamname") .. ": " .. ply:SteamName(), "icon16/page_copy.png")
+			function csname:DoClick()
+				SetClipboardText(ply:SteamName())
+				_menu:Remove()
+			end
+			_menu:AddSpacer()
+
+			_menu:AddOption(YRP.lang_string("LID_language") .. ": " .. ply:GetLanguage(), "icon16/map.png")
+			_menu:AddSpacer()
+
+			if notself(ply) then
+				local ban = _menu:AddOption(YRP.lang_string("LID_ban"), "icon16/world_link.png")
+				function ban:DoClick()
+					net.Start("ply_ban")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
+				local kick = _menu:AddOption(YRP.lang_string("LID_kick"), "icon16/world_go.png")
+				function kick:DoClick()
+					net.Start("ply_kick")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
+				_menu:AddSpacer()
+			end
+
+			if notself(ply) then
+				local tpto = _menu:AddOption(YRP.lang_string("LID_tpto"), "icon16/arrow_right.png")
+				function tpto:DoClick()
+					net.Start("tp_tpto")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
+				local bring = _menu:AddOption(YRP.lang_string("LID_bring"), "icon16/arrow_redo.png")
+				function bring:DoClick()
+					net.Start("tp_bring")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
+			end
+
+			if true then
+				if !ply:GetNWBool("injail", false) then
+					local jail = _menu:AddOption(YRP.lang_string("LID_jail"), "icon16/lock_go.png")
+					function jail:DoClick()
+						net.Start("tp_jail")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local unjail = _menu:AddOption(YRP.lang_string("LID_unjail"), "icon16/lock_open.png")
+					function unjail:DoClick()
+						net.Start("tp_unjail")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+				_menu:AddSpacer()
+			end
+
+			if true then
+				if !ply:GetNWBool("ragdolled", false) then
+					local ragdoll = _menu:AddOption(YRP.lang_string("LID_ragdoll"), "icon16/user_red.png")
+					function ragdoll:DoClick()
+						net.Start("ragdoll")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local unragdoll = _menu:AddOption(YRP.lang_string("LID_unragdoll"), "icon16/user_green.png")
+					function unragdoll:DoClick()
+						net.Start("unragdoll")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+				if !ply:IsFlagSet(FL_FROZEN) then
+					local freeze = _menu:AddOption(YRP.lang_string("LID_freeze"), "icon16/user_suit.png")
+					function freeze:DoClick()
+						net.Start("freeze")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local unfreeze = _menu:AddOption(YRP.lang_string("LID_unfreeze"), "icon16/user_gray.png")
+					function unfreeze:DoClick()
+						net.Start("unfreeze")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+			end
+
+			if true then
+				if !ply:GetNWBool("godmode", false) then
+					local god = _menu:AddOption(YRP.lang_string("LID_god"), "icon16/star.png")
+					function god:DoClick()
+						net.Start("god")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local ungod = _menu:AddOption(YRP.lang_string("LID_ungod"), "icon16/stop.png")
+					function ungod:DoClick()
+						net.Start("ungod")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+				if !ply:GetNWBool("cloaked", false) then
+					local cloak = _menu:AddOption(YRP.lang_string("LID_cloak"), "icon16/status_offline.png")
+					function cloak:DoClick()
+						net.Start("cloak")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local uncloak = _menu:AddOption(YRP.lang_string("LID_uncloak"), "icon16/status_online.png")
+					function uncloak:DoClick()
+						net.Start("uncloak")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+				if !ply:GetNWBool("blinded", false) then
+					local blind = _menu:AddOption(YRP.lang_string("LID_blind"), "icon16/weather_sun.png")
+					function blind:DoClick()
+						net.Start("blind")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local unblind = _menu:AddOption(YRP.lang_string("LID_unblind"), "icon16/weather_clouds.png")
+					function unblind:DoClick()
+						net.Start("unblind")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+				if !ply:IsOnFire() then
+					local ignite = _menu:AddOption(YRP.lang_string("LID_ignite"), "icon16/fire.png")
+					function ignite:DoClick()
+						net.Start("ignite")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				else
+					local extinguish = _menu:AddOption(YRP.lang_string("LID_extinguish"), "icon16/water.png")
+					function extinguish:DoClick()
+						net.Start("extinguish")
+							net.WriteEntity(ply)
+						net.SendToServer()
+						_menu:Remove()
+					end
+				end
+
+				local slay = _menu:AddOption(YRP.lang_string("LID_slay"), "icon16/delete.png")
+				function slay:DoClick()
+					net.Start("slay")
+						net.WriteEntity(ply)
+					net.SendToServer()
+					_menu:Remove()
+				end
+				local slap = _menu:AddOption(YRP.lang_string("LID_slap"), "icon16/heart_delete.png")
+				function slap:DoClick()
+					net.Start("slap")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
 			end
 		end
 	end
@@ -366,7 +371,8 @@ function OpenSBS()
 			draw.SimpleTextOutlined(YRP.lang_string("LID_ping"), "sef", ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 
-		sbs.stab = createD("DPanelList", sbs.frame, BScrW(), ScrH() - ctr(512 + 64), 0, ctr(256 + 10 + 64))
+		sbs.stab = createD("DPanelList", sbs.frame, BScrW(), ScrH() - ctr(256 + 10 + 64), 0, ctr(256 + 10 + 64))
+		sbs.stab:EnableVerticalScrollbar(true)
 
 		local allplys = player.GetAll()
 		local rplys = {}

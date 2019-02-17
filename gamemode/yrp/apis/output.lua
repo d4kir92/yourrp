@@ -106,6 +106,8 @@ function IsChannelRegistered(chan)
 end
 
 function MSGChannelEnabled(chan)
+	if !isstring(chan) then return false end
+	
 	chan = string.lower(chan)
 	if GetGlobalBool("bool_msg_channel_" .. chan, false) or chan == "printtable" or chan == "missing" or chan == "error" then
 		return true
@@ -143,6 +145,9 @@ local r = GetRealm()
 local rc = GetRealmColor()
 local _msgcache = {}
 function YRP.msg(chan, msg, tochat)
+	if !isstring(chan) then return false end
+	if !isstring(msg) then return false end
+
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
 		if msg == nil or msg == false then
@@ -182,9 +187,6 @@ end
 
 local darkrp_debug = false
 function printGM(channel, text, tochat)
-	if tochat then
-		YRP.msg("error", "[TOCHAT] [" .. channel .. "] " .. text)
-	end
 	YRP.msg(channel, text, tochat)
 	--[[local _realm = "SHARED"
 	local _string = tostring(text)
