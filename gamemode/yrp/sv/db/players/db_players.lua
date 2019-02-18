@@ -401,11 +401,15 @@ util.AddNetworkString("getCharakterList")
 util.AddNetworkString("getrpdescription")
 net.Receive("getCharakterList", function(len, ply)
 	local _plytab = ply:GetChaTab()
-	_plytab.rpname = SQL_STR_OUT(_plytab.rpname)
-	_plytab.rpdescription = SQL_STR_OUT(_plytab.rpdescription)
-	net.Start("getCharakterList")
-		net.WriteTable(_plytab)
-	net.Send(ply)
+	if wk(_plytab) then
+		_plytab.rpname = SQL_STR_OUT(_plytab.rpname)
+		_plytab.rpdescription = SQL_STR_OUT(_plytab.rpdescription)
+		net.Start("getCharakterList")
+			net.WriteTable(_plytab)
+		net.Send(ply)
+	else
+		printGM("error", "_plytab failed! " .. tostring(_plytab))
+	end
 end)
 
 util.AddNetworkString("give_getGroTab")

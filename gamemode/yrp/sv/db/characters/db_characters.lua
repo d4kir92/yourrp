@@ -489,13 +489,17 @@ function send_characters(ply)
 			end
 		end
 	end
+
 	local plytab = ply:GetPlyTab()
+
 	if plytab != nil then
 		netTable.plytab = plytab
 
 		net.Start("yrp_get_characters")
 			net.WriteTable(netTable)
 		net.Send(ply)
+	else
+		printGM("note", "[send_characters] plytab failed! " .. tostring(plytab))
 	end
 end
 
@@ -551,6 +555,11 @@ function CreateCharacter(ply, tab)
 		local chars = SQL_SELECT("yrp_characters", "*", nil)
 		if worked(chars, "CreateCharacter") then
 			local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(chars[#chars].uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
+			if result != nil then
+				printGM("note", "CreateCharacter() failed!")
+			end
+		else
+			printGM("note", "chars failed: " .. tostring(chars))
 		end
 		send_characters(ply)
 	else

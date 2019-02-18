@@ -114,6 +114,8 @@ function GM:PlayerLoadout(ply)
 
 		ply:SetNWFloat("hunger", 100)
 		ply:SetNWFloat("thirst", 100)
+	else
+		printGM("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
 	end
 
 	hook.Run("OnPlayerChangedTeam", ply, 1, 1)
@@ -569,8 +571,8 @@ function GM:PlayerSetModel(ply)
 	setPlayerModel(ply)
 end
 
-util.AddNetworkString("player_is_ready")
-net.Receive("player_is_ready", function(len, ply)
+util.AddNetworkString("yrp_player_is_ready")
+net.Receive("yrp_player_is_ready", function(len, ply)
 	printGM("note", ply:YRPName() .. " finished loading.")
 	local OS_Windows = net.ReadBool()
 	local OS_Linux = net.ReadBool()

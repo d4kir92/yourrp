@@ -51,9 +51,14 @@ function Player:GetPlyTab()
 						return self.plytab
 					end
 				end
+			else
+				printGM("note", "[GetPlyTab] player is invalid.")
 			end
+		else
+			printGM("note", "[GetPlyTab] Gamemode not fully loaded for " .. self:YRPName())
 		end
 	end
+	printGM("note", "[GetPlyTab] failed.")
 	return nil
 end
 

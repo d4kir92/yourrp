@@ -1239,62 +1239,73 @@ net.Receive("yrpInfoBox", function(len)
 	_tmp:MakePopup()
 end)
 
-function GM:InitPostEntity()
-	printGM("note", "All entities are loaded.")
-	playerready = true
+function YRPInitPostEntity()
+	printGM("note", "YRPInitPostEntity()")
+	if !playerready then
+		printGM("note", "All entities are loaded.")
+		playerready = true
 
-	net.Start("player_is_ready")
-		net.WriteBool(system.IsWindows())
-		net.WriteBool(system.IsLinux())
-		net.WriteBool(system.IsOSX())
-		net.WriteString(system.GetCountry())
-	net.SendToServer()
+		net.Start("yrp_player_is_ready")
+			net.WriteBool(system.IsWindows())
+			net.WriteBool(system.IsLinux())
+			net.WriteBool(system.IsOSX())
+			net.WriteString(system.GetCountry())
+		net.SendToServer()
 
-	YRP.initLang()
+		YRP.initLang()
 
-	if tobool(get_tutorial("tut_welcome")) then
-		openHelpMenu()
+		if tobool(get_tutorial("tut_welcome")) then
+			openHelpMenu()
+		end
+
+		timer.Simple(4, function()
+			local _wsitems = engine.GetAddons()
+			printGM("note", "[" .. #_wsitems .. " Workshop items]")
+			printGM("note", " Nr.\tID\t\tName Mounted")
+
+			for k, ws in pairs(_wsitems) do
+				if not ws.mounted then
+					printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
+					game.MountGMA(tostring(ws.path))
+				end
+			end
+
+			printGM("note", "Workshop Addons Done")
+			playerfullready = true
+
+			--[[ IF STARTED SINGLEPLAYER ]]
+			--
+			if game.SinglePlayer() then
+				local _warning = createD("DFrame", nil, 600, 300, 0, 0)
+				_warning:SetTitle("")
+				_warning:Center()
+
+				function _warning:Paint(pw, ph)
+					surfaceWindow(self, pw, ph, "WARNING!")
+					draw.SimpleTextOutlined("PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw / 2, ph / 2 - ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined("Use a dedicated server or start multiplayer, thanks!", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined("PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw / 2, ph / 2 + ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+				end
+
+				_warning:MakePopup()
+			elseif not ServerIsDedicated and ServerIsDedicated ~= nil and LocalPlayer():HasAccess() then
+				LocalPlayer():SetNWBool("warning_dedicated", true)
+
+				timer.Create("yrp_warning_dedicated_server", 10, 0, function()
+					LocalPlayer():SetNWBool("warning_dedicated", false)
+				end)
+			end
+		end)
 	end
-
-	timer.Simple(4, function()
-		local _wsitems = engine.GetAddons()
-		printGM("note", "[" .. #_wsitems .. " Workshop items]")
-		printGM("note", " Nr.\tID\t\tName Mounted")
-
-		for k, ws in pairs(_wsitems) do
-			if not ws.mounted then
-				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
-				game.MountGMA(tostring(ws.path))
-			end
-		end
-
-		printGM("note", "Workshop Addons Done")
-		playerfullready = true
-
-		--[[ IF STARTED SINGLEPLAYER ]]
-		--
-		if game.SinglePlayer() then
-			local _warning = createD("DFrame", nil, 600, 300, 0, 0)
-			_warning:SetTitle("")
-			_warning:Center()
-
-			function _warning:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, "WARNING!")
-				draw.SimpleTextOutlined("PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw / 2, ph / 2 - ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined("Use a dedicated server or start multiplayer, thanks!", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined("PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw / 2, ph / 2 + ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-			end
-
-			_warning:MakePopup()
-		elseif not ServerIsDedicated and ServerIsDedicated ~= nil and LocalPlayer():HasAccess() then
-			LocalPlayer():SetNWBool("warning_dedicated", true)
-
-			timer.Create("yrp_warning_dedicated_server", 10, 0, function()
-				LocalPlayer():SetNWBool("warning_dedicated", false)
-			end)
-		end
-	end)
 end
+
+function GM:InitPostEntity()
+	YRPInitPostEntity()
+end
+
+hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
+	YRPInitPostEntity()
+end)
 
 --Remove Ragdolls after 60 sec
 function RemoveDeadRag(ent)

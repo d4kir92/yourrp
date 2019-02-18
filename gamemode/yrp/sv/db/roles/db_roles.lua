@@ -160,7 +160,6 @@ if wk(SQL_SELECT(DATABASE_NAME, "*", nil)) then
 	local wrongpercentage = SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
 	if wk(wrongpercentage) then
 		for i, role in pairs(wrongpercentage) do
-			pTab(role)
 			SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '" .. role.uniqueID .. "'")
 		end
 	end
