@@ -476,10 +476,12 @@ function HUDSimple()
 		if IsValid(weapon) then
 			local clip1 = weapon:Clip1()
 			local clip1max = weapon:GetMaxClip1()
+			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+
 			local clip2 = weapon:Clip2()
 			local clip2max = weapon:GetMaxClip2()
-			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+
 			if ammo1 != nil then
 				WP = {}
 				WP.element = "WP"

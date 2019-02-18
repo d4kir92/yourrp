@@ -28,17 +28,19 @@ net.Receive("getCharakterList", function()
 end)
 
 hook.Add("open_client_character", "open_client_character", function()
-	SaveLastSite()
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
+	if pa(settingsWindow) then
+		SaveLastSite()
+		local w = settingsWindow.window.sitepanel:GetWide()
+		local h = settingsWindow.window.sitepanel:GetTall()
 
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-	function settingsWindow.window.site:Paint(pw, ph)
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
+		function settingsWindow.window.site:Paint(pw, ph)
+			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "sef", ctr(10), ctr(45 + 150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "sef", ctr(10), ctr(45 + 150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		end
+
+		net.Start("getCharakterList")
+		net.SendToServer()
 	end
-
-	net.Start("getCharakterList")
-	net.SendToServer()
 end)
