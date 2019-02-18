@@ -126,7 +126,7 @@ end
 function db_drop_table(db_table)
 	local _result = sql.Query("DROP TABLE " .. db_table)
 
-	if _result ~= nil then
+	if _result != nil then
 		printGM("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	end
@@ -197,7 +197,9 @@ end
 function SQL_TABLE_EXISTS(db_table)
 	-- printGM("db", "SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
-		if sql.TableExists(db_table) then
+		local _r = SQL_SELECT(db_table, "*", nil)
+
+		if _r == nil or istable(_r) then
 			return true
 		else
 			printGM("note", "Table [" .. tostring(db_table) .. "] not exists.")
@@ -239,7 +241,7 @@ function SQL_QUERY(query)
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
-		if YRPSQL.db ~= nil then
+		if YRPSQL.db != nil then
 			local que = YRPSQL.db:query(query)
 
 			que.onError = function(q, e)
@@ -275,7 +277,7 @@ end
 function SQL_DROP_TABLE(db_table)
 	local _result = SQL_QUERY("DROP TABLE " .. db_table .. ";")
 
-	if _result ~= nil then
+	if _result != nil then
 		printGM("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	else
@@ -314,7 +316,7 @@ function SQL_SELECT(db_table, db_columns, db_where)
 		_q = _q .. db_columns
 		_q = _q .. " FROM " .. tostring(db_table)
 
-		if db_where ~= nil then
+		if db_where != nil then
 			_q = _q .. " WHERE "
 			_q = _q .. db_where
 		end
@@ -327,7 +329,7 @@ function SQL_SELECT(db_table, db_columns, db_where)
 		_q = _q .. db_columns
 		_q = _q .. " FROM " .. YRPSQL.schema .. "." .. tostring(db_table)
 
-		if db_where ~= nil then
+		if db_where != nil then
 			_q = _q .. " WHERE "
 			_q = _q .. db_where
 		end
@@ -345,7 +347,7 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 		_q = _q .. db_table
 		_q = _q .. " SET " .. db_sets
 
-		if db_where ~= nil then
+		if db_where != nil then
 			_q = _q .. " WHERE "
 			_q = _q .. db_where
 		end
@@ -357,7 +359,7 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 		_q = _q .. YRPSQL.schema .. "." .. db_table
 		_q = _q .. " SET " .. db_sets
 
-		if db_where ~= nil then
+		if db_where != nil then
 			_q = _q .. " WHERE "
 			_q = _q .. db_where
 		end
@@ -377,7 +379,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 			_q = _q .. " DEFAULT VALUES;"
 			local _result = SQL_QUERY(_q)
 
-			if _result ~= nil then
+			if _result != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
@@ -399,7 +401,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 			_vals = string.Implode(",", _vals)
 			local _result = SQL_INSERT_INTO(db_table, _cols, _vals)
 
-			if _result ~= nil then
+			if _result != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
 			end
 
@@ -421,7 +423,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. ");"
 			local _result = SQL_QUERY(_q)
 
-			if _result ~= nil then
+			if _result != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 			return _result
@@ -448,7 +450,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 					end
 				end
 
-				if db_columns ~= "" then
+				if db_columns != "" then
 					db_columns = db_columns .. "," .. col
 					db_values = db_values .. "," .. _tmp[col]
 				else
@@ -466,7 +468,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. ");"
 			local _result = SQL_QUERY(_q)
 
-			if _result ~= nil then
+			if _result != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
 			end
 
@@ -481,7 +483,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 			local _q = "DELETE FROM "
 			_q = _q .. db_table
 
-			if db_where ~= nil then
+			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
 				_q = _q .. " ;"
@@ -489,7 +491,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 
 			local _result = SQL_QUERY(_q)
 
-			if _result ~= nil then
+			if _result != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 		end
@@ -498,7 +500,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 			local _q = "DELETE FROM "
 			_q = _q .. db_table
 
-			if db_where ~= nil then
+			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
 				_q = _q .. ");"
@@ -506,7 +508,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 
 			local _result = SQL_QUERY(_q)
 
-			if _result ~= nil then
+			if _result != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
 			end
 		end
@@ -543,7 +545,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
 			local _r = SQL_QUERY(_q)
 
-			if _r ~= nil then
+			if _r != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
@@ -559,12 +561,12 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 		if YRPSQL[table_name][column_name] == nil then
 			local _start, _end = string.find(datatype, "DEFAULT ", 1)
 
-			if _end ~= nil then
+			if _end != nil then
 				local _default_value = string.sub(datatype, _end + 1)
 				YRPSQL[table_name][column_name] = _default_value
-			elseif string.find(datatype, "TEXT") ~= nil then
+			elseif string.find(datatype, "TEXT") != nil then
 				YRPSQL[table_name][column_name] = "' '"
-			elseif string.find(datatype, "INT") ~= nil then
+			elseif string.find(datatype, "INT") != nil then
 				YRPSQL[table_name][column_name] = "1"
 			end
 		end
@@ -577,7 +579,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
 			local _r = SQL_QUERY(_q)
 
-			if _r ~= nil then
+			if _r != nil then
 				printGM("error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_r))
 			end
 
@@ -600,7 +602,7 @@ if SERVER then
 		-- MYSQL
 		require("mysqloo")
 
-		if (mysqloo.VERSION ~= "9" or not mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
+		if (mysqloo.VERSION != "9" or not mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
 			MsgC(Color(255, 0, 0), "You are using an outdated mysqloo version\n")
 			MsgC(Color(255, 0, 0), "Download the latest mysqloo9 from here\n")
 			MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
@@ -651,30 +653,21 @@ function SQL_INIT_DATABASE(db_name)
 	--printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then
-		if not SQL_TABLE_EXISTS(db_name) then
+		if !SQL_TABLE_EXISTS(db_name) then
 			printGM("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
-			if _result ~= nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
-			end
-
-			if not sql.TableExists(tostring(db_name)) then
-				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
-				sql_show_last_error()
+			if !SQL_TABLE_EXISTS(db_name) then
+				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " (table not exists) lastError: " .. sql_show_last_error())
 				retry_load_database(db_name)
 			end
 		end
 	elseif GetSQLMode() == 1 then
-		if not SQL_TABLE_EXISTS(db_name) then
+		if !SQL_TABLE_EXISTS(db_name) then
 			printGM("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
-			if _result ~= nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INIT_DATABASE failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
-			end
-
-			if not sql.TableExists(tostring(db_name)) then
+			if !SQL_TABLE_EXISTS(db_name) then
 				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
 				sql_show_last_error()
 				retry_load_database(db_name)
