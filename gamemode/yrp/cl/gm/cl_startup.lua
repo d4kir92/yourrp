@@ -1299,6 +1299,22 @@ function YRPInitPostEntity()
 	end
 end
 
+function GM:Initialize()
+	timer.Simple(4, function()
+		YRPInitPostEntity()
+	end)
+end
+
+hook.Add("Initialize", "yrp_Initialize", function()
+	timer.Simple(4, function()
+		YRPInitPostEntity()
+	end)
+end)
+
+function GM:InitPostEntity()
+	YRPInitPostEntity()
+end
+
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	YRPInitPostEntity()
 end)
