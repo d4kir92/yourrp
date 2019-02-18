@@ -3,22 +3,22 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_" .. GetMapNameDB() .. "_doors"
-SQL_ADD_COLUMN(_db_name, "buildingID", "TEXT DEFAULT '-1'")
-SQL_ADD_COLUMN(_db_name, "level", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "keynr", "INTEGER DEFAULT -1")
+local DATABASE_NAME_DOORS = "yrp_" .. GetMapNameDB() .. "_doors"
+SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "buildingID", "TEXT DEFAULT '-1'")
+SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "level", "INTEGER DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "keynr", "INTEGER DEFAULT -1")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME_DOORS)
+--db_is_empty(DATABASE_NAME_DOORS)
 
-_db_name = "yrp_" .. GetMapNameDB() .. "_buildings"
-SQL_ADD_COLUMN(_db_name, "groupID", "INTEGER DEFAULT -1")
-SQL_ADD_COLUMN(_db_name, "buildingprice", "TEXT DEFAULT 100")
-SQL_ADD_COLUMN(_db_name, "ownerCharID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT 'Building'")
+local DATABASE_NAME_BUILDINGS = "yrp_" .. GetMapNameDB() .. "_buildings"
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT -1")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME_BUILDINGS)
+--db_is_empty(DATABASE_NAME_BUILDINGS)
 
 function IsUnderGroup(uid, tuid)
 	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
