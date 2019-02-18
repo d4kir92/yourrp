@@ -1299,10 +1299,6 @@ function YRPInitPostEntity()
 	end
 end
 
-function GM:InitPostEntity()
-	YRPInitPostEntity()
-end
-
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	YRPInitPostEntity()
 end)
