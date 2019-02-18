@@ -18,6 +18,14 @@ function Player:GetLanguageShort() -- The Language the player selected (shortkey
 	return self:YRPGetLanguageShort() -- return string
 end
 
+function Player:GetCountryShort()
+	return string.upper(self:GetNWString("yrp_country", "EN"))
+end
+
+function Player:GetCountry() -- The Language the player selected
+	return GetCountryName(self:GetCountryShort())
+end
+
 function Player:Slowed()
 	return self:GetNWBool("slowed", false)
 end

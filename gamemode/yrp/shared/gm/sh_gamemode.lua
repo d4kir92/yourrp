@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 34 --do NOT change this!
-GM.VersionCanary = 71 --do NOT change this!
+GM.VersionBeta = 35 --do NOT change this!
+GM.VersionCanary = 73 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -81,12 +81,8 @@ function GetMapName()
 	return game.GetMap()
 end
 
-function RSWU(str) -- Replace Space With Underline
-	return string.Replace(str, " ", "_")
-end
-
 function GetMapNameDB()
-	return string.lower(SQL_STR_IN(RSWU(game.GetMap())))
+	return string.lower(SQL_STR_IN(game.GetMap()))
 end
 
 concommand.Add("yrp_version", function(ply, cmd, args)

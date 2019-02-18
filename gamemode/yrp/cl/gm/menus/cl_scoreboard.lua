@@ -65,6 +65,9 @@ function OpenPlayerOptions(ply)
 			_menu:AddOption(YRP.lang_string("LID_language") .. ": " .. ply:GetLanguage(), "icon16/map.png")
 			_menu:AddSpacer()
 
+			_menu:AddOption(YRP.lang_string("LID_country") .. ": " .. ply:GetCountry(), "icon16/map.png")
+			_menu:AddSpacer()
+
 			if notself(ply) then
 				local ban = _menu:AddOption(YRP.lang_string("LID_ban"), "icon16/world_link.png")
 				function ban:DoClick()
@@ -410,8 +413,10 @@ function OpenSBS()
 			_p.os = pl:GetNWString("yrp_os", "other")
 			_p.lang = pl:GetLanguageShort()
 
-			local country = pl:GetNWString("yrp_country", "EN")
-			_p.cc = string.lower(country)
+			local country = pl:GetCountry()
+			_p.country = country
+			local countryshort = pl:GetCountryShort()
+			_p.cc = string.lower(countryshort)
 			if tostring(YRP.GetDesignIcon("flag_" .. _p.cc)) == "Material [vgui/material/icon_clear]" and mc[_p.cc] == nil then
 				mc[_p.cc] = true
 				YRP.msg("mis", "Missing Country: " .. string.upper(_p.cc))
@@ -492,7 +497,7 @@ function OpenSBS()
 						local icon_size = ctr(100)
 						YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 						if self:IsHovered() then
-							draw.SimpleTextOutlined(string.upper(self.cc), "sef", ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleTextOutlined(string.upper(self.cc), "sef", ctr(x) + icon_size * 1.49 / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + 300
 					end

@@ -647,6 +647,7 @@ end
 printGM("db", "Current SQL Mode: " .. GetSQLModeName())
 
 function SQL_INIT_DATABASE(db_name)
+	db_name = sql.SQLStr(db_name)
 	--printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then

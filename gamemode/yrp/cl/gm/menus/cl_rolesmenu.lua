@@ -147,9 +147,7 @@ end
 function addRole(rol, parent, mainparent)
 	createRoleBox(rol, parent, mainparent)
 	_pr[rol.uniqueID] = parent
-	if tostring(rol.uniqueID) != "1" then
-		getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
-	end
+	getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
 end
 
 function addRoleRow(rol, parent)
@@ -171,10 +169,12 @@ function getRoles(uid, parent)
 		local _roles = net.ReadTable()
 
 		for i, rol in pairs(_roles) do
-			if tonumber(rol.int_prerole) <= 0 then
+			if !wk(rol.int_prerole) then
+				YRP.msg("error", "getRoles(" .. tostring(uid) .. ", " .. tostring(parent) .. ") rol: " .. tostring(rol) .. " rol.int_prerole: " .. tostring(rol.int_prerole))
+			elseif tonumber(rol.int_prerole) <= 0 then
 				addRoleRow(rol, parent)
 			elseif tonumber(rol.int_prerole) >= 1 then
-				addRoleRow(rol, parent)
+				--addRoleRow(rol, parent)
 			end
 		end
 		--getGroups(uid, parent)
