@@ -379,11 +379,14 @@ function DColor(tab)
 			end
 			window.cm = createD("DColorMixer", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
 			function window.cm:ValueChanged(col)
-				pnl.DButton.tabcolor = TableToColorStr(col)
-				pnl.DButton.color = StringToColor(pnl.DButton.tabcolor)
+				local colstr = TableToColorStr(col)
+				if pnl.DButton:IsValid() then
+					pnl.DButton.tabcolor = colstr
+					pnl.DButton.color = StringToColor(pnl.DButton.tabcolor)
+				end
 				net.Start(tab.netstr)
 					net.WriteString(tab.uniqueID)
-					net.WriteString(pnl.DButton.tabcolor)
+					net.WriteString(colstr)
 				net.SendToServer()
 			end
 		end

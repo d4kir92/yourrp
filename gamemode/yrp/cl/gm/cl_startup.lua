@@ -51,7 +51,7 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 		end
 
 		surfaceBox(0, 0, pw, ph, color)
-		YRP.DrawIcon(YRP.GetDesignIcon(tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
+		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
 		self.textcol = Color(255, 255, 255)
 
 		if self.lang.percentage ~= nil and self.lang.percentage == 100 then
@@ -113,7 +113,7 @@ function YRP.DChangeLanguage(parent, x, y, size)
 		end
 
 		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		YRP.DrawIcon(YRP.GetDesignIcon(YRP.GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
+		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. YRP.GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
 	end
 
 	function LanguageChanger:DoClick()

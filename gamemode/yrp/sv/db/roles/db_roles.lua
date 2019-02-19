@@ -180,6 +180,7 @@ end
 
 -- darkrp
 function ConvertToDarkRPJobName(name)
+	name = tostring(name)
 	name = string.Replace(name, " ", "_")
 	local jobname = "TEAM_" .. name
 	return jobname

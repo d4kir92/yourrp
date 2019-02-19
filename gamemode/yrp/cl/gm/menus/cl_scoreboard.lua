@@ -486,7 +486,7 @@ function OpenSBS()
 
 					if pl:GetNWBool("bool_yrp_scoreboard_show_language", false) then
 						local icon_size = ctr(100)
-						YRP.DrawIcon(YRP.GetDesignIcon(self.lang), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+						YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.lang), "sef", ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
@@ -671,7 +671,7 @@ function OpenSBS()
 
 						if lply:GetNWBool("bool_yrp_scoreboard_show_language", false) then
 							local icon_size = ctr(100)
-							YRP.DrawIcon(YRP.GetDesignIcon(self.lang), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+							YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.lang), "sef", ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end

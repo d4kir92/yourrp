@@ -329,7 +329,7 @@ function YRP.DrawIcon(material, w, h, x, y, color)
 	surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
 end
 
-YRP.AddDesignIcon("auto", "vgui/flags/lang_" .. "auto" .. ".png")
+YRP.AddDesignIcon("lang_auto", "vgui/iso_639/" .. "auto" .. ".png")
 YRP.AddDesignIcon("group", "vgui/material/icon_group.png")
 YRP.AddDesignIcon("role", "vgui/material/icon_person.png")
 YRP.AddDesignIcon("help", "vgui/material/icon_help.png")
@@ -386,10 +386,10 @@ YRP.AddDesignIcon("ts", "vgui/material/icon_ts_bluelight.png")
 YRP.AddDesignIcon("ts_light", "vgui/material/icon_ts_light.png")
 
 -- Flags
-local flags, folders = file.Find("materials/vgui/iso_3166_1/*.png", "GAME", "nameasc")
+local flags, folders = file.Find("materials/vgui/iso_3166/*.png", "GAME", "nameasc")
 for i, flag in pairs(flags) do
 	flag = string.Replace(flag, ".png", "")
-	YRP.AddDesignIcon("flag_" .. flag, "vgui/iso_3166_1/" .. flag .. ".png")
+	YRP.AddDesignIcon("flag_" .. flag, "vgui/iso_3166/" .. flag .. ".png")
 end
 
 local _delay = 1
