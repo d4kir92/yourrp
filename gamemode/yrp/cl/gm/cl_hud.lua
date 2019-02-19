@@ -93,8 +93,9 @@ end
 
 function show_global_voice_info(ply)
 	if _showGlobalVoice then
-		local _role_name = ply:GetNWString("voice_global_rolename", "")
-		draw.SimpleTextOutlined(YRP.lang_string("LID_makesanannoucmentpre") .. " " .. _role_name .. " " .. YRP.lang_string("LID_makesanannoucmentpos") .. "!", "HudBars", ScrW2(), ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		local tab = {}
+		tab["NAME"] = ply:RPName()
+		draw.SimpleTextOutlined(YRP.lang_string("LID_makesanannoucment", tab) .. "!", "HudBars", ScrW2(), ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 

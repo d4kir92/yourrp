@@ -688,7 +688,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 				surfaceButton(self, pw, ph, "")
 				surfaceText(_allProgressTexts[sho], "mat1text", ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
-				YRP.DrawIcon(YRP.GetDesignIcon(tostring(self.language.short)), ctr(_icon_w), ctr(_icon_h), ctr(_br), ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
+				YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.language.short)), ctr(_icon_w), ctr(_icon_h), ctr(_br), ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 			end
 
 			function lan:DoClick()
