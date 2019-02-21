@@ -542,7 +542,7 @@ function HUD_FO76()
 
 		local MO = {}
 		MO.element = "MO"
-		MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. ")"
+		MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. ")"
 		FO76Name(MO)
 
 		local batterypower = system.BatteryPower()

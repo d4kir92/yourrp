@@ -16,6 +16,9 @@ hook.Add("ResolutionChanged", "Resolution Change", function(w, h)
 	local rw, rh = getResolutionRatio()
 	printGM("gm", "Changed Resolution to " .. w .. "x" .. h .. " (" .. rw .. ":" .. rh .. ")")
 	changeFontSize()
+
+	net.Start("ply_changed_resolution")
+	net.SendToServer()
 end)
 --##############################################################################
 

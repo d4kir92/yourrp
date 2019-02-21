@@ -192,20 +192,63 @@ function Player:MoneyBank()
 	return self:GetMoneyBank()
 end
 
-function Player:FormattedMoney()
-	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), 2) .. self:GetNWString("text_money_pos", "[LOADING POS]")
-end
-
-function Player:FormattedMoneyBank()
-	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:MoneyBank(), 2) .. self:GetNWString("text_money_pos", "[LOADING POS]")
-end
-
 function Player:Salary()
 	return tonumber(self:GetNWString("salary", "0"))
 end
 
+function string.point(number)
+	if ( isnumber( number ) ) then
+		number = string.format( "%f", number )
+		number = string.match( number, "^(.-)%.?0*$" ) -- Remove trailing zeros
+	end
+	local k
+	while true do
+		number, k = string.gsub( number, "^(-?%d+)(%d%d%d)", "%1.%2" )
+		if ( k == 0 ) then break end
+	end
+	return number
+end
+
+function Player:FormattedMoney()
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:Money()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
+function Player:FormattedMoneyBank()
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:MoneyBank()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
 function Player:FormattedSalary()
-	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), 2) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:Salary()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
+function Player:FormattedMoneyRounded(round)
+	round = round or 1
+	if round > 3 then
+		round = 3
+	elseif round < 0 then
+		round = 0
+	end
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
+function Player:FormattedMoneyBankRounded(round)
+	round = round or 1
+	if round > 3 then
+		round = 3
+	elseif round < 0 then
+		round = 0
+	end
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:MoneyBank(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
+function Player:FormattedSalaryRounded(round)
+	round = round or 1
+	if round > 3 then
+		round = 3
+	elseif round < 0 then
+		round = 0
+	end
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 --[[ Role ]]--

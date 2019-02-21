@@ -224,8 +224,6 @@ function YRP:Loadout(ply)
 	printGM("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
 	ply:SetNWBool("bool_loadouted", false)
 
-	ply:HudLoadout()
-	ply:InterfaceLoadout()
 	ply:DesignLoadout()
 
 	ply:UserGroupLoadout()

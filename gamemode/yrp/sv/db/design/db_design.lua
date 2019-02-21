@@ -58,9 +58,13 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
 	RegisterHUDDesign(HUD_FO76)
 end)
 
+
+
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout()
+	self:HudLoadout()
+	self:InterfaceLoadout()
 	printGM("debug", "[DesignLoadout] " .. self:YRPName())
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
@@ -69,6 +73,12 @@ function Player:DesignLoadout()
 		self:SetNWString("string_interface_design", setting.string_interface_design)
 	end
 end
+
+util.AddNetworkString("ply_changed_resolution")
+net.Receive("ply_changed_resolution", function(len, ply)
+	YRP.msg("note", ply:YRPName() .. " changed the Resolution.")
+	ply:DesignLoadout()
+end)
 
 util.AddNetworkString("change_hud_design")
 net.Receive("change_hud_design", function(len, ply)

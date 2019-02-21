@@ -421,7 +421,7 @@ function HUDSimple()
 		MO.element = "MO"
 		MO.cur = CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()
 		MO.max = lply:SalaryTime()
-		MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. ")"
+		MO.text = lply:FormattedMoneyRounded(1) .. " (+" .. lply:FormattedSalaryRounded(1) .. ")"
 		MO.icon = Material("icon16/money.png")
 		HUDSimpleBAR(MO)
 		if lply:GetNWBool("bool_stamina", false) then

@@ -266,7 +266,7 @@ mc = {}
 function OpenSBS()
 	if sbs.frame == nil then
 		SetIsScoreboardOpen(true)
-		sbs.frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+		sbs.frame = createD("DFrame", nil, BScrW(), ScrH(), PosX(), 0)
 		sbs.frame:SetDraggable(false)
 		sbs.frame:ShowCloseButton(false)
 		sbs.frame:SetTitle("")
@@ -634,7 +634,7 @@ function OpenSBS()
 				_p.playtime = _p.pt.h .. ":" .. _p.pt.m
 				_p.os = pl:GetNWString("yrp_os", "other")
 				_p.lang = pl:GetLanguageShort()
-				
+
 				local country = pl:GetCountry()
 				_p.country = country
 				local countryshort = pl:GetCountryShort()
