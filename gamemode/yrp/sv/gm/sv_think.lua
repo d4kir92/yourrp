@@ -10,7 +10,7 @@ end)
 util.AddNetworkString("client_lang")
 net.Receive("client_lang", function(len, ply)
 	local _lang = net.ReadString()
-	printGM("note", ply:YRPName() .. " using language: " .. string.upper(_lang))
+	printGM("db", ply:YRPName() .. " using language: " .. string.upper(_lang))
 	ply:SetNWString("client_lang", _lang or "NONE")
 end)
 
@@ -256,7 +256,7 @@ timer.Create("ServerThink", 1, 0, function()
 
 							local sequence = _dealer.Entity:LookupSequence("idle_all_01")
 							_dealer.Entity:ResetSequence("idle_all_01")
-							
+
 						end
 					end
 				end
@@ -267,6 +267,8 @@ timer.Create("ServerThink", 1, 0, function()
 	if _time % GetBackupCreateTime() == 0 then
 		RemoveOldBackups()
 		CreateBackup()
+
+		SearchForCollectionID()
 	end
 
 	local _auto_save = 300

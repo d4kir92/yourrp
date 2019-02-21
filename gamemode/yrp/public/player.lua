@@ -19,7 +19,7 @@ function Player:GetLanguageShort() -- The Language the player selected (shortkey
 end
 
 function Player:GetCountryShort()
-	return string.upper(self:GetNWString("yrp_country", "EN"))
+	return string.upper(self:GetNWString("yrp_country", "LOADING"))
 end
 
 function Player:GetCountry() -- The Language the player selected

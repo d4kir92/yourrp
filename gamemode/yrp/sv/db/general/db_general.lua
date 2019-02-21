@@ -19,11 +19,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_noclip_mdl", "TEXT DEFAULT 'models/crow.mdl'
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ' '")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ' '")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ' '")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'")
@@ -130,21 +130,21 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ' '")
 
 --[[ Social Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT '9987'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT '10011'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ' '")
 
 --[[ OLD ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "access_jail", "TEXT DEFAULT -1")
@@ -247,7 +247,7 @@ end
 
 
 function YRPCollectionID()
-	return yrp_general.text_server_collectionid
+	return tonumber(yrp_general.text_server_collectionid)
 end
 
 
@@ -316,6 +316,19 @@ function GetMaxAmountOfDroppedMoney()
 end
 
 
+
+--[[ Setter ]]--
+function SetYRPCollectionID(cid)
+	cid = cid or 0
+	cid = tonumber(cid)
+	if cid > 0 then
+		printGM("db", "SetYRPCollectionID(" .. cid .. ")")
+		yrp_general.text_server_collectionid = cid
+		SQL_UPDATE(DATABASE_NAME, "text_server_collectionid = '" .. cid .. "'", "uniqueID = '1'")
+
+		IsServerInfoOutdated()
+	end
+end
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")

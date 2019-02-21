@@ -1,5 +1,167 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+function CheckIfCollectionIDIsCorrect()
+	local collectionID = YRPCollectionID()
+	if collectionID <= 0 then
+		printGM("note", "Current CollectionID is not correct.")
+		return false
+	end
+end
+
+local collections = {}
+
+function TestCollection(cid)
+	--printGM("db", "TestCollection(" .. cid .. ")")
+	cid = tonumber(cid)
+	if collections[cid].done then
+		-- Check if same size
+		local addons = engine.GetAddons()
+		if table.Count(collections[cid].ids) == table.Count(addons) then
+			for i, addon in pairs(addons) do
+				addon.wsid = tonumber(addon.wsid)
+				if !table.HasValue(collections[cid].ids, addon.wsid) then
+					printGM("db", "[TestCollection] Collection " .. cid .. " is not the right collection.")
+					return false
+				end
+			end
+
+			printGM("db", "[TestCollection] Found right collection: " .. cid)
+			if YRPCollectionID() != cid then
+				printGM("db", "[TestCollection] Current Collection wrong -> updating CollectionID.")
+				SetYRPCollectionID(cid)
+			end
+			return true
+		end
+	end
+end
+
+function GetCollection(cid, maincid)
+	cid = tonumber(cid)
+	maincid = maincid or cid
+	maincid = tonumber(maincid)
+
+	if maincid == cid then
+		collections[maincid] = {}
+		collections[maincid].id = collections[maincid].id or maincid
+		collections[maincid].ids = collections[maincid].ids or {}
+		collections[maincid].othercollections = {}
+		collections[maincid].done = collections[maincid].done or false
+	end
+
+	if !table.HasValue(collections[maincid].othercollections, cid) then
+		table.insert(collections[maincid].othercollections, cid)
+
+		local url = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. cid
+		http.Fetch(url,
+			function( body, len, headers, code )
+				local _st, _en = string.find(body, "collectionChildren")
+				local wsids = ""
+				if _st then
+					wsids = string.sub(body, _st)
+				end
+
+				local ids = string.Explode("\"collectionItem\"", wsids)
+				for i, v in pairs(ids) do
+					local searchfor = "?id="
+					local _s, _e = string.find(v, searchfor)
+					if _s then
+						_s = _s + string.len(searchfor)
+					 	local id = string.sub(v, _s)
+						searchfor = "\""
+						_s, _e = string.find(id, searchfor)
+						_s = _s + string.len(searchfor)
+						id = string.sub(id, 1, _e - 1)
+						id = tonumber(id)
+						if isnumber(id) and id != cid then
+							table.insert(collections[maincid].ids, id)
+						end
+					end
+				end
+
+				_st, _en = string.find(wsids, "childrenTitle")
+				local coids = ""
+				if _st then
+					coids = string.sub(wsids, _st)
+				end
+
+				local linkedcollections = {}
+				if coids != "" then
+					local othercollections = string.Explode("\"workshopItem ", coids)
+					for i, v in pairs(othercollections) do
+						local searchfor = "?id="
+						local _s, _e = string.find(v, searchfor)
+						if _s then
+							_s = _s + string.len(searchfor)
+						 	local id = string.sub(v, _s)
+							searchfor = "\""
+							_s, _e = string.find(id, searchfor)
+							_s = _s + string.len(searchfor)
+							id = string.sub(id, 1, _e - 1)
+							id = tonumber(id)
+							if isnumber(id) and id != cid and id != maincid then
+								table.insert(linkedcollections, id)
+							end
+						end
+					end
+				end
+
+				collections[maincid].linkedcollections = collections[maincid].linkedcollections or 0
+				collections[maincid].linkedcollections = collections[maincid].linkedcollections + table.Count(linkedcollections)
+
+				collections[maincid].linkedcollectionsadded = collections[maincid].linkedcollectionsadded or 0
+				if cid != maincid then
+					collections[maincid].linkedcollectionsadded = collections[maincid].linkedcollectionsadded + 1
+				end
+
+				if cid != maincid then
+					printGM("db", "[GetCollection] Collected IDs for " .. maincid .. " [" .. collections[maincid].linkedcollectionsadded .. "|" .. collections[maincid].linkedcollections .. "] " .. cid)
+				end
+
+				for i, v in pairs(linkedcollections) do
+					GetCollection(v, maincid)
+				end
+
+				if collections[maincid].linkedcollections == collections[maincid].linkedcollectionsadded then
+					collections[maincid].done = true
+					TestCollection(maincid)
+				end
+			end,
+			function(err)
+				printGM("note", "[GetCollection] Error in GetCollection. (" .. tostring(err) .. ")")
+			end
+		)
+	end
+end
+
+function SearchForCollectionID()
+	local collectionID = YRPCollectionID()
+	local files, folders = file.Find("*", "BASE_PATH")
+	local collectionIDs = {}
+	for k, v in pairs(files) do
+		if system.IsWindows() then
+			if ( !string.EndsWith( v, ".bat" ) ) then continue end
+		end
+		local file = file.Read(v, "BASE_PATH")
+		local cidstart, cidend = string.find(file, "+host_workshop_collection ")
+
+		if cidstart then
+			local cid = string.sub(file, cidstart + string.len("+host_workshop_collection "))
+			local _s, _e = string.find(cid, " ")
+			cid = string.sub(cid, 1, _e - 1)
+			if !table.HasValue(collectionIDs, cid) then
+				table.insert(collectionIDs, cid)
+			end
+		end
+	end
+	if !CheckIfCollectionIDIsCorrect() then
+		for i, cid in pairs(collectionIDs) do
+			printGM("db", "SearchForCollectionID: " .. cid)
+			GetCollection(cid)
+		end
+	end
+end
+SearchForCollectionID()
+
 function GM:PlayerDisconnected(ply)
 	printGM("gm", "[PlayerDisconnected] " .. ply:YRPName())
 	save_clients("PlayerDisconnected")
@@ -117,8 +279,6 @@ function GM:PlayerLoadout(ply)
 	else
 		printGM("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
 	end
-
-	hook.Run("OnPlayerChangedTeam", ply, 1, 1)
 
 	ply:UpdateBackpack()
 
@@ -361,7 +521,7 @@ function StartCombat(ply)
 			if timer.Exists(steamid .. " outOfCombat") then
 				timer.Remove(steamid .. " outOfCombat")
 			end
-			timer.Create(steamid .. " outOfCombat", 25, 1, function()
+			timer.Create(steamid .. " outOfCombat", 5, 1, function()
 				if ea(ply) then
 					ply:SetNWBool("inCombat", false)
 					lowering_weapon(ply)

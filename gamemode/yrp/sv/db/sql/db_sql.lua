@@ -30,6 +30,7 @@ function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
 	end
 end
 
+SQLITE_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'", true)
 SQLITE_ADD_COLUMN(DATABASE_NAME, "int_mode", "INT DEFAULT '0'", true)
 SQLITE_ADD_COLUMN(DATABASE_NAME, "string_host", "TEXT DEFAULT 'UNKNOWN HOST'", true)
 SQLITE_ADD_COLUMN(DATABASE_NAME, "string_database", "TEXT DEFAULT 'UNKNOWN DATABASE'", true)

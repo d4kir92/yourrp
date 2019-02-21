@@ -634,7 +634,15 @@ function OpenSBS()
 				_p.playtime = _p.pt.h .. ":" .. _p.pt.m
 				_p.os = pl:GetNWString("yrp_os", "other")
 				_p.lang = pl:GetLanguageShort()
-				_p.cc = string.lower(pl:GetNWString("yrp_country", "EN"))
+				
+				local country = pl:GetCountry()
+				_p.country = country
+				local countryshort = pl:GetCountryShort()
+				_p.cc = string.lower(countryshort)
+				if tostring(YRP.GetDesignIcon("flag_" .. _p.cc)) == "Material [vgui/material/icon_clear]" and mc[_p.cc] == nil then
+					mc[_p.cc] = true
+					YRP.msg("mis", "Missing Country: " .. string.upper(_p.cc))
+				end
 
 				function _p:Paint(pw, ph)
 					if !pl:IsValid() then

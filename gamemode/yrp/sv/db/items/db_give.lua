@@ -21,12 +21,14 @@ function Player:GetEQ(slot)
 
 		if wk(_slot_uid) then
 			_slot_uid = _slot_uid[1][slot]
-			local _item = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot_uid .. "'")
+			if wk(_slot_uid) then
+				local _item = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot_uid .. "'")
 
-			if wk(_item) then
-				_item = _item[1]
+				if wk(_item) then
+					_item = _item[1]
 
-				return _item
+					return _item
+				end
 			end
 		end
 	end

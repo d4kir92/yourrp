@@ -8,10 +8,10 @@ local DATABASE_NAME = "yrp_laws"
 --SQL_DROP_TABLE(DATABASE_NAME)
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_lawsymbol", "TEXT DEFAULT '§'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_laws", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_laws", "TEXT DEFAULT ' '")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_lawsymbol, string_laws", "'§', ''")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_lawsymbol, string_laws", "'§', ' '")
 end
 
 util.AddNetworkString("get_laws")

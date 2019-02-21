@@ -1,5 +1,120 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+SQL = SQL or {}
+SQL.mode = "SQLITE"
+
+function SQL.MODE()
+	return SQL.mode
+end
+
+function SQL.GETMODE()
+	return SQL.MODE()
+end
+
+function SQL.SETMODE(sqlmode, force)
+	SQL.mode = tostring(sqlmode)
+	if force then
+		YRP.msg("db", "Update SQLMODE to: " .. SQL.mode)
+		local _q = "UPDATE "
+		_q = _q .. "yrp_sql"
+		_q = _q .. " SET " .. "string_mode = " .. SQL.mode
+		_q = _q .. " WHERE uniqueID = 1"
+		_q = _q .. ";"
+		sql.Query(_q)
+	end
+end
+
+function SQL.TABLE_EXISTS(db_table)
+	-- YRP.msg("db", "SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
+	if SQL.MODE() == "SQLITE" then
+		local _result = SQL_SELECT(db_table, "*", nil)
+
+		if _result == nil or istable(_result) then
+			return true
+		else
+			YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
+			return false
+		end
+	elseif SQL.MODE() == "MYSQL" then
+
+	end
+end
+
+function SQL.QUERY(query)
+	query = tostring(query)
+	if !string.find(query, ";") then
+		YRP.msg("error", "[SQL.QUERY] " .. GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
+		return false
+	end
+
+	if SQL.MODE() == "SQLITE" then
+		local _result = sql.Query(query)
+
+		if _result == nil then
+			--
+		elseif _result == false then
+			--
+		else
+			--
+		end
+		return _result
+	elseif SQL.MODE() == "MYSQL" then
+
+	end
+end
+
+function SQL.SELECT(tab)
+	--YRP.msg("db", "SQL.SELECT")
+	if SQL.MODE() == "SQLITE" then
+		if SQL.TABLE_EXISTS(tab.table) then
+			local _q = "SELECT "
+			for i, col in pairs(tab.cols) do
+				col = SQL_STR_OUT(col)
+				if i > 1 then
+					_q = _q .. ", " .. col
+				else
+					_q = _q .. col
+				end
+			end
+			_q = _q .. " FROM " .. tab.table
+
+			if tab.where != nil then
+				_q = _q .. " WHERE "
+				_q = _q .. tab.where
+			end
+
+			_q = _q .. ";"
+
+			local rettab = SQL_QUERY(_q)
+			if istable(rettab) then
+				for i, v in pairs(rettab) do
+					for j, w in pairs(v) do
+						w = SQL_STR_OUT(w)
+					end
+				end
+			end
+			return rettab
+		else
+			return false
+		end
+	elseif SQL.MODE() == "MYSQL" then
+
+	end
+end
+
+--[[
+timer.Simple(2, function()
+	local tab = {}
+	tab.table = "yrp_players"
+	tab.cols = {}
+	tab.cols[1] = "SteamID"
+	tab.cols[2] = "SteamID64"
+	tab.where = "uniqueID = 1"
+	pTab(SQL.SELECT(tab))
+end)
+]]
+
+--[[
 function disk_full(error)
 	if string.find(error, "database or disk is full") then
 		if SERVER then
@@ -701,3 +816,5 @@ function SQL_INIT_DATABASE(db_name)
 		end
 	end
 end
+
+]]

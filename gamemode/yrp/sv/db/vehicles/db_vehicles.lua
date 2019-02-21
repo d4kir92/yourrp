@@ -108,7 +108,7 @@ net.Receive("removeVehicleOwner", function(len, ply)
 	local _tmpVehicleID = net.ReadString()
 	local _tmpTable = SQL_SELECT("yrp_vehicles", "*", "item_id = '" .. _tmpVehicleID .. "'")
 
-	local result = SQL_UPDATE("yrp_vehicles", "ownerCharID = ''", "item_id = '" .. _tmpVehicleID .. "'")
+	local result = SQL_UPDATE("yrp_vehicles", "ownerCharID = ' '", "item_id = '" .. _tmpVehicleID .. "'")
 
 	for k, v in pairs(ents.GetAll()) do
 		if tonumber(v:GetNWString("item_uniqueID")) == tonumber(_tmpVehicleID) then
