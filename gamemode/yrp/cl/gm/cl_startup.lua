@@ -1,4 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
+local playerready = false
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -1241,8 +1243,8 @@ end)
 
 function YRPInitPostEntity()
 	printGM("note", "YRPInitPostEntity()")
-	if !playerready then
-		printGM("note", "All entities are loaded.")
+	if playerready == false then
+		printGM("note", "Player is ready.")
 		playerready = true
 
 		net.Start("yrp_player_is_ready")
@@ -1312,6 +1314,7 @@ hook.Add("Initialize", "yrp_Initialize", function()
 end)
 
 function GM:InitPostEntity()
+	printGM("note", "All entities are loaded.")
 	YRPInitPostEntity()
 end
 
