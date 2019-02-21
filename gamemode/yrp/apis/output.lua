@@ -163,6 +163,9 @@ function YRP.msg(chan, msg, tochat)
 			MsgC(_yrpc, _yrp)
 			MsgC(rc, "|")
 			MsgC(cc, cn)
+			if cn == "DB" then
+				MsgC(cc, ":" .. GetSQLModeName())
+			end
 			MsgC(rc, "] ")
 
 			MsgC(rc, msg)
@@ -211,32 +214,52 @@ end
 local countries = {}
 countries["AT"] = "Austria"
 countries["AU"] = "Australia"
+
 countries["BE"] = "Belgium"
 countries["BR"] = "Brazil"
+
 countries["CA"] = "Canada"
 countries["CH"] = "Switzerland"
 countries["CN"] = "China"
+
 countries["DE"] = "Germany"
 countries["DK"] = "Denmark"
+
 countries["EG"] = "Egypt"
 countries["ES"] = "Spain"
+
 countries["FR"] = "France"
+
 countries["GB"] = "Great Britain"
+countries["GG"] = "Guernsey"
 countries["GR"] = "Greece"
+
 countries["HU"] = "Hungary"
+
 countries["IE"] = "Ireland"
 countries["IT"] = "Italy"
+
+countries["JP"] = "Japan"
+
 countries["KZ"] = "Kazakhstan"
+
 countries["MX"] = "Mexico"
+
 countries["NL"] = "Netherlands"
 countries["NZ"] = "New Zealand"
+
 countries["PL"] = "Poland"
 countries["PT"] = "Portugal"
+
 countries["RO"] = "Romania"
 countries["RU"] = "Russia"
+
 countries["SE"] = "Sweden"
+
+countries["TH"] = "Thailand"
 countries["TR"] = "Turkey"
 countries["TW"] = "Taiwan"
+
 countries["UA"] = "Ukraine"
 countries["US"] = "USA"
 function GetCountryName(id)

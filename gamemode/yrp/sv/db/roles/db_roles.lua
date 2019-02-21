@@ -6,16 +6,16 @@
 local DATABASE_NAME = "yrp_ply_roles"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
@@ -53,9 +53,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ' '")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ' '")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1")
 
@@ -190,10 +190,10 @@ function ConvertToDarkRPJob(tab)
 	local _job = {}
 
 	_job.name = tab.string_name
-	local _pms = string.Explode(",", tab.string_playermodels)
+	local _pms = string.Explode(",", "")
 	_job.model = _pms
 	_job.description = tab.string_description
-	local _weapons = string.Explode(",", tab.string_sweps)
+	local _weapons = string.Explode(",", "")
 	_job.weapons = _weapons
 	_job.max = tonumber(tab.int_maxamount)
 	_job.salary = tonumber(tab.int_salary)

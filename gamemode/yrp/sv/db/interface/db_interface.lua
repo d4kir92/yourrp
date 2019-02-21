@@ -5,8 +5,8 @@
 
 local DATABASE_NAME = "yrp_interface"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ' '")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 
@@ -66,14 +66,16 @@ function Player:InterfaceLoadout()
 	local ifeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(ifeles) then
 		for i, ele in pairs(ifeles) do
-			if string.StartWith(ele.name, "float_") then
-				self:SetNWFloat(ele.name, tonumber(ele.value))
-			elseif string.StartWith(ele.name, "bool_") then
-				self:SetNWBool(ele.name, tobool(ele.value))
-			elseif string.StartWith(ele.name, "color_") then
-				self:SetNWString(ele.name, ele.value)
-			elseif string.StartWith(ele.name, "int_") then
-				self:SetNWInt(ele.name, ele.value)
+			if ele.name != nil then
+				if string.StartWith(ele.name, "float_") then
+					self:SetNWFloat(ele.name, tonumber(ele.value))
+				elseif string.StartWith(ele.name, "bool_") then
+					self:SetNWBool(ele.name, tobool(ele.value))
+				elseif string.StartWith(ele.name, "color_") then
+					self:SetNWString(ele.name, ele.value)
+				elseif string.StartWith(ele.name, "int_") then
+					self:SetNWInt(ele.name, ele.value)
+				end
 			end
 		end
 	end

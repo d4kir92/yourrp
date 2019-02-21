@@ -154,13 +154,15 @@ function set_role_values(ply)
 			ply:SetNWString("licenseNames", "")
 
 			if worked(rolTab, "set_role_values rolTab") and worked(ChaTab, "set_role_values ChaTab") then
-				local _storage = string.Explode(",", ChaTab.storage)
-				printGM("debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
-				for i, lic in pairs(_storage) do
-					local _lic = SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
-					if _lic != nil and _lic != false then
-						_lic = _lic[1]
-						ply:AddLicense(_lic.ClassName)
+				if ChaTab.storage != nil then
+					local _storage = string.Explode(",", ChaTab.storage)
+					printGM("debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
+					for i, lic in pairs(_storage) do
+						local _lic = SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
+						if _lic != nil and _lic != false then
+							_lic = _lic[1]
+							ply:AddLicense(_lic.ClassName)
+						end
 					end
 				end
 

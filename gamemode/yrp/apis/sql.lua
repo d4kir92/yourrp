@@ -246,8 +246,7 @@ function SQL_QUERY(query)
 
 			que.onError = function(q, e)
 				if string.find(e, "Unknown column") == nil and string.find(e, "doesn't exist") == nil then
-					printGM("error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring(e))
-					printGM("error", GetSQLModeName() .. ": " .. tostring(query))
+					printGM("error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query))
 					q:error()
 				end
 			end
@@ -370,46 +369,6 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 	end
 end
 
-function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
-	--printGM("db", "SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
-	if GetSQLMode() == 0 then
-		if SQL_TABLE_EXISTS(db_table) then
-			local _q = "INSERT INTO "
-			_q = _q .. db_table
-			_q = _q .. " DEFAULT VALUES;"
-			local _result = SQL_QUERY(_q)
-
-			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
-			end
-
-			return _result
-		end
-	elseif GetSQLMode() == 1 then
-		if SQL_TABLE_EXISTS(db_table) then
-			local _q = "INSERT INTO "
-			_q = _q .. "'" .. YRPSQL.schema .. "." .. db_table .. "'"
-			local _cols = {}
-			local _vals = {}
-
-			for i, col in pairs(YRPSQL[db_table]) do
-				table.insert(_cols, i)
-				table.insert(_vals, col)
-			end
-
-			_cols = string.Implode(",", _cols)
-			_vals = string.Implode(",", _vals)
-			local _result = SQL_INSERT_INTO(db_table, _cols, _vals)
-
-			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
-			end
-
-			return _result
-		end
-	end
-end
-
 function SQL_INSERT_INTO(db_table, db_columns, db_values)
 	printGM("db", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
 	if GetSQLMode() == 0 then
@@ -430,34 +389,61 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 		end
 	elseif GetSQLMode() == 1 then
 		if SQL_TABLE_EXISTS(db_table) then
-			local _v = string.Explode(", ", db_values)
-			local _ins = {}
-
-			for i, col in pairs(string.Explode(", ", db_columns)) do
-				_ins[col] = _v[i]
+			local newcols = string.Explode(",", db_columns)
+			for i, v in pairs(newcols) do
+				local col = string.Replace(v, " ", "")
+				newcols[i] = col
 			end
 
-			local _tmp = YRPSQL[db_table]
-			db_columns = ""
-			db_values = ""
-			local _count = 0
-
-			for col, value in pairs(_tmp) do
-				for c, v in pairs(_ins) do
-					if c == col then
-						_tmp[col] = v
-						break
+			-- new
+			local newdb_values = {}
+			--db_values = "1, 1, 1, 1"
+			db_values = string.Replace(db_values, "', '", "','")
+			db_values = string.Replace(db_values, "', ", "',")
+			db_values = string.Replace(db_values, ", '", ",'")
+			db_values = string.Replace(db_values, ", ", ",")
+			local count = 1
+			for i, v in pairs(newcols) do
+				local val = ""
+				local value = string.find(db_values, "'")
+				local comma = string.find(db_values, ",")
+				if value != nil and comma != nil then
+					if value < comma then
+						db_values = string.sub(db_values, value + 1)
+						local _s, _e = string.find(db_values, "'")
+						val = string.sub(db_values, 1, _e - 1)
+						db_values = string.sub(db_values, _e + 1)
+						val = "'" .. val .. "'"
+					elseif value > comma then
+						local _s, _e = string.find(db_values, ",")
+						val = string.sub(db_values, 1, _e - 1)
+						db_values = string.sub(db_values, _e + 1)
+					else
+						printGM("note", "[SQL_INSERT_INTO] ELSE")
 					end
-				end
-
-				if db_columns != "" then
-					db_columns = db_columns .. "," .. col
-					db_values = db_values .. "," .. _tmp[col]
+				elseif value != nil then
+					db_values = string.sub(db_values, value + 1)
+					local _s, _e = string.find(db_values, "'")
+					val = string.sub(db_values, 1, _e - 1)
+					db_values = string.sub(db_values, _e + 1)
+					val = "'" .. val .. "'"
+				elseif comma != nil then
+					local _s, _e = string.find(db_values, ",")
+					val = string.sub(db_values, 1, _e - 1)
+					db_values = string.sub(db_values, _e)
 				else
-					db_columns = col
-					db_values = _tmp[col]
+					val = db_values
 				end
+				local _cs, _ce = string.find(db_values, ",")
+				if _cs then
+					db_values = string.sub(db_values, _cs + 1)
+				end
+				newdb_values[count] = val
+				count = count + 1
 			end
+
+			db_columns = table.concat(newcols, ",")
+			db_values = table.concat(newdb_values, ",")
 
 			local _q = "INSERT INTO "
 			_q = _q .. YRPSQL.schema .. "." .. db_table
@@ -469,7 +455,45 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
+				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(_q))
+			end
+
+			return _result
+		end
+	end
+end
+
+function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
+	--printGM("db", "SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
+	if GetSQLMode() == 0 then
+		if SQL_TABLE_EXISTS(db_table) then
+			local _q = "INSERT INTO "
+			_q = _q .. db_table
+			_q = _q .. " DEFAULT VALUES;"
+			local _result = SQL_QUERY(_q)
+
+			if _result != nil then
+				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+			end
+
+			return _result
+		end
+	elseif GetSQLMode() == 1 then
+		if SQL_TABLE_EXISTS(db_table) then
+			local _cols = {}
+			local _vals = {}
+
+			for i, col in pairs(YRPSQL[db_table]) do
+				table.insert(_cols, i)
+				table.insert(_vals, col)
+			end
+
+			_cols = string.Implode(",", _cols)
+			_vals = string.Implode(",", _vals)
+			local _result = SQL_INSERT_INTO(db_table, _cols, _vals)
+
+			if _result != nil then
+				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			return _result
@@ -503,7 +527,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
-				_q = _q .. ");"
+				_q = _q .. ";"
 			end
 
 			local _result = SQL_QUERY(_q)
@@ -537,7 +561,9 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 end
 
 function SQL_ADD_COLUMN(table_name, column_name, datatype)
-	--printGM("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
+	if table_name == "yrp_usergroups" then
+		printGM("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
+	end
 	local _result = SQL_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 
 	if GetSQLMode() == 0 then
@@ -552,8 +578,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			return _r
 		end
 	elseif GetSQLMode() == 1 then
-		--[[ MYSQL DEFAULT VALUES FIX ]]
-		--
+		-- MYSQL DEFAULT VALUES FIX
 		if YRPSQL[table_name] == nil then
 			YRPSQL[table_name] = {}
 		end
@@ -566,8 +591,10 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 				YRPSQL[table_name][column_name] = _default_value
 			elseif string.find(datatype, "TEXT") != nil then
 				YRPSQL[table_name][column_name] = "' '"
-			elseif string.find(datatype, "INT") != nil then
+			elseif string.find(datatype, "INT") != nil or string.find(datatype, "INTEGER") != nil then
 				YRPSQL[table_name][column_name] = "1"
+			else
+				printGM("note", "[SQL_ADD_COLUMN] " .. table_name .. " | " .. column_name)
 			end
 		end
 
@@ -649,7 +676,6 @@ end
 printGM("db", "Current SQL Mode: " .. GetSQLModeName())
 
 function SQL_INIT_DATABASE(db_name)
-	db_name = sql.SQLStr(db_name)
 	--printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then

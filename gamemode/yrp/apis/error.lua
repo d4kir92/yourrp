@@ -366,7 +366,9 @@ function CanSendError()
 		end
 	else
 		if tick % 10 == 0 and IsYRPOutdated() != nil then
-			printGM("note", "Gamemode is outdated!")
+			if IsYRPOutdated() then
+				printGM("note", "Gamemode is outdated!")
+			end
 		end
 	end
 	return false

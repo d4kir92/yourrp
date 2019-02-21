@@ -14,8 +14,8 @@ SQL_ADD_COLUMN(_db_name, "transparent", "INT DEFAULT '1'")
 SQL_ADD_COLUMN(_db_name, "border", "INT DEFAULT '0'")
 ]]-- OLD
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ' '")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design", "'Simple', 'Simple'")
@@ -34,23 +34,29 @@ function RegisterHUDDesign(tab)
 	return true
 end
 
-local HUD_None = {}
-HUD_None.name = "Disabled"
-HUD_None.author = "YourRP"
-HUD_None.progress = 100
-RegisterHUDDesign(HUD_None)
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_none", function()
+	local HUD_None = {}
+	HUD_None.name = "Disabled"
+	HUD_None.author = "YourRP"
+	HUD_None.progress = 100
+	RegisterHUDDesign(HUD_None)
+end)
 
-local HUD_Simple = {}
-HUD_Simple.name = "Simple"
-HUD_Simple.author = "D4KiR"
-HUD_Simple.progress = 100
-RegisterHUDDesign(HUD_Simple)
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_simple", function()
+	local HUD_Simple = {}
+	HUD_Simple.name = "Simple"
+	HUD_Simple.author = "D4KiR"
+	HUD_Simple.progress = 100
+	RegisterHUDDesign(HUD_Simple)
+end)
 
-local HUD_FO76 = {}
-HUD_FO76.name = "Fallout 76"
-HUD_FO76.author = "D4KiR"
-HUD_FO76.progress = 100
-RegisterHUDDesign(HUD_FO76)
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
+	local HUD_FO76 = {}
+	HUD_FO76.name = "Fallout 76"
+	HUD_FO76.author = "D4KiR"
+	HUD_FO76.progress = 100
+	RegisterHUDDesign(HUD_FO76)
+end)
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
@@ -108,6 +114,7 @@ end)
 util.AddNetworkString("get_design_settings")
 net.Receive("get_design_settings", function(len, ply)
 	if ply:CanAccess("bool_design") then
+		hook.Call("RegisterHUDDesign")
 		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		if wk(setting) then
 			setting = setting[1]

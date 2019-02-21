@@ -56,65 +56,67 @@ function Player:VisualEquipment(name, slot)
 		local _charid = self:CharID()
 		if _charid != nil then
 			local _uid = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. _charid .. "'")
-			if _uid != nil then
+			if wk(_uid) then
 				_uid = _uid[1][slot]
-				local _item = SQL_SELECT("yrp_items", "*", "storageID = '" .. _uid .. "'")
-				if _item != nil then
-					_item = _item[1]
-					local _model = _item.WorldModel
+				if wk(_uid) then
+					local _item = SQL_SELECT("yrp_items", "*", "storageID = '" .. _uid .. "'")
+					if wk(_item) then
+						_item = _item[1]
+						local _model = _item.WorldModel
 
-					local _old = self:GetNWEntity(name)
-					if ea(_old) then
-						_old:Remove()
+						local _old = self:GetNWEntity(name)
+						if ea(_old) then
+							_old:Remove()
+						end
+						self:SetNWString(name, _model)
+						local _visual = ents.Create("prop_dynamic")
+						_visual:SetModel(_item.WorldModel)
+						_visual:SetOwner(self)
+						_visual:SetNWBool("isviewmodel", true)
+						_visual:Spawn()
+
+						self:SetNWEntity(name, _visual)
+						self:SetNWString(name .. "ClassName", _item.ClassName)
+
+						local _maxs = _visual:OBBMaxs()
+						local _mins = _visual:OBBMins()
+
+						local _x = _maxs.x - _mins.x
+						local _y = _maxs.y - _mins.y
+						local _z = _maxs.z - _mins.z
+
+						local corax = 0
+						local coray = 0
+						local coraz = 0
+						if _z >= _x and _y >= _x then
+							corax = 0
+							coray = -90
+							coraz = 90
+							self:SetNWString(name .. "thick", _x)
+						elseif _x >= _z and _y >= _z then
+							corax = 0
+							coray = 0
+							coraz = 0
+							self:SetNWString(name .. "thick", _z)
+						elseif _x >= _y and _z >= _y then
+							corax = 90
+							coray = 90
+							coraz = 90
+							self:SetNWString(name .. "thick", _y)
+						end
+						self:SetNWString(name .. "corax", corax)
+						self:SetNWString(name .. "coray", coray)
+						self:SetNWString(name .. "coraz", coraz)
+					else
+						local _old = self:GetNWEntity(name)
+						if ea(_old) then
+							_old:Remove()
+							self:SetNWEntity(name, NULL)
+							self:SetNWString(name .. "ClassName", "")
+						end
 					end
-					self:SetNWString(name, _model)
-					local _visual = ents.Create("prop_dynamic")
-					_visual:SetModel(_item.WorldModel)
-					_visual:SetOwner(self)
-					_visual:SetNWBool("isviewmodel", true)
-					_visual:Spawn()
-
-					self:SetNWEntity(name, _visual)
-					self:SetNWString(name .. "ClassName", _item.ClassName)
-
-					local _maxs = _visual:OBBMaxs()
-					local _mins = _visual:OBBMins()
-
-					local _x = _maxs.x - _mins.x
-					local _y = _maxs.y - _mins.y
-					local _z = _maxs.z - _mins.z
-
-					local corax = 0
-					local coray = 0
-					local coraz = 0
-					if _z >= _x and _y >= _x then
-						corax = 0
-						coray = -90
-						coraz = 90
-						self:SetNWString(name .. "thick", _x)
-					elseif _x >= _z and _y >= _z then
-						corax = 0
-						coray = 0
-						coraz = 0
-						self:SetNWString(name .. "thick", _z)
-					elseif _x >= _y and _z >= _y then
-						corax = 90
-						coray = 90
-						coraz = 90
-						self:SetNWString(name .. "thick", _y)
-					end
-					self:SetNWString(name .. "corax", corax)
-					self:SetNWString(name .. "coray", coray)
-					self:SetNWString(name .. "coraz", coraz)
-				else
-					local _old = self:GetNWEntity(name)
-					if ea(_old) then
-						_old:Remove()
-						self:SetNWEntity(name, NULL)
-						self:SetNWString(name .. "ClassName", "")
-					end
+					return _item
 				end
-				return _item
 			end
 		end
 	end
@@ -401,7 +403,8 @@ net.Receive("charGetRoleInfo", function(len, ply)
 	if tmpTable == nil then
 		tmpTable = {}
 	else
-		local rpms = string.Explode(",", tmpTable[1].string_playermodels)
+		local rpms = GetPlayermodelsOfRole(roleID)
+		--[[local rpms = string.Explode(",", tmpTable[1].string_playermodels)
 		local tab = {}
 		for i, id in pairs(rpms) do
 			local tmppm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
@@ -410,7 +413,8 @@ net.Receive("charGetRoleInfo", function(len, ply)
 				table.insert(tab, tmppm.string_models)
 			end
 		end
-		tmpTable[1].string_playermodels = table.concat(tab,",")
+		]]--
+		tmpTable[1].string_playermodels = rpms -- table.concat(tab,",")
 	end
 
 	net.Start("charGetRoleInfo")
@@ -419,7 +423,7 @@ net.Receive("charGetRoleInfo", function(len, ply)
 end)
 
 function GetPlayermodelsOfRole(ruid)
-	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(ruid))
+	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
 	if wk(role) then
 		role = role[1]
 		local rpms = string.Explode(",", role.string_playermodels)

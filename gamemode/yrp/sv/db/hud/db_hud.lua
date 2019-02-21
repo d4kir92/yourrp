@@ -5,8 +5,8 @@
 
 local DATABASE_NAME = "yrp_hud"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ' '")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")

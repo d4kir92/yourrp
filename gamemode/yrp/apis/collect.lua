@@ -106,7 +106,7 @@ if SERVER then
 							if test != nil then
 								utd[str] = true
 							else
-								printGM("note", "[ServerInfo] " .. tostring(str) .. " is outdated.")
+								printGM("db", "[ServerInfo] " .. tostring(str) .. " is outdated.")
 								utd[str] = false
 							end
 						end

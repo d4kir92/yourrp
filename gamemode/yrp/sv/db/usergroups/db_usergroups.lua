@@ -69,7 +69,7 @@ end
 yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(yrp_usergroups) then
 	for _i, _ug in pairs(yrp_usergroups) do
-		local tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name'" .. _ug.string_name .. "'")
+		local tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
 		if wk(tmp) and #tmp > 1 then
 			for i, ug in pairs(tmp) do
 				if i > 1 then
@@ -143,6 +143,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
 
+SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
 local unremoveable = SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
 if unremoveable == nil then
 	local _str = "string_name, "
@@ -339,15 +340,18 @@ function Player:CanAccess(site)
 	_ug = string.lower(_ug)
 	local _b = SQL_SELECT(DATABASE_NAME, site, "string_name = '" .. _ug .. "'")
 	if wk(_b) then
+		local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug .. "'")
 		_b = tobool(_b[1][site])
 		if !_b then
 			local _ugs = SQL_SELECT(DATABASE_NAME, "string_name", "bool_usergroups = '1'")
-			local usergroups = ""
-			for i, ug in pairs(_ugs) do
-				if usergroups == "" then
-					usergroups = usergroups .. string.lower(ug.string_name)
-				else
-					usergroups = usergroups .. ", " .. string.lower(ug.string_name)
+			if wk(_ugs) then
+				local usergroups = ""
+				for i, ug in pairs(_ugs) do
+					if usergroups == "" then
+						usergroups = usergroups .. string.lower(ug.string_name)
+					else
+						usergroups = usergroups .. ", " .. string.lower(ug.string_name)
+					end
 				end
 			end
 			self:NoAccess(lsite, usergroups)
