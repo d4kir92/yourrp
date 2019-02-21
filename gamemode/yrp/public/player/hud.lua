@@ -2,6 +2,10 @@
 
 local Player = FindMetaTable("Player")
 
+function Player:GetHudDesignName()
+	return self:GetNWString("string_hud_design", "notloaded")
+end
+
 -- string element for example "health", art for example "SIZE_W"
 function Player:HudValue(element, art)
 	local hfloats = {"POSI_X", "POSI_Y", "SIZE_W", "SIZE_H"}
