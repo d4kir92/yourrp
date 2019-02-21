@@ -37,99 +37,102 @@ end
 
 function GetCollection(cid, maincid)
 	cid = tonumber(cid)
-	maincid = maincid or cid
-	maincid = tonumber(maincid)
+	if isnumber(cid) then
+		maincid = maincid or cid
+		maincid = tonumber(maincid)
+		if isnumber(maincid) then
+			if maincid == cid then
+				collections[maincid] = {}
+				collections[maincid].id = collections[maincid].id or maincid
+				collections[maincid].ids = collections[maincid].ids or {}
+				collections[maincid].othercollections = {}
+				collections[maincid].done = collections[maincid].done or false
+			end
 
-	if maincid == cid then
-		collections[maincid] = {}
-		collections[maincid].id = collections[maincid].id or maincid
-		collections[maincid].ids = collections[maincid].ids or {}
-		collections[maincid].othercollections = {}
-		collections[maincid].done = collections[maincid].done or false
-	end
+			if !table.HasValue(collections[maincid].othercollections, cid) then
+				table.insert(collections[maincid].othercollections, cid)
 
-	if !table.HasValue(collections[maincid].othercollections, cid) then
-		table.insert(collections[maincid].othercollections, cid)
-
-		local url = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. cid
-		http.Fetch(url,
-			function( body, len, headers, code )
-				local _st, _en = string.find(body, "collectionChildren")
-				local wsids = ""
-				if _st then
-					wsids = string.sub(body, _st)
-				end
-
-				local ids = string.Explode("\"collectionItem\"", wsids)
-				for i, v in pairs(ids) do
-					local searchfor = "?id="
-					local _s, _e = string.find(v, searchfor)
-					if _s then
-						_s = _s + string.len(searchfor)
-					 	local id = string.sub(v, _s)
-						searchfor = "\""
-						_s, _e = string.find(id, searchfor)
-						_s = _s + string.len(searchfor)
-						id = string.sub(id, 1, _e - 1)
-						id = tonumber(id)
-						if isnumber(id) and id != cid then
-							table.insert(collections[maincid].ids, id)
+				local url = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. cid
+				http.Fetch(url,
+					function( body, len, headers, code )
+						local _st, _en = string.find(body, "collectionChildren")
+						local wsids = ""
+						if _st then
+							wsids = string.sub(body, _st)
 						end
-					end
-				end
 
-				_st, _en = string.find(wsids, "childrenTitle")
-				local coids = ""
-				if _st then
-					coids = string.sub(wsids, _st)
-				end
-
-				local linkedcollections = {}
-				if coids != "" then
-					local othercollections = string.Explode("\"workshopItem ", coids)
-					for i, v in pairs(othercollections) do
-						local searchfor = "?id="
-						local _s, _e = string.find(v, searchfor)
-						if _s then
-							_s = _s + string.len(searchfor)
-						 	local id = string.sub(v, _s)
-							searchfor = "\""
-							_s, _e = string.find(id, searchfor)
-							_s = _s + string.len(searchfor)
-							id = string.sub(id, 1, _e - 1)
-							id = tonumber(id)
-							if isnumber(id) and id != cid and id != maincid then
-								table.insert(linkedcollections, id)
+						local ids = string.Explode("\"collectionItem\"", wsids)
+						for i, v in pairs(ids) do
+							local searchfor = "?id="
+							local _s, _e = string.find(v, searchfor)
+							if _s then
+								_s = _s + string.len(searchfor)
+							 	local id = string.sub(v, _s)
+								searchfor = "\""
+								_s, _e = string.find(id, searchfor)
+								_s = _s + string.len(searchfor)
+								id = string.sub(id, 1, _e - 1)
+								id = tonumber(id)
+								if isnumber(id) and id != cid then
+									table.insert(collections[maincid].ids, id)
+								end
 							end
 						end
+
+						_st, _en = string.find(wsids, "childrenTitle")
+						local coids = ""
+						if _st then
+							coids = string.sub(wsids, _st)
+						end
+
+						local linkedcollections = {}
+						if coids != "" then
+							local othercollections = string.Explode("\"workshopItem ", coids)
+							for i, v in pairs(othercollections) do
+								local searchfor = "?id="
+								local _s, _e = string.find(v, searchfor)
+								if _s then
+									_s = _s + string.len(searchfor)
+								 	local id = string.sub(v, _s)
+									searchfor = "\""
+									_s, _e = string.find(id, searchfor)
+									_s = _s + string.len(searchfor)
+									id = string.sub(id, 1, _e - 1)
+									id = tonumber(id)
+									if isnumber(id) and id != cid and id != maincid then
+										table.insert(linkedcollections, id)
+									end
+								end
+							end
+						end
+
+						collections[maincid].linkedcollections = collections[maincid].linkedcollections or 0
+						collections[maincid].linkedcollections = collections[maincid].linkedcollections + table.Count(linkedcollections)
+
+						collections[maincid].linkedcollectionsadded = collections[maincid].linkedcollectionsadded or 0
+						if cid != maincid then
+							collections[maincid].linkedcollectionsadded = collections[maincid].linkedcollectionsadded + 1
+						end
+
+						if cid != maincid then
+							printGM("db", "[GetCollection] Collected IDs for " .. maincid .. " [" .. collections[maincid].linkedcollectionsadded .. "|" .. collections[maincid].linkedcollections .. "] " .. cid)
+						end
+
+						for i, v in pairs(linkedcollections) do
+							GetCollection(v, maincid)
+						end
+
+						if collections[maincid].linkedcollections == collections[maincid].linkedcollectionsadded then
+							collections[maincid].done = true
+							TestCollection(maincid)
+						end
+					end,
+					function(err)
+						printGM("note", "[GetCollection] Error in GetCollection. (" .. tostring(err) .. ")")
 					end
-				end
-
-				collections[maincid].linkedcollections = collections[maincid].linkedcollections or 0
-				collections[maincid].linkedcollections = collections[maincid].linkedcollections + table.Count(linkedcollections)
-
-				collections[maincid].linkedcollectionsadded = collections[maincid].linkedcollectionsadded or 0
-				if cid != maincid then
-					collections[maincid].linkedcollectionsadded = collections[maincid].linkedcollectionsadded + 1
-				end
-
-				if cid != maincid then
-					printGM("db", "[GetCollection] Collected IDs for " .. maincid .. " [" .. collections[maincid].linkedcollectionsadded .. "|" .. collections[maincid].linkedcollections .. "] " .. cid)
-				end
-
-				for i, v in pairs(linkedcollections) do
-					GetCollection(v, maincid)
-				end
-
-				if collections[maincid].linkedcollections == collections[maincid].linkedcollectionsadded then
-					collections[maincid].done = true
-					TestCollection(maincid)
-				end
-			end,
-			function(err)
-				printGM("note", "[GetCollection] Error in GetCollection. (" .. tostring(err) .. ")")
+				)
 			end
-		)
+		end
 	end
 end
 
