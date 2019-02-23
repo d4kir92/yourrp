@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local playerready = false
+playerready = playerready or false
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -56,7 +56,7 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
 		self.textcol = Color(255, 255, 255)
 
-		if self.lang.percentage ~= nil and self.lang.percentage == 100 then
+		if self.lang.percentage != nil and self.lang.percentage == 100 then
 			self.textcol = Color(0, 255, 0)
 		end
 
@@ -72,7 +72,7 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 end
 
 function constructLanguageText(lang, inenglish, percentage)
-	if percentage ~= nil then
+	if percentage != nil then
 		return tostring(lang) .. "/" .. tostring(inenglish) .. " (" .. percentage .. "%)"
 	else
 		return tostring(lang) .. "/" .. tostring(inenglish)
@@ -106,7 +106,7 @@ end
 function YRP.DChangeLanguage(parent, x, y, size)
 	local LanguageChanger = createD("DButton", parent, size, size * 0.671, x, y)
 	LanguageChanger:SetText("")
-
+	LanguageChanger.selecting = false
 	function LanguageChanger:Paint(pw, ph)
 		local color = YRPGetColor("2")
 
@@ -118,7 +118,12 @@ function YRP.DChangeLanguage(parent, x, y, size)
 		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. YRP.GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
 	end
 
+	function LanguageChanger:Selecting()
+		return self.selecting
+	end
+
 	function LanguageChanger:DoClick()
+		self.selecting = true
 		local languages = YRP.GetAllLanguages()
 		surface.SetFont(GetFont())
 		local _longestLanguageString = 0
@@ -153,14 +158,19 @@ function YRP.DChangeLanguage(parent, x, y, size)
 				if self.startup == nil and child:IsHovered() then
 					self.startup = true
 				end
-				if self.startup and not self:IsHovered() and child:IsHovered() then
+				if self.startup and !self:IsHovered() and child:IsHovered() then
 
 					return true
 				end
 			end
-			if self.startup and not self:IsHovered() then
+			if self.startup and !self:IsHovered() then
 				self:Remove()
 			end
+			self:MoveToFront()
+		end
+
+		function window:OnRemove()
+			LanguageChanger.selecting = false
 		end
 
 		window:MakePopup()
@@ -237,7 +247,7 @@ function GetSWEPWorldModel(ClassName)
 			v.ClassName = v.Class or ""
 		end
 
-		if tostring(v.ClassName) == tostring(ClassName) and v.WorldModel ~= nil then
+		if tostring(v.ClassName) == tostring(ClassName) and v.WorldModel != nil then
 			return v.WorldModel
 		end
 	end
@@ -397,22 +407,22 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
 
-							if self.text ~= "" then
+							if self.text != "" then
 								surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
 							end
 						end
 					end
 
-					if v.WorldModel ~= nil and v.WorldModel ~= "" then
+					if v.WorldModel != nil and v.WorldModel != "" then
 						local icon = createD("SpawnIcon", tmpPointer, ctr(item.h), ctr(item.h), 0, 0)
 						icon.item = v
 						icon:SetText("")
 
 						timer.Create("shop" .. count, 0.002 * count, 1, function()
-							if icon ~= nil and icon ~= NULL and icon.item ~= nil then
+							if icon != nil and icon != NULL and icon.item != nil then
 								icon:SetModel(icon.item.WorldModel)
 
-								if icon.Entity ~= nil then
+								if icon.Entity != nil then
 									icon.Entity:SetModelScale(1, 0)
 									icon:SetLookAt(Vector(0, 0, 0))
 									icon:SetCamPos(Vector(0, -30, 15))
@@ -431,20 +441,20 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 						if tmpSelected[k].selected then
 							text = "Added"
 
-							if tmpPointer.text ~= "" then
+							if tmpPointer.text != "" then
 								text = text .. " (" .. tmpPointer.text .. ")"
 							end
 						end
 
 						local _test = "HAS NO NAME"
 
-						if v.PrintName ~= nil and v.PrintName ~= "" then
+						if v.PrintName != nil and v.PrintName != "" then
 							_test = v.PrintName
-						elseif v.ClassName ~= nil and v.ClassName ~= "" then
+						elseif v.ClassName != nil and v.ClassName != "" then
 							_test = v.ClassName
-						elseif v.WorldModel ~= nil and v.WorldModel ~= "" then
+						elseif v.WorldModel != nil and v.WorldModel != "" then
 							_test = v.WorldModel
-						elseif v.ViewModel ~= nil and v.ViewModel ~= "" then
+						elseif v.ViewModel != nil and v.ViewModel != "" then
 							_test = v.ViewModel
 						end
 
@@ -468,7 +478,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 						local tmpString = ""
 
 						for k, v in pairs(tmpSelected) do
-							if v.selected and v.ClassName ~= nil then
+							if v.selected and v.ClassName != nil then
 								if tmpString == "" then
 									tmpString = v.ClassName
 								else
@@ -654,7 +664,7 @@ function OpenSingleSelector(table, closeF)
 					spawnicon:SetText("")
 
 					timer.Create("shop" .. count, 0.002 * count, 1, function()
-						if spawnicon ~= nil and spawnicon ~= NULL and spawnicon.item ~= nil then
+						if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
 							spawnicon:SetModel(spawnicon.item.WorldModel)
 						end
 					end)
@@ -883,22 +893,22 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
 
-							if self.text ~= "" then
+							if self.text != "" then
 								surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
 							end
 						end
 					end
 
-					if v.WorldModel ~= nil and v.WorldModel ~= "" then
+					if v.WorldModel != nil and v.WorldModel != "" then
 						local icon = createD("SpawnIcon", tmpPointer, ctr(item.h), ctr(item.h), 0, 0)
 						icon.item = v
 						icon:SetText("")
 
 						timer.Create("shop" .. count, 0.002 * count, 1, function()
-							if icon ~= nil and icon ~= NULL and icon.item ~= nil then
+							if icon != nil and icon != NULL and icon.item != nil then
 								icon:SetModel(icon.item.WorldModel)
 
-								if icon.Entity ~= nil then
+								if icon.Entity != nil then
 									icon.Entity:SetModelScale(1, 0)
 									icon:SetLookAt(Vector(0, 0, 0))
 									icon:SetCamPos(Vector(0, -30, 15))
@@ -917,20 +927,20 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 						if tmpSelected[k].selected then
 							text = "Added"
 
-							if tmpPointer.text ~= "" then
+							if tmpPointer.text != "" then
 								text = text .. " (" .. tmpPointer.text .. ")"
 							end
 						end
 
 						local _test = "HAS NO NAME"
 
-						if v.PrintName ~= nil and v.PrintName ~= "" then
+						if v.PrintName != nil and v.PrintName != "" then
 							_test = v.PrintName
-						elseif v.ClassName ~= nil and v.ClassName ~= "" then
+						elseif v.ClassName != nil and v.ClassName != "" then
 							_test = v.ClassName
-						elseif v.WorldModel ~= nil and v.WorldModel ~= "" then
+						elseif v.WorldModel != nil and v.WorldModel != "" then
 							_test = v.WorldModel
-						elseif v.ViewModel ~= nil and v.ViewModel ~= "" then
+						elseif v.ViewModel != nil and v.ViewModel != "" then
 							_test = v.ViewModel
 						end
 
@@ -954,7 +964,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 						local tmpString = ""
 
 						for k, v in pairs(tmpSelected) do
-							if v.selected and v.ClassName ~= nil then
+							if v.selected and v.ClassName != nil then
 								if tmpString == "" then
 									tmpString = v.ClassName
 								else
@@ -1145,7 +1155,7 @@ function openSingleSelector(table, closeF)
 					spawnicon:SetText("")
 
 					timer.Create("shop" .. count, 0.002 * count, 1, function()
-						if spawnicon ~= nil and spawnicon ~= NULL and spawnicon.item ~= nil then
+						if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
 							spawnicon:SetModel(spawnicon.item.WorldModel)
 						end
 					end)
@@ -1241,61 +1251,142 @@ net.Receive("yrpInfoBox", function(len)
 	_tmp:MakePopup()
 end)
 
+function YRP.Color()
+	return Color(26, 113, 242)
+end
+
+local yrp_icon = Material("yrp/yrp_icon")
+local loadinggamemode = nil
+local loadingend = false
+if !playerready then
+	loadinggamemode = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
+	loadinggamemode:SetTitle("")
+	loadinggamemode:SetDraggable(false)
+	loadinggamemode:ShowCloseButton(false)
+	loadinggamemode.languagechanger = YRP.DChangeLanguage(loadinggamemode, PosX() + ScrW() - ctr(200) - ctr(100), ScrH() - ctr(200) - ctr(250), ctr(100))
+	function loadinggamemode:Paint(pw, ph)
+		if !self.languagechanger:Selecting() then
+			self:MoveToFront()
+		end
+		local lply = LocalPlayer()
+		local hud = tonumber(lply:GetNWInt("yrp_loading_hud", 0))
+		local interface = tonumber(lply:GetNWInt("yrp_loading_interface", 0))
+		local loading = hud + interface
+		loading = loading / 2
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
+
+		local iconsize = ctr(512)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(yrp_icon)
+		surface.DrawTexturedRect(pw / 2 - iconsize / 2, ph / 2 - iconsize - ctr(100), iconsize, iconsize)
+
+		local text = math.Round(loading, 0) .. "%"
+		local posx = PosX()
+		local w = ScW() - ctr(400)
+		local h = ctr(120)
+		local x = posx + ctr(200)
+		local y = ph - h - ctr(200)
+		draw.RoundedBox(h / 2, x, y, w, h, Color(0, 0, 0))
+		draw.RoundedBox(h / 2, x, y, w * loading / 100, h, YRP.Color())
+		draw.SimpleTextOutlined(text, "Roboto60B", pw / 2, y + h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+		local text_hud_name = YRP.lang_string("LID_hud") .. ":"
+		draw.SimpleTextOutlined(text_hud_name, "Roboto18B", posx + ctr(200), y - ctr(70), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		local text_hud_value = hud .. "%"
+		draw.SimpleTextOutlined(text_hud_value, "Roboto18B", posx + ctr(200) + ctr(300), y - ctr(70), YRP.Color(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+		local text_interface_name = YRP.lang_string("LID_interface") .. ":"
+		draw.SimpleTextOutlined(text_interface_name, "Roboto18B", posx + ctr(200), y - ctr(30), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		local text_interface_value = interface .. "%"
+		draw.SimpleTextOutlined(text_interface_value, "Roboto18B", posx + ctr(200) + ctr(300), y - ctr(30), YRP.Color(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+		local text_version = "(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR"
+		draw.SimpleTextOutlined(text_version, "Roboto18B", posx + ctr(200) + w, y - ctr(30), GetVersionColor(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+		draw.SimpleTextOutlined("YourRP", "Roboto48B", pw / 2, ph / 2, YRP.Color(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+		draw.SimpleTextOutlined(GetHostName(), "Roboto48B", posx + ctr(200), ctr(200), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(GAMEMODE:GetGameDescription(), "Roboto24B", posx + ctr(200), ctr(300), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_map") .. ": " .. game.GetMap(), "Roboto24B", posx + ctr(200), ctr(350), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+		if loading >= 100 and !loadingend then
+			loadingend = true
+			timer.Simple(1, function()
+				if loadinggamemode != nil then
+					loadinggamemode:Remove()
+				end
+			end)
+		end
+	end
+
+	loadinggamemode:MakePopup()
+end
+
+function SendIsReady()
+	net.Start("yrp_player_is_ready")
+		net.WriteBool(system.IsWindows())
+		net.WriteBool(system.IsLinux())
+		net.WriteBool(system.IsOSX())
+		net.WriteString(system.GetCountry())
+	net.SendToServer()
+
+	YRP.initLang()
+
+	if tobool(get_tutorial("tut_welcome")) then
+		openHelpMenu()
+	end
+
+	timer.Simple(4, function()
+		local _wsitems = engine.GetAddons()
+		printGM("note", "[" .. #_wsitems .. " Workshop items]")
+		printGM("note", " Nr.\tID\t\tName Mounted")
+
+		for k, ws in pairs(_wsitems) do
+			if !ws.mounted then
+				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
+				game.MountGMA(tostring(ws.path))
+			end
+		end
+
+		printGM("note", "Workshop Addons Done")
+		playerfullready = true
+
+		--[[ IF STARTED SINGLEPLAYER ]]
+		--
+		if game.SinglePlayer() then
+			local _warning = createD("DFrame", nil, 600, 300, 0, 0)
+			_warning:SetTitle("")
+			_warning:Center()
+
+			function _warning:Paint(pw, ph)
+				surfaceWindow(self, pw, ph, "WARNING!")
+				draw.SimpleTextOutlined("PLEASE DO !USE SINGLEPLAYER!", "HudBars", pw / 2, ph / 2 - ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined("Use a dedicated server or start multiplayer, thanks!", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined("PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw / 2, ph / 2 + ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+			end
+
+			_warning:MakePopup()
+		elseif !ServerIsDedicated and ServerIsDedicated != nil and LocalPlayer():HasAccess() then
+			LocalPlayer():SetNWBool("warning_dedicated", true)
+
+			timer.Create("yrp_warning_dedicated_server", 10, 0, function()
+				LocalPlayer():SetNWBool("warning_dedicated", false)
+			end)
+		end
+	end)
+end
+
 function YRPInitPostEntity()
 	printGM("note", "YRPInitPostEntity()")
 	if playerready == false then
 		printGM("note", "Player is ready.")
 		playerready = true
 
-		net.Start("yrp_player_is_ready")
-			net.WriteBool(system.IsWindows())
-			net.WriteBool(system.IsLinux())
-			net.WriteBool(system.IsOSX())
-			net.WriteString(system.GetCountry())
-		net.SendToServer()
-
-		YRP.initLang()
-
-		if tobool(get_tutorial("tut_welcome")) then
-			openHelpMenu()
-		end
-
-		timer.Simple(4, function()
-			local _wsitems = engine.GetAddons()
-			printGM("note", "[" .. #_wsitems .. " Workshop items]")
-			printGM("note", " Nr.\tID\t\tName Mounted")
-
-			for k, ws in pairs(_wsitems) do
-				if not ws.mounted then
-					printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
-					game.MountGMA(tostring(ws.path))
-				end
-			end
-
-			printGM("note", "Workshop Addons Done")
-			playerfullready = true
-
-			--[[ IF STARTED SINGLEPLAYER ]]
-			--
-			if game.SinglePlayer() then
-				local _warning = createD("DFrame", nil, 600, 300, 0, 0)
-				_warning:SetTitle("")
-				_warning:Center()
-
-				function _warning:Paint(pw, ph)
-					surfaceWindow(self, pw, ph, "WARNING!")
-					draw.SimpleTextOutlined("PLEASE DO NOT USE SINGLEPLAYER!", "HudBars", pw / 2, ph / 2 - ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-					draw.SimpleTextOutlined("Use a dedicated server or start multiplayer, thanks!", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-					draw.SimpleTextOutlined("PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw / 2, ph / 2 + ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				end
-
-				_warning:MakePopup()
-			elseif not ServerIsDedicated and ServerIsDedicated ~= nil and LocalPlayer():HasAccess() then
-				LocalPlayer():SetNWBool("warning_dedicated", true)
-
-				timer.Create("yrp_warning_dedicated_server", 10, 0, function()
-					LocalPlayer():SetNWBool("warning_dedicated", false)
-				end)
+		timer.Create("yrp_ready_timer", 0.1, 0, function()
+			local lply = LocalPlayer()
+			if lply:GetNWInt("yrp_loading_hud", 0) >= 100 and lply:GetNWInt("yrp_loading_interface", 0) >= 100 then
+				timer.Remove("yrp_ready_timer")
+				SendIsReady()
 			end
 		end)
 	end
@@ -1326,7 +1417,7 @@ end)
 function RemoveDeadRag(ent)
 	if (ent == NULL) or (ent == nil) then return end
 
-	if (ent:GetClass() == "class C_ClientRagdoll") and ent:IsValid() and ent ~= NULL then
+	if (ent:GetClass() == "class C_ClientRagdoll") and ent:IsValid() and ent != NULL then
 			SafeRemoveEntityDelayed(ent, 60)
 	end
 end
@@ -1444,17 +1535,19 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	color.a = math.Round(color.a * 0.5, 0)
 	surfaceBox(0, 0, w, h, color)
 
-	if _cur ~= nil and _max ~= nil then
+	if _cur != nil and _max != nil then
 		color2.a = alpha
 		local cur = tonumber(_cur)
 		local max = tonumber(_max)
 
-		if max > 0 then
-			surfaceBox(0, 0, cur / max * w, h, color2)
+		if cur != nil and max != nil then
+			if max > 0 then
+				surfaceBox(0, 0, cur / max * w, h, color2)
+			end
 		end
 	end
 
-	if icon ~= nil then
+	if icon != nil then
 		surface.SetDrawColor(255, 255, 255, alpha)
 		surface.SetMaterial(icon)
 		surface.DrawTexturedRect(2, 2, h - 4, h - 4)
@@ -1479,7 +1572,7 @@ _icons["ug"] = Material("icon16/group_key.png")
 _icons["ms"] = Material("icon16/lightning.png")
 
 function drawPlates(ply)
-	if ply:Alive() then
+	if ply:Alive() and ply:GetNWInt("yrp_loading_hud", 0) >= 100 then
 		local _height = 31
 		local color = ply:GetColor()
 		color.a = color.a - 160
@@ -1541,15 +1634,17 @@ function drawPlates(ply)
 
 			if ply:GetNWBool("bool_tag_on_head_armor", false) then
 				_height = _height + 1
-				local str = ply:Armor() .. "/" .. ply:GetNWInt("MaxArmor", 100) .. " " .. YRP.lang_string("LID_armor")
-				drawBar(ply, str, _height, color, ply:Armor(), ply:GetNWInt("MaxArmor", 100), Color(0, 0, 255, color.a))
+				local str = ply:Armor() .. "/" .. ply:GetNWInt("MaxArmor", 100)
+				local col = ply:HudValue("AR", "BA")
+				drawBar(ply, str, _height, color, ply:Armor(), ply:GetNWInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
 				_height = _height + 6
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_health", false) then
 				_height = _height + 1
-				local str = ply:Health() .. "/" .. ply:GetMaxHealth() .. " " .. YRP.lang_string("LID_health")
-				drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(0, 255, 0, color.a))
+				local str = ply:Health() .. "/" .. ply:GetMaxHealth()
+				local col = ply:HudValue("HP", "BA")
+				drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a))
 				_height = _height + 6
 			end
 
@@ -1563,7 +1658,7 @@ function drawPlates(ply)
 
 		_height = _height + 2
 
-		if ply:GetNWBool("tag_ug", false) or (ply:GetNWBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and not ply:InVehicle()) and ply:GetColor().a > 10 then
+		if ply:GetNWBool("tag_ug", false) or (ply:GetNWBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
 				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
 				_height = _height + 9
 		end
@@ -1617,17 +1712,20 @@ function drawPlates(ply)
 				end
 
 				if ply:GetNWBool("bool_tag_on_side_health", false) then
-					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(150, 52, 52, 200))
+					local col = ply:HudValue("HP", "BA")
+					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if ply:GetNWBool("bool_tag_on_side_armor", false) then
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNWInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString("MaxArmor", ""), Color(52, 150, 72, 200))
+					local col = ply:HudValue("AR", "BA")
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNWInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
-					drawPlayerInfo(ply, ply:GetNWString("GetCurStamina", "") .. "/" .. ply:GetNWString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetNWString("GetCurStamina", ""), ply:GetNWString("GetMaxStamina", ""), Color(150, 150, 60, _alpha))
+					local col = ply:HudValue("ST", "BA")
+					drawPlayerInfo(ply, ply:GetNWString("GetCurStamina", "") .. "/" .. ply:GetNWString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetNWString("GetCurStamina", ""), ply:GetNWString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
 					_z = _z + _d
@@ -1667,7 +1765,7 @@ net.Receive("yrp_noti", function(len)
 	if playerready then
 		local ply = LocalPlayer()
 
-		if ply ~= nil and ply:HasAccess() then
+		if ply != nil and ply:HasAccess() then
 			local _str_lang = net.ReadString()
 			local _time = 4
 			local _channel = NOTIFY_GENERIC
@@ -1702,7 +1800,7 @@ net.Receive("yrp_info", function(len)
 	if playerready then
 		local ply = LocalPlayer()
 
-		if ply ~= nil then
+		if ply != nil then
 			local _str = net.ReadString()
 			_str = YRP.lang_string("LID_notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
 			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
@@ -1714,12 +1812,12 @@ net.Receive("yrp_info2", function(len)
 	if playerready then
 		local ply = LocalPlayer()
 
-		if ply ~= nil then
+		if ply != nil then
 			local _str = net.ReadString()
 			_str = YRP.lang_string(_str)
 			local _str2 = net.ReadString()
 
-			if _str2 ~= nil then
+			if _str2 != nil then
 				_str2 = " " .. YRP.lang_string(_str2)
 			else
 				_str2 = ""
@@ -1734,7 +1832,7 @@ net.Receive("yrp_message", function(len)
 	if playerready then
 		local ply = LocalPlayer()
 
-		if ply ~= nil then
+		if ply != nil then
 			local _str = YRP.lang_string(net.ReadString())
 			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 		end

@@ -72,7 +72,7 @@ function SetYRPChannel()
 			end
 		end,
 			function(error)
-				printGM("error", "SetYRPChannel: " .. error)
+				printGM("note", "SetYRPChannel: " .. error)
 				timer.Simple(1, function()
 					SetYRPChannel()
 				end)
@@ -112,6 +112,9 @@ if CLIENT then
 		frame:Center()
 		frame:SetTitle("LID_about")
 		function frame:Paint(pw, ph)
+			if !IsYRPOutdated() then
+				self:Remove()
+			end
 			hook.Run("YFramePaint", self, pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 
@@ -181,7 +184,7 @@ function YRPCheckVersion()
 	if GAMEMODE != nil then
 		if GAMEMODE.VersionSortWasSet then
 			if CurTime() < check then return end
-			check = CurTime() + 5
+			check = CurTime() + 1
 			http.Fetch("https://docs.google.com/spreadsheets/d/1ImHeLchvq2D_1DJHrHepF3WuncxIU4N431pzXOLNr8M/edit?usp=sharing",
 			function(body, len, headers, code)
 				if body != nil then

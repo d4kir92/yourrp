@@ -65,18 +65,26 @@ function Player:InterfaceLoadout()
 	printGM("debug", "[InterfaceLoadout] " .. self:YRPName())
 	local ifeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(ifeles) then
+		local perc = 0
 		for i, ele in pairs(ifeles) do
-			if ele.name != nil then
-				if string.StartWith(ele.name, "float_") then
-					self:SetNWFloat(ele.name, tonumber(ele.value))
-				elseif string.StartWith(ele.name, "bool_") then
-					self:SetNWBool(ele.name, tobool(ele.value))
-				elseif string.StartWith(ele.name, "color_") then
-					self:SetNWString(ele.name, ele.value)
-				elseif string.StartWith(ele.name, "int_") then
-					self:SetNWInt(ele.name, ele.value)
+			timer.Simple(i * 0.02, function()
+				if ele.name != nil then
+					perc = i * 100 / table.Count(ifeles)
+					perc = math.Round(perc, 0)
+					if perc > self:GetNWInt("yrp_loading_interface", 0) then
+						self:SetNWInt("yrp_loading_interface", perc)
+					end
+					if string.StartWith(ele.name, "float_") then
+						self:SetNWFloat(ele.name, tonumber(ele.value))
+					elseif string.StartWith(ele.name, "bool_") then
+						self:SetNWBool(ele.name, tobool(ele.value))
+					elseif string.StartWith(ele.name, "color_") then
+						self:SetNWString(ele.name, ele.value)
+					elseif string.StartWith(ele.name, "int_") then
+						self:SetNWInt(ele.name, ele.value)
+					end
 				end
-			end
+			end)
 		end
 	end
 	self:SetNWInt("interface_version", self:GetNWInt("interface_version", 0) + 1)

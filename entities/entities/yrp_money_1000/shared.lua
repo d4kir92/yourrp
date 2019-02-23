@@ -4,7 +4,7 @@ AddCSLuaFile()
 
 ENT.Base = "yrp_money"
 
-ENT.PrintName		= "YourRP - 50 Money"
+ENT.PrintName		= "YourRP - 1k Money"
 ENT.Category = "[YourRP] Money"
 
 ENT.Editable = false
@@ -12,4 +12,4 @@ ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
-ENT.money = 50
+ENT.money = 1000

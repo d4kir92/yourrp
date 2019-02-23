@@ -225,7 +225,6 @@ function YRP:Loadout(ply)
 	ply:SetNWBool("bool_loadouted", false)
 
 	ply:DesignLoadout()
-
 	ply:UserGroupLoadout()
 	ply:GeneralLoadout()
 

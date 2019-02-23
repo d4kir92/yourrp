@@ -56,6 +56,7 @@ AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_design.lua")
 
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_console.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_status.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_feedback.lua")
 

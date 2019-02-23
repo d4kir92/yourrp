@@ -1,5 +1,49 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- Screen
+local HA = {}
+HA.w = 0
+function HScrW()
+	return ScrW()
+end
+
+function BiggerThen16_9()
+	if ScrW() > ScrH() / 9 * 16 then
+		HA.w = ScrH() / 9 * 16
+		return true
+	else
+		HA.w = ScrW()
+		return false
+	end
+end
+
+function ScreenFix()
+	if BiggerThen16_9() then
+		return (ScrW() - (ScrH() / 9 * 16)) / 2
+	else
+		return 0
+	end
+end
+
+function PosX()
+	return ScreenFix()
+end
+
+function ScW()
+	if BiggerThen16_9() then
+		return ScrW() - 2 * ScreenFix()
+	else
+		return ScrW()
+	end
+end
+
+function ScH()
+	return ScrH()
+end
+
+
+
+-- Datatypes
 function GetMaxInt()
 	-- "Max" Int Value
 	return 999999999

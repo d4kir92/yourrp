@@ -86,7 +86,7 @@ function MoveUnusedRolesToDefault()
 	end
 end
 
--- CONVERTING
+-- CONVERTING OLD roles
 if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 	printGM("note", "Converting OLD Roles into NEW Roles")
 	local oldroles = SQL_SELECT("yrp_roles", "*", nil)
@@ -140,43 +140,46 @@ if wk(SQL_SELECT("yrp_roles", "*", nil)) then
 	end
 	SQL_DROP_TABLE("yrp_roles")
 end
+-- CONVERTING OLD roles
+
+
+
 -- CONVERTING
-
-if wk(SQL_SELECT(DATABASE_NAME, "*", nil)) then
-	local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
-	if wk(wrongprerole) then
-		for i, role in pairs(wrongprerole) do
-			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
-		end
-	end
-
-	local wrongmaxamount = SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = '-1'")
-	if wk(wrongmaxamount) then
-		for i, role in pairs(wrongmaxamount) do
-			SQL_UPDATE(DATABASE_NAME, "int_maxamount = '0'", "uniqueID = '" .. role.uniqueID .. "'")
-		end
-	end
-
-	local wrongpercentage = SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
-	if wk(wrongpercentage) then
-		for i, role in pairs(wrongpercentage) do
-			SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '" .. role.uniqueID .. "'")
-		end
-	end
-
-	local wrongmainrole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-	if wk(wrongmainrole) then
-		SQL_UPDATE(DATABASE_NAME, "string_usergroups = 'ALL'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "int_maxamount = '0'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "bool_visible = '1'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "bool_locked = '0'", "uniqueID = '1'")
-		SQL_UPDATE(DATABASE_NAME, "bool_whitelist = '0'", "uniqueID = '1'")
+local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
+if wk(wrongprerole) then
+	for i, role in pairs(wrongprerole) do
+		SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
+
+local wrongmaxamount = SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1")
+if wk(wrongmaxamount) then
+	for i, role in pairs(wrongmaxamount) do
+		SQL_UPDATE(DATABASE_NAME, "int_maxamount = 0", "uniqueID = '" .. role.uniqueID .. "'")
+	end
+end
+
+local wrongpercentage = SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
+if wk(wrongpercentage) then
+	for i, role in pairs(wrongpercentage) do
+		SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '" .. role.uniqueID .. "'")
+	end
+end
+
+local wrongmainrole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+if wk(wrongmainrole) then
+	SQL_UPDATE(DATABASE_NAME, "string_usergroups = 'ALL'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "int_maxamount = '0'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "bool_visible = '1'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "bool_locked = '0'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "bool_whitelist = '0'", "uniqueID = '1'")
+end
+-- CONVERTING
+
+
 
 -- darkrp
 function ConvertToDarkRPJobName(name)

@@ -22,13 +22,13 @@ hud["rt"] = 0
 function roundMoney(_money, round)
 	if _money != nil then
 		local money = tonumber(_money)
-		if money > 1000 and money < 1000000 then
+		if money >= 1000 and money < 1000000 then
 			return math.Round(money / 1000, round) .. "K"
-		elseif money > 1000000 and money < 1000000000 then
+		elseif money >= 1000000 and money < 1000000000 then
 			return math.Round(money / 1000000, round) .. "M"
-		elseif money > 1000000000 then
+		elseif money >= 1000000000 then
 			return math.Round(money / 1000000000, round) .. "B"
-		elseif money > 1000000000000 then
+		elseif money >= 1000000000000 then
 			return math.Round(money / 1000000000000, round) .. "T"
 		else
 			return math.Round(money, round)

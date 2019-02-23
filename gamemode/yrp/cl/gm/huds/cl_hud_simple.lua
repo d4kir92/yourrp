@@ -56,6 +56,11 @@ function HUDSimpleBAR(tab)
 			local y = lply:GetHudValue(tab.element, "POSI_Y")
 
 			Simple[tab.element]["bar"].fw = w
+			Simple[tab.element]["bar"].fh = h
+			Simple[tab.element]["bar"].fx = x
+			Simple[tab.element]["bar"].fy = y
+
+			Simple[tab.element]["bar"].w = w
 			Simple[tab.element]["bar"].h = h
 			Simple[tab.element]["bar"].x = x
 			Simple[tab.element]["bar"].y = y
@@ -92,12 +97,25 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["text"].color = lply:GetHudColor(tab.element, "TE")
 			Simple[tab.element]["text"].brcolor = lply:GetHudColor(tab.element, "TB")
 
-			Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].h * 0.6
-			Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].h * 0.6
-			Simple[tab.element]["icon"].x = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].h * 0.2
-			Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].h * 0.2
+			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
+				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fh * 0.6
+				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fh * 0.6
+				Simple[tab.element]["icon"].x = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fh * 0.2
+				Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fh * 0.2
+			else
+				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fw * 0.6
+				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fw * 0.6
+				Simple[tab.element]["icon"].x = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fw * 0.2
+				Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fw * 0.2
+			end
 		else
-			Simple[tab.element]["bar"].w = Simple[tab.element]["bar"].fw / tab.max * tab.cur
+			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
+				Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh
+				Simple[tab.element]["bar"].w = Simple[tab.element]["bar"].fw / tab.max * tab.cur
+			else
+				Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh / tab.max * tab.cur
+				Simple[tab.element]["bar"].y = Simple[tab.element]["bar"].fy + Simple[tab.element]["bar"].fh - Simple[tab.element]["bar"].h
+			end
 			HudBox(Simple[tab.element]["bar"])
 
 			if lply:GetHudBool(tab.element, "ICON") and tab.icon != nil then

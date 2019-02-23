@@ -7,7 +7,7 @@ include("shared.lua")
 
 function ENT:Initialize()
 	if table.HasValue(GetWorkshopIDs(), "1189643820") then
-		self:SetModel("models/props/cs_assault/money.mdl")
+		self:SetModel(YRPGetMoneyModel())
 	else
 		self:SetModel("models/props_junk/garbage_newspaper001a.mdl")
 	end
@@ -18,14 +18,13 @@ function ENT:Initialize()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
-end
 
-function ENT:GetMoney()
-	return tonumber(self:GetNWString("money"))
+	self:SetMoney(tonumber(self.money))
 end
 
 function ENT:SetMoney(money)
-	self:SetNWString("money", money)
+	self.money = tonumber(money)
+	self:SetNWString("money", self.money)
 end
 
 function ENT:Use(activator, caller)

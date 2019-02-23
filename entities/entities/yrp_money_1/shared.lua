@@ -2,21 +2,14 @@
 
 AddCSLuaFile()
 
-DEFINE_BASECLASS("base_anim")
-
-ENT.Type = "anim"
-ENT.Base = "base_gmodentity"
+ENT.Base = "yrp_money"
 
 ENT.PrintName		= "YourRP - 1 Money"
-ENT.Author			= "D4KiR"
-ENT.Contact			= "-"
-ENT.Purpose			= "Sharing money"
-ENT.Information = "Test"
-ENT.Instructions	= ""
-
 ENT.Category = "[YourRP] Money"
 
 ENT.Editable = false
 ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+
+ENT.money = 1

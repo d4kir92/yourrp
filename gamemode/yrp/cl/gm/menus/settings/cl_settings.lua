@@ -14,6 +14,7 @@ include("cl_settings_server_whitelist.lua")
 -- WIP
 
 --SERVER
+include("cl_settings_server_console.lua")
 include("cl_settings_server_status.lua")
 include("cl_settings_server_feedback.lua")
 
@@ -48,25 +49,27 @@ end
 
 function F8RequireUG(site, usergroups)
 	local ply = LocalPlayer()
-	local tab = {}
-	tab[1] = usergroups
+	local ugs = string.Explode(", ", usergroups)
 
+	local allugs = {}
+	allugs["USERGROUPS"] = usergroups
 	function settingsWindow.window.site:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
 		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "roleInfoHeader", w / 2, h / 2, Color(255, 0, 0), 1, 1)
 
-		if site ~= YRP.lang_string("LID_usergroups") then
+		if site != "usergroups" then
 			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
 		else
-			surfaceText(YRP.replace_string(YRP.lang_string("LID_settings_giveyourselftheusergroup"), tab), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
 			surfaceText("(In Server Console) Example:", "roleInfoHeader", w / 2, h / 2 + ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
 
-	if site == YRP.lang_string("LID_usergroups") then
-		local first_usergroup = string.Explode(",", tab[1])
-		local example = createD("DTextEntry", settingsWindow.window.site, ctr(1000), ctr(50), settingsWindow.window.site:GetWide() / 2 - ctr(1000 / 2), settingsWindow.window.site:GetTall() / 2 + ctr(300))
-		example:SetText("yrp_usergroup \"" .. ply:SteamName() .. "\" " .. first_usergroup[1])
+	if site == "usergroups" then
+		for i, v in pairs(ugs) do
+			local example = createD("DTextEntry", settingsWindow.window.site, ctr(1000), ctr(50), settingsWindow.window.site:GetWide() / 2 - ctr(1000 / 2), settingsWindow.window.site:GetTall() / 2 + ctr(300) + (i - 1) * ctr(60))
+			example:SetText("yrp_usergroup \"" .. ply:SteamName() .. "\" " .. v)
+		end
 	end
 end
 
@@ -138,6 +141,7 @@ function OpenSettings()
 
 	local _settings_server_maintance = "LID_settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)
+	settingsWindow.window:AddSite("open_server_console", "LID_server_console", _settings_server_maintance, "icon16/error.png")
 	settingsWindow.window:AddSite("open_server_status", "LID_settings_status", _settings_server_maintance, "icon16/error.png")
 	settingsWindow.window:AddSite("open_server_feedback", "LID_settings_feedback", _settings_server_maintance, "icon16/page_lightning.png")
 

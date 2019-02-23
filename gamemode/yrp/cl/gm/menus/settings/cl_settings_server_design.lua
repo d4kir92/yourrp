@@ -1,46 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local HA = {}
-HA.w = ScrW()
-HA.space = ctr(20)
-
-function HScrW()
-	return HA.w
-end
-
-function BiggerThen16_9()
-	if ScrW() > ScrH() / 9 * 16 then
-		HA.w = ScrH() / 9 * 16
-		return true
-	else
-		HA.w = ScrW()
-		return false
-	end
-end
-
-function ScreenFix()
-	if BiggerThen16_9() then
-		return (ScrW() - (ScrH() / 9 * 16)) / 2
-	else
-		return 0
-	end
-end
-
-function PosX()
-	return ScreenFix()
-end
-
-function ScW()
-	if BiggerThen16_9() then
-		return ScrW() - 2 * ScreenFix()
-	else
-		return ScrW()
-	end
-end
-
-function ScH()
-	return ScrH()
-end
+local boxspace = ctr(20)
 
 local Player = FindMetaTable("Player")
 function Player:GetHudVal(element, art)
@@ -165,7 +125,7 @@ net.Receive("get_design_settings", function(len)
 				editarea:SetPos(PosX(), 0)
 				editarea:SetWide(ScW())
 			end
-			editarea.space = HA.space
+			editarea.space = boxspace
 			editarea.hl = 5
 			editarea["windows"] = {}
 			editarea["settingswindows"] = {}
@@ -266,8 +226,8 @@ net.Receive("get_design_settings", function(len)
 				win:SetDraggable(true)
 				win:ShowCloseButton(false)
 				win:SetSizable(true)
-				win:SetMinWidth(40)
-				win:SetMinHeight(20)
+				win:SetMinWidth(10)
+				win:SetMinHeight(10)
 				win.saved = false
 				win.w = win:GetWide()
 				win.h = win:GetTall()
@@ -312,7 +272,7 @@ net.Receive("get_design_settings", function(len)
 						HudBoxBr(tbr)
 
 						local x, y = self:GetPos()
-						local modx, mody = x % HA.space, y % HA.space
+						local modx, mody = x % boxspace, y % boxspace
 
 						if !self:IsDragging() or !self.saved then
 							if x + self:GetWide() > ScW() + PosX() then
@@ -351,8 +311,8 @@ net.Receive("get_design_settings", function(len)
 							local h = ph
 							if self.w != self:GetWide() or self.h != self:GetTall() then
 
-								w = w - w % HA.space
-								h = h - h % HA.space
+								w = w - w % boxspace
+								h = h - h % boxspace
 								if w >= win:GetMinWidth() then
 									win:SetWide(w)
 
@@ -471,7 +431,7 @@ net.Receive("get_design_settings", function(len)
 								function tp:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 									local x, y = self:GetPos()
-									local modx, mody = x % HA.space, y % HA.space
+									local modx, mody = x % boxspace, y % boxspace
 									if !self:IsDragging() then
 										if x + self:GetWide() > ScW() + PosX() then
 											self:SetPos(ScW() + PosX() - self:GetWide(), y)
@@ -672,6 +632,12 @@ net.Receive("get_design_settings", function(len)
 						textsize.value = lply:GetHudInt(tab.element, "TS")
 						win.winset:AddComboBox(textsize)
 
+						local colorbar = {}
+						colorbar.name = "LID_barcolor"
+						colorbar.element = tab.element
+						colorbar.art = "BA"
+						win.winset:AddColorMixer(colorbar)
+
 						local colortext = {}
 						colortext.name = "LID_textcolor"
 						colortext.element = tab.element
@@ -830,6 +796,32 @@ net.Receive("get_design_settings", function(len)
 			end
 		end
 		GRP_HUD:AddItem(hud_customize_btn)
+
+		DHr(hr)
+
+		-- HUD Reset Settings
+		local hud_reset_settings = createD("DButton", nil, GRP_HUD:GetWide(), ctr(50), 0, ctr(50))
+		hud_reset_settings:SetText("")
+		function hud_reset_settings:Paint(pw, ph)
+			local color = Color(255, 255, 255)
+			if self:IsHovered() then
+				color = Color(255, 255, 100)
+			end
+			draw.RoundedBox(0, 0, 0, pw, ph, color)
+			draw.SimpleText(YRP.lang_string("LID_settodefault"), "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+		function hud_reset_settings:DoClick()
+			CloseSettings()
+
+			function YesFunction()
+				net.Start("reset_hud_settings")
+				net.SendToServer()
+			end
+			AreYouSure(YesFunction)
+		end
+		GRP_HUD:AddItem(hud_reset_settings)
+
+
 
 		-- Interface
 		local GRP_IF = {}

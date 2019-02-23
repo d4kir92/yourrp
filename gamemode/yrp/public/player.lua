@@ -209,6 +209,26 @@ function string.point(number)
 	return number
 end
 
+if CLIENT then
+	function MoneyFormat(money)
+		money = tonumber(money)
+		local ply = LocalPlayer()
+		return ply:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(money) .. ply:GetNWString("text_money_pos", "[LOADING POS]")
+	end
+
+	function MoneyFormatRounded(money, round)
+		round = round or 1
+		if round > 3 then
+			round = 3
+		elseif round < 0 then
+			round = 0
+		end
+		money = tonumber(money)
+		local ply = LocalPlayer()
+		return ply:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(money, round) .. ply:GetNWString("text_money_pos", "[LOADING POS]")
+	end
+end
+
 function Player:FormattedMoney()
 	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:Money()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end

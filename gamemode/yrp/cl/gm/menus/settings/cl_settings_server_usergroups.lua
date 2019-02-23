@@ -399,6 +399,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddHr()
 	ACCESSAddHr()
 	-- Maintance
+	ACCESSAddCheckBox("bool_console", "LID_server_console")
 	ACCESSAddCheckBox("bool_status", "LID_settings_status")
 	ACCESSAddCheckBox("bool_feedback", "LID_settings_feedback")
 	ACCESSAddHr()

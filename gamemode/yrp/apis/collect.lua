@@ -14,16 +14,16 @@ if SERVER then
 			printGM("db", "[ServerInfo] Sending...")
 
 			local entry = {}
-			entry["entry.1546304774"] = sv.ip
-			entry["entry.701722785"] = sv.name
-			entry["entry.2033271728"] = sv.game
-			entry["entry.10628146"] = sv.maxplayers
-			entry["entry.1206099686"] = sv.collectionid
-			entry["entry.303744727"] = sv.versionid
-			entry["entry.1940143037"] = sv.versionstable
-			entry["entry.2104377567"] = sv.versionbeta
-			entry["entry.1969286222"] = sv.versioncanary
-			entry["entry.398751929"] = sv.art
+			entry["entry.1546304774"] = tostring(sv.ip)
+			entry["entry.701722785"] = tostring(sv.name)
+			entry["entry.2033271728"] = tostring(sv.game)
+			entry["entry.10628146"] = tostring(sv.maxplayers)
+			entry["entry.1206099686"] = tostring(sv.collectionid)
+			entry["entry.303744727"] = tostring(sv.versionid)
+			entry["entry.1940143037"] = tostring(sv.versionstable)
+			entry["entry.2104377567"] = tostring(sv.versionbeta)
+			entry["entry.1969286222"] = tostring(sv.versioncanary)
+			entry["entry.398751929"] = tostring(sv.art)
 
 			local url = "https://docs.google.com/forms/d/e/1FAIpQLSdmM5ZkekAXvtf1RMsPI7ZJeetqyFb5L06vjAuFmHNx96_MEQ/formResponse"
 			http.Post(url, entry, function(result)
@@ -35,16 +35,16 @@ if SERVER then
 			printGM("db", "[ServerInfo] Server has password => not setting in public list.")
 
 			local entry = {}
-			entry["entry.1546304774"] = sv.ip
-			entry["entry.701722785"] = sv.name
-			entry["entry.2033271728"] = sv.game
-			entry["entry.10628146"] = sv.maxplayers
-			entry["entry.1206099686"] = sv.collectionid
-			entry["entry.1981636793"] = sv.versionid
-			entry["entry.1940143037"] = sv.versionstable
-			entry["entry.1026307624"] = sv.versionbeta
-			entry["entry.167550390"] = sv.versioncanary
-			entry["entry.398751929"] = sv.art
+			entry["entry.1546304774"] = tostring(sv.ip)
+			entry["entry.701722785"] = tostring(sv.name)
+			entry["entry.2033271728"] = tostring(sv.game)
+			entry["entry.10628146"] = tostring(sv.maxplayers)
+			entry["entry.1206099686"] = tostring(sv.collectionid)
+			entry["entry.1981636793"] = tostring(sv.versionid)
+			entry["entry.1940143037"] = tostring(sv.versionstable)
+			entry["entry.1026307624"] = tostring(sv.versionbeta)
+			entry["entry.167550390"] = tostring(sv.versioncanary)
+			entry["entry.398751929"] = tostring(sv.art)
 
 			local url = "https://docs.google.com/forms/d/e/1FAIpQLSdGoAN4FbsiuVdhKFSr88zmHZ5DAbdFOLU7QBgDyv7TIZFduA/formResponse"
 			http.Post(url, entry, function(result)

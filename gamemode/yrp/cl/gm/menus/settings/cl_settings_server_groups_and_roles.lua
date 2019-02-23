@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
-	if pa(settingsWindow) then
+	if pa(settingsWindow) and pa(settingsWindow.window) then
 		function settingsWindow.window.site:Paint(pw, ph)
 			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
 		end

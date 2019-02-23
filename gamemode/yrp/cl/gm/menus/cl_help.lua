@@ -150,11 +150,11 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, GetKeybindName("speak_next"), "LID_nextvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("speak_prev"), "LID_previousvoicechannel", "record_voice_over", "bool_voice_channels")
 
-		HELPMENU.feedback = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20))
-		HELPMENU.feedback:SetText("")
+		HELPMENU.feedback = createD("YButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20))
+		HELPMENU.feedback:SetText("LID_givefeedback")
 
 		function HELPMENU.feedback:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_givefeedback"))
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 
 		function HELPMENU.feedback:DoClick()
@@ -163,11 +163,11 @@ net.Receive("getsitehelp", function(len)
 			--gui.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link")
 		end
 
-		HELPMENU.discord = createD("DButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20 + 50 + 20))
-		HELPMENU.discord:SetText("")
+		HELPMENU.discord = createD("YButton", HELPMENU.mainmenu.site, ctr(500), ctr(50), BScrW() - ctr(560), ctr(20 + 50 + 20))
+		HELPMENU.discord:SetText("Get Live Support")
 
 		function HELPMENU.discord:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "Get Live Support")
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 
 		function HELPMENU.discord:DoClick()

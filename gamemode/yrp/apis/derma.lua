@@ -1,5 +1,34 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+function AreYouSure(yes, no)
+	local win = createVGUI("YFrame", nil, 630, 50 + 10 + 50 + 10, 0, 0)
+	win:Center()
+	win:SetTitle(YRP.lang_string("LID_areyousure"))
+	function win:Paint(pw, ph)
+		hook.Run("YFramePaint", self, pw, ph)
+	end
+
+	local _yes = createVGUI("DButton", win, 300, 50, 10, 60)
+	_yes:SetText(YRP.lang_string("LID_yes"))
+	function _yes:DoClick()
+		if yes != nil then
+			yes()
+		end
+		win:Close()
+	end
+
+	local _no = createVGUI("DButton", win, 300, 50, 10 + 300 + 10, 60)
+	_no:SetText(YRP.lang_string("LID_no"))
+	function _no:DoClick()
+		if no != nil then
+			no()
+		end
+		win:Close()
+	end
+
+	win:MakePopup()
+end
+
 local HUD = {}
 function RegisterHUDElement(design, element, func)
 	HUD[design] = HUD[design] or {}
@@ -329,6 +358,10 @@ function YRP.DrawIcon(material, w, h, x, y, color)
 	surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
 end
 
+function YRP.AllIconsLoaded()
+	return YRP.iconsloaded or false
+end
+
 YRP.AddDesignIcon("lang_auto", "vgui/iso_639/" .. "auto" .. ".png")
 YRP.AddDesignIcon("group", "vgui/material/icon_group.png")
 YRP.AddDesignIcon("role", "vgui/material/icon_person.png")
@@ -384,6 +417,8 @@ YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
 
 YRP.AddDesignIcon("ts", "vgui/material/icon_ts_bluelight.png")
 YRP.AddDesignIcon("ts_light", "vgui/material/icon_ts_light.png")
+
+YRP.iconsloaded = true
 
 -- Flags
 local flags, folders = file.Find("materials/vgui/iso_3166/*.png", "GAME", "nameasc")

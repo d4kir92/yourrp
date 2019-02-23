@@ -3,7 +3,7 @@
 net.Receive("getCharakterList", function()
 	local _charTab = net.ReadTable()
 
-	if pa(settingsWindow) then
+	if pa(settingsWindow) and pa(settingsWindow.window) then
 		local cl_rpName = createVGUI("DTextEntry", settingsWindow.window.site, 400, 50, 10, 50)
 		if _charTab.rpname != nil then
 			cl_rpName:SetText(_charTab.rpname)

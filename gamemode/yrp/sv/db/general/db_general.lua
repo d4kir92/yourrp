@@ -131,6 +131,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_money_model", "TEXT DEFAULT 'models/props/cs_assault/money.mdl'")
 
 --[[ Social Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
@@ -250,6 +251,14 @@ function YRPCollectionID()
 	return tonumber(yrp_general.text_server_collectionid)
 end
 
+
+function YRPGetMoneyModel()
+	local model = yrp_general.text_money_model
+	if model == "" then
+		model = "models/props/cs_assault/money.mdl"
+	end
+	return model
+end
 
 function YRPServerLogo()
 	return yrp_general.text_server_logo
@@ -987,6 +996,12 @@ util.AddNetworkString("update_text_money_pos")
 net.Receive("update_text_money_pos", function(len, ply)
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_money_pos", "text_money_pos", str)
+end)
+
+util.AddNetworkString("update_text_money_model")
+net.Receive("update_text_money_model", function(len, ply)
+	local str = net.ReadString()
+	GeneralUpdateString(ply, "update_text_money_model", "text_money_model", str)
 end)
 
 

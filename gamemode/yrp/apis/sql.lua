@@ -561,22 +561,13 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 end
 
 function SQL_ADD_COLUMN(table_name, column_name, datatype)
-	if table_name == "yrp_usergroups" then
-		printGM("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
-	end
 	local _result = SQL_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 
 	if GetSQLMode() == 0 then
-		if not _result then
-			local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
-			local _r = SQL_QUERY(_q)
+		local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
+		local _r = SQL_QUERY(_q)
 
-			if _r != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
-			end
-
-			return _r
-		end
+		return _r
 	elseif GetSQLMode() == 1 then
 		-- MYSQL DEFAULT VALUES FIX
 		if YRPSQL[table_name] == nil then

@@ -2,7 +2,7 @@
 
 AddCSLuaFile()
 
-DEFINE_BASECLASS("base_anim")
+DEFINE_BASECLASS("yrp_money")
 
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
@@ -20,3 +20,11 @@ ENT.Editable = false
 ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+
+ENT.money = 0
+
+function ENT:GetMoney()
+	self.money = tonumber(self:GetNWString("money", "-1"))
+	self.PrintName = "YourRP - " .. self.money .. " Money"
+	return self.money
+end

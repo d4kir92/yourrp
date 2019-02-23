@@ -120,6 +120,8 @@ include("resources/db_resources.lua")
 include("sql/db_sql.lua")
 
 include("database/db_database.lua")
+
+include("console/db_console.lua")
 include("status/db_status.lua")
 include("yourrp_addons/db_yourrp_addons.lua")
 

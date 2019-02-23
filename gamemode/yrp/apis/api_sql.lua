@@ -36,7 +36,7 @@ function SQL.TABLE_EXISTS(db_table)
 			return false
 		end
 	elseif SQL.MODE() == "MYSQL" then
-
+		--
 	end
 end
 
@@ -59,7 +59,7 @@ function SQL.QUERY(query)
 		end
 		return _result
 	elseif SQL.MODE() == "MYSQL" then
-
+		--
 	end
 end
 
@@ -98,7 +98,7 @@ function SQL.SELECT(tab)
 			return false
 		end
 	elseif SQL.MODE() == "MYSQL" then
-
+		--
 	end
 end
 

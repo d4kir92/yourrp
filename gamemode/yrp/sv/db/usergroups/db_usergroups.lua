@@ -16,6 +16,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_console", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_status", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yourrp_addons", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_design", "INT DEFAULT 0")
@@ -327,6 +328,7 @@ end)
 local Player = FindMetaTable("Player")
 
 function Player:NoAccess(site, usergroups)
+	usergroups = usergroups or "yrp_usergroups"
 	net.Start("setting_hasnoaccess")
 		net.WriteString(site)
 		net.WriteString(usergroups or "yrp_usergroups")
@@ -336,16 +338,16 @@ end
 util.AddNetworkString("setting_hasnoaccess")
 function Player:CanAccess(site)
 	local lsite = string.Replace(site, "bool_", "")
+	local usergroups = ""
+
 	local _ug = self:GetUserGroup() or "failed"
 	_ug = string.lower(_ug)
 	local _b = SQL_SELECT(DATABASE_NAME, site, "string_name = '" .. _ug .. "'")
 	if wk(_b) then
-		local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug .. "'")
 		_b = tobool(_b[1][site])
 		if !_b then
 			local _ugs = SQL_SELECT(DATABASE_NAME, "string_name", "bool_usergroups = '1'")
 			if wk(_ugs) then
-				local usergroups = ""
 				for i, ug in pairs(_ugs) do
 					if usergroups == "" then
 						usergroups = usergroups .. string.lower(ug.string_name)
@@ -593,6 +595,13 @@ net.Receive("usergroup_update_bool_ac_database", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local bool_ac_database = net.ReadString()
 	UGCheckBox(ply, uid, "bool_ac_database", bool_ac_database)
+end)
+
+util.AddNetworkString("usergroup_update_bool_console")
+net.Receive("usergroup_update_bool_console", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_console = net.ReadString()
+	UGCheckBox(ply, uid, "bool_console", bool_console)
 end)
 
 util.AddNetworkString("usergroup_update_bool_status")

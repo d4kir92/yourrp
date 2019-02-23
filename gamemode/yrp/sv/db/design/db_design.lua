@@ -63,6 +63,7 @@ end)
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout()
+	self:SetNWInt("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
 	printGM("debug", "[DesignLoadout] " .. self:YRPName())
@@ -72,11 +73,17 @@ function Player:DesignLoadout()
 		self:SetNWString("string_hud_design", setting.string_hud_design)
 		self:SetNWString("string_interface_design", setting.string_interface_design)
 	end
+	self:SetNWInt("yrp_loading", 100)
 end
 
+local once = false
 util.AddNetworkString("ply_changed_resolution")
 net.Receive("ply_changed_resolution", function(len, ply)
 	YRP.msg("note", ply:YRPName() .. " changed the Resolution.")
+	if !once then
+		once = true
+		return
+	end
 	ply:DesignLoadout()
 end)
 

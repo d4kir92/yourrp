@@ -635,19 +635,19 @@ function openCharacterSelection()
 			closeMenu()
 		end
 
-		local _close = createD("DButton", _cs.frame, ctr(50), ctr(50), BScrW() - ctr(60), ctr(10))
-		_close:SetText("")
+		local _close = createD("YButton", _cs.frame, ctr(50), ctr(50), BScrW() - ctr(60), ctr(10))
+		_close:SetText("X")
 		function _close:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "X")
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 		function _close:DoClick()
 			closeCharacterSelection()
 		end
 
-		local feedback = createD("DButton", _cs.frame, ctr(500), ctr(50), BScrW() - ctr(510), ScrH() - ctr(60))
-		feedback:SetText("")
+		local feedback = createD("YButton", _cs.frame, ctr(500), ctr(50), BScrW() - ctr(510), ScrH() - ctr(60))
+		feedback:SetText("LID_givefeedback")
 		function feedback:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_givefeedback"))
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 		function feedback:DoClick()
 			closeCharacterSelection()
@@ -839,10 +839,13 @@ function openCharacterSelection()
 			net.SendToServer()
 		end)
 
-		local deleteChar = createMD("DButton", _cs.frame, ctr(400), ctr(100), ScrW2() - ctr(400 + 800/2 + 10), ScrH() - ctr(150), ctr(5))
+		local deleteChar = createD("YButton", _cs.frame, ctr(400), ctr(100), ScrW2() - ctr(400 + 800/2 + 10), ScrH() - ctr(150), ctr(5))
 		deleteChar:SetText("")
 		function deleteChar:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_deletecharacter"), Color(255, 0, 0))
+			local tab = {}
+			tab.text = YRP.lang_string("LID_deletecharacter")
+			tab.color = Color(255, 0, 0)
+			hook.Run("YButtonPaint", self, pw, ph, tab)
 		end
 		function deleteChar:DoClick()
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
@@ -901,15 +904,17 @@ function openCharacterSelection()
 		button.x = ScrW2() - button.w/2
 		button.y = ScrH() - button.h - border
 		local confirmColor = Color(255, 0, 0, 255)
-		local charactersEnter = createMDButton(_cs.frame, button.w, button.h, button.x, button.y, ctr(0), YRP.lang_string("LID_enterworld"))
+		local charactersEnter = createD("YButton", _cs.frame, button.w, button.h, button.x, button.y) --createMDButton(_cs.frame, button.w, button.h, button.x, button.y, ctr(0), YRP.lang_string("LID_enterworld"))
 		function charactersEnter:Paint(pw, ph)
-			local text = YRP.lang_string("LID_enterworld") .. " (" .. _cur .. ")"
+			local tab = {}
+			tab.text = YRP.lang_string("LID_enterworld") .. " (" .. _cur .. ")"
 			if LocalPlayer() != nil then
 				if LocalPlayer():Alive() then
-					text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+					tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+					tab.color = Color(255, 0, 0)
 				end
 			end
-			surfaceButton(self, pw, ph, YRP.lang_string(text))
+			hook.Run("YButtonPaint", self, pw, ph, tab)
 		end
 
 		charactersEnter:SetText("")

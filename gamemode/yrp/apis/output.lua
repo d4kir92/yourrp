@@ -122,13 +122,15 @@ function MSGChannelEnabled(chan)
 end
 
 function hr_pre(chan)
-	if MSGChannelEnabled(chan) then
+	local cn = GetChannelName(chan)
+	if MSGChannelEnabled(cn) then
 		print(_text.spacePre)
 	end
 end
 
 function hr_pos(chan)
-	if MSGChannelEnabled(chan) then
+	local cn = GetChannelName(chan)
+	if MSGChannelEnabled(cn) then
 		print(_text.spacePos)
 	end
 end
@@ -141,7 +143,7 @@ function GetGamemodeShortname()
 	end
 end
 
-local r = GetRealm()
+--local r = GetRealm()
 local rc = GetRealmColor()
 local _msgcache = {}
 function YRP.msg(chan, msg, tochat)
@@ -172,9 +174,15 @@ function YRP.msg(chan, msg, tochat)
 
 			MsgC("\n")
 
+			local str = "[" .. _yrp .. "|" .. cn .. "] " .. msg
 			if tochat and SERVER then
 				PrintMessage(3, "\n ")
-				PrintMessage(3, "[" .. _yrp .. "|" .. cn .. "] " .. msg)
+				PrintMessage(3, str)
+			end
+			if SERVER then
+				if AddToFakeServerConsole != nil then
+					AddToFakeServerConsole(str)
+				end
 			end
 
 			if cn == "ERROR" or cn == "MISSING" then
@@ -221,6 +229,7 @@ countries["BR"] = "Brazil"
 countries["CA"] = "Canada"
 countries["CH"] = "Switzerland"
 countries["CN"] = "China"
+countries["CZ"] = "Czech Republic"
 
 countries["DE"] = "Germany"
 countries["DK"] = "Denmark"
