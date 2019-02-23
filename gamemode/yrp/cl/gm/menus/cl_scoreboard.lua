@@ -639,7 +639,8 @@ function OpenSBS()
 				_p.country = country
 				local countryshort = pl:GetCountryShort()
 				_p.cc = string.lower(countryshort)
-				if tostring(YRP.GetDesignIcon("flag_" .. _p.cc)) == "Material [vgui/material/icon_clear]" and mc[_p.cc] == nil and YRP.AllIconsLoaded() then
+
+				if tostring(YRP.GetDesignIcon("flag_" .. _p.cc)) == "Material [vgui/material/icon_clear]" and mc[_p.cc] == nil and string.upper(_p.cc) != "LOADING" and YRP.AllIconsLoaded() then
 					mc[_p.cc] = true
 					YRP.msg("mis", "Missing Country: " .. string.upper(_p.cc))
 				end

@@ -141,7 +141,7 @@ function OpenSettings()
 
 	local _settings_server_maintance = "LID_settings_server_maintance"
 	settingsWindow.window:AddCategory(_settings_server_maintance)
-	settingsWindow.window:AddSite("open_server_console", "LID_server_console", _settings_server_maintance, "icon16/error.png")
+	settingsWindow.window:AddSite("open_server_console", "LID_server_console", _settings_server_maintance, "icon16/application_xp_terminal.png")
 	settingsWindow.window:AddSite("open_server_status", "LID_settings_status", _settings_server_maintance, "icon16/error.png")
 	settingsWindow.window:AddSite("open_server_feedback", "LID_settings_feedback", _settings_server_maintance, "icon16/page_lightning.png")
 

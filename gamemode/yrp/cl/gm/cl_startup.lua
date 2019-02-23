@@ -170,7 +170,9 @@ function YRP.DChangeLanguage(parent, x, y, size)
 		end
 
 		function window:OnRemove()
-			LanguageChanger.selecting = false
+			if pa(LanguageChanger) then
+				LanguageChanger.selecting = false
+			end
 		end
 
 		window:MakePopup()
@@ -1264,6 +1266,11 @@ if !playerready then
 	loadinggamemode:SetDraggable(false)
 	loadinggamemode:ShowCloseButton(false)
 	loadinggamemode.languagechanger = YRP.DChangeLanguage(loadinggamemode, PosX() + ScrW() - ctr(200) - ctr(100), ScrH() - ctr(200) - ctr(250), ctr(100))
+	loadinggamemode.ts = CurTime()
+	loadinggamemode.ay = 0
+	loadinggamemode.aymin = -10
+	loadinggamemode.aymax = 10
+	loadinggamemode.ad = 1
 	function loadinggamemode:Paint(pw, ph)
 		if !self.languagechanger:Selecting() then
 			self:MoveToFront()
@@ -1275,10 +1282,20 @@ if !playerready then
 		loading = loading / 2
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 
+		if CurTime() > self.ts then
+			self.ts = CurTime() + 0.04
+			self.ay = self.ay + self.ad
+			if self.ay > self.aymax then
+				self.ad = -1
+			elseif self.ay < self.aymin then
+				self.ad = 1
+			end
+		end
+
 		local iconsize = ctr(512)
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(yrp_icon)
-		surface.DrawTexturedRect(pw / 2 - iconsize / 2, ph / 2 - iconsize - ctr(100), iconsize, iconsize)
+		surface.DrawTexturedRect(pw / 2 - iconsize / 2, ph / 2 - iconsize - ctr(100) + self.ay, iconsize, iconsize)
 
 		local text = math.Round(loading, 0) .. "%"
 		local posx = PosX()
