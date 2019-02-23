@@ -1,5 +1,11 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+local elePos = {}
+elePos.x = 0
+elePos.y = 0
+
+local mc = {}
+
 function BScrW()
 	return ScW()
 end
@@ -256,12 +262,6 @@ function CloseSBS()
 		sbs.frame = nil
 	end
 end
-
-local elePos = {}
-elePos.x = 0
-elePos.y = 0
-
-mc = {}
 
 function OpenSBS()
 	if sbs.frame == nil then
@@ -562,7 +562,6 @@ function OpenSBS()
 
 			sbs.charsel = createD("DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
 			function sbs.charsel:Paint(pw, ph)
-				local pl = LocalPlayer()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 				local x = 128 + 10
@@ -639,7 +638,6 @@ function OpenSBS()
 				_p.country = country
 				local countryshort = pl:GetCountryShort()
 				_p.cc = string.lower(countryshort)
-
 				if tostring(YRP.GetDesignIcon("flag_" .. _p.cc)) == "Material [vgui/material/icon_clear]" and mc[_p.cc] == nil and string.upper(_p.cc) != "LOADING" and YRP.AllIconsLoaded() then
 					mc[_p.cc] = true
 					YRP.msg("mis", "Missing Country: " .. string.upper(_p.cc))
