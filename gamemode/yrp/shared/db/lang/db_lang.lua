@@ -70,23 +70,20 @@ end
 
 local nf = {}
 local hascontent = false
+for i, addon in pairs(engine.GetAddons()) do
+	if addon.wsid == "1189643820" then
+		hascontent = true
+		break
+	end
+end
+
 function YRP.lang_string(var, vals)
 	var = tostring(var)
 	local _string = yrp_current_lang[string.lower(var)]
 	if !wk(_string) then
-		if nf[var] == nil and string.StartWith(var, "LID_") then
-			if !hascontent then
-				for i, addon in pairs(engine.GetAddons()) do
-					if addon.wsid == "1189643820" then
-						hascontent = true
-						break
-					end
-				end
-			end
-			if hascontent then
-				nf[var] = var
-				printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
-			end
+		if nf[var] == nil and string.StartWith(var, "LID_") and hascontent then
+			nf[var] = var
+			printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
 		end
 		return var
 	end

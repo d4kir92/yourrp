@@ -270,7 +270,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	site.cur = 1
 	site.max = 1
 	site.count = #tbl_list
-	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:Center()
 	frame:SetTitle("")
@@ -287,7 +287,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	local item = {}
 	item.w = 740
 	item.h = 370
-	local _w = BScrW() - ctr(20)
+	local _w = ScW() - ctr(20)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
@@ -503,7 +503,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
+	local nextB = createD("DButton", frame, ctr(200), ctr(50), ScW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -554,7 +554,7 @@ function OpenSingleSelector(table, closeF)
 	local _item = {}
 	_item.w = 740
 	_item.h = 370
-	local _w = BScrW() - ctr(20)
+	local _w = ScW() - ctr(20)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
@@ -574,7 +574,7 @@ function OpenSingleSelector(table, closeF)
 	end
 
 	getMaxSite()
-	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(YRP.lang_string("Item Menu"))
 
@@ -698,7 +698,7 @@ function OpenSingleSelector(table, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
+	local nextB = createD("DButton", frame, ctr(200), ctr(50), ScW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -747,7 +747,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 	site.max = 1
 	site.count = #table
 	local table2 = string.Explode(",", _globalWorking)
-	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:Center()
 	frame:SetTitle("")
@@ -764,7 +764,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 	local item = {}
 	item.w = 740
 	item.h = 370
-	local _w = BScrW() - ctr(20)
+	local _w = ScW() - ctr(20)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
@@ -994,7 +994,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
+	local nextB = createD("DButton", frame, ctr(200), ctr(50), ScW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -1045,7 +1045,7 @@ function openSingleSelector(table, closeF)
 	local _item = {}
 	_item.w = 740
 	_item.h = 370
-	local _w = BScrW() - ctr(20)
+	local _w = ScW() - ctr(20)
 	local _h = ScrH() - ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = ctr(10)
 	local _y = ctr(50 + 10 + 50 + 10)
@@ -1065,7 +1065,7 @@ function openSingleSelector(table, closeF)
 	end
 
 	getMaxSite()
-	local frame = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(YRP.lang_string("Item Menu"))
 
@@ -1189,7 +1189,7 @@ function openSingleSelector(table, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, ctr(200), ctr(50), BScrW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
+	local nextB = createD("DButton", frame, ctr(200), ctr(50), ScW() - ctr(200 + 10), ScrH() - ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -1260,6 +1260,7 @@ end
 local yrp_icon = Material("yrp/yrp_icon")
 local loadinggamemode = nil
 local loadingend = false
+local load_tick = CurTime()
 if !playerready then
 	loadinggamemode = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 	loadinggamemode:SetTitle("")
@@ -1271,72 +1272,153 @@ if !playerready then
 	loadinggamemode.aymin = -10
 	loadinggamemode.aymax = 10
 	loadinggamemode.ad = 1
+	loadinggamemode.iamstuck = false
 	function loadinggamemode:Paint(pw, ph)
-		if !self.languagechanger:Selecting() then
+		if !self.languagechanger:Selecting() and !loadinggamemode.iamstuck then
 			self:MoveToFront()
 		end
-		local lply = LocalPlayer()
-		local hud = tonumber(lply:GetNWInt("yrp_loading_hud", 0))
-		local interface = tonumber(lply:GetNWInt("yrp_loading_interface", 0))
-		local loading = hud + interface
-		loading = loading / 2
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 
-		if CurTime() > self.ts then
-			self.ts = CurTime() + 0.04
-			self.ay = self.ay + self.ad
-			if self.ay > self.aymax then
-				self.ad = -1
-			elseif self.ay < self.aymin then
-				self.ad = 1
+		local lply = LocalPlayer()
+
+		self.oldhud = self.hud or -1
+		self.oldinterface = self.interface or -1
+
+		self.hud = tonumber(lply:GetNWInt("yrp_loading_hud", 0))
+		self.interface = tonumber(lply:GetNWInt("yrp_loading_interface", 0))
+
+		if load_tick < CurTime() or !self.isloading and (self.hud != self.oldhud or self.interface != self.oldinterface) then
+			load_tick = CurTime() + 3
+			if self.hud != self.oldhud or self.interface != self.oldinterface then
+				self.isloading = true
+			else
+				self.isloading = false
 			end
 		end
 
-		local iconsize = ctr(512)
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(yrp_icon)
-		surface.DrawTexturedRect(pw / 2 - iconsize / 2, ph / 2 - iconsize - ctr(100) + self.ay, iconsize, iconsize)
+		self.loading = self.hud + self.interface
+		self.loading = self.loading / 2
+		if self.loading > 0 then
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 
-		local text = math.Round(loading, 0) .. "%"
-		local posx = PosX()
-		local w = ScW() - ctr(400)
-		local h = ctr(120)
-		local x = posx + ctr(200)
-		local y = ph - h - ctr(200)
-		draw.RoundedBox(h / 2, x, y, w, h, Color(0, 0, 0))
-		draw.RoundedBox(h / 2, x, y, w * loading / 100, h, YRP.Color())
-		draw.SimpleTextOutlined(text, "Roboto60B", pw / 2, y + h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
-		local text_hud_name = YRP.lang_string("LID_hud") .. ":"
-		draw.SimpleTextOutlined(text_hud_name, "Roboto18B", posx + ctr(200), y - ctr(70), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		local text_hud_value = hud .. "%"
-		draw.SimpleTextOutlined(text_hud_value, "Roboto18B", posx + ctr(200) + ctr(300), y - ctr(70), YRP.Color(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
-		local text_interface_name = YRP.lang_string("LID_interface") .. ":"
-		draw.SimpleTextOutlined(text_interface_name, "Roboto18B", posx + ctr(200), y - ctr(30), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		local text_interface_value = interface .. "%"
-		draw.SimpleTextOutlined(text_interface_value, "Roboto18B", posx + ctr(200) + ctr(300), y - ctr(30), YRP.Color(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
-		local text_version = "(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR"
-		draw.SimpleTextOutlined(text_version, "Roboto18B", posx + ctr(200) + w, y - ctr(30), GetVersionColor(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
-		draw.SimpleTextOutlined("YourRP", "Roboto48B", pw / 2, ph / 2, YRP.Color(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
-		draw.SimpleTextOutlined(GetHostName(), "Roboto48B", posx + ctr(200), ctr(200), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined(GAMEMODE:GetGameDescription(), "Roboto24B", posx + ctr(200), ctr(300), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_map") .. ": " .. game.GetMap(), "Roboto24B", posx + ctr(200), ctr(350), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
-		if loading >= 100 and !loadingend then
-			loadingend = true
-			timer.Simple(1, function()
-				if loadinggamemode != nil then
-					loadinggamemode:Remove()
+			if CurTime() > self.ts then
+				self.ts = CurTime() + 0.04
+				self.ay = self.ay + self.ad
+				if self.ay > self.aymax then
+					self.ad = -1
+				elseif self.ay < self.aymin then
+					self.ad = 1
 				end
-			end)
+			end
+
+			local iconsize = ctr(512)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(yrp_icon)
+			surface.DrawTexturedRect(pw / 2 - iconsize / 2, ph / 2 - iconsize - ctr(100) + self.ay, iconsize, iconsize)
+
+			local text = math.Round(self.loading, 0) .. "%"
+			local posx = PosX()
+			local w = ScW() - ctr(400)
+			local h = ctr(120)
+			local x = posx + ctr(200)
+			local y = ph - h - ctr(200)
+			draw.RoundedBox(h / 2, x, y, w, h, Color(0, 0, 0))
+			draw.RoundedBox(h / 2, x, y, w * self.loading / 100, h, YRP.Color())
+			draw.SimpleTextOutlined(text, "Roboto60B", pw / 2, y + h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+			local text_hud_name = YRP.lang_string("LID_hud") .. ":"
+			draw.SimpleTextOutlined(text_hud_name, "Roboto18B", posx + ctr(200), y - ctr(70), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			local text_hud_value = self.hud .. "%"
+			draw.SimpleTextOutlined(text_hud_value, "Roboto18B", posx + ctr(200) + ctr(300), y - ctr(70), YRP.Color(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+			local text_interface_name = YRP.lang_string("LID_interface") .. ":"
+			draw.SimpleTextOutlined(text_interface_name, "Roboto18B", posx + ctr(200), y - ctr(30), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			local text_interface_value = self.interface .. "%"
+			draw.SimpleTextOutlined(text_interface_value, "Roboto18B", posx + ctr(200) + ctr(300), y - ctr(30), YRP.Color(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+			local text_version = "(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR"
+			draw.SimpleTextOutlined(text_version, "Roboto18B", posx + ctr(200) + w, y - ctr(30), GetVersionColor(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+			draw.SimpleTextOutlined("YourRP", "Roboto48B", pw / 2, ph / 2, YRP.Color(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+			draw.SimpleTextOutlined(GetHostName(), "Roboto48B", posx + ctr(200), ctr(200), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(GAMEMODE:GetGameDescription(), "Roboto24B", posx + ctr(200), ctr(300), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_map") .. ": " .. game.GetMap(), "Roboto24B", posx + ctr(200), ctr(350), YRP.Color(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+
+			if self.loading >= 100 and !loadingend then
+				loadingend = true
+				timer.Simple(1, function()
+					if loadinggamemode != nil then
+						--loadinggamemode:Remove()
+					end
+				end)
+			end
 		end
 	end
 
 	loadinggamemode:MakePopup()
+
+	local tick = 0
+	local time = 30
+	loadinggamemode.stuck = createD("YButton", loadinggamemode, ctr(400), ctr(60), PosX() + ScrW() / 2 - ctr(200), ScH() / 2 + ctr(100))
+	loadinggamemode.stuck:SetText("LID_iamstuck")
+	function loadinggamemode.stuck:Paint(pw, ph)
+		if loadinggamemode.loading > 0 then
+			if tick >= time then
+				hook.Run("YButtonPaint", self, pw, ph)
+			else
+				draw.SimpleTextOutlined(YRP.lang_string("LID_pleasewait") .. " (" .. time - tick .. ")", "Roboto18B", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1, 1, Color(0, 0, 0))
+			end
+		end
+	end
+	function loadinggamemode.stuck:DoClick()
+		if tick >= time then
+			local lply = LocalPlayer()
+			YRP.msg("error", "[LoadingScreen] [I am stuck] " .. " HUD: " .. loadinggamemode.hud .. "% INTERFACE: " .. loadinggamemode.interface .. "% Loading: " .. tostring(loadinggamemode.isloading) .. " SteamID64: " .. tostring(lply:SteamID64()))
+
+			loadinggamemode.iamstuck = true
+
+			local win = createD("YFrame", nil, ctr(800), ctr(600), 0, 0)
+			win:MakePopup()
+			win:Center()
+			win:SetHeaderHeight(ctr(100))
+			win:SetTitle("LID_iamstuck")
+			function win:Paint(pw, ph)
+				hook.Run("YFramePaint", self, pw, ph)
+
+				draw.SimpleTextOutlined(YRP.lang_string("LID_pleasewait") .. " (" .. time - tick .. ")", "Roboto18B", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1, 1, Color(0, 0, 0))
+			end
+
+			win.text = createD("DTextEntry", win, ctr(760), ctr(400), ctr(20), ctr(120))
+			win.text:SetMultiline(true)
+			win.text:SetText("What happend?\n")
+
+			win.send = createD("YButton", win, ctr(760), ctr(60), ctr(20), ctr(520))
+			win.send:SetText("LID_send")
+			function win.send:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+			end
+			function win.send:DoClick()
+				win:Remove()
+			end
+
+			function win:OnRemove()
+				if loadinggamemode:IsValid() then
+					local text = string.Replace(win.text:GetText(), "\n", " [N] ")
+					if text != "What happend? [N] " then
+						YRP.msg("error", "[LoadingScreen] [I am stuck] TEXT: " .. text .. " HUD: " .. loadinggamemode.hud .. "% INTERFACE: " .. loadinggamemode.interface .. "% Loading: " .. tostring(loadinggamemode.isloading) .. " SteamID64: " .. tostring(lply:SteamID64()))
+					end
+					loadinggamemode:Remove()
+				end
+			end
+			self:Remove()
+		end
+	end
+	timer.Create("loading_gamemode_timer", 1, 0, function()
+		tick = tick + 1
+		if tick >= time then
+			timer.Remove("loading_gamemode_timer")
+		end
+	end)
 end
 
 function SendIsReady()

@@ -9,7 +9,7 @@ net.Receive("get_licenses", function()
 		local spw = settingsWindow.window.sitepanel:GetWide()
 		local sph = settingsWindow.window.sitepanel:GetTall()
 
-		_li.ea = createD("DPanel", settingsWindow.window.site, BScrW() - ctr(40 + 480 + 40 + 40), sph - ctr(80), ctr(40 + 480 + 40), ctr(40)	)
+		_li.ea = createD("DPanel", settingsWindow.window.site, ScW() - ctr(40 + 480 + 40 + 40), sph - ctr(80), ctr(40 + 480 + 40), ctr(40)	)
 		function _li.ea:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end

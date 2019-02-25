@@ -11,7 +11,7 @@ net.Receive("getRoleWhitelist", function(len)
 		local _tmpRoleList = net.ReadTable()
 		local _tmpGroupList = net.ReadTable()
 
-		local _whitelistListView = createD("DListView", settingsWindow.window.site, BScrW() - ctr(20 + 10 + 500), ScrH() - ctr(180), ctr(10), ctr(10 + 50))
+		local _whitelistListView = createD("DListView", settingsWindow.window.site, ScW() - ctr(20 + 10 + 500), ScrH() - ctr(180), ctr(10), ctr(10 + 50))
 		_whitelistListView:AddColumn("uniqueID")
 		_whitelistListView:AddColumn("SteamID")
 		_whitelistListView:AddColumn(YRP.lang_string("LID_nick"))
@@ -43,7 +43,7 @@ net.Receive("getRoleWhitelist", function(len)
 			end
 		end
 
-		local _buttonAdd = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), BScrW() - ctr(10 + 500), ctr(60))
+		local _buttonAdd = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), ScW() - ctr(10 + 500), ctr(60))
 		_buttonAdd:SetText(YRP.lang_string("LID_addentry") .. " (" .. YRP.lang_string("LID_role") .. ")")
 		function _buttonAdd:DoClick()
 			local _whitelistFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
@@ -105,7 +105,7 @@ net.Receive("getRoleWhitelist", function(len)
 			_whitelistFrame:MakePopup()
 		end
 
-		local _buttonAddGroup = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), BScrW() - ctr(10 + 500), ctr(120))
+		local _buttonAddGroup = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), ScW() - ctr(10 + 500), ctr(120))
 		_buttonAddGroup:SetText(YRP.lang_string("LID_addentry") .. " (" .. YRP.lang_string("LID_group") .. ")")
 		function _buttonAddGroup:DoClick()
 			local _whitelistFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
@@ -147,7 +147,7 @@ net.Receive("getRoleWhitelist", function(len)
 			_whitelistFrame:MakePopup()
 		end
 
-		local _buttonAddAll = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), BScrW() - ctr(10 + 500), ctr(180))
+		local _buttonAddAll = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), ScW() - ctr(10 + 500), ctr(180))
 		_buttonAddAll:SetText(YRP.lang_string("LID_addentry") .. " (" .. YRP.lang_string("LID_all") .. " [" .. YRP.lang_string("LID_roles") .. "|".. YRP.lang_string("LID_groups") .. "] " .. ")")
 		function _buttonAddAll:DoClick()
 			local _whitelistFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
@@ -182,7 +182,7 @@ net.Receive("getRoleWhitelist", function(len)
 			_whitelistFrame:MakePopup()
 		end
 
-		local _buttonRem = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), BScrW() - ctr(10 + 500), ctr(240))
+		local _buttonRem = createD("DButton", settingsWindow.window.site, ctr(500), ctr(50), ScW() - ctr(10 + 500), ctr(240))
 		_buttonRem:SetText(YRP.lang_string("LID_removeentry"))
 		function _buttonRem:DoClick()
 			if _whitelistListView:GetSelectedLine() != "" and _whitelistListView:GetSelectedLine() != nil then

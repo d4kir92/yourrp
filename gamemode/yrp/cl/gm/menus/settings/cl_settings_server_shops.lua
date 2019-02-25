@@ -402,7 +402,7 @@ hook.Add("open_server_shops", "open_server_shops", function()
 	function settingsWindow.window.site:Paint(w, h)
 		--
 	end
-	_sh.ea = createD("DPanel", settingsWindow.window.site, BScrW() - ctr(40 + 480 + 40 + 40), h - ctr(80), ctr(40 + 480 + 40), ctr(40)	)
+	_sh.ea = createD("DPanel", settingsWindow.window.site, ScW() - ctr(40 + 480 + 40 + 40), h - ctr(80), ctr(40 + 480 + 40), ctr(40)	)
 	function _sh.ea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 	end

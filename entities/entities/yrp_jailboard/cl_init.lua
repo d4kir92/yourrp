@@ -17,7 +17,7 @@ net.Receive("openLawBoard", function(len)
 	if !windowOpen then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
-		local window = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+		local window = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 		window:SetTitle("")
 		window:Center()
 		function window:OnClose()
@@ -60,7 +60,7 @@ net.Receive("openLawBoard", function(len)
 		end
 
 
-		local scrollpanel = createD("DScrollPanel", window, BScrW() - ctr(20), ScrH() - ctr(50+10+10), ctr(10), ctr(50+10))
+		local scrollpanel = createD("DScrollPanel", window, ScW() - ctr(20), ScrH() - ctr(50+10+10), ctr(10), ctr(50+10))
 		function scrollpanel:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 100))
 		end
@@ -107,7 +107,7 @@ net.Receive("openLawBoard", function(len)
 			_removeButton:SetPos(_x*ctr(_size+10), _y*ctr(_size+70) + ctr(_size))
 
 			_x = _x + 1
-			if (_x-1)*_size >= BScrW() then
+			if (_x-1)*_size >= ScW() then
 				_y = _y + 1
 				_x = 0
 			end

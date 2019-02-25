@@ -18,7 +18,7 @@ net.Receive("getMapList", function(len)
 				draw.RoundedBox(4, 0, 0, pw, ph, get_dbg_col())
 			end
 
-			local _mapName = createD("DPanel", settingsWindow.window.site, BScrW() - ctr(20 + 256), ctr(256), ctr(10 + 256), ctr(10))
+			local _mapName = createD("DPanel", settingsWindow.window.site, ScW() - ctr(20 + 256), ctr(256), ctr(10 + 256), ctr(10))
 			function _mapName:Paint(pw, ph)
 				draw.RoundedBox(0, 0,0, pw, ph, get_dp_col())
 				draw.SimpleTextOutlined(YRP.lang_string("LID_map") .. ": " .. GetMapNameDB(), "sef", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
@@ -34,14 +34,14 @@ net.Receive("getMapList", function(len)
 				end
 			end
 
-			_mapListView = createD("DListView", settingsWindow.window.site, BScrW() - ctr(20 + 10 + 700), ScrH() - ctr(180 + 256 + 20), ctr(10), ctr(10 + 256 + 10))
+			_mapListView = createD("DListView", settingsWindow.window.site, ScW() - ctr(20 + 10 + 700), ScrH() - ctr(180 + 256 + 20), ctr(10), ctr(10 + 256 + 10))
 			_mapListView:AddColumn("uniqueID")
 			_mapListView:AddColumn(YRP.lang_string("LID_position"))
 			_mapListView:AddColumn(YRP.lang_string("LID_angle"))
 			_mapListView:AddColumn(YRP.lang_string("LID_type"))
 			_mapListView:AddColumn(YRP.lang_string("LID_name"))
 
-			local _buttonDelete = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(10+256+10))
+			local _buttonDelete = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(10+256+10))
 			_buttonDelete:SetText("")
 			function _buttonDelete:DoClick()
 				if _mapListView:GetSelectedLine() != nil then
@@ -57,7 +57,7 @@ net.Receive("getMapList", function(len)
 				end
 			end
 
-			local _buttonTeleport = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(336))
+			local _buttonTeleport = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(336))
 			_buttonTeleport:SetText("")
 			function _buttonTeleport:DoClick()
 				if _mapListView:GetSelectedLine() != nil then
@@ -73,7 +73,7 @@ net.Receive("getMapList", function(len)
 				end
 			end
 
-			local _buttonAddGroupSpawnPoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(396))
+			local _buttonAddGroupSpawnPoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(396))
 			_buttonAddGroupSpawnPoint:SetText("")
 			function _buttonAddGroupSpawnPoint:DoClick()
 				local tmpFrame = createD("DFrame", nil, ctr(1200), ctr(290), 0, 0)
@@ -116,7 +116,7 @@ net.Receive("getMapList", function(len)
 				surfaceButton(self, pw, ph, YRP.lang_string("LID_addgroupspawnpoint"))
 			end
 
-			local _buttonAddRoleSpawnPoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(456))
+			local _buttonAddRoleSpawnPoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(456))
 			_buttonAddRoleSpawnPoint:SetText("")
 			function _buttonAddRoleSpawnPoint:DoClick()
 				local tmpFrame = createD("DFrame", nil, ctr(1200), ctr(290), 0, 0)
@@ -164,7 +164,7 @@ net.Receive("getMapList", function(len)
 				surfaceButton(self, pw, ph, YRP.lang_string("LID_addrolespawnpoint"))
 			end
 
-			local _buttonAddJailPoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(516))
+			local _buttonAddJailPoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(516))
 			_buttonAddJailPoint:SetText("")
 			function _buttonAddJailPoint:DoClick()
 				net.Start("dbInsertIntoMap")
@@ -184,7 +184,7 @@ net.Receive("getMapList", function(len)
 				surfaceButton(self, pw, ph, YRP.lang_string("LID_addjailpoint"))
 			end
 
-			local _buttonAddReleasePoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(576))
+			local _buttonAddReleasePoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(576))
 			_buttonAddReleasePoint:SetText("")
 			function _buttonAddReleasePoint:DoClick()
 				net.Start("dbInsertIntoMap")
@@ -204,7 +204,7 @@ net.Receive("getMapList", function(len)
 				surfaceButton(self, pw, ph, YRP.lang_string("LID_addjailreleasepoint"))
 			end
 
-			local _buttonAddDealer = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(636))
+			local _buttonAddDealer = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(636))
 			_buttonAddDealer:SetText("")
 			function _buttonAddDealer:DoClick()
 				net.Start("dealer_add")
@@ -218,7 +218,7 @@ net.Receive("getMapList", function(len)
 				surfaceButton(self, pw, ph, YRP.lang_string("LID_add") .. " [" .. YRP.lang_string("LID_dealer") .. "]")
 			end
 
-			local _buttonAddStoragepoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), BScrW() - ctr(10 + 700), ctr(696))
+			local _buttonAddStoragepoint = createD("DButton", settingsWindow.window.site, ctr(700), ctr(50), ScW() - ctr(10 + 700), ctr(696))
 			_buttonAddStoragepoint:SetText("")
 			function _buttonAddStoragepoint:DoClick()
 				local tmpFrame = createD("DFrame", nil, ctr(1200), ctr(290), 0, 0)

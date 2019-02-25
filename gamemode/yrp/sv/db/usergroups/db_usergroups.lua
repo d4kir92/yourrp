@@ -423,14 +423,14 @@ end)
 util.AddNetworkString("usergroup_update_string_sweps")
 net.Receive("usergroup_update_string_sweps", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local sweps = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "sweps = '" .. sweps .. "'", "uniqueID = '" .. uid .. "'")
+	local string_sweps = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. string_sweps .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated sweps of usergroup (" .. uid .. ") to [" .. sweps .. "]")
+	printGM("db", ply:YRPName() .. " updated string_sweps of usergroup (" .. uid .. ") to [" .. string_sweps .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_string_sweps")
-			net.WriteString(sweps)
+			net.WriteString(string_sweps)
 		net.Send(pl)
 	end
 end)
@@ -438,14 +438,14 @@ end)
 util.AddNetworkString("usergroup_update_entities")
 net.Receive("usergroup_update_entities", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local entities = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "entities = '" .. entities .. "'", "uniqueID = '" .. uid .. "'")
+	local string_entities = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_entities = '" .. string_entities .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated entities of usergroup (" .. uid .. ") to [" .. entities .. "]")
+	printGM("db", ply:YRPName() .. " updated string_entities of usergroup (" .. uid .. ") to [" .. string_entities .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_entities")
-			net.WriteString(entities)
+			net.WriteString(string_entities)
 		net.Send(pl)
 	end
 end)

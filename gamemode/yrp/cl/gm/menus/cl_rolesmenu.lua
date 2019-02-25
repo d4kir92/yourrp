@@ -277,7 +277,7 @@ end
 function openRoleMenu()
 	openMenu()
 	if LocalPlayer():GetNWBool("bool_players_can_switch_role", false) then
-		_rm = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
+		_rm = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
 		_rm:Center()
 		_rm:ShowCloseButton(true)
 		_rm:SetDraggable(false)
@@ -286,7 +286,7 @@ function openRoleMenu()
 			hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_rolemenu") .. " [PROTOTYPE]")
 		end
 
-		_rm.info = createD("DPanel", _rm, ctrb(800), ScrH() - ctrb(60), BScrW() - ctrb(10) - ctrb(800), ctrb(50))
+		_rm.info = createD("DPanel", _rm, ctrb(800), ScrH() - ctrb(60), ScW() - ctrb(10) - ctrb(800), ctrb(50))
 		_rm.info.rolename = YRP.lang_string("LID_none")
 		_rm.info.rolesala = YRP.lang_string("LID_none")
 		function _rm.info:Paint(pw, ph)
@@ -348,7 +348,7 @@ function openRoleMenu()
 			end
 		end
 
-		_rm.pl = createD("DPanelList", _rm, BScrW() - ctrb(10+10+10) - ctrb(800), ScrH() - ctrb(60), ctrb(10), ctrb(50))
+		_rm.pl = createD("DPanelList", _rm, ScW() - ctrb(10+10+10) - ctrb(800), ScrH() - ctrb(60), ctrb(10), ctrb(50))
 		_rm.pl:EnableVerticalScrollbar(true)
 		_rm.pl:SetSpacing(10)
 		_rm.pl:SetNoSizing(true)

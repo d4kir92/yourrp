@@ -523,7 +523,7 @@ function openCharacterCreation()
 		character.rpname = charactersNameText:GetValue()
 	end
 
-	YRP.DChangeLanguage(frame, BScrW() - ctr(100 + 10), ctr(10), ctr(100))
+	YRP.DChangeLanguage(frame, ScW() - ctr(100 + 10), ctr(10), ctr(100))
 
 	if character.amount > 0 then
 		local button = {}
@@ -635,7 +635,7 @@ function openCharacterSelection()
 			closeMenu()
 		end
 
-		local _close = createD("YButton", _cs.frame, ctr(50), ctr(50), BScrW() - ctr(60), ctr(10))
+		local _close = createD("YButton", _cs.frame, ctr(50), ctr(50), ScW() - ctr(60), ctr(10))
 		_close:SetText("X")
 		function _close:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
@@ -644,7 +644,7 @@ function openCharacterSelection()
 			closeCharacterSelection()
 		end
 
-		local feedback = createD("YButton", _cs.frame, ctr(500), ctr(50), BScrW() - ctr(510), ScrH() - ctr(60))
+		local feedback = createD("YButton", _cs.frame, ctr(500), ctr(50), ScW() - ctr(510), ScrH() - ctr(60))
 		feedback:SetText("LID_givefeedback")
 		function feedback:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
@@ -654,10 +654,10 @@ function openCharacterSelection()
 			openFeedbackMenu()
 		end
 
-		YRP.DChangeLanguage(_cs.frame, BScrW() - ctr(100 + 10 + 50 + 10), ctr(10), ctr(100))
+		YRP.DChangeLanguage(_cs.frame, ScW() - ctr(100 + 10 + 50 + 10), ctr(10), ctr(100))
 
 		local border = ctr(50)
-		local charactersBackground = createD("DPanel", _cs.frame, ctr(800), ScrH() - (2*border), (ScrW() - BScrW())/2 + border, border)
+		local charactersBackground = createD("DPanel", _cs.frame, ctr(800), ScrH() - (2*border), (ScrW() - ScW())/2 + border, border)
 		charactersBackground.text = YRP.lang_string("LID_siteisloading")
 		function charactersBackground:Paint(pw, ph)
 			paintMD(pw, ph, nil, get_dp_col())

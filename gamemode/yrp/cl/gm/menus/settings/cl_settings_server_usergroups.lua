@@ -97,6 +97,13 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	-- SWEPS
 	ug.string_sweps = string.Explode(",", ug.string_sweps)
+	local tmp = {}
+	for i, v in pairs(ug.string_sweps) do
+		if v != nil and v != "" and v != " " then
+			table.insert(tmp, v)
+		end
+	end
+	ug.string_sweps = tmp
 
 	local SWEPS = createD("DYRPPanelPlus", PARENT, ctr(500), ctr(50 + 500 + 50), ctr(20), ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
 	SWEPS:INITPanel("DPanel")
@@ -107,7 +114,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 
 	SWEPS.preview = createD("DModelPanel", SWEPS, ctr(500), ctr(500), ctr(0), ctr(50))
-	if ug.string_sweps[1] != "" then
+	if ug.string_sweps[1] != nil then
 		SWEPS.preview:SetModel(GetSWEPWorldModel(ug.string_sweps[1]))
 		SWEPS.preview.cur = 1
 		SWEPS.preview.max = #ug.string_sweps
@@ -142,7 +149,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			self.oldcur = self.cur
 			self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[self.cur]))
 		end
-		surfaceText(self.cur .. "/" .. self.max, "mat1text", pw / 2, ph - ctr(25), Color(255, 255, 255), 1, 1)
+		surfaceText(self.cur .. "/" .. self.max, "mat1text", pw / 2, ph - ctr(30), Color(255, 255, 255), 1, 1)
+		surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "mat1text", pw / 2, ph - ctr(70), Color(255, 255, 255), 1, 1)
 	end
 
 	SWEPS.preview.prev = createD("DButton", SWEPS.preview, ctr(50), ctr(50), ctr(0), ctr(500 - 50) / 2)
@@ -191,7 +199,16 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	net.Receive("usergroup_update_string_sweps", function(len2)
 		if pa(SWEPS) then
 			local string_sweps = net.ReadString()
+
 			UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", string_sweps)
+			local tmp2 = {}
+			for i, v in pairs(ug.string_sweps) do
+				if v != nil and v != "" and v != " " then
+					table.insert(tmp2, v)
+				end
+			end
+			UGS[CURRENT_USERGROUP].string_sweps = tmp2
+
 			if UGS[CURRENT_USERGROUP].string_sweps[1] != "" then
 				SWEPS.preview.cur = 1
 				SWEPS.preview.max = #UGS[CURRENT_USERGROUP].string_sweps
@@ -205,6 +222,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- ENTITIES
+	--[[
 	ug.string_sents = string.Explode(";", ug.string_sents)
 
 	ug.dstring_sents = {}
@@ -341,6 +359,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		local cname = net.ReadString()
 		ug.dstring_sents[cname]:Remove()
 	end)
+	]]
 
 	local ACCESS = createD("DYRPPanelPlus", PARENT, ctr(800), ScrH() - ctr(100 + 10 + 10), ctr(20 + 500 + 20), ctr(20))
 	ACCESS:INITPanel("DPanelList")
@@ -399,7 +418,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddHr()
 	ACCESSAddHr()
 	-- Maintance
-	ACCESSAddCheckBox("bool_console", "LID_server_console")
+	ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
 	ACCESSAddCheckBox("bool_status", "LID_settings_status")
 	ACCESSAddCheckBox("bool_feedback", "LID_settings_feedback")
 	ACCESSAddHr()

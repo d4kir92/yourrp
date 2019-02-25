@@ -101,7 +101,7 @@ net.Receive("openStorage", function(len)
 	local _tabs = net.ReadTable()
 
 	if inv.window == nil then
-		inv.window = createD("DFrame", nil, BScrW(), ScrH(), 0, 0)
+		inv.window = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 		inv.window:SetTitle("")
 		inv.window:ShowCloseButton(true)
 		inv.window:SetDraggable(false)

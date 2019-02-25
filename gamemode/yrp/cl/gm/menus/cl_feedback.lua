@@ -22,7 +22,7 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-
 
 function openFeedbackMenu()
 	openMenu()
-	_fb.window = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
+	_fb.window = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
 	_fb.window:Center()
 	_fb.window:SetTitle("LID_givefeedback")
 	function _fb.window:OnClose()
@@ -32,7 +32,7 @@ function openFeedbackMenu()
 		closeMenu()
 	end
 
-	_fb.langu = YRP.DChangeLanguage(_fb.window, BScrW()/2, ctr(50), ctr(100))
+	_fb.langu = YRP.DChangeLanguage(_fb.window, ScW()/2, ctr(50), ctr(100))
 
 	function _fb.window:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_givefeedback") .. " [PROTOTYPE]")
@@ -47,24 +47,24 @@ function openFeedbackMenu()
 		gui.OpenURL("https://discord.gg/sEgNZxg")
 	end
 
-	_fb.titleP = createD("DPanel", _fb.window, BScrW() - ctr(20), ctr(50), ctr(10), ctr(120))
+	_fb.titleP = createD("DPanel", _fb.window, ScW() - ctr(20), ctr(50), ctr(10), ctr(120))
 	function _fb.titleP:Paint(pw, ph)
 		surfaceText(YRP.lang_string("LID_title"), "roleInfoHeader", ctr(10), ph/2, Color(255, 255, 255), 0, 1)
 	end
-	_fb.titleT = createD("DTextEntry", _fb.window, BScrW() - ctr(20), ctr(50), ctr(10), ctr(170))
+	_fb.titleT = createD("DTextEntry", _fb.window, ScW() - ctr(20), ctr(50), ctr(10), ctr(170))
 
-	_fb.feedbackP = createD("DPanel", _fb.window, BScrW() - ctr(20), ctr(50), ctr(10), ctr(250))
+	_fb.feedbackP = createD("DPanel", _fb.window, ScW() - ctr(20), ctr(50), ctr(10), ctr(250))
 	function _fb.feedbackP:Paint(pw, ph)
 		surfaceText(YRP.lang_string("LID_feedback") .. " (" .. YRP.lang_string("LID_problems") .. ", " .. YRP.lang_string("LID_suggestions") .. ", ...)", "roleInfoHeader", ctr(10), ph/2, Color(255, 255, 255), 0, 1)
 	end
-	_fb.feedbackT = createD("DTextEntry", _fb.window, BScrW() - ctr(20), ctr(500), ctr(10), ctr(300))
+	_fb.feedbackT = createD("DTextEntry", _fb.window, ScW() - ctr(20), ctr(500), ctr(10), ctr(300))
 	_fb.feedbackT:SetMultiline(true)
 
-	_fb.contactP = createD("DPanel", _fb.window, BScrW() - ctr(20), ctr(50), ctr(10), ctr(850))
+	_fb.contactP = createD("DPanel", _fb.window, ScW() - ctr(20), ctr(50), ctr(10), ctr(850))
 	function _fb.contactP:Paint(pw, ph)
 		surfaceText(YRP.lang_string("LID_contact") .. " (" .. YRP.lang_string("LID_notrequired") .. ")", "roleInfoHeader", ctr(10), ph/2, Color(255, 255, 255), 0, 1)
 	end
-	_fb.contactT = createD("DTextEntry", _fb.window, BScrW() - ctr(20), ctr(50), ctr(10), ctr(900))
+	_fb.contactT = createD("DTextEntry", _fb.window, ScW() - ctr(20), ctr(50), ctr(10), ctr(900))
 
 	_fb.send = createD("YButton", _fb.window, ctr(600), ctr(50), ctr(10), ctr(1000))
 	_fb.send:SetText("LID_sendfeedback")

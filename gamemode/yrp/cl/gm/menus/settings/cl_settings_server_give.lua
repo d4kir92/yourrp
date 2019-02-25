@@ -6,7 +6,7 @@ net.Receive("setting_players", function(len)
 		surfaceText(YRP.lang_string("LID_players"), "roleInfoHeader", ctr(10), ctr(10 + 25), Color(255, 255, 255), 0, 1)
 	end
 
-	local _giveListView = createD("DListView", settingsWindow.window.site, BScrW() - ctr(20), ScrH() - ctr(180), ctr(10), ctr(10 + 50))
+	local _giveListView = createD("DListView", settingsWindow.window.site, ScW() - ctr(20), ScrH() - ctr(180), ctr(10), ctr(10 + 50))
 	_giveListView:AddColumn("SteamID")
 	_giveListView:AddColumn(YRP.lang_string("LID_nick"))
 	_giveListView:AddColumn(YRP.lang_string("LID_name"))

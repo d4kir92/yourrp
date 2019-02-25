@@ -53,7 +53,7 @@ net.Receive("get_menu_bodygroups", function(len)
 					--draw.SimpleTextOutlined(YRP.lang_string("LID_appearance"), "HudBars", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 				end
 
-				_appe.r.play = createD("DButton", _yrp_appearance.left, ctr(100), ctr(100), BScrW() / 4, ScrH() - ctr(200))
+				_appe.r.play = createD("DButton", _yrp_appearance.left, ctr(100), ctr(100), ScW() / 4, ScrH() - ctr(200))
 				_appe.r.play:SetText("")
 				function _appe.r.play:Paint(pw, ph)
 					local tab = {}
@@ -77,7 +77,7 @@ net.Receive("get_menu_bodygroups", function(len)
 					play = !play
 				end
 
-				_appe.r.pm = createD("DModelPanel", _yrp_appearance.left, ScrH() - ctr(100), BScrW() / 2, 0, ctr(50))
+				_appe.r.pm = createD("DModelPanel", _yrp_appearance.left, ScrH() - ctr(100), ScW() / 2, 0, ctr(50))
 				_appe.r.pm:SetModel(_pm)
 				_appe.r.pm:SetAnimated(true)
 				_appe.r.pm.Angles = Angle(0, 0, 0)
@@ -105,7 +105,7 @@ net.Receive("get_menu_bodygroups", function(len)
 				end
 
 				-- Playermodel changing
-				local _tmpPM = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(80), BScrW() / 2, ctr(50))
+				local _tmpPM = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(80), ScW() / 2, ctr(50))
 				_tmpPM.cur = _pmid
 				_tmpPM.max = #_pms
 				_tmpPM.name = YRP.lang_string("LID_appearance")
@@ -151,7 +151,7 @@ net.Receive("get_menu_bodygroups", function(len)
 				--[[ Skin changing ]]--
 				_tbl.bgs = _appe.r.pm.Entity:GetBodyGroups()
 
-				local _tmpSkin = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(80), BScrW() / 2, ctr(200))
+				local _tmpSkin = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(80), ScW() / 2, ctr(200))
 				_tmpSkin.cur = _appe.r.pm.Entity:GetSkin()
 				_tmpSkin.max = _appe.r.pm.Entity:SkinCount()
 				_tmpSkin.name = YRP.lang_string("LID_skin")
@@ -202,7 +202,7 @@ net.Receive("get_menu_bodygroups", function(len)
 						_cbg[k] = tonumber(_cbg[k])
 						_appe.r.pm.Entity:SetBodygroup(k-1, tonumber(_cbg[k]))
 						local _height = 80
-						local _tmpBg = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(_height), BScrW() / 2, ctr(300) + k * ctr(_height + 2))
+						local _tmpBg = createD("DPanel", _yrp_appearance.left, ScrH2() - ctr(30), ctr(_height), ScW() / 2, ctr(300) + k * ctr(_height + 2))
 						_tmpBg.name = v.name
 						_tmpBg.max = v.num
 						_tmpBg.cur = _cbg[k]
@@ -291,7 +291,7 @@ function open_appearance()
 
 	local ply = LocalPlayer()
 
-	_yrp_appearance.window = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
+	_yrp_appearance.window = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
 	_yrp_appearance.window:SetTitle("LID_appearance")
 	_yrp_appearance.window:Center()
 	_yrp_appearance.window:SetDraggable(false)
@@ -304,7 +304,7 @@ function open_appearance()
 		hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 	end
 
-	_yrp_appearance.left = createD("DPanel", _yrp_appearance.window, BScrW(), ScrH() - ctr(50), 0, ctr(50))
+	_yrp_appearance.left = createD("DPanel", _yrp_appearance.window, ScW(), ScrH() - ctr(50), 0, ctr(50))
 	function _yrp_appearance.left:Paint(pw, ph)
 		--surfacePanel(self, pw, ph)
 		--paintBr(pw, ph, Color(255, 0, 0, 255))

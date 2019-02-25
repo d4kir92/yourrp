@@ -6,10 +6,6 @@ elePos.y = 0
 
 local mc = {}
 
-function BScrW()
-	return ScW()
-end
-
 isScoreboardOpen = false
 function SetIsScoreboardOpen(bo)
 	isScoreboardOpen = bo
@@ -266,7 +262,7 @@ end
 function OpenSBS()
 	if sbs.frame == nil then
 		SetIsScoreboardOpen(true)
-		sbs.frame = createD("DFrame", nil, BScrW(), ScrH(), PosX(), 0)
+		sbs.frame = createD("DFrame", nil, ScW(), ScrH(), PosX(), 0)
 		sbs.frame:SetDraggable(false)
 		sbs.frame:ShowCloseButton(false)
 		sbs.frame:SetTitle("")
@@ -318,7 +314,7 @@ function OpenSBS()
 			end
 		end
 
-		sbs.header = createD("DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+		sbs.header = createD("DPanel", sbs.frame, ScW(), ctr(64), 0, ctr(256 + 10))
 		function sbs.header:Paint(pw, ph)
 			local pl = LocalPlayer()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
@@ -374,7 +370,7 @@ function OpenSBS()
 			draw.SimpleTextOutlined(YRP.lang_string("LID_ping"), "sef", ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 
-		sbs.stab = createD("DPanelList", sbs.frame, BScrW(), ScrH() - ctr(256 + 10 + 64), 0, ctr(256 + 10 + 64))
+		sbs.stab = createD("DPanelList", sbs.frame, ScW(), ScrH() - ctr(256 + 10 + 64), 0, ctr(256 + 10 + 64))
 		sbs.stab:EnableVerticalScrollbar(true)
 
 		local allplys = player.GetAll()
@@ -389,7 +385,7 @@ function OpenSBS()
 			end
 		end
 		for i, pl in SortedPairsByMemberValue(rplys, "group") do
-			local _p = createD("DButton", sbs.stab, BScrW(), ctr(128), 0, 0)
+			local _p = createD("DButton", sbs.stab, ScW(), ctr(128), 0, 0)
 			_p:SetText("")
 			function _p:DoClick()
 				OpenPlayerOptions(pl)
@@ -555,12 +551,12 @@ function OpenSBS()
 		end
 
 		if #uplys > 0 then
-			sbs.hr = createD("DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+			sbs.hr = createD("DPanel", sbs.frame, ScW(), ctr(64), 0, ctr(256 + 10))
 			function sbs.hr:Paint(pw, ph)
 			end
 			sbs.stab:AddItem(sbs.hr)
 
-			sbs.charsel = createD("DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+			sbs.charsel = createD("DPanel", sbs.frame, ScW(), ctr(64), 0, ctr(256 + 10))
 			function sbs.charsel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
@@ -569,7 +565,7 @@ function OpenSBS()
 			end
 			sbs.stab:AddItem(sbs.charsel)
 
-			sbs.header2 = createD("DPanel", sbs.frame, BScrW(), ctr(64), 0, ctr(256 + 10))
+			sbs.header2 = createD("DPanel", sbs.frame, ScW(), ctr(64), 0, ctr(256 + 10))
 			function sbs.header2:Paint(pw, ph)
 				local pl = LocalPlayer()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
@@ -610,7 +606,7 @@ function OpenSBS()
 			sbs.stab:AddItem(sbs.header2)
 
 			for i, pl in SortedPairsByMemberValue(uplys, "group") do
-				local _p = createD("DButton", sbs.stab, BScrW(), ctr(128), 0, 0)
+				local _p = createD("DButton", sbs.stab, ScW(), ctr(128), 0, 0)
 				_p:SetText("")
 				function _p:DoClick()
 					OpenPlayerOptions(pl)

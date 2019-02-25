@@ -19,7 +19,7 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		scroller.parent = PARENT
 		scroller.x = br
 		scroller.y = br
-		scroller.w = BScrW() - 2 * br
+		scroller.w = ScW() - 2 * br
 		scroller.h = ScrH() - ctr(100) - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 		local general = {}

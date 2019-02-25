@@ -214,7 +214,7 @@ net.Receive("shop_get_tabs", function(len)
 	local _dealer_uid = _dealer.uniqueID
 	local _tabs = net.ReadTable()
 
-	_bm.window = createD("YFrame", nil, BScrW(), ScrH(), 0, 0)
+	_bm.window = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
 	_bm.window.dUID = _dealer_uid
 	_bm.window:SetTitle(_dealer.name)
 	_bm.window:Center()
@@ -321,7 +321,7 @@ net.Receive("shop_get_tabs", function(len)
 	end
 
 	--[[ Shop ]]--
-	_bm.shop = createD("DPanelList", _bm.window, BScrW() - ctrb(10 + 10), ScrH() - ctrb(50 + 10 + 60 + 10), ctrb(10), ctrb(50 + 10 + 60))
+	_bm.shop = createD("DPanelList", _bm.window, ScW() - ctrb(10 + 10), ScrH() - ctrb(50 + 10 + 60 + 10), ctrb(10), ctrb(50 + 10 + 60))
 	_bm.shop:EnableVerticalScrollbar(false)
 	_bm.shop:SetSpacing(10)
 	_bm.shop:SetNoSizing(false)
@@ -329,7 +329,7 @@ net.Receive("shop_get_tabs", function(len)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100, 240))
 	end
 
-	_bm.tabs = createD("DYRPTabs", _bm.window, BScrW() - ctrb(10 + 10), ctrb(60), ctrb(10), ctrb(50 + 10))
+	_bm.tabs = createD("DYRPTabs", _bm.window, ScW() - ctrb(10 + 10), ctrb(60), ctrb(10), ctrb(50 + 10))
 	_bm.tabs:SetSelectedColor(Color(100, 100, 100, 240))
 	_bm.tabs:SetUnselectedColor(Color(0, 0, 0, 240))
 
