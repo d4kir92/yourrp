@@ -1348,7 +1348,7 @@ if !playerready then
 				loadingend = true
 				timer.Simple(1, function()
 					if loadinggamemode != nil then
-						--loadinggamemode:Remove()
+						loadinggamemode:Remove()
 					end
 				end)
 			end
