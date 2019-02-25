@@ -21,6 +21,12 @@ net.Receive("get_laws", function(len, ply)
 		laws = laws[1]
 		laws.string_lawsymbol = SQL_STR_OUT(laws.string_lawsymbol)
 		laws.string_laws = SQL_STR_OUT(laws.string_laws)
+		local lockdown = SQL_SELECT("yrp_lockdown", "*", "uniqueID = '1'")
+		if wk(lockdown) then
+			lockdown = lockdown[1]
+			laws.bool_lockdown = lockdown.bool_lockdown
+			laws.string_lockdowntext = SQL_STR_OUT(lockdown.string_lockdowntext)
+		end
 		net.Start("get_laws")
 			net.WriteTable(laws)
 		net.Send(ply)

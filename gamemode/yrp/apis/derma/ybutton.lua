@@ -5,6 +5,7 @@ local PANEL = {}
 PANEL._text = ""
 PANEL._hovertext = ""
 PANEL._selectedtext = ""
+PANEL._selected = false
 
 function PANEL:GetText()
 	return self._text
@@ -32,6 +33,14 @@ end
 
 function PANEL:SetSelectedText(str)
 	self._selectedtext = str
+end
+
+function PANEL:IsPressed()
+	return self._selected
+end
+
+function PANEL:SetPressed(selected)
+	self._selected = selected
 end
 
 function PANEL:Init()

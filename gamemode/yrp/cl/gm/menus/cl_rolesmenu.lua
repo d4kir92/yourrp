@@ -196,9 +196,6 @@ function addGroup(grp, parent)
 		_grp.color = Color(_grp.color[1], _grp.color[2], _grp.color[3])
 		_grp.tbl = grp
 		_grp.locked = tobool(grp.bool_locked)
-		if tonumber(_grp.tbl.int_parentgroup) == 0 then
-			print(_grp.tbl.int_position, _grp.tbl.string_name)
-		end
 		function _grp:PaintHeader(pw, ph)
 			local _hl = 0
 			if self.header:IsHovered() then

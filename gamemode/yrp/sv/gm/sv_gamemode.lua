@@ -228,6 +228,8 @@ function YRP:Loadout(ply)
 	ply:UserGroupLoadout()
 	ply:GeneralLoadout()
 
+	ply:LockdownLoadout()
+
 	ply:SetNWBool("bool_loadouted", true)
 end
 

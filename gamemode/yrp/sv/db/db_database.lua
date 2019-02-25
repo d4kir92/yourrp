@@ -34,6 +34,7 @@ table.insert(_dbs, "yrp_playermodels")
 table.insert(_dbs, "yrp_design")
 table.insert(_dbs, "yrp_hud")
 table.insert(_dbs, "yrp_laws")
+table.insert(_dbs, "yrp_lockdown")
 
 table.insert(_dbs, "yrp_players")
 table.insert(_dbs, "yrp_" .. GetMapNameDB())
@@ -133,6 +134,7 @@ include("design/db_design.lua")
 include("hud/db_hud.lua")
 
 include("laws/db_laws.lua")
+include("lockdown/db_lockdown.lua")
 
 include("general/db_general.lua")
 include("players/db_players.lua")

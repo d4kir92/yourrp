@@ -21,7 +21,7 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 	if lply:GetNWString("string_interface_design") == "Simple" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
-		if self:IsDown() then
+		if self:IsDown() or self:IsPressed() then
 			color = lply:InterfaceValue("YButton", "SC")
 			tcolor = lply:InterfaceValue("YButton", "ST")
 		elseif self:IsHovered() then

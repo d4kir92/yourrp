@@ -8,7 +8,7 @@ function ToggleLawsMenu()
 end
 
 function CloseLawsMenu()
-	if _la.window ~= nil then
+	if _la.window != nil then
 		closeMenu()
 		_la.window:Remove()
 		_la.window = nil
@@ -32,9 +32,11 @@ function OpenLawsMenu()
 		local lawtab = net.ReadTable()
 		local lawsymbol = tostring(lawtab.string_lawsymbol)
 		local laws = lawtab.string_laws
+		local lockdowntext = lawtab.string_lockdowntext
+		local lockdown = tobool(lawtab.bool_lockdown)
 
 		if !lply:GetNWBool("bool_" .. "ismayor", false) then
-			local laws = string.Explode(lawsymbol, laws)
+			laws = string.Explode(lawsymbol, laws)
 			if _la.window:IsValid() then
 				_la.dpl = createD("DPanelList", _la.window, ctr(760), ctr(1200 - 100 - 20 - 20), ctr(20), ctr(100 + 20))
 				_la.dpl:SetSpacing(ctr(20))
@@ -59,6 +61,13 @@ function OpenLawsMenu()
 				end
 			end
 		else
+			_la.window:SetWide(ctr(1600))
+			_la.window:SetTitle(YRP.lang_string("LID_laws") .. " | " .. YRP.lang_string("LID_lockdown"))
+			_la.window:Center()
+
+
+
+			-- LAWS
 			_la.lawsymbolheader = createD("YLabel", _la.window, ctr(760), ctr(50), ctr(20), ctr(100 + 20))
 			_la.lawsymbolheader:SetText(YRP.lang_string("LID_lawsymbol"))
 			function _la.lawsymbolheader:Paint(pw, ph)
@@ -87,6 +96,48 @@ function OpenLawsMenu()
 			function _la.laws:OnChange()
 				net.Start("set_laws")
 					net.WriteString(self:GetText())
+				net.SendToServer()
+			end
+
+
+
+			-- LOCKDOWN
+			_la.lockdownheader = createD("YLabel", _la.window, ctr(760), ctr(50), ctr(800 + 20), ctr(100 + 20))
+			_la.lockdownheader:SetText(YRP.lang_string("LID_lockdowntext"))
+			function _la.lockdownheader:Paint(pw, ph)
+				hook.Run("YLabelPaint", self, pw, ph)
+			end
+
+			_la.lockdowntext = createD("DTextEntry", _la.window, ctr(760), ctr(50), ctr(800 + 20), ctr(100 + 20 + 50))
+			_la.lockdowntext:SetText("#" .. lockdowntext)
+			function _la.lockdowntext:OnChange()
+				net.Start("set_lockdowntext")
+					net.WriteString(self:GetText())
+				net.SendToServer()
+			end
+
+			_la.lockdowntoggle = createD("YButton", _la.window, ctr(760), ctr(50), ctr(800 + 20), ctr(240))
+			_la.lockdowntoggle:SetPressed(lockdown)
+			local ld_enabled = YRP.lang_string("LID_lockdown") .. " (" .. YRP.lang_string("LID_enabled") .. ")"
+			local ld_disabled = YRP.lang_string("LID_lockdown") .. " (" .. YRP.lang_string("LID_disabled") .. ")"
+			if lockdown then
+				_la.lockdowntoggle:SetText(ld_enabled)
+			else
+				_la.lockdowntoggle:SetText(ld_disabled)
+			end
+			function _la.lockdowntoggle:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+			end
+			function _la.lockdowntoggle:DoClick()
+				lockdown = !self:IsPressed()
+				self:SetPressed(lockdown)
+				if lockdown then
+					_la.lockdowntoggle:SetText(ld_enabled)
+				else
+					_la.lockdowntoggle:SetText(ld_disabled)
+				end
+				net.Start("set_lockdown")
+					net.WriteBool(lockdown)
 				net.SendToServer()
 			end
 		end

@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
 yrp_current_lang.get_language = "Unknown"
@@ -79,25 +80,67 @@ end
 
 function YRP.lang_string(var, vals)
 	var = tostring(var)
-	local _string = yrp_current_lang[string.lower(var)]
-	if !wk(_string) then
-		if nf[var] == nil and string.StartWith(var, "LID_") and hascontent then
-			nf[var] = var
-			printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+	if yrp_current_lang["lid_initauthor"] != nil then
+		local _string = yrp_current_lang[string.lower(var)]
+		if !wk(_string) then
+			if nf[var] == nil and string.StartWith(var, "LID_") and hascontent then
+				nf[var] = var
+				printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+			end
+			return var
 		end
-		return var
-	end
-	if wk(vals) then
-		if type(vals) == "string" then
-			return YRP.lang_string(var)
-		else
-			for id, val in pairs(vals) do
-				_string = string.Replace(_string, "%" .. id .. "%", val)
+		if wk(vals) then
+			if type(vals) == "string" then
+				return YRP.lang_string(var)
+			else
+				for id, val in pairs(vals) do
+					_string = string.Replace(_string, "%" .. id .. "%", val)
+				end
 			end
 		end
+		return _string
+	else
+		return var
 	end
-	return _string
 end
+
+-- Translate
+local searching = {}	-- Anti spam
+local translations = {}	-- finished translations
+function GetTranslation(sentence, target, source)
+	if yrp_current_lang["lid_initauthor"] != nil then
+		target = target or YRP.lang_string("LID_initshort")
+		source = source or "auto"
+		searching[sentence] = searching[sentence] or false
+		if translations[sentence] == nil and !searching[sentence] then
+			searching[sentence] = true
+			local url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" .. source .. "&tl=" .. target .. "&dt=t&q=" .. sentence .. ""
+			http.Fetch(
+				url,
+				function(body)
+					local tomuchtraffic = string.find(body, "unusual traffic")
+					if tomuchtraffic then
+						YRP.msg("note", "[GetTranslation] To much Translations")
+					else
+						body = string.sub(body, 5)
+						local result = string.sub(body, 1, string.find(body, "\"") - 1)
+						if result then
+							translations[sentence] = result
+							searching[sentence] = false
+						end
+					end
+				end,
+				function(error)
+					YRP.msg("note", "[GetTranslation] failed " .. error)
+				end
+			)
+		elseif translations[sentence] != nil then
+			return translations[sentence]
+		end
+	end
+	return sentence
+end
+--GetTranslation("Lockdown")
 
 function YRP.GetAllLanguages()
 	return yrp_button_info
@@ -185,7 +228,7 @@ function YRP.LoadLanguage(short, init)
 			printGM("lang", "[AUTOMATIC DETECTION]")
 			YRP.search_language()
 
-			if yrp_current_lang.get_language ~= "" then
+			if yrp_current_lang.get_language != "" then
 				short = string.lower(yrp_current_lang.get_language)
 				printGM("lang", "Found Language: " .. "[" .. short .. "]")
 
@@ -251,7 +294,7 @@ elseif CLIENT then
 		for key, value in pairs(percentages) do
 			key = tostring(key)
 
-			if (yrp_button_info[key] ~= nil) then
+			if (yrp_button_info[key] != nil) then
 				yrp_button_info[key]["percentage"] = value
 			end
 		end
@@ -324,7 +367,7 @@ if CLIENT then
 	--[[ FLAGS ]]
 	--
 	for i, short in pairs(yrp_shorts) do
-		if short ~= nil then
+		if short != nil then
 			YRP.AddDesignIcon("lang_" .. short, "vgui/iso_639/" .. short .. ".png")
 		end
 	end
