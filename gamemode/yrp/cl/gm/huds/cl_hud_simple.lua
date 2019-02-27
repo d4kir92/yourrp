@@ -377,9 +377,10 @@ function HUDSimple()
 			CA.element = "CA"
 			HUDSimpleBG(CA)
 		end
-		local AB = {}
+		--[[local AB = {}
 		AB.element = "AB"
 		HUDSimpleBG(AB)
+		]]
 		local WP = {}
 		WP.element = "WP"
 		HUDSimpleBG(WP)
@@ -482,6 +483,7 @@ function HUDSimple()
 			CA.icon = Material("icon16/hourglass.png")
 			HUDSimpleBAR(CA)
 		end
+		--[[
 		AB = {}
 		AB.element = "AB"
 		AB.cur = lply:Ability()
@@ -490,6 +492,7 @@ function HUDSimple()
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
 		AB.icon = Material("icon16/wand.png")
 		HUDSimpleBAR(AB)
+		]]
 		local weapon = lply:GetActiveWeapon()
 		if IsValid(weapon) then
 			local clip1 = weapon:Clip1()
@@ -664,9 +667,11 @@ function HUDSimple()
 			CA.element = "CA"
 			HUDSimpleBR(CA)
 		end
+		--[[
 		AB = {}
 		AB.element = "AB"
 		HUDSimpleBR(AB)
+		]]
 		WP = {}
 		WP.element = "WP"
 		HUDSimpleBR(WP)

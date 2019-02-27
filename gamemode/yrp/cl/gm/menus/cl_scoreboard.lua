@@ -254,6 +254,7 @@ sbs.icons.yrp = Material("yrp/yrp_icon")
 function CloseSBS()
 	SetIsScoreboardOpen(false)
 	if pa(sbs.frame) then
+		gui.EnableScreenClicker(false)
 		sbs.frame:Remove()
 		sbs.frame = nil
 	end
@@ -266,14 +267,27 @@ function OpenSBS()
 		sbs.frame:SetDraggable(false)
 		sbs.frame:ShowCloseButton(false)
 		sbs.frame:SetTitle("")
-		sbs.frame:MakePopup()
+		--sbs.frame:MakePopup()
 
 		local _mapPNG = getMapPNG()
 
 		local _server_logo = LocalPlayer():GetNWString("text_server_logo", "")
 		text_server_logo = GetHTMLImage(LocalPlayer():GetNWString("text_server_logo", ""), ctr(256), ctr(256))
 
+		sbs.frame.tick = CurTime()
 		function sbs.frame:Paint(pw, ph)
+			if self.tick < CurTime() then
+				if input.IsMouseDown(MOUSE_RIGHT) or input.IsMouseDown(MOUSE_MIDDLE) then
+					gui.EnableScreenClicker(!vgui.CursorVisible())
+					self.tick = CurTime() + 0.4
+				end
+			end
+			if vgui.CursorVisible() then
+				self:ShowCloseButton(true)
+			else
+				self:ShowCloseButton(false)
+			end
+
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 			draw.RoundedBox(0, ctr(256), ctr(128-50), pw-ctr(512), ctr(100), Color(0, 0, 255, 100))
@@ -305,7 +319,7 @@ function OpenSBS()
 			end
 		end
 
-		if _server_logo != "" then
+		if !strEmpty(_server_logo) then
 			local ServerLogo = createD("DHTML", sbs.frame, ctr(256), ctr(256), 0, ctr(4))
 			ServerLogo:SetHTML(text_server_logo)
 			if _mapPNG == false then

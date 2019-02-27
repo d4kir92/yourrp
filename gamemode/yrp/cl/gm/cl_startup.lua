@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-playerready = playerready or false
+local playerready = playerready or false
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -1358,7 +1358,7 @@ if !playerready then
 	loadinggamemode:MakePopup()
 
 	local tick = 0
-	local time = 30
+	local time = 60
 	loadinggamemode.stuck = createD("YButton", loadinggamemode, ctr(400), ctr(60), PosX() + ScrW() / 2 - ctr(200), ScH() / 2 + ctr(100))
 	loadinggamemode.stuck:SetText("LID_iamstuck")
 	function loadinggamemode.stuck:Paint(pw, ph)
@@ -1421,7 +1421,7 @@ if !playerready then
 	end)
 end
 
-function SendIsReady()
+function YRPSendIsReady()
 	net.Start("yrp_player_is_ready")
 		net.WriteBool(system.IsWindows())
 		net.WriteBool(system.IsLinux())
@@ -1485,14 +1485,14 @@ function YRPInitPostEntity()
 			local lply = LocalPlayer()
 			if lply:GetNWInt("yrp_loading_hud", 0) >= 100 and lply:GetNWInt("yrp_loading_interface", 0) >= 100 then
 				timer.Remove("yrp_ready_timer")
-				SendIsReady()
+				YRPSendIsReady()
 			end
 		end)
 	end
 end
 
 function GM:Initialize()
-	timer.Simple(4, function()
+	timer.Simple(3, function()
 		YRPInitPostEntity()
 	end)
 end
@@ -1509,6 +1509,12 @@ function GM:InitPostEntity()
 end
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
+	timer.Simple(2, function()
+		YRPInitPostEntity()
+	end)
+end)
+
+timer.Simple(20, function()
 	YRPInitPostEntity()
 end)
 

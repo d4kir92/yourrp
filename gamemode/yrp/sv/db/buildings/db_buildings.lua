@@ -177,7 +177,7 @@ function loadDoors()
 	for k, v in pairs(_allPropDoors) do
 		for l, w in pairs(_tmpBuildings) do
 			if tonumber(w.uniqueID) == tonumber(v:GetNWString("buildingID")) then
-				if w.ownerCharID != "" and w.ownerCharID != " " then
+				if w.ownerCharID != "" and !strEmpty(w.ownerCharID) then
 
 					local _tmpRPName = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
 					if wk(_tmpRPName) then
@@ -243,7 +243,7 @@ util.AddNetworkString("sellBuilding")
 util.AddNetworkString("lockDoor")
 
 function canLock(ply, tab)
-	if tab.ownerCharID != "" and tab.ownerCharID != " " then
+	if !strEmpty(tab.ownerCharID) then
 		if tostring(ply:CharID()) == tostring(tab.ownerCharID) then
 			return true
 		end
@@ -503,7 +503,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 		if wk(_tmpTable) then
 			_tmpTable = _tmpTable[1]
 			_tmpTable.name = SQL_STR_OUT(_tmpTable.name)
-			if _tmpTable.ownerCharID != "" and _tmpTable.ownerCharID != " " then
+			if !strEmpty(_tmpTable.ownerCharID) then
 				local _tmpChaTab = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID)
 				if wk(_tmpChaTab) then
 					_tmpChaTab = _tmpChaTab[1]

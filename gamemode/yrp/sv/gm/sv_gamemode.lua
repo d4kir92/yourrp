@@ -234,57 +234,64 @@ function YRP:Loadout(ply)
 end
 
 function GM:PlayerLoadout(ply)
-	printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
-	YRP:Loadout(ply)
+	if ply:IsValid() and !ply:IsBot() then
+		printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
+		YRP:Loadout(ply)
 
-	if ply:HasCharacterSelected() then
-		--[[ Status Reset ]]--
-		ply:SetNWBool("cuffed", false)
-		ply:SetNWBool("broken_leg_left", false)
-		ply:SetNWBool("broken_leg_right", false)
-		ply:SetNWBool("broken_arm_left", false)
-		ply:SetNWBool("broken_arm_right", false)
+		if ply:HasCharacterSelected() then
+			--[[ Status Reset ]]--
+			ply:SetNWBool("cuffed", false)
+			ply:SetNWBool("broken_leg_left", false)
+			ply:SetNWBool("broken_leg_right", false)
+			ply:SetNWBool("broken_arm_left", false)
+			ply:SetNWBool("broken_arm_right", false)
 
-		ply:ForceEquip("yrp_key")
-		ply:ForceEquip("yrp_unarmed")
+			ply:ForceEquip("yrp_key")
+			ply:ForceEquip("yrp_unarmed")
 
-		local plyTab = ply:GetPlyTab()
+			local plyTab = ply:GetPlyTab()
+			if wk(plyTab) then
+				local _rol_tab = ply:GetRolTab()
+				if wk(_rol_tab) then
+					SetRole(ply, _rol_tab.uniqueID)
+				else
+					printGM("error", "Give role failed -> KillSilent -> " .. ply:YRPName())
+					if !ply:IsBot() then
+						ply:KillSilent()
+					end
+				end
 
-		local _rol_tab = ply:GetRolTab()
-		if _rol_tab != nil then
-			SetRole(ply, _rol_tab.uniqueID)
-		else
-			printGM("gm", "Give role failed -> KillSilent -> " .. ply:YRPName())
-			if !ply:IsBot() then
-				ply:KillSilent()
+				local chaTab = ply:GetChaTab()
+				if wk(chaTab) then
+					ply:SetNWString("money", chaTab.money)
+					ply:SetNWString("moneybank", chaTab.moneybank)
+					ply:SetNWString("rpname", SQL_STR_OUT(chaTab.rpname))
+
+					setbodygroups(ply)
+				else
+					printGM("error", "Give char failed -> KillSilent -> " .. ply:YRPName())
+					if !ply:IsBot() then
+						ply:KillSilent()
+					end
+				end
+
+				ply:EquipWeapons()
+
+				ply:SetNWFloat("hunger", 100)
+				ply:SetNWFloat("thirst", 100)
+			else
+				YRP.msg("error", "[PlayerLoadout] failed at plytab.")
 			end
+		else
+			printGM("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
 		end
 
-		local chaTab = ply:GetChaTab()
-		if chaTab != nil then
-			ply:SetNWString("money", chaTab.money)
-			ply:SetNWString("moneybank", chaTab.moneybank)
-			ply:SetNWString("rpname", SQL_STR_OUT(chaTab.rpname))
+		ply:UpdateBackpack()
 
-			setbodygroups(ply)
-		else
-			printGM("gm", "Give char failed -> KillSilent -> " .. ply:YRPName())
-			if !ply:IsBot() then
-				ply:KillSilent()
-			end
-		end
-
-		ply:EquipWeapons()
-
-		ply:SetNWFloat("hunger", 100)
-		ply:SetNWFloat("thirst", 100)
+		RenderNormal(ply)
 	else
-		printGM("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
+		YRP.msg("note", "[PlayerLoadout] is invalid or bot.")
 	end
-
-	ply:UpdateBackpack()
-
-	RenderNormal(ply)
 end
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
@@ -711,7 +718,7 @@ end
 
 function setbodygroups(ply)
 	local chaTab = ply:GetChaTab()
-	if chaTab != nil then
+	if wk(chaTab) then
 		ply:SetSkin(chaTab.skin)
 		for i = 0, 19 do
 			ply:SetBodygroup(i, chaTab["bg" .. i])
@@ -721,7 +728,7 @@ end
 
 function setPlayerModel(ply)
 	local tmpRolePlayermodel = ply:GetPlayerModel()
-	if wk(tmpRolePlayermodel) and tmpRolePlayermodel != "" and tmpRolePlayermodel != " " then
+	if wk(tmpRolePlayermodel) and !strEmpty(tmpRolePlayermodel) then
 		ply:SetModel(tmpRolePlayermodel)
 	else
 		ply:SetModel("models/player/skeleton.mdl")

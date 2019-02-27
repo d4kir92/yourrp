@@ -173,7 +173,7 @@ function InitYRPChat()
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.richText:PerformLayout()
-			self:SetFontInternal("cbsf")
+			self:SetFontInternal("Roboto18B")
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
@@ -181,7 +181,7 @@ function InitYRPChat()
 				yrpChat.closeChatbox()
 				gui.HideGameUI()
 			elseif code == KEY_ENTER then
-				if string.Trim(self:GetText()) != "" then
+				if !strEmpty(string.Trim(self:GetText())) then
 					LocalPlayer():ConCommand("say \"" .. self:GetText() .. "\"")
 				end
 				yrpChat.closeChatbox()
@@ -251,7 +251,7 @@ function InitYRPChat()
 							if _l.l_www then
 								_link = "https://" .. _link
 							end
-							if _link != "" then
+							if !strEmpty(_link) then
 								if _l.secure then
 									yrpChat.richText:InsertColorChange(200, 200, 255, 255)
 								else
@@ -346,13 +346,13 @@ net.Receive("yrp_player_say", function(len)
 
 		_tmp.name = ""
 		if _tmp.command != "roll" then
-			if _tmp.factionname != "" then
+			if !strEmpty(_tmp.factionname) then
 				_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
 			end
-			if _tmp.groupname != "" and _tmp.groupname != _tmp.factionname then
+			if !strEmpty(_tmp.groupname) and _tmp.groupname != _tmp.factionname then
 				_tmp.name = _tmp.name .. _tmp.groupname .. " "
 			end
-			if _tmp.rolename != "" then
+			if !strEmpty(_tmp.rolename) then
 				_tmp.name = _tmp.name .. _tmp.rolename .. " "
 			end
 			_tmp.name = _tmp.name .. _tmp.rpname
@@ -382,7 +382,7 @@ net.Receive("yrp_player_say", function(len)
 			table.insert(_unpack, " ")
 
 			if _usergroup then
-				if _tmp.usergroup != "" then
+				if !strEmpty(_tmp.usergroup) then
 					table.insert(_unpack, Color(0, 0, 100))
 					table.insert(_unpack, "[")
 					table.insert(_unpack, string.upper(_tmp.usergroup))

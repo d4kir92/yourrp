@@ -42,51 +42,60 @@ end
 
 function Player:GetPlyTab()
 	if SERVER then
-		if self:LoadedGamemode() then
-			if tostring(self) != "Player [NULL]" then
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
 				if worked(self:SteamID(), "SteamID fail", true) then
 					local yrp_players = SQL_SELECT("yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'")
 					if worked(yrp_players, "GetPlyTab fail", true) then
 						self.plytab = yrp_players[1]
 						return self.plytab
 					end
+				else
+					YRP.msg("error", "[GetPlyTab] SteamID() FAILED: " .. tostring(self:SteamID()) )
 				end
 			else
-				printGM("note", "[GetPlyTab] player is invalid.")
+				--printGM("note", "[GetPlyTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
-			printGM("note", "[GetPlyTab] Gamemode not fully loaded for " .. self:YRPName())
+			printGM("error", "[GetPlyTab] player is invalid. (" .. tostring(self:SteamID()) .. ") IsPlayer()?: " .. tostring(self:IsPlayer()))
 		end
 	end
-	printGM("note", "[GetPlyTab] failed.")
-	return nil
+	return false
 end
 
 function Player:IsCharacterValid()
 	if SERVER then
-		if self:LoadedGamemode() then
-			local _cha_tab = self:GetChaTab()
-			if _cha_tab == nil then
-				return false
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
+				local _cha_tab = self:GetChaTab()
+				if _cha_tab == false then
+					return false
+				else
+					return true
+				end
 			else
-				return true
+				--YRP.msg("note", "[IsCharacterValid] Gamemode not fully loaded for " .. self:YRPName())
 			end
+		else
+			YRP.msg("note", "[IsCharacterValid] not valid or not a player " .. self:YRPName())
 		end
 	end
 end
 
 function Player:HasCharacterSelected()
 	if SERVER then
-		if self:LoadedGamemode() then
-			--printGM("note", self:YRPName() .. " HasCharacterSelected?")
-			local _ply_tab = self:GetPlyTab()
-			if _ply_tab != nil then
-				if tostring(_ply_tab.CurrentCharacter) == "NULL" or _ply_tab.CurrentCharacter == NULL then
-					--
-				else
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
+				--printGM("note", self:YRPName() .. " HasCharacterSelected?")
+				local _ply_tab = self:GetPlyTab()
+				if _ply_tab != false and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
 					return true
 				end
+			else
+				--YRP.msg("note", "[HasCharacterSelected] Gamemode not fully loaded for " .. self:YRPName())
 			end
+		else
+			YRP.msg("note", "[HasCharacterSelected] not valid or not a player " .. self:YRPName())
 		end
 	end
 	return false
@@ -94,79 +103,92 @@ end
 
 function Player:GetChaTab()
 	if SERVER then
-		if self:LoadedGamemode() then
-			local _tmp = self:GetPlyTab()
-			if self:HasCharacterSelected() and tostring(_tmp.CurrentCharacter) != "" then
-				local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter)
-				if worked(yrp_characters, "yrp_characters GetChaTab", true) then
-					self.chatab = yrp_characters[1]
-					return self.chatab
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
+				local _tmp = self:GetPlyTab()
+				if wk(_tmp) then
+					local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter)
+					if worked(yrp_characters, "yrp_characters GetChaTab", true) then
+						self.chatab = yrp_characters[1]
+						return self.chatab
+					else
+						YRP.msg("error", "[GetChaTab] failed: " .. "yrp_characters failed (" .. tostring(_tmp.CurrentCharacter) .. ")")
+					end
+				else
+					YRP.msg("error", "[GetChaTab] failed: " .. "PlyTab failed")
 				end
+			else
+				--YRP.msg("note", "[GetChaTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
+		else
+			YRP.msg("note", "[GetChaTab] not valid or not a player " .. self:YRPName())
 		end
 	end
-	return self.chatab
+	return false
 end
 
 function Player:GetRolTab()
 	if SERVER then
-		if self:LoadedGamemode() then
-			if self:HasCharacterSelected() then
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
 				local yrp_characters = self:GetChaTab()
-				if worked(yrp_characters, "yrp_characters in GetRolTab", true) then
-					if worked(yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true) then
-						local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
-						if worked(yrp_roles, "yrp_roles GetRolTab", true) then
-							self.roltab = yrp_roles[1]
+				if worked(yrp_characters, "yrp_characters in GetRolTab", true) and worked(yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true) then
+					local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
+					if worked(yrp_roles, "yrp_roles GetRolTab", true) then
+						self.roltab = yrp_roles[1]
 
-							return self.roltab
-						end
+						return self.roltab
 					end
 				end
+			else
+				--YRP.msg("note", "[GetRolTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
+		else
+			YRP.msg("note", "[GetRolTab] not valid or not a player " .. self:YRPName())
 		end
 	end
-	return nil
+	return false
 end
 
 function Player:GetGroTab()
 	if SERVER then
-		if self:LoadedGamemode() then
-			local yrp_characters = self:GetChaTab()
-			if worked(yrp_characters, "yrp_characters in GetGroTab", true) then
-				if worked(yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true) then
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
+				local yrp_characters = self:GetChaTab()
+				if worked(yrp_characters, "yrp_characters in GetGroTab", true) and worked(yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true) then
 					local yrp_groups = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
 					if worked(yrp_groups, "yrp_groups GetGroTab", true) then
 						self.grotab = yrp_groups[1]
 						return self.grotab
 					end
 				end
+			else
+				--YRP.msg("note", "[GetGroTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
+		else
+			YRP.msg("note", "[GetGroTab] not valid or not a player " .. self:YRPName())
 		end
 	end
-	if self.grotab != nil then
-		return self.grotab
-	else
-		return nil
-	end
+	return false
 end
 
 function Player:CharID()
 	if SERVER then
-		if self:LoadedGamemode() then
-			local char = self:GetChaTab()
-			if worked(char, "char CharID", true) then
-				self.charid = char.uniqueID
-				return self.charid
+		if self:IsValid() and self:IsPlayer() then
+			if self:LoadedGamemode() then
+				local char = self:GetChaTab()
+				if worked(char, "char CharID", true) then
+					self.charid = char.uniqueID
+					return self.charid
+				end
+			else
+				--YRP.msg("note", "[CharID] Gamemode not fully loaded for " .. self:YRPName())
 			end
+		else
+			YRP.msg("note", "[CharID] not valid or not a player " .. self:YRPName())
 		end
 	end
-	if self.charid != nil then
-		return self.charid
-	else
-		--SPAM printGM("note", self:YRPName() .. " CharID == NIL! " .. tostring(self.charid))
-		return nil
-	end
+	return false
 end
 
 function Player:CheckMoney()
@@ -178,7 +200,7 @@ function Player:CheckMoney()
 				return false
 			end
 			local _money = tonumber(_m)
-			if worked(_money, "ply:money CheckMoney", true) and self:CharID() != nil then
+			if worked(_money, "ply:money CheckMoney", true) and self:CharID() != false then
 				SQL_UPDATE("yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID()) --attempt to nil value
 			end
 			_mb = self:GetNWString("moneybank", "FAILED")
@@ -187,7 +209,7 @@ function Player:CheckMoney()
 				return false
 			end
 			local _moneybank = tonumber(_mb)
-			if worked(_moneybank, "ply:moneybank CheckMoney", true) and self:CharID() != nil then
+			if worked(_moneybank, "ply:moneybank CheckMoney", true) and self:CharID() != false then
 				SQL_UPDATE("yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID())
 			end
 		end)
@@ -198,7 +220,7 @@ function Player:UpdateMoney()
 	if SERVER then
 		if self:HasCharacterSelected() then
 			local _char_id = self:CharID()
-			if _char_id != nil then
+			if _char_id != false then
 				local money = self:GetNWString("money", "FAILED")
 				if money == "FAILED" then
 					return false
@@ -219,10 +241,7 @@ function Player:UpdateMoney()
 end
 
 function Player:GetPlayerModel()
-	if SERVER then
-		return self:GetNWString("string_playermodel", "models/player/skeleton.mdl")
-	end
-	return nil
+	return self:GetNWString("string_playermodel", "models/player/skeleton.mdl")
 end
 
 function Player:IsAgent()

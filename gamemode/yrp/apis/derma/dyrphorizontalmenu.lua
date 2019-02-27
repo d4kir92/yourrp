@@ -125,7 +125,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.stabs:SetDraggable(false)
 
 			function self.stabs:Paint(pw, ph)
-				if not pa(self:GetParent()) then
+				if !pa(self:GetParent()) then
 					self:HideSubTabs()
 				end
 
@@ -174,7 +174,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 					elseif string.find(string.lower(subtab.name), "steam") then
 						icon = "steam"
 					end
-					if icon != "" then
+					if !strEmpty(icon) then
 						local br = ctr(20)
 						YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - 2 * br, ph - 2 * br, br, br, YRPGetColor("6"))
 					end

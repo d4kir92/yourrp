@@ -585,7 +585,7 @@ function Player:HudLoadout()
 	if wk(hudeles) then
 		local perc = 0
 		for i, ele in pairs(hudeles) do
-			timer.Simple(i * 0.04, function()
+			timer.Simple(i * 0.05, function()
 				perc = i * 100 / table.Count(hudeles)
 				perc = math.Round(perc, 0)
 				if perc > self:GetNWInt("yrp_loading_hud", 0) then

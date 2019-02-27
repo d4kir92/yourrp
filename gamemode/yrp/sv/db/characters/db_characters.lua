@@ -496,14 +496,14 @@ function send_characters(ply)
 
 	local plytab = ply:GetPlyTab()
 
-	if plytab != nil then
+	if wk(plytab) then
 		netTable.plytab = plytab
 
 		net.Start("yrp_get_characters")
 			net.WriteTable(netTable)
 		net.Send(ply)
 	else
-		printGM("note", "[send_characters] plytab failed! " .. tostring(plytab))
+		printGM("error", "[send_characters] plytab failed! " .. tostring(plytab))
 	end
 end
 
@@ -544,7 +544,7 @@ function CreateCharacter(ply, tab)
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
 		vals = vals .. 250 .. ", "
 		vals = vals .. 500 .. ", "
-		vals = vals .. "'" .. GetMapNameDB() .. "', "
+		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
 		vals = vals .. tonumber(tab.bg[0]) .. ", "
 		vals = vals .. tonumber(tab.bg[1]) .. ", "
@@ -554,16 +554,19 @@ function CreateCharacter(ply, tab)
 		vals = vals .. tonumber(tab.bg[5]) .. ", "
 		vals = vals .. tonumber(tab.bg[6]) .. ", "
 		vals = vals .. tonumber(tab.bg[7])
-		SQL_INSERT_INTO("yrp_characters", cols, vals)
-
-		local chars = SQL_SELECT("yrp_characters", "*", nil)
-		if worked(chars, "CreateCharacter") then
-			local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(chars[#chars].uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
-			if result != nil then
-				printGM("note", "CreateCharacter() failed!")
+		local char = SQL_INSERT_INTO("yrp_characters", cols, vals)
+		if char == nil then
+			local chars = SQL_SELECT("yrp_characters", "*", nil)
+			if worked(chars, "CreateCharacter") then
+				local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(chars[#chars].uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
+				if result != nil then
+					YRP.msg("error", "CreateCharacter() failed @Update!")
+				end
+			else
+				printGM("note", "chars failed: " .. tostring(chars))
 			end
 		else
-			printGM("note", "chars failed: " .. tostring(chars))
+			YRP.msg("error", "CreateCharacter failed - char: " .. tostring(char) .. " " .. sql_show_last_error())
 		end
 		send_characters(ply)
 	else

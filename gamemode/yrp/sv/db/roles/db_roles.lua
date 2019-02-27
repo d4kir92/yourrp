@@ -876,7 +876,7 @@ function AddPlayermodelToRole(ruid, muid)
 	if !table.HasValue(pms, tostring(muid)) then
 		local oldpms = {}
 		for i, v in pairs(pms) do
-			if v != "" and v != " " then
+			if !strEmpty(v) then
 				table.insert(oldpms, v)
 			end
 		end
@@ -918,7 +918,7 @@ function RemPlayermodelFromRole(ruid, muid)
 	local pms = string.Explode(",", role.string_playermodels)
 	local oldpms = {}
 	for i, v in pairs(pms) do
-		if v != "" and v != " " then
+		if !strEmpty(v) then
 			table.insert(oldpms, v)
 		end
 	end
@@ -945,7 +945,7 @@ function SendSweps(uid)
 		local nettab = {}
 		local sweps = string.Explode(",", role.string_sweps)
 		for i, swep in pairs(sweps) do
-			if swep != "" and swep != " " then
+			if !strEmpty(swep) then
 				table.insert(nettab, swep)
 			end
 		end
@@ -970,7 +970,7 @@ function AddSwepToRole(ruid, swepcn)
 	if !table.HasValue(sweps, tostring(swepcn)) then
 		local oldsweps = {}
 		for i, v in pairs(sweps) do
-			if v != "" and v != " " then
+			if !strEmpty(v) then
 				table.insert(oldsweps, v)
 			end
 		end
@@ -997,7 +997,7 @@ function RemSwepFromRole(ruid, swepcn)
 	local sweps = string.Explode(",", role.string_sweps)
 	local oldsweps = {}
 	for i, v in pairs(sweps) do
-		if v != "" and v != " " then
+		if !strEmpty(v) then
 			table.insert(oldsweps, v)
 		end
 	end
@@ -1025,7 +1025,7 @@ function SendNDSweps(uid)
 		local nettab = {}
 		local ndsweps = string.Explode(",", role.string_ndsweps)
 		for i, ndswep in pairs(ndsweps) do
-			if ndswep != "" and ndswep != " " then
+			if !strEmpty(ndswep) then
 				table.insert(nettab, ndswep)
 			end
 		end
@@ -1050,7 +1050,7 @@ function AddNDSwepToRole(ruid, ndswepcn)
 	if !table.HasValue(ndsweps, tostring(ndswepcn)) then
 		local oldndsweps = {}
 		for i, v in pairs(ndsweps) do
-			if v != "" and v != " " then
+			if !strEmpty(v) then
 				table.insert(oldndsweps, v)
 			end
 		end
@@ -1077,7 +1077,7 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 	local ndsweps = string.Explode(",", role.string_ndsweps)
 	local oldndsweps = {}
 	for i, v in pairs(ndsweps) do
-		if v != "" and v != " " then
+		if !strEmpty(v) then
 			table.insert(oldndsweps, v)
 		end
 	end
@@ -1129,7 +1129,7 @@ function RemLicenseFromRole(ruid, muid)
 	local lis = string.Explode(",", role.string_licenses)
 	local oldlis = {}
 	for i, v in pairs(lis) do
-		if v != "" and v != " " then
+		if !strEmpty(v) then
 			table.insert(oldlis, v)
 		end
 	end
@@ -1180,7 +1180,7 @@ function AddLicenseToRole(ruid, muid)
 	if !table.HasValue(lis, tostring(muid)) then
 		local oldlis = {}
 		for i, v in pairs(lis) do
-			if v != "" and v != " " then
+			if !strEmpty(v) then
 				table.insert(oldlis, v)
 			end
 		end
@@ -1232,74 +1232,72 @@ net.Receive("openInteractMenu", function(len, ply)
 			tmpTarget = v
 		end
 	end
-	if ea(tmpTarget) then
-		if tmpTarget:IsPlayer() then
-			local idcard = SQL_SELECT("yrp_general", "*", nil)
-			idcard = tobool(idcard[1].bool_identity_card)
+	if ea(tmpTarget) and tmpTarget:IsPlayer() then
+		local idcard = SQL_SELECT("yrp_general", "*", nil)
+		idcard = tobool(idcard[1].bool_identity_card)
 
-			local tmpTargetChaTab = tmpTarget:GetChaTab()
-			if tmpTargetChaTab != nil then
-				local tmpTargetRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
+		local tmpTargetChaTab = tmpTarget:GetChaTab()
+		if wk(tmpTargetChaTab) then
+			local tmpTargetRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
 
-				local tmpT = ply:GetChaTab()
-				local tmpTable = ply:GetRolTab()
-				if wk(tmpT) and wk(tmpTable) then
-					local isInstructor = false
+			local tmpT = ply:GetChaTab()
+			local tmpTable = ply:GetRolTab()
+			if wk(tmpT) and wk(tmpTable) then
+				local isInstructor = false
 
-					local tmpPromote = false
-					local tmpPromoteName = ""
+				local tmpPromote = false
+				local tmpPromoteName = ""
 
-					local tmpDemote = false
-					local tmpDemoteName = ""
+				local tmpDemote = false
+				local tmpDemoteName = ""
 
-					if tonumber(tmpTable.bool_instructor) == 1 then
-						isInstructor = true
+				if tonumber(tmpTable.bool_instructor) == 1 then
+					isInstructor = true
 
-						local tmpSearch = true	--tmpTargetSteamID
-						local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
-						if wk(tmpTableSearch) then
-							local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
-							local tmpCounter = 0
-							while (tmpSearch) do
-								tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
+					local tmpSearch = true	--tmpTargetSteamID
+					local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
+					if wk(tmpTableSearch) then
+						local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
+						local tmpCounter = 0
+						while (tmpSearch) do
+							tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
 
-								if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
-									tmpDemote = true
-									local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
-									tmpDemoteName = tmp[1].string_name
-								end
-
-								if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
-									tmpPromote = true
-									tmpPromoteName = tmpTableSearch[1].string_name
-								end
-								if tmpSearchUniqueID == -1 then
-									tmpSearch = false
-								end
-								if tmpCounter >= 100 then
-									printGM("note", "You have a loop in your preroles!")
-									tmpSearch = false
-								end
-								tmpCounter = tmpCounter + 1
-								tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
+							if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
+								tmpDemote = true
+								local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
+								tmpDemoteName = tmp[1].string_name
 							end
+
+							if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
+								tmpPromote = true
+								tmpPromoteName = tmpTableSearch[1].string_name
+							end
+							if tmpSearchUniqueID == -1 then
+								tmpSearch = false
+							end
+							if tmpCounter >= 100 then
+								printGM("note", "You have a loop in your preroles!")
+								tmpSearch = false
+							end
+							tmpCounter = tmpCounter + 1
+							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
 						end
 					end
-
-					net.Start("openInteractMenu")
-						net.WriteEntity(tmpTarget)
-
-						net.WriteBool(idcard)
-
-						net.WriteBool(isInstructor)
-
-						net.WriteBool(tmpPromote)
-						net.WriteString(tmpPromoteName)
-
-						net.WriteBool(tmpDemote)
-						net.WriteString(tmpDemoteName)
-					net.Send(ply)
 				end
+
+				net.Start("openInteractMenu")
+					net.WriteEntity(tmpTarget)
+
+					net.WriteBool(idcard)
+
+					net.WriteBool(isInstructor)
+
+					net.WriteBool(tmpPromote)
+					net.WriteString(tmpPromoteName)
+
+					net.WriteBool(tmpDemote)
+					net.WriteString(tmpDemoteName)
+				net.Send(ply)
 			end
 		end
 	end

@@ -6,7 +6,6 @@
 local _db_name = "yrp_players"
 
 SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "SteamID64", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "SteamName", "TEXT DEFAULT ' '")
 
 SQL_ADD_COLUMN(_db_name, "CurrentCharacter", "INT DEFAULT 1")
@@ -244,7 +243,9 @@ function set_role_values(ply)
 				local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps))
 				for k, swep in pairs(tmpSWEPTable) do
 					if swep != nil and swep != NULL and swep != "" then
-						ply:Give(swep)
+						if ply:Alive() then
+							ply:Give(swep)
+						end
 					end
 				end
 
@@ -329,21 +330,14 @@ function add_yrp_player(ply)
 	end
 
 	local _SteamID = ply:SteamID()
-	local _SteamID64 = ply:SteamID64() or ""
 	local _SteamName = tostring(SQL_STR_IN(ply:SteamName()))
 	local _ostime = os.time()
 
 	local cols = "SteamID, "
-	if !game.SinglePlayer() then
-		cols = cols .. "SteamID64, "
-	end
 	cols = cols .. "SteamName, "
 	cols = cols .. "Timestamp"
 
 	local vals = "'" .. _SteamID .. "', "
-	if !game.SinglePlayer() then
-		vals = vals .. "'" .. _SteamID64 .. "', "
-	end
 	vals = vals .. "'" .. _SteamName .. "', "
 	vals = vals .. "'" .. _ostime .. "'"
 
@@ -358,7 +352,7 @@ end
 function check_yrp_player(ply)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
 
-	if ply:SteamID64() != nil or game.SinglePlayer() then
+	if ply:SteamID() != nil or game.SinglePlayer() then
 		local _result = SQL_SELECT("yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
 		if _result == nil then
@@ -402,15 +396,15 @@ util.AddNetworkString("getPlyList")
 util.AddNetworkString("getCharakterList")
 util.AddNetworkString("getrpdescription")
 net.Receive("getCharakterList", function(len, ply)
-	local _plytab = ply:GetChaTab()
-	if wk(_plytab) then
-		_plytab.rpname = SQL_STR_OUT(_plytab.rpname)
-		_plytab.rpdescription = SQL_STR_OUT(_plytab.rpdescription)
+	local _character_table = ply:GetChaTab()
+	if wk(_character_table) then
+		_character_table.rpname = SQL_STR_OUT(_character_table.rpname)
+		_character_table.rpdescription = SQL_STR_OUT(_character_table.rpdescription)
 		net.Start("getCharakterList")
-			net.WriteTable(_plytab)
+			net.WriteTable(_character_table)
 		net.Send(ply)
 	else
-		printGM("error", "_plytab failed! " .. tostring(_plytab))
+		printGM("error", "[getCharakterList]_table failed! " .. tostring(_character_table))
 	end
 end)
 

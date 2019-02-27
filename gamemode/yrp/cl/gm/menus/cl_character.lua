@@ -733,7 +733,7 @@ function openCharacterSelection()
 							tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
 							tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
 							tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
-							tmpChar.map = _characters[i].char.map
+							tmpChar.map = SQL_STR_OUT(_characters[i].char.map)
 							tmpChar.playermodelID = _characters[i].char.playermodelID
 
 							tmpChar.playermodels = string.Explode(",", _characters[i].role.string_playermodels) or {}
@@ -796,7 +796,7 @@ function openCharacterSelection()
 								end
 								draw.SimpleTextOutlined(self.rpname, "HudBars", ctr(30), ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 								draw.SimpleTextOutlined(self.grp, "HudBars", ctr(30), ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-								draw.SimpleTextOutlined(self.map, "HudBars", ctr(30), ctr(155), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+								draw.SimpleTextOutlined(SQL_STR_OUT(self.map), "HudBars", ctr(30), ctr(155), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 							end
 							function tmpChar:DoClick()
 								curChar = self.charid
@@ -804,7 +804,7 @@ function openCharacterSelection()
 								if self.playermodels != nil and self.playermodelID != nil then
 									local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
 									if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
-										if _playermodel != "" and _playermodel != " " then
+										if !strEmpty(_playermodel) then
 											charplayermodel:SetModel(_playermodel)
 										else
 											charplayermodel:SetModel("models/player/skeleton.mdl")

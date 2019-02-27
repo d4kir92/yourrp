@@ -26,6 +26,7 @@ end
 
 function closeMap()
 	if _map.window != nil and _map.window != NULL then
+		gui.EnableScreenClicker(false)
 		closeMenu()
 		_map.window:Remove()
 		_map.window = nil
@@ -44,7 +45,18 @@ function openMap()
 		_map.window:SetSize(ScrW(), ScrH())
 		_map.window:ShowCloseButton(false)
 		_map.window:SetDraggable(false)
+
+		_map.window.tick = CurTime()
 		function _map.window:Paint(pw, ph)
+			if self.tick < CurTime() and input.IsMouseDown(MOUSE_RIGHT) or input.IsMouseDown(MOUSE_MIDDLE) then
+				gui.EnableScreenClicker(!vgui.CursorVisible())
+				self.tick = CurTime() + 0.4
+			end
+			if vgui.CursorVisible() then
+				self:ShowCloseButton(true)
+			else
+				self:ShowCloseButton(false)
+			end
 			if map != nil then
 				local ply = lply
 				draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 254))					 --_map.window of Map

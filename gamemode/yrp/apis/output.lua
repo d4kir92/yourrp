@@ -8,6 +8,18 @@ _text.successdb = " created successfully."
 _text.spacePre = "\n__________________________________________________________________________[" .. "YRP" .. "]_"
 _text.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯[" .. "YRP" .. "]¯\n"
 
+function strEmpty(str)
+	if isstring(str) then
+		local tab = string.Explode("", str)
+		for i, v in pairs(tab) do
+			if v != " " then -- function strEmpty(str)
+				return false
+			end
+		end
+	end
+	return true
+end
+
 function hr()
 	print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
 end
@@ -205,7 +217,7 @@ function printTab(table, name)
 	hr_pre("debug")
 	local _header = "PrintTable: "
 	name = name or ""
-	if name != "" then
+	if !strEmpty(name) then
 		name = name .. " "
 	end
 	_header = _header .. name .. "(" .. tostring(table) .. ")"

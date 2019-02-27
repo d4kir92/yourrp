@@ -169,7 +169,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	local _target = LocalPlayer():GetNWString("hittargetName", "")
-	if _target != "" then
+	if !strEmpty(_target) then
 		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetNWString("hittargetName", ""), "HudBars", ctr(10), ctr(10), Color(255, 0, 0, 255), 0, 0)
 		LocalPlayer():drawHitInfo()
 	end

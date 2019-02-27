@@ -24,7 +24,7 @@ end
 function nicekey(key_str)
 	local _str = string.lower(tostring(key_str))
 
-	if _str ~= nil then
+	if _str != nil then
 		if string.find(_str, "kp_") then
 			local _end = string.sub(_str, 4)
 			_end = replaceKeyName(_end)
@@ -51,7 +51,7 @@ function toggleHelpMenu()
 end
 
 function closeHelpMenu()
-	if HELPMENU.window ~= nil then
+	if HELPMENU.window != nil then
 		closeMenu()
 		HELPMENU.window:Remove()
 		HELPMENU.window = nil
@@ -67,7 +67,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
-		if disabled ~= nil and not LocalPlayer():GetNWBool(disabled) then
+		if disabled != nil and not LocalPlayer():GetNWBool(disabled) then
 			text = "[" .. YRP.lang_string("LID_disabled") .. "] "
 			color = Color(255, 0, 0, 255)
 		end
@@ -97,7 +97,7 @@ net.Receive("getsitehelp", function(len)
 		local motd = net.ReadString()
 		local posy = 0
 
-		if welcome_message ~= "" then
+		if !strEmpty(welcome_message) then
 			local wm = createD("DPanel", HELPMENU.mainmenu.site, ScW() - ctr(2 * 20), ctr(60), 0, posy)
 
 			function wm:Paint(pw, ph)
@@ -107,7 +107,7 @@ net.Receive("getsitehelp", function(len)
 			posy = posy + wm:GetTall() + ctr(20)
 		end
 
-		if motd ~= "" then
+		if !strEmpty(motd) then
 			local mo = createD("DPanel", HELPMENU.mainmenu.site, ScW() - ctr(2 * 20), ctr(60), 0, posy)
 
 			function mo:Paint(pw, ph)
@@ -273,7 +273,7 @@ net.Receive("getsitecommunitywebsite", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -300,7 +300,7 @@ net.Receive("getsitecommunityforum", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -328,7 +328,7 @@ net.Receive("getsitecommunitydiscord", function(len)
 		local link = net.ReadString()
 		local widgetid = net.ReadString()
 
-		if widgetid ~= "" then
+		if !strEmpty(widgetid) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -360,8 +360,8 @@ net.Receive("getsitecommunityteamspeak", function(len)
 		local query_port = net.ReadString()
 		printGM("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 
-		if ip ~= "" then
-			if port ~= "" and query_port ~= "" then
+		if !strEmpty(ip) then
+			if !strEmpty(port) and !strEmpty(query_port) then
 				local page = createD("DHTML", HELPMENU.mainmenu.site, ctr(1000), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 				function page:Paint(pw, ph)
@@ -385,7 +385,7 @@ net.Receive("getsitecommunitytwitter", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -412,7 +412,7 @@ net.Receive("getsitecommunityyoutube", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -439,7 +439,7 @@ net.Receive("getsitecommunityfacebook", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -466,7 +466,7 @@ net.Receive("getsitecommunitysteamgroup", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -493,7 +493,7 @@ net.Receive("getsiteyourrpwhatsnew", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local posy = ctr(220)
 			local page = createD("HTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20) + posy, 0, -posy)
 			page:OpenURL(link)
@@ -565,7 +565,7 @@ net.Receive("getsiteyourrpdiscord", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://discord.gg/sEgNZxg"
 
-		if link ~= "" then
+		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ctr(1040), ScrH() - ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
@@ -629,7 +629,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
 			local text = language.language .. "/" .. language.inenglish .. " ("
 
-			if language.percentage ~= nil then
+			if language.percentage != nil then
 				language.percentage = tonumber(language.percentage)
 				text = text .. language.percentage .. "% | "
 				if language.percentage == 100 then
@@ -643,7 +643,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 				text = text .. "Translated by "
 			end
 
-			if language.author ~= "" then
+			if !strEmpty(language.author) then
 				text = text .. language.author
 			else
 				text = text .. "... you?"
@@ -675,7 +675,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 			function lan:Paint(pw, ph)
 				self.textcol = Color(255, 255, 255)
 
-				if language.percentage ~= nil then
+				if language.percentage != nil then
 					local colper = 255 / 100 * language.percentage
 					if colper < 120 then
 						colper = 120

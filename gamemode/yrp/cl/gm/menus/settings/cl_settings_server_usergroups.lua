@@ -99,7 +99,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ug.string_sweps = string.Explode(",", ug.string_sweps)
 	local tmp = {}
 	for i, v in pairs(ug.string_sweps) do
-		if v != nil and v != "" and v != " " then
+		if v != nil and !strEmpty(v) then
 			table.insert(tmp, v)
 		end
 	end
@@ -203,7 +203,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", string_sweps)
 			local tmp2 = {}
 			for i, v in pairs(ug.string_sweps) do
-				if v != nil and v != "" and v != " " then
+				if v != nil and !strEmpty(v) then
 					table.insert(tmp2, v)
 				end
 			end

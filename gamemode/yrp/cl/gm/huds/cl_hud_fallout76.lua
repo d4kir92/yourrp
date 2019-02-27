@@ -424,12 +424,14 @@ function HUD_FO76()
 		TH.max = lply:GetMaxHunger()
 		FO76Element(TH)
 
+		--[[
 		local AB = {}
 		AB.element = "AB"
 		AB.text = YRP.lang_string("LID_ab")
 		AB.cur = lply:Hunger()
 		AB.max = lply:GetMaxHunger()
 		FO76Element(AB)
+		]]
 
 		local XP = {}
 		XP.element = "XP"

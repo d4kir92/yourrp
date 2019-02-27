@@ -67,7 +67,7 @@ function Player:InterfaceLoadout()
 	if wk(ifeles) then
 		local perc = 0
 		for i, ele in pairs(ifeles) do
-			timer.Simple(i * 0.03, function()
+			timer.Simple(i * 0.04, function()
 				if ele.name != nil then
 					perc = i * 100 / table.Count(ifeles)
 					perc = math.Round(perc, 0)
