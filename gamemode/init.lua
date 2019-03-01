@@ -54,7 +54,6 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_scoreboard.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_vehicle_options.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings.lua")
 
-AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_design.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_console.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_status.lua")
@@ -63,6 +62,8 @@ AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_feedback.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_general.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_realistic.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_groups_and_roles.lua")
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_levelsystem.lua")
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_design.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_database.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_usergroups.lua")

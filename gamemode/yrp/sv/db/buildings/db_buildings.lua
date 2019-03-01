@@ -209,18 +209,17 @@ function check_map_doors()
 	printGM("db", "[Buildings] Get Database Doors and Buildings")
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-	local amountDoors = 0
-	if _tmpTable == nil or _tmpTable2 == nil then
-		amountDoors = searchForDoors()
-	else
+	if wk(_tmpTable) and wk(_tmpTable2) then
 		printGM("db", "[Buildings] Found! (" .. tostring(#_tmpTable) .. " Doors | " .. tostring(#_tmpTable) .. " Buildings)")
 		local _allPropDoors = ents.FindByClass("prop_door_rotating")
 		local _allFuncDoors = ents.FindByClass("func_door")
 		local _allFuncRDoors = ents.FindByClass("func_door_rotating")
 		if (#_tmpTable) < (#_allPropDoors + #_allFuncDoors + #_allFuncRDoors) then
 			printGM("db", "[Buildings] New doors found!")
-			amountDoors = searchForDoors()
+			searchForDoors()
 		end
+	else
+		searchForDoors()
 	end
 
 	loadDoors()

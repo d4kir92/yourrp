@@ -107,18 +107,16 @@ function Player:GetChaTab()
 			if self:LoadedGamemode() then
 				local _tmp = self:GetPlyTab()
 				if wk(_tmp) then
-					local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. _tmp.CurrentCharacter)
+					local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'")
 					if worked(yrp_characters, "yrp_characters GetChaTab", true) then
 						self.chatab = yrp_characters[1]
 						return self.chatab
 					else
-						YRP.msg("error", "[GetChaTab] failed: " .. "yrp_characters failed (" .. tostring(_tmp.CurrentCharacter) .. ")")
+						YRP.msg("error", "[GetChaTab] failed: " .. "yrp_characters failed (" .. tostring(_tmp.CurrentCharacter) .. ") " .. tostring(yrp_characters))
 					end
 				else
-					YRP.msg("error", "[GetChaTab] failed: " .. "PlyTab failed")
+					YRP.msg("error", "[GetChaTab] failed: " .. "PlyTab: " .. tostring(_tmp))
 				end
-			else
-				--YRP.msg("note", "[GetChaTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			YRP.msg("note", "[GetChaTab] not valid or not a player " .. self:YRPName())
@@ -140,8 +138,6 @@ function Player:GetRolTab()
 						return self.roltab
 					end
 				end
-			else
-				--YRP.msg("note", "[GetRolTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			YRP.msg("note", "[GetRolTab] not valid or not a player " .. self:YRPName())
@@ -162,8 +158,6 @@ function Player:GetGroTab()
 						return self.grotab
 					end
 				end
-			else
-				--YRP.msg("note", "[GetGroTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			YRP.msg("note", "[GetGroTab] not valid or not a player " .. self:YRPName())

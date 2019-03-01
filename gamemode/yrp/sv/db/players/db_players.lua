@@ -357,7 +357,7 @@ function check_yrp_player(ply)
 
 		if _result == nil then
 			add_yrp_player(ply)
-		elseif _result != nil then
+		elseif wk(_result) then
 			printGM("db", "[" .. ply:SteamName() .. "] is in database.")
 			if #_result > 1 then
 				printGM("db", "[" .. ply:SteamName() .. "] is more then 1 time in database (" .. #_result .. ")")
@@ -368,6 +368,8 @@ function check_yrp_player(ply)
 					end
 				end
 			end
+		else
+			YRP.msg("error", "check_yrp_player FAILED (" .. tostring(_result) .. ")")
 		end
 	else
 		timer.Simple(1, function()
@@ -404,7 +406,7 @@ net.Receive("getCharakterList", function(len, ply)
 			net.WriteTable(_character_table)
 		net.Send(ply)
 	else
-		printGM("error", "[getCharakterList]_table failed! " .. tostring(_character_table))
+		YRP.msg("note", "[getCharakterList] Character Table from " .. ply:YRPName() .. " is broken.")
 	end
 end)
 
@@ -623,7 +625,7 @@ end
 
 function RemRolVals(ply)
 	local rolTab = ply:GetRolTab()
-	if rolTab != nil then
+	if wk(rolTab) then
 		local _sweps = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps))
 		for k, v in pairs(_sweps) do
 			ply:StripWeapon(v)

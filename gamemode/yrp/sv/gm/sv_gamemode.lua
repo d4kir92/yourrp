@@ -141,18 +141,20 @@ function SearchForCollectionID()
 	local files, folders = file.Find("*", "BASE_PATH")
 	local collectionIDs = {}
 	for k, v in pairs(files) do
-		if system.IsWindows() then
-			if ( !string.EndsWith( v, ".bat" ) ) then continue end
+		if system.IsWindows() and !string.EndsWith(v, ".bat") then
+			continue
 		end
-		local file = file.Read(v, "BASE_PATH")
-		local cidstart, cidend = string.find(file, "+host_workshop_collection ")
+		local f = file.Read(v, "BASE_PATH")
+		if isstring(f) then
+			local cidstart = string.find(f, "+host_workshop_collection ")
 
-		if cidstart then
-			local cid = string.sub(file, cidstart + string.len("+host_workshop_collection "))
-			local _s, _e = string.find(cid, " ")
-			cid = string.sub(cid, 1, _e - 1)
-			if !table.HasValue(collectionIDs, cid) then
-				table.insert(collectionIDs, cid)
+			if cidstart then
+				local cid = string.sub(f, cidstart + string.len("+host_workshop_collection "))
+				local _s, _e = string.find(cid, " ")
+				cid = string.sub(cid, 1, _e - 1)
+				if !table.HasValue(collectionIDs, cid) then
+					table.insert(collectionIDs, cid)
+				end
 			end
 		end
 	end
@@ -170,7 +172,7 @@ function GM:PlayerDisconnected(ply)
 	save_clients("PlayerDisconnected")
 
 	local _rol_tab = ply:GetRolTab()
-	if _rol_tab != nil then
+	if wk(_rol_tab) then
 		if tonumber(_rol_tab.int_maxamount) > 0 then
 			ply:SetNWString("roleUniqueID", "1")
 			updateRoleUses(_rol_tab.uniqueID)
@@ -255,7 +257,7 @@ function GM:PlayerLoadout(ply)
 				if wk(_rol_tab) then
 					SetRole(ply, _rol_tab.uniqueID)
 				else
-					printGM("error", "Give role failed -> KillSilent -> " .. ply:YRPName())
+					printGM("error", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 					if !ply:IsBot() then
 						ply:KillSilent()
 					end
@@ -269,7 +271,7 @@ function GM:PlayerLoadout(ply)
 
 					setbodygroups(ply)
 				else
-					printGM("error", "Give char failed -> KillSilent -> " .. ply:YRPName())
+					printGM("error", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring(chaTab))
 					if !ply:IsBot() then
 						ply:KillSilent()
 					end

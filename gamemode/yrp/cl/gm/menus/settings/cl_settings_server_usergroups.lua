@@ -426,6 +426,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddCheckBox("bool_general", "LID_settings_general")
 	ACCESSAddCheckBox("bool_realistic", "LID_settings_realistic")
 	ACCESSAddCheckBox("bool_groupsandroles", "LID_settings_groupsandroles")
+	ACCESSAddCheckBox("bool_levelsystem", "LID_levelsystem")
 	ACCESSAddCheckBox("bool_design", "LID_settings_design")
 	ACCESSAddHr()
 	-- Management
