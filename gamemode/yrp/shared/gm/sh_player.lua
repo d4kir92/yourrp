@@ -44,13 +44,14 @@ function Player:GetPlyTab()
 	if SERVER then
 		if self:IsValid() and self:IsPlayer() then
 			if self:LoadedGamemode() then
-				if worked(self:SteamID(), "SteamID fail", true) then
-					local yrp_players = SQL_SELECT("yrp_players", "*", "SteamID = '" .. self:SteamID() .. "'")
-					if worked(yrp_players, "GetPlyTab fail", true) then
+				local steamid = self:SteamID()
+				if steamid != nil and steamid != false and steamid != "" then
+					local yrp_players = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
+					if wk(yrp_players) then
 						self.plytab = yrp_players[1]
 						return self.plytab
 					else
-						YRP.msg("error", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID: " .. tostring(self:SteamID()))
+						YRP.msg("error", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]")
 					end
 				else
 					YRP.msg("error", "[GetPlyTab] SteamID() FAILED: " .. tostring(self:SteamID()) )
@@ -106,7 +107,7 @@ function Player:GetChaTab()
 				local _tmp = self:GetPlyTab()
 				if wk(_tmp) then
 					local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'")
-					if worked(yrp_characters, "yrp_characters GetChaTab", true) then
+					if wk(yrp_characters) then
 						self.chatab = yrp_characters[1]
 						return self.chatab
 					else
@@ -128,9 +129,9 @@ function Player:GetRolTab()
 		if self:IsValid() and self:IsPlayer() then
 			if self:LoadedGamemode() then
 				local yrp_characters = self:GetChaTab()
-				if worked(yrp_characters, "yrp_characters in GetRolTab", true) and worked(yrp_characters.roleID, "yrp_characters.roleID in GetRolTab", true) then
+				if wk(yrp_characters) and wk(yrp_characters.roleID) then
 					local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
-					if worked(yrp_roles, "yrp_roles GetRolTab", true) then
+					if wk(yrp_roles) then
 						self.roltab = yrp_roles[1]
 
 						return self.roltab
@@ -149,9 +150,9 @@ function Player:GetGroTab()
 		if self:IsValid() and self:IsPlayer() then
 			if self:LoadedGamemode() then
 				local yrp_characters = self:GetChaTab()
-				if worked(yrp_characters, "yrp_characters in GetGroTab", true) and worked(yrp_characters.groupID, "yrp_characters.groupID in GetGroTab", true) then
+				if wk(yrp_characters) and wk(yrp_characters.groupID) then
 					local yrp_groups = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
-					if worked(yrp_groups, "yrp_groups GetGroTab", true) then
+					if wk(yrp_groups) then
 						self.grotab = yrp_groups[1]
 						return self.grotab
 					end
@@ -169,12 +170,10 @@ function Player:CharID()
 		if self:IsValid() and self:IsPlayer() then
 			if self:LoadedGamemode() then
 				local char = self:GetChaTab()
-				if worked(char, "char CharID", true) then
+				if wk(char) then
 					self.charid = char.uniqueID
 					return self.charid
 				end
-			else
-				--YRP.msg("note", "[CharID] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			YRP.msg("note", "[CharID] not valid or not a player " .. self:YRPName())
@@ -192,7 +191,7 @@ function Player:CheckMoney()
 				return false
 			end
 			local _money = tonumber(_m)
-			if worked(_money, "ply:money CheckMoney", true) and self:CharID() != false then
+			if wk(_money) and self:CharID() != false then
 				SQL_UPDATE("yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID()) --attempt to nil value
 			end
 			_mb = self:GetNWString("moneybank", "FAILED")
@@ -201,7 +200,7 @@ function Player:CheckMoney()
 				return false
 			end
 			local _moneybank = tonumber(_mb)
-			if worked(_moneybank, "ply:moneybank CheckMoney", true) and self:CharID() != false then
+			if wk(_moneybank) and self:CharID() != false then
 				SQL_UPDATE("yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID())
 			end
 		end)

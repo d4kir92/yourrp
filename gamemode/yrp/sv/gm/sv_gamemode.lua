@@ -217,7 +217,7 @@ function GM:PlayerAuthed(ply, steamid, uniqueid)
 
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
-	check_yrp_client(ply)
+	check_yrp_client(ply, steamid)
 end
 
 YRP = YRP or {}

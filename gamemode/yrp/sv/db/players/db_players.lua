@@ -322,41 +322,48 @@ function open_character_selection(ply)
 	end
 end
 
-function add_yrp_player(ply)
+function add_yrp_player(ply, steamid)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Add player to database.")
+
+	steamid = steamid or ply:SteamID()
 
 	if !ply:IsBot() then
 		ply:KillSilent()
 	end
 
-	local _SteamID = ply:SteamID()
-	local _SteamName = tostring(SQL_STR_IN(ply:SteamName()))
-	local _ostime = os.time()
+	if steamid != nil and steamid != false then
+		local _SteamName = tostring(SQL_STR_IN(ply:SteamName()))
+		local _ostime = os.time()
 
-	local cols = "SteamID, "
-	cols = cols .. "SteamName, "
-	cols = cols .. "Timestamp"
+		local cols = "SteamID, "
+		cols = cols .. "SteamName, "
+		cols = cols .. "Timestamp"
 
-	local vals = "'" .. _SteamID .. "', "
-	vals = vals .. "'" .. _SteamName .. "', "
-	vals = vals .. "'" .. _ostime .. "'"
+		local vals = "'" .. steamid .. "', "
+		vals = vals .. "'" .. _SteamName .. "', "
+		vals = vals .. "'" .. _ostime .. "'"
 
-	local _insert = SQL_INSERT_INTO("yrp_players", cols, vals)
-	if _insert == nil then
-		printGM("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
+		local _insert = SQL_INSERT_INTO("yrp_players", cols, vals)
+		if _insert == nil then
+			printGM("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
+		else
+			printGM("error", "add_yrp_player failed! _insert: " .. tostring(_insert))
+		end
 	else
-		printGM("error", "add_yrp_player failed! _insert: " .. tostring(_insert))
+		YRP.msg("error", "[add_yrp_player] FAILED (" .. tostring(_result) .. ")")
 	end
 end
 
-function check_yrp_player(ply)
+function check_yrp_player(ply, steamid)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
 
-	if ply:SteamID() != nil or game.SinglePlayer() then
-		local _result = SQL_SELECT("yrp_players", "*", "SteamID = '" .. ply:SteamID() .. "'")
+	steamid = steamid or ply:SteamID()
+
+	if steamid != nil and steamid != false or game.SinglePlayer() then
+		local _result = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
 
 		if _result == nil then
-			add_yrp_player(ply)
+			add_yrp_player(ply, steamid)
 		elseif wk(_result) then
 			printGM("db", "[" .. ply:SteamName() .. "] is in database.")
 			if #_result > 1 then
@@ -369,20 +376,21 @@ function check_yrp_player(ply)
 				end
 			end
 		else
-			YRP.msg("error", "check_yrp_player FAILED (" .. tostring(_result) .. ")")
+			YRP.msg("error", "[check_yrp_player] FAILED (" .. tostring(_result) .. ")")
 		end
 	else
+		YRP.msg("error", "SteamID FAILED [" .. tostring(steamid) .. "]")
 		timer.Simple(1, function()
 			printGM("db", "[" .. ply:SteamName() .. "] -> Retry check.")
-			check_yrp_player(ply)
+			check_yrp_player(ply, steamid)
 		end)
 	end
 end
 
-function check_yrp_client(ply)
+function check_yrp_client(ply, steamid)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
 
-	check_yrp_player(ply)
+	check_yrp_player(ply, steamid)
 
 	ply:SendTeamsToPlayer()
 
