@@ -151,7 +151,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_general", "LID_settings_general", _settings_server_gameplay, "icon16/server.png")
 	settingsWindow.window:AddSite("open_server_realistic", "LID_settings_realistic", _settings_server_gameplay, "icon16/bomb.png")
 	settingsWindow.window:AddSite("open_server_groups_and_roles", "LID_settings_groupsandroles", _settings_server_gameplay, "icon16/group.png")
-	settingsWindow.window:AddSite("open_server_levelsystem", "LID_levelsystem", _settings_server_gameplay, "icon16/layers.png")
+	--settingsWindow.window:AddSite("open_server_levelsystem", "LID_levelsystem", _settings_server_gameplay, "icon16/layers.png")
 	settingsWindow.window:AddSite("open_server_design", "LID_settings_design", _settings_server_gameplay, "icon16/photo.png")
 
 	local _settings_server_management = "LID_settings_server_management"
