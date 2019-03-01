@@ -596,23 +596,25 @@ net.Receive("EnterWorld", function(len, ply)
 end)
 
 function SendBodyGroups(ply)
-	local _charid = ply:CharID()
-	local _result = SQL_SELECT("yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber(_charid))
-	if wk(_result) then
-		_result = _result[1]
-		local _role = ply:GetRolTab()
-		_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
-		if _result.string_playermodels != "" then
-			net.Start("get_menu_bodygroups")
-				net.WriteTable(_result)
-			net.Send(ply)
+	local charid = ply:CharID()
+	if wk(charid) then
+		local _result = SQL_SELECT("yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber(charid))
+		if wk(_result) then
+			_result = _result[1]
+			local _role = ply:GetRolTab()
+			_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
+			if _result.string_playermodels != "" then
+				net.Start("get_menu_bodygroups")
+					net.WriteTable(_result)
+				net.Send(ply)
+			else
+				net.Start("get_menu_bodygroups")
+					net.WriteTable({})
+				net.Send(ply)
+			end
 		else
-			net.Start("get_menu_bodygroups")
-				net.WriteTable({})
-			net.Send(ply)
+			printGM("note", "get_menu_bodygroups failed!")
 		end
-	else
-		printGM("note", "get_menu_bodygroups failed!")
 	end
 end
 

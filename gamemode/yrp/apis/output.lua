@@ -148,30 +148,26 @@ function hr_pos(chan)
 end
 
 function GetGamemodeShortname()
-	if GAMEMODE != nil then
-		return GAMEMODE.ShortName
-	else
-		return "YRP"
-	end
+	return "YRP"
 end
 
 --local r = GetRealm()
 local rc = GetRealmColor()
 local _msgcache = {}
-function YRP.msg(chan, msg, tochat)
+function YRP.msg(chan, str_msg, tochat)
 	if !isstring(chan) then return false end
-	if !isstring(msg) then return false end
+	if !isstring(str_msg) then return false end
 
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
-		if msg == nil or msg == false then
-			msg = tostring(msg)
+		if str_msg == nil or str_msg == false then
+			str_msg = tostring(str_msg)
 		end
 		local cc = GetChannelColor(cn)
 		local _yrp = GetGamemodeShortname()
 		local _yrpc = Color(0, 100, 225)
 
-		msgs = string.Explode("\n", msg)
+		msgs = string.Explode("\n", str_msg)
 		for i, msg in pairs(msgs) do
 			MsgC(rc, "[")
 			MsgC(_yrpc, _yrp)
@@ -191,10 +187,8 @@ function YRP.msg(chan, msg, tochat)
 				PrintMessage(3, "\n ")
 				PrintMessage(3, str)
 			end
-			if SERVER then
-				if AddToFakeServerConsole != nil then
-					AddToFakeServerConsole(str)
-				end
+			if SERVER and AddToFakeServerConsole != nil then
+				AddToFakeServerConsole(str)
 			end
 
 			if cn == "ERROR" or cn == "MISSING" then
@@ -203,12 +197,23 @@ function YRP.msg(chan, msg, tochat)
 					REALM = "SERVER"
 				end
 				send_error(REALM, "[" .. cn .. "] " .. msg)
+				if cn == "ERROR" then
+					local err = createD("YFrame", nil, ctr(600), ctr(60), ctr(60), ctr(400))
+					err:ShowCloseButton(false)
+					err:SetDraggable(false)
+					err:SetTitle("")
+					function err:Paint(pw, ph)
+						draw.WordBox(ctr(10), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Roboto14B", Color(255, 0, 0), Color(255, 255, 255))
+					end
+					timer.Simple(8, function()
+						err:Remove()
+					end)
+				end
 			end
 		end
 	end
 end
 
-local darkrp_debug = false
 function printGM(channel, text, tochat)
 	YRP.msg(channel, text, tochat)
 end

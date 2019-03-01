@@ -80,8 +80,9 @@ function Player:EquipWeapons()
 end
 
 function Player:EquipWeapon(slot, item)
-	if self:CharID() != nil then
-		local _slot = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. self:CharID() .. "'")
+	local charid = self:CharID()
+	if wk(charid) then
+		local _slot = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. charid .. "'")
 
 		if wk(_slot) then
 			_slot = _slot[1][slot]

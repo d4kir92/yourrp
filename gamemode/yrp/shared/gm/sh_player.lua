@@ -49,12 +49,12 @@ function Player:GetPlyTab()
 					if worked(yrp_players, "GetPlyTab fail", true) then
 						self.plytab = yrp_players[1]
 						return self.plytab
+					else
+						YRP.msg("error", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID: " .. tostring(self:SteamID()))
 					end
 				else
 					YRP.msg("error", "[GetPlyTab] SteamID() FAILED: " .. tostring(self:SteamID()) )
 				end
-			else
-				--printGM("note", "[GetPlyTab] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			printGM("error", "[GetPlyTab] player is invalid. (" .. tostring(self:SteamID()) .. ") IsPlayer()?: " .. tostring(self:IsPlayer()))
@@ -88,11 +88,9 @@ function Player:HasCharacterSelected()
 			if self:LoadedGamemode() then
 				--printGM("note", self:YRPName() .. " HasCharacterSelected?")
 				local _ply_tab = self:GetPlyTab()
-				if _ply_tab != false and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
+				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
 					return true
 				end
-			else
-				--YRP.msg("note", "[HasCharacterSelected] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			YRP.msg("note", "[HasCharacterSelected] not valid or not a player " .. self:YRPName())

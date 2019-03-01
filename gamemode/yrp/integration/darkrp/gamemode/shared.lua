@@ -294,6 +294,7 @@ end
 
 function DarkRP.getPhrase(key, parameters)
 	--Description: Get a phrase from the selected language.
+	key = tostring(key)
 	printGM("darkrp", "getPhrase(" .. key .. ", parameters)")
 	--printGM("darkrp", DarkRP._not)
 	if key == "job" then
