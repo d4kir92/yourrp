@@ -132,6 +132,12 @@ function Player:AddLevel(level)
 	end
 end
 
+function Player:SetLevel(level)
+	local curlvl = self:Level()
+
+	self:AddLevel(level - curlvl)
+end
+
 function Player:AddXP(xp)
 	xp = tonumber(xp)
 	local lvltab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
@@ -139,42 +145,44 @@ function Player:AddXP(xp)
 	local chatab = self:GetChaTab()
 	local charid = self:CharID()
 
-	local curxp = tonumber(chatab.int_xp)
-	local lvl = tonumber(chatab.int_level)
-	local lvlmulti = tonumber(lvltab.float_multiplier)
-	local xpforlvl = tonumber(lvltab.int_xp_for_levelup)
-	local maxxp = math.Round(math.pow(lvl, lvlmulti), 0) + xpforlvl
+	if wk(chatab) then
+		local curxp = tonumber(chatab.int_xp)
+		local lvl = tonumber(chatab.int_level)
+		local lvlmulti = tonumber(lvltab.float_multiplier)
+		local xpforlvl = tonumber(lvltab.int_xp_for_levelup)
+		local maxxp = math.Round(math.pow(lvl, lvlmulti), 0) + xpforlvl
 
-	local curlvl = self:Level()
-	local maxlvl = self:GetMaxLevel()
+		local curlvl = self:Level()
+		local maxlvl = self:GetMaxLevel()
 
-	if xp > 0 then
-		local newxp = curxp + xp
-		if curlvl < maxlvl or newxp <= maxxp then
-			if newxp > maxxp then
-				newxp = newxp - maxxp
-				self:AddLevel(1)
-				SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
-				self:AddXP(newxp)
-			else
-				SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
-				self:SetNWString("int_xp", newxp)
+		if xp > 0 then
+			local newxp = curxp + xp
+			if curlvl < maxlvl or newxp <= maxxp then
+				if newxp > maxxp then
+					newxp = newxp - maxxp
+					self:AddLevel(1)
+					SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
+					self:AddXP(newxp)
+				else
+					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
+					self:SetNWString("int_xp", newxp)
+				end
 			end
-		end
-	elseif xp < 0 then
-		local newxp = curxp + xp
-		if curlvl < maxlvl or newxp <= maxxp then
-			if newxp < 0 then
-				self:AddLevel(-1)
+		elseif xp < 0 then
+			local newxp = curxp + xp
+			if curlvl < maxlvl or newxp <= maxxp then
+				if newxp < 0 then
+					self:AddLevel(-1)
 
-				maxxp = math.Round(math.pow(lvl - 1, lvlmulti), 0) + xpforlvl
-				newxp = newxp + maxxp
+					maxxp = math.Round(math.pow(lvl - 1, lvlmulti), 0) + xpforlvl
+					newxp = newxp + maxxp
 
-				SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
-				self:AddXP(newxp)
-			else
-				SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
-				self:SetNWString("int_xp", newxp)
+					SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
+					self:AddXP(newxp)
+				else
+					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
+					self:SetNWString("int_xp", newxp)
+				end
 			end
 		end
 	end

@@ -80,7 +80,7 @@ end
 
 function getPictureRatio(w, h)
 	local _ggt = ggT(w, h)
-	return w/_ggt, h/_ggt
+	return w / _ggt, h / _ggt
 end
 
 function lowerToScreen(w, h)

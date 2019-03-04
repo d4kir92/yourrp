@@ -241,7 +241,7 @@ function add_level(sender, text)
 		local _lvl = tonumber(_table[3])
 		if isnumber(_lvl) then
 			local _receiver = get_player_by_name(_name)
-			if worked(_receiver, "xp receiver not found!") then
+			if worked(_receiver, "level receiver not found!") then
 				_receiver:AddLevel(_lvl)
 				return ""
 			else
@@ -249,7 +249,26 @@ function add_level(sender, text)
 			end
 		end
 	else
-		printGM("note", sender:Nick() .. " tried to use addxp!")
+		printGM("note", sender:Nick() .. " tried to use addlevel!")
+	end
+end
+
+function set_level(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode(" ", text, false)
+		local _name = _table[2]
+		local _lvl = tonumber(_table[3])
+		if isnumber(_lvl) then
+			local _receiver = get_player_by_name(_name)
+			if worked(_receiver, "level receiver not found!") then
+				_receiver:SetLevel(_lvl)
+				return ""
+			else
+				sender:ChatPrint("Command-FAILED NAME not found")
+			end
+		end
+	else
+		printGM("note", sender:Nick() .. " tried to use setlevel!")
 	end
 end
 
@@ -435,6 +454,11 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "addlevel" then
 		add_level(sender, text)
+		return ""
+	end
+
+	if paket.command == "setlevel" then
+		set_level(sender, text)
 		return ""
 	end
 
