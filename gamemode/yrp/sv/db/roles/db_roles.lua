@@ -522,6 +522,11 @@ net.Receive("get_grp_roles", function(len, ply)
 	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'")
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
+			updateRoleUses(ro.uniqueID)
+			local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ro.uniqueID .. "'")
+			if wk(role) then
+				ro = role[1]
+			end
 			ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
 		end
 		net.Start("get_grp_roles")

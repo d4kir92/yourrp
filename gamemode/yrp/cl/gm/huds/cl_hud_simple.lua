@@ -432,9 +432,9 @@ function HUDSimple()
 		HUDSimpleBAR(AR)
 		XP = {}
 		XP.element = "XP"
-		XP.cur = 1
-		XP.max = 1
-		XP.text = YRP.lang_string("LID_level") .. " " .. lply:Level() .. " " .. lply:GetGroupName() .. " " .. lply:GetRoleName()
+		XP.cur = lply:XP()
+		XP.max = lply:GetMaxXP()
+		XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "|" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level() .. " " .. lply:GetGroupName() .. " " .. lply:GetRoleName()
 		HUDSimpleBAR(XP)
 		MO = {}
 		MO.element = "MO"

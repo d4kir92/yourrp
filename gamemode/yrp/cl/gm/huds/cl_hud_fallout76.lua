@@ -13,6 +13,7 @@ FO76["BG"] = {}
 FO76["BGBar"] = {}
 FO76["Bar"] = {}
 FO76["TEXT"] = {}
+FO76["CENTERTEXT"] = {}
 FO76["BR"] = {}
 function FO76BG(tab)
 	local lply = LocalPlayer()
@@ -54,6 +55,7 @@ function FO76Element(tab)
 	FO76["BGBar"][tab.element] = FO76["BGBar"][tab.element] or {}
 	FO76["Bar"][tab.element] = FO76["Bar"][tab.element] or {}
 	FO76["TEXT"][tab.element] = FO76["TEXT"][tab.element] or {}
+	FO76["CENTERTEXT"][tab.element] = FO76["CENTERTEXT"][tab.element] or {}
 	FO76["BR"][tab.element] = FO76["BR"][tab.element] or {}
 	if lply:GetNWInt("hud_version", 0) != FO76["BG"][tab.element]["version"] then
 		FO76["BG"][tab.element]["version"] = lply:GetNWInt("hud_version", 0)
@@ -105,6 +107,13 @@ function FO76Element(tab)
 		FO76["TEXT"][tab.element].font = "Roboto18B"
 		FO76["TEXT"][tab.element].color = FOColor()
 
+		FO76["CENTERTEXT"][tab.element].x = x + w / 2
+		FO76["CENTERTEXT"][tab.element].y = y + h / 2
+		FO76["CENTERTEXT"][tab.element].ax = 1
+		FO76["CENTERTEXT"][tab.element].ay = 1
+		FO76["CENTERTEXT"][tab.element].font = "Roboto18B"
+		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
+
 		FO76["BR"][tab.element].r = 0
 		FO76["BR"][tab.element].w = w - h
 		FO76["BR"][tab.element].h = tab.thickness
@@ -123,6 +132,11 @@ function FO76Element(tab)
 		if tab.text != nil then
 			FO76["TEXT"][tab.element].text = tab.text
 			HudText(FO76["TEXT"][tab.element])
+		end
+
+		if tab.centertext != nil then
+			FO76["CENTERTEXT"][tab.element].text = tab.centertext
+			HudText(FO76["CENTERTEXT"][tab.element])
 		end
 
 		HudBoxBr(FO76["BR"][tab.element])
@@ -436,8 +450,9 @@ function HUD_FO76()
 		local XP = {}
 		XP.element = "XP"
 		XP.text = YRP.lang_string("LID_xp")
-		XP.cur = 1
-		XP.max = 1
+		XP.cur = lply:XP()
+		XP.max = lply:GetMaxXP()
+		XP.centertext = lply:Level()
 		FO76Element(XP)
 
 		if IsChatVisible() then

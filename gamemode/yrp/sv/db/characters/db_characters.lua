@@ -5,13 +5,17 @@
 
 local _db_name = "yrp_characters"
 
-SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT")
+SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
 
 SQL_ADD_COLUMN(_db_name, "roleID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "groupID", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(_db_name, "playermodelID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "skin", "INT DEFAULT 1")
+
+--[[ LEVEL ]]--
+SQL_ADD_COLUMN(_db_name, "int_level", "INT DEFAULT 1")
+SQL_ADD_COLUMN(_db_name, "int_xp", "INT DEFAULT 0")
 
 for i = 0, 19 do
 	SQL_ADD_COLUMN(_db_name, "bg" .. i, "INT DEFAULT 0")
@@ -25,9 +29,9 @@ SQL_ADD_COLUMN(_db_name, "rpdescription", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "gender", "TEXT DEFAULT 'gendermale'")
 SQL_ADD_COLUMN(_db_name, "money", "TEXT DEFAULT '250'")
 SQL_ADD_COLUMN(_db_name, "moneybank", "TEXT DEFAULT '500'")
-SQL_ADD_COLUMN(_db_name, "position", "TEXT")
-SQL_ADD_COLUMN(_db_name, "angle", "TEXT")
-SQL_ADD_COLUMN(_db_name, "map", "TEXT")
+SQL_ADD_COLUMN(_db_name, "position", "TEXT DEFAULT '0,0,0'")
+SQL_ADD_COLUMN(_db_name, "angle", "TEXT DEFAULT '0,0,0'")
+SQL_ADD_COLUMN(_db_name, "map", "TEXT DEFAULT 'gm_construct'")
 
 --[[ EQUIPMENT ]]--
 SQL_ADD_COLUMN(_db_name, "eqbp", "TEXT DEFAULT ' '")
@@ -50,6 +54,14 @@ end
 --db_is_empty(_db_name)
 
 local Player = FindMetaTable("Player")
+function Player:CharacterLoadout()
+	printGM("debug", "[CharacterLoadout] " .. self:YRPName())
+	local chatab = self:GetChaTab()
+	if wk(chatab) then
+		self:SetNWString("int_xp", chatab.int_xp)
+		self:SetNWString("int_level", chatab.int_level)
+	end
+end
 
 function Player:VisualEquipment(name, slot)
 	if self:HasCharacterSelected() then

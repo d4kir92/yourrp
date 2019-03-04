@@ -730,6 +730,7 @@ function openCharacterSelection()
 
 							tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
 							tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
+							tmpChar.level = _characters[i].char.int_level or "-1"
 							tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
 							tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
 							tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
@@ -764,7 +765,7 @@ function openCharacterSelection()
 							tmpChar.bg18 = _characters[i].char.bg18 or 0
 							tmpChar.bg19 = _characters[i].char.bg19 or 0
 
-							tmpChar.grp = YRP.lang_string("LID_level") .. " 1 " .. tmpChar.rolename
+							tmpChar.grp = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. " " .. tmpChar.rolename
 							if tmpChar.groupID == tmpChar.factionID then
 								tmpChar.grp = tmpChar.grp .. " [" .. tmpChar.factionID .. "]"
 							else

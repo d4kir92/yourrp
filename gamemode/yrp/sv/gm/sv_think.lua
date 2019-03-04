@@ -225,6 +225,13 @@ timer.Create("ServerThink", 1, 0, function()
 		end
 	end
 
+	if _time % 60 == 0 then
+		local xp_per_minute = YRP.XPPerMinute()
+		for i, p in pairs(player.GetAll()) do
+			p:AddXP(xp_per_minute)
+		end
+	end
+
 	if _time % 30 == 0 then
 		for i, ply in pairs(_all_players) do
 			if ply:GetRoleName() == nil and ply:Alive() then

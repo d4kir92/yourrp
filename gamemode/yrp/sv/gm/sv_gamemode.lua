@@ -232,6 +232,9 @@ function YRP:Loadout(ply)
 
 	ply:LockdownLoadout()
 
+	ply:LevelSystemLoadout()
+	ply:CharacterLoadout()
+
 	ply:SetNWBool("bool_loadouted", true)
 end
 
@@ -258,9 +261,7 @@ function GM:PlayerLoadout(ply)
 					SetRole(ply, _rol_tab.uniqueID)
 				else
 					printGM("error", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
-					if !ply:IsBot() then
-						ply:KillSilent()
-					end
+					ply:KillSilent()
 				end
 
 				local chaTab = ply:GetChaTab()

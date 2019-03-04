@@ -566,11 +566,13 @@ end
 
 function canGetRole(ply, roleID, want)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
+	local chatab = ply:GetChaTab()
 
 	if worked(tmpTableRole, "tmpTableRole") then
-		if tonumber(tmpTableRole[1].int_uses) < tonumber(tmpTableRole[1].int_maxamount) or tonumber(tmpTableRole[1].int_maxamount) == 0 or tonumber(tmpTableRole[1].uniqueID) == ply:GetRoleUID() then
+		tmpTableRole = tmpTableRole[1]
+		if tonumber(tmpTableRole.int_uses) < tonumber(tmpTableRole.int_maxamount) or tonumber(tmpTableRole.int_maxamount) == 0 or tonumber(tmpTableRole.uniqueID) == ply:GetRoleUID() then
 			-- Admin only
-			if tonumber(tmpTableRole[1].bool_adminonly) == 1 then
+			if tonumber(tmpTableRole.bool_adminonly) == 1 then
 				if !ply:HasAccess() then
 					local text = "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin."
 					printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
@@ -583,6 +585,16 @@ function canGetRole(ply, roleID, want)
 				end
 			end
 
+			-- level check
+			if tonumber(chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
+				local text = ply:YRPName() .. " is not high enough (is: " .. tonumber(chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
+				printGM("gm", "[canGetRole] " .. text)
+				net.Start("yrp_info2")
+					net.WriteString(text)
+				net.Broadcast()
+				return false
+			end
+
 			if tonumber(ply:GetNWInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then
 				local text = ply:YRPName() .. " is on cooldown for this role!"
 				printGM("gm", "[canGetRole] " .. text)
@@ -593,7 +605,7 @@ function canGetRole(ply, roleID, want)
 			end
 
 			-- Whitelist + Prerole
-			if tonumber(tmpTableRole[1].bool_whitelist) == 1 or tonumber(tmpTableRole[1].int_prerole) > 0 then
+			if tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0 then
 				printGM("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
 				if !isWhitelisted(ply, roleID) then
 					local text = ply:YRPName() .. " is not whitelisted."
@@ -606,7 +618,7 @@ function canGetRole(ply, roleID, want)
 			end
 
 			-- Usergroups
-			local ugs = string.Explode(",", tmpTableRole[1].string_usergroups)
+			local ugs = string.Explode(",", tmpTableRole.string_usergroups)
 			local ug = string.upper(ply:GetUserGroup())
 			local found = table.HasValue(ugs, ug) or table.HasValue(ugs, "ALL")
 			if !found then

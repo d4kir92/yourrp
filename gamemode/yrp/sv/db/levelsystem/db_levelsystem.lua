@@ -22,7 +22,12 @@ end
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:LevelSystemLoadout()
-
+	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	if wk(setting) then
+		setting = setting[1]
+		self:SetNWString("int_level_min", setting.int_level_min)
+		self:SetNWString("int_level_max", setting.int_level_max)
+	end
 end
 
 util.AddNetworkString("get_levelsystem_settings")
@@ -36,5 +41,157 @@ net.Receive("get_levelsystem_settings", function(len, ply)
 				net.WriteTable(setting)
 			net.Send(ply)
 		end
+	end
+end)
+
+local yrp_levelsystem = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+if wk(yrp_levelsystem) then
+	yrp_levelsystem = yrp_levelsystem[1]
+end
+
+function YRP.XPPerMinute()
+	return tonumber(yrp_levelsystem.int_xp_per_minute)
+end
+
+util.AddNetworkString("update_ls_int_level_min")
+net.Receive("update_ls_int_level_min", function(len, ply)
+	local int_level_min = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_level_min = '" .. int_level_min .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("update_ls_int_level_max")
+net.Receive("update_ls_int_level_max", function(len, ply)
+	local int_level_max = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_level_max = '" .. int_level_max .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("update_ls_int_level_start")
+net.Receive("update_ls_int_level_start", function(len, ply)
+	local int_level_start = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_level_start = '" .. int_level_start .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("update_ls_float_multiplier")
+net.Receive("update_ls_float_multiplier", function(len, ply)
+	local float_multiplier = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "float_multiplier = '" .. float_multiplier .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("update_ls_int_xp_for_levelup")
+net.Receive("update_ls_int_xp_for_levelup", function(len, ply)
+	local int_xp_for_levelup = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_xp_for_levelup = '" .. int_xp_for_levelup .. "'", "uniqueID = '1'")
+end)
+
+
+
+util.AddNetworkString("update_ls_int_xp_per_kill")
+net.Receive("update_ls_int_xp_per_kill", function(len, ply)
+	local int_xp_per_kill = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_xp_per_kill = '" .. int_xp_per_kill .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("update_ls_int_xp_per_minute")
+net.Receive("update_ls_int_xp_per_minute", function(len, ply)
+	local int_xp_per_minute = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_xp_per_minute = '" .. int_xp_per_minute .. "'", "uniqueID = '1'")
+end)
+
+util.AddNetworkString("update_ls_int_xp_per_revive")
+net.Receive("update_ls_int_xp_per_revive", function(len, ply)
+	local int_xp_per_revive = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "int_xp_per_revive = '" .. int_xp_per_revive .. "'", "uniqueID = '1'")
+end)
+
+function Player:AddLevel(level)
+	local charid = self:CharID()
+	local curlvl = self:Level()
+	local minlvl = self:GetMinLevel()
+	local maxlvl = self:GetMaxLevel()
+
+	if level > 0 then
+		level = level - 1
+		local newlvl = curlvl + 1
+		if newlvl <= maxlvl then
+
+			SQL_UPDATE("yrp_characters", "int_level = " .. newlvl, "uniqueID = '" .. charid .. "'")
+			self:SetNWString("int_level", newlvl)
+
+			self:AddLevel(level)
+		end
+	elseif level < 0 then
+		level = level + 1
+		local newlvl = curlvl - 1
+		if newlvl >= minlvl then
+
+			SQL_UPDATE("yrp_characters", "int_level = " .. newlvl, "uniqueID = '" .. charid .. "'")
+			self:SetNWString("int_level", newlvl)
+
+			self:AddLevel(level)
+		end
+	end
+end
+
+function Player:AddXP(xp)
+	xp = tonumber(xp)
+	local lvltab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	lvltab = lvltab[1]
+	local chatab = self:GetChaTab()
+	local charid = self:CharID()
+
+	local curxp = tonumber(chatab.int_xp)
+	local lvl = tonumber(chatab.int_level)
+	local lvlmulti = tonumber(lvltab.float_multiplier)
+	local xpforlvl = tonumber(lvltab.int_xp_for_levelup)
+	local maxxp = math.Round(math.pow(lvl, lvlmulti), 0) + xpforlvl
+
+	local curlvl = self:Level()
+	local maxlvl = self:GetMaxLevel()
+
+	if xp > 0 then
+		local newxp = curxp + xp
+		if curlvl < maxlvl or newxp <= maxxp then
+			if newxp > maxxp then
+				newxp = newxp - maxxp
+				self:AddLevel(1)
+				SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
+				self:AddXP(newxp)
+			else
+				SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
+				self:SetNWString("int_xp", newxp)
+			end
+		end
+	elseif xp < 0 then
+		local newxp = curxp + xp
+		if curlvl < maxlvl or newxp <= maxxp then
+			if newxp < 0 then
+				self:AddLevel(-1)
+
+				maxxp = math.Round(math.pow(lvl - 1, lvlmulti), 0) + xpforlvl
+				newxp = newxp + maxxp
+
+				SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
+				self:AddXP(newxp)
+			else
+				SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
+				self:SetNWString("int_xp", newxp)
+			end
+		end
+	end
+end
+
+hook.Add("PlayerDeath", "yrp_xp_playerdeath", function(victim, inflictor, attacker)
+	if attacker:IsPlayer() then
+		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		setting = setting[1]
+		attacker:AddXP(setting.int_xp_per_kill)
+	end
+end)
+
+hook.Add("OnNPCKilled", "yrp_xp_onnpckilled", function(npc, attacker, inflictor)
+	if attacker:IsPlayer() then
+		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		setting = setting[1]
+		attacker:AddXP(setting.int_xp_per_kill)
 	end
 end)

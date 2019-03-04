@@ -1675,9 +1675,10 @@ _icons["mo"] = Material("icon16/money.png")
 _icons["sn"] = Material("icon16/status_online.png")
 _icons["ug"] = Material("icon16/group_key.png")
 _icons["ms"] = Material("icon16/lightning.png")
+_icons["le"] = Material("icon16/layers.png")
 
 function drawPlates(ply)
-	if ply:Alive() and ply:GetNWInt("yrp_loading_hud", 0) >= 100 then
+	if ply != LocalPlayer() and ply:Alive() and ply:GetNWInt("yrp_loading_hud", 0) >= 100 then
 		local _height = 31
 		local color = ply:GetColor()
 		color.a = color.a - 160
@@ -1734,6 +1735,14 @@ function drawPlates(ply)
 
 			if ply:GetNWBool("bool_tag_on_head_factionname", false) then
 				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, color)
+				_height = _height + 5
+			end
+
+			if ply:GetNWBool("bool_tag_on_head_level", false) then
+				local lvl = ply:Level()
+				local t = {}
+				t["LEVEL"] = lvl
+				drawString(ply, YRP.lang_string("LID_levelx", t), _height, color)
 				_height = _height + 5
 			end
 
@@ -1813,6 +1822,14 @@ function drawPlates(ply)
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
+					_z = _z + _d
+				end
+
+				if ply:GetNWBool("bool_tag_on_side_level", false) then
+					local lvl = ply:Level()
+					local t = {}
+					t["LEVEL"] = lvl
+					drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["le"])
 					_z = _z + _d
 				end
 

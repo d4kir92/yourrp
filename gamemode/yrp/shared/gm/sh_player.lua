@@ -54,7 +54,7 @@ function Player:GetPlyTab()
 						YRP.msg("error", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]")
 					end
 				else
-					YRP.msg("error", "[GetPlyTab] SteamID() FAILED: " .. tostring(self:SteamID()) )
+					YRP.msg("error", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]" )
 				end
 			end
 		else
@@ -74,8 +74,6 @@ function Player:IsCharacterValid()
 				else
 					return true
 				end
-			else
-				--YRP.msg("note", "[IsCharacterValid] Gamemode not fully loaded for " .. self:YRPName())
 			end
 		else
 			YRP.msg("note", "[IsCharacterValid] not valid or not a player " .. self:YRPName())
@@ -110,8 +108,10 @@ function Player:GetChaTab()
 					if wk(yrp_characters) then
 						self.chatab = yrp_characters[1]
 						return self.chatab
+					elseif yrp_characters == nil then
+						YRP.msg("note", "[GetChaTab] Character not exists.")
 					else
-						YRP.msg("error", "[GetChaTab] failed: " .. "yrp_characters failed (" .. tostring(_tmp.CurrentCharacter) .. ") " .. tostring(yrp_characters))
+						YRP.msg("error", "[GetChaTab] yrp_characters failed [" .. tostring(yrp_characters) .. "]")
 					end
 				else
 					YRP.msg("error", "[GetChaTab] failed: " .. "PlyTab: " .. tostring(_tmp))
@@ -135,6 +135,10 @@ function Player:GetRolTab()
 						self.roltab = yrp_roles[1]
 
 						return self.roltab
+					elseif yrp_roles == nil then
+						YRP.msg("note", "[GetRolTab] Role not exists.")
+					else
+						YRP.msg("error", "[GetRolTab] yrp_roles failed [" .. tostring(yrp_roles) .. "]")
 					end
 				end
 			end

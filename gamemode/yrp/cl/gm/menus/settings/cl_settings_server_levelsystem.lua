@@ -32,11 +32,25 @@ net.Receive("get_levelsystem_settings", function(len)
 		GRP_LS:AddItem(ls_level_min_header)
 
 		local ls_level_min = createD("DNumberWang", nil, GRP_LS:GetWide(), ctr(50), 0, 0)
-		ls_level_min:SetMin(0)
+		ls_level_min:SetMin(1)
 		ls_level_min:SetMax(9999999)
 		ls_level_min:SetValue(setting.int_level_min)
 		function ls_level_min:OnValueChanged(val)
-			setting.int_level_min = val
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_level_min = val
+				net.Start("update_ls_int_level_min")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
 		end
 		GRP_LS:AddItem(ls_level_min)
 
@@ -58,7 +72,21 @@ net.Receive("get_levelsystem_settings", function(len)
 		ls_level_max:SetMax(10000000)
 		ls_level_max:SetValue(setting.int_level_max)
 		function ls_level_max:OnValueChanged(val)
-			setting.int_level_max = val
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_level_max = val
+				net.Start("update_ls_int_level_max")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
 		end
 		GRP_LS:AddItem(ls_level_max)
 
@@ -77,7 +105,21 @@ net.Receive("get_levelsystem_settings", function(len)
 		ls_level_start:SetMax(9999999)
 		ls_level_start:SetValue(setting.int_level_start)
 		function ls_level_start:OnValueChanged(val)
-			setting.int_level_start = val
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_level_start = val
+				net.Start("update_ls_int_level_start")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
 		end
 		GRP_LS:AddItem(ls_level_start)
 
@@ -98,9 +140,56 @@ net.Receive("get_levelsystem_settings", function(len)
 		ls_level_multiplier:SetMax(2.0)
 		ls_level_multiplier:SetValue(setting.float_multiplier)
 		function ls_level_multiplier:OnValueChanged(val)
-			setting.float_multiplier = val
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.float_multiplier = val
+				net.Start("update_ls_float_multiplier")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
 		end
 		GRP_LS:AddItem(ls_level_multiplier)
+
+		DHr(hr)
+
+		-- Levelup
+		local xp_for_levelup_header = createD("YLabel", nil, GRP_LS:GetWide(), ctr(50), 0, 0)
+		xp_for_levelup_header:SetText("LID_xpforlevelup")
+		function xp_for_levelup_header:Paint(pw, ph)
+			hook.Run("YLabelPaint", self, pw, ph)
+		end
+		GRP_LS:AddItem(xp_for_levelup_header)
+
+		local ls_xp_for_levelup = createD("DNumberWang", nil, GRP_LS:GetWide(), ctr(50), 0, 0)
+		ls_xp_for_levelup:SetMin(1)
+		ls_xp_for_levelup:SetMax(999999)
+		ls_xp_for_levelup:SetValue(setting.int_xp_for_levelup)
+		function ls_xp_for_levelup:OnValueChanged(val)
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_xp_for_levelup = val
+				net.Start("update_ls_int_xp_for_levelup")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
+		end
+		GRP_LS:AddItem(ls_xp_for_levelup)
 
 		GRP_LS:AutoSize()
 
@@ -118,13 +207,98 @@ net.Receive("get_levelsystem_settings", function(len)
 		GRP_XP.name = "LID_levelsystem"
 		GRP_XP = DGroup(GRP_XP)
 
-		-- Levelup
-		local xp_for_levelup_header = createD("YLabel", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
-		xp_for_levelup_header:SetText("LID_xpforlevelup")
-		function xp_for_levelup_header:Paint(pw, ph)
+		-- XP Per Kill
+		local xp_per_kill_header = createD("YLabel", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
+		xp_per_kill_header:SetText("LID_xpperkill")
+		function xp_per_kill_header:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
 		end
-		GRP_XP:AddItem(xp_for_levelup_header)
+		GRP_XP:AddItem(xp_per_kill_header)
+
+		local ls_xp_per_kill = createD("DNumberWang", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
+		ls_xp_per_kill:SetMin(1)
+		ls_xp_per_kill:SetMax(999999)
+		ls_xp_per_kill:SetValue(setting.int_xp_per_kill)
+		function ls_xp_per_kill:OnValueChanged(val)
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_xp_per_kill = val
+				net.Start("update_ls_int_xp_per_kill")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
+		end
+		GRP_XP:AddItem(ls_xp_per_kill)
+
+		-- XP Per Minute
+		local ls_xp_per_minute_header = createD("YLabel", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
+		ls_xp_per_minute_header:SetText("LID_xpperminute")
+		function ls_xp_per_minute_header:Paint(pw, ph)
+			hook.Run("YLabelPaint", self, pw, ph)
+		end
+		GRP_XP:AddItem(ls_xp_per_minute_header)
+
+		local ls_xp_per_minute = createD("DNumberWang", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
+		ls_xp_per_minute:SetMin(1)
+		ls_xp_per_minute:SetMax(999999)
+		ls_xp_per_minute:SetValue(setting.int_xp_per_minute)
+		function ls_xp_per_minute:OnValueChanged(val)
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_xp_per_minute = val
+				net.Start("update_ls_int_xp_per_minute")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
+		end
+		GRP_XP:AddItem(ls_xp_per_minute)
+
+		-- XP Per Revive
+		local ls_xp_per_revive_header = createD("YLabel", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
+		ls_xp_per_revive_header:SetText("LID_xpperrevive")
+		function ls_xp_per_revive_header:Paint(pw, ph)
+			hook.Run("YLabelPaint", self, pw, ph)
+		end
+		GRP_XP:AddItem(ls_xp_per_revive_header)
+
+		local ls_xp_per_revive = createD("DNumberWang", nil, GRP_XP:GetWide(), ctr(50), 0, 0)
+		ls_xp_per_revive:SetMin(1)
+		ls_xp_per_revive:SetMax(999999)
+		ls_xp_per_revive:SetValue(setting.int_xp_per_revive)
+		function ls_xp_per_revive:OnValueChanged(val)
+			val = tonumber(val)
+			local min = tonumber(self:GetMin())
+			local max = tonumber(self:GetMax())
+			if val >= min and val <= max then
+				setting.int_xp_per_revive = val
+				net.Start("update_ls_int_xp_per_revive")
+					net.WriteString(val)
+				net.SendToServer()
+			elseif val < min then
+				self:SetText(min)
+				self:SetValue(min)
+			elseif val > max then
+				self:SetText(max)
+				self:SetValue(max)
+			end
+		end
+		GRP_XP:AddItem(ls_xp_per_revive)
 
 		GRP_XP:AutoSize()
 
@@ -136,8 +310,9 @@ net.Receive("get_levelsystem_settings", function(len)
 		function diagramm:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 
-			local x = ctr(60)
-			local y = ph - ctr(60)
+			local br = ctr(100)
+			local x = br
+			local y = ph - br
 			surface.SetDrawColor(0, 0, 0, 255)
 			surface.DrawLine(x, y, pw - x, y)
 			surface.DrawLine(x, y, x, ph - y)
@@ -145,15 +320,16 @@ net.Receive("get_levelsystem_settings", function(len)
 			local min = tonumber(setting.int_level_min)
 			local max = tonumber(setting.int_level_max)
 			local multiplier = tonumber(setting.float_multiplier)
+			local xp_for_levelup = tonumber(setting.int_xp_for_levelup)
 			local coords = {}
 			for i = min, max do
-				coords[i] = math.pow(i, multiplier) + 100
+				coords[i] = math.pow(i, multiplier) + xp_for_levelup
 			end
 
 			local tab_count = tonumber(table.Count(coords))
-			local xaxis = pw - ctr(120)
+			local xaxis = pw - 2 * br
 			local xaxispart = xaxis / tab_count
-			local yaxis = ph - ctr(120)
+			local yaxis = ph - 2 * br
 			local ymax = coords[table.Count(coords)] or 1
 			local ymulti = yaxis / ymax
 
@@ -168,25 +344,25 @@ net.Receive("get_levelsystem_settings", function(len)
 					p1 = yaxis - p1
 					p2 = yaxis - p2
 
-					p1 = ctr(60) + p1
-					p2 = ctr(60) + p2
+					p1 = br + p1
+					p2 = br + p2
 
 					if i == min + 1 then
-						draw.SimpleTextOutlined(coords[i - 1], "DermaDefault", ctr(30), p1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+						draw.SimpleTextOutlined(coords[i - 1], "DermaDefault", br - ctr(10), p1, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 					end
-					surface.DrawLine(x + xaxispart * (i - 1), p1, x + xaxispart * i, p2)
+					surface.DrawLine(x + xaxispart * (i - 2), p1, x + xaxispart * (i - 1), p2)
 				end
 			end
 
 			local ymin = 0
 			ymax = math.Round(ymax, 0)
-			draw.SimpleTextOutlined(ymin, "DermaDefault", ctr(30), ctr(60) + yaxis, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined(ymax, "DermaDefault", ctr(30), ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_xp"), "DermaDefault", ctr(30), ctr(60) + yaxis / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(ymin, "DermaDefault", ctr(10), br + yaxis, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(ymax, "DermaDefault", ctr(10), br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_xp"), "DermaDefault", ctr(10), br + yaxis / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 
-			draw.SimpleTextOutlined(min, "DermaDefault", ctr(60), ctr(60) + yaxis + ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined(max, "DermaDefault", ctr(60) + xaxis, ctr(60) + yaxis + ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "DermaDefault", ctr(60) + xaxis / 2, ctr(60) + yaxis + ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(min, "DermaDefault", br, br + yaxis + br / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(max, "DermaDefault", br + xaxis, br + yaxis + br / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "DermaDefault", br + xaxis / 2, br + yaxis + br / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 	end
 end)

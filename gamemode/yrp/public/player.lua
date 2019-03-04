@@ -39,12 +39,12 @@ function Player:GetMaxArmor()
 	return self:GetNWInt("MaxArmor", 1)
 end
 
-function Player:Level()
-	return self:GetNWInt("Level", 1)
+function Player:GetMinLevel()
+	return tonumber(self:GetNWString("int_level_min", "1"))
 end
 
 function Player:GetMaxLevel()
-	return self:GetNWInt("MaxLevel", 10)
+	return tonumber(self:GetNWString("int_level_max", "100"))
 end
 
 function Player:Stamina()
@@ -269,6 +269,19 @@ function Player:FormattedSalaryRounded(round)
 		round = 0
 	end
 	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
+end
+
+--[[ Character ]]--
+function Player:Level()
+	return tonumber(self:GetNWString("int_level", "1"))
+end
+
+function Player:XP()
+	return tonumber(math.Round(self:GetNWString("int_xp", "1"), 0))
+end
+
+function Player:GetMaxXP()
+	return tonumber(math.Round(math.pow(self:Level(), 1.5), 0)) + 100
 end
 
 --[[ Role ]]--

@@ -334,6 +334,12 @@ function OpenSBS()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 			local x = 128 + 10
+
+			if pl:GetNWBool("bool_yrp_scoreboard_show_level", false) then
+				draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "sef", ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				x = x + 160
+			end
+
 			local naugname = YRP.lang_string("LID_name") .. "/" .. YRP.lang_string("LID_usergroup")
 			if !pl:GetNWBool("bool_yrp_scoreboard_show_usergroup", false) then
 				naugname = YRP.lang_string("LID_name")
@@ -444,6 +450,12 @@ function OpenSBS()
 
 					local x = 128 + 10
 					if true then
+
+						if pl:GetNWBool("bool_yrp_scoreboard_show_level", false) then
+							draw.SimpleTextOutlined(pl:Level(), "sef", ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							x = x + 160
+						end
+
 						local nay = ph / 4 * 1
 						local ugy = ph / 4 * 3
 						if !pl:GetNWBool("bool_yrp_scoreboard_show_usergroup", false) then

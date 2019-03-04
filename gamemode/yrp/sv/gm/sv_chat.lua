@@ -215,6 +215,44 @@ function add_money(sender, text)
 	end
 end
 
+function add_xp(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode(" ", text, false)
+		local _name = _table[2]
+		local _xp = tonumber(_table[3])
+		if isnumber(_xp) then
+			local _receiver = get_player_by_name(_name)
+			if worked(_receiver, "xp receiver not found!") then
+				_receiver:AddXP(_xp)
+				return ""
+			else
+				sender:ChatPrint("Command-FAILED NAME not found")
+			end
+		end
+	else
+		printGM("note", sender:Nick() .. " tried to use addxp!")
+	end
+end
+
+function add_level(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode(" ", text, false)
+		local _name = _table[2]
+		local _lvl = tonumber(_table[3])
+		if isnumber(_lvl) then
+			local _receiver = get_player_by_name(_name)
+			if worked(_receiver, "xp receiver not found!") then
+				_receiver:AddLevel(_lvl)
+				return ""
+			else
+				sender:ChatPrint("Command-FAILED NAME not found")
+			end
+		end
+	else
+		printGM("note", sender:Nick() .. " tried to use addxp!")
+	end
+end
+
 function do_sleep(sender)
 	if sender:GetNWBool("ragdolled", false) then
 		DoUnRagdoll(sender)
@@ -387,6 +425,16 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "addmoney" then
 		add_money(sender, text)
+		return ""
+	end
+
+	if paket.command == "addxp" then
+		add_xp(sender, text)
+		return ""
+	end
+
+	if paket.command == "addlevel" then
+		add_level(sender, text)
 		return ""
 	end
 
