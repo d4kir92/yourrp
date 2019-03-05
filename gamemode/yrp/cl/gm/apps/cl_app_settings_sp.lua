@@ -33,7 +33,7 @@ function APP:OpenApp(display, x, y, w, h)
 		else
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 		end
-		surfaceText(YRP.lang_string("LID_colorsettings"), "apph1", pw/2, ph/2, Color(0, 0, 0, 255), 1, 1)
+		surfaceText("Color settings", "apph1", pw/2, ph/2, Color(0, 0, 0, 255), 1, 1)
 	end
 	function _tmp.colors:DoClick()
 
@@ -45,7 +45,7 @@ function APP:OpenApp(display, x, y, w, h)
 		_tmp.menu_color_header = createD("DPanel", display, w, ctrb(60), x, y)
 		function _tmp.menu_color_header:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-			surfaceText(YRP.lang_string("LID_colorsettings"), "apph1", ctrb(10), ctrb(30), Color(255, 255, 255), 0, 1)
+			surfaceText("Color settings", "apph1", ctrb(10), ctrb(30), Color(255, 255, 255), 0, 1)
 		end
 
 		--[[ Case Color ]]--

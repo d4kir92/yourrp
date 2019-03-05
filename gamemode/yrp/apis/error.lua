@@ -81,7 +81,7 @@ function yts(str , str2)
 end
 
 function ErrorValidToSend(str)
-	if string.find(str, "  ") == nil and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
+	if string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
 		return true
 	else
 		return false
@@ -104,13 +104,14 @@ function update_error_table_sv()
 		local _yrp_read = file.Read("yrp/sv_errors.txt", "DATA")
 		if worked(_yrp_read, "_yrp_read failed") then
 
-			local _explode_yrp_read = string.Explode("\n", _yrp_read)
-			local _explode = string.Explode("\n", _read)
+			_yrp_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
+			_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
+			local _explode_yrp_read = string.Explode("\r\n\r\n", _yrp_read)
+			local _explode = string.Explode("\r\n\r\n", _read)
 
 			if #_explode < #_explode_yrp_read then
 				--if error file is smaller, update data
 				file.Write("yrp/sv_errors.txt", _read)
-
 			elseif #_explode > #_explode_yrp_read then
 				--if error file is bigger, get all errors
 
@@ -165,9 +166,10 @@ function update_error_table_cl()
 
 		local _yrp_read = file.Read("yrp/cl_errors.txt", "DATA")
 		if worked(_yrp_read, "_yrp_read failed") then
-
-			local _explode_yrp_read = string.Explode("\n", _yrp_read)
-			local _explode = string.Explode("\n", _read)
+			_yrp_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
+			_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
+			local _explode_yrp_read = string.Explode("\r\n\r\n", _yrp_read)
+			local _explode = string.Explode("\r\n\r\n", _read)
 
 			if #_explode < #_explode_yrp_read then
 				--if error file is smaller, update data
@@ -257,6 +259,9 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error(realm, str)
 	local entry = {}
+	if CLIENT and !LocalPlayer():GetNWBool("isserverdedicated", false) then
+		return false
+	end
 	timer.Create("wait_for_gamemode" .. str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
 			isdbfull(str)
@@ -341,9 +346,9 @@ function CanSendError()
 	if !IsYRPOutdated() then
 		if game.MaxPlayers() > 1 then
 			if CLIENT then
-				if LocalPlayer():GetNWBool("serverdedicated", false) then
+				if LocalPlayer():GetNWBool("isserverdedicated", false) then
 					if LocalPlayer():GetNWBool("bool_server_debug", true) then
-						if tick % LocalPlayer():GetNWInt("int_server_debug_tick", 60) == 0 then
+						if tick % tonumber(LocalPlayer():GetNWInt("int_server_debug_tick", 10)) == 0 then
 							return true
 						end
 					else

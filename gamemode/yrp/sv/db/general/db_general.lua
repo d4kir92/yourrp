@@ -225,7 +225,7 @@ function YRPDebug()
 end
 
 function YRPErrorMod()
-	return yrp_general.int_server_debug_tick or 60
+	return 10
 end
 
 function YRPIsAutomaticServerReloadingEnabled()

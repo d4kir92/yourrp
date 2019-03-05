@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-printGM("note", "Loading sv_includes.lua")
+printGM("gm", "Loading sv_includes.lua")
 
 include("db/db_database.lua")
 
@@ -12,4 +12,4 @@ include("gm/sv_chat.lua")
 include("gm/sv_teleport.lua")
 include("gm/sv_startup.lua")
 
-printGM("note", "Loaded sv_includes.lua")
+printGM("gm", "Loaded sv_includes.lua")

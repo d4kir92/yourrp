@@ -381,11 +381,11 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							self.tcolor = Color(255, 255, 255, 255)
 
 							if string.find(v.ClassName, "npc_") then
-								self.text = YRP.lang_string("LID_npcswep")
+								self.text = "NPC SWEP"
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = YRP.lang_string("LID_baseentity")
+								self.text = "Base Entity"
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
@@ -397,10 +397,10 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 						else
 							if string.find(v.ClassName, "npc_") then
-								self.text = YRP.lang_string("LID_npcswep")
+								self.text = "NPC SWEP"
 								self.color = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = YRP.lang_string("LID_baseentity")
+								self.text = "Base Entity"
 								self.color = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
 								self.text = "NO MODEL"
@@ -867,11 +867,11 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 							self.tcolor = Color(255, 255, 255, 255)
 
 							if string.find(v.ClassName, "npc_") then
-								self.text = YRP.lang_string("LID_npcswep")
+								self.text = "NPC SWEP"
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = YRP.lang_string("LID_baseentity")
+								self.text = "Base SWEP"
 								self.color = Color(255, 255, 0, 255)
 								self.tcolor = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
@@ -883,10 +883,10 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 						else
 							if string.find(v.ClassName, "npc_") then
-								self.text = YRP.lang_string("LID_npcswep")
+								self.text = "NPC SWEP"
 								self.color = Color(255, 0, 0, 255)
 							elseif string.find(v.ClassName, "base") then
-								self.text = YRP.lang_string("LID_baseentity")
+								self.text = "Base SWEP"
 								self.color = Color(255, 0, 0, 255)
 							elseif v.WorldModel == "" then
 								self.text = "NO MODEL"
@@ -1433,6 +1433,26 @@ function YRPSendIsReady()
 
 	if tobool(get_tutorial("tut_welcome")) then
 		openHelpMenu()
+	end
+
+	if !LocalPlayer():GetNWBool("isserverdedicated", false) then
+		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
+		warning:Center()
+		warning:SetTitle("Warning")
+		warning:SetHeaderHeight(ctr(100))
+		warning:ShowCloseButton(false)
+		function warning:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
+			hook.Run("YFramePaint", self, pw, ph)
+			if LocalPlayer():GetNWBool("isserverdedicated", false) then
+				self:Remove()
+			end
+		end
+
+		warning.site = createD("DHTML", warning, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+		warning.site:OpenURL("https://sites.google.com/view/yrp/nonededicatedservers")
+
+		warning:MakePopup()
 	end
 
 	timer.Simple(4, function()

@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function CheckIfCollectionIDIsCorrect()
-	local collectionID = YRPCollectionID()
+	local collectionID = tonumber(YRPCollectionID())
 	if collectionID <= 0 then
 		printGM("note", "Current CollectionID is not correct.")
 		return false
@@ -27,8 +27,10 @@ function TestCollection(cid)
 
 			printGM("db", "[TestCollection] Found right collection: " .. cid)
 			if YRPCollectionID() != cid then
-				printGM("db", "[TestCollection] Current Collection wrong -> updating CollectionID.")
+				printGM("db", "[TestCollection] Current Collection is wrong, updating CollectionID.")
 				SetYRPCollectionID(cid)
+			else
+				printGM("db", "[TestCollection] Current Collection is right.")
 			end
 			return true
 		end
@@ -45,6 +47,7 @@ function GetCollection(cid, maincid)
 				collections[maincid] = {}
 				collections[maincid].id = collections[maincid].id or maincid
 				collections[maincid].ids = collections[maincid].ids or {}
+				collections[maincid].idstest = collections[maincid].idstest or {}
 				collections[maincid].othercollections = {}
 				collections[maincid].done = collections[maincid].done or false
 			end
@@ -74,7 +77,23 @@ function GetCollection(cid, maincid)
 								id = string.sub(id, 1, _e - 1)
 								id = tonumber(id)
 								if isnumber(id) and id != cid then
-									table.insert(collections[maincid].ids, id)
+									local id_url = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. id
+									http.Fetch(id_url,
+										function(bo, le, he, co)
+											table.insert(collections[maincid].idstest, id)
+											local _found = string.find(bo, "Addon</a>")
+											if _found then
+												table.insert(collections[maincid].ids, id)
+											end
+											if table.Count(collections[maincid].idstest) == table.Count(engine.GetAddons()) and collections[maincid].done then
+												TestCollection(maincid)
+											end
+										end,
+										function(err)
+											printGM("note", "[GetCollection - ID] Error. (" .. tostring(err) .. ")")
+										end
+									)
+									---table.insert(collections[maincid].ids, id)
 								end
 							end
 						end
@@ -124,7 +143,6 @@ function GetCollection(cid, maincid)
 
 						if collections[maincid].linkedcollections == collections[maincid].linkedcollectionsadded then
 							collections[maincid].done = true
-							TestCollection(maincid)
 						end
 					end,
 					function(err)
@@ -215,6 +233,8 @@ function GM:PlayerAuthed(ply, steamid, uniqueid)
 
 	printGM("gm", "[PlayerAuthed] " .. ply:YRPName())
 
+	ply:SetNWBool("isserverdedicated", game.IsDedicated())
+
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid)
@@ -260,7 +280,7 @@ function GM:PlayerLoadout(ply)
 				if wk(_rol_tab) then
 					SetRole(ply, _rol_tab.uniqueID)
 				else
-					printGM("error", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
+					printGM("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 					ply:KillSilent()
 				end
 
@@ -272,7 +292,7 @@ function GM:PlayerLoadout(ply)
 
 					setbodygroups(ply)
 				else
-					printGM("error", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring(chaTab))
+					printGM("note", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring(chaTab))
 					if !ply:IsBot() then
 						ply:KillSilent()
 					end
