@@ -26,7 +26,7 @@ function testApp(display, x, y, w, h)
 		--[[ if Agent ]]--
 		local _we = createD("DPanel", _dw, ctrb(800), ctrb(100), 0, 0)
 		function _we:Paint(pw, ph)
-			surfaceText(YRP.lang_string("LID_welcomeagentpre") .. " " .. LocalPlayer():RPName() .. " " .. YRP.lang_string("LID_welcomeagentpos"), "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText("Welcome Agent", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
 		end
 
 		local _target_model = createD("DModelPanel", _dw, ctrb(800), ctrb(800), ctrb(400), ctrb(100))
@@ -34,14 +34,14 @@ function testApp(display, x, y, w, h)
 		local _target_rpname = createD("DPanel", _dw, ctrb(400), ctrb(100), ctrb(1200), ctrb(100))
 		_target_rpname.rpname = YRP.lang_string("LID_none")
 		function _target_rpname:Paint(pw, ph)
-			surfaceText(YRP.lang_string("LID_target") .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText("Target" .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
 			surfaceText(self.rpname, "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
 		end
 
 		local _target_reward = createD("DPanel", _dw, ctrb(400), ctrb(100), ctrb(1200), ctrb(250))
 		_target_reward.reward = YRP.lang_string("LID_none")
 		function _target_reward:Paint(pw, ph)
-			surfaceText(YRP.lang_string("LID_reward") .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText("Reward" .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
 			surfaceText(self.reward, "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
 		end
 
@@ -57,7 +57,7 @@ function testApp(display, x, y, w, h)
 		_target_accept:SetText("")
 		function _target_accept:Paint(pw, ph)
 			if self.hit != nil then
-				surfaceButton(self, pw, ph, YRP.lang_string("LID_accepthit"))
+				surfaceButton(self, pw, ph, "Accept hit")
 			end
 		end
 		function _target_accept:DoClick()
@@ -69,8 +69,8 @@ function testApp(display, x, y, w, h)
 
 		local _target_list = createD("DListView", _dw, ctrb(1000), ctrb(1200), 0, ctrb(100))
 		_target_list:AddColumn(YRP.lang_string("LID_name"))
-		_target_list:AddColumn(YRP.lang_string("LID_target"))
-		_target_list:AddColumn(YRP.lang_string("LID_reward"))
+		_target_list:AddColumn("Target")
+		_target_list:AddColumn("Reward")
 		_target_list:AddColumn(YRP.lang_string("LID_description"))
 		net.Receive("yrp_gethits", function(len)
 			local _hits = net.ReadTable()
@@ -116,16 +116,16 @@ function testApp(display, x, y, w, h)
 		local _ch = createD("DButton", _dw, ctrb(400), ctrb(60), 0, 0)
 		_ch:SetText("")
 		function _ch:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_createahit"))
+			surfaceButton(self, pw, ph, "Create Hit")
 		end
 		function _ch:DoClick()
 			local _newhit = createD("DFrame", nil, ctrb(1400), ctrb(1400), 0, 0)
 			_newhit:SetTitle("")
 			_newhit:Center()
 			function _newhit:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("LID_createahit"))
+				surfaceWindow(self, pw, ph, "Create Hit")
 
-				surfaceText(YRP.lang_string("LID_target") .. ":", "apph1", ctrb(10), ctrb(100), Color(255, 255, 255), 0, 2)
+				surfaceText("Target" .. ":", "apph1", ctrb(10), ctrb(100), Color(255, 255, 255), 0, 2)
 			end
 
 			local _pb = createD("DComboBox", _newhit, ctrb(400), ctrb(50), ctrb(10), ctrb(100))
@@ -140,10 +140,10 @@ function testApp(display, x, y, w, h)
 				self._hi = createD("DPanel", _newhit, ctrb(600), ctrb(1000), ctrb(600), ctrb(100))
 				self._hi.target = value
 				function self._hi:Paint(pw, ph)
-					surfaceText(YRP.lang_string("LID_target") .. ":", "apph1", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 2)
+					surfaceText(YRP.lang_string("Target") .. ":", "apph1", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 2)
 					surfaceText(self.target, "apph1", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 0)
 
-					surfaceText(YRP.lang_string("LID_reward") .. ":", "apph1", ctrb(10), ctrb(150), Color(255, 255, 255), 0, 2)
+					surfaceText(YRP.lang_string("Reward") .. ":", "apph1", ctrb(10), ctrb(150), Color(255, 255, 255), 0, 2)
 
 					surfaceText(YRP.lang_string("LID_description") .. ":", "apph1", ctrb(10), ctrb(250), Color(255, 255, 255), 0, 2)
 				end
@@ -155,7 +155,7 @@ function testApp(display, x, y, w, h)
 				local _hp = createD("DButton", self._hi, ctrb(400), ctrb(50), ctrb(10), ctrb(350))
 				_hp:SetText("")
 				function _hp:Paint(pw, ph)
-					surfaceButton(self, pw, ph, YRP.lang_string("LID_placehit"))
+					surfaceButton(self, pw, ph, YRP.lang_string("Place hit"))
 				end
 				function _hp:DoClick()
 					local _steamid = data
@@ -174,8 +174,8 @@ function testApp(display, x, y, w, h)
 
 		local _target_list = createD("DListView", _dw, ctrb(1000), ctrb(1200), 0, ctrb(100))
 		_target_list:AddColumn(YRP.lang_string("LID_name"))
-		_target_list:AddColumn(YRP.lang_string("LID_target"))
-		_target_list:AddColumn(YRP.lang_string("LID_reward"))
+		_target_list:AddColumn("Target")
+		_target_list:AddColumn("Reward")
 		_target_list:AddColumn(YRP.lang_string("LID_description"))
 		net.Receive("yrp_get_contracts", function(len)
 			local _hits = net.ReadTable()

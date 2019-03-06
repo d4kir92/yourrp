@@ -678,7 +678,7 @@ util.AddNetworkString("inv_pm_up")
 net.Receive("inv_pm_up", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
-	if _pms != nil then
+	if wk(_pms) then
 		ply:SetModel(_pms[_cur])
 		local _charid = ply:CharID()
 		SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))

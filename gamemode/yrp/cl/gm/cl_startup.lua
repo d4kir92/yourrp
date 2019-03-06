@@ -1435,7 +1435,7 @@ function YRPSendIsReady()
 		openHelpMenu()
 	end
 
-	if !LocalPlayer():GetNWBool("isserverdedicated", false) then
+	if LocalPlayer():GetNWBool("isserverdedicated", false) then
 		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 		warning:Center()
 		warning:SetTitle("Warning")
@@ -1445,13 +1445,38 @@ function YRPSendIsReady()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 			hook.Run("YFramePaint", self, pw, ph)
 			if LocalPlayer():GetNWBool("isserverdedicated", false) then
-				self:Remove()
+				--self:Remove()
 			end
 		end
 
-		warning.site = createD("DHTML", warning, ScrW(), ScrH() - ctr(100), 0, ctr(100))
+		warning.tick = 10
+
+		warning.site = createD("DHTML", warning, ScrW(), ScrH() - ctr(280), 0, ctr(100))
 		warning.site:OpenURL("https://sites.google.com/view/yrp/nonededicatedservers")
 
+		warning.close = createD("YButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 100))
+		warning.close:SetText("Close")
+		function warning.close:Paint(pw, ph)
+			hook.Run("YButtonPaint", self, pw, ph)
+		end
+		function warning.close:DoClick()
+			if warning.tick == 0 then
+				warning:Close()
+			end
+		end
+
+		timer.Create("yrp_warning_timer", 1, 0, function()
+			if warning:IsValid() then
+				warning.close:SetText(warning.tick)
+			end
+			warning.tick = warning.tick - 1
+			if warning.tick == 0 then
+				if warning:IsValid() then
+					warning.close:SetText("Close")
+				end
+				timer.Remove("yrp_warning_timer")
+			end
+		end)
 		warning:MakePopup()
 	end
 

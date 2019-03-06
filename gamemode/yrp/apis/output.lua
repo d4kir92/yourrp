@@ -282,6 +282,7 @@ countries["RO"] = "Romania"
 countries["RU"] = "Russia"
 
 countries["SE"] = "Sweden"
+countries["SG"] = "Singapore"
 
 countries["TH"] = "Thailand"
 countries["TR"] = "Turkey"

@@ -156,8 +156,9 @@ end
 
 function SearchForCollectionID()
 	local collectionID = YRPCollectionID()
-	local files, folders = file.Find("*", "BASE_PATH")
+	local files = file.Find("*", "BASE_PATH")
 	local collectionIDs = {}
+
 	for k, v in pairs(files) do
 		if system.IsWindows() and !string.EndsWith(v, ".bat") then
 			continue
