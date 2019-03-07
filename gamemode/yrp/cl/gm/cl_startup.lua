@@ -1435,7 +1435,7 @@ function YRPSendIsReady()
 		openHelpMenu()
 	end
 
-	if LocalPlayer():GetNWBool("isserverdedicated", false) then
+	if !LocalPlayer():GetNWBool("isserverdedicated", false) then
 		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 		warning:Center()
 		warning:SetTitle("Warning")
@@ -1445,7 +1445,7 @@ function YRPSendIsReady()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 			hook.Run("YFramePaint", self, pw, ph)
 			if LocalPlayer():GetNWBool("isserverdedicated", false) then
-				--self:Remove()
+				self:Remove()
 			end
 		end
 

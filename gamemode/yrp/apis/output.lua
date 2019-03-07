@@ -273,6 +273,7 @@ countries["KZ"] = "Kazakhstan"
 countries["MX"] = "Mexico"
 
 countries["NL"] = "Netherlands"
+countries["NO"] = "Norway"
 countries["NZ"] = "New Zealand"
 
 countries["PL"] = "Poland"
