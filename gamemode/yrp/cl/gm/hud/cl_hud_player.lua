@@ -220,11 +220,6 @@ function HudPlayer(ply)
 			drawRBox(0, 0, 0, ScrW() * ctrF(ScrH()), ScrH() * ctrF(ScrH()), Color(255, 0, 0, 100))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_dead") .. "! " .. YRP.lang_string("LID_respawning") .. "...", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
-
-		if ply:GetNWBool("bool_lockdown", false) then
-			local lockdown = "[" .. string.upper(YRP.lang_string("LID_lockdown")) .. "]"
-			draw.SimpleTextOutlined(lockdown .. " " .. ply:GetNWString("string_lockdowntext", "") .. " " .. lockdown, "Roboto30B", ScrW() / 2, ScrH() / 2 - ctr(800), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		end
 	else
 		draw.SimpleTextOutlined(YRP.lang_string("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
 	end

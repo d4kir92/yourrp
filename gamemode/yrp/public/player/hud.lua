@@ -57,3 +57,12 @@ function Player:HudElement(element)
 	end
 	return ele
 end
+
+function Player:LockdownText()
+	local lockdown = ""
+	if self:GetNWBool("bool_lockdown", false) then
+		lockdown = "[" .. string.upper(YRP.lang_string("LID_lockdown")) .. "]"
+		lockdown = lockdown .. " " .. ply:GetNWString("string_lockdowntext", "") .. " " .. lockdown
+	end
+	return lockdown
+end

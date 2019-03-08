@@ -1438,7 +1438,7 @@ function YRPSendIsReady()
 	if !LocalPlayer():GetNWBool("isserverdedicated", false) then
 		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 		warning:Center()
-		warning:SetTitle("Warning")
+		warning:SetTitle("Warning - If you want to remove this, use a dedicated server")
 		warning:SetHeaderHeight(ctr(100))
 		warning:ShowCloseButton(false)
 		function warning:Paint(pw, ph)
@@ -1451,8 +1451,17 @@ function YRPSendIsReady()
 
 		warning.tick = 10
 
-		warning.site = createD("DHTML", warning, ScrW(), ScrH() - ctr(280), 0, ctr(100))
-		warning.site:OpenURL("https://sites.google.com/view/yrp/nonededicatedservers")
+		warning.site = createD("DHTML", warning, ScrW() - ctr(200), ScrH() - ctr(100 + 100 + 60 + 20 + 60 + 20), ctr(100), ctr(100))
+		warning.site:OpenURL("https://sites.google.com/view/gdsm/home")
+
+		warning.openlink = createD("YButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 20 + 60 + 100))
+		warning.openlink:SetText("Open Website")
+		function warning.openlink:Paint(pw, ph)
+			hook.Run("YButtonPaint", self, pw, ph)
+		end
+		function warning.openlink:DoClick()
+			gui.OpenURL("https://sites.google.com/view/gdsm/home")
+		end
 
 		warning.close = createD("YButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 100))
 		warning.close:SetText("Close")

@@ -261,6 +261,8 @@ function send_error(realm, str)
 	local entry = {}
 	if CLIENT and !LocalPlayer():GetNWBool("isserverdedicated", false) then
 		return false
+	elseif SERVER and !game.IsDedicated() then
+		return false
 	end
 	timer.Create("wait_for_gamemode" .. str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
@@ -345,16 +347,14 @@ end
 function CanSendError()
 	if !IsYRPOutdated() then
 		if game.MaxPlayers() > 1 then
-			if CLIENT then
-				if LocalPlayer():GetNWBool("isserverdedicated", false) then
-					if LocalPlayer():GetNWBool("bool_server_debug", true) then
-						if tick % tonumber(LocalPlayer():GetNWInt("int_server_debug_tick", 10)) == 0 then
-							return true
-						end
-					else
-						if tick % 3600 == 0 then
-							return true
-						end
+			if CLIENT and LocalPlayer():GetNWBool("isserverdedicated", false) then
+				if LocalPlayer():GetNWBool("bool_server_debug", true) then
+					if tick % tonumber(LocalPlayer():GetNWInt("int_server_debug_tick", 10)) == 0 then
+						return true
+					end
+				else
+					if tick % 3600 == 0 then
+						return true
 					end
 				end
 			elseif SERVER and game.IsDedicated() then

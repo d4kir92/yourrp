@@ -109,14 +109,16 @@ function HUDSimpleBAR(tab)
 				Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fw * 0.2
 			end
 		else
-			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
-				Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh
-				Simple[tab.element]["bar"].w = Simple[tab.element]["bar"].fw / tab.max * tab.cur
-			else
-				Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh / tab.max * tab.cur
-				Simple[tab.element]["bar"].y = Simple[tab.element]["bar"].fy + Simple[tab.element]["bar"].fh - Simple[tab.element]["bar"].h
+			if tab.max != nil and tab.cur != nil then
+				if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
+					Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh
+					Simple[tab.element]["bar"].w = Simple[tab.element]["bar"].fw / tab.max * tab.cur
+				else
+					Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh / tab.max * tab.cur
+					Simple[tab.element]["bar"].y = Simple[tab.element]["bar"].fy + Simple[tab.element]["bar"].fh - Simple[tab.element]["bar"].h
+				end
+				HudBox(Simple[tab.element]["bar"])
 			end
-			HudBox(Simple[tab.element]["bar"])
 
 			if lply:GetHudBool(tab.element, "ICON") and tab.icon != nil then
 				local ico = tab.icon
@@ -132,6 +134,9 @@ function HUDSimpleBAR(tab)
 			end
 			if tab.tcolor != nil then
 				Simple[tab.element]["text"].color = tab.tcolor
+			end
+			if tab.tfont != nil then
+				Simple[tab.element]["text"].font = tab.tfont
 			end
 			HudTextBr(Simple[tab.element]["text"])
 		end
@@ -626,6 +631,13 @@ function HUDSimple()
 		local _y = math.Round(lply:GetPos().y, 0)
 		MI.text = "x: " .. tostring(_x) .. " y: " .. tostring(_y)
 		HUDSimpleBAR(MI)
+
+		LO = {}
+		LO.element = "LO"
+		LO.text = lply:LockdownText()
+		HUDSimpleBAR(LO)
+
+
 
 		-- Foreground
 		HP = {}

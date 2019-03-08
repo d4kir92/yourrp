@@ -155,14 +155,10 @@ function GetCollection(cid, maincid)
 end
 
 function SearchForCollectionID()
-	local collectionID = YRPCollectionID()
 	local files = file.Find("*", "BASE_PATH")
 	local collectionIDs = {}
 
 	for k, v in pairs(files) do
-		if system.IsWindows() and !string.EndsWith(v, ".bat") then
-			continue
-		end
 		local f = file.Read(v, "BASE_PATH")
 		if isstring(f) then
 			local cidstart = string.find(f, "+host_workshop_collection ")

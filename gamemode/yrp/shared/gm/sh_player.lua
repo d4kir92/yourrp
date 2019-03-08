@@ -87,7 +87,7 @@ function Player:HasCharacterSelected()
 			if self:LoadedGamemode() then
 				--printGM("note", self:YRPName() .. " HasCharacterSelected?")
 				local _ply_tab = self:GetPlyTab()
-				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL and self:Alive() then
+				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
 					return true
 				end
 			end

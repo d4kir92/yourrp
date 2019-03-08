@@ -7,6 +7,8 @@ function Player:GetHudVal(element, art)
 	local dbval = nil
 	dbval = self:GetNWFloat("float_HUD_" .. element .. "_" .. art, -1.0)
 
+	--YRP.msg("note", element .. " " .. art .. ": " .. dbval)
+
 	local ret = dbval
 
 	if art == "POSI_X" or  art == "SIZE_W" then
@@ -221,6 +223,7 @@ net.Receive("get_design_settings", function(len)
 				local sh = lply:GetHudVal(tab.element, "SIZE_H")
 				local px = lply:GetHudVal(tab.element, "POSI_X")
 				local py = lply:GetHudVal(tab.element, "POSI_Y")
+				--YRP.msg("note", "element: " .. tab.element " x: "..  px .. " y: " .. py .. " w: " .. sw .. " h: " .. sh)
 				local win = createD("DFrame", editarea, sw, sh, px, py)
 				win:SetTitle("")
 				win:SetDraggable(true)
@@ -781,6 +784,11 @@ net.Receive("get_design_settings", function(len)
 			MI.name = "LID_minimap"
 			AddElement(MI)
 			]]--
+
+			local LO = {}
+			LO.element = "LO"
+			LO.name = "LID_lockdown"
+			AddElement(LO)
 
 			function editarea:DoClick()
 				if table.Count(editarea["settingswindows"]) == 0 then

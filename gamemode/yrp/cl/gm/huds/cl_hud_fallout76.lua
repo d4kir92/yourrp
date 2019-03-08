@@ -579,6 +579,12 @@ function HUD_FO76()
 			FO76Name(CON)
 		end
 
+		local LO = {}
+		LO.element = "LO"
+		LO.text = lply:LockdownText()
+		LO.tcolor = Color(255, 0, 0)
+		FO76Name(LO)
+
 		if lply:GetNWBool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"

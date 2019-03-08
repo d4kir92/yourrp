@@ -574,6 +574,33 @@ function DefaultHUDSettings(reset)
 	COM.ints.AY = 1
 	COM.ints.TS = 12
 	AddHUDElement(COM, reset)
+
+	local LO = {}
+	LO.element = "LO"
+	LO.floats = {}
+	LO.floats.POSI_X = 0.36979165673256
+	LO.floats.POSI_Y = 0.10185185074806
+	LO.floats.SIZE_W = 0.26041665673256
+	LO.floats.SIZE_H = 0.074074074625969
+	LO.bools = {}
+	LO.bools.VISI = 1
+	LO.bools.ROUN = 0
+	LO.bools.ICON = 1
+	LO.bools.TEXT = 1
+	LO.bools.PERC = 1
+	LO.bools.BACK = 1
+	LO.bools.BORD = 0
+	LO.colors = {}
+	LO.colors.TE = "255, 0, 0, 255"
+	LO.colors.TB = "0, 0, 0, 255"
+	LO.colors.BG = "0, 0, 0, 200"
+	LO.colors.BA = "0, 0, 0, 255"
+	LO.colors.BR = "0, 0, 0, 255"
+	LO.ints = {}
+	LO.ints.AX = 1
+	LO.ints.AY = 1
+	LO.ints.TS = 30
+	AddHUDElement(LO, reset)
 end
 DefaultHUDSettings()
 
