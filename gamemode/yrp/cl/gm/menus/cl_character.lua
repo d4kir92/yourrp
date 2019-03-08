@@ -895,8 +895,9 @@ function openCharacterSelection()
 		local charactersCreate = createMDPlus(_cs.frame, button.size, button.x, button.y, ctr(5))
 		charactersCreate:SetText("")
 		function charactersCreate:DoClick()
-			_cs.frame:Close()
-
+			if pa(_cs.frame) then
+				_cs.frame:Close()
+			end
 			openCharacterCreation()
 		end
 
@@ -929,7 +930,9 @@ function openCharacterSelection()
 						net.Start("EnterWorld")
 							net.WriteString(curChar)
 						net.SendToServer()
-						_cs.frame:Close()
+						if pa(_cs.frame) then
+							_cs.frame:Close()
+						end
 					end
 				end
 			end

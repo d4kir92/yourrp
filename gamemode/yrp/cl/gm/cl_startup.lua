@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local playerready = playerready or false
+local playerready = false
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -1546,15 +1546,11 @@ function YRPInitPostEntity()
 end
 
 function GM:Initialize()
-	timer.Simple(3, function()
-		YRPInitPostEntity()
-	end)
+	YRPInitPostEntity()
 end
 
 hook.Add("Initialize", "yrp_Initialize", function()
-	timer.Simple(4, function()
-		YRPInitPostEntity()
-	end)
+	YRPInitPostEntity()
 end)
 
 function GM:InitPostEntity()
@@ -1563,9 +1559,7 @@ function GM:InitPostEntity()
 end
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
-	timer.Simple(2, function()
-		YRPInitPostEntity()
-	end)
+	YRPInitPostEntity()
 end)
 
 timer.Simple(20, function()
