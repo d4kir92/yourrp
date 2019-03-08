@@ -277,7 +277,7 @@ function OpenSBS()
 		sbs.frame.tick = CurTime()
 		function sbs.frame:Paint(pw, ph)
 			if self.tick < CurTime() then
-				if input.IsMouseDown(MOUSE_MIDDLE) then
+				if input.IsMouseDown(MOUSE_RIGHT) or input.IsMouseDown(MOUSE_MIDDLE) then
 					gui.EnableScreenClicker(!vgui.CursorVisible())
 					self.tick = CurTime() + 0.4
 				end

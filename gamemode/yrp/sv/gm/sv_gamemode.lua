@@ -768,11 +768,6 @@ net.Receive("yrp_player_is_ready", function(len, ply)
 	local OS_OSX = net.ReadBool()
 	local Country = net.ReadString()
 
-	print("TEST")
-		print("TEST")
-			print("TEST")
-	print(ply:YRPName(), OS_Windows, OS_Linux, OS_OSX, Country)
-
 	open_character_selection(ply)
 
 	if OS_Windows then
@@ -786,7 +781,6 @@ net.Receive("yrp_player_is_ready", function(len, ply)
 	end
 
 	ply:SetNWString("yrp_country", Country or "Unknown")
-	print(ply:YRPName(), Country, Country, Country, Country, Country, Country)
 
 	-- YRP Chat?
 	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
@@ -795,9 +789,7 @@ net.Receive("yrp_player_is_ready", function(len, ply)
 		ply:SetNWBool("bool_yrp_chat", tobool(_chat.yrp_chat))
 	end
 
-	print("BEF")
 	ply:SetNWBool("finishedloading", true)
-	print("AFT")
 
 	ply:KillSilent()
 
