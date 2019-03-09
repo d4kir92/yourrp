@@ -376,6 +376,12 @@ net.Receive("charGetRoles", function(len, ply)
 	if wk(tmpTable) then
 		local count = 1
 		for k, v in pairs(tmpTable) do
+			if canGetRole(ply, v.uniqueID) then
+				netTable[count] = {}
+				netTable[count] = v
+				count = count + 1
+			end
+			--[[
 			local insert = true
 			if tonumber(v.bool_adminonly) == 1 then
 				if ply:HasAccess() then
@@ -402,6 +408,7 @@ net.Receive("charGetRoles", function(len, ply)
 				netTable[count] = v
 				count = count + 1
 			end
+			]]
 		end
 	end
 	net.Start("charGetRoles")
@@ -515,7 +522,7 @@ function send_characters(ply)
 			net.WriteTable(netTable)
 		net.Send(ply)
 	else
-		printGM("error", "[send_characters] plytab failed! " .. tostring(plytab))
+		printGM("note", "[send_characters] plytab failed! " .. tostring(plytab))
 	end
 end
 

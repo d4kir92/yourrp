@@ -298,7 +298,7 @@ function OpenSBS()
 			draw.SimpleTextOutlined(YRP.lang_string("LID_map") .. ": " .. GetNiceMapName(), "ScoreBoardNormal", pw - ctr(256 + 20), ctr(128-20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_players") .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "ScoreBoardNormal", pw - ctr(256 + 20), ctr(128 + 20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-			if _server_logo == "" then
+			if strEmpty(_server_logo) then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(sbs.icons.yrp	)
 				surface.DrawTexturedRect(0, ctr(4), ctr(256), ctr(256))
@@ -311,7 +311,7 @@ function OpenSBS()
 				surface.SetMaterial(_mapPNG	)
 				surface.DrawTexturedRect(pw-ctr(256 + 4), ctr(4), ctr(256), ctr(256))
 			else
-				if _server_logo == "" then
+				if strEmpty(_server_logo) then
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(sbs.icons.yrp	)
 					surface.DrawTexturedRect(pw-ctr(256 + 4), ctr(4), ctr(256), ctr(256))

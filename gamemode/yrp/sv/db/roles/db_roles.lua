@@ -445,34 +445,38 @@ end
 function SendRoleList(gro, pre)
 	gro = tonumber(gro)
 	pre = tonumber(pre)
-	SortRoles(gro, pre)
+	if gro != nil and pre != nil then
+		SortRoles(gro, pre)
 
-	local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
-	if !wk(tbl_roles) then
-		tbl_roles = {}
-	end
+		local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
+		if !wk(tbl_roles) then
+			tbl_roles = {}
+		end
 
-	local headername = "NOT FOUND"
-	if pre > 0 then
-		headername = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
-		if worked(headername) then
-			headername = headername[1].string_name
+		local headername = "NOT FOUND"
+		if pre > 0 then
+			headername = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+			if worked(headername) then
+				headername = headername[1].string_name
+			end
+		else
+			headername = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
+			if worked(headername) then
+				headername = headername[1].string_name
+			end
+		end
+
+		local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
+		for i, pl in pairs(tbl_bc) do
+			net.Start("settings_subscribe_rolelist")
+				net.WriteTable(tbl_roles)
+				net.WriteString(headername)
+				net.WriteString(gro)
+				net.WriteString(pre)
+			net.Send(pl)
 		end
 	else
-		headername = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
-		if worked(headername) then
-			headername = headername[1].string_name
-		end
-	end
-
-	local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
-	for i, pl in pairs(tbl_bc) do
-		net.Start("settings_subscribe_rolelist")
-			net.WriteTable(tbl_roles)
-			net.WriteString(headername)
-			net.WriteString(gro)
-			net.WriteString(pre)
-		net.Send(pl)
+		YRP.msg("error", "SendRoleList(" .. tostring(gro) .. ", " .. tostring(pre) .. ")")
 	end
 end
 

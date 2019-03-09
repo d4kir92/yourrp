@@ -127,8 +127,10 @@ end
 function addPreRole(rol, parent, mainparent)
 	_pr[rol.uniqueID] = parent
 	local _tmp = createBouncer(parent, mainparent)
-	createRoleBox(rol, parent, mainparent)
-	getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
+	if tonumber(rol.bool_visible) == 1 then
+		createRoleBox(rol, parent, mainparent)
+		getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
+	end
 end
 
 function getPreRole(uid, parent, mainparent)
@@ -159,7 +161,7 @@ function addRoleRow(rol, parent)
 		end
 
 		addRole(rol, _rr, parent)
-
+		
 		parent:Add(_rr)
 	end
 end
@@ -172,7 +174,9 @@ function getRoles(uid, parent)
 			if !wk(rol.int_prerole) then
 				YRP.msg("error", "getRoles(" .. tostring(uid) .. ", " .. tostring(parent) .. ") rol: " .. tostring(rol) .. " rol.int_prerole: " .. tostring(rol.int_prerole))
 			elseif tonumber(rol.int_prerole) <= 0 then
-				addRoleRow(rol, parent)
+				if tonumber(rol.bool_visible) == 1 then
+					addRoleRow(rol, parent)
+				end
 			elseif tonumber(rol.int_prerole) >= 1 then
 				--addRoleRow(rol, parent)
 			end

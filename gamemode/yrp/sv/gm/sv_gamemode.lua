@@ -225,17 +225,17 @@ function GM:PlayerSelectSpawn(ply)
 
 end
 
-function GM:PlayerAuthed(ply, steamid, uniqueid)
+hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	ply:KillSilent()
 
-	printGM("gm", "[PlayerAuthed] " .. ply:YRPName())
+	printGM("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
 	ply:SetNWBool("isserverdedicated", game.IsDedicated())
 
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid)
-end
+end)
 
 YRP = YRP or {}
 
@@ -255,8 +255,9 @@ function YRP:Loadout(ply)
 	ply:SetNWBool("bool_loadouted", true)
 end
 
-function GM:PlayerLoadout(ply)
+hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 	if ply:IsValid() and !ply:IsBot() then
+		ply:StripWeapons()
 		printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
 		YRP:Loadout(ply)
 
@@ -312,7 +313,8 @@ function GM:PlayerLoadout(ply)
 	else
 		YRP.msg("note", "[PlayerLoadout] is invalid or bot.")
 	end
-end
+	return true
+end)
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 	--printGM("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
