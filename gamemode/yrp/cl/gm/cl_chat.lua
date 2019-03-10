@@ -108,10 +108,10 @@ function InitYRPChat()
 				local x, y = yrpChat.window:GetPos()
 				local w, h = yrpChat.window:GetSize()
 
-				local px = lply:GetHudValue("CH", "POSI_X")
-				local py = lply:GetHudValue("CH", "POSI_Y")
-				local sw = lply:GetHudValue("CH", "SIZE_W")
-				local sh = lply:GetHudValue("CH", "SIZE_H")
+				local px = lply:HudValue("CH", "POSI_X")
+				local py = lply:HudValue("CH", "POSI_Y")
+				local sw = lply:HudValue("CH", "SIZE_W")
+				local sh = lply:HudValue("CH", "SIZE_H")
 				--printGM("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
 				if px != x or py != y or sw != w or sh != h then
 					yrpChat.window:SetPos(px, py)
@@ -296,7 +296,8 @@ function InitYRPChat()
 end
 
 timer.Create("yrp_init_chat", 1, 0, function()
-	if LocalPlayer():GetNWBool("finishedloading", false) and LocalPlayer():GetNWString("string_hud_design", "notloaded") != "notloaded" then
+	local lply = LocalPlayer()
+	if lply:IsValid() and lply:GetNWBool("finishedloading", false) and LocalPlayer():GetNWString("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
 		timer.Remove("yrp_init_chat")
 	end
@@ -320,7 +321,8 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 end)
 
 hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
-	if LocalPlayer():GetNWBool("bool_yrp_chat", false) then
+	local lply = LocalPlayer()
+	if lply:IsValid() and lply:GetNWBool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
 				yrpChat.richText:AppendText(text.."\n")
@@ -330,7 +332,8 @@ hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type
 end)
 
 hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
-	if LocalPlayer():GetNWBool("bool_yrp_chat", false) then
+	local lply = LocalPlayer()
+	if lply:IsValid() and lply:GetNWBool("bool_yrp_chat", false) then
 		if name == "CHudChat" then
 			return false
 		end

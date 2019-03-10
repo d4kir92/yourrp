@@ -617,328 +617,315 @@ function openCharacterSelection()
 
 		local cache = {}
 
-		_cs.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-		_cs.frame:SetTitle("")
-		_cs.frame:ShowCloseButton(false)
-		_cs.frame:SetDraggable(false)
-		_cs.frame:Center()
-		function _cs.frame:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
+		if !pa(_cs.frame) then
+			_cs.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+			_cs.frame:SetTitle("")
+			_cs.frame:ShowCloseButton(false)
+			_cs.frame:SetDraggable(false)
+			_cs.frame:Center()
+			function _cs.frame:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection") .. " [PROTOTYPE]", "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(_cur, "HudHeader", pw/2, ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		end
-		function _cs.frame:OnClose()
-			closeMenu()
-		end
-		function _cs.frame:OnRemove()
-			closeMenu()
-		end
+				draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection") .. " [PROTOTYPE]", "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(_cur, "HudHeader", pw/2, ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			end
+			function _cs.frame:OnClose()
+				closeMenu()
+			end
+			function _cs.frame:OnRemove()
+				closeMenu()
+			end
 
-		local _close = createD("YButton", _cs.frame, ctr(50), ctr(50), ScW() - ctr(60), ctr(10))
-		_close:SetText("X")
-		function _close:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
-		function _close:DoClick()
-			closeCharacterSelection()
-		end
+			local _close = createD("YButton", _cs.frame, ctr(50), ctr(50), ScW() - ctr(60), ctr(10))
+			_close:SetText("X")
+			function _close:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+			end
+			function _close:DoClick()
+				closeCharacterSelection()
+			end
 
-		local feedback = createD("YButton", _cs.frame, ctr(500), ctr(50), ScW() - ctr(510), ScrH() - ctr(60))
-		feedback:SetText("LID_givefeedback")
-		function feedback:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
-		function feedback:DoClick()
-			closeCharacterSelection()
-			openFeedbackMenu()
-		end
+			local feedback = createD("YButton", _cs.frame, ctr(500), ctr(50), ScW() - ctr(510), ScrH() - ctr(60))
+			feedback:SetText("LID_givefeedback")
+			function feedback:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+			end
+			function feedback:DoClick()
+				closeCharacterSelection()
+				openFeedbackMenu()
+			end
 
-		YRP.DChangeLanguage(_cs.frame, ScW() - ctr(100 + 10 + 50 + 10), ctr(10), ctr(100))
+			YRP.DChangeLanguage(_cs.frame, ScW() - ctr(100 + 10 + 50 + 10), ctr(10), ctr(100))
 
-		local border = ctr(50)
-		local charactersBackground = createD("DPanel", _cs.frame, ctr(800), ScrH() - (2*border), (ScrW() - ScW())/2 + border, border)
-		charactersBackground.text = YRP.lang_string("LID_siteisloading")
-		function charactersBackground:Paint(pw, ph)
-			paintMD(pw, ph, nil, get_dp_col())
-			draw.SimpleTextOutlined(self.text, "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-		end
+			local border = ctr(50)
+			local charactersBackground = createD("DPanel", _cs.frame, ctr(800), ScrH() - (2*border), (ScrW() - ScW())/2 + border, border)
+			charactersBackground.text = YRP.lang_string("LID_siteisloading")
+			function charactersBackground:Paint(pw, ph)
+				paintMD(pw, ph, nil, get_dp_col())
+				draw.SimpleTextOutlined(self.text, "HudHeader", pw/2, ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+			end
 
-		local charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - ctr(200), ScrH() - ctr(200), ScrW2() - (ScrH() - ctr(200))/2, 0)
-		charplayermodel:SetModel("models/player/skeleton.mdl")
-		charplayermodel:SetAnimated(true)
-		charplayermodel.Angles = Angle(0, 0, 0)
-		charplayermodel:RunAnimation()
+			local charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - ctr(200), ScrH() - ctr(200), ScrW2() - (ScrH() - ctr(200))/2, 0)
+			charplayermodel:SetModel("models/player/skeleton.mdl")
+			charplayermodel:SetAnimated(true)
+			charplayermodel.Angles = Angle(0, 0, 0)
+			charplayermodel:RunAnimation()
 
-		function charplayermodel:DragMousePress()
-			self.PressX, self.PressY = gui.MousePos()
-			self.Pressed = true
-		end
-		function charplayermodel:DragMouseRelease() self.Pressed = false end
-
-		function charplayermodel:LayoutEntity(ent)
-
-			if (self.bAnimated) then self:RunAnimation() end
-
-			if (self.Pressed) then
-				local mx, my = gui.MousePos()
-				self.Angles = self.Angles - Angle(0, (self.PressX or mx) - mx, 0)
-
+			function charplayermodel:DragMousePress()
 				self.PressX, self.PressY = gui.MousePos()
-				if ent != nil then
-					ent:SetAngles(self.Angles)
+				self.Pressed = true
+			end
+			function charplayermodel:DragMouseRelease() self.Pressed = false end
+
+			function charplayermodel:LayoutEntity(ent)
+
+				if (self.bAnimated) then self:RunAnimation() end
+
+				if (self.Pressed) then
+					local mx, my = gui.MousePos()
+					self.Angles = self.Angles - Angle(0, (self.PressX or mx) - mx, 0)
+
+					self.PressX, self.PressY = gui.MousePos()
+					if ent != nil then
+						ent:SetAngles(self.Angles)
+					end
 				end
 			end
-		end
 
-		local characterList = createD("DScrollPanel", charactersBackground, ctr(800), ScrH() - (2*border), 0, 0)
+			local characterList = createD("DScrollPanel", charactersBackground, ctr(800), ScrH() - (2*border), 0, 0)
 
-		net.Receive("yrp_get_characters", function(len)
-			printGM("gm", "received characterlist")
-			local _characters = net.ReadTable()
+			net.Receive("yrp_get_characters", function(len)
+				printGM("gm", "received characterlist")
+				local _characters = net.ReadTable()
 
-			if pa(charactersBackground) then
-				charactersBackground.text = ""
-				if _characters != nil and pa(_characters) then
-					character.amount = #_characters or 0
+				if pa(charactersBackground) then
+					charactersBackground.text = ""
+					if _characters != nil and pa(_characters) then
+						character.amount = #_characters or 0
 
-					if #_characters < 1 then
-						if pa(_cs.frame) then
-							_cs.frame:Close()
-						end
-						openCharacterCreation()
-						return false
-					end
-					local y = 0
-					for k, v in pairs(cache) do
-						if v.tmpChar.shadow != nil then
-							v.tmpChar.shadow:Remove()
-						end
-						v.tmpChar:Remove()
-					end
-					for i = 1, #_characters do
-						if _characters[i].char != nil then
-							cache[i] = {}
-							cache[i].tmpChar = createMD("DButton", characterList, ctr(800-20), ctr(200), ctr(10), ctr(10) + y * ctr(200) + y * ctr(10), ctr(5))
-							local tmpChar = cache[i].tmpChar
-							tmpChar:SetText("")
-
-							_characters[i].char = _characters[i].char or {}
-							_characters[i].role = _characters[i].role or {}
-							_characters[i].group = _characters[i].group or {}
-							_characters[i].faction = _characters[i].faction or {}
-
-							tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
-							tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
-							tmpChar.level = _characters[i].char.int_level or "-1"
-							tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
-							tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
-							tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
-							tmpChar.map = SQL_STR_OUT(_characters[i].char.map)
-							tmpChar.playermodelID = _characters[i].char.playermodelID
-
-							tmpChar.playermodels = string.Explode(",", _characters[i].role.string_playermodels) or {}
-							if tmpChar.playermodels == "" or tmpChar.playermodels == " " then
-								tmpChar.playermodels = {}
+						if #_characters < 1 then
+							if pa(_cs.frame) then
+								_cs.frame:Close()
 							end
-
-							tmpChar.playermodelsize = _characters[i].role.playermodelsize
-							tmpChar.skin = _characters[i].char.skin
-							tmpChar.bg0 = _characters[i].char.bg0 or 0
-							tmpChar.bg1 = _characters[i].char.bg1 or 0
-							tmpChar.bg2 = _characters[i].char.bg2 or 0
-							tmpChar.bg3 = _characters[i].char.bg3 or 0
-							tmpChar.bg4 = _characters[i].char.bg4 or 0
-							tmpChar.bg5 = _characters[i].char.bg5 or 0
-							tmpChar.bg6 = _characters[i].char.bg6 or 0
-							tmpChar.bg7 = _characters[i].char.bg7 or 0
-							tmpChar.bg8 = _characters[i].char.bg8 or 0
-							tmpChar.bg9 = _characters[i].char.bg9 or 0
-							tmpChar.bg10 = _characters[i].char.bg10 or 0
-							tmpChar.bg11 = _characters[i].char.bg11 or 0
-							tmpChar.bg12 = _characters[i].char.bg12 or 0
-							tmpChar.bg13 = _characters[i].char.bg13 or 0
-							tmpChar.bg14 = _characters[i].char.bg14 or 0
-							tmpChar.bg15 = _characters[i].char.bg15 or 0
-							tmpChar.bg16 = _characters[i].char.bg16 or 0
-							tmpChar.bg17 = _characters[i].char.bg17 or 0
-							tmpChar.bg18 = _characters[i].char.bg18 or 0
-							tmpChar.bg19 = _characters[i].char.bg19 or 0
-
-							tmpChar.grp = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. " " .. tmpChar.rolename
-							if tmpChar.groupID == tmpChar.factionID then
-								tmpChar.grp = tmpChar.grp .. " [" .. tmpChar.factionID .. "]"
-							else
-								tmpChar.grp = tmpChar.grp .. " " .. tmpChar.groupID .. " [" .. tmpChar.factionID .. "]"
+							openCharacterCreation()
+							return false
+						end
+						local y = 0
+						for k, v in pairs(cache) do
+							if v.tmpChar.shadow != nil then
+								v.tmpChar.shadow:Remove()
 							end
+							v.tmpChar:Remove()
+						end
+						for i = 1, #_characters do
+							if _characters[i].char != nil then
+								cache[i] = {}
+								cache[i].tmpChar = createMD("DButton", characterList, ctr(800-20), ctr(200), ctr(10), ctr(10) + y * ctr(200) + y * ctr(10), ctr(5))
+								local tmpChar = cache[i].tmpChar
+								tmpChar:SetText("")
 
-							function tmpChar:Paint(pw, ph)
-								if tmpChar:IsHovered() then
-									paintMD(pw, ph, nil, Color(255, 255, 0, 255))
+								_characters[i].char = _characters[i].char or {}
+								_characters[i].role = _characters[i].role or {}
+								_characters[i].group = _characters[i].group or {}
+								_characters[i].faction = _characters[i].faction or {}
+
+								tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
+								tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
+								tmpChar.level = _characters[i].char.int_level or "-1"
+								tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
+								tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
+								tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
+								tmpChar.map = SQL_STR_OUT(_characters[i].char.map)
+								tmpChar.playermodelID = _characters[i].char.playermodelID
+
+								tmpChar.playermodels = string.Explode(",", _characters[i].role.string_playermodels) or {}
+								if tmpChar.playermodels == "" or tmpChar.playermodels == " " then
+									tmpChar.playermodels = {}
+								end
+
+								tmpChar.playermodelsize = _characters[i].role.playermodelsize
+								tmpChar.skin = _characters[i].char.skin
+								tmpChar.bg0 = _characters[i].char.bg0 or 0
+								tmpChar.bg1 = _characters[i].char.bg1 or 0
+								tmpChar.bg2 = _characters[i].char.bg2 or 0
+								tmpChar.bg3 = _characters[i].char.bg3 or 0
+								tmpChar.bg4 = _characters[i].char.bg4 or 0
+								tmpChar.bg5 = _characters[i].char.bg5 or 0
+								tmpChar.bg6 = _characters[i].char.bg6 or 0
+								tmpChar.bg7 = _characters[i].char.bg7 or 0
+								tmpChar.bg8 = _characters[i].char.bg8 or 0
+								tmpChar.bg9 = _characters[i].char.bg9 or 0
+								tmpChar.bg10 = _characters[i].char.bg10 or 0
+								tmpChar.bg11 = _characters[i].char.bg11 or 0
+								tmpChar.bg12 = _characters[i].char.bg12 or 0
+								tmpChar.bg13 = _characters[i].char.bg13 or 0
+								tmpChar.bg14 = _characters[i].char.bg14 or 0
+								tmpChar.bg15 = _characters[i].char.bg15 or 0
+								tmpChar.bg16 = _characters[i].char.bg16 or 0
+								tmpChar.bg17 = _characters[i].char.bg17 or 0
+								tmpChar.bg18 = _characters[i].char.bg18 or 0
+								tmpChar.bg19 = _characters[i].char.bg19 or 0
+
+								tmpChar.grp = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. " " .. tmpChar.rolename
+								if tmpChar.groupID == tmpChar.factionID then
+									tmpChar.grp = tmpChar.grp .. " [" .. tmpChar.factionID .. "]"
 								else
-									paintMD(pw, ph, nil, get_ds_col())
+									tmpChar.grp = tmpChar.grp .. " " .. tmpChar.groupID .. " [" .. tmpChar.factionID .. "]"
 								end
-								if curChar == self.charid then
-									paintMD(pw, ph, nil, Color(255, 255, 100, 255))
-									local _br = 4
-									local _w = 50
-									local _h = 10
-									draw.RoundedBox(0, ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-									draw.RoundedBox(0, ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
 
-									draw.RoundedBox(0, ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-									draw.RoundedBox(0, ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
+								function tmpChar:Paint(pw, ph)
+									if tmpChar:IsHovered() then
+										paintMD(pw, ph, nil, Color(255, 255, 0, 255))
+									else
+										paintMD(pw, ph, nil, get_ds_col())
+									end
+									if curChar == self.charid then
+										paintMD(pw, ph, nil, Color(255, 255, 100, 255))
+										local _br = 4
+										local _w = 50
+										local _h = 10
+										draw.RoundedBox(0, ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
+										draw.RoundedBox(0, ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
 
-									draw.RoundedBox(0, pw - ctr(_w) - ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-									draw.RoundedBox(0, pw - ctr(_h) - ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
+										draw.RoundedBox(0, ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
+										draw.RoundedBox(0, ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
 
-									draw.RoundedBox(0, pw - ctr(_w) - ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-									draw.RoundedBox(0, pw - ctr(_h) - ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
+										draw.RoundedBox(0, pw - ctr(_w) - ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
+										draw.RoundedBox(0, pw - ctr(_h) - ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
+
+										draw.RoundedBox(0, pw - ctr(_w) - ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
+										draw.RoundedBox(0, pw - ctr(_h) - ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
+									end
+									draw.SimpleTextOutlined(self.rpname, "HudBars", ctr(30), ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+									draw.SimpleTextOutlined(self.grp, "HudBars", ctr(30), ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+									draw.SimpleTextOutlined(SQL_STR_OUT(self.map), "HudBars", ctr(30), ctr(155), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 								end
-								draw.SimpleTextOutlined(self.rpname, "HudBars", ctr(30), ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-								draw.SimpleTextOutlined(self.grp, "HudBars", ctr(30), ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-								draw.SimpleTextOutlined(SQL_STR_OUT(self.map), "HudBars", ctr(30), ctr(155), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-							end
-							function tmpChar:DoClick()
-								curChar = self.charid
-								_cur = self.rpname
-								if self.playermodels != nil and self.playermodelID != nil then
-									local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
-									if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
-										if !strEmpty(_playermodel) then
-											charplayermodel:SetModel(_playermodel)
-										else
-											charplayermodel:SetModel("models/player/skeleton.mdl")
-										end
-										if charplayermodel.Entity != nil then
-											charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
-											charplayermodel.Entity:SetSkin(self.skin)
-											for bgx = 0, 19 do
-												charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
+								function tmpChar:DoClick()
+									curChar = self.charid
+									_cur = self.rpname
+									if self.playermodels != nil and self.playermodelID != nil then
+										local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
+										if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
+											if !strEmpty(_playermodel) then
+												charplayermodel:SetModel(_playermodel)
+											else
+												charplayermodel:SetModel("models/player/skeleton.mdl")
+											end
+											if charplayermodel.Entity != nil then
+												charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
+												charplayermodel.Entity:SetSkin(self.skin)
+												for bgx = 0, 19 do
+													charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
+												end
 											end
 										end
+									else
+										printGM("note", "Character role has no playermodel!")
 									end
-								else
-									printGM("note", "Character role has no playermodel!")
 								end
-							end
 
-							if _characters[i].char.uniqueID == _characters.plytab.CurrentCharacter then
-								curChar = tmpChar.charid
-								tmpChar:DoClick()
+								if _characters[i].char.uniqueID == _characters.plytab.CurrentCharacter then
+									curChar = tmpChar.charid
+									tmpChar:DoClick()
+								end
+								y = y + 1
 							end
-							y = y + 1
 						end
 					end
 				end
-			end
-		end)
+			end)
 
-		printGM("gm", "ask for characterlist")
-		timer.Simple(0.1, function()
-			net.Start("yrp_get_characters")
-			net.SendToServer()
-		end)
-
-		local deleteChar = createD("YButton", _cs.frame, ctr(400), ctr(100), ScrW2() - ctr(400 + 800/2 + 10), ScrH() - ctr(150), ctr(5))
-		deleteChar:SetText("")
-		function deleteChar:Paint(pw, ph)
-			local tab = {}
-			tab.text = YRP.lang_string("LID_deletecharacter")
-			tab.color = Color(255, 0, 0)
-			hook.Run("YButtonPaint", self, pw, ph, tab)
-		end
-		function deleteChar:DoClick()
-			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
-			_window:Center()
-			_window:SetTitle(YRP.lang_string("LID_areyousure"))
-
-			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("LID_yes"))
-			function _yesButton:DoClick()
-
-				net.Start("DeleteCharacter")
-					net.WriteString(curChar)
+			printGM("gm", "ask for characterlist")
+			timer.Simple(0.1, function()
+				net.Start("yrp_get_characters")
 				net.SendToServer()
+			end)
 
-				_window:Close()
+			local deleteChar = createD("YButton", _cs.frame, ctr(400), ctr(100), ScrW2() - ctr(400 + 800/2 + 10), ScrH() - ctr(150), ctr(5))
+			deleteChar:SetText("")
+			function deleteChar:Paint(pw, ph)
+				local tab = {}
+				tab.text = YRP.lang_string("LID_deletecharacter")
+				tab.color = Color(255, 0, 0)
+				hook.Run("YButtonPaint", self, pw, ph, tab)
+			end
+			function deleteChar:DoClick()
+				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
+				_window:Center()
+				_window:SetTitle(YRP.lang_string("LID_areyousure"))
+
+				local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+				_yesButton:SetText(YRP.lang_string("LID_yes"))
+				function _yesButton:DoClick()
+
+					net.Start("DeleteCharacter")
+						net.WriteString(curChar)
+					net.SendToServer()
+
+					_window:Close()
+				end
+
+				local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+				_noButton:SetText(YRP.lang_string("LID_no"))
+				function _noButton:DoClick()
+					_window:Close()
+				end
+
+				_window:MakePopup()
 			end
 
-			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("LID_no"))
-			function _noButton:DoClick()
-				_window:Close()
-			end
-
-			_window:MakePopup()
-		end
-
-	--[[
-		local backB = createMD("DButton", _cs.frame, ctr(400), ctr(100), ScrW2() + ctr(800/2 + 10), ScrH() - ctr(150), ctr(5))
-		backB:SetText("")
-		function backB:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_back"))
-		end
-		function backB:DoClick()
-			if curChar != "-1" then
-				if _cs.frame != nil then
+			local button = {}
+			button.size = ctr(100)
+			button.x = ctr(720)
+			button.y = ScrH() - button.size - border - ctr(30)
+			local charactersCreate = createMDPlus(_cs.frame, button.size, button.x, button.y, ctr(5))
+			charactersCreate:SetText("")
+			function charactersCreate:DoClick()
+				if pa(_cs.frame) then
 					_cs.frame:Close()
 				end
+				openCharacterCreation()
 			end
-		end
-	]]--
 
-		local button = {}
-		button.size = ctr(100)
-		button.x = ctr(720)
-		button.y = ScrH() - button.size - border - ctr(30)
-		local charactersCreate = createMDPlus(_cs.frame, button.size, button.x, button.y, ctr(5))
-		charactersCreate:SetText("")
-		function charactersCreate:DoClick()
-			if pa(_cs.frame) then
-				_cs.frame:Close()
-			end
-			openCharacterCreation()
-		end
-
-		button.w = ctr(800)
-		button.h = ctr(100)
-		button.x = ScrW2() - button.w/2
-		button.y = ScrH() - button.h - border
-		local confirmColor = Color(255, 0, 0, 255)
-		local charactersEnter = createD("YButton", _cs.frame, button.w, button.h, button.x, button.y) --createMDButton(_cs.frame, button.w, button.h, button.x, button.y, ctr(0), YRP.lang_string("LID_enterworld"))
-		function charactersEnter:Paint(pw, ph)
-			local tab = {}
-			tab.text = YRP.lang_string("LID_enterworld") .. " (" .. _cur .. ")"
-			if LocalPlayer() != nil then
-				if LocalPlayer():Alive() then
-					tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
-					tab.color = Color(255, 0, 0)
-				end
-			end
-			hook.Run("YButtonPaint", self, pw, ph, tab)
-		end
-
-		charactersEnter:SetText("")
-		function charactersEnter:DoClick()
-			if LocalPlayer() != nil then
-				if curChar != "-1" then
+			button.w = ctr(800)
+			button.h = ctr(100)
+			button.x = ScrW2() - button.w/2
+			button.y = ScrH() - button.h - border
+			local confirmColor = Color(255, 0, 0, 255)
+			local charactersEnter = createD("YButton", _cs.frame, button.w, button.h, button.x, button.y) --createMDButton(_cs.frame, button.w, button.h, button.x, button.y, ctr(0), YRP.lang_string("LID_enterworld"))
+			function charactersEnter:Paint(pw, ph)
+				local tab = {}
+				tab.text = YRP.lang_string("LID_enterworld") .. " (" .. _cur .. ")"
+				if LocalPlayer() != nil then
 					if LocalPlayer():Alive() then
-						net.Start("LogOut")
-						net.SendToServer()
-					else
-						net.Start("EnterWorld")
-							net.WriteString(curChar)
-						net.SendToServer()
-						if pa(_cs.frame) then
-							_cs.frame:Close()
+						tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+						tab.color = Color(255, 0, 0)
+					end
+				end
+				hook.Run("YButtonPaint", self, pw, ph, tab)
+			end
+
+			charactersEnter:SetText("")
+			function charactersEnter:DoClick()
+				if LocalPlayer() != nil then
+					if curChar != "-1" then
+						if LocalPlayer():Alive() then
+							net.Start("LogOut")
+							net.SendToServer()
+						else
+							net.Start("EnterWorld")
+								net.WriteString(curChar)
+							net.SendToServer()
+							if pa(_cs.frame) then
+								_cs.frame:Close()
+							end
 						end
 					end
 				end
 			end
-		end
 
-		_cs.frame:MakePopup()
+			_cs.frame:MakePopup()
+		end
 	end
 end
 

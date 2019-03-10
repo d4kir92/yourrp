@@ -134,7 +134,7 @@ function GetCollection(cid, maincid)
 						end
 
 						if cid != maincid then
-							printGM("db", "[GetCollection] Collected IDs for " .. maincid .. " [" .. collections[maincid].linkedcollectionsadded .. "|" .. collections[maincid].linkedcollections .. "] " .. cid)
+							printGM("db", "[GetCollection] Collected IDs for " .. maincid .. " [" .. collections[maincid].linkedcollectionsadded .. "|" .. collections[maincid].linkedcollections .. "] Child-Collection:" .. cid)
 						end
 
 						for i, v in pairs(linkedcollections) do
@@ -166,8 +166,8 @@ function SearchForCollectionID()
 			if cidstart then
 				local cid = string.sub(f, cidstart + string.len("+host_workshop_collection "))
 				local _s, _e = string.find(cid, " ")
-				cid = string.sub(cid, 1, _e - 1)
-				if !table.HasValue(collectionIDs, cid) then
+				cid = tonumber(string.sub(cid, 1, _e - 1))
+				if cid > 0 and !table.HasValue(collectionIDs, cid) then
 					table.insert(collectionIDs, cid)
 				end
 			end
@@ -200,9 +200,13 @@ function GM:PlayerConnect(name, ip)
 	PrintMessage(HUD_PRINTTALK, name .. " is connecting to the Server.")
 end
 
+util.AddNetworkString("yrp_askforinfo")
 function GM:PlayerInitialSpawn(ply)
 	--printGM("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 	--ply:KillSilent()
+	net.Start("yrp_askforinfo")
+	net.Send(ply)
+
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()
 		if rolTab != nil then
@@ -485,18 +489,6 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 			local _hold_type = newWeapon.HoldType or newWeapon:GetHoldType() or "normal"
 			newWeapon:SetNWString("swep_holdtype", _hold_type)
 		end
-
-		if !ply:GetNWBool("inCombat") then
-			ply:SetNWBool("weaponlowered", false)
-
-			if ply:GetNWBool("weaponlowered") == false then
-				timer.Simple(0.1, function()
-					lowering_weapon(ply)
-				end)
-			end
-		else
-			ply:SetNWBool("weaponlowered", false)
-		end
 	end
 
 	if ply:GetNWBool("cuffed") or ply.leiche != nil then
@@ -555,7 +547,6 @@ function StartCombat(ply)
 			timer.Create(steamid .. " outOfCombat", 5, 1, function()
 				if ea(ply) then
 					ply:SetNWBool("inCombat", false)
-					lowering_weapon(ply)
 					if timer.Exists(steamid .. " outOfCombat") then
 						timer.Remove(steamid .. " outOfCombat")
 					end
@@ -726,16 +717,20 @@ function canhear(talker, listener)
 end
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	if Is3DVoiceEnabled() then --[[ BEARBEITEN ]]
-		if IsVoiceChannelsEnabled() then
-			return canhear(talker, listener), hearfaded(talker, listener)
+	if IsVoiceEnabled() then
+		if Is3DVoiceEnabled() then --[[ BEARBEITEN ]]
+			if IsVoiceChannelsEnabled() then
+				return canhear(talker, listener), hearfaded(talker, listener)
+			else
+				return true, true
+			end
 		else
-			return true, true
+			return true, false
 		end
+		return true
 	else
-		return true, false
+		return false
 	end
-	return true
 end
 
 function setbodygroups(ply)
@@ -765,10 +760,11 @@ end
 util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)
 	printGM("note", ply:YRPName() .. " finished loading.")
-	local OS_Windows = net.ReadBool()
-	local OS_Linux = net.ReadBool()
-	local OS_OSX = net.ReadBool()
-	local Country = net.ReadString()
+	local tab = net.ReadTable()
+	local OS_Windows = tab.iswindows
+	local OS_Linux = tab.islinux
+	local OS_OSX = tab.isosx
+	local Country = tab.country
 
 	open_character_selection(ply)
 

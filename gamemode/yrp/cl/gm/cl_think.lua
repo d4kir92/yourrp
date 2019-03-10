@@ -165,11 +165,6 @@ function useFunction(string)
 				end
 			end
 
-		--Weapon Lowering
-		elseif string == "weaponlowering" and !mouseVisible() then
-			net.Start("yrp_weaponlowering")
-			net.SendToServer()
-
 		--Mouse changer
 		elseif string == "F11Toggle" then
 			done_tutorial("tut_tmo")
@@ -251,18 +246,22 @@ function get_speak_channel_name(id)
 	end
 end
 
-LocalPlayer():SetNWInt("view_range", 0)
-LocalPlayer():SetNWInt("view_range_view", 0)
-
-LocalPlayer():SetNWInt("view_z", 0)
-LocalPlayer():SetNWInt("view_x", 0)
-LocalPlayer():SetNWInt("view_s", 0)
-
 local afktime = CurTime()
 local _view_delay = true
 local blink_delay = 0
+local setup = false
 function KeyPress()
 	local ply = LocalPlayer()
+
+	if !setup then
+		setup = true
+		ply:SetNWInt("view_range", 0)
+		ply:SetNWInt("view_range_view", 0)
+
+		ply:SetNWInt("view_z", 0)
+		ply:SetNWInt("view_x", 0)
+		ply:SetNWInt("view_s", 0)
+	end
 
 	if ply:IsInCombat() and CurTime() > blink_delay and !system.HasFocus() then
 		blink_delay = CurTime() + 1
@@ -459,8 +458,6 @@ function KeyPress()
 	keyPressed(KEY_PAGEDOWN, "vno")
 
 	keyPressed(get_keybind("drop_item"), "dropitem")
-
-	keyPressed(get_keybind("weaponlowering"), "weaponlowering")
 
 	keyPressed(KEY_UP, "openSP")
 	keyPressed(KEY_DOWN, "closeSP")

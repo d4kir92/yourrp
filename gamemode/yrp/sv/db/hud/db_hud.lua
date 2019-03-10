@@ -604,39 +604,50 @@ function DefaultHUDSettings(reset)
 end
 DefaultHUDSettings()
 
+util.AddNetworkString("yrp_hud_info")
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:HudLoadout()
 	printGM("debug", "[HudLoadout] " .. self:YRPName())
 	local hudeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(hudeles) then
-		local perc = 0
+		net.Start("yrp_hud_info")
+			net.WriteTable(hudeles)
+		net.Send(self)
+
+		--[[
 		for i, ele in pairs(hudeles) do
-			timer.Simple(i * 0.01, function()
-				perc = i * 100 / table.Count(hudeles)
-				perc = math.Round(perc, 0)
-				if perc > self:GetNWInt("yrp_loading_hud", 0) then
-					self:SetNWInt("yrp_loading_hud", perc)
-				end
-				if string.StartWith(ele.name, "float_") then
-					self:SetNWFloat(ele.name, tonumber(ele.value))
-				elseif string.StartWith(ele.name, "bool_") then
-					self:SetNWBool(ele.name, tobool(ele.value))
-				elseif string.StartWith(ele.name, "color_") then
-					self:SetNWString(ele.name, ele.value)
-				elseif string.StartWith(ele.name, "int_") then
-					self:SetNWInt(ele.name, ele.value)
-				end
-			end)
+			if string.StartWith(ele.name, "float_") then
+				self:SetNWFloat(ele.name, tonumber(ele.value))
+			elseif string.StartWith(ele.name, "bool_") then
+				self:SetNWBool(ele.name, tobool(ele.value))
+			elseif string.StartWith(ele.name, "color_") then
+				self:SetNWString(ele.name, ele.value)
+			elseif string.StartWith(ele.name, "int_") then
+				self:SetNWInt(ele.name, ele.value)
+			end
 		end
+		]]
 	end
-	self:SetNWInt("hud_version", self:GetNWInt("hud_version", 0) + 1)
+	timer.Simple(1, function()
+		self:SetNWInt("hud_version", self:GetNWInt("hud_version", 0) + 1)
+	end)
 end
 
+local hud_f = 0
+local hud_c = 0
 function HudLoadoutAll()
-	for i, ply in pairs(player.GetAll()) do
-		ply:HudLoadout()
-	end
+	hud_c = hud_c + 1
+	local c = hud_c
+	local t = CurTime()
+	hud_f = CurTime()
+	timer.Simple(1, function()
+		if t == hud_f and c == hud_c then
+			for i, ply in pairs(player.GetAll()) do
+				ply:HudLoadout()
+			end
+		end
+	end)
 end
 
 util.AddNetworkString("update_hud_x")

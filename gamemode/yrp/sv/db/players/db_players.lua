@@ -593,13 +593,24 @@ function canGetRole(ply, roleID, want)
 			end
 
 			-- level check
-			if tonumber(chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
-				local text = ply:YRPName() .. " is not high enough (is: " .. tonumber(chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
-				printGM("gm", "[canGetRole] " .. text)
-				net.Start("yrp_info2")
-					net.WriteString(text)
-				net.Broadcast()
-				return false
+			if wk(chatab) then
+				if tonumber(chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
+					local text = ply:YRPName() .. " is not high enough (is: " .. tonumber(chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
+					printGM("gm", "[canGetRole] " .. text)
+					net.Start("yrp_info2")
+						net.WriteString(text)
+					net.Broadcast()
+					return false
+				end
+			else
+				if 1 < tonumber(tmpTableRole.int_requireslevel) then
+					local text = ply:YRPName() .. " is not high enough (is: " .. 1 .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
+					printGM("gm", "[canGetRole] " .. text)
+					net.Start("yrp_info2")
+						net.WriteString(text)
+					net.Broadcast()
+					return false
+				end
 			end
 
 			if tonumber(ply:GetNWInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then

@@ -17,7 +17,7 @@ resource.AddFile("resource/fonts/Roboto-Thin.ttf")
 resource.AddFile("resource/fonts/Roboto-Bold.ttf")
 
 -- Food and Household items
-resource.AddWorkshop("108024198")
+--resource.AddWorkshop("108024198")
 
 --Server Workshop Collection
 local _wsitems = engine.GetAddons()

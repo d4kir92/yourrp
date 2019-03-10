@@ -7,7 +7,7 @@ end
 local Simple = {}
 function HUDSimpleBG(tab)
 	local lply = LocalPlayer()
-	if lply:GetHudBool(tab.element, "VISI") and lply:GetHudBool(tab.element, "BACK") then
+	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BACK") then
 		tab.visiblefunc = tab.visiblefunc or fake_true
 		if tab.visiblefunc() then
 			Simple[tab.element] = Simple[tab.element] or {}
@@ -16,10 +16,10 @@ function HUDSimpleBG(tab)
 			if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["background"]["version"] then
 				Simple[tab.element]["background"]["version"] = lply:GetNWInt("hud_version", 0)
 
-				local w = lply:GetHudValue(tab.element, "SIZE_W")
-				local h = lply:GetHudValue(tab.element, "SIZE_H")
-				local x = lply:GetHudValue(tab.element, "POSI_X")
-				local y = lply:GetHudValue(tab.element, "POSI_Y")
+				local w = lply:HudValue(tab.element, "SIZE_W")
+				local h = lply:HudValue(tab.element, "SIZE_H")
+				local x = lply:HudValue(tab.element, "POSI_X")
+				local y = lply:HudValue(tab.element, "POSI_Y")
 
 				Simple[tab.element]["background"].w = w
 				Simple[tab.element]["background"].h = h
@@ -27,11 +27,11 @@ function HUDSimpleBG(tab)
 				Simple[tab.element]["background"].y = y
 
 				Simple[tab.element]["background"].r = 0
-				if lply:GetHudBool(tab.element, "ROUN") then
+				if lply:HudValue(tab.element, "ROUN") then
 					Simple[tab.element]["background"].r = tab.r or Simple[tab.element]["background"].h / 2
 				end
 
-				Simple[tab.element]["background"].color = lply:GetHudColor(tab.element, "BG")
+				Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
 			else
 				HudBox(Simple[tab.element]["background"])
 			end
@@ -41,7 +41,7 @@ end
 
 function HUDSimpleBAR(tab)
 	local lply = LocalPlayer()
-	if lply:GetHudBool(tab.element, "VISI") then
+	if lply:HudValue(tab.element, "VISI") then
 		Simple[tab.element] = Simple[tab.element] or {}
 		Simple[tab.element]["bar"] = Simple[tab.element]["bar"] or {}
 		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
@@ -50,10 +50,10 @@ function HUDSimpleBAR(tab)
 		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["bar"]["version"] then
 			Simple[tab.element]["bar"]["version"] = lply:GetNWInt("hud_version", 0)
 
-			local w = lply:GetHudValue(tab.element, "SIZE_W")
-			local h = lply:GetHudValue(tab.element, "SIZE_H")
-			local x = lply:GetHudValue(tab.element, "POSI_X")
-			local y = lply:GetHudValue(tab.element, "POSI_Y")
+			local w = lply:HudValue(tab.element, "SIZE_W")
+			local h = lply:HudValue(tab.element, "SIZE_H")
+			local x = lply:HudValue(tab.element, "POSI_X")
+			local y = lply:HudValue(tab.element, "POSI_Y")
 
 			Simple[tab.element]["bar"].fw = w
 			Simple[tab.element]["bar"].fh = h
@@ -66,14 +66,14 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["bar"].y = y
 
 			Simple[tab.element]["bar"].r = 0
-			if lply:GetHudBool(tab.element, "ROUN") then
+			if lply:HudValue(tab.element, "ROUN") then
 				Simple[tab.element]["bar"].r = tab.r or Simple[tab.element]["bar"].h / 2
 			end
 
-			Simple[tab.element]["bar"].color = lply:GetHudColor(tab.element, "BA")
+			Simple[tab.element]["bar"].color = lply:HudValue(tab.element, "BA")
 
-			Simple[tab.element]["text"].ax = lply:GetHudInt(tab.element, "AX")
-			Simple[tab.element]["text"].ay = lply:GetHudInt(tab.element, "AY")
+			Simple[tab.element]["text"].ax = lply:HudValue(tab.element, "AX")
+			Simple[tab.element]["text"].ay = lply:HudValue(tab.element, "AY")
 			local ax = Simple[tab.element]["text"].ax
 			local ay = Simple[tab.element]["text"].ay
 			if ay == 3 then
@@ -81,7 +81,7 @@ function HUDSimpleBAR(tab)
 			elseif ay == 4 then
 				ay = 2
 			end
-			if lply:GetHudBool(tab.element, "ROUN") then
+			if lply:HudValue(tab.element, "ROUN") then
 				Simple[tab.element]["text"].x = x + h/2 + (w - h) / 2 * ax
 				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
 			else
@@ -89,13 +89,13 @@ function HUDSimpleBAR(tab)
 				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
 			end
 			Simple[tab.element]["text"].text = tab.element
-			local fontsize = lply:GetHudInt(tab.element, "TS")
+			local fontsize = lply:HudValue(tab.element, "TS")
 			if fontsize <= 0 then
 				fontsize = 14
 			end
 			Simple[tab.element]["text"].font = "Roboto" .. fontsize
-			Simple[tab.element]["text"].color = lply:GetHudColor(tab.element, "TE")
-			Simple[tab.element]["text"].brcolor = lply:GetHudColor(tab.element, "TB")
+			Simple[tab.element]["text"].color = lply:HudValue(tab.element, "TE")
+			Simple[tab.element]["text"].brcolor = lply:HudValue(tab.element, "TB")
 
 			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
 				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fh * 0.6
@@ -120,16 +120,16 @@ function HUDSimpleBAR(tab)
 				HudBox(Simple[tab.element]["bar"])
 			end
 
-			if lply:GetHudBool(tab.element, "ICON") and tab.icon != nil then
+			if lply:HudValue(tab.element, "ICON") and tab.icon != nil then
 				local ico = tab.icon
 				YRP.DrawIcon(ico, Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color(255, 255, 255))
 			end
 
 			Simple[tab.element]["text"].text = ""
-			if tab.text != nil and lply:GetHudBool(tab.element, "TEXT") then
+			if tab.text != nil and lply:HudValue(tab.element, "TEXT") then
 				Simple[tab.element]["text"].text = tab.text
 			end
-			if tab.percentage != nil and lply:GetHudBool(tab.element, "PERC") then
+			if tab.percentage != nil and lply:HudValue(tab.element, "PERC") then
 				Simple[tab.element]["text"].text = Simple[tab.element]["text"].text .. " " .. tab.percentage
 			end
 			if tab.tcolor != nil then
@@ -145,19 +145,19 @@ end
 
 function HUDSimpleBR(tab)
 	local lply = LocalPlayer()
-	if lply:GetHudBool(tab.element, "VISI") and lply:GetHudBool(tab.element, "BORD") then
+	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BORD") then
 		tab.visiblefunc = tab.visiblefunc or fake_true
-		if lply:GetHudBool(tab.element, "VISI") and tab.visiblefunc() then
+		if lply:HudValue(tab.element, "VISI") and tab.visiblefunc() then
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["border"] = Simple[tab.element]["border"] or {}
 
 			if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["border"]["version"] then
 				Simple[tab.element]["border"]["version"] = lply:GetNWInt("hud_version", 0)
 
-				local w = lply:GetHudValue(tab.element, "SIZE_W")
-				local h = lply:GetHudValue(tab.element, "SIZE_H")
-				local x = lply:GetHudValue(tab.element, "POSI_X")
-				local y = lply:GetHudValue(tab.element, "POSI_Y")
+				local w = lply:HudValue(tab.element, "SIZE_W")
+				local h = lply:HudValue(tab.element, "SIZE_H")
+				local x = lply:HudValue(tab.element, "POSI_X")
+				local y = lply:HudValue(tab.element, "POSI_Y")
 
 				Simple[tab.element]["border"].r = 0
 
@@ -167,13 +167,13 @@ function HUDSimpleBR(tab)
 				Simple[tab.element]["border"].y = y
 
 				Simple[tab.element]["border"].r = 0
-				if lply:GetHudBool(tab.element, "ROUN") then
+				if lply:HudValue(tab.element, "ROUN") then
 					Simple[tab.element]["border"].r = tab.r or Simple[tab.element]["border"].h / 2
 				end
 
-				Simple[tab.element]["border"].color = lply:GetHudColor(tab.element, "BR")
+				Simple[tab.element]["border"].color = lply:HudValue(tab.element, "BR")
 				Simple[tab.element]["border"].br = ctr(2)
-			elseif lply:GetHudBool(tab.element, "ROUN") then
+			elseif lply:HudValue(tab.element, "ROUN") then
 				HudBoxBrRounded(Simple[tab.element]["border"])
 			else
 				HudBoxBr(Simple[tab.element]["border"])
@@ -185,7 +185,7 @@ end
 function HUDSimpleCompass(tab)
 	local lply = LocalPlayer()
 	tab.visiblefunc = tab.visiblefunc or fake_true
-	if lply:GetHudBool(tab.element, "VISI") and tab.visiblefunc() then
+	if lply:HudValue(tab.element, "VISI") and tab.visiblefunc() then
 		Simple[tab.element] = Simple[tab.element] or {}
 		Simple[tab.element]["needle"] = Simple[tab.element]["needle"] or {}
 		Simple[tab.element]["degree"] = Simple[tab.element]["degree"] or {}
@@ -197,10 +197,10 @@ function HUDSimpleCompass(tab)
 		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["degree"]["version"] then
 			Simple[tab.element]["degree"]["version"] = lply:GetNWInt("hud_version", 0)
 
-			local w = lply:GetHudValue(tab.element, "SIZE_W")
-			local h = lply:GetHudValue(tab.element, "SIZE_H")
-			local x = lply:GetHudValue(tab.element, "POSI_X")
-			local y = lply:GetHudValue(tab.element, "POSI_Y")
+			local w = lply:HudValue(tab.element, "SIZE_W")
+			local h = lply:HudValue(tab.element, "SIZE_H")
+			local x = lply:HudValue(tab.element, "POSI_X")
+			local y = lply:HudValue(tab.element, "POSI_Y")
 
 			Simple[tab.element]["needle"].r = 0
 			Simple[tab.element]["needle"].w = ctr(4)
@@ -209,7 +209,7 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["needle"].y = y + h - h / 4
 			Simple[tab.element]["needle"].color = Color(255, 255, 255)
 
-			local fontsize = lply:GetHudInt(tab.element, "TS")
+			local fontsize = lply:HudValue(tab.element, "TS")
 			if fontsize <= 0 then
 				fontsize = 8
 			end
@@ -235,8 +235,8 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["degree"].ax = 1
 			Simple[tab.element]["degree"].ay = 1
 			Simple[tab.element]["degree"].font = "Roboto" .. fontsize
-			Simple[tab.element]["degree"].color = lply:GetHudColor(tab.element, "TE")
-			Simple[tab.element]["degree"].brcolor = lply:GetHudColor(tab.element, "TB")
+			Simple[tab.element]["degree"].color = lply:HudValue(tab.element, "TE")
+			Simple[tab.element]["degree"].brcolor = lply:HudValue(tab.element, "TB")
 
 			Simple[tab.element]["north"].w = w
 			Simple[tab.element]["north"].h = h
@@ -246,7 +246,7 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["north"].ay = 1
 			Simple[tab.element]["north"].font = "Roboto" .. nextfontsize
 			Simple[tab.element]["north"].color = Color(0, 255, 0)
-			Simple[tab.element]["north"].brcolor = lply:GetHudColor(tab.element, "TB")
+			Simple[tab.element]["north"].brcolor = lply:HudValue(tab.element, "TB")
 			Simple[tab.element]["north"].text = YRP.lang_string("LID_north_short")
 
 			Simple[tab.element]["south"].w = w
@@ -256,8 +256,8 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["south"].ax = 1
 			Simple[tab.element]["south"].ay = 1
 			Simple[tab.element]["south"].font = "Roboto" .. fontsize
-			Simple[tab.element]["south"].color = lply:GetHudColor(tab.element, "TE")
-			Simple[tab.element]["south"].brcolor = lply:GetHudColor(tab.element, "TB")
+			Simple[tab.element]["south"].color = lply:HudValue(tab.element, "TE")
+			Simple[tab.element]["south"].brcolor = lply:HudValue(tab.element, "TB")
 			Simple[tab.element]["south"].text = YRP.lang_string("LID_south_short")
 
 			Simple[tab.element]["east"].w = w
@@ -267,8 +267,8 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["east"].ax = 1
 			Simple[tab.element]["east"].ay = 1
 			Simple[tab.element]["east"].font = "Roboto" .. fontsize
-			Simple[tab.element]["east"].color = lply:GetHudColor(tab.element, "TE")
-			Simple[tab.element]["east"].brcolor = lply:GetHudColor(tab.element, "TB")
+			Simple[tab.element]["east"].color = lply:HudValue(tab.element, "TE")
+			Simple[tab.element]["east"].brcolor = lply:HudValue(tab.element, "TB")
 			Simple[tab.element]["east"].text = YRP.lang_string("LID_east_short")
 
 			Simple[tab.element]["west"].w = w
@@ -278,8 +278,8 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["west"].ax = 1
 			Simple[tab.element]["west"].ay = 1
 			Simple[tab.element]["west"].font = "Roboto" .. fontsize
-			Simple[tab.element]["west"].color = lply:GetHudColor(tab.element, "TE")
-			Simple[tab.element]["west"].brcolor = lply:GetHudColor(tab.element, "TB")
+			Simple[tab.element]["west"].color = lply:HudValue(tab.element, "TE")
+			Simple[tab.element]["west"].brcolor = lply:HudValue(tab.element, "TB")
 			Simple[tab.element]["west"].text = YRP.lang_string("LID_west_short")
 		else
 			HudBox(Simple[tab.element]["needle"])
@@ -338,8 +338,8 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 function HUDSimple()
 	local lply = LocalPlayer()
-	if lply:GetNWString("string_hud_design") == "Simple" then
 
+	if lply:GetNWString("string_hud_design") == "Simple" then
 		local batterypower = system.BatteryPower()
 
 		-- Background
@@ -632,10 +632,12 @@ function HUDSimple()
 		MI.text = "x: " .. tostring(_x) .. " y: " .. tostring(_y)
 		HUDSimpleBAR(MI)
 
-		LO = {}
-		LO.element = "LO"
-		LO.text = lply:LockdownText()
-		HUDSimpleBAR(LO)
+		if lply:Lockdown() then
+			local LO = {}
+			LO.element = "LO"
+			LO.text = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
+			HUDSimpleBAR(LO)
+		end
 
 
 

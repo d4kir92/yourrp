@@ -29,19 +29,22 @@ function GM:DrawDeathNotice(x, y)
 end
 
 hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
-	local hide = {
-		CHudHealth = true,
-		CHudBattery = true,
-		CHudAmmo = true,
-		CHudSecondaryAmmo = true,
-		CHudCrosshair = LocalPlayer():GetNWBool("bool_yrp_crosshair", false),
-		CHudVoiceStatus = false
-	}
+	local lply = LocalPlayer()
+	if lply:IsValid() then
+		local hide = {
+			CHudHealth = true,
+			CHudBattery = true,
+			CHudAmmo = true,
+			CHudSecondaryAmmo = true,
+			CHudCrosshair = lply:GetNWBool("bool_yrp_crosshair", false),
+			CHudVoiceStatus = false
+		}
 
-	if g_VoicePanelList != nil then
-		g_VoicePanelList:SetVisible(false)
+		if g_VoicePanelList != nil then
+			g_VoicePanelList:SetVisible(false)
+		end
+		if (hide[ name ]) then return false end
 	end
-	if (hide[ name ]) then return false end
 end)
 
 --##############################################################################
@@ -105,15 +108,20 @@ end
 function show_voice_info(ply)
 	--Voice
 	if _showVoice then
-		local _voice_text = YRP.lang_string("LID_youarespeaking") .. " ("
-		if ply:GetNWInt("speak_channel", -1) == 1 then
-			_voice_text = _voice_text .. YRP.lang_string("LID_speakgroup")
-		elseif ply:GetNWInt("speak_channel", -1) == 2 then
-			_voice_text = _voice_text .. YRP.lang_string("LID_speakglobal")
+		local _voice_text = ""
+		if ply:GetNWBool("bool_voice", false) then
+			_voice_text = YRP.lang_string("LID_youarespeaking") .. " ("
+			if ply:GetNWInt("speak_channel", -1) == 1 then
+				_voice_text = _voice_text .. YRP.lang_string("LID_speakgroup")
+			elseif ply:GetNWInt("speak_channel", -1) == 2 then
+				_voice_text = _voice_text .. YRP.lang_string("LID_speakglobal")
+			else
+				_voice_text = _voice_text .. YRP.lang_string("LID_speaklocal")
+			end
+			_voice_text = _voice_text .. ")"
 		else
-			_voice_text = _voice_text .. YRP.lang_string("LID_speaklocal")
+			_voice_text = YRP.lang_string("LID_voicechatisdisabled")
 		end
-		_voice_text = _voice_text .. ")"
 
 		draw.SimpleTextOutlined(_voice_text, "HudBars", ScrW2(), ctr(500), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end

@@ -2,11 +2,8 @@
 
 local _debug = true
 
-if CLIENT then
-	LocalPlayer():SetNWBool("yrp_debug", false)
-end
 concommand.Add("yrp__debug", function(ply, cmd, args)
-	_debug = !_debug
+	_debug = !_debug or false
 	ply:SetNWBool("yrp_debug", _debug)
 	if _debug then
 		printGM("note", "Debug ON")
@@ -347,14 +344,17 @@ end
 function CanSendError()
 	if !IsYRPOutdated() then
 		if game.MaxPlayers() > 1 then
-			if CLIENT and LocalPlayer():GetNWBool("isserverdedicated", false) then
-				if LocalPlayer():GetNWBool("bool_server_debug", true) then
-					if tick % tonumber(LocalPlayer():GetNWInt("int_server_debug_tick", 10)) == 0 then
-						return true
-					end
-				else
-					if tick % 3600 == 0 then
-						return true
+			if CLIENT then
+				local lply = LocalPlayer()
+				if lply:IsValid() and lply:GetNWBool("isserverdedicated", false) then
+					if LocalPlayer():GetNWBool("bool_server_debug", true) then
+						if tick % tonumber(LocalPlayer():GetNWInt("int_server_debug_tick", 10)) == 0 then
+							return true
+						end
+					else
+						if tick % 3600 == 0 then
+							return true
+						end
 					end
 				end
 			elseif SERVER and game.IsDedicated() then

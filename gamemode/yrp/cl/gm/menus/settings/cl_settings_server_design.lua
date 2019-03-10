@@ -2,46 +2,6 @@
 
 local boxspace = ctr(20)
 
-local Player = FindMetaTable("Player")
-function Player:GetHudVal(element, art)
-	local dbval = nil
-	dbval = self:GetNWFloat("float_HUD_" .. element .. "_" .. art, -1.0)
-
-	--YRP.msg("note", element .. " " .. art .. ": " .. dbval)
-
-	local ret = dbval
-
-	if art == "POSI_X" or  art == "SIZE_W" then
-		ret = ret * ScW()
-	else
-		ret = ret * ScH()
-	end
-
-	if art == "POSI_X" and BiggerThen16_9() then
-		ret = ret + PosX()
-	end
-	return math.Round(ret, 0)
-end
-
-function Player:GetHudValue(element, art)
-	return self:GetHudVal(element, art)
-end
-
-function Player:GetHudColor(element, art)
-	local dbval = self:GetNWString("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
-	local ret = string.Explode(",", dbval)
-	return Color(ret[1], ret[2], ret[3], ret[4] or 255)
-end
-
-function Player:GetHudInt(element, art)
-	local dbval = self:GetNWInt("int_HUD_" .. element .. "_" .. art, -1)
-	return tonumber(dbval)
-end
-
-function Player:GetHudBool(element, art)
-	return self:GetNWBool("bool_HUD_" .. element .. "_" .. art, false)
-end
-
 net.Receive("get_design_settings", function(len)
 	local lply = LocalPlayer()
 	local setting = net.ReadTable()
@@ -219,10 +179,10 @@ net.Receive("get_design_settings", function(len)
 			end
 
 			function AddElement(tab)
-				local sw = lply:GetHudVal(tab.element, "SIZE_W")
-				local sh = lply:GetHudVal(tab.element, "SIZE_H")
-				local px = lply:GetHudVal(tab.element, "POSI_X")
-				local py = lply:GetHudVal(tab.element, "POSI_Y")
+				local sw = lply:HudValue(tab.element, "SIZE_W")
+				local sh = lply:HudValue(tab.element, "SIZE_H")
+				local px = lply:HudValue(tab.element, "POSI_X")
+				local py = lply:HudValue(tab.element, "POSI_Y")
 				--YRP.msg("note", "element: " .. tab.element " x: "..  px .. " y: " .. py .. " w: " .. sw .. " h: " .. sh)
 				local win = createD("DFrame", editarea, sw, sh, px, py)
 				win:SetTitle("")
@@ -231,7 +191,7 @@ net.Receive("get_design_settings", function(len)
 				win:SetSizable(true)
 				win:SetMinWidth(10)
 				win:SetMinHeight(10)
-				win.saved = false
+				win.saved = true
 				win.w = win:GetWide()
 				win.h = win:GetTall()
 				win.visible = true
@@ -773,10 +733,12 @@ net.Receive("get_design_settings", function(len)
 			NE.name = "LID_network"
 			AddElement(NE)
 
+			--[[
 			local COM = {}
 			COM.element = "COM"
 			COM.name = "LID_compass"
 			AddElement(COM)
+			]]
 
 			--[[
 			local MI = {}

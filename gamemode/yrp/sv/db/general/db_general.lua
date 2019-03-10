@@ -71,12 +71,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapon_lowering_system", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_3d", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1")
@@ -278,10 +278,6 @@ function IsDropItemsOnDeathEnabled()
 	return tobool(yrp_general.bool_drop_items_on_death)
 end
 
-function IsWeaponLoweringEnabled()
-	return tobool(yrp_general.bool_weapon_lowering_system)
-end
-
 function IsDealerImmortal()
 	return !tobool(yrp_general.bool_dealers_can_take_damage)
 end
@@ -302,6 +298,11 @@ function IsDropMoneyOnDeathEnabled()
 	return tobool(yrp_general.bool_drop_money_on_death)
 end
 
+
+
+function IsVoiceEnabled()
+	return tobool(yrp_general.bool_voice)
+end
 
 function Is3DVoiceEnabled()
 	return tobool(yrp_general.bool_voice_3d)
@@ -682,11 +683,6 @@ net.Receive("update_bool_smartphone_system", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_smartphone_system", "bool_smartphone_system", b)
 end)
 
-util.AddNetworkString("update_bool_weapon_lowering_system")
-net.Receive("update_bool_weapon_lowering_system", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_weapon_lowering_system", "bool_weapon_lowering_system", b)
-end)
 
 
 util.AddNetworkString("update_bool_players_can_switch_role")
@@ -702,6 +698,13 @@ net.Receive("update_bool_wanted_system", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_wanted_system", "bool_wanted_system", b)
 end)
 
+
+
+util.AddNetworkString("update_bool_voice")
+net.Receive("update_bool_voice", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_voice", "bool_voice", b)
+end)
 
 util.AddNetworkString("update_bool_voice_3d")
 net.Receive("update_bool_voice_3d", function(len, ply)
@@ -1130,7 +1133,7 @@ net.Receive("gethelpmenu", function(len, ply)
 
 		AddTab(tabs, "LID_help", "getsitehelp")
 		AddTab(tabs, "LID_staff", "getsitestaff")
-		if info.text_server_rules != "" then
+		if !strEmpty(info.text_server_rules) then
 			AddTab(tabs, "LID_rules", "getsiteserverrules")
 		end
 		if info.text_server_collectionid != "" then

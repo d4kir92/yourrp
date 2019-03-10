@@ -354,7 +354,9 @@ function Player:ForceEquip(cname, noammo)
 	local weapon = self:LegacyGive(cname, noammo)
 
 	if wk(weapon) then
-		weapon:SetNWBool("ispickupable", true)
+		if weapon:IsValid() then
+			weapon:SetNWBool("ispickupable", true)
+		end
 	end
 
 	return weapon

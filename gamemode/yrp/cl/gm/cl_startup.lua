@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local playerready = false
+playerready = playerready or false
 local searchIcon = Material("icon16/magnifier.png")
 
 function OpenHelpTranslatingWindow()
@@ -1262,6 +1262,7 @@ local loadinggamemode = nil
 local loadingend = false
 local load_tick = CurTime()
 if !playerready then
+	/*
 	loadinggamemode = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 	loadinggamemode:SetTitle("")
 	loadinggamemode:SetDraggable(false)
@@ -1373,7 +1374,7 @@ if !playerready then
 	function loadinggamemode.stuck:DoClick()
 		if tick >= time then
 			local lply = LocalPlayer()
-			YRP.msg("error", "[LoadingScreen] [I am stuck] " .. " HUD: " .. loadinggamemode.hud .. "% INTERFACE: " .. loadinggamemode.interface .. "% Loading: " .. tostring(loadinggamemode.isloading) .. " SteamID64: " .. tostring(lply:SteamID64()))
+			YRP.msg("error", "[LoadingScreen] [I am stuck] " .. " HUD: " .. loadinggamemode.hud .. "% INTERFACE: " .. loadinggamemode.interface .. "% Loading: " .. tostring(loadinggamemode.isloading) .. " SteamID: " .. tostring(lply:SteamID()))
 
 			loadinggamemode.iamstuck = true
 
@@ -1419,14 +1420,43 @@ if !playerready then
 			timer.Remove("loading_gamemode_timer")
 		end
 	end)
+	*/
 end
 
+yrp_hud = yrp_hud or {}
+function YRPHUD(name, failed)
+	local value = yrp_hud[name]
+	if value != nil then
+		return value
+	else
+		YRP.msg("error", "YRPHUD FAILED: " .. name)
+		return failed
+	end
+end
+
+net.Receive("yrp_hud_info", function(len)
+	local hud = net.ReadTable()
+
+	for i, v in pairs(hud) do
+		if string.StartWith(v.name, "float_") or string.StartWith(v.name, "int_") then
+			yrp_hud[v.name] = tonumber(v.value)
+		elseif string.StartWith(v.name, "bool_") then
+			yrp_hud[v.name] = tobool(v.value)
+		else
+			yrp_hud[v.name] = v.value
+		end
+	end
+end)
+
 function YRPSendIsReady()
+	local info = {}
+	info.iswindows = system.IsWindows()
+	info.islinux = system.IsLinux()
+	info.isosx = system.IsOSX()
+	info.country = system.GetCountry()
+
 	net.Start("yrp_player_is_ready")
-		net.WriteBool(system.IsWindows())
-		net.WriteBool(system.IsLinux())
-		net.WriteBool(system.IsOSX())
-		net.WriteString(system.GetCountry())
+		net.WriteTable(info)
 	net.SendToServer()
 
 	YRP.initLang()
@@ -1477,12 +1507,14 @@ function YRPSendIsReady()
 		timer.Create("yrp_warning_timer", 1, 0, function()
 			if warning:IsValid() then
 				warning.close:SetText(warning.tick)
-			end
-			warning.tick = warning.tick - 1
-			if warning.tick == 0 then
-				if warning:IsValid() then
-					warning.close:SetText("Close")
+				warning.tick = warning.tick - 1
+				if warning.tick == 0 then
+					if warning:IsValid() then
+						warning.close:SetText("Close")
+					end
+					timer.Remove("yrp_warning_timer")
 				end
+			else
 				timer.Remove("yrp_warning_timer")
 			end
 		end)
@@ -1503,29 +1535,6 @@ function YRPSendIsReady()
 
 		printGM("note", "Workshop Addons Done")
 		playerfullready = true
-
-		--[[ IF STARTED SINGLEPLAYER ]]
-		--
-		if game.SinglePlayer() then
-			local _warning = createD("DFrame", nil, 600, 300, 0, 0)
-			_warning:SetTitle("")
-			_warning:Center()
-
-			function _warning:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, "WARNING!")
-				draw.SimpleTextOutlined("PLEASE DO !USE SINGLEPLAYER!", "HudBars", pw / 2, ph / 2 - ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined("Use a dedicated server or start multiplayer, thanks!", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined("PLEASE USE A DEDICATED SERVER, FOR THE BEST EXPERIENCE!", "HudBars", pw / 2, ph / 2 + ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
-			end
-
-			_warning:MakePopup()
-		elseif !ServerIsDedicated and ServerIsDedicated != nil and LocalPlayer():HasAccess() then
-			LocalPlayer():SetNWBool("warning_dedicated", true)
-
-			timer.Create("yrp_warning_dedicated_server", 10, 0, function()
-				LocalPlayer():SetNWBool("warning_dedicated", false)
-			end)
-		end
 	end)
 end
 
@@ -1535,22 +1544,12 @@ function YRPInitPostEntity()
 		printGM("note", "Player is ready.")
 		playerready = true
 
-		timer.Create("yrp_ready_timer", 0.1, 0, function()
-			local lply = LocalPlayer()
-			if lply:GetNWInt("yrp_loading_hud", 0) >= 100 and lply:GetNWInt("yrp_loading_interface", 0) >= 100 then
-				timer.Remove("yrp_ready_timer")
-				YRPSendIsReady()
-			end
-		end)
+		YRPSendIsReady()
 	end
 end
 
-function GM:Initialize()
-	YRPInitPostEntity()
-end
-
-hook.Add("Initialize", "yrp_Initialize", function()
-	YRPInitPostEntity()
+net.Receive("yrp_askforinfo", function()
+	--YRPSendIsReady()
 end)
 
 function GM:InitPostEntity()
@@ -1558,12 +1557,8 @@ function GM:InitPostEntity()
 	YRPInitPostEntity()
 end
 
-hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
-	YRPInitPostEntity()
-end)
-
-timer.Simple(20, function()
-	YRPInitPostEntity()
+timer.Simple(30, function()
+	--YRPSendIsReady()
 end)
 
 --Remove Ragdolls after 60 sec
@@ -1932,79 +1927,67 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 end)
 
 net.Receive("yrp_noti", function(len)
-	if playerready then
-		local ply = LocalPlayer()
+	local ply = LocalPlayer()
+	if ply:IsValid() and ply:HasAccess() then
+		local _str_lang = net.ReadString()
+		local _time = 4
+		local _channel = NOTIFY_GENERIC
+		local _str = "[" .. YRP.lang_string("LID_adminnotification") .. "] "
 
-		if ply != nil and ply:HasAccess() then
-			local _str_lang = net.ReadString()
-			local _time = 4
-			local _channel = NOTIFY_GENERIC
-			local _str = "[" .. YRP.lang_string("LID_adminnotification") .. "] "
-
-			if _str_lang == "noreleasepoint" then
-				_str = _str .. YRP.lang_string("LID_" .. _str_lang)
-			elseif _str_lang == "nojailpoint" then
-				_str = _str .. YRP.lang_string("LID_" .. _str_lang)
-			elseif _str_lang == "nogroupspawn" then
-				_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. YRP.lang_string("LID_" .. _str_lang) .. "!"
-			elseif _str_lang == "inventoryclearing" then
-				_str = _str .. YRP.lang_string("LID_" .. _str_lang) .. " (" .. YRP.lang_string(net.ReadString()) .. ")"
-			elseif _str_lang == "playerisready" then
-				local name = {}
-				name["NAME"] = net.ReadString()
-				_str = _str .. YRP.lang_string("LID_hasfinishedloading", name)
-			elseif _str_lang == "newfeedback" then
-				_str = _str .. "New Feedback!"
-			elseif _str_lang == "database_full_server" then
-				_str = _str .. "SERVER: Database or disk is full, please make more space!"
-				_time = 40
-				_channel = NOTIFY_ERROR
-			end
-
-			notification.AddLegacy(_str, _channel, _time)
+		if _str_lang == "noreleasepoint" then
+			_str = _str .. YRP.lang_string("LID_" .. _str_lang)
+		elseif _str_lang == "nojailpoint" then
+			_str = _str .. YRP.lang_string("LID_" .. _str_lang)
+		elseif _str_lang == "nogroupspawn" then
+			_str = _str .. "[" .. string.upper(net.ReadString()) .. "]" .. " " .. YRP.lang_string("LID_" .. _str_lang) .. "!"
+		elseif _str_lang == "inventoryclearing" then
+			_str = _str .. YRP.lang_string("LID_" .. _str_lang) .. " (" .. YRP.lang_string(net.ReadString()) .. ")"
+		elseif _str_lang == "playerisready" then
+			local name = {}
+			name["NAME"] = net.ReadString()
+			_str = _str .. YRP.lang_string("LID_hasfinishedloading", name)
+		elseif _str_lang == "newfeedback" then
+			_str = _str .. "New Feedback!"
+		elseif _str_lang == "database_full_server" then
+			_str = _str .. "SERVER: Database or disk is full, please make more space!"
+			_time = 40
+			_channel = NOTIFY_ERROR
 		end
+
+		notification.AddLegacy(_str, _channel, _time)
 	end
 end)
 
 net.Receive("yrp_info", function(len)
-	if playerready then
-		local ply = LocalPlayer()
-
-		if ply != nil then
-			local _str = net.ReadString()
-			_str = YRP.lang_string("LID_notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
-			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
-		end
+	local ply = LocalPlayer()
+	if ply:IsValid() then
+		local _str = net.ReadString()
+		_str = YRP.lang_string("LID_notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
+		notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 	end
 end)
 
 net.Receive("yrp_info2", function(len)
-	if playerready then
-		local ply = LocalPlayer()
+	local ply = LocalPlayer()
+	if ply:IsValid() then
+		local _str = net.ReadString()
+		_str = YRP.lang_string(_str)
+		local _str2 = net.ReadString()
 
-		if ply != nil then
-			local _str = net.ReadString()
-			_str = YRP.lang_string(_str)
-			local _str2 = net.ReadString()
-
-			if _str2 != nil then
-				_str2 = " " .. YRP.lang_string(_str2)
-			else
-				_str2 = ""
-			end
-
-			notification.AddLegacy(_str .. _str2, NOTIFY_GENERIC, 3)
+		if _str2 != nil then
+			_str2 = " " .. YRP.lang_string(_str2)
+		else
+			_str2 = ""
 		end
+
+		notification.AddLegacy(_str .. _str2, NOTIFY_GENERIC, 3)
 	end
 end)
 
 net.Receive("yrp_message", function(len)
-	if playerready then
-		local ply = LocalPlayer()
-
-		if ply != nil then
-			local _str = YRP.lang_string(net.ReadString())
-			notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
-		end
+	local ply = LocalPlayer()
+	if ply:IsValid() then
+		local _str = YRP.lang_string(net.ReadString())
+		notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 	end
 end)
