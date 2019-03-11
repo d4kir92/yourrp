@@ -241,7 +241,7 @@ end
 local test = true
 function HUDFO76Compass(tab)
 	local lply = LocalPlayer()
-	if lply:GetHudBool(tab.element, "VISI") then
+	if lply:HudValue(tab.element, "VISI") then
 		FO76[tab.element] = FO76[tab.element] or {}
 		FO76[tab.element]["BG"] = FO76[tab.element]["BG"] or {}
 		FO76[tab.element]["Bar"] = FO76[tab.element]["Bar"] or {}
@@ -402,7 +402,7 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
-	if lply:GetNWString("string_hud_design") == "Fallout 76" then
+	if lply:GetNW2String("string_hud_design") == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
 		HP.text = YRP.lang_string("LID_hp")
@@ -587,7 +587,7 @@ function HUD_FO76()
 			FO76Name(LO)
 		end
 
-		if lply:GetNWBool("iscasting", false) then
+		if lply:GetNW2Bool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
 			CA.cur = lply:CastTimeCurrent()
@@ -598,7 +598,7 @@ function HUD_FO76()
 			FO76Name(CA)
 		end
 
-		if IsChatVisible() and lply:GetNWBool("bool_yrp_chat", false) then
+		if IsChatVisible() and lply:GetNW2Bool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			FO76Chat(CH)

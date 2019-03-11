@@ -1,17 +1,5 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local _debug = true
-
-concommand.Add("yrp__debug", function(ply, cmd, args)
-	_debug = !_debug or false
-	ply:SetNWBool("yrp_debug", _debug)
-	if _debug then
-		printGM("note", "Debug ON")
-	elseif !_debug then
-		printGM("note", "Debug OFF")
-	end
-end)
-
 function wk(obj)
 	if obj != nil and obj != false then
 		return true
@@ -24,7 +12,7 @@ function worked(obj, name, _silence)
 	if obj != nil and obj != false then
 		return true
 	else
-		if _debug and !_silence then
+		if !_silence then
 			printGM("note", "NOT WORKED: " .. tostring(obj) .. " " .. tostring(name))
 		end
 		return false
@@ -54,7 +42,7 @@ function check_yrp_sv_errors(str)
 			file.CreateDir("yrp")
 		end
 		printGM("db", "yrp/sv_errors.txt existiert nicht")
-		file.Write("yrp/sv_errors.txt", str)
+		file.Write("yrp/sv_errors.txt", 0)
 		return false
 	end
 	return true
@@ -67,7 +55,7 @@ function check_yrp_cl_errors(str)
 			file.CreateDir("yrp")
 		end
 		printGM("db", "yrp/cl_errors.txt existiert nicht")
-		file.Write("yrp/cl_errors.txt", str)
+		file.Write("yrp/cl_errors.txt", 0)
 		return false
 	end
 	return true
@@ -100,21 +88,22 @@ function update_error_table_sv()
 
 		local _yrp_read = file.Read("yrp/sv_errors.txt", "DATA")
 		if worked(_yrp_read, "_yrp_read failed") then
-
-			_yrp_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
+			_yrp_read = tonumber(_yrp_read)
+			if !isnumber(_yrp_read) then
+				file.Write("yrp/sv_errors.txt", 0)
+				_yrp_read = 0
+			end
 			_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
-			local _explode_yrp_read = string.Explode("\r\n\r\n", _yrp_read)
 			local _explode = string.Explode("\r\n\r\n", _read)
 
-			if #_explode < #_explode_yrp_read then
+			if table.Count(_explode) < _yrp_read then
 				--if error file is smaller, update data
-				file.Write("yrp/sv_errors.txt", _read)
-			elseif #_explode > #_explode_yrp_read then
+				file.Write("yrp/sv_errors.txt", table.Count(_explode))
+			elseif table.Count(_explode) > _yrp_read then
 				--if error file is bigger, get all errors
-
 				local _errors = {}
 				for k, v in pairs(_explode) do
-					if k > #_explode_yrp_read then
+					if k > _yrp_read then
 						if !table.HasValue(_errors, v) and !first_time_error then
 							if ErrorValidToSend(v) then
 								table.insert(_errors, v)
@@ -124,7 +113,7 @@ function update_error_table_sv()
 				end
 
 				--update data file
-				file.Write("yrp/sv_errors.txt", _read)
+				file.Write("yrp/sv_errors.txt", table.Count(_explode))
 
 				return _errors
 			elseif first_time_error then
@@ -138,7 +127,7 @@ function update_error_table_sv()
 				end
 
 				--update data file
-				file.Write("yrp/sv_errors.txt", _read)
+				file.Write("yrp/sv_errors.txt", table.Count(_explode))
 
 				return _errors
 			else
@@ -163,21 +152,24 @@ function update_error_table_cl()
 
 		local _yrp_read = file.Read("yrp/cl_errors.txt", "DATA")
 		if worked(_yrp_read, "_yrp_read failed") then
-			_yrp_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
+			_yrp_read = tonumber(_yrp_read)
+			if !isnumber(_yrp_read) then
+				file.Write("yrp/sv_errors.txt", 0)
+				_yrp_read = 0
+			end
 			_read = string.Replace(_read, "\r\n\r\n\r\n", "\r\n\r\n")
-			local _explode_yrp_read = string.Explode("\r\n\r\n", _yrp_read)
 			local _explode = string.Explode("\r\n\r\n", _read)
 
-			if #_explode < #_explode_yrp_read then
+			if table.Count(_explode) < _yrp_read then
 				--if error file is smaller, update data
-				file.Write("yrp/cl_errors.txt", _read)
+				file.Write("yrp/cl_errors.txt", table.Count(_explode))
 
-			elseif #_explode > #_explode_yrp_read then
+			elseif table.Count(_explode) > _yrp_read then
 				--if error file is bigger, get all errors
 
 				local _errors = {}
 				for k, v in pairs(_explode) do
-					if k > #_explode_yrp_read then
+					if k > _yrp_read then
 						if !table.HasValue(_errors, v) and !first_time_error then
 							if ErrorValidToSend(v) then
 								table.insert(_errors, v)
@@ -187,7 +179,7 @@ function update_error_table_cl()
 				end
 
 				--update data file
-				file.Write("yrp/cl_errors.txt", _read)
+				file.Write("yrp/cl_errors.txt", table.Count(_explode))
 
 				return _errors
 			elseif first_time_error then
@@ -201,7 +193,7 @@ function update_error_table_cl()
 				end
 
 				--update data file
-				file.Write("yrp/cl_errors.txt", _read)
+				file.Write("yrp/cl_errors.txt", table.Count(_explode))
 
 				return _errors
 			else
@@ -256,7 +248,7 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error(realm, str)
 	local entry = {}
-	if CLIENT and !LocalPlayer():GetNWBool("isserverdedicated", false) then
+	if CLIENT and !LocalPlayer():GetNW2Bool("isserverdedicated", false) then
 		return false
 	elseif SERVER and !game.IsDedicated() then
 		return false
@@ -346,26 +338,14 @@ function CanSendError()
 		if game.MaxPlayers() > 1 then
 			if CLIENT then
 				local lply = LocalPlayer()
-				if lply:IsValid() and lply:GetNWBool("isserverdedicated", false) then
-					if LocalPlayer():GetNWBool("bool_server_debug", true) then
-						if tick % tonumber(LocalPlayer():GetNWInt("int_server_debug_tick", 10)) == 0 then
-							return true
-						end
-					else
-						if tick % 3600 == 0 then
-							return true
-						end
+				if lply:IsValid() and lply:GetNW2Bool("isserverdedicated", false) then
+					if tick % 10 == 0 then
+						return true
 					end
 				end
 			elseif SERVER and game.IsDedicated() then
-				if YRPDebug() then
-					if tick % ErrorMod() == 0 then
-						return true
-					end
-				else
-					if tick % 3600 == 0 then
-						return true
-					end
+				if tick % 10 == 0 then
+					return true
 				end
 			end
 		end

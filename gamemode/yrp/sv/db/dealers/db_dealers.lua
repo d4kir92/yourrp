@@ -124,7 +124,7 @@ net.Receive("dealer_edit_worldmodel", function(len, ply)
 
 	local _dealer = SQL_UPDATE(_db_name, "WorldModel = '" .. _dealer_new_wm .. "'", "uniqueID = " .. _dealer_uid)
 	for i, npc in pairs(ents.GetAll()) do
-		if npc:GetNWString("dealerID", "FAILED") == tostring(_dealer_uid) then
+		if npc:GetNW2String("dealerID", "FAILED") == tostring(_dealer_uid) then
 			npc:SetModel(_dealer_new_wm)
 		end
 	end

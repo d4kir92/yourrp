@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 58 --do NOT change this!
-GM.VersionCanary = 120 --do NOT change this!
+GM.VersionBeta = 59 --do NOT change this!
+GM.VersionCanary = 121 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -143,7 +143,7 @@ concommand.Add("yrp_players", function(ply, cmd, args)
 		local _id = makeString(string.ToTable(pl:UserID()), 4, false)
 		local _steamid = makeString(string.ToTable(pl:SteamID()), 20, false)
 		local _name = makeString(string.ToTable(pl:YRPName()), 24, true)
-		local _money = makeString(string.ToTable(pl:GetNWString("money")), 12, false)
+		local _money = makeString(string.ToTable(pl:GetNW2String("money")), 12, false)
 		local _str = string.format("%s %s %s %s", _id, _steamid, _name, _money)
 		printGM("gm", _str)
 	end
@@ -197,14 +197,14 @@ concommand.Add("yrp_collection", function(ply, cmd, args)
 end)
 
 hook.Add("StartCommand", "NoJumpGuns", function(ply, cmd)
-	if ply:GetNWBool("bool_anti_bhop", false) and !ply:GetNWBool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
+	if ply:GetNW2Bool("bool_anti_bhop", false) and !ply:GetNW2Bool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
 		cmd:RemoveKey(IN_JUMP)
 	end
 end)
 
 function IsEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll()) do
-		if tostring(ent:GetNWString("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
+		if tostring(ent:GetNW2String("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
 			return true, ent
 		end
 	end

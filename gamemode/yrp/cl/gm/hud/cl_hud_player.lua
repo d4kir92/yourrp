@@ -180,23 +180,23 @@ end
 function hudThirdperson(ply, color)
 	if input.IsKeyDown(get_keybind("view_zoom_in")) or input.IsKeyDown(get_keybind("view_zoom_out")) then
 		local _3PText = ""
-		if ply:GetNWInt("view_range", 0) <= -200 then
+		if ply.view_range <= -200 then
 			_3PText = YRP.lang_string("LID_fppr")
-		elseif ply:GetNWInt("view_range", 0) > -200 and ply:GetNWInt("view_range", 0) < 0 then
+		elseif ply.view_range > -200 and ply.view_range < 0 then
 			_3PText = YRP.lang_string("LID_fpp")
-		elseif ply:GetNWInt("view_range", 0) > 0 then
+		elseif ply.view_range > 0 then
 			_3PText = YRP.lang_string("LID_tpp")
 		end
-		draw.SimpleTextOutlined(_3PText .. " (" .. math.Round(ply:GetNWInt("view_range", 0), -1) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(_3PText .. " (" .. math.Round(ply.view_range, -1) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_up")) or input.IsKeyDown(get_keybind("view_down")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply:GetNWInt("view_z", 0), 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply.view_z, 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_right")) or input.IsKeyDown(get_keybind("view_left")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply:GetNWInt("view_x", 0), 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply.view_x, 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_spin_right")) or input.IsKeyDown(get_keybind("view_spin_left")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply:GetNWInt("view_s", 0), 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply.view_s, 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -205,11 +205,11 @@ function client_toggled()
 end
 
 function server_toggled(ply)
-	return ply:GetNWBool("bool_yrp_hud", false)
+	return ply:GetNW2Bool("bool_yrp_hud", false)
 end
 
 function HudPlayer(ply)
-	if ply:GetNWString("string_hud_design", "notloaded") != "notloaded" then
+	if ply:GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 		drawMenuInfo()
 
 		if ply:Alive() then

@@ -48,7 +48,7 @@ function checkChatVisible()
 			_showChat = true
 		end
 		lply = LocalPlayer()
-		if lply:GetNWBool("bool_yrp_chat", false) == false then
+		if lply:GetNW2Bool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
 		yrpChat.richText:SetVisible(_showChat)
@@ -74,7 +74,7 @@ function niceCommand(com)
 	elseif com == "yell" then
 		return YRP.lang_string("LID_yell")
 	elseif com == "advert" then
-		return LocalPlayer():GetNWString("text_chat_advert", YRP.lang_string("LID_advert"))
+		return LocalPlayer():GetNW2String("text_chat_advert", YRP.lang_string("LID_advert"))
 	elseif com == "admin" then
 		return YRP.lang_string("LID_admin")
 	elseif com == "faction" then
@@ -297,14 +297,14 @@ end
 
 timer.Create("yrp_init_chat", 1, 0, function()
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNWBool("finishedloading", false) and LocalPlayer():GetNWString("string_hud_design", "notloaded") != "notloaded" then
+	if lply:IsValid() and lply:GetNW2Bool("finishedloading", false) and LocalPlayer():GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
 		timer.Remove("yrp_init_chat")
 	end
 end)
 
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	if ply:GetNWBool("bool_yrp_chat", false) then
+	if ply:GetNW2Bool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
 			bTeam = false
@@ -322,7 +322,7 @@ end)
 
 hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNWBool("bool_yrp_chat", false) then
+	if lply:IsValid() and lply:GetNW2Bool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
 				yrpChat.richText:AppendText(text.."\n")
@@ -333,7 +333,7 @@ end)
 
 hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNWBool("bool_yrp_chat", false) then
+	if lply:IsValid() and lply:GetNW2Bool("bool_yrp_chat", false) then
 		if name == "CHudChat" then
 			return false
 		end

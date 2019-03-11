@@ -276,14 +276,14 @@ function spawnItem(ply, item, duid)
 		end
 
 		SQL_INSERT_INTO("yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. SQL_STR_IN(item.ClassName) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'")
-		ent:SetNWString("item_uniqueID", item.uniqueID)
-		ent:SetNWString("ownerRPName", ply:RPName())
+		ent:SetNW2String("item_uniqueID", item.uniqueID)
+		ent:SetNW2String("ownerRPName", ply:RPName())
 		ent.yrpowner = ply
 	elseif item.type ~= "weapons" then
 		ent = ents.Create(item.ClassName)
 		if ent == NULL then return end
-		ent:SetNWString("item_uniqueID", item.uniqueID)
-		ent:SetNWString("ownerRPName", ply:RPName())
+		ent:SetNW2String("item_uniqueID", item.uniqueID)
+		ent:SetNW2String("ownerRPName", ply:RPName())
 		ent:SetOwner(ply)
 		ent:SetCreator(ply)
 	end

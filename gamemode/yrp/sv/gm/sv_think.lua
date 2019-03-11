@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 hook.Add("PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
-	ply:SetNWBool("taunting", true)
+	ply:SetNW2Bool("taunting", true)
 	timer.Simple(length, function()
-		ply:SetNWBool("taunting", false)
+		ply:SetNW2Bool("taunting", false)
 	end)
 end)
 
@@ -11,11 +11,11 @@ util.AddNetworkString("client_lang")
 net.Receive("client_lang", function(len, ply)
 	local _lang = net.ReadString()
 	printGM("db", ply:YRPName() .. " using language: " .. string.upper(_lang))
-	ply:SetNWString("client_lang", _lang or "NONE")
+	ply:SetNW2String("client_lang", _lang or "NONE")
 end)
 
 function reg_hp(ply)
-	local hpreg = ply:GetNWInt("HealthReg")
+	local hpreg = ply:GetNW2Int("HealthReg")
 	if hpreg != nil then
 		ply:Heal(hpreg)
 		if ply:Health() > ply:GetMaxHealth() then
@@ -27,11 +27,11 @@ function reg_hp(ply)
 end
 
 function reg_ar(ply)
-	local arreg = ply:GetNWInt("ArmorReg")
+	local arreg = ply:GetNW2Int("ArmorReg")
 	if arreg != nil then
 		ply:SetArmor(ply:Armor() + arreg)
-		if ply:Armor() > ply:GetNWInt("MaxArmor") then
-			ply:SetArmor(ply:GetNWInt("MaxArmor"))
+		if ply:Armor() > ply:GetNW2Int("MaxArmor") then
+			ply:SetArmor(ply:GetNW2Int("MaxArmor"))
 		elseif ply:Armor() < 0 then
 			ply:SetArmor(0)
 		end
@@ -39,14 +39,14 @@ function reg_ar(ply)
 end
 
 function con_hg(ply, time)
-	ply:SetNWFloat("hunger", tonumber(ply:GetNWFloat("hunger", 0.0)) - 0.01)
-	if tonumber(ply:GetNWFloat("hunger", 0.0)) < 0.0 then
-		ply:SetNWFloat("hunger", 0.0)
+	ply:SetNW2Float("hunger", tonumber(ply:GetNW2Float("hunger", 0.0)) - 0.01)
+	if tonumber(ply:GetNW2Float("hunger", 0.0)) < 0.0 then
+		ply:SetNW2Float("hunger", 0.0)
 	end
-	if tonumber(ply:GetNWFloat("hunger", 0.0)) < 20.0 then
+	if tonumber(ply:GetNW2Float("hunger", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 100)
-	elseif ply:GetNWBool("bool_hunger_health_regeneration", false) then
-		local tickrate = tonumber(ply:GetNWString("text_hunger_health_regeneration_tickrate", 1))
+	elseif ply:GetNW2Bool("bool_hunger_health_regeneration", false) then
+		local tickrate = tonumber(ply:GetNW2String("text_hunger_health_regeneration_tickrate", 1))
 		if tickrate >= 1 and time % tickrate == 0 then
 			ply:SetHealth(ply:Health() + 1)
 			if ply:Health() > ply:GetMaxHealth() then
@@ -57,36 +57,36 @@ function con_hg(ply, time)
 end
 
 function con_th(ply)
-	ply:SetNWFloat("thirst", tonumber(ply:GetNWFloat("thirst", 0.0)) - 0.02)
-	if tonumber(ply:GetNWFloat("thirst", 0.0)) < 0.0 then
-		ply:SetNWFloat("thirst", 0.0)
+	ply:SetNW2Float("thirst", tonumber(ply:GetNW2Float("thirst", 0.0)) - 0.02)
+	if tonumber(ply:GetNW2Float("thirst", 0.0)) < 0.0 then
+		ply:SetNW2Float("thirst", 0.0)
 	end
-	if tonumber(ply:GetNWFloat("thirst", 0.0)) < 20.0 then
+	if tonumber(ply:GetNW2Float("thirst", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 100)
 	end
 end
 
 function con_st(ply)
 	if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:IsOnGround() or ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)) and !ply:InVehicle() then
-		ply:SetNWInt("GetCurStamina", ply:GetNWInt("GetCurStamina", 0) - (ply:GetNWInt("stamindown", 1)))
-		if ply:GetNWInt("GetCurStamina", 0) < 0 then
-			ply:SetNWInt("GetCurStamina", 0)
+		ply:SetNW2Int("GetCurStamina", ply:GetNW2Int("GetCurStamina", 0) - (ply:GetNW2Int("stamindown", 1)))
+		if ply:GetNW2Int("GetCurStamina", 0) < 0 then
+			ply:SetNW2Int("GetCurStamina", 0)
 		end
-	elseif ply:GetNWFloat("thirst", 0) > 20 then
-		ply:SetNWInt("GetCurStamina", ply:GetNWInt("GetCurStamina", 0) + ply:GetNWInt("staminup", 1))
-		if ply:GetNWInt("GetCurStamina", 0) > ply:GetNWInt("GetMaxStamina", 100) then
-			ply:SetNWInt("GetCurStamina", ply:GetNWInt("GetMaxStamina", 100))
+	elseif ply:GetNW2Float("thirst", 0) > 20 then
+		ply:SetNW2Int("GetCurStamina", ply:GetNW2Int("GetCurStamina", 0) + ply:GetNW2Int("staminup", 1))
+		if ply:GetNW2Int("GetCurStamina", 0) > ply:GetNW2Int("GetMaxStamina", 100) then
+			ply:SetNW2Int("GetCurStamina", ply:GetNW2Int("GetMaxStamina", 100))
 		end
 	end
 
 	if !ply:Slowed() then
-		if ply:GetNWInt("GetCurStamina", 0) < 20 or ply:GetNWFloat("thirst", 0) < 20 then
-			ply:SetRunSpeed(ply:GetNWInt("speedrun", 0) * 0.6)
-			ply:SetWalkSpeed(ply:GetNWInt("speedwalk", 0) * 0.6)
+		if ply:GetNW2Int("GetCurStamina", 0) < 20 or ply:GetNW2Float("thirst", 0) < 20 then
+			ply:SetRunSpeed(ply:GetNW2Int("speedrun", 0) * 0.6)
+			ply:SetWalkSpeed(ply:GetNW2Int("speedwalk", 0) * 0.6)
 			ply:SetCanWalk(false)
 		else
-			ply:SetRunSpeed(ply:GetNWInt("speedrun", 0))
-			ply:SetWalkSpeed(ply:GetNWInt("speedwalk", 0))
+			ply:SetRunSpeed(ply:GetNW2Int("speedrun", 0))
+			ply:SetWalkSpeed(ply:GetNW2Int("speedwalk", 0))
 			ply:SetCanWalk(true)
 		end
 	end
@@ -99,63 +99,63 @@ hook.Add("Tick", "yrp_keydown", function()
 end)
 
 function anti_bunnyhop(ply)
-	if ply:KeyDown(IN_JUMP) and ply:GetNWBool("canjump", true) then
-		ply:SetNWBool("canjump", false)
-	elseif ply:OnGround() and !ply:GetNWBool("jump_resetting", false) and !ply:GetNWBool("canjump", false) then
-		ply:SetNWBool("jump_resetting", true)
+	if ply:KeyDown(IN_JUMP) and ply:GetNW2Bool("canjump", true) then
+		ply:SetNW2Bool("canjump", false)
+	elseif ply:OnGround() and !ply:GetNW2Bool("jump_resetting", false) and !ply:GetNW2Bool("canjump", false) then
+		ply:SetNW2Bool("jump_resetting", true)
 		timer.Simple(0.4, function()
-			ply:SetNWBool("jump_resetting", false)
-			ply:SetNWBool("canjump", true)
+			ply:SetNW2Bool("jump_resetting", false)
+			ply:SetNW2Bool("canjump", true)
 		end)
 	end
 end
 
 function broken(ply)
 	if IsBonefracturingEnabled() and !ply:Slowed() then
-		if ply:GetNWBool("broken_leg_left") and ply:GetNWBool("broken_leg_right") then
+		if ply:GetNW2Bool("broken_leg_left") and ply:GetNW2Bool("broken_leg_right") then
 			--[[ Both legs broken ]]--
-			ply:SetRunSpeed(ply:GetNWInt("speedrun", 0)*0.5)
-			ply:SetWalkSpeed(ply:GetNWInt("speedwalk", 0)*0.5)
+			ply:SetRunSpeed(ply:GetNW2Int("speedrun", 0)*0.5)
+			ply:SetWalkSpeed(ply:GetNW2Int("speedwalk", 0)*0.5)
 			ply:SetCanWalk(false)
-		elseif ply:GetNWBool("broken_leg_left") or ply:GetNWBool("broken_leg_right") then
+		elseif ply:GetNW2Bool("broken_leg_left") or ply:GetNW2Bool("broken_leg_right") then
 			--[[ One leg broken ]]--
-			ply:SetRunSpeed(ply:GetNWInt("speedrun", 0)*0.25)
-			ply:SetWalkSpeed(ply:GetNWInt("speedwalk", 0)*0.25)
+			ply:SetRunSpeed(ply:GetNW2Int("speedrun", 0)*0.25)
+			ply:SetWalkSpeed(ply:GetNW2Int("speedwalk", 0)*0.25)
 			ply:SetCanWalk(false)
 		else
-			ply:SetRunSpeed(ply:GetNWInt("speedrun", 0))
-			ply:SetWalkSpeed(ply:GetNWInt("speedwalk", 0))
+			ply:SetRunSpeed(ply:GetNW2Int("speedrun", 0))
+			ply:SetWalkSpeed(ply:GetNW2Int("speedwalk", 0))
 			ply:SetCanWalk(true)
 		end
 	end
 end
 
 function reg_ab(ply)
-	ply:SetNWInt("GetCurAbility", ply:GetNWInt("GetCurAbility", 0) + ply:GetNWInt("GetRegAbility", 1))
+	ply:SetNW2Int("GetCurAbility", ply:GetNW2Int("GetCurAbility", 0) + ply:GetNW2Int("GetRegAbility", 1))
 
-	if ply:GetNWInt("GetCurAbility") > ply:GetNWInt("GetMaxAbility") then
-		ply:SetNWInt("GetCurAbility", ply:GetNWInt("GetMaxAbility"))
-	elseif ply:GetNWInt("GetCurAbility") < 0 then
-		ply:SetNWInt("GetCurAbility", 0)
+	if ply:GetNW2Int("GetCurAbility") > ply:GetNW2Int("GetMaxAbility") then
+		ply:SetNW2Int("GetCurAbility", ply:GetNW2Int("GetMaxAbility"))
+	elseif ply:GetNW2Int("GetCurAbility") < 0 then
+		ply:SetNW2Int("GetCurAbility", 0)
 	end
 end
 
 function time_jail(ply)
-	if ply:GetNWBool("injail", false) then
-		ply:SetNWInt("jailtime", ply:GetNWInt("jailtime", 0) - 1)
-		if tonumber(ply:GetNWInt("jailtime", 0)) <= 0 then
+	if ply:GetNW2Bool("injail", false) then
+		ply:SetNW2Int("jailtime", ply:GetNW2Int("jailtime", 0) - 1)
+		if tonumber(ply:GetNW2Int("jailtime", 0)) <= 0 then
 			clean_up_jail(ply)
 		end
 	end
 end
 
 function check_salary(ply)
-	if worked(ply:GetNWString("money"), "sv_think money fail") and worked(ply:GetNWString("salary"), "sv_think salary fail") then
-		if CurTime() >= ply:GetNWInt("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
-			ply:SetNWInt("nextsalarytime", CurTime() + ply:GetNWInt("salarytime"))
+	if worked(ply:GetNW2String("money"), "sv_think money fail") and worked(ply:GetNW2String("salary"), "sv_think salary fail") then
+		if CurTime() >= ply:GetNW2Int("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
+			ply:SetNW2Int("nextsalarytime", CurTime() + ply:GetNW2Int("salarytime"))
 
-			local _m = ply:GetNWString("money", "FAILED")
-			local _ms = ply:GetNWString("salary", "FAILED")
+			local _m = ply:GetNW2String("money", "FAILED")
+			local _ms = ply:GetNW2String("salary", "FAILED")
 			if _m == "FAILED" or _ms == "FAILED" then
 				printGM("note", "_m or _ms failed _m: " .. _m .. " _ms: " .. _ms)
 				return false
@@ -163,7 +163,7 @@ function check_salary(ply)
 			local _money = tonumber(_m)
 			local _salary = tonumber(_ms)
 			if _money != nil and _salary != nil then
-				ply:SetNWString("money", _money + _salary)
+				ply:SetNW2String("money", _money + _salary)
 				ply:UpdateMoney()
 			else
 				printGM("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
@@ -176,7 +176,7 @@ end
 function dealerAlive(uid)
 	for j, npc in pairs(ents.GetAll()) do
 		if npc:IsNPC() then
-			if tostring(npc:GetNWString("dealerID", "FAILED")) == tostring(uid) then
+			if tostring(npc:GetNW2String("dealerID", "FAILED")) == tostring(uid) then
 				return true
 			end
 		end
@@ -191,13 +191,13 @@ timer.Create("ServerThink", 1, 0, function()
 	for k, ply in pairs(_all_players) do
 		ply:addSecond()
 
-		if ply:GetNWBool("loaded", false) then
+		if ply:GetNW2Bool("loaded", false) then
 			anti_bunnyhop(ply)
 
-			if !ply:GetNWBool("inCombat") then
+			if !ply:GetNW2Bool("inCombat") then
 				reg_hp(ply)	 --HealthReg
 				reg_ar(ply)	 --ArmorReg
-				ply:SetNWInt("yrp_stars", 0)
+				ply:SetNW2Int("yrp_stars", 0)
 			end
 
 			if ply:IsBleeding() then
@@ -208,13 +208,13 @@ timer.Create("ServerThink", 1, 0, function()
 				ply:TakeDamage(0.5, ply, ply)
 			end
 
-			if ply:GetNWBool("bool_hunger", false) then
+			if ply:GetNW2Bool("bool_hunger", false) then
 				con_hg(ply, _time)
 			end
-			if ply:GetNWBool("bool_thirst", false) then
+			if ply:GetNW2Bool("bool_thirst", false) then
 				con_th(ply)
 			end
-			if ply:GetNWBool("bool_stamina", false) then
+			if ply:GetNW2Bool("bool_stamina", false) then
 				con_st(ply)
 			end
 
@@ -250,8 +250,8 @@ timer.Create("ServerThink", 1, 0, function()
 							printGM("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
 							_del = _del[1]
 							local _dealer = ents.Create("yrp_dealer")
-							_dealer:SetNWString("dealerID", dealer.uniqueID)
-							_dealer:SetNWString("name", dealer.name)
+							_dealer:SetNW2String("dealerID", dealer.uniqueID)
+							_dealer:SetNW2String("name", dealer.name)
 							local _pos = string.Explode(",", _del.position)
 							_pos = Vector(_pos[1], _pos[2], _pos[3])
 							_dealer:SetPos(_pos)

@@ -165,12 +165,12 @@ function OpenEmotesMenu()
 	function _em.emotes:DoClick()
 		if self.select ~= nil then
 			local _sel = self.select
-			LocalPlayer():SetNWBool("istaunting", true)
+			LocalPlayer():SetNW2Bool("istaunting", true)
 			CloseEmotesMenu()
 
 			timer.Simple(0.01, function()
 				if _sel ~= nil and GetEmotes()[_sel] ~= nil then
-						LocalPlayer():SetNWBool("istaunting", false)
+						LocalPlayer():SetNW2Bool("istaunting", false)
 						RunConsoleCommand("act", GetEmotes()[_sel].cmd)
 				end
 			end)

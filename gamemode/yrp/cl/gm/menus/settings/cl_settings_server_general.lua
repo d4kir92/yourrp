@@ -133,7 +133,7 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	local background = createD("DPanel", nil, ctr(800), ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		local ply = LocalPlayer()
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": (" .. ply:GetNWString("text_money_pre", "") .. "100" .. ply:GetNWString("text_money_pos", "") .. ")", nil, ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": (" .. ply:GetNW2String("text_money_pre", "") .. "100" .. ply:GetNW2String("text_money_pos", "") .. ")", nil, ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	background.textbox = createD("DTextEntry", background, ctr(400) - ctr(10 * 2), ctr(50), ctr(10), ctr(50))
@@ -297,7 +297,7 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_noclip_model = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_noclip_model, "LID_noclipmodel", "update_bool_noclip_model")
 		local noclip_mdl = CreateButtonLine(SERVER_SETTINGS.plus, "LID_noclipmodel", "update_text_noclip_mdl", "LID_change")
 		hook.Add("update_text_noclip_mdl", "yrp_update_text_noclip_mdl", function()
-			local mdl = LocalPlayer():GetNWString("WorldModel", "")
+			local mdl = LocalPlayer():GetNW2String("WorldModel", "")
 			net.Start("update_text_noclip_mdl")
 				net.WriteString(mdl)
 			net.SendToServer()
@@ -318,7 +318,7 @@ net.Receive("Connect_Settings_General", function(len)
 				tmpTable[count].PrintName = v
 			end
 
-			LocalPlayer():SetNWString("WorldModel", GEN.bool_noclip_mdl)
+			LocalPlayer():SetNW2String("WorldModel", GEN.bool_noclip_mdl)
 			OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
 		end
 		CreateHRLine(SERVER_SETTINGS.plus)

@@ -187,7 +187,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	function SWEPS.button:DoClick()
 		OpenSelector(GetSWEPsList(), ug.string_sweps, "selector_usergroup_string_sweps")
 		hook.Add("selector_usergroup_string_sweps", "selector_usergroup_string_sweps", function()
-			local string_sweps = ply:GetNWString("global_working", "")
+			local string_sweps = ply.global_working
 
 			net.Start("usergroup_update_string_sweps")
 				net.WriteString(CURRENT_USERGROUP)
@@ -323,7 +323,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	function ENTITIES.add:DoClick()
 		OpenSingleSelector(GetSENTsList(), "selector_usergroup_string_sents")
 		hook.Add("selector_usergroup_string_sents", "selector_usergroup_string_sents", function()
-			local sent = ply:GetNWString("ClassName", "")
+			local sent = ply:GetNW2String("ClassName", "")
 
 			net.Start("usergroup_add_sent")
 				net.WriteString(CURRENT_USERGROUP)

@@ -277,7 +277,7 @@ end
 
 function openRoleMenu()
 	openMenu()
-	if LocalPlayer():GetNWBool("bool_players_can_switch_role", false) then
+	if LocalPlayer():GetNW2Bool("bool_players_can_switch_role", false) then
 		_rm = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
 		_rm:Center()
 		_rm:ShowCloseButton(true)

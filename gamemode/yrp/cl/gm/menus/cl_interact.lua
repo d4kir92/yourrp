@@ -60,13 +60,13 @@ net.Receive("openInteractMenu", function(len)
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
-			tmpGender = v:GetNWString("Gender")
+			tmpGender = v:GetNW2String("Gender")
 			tmpRPDescription = ""
 			for i = 1, 10 do
 				if i > 1 then
 					tmpRPDescription = tmpRPDescription .. "\n"
 				end
-				tmpRPDescription = tmpRPDescription .. v:GetNWString("rpdescription" .. i, "")
+				tmpRPDescription = tmpRPDescription .. v:GetNW2String("rpdescription" .. i, "")
 			end
 			break
 		end

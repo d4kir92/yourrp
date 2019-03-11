@@ -448,8 +448,8 @@ net.Receive("get_design_settings", function(len)
 								end
 								draw.RoundedBox(0, 0, 0, pw, ph, color)
 
-								local ax = lply:GetHudInt(tab.element, "AX")
-								local ay = lply:GetHudInt(tab.element, "AY")
+								local ax = lply:HudValue(tab.element, "AX")
+								local ay = lply:HudValue(tab.element, "AY")
 								if ay == 3 then
 									ay = 0
 								elseif ay == 4 then
@@ -496,7 +496,7 @@ net.Receive("get_design_settings", function(len)
 								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
-							t.color = lply:GetHudColor(t.element, t.art)
+							t.color = lply:HudValue(t.element, t.art)
 
 							local btn = createD("DButton", line, ctr(50), ctr(50), 0, 0)
 							btn:SetText("")
@@ -592,7 +592,7 @@ net.Receive("get_design_settings", function(len)
 						textsize.name = "LID_textsize"
 						textsize.element = tab.element
 						textsize.choices = GetFontSizeTable()
-						textsize.value = lply:GetHudInt(tab.element, "TS")
+						textsize.value = lply:HudValue(tab.element, "TS")
 						win.winset:AddComboBox(textsize)
 
 						local colorbar = {}

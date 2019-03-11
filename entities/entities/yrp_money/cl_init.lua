@@ -41,7 +41,7 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(money, "Roboto72B", 0, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			cam.End3D2D()
 
-			if ply:GetNWBool("bool_tag_on_head_name", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_name", false) then
 				ang = ply:GetAngles()
 				ang = Angle(0, ang.y - 90, 90)
 				cam.Start3D2D(pos + Vector(0, 0, 4), ang, 0.04 )

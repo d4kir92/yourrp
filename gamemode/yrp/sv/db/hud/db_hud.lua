@@ -618,19 +618,19 @@ function Player:HudLoadout()
 		--[[
 		for i, ele in pairs(hudeles) do
 			if string.StartWith(ele.name, "float_") then
-				self:SetNWFloat(ele.name, tonumber(ele.value))
+				self:SetNW2Float(ele.name, tonumber(ele.value))
 			elseif string.StartWith(ele.name, "bool_") then
-				self:SetNWBool(ele.name, tobool(ele.value))
+				self:SetNW2Bool(ele.name, tobool(ele.value))
 			elseif string.StartWith(ele.name, "color_") then
-				self:SetNWString(ele.name, ele.value)
+				self:SetNW2String(ele.name, ele.value)
 			elseif string.StartWith(ele.name, "int_") then
-				self:SetNWInt(ele.name, ele.value)
+				self:SetNW2Int(ele.name, ele.value)
 			end
 		end
 		]]
 	end
 	timer.Simple(1, function()
-		self:SetNWInt("hud_version", self:GetNWInt("hud_version", 0) + 1)
+		self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
 	end)
 end
 

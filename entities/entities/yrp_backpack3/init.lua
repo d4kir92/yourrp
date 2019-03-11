@@ -22,5 +22,5 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	openStorage(activator, self:GetNWString("storage_uid"))
+	openStorage(activator, self:GetNW2String("storage_uid"))
 end

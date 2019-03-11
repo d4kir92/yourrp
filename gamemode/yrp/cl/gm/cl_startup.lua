@@ -265,7 +265,7 @@ end
 
 function OpenSelector(tbl_list, tbl_sele, closeF)
 	local ply = LocalPlayer()
-	ply:SetNWString("global_working", table.concat(tbl_sele, ","))
+	ply.global_working = table.concat(tbl_sele, ",")
 	local site = {}
 	site.cur = 1
 	site.max = 1
@@ -489,7 +489,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							end
 						end
 
-						ply:SetNWString("global_working", tmpString)
+						ply.global_working = tmpString
 					end
 
 					tmpX = tmpX + ctr(item.w) + tmpBr
@@ -680,10 +680,10 @@ function OpenSingleSelector(table, closeF)
 					end
 
 					function _tmpName:DoClick()
-						LocalPlayer():SetNWString("WorldModel", item.WorldModel)
-						LocalPlayer():SetNWString("ClassName", item.ClassName)
-						LocalPlayer():SetNWString("PrintName", item.PrintName)
-						LocalPlayer():SetNWString("Skin", item.Skin)
+						LocalPlayer():SetNW2String("WorldModel", item.WorldModel)
+						LocalPlayer():SetNW2String("ClassName", item.ClassName)
+						LocalPlayer():SetNW2String("PrintName", item.PrintName)
+						LocalPlayer():SetNW2String("Skin", item.Skin)
 						frame:Close()
 					end
 
@@ -1171,10 +1171,10 @@ function openSingleSelector(table, closeF)
 					end
 
 					function _tmpName:DoClick()
-						LocalPlayer():SetNWString("WorldModel", item.WorldModel)
-						LocalPlayer():SetNWString("ClassName", item.ClassName)
-						LocalPlayer():SetNWString("PrintName", item.PrintName)
-						LocalPlayer():SetNWString("Skin", item.Skin)
+						LocalPlayer():SetNW2String("WorldModel", item.WorldModel)
+						LocalPlayer():SetNW2String("ClassName", item.ClassName)
+						LocalPlayer():SetNW2String("PrintName", item.PrintName)
+						LocalPlayer():SetNW2String("Skin", item.Skin)
 						frame:Close()
 					end
 
@@ -1284,8 +1284,8 @@ if !playerready then
 		self.oldhud = self.hud or -1
 		self.oldinterface = self.interface or -1
 
-		self.hud = tonumber(lply:GetNWInt("yrp_loading_hud", 0))
-		self.interface = tonumber(lply:GetNWInt("yrp_loading_interface", 0))
+		self.hud = tonumber(lply:GetNW2Int("yrp_loading_hud", 0))
+		self.interface = tonumber(lply:GetNW2Int("yrp_loading_interface", 0))
 
 		if load_tick < CurTime() or !self.isloading and (self.hud != self.oldhud or self.interface != self.oldinterface) then
 			load_tick = CurTime() + 3
@@ -1465,7 +1465,7 @@ function YRPSendIsReady()
 		openHelpMenu()
 	end
 
-	if !LocalPlayer():GetNWBool("isserverdedicated", false) then
+	if !LocalPlayer():GetNW2Bool("isserverdedicated", false) then
 		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 		warning:Center()
 		warning:SetTitle("Warning - If you want to remove this, use a dedicated server")
@@ -1474,7 +1474,7 @@ function YRPSendIsReady()
 		function warning:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 			hook.Run("YFramePaint", self, pw, ph)
-			if LocalPlayer():GetNWBool("isserverdedicated", false) then
+			if LocalPlayer():GetNW2Bool("isserverdedicated", false) then
 				self:Remove()
 			end
 		end
@@ -1721,7 +1721,7 @@ _icons["ms"] = Material("icon16/lightning.png")
 _icons["le"] = Material("icon16/layers.png")
 
 function drawPlates(ply)
-	if ply != LocalPlayer() and ply:Alive() and ply:GetNWInt("yrp_loading_hud", 0) >= 100 then
+	if ply != LocalPlayer() and ply:Alive() and ply:GetNW2Int("yrp_loading_hud", 0) >= 100 then
 		local _height = 31
 		local color = ply:GetColor()
 		color.a = color.a - 160
@@ -1730,34 +1730,34 @@ function drawPlates(ply)
 			color.a = 10
 		end
 
-		if ply:GetNWBool("bool_tag_on_head", false) then
-			if ply:GetNWBool("bool_tag_on_head_voice", false) and ply:GetNWBool("yrp_speaking", false) then
+		if ply:GetNW2Bool("bool_tag_on_head", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_voice", false) and ply:GetNW2Bool("yrp_speaking", false) then
 				local plyvol = ply:VoiceVolume() * 200
 				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
 				YRP.DrawSymbol(ply, "voice", 26, voicecolor)
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_chat", false) and ply:GetNWBool("istyping", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_chat", false) and ply:GetNW2Bool("istyping", false) then
 				YRP.DrawSymbol(ply, "chat", 26, color)
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_clan", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_clan", false) then
 				drawString(ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, color)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_name", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_name", false) then
 				drawString(ply, ply:RPName(), _height, color)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("isafk", false) or ply:GetNWBool("isdnd", false) then
+			if ply:GetNW2Bool("isafk", false) or ply:GetNW2Bool("isdnd", false) then
 				local onlinestatus = ""
 				local onlinecolor = Color(255, 255, 255, 255)
-				if ply:GetNWBool("isdnd", false) then
+				if ply:GetNW2Bool("isdnd", false) then
 					onlinestatus = YRP.lang_string("LID_dnd")
 					onlinecolor = Color(255, 0, 0, 255)
-				elseif ply:GetNWBool("isafk", false) then
+				elseif ply:GetNW2Bool("isafk", false) then
 					onlinestatus = YRP.lang_string("LID_afk")
 					onlinecolor = Color(255, 255, 0, 255)
 				end
@@ -1766,22 +1766,22 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_rolename", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_rolename", false) then
 				drawString(ply, ply:GetRoleName(), _height, color)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_groupname", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_groupname", false) then
 				drawString(ply, ply:GetGroupName(), _height, color)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_factionname", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_factionname", false) then
 				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, color)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_level", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_level", false) then
 				local lvl = ply:Level()
 				local t = {}
 				t["LEVEL"] = lvl
@@ -1789,15 +1789,15 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_armor", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_armor", false) then
 				_height = _height + 1
-				local str = ply:Armor() .. "/" .. ply:GetNWInt("MaxArmor", 100)
+				local str = ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100)
 				local col = ply:HudValue("AR", "BA")
-				drawBar(ply, str, _height, color, ply:Armor(), ply:GetNWInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
+				drawBar(ply, str, _height, color, ply:Armor(), ply:GetNW2Int("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
 				_height = _height + 6
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_health", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_health", false) then
 				_height = _height + 1
 				local str = ply:Health() .. "/" .. ply:GetMaxHealth()
 				local col = ply:HudValue("HP", "BA")
@@ -1805,7 +1805,7 @@ function drawPlates(ply)
 				_height = _height + 6
 			end
 
-			if ply:GetNWBool("bool_tag_on_head_usergroup", false) then
+			if ply:GetNW2Bool("bool_tag_on_head_usergroup", false) then
 				local ugcolor = ply:GetUserGroupColor()
 				ugcolor.a = color.a
 				drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
@@ -1815,17 +1815,17 @@ function drawPlates(ply)
 
 		_height = _height + 2
 
-		if ply:GetNWBool("tag_ug", false) or (ply:GetNWBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
+		if ply:GetNW2Bool("tag_ug", false) or (ply:GetNW2Bool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
 				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
 				_height = _height + 9
 		end
 
-		if ply:GetNWBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
+		if ply:GetNW2Bool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
 				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
 				_height = _height + 9
 		end
 
-		if ply:GetNWBool("bool_tag_on_side", false) then
+		if ply:GetNW2Bool("bool_tag_on_side", false) then
 			local _distance = 200
 
 			if LocalPlayer():GetPos():Distance(ply:GetPos()) < _distance then
@@ -1842,33 +1842,33 @@ function drawPlates(ply)
 				local _h = 20
 				local _d = 2
 
-				if ply:GetNWBool("bool_tag_on_side_name", false) then
+				if ply:GetNW2Bool("bool_tag_on_side_name", false) then
 					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["na"])
 					_z = _z + _d
 				end
 
-				if ply:GetNWBool("bool_tag_on_side_rolename", false) then
+				if ply:GetNW2Bool("bool_tag_on_side_rolename", false) then
 					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["rn"])
 					_z = _z + _d
 				end
 
-				if ply:GetNWBool("bool_tag_on_side_groupname", false) then
-					local _color = ply:GetNWString("groupColor", "255,0,0")
+				if ply:GetNW2Bool("bool_tag_on_side_groupname", false) then
+					local _color = ply:GetNW2String("groupColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
 					_z = _z + _d
 				end
 
-				if ply:GetNWBool("bool_tag_on_side_factionname", false) then
-					local _color = ply:GetNWString("factionColor", "255,0,0")
+				if ply:GetNW2Bool("bool_tag_on_side_factionname", false) then
+					local _color = ply:GetNW2String("factionColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
 					_z = _z + _d
 				end
 
-				if ply:GetNWBool("bool_tag_on_side_level", false) then
+				if ply:GetNW2Bool("bool_tag_on_side_level", false) then
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
@@ -1876,31 +1876,31 @@ function drawPlates(ply)
 					_z = _z + _d
 				end
 
-				if ply:GetNWBool("bool_tag_on_side_health", false) then
+				if ply:GetNW2Bool("bool_tag_on_side_health", false) then
 					local col = ply:HudValue("HP", "BA")
 					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
-				if ply:GetNWBool("bool_tag_on_side_armor", false) then
+				if ply:GetNW2Bool("bool_tag_on_side_armor", false) then
 					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNWInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetNWString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetNW2String("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
 					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetNWString("GetCurStamina", "") .. "/" .. ply:GetNWString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetNWString("GetCurStamina", ""), ply:GetNWString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					drawPlayerInfo(ply, ply:GetNW2String("GetCurStamina", "") .. "/" .. ply:GetNW2String("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetNW2String("GetCurStamina", ""), ply:GetNW2String("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
 					_z = _z + _d
 					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ug"])
 					_z = _z + _d
-					drawPlayerInfo(ply, "+" .. ply:GetNWString("text_money_pre", "") .. ply:GetNWString("salary", "") .. ply:GetNWString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
+					drawPlayerInfo(ply, "+" .. ply:GetNW2String("text_money_pre", "") .. ply:GetNW2String("salary", "") .. ply:GetNW2String("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
 					_z = _z + _d
-					local _motext = ply:GetNWString("text_money_pre", "") .. ply:GetNWString("money", "") .. ply:GetNWString("text_money_pos", "")
-					local _mMin = CurTime() + ply:GetNWInt("salarytime") - ply:GetNWInt("nextsalarytime")
-					local _mMax = ply:GetNWInt("salarytime") + 1
+					local _motext = ply:GetNW2String("text_money_pre", "") .. ply:GetNW2String("money", "") .. ply:GetNW2String("text_money_pos", "")
+					local _mMin = CurTime() + ply:GetNW2Int("salarytime") - ply:GetNW2Int("nextsalarytime")
+					local _mMax = ply:GetNW2Int("salarytime") + 1
 					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 					_z = _z + _d
 				end
@@ -1917,9 +1917,9 @@ hook.Add("PostPlayerDraw", "yrp_draw_plates", drawPlates)
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	local ply = LocalPlayer()
 
-	if ply:GetNWBool("tag_immortal", false) then
+	if ply:GetNW2Bool("tag_immortal", false) then
 		for i, ent in pairs(ents.GetAll()) do
-			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetNWBool("immortal", false) or ent:GetNWBool("godmode", false)) then
+			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetNW2Bool("immortal", false) or ent:GetNW2Bool("godmode", false)) then
 				drawPlate(ent, string.upper("[" .. YRP.lang_string("LID_immortal") .. "]"), 0, Color(0, 0, 100, ent:GetColor().a))
 			end
 		end
