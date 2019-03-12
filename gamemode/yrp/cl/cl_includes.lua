@@ -4,6 +4,8 @@ printGM("gm", "Loading cl_includes.lua")
 
 include("db/db_database.lua")
 
+include("gm/cl_playerisready.lua")
+
 include("gm/cl_startup.lua")
 
 include("gm/huds/cl_hud_simple.lua")

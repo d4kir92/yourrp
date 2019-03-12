@@ -166,13 +166,17 @@ function SearchForCollectionID()
 			if cidstart then
 				local cid = string.sub(f, cidstart + string.len("+host_workshop_collection "))
 				local _s, _e = string.find(cid, " ")
-				if _s then
+				if _s and _e != nil then
 					cid = tonumber(string.sub(cid, 1, _e - 1))
 				else
 					cid = tonumber(string.sub(cid, 1))
 				end
-				if cid > 0 and !table.HasValue(collectionIDs, cid) then
-					table.insert(collectionIDs, cid)
+				if isnumber(cid) then
+					if cid > 0 and !table.HasValue(collectionIDs, cid) then
+						table.insert(collectionIDs, cid)
+					end
+				else
+					YRP.msg("error", "Cid is not a number: " .. tostring(cid))
 				end
 			end
 		end
@@ -760,46 +764,6 @@ end
 function GM:PlayerSetModel(ply)
 	setPlayerModel(ply)
 end
-
-util.AddNetworkString("yrp_player_is_ready")
-net.Receive("yrp_player_is_ready", function(len, ply)
-	printGM("note", ply:YRPName() .. " finished loading.")
-	local tab = net.ReadTable()
-	local OS_Windows = tab.iswindows
-	local OS_Linux = tab.islinux
-	local OS_OSX = tab.isosx
-	local Country = tab.country
-
-	open_character_selection(ply)
-
-	if OS_Windows then
-		ply:SetNW2String("yrp_os", "windows")
-	elseif OS_Linux then
-		ply:SetNW2String("yrp_os", "linux")
-	elseif OS_OSX then
-		ply:SetNW2String("yrp_os", "osx")
-	else
-		ply:SetNW2String("yrp_os", "other")
-	end
-
-	ply:SetNW2String("yrp_country", Country or "Unknown")
-
-	-- YRP Chat?
-	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
-	if _chat != nil and _chat != false then
-		_chat = _chat[1]
-		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
-	end
-
-	ply:SetNW2Bool("finishedloading", true)
-
-	ply:KillSilent()
-
-	net.Start("yrp_noti")
-		net.WriteString("playerisready")
-		net.WriteString(ply:Nick())
-	net.Broadcast()
-end)
 
 function GM:PlayerSpray(ply)
 	if ply:GetNW2Bool("bool_graffiti_disabled", false) then

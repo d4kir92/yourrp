@@ -27,6 +27,7 @@ AddCSLuaFile("yrp/cl/db/db_apps.lua")
 AddCSLuaFile("yrp/cl/db/db_smartphone.lua")
 
 AddCSLuaFile("yrp/cl/cl_includes.lua")
+AddCSLuaFile("yrp/cl/gm/cl_playerisready.lua")
 AddCSLuaFile("yrp/cl/gm/cl_startup.lua")
 AddCSLuaFile("yrp/cl/gm/cl_hud.lua")
 AddCSLuaFile("yrp/cl/gm/cl_chat.lua")

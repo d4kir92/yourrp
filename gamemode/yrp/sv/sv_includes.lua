@@ -4,6 +4,7 @@ printGM("gm", "Loading sv_includes.lua")
 
 include("db/db_database.lua")
 
+include("gm/sv_playerisready.lua")
 include("gm/sv_gamemode.lua")
 include("gm/sv_net.lua")
 include("gm/sv_map.lua")

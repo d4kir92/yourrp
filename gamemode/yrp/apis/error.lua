@@ -117,18 +117,8 @@ function update_error_table_sv()
 
 				return _errors
 			elseif first_time_error then
-				local _errors = {}
-				for k, v in pairs(_explode) do
-					if !table.HasValue(_errors, v) then
-						if ErrorValidToSend(v) then
-							table.insert(_errors, v)
-						end
-					end
-				end
-
 				--update data file
 				file.Write("yrp/sv_errors.txt", table.Count(_explode))
-
 				return _errors
 			else
 				--printGM("gm", "No new error")
@@ -183,18 +173,8 @@ function update_error_table_cl()
 
 				return _errors
 			elseif first_time_error then
-				local _errors = {}
-				for k, v in pairs(_explode) do
-					if !table.HasValue(_errors, v) then
-						if ErrorValidToSend(v) then
-							table.insert(_errors, v)
-						end
-					end
-				end
-
 				--update data file
 				file.Write("yrp/cl_errors.txt", table.Count(_explode))
-
 				return _errors
 			else
 				--printGM("gm", "No new error")
