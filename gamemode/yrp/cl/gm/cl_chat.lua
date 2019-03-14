@@ -340,12 +340,36 @@ hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
 	end
 end)
 
+net.Receive("sendanim", function()
+	local ply = net.ReadEntity()
+	local slot = net.ReadInt(32)
+	local activity = net.ReadInt(32)
+	local loop = net.ReadBool()
+
+	ply:AnimRestartGesture(slot, activity, loop)
+end)
+
+net.Receive("stopanim", function()
+	local ply = net.ReadEntity()
+	local slot = net.ReadInt(32)
+
+	ply:AnimResetGestureSlot(slot)
+end)
+
 net.Receive("yrp_player_say", function(len)
 	local _tmp = net.ReadTable()
 	local _write = false
 
 	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
 		_write = true
+
+		_tmp.status = ""
+		if _tmp.afk then
+			_tmp.status = "<AFK>"
+		end
+		if _tmp.dnd then
+			_tmp.status = "<DND>"
+		end
 
 		_tmp.name = ""
 		if _tmp.command != "roll" then
@@ -412,9 +436,11 @@ net.Receive("yrp_player_say", function(len)
 			table.insert(_unpack, " ")
 		end
 
+		table.insert(_unpack, Color(255, 0, 0))
+		table.insert(_unpack, _tmp.status)
 
-			table.insert(_unpack, _tmp.command_color)
-			table.insert(_unpack, _tmp.name)
+		table.insert(_unpack, _tmp.command_color)
+		table.insert(_unpack, _tmp.name)
 
 		if _tmp.command != "me" and _tmp.command != "roll" then
 			table.insert(_unpack, ":\n")

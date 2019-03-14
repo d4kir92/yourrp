@@ -37,23 +37,25 @@ function tp_to(ply, pos)
 	local _pos = Vector(pos[1], pos[2], pos[3])
 	local _angle = Angle(0, 0, 0)
 	local _tmpAngle = ply:EyeAngles()
-	ply:SetEyeAngles(_angle)
+	if ply:IsValid() then
+		ply:SetEyeAngles(_angle)
 
-	if enough_space(ply, _pos + Vector(0, 0, 2)) then
-		local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2))
+		if enough_space(ply, _pos + Vector(0, 0, 2)) then
+			local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2))
 
-		ply:SetPos(__pos)
-		ply:SetEyeAngles(_tmpAngle)
-	else
-		for i = 1, 3 do
-			for j = 0, 360, 45 do
-				_angle:RotateAroundAxis(ply:GetForward(), 45)
-				local _enough_space = enough_space(ply, _pos + Vector(0, 0, 2) + _angle:Forward() * 44 * i)
-				if _enough_space then
-					local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2) + _angle:Forward() * 44 * i)
-					ply:SetPos(__pos)
-					ply:SetEyeAngles(_tmpAngle)
-					return
+			ply:SetPos(__pos)
+			ply:SetEyeAngles(_tmpAngle)
+		else
+			for i = 1, 3 do
+				for j = 0, 360, 45 do
+					_angle:RotateAroundAxis(ply:GetForward(), 45)
+					local _enough_space = enough_space(ply, _pos + Vector(0, 0, 2) + _angle:Forward() * 44 * i)
+					if _enough_space then
+						local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2) + _angle:Forward() * 44 * i)
+						ply:SetPos(__pos)
+						ply:SetEyeAngles(_tmpAngle)
+						return
+					end
 				end
 			end
 		end

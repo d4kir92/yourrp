@@ -30,7 +30,7 @@ function save_clients(string)
 	if !g_db_reseted then
 		for k, ply in pairs(player.GetAll()) do
 
-			local _result = SQL_UPDATE(_db_name, "Timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() .. "'")
+			local _result = SQL_UPDATE(_db_name, "Timestamp = " .. os.time(), "SteamID = '" .. ply:SteamID() or ply:UniqueID() .. "'")
 
 			if ply:Alive() then
 				local _char_id = ply:CharID()
@@ -174,9 +174,7 @@ function set_role_values(ply)
 			ply:SetNW2String("Gender", ChaTab.gender)
 		else
 			printGM("note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
-			if !ply:IsBot() then
-				ply:KillSilent()
-			end
+			ply:KillSilent()
 		end
 
 		--[RE]--check_inv(ply, ply:CharID())
@@ -263,9 +261,7 @@ function set_role_values(ply)
 			end
 		else
 			printGM("note", "[SET ROLE VALUES] No role selected -> Suicide")
-			if !ply:IsBot() then
-				ply:KillSilent()
-			end
+			ply:KillSilent()
 		end
 
 		if groTab != nil then
@@ -280,9 +276,7 @@ function set_role_values(ply)
 			ply:SetNW2String("factionColor", faction.string_color)
 		else
 			printGM("note", "[SET ROLE VALUES] No group selected -> Suicide")
-			if !ply:IsBot() then
-				ply:KillSilent()
-			end
+			ply:KillSilent()
 		end
 		ply:SetNW2Bool("loaded", true)
 	end
@@ -304,27 +298,23 @@ end
 
 function open_character_selection(ply)
 	if ply:IsFullyAuthenticated() then
-
-			printGM("db", "[" .. ply:SteamName() .. "] -> open character selection.")
-			local tmpTable = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
-			if tmpTable == nil then
-				tmpTable = {}
-			end
-			net.Start("openCharacterMenu")
-				net.WriteTable(tmpTable)
-			net.Send(ply)
-
+		printGM("db", "[" .. ply:SteamName() .. "] -> open character selection.")
+		local tmpTable = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() or ply:UniqueID() .. "'")
+		if !wk(tmpTable) then
+			tmpTable = {}
+		end
+		net.Start("openCharacterMenu")
+			net.WriteTable(tmpTable)
+		net.Send(ply)
 	end
 end
 
 function add_yrp_player(ply, steamid)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Add player to database.")
 
-	steamid = steamid or ply:SteamID()
+	steamid = steamid or ply:SteamID() or ply:UniqueID()
 
-	if !ply:IsBot() then
-		ply:KillSilent()
-	end
+	ply:KillSilent()
 
 	if steamid != nil and steamid != false then
 		local _SteamName = tostring(SQL_STR_IN(ply:SteamName()))
@@ -352,7 +342,7 @@ end
 function check_yrp_player(ply, steamid)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
 
-	steamid = steamid or ply:SteamID()
+	steamid = steamid or ply:SteamID() or ply:UniqueID()
 
 	if steamid != nil and steamid != false or game.SinglePlayer() then
 		local _result = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
@@ -477,7 +467,7 @@ function isWhitelisted(ply, id)
 	if _role != nil then
 		_role = _role[1]
 
-		local _plyAllowedAll = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "'")
+		local _plyAllowedAll = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() or ply:UniqueID() .. "'")
 		if worked(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
 			if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
@@ -486,8 +476,8 @@ function isWhitelisted(ply, id)
 			end
 		end
 
-		local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. id)
-		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
+		local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() or ply:UniqueID() .. "' AND roleID = " .. id)
+		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() or ply:UniqueID() .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
 		if ply:HasAccess() then
 			printGM("gm", ply:RPName() .. " has access.")
 			return true

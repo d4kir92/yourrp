@@ -42,7 +42,7 @@ end
 
 function Player:GetPlyTab()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				local steamid = self:SteamID()
 				if steamid != nil and steamid != false and steamid != "" then
@@ -66,7 +66,7 @@ end
 
 function Player:IsCharacterValid()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				local _cha_tab = self:GetChaTab()
 				if _cha_tab == false then
@@ -83,7 +83,7 @@ end
 
 function Player:HasCharacterSelected()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				--printGM("note", self:YRPName() .. " HasCharacterSelected?")
 				local _ply_tab = self:GetPlyTab()
@@ -100,7 +100,7 @@ end
 
 function Player:GetChaTab()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				local _tmp = self:GetPlyTab()
 				if wk(_tmp) then
@@ -126,7 +126,7 @@ end
 
 function Player:GetRolTab()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				local yrp_characters = self:GetChaTab()
 				if wk(yrp_characters) and wk(yrp_characters.roleID) then
@@ -151,7 +151,7 @@ end
 
 function Player:GetGroTab()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				local yrp_characters = self:GetChaTab()
 				if wk(yrp_characters) and wk(yrp_characters.groupID) then
@@ -171,13 +171,15 @@ end
 
 function Player:CharID()
 	if SERVER then
-		if self:IsValid() and self:IsPlayer() and !self:IsBot() then
+		if self:IsValid() then
 			if self:LoadedGamemode() then
 				local char = self:GetChaTab()
 				if wk(char) then
 					self.charid = char.uniqueID
 					return self.charid
 				end
+			elseif self:IsBot() then
+				return 1
 			end
 		else
 			YRP.msg("note", "[CharID] not valid or not a player " .. self:YRPName())

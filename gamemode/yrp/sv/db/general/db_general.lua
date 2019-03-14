@@ -1425,9 +1425,7 @@ util.AddNetworkString("ply_kick")
 net.Receive("ply_kick", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if _target:IsPlayer() then
-			_target:Kick("You get kicked by " .. ply:YRPName())
-		end
+		_target:Kick("You get kicked by " .. ply:YRPName())
 	end
 end)
 util.AddNetworkString("ply_ban")
@@ -1435,10 +1433,8 @@ net.Receive("ply_ban", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		if ea(_target) then
-			if _target:IsPlayer() then
-				_target:Ban(24*60, false)
-				_target:Kick("You get banned for 24 hours by " .. ply:YRPName())
-			end
+			_target:Ban(24*60, false)
+			_target:Kick("You get banned for 24 hours by " .. ply:YRPName())
 		else
 			printGM("note", "ply_ban " .. tostring(_target) .. " IS NIL => NOT AVAILABLE")
 		end
@@ -1523,20 +1519,16 @@ util.AddNetworkString("freeze")
 net.Receive("freeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if _target:IsPlayer() then
-			_target:Freeze(true)
-			RenderFrozen(_target)
-		end
+		_target:Freeze(true)
+		RenderFrozen(_target)
 	end
 end)
 util.AddNetworkString("unfreeze")
 net.Receive("unfreeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if _target:IsPlayer() then
-			_target:Freeze(false)
-			RenderNormal(_target)
-		end
+		_target:Freeze(false)
+		RenderNormal(_target)
 	end
 end)
 util.AddNetworkString("god")
@@ -1561,20 +1553,16 @@ util.AddNetworkString("cloak")
 net.Receive("cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if _target:IsPlayer() then
-			_target:SetNW2Bool("cloaked", true)
-			RenderCloaked(_target)
-		end
+		_target:SetNW2Bool("cloaked", true)
+		RenderCloaked(_target)
 	end
 end)
 util.AddNetworkString("uncloak")
 net.Receive("uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if _target:IsPlayer() then
-			_target:SetNW2Bool("cloaked", false)
-			RenderNormal(_target)
-		end
+		_target:SetNW2Bool("cloaked", false)
+		RenderNormal(_target)
 	end
 end)
 util.AddNetworkString("blind")

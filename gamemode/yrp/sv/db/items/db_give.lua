@@ -356,10 +356,10 @@ function Player:ForceEquip(cname, noammo)
 	if wk(weapon) then
 		if weapon:IsValid() then
 			weapon:SetNW2Bool("ispickupable", true)
+			return weapon
 		end
 	end
-
-	return weapon
+	return NULL
 end
 
 function Player:Give(cname, noammo)

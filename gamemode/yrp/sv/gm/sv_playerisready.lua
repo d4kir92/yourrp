@@ -1,8 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-util.AddNetworkString("yrp_player_is_ready")
-net.Receive("yrp_player_is_ready", function(len, ply)
-	printGM("note", ply:YRPName() .. " finished loading.")
+function PlayerLoadedGame(ply)
+	printGM("note", tostring(ply:YRPName()) .. " finished loading.")
 	local tab = net.ReadTable()
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux
@@ -38,4 +37,13 @@ net.Receive("yrp_player_is_ready", function(len, ply)
 		net.WriteString("playerisready")
 		net.WriteString(ply:Nick())
 	net.Broadcast()
+end
+
+util.AddNetworkString("yrp_player_is_ready")
+net.Receive("yrp_player_is_ready", function(len, ply)
+	if ply:IsValid() then
+		PlayerLoadedGame(ply)
+	else
+		YRP.msg("error", "[yrp_player_is_ready] failed! [" .. tostring(ply:YRPName()) .. "] [" .. tostring(ply:SteamID()) .. "]")
+	end
 end)

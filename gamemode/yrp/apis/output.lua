@@ -270,6 +270,8 @@ countries["JP"] = "Japan"
 
 countries["KZ"] = "Kazakhstan"
 
+countries["LT"] = "Lithuania"
+
 countries["MX"] = "Mexico"
 
 countries["NL"] = "Netherlands"

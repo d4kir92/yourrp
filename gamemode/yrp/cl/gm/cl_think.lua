@@ -271,18 +271,25 @@ function KeyPress()
 			system.FlashWindow()
 		end
 
-		if ply:GetNW2Bool("isafk", false) then
+		if ply:AFK() then
+			local afk = true
 			for i = 107, 113 do
 				if input.IsMouseDown(i) then
-					net.Start("notafk")
-					net.SendToServer()
+					afk = false
+					break
 				end
 			end
-			for i = 0, 159 do
-				if ply:KeyDown(i) then
-					net.Start("notafk")
-					net.SendToServer()
+			if afk then
+				for i = 0, 159 do
+					if ply:KeyDown(i) then
+						afk = false
+						break
+					end
 				end
+			end
+			if !afk then
+				net.Start("notafk")
+				net.SendToServer()
 			end
 		else
 			for i = 107, 113 do
@@ -476,7 +483,7 @@ local oldang = Angle(0, 0, 0)
 local function yrpCalcView(ply, pos, angles, fov)
 	if ply:Alive() and !ply:IsPlayingTaunt() then
 
-		if ply:GetNW2Bool("isafk", false) then
+		if ply:AFK() then
 			if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
 				net.Start("notafk")
 				net.SendToServer()

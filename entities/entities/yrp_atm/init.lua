@@ -23,9 +23,13 @@ function ENT:Initialize()
 
 	self:SetNW2String("status", "startup")
 	timer.Simple(4, function()
-		self:SetNW2String("status", "logo")
+		if self:IsValid() then
+			self:SetNW2String("status", "logo")
+		end
 		timer.Simple(3, function()
-			self:SetNW2String("status", "home")
+			if self:IsValid() then
+				self:SetNW2String("status", "home")
+			end
 		end)
 	end)
 

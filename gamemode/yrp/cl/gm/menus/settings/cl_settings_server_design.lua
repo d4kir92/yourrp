@@ -733,12 +733,10 @@ net.Receive("get_design_settings", function(len)
 			NE.name = "LID_network"
 			AddElement(NE)
 
-			--[[
 			local COM = {}
 			COM.element = "COM"
 			COM.name = "LID_compass"
 			AddElement(COM)
-			]]
 
 			--[[
 			local MI = {}

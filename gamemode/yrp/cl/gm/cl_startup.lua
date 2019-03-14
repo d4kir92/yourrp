@@ -1441,7 +1441,7 @@ _icons["ms"] = Material("icon16/lightning.png")
 _icons["le"] = Material("icon16/layers.png")
 
 function drawPlates(ply)
-	if ply != LocalPlayer() and ply:Alive() and ply:GetNW2Int("yrp_loading_hud", 0) >= 100 then
+	if ply:Alive() then
 		local _height = 31
 		local color = ply:GetColor()
 		color.a = color.a - 160
@@ -1471,13 +1471,13 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("isafk", false) or ply:GetNW2Bool("isdnd", false) then
+			if ply:AFK() or ply:DND() then
 				local onlinestatus = ""
 				local onlinecolor = Color(255, 255, 255, 255)
 				if ply:GetNW2Bool("isdnd", false) then
 					onlinestatus = YRP.lang_string("LID_dnd")
 					onlinecolor = Color(255, 0, 0, 255)
-				elseif ply:GetNW2Bool("isafk", false) then
+				elseif ply:AFK() then
 					onlinestatus = YRP.lang_string("LID_afk")
 					onlinecolor = Color(255, 255, 0, 255)
 				end

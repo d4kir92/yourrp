@@ -90,18 +90,8 @@ function YRPSendIsReady()
 	end)
 end
 
-local playerready = false
-function YRPInitPostEntity()
-	printGM("note", "YRPInitPostEntity()")
-	if playerready == false then
-		printGM("note", "Player is ready.")
-		playerready = true
-
-		YRPSendIsReady()
-	end
-end
-
 function GM:InitPostEntity()
 	printGM("note", "All entities are loaded.")
-	YRPInitPostEntity()
+
+	YRPSendIsReady()
 end

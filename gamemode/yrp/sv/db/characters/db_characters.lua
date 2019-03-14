@@ -555,7 +555,7 @@ function CreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
-		local vals = "'" .. ply:SteamID() .. "', "
+		local vals = "'" .. ply:SteamID() or ply:UniqueID() .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tab.rpname) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tab.gender) .. "', "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "

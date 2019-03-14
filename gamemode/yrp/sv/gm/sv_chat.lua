@@ -72,6 +72,17 @@ function print_help(sender)
 	sender:ChatPrint("sleep - sleep or wake up")
 	sender:ChatPrint("tag_ug - show usergroup tag")
 	sender:ChatPrint("tag_immortal - shows immortal tag")
+	if sender:HasAccess() then
+		sender:ChatPrint("ADMIN ONLY:")
+
+		sender:ChatPrint("addmoney NAME AMOUNT - adds money to NAME")
+		sender:ChatPrint("setmoney NAME AMOUNT - sets money of NAME")
+
+		sender:ChatPrint("addlevel NAME AMOUNT - adds level to NAME")
+		sender:ChatPrint("setlevel NAME AMOUNT - sets level of NAME")
+
+		sender:ChatPrint("addxp NAME AMOUNT - adds xp to NAME")
+	end
 	sender:ChatPrint("")
 	return ""
 end
@@ -370,14 +381,42 @@ function unpack_paket(sender, text, iscommand)
 	end
 end
 
+util.AddNetworkString("sendanim")
+function SendAnim(ply, slot, activity, loop)
+	net.Start("sendanim")
+		net.WriteEntity(ply)
+		net.WriteInt(slot, 32)
+		net.WriteInt(activity, 32)
+		net.WriteBool(loop)
+	net.Broadcast()
+end
+
+util.AddNetworkString("stopanim")
+function StopAnim(ply, slot)
+	net.Start("stopanim")
+		net.WriteEntity(ply)
+		net.WriteInt(slot, 32)
+	net.Broadcast()
+end
+
+local Player = FindMetaTable("Player")
+function Player:SetAFK(bo)
+	self:SetNW2Bool("isafk", bo)
+
+	SendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
+end
+
 util.AddNetworkString("notafk")
 net.Receive("notafk", function(len, ply)
-	ply:SetNW2Bool("isafk", false)
+	if ply:AFK() then
+		ply:SetAFK(false)
+		StopAnim(ply, GESTURE_SLOT_ATTACK_AND_RELOAD)
+	end
 end)
 
 util.AddNetworkString("setafk")
 net.Receive("setafk", function(len, ply)
-	ply:SetNW2Bool("isafk", true)
+	ply:SetAFK(true)
 end)
 
 function GM:PlayerSay(sender, text, teamChat)
@@ -393,7 +432,7 @@ function GM:PlayerSay(sender, text, teamChat)
 	end
 
 	if paket.command == "afk" then
-		sender:SetNW2Bool("isafk", !sender:GetNW2Bool("isafk", false))
+		sender:SetAFK(!sender:AFK())
 		return ""
 	end
 
@@ -486,6 +525,8 @@ function GM:PlayerSay(sender, text, teamChat)
 	pk.factionname = paket.faction or ""
 	pk.groupname = paket.group or ""
 	pk.isyrpcommand = paket.isyrpcommand or false
+	pk.afk = sender:AFK()
+	pk.dnd = sender:DND()
 
 	if paket.command == "roll" then
 		local tab = {}

@@ -170,8 +170,8 @@ function OpenEmotesMenu()
 
 			timer.Simple(0.01, function()
 				if _sel ~= nil and GetEmotes()[_sel] ~= nil then
-						LocalPlayer():SetNW2Bool("istaunting", false)
-						RunConsoleCommand("act", GetEmotes()[_sel].cmd)
+					LocalPlayer():SetNW2Bool("istaunting", false)
+					RunConsoleCommand("act", GetEmotes()[_sel].cmd)
 				end
 			end)
 		end

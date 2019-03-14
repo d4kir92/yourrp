@@ -140,9 +140,11 @@ end)
 util.AddNetworkString("getMapListRoles")
 net.Receive("getMapListRoles", function(len, ply)
 	local _tmpRolesTable = SQL_SELECT("yrp_ply_roles", "*", nil)
-	net.Start("getMapListRoles")
-		net.WriteTable(_tmpRolesTable)
-	net.Send(ply)
+	if wk(_tmpRolesTable) then
+		net.Start("getMapListRoles")
+			net.WriteTable(_tmpRolesTable)
+		net.Send(ply)
+	end
 end)
 
 net.Receive("dbInsertIntoMap", function(len, ply)

@@ -10,6 +10,14 @@ include("player/interface.lua")
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")
 
+function Player:AFK()
+	return self:GetNW2Bool("isafk", false)
+end
+
+function Player:DND()
+	return self:GetNW2Bool("isdnd", false)
+end
+
 function Player:GetLanguage() -- The Language the player selected
 	return self:YRPGetLanguage() -- return string
 end

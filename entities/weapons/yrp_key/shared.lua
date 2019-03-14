@@ -79,17 +79,19 @@ end
 function SWEP:SecondaryAttack()
 	if SERVER then
 		if self:GetOwner():IsValid() then
-			if self:GetOwner():GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self:GetOwner():GetEyeTrace().Entity:GetClass() == "func_door" or self:GetOwner():GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
-				if lockDoor(self:GetOwner(), self:GetOwner():GetEyeTrace().Entity, self:GetOwner():GetEyeTrace().Entity:GetNW2String("buildingID", "Failed")) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_lockeddoor"))
-				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
-				end
-			elseif self:GetOwner():GetEyeTrace().Entity:IsVehicle() and self:GetOwner():GetEyeTrace().Entity:GetNW2String("item_uniqueID", "Failed") != "Failed" then
-				if lockVehicle(self:GetOwner(), self:GetOwner():GetEyeTrace().Entity, self:GetOwner():GetEyeTrace().Entity:GetNW2String("item_uniqueID", "Failed")) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_lockedvehicle"))
-				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
+			if ea(self:GetOwner():GetEyeTrace().Entity) then
+				if self:GetOwner():GetEyeTrace().Entity:GetClass() == "prop_door_rotating" or self:GetOwner():GetEyeTrace().Entity:GetClass() == "func_door" or self:GetOwner():GetEyeTrace().Entity:GetClass() == "func_door_rotating" then
+					if lockDoor(self:GetOwner(), self:GetOwner():GetEyeTrace().Entity, self:GetOwner():GetEyeTrace().Entity:GetNW2String("buildingID", "Failed")) then
+						self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_lockeddoor"))
+					else
+						self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
+					end
+				elseif self:GetOwner():GetEyeTrace().Entity:IsVehicle() and self:GetOwner():GetEyeTrace().Entity:GetNW2String("item_uniqueID", "Failed") != "Failed" then
+					if lockVehicle(self:GetOwner(), self:GetOwner():GetEyeTrace().Entity, self:GetOwner():GetEyeTrace().Entity:GetNW2String("item_uniqueID", "Failed")) then
+						self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_lockedvehicle"))
+					else
+						self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
+					end
 				end
 			end
 		end

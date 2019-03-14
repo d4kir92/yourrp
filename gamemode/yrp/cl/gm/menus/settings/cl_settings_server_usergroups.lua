@@ -189,10 +189,12 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		hook.Add("selector_usergroup_string_sweps", "selector_usergroup_string_sweps", function()
 			local string_sweps = ply.global_working
 
-			net.Start("usergroup_update_string_sweps")
-				net.WriteString(CURRENT_USERGROUP)
-				net.WriteString(string_sweps)
-			net.SendToServer()
+			if wk(string_sweps) then
+				net.Start("usergroup_update_string_sweps")
+					net.WriteString(CURRENT_USERGROUP)
+					net.WriteString(string_sweps)
+				net.SendToServer()
+			end
 		end)
 	end
 

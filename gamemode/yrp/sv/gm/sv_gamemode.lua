@@ -176,7 +176,7 @@ function SearchForCollectionID()
 						table.insert(collectionIDs, cid)
 					end
 				else
-					YRP.msg("error", "Cid is not a number: " .. tostring(cid))
+					YRP.msg("error", "Cid is not a number [" .. tostring(cid) .. "] f [" .. tostring(f) .. "]")
 				end
 			end
 		end
@@ -246,7 +246,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
-	check_yrp_client(ply, steamid)
+	check_yrp_client(ply, steamid or uniqueID)
 end)
 
 YRP = YRP or {}
@@ -268,7 +268,7 @@ function YRP:Loadout(ply)
 end
 
 hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
-	if ply:IsValid() and !ply:IsBot() then
+	if ply:IsValid() then
 		ply:StripWeapons()
 		printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
 		YRP:Loadout(ply)
