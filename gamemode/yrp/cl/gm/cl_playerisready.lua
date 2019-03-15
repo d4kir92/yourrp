@@ -36,20 +36,14 @@ function YRPSendIsReady()
 		warning.site = createD("DHTML", warning, ScrW() - ctr(200), ScrH() - ctr(100 + 100 + 60 + 20 + 60 + 20), ctr(100), ctr(100))
 		warning.site:OpenURL("https://sites.google.com/view/gdsm/home")
 
-		warning.openlink = createD("YButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 20 + 60 + 100))
+		warning.openlink = createD("DButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 20 + 60 + 100))
 		warning.openlink:SetText("Open Website")
-		function warning.openlink:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
 		function warning.openlink:DoClick()
 			gui.OpenURL("https://sites.google.com/view/gdsm/home")
 		end
 
-		warning.close = createD("YButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 100))
+		warning.close = createD("DButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 100))
 		warning.close:SetText("Close")
-		function warning.close:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
 		function warning.close:DoClick()
 			if warning.tick == 0 then
 				warning:Close()

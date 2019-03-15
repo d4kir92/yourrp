@@ -29,6 +29,8 @@ function PlayerLoadedGame(ply)
 		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
 	end
 
+	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
+
 	ply:SetNW2Bool("finishedloading", true)
 
 	ply:KillSilent()

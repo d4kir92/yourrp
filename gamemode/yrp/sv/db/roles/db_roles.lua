@@ -179,16 +179,7 @@ if wk(wrongmainrole) then
 end
 -- CONVERTING
 
-
-
 -- darkrp
-function ConvertToDarkRPJobName(name)
-	name = tostring(name)
-	name = string.Replace(name, " ", "_")
-	local jobname = "TEAM_" .. name
-	return jobname
-end
-
 function ConvertToDarkRPJob(tab)
 	local _job = {}
 

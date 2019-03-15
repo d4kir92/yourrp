@@ -59,6 +59,16 @@ function Player:getHitTarget()
 	return self:GetNW2Entity("hittarget", NULL)
 end
 
+function ConvertToDarkRPJobName(name)
+	if wk(name) then
+		name = string.Replace(name, " ", "_")
+		local jobname = "TEAM_" .. name
+		return jobname
+	else
+		return "FAILED"
+	end
+end
+
 function Player:getJobTable()
 	--Description: Get the job table of a player.
 	local _job = {}

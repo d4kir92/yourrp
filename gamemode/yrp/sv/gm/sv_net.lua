@@ -103,6 +103,10 @@ end
 
 concommand.Add("yrp_force_sqlite", function(ply, cmd, args)
 	SetSQLMode(0, true)
+
+	timer.Simple(1, function()
+		game.ConsoleCommand("changelevel " .. game.GetMap() .. "\n")
+	end)
 end)
 
 concommand.Add("yrp_usergroup", function(ply, cmd, args)
