@@ -36,7 +36,7 @@ end
 local CamDataMap = {}
 function openMap()
 	local lply = LocalPlayer()
-	if lply:GetNW2Bool("bool_map_system", false) then
+	if lply:GetNWBool("bool_map_system", false) then
 		map.open = true
 
 		_map.window = vgui.Create("DFrame")
@@ -149,9 +149,9 @@ function openMap()
 
 				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "HudBars", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-				if lply:GetNW2Bool("bool_canseeteammatesonmap", false) or lply:GetNW2Bool("bool_canseeenemiesonmap", false) then
+				if lply:GetNWBool("bool_canseeteammatesonmap", false) or lply:GetNWBool("bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll()) do
-						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNW2Bool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNW2Bool("bool_canseeenemiesonmap", false)) then
+						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNWBool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNWBool("bool_canseeenemiesonmap", false)) then
 							local tmp = {}
 							tmp.xMax = map.sizeX
 							tmp.yMax = map.sizeY

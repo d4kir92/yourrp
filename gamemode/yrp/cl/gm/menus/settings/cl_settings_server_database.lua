@@ -13,9 +13,9 @@ net.Receive("Connect_Settings_Database", function(len)
 			net.SendToServer()
 		end
 
-		local NW_YRP = net.ReadTable()
-		local NW_YRP_RELATED = net.ReadTable()
-		local NW_YRP_OTHER = net.ReadTable()
+		local TAB_YRP = net.ReadTable()
+		local TAB_YRP_RELATED = net.ReadTable()
+		local TAB_YRP_OTHER = net.ReadTable()
 		local YRP_SQL = net.ReadTable()
 
 		local br = ctr(20)
@@ -173,7 +173,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.parent = Scroller.YourRPTables
 		dbtab.color = YRPGetColor("2")
 		local yrp_tabs = {}
-		for i, tab in pairs(NW_YRP) do
+		for i, tab in pairs(TAB_YRP) do
 			yrp_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _x, _y = Scroller.YourRPTables:GetPos()
@@ -228,7 +228,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.parent = Scroller.YourRPRelatedTables
 		dbtab.color = YRPGetColor("2")
 		local yrp_r_tabs = {}
-		for i, tab in pairs(NW_YRP_RELATED) do
+		for i, tab in pairs(TAB_YRP_RELATED) do
 			yrp_r_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _rem_and_change2 = createD("DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))
@@ -281,7 +281,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		dbtab.parent = OtherTables
 		dbtab.color = YRPGetColor("2")
 		local other_tabs = {}
-		for i, tab in pairs(NW_YRP_OTHER) do
+		for i, tab in pairs(TAB_YRP_OTHER) do
 			other_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 		end
 		local _rem_and_change3 = createD("DButton", OtherTables:GetParent(), OtherTables:GetWide(), ctr(50), _x, _y + _h + ctr(10))

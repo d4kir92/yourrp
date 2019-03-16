@@ -16,7 +16,7 @@ net.Receive("get_licenses", function()
 
 		_li._lic = createD("DYRPDBList", settingsWindow.window.site, ctr(480), ctr(500), ctr(40), ctr(40))
 		_li._lic:SetListHeader("licenses")
-		--_li._lic:SetNW2StrForAdd("licence_add")
+		--_li._lic:SetNWStrForAdd("licence_add")
 		_li._lic:SetEditArea(_li.ea)
 		function _li.eaf(tbl)
 			for i, child in pairs(_li.ea:GetChildren()) do

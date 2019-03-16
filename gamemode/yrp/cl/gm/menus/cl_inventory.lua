@@ -10,19 +10,19 @@ function PositionEquipment(ply, na, bo, v_pos, a_ang)
 				local pos = matrix:GetTranslation()
 				local ang = matrix:GetAngles()
 
-				local ent = ply:GetNW2Entity(na, NULL)
+				local ent = ply:GetNWEntity(na, NULL)
 				if ea(ent) then
 					local _aw = ply:GetActiveWeapon()
 					if ea(_aw) then
-						if tostring(_aw:GetClass()) == tostring(ply:GetNW2String(na .. "ClassName", "")) then
+						if tostring(_aw:GetClass()) == tostring(ply:GetNWString(na .. "ClassName", "")) then
 							ent:SetRenderMode(RENDERMODE_TRANSALPHA)
 							ent:SetColor(Color(255, 255, 255, 0))
 						else
 							ent:SetColor(ply:GetColor())
 
-							local corax = tonumber(ply:GetNW2String(na .. "corax", "0"))
-							local coray = tonumber(ply:GetNW2String(na .. "coray", "0"))
-							local coraz = tonumber(ply:GetNW2String(na .. "coraz", "0"))
+							local corax = tonumber(ply:GetNWString(na .. "corax", "0"))
+							local coray = tonumber(ply:GetNWString(na .. "coray", "0"))
+							local coraz = tonumber(ply:GetNWString(na .. "coraz", "0"))
 
 							ent:SetLocalPos(pos + ang:Forward() * v_pos.x + ang:Up() * v_pos.y + ang:Right() * v_pos.z)
 
@@ -39,19 +39,19 @@ function PositionEquipment(ply, na, bo, v_pos, a_ang)
 end
 
 hook.Add("PostPlayerDraw", "yrp_weapon_holster", function(ply)
-	if ply:Alive() and ply:GetNW2Bool("bool_inventory_system", false) then
+	if ply:Alive() and ply:GetNWBool("bool_inventory_system", false) then
 		if ply == LocalPlayer() then
-			if tonumber(ply:GetNW2String("view_range", "0")) <= 0 then
+			if tonumber(ply:GetNWString("view_range", "0")) <= 0 then
 				return false
 			end
 		end
 		 PositionEquipment(ply, "backpack", "ValveBiped.Bip01_Spine4", Vector(-10, 3, 8), Angle(0, 90, 0))
 
 		 PositionEquipment(ply, "weaponprimary1", "ValveBiped.Bip01_R_Clavicle", Vector(5, 4, 0), Angle(0, -90, 0))
-		 PositionEquipment(ply, "weaponprimary2", "ValveBiped.Bip01_L_Clavicle", Vector(5, -4 -tonumber(ply:GetNW2String("weaponprimary2" .. "thick", "0"))/5, 0), Angle(0, -90, 0))
+		 PositionEquipment(ply, "weaponprimary2", "ValveBiped.Bip01_L_Clavicle", Vector(5, -4 -tonumber(ply:GetNWString("weaponprimary2" .. "thick", "0"))/5, 0), Angle(0, -90, 0))
 
-		 PositionEquipment(ply, "weaponsecondary1", "ValveBiped.Bip01_R_Thigh", Vector(0, -tonumber(ply:GetNW2String("weaponsecondary1" .. "thick", "0")), 0), Angle(0, -90, -90))
-		 PositionEquipment(ply, "weaponsecondary2", "ValveBiped.Bip01_L_Thigh", Vector(0, tonumber(ply:GetNW2String("weaponsecondary2" .. "thick", "0")), 0), Angle(0, -90, -90))
+		 PositionEquipment(ply, "weaponsecondary1", "ValveBiped.Bip01_R_Thigh", Vector(0, -tonumber(ply:GetNWString("weaponsecondary1" .. "thick", "0")), 0), Angle(0, -90, -90))
+		 PositionEquipment(ply, "weaponsecondary2", "ValveBiped.Bip01_L_Thigh", Vector(0, tonumber(ply:GetNWString("weaponsecondary2" .. "thick", "0")), 0), Angle(0, -90, -90))
 
 		 PositionEquipment(ply, "weapongadget", "ValveBiped.Bip01_L_Thigh", Vector(0, 0, 5), Angle(0, 0, 0))
 	end
@@ -425,7 +425,7 @@ net.Receive("openStorage", function(len)
 end)
 
 function OpenInventory()
-	if LocalPlayer():GetNW2Bool("bool_inventory_system", false) then
+	if LocalPlayer():GetNWBool("bool_inventory_system", false) then
 		net.Start("openStorage")
 		net.SendToServer()
 	else

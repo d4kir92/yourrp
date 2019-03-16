@@ -141,15 +141,11 @@ function get_coords()
 
 	local _hasNoSpawnpoints = true
 	for k, v in pairs(ents.GetAll()) do
-		if ea(v) then
-			if v:GetClass() == "info_player_teamspawn"
-				or v:GetClass() == "info_player_terrorist"
-				or v:GetClass() == "info_player_counterterrorist"
-				then
-				_hasNoSpawnpoints = true
-			end
-		else
-			YRP.msg("error", "[get_coords] v is not an entity: " .. tostring(v))
+		if ea(v) and (v:GetClass() == "info_player_teamspawn"
+			or v:GetClass() == "info_player_terrorist"
+			or v:GetClass() == "info_player_counterterrorist")
+			then
+			_hasNoSpawnpoints = true
 		end
 	end
 

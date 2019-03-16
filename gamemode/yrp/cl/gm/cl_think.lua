@@ -132,7 +132,7 @@ function useFunction(string)
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 					toggleDoorOptions(eyeTrace.Entity)
 				elseif eyeTrace.Entity:IsVehicle() then
-					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetNW2Int("item_uniqueID"))
+					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetNWInt("item_uniqueID"))
 				end
 			end
 
@@ -320,11 +320,11 @@ function KeyPress()
 					if tonumber(ply.view_range_view) > 0 then
 						ply.view_range_view = 0
 					else
-						local _old_view = tonumber(LocalPlayer():GetNW2Int("view_range_old", 0))
+						local _old_view = tonumber(LocalPlayer():GetNWInt("view_range_old", 0))
 						if _old_view > 0 then
 							ply.view_range_view = _old_view
 						else
-							ply.view_range_view = tonumber(LocalPlayer():GetNW2String("text_view_distance", "0"))
+							ply.view_range_view = tonumber(LocalPlayer():GetNWString("text_view_distance", "0"))
 						end
 					end
 
@@ -333,7 +333,7 @@ function KeyPress()
 			else
 				--[[ smoothing ]]--
 				if tonumber(ply.view_range) < tonumber(ply.view_range_view) then
-					ply.view_range = ply:GetNW2Int("view_range") + ply.view_range_view / 16
+					ply.view_range = ply:GetNWInt("view_range") + ply.view_range_view / 16
 				else
 
 					if input.IsKeyDown(get_keybind("view_zoom_out")) then
@@ -341,8 +341,8 @@ function KeyPress()
 
 						ply.view_range_view = ply.view_range_view + 1
 
-						if tonumber(ply.view_range_view) > tonumber(ply:GetNW2String("text_view_distance", "0")) then
-							ply.view_range_view = tonumber(ply:GetNW2String("text_view_distance", "0"))
+						if tonumber(ply.view_range_view) > tonumber(ply:GetNWString("text_view_distance", "0")) then
+							ply.view_range_view = tonumber(ply:GetNWString("text_view_distance", "0"))
 						end
 						ply.view_range_old = ply.view_range_view
 					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then
@@ -417,7 +417,7 @@ function KeyPress()
 
 					timer.Simple(0.4, function()
 						clicked = false
-						notification.AddLegacy(get_speak_channel_name(LocalPlayer():GetNW2Int("speak_channel")), NOTIFY_GENERIC, 3)
+						notification.AddLegacy(get_speak_channel_name(LocalPlayer():GetNWInt("speak_channel")), NOTIFY_GENERIC, 3)
 					end)
 				end
 
@@ -429,7 +429,7 @@ function KeyPress()
 
 					timer.Simple(0.4, function()
 						clicked = false
-						notification.AddLegacy(get_speak_channel_name(LocalPlayer():GetNW2Int("speak_channel")), NOTIFY_GENERIC, 3)
+						notification.AddLegacy(get_speak_channel_name(LocalPlayer():GetNWInt("speak_channel")), NOTIFY_GENERIC, 3)
 					end)
 				end
 			end
@@ -494,7 +494,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 		local weapon = ply:GetActiveWeapon()
 		if weapon != NULL and weapon:GetClass() != nil then
 			local _weaponName = string.lower(tostring(ply:GetActiveWeapon():GetClass()))
-			if !string.find(_weaponName, "lightsaber", 0, false) and !ply:GetNW2Bool("istaunting", false) then
+			if !string.find(_weaponName, "lightsaber", 0, false) and !ply:GetNWBool("istaunting", false) then
 				local view = {}
 
 				if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() then

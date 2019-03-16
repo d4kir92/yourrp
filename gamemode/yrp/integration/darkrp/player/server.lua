@@ -30,8 +30,8 @@ end
 function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
 	printGM("darkrp", "arrest(" .. tostring(time) .. ", " .. Arrester:Nick() .. ")")
-	self:SetNW2Bool("injail", true)
-	self:SetNW2Int("jailtime", time)
+	self:SetNWBool("injail", true)
+	self:SetNWInt("jailtime", time)
 end
 
 function Player:canKeysLock(door)
@@ -191,9 +191,9 @@ function Player:setDarkRPVar(variable, value, target)
 	if value == nil then return false end
 	
 	if isnumber(value) then
-		self:SetNW2Int(variable, value)
+		self:SetNWInt(variable, value)
 	else
-		self:SetNW2String(variable, value)
+		self:SetNWString(variable, value)
 	end
 end
 
@@ -248,7 +248,7 @@ end
 function Player:unArrest(Unarrester)
 	--Description: Unarrest a player.
 	printGM("darkrp", "unArrest(" .. Unarrester:YRPName() .. ")")
-	self:SetNW2Bool("injail", false)
+	self:SetNWBool("injail", false)
 end
 
 function Player:unWanted(actor)

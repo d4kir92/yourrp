@@ -205,11 +205,11 @@ function client_toggled()
 end
 
 function server_toggled(ply)
-	return ply:GetNW2Bool("bool_yrp_hud", false)
+	return ply:GetNWBool("bool_yrp_hud", false)
 end
 
 function HudPlayer(ply)
-	if ply:GetNW2String("string_hud_design", "notloaded") != "notloaded" then
+	if ply:GetNWString("string_hud_design", "notloaded") != "notloaded" then
 		drawMenuInfo()
 
 		if ply:Alive() then

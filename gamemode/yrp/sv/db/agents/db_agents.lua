@@ -53,18 +53,18 @@ net.Receive("yrp_get_contracts", function(len, ply)
 end)
 
 function hitdone(target, agent)
-	SQL_DELETE_FROM(_db_name, "uniqueID = " .. target:GetNW2String("hituid"))
+	SQL_DELETE_FROM(_db_name, "uniqueID = " .. target:GetNWString("hituid"))
 
-	target:SetNW2Bool("iswanted", false)
-	target:SetNW2String("hitreward", "")
-	target:SetNW2String("hituid", "")
-	agent:SetNW2String("hittargetName", "")
-	agent:SetNW2Entity("hittarget", NULL)
+	target:SetNWBool("iswanted", false)
+	target:SetNWString("hitreward", "")
+	target:SetNWString("hituid", "")
+	agent:SetNWString("hittargetName", "")
+	agent:SetNWEntity("hittarget", NULL)
 end
 
 function hitquit(agent)
-	agent:SetNW2String("hittargetName", "")
-	agent:SetNW2Entity("hittarget", NULL)
+	agent:SetNWString("hittargetName", "")
+	agent:SetNWEntity("hittarget", NULL)
 end
 
 net.Receive("yrp_accepthit", function(len, ply)
@@ -75,11 +75,11 @@ net.Receive("yrp_accepthit", function(len, ply)
 		_hit = _hit[1]
 		for i, p in pairs(player.GetAll()) do
 			if _hit.target == p:SteamID() then
-				p:SetNW2Bool("iswanted", true)
-				p:SetNW2String("hitreward", _hit.reward)
-				p:SetNW2String("hituid", _hit.uniqueID)
-				ply:SetNW2String("hittargetName", p:RPName())
-				ply:SetNW2Entity("hittarget", p)
+				p:SetNWBool("iswanted", true)
+				p:SetNWString("hitreward", _hit.reward)
+				p:SetNWString("hituid", _hit.uniqueID)
+				ply:SetNWString("hittargetName", p:RPName())
+				ply:SetNWEntity("hittarget", p)
 				break
 			end
 		end

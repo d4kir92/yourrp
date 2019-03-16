@@ -25,8 +25,8 @@ function Player:LevelSystemLoadout()
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
-		self:SetNW2String("int_level_min", setting.int_level_min)
-		self:SetNW2String("int_level_max", setting.int_level_max)
+		self:SetNWString("int_level_min", setting.int_level_min)
+		self:SetNWString("int_level_max", setting.int_level_max)
 	end
 end
 
@@ -115,7 +115,7 @@ function Player:AddLevel(level)
 		if newlvl <= maxlvl then
 
 			SQL_UPDATE("yrp_characters", "int_level = " .. newlvl, "uniqueID = '" .. charid .. "'")
-			self:SetNW2String("int_level", newlvl)
+			self:SetNWString("int_level", newlvl)
 
 			self:AddLevel(level)
 		end
@@ -125,7 +125,7 @@ function Player:AddLevel(level)
 		if newlvl >= minlvl then
 
 			SQL_UPDATE("yrp_characters", "int_level = " .. newlvl, "uniqueID = '" .. charid .. "'")
-			self:SetNW2String("int_level", newlvl)
+			self:SetNWString("int_level", newlvl)
 
 			self:AddLevel(level)
 		end
@@ -165,7 +165,7 @@ function Player:AddXP(xp)
 					self:AddXP(newxp)
 				else
 					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
-					self:SetNW2String("int_xp", newxp)
+					self:SetNWString("int_xp", newxp)
 				end
 			end
 		elseif xp < 0 then
@@ -181,7 +181,7 @@ function Player:AddXP(xp)
 					self:AddXP(newxp)
 				else
 					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
-					self:SetNW2String("int_xp", newxp)
+					self:SetNWString("int_xp", newxp)
 				end
 			end
 		end

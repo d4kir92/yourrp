@@ -24,7 +24,7 @@ ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 ENT.money = 0
 
 function ENT:GetMoney()
-	self.money = tonumber(self:GetNW2String("money", "-1"))
+	self.money = tonumber(self:GetNWString("money", "-1"))
 	self.PrintName = "YourRP - " .. self.money .. " Money"
 	return self.money
 end

@@ -67,7 +67,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
-		if disabled != nil and not LocalPlayer():GetNW2Bool(disabled) then
+		if disabled != nil and not LocalPlayer():GetNWBool(disabled) then
 			text = "[" .. YRP.lang_string("LID_disabled") .. "] "
 			color = Color(255, 0, 0, 255)
 		end

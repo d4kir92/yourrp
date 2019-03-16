@@ -8,15 +8,15 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-		draw.RoundedBox(0, 0, 0, (mp:GetNW2Int(item, -1) / mp:GetNW2Int(item .. "Max", -1)) * ctr(360) , ph, Color(0, 0, 255, 200))
+		draw.RoundedBox(0, 0, 0, (mp:GetNWInt(item, -1) / mp:GetNWInt(item .. "Max", -1)) * ctr(360) , ph, Color(0, 0, 255, 200))
 
-		draw.SimpleTextOutlined(mp:GetNW2Int(item, -1) .. "/" .. mp:GetNW2Int(item .. "Max", -1) .. " " .. name, "HudBars", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(mp:GetNWInt(item, -1) .. "/" .. mp:GetNWInt(item .. "Max", -1) .. " " .. name, "HudBars", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	local tmpBut = createD("DButton", tmp, ctr(220), h, w - ctr(220), 0)
 	tmpBut:SetText("")
 	function tmpBut:Paint(pw, ph)
-		local cost = mp:GetNW2Int(item .. "Cost")
-		if mp:GetNW2Int(item) < mp:GetNW2Int(item .. "Max") then
+		local cost = mp:GetNWInt(item .. "Cost")
+		if mp:GetNWInt(item) < mp:GetNWInt(item .. "Max") then
 			if self:IsHovered() then
 				draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 				draw.SimpleTextOutlined(formatMoney(cost, ply), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -75,9 +75,9 @@ net.Receive("getMoneyPrintMenu", function(len)
 		function moneyInfo:Paint(pw, ph)
 			draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-			draw.RoundedBox(0, 0, 0, (mp:GetNW2Int("money", -1) / mp:GetNW2Int("moneyMax", -1)) * ctr(360) , ph, Color(0, 0, 255, 200))
+			draw.RoundedBox(0, 0, 0, (mp:GetNWInt("money", -1) / mp:GetNWInt("moneyMax", -1)) * ctr(360) , ph, Color(0, 0, 255, 200))
 
-			draw.SimpleTextOutlined(formatMoney(mp:GetNW2Int("money", -1), ply) .. "/" .. formatMoney(mp:GetNW2Int("moneyMax" , -1), ply), "HudBars", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(formatMoney(mp:GetNWInt("money", -1), ply) .. "/" .. formatMoney(mp:GetNWInt("moneyMax" , -1), ply), "HudBars", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 
 		local gatherMoney = createD("DButton", moneyInfo, ctr(220), ctr(60), ctr(360), ctr(0))
@@ -102,14 +102,14 @@ net.Receive("getMoneyPrintMenu", function(len)
 		workingB:SetText("")
 		function workingB:Paint(pw, ph)
 			local working =YRP.lang_string("LID_off")
-			if mp:GetNW2Bool("working") then
+			if mp:GetNWBool("working") then
 				working =YRP.lang_string("LID_on")
 			end
 			if self:IsHovered() then
 				draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_toggle"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			else
-				if mp:GetNW2Bool("working") then
+				if mp:GetNWBool("working") then
 					draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 255, 0, 200))
 				else
 					draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 0, 0, 200))

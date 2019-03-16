@@ -22,8 +22,8 @@ function Player:LockdownLoadout()
 		lockdown = lockdown[1]
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
 		for i, pl in pairs(player.GetAll()) do
-			pl:SetNW2Bool("bool_lockdown", lockdown.bool_lockdown)
-			pl:SetNW2Bool("string_lockdowntext", SQL_STR_OUT(lockdown.string_lockdowntext))
+			pl:SetNWBool("bool_lockdown", lockdown.bool_lockdown)
+			pl:SetNWBool("string_lockdowntext", SQL_STR_OUT(lockdown.string_lockdowntext))
 		end
 	else
 		YRP.msg("note", "LockdownLoadout FAILED")

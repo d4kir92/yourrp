@@ -4,7 +4,7 @@
 local Entity = FindMetaTable("Entity")
 
 function Entity:SetWorldStorage(b)
-	self:SetNW2String("isaworldstorage", tobool(b))
+	self:SetNWString("isaworldstorage", tobool(b))
 end
 
 local Player = FindMetaTable("Player")
@@ -254,10 +254,10 @@ function Player:DropSWEP(cname)
 
 		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 		ent:SetAngles(self:GetAngles())
-		ent:SetNW2Bool("ispickupable", false)
+		ent:SetNWBool("ispickupable", false)
 
 		timer.Simple(1, function()
-			ent:SetNW2Bool("ispickupable", true)
+			ent:SetNWBool("ispickupable", true)
 		end)
 
 		ent:Spawn()
@@ -355,7 +355,7 @@ function Player:ForceEquip(cname, noammo)
 
 	if wk(weapon) then
 		if weapon:IsValid() then
-			weapon:SetNW2Bool("ispickupable", true)
+			weapon:SetNWBool("ispickupable", true)
 			return weapon
 		end
 	end
@@ -370,7 +370,7 @@ function Player:Give(cname, noammo)
 		_noAmmo = false
 	end
 
-	if self:GetNW2Bool("bool_inventory_system", false) then
+	if self:GetNWBool("bool_inventory_system", false) then
 		return self:PutInInventory(cname, noammo)
 	else
 		return self:ForceEquip(cname, noammo)
@@ -388,7 +388,7 @@ function Player:GiveAmmo(amount, atype, hidePopup)
 		_hide_popup = false
 	end
 
-	if self:GetNW2Bool("bool_inventory_system", false) then
+	if self:GetNWBool("bool_inventory_system", false) then
 		self:LegacyGiveAmmo(amount, atype)
 		--self:AddItemAmmo(amount, atype)
 	else
@@ -456,7 +456,7 @@ end
 function Player:StripWeapon(weapon)
 	printGM("note", "StripWeapon(" .. tostring(weapon) .. ")")
 
-	if self:GetNW2Bool("bool_inventory_system", false) then
+	if self:GetNWBool("bool_inventory_system", false) then
 		self:RemoveWeaponFromInventory(weapon)
 		self:LegacyStripWeapon(weapon)
 	else
@@ -474,7 +474,7 @@ function Player:StripWeapons()
 end
 
 function Player:IsAllowedToDropSWEP(cname)
-	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String("roleUniqueID", "0") .. "'")
+	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNWString("roleUniqueID", "0") .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_ndsweps)
@@ -487,17 +487,17 @@ function Player:IsAllowedToDropSWEP(cname)
 end
 
 function GM:PlayerCanPickupWeapon(ply, wep)
-	if not ply:GetNW2Bool("bool_inventory_system", false) then
+	if not ply:GetNWBool("bool_inventory_system", false) then
 		--[[ Inventory OFF ]]
 		--
-		return wep:GetNW2Bool("ispickupable", true)
+		return wep:GetNWBool("ispickupable", true)
 	else
 		--[[ Inventory ON ]]
 		--
 		if ply.canpickup == true then
 			ply.canpickup = false
 
-			return wep:GetNW2Bool("ispickupable", true)
+			return wep:GetNWBool("ispickupable", true)
 		else
 			return false
 		end

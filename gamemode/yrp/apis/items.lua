@@ -95,7 +95,7 @@ function GetEntityItemSize(ent)
 end
 
 function IsViewModel(ent)
-	if string.find(ent:GetClass(), "viewmodel") or string.find(ent:GetModel(), "/c_") or ent:GetNW2Bool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex") then
+	if string.find(ent:GetClass(), "viewmodel") or string.find(ent:GetModel(), "/c_") or ent:GetNWBool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex") then
 		return true
 	end
 	return false
@@ -395,7 +395,7 @@ if CLIENT then
 
 	function AddItemToStorage(tab)
 		if tab.entity != nil then
-			tab.intern_storageID = tab.entity:GetNW2String("storage_uid", "")
+			tab.intern_storageID = tab.entity:GetNWString("storage_uid", "")
 		end
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
 		if pa(_storage) then

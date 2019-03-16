@@ -286,7 +286,7 @@ net.Receive("shop_get_tabs", function(len)
 					end
 					_globalWorking = _dealer.WorldModel
 					hook.Add("close_dealer_worldmodel", "close_dealer_worldmodel_hook", function()
-						_dealer.WorldModel = LocalPlayer():GetNW2String("WorldModel")
+						_dealer.WorldModel = LocalPlayer():GetNWString("WorldModel")
 
 						net.Start("dealer_edit_worldmodel")
 							net.WriteString(_dealer.uniqueID)

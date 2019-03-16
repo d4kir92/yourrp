@@ -17,18 +17,18 @@ function ENT:Initialize()
 
 	self:SetUseType(SIMPLE_USE)
 	if IsDealerImmortal() then
-		self:SetNW2Bool("immortal", true)
+		self:SetNWBool("immortal", true)
 	else
-		self:SetNW2Bool("immortal", false)
+		self:SetNWBool("immortal", false)
 	end
 end
 
 function ENT:OnTakeDamage(dmg)
 	self:SetHealth(self:Health() - dmg:GetDamage())
 	if IsDealerImmortal() then
-		self:SetNW2Bool("immortal", true)
+		self:SetNWBool("immortal", true)
 	else
-		self:SetNW2Bool("immortal", false)
+		self:SetNWBool("immortal", false)
 		if self:Health() <= 0 then
 			self:SetSchedule(SCHED_FALL_TO_GROUND)
 			local _rd = ents.Create("prop_ragdoll")
@@ -52,16 +52,16 @@ end
 
 function ENT:Open(activator, caller)
 	if IsDealerImmortal() then
-		self:SetNW2Bool("immortal", true)
+		self:SetNWBool("immortal", true)
 	else
-		self:SetNW2Bool("immortal", false)
+		self:SetNWBool("immortal", false)
 	end
-	if !activator:GetNW2Bool("open_menu", false) then
-		openBuyMenu(activator, self:GetNW2String("dealerID", "-1"))
+	if !activator:GetNWBool("open_menu", false) then
+		openBuyMenu(activator, self:GetNWString("dealerID", "-1"))
 
-		activator:SetNW2Bool("open_menu", true)
+		activator:SetNWBool("open_menu", true)
 		timer.Simple(1, function()
-			activator:SetNW2Bool("open_menu", false)
+			activator:SetNWBool("open_menu", false)
 		end)
 	end
 end

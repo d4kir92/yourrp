@@ -72,8 +72,8 @@ function SWEP:PrimaryAttack()
 		if tr.Entity:IsPlayer() then
 			if SERVER then
 				teleportToJailpoint(tr.Entity)
-				tr.Entity:SetNW2Bool("injail", true)
-				tr.Entity:SetNW2Int("jailtime", 5*60)
+				tr.Entity:SetNWBool("injail", true)
+				tr.Entity:SetNWInt("jailtime", 5*60)
 			end
 		end
 	else
@@ -100,7 +100,7 @@ function SWEP:SecondaryAttack()
 		if tr.Entity:IsPlayer() then
 			if SERVER then
 				teleportToReleasepoint(tr.Entity)
-				tr.Entity:SetNW2Bool("injail", false)
+				tr.Entity:SetNWBool("injail", false)
 			end
 		end
 	else

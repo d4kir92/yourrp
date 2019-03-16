@@ -18,9 +18,9 @@ function ENT:Initialize()
 	end
 
 	self.storage = self:InitStorage(8, 12)
-	self:SetNW2Bool("isaworldstorage", true)
+	self:SetNWBool("isaworldstorage", true)
 end
 
 function ENT:Use(activator, caller)
-	openStorage(activator, self:GetNW2String("storage_uid"))
+	openStorage(activator, self:GetNWString("storage_uid"))
 end

@@ -11,11 +11,11 @@ include("player/interface.lua")
 local Player = FindMetaTable("Player")
 
 function Player:AFK()
-	return self:GetNW2Bool("isafk", false)
+	return self:GetNWBool("isafk", false)
 end
 
 function Player:DND()
-	return self:GetNW2Bool("isdnd", false)
+	return self:GetNWBool("isdnd", false)
 end
 
 function Player:GetLanguage() -- The Language the player selected
@@ -27,7 +27,7 @@ function Player:GetLanguageShort() -- The Language the player selected (shortkey
 end
 
 function Player:GetCountryShort()
-	return string.upper(self:GetNW2String("yrp_country", "LOADING"))
+	return string.upper(self:GetNWString("yrp_country", "LOADING"))
 end
 
 function Player:GetCountry() -- The Language the player selected
@@ -35,36 +35,36 @@ function Player:GetCountry() -- The Language the player selected
 end
 
 function Player:Slowed()
-	return self:GetNW2Bool("slowed", false)
+	return self:GetNWBool("slowed", false)
 end
 
 function Player:IsInCombat()
-	return self:GetNW2Bool("inCombat", false)
+	return self:GetNWBool("inCombat", false)
 end
 
 --[[ Stats ]]--
 function Player:GetMaxArmor()
-	return self:GetNW2Int("MaxArmor", 1)
+	return self:GetNWInt("MaxArmor", 1)
 end
 
 function Player:GetMinLevel()
-	return tonumber(self:GetNW2String("int_level_min", "1"))
+	return tonumber(self:GetNWString("int_level_min", "1"))
 end
 
 function Player:GetMaxLevel()
-	return tonumber(self:GetNW2String("int_level_max", "100"))
+	return tonumber(self:GetNWString("int_level_max", "100"))
 end
 
 function Player:Stamina()
-	return self:GetNW2Int("GetCurStamina", 1)
+	return self:GetNWInt("GetCurStamina", 1)
 end
 
 function Player:GetMaxStamina()
-	return self:GetNW2Int("GetMaxStamina", 10)
+	return self:GetNWInt("GetMaxStamina", 10)
 end
 
 function Player:Hunger()
-	return self:GetNW2Float("hunger", 100.0)
+	return self:GetNWFloat("hunger", 100.0)
 end
 
 function Player:GetMaxHunger()
@@ -72,7 +72,7 @@ function Player:GetMaxHunger()
 end
 
 function Player:Thirst()
-	return self:GetNW2Float("thirst", 100.0)
+	return self:GetNWFloat("thirst", 100.0)
 end
 
 function Player:GetMaxThirst()
@@ -80,31 +80,31 @@ function Player:GetMaxThirst()
 end
 
 function Player:SalaryTime()
-	return self:GetNW2Int("salarytime", 0)
+	return self:GetNWInt("salarytime", 0)
 end
 
 function Player:NextSalaryTime()
-	return self:GetNW2Int("nextsalarytime", 0)
+	return self:GetNWInt("nextsalarytime", 0)
 end
 
 function Player:GetCastName()
-	return self:GetNW2String("castname", "")
+	return self:GetNWString("castname", "")
 end
 
 function Player:CastTimeCurrent()
-	return math.Round(self:GetNW2Float("castcur", 0.0), 1)
+	return math.Round(self:GetNWFloat("castcur", 0.0), 1)
 end
 
 function Player:CastTimeMax()
-	return math.Round(self:GetNW2Float("castmax", 1.0), 1)
+	return math.Round(self:GetNWFloat("castmax", 1.0), 1)
 end
 
 function Player:Ability()
-	return self:GetNW2Int("GetCurAbility", 0)
+	return self:GetNWInt("GetCurAbility", 0)
 end
 
 function Player:GetMaxAbility()
-	return self:GetNW2Int("GetMaxAbility", 100)
+	return self:GetNWInt("GetMaxAbility", 100)
 end
 
 function Player:Condition()
@@ -115,53 +115,53 @@ function Player:Condition()
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_youarebleeding")
 	end
-	if self:GetNW2Bool("cuffed") then
+	if self:GetNWBool("cuffed") then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_cuffed")
 	end
-	if self:GetNW2Float("hunger", 100) < 20 then
+	if self:GetNWFloat("hunger", 100) < 20 then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_hungry")
 	end
-	if self:GetNW2Float("thirst", 100) < 20.0 then
+	if self:GetNWFloat("thirst", 100) < 20.0 then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_thirsty")
 	end
-	if self:GetNW2Bool("broken_leg_right", false) then
+	if self:GetNWBool("broken_leg_right", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourrightlegisbroken")
 	end
-	if self:GetNW2Bool("broken_leg_left", false) then
+	if self:GetNWBool("broken_leg_left", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourleftlegisbroken")
 	end
-	if self:GetNW2Bool("broken_arm_right", false) then
+	if self:GetNWBool("broken_arm_right", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourrightarmisbroken")
 	end
-	if self:GetNW2Bool("broken_arm_left", false) then
+	if self:GetNWBool("broken_arm_left", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourleftarmisbroken")
 	end
-	if self:GetNW2Bool("injail", false) then
+	if self:GetNWBool("injail", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. YRP.lang_string("LID_jail") .. ": " .. self:GetNW2Int("jailtime", 0)
+		_sttext = _sttext .. YRP.lang_string("LID_jail") .. ": " .. self:GetNWInt("jailtime", 0)
 	end
 	return _sttext
 end
@@ -185,11 +185,11 @@ end
 
 --[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
-	return math.Round(tonumber(self:GetNW2String("money", "0")), 2) -- return float
+	return math.Round(tonumber(self:GetNWString("money", "0")), 2) -- return float
 end
 
 function Player:GetMoneyBank() -- Money that the bank is holding
-	return math.Round(tonumber(self:GetNW2String("moneybank", "0")), 2) -- return float
+	return math.Round(tonumber(self:GetNWString("moneybank", "0")), 2) -- return float
 end
 
 function Player:Money()
@@ -201,7 +201,7 @@ function Player:MoneyBank()
 end
 
 function Player:Salary()
-	return tonumber(self:GetNW2String("salary", "0"))
+	return tonumber(self:GetNWString("salary", "0"))
 end
 
 function string.point(number)
@@ -221,7 +221,7 @@ if CLIENT then
 	function MoneyFormat(money)
 		money = tonumber(money)
 		local ply = LocalPlayer()
-		return ply:GetNW2String("text_money_pre", "[LOADING PRE]") .. string.point(money) .. ply:GetNW2String("text_money_pos", "[LOADING POS]")
+		return ply:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(money) .. ply:GetNWString("text_money_pos", "[LOADING POS]")
 	end
 
 	function MoneyFormatRounded(money, round)
@@ -233,20 +233,20 @@ if CLIENT then
 		end
 		money = tonumber(money)
 		local ply = LocalPlayer()
-		return ply:GetNW2String("text_money_pre", "[LOADING PRE]") .. roundMoney(money, round) .. ply:GetNW2String("text_money_pos", "[LOADING POS]")
+		return ply:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(money, round) .. ply:GetNWString("text_money_pos", "[LOADING POS]")
 	end
 end
 
 function Player:FormattedMoney()
-	return self:GetNW2String("text_money_pre", "[LOADING PRE]") .. string.point(self:Money()) .. self:GetNW2String("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:Money()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 function Player:FormattedMoneyBank()
-	return self:GetNW2String("text_money_pre", "[LOADING PRE]") .. string.point(self:MoneyBank()) .. self:GetNW2String("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:MoneyBank()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 function Player:FormattedSalary()
-	return self:GetNW2String("text_money_pre", "[LOADING PRE]") .. string.point(self:Salary()) .. self:GetNW2String("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. string.point(self:Salary()) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 function Player:FormattedMoneyRounded(round)
@@ -256,7 +256,7 @@ function Player:FormattedMoneyRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return self:GetNW2String("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), round) .. self:GetNW2String("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 function Player:FormattedMoneyBankRounded(round)
@@ -266,7 +266,7 @@ function Player:FormattedMoneyBankRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return self:GetNW2String("text_money_pre", "[LOADING PRE]") .. roundMoney(self:MoneyBank(), round) .. self:GetNW2String("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:MoneyBank(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 function Player:FormattedSalaryRounded(round)
@@ -276,16 +276,16 @@ function Player:FormattedSalaryRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return self:GetNW2String("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), round) .. self:GetNW2String("text_money_pos", "[LOADING POS]")
+	return self:GetNWString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), round) .. self:GetNWString("text_money_pos", "[LOADING POS]")
 end
 
 --[[ Character ]]--
 function Player:Level()
-	return tonumber(self:GetNW2String("int_level", "1"))
+	return tonumber(self:GetNWString("int_level", "1"))
 end
 
 function Player:XP()
-	return tonumber(math.Round(self:GetNW2String("int_xp", "1"), 0))
+	return tonumber(math.Round(self:GetNWString("int_xp", "1"), 0))
 end
 
 function Player:GetMaxXP()
@@ -294,15 +294,15 @@ end
 
 --[[ Role ]]--
 function Player:GetRoleUID()
-	return tonumber(self:GetNW2String("roleUniqueID", "0"))
+	return tonumber(self:GetNWString("roleUniqueID", "0"))
 end
 
 function Player:GetRoleCooldown()
-	return tonumber(self:GetNW2Int("int_role_cooldown", "1"))
+	return tonumber(self:GetNWInt("int_role_cooldown", "1"))
 end
 
 function Player:GetRoleOnDeathRoleUID()
-	return tonumber(self:GetNW2String("int_roleondeath", "0"))
+	return tonumber(self:GetNWString("int_roleondeath", "0"))
 end
 
 function Player:GetRoleName() -- Role Name / "Job" Name
@@ -310,11 +310,11 @@ function Player:GetRoleName() -- Role Name / "Job" Name
 end
 
 function Player:GetLicenseIDs()
-	return self:GetNW2String("licenseIDs", "")
+	return self:GetNWString("licenseIDs", "")
 end
 
 function Player:GetLicenseNames()
-	return self:GetNW2String("licenseNames", "failed")
+	return self:GetNWString("licenseNames", "failed")
 end
 
 --[[ Faction ]]--
