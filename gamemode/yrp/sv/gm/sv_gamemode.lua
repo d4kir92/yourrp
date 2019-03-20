@@ -161,6 +161,8 @@ function SearchForCollectionID()
 	for k, v in pairs(files) do
 		local f = file.Read(v, "BASE_PATH")
 		if isstring(f) then
+			f = string.Replace(f, "\n", " ")
+			f = string.Replace(f, "\r", " ")
 			local cidstart = string.find(f, "+host_workshop_collection ")
 
 			if cidstart then
@@ -177,7 +179,7 @@ function SearchForCollectionID()
 							table.insert(collectionIDs, cid)
 						end
 					else
-						YRP.msg("error", "Cid is not a number [" .. tostring(cid) .. "] f [" .. tostring(string.Replace(f, "\n", "[N]")) .. "]")
+						YRP.msg("error", "Cid is not a number [" .. tostring(cid) .. "] f [" .. tostring(f) .. "]")
 					end
 				end
 			end

@@ -383,16 +383,24 @@ hook.Add("open_server_map", "open_server_map", function()
 	gar.r = false
 
 	net.Receive("getMapListGroups", function(len)
-		_groups = net.ReadTable()
-		gar.g = true
+		local entries = tonumber(net.ReadString())
+		local id = tonumber(net.ReadString())
+		_groups[id] = net.ReadTable()
+		if id == entries then
+			gar.g = true
+		end
 		GetMapList()
 	end)
 	net.Start("getMapListGroups")
 	net.SendToServer()
 
 	net.Receive("getMapListRoles", function(len)
-		_roles = net.ReadTable()
-		gar.r = true
+		local entries = tonumber(net.ReadString())
+		local id = tonumber(net.ReadString())
+		_roles[id] = net.ReadTable()
+		if id == entries then
+			gar.r = true
+		end
 		GetMapList()
 	end)
 	net.Start("getMapListRoles")

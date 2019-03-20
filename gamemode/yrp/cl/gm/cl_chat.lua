@@ -346,7 +346,7 @@ net.Receive("sendanim", function()
 	local activity = net.ReadInt(32)
 	local loop = net.ReadBool()
 
-	if ply:IsValid() then
+	if ply:IsValid() and wk(slot) and wk(activity) and wk(loop) then
 		ply:AnimRestartGesture(slot, activity, loop)
 	end
 end)
@@ -355,7 +355,9 @@ net.Receive("stopanim", function()
 	local ply = net.ReadEntity()
 	local slot = net.ReadInt(32)
 
-	ply:AnimResetGestureSlot(slot)
+	if ply:IsValid() and wk(slot) then
+		ply:AnimResetGestureSlot(slot)
+	end
 end)
 
 net.Receive("yrp_player_say", function(len)

@@ -337,58 +337,60 @@ net.Receive("shop_get_tabs", function(len)
 		local _tab = _bm.tabs:AddTab(SQL_STR_OUT(tab.name), tab.uniqueID)
 		function _tab:GetCategories()
 			net.Receive("shop_get_categories", function(le)
-				local _uid = net.ReadString()
-				local _cats = net.ReadTable()
+				if _bm.shop:IsValid() then
+					local _uid = net.ReadString()
+					local _cats = net.ReadTable()
 
-				_bm.shop:Clear()
+					_bm.shop:Clear()
 
-				for j, cat in pairs(_cats) do
-					local _cat = createD("DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb(100), 0, 0)
-					_cat.uid = cat.uniqueID
-					_cat:SetHeaderHeight(ctrb(100))
-					_cat:SetHeader(SQL_STR_OUT(cat.name))
-					_cat:SetSpacing(30)
-					_cat.color = Color(100, 100, 255)
-					_cat.color2 = Color(50, 50, 255)
-					function _cat:DoClick()
-						if self:IsOpen() then
-							net.Receive("shop_get_items", function(l)
-								local _items = net.ReadTable()
-								for k, item in pairs(_items) do
-									timer.Simple(0.1 * k, function()
-										local _item = createShopItem(item, _dealer_uid)
-										self:Add(_item)
-									end)
-								end
-							end)
-							net.Start("shop_get_items")
+					for j, cat in pairs(_cats) do
+						local _cat = createD("DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb(100), 0, 0)
+						_cat.uid = cat.uniqueID
+						_cat:SetHeaderHeight(ctrb(100))
+						_cat:SetHeader(SQL_STR_OUT(cat.name))
+						_cat:SetSpacing(30)
+						_cat.color = Color(100, 100, 255)
+						_cat.color2 = Color(50, 50, 255)
+						function _cat:DoClick()
+							if self:IsOpen() then
+								net.Receive("shop_get_items", function(l)
+									local _items = net.ReadTable()
+									for k, item in pairs(_items) do
+										timer.Simple(0.1 * k, function()
+											local _item = createShopItem(item, _dealer_uid)
+											self:Add(_item)
+										end)
+									end
+								end)
+								net.Start("shop_get_items")
+									net.WriteString(self.uid)
+								net.SendToServer()
+							else
+								self:ClearContent()
+							end
+						end
+
+						_bm.shop:AddItem(_cat)
+						_bm.shop:Rebuild()
+					end
+					if LocalPlayer():HasAccess() then
+						local _remove = createD("DButton", _cat, ctr(400), ctr(100), 0, 0)
+						_remove:SetText("")
+						_remove.uid = _uid
+						function _remove:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+							surfaceText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+						end
+						function _remove:DoClick()
+							net.Start("dealer_rem_tab")
+								net.WriteString(_dealer_uid)
 								net.WriteString(self.uid)
 							net.SendToServer()
-						else
-							self:ClearContent()
+							_bm.window:Close()
 						end
+						_bm.shop:AddItem(_remove)
+						_bm.shop:Rebuild()
 					end
-
-					_bm.shop:AddItem(_cat)
-					_bm.shop:Rebuild()
-				end
-				if LocalPlayer():HasAccess() then
-					local _remove = createD("DButton", _cat, ctr(400), ctr(100), 0, 0)
-					_remove:SetText("")
-					_remove.uid = _uid
-					function _remove:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-						surfaceText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
-					end
-					function _remove:DoClick()
-						net.Start("dealer_rem_tab")
-							net.WriteString(_dealer_uid)
-							net.WriteString(self.uid)
-						net.SendToServer()
-						_bm.window:Close()
-					end
-					_bm.shop:AddItem(_remove)
-					_bm.shop:Rebuild()
 				end
 			end)
 			net.Start("shop_get_categories")

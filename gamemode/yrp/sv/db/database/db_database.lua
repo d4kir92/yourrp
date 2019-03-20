@@ -89,8 +89,13 @@ function GetBackupCreateTime()
 	local _create = sql.Query("SELECT int_backup_create FROM yrp_sql WHERE uniqueID = 1;")
 	if wk(_create) then
 		_create = tonumber(_create[1].int_backup_create)
-		_create = _create * 60 * 60
-		return _create
+		if isnumber(_create) then
+			_create = _create * 60 * 60
+			return _create
+		else
+			YRP.msg("error", "[GetBackupCreateTime] is not a number: " .. tostring(_create))
+			return 60
+		end
 	else
 		printGM("error", "GetBackupCreateTime FAILED")
 		return 60

@@ -114,13 +114,15 @@ function createRoleBox(rol, parent, mainparent)
 end
 
 function createBouncer(parent, mainparent)
-	parent:SetWide(mainparent:GetWide() - ctrb(140))
-	local _bou = createD("DPanel", parent, ctrb(50), ctrb(200), 0, 0)
-	function _bou:Paint(pw, ph)
-		surfaceText("➔", "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
-	end
-	if parent.AddPanel != nil then
-		parent:AddPanel(_bou)
+	if parent:IsValid() and mainparent:IsValid() then
+		parent:SetWide(mainparent:GetWide() - ctrb(140))
+		local _bou = createD("DPanel", parent, ctrb(50), ctrb(200), 0, 0)
+		function _bou:Paint(pw, ph)
+			surfaceText("➔", "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+		end
+		if parent.AddPanel != nil then
+			parent:AddPanel(_bou)
+		end
 	end
 end
 
@@ -161,7 +163,7 @@ function addRoleRow(rol, parent)
 		end
 
 		addRole(rol, _rr, parent)
-		
+
 		parent:Add(_rr)
 	end
 end

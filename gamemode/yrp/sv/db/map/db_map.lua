@@ -132,18 +132,26 @@ end)
 util.AddNetworkString("getMapListGroups")
 net.Receive("getMapListGroups", function(len, ply)
 	local _tmpGroupTable = SQL_SELECT("yrp_ply_groups", "*", nil)
-	net.Start("getMapListGroups")
-		net.WriteTable(_tmpGroupTable)
-	net.Send(ply)
+	for i, v in pairs(_tmpGroupTable) do
+		net.Start("getMapListGroups")
+			net.WriteString(table.Count(_tmpGroupTable))
+			net.WriteString(i)
+			net.WriteTable(v)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("getMapListRoles")
 net.Receive("getMapListRoles", function(len, ply)
 	local _tmpRolesTable = SQL_SELECT("yrp_ply_roles", "*", nil)
 	if wk(_tmpRolesTable) then
-		net.Start("getMapListRoles")
-			net.WriteTable(_tmpRolesTable)
-		net.Send(ply)
+		for i, v in pairs(_tmpRolesTable) do
+			net.Start("getMapListRoles")
+				net.WriteString(table.Count(_tmpRolesTable))
+				net.WriteString(i)
+				net.WriteTable(v)
+			net.Send(ply)
+		end
 	end
 end)
 

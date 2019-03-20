@@ -537,10 +537,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
 
-			net.Start("settings_subscribe_rolelist")
-				net.WriteString(group.uniqueID)
-				net.WriteString("0")
-			net.SendToServer()
+			if group.uniqueID != nil then
+				net.Start("settings_subscribe_rolelist")
+					net.WriteString(group.uniqueID)
+					net.WriteString("0")
+				net.SendToServer()
+			end
 
 			group.uniqueID = tonumber(group.uniqueID)
 			cur_group.edi = group.uniqueID
