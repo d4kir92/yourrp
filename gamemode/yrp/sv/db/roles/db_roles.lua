@@ -68,6 +68,26 @@ end
 
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
+function RemoveUnusedGroups()
+	local count = 0
+	local all_groups = SQL_SELECT("yrp_ply_groups", "*", nil)
+	for i, group in pairs(all_groups) do
+		group.int_parentgroup = tonumber(group.int_parentgroup)
+		--print(group.int_parentgroup)
+		if group.int_parentgroup > 0 then
+			local parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+			if parentgroup == nil then
+				count = count + 1
+				YRP.msg("note", "Group is out of space: " .. group.string_name)
+				SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = '" .. group.uniqueID .. "'")
+			end
+		end
+	end
+	if count > 0 then
+		RemoveUnusedGroups()
+	end
+end
+
 function MoveUnusedRolesToDefault()
 	printGM("note", "Move unused roles to default group")
 	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
@@ -78,6 +98,7 @@ function MoveUnusedRolesToDefault()
 			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 		end
 
+		RemoveUnusedGroups()
 		-- if group not exists move it to default group
 		local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 		if !wk(group) then
@@ -85,6 +106,7 @@ function MoveUnusedRolesToDefault()
 		end
 	end
 end
+MoveUnusedRolesToDefault()
 
 -- CONVERTING OLD roles
 if wk(SQL_SELECT("yrp_roles", "*", nil)) then
