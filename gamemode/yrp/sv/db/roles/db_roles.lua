@@ -478,15 +478,18 @@ function SendRoleList(gro, pre)
 				headername = headername[1].string_name
 			end
 		end
-
-		local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
-		for i, pl in pairs(tbl_bc) do
-			net.Start("settings_subscribe_rolelist")
-				net.WriteTable(tbl_roles)
-				net.WriteString(headername)
-				net.WriteString(gro)
-				net.WriteString(pre)
-			net.Send(pl)
+		if wk(headername) then
+			local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
+			for i, pl in pairs(tbl_bc) do
+				net.Start("settings_subscribe_rolelist")
+					net.WriteTable(tbl_roles)
+					net.WriteString(headername)
+					net.WriteString(gro)
+					net.WriteString(pre)
+				net.Send(pl)
+			end
+		else
+			YRP.msg("error", "headername: " .. tostring(headername))
 		end
 	else
 		YRP.msg("error", "SendRoleList(" .. tostring(gro) .. ", " .. tostring(pre) .. ")")
@@ -1276,29 +1279,37 @@ net.Receive("openInteractMenu", function(len, ply)
 					local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
 					if wk(tmpTableSearch) then
 						local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
+						print("START", tmpSearchUniqueID)
+
 						local tmpCounter = 0
 						while (tmpSearch) do
-							tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
+							if wk(tmpTableSearch) then
+								tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
 
-							if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
-								tmpDemote = true
-								local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
-								tmpDemoteName = tmp[1].string_name
-							end
+								if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
+									tmpDemote = true
+									local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
+									tmpDemoteName = tmp[1].string_name
+								end
 
-							if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
-								tmpPromote = true
-								tmpPromoteName = tmpTableSearch[1].string_name
+								if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
+									tmpPromote = true
+									tmpPromoteName = tmpTableSearch[1].string_name
+								end
+								if tmpSearchUniqueID == 0 then
+									tmpSearch = false
+								end
+							else
+								print("FAILED", tmpSearchUniqueID)
 							end
-							if tmpSearchUniqueID == -1 then
-								tmpSearch = false
-							end
-							if tmpCounter >= 100 then
+							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
+
+							--Only look for 10 preroles
+							tmpCounter = tmpCounter + 1
+							if tmpCounter >= 10 then
 								printGM("note", "You have a loop in your preroles!")
 								tmpSearch = false
 							end
-							tmpCounter = tmpCounter + 1
-							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
 						end
 					end
 				end
@@ -1318,5 +1329,94 @@ net.Receive("openInteractMenu", function(len, ply)
 				net.Send(ply)
 			end
 		end
+	end
+end)
+
+function removeFromWhitelist( SteamID, roleID )
+	local _result = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID )
+	if _result != nil then
+		SQL_DELETE_FROM( "yrp_role_whitelist", "uniqueID = " .. _result[1].uniqueID )
+	end
+end
+
+function addToWhitelist( SteamID, roleID, groupID, nick )
+	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
+		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID )
+	else
+		printGM( "note", "is already in whitelist")
+	end
+end
+
+util.AddNetworkString("promotePlayer")
+net.Receive("promotePlayer", function(len, ply)
+	local tmpTargetSteamID = net.ReadString()
+
+	local tmpTarget = nil
+	for k, v in pairs( player.GetAll() ) do
+		if v:SteamID() == tmpTargetSteamID then
+			tmpTarget = v
+		end
+	end
+
+	local tmpTableInstructorRole = ply:GetRolTab() --SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+
+	local tmpTargetChaTab = tmpTarget:GetChaTab()
+
+	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
+		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+		local tmpTableTargetPromoteRole = SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
+		local tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
+
+		tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
+		tmpTableTargetGroup = tmpTableTargetGroup[1]
+
+		for k, v in pairs(player.GetAll()) do
+			if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
+				addToWhitelist( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick() )
+				break
+			end
+		end
+
+		SetRole( tmpTarget, tmpTableTargetPromoteRole.uniqueID, true )
+
+		printGM( "note", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.uniqueID )
+	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
+		printGM( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
+	else
+		printGM( "error", "ELSE promote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
+	end
+end)
+
+util.AddNetworkString("demotePlayer")
+net.Receive( "demotePlayer", function( len, ply )
+	local tmpTargetSteamID = net.ReadString()
+
+	local tmpTarget = nil
+	for k, v in pairs( player.GetAll() ) do
+		if v:SteamID() == tmpTargetSteamID then
+			tmpTarget = v
+		end
+	end
+
+	local tmpTableInstructorRole = ply:GetRolTab()
+
+	local tmpTargetChaTab = tmpTarget:GetChaTab()
+
+	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
+		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+		local tmpTableTargetDemoteRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole )
+		local tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].int_groupID )
+
+		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
+		tmpTableTargetGroup = tmpTableTargetGroup[1]
+
+		removeFromWhitelist( tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID )
+		SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
+
+		printGM( "note", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.uniqueID )
+	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
+		printGM( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
+	else
+		printGM( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
 end)

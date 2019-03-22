@@ -284,6 +284,7 @@ countries["PL"] = "Poland"
 countries["PT"] = "Portugal"
 
 countries["RO"] = "Romania"
+countries["RS"] = "Serbia"
 countries["RU"] = "Russia"
 
 countries["SE"] = "Sweden"

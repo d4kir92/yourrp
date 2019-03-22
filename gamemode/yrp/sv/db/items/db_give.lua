@@ -39,7 +39,7 @@ end
 function Player:EquipWeapons()
 	local _char_id = self:CharID()
 
-	if _char_id != nil then
+	if wk(_char_id) then
 		local _char = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _char_id .. "'")
 
 		if wk(_char) then

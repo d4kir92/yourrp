@@ -318,6 +318,10 @@ function Player:GetLicenseNames()
 end
 
 --[[ Faction ]]--
+function Player:GetFactionUniqueID() -- Faction uniqueID
+	return self:YRPGetFactionUID() -- return number
+end
+
 function Player:GetFactionName() -- Faction Name
 	return self:YRPGetFactionName() -- return string
 end

@@ -396,7 +396,7 @@ function OpenSBS()
 		local allplys = player.GetAll()
 		local rplys = {}
 		local uplys = {}
-		for i, pl in pairs(allplys) do
+		for i, pl in SortedPairsByMemberValue(allplys, GetFactionUniqueID) do
 			pl["group"] = pl:GetGroupName()
 			if pl:GetGroupName() != "NO GROUP SELECTED" then
 				table.insert(rplys, pl)

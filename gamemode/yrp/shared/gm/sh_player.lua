@@ -529,6 +529,11 @@ function Player:YRPGetRoleName()
 	return _rn
 end
 
+function Player:YRPGetFactionUID()
+	local _uid = tonumber(self:GetNWString("factionUniqueID", "0"))
+	return _uid
+end
+
 function Player:YRPGetFactionName()
 	local _gn = self:GetNWString("factionName", "NO Faction SELECTED")
 	return _gn
