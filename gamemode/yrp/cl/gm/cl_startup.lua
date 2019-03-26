@@ -363,7 +363,8 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 				end
 			end
 
-			if string.find(string.lower(v.WorldModel), search:GetText()) or string.find(string.lower(v.PrintName), search:GetText()) or string.find(string.lower(v.ClassName), search:GetText()) then
+			local searchtext = search:GetText()
+			if string.find(string.lower(v.WorldModel), searchtext) or string.find(string.lower(v.PrintName), searchtext) or string.find(string.lower(v.ClassName), searchtext) then
 				site.count = site.count + 1
 
 				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
@@ -636,7 +637,8 @@ function OpenSingleSelector(table, closeF)
 			item.ClassName = item.ClassName or item.Class or ""
 			item.WorldModel = item.WorldModel or item.Model or ""
 
-			if string.find(string.lower(item.WorldModel or ""), search:GetText()) or string.find(string.lower(item.PrintName or ""), search:GetText()) or string.find(string.lower(item.ClassName or ""), search:GetText()) then
+			local searchtext = search:GetText()
+			if string.find(string.lower(item.WorldModel or ""), searchtext) or string.find(string.lower(item.PrintName or ""), searchtext) or string.find(string.lower(item.ClassName or ""), searchtext) then
 				site.count = site.count + 1
 
 				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
@@ -849,7 +851,8 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 				end
 			end
 
-			if string.find(string.lower(v.WorldModel), search:GetText()) or string.find(string.lower(v.PrintName), search:GetText()) or string.find(string.lower(v.ClassName), search:GetText()) then
+			local searchtext = search:GetText()
+			if string.find(string.lower(v.WorldModel), searchtext) or string.find(string.lower(v.PrintName), searchtext) or string.find(string.lower(v.ClassName), searchtext) then
 				site.count = site.count + 1
 
 				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
@@ -1127,7 +1130,9 @@ function openSingleSelector(table, closeF)
 			item.ClassName = item.ClassName or item.Class or ""
 			item.WorldModel = item.WorldModel or item.Model or ""
 
-			if string.find(string.lower(item.WorldModel or ""), search:GetText()) or string.find(string.lower(item.PrintName or ""), search:GetText()) or string.find(string.lower(item.ClassName or ""), search:GetText()) then
+			local searchtext = search:GetText()
+
+			if string.find(string.lower(item.WorldModel or ""), searchtext) or string.find(string.lower(item.PrintName or ""), searchtext) or string.find(string.lower(item.ClassName or ""), searchtext) then
 				site.count = site.count + 1
 
 				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then

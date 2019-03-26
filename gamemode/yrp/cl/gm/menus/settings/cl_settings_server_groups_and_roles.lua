@@ -119,7 +119,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 		net.Receive("settings_group_update_name", function(le)
-			if pa(gs) then
+			if pa(gs.gplist) then
 				local _uid = tonumber(net.ReadString())
 				local name = net.ReadString()
 				gs.gplist[_uid].text = name
@@ -1330,7 +1330,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								local py = 0
 
 								for i, v in pairs(cl_pms) do
-									if string.find(string.lower(v.PrintName), pmsel.keyword) or string.find(string.lower(v.ClassName), pmsel.keyword) or string.find(string.lower(v.WorldModel), pmsel.keyword) then
+									if string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
 										nothingfound = false
 										count = count + 1
 										if count > pmsel.nr and count <= pmsel.nr + perpage then
@@ -1397,8 +1397,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 									end
 								end
 							end
-							function pmsel:Search(keyword)
-								pmsel.keyword = keyword
+							function pmsel:Search(strsearch)
+								pmsel.strsearch = strsearch
 								pmsel.nr = 0
 								pmsel:RefreshPage()
 							end
@@ -1479,7 +1479,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								local py = 0
 
 								for i, v in pairs(cl_pms) do
-									if string.find(string.lower(v.PrintName), pmsel.keyword) or string.find(string.lower(v.ClassName), pmsel.keyword) or string.find(string.lower(v.WorldModel), pmsel.keyword) then
+									if string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
 										nothingfound = false
 										count = count + 1
 										if count > pmsel.nr and count <= pmsel.nr + perpage then
@@ -1546,8 +1546,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 									end
 								end
 							end
-							function pmsel:Search(keyword)
-								pmsel.keyword = keyword
+							function pmsel:Search(strsearch)
+								pmsel.strsearch = strsearch
 								pmsel.nr = 0
 								pmsel:RefreshPage()
 							end
@@ -1599,10 +1599,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 					end
 
-					function win:Search(keyword)
+					function win:Search(strsearch)
 						self.dpl:Clear()
 						for i, pm in pairs(pms) do
-							if string.find(string.lower(pm.string_name), keyword) or string.find(string.lower(pm.string_models), keyword) then
+							if string.find(string.lower(pm.string_name), strsearch) or string.find(string.lower(pm.string_models), strsearch) then
 								local line = createD("DButton", nil, ctr(800), ctr(200), 0, 0)
 								line.string_name = pm.string_name
 								line.models = string.Explode(",", pm.string_models)
@@ -1713,10 +1713,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winswep.dpl = createD("DPanelList", winswep, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
 				winswep.dpl:EnableVerticalScrollbar(true)
 				local height = ScrH() - ctr(100)
-				function winswep:Search(keyword)
+				function winswep:Search(strsearch)
 					self.dpl:Clear()
 					for i, v in pairs(cl_sweps) do
-						if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
+						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
 							local d_swep = createD("DButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
 							d_swep:SetText(v.PrintName)
 							function d_swep:DoClick()
@@ -1813,10 +1813,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
 				winndswep.dpl:EnableVerticalScrollbar(true)
 				local height = ScrH() - ctr(100)
-				function winndswep:Search(keyword)
+				function winndswep:Search(strsearch)
 					self.dpl:Clear()
 					for i, v in pairs(cl_ndsweps) do
-						if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
+						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
 							local d_ndswep = createD("DButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
 							d_ndswep:SetText(v.PrintName)
 							function d_ndswep:DoClick()
@@ -1913,32 +1913,37 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					winlicenses.dpl = createD("DPanelList", winlicenses, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
 					winlicenses.dpl:EnableVerticalScrollbar(true)
 					local height = ScrH() - ctr(100)
-					function winlicenses:Search(keyword)
+					function winlicenses:Search(strsearch)
 						self.dpl:Clear()
-						for i, v in pairs(cl_licenses) do
-							if string.find(string.lower(v.PrintName), keyword) or string.find(string.lower(v.ClassName), keyword) or string.find(string.lower(v.WorldModel), keyword) then
-								local d_licenses = createD("DButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
-								d_licenses:SetText(v.PrintName)
-								function d_licenses:DoClick()
-									net.Start("add_role_license")
-										net.WriteInt(role.uniqueID, 32)
-										net.WriteString(v.ClassName)
-									net.SendToServer()
-									winlicenses:Close()
-								end
-
-								if v.WorldModel != "" and v.WorldModel != nil then
-									d_licenses.model = createD("DModelPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
-									d_licenses.model:SetModel(v.WorldModel)
-								elseif v.WorldModel == "" then
-									d_licenses.model = createD("DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
-									function d_licenses.model:Paint(pw, ph)
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-										draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						if strsearch != nil then
+							for i, v in pairs(cl_licenses) do
+								v.PrintName = v.PrintName or ""
+								v.ClassName = v.ClassName or ""
+								v.WorldModel = v.WorldModel or ""
+								if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+									local d_licenses = createD("DButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
+									d_licenses:SetText(v.PrintName)
+									function d_licenses:DoClick()
+										net.Start("add_role_license")
+											net.WriteInt(role.uniqueID, 32)
+											net.WriteString(v.ClassName)
+										net.SendToServer()
+										winlicenses:Close()
 									end
-								end
 
-								winlicenses.dpl:AddItem(d_licenses)
+									if v.WorldModel != "" and v.WorldModel != nil then
+										d_licenses.model = createD("DModelPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
+										d_licenses.model:SetModel(v.WorldModel)
+									elseif v.WorldModel == "" then
+										d_licenses.model = createD("DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
+										function d_licenses.model:Paint(pw, ph)
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+											draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+									end
+
+									winlicenses.dpl:AddItem(d_licenses)
+								end
 							end
 						end
 					end
@@ -1946,7 +1951,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 					winlicenses.search = createD("DTextEntry", winlicenses, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
 					function winlicenses.search:OnChange()
-						winlicenses:Search(self:GetText())
+						local searchtext = self:GetText()
+						if searchtext != nil then
+							winlicenses:Search(searchtext)
+						end
 					end
 				end)
 				net.Start("get_all_licenses")
