@@ -66,7 +66,7 @@ end
 function Player:VisualEquipment(name, slot)
 	if self:HasCharacterSelected() then
 		local _charid = self:CharID()
-		if _charid != nil then
+		if wk(_charid) then
 			local _uid = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. _charid .. "'")
 			if wk(_uid) then
 				_uid = _uid[1][slot]

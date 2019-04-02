@@ -15,6 +15,15 @@ function retry_load_database()
 		timer.Remove("retryLoadDatabase")
 	end
 
+	local integrity_check = sql.Query("pragma integrity_check;")
+	printGM("db", "Integrity_check: " .. integrity_check)
+
+	local nodes = sql.Query("reindex nodes;")
+	printGM("db", "Nodes: " .. nodes)
+
+	local pristine = sql.Query("reindex pristine;")
+	printGM("db", "Pristine: " .. pristine)
+
 	timer.Create("retryLoadDatabase", 10, 1, function()
 		db_init_database()
 		timer.Remove("retryLoadDatabase")

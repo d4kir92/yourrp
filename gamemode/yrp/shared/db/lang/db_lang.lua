@@ -27,8 +27,8 @@ table.insert(yrp_shorts, "sv")
 table.insert(yrp_shorts, "th")
 table.insert(yrp_shorts, "tr")
 table.insert(yrp_shorts, "uk")
-table.insert(yrp_shorts, "zh_cn")
-table.insert(yrp_shorts, "zh_tw")
+table.insert(yrp_shorts, "zh-cn")
+table.insert(yrp_shorts, "zh-tw")
 
 function YRP.GetLanguageAutoInfo()
 	local auto = {}

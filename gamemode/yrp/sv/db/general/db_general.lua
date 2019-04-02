@@ -251,6 +251,7 @@ end
 
 
 function YRPCollectionID()
+	yrp_general.text_server_collectionid = yrp_general.text_server_collectionid or 0
 	return tonumber(yrp_general.text_server_collectionid)
 end
 

@@ -91,18 +91,20 @@ end
 function MoveUnusedRolesToDefault()
 	printGM("note", "Move unused roles to default group")
 	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
-	for i, role in pairs(allroles) do
-		-- If prerole not exists remove the prerole
-		local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
-		if !wk(prerole) then
-			SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
-		end
+	if wk(allroles) then
+		for i, role in pairs(allroles) do
+			-- If prerole not exists remove the prerole
+			local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
+			if !wk(prerole) then
+				SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+			end
 
-		RemoveUnusedGroups()
-		-- if group not exists move it to default group
-		local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
-		if !wk(group) then
-			SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+			RemoveUnusedGroups()
+			-- if group not exists move it to default group
+			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
+			if !wk(group) then
+				SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+			end
 		end
 	end
 end

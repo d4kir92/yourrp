@@ -840,35 +840,37 @@ net.Receive("get_design_settings", function(len)
 		GRP_IF:AddItem(if_design_bg)
 
 		net.Receive("get_interface_settings", function(len)
-			for i, ele in pairs(GRP_IF.cif) do
-				ele:Remove()
-			end
+			if pa(GRP_IF) then
+				for i, ele in pairs(GRP_IF.cif) do
+					ele:Remove()
+				end
 
-			local iftab = net.ReadTable()
-			for i, ift in pairs(iftab) do
-				if string.find(ift.name, "color") then
-					local _start, _end = string.find(ift.name, "_Y")
-					local name = "LID_" .. string.lower("color_" .. string.sub(ift.name, _start + 1))
+				local iftab = net.ReadTable()
+				for i, ift in pairs(iftab) do
+					if string.find(ift.name, "color") then
+						local _start, _end = string.find(ift.name, "_Y")
+						local name = "LID_" .. string.lower("color_" .. string.sub(ift.name, _start + 1))
 
-					local color = StringToColor(ift.value)
+						local color = StringToColor(ift.value)
 
-					local ycol = createD("DPanel", nil, ctr(200), ctr(50), 0, 0)
-					function ycol:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-						draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						local ycol = createD("DPanel", nil, ctr(200), ctr(50), 0, 0)
+						function ycol:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+							draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						end
+
+						ycol.cm = createD("YColorMenuButton", ycol, ctr(50), ctr(50), 0, 0)
+						ycol.cm:SetColor(color)
+						function ycol.cm:ColorChanged(col)
+							net.Start("update_interface_color")
+								net.WriteString(ift.name)
+								net.WriteString(ColorToString(col))
+							net.SendToServer()
+						end
+
+						table.insert(GRP_IF.cif, ycol)
+						GRP_IF:AddItem(ycol)
 					end
-
-					ycol.cm = createD("YColorMenuButton", ycol, ctr(50), ctr(50), 0, 0)
-					ycol.cm:SetColor(color)
-					function ycol.cm:ColorChanged(col)
-						net.Start("update_interface_color")
-							net.WriteString(ift.name)
-							net.WriteString(ColorToString(col))
-						net.SendToServer()
-					end
-
-					table.insert(GRP_IF.cif, ycol)
-					GRP_IF:AddItem(ycol)
 				end
 			end
 		end)

@@ -130,7 +130,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			if pa(gs) then
 				local _uid = tonumber(net.ReadString())
 				local color = net.ReadString()
-				gs.gplist[_uid].string_color = stc(color)
+				if isnumber(_uid) and gs.gplist[_uid] != nil then
+					gs.gplist[_uid].string_color = stc(color)
+				end
 			end
 		end)
 
