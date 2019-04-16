@@ -314,7 +314,11 @@ function Player:GetLicenseIDs()
 end
 
 function Player:GetLicenseNames()
-	return self:GetNWString("licenseNames", "failed")
+	return self:GetNWString("licenseNames", "")
+end
+
+function Player:GetRoleSweps()
+	return self:GetNWString("sweps", "")
 end
 
 --[[ Faction ]]--

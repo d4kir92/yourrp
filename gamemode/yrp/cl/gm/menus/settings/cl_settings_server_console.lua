@@ -32,7 +32,7 @@ end)
 
 net.Receive("get_console_line", function(len)
 	local str = net.ReadString()
-	if settingsWindow.window.site.console != nil then
+	if pa(settingsWindow) and pa(settingsWindow.window.site.console) then
 		settingsWindow.window.site.console:AppendText(str)
 		settingsWindow.window.site.console:AppendText("\n")
 	end

@@ -256,6 +256,7 @@ countries["EE"] = "Estonia"
 countries["EG"] = "Egypt"
 countries["ES"] = "Spain"
 
+countries["FI"] = "Finland"
 countries["FR"] = "France"
 
 countries["GB"] = "Great Britain"
