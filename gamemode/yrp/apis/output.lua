@@ -237,6 +237,7 @@ function printTab(table, name)
 end
 
 local countries = {}
+countries["AR"] = "Argentina"
 countries["AT"] = "Austria"
 countries["AU"] = "Australia"
 
@@ -270,6 +271,7 @@ countries["IT"] = "Italy"
 
 countries["JP"] = "Japan"
 
+countries["KG"] = "Kyrgyzstan"
 countries["KZ"] = "Kazakhstan"
 
 countries["LT"] = "Lithuania"

@@ -1036,7 +1036,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			salarytime.parent = ea.info
 			salarytime.header = "LID_timesalary"
 			salarytime.netstr = "update_role_int_salarytime"
-			salarytime.value = role.int_requireslevel
+			salarytime.value = role.int_salarytime
 			salarytime.uniqueID = role.uniqueID
 			salarytime.lforce = false
 			salarytime.min = 1
