@@ -135,62 +135,65 @@ end
 
 function Player:PutInBackpack(item)
 	printGM("db", "Player:PutInBackpack(item)")
-	local _slot = SQL_SELECT("yrp_characters", "eqbp", "uniqueID = '" .. self:CharID() .. "'")
-
-	if wk(_slot) then
-		_slot = _slot[1]["eqbp"]
-		_slot = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _slot .. "'")
+	local _char_id = self:CharID()
+	if wk(_char_id) then
+		local _slot = SQL_SELECT("yrp_characters", "eqbp", "uniqueID = '" .. _char_id .. "'")
 
 		if wk(_slot) then
-			_slot = _slot[1]
-			local _bp = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'")
+			_slot = _slot[1]["eqbp"]
+			_slot = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _slot .. "'")
 
-			if wk(_bp) then
-				_bp = _bp[1]
-				_slot = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _bp.intern_storageID .. "'")
+			if wk(_slot) then
+				_slot = _slot[1]
+				local _bp = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'")
 
-				if wk(_slot) then
-					_slot = _slot[1]
-					local _items = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'")
+				if wk(_bp) then
+					_bp = _bp[1]
+					_slot = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _bp.intern_storageID .. "'")
 
-					if _items != false then
-						local _inv = {}
+					if wk(_slot) then
+						_slot = _slot[1]
+						local _items = SQL_SELECT("yrp_items", "*", "storageID = '" .. _slot.uniqueID .. "'")
 
-						for y = 1, _slot.sizeh do
-							_inv[y] = {}
+						if _items != false then
+							local _inv = {}
 
-							for x = 1, _slot.sizew do
-								_inv[y][x] = {}
-								_inv[y][x].value = ""
+							for y = 1, _slot.sizeh do
+								_inv[y] = {}
+
+								for x = 1, _slot.sizew do
+									_inv[y][x] = {}
+									_inv[y][x].value = ""
+								end
 							end
-						end
 
-						if _items != nil then
-							for i, it in pairs(_items) do
-								for _y = it.posy, it.posy + it.sizeh - 1 do
-									for _x = it.posx, it.posx + it.sizew - 1 do
-										_inv[_y][_x].value = it.uniqueID
+							if _items != nil then
+								for i, it in pairs(_items) do
+									for _y = it.posy, it.posy + it.sizeh - 1 do
+										for _x = it.posx, it.posx + it.sizew - 1 do
+											_inv[_y][_x].value = it.uniqueID
+										end
 									end
 								end
 							end
-						end
 
-						local _bool, _x, _y = FindPlace(_inv, item.sizew, item.sizeh)
+							local _bool, _x, _y = FindPlace(_inv, item.sizew, item.sizeh)
 
-						if _bool then
-							item.posx = _x
-							item.posy = _y
-							item = CreateItem(item, _slot)
-							net.Start("moveitem_slot2")
-							net.WriteTable(_slot)
-							net.WriteTable(item)
-							net.Send(self)
-							self:UpdateBackpack()
-							self:ForceEquip(item.ClassName)
+							if _bool then
+								item.posx = _x
+								item.posy = _y
+								item = CreateItem(item, _slot)
+								net.Start("moveitem_slot2")
+								net.WriteTable(_slot)
+								net.WriteTable(item)
+								net.Send(self)
+								self:UpdateBackpack()
+								self:ForceEquip(item.ClassName)
 
-							return true
-						else
-							return false
+								return true
+							else
+								return false
+							end
 						end
 					end
 				end

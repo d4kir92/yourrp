@@ -1,5 +1,36 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+KEYBINDS = KEYBINDS or {}
+KEYBINDS["menu_character_selection"] = KEY_F2
+KEYBINDS["menu_role"] = KEY_F4
+KEYBINDS["menu_buy"] = KEY_F11
+KEYBINDS["menu_settings"] = KEY_F8
+KEYBINDS["menu_inventory"] = KEY_I
+KEYBINDS["menu_options_vehicle"] = KEY_B
+KEYBINDS["menu_options_door"] = KEY_B
+KEYBINDS["menu_appearance"] = KEY_O
+KEYBINDS["menu_emotes"] = KEY_N
+KEYBINDS["menu_laws"] = KEY_L
+
+KEYBINDS["view_switch"] = KEY_T
+KEYBINDS["view_zoom_out"] = KEY_PAD_PLUS
+KEYBINDS["view_zoom_in"] = KEY_PAD_MINUS
+KEYBINDS["view_up"] = KEY_PAD_8
+KEYBINDS["view_down"] = KEY_PAD_5
+KEYBINDS["view_right"] = KEY_PAD_6
+KEYBINDS["view_left"] = KEY_PAD_4
+KEYBINDS["view_spin_right"] = KEY_PAD_9
+KEYBINDS["view_spin_left"] = KEY_PAD_7
+
+KEYBINDS["toggle_mouse"] = KEY_F3
+KEYBINDS["toggle_map"] = KEY_M
+KEYBINDS["speak_next"] = KEY_PAGEUP
+KEYBINDS["speak_prev"] = KEY_PAGEDOWN
+KEYBINDS["drop_item"] = KEY_G
+
+KEYBINDS["sp_open"] = KEY_UP
+KEYBINDS["sp_close"] = KEY_DOWN
+
 local yrp_keybinds = {}
 yrp_keybinds.version = 2
 
@@ -11,7 +42,10 @@ end
 
 function set_keybind(name, value)
 	for n,v in pairs(yrp_keybinds) do
-		if tonumber(value) == tonumber(v) and name != n then
+		if n == "version" then
+			continue
+		end
+		if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
 			return false
 		end
 	end
@@ -53,34 +87,10 @@ function check_yrp_keybinds()
 	end
 
 	SQL_ADD_COLUMN(_db_name, "version", "INT DEFAULT " .. yrp_keybinds.version)
-	SQL_ADD_COLUMN(_db_name, "menu_character_selection", "INT DEFAULT " .. KEY_F2)
-	SQL_ADD_COLUMN(_db_name, "menu_role", "INT DEFAULT " .. KEY_F4)
-	SQL_ADD_COLUMN(_db_name, "menu_buy", "INT DEFAULT " .. KEY_F11)
-	SQL_ADD_COLUMN(_db_name, "menu_settings", "INT DEFAULT " .. KEY_F8)
-	SQL_ADD_COLUMN(_db_name, "toggle_mouse", "INT DEFAULT " .. KEY_F3)
-	SQL_ADD_COLUMN(_db_name, "toggle_map", "INT DEFAULT " .. KEY_M)
-	SQL_ADD_COLUMN(_db_name, "menu_inventory", "INT DEFAULT " .. KEY_I)
-	SQL_ADD_COLUMN(_db_name, "menu_options_vehicle", "INT DEFAULT " .. KEY_B)
-	SQL_ADD_COLUMN(_db_name, "menu_options_door", "INT DEFAULT " .. KEY_B)
-	SQL_ADD_COLUMN(_db_name, "speak_next", "INT DEFAULT " .. KEY_PAGEUP)
-	SQL_ADD_COLUMN(_db_name, "speak_prev", "INT DEFAULT " .. KEY_PAGEDOWN)
-	SQL_ADD_COLUMN(_db_name, "drop_item", "INT DEFAULT " .. KEY_G)
-	SQL_ADD_COLUMN(_db_name, "menu_appearance", "INT DEFAULT " .. KEY_O)
-	SQL_ADD_COLUMN(_db_name, "menu_emotes", "INT DEFAULT " .. KEY_N)
-	SQL_ADD_COLUMN(_db_name, "menu_laws", "INT DEFAULT " .. KEY_L)
-
-	SQL_ADD_COLUMN(_db_name, "view_switch", "INT DEFAULT " .. KEY_T)
-	SQL_ADD_COLUMN(_db_name, "view_zoom_out", "INT DEFAULT " .. KEY_PAD_PLUS)
-	SQL_ADD_COLUMN(_db_name, "view_zoom_in", "INT DEFAULT " .. KEY_PAD_MINUS)
-	SQL_ADD_COLUMN(_db_name, "view_up", "INT DEFAULT " .. KEY_PAD_8)
-	SQL_ADD_COLUMN(_db_name, "view_down", "INT DEFAULT " .. KEY_PAD_5)
-	SQL_ADD_COLUMN(_db_name, "view_right", "INT DEFAULT " .. KEY_PAD_6)
-	SQL_ADD_COLUMN(_db_name, "view_left", "INT DEFAULT " .. KEY_PAD_4)
-	SQL_ADD_COLUMN(_db_name, "view_spin_right", "INT DEFAULT " .. KEY_PAD_9)
-	SQL_ADD_COLUMN(_db_name, "view_spin_left", "INT DEFAULT " .. KEY_PAD_7)
-
-	SQL_ADD_COLUMN(_db_name, "sp_open", "INT DEFAULT " .. KEY_UP)
-	SQL_ADD_COLUMN(_db_name, "sp_close", "INT DEFAULT " .. KEY_DOWN)
+	-- Keybind Cols
+	for i, keybind in pairs(KEYBINDS) do
+		SQL_ADD_COLUMN(_db_name, i, "INT DEFAULT " .. keybind)
+	end
 
 
 	local _tmp = SQL_SELECT(_db_name, "*", "uniqueID = 1")
@@ -102,30 +112,7 @@ end
 check_yrp_keybinds()
 
 function ResetKeybinds()
-	set_keybind("menu_character_selection", KEY_F2)
-	set_keybind("menu_role", KEY_F4)
-	set_keybind("menu_buy", KEY_F11)
-	set_keybind("menu_settings", KEY_F8)
-	set_keybind("toggle_mouse", KEY_F3)
-	set_keybind("toggle_map", KEY_M)
-	set_keybind("menu_inventory", KEY_I)
-	set_keybind("menu_options_vehicle", KEY_B)
-	set_keybind("menu_options_door", KEY_B)
-	set_keybind("speak_next", KEY_PAGEUP)
-	set_keybind("speak_prev", KEY_PAGEDOWN)
-	set_keybind("drop_item", KEY_G)
-	set_keybind("menu_appearance", KEY_O)
-	set_keybind("menu_emotes", KEY_N)
-	set_keybind("menu_laws", KEY_L)
-	set_keybind("view_switch", KEY_T)
-	set_keybind("view_zoom_out", KEY_PAD_PLUS)
-	set_keybind("view_zoom_in", KEY_PAD_MINUS)
-	set_keybind("view_up", KEY_PAD_8)
-	set_keybind("view_down", KEY_PAD_5)
-	set_keybind("view_right", KEY_PAD_6)
-	set_keybind("view_left", KEY_PAD_4)
-	set_keybind("view_spin_right", KEY_PAD_9)
-	set_keybind("view_spin_left", KEY_PAD_7)
-	set_keybind("sp_open", KEY_UP)
-	set_keybind("sp_close", KEY_DOWN)
+	for i, keybind in pairs(KEYBINDS) do
+		set_keybind(i, keybind)
+	end
 end
