@@ -194,6 +194,7 @@ function SearchForCollectionID()
 end
 SearchForCollectionID()
 
+local leftedPlys = {}
 function GM:PlayerDisconnected(ply)
 	printGM("gm", "[PlayerDisconnected] " .. ply:YRPName())
 	save_clients("PlayerDisconnected")
@@ -204,6 +205,27 @@ function GM:PlayerDisconnected(ply)
 			ply:SetNWString("roleUniqueID", "1")
 			updateRoleUses(_rol_tab.uniqueID)
 		end
+	end
+
+	if YRPRemoveBuildingOwner() then
+		local entry = {}
+		entry.SteamID = ply:SteamID()
+		entry.timestamp = CurTime()
+		table.insert(leftedPlys, entry)
+		timer.Simple(YRPRemoveBuildingOwnerTime(), function()
+			local found = false
+			for i, e in pairs(leftedPlys) do
+				for j, p in pairs(player.GetAll()) do
+					if p:SteamID() == e.SteamID then
+						found = true
+					end
+				end
+				if !found then
+					BuildingRemoveOwner(e.SteamID)
+				end
+				table.RemoveByValue(leftedPlys, e)
+			end
+		end)
 	end
 end
 

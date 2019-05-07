@@ -391,27 +391,25 @@ function spawnItem(ply, item, duid)
 					_pos_end = ent:GetPos() + _angle:Forward() * dist
 					ent:SetPos(_pos_end)
 
-					if item.type ~= "vehicles" then
-						printGM("gm", "[spawnItem] Spawn Item")
+					printGM("gm", "[spawnItem] Spawn Item")
 
-						local tr2 = util.TraceHull({
-							start = _pos_end + Vector(0, 0, 128),
-							endpos = _pos_end - Vector(0, 0, 128),
-							maxs = maxs,
-							mins = mins,
-							filter = ent
-						})
+					local tr2 = util.TraceHull({
+						start = _pos_end + Vector(0, 0, 128),
+						endpos = _pos_end - Vector(0, 0, 128),
+						maxs = maxs,
+						mins = mins,
+						filter = ent
+					})
 
-						ClassName = ent:GetClass()
-						if ent.SpawnFunction ~= nil then
-							ent:SpawnFunction(ply, tr2, ent:GetClass())
-						else
-							ent:Spawn()
-						end
-
-						ent:Activate()
-						ent:SetPos(_pos_end)
+					ClassName = ent:GetClass()
+					if ent.SpawnFunction ~= nil then
+						ent:SpawnFunction(ply, tr2, ent:GetClass())
+					else
+						ent:Spawn()
 					end
+
+					ent:Activate()
+					ent:SetPos(_pos_end)
 
 					printGM("gm", "[spawnItem] Enough Space")
 

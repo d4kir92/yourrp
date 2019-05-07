@@ -690,7 +690,9 @@ net.Receive("wantRole", function(len, ply)
 		--Remove Sweps from old role
 		RemRolVals(ply)
 
-		ply:Kill()
+		if ply:GetNWBool("bool_players_die_on_role_switch", false) then
+			ply:Kill()
+		end
 
 		--New role
 		SetRole(ply, uniqueIDRole)

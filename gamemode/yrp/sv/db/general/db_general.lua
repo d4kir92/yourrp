@@ -57,6 +57,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_view_distance", "TEXT DEFAULT '200'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600'")
+
 --[[ Gamemode Systems ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger_health_regeneration", "INT DEFAULT 1")
@@ -73,6 +76,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_die_on_role_switch", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 
@@ -271,6 +275,16 @@ end
 
 function YRPServerRules()
 	return yrp_general.server_rules
+end
+
+function YRPRemoveBuildingOwner()
+	local result = yrp_general.bool_removebuildingowner or false
+	return tobool(result)
+end
+
+function YRPRemoveBuildingOwnerTime()
+	local result = yrp_general.text_removebuildingownertime or 60 * 10
+	return tonumber(result)
 end
 
 
@@ -578,7 +592,6 @@ net.Receive("update_bool_drop_items_on_death", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_drop_items_on_death", "bool_drop_items_on_death", b)
 end)
 
-
 util.AddNetworkString("update_bool_players_can_drop_weapons")
 net.Receive("update_bool_players_can_drop_weapons", function(len, ply)
 	local b = btn(net.ReadBool())
@@ -606,7 +619,17 @@ net.Receive("update_text_chat_advert", function(len, ply)
 	GeneralUpdateString(ply, "update_text_chat_advert", "text_chat_advert", str)
 end)
 
+util.AddNetworkString("update_bool_removebuildingowner")
+net.Receive("update_bool_removebuildingowner", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_removebuildingowner", "bool_removebuildingowner", b)
+end)
 
+util.AddNetworkString("update_text_removebuildingownertime")
+net.Receive("update_text_removebuildingownertime", function(len, ply)
+	local str = net.ReadString()
+	GeneralUpdateString(ply, "update_text_removebuildingownertime", "text_removebuildingownertime", str)
+end)
 
 --[[ GAMEMODE SYSTEMS ]]--
 util.AddNetworkString("update_bool_hunger")
@@ -691,6 +714,13 @@ net.Receive("update_bool_players_can_switch_role", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_players_can_switch_role", "bool_players_can_switch_role", b)
 end)
+
+util.AddNetworkString("update_bool_players_die_on_role_switch")
+net.Receive("update_bool_players_die_on_role_switch", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_players_die_on_role_switch", "bool_players_die_on_role_switch", b)
+end)
+
 
 
 util.AddNetworkString("update_bool_wanted_system")

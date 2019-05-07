@@ -344,9 +344,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE SETTINGS ]]--
-		local Gamemode_Settings = createD("DPanel", General_Slider, ctr(800), General_Slider:GetTall(), 0, 0)
+		local Gamemode_Settings = createD("DPanel", General_Slider, ctr(1000), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Gamemode_Settings)
-		local GAMEMODE_SETTINGS = createD("DYRPPanelPlus", Gamemode_Settings, ctr(800), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_SETTINGS = createD("DYRPPanelPlus", Gamemode_Settings, ctr(1000), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_SETTINGS:INITPanel("DPanelList")
 		GAMEMODE_SETTINGS:SetHeader("LID_gamemodesettings")
 		function GAMEMODE_SETTINGS.plus:Paint(pw, ph)
@@ -370,6 +370,9 @@ net.Receive("Connect_Settings_General", function(len)
 		text_view_distance.numberwang:SetMin(-200)
 		CreateHRLine(GAMEMODE_SETTINGS.plus)
 		local text_chat_advert = CreateTextBoxLine(GAMEMODE_SETTINGS.plus, GEN.text_chat_advert, "LID_channelname", "update_text_chat_advert")
+		CreateHRLine(GAMEMODE_SETTINGS.plus)
+		local bool_removebuildingowner = CreateCheckBoxLine(GAMEMODE_SETTINGS.plus, GEN.bool_removebuildingowner, "LID_removethebuildingowneratdisconnect", "update_bool_removebuildingowner")
+		local text_removebuildingownertime = CreateNumberWangLine(GAMEMODE_SETTINGS.plus, GEN.text_removebuildingownertime, "LID_timeremovethebuildingowneratdisconnect", "update_text_removebuildingownertime")
 
 
 
@@ -403,6 +406,7 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_wanted_system = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_wanted_system, "LID_wantedsystem", "update_bool_wanted_system")
 		CreateHRLine(GAMEMODE_SYSTEMS.plus)
 		local bool_players_can_switch_role = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_players_can_switch_role, "LID_playerscanswitchrole", "update_bool_players_can_switch_role")
+		local bool_players_die_on_role_switch = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_players_die_on_role_switch, "LID_playersdieonroleswitch", "update_bool_players_die_on_role_switch")
 		CreateHRLine(GAMEMODE_SYSTEMS.plus)
 		local bool_voice = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice, "LID_voicechat", "update_bool_voice")
 		local bool_voice_3d = CreateCheckBoxLineTab(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_3d, "LID_3dvoicechat", "update_bool_voice_3d")

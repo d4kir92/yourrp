@@ -253,6 +253,17 @@ local setup = false
 function KeyPress()
 	local ply = LocalPlayer()
 
+	ply.view_range = ply.view_range or 0
+	ply.view_range_view = ply.view_range_view or 0
+
+	ply.view_z = ply.view_z or 0
+	ply.view_x = ply.view_x or 0
+	ply.view_s = ply.view_s or 0
+
+	ply.view_z_c = ply.view_z_c or 0
+	ply.view_x_c = ply.view_x_c or 0
+	ply.view_s_c = ply.view_s_c or 0
+
 	if !setup then
 		setup = true
 		ply.view_range = 0
@@ -481,6 +492,17 @@ _drawViewmodel = false
 
 local oldang = Angle(0, 0, 0)
 local function yrpCalcView(ply, pos, angles, fov)
+	ply.view_range = ply.view_range or 0
+	ply.view_range_view = ply.view_range_view or 0
+
+	ply.view_z = ply.view_z or 0
+	ply.view_x = ply.view_x or 0
+	ply.view_s = ply.view_s or 0
+
+	ply.view_z_c = ply.view_z_c or 0
+	ply.view_x_c = ply.view_x_c or 0
+	ply.view_s_c = ply.view_s_c or 0
+
 	if ply:Alive() and !ply:IsPlayingTaunt() then
 
 		if ply:AFK() then
