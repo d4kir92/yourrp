@@ -142,6 +142,38 @@ function DrawEquipment(ply, name)
 	end
 end
 
+local oldlevel = nil
+hook.Add("HUDPaint", "yrp_hud_levelup", function()
+	local ply = LocalPlayer()
+
+	if oldlevel == nil then
+		ply:Level()
+	end
+	if oldlevel != ply:Level() then
+		oldlevel = ply:Level()
+
+		surface.PlaySound("garrysmod/content_downloaded.wav")
+
+		local levelup = createD("DFrame", nil, ctr(600), ctr(300), 0, 0)
+		levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - ctr(400))
+		levelup:ShowCloseButton(false)
+		levelup:SetTitle("")
+
+		function levelup:Paint(pw, ph)
+			draw.SimpleTextOutlined(YRP.lang_string("LID_levelup"), "HudHeader", pw / 2, ph / 2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			local tab = {}
+			tab["LEVEL"] = ply:Level()
+			draw.SimpleTextOutlined(YRP.lang_string("LID_levelx", tab), "HudBars", pw / 2, ph / 2 + ctr(80), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			if oldlevel != ply:Level() then
+				self:Remove()
+			end
+		end
+		levelup.timer = timer.Simple(10, function()
+			levelup:Remove()
+		end)
+	end
+end)
+
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 

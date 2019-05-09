@@ -103,6 +103,12 @@ net.Receive("update_ls_int_xp_per_revive", function(len, ply)
 	SQL_UPDATE(DATABASE_NAME, "int_xp_per_revive = '" .. yrp_levelsystem.int_xp_per_revive .. "'", "uniqueID = '1'")
 end)
 
+function Player:ClearXP()
+	local charid = self:CharID()
+	SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
+	self:SetNWString("int_xp", 0)
+end
+
 function Player:AddLevel(level)
 	local charid = self:CharID()
 	local curlvl = self:Level()
@@ -134,7 +140,7 @@ end
 
 function Player:SetLevel(level)
 	local curlvl = self:Level()
-
+	self:ClearXP()
 	self:AddLevel(level - curlvl)
 end
 

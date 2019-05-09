@@ -73,7 +73,6 @@ function RemoveUnusedGroups()
 	local all_groups = SQL_SELECT("yrp_ply_groups", "*", nil)
 	for i, group in pairs(all_groups) do
 		group.int_parentgroup = tonumber(group.int_parentgroup)
-		--print(group.int_parentgroup)
 		if group.int_parentgroup > 0 then
 			local parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
 			if parentgroup == nil then
@@ -1281,7 +1280,6 @@ net.Receive("openInteractMenu", function(len, ply)
 					local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
 					if wk(tmpTableSearch) then
 						local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
-						print("START", tmpSearchUniqueID)
 
 						local tmpCounter = 0
 						while (tmpSearch) do
@@ -1301,8 +1299,6 @@ net.Receive("openInteractMenu", function(len, ply)
 								if tmpSearchUniqueID == 0 then
 									tmpSearch = false
 								end
-							else
-								print("FAILED", tmpSearchUniqueID)
 							end
 							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
 

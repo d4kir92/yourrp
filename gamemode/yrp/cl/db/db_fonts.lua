@@ -22,7 +22,7 @@ end
 function createFont(_name, _font, _size, __weight, _outline, _shadow)
 	--printGM("db", "createFont: " .. _name)
 	--printGM("db", _font .. ", " .. _size .. ", " .. __weight)
-	_size = ctr(_size*2)
+	_size = ctr(_size * 2)
 	surface.CreateFont(_name, {
 		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 		extended = true,

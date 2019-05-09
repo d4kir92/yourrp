@@ -23,7 +23,7 @@ net.Receive("getRoleWhitelist", function(len)
 				if (w.uniqueID == v.roleID) then
 					for m, x in pairs(_tmpGroupList) do
 						if (x.uniqueID == w.int_groupID) then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, v.nick, x.string_name, w.roleID)
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, v.nick, x.string_name, w.string_name)
 							break
 						end
 					end
