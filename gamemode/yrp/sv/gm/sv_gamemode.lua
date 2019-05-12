@@ -813,3 +813,9 @@ end
 function GM:ShowHelp(ply)
 	return false
 end
+
+function GM:PostCleanupMap()
+	-- Rebuild Doors
+	YRP.msg("note", "RELOAD DOORS")
+	loadDoors()
+end

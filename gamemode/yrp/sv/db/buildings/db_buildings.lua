@@ -173,12 +173,21 @@ function loadDoors()
 		--end
 	end
 
+	local _allDoors = {}
+	for i, v in pairs(_allPropDoors) do
+		table.insert(_allDoors, v)
+	end
+	for i, v in pairs(_allFuncDoors) do
+		table.insert(_allDoors, v)
+	end
+	for i, v in pairs(_allFuncRDoors) do
+		table.insert(_allDoors, v)
+	end
 	local _tmpBuildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-	for k, v in pairs(_allPropDoors) do
+	for k, v in pairs(_allDoors) do
 		for l, w in pairs(_tmpBuildings) do
 			if tonumber(w.uniqueID) == tonumber(v:GetNWString("buildingID")) then
-				if w.ownerCharID != "" and !strEmpty(w.ownerCharID) then
-
+				if !strEmpty(w.ownerCharID) then
 					local _tmpRPName = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
 					if wk(_tmpRPName) then
 						_tmpRPName = _tmpRPName[1]
