@@ -84,6 +84,9 @@ function unlockVehicle(ply, ent, nr)
 		_tmpVehicleTable = _tmpVehicleTable[1]
 		if canVehicleLock(ply, _tmpVehicleTable) then
 			ent:Fire("Unlock")
+			if ent.UnLock != nil then
+				ent:UnLock()
+			end
 			return true
 		end
 	else
@@ -97,6 +100,9 @@ function lockVehicle(ply, ent, nr)
 		_tmpVehicleTable = _tmpVehicleTable[1]
 		if canVehicleLock(ply, _tmpVehicleTable) then
 			ent:Fire("Lock")
+			if ent.Lock != nil then
+				ent:Lock()
+			end
 			return true
 		end
 	else

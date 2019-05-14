@@ -79,7 +79,7 @@ function createShopItem(item, duid)
 		_i.description = createD("DTextEntry", _i, ctrb(_w / 2), ctrb(_h - 100), ctrb(_w / 2), ctrb(0))
 		_i.description:SetMultiline(true)
 		_i.description:SetEditable(false)
-		_i.description:SetText(item.description)
+		_i.description:SetText(SQL_STR_OUT(item.description))
 	end
 
 	if LocalPlayer():HasLicense(item.licenseID) then
@@ -329,12 +329,13 @@ net.Receive("shop_get_tabs", function(len)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100, 240))
 	end
 
-	_bm.tabs = createD("DYRPTabs", _bm.window, ScW() - ctrb(10 + 10), ctrb(60), ctrb(10), ctrb(50 + 10))
+	_bm.tabs = createD("DYRPTabs", _bm.window, ScW() - ctrb(10 + 10) - ctr(80 + 10), ctrb(60), ctrb(10), ctrb(50 + 10))
 	_bm.tabs:SetSelectedColor(Color(100, 100, 100, 240))
 	_bm.tabs:SetUnselectedColor(Color(0, 0, 0, 240))
 
 	for i, tab in pairs(_tabs) do
 		local _tab = _bm.tabs:AddTab(SQL_STR_OUT(tab.name), tab.uniqueID)
+
 		function _tab:GetCategories()
 			net.Receive("shop_get_categories", function(le)
 				if _bm.shop:IsValid() then
@@ -452,22 +453,15 @@ net.Receive("shop_get_tabs", function(len)
 	end
 
 	if LocalPlayer():HasAccess() then
-		_bm.addtab = createD("DButton", _bm.tabs, ctr(80), ctr(60), 0, 0)
+		_bm.addtab = createD("DButton", _bm.window, ctr(80), ctr(60), ScrW() - ctr(80 + 10), ctr(50 + 10))
 		_bm.addtab:SetText("")
-		_bm.addtab:SetPos(0, 0)
 		function _bm.addtab:Paint(pw, ph)
-			local _posx = self:GetPos()
-			local _x = math.Round(_bm.tabs.tabx, 0) + ctr(4)
-			if _x != _posx then
-				self:SetPos(_x, 0)
-			end
-
 			local _color = Color(0, 255, 0, 255)
 			if self:IsHovered() then
 				_color = Color(255, 255, 0, 255)
 			end
-			draw.RoundedBoxEx(ph/2, 0, 0, pw, ph, _color, true, true)
-			surfaceText("+", "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+			draw.RoundedBoxEx(ph / 2, 0, 0, pw, ph, _color, true, true)
+			surfaceText("+", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		function _bm.addtab:DoClick()
 			local _tmp = createD("DFrame", nil, ctr(420), ctr(50+10+100+10+50+10), 0, 0)
