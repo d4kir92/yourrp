@@ -97,7 +97,7 @@ function GetBackupCreateTime()
 			return 60
 		end
 	else
-		printGM("error", "GetBackupCreateTime FAILED")
+		printGM("note", "GetBackupCreateTime FAILED")
 		return 60
 	end
 end
