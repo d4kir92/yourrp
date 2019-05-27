@@ -184,29 +184,31 @@ function loadDoors()
 		table.insert(_allDoors, v)
 	end
 	local _tmpBuildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-	for k, v in pairs(_allDoors) do
-		for l, w in pairs(_tmpBuildings) do
-			if tonumber(w.uniqueID) == tonumber(v:GetNWString("buildingID")) then
-				if !strEmpty(w.ownerCharID) then
-					local _tmpRPName = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
-					if wk(_tmpRPName) then
-						_tmpRPName = _tmpRPName[1]
-						if wk(_tmpRPName.rpname) then
-							v:SetNWString("ownerRPName", _tmpRPName.rpname)
+	if wk(_tmpBuildings) then
+		for k, v in pairs(_allDoors) do
+			for l, w in pairs(_tmpBuildings) do
+				if tonumber(w.uniqueID) == tonumber(v:GetNWString("buildingID")) then
+					if !strEmpty(w.ownerCharID) then
+						local _tmpRPName = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
+						if wk(_tmpRPName) then
+							_tmpRPName = _tmpRPName[1]
+							if wk(_tmpRPName.rpname) then
+								v:SetNWString("ownerRPName", _tmpRPName.rpname)
+							end
 						end
-					end
-				else
-					if tonumber(w.groupID) != -1 then
-						local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. w.groupID)
-						if wk(_tmpGroupName) then
-							_tmpGroupName = _tmpGroupName[1]
+					else
+						if tonumber(w.groupID) != -1 then
+							local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. w.groupID)
 							if wk(_tmpGroupName) then
-								v:SetNWString("ownerGroup", tostring(_tmpGroupName.string_name))
+								_tmpGroupName = _tmpGroupName[1]
+								if wk(_tmpGroupName) then
+									v:SetNWString("ownerGroup", tostring(_tmpGroupName.string_name))
+								end
 							end
 						end
 					end
+					break
 				end
-				break
 			end
 		end
 	end

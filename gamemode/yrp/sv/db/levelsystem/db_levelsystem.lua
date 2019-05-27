@@ -47,10 +47,10 @@ end)
 local yrp_levelsystem = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(yrp_levelsystem) then
 	yrp_levelsystem = yrp_levelsystem[1]
-end
 
-function YRP.XPPerMinute()
-	return tonumber(yrp_levelsystem.int_xp_per_minute)
+	function YRP.XPPerMinute()
+		return tonumber(yrp_levelsystem.int_xp_per_minute)
+	end
 end
 
 util.AddNetworkString("update_ls_int_level_min")

@@ -9,7 +9,8 @@ yrp_db.version = 1
 yrp_db.loaded = false
 
 function retry_load_database()
-	printGM("db", "retry Load Database in 10sec")
+	printGM("db", "ERROR!!! >> retry Load Database in 10sec <<")
+	printGM("db", "ERROR!!! >> Your database is maybe broken! <<")
 
 	if timer.Exists("retryLoadDatabase") then
 		timer.Remove("retryLoadDatabase")

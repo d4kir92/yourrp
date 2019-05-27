@@ -226,9 +226,11 @@ timer.Create("ServerThink", 1, 0, function()
 	end
 
 	if _time % 60 == 0 then
-		local xp_per_minute = YRP.XPPerMinute()
-		for i, p in pairs(player.GetAll()) do
-			p:AddXP(xp_per_minute)
+		if YRP.XPPerMinute != nil then
+			local xp_per_minute = YRP.XPPerMinute()
+			for i, p in pairs(player.GetAll()) do
+				p:AddXP(xp_per_minute)
+			end
 		end
 	end
 

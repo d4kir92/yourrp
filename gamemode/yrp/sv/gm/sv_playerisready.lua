@@ -8,7 +8,9 @@ function PlayerLoadedGame(ply)
 	local OS_OSX = tab.isosx
 	local Country = tab.country
 
-	open_character_selection(ply)
+	if open_character_selection != nil then
+		open_character_selection(ply)
+	end
 
 	if OS_Windows then
 		ply:SetNWString("yrp_os", "windows")

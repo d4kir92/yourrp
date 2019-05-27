@@ -1,11 +1,14 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function CheckIfCollectionIDIsCorrect()
-	local collectionID = tonumber(YRPCollectionID())
-	if collectionID <= 0 then
-		printGM("note", "Current CollectionID is not correct.")
-		return false
+	if YRPCollectionID != nil then
+		local collectionID = tonumber(YRPCollectionID())
+		if collectionID <= 0 then
+			printGM("note", "Current CollectionID is not correct.")
+			return false
+		end
 	end
+	return false
 end
 
 local collections = {}
