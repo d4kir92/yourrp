@@ -184,18 +184,20 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	function SWEPS.button:Paint(pw, ph)
 		surfaceButton(self, pw, ph, YRP.lang_string("LID_change"))
 	end
-	function SWEPS.button:DoClick()
-		OpenSelector(GetSWEPsList(), ug.string_sweps, "selector_usergroup_string_sweps")
-		hook.Add("selector_usergroup_string_sweps", "selector_usergroup_string_sweps", function()
+	hook.Add("selector_usergroup_string_sweps", "selector_usergroup_string_sweps", function()
+		ply = LocalPlayer()
+		if ply.global_working != nil then
 			local string_sweps = ply.global_working
-
 			if wk(string_sweps) then
 				net.Start("usergroup_update_string_sweps")
 					net.WriteString(CURRENT_USERGROUP)
 					net.WriteString(string_sweps)
 				net.SendToServer()
 			end
-		end)
+		end
+	end)
+	function SWEPS.button:DoClick()
+		OpenSelector(GetSWEPsList(), ug.string_sweps, "selector_usergroup_string_sweps")
 	end
 
 	net.Receive("usergroup_update_string_sweps", function(len2)

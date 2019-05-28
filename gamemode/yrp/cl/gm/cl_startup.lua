@@ -546,11 +546,11 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	frame:MakePopup()
 end
 
-function OpenSingleSelector(table, closeF)
+function OpenSingleSelector(tab, closeF)
 	local site = {}
 	site.cur = 1
 	site.max = 1
-	site.count = #table
+	site.count = #tab
 	local _item = {}
 	_item.w = 740
 	_item.h = 370
@@ -632,7 +632,7 @@ function OpenSingleSelector(table, closeF)
 		site.count = 0
 		local count = 0
 
-		for k, item in SortedPairsByMemberValue(table, _cat, false) do
+		for k, item in SortedPairsByMemberValue(tab, _cat, false) do
 			item.PrintName = item.PrintName or item.Name or ""
 			item.ClassName = item.ClassName or item.Class or ""
 			item.WorldModel = item.WorldModel or item.Model or ""
@@ -742,11 +742,11 @@ function OpenSingleSelector(table, closeF)
 	frame:MakePopup()
 end
 
-function openSelector(table, dbTable, dbSets, dbWhile, closeF)
+function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 	local site = {}
 	site.cur = 1
 	site.max = 1
-	site.count = #table
+	site.count = #tab
 	local table2 = string.Explode(",", _globalWorking)
 	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
@@ -827,7 +827,7 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 		site.count = 0
 		local count = 0
 
-		for k, v in pairs(table) do
+		for k, v in pairs(tab) do
 			if v.WorldModel == nil then
 				v.WorldModel = v.Model or ""
 			end
@@ -1039,11 +1039,11 @@ function openSelector(table, dbTable, dbSets, dbWhile, closeF)
 	frame:MakePopup()
 end
 
-function openSingleSelector(table, closeF)
+function openSingleSelector(tab, closeF)
 	local site = {}
 	site.cur = 1
 	site.max = 1
-	site.count = #table
+	site.count = #tab
 	local _item = {}
 	_item.w = 740
 	_item.h = 370
@@ -1125,7 +1125,7 @@ function openSingleSelector(table, closeF)
 		site.count = 0
 		local count = 0
 
-		for k, item in SortedPairsByMemberValue(table, _cat, false) do
+		for k, item in SortedPairsByMemberValue(tab, _cat, false) do
 			item.PrintName = item.PrintName or item.Name or ""
 			item.ClassName = item.ClassName or item.Class or ""
 			item.WorldModel = item.WorldModel or item.Model or ""
