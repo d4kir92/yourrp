@@ -428,7 +428,7 @@ net.Receive("Connect_Settings_General", function(len)
 			surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
 		end
 
-		local text_character_background = CreateTextBoxLine(GAMEMODE_VISUALS.plus, GEN.text_character_background, "LID_Character_background", "update_text_character_background")
+		local text_character_background = CreateTextBoxLine(GAMEMODE_VISUALS.plus, GEN.text_character_background, "LID_character_background", "update_text_character_background")
 		local bool_yrp_chat = CreateCheckBoxLine(GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat, "LID_yourrpchat", "update_bool_yrp_chat")
 		local bool_yrp_chat_show_rolename = CreateCheckBoxLineTab(GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat_show_rolename, "LID_showrolename", "update_bool_yrp_chat_show_rolename")
 		local bool_yrp_chat_show_factionname = CreateCheckBoxLineTab(GAMEMODE_VISUALS.plus, GEN.bool_yrp_chat_show_factionname, "LID_showfactionname", "update_bool_yrp_chat_show_factionname")
