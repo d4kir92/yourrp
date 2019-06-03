@@ -440,10 +440,6 @@ function Player:GetBleedingPosition()
 	return self:GetNWVector("bleedingpos", Vector(0, 0, 0))
 end
 
-function Player:IsBleeding()
-	return self:GetNWBool("isbleeding", false)
-end
-
 function Player:canAfford(money)
 	if money == nil then return false end
 	if self:GetNWString("money") == nil then return false end

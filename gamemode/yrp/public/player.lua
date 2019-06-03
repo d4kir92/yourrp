@@ -107,6 +107,42 @@ function Player:GetMaxAbility()
 	return self:GetNWInt("GetMaxAbility", 100)
 end
 
+function Player:IsBleeding()
+	return self:GetNWBool("isbleeding", false)
+end
+
+function Player:IsCuffed()
+	return self:GetNWBool("cuffed")
+end
+
+function Player:IsHungry()
+	return (self:GetNWFloat("hunger", 100.0) < 20.0)
+end
+
+function Player:IsThirsty()
+	return (self:GetNWFloat("thirst", 100.0) < 20.0)
+end
+
+function Player:IsRightLegBroken()
+	return self:GetNWBool("broken_leg_right", false)
+end
+
+function Player:IsLeftLegBroken()
+	return self:GetNWBool("broken_leg_left", false)
+end
+
+function Player:IsRightArmBroken()
+	return self:GetNWBool("broken_arm_right", false)
+end
+
+function Player:IsLeftArmBroken()
+	return self:GetNWBool("broken_arm_left", false)
+end
+
+function Player:InJail()
+	return self:GetNWBool("injail", false)
+end
+
 function Player:Condition()
 	local _sttext = ""
 	if self:IsBleeding() then

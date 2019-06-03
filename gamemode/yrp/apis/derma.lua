@@ -852,7 +852,7 @@ end
 
 function createMDMenu(parent, w, h, x, y)
 	local tmp = createD("DFrame", parent, w, h, x, y)
-	tmp:ShowCloseButton(true)
+	tmp:ShowCloseButton(false)
 	tmp:SetDraggable(true)
 	tmp:SetTitle("")
 	tmp.sites = {}

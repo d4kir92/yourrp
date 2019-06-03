@@ -88,7 +88,7 @@ concommand.Add("yrp_open_settings", function(ply, cmd, args)
 end)
 
 function CloseSettings()
-	if settingsWindow.window ~= NULL and settingsWindow.window ~= nil then
+	if settingsWindow.window != NULL and settingsWindow.window != nil then
 		closeMenu()
 		settingsWindow.window:Remove()
 		settingsWindow.window = nil
@@ -98,7 +98,7 @@ end
 local _save_site = "open_client_character"
 
 function SaveLastSite()
-	if pa(settingsWindow) and settingsWindow.window.lastsite ~= "" then
+	if pa(settingsWindow) and settingsWindow.window.lastsite != "" then
 		_save_site = settingsWindow.window.lastsite
 	end
 end
@@ -244,7 +244,7 @@ function OpenSettings()
 	end
 
 	function exitButton:DoClick()
-		if settingsWindow.window ~= NULL then
+		if settingsWindow.window != nil then
 			settingsWindow.window:Remove()
 			settingsWindow.window = nil
 		end
@@ -269,7 +269,7 @@ function OpenSettings()
 	end
 
 	function burgerMenu:DoClick()
-		if settingsWindow.window ~= NULL then
+		if settingsWindow.window != NULL then
 			settingsWindow.window:openMenu()
 		end
 	end
