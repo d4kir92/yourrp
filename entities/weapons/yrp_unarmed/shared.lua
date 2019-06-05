@@ -8,7 +8,7 @@ SWEP.Category = "[YourRP] Custom"
 
 SWEP.PrintName = "Unarmed"
 SWEP.Language = "en"
-SWEP.LanguageString = "unarmed"
+SWEP.LanguageString = "LID_unarmed"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

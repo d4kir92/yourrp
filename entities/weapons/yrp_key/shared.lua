@@ -8,7 +8,7 @@ SWEP.Category = "[YourRP] Custom"
 
 SWEP.PrintName = "Key"
 SWEP.Language = "en"
-SWEP.LanguageString = "keys"
+SWEP.LanguageString = "LID_keys"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

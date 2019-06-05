@@ -75,6 +75,7 @@ function createShopItem(item, duid)
 		end
 	end
 
+	item.description = SQL_STR_OUT(item.description)
 	if item.description != "" then
 		_i.description = createD("DTextEntry", _i, ctrb(_w / 2), ctrb(_h - 100), ctrb(_w / 2), ctrb(0))
 		_i.description:SetMultiline(true)

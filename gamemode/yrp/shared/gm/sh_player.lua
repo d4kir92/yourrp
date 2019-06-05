@@ -275,6 +275,7 @@ if SERVER then
 		if timer.Exists(self:SteamID() .. "castduration") then
 			timer.Remove(self:SteamID() .. "castduration")
 		end
+		hook.Run("yrp_interupt_" .. self:GetNWString("castnet"))
 	end
 
 	function Player:StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
@@ -316,7 +317,7 @@ if SERVER then
 					if _c_pos.x + _space < _o_pos.x or _c_pos.x - _space > _o_pos.x or _c_pos.y + _space < _o_pos.y or _c_pos.y - _space > _o_pos.y then
 						self:InteruptCasting()
 					end
-					if self:GetPos():Distance(target:GetPos()) > self:GetNWFloat("castrange") then
+					if self:OBBCenter():Distance(target:OBBCenter()) > self:GetNWFloat("castrange") then
 						self:InteruptCasting()
 					end
 				end

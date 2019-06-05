@@ -8,7 +8,7 @@ SWEP.Category = "[YourRP] Weapon"
 
 SWEP.PrintName = "Handcuffs"
 SWEP.Language = "en"
-SWEP.LanguageString = "handcuffs"
+SWEP.LanguageString = "LID_handcuffs"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1

@@ -8,7 +8,7 @@ SWEP.Category = "[YourRP] Medical"
 
 SWEP.PrintName = "Bandage"
 SWEP.Language = "en"
-SWEP.LanguageString = "bandages"
+SWEP.LanguageString = "LID_bandages"
 
 SWEP.Slot = 5
 SWEP.SlotPos = 1
