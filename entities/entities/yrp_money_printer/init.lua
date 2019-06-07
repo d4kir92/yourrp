@@ -66,6 +66,19 @@ net.Receive("fuelUp", function(len, ply)
 	end
 end)
 
+util.AddNetworkString("repairMP")
+net.Receive("repairMP", function(len, ply)
+	local mp = net.ReadEntity()
+	local cost = mp:GetNWInt("hpCost")
+	if ply:canAfford(cost) and mp:GetNWInt("hp") < mp:GetNWInt("hpMax") then
+		ply:addMoney(-cost)
+		mp:SetNWInt("hp", mp:GetNWInt("hp") + 10)
+		if mp:GetNWInt("hp") > mp:GetNWInt("hpMax") then
+			mp:SetNWInt("hp", mp:GetNWInt("hpMax"))
+		end
+	end
+end)
+
 util.AddNetworkString("withdrawMoney")
 net.Receive("withdrawMoney", function(len, ply)
 	local mp = net.ReadEntity()
@@ -108,7 +121,7 @@ function ENT:Initialize()
 	self:SetNWInt("cpuCost", 400)
 
 	self:SetNWInt("cooler", 1)
-	self:SetNWInt("coolerMax", 4)
+	self:SetNWInt("coolerMax", 10)
 	self:SetNWInt("coolerCost", 80)
 
 	self:SetNWInt("printer", 1)
@@ -126,8 +139,40 @@ function ENT:Initialize()
 	self:SetNWInt("money", 0)
 	self:SetNWInt("moneyMax", 1000)
 
+	self:SetNWInt("hp", 100)
+	self:SetNWInt("hpMax", 100)
+	self:SetNWInt("hpCost", 20)
+
+	self:SetNWFloat("temp", 0.0)
+	self:SetNWFloat("tempMax", 90.0)
+
+	self.tick = CurTime()
 	self.delay = CurTime()
-	self.countdown = 10*self:GetNWInt("cpuMax") + 5*self:GetNWInt("coolerMax") + 2
+	self.countdown = 10 * self:GetNWInt("cpuMax") + 5 * self:GetNWInt("coolerMax") + 2
+end
+
+function ENT:OnTakeDamage( dmginfo )
+	if !self.m_bApplyingDamage then
+		self.m_bApplyingDamage = true
+		self:SetNWInt("hp", self:GetNWInt("hp", 0) - dmginfo:GetDamage())
+
+		if self:GetNWInt("hp", 0) <= 0 then
+			 self:Destroy()
+		end
+		self.m_bApplyingDamage = false
+	end
+end
+
+function ENT:Destroy()
+	local explosion = ents.Create("env_explosion")
+	explosion:SetKeyValue("spawnflags", 144)
+	explosion:SetKeyValue("iMagnitude", 15)  -- Damage
+	explosion:SetKeyValue("iRadiusOverride", 200) -- Radius
+	explosion:SetPos(self:GetPos()) -- inside money printer
+	explosion:Spawn()
+	explosion:Fire("explode", "", 0)
+
+	self:Remove()
 end
 
 function ENT:Use(activator, caller)
@@ -136,14 +181,54 @@ function ENT:Use(activator, caller)
 	net.Send(caller)
 end
 
+local heated = false
+local overheated = false
 function ENT:Think()
+	if CurTime() < self.tick then return end
+	self.tick = CurTime() + 0.1
+	if self:GetNWBool("working") then
+		if self:GetNWFloat("temp", 0.0) > 70.0 then
+			overheated = true
+		else
+			overheated = false
+		end
+		if self:GetNWInt("cooler", 0) > self:GetNWInt("cpu", 0) then
+			self:SetNWFloat("temp", self:GetNWFloat("temp", 0.0) - 0.1)
+			if self:GetNWFloat("temp", 0.0) < 34.0 and heated then
+				self:SetNWFloat("temp", 34.0)
+			end
+		elseif self:GetNWInt("cooler", 0) + 1 < self:GetNWInt("cpu", 0) then
+			self:SetNWFloat("temp", self:GetNWFloat("temp", 0.0) + 0.2)
+		else
+			if overheated then
+				self:SetNWFloat("temp", self:GetNWFloat("temp", 0.0) - 0.1)
+			else
+				self:SetNWFloat("temp", self:GetNWFloat("temp", 0.0) + 0.1)
+			end
+			if self:GetNWFloat("temp", 0.0) > 34.0 then
+				heated = true
+			end
+		end
+	else
+		self:SetNWFloat("temp", self:GetNWFloat("temp", 0.0) - 0.3)
+		heated = false
+	end
+	if self:GetNWFloat("temp", 0.0) < 0.0 then
+		self:SetNWFloat("temp", 0.0)
+	end
+
+	-- To much heat, explode
+	if self:GetNWFloat("temp", 0.0) > self:GetNWFloat("tempMax", 90.0) then
+		self:Destroy()
+	end
+
 	if self:GetNWInt("money") != nil then
 		if self:GetNWInt("fuel") > 0 and self:GetNWBool("working") then
 
 			self.workingsound = sound.Add({
 				name = "moneyprintersound",
 				channel = CHAN_AUTO,
-				volume = 1.0/self:GetNWInt("cooler"),
+				volume = 1.0 / self:GetNWInt("cooler"),
 				level = 60,
 				pitch = { 90, 110 },
 				sound = "ambient/machines/combine_terminal_idle1.wav"
@@ -152,7 +237,7 @@ function ENT:Think()
 			self:EmitSound("moneyprintersound") -- "ambient/machines/combine_terminal_idle1.wav", 75, 100, 1/self:GetNWInt("cooler"), CHAN_AUTO)
 
 			if CurTime() < self.delay then return end
-			local test = self.countdown - self:GetNWInt("cpu")*10 - self:GetNWInt("cooler")*5
+			local test = self.countdown - self:GetNWInt("cpu") * 10 - self:GetNWInt("cooler") * 5
 			self.delay = CurTime() + test
 
 			self:SetNWInt("fuel", self:GetNWInt("fuel") - 1)

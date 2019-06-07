@@ -41,12 +41,14 @@ function get_keybind(name)
 end
 
 function set_keybind(name, value)
-	for n,v in pairs(yrp_keybinds) do
-		if n == "version" then
-			continue
-		end
-		if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
-			return false
+	if value != 0 then
+		for n, v in pairs(yrp_keybinds) do
+			if n == "version" then
+				continue
+			end
+			if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
+				return false
+			end
 		end
 	end
 	SQL_UPDATE(_db_name, name .. " = " .. value, "uniqueID = " .. 1)

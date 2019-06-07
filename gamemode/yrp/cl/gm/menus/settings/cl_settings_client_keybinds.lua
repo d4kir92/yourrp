@@ -3,7 +3,7 @@ function createDKeybinder(parent, w, h, x, y, keybind)
 	local _tmp = createD("DBinder", parent, w, h, x, y)
 	_tmp:SetValue(get_keybind(keybind))
 	function _tmp:OnChange(num)
-		if !set_keybind(keybind, num) then
+		if !set_keybind(keybind, num) and num != 0 then
 			_tmp:SetSelectedNumber(get_keybind(keybind))
 			Derma_Message(YRP.lang_string("LID_hotkeyinuse") .. "!", YRP.lang_string("LID_error"), YRP.lang_string("LID_ok"))
 		end

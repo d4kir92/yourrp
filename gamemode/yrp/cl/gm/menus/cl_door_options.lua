@@ -22,6 +22,8 @@ net.Receive("getBuildingInfo", function(len)
 		local _building = net.ReadString()
 		local _tmpBuilding = net.ReadTable()
 		local owner = net.ReadString()
+		local header = net.ReadString()
+		local description = net.ReadString()
 
 		local ply = LocalPlayer()
 		if ply:GetNWBool("bool_building_system", false) then
@@ -29,7 +31,7 @@ net.Receive("getBuildingInfo", function(len)
 				if (_tmpBuilding.ownerCharID == "" or _tmpBuilding.ownerCharID == " ") and tonumber(_tmpBuilding.groupID) == -1 then
 					buyWindow(_building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door)
 				elseif _tmpBuilding.ownerCharID == ply:CharID() or _tmpBuilding.groupID != -1 then
-					optionWindow(_building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door, owner)
+					optionWindow(_building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door, owner, header, description)
 				else
 					printGM("note", "fail")
 				end
@@ -213,7 +215,7 @@ function buyWindow(buildingID, name, price, door)
 	yrp_door.window:MakePopup()
 end
 
-function optionWindow(buildingID, name, price, door, owner)
+function optionWindow(buildingID, name, price, door, owner, header, description)
 	openMenu()
 	local ply = LocalPlayer()
 	local _buildingID = buildingID
@@ -270,6 +272,28 @@ function optionWindow(buildingID, name, price, door, owner)
 		function _ButtonSell:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. ply:GetNWString("text_money_pre").. _price/2 .. ply:GetNWString("text_money_pos") .. ")")
 		end
+	end
+
+	local _header = createVGUI("DTextEntry", yrp_door.window, 530, 50, 550, 200)
+	_header:SetText(header)
+	function _header:OnChange()
+		local _newName = _header:GetText()
+		_name = _newName
+		net.Start("changeBuildingHeader")
+			net.WriteString(_buildingID)
+			net.WriteString(_newName)
+		net.SendToServer()
+	end
+
+	local _description = createVGUI("DTextEntry", yrp_door.window, 530, 50, 550, 260)
+	_description:SetText(description)
+	function _description:OnChange()
+		local _newName = _description:GetText()
+		_name = _newName
+		net.Start("changeBuildingDescription")
+			net.WriteString(_buildingID)
+			net.WriteString(_newName)
+		net.SendToServer()
 	end
 
 	if ply:HasAccess() then

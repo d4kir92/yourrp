@@ -36,6 +36,17 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 	end
 end
 
+function tempInfo(mp, parent, w, h, x, y)
+	local tmp = createD("DPanel", parent, w, h, x, y)
+	function tmp:Paint(pw, ph)
+		draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
+
+		draw.RoundedBox(0, 0, 0, (mp:GetNWFloat("temp", 0.0) / mp:GetNWFloat("tempMax", 0.0)) * ctr(360) , ph, Color(0, 0, 255, 200))
+
+		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetNWFloat("temp", 0.0)),2) .. " °C", "HudBars", ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+end
+
 local upgradeframe = nil
 net.Receive("getMoneyPrintMenu", function(len)
 	local ply = LocalPlayer()
@@ -43,7 +54,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 	local mp = net.ReadEntity()
 
 	if upgradeframe == nil then
-		upgradeframe = createD("DFrame", nil, ctr(600), ctr(600), 0, 0)
+		upgradeframe = createD("DFrame", nil, ctr(600), ctr(900), 0, 0)
 		upgradeframe:SetTitle("")
 		upgradeframe:ShowCloseButton(false)
 		function upgradeframe:Remove()
@@ -68,10 +79,16 @@ net.Receive("getMoneyPrintMenu", function(len)
 		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 210), "storage", "upgradeStorage",YRP.lang_string("LID_storage"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Fuel
-		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 280), "fuel", "fuelUP",YRP.lang_string("LID_fuel"),YRP.lang_string("LID_fuelup"),YRP.lang_string("LID_full"))
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 380), "fuel", "fuelUP",YRP.lang_string("LID_fuel"),YRP.lang_string("LID_fuelup"),YRP.lang_string("LID_full"))
+
+		--HP
+		moneyPrinterButton(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 450), "hp", "repairMP", YRP.lang_string("LID_health"), YRP.lang_string("LID_repair"), "")
+
+		--Temperatur
+		tempInfo(mp, upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 520))
 
 		--gather
-		local moneyInfo = createD("DPanel", upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 390))
+		local moneyInfo = createD("DPanel", upgradeframe, ctr(580), ctr(60), ctr(10), ctr(60 + 690))
 		function moneyInfo:Paint(pw, ph)
 			draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
@@ -98,7 +115,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 		end
 
 		--Working
-		local workingB = createD("DButton", upgradeframe, ctr(360), ctr(60), ctr(10), ctr(520))
+		local workingB = createD("DButton", upgradeframe, ctr(360), ctr(60), ctr(10), ctr(820))
 		workingB:SetText("")
 		function workingB:Paint(pw, ph)
 			local working =YRP.lang_string("LID_off")
@@ -107,7 +124,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 			end
 			if self:IsHovered() then
 				draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_toggle"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_toggle"), "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			else
 				if mp:GetNWBool("working") then
 					draw.RoundedBox(ctr(10), 0, 0, pw, ph, Color(0, 255, 0, 200))
@@ -124,7 +141,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 		end
 
 		--CLOSE
-		local closeMenu = createD("DButton", upgradeframe, ctr(200), ctr(60), ctr(600-200-10), ctr(600-60-20))
+		local closeMenu = createD("DButton", upgradeframe, ctr(200), ctr(60), ctr(600-200-10), ctr(900-60-20))
 		closeMenu:SetText("")
 		function closeMenu:Paint(pw, ph)
 			if self:IsHovered() then

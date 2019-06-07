@@ -16,7 +16,8 @@ SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT -1")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
-
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_header", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
 --db_drop_table(DATABASE_NAME_BUILDINGS)
 --db_is_empty(DATABASE_NAME_BUILDINGS)
 
@@ -127,6 +128,7 @@ function searchForDoors()
 	return #_allPropDoors+#_allFuncDoors+#_allFuncRDoors
 end
 
+util.AddNetworkString("loaded_doors")
 function loadDoors()
 	printGM("db", "[Buildings] Setting up Doors!")
 	local _allPropDoors = ents.FindByClass("prop_door_rotating")
@@ -207,6 +209,14 @@ function loadDoors()
 							end
 						end
 					end
+
+					if !strEmpty(w.text_header) then
+						v:SetNWString("text_header", w.text_header)
+					end
+					if !strEmpty(w.text_description) then
+						v:SetNWString("text_description", w.text_description)
+					end
+
 					break
 				end
 			end
@@ -214,6 +224,9 @@ function loadDoors()
 	end
 
 	printGM("db", "[Buildings] Map Doors are now available!")
+	SetGlobalBool("loaded_doors", true)
+	net.Start("loaded_doors")
+	net.Broadcast()
 end
 
 function check_map_doors()
@@ -241,6 +254,9 @@ util.AddNetworkString("getBuildings")
 util.AddNetworkString("changeBuildingName")
 util.AddNetworkString("changeBuildingID")
 util.AddNetworkString("changeBuildingPrice")
+
+util.AddNetworkString("changeBuildingHeader")
+util.AddNetworkString("changeBuildingDescription")
 
 util.AddNetworkString("getBuildingGroups")
 
@@ -540,6 +556,53 @@ net.Receive("changeBuildingName", function(len, ply)
 	end
 end)
 
+function ChangeBuildingString(uid, net_str, new_str)
+	local _allPropDoors = ents.FindByClass("prop_door_rotating")
+	local _allFuncDoors = ents.FindByClass("func_door")
+	local _allFuncRDoors = ents.FindByClass("func_door_rotating")
+
+	local _allDoors = {}
+	for i, v in pairs(_allPropDoors) do
+		table.insert(_allDoors, v)
+	end
+	for i, v in pairs(_allFuncDoors) do
+		table.insert(_allDoors, v)
+	end
+	for i, v in pairs(_allFuncRDoors) do
+		table.insert(_allDoors, v)
+	end
+
+	for i, v in pairs(_allDoors) do
+		if uid == tonumber(v:GetNWString("buildingID")) then
+			v:SetNWString(net_str, new_str)
+		end
+	end
+end
+
+net.Receive("changeBuildingHeader", function(len, ply)
+	local _tmpBuildingID = net.ReadString()
+	local _tmpNewName = net.ReadString()
+	if wk(_tmpBuildingID) then
+		printGM("note", "header Building: " .. _tmpNewName)
+		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "text_header = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
+		ChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
+	else
+		printGM("note", "changeBuildingName failed")
+	end
+end)
+
+net.Receive("changeBuildingDescription", function(len, ply)
+	local _tmpBuildingID = net.ReadString()
+	local _tmpNewName = net.ReadString()
+	if wk(_tmpBuildingID) then
+		printGM("note", "description Building: " .. _tmpNewName)
+		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "text_description = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
+		ChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
+	else
+		printGM("note", "changeBuildingName failed")
+	end
+end)
+
 net.Receive("getBuildings", function(len, ply)
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	for k, building in pairs(_tmpTable) do
@@ -583,6 +646,8 @@ net.Receive("getBuildingInfo", function(len, ply)
 						net.WriteString(_tmpBuildingID)
 						net.WriteTable(_tmpTable)
 						net.WriteString(owner)
+						net.WriteString(_tmpTable.text_header)
+						net.WriteString(_tmpTable.text_description)
 					net.Send(ply)
 				end
 			end

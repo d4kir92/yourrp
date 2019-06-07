@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 81 --do NOT change this!
-GM.VersionCanary = 166 --do NOT change this!
+GM.VersionBeta = 82 --do NOT change this!
+GM.VersionCanary = 167 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -116,7 +116,30 @@ concommand.Add("yrp_maps", function(ply, cmd, args)
 	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
 	for i, map in pairs(allmaps) do
 		local mapname = string.Replace(map, ".bsp", "")
-		printGM("gm", mapname)
+		printGM("gm", i .. "\t" .. mapname)
+	end
+	hr_pos("gm")
+end)
+
+concommand.Add("yrp_map", function(ply, cmd, args)
+	hr_pre("gm")
+	printGM("gm", "[Changelevel]")
+	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
+	for i, map in pairs(allmaps) do
+		local mapname = string.Replace(map, ".bsp", "")
+		allmaps[i] = mapname
+	end
+	local id = tonumber(args[1])
+	local map = allmaps[id]
+	if map != nil then
+		if SERVER then
+			printGM("gm", "Changelevel to " .. map)
+			RunConsoleCommand("changelevel", map)
+		else
+			printGM("gm", "ONLY AVAILABLE ON SERVER")
+		end
+	else
+		printGM("gm", "ID OUT OF RANGE")
 	end
 	hr_pos("gm")
 end)
@@ -163,6 +186,8 @@ function PrintHelp()
 	printGM("note", "	Put a player with the RPNAME to the UserGroup")
 	printGM("note", "yrp_maps")
 	printGM("note", "	Shows all maps on server")
+	printGM("note", "yrp_map ID")
+	printGM("note", "	Changelevel to map ID")
 	printGM("note", "yrp_collection / yrp_collectionid")
 	printGM("note", "	Shows servers collectionid")
 	hr_pos("note")
