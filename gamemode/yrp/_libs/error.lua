@@ -274,7 +274,7 @@ function send_error(realm, str)
 					end
 				end, function(failed)
 					if tostring(failed) != "unsuccessful" then
-						printGM("error", "ERROR1-API: " .. tostring(failed))
+						printGM("error", "ERROR1: " .. tostring(failed))
 					end
 				end)
 			else
@@ -284,7 +284,7 @@ function send_error(realm, str)
 					end
 				end, function(failed)
 					if tostring(failed) != "unsuccessful" then
-						printGM("error", "ERROR2-API: " .. tostring(failed))
+						printGM("error", "ERROR2: " .. tostring(failed))
 					end
 				end)
 			end

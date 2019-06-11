@@ -28,10 +28,6 @@ function Player:YRPGetLanguageShort()
 	return self:GetNWString("client_lang", YRP.lang_string("LID_none"))
 end
 
-function Player:GetBackpack()
-	return self:GetNWEntity("backpack")
-end
-
 function Player:HasAccess()
 	return self:GetNWBool("bool_adminaccess", false)
 end

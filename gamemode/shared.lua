@@ -24,7 +24,7 @@ function add_luas(string)
 	include(string)
 end
 
-add_luas("yrp/apis/api_includes.lua")
+add_luas("yrp/_libs/_libs_includes.lua")
 
 add_luas("yrp/shared/sh_includes.lua")
 
