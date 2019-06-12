@@ -91,6 +91,8 @@ function Player:GetBackpack()
 		newbp.cols["text_steamid"] = self:SteamID()
 
 		SQL.INSERT_INTO(newbp)
+
+		return self:GetBackpack()
 	end
 end
 

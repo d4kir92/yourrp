@@ -77,6 +77,7 @@ function DefaultHUDSettings(reset)
 	HP.bools.PERC = 1
 	HP.bools.BACK = 1
 	HP.bools.BORD = 1
+	HP.bools.EXTR = 1
 	HP.colors = {}
 	HP.colors.TE = "255, 255, 255, 255"
 	HP.colors.TB = "0, 0, 0, 255"
@@ -104,6 +105,7 @@ function DefaultHUDSettings(reset)
 	AR.bools.PERC = 1
 	AR.bools.BACK = 1
 	AR.bools.BORD = 1
+	AR.bools.EXTR = 1
 	AR.colors = {}
 	AR.colors.TE = "255, 255, 255, 255"
 	AR.colors.TB = "0, 0, 0, 255"
@@ -131,6 +133,7 @@ function DefaultHUDSettings(reset)
 	XP.bools.PERC = 1
 	XP.bools.BACK = 1
 	XP.bools.BORD = 1
+	XP.bools.EXTR = 1
 	XP.colors = {}
 	XP.colors.TE = "255, 255, 255, 255"
 	XP.colors.TB = "0, 0, 0, 255"
@@ -158,6 +161,7 @@ function DefaultHUDSettings(reset)
 	MO.bools.PERC = 1
 	MO.bools.BACK = 1
 	MO.bools.BORD = 1
+	MO.bools.EXTR = 1
 	MO.colors = {}
 	MO.colors.TE = "255, 255, 255, 255"
 	MO.colors.TB = "0, 0, 0, 255"
@@ -185,6 +189,7 @@ function DefaultHUDSettings(reset)
 	ST.bools.PERC = 1
 	ST.bools.BACK = 1
 	ST.bools.BORD = 1
+	ST.bools.EXTR = 1
 	ST.colors = {}
 	ST.colors.TE = "255, 255, 255, 255"
 	ST.colors.TB = "0, 0, 0, 255"
@@ -212,6 +217,7 @@ function DefaultHUDSettings(reset)
 	CH.bools.PERC = 1
 	CH.bools.BACK = 1
 	CH.bools.BORD = 1
+	CH.bools.EXTR = 1
 	CH.colors = {}
 	CH.colors.TE = "255, 255, 255, 255"
 	CH.colors.TB = "0, 0, 0, 255"
@@ -239,6 +245,7 @@ function DefaultHUDSettings(reset)
 	HU.bools.PERC = 1
 	HU.bools.BACK = 1
 	HU.bools.BORD = 1
+	HU.bools.EXTR = 1
 	HU.colors = {}
 	HU.colors.TE = "255, 255, 255, 255"
 	HU.colors.TB = "0, 0, 0, 255"
@@ -266,6 +273,7 @@ function DefaultHUDSettings(reset)
 	TH.bools.PERC = 1
 	TH.bools.BACK = 1
 	TH.bools.BORD = 1
+	TH.bools.EXTR = 1
 	TH.colors = {}
 	TH.colors.TE = "255, 255, 255, 255"
 	TH.colors.TB = "0, 0, 0, 255"
@@ -293,6 +301,7 @@ function DefaultHUDSettings(reset)
 	CA.bools.PERC = 1
 	CA.bools.BACK = 1
 	CA.bools.BORD = 1
+	CA.bools.EXTR = 1
 	CA.colors = {}
 	CA.colors.TE = "255, 255, 255, 255"
 	CA.colors.TB = "0, 0, 0, 255"
@@ -320,6 +329,7 @@ function DefaultHUDSettings(reset)
 	AB.bools.PERC = 1
 	AB.bools.BACK = 1
 	AB.bools.BORD = 1
+	AB.bools.EXTR = 1
 	AB.colors = {}
 	AB.colors.TE = "255, 255, 255, 255"
 	AB.colors.TB = "0, 0, 0, 255"
@@ -347,6 +357,7 @@ function DefaultHUDSettings(reset)
 	WP.bools.PERC = 1
 	WP.bools.BACK = 1
 	WP.bools.BORD = 1
+	WP.bools.EXTR = 1
 	WP.colors = {}
 	WP.colors.TE = "255, 255, 255, 255"
 	WP.colors.TB = "0, 0, 0, 255"
@@ -374,6 +385,7 @@ function DefaultHUDSettings(reset)
 	WS.bools.PERC = 1
 	WS.bools.BACK = 1
 	WS.bools.BORD = 1
+	WS.bools.EXTR = 1
 	WS.colors = {}
 	WS.colors.TE = "255, 255, 255, 255"
 	WS.colors.TB = "0, 0, 0, 255"
@@ -401,6 +413,7 @@ function DefaultHUDSettings(reset)
 	WN.bools.PERC = 1
 	WN.bools.BACK = 1
 	WN.bools.BORD = 1
+	WN.bools.EXTR = 1
 	WN.colors = {}
 	WN.colors.TE = "255, 255, 255, 255"
 	WN.colors.TB = "0, 0, 0, 255"
@@ -428,6 +441,7 @@ function DefaultHUDSettings(reset)
 	MI.bools.PERC = 1
 	MI.bools.BACK = 1
 	MI.bools.BORD = 1
+	MI.bools.EXTR = 1
 	MI.colors = {}
 	MI.colors.TE = "255, 255, 255, 255"
 	MI.colors.TB = "0, 0, 0, 255"
@@ -455,6 +469,7 @@ function DefaultHUDSettings(reset)
 	BA.bools.PERC = 1
 	BA.bools.BACK = 1
 	BA.bools.BORD = 1
+	BA.bools.EXTR = 1
 	BA.colors = {}
 	BA.colors.TE = "255, 255, 255, 255"
 	BA.colors.TB = "0, 0, 0, 255"
@@ -482,6 +497,7 @@ function DefaultHUDSettings(reset)
 	CON.bools.PERC = 1
 	CON.bools.BACK = 1
 	CON.bools.BORD = 1
+	CON.bools.EXTR = 1
 	CON.colors = {}
 	CON.colors.TE = "255, 255, 255, 255"
 	CON.colors.TB = "0, 0, 0, 255"
@@ -509,6 +525,7 @@ function DefaultHUDSettings(reset)
 	PE.bools.PERC = 1
 	PE.bools.BACK = 0
 	PE.bools.BORD = 0
+	PE.bools.EXTR = 1
 	PE.colors = {}
 	PE.colors.TE = "255, 255, 255, 255"
 	PE.colors.TB = "0, 0, 0, 255"
@@ -536,6 +553,7 @@ function DefaultHUDSettings(reset)
 	NE.bools.PERC = 1
 	NE.bools.BACK = 0
 	NE.bools.BORD = 0
+	NE.bools.EXTR = 1
 	NE.colors = {}
 	NE.colors.TE = "255, 255, 255, 255"
 	NE.colors.TB = "0, 0, 0, 255"
@@ -563,6 +581,7 @@ function DefaultHUDSettings(reset)
 	COM.bools.PERC = 1
 	COM.bools.BACK = 1
 	COM.bools.BORD = 0
+	COM.bools.EXTR = 1
 	COM.colors = {}
 	COM.colors.TE = "255, 255, 255, 255"
 	COM.colors.TB = "0, 0, 0, 255"
@@ -590,6 +609,7 @@ function DefaultHUDSettings(reset)
 	LO.bools.PERC = 1
 	LO.bools.BACK = 1
 	LO.bools.BORD = 0
+	LO.bools.EXTR = 1
 	LO.colors = {}
 	LO.colors.TE = "255, 0, 0, 255"
 	LO.colors.TB = "0, 0, 0, 255"
@@ -601,6 +621,64 @@ function DefaultHUDSettings(reset)
 	LO.ints.AY = 1
 	LO.ints.TS = 30
 	AddHUDElement(LO, reset)
+
+	local NA = {}
+	NA.element = "NA"
+	NA.floats = {}
+	NA.floats.POSI_X = 0.125
+	NA.floats.POSI_Y = 0.9074074074074074
+	NA.floats.SIZE_W = 0.1145833333333333
+	NA.floats.SIZE_H = 0.027777777984738
+	NA.bools = {}
+	NA.bools.VISI = 0
+	NA.bools.ROUN = 0
+	NA.bools.ICON = 1
+	NA.bools.TEXT = 1
+	NA.bools.PERC = 1
+	NA.bools.BACK = 1
+	NA.bools.BORD = 1
+	NA.bools.EXTR = 1
+	NA.colors = {}
+	NA.colors.TE = "255, 255, 255, 255"
+	NA.colors.TB = "0, 0, 0, 255"
+	NA.colors.BG = "0, 0, 0, 200"
+	NA.colors.BA = "0, 0, 0, 200"
+	NA.colors.BR = "0, 0, 0, 255"
+	NA.ints = {}
+	NA.ints.AX = 1
+	NA.ints.AY = 1
+	NA.ints.TS = 18
+	AddHUDElement(NA, reset)
+
+	for i = 1, 10 do
+		local BOX = {}
+		BOX.element = "BOX" .. i
+		BOX.floats = {}
+		BOX.floats.POSI_X = 0
+		BOX.floats.POSI_Y = 0
+		BOX.floats.SIZE_W = 0.26
+		BOX.floats.SIZE_H = 0.26
+		BOX.bools = {}
+		BOX.bools.VISI = 0
+		BOX.bools.ROUN = 0
+		BOX.bools.ICON = 1
+		BOX.bools.TEXT = 1
+		BOX.bools.PERC = 1
+		BOX.bools.BACK = 1
+		BOX.bools.BORD = 1
+		BOX.bools.EXTR = 1
+		BOX.colors = {}
+		BOX.colors.TE = "255, 255, 255, 255"
+		BOX.colors.TB = "255, 255, 255, 255"
+		BOX.colors.BG = "255, 255, 255, 255"
+		BOX.colors.BA = "255, 255, 255, 255"
+		BOX.colors.BR = "255, 255, 255, 255"
+		BOX.ints = {}
+		BOX.ints.AX = 1
+		BOX.ints.AY = 1
+		BOX.ints.TS = 18
+		AddHUDElement(BOX, reset)
+	end
 end
 DefaultHUDSettings()
 

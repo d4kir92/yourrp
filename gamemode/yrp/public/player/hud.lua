@@ -10,7 +10,7 @@ if CLIENT then
 	-- string element for example "health", art for example "SIZE_W"
 	function Player:HudValue(element, art)
 		local hfloats = {"POSI_X", "POSI_Y", "SIZE_W", "SIZE_H"}
-		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD"}
+		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD", "EXTR"}
 		local hcolors = {"TE", "TB", "BG", "BA", "BR"}
 		local hints = {"AX", "AY", "TS"}
 
@@ -40,7 +40,7 @@ if CLIENT then
 
 	function Player:HudElement(element)
 		local hfloats = {"POSI_X", "POSI_Y", "SIZE_W", "SIZE_H"}
-		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD"}
+		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD", "EXTR"}
 		local hcolors = {"TE", "TB", "BG", "BA", "BR"}
 		local hints = {"AX", "AY", "TS"}
 

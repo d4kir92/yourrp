@@ -275,6 +275,7 @@ countries["KG"] = "Kyrgyzstan"
 countries["KZ"] = "Kazakhstan"
 
 countries["LT"] = "Lithuania"
+countries["LU"] = "Luxembourg"
 
 countries["ME"] = "Montenegro"
 countries["MX"] = "Mexico"

@@ -77,6 +77,37 @@ end
 local character = {}
 character.amount = 0
 
+local cc = {}
+
+local isidcardenabled = false
+net.Receive("isidcardenabled", function(len)
+	local ply = LocalPlayer()
+
+	isidcardenabled = net.ReadBool()
+	if isidcardenabled then
+		local identification = createD("DPanel", cc.frame, ctr(800), ctr(360), ScrW() - ctr(800) - ctr(100), ScrH() - ctr(400) - ctr(100))
+		function identification:Paint(pw, ph)
+			if isidcardenabled then
+				draw.RoundedBox(ctr(15), 0, 0, pw, ph, Color(255, 255, 255, 255))
+
+				draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charText", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(GetHostName(), "charText", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+
+				draw.SimpleTextOutlined(ply:SteamID(), "charText", pw - ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+
+				draw.SimpleTextOutlined(YRP.lang_string("LID_name"), "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(character.rpname, "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+
+				draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string(character.gender), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+			end
+		end
+
+		local avatar = createD("AvatarImage", identification, ctr(256), ctr(256), ctr(10), ctr(360 - 10 - 256))
+		avatar:SetPlayer(ply)
+	end
+end)
+
 function openCharacterCreation()
 	openMenu()
 	local ply = LocalPlayer()
@@ -99,52 +130,33 @@ function openCharacterCreation()
 		character.description[i] = ""
 	end
 
-	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-	frame:SetTitle("")
-	frame:ShowCloseButton(false)
-	frame:SetDraggable(false)
-	frame:Center()
-	function frame:Paint(pw, ph)
+	cc.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+	cc.frame:SetTitle("")
+	cc.frame:ShowCloseButton(false)
+	cc.frame:SetDraggable(false)
+	cc.frame:Center()
+	function cc.frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 
 		draw.SimpleTextOutlined(YRP.lang_string("LID_charactercreation") .. " [PROTOTYPE]", "HudHeader", pw / 2, ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
-	function frame:OnClose()
+	function cc.frame:OnClose()
 		closeMenu()
 	end
-	function frame:OnRemove()
+	function cc.frame:OnRemove()
 		closeMenu()
 	end
 
-	frame.bg = createD("DHTML", frame, ScW(), ScH(), PosX(), 0)
-	frame.bg:SetHTML(GetHTMLImage(ply:GetNWString("text_character_background"), ScW(), ScH()))
+	cc.frame.bg = createD("DHTML", cc.frame, ScW(), ScH(), PosX(), 0)
+	cc.frame.bg:SetHTML(GetHTMLImage(ply:GetNWString("text_character_background"), ScW(), ScH()))
 
-	frame.bgcf = createD("DPanel", frame.bg, frame.bg:GetWide(), frame.bg:GetTall(), 0, 0)
-	function frame.bgcf:Paint(pw, ph)
+	cc.frame.bgcf = createD("DPanel", cc.frame.bg, cc.frame.bg:GetWide(), cc.frame.bg:GetTall(), 0, 0)
+	function cc.frame.bgcf:Paint(pw, ph)
 		-- nothing
 	end
 
-	local identification = createD("DPanel", frame, ctr(800), ctr(360), ScrW() - ctr(800) - ctr(100), ScrH() - ctr(400) - ctr(100))
-	function identification:Paint(pw, ph)
-		draw.RoundedBox(ctr(15), 0, 0, pw, ph, Color(255, 255, 255, 255))
-
-		draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charText", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(GetHostName(), "charText", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-		draw.SimpleTextOutlined(ply:SteamID(), "charText", pw - ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name"), "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.rpname, "charText", ctr(256 + 20), ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-		draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string(character.gender), "charText", ctr(256 + 20), ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-	end
-	local avatar = createD("AvatarImage", identification, ctr(256), ctr(256), ctr(10), ctr(360 - 10 - 256))
-	avatar:SetPlayer(ply)
-
 	local border = ctr(50)
-	local charactersBackground = createMD("DPanel", frame, ctr(800), ScrH() - (2*border), border, border, ctr(5))
+	local charactersBackground = createMD("DPanel", cc.frame, ctr(800), ScrH() - (2*border), border, border, ctr(5))
 	function charactersBackground:Paint(pw, ph)
 		paintMD(pw, ph, nil, get_dp_col())
 	end
@@ -269,7 +281,7 @@ function openCharacterCreation()
 		draw.SimpleTextOutlined(character.description[6], "HudBars", ctr(10), ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
-	local characterPlayermodel = createMD("DModelPanel", frame, ctr(1600), ctr(2160), ScrW2() - ctr(1600 / 2), ScrH2() - ctr(2160 / 2), ctr(5))
+	local characterPlayermodel = createMD("DModelPanel", cc.frame, ctr(1600), ctr(2160), ScrW2() - ctr(1600 / 2), ScrH2() - ctr(2160 / 2), ctr(5))
 	characterPlayermodel.bodygroups = {}
 	characterPlayermodel.cache = {}
 
@@ -389,7 +401,7 @@ function openCharacterCreation()
 		characterPlayermodel:UpdateBodyGroups()
 	end
 
-	local prevPM = createD("DButton", frame, ctr(100), ctr(1200), ScrW() / 2 - ctr(50 + 800), ScrH() - ctr(1800))
+	local prevPM = createD("DButton", cc.frame, ctr(100), ctr(1200), ScrW() / 2 - ctr(50 + 800), ScrH() - ctr(1800))
 	prevPM:SetText("")
 	function prevPM:Paint(pw, ph)
 		if tonumber(character.playermodelID) > 1 then
@@ -412,7 +424,7 @@ function openCharacterCreation()
 		characterPlayermodel:UpdateBodyGroups()
 	end
 
-	local nextPM = createD("DButton", frame, ctr(100), ctr(1200), ScrW() / 2 + ctr( - 50 + 800), ScrH() - ctr(1800))
+	local nextPM = createD("DButton", cc.frame, ctr(100), ctr(1200), ScrW() / 2 + ctr( - 50 + 800), ScrH() - ctr(1800))
 	nextPM:SetText("")
 	function nextPM:Paint(pw, ph)
 		if tonumber(character.playermodelID) < #character.playermodels then
@@ -519,13 +531,13 @@ function openCharacterCreation()
 		end
 	end
 
-	local charactersNameText = createMD("DTextEntry", frame, ctr(600), ctr(100), ScrW2() - ctr(600 / 2), ScrH() - ctr(100 + 50), ctr(5))
+	local charactersNameText = createMD("DTextEntry", cc.frame, ctr(600), ctr(100), ScrW2() - ctr(600 / 2), ScrH() - ctr(100 + 50), ctr(5))
 	charactersNameText:SetText(character.rpname)
 	function charactersNameText:OnTextChanged()
 		character.rpname = charactersNameText:GetValue()
 	end
 
-	YRP.DChangeLanguage(frame, ScW() - ctr(100 + 10), ctr(10), ctr(100))
+	YRP.DChangeLanguage(cc.frame, ScW() - ctr(100 + 10), ctr(10), ctr(100))
 
 	if character.amount > 0 then
 		local button = {}
@@ -533,13 +545,13 @@ function openCharacterCreation()
 		button.h = ctr(100)
 		button.x = ScrW2() - ctr(400 + 300 + 50)
 		button.y = ScrH() - ctr(100 + 50)
-		local charactersBack = createMD("DButton", frame, button.w, button.h, button.x, button.y, ctr(10))
+		local charactersBack = createMD("DButton", cc.frame, button.w, button.h, button.x, button.y, ctr(10))
 		charactersBack:SetText("")
 		function charactersBack:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string("LID_back"))
 		end
 		function charactersBack:DoClick()
-			frame:Close()
+			cc.frame:Close()
 
 			openCharacterSelection()
 		end
@@ -550,7 +562,7 @@ function openCharacterCreation()
 	button.h = ctr(100)
 	button.x = ScrW2() + ctr(300 + 50)
 	button.y = ScrH() - ctr(100 + 50)
-	local charactersConfirm = createMD("DButton", frame, button.w, button.h, button.x, button.y, ctr(10))
+	local charactersConfirm = createMD("DButton", cc.frame, button.w, button.h, button.x, button.y, ctr(10))
 	charactersConfirm:SetText("")
 	function testName()
 		if string.len(character.rpname) >= 3 then
@@ -579,7 +591,7 @@ function openCharacterCreation()
 	end
 	function charactersConfirm:DoClick()
 		if testName() then
-			frame:Close()
+			cc.frame:Close()
 
 			openCharacterSelection()
 
@@ -589,7 +601,10 @@ function openCharacterCreation()
 		end
 	end
 
-	frame:MakePopup()
+	cc.frame:MakePopup()
+
+	net.Start("isidcardenabled")
+	net.SendToServer()
 end
 
 local _cs = {}

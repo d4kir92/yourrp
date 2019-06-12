@@ -312,7 +312,7 @@ net.Receive("get_design_settings", function(len)
 
 						win.visible = false
 
-						win.winset = createD("DFrame", nil, ctr(800), ctr(800), wx, wy)
+						win.winset = createD("DFrame", nil, ctr(860), ctr(860), wx, wy)
 						win.winset:MakePopup()
 						win.winset:SetTitle("")
 						win.winset:Center()
@@ -583,6 +583,13 @@ net.Receive("get_design_settings", function(len)
 						bord.value = eletab["bool_HUD_" .. tab.element .. "_BORD"]
 						win.winset:AddCheckBox(bord)
 
+						local extr = {}
+						extr.name = "LID_extra"
+						extr.element = tab.element
+						extr.art = "EXTR"
+						extr.value = eletab["bool_HUD_" .. tab.element .. "_EXTR"]
+						win.winset:AddCheckBox(extr)
+
 						local textposi = {}
 						textposi.name = "LID_textposition"
 						textposi.element = tab.element
@@ -749,6 +756,18 @@ net.Receive("get_design_settings", function(len)
 			LO.element = "LO"
 			LO.name = "LID_lockdown"
 			AddElement(LO)
+
+			local NA = {}
+			NA.element = "NA"
+			NA.name = "LID_name"
+			AddElement(NA)
+
+			for i = 1, 10 do
+				local BOX = {}
+				BOX.element = "BOX" .. i
+				BOX.name = "LID_box"
+				AddElement(BOX)
+			end
 
 			function editarea:DoClick()
 				if table.Count(editarea["settingswindows"]) == 0 then

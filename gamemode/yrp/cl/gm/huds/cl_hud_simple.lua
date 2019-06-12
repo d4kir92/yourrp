@@ -55,6 +55,8 @@ function HUDSimpleBAR(tab)
 			local x = lply:HudValue(tab.element, "POSI_X")
 			local y = lply:HudValue(tab.element, "POSI_Y")
 
+			print(tab.element, w, h, x, y)
+
 			Simple[tab.element]["bar"].fw = w
 			Simple[tab.element]["bar"].fh = h
 			Simple[tab.element]["bar"].fx = x
@@ -343,6 +345,14 @@ function HUDSimple()
 		local batterypower = system.BatteryPower()
 
 		-- Background
+		for i = 1, 10 do
+			local BOX = {}
+			BOX.element = "BOX" .. i
+			HUDSimpleBG(BOX)
+		end
+		local NA = {}
+		NA.element = "NA"
+		HUDSimpleBG(NA)
 		local HP = {}
 		HP.element = "HP"
 		HUDSimpleBG(HP)
@@ -419,6 +429,20 @@ function HUDSimple()
 		HUDSimpleBG(MI)
 
 		-- Midground
+		for i = 1, 10 do
+			local BOX = {}
+			BOX.element = "BOX" .. i
+			BOX.cur = 1
+			BOX.max = 1
+			BOX.text = ""
+			HUDSimpleBAR(BOX)
+		end
+		NA = {}
+		NA.element = "NA"
+		NA.cur = 1
+		NA.max = 1
+		NA.text = lply:RPName()
+		HUDSimpleBAR(NA)
 		HP = {}
 		HP.element = "HP"
 		HP.cur = lply:Health()
@@ -559,18 +583,20 @@ function HUDSimple()
 		if CurTime() > fps_delay then
 			fps_delay = CurTime() + 0.5
 			fps = GetFPS()
-			if fps < fpsmin then
-				fpsmin = fps
-			elseif fps > fpsmax then
-				fpsmax = fps
-			end
+			if lply:HudValue("PE", "EXTR") then
+				if fps < fpsmin then
+					fpsmin = fps
+				elseif fps > fpsmax then
+					fpsmax = fps
+				end
 
-			fpscou = fpscou + 1
-			fpstavg = fpstavg + fps
-			if fpscou > 9 then
-				fpsavg = math.Round(fpstavg / 10, 0)
-				fpscou = 0
-				fpstavg = 0
+				fpscou = fpscou + 1
+				fpstavg = fpstavg + fps
+				if fpscou > 9 then
+					fpsavg = math.Round(fpstavg / 10, 0)
+					fpscou = 0
+					fpstavg = 0
+				end
 			end
 
 			if fps < 30 then
@@ -581,25 +607,30 @@ function HUDSimple()
 				fpscolor = Color(0, 255, 0)
 			end
 		end
-		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
+		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps
+		if lply:HudValue("PE", "EXTR") then
+			PE.text = PE.text .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
+		end
 		PE.tcolor = fpscolor
 		HUDSimpleBAR(PE)
 
 		if CurTime() > ping_delay then
 			ping_delay = CurTime() + 0.5
 			ping = lply:Ping()
-			if ping < pingmin then
-				pingmin = ping
-			elseif ping > pingmax then
-				pingmax = ping
-			end
+			if lply:HudValue("NE", "EXTR") then
+				if ping < pingmin then
+					pingmin = ping
+				elseif ping > pingmax then
+					pingmax = ping
+				end
 
-			pingcou = pingcou + 1
-			pingtavg = pingtavg + ping
-			if pingcou > 9 then
-				pingavg = math.Round(pingtavg / 10, 0)
-				pingcou = 0
-				pingtavg = 0
+				pingcou = pingcou + 1
+				pingtavg = pingtavg + ping
+				if pingcou > 9 then
+					pingavg = math.Round(pingtavg / 10, 0)
+					pingcou = 0
+					pingtavg = 0
+				end
 			end
 
 			if ping > 100 then
@@ -614,7 +645,10 @@ function HUDSimple()
 		NE.element = "NE"
 		NE.cur = 0
 		NE.max = 1
-		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
+		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping
+		if lply:HudValue("NE", "EXTR") then
+			NE.text = NE.text .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
+		end
 		NE.tcolor = pingcolor
 		HUDSimpleBAR(NE)
 
@@ -717,6 +751,14 @@ function HUDSimple()
 		MI = {}
 		MI.element = "MI"
 		HUDSimpleBR(MI)
+		NA = {}
+		NA.element = "NA"
+		HUDSimpleBR(NA)
+		for i = 1, 10 do
+			local BOX = {}
+			BOX.element = "BOX" .. i
+			HUDSimpleBR(BOX)
+		end
 	end
 end
 hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple)

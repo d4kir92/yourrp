@@ -3,9 +3,9 @@
 local inv = {}
 function ToggleInventory()
 	if isNoMenuOpen() then
-		OpenInventory()
+		--OpenInventory()
 	else
-		CloseInventory()
+		--CloseInventory()
 	end
 end
 

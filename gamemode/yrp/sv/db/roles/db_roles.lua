@@ -1330,6 +1330,16 @@ net.Receive("openInteractMenu", function(len, ply)
 	end
 end)
 
+util.AddNetworkString("isidcardenabled")
+net.Receive("isidcardenabled", function(len, ply)
+	local idcard = SQL_SELECT("yrp_general", "*", nil)
+	idcard = tobool(idcard[1].bool_identity_card)
+
+	net.Start("isidcardenabled")
+		net.WriteBool(idcard)
+	net.Send(ply)
+end)
+
 function removeFromWhitelist( SteamID, roleID )
 	local _result = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID )
 	if _result != nil then
