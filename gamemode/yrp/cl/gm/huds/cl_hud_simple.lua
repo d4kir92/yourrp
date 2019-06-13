@@ -55,8 +55,6 @@ function HUDSimpleBAR(tab)
 			local x = lply:HudValue(tab.element, "POSI_X")
 			local y = lply:HudValue(tab.element, "POSI_Y")
 
-			print(tab.element, w, h, x, y)
-
 			Simple[tab.element]["bar"].fw = w
 			Simple[tab.element]["bar"].fh = h
 			Simple[tab.element]["bar"].fx = x

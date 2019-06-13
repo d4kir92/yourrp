@@ -42,8 +42,10 @@ function createRoleBox(rol, parent, mainparent)
 
 		--[[ Role Name ]]--
 		_rol.rn = createD("DPanel", _rol, _rol:GetWide(), ctrb(60), 0, 0)
+		_rol.rn.rolename = _rol.rn:GetParent().tbl.string_name
+		_rol.rn.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rn:Paint(pw, ph)
-			surfaceText(self:GetParent().tbl.string_name, "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+			surfaceText(self.rolename, "roleInfoHeader", pw / 2, ph / 2, self.rolecolor, 1, 1)
 		end
 
 		--[[ Role MaxAmount ]]--
@@ -89,6 +91,7 @@ function createRoleBox(rol, parent, mainparent)
 			_rm.infopm:SetModel(_pm[1] or "")
 
 			_rm.info.rolename = rol.string_name
+			_rm.info.rolecolor = rol.string_color
 
 			_rm.infodesc:SetText("")
 			_rm.infodesc:SetFontInternal("roleInfoText")

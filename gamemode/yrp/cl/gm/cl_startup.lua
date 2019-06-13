@@ -1391,7 +1391,6 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	local z = tonumber(_z)
 	local w = tonumber(_w)
 	local h = tonumber(_h)
-	local h = tonumber(_h)
 	local alpha = tonumber(_alpha)
 	local pos = ply:GetPos()
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
@@ -1427,7 +1426,7 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	end
 
 	color.a = alpha
-	surfaceText(str, "plyinfo", 5 + h, h / 2, Color(255, 255, 255, color.a + 1), 0, 1)
+	surfaceText(str, "plyinfo", 5 + h, h / 2, Color(color.r, color.g, color.b, color.a + 1), 0, 1)
 	cam.End3D2D()
 end
 
@@ -1492,17 +1491,17 @@ function drawPlates(ply)
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_rolename", false) then
-				drawString(ply, ply:GetRoleName(), _height, color)
+				drawString(ply, ply:GetRoleName(), _height, ply:GetRoleColor())
 				_height = _height + 5
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_groupname", false) then
-				drawString(ply, ply:GetGroupName(), _height, color)
+				drawString(ply, ply:GetGroupName(), _height, ply:GetGroupColor())
 				_height = _height + 5
 			end
 
 			if ply:GetNWBool("bool_tag_on_head_factionname", false) then
-				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, color)
+				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, ply:GetFactionColor())
 				_height = _height + 5
 			end
 
@@ -1541,8 +1540,9 @@ function drawPlates(ply)
 		_height = _height + 2
 
 		if ply:GetNWBool("tag_ug", false) or (ply:GetNWBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
-				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
-				_height = _height + 9
+
+			drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
+			_height = _height + 9
 		end
 
 		if ply:GetNWBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
@@ -1573,7 +1573,8 @@ function drawPlates(ply)
 				end
 
 				if ply:GetNWBool("bool_tag_on_side_rolename", false) then
-					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["rn"])
+					local rc = ply:GetRoleColor()
+					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, ply:GetColor().a), _alpha, _icons["rn"])
 					_z = _z + _d
 				end
 
@@ -1581,7 +1582,8 @@ function drawPlates(ply)
 					local _color = ply:GetNWString("groupColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
-					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
+					local gc = ply:GetGroupColor()
+					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, ply:GetColor().a), _alpha, _icons["gn"])
 					_z = _z + _d
 				end
 
@@ -1589,7 +1591,8 @@ function drawPlates(ply)
 					local _color = ply:GetNWString("factionColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
-					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["gn"], 1, 1, _color)
+					local fc = ply:GetFactionColor()
+					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, ply:GetColor().a), _alpha, _icons["gn"])
 					_z = _z + _d
 				end
 
@@ -1619,7 +1622,8 @@ function drawPlates(ply)
 					_z = _z + _d
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
 					_z = _z + _d
-					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ug"])
+					local ugcolor = ply:GetUserGroupColor()
+					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, ply:GetColor().a), _alpha, _icons["ug"])
 					_z = _z + _d
 					drawPlayerInfo(ply, "+" .. ply:GetNWString("text_money_pre", "") .. ply:GetNWString("salary", "") .. ply:GetNWString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
 					_z = _z + _d

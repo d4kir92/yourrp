@@ -61,17 +61,7 @@ net.Receive("get_design_settings", function(len)
 		DHr(hr)
 
 		-- HUD Customize
-		local hud_customize_btn = createD("DButton", nil, GRP_HUD:GetWide(), ctr(50), 0, ctr(50))
-		hud_customize_btn:SetText("")
-		function hud_customize_btn:Paint(pw, ph)
-			local color = Color(255, 255, 255)
-			if self:IsHovered() then
-				color = Color(255, 255, 100)
-			end
-			draw.RoundedBox(0, 0, 0, pw, ph, color)
-			draw.SimpleText(YRP.lang_string("LID_customize"), "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
-		function hud_customize_btn:DoClick()
+		function Customize()
 			CloseSettings()
 
 			local hudcustom = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -87,7 +77,6 @@ net.Receive("get_design_settings", function(len)
 				editarea:SetPos(PosX(), 0)
 				editarea:SetWide(ScW())
 			end
-			editarea.space = boxspace
 			editarea.hl = 5
 			editarea["windows"] = {}
 			editarea["settingswindows"] = {}
@@ -96,7 +85,7 @@ net.Receive("get_design_settings", function(len)
 				if table.Count(editarea["settingswindows"]) == 0 then
 					-- X
 					local count = 0
-					for x = 0, ScW(), self.space do
+					for x = 0, ScW(), boxspace do
 						local color = Color(255, 255, 255, 160)
 
 						-- X L
@@ -105,12 +94,12 @@ net.Receive("get_design_settings", function(len)
 						end
 
 						-- X R
-						if count % self.hl == ScW() / self.space % self.hl and x > ScW() / 2 then
+						if count % self.hl == ScW() / boxspace % self.hl and x > ScW() / 2 then
 							color = Color(0, 0, 0, 160)
 						end
 
 						-- X C
-						if count % self.hl == ScW() / 2 / self.space % self.hl then
+						if count % self.hl == ScW() / 2 / boxspace % self.hl then
 							color = Color(0, 255, 0, 255)
 						end
 
@@ -125,7 +114,7 @@ net.Receive("get_design_settings", function(len)
 
 					-- Y
 					count = 0
-					for y = 0, ScH(), self.space do
+					for y = 0, ScH(), boxspace do
 						local color = Color(255, 255, 255, 160)
 
 						-- Y U
@@ -134,12 +123,12 @@ net.Receive("get_design_settings", function(len)
 						end
 
 						-- Y D
-						if count % self.hl == ScH() / self.space % self.hl and y > ScH() / 2 then
+						if count % self.hl == ScH() / boxspace % self.hl and y > ScH() / 2 then
 							color = Color(0, 0, 0, 160)
 						end
 
 						-- Y C
-						if count % self.hl == ScH() / 2 / self.space % self.hl then
+						if count % self.hl == ScH() / 2 / boxspace % self.hl then
 							color = Color(0, 255, 0, 255)
 						end
 
@@ -655,6 +644,18 @@ net.Receive("get_design_settings", function(len)
 				return win
 			end
 
+			for i = 1, 10 do
+				local BOX = {}
+				BOX.element = "BOX" .. i
+				BOX.name = YRP.lang_string("LID_box") .. " " .. i
+				AddElement(BOX)
+			end
+
+			local AV = {}
+			AV.element = "AV"
+			AV.name = "LID_avatar"
+			AddElement(AV)
+
 			local HP = {}
 			HP.element = "HP"
 			HP.name = "LID_healthbar"
@@ -762,13 +763,6 @@ net.Receive("get_design_settings", function(len)
 			NA.name = "LID_name"
 			AddElement(NA)
 
-			for i = 1, 10 do
-				local BOX = {}
-				BOX.element = "BOX" .. i
-				BOX.name = "LID_box"
-				AddElement(BOX)
-			end
-
 			function editarea:DoClick()
 				if table.Count(editarea["settingswindows"]) == 0 then
 					for i, child in pairs(self:GetChildren()) do
@@ -782,7 +776,25 @@ net.Receive("get_design_settings", function(len)
 				end
 			end
 		end
-		GRP_HUD:AddItem(hud_customize_btn)
+
+		local gridsizes = {8, 10, 12, 16, 20}
+		for i, size in pairs(gridsizes) do
+			local hud_x = createD("DButton", nil, GRP_HUD:GetWide(), ctr(50), 0, ctr(50))
+			hud_x:SetText("")
+			function hud_x:Paint(pw, ph)
+				local color = Color(255, 255, 255)
+				if self:IsHovered() then
+					color = Color(255, 255, 100)
+				end
+				draw.RoundedBox(0, 0, 0, pw, ph, color)
+				draw.SimpleText(YRP.lang_string("LID_customize") .. " (" .. YRP.lang_string("LID_gridsize") .. " " .. size .. ")", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			function hud_x:DoClick()
+				boxspace = tr(size)
+				Customize()
+			end
+			GRP_HUD:AddItem(hud_x)
+		end
 
 		DHr(hr)
 

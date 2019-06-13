@@ -463,7 +463,7 @@ function OpenSBS()
 						end
 						draw.SimpleTextOutlined(pl:RPName(), "sef", ctr(x), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						if pl:GetNWBool("bool_yrp_scoreboard_show_usergroup", false) then
-							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", ctr(x), ugy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", ctr(x), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + 700
 					end
@@ -477,14 +477,14 @@ function OpenSBS()
 							ry = ph / 2
 						end
 						if pl:GetNWBool("bool_yrp_scoreboard_show_rolename", false) then
-							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", ctr(x), ry, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", ctr(x), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						if pl:GetNWBool("bool_yrp_scoreboard_show_groupname", false) then
 							local grpname = pl:GetGroupName()
 							if pl:GetFactionName() != pl:GetGroupName() then
 								grpname = "[" .. pl:GetFactionName() .. "] " .. grpname
 							end
-							draw.SimpleTextOutlined(grpname, "sef", ctr(x), gy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleTextOutlined(grpname, "sef", ctr(x), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + 700
 					end
@@ -538,7 +538,14 @@ function OpenSBS()
 						x = x + 300
 					end
 
-					draw.SimpleTextOutlined(pl:Ping(), "sef", ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					local ping = pl:Ping()
+					local ping_color = Color(255, 0, 0, 255)
+					if ping < 100 then
+						ping_color = Color(0, 255, 0, 255)
+					elseif ping >= 100 and ping < 200 then
+						ping_color = Color(255, 255, 0, 255)
+					end
+					draw.SimpleTextOutlined(ping, "sef", ctr(x), ph / 2, ping_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				end
 			end
 

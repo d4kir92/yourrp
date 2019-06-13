@@ -174,6 +174,29 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	end
 end)
 
+local Avatar = vgui.Create("AvatarImage", nil)
+local ava = {}
+ava.w = 64
+ava.h = 64
+ava.x = 0
+ava.y = 0
+ava.version = -1
+function Avatar:Think()
+	local lply = LocalPlayer()
+	if lply:GetNWInt("hud_version", 0) != ava.version then
+		ava.version = lply:GetNWInt("hud_version", 0)
+
+		ava.w = lply:HudValue("AV", "SIZE_W")
+		ava.h = lply:HudValue("AV", "SIZE_H")
+		ava.x = lply:HudValue("AV", "POSI_X")
+		ava.y = lply:HudValue("AV", "POSI_Y")
+
+		Avatar:SetPos(ava.x, ava.y)
+		Avatar:SetSize(ava.h, ava.h)
+		Avatar:SetPlayer(LocalPlayer(), ava.h)
+	end
+end
+
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 

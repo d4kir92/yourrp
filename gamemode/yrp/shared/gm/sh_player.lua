@@ -517,6 +517,13 @@ timer.Simple(10, function()
 	end
 end)
 
+function Player:YRPGetRoleColor()
+	local _rc = self:GetNWString("roleColor", "255,0,0")
+	_rc = string.Explode(",", _rc)
+	_rc = Color(_rc[1], _rc[2], _rc[3], _rc[4] or 255)
+	return _rc
+end
+
 function Player:YRPGetRoleName()
 	local _rn = self:GetNWString("roleName", "NO ROLE SELECTED")
 	return _rn

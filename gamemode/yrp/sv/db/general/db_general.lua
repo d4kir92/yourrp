@@ -1174,47 +1174,47 @@ net.Receive("gethelpmenu", function(len, ply)
 		if !strEmpty(info.text_server_rules) then
 			AddTab(tabs, "LID_rules", "getsiteserverrules")
 		end
-		if info.text_server_collectionid != "" then
+		if !strEmpty(info.text_server_collectionid) then
 			if tonumber(info.text_server_collectionid) > 0 then
 				AddTab(tabs, "LID_collection", "getsitecollection")
 			end
 		end
 
-		if info.text_social_website != "" or
-			info.text_social_forum != "" or
-			info.text_social_discord != "" or
-			info.text_social_teamspeak_ip != "" or
-			info.text_social_twitter != "" or
-			info.text_social_youtube != "" or
-			info.text_social_facebook != "" or
-			info.text_social_steamgroup != "" then
-			--info.text_social_servers != "" then
+		if !strEmpty(info.text_social_website) or
+			!strEmpty(info.text_social_forum) or
+			!strEmpty(info.text_social_discord) or
+			!strEmpty(info.text_social_teamspeak_ip) or
+			!strEmpty(info.text_social_twitter) or
+			!strEmpty(info.text_social_youtube) or
+			!strEmpty(info.text_social_facebook) or
+			!strEmpty(info.text_social_steamgroup) then
+			--!strEmpty(info.text_social_servers) then
 			AddTab(tabs, "LID_community", "")
-			if info.text_social_website != "" then
+			if !strEmpty(info.text_social_website) then
 				AddSubTab(subtabs, "LID_community", "Website", "getsitecommunitywebsite")
 			end
-			if info.text_social_forum != "" then
+			if !strEmpty(info.text_social_forum) then
 				AddSubTab(subtabs, "LID_community", "Forum", "getsitecommunityforum")
 			end
-			if info.text_social_discord != "" then
+			if !strEmpty(info.text_social_discord) then
 				AddSubTab(subtabs, "LID_community", "Discord", "getsitecommunitydiscord")
 			end
-			if info.text_social_teamspeak_ip != "" then
+			if !strEmpty(info.text_social_teamspeak_ip) then
 				AddSubTab(subtabs, "LID_community", "Teamspeak", "getsitecommunityteamspeak")
 			end
-			if info.text_social_twitter != "" then
+			if !strEmpty(info.text_social_twitter) then
 				AddSubTab(subtabs, "LID_community", "Twitter", "getsitecommunitytwitter")
 			end
-			if info.text_social_youtube != "" then
+			if !strEmpty(info.text_social_youtube) then
 				AddSubTab(subtabs, "LID_community", "Youtube", "getsitecommunityyoutube")
 			end
-			if info.text_social_facebook != "" then
+			if !strEmpty(info.text_social_facebook) then
 				AddSubTab(subtabs, "LID_community", "Facebook", "getsitecommunityfacebook")
 			end
-			if info.text_social_steamgroup != "" then
+			if !strEmpty(info.text_social_steamgroup) then
 				AddSubTab(subtabs, "LID_community", "SteamGroup", "getsitecommunitysteamgroup")
 			end
-			--if info.text_social_servers != "" then
+			--if info.text_social_servers) then
 				--AddSubTab(subtabs, "LID_community", "servers", "getsitecommunityservers")
 			--end
 		end

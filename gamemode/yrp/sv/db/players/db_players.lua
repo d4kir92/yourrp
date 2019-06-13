@@ -182,6 +182,7 @@ function set_role_values(ply)
 
 		if worked(rolTab, "set_role_values rolTab") then
 			local pmsize = rolTab.int_playermodelsize or 1
+			ply:SetNWString("roleColor", rolTab.string_color)
 			ply:SetModelScale(pmsize, 0)
 			ply:SetNWInt("speedwalk", rolTab.int_speedwalk * pmsize)
 			ply:SetNWInt("speedrun", rolTab.int_speedrun * pmsize)

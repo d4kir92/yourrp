@@ -650,14 +650,42 @@ function DefaultHUDSettings(reset)
 	NA.ints.TS = 18
 	AddHUDElement(NA, reset)
 
+	local AV = {}
+	AV.element = "AV"
+	AV.floats = {}
+	AV.floats.POSI_X = 10 / 1920
+	AV.floats.POSI_Y = 10 / 1080
+	AV.floats.SIZE_W = 64 / 1920
+	AV.floats.SIZE_H = 64 / 1080
+	AV.bools = {}
+	AV.bools.VISI = 1
+	AV.bools.ROUN = 0
+	AV.bools.ICON = 1
+	AV.bools.TEXT = 1
+	AV.bools.PERC = 1
+	AV.bools.BACK = 1
+	AV.bools.BORD = 1
+	AV.bools.EXTR = 1
+	AV.colors = {}
+	AV.colors.TE = "255, 255, 255, 255"
+	AV.colors.TB = "0, 0, 0, 255"
+	AV.colors.BG = "0, 0, 0, 200"
+	AV.colors.BA = "150, 52, 52, 255"
+	AV.colors.BR = "150, 52, 52, 255"
+	AV.ints = {}
+	AV.ints.AX = 1
+	AV.ints.AY = 1
+	AV.ints.TS = 24
+	AddHUDElement(AV, reset)
+
 	for i = 1, 10 do
 		local BOX = {}
 		BOX.element = "BOX" .. i
 		BOX.floats = {}
-		BOX.floats.POSI_X = 0
-		BOX.floats.POSI_Y = 0
-		BOX.floats.SIZE_W = 0.26
-		BOX.floats.SIZE_H = 0.26
+		BOX.floats.POSI_X = 10 / 1920
+		BOX.floats.POSI_Y = 10 / 1080
+		BOX.floats.SIZE_W = 50 / 1920
+		BOX.floats.SIZE_H = 50 / 1080
 		BOX.bools = {}
 		BOX.bools.VISI = 0
 		BOX.bools.ROUN = 0

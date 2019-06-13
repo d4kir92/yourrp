@@ -369,6 +369,7 @@ function unpack_paket(sender, text, iscommand)
 	paket.rpname = sender:RPName()
 	if sender:GetNWBool("bool_yrp_chat_show_usergroup", false) then
 		paket.usergroup = sender:GetUserGroup()
+		paket.usergroup_color = sender:GetUserGroupColor()
 	end
 	if sender:GetNWBool("bool_yrp_chat_show_rolename", false) then
 		paket.role = sender:GetNWString("roleName")
@@ -521,6 +522,7 @@ function GM:PlayerSay(sender, text, teamChat)
 	pk.rpname = paket.rpname or ""
 	pk.steamname = paket.steamname or ""
 	pk.usergroup = paket.usergroup or ""
+	pk.usergroup_color = paket.usergroup_color or Color(0, 0, 100)
 	pk.rolename = paket.role or ""
 	pk.factionname = paket.faction or ""
 	pk.groupname = paket.group or ""

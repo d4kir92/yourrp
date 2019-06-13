@@ -271,7 +271,6 @@ end)
 net.Receive("getsitecommunitywebsite", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
-
 		if !strEmpty(link) then
 			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - ctr(20 + 20), ScrH() - ctr(100 + 20 + 20), 0, 0)
 

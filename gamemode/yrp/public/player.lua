@@ -329,6 +329,10 @@ function Player:GetMaxXP()
 end
 
 --[[ Role ]]--
+function Player:GetRoleColor() -- Group Color
+	return self:YRPGetRoleColor() -- return Color(int r, int g, int b, int a)
+end
+
 function Player:GetRoleUID()
 	return tonumber(self:GetNWString("roleUniqueID", "0"))
 end

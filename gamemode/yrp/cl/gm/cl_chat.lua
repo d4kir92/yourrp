@@ -414,7 +414,7 @@ net.Receive("yrp_player_say", function(len)
 
 			if _usergroup then
 				if !strEmpty(_tmp.usergroup) then
-					table.insert(_unpack, Color(0, 0, 100))
+					table.insert(_unpack, _tmp.usergroup_color)
 					table.insert(_unpack, "[")
 					table.insert(_unpack, string.upper(_tmp.usergroup))
 					table.insert(_unpack, "]")
