@@ -656,6 +656,16 @@ net.Receive("get_design_settings", function(len)
 			AV.name = "LID_avatar"
 			AddElement(AV)
 
+			local PM = {}
+			PM.element = "PM"
+			PM.name = "LID_model"
+			AddElement(PM)
+
+			local CR = {}
+			CR.element = "CR"
+			CR.name = "LID_realtime"
+			AddElement(CR)
+
 			local HP = {}
 			HP.element = "HP"
 			HP.name = "LID_healthbar"
@@ -675,6 +685,16 @@ net.Receive("get_design_settings", function(len)
 			MO.element = "MO"
 			MO.name = "LID_moneybar"
 			AddElement(MO)
+
+			local SA = {}
+			SA.element = "SA"
+			SA.name = "LID_salary"
+			AddElement(SA)
+
+			local RO = {}
+			RO.element = "RO"
+			RO.name = "LID_rolename"
+			AddElement(RO)
 
 			local ST = {}
 			ST.element = "ST"
@@ -790,7 +810,7 @@ net.Receive("get_design_settings", function(len)
 				draw.SimpleText(YRP.lang_string("LID_customize") .. " (" .. YRP.lang_string("LID_gridsize") .. " " .. size .. ")", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function hud_x:DoClick()
-				boxspace = tr(size)
+				boxspace = ctr(size)
 				Customize()
 			end
 			GRP_HUD:AddItem(hud_x)

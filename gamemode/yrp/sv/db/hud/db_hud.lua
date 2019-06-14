@@ -65,7 +65,7 @@ function DefaultHUDSettings(reset)
 	local HP = {}
 	HP.element = "HP"
 	HP.floats = {}
-	HP.floats.POSI_X = 0.0052083334885538
+	HP.floats.POSI_X = 0.078125
 	HP.floats.POSI_Y = 0.96296298503876
 	HP.floats.SIZE_W = 0.11458333581686
 	HP.floats.SIZE_H = 0.027777777984738
@@ -93,8 +93,8 @@ function DefaultHUDSettings(reset)
 	local AR = {}
 	AR.element = "AR"
 	AR.floats = {}
-	AR.floats.POSI_X = 0.0052083334885538
-	AR.floats.POSI_Y = 0.9351851940155
+	AR.floats.POSI_X = 0.078125
+	AR.floats.POSI_Y = 0.93055558204651
 	AR.floats.SIZE_W = 0.11458333581686
 	AR.floats.SIZE_H = 0.027777777984738
 	AR.bools = {}
@@ -149,8 +149,8 @@ function DefaultHUDSettings(reset)
 	local MO = {}
 	MO.element = "MO"
 	MO.floats = {}
-	MO.floats.POSI_X = 0.88020831346512
-	MO.floats.POSI_Y = 0.0092592593282461
+	MO.floats.POSI_X = 0.078125
+	MO.floats.POSI_Y = 0.89814811944962
 	MO.floats.SIZE_W = 0.11458333581686
 	MO.floats.SIZE_H = 0.027777777984738
 	MO.bools = {}
@@ -174,11 +174,67 @@ function DefaultHUDSettings(reset)
 	MO.ints.TS = 24
 	AddHUDElement(MO, reset)
 
+	local SA = {}
+	SA.element = "SA"
+	SA.floats = {}
+	SA.floats.POSI_X = 0.078125
+	SA.floats.POSI_Y = 0.86574071645737
+	SA.floats.SIZE_W = 0.11458333581686
+	SA.floats.SIZE_H = 0.027777777984738
+	SA.bools = {}
+	SA.bools.VISI = 1
+	SA.bools.ROUN = 0
+	SA.bools.ICON = 1
+	SA.bools.TEXT = 1
+	SA.bools.PERC = 1
+	SA.bools.BACK = 1
+	SA.bools.BORD = 1
+	SA.bools.EXTR = 1
+	SA.colors = {}
+	SA.colors.TE = "255, 255, 255, 255"
+	SA.colors.TB = "0, 0, 0, 255"
+	SA.colors.BG = "0, 0, 0, 200"
+	SA.colors.BA = "33, 108, 42, 255"
+	SA.colors.BR = "33, 108, 42, 255"
+	SA.ints = {}
+	SA.ints.AX = 1
+	SA.ints.AY = 1
+	SA.ints.TS = 24
+	AddHUDElement(SA, reset)
+
+	local RO = {}
+	RO.element = "RO"
+	RO.floats = {}
+	RO.floats.POSI_X = 0.078125
+	RO.floats.POSI_Y = 0.83333331346512
+	RO.floats.SIZE_W = 0.11458333581686
+	RO.floats.SIZE_H = 0.027777777984738
+	RO.bools = {}
+	RO.bools.VISI = 1
+	RO.bools.ROUN = 0
+	RO.bools.ICON = 1
+	RO.bools.TEXT = 1
+	RO.bools.PERC = 1
+	RO.bools.BACK = 1
+	RO.bools.BORD = 1
+	RO.bools.EXTR = 1
+	RO.colors = {}
+	RO.colors.TE = "255, 255, 255, 255"
+	RO.colors.TB = "0, 0, 0, 255"
+	RO.colors.BG = "0, 0, 0, 100"
+	RO.colors.BA = "0, 0, 0, 100"
+	RO.colors.BR = "255, 255, 255, 255"
+	RO.ints = {}
+	RO.ints.AX = 1
+	RO.ints.AY = 1
+	RO.ints.TS = 24
+	AddHUDElement(RO, reset)
+
 	local ST = {}
 	ST.element = "ST"
 	ST.floats = {}
 	ST.floats.POSI_X = 0.41666665673256
-	ST.floats.POSI_Y = 0.96296298503876
+	ST.floats.POSI_Y = 0.96759259700775
 	ST.floats.SIZE_W = 0.16666667163372
 	ST.floats.SIZE_H = 0.027777777984738
 	ST.bools = {}
@@ -205,9 +261,9 @@ function DefaultHUDSettings(reset)
 	local CH = {}
 	CH.element = "CH"
 	CH.floats = {}
-	CH.floats.POSI_X = 0.0052083334885538
-	CH.floats.POSI_Y = 0.5
-	CH.floats.SIZE_W = 0.234375
+	CH.floats.POSI_X = 0.0026041667442769
+	CH.floats.POSI_Y = 0.42592594027519
+	CH.floats.SIZE_W = 0.24479167163372
 	CH.floats.SIZE_H = 0.39814814925194
 	CH.bools = {}
 	CH.bools.VISI = 1
@@ -233,10 +289,10 @@ function DefaultHUDSettings(reset)
 	local HU = {}
 	HU.element = "HU"
 	HU.floats = {}
-	HU.floats.POSI_X = 0.125
-	HU.floats.POSI_Y = 0.9351851940155
-	HU.floats.SIZE_W = 0.11458333581686
-	HU.floats.SIZE_H = 0.027777777984738
+	HU.floats.POSI_X = 0.1953125
+	HU.floats.POSI_Y = 0.83333331346512
+	HU.floats.SIZE_W = 0.0234375
+	HU.floats.SIZE_H = 0.15740740299225
 	HU.bools = {}
 	HU.bools.VISI = 1
 	HU.bools.ROUN = 0
@@ -261,10 +317,10 @@ function DefaultHUDSettings(reset)
 	local TH = {}
 	TH.element = "TH"
 	TH.floats = {}
-	TH.floats.POSI_X = 0.125
-	TH.floats.POSI_Y = 0.96296298503876
-	TH.floats.SIZE_W = 0.11458333581686
-	TH.floats.SIZE_H = 0.027777777984738
+	TH.floats.POSI_X = 0.22135417163372
+	TH.floats.POSI_Y = 0.83333331346512
+	TH.floats.SIZE_W = 0.0234375
+	TH.floats.SIZE_H = 0.15740740299225
 	TH.bools = {}
 	TH.bools.VISI = 1
 	TH.bools.ROUN = 0
@@ -290,7 +346,7 @@ function DefaultHUDSettings(reset)
 	CA.element = "CA"
 	CA.floats = {}
 	CA.floats.POSI_X = 0.41666665673256
-	CA.floats.POSI_Y = 0.92592591047287
+	CA.floats.POSI_Y = 0.9351851940155
 	CA.floats.SIZE_W = 0.16666667163372
 	CA.floats.SIZE_H = 0.027777777984738
 	CA.bools = {}
@@ -317,8 +373,8 @@ function DefaultHUDSettings(reset)
 	local AB = {}
 	AB.element = "AB"
 	AB.floats = {}
-	AB.floats.POSI_X = 0.0052083334885538
-	AB.floats.POSI_Y = 0.90740740299225
+	AB.floats.POSI_X = 0.25
+	AB.floats.POSI_Y = 0.96759259700775
 	AB.floats.SIZE_W = 0.11458333581686
 	AB.floats.SIZE_H = 0.027777777984738
 	AB.bools = {}
@@ -345,8 +401,8 @@ function DefaultHUDSettings(reset)
 	local WP = {}
 	WP.element = "WP"
 	WP.floats = {}
-	WP.floats.POSI_X = 0.88020831346512
-	WP.floats.POSI_Y = 0.9351851940155
+	WP.floats.POSI_X = 0.8828125
+	WP.floats.POSI_Y = 0.9398148059845
 	WP.floats.SIZE_W = 0.11458333581686
 	WP.floats.SIZE_H = 0.027777777984738
 	WP.bools = {}
@@ -373,8 +429,8 @@ function DefaultHUDSettings(reset)
 	local WS = {}
 	WS.element = "WS"
 	WS.floats = {}
-	WS.floats.POSI_X = 0.88020831346512
-	WS.floats.POSI_Y = 0.90740740299225
+	WS.floats.POSI_X = 0.8828125
+	WS.floats.POSI_Y = 0.91203701496124
 	WS.floats.SIZE_W = 0.11458333581686
 	WS.floats.SIZE_H = 0.027777777984738
 	WS.bools = {}
@@ -401,8 +457,8 @@ function DefaultHUDSettings(reset)
 	local WN = {}
 	WN.element = "WN"
 	WN.floats = {}
-	WN.floats.POSI_X = 0.88020831346512
-	WN.floats.POSI_Y = 0.96296298503876
+	WN.floats.POSI_X = 0.8828125
+	WN.floats.POSI_Y = 0.96759259700775
 	WN.floats.SIZE_W = 0.11458333581686
 	WN.floats.SIZE_H = 0.027777777984738
 	WN.bools = {}
@@ -457,8 +513,8 @@ function DefaultHUDSettings(reset)
 	local BA = {}
 	BA.element = "BA"
 	BA.floats = {}
-	BA.floats.POSI_X = 0.76041668653488
-	BA.floats.POSI_Y = 0.0092592593282461
+	BA.floats.POSI_X = 0.8828125
+	BA.floats.POSI_Y = 0.0046296296641231
 	BA.floats.SIZE_W = 0.11458333581686
 	BA.floats.SIZE_H = 0.027777777984738
 	BA.bools = {}
@@ -486,7 +542,7 @@ function DefaultHUDSettings(reset)
 	CON.element = "CON"
 	CON.floats = {}
 	CON.floats.POSI_X = 0.41666665673256
-	CON.floats.POSI_Y = 0.064814813435078
+	CON.floats.POSI_Y = 0.092592589557171
 	CON.floats.SIZE_W = 0.16666667163372
 	CON.floats.SIZE_H = 0.027777777984738
 	CON.bools = {}
@@ -514,7 +570,7 @@ function DefaultHUDSettings(reset)
 	PE.element = "PE"
 	PE.floats = {}
 	PE.floats.POSI_X = 0.0052083334885538
-	PE.floats.POSI_Y = 0.47222220897675
+	PE.floats.POSI_Y = 0.032407406717539
 	PE.floats.SIZE_W = 0.05208333209157
 	PE.floats.SIZE_H = 0.018518518656492
 	PE.bools = {}
@@ -525,7 +581,7 @@ function DefaultHUDSettings(reset)
 	PE.bools.PERC = 1
 	PE.bools.BACK = 0
 	PE.bools.BORD = 0
-	PE.bools.EXTR = 1
+	PE.bools.EXTR = 0
 	PE.colors = {}
 	PE.colors.TE = "255, 255, 255, 255"
 	PE.colors.TB = "0, 0, 0, 255"
@@ -542,7 +598,7 @@ function DefaultHUDSettings(reset)
 	NE.element = "NE"
 	NE.floats = {}
 	NE.floats.POSI_X = 0.0052083334885538
-	NE.floats.POSI_Y = 0.45370370149612
+	NE.floats.POSI_Y = 0.0092592593282461
 	NE.floats.SIZE_W = 0.08333333581686
 	NE.floats.SIZE_H = 0.018518518656492
 	NE.bools = {}
@@ -553,7 +609,7 @@ function DefaultHUDSettings(reset)
 	NE.bools.PERC = 1
 	NE.bools.BACK = 0
 	NE.bools.BORD = 0
-	NE.bools.EXTR = 1
+	NE.bools.EXTR = 0
 	NE.colors = {}
 	NE.colors.TE = "255, 255, 255, 255"
 	NE.colors.TB = "0, 0, 0, 255"
@@ -569,9 +625,9 @@ function DefaultHUDSettings(reset)
 	local COM = {}
 	COM.element = "COM"
 	COM.floats = {}
-	COM.floats.POSI_X = 0.41666665673256
-	COM.floats.POSI_Y = 0.027777777984738
-	COM.floats.SIZE_W = 0.16666667163372
+	COM.floats.POSI_X = 0.33072915673256
+	COM.floats.POSI_Y = 0.023148147389293
+	COM.floats.SIZE_W = 0.33854165673256
 	COM.floats.SIZE_H = 0.027777777984738
 	COM.bools = {}
 	COM.bools.VISI = 1
@@ -585,7 +641,7 @@ function DefaultHUDSettings(reset)
 	COM.colors = {}
 	COM.colors.TE = "255, 255, 255, 255"
 	COM.colors.TB = "0, 0, 0, 255"
-	COM.colors.BG = "0, 0, 0, 200"
+	COM.colors.BG = "0, 0, 0, 100"
 	COM.colors.BA = "0, 0, 0, 255"
 	COM.colors.BR = "0, 0, 0, 255"
 	COM.ints = {}
@@ -598,7 +654,7 @@ function DefaultHUDSettings(reset)
 	LO.element = "LO"
 	LO.floats = {}
 	LO.floats.POSI_X = 0.36979165673256
-	LO.floats.POSI_Y = 0.10185185074806
+	LO.floats.POSI_Y = 0.125
 	LO.floats.SIZE_W = 0.26041665673256
 	LO.floats.SIZE_H = 0.074074074625969
 	LO.bools = {}
@@ -625,18 +681,18 @@ function DefaultHUDSettings(reset)
 	local NA = {}
 	NA.element = "NA"
 	NA.floats = {}
-	NA.floats.POSI_X = 0.125
-	NA.floats.POSI_Y = 0.9074074074074074
-	NA.floats.SIZE_W = 0.1145833333333333
+	NA.floats.POSI_X = 0.0052083334885538
+	NA.floats.POSI_Y = 0.83333331346512
+	NA.floats.SIZE_W = 0.0703125
 	NA.floats.SIZE_H = 0.027777777984738
 	NA.bools = {}
-	NA.bools.VISI = 0
+	NA.bools.VISI = 1
 	NA.bools.ROUN = 0
 	NA.bools.ICON = 1
 	NA.bools.TEXT = 1
 	NA.bools.PERC = 1
-	NA.bools.BACK = 1
-	NA.bools.BORD = 1
+	NA.bools.BACK = 0
+	NA.bools.BORD = 0
 	NA.bools.EXTR = 1
 	NA.colors = {}
 	NA.colors.TE = "255, 255, 255, 255"
@@ -653,10 +709,10 @@ function DefaultHUDSettings(reset)
 	local AV = {}
 	AV.element = "AV"
 	AV.floats = {}
-	AV.floats.POSI_X = 10 / 1920
-	AV.floats.POSI_Y = 10 / 1080
-	AV.floats.SIZE_W = 64 / 1920
-	AV.floats.SIZE_H = 64 / 1080
+	AV.floats.POSI_X = 0.0052083334885538
+	AV.floats.POSI_Y = 0.86574071645737
+	AV.floats.SIZE_W = 0.0703125
+	AV.floats.SIZE_H = 0.125
 	AV.bools = {}
 	AV.bools.VISI = 1
 	AV.bools.ROUN = 0
@@ -678,8 +734,92 @@ function DefaultHUDSettings(reset)
 	AV.ints.TS = 24
 	AddHUDElement(AV, reset)
 
-	for i = 1, 10 do
-		local BOX = {}
+	local PM = {}
+	PM.element = "PM"
+	PM.floats = {}
+	PM.floats.POSI_X = 0.0052083334885538
+	PM.floats.POSI_Y = 0.86574071645737
+	PM.floats.SIZE_W = 0.0703125
+	PM.floats.SIZE_H = 0.125
+	PM.bools = {}
+	PM.bools.VISI = 0
+	PM.bools.ROUN = 0
+	PM.bools.ICON = 1
+	PM.bools.TEXT = 1
+	PM.bools.PERC = 1
+	PM.bools.BACK = 1
+	PM.bools.BORD = 1
+	PM.bools.EXTR = 1
+	PM.colors = {}
+	PM.colors.TE = "255, 255, 255, 255"
+	PM.colors.TB = "0, 0, 0, 255"
+	PM.colors.BG = "0, 0, 0, 200"
+	PM.colors.BA = "150, 52, 52, 255"
+	PM.colors.BR = "150, 52, 52, 255"
+	PM.ints = {}
+	PM.ints.AX = 1
+	PM.ints.AY = 1
+	PM.ints.TS = 24
+	AddHUDElement(PM, reset)
+
+	local CR = {}
+	CR.element = "CR"
+	CR.floats = {}
+	CR.floats.POSI_X = 0.46875
+	CR.floats.POSI_Y = 0.055555555969477
+	CR.floats.SIZE_W = 0.0625
+	CR.floats.SIZE_H = 0.027777777984738
+	CR.bools = {}
+	CR.bools.VISI = 1
+	CR.bools.ROUN = 0
+	CR.bools.ICON = 1
+	CR.bools.TEXT = 1
+	CR.bools.PERC = 1
+	CR.bools.BACK = 0
+	CR.bools.BORD = 0
+	CR.bools.EXTR = 1
+	CR.colors = {}
+	CR.colors.TE = "255, 255, 255, 255"
+	CR.colors.TB = "0, 0, 0, 255"
+	CR.colors.BG = "0, 0, 0, 200"
+	CR.colors.BA = "0, 0, 0, 0"
+	CR.colors.BR = "0, 0, 0, 255"
+	CR.ints = {}
+	CR.ints.AX = 1
+	CR.ints.AY = 1
+	CR.ints.TS = 24
+	AddHUDElement(CR, reset)
+
+	local BOX = {}
+	BOX.element = "BOX" .. 1
+	BOX.floats = {}
+	BOX.floats.POSI_X = 0.0026041667442769
+	BOX.floats.POSI_Y = 0.82870370149612
+	BOX.floats.SIZE_W = 0.24479167163372
+	BOX.floats.SIZE_H = 0.16666667163372
+	BOX.bools = {}
+	BOX.bools.VISI = 1
+	BOX.bools.ROUN = 0
+	BOX.bools.ICON = 1
+	BOX.bools.TEXT = 1
+	BOX.bools.PERC = 1
+	BOX.bools.BACK = 1
+	BOX.bools.BORD = 1
+	BOX.bools.EXTR = 1
+	BOX.colors = {}
+	BOX.colors.TE = "255, 255, 255, 255"
+	BOX.colors.TB = "255, 255, 255, 255"
+	BOX.colors.BG = "0, 0, 0, 200"
+	BOX.colors.BA = "0, 0, 0, 0"
+	BOX.colors.BR = "255, 255, 255, 255"
+	BOX.ints = {}
+	BOX.ints.AX = 1
+	BOX.ints.AY = 1
+	BOX.ints.TS = 18
+	AddHUDElement(BOX, reset)
+
+	for i = 2, 10 do
+		BOX = {}
 		BOX.element = "BOX" .. i
 		BOX.floats = {}
 		BOX.floats.POSI_X = 10 / 1920
@@ -720,20 +860,6 @@ function Player:HudLoadout()
 		net.Start("yrp_hud_info")
 			net.WriteTable(hudeles)
 		net.Send(self)
-
-		--[[
-		for i, ele in pairs(hudeles) do
-			if string.StartWith(ele.name, "float_") then
-				self:SetNWFloat(ele.name, tonumber(ele.value))
-			elseif string.StartWith(ele.name, "bool_") then
-				self:SetNWBool(ele.name, tobool(ele.value))
-			elseif string.StartWith(ele.name, "color_") then
-				self:SetNWString(ele.name, ele.value)
-			elseif string.StartWith(ele.name, "int_") then
-				self:SetNWInt(ele.name, ele.value)
-			end
-		end
-		]]
 	end
 	timer.Simple(1, function()
 		self:SetNWInt("hud_version", self:GetNWInt("hud_version", 0) + 1)

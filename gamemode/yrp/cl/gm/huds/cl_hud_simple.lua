@@ -351,6 +351,9 @@ function HUDSimple()
 		local NA = {}
 		NA.element = "NA"
 		HUDSimpleBG(NA)
+		local CR = {}
+		CR.element = "CR"
+		HUDSimpleBG(CR)
 		local HP = {}
 		HP.element = "HP"
 		HUDSimpleBG(HP)
@@ -363,6 +366,12 @@ function HUDSimple()
 		local MO = {}
 		MO.element = "MO"
 		HUDSimpleBG(MO)
+		local SA = {}
+		SA.element = "SA"
+		HUDSimpleBG(SA)
+		local RO = {}
+		RO.element = "RO"
+		HUDSimpleBG(RO)
 		if lply:GetNWBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
@@ -437,10 +446,16 @@ function HUDSimple()
 		end
 		NA = {}
 		NA.element = "NA"
-		NA.cur = 1
+		NA.cur = 0
 		NA.max = 1
 		NA.text = lply:RPName()
 		HUDSimpleBAR(NA)
+		CR = {}
+		CR.element = "CR"
+		CR.cur = 0
+		CR.max = 1
+		CR.text = os.date("%H:%M" , os.time())
+		HUDSimpleBAR(CR)
 		HP = {}
 		HP.element = "HP"
 		HP.cur = lply:Health()
@@ -461,15 +476,30 @@ function HUDSimple()
 		XP.element = "XP"
 		XP.cur = lply:XP()
 		XP.max = lply:GetMaxXP()
-		XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level() .. " " .. lply:GetGroupName() .. " " .. lply:GetRoleName()
+		XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
 		HUDSimpleBAR(XP)
 		MO = {}
 		MO.element = "MO"
-		MO.cur = CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()
-		MO.max = lply:SalaryTime()
-		MO.text = lply:FormattedMoneyRounded(1) .. " (+" .. lply:FormattedSalaryRounded(1) .. ")"
+		MO.cur = 1
+		MO.max = 1
+		MO.text = lply:FormattedMoneyRounded(1)
 		MO.icon = Material("icon16/money.png")
 		HUDSimpleBAR(MO)
+		SA = {}
+		SA.element = "SA"
+		SA.cur = CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()
+		SA.max = lply:SalaryTime()
+		SA.text = "+" .. lply:FormattedSalaryRounded(1)
+		SA.icon = Material("icon16/money_add.png")
+		HUDSimpleBAR(SA)
+		RO = {}
+		RO.element = "RO"
+		RO.cur = 1
+		RO.max = 1
+		RO.text = lply:GetRoleName()
+		RO.icon = Material("icon16/user.png")
+		RO.tcolor = lply:GetRoleColor()
+		HUDSimpleBAR(RO)
 		if lply:GetNWBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
@@ -485,8 +515,8 @@ function HUDSimple()
 			HU.element = "HU"
 			HU.cur = lply:Hunger()
 			HU.max = lply:GetMaxHunger()
-			HU.text = math.Round(lply:Hunger(), 1) .. "/" .. math.Round(lply:GetMaxHunger(), 1)
-			HU.percentage = math.Round(lply:Hunger() / lply:GetMaxHunger() * 100, 1) .. "%"
+			HU.text = math.Round(lply:Hunger(), 1) .. "/" .. math.Round(lply:GetMaxHunger(), 0)
+			HU.percentage = math.Round(lply:Hunger() / lply:GetMaxHunger() * 100, 0) .. "%"
 			HU.icon = Material("icon16/cake.png")
 			HUDSimpleBAR(HU)
 		end
@@ -495,8 +525,8 @@ function HUDSimple()
 			TH.element = "TH"
 			TH.cur = lply:Thirst()
 			TH.max = lply:GetMaxThirst()
-			TH.text = math.Round(lply:Thirst(), 1) .. "/" .. math.Round(lply:GetMaxThirst(), 1)
-			TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 1) .. "%"
+			TH.text = math.Round(lply:Thirst(), 1) .. "/" .. math.Round(lply:GetMaxThirst(), 0)
+			TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 0) .. "%"
 			TH.icon = Material("icon16/cup.png")
 			HUDSimpleBAR(TH)
 		end
@@ -686,6 +716,12 @@ function HUDSimple()
 		MO = {}
 		MO.element = "MO"
 		HUDSimpleBR(MO)
+		SA = {}
+		SA.element = "SA"
+		HUDSimpleBR(SA)
+		RO = {}
+		RO.element = "RO"
+		HUDSimpleBR(RO)
 		if lply:GetNWBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"

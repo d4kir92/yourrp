@@ -174,28 +174,63 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	end
 end)
 
-local Avatar = vgui.Create("AvatarImage", nil)
-local ava = {}
-ava.w = 64
-ava.h = 64
-ava.x = 0
-ava.y = 0
-ava.version = -1
-function Avatar:Think()
-	local lply = LocalPlayer()
-	if lply:GetNWInt("hud_version", 0) != ava.version then
-		ava.version = lply:GetNWInt("hud_version", 0)
+timer.Simple(1, function()
+	local Avatar = vgui.Create("AvatarImage", nil)
+	local ava = {}
+	ava.w = 64
+	ava.h = 64
+	ava.x = 0
+	ava.y = 0
+	ava.version = -1
+	function Avatar:Think()
+		local lply = LocalPlayer()
+		if lply:GetNWInt("hud_version", 0) != ava.version then
+			ava.version = lply:GetNWInt("hud_version", 0)
 
-		ava.w = lply:HudValue("AV", "SIZE_W")
-		ava.h = lply:HudValue("AV", "SIZE_H")
-		ava.x = lply:HudValue("AV", "POSI_X")
-		ava.y = lply:HudValue("AV", "POSI_Y")
+			ava.w = lply:HudValue("AV", "SIZE_W")
+			ava.h = lply:HudValue("AV", "SIZE_H")
+			ava.x = lply:HudValue("AV", "POSI_X")
+			ava.y = lply:HudValue("AV", "POSI_Y")
+			ava.visible = lply:HudValue("AV", "VISI")
 
-		Avatar:SetPos(ava.x, ava.y)
-		Avatar:SetSize(ava.h, ava.h)
-		Avatar:SetPlayer(LocalPlayer(), ava.h)
+			Avatar:SetPos(ava.x, ava.y)
+			Avatar:SetSize(ava.h, ava.h)
+			Avatar:SetPlayer(LocalPlayer(), ava.h)
+			if !ava.visible then
+				Avatar:SetSize(0, 0)
+			end
+		end
 	end
-end
+end)
+
+timer.Simple(2, function()
+	local PM = vgui.Create("DModelPanel", nil)
+	local pm = {}
+	pm.w = 64
+	pm.h = 64
+	pm.x = 0
+	pm.y = 0
+	pm.version = -1
+	function PM:Think()
+		local lply = LocalPlayer()
+		if lply:GetNWInt("hud_version", 0) != pm.version then
+			pm.version = lply:GetNWInt("hud_version", 0)
+
+			pm.w = lply:HudValue("PM", "SIZE_W")
+			pm.h = lply:HudValue("PM", "SIZE_H")
+			pm.x = lply:HudValue("PM", "POSI_X")
+			pm.y = lply:HudValue("PM", "POSI_Y")
+			pm.visible = lply:HudValue("PM", "VISI")
+
+			PM:SetPos(pm.x, pm.y)
+			PM:SetSize(pm.h, pm.h)
+			PM:SetModel(lply:GetModel())
+			if !pm.visible then
+				PM:SetModel("")
+			end
+		end
+	end
+end)
 
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()

@@ -112,6 +112,10 @@ function ctr(input)
 	end
 end
 
+function tr(input)
+	return ctr(input)
+end
+
 function under1080p()
 	if ScrH() < 1080 then
 		return true

@@ -3,9 +3,9 @@
 function GM:InitPostEntity()
 	printGM("note", "InitPostEntity()")
 
-	timer.Simple(2, function()
+	timer.Simple(3, function()
 		check_map_doors()
-		LoadStorages()
+		--LoadStorages()
 	end)
 
 	timer.Simple(4, function()

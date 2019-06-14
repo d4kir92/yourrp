@@ -549,10 +549,12 @@ end
 
 hook.Add("EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 	if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
-		dmginfo:ScaleDamage(GetHitFactorEntities())
+		local hitfactor = GetHitFactorEntities() or 1
+		dmginfo:ScaleDamage(hitfactor)
 	end
 	if ent:IsVehicle() then
-		dmginfo:ScaleDamage(GetHitFactorVehicles())
+		local hitfactor = GetHitFactorVehicles() or 1
+		dmginfo:ScaleDamage(hitfactor)
 	end
 end)
 
