@@ -16,9 +16,10 @@ SQL_ADD_COLUMN(_db_name, "border", "INT DEFAULT '0'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Ubuntu'")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design", "'Simple', 'Simple'")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design", "'Simple', 'Simple', 'Ubuntu'")
 end
 
 local HUDS = {}
@@ -141,5 +142,36 @@ net.Receive("get_design_settings", function(len, ply)
 				net.WriteTable(INTERFACES)
 			net.Send(ply)
 		end
+	end
+end)
+
+util.AddNetworkString("yrp_set_font")
+function SendFontName(ply)
+	local tab = {}
+	tab.table = DATABASE_NAME
+	tab.cols = {}
+	tab.cols[1] = "string_fontname"
+	tab.where = "uniqueID = '1'"
+
+	local dbtab = SQL.SELECT(tab)
+	dbtab = dbtab[1]
+
+	net.Start("yrp_set_font")
+		net.WriteString(dbtab.string_fontname)
+	net.Send(ply)
+end
+
+net.Receive("yrp_set_font", function(len, ply)
+	SendFontName(ply)
+end)
+
+util.AddNetworkString("yrp_update_font")
+net.Receive("yrp_update_font", function(len, ply)
+	local string_fontname = net.ReadString()
+	printGM("db", "[DESIGN] string_fontname changed to " .. string_fontname)
+	SQL_UPDATE(DATABASE_NAME, "string_fontname = '" .. string_fontname .. "'", "uniqueID = '1'")
+
+	for i, p in pairs(player.GetAll()) do
+		SendFontName(p)
 	end
 end)

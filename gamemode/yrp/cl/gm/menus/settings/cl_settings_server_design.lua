@@ -857,6 +857,30 @@ net.Receive("get_design_settings", function(len)
 		GRP_IF.cif = {}
 
 		-- IF Design
+		local if_font_bg = createD("DPanel", nil, GRP_IF:GetWide(), ctr(100), 0, 0)
+		function if_font_bg:Paint(pw, ph)
+			--
+		end
+		local if_font_header = createD("DPanel", if_font_bg, if_font_bg:GetWide(), ctr(50), 0, 0)
+		function if_font_header:Paint(pw, ph)
+			draw.SimpleText(YRP.lang_string("LID_font"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+		local if_font_choice = createD("DComboBox", if_font_bg, if_font_bg:GetWide(), ctr(50), 0, ctr(50))
+		for font, fontscale in pairs(YRP.GetFonts()) do
+			local selected = false
+			if font == YRP.GetFont() then
+				selected = true
+			end
+			local name = font
+			if_font_choice:AddChoice(name, font, selected)
+		end
+		function if_font_choice:OnSelect(panel, index, value)
+			net.Start("yrp_update_font")
+				net.WriteString(value)
+			net.SendToServer()
+		end
+		GRP_IF:AddItem(if_font_bg)
+
 		local if_design_bg = createD("DPanel", nil, GRP_IF:GetWide(), ctr(100), 0, 0)
 		function if_design_bg:Paint(pw, ph)
 			--
