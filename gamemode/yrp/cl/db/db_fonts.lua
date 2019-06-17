@@ -5,27 +5,42 @@ local fontscale = 1
 local fonts = {}
 
 function YRP.AddFont(fontname, scale)
-	fonts[fontname] = scale
+	fonts[string.lower(fontname)] = scale
 end
 
-YRP.AddFont("Roboto", 1)
-YRP.AddFont("Mali", 1.6)
-YRP.AddFont("pixelmix", 0.7)
-YRP.AddFont("Star Jedi", 1.1)
-YRP.AddFont("Swanky and Moo Moo", 1.3)
-YRP.AddFont("Ubuntu", 1)
-YRP.AddFont("Tahoma", 1)
-YRP.AddFont("Arial", 0.94)
-YRP.AddFont("Harry Potter", 1)
 YRP.AddFont("AmazDooMLeft", 1)
+YRP.AddFont("Arial", 0.94)
+
+YRP.AddFont("Caribbean", 0.7)
+YRP.AddFont("Comfortaa", 1.1)
+
+YRP.AddFont("Gang of Three", 0.9)
+
 YRP.AddFont("Halo", 0.48)
 YRP.AddFont("Harry Potter", 1)
+
+YRP.AddFont("Kimberley Bl", 0.96)
+
+YRP.AddFont("Mali", 1.6)
 YRP.AddFont("Military Font 7", 0.72)
+
 YRP.AddFont("Overseer", 1)
+
+YRP.AddFont("pixelmix", 0.7)
 YRP.AddFont("Pokemon Solid", 2)
 YRP.AddFont("pricedown bl", 1.34)
+
+YRP.AddFont("Roboto", 1)
+
 YRP.AddFont("Space Age", 0.52)
+YRP.AddFont("Star Jedi", 1.1)
 YRP.AddFont("Starcraft", 0.45)
+YRP.AddFont("Swanky and Moo Moo", 1.3)
+
+YRP.AddFont("Tahoma", 1)
+
+YRP.AddFont("Ubuntu", 1)
+
 YRP.AddFont("ZombieA", 0.65)
 
 function YRP.GetFonts()
@@ -97,11 +112,17 @@ local _weight = 500
 
 function changeFontSizeOf(_font, _size)
 	printGM("note", "changeFontSizeOf" .. _font .. _size)
-	createFont(_font, YRP.GetFont(), _size, weight, false)
+	createFont(_font, YRP.GetFont(), _size, _weight, false)
 end
 
 function changeFontSize()
 	printGM("db", "changeFontSize")
+
+	for i, s in pairs(GetFontSizeTable()) do
+		createFont("YRP_" .. s .. "_500", YRP.GetFont(), s, 500, false)
+		createFont("YRP_" .. s .. "_600", YRP.GetFont(), s, 600, false)
+		createFont("YRP_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+	end
 
 	for i, s in pairs(GetFontSizeTable()) do
 		createFont("Roboto" .. s, YRP.GetFont(), s, _weight, false)

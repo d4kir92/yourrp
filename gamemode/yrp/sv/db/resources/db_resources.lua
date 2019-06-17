@@ -11,15 +11,8 @@ printGM("gm", "")
 -- YourRP Content
 resource.AddWorkshop("1189643820")
 
--- FONTS
-resource.AddFile("resource/fonts/Roboto-Regular.ttf")
-resource.AddFile("resource/fonts/Roboto-Thin.ttf")
-resource.AddFile("resource/fonts/Roboto-Bold.ttf")
-resource.AddFile("resource/fonts/Starjedi.ttf")
-resource.AddFile("resource/fonts/starjedi.ttf")
-resource.AddFile("resource/fonts/Star Jedi.ttf")
 -- Food and Household items
---resource.AddWorkshop("108024198")
+-- resource.AddWorkshop("108024198")
 
 --Server Workshop Collection
 local _wsitems = engine.GetAddons()
