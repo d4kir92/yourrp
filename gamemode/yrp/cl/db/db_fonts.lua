@@ -122,6 +122,10 @@ function changeFontSize()
 		createFont("YRP_" .. s .. "_500", YRP.GetFont(), s, 500, false)
 		createFont("YRP_" .. s .. "_600", YRP.GetFont(), s, 600, false)
 		createFont("YRP_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+
+		createFont("YRP_O_" .. s .. "_500", YRP.GetFont(), s, 500, false)
+		createFont("YRP_O_" .. s .. "_600", YRP.GetFont(), s, 600, false)
+		createFont("YRP_O_" .. s .. "_700", YRP.GetFont(), s, 700, false)
 	end
 
 	for i, s in pairs(GetFontSizeTable()) do
