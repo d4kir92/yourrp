@@ -6,9 +6,9 @@ KEYBINDS["menu_role"] = KEY_F4
 KEYBINDS["menu_buy"] = KEY_F11
 KEYBINDS["menu_settings"] = KEY_F8
 KEYBINDS["menu_inventory"] = KEY_I
-KEYBINDS["menu_options_vehicle"] = KEY_B
-KEYBINDS["menu_options_door"] = KEY_B
-KEYBINDS["menu_appearance"] = KEY_O
+KEYBINDS["menu_options_vehicle"] = KEY_O
+KEYBINDS["menu_options_door"] = KEY_O
+KEYBINDS["menu_appearance"] = KEY_P
 KEYBINDS["menu_emotes"] = KEY_N
 KEYBINDS["menu_laws"] = KEY_L
 

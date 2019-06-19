@@ -310,8 +310,8 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 			ply:SetNWBool("broken_arm_left", false)
 			ply:SetNWBool("broken_arm_right", false)
 
-			ply:ForceEquip("yrp_key")
-			ply:ForceEquip("yrp_unarmed")
+			ply:Give("yrp_key")
+			ply:Give("yrp_unarmed")
 
 			local plyTab = ply:GetPlyTab()
 			if wk(plyTab) then
@@ -337,7 +337,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					end
 				end
 
-				ply:EquipWeapons()
+				--ply:EquipWeapons()
 
 				ply:SetNWFloat("hunger", 100)
 				ply:SetNWFloat("thirst", 100)
@@ -467,10 +467,10 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 					end
 				end)
 			else
-				ply:DropSWEPSilence(wep:GetClass())
+				--ply:DropSWEPSilence(wep:GetClass())
 			end
 		end
-		ply:DropBackpackStorage()
+		--ply:DropBackpackStorage()
 	end
 	if IsDropMoneyOnDeathEnabled() then
 		local _money = ply:GetMoney()
@@ -490,7 +490,7 @@ end)
 
 function GM:ShutDown()
 	save_clients("Shutdown/Changelevel")
-	SaveStorages("Shutdown/Changelevel")
+	--SaveStorages("Shutdown/Changelevel")
 end
 
 function GM:GetFallDamage(ply, speed)

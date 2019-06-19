@@ -605,12 +605,14 @@ end)
 
 net.Receive("getBuildings", function(len, ply)
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-	for k, building in pairs(_tmpTable) do
-		building.name = SQL_STR_OUT(building.name)
+	if wk(_tmpTable) then
+		for k, building in pairs(_tmpTable) do
+			building.name = SQL_STR_OUT(building.name)
+		end
+		net.Start("getBuildings")
+			net.WriteTable(_tmpTable)
+		net.Send(ply)
 	end
-	net.Start("getBuildings")
-		net.WriteTable(_tmpTable)
-	net.Send(ply)
 end)
 
 net.Receive("getBuildingInfo", function(len, ply)

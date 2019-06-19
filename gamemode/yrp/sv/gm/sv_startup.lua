@@ -5,7 +5,6 @@ function GM:InitPostEntity()
 
 	timer.Simple(3, function()
 		check_map_doors()
-		--LoadStorages()
 	end)
 
 	timer.Simple(4, function()

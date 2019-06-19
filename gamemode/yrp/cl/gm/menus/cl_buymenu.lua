@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https: /  / www.gnu.org / licenses / gpl.txt)
 
 local _bm = {}
 
@@ -206,7 +206,7 @@ function createStorageItem(item, duid)
 	return _i
 end
 
-local _mat_set = Material("vgui/yrp/light_settings.png")
+local _mat_set = Material("vgui / yrp / light_settings.png")
 
 net.Receive("shop_get_tabs", function(len)
 	openMenu()
@@ -381,7 +381,7 @@ net.Receive("shop_get_tabs", function(len)
 						_remove.uid = _uid
 						function _remove:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-							surfaceText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw/2, ph/2, Color(255, 255, 255), 1, 1)
+							surfaceText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 						end
 						function _remove:DoClick()
 							net.Start("dealer_rem_tab")
@@ -409,35 +409,37 @@ net.Receive("shop_get_tabs", function(len)
 				local _uid = net.ReadString()
 				local _cats = net.ReadTable()
 
-				_bm.shop:Clear()
+				if wk(_bm) then
+					_bm.shop:Clear()
 
-				for j, cat in pairs(_cats) do
-					local _cat = createD("DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb(100), 0, 0)
-					_cat.uid = cat.uniqueID
-					_cat:SetHeaderHeight(ctrb(100))
-					_cat:SetHeader(SQL_STR_OUT(cat.name))
-					_cat:SetSpacing(30)
-					_cat.color = Color(100, 100, 255)
-					_cat.color2 = Color(50, 50, 255)
-					function _cat:DoClick()
-						if self:IsOpen() then
-							net.Receive("shop_get_items_storage", function(l)
-								local _items = net.ReadTable()
-								for k, item in pairs(_items) do
-									local _item = createStorageItem(item, _dealer_uid)
-									self:Add(_item)
-								end
-							end)
-							net.Start("shop_get_items_storage")
-								net.WriteString(self.uid)
-							net.SendToServer()
-						else
-							self:ClearContent()
+					for j, cat in pairs(_cats) do
+						local _c = createD("DYRPCollapsibleCategory", _bm.shop, _bm.shop:GetWide(), ctrb(100), 0, 0)
+						_c.uid = cat.uniqueID
+						_c:SetHeaderHeight(ctrb(100))
+						_c:SetHeader(SQL_STR_OUT(cat.name))
+						_c:SetSpacing(30)
+						_c.color = Color(100, 100, 255)
+						_c.color2 = Color(50, 50, 255)
+						function _c:DoClick()
+							if self:IsOpen() then
+								net.Receive("shop_get_items_storage", function(l)
+									local _items = net.ReadTable()
+									for k, item in pairs(_items) do
+										local _item = createStorageItem(item, _dealer_uid)
+										self:Add(_item)
+									end
+								end)
+								net.Start("shop_get_items_storage")
+									net.WriteString(self.uid)
+								net.SendToServer()
+							else
+								self:ClearContent()
+							end
 						end
-					end
 
-					_bm.shop:AddItem(_cat)
-					_bm.shop:Rebuild()
+						_bm.shop:AddItem(_c)
+						_bm.shop:Rebuild()
+					end
 				end
 			end)
 			net.Start("shop_get_categories")
@@ -462,10 +464,10 @@ net.Receive("shop_get_tabs", function(len)
 				_color = Color(255, 255, 0, 255)
 			end
 			draw.RoundedBoxEx(ph / 2, 0, 0, pw, ph, _color, true, true)
-			surfaceText("+", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			surfaceText(" + ", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		function _bm.addtab:DoClick()
-			local _tmp = createD("DFrame", nil, ctr(420), ctr(50+10+100+10+50+10), 0, 0)
+			local _tmp = createD("DFrame", nil, ctr(420), ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)
 			function _tmp:Paint(pw, ph)
 				if !pa(_bm.tabs) then
 					self:Remove()

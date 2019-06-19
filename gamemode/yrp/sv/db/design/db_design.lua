@@ -154,11 +154,13 @@ function SendFontName(ply)
 	tab.where = "uniqueID = '1'"
 
 	local dbtab = SQL.SELECT(tab)
-	dbtab = dbtab[1]
+	if wk(dbtab) then
+		dbtab = dbtab[1]
 
-	net.Start("yrp_set_font")
-		net.WriteString(dbtab.string_fontname)
-	net.Send(ply)
+		net.Start("yrp_set_font")
+			net.WriteString(dbtab.string_fontname)
+		net.Send(ply)
+	end
 end
 
 net.Receive("yrp_set_font", function(len, ply)

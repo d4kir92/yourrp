@@ -286,7 +286,7 @@ timer.Create("ServerThink", 1, 0, function()
 		local _left = _time / 60 - _mod
 		local _str = "Auto-Save (Uptime: " .. _left .. " " .. YRP.lang_string("LID_minutes") .. ")"
 		save_clients(_str)
-		SaveStorages(_str)
+		--SaveStorages(_str)
 	end
 
 	if GAMEMODE:IsAutomaticServerReloadingEnabled() then

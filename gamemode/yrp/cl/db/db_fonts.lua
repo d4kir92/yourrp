@@ -8,6 +8,7 @@ function YRP.AddFont(fontname, scale)
 	fonts[string.lower(fontname)] = scale
 end
 
+YRP.AddFont("Aniron", 1.2)
 YRP.AddFont("AmazDooMLeft", 1)
 YRP.AddFont("Arial", 0.94)
 
@@ -16,9 +17,10 @@ YRP.AddFont("Comfortaa", 1.1)
 
 YRP.AddFont("Gang of Three", 0.9)
 
-YRP.AddFont("Halo", 0.48)
+YRP.AddFont("Halo", 0.58)
 YRP.AddFont("Harry Potter", 1)
 
+YRP.AddFont("Kelt", 1)
 YRP.AddFont("Kimberley Bl", 0.96)
 
 YRP.AddFont("Mali", 1.6)
@@ -32,16 +34,16 @@ YRP.AddFont("pricedown bl", 1.34)
 
 YRP.AddFont("Roboto", 1)
 
-YRP.AddFont("Space Age", 0.52)
-YRP.AddFont("Star Jedi", 1.1)
-YRP.AddFont("Starcraft", 0.45)
+YRP.AddFont("Space Age", 1.1)
+YRP.AddFont("Star Jedi", 1.3)
+YRP.AddFont("Starcraft", 0.72)
 YRP.AddFont("Swanky and Moo Moo", 1.3)
 
 YRP.AddFont("Tahoma", 1)
 
 YRP.AddFont("Ubuntu", 1)
 
-YRP.AddFont("ZombieA", 0.65)
+YRP.AddFont("ZombieA", 0.74)
 
 function YRP.GetFonts()
 	return fonts
@@ -58,8 +60,8 @@ function YRP.SetFont(fontname)
 end
 
 net.Receive("yrp_set_font", function(len)
-	local fontname = net.ReadString()
-	YRP.SetFont(fontname)
+	local fname = net.ReadString()
+	YRP.SetFont(fname)
 end)
 timer.Simple(1, function()
 	net.Start("yrp_set_font")
@@ -85,30 +87,29 @@ function GetFontSizeTable()
 	return tab
 end
 
-function createFont(_name, _font, _size, __weight, _outline, _shadow)
-	--printGM("db", "createFont: " .. _name)
-	--printGM("db", _font .. ", " .. _size .. ", " .. __weight)
-	--_size = ctr(_size * 2)
-	surface.CreateFont(_name, {
-		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = true,
-		size = _size * fontscale,
-		weight = __weight,
-		blursize = 0,
-		scanlines = 0,
-		antialias = true,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = _shadow or false,
-		additive = false,
-		outline = _outline or false
-	})
-end
-
 local _weight = 500
+
+function createFont(_name, _font, _size, __weight, _outline, _shadow)
+	if wk(_name) and wk(_font) then
+		surface.CreateFont(_name, {
+			font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+			extended = true,
+			size = _size * fontscale,
+			weight = _weight or _weight,
+			blursize = 0,
+			scanlines = 0,
+			antialias = true,
+			underline = false,
+			italic = false,
+			strikeout = false,
+			symbol = false,
+			rotary = false,
+			shadow = _shadow or false,
+			additive = false,
+			outline = _outline or false
+		})
+	end
+end
 
 function changeFontSizeOf(_font, _size)
 	printGM("note", "changeFontSizeOf" .. _font .. _size)
@@ -123,9 +124,9 @@ function changeFontSize()
 		createFont("YRP_" .. s .. "_600", YRP.GetFont(), s, 600, false)
 		createFont("YRP_" .. s .. "_700", YRP.GetFont(), s, 700, false)
 
-		createFont("YRP_O_" .. s .. "_500", YRP.GetFont(), s, 500, false)
-		createFont("YRP_O_" .. s .. "_600", YRP.GetFont(), s, 600, false)
-		createFont("YRP_O_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+		createFont("YRP_O_" .. s .. "_500", YRP.GetFont(), s, 500, true)
+		createFont("YRP_O_" .. s .. "_600", YRP.GetFont(), s, 600, true)
+		createFont("YRP_O_" .. s .. "_700", YRP.GetFont(), s, 700, true)
 	end
 
 	for i, s in pairs(GetFontSizeTable()) do

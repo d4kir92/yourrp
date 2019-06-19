@@ -173,7 +173,7 @@ function InitYRPChat()
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.richText:PerformLayout()
-			self:SetFontInternal("Roboto18B")
+			self:SetFontInternal("YRP_O_18_500")
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)

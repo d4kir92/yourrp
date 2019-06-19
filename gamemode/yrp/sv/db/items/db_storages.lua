@@ -153,8 +153,8 @@ function Entity:InitStorage(w, h)
 	end)
 end
 
-util.AddNetworkString("openStorage")
-function openStorage(ply, uid)
+util.AddNetworkString("--openstorage")
+function --openstorage(ply, uid)
 	local _storages = {}
 
 	--[[ Add World Storage ]]--
@@ -166,10 +166,10 @@ function openStorage(ply, uid)
 		end
 	end
 
-	net.Start("openStorage")
+	net.Start("--openstorage")
 		net.WriteTable(_storages)
 	net.Send(ply)
 end
-net.Receive("openStorage", function(len, ply)
-	openStorage(ply)
+net.Receive("--openstorage", function(len, ply)
+	--openstorage(ply)
 end)

@@ -4,7 +4,7 @@ local PANEL = {}
 
 STORAGES = STORAGES or {}
 
-local itemsize = 140
+itemsize = itemsize or 100
 
 net.Receive("yrp_join_storage", function(len)
 	local sto = net.ReadTable()
@@ -52,6 +52,8 @@ net.Receive("yrp_join_storage", function(len)
 					storage:SetWide(tr(itemsize * ((x - 1) + 1) + 10 * (x - 1)))
 					storage:SetTall(tr(itemsize * 4 + 10 * 3))
 					reached = true
+
+					storage:UpdateBagLayout()
 					break
 				end
 			end
@@ -100,7 +102,7 @@ net.Receive("yrp_misplace_item", function(len, ply)
 end)
 
 function PANEL:Paint(pw, ph)
-	--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0, 100))
 end
 
 function PANEL:SetStorage(uid)
@@ -111,6 +113,17 @@ function PANEL:SetStorage(uid)
 	net.Start("yrp_join_storage")
 		net.WriteString(self.uid)
 	net.SendToServer()
+end
+
+function PANEL:UpdateBagLayout()
+	self.bag:SetWide(self:GetWide() + 2 * tr(20))
+	self.bag:SetTall(self:GetTall() + 2 * tr(20) + tr(50))
+	self:SetPos(tr(20), tr(50 + 20))
+end
+
+function PANEL:SetBag(bag)
+	self.bag = bag
+	self:UpdateBagLayout()
 end
 
 function PANEL:OnRemove()

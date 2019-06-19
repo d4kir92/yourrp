@@ -14,7 +14,7 @@ add_luas("vehicles.lua")
 add_luas("date.lua")
 add_luas("sp.lua")
 add_luas("table.lua")
-add_luas("items.lua")
+--add_luas("items.lua")
 
 AddCSLuaFile("derma.lua")
 AddCSLuaFile("yrp_derma.lua")
@@ -34,6 +34,7 @@ AddCSLuaFile("derma/DYRPHorizontalMenu.lua")
 AddCSLuaFile("interface/base.lua")
 
 AddCSLuaFile("derma/ystorage.lua")
+AddCSLuaFile("derma/ybag.lua")
 
 if CLIENT then
 	include("derma.lua")
@@ -54,6 +55,7 @@ if CLIENT then
 	include("interface/base.lua")
 
 	include("derma/ystorage.lua")
+	include("derma/ybag.lua")
 end
 
 print("Loaded _libs_includes.lua")
