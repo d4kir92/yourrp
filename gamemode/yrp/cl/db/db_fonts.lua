@@ -5,7 +5,7 @@ local fontscale = 1
 local fonts = {}
 
 function YRP.AddFont(fontname, scale)
-	fonts[string.lower(fontname)] = scale
+	fonts[fontname] = scale
 end
 
 YRP.AddFont("Aniron", 1.2)
@@ -54,9 +54,12 @@ function YRP.GetFont()
 end
 
 function YRP.SetFont(fontname)
-	font = fontname
-	fontscale = fonts[fontname]
-	changeFontSize()
+	if wk(fontname) then
+		font = fontname
+		fontscale = fonts[fontname] or 1
+		YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
+		changeFontSize()
+	end
 end
 
 net.Receive("yrp_set_font", function(len)
