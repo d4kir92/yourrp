@@ -12,8 +12,8 @@ end
 
 function Player:getAgendaTable()
 	--Description: Get the agenda a player can see. Note: when a player is not the manager of an agenda, it returns the agenda of the manager.
-	printGM("darkrp", "getAgendaTable()")
-	printGM("darkrp", DarkRP._not)
+	--printGM("darkrp", "getAgendaTable()")
+	--printGM("darkrp", DarkRP._not)
 	return false
 end
 
@@ -30,6 +30,8 @@ function Player:getDarkRPVar(var)
 		return self:RPName() or self:SteamName()
 	elseif var == "HasGunlicense" then
 		return true
+	elseif var == "Energy" then
+		return self:Hunger()
 	else
 		local _nw_var = self:GetNWString(var, "VARIABLE NOT FOUND")
 		if tonumber(_nw_var) == nil then
