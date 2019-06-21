@@ -2,7 +2,7 @@
 
 function DarkRP.addChatReceiver(prefix, text, hearFunc)
 	--Description: Add a chat command with specific receivers
-	printGM("darkrp", "addChatReceiver(" .. prefix .. ", " .. text .. ", " .. hearFunc .. ")")
+	printGM("darkrp", "addChatReceiver(" .. prefix .. ", " .. text .. ", " .. tostring(hearFunc) .. ")")
 	printGM("darkrp", DarkRP._not)
 end
 
