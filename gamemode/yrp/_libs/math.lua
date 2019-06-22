@@ -43,6 +43,27 @@ end
 
 
 
+-- Frame Settings
+local fw = 2400
+local fh = 1600
+function FW()
+	return tr(fw)
+end
+
+function FH()
+	return tr(fh)
+end
+
+function PX()
+	return ScrW() / 2 - tr(fw) / 2
+end
+
+function PY()
+	return ScrH() / 2 - tr(fh) / 2
+end
+
+
+
 -- Datatypes
 function GetMaxInt()
 	-- "Max" Int Value
@@ -154,7 +175,7 @@ end
 
 function formatMoney(money, ply)
 	if CLIENT then
-		return ply:GetNWString("text_money_pre").. money .. ply:GetNWString("text_money_pos")
+		return ply:GetNWString("text_money_pre") .. money .. ply:GetNWString("text_money_pos")
 	else
 		return "[FAILED]" .. money .. "[FAILED]"
 	end

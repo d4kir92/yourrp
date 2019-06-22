@@ -46,7 +46,7 @@ Simple.bools = {}
 Simple.colors = {}
 
 Simple.colors.YFrame_HT = "255, 255, 255, 255"
-Simple.colors.YFrame_HB = "0, 0, 0, 254"
+Simple.colors.YFrame_HB = "40, 40, 40, 255"
 Simple.colors.YFrame_BG = "0, 0, 0, 200"
 
 Simple.colors.YButton_NC = "255, 255, 255, 255"
@@ -104,6 +104,7 @@ util.AddNetworkString("update_interface_color")
 net.Receive("update_interface_color", function(len, ply)
 	local name = net.ReadString()
 	local color = net.ReadString()
+	YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
 	SQL_UPDATE(DATABASE_NAME, "value = '" .. color .. "'", "name = '" .. name .. "'")
 	IFLoadoutAll()
 end)

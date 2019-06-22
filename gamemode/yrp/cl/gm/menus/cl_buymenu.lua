@@ -206,7 +206,7 @@ function createStorageItem(item, duid)
 	return _i
 end
 
-local _mat_set = Material("vgui / yrp / light_settings.png")
+local _mat_set = Material("vgui/yrp/light_settings.png")
 
 net.Receive("shop_get_tabs", function(len)
 	openMenu()
@@ -215,19 +215,23 @@ net.Receive("shop_get_tabs", function(len)
 	local _dealer_uid = _dealer.uniqueID
 	local _tabs = net.ReadTable()
 
-	_bm.window = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
+	_bm.window = createD("YFrame", nil, FW(), FH(), PX(), PY())
 	_bm.window.dUID = _dealer_uid
 	_bm.window:SetTitle(_dealer.name)
 	_bm.window:Center()
 	_bm.window:ShowCloseButton(true)
-	_bm.window:SetDraggable(false)
+	_bm.window:SetDraggable(true)
+	_bm.window:SetHeaderHeight(50)
 	function _bm.window:OnClose()
 		closeMenu()
 	end
 	function _bm.window:OnRemove()
 		closeMenu()
 	end
+
+	_bm.window.systime = SysTime()
 	function _bm.window:Paint(pw, ph)
+		Derma_DrawBackgroundBlur(self, self.systime)
 		hook.Run("YFramePaint", self, pw, ph) -- surfaceWindow(self, pw, ph, YRP.lang_string(_dealer.name) .. " [PROTOTYPE]")
 	end
 
@@ -255,7 +259,7 @@ net.Receive("shop_get_tabs", function(len)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 				end
 
-				_set.name = createD("DYRPPanelPlus", _set, ctrb(580), ctrb(100), ctrb(10), ctrb(60))
+				_set.name = createD("DYRPPanelPlus", _set, ctrb(560), ctrb(100), ctrb(20), ctrb(60))
 				_set.name:INITPanel("DTextEntry")
 				_set.name:SetHeader(YRP.lang_string("LID_name"))
 				_set.name:SetText(_dealer.name)
@@ -267,7 +271,7 @@ net.Receive("shop_get_tabs", function(len)
 					net.SendToServer()
 				end
 
-				_set.name = createD("DYRPPanelPlus", _set, ctrb(580), ctrb(100), ctrb(10), ctrb(170))
+				_set.name = createD("DYRPPanelPlus", _set, ctrb(560), ctrb(100), ctrb(20), ctrb(170))
 				_set.name:INITPanel("YButton")
 				_set.name:SetHeader(YRP.lang_string("LID_appearance"))
 				_set.name.plus:SetText("LID_change")
@@ -298,7 +302,7 @@ net.Receive("shop_get_tabs", function(len)
 				end
 
 				local _storages = net.ReadTable()
-				_set.storagepoint = createD("DYRPPanelPlus", _set, ctrb(580), ctrb(100), ctrb(10), ctrb(280))
+				_set.storagepoint = createD("DYRPPanelPlus", _set, ctrb(560), ctrb(100), ctrb(20), ctrb(280))
 				_set.storagepoint:INITPanel("DComboBox")
 				_set.storagepoint:SetHeader(YRP.lang_string("LID_storagepoint"))
 				for i, storage in pairs(_storages) do
@@ -322,15 +326,15 @@ net.Receive("shop_get_tabs", function(len)
 	end
 
 	--[[ Shop ]]--
-	_bm.shop = createD("DPanelList", _bm.window, ScW() - ctrb(10 + 10), ScrH() - ctrb(50 + 10 + 60 + 10), ctrb(10), ctrb(50 + 10 + 60))
-	_bm.shop:EnableVerticalScrollbar(false)
-	_bm.shop:SetSpacing(10)
+	_bm.shop = createD("DPanelList", _bm.window, FW() - ctrb(20 + 20), FH() - ctrb(100 + 20 + 60 + 20), ctrb(20), ctrb(100 + 20 + 60))
+	_bm.shop:EnableVerticalScrollbar(true)
+	_bm.shop:SetSpacing(20)
 	_bm.shop:SetNoSizing(false)
 	function _bm.shop:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100, 240))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
 	end
 
-	_bm.tabs = createD("DYRPTabs", _bm.window, ScW() - ctrb(10 + 10) - ctr(80 + 10), ctrb(60), ctrb(10), ctrb(50 + 10))
+	_bm.tabs = createD("DYRPTabs", _bm.window, FW() - ctrb(20 + 20) - ctr(80 + 20), ctrb(60), ctrb(20), ctrb(100 + 20))
 	_bm.tabs:SetSelectedColor(Color(100, 100, 100, 240))
 	_bm.tabs:SetUnselectedColor(Color(0, 0, 0, 240))
 
@@ -456,7 +460,7 @@ net.Receive("shop_get_tabs", function(len)
 	end
 
 	if LocalPlayer():HasAccess() then
-		_bm.addtab = createD("DButton", _bm.window, ctr(80), ctr(60), ScrW() - ctr(80 + 10), ctr(50 + 10))
+		_bm.addtab = createD("DButton", _bm.window, ctr(80), ctr(60), FW() - ctr(80 + 20), ctr(100 + 20))
 		_bm.addtab:SetText("")
 		function _bm.addtab:Paint(pw, ph)
 			local _color = Color(0, 255, 0, 255)

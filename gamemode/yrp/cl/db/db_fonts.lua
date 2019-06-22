@@ -97,7 +97,7 @@ function createFont(_name, _font, _size, __weight, _outline, _shadow)
 		surface.CreateFont(_name, {
 			font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 			extended = true,
-			size = _size * fontscale,
+			size = tr(_size * fontscale * 2),
 			weight = _weight or _weight,
 			blursize = 0,
 			scanlines = 0,

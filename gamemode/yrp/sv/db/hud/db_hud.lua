@@ -82,8 +82,8 @@ function DefaultHUDSettings(reset)
 	HP.colors.TE = "255, 255, 255, 255"
 	HP.colors.TB = "0, 0, 0, 255"
 	HP.colors.BG = "0, 0, 0, 200"
-	HP.colors.BA = "150, 52, 52, 255"
-	HP.colors.BR = "150, 52, 52, 255"
+	HP.colors.BA = "200, 52, 52, 255"
+	HP.colors.BR = "200, 52, 52, 255"
 	HP.ints = {}
 	HP.ints.AX = 1
 	HP.ints.AY = 1
@@ -110,8 +110,8 @@ function DefaultHUDSettings(reset)
 	AR.colors.TE = "255, 255, 255, 255"
 	AR.colors.TB = "0, 0, 0, 255"
 	AR.colors.BG = "0, 0, 0, 200"
-	AR.colors.BA = "52, 150, 72, 255"
-	AR.colors.BR = "52, 150, 72, 255"
+	AR.colors.BA = "100, 100, 255, 255"
+	AR.colors.BR = "100, 100, 255, 255"
 	AR.ints = {}
 	AR.ints.AX = 1
 	AR.ints.AY = 1
@@ -138,8 +138,8 @@ function DefaultHUDSettings(reset)
 	XP.colors.TE = "255, 255, 255, 255"
 	XP.colors.TB = "0, 0, 0, 255"
 	XP.colors.BG = "0, 0, 0, 200"
-	XP.colors.BA = "181, 255, 107, 255"
-	XP.colors.BR = "181, 255, 107, 255"
+	XP.colors.BA = "25, 100, 227, 255"
+	XP.colors.BR = "25, 100, 227, 255"
 	XP.ints = {}
 	XP.ints.AX = 1
 	XP.ints.AY = 1
@@ -250,8 +250,8 @@ function DefaultHUDSettings(reset)
 	ST.colors.TE = "255, 255, 255, 255"
 	ST.colors.TB = "0, 0, 0, 255"
 	ST.colors.BG = "0, 0, 0, 200"
-	ST.colors.BA = "150, 150, 60, 255"
-	ST.colors.BR = "150, 150, 60, 255"
+	ST.colors.BA = "200, 200, 50, 255"
+	ST.colors.BR = "200, 200, 50, 255"
 	ST.ints = {}
 	ST.ints.AX = 1
 	ST.ints.AY = 1
@@ -418,8 +418,8 @@ function DefaultHUDSettings(reset)
 	WP.colors.TE = "255, 255, 255, 255"
 	WP.colors.TB = "0, 0, 0, 255"
 	WP.colors.BG = "0, 0, 0, 200"
-	WP.colors.BA = "181, 255, 107, 255"
-	WP.colors.BR = "181, 255, 107, 255"
+	WP.colors.BA = "40, 40, 40, 255"
+	WP.colors.BR = "40, 40, 40, 255"
 	WP.ints = {}
 	WP.ints.AX = 1
 	WP.ints.AY = 1
@@ -446,8 +446,8 @@ function DefaultHUDSettings(reset)
 	WS.colors.TE = "255, 255, 255, 255"
 	WS.colors.TB = "0, 0, 0, 255"
 	WS.colors.BG = "0, 0, 0, 200"
-	WS.colors.BA = "181, 255, 107, 255"
-	WS.colors.BR = "181, 255, 107, 255"
+	WS.colors.BA = "40, 40, 40, 255"
+	WS.colors.BR = "40, 40, 40, 255"
 	WS.ints = {}
 	WS.ints.AX = 1
 	WS.ints.AY = 1
@@ -474,8 +474,8 @@ function DefaultHUDSettings(reset)
 	WN.colors.TE = "255, 255, 255, 255"
 	WN.colors.TB = "0, 0, 0, 255"
 	WN.colors.BG = "0, 0, 0, 200"
-	WN.colors.BA = "181, 255, 107, 255"
-	WN.colors.BR = "181, 255, 107, 255"
+	WN.colors.BA = "40, 40, 40, 255"
+	WN.colors.BR = "40, 40, 40, 255"
 	WN.ints = {}
 	WN.ints.AX = 1
 	WN.ints.AY = 1
