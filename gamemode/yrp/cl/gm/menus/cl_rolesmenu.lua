@@ -37,8 +37,18 @@ function createRoleBox(rol, parent, mainparent)
 		_rol.tbl = rol
 
 		-- Role Playermodel --
-		_rol.pm = createD("DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
-		_rol.pm:SetModel(string.Explode(",", _rol.tbl.string_playermodels)[1] or "")
+		_rol.pms = createD("DHorizontalScroller", _rol, tr(600), tr(400), -tr(125), 0)
+		_rol.pms:SetOverlap(150)
+
+		for i, pm in pairs(_rol.tbl.pms) do
+			local p = createD("DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
+			p:SetModel(pm.string_model)
+
+			local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
+			p.Entity:SetModelScale(randsize, 0)
+
+			_rol.pms:AddPanel(p)
+		end
 
 		-- Role Name --
 		_rol.rn = createD("DPanel", _rol, _rol:GetWide(), tr(60), 0, 0)
@@ -57,14 +67,18 @@ function createRoleBox(rol, parent, mainparent)
 				ph = ph - 1 * tr(4)
 
 				--Background
-				draw.RoundedBox(0, tr(_br), 0, pw, ph, Color(255, 255, 255, 100))
+				--draw.RoundedBox(0, tr(_br), 0, pw, ph, Color(255, 255, 255, 100))
 
 				--Maxamount
-				draw.RoundedBox(0, tr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color(255, 0, 0, 255))
-				surfaceText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+				--draw.RoundedBox(0, tr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color(255, 0, 0, 255))
+				local color = Color(255, 255, 255)
+				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
+					color = Color(255, 0, 0)
+				end
+				surfaceText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Roboto14B", pw - tr(20), ph / 2, color, 2, 1)
 
 				--BR
-				drawRBBR(0, tr(_br), 0, pw, ph, Color(0, 0, 0, 255), tr(4))
+				--drawRBBR(0, tr(_br), 0, pw, ph, Color(0, 0, 0, 255), tr(4))
 			end
 		end
 
@@ -76,11 +90,18 @@ function createRoleBox(rol, parent, mainparent)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 60))
 			end
 		end
-		_rol.gr:SetText("LID_moreinformation")
+		_rol.gr:SetText("")
 		function _rol.gr:DoClick()
-			local _pm = string.Explode(",", rol.string_playermodels)
+			_rm.pms:Clear()
+			for i, pm in pairs(rol.pms) do
+				local dmp = createD("DModelPanel", _rm.pms, tr(400), tr(400), -tr(100) + (i - 1) * tr(150), tr(50))
+				dmp:SetModel(pm.string_model)
 
-			_rm.infopm:SetModel(_pm[1] or "")
+				local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
+				dmp.Entity:SetModelScale(randsize, 0)
+
+				_rm.pms:AddPanel(dmp)
+			end
 
 			_rm.info.rolename = rol.string_name
 			_rm.info.rolecolor = rol.string_color
@@ -278,12 +299,26 @@ function openRoleMenu()
 	openMenu()
 	if LocalPlayer():GetNWBool("bool_players_can_switch_role", false) then
 		_rm = createD("YFrame", nil, FW(), FH(), PX(), PY())
+		_rm:SetMinWidth(FW())
+		_rm:SetMinHeight(FH())
 		_rm:Center()
+		_rm:Sizable(true)
 		_rm:ShowCloseButton(true)
 		_rm:SetTitle("LID_rolemenu")
 		_rm:SetHeaderHeight(50)
 		_rm:SetBackgroundBlur(true)
 		_rm.systime = SysTime()
+		function _rm.ChangedSize()
+			_rm.pl:SetSize(_rm:GetWide() - _rm.info:GetWide() - 3 * tr(20), _rm:GetTall() - _rm:GetHeaderHeight() - tr(20 + 20))
+			_rm.pl:SetPos(tr(20), _rm:GetHeaderHeight() + tr(20))
+
+			for i, v in pairs(_rm.pl:GetChildren()) do
+				v:SetWide(_rm:GetWide() - _rm.info:GetWide() - 3 * tr(20))
+			end
+
+			_rm.info:SetSize(tr(800), _rm:GetTall() - _rm:GetHeaderHeight() - tr(20 + 20))
+			_rm.info:SetPos(_rm:GetWide() - tr(20) - tr(800), _rm:GetHeaderHeight() + tr(20))
+		end
 		function _rm:Paint(pw, ph)
 			Derma_DrawBackgroundBlur(self, self.systime)
 			hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_rolemenu") .. " [PROTOTYPE]")
@@ -300,7 +335,7 @@ function openRoleMenu()
 			-- Role Appearance --
 			draw.RoundedBox(0, 0, 0, pw, tr(50), headercolor)
 			surfaceText(YRP.lang_string("LID_appearance"), "roleInfoHeader", tr(25), tr(25), Color(255, 255, 255), 0, 1)
-			--draw.RoundedBox(0, 0, tr(50), pw, pw, Color(0, 0, 0, 200))
+			draw.RoundedBox(0, 0, tr(50), pw, tr(400), contentcolor)
 
 			-- Role Name --
 			draw.RoundedBox(0, 0, tr(500), pw, tr(50), headercolor)
@@ -324,7 +359,9 @@ function openRoleMenu()
 			draw.RoundedBox(0, 0, tr(1150 + 50), pw, tr(50), contentcolor)
 			surfaceText(formatMoney(self.rolesala, LocalPlayer()), "roleInfoText", tr(25), tr(1150 + 50 + 25), Color(255, 255, 255), 0, 1)
 		end
-		_rm.infopm = createD("DModelPanel", _rm.info, tr(400), tr(400), 0, tr(50))
+
+		_rm.pms = createD("DHorizontalScroller", _rm.info, tr(800), tr(400), 0, tr(50))
+		_rm.pms:SetOverlap(100)
 
 		_rm.infodesc = createD("RichText", _rm.info, tr(800 - 20 - 20), tr(200), tr(20), tr(650 + 50))
 		function _rm.infodesc:Paint(pw, ph)
@@ -339,11 +376,11 @@ function openRoleMenu()
 		end
 
 		_rm.infobutton = createD("YButton", _rm.info, tr(800 - 2 * 20), tr(100), tr(20), _rm.info:GetTall() - tr(100 + 20))
-		_rm.infobutton:SetText("LID_getrole")
+		_rm.infobutton:SetText("LID_becomerole")
 		_rm.infobutton.rolename = ""
 		function _rm.infobutton:Paint(pw, ph)
 			if _rm.info.rolename == YRP.lang_string("LID_none") then return end
-			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_getrole"))
+			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_becomerole"))
 		end
 		function _rm.infobutton:DoClick()
 			if self.uniqueID != nil then

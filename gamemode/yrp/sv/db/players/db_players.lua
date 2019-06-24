@@ -105,19 +105,20 @@ function set_role(ply, rid)
 	local _char_id = ply:CharID()
 	if _char_id != nil then
 		local _result = SQL_UPDATE("yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID())
-		local _gid = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
+		local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
 		local _old_uid = ply:GetNWString("roleUniqueID", "1")
 		ply:SetNWString("roleUniqueID", rid)
-		if _gid != nil then
-			_gid = tonumber(_gid[1].int_groupID)
-			if isnumber(_gid) then
-				local _result2 = SQL_UPDATE("yrp_characters", "groupID = " .. _gid, "uniqueID = " .. ply:CharID())
-				ply:SetNWString("groupUniqueID", _gid)
+
+		if _role != nil then
+			_role = tonumber(_role[1].int_groupID)
+			if isnumber(_role) then
+				local _result2 = SQL_UPDATE("yrp_characters", "groupID = " .. _role, "uniqueID = " .. ply:CharID())
+				ply:SetNWString("groupUniqueID", _role)
 			else
-				printGM("note", "_gid = " .. _gid)
+				YRP.msg("note", "_role = " .. _role)
 			end
 		else
-			YRP.msg("note", "_gid failed")
+			YRP.msg("note", "_role failed")
 		end
 		updateRoleUses(_old_uid)
 		updateRoleUses(rid)
@@ -165,12 +166,16 @@ function set_role_values(ply)
 			end
 			if ChaTab.playermodelID != nil then
 				local pmid = tonumber(ChaTab.playermodelID)
-				local pms = string.Explode(",", GetPlayermodelsOfRole(rolTab.uniqueID))
+				local pms = GetPMTableOfRole(rolTab.uniqueID)
 				if pms[pmid] == nil then
 					pmid = 1
 				end
-				ply:SetNWString("string_playermodel", pms[pmid])
-				ply:SetModel(pms[pmid])
+				local pm = pms[pmid]
+				ply:SetNWString("string_playermodel", pm.string_model)
+				ply:SetModel(pm.string_model)
+
+				local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
+				ply:SetModelScale(randsize, 0)
 			end
 			ply:SetNWString("Gender", ChaTab.gender)
 		else
@@ -181,11 +186,9 @@ function set_role_values(ply)
 		--[RE]--check_inv(ply, ply:CharID())
 
 		if worked(rolTab, "set_role_values rolTab") then
-			local pmsize = rolTab.int_playermodelsize or 1
 			ply:SetNWString("roleColor", rolTab.string_color)
-			ply:SetModelScale(pmsize, 0)
-			ply:SetNWInt("speedwalk", rolTab.int_speedwalk * pmsize)
-			ply:SetNWInt("speedrun", rolTab.int_speedrun * pmsize)
+			ply:SetNWInt("speedwalk", rolTab.int_speedwalk)
+			ply:SetNWInt("speedrun", rolTab.int_speedrun)
 			ply:SetWalkSpeed(ply:GetNWInt("speedwalk"))
 			ply:SetRunSpeed(ply:GetNWInt("speedrun"))
 

@@ -180,7 +180,7 @@ end
 
 function Player:isWanted()
 	--Description: Whether this player is wanted
-	return self:GetNWBool("iswanted", false)
+	return false -- self:GetNWBool("iswanted", false)
 end
 
 function Player:nickSortedPlayers()

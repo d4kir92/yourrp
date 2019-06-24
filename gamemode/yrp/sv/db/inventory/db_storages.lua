@@ -244,12 +244,13 @@ end)
 -- DROP SWEPS
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if !ply:GetNWBool("bool_inventory_system", false) then
-		--[[ Inventory OFF ]]
-		--
+		-- Inventory OFF
+
 		return wep:GetNWBool("ispickupable", true)
 	else
-		--[[ Inventory ON ]]
-		--
+		-- Inventory ON
+
+		--[[
 		if ply.canpickup == true then
 			ply.canpickup = false
 
@@ -257,6 +258,8 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		else
 			return false
 		end
+		]]--
+		return wep:GetNWBool("ispickupable", true)
 	end
 
 	return true

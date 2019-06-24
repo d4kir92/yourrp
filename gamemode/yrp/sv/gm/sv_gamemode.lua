@@ -320,6 +320,10 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					SetRole(ply, _rol_tab.uniqueID)
 				else
 					printGM("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
+
+					local chatab = ply:GetChaTab()
+					CheckIfRoleExists(ply, chatab.roleID)
+
 					ply:KillSilent()
 				end
 

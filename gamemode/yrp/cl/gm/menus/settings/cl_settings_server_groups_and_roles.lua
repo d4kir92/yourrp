@@ -459,7 +459,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				ea.typ = nil
 				ea.tab = nil
-			elseif ea.typ == "role" and tonumber(ea.tab.uniqueID) != 1 then
+			elseif ea.typ == "role" and wk(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
 				net.Start("settings_delete_role")
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()

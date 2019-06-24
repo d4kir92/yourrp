@@ -423,16 +423,6 @@ net.Receive("charGetRoleInfo", function(len, ply)
 		tmpTable = {}
 	else
 		local rpms = GetPlayermodelsOfRole(roleID)
-		--[[local rpms = string.Explode(",", tmpTable[1].string_playermodels)
-		local tab = {}
-		for i, id in pairs(rpms) do
-			local tmppm = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
-			if wk(tmppm) then
-				tmppm = tmppm[1]
-				table.insert(tab, tmppm.string_models)
-			end
-		end
-		]]--
 		tmpTable[1].string_playermodels = rpms -- table.concat(tab,",")
 	end
 
@@ -452,12 +442,38 @@ function GetPlayermodelsOfRole(ruid)
 			if wk(tmppms) then
 				tmppms = tmppms[1]
 				tmppms = string.Explode(",", tmppms.string_models)
-				for i, pm in pairs(tmppms) do
+				for j, pm in pairs(tmppms) do
 					table.insert(tab, pm)
 				end
 			end
 		end
 		return table.concat(tab,",")
+	else
+		printGM("note", "role " .. ruid .. " has no playermodels")
+		return ""
+	end
+end
+
+function GetPMTableOfRole(ruid)
+	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
+	if wk(role) then
+		role = role[1]
+		local rpms = string.Explode(",", role.string_playermodels)
+		local tab = {}
+		for i, id in pairs(rpms) do
+			local tmppms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+			if wk(tmppms) then
+				tmppms = tmppms[1]
+				for x, pm in pairs(string.Explode(",", tmppms.string_models)) do
+					local entry = {}
+					entry.float_size_min = tmppms.float_size_min
+					entry.float_size_max = tmppms.float_size_max
+					entry.string_model = pm
+					table.insert(tab, entry)
+				end
+			end
+		end
+		return tab
 	else
 		printGM("note", "role " .. ruid .. " has no playermodels")
 		return ""

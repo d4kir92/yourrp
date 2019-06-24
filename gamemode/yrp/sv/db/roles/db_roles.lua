@@ -401,7 +401,7 @@ function SubscribeRoleList(ply, gro, pre)
 		table.insert(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
 		printGM("gm", ply:YRPName() .. " subscribed to RoleList " .. gro .. " pre: " .. pre)
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to RoleList " .. gro.. " pre: " .. pre)
+		printGM("gm", ply:YRPName() .. " already subscribed to RoleList " .. gro .. " pre: " .. pre)
 	end
 end
 
@@ -456,7 +456,7 @@ function SortRoles(gro, pre)
 	end
 end
 
-function SendRoleList(gro, pre)
+function SendRoleList(ply, gro, pre)
 	gro = tonumber(gro)
 	pre = tonumber(pre)
 	if gro != nil and pre != nil then
@@ -480,14 +480,23 @@ function SendRoleList(gro, pre)
 			end
 		end
 		if wk(headername) then
-			local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
-			for i, pl in pairs(tbl_bc) do
+			if ply != nil then
 				net.Start("settings_subscribe_rolelist")
 					net.WriteTable(tbl_roles)
 					net.WriteString(headername)
 					net.WriteString(gro)
 					net.WriteString(pre)
-				net.Send(pl)
+				net.Send(ply)
+			else
+				local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
+				for i, pl in pairs(tbl_bc) do
+					net.Start("settings_subscribe_rolelist")
+						net.WriteTable(tbl_roles)
+						net.WriteString(headername)
+						net.WriteString(gro)
+						net.WriteString(pre)
+					net.Send(pl)
+				end
 			end
 		else
 			YRP.msg("error", "headername: " .. tostring(headername))
@@ -498,7 +507,7 @@ function SendRoleList(gro, pre)
 end
 
 -- Duplicate
-function DuplicateRole(ruid, guid)
+function DuplicateRole(ply, ruid, guid)
 	ruid = tonumber(ruid)
 	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 	if wk(role) then
@@ -524,7 +533,7 @@ function DuplicateRole(ruid, guid)
 
 		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
 
-		SendRoleList(guid, role.int_prerole)
+		SendRoleList(nil, guid, role.int_prerole)
 	else
 		printGM("note", "Role [" .. ruid .. "] was deleted.")
 	end
@@ -544,7 +553,7 @@ net.Receive("get_grp_roles", function(len, ply)
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
 			updateRoleUses(ro.uniqueID)
-			ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
+			ro.pms = GetPMTableOfRole(ro.uniqueID)
 		end
 		net.Start("get_grp_roles")
 			net.WriteTable(_roles)
@@ -557,12 +566,14 @@ end)
 util.AddNetworkString("get_rol_prerole")
 net.Receive("get_rol_prerole", function(len, ply)
 	local _uid = net.ReadString()
-	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = " .. _uid)
+	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. _uid .. "'")
+
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
-			ro.string_playermodels = GetPlayermodelsOfRole(ro.uniqueID)
+			ro.pms = GetPMTableOfRole(ro.uniqueID)
 		end
 		_roles = _roles[1]
+
 		net.Start("get_rol_prerole")
 			net.WriteTable(_roles)
 		net.Send(ply)
@@ -576,7 +587,7 @@ net.Receive("settings_subscribe_rolelist", function(len, ply)
 	local pre = tonumber(net.ReadString())
 
 	SubscribeRoleList(ply, gro, pre)
-	SendRoleList(gro, pre)
+	SendRoleList(ply, gro, pre)
 end)
 
 util.AddNetworkString("settings_subscribe_prerolelist")
@@ -587,7 +598,7 @@ net.Receive("settings_subscribe_prerolelist", function(len, ply)
 	pre = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
 	pre = tonumber(pre[1].int_prerole)
 	SubscribeRoleList(ply, gro, pre)
-	SendRoleList(gro, pre)
+	SendRoleList(ply, gro, pre)
 end)
 
 util.AddNetworkString("settings_add_role")
@@ -610,7 +621,7 @@ net.Receive("settings_add_role", function(len, ply)
 
 	printGM("db", "Added new role: " .. new_role.uniqueID)
 
-	SendRoleList(gro, pre)
+	SendRoleList(nil, gro, pre)
 end)
 
 util.AddNetworkString("settings_role_position_up")
@@ -638,7 +649,7 @@ net.Receive("settings_role_position_up", function(len, ply)
 
 	role.int_groupID = tonumber(role.int_groupID)
 	role.int_prerole = tonumber(role.int_prerole)
-	SendRoleList(role.int_groupID, role.int_prerole)
+	SendRoleList(nil, role.int_groupID, role.int_prerole)
 end)
 
 util.AddNetworkString("settings_role_position_dn")
@@ -666,7 +677,7 @@ net.Receive("settings_role_position_dn", function(len, ply)
 
 	role.int_groupID = tonumber(role.int_groupID)
 	role.int_prerole = tonumber(role.int_prerole)
-	SendRoleList(role.int_groupID, role.int_prerole)
+	SendRoleList(nil, role.int_groupID, role.int_prerole)
 end)
 
 util.AddNetworkString("settings_subscribe_role")
@@ -733,7 +744,7 @@ net.Receive("settings_delete_role", function(len, ply)
 
 		role.int_groupID = tonumber(role.int_groupID)
 		role.int_prerole = tonumber(role.int_prerole)
-		SendRoleList(role.int_groupID, role.int_prerole)
+		SendRoleList(nil, role.int_groupID, role.int_prerole)
 	end
 end)
 
@@ -1428,3 +1439,27 @@ net.Receive( "demotePlayer", function( len, ply )
 		printGM( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
 end)
+
+-- Role Reset
+function CheckIfRoleExists(ply, ruid)
+	local tab = {}
+	tab.table = DATABASE_NAME
+	tab.cols = {}
+	tab.cols[1] = "*"
+	tab.where = "uniqueID = '" .. ruid .. "'"
+	local result = SQL.SELECT(tab)
+
+	if result == nil then
+		YRP.msg("note", "Role not exists anymore! Change back to default role!")
+
+		local utab = {}
+		utab.table = "yrp_characters"
+		utab.sets = {}
+		utab.sets["roleID"] = 1
+		utab.sets["groupID"] = 1
+		utab.where = "roleID = '" .. ruid .. "'"
+		SQL.UPDATE(utab)
+
+		ply:KillSilent()
+	end
+end

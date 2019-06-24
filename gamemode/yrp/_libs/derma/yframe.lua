@@ -100,6 +100,35 @@ function PANEL:SetTitle(str)
 	self.lblTitle:SetText("")
 end
 
+function PANEL:FullScreen()
+	return PANEL.fullscreen or false
+end
+
+function PANEL:ChangedSize()
+
+end
+
+function PANEL:Sizable(b)
+	self.btnMaxim:SetDisabled(!b)
+
+	local panel = self
+	function self.btnMaxim.DoClick()
+		panel.fullscreen = !panel.fullscreen or false
+
+		if panel.fullscreen then
+			panel:SetSize(ScW(), ScH())
+			panel:Center()
+		else
+			panel:SetSize(panel:GetMinWidth(), panel:GetMinHeight())
+			panel:Center()
+		end
+
+		panel:ChangedSize()
+	end
+
+	self:SetSizable(b)
+end
+
 function PANEL:Init()
 	self._headerheight = 24
 end

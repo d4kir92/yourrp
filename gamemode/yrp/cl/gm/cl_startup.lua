@@ -55,8 +55,13 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.lang.short)), ctr(46), ctr(31), ctr(4), ctr((40 - 31) / 2), Color(255, 255, 255, 255))
 		self.textcol = Color(255, 255, 255)
 
-		if self.lang.percentage != nil and self.lang.percentage == 100 then
-			self.textcol = Color(0, 255, 0)
+		if self.lang.percentage != nil then
+			if self.lang.percentage == 100 then
+				self.textcol = Color(0, 255, 0)
+			elseif self.lang.percentage < 100 then
+				local perc = 255 - 255 * self.lang.percentage / 100
+				self.textcol = Color(perc, 255, perc)
+			end
 		end
 
 		draw.SimpleTextOutlined(constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color(0, 0, 0, 255))

@@ -11,8 +11,8 @@ end
 
 function CloseInventory()
 	closeMenu()
-	if inv.win != nil then
-		inv.win:Remove()
+	if inv.bag1 != nil then
+		inv.bag1:Remove()
 	end
 end
 
@@ -40,5 +40,13 @@ function OpenInventory(target)
 
 	-- Bags
 	inv.bag1 = vgui.Create("YBag")
+	inv.bag1:SetVisible(false)
 	inv.bag1:SetStorage(1)
+	inv.bag1:MakePopup()
+
+	timer.Simple(0.1, function()
+		inv.bag1:SetPos(ScW() - inv.bag1:GetWide() - tr(20), ScH() - inv.bag1:GetTall() - tr(20))
+
+		inv.bag1:SetVisible(true)
+	end)
 end
