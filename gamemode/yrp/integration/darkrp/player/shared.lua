@@ -20,6 +20,8 @@ end
 SetGlobalBool("DarkRP_LockDown", false)
 function Player:getDarkRPVar(var)
 	--Description: Get the value of a DarkRPVar, which is shared between server and client.
+	local notavailable = "feature not available yet"
+
 	if var == "money" then
 		return tonumber(self:GetNWString("money", "-1"))
 	elseif var == "salary" then
@@ -32,6 +34,26 @@ function Player:getDarkRPVar(var)
 		return true
 	elseif var == "Energy" then
 		return self:Hunger()
+	elseif var == "wanted" then
+		return self:GetNWBool("iswanted", false)
+	elseif var == "wantedReason" then
+		return notavailable
+	elseif var == "agenda" then
+		return notavailable
+	elseif var == "AFK" then
+		return self:AFK()
+	elseif var == "AFKDemoted" then
+		return false -- notavailable
+	elseif var == "Arrested" then
+		return self:isArrested()
+	elseif var == "hasHit" then
+		return self:GetNWBool("iswanted", false)
+	elseif var == "hitTarget" then
+		return self:GetNWEntity("hittarget")
+	elseif var == "hitPrice" then
+		return tonumber(self:GetNWString("hitreward"))
+	elseif var == "lastHitTime" then
+		return 0 -- notavailable
 	else
 		local _nw_var = self:GetNWString(var, "VARIABLE NOT FOUND")
 		if tonumber(_nw_var) == nil then
@@ -180,7 +202,7 @@ end
 
 function Player:isWanted()
 	--Description: Whether this player is wanted
-	return false -- self:GetNWBool("iswanted", false)
+	return self:GetNWBool("iswanted", false)
 end
 
 function Player:nickSortedPlayers()

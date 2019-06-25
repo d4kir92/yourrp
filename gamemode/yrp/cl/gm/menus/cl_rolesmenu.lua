@@ -26,7 +26,7 @@ end
 local _pr = {}
 
 local _adminonly = Material("icon16/shield.png")
-
+local pmid = 1
 function createRoleBox(rol, parent, mainparent)
 	if rol != nil then
 		local _rol = createD("DPanel", parent, tr(400), tr(400), 0, 0)
@@ -37,17 +37,12 @@ function createRoleBox(rol, parent, mainparent)
 		_rol.tbl = rol
 
 		-- Role Playermodel --
-		_rol.pms = createD("DHorizontalScroller", _rol, tr(600), tr(400), -tr(125), 0)
-		_rol.pms:SetOverlap(150)
-
-		for i, pm in pairs(_rol.tbl.pms) do
+		local pm = _rol.tbl.pms[1] or {}
+		if pm.string_model != nil and pm.string_model != "" then
 			local p = createD("DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
 			p:SetModel(pm.string_model)
-
 			local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
 			p.Entity:SetModelScale(randsize, 0)
-
-			_rol.pms:AddPanel(p)
 		end
 
 		-- Role Name --
@@ -92,13 +87,25 @@ function createRoleBox(rol, parent, mainparent)
 		end
 		_rol.gr:SetText("")
 		function _rol.gr:DoClick()
+			pmid = 1
 			_rm.pms:Clear()
-			for i, pm in pairs(rol.pms) do
+			for i, pmtab in pairs(rol.pms) do
 				local dmp = createD("DModelPanel", _rm.pms, tr(400), tr(400), -tr(100) + (i - 1) * tr(150), tr(50))
-				dmp:SetModel(pm.string_model)
-
-				local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
+				dmp:SetModel(pmtab.string_model)
+				local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
 				dmp.Entity:SetModelScale(randsize, 0)
+
+				local bpm = createD("DButton", dmp, tr(200), tr(400), tr(100), tr(0))
+				bpm.id = i
+				bpm:SetText("")
+				function bpm:Paint(pw, ph)
+					if self.id == pmid then
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+					end
+				end
+				function bpm:DoClick()
+					pmid = self.id
+				end
 
 				_rm.pms:AddPanel(dmp)
 			end
@@ -386,6 +393,7 @@ function openRoleMenu()
 			if self.uniqueID != nil then
 				net.Start("wantRole")
 					net.WriteInt(self.uniqueID, 16)
+					net.WriteInt(pmid, 16)
 				net.SendToServer()
 				_rm:Close()
 			end

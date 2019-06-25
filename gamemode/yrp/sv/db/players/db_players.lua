@@ -89,10 +89,10 @@ function updateRoleUses(rid)
 	SQL_UPDATE("yrp_ply_roles", "int_uses = " .. _count, "uniqueID = " .. rid)
 end
 
-function SetRole(ply, rid, force)
+function SetRole(ply, rid, force, pmid)
 	if canGetRole(ply, rid, false) or force then
 		set_role(ply, rid)
-		set_role_values(ply)
+		set_role_values(ply, pmid)
 	else
 		set_role(ply, 1)
 		set_role_values(ply)
@@ -138,7 +138,7 @@ function GetFactionTable(uid)
 	end
 end
 
-function set_role_values(ply)
+function set_role_values(ply, pmid)
 	hitquit(ply)
 	if yrp_db_loaded() then
 		if IsNoClipTagsEnabled() then
@@ -165,7 +165,7 @@ function set_role_values(ply)
 				end
 			end
 			if ChaTab.playermodelID != nil then
-				local pmid = tonumber(ChaTab.playermodelID)
+				pmid = tonumber(pmid) or tonumber(ChaTab.playermodelID)
 				local pms = GetPMTableOfRole(rolTab.uniqueID)
 				if pms[pmid] == nil then
 					pmid = 1
@@ -687,6 +687,7 @@ end
 util.AddNetworkString("wantRole")
 net.Receive("wantRole", function(len, ply)
 	local uniqueIDRole = net.ReadInt(16)
+	local pmid = net.ReadInt(16)
 
 	YRP.msg("note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
 
@@ -699,7 +700,7 @@ net.Receive("wantRole", function(len, ply)
 		end
 
 		--New role
-		SetRole(ply, uniqueIDRole)
+		SetRole(ply, uniqueIDRole, false, pmid)
 
 		local reusetime = math.Round(CurTime() + ply:GetRoleCooldown(), 0)
 		ply:SetNWInt("ts_role_" .. ply:GetRoleUID(), reusetime)

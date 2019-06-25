@@ -156,7 +156,7 @@ function Player:AddXP(xp)
 		local lvl = tonumber(chatab.int_level)
 		local lvlmulti = tonumber(lvltab.float_multiplier)
 		local xpforlvl = tonumber(lvltab.int_xp_for_levelup)
-		local maxxp = math.Round(math.pow(lvl, lvlmulti), 0) + xpforlvl
+		local maxxp = tonumber(math.Round(math.pow(lvl, lvlmulti), 0) + xpforlvl)
 
 		local curlvl = self:Level()
 		local maxlvl = self:GetMaxLevel()
