@@ -734,43 +734,45 @@ net.Receive("yrp_voice_end", function(len, ply)
 end)
 
 function hearfaded(talker, listener)
-	if talker:GetNWInt("speak_channel") == 0 or talker:GetNWInt("speak_channel") == 1 and talker:GetNWString("groupUniqueID") != listener:GetNWInt("groupUniqueID") then
-		--printGM("note", "hearfaded true")
+	local t_speak_channel = tonumber(talker:GetNWInt("speak_channel"))
+	local t_guid = tonumber(talker:GetNWString("groupUniqueID"))
+	local l_guid = tonumber(listener:GetNWString("groupUniqueID"))
+	if t_speak_channel == 0 or t_speak_channel == 1 and t_guid != l_guid then
 		return true
 	else
-		--printGM("note", "hearfaded false")
 		return false
 	end
+	return false
 end
 
 function canhear(talker, listener)
-	if talker:GetNWInt("speak_channel") == 2 then
-		--printGM("note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear global")
+	local t_speak_channel = tonumber(talker:GetNWInt("speak_channel"))
+	local t_guid = tonumber(talker:GetNWString("groupUniqueID"))
+	local l_guid = tonumber(listener:GetNWString("groupUniqueID"))
+	local dist = talker:GetPos():Distance(listener:GetPos())
+	if t_speak_channel == 2 then
 		return true
-	elseif talker:GetNWInt("speak_channel") == 1 and talker:GetNWString("groupUniqueID") == listener:GetNWInt("groupUniqueID") or talker:GetPos():Distance(listener:GetPos()) < GetGroupVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled() then
-		--printGM("note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear group")
+	elseif t_speak_channel == 1 and t_guid == l_guid or dist < GetGroupVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled() then
 		return true
-	elseif talker:GetPos():Distance(listener:GetPos()) < GetVoiceChatLocalRange() then
-		--printGM("note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can hear local ")
+	elseif dist < GetVoiceChatLocalRange() then
 		return true
 	else
-		--printGM("note", "Talker: " .. talker:Nick() .. " | List: " .. listener:Nick() .. " can >>NOT<< hear")
 		return false
 	end
 end
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if IsVoiceEnabled() then
-		if Is3DVoiceEnabled() then --[[ BEARBEITEN ]]
+		if Is3DVoiceEnabled() then
 			if IsVoiceChannelsEnabled() then
-				return canhear(talker, listener), hearfaded(talker, listener)
+				return canhear(talker, listener), hearfaded(talker, listener)	-- 3D Voice chat + voice channels
 			else
-				return true, true
+				return true, true	-- 3D Voice enabled
 			end
 		else
-			return true, false
+			return true, false	-- 3D Voice disabled
 		end
-		return true
+		return true	-- Voice chat enabled
 	else
 		return false
 	end

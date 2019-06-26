@@ -171,11 +171,13 @@ function set_role_values(ply, pmid)
 					pmid = 1
 				end
 				local pm = pms[pmid]
-				ply:SetNWString("string_playermodel", pm.string_model)
-				ply:SetModel(pm.string_model)
+				if wk(pm) then
+					ply:SetNWString("string_playermodel", pm.string_model)
+					ply:SetModel(pm.string_model)
 
-				local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
-				ply:SetModelScale(randsize, 0)
+					local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
+					ply:SetModelScale(randsize, 0)
+				end
 			end
 			ply:SetNWString("Gender", ChaTab.gender)
 		else
