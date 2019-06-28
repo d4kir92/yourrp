@@ -1727,6 +1727,7 @@ net.Receive("yrp_message", function(len)
 end)
 
 function loadDoorTexts()
+	print("loadDoorTexts")
 	if GetGlobalBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
 		local _allPropDoors = ents.FindByClass("prop_door_rotating")
 		local _allFuncDoors = ents.FindByClass("func_door")
@@ -1746,7 +1747,9 @@ function loadDoorTexts()
 		for k, v in pairs(_allDoors) do
 			hook.Remove("PostDrawOpaqueRenderables", "door_info_" .. k)
 		end
+		print("TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		for k, v in pairs(_allDoors) do
+			print(k, v)
 			hook.Add("PostDrawOpaqueRenderables", "door_info_" .. k, function()
 				local ang = Angle(0, 0, 0)
 
@@ -1829,6 +1832,9 @@ function loadDoorTexts()
 		end)
 	end
 end
+timer.Simple(3, function()
+	loadDoorTexts()
+end)
 net.Receive("loaded_doors", function()
 	timer.Simple(1, function()
 		loadDoorTexts()
