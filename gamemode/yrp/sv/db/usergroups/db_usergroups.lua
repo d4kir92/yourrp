@@ -44,6 +44,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removetool", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_dynamitetool", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_creatortool", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_customfunctions", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ignite", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drive", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_flashlight", "INT DEFAULT 0")
@@ -94,6 +96,8 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	_str = _str .. "bool_noclip, "
 	_str = _str .. "bool_removetool, "
 	_str = _str .. "bool_dynamitetool, "
+	_str = _str .. "bool_creatortool, "
+	_str = _str .. "bool_customfunctions, "
 	_str = _str .. "bool_ignite, "
 	_str = _str .. "bool_drive, "
 	_str = _str .. "bool_flashlight, "
@@ -123,7 +127,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 
 	local _str2 = "'superadmin', "
 	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 
 	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
@@ -159,6 +163,8 @@ if unremoveable == nil then
 	_str = _str .. "bool_noclip, "
 	_str = _str .. "bool_removetool, "
 	_str = _str .. "bool_dynamitetool, "
+	_str = _str .. "bool_creatortool, "
+	_str = _str .. "bool_customfunctions, "
 	_str = _str .. "bool_ignite, "
 	_str = _str .. "bool_drive, "
 	_str = _str .. "bool_flashlight, "
@@ -188,7 +194,7 @@ if unremoveable == nil then
 	_str = _str .. "bool_removeable"
 
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0"
 
@@ -780,6 +786,20 @@ net.Receive("usergroup_update_bool_dynamitetool", function(len, ply)
 	UGCheckBox(ply, uid, "bool_dynamitetool", bool_dynamitetool)
 end)
 
+util.AddNetworkString("usergroup_update_bool_creatortool")
+net.Receive("usergroup_update_bool_creatortool", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_creatortool = net.ReadString()
+	UGCheckBox(ply, uid, "bool_creatortool", bool_creatortool)
+end)
+
+util.AddNetworkString("usergroup_update_bool_customfunctions")
+net.Receive("usergroup_update_bool_customfunctions", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_customfunctions = net.ReadString()
+	UGCheckBox(ply, uid, "bool_customfunctions", bool_customfunctions)
+end)
+
 util.AddNetworkString("usergroup_update_bool_ignite")
 net.Receive("usergroup_update_bool_ignite", function(len, ply)
 	local uid = tonumber(net.ReadString())
@@ -1306,19 +1326,51 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 				return false
 			end
 		elseif tool == "dynamite" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "dynamitetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_dynamitetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
-				if tobool(_tmp.dynamitetool) then
+				if tobool(_tmp.bool_dynamitetool) then
 					return true
 				else
 					net.Start("yrp_info")
-						net.WriteString("dynamitetool")
+						net.WriteString("bool_dynamitetool")
 					net.Send(pl)
 					return false
 				end
 			else
 				printGM("db", "[dynamite] failed! UserGroup not found in database.")
+				return false
+			end
+		elseif tool == "creator" then
+			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_creatortool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+			if _tmp != nil and _tmp != false then
+				_tmp = _tmp[1]
+				if tobool(_tmp.bool_creatortool) then
+					return true
+				else
+					net.Start("yrp_info")
+						net.WriteString("bool_creatortool")
+					net.Send(pl)
+					return false
+				end
+			else
+				printGM("db", "[customfunctions] failed! UserGroup not found in database.")
+				return false
+			end
+		else
+			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_customfunctions", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+			if _tmp != nil and _tmp != false then
+				_tmp = _tmp[1]
+				if tobool(_tmp.bool_customfunctions) then
+					return true
+				else
+					net.Start("yrp_info")
+						net.WriteString("bool_customfunctions")
+					net.Send(pl)
+					return false
+				end
+			else
+				printGM("db", "[customfunctions] failed! UserGroup not found in database.")
 				return false
 			end
 		end

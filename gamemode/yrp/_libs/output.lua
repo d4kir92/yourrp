@@ -248,6 +248,7 @@ countries["BY"] = "Belarus"
 
 countries["CA"] = "Canada"
 countries["CH"] = "Switzerland"
+countries["CL"] = "Chile"
 countries["CN"] = "China"
 countries["CZ"] = "Czech Republic"
 
