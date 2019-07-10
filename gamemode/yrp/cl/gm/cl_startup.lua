@@ -1751,79 +1751,76 @@ function loadDoorTexts()
 
 		for k, v in pairs(_allDoors) do
 			hook.Add("PostDrawOpaqueRenderables", "door_info_" .. k, function()
-				if LocalPlayer():GetPos():Distance(v:GetPos()) < 500 then
+				if v != nil and v != NULL and LocalPlayer():GetPos():Distance(v:GetPos()) < 500 then
 					local ang = Angle(0, 0, 0)
+					local mins = v:OBBMins()
+					local maxs = v:OBBMaxs()
+					local x = maxs.x - mins.x
+					local y = maxs.y - mins.y
 
-					if v != nil and v != NULL then
-						local mins = v:OBBMins()
-						local maxs = v:OBBMaxs()
-						local x = maxs.x - mins.x
-						local y = maxs.y - mins.y
+					local pos = v:LocalToWorld(v:OBBCenter())
 
-						local pos = v:LocalToWorld(v:OBBCenter())
-
-						if x > y then
-							ang = Angle(0, v:GetAngles().y, 90)
-							pos = pos + v:GetRight() * y / 2
-						else
-							ang = Angle(0, v:GetAngles().y + 90, 90)
-							pos = pos + v:GetForward() * x / 2
-						end
-
-						--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
-
-						cam.Start3D2D(pos, ang, 0.2)
-							surface.SetFont("Roboto24")
-							local header = SQL_STR_OUT(v:GetNWString("text_header", ""))
-							local head_size = surface.GetTextSize(header)
-							surface.SetFont("Roboto24B")
-							surface.SetTextColor(255, 255, 255)
-							surface.SetTextPos(- head_size / 2, -80)
-							surface.DrawText(header)
-
-							local description = SQL_STR_OUT(v:GetNWString("text_description", ""))
-							surface.SetFont("Roboto14")
-							local desc_size = surface.GetTextSize(description)
-							surface.SetTextColor(255, 255, 255)
-							surface.SetTextPos(- desc_size / 2, -40)
-							surface.DrawText(description)
-						cam.End3D2D()
-
-						ang = Angle(0, 180, 0)
-
-						mins = v:OBBMins()
-						maxs = v:OBBMaxs()
-						x = maxs.x - mins.x
-						y = maxs.y - mins.y
-
-						pos = v:LocalToWorld(v:OBBCenter())
-
-						if x > y then
-							ang = Angle(0, v:GetAngles().y, 90)
-							pos = pos - v:GetRight() * y / 2
-						else
-							ang = Angle(0, v:GetAngles().y + 90, 90)
-							pos = pos - v:GetForward() * x / 2
-						end
-
-						ang = ang + Angle(0, 180, 0)
-
-						cam.Start3D2D(pos, ang, 0.2)
-							header = SQL_STR_OUT(v:GetNWString("text_header", ""))
-							surface.SetFont("Roboto24B")
-							head_size = surface.GetTextSize(header)
-							surface.SetTextColor(255, 255, 255)
-							surface.SetTextPos(- head_size / 2, -80)
-							surface.DrawText(header)
-
-							description = SQL_STR_OUT(v:GetNWString("text_description", ""))
-							surface.SetFont("Roboto14")
-							desc_size = surface.GetTextSize(description)
-							surface.SetTextColor(255, 255, 255)
-							surface.SetTextPos(- desc_size / 2, -40)
-							surface.DrawText(description)
-						cam.End3D2D()
+					if x > y then
+						ang = Angle(0, v:GetAngles().y, 90)
+						pos = pos + v:GetRight() * y / 2
+					else
+						ang = Angle(0, v:GetAngles().y + 90, 90)
+						pos = pos + v:GetForward() * x / 2
 					end
+
+					--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
+
+					cam.Start3D2D(pos, ang, 0.2)
+						surface.SetFont("Roboto24")
+						local header = SQL_STR_OUT(v:GetNWString("text_header", ""))
+						local head_size = surface.GetTextSize(header)
+						surface.SetFont("Roboto24B")
+						surface.SetTextColor(255, 255, 255)
+						surface.SetTextPos(- head_size / 2, -80)
+						surface.DrawText(header)
+
+						local description = SQL_STR_OUT(v:GetNWString("text_description", ""))
+						surface.SetFont("Roboto14")
+						local desc_size = surface.GetTextSize(description)
+						surface.SetTextColor(255, 255, 255)
+						surface.SetTextPos(- desc_size / 2, -40)
+						surface.DrawText(description)
+					cam.End3D2D()
+
+					ang = Angle(0, 180, 0)
+
+					mins = v:OBBMins()
+					maxs = v:OBBMaxs()
+					x = maxs.x - mins.x
+					y = maxs.y - mins.y
+
+					pos = v:LocalToWorld(v:OBBCenter())
+
+					if x > y then
+						ang = Angle(0, v:GetAngles().y, 90)
+						pos = pos - v:GetRight() * y / 2
+					else
+						ang = Angle(0, v:GetAngles().y + 90, 90)
+						pos = pos - v:GetForward() * x / 2
+					end
+
+					ang = ang + Angle(0, 180, 0)
+
+					cam.Start3D2D(pos, ang, 0.2)
+						header = SQL_STR_OUT(v:GetNWString("text_header", ""))
+						surface.SetFont("Roboto24B")
+						head_size = surface.GetTextSize(header)
+						surface.SetTextColor(255, 255, 255)
+						surface.SetTextPos(- head_size / 2, -80)
+						surface.DrawText(header)
+
+						description = SQL_STR_OUT(v:GetNWString("text_description", ""))
+						surface.SetFont("Roboto14")
+						desc_size = surface.GetTextSize(description)
+						surface.SetTextColor(255, 255, 255)
+						surface.SetTextPos(- desc_size / 2, -40)
+						surface.DrawText(description)
+					cam.End3D2D()
 				end
 			end)
 		end

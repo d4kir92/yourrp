@@ -97,6 +97,7 @@ function SetRole(ply, rid, force, pmid)
 		set_role(ply, 1)
 		set_role_values(ply)
 	end
+	ply:SetNWBool("switchrole", false)
 end
 
 function set_role(ply, rid)
@@ -694,6 +695,7 @@ net.Receive("wantRole", function(len, ply)
 	YRP.msg("note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
 
 	if canGetRole(ply, uniqueIDRole, true) then
+		ply:SetNWBool("switchrole", true)
 		--Remove Sweps from old role
 		RemRolVals(ply)
 

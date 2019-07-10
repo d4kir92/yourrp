@@ -286,6 +286,7 @@ countries["NL"] = "Netherlands"
 countries["NO"] = "Norway"
 countries["NZ"] = "New Zealand"
 
+countries["PH"] = "Philippines"
 countries["PL"] = "Poland"
 countries["PT"] = "Portugal"
 
@@ -303,6 +304,8 @@ countries["TW"] = "Taiwan"
 
 countries["UA"] = "Ukraine"
 countries["US"] = "USA"
+
+countries["VN"] = "Vietnam"
 function GetCountryName(id)
 	id = string.upper(id)
 	local countryname = countries[id]

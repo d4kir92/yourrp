@@ -110,7 +110,7 @@ function show_voice_info(ply)
 	if _showVoice then
 		local _voice_text = ""
 		if ply:GetNWBool("bool_voice", false) then
-			_voice_text = YRP.lang_string("LID_youarespeaking") .. " ("
+			_voice_text = "" -- YRP.lang_string("LID_youarespeaking") .. " ("
 			if ply:GetNWInt("speak_channel", -1) == 1 then
 				_voice_text = _voice_text .. YRP.lang_string("LID_speakgroup")
 			elseif ply:GetNWInt("speak_channel", -1) == 2 then
@@ -118,7 +118,7 @@ function show_voice_info(ply)
 			else
 				_voice_text = _voice_text .. YRP.lang_string("LID_speaklocal")
 			end
-			_voice_text = _voice_text .. ")"
+			--_voice_text = _voice_text .. ")"
 		else
 			_voice_text = YRP.lang_string("LID_voicechatisdisabled")
 		end

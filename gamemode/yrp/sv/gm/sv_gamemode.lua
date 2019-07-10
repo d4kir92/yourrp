@@ -182,7 +182,7 @@ function SearchForCollectionID()
 							table.insert(collectionIDs, cid)
 						end
 					else
-						YRP.msg("error", "Cid is not a number [" .. tostring(cid) .. "] f [" .. tostring(f) .. "]")
+						YRP.msg("note", "Cid is not a number [" .. tostring(cid) .. "] f [" .. tostring(f) .. "]")
 					end
 				end
 			end
@@ -476,7 +476,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		end
 		--ply:DropBackpackStorage()
 	end
-	if IsDropMoneyOnDeathEnabled() then
+	if IsDropMoneyOnDeathEnabled() and !ply:GetNWBool("switchrole", false) then
 		local _money = ply:GetMoney()
 		local _max = GetMaxAmountOfDroppedMoney()
 		if _money > _max then
