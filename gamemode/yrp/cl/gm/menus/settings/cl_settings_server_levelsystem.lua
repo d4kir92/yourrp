@@ -330,27 +330,25 @@ net.Receive("get_levelsystem_settings", function(len)
 			local xaxis = pw - 2 * br
 			local xaxispart = xaxis / tab_count
 			local yaxis = ph - 2 * br
-			local ymax = coords[table.Count(coords)] or 1
+			local ymax = coords[tab_count - 1] or 1
 			local ymulti = yaxis / ymax
 
 			surface.SetDrawColor(0, 0, 255, 255)
 			for i, v in pairs(coords) do
-				if i > min then
-					local p1 = coords[i - 1]
-					local p2 = coords[i]
+				if i < max then
+					local p1 = coords[i]
+					local p2 = coords[i + 1]
 					p1 = p1 * ymulti
 					p2 = p2 * ymulti
-
 					p1 = yaxis - p1
 					p2 = yaxis - p2
-
 					p1 = br + p1
 					p2 = br + p2
-
-					if i == min + 1 then
-						draw.SimpleTextOutlined(coords[i - 1], "DermaDefault", br - ctr(10), p1, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					if i == min then
+						draw.SimpleTextOutlined(coords[i], "DermaDefault", br - ctr(10), p1, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 					end
-					surface.DrawLine(x + xaxispart * (i - 2), p1, x + xaxispart * (i - 1), p2)
+
+					surface.DrawLine(x + xaxispart * i, p1, x + xaxispart * (i + 1), p2)
 				end
 			end
 

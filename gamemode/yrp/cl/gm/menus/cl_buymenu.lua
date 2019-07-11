@@ -19,6 +19,7 @@ function closeBuyMenu()
 end
 
 function createShopItem(item, duid)
+	item.int_level = tonumber(item.int_level)
 	local _w = 2000
 	local _h = 400
 	local _i = createD("DPanel", nil, ctrb(_w), ctrb(_h), 0, 0)
@@ -84,26 +85,38 @@ function createShopItem(item, duid)
 	end
 
 	if LocalPlayer():HasLicense(item.licenseID) then
-		_i.buy = createD("DButton", _i, ctrb(_w / 2), ctrb(50), ctrb(_w / 2), ctrb(350))
-		_i.buy:SetText("")
-		_i.buy.item = item
-		function _i.buy:Paint(pw, ph)
-			local _color = Color(0, 255, 0)
-			if !LocalPlayer():canAfford(item.price) then
-				_color = Color(255, 0, 0)
+		if LocalPlayer():Level() < item.int_level then
+			_i.require = createD("DPanel", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
+			_i.require.level = item.int_level
+			function _i.require:Paint(pw, ph)
+				local _color = Color(255, 0, 0)
+				draw.RoundedBox(0, 0, 0, pw, ph, _color)
+				local tab = {}
+				tab["LEVEL"] = self.level
+				surfaceText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 			end
-			if self:IsHovered() then
-				_color = Color(255, 255, 0)
+		else
+			_i.buy = createD("DButton", _i, ctrb(_w / 2), ctrb(50), ctrb(_w / 2), ctrb(350))
+			_i.buy:SetText("")
+			_i.buy.item = item
+			function _i.buy:Paint(pw, ph)
+				local _color = Color(0, 255, 0)
+				if !LocalPlayer():canAfford(item.price) then
+					_color = Color(255, 0, 0)
+				end
+				if self:IsHovered() then
+					_color = Color(255, 255, 0)
+				end
+				draw.RoundedBox(0, 0, 0, pw, ph, _color)
+				surfaceText(YRP.lang_string("LID_buy"), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 			end
-			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			surfaceText(YRP.lang_string("LID_buy"), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
-		end
-		function _i.buy:DoClick()
-			net.Start("item_buy")
-				net.WriteTable(self.item)
-				net.WriteString(duid)
-			net.SendToServer()
-			closeBuyMenu()
+			function _i.buy:DoClick()
+				net.Start("item_buy")
+					net.WriteTable(self.item)
+					net.WriteString(duid)
+				net.SendToServer()
+				closeBuyMenu()
+			end
 		end
 	else
 		_i.require = createD("DPanel", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
@@ -111,7 +124,7 @@ function createShopItem(item, duid)
 		net.Receive("GetLicenseName", function(len)
 			local tmp = net.ReadString()
 			if wk(tmp) and _i.require != nil then
-				_i.require.text = tmp
+				_i.require.text = SQL_STR_OUT(tmp)
 			end
 		end)
 		net.Start("GetLicenseName")

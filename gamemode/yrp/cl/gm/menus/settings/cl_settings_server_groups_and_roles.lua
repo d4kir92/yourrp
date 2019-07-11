@@ -1909,7 +1909,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						cl_licenses[count] = {}
 						cl_licenses[count].WorldModel = v.WorldModel or nil
 						cl_licenses[count].ClassName = v.uniqueID
-						cl_licenses[count].PrintName = v.name
+						cl_licenses[count].PrintName = SQL_STR_OUT(v.name)
 					end
 
 					winlicenses.dpl = createD("DPanelList", winlicenses, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
@@ -1972,7 +1972,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						license.uniqueID = i
 						license.string_models = ""
 						license.string_classname = v.uniqueID
-						license.string_name = v.string_name
+						license.string_name = SQL_STR_OUT(v.string_name)
 						license.doclick = function()
 							net.Start("rem_role_license")
 								net.WriteInt(role.uniqueID, 32)
@@ -2059,7 +2059,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local bool_voiceglobal = {}
 			bool_voiceglobal.parent = ea.restriction
 			bool_voiceglobal.uniqueID = role.uniqueID
-			bool_voiceglobal.header = "LID_canuserolevoicechat"
+			bool_voiceglobal.header = "LID_canuseglobalvoicechat"
 			bool_voiceglobal.netstr = "update_role_bool_voiceglobal"
 			bool_voiceglobal.value = role.bool_voiceglobal
 			bool_voiceglobal.uniqueID = role.uniqueID

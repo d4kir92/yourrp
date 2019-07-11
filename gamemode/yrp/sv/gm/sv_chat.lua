@@ -299,6 +299,7 @@ net.Receive("set_chat_mode", function(len, ply)
 end)
 
 function unpack_paket(sender, text, iscommand)
+	paket = {}
 
 	if string.find(text[1], "/", 1, false) or string.find(text[1], "!", 1, false) then
 		--command

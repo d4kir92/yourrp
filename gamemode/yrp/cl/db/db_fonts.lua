@@ -5,7 +5,14 @@ local fontscale = 1
 local fonts = {}
 
 function YRP.AddFont(fontname, scale)
-	fonts[fontname] = scale
+	fontname = fontname or ""
+	local fontID = string.lower(fontname)
+	if fontID != "" and fonts[fontID] == nil and scale != nil then
+		local fontentry = {}
+		fontentry.name = fontname
+		fontentry.scale = scale
+		fonts[fontID] = fontentry
+	end
 end
 
 YRP.AddFont("Aniron", 1.2)
@@ -24,6 +31,7 @@ YRP.AddFont("Kelt", 1)
 YRP.AddFont("Kimberley Bl", 0.96)
 
 YRP.AddFont("Mali", 1.6)
+YRP.AddFont("Metro", 0.5)
 YRP.AddFont("Military Font 7", 0.72)
 
 YRP.AddFont("Overseer", 1)
@@ -55,8 +63,10 @@ end
 
 function YRP.SetFont(fontname)
 	if wk(fontname) then
-		font = fontname
-		fontscale = fonts[fontname] or 1
+		local fontID = string.lower(fontname)
+		local fontTab = fonts[fontID]
+		font = fontTab.name or ""
+		fontscale = fontTab.scale or ""
 		YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
 		changeFontSize()
 	end
@@ -235,3 +245,11 @@ function changeFontSize()
 	createFont("DarkRP_tipjar", YRP.GetFont(), 100, _weight, false)
 end
 changeFontSize()
+
+local files, _ = file.Find("resource/fonts/*.ttf", "GAME")
+for i, f in pairs(files) do
+	if string.EndsWith(f, "-regular.ttf") then
+		local fo = string.Replace(f, "-regular.ttf", "")
+		YRP.AddFont(fo, 1)
+	end
+end

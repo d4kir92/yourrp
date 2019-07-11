@@ -269,6 +269,7 @@ countries["GR"] = "Greece"
 countries["HU"] = "Hungary"
 
 countries["IE"] = "Ireland"
+countries["IS"] = "Iceland"
 countries["IT"] = "Italy"
 
 countries["JP"] = "Japan"
@@ -278,6 +279,7 @@ countries["KZ"] = "Kazakhstan"
 
 countries["LT"] = "Lithuania"
 countries["LU"] = "Luxembourg"
+countries["LV"] = "Latvia"
 
 countries["ME"] = "Montenegro"
 countries["MX"] = "Mexico"

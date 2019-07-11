@@ -31,7 +31,7 @@ end
 
 net.Receive("openInteractMenu", function(len)
 	local ply = net.ReadEntity()
-	
+
 	local idcard = net.ReadBool()
 
 	local isInstructor = net.ReadBool()
@@ -66,7 +66,7 @@ net.Receive("openInteractMenu", function(len)
 				if i > 1 then
 					tmpRPDescription = tmpRPDescription .. "\n"
 				end
-				tmpRPDescription = tmpRPDescription .. v:GetNWString("rpdescription" .. i, "")
+				tmpRPDescription = tmpRPDescription .. SQL_STR_OUT(v:GetNWString("rpdescription" .. i, ""))
 			end
 			break
 		end
@@ -101,7 +101,7 @@ net.Receive("openInteractMenu", function(len)
 			--[[ Licenses ]]--
 			draw.RoundedBox(0, ctr(10), ctr(420), ctr(1070), ctr(100), Color(255, 255, 255, 255))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", ctr(10 + 10), ctr(420 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(licenses, "charTitle", ctr(10 + 10), ctr(460 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", ctr(10 + 10), ctr(460 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 
 			--[[ Description ]]--
 			draw.RoundedBox(0, ctr(10), ctr(530), ctr(1070), ctr(100), Color(255, 255, 255, 255))

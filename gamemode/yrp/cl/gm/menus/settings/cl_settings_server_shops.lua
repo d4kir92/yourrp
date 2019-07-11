@@ -211,8 +211,28 @@ net.Receive("get_shop_items", function()
 					end
 				end
 
+				--[[ LEVEL ]]--
+				_sh._sit.itemlevel = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(900))
+				_sh._sit.itemlevel:SetHeader(YRP.lang_string("LID_level"))
+				_sh._sit.itemlevel:INITPanel("DNumberWang")
+				_sh._sit.itemlevel.plus.tbl = tbl
+				_sh._sit.itemlevel.plus:SetMin(0)
+				_sh._sit.itemlevel.plus:SetMax(999999999)
+				_sh._sit.itemlevel.plus:SetValue(tbl.int_level)
+				function _sh._sit.itemlevel.plus:OnValueChanged(value)
+					self.tbl.int_level = value
+					if _sh._cat.uid != nil then
+						net.Start("shop_item_edit_level")
+							net.WriteString(self.tbl.uniqueID)
+							net.WriteString(self.tbl.int_level)
+							net.WriteString(_sh._cat.uid)
+						net.SendToServer()
+					end
+				end
+
 				--[[ Quantity ]]--
-				_sh._sit.itemquan = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(900))
+				--[[
+				_sh._sit.itemquan = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1050))
 				_sh._sit.itemquan:SetHeader(YRP.lang_string("LID_quantity") .. " (" .. YRP.lang_string("LID_wip") .. ")")
 				_sh._sit.itemquan:INITPanel("DComboBox")
 				_sh._sit.itemquan.plus.tbl = tbl
@@ -235,9 +255,11 @@ net.Receive("get_shop_items", function()
 						net.SendToServer()
 					end
 				end
+				]]--
 
 				--[[ Cooldown ]]--
-				_sh._sit.itemcool = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1050))
+				--[[
+				_sh._sit.itemcool = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1200))
 				_sh._sit.itemcool:SetHeader(YRP.lang_string("LID_cooldown") .. " (" .. YRP.lang_string("LID_wip") .. ")")
 				_sh._sit.itemcool:INITPanel("DNumberWang")
 				_sh._sit.itemcool.plus.tbl = tbl
@@ -254,9 +276,10 @@ net.Receive("get_shop_items", function()
 						net.SendToServer()
 					end
 				end
+				]]--
 
 				--[[ License ]]--
-				_sh._sit.itemlice = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1200))
+				_sh._sit.itemlice = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1350))
 				_sh._sit.itemlice:SetHeader(YRP.lang_string("LID_licenses"))
 				_sh._sit.itemlice:INITPanel("DComboBox")
 				_sh._sit.itemlice.plus.tbl = tbl
@@ -287,7 +310,7 @@ net.Receive("get_shop_items", function()
 				end
 
 				--[[ Permanent ]]--
-				_sh._sit.itemperm = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1350))
+				_sh._sit.itemperm = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1500))
 				_sh._sit.itemperm:SetHeader(YRP.lang_string("LID_permanent") .. " (" .. YRP.lang_string("LID_wip") .. ")")
 				_sh._sit.itemperm:INITPanel("DCheckBox")
 				_sh._sit.itemperm.plus.tbl = tbl

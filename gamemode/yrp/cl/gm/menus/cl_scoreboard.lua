@@ -268,6 +268,9 @@ function OpenSBS()
 		sbs.frame:ShowCloseButton(false)
 		sbs.frame:SetTitle("")
 		--sbs.frame:MakePopup()
+		function sbs.frame.btnClose:DoClick()
+			CloseSBS()
+		end
 
 		local _mapPNG = getMapPNG()
 
