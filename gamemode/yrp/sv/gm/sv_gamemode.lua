@@ -764,6 +764,14 @@ end
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if IsVoiceEnabled() then
 		if Is3DVoiceEnabled() then
+			return true, true
+		else
+			return true
+		end
+	else
+		return false
+	end
+		--[[
 			if IsVoiceChannelsEnabled() then
 				return canhear(talker, listener), hearfaded(talker, listener)	-- 3D Voice chat + voice channels
 			else
@@ -776,6 +784,7 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 	else
 		return false
 	end
+	]]
 end
 
 function setbodygroups(ply)

@@ -410,10 +410,10 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SYSTEMS.plus)
 		local bool_voice = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice, "LID_voicechat", "update_bool_voice")
 		local bool_voice_3d = CreateCheckBoxLineTab(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_3d, "LID_3dvoicechat", "update_bool_voice_3d")
-		local bool_voice_channels = CreateCheckBoxLineTab(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_channels, "LID_voicechatchannels", "update_bool_voice_channels")
-		local int_voice_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_local_range, "LID_localvoicechatdistance", "update_int_voice_local_range")
-		local bool_voice_group_local = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_group_local, "LID_groupvoicechatisaudiblelocally", "update_bool_voice_group_local")
-		local int_voice_group_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_group_local_range, "LID_localgroupvoicechatdistance", "update_int_voice_group_local_range")
+		local bool_voice_channels = CreateCheckBoxLineTab(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_channels, YRP.lang_string("LID_voicechatchannels") .. " (currently not available)", "update_bool_voice_channels")
+		local int_voice_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_local_range, YRP.lang_string("LID_localvoicechatdistance") .. " (currently not available)", "update_int_voice_local_range")
+		local bool_voice_group_local = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_group_local, YRP.lang_string("LID_groupvoicechatisaudiblelocally") .. " (currently not available)", "update_bool_voice_group_local")
+		local int_voice_group_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_group_local_range, YRP.lang_string("LID_localgroupvoicechatdistance") .. " (currently not available)", "update_int_voice_group_local_range")
 
 
 

@@ -59,7 +59,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 		if _map == nil then
 			_map = {}
 		end
-		if wk(_map) then
+		if wk(_map) and wk(_groups) then
 			for i, group in pairs(_groups) do
 				local _has_no_spawnpoint = true
 				for j, entry in pairs(_map) do
