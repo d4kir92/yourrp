@@ -141,8 +141,8 @@ function loadDoors()
 		--for k, v in pairs(_tmpDoors) do
 			for l, door in pairs(_allPropDoors) do
 				if worked(_tmpDoors[_count], "loadDoors 2") then
-					door:SetNWString("buildingID", _tmpDoors[_count].buildingID)
-					door:SetNWString("uniqueID", _count)
+					door:SetNW2String("buildingID", _tmpDoors[_count].buildingID)
+					door:SetNW2String("uniqueID", _count)
 					HasUseFunction(door)
 				else
 					printGM("note", "[Buildings] more doors, then in list!")
@@ -152,8 +152,8 @@ function loadDoors()
 
 			for l, door in pairs(_allFuncDoors) do
 				if wk(_tmpDoors[_count]) then
-					door:SetNWString("buildingID", _tmpDoors[_count].buildingID)
-					door:SetNWString("uniqueID", _count)
+					door:SetNW2String("buildingID", _tmpDoors[_count].buildingID)
+					door:SetNW2String("uniqueID", _count)
 					HasUseFunction(door)
 				else
 					printGM("note", "[Buildings] more doors, then in list!")
@@ -163,8 +163,8 @@ function loadDoors()
 
 			for l, door in pairs(_allFuncRDoors) do
 				if wk(_tmpDoors[_count]) then
-					door:SetNWString("buildingID", _tmpDoors[_count].buildingID)
-					door:SetNWString("uniqueID", _count)
+					door:SetNW2String("buildingID", _tmpDoors[_count].buildingID)
+					door:SetNW2String("uniqueID", _count)
 					HasUseFunction(door)
 
 				else
@@ -189,13 +189,13 @@ function loadDoors()
 	if wk(_tmpBuildings) then
 		for k, v in pairs(_allDoors) do
 			for l, w in pairs(_tmpBuildings) do
-				if tonumber(w.uniqueID) == tonumber(v:GetNWString("buildingID")) then
+				if tonumber(w.uniqueID) == tonumber(v:GetNW2String("buildingID")) then
 					if !strEmpty(w.ownerCharID) then
 						local _tmpRPName = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
 						if wk(_tmpRPName) then
 							_tmpRPName = _tmpRPName[1]
 							if wk(_tmpRPName.rpname) then
-								v:SetNWString("ownerRPName", _tmpRPName.rpname)
+								v:SetNW2String("ownerRPName", _tmpRPName.rpname)
 							end
 						end
 					else
@@ -204,17 +204,17 @@ function loadDoors()
 							if wk(_tmpGroupName) then
 								_tmpGroupName = _tmpGroupName[1]
 								if wk(_tmpGroupName) then
-									v:SetNWString("ownerGroup", tostring(_tmpGroupName.string_name))
+									v:SetNW2String("ownerGroup", tostring(_tmpGroupName.string_name))
 								end
 							end
 						end
 					end
 
 					if !strEmpty(w.text_header) then
-						v:SetNWString("text_header", w.text_header)
+						v:SetNW2String("text_header", w.text_header)
 					end
 					if !strEmpty(w.text_description) then
-						v:SetNWString("text_description", w.text_description)
+						v:SetNW2String("text_description", w.text_description)
 					end
 
 					break
@@ -275,7 +275,7 @@ function canLock(ply, tab)
 		end
 		return false
 	elseif tab.groupID != "-1" then
-		if ply:GetNWString("GroupUniqueID", "Failed") == tab.groupID then
+		if ply:GetNW2String("GroupUniqueID", "Failed") == tab.groupID then
 			return true
 		elseif IsUnderGroupOf(ply, tab.groupID) then
 			return true
@@ -323,32 +323,32 @@ function BuildingRemoveOwner(SteamID)
 		local charid = c.uniqueID
 		local _tmpDoors = ents.FindByClass("prop_door_rotating")
 		for k, v in pairs(_tmpDoors) do
-			if v:GetNWString("ownerCharID") == charid then
-				v:SetNWString("ownerRPName", "")
-				v:SetNWString("ownerGroup", "")
-				v:SetNWString("ownerCharID", "")
+			if v:GetNW2String("ownerCharID") == charid then
+				v:SetNW2String("ownerRPName", "")
+				v:SetNW2String("ownerGroup", "")
+				v:SetNW2String("ownerCharID", "")
 				v:Fire("Unlock")
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNWString("uniqueID") .. "'")
+				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNW2String("uniqueID") .. "'")
 			end
 		end
 		local _tmpFDoors = ents.FindByClass("func_door")
 		for k, v in pairs(_tmpFDoors) do
-			if v:GetNWString("ownerCharID") == charid then
-				v:SetNWString("ownerRPName", "")
-				v:SetNWString("ownerGroup", "")
-				v:SetNWString("ownerCharID", "")
+			if v:GetNW2String("ownerCharID") == charid then
+				v:SetNW2String("ownerRPName", "")
+				v:SetNW2String("ownerGroup", "")
+				v:SetNW2String("ownerCharID", "")
 				v:Fire("Unlock")
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNWString("uniqueID") .. "'")
+				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNW2String("uniqueID") .. "'")
 			end
 		end
 		local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 		for k, v in pairs(_tmpFRDoors) do
-			if v:GetNWString("ownerCharID") == charid then
-				v:SetNWString("ownerRPName", "")
-				v:SetNWString("ownerGroup", "")
-				v:SetNWString("ownerCharID", "")
+			if v:GetNW2String("ownerCharID") == charid then
+				v:SetNW2String("ownerRPName", "")
+				v:SetNW2String("ownerGroup", "")
+				v:SetNW2String("ownerCharID", "")
 				v:Fire("Unlock")
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNWString("uniqueID") .. "'")
+				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNW2String("uniqueID") .. "'")
 			end
 		end
 	end
@@ -362,26 +362,26 @@ net.Receive("removeOwner", function(len, ply)
 
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerRPName", "")
-			v:SetNWString("ownerGroup", "")
-			v:SetNWString("ownerCharID", "")
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerRPName", "")
+			v:SetNW2String("ownerGroup", "")
+			v:SetNW2String("ownerCharID", "")
 		end
 	end
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerRPName", "")
-			v:SetNWString("ownerGroup", "")
-			v:SetNWString("ownerCharID", "")
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerRPName", "")
+			v:SetNW2String("ownerGroup", "")
+			v:SetNW2String("ownerCharID", "")
 		end
 	end
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerRPName", "")
-			v:SetNWString("ownerGroup", "")
-			v:SetNWString("ownerCharID", "")
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerRPName", "")
+			v:SetNW2String("ownerGroup", "")
+			v:SetNW2String("ownerCharID", "")
 		end
 	end
 end)
@@ -394,36 +394,36 @@ net.Receive("sellBuilding", function(len, ply)
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerRPName", "")
-			v:SetNWString("ownerGroup", "")
-			v:SetNWString("ownerCharID", "")
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerRPName", "")
+			v:SetNW2String("ownerGroup", "")
+			v:SetNW2String("ownerCharID", "")
 			v:Fire("Unlock")
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNWString("buildingID")))
+			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNW2String("buildingID")))
 		end
 	end
 
 	local _tmpFDoors = ents.FindByClass("func_door")
 
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerRPName", "")
-			v:SetNWString("ownerGroup", "")
-			v:SetNWString("ownerCharID", "")
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerRPName", "")
+			v:SetNW2String("ownerGroup", "")
+			v:SetNW2String("ownerCharID", "")
 			v:Fire("Unlock")
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNWString("buildingID")))
+			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNW2String("buildingID")))
 		end
 	end
 
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerRPName", "")
-			v:SetNWString("ownerGroup", "")
-			v:SetNWString("ownerCharID", "")
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerRPName", "")
+			v:SetNW2String("ownerGroup", "")
+			v:SetNW2String("ownerCharID", "")
 			v:Fire("Unlock")
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNWString("buildingID")))
+			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNW2String("buildingID")))
 		end
 	end
 
@@ -431,7 +431,7 @@ net.Receive("sellBuilding", function(len, ply)
 end)
 
 net.Receive("buyBuilding", function(len, ply)
-	if ply:GetNWBool("bool_building_system", false) then
+	if ply:GetNW2Bool("bool_building_system", false) then
 		local _tmpBuildingID = net.ReadString()
 		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
@@ -441,23 +441,23 @@ net.Receive("buyBuilding", function(len, ply)
 			local _tmpDoors = ents.FindByClass("prop_door_rotating")
 			local _tmpPlys = SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
 			for k, v in pairs(_tmpDoors) do
-				if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetNWString("ownerRPName", _tmpPlys[1].rpname)
-					v:SetNWString("ownerCharID", ply:CharID())
+				if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+					v:SetNW2String("ownerRPName", _tmpPlys[1].rpname)
+					v:SetNW2String("ownerCharID", ply:CharID())
 				end
 			end
 			local _tmpFDoors = ents.FindByClass("func_door")
 			for k, v in pairs(_tmpFDoors) do
-				if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetNWString("ownerRPName", _tmpPlys[1].rpname)
-					v:SetNWString("ownerCharID", ply:CharID())
+				if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+					v:SetNW2String("ownerRPName", _tmpPlys[1].rpname)
+					v:SetNW2String("ownerCharID", ply:CharID())
 				end
 			end
 			local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 			for k, v in pairs(_tmpFRDoors) do
-				if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetNWString("ownerRPName", _tmpPlys[1].rpname)
-					v:SetNWString("ownerCharID", ply:CharID())
+				if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+					v:SetNW2String("ownerRPName", _tmpPlys[1].rpname)
+					v:SetNW2String("ownerCharID", ply:CharID())
 				end
 			end
 
@@ -479,20 +479,20 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 	local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. _tmpGroupID)
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerGroup", _tmpGroupName[1].string_name)
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerGroup", _tmpGroupName[1].string_name)
 		end
 	end
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerGroup", _tmpGroupName[1].string_name)
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerGroup", _tmpGroupName[1].string_name)
 		end
 	end
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetNWString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetNWString("ownerGroup", _tmpGroupName[1].string_name)
+		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetNW2String("ownerGroup", _tmpGroupName[1].string_name)
 		end
 	end
 end)
@@ -539,8 +539,8 @@ net.Receive("changeBuildingID", function(len, ply)
 	local _tmpDoor = net.ReadEntity()
 	local _tmpBuildingID = net.ReadString()
 
-	_tmpDoor:SetNWString("buildingID", _tmpBuildingID)
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "buildingID = " .. tonumber(_tmpBuildingID) , "uniqueID = " .. _tmpDoor:GetNWString("uniqueID"))
+	_tmpDoor:SetNW2String("buildingID", _tmpBuildingID)
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "buildingID = " .. tonumber(_tmpBuildingID) , "uniqueID = " .. _tmpDoor:GetNW2String("uniqueID"))
 
 	lookForEmptyBuildings()
 end)
@@ -573,8 +573,8 @@ function ChangeBuildingString(uid, net_str, new_str)
 	end
 
 	for i, v in pairs(_allDoors) do
-		if uid == tonumber(v:GetNWString("buildingID")) then
-			v:SetNWString(net_str, new_str)
+		if uid == tonumber(v:GetNW2String("buildingID")) then
+			v:SetNW2String(net_str, new_str)
 		end
 	end
 end
@@ -617,7 +617,7 @@ end)
 
 net.Receive("getBuildingInfo", function(len, ply)
 	local _tmpDoor = net.ReadEntity()
-	local _tmpBuildingID = _tmpDoor:GetNWString("buildingID")
+	local _tmpBuildingID = _tmpDoor:GetNW2String("buildingID")
 
 	if wk(_tmpBuildingID) then
 		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")

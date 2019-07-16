@@ -60,13 +60,13 @@ net.Receive("openInteractMenu", function(len)
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
-			tmpGender = v:GetNWString("Gender")
+			tmpGender = v:GetNW2String("Gender")
 			tmpRPDescription = ""
 			for i = 1, 10 do
 				if i > 1 then
 					tmpRPDescription = tmpRPDescription .. "\n"
 				end
-				tmpRPDescription = tmpRPDescription .. SQL_STR_OUT(v:GetNWString("rpdescription" .. i, ""))
+				tmpRPDescription = tmpRPDescription .. SQL_STR_OUT(v:GetNW2String("rpdescription" .. i, ""))
 			end
 			break
 		end
@@ -77,17 +77,17 @@ net.Receive("openInteractMenu", function(len)
 		surfaceWindow(self, pw, ph, "")
 
 		if idcard then
-			draw.RoundedBox(ctr(30), ctr(10), ctr(50), ctr(750), ctr(350), Color(255, 255, 255, 255))
+			draw.RoundedBox(YRP.ctr(30), YRP.ctr(10), YRP.ctr(50), YRP.ctr(750), YRP.ctr(350), Color(255, 255, 255, 255))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charTitle", ctr(10 + 10), ctr(55), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(GetHostName(), "charTitle", ctr(10 + 10), ctr(60+30), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(LocalPlayer():SteamID(), "charTitle", ctr(745), ctr(55), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charTitle", YRP.ctr(10 + 10), YRP.ctr(55), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(GetHostName(), "charTitle", YRP.ctr(10 + 10), YRP.ctr(60+30), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(LocalPlayer():SteamID(), "charTitle", YRP.ctr(745), YRP.ctr(55), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "charHeader", ctr(280), ctr(60 + 70), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(60 + 70), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(tmpRPName, "charText", ctr(280), ctr(60 + 100), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(tmpRPName, "charText", YRP.ctr(280), YRP.ctr(60 + 100), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", ctr(280), ctr(60 + 210), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(60 + 210), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 			local gender = YRP.lang_string("LID_genderother")
 			if tmpGender == "gendermale" then
 				gender = YRP.lang_string("LID_gendermale")
@@ -96,27 +96,27 @@ net.Receive("openInteractMenu", function(len)
 			elseif tmpGender == "genderother" then
 				gender = YRP.lang_string("LID_genderother")
 			end
-			draw.SimpleTextOutlined(gender, "charText", ctr(280), ctr(60 + 240), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(gender, "charText", YRP.ctr(280), YRP.ctr(60 + 240), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
 			--[[ Licenses ]]--
-			draw.RoundedBox(0, ctr(10), ctr(420), ctr(1070), ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", ctr(10 + 10), ctr(420 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", ctr(10 + 10), ctr(460 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(420), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(420 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", YRP.ctr(10 + 10), YRP.ctr(460 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 
 			--[[ Description ]]--
-			draw.RoundedBox(0, ctr(10), ctr(530), ctr(1070), ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", ctr(10 + 10), ctr(560), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(530), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(560), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 		end
 	end
 
 	if idcard then
-		local _tmpDescription = createD("DTextEntry", _windowInteract, ctr(1070), ctr(400 - 50), ctr(10), ctr(590))
+		local _tmpDescription = createD("DTextEntry", _windowInteract, YRP.ctr(1070), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(590))
 		_tmpDescription:SetMultiline(true)
 		_tmpDescription:SetEditable(false)
 		_tmpDescription:SetText(tmpRPDescription)
 
 		local tmpAvatarI = createVGUI("AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70)
-		tmpAvatarI:SetPlayer(tmpPly, ctr(256))
+		tmpAvatarI:SetPlayer(tmpPly, YRP.ctr(256))
 	end
 
 	local buttonTrade = createVGUI("DButton", _windowInteract, 530, 50, 10, 950)

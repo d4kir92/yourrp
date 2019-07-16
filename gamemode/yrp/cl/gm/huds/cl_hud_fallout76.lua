@@ -341,8 +341,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].text = "N"
 			local hr_n = table.Copy(FO76[tab.element]["north"])
 			hr_n.y = hr_n.y - hr_n.h * 0.35
-			hr_n.x = hr_n.x - ctr(4)
-			hr_n.w = ctr(8)
+			hr_n.x = hr_n.x - YRP.ctr(4)
+			hr_n.w = YRP.ctr(8)
 			hr_n.h = hr_n.h * 0.3
 			HudBox(hr_n)
 			HudTextBr(FO76[tab.element]["north"])
@@ -352,8 +352,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].text = "S"
 			local hr_s = table.Copy(FO76[tab.element]["south"])
 			hr_s.y = hr_s.y - hr_s.h * 0.35
-			hr_s.x = hr_s.x - ctr(4)
-			hr_s.w = ctr(8)
+			hr_s.x = hr_s.x - YRP.ctr(4)
+			hr_s.w = YRP.ctr(8)
 			hr_s.h = hr_s.h * 0.3
 			HudBox(hr_s)
 			HudTextBr(FO76[tab.element]["south"])
@@ -363,8 +363,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].text = "E"
 			local hr_e = table.Copy(FO76[tab.element]["east"])
 			hr_e.y = hr_e.y - hr_e.h * 0.35
-			hr_e.x = hr_e.x - ctr(4)
-			hr_e.w = ctr(8)
+			hr_e.x = hr_e.x - YRP.ctr(4)
+			hr_e.w = YRP.ctr(8)
 			hr_e.h = hr_e.h * 0.3
 			HudBox(hr_e)
 			HudTextBr(FO76[tab.element]["east"])
@@ -374,8 +374,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].text = "W"
 			local hr_w = table.Copy(FO76[tab.element]["west"])
 			hr_w.y = hr_w.y - hr_w.h * 0.35
-			hr_w.x = hr_w.x - ctr(4)
-			hr_w.w = ctr(8)
+			hr_w.x = hr_w.x - YRP.ctr(4)
+			hr_w.w = YRP.ctr(8)
 			hr_w.h = hr_w.h * 0.3
 			HudBox(hr_w)
 			HudTextBr(FO76[tab.element]["west"])
@@ -402,7 +402,7 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
-	if lply:GetNWString("string_hud_design") == "Fallout 76" then
+	if lply:GetNW2String("string_hud_design") == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
 		HP.text = YRP.lang_string("LID_hp")
@@ -587,7 +587,7 @@ function HUD_FO76()
 			FO76Name(LO)
 		end
 
-		if lply:GetNWBool("iscasting", false) then
+		if lply:GetNW2Bool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
 			CA.cur = lply:CastTimeCurrent()
@@ -598,7 +598,7 @@ function HUD_FO76()
 			FO76Name(CA)
 		end
 
-		if IsChatVisible() and lply:GetNWBool("bool_yrp_chat", false) then
+		if IsChatVisible() and lply:GetNW2Bool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			FO76Chat(CH)

@@ -187,13 +187,13 @@ end
 function isdbfull(str)
 	if CLIENT then
 		if string.find(str, "full") then
-			local FRAME = createD("DFrame", nil, ctr(1800), ctr(300), 0, 0)
+			local FRAME = createD("DFrame", nil, YRP.ctr(1800), YRP.ctr(300), 0, 0)
 			FRAME:SetTitle("")
 			FRAME:Center()
 			FRAME:MakePopup()
 			function FRAME:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, "INFO")
-				surfaceText("YOUR DATABASE IS FULL! (Your Disk)", "mat1header", pw/2, ctr(100), Color(255, 255, 255, 255), 1, 1)
+				surfaceText("YOUR DATABASE IS FULL! (Your Disk)", "mat1header", pw/2, YRP.ctr(100), Color(255, 255, 255, 255), 1, 1)
 			end
 		end
 	end
@@ -202,17 +202,17 @@ end
 function ismalformed(str)
 	if string.find(str, "database disk image is malformed") then
 		if CLIENT then
-			local FRAME = createD("DFrame", nil, ctr(1800), ctr(300), 0, 0)
+			local FRAME = createD("DFrame", nil, YRP.ctr(1800), YRP.ctr(300), 0, 0)
 			FRAME:SetTitle("")
 			FRAME:Center()
 			FRAME:MakePopup()
 			function FRAME:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, "INFO")
-				surfaceText("YOUR DATABASE IS MALFORMED, please join the Discord and tell the DEVs!", "mat1header", pw/2, ctr(100), Color(255, 255, 255, 255), 1, 1)
-				surfaceText("Stop Game, delete .../garrysmod/garrysmod/cl.db to fix this problem", "mat1header", pw/2, ctr(150), Color(255, 255, 255, 255), 1, 1)
+				surfaceText("YOUR DATABASE IS MALFORMED, please join the Discord and tell the DEVs!", "mat1header", pw/2, YRP.ctr(100), Color(255, 255, 255, 255), 1, 1)
+				surfaceText("Stop Game, delete .../garrysmod/garrysmod/cl.db to fix this problem", "mat1header", pw/2, YRP.ctr(150), Color(255, 255, 255, 255), 1, 1)
 			end
 
-			FRAME.discord = createD("DButton", FRAME, ctr(400), ctr(50), ctr(900-200), ctr(200))
+			FRAME.discord = createD("DButton", FRAME, YRP.ctr(400), YRP.ctr(50), YRP.ctr(900-200), YRP.ctr(200))
 			FRAME.discord:SetText("")
 			function FRAME.discord:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "JOIN DISCORD")
@@ -228,7 +228,7 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error(realm, str)
 	local entry = {}
-	if CLIENT and !LocalPlayer():GetNWBool("isserverdedicated", false) then
+	if CLIENT and !LocalPlayer():GetNW2Bool("isserverdedicated", false) then
 		return false
 	elseif SERVER and !game.IsDedicated() then
 		return false
@@ -318,7 +318,7 @@ function CanSendError()
 		if game.MaxPlayers() > 1 then
 			if CLIENT then
 				local lply = LocalPlayer()
-				if lply:IsValid() and lply:GetNWBool("isserverdedicated", false) then
+				if lply:IsValid() and lply:GetNW2Bool("isserverdedicated", false) then
 					if tick % 10 == 0 then
 						return true
 					end

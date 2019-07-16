@@ -1,13 +1,13 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function CreateCheckBoxLine(dpanellist, val, lstr, netstr)
-	local background = createD("DPanel", nil, ctr(800), ctr(50), 0, 0)
-	background.text_posx = ctr(50 + 10)
+	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+	background.text_posx = YRP.ctr(50 + 10)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, self.text_posx, nil, 0, 1)
 	end
 
-	background.checkbox = createD("DCheckBox", background, ctr(50), ctr(50), 0, 0)
+	background.checkbox = createD("DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0, 0)
 	background.checkbox:SetValue(val)
 	function background.checkbox:Paint(pw, ph)
 		surfaceCheckBox(self, pw, ph, "done")
@@ -37,17 +37,17 @@ end
 
 function CreateCheckBoxLineTab(dpanellist, val, lstr, netstr)
 	local cb = CreateCheckBoxLine(dpanellist, val, lstr, netstr)
-	cb.checkbox:SetPos(ctr(50), ctr(0))
-	cb.text_posx = ctr(50 + 50 + 10)
+	cb.checkbox:SetPos(YRP.ctr(50), YRP.ctr(0))
+	cb.text_posx = YRP.ctr(50 + 50 + 10)
 end
 
 function CreateButtonLine(dpanellist, lstr, netstr, lstr2)
-	local background = createD("DPanel", nil, ctr(800), ctr(100 + 10), 0, 0)
+	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	background.button = createD("DButton", background, ctr(800) - ctr(10 * 2), ctr(50), ctr(10), ctr(50))
+	background.button = createD("DButton", background, YRP.ctr(800) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
 	background.button:SetText("")
 	background.button.text = lstr2 or lstr
 	function background.button:Paint(pw, ph)
@@ -65,12 +65,12 @@ function CreateButtonLine(dpanellist, lstr, netstr, lstr2)
 end
 
 function CreateTextBoxLine(dpanellist, text, lstr, netstr)
-	local background = createD("DPanel", nil, ctr(800), ctr(100 + 10), 0, 0)
+	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	local textbox = createD("DTextEntry", background, ctr(800) - ctr(10 * 2), ctr(50), ctr(10), ctr(50))
+	local textbox = createD("DTextEntry", background, YRP.ctr(800) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
 	textbox:SetText(text)
 	textbox.serverside = false
 
@@ -97,12 +97,12 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 end
 
 function CreateTextBoxBox(dpanellist, text, lstr, netstr)
-	local background = createD("DPanel", nil, ctr(800), ctr(50 + 400 + 10), 0, 0)
+	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(50 + 400 + 10), 0, 0)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, ctr(10), ctr(25), 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), YRP.ctr(25), 0, 1)
 	end
 
-	local textbox = createD("DTextEntry", background, ctr(800) - ctr(10 * 2), ctr(400), ctr(10), ctr(50))
+	local textbox = createD("DTextEntry", background, YRP.ctr(800) - YRP.ctr(10 * 2), YRP.ctr(400), YRP.ctr(10), YRP.ctr(50))
 	textbox:SetText(text)
 	textbox:SetMultiline(true)
 	textbox.serverside = false
@@ -130,13 +130,13 @@ function CreateTextBoxBox(dpanellist, text, lstr, netstr)
 end
 
 function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2)
-	local background = createD("DPanel", nil, ctr(800), ctr(100 + 10), 0, 0)
+	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		local ply = LocalPlayer()
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": (" .. ply:GetNWString("text_money_pre", "") .. "100" .. ply:GetNWString("text_money_pos", "") .. ")", nil, ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": (" .. ply:GetNW2String("text_money_pre", "") .. "100" .. ply:GetNW2String("text_money_pos", "") .. ")", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	background.textbox = createD("DTextEntry", background, ctr(400) - ctr(10 * 2), ctr(50), ctr(10), ctr(50))
+	background.textbox = createD("DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
 	background.textbox:SetText(text)
 	background.textbox.serverside = false
 
@@ -157,7 +157,7 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 		end
 	end)
 
-	background.textbox2 = createD("DTextEntry", background, ctr(400) - ctr(10 * 2), ctr(50), ctr(10 + 400), ctr(50))
+	background.textbox2 = createD("DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10 + 400), YRP.ctr(50))
 	background.textbox2:SetText(text2)
 	background.textbox2.serverside = false
 
@@ -184,12 +184,12 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 end
 
 function CreateNumberWangLine(dpanellist, value, lstr, netstr)
-	local background = createD("DPanel", nil, ctr(800), ctr(100 + 10), 0, 0)
+	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	background.numberwang = createD("DNumberWang", background, ctr(800) - ctr(10 * 2), ctr(50), ctr(10), ctr(50))
+	background.numberwang = createD("DNumberWang", background, YRP.ctr(800) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
 	background.numberwang:SetMax(999999999999)
 	background.numberwang:SetMin(-999999999999)
 	background.numberwang:SetValue(value)
@@ -235,10 +235,10 @@ function CreateNumberWangLine(dpanellist, value, lstr, netstr)
 end
 
 function CreateHRLine(dpanellist)
-	local hr = createD("DPanel", nil, ctr(800), ctr(20), 0, 0)
+	local hr = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(20), 0, 0)
 	function hr:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "")
-		surfaceBox(ctr(10), hr:GetTall() / 4, hr:GetWide() - ctr(2 * 10), hr:GetTall() / 2, Color(0, 0, 0, 255))
+		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color(0, 0, 0, 255))
 	end
 	dpanellist:AddItem(hr)
 	return hr
@@ -274,15 +274,15 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 
-		local General_Slider = createD("DHorizontalScroller", PARENT, ScrW() - ctr(2 * 20), ScrH() - ctr(100 + 20 + 20), ctr(20), ctr(20))
-		General_Slider:SetOverlap(- ctr(20))
+		local General_Slider = createD("DHorizontalScroller", PARENT, ScrW() - YRP.ctr(2 * 20), ScrH() - YRP.ctr(100 + 20 + 20), YRP.ctr(20), YRP.ctr(20))
+		General_Slider:SetOverlap(- YRP.ctr(20))
 
 
 
 		--[[ SERVER SETTINGS ]]--
-		local Server_Settings = createD("DPanel", General_Slider, ctr(800), General_Slider:GetTall(), 0, 0)
+		local Server_Settings = createD("DPanel", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Server_Settings)
-		local SERVER_SETTINGS = createD("DYRPPanelPlus", Server_Settings, ctr(800), General_Slider:GetTall(), 0, 0)
+		local SERVER_SETTINGS = createD("DYRPPanelPlus", Server_Settings, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		SERVER_SETTINGS:INITPanel("DPanelList")
 		SERVER_SETTINGS:SetHeader("LID_serversettings")
 		function SERVER_SETTINGS.plus:Paint(pw, ph)
@@ -297,7 +297,7 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_noclip_model = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_noclip_model, "LID_noclipmodel", "update_bool_noclip_model")
 		local noclip_mdl = CreateButtonLine(SERVER_SETTINGS.plus, "LID_noclipmodel", "update_text_noclip_mdl", "LID_change")
 		hook.Add("update_text_noclip_mdl", "yrp_update_text_noclip_mdl", function()
-			local mdl = LocalPlayer():GetNWString("WorldModel", "")
+			local mdl = LocalPlayer():GetNW2String("WorldModel", "")
 			net.Start("update_text_noclip_mdl")
 				net.WriteString(mdl)
 			net.SendToServer()
@@ -318,7 +318,7 @@ net.Receive("Connect_Settings_General", function(len)
 				tmpTable[count].PrintName = v
 			end
 
-			LocalPlayer():SetNWString("WorldModel", GEN.bool_noclip_mdl)
+			LocalPlayer():SetNW2String("WorldModel", GEN.bool_noclip_mdl)
 			OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
 		end
 		CreateHRLine(SERVER_SETTINGS.plus)
@@ -344,9 +344,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE SETTINGS ]]--
-		local Gamemode_Settings = createD("DPanel", General_Slider, ctr(1000), General_Slider:GetTall(), 0, 0)
+		local Gamemode_Settings = createD("DPanel", General_Slider, YRP.ctr(1000), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Gamemode_Settings)
-		local GAMEMODE_SETTINGS = createD("DYRPPanelPlus", Gamemode_Settings, ctr(1000), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_SETTINGS = createD("DYRPPanelPlus", Gamemode_Settings, YRP.ctr(1000), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_SETTINGS:INITPanel("DPanelList")
 		GAMEMODE_SETTINGS:SetHeader("LID_gamemodesettings")
 		function GAMEMODE_SETTINGS.plus:Paint(pw, ph)
@@ -377,9 +377,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE SYSTEMS ]]--
-		local Gamemode_Systems = createD("DPanel", General_Slider, ctr(800), General_Slider:GetTall(), 0, 0)
+		local Gamemode_Systems = createD("DPanel", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Gamemode_Systems)
-		local GAMEMODE_SYSTEMS = createD("DYRPPanelPlus", Gamemode_Systems, ctr(800), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_SYSTEMS = createD("DYRPPanelPlus", Gamemode_Systems, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_SYSTEMS:INITPanel("DPanelList")
 		GAMEMODE_SYSTEMS:SetHeader("LID_gamemodesystems")
 		function GAMEMODE_SYSTEMS.plus:Paint(pw, ph)
@@ -418,9 +418,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE VISUALS ]]--
-		local Gamemode_Visuals = createD("DPanel", General_Slider, ctr(800), General_Slider:GetTall(), 0, 0)
+		local Gamemode_Visuals = createD("DPanel", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Gamemode_Visuals)
-		local GAMEMODE_VISUALS = createD("DYRPPanelPlus", Gamemode_Visuals, ctr(800), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_VISUALS = createD("DYRPPanelPlus", Gamemode_Visuals, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_VISUALS:INITPanel("DPanelList")
 		GAMEMODE_VISUALS.plus:EnableVerticalScrollbar(true)
 		GAMEMODE_VISUALS:SetHeader("LID_gamemodevisuals")
@@ -475,9 +475,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 		--[[ MONEY SETTINGS ]]--
-		local Money_Settings = createD("DPanel", General_Slider, ctr(800), General_Slider:GetTall(), 0, 0)
+		local Money_Settings = createD("DPanel", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Money_Settings)
-		local MONEY_SETTINGS = createD("DYRPPanelPlus", Money_Settings, ctr(800), General_Slider:GetTall(), 0, 0)
+		local MONEY_SETTINGS = createD("DYRPPanelPlus", Money_Settings, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		MONEY_SETTINGS:INITPanel("DPanelList")
 		MONEY_SETTINGS:SetHeader("LID_moneysettings")
 		function MONEY_SETTINGS.plus:Paint(pw, ph)
@@ -516,9 +516,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 		--[[ SOCIAL SETTINGS ]]--
-		local Social_Settings = createD("DPanel", General_Slider, ctr(800), General_Slider:GetTall(), 0, 0)
+		local Social_Settings = createD("DPanel", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		General_Slider:AddPanel(Social_Settings)
-		local SOCIAL_SETTINGS = createD("DYRPPanelPlus", Social_Settings, ctr(800), General_Slider:GetTall(), 0, 0)
+		local SOCIAL_SETTINGS = createD("DYRPPanelPlus", Social_Settings, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		SOCIAL_SETTINGS:INITPanel("DPanelList")
 		SOCIAL_SETTINGS:SetHeader("LID_socialsettings")
 		function SOCIAL_SETTINGS.plus:Paint(pw, ph)

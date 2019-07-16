@@ -63,7 +63,7 @@ function appPosition(parent, x, y, nr)
 		if isDropped then
 			if receiver:IsHovered() then
 				local _x, _y = receiver:GetPos()
-				tableOfDroppedPanels[1]:SetPos(_x + ctr(	1), _y + ctr(	1))
+				tableOfDroppedPanels[1]:SetPos(_x + YRP.ctr(	1), _y + YRP.ctr(	1))
 				changeAppPosition(tableOfDroppedPanels[1].tbl.ClassName, receiver.nr)
 			end
 		end

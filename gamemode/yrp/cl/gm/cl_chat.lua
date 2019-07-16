@@ -48,7 +48,7 @@ function checkChatVisible()
 			_showChat = true
 		end
 		lply = LocalPlayer()
-		if lply:GetNWBool("bool_yrp_chat", false) == false then
+		if lply:GetNW2Bool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
 		yrpChat.richText:SetVisible(_showChat)
@@ -74,7 +74,7 @@ function niceCommand(com)
 	elseif com == "yell" then
 		return YRP.lang_string("LID_yell")
 	elseif com == "advert" then
-		return LocalPlayer():GetNWString("text_chat_advert", YRP.lang_string("LID_advert"))
+		return LocalPlayer():GetNW2String("text_chat_advert", YRP.lang_string("LID_advert"))
 	elseif com == "admin" then
 		return YRP.lang_string("LID_admin")
 	elseif com == "faction" then
@@ -117,14 +117,14 @@ function InitYRPChat()
 					yrpChat.window:SetPos(px, py)
 					yrpChat.window:SetSize(sw, sh)
 
-					yrpChat.comboBox:SetPos(ctr(10), sh - ctr(40 + 10))
-					yrpChat.comboBox:SetSize(ctr(140), ctr(40))
+					yrpChat.comboBox:SetPos(YRP.ctr(10), sh - YRP.ctr(40 + 10))
+					yrpChat.comboBox:SetSize(YRP.ctr(140), YRP.ctr(40))
 
-					yrpChat.writeField:SetPos(ctr(10 + 140), sh - ctr(40 + 10))
-					yrpChat.writeField:SetSize(sw - ctr(2 * 10 + 140), ctr(40))
+					yrpChat.writeField:SetPos(YRP.ctr(10 + 140), sh - YRP.ctr(40 + 10))
+					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * 10 + 140), YRP.ctr(40))
 
-					yrpChat.richText:SetPos(ctr(10), ctr(10))
-					yrpChat.richText:SetSize(sw - ctr(2 * 10), sh - ctr(2 * 10 + 40 + 10))
+					yrpChat.richText:SetPos(YRP.ctr(10), YRP.ctr(10))
+					yrpChat.richText:SetSize(sw - YRP.ctr(2 * 10), sh - YRP.ctr(2 * 10 + 40 + 10))
 				end
 				local _com = yrpChat.writeField:GetText()
 				if isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
@@ -173,7 +173,7 @@ function InitYRPChat()
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.richText:PerformLayout()
-			self:SetFontInternal("YRP_O_18_500")
+			self:SetFontInternal("YRP_CHAT")
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
@@ -297,14 +297,14 @@ end
 
 timer.Create("yrp_init_chat", 1, 0, function()
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNWBool("finishedloading", false) and LocalPlayer():GetNWString("string_hud_design", "notloaded") != "notloaded" then
+	if lply:IsValid() and lply:GetNW2Bool("finishedloading", false) and LocalPlayer():GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
 		timer.Remove("yrp_init_chat")
 	end
 end)
 
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	if ply:GetNWBool("bool_yrp_chat", false) then
+	if ply:GetNW2Bool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
 			bTeam = false
@@ -322,7 +322,7 @@ end)
 
 hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNWBool("bool_yrp_chat", false) then
+	if lply:IsValid() and lply:GetNW2Bool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
 				yrpChat.richText:AppendText(text.."\n")
@@ -333,7 +333,7 @@ end)
 
 hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNWBool("bool_yrp_chat", false) then
+	if lply:IsValid() and lply:GetNW2Bool("bool_yrp_chat", false) then
 		if name == "CHudChat" then
 			return false
 		end

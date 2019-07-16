@@ -49,9 +49,9 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	function yrp_vehicle.window:Paint(pw, ph)
 		surfaceWindow(self, pw, ph, YRP.lang_string("LID_settings"))
 
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-		draw.RoundedBox(0, ctr(4), ctr(160), pw - ctr(8), ctr(70-4), Color(255, 255, 0, 200))
+		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color(255, 255, 0, 200))
 	end
 
 	if ply:HasAccess() then
@@ -68,7 +68,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		end
 
 
-		yrp_vehicle.window:SetSize(ctr(1090), ctr(230))
+		yrp_vehicle.window:SetSize(YRP.ctr(1090), YRP.ctr(230))
 		yrp_vehicle.window:Center()
 	end
 

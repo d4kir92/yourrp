@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local boxspace = ctr(20)
+local boxspace = YRP.ctr(20)
 
 net.Receive("get_design_settings", function(len)
 	local lply = LocalPlayer()
@@ -9,7 +9,7 @@ net.Receive("get_design_settings", function(len)
 	local INTERFACES = net.ReadTable()
 
 	if pa(settingsWindow.window) then
-		settingsWindow.window.site:SetWide(ctr(20 + 1000 + 20 + 1000 + 20))
+		settingsWindow.window.site:SetWide(YRP.ctr(20 + 1000 + 20 + 1000 + 20))
 		function settingsWindow.window.site:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
 		end
@@ -17,26 +17,26 @@ net.Receive("get_design_settings", function(len)
 		local Parent = settingsWindow.window.site
 		local GRP_HUD = {}
 		GRP_HUD.parent = Parent
-		GRP_HUD.x = ctr(20)
-		GRP_HUD.y = ctr(20)
-		GRP_HUD.w = ctr(1000)
-		GRP_HUD.h = ctr(530)
-		GRP_HUD.br = ctr(20)
+		GRP_HUD.x = YRP.ctr(20)
+		GRP_HUD.y = YRP.ctr(20)
+		GRP_HUD.w = YRP.ctr(1000)
+		GRP_HUD.h = YRP.ctr(530)
+		GRP_HUD.br = YRP.ctr(20)
 		GRP_HUD.color = Color(255, 255, 255)
 		GRP_HUD.bgcolor = Color(80, 80, 80)
 		GRP_HUD.name = "LID_hud"
 		GRP_HUD = DGroup(GRP_HUD)
 
 		-- HUD Design
-		local hud_design_bg = createD("DPanel", nil, GRP_HUD:GetWide(), ctr(100), 0, 0)
+		local hud_design_bg = createD("DPanel", nil, GRP_HUD:GetWide(), YRP.ctr(100), 0, 0)
 		function hud_design_bg:Paint(pw, ph)
 			--
 		end
-		local hud_design_header = createD("DPanel", hud_design_bg, hud_design_bg:GetWide(), ctr(50), 0, 0)
+		local hud_design_header = createD("DPanel", hud_design_bg, hud_design_bg:GetWide(), YRP.ctr(50), 0, 0)
 		function hud_design_header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
-		local hud_design_choice = createD("DComboBox", hud_design_bg, hud_design_bg:GetWide(), ctr(50), 0, ctr(50))
+		local hud_design_choice = createD("DComboBox", hud_design_bg, hud_design_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		for i, design in pairs(HUDS) do
 			local selected = false
 			if design.name == setting.string_hud_design then
@@ -56,7 +56,7 @@ net.Receive("get_design_settings", function(len)
 		GRP_HUD:AddItem(hud_design_bg)
 
 		local hr = {}
-		hr.h = ctr(16)
+		hr.h = YRP.ctr(16)
 		hr.parent = GRP_HUD
 		DHr(hr)
 
@@ -155,7 +155,7 @@ net.Receive("get_design_settings", function(len)
 								local x, y = window:GetPos()
 								local w, h = window:GetSize()
 
-								local br = ctr(10)
+								local br = YRP.ctr(10)
 								draw.RoundedBox(0, x - br, y - br, w + 2 * br, h + 2 * br, Color(255, 0, 0, 255))
 							end
 						end
@@ -195,23 +195,23 @@ net.Receive("get_design_settings", function(len)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, alpha-40))
 
 						-- Corner
-						draw.RoundedBox(0, pw - ctr(8 + 16), ph - ctr(8 + 4), ctr(16), ctr(4), Color(255, 255, 255, alpha))
-						draw.RoundedBox(0, pw - ctr(8 + 4), ph - ctr(8 + 16), ctr(4), ctr(16), Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw - YRP.ctr(8 + 16), ph - YRP.ctr(8 + 4), YRP.ctr(16), YRP.ctr(4), Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw - YRP.ctr(8 + 4), ph - YRP.ctr(8 + 16), YRP.ctr(4), YRP.ctr(16), Color(255, 255, 255, alpha))
 
 						-- Center
-						local w = ctr(16)
-						local h = ctr(4)
-						local space = ctr(8)
+						local w = YRP.ctr(16)
+						local h = YRP.ctr(4)
+						local space = YRP.ctr(8)
 						draw.RoundedBox(0, space, ph / 2 - h / 2, w, h, Color(255, 255, 255, alpha))
 						draw.RoundedBox(0, pw / 2 - h / 2, space, h, w, Color(255, 255, 255, alpha))
 						draw.RoundedBox(0, pw - (space + w), ph / 2 - h / 2, w, h, Color(255, 255, 255, alpha))
 						draw.RoundedBox(0, pw / 2 - h / 2, ph - (space + w), h, w, Color(255, 255, 255, alpha))
 
 						-- Dragbar
-						draw.RoundedBox(0, 0, 0, pw, ctr(50), Color(0, 0, 255, alpha - 40))
+						draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), Color(0, 0, 255, alpha - 40))
 
 						-- Name
-						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(36 + 8 + 8), ctr(20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(36 + 8 + 8), YRP.ctr(20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 						-- Border
 						local tbr = {}
@@ -292,7 +292,7 @@ net.Receive("get_design_settings", function(len)
 					end
 				end
 
-				win.setting = createD("DButton", win, ctr(36), ctr(36), ctr(4), ctr(4))
+				win.setting = createD("DButton", win, YRP.ctr(36), YRP.ctr(36), YRP.ctr(4), YRP.ctr(4))
 				win.setting:SetText("")
 				function win.setting:DoClick()
 					net.Receive("get_hud_element_settings", function(le)
@@ -301,14 +301,14 @@ net.Receive("get_design_settings", function(len)
 
 						win.visible = false
 
-						win.winset = createD("DFrame", nil, ctr(860), ctr(860), wx, wy)
+						win.winset = createD("DFrame", nil, YRP.ctr(860), YRP.ctr(860), wx, wy)
 						win.winset:MakePopup()
 						win.winset:SetTitle("")
 						win.winset:Center()
 						table.insert(editarea["settingswindows"], win.winset)
 						function win.winset:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
-							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", ctr(50), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 							local x, y = self:GetPos()
 							local mx, my = gui.MousePos()
@@ -348,14 +348,14 @@ net.Receive("get_design_settings", function(len)
 							table.RemoveByValue(editarea["settingswindows"], win.winset)
 						end
 
-						win.winset.dpl = createD("DPanelList", win.winset, win.winset:GetWide() - ctr(20 + 20), win.winset:GetTall() - ctr(50 + 20 + 20), ctr(20), ctr(50 + 20))
+						win.winset.dpl = createD("DPanelList", win.winset, win.winset:GetWide() - YRP.ctr(20 + 20), win.winset:GetTall() - YRP.ctr(50 + 20 + 20), YRP.ctr(20), YRP.ctr(50 + 20))
 						function win.winset:AddCheckBox(t)
-							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
-							local cb = createD("DCheckBox", line, ctr(50), ctr(50), 0, 0)
+							local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 							cb:SetValue(t.value)
 							function cb:OnChange(bVal)
 								net.Start("update_hud_bool")
@@ -368,16 +368,16 @@ net.Receive("get_design_settings", function(len)
 							win.winset.dpl:AddItem(line)
 						end
 						function win.winset:AddTextPosition(t)
-							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
-							local btn = createD("DButton", line, ctr(50), ctr(50), 0, 0)
+							local btn = createD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 							btn:SetText("")
 							function btn:DoClick()
 								local mx, my = gui.MousePos()
-								local tp = createD("DFrame", nil, ctr(300), ctr(350), mx, my)
+								local tp = createD("DFrame", nil, YRP.ctr(300), YRP.ctr(350), mx, my)
 								tp:SetTitle("")
 								tp:MakePopup()
 								function tp:Paint(pw, ph)
@@ -404,18 +404,18 @@ net.Receive("get_design_settings", function(len)
 								for y = 0, 3 do
 									for x = 0, 3 do
 										local id = x .. "," .. y
-										local tp_btn = createD("DButton", tp, ctr(100), ctr(100), x * ctr(100), y * ctr(100) + ctr(50))
+										local tp_btn = createD("DButton", tp, YRP.ctr(100), YRP.ctr(100), x * YRP.ctr(100), y * YRP.ctr(100) + YRP.ctr(50))
 										tp_btn:SetText("")
 										function tp_btn:Paint(pw, ph)
-											local bw = pw - ctr(8)
-											local bh = ph - ctr(8)
-											local bx = ctr(8) / 2
-											local by = ctr(8) / 2
-											local _w = bw - ctr(8)
-											local _h = bh - ctr(8)
-											local _x = bx + ctr(8) / 2
-											local _y = by + ctr(8) / 2
-											local _size = ctr(20)
+											local bw = pw - YRP.ctr(8)
+											local bh = ph - YRP.ctr(8)
+											local bx = YRP.ctr(8) / 2
+											local by = YRP.ctr(8) / 2
+											local _w = bw - YRP.ctr(8)
+											local _h = bh - YRP.ctr(8)
+											local _x = bx + YRP.ctr(8) / 2
+											local _y = by + YRP.ctr(8) / 2
+											local _size = YRP.ctr(20)
 											draw.RoundedBox(0, bx, by, bw, bh, Color(255, 255, 255))
 											draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color(0, 0, 0))
 										end
@@ -444,23 +444,23 @@ net.Receive("get_design_settings", function(len)
 								elseif ay == 4 then
 									ay = 2
 								end
-								local _w = pw - ctr(8)
-								local _h = ph - ctr(8)
-								local _x = ctr(8) / 2
-								local _y = ctr(8) / 2
-								local _size = ctr(20)
+								local _w = pw - YRP.ctr(8)
+								local _h = ph - YRP.ctr(8)
+								local _x = YRP.ctr(8) / 2
+								local _y = YRP.ctr(8) / 2
+								local _size = YRP.ctr(20)
 								draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * ax, _y + (_h - _size) / 2 * ay, _size, _size, Color(0, 0, 0))
 							end
 
 							win.winset.dpl:AddItem(line)
 						end
 						function win.winset:AddComboBox(t)
-							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
-							line.cb = createD("DComboBox", line, ctr(200), ctr(50), 0, 0)
+							line.cb = createD("DComboBox", line, YRP.ctr(200), YRP.ctr(50), 0, 0)
 							line.cb:SetSortItems(false)
 							for i, choice in pairs(t.choices) do
 								local selected = false
@@ -480,21 +480,21 @@ net.Receive("get_design_settings", function(len)
 						end
 
 						function win.winset:AddColorMixer(t)
-							local line = createD("DPanel", nil, ctr(400), ctr(50), 0, 0)
+							local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							t.color = lply:HudValue(t.element, t.art)
 
-							local btn = createD("DButton", line, ctr(50), ctr(50), 0, 0)
+							local btn = createD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 							btn:SetText("")
 							function btn:Paint(pw, ph)
 								draw.RoundedBox(ph / 2, 0, 0, pw, ph, t.color)
 							end
 							function btn:DoClick()
 								-- ColorMixer
-								local cmwin = createD("DFrame", nil, ctr(400 + 20 + 20), ctr(450 + 20 + 20), 0, 0)
+								local cmwin = createD("DFrame", nil, YRP.ctr(400 + 20 + 20), YRP.ctr(450 + 20 + 20), 0, 0)
 								cmwin:SetTitle("")
 								cmwin:Center()
 								cmwin:MakePopup()
@@ -508,7 +508,7 @@ net.Receive("get_design_settings", function(len)
 									end
 								end
 
-								cmwin.cm = createD("DColorMixer", cmwin, ctr(400), ctr(400), ctr(20), ctr(50 + 20))
+								cmwin.cm = createD("DColorMixer", cmwin, YRP.ctr(400), YRP.ctr(400), YRP.ctr(20), YRP.ctr(50 + 20))
 								cmwin.cm:SetColor(t.color)
 								function cmwin.cm:ValueChanged(col)
 									t.color = col
@@ -636,7 +636,7 @@ net.Receive("get_design_settings", function(len)
 						end
 						draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 
-						YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - ctr(4), ph - ctr(4), ctr(2), ctr(2), Color(0, 0, 0, alpha))
+						YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), Color(0, 0, 0, alpha))
 					end
 				end
 
@@ -799,7 +799,7 @@ net.Receive("get_design_settings", function(len)
 
 		local gridsizes = {8, 10, 12, 16, 20}
 		for i, size in pairs(gridsizes) do
-			local hud_x = createD("DButton", nil, GRP_HUD:GetWide(), ctr(50), 0, ctr(50))
+			local hud_x = createD("DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 			hud_x:SetText("")
 			function hud_x:Paint(pw, ph)
 				local color = Color(255, 255, 255)
@@ -810,7 +810,7 @@ net.Receive("get_design_settings", function(len)
 				draw.SimpleText(YRP.lang_string("LID_customize") .. " (" .. YRP.lang_string("LID_gridsize") .. " " .. size .. ")", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function hud_x:DoClick()
-				boxspace = ctr(size)
+				boxspace = YRP.ctr(size)
 				Customize()
 			end
 			GRP_HUD:AddItem(hud_x)
@@ -819,7 +819,7 @@ net.Receive("get_design_settings", function(len)
 		DHr(hr)
 
 		-- HUD Reset Settings
-		local hud_reset_settings = createD("DButton", nil, GRP_HUD:GetWide(), ctr(50), 0, ctr(50))
+		local hud_reset_settings = createD("DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		hud_reset_settings:SetText("")
 		function hud_reset_settings:Paint(pw, ph)
 			local color = Color(255, 255, 255)
@@ -845,11 +845,11 @@ net.Receive("get_design_settings", function(len)
 		-- Interface
 		local GRP_IF = {}
 		GRP_IF.parent = Parent
-		GRP_IF.x = ctr(20 + 1000 + 20)
-		GRP_IF.y = ctr(20)
-		GRP_IF.w = ctr(1000)
-		GRP_IF.h = ctr(1600)
-		GRP_IF.br = ctr(20)
+		GRP_IF.x = YRP.ctr(20 + 1000 + 20)
+		GRP_IF.y = YRP.ctr(20)
+		GRP_IF.w = YRP.ctr(1000)
+		GRP_IF.h = YRP.ctr(1600)
+		GRP_IF.br = YRP.ctr(20)
 		GRP_IF.color = Color(255, 255, 255)
 		GRP_IF.bgcolor = Color(80, 80, 80)
 		GRP_IF.name = "LID_interface"
@@ -857,15 +857,15 @@ net.Receive("get_design_settings", function(len)
 		GRP_IF.cif = {}
 
 		-- IF Design
-		local if_font_bg = createD("DPanel", nil, GRP_IF:GetWide(), ctr(100), 0, 0)
+		local if_font_bg = createD("DPanel", nil, GRP_IF:GetWide(), YRP.ctr(100), 0, 0)
 		function if_font_bg:Paint(pw, ph)
 			--
 		end
-		local if_font_header = createD("DPanel", if_font_bg, if_font_bg:GetWide(), ctr(50), 0, 0)
+		local if_font_header = createD("DPanel", if_font_bg, if_font_bg:GetWide(), YRP.ctr(50), 0, 0)
 		function if_font_header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_font"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
-		local if_font_choice = createD("DComboBox", if_font_bg, if_font_bg:GetWide(), ctr(50), 0, ctr(50))
+		local if_font_choice = createD("DComboBox", if_font_bg, if_font_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		for i, fo in pairs(YRP.GetFonts()) do
 			local selected = false
 			if fo.name == YRP.GetFont() then
@@ -881,15 +881,15 @@ net.Receive("get_design_settings", function(len)
 		end
 		GRP_IF:AddItem(if_font_bg)
 
-		local if_design_bg = createD("DPanel", nil, GRP_IF:GetWide(), ctr(100), 0, 0)
+		local if_design_bg = createD("DPanel", nil, GRP_IF:GetWide(), YRP.ctr(100), 0, 0)
 		function if_design_bg:Paint(pw, ph)
 			--
 		end
-		local if_design_header = createD("DPanel", if_design_bg, if_design_bg:GetWide(), ctr(50), 0, 0)
+		local if_design_header = createD("DPanel", if_design_bg, if_design_bg:GetWide(), YRP.ctr(50), 0, 0)
 		function if_design_header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
-		local if_design_choice = createD("DComboBox", if_design_bg, if_design_bg:GetWide(), ctr(50), 0, ctr(50))
+		local if_design_choice = createD("DComboBox", if_design_bg, if_design_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		for i, design in pairs(INTERFACES) do
 			local selected = false
 			if design.name == setting.string_interface_design then
@@ -928,13 +928,13 @@ net.Receive("get_design_settings", function(len)
 
 						local color = StringToColor(ift.value)
 
-						local ycol = createD("DPanel", nil, ctr(200), ctr(50), 0, 0)
+						local ycol = createD("DPanel", nil, YRP.ctr(200), YRP.ctr(50), 0, 0)
 						function ycol:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-							draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						ycol.cm = createD("YColorMenuButton", ycol, ctr(50), ctr(50), 0, 0)
+						ycol.cm = createD("YColorMenuButton", ycol, YRP.ctr(50), YRP.ctr(50), 0, 0)
 						ycol.cm:SetColor(color)
 						function ycol.cm:ColorChanged(col)
 							net.Start("update_interface_color")
@@ -950,16 +950,16 @@ net.Receive("get_design_settings", function(len)
 			end
 		end)
 
-		local pv_win = createD("YFrame", Parent, ctr(1000), ctr(1000), ctr(20 + 1000 + 20 + 1000 + 20 + 20), ctr(120))
+		local pv_win = createD("YFrame", Parent, YRP.ctr(1000), YRP.ctr(1000), YRP.ctr(20 + 1000 + 20 + 1000 + 20 + 20), YRP.ctr(120))
 		pv_win:SetTitle("LID_window")
 		function pv_win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
 			self:MoveToFront()
 		end
-		pv_win:SetHeaderHeight(ctr(100))
+		pv_win:SetHeaderHeight(YRP.ctr(100))
 		pv_win:MakePopup()
 
-		local pv_btn = createD("YButton", pv_win, ctr(300), ctr(100), ctr(20), ctr(100 + 20))
+		local pv_btn = createD("YButton", pv_win, YRP.ctr(300), YRP.ctr(100), YRP.ctr(20), YRP.ctr(100 + 20))
 		pv_btn:SetText("LID_button")
 		function pv_btn:Paint(pw, ph)
 			local tab = {}
@@ -972,7 +972,7 @@ net.Receive("get_design_settings", function(len)
 			hook.Run("YButtonPaint", self, pw, ph, tab)
 		end
 
-		local pv_lbl = createD("YLabel", pv_win, ctr(300), ctr(100), ctr(20 + 300 + 20), ctr(100 + 20))
+		local pv_lbl = createD("YLabel", pv_win, YRP.ctr(300), YRP.ctr(100), YRP.ctr(20 + 300 + 20), YRP.ctr(100 + 20))
 		pv_lbl:SetText("LID_label")
 		function pv_lbl:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)

@@ -103,11 +103,11 @@ end
 local _weight = 500
 
 function createFont(_name, _font, _size, __weight, _outline, _shadow)
-	if wk(_name) and wk(_font) then
+	if wk(_name) and wk(_font) and wk(_size) then
 		surface.CreateFont(_name, {
 			font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 			extended = true,
-			size = tr(_size * fontscale * 2),
+			size = YRP.ctr(_size * fontscale * 2),
 			weight = _weight or _weight,
 			blursize = 0,
 			scanlines = 0,
@@ -148,6 +148,11 @@ function changeFontSize()
 	end
 
 	--[[ DESIGNS ]]--
+	yrp_hud = yrp_hud or {}
+	local chatfontsize = yrp_hud["int_HUD_CH_TS"] or 18
+	createFont("YRP_CHAT", YRP.GetFont(), chatfontsize, _weight, true)
+
+	--[[ DESIGNS ]]--
 	createFont("mat1header", YRP.GetFont(), 22, _weight, false)
 	createFont("mat1text", YRP.GetFont(), 18, 0, false)
 
@@ -161,8 +166,8 @@ function changeFontSize()
 	createFont("Settings_Normal", YRP.GetFont(), 22, _weight, false)
 	createFont("Settings_Header", YRP.GetFont(), 26, _weight, false)
 
-	createFont("apph1", YRP.GetFont(), fontr(36), _weight, false)
-	createFont("appt", YRP.GetFont(), fontr(30), _weight, false)
+	createFont("apph1", YRP.GetFont(), YRP.fonttr(36), _weight, false)
+	createFont("appt", YRP.GetFont(), YRP.fonttr(30), _weight, false)
 
 	createFont("appname", YRP.GetFont(), ctrb(28), _weight, false)
 

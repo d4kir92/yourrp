@@ -36,7 +36,7 @@ end
 local CamDataMap = {}
 function openMap()
 	local lply = LocalPlayer()
-	if lply:GetNWBool("bool_map_system", false) then
+	if lply:GetNW2Bool("bool_map_system", false) then
 		map.open = true
 
 		_map.window = vgui.Create("DFrame")
@@ -66,7 +66,7 @@ function openMap()
 				win.x = (ScrW() / 2) - (win.w / 2)
 				win.y = (ScrH() / 2) - (win.h / 2)
 
-				draw.RoundedBox(0, win.x - ctr(2), win.y - ctr(2), win.w + ctr(4), win.h + ctr(4), Color(255, 255, 0, 240))
+				draw.RoundedBox(0, win.x - YRP.ctr(2), win.y - YRP.ctr(2), win.w + YRP.ctr(4), win.h + YRP.ctr(4), Color(255, 255, 0, 240))
 				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color(0, 0, 0, 255))
 
 				local _mapName = GetNiceMapName()
@@ -134,24 +134,24 @@ function openMap()
 				--You
 				local x = plyPos.x
 				local y = plyPos.y
-				local w = ctr(50)
-				local h = ctr(50)
+				local w = YRP.ctr(50)
+				local h = YRP.ctr(50)
 				local rot = ply:EyeAngles().y - 90
 
 				surface.SetDrawColor(100, 100, 255, 255)
 				surface.SetMaterial(YRP.GetDesignIcon("navigation"))
 				surface.DrawTexturedRectRotated(x, y, w, h, rot)
-				draw.SimpleTextOutlined(YRP.lang_string("LID_you"), "sef", plyPos.x, plyPos.y-ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_you"), "sef", plyPos.x, plyPos.y-YRP.ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				--Coords
-				draw.SimpleTextOutlined(math.Round(ply:GetPos().x, 0), "sef", ScrW() / 2, ScrH() - ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(", " .. math.Round(ply:GetPos().y, 0), "sef", ScrW() / 2, ScrH() - ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(math.Round(ply:GetPos().x, 0), "sef", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(", " .. math.Round(ply:GetPos().y, 0), "sef", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "HudBars", ctr(10), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "HudBars", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-				if lply:GetNWBool("bool_canseeteammatesonmap", false) or lply:GetNWBool("bool_canseeenemiesonmap", false) then
+				if lply:GetNW2Bool("bool_canseeteammatesonmap", false) or lply:GetNW2Bool("bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll()) do
-						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNWBool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNWBool("bool_canseeenemiesonmap", false)) then
+						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNW2Bool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNW2Bool("bool_canseeenemiesonmap", false)) then
 							local tmp = {}
 							tmp.xMax = map.sizeX
 							tmp.yMax = map.sizeY
@@ -171,8 +171,8 @@ function openMap()
 							--Draw
 							local ppx = tmp.x
 							local ppy = tmp.y
-							local psw = ctr(50)
-							local psh = ctr(50)
+							local psw = YRP.ctr(50)
+							local psh = YRP.ctr(50)
 							local prot = pl:EyeAngles().y - 90
 
 							local pl_col = Color(100, 100, 255, 255)
@@ -184,7 +184,7 @@ function openMap()
 							surface.SetDrawColor(pl_col)
 							surface.SetMaterial(YRP.GetDesignIcon("navigation"))
 							surface.DrawTexturedRectRotated(ppx, ppy, psw, psh, prot)
-							draw.SimpleTextOutlined(pl:Nick(), "sef", tmp.x, tmp.y - ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+							draw.SimpleTextOutlined(pl:Nick(), "sef", tmp.x, tmp.y - YRP.ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 						end
 					end
 				end
@@ -199,7 +199,7 @@ function openMap()
 			closeMenu()
 		end
 	else
-		_info = createD("DFrame", nil, ctr(400), ctr(400), 0, 0)
+		_info = createD("DFrame", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
 		_info:SetTitle("")
 		function _info:Paint(pw, ph)
 			surfaceWindow(self, pw, ph, "map")

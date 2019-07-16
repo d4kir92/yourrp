@@ -9,14 +9,14 @@ net.Receive("get_licenses", function()
 		local spw = settingsWindow.window.sitepanel:GetWide()
 		local sph = settingsWindow.window.sitepanel:GetTall()
 
-		_li.ea = createD("DPanel", settingsWindow.window.site, ScW() - ctr(40 + 480 + 40 + 40), sph - ctr(80), ctr(40 + 480 + 40), ctr(40)	)
+		_li.ea = createD("DPanel", settingsWindow.window.site, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 		function _li.ea:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end
 
-		_li._lic = createD("DYRPDBList", settingsWindow.window.site, ctr(480), ctr(500), ctr(40), ctr(40))
+		_li._lic = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_li._lic:SetListHeader("licenses")
-		--_li._lic:SetNWStrForAdd("licence_add")
+		--_li._lic:SetNW2StrForAdd("licence_add")
 		_li._lic:SetEditArea(_li.ea)
 		function _li.eaf(tbl)
 			for i, child in pairs(_li.ea:GetChildren()) do
@@ -24,7 +24,7 @@ net.Receive("get_licenses", function()
 			end
 
 			--[[ NAME ]]--
-			_li.name = createD("DYRPTextEntry", _li.ea, ctr(800), ctr(100), 0, 0)
+			_li.name = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
 			_li.name:SetHeader(YRP.lang_string("LID_name"))
 			_li.name:SetText(SQL_STR_OUT(tbl.name))
@@ -37,7 +37,7 @@ net.Receive("get_licenses", function()
 			end
 
 			--[[ Description ]]--
-			_li.desc = createD("DYRPTextEntry", _li.ea, ctr(800), ctr(400), 0, ctr(150))
+			_li.desc = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(150))
 			_li.desc.textentry.tbl = tbl
 			_li.desc:SetHeader(YRP.lang_string("LID_description"))
 			_li.desc:SetText(SQL_STR_OUT(tbl.description))
@@ -50,7 +50,7 @@ net.Receive("get_licenses", function()
 			end
 
 			--[[ Price ]]--
-			_li.price = createD("DYRPNumberWang", _li.ea, ctr(800), ctr(100), 0, ctr(600))
+			_li.price = createD("DYRPNumberWang", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600))
 			_li.price.numberwang.tbl = tbl
 			_li.price:SetHeader(YRP.lang_string("LID_price"))
 			_li.price:SetText(SQL_STR_OUT(tbl.price))

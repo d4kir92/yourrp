@@ -862,7 +862,7 @@ function Player:HudLoadout()
 		net.Send(self)
 	end
 	timer.Simple(1, function()
-		self:SetNWInt("hud_version", self:GetNWInt("hud_version", 0) + 1)
+		self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
 	end)
 end
 

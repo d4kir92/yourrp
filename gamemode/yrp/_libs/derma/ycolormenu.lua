@@ -9,7 +9,7 @@ end
 function PANEL:Init()
 	self:SetTitle("LID_color")
 
-	local ctrl = createD("DColorMixer", self, self:GetWide() - ctr(40), self:GetTall() - ctr(40), ctr(20), ctr(20))
+	local ctrl = createD("DColorMixer", self, self:GetWide() - YRP.ctr(40), self:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 
 	ctrl.ValueChanged = function(ctrl, color)
 		self:ValueChanged(color)
@@ -40,7 +40,7 @@ function PANEL:Think()
 	local px, py = self:GetPos()
 	local pw, ph = self:GetSize()
 
-	self._cm:SetSize(pw - ctr(40), ph - ctr(40))
+	self._cm:SetSize(pw - YRP.ctr(40), ph - YRP.ctr(40))
 
 	local mx, my = gui.MousePos()
 	if mx < px then

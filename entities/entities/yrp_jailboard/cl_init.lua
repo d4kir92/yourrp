@@ -30,9 +30,9 @@ net.Receive("openLawBoard", function(len)
 		end
 		function window:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 250))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_jail"), "sef", ctr(10), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_jail"), "sef", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_access"), "sef", ctr(600), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_access"), "sef", YRP.ctr(600), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 
 		local _tmpGroups = net.ReadTable()
@@ -42,7 +42,7 @@ net.Receive("openLawBoard", function(len)
 			_gAccess = tonumber(_tmpGeneral[1].access_jail)
 		end
 		if LocalPlayer():HasAccess() then
-			local _access = createD("DComboBox", window, ctr(300), ctr(50), ctr(610), 0)
+			local _access = createD("DComboBox", window, YRP.ctr(300), YRP.ctr(50), YRP.ctr(610), 0)
 			_access:AddChoice("-", -1, false)
 			for k, v in pairs(_tmpGroups) do
 				local _hasaccess = false
@@ -60,7 +60,7 @@ net.Receive("openLawBoard", function(len)
 		end
 
 
-		local scrollpanel = createD("DScrollPanel", window, ScW() - ctr(20), ScrH() - ctr(50+10+10), ctr(10), ctr(50+10))
+		local scrollpanel = createD("DScrollPanel", window, ScW() - YRP.ctr(20), ScrH() - YRP.ctr(50+10+10), YRP.ctr(10), YRP.ctr(50+10))
 		function scrollpanel:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 100))
 		end
@@ -71,17 +71,17 @@ net.Receive("openLawBoard", function(len)
 		for k, v in pairs(tmpJailList) do
 			local dpanel = createVGUI("DPanel", scrollpanel, _size, _size, 0, 0)
 			dpanel:SetText("")
-			dpanel:SetPos(_x*ctr(_size+10), _y*ctr(_size+60+10))
+			dpanel:SetPos(_x*YRP.ctr(_size+10), _y*YRP.ctr(_size+60+10))
 			function dpanel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255, 200))
 
-				draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. v.nick, "sef", pw/2, ph - ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_reason") .. ": " .. SQL_STR_OUT(v.reason), "sef", pw/2, ph - ctr(75), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_time") .. ": " .. v.time, "sef", pw/2, ph - ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. v.nick, "sef", pw/2, ph - YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_reason") .. ": " .. SQL_STR_OUT(v.reason), "sef", pw/2, ph - YRP.ctr(75), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_time") .. ": " .. v.time, "sef", pw/2, ph - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			scrollpanel:AddItem(dpanel)
 
-			local _removeButton = createD("DButton", scrollpanel, ctr(_size), ctr(50), 0, 0)
+			local _removeButton = createD("DButton", scrollpanel, YRP.ctr(_size), YRP.ctr(50), 0, 0)
 			_removeButton:SetText("")
 			_removeButton.uniqueID = v.uniqueID
 			_removeButton.panel = dpanel
@@ -104,7 +104,7 @@ net.Receive("openLawBoard", function(len)
 				end
 			end
 
-			_removeButton:SetPos(_x*ctr(_size+10), _y*ctr(_size+70) + ctr(_size))
+			_removeButton:SetPos(_x*YRP.ctr(_size+10), _y*YRP.ctr(_size+70) + YRP.ctr(_size))
 
 			_x = _x + 1
 			if (_x-1)*_size >= ScW() then
@@ -117,14 +117,14 @@ net.Receive("openLawBoard", function(len)
 		if _gAccess == _tmpGroupID then
 			local addButton = createVGUI("DButton", scrollpanel, _size, _size)
 			addButton:SetText("")
-			addButton:SetPos(_x*ctr(_size+10), _y*ctr(_size+70))
+			addButton:SetPos(_x*YRP.ctr(_size+10), _y*YRP.ctr(_size+70))
 			function addButton:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200))
 
 				local _pl = 200
 				local _ph = 50
-				draw.RoundedBox(0, pw/2 - ctr(_pl/2), ph/2 - ctr(_ph/2), ctr(_pl), ctr(_ph), Color(0, 0, 0, 255))
-				draw.RoundedBox(0, pw/2 - ctr(_ph/2), ph/2 - ctr(_pl/2), ctr(_ph), ctr(_pl), Color(0, 0, 0, 255))
+				draw.RoundedBox(0, pw/2 - YRP.ctr(_pl/2), ph/2 - YRP.ctr(_ph/2), YRP.ctr(_pl), YRP.ctr(_ph), Color(0, 0, 0, 255))
+				draw.RoundedBox(0, pw/2 - YRP.ctr(_ph/2), ph/2 - YRP.ctr(_pl/2), YRP.ctr(_ph), YRP.ctr(_pl), Color(0, 0, 0, 255))
 			end
 			scrollpanel:AddItem(addButton)
 			function addButton:DoClick()
@@ -136,13 +136,13 @@ net.Receive("openLawBoard", function(len)
 				function addWindow:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 250))
 
-					draw.SimpleTextOutlined(YRP.lang_string("LID_add"), "sef", ctr(10), ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_add"), "sef", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-					draw.SimpleTextOutlined(YRP.lang_string("LID_player"), "sef", ctr(10), ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_player"), "sef", YRP.ctr(10), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-					draw.SimpleTextOutlined(YRP.lang_string("LID_reason"), "sef", ctr(10), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_reason"), "sef", YRP.ctr(10), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-					draw.SimpleTextOutlined(YRP.lang_string("LID_timeinsec"), "sef", ctr(10), ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_timeinsec"), "sef", YRP.ctr(10), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 				end
 
 				local _player = createVGUI("DComboBox", addWindow, 380, 50, 10, 100)

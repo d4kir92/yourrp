@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function AddStatusLine(parent, cat, entry, str_id, color)
-	local sl = createD("DPanel", parent, parent:GetWide(), ctr(50), 0, 0)
+	local sl = createD("DPanel", parent, parent:GetWide(), YRP.ctr(50), 0, 0)
 	local _t = {}
 	_t[cat] = entry
 	sl.text = YRP.lang_string(str_id, _t)
@@ -41,20 +41,20 @@ net.Receive("Connect_Settings_Status", function(len)
 		local TAB_GROUPS = net.ReadTable()
 		local TAB_MAP = net.ReadTable()
 
-		local br = ctr(20)
+		local br = YRP.ctr(20)
 		local scroller = {}
 		scroller.parent = PARENT
 		scroller.x = br
 		scroller.y = br
 		scroller.w = ScW() - 2 * br
-		scroller.h = ScrH() - ctr(100) - 2 * br
+		scroller.h = ScrH() - YRP.ctr(100) - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 
 		local tab_yourrp = {}
 		tab_yourrp.parent = Scroller
 		tab_yourrp.x = 0
 		tab_yourrp.y = 0
-		tab_yourrp.w = ctr(800)
+		tab_yourrp.w = YRP.ctr(800)
 		tab_yourrp.h = Scroller:GetTall()
 		tab_yourrp.br = br / 2
 		tab_yourrp.name = "YourRP"
@@ -69,7 +69,7 @@ net.Receive("Connect_Settings_Status", function(len)
 		tab_roles.parent = Scroller
 		tab_roles.x = 0
 		tab_roles.y = 0
-		tab_roles.w = ctr(800)
+		tab_roles.w = YRP.ctr(800)
 		tab_roles.h = Scroller:GetTall()
 		tab_roles.br = br / 2
 		tab_roles.name = "LID_roles"
@@ -84,7 +84,7 @@ net.Receive("Connect_Settings_Status", function(len)
 		tab_groups.parent = Scroller
 		tab_groups.x = 0
 		tab_groups.y = 0
-		tab_groups.w = ctr(800)
+		tab_groups.w = YRP.ctr(800)
 		tab_groups.h = Scroller:GetTall()
 		tab_groups.br = br / 2
 		tab_groups.name = "LID_groups"
@@ -99,7 +99,7 @@ net.Receive("Connect_Settings_Status", function(len)
 		tab_map.parent = Scroller
 		tab_map.x = 0
 		tab_map.y = 0
-		tab_map.w = ctr(800)
+		tab_map.w = YRP.ctr(800)
 		tab_map.h = Scroller:GetTall()
 		tab_map.br = br / 2
 		tab_map.name = "LID_map"

@@ -4,7 +4,7 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if lply:GetNWString("string_interface_design") == "Simple" then
+	if lply:GetNW2String("string_interface_design") == "Simple" then
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "HB"))
 
 		draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "BG"))
@@ -18,7 +18,7 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if lply:GetNWString("string_interface_design") == "Simple" then
+	if lply:GetNW2String("string_interface_design") == "Simple" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -41,7 +41,7 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if lply:GetNWString("string_interface_design") == "Simple" then
+	if lply:GetNW2String("string_interface_design") == "Simple" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 
@@ -52,11 +52,11 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 
 		local tx = pw / 2
 		if ax == 0 then
-			tx = ctr(20)
+			tx = YRP.ctr(20)
 		end
 		local ty = ph / 2
 		if ay == 3 then
-			ty = ctr(20)
+			ty = YRP.ctr(20)
 		end
 
 		draw.SimpleText(YRP.lang_string(self:GetText()), "Roboto18", tx, ty, tcolor, ax, ay)

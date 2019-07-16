@@ -64,17 +64,17 @@ end)
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout()
-	self:SetNWInt("yrp_loading", 0)
+	self:SetNW2Int("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
 	printGM("debug", "[DesignLoadout] " .. self:YRPName())
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
-		self:SetNWString("string_hud_design", setting.string_hud_design)
-		self:SetNWString("string_interface_design", setting.string_interface_design)
+		self:SetNW2String("string_hud_design", setting.string_hud_design)
+		self:SetNW2String("string_interface_design", setting.string_interface_design)
 	end
-	self:SetNWInt("yrp_loading", 100)
+	self:SetNW2Int("yrp_loading", 100)
 end
 
 local once = false
@@ -94,7 +94,7 @@ net.Receive("change_hud_design", function(len, ply)
 	printGM("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 	SQL_UPDATE(DATABASE_NAME, "string_hud_design = '" .. string_hud_design .. "'", "uniqueID = '1'")
 	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWString("string_hud_design", string_hud_design)
+		pl:SetNW2String("string_hud_design", string_hud_design)
 	end
 end)
 
@@ -124,7 +124,7 @@ net.Receive("change_interface_design", function(len, ply)
 	printGM("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
 	for i, pl in pairs(player.GetAll()) do
-		pl:SetNWString("string_interface_design", string_interface_design)
+		pl:SetNW2String("string_interface_design", string_interface_design)
 	end
 end)
 

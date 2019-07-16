@@ -13,27 +13,27 @@ function PlayerLoadedGame(ply)
 	end
 
 	if OS_Windows then
-		ply:SetNWString("yrp_os", "windows")
+		ply:SetNW2String("yrp_os", "windows")
 	elseif OS_Linux then
-		ply:SetNWString("yrp_os", "linux")
+		ply:SetNW2String("yrp_os", "linux")
 	elseif OS_OSX then
-		ply:SetNWString("yrp_os", "osx")
+		ply:SetNW2String("yrp_os", "osx")
 	else
-		ply:SetNWString("yrp_os", "other")
+		ply:SetNW2String("yrp_os", "other")
 	end
 
-	ply:SetNWString("yrp_country", Country or "Unknown")
+	ply:SetNW2String("yrp_country", Country or "Unknown")
 
 	-- YRP Chat?
 	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
 	if _chat != nil and _chat != false then
 		_chat = _chat[1]
-		ply:SetNWBool("bool_yrp_chat", tobool(_chat.yrp_chat))
+		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
 	end
 
-	ply:SetNWBool("isserverdedicated", game.IsDedicated())
+	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
 
-	ply:SetNWBool("finishedloading", true)
+	ply:SetNW2Bool("finishedloading", true)
 
 	ply:KillSilent()
 

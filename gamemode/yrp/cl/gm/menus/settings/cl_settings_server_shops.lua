@@ -6,7 +6,7 @@ net.Receive("get_shops", function()
 	local _shops = net.ReadTable()
 
 	if settingsWindow.window != nil then
-		_sh._sho = createD("DYRPDBList", settingsWindow.window.site, ctr(480), ctr(500), ctr(40), ctr(40))
+		_sh._sho = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_sh._sho.tbl = _shops
 		_sh._sho:SetListHeader("shops")
 		_sh._sho:SetEditArea(_sh.ea)
@@ -33,7 +33,7 @@ net.Receive("get_shops", function()
 			end
 
 			--[[ NAME ]]--
-			_sh._sho._name = createD("DYRPTextEntry", _sh.ea, ctr(800), ctr(100), 0, 0)
+			_sh._sho._name = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_sh._sho._name.textentry.tbl = tbl
 			_sh._sho._name:SetHeader(YRP.lang_string("LID_name"))
 			_sh._sho._name:SetText(SQL_STR_OUT(tbl.name))
@@ -60,7 +60,7 @@ net.Receive("get_shop_categories", function()
 	local _scats = net.ReadTable()
 
 	if settingsWindow.window != nil then
-		_sh._cat = createD("DYRPDBList", settingsWindow.window.site, ctr(480), ctr(500), ctr(40), ctr(40+500+40))
+		_sh._cat = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40))
 		_sh._cat.tbl = _scats
 		_sh._cat:SetListHeader("categories")
 		_sh._cat:SetEditArea(_sh.ea)
@@ -90,7 +90,7 @@ net.Receive("get_shop_categories", function()
 			--[[ NAME ]]--
 			if pa(_sh.ea) then
 				if pa(_sh._cat) then
-					_sh._cat._name = createD("DYRPTextEntry", _sh.ea, ctr(800), ctr(100), 0, 0)
+					_sh._cat._name = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 					_sh._cat._name.textentry.tbl = tbl
 					_sh._cat._name:SetHeader(YRP.lang_string("LID_name"))
 					_sh._cat._name:SetText(SQL_STR_OUT(tbl.name))
@@ -120,7 +120,7 @@ net.Receive("get_shop_items", function()
 	local _sitems = net.ReadTable()
 
 	if pa(settingsWindow.window) then
-		_sh._sit = createD("DYRPDBList", settingsWindow.window.site, ctr(480), ctr(500), ctr(40), ctr(40+500+40+500+40))
+		_sh._sit = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40+500+40))
 		_sh._sit.tbl = _sitems
 		_sh._sit:SetListHeader("items")
 		_sh._sit:SetEditArea(_sh.ea)
@@ -146,7 +146,7 @@ net.Receive("get_shop_items", function()
 
 			--[[ NAME ]]--
 			if pa(_sh.ea) and pa(_sh._sit) then
-				_sh._sit.itemname = createD("DYRPTextEntry", _sh.ea, ctr(800), ctr(100), 0, ctr(150))
+				_sh._sit.itemname = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(150))
 				_sh._sit.itemname.textentry.tbl = tbl
 				_sh._sit.itemname:SetHeader(YRP.lang_string("LID_name"))
 				_sh._sit.itemname:SetText(SQL_STR_OUT(tbl.name))
@@ -169,7 +169,7 @@ net.Receive("get_shop_items", function()
 				end
 
 				--[[ Description ]]--
-				_sh._sit.itemdesc = createD("DYRPTextEntry", _sh.ea, ctr(800), ctr(400), 0, ctr(300))
+				_sh._sit.itemdesc = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(300))
 				_sh._sit.itemdesc.textentry.tbl = tbl
 				_sh._sit.itemdesc:SetHeader(YRP.lang_string("LID_description"))
 				_sh._sit.itemdesc:SetText(SQL_STR_OUT(tbl.description))
@@ -193,7 +193,7 @@ net.Receive("get_shop_items", function()
 				end
 
 				--[[ Price ]]--
-				_sh._sit.itemprice = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(750))
+				_sh._sit.itemprice = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(750))
 				_sh._sit.itemprice:SetHeader(YRP.lang_string("LID_price"))
 				_sh._sit.itemprice:INITPanel("DNumberWang")
 				_sh._sit.itemprice.plus.tbl = tbl
@@ -212,7 +212,7 @@ net.Receive("get_shop_items", function()
 				end
 
 				--[[ LEVEL ]]--
-				_sh._sit.itemlevel = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(900))
+				_sh._sit.itemlevel = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(900))
 				_sh._sit.itemlevel:SetHeader(YRP.lang_string("LID_level"))
 				_sh._sit.itemlevel:INITPanel("DNumberWang")
 				_sh._sit.itemlevel.plus.tbl = tbl
@@ -232,7 +232,7 @@ net.Receive("get_shop_items", function()
 
 				--[[ Quantity ]]--
 				--[[
-				_sh._sit.itemquan = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1050))
+				_sh._sit.itemquan = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1050))
 				_sh._sit.itemquan:SetHeader(YRP.lang_string("LID_quantity") .. " (" .. YRP.lang_string("LID_wip") .. ")")
 				_sh._sit.itemquan:INITPanel("DComboBox")
 				_sh._sit.itemquan.plus.tbl = tbl
@@ -259,7 +259,7 @@ net.Receive("get_shop_items", function()
 
 				--[[ Cooldown ]]--
 				--[[
-				_sh._sit.itemcool = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1200))
+				_sh._sit.itemcool = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1200))
 				_sh._sit.itemcool:SetHeader(YRP.lang_string("LID_cooldown") .. " (" .. YRP.lang_string("LID_wip") .. ")")
 				_sh._sit.itemcool:INITPanel("DNumberWang")
 				_sh._sit.itemcool.plus.tbl = tbl
@@ -279,7 +279,7 @@ net.Receive("get_shop_items", function()
 				]]--
 
 				--[[ License ]]--
-				_sh._sit.itemlice = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1350))
+				_sh._sit.itemlice = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1350))
 				_sh._sit.itemlice:SetHeader(YRP.lang_string("LID_licenses"))
 				_sh._sit.itemlice:INITPanel("DComboBox")
 				_sh._sit.itemlice.plus.tbl = tbl
@@ -310,7 +310,7 @@ net.Receive("get_shop_items", function()
 				end
 
 				--[[ Permanent ]]--
-				_sh._sit.itemperm = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, ctr(1500))
+				_sh._sit.itemperm = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1500))
 				_sh._sit.itemperm:SetHeader(YRP.lang_string("LID_permanent") .. " (" .. YRP.lang_string("LID_wip") .. ")")
 				_sh._sit.itemperm:INITPanel("DCheckBox")
 				_sh._sit.itemperm.plus.tbl = tbl
@@ -331,7 +331,7 @@ net.Receive("get_shop_items", function()
 				end
 
 				--[[ TYPE ]]--
-				_sh._sit.type = createD("DYRPPanelPlus", _sh.ea, ctr(800), ctr(100), 0, 0)
+				_sh._sit.type = createD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 				_sh._sit.type:SetHeader(YRP.lang_string("LID_type"))
 				_sh._sit.type:INITPanel("DComboBox")
 				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_weapons"), "weapons")
@@ -390,9 +390,9 @@ net.Receive("get_shop_items", function()
 				hook.Add("selected_shop_item", "yrp_selected_shop_item", function()
 					if pa(_sh._sit) then
 						if pa(_sh._sit.type) then
-							local _wm = LocalPlayer():GetNWString("WorldModel")
-							local _cn = LocalPlayer():GetNWString("ClassName")
-							local _pn = LocalPlayer():GetNWString("PrintName")
+							local _wm = LocalPlayer():GetNW2String("WorldModel")
+							local _cn = LocalPlayer():GetNW2String("ClassName")
+							local _pn = LocalPlayer():GetNW2String("PrintName")
 							local _type = _sh._sit.type.plus:GetOptionData(_sh._sit.type.plus:GetSelectedID())
 							net.Start("shop_item_edit_base")
 								net.WriteString(_sh._sit.type.plus.tbl.uniqueID)
@@ -425,7 +425,7 @@ hook.Add("open_server_shops", "open_server_shops", function()
 	function settingsWindow.window.site:Paint(w, h)
 		--
 	end
-	_sh.ea = createD("DPanel", settingsWindow.window.site, ScW() - ctr(40 + 480 + 40 + 40), h - ctr(80), ctr(40 + 480 + 40), ctr(40)	)
+	_sh.ea = createD("DPanel", settingsWindow.window.site, ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 	function _sh.ea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 	end

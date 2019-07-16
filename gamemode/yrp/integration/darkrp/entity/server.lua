@@ -25,7 +25,7 @@ function Entity:doorIndex()
 	--						 information in the database.
 	printGM("darkrp", "doorIndex()")
 
-	return self:GetNWInt("uniqueID", -1)
+	return self:GetNW2Int("uniqueID", -1)
 end
 
 function Entity:isLocked()

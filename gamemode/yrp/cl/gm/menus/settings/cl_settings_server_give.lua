@@ -3,10 +3,10 @@
 net.Receive("setting_players", function(len)
 	function settingsWindow.window.site:Paint(pw, ph)
 		--draw.RoundedBox(4, 0, 0, pw, ph, get_dbg_col())
-		surfaceText(YRP.lang_string("LID_players"), "roleInfoHeader", ctr(10), ctr(10 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_players"), "roleInfoHeader", YRP.ctr(10), YRP.ctr(10 + 25), Color(255, 255, 255), 0, 1)
 	end
 
-	local _giveListView = createD("DListView", settingsWindow.window.site, ScW() - ctr(20), ScrH() - ctr(180), ctr(10), ctr(10 + 50))
+	local _giveListView = createD("DListView", settingsWindow.window.site, ScW() - YRP.ctr(20), ScrH() - YRP.ctr(180), YRP.ctr(10), YRP.ctr(10 + 50))
 	_giveListView:AddColumn("SteamID")
 	_giveListView:AddColumn(YRP.lang_string("LID_nick"))
 	_giveListView:AddColumn(YRP.lang_string("LID_name"))
@@ -15,14 +15,14 @@ net.Receive("setting_players", function(len)
 	_giveListView:AddColumn(YRP.lang_string("LID_money"))
 
 	for n, y in pairs(player.GetAll()) do
-		_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:GetNWString("groupName"), y:GetNWString("roleName"), y:GetNWInt("money"))
+		_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:GetNW2String("groupName"), y:GetNW2String("roleName"), y:GetNW2Int("money"))
 	end
 
 	function _giveListView:OnRowRightClick(lineID, line)
 		local _tmpSteamID = line:GetValue(1)
 		local tmpX, tmpY = gui.MousePos()
-		tmpX = tmpX - ctr(4)
-		tmpY = tmpY - ctr(4)
+		tmpX = tmpX - YRP.ctr(4)
+		tmpY = tmpY - YRP.ctr(4)
 		local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
 		_tmpPanel:SetPos(tmpX, tmpY)
 		_tmpPanel.ready = false
@@ -83,8 +83,8 @@ net.Receive("setting_players", function(len)
 			function _giveFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
 
-				draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "sef", ctr(10), ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_role") .. ":", "sef", ctr(10), ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "sef", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_role") .. ":", "sef", YRP.ctr(10), YRP.ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 			end
 
 			_giveFrame:MakePopup()

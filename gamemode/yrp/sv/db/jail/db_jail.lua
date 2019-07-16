@@ -59,8 +59,8 @@ function clean_up_jail(ply)
 	if _tmpTable != nil then
 		SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. ply:SteamID() .. "'")
 	end
-	ply:SetNWBool("injail", false)
-	ply:SetNWInt("jailtime", 0)
+	ply:SetNW2Bool("injail", false)
+	ply:SetNW2Int("jailtime", 0)
 
 	teleportToReleasepoint(ply)
 end
@@ -82,8 +82,8 @@ net.Receive("dbAddJail", function(len, ply)
 	for k, v in pairs(player.GetAll()) do
 		if v:SteamID() == _SteamID then
 			printGM("note", v:Nick() .. " added to jail")
-			v:SetNWBool("injail", true)
-			v:SetNWInt("jailtime", _tmpTable[1].time)
+			v:SetNW2Bool("injail", true)
+			v:SetNW2Int("jailtime", _tmpTable[1].time)
 		end
 	end
 end)
@@ -102,15 +102,15 @@ net.Receive("dbRemJail", function(len, ply)
 	if _in_jailboard != nil then
 		for k, v in pairs(player.GetAll()) do
 			if v:SteamID() == _SteamID then
-				v:SetNWBool("injail", true)
-				v:SetNWInt("jailtime", _in_jailboard[1].time)
+				v:SetNW2Bool("injail", true)
+				v:SetNW2Int("jailtime", _in_jailboard[1].time)
 			end
 		end
 	else
 		for k, v in pairs(player.GetAll()) do
 			if v:SteamID() == _SteamID then
-				v:SetNWBool("injail", false)
-				v:SetNWInt("jailtime", 0)
+				v:SetNW2Bool("injail", false)
+				v:SetNW2Int("jailtime", 0)
 			end
 		end
 	end

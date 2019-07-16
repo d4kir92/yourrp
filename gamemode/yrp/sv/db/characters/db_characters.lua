@@ -58,8 +58,8 @@ function Player:CharacterLoadout()
 	printGM("debug", "[CharacterLoadout] " .. self:YRPName())
 	local chatab = self:GetChaTab()
 	if wk(chatab) then
-		self:SetNWString("int_xp", chatab.int_xp)
-		self:SetNWString("int_level", chatab.int_level)
+		self:SetNW2String("int_xp", chatab.int_xp)
+		self:SetNW2String("int_level", chatab.int_level)
 	end
 end
 
@@ -76,19 +76,19 @@ function Player:VisualEquipment(name, slot)
 						_item = _item[1]
 						local _model = _item.WorldModel
 
-						local _old = self:GetNWEntity(name)
+						local _old = self:GetNW2Entity(name)
 						if ea(_old) then
 							_old:Remove()
 						end
-						self:SetNWString(name, _model)
+						self:SetNW2String(name, _model)
 						local _visual = ents.Create("prop_dynamic")
 						_visual:SetModel(_item.WorldModel)
 						_visual:SetOwner(self)
-						_visual:SetNWBool("isviewmodel", true)
+						_visual:SetNW2Bool("isviewmodel", true)
 						_visual:Spawn()
 
-						self:SetNWEntity(name, _visual)
-						self:SetNWString(name .. "ClassName", _item.ClassName)
+						self:SetNW2Entity(name, _visual)
+						self:SetNW2String(name .. "ClassName", _item.ClassName)
 
 						local _maxs = _visual:OBBMaxs()
 						local _mins = _visual:OBBMins()
@@ -104,27 +104,27 @@ function Player:VisualEquipment(name, slot)
 							corax = 0
 							coray = -90
 							coraz = 90
-							self:SetNWString(name .. "thick", _x)
+							self:SetNW2String(name .. "thick", _x)
 						elseif _x >= _z and _y >= _z then
 							corax = 0
 							coray = 0
 							coraz = 0
-							self:SetNWString(name .. "thick", _z)
+							self:SetNW2String(name .. "thick", _z)
 						elseif _x >= _y and _z >= _y then
 							corax = 90
 							coray = 90
 							coraz = 90
-							self:SetNWString(name .. "thick", _y)
+							self:SetNW2String(name .. "thick", _y)
 						end
-						self:SetNWString(name .. "corax", corax)
-						self:SetNWString(name .. "coray", coray)
-						self:SetNWString(name .. "coraz", coraz)
+						self:SetNW2String(name .. "corax", corax)
+						self:SetNW2String(name .. "coray", coray)
+						self:SetNW2String(name .. "coraz", coraz)
 					else
-						local _old = self:GetNWEntity(name)
+						local _old = self:GetNW2Entity(name)
 						if ea(_old) then
 							_old:Remove()
-							self:SetNWEntity(name, NULL)
-							self:SetNWString(name .. "ClassName", "")
+							self:SetNW2Entity(name, NULL)
+							self:SetNW2String(name .. "ClassName", "")
 						end
 					end
 					return _item
@@ -172,7 +172,7 @@ function Player:SetRPName(str)
 		SQL_UPDATE("yrp_characters", "rpname = '" .. newname .. "'", "uniqueID = " .. self:CharID())
 
 		newname = SQL_STR_OUT(newname)
-		self:SetNWString("rpname", newname)
+		self:SetNW2String("rpname", newname)
 
 		printGM("note", oldname .." changed name to " .. newname, true)
 	end
@@ -346,7 +346,7 @@ net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-		ply:SetNWString("rpdescription" .. i, SQL_STR_IN(v))
+		ply:SetNW2String("rpdescription" .. i, SQL_STR_IN(v))
 	end
 end)
 
@@ -638,15 +638,17 @@ function SendBodyGroups(ply)
 		if wk(_result) then
 			_result = _result[1]
 			local _role = ply:GetRolTab()
-			_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
-			if _result.string_playermodels != "" then
-				net.Start("get_menu_bodygroups")
-					net.WriteTable(_result)
-				net.Send(ply)
-			else
-				net.Start("get_menu_bodygroups")
-					net.WriteTable({})
-				net.Send(ply)
+			if wk(_role) then
+				_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
+				if _result.string_playermodels != "" then
+					net.Start("get_menu_bodygroups")
+						net.WriteTable(_result)
+					net.Send(ply)
+				else
+					net.Start("get_menu_bodygroups")
+						net.WriteTable({})
+					net.Send(ply)
+				end
 			end
 		else
 			printGM("note", "get_menu_bodygroups failed!")

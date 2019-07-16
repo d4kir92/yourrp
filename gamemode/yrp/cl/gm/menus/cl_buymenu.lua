@@ -257,7 +257,7 @@ net.Receive("shop_get_tabs", function(len)
 			local _br = 4
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.SetMaterial(_mat_set)
-			surface.DrawTexturedRect(ctr(_br), ctr(_br), pw-ctr(2 * _br), ph-ctr(2 * _br))
+			surface.DrawTexturedRect(YRP.ctr(_br), YRP.ctr(_br), pw-YRP.ctr(2 * _br), ph-YRP.ctr(2 * _br))
 		end
 		function _bm.settings:DoClick()
 			net.Receive("dealer_settings", function(le)
@@ -304,7 +304,7 @@ net.Receive("shop_get_tabs", function(len)
 					end
 					_globalWorking = _dealer.WorldModel
 					hook.Add("close_dealer_worldmodel", "close_dealer_worldmodel_hook", function()
-						_dealer.WorldModel = LocalPlayer():GetNWString("WorldModel")
+						_dealer.WorldModel = LocalPlayer():GetNW2String("WorldModel")
 
 						net.Start("dealer_edit_worldmodel")
 							net.WriteString(_dealer.uniqueID)
@@ -347,7 +347,7 @@ net.Receive("shop_get_tabs", function(len)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
 	end
 
-	_bm.tabs = createD("DYRPTabs", _bm.window, FW() - ctrb(20 + 20) - ctr(80 + 20), ctrb(60), ctrb(20), ctrb(100 + 20))
+	_bm.tabs = createD("DYRPTabs", _bm.window, FW() - ctrb(20 + 20) - YRP.ctr(80 + 20), ctrb(60), ctrb(20), ctrb(100 + 20))
 	_bm.tabs:SetSelectedColor(Color(100, 100, 100, 240))
 	_bm.tabs:SetUnselectedColor(Color(0, 0, 0, 240))
 
@@ -393,7 +393,7 @@ net.Receive("shop_get_tabs", function(len)
 						_bm.shop:Rebuild()
 					end
 					if LocalPlayer():HasAccess() then
-						local _remove = createD("DButton", _cat, ctr(400), ctr(100), 0, 0)
+						local _remove = createD("DButton", _cat, YRP.ctr(400), YRP.ctr(100), 0, 0)
 						_remove:SetText("")
 						_remove.uid = _uid
 						function _remove:Paint(pw, ph)
@@ -473,7 +473,7 @@ net.Receive("shop_get_tabs", function(len)
 	end
 
 	if LocalPlayer():HasAccess() then
-		_bm.addtab = createD("DButton", _bm.window, ctr(80), ctr(60), FW() - ctr(80 + 20), ctr(100 + 20))
+		_bm.addtab = createD("DButton", _bm.window, YRP.ctr(80), YRP.ctr(60), FW() - YRP.ctr(80 + 20), YRP.ctr(100 + 20))
 		_bm.addtab:SetText("")
 		function _bm.addtab:Paint(pw, ph)
 			local _color = Color(0, 255, 0, 255)
@@ -484,7 +484,7 @@ net.Receive("shop_get_tabs", function(len)
 			surfaceText(" + ", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		function _bm.addtab:DoClick()
-			local _tmp = createD("DFrame", nil, ctr(420), ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)
+			local _tmp = createD("DFrame", nil, YRP.ctr(420), YRP.ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)
 			function _tmp:Paint(pw, ph)
 				if !pa(_bm.tabs) then
 					self:Remove()
@@ -495,7 +495,7 @@ net.Receive("shop_get_tabs", function(len)
 			_tmp:Center()
 			_tmp:MakePopup()
 
-			_tmp.tabs = createD("DYRPPanelPlus", _tmp, ctr(400), ctr(100), ctr(10), ctr(50 + 10))
+			_tmp.tabs = createD("DYRPPanelPlus", _tmp, YRP.ctr(400), YRP.ctr(100), YRP.ctr(10), YRP.ctr(50 + 10))
 			_tmp.tabs:INITPanel("DComboBox")
 			_tmp.tabs:SetHeader(YRP.lang_string("LID_tabs"))
 
@@ -509,7 +509,7 @@ net.Receive("shop_get_tabs", function(len)
 			net.Start("shop_get_all_tabs")
 			net.SendToServer()
 
-			_tmp.addtab = createD("YButton", _tmp, ctr(400), ctr(50), ctr(10), ctr(50 + 10 + 100 + 10))
+			_tmp.addtab = createD("YButton", _tmp, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10 + 100 + 10))
 			_tmp.addtab:SetText("LID_add")
 			function _tmp.addtab:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)

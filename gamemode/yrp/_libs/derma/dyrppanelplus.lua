@@ -2,7 +2,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD("DPanel", self, self:GetWide(), ctr(50), 0, 0)
+	self.header = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
 
 	function self:SetHeader(text)

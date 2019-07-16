@@ -39,7 +39,7 @@ end
 function showIcon(string, material)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.SetMaterial(material)
-	surface.DrawTexturedRect(anchorW(HudV(string .. "aw")) + ctr(HudV(string .. "px")) + ctr(30) - ctr(16), anchorH(HudV(string .. "ah")) + ctr(HudV(string .. "py")) + ctr(HudV(string .. "sh")/2) - ctr(16), ctr(32), ctr(32))
+	surface.DrawTexturedRect(anchorW(HudV(string .. "aw")) + YRP.ctr(HudV(string .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(string .. "ah")) + YRP.ctr(HudV(string .. "py")) + YRP.ctr(HudV(string .. "sh")/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
 end
 
 local contextMenuOpen = false
@@ -70,8 +70,8 @@ end
 
 function drawMenuInfo()
 	if get_tutorial("tut_f1info") then
-		local isize = ctr(48)
-		local ibr = ctr(10)
+		local isize = YRP.ctr(48)
+		local ibr = YRP.ctr(10)
 		local color = Color(255, 255, 255, 20)
 
 		local x = ibr
@@ -112,11 +112,11 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				HUD[dbV] = {}
 				HUD[dbV].id = HUD.count
 				HUD[dbV].delay = CurTime()
-				HUD[dbV].x = anchorW(HudV(dbV .. "aw")) + ctr(HudV(dbV .. "px"))
-				HUD[dbV].y = anchorH(HudV(dbV .. "ah")) + ctr(HudV(dbV .. "py"))
-				HUD[dbV].w = ctr(HudV(dbV .. "sw"))
+				HUD[dbV].x = anchorW(HudV(dbV .. "aw")) + YRP.ctr(HudV(dbV .. "px"))
+				HUD[dbV].y = anchorH(HudV(dbV .. "ah")) + YRP.ctr(HudV(dbV .. "py"))
+				HUD[dbV].w = YRP.ctr(HudV(dbV .. "sw"))
 				HUD[dbV].barw = cur / max * HUD[dbV].w
-				HUD[dbV].h = ctr(HudV(dbV .. "sh"))
+				HUD[dbV].h = YRP.ctr(HudV(dbV .. "sh"))
 				HUD[dbV].r = HUD[dbV].h / 2
 			end
 			if CurTime() > HUD[dbV].delay then
@@ -125,14 +125,14 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 			end
 
 			if tobool(HudV(dbV .. "tr")) then
-				_r = ctr(HudV(dbV .. "sh")) / 2
+				_r = YRP.ctr(HudV(dbV .. "sh")) / 2
 			end
 			draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
 			if tonumber(max) >= 0 then
 				if !tobool(HudV(dbV .. "tr")) then
 					draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color)
 				else
-					drawRoundedBoxStencil(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, ctr(HudV(dbV .. "sw")))
+					drawRoundedBoxStencil(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, YRP.ctr(HudV(dbV .. "sw")))
 				end
 			end
 
@@ -141,22 +141,22 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				_st.br = 10
 				local _pw = 0
 				if HudV(dbV .. "tx") == 0 then
-					_pw = ctr(_st.br)
+					_pw = YRP.ctr(_st.br)
 				elseif HudV(dbV .. "tx") == 1 then
-					_pw = ctr(HudV(dbV .. "sw")) / 2
+					_pw = YRP.ctr(HudV(dbV .. "sw")) / 2
 				elseif HudV(dbV .. "tx") == 2 then
-					_pw = ctr(HudV(dbV .. "sw")) - ctr(_st.br)
+					_pw = YRP.ctr(HudV(dbV .. "sw")) - YRP.ctr(_st.br)
 				end
 				local _ph = 0
 				if HudV(dbV .. "ty") == 3 then
-					_ph = ctr(_st.br)
+					_ph = YRP.ctr(_st.br)
 				elseif HudV(dbV .. "ty") == 1 then
-					_ph = ctr(HudV(dbV .. "sh")) / 2
+					_ph = YRP.ctr(HudV(dbV .. "sh")) / 2
 				elseif HudV(dbV .. "ty") == 4 then
-					_ph = ctr(HudV(dbV .. "sh")) - ctr(_st.br)
+					_ph = YRP.ctr(HudV(dbV .. "sh")) - YRP.ctr(_st.br)
 				end
-				_st.x = anchorW(HudV(dbV .. "aw")) + ctr(HudV(dbV .. "px")) + _pw
-				_st.y = anchorH(HudV(dbV .. "ah")) + ctr(HudV(dbV .. "py")) + _ph
+				_st.x = anchorW(HudV(dbV .. "aw")) + YRP.ctr(HudV(dbV .. "px")) + _pw
+				_st.y = anchorH(HudV(dbV .. "ah")) + YRP.ctr(HudV(dbV .. "py")) + _ph
 				draw.SimpleTextOutlined(text, dbV .. "sf", _st.x, _st.y, Color(255, 255, 255, 255), HudV(dbV .. "tx"), HudV(dbV .. "ty"), 1, Color(0, 0, 0))
 			end
 
@@ -187,16 +187,16 @@ function hudThirdperson(ply, color)
 		elseif ply.view_range > 0 then
 			_3PText = YRP.lang_string("LID_tpp")
 		end
-		draw.SimpleTextOutlined(_3PText .. " (" .. math.Round(ply.view_range, -1) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(_3PText .. " (" .. math.Round(ply.view_range, -1) .. ")", "HudBars", ScrW()/2, YRP.ctr(2160/2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_up")) or input.IsKeyDown(get_keybind("view_down")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply.view_z, 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply.view_z, 0) .. ")", "HudBars", ScrW()/2, YRP.ctr(2160/2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_right")) or input.IsKeyDown(get_keybind("view_left")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply.view_x, 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply.view_x, 0) .. ")", "HudBars", ScrW()/2, YRP.ctr(2160/2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_spin_right")) or input.IsKeyDown(get_keybind("view_spin_left")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply.view_s, 0) .. ")", "HudBars", ScrW()/2, ctr(2160/2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply.view_s, 0) .. ")", "HudBars", ScrW()/2, YRP.ctr(2160/2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -205,11 +205,11 @@ function client_toggled()
 end
 
 function server_toggled(ply)
-	return ply:GetNWBool("bool_yrp_hud", false)
+	return ply:GetNW2Bool("bool_yrp_hud", false)
 end
 
 function HudPlayer(ply)
-	if ply:GetNWString("string_hud_design", "notloaded") != "notloaded" then
+	if ply:GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 		drawMenuInfo()
 
 		if ply:Alive() then
@@ -221,6 +221,6 @@ function HudPlayer(ply)
 			draw.SimpleTextOutlined(YRP.lang_string("LID_dead") .. "! " .. YRP.lang_string("LID_respawning") .. "...", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 	else
-		draw.SimpleTextOutlined(YRP.lang_string("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 end

@@ -278,7 +278,7 @@ end
 
 function interfaceDesign()
 	local ply = LocalPlayer()
-	local design = ply:GetNWString("interface_design", "Material Design 1")
+	local design = ply:GetNW2String("interface_design", "Material Design 1")
 
 	if yrp_if[design] ~= nil then
 		return design
@@ -290,31 +290,31 @@ end
 function InterfaceBorder()
 	local ply = LocalPlayer()
 
-	return ply:GetNWBool("interface_border", true)
+	return ply:GetNW2Bool("interface_border", true)
 end
 
 function InterfaceRounded()
 	local ply = LocalPlayer()
 
-	return ply:GetNWBool("interface_rounded", true)
+	return ply:GetNW2Bool("interface_rounded", true)
 end
 
 function InterfaceTransparent()
 	local ply = LocalPlayer()
 
-	return ply:GetNWBool("interface_transparent", true)
+	return ply:GetNW2Bool("interface_transparent", true)
 end
 
 function InterfaceColor()
 	local ply = LocalPlayer()
 
-	return ply:GetNWString("interface_color", "blue")
+	return ply:GetNW2String("interface_color", "blue")
 end
 
 function InterfaceStyle()
 	local ply = LocalPlayer()
 
-	return ply:GetNWString("interface_style", "dark")
+	return ply:GetNW2String("interface_style", "dark")
 end
 
 local yrp_colors = {}
@@ -476,16 +476,16 @@ function surfaceCheckBox(derma, pw, ph, icon)
 			local th = 4
 			local br = 8
 			local color = Color(0, 0, 0, 255)
-			surfaceBox(ctr(br), ctr(br), pw - ctr(br * 2), ctr(th), color)
-			surfaceBox(ctr(br), ctr(br), ctr(th), ph - ctr(br * 2), color)
-			surfaceBox(ctr(br), ph - ctr(br + th), pw - ctr(br * 2), ctr(th), color)
-			surfaceBox(pw - ctr(br + th), ctr(br), ctr(th), ph - ctr(br * 2), color)
+			surfaceBox(YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), YRP.ctr(th), color)
+			surfaceBox(YRP.ctr(br), YRP.ctr(br), YRP.ctr(th), ph - YRP.ctr(br * 2), color)
+			surfaceBox(YRP.ctr(br), ph - YRP.ctr(br + th), pw - YRP.ctr(br * 2), YRP.ctr(th), color)
+			surfaceBox(pw - YRP.ctr(br + th), YRP.ctr(br), YRP.ctr(th), ph - YRP.ctr(br * 2), color)
 
 			if derma:GetChecked() then
 				br = 4
 				surface.SetDrawColor(0, 255, 0, 255)
 				surface.SetMaterial(YRP.GetDesignIcon(icon))
-				surface.DrawTexturedRect(ctr(br), ctr(br), pw - ctr(br * 2), ph - ctr(8))
+				surface.DrawTexturedRect(YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), ph - YRP.ctr(8))
 			end
 		end
 	else
@@ -506,26 +506,26 @@ function surfaceSelected(derma, pw, ph, px, py)
 			local _w = 32
 			local _h = 12
 			--Outter
-			surfaceBox(px + ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-			surfaceBox(px + ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
-			surfaceBox(px + ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-			surfaceBox(px + ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
-			surfaceBox(px + pw - ctr(_w) - ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-			surfaceBox(px + pw - ctr(_h) - ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
-			surfaceBox(px + pw - ctr(_w) - ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(0, 0, 0, 255))
-			surfaceBox(px + pw - ctr(_h) - ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(0, 0, 0, 255))
+			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
 			_br = 8
 			_w = 32 - 2 * 4
 			_h = 12 - 2 * 4
 			--Inner
-			surfaceBox(px + ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(255, 255, 255, 255))
-			surfaceBox(px + ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(255, 255, 255, 255))
-			surfaceBox(px + ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(255, 255, 255, 255))
-			surfaceBox(px + ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(255, 255, 255, 255))
-			surfaceBox(px + pw - ctr(_w) - ctr(_br), ctr(_br), ctr(_w), ctr(_h), Color(255, 255, 255, 255))
-			surfaceBox(px + pw - ctr(_h) - ctr(_br), ctr(_br), ctr(_h), ctr(_w), Color(255, 255, 255, 255))
-			surfaceBox(px + pw - ctr(_w) - ctr(_br), ph - ctr(_h) - ctr(_br), ctr(_w), ctr(_h), Color(255, 255, 255, 255))
-			surfaceBox(px + pw - ctr(_h) - ctr(_br), ph - ctr(_w) - ctr(_br), ctr(_h), ctr(_w), Color(255, 255, 255, 255))
+			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
+			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
+			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
+			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
 		end
 	else
 		GetDesign()
@@ -558,7 +558,7 @@ function openMenu()
 end
 
 function paintBr(pw, ph, color)
-	local _br = ctr(2)
+	local _br = YRP.ctr(2)
 	--links
 	draw.RoundedBox(0, _br, _br, _br, ph - 2 * _br, color)
 	--oben
@@ -583,7 +583,7 @@ function paintButton(derma, pw, ph, mytext)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.lang_string(mytext), "windowTitle", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.lang_string(mytext), "windowTitle", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 end
 
 function paintPanel(derma, pw, ph, color)
@@ -602,10 +602,10 @@ function paintInv(derma, pw, ph, text1, text2)
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 190))
 	local _brC = Color(255, 255, 255, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.lang_string(text1), "DermaDefault", ctr(15), ph - ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.lang_string(text1), "DermaDefault", YRP.ctr(15), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP.ctr(1), Color(0, 0, 0, 255))
 
 	if text2 ~= nil then
-		draw.SimpleTextOutlined(YRP.lang_string(text2), "DermaDefault", ctr(15), ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.lang_string(text2), "DermaDefault", YRP.ctr(15), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 end
 
@@ -792,7 +792,7 @@ function GetFontSizes()
 end
 
 function drawRBox(r, x, y, w, h, col)
-	draw.RoundedBox(ctr(r), ctr(x), ctr(y), ctr(w), ctr(h), col)
+	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x), YRP.ctr(y), YRP.ctr(w), YRP.ctr(h), col)
 end
 
 function drawRBoxBr2(r, x, y, w, h, col, br)
@@ -803,14 +803,14 @@ function drawRBoxBr2(r, x, y, w, h, col, br)
 end
 
 function drawRBoxBr(r, x, y, w, h, col, br)
-	draw.RoundedBox(ctr(r), ctr(x - br), ctr(y - br), ctr(w + 2 * br - 1), ctr(2 * br), col)
-	draw.RoundedBox(ctr(r), ctr(x - br), ctr(y + h - br), ctr(w + 2 * br - 1), ctr(2 * br), col)
-	draw.RoundedBox(ctr(r), ctr(x - br), ctr(y), ctr(2 * br), ctr(h), col)
-	draw.RoundedBox(ctr(r), ctr(x + w - br), ctr(y), ctr(2 * br), ctr(h), col)
+	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x - br), YRP.ctr(y - br), YRP.ctr(w + 2 * br - 1), YRP.ctr(2 * br), col)
+	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x - br), YRP.ctr(y + h - br), YRP.ctr(w + 2 * br - 1), YRP.ctr(2 * br), col)
+	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x - br), YRP.ctr(y), YRP.ctr(2 * br), YRP.ctr(h), col)
+	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x + w - br), YRP.ctr(y), YRP.ctr(2 * br), YRP.ctr(h), col)
 end
 
 function drawRBoxCr(x, y, size, col)
-	draw.RoundedBox(ctr(size / 2), ctr(x), ctr(y), ctr(size), ctr(size), col)
+	draw.RoundedBox(YRP.ctr(size / 2), YRP.ctr(x), YRP.ctr(y), YRP.ctr(size), YRP.ctr(size), col)
 end
 
 function surfaceText(mytext, font, x, y, color, ax, ay, br)
@@ -832,11 +832,11 @@ function createVGUI(art, parent, w, h, x, y)
 	local tmp = vgui.Create(art, parent, nil)
 
 	if w ~= nil and h ~= nil then
-		tmp:SetSize(ctr(w), ctr(h))
+		tmp:SetSize(YRP.ctr(w), YRP.ctr(h))
 	end
 
 	if x ~= nil and y ~= nil then
-		tmp:SetPos(ctr(x), ctr(y))
+		tmp:SetPos(YRP.ctr(x), YRP.ctr(y))
 	end
 
 	return tmp
@@ -874,7 +874,7 @@ function createMDMenu(parent, w, h, x, y)
 		self.sites[cat][tmpNr].material = material
 	end
 
-	tmp.sitepanel = createD("DPanel", tmp, w, h - ctr(100), 0, ctr(100))
+	tmp.sitepanel = createD("DPanel", tmp, w, h - YRP.ctr(100), 0, YRP.ctr(100))
 
 	function tmp.sitepanel:Paint(pw, ph)
 		--
@@ -891,14 +891,14 @@ function createMDMenu(parent, w, h, x, y)
 	end
 
 	function tmp:openMenu()
-		self.menu = createD("DPanelList", self, ctr(600), h - ctr(100), 0, ctr(100))
+		self.menu = createD("DPanelList", self, YRP.ctr(600), h - YRP.ctr(100), 0, YRP.ctr(100))
 		self.menu:EnableVerticalScrollbar(true)
 
 		function self.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, ctr(600), ph, YRPGetColor("5"))
+			draw.RoundedBox(0, 0, 0, YRP.ctr(600), ph, YRPGetColor("5"))
 			local mx = select(1,gui.MousePos())
 
-			if mx > ctr(600) then
+			if mx > YRP.ctr(600) then
 				self:Remove()
 			end
 		end
@@ -906,10 +906,10 @@ function createMDMenu(parent, w, h, x, y)
 		local posY = 100
 
 		for k, v in pairs(self.cat) do
-			local tmpCat = createD("DPanel", self.menu, ctr(600 - 20), ctr(50), ctr(10), ctr(posY))
+			local tmpCat = createD("DPanel", self.menu, YRP.ctr(600 - 20), YRP.ctr(50), YRP.ctr(10), YRP.ctr(posY))
 
 			function tmpCat:Paint(pw, ph)
-				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "windowTitle", ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "windowTitle", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 
 			self.menu:AddItem(tmpCat)
@@ -917,7 +917,7 @@ function createMDMenu(parent, w, h, x, y)
 			--posY = posY + 50 + 10
 			if self.sites[v] ~= nil then
 				for _l, _w in pairs(self.sites[v]) do
-					local tmp2 = createD("DButton", self.menu, ctr(600 - 20), ctr(80), ctr(10), ctr(posY))
+					local tmp2 = createD("DButton", self.menu, YRP.ctr(600 - 20), YRP.ctr(80), YRP.ctr(10), YRP.ctr(posY))
 					tmp2:SetText("")
 					tmp2.hook = string.lower(_w.hook)
 					tmp2.site = string.upper(_w.site)
@@ -936,10 +936,10 @@ function createMDMenu(parent, w, h, x, y)
 						if _w.material ~= nil then
 							surface.SetDrawColor(255, 255, 255, 255)
 							surface.SetMaterial(_w.material)
-							surface.DrawTexturedRect(ctr(24), ctr(24), ctr(32), ctr(32))
+							surface.DrawTexturedRect(YRP.ctr(24), YRP.ctr(24), YRP.ctr(32), YRP.ctr(32))
 						end
 
-						draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "mat1text", ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+						draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "mat1text", YRP.ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					end
 
 					function tmp2:DoClick()
@@ -949,7 +949,7 @@ function createMDMenu(parent, w, h, x, y)
 					end
 
 					self.menu:AddItem(tmp2)
-					local tmpHr2 = createD("DPanel", self.menu, ctr(600 - 20), ctr(6), ctr(10), ctr(posY))
+					local tmpHr2 = createD("DPanel", self.menu, YRP.ctr(600 - 20), YRP.ctr(6), YRP.ctr(10), YRP.ctr(posY))
 
 					function tmpHr2:Paint(pw, ph)
 					end
@@ -958,10 +958,10 @@ function createMDMenu(parent, w, h, x, y)
 					--posY = posY + 80 + 10
 				end
 
-				local tmpHr = createD("DPanel", self.menu, ctr(600 - 20), ctr(20), ctr(10), ctr(posY))
+				local tmpHr = createD("DPanel", self.menu, YRP.ctr(600 - 20), YRP.ctr(20), YRP.ctr(10), YRP.ctr(posY))
 
 				function tmpHr:Paint(pw, ph)
-					--draw.SimpleTextOutlined("test", "windowTitle", ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					--draw.SimpleTextOutlined("test", "windowTitle", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
 				self.menu:AddItem(tmpHr)
@@ -1011,7 +1011,7 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 end
 
 function addPColorField(parent, col, x, y)
-	local tmp = createD("DButton", parent, ctr(50), ctr(50), x, y)
+	local tmp = createD("DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
 	tmp.color = col
 	tmp:SetText("")
 
@@ -1032,7 +1032,7 @@ function addPColorField(parent, col, x, y)
 end
 
 function addSColorField(parent, col, x, y)
-	local tmp = createD("DButton", parent, ctr(50), ctr(50), x, y)
+	local tmp = createD("DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
 	tmp.color = col
 	tmp:SetText("")
 

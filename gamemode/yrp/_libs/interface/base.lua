@@ -8,7 +8,7 @@ function DHr(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(0, 0, 0)
@@ -35,7 +35,7 @@ function DCheckBoxes(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -55,7 +55,7 @@ function DCheckBoxes(tab)
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr(10)
+		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
@@ -72,21 +72,21 @@ function DCheckBoxes(tab)
 		local change = {}
 		change.text = "[" .. YRP.lang_string("LID_change") .. "] (" .. tab.value .. ")"
 		change.font = "mat1header"
-		change.x = ctr(10)
+		change.x = YRP.ctr(10)
 		change.y = ph / 2
 		change.ax = 0
 		DrawText(change)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DButton:DoClick()
-			local window = createD("DFrame", nil, ctr(20 + 500 + 20), ctr(50 + 20 + 500 + 20), 0, 0)
+			local window = createD("DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
 			window:Center()
 			window:MakePopup()
 			window:SetTitle("")
 			function window:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, YRP.lang_string("LID_usergroups"))
 			end
-			window.cm = createD("DPanelList", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
+			window.cm = createD("DPanelList", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
 
 			function window:sendtoserver()
 				local str = {}
@@ -109,18 +109,18 @@ function DCheckBoxes(tab)
 			end
 
 			for i, choice in pairs(tab.choices) do
-				local ch = createD("DPanel", window.cm, ctr(500), ctr(50), 0, 0)
+				local ch = createD("DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
 				function ch:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 					local ta = {}
 					ta.text = i
 					ta.font = "mat1header"
-					ta.x = ctr(60)
+					ta.x = YRP.ctr(60)
 					ta.y = ph / 2
 					ta.ax = 0
 					DrawText(ta)
 				end
-				ch.ch = createD("DCheckBox", ch, ctr(50), ctr(50), 0, 0)
+				ch.ch = createD("DCheckBox", ch, YRP.ctr(50), YRP.ctr(50), 0, 0)
 				ch.ch:SetChecked(choice.checked)
 				function ch.ch:OnChange(bo)
 					choice.checked = bo
@@ -133,20 +133,20 @@ function DCheckBoxes(tab)
 				window.cm:AddItem(ch)
 				ch.subchoices = {}
 				for j, cho in pairs(choice.choices) do
-					ch.subchoices[j] = createD("DPanel", window.cm, ctr(500), ctr(50), 0, 0)
+					ch.subchoices[j] = createD("DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
 					local sch = ch.subchoices[j]
 					function sch:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 						local ta = {}
 						ta.text = j
 						ta.font = "mat1header"
-						ta.x = ctr(110)
+						ta.x = YRP.ctr(110)
 						ta.y = ph / 2
 						ta.ax = 0
 						ta.lforce = false
 						DrawText(ta)
 					end
-					sch.ch = createD("DCheckBox", sch, ctr(50), ctr(50), ctr(50), 0)
+					sch.ch = createD("DCheckBox", sch, YRP.ctr(50), YRP.ctr(50), YRP.ctr(50), 0)
 					sch.ch:SetChecked(cho.checked)
 					function sch.ch:OnChange(bo)
 						cho.checked = bo
@@ -185,7 +185,7 @@ function DCheckBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(50)
+	tab.h = tab.h or YRP.ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -205,7 +205,7 @@ function DCheckBox(tab)
 		else
 			text.text = tab.header
 		end
-		text.x = ctr(60)
+		text.x = YRP.ctr(60)
 		text.y = ph / 2
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
@@ -256,7 +256,7 @@ function DComboBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -276,7 +276,7 @@ function DComboBox(tab)
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr(10)
+		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
@@ -326,7 +326,7 @@ function DColor(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -346,7 +346,7 @@ function DColor(tab)
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr(10)
+		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
@@ -370,14 +370,14 @@ function DColor(tab)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DButton:DoClick()
-			local window = createD("DFrame", nil, ctr(20 + 500 + 20), ctr(50 + 20 + 500 + 20), 0, 0)
+			local window = createD("DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
 			window:Center()
 			window:MakePopup()
 			window:SetTitle("")
 			function window:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, YRP.lang_string("LID_color"))
 			end
-			window.cm = createD("DColorMixer", window, ctr(500), ctr(500), ctr(20), ctr(50 + 20))
+			window.cm = createD("DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
 			function window.cm:ValueChanged(col)
 				local colstr = TableToColorStr(col)
 				if pnl.DButton:IsValid() then
@@ -415,7 +415,7 @@ function DIntBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -438,7 +438,7 @@ function DIntBox(tab)
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr(10)
+		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
@@ -493,7 +493,7 @@ function DTextBox(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(100)
+	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -513,7 +513,7 @@ function DTextBox(tab)
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr(10)
+		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
@@ -524,7 +524,7 @@ function DTextBox(tab)
 		if dmg != nil and pnl.dtextentry != nil then
 			local DMG = {}
 			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
-			DMG.x = pw - ctr(10)
+			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "mat1header"
 			DMG.color = Color(0, 0, 0, 255)
@@ -609,7 +609,7 @@ function DAttributeBar(tab)
 	else
 		tab.w = tab.w or 300
 	end
-	tab.h = tab.h or ctr(120)
+	tab.h = tab.h or YRP.ctr(120)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -681,7 +681,7 @@ function DAttributeBar(tab)
 			else
 				text.text = tab.header .. ":"
 			end
-			text.x = ctr(10)
+			text.x = YRP.ctr(10)
 			text.y = ph / 2
 			text.font = "mat1text"
 			text.color = Color(255, 255, 255, 255)
@@ -738,8 +738,8 @@ end
 function DStringListBox(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or nil
-	tab.w = tab.w or ctr(300)
-	tab.h = tab.h or ctr(120)
+	tab.w = tab.w or YRP.ctr(300)
+	tab.h = tab.h or YRP.ctr(120)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
@@ -758,8 +758,8 @@ function DStringListBox(tab)
 		else
 			text.text = tab.header .. ":"
 		end
-		text.x = ctr(10)
-		text.y = ctr(25)
+		text.x = YRP.ctr(10)
+		text.y = YRP.ctr(25)
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
@@ -767,7 +767,7 @@ function DStringListBox(tab)
 		DrawText(text)
 	end
 
-	pnl.add = createD("DButton", pnl.bg, ctr(50), ctr(50), tab.w - ctr(50), 0)
+	pnl.add = createD("DButton", pnl.bg, YRP.ctr(50), YRP.ctr(50), tab.w - YRP.ctr(50), 0)
 	pnl.add:SetText("")
 	function pnl.add:Paint(pw, ph)
 		self.color = Color(0, 255, 0)
@@ -781,7 +781,7 @@ function DStringListBox(tab)
 		tab.doclick()
 	end
 
-	pnl.dpl = createD("DPanelList", pnl.bg, tab.w, tab.h - ctr(50), 0, ctr(50))
+	pnl.dpl = createD("DPanelList", pnl.bg, tab.w, tab.h - YRP.ctr(50), 0, YRP.ctr(50))
 	pnl.dpl:EnableVerticalScrollbar(true)
 	pnl.dpl:SetSpacing(1)
 	function pnl.dpl:Paint(pw, ph)
@@ -792,8 +792,8 @@ function DStringListBox(tab)
 
 		for i, v in pairs(t) do
 			if type(v) == "table" then
-				v.h = v.h or ctr(70)
-				v.br = v.br or ctr(10)
+				v.h = v.h or YRP.ctr(70)
+				v.br = v.br or YRP.ctr(10)
 
 				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
 				line:SetText("")
@@ -802,7 +802,7 @@ function DStringListBox(tab)
 				line.pmid = 1
 
 				if table.Count(line.models) > 1 or !strEmpty(line.models[1]) then
-					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, ctr(40) + v.br, v.br)
+					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP.ctr(40) + v.br, v.br)
 				end
 
 				function line:Paint(pw, ph)
@@ -819,8 +819,8 @@ function DStringListBox(tab)
 					if table.Count(self.models) > 1 then
 						name = name .. " (" .. self.pmid .. "/" .. table.Count(self.models) .. ")"
 					end
-					draw.SimpleText(name, "DermaDefault", ctr(40) + v.h + ctr(40) + ctr(20), ph / 2 - ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-					draw.SimpleText(line.models[line.pmid], "DermaDefault", ctr(40) + v.h + ctr(40) + ctr(20), ph / 2 + ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(name, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 - YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(line.models[line.pmid], "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				line.rem = createD("DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
@@ -833,7 +833,7 @@ function DStringListBox(tab)
 					v.doclick()
 				end
 
-				line.next = createD("DButton", line, ctr(40), v.h - 2 * v.br, ctr(40) + v.h, v.br)
+				line.next = createD("DButton", line, YRP.ctr(40), v.h - 2 * v.br, YRP.ctr(40) + v.h, v.br)
 				line.next:SetText("")
 				function line.next:Paint(pw, ph)
 					if line.pmid < table.Count(line.models) then
@@ -847,7 +847,7 @@ function DStringListBox(tab)
 					end
 				end
 
-				line.prev = createD("DButton", line, ctr(40), v.h - 2 * v.br, 0, v.br)
+				line.prev = createD("DButton", line, YRP.ctr(40), v.h - 2 * v.br, 0, v.br)
 				line.prev:SetText("")
 				function line.prev:Paint(pw, ph)
 					if line.pmid > 1 then

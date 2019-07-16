@@ -13,13 +13,13 @@ net.Receive("Connect_Settings_Console", function(len)
 			net.SendToServer()
 		end
 
-		PARENT.consolebackground = createD("DPanel", PARENT, ctr(1000), ScrH() - ctr(140), ctr(20), ctr(20))
+		PARENT.consolebackground = createD("DPanel", PARENT, YRP.ctr(1000), ScrH() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 
-		PARENT.console = createD("RichText", PARENT.consolebackground, ctr(1000), ScrH() - ctr(140) - ctr(50), 0, 0)
+		PARENT.console = createD("RichText", PARENT.consolebackground, YRP.ctr(1000), ScrH() - YRP.ctr(140) - YRP.ctr(50), 0, 0)
 		PARENT.console:SetFontInternal("Roboto18B")
 		PARENT.console:InsertColorChange(0, 0, 0, 255)
 
-		PARENT.consoletext = createD("DTextEntry", PARENT.consolebackground, ctr(1000), ctr(50), 0, ScrH() - ctr(140) - ctr(50))
+		PARENT.consoletext = createD("DTextEntry", PARENT.consolebackground, YRP.ctr(1000), YRP.ctr(50), 0, ScrH() - YRP.ctr(140) - YRP.ctr(50))
 		function PARENT.consoletext:OnEnter()
 			net.Start("send_console_command")
 				net.WriteString(self:GetText())

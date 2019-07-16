@@ -47,19 +47,19 @@ end
 local fw = 2400
 local fh = 1600
 function FW()
-	return tr(fw)
+	return YRP.ctr(fw)
 end
 
 function FH()
-	return tr(fh)
+	return YRP.ctr(fh)
 end
 
 function PX()
-	return ScrW() / 2 - tr(fw) / 2
+	return ScrW() / 2 - YRP.ctr(fw) / 2
 end
 
 function PY()
-	return ScrH() / 2 - tr(fh) / 2
+	return ScrH() / 2 - YRP.ctr(fh) / 2
 end
 
 
@@ -125,16 +125,13 @@ function ctrF(tmpNumber)
 	return math.Round(tmpNumber, 8)
 end
 
-function ctr(input)
+YRP = YRP or {}
+function YRP.ctr(input)
 	if input != nil then
 		return math.Round((tonumber(input) / 2160) * ScrH(), 0)
 	else
 		return -1
 	end
-end
-
-function tr(input)
-	return ctr(input)
 end
 
 function under1080p()
@@ -145,9 +142,9 @@ function under1080p()
 	end
 end
 
-function fontr(fontsize)
+function YRP.fonttr(fontsize)
 	if !under1080p() then
-		return ctr(fontsize)
+		return YRP.ctr(fontsize)
 	else
 		return fontsize
 	end
@@ -156,7 +153,7 @@ end
 function ctrb(input)
 	if input != nil then
 		if !under1080p() then
-			return ctr(input)
+			return YRP.ctr(input)
 		else
 			return input/2
 		end
@@ -175,7 +172,7 @@ end
 
 function formatMoney(money, ply)
 	if CLIENT then
-		return ply:GetNWString("text_money_pre") .. money .. ply:GetNWString("text_money_pos")
+		return ply:GetNW2String("text_money_pre") .. money .. ply:GetNW2String("text_money_pos")
 	else
 		return "[FAILED]" .. money .. "[FAILED]"
 	end

@@ -2,7 +2,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD("DPanel", self, self:GetWide(), ctr(50), 0, 0)
+	self.header = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
 
 	function self:SetHeader(text)
@@ -14,7 +14,7 @@ function PANEL:Init()
 		surfaceText(SQL_STR_OUT(self.text), "SettingsNormal", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 	end
 
-	self.textentry = createD("DTextEntry", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, ctr(50))
+	self.textentry = createD("DTextEntry", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50))
 
 	function self:SetText(text)
 		self.textentry:SetText(text)
@@ -34,8 +34,8 @@ function PANEL:Think()
 		self.textentry:SetTall(self:GetTall() - self.header:GetTall())
 	end
 
-	if self.textentry:GetPos() ~= self:GetPos() + ctr(50) then
-		self.textentry:SetPos(0, self:GetPos() + ctr(50))
+	if self.textentry:GetPos() ~= self:GetPos() + YRP.ctr(50) then
+		self.textentry:SetPos(0, self:GetPos() + YRP.ctr(50))
 	end
 end
 

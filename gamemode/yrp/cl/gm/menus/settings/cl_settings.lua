@@ -59,16 +59,16 @@ function F8RequireUG(site, usergroups)
 		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "roleInfoHeader", w / 2, h / 2, Color(255, 0, 0), 1, 1)
 
 		if site != "usergroups" then
-			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "roleInfoHeader", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
 		else
-			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "roleInfoHeader", w / 2, h / 2 + ctr(100), Color(255, 255, 0), 1, 1)
-			surfaceText("(In Server Console) Example:", "roleInfoHeader", w / 2, h / 2 + ctr(250), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "roleInfoHeader", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText("(In Server Console) Example:", "roleInfoHeader", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
 
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
-			local example = createD("DTextEntry", settingsWindow.window.site, ctr(1000), ctr(50), settingsWindow.window.site:GetWide() / 2 - ctr(1000 / 2), settingsWindow.window.site:GetTall() / 2 + ctr(300) + (i - 1) * ctr(60))
+			local example = createD("DTextEntry", settingsWindow.window.site, YRP.ctr(1000), YRP.ctr(50), settingsWindow.window.site:GetWide() / 2 - YRP.ctr(1000 / 2), settingsWindow.window.site:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
 			example:SetText("yrp_usergroup \"" .. ply:SteamName() .. "\" " .. v)
 		end
 	end
@@ -167,13 +167,13 @@ function OpenSettings()
 	settingsWindow.window.cursite = "character"
 	settingsWindow.window:SwitchToSite(_save_site)
 	--Mainbar
-	local mainBar = createD("DPanel", settingsWindow.window, ScrW(), ctr(100), 0, 0)
+	local mainBar = createD("DPanel", settingsWindow.window, ScrW(), YRP.ctr(100), 0, 0)
 
 	function mainBar:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetColor("5"))
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(_yrp_settings.materials.logo100)
-		surface.DrawTexturedRect(ctr(610), ctr(10), ctr(400 * 0.6), ctr(130 * 0.6))
+		surface.DrawTexturedRect(YRP.ctr(610), YRP.ctr(10), YRP.ctr(400 * 0.6), YRP.ctr(130 * 0.6))
 
 		local _singleplayer = ""
 
@@ -182,11 +182,11 @@ function OpenSettings()
 		end
 
 		local _color = GetVersionColor()
-		draw.SimpleTextOutlined(_singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(_singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", YRP.ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
-	YRP.DChangeLanguage(settingsWindow.window, ScrW() - ctr(310), ctr(10), ctr(120))
-	local feedback = createD("DButton", settingsWindow.window, ctr(500), ctr(80), ScrW() - ctr(820), ctr(10))
+	YRP.DChangeLanguage(settingsWindow.window, ScrW() - YRP.ctr(310), YRP.ctr(10), YRP.ctr(120))
+	local feedback = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(820), YRP.ctr(10))
 	feedback:SetText("")
 
 	function feedback:Paint(pw, ph)
@@ -206,9 +206,9 @@ function OpenSettings()
 		openFeedbackMenu()
 	end
 
-	local _bg = createD("HTML", settingsWindow.window, ctr(500 - 8), ctr(80 - 12), ScrW() - ctr(820 + 500 + 10 - 6), ctr(10 + 6))
+	local _bg = createD("HTML", settingsWindow.window, YRP.ctr(500 - 8), YRP.ctr(80 - 12), ScrW() - YRP.ctr(820 + 500 + 10 - 6), YRP.ctr(10 + 6))
 	_bg:OpenURL("https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg")
-	local liveSupport = createD("DButton", settingsWindow.window, ctr(500), ctr(80), ScrW() - ctr(820 + 500 + 10), ctr(10))
+	local liveSupport = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(820 + 500 + 10), YRP.ctr(10))
 	liveSupport:SetText("")
 
 	function liveSupport:DoClick()
@@ -227,7 +227,7 @@ function OpenSettings()
 		draw.SimpleTextOutlined(YRP.lang_string("LID_getlivesupport"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
-	local exitButton = createD("DButton", mainBar, ctr(80), ctr(80), ScrW() - ctr(80 + 10), ctr(10))
+	local exitButton = createD("DButton", mainBar, YRP.ctr(80), YRP.ctr(80), ScrW() - YRP.ctr(80 + 10), YRP.ctr(10))
 	exitButton:SetText("")
 
 	function exitButton:Paint(pw, ph)
@@ -240,7 +240,7 @@ function OpenSettings()
 		draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 		surface.SetDrawColor(YRPGetColor("6"))
 		surface.SetMaterial(_yrp_settings.materials[_yrp_settings.design.mode].close)
-		surface.DrawTexturedRect(ctr(15), ctr(15), ctr(50), ctr(50))
+		surface.DrawTexturedRect(YRP.ctr(15), YRP.ctr(15), YRP.ctr(50), YRP.ctr(50))
 	end
 
 	function exitButton:DoClick()
@@ -250,7 +250,7 @@ function OpenSettings()
 		end
 	end
 
-	local burgerMenu = createD("DButton", mainBar, ctr(600 - 10 * 2), ctr(80), ctr(10), ctr(10))
+	local burgerMenu = createD("DButton", mainBar, YRP.ctr(600 - 10 * 2), YRP.ctr(80), YRP.ctr(10), YRP.ctr(10))
 	burgerMenu:SetText("")
 
 	function burgerMenu:Paint(pw, ph)
@@ -264,8 +264,8 @@ function OpenSettings()
 		draw.RoundedBox(ph / 2, 0, 0, ph, ph, color)
 		surface.SetDrawColor(YRPGetColor("6"))
 		surface.SetMaterial(_yrp_settings.materials[_yrp_settings.design.mode].burger)
-		surface.DrawTexturedRect(ctr(15), ctr(15), ctr(50), ctr(50))
-		draw.SimpleTextOutlined(string.upper(YRP.lang_string("LID_menu")), "mat1text", ctr(90), ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		surface.DrawTexturedRect(YRP.ctr(15), YRP.ctr(15), YRP.ctr(50), YRP.ctr(50))
+		draw.SimpleTextOutlined(string.upper(YRP.lang_string("LID_menu")), "mat1text", YRP.ctr(90), YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	function burgerMenu:DoClick()

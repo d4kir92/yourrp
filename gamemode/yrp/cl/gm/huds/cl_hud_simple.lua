@@ -13,8 +13,8 @@ function HUDSimpleBG(tab)
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["background"] = Simple[tab.element]["background"] or {}
 
-			if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["background"]["version"] then
-				Simple[tab.element]["background"]["version"] = lply:GetNWInt("hud_version", 0)
+			if lply:GetNW2Int("hud_version", 0) != Simple[tab.element]["background"]["version"] then
+				Simple[tab.element]["background"]["version"] = lply:GetNW2Int("hud_version", 0)
 
 				local w = lply:HudValue(tab.element, "SIZE_W")
 				local h = lply:HudValue(tab.element, "SIZE_H")
@@ -47,8 +47,8 @@ function HUDSimpleBAR(tab)
 		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
 		Simple[tab.element]["text"] = Simple[tab.element]["text"] or {}
 
-		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["bar"]["version"] then
-			Simple[tab.element]["bar"]["version"] = lply:GetNWInt("hud_version", 0)
+		if lply:GetNW2Int("hud_version", 0) != Simple[tab.element]["bar"]["version"] then
+			Simple[tab.element]["bar"]["version"] = lply:GetNW2Int("hud_version", 0)
 
 			local w = lply:HudValue(tab.element, "SIZE_W")
 			local h = lply:HudValue(tab.element, "SIZE_H")
@@ -151,8 +151,8 @@ function HUDSimpleBR(tab)
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["border"] = Simple[tab.element]["border"] or {}
 
-			if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["border"]["version"] then
-				Simple[tab.element]["border"]["version"] = lply:GetNWInt("hud_version", 0)
+			if lply:GetNW2Int("hud_version", 0) != Simple[tab.element]["border"]["version"] then
+				Simple[tab.element]["border"]["version"] = lply:GetNW2Int("hud_version", 0)
 
 				local w = lply:HudValue(tab.element, "SIZE_W")
 				local h = lply:HudValue(tab.element, "SIZE_H")
@@ -172,7 +172,7 @@ function HUDSimpleBR(tab)
 				end
 
 				Simple[tab.element]["border"].color = lply:HudValue(tab.element, "BR")
-				Simple[tab.element]["border"].br = ctr(2)
+				Simple[tab.element]["border"].br = YRP.ctr(2)
 			elseif lply:HudValue(tab.element, "ROUN") then
 				HudBoxBrRounded(Simple[tab.element]["border"])
 			else
@@ -194,8 +194,8 @@ function HUDSimpleCompass(tab)
 		Simple[tab.element]["east"] = Simple[tab.element]["east"] or {}
 		Simple[tab.element]["west"] = Simple[tab.element]["west"] or {}
 
-		if lply:GetNWInt("hud_version", 0) != Simple[tab.element]["degree"]["version"] then
-			Simple[tab.element]["degree"]["version"] = lply:GetNWInt("hud_version", 0)
+		if lply:GetNW2Int("hud_version", 0) != Simple[tab.element]["degree"]["version"] then
+			Simple[tab.element]["degree"]["version"] = lply:GetNW2Int("hud_version", 0)
 
 			local w = lply:HudValue(tab.element, "SIZE_W")
 			local h = lply:HudValue(tab.element, "SIZE_H")
@@ -203,7 +203,7 @@ function HUDSimpleCompass(tab)
 			local y = lply:HudValue(tab.element, "POSI_Y")
 
 			Simple[tab.element]["needle"].r = 0
-			Simple[tab.element]["needle"].w = ctr(4)
+			Simple[tab.element]["needle"].w = YRP.ctr(4)
 			Simple[tab.element]["needle"].h = h / 4
 			Simple[tab.element]["needle"].x = x + w / 2 - Simple[tab.element]["needle"].w / 2
 			Simple[tab.element]["needle"].y = y + h - h / 4
@@ -339,7 +339,7 @@ local pingcolor = Color(0, 0, 0)
 function HUDSimple()
 	local lply = LocalPlayer()
 
-	if lply:GetNWString("string_hud_design") == "Simple" then
+	if lply:GetNW2String("string_hud_design") == "Simple" then
 		local batterypower = system.BatteryPower()
 
 		-- Background
@@ -372,29 +372,29 @@ function HUDSimple()
 		local RO = {}
 		RO.element = "RO"
 		HUDSimpleBG(RO)
-		if lply:GetNWBool("bool_stamina", false) then
+		if lply:GetNW2Bool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
 			HUDSimpleBG(ST)
 		end
-		if lply:GetNWBool("bool_yrp_chat", false) then
+		if lply:GetNW2Bool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
-			CH.r = ctr(16)
+			CH.r = YRP.ctr(16)
 			CH.visiblefunc = IsChatVisible
 			HUDSimpleBG(CH)
 		end
-		if lply:GetNWBool("bool_hunger", false) then
+		if lply:GetNW2Bool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
 			HUDSimpleBG(HU)
 		end
-		if lply:GetNWBool("bool_thirst", false) then
+		if lply:GetNW2Bool("bool_thirst", false) then
 			local TH = {}
 			TH.element = "TH"
 			HUDSimpleBG(TH)
 		end
-		if lply:GetNWBool("iscasting", false) then
+		if lply:GetNW2Bool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
 			HUDSimpleBG(CA)
@@ -500,7 +500,7 @@ function HUDSimple()
 		RO.icon = Material("icon16/user.png")
 		RO.tcolor = lply:GetRoleColor()
 		HUDSimpleBAR(RO)
-		if lply:GetNWBool("bool_stamina", false) then
+		if lply:GetNW2Bool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
 			ST.cur = lply:Stamina()
@@ -510,7 +510,7 @@ function HUDSimple()
 			ST.icon = Material("icon16/lightning.png")
 			HUDSimpleBAR(ST)
 		end
-		if lply:GetNWBool("bool_hunger", false) then
+		if lply:GetNW2Bool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
 			HU.cur = lply:Hunger()
@@ -520,7 +520,7 @@ function HUDSimple()
 			HU.icon = Material("icon16/cake.png")
 			HUDSimpleBAR(HU)
 		end
-		if lply:GetNWBool("bool_thirst", false) then
+		if lply:GetNW2Bool("bool_thirst", false) then
 			local TH = {}
 			TH.element = "TH"
 			TH.cur = lply:Thirst()
@@ -530,7 +530,7 @@ function HUDSimple()
 			TH.icon = Material("icon16/cup.png")
 			HUDSimpleBAR(TH)
 		end
-		if lply:GetNWBool("iscasting", false) then
+		if lply:GetNW2Bool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
 			CA.cur = lply:CastTimeCurrent()
@@ -722,29 +722,29 @@ function HUDSimple()
 		RO = {}
 		RO.element = "RO"
 		HUDSimpleBR(RO)
-		if lply:GetNWBool("bool_stamina", false) then
+		if lply:GetNW2Bool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
 			HUDSimpleBR(ST)
 		end
-		if lply:GetNWBool("bool_yrp_chat", false) then
+		if lply:GetNW2Bool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
-			CH.r = ctr(16)
+			CH.r = YRP.ctr(16)
 			CH.visiblefunc = IsChatVisible
 			HUDSimpleBR(CH)
 		end
-		if lply:GetNWBool("bool_hunger", false) then
+		if lply:GetNW2Bool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
 			HUDSimpleBR(HU)
 		end
-		if lply:GetNWBool("bool_thirst", false) then
+		if lply:GetNW2Bool("bool_thirst", false) then
 			local TH = {}
 			TH.element = "TH"
 			HUDSimpleBR(TH)
 		end
-		if lply:GetNWBool("iscasting", false) then
+		if lply:GetNW2Bool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
 			HUDSimpleBR(CA)

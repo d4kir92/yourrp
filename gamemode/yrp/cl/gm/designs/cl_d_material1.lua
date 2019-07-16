@@ -102,19 +102,19 @@ function _mat1.DrawWindow(window, pw, ph, title)
 		_color_bar.a = 255
 		_color_bg.a = 255
 	end
-	surfaceBox(0, 0, pw, ctr(50), _color_bar)
-	surfaceBox(0, ctr(50), pw, ph - ctr(50), _color_bg)
+	surfaceBox(0, 0, pw, YRP.ctr(50), _color_bar)
+	surfaceBox(0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
 	if InterfaceBorder() then
 		local _br = 2
-		surfaceBox(0, 0, pw, ctr(_br), _color_br)
-		surfaceBox(0, ph-ctr(_br), pw, ctr(_br), _color_br)
+		surfaceBox(0, 0, pw, YRP.ctr(_br), _color_br)
+		surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), _color_br)
 
-		surfaceBox(pw - ctr(_br), ctr(_br), ctr(_br), ph - ctr(2*_br), _color_br)
-		surfaceBox(0, ctr(_br), ctr(_br), ph - ctr(2*_br), _color_br)
+		surfaceBox(pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
+		surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
 	end
 
 	--[[ Title ]]--
-	surfaceText(YRP.lang_string(_title), "mat1header", ctr(10), ctr(25), Color(255, 255, 255), 0, 1, 1)
+	surfaceText(YRP.lang_string(_title), "mat1header", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255), 0, 1, 1)
 end
 
 RegisterWindowFunction(_mat1.name, _mat1.DrawWindow)
@@ -138,11 +138,11 @@ function _mat1.DrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 	surfaceBox(0, 0, pw, ph, _color)
 	if InterfaceBorder() then
 		local _br = 2
-		surfaceBox(0, 0, pw, ctr(_br), _color_br)
-		surfaceBox(0, ph-ctr(_br), pw, ctr(_br), _color_br)
+		surfaceBox(0, 0, pw, YRP.ctr(_br), _color_br)
+		surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), _color_br)
 
-		surfaceBox(pw - ctr(_br), ctr(_br), ctr(_br), ph - ctr(2 * _br), _color_br)
-		surfaceBox(0, ctr(_br), ctr(_br), ph - ctr(2 * _br), _color_br)
+		surfaceBox(pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2 * _br), _color_br)
+		surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2 * _br), _color_br)
 	end
 
 	--[[ text ]]--
@@ -168,11 +168,11 @@ function _mat1.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	surfaceBox(0, 0, pw, ph,_color_bar)
 	if InterfaceBorder() then
 		local _br = 2
-		surfaceBox(0, 0, pw, ctr(_br), _color_br)
-		surfaceBox(0, ph-ctr(_br), pw, ctr(_br), _color_br)
+		surfaceBox(0, 0, pw, YRP.ctr(_br), _color_br)
+		surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), _color_br)
 
-		surfaceBox(pw - ctr(_br), ctr(_br), ctr(_br), ph - ctr(2*_br), _color_br)
-		surfaceBox(0, ctr(_br), ctr(_br), ph - ctr(2*_br), _color_br)
+		surfaceBox(pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
+		surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
 	end
 
 	--[[ text ]]--

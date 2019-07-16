@@ -17,32 +17,32 @@ function YRPSendIsReady()
 		openHelpMenu()
 	end
 
-	if !LocalPlayer():GetNWBool("isserverdedicated", false) then
+	if !LocalPlayer():GetNW2Bool("isserverdedicated", false) then
 		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 		warning:Center()
 		warning:SetTitle("Warning - If you want to remove this, use a dedicated server")
-		warning:SetHeaderHeight(ctr(100))
+		warning:SetHeaderHeight(YRP.ctr(100))
 		warning:ShowCloseButton(false)
 		function warning:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 			hook.Run("YFramePaint", self, pw, ph)
-			if LocalPlayer():GetNWBool("isserverdedicated", false) then
+			if LocalPlayer():GetNW2Bool("isserverdedicated", false) then
 				self:Remove()
 			end
 		end
 
 		warning.tick = 10
 
-		warning.site = createD("DHTML", warning, ScrW() - ctr(200), ScrH() - ctr(100 + 100 + 60 + 20 + 60 + 20), ctr(100), ctr(100))
+		warning.site = createD("DHTML", warning, ScrW() - YRP.ctr(200), ScrH() - YRP.ctr(100 + 100 + 60 + 20 + 60 + 20), YRP.ctr(100), YRP.ctr(100))
 		warning.site:OpenURL("https://sites.google.com/view/gdsm/home")
 
-		warning.openlink = createD("DButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 20 + 60 + 100))
+		warning.openlink = createD("DButton", warning, YRP.ctr(400), YRP.ctr(60), warning:GetWide() / 2 - YRP.ctr(200), warning:GetTall() - YRP.ctr(60 + 20 + 60 + 100))
 		warning.openlink:SetText("Open Website")
 		function warning.openlink:DoClick()
 			gui.OpenURL("https://sites.google.com/view/gdsm/home")
 		end
 
-		warning.close = createD("DButton", warning, ctr(400), ctr(60), warning:GetWide() / 2 - ctr(200), warning:GetTall() - ctr(60 + 100))
+		warning.close = createD("DButton", warning, YRP.ctr(400), YRP.ctr(60), warning:GetWide() / 2 - YRP.ctr(200), warning:GetTall() - YRP.ctr(60 + 100))
 		warning.close:SetText("Close")
 		function warning.close:DoClick()
 			if warning.tick == 0 then

@@ -243,10 +243,10 @@ end)
 
 -- DROP SWEPS
 function GM:PlayerCanPickupWeapon(ply, wep)
-	if !ply:GetNWBool("bool_inventory_system", false) then
+	if !ply:GetNW2Bool("bool_inventory_system", false) then
 		-- Inventory OFF
 
-		return wep:GetNWBool("ispickupable", true)
+		return wep:GetNW2Bool("ispickupable", true)
 	else
 		-- Inventory ON
 
@@ -254,12 +254,12 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		if ply.canpickup == true then
 			ply.canpickup = false
 
-			return wep:GetNWBool("ispickupable", true)
+			return wep:GetNW2Bool("ispickupable", true)
 		else
 			return false
 		end
 		]]--
-		return wep:GetNWBool("ispickupable", true)
+		return wep:GetNW2Bool("ispickupable", true)
 	end
 
 	return true
@@ -292,10 +292,10 @@ function Player:DropSWEP(cname)
 
 		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 		ent:SetAngles(self:GetAngles())
-		ent:SetNWBool("ispickupable", false)
+		ent:SetNW2Bool("ispickupable", false)
 
 		timer.Simple(1, function()
-			ent:SetNWBool("ispickupable", true)
+			ent:SetNW2Bool("ispickupable", true)
 		end)
 
 		ent:Spawn()
@@ -312,7 +312,7 @@ function Player:DropSWEPSilence(cname)
 end
 
 function Player:IsAllowedToDropSWEP(cname)
-	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNWString("roleUniqueID", "0") .. "'")
+	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String("roleUniqueID", "0") .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_ndsweps)

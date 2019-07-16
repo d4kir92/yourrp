@@ -15,7 +15,7 @@ end
 function PANEL:Init()
 	self:SetTitle("")
 
-	self.storage = createD("YStorage", self, tr(100), tr(100), 0, tr(50))
+	self.storage = createD("YStorage", self, YRP.ctr(100), YRP.ctr(100), 0, YRP.ctr(50))
 	self.storage:SetBag(self)
 
 	self:MakePopup()

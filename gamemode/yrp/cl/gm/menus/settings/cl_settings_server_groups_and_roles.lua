@@ -30,7 +30,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		PARENT.rs = {}
 		local rs = PARENT.rs
 
-		gs.bac = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20), ctr(20))
+		gs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
 		gs.bac:SetText("")
 		function gs.bac:Paint(pw, ph)
 			if cur_group.cur == cur_group.par then
@@ -63,7 +63,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		gs.top = createD("DPanel", PARENT, ctr(800-120), ctr(60), ctr(80), ctr(20))
+		gs.top = createD("DPanel", PARENT, YRP.ctr(800-120), YRP.ctr(60), YRP.ctr(80), YRP.ctr(20))
 		function gs.top:Paint(pw, ph)
 			local tab = {}
 			tab.color = YRPGetColor("3")
@@ -88,7 +88,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DrawText(tab2)
 		end
 
-		gs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20 + 800 - 60), ctr(20))
+		gs.add = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(20))
 		gs.add:SetText("")
 		function gs.add:Paint(pw, ph)
 			local tab = {}
@@ -109,10 +109,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.SendToServer()
 		end
 
-		gs.glist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(80))
+		gs.glist = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(940), YRP.ctr(20), YRP.ctr(80))
 		gs.gplist = createD("DPanelList", gs.glist, gs.glist:GetWide(), gs.glist:GetTall(), 0, 0)
 		gs.gplist:EnableVerticalScrollbar(true)
-		gs.gplist:SetSpacing(ctr(10))
+		gs.gplist:SetSpacing(YRP.ctr(10))
 		function gs.gplist:ClearList()
 			gs.top.group = nil
 			gs.gplist:Clear()
@@ -148,7 +148,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function CreateLineGroup(parent, group)
 			group.uniqueID = tonumber(group.uniqueID)
 			gs.gplist[group.uniqueID] = gs.gplist[group.uniqueID] or {}
-			gs.gplist[group.uniqueID] = createD("DButton", parent, parent:GetWide() - ctr(20), ctr(120), 0, 0)
+			gs.gplist[group.uniqueID] = createD("DButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
 			gs.gplist[group.uniqueID]:SetText("")
 			for i, e in pairs(group) do
 				if string.StartWith(i, "int_") then
@@ -167,8 +167,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 				self.text = self.text or group.string_name --.. " [UID: " .. group.uniqueID .. "]"
 				local tab2 = {}
-				tab2.x = ctr(182)
-				tab2.y = ctr(20)
+				tab2.x = YRP.ctr(182)
+				tab2.y = YRP.ctr(20)
 				tab2.ax = 0
 				tab2.ay = 0
 				tab2.text = self.text
@@ -177,8 +177,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 
 				--[[local tab3 = {}
-				tab3.x = ctr(182)
-				tab3.y = ctr(100)
+				tab3.x = YRP.ctr(182)
+				tab3.y = YRP.ctr(100)
 				tab3.ax = 0
 				tab3.ay = 4
 				tab3.text = "POSITION: " .. group.int_position
@@ -191,13 +191,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			gs.gplist[group.uniqueID].ico = createD("DHTML", gs.gplist[group.uniqueID], gs.gplist[group.uniqueID]:GetTall() - ctr(20), gs.gplist[group.uniqueID]:GetTall() - ctr(20), ctr(60), ctr(10))
+			gs.gplist[group.uniqueID].ico = createD("DHTML", gs.gplist[group.uniqueID], gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(20), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(20), YRP.ctr(60), YRP.ctr(10))
 			local ico = gs.gplist[group.uniqueID].ico
 			function ico:Paint(pw, ph)
 			end
 			ico:SetHTML(GetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall()))
 
-			gs.gplist[group.uniqueID].up = createD("DButton", gs.gplist[group.uniqueID], ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), ctr(10))
+			gs.gplist[group.uniqueID].up = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
 			gs.gplist[group.uniqueID].up:SetText("")
 			local up = gs.gplist[group.uniqueID].up
 			function up:Paint(pw, ph)
@@ -221,7 +221,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			gs.gplist[group.uniqueID].dn = createD("DButton", gs.gplist[group.uniqueID], ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), gs.gplist[group.uniqueID]:GetTall() / 2 + ctr(5))
+			gs.gplist[group.uniqueID].dn = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), gs.gplist[group.uniqueID]:GetTall() / 2 + YRP.ctr(5))
 			gs.gplist[group.uniqueID].dn:SetText("")
 			local dn = gs.gplist[group.uniqueID].dn
 			function dn:Paint(pw, ph)
@@ -245,7 +245,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], ctr(40), ctr(40), gs.gplist[group.uniqueID]:GetWide() - ctr(66), gs.gplist[group.uniqueID]:GetTall() - ctr(60))
+			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
 			function ch:Paint(pw, ph)
@@ -306,7 +306,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
-		rs.top = createD("DPanel", PARENT, ctr(800-120), ctr(60), ctr(80), ctr(1040))
+		rs.top = createD("DPanel", PARENT, YRP.ctr(800-120), YRP.ctr(60), YRP.ctr(80), YRP.ctr(1040))
 		function rs.top:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}
@@ -329,7 +329,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.bac = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20), ctr(1040))
+		rs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(1040))
 		rs.bac:SetText("")
 		function rs.bac:Paint(pw, ph)
 			if cur_role.pre > 0 then
@@ -372,7 +372,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.add = createD("DButton", PARENT, ctr(60), ctr(60), ctr(20 + 800 - 60), ctr(1040))
+		rs.add = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(1040))
 		rs.add:SetText("")
 		function rs.add:Paint(pw, ph)
 			if rs.top.headername != nil then
@@ -398,7 +398,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.rlist = createD("DPanel", PARENT, ctr(800), ctr(940), ctr(20), ctr(1100))
+		rs.rlist = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(940), YRP.ctr(20), YRP.ctr(1100))
 		function rs.rlist:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}
@@ -408,7 +408,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 		rs.rplist = createD("DPanelList", rs.rlist, rs.rlist:GetWide(), rs.rlist:GetTall(), 0, 0)
 		rs.rplist:EnableVerticalScrollbar(true)
-		rs.rplist:SetSpacing(ctr(10))
+		rs.rplist:SetSpacing(YRP.ctr(10))
 		function rs.rplist:ClearList()
 			rs.top.headername = nil
 			rs.rplist:Clear()
@@ -417,7 +417,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		PARENT.ea = {}
 		local ea = PARENT.ea
 
-		ea.background = createD("DPanel", PARENT, ScrW() - ctr(860), ScrH() - ctr(200), ctr(840), ctr(80))
+		ea.background = createD("DPanel", PARENT, ScrW() - YRP.ctr(860), ScrH() - YRP.ctr(200), YRP.ctr(840), YRP.ctr(80))
 		function ea.background:Paint(pw, ph)
 			if ea.typ != nil then
 				local tab = {}
@@ -426,7 +426,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		ea.del = createD("DButton", PARENT, ctr(60), ctr(60), ctr(840), ctr(20))
+		ea.del = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(840), YRP.ctr(20))
 		ea.del:SetText("")
 		function ea.del:Paint(pw, ph)
 			if ea.typ != nil and tonumber(ea.tab.uniqueID) != 1 then
@@ -437,7 +437,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local tab2 = {}
 				tab2.w = pw
 				tab2.h = ph
-				tab2.x = ctr(20)
+				tab2.x = YRP.ctr(20)
 				tab2.y = ph / 2
 				tab2.ax = 0
 				tab2.text = "-"
@@ -471,7 +471,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		ea.dup = createD("DButton", PARENT, ctr(60), ctr(60), ctr(900), ctr(20))
+		ea.dup = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(900), YRP.ctr(20))
 		ea.dup:SetText("")
 		function ea.dup:Paint(pw, ph)
 			if ea.typ != nil then
@@ -483,7 +483,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					local tab2 = {}
 					tab2.w = pw
 					tab2.h = ph
-					tab2.x = ctr(20)
+					tab2.x = YRP.ctr(20)
 					tab2.y = ph / 2
 					tab2.ax = 0
 					tab2.text = "[ ]"
@@ -511,7 +511,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 
-		ea.top = createD("DPanel", PARENT, ScrW() - ctr(980), ctr(60), ctr(960), ctr(20))
+		ea.top = createD("DPanel", PARENT, ScrW() - YRP.ctr(980), YRP.ctr(60), YRP.ctr(960), YRP.ctr(20))
 		function ea.top:Paint(pw, ph)
 			if ea.typ != nil then
 				local tab = {}
@@ -521,7 +521,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local tab2 = {}
 				tab2.w = pw
 				tab2.h = ph
-				tab2.x = ctr(20)
+				tab2.x = YRP.ctr(20)
 				tab2.y = ph / 2
 				tab2.ax = 0
 				if ea.tab.uniqueID == 1 then
@@ -560,11 +560,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local info = {}
 			info.parent = ea.background
-			info.x = ctr(20)
-			info.y = ctr(20)
-			info.w = ctr(1000)
-			info.h = ctr(530)
-			info.br = ctr(20)
+			info.x = YRP.ctr(20)
+			info.y = YRP.ctr(20)
+			info.w = YRP.ctr(1000)
+			info.h = YRP.ctr(530)
+			info.br = YRP.ctr(20)
 			info.color = Color(255, 255, 255)
 			info.bgcolor = Color(80, 80, 80)
 			info.name = "LID_general"
@@ -589,7 +589,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[group.uniqueID].name = DTextBox(name)
 
 			local hr = {}
-			hr.h = ctr(16)
+			hr.h = YRP.ctr(16)
 			hr.parent = ea.info
 			DHr(hr)
 
@@ -636,11 +636,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local restriction = {}
 			restriction.parent = ea.background
-			restriction.x = ctr(1040)
-			restriction.y = ctr(20)
-			restriction.w = ctr(1000)
-			restriction.h = ctr(550)
-			restriction.br = ctr(20)
+			restriction.x = YRP.ctr(1040)
+			restriction.y = YRP.ctr(20)
+			restriction.w = YRP.ctr(1000)
+			restriction.h = YRP.ctr(550)
+			restriction.br = YRP.ctr(20)
 			restriction.color = Color(255, 255, 255)
 			restriction.bgcolor = Color(80, 80, 80)
 			restriction.name = "LID_restriction"
@@ -741,7 +741,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function CreateLineRole(parent, role)
 			role.uniqueID = tonumber(role.uniqueID)
 			rs.rplist[role.uniqueID] = rs.rplist[role.uniqueID] or {}
-			rs.rplist[role.uniqueID] = createD("DButton", parent, parent:GetWide() - ctr(20), ctr(120), 0, 0)
+			rs.rplist[role.uniqueID] = createD("DButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
 			rs.rplist[role.uniqueID]:SetText("")
 			for i, e in pairs(role) do
 				if string.StartWith(i, "int_") then
@@ -760,8 +760,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 				self.text = self.text or role.string_name --.. " [UID: " .. role.uniqueID .. "]"
 				local tab2 = {}
-				tab2.x = ctr(182)
-				tab2.y = ctr(20)
+				tab2.x = YRP.ctr(182)
+				tab2.y = YRP.ctr(20)
 				tab2.ax = 0
 				tab2.ay = 0
 				tab2.text = self.text
@@ -770,8 +770,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 
 				--[[local tab3 = {}
-				tab3.x = ctr(182)
-				tab3.y = ctr(100)
+				tab3.x = YRP.ctr(182)
+				tab3.y = YRP.ctr(100)
 				tab3.ax = 0
 				tab3.ay = 4
 				tab3.text = "POSITION: " .. role.int_position
@@ -784,13 +784,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			rs.rplist[role.uniqueID].ico = createD("DHTML", rs.rplist[role.uniqueID], rs.rplist[role.uniqueID]:GetTall() - ctr(20), rs.rplist[role.uniqueID]:GetTall() - ctr(20), ctr(60), ctr(10))
+			rs.rplist[role.uniqueID].ico = createD("DHTML", rs.rplist[role.uniqueID], rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(20), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(20), YRP.ctr(60), YRP.ctr(10))
 			local ico = rs.rplist[role.uniqueID].ico
 			function ico:Paint(pw, ph)
 			end
 			ico:SetHTML(GetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall()))
 
-			rs.rplist[role.uniqueID].up = createD("DButton", rs.rplist[role.uniqueID], ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), ctr(10))
+			rs.rplist[role.uniqueID].up = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
 			rs.rplist[role.uniqueID].up:SetText("")
 			local up = rs.rplist[role.uniqueID].up
 			function up:Paint(pw, ph)
@@ -814,7 +814,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			rs.rplist[role.uniqueID].dn = createD("DButton", rs.rplist[role.uniqueID], ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - ctr(15), ctr(10), rs.rplist[role.uniqueID]:GetTall() / 2 + ctr(5))
+			rs.rplist[role.uniqueID].dn = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), rs.rplist[role.uniqueID]:GetTall() / 2 + YRP.ctr(5))
 			rs.rplist[role.uniqueID].dn:SetText("")
 			local dn = rs.rplist[role.uniqueID].dn
 			function dn:Paint(pw, ph)
@@ -838,7 +838,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], ctr(40), ctr(40), rs.rplist[role.uniqueID]:GetWide() - ctr(66), rs.rplist[role.uniqueID]:GetTall() - ctr(60))
+			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP.ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(60))
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
 			function ch:Paint(pw, ph)
@@ -894,11 +894,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local info = {}
 			info.parent = ea.background
-			info.x = ctr(20)
-			info.y = ctr(20)
-			info.w = ctr(800)
-			info.h = ctr(866)
-			info.br = ctr(20)
+			info.x = YRP.ctr(20)
+			info.y = YRP.ctr(20)
+			info.w = YRP.ctr(800)
+			info.h = YRP.ctr(866)
+			info.br = YRP.ctr(20)
 			info.color = Color(255, 255, 255)
 			info.bgcolor = Color(80, 80, 80)
 			info.name = "LID_general"
@@ -923,7 +923,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].name = DTextBox(name)
 
 			local hr = {}
-			hr.h = ctr(16)
+			hr.h = YRP.ctr(16)
 			hr.parent = ea.info
 			DHr(hr)
 
@@ -1096,10 +1096,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local flags = {}
 			flags.parent = ea.background
 			flags.x = ea.info:GetParent().x
-			flags.y = ea.info:GetParent().y + ea.info:GetParent():GetTall() + ctr(20)
+			flags.y = ea.info:GetParent().y + ea.info:GetParent():GetTall() + YRP.ctr(20)
 			flags.w = ea.info:GetParent():GetWide()
-			flags.h = ctr(800)
-			flags.br = ctr(20)
+			flags.h = YRP.ctr(800)
+			flags.br = YRP.ctr(20)
 			flags.color = Color(255, 255, 255)
 			flags.bgcolor = Color(80, 80, 80)
 			flags.name = "LID_flags"
@@ -1127,19 +1127,19 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			custom_flags.value = role.string_customflags
 			custom_flags.uniqueID = role.uniqueID
 			custom_flags.w = ea.flags:GetWide()
-			custom_flags.h = ctr(225)
+			custom_flags.h = YRP.ctr(225)
 			custom_flags.doclick = function()
 				net.Receive("get_all_role_customflags", function()
 					local cf = net.ReadTable()
 
-					local win = createD("DFrame", nil, ctr(800), ctr(800), 0, 0)
+					local win = createD("DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 					win:SetTitle("")
 					win:Center()
 					win:MakePopup()
 
-					win.dpl = createD("DPanelList", win, ctr(800), ctr(750), 0, ctr(50))
+					win.dpl = createD("DPanelList", win, YRP.ctr(800), YRP.ctr(750), 0, YRP.ctr(50))
 					for i, flag in pairs(cf) do
-						local line = createD("DButton", nil, ctr(800), ctr(50), 0, 0)
+						local line = createD("DButton", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
 						line:SetText(flag.string_name)
 						function line:DoClick()
 							net.Start("add_role_flag")
@@ -1178,11 +1178,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local appearance = {}
 			appearance.parent = ea.background
-			appearance.x = ctr(840)
-			appearance.y = ctr(20)
-			appearance.w = ctr(800)
-			appearance.h = ctr(800)
-			appearance.br = ctr(20)
+			appearance.x = YRP.ctr(840)
+			appearance.y = YRP.ctr(20)
+			appearance.w = YRP.ctr(800)
+			appearance.h = YRP.ctr(800)
+			appearance.br = YRP.ctr(20)
 			appearance.color = Color(255, 255, 255)
 			appearance.bgcolor = Color(80, 80, 80)
 			appearance.name = "LID_appearance"
@@ -1197,34 +1197,34 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			playermodels.value = role.string_playermodels
 			playermodels.uniqueID = role.uniqueID
 			playermodels.w = ea.appearance:GetWide()
-			playermodels.h = ctr(425)
+			playermodels.h = YRP.ctr(425)
 			playermodels.doclick = function()
 				net.Receive("get_all_playermodels", function()
 					local pms = net.ReadTable()
 
-					local win = createD("DFrame", nil, ctr(800), ctr(800), 0, 0)
+					local win = createD("DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 					win:SetTitle("")
 					win:Center()
 					win:MakePopup()
 					function win:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-						draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 150), ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 150), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					end
 
-					win.add = createD("DButton", win, ctr(50), ctr(50), ctr(20), ctr(50 + 20))
+					win.add = createD("DButton", win, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
 					win.add:SetText("+")
 					function win.add:DoClick()
 						win:Close()
 
-						local pmwin = createD("DFrame", nil, ctr(800), ctr(800), 0, 0)
+						local pmwin = createD("DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 						pmwin:Center()
 						pmwin:MakePopup()
 						pmwin:SetTitle("")
 						pmwin.pms = {}
-						pmwin.name = createD("DTextEntry", pmwin, ctr(200), ctr(50), ctr(20 + 200 + 20 + 200 + 20 + 100), ctr(50 + 20))
+						pmwin.name = createD("DTextEntry", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20 + 200 + 20 + 100), YRP.ctr(50 + 20))
 
-						pmwin.float_min = createD("DNumberWang", pmwin, ctr(200), ctr(50), ctr(20), ctr(200))
-						pmwin.float_max = createD("DNumberWang", pmwin, ctr(200), ctr(50), ctr(20 + 200 + 20), ctr(200))
+						pmwin.float_min = createD("DNumberWang", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(200))
+						pmwin.float_max = createD("DNumberWang", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(200))
 
 						pmwin.float_min:SetMinMax(0.1, 100.0)
 						pmwin.float_max:SetMinMax(0.1, 100.0)
@@ -1251,20 +1251,20 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 
-						pmwin.list = createD("DPanelList", pmwin, pmwin:GetWide() - ctr(40), ctr(400), ctr(20), ctr(300))
+						pmwin.list = createD("DPanelList", pmwin, pmwin:GetWide() - YRP.ctr(40), YRP.ctr(400), YRP.ctr(20), YRP.ctr(300))
 						pmwin.list:EnableVerticalScrollbar(true)
 						pmwin.list:SetSpacing(10)
 						function pmwin.list:RefreshList()
 							self:Clear()
 							for i, pm in pairs(pmwin.pms) do
-								local line = createD("DPanel", pmwin.list, ctr(200), ctr(64), 0, 0)
+								local line = createD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
 								line.pm = pm
 								function line:Paint(pw, ph)
 									draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255))
-									draw.SimpleText(self.pm, "DermaDefault", ph + ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 
-								line.dmp = createD("DModelPanel", line, ctr(64), ctr(64), 0, 0)
+								line.dmp = createD("DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
 								line.dmp:SetModel(pm)
 
 								pmwin.list:AddItem(line)
@@ -1274,21 +1274,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						function pmwin:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
 
-							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", ctr(20 + 200 + 20 + 200 + 20 + 100), ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 200 + 20 + 200 + 20 + 100), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", ctr(20), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(20), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", ctr(20 + 200 + 20), ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(20 + 200 + 20), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", ctr(20), ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 						end
 
-						pmwin.selpm = createD("DButton", pmwin, ctr(200), ctr(50), ctr(20), ctr(50 + 20))
+						pmwin.selpm = createD("DButton", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
 						pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
 						function pmwin.selpm:DoClick()
-							local height = ScH() - ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
-							local fx = ScW() - ctr(20 + 20)
-							local br = ctr(10)
+							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
+							local fx = ScW() - YRP.ctr(20 + 20)
+							local br = YRP.ctr(10)
 							local size = (height - 2 * br) / 3
 							local space = size + br
 							local x_max = fx / space - fx / space % 1
@@ -1301,9 +1301,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							pmsel.nr = 0
 							function pmsel:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-								draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-								draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / perpage) + 1), "DermaDefault", ScrW() / 2, ScrH() - ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / perpage) + 1), "DermaDefault", ScrW() / 2, ScrH() - YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 
 							local allvalidmodels = player_manager.AllValidModels()
@@ -1317,7 +1317,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								cl_pms[c].PrintName = player_manager.TranslateToPlayerModelName(v)
 							end
 
-							pmsel.dpl = createD("DPanel", pmsel, ScrW() - ctr(20 * 2), height, ctr(20), ctr(50 + 20 + 50 + 20))
+							pmsel.dpl = createD("DPanel", pmsel, ScrW() - YRP.ctr(20 * 2), height, YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
 							function pmsel.dpl:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
 							end
@@ -1349,7 +1349,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 													color = Color(0, 255, 0)
 													text = YRP.lang_string("LID_added")
 												end
-												draw.RoundedBox(ctr(10), 0, 0, pw, ph, color)
+												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 												draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -1405,7 +1405,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel:RefreshPage()
 							end
 
-							pmsel.prev = createD("DButton", pmsel, ctr(200), ctr(50), ScW() / 2 - ctr(50 + 20) - ctr(200), ScH() - ctr(50 + 20))
+							pmsel.prev = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 - YRP.ctr(50 + 20) - YRP.ctr(200), ScH() - YRP.ctr(50 + 20))
 							pmsel.prev:SetText("<")
 							function pmsel.prev:DoClick()
 								if pmsel.nr >= perpage then
@@ -1414,7 +1414,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 							end
 
-							pmsel.next = createD("DButton", pmsel, ctr(200), ctr(50), ScW() / 2 + ctr(50 + 20), ScH() - ctr(50 + 20))
+							pmsel.next = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 + YRP.ctr(50 + 20), ScH() - YRP.ctr(50 + 20))
 							pmsel.next:SetText(">")
 							function pmsel.next:DoClick()
 								pmsel.nr = pmsel.nr + perpage
@@ -1422,18 +1422,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 							pmsel:Search("")
 
-							pmsel.search = createD("DTextEntry", pmsel, ScW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50 + 20))
+							pmsel.search = createD("DTextEntry", pmsel, ScW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50 + 20))
 							function pmsel.search:OnChange()
 								pmsel:Search(self:GetText())
 							end
 						end
 
-						pmwin.selnpm = createD("DButton", pmwin, ctr(200), ctr(50), ctr(20 + 200 + 20), ctr(50 + 20))
+						pmwin.selnpm = createD("DButton", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(50 + 20))
 						pmwin.selnpm:SetText(YRP.lang_string("LID_othermodels"))
 						function pmwin.selnpm:DoClick()
-							local height = ScH() - ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
-							local fx = ScW() - ctr(20 + 20)
-							local br = ctr(10)
+							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
+							local fx = ScW() - YRP.ctr(20 + 20)
+							local br = YRP.ctr(10)
 							local size = (height - 3 * br) / 4
 							local space = size + br
 							local x_max = fx / space - fx / space % 1
@@ -1446,9 +1446,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							pmsel.nr = 0
 							function pmsel:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-								draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-								draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / perpage) + 1), "DermaDefault", ScrW() / 2, ScrH() - ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / perpage) + 1), "DermaDefault", ScrW() / 2, ScrH() - YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 
 							local noneplayermodels = {}
@@ -1466,7 +1466,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								cl_pms[c].PrintName = v
 							end
 
-							pmsel.dpl = createD("DPanel", pmsel, ScrW() - ctr(20 * 2), height, ctr(20), ctr(50 + 20 + 50 + 20))
+							pmsel.dpl = createD("DPanel", pmsel, ScrW() - YRP.ctr(20 * 2), height, YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
 							function pmsel.dpl:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
 							end
@@ -1498,7 +1498,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 													color = Color(0, 255, 0)
 													text = YRP.lang_string("LID_added")
 												end
-												draw.RoundedBox(ctr(10), 0, 0, pw, ph, color)
+												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 												draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -1554,7 +1554,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel:RefreshPage()
 							end
 
-							pmsel.prev = createD("DButton", pmsel, ctr(200), ctr(50), ScW() / 2 - ctr(50 + 20) - ctr(200), ScH() - ctr(50 + 20))
+							pmsel.prev = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 - YRP.ctr(50 + 20) - YRP.ctr(200), ScH() - YRP.ctr(50 + 20))
 							pmsel.prev:SetText("<")
 							function pmsel.prev:DoClick()
 								if pmsel.nr >= perpage then
@@ -1563,7 +1563,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 							end
 
-							pmsel.next = createD("DButton", pmsel, ctr(200), ctr(50), ScW() / 2 + ctr(50 + 20), ScH() - ctr(50 + 20))
+							pmsel.next = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 + YRP.ctr(50 + 20), ScH() - YRP.ctr(50 + 20))
 							pmsel.next:SetText(">")
 							function pmsel.next:DoClick()
 								pmsel.nr = pmsel.nr + perpage
@@ -1571,13 +1571,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 							pmsel:Search("")
 
-							pmsel.search = createD("DTextEntry", pmsel, ScW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50 + 20))
+							pmsel.search = createD("DTextEntry", pmsel, ScW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50 + 20))
 							function pmsel.search:OnChange()
 								pmsel:Search(self:GetText())
 							end
 						end
 
-						pmwin.add = createD("DButton", pmwin, ctr(200), ctr(50), pmwin:GetWide() / 2 - ctr(200 / 2), pmwin:GetTall() - ctr(50 + 20))
+						pmwin.add = createD("DButton", pmwin, YRP.ctr(200), YRP.ctr(50), pmwin:GetWide() / 2 - YRP.ctr(200 / 2), pmwin:GetTall() - YRP.ctr(50 + 20))
 						pmwin.add:SetText(YRP.lang_string("LID_add"))
 						function pmwin.add:DoClick()
 							if pmwin.WorldModel != "" then
@@ -1595,7 +1595,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						end
 					end
 
-					win.dpl = createD("DPanelList", win, ctr(800) - ctr(20 * 2), ctr(800) - ctr(50 + 20 + 50 + 20 + 20), ctr(20), ctr(50 + 20 + 50 + 20))
+					win.dpl = createD("DPanelList", win, YRP.ctr(800) - YRP.ctr(20 * 2), YRP.ctr(800) - YRP.ctr(50 + 20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
 					win.dpl:EnableVerticalScrollbar(true)
 					function win.dpl:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
@@ -1605,7 +1605,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						self.dpl:Clear()
 						for i, pm in pairs(pms) do
 							if string.find(string.lower(pm.string_name), strsearch) or string.find(string.lower(pm.string_models), strsearch) then
-								local line = createD("DButton", nil, ctr(800), ctr(200), 0, 0)
+								local line = createD("DButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
 								line.string_name = pm.string_name
 								line.models = string.Explode(",", pm.string_models)
 								line:SetText("")
@@ -1618,8 +1618,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 								function line:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140))
-									draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 
 								if line.models[1] != nil then
@@ -1639,7 +1639,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 					win:Search("")
 
-					win.search = createD("DTextEntry", win, win:GetWide() - ctr(20 + 150 + 20), ctr(50), ctr(20 + 150), ctr(50 + 20))
+					win.search = createD("DTextEntry", win, win:GetWide() - YRP.ctr(20 + 150 + 20), YRP.ctr(50), YRP.ctr(20 + 150), YRP.ctr(50 + 20))
 					function win.search:OnChange()
 						win:Search(self:GetText())
 					end
@@ -1657,7 +1657,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							net.WriteInt(v.uniqueID, 32)
 						net.SendToServer()
 					end
-					v.h = ctr(100)
+					v.h = YRP.ctr(100)
 				end
 				if ea[role.uniqueID].playermodels.dpl.AddLines != nil then
 					ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
@@ -1672,10 +1672,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local equipment = {}
 			equipment.parent = ea.background
 			equipment.x = ea.appearance:GetParent().x
-			equipment.y = ea.appearance:GetParent().y + ea.appearance:GetParent():GetTall() + ctr(20)
-			equipment.w = ctr(800)
-			equipment.h = ctr(1250)
-			equipment.br = ctr(20)
+			equipment.y = ea.appearance:GetParent().y + ea.appearance:GetParent():GetTall() + YRP.ctr(20)
+			equipment.w = YRP.ctr(800)
+			equipment.h = YRP.ctr(1250)
+			equipment.br = YRP.ctr(20)
 			equipment.color = Color(255, 255, 255)
 			equipment.bgcolor = Color(80, 80, 80)
 			equipment.name = "LID_equipment"
@@ -1690,7 +1690,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			sweps.value = role.string_sweps
 			sweps.uniqueID = role.uniqueID
 			sweps.w = ea.equipment:GetWide()
-			sweps.h = ctr(325)
+			sweps.h = YRP.ctr(325)
 			sweps.doclick = function()
 				local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 				winswep:SetTitle("")
@@ -1698,7 +1698,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winswep:MakePopup()
 				function winswep:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				local allsweps = GetSWEPsList()
@@ -1712,9 +1712,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 				end
 
-				winswep.dpl = createD("DPanelList", winswep, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
+				winswep.dpl = createD("DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 				winswep.dpl:EnableVerticalScrollbar(true)
-				local height = ScrH() - ctr(100)
+				local height = ScrH() - YRP.ctr(100)
 				function winswep:Search(strsearch)
 					self.dpl:Clear()
 					for i, v in pairs(cl_sweps) do
@@ -1746,7 +1746,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				winswep:Search("")
 
-				winswep.search = createD("DTextEntry", winswep, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+				winswep.search = createD("DTextEntry", winswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
 				function winswep.search:OnChange()
 					winswep:Search(self:GetText())
 				end
@@ -1767,7 +1767,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							net.WriteString(swep.string_classname)
 						net.SendToServer()
 					end
-					swep.h = ctr(120)
+					swep.h = YRP.ctr(120)
 					table.insert(cl_sweps, swep)
 				end
 				if ea[role.uniqueID].sweps.dpl.AddLines != nil then
@@ -1790,7 +1790,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ndsweps.value = role.string_ndsweps
 			ndsweps.uniqueID = role.uniqueID
 			ndsweps.w = ea.equipment:GetWide()
-			ndsweps.h = ctr(325)
+			ndsweps.h = YRP.ctr(325)
 			ndsweps.doclick = function()
 				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 				winndswep:SetTitle("")
@@ -1798,7 +1798,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winndswep:MakePopup()
 				function winndswep:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				local allndsweps = GetSWEPsList()
@@ -1812,9 +1812,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 				end
 
-				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
+				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 				winndswep.dpl:EnableVerticalScrollbar(true)
-				local height = ScrH() - ctr(100)
+				local height = ScrH() - YRP.ctr(100)
 				function winndswep:Search(strsearch)
 					self.dpl:Clear()
 					for i, v in pairs(cl_ndsweps) do
@@ -1846,7 +1846,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				winndswep:Search("")
 
-				winndswep.search = createD("DTextEntry", winndswep, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+				winndswep.search = createD("DTextEntry", winndswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
 				function winndswep.search:OnChange()
 					winndswep:Search(self:GetText())
 				end
@@ -1866,7 +1866,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							net.WriteString(ndswep.string_classname)
 						net.SendToServer()
 					end
-					ndswep.h = ctr(120)
+					ndswep.h = YRP.ctr(120)
 					table.insert(cl_ndsweps, ndswep)
 				end
 				if ea[role.uniqueID].ndsweps.dpl.AddLines != nil then
@@ -1889,7 +1889,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			licenses.value = role.string_licenses
 			licenses.uniqueID = role.uniqueID
 			licenses.w = ea.equipment:GetWide()
-			licenses.h = ctr(325)
+			licenses.h = YRP.ctr(325)
 			licenses.doclick = function()
 				local winlicenses = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 				winlicenses:SetTitle("")
@@ -1897,7 +1897,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winlicenses:MakePopup()
 				function winlicenses:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", ctr(20 + 100), ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				net.Receive("get_all_licenses", function(l)
@@ -1912,9 +1912,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						cl_licenses[count].PrintName = SQL_STR_OUT(v.name)
 					end
 
-					winlicenses.dpl = createD("DPanelList", winlicenses, ScrW() - ctr(20 * 2), ScrH() - ctr(100 + 20), ctr(20), ctr(100))
+					winlicenses.dpl = createD("DPanelList", winlicenses, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 					winlicenses.dpl:EnableVerticalScrollbar(true)
-					local height = ScrH() - ctr(100)
+					local height = ScrH() - YRP.ctr(100)
 					function winlicenses:Search(strsearch)
 						self.dpl:Clear()
 						if strsearch != nil then
@@ -1951,7 +1951,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 					winlicenses:Search("")
 
-					winlicenses.search = createD("DTextEntry", winlicenses, ScrW() - ctr(20 + 100 + 20), ctr(50), ctr(20 + 100), ctr(50))
+					winlicenses.search = createD("DTextEntry", winlicenses, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
 					function winlicenses.search:OnChange()
 						local searchtext = self:GetText()
 						if searchtext != nil then
@@ -1979,7 +1979,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								net.WriteString(license.string_classname)
 							net.SendToServer()
 						end
-						license.h = ctr(120)
+						license.h = YRP.ctr(120)
 						table.insert(cl_licenses, license)
 					end
 				end
@@ -1997,11 +1997,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local restriction = {}
 			restriction.parent = ea.background
-			restriction.x = ctr(1660)
-			restriction.y = ctr(20)
-			restriction.w = ctr(800)
-			restriction.h = ctr(800)
-			restriction.br = ctr(20)
+			restriction.x = YRP.ctr(1660)
+			restriction.y = YRP.ctr(20)
+			restriction.w = YRP.ctr(800)
+			restriction.h = YRP.ctr(800)
+			restriction.br = YRP.ctr(20)
 			restriction.color = Color(255, 255, 255)
 			restriction.bgcolor = Color(80, 80, 80)
 			restriction.name = "LID_restriction"
@@ -2142,10 +2142,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local attributes = {}
 			attributes.parent = ea.background
 			attributes.x = ea.restriction:GetParent().x
-			attributes.y = ea.restriction:GetParent().y + ea.restriction:GetParent():GetTall() + ctr(20)
-			attributes.w = ctr(800)
-			attributes.h = ctr(1000)
-			attributes.br = ctr(20)
+			attributes.y = ea.restriction:GetParent().y + ea.restriction:GetParent():GetTall() + YRP.ctr(20)
+			attributes.w = YRP.ctr(800)
+			attributes.h = YRP.ctr(1000)
+			attributes.br = YRP.ctr(20)
 			attributes.color = Color(255, 255, 255)
 			attributes.bgcolor = Color(80, 80, 80)
 			attributes.name = "LID_attributes"

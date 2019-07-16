@@ -77,27 +77,27 @@ local _seg = #GetEmotes()
 for i = 0, _seg do
 	local a = math.rad(((i / _seg) * -360) + 180 - (360 / _seg) / 2)
 	local _coord = {}
-	_coord.x = ctr(950) + math.sin(a) * ctr(800)
-	_coord.y = ctr(950) + math.cos(a) * ctr(800)
+	_coord.x = YRP.ctr(950) + math.sin(a) * YRP.ctr(800)
+	_coord.y = YRP.ctr(950) + math.cos(a) * YRP.ctr(800)
 	table.insert(_vec_emo, _coord)
 end
 
 local _test = {}
 
 for i = 1, _seg do
-	local _segment = circleCoords(ctr(950), ctr(950), ctr(900), ctr(700), 8, (i - 1) * 360 / _seg + 0.5, 360 / _seg - 1)
+	local _segment = circleCoords(YRP.ctr(950), YRP.ctr(950), YRP.ctr(900), YRP.ctr(700), 8, (i - 1) * 360 / _seg + 0.5, 360 / _seg - 1)
 	table.insert(_test, _segment)
 end
 
 function OpenEmotesMenu()
 	openMenu()
-	_em.window = createD("DFrame", nil, ctr(1900), ctr(1900), 0, 0)
+	_em.window = createD("DFrame", nil, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
 	_em.window:Center()
 	_em.window:ShowCloseButton(false)
 	_em.window:SetDraggable(false)
 	_em.window:MakePopup()
 	_em.window:SetTitle("")
-	_em.emotes = createD("DButton", _em.window, ctr(1900), ctr(1900), 0, 0)
+	_em.emotes = createD("DButton", _em.window, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
 	_em.emotes:SetText("")
 
 	function _em.emotes:Paint(pw, ph)
@@ -165,12 +165,12 @@ function OpenEmotesMenu()
 	function _em.emotes:DoClick()
 		if self.select ~= nil then
 			local _sel = self.select
-			LocalPlayer():SetNWBool("istaunting", true)
+			LocalPlayer():SetNW2Bool("istaunting", true)
 			CloseEmotesMenu()
 
 			timer.Simple(0.01, function()
 				if _sel ~= nil and GetEmotes()[_sel] ~= nil then
-					LocalPlayer():SetNWBool("istaunting", false)
+					LocalPlayer():SetNW2Bool("istaunting", false)
 					RunConsoleCommand("act", GetEmotes()[_sel].cmd)
 				end
 			end)

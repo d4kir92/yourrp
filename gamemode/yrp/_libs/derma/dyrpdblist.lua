@@ -16,7 +16,7 @@ function PANEL:Init()
 	local _pnl = self
 	--[[ Header ]]
 	--
-	self.header = createD("DPanel", self, self:GetWide(), ctr(50), 0, 0)
+	self.header = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 
 	function self.header:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
@@ -77,7 +77,7 @@ function PANEL:Init()
 
 	--[[ List Header ]]
 	--
-	self.listheader = createD("DPanel", self, self:GetWide(), ctr(50), 0, 0)
+	self.listheader = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.listheader.textpre = ""
 	self.listheader.text = "UNNAMED"
 	self.listheader.textpos = ""
@@ -89,7 +89,7 @@ function PANEL:Init()
 
 	--[[ List ]]
 	--
-	self.list = createD("DPanelList", self, self:GetWide(), self:GetTall() - ctr(110), 0, 0)
+	self.list = createD("DPanelList", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
 	self.list:EnableVerticalScrollbar(true)
 	self.list:SetSpacing(2)
 
@@ -133,7 +133,7 @@ function PANEL:Init()
 	end
 
 	function self:AddEntry(tbl)
-		local _new = createD("DButton", nil, self:GetWide(), ctr(50), 0, 0)
+		local _new = createD("DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
 		_new:SetText("")
 		_new.tbl = tbl
 
@@ -177,14 +177,14 @@ end
 function PANEL:Think()
 	local _x = self.listheader:GetPos()
 
-	if ctr(60) ~= _x then
-		self.listheader:SetPos(0, ctr(60))
+	if YRP.ctr(60) ~= _x then
+		self.listheader:SetPos(0, YRP.ctr(60))
 	end
 
 	_x = self.list:GetPos()
 
-	if ctr(110) ~= _x then
-		self.list:SetPos(0, ctr(110))
+	if YRP.ctr(110) ~= _x then
+		self.list:SetPos(0, YRP.ctr(110))
 	end
 
 	if self:GetWide() ~= self.header:GetWide() then
@@ -199,8 +199,8 @@ function PANEL:Think()
 		self.list:SetWide(self:GetWide())
 	end
 
-	if self.list:GetTall() ~= self:GetTall() - ctr(120) then
-		self.list:SetTall(self:GetTall() - ctr(120))
+	if self.list:GetTall() ~= self:GetTall() - YRP.ctr(120) then
+		self.list:SetTall(self:GetTall() - YRP.ctr(120))
 	end
 end
 

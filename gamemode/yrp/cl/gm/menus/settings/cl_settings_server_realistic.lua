@@ -14,19 +14,19 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		end
 
 		local REL = net.ReadTable()
-		local br = ctr(20)
+		local br = YRP.ctr(20)
 		local scroller = {}
 		scroller.parent = PARENT
 		scroller.x = br
 		scroller.y = br
 		scroller.w = ScW() - 2 * br
-		scroller.h = ScrH() - ctr(100) - 2 * br
+		scroller.h = ScrH() - YRP.ctr(100) - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 		local general = {}
 		general.parent = Scroller
 		general.x = 0
 		general.y = 0
-		general.w = ctr(800)
+		general.w = YRP.ctr(800)
 		general.h = Scroller:GetTall()
 		general.br = br / 2
 		general.name = "LID_generalsettings"
@@ -40,7 +40,7 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		local ble = {}
 		ble.parent = General
 		ble.color = YRPGetColor("2")
-		ble.brx = ctr(50)
+		ble.brx = YRP.ctr(50)
 		DBoolLine(bl, REL.bool_bonefracturing, "LID_bonefracturing", "update_bool_bonefracturing")
 		DFloatLine(ble, REL.float_bonechance_legs, "% " .. YRP.lang_string("LID_breakchancelegs"), "update_float_bonechance_legs")
 		DFloatLine(ble, REL.float_bonechance_arms, "% " .. YRP.lang_string("LID_breakchancearms"), "update_float_bonechance_arms")
@@ -59,7 +59,7 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		damage.parent = Scroller
 		damage.x = 0
 		damage.y = 0
-		damage.w = ctr(1000)
+		damage.w = YRP.ctr(1000)
 		damage.h = Scroller:GetTall()
 		damage.br = br / 2
 		damage.name = "LID_damagesettings"
@@ -74,7 +74,7 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		ble = {}
 		ble.parent = Damage
 		ble.color = YRPGetColor("2")
-		ble.brx = ctr(50)
+		ble.brx = YRP.ctr(50)
 		local dmg = DFloatLine(bl, Damage.dmg, "LID_damage", "")
 		DHR(dhr)
 		DHeader(bl, "LID_players")

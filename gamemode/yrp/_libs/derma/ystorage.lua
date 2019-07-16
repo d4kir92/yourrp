@@ -21,7 +21,7 @@ net.Receive("yrp_join_storage", function(len)
 			for y = 0, 3 do
 				id = id + 1
 				if id <= sto.int_size then
-					storage.slots[id] = createD("DScrollPanel", storage, tr(itemsize), tr(itemsize), tr(x * 10 + x * itemsize), tr(y * 10 + y * itemsize))
+					storage.slots[id] = createD("DScrollPanel", storage, YRP.ctr(itemsize), YRP.ctr(itemsize), YRP.ctr(x * 10 + x * itemsize), YRP.ctr(y * 10 + y * itemsize))
 					local slot = storage.slots[id]
 					slot.int_storage = suid
 					slot.int_position = id
@@ -49,8 +49,8 @@ net.Receive("yrp_join_storage", function(len)
 					if sx > 0 then
 						x = x + 1
 					end
-					storage:SetWide(tr(itemsize * ((x - 1) + 1) + 10 * (x - 1)))
-					storage:SetTall(tr(itemsize * 4 + 10 * 3))
+					storage:SetWide(YRP.ctr(itemsize * ((x - 1) + 1) + 10 * (x - 1)))
+					storage:SetTall(YRP.ctr(itemsize * 4 + 10 * 3))
 					reached = true
 
 					storage:UpdateBagLayout()
@@ -78,12 +78,12 @@ net.Receive("yrp_place_item", function(len, ply)
 	local iuid = item.uniqueID
 	local storage = STORAGES[suid]
 
-	local test = createD("SpawnIcon", nil, tr(itemsize), tr(itemsize), 0, 0)
+	local test = createD("SpawnIcon", nil, YRP.ctr(itemsize), YRP.ctr(itemsize), 0, 0)
 	test.int_storage = suid
 	test.uid = iuid
 	test:SetModel(item.text_worldmodel)
 	function test:PaintOver(pw, ph)
-		draw.SimpleText(item.text_printname, "Roboto12", pw / 2, ph - tr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(item.text_printname, "Roboto12", pw / 2, ph - YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	test:Droppable("yrp_item")
 
@@ -116,9 +116,9 @@ function PANEL:SetStorage(uid)
 end
 
 function PANEL:UpdateBagLayout()
-	self.bag:SetWide(self:GetWide() + 2 * tr(20))
-	self.bag:SetTall(self:GetTall() + 2 * tr(20) + tr(50))
-	self:SetPos(tr(20), tr(50 + 20))
+	self.bag:SetWide(self:GetWide() + 2 * YRP.ctr(20))
+	self.bag:SetTall(self:GetTall() + 2 * YRP.ctr(20) + YRP.ctr(50))
+	self:SetPos(YRP.ctr(20), YRP.ctr(50 + 20))
 end
 
 function PANEL:SetBag(bag)

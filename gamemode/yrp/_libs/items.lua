@@ -95,7 +95,7 @@ function GetEntityItemSize(ent)
 end
 
 function IsViewModel(ent)
-	if string.find(ent:GetClass(), "viewmodel") or string.find(ent:GetModel(), "/c_") or ent:GetNWBool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex") then
+	if string.find(ent:GetClass(), "viewmodel") or string.find(ent:GetModel(), "/c_") or ent:GetNW2Bool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex") then
 		return true
 	end
 	return false
@@ -315,12 +315,12 @@ if CLIENT then
 			item_handler[tonumber(uid)].pnl = pnl
 			pnl.uid = uid
 			if pa(item_handler[tonumber(uid)].pnl) then
-				item_handler[tonumber(uid)].pnl:SetSize(ctr(ICON_SIZE*w), ctr(ICON_SIZE*h))
+				item_handler[tonumber(uid)].pnl:SetSize(YRP.ctr(ICON_SIZE*w), YRP.ctr(ICON_SIZE*h))
 				for y = 1, h do
 					item_handler[tonumber(uid)][y] = {}
 					for x = 1, w do
 						item_handler[tonumber(uid)][y][x] = {}
-						item_handler[tonumber(uid)][y][x].slot = createD("DPanel", item_handler[tonumber(uid)].pnl, ctr(ICON_SIZE), ctr(ICON_SIZE), ctr((x-1)*ICON_SIZE), ctr((y-1)*ICON_SIZE))
+						item_handler[tonumber(uid)][y][x].slot = createD("DPanel", item_handler[tonumber(uid)].pnl, YRP.ctr(ICON_SIZE), YRP.ctr(ICON_SIZE), YRP.ctr((x-1)*ICON_SIZE), YRP.ctr((y-1)*ICON_SIZE))
 						local _edit_slot = item_handler[tonumber(uid)][y][x].slot
 						item_handler[tonumber(uid)][y][x].value = ""
 						_edit_slot.storageID = uid
@@ -358,7 +358,7 @@ if CLIENT then
 								self.color = Color(255, 255, 255, 10)
 							end
 							surfaceBox(0, 0, pw, ph, self.color)
-							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0), ctr(4))
+							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0), YRP.ctr(4))
 						end
 					end
 				end
@@ -395,35 +395,35 @@ if CLIENT then
 
 	function AddItemToStorage(tab)
 		if tab.entity != nil then
-			tab.intern_storageID = tab.entity:GetNWString("storage_uid", "")
+			tab.intern_storageID = tab.entity:GetNW2String("storage_uid", "")
 		end
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
 		if pa(_storage) then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
 			local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 
-			local _bg = createD("DPanel", _parent, ctr(ICON_SIZE*tab.sizew), ctr(ICON_SIZE*tab.sizeh), _x + ctr((tab.posx-1)*ICON_SIZE), _y + ctr((tab.posy-1)*ICON_SIZE))
+			local _bg = createD("DPanel", _parent, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), _x + YRP.ctr((tab.posx-1)*ICON_SIZE), _y + YRP.ctr((tab.posy-1)*ICON_SIZE))
 			function _bg:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 200))
 			end
 			function _bg:PaintOver(pw, ph)
 				local _br = 2
-				surfaceBox(0, 0, pw, ctr(_br), Color(0, 0, 255, 255))
-				surfaceBox(0, ph-ctr(_br), pw, ctr(_br), Color(0, 0, 255, 255))
+				surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255))
+				surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255))
 
-				surfaceBox(0, ctr(_br), ctr(_br), ph - ctr(_br*2), Color(0, 0, 255, 255))
-				surfaceBox(pw-ctr(_br), ctr(_br), ctr(_br), ph - ctr(_br*2), Color(0, 0, 255, 255))
+				surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
+				surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
 
-				surfaceText(tab.PrintName, "mat1text", ctr(20), ctr(10), Color(255, 255, 255), 0, 0)
+				surfaceText(tab.PrintName, "mat1text", YRP.ctr(20), YRP.ctr(10), Color(255, 255, 255), 0, 0)
 			end
 
-			local _item = createD("DModelPanel", _bg, ctr(ICON_SIZE*tab.sizew), ctr(ICON_SIZE*tab.sizeh), 0, 0)
+			local _item = createD("DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
 			_item:InvalidateLayout(true)
 			_item:SetModel(tab.WorldModel)
 			SetCamPosition(_item, tab)
 			function _item:LayoutEntity(Entity) return end
 
-			local _item2 = createD("DPanel", _bg, ctr(ICON_SIZE*tab.sizew), ctr(ICON_SIZE*tab.sizeh), 0, 0)
+			local _item2 = createD("DPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
 			if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)] != nil then
 				if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)] != nil then
 					item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
@@ -435,11 +435,11 @@ if CLIENT then
 					end
 					function _i:PaintOver(pw, ph)
 						local _br = 2
-						surfaceBox(0, 0, pw, ctr(_br), Color(0, 0, 255, 255))
-						surfaceBox(0, ph-ctr(_br), pw, ctr(_br), Color(0, 0, 255, 255))
+						surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255))
+						surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255))
 
-						surfaceBox(0, ctr(_br), ctr(_br), ph - ctr(_br*2), Color(0, 0, 255, 255))
-						surfaceBox(pw-ctr(_br), ctr(_br), ctr(_br), ph - ctr(_br*2), Color(0, 0, 255, 255))
+						surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
+						surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
 					end
 					_i:Droppable("slot")
 					_i:SetToolTip("PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh)
