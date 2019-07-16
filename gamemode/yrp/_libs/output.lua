@@ -266,6 +266,7 @@ countries["GB"] = "Great Britain"
 countries["GG"] = "Guernsey"
 countries["GR"] = "Greece"
 
+countries["HO"] = "Hong Kong"
 countries["HU"] = "Hungary"
 
 countries["IE"] = "Ireland"
@@ -284,6 +285,7 @@ countries["LV"] = "Latvia"
 
 countries["ME"] = "Montenegro"
 countries["MX"] = "Mexico"
+countries["MY"] = "Malaysia"
 
 countries["NL"] = "Netherlands"
 countries["NO"] = "Norway"
