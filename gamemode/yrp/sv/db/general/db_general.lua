@@ -365,9 +365,9 @@ function Player:GeneralLoadout()
 	--printGM("gm", "[GeneralLoadout] " .. self:YRPName())
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
-			self:SetNW2String(i, set)
+			self:SetDString(i, set)
 		elseif string.StartWith(i, "bool_") then
-			self:SetNW2Bool(i, tobool(set))
+			self:SetDBool(i, tobool(set))
 		end
 	end
 end
@@ -395,7 +395,7 @@ function GeneralUpdateBool(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateValue(ply, netstr, str, value)
 	for i, pl in pairs(player.GetAll()) do
-		pl:SetNW2Bool(str, tobool(value))
+		pl:SetDBool(str, tobool(value))
 	end
 end
 
@@ -403,7 +403,7 @@ function GeneralUpdateString(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
 	for i, pl in pairs(player.GetAll()) do
-		pl:SetNW2String(str, value)
+		pl:SetDString(str, value)
 	end
 end
 
@@ -411,7 +411,7 @@ function GeneralUpdateInt(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
 	for i, pl in pairs(player.GetAll()) do
-		pl:SetNW2Int(str, value)
+		pl:SetDInt(str, value)
 	end
 end
 
@@ -1498,8 +1498,8 @@ net.Receive("tp_jail", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		teleportToJailpoint(_target)
-		_target:SetNW2Bool("injail", true)
-		_target:SetNW2Int("jailtime", 5*60)
+		_target:SetDBool("injail", true)
+		_target:SetDInt("jailtime", 5*60)
 	end
 end)
 util.AddNetworkString("tp_unjail")
@@ -1507,12 +1507,12 @@ net.Receive("tp_unjail", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		teleportToReleasepoint(_target)
-		_target:SetNW2Bool("injail", false)
+		_target:SetDBool("injail", false)
 	end
 end)
 
 function DoRagdoll(ply)
-	ply:SetNW2Bool("ragdolled", true)
+	ply:SetDBool("ragdolled", true)
 
 	local tmp = ents.Create("prop_ragdoll")
 	tmp:SetModel(ply:GetModel())
@@ -1521,16 +1521,16 @@ function DoRagdoll(ply)
 	tmp:Spawn()
 
 	ply:SetParent(tmp)
-	ply:SetNW2Entity("ragdoll", tmp)
+	ply:SetDEntity("ragdoll", tmp)
 
 	RenderCloaked(ply)
 end
 
 function DoUnRagdoll(ply)
-	ply:SetNW2Bool("ragdolled", false)
+	ply:SetDBool("ragdolled", false)
 	ply:SetParent(nil)
 
-	local ragdoll = ply:GetNW2Entity("ragdoll")
+	local ragdoll = ply:GetDEntity("ragdoll")
 	if ea(ragdoll) then
 		ply:SetPos(ragdoll:GetPos())
 		ragdoll:Remove()
@@ -1575,7 +1575,7 @@ net.Receive("god", function(len, ply)
 		local _target = net.ReadEntity()
 		_target:GodEnable()
 		_target:AddFlags(FL_GODMODE)
-		_target:SetNW2Bool("godmode", true)
+		_target:SetDBool("godmode", true)
 	end
 end)
 util.AddNetworkString("ungod")
@@ -1584,14 +1584,14 @@ net.Receive("ungod", function(len, ply)
 		local _target = net.ReadEntity()
 		_target:GodDisable()
 		_target:RemoveFlags(FL_GODMODE)
-		_target:SetNW2Bool("godmode", false)
+		_target:SetDBool("godmode", false)
 	end
 end)
 util.AddNetworkString("cloak")
 net.Receive("cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool("cloaked", true)
+		_target:SetDBool("cloaked", true)
 		RenderCloaked(_target)
 	end
 end)
@@ -1599,7 +1599,7 @@ util.AddNetworkString("uncloak")
 net.Receive("uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool("cloaked", false)
+		_target:SetDBool("cloaked", false)
 		RenderNormal(_target)
 	end
 end)
@@ -1607,14 +1607,14 @@ util.AddNetworkString("blind")
 net.Receive("blind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool("blinded", true)
+		_target:SetDBool("blinded", true)
 	end
 end)
 util.AddNetworkString("unblind")
 net.Receive("unblind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool("blinded", false)
+		_target:SetDBool("blinded", false)
 	end
 end)
 util.AddNetworkString("ignite")

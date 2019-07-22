@@ -4,7 +4,7 @@ local Player = FindMetaTable("Player")
 
 if CLIENT then
 	function Player:GetHudDesignName()
-		return self:GetNW2String("string_hud_design", "notloaded")
+		return self:GetDString("string_hud_design", "notloaded")
 	end
 
 	-- string element for example "health", art for example "SIZE_W"
@@ -15,7 +15,7 @@ if CLIENT then
 		local hints = {"AX", "AY", "TS"}
 
 		if table.HasValue(hfloats, art) then
-			--local f_val = self:GetNW2Float("float_HUD_" .. element .. "_" .. art, -1.0)
+			--local f_val = self:GetDFloat("float_HUD_" .. element .. "_" .. art, -1.0)
 			local f_val = YRPHUD("float_HUD_" .. element .. "_" .. art, -1.0)
 			if art == "POSI_X" or  art == "SIZE_W" then
 				f_val = f_val * ScW()
@@ -27,13 +27,13 @@ if CLIENT then
 			end
 			return math.Round(f_val, 0)
 		elseif table.HasValue(hbools, art) then
-			return YRPHUD("bool_HUD_" .. element .. "_" .. art, false) --self:GetNW2Bool("bool_HUD_" .. element .. "_" .. art, false)
+			return YRPHUD("bool_HUD_" .. element .. "_" .. art, false) --self:GetDBool("bool_HUD_" .. element .. "_" .. art, false)
 		elseif table.HasValue(hcolors, art) then
-			local hcolor = YRPHUD("color_HUD_" .. element .. "_" .. art, "255, 0, 0") -- self:GetNW2String("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
+			local hcolor = YRPHUD("color_HUD_" .. element .. "_" .. art, "255, 0, 0") -- self:GetDString("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
 			hcolor = string.Explode(",", hcolor)
 			return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
 		elseif table.HasValue(hints, art) then
-			return YRPHUD("int_HUD_" .. element .. "_" .. art, -1) -- tonumber(self:GetNW2Int("int_HUD_" .. element .. "_" .. art, -1))
+			return YRPHUD("int_HUD_" .. element .. "_" .. art, -1) -- tonumber(self:GetDInt("int_HUD_" .. element .. "_" .. art, -1))
 		end
 		return "ART: " .. art .. " not found."
 	end
@@ -62,9 +62,9 @@ if CLIENT then
 end
 
 function Player:Lockdown()
-	return self:GetNW2Bool("bool_lockdown", false)
+	return self:GetDBool("bool_lockdown", false)
 end
 
 function Player:LockdownText()
-	return self:GetNW2String("string_lockdowntext", "")
+	return self:GetDString("string_lockdowntext", "")
 end

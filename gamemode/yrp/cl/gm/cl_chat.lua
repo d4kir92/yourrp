@@ -11,6 +11,7 @@ _showChat = true
 function update_chat_choices()
 	if yrpChat.comboBox != nil then
 		yrpChat.comboBox:Clear()
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_general") .. " /GENERAL", "general", false)
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_ooc") .. " /OOC", "ooc", false)
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_looc") .. " /LOOC", "looc", false)
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_say") .. " /SAY", "say", true)
@@ -48,7 +49,7 @@ function checkChatVisible()
 			_showChat = true
 		end
 		lply = LocalPlayer()
-		if lply:GetNW2Bool("bool_yrp_chat", false) == false then
+		if lply:GetDBool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
 		yrpChat.richText:SetVisible(_showChat)
@@ -74,7 +75,7 @@ function niceCommand(com)
 	elseif com == "yell" then
 		return YRP.lang_string("LID_yell")
 	elseif com == "advert" then
-		return LocalPlayer():GetNW2String("text_chat_advert", YRP.lang_string("LID_advert"))
+		return LocalPlayer():GetDString("text_chat_advert", YRP.lang_string("LID_advert"))
 	elseif com == "admin" then
 		return YRP.lang_string("LID_admin")
 	elseif com == "faction" then
@@ -127,39 +128,42 @@ function InitYRPChat()
 					yrpChat.richText:SetSize(sw - YRP.ctr(2 * 10), sh - YRP.ctr(2 * 10 + 40 + 10))
 				end
 				local _com = yrpChat.writeField:GetText()
-				if isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
+				if isFullyCommand(_com, "sgeneral", YRP.lang_string("LID_general")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), 1)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_general"), 1)
+				elseif isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), 2)
 				elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), 2)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), 3)
 				elseif isFullyCommand(_com, "ssay", YRP.lang_string("LID_say")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), 3)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), 4)
 				elseif isFullyCommand(_com, "sme", YRP.lang_string("LID_me")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), 6)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), 7)
 				elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), 5)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), 6)
 				elseif isFullyCommand(_com, "sadvert", YRP.lang_string("LID_advert")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), 4)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), 5)
 				elseif isFullyCommand(_com, "sadmin", YRP.lang_string("LID_admin")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), 7)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), 8)
 				elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), 8)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), 9)
 				elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), 9)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), 10)
 				elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), 10)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), 11)
 				elseif isFullyCommand(_com, "sfaction", YRP.lang_string("LID_faction")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), 11)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), 12)
 				end
 			end
 		end
@@ -297,14 +301,14 @@ end
 
 timer.Create("yrp_init_chat", 1, 0, function()
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNW2Bool("finishedloading", false) and LocalPlayer():GetNW2String("string_hud_design", "notloaded") != "notloaded" then
+	if lply:IsValid() and lply:GetDBool("finishedloading", false) and LocalPlayer():GetDString("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
 		timer.Remove("yrp_init_chat")
 	end
 end)
 
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	if ply:GetNW2Bool("bool_yrp_chat", false) then
+	if ply:GetDBool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
 			bTeam = false
@@ -322,7 +326,7 @@ end)
 
 hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNW2Bool("bool_yrp_chat", false) then
+	if lply:IsValid() and lply:GetDBool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
 				yrpChat.richText:AppendText(text.."\n")
@@ -333,7 +337,7 @@ end)
 
 hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNW2Bool("bool_yrp_chat", false) then
+	if lply:IsValid() and lply:GetDBool("bool_yrp_chat", false) then
 		if name == "CHudChat" then
 			return false
 		end
@@ -364,7 +368,7 @@ net.Receive("yrp_player_say", function(len)
 	local _tmp = net.ReadTable()
 	local _write = false
 
-	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
+	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "general" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" then
 		_write = true
 
 		_tmp.status = ""

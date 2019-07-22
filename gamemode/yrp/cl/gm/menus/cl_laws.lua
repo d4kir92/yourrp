@@ -35,7 +35,7 @@ function OpenLawsMenu()
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
 
-		if !lply:GetNW2Bool("bool_" .. "ismayor", false) then
+		if !lply:GetDBool("bool_" .. "ismayor", false) then
 			laws = string.Explode(lawsymbol, laws)
 			if _la.window:IsValid() then
 				_la.dpl = createD("DPanelList", _la.window, YRP.ctr(760), YRP.ctr(1200 - 100 - 20 - 20), YRP.ctr(20), YRP.ctr(100 + 20))

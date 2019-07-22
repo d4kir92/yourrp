@@ -686,10 +686,10 @@ function OpenSingleSelector(tab, closeF)
 					end
 
 					function _tmpName:DoClick()
-						LocalPlayer():SetNW2String("WorldModel", item.WorldModel)
-						LocalPlayer():SetNW2String("ClassName", item.ClassName)
-						LocalPlayer():SetNW2String("PrintName", item.PrintName)
-						LocalPlayer():SetNW2String("Skin", item.Skin)
+						LocalPlayer():SetDString("WorldModel", item.WorldModel)
+						LocalPlayer():SetDString("ClassName", item.ClassName)
+						LocalPlayer():SetDString("PrintName", item.PrintName)
+						LocalPlayer():SetDString("Skin", item.Skin)
 						frame:Close()
 					end
 
@@ -1180,10 +1180,10 @@ function openSingleSelector(tab, closeF)
 					end
 
 					function _tmpName:DoClick()
-						LocalPlayer():SetNW2String("WorldModel", item.WorldModel)
-						LocalPlayer():SetNW2String("ClassName", item.ClassName)
-						LocalPlayer():SetNW2String("PrintName", item.PrintName)
-						LocalPlayer():SetNW2String("Skin", item.Skin)
+						LocalPlayer():SetDString("WorldModel", item.WorldModel)
+						LocalPlayer():SetDString("ClassName", item.ClassName)
+						LocalPlayer():SetDString("PrintName", item.PrintName)
+						LocalPlayer():SetDString("Skin", item.Skin)
 						frame:Close()
 					end
 
@@ -1461,23 +1461,23 @@ function drawPlates(ply)
 			color.a = 10
 		end
 
-		if ply:GetNW2Bool("bool_tag_on_head", false) then
-			if ply:GetNW2Bool("bool_tag_on_head_voice", false) and ply:GetNW2Bool("yrp_speaking", false) then
+		if ply:GetDBool("bool_tag_on_head", false) then
+			if ply:GetDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
 				local plyvol = ply:VoiceVolume() * 200
 				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
 				YRP.DrawSymbol(ply, "voice", 26, voicecolor)
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_chat", false) and ply:GetNW2Bool("istyping", false) then
+			if ply:GetDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
 				YRP.DrawSymbol(ply, "chat", 26, color)
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_clan", false) then
+			if ply:GetDBool("bool_tag_on_head_clan", false) then
 				drawString(ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, color)
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_name", false) then
+			if ply:GetDBool("bool_tag_on_head_name", false) then
 				drawString(ply, ply:RPName(), _height, color)
 				_height = _height + 5
 			end
@@ -1485,7 +1485,7 @@ function drawPlates(ply)
 			if ply:AFK() or ply:DND() then
 				local onlinestatus = ""
 				local onlinecolor = Color(255, 255, 255, 255)
-				if ply:GetNW2Bool("isdnd", false) then
+				if ply:GetDBool("isdnd", false) then
 					onlinestatus = YRP.lang_string("LID_dnd")
 					onlinecolor = Color(255, 0, 0, 255)
 				elseif ply:AFK() then
@@ -1497,22 +1497,22 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_rolename", false) then
+			if ply:GetDBool("bool_tag_on_head_rolename", false) then
 				drawString(ply, ply:GetRoleName(), _height, ply:GetRoleColor())
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_groupname", false) then
+			if ply:GetDBool("bool_tag_on_head_groupname", false) then
 				drawString(ply, ply:GetGroupName(), _height, ply:GetGroupColor())
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_factionname", false) then
+			if ply:GetDBool("bool_tag_on_head_factionname", false) then
 				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, ply:GetFactionColor())
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_level", false) then
+			if ply:GetDBool("bool_tag_on_head_level", false) then
 				local lvl = ply:Level()
 				local t = {}
 				t["LEVEL"] = lvl
@@ -1520,15 +1520,15 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_armor", false) then
+			if ply:GetDBool("bool_tag_on_head_armor", false) then
 				_height = _height + 1
-				local str = ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100)
+				local str = ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100)
 				local col = ply:HudValue("AR", "BA")
-				drawBar(ply, str, _height, color, ply:Armor(), ply:GetNW2Int("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
+				drawBar(ply, str, _height, color, ply:Armor(), ply:GetDInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
 				_height = _height + 6
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_health", false) then
+			if ply:GetDBool("bool_tag_on_head_health", false) then
 				_height = _height + 1
 				local str = ply:Health() .. "/" .. ply:GetMaxHealth()
 				local col = ply:HudValue("HP", "BA")
@@ -1536,7 +1536,7 @@ function drawPlates(ply)
 				_height = _height + 6
 			end
 
-			if ply:GetNW2Bool("bool_tag_on_head_usergroup", false) then
+			if ply:GetDBool("bool_tag_on_head_usergroup", false) then
 				local ugcolor = ply:GetUserGroupColor()
 				ugcolor.a = color.a
 				drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
@@ -1546,18 +1546,18 @@ function drawPlates(ply)
 
 		_height = _height + 2
 
-		if ply:GetNW2Bool("tag_ug", false) or (ply:GetNW2Bool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
+		if ply:GetDBool("tag_ug", false) or (ply:GetDBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
 
 			drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
 			_height = _height + 9
 		end
 
-		if ply:GetNW2Bool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
+		if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
 				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
 				_height = _height + 9
 		end
 
-		if ply:GetNW2Bool("bool_tag_on_side", false) then
+		if ply:GetDBool("bool_tag_on_side", false) then
 			local _distance = 200
 
 			if LocalPlayer():GetPos():Distance(ply:GetPos()) < _distance then
@@ -1574,19 +1574,19 @@ function drawPlates(ply)
 				local _h = 20
 				local _d = 2
 
-				if ply:GetNW2Bool("bool_tag_on_side_name", false) then
+				if ply:GetDBool("bool_tag_on_side_name", false) then
 					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["na"])
 					_z = _z + _d
 				end
 
-				if ply:GetNW2Bool("bool_tag_on_side_rolename", false) then
+				if ply:GetDBool("bool_tag_on_side_rolename", false) then
 					local rc = ply:GetRoleColor()
 					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, ply:GetColor().a), _alpha, _icons["rn"])
 					_z = _z + _d
 				end
 
-				if ply:GetNW2Bool("bool_tag_on_side_groupname", false) then
-					local _color = ply:GetNW2String("groupColor", "255,0,0")
+				if ply:GetDBool("bool_tag_on_side_groupname", false) then
+					local _color = ply:GetDString("groupColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local gc = ply:GetGroupColor()
@@ -1594,8 +1594,8 @@ function drawPlates(ply)
 					_z = _z + _d
 				end
 
-				if ply:GetNW2Bool("bool_tag_on_side_factionname", false) then
-					local _color = ply:GetNW2String("factionColor", "255,0,0")
+				if ply:GetDBool("bool_tag_on_side_factionname", false) then
+					local _color = ply:GetDString("factionColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local fc = ply:GetFactionColor()
@@ -1603,7 +1603,7 @@ function drawPlates(ply)
 					_z = _z + _d
 				end
 
-				if ply:GetNW2Bool("bool_tag_on_side_level", false) then
+				if ply:GetDBool("bool_tag_on_side_level", false) then
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
@@ -1611,32 +1611,32 @@ function drawPlates(ply)
 					_z = _z + _d
 				end
 
-				if ply:GetNW2Bool("bool_tag_on_side_health", false) then
+				if ply:GetDBool("bool_tag_on_side_health", false) then
 					local col = ply:HudValue("HP", "BA")
 					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
-				if ply:GetNW2Bool("bool_tag_on_side_armor", false) then
+				if ply:GetDBool("bool_tag_on_side_armor", false) then
 					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetNW2String("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
 					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetNW2String("GetCurStamina", "") .. "/" .. ply:GetNW2String("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetNW2String("GetCurStamina", ""), ply:GetNW2String("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
 					_z = _z + _d
 					local ugcolor = ply:GetUserGroupColor()
 					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, ply:GetColor().a), _alpha, _icons["ug"])
 					_z = _z + _d
-					drawPlayerInfo(ply, "+" .. ply:GetNW2String("text_money_pre", "") .. ply:GetNW2String("salary", "") .. ply:GetNW2String("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
+					drawPlayerInfo(ply, "+" .. ply:GetDString("text_money_pre", "") .. ply:GetDString("salary", "") .. ply:GetDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
 					_z = _z + _d
-					local _motext = ply:GetNW2String("text_money_pre", "") .. ply:GetNW2String("money", "") .. ply:GetNW2String("text_money_pos", "")
-					local _mMin = CurTime() + ply:GetNW2Int("salarytime") - ply:GetNW2Int("nextsalarytime")
-					local _mMax = ply:GetNW2Int("salarytime") + 1
+					local _motext = ply:GetDString("text_money_pre", "") .. ply:GetDString("money", "") .. ply:GetDString("text_money_pos", "")
+					local _mMin = CurTime() + ply:GetDInt("salarytime") - ply:GetDInt("nextsalarytime")
+					local _mMax = ply:GetDInt("salarytime") + 1
 					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 					_z = _z + _d
 				end
@@ -1653,9 +1653,9 @@ hook.Add("PostPlayerDraw", "yrp_draw_plates", drawPlates)
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	local ply = LocalPlayer()
 
-	if ply:GetNW2Bool("tag_immortal", false) then
+	if ply:GetDBool("tag_immortal", false) then
 		for i, ent in pairs(ents.GetAll()) do
-			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetNW2Bool("immortal", false) or ent:GetNW2Bool("godmode", false)) then
+			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetDBool("immortal", false) or ent:GetDBool("godmode", false)) then
 				drawPlate(ent, string.upper("[" .. YRP.lang_string("LID_immortal") .. "]"), 0, Color(0, 0, 100, ent:GetColor().a))
 			end
 		end
@@ -1774,14 +1774,14 @@ function loadDoorTexts()
 
 					cam.Start3D2D(pos, ang, 0.2)
 						surface.SetFont("Roboto24")
-						local header = SQL_STR_OUT(v:GetNW2String("text_header", ""))
+						local header = SQL_STR_OUT(v:GetDString("text_header", ""))
 						local head_size = surface.GetTextSize(header)
 						surface.SetFont("Roboto24B")
 						surface.SetTextColor(255, 255, 255)
 						surface.SetTextPos(- head_size / 2, -80)
 						surface.DrawText(header)
 
-						local description = SQL_STR_OUT(v:GetNW2String("text_description", ""))
+						local description = SQL_STR_OUT(v:GetDString("text_description", ""))
 						surface.SetFont("Roboto14")
 						local desc_size = surface.GetTextSize(description)
 						surface.SetTextColor(255, 255, 255)
@@ -1809,14 +1809,14 @@ function loadDoorTexts()
 					ang = ang + Angle(0, 180, 0)
 
 					cam.Start3D2D(pos, ang, 0.2)
-						header = SQL_STR_OUT(v:GetNW2String("text_header", ""))
+						header = SQL_STR_OUT(v:GetDString("text_header", ""))
 						surface.SetFont("Roboto24B")
 						head_size = surface.GetTextSize(header)
 						surface.SetTextColor(255, 255, 255)
 						surface.SetTextPos(- head_size / 2, -80)
 						surface.DrawText(header)
 
-						description = SQL_STR_OUT(v:GetNW2String("text_description", ""))
+						description = SQL_STR_OUT(v:GetDString("text_description", ""))
 						surface.SetFont("Roboto14")
 						desc_size = surface.GetTextSize(description)
 						surface.SetTextColor(255, 255, 255)

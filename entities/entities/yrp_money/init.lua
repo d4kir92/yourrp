@@ -24,7 +24,7 @@ end
 
 function ENT:SetMoney(money)
 	self.money = tonumber(money)
-	self:SetNW2String("money", self.money)
+	self:SetDString("money", self.money)
 end
 
 function ENT:Use(activator, caller)

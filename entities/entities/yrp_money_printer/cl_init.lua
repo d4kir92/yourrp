@@ -8,15 +8,15 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-		draw.RoundedBox(0, 0, 0, (mp:GetNW2Int(item, -1) / mp:GetNW2Int(item .. "Max", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
+		draw.RoundedBox(0, 0, 0, (mp:GetDInt(item, -1) / mp:GetDInt(item .. "Max", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
 
-		draw.SimpleTextOutlined(mp:GetNW2Int(item, -1) .. "/" .. mp:GetNW2Int(item .. "Max", -1) .. " " .. name, "HudBars", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(mp:GetDInt(item, -1) .. "/" .. mp:GetDInt(item .. "Max", -1) .. " " .. name, "HudBars", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	local tmpBut = createD("DButton", tmp, YRP.ctr(220), h, w - YRP.ctr(220), 0)
 	tmpBut:SetText("")
 	function tmpBut:Paint(pw, ph)
-		local cost = mp:GetNW2Int(item .. "Cost")
-		if mp:GetNW2Int(item) < mp:GetNW2Int(item .. "Max") then
+		local cost = mp:GetDInt(item .. "Cost")
+		if mp:GetDInt(item, 0) < mp:GetDInt(item .. "Max", 0) then
 			if self:IsHovered() then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 				draw.SimpleTextOutlined(formatMoney(cost, ply), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -41,9 +41,9 @@ function tempInfo(mp, parent, w, h, x, y)
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-		draw.RoundedBox(0, 0, 0, (mp:GetNW2Float("temp", 0.0) / mp:GetNW2Float("tempMax", 0.0)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
+		draw.RoundedBox(0, 0, 0, (mp:GetDFloat("temp", 0.0) / mp:GetDFloat("tempMax", 0.0)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
 
-		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetNW2Float("temp", 0.0)),2) .. " °C", "HudBars", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetDFloat("temp", 0.0)),2) .. " °C", "HudBars", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -92,9 +92,9 @@ net.Receive("getMoneyPrintMenu", function(len)
 		function moneyInfo:Paint(pw, ph)
 			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-			draw.RoundedBox(0, 0, 0, (mp:GetNW2Int("money", -1) / mp:GetNW2Int("moneyMax", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
+			draw.RoundedBox(0, 0, 0, (mp:GetDInt("money", -1) / mp:GetDInt("moneyMax", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
 
-			draw.SimpleTextOutlined(formatMoney(mp:GetNW2Int("money", -1), ply) .. "/" .. formatMoney(mp:GetNW2Int("moneyMax" , -1), ply), "HudBars", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(formatMoney(mp:GetDInt("money", -1), ply) .. "/" .. formatMoney(mp:GetDInt("moneyMax" , -1), ply), "HudBars", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 
 		local gatherMoney = createD("DButton", moneyInfo, YRP.ctr(220), YRP.ctr(60), YRP.ctr(360), YRP.ctr(0))
@@ -119,14 +119,14 @@ net.Receive("getMoneyPrintMenu", function(len)
 		workingB:SetText("")
 		function workingB:Paint(pw, ph)
 			local working =YRP.lang_string("LID_off")
-			if mp:GetNW2Bool("working") then
+			if mp:GetDBool("working") then
 				working =YRP.lang_string("LID_on")
 			end
 			if self:IsHovered() then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_toggle"), "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			else
-				if mp:GetNW2Bool("working") then
+				if mp:GetDBool("working") then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 255, 0, 200))
 				else
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 0, 0, 200))

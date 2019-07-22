@@ -205,7 +205,7 @@ function GM:PlayerDisconnected(ply)
 	local _rol_tab = ply:GetRolTab()
 	if wk(_rol_tab) then
 		if tonumber(_rol_tab.int_maxamount) > 0 then
-			ply:SetNW2String("roleUniqueID", "1")
+			ply:SetDString("roleUniqueID", "1")
 			updateRoleUses(_rol_tab.uniqueID)
 		end
 	end
@@ -271,7 +271,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	printGM("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
-	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
+	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
@@ -282,7 +282,7 @@ YRP = YRP or {}
 
 function YRP:Loadout(ply)
 	printGM("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
-	ply:SetNW2Bool("bool_loadouted", false)
+	ply:SetDBool("bool_loadouted", false)
 
 	ply:DesignLoadout()
 	ply:UserGroupLoadout()
@@ -293,7 +293,7 @@ function YRP:Loadout(ply)
 	ply:LevelSystemLoadout()
 	ply:CharacterLoadout()
 
-	ply:SetNW2Bool("bool_loadouted", true)
+	ply:SetDBool("bool_loadouted", true)
 end
 
 hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
@@ -304,11 +304,11 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 		if ply:HasCharacterSelected() then
 			--[[ Status Reset ]]--
-			ply:SetNW2Bool("cuffed", false)
-			ply:SetNW2Bool("broken_leg_left", false)
-			ply:SetNW2Bool("broken_leg_right", false)
-			ply:SetNW2Bool("broken_arm_left", false)
-			ply:SetNW2Bool("broken_arm_right", false)
+			ply:SetDBool("cuffed", false)
+			ply:SetDBool("broken_leg_left", false)
+			ply:SetDBool("broken_leg_right", false)
+			ply:SetDBool("broken_arm_left", false)
+			ply:SetDBool("broken_arm_right", false)
 
 			ply:Give("yrp_key")
 			ply:Give("yrp_unarmed")
@@ -322,16 +322,18 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					printGM("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 
 					local chatab = ply:GetChaTab()
-					CheckIfRoleExists(ply, chatab.roleID)
+					if wk(chatab) then
+						CheckIfRoleExists(ply, chatab.roleID)
+					end
 
 					ply:KillSilent()
 				end
 
 				local chaTab = ply:GetChaTab()
 				if wk(chaTab) then
-					ply:SetNW2String("money", chaTab.money)
-					ply:SetNW2String("moneybank", chaTab.moneybank)
-					ply:SetNW2String("rpname", SQL_STR_OUT(chaTab.rpname))
+					ply:SetDString("money", chaTab.money)
+					ply:SetDString("moneybank", chaTab.moneybank)
+					ply:SetDString("rpname", SQL_STR_OUT(chaTab.rpname))
 
 					setbodygroups(ply)
 				else
@@ -343,8 +345,8 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 				--ply:EquipWeapons()
 
-				ply:SetNW2Float("hunger", 100)
-				ply:SetNW2Float("thirst", 100)
+				ply:SetDFloat("hunger", 100)
+				ply:SetDFloat("thirst", 100)
 			else
 				YRP.msg("error", "[PlayerLoadout] failed at plytab.")
 			end
@@ -363,8 +365,8 @@ end)
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 	--printGM("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
-	if ply:GetNW2Bool("can_respawn", false) then
-		ply:SetNW2Bool("can_respawn", false)
+	if ply:GetDBool("can_respawn", false) then
+		ply:SetDBool("can_respawn", false)
 
 		timer.Simple(0.01, function()
 			teleportToSpawnpoint(ply)
@@ -376,20 +378,20 @@ hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
 	--printGM("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
 	ply:StopBleeding()
 
-	ply:SetNW2Int("yrp_stars", 0)
+	ply:SetDInt("yrp_stars", 0)
 
-	ply:SetNW2Bool("can_respawn", true)
+	ply:SetDBool("can_respawn", true)
 end)
 
 function AddStar(ply)
 	StartCombat(ply)
-	local stars = ply:GetNW2Int("yrp_stars", 0) + 1
+	local stars = ply:GetDInt("yrp_stars", 0) + 1
 	local rand = math.random(0,100)
 	local chance = 100 / stars
 	if rand <= chance then
-		ply:SetNW2Int("yrp_stars", ply:GetNW2Int("yrp_stars", 0) + 1)
-		if ply:GetNW2Int("yrp_stars", 0) > 5 then
-			ply:SetNW2Int("yrp_stars", 5)
+		ply:SetDInt("yrp_stars", ply:GetDInt("yrp_stars", 0) + 1)
+		if ply:GetDInt("yrp_stars", 0) > 5 then
+			ply:SetDInt("yrp_stars", 5)
 		end
 	end
 end
@@ -421,7 +423,7 @@ function IsNoAdminWeapon(cname)
 end
 
 function IsNoUserGroupWeapon(ply, cname)
-	local _ugsweps = string.Explode(",", ply:GetNW2String("usergroup_sweps", ""))
+	local _ugsweps = string.Explode(",", ply:GetDString("usergroup_sweps", ""))
 	if !table.HasValue(_ugsweps, cname) then
 		return true
 	else
@@ -443,7 +445,7 @@ end
 
 hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
 	--printGM("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
-	local _reward = tonumber(ply:GetNW2String("hitreward"))
+	local _reward = tonumber(ply:GetDString("hitreward"))
 	if isnumber(_reward) and attacker:IsPlayer() then
 		if attacker:IsAgent() then
 			printGM("note", "Hit done! " .. _reward)
@@ -476,7 +478,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		end
 		--ply:DropBackpackStorage()
 	end
-	if IsDropMoneyOnDeathEnabled() and !ply:GetNW2Bool("switchrole", false) then
+	if IsDropMoneyOnDeathEnabled() and !ply:GetDBool("switchrole", false) then
 		local _money = ply:GetMoney()
 		local _max = GetMaxAmountOfDroppedMoney()
 		if _money > _max then
@@ -504,9 +506,9 @@ function GM:GetFallDamage(ply, speed)
 			if IsBonefracturingEnabled() then
 				local _rand = math.Round(math.Rand(0, 1), 0)
 				if _rand == 0 then
-					ply:SetNW2Bool("broken_leg_right", true)
+					ply:SetDBool("broken_leg_right", true)
 				elseif _rand == 1 then
-					ply:SetNW2Bool("broken_leg_left", true)
+					ply:SetDBool("broken_leg_left", true)
 				end
 			end
 			if IsCustomFalldamagePercentageEnabled() then
@@ -526,13 +528,13 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 
 	if newWeapon:IsScripted() then
 		--[[ Set default HoldType of currentweapon ]]--
-		if newWeapon:GetNW2String("swep_holdtype", "") == "" then
+		if newWeapon:GetDString("swep_holdtype", "") == "" then
 			local _hold_type = newWeapon.HoldType or newWeapon:GetHoldType() or "normal"
-			newWeapon:SetNW2String("swep_holdtype", _hold_type)
+			newWeapon:SetDString("swep_holdtype", _hold_type)
 		end
 	end
 
-	if ply:GetNW2Bool("cuffed") or ply.leiche != nil then
+	if ply:GetDBool("cuffed") or ply.leiche != nil then
 		return true
 	end
 end
@@ -540,7 +542,7 @@ end
 function IsAllowedToSuicide(ply)
 	if ply:HasAccess() then
 		return true
-	elseif IsSuicideDisabled() or ply:IsFlagSet(FL_FROZEN) or ply:GetNW2Bool("ragdolled", false) or ply:GetNW2Bool("injail", false) then
+	elseif IsSuicideDisabled() or ply:IsFlagSet(FL_FROZEN) or ply:GetDBool("ragdolled", false) or ply:GetDBool("injail", false) then
 		return false
 	else
 		return true
@@ -564,16 +566,16 @@ end)
 
 function SlowThink(ent)
 	if IsSlowingEnabled() then
-		local speedrun = tonumber(ent:GetNW2Int("speedrun", 0))
-		local speedwalk = tonumber(ent:GetNW2Int("speedwalk", 0))
+		local speedrun = tonumber(ent:GetDInt("speedrun", 0))
+		local speedwalk = tonumber(ent:GetDInt("speedwalk", 0))
 		if speedrun == tonumber(ent:GetRunSpeed()) or speedwalk == tonumber(ent:GetWalkSpeed()) then
 			ent:SetRunSpeed(speedrun * GetSlowingFactor())
 			ent:SetWalkSpeed(speedwalk * GetSlowingFactor())
-			ent:SetNW2Bool("slowed", true)
+			ent:SetDBool("slowed", true)
 			timer.Simple(GetSlowingTime(), function()
 				ent:SetRunSpeed(speedrun)
 				ent:SetWalkSpeed(speedwalk)
-				ent:SetNW2Bool("slowed", false)
+				ent:SetDBool("slowed", false)
 			end)
 		end
 	end
@@ -582,14 +584,14 @@ end
 function StartCombat(ply)
 	if ply:IsValid() then
 		if ply:IsPlayer() then
-			ply:SetNW2Bool("inCombat", true)
+			ply:SetDBool("inCombat", true)
 			local steamid = ply:SteamID()
 			if timer.Exists(steamid .. " outOfCombat") then
 				timer.Remove(steamid .. " outOfCombat")
 			end
 			timer.Create(steamid .. " outOfCombat", 5, 1, function()
 				if ea(ply) then
-					ply:SetNW2Bool("inCombat", false)
+					ply:SetDBool("inCombat", false)
 					if timer.Exists(steamid .. " outOfCombat") then
 						timer.Remove(steamid .. " outOfCombat")
 					end
@@ -631,12 +633,12 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 					local _break = math.Round(math.Rand(0, 100), 0)
 					if _break <= GetBrokeChanceArms() then
 						if hitgroup == HITGROUP_LEFTARM then
-							ply:SetNW2Bool("broken_arm_left", true)
+							ply:SetDBool("broken_arm_left", true)
 
 							ply:SetActiveWeapon("yrp_unarmed")
 							ply:SelectWeapon("yrp_unarmed")
 						elseif hitgroup == HITGROUP_RIGHTARM then
-							ply:SetNW2Bool("broken_arm_right", true)
+							ply:SetDBool("broken_arm_right", true)
 
 							ply:SetActiveWeapon("yrp_unarmed")
 							ply:SelectWeapon("yrp_unarmed")
@@ -649,9 +651,9 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 					local _break = math.Round(math.Rand(0, 100), 0)
 					if _break <= GetBrokeChanceLegs() then
 						if hitgroup == HITGROUP_LEFTLEG then
-							ply:SetNW2Bool("broken_leg_left", true)
+							ply:SetDBool("broken_leg_left", true)
 						elseif hitgroup == HITGROUP_RIGHTLEG then
-							ply:SetNW2Bool("broken_leg_right", true)
+							ply:SetDBool("broken_leg_right", true)
 						end
 					end
 				end
@@ -694,49 +696,49 @@ util.AddNetworkString("press_speak_next")
 util.AddNetworkString("press_speak_prev")
 
 net.Receive("press_speak_next", function(len, ply)
-	ply:SetNW2Int("speak_channel", ply:GetNW2Int("speak_channel", 0) + 1)
-	if ply:GetNW2Int("speak_channel", 0) > 1 then
-		if ply:GetNW2Bool("yrp_voice_global", false) then
-			if ply:GetNW2Int("speak_channel", 0) > 2 then
-				ply:SetNW2Int("speak_channel", 0)
+	ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) + 1)
+	if ply:GetDInt("speak_channel", 0) > 1 then
+		if ply:GetDBool("yrp_voice_global", false) then
+			if ply:GetDInt("speak_channel", 0) > 2 then
+				ply:SetDInt("speak_channel", 0)
 			end
 		else
-			ply:SetNW2Int("speak_channel", 0)
+			ply:SetDInt("speak_channel", 0)
 		end
 	end
 end)
 
 net.Receive("press_speak_prev", function(len, ply)
-	ply:SetNW2Int("speak_channel", ply:GetNW2Int("speak_channel", 0) - 1)
-	if ply:GetNW2Int("speak_channel", 0) < 0 then
-		if ply:GetNW2Bool("yrp_voice_global", false) then
-			ply:SetNW2Int("speak_channel", 2)
+	ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) - 1)
+	if ply:GetDInt("speak_channel", 0) < 0 then
+		if ply:GetDBool("yrp_voice_global", false) then
+			ply:SetDInt("speak_channel", 2)
 		else
-			ply:SetNW2Int("speak_channel", 1)
+			ply:SetDInt("speak_channel", 1)
 		end
 	end
 end)
 
 util.AddNetworkString("yrp_voice_start")
 net.Receive("yrp_voice_start", function(len, ply)
-	ply:SetNW2Bool("yrp_speaking", true)
-	if ply:GetNW2String("speak_channel") == 2 then
+	ply:SetDBool("yrp_speaking", true)
+	if ply:GetDString("speak_channel") == 2 then
 		for k, v in pairs(player.GetAll()) do
-			v:SetNW2String("voice_global_steamid", ply:SteamID())
-			v:SetNW2String("voice_global_rolename", ply:GetNW2String("RoleName"))
+			v:SetDString("voice_global_steamid", ply:SteamID())
+			v:SetDString("voice_global_rolename", ply:GetDString("RoleName"))
 		end
 	end
 end)
 
 util.AddNetworkString("yrp_voice_end")
 net.Receive("yrp_voice_end", function(len, ply)
-	ply:SetNW2Bool("yrp_speaking", false)
+	ply:SetDBool("yrp_speaking", false)
 end)
 
 function hearfaded(talker, listener)
-	local t_speak_channel = tonumber(talker:GetNW2Int("speak_channel"))
-	local t_guid = tonumber(talker:GetNW2String("groupUniqueID"))
-	local l_guid = tonumber(listener:GetNW2String("groupUniqueID"))
+	local t_speak_channel = tonumber(talker:GetDInt("speak_channel"))
+	local t_guid = tonumber(talker:GetDString("groupUniqueID"))
+	local l_guid = tonumber(listener:GetDString("groupUniqueID"))
 	if t_speak_channel == 0 or t_speak_channel == 1 and t_guid != l_guid then
 		return true
 	else
@@ -746,9 +748,9 @@ function hearfaded(talker, listener)
 end
 
 function canhear(talker, listener)
-	local t_speak_channel = tonumber(talker:GetNW2Int("speak_channel"))
-	local t_guid = tonumber(talker:GetNW2String("groupUniqueID"))
-	local l_guid = tonumber(listener:GetNW2String("groupUniqueID"))
+	local t_speak_channel = tonumber(talker:GetDInt("speak_channel"))
+	local t_guid = tonumber(talker:GetDString("groupUniqueID"))
+	local l_guid = tonumber(listener:GetDString("groupUniqueID"))
 	local dist = talker:GetPos():Distance(listener:GetPos())
 	if t_speak_channel == 2 then
 		return true
@@ -764,27 +766,17 @@ end
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if IsVoiceEnabled() then
 		if Is3DVoiceEnabled() then
-			return true, true
-		else
-			return true
-		end
-	else
-		return false
-	end
-		--[[
 			if IsVoiceChannelsEnabled() then
 				return canhear(talker, listener), hearfaded(talker, listener)	-- 3D Voice chat + voice channels
 			else
 				return true, true	-- 3D Voice enabled
 			end
 		else
-			return true, false	-- 3D Voice disabled
+			return true, false -- 3D Voice chat disabled
 		end
-		return true	-- Voice chat enabled
 	else
-		return false
+		return false -- Voice disabled
 	end
-	]]
 end
 
 function setbodygroups(ply)
@@ -812,7 +804,7 @@ function GM:PlayerSetModel(ply)
 end
 
 function GM:PlayerSpray(ply)
-	if ply:GetNW2Bool("bool_graffiti_disabled", false) then
+	if ply:GetDBool("bool_graffiti_disabled", false) then
 		return true
 	else
 		return false

@@ -58,8 +58,8 @@ function Player:CharacterLoadout()
 	printGM("debug", "[CharacterLoadout] " .. self:YRPName())
 	local chatab = self:GetChaTab()
 	if wk(chatab) then
-		self:SetNW2String("int_xp", chatab.int_xp)
-		self:SetNW2String("int_level", chatab.int_level)
+		self:SetDString("int_xp", chatab.int_xp)
+		self:SetDString("int_level", chatab.int_level)
 	end
 end
 
@@ -76,19 +76,19 @@ function Player:VisualEquipment(name, slot)
 						_item = _item[1]
 						local _model = _item.WorldModel
 
-						local _old = self:GetNW2Entity(name)
+						local _old = self:GetDEntity(name)
 						if ea(_old) then
 							_old:Remove()
 						end
-						self:SetNW2String(name, _model)
+						self:SetDString(name, _model)
 						local _visual = ents.Create("prop_dynamic")
 						_visual:SetModel(_item.WorldModel)
 						_visual:SetOwner(self)
-						_visual:SetNW2Bool("isviewmodel", true)
+						_visual:SetDBool("isviewmodel", true)
 						_visual:Spawn()
 
-						self:SetNW2Entity(name, _visual)
-						self:SetNW2String(name .. "ClassName", _item.ClassName)
+						self:SetDEntity(name, _visual)
+						self:SetDString(name .. "ClassName", _item.ClassName)
 
 						local _maxs = _visual:OBBMaxs()
 						local _mins = _visual:OBBMins()
@@ -104,27 +104,27 @@ function Player:VisualEquipment(name, slot)
 							corax = 0
 							coray = -90
 							coraz = 90
-							self:SetNW2String(name .. "thick", _x)
+							self:SetDString(name .. "thick", _x)
 						elseif _x >= _z and _y >= _z then
 							corax = 0
 							coray = 0
 							coraz = 0
-							self:SetNW2String(name .. "thick", _z)
+							self:SetDString(name .. "thick", _z)
 						elseif _x >= _y and _z >= _y then
 							corax = 90
 							coray = 90
 							coraz = 90
-							self:SetNW2String(name .. "thick", _y)
+							self:SetDString(name .. "thick", _y)
 						end
-						self:SetNW2String(name .. "corax", corax)
-						self:SetNW2String(name .. "coray", coray)
-						self:SetNW2String(name .. "coraz", coraz)
+						self:SetDString(name .. "corax", corax)
+						self:SetDString(name .. "coray", coray)
+						self:SetDString(name .. "coraz", coraz)
 					else
-						local _old = self:GetNW2Entity(name)
+						local _old = self:GetDEntity(name)
 						if ea(_old) then
 							_old:Remove()
-							self:SetNW2Entity(name, NULL)
-							self:SetNW2String(name .. "ClassName", "")
+							self:SetDEntity(name, NULL)
+							self:SetDString(name .. "ClassName", "")
 						end
 					end
 					return _item
@@ -172,7 +172,7 @@ function Player:SetRPName(str)
 		SQL_UPDATE("yrp_characters", "rpname = '" .. newname .. "'", "uniqueID = " .. self:CharID())
 
 		newname = SQL_STR_OUT(newname)
-		self:SetNW2String("rpname", newname)
+		self:SetDString("rpname", newname)
 
 		printGM("note", oldname .." changed name to " .. newname, true)
 	end
@@ -346,7 +346,7 @@ net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-		ply:SetNW2String("rpdescription" .. i, SQL_STR_IN(v))
+		ply:SetDString("rpdescription" .. i, SQL_STR_IN(v))
 	end
 end)
 

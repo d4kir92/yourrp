@@ -402,7 +402,7 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
-	if lply:GetNW2String("string_hud_design") == "Fallout 76" then
+	if lply:GetDString("string_hud_design") == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
 		HP.text = YRP.lang_string("LID_hp")
@@ -587,7 +587,7 @@ function HUD_FO76()
 			FO76Name(LO)
 		end
 
-		if lply:GetNW2Bool("iscasting", false) then
+		if lply:GetDBool("iscasting", false) then
 			local CA = {}
 			CA.element = "CA"
 			CA.cur = lply:CastTimeCurrent()
@@ -598,7 +598,7 @@ function HUD_FO76()
 			FO76Name(CA)
 		end
 
-		if IsChatVisible() and lply:GetNW2Bool("bool_yrp_chat", false) then
+		if IsChatVisible() and lply:GetDBool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			FO76Chat(CH)

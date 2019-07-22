@@ -327,7 +327,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	function ENTITIES.add:DoClick()
 		OpenSingleSelector(GetSENTsList(), "selector_usergroup_string_sents")
 		hook.Add("selector_usergroup_string_sents", "selector_usergroup_string_sents", function()
-			local sent = ply:GetNW2String("ClassName", "")
+			local sent = ply:GetDString("ClassName", "")
 
 			net.Start("usergroup_add_sent")
 				net.WriteString(CURRENT_USERGROUP)

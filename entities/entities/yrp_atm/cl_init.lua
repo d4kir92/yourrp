@@ -26,14 +26,14 @@ function ENT:Draw()
 		self.display.ent = self
 
 		function self.display:Paint(pw, ph)
-			local bankName = "YRP Bank [" .. ply:GetNW2String("text_money_pre").. ply:GetNW2String("moneybank") .. ply:GetNW2String("text_money_pos") .."]"
-			if self.ent:GetNW2String("status") == "startup" then
+			local bankName = "YRP Bank [" .. ply:GetDString("text_money_pre").. ply:GetDString("moneybank") .. ply:GetDString("text_money_pos") .."]"
+			if self.ent:GetDString("status") == "startup" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
 				draw.SimpleTextOutlined("..." ..YRP.lang_string("LID_loading") .. "...", "ATM_Header", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif self.ent:GetNW2String("status") == "logo" then
+			elseif self.ent:GetDString("status") == "logo" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_welcome") .. "!", "ATM_Header", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif self.ent:GetNW2String("status") == "home" then
+			elseif self.ent:GetDString("status") == "home" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(bankName, "ATM_Header", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
@@ -48,7 +48,7 @@ function ENT:Draw()
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_transfer"), "ATM_Normal", 200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif self.ent:GetNW2String("status") == "withdraw" then
+			elseif self.ent:GetDString("status") == "withdraw" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(bankName, "ATM_Header", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
@@ -56,26 +56,26 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(YRP.lang_string("LID_withdraw"), "ATM_Header", pw/2, 150+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 300, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "5" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "5" .. ply:GetDString("text_money_pos"), "ATM_Normal", 200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 450, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "10" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "10" .. ply:GetDString("text_money_pos"), "ATM_Normal", 200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "20" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "20" .. ply:GetDString("text_money_pos"), "ATM_Normal", 200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 850, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_back"), "ATM_Normal", 200, 850+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, pw-400, 300, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "50" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", pw-200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "50" .. ply:GetDString("text_money_pos"), "ATM_Normal", pw-200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, pw-400, 450, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "100" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", pw-200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "100" .. ply:GetDString("text_money_pos"), "ATM_Normal", pw-200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_other"), "ATM_Normal", pw-200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif self.ent:GetNW2String("status") == "deposit" then
+			elseif self.ent:GetDString("status") == "deposit" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(bankName, "ATM_Header", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
@@ -83,41 +83,41 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(YRP.lang_string("LID_deposit"), "ATM_Header", pw/2, 150+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 300, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "5" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "5" .. ply:GetDString("text_money_pos"), "ATM_Normal", 200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 450, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "10" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "10" .. ply:GetDString("text_money_pos"), "ATM_Normal", 200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "20" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "20" .. ply:GetDString("text_money_pos"), "ATM_Normal", 200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 850, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_back"), "ATM_Normal", 200, 850+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, pw-400, 300, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "50" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", pw-200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "50" .. ply:GetDString("text_money_pos"), "ATM_Normal", pw-200, 300+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, pw-400, 450, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. "100" .. ply:GetNW2String("text_money_pos"), "ATM_Normal", pw-200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre").. "100" .. ply:GetDString("text_money_pos"), "ATM_Normal", pw-200, 450+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_other"), "ATM_Normal", pw-200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif self.ent:GetNW2String("status") == "transfer" then
+			elseif self.ent:GetDString("status") == "transfer" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(bankName, "ATM_Header", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_transfer"), "ATM_Header", pw/2, 150+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				if self.ent:GetNW2String("name1") != "nil" then
+				if self.ent:GetDString("name1") != "nil" then
 					draw.RoundedBox(0, 0, 300, 400, 100, Color(255, 255, 255))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("name1", "EMPTY"), "ATM_Name", 200, 300+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("SteamID1", "EMPTY"), "ATM_Name", 200, 300+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("name1", "EMPTY"), "ATM_Name", 200, 300+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("SteamID1", "EMPTY"), "ATM_Name", 200, 300+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
-				if self.ent:GetNW2String("name2") != "nil" then
+				if self.ent:GetDString("name2") != "nil" then
 					draw.RoundedBox(0, 0, 450, 400, 100, Color(255, 255, 255))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("name2", "EMPTY"), "ATM_Name", 200, 450+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("SteamID2", "EMPTY"), "ATM_Name", 200, 450+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("name2", "EMPTY"), "ATM_Name", 200, 450+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("SteamID2", "EMPTY"), "ATM_Name", 200, 450+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color(255, 255, 255))
@@ -126,44 +126,44 @@ function ENT:Draw()
 				draw.RoundedBox(0, 0, 850, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_back"), "ATM_Normal", 200, 850+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				if self.ent:GetNW2String("name3") != "nil" then
+				if self.ent:GetDString("name3") != "nil" then
 					draw.RoundedBox(0, pw-400, 300, 400, 100, Color(255, 255, 255))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("name3", "EMPTY"), "ATM_Name", pw-200, 300+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("SteamID3", "EMPTY"), "ATM_Name", pw-200, 300+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("name3", "EMPTY"), "ATM_Name", pw-200, 300+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("SteamID3", "EMPTY"), "ATM_Name", pw-200, 300+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
-				if self.ent:GetNW2String("name4") != "nil" then
+				if self.ent:GetDString("name4") != "nil" then
 					draw.RoundedBox(0, pw-400, 450, 400, 100, Color(255, 255, 255))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("name4", "EMPTY"), "ATM_Name", pw-200, 450+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(self.ent:GetNW2String("SteamID4", "EMPTY"), "ATM_Name", pw-200, 450+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("name4", "EMPTY"), "ATM_Name", pw-200, 450+50-20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(self.ent:GetDString("SteamID4", "EMPTY"), "ATM_Name", pw-200, 450+50+20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "ATM_Normal", pw-200, 600+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif self.ent:GetNW2String("status") == "other" then
+			elseif self.ent:GetDString("status") == "other" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(bankName, "ATM_Header", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color(255, 255, 255))
 				local otherText = ""
 				local otherTextPos =YRP.lang_string("LID_other")
-				if self.ent:GetNW2String("prevstatus") == "withdraw" then
+				if self.ent:GetDString("prevstatus") == "withdraw" then
 					otherText =YRP.lang_string("LID_withdraw")
-				elseif self.ent:GetNW2String("prevstatus") == "deposit" then
+				elseif self.ent:GetDString("prevstatus") == "deposit" then
 					otherText =YRP.lang_string("LID_deposit")
-				elseif self.ent:GetNW2String("prevstatus") == "transfer" then
+				elseif self.ent:GetDString("prevstatus") == "transfer" then
 					otherText =YRP.lang_string("LID_transfer")
-					otherTextPos = self.ent:GetNW2String("name", "ERROR")
+					otherTextPos = self.ent:GetDString("name", "ERROR")
 				end
 				draw.SimpleTextOutlined(otherText .. " > " .. otherTextPos, "ATM_Header", pw/2, 150+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 300, 250, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(ply:GetNW2String("text_money_pre").. self.ent:GetNW2String("othermoney") .. ply:GetNW2String("text_money_pos"), "ATM_Normal", 500, 250+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(ply:GetDString("text_money_pre", "...") .. self.ent:GetDString("othermoney", "...") .. ply:GetDString("text_money_pos", "..."), "ATM_Normal", 500, 250+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 750, 250, 100, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined("<", "ATM_Normal", 800, 250+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined("<", "ATM_Normal", 800, 250 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 300, 400, 100, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined("1", "ATM_Normal", 350, 400+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined("1", "ATM_Normal", 350, 400 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 450, 400, 100, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined("2", "ATM_Normal", 500, 400+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -194,11 +194,11 @@ function ENT:Draw()
 
 				draw.RoundedBox(0, 600, 850, 400, 100, Color(255, 255, 255))
 				local _confirm = ""
-				if self.ent:GetNW2String("prevstatus") == "withdraw" then
+				if self.ent:GetDString("prevstatus") == "withdraw" then
 					_confirm =YRP.lang_string("LID_withdraw")
-				elseif self.ent:GetNW2String("prevstatus") == "deposit" then
+				elseif self.ent:GetDString("prevstatus") == "deposit" then
 					_confirm =YRP.lang_string("LID_deposit")
-				elseif self.ent:GetNW2String("prevstatus") == "transfer" then
+				elseif self.ent:GetDString("prevstatus") == "transfer" then
 					_confirm =YRP.lang_string("LID_transfer")
 				end
 				draw.SimpleTextOutlined(_confirm, "ATM_Normal", 600 + 200, 850+50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

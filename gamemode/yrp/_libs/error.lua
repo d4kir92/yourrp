@@ -228,7 +228,7 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error(realm, str)
 	local entry = {}
-	if CLIENT and !LocalPlayer():GetNW2Bool("isserverdedicated", false) then
+	if CLIENT and !LocalPlayer():GetDBool("isserverdedicated", false) then
 		return false
 	elseif SERVER and !game.IsDedicated() then
 		return false
@@ -318,7 +318,7 @@ function CanSendError()
 		if game.MaxPlayers() > 1 then
 			if CLIENT then
 				local lply = LocalPlayer()
-				if lply:IsValid() and lply:GetNW2Bool("isserverdedicated", false) then
+				if lply:IsValid() and lply:GetDBool("isserverdedicated", false) then
 					if tick % 10 == 0 then
 						return true
 					end

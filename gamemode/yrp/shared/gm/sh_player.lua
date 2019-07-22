@@ -4,36 +4,36 @@ local Player = FindMetaTable("Player")
 
 function Player:YRPEat(num)
 	if isnumber(num) then
-		self:SetNW2Float("hunger", self:GetNW2Float("hunger", 0.0) + num)
-		if self:GetNW2Float("hunger", 0.0) > 100.0 then
-			self:SetNW2Float("hunger", 100.0)
+		self:SetDFloat("hunger", self:GetDFloat("hunger", 0.0) + num)
+		if self:GetDFloat("hunger", 0.0) > 100.0 then
+			self:SetDFloat("hunger", 100.0)
 		end
 	end
 end
 
 function Player:YRPDrink(num)
 	if isnumber(num) then
-		self:SetNW2Float("thirst", self:GetNW2Float("thirst", 0.0) + num)
-		if self:GetNW2Float("thirst", 0.0) > 100.0 then
-			self:SetNW2Float("thirst", 100.0)
+		self:SetDFloat("thirst", self:GetDFloat("thirst", 0.0) + num)
+		if self:GetDFloat("thirst", 0.0) > 100.0 then
+			self:SetDFloat("thirst", 100.0)
 		end
 	end
 end
 
 function Player:YRPGetLanguage()
-	return YRP.get_language_name(self:GetNW2String("client_lang", YRP.lang_string("LID_none")))
+	return YRP.get_language_name(self:GetDString("client_lang", YRP.lang_string("LID_none")))
 end
 
 function Player:YRPGetLanguageShort()
-	return self:GetNW2String("client_lang", YRP.lang_string("LID_none"))
+	return self:GetDString("client_lang", YRP.lang_string("LID_none"))
 end
 
 function Player:HasAccess()
-	return self:GetNW2Bool("bool_adminaccess", false)
+	return self:GetDBool("bool_adminaccess", false)
 end
 
 function Player:LoadedGamemode()
-	return self:GetNW2Bool("finishedloading", false)
+	return self:GetDBool("finishedloading", false)
 end
 
 function Player:GetPlyTab()
@@ -187,7 +187,7 @@ end
 function Player:CheckMoney()
 	if SERVER then
 		timer.Simple(4, function()
-			local _m = self:GetNW2String("money", "FAILED")
+			local _m = self:GetDString("money", "FAILED")
 			if _m == "FAILED" then
 				printGM("error", "CheckMoney failed")
 				return false
@@ -196,7 +196,7 @@ function Player:CheckMoney()
 			if wk(_money) and self:CharID() != false then
 				SQL_UPDATE("yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID()) --attempt to nil value
 			end
-			_mb = self:GetNW2String("moneybank", "FAILED")
+			_mb = self:GetDString("moneybank", "FAILED")
 			if _mb == "FAILED" then
 				printGM("error", "CheckMoney failed")
 				return false
@@ -214,14 +214,14 @@ function Player:UpdateMoney()
 		if self:HasCharacterSelected() then
 			local _char_id = self:CharID()
 			if _char_id != false then
-				local money = self:GetNW2String("money", "FAILED")
+				local money = self:GetDString("money", "FAILED")
 				if money == "FAILED" then
 					return false
 				end
 				if worked(money, "ply:money UpdateMoney", true) then
 					SQL_UPDATE("yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. _char_id)
 				end
-				local moneybank = tonumber(self:GetNW2String("moneybank", "FAILED"))
+				local moneybank = tonumber(self:GetDString("moneybank", "FAILED"))
 				if moneybank == "FAILED" then
 					return false
 				end
@@ -234,44 +234,44 @@ function Player:UpdateMoney()
 end
 
 function Player:GetPlayerModel()
-	return self:GetNW2String("string_playermodel", "models/player/skeleton.mdl")
+	return self:GetDString("string_playermodel", "models/player/skeleton.mdl")
 end
 
 function Player:IsAgent()
-	return self:GetNW2Bool("canbeagent")
+	return self:GetDBool("canbeagent")
 end
 
 if SERVER then
 	function Player:Unbroke()
-		self:SetNW2Bool("broken_leg_right", false)
-		self:SetNW2Bool("broken_leg_left", false)
-		self:SetNW2Bool("broken_arm_right", false)
-		self:SetNW2Bool("broken_arm_left", false)
+		self:SetDBool("broken_leg_right", false)
+		self:SetDBool("broken_leg_left", false)
+		self:SetDBool("broken_arm_right", false)
+		self:SetDBool("broken_arm_left", false)
 	end
 
 	function Player:StopCasting()
 		--[[ successfull casting ]]--
-		self:SetNW2Bool("iscasting", false)
+		self:SetDBool("iscasting", false)
 
-		self:SetNW2String("castname", "")
-		self:SetNW2Float("castcur", 0.0)
+		self:SetDString("castname", "")
+		self:SetDFloat("castcur", 0.0)
 
 		local _args = {}
 		_args.attacker = self
-		_args.target = self:GetNW2Entity("casttarget")
-		hook.Run("yrp_castdone_" .. self:GetNW2String("castnet"), _args)
+		_args.target = self:GetDEntity("casttarget")
+		hook.Run("yrp_castdone_" .. self:GetDString("castnet"), _args)
 	end
 
 	function Player:InteruptCasting()
-		self:SetNW2String("castname", "")
-		self:SetNW2Float("castcur", 0.0)
+		self:SetDString("castname", "")
+		self:SetDFloat("castcur", 0.0)
 
 		--[[ failed casting ]]--
-		self:SetNW2Bool("iscasting", false)
+		self:SetDBool("iscasting", false)
 		if timer.Exists(self:SteamID() .. "castduration") then
 			timer.Remove(self:SteamID() .. "castduration")
 		end
-		hook.Run("yrp_interupt_" .. self:GetNW2String("castnet"))
+		hook.Run("yrp_interupt_" .. self:GetDString("castnet", ""))
 	end
 
 	function Player:StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
@@ -279,33 +279,33 @@ if SERVER then
 		self:InteruptCasting()
 
 		--[[ Setup ]]--
-		self:SetNW2String("castnet", net_str)
-		self:SetNW2Int("castmode", mode or 0)
-		self:SetNW2Bool("castcanmove", canmove or false)
-		if !self:GetNW2Bool("castcanmove") then
-			self:SetNW2Vector("castposition", self:GetPos())
+		self:SetDString("castnet", net_str)
+		self:SetDInt("castmode", mode or 0)
+		self:SetDBool("castcanmove", canmove or false)
+		if !self:GetDBool("castcanmove") then
+			self:SetNWVector("castposition", self:GetPos())
 		end
-		self:SetNW2String("castname", lang_str)
-		self:SetNW2Float("castmax", duration or 1.0)
-		if self:GetNW2Int("castmode") == 0 then
-			self:SetNW2Float("castcur", 0.0)
-		elseif self:GetNW2Int("castmode") == 1 then
-			self:SetNW2Float("castcur", self:GetNW2Float("castmax"))
+		self:SetDString("castname", lang_str)
+		self:SetDFloat("castmax", duration or 1.0)
+		if self:GetDInt("castmode") == 0 then
+			self:SetDFloat("castcur", 0.0)
+		elseif self:GetDInt("castmode") == 1 then
+			self:SetDFloat("castcur", self:GetDFloat("castmax"))
 		end
-		self:SetNW2Entity("casttarget", target or self)
-		self:SetNW2Float("castrange", range or 0.0)
+		self:SetDEntity("casttarget", target or self)
+		self:SetDFloat("castrange", range or 0.0)
 
 		--[[ Start casting ]]--
-		self:SetNW2Bool("iscasting", true)
+		self:SetDBool("iscasting", true)
 		timer.Create(self:SteamID() .. "castduration", 0.1, 0, function()
 
-			--printGM("note", self:GetNW2String("castname") .. " " .. tostring(self:GetNW2Float("castcur")))
+			--printGM("note", self:GetDString("castname") .. " " .. tostring(self:GetDFloat("castcur")))
 
 			--[[ Casting ]]--
-			if self:GetNW2Int("castmode") == 0 then
-				self:SetNW2Float("castcur", self:GetNW2Float("castcur") + 0.1)
-				if !self:GetNW2Bool("castcanmove") then
-					local _o_pos = self:GetNW2Vector("castposition")
+			if self:GetDInt("castmode") == 0 then
+				self:SetDFloat("castcur", self:GetDFloat("castcur") + 0.1)
+				if !self:GetDBool("castcanmove") then
+					local _o_pos = self:GetNWVector("castposition")
 					local _c_pos = self:GetPos()
 					local _space = 3
 
@@ -313,19 +313,19 @@ if SERVER then
 					if _c_pos.x + _space < _o_pos.x or _c_pos.x - _space > _o_pos.x or _c_pos.y + _space < _o_pos.y or _c_pos.y - _space > _o_pos.y then
 						self:InteruptCasting()
 					end
-					if self:OBBCenter():Distance(target:OBBCenter()) > self:GetNW2Float("castrange") then
+					if self:OBBCenter():Distance(target:OBBCenter()) > self:GetDFloat("castrange") then
 						self:InteruptCasting()
 					end
 				end
-				if self:GetNW2Float("castcur") >= self:GetNW2Float("castmax") then
+				if self:GetDFloat("castcur") >= self:GetDFloat("castmax") then
 					self:StopCasting()
 					timer.Remove(self:SteamID() .. "castduration")
 				end
 
 			--[[ Channeling ]]--
-			elseif self:GetNW2Int("castmode") == 1 then
-				self:SetNW2Float("castcur", self:GetNW2Float("castcur") - 0.1)
-				if self:GetNW2Float("castcur") <= 0.0 then
+			elseif self:GetDInt("castmode") == 1 then
+				self:SetDFloat("castcur", self:GetDFloat("castcur") - 0.1)
+				if self:GetDFloat("castcur") <= 0.0 then
 					self:StopCasting()
 					timer.Remove(self:SteamID() .. "castduration")
 				end
@@ -343,42 +343,40 @@ if SERVER then
 	end
 
 	function Player:addMoney(money)
-		if wk(money) and isnumber(money) and self:GetNW2String("money") != nil then
-			local newmoney = math.Round(tonumber(self:GetNW2String("money")), 2) + math.Round(money, 2)
-			self:SetNW2String("money", math.Round(newmoney, 2))
+		if wk(money) and isnumber(money) and self:GetDString("money") != nil then
+			local newmoney = math.Round(tonumber(self:GetDString("money")), 2) + math.Round(money, 2)
+			self:SetDString("money", math.Round(newmoney, 2))
 			self:UpdateMoney()
 		end
 	end
 
 	function Player:YRPGetMoney()
-		return math.Round(tonumber(self:GetNW2String("money", "0")), 2)
+		return math.Round(tonumber(self:GetDString("money", "0")), 2)
 	end
 
 	function Player:YRPGetMoneyBank()
-		return math.Round(tonumber(self:GetNW2String("moneybank", "0")), 2)
+		return math.Round(tonumber(self:GetDString("moneybank", "0")), 2)
 	end
 
 	function Player:SetMoney(money)
 		if isnumber(money) then
-			self:SetNW2String("money", math.Round(money, 2))
+			self:SetDString("money", math.Round(money, 2))
 			self:UpdateMoney()
 		end
 	end
 
 	function Player:SetMoneyBank(money)
 		if isnumber(money) then
-			self:SetNW2String("moneybank", math.Round(money, 2))
+			self:SetDString("moneybank", math.Round(money, 2))
 			self:UpdateMoney()
 		end
 	end
 
 	function Player:addMoneyBank(money)
-		if money != nil then
-			if isnumber(money) and self:GetNW2String("moneybank") != nil then
-				local newmoney = math.Round(tonumber(self:GetNW2String("moneybank")), 2) + math.Round(money, 2)
-				self:SetNW2String("moneybank", math.Round(newmoney, 2))
-				self:UpdateMoney()
-			end
+		if money != nil and isnumber(money) and self:GetDString("moneybank") != nil then
+			local newmoney = math.Round(tonumber(self:GetDString("moneybank")), 2) + math.Round(money, 2)
+			self:SetDString("moneybank", math.Round(newmoney, 2))
+			self:UpdateMoney()
 		end
 	end
 
@@ -407,9 +405,9 @@ if SERVER then
 		local _sec_current = self:getuptimecurrent()
 		if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
 			local _res = SQL_UPDATE("yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'")
-			self:SetNW2Float("uptime_current", self:getuptimecurrent())
-			self:SetNW2Float("uptime_total", self:getuptimetotal())
-			self:SetNW2Float("uptime_server", os.clock())
+			self:SetDFloat("uptime_current", self:getuptimecurrent())
+			self:SetDFloat("uptime_total", self:getuptimetotal())
+			self:SetDFloat("uptime_server", os.clock())
 		end
 	end
 
@@ -421,29 +419,29 @@ if SERVER then
 	end
 
 	function Player:StartBleeding()
-		self:SetNW2Bool("isbleeding", true)
+		self:SetDBool("isbleeding", true)
 	end
 
 	function Player:StopBleeding()
-		self:SetNW2Bool("isbleeding", false)
+		self:SetDBool("isbleeding", false)
 	end
 
 	function Player:SetBleedingPosition(pos)
-		self:SetNW2Vector("bleedingpos", pos)
+		self:SetNWVector("bleedingpos", pos)
 	end
 end
 
 function Player:GetBleedingPosition()
-	return self:GetNW2Vector("bleedingpos", Vector(0, 0, 0))
+	return self:GetNWVector("bleedingpos", Vector(0, 0, 0))
 end
 
 function Player:canAfford(money)
 	if money == nil then return false end
-	if self:GetNW2String("money") == nil then return false end
+	if self:GetDString("money") == nil then return false end
 
 	local _tmpMoney = math.abs(tonumber(money))
 	if isnumber(_tmpMoney) then
-		if tonumber(self:GetNW2String("money")) >= _tmpMoney then
+		if tonumber(self:GetDString("money")) >= _tmpMoney then
 			return true
 		else
 			return false
@@ -455,11 +453,11 @@ end
 
 function Player:canAffordBank(money)
 	if money == nil then return false end
-	if self:GetNW2String("moneybank") == nil then return false end
+	if self:GetDString("moneybank") == nil then return false end
 
 	local _tmpMoney = math.abs(tonumber(money))
 	if isnumber(_tmpMoney) then
-		if tonumber(self:GetNW2String("moneybank")) >= _tmpMoney then
+		if tonumber(self:GetDString("moneybank")) >= _tmpMoney then
 			return true
 		else
 			return false
@@ -476,11 +474,11 @@ function Player:SteamName()
 end
 
 function Player:YRPRPName()
-	return self:GetNW2String("rpname", self:SteamName())
+	return self:GetDString("rpname", self:SteamName())
 end
 
 function Player:Name()
-	return self:GetNW2String("rpname", self:SteamName())
+	return self:GetDString("rpname", self:SteamName())
 end
 
 function Player:Nick()
@@ -492,14 +490,14 @@ function Player:YRPName()
 end
 
 function Player:Team()
-	return tonumber(self:GetNW2String("groupUniqueID", "-1"))
+	return tonumber(self:GetDString("groupUniqueID", "-1"))
 end
 
 timer.Simple(10, function()
 	function team.GetName(index)
 		for k, v in pairs(player.GetAll()) do
 			if v:Team() == index then
-				return v:GetNW2String("groupName", "NO TEAM")
+				return v:GetDString("groupName", "NO TEAM")
 			end
 		end
 		return "FAIL"
@@ -508,7 +506,7 @@ timer.Simple(10, function()
 	function team.GetColor(index)
 		for k, v in pairs(player.GetAll()) do
 			if v:Team() == index then
-				local _color = v:GetNW2String("groupColor", "255,0,0")
+				local _color = v:GetDString("groupColor", "255,0,0")
 				_color = string.Explode(",", _color)
 				return Color(_color[1], _color[2], _color[3])
 			end
@@ -518,55 +516,55 @@ timer.Simple(10, function()
 end)
 
 function Player:YRPGetRoleColor()
-	local _rc = self:GetNW2String("roleColor", "255,0,0")
+	local _rc = self:GetDString("roleColor", "255,0,0")
 	_rc = string.Explode(",", _rc)
 	_rc = Color(_rc[1], _rc[2], _rc[3], _rc[4] or 255)
 	return _rc
 end
 
 function Player:YRPGetRoleName()
-	local _rn = self:GetNW2String("roleName", "NO ROLE SELECTED")
+	local _rn = self:GetDString("roleName", "NO ROLE SELECTED")
 	return _rn
 end
 
 function Player:YRPGetFactionUID()
-	local _uid = tonumber(self:GetNW2String("factionUniqueID", "0"))
+	local _uid = tonumber(self:GetDString("factionUniqueID", "0"))
 	return _uid
 end
 
 function Player:YRPGetFactionName()
-	local _gn = self:GetNW2String("factionName", "NO Faction SELECTED")
+	local _gn = self:GetDString("factionName", "NO Faction SELECTED")
 	return _gn
 end
 
 function Player:YRPGetFactionColor()
-	local _gc = self:GetNW2String("factionColor", "255,0,0")
+	local _gc = self:GetDString("factionColor", "255,0,0")
 	_gc = string.Explode(",", _gc)
 	_gc = Color(_gc[1], _gc[2], _gc[3], _gc[4] or 255)
 	return _gc
 end
 
 function Player:YRPGetGroupName()
-	local _gn = self:GetNW2String("groupName", "NO GROUP SELECTED")
+	local _gn = self:GetDString("groupName", "NO GROUP SELECTED")
 	return _gn
 end
 
 function Player:YRPGetGroupColor()
-	local _gc = self:GetNW2String("groupColor", "255,0,0")
+	local _gc = self:GetDString("groupColor", "255,0,0")
 	_gc = string.Explode(",", _gc)
 	_gc = Color(_gc[1], _gc[2], _gc[3], _gc[4] or 255)
 	return _gc
 end
 
 function Player:YRPGetUserGroupColor()
-	local _gc = self:GetNW2String("usergroupColor", "255,0,0")
+	local _gc = self:GetDString("usergroupColor", "255,0,0")
 	_gc = string.Explode(",", _gc)
 	_gc = Color(_gc[1], _gc[2], _gc[3], _gc[4] or 255)
 	return _gc
 end
 
 function Player:HasLicense(license)
-	local _licenseIDs = self:GetNW2String("licenseIDs", "")
+	local _licenseIDs = self:GetDString("licenseIDs", "")
 
 	local _licenses = string.Explode(",", _licenseIDs)
 	if table.HasValue(_licenses, license) then

@@ -117,4 +117,72 @@ hook.Add("open_client_keybinds", "open_client_keybinds", function()
 
 		_window:MakePopup()
 	end
+
+	if LocalPlayer():HasAccess() then
+		_k.setsvkeybind = createD("DButton", settingsWindow.window.site, YRP.ctr(400), YRP.ctr(50), YRP.ctr(_wide + 10 + 20 + 400), YRP.ctr(1800))
+		_k.setsvkeybind:SetText("")
+		function _k.setsvkeybind:Paint(pw, ph)
+			local tab = {}
+			tab.color = Color(255, 0, 0)
+			tab.hovercolor = Color(255, 100, 100)
+			tab.text = {}
+			tab.text.text = YRP.lang_string("LID_setasserverdefault")
+			DrawButton(self, tab)
+		end
+		function _k.setsvkeybind:DoClick()
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
+			_window:Center()
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
+
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
+			function _yesButton:DoClick()
+				net.Start("setserverdefaultkeybind")
+					net.WriteTable(GetKeyBinds())
+				net.SendToServer()
+				_window:Close()
+			end
+
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("LID_no"))
+			function _noButton:DoClick()
+				_window:Close()
+			end
+
+			_window:MakePopup()
+		end
+
+		_k.forcesetkeybinds = createD("DButton", settingsWindow.window.site, YRP.ctr(400), YRP.ctr(50), YRP.ctr(_wide + 10 + 20 + 400), YRP.ctr(1800 + 70))
+		_k.forcesetkeybinds:SetText("")
+		function _k.forcesetkeybinds:Paint(pw, ph)
+			local tab = {}
+			tab.color = Color(255, 0, 0)
+			tab.hovercolor = Color(255, 100, 100)
+			tab.text = {}
+			tab.text.text = YRP.lang_string("LID_forcesetkeybinds")
+			DrawButton(self, tab)
+		end
+		function _k.forcesetkeybinds:DoClick()
+			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
+			_window:Center()
+			_window:SetTitle(YRP.lang_string("LID_areyousure"))
+
+			local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+			_yesButton:SetText(YRP.lang_string("LID_yes"))
+			function _yesButton:DoClick()
+				net.Start("setserverdefaultkeybind")
+					net.WriteTable(GetKeyBinds())
+				net.SendToServer()
+				_window:Close()
+			end
+
+			local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			_noButton:SetText(YRP.lang_string("LID_no"))
+			function _noButton:DoClick()
+				_window:Close()
+			end
+
+			_window:MakePopup()
+		end
+	end
 end)

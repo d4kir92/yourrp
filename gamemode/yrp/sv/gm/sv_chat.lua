@@ -4,12 +4,12 @@ util.AddNetworkString("yrp_player_say")
 
 util.AddNetworkString("startchat")
 net.Receive("startchat", function(len, ply)
-	ply:SetNW2Bool("istyping", true)
+	ply:SetDBool("istyping", true)
 end)
 
 util.AddNetworkString("finishchat")
 net.Receive("finishchat", function(len, ply)
-	ply:SetNW2Bool("istyping", false)
+	ply:SetDBool("istyping", false)
 end)
 
 local paket = {}
@@ -61,6 +61,7 @@ function print_help(sender)
 	sender:ChatPrint("dnd - Do not disturb")
 	sender:ChatPrint("me - Emote chat")
 	sender:ChatPrint("yell - Yell locally")
+	sender:ChatPrint("general - General chat (global)")
 	sender:ChatPrint("ooc or / - Out of character chat")
 	sender:ChatPrint("looc or . - Local out of character chat")
 	sender:ChatPrint("advert - Advert chat")
@@ -161,26 +162,26 @@ function do_suicide(sender)
 end
 
 function show_tag_dev(sender)
-	if !sender:GetNW2Bool("tag_dev", false) then
-		sender:SetNW2Bool("tag_dev", true)
+	if !sender:GetDBool("tag_dev", false) then
+		sender:SetDBool("tag_dev", true)
 	else
-		sender:SetNW2Bool("tag_dev", false)
+		sender:SetDBool("tag_dev", false)
 	end
 	return ""
 end
 function show_tag_ug(sender)
-	if !sender:GetNW2Bool("tag_ug", false) then
-		sender:SetNW2Bool("tag_ug", true)
+	if !sender:GetDBool("tag_ug", false) then
+		sender:SetDBool("tag_ug", true)
 	else
-		sender:SetNW2Bool("tag_ug", false)
+		sender:SetDBool("tag_ug", false)
 	end
 	return ""
 end
 function show_tag_immortal(sender)
-	if !sender:GetNW2Bool("tag_immortal", false) then
-		sender:SetNW2Bool("tag_immortal", true)
+	if !sender:GetDBool("tag_immortal", false) then
+		sender:SetDBool("tag_immortal", true)
 	else
-		sender:SetNW2Bool("tag_immortal", false)
+		sender:SetDBool("tag_immortal", false)
 	end
 	return ""
 end
@@ -284,7 +285,7 @@ function set_level(sender, text)
 end
 
 function do_sleep(sender)
-	if sender:GetNW2Bool("ragdolled", false) then
+	if sender:GetDBool("ragdolled", false) then
 		DoUnRagdoll(sender)
 	else
 		DoRagdoll(sender)
@@ -295,7 +296,7 @@ util.AddNetworkString("set_chat_mode")
 
 net.Receive("set_chat_mode", function(len, ply)
 	local _str = net.ReadString() or "say"
-	ply:SetNW2String("chat_mode", string.lower(_str))
+	ply:SetDString("chat_mode", string.lower(_str))
 end)
 
 function unpack_paket(sender, text, iscommand)
@@ -322,7 +323,7 @@ function unpack_paket(sender, text, iscommand)
 
 		paket.text = string.sub(text, _start_txt)
 	else
-		paket.command = sender:GetNW2String("chat_mode", "say")
+		paket.command = sender:GetDString("chat_mode", "say")
 		paket.text = text
 	end
 
@@ -338,6 +339,9 @@ function unpack_paket(sender, text, iscommand)
 	elseif paket.command == "say" then
 		paket.command_color = Color(100, 255, 100)
 		paket.text_color = Color(255, 255, 255)
+	elseif paket.command == "general" then
+		paket.command_color = Color(200, 200, 255)
+		paket.text_color = Color(200, 200, 255)
 	elseif paket.command == "ooc" or paket.command == "looc" then
 		paket.command_color = Color(100, 255, 100)
 	elseif paket.command == "admin" then
@@ -368,18 +372,18 @@ function unpack_paket(sender, text, iscommand)
 
 	paket.steamname = sender:SteamName()
 	paket.rpname = sender:RPName()
-	if sender:GetNW2Bool("bool_yrp_chat_show_usergroup", false) then
+	if sender:GetDBool("bool_yrp_chat_show_usergroup", false) then
 		paket.usergroup = sender:GetUserGroup()
 		paket.usergroup_color = sender:GetUserGroupColor()
 	end
-	if sender:GetNW2Bool("bool_yrp_chat_show_rolename", false) then
-		paket.role = sender:GetNW2String("roleName")
+	if sender:GetDBool("bool_yrp_chat_show_rolename", false) then
+		paket.role = sender:GetDString("roleName")
 	end
-	if sender:GetNW2Bool("bool_yrp_chat_show_factionname", false) then
-		paket.faction = sender:GetNW2String("factionName")
+	if sender:GetDBool("bool_yrp_chat_show_factionname", false) then
+		paket.faction = sender:GetDString("factionName")
 	end
-	if sender:GetNW2Bool("bool_yrp_chat_show_groupname", false) then
-		paket.group = sender:GetNW2String("groupName")
+	if sender:GetDBool("bool_yrp_chat_show_groupname", false) then
+		paket.group = sender:GetDString("groupName")
 	end
 end
 
@@ -403,7 +407,7 @@ end
 
 local Player = FindMetaTable("Player")
 function Player:SetAFK(bo)
-	self:SetNW2Bool("isafk", bo)
+	self:SetDBool("isafk", bo)
 
 	SendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
@@ -427,7 +431,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	paket.command = string.lower(paket.command)
 
-	if paket.command == "ooc" or paket.command == "advert" then
+	if paket.command == "general" or paket.command == "ooc" or paket.command == "advert" then
 		paket.lokal = false
 	else
 		paket.lokal = true
@@ -439,7 +443,7 @@ function GM:PlayerSay(sender, text, teamChat)
 	end
 
 	if paket.command == "dnd" then
-		sender:SetNW2Bool("isdnd", !sender:GetNW2Bool("isdnd", false))
+		sender:SetDBool("isdnd", !sender:GetDBool("isdnd", false))
 		return ""
 	end
 
@@ -559,7 +563,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "faction" then
 		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetNW2String("factionName") == sender:GetNW2String("factionName") then
+			if receiver:GetDString("factionName") == sender:GetDString("factionName") then
 				net.Start("yrp_player_say")
 					net.WriteTable(pk)
 				net.Send(receiver)
@@ -570,7 +574,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "group" then
 		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetNW2String("groupName") == sender:GetNW2String("groupName") then
+			if receiver:GetDString("groupName") == sender:GetDString("groupName") then
 				net.Start("yrp_player_say")
 					net.WriteTable(pk)
 				net.Send(receiver)
@@ -581,7 +585,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "role" then
 		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetNW2String("roleName") == sender:GetNW2String("roleName") then
+			if receiver:GetDString("roleName") == sender:GetDString("roleName") then
 				net.Start("yrp_player_say")
 					net.WriteTable(pk)
 				net.Send(receiver)
@@ -592,7 +596,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "service" then
 		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetNW2Bool("bool_iscp", false) or receiver == sender then
+			if receiver:GetDBool("bool_iscp", false) or receiver == sender then
 				net.Start("yrp_player_say")
 					net.WriteTable(pk)
 				net.Send(receiver)

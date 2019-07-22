@@ -31,8 +31,19 @@ KEYBINDS["drop_item"] = KEY_G
 KEYBINDS["sp_open"] = KEY_UP
 KEYBINDS["sp_close"] = KEY_DOWN
 
+net.Receive("SetServerKeybinds", function(len)
+	local keytab = net.ReadTable()
+	for i, ktab in pairs(keytab) do
+		set_keybind(ktab.name, ktab.value)
+	end
+end)
+
 local yrp_keybinds = {}
 yrp_keybinds.version = 2
+
+function GetKeyBinds()
+	return yrp_keybinds
+end
 
 local _db_name = "yrp_keybinds"
 

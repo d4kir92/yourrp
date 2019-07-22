@@ -36,7 +36,7 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 			CHudBattery = true,
 			CHudAmmo = true,
 			CHudSecondaryAmmo = true,
-			CHudCrosshair = lply:GetNW2Bool("bool_yrp_crosshair", false),
+			CHudCrosshair = lply:GetDBool("bool_yrp_crosshair", false),
 			CHudVoiceStatus = false
 		}
 
@@ -77,7 +77,7 @@ function GM:PlayerStartVoice(pl)
 		if pl.SteamID != nil then
 			local stid = pl:SteamID()
 			stid = stid or ""
-			if stid == LocalPlayer():GetNW2String("voice_global_steamid") and pl:GetNW2Int("speak_channel", 0) == 2 then
+			if stid == LocalPlayer():GetDString("voice_global_steamid") and pl:GetDInt("speak_channel", 0) == 2 then
 				_showGlobalVoice = true
 			end
 		end
@@ -92,7 +92,7 @@ function GM:PlayerEndVoice(pl)
 	end
 	local stid = pl:SteamID()
 	stid = stid or ""
-	if stid == LocalPlayer():GetNW2String("voice_global_steamid") then
+	if stid == LocalPlayer():GetDString("voice_global_steamid") then
 		_showGlobalVoice = false
 	end
 end
@@ -109,11 +109,11 @@ function show_voice_info(ply)
 	--Voice
 	if _showVoice then
 		local _voice_text = ""
-		if ply:GetNW2Bool("bool_voice", false) then
+		if ply:GetDBool("bool_voice", false) then
 			_voice_text = "" -- YRP.lang_string("LID_youarespeaking") .. " ("
-			if ply:GetNW2Int("speak_channel", -1) == 1 then
+			if ply:GetDInt("speak_channel", -1) == 1 then
 				_voice_text = _voice_text .. YRP.lang_string("LID_speakgroup")
-			elseif ply:GetNW2Int("speak_channel", -1) == 2 then
+			elseif ply:GetDInt("speak_channel", -1) == 2 then
 				_voice_text = _voice_text .. YRP.lang_string("LID_speakglobal")
 			else
 				_voice_text = _voice_text .. YRP.lang_string("LID_speaklocal")
@@ -132,9 +132,9 @@ local _yrp_testing = Material("yrp/warn_testing.png")
 local star = Material("vgui/material/icon_star.png")
 
 function DrawEquipment(ply, name)
-	local _tmp = ply:GetNW2Entity(name, NULL)
+	local _tmp = ply:GetDEntity(name, NULL)
 	if ea(_tmp) then
-		if tonumber(ply:GetNW2String("view_range", "0")) <= 0 then
+		if tonumber(ply:GetDString("view_range", "0")) <= 0 then
 			_tmp:SetNoDraw(true)
 		else
 			_tmp:SetNoDraw(false)
@@ -184,8 +184,8 @@ timer.Simple(1, function()
 	ava.version = -1
 	function Avatar:Think()
 		local lply = LocalPlayer()
-		if lply:GetNW2Int("hud_version", 0) != ava.version then
-			ava.version = lply:GetNW2Int("hud_version", 0)
+		if lply:GetDInt("hud_version", 0) != ava.version then
+			ava.version = lply:GetDInt("hud_version", 0)
 
 			ava.w = lply:HudValue("AV", "SIZE_W")
 			ava.h = lply:HudValue("AV", "SIZE_H")
@@ -213,8 +213,8 @@ timer.Simple(2, function()
 	pm.version = -1
 	function PM:Think()
 		local lply = LocalPlayer()
-		if lply:GetNW2Int("hud_version", 0) != pm.version then
-			pm.version = lply:GetNW2Int("hud_version", 0)
+		if lply:GetDInt("hud_version", 0) != pm.version then
+			pm.version = lply:GetDInt("hud_version", 0)
 
 			pm.w = lply:HudValue("PM", "SIZE_W")
 			pm.h = lply:HudValue("PM", "SIZE_H")
@@ -235,14 +235,14 @@ end)
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 
-	if ply:GetNW2Bool("blinded", false) then
+	if ply:GetDBool("blinded", false) then
 		surfaceBox(0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
 		surfaceText(YRP.lang_string("LID_blinded"), "SettingsHeader", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
 	end
 	if ply:IsFlagSet(FL_FROZEN) then
 		surfaceText(YRP.lang_string("LID_frozen"), "SettingsHeader", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
 	end
-	if ply:GetNW2Bool("cloaked", false) then
+	if ply:GetDBool("cloaked", false) then
 		surfaceText(YRP.lang_string("LID_cloaked"), "SettingsHeader", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
 	end
 
@@ -266,9 +266,9 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "72", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 
-	local _target = LocalPlayer():GetNW2String("hittargetName", "")
+	local _target = LocalPlayer():GetDString("hittargetName", "")
 	if !strEmpty(_target) then
-		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetNW2String("hittargetName", ""), "HudBars", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
+		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetDString("hittargetName", ""), "HudBars", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
 		LocalPlayer():drawHitInfo()
 	end
 
@@ -288,7 +288,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80))
 	end
 
-	if ply:GetNW2Bool("bool_wanted_system", false) and false then
+	if ply:GetDBool("bool_wanted_system", false) and false then
 		local stars = {}
 		stars.size = YRP.ctr(80)
 		stars.cur = stars.size
@@ -312,13 +312,13 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		-- Current Stars
 		surface.SetDrawColor(255, 255, 255, 255)
 		for x = 1, 5 do
-			if ply:GetNW2Int("yrp_stars", 0) >= x then
+			if ply:GetDInt("yrp_stars", 0) >= x then
 				surface.DrawTexturedRect(stars.x + x * stars.size + stars.br, stars.y + stars.br, stars.cur, stars.cur)
 			end
 		end
 	end
 
-	if !ply:GetNW2Bool("serverdedicated", false) then
+	if !ply:GetDBool("serverdedicated", false) then
 		if !string.find(tostring(_yrp_testing), "error") then
 			local icon = {}
 			icon.s = 165 * 2

@@ -23,11 +23,11 @@ function Player:getDarkRPVar(var)
 	local notavailable = "feature not available yet"
 
 	if var == "money" then
-		return tonumber(self:GetNW2String("money", "-1"))
+		return tonumber(self:GetDString("money", "-1"))
 	elseif var == "salary" then
-		return tonumber(self:GetNW2String("salary", "-1"))
+		return tonumber(self:GetDString("salary", "-1"))
 	elseif var == "job" then
-		return self:GetNW2String("roleName", "NO ROLE SELECTED")
+		return self:GetDString("roleName", "NO ROLE SELECTED")
 	elseif var == "rpname" then
 		return self:RPName() or self:SteamName()
 	elseif var == "HasGunlicense" then
@@ -35,7 +35,7 @@ function Player:getDarkRPVar(var)
 	elseif var == "Energy" then
 		return self:Hunger()
 	elseif var == "wanted" then
-		return self:GetNW2Bool("iswanted", false)
+		return self:GetDBool("iswanted", false)
 	elseif var == "wantedReason" then
 		return notavailable
 	elseif var == "agenda" then
@@ -47,15 +47,15 @@ function Player:getDarkRPVar(var)
 	elseif var == "Arrested" then
 		return self:isArrested()
 	elseif var == "hasHit" then
-		return self:GetNW2Bool("iswanted", false)
+		return self:GetDBool("iswanted", false)
 	elseif var == "hitTarget" then
-		return self:GetNW2Entity("hittarget")
+		return self:GetDEntity("hittarget")
 	elseif var == "hitPrice" then
-		return tonumber(self:GetNW2String("hitreward"))
+		return tonumber(self:GetDString("hitreward"))
 	elseif var == "lastHitTime" then
 		return 0 -- notavailable
 	else
-		local _nw_var = self:GetNW2String(var, "VARIABLE NOT FOUND")
+		local _nw_var = self:GetDString(var, "VARIABLE NOT FOUND")
 		if tonumber(_nw_var) == nil then
 			return _nw_var
 		elseif isnumber(_nw_var) != nil then
@@ -75,12 +75,12 @@ end
 
 function Player:getHitPrice()
 	--Description: Get the price the hitman demands for his work.
-	return self:getHitTarget():GetNW2String("hitreward", -1)
+	return self:getHitTarget():GetDString("hitreward", -1)
 end
 
 function Player:getHitTarget()
 	--Description: Get the target of a hitman.
-	return self:GetNW2Entity("hittarget", NULL)
+	return self:GetDEntity("hittarget", NULL)
 end
 
 function ConvertToDarkRPJobName(name)
@@ -97,24 +97,24 @@ function Player:getJobTable()
 	--Description: Get the job table of a player.
 	local _job = {}
 
-	_job.name = self:GetNW2String("roleName", "INVALID")
-	local _pms = string.Explode(",", self:GetNW2String("playermodels", "INVALID"))
+	_job.name = self:GetDString("roleName", "INVALID")
+	local _pms = string.Explode(",", self:GetDString("playermodels", "INVALID"))
 	_job.model = _pms
-	_job.description = self:GetNW2String("roleDescription", "INVALID")
-	local _weapons = string.Explode(",", self:GetNW2String("sweps", "INVALID"))
+	_job.description = self:GetDString("roleDescription", "INVALID")
+	local _weapons = string.Explode(",", self:GetDString("sweps", "INVALID"))
 	_job.weapons = _weapons
 	_job.command = "NONE"
-	_job.max = tonumber(self:GetNW2String("maxamount", -1))
-	_job.salary = tonumber(self:GetNW2String("salary", "INVALID"))
-	_job.admin = tonumber(self:GetNW2Bool("isadminonly")) or 0
-	_job.vote = self:GetNW2Bool("isVoteable") or false
-	if self:GetNW2String("licenseIDs", "") != "" then
+	_job.max = tonumber(self:GetDString("maxamount", -1))
+	_job.salary = tonumber(self:GetDString("salary", "INVALID"))
+	_job.admin = tonumber(self:GetDBool("isadminonly")) or 0
+	_job.vote = self:GetDBool("isVoteable") or false
+	if self:GetDString("licenseIDs", "") != "" then
 		_job.hasLicense = true
 	else
 		_job.hasLicense = false
 	end
-	_job.candemote = self:GetNW2Bool("isInstructor") or false
-	_job.category = self:GetNW2String("groupName", "INVALID")
+	_job.candemote = self:GetDBool("isInstructor") or false
+	_job.category = self:GetDString("groupName", "INVALID")
 	_job.command = ConvertToDarkRPJobName(_job.name)
 
 	return _job
@@ -163,7 +163,7 @@ end
 function Player:isArrested()
 	--Description: Whether this player is arrested
 	--printGM("darkrp", "isArrested()")
-	return self:GetNW2Bool("injail", false)
+	return self:GetDBool("injail", false)
 end
 
 function Player:isChief()
@@ -182,27 +182,27 @@ end
 
 function Player:isCP()
 	--Description: Whether this player is part of the police force (mayor, cp, chief).
-	return self:GetNW2Bool("bool_iscp", false)
+	return self:GetDBool("bool_iscp", false)
 end
 
 function Player:isHitman()
 	--Description: Whether this player is a hitman.
-	return self:GetNW2Bool("bool_canbeagent", false)
+	return self:GetDBool("bool_canbeagent", false)
 end
 
 function Player:isMayor()
 	--Description: Whether this player is a mayor.
-	return self:GetNW2Bool("bool_ismayor", false)
+	return self:GetDBool("bool_ismayor", false)
 end
 
 function Player:isMedic()
 	--Description: Whether this player is a medic.
-	return self:GetNW2Bool("bool_ismedic", false)
+	return self:GetDBool("bool_ismedic", false)
 end
 
 function Player:isWanted()
 	--Description: Whether this player is wanted
-	return self:GetNW2Bool("iswanted", false)
+	return self:GetDBool("iswanted", false)
 end
 
 function Player:nickSortedPlayers()

@@ -68,18 +68,18 @@ function Player:InterfaceLoadout()
 		for i, ele in pairs(ifeles) do
 			if ele.name != nil then
 				if string.StartWith(ele.name, "float_") then
-					self:SetNW2Float(ele.name, tonumber(ele.value))
+					self:SetDFloat(ele.name, tonumber(ele.value))
 				elseif string.StartWith(ele.name, "bool_") then
-					self:SetNW2Bool(ele.name, tobool(ele.value))
+					self:SetDBool(ele.name, tobool(ele.value))
 				elseif string.StartWith(ele.name, "color_") then
-					self:SetNW2String(ele.name, ele.value)
+					self:SetDString(ele.name, ele.value)
 				elseif string.StartWith(ele.name, "int_") then
-					self:SetNW2Int(ele.name, ele.value)
+					self:SetDInt(ele.name, ele.value)
 				end
 			end
 		end
 	end
-	self:SetNW2Int("interface_version", self:GetNW2Int("interface_version", 0) + 1)
+	self:SetDInt("interface_version", self:GetDInt("interface_version", 0) + 1)
 end
 
 function IFLoadoutAll()

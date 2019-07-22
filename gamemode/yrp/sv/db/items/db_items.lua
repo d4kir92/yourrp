@@ -77,7 +77,7 @@ function ItemToEntity(item, ply)
 	_ent:SetModel(item.WorldModel)
 	_ent:Spawn()
 	if item.intern_storageID != "" then
-		_ent:SetNW2String("storage_uid", item.intern_storageID)
+		_ent:SetDString("storage_uid", item.intern_storageID)
 	end
 	TeleportEntityTo(_ent, ply:GetPos())
 	return item
@@ -111,7 +111,7 @@ function CreateItem(item, slot)
 		_type = "weapon"
 	end
 	item.storageID = slot.uniqueID or item.storageID
-	SQL_INSERT_INTO(_db_name, "intern_storageID, ClassName, WorldModel, PrintName, storageID, sizew, sizeh, posx, posy, type", "'" .. item.entity:GetNW2String("storage_uid", "") .. "', '" .. item.ClassName .. "', '" .. item.WorldModel .. "', '" .. SQL_STR_IN(item.PrintName) .. "', '" .. item.storageID .. "', " .. _size.sizew .. ", " .. _size.sizeh .. ", " .. item.posx .. ", " .. item.posy .. ", '" .. _type .. "'")
+	SQL_INSERT_INTO(_db_name, "intern_storageID, ClassName, WorldModel, PrintName, storageID, sizew, sizeh, posx, posy, type", "'" .. item.entity:GetDString("storage_uid", "") .. "', '" .. item.ClassName .. "', '" .. item.WorldModel .. "', '" .. SQL_STR_IN(item.PrintName) .. "', '" .. item.storageID .. "', " .. _size.sizew .. ", " .. _size.sizeh .. ", " .. item.posx .. ", " .. item.posy .. ", '" .. _type .. "'")
 	local _items = SQL_SELECT(_db_name, "*", nil)
 	local _item = _items[#_items]
 	return _item
@@ -156,7 +156,7 @@ function Player:MoveItem(_slot1, _slot2, _item)
 		_i.posx = _slot2.posx
 		_i.posy = _slot2.posy
 		if _i.entity:IsWeapon() then
-			_i.entity:SetNW2String("eqtype", "weapon")
+			_i.entity:SetDString("eqtype", "weapon")
 		end
 
 		if _slot2.storageID == 0 then
@@ -184,8 +184,8 @@ function Player:MoveItem(_slot1, _slot2, _item)
 				end
 
 				if IsEnoughSpace(_stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID) then
-					if !IsRightInventoryType(_storage.type, _item.entity:GetNW2String("eqtype", "world")) then
-						printGM("note", "[moveitem] Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetNW2String("eqtype", "world"))
+					if !IsRightInventoryType(_storage.type, _item.entity:GetDString("eqtype", "world")) then
+						printGM("note", "[moveitem] Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetDString("eqtype", "world"))
 						return "notrighttype"
 					end
 
@@ -244,7 +244,7 @@ function Player:MoveItem(_slot1, _slot2, _item)
 						local _ent = _item.entity
 						local _type = "failed"
 						if ea(_ent) then
-							_type = _item.entity:GetNW2String("eqtype", "world")
+							_type = _item.entity:GetDString("eqtype", "world")
 						end
 						printGM("note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _type)
 						return "notrighttype"

@@ -254,6 +254,7 @@ countries["CZ"] = "Czech Republic"
 
 countries["DE"] = "Germany"
 countries["DK"] = "Denmark"
+countries["DO"] = "Dominican Republic"
 
 countries["EE"] = "Estonia"
 countries["EG"] = "Egypt"

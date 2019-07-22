@@ -278,7 +278,7 @@ end
 
 function interfaceDesign()
 	local ply = LocalPlayer()
-	local design = ply:GetNW2String("interface_design", "Material Design 1")
+	local design = ply:GetDString("interface_design", "Material Design 1")
 
 	if yrp_if[design] ~= nil then
 		return design
@@ -290,31 +290,31 @@ end
 function InterfaceBorder()
 	local ply = LocalPlayer()
 
-	return ply:GetNW2Bool("interface_border", true)
+	return ply:GetDBool("interface_border", true)
 end
 
 function InterfaceRounded()
 	local ply = LocalPlayer()
 
-	return ply:GetNW2Bool("interface_rounded", true)
+	return ply:GetDBool("interface_rounded", true)
 end
 
 function InterfaceTransparent()
 	local ply = LocalPlayer()
 
-	return ply:GetNW2Bool("interface_transparent", true)
+	return ply:GetDBool("interface_transparent", true)
 end
 
 function InterfaceColor()
 	local ply = LocalPlayer()
 
-	return ply:GetNW2String("interface_color", "blue")
+	return ply:GetDString("interface_color", "blue")
 end
 
 function InterfaceStyle()
 	local ply = LocalPlayer()
 
-	return ply:GetNW2String("interface_style", "dark")
+	return ply:GetDString("interface_style", "dark")
 end
 
 local yrp_colors = {}

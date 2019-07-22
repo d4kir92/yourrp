@@ -26,7 +26,7 @@ util.AddNetworkString("remove_storage")
 function RemoveDBStorage(ply, uid)
 	if ply:HasAccess() then
 		for i, ent in pairs(ents.GetAll()) do
-			if tostring(ent:GetNW2String("storage_uid")) == tostring(uid) then
+			if tostring(ent:GetDString("storage_uid")) == tostring(uid) then
 				ent:Remove()
 				SQL_DELETE_FROM(_db_name, "uniqueID = '" .. uid .. "'")
 			end
@@ -57,7 +57,7 @@ function SaveStorages(str)
 	printGM("db", "SaveStorages(" .. string.upper(tostring(str)) .. ")")
 	local _ents = ents.GetAll()
 	for i, ent in pairs(_ents) do
-		if ent:IsValid() and ent:GetNW2String("storage_uid", "") != "" and ent:IsWorldStorage() then
+		if ent:IsValid() and ent:GetDString("storage_uid", "") != "" and ent:IsWorldStorage() then
 			local _pos = string.Explode(" ", tostring(ent:GetPos()))
 			local _posx = _pos[1]
 			local _posy = _pos[2]
@@ -67,7 +67,7 @@ function SaveStorages(str)
 			local _angy = _ang[2]
 			local _angr = _ang[3]
 
-			SQL_UPDATE(_db_name, "posx = '" .. _posx .. "', posy = '" .. _posy .. "', posz = '" .. _posz .. "', angp = '" .. _angp .. "', angy = '" .. _angy .. "', angr = '" .. _angr .. "'", "uniqueID = '" .. ent:GetNW2String("storage_uid") .. "'")
+			SQL_UPDATE(_db_name, "posx = '" .. _posx .. "', posy = '" .. _posy .. "', posz = '" .. _posz .. "', angp = '" .. _angp .. "', angy = '" .. _angy .. "', angr = '" .. _angr .. "'", "uniqueID = '" .. ent:GetDString("storage_uid") .. "'")
 			local _all = SQL_SELECT(_db_name, "*", nil)
 
 		end
@@ -84,7 +84,7 @@ function LoadStorages()
 	for i, stor in pairs(_storages) do
 		local _tmp = ents.Create(stor.ClassName)
 		if ea(_tmp) then
-			_tmp:SetNW2String("storage_uid", stor.uniqueID)
+			_tmp:SetDString("storage_uid", stor.uniqueID)
 			_tmp:SetPos(Vector(stor.posx, stor.posy, stor.posz))
 			_tmp:SetAngles(Angle(stor.angp, stor.angy, stor.angr))
 			_tmp:Spawn()
@@ -103,12 +103,12 @@ end
 local Entity = FindMetaTable("Entity")
 
 function Entity:InitBackpackStorage(w, h)
-	self:SetNW2String("item_size_w", 1)
-	self:SetNW2String("item_size_h", 1)
+	self:SetDString("item_size_w", 1)
+	self:SetDString("item_size_h", 1)
 
 	self:InitStorage(w, h, "backpack")
-	self:SetNW2Bool("isbackpack", true)
-	self:SetNW2String("eqtype", "eqbp")
+	self:SetDBool("isbackpack", true)
+	self:SetDString("eqtype", "eqbp")
 end
 
 function Entity:InitStorage(w, h)
@@ -119,7 +119,7 @@ function Entity:InitStorage(w, h)
 	end
 	timer.Simple(0.1, function()
 		local _storage = nil
-		local _uid = tonumber(self:GetNW2String("storage_uid", "0"))
+		local _uid = tonumber(self:GetDString("storage_uid", "0"))
 		if _uid != 0 then
 			--[[ FOUND STORAGE ]]--
 			_storage = SQL_SELECT(_db_name, "*", "uniqueID = " .. _uid)
@@ -141,13 +141,13 @@ function Entity:InitStorage(w, h)
 					_uid = tonumber(stor.uniqueID)
 				end
 			end
-			self:SetNW2String("storage_uid", _uid)
-			_storage = SQL_SELECT(_db_name, "*", "uniqueID = " .. self:GetNW2String("storage_uid"))
+			self:SetDString("storage_uid", _uid)
+			_storage = SQL_SELECT(_db_name, "*", "uniqueID = " .. self:GetDString("storage_uid"))
 		end
 		if _storage != nil then
 			_storage = _storage[1]
-			self:SetNW2Bool("storagename", _storage.name)
-			self:SetNW2Bool("hasinventory", true)
+			self:SetDBool("storagename", _storage.name)
+			self:SetDBool("hasinventory", true)
 			return _storage
 		end
 	end)

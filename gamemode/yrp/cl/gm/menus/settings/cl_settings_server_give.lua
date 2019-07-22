@@ -15,7 +15,7 @@ net.Receive("setting_players", function(len)
 	_giveListView:AddColumn(YRP.lang_string("LID_money"))
 
 	for n, y in pairs(player.GetAll()) do
-		_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:GetNW2String("groupName"), y:GetNW2String("roleName"), y:GetNW2Int("money"))
+		_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:GetDString("groupName"), y:GetDString("roleName"), y:GetDInt("money"))
 	end
 
 	function _giveListView:OnRowRightClick(lineID, line)

@@ -591,7 +591,7 @@ function UGCheckBox(ply, uid, name, value)
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll()) do
 			if string.lower(pl:GetUserGroup()) == ug.string_name then
-				pl:SetNW2Bool(name, tobool(value))
+				pl:SetDBool(name, tobool(value))
 			end
 		end
 	end
@@ -927,17 +927,17 @@ end)
 
 local Entity = FindMetaTable("Entity")
 function Entity:YRPSetOwner(ply)
-	self:SetNW2Entity("yrp_owner", ply)
+	self:SetDEntity("yrp_owner", ply)
 end
 
 function Entity:YRPRemoveOwner()
-	self:SetNW2Entity("yrp_owner", NULL)
+	self:SetDEntity("yrp_owner", NULL)
 end
 
 function HasUseFunction(ent)
 	if IsEntity(ent) then
 		if ent.Use != nil then
-			ent:SetNW2Bool("yrp_has_use", true)
+			ent:SetDBool("yrp_has_use", true)
 		end
 	end
 end
@@ -1082,12 +1082,12 @@ hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 end)
 
 function RenderEquipment(ply, name, mode, color)
-	local _eq = ply:GetNW2Entity(name)
+	local _eq = ply:GetDEntity(name)
 	if ea(_eq) then
 		_eq:SetRenderMode(mode)
 		_eq:SetColor(color)
-		_eq:SetNW2Int(name .. "mode", mode)
-		_eq:SetNW2String(name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a)
+		_eq:SetDInt(name .. "mode", mode)
+		_eq:SetDString(name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a)
 	end
 end
 
@@ -1116,7 +1116,7 @@ end
 
 function RenderNoClip(ply, alpha)
 	if ea(ply) then
-		if ply:GetNW2Bool("cloaked", false) then
+		if ply:GetDBool("cloaked", false) then
 			RenderCloaked(ply)
 		else
 			local _alpha = 255
@@ -1141,7 +1141,7 @@ end
 
 function RenderFrozen(ply)
 	if ea(ply) then
-		if ply:GetNW2Bool("cloaked", false) then
+		if ply:GetDBool("cloaked", false) then
 			RenderCloaked(ply)
 		else
 			ply:SetRenderMode(RENDERMODE_NORMAL)
@@ -1157,7 +1157,7 @@ end
 
 function RenderNormal(ply)
 	if ea(ply) then
-		if ply:GetNW2Bool("cloaked", false) then
+		if ply:GetDBool("cloaked", false) then
 			RenderCloaked(ply)
 		elseif ply:IsFlagSet(FL_FROZEN) then
 			RenderFrozen(ply)
@@ -1236,7 +1236,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 				if tobool(_tmp.bool_noclip) then
 
 					if IsNoClipModelEnabled() then
-						local mdl = pl:GetNW2String("text_noclip_mdl", "")
+						local mdl = pl:GetDString("text_noclip_mdl", "")
 						if mdl != "" then
 							pl:SetModel(mdl)
 						end
@@ -1510,15 +1510,15 @@ function Player:UserGroupLoadout()
 	local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(UG) then
 		UG = UG[1]
-		self:SetNW2String("usergroup_sweps", UG.string_sweps)
+		self:SetDString("usergroup_sweps", UG.string_sweps)
 		local SWEPS = string.Explode(",", UG.string_sweps)
 		for i, swep in pairs(SWEPS) do
 			self:Give(swep)
 		end
-		self:SetNW2String("usergroupColor", UG.string_color)
-		self:SetNW2Bool("bool_adminaccess", tobool(UG.bool_adminaccess))
-		self:SetNW2Bool("bool_canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
-		self:SetNW2Bool("bool_canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
+		self:SetDString("usergroupColor", UG.string_color)
+		self:SetDBool("bool_adminaccess", tobool(UG.bool_adminaccess))
+		self:SetDBool("bool_canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
+		self:SetDBool("bool_canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
 	end
 end
 
