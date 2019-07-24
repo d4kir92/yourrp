@@ -148,14 +148,16 @@ function openCharacterCreation()
 	end
 
 	cc.frame.bg = createD("DHTML", cc.frame, ScW(), ScH(), PosX(), 0)
-	local url = ply:GetDString("text_character_background", "")
-	if !strEmpty(url) then
-		cc.frame.bg:SetHTML(GetHTMLImage(url, ScW(), ScH())) -- url?
-	end
+	cc.frame.bg.url = ""
 
 	cc.frame.bgcf = createD("DPanel", cc.frame.bg, cc.frame.bg:GetWide(), cc.frame.bg:GetTall(), 0, 0)
 	function cc.frame.bgcf:Paint(pw, ph)
-		-- nothing
+		local oldurl = cc.frame.bg.url
+		local newurl = ply:GetDString("text_character_background", "")
+		if oldurl != newurl then
+			cc.frame.bg.url = newurl
+			cc.frame.bg:SetHTML(GetHTMLImage(newurl, ScW(), ScH())) -- url?
+		end
 	end
 
 	local border = YRP.ctr(50)
@@ -656,13 +658,16 @@ function openCharacterSelection()
 				closeMenu()
 			end
 
-			local background = ply:GetDString("text_character_background")
-			if !strEmpty(background) then
-				_cs.bg = createD("DHTML", _cs.frame, ScW(), ScH(), PosX(), 0)
-				_cs.bg:SetHTML(GetHTMLImage(ply:GetDString("text_character_background"), ScW(), ScH()))
-				_cs.bgcf = createD("DPanel", _cs.bg, _cs.bg:GetWide(), _cs.bg:GetTall(), 0, 0)
-				function _cs.bgcf:Paint(pw, ph)
-					-- nothing
+			_cs.frame.bg = createD("DHTML", _cs.frame, ScW(), ScH(), PosX(), 0)
+			_cs.frame.bg.url = ""
+
+			_cs.frame.bgcf = createD("DPanel", _cs.frame.bg, _cs.frame.bg:GetWide(), _cs.frame.bg:GetTall(), 0, 0)
+			function _cs.frame.bgcf:Paint(pw, ph)
+				local oldurl = _cs.frame.bg.url
+				local newurl = ply:GetDString("text_character_background", "")
+				if oldurl != newurl then
+					_cs.frame.bg.url = newurl
+					_cs.frame.bg:SetHTML(GetHTMLImage(newurl, ScW(), ScH())) -- url?
 				end
 			end
 

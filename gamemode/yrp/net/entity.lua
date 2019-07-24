@@ -87,7 +87,12 @@ end
 function ENTITY:GetDBool(key, value)
 	self.NWTAB = self.NWTAB or {}
 	self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
-	return self.NWTAB["BOOL"][key] or value
+	local result = self.NWTAB["BOOL"][key]
+	if isbool(result) then
+		return result
+	else
+		return value
+	end
 end
 
 -- INT

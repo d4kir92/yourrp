@@ -402,7 +402,7 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
-	if lply:GetDString("string_hud_design") == "Fallout 76" then
+	if GetGlobalBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
 		HP.text = YRP.lang_string("LID_hp")

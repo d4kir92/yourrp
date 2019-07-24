@@ -59,7 +59,13 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
 	RegisterHUDDesign(HUD_FO76)
 end)
 
-
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_icons", function()
+	local HUD_Icons = {}
+	HUD_Icons.name = "Icons"
+	HUD_Icons.author = "D4KiR"
+	HUD_Icons.progress = 100
+	RegisterHUDDesign(HUD_Icons)
+end)
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")

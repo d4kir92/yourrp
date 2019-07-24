@@ -185,8 +185,8 @@ function OpenSettings()
 		draw.SimpleTextOutlined(_singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", YRP.ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
-	YRP.DChangeLanguage(settingsWindow.window, ScrW() - YRP.ctr(310), YRP.ctr(10), YRP.ctr(120))
-	local feedback = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(820), YRP.ctr(10))
+	YRP.DChangeLanguage(settingsWindow.window, ScrW() - YRP.ctr(120 + 10 + 80 + 10), YRP.ctr(10), YRP.ctr(120))
+	local feedback = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(500 + 10 + 120 + 10 + 80 + 10), YRP.ctr(10))
 	feedback:SetText("")
 
 	function feedback:Paint(pw, ph)
@@ -208,7 +208,7 @@ function OpenSettings()
 
 	local _bg = createD("HTML", settingsWindow.window, YRP.ctr(500 - 8), YRP.ctr(80 - 12), ScrW() - YRP.ctr(820 + 500 + 10 - 6), YRP.ctr(10 + 6))
 	_bg:OpenURL("https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg")
-	local liveSupport = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(820 + 500 + 10), YRP.ctr(10))
+	local liveSupport = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(500 + 10 + 500 + 10 + 120 + 10 + 80 + 10), YRP.ctr(10))
 	liveSupport:SetText("")
 
 	function liveSupport:DoClick()

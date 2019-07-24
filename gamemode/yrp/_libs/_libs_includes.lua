@@ -35,6 +35,8 @@ AddCSLuaFile("interface/base.lua")
 
 AddCSLuaFile("derma/ystorage.lua")
 AddCSLuaFile("derma/ybag.lua")
+AddCSLuaFile("derma/yitem.lua")
+AddCSLuaFile("derma/yslot.lua")
 
 if CLIENT then
 	include("derma.lua")
@@ -56,6 +58,8 @@ if CLIENT then
 
 	include("derma/ystorage.lua")
 	include("derma/ybag.lua")
+	include("derma/yitem.lua")
+	include("derma/yslot.lua")
 end
 
 print("Loaded _libs_includes.lua")

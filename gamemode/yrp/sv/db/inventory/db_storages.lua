@@ -243,15 +243,8 @@ end)
 
 -- DROP SWEPS
 function GM:PlayerCanPickupWeapon(ply, wep)
-	if !ply:GetDBool("bool_inventory_system", false) then
-		-- Inventory OFF
-		return wep:GetDBool("ispickupable", false)
-	else
-		-- Inventory ON
-		return wep:GetDBool("ispickupable", false)
-	end
 
-	return true
+	return wep:GetDBool("ispickupable", true)
 end
 
 function Player:RemoveWeapon(cname)
@@ -282,14 +275,13 @@ function Player:DropSWEP(cname)
 		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 		ent:SetAngles(self:GetAngles())
 		ent:SetDBool("ispickupable", false)
+		ent:Spawn()
 
 		timer.Simple(1, function()
 			if ea(ent) then
 				ent:SetDBool("ispickupable", true)
 			end
 		end)
-
-		ent:Spawn()
 
 		if ent:GetPhysicsObject():IsValid() then
 			ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)

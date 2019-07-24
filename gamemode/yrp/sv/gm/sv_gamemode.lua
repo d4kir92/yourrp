@@ -244,6 +244,10 @@ function GM:PlayerInitialSpawn(ply)
 	net.Start("yrp_askforinfo")
 	net.Send(ply)
 
+	ply:DesignLoadout()
+	ply:UserGroupLoadout()
+	ply:GeneralLoadout()
+
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()
 		if rolTab != nil then

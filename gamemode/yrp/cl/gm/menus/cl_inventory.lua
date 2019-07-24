@@ -2,7 +2,7 @@
 
 local inv = {}
 function ToggleInventory()
-	if isNoMenuOpen() then
+	if !inv.open then
 		OpenInventory()
 	else
 		CloseInventory()
@@ -10,35 +10,49 @@ function ToggleInventory()
 end
 
 function CloseInventory()
-	closeMenu()
-	if inv.bag1 != nil then
-		inv.bag1:Remove()
+	inv.open = false
+	if inv.bags != nil then
+		inv.bags:Remove()
 	end
 end
 
 itemsize = itemsize or 100
 
-inv.bags = {}
-
 function OpenInventory(target)
-	openMenu()
-	--[[inv.win = createD("YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
-	inv.win:MakePopup()
-	inv.win:SetTitle(YRP.lang_string("LID_inventory"))
-	inv.win:SetHeaderHeight(YRP.ctr(50))
-	function inv.win:Paint(pw, ph)
-		hook.Run("YFramePaint", self, pw, ph)
+	inv.open = true
+
+	inv.bags = createD("DPanel", nil, YRP.ctr(5 * 80 + 6 * 20), YRP.ctr(20 + 80 + 20), ScW() - YRP.ctr(5 * 80 + 7 * 20), ScH() - YRP.ctr(20 + 80 + 20))
+	inv.bags:MakePopup()
+	function inv.bags:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 250))
 	end
 
-	net.Start("get_inventory")
-	net.SendToServer()
+	for i = 0, 5 do
+		inv.bags["bag" .. i] = createD("YSlot", inv.bags, YRP.ctr(80), YRP.ctr(80), inv.bags:GetWide() - YRP.ctr(80 + 20) - i * YRP.ctr(80 + 20), YRP.ctr(20))
+		local slot = inv.bags["bag" .. i]
+		slot:AddAllowed("bag")
+		slot:RemoveAllowed("item")
+		slot:SetSlot("bag" .. i)
+	end
+
+	--[[local test = createD("YItem", nil, YRP.ctr(80), YRP.ctr(80), 0, 0)
+	test:SetText("BAG 1")
+	test:SetFixed(true)
+	inv.bags["bag" .. 0]:AddItem(test)
+
+	local test2 = createD("YItem", nil, YRP.ctr(80), YRP.ctr(80), 0, 0)
+	test2:SetText("BAG 2")
+	test2:SetTyp("bag")
+	inv.bags["bag" .. 1]:AddItem(test2)
+
+	local test3 = createD("YItem", nil, YRP.ctr(80), YRP.ctr(80), 0, 0)
+	test3:SetText("BAG 3")
+	test3:SetTyp("bag")
+	inv.bags["bag" .. 2]:AddItem(test3)
 	]]--
 
-	local BR = YRP.ctr(20)
-
-	local bgcolor = Color(40, 40, 40, 240)
-
 	-- Bags
+	--[[
 	inv.bag1 = vgui.Create("YBag")
 	inv.bag1:SetVisible(false)
 	inv.bag1:SetStorage(1)
@@ -49,4 +63,5 @@ function OpenInventory(target)
 
 		inv.bag1:SetVisible(true)
 	end)
+	]]
 end
