@@ -81,7 +81,7 @@ function buyWindow(buildingID, name, price, door)
 		hook.Run("YFramePaint", self, pw, ph)
 
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. _name, "sef", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. ply:GetDString("text_money_pre") .. _price .. ply:GetDString("text_money_pos"), "sef", YRP.ctr(10), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalDString("text_money_pre", "") .. _price .. GetGlobalDString("text_money_pos", ""), "sef", YRP.ctr(10), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "sef", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(210), pw - YRP.ctr(8), YRP.ctr(530 - 210 - 4), Color(255, 255, 0, 200))
@@ -250,7 +250,7 @@ function optionWindow(buildingID, name, price, door, owner, header, description)
 
 	--[[
 	local _ButtonUpgrade = createVGUI("DButton", yrp_door.window, 400, 50, 10, 200)
-	_ButtonUpgrade:SetText(YRP.lang_string("LID_upgradedoor") .. " (-" .. ply:GetDString("text_money_pre").. "100" .. ply:GetDString("text_money_pos") .. ") NOT AVAILABLE")
+	_ButtonUpgrade:SetText(YRP.lang_string("LID_upgradedoor") .. " (-" .. GetGlobalDString("text_money_pre", "") .. "100" .. GetGlobalDString("text_money_pos", "") .. ") NOT AVAILABLE")
 	function _ButtonUpgrade:DoClick()
 		net.Start("wantHouse")
 			net.WriteInt(_buildingID, 16)
@@ -269,7 +269,7 @@ function optionWindow(buildingID, name, price, door, owner, header, description)
 			yrp_door.window:Remove()
 		end
 		function _ButtonSell:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. ply:GetDString("text_money_pre") .. _price / 2 .. ply:GetDString("text_money_pos") .. ")")
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. GetGlobalDString("text_money_pre", "") .. _price / 2 .. GetGlobalDString("text_money_pos", "") .. ")")
 		end
 	end
 

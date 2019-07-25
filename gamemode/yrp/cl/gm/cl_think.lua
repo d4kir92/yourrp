@@ -335,7 +335,7 @@ function KeyPress()
 						if _old_view > 0 then
 							ply.view_range_view = _old_view
 						else
-							ply.view_range_view = tonumber(LocalPlayer():GetDString("text_view_distance", "0"))
+							ply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
 						end
 					end
 
@@ -352,8 +352,8 @@ function KeyPress()
 
 						ply.view_range_view = ply.view_range_view + 1
 
-						if tonumber(ply.view_range_view) > tonumber(ply:GetDString("text_view_distance", "0")) then
-							ply.view_range_view = tonumber(ply:GetDString("text_view_distance", "0"))
+						if tonumber(ply.view_range_view) > tonumber(GetGlobalDString("text_view_distance", "0")) then
+							ply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
 						end
 						ply.view_range_old = ply.view_range_view
 					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then

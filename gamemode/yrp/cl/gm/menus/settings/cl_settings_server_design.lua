@@ -797,7 +797,7 @@ net.Receive("get_design_settings", function(len)
 			end
 		end
 
-		local gridsizes = {8, 10, 12, 16, 20}
+		local gridsizes = {10} --, 12, 16, 20}
 		for i, size in pairs(gridsizes) do
 			local hud_x = createD("DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 			hud_x:SetText("")

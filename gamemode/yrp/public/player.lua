@@ -116,11 +116,11 @@ function Player:IsCuffed()
 end
 
 function Player:IsHungry()
-	return (self:GetDFloat("hunger", 100.0) < 20.0)
+	return self:GetDFloat("hunger", 100.0) < 20.0
 end
 
 function Player:IsThirsty()
-	return (self:GetDFloat("thirst", 100.0) < 20.0)
+	return self:GetDFloat("thirst", 100.0) < 20.0
 end
 
 function Player:IsRightLegBroken()
@@ -256,8 +256,7 @@ end
 if CLIENT then
 	function MoneyFormat(money)
 		money = tonumber(money)
-		local ply = LocalPlayer()
-		return ply:GetDString("text_money_pre", "[LOADING PRE]") .. string.point(money) .. ply:GetDString("text_money_pos", "[LOADING POS]")
+		return GetGlobalDString("text_money_pre", "") .. string.point(money) .. GetGlobalDString("text_money_pos", "")
 	end
 
 	function MoneyFormatRounded(money, round)
@@ -268,21 +267,20 @@ if CLIENT then
 			round = 0
 		end
 		money = tonumber(money)
-		local ply = LocalPlayer()
-		return ply:GetDString("text_money_pre", "[LOADING PRE]") .. roundMoney(money, round) .. ply:GetDString("text_money_pos", "[LOADING POS]")
+		return GetGlobalDString("text_money_pre", "") .. roundMoney(money, round) .. GetGlobalDString("text_money_pos", "")
 	end
 end
 
 function Player:FormattedMoney()
-	return self:GetDString("text_money_pre", "[LOADING PRE]") .. string.point(self:Money()) .. self:GetDString("text_money_pos", "[LOADING POS]")
+	return GetGlobalDString("text_money_pre", "") .. string.point(self:Money()) .. GetGlobalDString("text_money_pos", "")
 end
 
 function Player:FormattedMoneyBank()
-	return self:GetDString("text_money_pre", "[LOADING PRE]") .. string.point(self:MoneyBank()) .. self:GetDString("text_money_pos", "[LOADING POS]")
+	return GetGlobalDString("text_money_pre", "") .. string.point(self:MoneyBank()) .. GetGlobalDString("text_money_pos", "")
 end
 
 function Player:FormattedSalary()
-	return self:GetDString("text_money_pre", "[LOADING PRE]") .. string.point(self:Salary()) .. self:GetDString("text_money_pos", "[LOADING POS]")
+	return GetGlobalDString("text_money_pre", "") .. string.point(self:Salary()) .. GetGlobalDString("text_money_pos", "")
 end
 
 function Player:FormattedMoneyRounded(round)
@@ -292,7 +290,7 @@ function Player:FormattedMoneyRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return self:GetDString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Money(), round) .. self:GetDString("text_money_pos", "[LOADING POS]")
+	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:Money(), round) .. GetGlobalDString("text_money_pos", "")
 end
 
 function Player:FormattedMoneyBankRounded(round)
@@ -302,7 +300,7 @@ function Player:FormattedMoneyBankRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return self:GetDString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:MoneyBank(), round) .. self:GetDString("text_money_pos", "[LOADING POS]")
+	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:MoneyBank(), round) .. GetGlobalDString("text_money_pos", "")
 end
 
 function Player:FormattedSalaryRounded(round)
@@ -312,7 +310,7 @@ function Player:FormattedSalaryRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return self:GetDString("text_money_pre", "[LOADING PRE]") .. roundMoney(self:Salary(), round) .. self:GetDString("text_money_pos", "[LOADING POS]")
+	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:Salary(), round) .. GetGlobalDString("text_money_pos", "")
 end
 
 --[[ Character ]]--

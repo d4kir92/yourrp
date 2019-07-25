@@ -215,11 +215,15 @@ if wk(_init_general) then
 
 	for name, value in pairs(yrp_general) do
 		if string.StartWith(name, "bool_") then
-			SetGlobalBool(name, tobool(value))
+			SetGlobalDBool(name, tobool(value))
+		elseif string.StartWith(name, "text_") then
+			SetGlobalDString(name, tostring(value))
+		elseif string.StartWith(name, "int_") then
+			SetGlobalDInt(name, tonumber(value))
 		end
 	end
 
-	SetGlobalBool("yrp_general_loaded", true)
+	SetGlobalDBool("yrp_general_loaded", true)
 end
 
 
@@ -365,9 +369,11 @@ function Player:GeneralLoadout()
 	--printGM("gm", "[GeneralLoadout] " .. self:YRPName())
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
-			self:SetDString(i, set)
+			SetGlobalDString(i, set)
 		elseif string.StartWith(i, "bool_") then
-			self:SetDBool(i, tobool(set))
+			SetGlobalDBool(i, tobool(set))
+		elseif string.StartWith(i, "bool_") then
+			SetGlobalDInt(i, tonumber(set))
 		end
 	end
 end
@@ -394,25 +400,19 @@ end
 function GeneralUpdateBool(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateValue(ply, netstr, str, value)
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetDBool(str, tobool(value))
-	end
+	SetGlobalDBool(str, tobool(value))
 end
 
 function GeneralUpdateString(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetDString(str, value)
-	end
+	SetGlobalDString(str, value)
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetDInt(str, value)
-	end
+	SetGlobalDInt(str, value)
 end
 
 function GeneralUpdateGlobalValue(ply, netstr, str, value)
@@ -424,7 +424,7 @@ end
 function GeneralUpdateGlobalBool(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated global " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateGlobalValue(ply, netstr, str, value)
-	SetGlobalBool(str, tobool(value))
+	SetGlobalDBool(str, tobool(value))
 end
 
 
@@ -1499,7 +1499,7 @@ net.Receive("tp_jail", function(len, ply)
 		local _target = net.ReadEntity()
 		teleportToJailpoint(_target)
 		_target:SetDBool("injail", true)
-		_target:SetDInt("jailtime", 5*60)
+		_target:SetDInt("jailtime", 5 * 60)
 	end
 end)
 util.AddNetworkString("tp_unjail")

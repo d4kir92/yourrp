@@ -10,7 +10,7 @@ net.Receive("get_menu_bodygroups", function(len)
 		local _skin = tonumber(_tbl.skin)
 		local _pms = string.Explode(",", _tbl.string_playermodels)
 		local ply = LocalPlayer()
-		if ply:GetDBool("bool_appearance_system", false) and pa(_yrp_appearance.left) then
+		if GetGlobalDBool("bool_appearance_system", false) and pa(_yrp_appearance.left) then
 			if _yrp_appearance.left.GetChildren != nil then
 				for i, child in pairs(_yrp_appearance.left:GetChildren()) do
 					child:Remove()
@@ -310,7 +310,7 @@ function open_appearance()
 		--paintBr(pw, ph, Color(255, 0, 0, 255))
 	end
 
-	if ply:GetDBool("bool_appearance_system", false) then
+	if GetGlobalDBool("bool_appearance_system", false) then
 		net.Start("get_menu_bodygroups")
 		net.SendToServer()
 	else

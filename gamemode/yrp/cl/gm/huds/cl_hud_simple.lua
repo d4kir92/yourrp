@@ -339,7 +339,7 @@ local pingcolor = Color(0, 0, 0)
 function HUDSimple()
 	local lply = LocalPlayer()
 
-	if GetGlobalBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Simple" then
+	if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Simple" then
 		local batterypower = system.BatteryPower()
 
 		-- Background

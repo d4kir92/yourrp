@@ -153,7 +153,7 @@ function openCharacterCreation()
 	cc.frame.bgcf = createD("DPanel", cc.frame.bg, cc.frame.bg:GetWide(), cc.frame.bg:GetTall(), 0, 0)
 	function cc.frame.bgcf:Paint(pw, ph)
 		local oldurl = cc.frame.bg.url
-		local newurl = ply:GetDString("text_character_background", "")
+		local newurl = GetGlobalDString("text_character_background", "")
 		if oldurl != newurl then
 			cc.frame.bg.url = newurl
 			cc.frame.bg:SetHTML(GetHTMLImage(newurl, ScW(), ScH())) -- url?
@@ -664,7 +664,7 @@ function openCharacterSelection()
 			_cs.frame.bgcf = createD("DPanel", _cs.frame.bg, _cs.frame.bg:GetWide(), _cs.frame.bg:GetTall(), 0, 0)
 			function _cs.frame.bgcf:Paint(pw, ph)
 				local oldurl = _cs.frame.bg.url
-				local newurl = ply:GetDString("text_character_background", "")
+				local newurl = GetGlobalDString("text_character_background", "")
 				if oldurl != newurl then
 					_cs.frame.bg.url = newurl
 					_cs.frame.bg:SetHTML(GetHTMLImage(newurl, ScW(), ScH())) -- url?

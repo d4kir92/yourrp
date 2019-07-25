@@ -36,7 +36,7 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 			CHudBattery = true,
 			CHudAmmo = true,
 			CHudSecondaryAmmo = true,
-			CHudCrosshair = lply:GetDBool("bool_yrp_crosshair", false),
+			CHudCrosshair = GetGlobalDBool("bool_yrp_crosshair", false),
 			CHudVoiceStatus = false
 		}
 
@@ -109,7 +109,7 @@ function show_voice_info(ply)
 	--Voice
 	if _showVoice then
 		local _voice_text = ""
-		if ply:GetDBool("bool_voice", false) then
+		if GetGlobalDBool("bool_voice", false) then
 			_voice_text = "" -- YRP.lang_string("LID_youarespeaking") .. " ("
 			if ply:GetDInt("speak_channel", -1) == 1 then
 				_voice_text = _voice_text .. YRP.lang_string("LID_speakgroup")
@@ -235,7 +235,7 @@ end)
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 
-	if ply:GetDBool("blinded", false) then
+	if GetGlobalDBool("blinded", false) then
 		surfaceBox(0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
 		surfaceText(YRP.lang_string("LID_blinded"), "SettingsHeader", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
 	end
@@ -288,7 +288,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80))
 	end
 
-	if ply:GetDBool("bool_wanted_system", false) and false then
+	if GetGlobalDBool("bool_wanted_system", false) and false then
 		local stars = {}
 		stars.size = YRP.ctr(80)
 		stars.cur = stars.size

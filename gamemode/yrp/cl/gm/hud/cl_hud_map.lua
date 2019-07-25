@@ -36,7 +36,7 @@ end
 local CamDataMap = {}
 function openMap()
 	local lply = LocalPlayer()
-	if lply:GetDBool("bool_map_system", false) then
+	if GetGlobalDBool("bool_map_system", false) then
 		map.open = true
 
 		_map.window = vgui.Create("DFrame")

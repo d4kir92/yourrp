@@ -133,7 +133,7 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		local ply = LocalPlayer()
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": (" .. ply:GetDString("text_money_pre", "") .. "100" .. ply:GetDString("text_money_pos", "") .. ")", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": (" .. GetGlobalDString("text_money_pre", "") .. "100" .. GetGlobalDString("text_money_pos", "") .. ")", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	background.textbox = createD("DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))

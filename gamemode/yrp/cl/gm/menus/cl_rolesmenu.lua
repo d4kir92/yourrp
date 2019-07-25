@@ -304,7 +304,7 @@ end
 
 function openRoleMenu()
 	openMenu()
-	if LocalPlayer():GetDBool("bool_players_can_switch_role", false) then
+	if GetGlobalDBool("bool_players_can_switch_role", false) then
 		_rm = createD("YFrame", nil, FW(), FH(), PX(), PY())
 		_rm:SetMinWidth(FW())
 		_rm:SetMinHeight(FH())

@@ -49,7 +49,7 @@ function checkChatVisible()
 			_showChat = true
 		end
 		lply = LocalPlayer()
-		if lply:GetDBool("bool_yrp_chat", false) == false then
+		if GetGlobalDBool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
 		yrpChat.richText:SetVisible(_showChat)
@@ -75,7 +75,7 @@ function niceCommand(com)
 	elseif com == "yell" then
 		return YRP.lang_string("LID_yell")
 	elseif com == "advert" then
-		return LocalPlayer():GetDString("text_chat_advert", YRP.lang_string("LID_advert"))
+		return GetGlobalDString("text_chat_advert", YRP.lang_string("LID_advert"))
 	elseif com == "admin" then
 		return YRP.lang_string("LID_admin")
 	elseif com == "faction" then
@@ -308,7 +308,7 @@ timer.Create("yrp_init_chat", 1, 0, function()
 end)
 
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	if ply:GetDBool("bool_yrp_chat", false) then
+	if GetGlobalDBool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
 			bTeam = false
@@ -326,7 +326,7 @@ end)
 
 hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetDBool("bool_yrp_chat", false) then
+	if lply:IsValid() and GetGlobalDBool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
 				yrpChat.richText:AppendText(text.."\n")
@@ -337,7 +337,7 @@ end)
 
 hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetDBool("bool_yrp_chat", false) then
+	if lply:IsValid() and GetGlobalDBool("bool_yrp_chat", false) then
 		if name == "CHudChat" then
 			return false
 		end

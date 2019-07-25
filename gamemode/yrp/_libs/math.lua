@@ -172,7 +172,7 @@ end
 
 function formatMoney(money, ply)
 	if CLIENT then
-		return ply:GetDString("text_money_pre") .. money .. ply:GetDString("text_money_pos")
+		return GetGlobalDString("text_money_pre", "") .. money .. GetGlobalDString("text_money_pos", "")
 	else
 		return "[FAILED]" .. money .. "[FAILED]"
 	end

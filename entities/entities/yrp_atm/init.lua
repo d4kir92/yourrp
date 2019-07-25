@@ -8,8 +8,6 @@ include("shared.lua")
 util.AddNetworkString("ATMPressPrev")
 util.AddNetworkString("ATMPressNext")
 
-local ent = nil
-
 function ENT:Initialize()
 	self:SetModel("models/yrp/yrp_atm.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
@@ -97,7 +95,7 @@ function ENT:ATMPressPrev(ply)
 				SteamIDs[i] = ""
 			end
 			i = i + 1
-			if self.namePos > self.namePos+4 then
+			if self.namePos > self.namePos + 4 then
 				break
 			end
 		end
@@ -130,7 +128,7 @@ function ENT:ATMPressNext(ply)
 				SteamIDs[i] = ""
 			end
 			i = i + 1
-			if self.namePos > self.namePos+4 then
+			if self.namePos > self.namePos + 4 then
 				break
 			end
 		end
@@ -233,7 +231,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 													break
 												end
 											end
-											printGM("note", activator:RPName() .. " transfered " .. activator:GetDString("text_money_pre").. self.money .. activator:GetDString("text_money_pos") .. " to " .. dbSelectTarget[1].rpname)
+											printGM("note", activator:RPName() .. " transfered " .. GetGlobalDString("text_money_pre", "") .. self.money .. GetGlobalDString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
 										end
 									end
 								end

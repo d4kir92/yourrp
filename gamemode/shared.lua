@@ -26,6 +26,7 @@ function add_luas(string)
 end
 
 add_luas("yrp/net/entity.lua")
+add_luas("yrp/net/global.lua")
 
 add_luas("yrp/_libs/_libs_includes.lua")
 

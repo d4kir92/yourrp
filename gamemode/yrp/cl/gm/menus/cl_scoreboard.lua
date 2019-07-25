@@ -338,46 +338,46 @@ function OpenSBS()
 
 			local x = 128 + 10
 
-			if pl:GetDBool("bool_yrp_scoreboard_show_level", false) then
+			if GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 160
 			end
 
 			local naugname = YRP.lang_string("LID_name") .. "/" .. YRP.lang_string("LID_usergroup")
-			if !pl:GetDBool("bool_yrp_scoreboard_show_usergroup", false) then
+			if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 				naugname = YRP.lang_string("LID_name")
 			end
 			draw.SimpleTextOutlined(naugname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			x = x + 700
 
-			if pl:GetDBool("bool_yrp_scoreboard_show_rolename", false) or pl:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+			if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 				local rgname = YRP.lang_string("LID_role") .. "/" .. YRP.lang_string("LID_group")
-				if !pl:GetDBool("bool_yrp_scoreboard_show_rolename", false) then
+				if !GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) then
 					rgname = YRP.lang_string("LID_group")
-				elseif !pl:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+				elseif !GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 					rgname = YRP.lang_string("LID_role")
 				end
 				draw.SimpleTextOutlined(rgname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 700
 			end
 
-			if pl:GetDBool("bool_yrp_scoreboard_show_frags", false) or pl:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+			if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 				local fdname = YRP.lang_string("LID_frags") .. "/" .. YRP.lang_string("LID_deaths")
-				if !pl:GetDBool("bool_yrp_scoreboard_show_frags", false) then
+				if !GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) then
 					fdname = YRP.lang_string("LID_deaths")
-				elseif !pl:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+				elseif !GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 					fdname = YRP.lang_string("LID_frags")
 				end
 				draw.SimpleTextOutlined(fdname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 400
 			end
 
-			if pl:GetDBool("bool_yrp_scoreboard_show_language", false) then
+			if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_language"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 			end
 
-			if pl:GetDBool("bool_yrp_scoreboard_show_country", false) then
+			if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_country"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 			end
@@ -385,7 +385,7 @@ function OpenSBS()
 			draw.SimpleTextOutlined(YRP.lang_string("LID_playtime"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			x = x + 300
 
-			if pl:GetDBool("bool_yrp_scoreboard_show_operating_system", false) then
+			if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_os"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 			end
@@ -454,35 +454,35 @@ function OpenSBS()
 					local x = 128 + 10
 					if true then
 
-						if pl:GetDBool("bool_yrp_scoreboard_show_level", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
 							draw.SimpleTextOutlined(pl:Level(), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							x = x + 160
 						end
 
 						local nay = ph / 4 * 1
 						local ugy = ph / 4 * 3
-						if !pl:GetDBool("bool_yrp_scoreboard_show_usergroup", false) then
+						if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 							nay = ph / 2
 						end
 						draw.SimpleTextOutlined(pl:RPName(), "sef", YRP.ctr(x), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						if pl:GetDBool("bool_yrp_scoreboard_show_usergroup", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", YRP.ctr(x), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + 700
 					end
 
-					if pl:GetDBool("bool_yrp_scoreboard_show_rolename", false) or pl:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+					if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 						local ry = ph / 4 * 1
 						local gy = ph / 4 * 3
-						if !pl:GetDBool("bool_yrp_scoreboard_show_rolename", false) then
+						if !GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) then
 							gy = ph / 2
-						elseif !pl:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+						elseif !GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 							ry = ph / 2
 						end
-						if pl:GetDBool("bool_yrp_scoreboard_show_rolename", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) then
 							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", YRP.ctr(x), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						if pl:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 							local grpname = pl:GetGroupName()
 							if pl:GetFactionName() != pl:GetGroupName() then
 								grpname = "[" .. pl:GetFactionName() .. "] " .. grpname
@@ -492,24 +492,24 @@ function OpenSBS()
 						x = x + 700
 					end
 
-					if pl:GetDBool("bool_yrp_scoreboard_show_frags", false) or pl:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+					if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 						local fy = ph / 4 * 1
 						local dy = ph / 4 * 3
-						if !pl:GetDBool("bool_yrp_scoreboard_show_frags", false) then
+						if !GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) then
 							dy = ph / 2
-						elseif !pl:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+						elseif !GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 							fy = ph / 2
 						end
-						if pl:GetDBool("bool_yrp_scoreboard_show_frags", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) then
 							draw.SimpleTextOutlined(pl:Frags(), "sef", YRP.ctr(x), fy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						if pl:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 							draw.SimpleTextOutlined(pl:Deaths(), "sef", YRP.ctr(x), dy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + 400
 					end
 
-					if pl:GetDBool("bool_yrp_scoreboard_show_language", false) then
+					if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 						local icon_size = YRP.ctr(100)
 						YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, YRP.ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 						if self:IsHovered() then
@@ -518,7 +518,7 @@ function OpenSBS()
 						x = x + 300
 					end
 
-					if pl:GetDBool("bool_yrp_scoreboard_show_country", false) then
+					if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 						local icon_size = YRP.ctr(100)
 						YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, YRP.ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 						if self:IsHovered() then
@@ -527,12 +527,12 @@ function OpenSBS()
 						x = x + 300
 					end
 
-					if pl:GetDBool("bool_yrp_scoreboard_show_playtime", false) then
+					if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
 						draw.SimpleTextOutlined(self.playtime, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						x = x + 300
 					end
 
-					if pl:GetDBool("bool_yrp_scoreboard_show_operating_system", false) then
+					if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 						local icon_size = YRP.ctr(100)
 						YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, YRP.ctr(x), (ph - icon_size) / 2, Color(255, 255, 255, 255))
 						if self:IsHovered() then
@@ -611,20 +611,20 @@ function OpenSBS()
 				draw.SimpleTextOutlined(naugname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 700
 
-				if pl:GetDBool("bool_yrp_scoreboard_show_rolename", false) or pl:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+				if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 					x = x + 700
 				end
 
-				if pl:GetDBool("bool_yrp_scoreboard_show_frags", false) or pl:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+				if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 					x = x + 400
 				end
 
-				if pl:GetDBool("bool_yrp_scoreboard_show_language", false) then
+				if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 					draw.SimpleTextOutlined(YRP.lang_string("LID_language"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 					x = x + 300
 				end
 
-				if pl:GetDBool("bool_yrp_scoreboard_show_country", false) then
+				if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 					draw.SimpleTextOutlined(YRP.lang_string("LID_country"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 					x = x + 300
 				end
@@ -632,7 +632,7 @@ function OpenSBS()
 				draw.SimpleTextOutlined(YRP.lang_string("LID_playtime"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 300
 
-				if pl:GetDBool("bool_yrp_scoreboard_show_operating_system", false) then
+				if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 					draw.SimpleTextOutlined(YRP.lang_string("LID_os"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 					x = x + 300
 				end
@@ -690,25 +690,25 @@ function OpenSBS()
 						if true then
 							local nay = ph / 4 * 1
 							local ugy = ph / 4 * 3
-							if !lply:GetDBool("bool_yrp_scoreboard_show_usergroup", false) then
+							if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 								nay = ph / 2
 							end
 							draw.SimpleTextOutlined(pl:RPName(), "sef", YRP.ctr(x), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-							if pl:GetDBool("bool_yrp_scoreboard_show_usergroup", false) then
+							if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 								draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", YRP.ctr(x), ugy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
 							x = x + 700
 						end
 
-						if lply:GetDBool("bool_yrp_scoreboard_show_rolename", false) or lply:GetDBool("bool_yrp_scoreboard_show_groupname", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 							x = x + 700
 						end
 
-						if lply:GetDBool("bool_yrp_scoreboard_show_frags", false) or lply:GetDBool("bool_yrp_scoreboard_show_deaths", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 							x = x + 400
 						end
 
-						if lply:GetDBool("bool_yrp_scoreboard_show_language", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 							local icon_size = YRP.ctr(100)
 							YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, YRP.ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 							if self:IsHovered() then
@@ -717,7 +717,7 @@ function OpenSBS()
 							x = x + 300
 						end
 
-						if pl:GetDBool("bool_yrp_scoreboard_show_country", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 							local icon_size = YRP.ctr(100)
 							YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, YRP.ctr(x), ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
 							if self:IsHovered() then
@@ -726,12 +726,12 @@ function OpenSBS()
 							x = x + 300
 						end
 
-						if lply:GetDBool("bool_yrp_scoreboard_show_playtime", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
 							draw.SimpleTextOutlined(self.playtime, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							x = x + 300
 						end
 
-						if lply:GetDBool("bool_yrp_scoreboard_show_operating_system", false) then
+						if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 							local icon_size = YRP.ctr(100)
 							YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, YRP.ctr(x), (ph - icon_size) / 2, Color(255, 255, 255, 255))
 							if self:IsHovered() then
