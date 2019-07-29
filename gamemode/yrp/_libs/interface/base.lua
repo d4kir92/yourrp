@@ -286,6 +286,7 @@ function DComboBox(tab)
 	end
 
 	pnl.DComboBox = createD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DComboBox:SetSortItems(false)
 	for i, v in pairs(tab.choices) do
 		if tab.value == i then
 			pnl.DComboBox:AddChoice(v, i, true)

@@ -45,7 +45,7 @@ function con_hg(ply, time)
 	end
 	if tonumber(ply:GetDFloat("hunger", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 100)
-	elseif ply:GetDBool("bool_hunger_health_regeneration", false) then
+	elseif GetGlobalDBool("bool_hunger_health_regeneration", false) then
 		local tickrate = tonumber(ply:GetDString("text_hunger_health_regeneration_tickrate", 1))
 		if tickrate >= 1 and time % tickrate == 0 then
 			ply:SetHealth(ply:Health() + 1)
@@ -208,13 +208,13 @@ timer.Create("ServerThink", 1, 0, function()
 				ply:TakeDamage(0.5, ply, ply)
 			end
 
-			if ply:GetDBool("bool_hunger", false) then
+			if GetGlobalDBool("bool_hunger", false) then
 				con_hg(ply, _time)
 			end
-			if ply:GetDBool("bool_thirst", false) then
+			if GetGlobalDBool("bool_thirst", false) then
 				con_th(ply)
 			end
-			if ply:GetDBool("bool_stamina", false) then
+			if GetGlobalDBool("bool_stamina", false) then
 				con_st(ply)
 			end
 

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local DATABASE_NAME = "yrp_inv_items"
+local DATABASE_NAME = "yrp_i_items"
 
 SQL = SQL or {}
 

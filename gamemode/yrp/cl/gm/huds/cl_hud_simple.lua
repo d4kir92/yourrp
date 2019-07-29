@@ -372,24 +372,24 @@ function HUDSimple()
 		local RO = {}
 		RO.element = "RO"
 		HUDSimpleBG(RO)
-		if lply:GetDBool("bool_stamina", false) then
+		if GetGlobalDBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
 			HUDSimpleBG(ST)
 		end
-		if lply:GetDBool("bool_yrp_chat", false) then
+		if GetGlobalDBool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			CH.r = YRP.ctr(16)
 			CH.visiblefunc = IsChatVisible
 			HUDSimpleBG(CH)
 		end
-		if lply:GetDBool("bool_hunger", false) then
+		if GetGlobalDBool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
 			HUDSimpleBG(HU)
 		end
-		if lply:GetDBool("bool_thirst", false) then
+		if GetGlobalDBool("bool_thirst", false) then
 			local TH = {}
 			TH.element = "TH"
 			HUDSimpleBG(TH)
@@ -500,7 +500,7 @@ function HUDSimple()
 		RO.icon = Material("icon16/user.png")
 		RO.tcolor = lply:GetRoleColor()
 		HUDSimpleBAR(RO)
-		if lply:GetDBool("bool_stamina", false) then
+		if GetGlobalDBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
 			ST.cur = lply:Stamina()
@@ -510,7 +510,7 @@ function HUDSimple()
 			ST.icon = Material("icon16/lightning.png")
 			HUDSimpleBAR(ST)
 		end
-		if lply:GetDBool("bool_hunger", false) then
+		if GetGlobalDBool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
 			HU.cur = lply:Hunger()
@@ -520,7 +520,7 @@ function HUDSimple()
 			HU.icon = Material("icon16/cake.png")
 			HUDSimpleBAR(HU)
 		end
-		if lply:GetDBool("bool_thirst", false) then
+		if GetGlobalDBool("bool_thirst", false) then
 			local TH = {}
 			TH.element = "TH"
 			TH.cur = lply:Thirst()
@@ -722,24 +722,24 @@ function HUDSimple()
 		RO = {}
 		RO.element = "RO"
 		HUDSimpleBR(RO)
-		if lply:GetDBool("bool_stamina", false) then
+		if GetGlobalDBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
 			HUDSimpleBR(ST)
 		end
-		if lply:GetDBool("bool_yrp_chat", false) then
+		if GetGlobalDBool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			CH.r = YRP.ctr(16)
 			CH.visiblefunc = IsChatVisible
 			HUDSimpleBR(CH)
 		end
-		if lply:GetDBool("bool_hunger", false) then
+		if GetGlobalDBool("bool_hunger", false) then
 			local HU = {}
 			HU.element = "HU"
 			HUDSimpleBR(HU)
 		end
-		if lply:GetDBool("bool_thirst", false) then
+		if GetGlobalDBool("bool_thirst", false) then
 			local TH = {}
 			TH.element = "TH"
 			HUDSimpleBR(TH)

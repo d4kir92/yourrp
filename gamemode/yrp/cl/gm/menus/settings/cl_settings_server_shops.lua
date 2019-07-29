@@ -388,21 +388,19 @@ net.Receive("get_shop_items", function()
 					end
 				end
 				hook.Add("selected_shop_item", "yrp_selected_shop_item", function()
-					if pa(_sh._sit) then
-						if pa(_sh._sit.type) then
-							local _wm = LocalPlayer():GetDString("WorldModel")
-							local _cn = LocalPlayer():GetDString("ClassName")
-							local _pn = LocalPlayer():GetDString("PrintName")
-							local _type = _sh._sit.type.plus:GetOptionData(_sh._sit.type.plus:GetSelectedID())
-							net.Start("shop_item_edit_base")
-								net.WriteString(_sh._sit.type.plus.tbl.uniqueID)
-								net.WriteString(_wm)
-								net.WriteString(_cn)
-								net.WriteString(_pn)
-								net.WriteString(_type)
-							net.SendToServer()
-							_sh._sit.itemname.textentry:SetValue(_pn)
-						end
+					if pa(_sh._sit) and pa(_sh._sit.type) then
+						local _wm = LocalPlayer():GetDString("WorldModel", "")
+						local _cn = LocalPlayer():GetDString("ClassName", "")
+						local _pn = LocalPlayer():GetDString("PrintName", "")
+						local _type = _sh._sit.type.plus:GetOptionData(_sh._sit.type.plus:GetSelectedID())
+						net.Start("shop_item_edit_base")
+							net.WriteString(_sh._sit.type.plus.tbl.uniqueID)
+							net.WriteString(_wm)
+							net.WriteString(_cn)
+							net.WriteString(_pn)
+							net.WriteString(_type)
+						net.SendToServer()
+						_sh._sit.itemname.textentry:SetValue(_pn)
 					end
 				end)
 			end

@@ -60,7 +60,7 @@ function GetCollection(cid, maincid)
 
 				local url = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. cid
 				http.Fetch(url,
-					function( body, len, headers, code )
+					function(body, len, headers, code)
 						local _st, _en = string.find(body, "collectionChildren")
 						local wsids = ""
 						if _st then
@@ -398,6 +398,52 @@ function AddStar(ply)
 			ply:SetDInt("yrp_stars", 5)
 		end
 	end
+end
+
+function GM:PlayerDeath(ply, inflictor, attacker)
+	ply.NextSpawnTime = CurTime() + 2
+	ply.DeathTime = CurTime()
+
+	if (IsValid(attacker) and attacker:GetClass() == "trigger_hurt") then
+		attacker = ply
+	end
+
+	if (IsValid(attacker) and attacker:IsVehicle() and IsValid(attacker:GetDriver())) then
+		attacker = attacker:GetDriver()
+	end
+
+	if (!IsValid(inflictor) and IsValid(attacker)) then
+		inflictor = attacker
+	end
+
+	if (IsValid(inflictor) and inflictor == attacker and (inflictor:IsPlayer() or inflictor:IsNPC())) then
+		inflictor = inflictor:GetActiveWeapon()
+		if (!IsValid(inflictor)) then
+			inflictor = attacker
+		end
+	end
+
+	if (attacker == ply) then
+		net.Start("PlayerKilledSelf")
+			net.WriteEntity(ply)
+		net.Broadcast()
+		return
+	end
+
+	if (attacker:IsPlayer()) then
+		net.Start("PlayerKilledByPlayer")
+			net.WriteEntity(ply)
+			net.WriteString(inflictor:GetClass())
+			net.WriteEntity(attacker)
+		net.Broadcast()
+		return
+	end
+
+	net.Start("PlayerKilled")
+		net.WriteEntity(ply)
+		net.WriteString(inflictor:GetClass())
+		net.WriteString(attacker:GetClass())
+	net.Broadcast()
 end
 
 hook.Add("PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, attacker)
@@ -808,7 +854,7 @@ function GM:PlayerSetModel(ply)
 end
 
 function GM:PlayerSpray(ply)
-	if ply:GetDBool("bool_graffiti_disabled", false) then
+	if GetGlobalDBool("bool_graffiti_disabled", false) then
 		return true
 	else
 		return false

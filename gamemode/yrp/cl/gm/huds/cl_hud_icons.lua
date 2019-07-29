@@ -95,7 +95,9 @@ function HUDIcons()
 		HUDIconsDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxStamina())
 		HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
 
-		HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP())
+		local tab = {}
+		tab["LEVEL"] = lply:Level()
+		HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
 
 		HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
 		HUDIconsDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
@@ -141,7 +143,7 @@ function HUDIcons()
 			HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
 		end
 
-		if lply:GetDBool("bool_yrp_chat", false) then
+		if GetGlobalDBool("bool_yrp_chat", false) then
 			local CH = {}
 			CH.element = "CH"
 			CH.r = YRP.ctr(16)

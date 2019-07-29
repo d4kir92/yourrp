@@ -205,7 +205,7 @@ function client_toggled()
 end
 
 function server_toggled(ply)
-	return ply:GetDBool("bool_yrp_hud", false)
+	return GetGlobalDBool("bool_yrp_hud", false)
 end
 
 function HudPlayer(ply)

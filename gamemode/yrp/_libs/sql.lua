@@ -223,7 +223,7 @@ function SQL_QUERY(query)
 	query = tostring(query)
 
 	--printGM("db", "SQL_QUERY(" .. tostring(query) .. ")")
-	if not string.find(query, ";") then
+	if !string.find(query, ";") then
 		printGM("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
 
 		return false
@@ -589,7 +589,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			end
 		end
 
-		if not _result then
+		if !_result then
 			if string.find(datatype, "TEXT") then
 				datatype = "TEXT"
 			end
@@ -620,17 +620,17 @@ if SERVER then
 		-- MYSQL
 		require("mysqloo")
 
-		if (mysqloo.VERSION != "9" or not mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
+		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
 			MsgC(Color(255, 0, 0), "You are using an outdated mysqloo version\n")
 			MsgC(Color(255, 0, 0), "Download the latest mysqloo9 from here\n")
 			MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
 			YRPSQL.outdated = true
 		end
-		if not YRPSQL.outdated then
+		if !YRPSQL.outdated then
 			YRPSQL.mysql_worked = false
 
 			timer.Simple(10, function()
-				if not YRPSQL.mysql_worked then
+				if !YRPSQL.mysql_worked then
 					printGM("note", "Took to long to connect to mysql server, switch back to sqlite")
 					SetSQLMode(0, true)
 				end

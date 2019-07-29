@@ -701,7 +701,7 @@ net.Receive("wantRole", function(len, ply)
 		--Remove Sweps from old role
 		RemRolVals(ply)
 
-		if ply:GetDBool("bool_players_die_on_role_switch", false) then
+		if GetGlobalDBool("bool_players_die_on_role_switch", false) then
 			ply:Kill()
 		end
 

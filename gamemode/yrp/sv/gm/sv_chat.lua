@@ -372,17 +372,17 @@ function unpack_paket(sender, text, iscommand)
 
 	paket.steamname = sender:SteamName()
 	paket.rpname = sender:RPName()
-	if sender:GetDBool("bool_yrp_chat_show_usergroup", false) then
+	if GetGlobalDBool("bool_yrp_chat_show_usergroup", false) then
 		paket.usergroup = sender:GetUserGroup()
 		paket.usergroup_color = sender:GetUserGroupColor()
 	end
-	if sender:GetDBool("bool_yrp_chat_show_rolename", false) then
+	if GetGlobalDBool("bool_yrp_chat_show_rolename", false) then
 		paket.role = sender:GetDString("roleName")
 	end
-	if sender:GetDBool("bool_yrp_chat_show_factionname", false) then
+	if GetGlobalDBool("bool_yrp_chat_show_factionname", false) then
 		paket.faction = sender:GetDString("factionName")
 	end
-	if sender:GetDBool("bool_yrp_chat_show_groupname", false) then
+	if GetGlobalDBool("bool_yrp_chat_show_groupname", false) then
 		paket.group = sender:GetDString("groupName")
 	end
 end

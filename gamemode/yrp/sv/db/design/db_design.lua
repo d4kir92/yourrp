@@ -67,6 +67,14 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_icons", function()
 	RegisterHUDDesign(HUD_Icons)
 end)
 
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_animated", function()
+	local HUD_Animated = {}
+	HUD_Animated.name = "Animated"
+	HUD_Animated.author = "D4KiR"
+	HUD_Animated.progress = 1
+	RegisterHUDDesign(HUD_Animated)
+end)
+
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout()

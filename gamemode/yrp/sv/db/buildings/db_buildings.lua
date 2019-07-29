@@ -196,6 +196,7 @@ function loadDoors()
 							_tmpRPName = _tmpRPName[1]
 							if wk(_tmpRPName.rpname) then
 								v:SetDString("ownerRPName", _tmpRPName.rpname)
+								v:SetDString("ownerCharID", w.ownerCharID)
 							end
 						end
 					else
@@ -431,7 +432,7 @@ net.Receive("sellBuilding", function(len, ply)
 end)
 
 net.Receive("buyBuilding", function(len, ply)
-	if ply:GetDBool("bool_building_system", false) then
+	if GetGlobalDBool("bool_building_system", false) then
 		local _tmpBuildingID = net.ReadString()
 		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
@@ -621,7 +622,6 @@ net.Receive("getBuildingInfo", function(len, ply)
 
 	if wk(_tmpBuildingID) then
 		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-
 		local owner = ""
 		if wk(_tmpTable) then
 			_tmpTable = _tmpTable[1]
@@ -640,18 +640,16 @@ net.Receive("getBuildingInfo", function(len, ply)
 				end
 			end
 
-			if wk(_tmpTable) then
-				if allowedToUseDoor(_tmpBuildingID, ply) then
-					net.Start("getBuildingInfo")
-						net.WriteBool(true)
-						net.WriteEntity(_tmpDoor)
-						net.WriteString(_tmpBuildingID)
-						net.WriteTable(_tmpTable)
-						net.WriteString(owner)
-						net.WriteString(_tmpTable.text_header)
-						net.WriteString(_tmpTable.text_description)
-					net.Send(ply)
-				end
+			if allowedToUseDoor(_tmpBuildingID, ply) then
+				net.Start("getBuildingInfo")
+					net.WriteBool(true)
+					net.WriteEntity(_tmpDoor)
+					net.WriteString(_tmpBuildingID)
+					net.WriteTable(_tmpTable)
+					net.WriteString(owner)
+					net.WriteString(_tmpTable.text_header)
+					net.WriteString(_tmpTable.text_description)
+				net.Send(ply)
 			end
 		else
 			printGM("note", "getBuildingInfo -> Building not found in Database.")

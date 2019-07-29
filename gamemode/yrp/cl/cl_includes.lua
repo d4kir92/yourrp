@@ -11,6 +11,7 @@ include("gm/cl_startup.lua")
 include("gm/huds/cl_hud_simple.lua")
 include("gm/huds/cl_hud_fallout76.lua")
 include("gm/huds/cl_hud_icons.lua")
+include("gm/huds/cl_hud_animated.lua")
 
 include("gm/interfaces/cl_if_simple.lua")
 

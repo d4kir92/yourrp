@@ -17,13 +17,13 @@ function retry_load_database()
 	end
 
 	local integrity_check = sql.Query("pragma integrity_check;")
-	printGM("db", "Integrity_check: " .. integrity_check)
+	printGM("db", "Integrity_check: " .. tostring(integrity_check))
 
 	local nodes = sql.Query("reindex nodes;")
-	printGM("db", "Nodes: " .. nodes)
+	printGM("db", "Nodes: " .. tostring(nodes))
 
 	local pristine = sql.Query("reindex pristine;")
-	printGM("db", "Pristine: " .. pristine)
+	printGM("db", "Pristine: " .. tostring(pristine))
 
 	timer.Create("retryLoadDatabase", 10, 1, function()
 		db_init_database()
@@ -46,8 +46,8 @@ table.insert(_dbs, "yrp_levelsystem")
 table.insert(_dbs, "yrp_hud")
 table.insert(_dbs, "yrp_laws")
 table.insert(_dbs, "yrp_lockdown")
-table.insert(_dbs, "yrp_inv_storages")
-table.insert(_dbs, "yrp_inv_items")
+table.insert(_dbs, "yrp_i_storages")
+table.insert(_dbs, "yrp_i_items")
 table.insert(_dbs, "yrp_keybinds")
 
 table.insert(_dbs, "yrp_players")
@@ -150,7 +150,9 @@ include("laws/db_laws.lua")
 include("lockdown/db_lockdown.lua")
 
 include("inventory/db_storages.lua")
-include("inventory/db_items.lua")
+
+include("inventory/db_i_storages.lua")
+include("inventory/db_i_items.lua")
 
 include("keybinds/db_keybinds.lua")
 
@@ -164,9 +166,6 @@ include("buildings/db_buildings.lua")
 include("whitelist/db_role_whitelist.lua")
 include("vehicles/db_vehicles.lua")
 include("jail/db_jail.lua")
---include("items/db_give.lua")
---include("items/db_items.lua")
---include("items/db_storages.lua")
 include("realistic/db_realistic.lua")
 include("agents/db_agents.lua")
 include("licenses/db_licenses.lua")

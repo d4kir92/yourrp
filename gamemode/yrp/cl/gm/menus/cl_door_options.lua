@@ -26,7 +26,7 @@ net.Receive("getBuildingInfo", function(len)
 		local description = net.ReadString()
 
 		local ply = LocalPlayer()
-		if ply:GetDBool("bool_building_system", false) then
+		if GetGlobalDBool("bool_building_system", false) then
 			if _building != nil and _tmpBuilding != nil then
 				if (_tmpBuilding.ownerCharID == "" or _tmpBuilding.ownerCharID == " ") and tonumber(_tmpBuilding.groupID) == -1 then
 					buyWindow(_building, _tmpBuilding.name, _tmpBuilding.buildingprice, _door)
@@ -71,7 +71,7 @@ function buyWindow(buildingID, name, price, door)
 		end
 	end
 
-	yrp_door.window = createD("YFrame", nil, YRP.ctr(2180), YRP.ctr(420), 0, 0)
+	yrp_door.window = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(210), 0, 0)
 	yrp_door.window:Center()
 	yrp_door.window:SetTitle("LID_buymenu")
 	function yrp_door.window:Close()
@@ -222,7 +222,7 @@ function optionWindow(buildingID, name, price, door, owner, header, description)
 	local _name = name
 	local _price = price
 
-	yrp_door.window = createD("YFrame", nil, YRP.ctr(2180), YRP.ctr(640), 0, 0)
+	yrp_door.window = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(320), 0, 0)
 	yrp_door.window:Center()
 	yrp_door.window:SetTitle("LID_settings")
 	function yrp_door.window:Close()
@@ -259,8 +259,8 @@ function optionWindow(buildingID, name, price, door, owner, header, description)
 	end
 	]]--
 
-	if door:GetDString("ownerGroup") == "" then
-		local _ButtonSell = createVGUI("DButton", yrp_door.window, 530, 50, 10, 260)
+	if door:GetDString("ownerGroup") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
+		local _ButtonSell = createD("DButton", yrp_door.window, YRP.ctr(530), YRP.ctr(50), YRP.ctr(10), YRP.ctr(260))
 		_ButtonSell:SetText("")
 		function _ButtonSell:DoClick()
 			net.Start("sellBuilding")
@@ -305,7 +305,7 @@ function optionWindow(buildingID, name, price, door, owner, header, description)
 			net.SendToServer()
 		end
 
-		local _buttonRemoveOwner = createVGUI("DButton", yrp_door.window, 530, 50, 545, 400)
+		local _buttonRemoveOwner = createD("DButton", yrp_door.window, YRP.ctr(530), YRP.ctr(50), YRP.ctr(545), YRP.ctr(400))
 		_buttonRemoveOwner:SetText("")
 		function _buttonRemoveOwner:DoClick()
 			net.Start("removeOwner")
