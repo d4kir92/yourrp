@@ -467,10 +467,10 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 						surface.SetFont("DermaDefaultBold")
 						local _tw, _th = surface.GetTextSize(_test)
-						local _x = YRP.ctr(4)
-						local _y = YRP.ctr(4)
-						surfaceBox(_x, _y, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
-						surfaceText(_test, "DermaDefaultBold", _x + YRP.ctr(4), _y + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
+						local _x_ = YRP.ctr(4)
+						local _y_ = YRP.ctr(4)
+						surfaceBox(_x_, _y_, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
+						surfaceText(_test, "DermaDefaultBold", _x_ + YRP.ctr(4), _y_ + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
 						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - YRP.ctr(10), YRP.ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(255, 255, 255, 255))
 						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 					end
@@ -484,12 +484,12 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 						local tmpString = ""
 
-						for k, v in pairs(tmpSelected) do
-							if v.selected and v.ClassName != nil then
+						for l, w in pairs(tmpSelected) do
+							if w.selected and w.ClassName != nil then
 								if tmpString == "" then
-									tmpString = v.ClassName
+									tmpString = w.ClassName
 								else
-									tmpString = tmpString .. "," .. v.ClassName
+									tmpString = tmpString .. "," .. w.ClassName
 								end
 							end
 						end
@@ -955,10 +955,10 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 
 						surface.SetFont("DermaDefaultBold")
 						local _tw, _th = surface.GetTextSize(_test)
-						local _x = YRP.ctr(4)
-						local _y = YRP.ctr(4)
-						surfaceBox(_x, _y, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
-						surfaceText(_test, "DermaDefaultBold", _x + YRP.ctr(4), _y + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
+						local _x_ = YRP.ctr(4)
+						local _y_ = YRP.ctr(4)
+						surfaceBox(_x_, _y_, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
+						surfaceText(_test, "DermaDefaultBold", _x_ + YRP.ctr(4), _y_ + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
 						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - YRP.ctr(10), YRP.ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(255, 255, 255, 255))
 						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 					end
@@ -972,12 +972,12 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 
 						local tmpString = ""
 
-						for k, v in pairs(tmpSelected) do
-							if v.selected and v.ClassName != nil then
+						for l, w in pairs(tmpSelected) do
+							if w.selected and w.ClassName != nil then
 								if tmpString == "" then
-									tmpString = v.ClassName
+									tmpString = w.ClassName
 								else
-									tmpString = tmpString .. "," .. v.ClassName
+									tmpString = tmpString .. "," .. w.ClassName
 								end
 							end
 						end
@@ -1349,7 +1349,7 @@ function drawString(ply, instr, z, color)
 	cam.End3D2D()
 end
 
-function drawBar(ply, string, z, color, cur, max, barcolor)
+function drawBar(ply, stri, z, color, cur, max, barcolor)
 	local pos = ply:GetPos() + Vector(0, 0, 86)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
@@ -1358,7 +1358,7 @@ function drawBar(ply, string, z, color, cur, max, barcolor)
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
-	local str = string
+	local str = stri
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetFont("3d2d_string")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1367,11 +1367,11 @@ function drawBar(ply, string, z, color, cur, max, barcolor)
 	local w = 200
 	surfaceBox(-w / 2 - 2, 2 - 2, w + 4, 20 + 4, Color(0, 0, 0, 100))
 	surfaceBox(-w / 2, 2, w * cur / max, 20, barcolor)
-	surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+	surfaceText(str, "3d2d_string", 0, _th / 2 - 2, color, 1, 1)
 	cam.End3D2D()
 end
 
-function drawPlate(ply, string, z, color)
+function drawPlate(ply, stri, z, color)
 	local pos = ply:GetPos() + Vector(0, 0, 86)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
@@ -1380,7 +1380,7 @@ function drawPlate(ply, string, z, color)
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
-	local str = string
+	local str = stri
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
 	surface.SetFont("plates")
 	local _tw, _th = surface.GetTextSize(str)
@@ -1419,10 +1419,8 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 		local cur = tonumber(_cur)
 		local max = tonumber(_max)
 
-		if cur != nil and max != nil then
-			if max > 0 then
-				surfaceBox(0, 0, cur / max * w, h, color2)
-			end
+		if cur != nil and max != nil and max > 0 then
+			surfaceBox(0, 0, cur / max * w, h, color2)
 		end
 	end
 
@@ -1451,6 +1449,17 @@ _icons["ug"] = Material("icon16/group_key.png")
 _icons["ms"] = Material("icon16/lightning.png")
 _icons["le"] = Material("icon16/layers.png")
 
+function Debug3DText(ply, str, pos, color)
+	local _tw, _th = surface.GetTextSize(str)
+	local yaw = LocalPlayer():GetAngles().y
+	cam.Start3D2D(pos + Vector(0, 0, _th), Angle(0, yaw - 90, 90), 1)
+		surface.SetFont("3d2d_string")
+		_tw = math.Round(_tw * 1.08, 0)
+		_th = _th
+		surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+	cam.End3D2D()
+end
+
 function drawPlates(ply)
 	if ply:Alive() then
 		local _height = 31
@@ -1459,6 +1468,25 @@ function drawPlates(ply)
 
 		if color.a <= 0 then
 			color.a = 10
+		end
+
+		if GetGlobalDBool("bool_server_debug_voice", false) then
+			if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
+				render.SetColorMaterial()
+				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, Color(100, 100, 255, 10))
+				Debug3DText(ply, "Local Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_local_range", 1)), Color(100, 100, 255, 200))
+			end
+			if !GetGlobalDBool("bool_voice_channels", false) then
+				render.SetColorMaterial()
+				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, Color(255, 100, 100, 10))
+				Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+			end
+		end
+
+		if LocalPlayer():GetDBool("bool_canuseesp", false) then
+			render.SetColorMaterial()
+			local cent = ply:OBBCenter()
+			render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 1))
 		end
 
 		if GetGlobalDBool("bool_tag_on_head", false) then
@@ -1647,12 +1675,64 @@ function drawPlates(ply)
 	ply:drawPlayerInfo()
 	ply:drawWantedInfo()
 end
-
 hook.Add("PostPlayerDraw", "yrp_draw_plates", drawPlates)
 
-hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
-	local ply = LocalPlayer()
+function draw3DText(text, x, y, color)
+	color = color or Color(255, 255, 255, 255)
+	surface.SetTextColor(color)
+	surface.SetFont("YRP_O_" .. 24 .. "_700")
+	local tw, _ = surface.GetTextSize(text)
+	surface.SetTextPos(x - tw / 2, y)
+	surface.DrawText(text)
+end
 
+hook.Add("HUDPaint", "yrp_esp_draw", function()
+	if LocalPlayer():GetDBool("bool_canuseesp", false) then
+		for i, p in pairs(player.GetAll()) do
+			--if p != LocalPlayer() then
+				local OBBCen = p:LocalToWorld(p:OBBCenter())
+				local ScrCen = OBBCen:ToScreen()
+
+				local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos()) * 0.019, 0)
+				draw3DText(YRP.lang_string("LID_distance") .. ": " .. dist .. "m", ScrCen.x, ScrCen.y - 50)
+				draw3DText(YRP.lang_string("LID_health") .. ": " .. p:Health() .. "/" .. p:GetMaxHealth() .. " [" .. p:Armor() .. "/" .. p:GetMaxArmor() .. "]", ScrCen.x, ScrCen.y - 30)
+				draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]", ScrCen.x, ScrCen.y - 10)
+				draw3DText(YRP.lang_string("LID_role") .. ": " .. p:GetRoleName() .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y + 10)
+				draw3DText(YRP.lang_string("LID_usergroup") .. ": " .. p:GetUserGroup(), ScrCen.x, ScrCen.y + 30)
+			--end
+		end
+	end
+	if GetGlobalDBool("bool_server_debug_voice", false) then
+		for i, p in pairs(player.GetAll()) do
+			local OBBCen = p:LocalToWorld(p:OBBCenter())
+			local ScrCen = OBBCen:ToScreen()
+
+			local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos()) * 0.019, 0)
+			if dist > 0 then
+				draw3DText(YRP.lang_string("LID_distance") .. ": " .. dist .. "m", ScrCen.x, ScrCen.y - 40)
+			end
+
+			draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
+
+			if GetGlobalDBool("bool_voice_channels", false) then
+				local channel = "X"
+				if p:GetDInt("speak_channel", -1) == 1 then
+					channel = YRP.lang_string("LID_speakgroup") .. " [" .. p:GetGroupName() .. "]"
+				elseif p:GetDInt("speak_channel", -1) == 2 then
+					channel = YRP.lang_string("LID_speakglobal")
+				else
+					channel = YRP.lang_string("LID_speaklocal")
+				end
+				draw3DText(channel .. " (ID: " .. p:GetDInt("speak_channel", -1) .. ")", ScrCen.x, ScrCen.y, Color(255, 255, 0, 255))
+			end
+			if p:GetDBool("yrp_speaking", false) then
+				draw3DText("IS SPEAKING! [Volume: " .. math.Round(p:VoiceVolume(), 2) .. "]", ScrCen.x, ScrCen.y + 20, Color(0, 255, 0, 255))
+			end
+		end
+	end
+end)
+
+hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	if GetGlobalDBool("tag_immortal", false) then
 		for i, ent in pairs(ents.GetAll()) do
 			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetDBool("immortal", false) or ent:GetDBool("godmode", false)) then

@@ -280,6 +280,9 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
+
+	SendDGlobals(ply)
+	SendDEntities(ply)
 end)
 
 YRP = YRP or {}
@@ -287,6 +290,8 @@ YRP = YRP or {}
 function YRP:Loadout(ply)
 	printGM("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
 	ply:SetDBool("bool_loadouted", false)
+
+	ply:SetDInt("speak_channel", 0)
 
 	ply:DesignLoadout()
 	ply:UserGroupLoadout()
@@ -743,39 +748,48 @@ end)
 
 --[[ SPEAK Channels ]] --
 util.AddNetworkString("press_speak_next")
-util.AddNetworkString("press_speak_prev")
-
 net.Receive("press_speak_next", function(len, ply)
-	ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) + 1)
-	if ply:GetDInt("speak_channel", 0) > 1 then
-		if ply:GetDBool("yrp_voice_global", false) then
-			if ply:GetDInt("speak_channel", 0) > 2 then
+	if GetGlobalDBool("bool_voice", false) and GetGlobalDBool("bool_voice_channels", false) then
+		ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) + 1)
+		if ply:GetDInt("speak_channel", 0) > 1 then
+			if ply:GetDBool("yrp_voice_global", false) then
+				if ply:GetDInt("speak_channel", 0) > 2 then
+					ply:SetDInt("speak_channel", 0)
+				end
+			else
 				ply:SetDInt("speak_channel", 0)
 			end
-		else
-			ply:SetDInt("speak_channel", 0)
 		end
+	else
+		ply:SetDInt("speak_channel", 0)
 	end
 end)
 
+util.AddNetworkString("press_speak_prev")
 net.Receive("press_speak_prev", function(len, ply)
-	ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) - 1)
-	if ply:GetDInt("speak_channel", 0) < 0 then
-		if ply:GetDBool("yrp_voice_global", false) then
-			ply:SetDInt("speak_channel", 2)
-		else
-			ply:SetDInt("speak_channel", 1)
+	if GetGlobalDBool("bool_voice", false) and GetGlobalDBool("bool_voice_channels", false) then
+		ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) - 1)
+		if ply:GetDInt("speak_channel", 0) < 0 then
+			if ply:GetDBool("yrp_voice_global", false) then
+				ply:SetDInt("speak_channel", 2)
+			else
+				ply:SetDInt("speak_channel", 1)
+			end
 		end
+	else
+		ply:SetDInt("speak_channel", 0)
 	end
 end)
 
 util.AddNetworkString("yrp_voice_start")
 net.Receive("yrp_voice_start", function(len, ply)
-	ply:SetDBool("yrp_speaking", true)
-	if ply:GetDString("speak_channel") == 2 then
-		for k, v in pairs(player.GetAll()) do
-			v:SetDString("voice_global_steamid", ply:SteamID())
-			v:SetDString("voice_global_rolename", ply:GetDString("RoleName"))
+	if GetGlobalDBool("bool_voice", false) then
+		ply:SetDBool("yrp_speaking", true)
+		if ply:GetDString("speak_channel") == 2 then
+			for k, v in pairs(player.GetAll()) do
+				v:SetDString("voice_global_steamid", ply:SteamID())
+				v:SetDString("voice_global_rolename", ply:GetDString("RoleName"))
+			end
 		end
 	end
 end)
@@ -785,44 +799,61 @@ net.Receive("yrp_voice_end", function(len, ply)
 	ply:SetDBool("yrp_speaking", false)
 end)
 
-function hearfaded(talker, listener)
+function hearfaded(listener, talker)
 	local t_speak_channel = tonumber(talker:GetDInt("speak_channel"))
 	local t_guid = tonumber(talker:GetDString("groupUniqueID"))
 	local l_guid = tonumber(listener:GetDString("groupUniqueID"))
 	if t_speak_channel == 0 or t_speak_channel == 1 and t_guid != l_guid then
-		return true
+		return true -- if talker is local or global and not in same group
 	else
 		return false
 	end
 	return false
 end
 
-function canhear(talker, listener)
+function canhear(listener, talker)
 	local t_speak_channel = tonumber(talker:GetDInt("speak_channel"))
 	local t_guid = tonumber(talker:GetDString("groupUniqueID"))
 	local l_guid = tonumber(listener:GetDString("groupUniqueID"))
-	local dist = talker:GetPos():Distance(listener:GetPos())
-	if t_speak_channel == 2 then
-		return true
-	elseif t_speak_channel == 1 and t_guid == l_guid or dist < GetGroupVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled() then
-		return true
-	elseif dist < GetVoiceChatLocalRange() then
-		return true
+	local dist = listener:GetPos():Distance(talker:GetPos())
+	if t_speak_channel == 2 then -- GLOBAL
+		--print(listener, talker, "GLOBAL ||| t_speak_channel == 2")
+		return true -- if talker is globalvoice
+	elseif t_speak_channel == 1 and t_guid == l_guid then
+		--print(listener, talker, "SAME GROUP ||| t_speak_channel == 1 and t_guid == l_guid")
+		return true -- if talker is groupvoice and same group
+	elseif t_speak_channel == 1 and dist < GetVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled() then
+		--print(listener, talker, "GROUP LOCAL VOICE RANGE |||| dist < GetVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled()")
+		return true -- is near groupvoicerange
+	elseif dist < GetVoiceChatLocalRange() then -- LOCAL
+		--print(listener, talker, "LOCAL VOICE RANGE |||| dist < GetVoiceChatLocalRange()")
+		return true -- if near local range
 	else
 		return false
 	end
 end
 
+function IsInMaxVoiceRange(listener, talker)
+	local dist = listener:GetPos():Distance(talker:GetPos())
+	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
+	--print(listener, talker, result)
+	return result
+end
+
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if IsVoiceEnabled() then
-		if Is3DVoiceEnabled() then
-			if IsVoiceChannelsEnabled() then
-				return canhear(talker, listener), hearfaded(talker, listener)	-- 3D Voice chat + voice channels
+		if listener != talker then
+			if Is3DVoiceEnabled() then
+				if IsVoiceChannelsEnabled() then
+					return canhear(listener, talker), hearfaded(listener, talker)	-- 3D Voice chat + voice channels
+				else
+					return IsInMaxVoiceRange(listener, talker), true	-- 3D Voice enabled
+				end
 			else
-				return true, true	-- 3D Voice enabled
+				return true, false -- 3D Voice chat disabled
 			end
 		else
-			return true, false -- 3D Voice chat disabled
+			return false
 		end
 	else
 		return false -- Voice disabled

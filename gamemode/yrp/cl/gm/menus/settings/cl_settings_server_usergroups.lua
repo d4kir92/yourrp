@@ -503,6 +503,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_canseeteammatesonmap", "LID_gp_canseeteammatesonmap")
 	GAMEPLAYAddCheckBox("bool_canseeenemiesonmap", "LID_gp_canseeenemiesonmap")
+	GAMEPLAYAddHr()
+	GAMEPLAYAddCheckBox("bool_canuseesp", "LID_gp_canuseesp")
 end)
 
 function AddUG(tbl)

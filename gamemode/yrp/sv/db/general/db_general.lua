@@ -30,6 +30,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'T
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug_voice", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_gm", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_db", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_noti", "INT DEFAULT 1")
@@ -37,8 +39,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_lang", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_darkrp", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_chat", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_debug", "INT DEFAULT 0")
-
-SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_group_local_range", "INT DEFAULT 60")
 
 --[[ Gamemode Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'")
@@ -85,7 +85,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_3d", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_local_range", "INT DEFAULT 300")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_group_local_range", "INT DEFAULT 100")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
 
 --[[ Gamemode Visuals ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''")
@@ -340,8 +340,8 @@ function GetVoiceChatLocalRange()
 	return tonumber(yrp_general.int_voice_local_range)
 end
 
-function GetGroupVoiceChatLocalRange()
-	return tonumber(yrp_general.int_voice_group_local_range)
+function GetMaxVoiceRange()
+	return tonumber(yrp_general.int_voice_max_range)
 end
 
 function GetMaxAmountOfDroppedMoney()
@@ -372,7 +372,7 @@ function Player:GeneralLoadout()
 			SetGlobalDString(i, set)
 		elseif string.StartWith(i, "bool_") then
 			SetGlobalDBool(i, tobool(set))
-		elseif string.StartWith(i, "bool_") then
+		elseif string.StartWith(i, "int_") then
 			SetGlobalDInt(i, tonumber(set))
 		end
 	end
@@ -506,6 +506,12 @@ net.Receive("update_bool_server_debug", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_server_debug", "bool_server_debug", b)
 	RunConsoleCommand("lua_log_sv", b)
 	RunConsoleCommand("lua_log_cl", b)
+end)
+
+util.AddNetworkString("update_bool_server_debug_voice")
+net.Receive("update_bool_server_debug_voice", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_server_debug_voice", "bool_server_debug_voice", b)
 end)
 
 util.AddNetworkString("update_int_server_debug_tick")
@@ -764,11 +770,11 @@ net.Receive("update_int_voice_local_range", function(len, ply)
 	end
 end)
 
-util.AddNetworkString("update_int_voice_group_local_range")
-net.Receive("update_int_voice_group_local_range", function(len, ply)
+util.AddNetworkString("update_int_voice_max_range")
+net.Receive("update_int_voice_max_range", function(len, ply)
 	local int = net.ReadString()
 	if isnumber(tonumber(int)) then
-		GeneralUpdateInt(ply, "update_int_voice_group_local_range", "int_voice_group_local_range", int)
+		GeneralUpdateInt(ply, "update_int_voice_max_range", "int_voice_max_range", int)
 	end
 end)
 

@@ -58,6 +58,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
@@ -884,6 +885,13 @@ net.Receive("usergroup_update_bool_canseeenemiesonmap", function(len, ply)
 	UGCheckBox(ply, uid, "bool_canseeenemiesonmap", bool_canseeenemiesonmap)
 end)
 
+util.AddNetworkString("usergroup_update_bool_canuseesp")
+net.Receive("usergroup_update_bool_canuseesp", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_canuseesp = net.ReadString()
+	UGCheckBox(ply, uid, "bool_canuseesp", bool_canuseesp)
+end)
+
 -- Functions
 hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, name, tab)
 	if ea(pl) then
@@ -1519,6 +1527,7 @@ function Player:UserGroupLoadout()
 		self:SetDBool("bool_adminaccess", tobool(UG.bool_adminaccess))
 		self:SetDBool("bool_canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
 		self:SetDBool("bool_canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
+		self:SetDBool("bool_canuseesp", tobool(UG.bool_canuseesp))
 	end
 end
 

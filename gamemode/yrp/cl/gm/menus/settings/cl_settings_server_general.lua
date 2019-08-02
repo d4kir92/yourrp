@@ -1,13 +1,14 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-function CreateCheckBoxLine(dpanellist, val, lstr, netstr)
+function CreateCheckBoxLine(dpanellist, val, lstr, netstr, fixx)
+	fixx = fixx or 0
 	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
 	background.text_posx = YRP.ctr(50 + 10)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, self.text_posx, nil, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, self.text_posx + YRP.ctr(fixx), nil, 0, 1)
 	end
 
-	background.checkbox = createD("DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0, 0)
+	background.checkbox = createD("DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0 + YRP.ctr(fixx), 0)
 	background.checkbox:SetValue(val)
 	function background.checkbox:Paint(pw, ph)
 		surfaceCheckBox(self, pw, ph, "done")
@@ -183,13 +184,13 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	return background
 end
 
-function CreateNumberWangLine(dpanellist, value, lstr, netstr)
+function CreateNumberWangLine(dpanellist, value, lstr, netstr, fixx)
 	local background = createD("DPanel", nil, YRP.ctr(800), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10) + YRP.ctr(fixx), ph * 1 / 4, 0, 1)
 	end
 
-	background.numberwang = createD("DNumberWang", background, YRP.ctr(800) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+	background.numberwang = createD("DNumberWang", background, YRP.ctr(800) - YRP.ctr(10 * 2) - YRP.ctr(fixx), YRP.ctr(50), YRP.ctr(10) + YRP.ctr(fixx), YRP.ctr(50))
 	background.numberwang:SetMax(999999999999)
 	background.numberwang:SetMin(-999999999999)
 	background.numberwang:SetValue(value)
@@ -340,6 +341,8 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_msg_channel_darkrp = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_darkrp, "Console DarkRP (DarkRP)", "update_bool_msg_channel_darkrp")
 		local bool_msg_channel_chat = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_chat, "Console Chat (CHAT)", "update_bool_msg_channel_chat")
 		local bool_msg_channel_debug = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_msg_channel_debug, "Console DEBUG (DEBUG)", "update_bool_msg_channel_debug")
+		CreateHRLine(SERVER_SETTINGS.plus)
+		local bool_server_debug_voice = CreateCheckBoxLine(SERVER_SETTINGS.plus, GEN.bool_server_debug_voice, "Voice DEBUG", "update_bool_server_debug_voice")
 
 
 
@@ -409,13 +412,11 @@ net.Receive("Connect_Settings_General", function(len)
 		local bool_players_die_on_role_switch = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_players_die_on_role_switch, "LID_playersdieonroleswitch", "update_bool_players_die_on_role_switch")
 		CreateHRLine(GAMEMODE_SYSTEMS.plus)
 		local bool_voice = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice, "LID_voicechat", "update_bool_voice")
-		local bool_voice_3d = CreateCheckBoxLineTab(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_3d, "LID_3dvoicechat", "update_bool_voice_3d")
-		local bool_voice_channels = CreateCheckBoxLineTab(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_channels, YRP.lang_string("LID_voicechatchannels") .. " (currently not available)", "update_bool_voice_channels")
-		local int_voice_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_local_range, YRP.lang_string("LID_localvoicechatdistance") .. " (currently not available)", "update_int_voice_local_range")
-		local bool_voice_group_local = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_group_local, YRP.lang_string("LID_groupvoicechatisaudiblelocally") .. " (currently not available)", "update_bool_voice_group_local")
-		local int_voice_group_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_group_local_range, YRP.lang_string("LID_localgroupvoicechatdistance") .. " (currently not available)", "update_int_voice_group_local_range")
-
-
+		local bool_voice_3d = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_3d, "LID_3dvoicechat", "update_bool_voice_3d", 50)
+		local int_voice_max_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_max_range, YRP.lang_string("LID_maxvoicerange"), "update_int_voice_max_range", 100)
+		local bool_voice_channels = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_channels, YRP.lang_string("LID_voicechatchannels"), "update_bool_voice_channels", 50)
+		local int_voice_local_range = CreateNumberWangLine(GAMEMODE_SYSTEMS.plus, GEN.int_voice_local_range, YRP.lang_string("LID_localvoicechatdistance"), "update_int_voice_local_range", 100)
+		local bool_voice_group_local = CreateCheckBoxLine(GAMEMODE_SYSTEMS.plus, GEN.bool_voice_group_local, YRP.lang_string("LID_groupvoicechatisaudiblelocally"), "update_bool_voice_group_local", 100)
 
 		--[[ GAMEMODE VISUALS ]]--
 		local Gamemode_Visuals = createD("DPanel", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
