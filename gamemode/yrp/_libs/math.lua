@@ -96,7 +96,7 @@ end
 
 function getResolutionRatio()
 	local _ggt = ggT(ScrW(), ScrH())
-	return ScrW()/_ggt, ScrH()/_ggt
+	return ScrW() / _ggt, ScrH() / _ggt
 end
 
 function getPictureRatio(w, h)
@@ -121,7 +121,7 @@ function lowerToScreen(w, h)
 end
 
 function ctrF(tmpNumber)
-	tmpNumber = 2160/tmpNumber
+	tmpNumber = 2160 / tmpNumber
 	return math.Round(tmpNumber, 8)
 end
 
@@ -155,7 +155,7 @@ function ctrb(input)
 		if !under1080p() then
 			return YRP.ctr(input)
 		else
-			return input/2
+			return input / 2
 		end
 	else
 		return -1
@@ -163,18 +163,18 @@ function ctrb(input)
 end
 
 function ScrW2()
-	return (ScrW() / 2)
+	return ScrW() / 2
 end
 
 function ScrH2()
-	return (ScrH() / 2)
+	return ScrH() / 2
 end
 
 function formatMoney(money, ply)
-	if CLIENT then
+	if CLIENT and wk(money) then
 		return GetGlobalDString("text_money_pre", "") .. money .. GetGlobalDString("text_money_pos", "")
 	else
-		return "[FAILED]" .. money .. "[FAILED]"
+		return "[FAILED]" .. tostring(money) .. "[FAILED]"
 	end
 end
 

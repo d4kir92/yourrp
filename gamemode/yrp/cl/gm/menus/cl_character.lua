@@ -674,7 +674,11 @@ function openCharacterSelection()
 			local _close = createD("YButton", _cs.frame, YRP.ctr(50), YRP.ctr(50), ScrW() - YRP.ctr(60), YRP.ctr(10))
 			_close:SetText("X")
 			function _close:Paint(pw, ph)
-				hook.Run("YButtonPaint", self, pw, ph)
+				local hasdesign = hook.Run("YButtonPaint", self, pw, ph)
+				if !hasdesign then
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleTextOutlined("X", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				end
 			end
 			function _close:DoClick()
 				closeCharacterSelection()
@@ -683,7 +687,11 @@ function openCharacterSelection()
 			local feedback = createD("YButton", _cs.frame, YRP.ctr(500), YRP.ctr(50), ScrW() - YRP.ctr(510), ScrH() - YRP.ctr(60))
 			feedback:SetText("LID_givefeedback")
 			function feedback:Paint(pw, ph)
-				hook.Run("YButtonPaint", self, pw, ph)
+				local hasdesign = hook.Run("YButtonPaint", self, pw, ph)
+				if !hasdesign then
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleTextOutlined("X", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				end
 			end
 			function feedback:DoClick()
 				closeCharacterSelection()
@@ -880,7 +888,12 @@ function openCharacterSelection()
 				local tab = {}
 				tab.text = YRP.lang_string("LID_deletecharacter")
 				tab.color = Color(255, 0, 0)
-				hook.Run("YButtonPaint", self, pw, ph, tab)
+
+				local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
+				if !hasdesign then
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleTextOutlined(tab.text, "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				end
 			end
 			function deleteChar:DoClick()
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
@@ -934,7 +947,12 @@ function openCharacterSelection()
 						tab.color = Color(255, 0, 0)
 					end
 				end
-				hook.Run("YButtonPaint", self, pw, ph, tab)
+
+				local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
+				if !hasdesign then
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleTextOutlined(tab.text, "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				end
 			end
 
 			charactersEnter:SetText("")

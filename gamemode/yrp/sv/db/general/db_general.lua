@@ -74,6 +74,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_level_system", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_die_on_role_switch", "INT DEFAULT 0")
@@ -692,6 +693,12 @@ util.AddNetworkString("update_bool_realistic_system")
 net.Receive("update_bool_realistic_system", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_realistic_system", "bool_realistic_system", b)
+end)
+
+util.AddNetworkString("update_bool_level_system")
+net.Receive("update_bool_level_system", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_level_system", "bool_level_system", b)
 end)
 
 

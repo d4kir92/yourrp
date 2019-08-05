@@ -91,7 +91,7 @@ function FO76Element(tab)
 		m.h = tab.thickness
 
 		FO76["Bar"][tab.element].r = 0
-		local br = h * tab.br
+		br = h * tab.br
 		br = br + (1 - h * tab.br % 1)
 		FO76["Bar"][tab.element].fw = m.w - 2 * br
 		FO76["Bar"][tab.element].w = FO76["Bar"][tab.element].fw
@@ -448,12 +448,14 @@ function HUD_FO76()
 		]]
 
 		local XP = {}
-		XP.element = "XP"
-		XP.text = YRP.lang_string("LID_xp")
-		XP.cur = lply:XP()
-		XP.max = lply:GetMaxXP()
-		XP.centertext = lply:Level()
-		FO76Element(XP)
+		if IsLevelSystemEnabled() then
+			XP.element = "XP"
+			XP.text = YRP.lang_string("LID_xp")
+			XP.cur = lply:XP()
+			XP.max = lply:GetMaxXP()
+			XP.centertext = lply:Level()
+			FO76Element(XP)
+		end
 
 		if IsChatVisible() then
 			local CH = {}

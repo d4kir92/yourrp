@@ -10,6 +10,18 @@ include("player/interface.lua")
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")
 
+function Player:Battery()
+	local battery = system.BatteryPower()
+	if battery > 100 then
+		battery = 100
+	end
+	return battery
+end
+
+function Player:GetMaxBattery()
+	return 100
+end
+
 function Player:AFK()
 	return self:GetDBool("isafk", false)
 end

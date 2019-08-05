@@ -85,7 +85,7 @@ function createShopItem(item, duid)
 	end
 
 	if LocalPlayer():HasLicense(item.licenseID) then
-		if LocalPlayer():Level() < item.int_level then
+		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
 			_i.require = createD("DPanel", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)

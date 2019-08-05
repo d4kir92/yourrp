@@ -67,12 +67,12 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_icons", function()
 	RegisterHUDDesign(HUD_Icons)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_animated", function()
-	local HUD_Animated = {}
-	HUD_Animated.name = "Animated"
-	HUD_Animated.author = "D4KiR"
-	HUD_Animated.progress = 1
-	RegisterHUDDesign(HUD_Animated)
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_circles", function()
+	local HUD_Circles = {}
+	HUD_Circles.name = "Circles"
+	HUD_Circles.author = "D4KiR"
+	HUD_Circles.progress = 90
+	RegisterHUDDesign(HUD_Circles)
 end)
 
 --[[ LOADOUT ]]--

@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 108 --do NOT change this!
-GM.VersionCanary = 220 --do NOT change this!
+GM.VersionBeta = 109 --do NOT change this!
+GM.VersionCanary = 221 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -166,7 +166,7 @@ concommand.Add("yrp_players", function(ply, cmd, args)
 		local _id = makeString(string.ToTable(pl:UserID()), 4, false)
 		local _steamid = makeString(string.ToTable(pl:SteamID()), 20, false)
 		local _name = makeString(string.ToTable(pl:YRPName()), 24, true)
-		local _money = makeString(string.ToTable(pl:GetDString("money")), 12, false)
+		local _money = makeString(string.ToTable(pl:GetDString("money", -1)), 12, false)
 		local _str = string.format("%s %s %s %s", _id, _steamid, _name, _money)
 		printGM("gm", _str)
 	end

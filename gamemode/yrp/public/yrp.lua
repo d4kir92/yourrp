@@ -9,3 +9,7 @@ end
 function GetTranslation(id)
 	return GTS(id)
 end
+
+function IsLevelSystemEnabled()
+	return GetGlobalDBool("bool_level_system", false)
+end

@@ -148,43 +148,74 @@ local oldlevel = nil
 hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	local ply = LocalPlayer()
 
-	if oldlevel == nil then
-		ply:Level()
-	end
-	if oldlevel != ply:Level() then
-		oldlevel = ply:Level()
-
-		surface.PlaySound("garrysmod/content_downloaded.wav")
-
-		local levelup = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(300), 0, 0)
-		levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400))
-		levelup:ShowCloseButton(false)
-		levelup:SetTitle("")
-
-		function levelup:Paint(pw, ph)
-			draw.SimpleTextOutlined(YRP.lang_string("LID_levelup"), "HudHeader", pw / 2, ph / 2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			local tab = {}
-			tab["LEVEL"] = ply:Level()
-			draw.SimpleTextOutlined(YRP.lang_string("LID_levelx", tab), "HudBars", pw / 2, ph / 2 + YRP.ctr(80), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			if oldlevel != ply:Level() then
-				self:Remove()
-			end
+	if IsLevelSystemEnabled() then
+		if oldlevel == nil then
+			ply:Level()
 		end
-		levelup.timer = timer.Simple(10, function()
-			levelup:Remove()
-		end)
+		if oldlevel != ply:Level() then
+			oldlevel = ply:Level()
+
+			surface.PlaySound("garrysmod/content_downloaded.wav")
+
+			local levelup = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(300), 0, 0)
+			levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400))
+			levelup:ShowCloseButton(false)
+			levelup:SetTitle("")
+
+			function levelup:Paint(pw, ph)
+				draw.SimpleTextOutlined(YRP.lang_string("LID_levelup"), "HudHeader", pw / 2, ph / 2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				local tab = {}
+				tab["LEVEL"] = ply:Level()
+				draw.SimpleTextOutlined(YRP.lang_string("LID_levelx", tab), "HudBars", pw / 2, ph / 2 + YRP.ctr(80), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				if oldlevel != ply:Level() then
+					self:Remove()
+				end
+			end
+			levelup.timer = timer.Simple(10, function()
+				levelup:Remove()
+			end)
+		end
 	end
 end)
 
+local HUD_AVATAR = nil
+local PAvatar = vgui.Create("DPanel")
+function PAvatar:Paint(pw, ph)
+	render.ClearStencil()
+	render.SetStencilEnable(true)
+
+		render.SetStencilWriteMask(1)
+		render.SetStencilTestMask(1)
+
+		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+
+		render.SetStencilFailOperation(STENCILOPERATION_INCR)
+		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+
+		render.SetStencilReferenceValue(1)
+
+		drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
+
+		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+
+		if HUD_AVATAR != nil then
+			HUD_AVATAR:SetPaintedManually(false)
+			HUD_AVATAR:PaintManual()
+			HUD_AVATAR:SetPaintedManually(true)
+		end
+
+	render.SetStencilEnable(false)
+end
 timer.Simple(1, function()
-	local Avatar = vgui.Create("AvatarImage", nil)
+	HUD_AVATAR = vgui.Create("AvatarImage", PAvatar)
 	local ava = {}
 	ava.w = 64
 	ava.h = 64
 	ava.x = 0
 	ava.y = 0
 	ava.version = -1
-	function Avatar:Think()
+	function HUD_AVATAR:Think()
 		local lply = LocalPlayer()
 		if lply:GetDInt("hud_version", 0) != ava.version then
 			ava.version = lply:GetDInt("hud_version", 0)
@@ -195,12 +226,15 @@ timer.Simple(1, function()
 			ava.y = lply:HudValue("AV", "POSI_Y")
 			ava.visible = lply:HudValue("AV", "VISI")
 
-			Avatar:SetPos(ava.x, ava.y)
-			Avatar:SetSize(ava.h, ava.h)
-			Avatar:SetPlayer(LocalPlayer(), ava.h)
+			PAvatar:SetPos(ava.x, ava.y)
+			PAvatar:SetSize(ava.h, ava.h)
+			self:SetPlayer(LocalPlayer(), ava.h)
 			if !ava.visible then
-				Avatar:SetSize(0, 0)
+				PAvatar:SetSize(0, 0)
 			end
+
+			self:SetPos(0, 0)
+			self:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
 		end
 	end
 end)

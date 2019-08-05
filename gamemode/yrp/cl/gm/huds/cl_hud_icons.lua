@@ -95,9 +95,11 @@ function HUDIcons()
 		HUDIconsDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxStamina())
 		HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
 
-		local tab = {}
-		tab["LEVEL"] = lply:Level()
-		HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
+		if IsLevelSystemEnabled() then
+			local tab = {}
+			tab["LEVEL"] = lply:Level()
+			HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
+		end
 
 		HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
 		HUDIconsDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(1))

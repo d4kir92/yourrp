@@ -1540,7 +1540,7 @@ function drawPlates(ply)
 				_height = _height + 5
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_level", false) then
+			if IsLevelSystemEnabled() and GetGlobalDBool("bool_tag_on_head_level", false) then
 				local lvl = ply:Level()
 				local t = {}
 				t["LEVEL"] = lvl

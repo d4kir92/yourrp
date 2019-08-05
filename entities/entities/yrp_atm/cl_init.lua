@@ -25,7 +25,7 @@ function ENT:Draw()
 		self.display.ent = self
 
 		function self.display:Paint(pw, ph)
-			local bankName = "YRP Bank [" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("moneybank") .. GetGlobalDString("text_money_pos", "") .. "]"
+			local bankName = "YRP Bank [" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("moneybank", "-1") .. GetGlobalDString("text_money_pos", "") .. "]"
 			if self.ent:GetDString("status") == "startup" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
 				draw.SimpleTextOutlined("..." .. YRP.lang_string("LID_loading") .. "...", "ATM_Header", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

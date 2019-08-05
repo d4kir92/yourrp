@@ -338,7 +338,7 @@ function OpenSBS()
 
 			local x = 128 + 10
 
-			if GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
+			if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + 160
 			end
@@ -454,7 +454,7 @@ function OpenSBS()
 					local x = 128 + 10
 					if true then
 
-						if GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
+						if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
 							draw.SimpleTextOutlined(pl:Level(), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							x = x + 160
 						end

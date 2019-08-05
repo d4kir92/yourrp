@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2019 Arno Zura (https: /  / www.gnu.org / licenses / gpl.txt)
 
 function fake_true()
 	return true
@@ -82,11 +82,11 @@ function HUDSimpleBAR(tab)
 				ay = 2
 			end
 			if lply:HudValue(tab.element, "ROUN") then
-				Simple[tab.element]["text"].x = x + h/2 + (w - h) / 2 * ax
-				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
+				Simple[tab.element]["text"].x = x + h / 2 + (w - h) / 2 * ax
+				Simple[tab.element]["text"].y = y + h / 16 + (h - h / 8) / 2 * ay
 			else
-				Simple[tab.element]["text"].x = x + h/16 + (w - h/8) / 2 * ax
-				Simple[tab.element]["text"].y = y + h/16 + (h - h/8) / 2 * ay
+				Simple[tab.element]["text"].x = x + h / 16 + (w - h / 8) / 2 * ax
+				Simple[tab.element]["text"].y = y + h / 16 + (h - h / 8) / 2 * ay
 			end
 			Simple[tab.element]["text"].text = tab.element
 			local fontsize = lply:HudValue(tab.element, "TS")
@@ -172,7 +172,7 @@ function HUDSimpleBR(tab)
 				end
 
 				Simple[tab.element]["border"].color = lply:HudValue(tab.element, "BR")
-				Simple[tab.element]["border"].br = YRP.ctr(2)
+				Simple[tab.element]["border"].br = YRP.ctr(4)
 			elseif lply:HudValue(tab.element, "ROUN") then
 				HudBoxBrRounded(Simple[tab.element]["border"])
 			else
@@ -315,8 +315,18 @@ function HUDSimpleCompass(tab)
 	end
 end
 
+local _fps = 144
+local _fps_delay = 0
+function FPS_Think()
+	if CurTime() > _fps_delay then
+		_fps_delay = CurTime() + 0.5
+		_fps = math.Round(1 / RealFrameTime())
+	end
+end
+
+hook.Add("HUDPaint", "yrp_think_fps", FPS_Think)
 function GetFPS()
-	return math.Round(1 / RealFrameTime())
+	return _fps
 end
 
 local fps = 0
@@ -360,9 +370,11 @@ function HUDSimple()
 		local AR = {}
 		AR.element = "AR"
 		HUDSimpleBG(AR)
-		local XP = {}
-		XP.element = "XP"
-		HUDSimpleBG(XP)
+		if IsLevelSystemEnabled() then
+			local XP = {}
+			XP.element = "XP"
+			HUDSimpleBG(XP)
+		end
 		local MO = {}
 		MO.element = "MO"
 		HUDSimpleBG(MO)
@@ -460,7 +472,7 @@ function HUDSimple()
 		HP.element = "HP"
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
-		HP.text = lply:Health() .. "/" .. lply:GetMaxHealth()
+		HP.text = lply:Health() .. " / " .. lply:GetMaxHealth()
 		HP.percentage = lply:Health() / lply:GetMaxHealth() * 100 .. "%"
 		HP.icon = Material("icon16/heart.png")
 		HUDSimpleBAR(HP)
@@ -468,16 +480,18 @@ function HUDSimple()
 		AR.element = "AR"
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
-		AR.text = lply:Armor() .. "/" .. lply:GetMaxArmor()
+		AR.text = lply:Armor() .. " / " .. lply:GetMaxArmor()
 		AR.percentage = lply:Armor() / lply:GetMaxArmor() * 100 .. "%"
 		AR.icon = Material("icon16/shield.png")
 		HUDSimpleBAR(AR)
 		XP = {}
-		XP.element = "XP"
-		XP.cur = lply:XP()
-		XP.max = lply:GetMaxXP()
-		XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
-		HUDSimpleBAR(XP)
+		if IsLevelSystemEnabled() then
+			XP.element = "XP"
+			XP.cur = lply:XP()
+			XP.max = lply:GetMaxXP()
+			XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. " / " .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
+			HUDSimpleBAR(XP)
+		end
 		MO = {}
 		MO.element = "MO"
 		MO.cur = 1
@@ -505,7 +519,7 @@ function HUDSimple()
 			ST.element = "ST"
 			ST.cur = lply:Stamina()
 			ST.max = lply:GetMaxStamina()
-			ST.text = lply:Stamina() .. "/" .. lply:GetMaxStamina()
+			ST.text = lply:Stamina() .. " / " .. lply:GetMaxStamina()
 			ST.percentage = lply:Stamina() / lply:GetMaxStamina() * 100 .. "%"
 			ST.icon = Material("icon16/lightning.png")
 			HUDSimpleBAR(ST)
@@ -515,7 +529,7 @@ function HUDSimple()
 			HU.element = "HU"
 			HU.cur = lply:Hunger()
 			HU.max = lply:GetMaxHunger()
-			HU.text = math.Round(lply:Hunger(), 1) .. "/" .. math.Round(lply:GetMaxHunger(), 0)
+			HU.text = math.Round(lply:Hunger(), 1) .. " / " .. math.Round(lply:GetMaxHunger(), 0)
 			HU.percentage = math.Round(lply:Hunger() / lply:GetMaxHunger() * 100, 0) .. "%"
 			HU.icon = Material("icon16/cake.png")
 			HUDSimpleBAR(HU)
@@ -525,7 +539,7 @@ function HUDSimple()
 			TH.element = "TH"
 			TH.cur = lply:Thirst()
 			TH.max = lply:GetMaxThirst()
-			TH.text = math.Round(lply:Thirst(), 1) .. "/" .. math.Round(lply:GetMaxThirst(), 0)
+			TH.text = math.Round(lply:Thirst(), 1) .. " / " .. math.Round(lply:GetMaxThirst(), 0)
 			TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 0) .. "%"
 			TH.icon = Material("icon16/cup.png")
 			HUDSimpleBAR(TH)
@@ -545,7 +559,7 @@ function HUDSimple()
 		AB.element = "AB"
 		AB.cur = lply:Ability()
 		AB.max = lply:GetMaxAbility()
-		AB.text = math.Round(lply:Ability(), 1) .. "/" .. math.Round(lply:GetMaxAbility(), 1)
+		AB.text = math.Round(lply:Ability(), 1) .. " / " .. math.Round(lply:GetMaxAbility(), 1)
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
 		AB.icon = Material("icon16/wand.png")
 		HUDSimpleBAR(AB)
@@ -565,7 +579,7 @@ function HUDSimple()
 				WP.element = "WP"
 				WP.cur = clip1
 				WP.max = clip1max
-				WP.text = clip1 .. "/" .. clip1max.. " | " .. ammo1
+				WP.text = clip1 .. " / " .. clip1max .. " | " .. ammo1
 				HUDSimpleBAR(WP)
 			end
 			if ammo2 != nil then
@@ -573,7 +587,7 @@ function HUDSimple()
 				WS.element = "WS"
 				WS.cur = clip2
 				WS.max = clip2max
-				WS.text = clip2 .. "/" .. clip2max .. " | " .. ammo2
+				WS.text = clip2 .. " / " .. clip2max .. " | " .. ammo2
 				HUDSimpleBAR(WS)
 			end
 			WN = {}
@@ -710,9 +724,11 @@ function HUDSimple()
 		AR = {}
 		AR.element = "AR"
 		HUDSimpleBR(AR)
-		XP = {}
-		XP.element = "XP"
-		HUDSimpleBR(XP)
+		if IsLevelSystemEnabled() then
+			XP = {}
+			XP.element = "XP"
+			HUDSimpleBR(XP)
+		end
 		MO = {}
 		MO.element = "MO"
 		HUDSimpleBR(MO)

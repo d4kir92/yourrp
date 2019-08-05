@@ -244,10 +244,6 @@ function GM:PlayerInitialSpawn(ply)
 	net.Start("yrp_askforinfo")
 	net.Send(ply)
 
-	ply:DesignLoadout()
-	ply:UserGroupLoadout()
-	ply:GeneralLoadout()
-
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()
 		if rolTab != nil then
@@ -280,6 +276,9 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	--ply:KillSilent()
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
+
+	ply:DesignLoadout()
+	ply:GeneralLoadout()
 
 	SendDGlobals(ply)
 	SendDEntities(ply)
