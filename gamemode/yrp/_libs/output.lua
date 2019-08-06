@@ -270,6 +270,7 @@ countries["GR"] = "Greece"
 countries["HO"] = "Hong Kong"
 countries["HU"] = "Hungary"
 
+countries["ID"] = "Indonesia"
 countries["IE"] = "Ireland"
 countries["IR"] = "Iran"
 countries["IS"] = "Iceland"

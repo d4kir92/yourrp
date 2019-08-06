@@ -150,35 +150,32 @@ function time_jail(ply)
 end
 
 function check_salary(ply)
-	if worked(ply:GetDString("money"), "sv_think money fail") and worked(ply:GetDString("salary"), "sv_think salary fail") then
+	local _m = ply:GetDString("money", "FAILED")
+	local _ms = ply:GetDString("salary", "FAILED")
+	if _m == "FAILED" or _ms == "FAILED" then
+		printGM("note", "_m or _ms failed _m: " .. _m .. " _ms: " .. _ms)
+		return false
+	end
+	local _money = tonumber(_m)
+	local _salary = tonumber(_ms)
+
+	if _money != nil and _salary != nil then
 		if CurTime() >= ply:GetDInt("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
 			ply:SetDInt("nextsalarytime", CurTime() + ply:GetDInt("salarytime"))
 
-			local _m = ply:GetDString("money", "FAILED")
-			local _ms = ply:GetDString("salary", "FAILED")
-			if _m == "FAILED" or _ms == "FAILED" then
-				printGM("note", "_m or _ms failed _m: " .. _m .. " _ms: " .. _ms)
-				return false
-			end
-			local _money = tonumber(_m)
-			local _salary = tonumber(_ms)
-			if _money != nil and _salary != nil then
-				ply:SetDString("money", _money + _salary)
-				ply:UpdateMoney()
-			else
-				printGM("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
-				ply:CheckMoney()
-			end
+			ply:SetDString("money", _money + _salary)
+			ply:UpdateMoney()
 		end
+	else
+		printGM("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
+		ply:CheckMoney()
 	end
 end
 
 function dealerAlive(uid)
 	for j, npc in pairs(ents.GetAll()) do
-		if npc:IsNPC() then
-			if tostring(npc:GetDString("dealerID", "FAILED")) == tostring(uid) then
-				return true
-			end
+		if npc:IsNPC() and tostring(npc:GetDString("dealerID", "FAILED")) == tostring(uid) then
+			return true
 		end
 	end
 	return false

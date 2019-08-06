@@ -45,9 +45,13 @@ if CLIENT then
 end
 
 function ENTITY:GetDString(key, value)
-	self.NWTAB = self.NWTAB or {}
-	self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
-	return self.NWTAB["STRING"][key] or value
+	if self != NULL then
+		self.NWTAB = self.NWTAB or {}
+		self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
+		return self.NWTAB["STRING"][key] or value
+	else
+		return ""
+	end
 end
 
 -- BOOL
@@ -91,13 +95,17 @@ if CLIENT then
 end
 
 function ENTITY:GetDBool(key, value)
-	self.NWTAB = self.NWTAB or {}
-	self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
-	local result = self.NWTAB["BOOL"][key]
-	if isbool(result) then
-		return result
+	if self != NULL then
+	  self.NWTAB = self.NWTAB or {}
+		self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
+		local result = self.NWTAB["BOOL"][key]
+		if isbool(result) then
+			return result
+		else
+			return value
+		end
 	else
-		return value
+		return false
 	end
 end
 
@@ -144,9 +152,13 @@ if CLIENT then
 end
 
 function ENTITY:GetDInt(key, value)
-	self.NWTAB = self.NWTAB or {}
-	self.NWTAB["INT"] = self.NWTAB["INT"] or {}
-	return self.NWTAB["INT"][key] or value
+	if self != NULL then
+	  self.NWTAB = self.NWTAB or {}
+		self.NWTAB["INT"] = self.NWTAB["INT"] or {}
+		return self.NWTAB["INT"][key] or value
+	else
+		return -1
+	end
 end
 
 -- FLOAT
@@ -192,9 +204,13 @@ if CLIENT then
 end
 
 function ENTITY:GetDFloat(key, value)
-	self.NWTAB = self.NWTAB or {}
-	self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
-	return self.NWTAB["FLOAT"][key] or value
+	if self != NULL then
+	  self.NWTAB = self.NWTAB or {}
+		self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
+		return self.NWTAB["FLOAT"][key] or value
+	else
+		return -1.0
+	end
 end
 
 -- ENTITY
@@ -240,9 +256,13 @@ if CLIENT then
 end
 
 function ENTITY:GetDEntity(key, value)
-	self.NWTAB = self.NWTAB or {}
-	self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
-	return self.NWTAB["ENTITY"][key] or value
+	if self != NULL then
+	  self.NWTAB = self.NWTAB or {}
+		self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
+		return self.NWTAB["ENTITY"][key] or value
+	else
+		return NULL
+	end
 end
 
 -- INIT

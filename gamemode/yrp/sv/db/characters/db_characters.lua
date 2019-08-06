@@ -381,34 +381,6 @@ net.Receive("charGetRoles", function(len, ply)
 				netTable[count] = v
 				count = count + 1
 			end
-			--[[
-			local insert = true
-			if tonumber(v.bool_adminonly) == 1 then
-				if ply:HasAccess() then
-					insert = true
-				else
-					insert = false
-				end
-			else
-				if tonumber(v.int_maxamount) > 0 then
-					if tonumber(v.int_uses) < tonumber(v.int_maxamount) and tonumber(v.int_uses) < tonumber(#player.GetAll()) * (tonumber(v.int_amountpercentage) / 100) then
-						insert = true
-					else
-						insert = false
-					end
-				end
-				if insert then
-					if tonumber(v.int_whitelist) == 1 then
-						insert = isWhitelisted(ply, v.uniqueID)
-					end
-				end
-			end
-			if insert then
-				netTable[count] = {}
-				netTable[count] = v
-				count = count + 1
-			end
-			]]
 		end
 	end
 	net.Start("charGetRoles")
@@ -486,7 +458,7 @@ function send_characters(ply)
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
 	local _charCount = 0
-	if worked(chaTab, "yrp_get_characters") then
+	if worked(chaTab, "[send_characters] yrp_get_characters") then
 		for k, v in pairs(chaTab) do
 			if v.roleID != nil and v.groupID != nil then
 				_charCount = _charCount + 1
@@ -525,6 +497,8 @@ function send_characters(ply)
 						netTable[_charCount].faction = GetFactionTable(tmp3.uniqueID)
 					end
 				end
+			else
+				YRP.msg("note", "[send_characters] roleid != nil or groupid != nil")
 			end
 		end
 	end
@@ -593,20 +567,20 @@ function CreateCharacter(ply, tab)
 		local char = SQL_INSERT_INTO("yrp_characters", cols, vals)
 		if char == nil then
 			local chars = SQL_SELECT("yrp_characters", "*", nil)
-			if worked(chars, "CreateCharacter") then
+			if worked(chars, "[CreateCharacter] chars") then
 				local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(chars[#chars].uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
 				if result != nil then
-					YRP.msg("error", "CreateCharacter() failed @Update!")
+					YRP.msg("error", "[CreateCharacter] failed @Update!")
 				end
 			else
-				printGM("note", "chars failed: " .. tostring(chars))
+				printGM("note", "[CreateCharacter] chars failed: " .. tostring(chars))
 			end
 		else
-			YRP.msg("error", "CreateCharacter failed - char: " .. tostring(char) .. " " .. sql_show_last_error())
+			YRP.msg("error", "[CreateCharacter] failed - char: " .. tostring(char) .. " " .. sql_show_last_error())
 		end
 		send_characters(ply)
 	else
-		printGM("note", "role not found!")
+		printGM("note", "[CreateCharacter] role not found!")
 	end
 end
 
