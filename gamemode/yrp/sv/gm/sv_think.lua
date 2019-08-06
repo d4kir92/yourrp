@@ -152,23 +152,21 @@ end
 function check_salary(ply)
 	local _m = ply:GetDString("money", "FAILED")
 	local _ms = ply:GetDString("salary", "FAILED")
-	if _m == "FAILED" or _ms == "FAILED" then
-		printGM("note", "_m or _ms failed _m: " .. _m .. " _ms: " .. _ms)
-		return false
-	end
-	local _money = tonumber(_m)
-	local _salary = tonumber(_ms)
+	if _m != "FAILED" and _ms != "FAILED" then
+		local _money = tonumber(_m)
+		local _salary = tonumber(_ms)
 
-	if _money != nil and _salary != nil then
-		if CurTime() >= ply:GetDInt("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
-			ply:SetDInt("nextsalarytime", CurTime() + ply:GetDInt("salarytime"))
+		if _money != nil and _salary != nil then
+			if CurTime() >= ply:GetDInt("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
+				ply:SetDInt("nextsalarytime", CurTime() + ply:GetDInt("salarytime"))
 
-			ply:SetDString("money", _money + _salary)
-			ply:UpdateMoney()
+				ply:SetDString("money", _money + _salary)
+				ply:UpdateMoney()
+			end
+		else
+			printGM("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
+			ply:CheckMoney()
 		end
-	else
-		printGM("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
-		ply:CheckMoney()
 	end
 end
 

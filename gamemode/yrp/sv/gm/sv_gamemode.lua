@@ -650,6 +650,10 @@ function StartCombat(ply)
 					if timer.Exists(steamid .. " outOfCombat") then
 						timer.Remove(steamid .. " outOfCombat")
 					end
+				else
+					if timer.Exists(steamid .. " outOfCombat") then
+						timer.Remove(steamid .. " outOfCombat")
+					end
 				end
 			end)
 		end

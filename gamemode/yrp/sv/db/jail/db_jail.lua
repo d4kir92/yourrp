@@ -22,7 +22,7 @@ function teleportToReleasepoint(ply)
 		_tmp = string.Explode(",", _tmpTele[1].angle)
 		ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 
-		ply:KillSilent()
+		ply:Spawn()
 	else
 		local _str = YRP.lang_string("LID_noreleasepoint")
 		printGM("note", "[teleportToReleasepoint] " .. _str)
