@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack()
 			if SERVER then
 				teleportToJailpoint(tr.Entity)
 				tr.Entity:SetDBool("injail", true)
-				tr.Entity:SetDInt("jailtime", 5*60)
+				tr.Entity:SetDInt("jailtime", 2*60)
 			end
 		end
 	else

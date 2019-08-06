@@ -385,6 +385,7 @@ end)
 hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
 	--printGM("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
 	ply:StopBleeding()
+	ply:InteruptCasting()
 
 	ply:SetDInt("yrp_stars", 0)
 

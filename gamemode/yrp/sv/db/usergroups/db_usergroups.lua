@@ -1271,23 +1271,17 @@ end)
 
 hook.Add("PhysgunPickup", "yrp_physgun_pickup", function(pl, ent)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(_tmp) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_physgunpickup) then
 				if ent:IsPlayer() then
-					local _tmp2 = SQL_SELECT(DATABASE_NAME, "bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-					if wk(_tmp2) then
-						_tmp2 = _tmp2[1]
-						if tobool(_tmp2.bool_physgunpickupplayer) then
-							return true
-						else
-							net.Start("yrp_info")
-								net.WriteString("physgunpickupplayer")
-							net.Send(pl)
-							return false
-						end
+					if tobool(_tmp2.bool_physgunpickupplayer) then
+						return true
 					else
+						net.Start("yrp_info")
+							net.WriteString("physgunpickupplayer")
+						net.Send(pl)
 						return false
 					end
 				elseif ent:CreatedByMap() then
@@ -1296,10 +1290,10 @@ hook.Add("PhysgunPickup", "yrp_physgun_pickup", function(pl, ent)
 					else
 						return false
 					end
-				else
+				elseif ent:GetRPOwner() == pl or pl:HasAccess() then
 					return true
 				end
-			elseif ent:GetRPOwner() == pl then
+			elseif ent:GetRPOwner() == pl or pl:HasAccess() then
 				return true
 			else
 				net.Start("yrp_info")

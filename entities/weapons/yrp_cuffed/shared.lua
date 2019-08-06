@@ -38,6 +38,8 @@ SWEP.DrawCrosshair = true
 SWEP.HoldType = "duel"
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
+	self.delay = CurTime()
+	self.hp = 30
 end
 
 function SWEP:Reload()
@@ -45,12 +47,37 @@ function SWEP:Reload()
 end
 
 function SWEP:Think()
+	if SERVER and CurTime() > self.delay then
+		self.delay = CurTime() + 0.3
 
+		self.hp = self.hp + 1
+		if self.hp > 30 then
+			self.hp = 30
+		end
+
+		self.Owner:ShowStatus("befreien", 30 - self.hp, 30)
+	end
+end
+
+function SWEP:DestroyCuffs()
+	self.Owner:InteruptCasting()
+	self.Owner:SelectWeapon("yrp_unarmed")
+	self:Remove()
+end
+
+function SWEP:LowerHP()
+	if SERVER then
+		self.Owner:ShowStatus("befreien", 30 - self.hp, 30)
+		self.hp = self.hp - 1
+		if self.hp <= 0 then
+			self:DestroyCuffs()
+		end
+	end
 end
 
 local _target
 function SWEP:PrimaryAttack()
-
+	self:LowerHP()
 end
 
 function SWEP:SecondaryAttack()

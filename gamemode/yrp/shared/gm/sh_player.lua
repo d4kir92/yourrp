@@ -259,6 +259,16 @@ if SERVER then
 		hook.Run("yrp_interupt_" .. self:GetDString("castnet", ""))
 	end
 
+	function Player:ShowStatus(lang_str, min, max)
+		--[[ Setup ]]--
+		self:SetDString("castname", lang_str)
+		self:SetDFloat("castmax", max)
+		self:SetDFloat("castcur", min)
+
+		--[[ Start casting ]]--
+		self:SetDBool("iscasting", true)
+	end
+
 	function Player:StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
 		--[[ cancel other spells ]]--
 		self:InteruptCasting()
