@@ -259,7 +259,7 @@ function optionWindow(buildingID, name, price, door, owner, header, description)
 	end
 	]]--
 
-	if door:GetDString("ownerGroup") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
+	if door:GetDString("ownerGroup", "") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
 		local _ButtonSell = createD("DButton", yrp_door.window, YRP.ctr(530), YRP.ctr(50), YRP.ctr(10), YRP.ctr(260))
 		_ButtonSell:SetText("")
 		function _ButtonSell:DoClick()

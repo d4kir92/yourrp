@@ -27,7 +27,7 @@ function IsUnderGroup(uid, tuid)
 	local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
 	if wk(undergroup) then
 		undergroup = undergroup[1]
-		if undergroup.uniqueID == tuid then
+		if tonumber(undergroup.uniqueID) == tonumber(tuid) then
 			return true
 		else
 			return IsUnderGroup(undergroup.uniqueID, tuid)
@@ -37,7 +37,7 @@ function IsUnderGroup(uid, tuid)
 end
 
 function IsUnderGroupOf(ply, uid)
-	local ply_group = SQL_SELECT("yrp_ply_groups", "*", "string_name = '" .. ply:GetGroupName() .. "'")
+	local ply_group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply:GetDString("groupUniqueID", "Failed") .. "'")
 	ply_group = ply_group[1]
 	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'")
 	group = group[1]
@@ -276,7 +276,7 @@ function canLock(ply, tab)
 		end
 		return false
 	elseif tab.groupID != "-1" then
-		if ply:GetDString("GroupUniqueID", "Failed") == tab.groupID then
+		if ply:GetDString("groupUniqueID", "Failed") == tab.groupID then
 			return true
 		elseif IsUnderGroupOf(ply, tab.groupID) then
 			return true
@@ -482,18 +482,21 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 	for k, v in pairs(_tmpDoors) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
+			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
 		end
 	end
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
+			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
 		end
 	end
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
+			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
 		end
 	end
 end)
