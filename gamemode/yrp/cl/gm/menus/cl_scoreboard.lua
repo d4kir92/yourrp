@@ -263,7 +263,7 @@ end
 function OpenSBS()
 	if sbs.frame == nil then
 		SetIsScoreboardOpen(true)
-		sbs.frame = createD("DFrame", nil, ScW(), ScrH(), PosX(), 0)
+		sbs.frame = createD("DFrame", nil, BFW(), BFH(), BPX(), BPY())
 		sbs.frame:SetDraggable(false)
 		sbs.frame:ShowCloseButton(false)
 		sbs.frame:SetTitle("")
@@ -274,8 +274,8 @@ function OpenSBS()
 
 		local _mapPNG = getMapPNG()
 
-		local _server_logo = LocalPlayer():GetDString("text_server_logo", "")
-		text_server_logo = GetHTMLImage(LocalPlayer():GetDString("text_server_logo", ""), YRP.ctr(256), YRP.ctr(256))
+		local _server_logo = GetGlobalDString("text_server_logo", "")
+		text_server_logo = GetHTMLImage(GetGlobalDString("text_server_logo", ""), YRP.ctr(256), YRP.ctr(256))
 
 		sbs.frame.tick = CurTime()
 		function sbs.frame:Paint(pw, ph)
@@ -291,7 +291,7 @@ function OpenSBS()
 				self:ShowCloseButton(false)
 			end
 
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 240))
 
 			draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw-YRP.ctr(512), YRP.ctr(100), Color(0, 0, 255, 100))
 
@@ -303,27 +303,27 @@ function OpenSBS()
 
 			if strEmpty(_server_logo) then
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(sbs.icons.yrp	)
-				surface.DrawTexturedRect(0, YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+				surface.SetMaterial(sbs.icons.yrp)
+				surface.DrawTexturedRect(YRP.ctr(4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
 			end
 
 			if _mapPNG != false then
-				draw.RoundedBox(0, pw-YRP.ctr(256 + 8), 0, YRP.ctr(256 + 8), YRP.ctr(256 + 8), Color(0, 0, 0, 255))
+				draw.RoundedBox(0, pw - YRP.ctr(256 + 8), 0, YRP.ctr(256 + 8), YRP.ctr(256 + 8), Color(0, 0, 0, 255))
 
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(_mapPNG	)
-				surface.DrawTexturedRect(pw-YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+				surface.SetMaterial(_mapPNG)
+				surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
 			else
 				if strEmpty(_server_logo) then
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(sbs.icons.yrp	)
-					surface.DrawTexturedRect(pw-YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+					surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
 				end
 			end
 		end
 
 		if !strEmpty(_server_logo) then
-			local ServerLogo = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), 0, YRP.ctr(4))
+			local ServerLogo = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), YRP.ctr(4), YRP.ctr(4))
 			ServerLogo:SetHTML(text_server_logo)
 			if _mapPNG == false then
 				local ServerLogo2 = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), sbs.frame:GetWide() - YRP.ctr(256 + 4), YRP.ctr(4))
@@ -331,7 +331,7 @@ function OpenSBS()
 			end
 		end
 
-		sbs.header = createD("DPanel", sbs.frame, ScW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
+		sbs.header = createD("DPanel", sbs.frame, BFW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
 		function sbs.header:Paint(pw, ph)
 			local pl = LocalPlayer()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
@@ -348,7 +348,7 @@ function OpenSBS()
 				naugname = YRP.lang_string("LID_name")
 			end
 			draw.SimpleTextOutlined(naugname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			x = x + 700
+			x = x + 600
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 				local rgname = YRP.lang_string("LID_role") .. "/" .. YRP.lang_string("LID_group")
@@ -358,7 +358,7 @@ function OpenSBS()
 					rgname = YRP.lang_string("LID_role")
 				end
 				draw.SimpleTextOutlined(rgname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 700
+				x = x + 600
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
@@ -369,31 +369,31 @@ function OpenSBS()
 					fdname = YRP.lang_string("LID_frags")
 				end
 				draw.SimpleTextOutlined(fdname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 400
+				x = x + 350
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_language"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 300
+				x = x + 250
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_country"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 300
+				x = x + 250
 			end
 
 			draw.SimpleTextOutlined(YRP.lang_string("LID_playtime"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			x = x + 300
+			x = x + 250
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_os"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 300
+				x = x + 200
 			end
 
 			draw.SimpleTextOutlined(YRP.lang_string("LID_ping"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 
-		sbs.stab = createD("DPanelList", sbs.frame, ScW(), ScrH() - YRP.ctr(256 + 10 + 64), 0, YRP.ctr(256 + 10 + 64))
+		sbs.stab = createD("DPanelList", sbs.frame, BFW(), BFH() - YRP.ctr(256 + 10 + 64), 0, YRP.ctr(256 + 10 + 64))
 		sbs.stab:EnableVerticalScrollbar(true)
 
 		local allplys = player.GetAll()
@@ -408,7 +408,7 @@ function OpenSBS()
 			end
 		end
 		for i, pl in SortedPairsByMemberValue(rplys, "group") do
-			local _p = createD("DButton", sbs.stab, ScW(), YRP.ctr(128), 0, 0)
+			local _p = createD("DButton", sbs.stab, BFW(), YRP.ctr(128), 0, 0)
 			_p:SetText("")
 			function _p:DoClick()
 				OpenPlayerOptions(pl)
@@ -468,7 +468,7 @@ function OpenSBS()
 						if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", YRP.ctr(x), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + 700
+						x = x + 600
 					end
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
@@ -489,7 +489,7 @@ function OpenSBS()
 							end
 							draw.SimpleTextOutlined(grpname, "sef", YRP.ctr(x), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + 700
+						x = x + 600
 					end
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
@@ -506,7 +506,7 @@ function OpenSBS()
 						if GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 							draw.SimpleTextOutlined(pl:Deaths(), "sef", YRP.ctr(x), dy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + 400
+						x = x + 350
 					end
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
@@ -515,7 +515,7 @@ function OpenSBS()
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.lang), "sef", YRP.ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + 300
+						x = x + 250
 					end
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
@@ -524,12 +524,12 @@ function OpenSBS()
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.cc), "sef", YRP.ctr(x) + icon_size * 1.49 / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + 300
+						x = x + 250
 					end
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
 						draw.SimpleTextOutlined(self.playtime, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						x = x + 300
+						x = x + 250
 					end
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
@@ -538,7 +538,7 @@ function OpenSBS()
 						if self:IsHovered() then
 							draw.SimpleTextOutlined(string.upper(self.os), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + 300
+						x = x + 200
 					end
 
 					local ping = pl:Ping()
@@ -587,12 +587,12 @@ function OpenSBS()
 		end
 
 		if #uplys > 0 then
-			sbs.hr = createD("DPanel", sbs.frame, ScW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
+			sbs.hr = createD("DPanel", sbs.frame, BFW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
 			function sbs.hr:Paint(pw, ph)
 			end
 			sbs.stab:AddItem(sbs.hr)
 
-			sbs.charsel = createD("DPanel", sbs.frame, ScW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
+			sbs.charsel = createD("DPanel", sbs.frame, BFW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
 			function sbs.charsel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
@@ -601,40 +601,45 @@ function OpenSBS()
 			end
 			sbs.stab:AddItem(sbs.charsel)
 
-			sbs.header2 = createD("DPanel", sbs.frame, ScW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
+			sbs.header2 = createD("DPanel", sbs.frame, BFW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
 			function sbs.header2:Paint(pw, ph)
 				local pl = LocalPlayer()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 				local x = 128 + 10
+
+				if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
+					x = x + 160
+				end
+
 				local naugname = YRP.lang_string("LID_name")
 				draw.SimpleTextOutlined(naugname, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 700
+				x = x + 600
 
 				if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
-					x = x + 700
+					x = x + 600
 				end
 
 				if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
-					x = x + 400
+					x = x + 350
 				end
 
 				if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 					draw.SimpleTextOutlined(YRP.lang_string("LID_language"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-					x = x + 300
+					x = x + 250
 				end
 
 				if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 					draw.SimpleTextOutlined(YRP.lang_string("LID_country"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-					x = x + 300
+					x = x + 250
 				end
 
 				draw.SimpleTextOutlined(YRP.lang_string("LID_playtime"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				x = x + 300
+				x = x + 250
 
 				if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 					draw.SimpleTextOutlined(YRP.lang_string("LID_os"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-					x = x + 300
+					x = x + 200
 				end
 
 				draw.SimpleTextOutlined(YRP.lang_string("LID_ping"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
@@ -642,7 +647,7 @@ function OpenSBS()
 			sbs.stab:AddItem(sbs.header2)
 
 			for i, pl in SortedPairsByMemberValue(uplys, "group") do
-				local _p = createD("DButton", sbs.stab, ScW(), YRP.ctr(128), 0, 0)
+				local _p = createD("DButton", sbs.stab, BFW(), YRP.ctr(128), 0, 0)
 				_p:SetText("")
 				function _p:DoClick()
 					OpenPlayerOptions(pl)
@@ -687,6 +692,11 @@ function OpenSBS()
 						draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
 
 						local x = 128 + 10
+
+						if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
+							x = x + 160
+						end
+
 						if true then
 							local nay = ph / 4 * 1
 							local ugy = ph / 4 * 3
@@ -697,15 +707,15 @@ function OpenSBS()
 							if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 								draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", YRP.ctr(x), ugy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
-							x = x + 700
+							x = x + 600
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
-							x = x + 700
+							x = x + 600
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) or GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
-							x = x + 400
+							x = x + 350
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
@@ -714,7 +724,7 @@ function OpenSBS()
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.lang), "sef", YRP.ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
-							x = x + 300
+							x = x + 250
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
@@ -723,12 +733,12 @@ function OpenSBS()
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.cc), "sef", YRP.ctr(x) + icon_size / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
-							x = x + 300
+							x = x + 250
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
 							draw.SimpleTextOutlined(self.playtime, "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-							x = x + 300
+							x = x + 250
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
@@ -737,7 +747,7 @@ function OpenSBS()
 							if self:IsHovered() then
 								draw.SimpleTextOutlined(string.upper(self.os), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
-							x = x + 300
+							x = x + 200
 						end
 
 						draw.SimpleTextOutlined(pl:Ping(), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))

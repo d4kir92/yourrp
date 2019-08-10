@@ -261,9 +261,50 @@ timer.Simple(2, function()
 			PM:SetPos(pm.x, pm.y)
 			PM:SetSize(pm.h, pm.h)
 			PM:SetModel(lply:GetModel())
+
+			local eyepos = PM.Entity:GetBonePosition(PM.Entity:LookupBone("ValveBiped.Bip01_Head1"))
+			eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+			PM:SetLookAt(eyepos - Vector(0, 0, 4))
+			PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
+			PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+
 			if !pm.visible then
 				PM:SetModel("")
 			end
+		end
+	end
+
+	function PM:LayoutEntity(ent)
+		ent:SetSequence(ent:LookupSequence("menu_gman"))
+		PM:RunAnimation()
+		return
+	end
+
+	local SL = vgui.Create("DHTML", nil)
+	local sl = {}
+	sl.w = 64
+	sl.h = 64
+	sl.x = 0
+	sl.y = 0
+	sl.version = -1
+	function SL:Think()
+		local lply = LocalPlayer()
+		if lply:GetDInt("hud_version", 0) != sl.version or sl.url != GetGlobalDString("text_server_logo", "") then
+			sl.version = lply:GetDInt("hud_version", 0)
+
+			sl.url = GetGlobalDString("text_server_logo", "")
+
+			sl.w = lply:HudValue("SL", "SIZE_W")
+			sl.h = lply:HudValue("SL", "SIZE_H")
+			sl.x = lply:HudValue("SL", "POSI_X")
+			sl.y = lply:HudValue("SL", "POSI_Y")
+			sl.visible = lply:HudValue("SL", "VISI")
+
+			SL:SetPos(sl.x, sl.y)
+			SL:SetSize(sl.h, sl.h)
+			SL:SetHTML(GetHTMLImage(sl.url, sl.h, sl.h))
+
+			SL:SetVisible(sl.visible)
 		end
 	end
 end)

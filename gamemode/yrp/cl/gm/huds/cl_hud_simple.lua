@@ -172,7 +172,7 @@ function HUDSimpleBR(tab)
 				end
 
 				Simple[tab.element]["border"].color = lply:HudValue(tab.element, "BR")
-				Simple[tab.element]["border"].br = YRP.ctr(4)
+				Simple[tab.element]["border"].br = YRP.ctr(6)
 			elseif lply:HudValue(tab.element, "ROUN") then
 				HudBoxBrRounded(Simple[tab.element]["border"])
 			else
@@ -281,16 +281,52 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["west"].color = lply:HudValue(tab.element, "TE")
 			Simple[tab.element]["west"].brcolor = lply:HudValue(tab.element, "TB")
 			Simple[tab.element]["west"].text = YRP.lang_string("LID_west_short")
+
+			for i = 0, 360, 30 do
+				if i % 90 != 0 then
+					Simple[tab.element][i] = {}
+					Simple[tab.element][i].w = 2
+					Simple[tab.element][i].h = 12
+					Simple[tab.element][i].x = x + 2 / 2
+					Simple[tab.element][i].y = y + h - 12 - Simple[tab.element]["needle"].h
+					Simple[tab.element][i].ax = 1
+					Simple[tab.element][i].ay = 1
+					Simple[tab.element][i].text = (i + 180) % 360
+					Simple[tab.element][i].color = Color(255, 255, 255, 200)
+					Simple[tab.element][i].font = "Roboto" .. 14
+					Simple[tab.element][i].color = lply:HudValue(tab.element, "TE")
+					Simple[tab.element][i].brcolor = lply:HudValue(tab.element, "TB")
+
+					Simple[tab.element][i .. "num"] = {}
+					Simple[tab.element][i .. "num"].w = 2
+					Simple[tab.element][i .. "num"].h = 12
+					Simple[tab.element][i .. "num"].x = x + 2 / 2
+					Simple[tab.element][i .. "num"].y = y + h
+					Simple[tab.element][i .. "num"].ax = 1
+					Simple[tab.element][i .. "num"].ay = 1
+					Simple[tab.element][i .. "num"].text = (i + 180) % 360
+					Simple[tab.element][i .. "num"].color = Color(255, 255, 255, 200)
+					Simple[tab.element][i .. "num"].font = "Roboto" .. 14
+					Simple[tab.element][i .. "num"].color = lply:HudValue(tab.element, "TE")
+					Simple[tab.element][i .. "num"].brcolor = lply:HudValue(tab.element, "TB")
+					--HudBox(Simple[tab.element][i])
+					--Simple[tab.element][i].y = y + h
+				end
+			end
 		else
-			HudBox(Simple[tab.element]["needle"])
-
-			Simple[tab.element]["degree"].text = tab.text
-
-			HudTextBr(Simple[tab.element]["degree"])
-
 			local x = Simple[tab.element]["degree"].x - Simple[tab.element]["north"].w / 2
 			local w = Simple[tab.element]["north"].w
 			local fw = (w * (lply:CoordAngle() / 360)) * -1
+
+			-- striche
+			for i = 0, 360, 30 do
+				if i % 90 != 0 then
+					Simple[tab.element][i].x = x + (fw + w * i / 360) % w
+					HudBox(Simple[tab.element][i])
+					Simple[tab.element][i .. "num"].x = Simple[tab.element][i].x
+					HudTextBr(Simple[tab.element][i .. "num"])
+				end
+			end
 
 			-- North
 			Simple[tab.element]["north"].x = x + (fw + w * 0.5) % w
@@ -311,6 +347,13 @@ function HUDSimpleCompass(tab)
 			Simple[tab.element]["west"].x = x + (fw + w * 0.25) % w
 			Simple[tab.element]["west"].text = "W"
 			HudTextBr(Simple[tab.element]["west"])
+
+			-- Degree Number
+			Simple[tab.element]["degree"].text = tab.text
+			HudTextBr(Simple[tab.element]["degree"])
+
+			-- Needle
+			HudBox(Simple[tab.element]["needle"])
 		end
 	end
 end
@@ -358,6 +401,9 @@ function HUDSimple()
 			BOX.element = "BOX" .. i
 			HUDSimpleBG(BOX)
 		end
+		local SN = {}
+		SN.element = "SN"
+		HUDSimpleBG(SN)
 		local NA = {}
 		NA.element = "NA"
 		HUDSimpleBG(NA)
@@ -417,12 +463,62 @@ function HUDSimple()
 		]]
 		local WP = {}
 		WP.element = "WP"
-		HUDSimpleBG(WP)
+		WP.visible = false
 		local WS = {}
 		WS.element = "WS"
-		HUDSimpleBG(WS)
+		WS.visible = false
 		local WN = {}
 		WN.element = "WN"
+		local weapon = lply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local clip1 = weapon:Clip1()
+			local clip1max = weapon:GetMaxClip1()
+			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+
+			local clip2 = weapon:Clip2()
+			local clip2max = weapon:GetMaxClip2()
+			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+
+			if clip1 > 0 or ammo1 > 0 then
+				WP.visible = true
+				WP.cur = clip1
+				WP.max = clip1max
+				WP.text = ""
+				if clip1 > 0 then
+					WP.text = clip1 .. " / " .. clip1max
+				end
+				if ammo1 > 0 then
+					if WP.text != "" then
+						WP.text = WP.text .. " | "
+					end
+					WP.text = WP.text .. ammo1
+				end
+			end
+			if clip2 > 0 or ammo2 > 0 then
+				WS.visible = true
+				WS.cur = clip2
+				WS.max = clip2max
+				WS.text = ""
+				if clip2 > 0 then
+					WS.text = clip2 .. " / " .. clip2max
+				end
+				if ammo2 > 0 then
+					if WS.text != "" then
+						WS.text = WS.text .. " | "
+					end
+					WS.text = WS.text .. ammo2
+				end
+			end
+			WN.cur = 1
+			WN.max = 1
+			WN.text = lply:GetActiveWeapon():GetPrintName()
+		end
+		if WP.visible then
+			HUDSimpleBG(WP)
+		end
+		if WS.visible then
+			HUDSimpleBG(WS)
+		end
 		HUDSimpleBG(WN)
 		if batterypower <= 100 then
 			local BA = {}
@@ -446,6 +542,9 @@ function HUDSimple()
 		local MI = {}
 		MI.element = "MI"
 		HUDSimpleBG(MI)
+		local PM = {}
+		PM.element = "PM"
+		HUDSimpleBG(PM)
 
 		-- Midground
 		for i = 1, 10 do
@@ -456,6 +555,12 @@ function HUDSimple()
 			BOX.text = ""
 			HUDSimpleBAR(BOX)
 		end
+		SN = {}
+		SN.element = "SN"
+		SN.cur = 0
+		SN.max = 1
+		SN.text = GetGlobalDString("text_server_name", "SERVERNAME")
+		HUDSimpleBAR(SN)
 		NA = {}
 		NA.element = "NA"
 		NA.cur = 0
@@ -472,7 +577,7 @@ function HUDSimple()
 		HP.element = "HP"
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
-		HP.text = lply:Health() .. " / " .. lply:GetMaxHealth()
+		HP.text = lply:Health() .. "/" .. lply:GetMaxHealth()
 		HP.percentage = lply:Health() / lply:GetMaxHealth() * 100 .. "%"
 		HP.icon = Material("icon16/heart.png")
 		HUDSimpleBAR(HP)
@@ -480,7 +585,7 @@ function HUDSimple()
 		AR.element = "AR"
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
-		AR.text = lply:Armor() .. " / " .. lply:GetMaxArmor()
+		AR.text = lply:Armor() .. "/" .. lply:GetMaxArmor()
 		AR.percentage = lply:Armor() / lply:GetMaxArmor() * 100 .. "%"
 		AR.icon = Material("icon16/shield.png")
 		HUDSimpleBAR(AR)
@@ -489,7 +594,7 @@ function HUDSimple()
 			XP.element = "XP"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
-			XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. " / " .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
+			XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
 			HUDSimpleBAR(XP)
 		end
 		MO = {}
@@ -564,39 +669,15 @@ function HUDSimple()
 		AB.icon = Material("icon16/wand.png")
 		HUDSimpleBAR(AB)
 		]]
-		local weapon = lply:GetActiveWeapon()
-		if IsValid(weapon) then
-			local clip1 = weapon:Clip1()
-			local clip1max = weapon:GetMaxClip1()
-			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
 
-			local clip2 = weapon:Clip2()
-			local clip2max = weapon:GetMaxClip2()
-			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-
-			if ammo1 != nil then
-				WP = {}
-				WP.element = "WP"
-				WP.cur = clip1
-				WP.max = clip1max
-				WP.text = clip1 .. " / " .. clip1max .. " | " .. ammo1
-				HUDSimpleBAR(WP)
-			end
-			if ammo2 != nil then
-				WS = {}
-				WS.element = "WS"
-				WS.cur = clip2
-				WS.max = clip2max
-				WS.text = clip2 .. " / " .. clip2max .. " | " .. ammo2
-				HUDSimpleBAR(WS)
-			end
-			WN = {}
-			WN.element = "WN"
-			WN.cur = 1
-			WN.max = 1
-			WN.text = lply:GetActiveWeapon():GetPrintName()
-			HUDSimpleBAR(WN)
+		if WP.visible then
+			HUDSimpleBAR(WP)
 		end
+		if WS.visible then
+			HUDSimpleBAR(WS)
+		end
+		HUDSimpleBAR(WN)
+
 		if batterypower <= 100 then
 			if batterypower > 100 then
 				batterypower = 100
@@ -770,13 +851,14 @@ function HUDSimple()
 		AB.element = "AB"
 		HUDSimpleBR(AB)
 		]]
-		WP = {}
 		WP.element = "WP"
-		HUDSimpleBR(WP)
-		WS = {}
+		if WP.visible then
+			HUDSimpleBR(WP)
+		end
 		WS.element = "WS"
-		HUDSimpleBR(WS)
-		WN = {}
+		if WS.visible then
+			HUDSimpleBR(WS)
+		end
 		WN.element = "WN"
 		HUDSimpleBR(WN)
 		if batterypower <= 100 then
@@ -804,6 +886,9 @@ function HUDSimple()
 		NA = {}
 		NA.element = "NA"
 		HUDSimpleBR(NA)
+		SN = {}
+		SN.element = "SN"
+		HUDSimpleBR(SN)
 		for i = 1, 10 do
 			local BOX = {}
 			BOX.element = "BOX" .. i

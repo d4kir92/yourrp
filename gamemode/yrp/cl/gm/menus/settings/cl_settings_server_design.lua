@@ -721,10 +721,10 @@ net.Receive("get_design_settings", function(len)
 			CA.name = "LID_castbar"
 			AddElement(CA)
 
-			local AB = {}
+			--[[local AB = {}
 			AB.element = "AB"
 			AB.name = "LID_abilitybar"
-			AddElement(AB)
+			AddElement(AB)]]--
 
 			local WP = {}
 			WP.element = "WP"
@@ -782,6 +782,16 @@ net.Receive("get_design_settings", function(len)
 			NA.element = "NA"
 			NA.name = "LID_name"
 			AddElement(NA)
+
+			local SL = {}
+			SL.element = "SL"
+			SL.name = "LID_serverlogo"
+			AddElement(SL)
+
+			local SN = {}
+			SN.element = "SN"
+			SN.name = "LID_hostname"
+			AddElement(SN)
 
 			function editarea:DoClick()
 				if table.Count(editarea["settingswindows"]) == 0 then

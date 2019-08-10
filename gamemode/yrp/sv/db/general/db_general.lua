@@ -21,7 +21,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ' '")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_server_name", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ' '")
 
@@ -480,6 +481,13 @@ net.Receive("update_text_server_logo", function(len, ply)
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_logo", "text_server_logo", str)
 end)
+
+util.AddNetworkString("update_text_server_name")
+net.Receive("update_text_server_name", function(len, ply)
+	local str = net.ReadString()
+	GeneralUpdateString(ply, "update_text_server_name", "text_server_name", str)
+end)
+
 
 
 util.AddNetworkString("update_text_server_rules")

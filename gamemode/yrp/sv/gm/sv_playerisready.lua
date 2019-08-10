@@ -33,6 +33,12 @@ function PlayerLoadedGame(ply)
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
+	-- Send Server Settings
+	ply:DesignLoadout()
+	ply:GeneralLoadout()
+	SendDGlobals(ply)
+	SendDEntities(ply)
+
 	ply:SetDBool("finishedloading", true)
 
 	ply:KillSilent()

@@ -277,11 +277,16 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
 
-	ply:DesignLoadout()
-	ply:GeneralLoadout()
 
-	SendDGlobals(ply)
-	SendDEntities(ply)
+	timer.Simple(1, function()
+		ply:DesignLoadout()
+		ply:GeneralLoadout()
+	end)
+
+	timer.Simple(2, function()
+		SendDGlobals(ply)
+		SendDEntities(ply)
+	end)
 end)
 
 YRP = YRP or {}

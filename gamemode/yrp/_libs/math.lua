@@ -62,6 +62,23 @@ function PY()
 	return ScrH() / 2 - YRP.ctr(fh) / 2
 end
 
+local bfw = 3000
+local bfh = 2000
+function BFW()
+	return YRP.ctr(bfw)
+end
+
+function BFH()
+	return YRP.ctr(bfh)
+end
+
+function BPX()
+	return ScrW() / 2 - YRP.ctr(bfw) / 2
+end
+
+function BPY()
+	return ScrH() / 2 - YRP.ctr(bfh) / 2
+end
 
 
 -- Datatypes
