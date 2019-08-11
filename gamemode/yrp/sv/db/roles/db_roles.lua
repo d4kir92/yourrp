@@ -872,8 +872,8 @@ function SendPlayermodels(uid)
 				if name == "" or	name == " " then
 					name = pms.string_models
 				end
-				entry.string_name = name
-				entry.string_models = pms.string_models
+				entry.string_name = SQL_STR_OUT(name)
+				entry.string_models = SQL_STR_OUT(pms.string_models)
 				table.insert(nettab, entry)
 			end
 		end
@@ -898,6 +898,10 @@ net.Receive("get_all_playermodels", function(len, ply)
 	if !wk(allpms) then
 		allpms = {}
 	end
+	for x, pm in pairs(allpms) do
+		pm.string_models = SQL_STR_OUT(pm.string_models)
+	end
+
 	net.Start("get_all_playermodels")
 		net.WriteTable(allpms)
 	net.Send(ply)
@@ -908,9 +912,9 @@ function AddPlayermodelToRole(ruid, muid)
 	local pms = string.Explode(",", role.string_playermodels)
 	if !table.HasValue(pms, tostring(muid)) then
 		local oldpms = {}
-		for i, v in pairs(pms) do
-			if !strEmpty(v) then
-				table.insert(oldpms, v)
+		for i, pm in pairs(pms) do
+			if !strEmpty(pm) then
+				table.insert(oldpms, pm)
 			end
 		end
 
@@ -938,7 +942,7 @@ net.Receive("add_playermodels", function(len, ply)
 	local name = net.ReadString()
 	local min = net.ReadString()
 	local max = net.ReadString()
-	pms = table.concat(pms, ",")
+	pms = SQL_STR_IN(table.concat(pms, ","))
 	SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "'" .. pms .. "', '" .. name .. "', '" .. min .. "', '" .. max .. "'")
 
 	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)

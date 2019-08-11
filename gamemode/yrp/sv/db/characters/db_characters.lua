@@ -415,8 +415,10 @@ function GetPlayermodelsOfRole(ruid)
 			if wk(tmppms) then
 				tmppms = tmppms[1]
 				tmppms = string.Explode(",", tmppms.string_models)
-				for j, pm in pairs(tmppms) do
-					table.insert(tab, pm)
+				for x, pm in pairs(tmppms) do
+					for y, xpm in pairs(string.Explode(",", SQL_STR_OUT(pm))) do
+						table.insert(tab, SQL_STR_OUT(xpm))
+					end
 				end
 			end
 		end
@@ -438,11 +440,13 @@ function GetPMTableOfRole(ruid)
 			if wk(tmppms) then
 				tmppms = tmppms[1]
 				for x, pm in pairs(string.Explode(",", tmppms.string_models)) do
-					local entry = {}
-					entry.float_size_min = tmppms.float_size_min
-					entry.float_size_max = tmppms.float_size_max
-					entry.string_model = pm
-					table.insert(tab, entry)
+					for y, xpm in pairs(string.Explode(",", SQL_STR_OUT(pm))) do
+						local entry = {}
+						entry.float_size_min = tmppms.float_size_min
+						entry.float_size_max = tmppms.float_size_max
+						entry.string_model = SQL_STR_OUT(xpm)
+						table.insert(tab, entry)
+					end
 				end
 			end
 		end
