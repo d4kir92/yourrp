@@ -59,8 +59,8 @@ end)
 
 util.AddNetworkString("shop_get_tabs")
 
-function openBuyMenu(ply, uid)
-	--printGM("note", "openBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
+function OpenBuyMenu(ply, uid)
+	--printGM("note", "OpenBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
 	local _dealer = SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
 	if _dealer != nil then
 		_dealer = _dealer[1]
@@ -87,7 +87,7 @@ end
 
 net.Receive("shop_get_tabs", function(len, ply)
 	local _uid = net.ReadString()
-	openBuyMenu(ply, _uid)
+	OpenBuyMenu(ply, _uid)
 end)
 
 util.AddNetworkString("shop_get_all_tabs")

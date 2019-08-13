@@ -143,7 +143,7 @@ function changeFontSize()
 	end
 
 	for i, s in pairs(GetFontSizeTable()) do
-		createFont("Roboto" .. s, YRP.GetFont(), s, _weight, false)
+		createFont("Roboto" .. s, YRP.GetFont(), s, 1, false)
 		createFont("Roboto" .. s .. "B", YRP.GetFont(), s, 700, false)
 	end
 

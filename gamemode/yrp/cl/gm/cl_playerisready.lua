@@ -14,7 +14,7 @@ function YRPSendIsReady()
 	YRP.initLang()
 
 	if tobool(get_tutorial("tut_welcome")) then
-		openHelpMenu()
+		OpenHelpMenu()
 	end
 
 	if !LocalPlayer():GetDBool("isserverdedicated", false) then

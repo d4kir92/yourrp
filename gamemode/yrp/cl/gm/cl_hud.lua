@@ -240,17 +240,19 @@ timer.Simple(1, function()
 end)
 
 timer.Simple(2, function()
-	local PM = vgui.Create("DModelPanel", nil)
+	YRP_PM = YRP_PM or vgui.Create("DModelPanel", nil)
 	local pm = {}
 	pm.w = 64
 	pm.h = 64
 	pm.x = 0
 	pm.y = 0
 	pm.version = -1
-	function PM:Think()
+	pm.model = ""
+	function YRP_PM:Think()
 		local lply = LocalPlayer()
-		if lply:GetDInt("hud_version", 0) != pm.version then
+		if lply:GetDInt("hud_version", 0) != pm.version or pm.model != lply:GetModel() then
 			pm.version = lply:GetDInt("hud_version", 0)
+			pm.model = lply:GetModel()
 
 			pm.w = lply:HudValue("PM", "SIZE_W")
 			pm.h = lply:HudValue("PM", "SIZE_H")
@@ -258,25 +260,28 @@ timer.Simple(2, function()
 			pm.y = lply:HudValue("PM", "POSI_Y")
 			pm.visible = lply:HudValue("PM", "VISI")
 
-			PM:SetPos(pm.x, pm.y)
-			PM:SetSize(pm.h, pm.h)
-			PM:SetModel(lply:GetModel())
+			YRP_PM:SetPos(pm.x, pm.y)
+			YRP_PM:SetSize(pm.h, pm.h)
+			YRP_PM:SetModel(pm.model)
 
-			local eyepos = PM.Entity:GetBonePosition(PM.Entity:LookupBone("ValveBiped.Bip01_Head1"))
-			eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
-			PM:SetLookAt(eyepos - Vector(0, 0, 4))
-			PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
-			PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
+			if lb != nil then
+				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
+				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
+				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
+				YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+			end
 
 			if !pm.visible then
-				PM:SetModel("")
+				YRP_PM:SetModel("")
 			end
 		end
 	end
 
-	function PM:LayoutEntity(ent)
+	function YRP_PM:LayoutEntity(ent)
 		ent:SetSequence(ent:LookupSequence("menu_gman"))
-		PM:RunAnimation()
+		YRP_PM:RunAnimation()
 		return
 	end
 

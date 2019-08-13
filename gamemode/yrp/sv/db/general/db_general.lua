@@ -90,6 +90,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_local_range", "INT DEFAULT 300")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
 
 --[[ Gamemode Visuals ]]--
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_combined_menu", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")
@@ -796,6 +797,12 @@ end)
 
 
 --[[ GAMEMODE VISUALS ]]--
+util.AddNetworkString("update_bool_yrp_combined_menu")
+net.Receive("update_bool_yrp_combined_menu", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_combined_menu", "bool_yrp_combined_menu", b)
+end)
+
 util.AddNetworkString("update_text_character_background")
 net.Receive("update_text_character_background", function(len, ply)
 	local str = net.ReadString()

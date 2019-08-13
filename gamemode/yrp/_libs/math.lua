@@ -62,7 +62,7 @@ function PY()
 	return ScrH() / 2 - YRP.ctr(fh) / 2
 end
 
-local bfw = 3000
+local bfw = 2700
 local bfh = 2000
 function BFW()
 	return YRP.ctr(bfw)

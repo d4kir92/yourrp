@@ -77,7 +77,7 @@ net.Receive("get_menu_bodygroups", function(len)
 					play = !play
 				end
 
-				_appe.r.pm = createD("DModelPanel", _yrp_appearance.left, ScrH() - YRP.ctr(100), ScW() / 2, 0, YRP.ctr(50))
+				_appe.r.pm = createD("DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight(), ScW() / 2, 0, _yrp_appearance.window:GetHeaderHeight())
 				_appe.r.pm:SetModel(_pm)
 				_appe.r.pm:SetAnimated(true)
 				_appe.r.pm.Angles = Angle(0, 0, 0)
@@ -105,7 +105,7 @@ net.Receive("get_menu_bodygroups", function(len)
 				end
 
 				-- Playermodel changing
-				local _tmpPM = createD("DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, YRP.ctr(50))
+				local _tmpPM = createD("DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, _yrp_appearance.window:GetHeaderHeight())
 				_tmpPM.cur = _pmid
 				_tmpPM.max = #_pms
 				_tmpPM.name = YRP.lang_string("LID_appearance")
@@ -295,8 +295,8 @@ function open_appearance()
 	_yrp_appearance.window:SetTitle("LID_appearance")
 	_yrp_appearance.window:Center()
 	_yrp_appearance.window:SetDraggable(false)
-	_yrp_appearance.window:ShowCloseButton(true)
 	_yrp_appearance.window:SetSizable(true)
+	_yrp_appearance.window:SetHeaderHeight(YRP.ctr(100))
 	function _yrp_appearance.window:OnClose()
 		_yrp_appearance.window:Remove()
 	end
@@ -304,7 +304,7 @@ function open_appearance()
 		hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")
 	end
 
-	_yrp_appearance.left = createD("DPanel", _yrp_appearance.window, ScW(), ScrH() - YRP.ctr(50), 0, YRP.ctr(50))
+	_yrp_appearance.left = createD("DPanel", _yrp_appearance.window, ScW(), ScrH() - _yrp_appearance.window:GetHeaderHeight(), 0, _yrp_appearance.window:GetHeaderHeight())
 	function _yrp_appearance.left:Paint(pw, ph)
 		--surfacePanel(self, pw, ph)
 		--paintBr(pw, ph, Color(255, 0, 0, 255))

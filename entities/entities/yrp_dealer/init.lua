@@ -2,7 +2,7 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
-include('shared.lua')
+include("shared.lua")
 
 function ENT:Initialize()
 	self:SetHullType(HULL_HUMAN)
@@ -57,8 +57,6 @@ function ENT:Open(activator, caller)
 		self:SetDBool("immortal", false)
 	end
 	if !activator:GetDBool("open_menu", false) then
-		openBuyMenu(activator, self:GetDString("dealerID", "-1"))
-
 		activator:SetDBool("open_menu", true)
 		timer.Simple(1, function()
 			activator:SetDBool("open_menu", false)

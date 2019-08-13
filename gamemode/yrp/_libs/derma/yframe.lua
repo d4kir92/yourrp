@@ -16,6 +16,16 @@ end
 
 function PANEL:Think()
 
+	if self.sw != self:GetWide() or self.sh != self:GetTall() then
+		self.sw = self:GetWide()
+
+		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
+		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+
+		self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+		self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+	end
+
 	local mousex = math.Clamp( gui.MouseX(), 1, ScrW() - 1 )
 	local mousey = math.Clamp( gui.MouseY(), 1, ScrH() - 1 )
 
@@ -47,8 +57,8 @@ function PANEL:Think()
 
 		self:SetSize( x, y )
 		self:SetCursor( "sizenwse" )
-		return
 
+		return
 	end
 
 	local screenX, screenY = self:LocalToScreen( 0, 0 )
@@ -131,6 +141,24 @@ end
 
 function PANEL:Init()
 	self._headerheight = 24
+
+	self:ShowCloseButton(false)
+
+	self.close = createD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.close:SetText("X")
+	self.close.main = self
+	function self.close:Paint(pw, ph)
+		hook.Run("YClosePaint", self, pw, ph)
+	end
+	function self.close:DoClick()
+		self.main:Close()
+	end
+
+	self.langu = YRP.DChangeLanguage(self, self:GetWide() - YRP.ctr(60 * 1.4903 + 20 + 60 + 20), YRP.ctr(20), YRP.ctr(60), true)
+
+	self.sw = self:GetWide()
+	self.sh = self:GetTall()
+	self.px, self.py = self:GetPos()
 end
 
 vgui.Register("YFrame", PANEL, "DFrame")

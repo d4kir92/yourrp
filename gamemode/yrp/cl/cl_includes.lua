@@ -34,6 +34,7 @@ include("gm/menus/settings/cl_settings.lua")
 include("gm/menus/cl_smartphone.lua")
 include("gm/menus/cl_emotes.lua")
 include("gm/menus/cl_laws.lua")
+include("gm/menus/cl_combinedmenu.lua")
 
 include("gm/apps/cl_app_settings_yrp.lua")
 include("gm/apps/cl_app_settings_sp.lua")

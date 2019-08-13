@@ -62,11 +62,11 @@ end
 --[[
 local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
 for i, v in pairs(tab) do
-	if string.find(v.name, "SN_") then
-		prt(i, v.name, v.value)
+	if string.find(v.name, "LO_") then
+		(i, v.name, v.value)
 	end
 end
-]]--
+]]
 
 function DefaultHUDSettings(reset)
 	reset = reset or false
@@ -130,9 +130,9 @@ function DefaultHUDSettings(reset)
 	local XP = {}
 	XP.element = "XP"
 	XP.floats = {}
-	XP.floats.POSI_X = 0.25
+	XP.floats.POSI_X = 0.25260415673256
 	XP.floats.POSI_Y = 0.0
-	XP.floats.SIZE_W = 0.5
+	XP.floats.SIZE_W = 0.49479165673256
 	XP.floats.SIZE_H = 0.018518518656492
 	XP.bools = {}
 	XP.bools.VISI = 1
@@ -551,7 +551,7 @@ function DefaultHUDSettings(reset)
 	CON.element = "CON"
 	CON.floats = {}
 	CON.floats.POSI_X = 0.41666665673256
-	CON.floats.POSI_Y = 0.092592589557171
+	CON.floats.POSI_Y = 0.1064814850688
 	CON.floats.SIZE_W = 0.16666667163372
 	CON.floats.SIZE_H = 0.027777777984738
 	CON.bools = {}
@@ -634,10 +634,10 @@ function DefaultHUDSettings(reset)
 	local COM = {}
 	COM.element = "COM"
 	COM.floats = {}
-	COM.floats.POSI_X = 0.33072915673256
+	COM.floats.POSI_X = 0.25260415673256
 	COM.floats.POSI_Y = 0.023148147389293
-	COM.floats.SIZE_W = 0.33854165673256
-	COM.floats.SIZE_H = 0.032407406717539
+	COM.floats.SIZE_W = 0.49479165673256
+	COM.floats.SIZE_H = 0.046296294778585
 	COM.bools = {}
 	COM.bools.VISI = 1
 	COM.bools.ROUN = 0
@@ -663,7 +663,7 @@ function DefaultHUDSettings(reset)
 	LO.element = "LO"
 	LO.floats = {}
 	LO.floats.POSI_X = 0.36979165673256
-	LO.floats.POSI_Y = 0.125
+	LO.floats.POSI_Y = 0.13888889551163
 	LO.floats.SIZE_W = 0.26041665673256
 	LO.floats.SIZE_H = 0.074074074625969
 	LO.bools = {}
@@ -775,7 +775,7 @@ function DefaultHUDSettings(reset)
 	CR.element = "CR"
 	CR.floats = {}
 	CR.floats.POSI_X = 0.46875
-	CR.floats.POSI_Y = 0.060185186564922
+	CR.floats.POSI_Y = 0.074074074625969
 	CR.floats.SIZE_W = 0.0625
 	CR.floats.SIZE_H = 0.027777777984738
 	CR.bools = {}

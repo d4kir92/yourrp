@@ -9,7 +9,9 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 
 		draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "BG"))
 
-		draw.SimpleText(YRP.lang_string(self:GetTitle()), "Roboto18", self:GetHeaderHeight() / 4, self:GetHeaderHeight() / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		if self.GetTitle != nil then
+			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Roboto18", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
 		return true
 	end
 end)
@@ -60,6 +62,34 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 		end
 
 		draw.SimpleText(YRP.lang_string(self:GetText()), "Roboto18", tx, ty, tcolor, ax, ay)
+		return true
+	end
+end)
+
+hook.Add("YClosePaint", "YClose_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if lply:GetDString("string_interface_design") == "Simple" then
+		local color = lply:InterfaceValue("YButton", "NC")
+		local tcolor = lply:InterfaceValue("YButton", "NT")
+		if self:IsDown() or self:IsPressed() then
+			color = lply:InterfaceValue("YButton", "SC")
+			tcolor = lply:InterfaceValue("YButton", "ST")
+		elseif self:IsHovered() then
+			color = lply:InterfaceValue("YButton", "HC")
+			tcolor = lply:InterfaceValue("YButton", "HT")
+		end
+		color = tab.color or color
+		tcolor = tab.tcolor or tcolor
+
+		surface.SetDrawColor(255, 100, 100, 255)
+		surface.SetMaterial(YRP.GetDesignIcon("circle"))
+		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(YRP.GetDesignIcon("clear"))
+		surface.DrawTexturedRect(0, 0, pw, ph)
 		return true
 	end
 end)

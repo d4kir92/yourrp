@@ -107,8 +107,15 @@ function YRP.AddLanguageAddLine(parent, mainparent)
 	parent:AddItem(lang)
 end
 
-function YRP.DChangeLanguage(parent, x, y, size)
-	local LanguageChanger = createD("DButton", parent, size, size * 0.671, x, y)
+function YRP.DChangeLanguage(parent, x, y, size, vert)
+	local sw = size
+	local sh = size * 0.671
+	if vert then
+		sw = size * 1.4903
+		sh = size
+	end
+
+	local LanguageChanger = createD("DButton", parent, sw, sh, x, y)
 	LanguageChanger:SetText("")
 	LanguageChanger.selecting = false
 	function LanguageChanger:Paint(pw, ph)

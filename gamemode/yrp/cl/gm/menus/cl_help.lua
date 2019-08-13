@@ -1,4 +1,25 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
+HELPMENU = HELPMENU or {}
+HELPMENU.open = false
+
+function ToggleHelpMenu()
+	if !HELPMENU.open and isNoMenuOpen() then
+		OpenHelpMenu()
+	else
+		CloseHelpMenu()
+	end
+end
+
+function CloseHelpMenu()
+	HELPMENU.open = false
+	if HELPMENU.window != nil then
+		closeMenu()
+		HELPMENU.window:Remove()
+		HELPMENU.window = nil
+	end
+end
+
 function replaceKeyName(str)
 	if str == "uparrow" or str == "pgup" then
 		return "↑"
@@ -40,24 +61,6 @@ function nicekey(key_str)
 	return tostring(_str)
 end
 
-local HELPMENU = {}
-
-function toggleHelpMenu()
-	if isNoMenuOpen() then
-		openHelpMenu()
-	else
-		closeHelpMenu()
-	end
-end
-
-function closeHelpMenu()
-	if HELPMENU.window != nil then
-		closeMenu()
-		HELPMENU.window:Remove()
-		HELPMENU.window = nil
-	end
-end
-
 function AddKeybind(plist, keybind, lstr, icon, disabled)
 	local kb = createD("DPanel", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
 	kb.key = keybind
@@ -67,7 +70,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
-		if disabled != nil and not GetGlobalDBool(disabled) then
+		if disabled != nil and !GetGlobalDBool(disabled) then
 			text = "[" .. YRP.lang_string("LID_disabled") .. "] "
 			color = Color(255, 0, 0, 255)
 		end
@@ -82,10 +85,10 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 end
 
 function AddKeybindBr(plist)
-	local kb = createD("DPanel", nil, YRP.ctr(100), YRP.ctr(20), 0, 0)
+	local kb = createD("DPanel", nil, YRP.ctr(100), YRP.ctr(4), 0, 0)
 
 	function kb:Paint(pw, ph)
-		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, Color(0, 0, 0, 255))
+		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, Color(255, 255, 255, 255))
 	end
 
 	plist:AddItem(kb)
@@ -98,7 +101,7 @@ net.Receive("getsitehelp", function(len)
 		local posy = 0
 
 		if !strEmpty(welcome_message) then
-			local wm = createD("DPanel", HELPMENU.mainmenu.site, ScW() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
+			local wm = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function wm:Paint(pw, ph)
 				draw.SimpleText(welcome_message, "mat1header", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
@@ -108,7 +111,7 @@ net.Receive("getsitehelp", function(len)
 		end
 
 		if !strEmpty(motd) then
-			local mo = createD("DPanel", HELPMENU.mainmenu.site, ScW() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
+			local mo = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function mo:Paint(pw, ph)
 				draw.SimpleText(YRP.lang_string("LID_motd") .. ": " .. motd, "mat1header", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
@@ -117,14 +120,22 @@ net.Receive("getsitehelp", function(len)
 			posy = posy + mo:GetTall() + YRP.ctr(20)
 		end
 
-		local keybinds = createD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(1200), ScrH(), 0, posy)
-		AddKeybind(keybinds, "F1", "LID_help", "help")
+		local keybinds = createD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(1200), HELPMENU.content:GetTall(), 0, posy)
+		keybinds:SetSpacing(YRP.ctr(6))
+		if GetGlobalDBool("bool_yrp_combined_menu", false) then
+			AddKeybind(keybinds, "F4", "LID_help", "help")
+			AddKeybind(keybinds, "F4", "LID_rolemenu", "role", "bool_players_can_switch_role")
+			AddKeybind(keybinds, "F4", "LID_buymenu", "shop")
+			AddKeybind(keybinds, "F4", "LID_givefeedback", "feedback")
+		else
+			AddKeybind(keybinds, "F1", "LID_help", "help")
+			AddKeybind(keybinds, GetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
+			AddKeybind(keybinds, GetKeybindName("menu_buy"), "LID_buymenu", "shop")
+			AddKeybind(keybinds, "F7", "LID_givefeedback", "feedback")
+		end
 		AddKeybind(keybinds, GetKeybindName("menu_character_selection"), "LID_characterselection", "character")
 		AddKeybind(keybinds, GetKeybindName("toggle_mouse"), "LID_togglemouse", "mouse")
-		AddKeybind(keybinds, GetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
-		AddKeybind(keybinds, "F7", "LID_givefeedback", "feedback")
 		AddKeybind(keybinds, GetKeybindName("menu_settings"), "LID_settings", "settings")
-		AddKeybind(keybinds, GetKeybindName("menu_buy"), "LID_buymenu", "shop")
 		AddKeybind(keybinds, GetKeybindName("toggle_map"), "LID_map", "map", "bool_map_system")
 		AddKeybind(keybinds, GetKeybindName("menu_inventory"), "LID_inventory", "work", "bool_inventory_system")
 		AddKeybind(keybinds, GetKeybindName("menu_appearance"), "LID_appearance", "face", "bool_appearance_system")
@@ -149,7 +160,7 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, GetKeybindName("speak_next"), "LID_nextvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("speak_prev"), "LID_previousvoicechannel", "record_voice_over", "bool_voice_channels")
 
-		HELPMENU.feedback = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), ScW() - YRP.ctr(560), YRP.ctr(20))
+		HELPMENU.feedback = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20))
 		HELPMENU.feedback:SetText("LID_givefeedback")
 
 		function HELPMENU.feedback:Paint(pw, ph)
@@ -157,12 +168,12 @@ net.Receive("getsitehelp", function(len)
 		end
 
 		function HELPMENU.feedback:DoClick()
-			closeHelpMenu()
+			CloseHelpMenu()
 			openFeedbackMenu()
 			--gui.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link")
 		end
 
-		HELPMENU.discord = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), ScW() - YRP.ctr(560), YRP.ctr(20 + 50 + 20))
+		HELPMENU.discord = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20 + 50 + 20))
 		HELPMENU.discord:SetText("Get Live Support")
 
 		function HELPMENU.discord:Paint(pw, ph)
@@ -173,7 +184,7 @@ net.Receive("getsitehelp", function(len)
 			gui.OpenURL("https://discord.gg/sEgNZxg")
 		end
 
-		local version = createD("DPanel", HELPMENU.mainmenu.site, ScW() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
+		local version = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
 
 		function version:Paint(pw, ph)
 			draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1, 1, Color(0, 0, 0, 255))
@@ -185,7 +196,7 @@ end)
 net.Receive("getsitestaff", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local staff = net.ReadTable()
-		local stafflist = createD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(800), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+		local stafflist = createD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(800), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 		stafflist:SetSpacing(YRP.ctr(10))
 
 		for i, pl in pairs(staff) do
@@ -223,7 +234,7 @@ end)
 net.Receive("getsiteserverrules", function(len)
 	if pa(HELPMENU) then
 		local serverrules = net.ReadString()
-		local page = createD("DPanel", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+		local page = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_rules"), "mat1header", 0, 0, Color(255, 255, 255, 255), 0, 0)
@@ -246,14 +257,14 @@ net.Receive("getsitecollection", function(len)
 
 		if collectionid > 0 then
 			local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
-			local WorkshopPage = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local WorkshopPage = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function WorkshopPage:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			WorkshopPage:OpenURL(link)
-			local openLink = createD("DButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -272,14 +283,14 @@ net.Receive("getsitecommunitywebsite", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			page:OpenURL(link)
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -299,14 +310,14 @@ net.Receive("getsitecommunityforum", function(len)
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			page:OpenURL(link)
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -327,7 +338,7 @@ net.Receive("getsitecommunitydiscord", function(len)
 		local widgetid = net.ReadString()
 
 		if !strEmpty(widgetid) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255))
@@ -360,7 +371,7 @@ net.Receive("getsitecommunityteamspeak", function(len)
 
 		if !strEmpty(ip) then
 			if !strEmpty(port) and !strEmpty(query_port) then
-				local page = createD("DHTML", HELPMENU.mainmenu.site, YRP.ctr(1000), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = createD("DHTML", HELPMENU.mainmenu.site, YRP.ctr(1000), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 				function page:Paint(pw, ph)
 					surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(40, 40, 40, 255))
@@ -384,14 +395,14 @@ net.Receive("getsitecommunitytwitter", function(len)
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			page:OpenURL(link)
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -411,14 +422,14 @@ net.Receive("getsitecommunityyoutube", function(len)
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			page:OpenURL(link)
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -438,14 +449,14 @@ net.Receive("getsitecommunityfacebook", function(len)
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			page:OpenURL(link)
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -465,14 +476,14 @@ net.Receive("getsitecommunitysteamgroup", function(len)
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 			end
 
 			page:OpenURL(link)
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -493,10 +504,10 @@ net.Receive("getsiteyourrpwhatsnew", function(len)
 
 		if !strEmpty(link) then
 			local posy = YRP.ctr(220)
-			local page = createD("HTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20) + posy, 0, -posy)
+			local page = createD("HTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20) + posy, 0, -posy)
 			page:OpenURL(link)
 
-			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 
 			function openLink:Paint(pw, ph)
@@ -515,13 +526,13 @@ net.Receive("getsiteyourrproadmap", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQaL9ciXYnStYesglG7-zkRr1PdLNz1rbKgp5gF2EsGNfRAKkT3fBOYrGxyRYOEOg4khoQZh88ZxrBB/pubhtml"
 
-		local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH(), 0, 0)
+		local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 		function page:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 		end
 		page:OpenURL(link)
 
-		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 		openLink:SetText("")
 
 		function openLink:Paint(pw, ph)
@@ -539,13 +550,13 @@ net.Receive("getsiteyourrpnews", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://docs.google.com/document/d/e/2PACX-1vRcuPnvnAqRD7dQFOkH9d0Q1G3qXFn6rAHJWAAl7wV2TEABGhDdJK9Y-LCONFKTiAWmJJZpsTcDnz5W/pub"
 
-		local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH(), 0, 0)
+		local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 		function page:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 		end
 		page:OpenURL(link)
 
-		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 		openLink:SetText("")
 
 		function openLink:Paint(pw, ph)
@@ -564,7 +575,7 @@ net.Receive("getsiteyourrpdiscord", function(len)
 		local link = "https://discord.gg/sEgNZxg"
 
 		if !strEmpty(link) then
-			local page = createD("DHTML", HELPMENU.mainmenu.site, YRP.ctr(1040), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = createD("DHTML", HELPMENU.mainmenu.site, YRP.ctr(1040), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
 				--surfaceBox(0, 0, pw, ph, Color(255, 0, 0, 255))
@@ -585,7 +596,7 @@ net.Receive("getsiteyourrpdiscord", function(len)
 				gui.OpenURL(link)
 			end
 
-			local page2 = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(1040), ScrH() - YRP.ctr(100 + 20 + 20), YRP.ctr(1060), 0)
+			local page2 = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(1040), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), YRP.ctr(1060), 0)
 			page2:OpenURL(link)
 
 		end
@@ -596,10 +607,10 @@ net.Receive("getsiteyourrpserverlist", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQjN_z15gn7zQo-t6om2xArokvemGMs4pN2VasSuBNmzbEc7a0eUxG8lF5JZlT1l844LDhgJgrW52SJ/pubhtml?gid=0&single=true"
 
-		local page = createD("DHTML", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH(), 0, 0)
+		local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 		page:OpenURL(link)
 
-		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), ScW() - YRP.ctr(100 + 20 + 20), 0)
+		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 		openLink:SetText("")
 
 		function openLink:Paint(pw, ph)
@@ -615,7 +626,7 @@ end)
 
 net.Receive("getsiteyourrptranslations", function(len)
 	if pa(HELPMENU.mainmenu.site) then
-		local page = createD("DPanel", HELPMENU.mainmenu.site, ScW() - YRP.ctr(20 + 20), ScrH() - YRP.ctr(100 + 20 + 20), 0, 0)
+		local page = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
 			--surfacePanel(self, pw, ph, "")
@@ -724,38 +735,40 @@ net.Receive("getsiteyourrptranslations", function(len)
 	end
 end)
 
-function openHelpMenu()
+function OpenHelpMenu()
 	openMenu()
-	HELPMENU.window = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
+
+	HELPMENU.open = true
+	HELPMENU.window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY()) --ScW(), ScrH(), 0, 0)
 	HELPMENU.window:MakePopup()
 	HELPMENU.window:Center()
-	HELPMENU.window:SetTitle("")
+	HELPMENU.window:SetTitle("LID_helpmenu")
 	HELPMENU.window:SetDraggable(false)
-	HELPMENU.window:ShowCloseButton(false)
+
+	HELPMENU.window:SetHeaderHeight(YRP.ctr(100))
+	HELPMENU.window:SetBackgroundBlur(true)
+	HELPMENU.window.systime = SysTime()
 
 	function HELPMENU.window:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, Color(90, 90, 90, 200))
+		Derma_DrawBackgroundBlur(self, self.systime)
+		--surfaceBox(0, 0, pw, ph, Color(90, 90, 90, 200))
+		hook.Run("YFramePaint", self, pw, ph)
 	end
 
-	HELPMENU.mainmenu = createD("DYRPHorizontalMenu", HELPMENU.window, ScW(), ScrH(), 0, 0)
+	HELPMENU.content = createD("YPanel", HELPMENU.window, BFW(), BFH() - HELPMENU.window:GetHeaderHeight(), 0, HELPMENU.window:GetHeaderHeight())
+	HELPMENU.content:SetHeaderHeight(YRP.ctr(100))
+	function HELPMENU.content:Paint(pw, ph)
+
+	end
+
+	CreateHelpMenuContent(HELPMENU.content)
+end
+
+function CreateHelpMenuContent(parent)
+	HELPMENU.content = parent
+	HELPMENU.standalone = standalone or false
+	HELPMENU.mainmenu = createD("DYRPHorizontalMenu", HELPMENU.content, HELPMENU.content:GetWide(), HELPMENU.content:GetTall(), 0, 0)
 	HELPMENU.mainmenu:GetMenuInfo("gethelpmenu")
 	HELPMENU.mainmenu:SetStartTab("LID_help")
-	HELPMENU.changelanguage = YRP.DChangeLanguage(HELPMENU.window, ScW() - YRP.ctr(20 + 64 + 20 + 100), YRP.ctr(20), YRP.ctr(100))
-	HELPMENU.close = createD("DButton", HELPMENU.window, YRP.ctr(64), YRP.ctr(64), ScW() - YRP.ctr(64 + 20), YRP.ctr(20))
-	HELPMENU.close:SetText("")
-
-	function HELPMENU.close:Paint(pw, ph)
-		local color = YRPGetColor("2")
-
-		if self:IsHovered() then
-			color = YRPGetColor("1")
-		end
-
-		draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
-		YRP.DrawIcon(YRP.GetDesignIcon("close"), ph, ph, 0, 0, YRPGetColor("6"))
-	end
-
-	function HELPMENU.close:DoClick()
-		HELPMENU.window:Close()
-	end
+	HELPMENU.mainmenu:SetHeaderHeight(YRP.ctr(100))
 end

@@ -63,14 +63,14 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 end
 
 function close_all()
-	closeHelpMenu()
+	CloseHelpMenu()
 	CloseEmotesMenu()
 	closeFeedbackMenu()
 	closeCharacterSelection()
 	close_appearance()
 	CloseInventory()
-	closeRoleMenu()
-	closeBuyMenu()
+	CloseRoleMenu()
+	CloseBuyMenu()
 	CloseSettings()
 	closeMap()
 	closeInteractMenu()
@@ -94,17 +94,10 @@ function useFunction(string)
 			openSP()
 		elseif string == "closeSP" then
 			closeSP()
-		elseif string == "openHelpMenu" then
-			done_tutorial("tut_welcome")
-			done_tutorial("tut_feedback")
-			done_tutorial("tut_f1info", 10)
-			toggleHelpMenu()
 		elseif string == "ToggleEmotesMenu" then
 			ToggleEmotesMenu()
 		elseif string == "ToggleLawsMenu" then
 			ToggleLawsMenu()
-		elseif string == "openFeedbackMenu" then
-			toggleFeedbackMenu()
 		elseif string == "openCharMenu" then
 			done_tutorial("tut_cs")
 			toggleCharacterSelection()
@@ -113,12 +106,6 @@ function useFunction(string)
 		elseif string == "openInventory" then
 			done_tutorial("tut_mi")
 			ToggleInventory()
-		elseif string == "openRoleMenu" then
-			done_tutorial("tut_mr")
-			toggleRoleMenu()
-		elseif string == "openBuyMenu" then
-			done_tutorial("tut_mb")
-			toggleBuyMenu()
 		elseif string == "openSettings" then
 			done_tutorial("tut_ms")
 			toggleSettings()
@@ -178,6 +165,25 @@ function useFunction(string)
 			net.SendToServer()
 		elseif string == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
+		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
+			if string == "OpenRoleMenu" then
+				ToggleCombinedMenu()
+			end
+		elseif !GetGlobalDBool("bool_yrp_combined_menu", false) then
+			if string == "OpenHelpMenu" then
+				done_tutorial("tut_welcome")
+				done_tutorial("tut_feedback")
+				done_tutorial("tut_f1info", 10)
+				ToggleHelpMenu()
+			elseif string == "OpenRoleMenu" then
+				done_tutorial("tut_mr")
+				ToggleRoleMenu()
+			elseif string == "OpenBuyMenu" then
+				done_tutorial("tut_mb")
+				ToggleBuyMenu()
+			elseif string == "openFeedbackMenu" then
+				toggleFeedbackMenu()
+			end
 		end
 	end
 end
@@ -451,7 +457,7 @@ function KeyPress()
 
 	keyPressed(IN_ATTACK2, "scoreboard")
 
-	keyPressed(KEY_F1, "openHelpMenu")
+	keyPressed(KEY_F1, "OpenHelpMenu")
 	keyPressed(KEY_F7, "openFeedbackMenu")
 
 	keyPressed(get_keybind("menu_emotes"), "ToggleEmotesMenu")
@@ -464,8 +470,8 @@ function KeyPress()
 	keyPressed(get_keybind("menu_appearance"), "openAppearance")
 
 	keyPressed(get_keybind("menu_character_selection"), "openCharMenu")
-	keyPressed(get_keybind("menu_role"), "openRoleMenu")
-	keyPressed(get_keybind("menu_buy"), "openBuyMenu")
+	keyPressed(get_keybind("menu_role"), "OpenRoleMenu")
+	keyPressed(get_keybind("menu_buy"), "OpenBuyMenu")
 
 	keyPressed(KEY_E, "openInteractMenu", 100)
 
