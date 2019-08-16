@@ -11,17 +11,14 @@ net.Receive("get_levelsystem_settings", function(len)
 
 		local Parent = settingsWindow.window.site
 
-		local GRP_LS = {}
-		GRP_LS.parent = Parent
-		GRP_LS.x = YRP.ctr(20)
-		GRP_LS.y = YRP.ctr(20)
-		GRP_LS.w = YRP.ctr(1000)
-		GRP_LS.h = YRP.ctr(530)
-		GRP_LS.br = YRP.ctr(20)
-		GRP_LS.color = Color(255, 255, 255)
-		GRP_LS.bgcolor = Color(80, 80, 80)
-		GRP_LS.name = "LID_levelsystem"
-		GRP_LS = DGroup(GRP_LS)
+
+
+		local GRP_LS = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(20), YRP.ctr(20))
+		GRP_LS:SetText("LID_levelsystem")
+		function GRP_LS:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		GRP_LS:AutoSize(true)
 
 		-- MIN
 		local ls_level_min_header = createD("YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
@@ -191,21 +188,14 @@ net.Receive("get_levelsystem_settings", function(len)
 		end
 		GRP_LS:AddItem(ls_xp_for_levelup)
 
-		GRP_LS:AutoSize()
 
 
-
-		local GRP_XP = {}
-		GRP_XP.parent = Parent
-		GRP_XP.x = YRP.ctr(1040)
-		GRP_XP.y = YRP.ctr(20)
-		GRP_XP.w = YRP.ctr(1000)
-		GRP_XP.h = YRP.ctr(530)
-		GRP_XP.br = YRP.ctr(20)
-		GRP_XP.color = Color(255, 255, 255)
-		GRP_XP.bgcolor = Color(80, 80, 80)
-		GRP_XP.name = "LID_levelsystem"
-		GRP_XP = DGroup(GRP_XP)
+		local GRP_XP = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(1040), YRP.ctr(20))
+		GRP_XP:SetText("LID_levelsystem")
+		function GRP_XP:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		GRP_XP:AutoSize(true)
 
 		-- XP Per Kill
 		local xp_per_kill_header = createD("YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
@@ -300,7 +290,6 @@ net.Receive("get_levelsystem_settings", function(len)
 		end
 		GRP_XP:AddItem(ls_xp_per_revive)
 
-		GRP_XP:AutoSize()
 
 
 

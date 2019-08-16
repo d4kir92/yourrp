@@ -10,6 +10,13 @@ include("player/interface.lua")
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")
 
+function Player:IsUnknown()
+	if CLIENT and GetGlobalDBool("bool_players_need_to_introduce", false) and self != LocalPlayer() then
+		return true
+	end
+	return false
+end
+
 function Player:Battery()
 	local battery = system.BatteryPower()
 	if battery > 100 then
@@ -356,7 +363,11 @@ function Player:GetRoleOnDeathRoleUID()
 end
 
 function Player:GetRoleName() -- Role Name / "Job" Name
-	return self:YRPGetRoleName() -- return string
+	local RoleName = self:YRPGetRoleName()
+	if self:IsUnknown() then
+		RoleName = "Unknown"
+	end
+	return RoleName -- return string
 end
 
 function Player:GetLicenseIDs()
@@ -377,7 +388,11 @@ function Player:GetFactionUniqueID() -- Faction uniqueID
 end
 
 function Player:GetFactionName() -- Faction Name
-	return self:YRPGetFactionName() -- return string
+	local FactionName = self:YRPGetFactionName()
+	if self:IsUnknown() then
+		FactionName = "Unknown"
+	end
+	return FactionName -- return string
 end
 
 function Player:GetFactionColor() -- Faction Color
@@ -386,7 +401,11 @@ end
 
 --[[ Group ]]--
 function Player:GetGroupName() -- Group Name / "Category" Name
-	return self:YRPGetGroupName() -- return string
+	local GroupName = self:YRPGetGroupName()
+	if self:IsUnknown() then
+		GroupName = "Unknown"
+	end
+	return GroupName -- return string
 end
 
 function Player:GetGroupColor() -- Group Color
@@ -395,7 +414,11 @@ end
 
 --[[ Name ]]--
 function Player:RPName() -- Character Name / Roleplay Name
-	return self:YRPRPName() -- return string
+	local name = self:YRPRPName()
+	if self:IsUnknown() then
+		name = "Unknown"
+	end
+	return name -- return string
 end
 
 --[[ UserGroup ]]--

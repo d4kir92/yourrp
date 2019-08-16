@@ -5,15 +5,6 @@
 
 local DATABASE_NAME = "yrp_design"
 
---[[ OLD
-SQL_ADD_COLUMN(_db_name, "color", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "style", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "design", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "rounded", "INT DEFAULT '0'")
-SQL_ADD_COLUMN(_db_name, "transparent", "INT DEFAULT '1'")
-SQL_ADD_COLUMN(_db_name, "border", "INT DEFAULT '0'")
-]]-- OLD
-
 SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Ubuntu'")
@@ -21,6 +12,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Ubuntu'")
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Simple', 'Ubuntu'")
 end
+
+--SQL_DROPTABLE(DATABASE_NAME)
 
 local HUDS = {}
 function RegisterHUDDesign(tab)
@@ -86,7 +79,7 @@ function Player:DesignLoadout()
 	if wk(setting) then
 		setting = setting[1]
 		self:SetDString("string_hud_design", setting.string_hud_design)
-		self:SetDString("string_interface_design", setting.string_interface_design)
+		SetGlobalDString("string_interface_design", setting.string_interface_design)
 	end
 	self:SetDInt("yrp_loading", 100)
 end
@@ -129,7 +122,7 @@ end
 local IF_Simple = {}
 IF_Simple.name = "Simple"
 IF_Simple.author = "D4KiR"
-IF_Simple.progress = 20
+IF_Simple.progress = 40
 RegisterInterfaceDesign(IF_Simple)
 
 util.AddNetworkString("change_interface_design")
@@ -137,9 +130,7 @@ net.Receive("change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
 	printGM("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetDString("string_interface_design", string_interface_design)
-	end
+	SetGlobalDString("string_interface_design", string_interface_design)
 end)
 
 -- F8 Design Page

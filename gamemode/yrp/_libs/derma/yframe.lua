@@ -14,10 +14,19 @@ function PANEL:SetHeaderHeight(num)
 	end
 end
 
+function PANEL:GetBorder()
+	return self._headerheight
+end
+
+function PANEL:SetBorder(b)
+	self._border = b
+end
+
 function PANEL:Think()
 
 	if self.sw != self:GetWide() or self.sh != self:GetTall() then
 		self.sw = self:GetWide()
+		self.sh = self:GetTall()
 
 		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
@@ -141,6 +150,7 @@ end
 
 function PANEL:Init()
 	self._headerheight = 24
+	self._border = 20
 
 	self:ShowCloseButton(false)
 

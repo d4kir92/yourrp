@@ -3,7 +3,7 @@
 local Player = FindMetaTable("Player")
 
 function Player:GetInterfaceDesign()
-	return self:GetDString("string_interface_design", "Simple")
+	return GetGlobalDString("string_interface_design", "Simple")
 end
 
 function Player:InterfaceValue(element, art)

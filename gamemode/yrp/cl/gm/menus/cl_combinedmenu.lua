@@ -30,10 +30,14 @@ function OpenCombinedMenu()
 	cm.win:MakePopup()
 	cm.win:SetHeaderHeight(YRP.ctr(100))
 	function cm.win:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
-		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(40, 40, 40, 255))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
+		--draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(40, 40, 40, 255))
 
-		draw.SimpleText(self:GetTitle(), "YRP_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		--draw.SimpleText(self:GetTitle(), "YRP_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+		hook.Run("YFramePaint", self, pw, ph)
+
+		--draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), Color(60, 60, 60, 255))
 	end
 
 	-- MENU
@@ -59,6 +63,8 @@ function OpenCombinedMenu()
 	cm.site:SetHeaderHeight(cm.win:GetHeaderHeight())
 	function cm.site:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(120, 120, 120, 255))
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
 	end
 
 	-- SITES

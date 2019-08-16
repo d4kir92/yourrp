@@ -771,7 +771,7 @@ function DStringListBox(tab)
 	pnl.add = createD("DButton", pnl.bg, YRP.ctr(50), YRP.ctr(50), tab.w - YRP.ctr(50), 0)
 	pnl.add:SetText("")
 	function pnl.add:Paint(pw, ph)
-		self.color = Color(0, 255, 0)
+		self.color = Color(80, 255, 80)
 		if self:IsHovered() then
 			self.color = Color(100, 255, 100)
 		end
@@ -786,7 +786,7 @@ function DStringListBox(tab)
 	pnl.dpl:EnableVerticalScrollbar(true)
 	pnl.dpl:SetSpacing(1)
 	function pnl.dpl:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 	end
 	function pnl.dpl:AddLines(t)
 		pnl.dpl:Clear()

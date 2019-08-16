@@ -15,17 +15,11 @@ net.Receive("get_design_settings", function(len)
 		end
 
 		local Parent = settingsWindow.window.site
-		local GRP_HUD = {}
-		GRP_HUD.parent = Parent
-		GRP_HUD.x = YRP.ctr(20)
-		GRP_HUD.y = YRP.ctr(20)
-		GRP_HUD.w = YRP.ctr(1000)
-		GRP_HUD.h = YRP.ctr(530)
-		GRP_HUD.br = YRP.ctr(20)
-		GRP_HUD.color = Color(255, 255, 255)
-		GRP_HUD.bgcolor = Color(80, 80, 80)
-		GRP_HUD.name = "LID_hud"
-		GRP_HUD = DGroup(GRP_HUD)
+		local GRP_HUD = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20), YRP.ctr(20))
+		GRP_HUD:SetText("LID_hud")
+		function GRP_HUD:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
 
 		-- HUD Design
 		local hud_design_bg = createD("DPanel", nil, GRP_HUD:GetWide(), YRP.ctr(100), 0, 0)
@@ -853,7 +847,7 @@ net.Receive("get_design_settings", function(len)
 
 
 		-- Interface
-		local GRP_IF = {}
+		--[[local GRP_IF = {}
 		GRP_IF.parent = Parent
 		GRP_IF.x = YRP.ctr(20 + 1000 + 20)
 		GRP_IF.y = YRP.ctr(20)
@@ -864,6 +858,13 @@ net.Receive("get_design_settings", function(len)
 		GRP_IF.bgcolor = Color(80, 80, 80)
 		GRP_IF.name = "LID_interface"
 		GRP_IF = DGroup(GRP_IF)
+		GRP_IF.cif = {}
+		]]
+		local GRP_IF = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20 + 1000 + 20), YRP.ctr(20))
+		GRP_IF:SetText("LID_interface")
+		function GRP_IF:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
 		GRP_IF.cif = {}
 
 		-- IF Design
@@ -924,11 +925,25 @@ net.Receive("get_design_settings", function(len)
 		end
 		GRP_IF:AddItem(if_design_bg)
 
-		net.Receive("get_interface_settings", function(len)
+		net.Receive("get_interface_settings", function(le)
 			if pa(GRP_IF) then
 				for i, ele in pairs(GRP_IF.cif) do
 					ele:Remove()
 				end
+
+				local reset_interface = createD("YButton", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
+				reset_interface:SetText("LID_reset")
+				function reset_interface:DoClick()
+					net.Start("reset_interface_design")
+					net.SendToServer()
+				end
+				function reset_interface:Paint(pw, ph)
+					local tab = {}
+					tab.color = Color(255, 0, 0)
+					hook.Run("YButtonPaint", self, pw, ph, tab)
+				end
+				table.insert(GRP_IF.cif, reset_interface)
+				GRP_IF:AddItem(reset_interface)
 
 				local iftab = net.ReadTable()
 				for i, ift in pairs(iftab) do
@@ -986,6 +1001,24 @@ net.Receive("get_design_settings", function(len)
 		pv_lbl:SetText("LID_label")
 		function pv_lbl:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
+		end
+
+		local pv_add = createD("YButton", pv_win, YRP.ctr(80), YRP.ctr(80), YRP.ctr(20), YRP.ctr(20 + 80 + 20 + 100 + 20))
+		pv_add:SetText("LID_button")
+		function pv_add:Paint(pw, ph)
+			hook.Run("YAddPaint", self, pw, ph)
+		end
+
+		local pv_remove = createD("YButton", pv_win, YRP.ctr(80), YRP.ctr(80), YRP.ctr(20 + 80 + 20), YRP.ctr(20 + 80 + 20 + 100 + 20))
+		pv_remove:SetText("LID_button")
+		function pv_remove:Paint(pw, ph)
+			hook.Run("YRemovePaint", self, pw, ph)
+		end
+
+		local pv_groupbox = createD("YGroupBox", pv_win, YRP.ctr(400), YRP.ctr(400), YRP.ctr(20), YRP.ctr(20 + 80 + 20 + 80 + 20 + 100 + 20))
+		pv_groupbox:SetText("LID_groupbox")
+		function pv_groupbox:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
 		end
 	end
 end)

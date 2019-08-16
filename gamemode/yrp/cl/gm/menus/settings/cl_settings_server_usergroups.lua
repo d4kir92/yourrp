@@ -365,13 +365,14 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 	]]
 
-	local ACCESS = createD("DYRPPanelPlus", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20), YRP.ctr(20))
-	ACCESS:INITPanel("DPanelList")
-	ACCESS:SetHeader(YRP.lang_string("LID_accesssettings"))
-	function ACCESS.plus:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
+
+
+	local ACCESS = createD("YGroupBox", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20), YRP.ctr(20))
+	ACCESS:SetText("LID_accesssettings")
+	function ACCESS:Paint(pw, ph)
+		hook.Run("YGroupBoxPaint", self, pw, ph)
 	end
-	ACCESS.plus:EnableVerticalScrollbar(true)
+	ACCESS:AutoSize(true)
 
 	function ACCESSAddCheckBox(name, lstr, color)
 		local tmp = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
@@ -400,7 +401,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			end
 		end)
 
-		ACCESS.plus:AddItem(tmp)
+		ACCESS:AddItem(tmp)
 	end
 	function ACCESSAddHr()
 		local tmp = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
@@ -408,7 +409,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			surfacePanel(self, pw, ph, "")
 			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color(0, 0, 0, 255))
 		end
-		ACCESS.plus:AddItem(tmp)
+		ACCESS:AddItem(tmp)
 	end
 	ACCESSAddCheckBox("bool_adminaccess", "LID_yrp_adminaccess", Color(255, 255, 0, 255))
 	ACCESSAddHr()
@@ -440,13 +441,14 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	-- Addons
 	ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
 
-	local GAMEPLAY = createD("DYRPPanelPlus", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20 + 800 + 20), YRP.ctr(20))
-	GAMEPLAY:INITPanel("DPanelList")
-	GAMEPLAY:SetHeader(YRP.lang_string("LID_gameplayrestrictions"))
-	function GAMEPLAY.plus:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
+
+
+	local GAMEPLAY = createD("YGroupBox", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20 + 800 + 20), YRP.ctr(20))
+	GAMEPLAY:SetText("LID_gameplayrestrictions")
+	function GAMEPLAY:Paint(pw, ph)
+		hook.Run("YGroupBoxPaint", self, pw, ph)
 	end
-	GAMEPLAY.plus:EnableVerticalScrollbar(true)
+	GAMEPLAY:AutoSize(true)
 
 	function GAMEPLAYAddCheckBox(name, lstr)
 		local tmp = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
@@ -465,7 +467,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			net.SendToServer()
 		end
 
-		GAMEPLAY.plus:AddItem(tmp)
+		GAMEPLAY:AddItem(tmp)
 	end
 	function GAMEPLAYAddHr()
 		local tmp = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
@@ -473,7 +475,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			surfacePanel(self, pw, ph, "")
 			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color(0, 0, 0, 255))
 		end
-		GAMEPLAY.plus:AddItem(tmp)
+		GAMEPLAY:AddItem(tmp)
 	end
 	GAMEPLAYAddCheckBox("bool_vehicles", "LID_gp_vehicles")
 	GAMEPLAYAddCheckBox("bool_weapons", "LID_gp_weapons")
@@ -543,8 +545,10 @@ function AddUG(tbl)
 		local _icon = {}
 		_icon.size = YRP.ctr(100 - 16)
 		_icon.br = YRP.ctr(8)
-		local html = createD("HTML", _ug, _icon.size, _icon.size, _icon.br, _icon.br)
-		html:SetHTML(GetHTMLImage(tbl.string_icon, _icon.size, _icon.size))
+
+		local HTMLCODE = GetHTMLImage(tbl.string_icon, _icon.size, _icon.size)
+		local html = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br, _icon.br)
+		html:SetHTML(HTMLCODE)
 	end
 
 	PARENT.ugs:AddItem(_ug)

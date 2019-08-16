@@ -28,21 +28,16 @@ net.Receive("get_feedback", function()
 			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
 		end
 
-		local _fbh = createD("DPanel", settingsWindow.window.site, ScrW() - YRP.ctr(20), YRP.ctr(50), YRP.ctr(10), YRP.ctr(10))
-		function _fbh:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string("LID_settings_fb_feedbacks"))
-		end
-
-		local _fbl = createD("DPanelList", settingsWindow.window.site, ScrW() - YRP.ctr(20), ScrH() - YRP.ctr(100 + 10 + 50 + 10), YRP.ctr(10), YRP.ctr(10 + 50))
-		_fbl:EnableVerticalScrollbar(true)
-		function _fbl:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		local FEEDBACK = createD("YGroupBox", settingsWindow.window.site, ScrW() - YRP.ctr(40), settingsWindow.window.site:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+		FEEDBACK:SetText("LID_settings_fb_feedbacks")
+		function FEEDBACK:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
 		end
 
 		for i, fb in pairs(_fbt) do
 			GetAvatarUrl(fb.steamid)
 
-			local _fb = createD("DPanel", nil, _fbl:GetWide(), YRP.ctr(400), 0, 0)
+			local _fb = createD("DPanel", nil, FEEDBACK:GetContent():GetWide(), YRP.ctr(400), 0, 0)
 			_fb.steamid64 = util.SteamIDTo64(fb.steamid)
 			_fb.avatar = createD("HTML", _fb, YRP.ctr(400), YRP.ctr(400), YRP.ctr(10), YRP.ctr(10))
 			function _fb:Paint(pw, ph)
@@ -112,7 +107,7 @@ net.Receive("get_feedback", function()
 				gui.OpenURL("http://steamcommunity.com/profiles/" .. _fb.steamid64)
 			end
 
-			_fbl:AddItem(_fb)
+			FEEDBACK:AddItem(_fb)
 		end
 	end
 end)

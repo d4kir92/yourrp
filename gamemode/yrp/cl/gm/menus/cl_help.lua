@@ -626,11 +626,12 @@ end)
 
 net.Receive("getsiteyourrptranslations", function(len)
 	if pa(HELPMENU.mainmenu.site) then
-		local page = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+		local Parent = HELPMENU.mainmenu.site
+		--local page = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
-		function page:Paint(pw, ph)
+		--function page:Paint(pw, ph)
 			--surfacePanel(self, pw, ph, "")
-		end
+		--end
 
 		local _longestProgressText = 0
 		local _allProgressTexts = {}
@@ -673,11 +674,19 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _icon_h = _h - _br
 		local _icon_w = _icon_h * 1.478
 		local _w = _longestProgressText + YRP.ctr(_icon_w + 20 + 20)
-		page.panellist = createD("DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, YRP.ctr(100))
-		page.panellist:SetSpacing(_br)
+
+		local LANGUAGES = createD("YGroupBox", Parent, _w, Parent:GetTall(), Parent:GetWide() / 2 - _w / 2, 0)
+		LANGUAGES:SetText("Languages")
+		function LANGUAGES:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		LANGUAGES:SetSpacing(YRP.ctr(10))
+
+		--page.panellist = createD("DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, YRP.ctr(100))
+		--page.panellist:SetSpacing(_br)
 
 		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
-			local lan = createD("DButton", page, page.panellist:GetWide(), YRP.ctr(_h), 0, 0)
+			local lan = createD("DButton", nil, LANGUAGES:GetContent():GetWide(), YRP.ctr(_h), 0, 0)
 			lan:SetText("")
 			lan.language = language
 
@@ -708,7 +717,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 				YRP.LoadLanguage(self.language.short)
 			end
 
-			page.panellist:AddItem(lan)
+			LANGUAGES:AddItem(lan)
 		end
 
 		local _helplanWidth = YRP.ctr(400)
@@ -720,15 +729,11 @@ net.Receive("getsiteyourrptranslations", function(len)
 			_helplanX = ScrW() / 2 - _helplanWidth / 2
 		end
 
-		local helplan = createD("DButton", page, YRP.ctr(400), YRP.ctr(50), _helplanX, 0)
-		helplan:SetText("")
-
+		local helplan = createD("YButton", Parent, YRP.ctr(400), YRP.ctr(50), Parent:GetWide() - YRP.ctr(400), 0)
+		helplan:SetText("Help translating")
 		function helplan:Paint(pw, ph)
-			local text = "Help translating"
-			surfaceButton(self, pw, ph, "")
-			surfaceText(text, "mat1text", pw / 2, ph / 2, Color(255, 255, 0), 1, 1)
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
-
 		function helplan:DoClick()
 			OpenHelpTranslatingWindow()
 		end

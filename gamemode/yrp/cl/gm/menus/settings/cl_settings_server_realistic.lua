@@ -22,15 +22,14 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		scroller.w = ScW() - 2 * br
 		scroller.h = ScrH() - YRP.ctr(100) - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
-		local general = {}
-		general.parent = Scroller
-		general.x = 0
-		general.y = 0
-		general.w = YRP.ctr(800)
-		general.h = Scroller:GetTall()
-		general.br = br / 2
-		general.name = "LID_generalsettings"
-		local General = DGroup(general)
+
+		local General = createD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		General:SetText("LID_generalsettings")
+		function General:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		Scroller:AddPanel(General)
+
 		local dhr = {}
 		dhr.parent = General
 		dhr.color = YRPGetColor("2")
@@ -55,15 +54,16 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		DBoolLine(bl, REL.bool_custom_falldamage, "LID_customfalldamage", "update_bool_custom_falldamage")
 		DBoolLine(ble, REL.bool_custom_falldamage_percentage, "LID_percentage", "update_bool_custom_falldamage_percentage")
 		DFloatLine(ble, REL.float_custom_falldamage_muliplier, "LID_multiplier", "update_float_custom_falldamage_muliplier")
-		local damage = {}
-		damage.parent = Scroller
-		damage.x = 0
-		damage.y = 0
-		damage.w = YRP.ctr(1000)
-		damage.h = Scroller:GetTall()
-		damage.br = br / 2
-		damage.name = "LID_damagesettings"
-		local Damage = DGroup(damage)
+
+
+
+		local Damage = createD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+		Damage:SetText("LID_damagesettings")
+		function Damage:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		Scroller:AddPanel(Damage)
+
 		Damage.dmg = 1
 		dhr = {}
 		dhr.parent = Damage

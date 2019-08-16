@@ -10,7 +10,13 @@ SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ' '")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 
+local INTERFACES = {}
 function AddIFElement(tab)
+	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_ST'")
+	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_SC'")
+	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_HC'")
+	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_HT'")
+
 	for name, value in pairs(tab.floats) do
 		local _name = "float_IF_" .. tab.element .. "_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
@@ -37,26 +43,26 @@ function AddIFElement(tab)
 			end
 		end
 	end
+	INTERFACES[tab.element] = tab
 end
 
 local Simple = {}
 Simple.element = "Simple"
-Simple.floats = {}
-Simple.bools = {}
-Simple.colors = {}
 
+Simple.floats = {}
+
+Simple.bools = {}
+Simple.bools.Rounded = 0;
+
+Simple.colors = {}
 Simple.colors.YFrame_HT = "255, 255, 255, 255"
 Simple.colors.YFrame_HB = "40, 40, 40, 255"
 Simple.colors.YFrame_BG = "0, 0, 0, 200"
-
-Simple.colors.YButton_NC = "255, 255, 255, 255"
-Simple.colors.YButton_HC = "255, 255, 0, 255"
-Simple.colors.YButton_SC = "0, 255, 0, 255"
+Simple.colors.YButton_NC = "180, 180, 255, 255"
 Simple.colors.YButton_NT = "0, 0, 0, 255"
-Simple.colors.YButton_HT = "0, 0, 0, 255"
-Simple.colors.YButton_ST = "0, 0, 0, 255"
 
 Simple.ints = {}
+
 AddIFElement(Simple)
 
 --[[ LOADOUT ]]--
@@ -106,5 +112,30 @@ net.Receive("update_interface_color", function(len, ply)
 	local color = net.ReadString()
 	YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
 	SQL_UPDATE(DATABASE_NAME, "value = '" .. color .. "'", "name = '" .. name .. "'")
+	IFLoadoutAll()
+end)
+
+util.AddNetworkString("reset_interface_design")
+net.Receive("reset_interface_design", function(len, ply)
+	local tab = INTERFACES[GetGlobalDString("string_interface_design", "")]
+	if tab != nil then
+		for name, value in pairs(tab.floats) do
+			local _name = "float_IF_" .. tab.element .. "_" .. name
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+		end
+		for name, value in pairs(tab.bools) do
+			local _name = "bool_IF_" .. tab.element .. "_" .. name
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+		end
+		for name, value in pairs(tab.colors) do
+			local _name = "color_IF_" .. tab.element .. "_" .. name
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+		end
+		for name, value in pairs(tab.ints) do
+			local _name = "int_IF_" .. tab.element .. "_" .. name
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+		end
+	end
+
 	IFLoadoutAll()
 end)

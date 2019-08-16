@@ -4,7 +4,7 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if lply:GetDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Simple" then
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "HB"))
 
 		draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "BG"))
@@ -20,15 +20,21 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if lply:GetDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Simple" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
-			color = lply:InterfaceValue("YButton", "SC")
-			tcolor = lply:InterfaceValue("YButton", "ST")
+			--lply:InterfaceValue("YButton", "SC")
+			--tcolor = lply:InterfaceValue("YButton", "ST")
+			color.r = color.r - 50
+			color.g = color.g - 50
+			color.b = color.b - 50
 		elseif self:IsHovered() then
-			color = lply:InterfaceValue("YButton", "HC")
-			tcolor = lply:InterfaceValue("YButton", "HT")
+			--color = lply:InterfaceValue("YButton", "HC")
+			--tcolor = lply:InterfaceValue("YButton", "HT")
+			color.r = color.r + 50
+			color.g = color.g + 50
+			color.b = color.b + 50
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
@@ -43,7 +49,7 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if lply:GetDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Simple" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 
@@ -66,30 +72,96 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YClosePaint", "YClose_Simple", function(self, pw, ph, tab)
+hook.Add("YAddPaint", "YAdd_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	local lply = LocalPlayer()
-	if lply:GetDString("string_interface_design") == "Simple" then
-		local color = lply:InterfaceValue("YButton", "NC")
-		local tcolor = lply:InterfaceValue("YButton", "NT")
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		local color = Color(100, 205, 100)
 		if self:IsDown() or self:IsPressed() then
-			color = lply:InterfaceValue("YButton", "SC")
-			tcolor = lply:InterfaceValue("YButton", "ST")
+			color.r = color.r - 50
+			color.g = color.g - 50
+			color.b = color.b - 50
 		elseif self:IsHovered() then
-			color = lply:InterfaceValue("YButton", "HC")
-			tcolor = lply:InterfaceValue("YButton", "HT")
+			color.r = color.r + 50
+			color.g = color.g + 50
+			color.b = color.b + 50
 		end
-		color = tab.color or color
-		tcolor = tab.tcolor or tcolor
-
-		surface.SetDrawColor(255, 100, 100, 255)
+		surface.SetDrawColor(color)
 		surface.SetMaterial(YRP.GetDesignIcon("circle"))
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
+		local br = ph * 0.1
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(YRP.GetDesignIcon("add"))
+		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		return true
+	end
+end)
+
+hook.Add("YRemovePaint", "YRemove_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		local color = Color(205, 100, 100)
+		if self:IsDown() or self:IsPressed() then
+			color.r = color.r - 50
+			color.g = color.g - 50
+			color.b = color.b - 50
+		elseif self:IsHovered() then
+			color.r = color.r + 50
+			color.g = color.g + 50
+			color.b = color.b + 50
+		end
+		surface.SetDrawColor(color)
+		surface.SetMaterial(YRP.GetDesignIcon("circle"))
+		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		local br = ph * 0.1
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(YRP.GetDesignIcon("remove"))
+		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		return true
+	end
+end)
+
+hook.Add("YClosePaint", "YClose_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		local color = Color(205, 100, 100)
+		if self:IsDown() or self:IsPressed() then
+			color.r = color.r - 50
+			color.g = color.g - 50
+			color.b = color.b - 50
+		elseif self:IsHovered() then
+			color.r = color.r + 50
+			color.g = color.g + 50
+			color.b = color.b + 50
+		end
+		surface.SetDrawColor(color)
+		surface.SetMaterial(YRP.GetDesignIcon("circle"))
+		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		local br = ph * 0.1
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(YRP.GetDesignIcon("clear"))
-		surface.DrawTexturedRect(0, 0, pw, ph)
+		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		return true
+	end
+end)
+
+hook.Add("YGroupBoxPaint", "YGroupBox_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+
+		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 255))
+
+		local x, y = self.con:GetPos()
+		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 255))
+
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "YRP_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

@@ -313,14 +313,16 @@ function YRP.fetch_translation_progress()
 	if SERVER then
 		printGM("lang", "Get Translation progress from web...")
 
-		http.Fetch("https://yourrp.noserver4u.de/api/projects/yourrp/statistics/?format=json", function(body, len, headers, code)
+		http.Fetch("https://yourrp.noserver4u.de/api/projects/yourrp/languages/?format=json", function(body, len, headers, code)
 			if tonumber(code) == 200 then
 				for key, value in pairs(util.JSONToTable(body)) do
-					if yrp_button_info[string.lower(value.code)] == nil then
-						yrp_button_info[string.lower(value.code)] = {}
-					end
+					if value != nil then
+						if yrp_button_info[string.lower(value.code)] == nil then
+							yrp_button_info[string.lower(value.code)] = {}
+						end
 
-					yrp_button_info[string.lower(value.code)]["percentage"] = value.translated_percent
+						yrp_button_info[string.lower(value.code)]["percentage"] = value.translated_percent
+					end
 				end
 
 				printGM("lang", "Translation progress successfully received!")
@@ -337,6 +339,10 @@ function YRP.fetch_translation_progress()
 		net.Start("requestTranslationProgress")
 		net.SendToServer()
 	end
+end
+if CLIENT then
+net.Start("requestTranslationProgress")
+net.SendToServer()
 end
 
 function YRP.add_language(short)

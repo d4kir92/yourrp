@@ -317,6 +317,11 @@ end)
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 
+	DONE_LOADING = DONE_LOADING or false
+	if !DONE_LOADING then
+		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10))
+	end
+
 	if GetGlobalDBool("blinded", false) then
 		surfaceBox(0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
 		surfaceText(YRP.lang_string("LID_blinded"), "SettingsHeader", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)

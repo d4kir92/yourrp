@@ -54,7 +54,6 @@ end
 
 function CreateFeedbackContent(parent)
 	FEEDBACK.content = parent
-	FEEDBACK.langu = YRP.DChangeLanguage(FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(100 + 20), YRP.ctr(100 + 20), YRP.ctr(100))
 
 	FEEDBACK.discord = createD("YButton", FEEDBACK.content, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
 	FEEDBACK.discord:SetText("LID_getlivesupport")

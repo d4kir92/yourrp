@@ -419,6 +419,8 @@ YRP.AddDesignIcon("ts", "vgui/material/icon_ts_bluelight.png")
 YRP.AddDesignIcon("ts_light", "vgui/material/icon_ts_light.png")
 
 YRP.AddDesignIcon("circle", "vgui/material/icon_circle.png")
+YRP.AddDesignIcon("add", "vgui/material/icon_add.png")
+YRP.AddDesignIcon("remove", "vgui/material/icon_remove.png")
 
 YRP.iconsloaded = true
 

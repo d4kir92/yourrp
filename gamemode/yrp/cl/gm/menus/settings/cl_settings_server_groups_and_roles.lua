@@ -421,7 +421,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function ea.background:Paint(pw, ph)
 			if ea.typ != nil then
 				local tab = {}
-				tab.color = YRPGetColor("4")
+				tab.color = Color(20, 20, 20, 255)
 				DrawPanel(self, tab)
 			end
 		end
@@ -431,7 +431,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function ea.del:Paint(pw, ph)
 			if ea.typ != nil and tonumber(ea.tab.uniqueID) != 1 then
 				local tab = {}
-				tab.color = Color(255, 0, 0, 255)
+				tab.color = Color(80, 80, 80)
 				DrawPanel(self, tab)
 
 				local tab2 = {}
@@ -558,17 +558,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea[group.uniqueID] = ea[group.uniqueID] or {}
 
-			local info = {}
-			info.parent = ea.background
-			info.x = YRP.ctr(20)
-			info.y = YRP.ctr(20)
-			info.w = YRP.ctr(1000)
-			info.h = YRP.ctr(530)
-			info.br = YRP.ctr(20)
-			info.color = Color(255, 255, 255)
-			info.bgcolor = Color(80, 80, 80)
-			info.name = "LID_general"
-			ea[group.uniqueID].info = DGroup(info)
+
+
+			local info = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(540), YRP.ctr(20), YRP.ctr(20))
+			info:SetText("LID_general")
+			function info:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[group.uniqueID].info = info
 			ea.info = ea[group.uniqueID].info
 			function ea.info:OnRemove()
 				if cur_group.edi != group.uniqueID then
@@ -579,7 +577,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			local name = {}
-			name.parent = ea.info
+			name.parent = ea.info:GetContent()
 			name.uniqueID = group.uniqueID
 			name.header = "LID_name"
 			name.netstr = "update_group_string_name"
@@ -590,11 +588,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local hr = {}
 			hr.h = YRP.ctr(16)
-			hr.parent = ea.info
+			hr.parent = ea.info:GetContent()
 			DHr(hr)
 
 			local color = {}
-			color.parent = ea.info
+			color.parent = ea.info:GetContent()
 			color.uniqueID = group.uniqueID
 			color.header = "LID_color"
 			color.netstr = "update_group_string_color"
@@ -606,7 +604,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local icon = {}
-			icon.parent = ea.info
+			icon.parent = ea.info:GetContent()
 			icon.uniqueID = group.uniqueID
 			icon.header = "LID_icon"
 			icon.netstr = "update_group_string_icon"
@@ -623,75 +621,79 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 			end
 
-			local parentgroup = {}
-			parentgroup.parent = ea.info
-			parentgroup.uniqueID = group.uniqueID
-			parentgroup.header = "LID_parentgroup"
-			parentgroup.netstr = "update_group_int_parentgroup"
-			parentgroup.value = group.int_parentgroup
-			parentgroup.uniqueID = group.uniqueID
-			parentgroup.lforce = false
-			parentgroup.choices = othergroups
-			ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
+			if group.uniqueID != 1 then
+				local parentgroup = {}
+				parentgroup.parent = ea.info:GetContent()
+				parentgroup.uniqueID = group.uniqueID
+				parentgroup.header = "LID_parentgroup"
+				parentgroup.netstr = "update_group_int_parentgroup"
+				parentgroup.value = group.int_parentgroup
+				parentgroup.uniqueID = group.uniqueID
+				parentgroup.lforce = false
+				parentgroup.choices = othergroups
+				ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
+			end
 
-			local restriction = {}
-			restriction.parent = ea.background
-			restriction.x = YRP.ctr(1040)
-			restriction.y = YRP.ctr(20)
-			restriction.w = YRP.ctr(1000)
-			restriction.h = YRP.ctr(550)
-			restriction.br = YRP.ctr(20)
-			restriction.color = Color(255, 255, 255)
-			restriction.bgcolor = Color(80, 80, 80)
-			restriction.name = "LID_restriction"
-			ea[group.uniqueID].restriction = DGroup(restriction)
+
+
+			local restriction = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(1040), YRP.ctr(20))
+			restriction:SetText("LID_restriction")
+			function restriction:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[group.uniqueID].restriction = restriction
 			ea.restriction = ea[group.uniqueID].restriction
 
-			local gugs = string.Explode(",", group.string_usergroups)
+			if group.uniqueID != 1 then
+				local gugs = string.Explode(",", group.string_usergroups)
 
-			local ugs = {}
-			ugs["ALL"] = {}
-			ugs["ALL"].checked = table.HasValue(gugs, "ALL")
-			ugs["ALL"]["choices"] = {}
-			for i, pl in pairs(player.GetAll()) do
-				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
-				ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+				local ugs = {}
+				ugs["ALL"] = {}
+				ugs["ALL"].checked = table.HasValue(gugs, "ALL")
+				ugs["ALL"]["choices"] = {}
+				for i, pl in pairs(player.GetAll()) do
+					ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
+					ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+				end
+
+				for i, ug in pairs(db_ugs) do
+					ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+					ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+				end
+
+				local usergroups = {}
+				usergroups.parent = ea.restriction:GetContent()
+				usergroups.uniqueID = group.uniqueID
+				usergroups.header = "LID_usergroups"
+				usergroups.netstr = "update_group_string_usergroups"
+				usergroups.value = group.string_usergroups
+				usergroups.uniqueID = group.uniqueID
+				usergroups.lforce = false
+				usergroups.choices = ugs
+				ea[group.uniqueID].usergroups = DCheckBoxes(usergroups)
 			end
 
-			for i, ug in pairs(db_ugs) do
-				ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
-				ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
-			end
-
-			local usergroups = {}
-			usergroups.parent = ea.restriction
-			usergroups.uniqueID = group.uniqueID
-			usergroups.header = "LID_usergroups"
-			usergroups.netstr = "update_group_string_usergroups"
-			usergroups.value = group.string_usergroups
-			usergroups.uniqueID = group.uniqueID
-			usergroups.lforce = false
-			usergroups.choices = ugs
-			ea[group.uniqueID].usergroups = DCheckBoxes(usergroups)
-
-			hr.parent = ea.restriction
+			hr.parent = ea.restriction:GetContent()
 			DHr(hr)
 
-			local requireslevel = {}
-			requireslevel.parent = ea.restriction
-			requireslevel.header = "LID_requireslevel"
-			requireslevel.netstr = "update_group_int_requireslevel"
-			requireslevel.value = group.int_requireslevel
-			requireslevel.uniqueID = group.uniqueID
-			requireslevel.lforce = false
-			requireslevel.min = 1
-			requireslevel.max = 100
-			ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
+			if group.uniqueID != 1 then
+				local requireslevel = {}
+				requireslevel.parent = ea.restriction:GetContent()
+				requireslevel.header = "LID_requireslevel"
+				requireslevel.netstr = "update_group_int_requireslevel"
+				requireslevel.value = group.int_requireslevel
+				requireslevel.uniqueID = group.uniqueID
+				requireslevel.lforce = false
+				requireslevel.min = 1
+				requireslevel.max = 100
+				ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
+			end
 
 			DHr(hr)
 
 			local groupvoicechat = {}
-			groupvoicechat.parent = ea.restriction
+			groupvoicechat.parent = ea.restriction:GetContent()
 			groupvoicechat.uniqueID = group.uniqueID
 			groupvoicechat.header = "LID_canusegroupvoicechat"
 			groupvoicechat.netstr = "update_group_bool_groupvoicechat"
@@ -702,40 +704,41 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
+			if group.uniqueID != 1 then
+				local whitelist = {}
+				whitelist.parent = ea.restriction:GetContent()
+				whitelist.uniqueID = group.uniqueID
+				whitelist.header = "LID_useswhitelist"
+				whitelist.netstr = "update_group_bool_whitelist"
+				whitelist.value = group.bool_whitelist
+				whitelist.uniqueID = group.uniqueID
+				whitelist.lforce = false
+				ea[group.uniqueID].whitelist = DCheckBox(whitelist)
 
-			local whitelist = {}
-			whitelist.parent = ea.restriction
-			whitelist.uniqueID = group.uniqueID
-			whitelist.header = "LID_useswhitelist"
-			whitelist.netstr = "update_group_bool_whitelist"
-			whitelist.value = group.bool_whitelist
-			whitelist.uniqueID = group.uniqueID
-			whitelist.lforce = false
-			ea[group.uniqueID].whitelist = DCheckBox(whitelist)
+				DHr(hr)
 
-			DHr(hr)
+				local locked = {}
+				locked.parent = ea.restriction:GetContent()
+				locked.uniqueID = group.uniqueID
+				locked.header = "LID_locked"
+				locked.netstr = "update_group_bool_locked"
+				locked.value = group.bool_locked
+				locked.uniqueID = group.uniqueID
+				locked.lforce = false
+				ea[group.uniqueID].locked = DCheckBox(locked)
 
-			local locked = {}
-			locked.parent = ea.restriction
-			locked.uniqueID = group.uniqueID
-			locked.header = "LID_locked"
-			locked.netstr = "update_group_bool_locked"
-			locked.value = group.bool_locked
-			locked.uniqueID = group.uniqueID
-			locked.lforce = false
-			ea[group.uniqueID].locked = DCheckBox(locked)
+				DHr(hr)
 
-			DHr(hr)
-
-			local visible = {}
-			visible.parent = ea.restriction
-			visible.uniqueID = group.uniqueID
-			visible.header = "LID_visible"
-			visible.netstr = "update_group_bool_visible"
-			visible.value = group.bool_visible
-			visible.uniqueID = group.uniqueID
-			visible.lforce = false
-			ea[group.uniqueID].visible = DCheckBox(visible)
+				local visible = {}
+				visible.parent = ea.restriction:GetContent()
+				visible.uniqueID = group.uniqueID
+				visible.header = "LID_visible"
+				visible.netstr = "update_group_bool_visible"
+				visible.value = group.bool_visible
+				visible.uniqueID = group.uniqueID
+				visible.lforce = false
+				ea[group.uniqueID].visible = DCheckBox(visible)
+			end
 		end)
 
 		function CreateLineRole(parent, role)
@@ -892,17 +895,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea[role.uniqueID] = ea[role.uniqueID] or {}
 
-			local info = {}
-			info.parent = ea.background
-			info.x = YRP.ctr(20)
-			info.y = YRP.ctr(20)
-			info.w = YRP.ctr(800)
-			info.h = YRP.ctr(866)
-			info.br = YRP.ctr(20)
-			info.color = Color(255, 255, 255)
-			info.bgcolor = Color(80, 80, 80)
-			info.name = "LID_general"
-			ea[role.uniqueID].info = DGroup(info)
+
+
+			local info = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(866), YRP.ctr(20), YRP.ctr(20))
+			info:SetText("LID_general")
+			function info:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[role.uniqueID].info = info
 			ea.info = ea[role.uniqueID].info
 			function ea.info:OnRemove()
 				if cur_role.edi != role.uniqueID then
@@ -913,7 +914,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			local name = {}
-			name.parent = ea.info
+			name.parent = ea.info:GetContent()
 			name.uniqueID = role.uniqueID
 			name.header = "LID_name"
 			name.netstr = "update_role_string_name"
@@ -924,11 +925,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			local hr = {}
 			hr.h = YRP.ctr(16)
-			hr.parent = ea.info
+			hr.parent = ea.info:GetContent()
 			DHr(hr)
 
 			local color = {}
-			color.parent = ea.info
+			color.parent = ea.info:GetContent()
 			color.uniqueID = role.uniqueID
 			color.header = "LID_color"
 			color.netstr = "update_role_string_color"
@@ -940,7 +941,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local icon = {}
-			icon.parent = ea.info
+			icon.parent = ea.info:GetContent()
 			icon.uniqueID = role.uniqueID
 			icon.header = "LID_icon"
 			icon.netstr = "update_role_string_icon"
@@ -959,7 +960,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local maxamount = {}
-				maxamount.parent = ea.info
+				maxamount.parent = ea.info:GetContent()
 				maxamount.uniqueID = role.uniqueID
 				maxamount.header = "LID_maxamount"
 				maxamount.netstr = "update_role_int_maxamount"
@@ -974,7 +975,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local amountpercentage = {}
-				amountpercentage.parent = ea.info
+				amountpercentage.parent = ea.info:GetContent()
 				amountpercentage.header = "LID_amountpercentage"
 				amountpercentage.netstr = "update_role_int_amountpercentage"
 				amountpercentage.value = role.int_amountpercentage
@@ -994,7 +995,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				local int_groupID = {}
-				int_groupID.parent = ea.info
+				int_groupID.parent = ea.info:GetContent()
 				int_groupID.uniqueID = role.uniqueID
 				int_groupID.header = "LID_group"
 				int_groupID.netstr = "update_role_int_groupID"
@@ -1008,7 +1009,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			local string_description = {}
-			string_description.parent = ea.info
+			string_description.parent = ea.info:GetContent()
 			string_description.uniqueID = role.uniqueID
 			string_description.header = "LID_description"
 			string_description.netstr = "update_role_string_description"
@@ -1020,7 +1021,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local salary = {}
-			salary.parent = ea.info
+			salary.parent = ea.info:GetContent()
 			salary.header = "LID_salary"
 			salary.netstr = "update_role_int_salary"
 			salary.value = role.int_salary
@@ -1033,7 +1034,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local salarytime = {}
-			salarytime.parent = ea.info
+			salarytime.parent = ea.info:GetContent()
 			salarytime.header = "LID_timesalary"
 			salarytime.netstr = "update_role_int_salarytime"
 			salarytime.value = role.int_salarytime
@@ -1056,7 +1057,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local prerole = {}
-				prerole.parent = ea.info
+				prerole.parent = ea.info:GetContent()
 				prerole.uniqueID = role.uniqueID
 				prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
 				prerole.netstr = "update_role_int_prerole"
@@ -1078,7 +1079,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rod_roles[0] = YRP.lang_string("LID_none")
 
 			local roleondeath = {}
-			roleondeath.parent = ea.info
+			roleondeath.parent = ea.info:GetContent()
 			roleondeath.uniqueID = role.uniqueID
 			roleondeath.header = YRP.lang_string("LID_roleafterdeath")
 			roleondeath.netstr = "update_role_int_roleondeath"
@@ -1088,26 +1089,22 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			roleondeath.choices = rod_roles
 			ea[role.uniqueID].roleondeath = DComboBox(roleondeath)
 
-			ea.info:AutoSize()
+			ea.info:AutoSize(true)
 
 
 
 			-- FLAGS
-			local flags = {}
-			flags.parent = ea.background
-			flags.x = ea.info:GetParent().x
-			flags.y = ea.info:GetParent().y + ea.info:GetParent():GetTall() + YRP.ctr(20)
-			flags.w = ea.info:GetParent():GetWide()
-			flags.h = YRP.ctr(800)
-			flags.br = YRP.ctr(20)
-			flags.color = Color(255, 255, 255)
-			flags.bgcolor = Color(80, 80, 80)
-			flags.name = "LID_flags"
-			ea[role.uniqueID].flags = DGroup(flags)
+			local flags = createD("YGroupBox", ea.background, ea.info:GetWide(), YRP.ctr(800), YRP.ctr(20), ea.info.y + ea.info:GetTall() + YRP.ctr(20))
+			flags:SetText("LID_flags")
+			function flags:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[role.uniqueID].flags = flags
 			ea.flags = ea[role.uniqueID].flags
 
 			local bool_instructor = {}
-			bool_instructor.parent = ea.flags
+			bool_instructor.parent = ea.flags:GetContent()
 			bool_instructor.uniqueID = role.uniqueID
 			bool_instructor.header = "LID_isinstructor"
 			bool_instructor.netstr = "update_role_bool_instructor"
@@ -1116,17 +1113,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_instructor.lforce = false
 			ea[role.uniqueID].bool_instructor = DCheckBox(bool_instructor)
 
-			hr.parent = ea.flags
+			hr.parent = ea.flags:GetContent()
 			DHr(hr)
 
 			local custom_flags = {}
-			custom_flags.parent = ea.flags
+			custom_flags.parent = ea.flags:GetContent()
 			custom_flags.uniqueID = role.uniqueID
 			custom_flags.header = "LID_customflags"
 			custom_flags.netstr = "update_role_string_customflags"
 			custom_flags.value = role.string_customflags
 			custom_flags.uniqueID = role.uniqueID
-			custom_flags.w = ea.flags:GetWide()
+			custom_flags.w = ea.flags:GetContent():GetWide()
 			custom_flags.h = YRP.ctr(225)
 			custom_flags.doclick = function()
 				net.Receive("get_all_role_customflags", function()
@@ -1174,29 +1171,27 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
-			ea.flags:AutoSize()
+			ea.flags:AutoSize(true)
 
-			local appearance = {}
-			appearance.parent = ea.background
-			appearance.x = YRP.ctr(840)
-			appearance.y = YRP.ctr(20)
-			appearance.w = YRP.ctr(800)
-			appearance.h = YRP.ctr(800)
-			appearance.br = YRP.ctr(20)
-			appearance.color = Color(255, 255, 255)
-			appearance.bgcolor = Color(80, 80, 80)
-			appearance.name = "LID_appearance"
-			ea[role.uniqueID].appearance = DGroup(appearance)
+
+
+			local appearance = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(800), YRP.ctr(840), YRP.ctr(20))
+			appearance:SetText("LID_appearance")
+			function appearance:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[role.uniqueID].appearance = appearance
 			ea.appearance = ea[role.uniqueID].appearance
 
 			local playermodels = {}
-			playermodels.parent = ea.appearance
+			playermodels.parent = ea.appearance:GetContent()
 			playermodels.uniqueID = role.uniqueID
 			playermodels.header = "LID_playermodels"
 			playermodels.netstr = "update_role_string_playermodels"
 			playermodels.value = role.string_playermodels
 			playermodels.uniqueID = role.uniqueID
-			playermodels.w = ea.appearance:GetWide()
+			playermodels.w = ea.appearance:GetContent():GetWide()
 			playermodels.h = YRP.ctr(425)
 			playermodels.doclick = function()
 				net.Receive("get_all_playermodels", function()
@@ -1366,7 +1361,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 											else
 												d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
 												function d_pm.model:Paint(pw, ph)
-													draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+													draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 													draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 												end
 											end
@@ -1515,7 +1510,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 											else
 												d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
 												function d_pm.model:Paint(pw, ph)
-													draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+													draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 													draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 												end
 											end
@@ -1628,7 +1623,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								else
 									line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
 									function line.model:Paint(pw, ph)
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+										draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 										draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 									end
 								end
@@ -1667,29 +1662,27 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
-			ea.appearance:AutoSize()
+			ea.appearance:AutoSize(true)
 
-			local equipment = {}
-			equipment.parent = ea.background
-			equipment.x = ea.appearance:GetParent().x
-			equipment.y = ea.appearance:GetParent().y + ea.appearance:GetParent():GetTall() + YRP.ctr(20)
-			equipment.w = YRP.ctr(800)
-			equipment.h = YRP.ctr(1250)
-			equipment.br = YRP.ctr(20)
-			equipment.color = Color(255, 255, 255)
-			equipment.bgcolor = Color(80, 80, 80)
-			equipment.name = "LID_equipment"
-			ea[role.uniqueID].equipment = DGroup(equipment)
+
+
+			local equipment = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1250), ea.appearance.x,  ea.appearance.y + ea.appearance:GetTall() + YRP.ctr(20))
+			equipment:SetText("LID_equipment")
+			function equipment:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[role.uniqueID].equipment = equipment
 			ea.equipment = ea[role.uniqueID].equipment
 
 			local sweps = {}
-			sweps.parent = ea.equipment
+			sweps.parent = ea.equipment:GetContent()
 			sweps.uniqueID = role.uniqueID
 			sweps.header = "LID_sweps"
 			sweps.netstr = "update_role_string_sweps"
 			sweps.value = role.string_sweps
 			sweps.uniqueID = role.uniqueID
-			sweps.w = ea.equipment:GetWide()
+			sweps.w = ea.equipment:GetContent():GetWide()
 			sweps.h = YRP.ctr(325)
 			sweps.doclick = function()
 				local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -1735,7 +1728,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							else
 								d_swep.model = createD("DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
 								function d_swep.model:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 							end
@@ -1778,18 +1771,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
-			hr.parent = ea.equipment
+			hr.parent = ea.equipment:GetContent()
 			DHr(hr)
 
 			-- Not droppable
 			local ndsweps = {}
-			ndsweps.parent = ea.equipment
+			ndsweps.parent = ea.equipment:GetContent()
 			ndsweps.uniqueID = role.uniqueID
 			ndsweps.header = "LID_ndsweps"
 			ndsweps.netstr = "update_role_string_ndsweps"
 			ndsweps.value = role.string_ndsweps
 			ndsweps.uniqueID = role.uniqueID
-			ndsweps.w = ea.equipment:GetWide()
+			ndsweps.w = ea.equipment:GetContent():GetWide()
 			ndsweps.h = YRP.ctr(325)
 			ndsweps.doclick = function()
 				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -1835,7 +1828,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							else
 								d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
 								function d_ndswep.model:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 							end
@@ -1877,18 +1870,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
-			hr.parent = ea.equipment
+			hr.parent = ea.equipment:GetContent()
 			DHr(hr)
 
 			-- Licenses
 			local licenses = {}
-			licenses.parent = ea.equipment
+			licenses.parent = ea.equipment:GetContent()
 			licenses.uniqueID = role.uniqueID
 			licenses.header = "LID_licenses"
 			licenses.netstr = "update_role_string_licenses"
 			licenses.value = role.string_licenses
 			licenses.uniqueID = role.uniqueID
-			licenses.w = ea.equipment:GetWide()
+			licenses.w = ea.equipment:GetContent():GetWide()
 			licenses.h = YRP.ctr(325)
 			licenses.doclick = function()
 				local winlicenses = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -1939,7 +1932,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 									elseif v.WorldModel == "" then
 										d_licenses.model = createD("DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
 										function d_licenses.model:Paint(pw, ph)
-											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
 											draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 										end
 									end
@@ -1991,24 +1984,20 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
-			ea.equipment:AutoSize()
+			ea.equipment:AutoSize(true)
 
 
 
-			local restriction = {}
-			restriction.parent = ea.background
-			restriction.x = YRP.ctr(1660)
-			restriction.y = YRP.ctr(20)
-			restriction.w = YRP.ctr(800)
-			restriction.h = YRP.ctr(800)
-			restriction.br = YRP.ctr(20)
-			restriction.color = Color(255, 255, 255)
-			restriction.bgcolor = Color(80, 80, 80)
-			restriction.name = "LID_restriction"
-			ea[role.uniqueID].restriction = DGroup(restriction)
+			local restriction = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(800), YRP.ctr(1660), YRP.ctr(20))
+			restriction:SetText("LID_restriction")
+			function restriction:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[role.uniqueID].restriction = restriction
 			ea.restriction = ea[role.uniqueID].restriction
 
-			hr.parent = ea.restriction
+			hr.parent = ea.restriction:GetContent()
 
 			if role.uniqueID != 1 then
 				local gugs = string.Explode(",", role.string_usergroups)
@@ -2028,7 +2017,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				local usergroups = {}
-				usergroups.parent = ea.restriction
+				usergroups.parent = ea.restriction:GetContent()
 				usergroups.uniqueID = role.uniqueID
 				usergroups.header = "LID_usergroups"
 				usergroups.netstr = "update_role_string_usergroups"
@@ -2043,7 +2032,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local requireslevel = {}
-				requireslevel.parent = ea.restriction
+				requireslevel.parent = ea.restriction:GetContent()
 				requireslevel.header = "LID_requireslevel"
 				requireslevel.netstr = "update_role_int_requireslevel"
 				requireslevel.value = role.int_requireslevel
@@ -2057,7 +2046,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			local bool_voiceglobal = {}
-			bool_voiceglobal.parent = ea.restriction
+			bool_voiceglobal.parent = ea.restriction:GetContent()
 			bool_voiceglobal.uniqueID = role.uniqueID
 			bool_voiceglobal.header = "LID_canuseglobalvoicechat"
 			bool_voiceglobal.netstr = "update_role_bool_voiceglobal"
@@ -2070,7 +2059,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local whitelist = {}
-				whitelist.parent = ea.restriction
+				whitelist.parent = ea.restriction:GetContent()
 				whitelist.uniqueID = role.uniqueID
 				whitelist.header = "LID_useswhitelist"
 				whitelist.netstr = "update_role_bool_whitelist"
@@ -2084,7 +2073,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local locked = {}
-				locked.parent = ea.restriction
+				locked.parent = ea.restriction:GetContent()
 				locked.uniqueID = role.uniqueID
 				locked.header = "LID_locked"
 				locked.netstr = "update_role_bool_locked"
@@ -2098,7 +2087,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local visible = {}
-				visible.parent = ea.restriction
+				visible.parent = ea.restriction:GetContent()
 				visible.uniqueID = role.uniqueID
 				visible.header = "LID_visible"
 				visible.netstr = "update_role_bool_visible"
@@ -2112,7 +2101,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			if role.uniqueID != 1 then
 				local bool_voteable = {}
-				bool_voteable.parent = ea.restriction
+				bool_voteable.parent = ea.restriction:GetContent()
 				bool_voteable.uniqueID = role.uniqueID
 				bool_voteable.header = "LID_voteable"
 				bool_voteable.netstr = "update_role_bool_voteable"
@@ -2125,7 +2114,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			local cooldown = {}
-			cooldown.parent = ea.restriction
+			cooldown.parent = ea.restriction:GetContent()
 			cooldown.header = "LID_cooldown"
 			cooldown.netstr = "update_role_int_cooldown"
 			cooldown.value = role.int_cooldown
@@ -2135,25 +2124,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			cooldown.max = 360
 			ea[role.uniqueID].cooldown = DIntBox(cooldown)
 
-			ea.restriction:AutoSize()
+			ea.restriction:AutoSize(true)
 
 
 
-			local attributes = {}
-			attributes.parent = ea.background
-			attributes.x = ea.restriction:GetParent().x
-			attributes.y = ea.restriction:GetParent().y + ea.restriction:GetParent():GetTall() + YRP.ctr(20)
-			attributes.w = YRP.ctr(800)
-			attributes.h = YRP.ctr(1000)
-			attributes.br = YRP.ctr(20)
-			attributes.color = Color(255, 255, 255)
-			attributes.bgcolor = Color(80, 80, 80)
-			attributes.name = "LID_attributes"
-			ea[role.uniqueID].attributes = DGroup(attributes)
+			local attributes = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1000), ea.restriction.x, ea.restriction.y + ea.restriction:GetTall() + YRP.ctr(20))
+			attributes:SetText("LID_attributes")
+			function attributes:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+
+			ea[role.uniqueID].attributes = attributes
 			ea.attributes = ea[role.uniqueID].attributes
 
 			local health = {}
-			health.parent = ea.attributes
+			health.parent = ea.attributes:GetContent()
 			health.uniqueID = role.uniqueID
 			health.header = "LID_health"
 			health.netstr = "hp"
@@ -2184,11 +2169,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			health.color2 = Color(100, 255, 100)
 			ea[role.uniqueID].health = DAttributeBar(health)
 
-			hr.parent = ea.attributes
+			hr.parent = ea.attributes:GetContent()
 			DHr(hr)
 
 			local armor = {}
-			armor.parent = ea.attributes
+			armor.parent = ea.attributes:GetContent()
 			armor.uniqueID = role.uniqueID
 			armor.header = "LID_armor"
 			armor.netstr = "ar"
@@ -2222,7 +2207,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local stamina = {}
-			stamina.parent = ea.attributes
+			stamina.parent = ea.attributes:GetContent()
 			stamina.uniqueID = role.uniqueID
 			stamina.header = "LID_stamina"
 			stamina.netstr = "st"
@@ -2263,7 +2248,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local speedwalk = {}
-			speedwalk.parent = ea.attributes
+			speedwalk.parent = ea.attributes:GetContent()
 			speedwalk.header = "LID_walkspeed"
 			speedwalk.netstr = "update_role_int_speedwalk"
 			speedwalk.value = role.int_speedwalk or -1
@@ -2276,7 +2261,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local speedrun = {}
-			speedrun.parent = ea.attributes
+			speedrun.parent = ea.attributes:GetContent()
 			speedrun.header = "LID_runspeed"
 			speedrun.netstr = "update_role_int_speedrun"
 			speedrun.value = role.int_speedrun or -1
@@ -2289,7 +2274,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DHr(hr)
 
 			local powerjump = {}
-			powerjump.parent = ea.attributes
+			powerjump.parent = ea.attributes:GetContent()
 			powerjump.header = "LID_jumppower"
 			powerjump.netstr = "update_role_int_powerjump"
 			powerjump.value = role.int_powerjump or -1
@@ -2299,7 +2284,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			powerjump.max = 999999
 			ea[role.uniqueID].powerjump = DIntBox(powerjump)
 
-			ea.attributes:AutoSize()
+			ea.attributes:AutoSize(true)
 		end)
 
 		net.Receive("settings_subscribe_rolelist", function(le)

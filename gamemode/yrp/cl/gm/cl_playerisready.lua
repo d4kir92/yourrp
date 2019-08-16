@@ -17,56 +17,6 @@ function YRPSendIsReady()
 		OpenHelpMenu()
 	end
 
-	if !LocalPlayer():GetDBool("isserverdedicated", false) then
-		local warning = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
-		warning:Center()
-		warning:SetTitle("Warning - If you want to remove this, use a dedicated server")
-		warning:SetHeaderHeight(YRP.ctr(100))
-		warning:ShowCloseButton(false)
-		function warning:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
-			hook.Run("YFramePaint", self, pw, ph)
-			if LocalPlayer():GetDBool("isserverdedicated", false) then
-				self:Remove()
-			end
-		end
-
-		warning.tick = 10
-
-		warning.site = createD("DHTML", warning, ScrW() - YRP.ctr(200), ScrH() - YRP.ctr(100 + 100 + 60 + 20 + 60 + 20), YRP.ctr(100), YRP.ctr(100))
-		warning.site:OpenURL("https://sites.google.com/view/gdsm/home")
-
-		warning.openlink = createD("DButton", warning, YRP.ctr(400), YRP.ctr(60), warning:GetWide() / 2 - YRP.ctr(200), warning:GetTall() - YRP.ctr(60 + 20 + 60 + 100))
-		warning.openlink:SetText("Open Website")
-		function warning.openlink:DoClick()
-			gui.OpenURL("https://sites.google.com/view/gdsm/home")
-		end
-
-		warning.close = createD("DButton", warning, YRP.ctr(400), YRP.ctr(60), warning:GetWide() / 2 - YRP.ctr(200), warning:GetTall() - YRP.ctr(60 + 100))
-		warning.close:SetText("Close")
-		function warning.close:DoClick()
-			if warning.tick == 0 then
-				warning:Close()
-			end
-		end
-
-		timer.Create("yrp_warning_timer", 1, 0, function()
-			if warning:IsValid() then
-				warning.close:SetText(warning.tick)
-				warning.tick = warning.tick - 1
-				if warning.tick == 0 then
-					if warning:IsValid() then
-						warning.close:SetText("Close")
-					end
-					timer.Remove("yrp_warning_timer")
-				end
-			else
-				timer.Remove("yrp_warning_timer")
-			end
-		end)
-		warning:MakePopup()
-	end
-
 	timer.Simple(4, function()
 		local _wsitems = engine.GetAddons()
 		printGM("note", "[" .. #_wsitems .. " Workshop items]")

@@ -50,66 +50,61 @@ net.Receive("Connect_Settings_Status", function(len)
 		scroller.h = ScrH() - YRP.ctr(100) - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 
-		local tab_yourrp = {}
-		tab_yourrp.parent = Scroller
-		tab_yourrp.x = 0
-		tab_yourrp.y = 0
-		tab_yourrp.w = YRP.ctr(800)
-		tab_yourrp.h = Scroller:GetTall()
-		tab_yourrp.br = br / 2
-		tab_yourrp.name = "YourRP"
-		local Group_YourRP = DGroup(tab_yourrp)
+
+
+		local Group_YourRP = createD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		Group_YourRP:SetText("YourRP")
+		function Group_YourRP:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		Scroller:AddPanel(Group_YourRP)
 		for yourrpID, yourrp in pairs(TAB_YOURRP) do
 			for str_id, color in pairs(yourrp) do
-				AddStatusLine(Group_YourRP, "content", yourrpID, str_id, color)
+				AddStatusLine(Group_YourRP:GetContent(), "content", yourrpID, str_id, color)
 			end
 		end
 
-		local tab_roles = {}
-		tab_roles.parent = Scroller
-		tab_roles.x = 0
-		tab_roles.y = 0
-		tab_roles.w = YRP.ctr(800)
-		tab_roles.h = Scroller:GetTall()
-		tab_roles.br = br / 2
-		tab_roles.name = "LID_roles"
-		local Group_Roles = DGroup(tab_roles)
+
+
+		local Group_Roles = createD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		Group_Roles:SetText("LID_roles")
+		function Group_Roles:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		Scroller:AddPanel(Group_Roles)
 		for roleID, role in pairs(TAB_ROLES) do
 			for str_id, color in pairs(role) do
 				AddStatusLine(Group_Roles, "role", roleID, str_id, color)
 			end
 		end
 
-		local tab_groups = {}
-		tab_groups.parent = Scroller
-		tab_groups.x = 0
-		tab_groups.y = 0
-		tab_groups.w = YRP.ctr(800)
-		tab_groups.h = Scroller:GetTall()
-		tab_groups.br = br / 2
-		tab_groups.name = "LID_groups"
-		local Group_Groups = DGroup(tab_groups)
+
+
+		local Group_Groups = createD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		Group_Groups:SetText("LID_groups")
+		function Group_Groups:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		Scroller:AddPanel(Group_Groups)
 		for groupID, group in pairs(TAB_GROUPS) do
 			for str_id, color in pairs(group) do
 				AddStatusLine(Group_Groups, "group", groupID, str_id, color)
 			end
 		end
 
-		local tab_map = {}
-		tab_map.parent = Scroller
-		tab_map.x = 0
-		tab_map.y = 0
-		tab_map.w = YRP.ctr(800)
-		tab_map.h = Scroller:GetTall()
-		tab_map.br = br / 2
-		tab_map.name = "LID_map"
-		local Group_Map = DGroup(tab_map)
+
+
+		local Group_Map = createD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		Group_Map:SetText("LID_map")
+		function Group_Map:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		Scroller:AddPanel(Group_Map)
 		for mapID, map in pairs(TAB_MAP) do
 			for str_id, color in pairs(map) do
 				AddStatusLine(Group_Map, "map", mapID, str_id, color)
 			end
 		end
-
 	end
 end)
 
