@@ -640,7 +640,7 @@ function HUDSimple()
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
 		HP.text = lply:Health() .. "/" .. lply:GetMaxHealth()
-		HP.percentage = lply:Health() / lply:GetMaxHealth() * 100 .. "%"
+		HP.percentage = math.Round(lply:Health() / lply:GetMaxHealth() * 100, 0) .. "%"
 		HP.icon = Material("icon16/heart.png")
 		HUDSimpleBAR(HP)
 		AR = {}
@@ -648,7 +648,7 @@ function HUDSimple()
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
 		AR.text = lply:Armor() .. "/" .. lply:GetMaxArmor()
-		AR.percentage = lply:Armor() / lply:GetMaxArmor() * 100 .. "%"
+		AR.percentage = math.Round(lply:Armor() / lply:GetMaxArmor() * 100) .. "%"
 		AR.icon = Material("icon16/shield.png")
 		HUDSimpleBAR(AR)
 		XP = {}
@@ -656,7 +656,7 @@ function HUDSimple()
 			XP.element = "XP"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
-			XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
+			XP.text = "(" .. YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
 			HUDSimpleBAR(XP)
 		end
 		MO = {}
@@ -687,7 +687,7 @@ function HUDSimple()
 			ST.cur = lply:Stamina()
 			ST.max = lply:GetMaxStamina()
 			ST.text = lply:Stamina() .. " / " .. lply:GetMaxStamina()
-			ST.percentage = lply:Stamina() / lply:GetMaxStamina() * 100 .. "%"
+			ST.percentage = math.Round(lply:Stamina() / lply:GetMaxStamina() * 100, 0) .. "%"
 			ST.icon = Material("icon16/lightning.png")
 			HUDSimpleBAR(ST)
 		end

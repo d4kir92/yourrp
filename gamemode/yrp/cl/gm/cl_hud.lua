@@ -266,11 +266,15 @@ timer.Simple(2, function()
 
 			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 			if lb != nil then
+				print("found head")
 				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
 				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
 				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
 				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
 				YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+			else
+				YRP_PM:SetLookAt(Vector(0, 0, 40))
+				YRP_PM:SetCamPos(Vector(50, 50, 50))
 			end
 
 			if !pm.visible then
@@ -280,7 +284,10 @@ timer.Simple(2, function()
 	end
 
 	function YRP_PM:LayoutEntity(ent)
-		ent:SetSequence(ent:LookupSequence("menu_gman"))
+		local seq = ent:LookupSequence("menu_gman")
+		if seq > -1 then
+			ent:SetSequence(ent:LookupSequence("menu_gman"))
+		end
 		YRP_PM:RunAnimation()
 		return
 	end
@@ -294,16 +301,16 @@ timer.Simple(2, function()
 	sl.version = -1
 	function SL:Think()
 		local lply = LocalPlayer()
-		if lply:GetDInt("hud_version", 0) != sl.version or sl.url != GetGlobalDString("text_server_logo", "") then
+		sl.visible = lply:HudValue("SL", "VISI")
+		if lply:GetDInt("hud_version", 0) != sl.version or sl.url != GetGlobalDString("text_server_logo", "") or sl.visible != lply:HudValue("SL", "VISI") then
 			sl.version = lply:GetDInt("hud_version", 0)
-
+			sl.visible = lply:HudValue("SL", "VISI")
 			sl.url = GetGlobalDString("text_server_logo", "")
 
 			sl.w = lply:HudValue("SL", "SIZE_W")
 			sl.h = lply:HudValue("SL", "SIZE_H")
 			sl.x = lply:HudValue("SL", "POSI_X")
 			sl.y = lply:HudValue("SL", "POSI_Y")
-			sl.visible = lply:HudValue("SL", "VISI")
 
 			SL:SetPos(sl.x, sl.y)
 			SL:SetSize(sl.h, sl.h)
