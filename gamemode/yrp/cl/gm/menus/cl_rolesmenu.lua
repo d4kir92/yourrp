@@ -343,13 +343,7 @@ function OpenRoleMenu()
 
 		ROLEMENU.window:MakePopup()
 
-		ROLEMENU.content = createD("YPanel", ROLEMENU.window, BFW(), BFH() - ROLEMENU.window:GetHeaderHeight(), 0, ROLEMENU.window:GetHeaderHeight())
-		ROLEMENU.content:SetHeaderHeight(YRP.ctr(100))
-		function ROLEMENU.content:Paint(pw, ph)
-
-		end
-
-		CreateRoleMenuContent(ROLEMENU.content)
+		CreateRoleMenuContent(ROLEMENU.window.con)
 	end
 end
 

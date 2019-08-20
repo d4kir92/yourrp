@@ -760,13 +760,7 @@ function OpenHelpMenu()
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 
-	HELPMENU.content = createD("YPanel", HELPMENU.window, BFW(), BFH() - HELPMENU.window:GetHeaderHeight(), 0, HELPMENU.window:GetHeaderHeight())
-	HELPMENU.content:SetHeaderHeight(YRP.ctr(100))
-	function HELPMENU.content:Paint(pw, ph)
-
-	end
-
-	CreateHelpMenuContent(HELPMENU.content)
+	CreateHelpMenuContent(HELPMENU.window.con)
 end
 
 function CreateHelpMenuContent(parent)

@@ -76,7 +76,9 @@ net.Receive("getMoneyPrintMenu", function(len)
 		moneyPrinterButton(mp, upgradeframe, YRP.ctr(580), YRP.ctr(60), YRP.ctr(10), YRP.ctr(60 + 140), "printer", "upgradePrinter",YRP.lang_string("LID_printer"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Printer
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(580), YRP.ctr(60), YRP.ctr(10), YRP.ctr(60 + 210), "storage", "upgradeStorage",YRP.lang_string("LID_storage"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
+		if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+			moneyPrinterButton(mp, upgradeframe, YRP.ctr(580), YRP.ctr(60), YRP.ctr(10), YRP.ctr(60 + 210), "storage", "upgradeStorage",YRP.lang_string("LID_storage"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
+		end
 
 		--Fuel
 		moneyPrinterButton(mp, upgradeframe, YRP.ctr(580), YRP.ctr(60), YRP.ctr(10), YRP.ctr(60 + 380), "fuel", "fuelUP",YRP.lang_string("LID_fuel"),YRP.lang_string("LID_fuelup"),YRP.lang_string("LID_full"))
@@ -90,28 +92,34 @@ net.Receive("getMoneyPrintMenu", function(len)
 		--gather
 		local moneyInfo = createD("DPanel", upgradeframe, YRP.ctr(580), YRP.ctr(60), YRP.ctr(10), YRP.ctr(60 + 690))
 		function moneyInfo:Paint(pw, ph)
-			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
+			if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-			draw.RoundedBox(0, 0, 0, (mp:GetDInt("money", -1) / mp:GetDInt("moneyMax", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
+				draw.RoundedBox(0, 0, 0, (mp:GetDInt("money", -1) / mp:GetDInt("moneyMax", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
 
-			draw.SimpleTextOutlined(formatMoney(mp:GetDInt("money", -1), ply) .. "/" .. formatMoney(mp:GetDInt("moneyMax" , -1), ply), "HudBars", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(formatMoney(mp:GetDInt("money", -1), ply) .. "/" .. formatMoney(mp:GetDInt("moneyMax" , -1), ply), "HudBars", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			end
 		end
 
 		local gatherMoney = createD("DButton", moneyInfo, YRP.ctr(220), YRP.ctr(60), YRP.ctr(360), YRP.ctr(0))
 		gatherMoney:SetText("")
 		function gatherMoney:Paint(pw, ph)
-			if self:IsHovered() then
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			else
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 200))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+				if self:IsHovered() then
+					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				else
+					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 200))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "HudBars", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				end
 			end
 		end
 		function gatherMoney:DoClick()
-			net.Start("withdrawMoney")
-				net.WriteEntity(mp)
-			net.SendToServer()
+			if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+				net.Start("withdrawMoney")
+					net.WriteEntity(mp)
+				net.SendToServer()
+			end
 		end
 
 		--Working
@@ -165,7 +173,7 @@ end)
 function ENT:Draw()
 	local ply = LocalPlayer()
 	local dist = ply:GetPos():Distance(self:GetPos())
-	if dist < 2000 then
+	if dist < 2800 then
 		self:DrawModel()
 	end
 end

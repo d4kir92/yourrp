@@ -18,6 +18,7 @@ SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_header", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_canbeowned", "INT DEFAULT 1")
 --db_drop_table(DATABASE_NAME_BUILDINGS)
 --db_is_empty(DATABASE_NAME_BUILDINGS)
 
@@ -92,111 +93,55 @@ end
 function searchForDoors()
 	printGM("db", "[Buildings] Search Map for Doors")
 
-	local _allPropDoors = ents.FindByClass("prop_door_rotating")
-	for k, v in pairs(_allPropDoors) do
+	for k, v in pairs(GetAllDoors()) do
 		SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
 
 		local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 		if wk(_tmpBuildingTable) then
-			SQL_INSERT_INTO("yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "'")
+			SQL_INSERT_INTO("yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[table.Count(_tmpBuildingTable)].uniqueID .. "'")
 
 			local _tmpDoorsTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 		end
 	end
 
-	local _allFuncDoors = ents.FindByClass("func_door")
-	for k, v in pairs(_allFuncDoors) do
-		SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
-
-		local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-		SQL_INSERT_INTO("yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "'")
-
-		local _tmpDoorsTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
-	end
-
-	local _allFuncRDoors = ents.FindByClass("func_door_rotating")
-	for k, v in pairs(_allFuncRDoors) do
-		SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
-
-		local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-		SQL_INSERT_INTO("yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[#_tmpBuildingTable].uniqueID .. "'")
-
-		local _tmpDoorsTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
-	end
-
-	printGM("db", "[Buildings] Done finding them (" .. #_allPropDoors+#_allFuncDoors+#_allFuncRDoors .. " doors found)")
-	return #_allPropDoors+#_allFuncDoors+#_allFuncRDoors
+	local allDoorsNum = table.Count(GetAllDoors())
+	printGM("db", "[Buildings] Done finding them (" .. allDoorsNum .. " doors found)")
+	return allDoorsNum
 end
 
 util.AddNetworkString("loaded_doors")
 function loadDoors()
 	printGM("db", "[Buildings] Setting up Doors!")
-	local _allPropDoors = ents.FindByClass("prop_door_rotating")
-	local _allFuncDoors = ents.FindByClass("func_door")
-	local _allFuncRDoors = ents.FindByClass("func_door_rotating")
 	local _tmpDoors = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
-	local _count = 1
 
-	if worked(_tmpDoors, "[Buildings] No Map Doors found") then
-		--for k, v in pairs(_tmpDoors) do
-			for l, door in pairs(_allPropDoors) do
-				if worked(_tmpDoors[_count], "loadDoors 2") then
-					door:SetDString("buildingID", _tmpDoors[_count].buildingID)
-					door:SetDString("uniqueID", _count)
-					HasUseFunction(door)
-				else
-					printGM("note", "[Buildings] more doors, then in list!")
-				end
-				_count = _count + 1
-			end
-
-			for l, door in pairs(_allFuncDoors) do
-				if wk(_tmpDoors[_count]) then
-					door:SetDString("buildingID", _tmpDoors[_count].buildingID)
-					door:SetDString("uniqueID", _count)
-					HasUseFunction(door)
-				else
-					printGM("note", "[Buildings] more doors, then in list!")
-				end
-				_count = _count + 1
-			end
-
-			for l, door in pairs(_allFuncRDoors) do
-				if wk(_tmpDoors[_count]) then
-					door:SetDString("buildingID", _tmpDoors[_count].buildingID)
-					door:SetDString("uniqueID", _count)
-					HasUseFunction(door)
-
-				else
-					printGM("note", "[Buildings] more doors, then in list!")
-				end
-				_count = _count + 1
-			end
-		--end
+	for i, door in pairs(GetAllDoors()) do
+		if worked(_tmpDoors[i], "loadDoors 2") then
+			door:SetDString("buildingID", _tmpDoors[i].buildingID)
+			door:SetDString("uniqueID", i)
+			HasUseFunction(door)
+		else
+			printGM("note", "[Buildings] more doors, then in list!")
+		end
 	end
 
-	local _allDoors = {}
-	for i, v in pairs(_allPropDoors) do
-		table.insert(_allDoors, v)
-	end
-	for i, v in pairs(_allFuncDoors) do
-		table.insert(_allDoors, v)
-	end
-	for i, v in pairs(_allFuncRDoors) do
-		table.insert(_allDoors, v)
-	end
 	local _tmpBuildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if wk(_tmpBuildings) then
-		for k, v in pairs(_allDoors) do
+		for k, v in pairs(GetAllDoors()) do
 			for l, w in pairs(_tmpBuildings) do
 				if tonumber(w.uniqueID) == tonumber(v:GetDString("buildingID")) then
+					v:SetDBool("bool_canbeowned", w.bool_canbeowned)
+					v:SetDTable("building", w)
+					v:SetDBool("bool_hasowner", false)
+
 					if !strEmpty(w.ownerCharID) then
-						local _tmpRPName = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
-						if wk(_tmpRPName) then
-							_tmpRPName = _tmpRPName[1]
-							if wk(_tmpRPName.rpname) then
-								v:SetDString("ownerRPName", _tmpRPName.rpname)
+						local tabChar = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
+						if wk(tabChar) then
+							tabChar = tabChar[1]
+							if wk(tabChar.rpname) then
+								v:SetDTable("owner", tabChar)
+								v:SetDString("ownerRPName", tabChar.rpname)
 								v:SetDString("ownerCharID", w.ownerCharID)
+								v:SetDBool("bool_hasowner", true)
 							end
 						end
 					else
@@ -206,6 +151,7 @@ function loadDoors()
 								_tmpGroupName = _tmpGroupName[1]
 								if wk(_tmpGroupName) then
 									v:SetDString("ownerGroup", tostring(_tmpGroupName.string_name))
+									v:SetDBool("bool_hasowner", true)
 								end
 							end
 						end
@@ -235,11 +181,9 @@ function check_map_doors()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if wk(_tmpTable) and wk(_tmpTable2) then
-		printGM("db", "[Buildings] Found! (" .. tostring(#_tmpTable) .. " Doors | " .. tostring(#_tmpTable) .. " Buildings)")
-		local _allPropDoors = ents.FindByClass("prop_door_rotating")
-		local _allFuncDoors = ents.FindByClass("func_door")
-		local _allFuncRDoors = ents.FindByClass("func_door_rotating")
-		if (#_tmpTable) < (#_allPropDoors + #_allFuncDoors + #_allFuncRDoors) then
+		printGM("db", "[Buildings] Found! (" .. tostring(table.Count(_tmpTable)) .. " Doors | " .. tostring(table.Count(_tmpTable)) .. " Buildings)")
+		local doors = GetAllDoors()
+		if (table.Count(_tmpTable)) < (table.Count(doors)) then
 			printGM("db", "[Buildings] New doors found!")
 			searchForDoors()
 		end
@@ -322,32 +266,13 @@ function BuildingRemoveOwner(SteamID)
 
 	for i, c in pairs(chars) do
 		local charid = c.uniqueID
-		local _tmpDoors = ents.FindByClass("prop_door_rotating")
-		for k, v in pairs(_tmpDoors) do
+		for k, v in pairs(GetAllDoors()) do
 			if v:GetDString("ownerCharID") == charid then
+				v:SetDTable("owner", {})
 				v:SetDString("ownerRPName", "")
 				v:SetDString("ownerGroup", "")
 				v:SetDString("ownerCharID", "")
-				v:Fire("Unlock")
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetDString("uniqueID") .. "'")
-			end
-		end
-		local _tmpFDoors = ents.FindByClass("func_door")
-		for k, v in pairs(_tmpFDoors) do
-			if v:GetDString("ownerCharID") == charid then
-				v:SetDString("ownerRPName", "")
-				v:SetDString("ownerGroup", "")
-				v:SetDString("ownerCharID", "")
-				v:Fire("Unlock")
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetDString("uniqueID") .. "'")
-			end
-		end
-		local _tmpFRDoors = ents.FindByClass("func_door_rotating")
-		for k, v in pairs(_tmpFRDoors) do
-			if v:GetDString("ownerCharID") == charid then
-				v:SetDString("ownerRPName", "")
-				v:SetDString("ownerGroup", "")
-				v:SetDString("ownerCharID", "")
+				v:SetDBool("bool_hasowner", false)
 				v:Fire("Unlock")
 				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetDString("uniqueID") .. "'")
 			end
@@ -359,30 +284,15 @@ net.Receive("removeOwner", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-	local result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'")
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-	local _tmpDoors = ents.FindByClass("prop_door_rotating")
-	for k, v in pairs(_tmpDoors) do
+	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetDTable("owner", {})
 			v:SetDString("ownerRPName", "")
 			v:SetDString("ownerGroup", "")
 			v:SetDString("ownerCharID", "")
-		end
-	end
-	local _tmpFDoors = ents.FindByClass("func_door")
-	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerRPName", "")
-			v:SetDString("ownerGroup", "")
-			v:SetDString("ownerCharID", "")
-		end
-	end
-	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
-	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerRPName", "")
-			v:SetDString("ownerGroup", "")
-			v:SetDString("ownerCharID", "")
+			v:SetDBool("bool_hasowner", false)
 		end
 	end
 end)
@@ -392,37 +302,14 @@ net.Receive("sellBuilding", function(len, ply)
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
 	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'")
-	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 
-	for k, v in pairs(_tmpDoors) do
+	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetDTable("owner", {})
 			v:SetDString("ownerRPName", "")
 			v:SetDString("ownerGroup", "")
 			v:SetDString("ownerCharID", "")
-			v:Fire("Unlock")
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetDString("buildingID")))
-		end
-	end
-
-	local _tmpFDoors = ents.FindByClass("func_door")
-
-	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerRPName", "")
-			v:SetDString("ownerGroup", "")
-			v:SetDString("ownerCharID", "")
-			v:Fire("Unlock")
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetDString("buildingID")))
-		end
-	end
-
-	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
-
-	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerRPName", "")
-			v:SetDString("ownerGroup", "")
-			v:SetDString("ownerCharID", "")
+			v:SetDBool("bool_hasowner", false)
 			v:Fire("Unlock")
 			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetDString("buildingID")))
 		end
@@ -437,28 +324,18 @@ net.Receive("buyBuilding", function(len, ply)
 		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
 		if ply:canAfford(_tmpTable[1].buildingprice) and (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) == -1 then
-			ply:addMoney(- (_tmpTable[1].buildingprice))
+			ply:addMoney(- _tmpTable[1].buildingprice)
 			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'")
-			local _tmpDoors = ents.FindByClass("prop_door_rotating")
-			local _tmpPlys = SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
-			for k, v in pairs(_tmpDoors) do
-				if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetDString("ownerRPName", _tmpPlys[1].rpname)
-					v:SetDString("ownerCharID", ply:CharID())
-				end
+			local tabChar = SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
+			if wk(tabChar) then
+				tabChar = tabChar[1]
 			end
-			local _tmpFDoors = ents.FindByClass("func_door")
-			for k, v in pairs(_tmpFDoors) do
+			for k, v in pairs(GetAllDoors()) do
 				if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetDString("ownerRPName", _tmpPlys[1].rpname)
+					v:SetDTable("owner", tabChar)
+					v:SetDString("ownerRPName", tabChar.rpname)
 					v:SetDString("ownerCharID", ply:CharID())
-				end
-			end
-			local _tmpFRDoors = ents.FindByClass("func_door_rotating")
-			for k, v in pairs(_tmpFRDoors) do
-				if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetDString("ownerRPName", _tmpPlys[1].rpname)
-					v:SetDString("ownerCharID", ply:CharID())
+					v:SetDBool("bool_hasowner", true)
 				end
 			end
 
@@ -478,22 +355,7 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID)
 
 	local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. _tmpGroupID)
-	local _tmpDoors = ents.FindByClass("prop_door_rotating")
-	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
-			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
-		end
-	end
-	local _tmpFDoors = ents.FindByClass("func_door")
-	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
-			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
-		end
-	end
-	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
-	for k, v in pairs(_tmpFRDoors) do
+	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
 			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
@@ -515,7 +377,16 @@ net.Receive("changeBuildingPrice", function(len, ply)
 	_tmpNewPrice = tonumber(_tmpNewPrice) or 99
 
 	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID)
-	worked(_result, "changeBuildingPrice failed")
+end)
+
+util.AddNetworkString("CanBuildingBeOwned")
+net.Receive("CanBuildingBeOwned", function(len, ply)
+	local _tmpBuildingID = net.ReadString()
+	local _canbeowned = tonum(net.ReadBool())
+
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "bool_canbeowned = '" .. _canbeowned .. "'", "uniqueID = " .. _tmpBuildingID)
+
+	ChangeBuildingBool(tonumber(_tmpBuildingID), "bool_canbeowned", _canbeowned)
 end)
 
 
@@ -560,25 +431,47 @@ net.Receive("changeBuildingName", function(len, ply)
 	end
 end)
 
+function GetAllDoors()
+	local propDoors = ents.FindByClass("prop_door")
+	local propDoorRs = ents.FindByClass("prop_door_rotating")
+	local funcDoors = ents.FindByClass("func_door")
+	local funcDoorRs = ents.FindByClass("func_door_rotating")
+
+	local doors = {}
+	for i, v in pairs(propDoors) do
+		table.insert(doors, v)
+	end
+	for i, v in pairs(propDoorRs) do
+		table.insert(doors, v)
+	end
+	for i, v in pairs(funcDoors) do
+		table.insert(doors, v)
+	end
+	for i, v in pairs(funcDoorRs) do
+		table.insert(doors, v)
+	end
+	return doors
+end
+
 function ChangeBuildingString(uid, net_str, new_str)
-	local _allPropDoors = ents.FindByClass("prop_door_rotating")
-	local _allFuncDoors = ents.FindByClass("func_door")
-	local _allFuncRDoors = ents.FindByClass("func_door_rotating")
-
-	local _allDoors = {}
-	for i, v in pairs(_allPropDoors) do
-		table.insert(_allDoors, v)
-	end
-	for i, v in pairs(_allFuncDoors) do
-		table.insert(_allDoors, v)
-	end
-	for i, v in pairs(_allFuncRDoors) do
-		table.insert(_allDoors, v)
-	end
-
-	for i, v in pairs(_allDoors) do
+	for i, v in pairs(GetAllDoors()) do
 		if uid == tonumber(v:GetDString("buildingID")) then
 			v:SetDString(net_str, new_str)
+		end
+	end
+end
+
+function ChangeBuildingBool(uid, net_str, new_boo)
+	local tabBuilding = SQL_SELECT(DATABASE_NAME_BUILDINGS, "*", "uniqueID = '" .. uid .. "'")
+	if wk(tabBuilding) then
+		tabBuilding = tabBuilding[1]
+	else
+		tabBuilding = {}
+	end
+	for i, v in pairs(GetAllDoors()) do
+		if uid == tonumber(v:GetDString("buildingID")) then
+			v:SetDBool(net_str, new_boo)
+			v:SetDTable("building", tabBuilding)
 		end
 	end
 end
@@ -620,38 +513,50 @@ net.Receive("getBuildings", function(len, ply)
 end)
 
 net.Receive("getBuildingInfo", function(len, ply)
-	local _tmpDoor = net.ReadEntity()
-	local _tmpBuildingID = _tmpDoor:GetDString("buildingID")
+	local door = net.ReadEntity()
+	local buid = door:GetDString("buildingID")
 
-	if wk(_tmpBuildingID) then
-		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-		local owner = ""
-		if wk(_tmpTable) then
-			_tmpTable = _tmpTable[1]
-			_tmpTable.name = SQL_STR_OUT(_tmpTable.name)
-			if !strEmpty(_tmpTable.ownerCharID) then
-				local _tmpChaTab = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. _tmpTable.ownerCharID)
-				if wk(_tmpChaTab) then
-					_tmpChaTab = _tmpChaTab[1]
-					owner = _tmpChaTab.rpname
+	local tabBuilding = {}
+	local tabOwner = {}
+	local tabGroup = {}
+	if wk(buid) then
+		tabBuilding = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. buid .. "'")
+		--local owner = ""
+		if wk(tabBuilding) then
+			tabBuilding = tabBuilding[1]
+			tabBuilding.name = SQL_STR_OUT(tabBuilding.name)
+			if !strEmpty(tabBuilding.ownerCharID) then
+				tabOwner = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. tabBuilding.ownerCharID)
+				if wk(tabOwner) then
+					tabOwner = tabOwner[1]
+					--owner = tabOwner.rpname
+				else
+					tabOwner = {}
 				end
-			elseif _tmpTable.groupID != "" then
-				local _tmpGroTab = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. _tmpTable.groupID)
-				if wk(_tmpGroTab) then
-					_tmpGroTab = _tmpGroTab[1]
-					owner = _tmpGroTab.string_name
+			elseif tabBuilding.groupID != "" then
+				tabGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tabBuilding.groupID)
+				if wk(tabGroup) then
+					tabGroup = tabGroup[1]
+					--owner = _tmpGroTab.string_name
+				else
+					tabGroup = {}
 				end
 			end
 
-			if allowedToUseDoor(_tmpBuildingID, ply) then
+			if allowedToUseDoor(buid, ply) then
 				net.Start("getBuildingInfo")
+					net.WriteEntity(door)
+					net.WriteTable(tabBuilding)
+					net.WriteTable(tabOwner)
+					net.WriteTable(tabGroup)
+				--[[
 					net.WriteBool(true)
 					net.WriteEntity(_tmpDoor)
 					net.WriteString(_tmpBuildingID)
 					net.WriteTable(_tmpTable)
 					net.WriteString(owner)
 					net.WriteString(_tmpTable.text_header)
-					net.WriteString(_tmpTable.text_description)
+					net.WriteString(_tmpTable.text_description)]]
 				net.Send(ply)
 			end
 		else

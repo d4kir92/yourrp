@@ -43,6 +43,10 @@ function PANEL:SetPressed(selected)
 	self._selected = selected
 end
 
+function PANEL:Paint(pw, ph)
+	hook.Run("YButtonPaint", self, pw, ph)
+end
+
 function PANEL:Init()
 	if self.OldSetText == nil then
 		self.OldSetText = self.SetText

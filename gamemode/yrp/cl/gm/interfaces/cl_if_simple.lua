@@ -7,7 +7,11 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 	if GetGlobalDString("string_interface_design") == "Simple" then
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "HB"))
 
-		draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), lply:InterfaceValue("YFrame", "BG"))
+		draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), Color(60, 60, 60, 200)) --lply:InterfaceValue("YFrame", "BG"))
+
+		local x, y = self:GetContent():GetPos()
+		local w, h = self:GetContent():GetSize()
+		draw.RoundedBox(0, x, y, w, h, Color(20, 20, 20, 200))
 
 		if self.GetTitle != nil then
 			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Roboto18", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)

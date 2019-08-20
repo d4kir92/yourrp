@@ -16,6 +16,10 @@ function PANEL:NewSetText(str)
 	self:OldSetText("")
 end
 
+function PANEL:Paint(pw, ph)
+	hook.Run("YLabelPaint", self, pw, ph)
+end
+
 function PANEL:Init()
 	if self.OldSetText == nil then
 		self.OldSetText = self.SetText

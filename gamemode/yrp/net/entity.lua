@@ -1,7 +1,7 @@
 -- Networking
 local ENTITY = FindMetaTable("Entity")
 
-local ENTDELAY = 0.0001
+local ENTDELAY = 0.05
 
 -- STRING
 if SERVER then
@@ -258,8 +258,60 @@ end
 function ENTITY:GetDEntity(key, value)
 	if self != NULL then
 	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
-		return self.NWTAB["ENTITY"][key] or value
+		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
+		return self.NWTAB["TABLE"][key] or value
+	else
+		return NULL
+	end
+end
+
+-- TABLE
+if SERVER then
+	util.AddNetworkString("SetDTable")
+	function ENTITY:SendDTable(key, value)
+		net.Start("SetDTable")
+			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteString(key)
+			net.WriteTable(value)
+		net.Broadcast()
+	end
+end
+function ENTITY:SetDTable(key, value)
+	if isstring(key) and istable(value) then
+		self.NWTAB = self.NWTAB or {}
+		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
+		self.NWTAB["TABLE"][key] = value
+		if SERVER then
+			self:SendDTable(key, value)
+		end
+	else
+		YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
+	end
+end
+if CLIENT then
+	net.Receive("SetDTable", function(len)
+		local ENTINDEX = net.ReadUInt(16)
+		local key = net.ReadString()
+		local value = net.ReadTable()
+		local ENT = Entity(ENTINDEX)
+		if ENT != NULL then
+			ENT:SetDTable(key, value)
+		else
+			timer.Simple(ENTDELAY, function()
+				ENT = Entity(ENTINDEX)
+				if ENT != NULL then
+					ENT:SetDTable(key, value)
+				end
+			end)
+		end
+	end)
+end
+
+function ENTITY:GetDTable(key, value)
+	if self != NULL then
+	  self.NWTAB = self.NWTAB or {}
+		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
+		return self.NWTAB["TABLE"][key] or value
 	else
 		return NULL
 	end

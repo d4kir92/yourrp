@@ -49,6 +49,7 @@ table.insert(_dbs, "yrp_lockdown")
 table.insert(_dbs, "yrp_i_storages")
 table.insert(_dbs, "yrp_i_items")
 table.insert(_dbs, "yrp_keybinds")
+table.insert(_dbs, "yrp_profiles_hud")
 
 table.insert(_dbs, "yrp_players")
 table.insert(_dbs, "yrp_" .. GetMapNameDB())
@@ -155,6 +156,8 @@ include("inventory/db_i_storages.lua")
 include("inventory/db_i_items.lua")
 
 include("keybinds/db_keybinds.lua")
+
+include("profiles_hud/db_profiles_hud.lua")
 
 include("general/db_general.lua")
 include("players/db_players.lua")

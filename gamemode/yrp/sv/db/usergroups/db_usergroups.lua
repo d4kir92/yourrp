@@ -1269,44 +1269,46 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 	end
 end)
 
-hook.Add("PhysgunPickup", "yrp_physgun_pickup", function(pl, ent)
-	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-		if wk(_tmp) then
-			_tmp = _tmp[1]
-			if tobool(_tmp.bool_physgunpickup) then
-				if ent:IsPlayer() then
-					if tobool(_tmp2.bool_physgunpickupplayer) then
-						return true
-					else
-						net.Start("yrp_info")
-							net.WriteString("physgunpickupplayer")
-						net.Send(pl)
-						return false
-					end
-				elseif ent:CreatedByMap() then
-					if tobool(_tmp.bool_physgunpickupworld) then
-						return true
-					else
-						return false
-					end
-				elseif ent:GetRPOwner() == pl or pl:HasAccess() then
+function GM:PhysgunPickup(pl, ent)
+	if pl:HasAccess() then
+		return true
+	end
+	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+	if wk(tabUsergroup) then
+		tabUsergroup = tabUsergroup[1]
+		if tobool(tabUsergroup.bool_physgunpickup) then
+			if ent:IsPlayer() then
+				if tobool(tabUsergroup.bool_physgunpickupplayer) then
 					return true
+				else
+					net.Start("yrp_info")
+						net.WriteString("physgunpickupplayer")
+					net.Send(pl)
+					return false
 				end
-			elseif ent:GetRPOwner() == pl or pl:HasAccess() then
+			elseif ent:CreatedByMap() then
+				if tobool(tabUsergroup.bool_physgunpickupworld) then
+					return true
+				else
+					return false
+				end
+			elseif ent:GetRPOwner() == pl then
 				return true
-			else
-				net.Start("yrp_info")
-					net.WriteString("physgunpickup")
-				net.Send(pl)
-				return false
 			end
+		elseif ent:GetRPOwner() == pl then
+			return true
 		else
-			printGM("db", "[PhysgunPickup] failed! UserGroup not found in database.")
+			net.Start("yrp_info")
+				net.WriteString("physgunpickup")
+			net.Send(pl)
 			return false
 		end
+	else
+		printGM("db", "[PhysgunPickup] failed! UserGroup not found in database.")
+		return false
 	end
-end)
+	return false
+end
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) then

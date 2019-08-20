@@ -115,6 +115,11 @@ net.Receive("dealer_edit_name", function(len, ply)
 	local _dealer_new_name = net.ReadString()
 
 	local _dealer = SQL_UPDATE(_db_name, "name = '" .. _dealer_new_name .. "'", "uniqueID = " .. _dealer_uid)
+	for i, npc in pairs(ents.GetAll()) do
+		if npc:GetDString("dealerID", "FAILED") == tostring(_dealer_uid) then
+			npc:SetDString("name", _dealer_new_name)
+		end
+	end
 end)
 
 util.AddNetworkString("dealer_edit_worldmodel")
@@ -126,6 +131,9 @@ net.Receive("dealer_edit_worldmodel", function(len, ply)
 	for i, npc in pairs(ents.GetAll()) do
 		if npc:GetDString("dealerID", "FAILED") == tostring(_dealer_uid) then
 			npc:SetModel(_dealer_new_wm)
+
+			npc:LookupSequence("idle_all_01")
+			npc:ResetSequence("idle_all_01")
 		end
 	end
 end)

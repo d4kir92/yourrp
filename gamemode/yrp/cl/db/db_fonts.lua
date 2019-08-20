@@ -27,6 +27,8 @@ YRP.AddFont("Gang of Three", 0.9)
 YRP.AddFont("Halo", 0.58)
 YRP.AddFont("Harry Potter", 1)
 
+YRP.AddFont("Impact", 1)
+
 YRP.AddFont("Kelt", 1)
 YRP.AddFont("Kimberley Bl", 0.96)
 

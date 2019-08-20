@@ -58,10 +58,20 @@ function ENT:Open(activator, caller)
 	end
 	if !activator:GetDBool("open_menu", false) then
 		activator:SetDBool("open_menu", true)
+
+		self:OpenBuyMenu(activator)
+
 		timer.Simple(1, function()
 			activator:SetDBool("open_menu", false)
 		end)
 	end
+end
+
+util.AddNetworkString("open_buy_menu")
+function ENT:OpenBuyMenu(pl)
+	net.Start("open_buy_menu")
+		net.WriteString(self:GetDString("dealerID", "-1"))
+	net.Send(pl)
 end
 
 function ENT:AcceptInput(input, entActivator, entCaller, data)

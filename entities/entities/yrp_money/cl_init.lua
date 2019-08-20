@@ -6,7 +6,7 @@ local yrp_icon = Material("yrp/yrp_icon")
 
 function ENT:Draw()
 	local ply = LocalPlayer()
-	if ply:GetPos():Distance(self:GetPos()) < 2000 then
+	if ply:GetPos():Distance(self:GetPos()) < 2200 then
 		self:DrawModel()
 		local money = self:GetMoney()
 		if money != nil then

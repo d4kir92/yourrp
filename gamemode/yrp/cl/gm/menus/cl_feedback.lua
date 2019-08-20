@@ -43,13 +43,7 @@ function openFeedbackMenu()
 	end
 	FEEDBACK.window:MakePopup()
 
-	FEEDBACK.content = createD("YPanel", FEEDBACK.window, BFW(), BFH() - FEEDBACK.window:GetHeaderHeight(), 0, FEEDBACK.window:GetHeaderHeight())
-	FEEDBACK.content:SetHeaderHeight(YRP.ctr(100))
-	function FEEDBACK.content:Paint(pw, ph)
-
-	end
-
-	CreateFeedbackContent(FEEDBACK.content)
+	CreateFeedbackContent(FEEDBACK.window.con)
 end
 
 function CreateFeedbackContent(parent)

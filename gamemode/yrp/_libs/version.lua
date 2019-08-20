@@ -106,10 +106,11 @@ on.canary = -1
 if CLIENT then
 	local check_window = 0
 	function VersionWindow()
-		if CurTime() < check_window then return end
+		if CurTime() < check_window and LocalPlayer():HasAccess() then return end
 		check_window = CurTime() + 5
-		local frame = createVGUI("YFrame", nil, 1200, 570, 0, 0)
+		local frame = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(590), 0, 0)
 		frame:Center()
+		frame:SetHeaderHeight(YRP.ctr(100))
 		frame:SetTitle("LID_about")
 		function frame:Paint(pw, ph)
 			if !IsYRPOutdated() then
@@ -119,32 +120,30 @@ if CLIENT then
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 
 			--surfaceWindow(self, pw, ph, YRP.lang_string("LID_about"))
-
-			draw.SimpleTextOutlined("Language:", "HudBars", YRP.ctr(400), YRP.ctr(50 + 30), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		end
+		function frame.con:Paint(pw, ph)
 			local tab = {}
 			tab["yrp"] = "YourRP"
-			draw.SimpleTextOutlined(YRP.lang_string("LID_newyourrpversionavailable", tab), "HudBars", pw / 2, YRP.ctr(140), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_currentversion") .. ":", "HudBars", pw / 2, YRP.ctr(215), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_newyourrpversionavailable", tab), "HudBars", pw / 2, YRP.ctr(50), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_currentversion") .. ":", "HudBars", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_client") .. ": ", "HudBars", pw / 2, YRP.ctr(265), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(GAMEMODE.Version, "HudBars", pw / 2, YRP.ctr(265), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_client") .. ": ", "HudBars", pw / 2, YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(GAMEMODE.Version, "HudBars", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-			draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. ") " .. YRP.lang_string("LID_server") .. ": ", "HudBars", pw / 2, YRP.ctr(315), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(GAMEMODE.VersionServer, "HudBars", pw / 2, YRP.ctr(315), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. ") " .. YRP.lang_string("LID_server") .. ": ", "HudBars", pw / 2, YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(GAMEMODE.VersionServer, "HudBars", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_workshopversion") .. ": ", "HudBars", pw / 2, YRP.ctr(415), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")", "HudBars", pw / 2, YRP.ctr(415), Color(0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_workshopversion") .. ": ", "HudBars", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")", "HudBars", pw / 2, YRP.ctr(300), Color(0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 
-		local _langu = YRP.DChangeLanguage(frame, YRP.ctr(400 + 10), YRP.ctr(60), YRP.ctr(72))
-
-		local showChanges = createVGUI("YButton", frame, 520, 80, 0, 0)
+		local showChanges = createD("YButton", frame.con, YRP.ctr(500), YRP.ctr(80), YRP.ctr(20), YRP.ctr(200))
 		showChanges:SetText("LID_showchanges")
 		function showChanges:DoClick()
 			gui.OpenURL("http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152")
 		end
 		function showChanges:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_showchanges"))
+			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
 		end
 
 		if LocalPlayer():HasAccess() then
@@ -160,7 +159,7 @@ if CLIENT then
 				end
 				restartServer:SetPos(YRP.ctr(600 + 10), YRP.ctr(460))
 			else
-				local download_latest_git = createVGUI("YButton", frame, 520, 80, 0, 0)
+				local download_latest_git = createD("YButton", frame.con, YRP.ctr(500), YRP.ctr(80), YRP.ctr(20), YRP.ctr(20))
 				download_latest_git:SetText("LID_downloadlatestversion")
 				function download_latest_git:DoClick()
 					gui.OpenURL("https://github.com/d4kir92/GMOD-YourRP-unstable")
@@ -168,11 +167,11 @@ if CLIENT then
 				function download_latest_git:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
 				end
-				download_latest_git:SetPos(YRP.ctr(600 + 10), YRP.ctr(460))
+				download_latest_git:SetPos(YRP.ctr(20 + 500 + 20), YRP.ctr(350))
 			end
-			showChanges:SetPos(YRP.ctr(600-520-10), YRP.ctr(460))
+			showChanges:SetPos(YRP.ctr(20), YRP.ctr(350))
 		else
-			showChanges:SetPos(YRP.ctr(600-230), YRP.ctr(460))
+			showChanges:SetPos(showChanges:GetParent():GetWide() - YRP.ctr(500) / 2, YRP.ctr(350))
 		end
 
 		frame:MakePopup()

@@ -7,6 +7,7 @@ net.Receive("get_design_settings", function(len)
 	local setting = net.ReadTable()
 	local HUDS = net.ReadTable()
 	local INTERFACES = net.ReadTable()
+	local hud_profiles = net.ReadTable()
 
 	if pa(settingsWindow.window) then
 		settingsWindow.window.site:SetWide(YRP.ctr(20 + 1000 + 20 + 1000 + 20))
@@ -822,7 +823,29 @@ net.Receive("get_design_settings", function(len)
 
 		DHr(hr)
 
+		local lbl_profiles = createD("YLabel", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
+		lbl_profiles:SetText("LID_profile")
+		GRP_HUD:AddItem(lbl_profiles)
+
+		local cb_profiles = createD("DComboBox", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
+		GRP_HUD:AddItem(cb_profiles)
+		for i, v in pairs(hud_profiles) do
+			local selected = false
+			if GetGlobalDString("string_hud_profile", "") == v.value then
+				selected = true
+			end
+			cb_profiles:AddChoice(v.value, v.value, selected)
+		end
+		function cb_profiles:OnSelect(index, text, data)
+			local profile_name = data
+			net.Start("change_to_hud_profile")
+				net.WriteString(profile_name)
+			net.SendToServer()
+		end
+
+
 		-- HUD Reset Settings
+		--[[
 		local hud_reset_settings = createD("DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		hud_reset_settings:SetText("")
 		function hud_reset_settings:Paint(pw, ph)
@@ -842,24 +865,10 @@ net.Receive("get_design_settings", function(len)
 			end
 			AreYouSure(YesFunction)
 		end
-		GRP_HUD:AddItem(hud_reset_settings)
+		GRP_HUD:AddItem(hud_reset_settings)]]
 
 
 
-		-- Interface
-		--[[local GRP_IF = {}
-		GRP_IF.parent = Parent
-		GRP_IF.x = YRP.ctr(20 + 1000 + 20)
-		GRP_IF.y = YRP.ctr(20)
-		GRP_IF.w = YRP.ctr(1000)
-		GRP_IF.h = YRP.ctr(1600)
-		GRP_IF.br = YRP.ctr(20)
-		GRP_IF.color = Color(255, 255, 255)
-		GRP_IF.bgcolor = Color(80, 80, 80)
-		GRP_IF.name = "LID_interface"
-		GRP_IF = DGroup(GRP_IF)
-		GRP_IF.cif = {}
-		]]
 		local GRP_IF = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20 + 1000 + 20), YRP.ctr(20))
 		GRP_IF:SetText("LID_interface")
 		function GRP_IF:Paint(pw, ph)
@@ -924,6 +933,12 @@ net.Receive("get_design_settings", function(len)
 			net.SendToServer()
 		end
 		GRP_IF:AddItem(if_design_bg)
+
+		local spacer = createD("DPanel", nil, if_design_bg:GetWide(), YRP.ctr(50), 0, 0)
+		function spacer:Paint(pw, ph)
+			--
+		end
+		GRP_IF:AddItem(spacer)
 
 		net.Receive("get_interface_settings", function(le)
 			if pa(GRP_IF) then

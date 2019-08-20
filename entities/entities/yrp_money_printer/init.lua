@@ -249,6 +249,16 @@ function ENT:Think()
 			if self:GetDInt("money") > self:GetDInt("moneyMax") then
 				self:SetDInt("money", self:GetDInt("moneyMax"))
 			end
+
+			if GetGlobalDBool("bool_money_printer_spawn_money", false) and self:GetDInt("money", 0) > 0 then
+				local m = self:GetDInt("money", 0)
+				local ent_m = ents.Create("yrp_money")
+				ent_m:SetMoney(m)
+				ent_m:SetPos(self:GetPos() + Vector(0, 0, 30))
+				ent_m:Spawn()
+
+				self:SetDInt("money", 0)
+			end
 		else
 			self:StopSound("moneyprintersound")
 			self:SetDBool("working", false)

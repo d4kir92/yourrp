@@ -266,7 +266,6 @@ timer.Simple(2, function()
 
 			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 			if lb != nil then
-				print("found head")
 				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
 				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
 				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
@@ -292,7 +291,7 @@ timer.Simple(2, function()
 		return
 	end
 
-	local SL = vgui.Create("DHTML", nil)
+	SL = SL or vgui.Create("DHTML", nil)
 	local sl = {}
 	sl.w = 64
 	sl.h = 64
@@ -301,7 +300,6 @@ timer.Simple(2, function()
 	sl.version = -1
 	function SL:Think()
 		local lply = LocalPlayer()
-		sl.visible = lply:HudValue("SL", "VISI")
 		if lply:GetDInt("hud_version", 0) != sl.version or sl.url != GetGlobalDString("text_server_logo", "") or sl.visible != lply:HudValue("SL", "VISI") then
 			sl.version = lply:GetDInt("hud_version", 0)
 			sl.visible = lply:HudValue("SL", "VISI")

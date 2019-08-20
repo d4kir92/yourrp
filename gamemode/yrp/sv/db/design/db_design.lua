@@ -7,10 +7,11 @@ local DATABASE_NAME = "yrp_design"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Ubuntu'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Simple', 'Ubuntu'")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Simple', 'Impact'")
 end
 
 --SQL_DROPTABLE(DATABASE_NAME)
@@ -80,6 +81,7 @@ function Player:DesignLoadout()
 		setting = setting[1]
 		self:SetDString("string_hud_design", setting.string_hud_design)
 		SetGlobalDString("string_interface_design", setting.string_interface_design)
+		SetGlobalDString("string_hud_profile", setting.string_hud_profile)
 	end
 	self:SetDInt("yrp_loading", 100)
 end
@@ -139,12 +141,14 @@ net.Receive("get_design_settings", function(len, ply)
 	if ply:CanAccess("bool_design") then
 		hook.Call("RegisterHUDDesign")
 		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		local hud_profiles = GetHudProfiles()
 		if wk(setting) then
 			setting = setting[1]
 			net.Start("get_design_settings")
 				net.WriteTable(setting)
 				net.WriteTable(HUDS)
 				net.WriteTable(INTERFACES)
+				net.WriteTable(hud_profiles)
 			net.Send(ply)
 		end
 	end

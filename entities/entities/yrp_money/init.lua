@@ -6,11 +6,11 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	if table.HasValue(GetWorkshopIDs(), "1189643820") then
+	--if table.HasValue(GetWorkshopIDs(), "1189643820") then
 		self:SetModel(YRPGetMoneyModel())
-	else
-		self:SetModel("models/props_junk/garbage_newspaper001a.mdl")
-	end
+	--else
+		--self:SetModel("models/props_junk/garbage_newspaper001a.mdl")
+	--end
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -20,6 +20,8 @@ function ENT:Initialize()
 	end
 
 	self:SetMoney(tonumber(self.money))
+
+	self.ismoney = true
 end
 
 function ENT:SetMoney(money)
@@ -30,4 +32,11 @@ end
 function ENT:Use(activator, caller)
 	activator:addMoney(self:GetMoney())
 	self:Remove()
+end
+
+function ENT:StartTouch(ent)
+	if ent.ismoney and self:EntIndex() < ent:EntIndex() then
+		self:SetMoney(self:GetMoney() + ent:GetMoney())
+		ent:Remove()
+	end
 end

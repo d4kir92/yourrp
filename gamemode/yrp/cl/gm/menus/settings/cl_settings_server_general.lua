@@ -360,7 +360,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_drop_items_on_death, "LID_dropitemsondeath", "update_bool_drop_items_on_death")
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
-		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_need_to_introduce, "LID_introduction", "update_bool_players_need_to_introduce")
+		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_need_to_introduce, "LID_playerintroduction", "update_bool_players_need_to_introduce")
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_can_drop_weapons, "LID_playerscandropweapons", "update_bool_players_can_drop_weapons")
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_dealers_can_take_damage, "LID_dealerscantakedamage", "update_bool_dealers_can_take_damage")
@@ -512,6 +512,8 @@ net.Receive("Connect_Settings_General", function(len)
 			end
 			win:MakePopup()
 		end
+		CreateHRLine(MONEY_SETTINGS:GetContent())
+		CreateCheckBoxLine(MONEY_SETTINGS:GetContent(), GEN.bool_money_printer_spawn_money, "LID_moneyprinterspawnmoney", "update_bool_money_printer_spawn_money")
 
 
 

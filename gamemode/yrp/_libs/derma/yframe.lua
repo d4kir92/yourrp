@@ -12,6 +12,7 @@ function PANEL:SetHeaderHeight(num)
 	else
 		printGM("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
 	end
+	self:UpdateSize()
 end
 
 function PANEL:GetBorder()
@@ -148,6 +149,23 @@ function PANEL:Sizable(b)
 	self:SetSizable(b)
 end
 
+function PANEL:UpdateSize()
+	local br = YRP.ctr(self._border)
+	local header = self:GetHeaderHeight()
+	local pw = self:GetWide()
+	local ph = self:GetTall()
+	self.con:SetSize(pw - 2 * br, ph - header - 2 * br)
+	self.con:SetPos(br, header + br)
+end
+
+function PANEL:OnSizeChanged(pw, ph)
+	self:UpdateSize()
+end
+
+function PANEL:GetContent()
+	return self.con
+end
+
 function PANEL:Init()
 	self._headerheight = 24
 	self._border = 20
@@ -166,9 +184,15 @@ function PANEL:Init()
 
 	self.langu = YRP.DChangeLanguage(self, self:GetWide() - YRP.ctr(60 * 1.4903 + 20 + 60 + 20), YRP.ctr(20), YRP.ctr(60), true)
 
+	self.con = createD("YPanel", self, 10, 10, 0, 0)
+	function self.con:Paint(pw, ph)
+	end
+
 	self.sw = self:GetWide()
 	self.sh = self:GetTall()
 	self.px, self.py = self:GetPos()
+
+	self:UpdateSize()
 end
 
 vgui.Register("YFrame", PANEL, "DFrame")

@@ -145,6 +145,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_model", "TEXT DEFAULT 'models/props/cs_assault/money.mdl'")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
+
 --[[ Social Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ' '")
@@ -1099,6 +1101,12 @@ util.AddNetworkString("update_text_money_model")
 net.Receive("update_text_money_model", function(len, ply)
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_money_model", "text_money_model", str)
+end)
+
+util.AddNetworkString("update_bool_money_printer_spawn_money")
+net.Receive("update_bool_money_printer_spawn_money", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_money_printer_spawn_money", "bool_money_printer_spawn_money", b)
 end)
 
 

@@ -63,7 +63,7 @@ end
 
 --[[ Stats ]]--
 function Player:GetMaxArmor()
-	return self:GetDInt("MaxArmor", 1)
+	return tonumber(self:GetDInt("MaxArmor", 100))
 end
 
 function Player:GetMinLevel()

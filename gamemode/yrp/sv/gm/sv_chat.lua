@@ -177,14 +177,6 @@ function show_tag_ug(sender)
 	end
 	return ""
 end
-function show_tag_immortal(sender)
-	if !sender:GetDBool("tag_immortal", false) then
-		sender:SetDBool("tag_immortal", true)
-	else
-		sender:SetDBool("tag_immortal", false)
-	end
-	return ""
-end
 
 function set_money(sender, text)
 	if sender:HasAccess() then
@@ -426,7 +418,6 @@ net.Receive("setafk", function(len, ply)
 end)
 
 function GM:PlayerSay(sender, text, teamChat)
-
 	unpack_paket(sender, text)
 
 	paket.command = string.lower(paket.command)
@@ -474,11 +465,6 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "tag_ug" then
 		show_tag_ug(sender)
-		return ""
-	end
-
-	if paket.command == "tag_immortal" then
-		show_tag_immortal(sender)
 		return ""
 	end
 

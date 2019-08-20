@@ -1337,6 +1337,39 @@ function YRP.DrawSymbol(ply, str, z, color)
 	cam.End3D2D()
 end
 
+function drawStringBox(ent, instr, z, color)
+	local pos = ent:GetPos() + Vector(0, 0, 86)
+
+	if ent:LookupBone("ValveBiped.Bip01_Head1") then
+		pos = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
+	end
+
+	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
+	local sca = ent:GetModelScale() / 4
+	local str = instr
+	cam.Start3D2D(pos + Vector(0, 0, z), ang, 0.2)
+		surface.SetFont("YRP_18_500")
+		local tw, th = surface.GetTextSize(str)
+		--surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+
+		local br = 4
+		local box = {}
+		box.w = tw + 5 * br + th
+		box.h = th + 2 * br
+		draw.RoundedBox(box.h / 2, - box.w / 2, 0, box.w, box.h, Color(0, 0, 0, 160))
+
+		local ico = {}
+		ico.w = th * 0.8
+		ico.h = ico.w
+		ico.br = (th - ico.h) / 2
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(YRP.GetDesignIcon("shopping_cart"))
+		surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
+
+		draw.SimpleTextOutlined(instr, "YRP_18_500", -box.w / 2 + th + 2 * br, box.h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	cam.End3D2D()
+end
+
 function drawString(ply, instr, z, color)
 	local pos = ply:GetPos() + Vector(0, 0, 86)
 
@@ -1374,7 +1407,7 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 	local w = 200
 	surfaceBox(-w / 2 - 2, 2 - 2, w + 4, 20 + 4, Color(0, 0, 0, 100))
 	surfaceBox(-w / 2, 2, w * cur / max, 20, barcolor)
-	surfaceText(str, "3d2d_string", 0, _th / 2 - 2, color, 1, 1)
+	surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
 	cam.End3D2D()
 end
 
@@ -1497,14 +1530,30 @@ function drawPlates(ply)
 		end
 
 		if GetGlobalDBool("bool_tag_on_head", false) then
-			if GetGlobalDBool("bool_tag_on_head_voice", false) and GetGlobalDBool("yrp_speaking", false) then
+			if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
 				local plyvol = ply:VoiceVolume() * 200
 				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
 				YRP.DrawSymbol(ply, "voice", 26, voicecolor)
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_chat", false) and GetGlobalDBool("istyping", false) then
+			if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
 				YRP.DrawSymbol(ply, "chat", 26, color)
+			end
+
+			if GetGlobalDBool("bool_tag_on_head_armor", false) then
+				_height = _height + 1
+				local str = ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100)
+				local col = ply:HudValue("AR", "BA")
+				drawBar(ply, str, _height, color, ply:Armor(), ply:GetDInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
+				_height = _height + 6
+			end
+
+			if GetGlobalDBool("bool_tag_on_head_health", false) then
+				_height = _height + 1
+				local str = ply:Health() .. "/" .. ply:GetMaxHealth()
+				local col = ply:HudValue("HP", "BA")
+				drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a))
+				_height = _height + 6
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_clan", false) then
@@ -1514,6 +1563,14 @@ function drawPlates(ply)
 
 			if GetGlobalDBool("bool_tag_on_head_name", false) then
 				drawString(ply, ply:RPName(), _height, color)
+				_height = _height + 5
+			end
+
+			if IsLevelSystemEnabled() and GetGlobalDBool("bool_tag_on_head_level", false) then
+				local lvl = ply:Level()
+				local t = {}
+				t["LEVEL"] = lvl
+				drawString(ply, YRP.lang_string("LID_levelx", t), _height, color)
 				_height = _height + 5
 			end
 
@@ -1533,42 +1590,24 @@ function drawPlates(ply)
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_rolename", false) then
-				drawString(ply, ply:GetRoleName(), _height, ply:GetRoleColor())
+				local rc = ply:GetRoleColor()
+				rc.a = color.a
+				drawString(ply, ply:GetRoleName(), _height, rc)
 				_height = _height + 5
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_groupname", false) then
-				drawString(ply, ply:GetGroupName(), _height, ply:GetGroupColor())
+				local gc = ply:GetGroupColor()
+				gc.a = color.a
+				drawString(ply, ply:GetGroupName(), _height, gc)
 				_height = _height + 5
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_factionname", false) then
-				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, ply:GetFactionColor())
+				local fc = ply:GetFactionColor()
+				fc.a = color.a
+				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, fc)
 				_height = _height + 5
-			end
-
-			if IsLevelSystemEnabled() and GetGlobalDBool("bool_tag_on_head_level", false) then
-				local lvl = ply:Level()
-				local t = {}
-				t["LEVEL"] = lvl
-				drawString(ply, YRP.lang_string("LID_levelx", t), _height, color)
-				_height = _height + 5
-			end
-
-			if GetGlobalDBool("bool_tag_on_head_armor", false) then
-				_height = _height + 1
-				local str = ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100)
-				local col = ply:HudValue("AR", "BA")
-				drawBar(ply, str, _height, color, ply:Armor(), ply:GetDInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
-				_height = _height + 6
-			end
-
-			if GetGlobalDBool("bool_tag_on_head_health", false) then
-				_height = _height + 1
-				local str = ply:Health() .. "/" .. ply:GetMaxHealth()
-				local col = ply:HudValue("HP", "BA")
-				drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a))
-				_height = _height + 6
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_usergroup", false) then
@@ -1740,10 +1779,11 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 end)
 
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
-	if GetGlobalDBool("tag_immortal", false) then
-		for i, ent in pairs(ents.GetAll()) do
-			if (ent:IsNPC() or ent:IsPlayer()) and (ent:GetDBool("immortal", false) or ent:GetDBool("godmode", false)) then
-				drawPlate(ent, string.upper("[" .. YRP.lang_string("LID_immortal") .. "]"), 0, Color(0, 0, 100, ent:GetColor().a))
+	for i, ent in pairs(ents.GetAll()) do
+		if ent:IsNPC() and !ent:IsPlayer() and GetGlobalDBool("bool_tag_on_head_name", false) then
+			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
+			if dist < 300 then
+				drawStringBox(ent, ent:GetDString("name", "Unnamed"), 20, Color(255, 255, 255))
 			end
 		end
 	end
@@ -1819,18 +1859,22 @@ local loadattempts = 0
 function loadDoorTexts()
 	loadattempts = loadattempts + 1
 	if GetGlobalBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
-		local _allPropDoors = ents.FindByClass("prop_door_rotating")
+		local _allPropDoors = ents.FindByClass("prop_door")
+		local _allPropDoorRs = ents.FindByClass("prop_door_rotating")
 		local _allFuncDoors = ents.FindByClass("func_door")
-		local _allFuncRDoors = ents.FindByClass("func_door_rotating")
+		local _allFuncDoorRs = ents.FindByClass("func_door_rotating")
 
 		local _allDoors = {}
 		for i, v in pairs(_allPropDoors) do
 			table.insert(_allDoors, v)
 		end
+		for i, v in pairs(_allPropDoorRs) do
+			table.insert(_allDoors, v)
+		end
 		for i, v in pairs(_allFuncDoors) do
 			table.insert(_allDoors, v)
 		end
-		for i, v in pairs(_allFuncRDoors) do
+		for i, v in pairs(_allFuncDoorRs) do
 			table.insert(_allDoors, v)
 		end
 
@@ -1872,8 +1916,17 @@ function loadDoorTexts()
 						surface.SetFont("Roboto14")
 						local desc_size = surface.GetTextSize(description)
 						surface.SetTextColor(255, 255, 255)
-						surface.SetTextPos(- desc_size / 2, -40)
+						surface.SetTextPos(- desc_size / 2, -50)
 						surface.DrawText(description)
+
+						if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
+							local canbeowned = YRP.lang_string("LID_canbeowned")
+							surface.SetFont("Roboto18B")
+							local canb_size = surface.GetTextSize(canbeowned)
+							surface.SetTextColor(255, 255, 20, 255)
+							surface.SetTextPos(- canb_size / 2, -20)
+							surface.DrawText(canbeowned)
+						end
 					cam.End3D2D()
 
 					ang = Angle(0, 180, 0)
@@ -1909,6 +1962,15 @@ function loadDoorTexts()
 						surface.SetTextColor(255, 255, 255)
 						surface.SetTextPos(- desc_size / 2, -40)
 						surface.DrawText(description)
+
+						if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
+							local canbeowned = YRP.lang_string("LID_canbeowned")
+							surface.SetFont("Roboto18B")
+							local canb_size = surface.GetTextSize(canbeowned)
+							surface.SetTextColor(255, 255, 20, 255)
+							surface.SetTextPos(- canb_size / 2, -20)
+							surface.DrawText(canbeowned)
+						end
 					cam.End3D2D()
 				end
 			end)

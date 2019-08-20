@@ -220,7 +220,7 @@ function ENT:Draw()
 		end
 	end
 
-	if ply:GetPos():Distance(self:GetPos()) < 2000 then
+	if ply:GetPos():Distance(self:GetPos()) < 2200 then
 		self:DrawModel()
 
 		local ang = self:GetAngles()

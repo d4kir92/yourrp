@@ -104,8 +104,6 @@ function HUDCirclesDrawText(ele, text)
 	local h = lply:HudValue(ele, "SIZE_H")
 	local x = lply:HudValue(ele, "POSI_X")
 	local y = lply:HudValue(ele, "POSI_Y")
-	local midx = x + w / 2
-	local midy = y + h / 2
 
 	local fontsize = lply:HudValue(ele, "TS")
 	if fontsize <= 0 then
@@ -113,7 +111,11 @@ function HUDCirclesDrawText(ele, text)
 	end
 	local font = "YRP_" .. fontsize .. "_500"
 
-	draw.SimpleTextOutlined(text, font, midx, midy, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0))
+	local ax = lply:HudValue(ele, "AX")
+	local ay = lply:HudValue(ele, "AY")
+	local midx = x + (ax * w) / 2
+	local midy = y + (ay * h) / 2
+	draw.SimpleTextOutlined(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color(0, 0, 0))
 end
 
 function HUDCircles()
@@ -189,8 +191,12 @@ function HUDCircles()
 			HUDCirclesDrawText("WN", wep:GetPrintName())
 		end
 
+		HUDCirclesDrawText("SN", GetGlobalDString("text_server_name", "SERVERNAME"))
+
 		HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
 		HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))
+
+		HUDSimpleCompass()
 	end
 end
 hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)

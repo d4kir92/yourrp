@@ -422,6 +422,8 @@ YRP.AddDesignIcon("circle", "vgui/material/icon_circle.png")
 YRP.AddDesignIcon("add", "vgui/material/icon_add.png")
 YRP.AddDesignIcon("remove", "vgui/material/icon_remove.png")
 
+YRP.AddDesignIcon("shopping_cart", "vgui/material/icon_shop_cart.png")
+
 YRP.iconsloaded = true
 
 -- Flags

@@ -23,10 +23,13 @@ function HudView()
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopen", tab), "sef", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			local tab2 = {}
-			tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
-			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			showOwner(_eyeTrace)
+			local canbeowned = tobool(_eyeTrace.Entity:GetDTable("building", {}).bool_canbeowned)
+			if canbeowned or ply:HasAccess() then
+				local tab2 = {}
+				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
+				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				showOwner(_eyeTrace)
+			end
 		elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"

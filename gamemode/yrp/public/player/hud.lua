@@ -33,7 +33,15 @@ if CLIENT then
 			hcolor = string.Explode(",", hcolor)
 			return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
 		elseif table.HasValue(hints, art) then
-			return YRPHUD("int_HUD_" .. element .. "_" .. art, -1) -- tonumber(self:GetDInt("int_HUD_" .. element .. "_" .. art, -1))
+			local ay = YRPHUD("int_HUD_" .. element .. "_" .. art, -1)
+			if art == "AY" then
+				if ay == 3 then
+					ay = 0
+				elseif ay == 4 then
+					ay = 2
+				end
+			end
+			return ay
 		end
 		return "ART: " .. art .. " not found."
 	end
