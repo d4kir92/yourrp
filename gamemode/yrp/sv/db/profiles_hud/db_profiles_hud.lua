@@ -19,6 +19,9 @@ util.AddNetworkString("change_to_hud_profile")
 net.Receive("change_to_hud_profile", function()
 	local profile_name = net.ReadString()
 
+	SQL_UPDATE("yrp_design", "string_hud_profile = '" .. profile_name .. "'", "uniqueID = 1")
+	SetGlobalDString("string_hud_profile", profile_name)
+
 	local tab = SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
 	if wk(tab) then
 		for i, v in pairs(tab) do

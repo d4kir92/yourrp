@@ -1780,7 +1780,7 @@ end)
 
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	for i, ent in pairs(ents.GetAll()) do
-		if ent:IsNPC() and !ent:IsPlayer() and GetGlobalDBool("bool_tag_on_head_name", false) then
+		if ent:IsNPC() and !ent:IsPlayer() and GetGlobalDBool("bool_tag_on_head_name", false) and ent:GetDString("dealerID", "") != "" then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			if dist < 300 then
 				drawStringBox(ent, ent:GetDString("name", "Unnamed"), 20, Color(255, 255, 255))
@@ -1919,14 +1919,14 @@ function loadDoorTexts()
 						surface.SetTextPos(- desc_size / 2, -50)
 						surface.DrawText(description)
 
-						if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
+						--[[if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
 							local canbeowned = YRP.lang_string("LID_canbeowned")
 							surface.SetFont("Roboto18B")
 							local canb_size = surface.GetTextSize(canbeowned)
 							surface.SetTextColor(255, 255, 20, 255)
 							surface.SetTextPos(- canb_size / 2, -20)
 							surface.DrawText(canbeowned)
-						end
+						end]]
 					cam.End3D2D()
 
 					ang = Angle(0, 180, 0)
@@ -1963,14 +1963,14 @@ function loadDoorTexts()
 						surface.SetTextPos(- desc_size / 2, -40)
 						surface.DrawText(description)
 
-						if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
+						--[[if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
 							local canbeowned = YRP.lang_string("LID_canbeowned")
 							surface.SetFont("Roboto18B")
 							local canb_size = surface.GetTextSize(canbeowned)
 							surface.SetTextColor(255, 255, 20, 255)
 							surface.SetTextPos(- canb_size / 2, -20)
 							surface.DrawText(canbeowned)
-						end
+						end]]
 					cam.End3D2D()
 				end
 			end)

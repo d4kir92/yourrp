@@ -294,6 +294,7 @@ countries["NL"] = "Netherlands"
 countries["NO"] = "Norway"
 countries["NZ"] = "New Zealand"
 
+countries["PE"] = "Peru"
 countries["PH"] = "Philippines"
 countries["PL"] = "Poland"
 countries["PT"] = "Portugal"

@@ -56,12 +56,15 @@ function SWEP:PrimaryAttack()
 					ply:StartCasting("splint", "splinting", 0, self.target, 3, 100, 1, false)
 				end
 			end
+		else
+			self:Remove()
 		end
 	end
 end
 
 if SERVER then
 	hook.Add("yrp_castdone_splint", "splint", function(args)
+		pTab(args)
 		args.target:Heal(10)
 		args.target:Unbroke()
 		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
@@ -74,6 +77,8 @@ function SWEP:SecondaryAttack()
 			local ply = self:GetOwner()
 			_target = ply
 			ply:StartCasting("splint", "splinting", 0, _target, 3, 100, 1, false)
+		else
+			self:Remove()
 		end
 	end
 end

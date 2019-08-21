@@ -258,8 +258,8 @@ end
 function ENTITY:GetDEntity(key, value)
 	if self != NULL then
 	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
-		return self.NWTAB["TABLE"][key] or value
+		self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
+		return self.NWTAB["ENTITY"][key] or value
 	else
 		return NULL
 	end

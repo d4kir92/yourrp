@@ -244,6 +244,7 @@ if SERVER then
 		local _args = {}
 		_args.attacker = self
 		_args.target = self:GetDEntity("casttarget")
+
 		hook.Run("yrp_castdone_" .. self:GetDString("castnet"), _args)
 	end
 
