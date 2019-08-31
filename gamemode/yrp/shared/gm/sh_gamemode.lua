@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 121 --do NOT change this!
-GM.VersionCanary = 245 --do NOT change this!
+GM.VersionBeta = 122 --do NOT change this!
+GM.VersionCanary = 247 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -222,7 +222,7 @@ concommand.Add("yrp_collection", function(ply, cmd, args)
 end)
 
 hook.Add("StartCommand", "NoJumpGuns", function(ply, cmd)
-	if ply:GetDBool("bool_anti_bhop", false) and !ply:GetDBool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
+	if GetGlobalDBool("bool_anti_bhop", false) and !ply:GetDBool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
 		cmd:RemoveKey(IN_JUMP)
 	end
 end)
@@ -298,4 +298,48 @@ if CLIENT then
 elseif SERVER then
 	-- "removes" voice icons
 	RunConsoleCommand("mp_show_voice_icons", "0")
+end
+
+-- Reconnect
+if CLIENT then
+	local lost_connection = false
+	local recon_delay = CurTime() + 1
+	local retry_sec = 11
+	local recon_sec = 30
+	local server_pong = CurTime() + retry_sec
+	net.Receive("pingpong", function()
+		server_pong = CurTime() + retry_sec
+		lost_connection = false
+	end)
+	hook.Add("Think", "yrp_reconnect_think", function()
+		if recon_delay < CurTime() then
+			recon_delay = CurTime() + 1
+			if CurTime() >= server_pong + recon_sec then
+				lost_connection = true
+				YRP.msg("note", "RETRY")
+				RunConsoleCommand("retry")
+			elseif CurTime() > server_pong then
+				lost_connection = true
+				local time = math.Round((server_pong + recon_sec) - CurTime(), 0)
+				local tab = {}
+				tab["SECONDS"] = time
+				YRP.msg("note", YRP.lang_string("LID_lostconnection") .. "! " .. YRP.lang_string("LID_retryinxsec", tab))
+			end
+		end
+	end)
+	hook.Add("HUDPaint", "yrp_reconnect_hud", function()
+		if lost_connection then
+			local time = math.Round((server_pong + recon_sec) - CurTime(), 0)
+			local tab = {}
+			tab["SECONDS"] = time
+			draw.SimpleText(YRP.lang_string("LID_lostconnection") .. "! " .. YRP.lang_string("LID_retryinxsec", tab), "YRP_36_500", ScrW() / 2, ScrH() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+	end)
+elseif SERVER then
+	util.AddNetworkString("pingpong")
+
+	timer.Create("yrp_pingpong", 5, 0, function()
+		net.Start("pingpong")
+		net.Broadcast()
+	end)
 end

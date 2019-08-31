@@ -191,7 +191,7 @@ function HUDCircles()
 			HUDCirclesDrawText("WN", wep:GetPrintName())
 		end
 
-		HUDCirclesDrawText("SN", GetGlobalDString("text_server_name", "SERVERNAME"))
+		HUDCirclesDrawText("SN", SQL_STR_OUT(GetGlobalDString("text_server_name", "SERVERNAME")))
 
 		HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
 		HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))

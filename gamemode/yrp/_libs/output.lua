@@ -280,6 +280,7 @@ countries["IT"] = "Italy"
 countries["JP"] = "Japan"
 
 countries["KG"] = "Kyrgyzstan"
+countries["KR"] = "Korea"
 countries["KZ"] = "Kazakhstan"
 
 countries["LT"] = "Lithuania"

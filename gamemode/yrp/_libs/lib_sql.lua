@@ -166,6 +166,11 @@ function SQL.SELECT(tab)
 				_q = _q .. tab.where
 			end
 
+			if tab.manual != nil then
+				_q = _q .. " "
+				_q = _q .. tab.manual
+			end
+
 			_q = _q .. ";"
 
 			local rettab = SQL.QUERY(_q)

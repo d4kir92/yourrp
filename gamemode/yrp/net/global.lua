@@ -4,11 +4,15 @@ NWGlobal = NWGlobal or {}
 -- BOOL
 if SERVER then
 	util.AddNetworkString("SetGlobalDBool")
-	function SendGlobalDBool(index, bo)
+	function SendGlobalDBool(index, bo, ply)
 		net.Start("SetGlobalDBool")
 			net.WriteString(index)
 			net.WriteBool(bo)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function SetGlobalDBool(index, bo)
@@ -41,11 +45,15 @@ end
 -- STRING
 if SERVER then
 	util.AddNetworkString("SetGlobalDString")
-	function SendGlobalDString(index, str)
+	function SendGlobalDString(index, str, ply)
 		net.Start("SetGlobalDString")
 			net.WriteString(index)
 			net.WriteString(str)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function SetGlobalDString(index, str)
@@ -72,11 +80,15 @@ end
 -- INT
 if SERVER then
 	util.AddNetworkString("SetGlobalDInt")
-	function SendGlobalDInt(index, int)
+	function SendGlobalDInt(index, int, ply)
 		net.Start("SetGlobalDInt")
 			net.WriteString(index)
 			net.WriteInt(int, 32)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function SetGlobalDInt(index, int)
@@ -103,11 +115,15 @@ end
 -- FLOAT
 if SERVER then
 	util.AddNetworkString("SetGlobalDFloat")
-	function SendGlobalDFloat(index, flo)
+	function SendGlobalDFloat(index, flo, ply)
 		net.Start("SetGlobalDFloat")
 			net.WriteString(index)
 			net.WriteFloat(flo)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function SetGlobalDFloat(index, flo)
@@ -138,19 +154,19 @@ if SERVER then
 	function SendDGlobals(ply)
 		NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
 		for i, v in pairs(NWGlobal["BOOL"]) do
-			SendGlobalDBool(i, v)
+			SendGlobalDBool(i, v, ply)
 		end
 		NWGlobal["STRING"] = NWGlobal["STRING"] or {}
 		for i, v in pairs(NWGlobal["STRING"]) do
-			SendGlobalDString(i, v)
+			SendGlobalDString(i, v, ply)
 		end
 		NWGlobal["INT"] = NWGlobal["INT"] or {}
 		for i, v in pairs(NWGlobal["INT"]) do
-			SendGlobalDInt(i, v)
+			SendGlobalDInt(i, v, ply)
 		end
 		NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
 		for i, v in pairs(NWGlobal["FLOAT"]) do
-			SendGlobalDFloat(i, v)
+			SendGlobalDFloat(i, v, ply)
 		end
 	end
 	net.Receive("request_dglobals", function(len, ply)

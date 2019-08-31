@@ -412,7 +412,7 @@ end
 function GeneralUpdateString(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalDString(str, value)
+	SetGlobalDString(str, SQL_STR_OUT(value))
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
@@ -488,7 +488,7 @@ end)
 
 util.AddNetworkString("update_text_server_name")
 net.Receive("update_text_server_name", function(len, ply)
-	local str = net.ReadString()
+	local str = SQL_STR_IN(net.ReadString())
 	GeneralUpdateString(ply, "update_text_server_name", "text_server_name", str)
 end)
 
@@ -496,7 +496,7 @@ end)
 
 util.AddNetworkString("update_text_server_rules")
 net.Receive("update_text_server_rules", function(len, ply)
-	local str = net.ReadString()
+	local str = SQL_STR_IN(net.ReadString())
 	GeneralUpdateString(ply, "update_text_server_rules", "text_server_rules", str)
 end)
 
@@ -1305,7 +1305,7 @@ util.AddNetworkString("getsiteserverrules")
 net.Receive("getsiteserverrules", function(len, ply)
 	local server_rules = SQL_SELECT("yrp_general", "text_server_rules", "uniqueID = '1'")
 	if wk(server_rules) then
-		server_rules = server_rules[1].text_server_rules
+		server_rules = SQL_STR_OUT(server_rules[1].text_server_rules)
 	else
 		server_rules = ""
 	end

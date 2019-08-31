@@ -670,8 +670,7 @@ function openCharacterSelection()
 			function _cs.frame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 
-				draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection") .. " [PROTOTYPE]", "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(_cur, "HudHeader", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				--
 			end
 			function _cs.frame:OnClose()
 				closeMenu()
@@ -686,6 +685,10 @@ function openCharacterSelection()
 			_cs.frame.bgcf = createD("DPanel", _cs.frame.bg, _cs.frame.bg:GetWide(), _cs.frame.bg:GetTall(), 0, 0)
 			function _cs.frame.bgcf:Paint(pw, ph)
 				Derma_DrawBackgroundBlur(self, 0)
+
+				draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection"), "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(_cur, "HudHeader", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+
 				local oldurl = _cs.frame.bg.url
 				local newurl = GetGlobalDString("text_character_background", "")
 				if oldurl != newurl then

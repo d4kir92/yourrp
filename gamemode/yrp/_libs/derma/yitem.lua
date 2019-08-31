@@ -39,8 +39,10 @@ function PANEL:DoClick()
 		print("self.suid", self.suid)
 		print("ITEMS[self.suid].storage", ITEMS[self.suid].storage)
 		pTab( ITEMS)
+		print("__________________________________")
 		if ITEMS[self.suid].storage == nil then
-			print("IS NIL")
+			print("IS NIL => join storage")
+			print(self.suid)
 			net.Start("join_storage")
 				net.WriteString(self.suid)
 			net.SendToServer()
@@ -63,14 +65,18 @@ end)
 
 net.Receive("send_storage_content", function(len)
 	local suid = tonumber(net.ReadString())
-	local stor = net.ReadTable()
+	local storage = net.ReadTable()
+	local items = net.ReadTable()
 
 	ITEMS[suid] = ITEMS[suid] or {}
 
 	ITEMS[suid].storage = createD("YStorage", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
 	local st = ITEMS[suid].storage
 	st:SetPos(ScW() - st:GetWide() - YRP.ctr(20), ScH() - st:GetTall() - ItemSize() - YRP.ctr(60))
-	st:SetStorage(suid)
+
+	for i, v in pairs(items) do
+		print(i, v)
+	end
 
 	function st:OnRemove()
 		local s = self:GetStorage()

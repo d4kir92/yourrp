@@ -3,8 +3,8 @@
 local inv = {}
 inv.open = false
 function ToggleInventory()
-	if !inv.open and false then -- DEBUG
-		OpenInventory()
+	if !inv.open then -- DEBUG
+		--OpenInventory()
 	else
 		CloseInventory()
 	end

@@ -36,6 +36,7 @@ net.Receive("send_slot_content", function(len)
 	local slot = net.ReadString()
 	local yrp_slot = SLOTS[slot]
 	local items = net.ReadTable()
+
 	for i, item in pairs(items) do
 		local yitem = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
 		yitem:SetText("") --item.text_printname)
@@ -43,9 +44,10 @@ net.Receive("send_slot_content", function(len)
 		if slot == "bag0" then
 			yitem:SetFixed(true)
 		end
-		item.text_storage = tonumber(item.text_storage)
-		if item.text_storage > 0 then
-			yitem:SetStorage(item.text_storage)
+
+		item.text_has_storage = tonumber(item.text_has_storage)
+		if item.text_has_storage > 0 then -- is a storage
+			yitem:SetStorage(item.text_has_storage)
 		end
 
 		yitem:SetModel(item.text_worldmodel)

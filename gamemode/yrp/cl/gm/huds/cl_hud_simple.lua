@@ -616,7 +616,7 @@ function HUDSimple()
 		SN.element = "SN"
 		SN.cur = 0
 		SN.max = 1
-		SN.text = GetGlobalDString("text_server_name", "SERVERNAME")
+		SN.text = SQL_STR_OUT(GetGlobalDString("text_server_name", "SERVERNAME"))
 		HUDSimpleBAR(SN)
 		NA = {}
 		NA.element = "NA"

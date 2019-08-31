@@ -98,6 +98,7 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 end
 
 function CreateTextBoxBox(dpanellist, text, lstr, netstr)
+	text = SQL_STR_OUT(text)
 	local background = createD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(50 + 400 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), YRP.ctr(25), 0, 1)

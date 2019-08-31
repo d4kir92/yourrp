@@ -40,7 +40,7 @@ function Player:GetPlyTab()
 	if SERVER then
 		if self:IsValid() then
 			if self:LoadedGamemode() then
-				local steamid = self:SteamID()
+				local steamid = self:SteamID() or self:UniqueID()
 				if steamid != nil and steamid != false and steamid != "" then
 					local yrp_players = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
 					if wk(yrp_players) then
@@ -166,7 +166,11 @@ function Player:GetGroTab()
 end
 
 function Player:CharID()
-	return tonumber(self:GetDString("charid", "-1"))
+	if self:IsBot() then
+		return 1
+	else
+		return tonumber(self:GetDString("charid", "-1"))
+	end
 end
 
 function Player:CheckMoney()

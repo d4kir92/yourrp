@@ -26,7 +26,7 @@ function OpenCombinedMenu()
 	local menuw = YRP.ctr(400)
 
 	cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-	cm.win:SetTitle(GetGlobalDString("text_server_name", ""))
+	cm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
 	cm.win:MakePopup()
 	cm.win:SetHeaderHeight(YRP.ctr(100))
 	function cm.win:Paint(pw, ph)

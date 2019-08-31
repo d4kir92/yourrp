@@ -6,22 +6,28 @@ local ENTDELAY = 0.05
 -- STRING
 if SERVER then
 	util.AddNetworkString("SetDString")
-	function ENTITY:SendDString(key, value)
+	function ENTITY:SendDString(key, value, ply)
 		net.Start("SetDString")
 			net.WriteUInt(self:EntIndex(), 16)
 			net.WriteString(key)
 			net.WriteString(value)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function ENTITY:SetDString(key, value)
 	value = tostring(value)
-	if isstring(key) and value != "nil" then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
-		self.NWTAB["STRING"][key] = value
-		if SERVER then
-			self:SendDString(key, value)
+	if self:IsValid() then
+		if isstring(key) and value != "nil" then
+			self.NWTAB = self.NWTAB or {}
+			self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
+			self.NWTAB["STRING"][key] = value
+			if SERVER then
+				self:SendDString(key, value)
+			end
 		end
 	end
 end
@@ -45,7 +51,7 @@ if CLIENT then
 end
 
 function ENTITY:GetDString(key, value)
-	if self != NULL then
+	if self:IsValid() then
 		self.NWTAB = self.NWTAB or {}
 		self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
 		return self.NWTAB["STRING"][key] or value
@@ -57,21 +63,27 @@ end
 -- BOOL
 if SERVER then
 	util.AddNetworkString("SetDBool")
-	function ENTITY:SendDBool(key, value)
+	function ENTITY:SendDBool(key, value, ply)
 		net.Start("SetDBool")
 			net.WriteUInt(self:EntIndex(), 16)
 			net.WriteString(key)
 			net.WriteBool(value)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function ENTITY:SetDBool(key, value)
-	if isstring(key) and isbool(value) then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
-		self.NWTAB["BOOL"][key] = value
-		if SERVER then
-			self:SendDBool(key, value)
+	if self:IsValid() then
+		if isstring(key) and isbool(value) then
+			self.NWTAB = self.NWTAB or {}
+			self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
+			self.NWTAB["BOOL"][key] = value
+			if SERVER then
+				self:SendDBool(key, value)
+			end
 		end
 	end
 end
@@ -95,7 +107,7 @@ if CLIENT then
 end
 
 function ENTITY:GetDBool(key, value)
-	if self != NULL then
+	if self:IsValid() then
 	  self.NWTAB = self.NWTAB or {}
 		self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
 		local result = self.NWTAB["BOOL"][key]
@@ -112,24 +124,30 @@ end
 -- INT
 if SERVER then
 	util.AddNetworkString("SetDInt")
-	function ENTITY:SendDInt(key, value)
+	function ENTITY:SendDInt(key, value, ply)
 		net.Start("SetDInt")
 			net.WriteUInt(self:EntIndex(), 16)
 			net.WriteString(key)
 			net.WriteInt(value, 32)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function ENTITY:SetDInt(key, value)
-	if isstring(key) and isnumber(tonumber(value)) then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["INT"] = self.NWTAB["INT"] or {}
-		self.NWTAB["INT"][key] = value
-		if SERVER then
-			self:SendDInt(key, value)
+	if self:IsValid() then
+		if isstring(key) and isnumber(tonumber(value)) then
+			self.NWTAB = self.NWTAB or {}
+			self.NWTAB["INT"] = self.NWTAB["INT"] or {}
+			self.NWTAB["INT"][key] = value
+			if SERVER then
+				self:SendDInt(key, value)
+			end
+		else
+			YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
 		end
-	else
-		YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
 	end
 end
 if CLIENT then
@@ -152,7 +170,7 @@ if CLIENT then
 end
 
 function ENTITY:GetDInt(key, value)
-	if self != NULL then
+	if self:IsValid() then
 	  self.NWTAB = self.NWTAB or {}
 		self.NWTAB["INT"] = self.NWTAB["INT"] or {}
 		return self.NWTAB["INT"][key] or value
@@ -164,24 +182,30 @@ end
 -- FLOAT
 if SERVER then
 	util.AddNetworkString("SetDFloat")
-	function ENTITY:SendDFloat(key, value)
+	function ENTITY:SendDFloat(key, value, ply)
 		net.Start("SetDFloat")
 			net.WriteUInt(self:EntIndex(), 16)
 			net.WriteString(key)
 			net.WriteFloat(value)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function ENTITY:SetDFloat(key, value)
-	if isstring(key) and isnumber(tonumber(value)) then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
-		self.NWTAB["FLOAT"][key] = value
-		if SERVER then
-			self:SendDFloat(key, value)
+	if self:IsValid() then
+		if isstring(key) and isnumber(tonumber(value)) then
+			self.NWTAB = self.NWTAB or {}
+			self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
+			self.NWTAB["FLOAT"][key] = value
+			if SERVER then
+				self:SendDFloat(key, value)
+			end
+		else
+			YRP.msg("note", "[SetDFloat] " .. tostring(key) .. tostring(value))
 		end
-	else
-		YRP.msg("note", "[SetDFloat] " .. tostring(key) .. tostring(value))
 	end
 end
 if CLIENT then
@@ -204,7 +228,7 @@ if CLIENT then
 end
 
 function ENTITY:GetDFloat(key, value)
-	if self != NULL then
+	if self:IsValid() then
 	  self.NWTAB = self.NWTAB or {}
 		self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
 		return self.NWTAB["FLOAT"][key] or value
@@ -216,24 +240,30 @@ end
 -- ENTITY
 if SERVER then
 	util.AddNetworkString("SetDEntity")
-	function ENTITY:SendDEntity(key, value)
+	function ENTITY:SendDEntity(key, value, ply)
 		net.Start("SetDEntity")
 			net.WriteUInt(self:EntIndex(), 16)
 			net.WriteString(key)
 			net.WriteEntity(value)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function ENTITY:SetDEntity(key, value)
-	if isstring(key) and isentity(value) then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
-		self.NWTAB["ENTITY"][key] = value
-		if SERVER then
-			self:SendDEntity(key, value)
+	if self:IsValid() then
+		if isstring(key) and isentity(value) then
+			self.NWTAB = self.NWTAB or {}
+			self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
+			self.NWTAB["ENTITY"][key] = value
+			if SERVER then
+				self:SendDEntity(key, value)
+			end
+		else
+			YRP.msg("note", "[SetDEntity] " .. tostring(key) .. tostring(value))
 		end
-	else
-		YRP.msg("note", "[SetDEntity] " .. tostring(key) .. tostring(value))
 	end
 end
 if CLIENT then
@@ -256,7 +286,7 @@ if CLIENT then
 end
 
 function ENTITY:GetDEntity(key, value)
-	if self != NULL then
+	if self:IsValid() then
 	  self.NWTAB = self.NWTAB or {}
 		self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
 		return self.NWTAB["ENTITY"][key] or value
@@ -268,24 +298,30 @@ end
 -- TABLE
 if SERVER then
 	util.AddNetworkString("SetDTable")
-	function ENTITY:SendDTable(key, value)
+	function ENTITY:SendDTable(key, value, ply)
 		net.Start("SetDTable")
 			net.WriteUInt(self:EntIndex(), 16)
 			net.WriteString(key)
 			net.WriteTable(value)
-		net.Broadcast()
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
 	end
 end
 function ENTITY:SetDTable(key, value)
-	if isstring(key) and istable(value) then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
-		self.NWTAB["TABLE"][key] = value
-		if SERVER then
-			self:SendDTable(key, value)
+	if self:IsValid() then
+		if isstring(key) and istable(value) then
+			self.NWTAB = self.NWTAB or {}
+			self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
+			self.NWTAB["TABLE"][key] = value
+			if SERVER then
+				self:SendDTable(key, value)
+			end
+		else
+			YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
 		end
-	else
-		YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
 	end
 end
 if CLIENT then
@@ -308,7 +344,7 @@ if CLIENT then
 end
 
 function ENTITY:GetDTable(key, value)
-	if self != NULL then
+	if self:IsValid() then
 	  self.NWTAB = self.NWTAB or {}
 		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
 		return self.NWTAB["TABLE"][key] or value
@@ -326,19 +362,19 @@ if SERVER then
 			ent.NWTAB = ent.NWTAB or {}
 			ent.NWTAB["BOOL"] = ent.NWTAB["BOOL"] or {}
 			for i, v in pairs(ent.NWTAB["BOOL"]) do
-				ent:SendDBool(i, v)
+				ent:SendDBool(i, v, ply)
 			end
 			ent.NWTAB["STRING"] = ent.NWTAB["STRING"] or {}
 			for i, v in pairs(ent.NWTAB["STRING"]) do
-				ent:SendDString(i, v)
+				ent:SendDString(i, v, ply)
 			end
 			ent.NWTAB["INT"] = ent.NWTAB["INT"] or {}
 			for i, v in pairs(ent.NWTAB["INT"]) do
-				ent:SendDInt(i, v)
+				ent:SendDInt(i, v, ply)
 			end
 			ent.NWTAB["FLOAT"] = ent.NWTAB["FLOAT"] or {}
 			for i, v in pairs(ent.NWTAB["FLOAT"]) do
-				ent:SendDFloat(i, v)
+				ent:SendDFloat(i, v, ply)
 			end
 		end
 	end

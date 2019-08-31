@@ -239,85 +239,82 @@ timer.Simple(1, function()
 	end
 end)
 
-timer.Simple(2, function()
-	YRP_PM = YRP_PM or vgui.Create("DModelPanel", nil)
-	local pm = {}
-	pm.w = 64
-	pm.h = 64
-	pm.x = 0
-	pm.y = 0
-	pm.version = -1
-	pm.model = ""
-	function YRP_PM:Think()
-		local lply = LocalPlayer()
-		if lply:GetDInt("hud_version", 0) != pm.version or pm.model != lply:GetModel() then
-			pm.version = lply:GetDInt("hud_version", 0)
-			pm.model = lply:GetModel()
+SL = SL or vgui.Create("DHTML", nil)
+SL.w = 64
+SL.h = 64
+SL.x = 0
+SL.y = 0
+SL.url = ""
+SL.visible = false
+SL.version = -1
 
-			pm.w = lply:HudValue("PM", "SIZE_W")
-			pm.h = lply:HudValue("PM", "SIZE_H")
-			pm.x = lply:HudValue("PM", "POSI_X")
-			pm.y = lply:HudValue("PM", "POSI_Y")
-			pm.visible = lply:HudValue("PM", "VISI")
+YRP_PM = YRP_PM or vgui.Create("DModelPanel", nil)
+YRP_PM.w = 64
+YRP_PM.h = 64
+YRP_PM.x = 0
+YRP_PM.y = 0
+YRP_PM.version = -1
+YRP_PM.model = ""
+function YRP_PM:Think()
+	local lply = LocalPlayer()
+	if !lply:IsValid() then return end
+	if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetModel() then
+		YRP_PM.version = lply:GetDInt("hud_version", 0)
+		YRP_PM.model = lply:GetModel()
 
-			YRP_PM:SetPos(pm.x, pm.y)
-			YRP_PM:SetSize(pm.h, pm.h)
-			YRP_PM:SetModel(pm.model)
+		YRP_PM.w = lply:HudValue("PM", "SIZE_W")
+		YRP_PM.h = lply:HudValue("PM", "SIZE_H")
+		YRP_PM.x = lply:HudValue("PM", "POSI_X")
+		YRP_PM.y = lply:HudValue("PM", "POSI_Y")
+		YRP_PM.visible = lply:HudValue("PM", "VISI")
 
-			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
-			if lb != nil then
-				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
-				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
-				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
-				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
-				YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
-			else
-				YRP_PM:SetLookAt(Vector(0, 0, 40))
-				YRP_PM:SetCamPos(Vector(50, 50, 50))
-			end
+		YRP_PM:SetPos(YRP_PM.x, YRP_PM.y)
+		YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
+		YRP_PM:SetModel(YRP_PM.model)
 
-			if !pm.visible then
-				YRP_PM:SetModel("")
-			end
+		local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
+		if lb != nil then
+			local eyepos = YRP_PM.Entity:GetBonePosition(lb)
+			eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+			YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
+			YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
+			YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+		else
+			YRP_PM:SetLookAt(Vector(0, 0, 40))
+			YRP_PM:SetCamPos(Vector(50, 50, 50))
+		end
+
+		if !YRP_PM.visible then
+			YRP_PM:SetModel("")
 		end
 	end
 
-	function YRP_PM:LayoutEntity(ent)
-		local seq = ent:LookupSequence("menu_gman")
-		if seq > -1 then
-			ent:SetSequence(ent:LookupSequence("menu_gman"))
-		end
-		YRP_PM:RunAnimation()
-		return
+	if lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "") then
+		SL.version = lply:GetDInt("hud_version", 0)
+		SL.visible = lply:HudValue("SL", "VISI")
+		SL.url = GetGlobalDString("text_server_logo", "")
+
+		SL.w = lply:HudValue("SL", "SIZE_W")
+		SL.h = lply:HudValue("SL", "SIZE_H")
+		SL.x = lply:HudValue("SL", "POSI_X")
+		SL.y = lply:HudValue("SL", "POSI_Y")
+
+		SL:SetPos(SL.x, SL.y)
+		SL:SetSize(SL.h, SL.h)
+		SL:SetHTML(GetHTMLImage(SL.url, SL.h, SL.h))
+
+		SL:SetVisible(SL.visible)
 	end
+end
 
-	SL = SL or vgui.Create("DHTML", nil)
-	local sl = {}
-	sl.w = 64
-	sl.h = 64
-	sl.x = 0
-	sl.y = 0
-	sl.version = -1
-	function SL:Think()
-		local lply = LocalPlayer()
-		if lply:GetDInt("hud_version", 0) != sl.version or sl.url != GetGlobalDString("text_server_logo", "") or sl.visible != lply:HudValue("SL", "VISI") then
-			sl.version = lply:GetDInt("hud_version", 0)
-			sl.visible = lply:HudValue("SL", "VISI")
-			sl.url = GetGlobalDString("text_server_logo", "")
-
-			sl.w = lply:HudValue("SL", "SIZE_W")
-			sl.h = lply:HudValue("SL", "SIZE_H")
-			sl.x = lply:HudValue("SL", "POSI_X")
-			sl.y = lply:HudValue("SL", "POSI_Y")
-
-			SL:SetPos(sl.x, sl.y)
-			SL:SetSize(sl.h, sl.h)
-			SL:SetHTML(GetHTMLImage(sl.url, sl.h, sl.h))
-
-			SL:SetVisible(sl.visible)
-		end
+function YRP_PM:LayoutEntity(ent)
+	local seq = ent:LookupSequence("menu_gman")
+	if seq > -1 then
+		ent:SetSequence(ent:LookupSequence("menu_gman"))
 	end
-end)
+	YRP_PM:RunAnimation()
+	return
+end
 
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()

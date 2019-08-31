@@ -44,10 +44,11 @@ end
 
 util.AddNetworkString("send_slot_content")
 function SendSlotContent(ply, CharID, SName)
+	--print("SendSlotContent", ply, CharID, SName)
 	local storage = LoadSlot(CharID, SName) -- Create / Get Storage
 	local items = LoadSlotItems(storage.uniqueID)
 	if SName == "bag0" and table.Count(items) <= 0 then
-		GiveBag("yrp_mainbag", storage.uniqueID)
+		CreateBag("yrp_mainbag", storage.uniqueID)
 		items = LoadSlotItems(storage.uniqueID)
 	end
 	net.Start("send_slot_content")
@@ -59,7 +60,7 @@ end
 function JoinSlot(ply, CharID, SName)
 	if !table.HasValue(GetSlotClients(CharID, SName), ply) then
 		table.insert(GetSlotClients(CharID, SName), ply)
-		YRP.msg("note", "[" .. ply:RPName() .. "] joined slot: " .. SName .. " (" .. CharID .. ")")
+		YRP.msg("note", "[" .. ply:RPName() .. "] joined slot: " .. SName .. " (CharID: " .. CharID .. ")")
 		SendSlotContent(ply, CharID, SName)
 	end
 end
@@ -74,7 +75,7 @@ end)
 function LeaveSlot(ply, CharID, SName)
 	if table.HasValue(GetSlotClients(CharID, SName), ply) then
 		table.RemoveByValue(GetSlotClients(CharID, SName), ply)
-		YRP.msg("note", "[" .. ply:RPName() .. "] leaved slot: " .. SName .. " (" .. CharID .. ")")
+		YRP.msg("note", "[" .. ply:RPName() .. "] leaved slot: " .. SName .. " (CharID: " .. CharID .. ")")
 	end
 end
 
@@ -106,13 +107,47 @@ end)
 
 
 -- STORAGE
+function CreateStorage(tab)
+	tab.text_character = tab.text_character or 0
+	tab.int_size = tonumber(tab.int_size)
+
+	--[[
+	SQL.ADD_COLUMN(DATABASE_NAME, "text_name", "INT DEFAULT 'Unnamed'")
+	SQL.ADD_COLUMN(DATABASE_NAME, "int_size", "INT DEFAULT 1")
+	SQL.ADD_COLUMN(DATABASE_NAME, "text_character", "TEXT DEFAULT '0'")
+	SQL.ADD_COLUMN(DATABASE_NAME, "text_slotname", "TEXT DEFAULT '-'")
+	]]
+
+	local instab = {}
+	instab.table = DATABASE_NAME
+	instab.cols = {}
+	instab.cols["text_character"] = tab.text_character
+	instab.cols["int_size"] = tab.int_size
+
+	SQL.INSERT_INTO(instab)
+
+	local lastentry = {}
+	lastentry.table = DATABASE_NAME
+	lastentry.cols = {}
+	lastentry.cols[1] = "*"
+	lastentry.manual = "ORDER BY uniqueID DESC LIMIT 1"
+	local laststor = SQL.SELECT(lastentry)
+	if wk(laststor) then
+		laststor = laststor[1]
+	end
+
+	return laststor
+end
+
 function LoadStorage(suid)
+	suid = tonumber(suid)
 	local stortab = {}
 	stortab.table = DATABASE_NAME
 	stortab.cols = {}
 	stortab.cols[1] = "*"
 	stortab.where = "uniqueID = '" .. suid .. "'"
 	local stor = SQL.SELECT(stortab)
+	--print(stor)
 	if wk(stor) then
 		stor = stor[1]
 	end
@@ -127,10 +162,13 @@ end
 
 util.AddNetworkString("send_storage_content")
 function SendStorageContent(ply, suid)
+	--print("SendStorageContent", ply, suid)
 	local storage = LoadStorage(suid) -- Create / Get Storage
+
 	local items = LoadStorageItems(storage.uniqueID)
 	net.Start("send_storage_content")
 		net.WriteString(suid)
+		net.WriteTable(storage)
 		net.WriteTable(items)
 	net.Send(ply)
 end

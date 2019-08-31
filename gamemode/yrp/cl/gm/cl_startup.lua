@@ -1322,7 +1322,7 @@ end
 
 function YRP.DrawSymbol(ply, str, z, color)
 	local _size = 32
-	local pos = ply:GetPos() + Vector(0, 0, 86)
+	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
 		pos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1"))
@@ -1330,7 +1330,7 @@ function YRP.DrawSymbol(ply, str, z, color)
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
-	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
+	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
 	surface.SetDrawColor(color)
 	surface.SetMaterial(YRP.GetDesignIcon(str))
 	surface.DrawTexturedRect(-_size / 2, 0, _size, _size)
@@ -1338,7 +1338,7 @@ function YRP.DrawSymbol(ply, str, z, color)
 end
 
 function drawStringBox(ent, instr, z, color)
-	local pos = ent:GetPos() + Vector(0, 0, 86)
+	local pos = ent:GetPos() + Vector(0, 0, ent:OBBMaxs().z)
 
 	if ent:LookupBone("ValveBiped.Bip01_Head1") then
 		pos = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
@@ -1366,12 +1366,12 @@ function drawStringBox(ent, instr, z, color)
 		surface.SetMaterial(YRP.GetDesignIcon("shopping_cart"))
 		surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
 
-		draw.SimpleTextOutlined(instr, "YRP_18_500", -box.w / 2 + th + 2 * br, box.h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleText(instr, "YRP_18_500", -box.w / 2 + th + 2 * br, box.h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) --, 1, Color(0, 0, 0))
 	cam.End3D2D()
 end
 
 function drawString(ply, instr, z, color)
-	local pos = ply:GetPos() + Vector(0, 0, 86)
+	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
 		pos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1"))
@@ -1380,7 +1380,7 @@ function drawString(ply, instr, z, color)
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
 	local str = instr
-	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
+	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
 	surface.SetFont("3d2d_string")
 	local _tw, _th = surface.GetTextSize(str)
 	_tw = math.Round(_tw * 1.08, 0)
@@ -1390,7 +1390,7 @@ function drawString(ply, instr, z, color)
 end
 
 function drawBar(ply, stri, z, color, cur, max, barcolor)
-	local pos = ply:GetPos() + Vector(0, 0, 86)
+	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
 		pos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1"))
@@ -1399,7 +1399,7 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
 	local str = stri
-	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
+	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
 	surface.SetFont("3d2d_string")
 	local _tw, _th = surface.GetTextSize(str)
 	_tw = math.Round(_tw * 1.00, 0)
@@ -1412,7 +1412,7 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 end
 
 function drawPlate(ply, stri, z, color)
-	local pos = ply:GetPos() + Vector(0, 0, 86)
+	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
 		pos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1"))
@@ -1421,7 +1421,7 @@ function drawPlate(ply, stri, z, color)
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
 	local sca = ply:GetModelScale() / 4
 	local str = stri
-	cam.Start3D2D(pos + Vector(0, 0, z), ang, sca)
+	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
 	surface.SetFont("plates")
 	local _tw, _th = surface.GetTextSize(str)
 	_tw = math.Round(_tw * 1.08, 0)
@@ -1501,10 +1501,15 @@ function Debug3DText(ply, str, pos, color)
 end
 
 function drawPlates(ply)
-	if ply:Alive() then
-		local _height = 31
+	local renderdist = 550
+	local _distance = 200
+
+	if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() then
+		local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
+		local _height = 24 -- 31
 		local color = ply:GetColor()
 		color.a = color.a - 160
+		color.a = renderalpha
 
 		if color.a <= 0 then
 			color.a = 10
@@ -1533,11 +1538,11 @@ function drawPlates(ply)
 			if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
 				local plyvol = ply:VoiceVolume() * 200
 				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
-				YRP.DrawSymbol(ply, "voice", 26, voicecolor)
+				YRP.DrawSymbol(ply, "voice", 18, voicecolor)
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
-				YRP.DrawSymbol(ply, "chat", 26, color)
+				YRP.DrawSymbol(ply, "chat", 18, color)
 			end
 
 			if GetGlobalDBool("bool_tag_on_head_armor", false) then
@@ -1632,88 +1637,84 @@ function drawPlates(ply)
 		end
 
 		if GetGlobalDBool("bool_tag_on_side", false) then
-			local _distance = 200
+			local _alpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
 
-			if LocalPlayer():GetPos():Distance(ply:GetPos()) < _distance then
-				local _alpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
+			if ply:GetColor().a < _alpha then
+				_alpha = ply:GetColor().a
+			end
 
-				if ply:GetColor().a < _alpha then
-					_alpha = ply:GetColor().a
-				end
+			local _z = 50
+			local _x = -10
+			local _y = 18
+			local _w = 160
+			local _h = 20
+			local _d = 2
 
-				local _z = 50
-				local _x = -10
-				local _y = 18
-				local _w = 160
-				local _h = 20
-				local _d = 2
+			if GetGlobalDBool("bool_tag_on_side_name", false) then
+				drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["na"])
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_name", false) then
-					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["na"])
-					_z = _z + _d
-				end
+			if GetGlobalDBool("bool_tag_on_side_rolename", false) then
+				local rc = ply:GetRoleColor()
+				drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, ply:GetColor().a), _alpha, _icons["rn"])
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_rolename", false) then
-					local rc = ply:GetRoleColor()
-					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, ply:GetColor().a), _alpha, _icons["rn"])
-					_z = _z + _d
-				end
+			if GetGlobalDBool("bool_tag_on_side_groupname", false) then
+				local _color = ply:GetDString("groupColor", "255,0,0")
+				_color = string.Explode(",", _color)
+				_color = Color(_color[1], _color[2], _color[3])
+				local gc = ply:GetGroupColor()
+				drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, ply:GetColor().a), _alpha, _icons["gn"])
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_groupname", false) then
-					local _color = ply:GetDString("groupColor", "255,0,0")
-					_color = string.Explode(",", _color)
-					_color = Color(_color[1], _color[2], _color[3])
-					local gc = ply:GetGroupColor()
-					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, ply:GetColor().a), _alpha, _icons["gn"])
-					_z = _z + _d
-				end
+			if GetGlobalDBool("bool_tag_on_side_factionname", false) then
+				local _color = ply:GetDString("factionColor", "255,0,0")
+				_color = string.Explode(",", _color)
+				_color = Color(_color[1], _color[2], _color[3])
+				local fc = ply:GetFactionColor()
+				drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, ply:GetColor().a), _alpha, _icons["gn"])
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_factionname", false) then
-					local _color = ply:GetDString("factionColor", "255,0,0")
-					_color = string.Explode(",", _color)
-					_color = Color(_color[1], _color[2], _color[3])
-					local fc = ply:GetFactionColor()
-					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, ply:GetColor().a), _alpha, _icons["gn"])
-					_z = _z + _d
-				end
+			if GetGlobalDBool("bool_tag_on_side_level", false) then
+				local lvl = ply:Level()
+				local t = {}
+				t["LEVEL"] = lvl
+				drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["le"])
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_level", false) then
-					local lvl = ply:Level()
-					local t = {}
-					t["LEVEL"] = lvl
-					drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["le"])
-					_z = _z + _d
-				end
+			if GetGlobalDBool("bool_tag_on_side_health", false) then
+				local col = ply:HudValue("HP", "BA")
+				drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_health", false) then
-					local col = ply:HudValue("HP", "BA")
-					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
-					_z = _z + _d
-				end
+			if GetGlobalDBool("bool_tag_on_side_armor", false) then
+				local col = ply:HudValue("AR", "BA")
+				drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+				_z = _z + _d
+			end
 
-				if GetGlobalDBool("bool_tag_on_side_armor", false) then
-					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
-					_z = _z + _d
-				end
-
-				if LocalPlayer():HasAccess() then
-					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
-					_z = _z + _d
-					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
-					_z = _z + _d
-					local ugcolor = ply:GetUserGroupColor()
-					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, ply:GetColor().a), _alpha, _icons["ug"])
-					_z = _z + _d
-					drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
-					_z = _z + _d
-					local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
-					local _mMin = CurTime() + ply:GetDInt("salarytime") - ply:GetDInt("nextsalarytime")
-					local _mMax = ply:GetDInt("salarytime") + 1
-					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
-					_z = _z + _d
-				end
+			if LocalPlayer():HasAccess() then
+				local col = ply:HudValue("ST", "BA")
+				drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+				_z = _z + _d
+				drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
+				_z = _z + _d
+				local ugcolor = ply:GetUserGroupColor()
+				drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, ply:GetColor().a), _alpha, _icons["ug"])
+				_z = _z + _d
+				drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
+				_z = _z + _d
+				local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
+				local _mMin = CurTime() + ply:GetDInt("salarytime") - ply:GetDInt("nextsalarytime")
+				local _mMax = ply:GetDInt("salarytime") + 1
+				drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
+				_z = _z + _d
 			end
 		end
 	end
@@ -1904,7 +1905,6 @@ function loadDoorTexts()
 					--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
 
 					cam.Start3D2D(pos, ang, 0.2)
-						surface.SetFont("Roboto24")
 						local header = SQL_STR_OUT(v:GetDString("text_header", ""))
 						local head_size = surface.GetTextSize(header)
 						surface.SetFont("Roboto24B")
