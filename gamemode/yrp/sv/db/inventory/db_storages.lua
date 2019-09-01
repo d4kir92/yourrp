@@ -9,8 +9,9 @@ end
 
 function Player:Give(weaponClassName, bNoAmmo)
 	bNoAmmo = bNoAmmo or true
+	self.canpickup = true
 	local wep = self:OldGive(weaponClassName, bNoAmmo)
-	wep.ispickupable = true
+	print("Give", weaponClassName)
 	return wep
 end
 
@@ -37,8 +38,8 @@ end)
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
 
-	local canpickup = wep.ispickupable
-	wep.ispickupable = false
+	local canpickup = ply.canpickup
+	ply.canpickup = false
 
 	local swep = weapons.GetStored(wep:GetClass())
 	if IsValid(swep) then
@@ -78,7 +79,7 @@ function Player:DropSWEP(cname)
 
 	ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 	ent:SetAngles(self:GetAngles())
-	ent.ispickupable = false
+	self.canpickup = false
 	ent:Spawn()
 	ent:SetDInt("clip1", clip1)
 	ent:SetDInt("clip2", clip2)

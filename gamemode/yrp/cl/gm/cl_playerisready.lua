@@ -25,7 +25,11 @@ function YRPSendIsReady()
 		for k, ws in pairs(_wsitems) do
 			if !ws.mounted then
 				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
-				game.MountGMA(tostring(ws.path))
+				if IsValid(ws.path) then
+					game.MountGMA(tostring(ws.path))
+				else
+					YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
+				end
 			end
 		end
 
