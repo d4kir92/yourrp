@@ -46,13 +46,13 @@ function save_clients(string)
 						SQL_UPDATE("yrp_characters", _ply_ang, "uniqueID = " .. _char_id)
 					end
 
-					if worked(ply:GetDString("money"), "money failed @save_clients") and isnumber(tonumber(ply:GetDString("money"))) then
-						local _money = "money = '" .. ply:GetDString("money") .. "'"
+					if worked(ply:GetDString("money", "0"), "money failed @save_clients") and isnumber(tonumber(ply:GetDString("money"))) then
+						local _money = "money = '" .. ply:GetDString("money", "0") .. "'"
 						local _mo_result = SQL_UPDATE("yrp_characters", _money, "uniqueID = " .. _char_id)
 					end
 
-					if worked(ply:GetDString("moneybank"), "moneybank failed @save_clients") and isnumber(tonumber(ply:GetDString("moneybank"))) then
-						local _moneybank = "moneybank = '" .. ply:GetDString("moneybank") .. "'"
+					if worked(ply:GetDString("moneybank", "0"), "moneybank failed @save_clients") and isnumber(tonumber(ply:GetDString("moneybank"))) then
+						local _moneybank = "moneybank = '" .. ply:GetDString("moneybank", "0") .. "'"
 						local _mb_result = SQL_UPDATE("yrp_characters", _moneybank, "uniqueID = " .. _char_id)
 					end
 
@@ -246,7 +246,7 @@ function set_role_values(ply, pmid)
 			for k, swep in pairs(tmpSWEPTable) do
 				if swep != nil and swep != NULL and swep != "" then
 					if ply:Alive() then
-						ply:Give(swep)
+						ply:Give(swep, false)
 					end
 				end
 			end
@@ -276,7 +276,7 @@ function set_role_values(ply, pmid)
 			ply:SetDString("groupName", groTab.string_name)
 			ply:SetDString("groupUniqueID", groTab.uniqueID)
 			ply:SetDString("groupColor", groTab.string_color)
-			ply:SetTeam(tonumber(groTab.uniqueID))
+			--ply:SetTeam(tonumber(groTab.uniqueID))
 
 			local faction = GetFactionTable(groTab.uniqueID)
 			ply:SetDString("factionName", faction.string_name)

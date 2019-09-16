@@ -1024,7 +1024,7 @@ hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
 		end
 	end
 end)
-
+--[[
 hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 	if ea(pl) then
 		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_npcs", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
@@ -1043,7 +1043,7 @@ hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 			end
 		end
 	end
-end)
+end)]]
 
 hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 	if ea(pl) then
@@ -1517,7 +1517,7 @@ function Player:UserGroupLoadout()
 		self:SetDString("usergroup_sweps", UG.string_sweps)
 		local SWEPS = string.Explode(",", UG.string_sweps)
 		for i, swep in pairs(SWEPS) do
-			self:Give(swep)
+			self:Give(swep, false)
 		end
 		self:SetDString("usergroupColor", UG.string_color)
 		self:SetDBool("bool_adminaccess", tobool(UG.bool_adminaccess))

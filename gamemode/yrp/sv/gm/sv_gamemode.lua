@@ -587,7 +587,7 @@ end
 function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 
 	if newWeapon:IsScripted() then
-		--[[ Set default HoldType of currentweapon ]]--
+		-- Set default HoldType of currentweapon
 		if newWeapon:GetDString("swep_holdtype", "") == "" then
 			local _hold_type = newWeapon.HoldType or newWeapon:GetHoldType() or "normal"
 			newWeapon:SetDString("swep_holdtype", _hold_type)
@@ -622,6 +622,7 @@ hook.Add("EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 		local hitfactor = GetHitFactorVehicles() or 1
 		dmginfo:ScaleDamage(hitfactor)
 	end
+	dmginfo:ScaleDamage(1)
 end)
 
 function SlowThink(ent)
@@ -753,7 +754,6 @@ hook.Add("ScaleNPCDamage", "YRP_ScaleNPCDamage", function(npc, hitgroup, dmginfo
 		dmginfo:ScaleDamage(1)
 	end
 end)
-
 
 --[[ SPEAK Channels ]] --
 util.AddNetworkString("press_speak_next")

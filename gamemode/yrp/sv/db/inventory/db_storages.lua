@@ -9,6 +9,7 @@ end
 
 function Player:Give(weaponClassName, bNoAmmo)
 	bNoAmmo = bNoAmmo or true
+
 	self.canpickup = true
 	local wep = self:OldGive(weaponClassName, bNoAmmo)
 	print("Give", weaponClassName)
@@ -27,11 +28,14 @@ end
 
 hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass())
-	if IsValid(swep) then
+	print(swep)
+	if swep != nil then
+		print("ISVALID")
 		local pammo = swep.Primary.Ammo or wep:GetPrimaryAmmoType()
 		local sammo = swep.Secondary.Ammo or wep:GetSecondaryAmmoType()
-		owner:GiveAmmo(wep:GetDInt("clip1", 0), pammo)
-		owner:GiveAmmo(wep:GetDInt("clip2", 0), sammo)
+		print(pammo, sammo)
+		--owner:GiveAmmo(wep:GetDInt("clip1", 0), pammo)
+		--owner:GiveAmmo(wep:GetDInt("clip2", 0), sammo)
 	end
 end)
 
