@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 125 --do NOT change this!
-GM.VersionCanary = 252 --do NOT change this!
+GM.VersionBeta = 126 --do NOT change this!
+GM.VersionCanary = 253 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -304,8 +304,8 @@ end
 if CLIENT then
 	local lost_connection = false
 	local recon_delay = CurTime() + 1
-	local retry_sec = 11
-	local recon_sec = 30
+	local retry_sec = 10
+	local recon_sec = 42
 	local server_pong = CurTime() + retry_sec
 	net.Receive("pingpong", function()
 		server_pong = CurTime() + retry_sec

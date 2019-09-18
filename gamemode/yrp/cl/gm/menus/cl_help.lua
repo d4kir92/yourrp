@@ -122,17 +122,12 @@ net.Receive("getsitehelp", function(len)
 
 		local keybinds = createD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(1200), HELPMENU.content:GetTall(), 0, posy)
 		keybinds:SetSpacing(YRP.ctr(6))
-		if GetGlobalDBool("bool_yrp_combined_menu", false) then
-			AddKeybind(keybinds, "F4", "LID_help", "help")
-			AddKeybind(keybinds, "F4", "LID_rolemenu", "role", "bool_players_can_switch_role")
-			AddKeybind(keybinds, "F4", "LID_buymenu", "shop")
-			AddKeybind(keybinds, "F4", "LID_givefeedback", "feedback")
-		else
-			AddKeybind(keybinds, "F1", "LID_help", "help")
-			AddKeybind(keybinds, GetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
-			AddKeybind(keybinds, GetKeybindName("menu_buy"), "LID_buymenu", "shop")
-			AddKeybind(keybinds, "F7", "LID_givefeedback", "feedback")
-		end
+
+		AddKeybind(keybinds, "F1", "LID_help", "help")
+		AddKeybind(keybinds, GetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
+		AddKeybind(keybinds, GetKeybindName("menu_buy"), "LID_buymenu", "shop")
+		AddKeybind(keybinds, "F7", "LID_givefeedback", "feedback")
+
 		AddKeybind(keybinds, GetKeybindName("menu_character_selection"), "LID_characterselection", "character")
 		AddKeybind(keybinds, GetKeybindName("toggle_mouse"), "LID_togglemouse", "mouse")
 		AddKeybind(keybinds, GetKeybindName("menu_settings"), "LID_settings", "settings")

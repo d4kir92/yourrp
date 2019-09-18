@@ -246,7 +246,7 @@ function set_role_values(ply, pmid)
 			for k, swep in pairs(tmpSWEPTable) do
 				if swep != nil and swep != NULL and swep != "" then
 					if ply:Alive() then
-						ply:Give(swep, false)
+						ply:Give(swep)
 					end
 				end
 			end

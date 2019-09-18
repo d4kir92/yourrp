@@ -166,7 +166,7 @@ function useFunction(string)
 		elseif string == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
-			if string == "OpenRoleMenu" then
+			if string == "OpenHelpMenu" or string == "OpenRoleMenu" or string == "OpenBuyMenu" or string == "openFeedbackMenu" then
 				ToggleCombinedMenu()
 			end
 		elseif !GetGlobalDBool("bool_yrp_combined_menu", false) then

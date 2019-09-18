@@ -8,11 +8,20 @@ if Player.OldGive == nil then
 end
 
 function Player:Give(weaponClassName, bNoAmmo)
-	bNoAmmo = bNoAmmo or true
-
+	bNoAmmo = bNoAmmo or self.noammo or false
+	self.noammo = false
 	self.canpickup = true
 	local wep = self:OldGive(weaponClassName, bNoAmmo)
-	print("Give", weaponClassName)
+		if wep.Clip1 then
+		local clip1 = wep:Clip1()
+		local clip2 = wep:Clip2()
+		local clip1max = wep:GetMaxClip1()
+		local clip2max = wep:GetMaxClip2()
+		wep:SetDInt("clip1", clip1)
+		wep:SetDInt("clip2", clip2)
+		wep:SetDInt("clip1max", clip1max)
+		wep:SetDInt("clip2max", clip2max)
+	end
 	return wep
 end
 
@@ -28,14 +37,14 @@ end
 
 hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass())
-	print(swep)
+
 	if swep != nil then
-		print("ISVALID")
 		local pammo = swep.Primary.Ammo or wep:GetPrimaryAmmoType()
 		local sammo = swep.Secondary.Ammo or wep:GetSecondaryAmmoType()
-		print(pammo, sammo)
-		--owner:GiveAmmo(wep:GetDInt("clip1", 0), pammo)
-		--owner:GiveAmmo(wep:GetDInt("clip2", 0), sammo)
+		if wep:GetDInt("clip1") != nil then
+			owner.noammo = true
+			owner:RemoveAmmo(wep:GetDInt("clip1max", 0) + wep:GetDInt("clip1max", 0) - wep:GetDInt("clip1", 0), pammo)
+		end
 	end
 end)
 
@@ -53,7 +62,12 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		swep.Secondary.DefaultClip = 0
 	end
 
-	return canpickup or ply:KeyPressed(IN_USE)
+	if canpickup then
+		return true
+	elseif ply:KeyPressed(IN_USE) then
+		ply.noammo = true
+		return true
+	end
 end
 
 function Player:RemoveWeapon(cname)
@@ -72,6 +86,8 @@ function Player:DropSWEP(cname)
 	local wep = self:GetWeapon(cname)
 	local clip1 = wep:Clip1()
 	local clip2 = wep:Clip2()
+	local clip1max = wep:GetMaxClip1()
+	local clip2max = wep:GetMaxClip2()
 
 	self:RemoveWeapon(cname)
 
@@ -87,6 +103,8 @@ function Player:DropSWEP(cname)
 	ent:Spawn()
 	ent:SetDInt("clip1", clip1)
 	ent:SetDInt("clip2", clip2)
+	ent:SetDInt("clip1max", clip1max)
+	ent:SetDInt("clip2max", clip2max)
 
 	if ent:GetPhysicsObject():IsValid() then
 		ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)

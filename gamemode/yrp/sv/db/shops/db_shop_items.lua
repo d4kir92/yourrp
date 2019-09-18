@@ -299,7 +299,7 @@ function spawnItem(ply, item, duid)
 	end
 
 	if item.type == "weapons" then
-		ply:Give(item.ClassName, true)
+		ply:Give(item.ClassName)
 
 		return true
 	else

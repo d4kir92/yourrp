@@ -1517,7 +1517,7 @@ function Player:UserGroupLoadout()
 		self:SetDString("usergroup_sweps", UG.string_sweps)
 		local SWEPS = string.Explode(",", UG.string_sweps)
 		for i, swep in pairs(SWEPS) do
-			self:Give(swep, false)
+			self:Give(swep)
 		end
 		self:SetDString("usergroupColor", UG.string_color)
 		self:SetDBool("bool_adminaccess", tobool(UG.bool_adminaccess))
