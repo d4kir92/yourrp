@@ -42,12 +42,22 @@ function showIcon(string, material)
 	surface.DrawTexturedRect(anchorW(HudV(string .. "aw")) + YRP.ctr(HudV(string .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(string .. "ah")) + YRP.ctr(HudV(string .. "py")) + YRP.ctr(HudV(string .. "sh")/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
 end
 
-local contextMenuOpen = false
-hook.Add("OnContextMenuOpen", "OnContextMenuOpen", function()
-	contextMenuOpen = true
+hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
+	openMenu()
+	return LocalPlayer():GetDBool("bool_canusespawnmenu", false)
 end)
 
-hook.Add("OnContextMenuClose", "OnContextMenuClose", function()
+hook.Add("SpawnMenuClose", "yrp_spawn_menu_close", function()
+	closeMenu()
+end)
+
+local contextMenuOpen = false
+hook.Add("ContextMenuOpen", "OnContextMenuOpen", function()
+	contextMenuOpen = true
+	return LocalPlayer():GetDBool("bool_canusecontextmenu", false)
+end)
+
+hook.Add("ContextMenuClose", "OnContextMenuClose", function()
 	contextMenuOpen = false
 end)
 

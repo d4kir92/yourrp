@@ -60,6 +60,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusecontextmenu", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusespawnmenu", "INT DEFAULT 1")
+
 --SQL_DROP_TABLE(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
@@ -892,6 +895,22 @@ net.Receive("usergroup_update_bool_canuseesp", function(len, ply)
 	UGCheckBox(ply, uid, "bool_canuseesp", bool_canuseesp)
 end)
 
+util.AddNetworkString("usergroup_update_bool_canusecontextmenu")
+net.Receive("usergroup_update_bool_canusecontextmenu", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_canusecontextmenu = net.ReadString()
+	UGCheckBox(ply, uid, "bool_canusecontextmenu", bool_canusecontextmenu)
+end)
+
+util.AddNetworkString("usergroup_update_bool_canusespawnmenu")
+net.Receive("usergroup_update_bool_canusespawnmenu", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_canusespawnmenu = net.ReadString()
+	UGCheckBox(ply, uid, "bool_canusespawnmenu", bool_canusespawnmenu)
+end)
+
+
+
 -- Functions
 hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, name, tab)
 	if ea(pl) then
@@ -1024,7 +1043,7 @@ hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
 		end
 	end
 end)
---[[
+
 hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 	if ea(pl) then
 		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_npcs", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
@@ -1043,7 +1062,7 @@ hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 			end
 		end
 	end
-end)]]
+end)
 
 hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 	if ea(pl) then
@@ -1524,6 +1543,8 @@ function Player:UserGroupLoadout()
 		self:SetDBool("bool_canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
 		self:SetDBool("bool_canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
 		self:SetDBool("bool_canuseesp", tobool(UG.bool_canuseesp))
+		self:SetDBool("bool_canusecontextmenu", tobool(UG.bool_canusecontextmenu))
+		self:SetDBool("bool_canusespawnmenu", tobool(UG.bool_canusespawnmenu))
 	end
 end
 

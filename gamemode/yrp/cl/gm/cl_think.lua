@@ -41,14 +41,6 @@ end)
 local keys = {}
 keys["_hold"] = 0
 
-hook.Add("OnSpawnMenuOpen", "yrp_spawn_menu_open", function()
-	openMenu()
-end)
-
-hook.Add("OnSpawnMenuClose", "yrp_spawn_menu_close", function()
-	closeMenu()
-end)
-
 hook.Add("HUDWeaponPickedUp", "yrp_translate_weaponname", function(wep)
 	if wep.LanguageString != nil then
 		wep.PrintName = YRP.lang_string(wep.LanguageString)
