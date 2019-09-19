@@ -12,15 +12,19 @@ function Player:Give(weaponClassName, bNoAmmo)
 	self.noammo = false
 	self.canpickup = true
 	local wep = self:OldGive(weaponClassName, bNoAmmo)
+	if wk(wep) then
 		if wep.Clip1 then
-		local clip1 = wep:Clip1()
-		local clip2 = wep:Clip2()
-		local clip1max = wep:GetMaxClip1()
-		local clip2max = wep:GetMaxClip2()
-		wep:SetDInt("clip1", clip1)
-		wep:SetDInt("clip2", clip2)
-		wep:SetDInt("clip1max", clip1max)
-		wep:SetDInt("clip2max", clip2max)
+			local clip1 = wep:Clip1()
+			local clip2 = wep:Clip2()
+			local clip1max = wep:GetMaxClip1()
+			local clip2max = wep:GetMaxClip2()
+			wep:SetDInt("clip1", clip1)
+			wep:SetDInt("clip2", clip2)
+			wep:SetDInt("clip1max", clip1max)
+			wep:SetDInt("clip2max", clip2max)
+		end
+	else
+		YRP.msg("note", tostring(weaponClassName) .. " must be a none swep.")
 	end
 	return wep
 end
