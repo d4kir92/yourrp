@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
 local PANEL = {}
 
 function PANEL:Init()
-	self.tabx = 0
 	self.color_sel = Color(0, 0, 255)
 	self.color_uns = Color(255, 255, 0)
 
@@ -16,13 +16,19 @@ function PANEL:Init()
 
 	self.tabs = {}
 
+	self.slider = createD("DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
+
+	self.OldSetSize = self.OldSetSize or self.SetSize
+	function self:SetSize(w, h)
+		self:OldSetSize(w, h)
+		self.slider:SetSize(w, h)
+	end
+
+	function self.slider:Paint(pw, ph)
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+	end
+
 	function self:AddTab(str, tbl)
-		local _x = 0
-
-		for i, tab in pairs(self.tabs) do
-			_x = _x + tab:GetWide()
-		end
-
 		surface.SetFont("roleInfoHeader")
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
@@ -37,19 +43,13 @@ function PANEL:Init()
 		_tmp:SetText("")
 		_tmp.name = str
 		_tmp.selected = false
-
-		if _x == 0 then
-			_tmp.selected = true
-		end
-
-		self.tabx = _x + _w
-
+		_tmp.base = self
 		function _tmp:Paint(pw, ph)
 			local _br = 4
-			local _color = self:GetParent().color_uns
+			local _color = _tmp.base.color_uns
 
 			if self.selected then
-				_color = self:GetParent().color_sel
+				_color = _tmp.base.color_sel
 			end
 
 			if self:IsHovered() then
@@ -61,7 +61,7 @@ function PANEL:Init()
 		end
 
 		function _tmp:DoClick()
-			for i, tab in pairs(self:GetParent().tabs) do
+			for i, tab in pairs(_tmp.base.tabs) do
 				tab.selected = false
 			end
 
@@ -70,12 +70,14 @@ function PANEL:Init()
 		end
 
 		table.insert(self.tabs, _tmp)
+		self.slider:AddPanel(_tmp)
 
 		return _tmp
 	end
 end
 
 function PANEL:Think()
+
 end
 
 function PANEL:Paint(w, h)

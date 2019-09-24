@@ -57,8 +57,25 @@ net.Receive("shop_edit_name", function(len, ply)
 	printGM("db", "shop_edit_name: " .. tostring(_uid))
 end)
 
-util.AddNetworkString("shop_get_tabs")
+function HasShopPermanent(tab)
+	local _cats = SQL_SELECT("yrp_shop_categories", "*", "shopID = '" .. tab .. "'")
+	local _nw = {}
+	if _cats != nil then
+		_nw = _cats
+	end
 
+	for i, cat in pairs(_nw) do
+		local _s_items = SQL_SELECT("yrp_shop_items", "*", "categoryID = " .. cat.uniqueID)
+		for j, item in pairs(_s_items) do
+			if tonumber(item.permanent) == 1 then --or item.permanent == "1" then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+util.AddNetworkString("shop_get_tabs")
 function OpenBuyMenu(ply, uid)
 	--printGM("note", "OpenBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
 	local _dealer = SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
@@ -71,6 +88,7 @@ function OpenBuyMenu(ply, uid)
 				local _tab = SQL_SELECT("yrp_shops", "*", "uniqueID = " .. tab)
 				if _tab != false and _tab != nil then
 					_tab = _tab[1]
+					_tab.haspermanent = HasShopPermanent(tab)
 					table.insert(_nw_tabs, _tab)
 				end
 			end

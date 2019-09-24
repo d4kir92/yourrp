@@ -20,16 +20,16 @@ SQL_ADD_COLUMN(_db_name, "WorldModel", "TEXT DEFAULT ' '")
 util.AddNetworkString("get_shop_items")
 
 function send_shop_items(ply, uid)
-local _s_items = SQL_SELECT(_db_name, "*", "categoryID = " .. uid)
-local _nw = _s_items
+	local _s_items = SQL_SELECT(_db_name, "*", "categoryID = " .. uid)
+	local _nw = _s_items
 
-if _nw == nil then
-	_nw = {}
-end
+	if _nw == nil then
+		_nw = {}
+	end
 
-net.Start("get_shop_items")
-net.WriteTable(_nw)
-net.Send(ply)
+	net.Start("get_shop_items")
+	net.WriteTable(_nw)
+	net.Send(ply)
 end
 
 net.Receive("get_shop_items", function(len, ply)

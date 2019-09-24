@@ -8,10 +8,9 @@ if Player.OldGive == nil then
 end
 
 function Player:Give(weaponClassName, bNoAmmo)
-	bNoAmmo = bNoAmmo or self.noammo or false
-	self.noammo = false
+	bNoAmmo = bNoAmmo or false
 	self.canpickup = true
-	local wep = self:OldGive(weaponClassName, bNoAmmo)
+	local wep = self:OldGive(weaponClassName, false)
 	if wk(wep) then
 		if wep.Clip1 then
 			local clip1 = wep:Clip1()
@@ -22,6 +21,20 @@ function Player:Give(weaponClassName, bNoAmmo)
 			wep:SetDInt("clip2", clip2)
 			wep:SetDInt("clip1max", clip1max)
 			wep:SetDInt("clip2max", clip2max)
+
+			local swep = weapons.GetStored(wep:GetClass())
+			if swep != nil then
+				local pammo = wep.Primary.Ammo or wep:GetPrimaryAmmoType()
+				local sammo = wep.Secondary.Ammo or wep:GetSecondaryAmmoType()
+
+				swep.Primary.OldDefaultClip = swep.Primary.OldDefaultClip or swep.Primary.DefaultClip
+				swep.Secondary.OldDefaultClip = swep.Secondary.OldDefaultClip or swep.Secondary.DefaultClip
+				swep.Primary.DefaultClip = 0
+				swep.Secondary.DefaultClip = 0
+
+				self:GiveAmmo(swep.Primary.OldDefaultClip, pammo)
+				self:GiveAmmo(swep.Secondary.OldDefaultClip, sammo)
+			end
 		end
 	else
 		YRP.msg("note", tostring(weaponClassName) .. " must be a none swep.")
@@ -33,9 +46,9 @@ if Player.OldGiveAmmo == nil then
 	Player.OldGiveAmmo = Player.GiveAmmo
 end
 
-function Player:GiveAmmo(amount, type, hidePopup)
+function Player:GiveAmmo(amount, typ, hidePopup)
 	hidePopup = hidePopup or false
-	self:OldGiveAmmo(amount, type, hidePopup)
+	self:OldGiveAmmo(amount, typ, hidePopup)
 	return amount
 end
 
@@ -43,12 +56,15 @@ hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass())
 
 	if swep != nil then
-		local pammo = swep.Primary.Ammo or wep:GetPrimaryAmmoType()
-		local sammo = swep.Secondary.Ammo or wep:GetSecondaryAmmoType()
-		if wep:GetDInt("clip1") != nil then
-			owner.noammo = true
-			owner:RemoveAmmo(wep:GetDInt("clip1max", 0) + wep:GetDInt("clip1max", 0) - wep:GetDInt("clip1", 0), pammo)
-		end
+		swep.Primary.OldDefaultClip = swep.Primary.OldDefaultClip or swep.Primary.DefaultClip
+		swep.Secondary.OldDefaultClip = swep.Secondary.OldDefaultClip or swep.Secondary.DefaultClip
+		swep.Primary.DefaultClip = 0
+		swep.Secondary.DefaultClip = 0
+
+		local pammo = wep.Primary.Ammo or wep:GetPrimaryAmmoType()
+		local sammo = wep.Secondary.Ammo or wep:GetSecondaryAmmoType()
+		owner:GiveAmmo(wep:GetDInt("clip1", 0), pammo)
+		owner:GiveAmmo(wep:GetDInt("clip2", 0), sammo)
 	end
 end)
 
@@ -62,8 +78,8 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	if IsValid(swep) then
 		wep.PrimaryAmmo = 0
 		wep.Secondary = 0
-		swep.Primary.DefaultClip = 0
-		swep.Secondary.DefaultClip = 0
+		--swep.Primary.DefaultClip = 0
+		--swep.Secondary.DefaultClip = 0
 	end
 
 	if canpickup then
