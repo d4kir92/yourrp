@@ -529,21 +529,23 @@ end)
 net.Receive("DeleteCharacter", function(len, ply)
 	local charID = net.ReadString()
 
-	local result = SQL_DELETE_FROM("yrp_characters", "uniqueID = '" .. tonumber(charID) .. "'")
-	if result == nil then
-		printGM("db", "DeleteCharacter: success"	)
-		ply:KillSilent()
-		local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
-		if _first_character != nil then
-			_first_character = _first_character[1]
-			local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
-			local test = SQL_SELECT("yrp_players", "*", nil)
+	if wk(charID) then
+		local result = SQL_DELETE_FROM("yrp_characters", "uniqueID = '" .. tonumber(charID) .. "'")
+		if result == nil then
+			printGM("db", "DeleteCharacter: success"	)
+			ply:KillSilent()
+			local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
+			if _first_character != nil then
+				_first_character = _first_character[1]
+				local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
+				local test = SQL_SELECT("yrp_players", "*", nil)
+			end
+			ply:Spawn()
+		else
+			printGM("note", "DeleteCharacter: fail")
 		end
-		ply:Spawn()
-	else
-		printGM("note", "DeleteCharacter: fail")
+		send_characters(ply)
 	end
-	send_characters(ply)
 end)
 
 function CreateCharacter(ply, tab)

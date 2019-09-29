@@ -272,7 +272,7 @@ function set_role_values(ply, pmid)
 			ply:KillSilent()
 		end
 
-		if groTab != nil then
+		if wk(groTab) then
 			ply:SetDString("groupName", groTab.string_name)
 			ply:SetDString("groupUniqueID", groTab.uniqueID)
 			ply:SetDString("groupColor", groTab.string_color)

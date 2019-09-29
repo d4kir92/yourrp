@@ -546,10 +546,12 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		end
 		if _money > 0 then
 			local money = ents.Create("yrp_money")
-			money:SetPos(ply:GetPos())
-			money:Spawn()
-			money:SetMoney(_money)
-			ply:addMoney(-_money)
+			if wk(money) then
+				money:SetPos(ply:GetPos())
+				money:Spawn()
+				money:SetMoney(_money)
+				ply:addMoney(-_money)
+			end
 		end
 	end
 end)

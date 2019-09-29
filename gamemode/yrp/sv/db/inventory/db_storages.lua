@@ -23,9 +23,9 @@ function Player:Give(weaponClassName, bNoAmmo)
 			wep:SetDInt("clip2max", clip2max)
 
 			local swep = weapons.GetStored(wep:GetClass())
-			if swep != nil then
-				local pammo = wep.Primary.Ammo or wep:GetPrimaryAmmoType()
-				local sammo = wep.Secondary.Ammo or wep:GetSecondaryAmmoType()
+			if swep != nil and wk(swep.Primary) then
+				local pammo = swep.Primary.Ammo or wep:GetPrimaryAmmoType()
+				local sammo = swep.Secondary.Ammo or wep:GetSecondaryAmmoType()
 
 				swep.Primary.OldDefaultClip = swep.Primary.OldDefaultClip or swep.Primary.DefaultClip
 				swep.Secondary.OldDefaultClip = swep.Secondary.OldDefaultClip or swep.Secondary.DefaultClip
@@ -55,7 +55,7 @@ end
 hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass())
 
-	if swep != nil then
+	if swep != nil and wk(swep.Primary) then
 		swep.Primary.OldDefaultClip = swep.Primary.OldDefaultClip or swep.Primary.DefaultClip
 		swep.Secondary.OldDefaultClip = swep.Secondary.OldDefaultClip or swep.Secondary.DefaultClip
 		swep.Primary.DefaultClip = 0

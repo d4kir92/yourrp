@@ -268,9 +268,9 @@ function YRP.sendTranslationProgress(player)
 		net.Start("receiveTranslationProgress")
 		local percentages = {}
 
-		for key, value in pairs(yrp_button_info) do
+		for key, val in pairs(yrp_button_info) do
 			key = tostring(key)
-			percentages[key] = value.percentage
+			percentages[key] = val.percentage
 		end
 
 		net.WriteTable(percentages)
@@ -292,11 +292,11 @@ elseif CLIENT then
 	local receiveTranslationProgress = function(len)
 		local percentages = net.ReadTable()
 
-		for key, value in pairs(percentages) do
+		for key, val in pairs(percentages) do
 			key = tostring(key)
 
 			if (yrp_button_info[key] != nil) then
-				yrp_button_info[key]["percentage"] = value
+				yrp_button_info[key]["percentage"] = val
 			end
 		end
 
@@ -314,14 +314,14 @@ function YRP.fetch_translation_progress()
 		printGM("lang", "Get Translation progress from web...")
 
 		http.Fetch("https://yourrp.noserver4u.de/api/projects/yourrp/languages/?format=json", function(body, len, headers, code)
-			if tonumber(code) == 200 then
-				for key, value in pairs(util.JSONToTable(body)) do
-					if value != nil then
-						if yrp_button_info[string.lower(value.code)] == nil then
-							yrp_button_info[string.lower(value.code)] = {}
+			if tonumber(code) == 200 and wk(body) then
+				for key, val in pairs(util.JSONToTable(body)) do
+					if val != nil then
+						if yrp_button_info[string.lower(val.code)] == nil then
+							yrp_button_info[string.lower(val.code)] = {}
 						end
 
-						yrp_button_info[string.lower(value.code)]["percentage"] = value.translated_percent
+						yrp_button_info[string.lower(val.code)]["percentage"] = val.translated_percent
 					end
 				end
 

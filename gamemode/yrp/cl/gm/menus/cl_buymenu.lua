@@ -412,7 +412,7 @@ net.Receive("shop_get_tabs", function(len)
 
 		--[[ Settings ]]--
 		if LocalPlayer():HasAccess() then
-			BUYMENU.settings = createD("YButton", BUYMENU.content, ctr(80), ctr(80), BUYMENU.content:GetWide() - ctr(100), ctr(10))
+			BUYMENU.settings = createD("YButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(80), BUYMENU.content:GetWide() - YRP.ctr(100), YRP.ctr(10))
 			BUYMENU.settings:SetText("")
 			function BUYMENU.settings:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)

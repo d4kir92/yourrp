@@ -95,7 +95,9 @@ function createRoleBox(rol, parent, mainparent)
 				local dmp = createD("DModelPanel", ROLEMENU.pms, YRP.ctr(400), YRP.ctr(400), -YRP.ctr(100) + (i - 1) * YRP.ctr(150), YRP.ctr(50))
 				dmp:SetModel(pmtab.string_model)
 				local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
-				dmp.Entity:SetModelScale(randsize, 0)
+				if wk(dmp.Entity) then
+					dmp.Entity:SetModelScale(randsize, 0)
+				end
 
 				local bpm = createD("DButton", dmp, YRP.ctr(200), YRP.ctr(400), YRP.ctr(100), YRP.ctr(0))
 				bpm.id = i
