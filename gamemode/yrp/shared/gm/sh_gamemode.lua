@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 130 --do NOT change this!
-GM.VersionCanary = 262 --do NOT change this!
+GM.VersionBeta = 131 --do NOT change this!
+GM.VersionCanary = 263 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -301,6 +301,7 @@ elseif SERVER then
 end
 
 -- Reconnect
+--[[
 if CLIENT then
 	local lost_connection = false
 	local recon_delay = CurTime() + 1
@@ -343,3 +344,4 @@ elseif SERVER then
 		net.Broadcast()
 	end)
 end
+]]
