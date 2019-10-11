@@ -1,5 +1,9 @@
 --Copyright (C) 2017 - 2019 Arno Zura (https: /  / www.gnu.org / licenses / gpl.txt)
 
+--[[ Local Variables ]]--
+local l = {}
+l.max = 99
+
 function createMDBox(derma, parent, w, h, x, y, height, color)
 	local tmpMD = vgui.Create(derma, parent)
 	tmpMD:SetSize(w + height, h + height)
@@ -132,7 +136,6 @@ end)
 
 function openCharacterCreation()
 	openMenu()
-	local ply = LocalPlayer()
 	character.cause = YRP.lang_string("LID_enteraname")
 	character.rpname = ""
 	character.gender = "gendermale"
@@ -183,7 +186,7 @@ function openCharacterCreation()
 	end
 
 	local border = YRP.ctr(50)
-	local charactersBackground = createMD("DPanel", cc.frame, YRP.ctr(800), ScrH() - (2*border), border, border, YRP.ctr(5))
+	local charactersBackground = createMD("DPanel", cc.frame, YRP.ctr(800), ScrH() - (2 * border), border, border, YRP.ctr(5))
 	function charactersBackground:Paint(pw, ph)
 		paintMD(pw, ph, nil, get_dp_col())
 	end
@@ -270,14 +273,16 @@ function openCharacterCreation()
 	net.Receive("charGetGroups", function(len)
 		local tmpTable = net.ReadTable()
 		for k, v in pairs(tmpTable) do
-			local selectChoice = false
-			if tonumber(v.uniqueID) == tonumber(character.groupID) then
-				selectChoice = true
-			end
-			if pa(charactersGroupCB) then
-				charactersGroupCB:AddChoice(v.string_name, v.uniqueID, selectChoice)
-			else
-				break
+			if tobool(v.bool_visible) and !tobool(v.bool_locked) then
+				local selectChoice = false
+				if tonumber(v.uniqueID) == tonumber(character.groupID) then
+					selectChoice = true
+				end
+				if pa(charactersGroupCB) then
+					charactersGroupCB:AddChoice(v.string_name, v.uniqueID, selectChoice)
+				else
+					break
+				end
 			end
 		end
 	end)
@@ -527,12 +532,10 @@ function openCharacterCreation()
 		draw.SimpleTextOutlined("↑", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	function skinUp:DoClick()
-		if characterPlayermodel.Entity != nil then
-			if characterPlayermodel.Entity:SkinCount() - 1 > characterPlayermodel.Entity:GetSkin() and characterPlayermodel.skin != nil then
-				characterPlayermodel.skin = characterPlayermodel.skin + 1
-				character.skin = characterPlayermodel.skin
-				characterPlayermodel.Entity:SetSkin(characterPlayermodel.skin)
-			end
+		if characterPlayermodel.Entity != nil and characterPlayermodel.Entity:SkinCount() - 1 > characterPlayermodel.Entity:GetSkin() and characterPlayermodel.skin != nil then
+			characterPlayermodel.skin = characterPlayermodel.skin + 1
+			character.skin = characterPlayermodel.skin
+			characterPlayermodel.Entity:SetSkin(characterPlayermodel.skin)
 		end
 	end
 
@@ -540,21 +543,17 @@ function openCharacterCreation()
 	skinDo:SetText("↓")
 	function skinDo:Paint(pw, ph)
 		local color = Color(100, 100, 100, 100)
-		if characterPlayermodel.Entity != nil then
-			if characterPlayermodel.Entity:GetSkin() > 0 then
-				color = Color(255, 255, 255, 255)
-			end
+		if characterPlayermodel.Entity != nil and characterPlayermodel.Entity:GetSkin() > 0 then
+			color = Color(255, 255, 255, 255)
 		end
 		draw.RoundedBox(0, 0, 0, pw, ph, color)
 		draw.SimpleTextOutlined("↓", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	function skinDo:DoClick()
-		if characterPlayermodel.Entity != nil then
-			if characterPlayermodel.Entity:GetSkin() > 0 then
-				characterPlayermodel.skin = characterPlayermodel.skin - 1
-				character.skin = characterPlayermodel.skin
-				characterPlayermodel.Entity:SetSkin(characterPlayermodel.skin)
-			end
+		if characterPlayermodel.Entity != nil and characterPlayermodel.Entity:GetSkin() > 0 then
+			characterPlayermodel.skin = characterPlayermodel.skin - 1
+			character.skin = characterPlayermodel.skin
+			characterPlayermodel.Entity:SetSkin(characterPlayermodel.skin)
 		end
 	end
 
@@ -607,7 +606,6 @@ function openCharacterCreation()
 	end
 	function charactersConfirm:Paint(pw, ph)
 		local text = "Fill out more"
-		local color = Color(255, 255, 0, 255)
 		if testName() then
 			text = YRP.lang_string("LID_confirm")
 			color = get_dp_col()
@@ -657,7 +655,6 @@ local _cur = ""
 function openCharacterSelection()
 	if true then
 		openMenu()
-		local ply = LocalPlayer()
 
 		local cache = {}
 
@@ -684,11 +681,16 @@ function openCharacterSelection()
 
 			_cs.frame.bgcf = createD("DPanel", _cs.frame.bg, _cs.frame.bg:GetWide(), _cs.frame.bg:GetTall(), 0, 0)
 			function _cs.frame.bgcf:Paint(pw, ph)
+				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 
+				-- Header of Menu
 				draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection"), "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+
+				-- Current Character Name
 				draw.SimpleTextOutlined(_cur, "HudHeader", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
+				-- Get Newest Background for the Menu
 				local oldurl = _cs.frame.bg.url
 				local newurl = GetGlobalDString("text_character_background", "")
 				if oldurl != newurl then
@@ -697,6 +699,7 @@ function openCharacterSelection()
 				end
 			end
 
+			-- Language Changer / LanguageChanger
 			YRP.DChangeLanguage(_cs.frame, ScrW() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 
 			local border = YRP.ctr(50)
@@ -704,6 +707,12 @@ function openCharacterSelection()
 			charactersBackground.text = YRP.lang_string("LID_siteisloading")
 			function charactersBackground:Paint(pw, ph)
 				paintMD(pw, ph, nil, Color(20, 20, 20, 100))
+
+				-- Current and Max Count of Possible Characters
+				local acur = character.amount or -1
+				local amax = l.max or -1
+				draw.SimpleTextOutlined(acur .. "/" .. amax, "HudHeader", pw / 2, ph - YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+
 				draw.SimpleTextOutlined(self.text, "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 			end
 
@@ -724,7 +733,7 @@ function openCharacterSelection()
 				if (self.bAnimated) then self:RunAnimation() end
 
 				if (self.Pressed) then
-					local mx, my = gui.MousePos()
+					local mx, _ = gui.MousePos()
 					self.Angles = self.Angles - Angle(0, (self.PressX or mx) - mx, 0)
 
 					self.PressX, self.PressY = gui.MousePos()
@@ -746,6 +755,9 @@ function openCharacterSelection()
 					charactersBackground.text = ""
 					if _characters != nil and pa(_characters) then
 						character.amount = #_characters or 0
+						character.amount = tonumber(character.amount)
+						l.max = _characters.chars.max or 99
+						l.max = tonumber(l.max)
 
 						if #_characters < 1 then
 							if pa(_cs.frame) then
@@ -918,13 +930,17 @@ function openCharacterSelection()
 			local charactersCreate = createD("YButton", characterList, YRP.ctr(80), YRP.ctr(80), characterList:GetWide() - YRP.ctr(80) - br, characterList:GetTall() - YRP.ctr(80) - br)
 			charactersCreate:SetText("")
 			function charactersCreate:Paint(pw, ph)
-				hook.Run("YAddPaint", self, pw, ph)
+				if character.amount < l.max then
+					hook.Run("YAddPaint", self, pw, ph)
+				end
 			end
 			function charactersCreate:DoClick()
-				if pa(_cs.frame) then
-					_cs.frame:Close()
+				if character.amount < l.max then
+					if pa(_cs.frame) then
+						_cs.frame:Close()
+					end
+					openCharacterCreation()
 				end
-				openCharacterCreation()
 			end
 
 			button.w = YRP.ctr(600)
@@ -935,11 +951,9 @@ function openCharacterSelection()
 			function charactersEnter:Paint(pw, ph)
 				local tab = {}
 				tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
-				if LocalPlayer() != nil then
-					if LocalPlayer():Alive() then
-						tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
-						tab.tcolor = Color(255, 100, 100, 255)
-					end
+				if LocalPlayer() != nil and LocalPlayer():Alive() then
+					tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+					tab.tcolor = Color(255, 100, 100, 255)
 				end
 
 				local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
@@ -951,18 +965,16 @@ function openCharacterSelection()
 
 			charactersEnter:SetText("")
 			function charactersEnter:DoClick()
-				if LocalPlayer() != nil then
-					if curChar != " - 1" then
-						if LocalPlayer():Alive() then
-							net.Start("LogOut")
-							net.SendToServer()
-						else
-							net.Start("EnterWorld")
-								net.WriteString(curChar)
-							net.SendToServer()
-							if pa(_cs.frame) then
-								_cs.frame:Close()
-							end
+				if LocalPlayer() != nil and curChar != " - 1" then
+					if LocalPlayer():Alive() then
+						net.Start("LogOut")
+						net.SendToServer()
+					else
+						net.Start("EnterWorld")
+							net.WriteString(curChar)
+						net.SendToServer()
+						if pa(_cs.frame) then
+							_cs.frame:Close()
 						end
 					end
 				end
@@ -974,7 +986,5 @@ function openCharacterSelection()
 end
 
 net.Receive("openCharacterMenu", function(len, ply)
-	local tmpTable = net.ReadTable()
-
 	openCharacterSelection()
 end)

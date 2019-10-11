@@ -518,6 +518,19 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 
+		--[[ CHARACTERS SETTINGS ]]--
+		local CHARACTERS_SETTINGS = createD("YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		CHARACTERS_SETTINGS:SetText("LID_characterssettings")
+		function CHARACTERS_SETTINGS:Paint(pw, ph)
+			hook.Run("YGroupBoxPaint", self, pw, ph)
+		end
+		General_Slider:AddPanel(CHARACTERS_SETTINGS)
+
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_max, "LID_charactersmax", "update_text_characters_max")
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_money_start, "LID_charactersmoneystart", "update_text_characters_money_start")
+
+
+
 		--[[ SOCIAL SETTINGS ]]--
 		local SOCIAL_SETTINGS = createD("YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		SOCIAL_SETTINGS:SetText("LID_socialsettings")

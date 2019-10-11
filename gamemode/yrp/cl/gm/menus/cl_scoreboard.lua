@@ -304,9 +304,13 @@ function OpenSBS()
 				self:ShowCloseButton(false)
 			end
 
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 240))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255)) -- Background
 
-			draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw-YRP.ctr(512), YRP.ctr(100), Color(0, 0, 255, 100))
+			if strEmpty(_server_logo) then
+				draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw - YRP.ctr(512), YRP.ctr(100), Color(100, 100, 255, 100)) -- Stripe
+			else
+				draw.RoundedBox(0, YRP.ctr(256) / 2, YRP.ctr(128-50), pw - YRP.ctr(512) / 2, YRP.ctr(100), Color(100, 100, 255, 100)) -- Stripe
+			end
 
 			draw.SimpleTextOutlined(GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "ScoreBoardNormal", YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined(GetHostName(), "ScoreBoardTitle", YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -495,7 +499,7 @@ function OpenSBS()
 				else
 					self.bg = self.color
 					if self:IsHovered() then
-						self.bg = Color(255, 255, 0, 200)
+						self.bg = Color(255, 255, 0, 255)
 					end
 					draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
 
@@ -744,7 +748,7 @@ function OpenSBS()
 					else
 						self.bg = self.color
 						if self:IsHovered() then
-							self.bg = Color(255, 255, 0, 200)
+							self.bg = Color(255, 255, 0, 255)
 						end
 						draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
 

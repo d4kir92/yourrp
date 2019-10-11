@@ -11,8 +11,6 @@ include("cl_settings_server_whitelist.lua")
 
 -- CLIENT
 
--- WIP
-
 --SERVER
 include("cl_settings_server_console.lua")
 include("cl_settings_server_status.lua")
@@ -136,8 +134,6 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_map", "LID_settings_map", _server_admin, "icon16/map.png")
 	settingsWindow.window:AddSite("open_server_whitelist", "Whitelist", _server_admin, "icon16/page_white_key.png")
 
-	--local _wip = "wip"
-	--settingsWindow.window:AddCategory(_wip)
 
 
 	local _settings_server_maintance = "LID_settings_server_maintance"

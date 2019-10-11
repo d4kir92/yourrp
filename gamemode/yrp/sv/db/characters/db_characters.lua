@@ -457,8 +457,19 @@ function GetPMTableOfRole(ruid)
 	end
 end
 
+--[[ Server Send Characters to Client ]]--
 function send_characters(ply)
 	local netTable = {}
+
+	local chars = {}
+	chars.max = 99
+
+	local generalTab = SQL_SELECT("yrp_general", "*", nil)
+	if wk(generalTab) then
+		generalTab = generalTab[1]
+
+		chars.max = generalTab.text_characters_max or chars.max
+	end
 
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
@@ -512,6 +523,7 @@ function send_characters(ply)
 
 	if wk(plytab) then
 		netTable.plytab = plytab
+		netTable.chars = chars
 
 		net.Start("yrp_get_characters")
 			net.WriteTable(netTable)
@@ -521,6 +533,7 @@ function send_characters(ply)
 	end
 end
 
+--[[ Client ask for Characters ]]--
 net.Receive("yrp_get_characters", function(len, ply)
 	printGM("db", ply:YRPName() .. " ask for characters")
 	send_characters(ply)
@@ -559,8 +572,8 @@ function CreateCharacter(ply, tab)
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
-		vals = vals .. 250 .. ", "
-		vals = vals .. 500 .. ", "
+		vals = vals .. GetGlobalDString("text_characters_money_start", 0) .. ", "
+		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
 		vals = vals .. tonumber(tab.bg[0]) .. ", "

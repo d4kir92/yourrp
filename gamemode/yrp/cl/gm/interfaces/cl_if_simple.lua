@@ -28,17 +28,24 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
-			--lply:InterfaceValue("YButton", "SC")
-			--tcolor = lply:InterfaceValue("YButton", "ST")
+			if not self.clicked then
+				self.clicked = true
+				surface.PlaySound("garrysmod/ui_click.wav")
+			end
 			color.r = color.r - 50
 			color.g = color.g - 50
 			color.b = color.b - 50
 		elseif self:IsHovered() then
-			--color = lply:InterfaceValue("YButton", "HC")
-			--tcolor = lply:InterfaceValue("YButton", "HT")
+			if not self.hovering then
+				self.hovering = true
+				surface.PlaySound("garrysmod/ui_hover.wav")
+			end
 			color.r = color.r + 50
 			color.g = color.g + 50
 			color.b = color.b + 50
+		else
+			self.hovering = false
+			self.clicked = false
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor

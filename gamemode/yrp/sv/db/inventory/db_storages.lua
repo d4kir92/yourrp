@@ -103,31 +103,37 @@ function Player:RemoveWeapon(cname)
 end
 
 function Player:DropSWEP(cname)
-	local wep = self:GetWeapon(cname)
-	local clip1 = wep:Clip1()
-	local clip2 = wep:Clip2()
-	local clip1max = wep:GetMaxClip1()
-	local clip2max = wep:GetMaxClip2()
+	self.dropdelay = self.dropdelay or CurTime() - 1
+	if self.dropdelay < CurTime() then
+		self.dropdelay = CurTime() + 1
+		local wep = self:GetWeapon(cname)
+		local clip1 = wep:Clip1()
+		local clip2 = wep:Clip2()
+		local clip1max = wep:GetMaxClip1()
+		local clip2max = wep:GetMaxClip2()
 
-	self:RemoveWeapon(cname)
+		self:RemoveWeapon(cname)
 
-	local ent = ents.Create(cname)
+		local ent = ents.Create(cname)
 
-	if ent.WorldModel == "" then
-		ent.WorldModel = "models/hunter/blocks/cube025x025x025.mdl"
-	end
+		if ent.WorldModel == "" then
+			ent.WorldModel = "models/hunter/blocks/cube025x025x025.mdl"
+		end
 
-	ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
-	ent:SetAngles(self:GetAngles())
-	self.canpickup = false
-	ent:Spawn()
-	ent:SetDInt("clip1", clip1)
-	ent:SetDInt("clip2", clip2)
-	ent:SetDInt("clip1max", clip1max)
-	ent:SetDInt("clip2max", clip2max)
+		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
+		ent:SetAngles(self:GetAngles())
+		self.canpickup = false
+		ent:Spawn()
+		ent:SetDInt("clip1", clip1)
+		ent:SetDInt("clip2", clip2)
+		ent:SetDInt("clip1max", clip1max)
+		ent:SetDInt("clip2max", clip2max)
 
-	if ent:GetPhysicsObject():IsValid() then
-		ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
+		if ent:GetPhysicsObject():IsValid() then
+			ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
+		end
+	else
+		print("onCD")
 	end
 end
 

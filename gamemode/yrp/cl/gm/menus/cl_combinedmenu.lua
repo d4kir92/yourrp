@@ -21,7 +21,7 @@ end
 
 function OpenCombinedMenu()
 	cm.open = true
-
+	surface.PlaySound("garrysmod/save_load1.wav")
 	local br = YRP.ctr(20)
 	local menuw = YRP.ctr(400)
 

@@ -6,7 +6,7 @@ SWEP.Instructions = ""
 
 SWEP.Category = "[YourRP] Medical"
 
-SWEP.PrintName = "Syringe WIP"
+SWEP.PrintName = "Syringe"
 SWEP.Language = "en"
 SWEP.LanguageString = "LID_syringe"
 
