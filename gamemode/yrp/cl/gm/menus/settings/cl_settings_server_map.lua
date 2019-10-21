@@ -104,7 +104,9 @@ net.Receive("getMapList", function(len)
 						net.SendToServer()
 					end
 
-					_mapListView:Clear()
+					if pa(_mapListView) then
+						_mapListView:Clear()
+					end
 					net.Start("getMapList")
 					net.SendToServer()
 					tmpFrame:Close()

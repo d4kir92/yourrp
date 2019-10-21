@@ -521,7 +521,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 		end
 
 		local view = {}
-		if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() and !disablethirdperson then
+		if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
 			if ply:LookupBone("ValveBiped.Bip01_Head1") != nil then
 				pos2 = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * ply:GetModelScale())
 			end

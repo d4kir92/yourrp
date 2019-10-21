@@ -55,6 +55,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_drop_weapons", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_dealers_can_take_damage", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirdperson", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_view_distance", "TEXT DEFAULT '200'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'")
@@ -635,6 +636,13 @@ net.Receive("update_bool_dealers_can_take_damage", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_dealers_can_take_damage", "bool_dealers_can_take_damage", b)
 end)
 
+
+
+util.AddNetworkString("update_bool_thirdperson")
+net.Receive("update_bool_thirdperson", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_thirdperson", "bool_thirdperson", b)
+end)
 
 util.AddNetworkString("update_text_view_distance")
 net.Receive("update_text_view_distance", function(len, ply)

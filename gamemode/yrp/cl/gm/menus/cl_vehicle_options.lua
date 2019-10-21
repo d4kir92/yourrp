@@ -76,8 +76,10 @@ function optionVehicleWindow(vehicle, vehicleTab)
 end
 
 function openVehicleOptions(vehicle, vehicleID)
-	net.Start("getVehicleInfo")
-		net.WriteEntity(vehicle)
-		net.WriteString(vehicleID)
-	net.SendToServer()
+	if wk(vehicle) and wk(vehicleID) then
+		net.Start("getVehicleInfo")
+			net.WriteEntity(vehicle)
+			net.WriteString(vehicleID)
+		net.SendToServer()
+	end
 end
