@@ -499,7 +499,7 @@ function SendRoleList(ply, gro, pre)
 				end
 			end
 		else
-			YRP.msg("error", "headername: " .. tostring(headername))
+			YRP.msg("note", "headername: " .. tostring(headername))
 		end
 	else
 		YRP.msg("error", "SendRoleList(" .. tostring(gro) .. ", " .. tostring(pre) .. ")")
@@ -508,34 +508,37 @@ end
 
 -- Duplicate
 function DuplicateRole(ply, ruid, guid)
+	ruid = ruid or "-1"
 	ruid = tonumber(ruid)
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
-	if wk(role) then
-		role = role[1]
+	if ruid > -1 then
+		local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
+		if wk(role) then
+			role = role[1]
 
-		guid = guid or role.int_groupID
-		guid = tonumber(guid)
+			guid = guid or role.int_groupID
+			guid = tonumber(guid)
 
-		local cols = {}
-		local vals = {}
-		for name, value in pairs(role) do
-			if name != "uniqueID" and name != "int_removeable" then
-				if name == "int_groupID" then
-					value = guid
+			local cols = {}
+			local vals = {}
+			for name, value in pairs(role) do
+				if name != "uniqueID" and name != "int_removeable" then
+					if name == "int_groupID" then
+						value = guid
+					end
+					table.insert(cols, name)
+					table.insert(vals, "'" .. value .. "'")
 				end
-				table.insert(cols, name)
-				table.insert(vals, "'" .. value .. "'")
 			end
+
+			cols = table.concat(cols, ", ")
+			vals = table.concat(vals, ", ")
+
+			SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+
+			SendRoleList(nil, guid, role.int_prerole)
+		else
+			printGM("note", "Role [" .. ruid .. "] was deleted.")
 		end
-
-		cols = table.concat(cols, ", ")
-		vals = table.concat(vals, ", ")
-
-		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
-
-		SendRoleList(nil, guid, role.int_prerole)
-	else
-		printGM("note", "Role [" .. ruid .. "] was deleted.")
 	end
 end
 

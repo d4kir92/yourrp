@@ -23,7 +23,7 @@ net.Receive("getRoleWhitelist", function(len)
 				if (w.uniqueID == v.roleID) then
 					for m, x in pairs(_tmpGroupList) do
 						if (x.uniqueID == w.int_groupID) then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, v.nick, x.string_name, w.string_name)
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), x.string_name, w.string_name)
 							break
 						end
 					end
@@ -31,10 +31,10 @@ net.Receive("getRoleWhitelist", function(len)
 				elseif v.roleID == "-1" then
 					for m, x in pairs(_tmpGroupList) do
 						if (x.uniqueID == v.groupID) then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, v.nick, x.string_name, "")
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), x.string_name, "")
 							break
 						elseif v.groupID == "-1" then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, v.nick, YRP.lang_string("LID_all"), YRP.lang_string("LID_all"))
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"))
 							break
 						end
 					end

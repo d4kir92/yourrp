@@ -48,7 +48,10 @@ end
 
 function Player:GiveAmmo(amount, typ, hidePopup)
 	hidePopup = hidePopup or false
-	self:OldGiveAmmo(amount, typ, hidePopup)
+	amount = amount or 0
+	if amount > 0 then
+		self:OldGiveAmmo(amount, typ, hidePopup)
+	end
 	return amount
 end
 

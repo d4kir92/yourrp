@@ -289,10 +289,12 @@ function addGroup(grp, parent)
 			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
 		end
 
-		if tostring(grp.int_parentgroup) != "0" then
-			parent:Add(_grp)
-		else
-			parent:AddItem(_grp)
+		if pa(parent) then
+			if tostring(grp.int_parentgroup) != "0" then
+				parent:Add(_grp)
+			else
+				parent:AddItem(_grp)
+			end
 		end
 		--parent:Rebuild()
 

@@ -66,7 +66,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 	kb.key = keybind
 
 	function kb:Paint(pw, ph)
-		draw.SimpleTextOutlined(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), 0, 1, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), 0, 1)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
@@ -76,8 +76,8 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		end
 
 		text = text .. YRP.lang_string(lstr)
-		draw.SimpleTextOutlined(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + YRP.ctr(10), ph / 2, color, 0, 1, YRP.ctr(1), Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined(text, "mat1text", ph + YRP.ctr(300), ph / 2, color, 0, 1, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + YRP.ctr(10), ph / 2, color, 0, 1)
+		draw.SimpleText(text, "mat1text", ph + YRP.ctr(300), ph / 2, color, 0, 1)
 		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
 	end
 
@@ -182,7 +182,7 @@ net.Receive("getsitehelp", function(len)
 		local version = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
 
 		function version:Paint(pw, ph)
-			draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1, 1, Color(0, 0, 0, 255))
+			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion()
 	end
@@ -201,8 +201,8 @@ net.Receive("getsitestaff", function(len)
 			function tmp:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 				if ea(pl) then
-					draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. pl:RPName(), "mat1text", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1, YRP.ctr(1), Color(0, 0, 0, 255))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "mat1text", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1, YRP.ctr(1), Color(0, 0, 0, 255))
+					draw.SimpleText(YRP.lang_string("LID_name") .. ": " .. pl:RPName(), "mat1text", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.lang_string("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "mat1text", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
 				end
 			end
 

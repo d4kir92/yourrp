@@ -269,6 +269,7 @@ countries["GG"] = "Guernsey"
 countries["GR"] = "Greece"
 
 countries["HO"] = "Hong Kong"
+countries["HR"] = "Croatia"
 countries["HU"] = "Hungary"
 
 countries["ID"] = "Indonesia"
@@ -282,6 +283,7 @@ countries["JP"] = "Japan"
 
 countries["KG"] = "Kyrgyzstan"
 countries["KR"] = "Korea"
+countries["KW"] = "Kuwait"
 countries["KZ"] = "Kazakhstan"
 
 countries["LT"] = "Lithuania"
@@ -305,6 +307,7 @@ countries["RO"] = "Romania"
 countries["RS"] = "Serbia"
 countries["RU"] = "Russia"
 
+countries["SA"] = "Saudi Arabia"
 countries["SE"] = "Sweden"
 countries["SG"] = "Singapore"
 countries["SK"] = "Slovakia"
@@ -316,7 +319,9 @@ countries["TW"] = "Taiwan"
 countries["UA"] = "Ukraine"
 countries["US"] = "USA"
 
+countries["VE"] = "Venezuela"
 countries["VN"] = "Vietnam"
+
 function GetCountryName(id)
 	id = string.upper(id)
 	local countryname = countries[id]

@@ -9,7 +9,6 @@ net.Receive("get_menu_bodygroups", function(len)
 	if _tbl.string_playermodels != nil then
 		local _skin = tonumber(_tbl.skin)
 		local _pms = string.Explode(",", _tbl.string_playermodels)
-		local ply = LocalPlayer()
 		if GetGlobalDBool("bool_appearance_system", false) and pa(_yrp_appearance.left) then
 			if _yrp_appearance.left.GetChildren != nil then
 				for i, child in pairs(_yrp_appearance.left:GetChildren()) do
@@ -288,8 +287,6 @@ end)
 
 function open_appearance()
 	openMenu()
-
-	local ply = LocalPlayer()
 
 	_yrp_appearance.window = createD("YFrame", nil, ScW(), ScrH(), 0, 0)
 	_yrp_appearance.window:SetTitle("LID_appearance")

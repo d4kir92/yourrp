@@ -65,7 +65,7 @@ net.Receive("whitelistPlayer", function(len, ply)
 		if wk(_dbRole) then
 			local _groupID = _dbRole[1].int_groupID
 
-			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. _roleID)
+			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. _roleID)
 		else
 			printGM("note", "whitelistPlayer FAILED! CALL DEVS")
 		end
@@ -85,7 +85,7 @@ net.Receive("whitelistPlayerGroup", function(len, ply)
 		local _groupID = net.ReadInt(16)
 		local _dbRole = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. _groupID)
 
-		local res = SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID)
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID)
 	end
 	sendRoleWhitelist(ply)
 end)
@@ -99,7 +99,7 @@ net.Receive("whitelistPlayerAll", function(len, ply)
 				_nick = v:Nick()
 			end
 		end
-		local res = SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID", "'" .. _SteamID .. "', '" .. _nick .. "', " .. "-1" .. ", " .. "-1")
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. "-1" .. ", " .. "-1")
 	end
 	sendRoleWhitelist(ply)
 end)
