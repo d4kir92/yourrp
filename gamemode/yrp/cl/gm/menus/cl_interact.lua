@@ -44,7 +44,8 @@ net.Receive("openInteractMenu", function(len)
 
 	local licenses = ply:GetLicenseNames()
 
-	_windowInteract = createVGUI("DFrame", nil, 1090, 1090, ScrW() - 160, ScrH() - 100)
+	_windowInteract = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1090), 0, 0)
+	_windowInteract:SetHeaderHeight(YRP.ctr(100))
 	function _windowInteract:OnClose()
 		closeMenu()
 	end
@@ -52,15 +53,18 @@ net.Receive("openInteractMenu", function(len)
 		closeMenu()
 	end
 
-	local tmpTargetName = ""
 	local tmpRPName = ""
 	local tmpPly = NULL
+	local tmpGender = ""
+	local tmpID = ""
 	for k, v in pairs (player.GetAll()) do
 		if tostring(v:SteamID()) == tostring(tmpTargetSteamID) then
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
 			tmpGender = v:GetDString("Gender")
+			print(v:GetDString("idcardid"))
+			tmpID = v:GetDString("idcardid")
 			tmpRPDescription = ""
 			for i = 1, 10 do
 				if i > 1 then
@@ -74,20 +78,20 @@ net.Receive("openInteractMenu", function(len)
 	_windowInteract:SetTitle(YRP.lang_string("LID_interactmenu"))
 
 	function _windowInteract:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, "")
+		hook.Run("YFramePaint", self, pw, ph)
 
 		if idcard then
-			draw.RoundedBox(YRP.ctr(30), YRP.ctr(10), YRP.ctr(50), YRP.ctr(750), YRP.ctr(350), Color(255, 255, 255, 255))
+			draw.RoundedBox(YRP.ctr(30), YRP.ctr(10), YRP.ctr(100), YRP.ctr(750), YRP.ctr(350), Color(255, 255, 255, 255))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charTitle", YRP.ctr(10 + 10), YRP.ctr(55), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(GetHostName(), "charTitle", YRP.ctr(10 + 10), YRP.ctr(60+30), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(LocalPlayer():SteamID(), "charTitle", YRP.ctr(745), YRP.ctr(55), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charTitle", YRP.ctr(10 + 10), YRP.ctr(105), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(GetHostName(), "charTitle", YRP.ctr(10 + 10), YRP.ctr(110 + 30), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(LocalPlayer():SteamID(), "charTitle", YRP.ctr(745), YRP.ctr(105), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(60 + 70), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(110 + 70), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(tmpRPName, "charText", YRP.ctr(280), YRP.ctr(60 + 100), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(tmpRPName, "charText", YRP.ctr(280), YRP.ctr(110 + 100), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(60 + 210), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(270), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 			local gender = YRP.lang_string("LID_genderother")
 			if tmpGender == "gendermale" then
 				gender = YRP.lang_string("LID_gendermale")
@@ -96,16 +100,18 @@ net.Receive("openInteractMenu", function(len)
 			elseif tmpGender == "genderother" then
 				gender = YRP.lang_string("LID_genderother")
 			end
-			draw.SimpleTextOutlined(gender, "charText", YRP.ctr(280), YRP.ctr(60 + 240), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(gender, "charText", YRP.ctr(280), YRP.ctr(300), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+
+			draw.SimpleTextOutlined(tmpID, "charText", YRP.ctr(280), YRP.ctr(360), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
 			--[[ Licenses ]]--
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(420), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(420 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", YRP.ctr(10 + 10), YRP.ctr(460 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 
 			--[[ Description ]]--
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(530), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(560), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(580), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 		end
 	end
 
@@ -115,7 +121,7 @@ net.Receive("openInteractMenu", function(len)
 		_tmpDescription:SetEditable(false)
 		_tmpDescription:SetText(tmpRPDescription)
 
-		local tmpAvatarI = createVGUI("AvatarImage", _windowInteract, 256, 256, 10 + 10, 60 + 70)
+		local tmpAvatarI = createVGUI("AvatarImage", _windowInteract, 256, 256, 10 + 10, 180)
 		tmpAvatarI:SetPlayer(tmpPly, YRP.ctr(256))
 	end
 

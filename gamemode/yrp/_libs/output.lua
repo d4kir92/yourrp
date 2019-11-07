@@ -279,6 +279,7 @@ countries["IR"] = "Iran"
 countries["IS"] = "Iceland"
 countries["IT"] = "Italy"
 
+countries["JE"] = "Jersey"
 countries["JP"] = "Japan"
 
 countries["KG"] = "Kyrgyzstan"

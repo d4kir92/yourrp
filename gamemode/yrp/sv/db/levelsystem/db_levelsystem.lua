@@ -173,10 +173,14 @@ function Player:AddXP(xp)
 					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
 					self:SetDString("int_xp", newxp)
 				end
+			elseif curlvl > maxlvl then
+				self:SetLevel(maxlvl)
+			else
+				YRP.msg("error", "AddXP ELSE " .. tostring(curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp))
 			end
 		elseif xp < 0 then
 			local newxp = curxp + xp
-			if curlvl < maxlvl or newxp <= maxxp then
+			if curlvl > 1 then
 				if newxp < 0 then
 					self:AddLevel(-1)
 

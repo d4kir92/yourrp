@@ -205,14 +205,10 @@ function getRoles(uid, parent)
 		local _roles = net.ReadTable()
 
 		for i, rol in pairs(_roles) do
-			if !wk(rol.int_prerole) then
-				YRP.msg("error", "getRoles(" .. tostring(uid) .. ", " .. tostring(parent) .. ") rol: " .. tostring(rol) .. " rol.int_prerole: " .. tostring(rol.int_prerole))
-			elseif tonumber(rol.int_prerole) <= 0 then
+			if tonumber(rol.int_prerole) <= 0 then
 				if tonumber(rol.bool_visible) == 1 then
 					addRoleRow(rol, parent)
 				end
-			--elseif tonumber(rol.int_prerole) >= 1 then
-				--addRoleRow(rol, parent)
 			end
 		end
 		--getGroups(uid, parent)

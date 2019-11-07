@@ -100,6 +100,66 @@ function SetRole(ply, rid, force, pmid)
 	ply:SetDBool("switchrole", false)
 end
 
+function YFAR(str, f, r)
+	-- Y Find And Replace
+	local s, e = string.find(str, f)
+	if s then
+		local pre = string.sub(str, 0, s - 1)
+		local pos = string.sub(str, e + 1)
+		str = pre .. r .. pos
+		return str
+	end
+end
+
+function IsCardIDUnique(ply, id)
+	for i, v in pairs(player.GetAll()) do
+		if ply != v and v:GetDString("idcardid") == id then
+			return false
+		end
+	end
+	return true
+end
+
+function SetIDCardID(ply, rid)
+	local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
+	local numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	local digits = table.Add(letters, numbers)
+
+	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
+
+	if wk(role) then
+		role = role[1]
+		local idstructure = role.string_idstructure
+
+		while (string.find(idstructure, "!D")) do
+			idstructure = YFAR(idstructure, "!D", table.Random(digits))
+		end
+
+		while (string.find(idstructure, "!L")) do
+			idstructure = YFAR(idstructure, "!L", table.Random(letters))
+		end
+
+		while (string.find(idstructure, "!N")) do
+			idstructure = YFAR(idstructure, "!N", table.Random(numbers))
+		end
+
+		-- Remove bad symbols
+		local result = {}
+		for i, v in pairs(string.Explode("", idstructure)) do
+			if string.byte(v) != 167 and string.byte(v) != 194 then
+				table.insert(result, v)
+			end
+		end
+		idstructure = table.concat(result, "")
+
+		if IsCardIDUnique(ply, idstructure) then
+			ply:SetDString("idcardid", idstructure)
+		else
+			SetIDCardID(ply, rid)
+		end
+	end
+end
+
 function set_role(ply, rid)
 	ply:SetDBool("serverdedicated", game.IsDedicated())
 
@@ -109,6 +169,8 @@ function set_role(ply, rid)
 		local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
 		local _old_uid = ply:GetDString("roleUniqueID", "1")
 		ply:SetDString("roleUniqueID", rid)
+
+		SetIDCardID(ply, rid)
 
 		if _role != nil then
 			_role = tonumber(_role[1].int_groupID)
@@ -189,6 +251,7 @@ function set_role_values(ply, pmid)
 		--[RE]--check_inv(ply, ply:CharID())
 
 		if worked(rolTab, "set_role_values rolTab") then
+			ply:SetDString("roleIcon", rolTab.string_icon)
 			ply:SetDString("roleColor", rolTab.string_color)
 			ply:SetDInt("speedwalk", rolTab.int_speedwalk)
 			ply:SetDInt("speedrun", rolTab.int_speedrun)
@@ -276,6 +339,7 @@ function set_role_values(ply, pmid)
 			ply:SetDString("groupName", groTab.string_name)
 			ply:SetDString("groupUniqueID", groTab.uniqueID)
 			ply:SetDString("groupColor", groTab.string_color)
+			ply:SetDString("groupIcon", groTab.string_icon)
 			--ply:SetTeam(tonumber(groTab.uniqueID))
 
 			local faction = GetFactionTable(groTab.uniqueID)

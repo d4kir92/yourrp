@@ -529,6 +529,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				else
 					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
 				end
+				if ea.typ == "role" then
+					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. ConvertToDarkRPJobName(ea.tab.string_name) .. ""
+				end
 				tab2.font = "mat1text"
 				DrawText(tab2)
 			end
@@ -926,6 +929,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local hr = {}
 			hr.h = YRP.ctr(16)
 			hr.parent = ea.info:GetContent()
+			DHr(hr)
+
+			local idstructure = {}
+			idstructure.parent = ea.info:GetContent()
+			idstructure.uniqueID = role.uniqueID
+			idstructure.header = "LID_idstructure"
+			idstructure.netstr = "update_role_string_idstructure"
+			idstructure.value = role.string_idstructure
+			idstructure.uniqueID = role.uniqueID
+			idstructure.lforce = false
+			ea[role.uniqueID].idstructure = DTextBox(idstructure)
+
 			DHr(hr)
 
 			local color = {}

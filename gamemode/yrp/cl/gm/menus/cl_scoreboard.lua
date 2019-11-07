@@ -493,6 +493,9 @@ function OpenSBS()
 				YRP.msg("mis", "Missing Country: " .. string.upper(_p.cc))
 			end
 
+			_p.ricon = createD("DHTML", _p, YRP.ctr(60), YRP.ctr(60), 0, 0)
+			_p.gicon = createD("DHTML", _p, YRP.ctr(60), YRP.ctr(60), 0, 0)
+
 			function _p:Paint(pw, ph)
 				if !pl:IsValid() then
 					self:Remove()
@@ -533,14 +536,30 @@ function OpenSBS()
 							ry = ph / 2
 						end
 						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) then
-							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", YRP.ctr(x * fac), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							self.rolicon = self.rolicon or ""
+							if self.rolicon != pl:GetDString("roleIcon", "") then
+								self.rolicon = pl:GetDString("roleIcon", "")
+								local text_ricon = GetHTMLImage(self.rolicon, YRP.ctr(60), YRP.ctr(60))
+								_p.ricon:SetHTML(text_ricon)
+							end
+							_p.ricon:SetPos(YRP.ctr(x * fac + 2), ry - YRP.ctr(30))
+
+							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", YRP.ctr(x * fac + 64 + 10), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						if GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
+							self.grpicon = self.grpicon or ""
+							if self.grpicon != pl:GetDString("groupIcon", "") then
+								self.grpicon = pl:GetDString("groupIcon", "")
+								local text_gicon = GetHTMLImage(self.grpicon, YRP.ctr(60), YRP.ctr(60))
+								_p.gicon:SetHTML(text_gicon)
+							end
+							_p.gicon:SetPos(YRP.ctr(x * fac + 2), gy - YRP.ctr(30))
+
 							local grpname = pl:GetGroupName()
 							if pl:GetFactionName() != pl:GetGroupName() then
 								grpname = "[" .. pl:GetFactionName() .. "] " .. grpname
 							end
-							draw.SimpleTextOutlined(grpname, "sef", YRP.ctr(x * fac), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleTextOutlined(grpname, "sef", YRP.ctr(x * fac + 64 + 10), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + scolen["role"]
 					end

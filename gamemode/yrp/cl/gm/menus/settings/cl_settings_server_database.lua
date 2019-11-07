@@ -143,7 +143,7 @@ net.Receive("Connect_Settings_Database", function(len)
 				Scroller:SetOverlap(-3)
 			end
 			Scroller:InvalidateLayout(true)
-			--yrp_db:Rebuild()
+			yrp_db:Rebuild()
 		end
 		function yrp_db.change_to_sqlmode:DoClick()
 			local _, dat = sqlmode:GetSelected()
