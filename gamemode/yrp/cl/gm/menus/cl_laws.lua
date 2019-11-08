@@ -139,6 +139,37 @@ function OpenLawsMenu()
 					net.WriteBool(lockdown)
 				net.SendToServer()
 			end
+
+			-- Lockdown Alarms
+			local alarms = GetGlobalDTable("lockdown_alarms")
+			pTab(alarms)
+
+			local l_alarms = createD("DPanelList", _la.window, YRP.ctr(760), YRP.ctr(870), YRP.ctr(800 + 20), YRP.ctr(310))
+			l_alarms:SetSpacing(4)
+			function l_alarms:Paint(pw, ph)
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+			end
+
+			for i, e in pairs(alarms) do
+				local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
+				function line:Paint(pw, ph)
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
+				end
+
+				local a = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+				a:SetChecked(e.enabled)
+				function a:OnChange( bVal )
+					net.Start("update_lockdown_alarms")
+						net.WriteString(e.name)
+						net.WriteBool(bVal)
+					net.SendToServer()
+				end
+
+				local label = createD("YLabel", line, YRP.ctr(690), YRP.ctr(50), YRP.ctr(60), 0)
+				label:SetText(e.name)
+
+				l_alarms:AddItem(line)
+			end
 		end
 	end)
 

@@ -91,16 +91,18 @@ net.Receive("openInteractMenu", function(len)
 
 			draw.SimpleTextOutlined(tmpRPName, "charText", YRP.ctr(280), YRP.ctr(110 + 100), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(270), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			local gender = YRP.lang_string("LID_genderother")
-			if tmpGender == "gendermale" then
-				gender = YRP.lang_string("LID_gendermale")
-			elseif tmpGender == "genderfemale" then
-				gender = YRP.lang_string("LID_genderfemale")
-			elseif tmpGender == "genderother" then
-				gender = YRP.lang_string("LID_genderother")
+			if GetGlobalDBool("bool_characters_gender", false) then
+				draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(270), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+				local gender = YRP.lang_string("LID_genderother")
+				if tmpGender == "gendermale" then
+					gender = YRP.lang_string("LID_gendermale")
+				elseif tmpGender == "genderfemale" then
+					gender = YRP.lang_string("LID_genderfemale")
+				elseif tmpGender == "genderother" then
+					gender = YRP.lang_string("LID_genderother")
+				end
+				draw.SimpleTextOutlined(gender, "charText", YRP.ctr(280), YRP.ctr(300), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 			end
-			draw.SimpleTextOutlined(gender, "charText", YRP.ctr(280), YRP.ctr(300), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 
 			draw.SimpleTextOutlined(tmpID, "charText", YRP.ctr(280), YRP.ctr(360), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
 

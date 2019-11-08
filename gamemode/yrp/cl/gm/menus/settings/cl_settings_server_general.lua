@@ -72,7 +72,7 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 	end
 
 	local textbox = createD("DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
-	textbox:SetText(text)
+	textbox:SetText(SQL_STR_OUT(text))
 	textbox.serverside = false
 
 	function textbox:OnChange()
@@ -529,6 +529,10 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_max, "LID_charactersmax", "update_text_characters_max")
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_money_start, "LID_charactersmoneystart", "update_text_characters_money_start")
+
+		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_gender, "LID_gender", "update_bool_characters_gender")
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_othergender, "LID_genderother", "update_bool_characters_othergender", 50)
 
 
 

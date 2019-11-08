@@ -10,6 +10,8 @@ SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
 SQL_ADD_COLUMN(_db_name, "roleID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "groupID", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(_db_name, "string_idcardid", "TEXT DEFAULT ''")
+
 SQL_ADD_COLUMN(_db_name, "playermodelID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "skin", "INT DEFAULT 1")
 

@@ -23,7 +23,7 @@ function Player:LockdownLoadout()
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
 		for i, pl in pairs(player.GetAll()) do
 			pl:SetDBool("bool_lockdown", lockdown.bool_lockdown)
-			pl:SetDBool("string_lockdowntext", SQL_STR_OUT(lockdown.string_lockdowntext))
+			pl:SetDString("string_lockdowntext", SQL_STR_OUT(lockdown.string_lockdowntext))
 		end
 	else
 		YRP.msg("note", "LockdownLoadout FAILED")
@@ -42,14 +42,96 @@ net.Receive("set_lockdowntext", function(len, ply)
 	end
 end)
 
+local alarms = {}
+function AddLockDownAlarm(alarm, name, enabled)
+	name = name or alarm
+	enabled = enabled or true
+	local entry = {}
+	entry.sound = alarm
+	entry.name = name
+	entry.enabled = enabled
+	table.insert(alarms, entry)
+	SetGlobalDTable("lockdown_alarms", alarms)
+end
+
+AddLockDownAlarm([[ambient\alarms\alarm_citizen_loop1.wav]], "alarm_citizen_loop1")
+AddLockDownAlarm([[ambient\alarms\alarm1.wav]], "alarm1")
+AddLockDownAlarm([[ambient\alarms\apc_alarm_loop1.wav]], "apc_alarm_loop1")
+AddLockDownAlarm([[ambient\alarms\citadel_alert_loop2.wav]], "citadel_alert_loop2")
+AddLockDownAlarm([[ambient\alarms\city_siren_loop2.wav]], "city_siren_loop2")
+
+function GetAlarmSounds()
+	return alarms
+end
+
+function StartGetRandomAlarm(tries)
+	local counter = 0
+	local alarm = nil
+	while (counter < tries) do
+		counter = counter + 1
+		alarm = GetRandomAlarm()
+		if alarm.enabled then
+			break
+		end
+	end
+	return alarm
+end
+
+function GetRandomAlarm()
+	return table.Random(alarms)
+end
+
+util.AddNetworkString("update_lockdown_alarms")
+net.Receive("update_lockdown_alarms", function(len, ply)
+	local name = net.ReadString()
+	local checked = net.ReadBool()
+
+	for i, e in pairs(alarms) do
+		if e.name == name then
+			e.enabled = checked
+		end
+	end
+	SetGlobalDTable("lockdown_alarms", alarms)
+end)
+
+_G["LOCKDOWN_ENTITIES"] = _G["LOCKDOWN_ENTITIES"] or {}
+
+function AddToLockdownSpeakers(ent)
+	table.insert(_G["LOCKDOWN_ENTITIES"], ent)
+end
+
+function RemoveFromLockdownSpeakers(ent)
+	table.RemoveByValue(_G["LOCKDOWN_ENTITIES"], ent)
+end
+
 util.AddNetworkString("set_lockdown")
 net.Receive("set_lockdown", function(len, ply)
 	local bool_lockdown = net.ReadBool()
-	bool_lockdown = tonum(bool_lockdown)
-	YRP.msg("db", "Changed bool_lockdown to: " .. tostring(bool_lockdown))
-	SQL_UPDATE(DATABASE_NAME, "bool_lockdown = '" .. bool_lockdown .. "'", "uniqueID = '1'")
+	int_lockdown = tonum(bool_lockdown)
+	YRP.msg("db", "Changed bool_lockdown to: " .. tostring(int_lockdown))
+	SQL_UPDATE(DATABASE_NAME, "bool_lockdown = '" .. int_lockdown .. "'", "uniqueID = '1'")
 
 	for i, pl in pairs(player.GetAll()) do
 		pl:LockdownLoadout()
+	end
+
+	if bool_lockdown then
+		YRP.msg("note", ply:RPName() .. " started a lockdown!")
+		sound.Add( {
+			name = "sound_lockdown",
+			channel = CHAN_AUTO,
+			volume = 1.0,
+			level = 80,
+			pitch = { 95, 110 },
+			sound = StartGetRandomAlarm(table.Count(alarms) * 2).sound
+		} )
+		for i, speaker in pairs(_G["LOCKDOWN_ENTITIES"]) do
+			speaker:EmitSound("sound_lockdown")
+		end
+	else
+		YRP.msg("note", ply:RPName() .. " stopped the lockdown!")
+		for i, speaker in pairs(_G["LOCKDOWN_ENTITIES"]) do
+			speaker:StopSound("sound_lockdown")
+		end
 	end
 end)

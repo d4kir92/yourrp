@@ -136,7 +136,7 @@ function Player:DropSWEP(cname)
 			ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
 		end
 	else
-		print("onCD")
+		-- on cooldown
 	end
 end
 

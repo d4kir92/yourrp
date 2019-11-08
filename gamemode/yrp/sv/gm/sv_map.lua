@@ -124,7 +124,9 @@ function search_coords(ent)
 	end
 end
 
+local tries = 0
 function get_coords()
+	tries = tries + 1
 	if skyCamera == nil then
 		skyCamera = ents.FindByClass("sky_camera")
 		skyCamera = skyCamera[1]
@@ -212,10 +214,12 @@ function get_coords()
 	_map_size.error = 0
 
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		timer.Simple(5, function()
-			printGM("note", "get_map_coords() retry")
-			get_map_coords()
-		end)
+		if tries < 5 then
+			timer.Simple(5, function()
+				printGM("note", "get_map_coords() retry")
+				get_map_coords()
+			end)
+		end
 	end
 end
 

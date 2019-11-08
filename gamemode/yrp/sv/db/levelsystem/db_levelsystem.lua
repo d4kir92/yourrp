@@ -175,6 +175,8 @@ function Player:AddXP(xp)
 				end
 			elseif curlvl > maxlvl then
 				self:SetLevel(maxlvl)
+			elseif newxp > maxxp then
+				self:SetDString("int_xp", maxxp)
 			else
 				YRP.msg("error", "AddXP ELSE " .. tostring(curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp))
 			end

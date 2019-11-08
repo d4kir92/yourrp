@@ -341,8 +341,16 @@ function Player:XP()
 	return tonumber(math.Round(self:GetDString("int_xp", "1"), 0))
 end
 
+function Player:XPForLevelUp()
+	return tonumber(math.Round(self:GetDString("int_xp_for_levelup", "10"), 0))
+end
+
+function Player:XPMultiplier()
+	return tonumber(math.Round(self:GetDString("float_multiplier", "1.5"), 0))
+end
+
 function Player:GetMaxXP()
-	return tonumber(math.Round(math.pow(self:Level(), 1.5), 0)) + 100
+	return tonumber(math.Round(math.pow(self:Level(), 1.5), self:XPMultiplier())) + self:XPForLevelUp()
 end
 
 --[[ Role ]]--

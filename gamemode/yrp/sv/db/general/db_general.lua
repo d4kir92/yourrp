@@ -152,6 +152,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_money_start", "TEXT DEFAULT '500'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_max", "TEXT DEFAULT '10'")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_gender", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_othergender", "INT DEFAULT 0")
+
 --[[ Social Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ' '")
@@ -1134,6 +1137,17 @@ util.AddNetworkString("update_text_characters_money_start")
 net.Receive("update_text_characters_money_start", function(len, ply)
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_characters_money_start", "text_characters_money_start", str)
+end)
+
+util.AddNetworkString("update_bool_characters_gender")
+net.Receive("update_bool_characters_gender", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_characters_gender", "bool_characters_gender", b)
+end)
+util.AddNetworkString("update_bool_characters_othergender")
+net.Receive("update_bool_characters_othergender", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_characters_othergender", "bool_characters_othergender", b)
 end)
 
 

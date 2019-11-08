@@ -464,6 +464,9 @@ function HUDSimple()
 		local NA = {}
 		NA.element = "NA"
 		HUDSimpleBG(NA)
+		local ID = {}
+		ID.element = "ID"
+		HUDSimpleBG(ID)
 		local CR = {}
 		CR.element = "CR"
 		HUDSimpleBG(CR)
@@ -624,6 +627,12 @@ function HUDSimple()
 		NA.max = 1
 		NA.text = lply:RPName()
 		HUDSimpleBAR(NA)
+		ID = {}
+		ID.element = "ID"
+		ID.cur = 0
+		ID.max = 1
+		ID.text = lply:GetDString("idcardid", "")
+		HUDSimpleBAR(ID)
 		CR = {}
 		CR.element = "CR"
 		CR.cur = 0
@@ -945,6 +954,9 @@ function HUDSimple()
 		NA = {}
 		NA.element = "NA"
 		HUDSimpleBR(NA)
+		ID = {}
+		ID.element = "ID"
+		HUDSimpleBR(ID)
 		SN = {}
 		SN.element = "SN"
 		HUDSimpleBR(SN)

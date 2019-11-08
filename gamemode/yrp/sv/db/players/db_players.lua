@@ -120,7 +120,9 @@ function IsCardIDUnique(ply, id)
 	return true
 end
 
-function SetIDCardID(ply, rid)
+function SetIDCardID(ply, rid, old_rid)
+	rid = tonumber(rid)
+	old_rid = tonumber(old_rid)
 	local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	local numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 	local digits = table.Add(letters, numbers)
@@ -153,7 +155,13 @@ function SetIDCardID(ply, rid)
 		idstructure = table.concat(result, "")
 
 		if IsCardIDUnique(ply, idstructure) then
-			ply:SetDString("idcardid", idstructure)
+			if old_rid != rid then
+				SQL_UPDATE("yrp_characters", "string_idcardid = '" .. idstructure .. "'")
+				ply:SetDString("idcardid", idstructure)
+			else
+				local char = ply:GetChaTab()
+				ply:SetDString("idcardid", char.string_idcardid)
+			end
 		else
 			SetIDCardID(ply, rid)
 		end
@@ -165,12 +173,14 @@ function set_role(ply, rid)
 
 	local _char_id = ply:CharID()
 	if _char_id != nil then
+		local old_rid = ply:GetChaTab()
+		old_rid = old_rid.roleID
 		local _result = SQL_UPDATE("yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID())
 		local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
 		local _old_uid = ply:GetDString("roleUniqueID", "1")
 		ply:SetDString("roleUniqueID", rid)
 
-		SetIDCardID(ply, rid)
+		SetIDCardID(ply, rid, old_rid)
 
 		if _role != nil then
 			_role = tonumber(_role[1].int_groupID)

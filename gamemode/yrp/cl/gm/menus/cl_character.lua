@@ -124,8 +124,10 @@ net.Receive("isidcardenabled", function(len)
 				draw.SimpleTextOutlined(YRP.lang_string("LID_name"), "charText", YRP.ctr(256 + 20), YRP.ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 				draw.SimpleTextOutlined(character.rpname, "charText", YRP.ctr(256 + 20), YRP.ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-				draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "charText", YRP.ctr(256 + 20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string(character.gender), "charText", YRP.ctr(256 + 20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				if GetGlobalDBool("bool_characters_gender", false) then
+					draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "charText", YRP.ctr(256 + 20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string(character.gender), "charText", YRP.ctr(256 + 20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				end
 			end
 		end
 
@@ -197,68 +199,78 @@ function openCharacterCreation()
 	data.h = YRP.ctr(200)
 	data.x = border
 	data.y = border
-	local charactersGender = createMD("DPanel", charactersBackground, data.w, data.h, data.x, data.y, YRP.ctr(5))
-	function charactersGender:Paint(pw, ph)
-		paintMD(pw, ph, nil, get_ds_col())
-		draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "HudBars", pw / 2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
+	local genders = 2
+	if GetGlobalDBool("bool_characters_gender", false) then
+		if GetGlobalDBool("bool_characters_othergender", false) then
+			genders = 3
+		end
+		local charactersGender = createMD("DPanel", charactersBackground, data.w, data.h, data.x, data.y, YRP.ctr(5))
+		function charactersGender:Paint(pw, ph)
+			paintMD(pw, ph, nil, get_ds_col())
+			draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "HudBars", pw / 2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		end
 
-	local charactersGenderMale = createMD("DButton", charactersGender, YRP.ctr(100), YRP.ctr(100), YRP.ctr((760 / 2) - 50 - 100 - 20), YRP.ctr(70), YRP.ctr(5))
-	charactersGenderMale:SetText("")
-	function charactersGenderMale:Paint(pw, ph)
-		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.hovered)
-		else
-			if character.gender == "gendermale" then
-				draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.selected)
+		local GX = data.w / 2 - YRP.ctr(150 + border)
+		local charactersGenderMale = createMD("DButton", charactersGender, YRP.ctr(100), YRP.ctr(100), GX, YRP.ctr(70), YRP.ctr(5))
+		charactersGenderMale:SetText("")
+		function charactersGenderMale:Paint(pw, ph)
+			if self:IsHovered() then
+				draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.hovered)
 			else
-				draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col())
+				if character.gender == "gendermale" then
+					draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.selected)
+				else
+					draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col())
+				end
+			end
+			draw.SimpleTextOutlined("♂", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		end
+		function charactersGenderMale:DoClick()
+			character.gender = "gendermale"
+		end
+
+		local charactersGenderFemale = createMD("DButton", charactersGender, YRP.ctr(100), YRP.ctr(100), GX + YRP.ctr(100 + border) * (4 - genders), YRP.ctr(70), YRP.ctr(5))
+		charactersGenderFemale:SetText("")
+		function charactersGenderFemale:Paint(pw, ph)
+			if self:IsHovered() then
+				draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.hovered)
+			else
+				if character.gender == "genderfemale" then
+					draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.selected)
+				else
+					draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col())
+				end
+			end
+			draw.SimpleTextOutlined("♀", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		end
+		function charactersGenderFemale:DoClick()
+			character.gender = "genderfemale"
+		end
+
+		if GetGlobalDBool("bool_characters_othergender", false) then
+			local charactersGenderOther = createMD("DButton", charactersGender, YRP.ctr(100), YRP.ctr(100), GX + YRP.ctr(200 + 2 * border), YRP.ctr(70), YRP.ctr(5))
+			charactersGenderOther:SetText("")
+			function charactersGenderOther:Paint(pw, ph)
+				if self:IsHovered() then
+					draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.hovered)
+				else
+					if character.gender == "genderother" then
+						draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.selected)
+					else
+						draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col())
+					end
+				end
+				draw.SimpleTextOutlined("⚲", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			end
+			function charactersGenderOther:DoClick()
+				character.gender = "genderother"
 			end
 		end
-		draw.SimpleTextOutlined("♂", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-	function charactersGenderMale:DoClick()
-		character.gender = "gendermale"
-	end
 
-	local charactersGenderFemale = createMD("DButton", charactersGender, YRP.ctr(100), YRP.ctr(100), YRP.ctr((760 / 2) - 50), YRP.ctr(70), YRP.ctr(5))
-	charactersGenderFemale:SetText("")
-	function charactersGenderFemale:Paint(pw, ph)
-		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.hovered)
-		else
-			if character.gender == "genderfemale" then
-				draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.selected)
-			else
-				draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col())
-			end
-		end
-		draw.SimpleTextOutlined("♀", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-	function charactersGenderFemale:DoClick()
-		character.gender = "genderfemale"
-	end
-
-	local charactersGenderOther = createMD("DButton", charactersGender, YRP.ctr(100), YRP.ctr(100), YRP.ctr((760 / 2) + 50 + 20), YRP.ctr(70), YRP.ctr(5))
-	charactersGenderOther:SetText("")
-	function charactersGenderOther:Paint(pw, ph)
-		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.hovered)
-		else
-			if character.gender == "genderother" then
-				draw.RoundedBox(0, 0, 0, pw, ph, _char_colors.selected)
-			else
-				draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col())
-			end
-		end
-		draw.SimpleTextOutlined("⚲", "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-	function charactersGenderOther:DoClick()
-		character.gender = "genderother"
+		data.y = data.y + data.h + border
 	end
 
 	data.x = border
-	data.y = data.y + data.h + border
 	data.w = YRP.ctr(800) - 2 * border
 	data.h = YRP.ctr(140)
 	local charactersGroup = createMD("DPanel", charactersBackground, data.w, data.h, data.x, data.y, YRP.ctr(5))

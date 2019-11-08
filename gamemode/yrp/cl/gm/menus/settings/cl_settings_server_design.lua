@@ -778,6 +778,11 @@ net.Receive("get_design_settings", function(len)
 			NA.name = "LID_name"
 			AddElement(NA)
 
+			local ID = {}
+			ID.element = "ID"
+			ID.name = "LID_id"
+			AddElement(ID)
+
 			local SL = {}
 			SL.element = "SL"
 			SL.name = "LID_serverlogo"

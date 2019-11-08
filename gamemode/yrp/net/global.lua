@@ -147,6 +147,41 @@ function GetGlobalDFloat(index, def)
 	return result or def
 end
 
+-- TABLE
+if SERVER then
+	util.AddNetworkString("SetGlobalDTable")
+	function SendGlobalDTable(index, tab, ply)
+		net.Start("SetGlobalDTable")
+			net.WriteString(index)
+			net.WriteTable(tab)
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
+	end
+end
+function SetGlobalDTable(index, tab)
+	NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
+	NWGlobal["TABLE"][index] = tab
+	if SERVER then
+		SendGlobalDTable(index, tab)
+	end
+end
+if CLIENT then
+	net.Receive("SetGlobalDTable", function(len)
+		local index = net.ReadString()
+		local value = net.ReadTable()
+		SetGlobalDTable(index, value)
+	end)
+end
+
+function GetGlobalDTable(index, def)
+	NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
+	local result = NWGlobal["TABLE"][index]
+	return result or def or {}
+end
+
 -- INIT
 if SERVER then
 	util.AddNetworkString("request_dglobals")
@@ -167,6 +202,10 @@ if SERVER then
 		NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
 		for i, v in pairs(NWGlobal["FLOAT"]) do
 			SendGlobalDFloat(i, v, ply)
+		end
+		NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
+		for i, v in pairs(NWGlobal["TABLE"]) do
+			SendGlobalDTable(i, v, ply)
 		end
 	end
 	net.Receive("request_dglobals", function(len, ply)

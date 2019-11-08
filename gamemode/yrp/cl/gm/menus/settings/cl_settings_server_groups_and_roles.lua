@@ -530,7 +530,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
 				end
 				if ea.typ == "role" then
-					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. ConvertToDarkRPJobName(ea.tab.string_name) .. ""
+					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. ConvertToDarkRPJobName(ea.tab.string_name) .. "      RoleUID: " .. ea.tab.uniqueID
 				end
 				tab2.font = "mat1text"
 				DrawText(tab2)

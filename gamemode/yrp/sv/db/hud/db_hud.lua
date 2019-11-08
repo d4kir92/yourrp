@@ -715,6 +715,34 @@ function DefaultHUDSettings(reset)
 	NA.ints.TS = 18
 	AddHUDElement(NA, reset)
 
+	local ID = {}
+	ID.element = "ID"
+	ID.floats = {}
+	ID.floats.POSI_X = 0.265625
+	ID.floats.POSI_Y = 0.90277779102325
+	ID.floats.SIZE_W = 0.11458333581686
+	ID.floats.SIZE_H = 0.027777777984738
+	ID.bools = {}
+	ID.bools.VISI = 1
+	ID.bools.ROUN = 0
+	ID.bools.ICON = 1
+	ID.bools.TEXT = 1
+	ID.bools.PERC = 1
+	ID.bools.BACK = 1
+	ID.bools.BORD = 0
+	ID.bools.EXTR = 1
+	ID.colors = {}
+	ID.colors.TE = "255, 255, 255, 255"
+	ID.colors.TB = "0, 0, 0, 255"
+	ID.colors.BG = "0, 0, 0, 120"
+	ID.colors.BA = "0, 0, 0, 180"
+	ID.colors.BR = "0, 0, 0, 180"
+	ID.ints = {}
+	ID.ints.AX = 1
+	ID.ints.AY = 1
+	ID.ints.TS = 18
+	AddHUDElement(ID, reset)
+
 	local AV = {}
 	AV.element = "AV"
 	AV.floats = {}
