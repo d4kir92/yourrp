@@ -112,10 +112,9 @@ function YFAR(str, f, r)
 end
 
 function IsCardIDUnique(ply, id)
-	for i, v in pairs(player.GetAll()) do
-		if ply != v and v:GetDString("idcardid") == id then
-			return false
-		end
+	local charTab = SQL_SELECT("yrp_characters", "*", "string_idcardid = '" .. id .. "'" )
+	if wk(charTab) then
+		return false
 	end
 	return true
 end

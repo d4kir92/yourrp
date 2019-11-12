@@ -377,6 +377,9 @@ function unpack_paket(sender, text, iscommand)
 	if GetGlobalDBool("bool_yrp_chat_show_groupname", false) then
 		paket.group = sender:GetDString("groupName")
 	end
+	if GetGlobalDBool("bool_yrp_chat_show_idcardid", false) then
+		paket.idcardid = sender:GetDString("idcardid")
+	end
 end
 
 util.AddNetworkString("sendanim")
@@ -517,6 +520,7 @@ function GM:PlayerSay(sender, text, teamChat)
 	pk.rolename = paket.role or ""
 	pk.factionname = paket.faction or ""
 	pk.groupname = paket.group or ""
+	pk.idcardid = paket.idcardid or ""
 	pk.isyrpcommand = paket.isyrpcommand or false
 	pk.afk = sender:AFK()
 	pk.dnd = sender:DND()

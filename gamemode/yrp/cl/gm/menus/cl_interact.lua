@@ -63,7 +63,6 @@ net.Receive("openInteractMenu", function(len)
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
 			tmpGender = v:GetDString("Gender")
-			print(v:GetDString("idcardid"))
 			tmpID = v:GetDString("idcardid")
 			tmpRPDescription = ""
 			for i = 1, 10 do

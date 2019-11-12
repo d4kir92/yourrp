@@ -387,6 +387,9 @@ net.Receive("yrp_player_say", function(len)
 			if !strEmpty(_tmp.groupname) and _tmp.groupname != _tmp.factionname then
 				_tmp.name = _tmp.name .. _tmp.groupname .. " "
 			end
+			if !strEmpty(_tmp.idcardid) then
+				_tmp.name = _tmp.name .. _tmp.idcardid .. " "
+			end
 			if !strEmpty(_tmp.rolename) then
 				_tmp.name = _tmp.name .. _tmp.rolename .. " "
 			end

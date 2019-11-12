@@ -1163,6 +1163,11 @@ function RenderNoClip(ply, alpha)
 			end
 			RenderEquipments(ply, RENDERMODE_TRANSALPHA, Color(255, 255, 255, _alpha))
 		end
+
+		local model = GetGlobalDString("text_noclip_mdl", "")
+		if !strEmpty(model) then
+			ply:SetModel(model)
+		end
 	end
 end
 

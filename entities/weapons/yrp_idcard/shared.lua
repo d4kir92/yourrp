@@ -1,0 +1,57 @@
+
+SWEP.Author = "D4KiR"
+SWEP.Contact = "youtube.com/c/D4KiR"
+SWEP.Purpose = "Shows the idcard"
+SWEP.Instructions = "-"
+
+SWEP.Category = "[YourRP] Roleplay"
+
+SWEP.PrintName = "IDCard"
+SWEP.Language = "en"
+SWEP.LanguageString = "LID_idcard"
+
+SWEP.Slot = 1
+SWEP.SlotPos = 1
+
+SWEP.DrawAmmo = false
+
+SWEP.DrawCrosshair = false
+
+SWEP.Spawnable = true
+SWEP.AdminSpawnable = true
+
+SWEP.ViewModel = ""
+SWEP.WorldModel = ""
+SWEP.notdropable = true
+
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "none"
+
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Ammo = "none"
+
+SWEP.DrawCrosshair = false
+
+SWEP.HoldType = "pistol"
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType)
+end
+
+function SWEP:Reload()
+
+end
+
+function SWEP:Think()
+
+end
+
+function SWEP:PrimaryAttack()
+	
+end
+
+function SWEP:SecondaryAttack()
+	
+end

@@ -317,6 +317,15 @@ net.Receive("Connect_Settings_General", function(len)
 				tmpTable[count].PrintName = v
 			end
 
+			local allvalidmodels = player_manager.AllValidModels()
+			for k, v in pairs(allvalidmodels) do
+				count = count + 1
+				tmpTable[count] = {}
+				tmpTable[count].WorldModel = v
+				tmpTable[count].ClassName = v
+				tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName(v)
+			end
+
 			LocalPlayer():SetDString("WorldModel", GEN.bool_noclip_mdl)
 			OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
 		end
@@ -435,6 +444,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_factionname, "LID_showfactionname", "update_bool_yrp_chat_show_factionname")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_groupname, "LID_showgroupname", "update_bool_yrp_chat_show_groupname")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_usergroup, "LID_showusergroup", "update_bool_yrp_chat_show_usergroup")
+		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_idcardid, "LID_showidcardid", "update_bool_yrp_chat_show_idcardid")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_crosshair, "LID_yourrpcrosshair", "update_bool_yrp_crosshair")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
@@ -451,6 +461,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_scoreboard_show_frags, "LID_showfrags", "update_bool_yrp_scoreboard_show_frags")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_scoreboard_show_deaths, "LID_showdeaths", "update_bool_yrp_scoreboard_show_deaths")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_scoreboard_show_operating_system, "LID_showoperatingsystem", "update_bool_yrp_scoreboard_show_operating_system")
+		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_scoreboard_show_idcardid, "LID_showidcardid", "update_bool_yrp_scoreboard_show_idcardid")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head, "LID_overheadinfo", "update_bool_tag_on_head")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_name, "LID_showname", "update_bool_tag_on_head_name")

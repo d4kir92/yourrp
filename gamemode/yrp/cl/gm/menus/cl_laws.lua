@@ -142,7 +142,6 @@ function OpenLawsMenu()
 
 			-- Lockdown Alarms
 			local alarms = GetGlobalDTable("lockdown_alarms")
-			pTab(alarms)
 
 			local l_alarms = createD("DPanelList", _la.window, YRP.ctr(760), YRP.ctr(870), YRP.ctr(800 + 20), YRP.ctr(310))
 			l_alarms:SetSpacing(4)

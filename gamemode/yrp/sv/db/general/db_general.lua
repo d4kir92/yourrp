@@ -99,6 +99,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_factionname", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_groupname", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_usergroup", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
@@ -114,6 +115,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_frags", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_deaths", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_playtime", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_operating_system", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_idcardid", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_clan", "INT DEFAULT 1")
@@ -419,7 +421,7 @@ end
 
 function GeneralUpdateString(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, str, value)
+	GeneralUpdateValue(ply, netstr, SQL_STR_IN(str), value)
 	SetGlobalDString(str, SQL_STR_OUT(value))
 end
 
@@ -496,7 +498,7 @@ end)
 
 util.AddNetworkString("update_text_server_name")
 net.Receive("update_text_server_name", function(len, ply)
-	local str = SQL_STR_IN(net.ReadString())
+	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_name", "text_server_name", str)
 end)
 
@@ -863,6 +865,13 @@ net.Receive("update_bool_yrp_chat_show_usergroup", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_yrp_chat_show_usergroup", "bool_yrp_chat_show_usergroup", b)
 end)
 
+util.AddNetworkString("update_bool_yrp_chat_show_idcardid")
+net.Receive("update_bool_yrp_chat_show_idcardid", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_chat_show_idcardid", "bool_yrp_chat_show_idcardid", b)
+end)
+
+
 
 util.AddNetworkString("update_bool_yrp_crosshair")
 net.Receive("update_bool_yrp_crosshair", function(len, ply)
@@ -949,6 +958,13 @@ net.Receive("update_bool_yrp_scoreboard_show_operating_system", function(len, pl
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_yrp_scoreboard_show_operating_system", "bool_yrp_scoreboard_show_operating_system", b)
 end)
+
+util.AddNetworkString("update_bool_yrp_scoreboard_show_idcardid")
+net.Receive("update_bool_yrp_scoreboard_show_idcardid", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_scoreboard_show_idcardid", "bool_yrp_scoreboard_show_idcardid", b)
+end)
+
 
 
 util.AddNetworkString("update_bool_tag_on_head")

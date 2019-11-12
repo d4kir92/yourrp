@@ -64,7 +64,6 @@ end
 
 if SERVER then
 	hook.Add("yrp_castdone_splint", "splint", function(args)
-		pTab(args)
 		args.target:Heal(10)
 		args.target:Unbroke()
 		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)

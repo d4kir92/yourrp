@@ -3,13 +3,14 @@
 -- CONFIG
 local scolen = {}
 scolen["leve"] = 160
-scolen["name"] = 580
-scolen["role"] = 580
-scolen["frag"] = 220
-scolen["lang"] = 220
-scolen["coun"] = 220
-scolen["oper"] = 220
-scolen["play"] = 240
+scolen["idca"] = 340
+scolen["name"] = 480
+scolen["role"] = 480
+scolen["frag"] = 200
+scolen["lang"] = 200
+scolen["coun"] = 200
+scolen["oper"] = 200
+scolen["play"] = 160
 scolen["ping"] = 120
 -- CONFIG
 
@@ -358,7 +359,7 @@ function OpenSBS()
 					t = t + 1
 				end
 			end
-			fac = 1 + (4 / t * (1 - t / 9))
+			fac = 1 + (4 / t * (1 - t / table.Count(scolen)))
 
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
@@ -368,6 +369,14 @@ function OpenSBS()
 			if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
 				draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				x = x + scolen["leve"]
+				--act["leve"] = true
+			else
+				act["leve"] = false
+			end
+
+			if GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) then
+				draw.SimpleTextOutlined(YRP.lang_string("LID_idcardid"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				x = x + scolen["idca"]
 				--act["leve"] = true
 			else
 				act["leve"] = false
@@ -512,24 +521,27 @@ function OpenSBS()
 
 					local br = 40
 					local x = 128 + 10
-					if true then
 
-						if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
-							draw.SimpleTextOutlined(pl:Level(), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-							x = x + scolen["leve"]
-						end
-
-						local nay = ph / 4 * 1
-						local ugy = ph / 4 * 3
-						if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
-							nay = ph / 2
-						end
-						draw.SimpleTextOutlined(pl:RPName(), "sef", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
-							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", YRP.ctr(x * fac), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-						end
-						x = x + scolen["name"]
+					if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
+						draw.SimpleTextOutlined(pl:Level(), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+						x = x + scolen["leve"]
 					end
+
+					if GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) then
+						draw.SimpleTextOutlined(pl:GetDString("idcardid", "X"), "sef", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+						x = x + scolen["idca"]
+					end
+
+					local nay = ph / 4 * 1
+					local ugy = ph / 4 * 3
+					if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+						nay = ph / 2
+					end
+					draw.SimpleTextOutlined(pl:RPName(), "sef", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+						draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "sef", YRP.ctr(x * fac), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					end
+					x = x + scolen["name"]
 
 					if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 						local ry = ph / 4 * 1
@@ -694,6 +706,14 @@ function OpenSBS()
 
 				if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
 					x = x + scolen["leve"]
+				end
+
+				local idcardid = YRP.lang_string("LID_idcardid")
+				draw.SimpleTextOutlined(idcardid, "sef", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				x = x + scolen["idca"]
+
+				if GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
+					x = x + scolen["idca"]
 				end
 
 				local naugname = YRP.lang_string("LID_name")

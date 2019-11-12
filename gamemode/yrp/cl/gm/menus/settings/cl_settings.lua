@@ -265,7 +265,7 @@ function OpenSettings()
 	end
 
 	function burgerMenu:DoClick()
-		if settingsWindow.window != NULL then
+		if pa(settingsWindow.window) then
 			settingsWindow.window:openMenu()
 		end
 	end
