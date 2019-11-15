@@ -445,6 +445,61 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_groupname, "LID_showgroupname", "update_bool_yrp_chat_show_groupname")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_usergroup, "LID_showusergroup", "update_bool_yrp_chat_show_usergroup")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_idcardid, "LID_showidcardid", "update_bool_yrp_chat_show_idcardid")
+		
+		--[[ TODO
+		
+		
+		local idcard_change = createD("DButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
+		function idcard_change:DoClick()
+			CloseSettings()
+			local idbg = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+			idbg:MakePopup()
+			idbg:SetTitle("")
+			idbg:SetDraggable(false)
+			function idbg:Paint(pw, ph)
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				for y = 0, ScrH(), 16 do
+					draw.RoundedBox(0, 0, y, pw, 1, Color(255, 255, 255, 255))
+				end
+				for x = 0, ScrW(), 16 do
+					draw.RoundedBox(0, x, 0, 1, ph, Color(255, 255, 255, 255))
+				end
+			end
+
+			local elements = {
+				"background",
+				"server_name"
+			}
+			for i, ele in pairs(elements) do
+				local e = createD("DFrame", idbg, YRP.ctr(GetGlobalDInt("int_" .. ele .. "_w", 10)), YRP.ctr(GetGlobalDInt("int_" .. ele .. "_h", 10)), YRP.ctr(GetGlobalDInt("int_" .. ele .. "_x", 10)), YRP.ctr(GetGlobalDInt("int_" .. ele .. "_y", 10)))
+				e:SetTitle("")
+				e:ShowCloseButton(false)
+				e:SetSizable(true)
+				function e:Paint(pw, ph)
+					local bgcolor = Color(255, 0, 0)
+					if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
+						bgcolor = Color(0, 255, 0)
+					end
+					draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
+
+					draw.SimpleText(YRP.lang_string("LID_" .. ele), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+
+				e.toggle = createD("DCheckBox", e, YRP.ctr(50), YRP.ctr(50), 0, 0)
+				e.toggle:SetChecked(GetGlobalDBool("bool_" .. ele .. "_visible", false))
+				function e.toggle:OnChange(bVal)
+					net.Start("update_idcard_" .. "bool_" .. ele .. "_visible")
+						net.WriteString("bool_" .. ele .. "_visible")
+						net.WriteString(tostring(bVal))
+					net.SendToServer()
+				end
+			end
+		end
+
+
+		]]
+
+		GAMEMODE_VISUALS:GetContent():AddItem(idcard_change)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_crosshair, "LID_yourrpcrosshair", "update_bool_yrp_crosshair")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())

@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:GetHeaderHeight()
-	return self._headerheight
+	return self._headerheight or 24
 end
 
 function PANEL:SetHeaderHeight(num)

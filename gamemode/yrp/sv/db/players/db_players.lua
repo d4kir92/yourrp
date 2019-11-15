@@ -119,14 +119,15 @@ function IsCardIDUnique(ply, id)
 	return true
 end
 
-function SetIDCardID(ply, rid, old_rid)
+function SetIDCardID(ply, rid, old_rid, try)
+	try = try or 0
 	rid = tonumber(rid)
 	old_rid = tonumber(old_rid)
 	local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	local numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 	local digits = table.Add(letters, numbers)
 
-	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
+	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
 
 	if wk(role) then
 		role = role[1]
@@ -161,8 +162,14 @@ function SetIDCardID(ply, rid, old_rid)
 				local char = ply:GetChaTab()
 				ply:SetDString("idcardid", char.string_idcardid)
 			end
+		elseif try < 32 then
+			try = try + 1
+			SetIDCardID(ply, rid, old_rid, try)
 		else
-			SetIDCardID(ply, rid)
+			if idstructure == "%%%%-%%%%-%%%%" then
+				SQL_UPDATE("yrp_ply_roles", "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. rid .. "'")
+			end
+			YRP.msg("note", "!!! Hit max tries generating new IDcardID !!!")
 		end
 	end
 end
