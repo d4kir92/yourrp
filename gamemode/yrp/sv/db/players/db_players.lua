@@ -166,7 +166,7 @@ function SetIDCardID(ply, rid, old_rid, try)
 			try = try + 1
 			SetIDCardID(ply, rid, old_rid, try)
 		else
-			if idstructure == "%%%%-%%%%-%%%%" then
+			if idstructure == "%%%%-%%%%-%%%%" or strEmpty(idstructure) then
 				SQL_UPDATE("yrp_ply_roles", "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. rid .. "'")
 			end
 			YRP.msg("note", "!!! Hit max tries generating new IDcardID !!!")
@@ -175,6 +175,7 @@ function SetIDCardID(ply, rid, old_rid, try)
 end
 
 function set_role(ply, rid)
+	hook.Run("yrp_get_role_pre", ply, rid)
 	ply:SetDBool("serverdedicated", game.IsDedicated())
 
 	local _char_id = ply:CharID()
@@ -201,6 +202,7 @@ function set_role(ply, rid)
 		end
 		updateRoleUses(_old_uid)
 		updateRoleUses(rid)
+		hook.Run("yrp_get_role_post", ply, rid)
 	end
 end
 

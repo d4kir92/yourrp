@@ -92,12 +92,12 @@ end
 
 function InitYRPChat()
 	if yrpChat.window == nil then
-		yrpChat.window = createVGUI("DFrame", nil, 100, 100, 100, 100)
+		yrpChat.window = createD("DFrame", nil, 100, 100, 100, 100)
 		yrpChat.window:SetTitle("")
 		yrpChat.window:ShowCloseButton(false)
 		yrpChat.window:SetDraggable(false)
 
-		yrpChat.richText = createVGUI("RichText", yrpChat.window, 1, 1, 1, 1)
+		yrpChat.richText = createD("RichText", yrpChat.window, 1, 1, 1, 1)
 
 		yrpChat.comboBox = createD("DComboBox", yrpChat.window, 1, 1, 1, 1)
 		update_chat_choices()
@@ -287,6 +287,7 @@ function InitYRPChat()
 				end
 				_fadeout = CurTime() + _delay
 			end
+			yrpChat.richText:GotoTextEnd()
 			oldAddText (...)
 		end
 

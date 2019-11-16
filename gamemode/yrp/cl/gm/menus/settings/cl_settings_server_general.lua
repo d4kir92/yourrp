@@ -445,11 +445,10 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_groupname, "LID_showgroupname", "update_bool_yrp_chat_show_groupname")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_usergroup, "LID_showusergroup", "update_bool_yrp_chat_show_usergroup")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_idcardid, "LID_showidcardid", "update_bool_yrp_chat_show_idcardid")
-		
-		--[[ TODO
-		
-		
-		local idcard_change = createD("DButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
+
+		local gs = 8
+		local idcard_change = createD("YButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
+		idcard_change:SetText("LID_change")
 		function idcard_change:DoClick()
 			CloseSettings()
 			local idbg = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -458,46 +457,274 @@ net.Receive("Connect_Settings_General", function(len)
 			idbg:SetDraggable(false)
 			function idbg:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
-				for y = 0, ScrH(), 16 do
+				for y = 0, ScrH(), gs do
 					draw.RoundedBox(0, 0, y, pw, 1, Color(255, 255, 255, 255))
 				end
-				for x = 0, ScrW(), 16 do
+				for x = 0, ScrW(), gs do
 					draw.RoundedBox(0, x, 0, 1, ph, Color(255, 255, 255, 255))
 				end
 			end
 
 			local elements = {
 				"background",
-				"server_name"
+				"hostname",
+				"role",
+				"group",
+				"idcardid",
+				"faction",
+				"rpname",
+				"box1",
+				"box2",
+				"box3",
+				"box4",
+				"grouplogo",
+				"serverlogo"
 			}
 			for i, ele in pairs(elements) do
-				local e = createD("DFrame", idbg, YRP.ctr(GetGlobalDInt("int_" .. ele .. "_w", 10)), YRP.ctr(GetGlobalDInt("int_" .. ele .. "_h", 10)), YRP.ctr(GetGlobalDInt("int_" .. ele .. "_x", 10)), YRP.ctr(GetGlobalDInt("int_" .. ele .. "_y", 10)))
+				local name = string.upper(ele)
+				if !string.find(ele, "box") then
+					name = YRP.lang_string("LID_" .. ele)
+				end
+				local e = createD("DFrame", idbg, GetGlobalDInt("int_" .. ele .. "_w", 10), GetGlobalDInt("int_" .. ele .. "_h", 10), GetGlobalDInt("int_" .. ele .. "_x", 10), GetGlobalDInt("int_" .. ele .. "_y", 10))
+				if string.find(ele, "serverlogo") then
+					local size = 512
+					e.html = createD("DHTML", e, size, size, 0, 0)
+					e.html:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), size, size))
+					function e.html:Paint(pw, ph)
+						e.htmlmat = e.html:GetHTMLMaterial()
+						if e.htmlmat != nil and !e.html.found then
+							e.html.found = true
+							timer.Simple(1, function()
+								e.matname = e.htmlmat:GetName()
+								local matdata =	{
+									["$basetexture"] = e.matname,
+									["$translucent"] = 1,
+									["$model"] = 1
+								}
+								local uid = string.Replace(e.matname, "__vgui_texture_", "")
+								e.mat = CreateMaterial("WebMaterial_" .. uid, "VertexLitGeneric", matdata)
+								e.html:Remove()
+							end)
+						end
+					end
+				end
+
 				e:SetTitle("")
 				e:ShowCloseButton(false)
 				e:SetSizable(true)
+				e.ts = CurTime() + 1
+				e.ts2 = CurTime() + 1
 				function e:Paint(pw, ph)
-					local bgcolor = Color(255, 0, 0)
-					if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
-						bgcolor = Color(0, 255, 0)
+					local br = 2
+					draw.RoundedBox(0, 0, 0, pw, br, Color(0, 0, 0))
+					draw.RoundedBox(0, 0, ph - br, pw, br, Color(0, 0, 0))
+					draw.RoundedBox(0, 0, 0, br, ph, Color(0, 0, 0))
+					draw.RoundedBox(0, pw - br, 0, br, ph, Color(0, 0, 0))
+					if ele != "background" and !string.find(ele,  "box") then
+						if !string.find(ele, "logo") or GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
+							local bgcolor = Color(255, 0, 0, 200)
+							if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
+								bgcolor = Color(0, 255, 0, 0)
+							end
+							draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
+						elseif e.mat != nil then
+							surface.SetDrawColor(255, 255, 255, 255)
+							surface.SetMaterial(e.mat)
+							surface.DrawTexturedRect(0, 0, pw, ph)
+						end
+					else
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
 					end
-					draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
 
-					draw.SimpleText(YRP.lang_string("LID_" .. ele), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					local tx = 0
+					local ty = 0
+					local ax = GetGlobalDInt("int_" .. ele .. "_ax", 0)
+					if ax == 0 then
+						tx = 0
+					elseif ax == 1 then
+						tx = pw / 2
+					elseif ax == 2 then
+						tx = pw
+					end
+					local ay = GetGlobalDInt("int_" .. ele .. "_ay", 0)
+					if ay == 0 then
+						ay = 3
+						ty = 0
+					elseif ay == 1 then
+						ty = ph / 2
+					elseif ay == 2 then
+						ay = 4
+						ty = ph
+					end
+					draw.SimpleText(name, "DermaDefault", tx, ty, Color(255, 255, 255, 255), ax, ay)
+
+					-- SIZE
+					local w, h = self:GetSize()
+					local wrongsize = false
+					if w > ScrW() then
+						w = ScrW()
+						wrongsize = true
+					end
+					if h > ScrH() then
+						h = ScrH()
+						wrongsize = true
+					end
+					if w % gs != 0 then
+						w = w - w % gs
+						wrongsize = true
+					end
+					if h % gs != 0 then
+						h = h - h % gs
+						wrongsize = true
+					end
+					if wrongsize then
+						self:SetSize(w, h)
+					end
+
+					-- POSITION
+					local x, y = self:GetPos()
+					local wrongpos = false
+					if x < 0 then
+						x = 0
+						wrongpos = true
+					elseif x + w > ScrW() then
+						x = ScrW() - w
+						wrongpos = true
+					end
+					if y < 0 then
+						y = 0
+						wrongpos = true
+					elseif y + h > ScrH() then
+						y = ScrH() - h
+						wrongpos = true
+					end
+					if x % gs != 0 then
+						x = x - x % gs
+						wrongpos = true
+					end
+					if y % gs != 0 then
+						y = y - y % gs
+						wrongpos = true
+					end
+					if wrongpos then
+						self:SetPos(x, y)
+					end
+
+					self.posx = self.posx or x
+					self.posy = self.posy or y
+					if self.posx != x or self.posy != y then
+						self.posx = x
+						self.posy = y
+					elseif e.ts <= CurTime() then
+						e.ts = CurTime() + 1
+						if GetGlobalDInt("int_" .. ele .. "_x", 10) != x or GetGlobalDInt("int_" .. ele .. "_y", 10) != y then
+							net.Start("update_idcard_" .. "int_" .. ele .. "_x")
+								net.WriteString("int_" .. ele .. "_x")
+								net.WriteString(x)
+							net.SendToServer()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_y")
+								net.WriteString("int_" .. ele .. "_y")
+								net.WriteString(y)
+							net.SendToServer()
+						end
+					end
+
+					self.sizw = self.sizw or w
+					self.sizh = self.sizh or h
+					if self.sizw != w or self.sizh != h then
+						self.sizw = w
+						self.sizh = h
+					elseif e.ts2 <= CurTime() then
+						e.ts2 = CurTime() + 1
+						if GetGlobalDInt("int_" .. ele .. "_w", 10) != w or GetGlobalDInt("int_" .. ele .. "_h", 10) != h then
+							net.Start("update_idcard_" .. "int_" .. ele .. "_w")
+								net.WriteString("int_" .. ele .. "_w")
+								net.WriteString(w)
+							net.SendToServer()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_h")
+								net.WriteString("int_" .. ele .. "_h")
+								net.WriteString(h)
+							net.SendToServer()
+						end
+					end
 				end
 
-				e.toggle = createD("DCheckBox", e, YRP.ctr(50), YRP.ctr(50), 0, 0)
-				e.toggle:SetChecked(GetGlobalDBool("bool_" .. ele .. "_visible", false))
-				function e.toggle:OnChange(bVal)
-					net.Start("update_idcard_" .. "bool_" .. ele .. "_visible")
-						net.WriteString("bool_" .. ele .. "_visible")
-						net.WriteString(tostring(bVal))
-					net.SendToServer()
+				local X = 0
+				if ele != "background" then
+					e.toggle = createD("DCheckBox", e, YRP.ctr(50), YRP.ctr(50), 0, 0)
+					e.toggle:SetChecked(GetGlobalDBool("bool_" .. ele .. "_visible", false))
+					function e.toggle:OnChange(bVal)
+						net.Start("update_idcard_" .. "bool_" .. ele .. "_visible")
+							net.WriteString("bool_" .. ele .. "_visible")
+							net.WriteString(tostring(bVal))
+						net.SendToServer()
+					end
+					X = X + YRP.ctr(50 + 2)
+				end
+
+				e.setting = createD("DButton", e, YRP.ctr(50), YRP.ctr(50), X, 0)
+				e.setting:SetText("")
+				function e.setting:DoClick()
+					local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+					win:SetTitle(name)
+					win:SetHeaderHeight(YRP.ctr(100))
+					win:MakePopup()
+					win:Center()
+					function win:Paint(pw, ph)
+						hook.Run("YFramePaint", self, pw, ph)
+					end
+					local content = win:GetContent()
+					function content:Paint(pw, ph)
+						draw.SimpleText("TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(460), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText("TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(580), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					end
+					win.ele = ele
+
+					win.color = createD("DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, 0)
+					win.color:SetColor(Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
+					function win.color:ValueChanged(col)
+						net.Start("update_idcard_" .. "int_" .. ele .. "_r")
+							net.WriteString("int_" .. ele .. "_r")
+							net.WriteString(col.r)
+						net.SendToServer()
+						net.Start("update_idcard_" .. "int_" .. ele .. "_g")
+							net.WriteString("int_" .. ele .. "_g")
+							net.WriteString(col.g)
+						net.SendToServer()
+						net.Start("update_idcard_" .. "int_" .. ele .. "_b")
+							net.WriteString("int_" .. ele .. "_b")
+							net.WriteString(col.b)
+						net.SendToServer()
+						net.Start("update_idcard_" .. "int_" .. ele .. "_a")
+							net.WriteString("int_" .. ele .. "_a")
+							net.WriteString(col.a)
+						net.SendToServer()
+					end
+
+					for x = 0, 2 do
+						local ax = createD("DButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(470))
+						ax:SetText("")
+						function ax:DoClick()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_ax")
+								net.WriteString("int_" .. ele .. "_ax")
+								net.WriteString(x)
+							net.SendToServer()
+						end
+					end
+					for x = 0, 2 do
+						local ay = createD("DButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(590))
+						ay:SetText("")
+						function ay:DoClick()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_ay")
+								net.WriteString("int_" .. ele .. "_ay")
+								net.WriteString(x)
+							net.SendToServer()
+						end
+					end
+					X = X + YRP.ctr(50 + 2)
 				end
 			end
 		end
-
-
-		]]
 
 		GAMEMODE_VISUALS:GetContent():AddItem(idcard_change)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())

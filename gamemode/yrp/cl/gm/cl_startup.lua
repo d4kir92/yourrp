@@ -1625,15 +1625,15 @@ function drawPlates(ply)
 
 		_height = _height + 2
 
-		if GetGlobalDBool("tag_ug", false) or (GetGlobalDBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
+		if ply:GetDBool("tag_ug", false) or (GetGlobalDBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
 
 			drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
 			_height = _height + 9
 		end
 
-		if GetGlobalDBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
-				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
-				_height = _height + 9
+		if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
+			drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
+			_height = _height + 9
 		end
 
 		if GetGlobalDBool("bool_tag_on_side", false) then
@@ -1711,8 +1711,8 @@ function drawPlates(ply)
 				drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
 				_z = _z + _d
 				local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
-				local _mMin = CurTime() + ply:GetDInt("salarytime") - ply:GetDInt("nextsalarytime")
-				local _mMax = ply:GetDInt("salarytime") + 1
+				local _mMin = CurTime() + ply:GetDInt("salarytime", 0) - ply:GetDInt("nextsalarytime", 0)
+				local _mMax = ply:GetDInt("salarytime", 0) + 1
 				drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 				_z = _z + _d
 			end

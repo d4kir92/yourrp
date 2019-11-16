@@ -143,29 +143,29 @@ if CLIENT then
 			gui.OpenURL("http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152")
 		end
 		function showChanges:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 
 		if LocalPlayer():HasAccess() then
 			if VERSIONART == "workshop" then
-				local restartServer = createVGUI("DPanel", frame, 520, 80, 0, 0)
-				restartServer:SetText("")
+				local restartServer = createD("YButton", frame.con, YRP.ctr(500), YRP.ctr(80), YRP.ctr(540), YRP.ctr(200))
+				restartServer:SetText("Restart server, for update.")
 				function restartServer:DoClick()
 					net.Start("restartServer")
 					net.SendToServer()
 				end
 				function restartServer:Paint(pw, ph)
-					surfacePanel(self, pw, ph, "Restart server, for update.") --YRP.lang_string("LID_updateserver"))
+					hook.Run("YButtonPaint", self, pw, ph)
 				end
-				restartServer:SetPos(YRP.ctr(600 + 10), YRP.ctr(460))
+				restartServer:SetPos(YRP.ctr(20 + 500 + 20), YRP.ctr(350))
 			else
-				local download_latest_git = createD("YButton", frame.con, YRP.ctr(500), YRP.ctr(80), YRP.ctr(20), YRP.ctr(20))
+				local download_latest_git = createD("YButton", frame.con, YRP.ctr(500), YRP.ctr(80), YRP.ctr(540), YRP.ctr(200))
 				download_latest_git:SetText("LID_downloadlatestversion")
 				function download_latest_git:DoClick()
 					gui.OpenURL("https://github.com/d4kir92/GMOD-YourRP-unstable")
 				end
 				function download_latest_git:Paint(pw, ph)
-					hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_downloadlatestversion"))
+					hook.Run("YButtonPaint", self, pw, ph)
 				end
 				download_latest_git:SetPos(YRP.ctr(20 + 500 + 20), YRP.ctr(350))
 			end

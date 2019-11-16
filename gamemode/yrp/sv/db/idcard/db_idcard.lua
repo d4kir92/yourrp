@@ -16,7 +16,18 @@ end
 
 local elements = {
 	"background",
-	"server_name"
+	"hostname",
+	"role",
+	"group",
+	"idcardid",
+	"faction",
+	"rpname",
+	"box1",
+	"box2",
+	"box3",
+	"box4",
+	"grouplogo",
+	"serverlogo"
 }
 
 local names = {
@@ -25,6 +36,12 @@ local names = {
 	"int_ELEMENT_y",
 	"int_ELEMENT_w",
 	"int_ELEMENT_h",
+	"int_ELEMENT_r",
+	"int_ELEMENT_g",
+	"int_ELEMENT_b",
+	"int_ELEMENT_a",
+	"int_ELEMENT_ax",
+	"int_ELEMENT_ay"
 }
 
 -- CONFIG
@@ -36,14 +53,12 @@ local tries = 0
 local register = {}
 function LoadIDCardSetting(force)
 	tries = tries + 1
-
 	local missing = false
 
 	for i, ele in pairs(elements) do
 		for j, name in pairs(names) do
 			name = string.Replace(name, "ELEMENT", ele)
 			local value = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
-			pTab(value)
 			if wk(value) then
 				-- FOUND DATABASE VALUE
 				value = value[1]
@@ -64,9 +79,8 @@ function LoadIDCardSetting(force)
 						elseif v == "false" then
 							v = 0
 						end
-						print(n, v)
+
 						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")
-						print("LOADDDD")
 						LoadIDCardSetting(true)
 					end)
 				end
@@ -86,13 +100,10 @@ function LoadIDCardSetting(force)
 	end
 
 	if force then
-		print("Updated")
+		-- Updated
 	elseif missing and tries < maxtries then
 		-- If something was missing, Reload NW Variables
 		LoadIDCardSetting()
-	else
-		-- BUG, ERROR
-		YRP.msg("error", "To much tries in LoadIDCardSetting!")
 	end
 end
 LoadIDCardSetting()

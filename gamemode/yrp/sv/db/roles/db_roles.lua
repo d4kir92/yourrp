@@ -67,6 +67,17 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "1, 'Civilian', '0,0,255', 1, 0")
 end
 
+local yrp_ply_roles =  SQL_SELECT(DATABASE_NAME, "*", nil)
+if wk(yrp_ply_roles) then
+	for i, v in pairs(yrp_ply_roles) do
+		local rid = v.uniqueID
+		local idstructure = v.string_idstructure
+		if idstructure == "%%%%-%%%%-%%%%" or strEmpty(idstructure) then
+			SQL_UPDATE("yrp_ply_roles", "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. rid .. "'")
+		end
+	end
+end
+
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
 function RemoveUnusedGroups()
@@ -622,6 +633,8 @@ net.Receive("settings_add_role", function(len, ply)
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', int_up = '" .. up.uniqueID .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 		SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_role.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
+
+	SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 
 	printGM("db", "Added new role: " .. new_role.uniqueID)
 

@@ -1274,10 +1274,8 @@ net.Receive("gethelpmenu", function(len, ply)
 		if !strEmpty(info.text_server_rules) then
 			AddTab(tabs, "LID_rules", "getsiteserverrules")
 		end
-		if !strEmpty(info.text_server_collectionid) then
-			if tonumber(info.text_server_collectionid) > 0 then
-				AddTab(tabs, "LID_collection", "getsitecollection")
-			end
+		if !strEmpty(info.text_server_collectionid) and tonumber(info.text_server_collectionid) > 0 then
+			AddTab(tabs, "LID_collection", "getsitecollection")
 		end
 
 		if !strEmpty(info.text_social_website) or
@@ -1571,7 +1569,7 @@ net.Receive("ply_ban", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		if ea(_target) then
-			_target:Ban(24*60, false)
+			_target:Ban(24 * 60, false)
 			_target:Kick("You get banned for 24 hours by " .. ply:YRPName())
 		else
 			printGM("note", "ply_ban " .. tostring(_target) .. " IS NIL => NOT AVAILABLE")
