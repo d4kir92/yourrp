@@ -636,25 +636,9 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 			if language.percentage != nil then
 				language.percentage = tonumber(language.percentage)
-				text = text .. language.percentage .. "% | "
-				if language.percentage == 100 then
-					text = text .. "Was translated by "
-				elseif language.percentage == 0 then
-					text = text .. "Will be translated soon by "
-				else
-					text = text .. "Will be translated by "
-				end
-			else
-				text = text .. "Translated by "
+				text = text .. language.percentage .. "%)"
 			end
 
-			if !strEmpty(language.author) then
-				text = text .. language.author
-			else
-				text = text .. "... you?"
-			end
-
-			text = text .. ")"
 			_allProgressTexts[sho] = text
 			surface.SetFont(GetFont())
 			local width = surface.GetTextSize(text)
@@ -668,7 +652,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _h = 74
 		local _icon_h = _h - _br
 		local _icon_w = _icon_h * 1.478
-		local _w = _longestProgressText + YRP.ctr(_icon_w + 20 + 20)
+		local _w = YRP.ctr(800) -- _longestProgressText + YRP.ctr(_icon_w + 20 + 20)
 
 		local LANGUAGES = createD("YGroupBox", Parent, _w, Parent:GetTall(), Parent:GetWide() / 2 - _w / 2, 0)
 		LANGUAGES:SetText("Languages")
@@ -681,7 +665,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		--page.panellist:SetSpacing(_br)
 
 		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
-			local lan = createD("DButton", nil, LANGUAGES:GetContent():GetWide(), YRP.ctr(_h), 0, 0)
+			local lan = createD("YButton", nil, LANGUAGES:GetContent():GetWide(), YRP.ctr(_h), 0, 0)
 			lan:SetText("")
 			lan.language = language
 
@@ -699,7 +683,8 @@ net.Receive("getsiteyourrptranslations", function(len)
 					self.textcol = Color(255, 255, 0)
 				end
 
-				surfaceButton(self, pw, ph, "")
+				hook.Run("YButtonPaint", self, pw, ph)
+				--surfaceButton(self, pw, ph, "")
 				surfaceText(_allProgressTexts[sho], "mat1text", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
 				YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.language.short)), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 			end
@@ -707,9 +692,33 @@ net.Receive("getsiteyourrptranslations", function(len)
 			function lan:DoClick()
 				if self.language.author == "" then
 					OpenHelpTranslatingWindow()
-				end
+				else
+					local win = createD("YFrame", nil, YRP.ctr(1000), YRP.ctr(1600), 0, 0)
+					win:SetTitle(language.inenglish)
+					win:MakePopup()
+					function win:Paint(pw, ph)
+						hook.Run("YFramePaint", self, pw, ph)
+					end
+					win:Center()
+					win:SetHeaderHeight(YRP.ctr(100))
 
-				YRP.LoadLanguage(self.language.short)
+					for i, steamid64 in pairs(string.Explode(",", language.steamid64)) do
+						if !strEmpty(steamid64) then
+							local plink = "http://steamcommunity.com/profiles/" .. steamid64
+							local bg = createD("DPanel", win:GetContent(), win:GetContent():GetWide() - YRP.ctr(40), YRP.ctr(338), YRP.ctr(20), YRP.ctr(20) + (i - 1) * YRP.ctr(338 + 20))
+							local p = createD("DHTML", bg, YRP.ctr(1000), YRP.ctr(800), YRP.ctr(-26), YRP.ctr(-272))
+							p:OpenURL(plink)
+							local pb = createD("YButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
+							pb:SetText("")
+							function pb:DoClick()
+								gui.OpenURL(plink)
+							end
+							function pb:Paint(pw, ph)
+								--
+							end
+						end
+					end
+				end
 			end
 
 			LANGUAGES:AddItem(lan)

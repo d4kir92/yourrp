@@ -524,7 +524,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		local _cooldown_item = 120
 		for i, wep in pairs(_weapons) do
 			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
-				ply:DropSWEP(wep:GetClass())
+				ply:DropSWEP(wep:GetClass(), true)
 				timer.Simple(_cooldown_item, function()
 					if wep:IsValid() then
 						if wep:GetOwner() == "" then

@@ -620,12 +620,29 @@ util.AddNetworkString("settings_add_role")
 net.Receive("settings_add_role", function(len, ply)
 	local gro = tonumber(net.ReadString())
 	local pre = tonumber(net.ReadString())
+
+	local prerole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+	local has_prerole = false
+	if pre > 0 then
+		-- Has Prerole
+		has_prerole = true
+	end
+
 	SQL_INSERT_INTO(DATABASE_NAME, "int_groupID, int_prerole", "'" .. gro .. "', '" .. pre .. "'")
 
 	local roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 
 	local count = tonumber(table.Count(roles))
 	local new_role = roles[count]
+	if has_prerole then
+		prerole = prerole[1]
+		for name, value in pairs(prerole) do
+			local except = {"uniqueID", "int_prerole", "int_position", "int_groupID"}
+			if !table.HasValue(except, name) then
+				SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+			end
+		end
+	end
 	local up = roles[count - 1]
 	if count == 1 then
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', ", "uniqueID = '" .. new_role.uniqueID .. "'")

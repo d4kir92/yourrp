@@ -105,9 +105,9 @@ function Player:RemoveWeapon(cname)
 	return false
 end
 
-function Player:DropSWEP(cname)
+function Player:DropSWEP(cname, force)
 	self.dropdelay = self.dropdelay or CurTime() - 1
-	if self.dropdelay < CurTime() then
+	if self.dropdelay < CurTime() or force then
 		self.dropdelay = CurTime() + 1
 		local wep = self:GetWeapon(cname)
 		local clip1 = wep:Clip1()

@@ -357,11 +357,13 @@ function YRP.add_language(short)
 		yrp_button_info[short]["language"] = "Automatic"
 		yrp_button_info[short]["short"] = short
 		yrp_button_info[short]["author"] = "D4KiR"
+		yrp_button_info[short]["steamid64"] = ""
 	else
 		yrp_button_info[short]["inenglish"] = YRP.lang_string("LID_initinenglish")
 		yrp_button_info[short]["language"] = YRP.lang_string("LID_initlanguage")
 		yrp_button_info[short]["short"] = YRP.lang_string("LID_initshort")
 		yrp_button_info[short]["author"] = YRP.lang_string("LID_initauthor")
+		yrp_button_info[short]["steamid64"] = YRP.lang_string("LID_steamid64")
 	end
 end
 
