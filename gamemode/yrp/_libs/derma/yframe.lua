@@ -2,6 +2,14 @@
 
 local PANEL = {}
 
+function PANEL:GetLanguageChanger()
+	return self._lc or true
+end
+
+function PANEL:SetLanguageChanger(b)
+	self._lc = b
+end
+
 function PANEL:GetHeaderHeight()
 	return self._headerheight or 24
 end
@@ -23,75 +31,8 @@ function PANEL:SetBorder(b)
 	self._border = b
 end
 
-function PANEL:Think()
-
-	if self.sw != self:GetWide() or self.sh != self:GetTall() then
-		self.sw = self:GetWide()
-		self.sh = self:GetTall()
-
-		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
-		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
-
-		self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
-		self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
-	end
-
-	local mousex = math.Clamp( gui.MouseX(), 1, ScrW() - 1 )
-	local mousey = math.Clamp( gui.MouseY(), 1, ScrH() - 1 )
-
-	if ( self.Dragging ) then
-
-		local x = mousex - self.Dragging[1]
-		local y = mousey - self.Dragging[2]
-
-		-- Lock to screen bounds if screenlock is enabled
-		if ( self:GetScreenLock() ) then
-
-			x = math.Clamp( x, 0, ScrW() - self:GetWide() )
-			y = math.Clamp( y, 0, ScrH() - self:GetTall() )
-
-		end
-
-		self:SetPos( x, y )
-
-	end
-
-	if ( self.Sizing ) then
-
-		local x = mousex - self.Sizing[1]
-		local y = mousey - self.Sizing[2]
-		local px, py = self:GetPos()
-
-		if ( x < self.m_iMinWidth ) then x = self.m_iMinWidth elseif ( x > ScrW() - px && self:GetScreenLock() ) then x = ScrW() - px end
-		if ( y < self.m_iMinHeight ) then y = self.m_iMinHeight elseif ( y > ScrH() - py && self:GetScreenLock() ) then y = ScrH() - py end
-
-		self:SetSize( x, y )
-		self:SetCursor( "sizenwse" )
-
-		return
-	end
-
-	local screenX, screenY = self:LocalToScreen( 0, 0 )
-
-	if ( self.Hovered && self.m_bSizable && mousex > ( screenX + self:GetWide() - 20 ) && mousey > ( screenY + self:GetTall() - 20 ) ) then
-
-		self:SetCursor( "sizenwse" )
-		return
-
-	end
-
-	if ( self.Hovered && self:GetDraggable() && mousey < ( screenY + self:GetHeaderHeight() ) ) then
-		self:SetCursor( "sizeall" )
-		return
-	end
-
-	self:SetCursor( "arrow" )
-
-	-- Don't allow the frame to go higher than 0
-	if ( self.y < 0 ) then
-		self:SetPos( self.x, 0 )
-	end
-
+function PANEL:SetCloseButton( bShow )
+	self._cb = bShow
 end
 
 function PANEL:OnMousePressed()
@@ -167,6 +108,13 @@ function PANEL:GetContent()
 end
 
 function PANEL:Init()
+	if self._lc == nil then
+		self._lc = true
+	end
+	if self._cb == nil then
+		self._cb = true
+	end
+
 	self._headerheight = 24
 	self._border = 20
 
@@ -193,6 +141,83 @@ function PANEL:Init()
 	self.px, self.py = self:GetPos()
 
 	self:UpdateSize()
+end
+
+function PANEL:Think()
+	if self.langu != nil and self._lc != nil then
+		self.langu:SetVisible(self._lc)
+	end
+	if self.close != nil and self._cb != nil then
+		self.close:SetVisible(self._cb)
+	end
+
+	if self.sw != self:GetWide() or self.sh != self:GetTall() then
+		self.sw = self:GetWide()
+		self.sh = self:GetTall()
+
+		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
+		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+
+		self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+		self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+	end
+
+	local mousex = math.Clamp( gui.MouseX(), 1, ScrW() - 1 )
+	local mousey = math.Clamp( gui.MouseY(), 1, ScrH() - 1 )
+
+	if ( self.Dragging ) then
+
+		local x = mousex - self.Dragging[1]
+		local y = mousey - self.Dragging[2]
+
+		-- Lock to screen bounds if screenlock is enabled
+		if ( self:GetScreenLock() ) then
+
+			x = math.Clamp( x, 0, ScrW() - self:GetWide() )
+			y = math.Clamp( y, 0, ScrH() - self:GetTall() )
+
+		end
+
+		self:SetPos( x, y )
+
+	end
+
+	if ( self.Sizing ) then
+
+		local x = mousex - self.Sizing[1]
+		local y = mousey - self.Sizing[2]
+		local px, py = self:GetPos()
+
+		if ( x < self.m_iMinWidth ) then x = self.m_iMinWidth elseif ( x > ScrW() - px && self:GetScreenLock() ) then x = ScrW() - px end
+		if ( y < self.m_iMinHeight ) then y = self.m_iMinHeight elseif ( y > ScrH() - py && self:GetScreenLock() ) then y = ScrH() - py end
+
+		self:SetSize( x, y )
+		self:SetCursor( "sizenwse" )
+
+		return
+	end
+
+	local screenX, screenY = self:LocalToScreen( 0, 0 )
+
+	if ( self.Hovered && self.m_bSizable && mousex > ( screenX + self:GetWide() - 20 ) && mousey > ( screenY + self:GetTall() - 20 ) ) then
+
+		self:SetCursor( "sizenwse" )
+		return
+
+	end
+
+	if ( self.Hovered && self:GetDraggable() && mousey < ( screenY + self:GetHeaderHeight() ) ) then
+		self:SetCursor( "sizeall" )
+		return
+	end
+
+	self:SetCursor( "arrow" )
+
+	-- Don't allow the frame to go higher than 0
+	if ( self.y < 0 ) then
+		self:SetPos( self.x, 0 )
+	end
+
 end
 
 vgui.Register("YFrame", PANEL, "DFrame")

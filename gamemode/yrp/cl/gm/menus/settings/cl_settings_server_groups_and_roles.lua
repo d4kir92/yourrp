@@ -203,7 +203,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function up:Paint(pw, ph)
 				if gs.gplist[group.uniqueID].int_position > 1 then
 					local tab = {}
-					tab.color = Color(255, 255, 0)
+					tab.r = pw / 2
+					tab.color = Color(255, 255, 100)
 					DrawPanel(self, tab)
 					local tab2 = {}
 					tab2.x = pw / 2
@@ -227,7 +228,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function dn:Paint(pw, ph)
 				if gs.gplist[group.uniqueID].int_position < table.Count(gs.gplist.tab) then
 					local tab = {}
-					tab.color = Color(255, 255, 0)
+					tab.r = pw / 2
+					tab.color = Color(255, 255, 100)
 					DrawPanel(self, tab)
 					local tab2 = {}
 					tab2.x = pw / 2
@@ -248,16 +250,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
+			local text = YRP.lang_string("LID_underroles") .. " ▶"
+			local tw, _ = surface.GetTextSize(text)
+			tw = tw + YRP.ctr(20)
+			ch:SetWide(tw)
+			ch:SetPos(gs.gplist[group.uniqueID]:GetWide() - tw - YRP.ctr(10), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(50))
 			function ch:Paint(pw, ph)
 				local tab = {}
-				tab.color = Color(255, 255, 0)
+				tab.color = Color(255, 255, 100)
 				DrawPanel(self, tab)
 				local tab2 = {}
 				tab2.x = pw / 2
 				tab2.y = ph / 2
 				tab2.ax = 1
 				tab2.ay = 1
-				tab2.text = "▶"
+				tab2.text = text
 				tab2.font = "mat1text"
 				DrawText(tab2)
 			end
@@ -802,7 +809,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function up:Paint(pw, ph)
 				if rs.rplist[role.uniqueID].int_position > 1 then
 					local tab = {}
-					tab.color = Color(255, 255, 0)
+					tab.r = pw / 2
+					tab.color = Color(255, 255, 100)
 					DrawPanel(self, tab)
 					local tab2 = {}
 					tab2.x = pw / 2
@@ -826,7 +834,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function dn:Paint(pw, ph)
 				if rs.rplist[role.uniqueID].int_position < table.Count(rs.rplist.tab) then
 					local tab = {}
-					tab.color = Color(255, 255, 0)
+					tab.r = pw / 2
+					tab.color = Color(255, 255, 100)
 					DrawPanel(self, tab)
 					local tab2 = {}
 					tab2.x = pw / 2
@@ -847,16 +856,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP.ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(60))
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
+			local text = YRP.lang_string("LID_nextranks") .. " ▶"
+			local tw, _ = surface.GetTextSize(text)
+			tw = tw + YRP.ctr(20)
+			ch:SetWide(tw)
+			ch:SetPos(rs.rplist[role.uniqueID]:GetWide() - tw - YRP.ctr(10), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(50))
 			function ch:Paint(pw, ph)
 				local tab = {}
-				tab.color = Color(255, 255, 0)
+				tab.color = Color(255, 255, 100)
 				DrawPanel(self, tab)
 				local tab2 = {}
 				tab2.x = pw / 2
 				tab2.y = ph / 2
 				tab2.ax = 1
 				tab2.ay = 1
-				tab2.text = "▶"
+				tab2.text = text
 				tab2.font = "mat1text"
 				DrawText(tab2)
 			end
@@ -934,7 +948,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local idstructure = {}
 			idstructure.parent = ea.info:GetContent()
 			idstructure.uniqueID = role.uniqueID
-			idstructure.header = "LID_idstructure"
+			idstructure.header = YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)"
 			idstructure.netstr = "update_role_string_idstructure"
 			idstructure.value = role.string_idstructure
 			idstructure.uniqueID = role.uniqueID
@@ -1065,7 +1079,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			otherroles[0] = YRP.lang_string("LID_none")
 			for i, tab in pairs(roles) do
 				tab.uniqueID = tonumber(tab.uniqueID)
-				if tab.uniqueID != role.uniqueID then
+				if tab.uniqueID != role.uniqueID and tab.int_groupID == role.int_groupID then
 					otherroles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 				end
 			end

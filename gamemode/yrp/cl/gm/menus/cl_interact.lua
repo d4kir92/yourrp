@@ -12,10 +12,10 @@ function toggleInteractMenu()
 end
 
 function closeInteractMenu()
-	if _windowInteract != nil then
+	if wInteract != nil then
 		closeMenu()
-		_windowInteract:Remove()
-		_windowInteract = nil
+		wInteract:Remove()
+		wInteract = nil
 	end
 end
 
@@ -44,12 +44,12 @@ net.Receive("openInteractMenu", function(len)
 
 	local licenses = ply:GetLicenseNames()
 
-	_windowInteract = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1090), 0, 0)
-	_windowInteract:SetHeaderHeight(YRP.ctr(100))
-	function _windowInteract:OnClose()
+	wInteract = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1260), 0, 0)
+	wInteract:SetHeaderHeight(YRP.ctr(100))
+	function wInteract:OnClose()
 		closeMenu()
 	end
-	function _windowInteract:OnRemove()
+	function wInteract:OnRemove()
 		closeMenu()
 	end
 
@@ -74,94 +74,69 @@ net.Receive("openInteractMenu", function(len)
 			break
 		end
 	end
-	_windowInteract:SetTitle(YRP.lang_string("LID_interactmenu"))
+	wInteract:SetTitle(YRP.lang_string("LID_interactmenu"))
 
-	function _windowInteract:Paint(pw, ph)
+	function wInteract:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
+	end
 
-		if idcard then
-			draw.RoundedBox(YRP.ctr(30), YRP.ctr(10), YRP.ctr(100), YRP.ctr(750), YRP.ctr(350), Color(255, 255, 255, 255))
+	local content = wInteract:GetContent()
+	function content:Paint(pw, ph)
+		drawIDCard(ply, 0.6, YRP.ctr(10), YRP.ctr(10))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charTitle", YRP.ctr(10 + 10), YRP.ctr(105), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(GetHostName(), "charTitle", YRP.ctr(10 + 10), YRP.ctr(110 + 30), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(LocalPlayer():SteamID(), "charTitle", YRP.ctr(745), YRP.ctr(105), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
+		--[[ Licenses ]]--
+		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+		draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 
-			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(110 + 70), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-
-			draw.SimpleTextOutlined(tmpRPName, "charText", YRP.ctr(280), YRP.ctr(110 + 100), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-
-			if GetGlobalDBool("bool_characters_gender", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_gender") .. ":", "charHeader", YRP.ctr(280), YRP.ctr(270), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-				local gender = YRP.lang_string("LID_genderother")
-				if tmpGender == "gendermale" then
-					gender = YRP.lang_string("LID_gendermale")
-				elseif tmpGender == "genderfemale" then
-					gender = YRP.lang_string("LID_genderfemale")
-				elseif tmpGender == "genderother" then
-					gender = YRP.lang_string("LID_genderother")
-				end
-				draw.SimpleTextOutlined(gender, "charText", YRP.ctr(280), YRP.ctr(300), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-			end
-
-			draw.SimpleTextOutlined(tmpID, "charText", YRP.ctr(280), YRP.ctr(360), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 0))
-
-			--[[ Licenses ]]--
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-
-			--[[ Description ]]--
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(580), YRP.ctr(1070), YRP.ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-		end
+		--[[ Description ]]--
+		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 	end
 
 	if idcard then
-		local _tmpDescription = createD("DTextEntry", _windowInteract, YRP.ctr(1070), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(590))
+		local _tmpDescription = createD("DTextEntry", content, content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(640))
 		_tmpDescription:SetMultiline(true)
 		_tmpDescription:SetEditable(false)
 		_tmpDescription:SetText(tmpRPDescription)
-
-		local tmpAvatarI = createVGUI("AvatarImage", _windowInteract, 256, 256, 10 + 10, 180)
-		tmpAvatarI:SetPlayer(tmpPly, YRP.ctr(256))
 	end
 
-	local buttonTrade = createVGUI("DButton", _windowInteract, 530, 50, 10, 950)
-	buttonTrade:SetText("")
-	function buttonTrade:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("LID_trade") .. " (in future update)")
+	local btnTrade = createVGUI("YButton", content, 500, 50, 10, 1000)
+	btnTrade:SetText(YRP.lang_string("LID_trade") .. " (in future update)")
+	function btnTrade:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
 	end
 
 	if isInstructor then
 		if promoteable then
-			local buttonPromote = createVGUI("DButton", _windowInteract, 530, 50, 545, 950)
-			buttonPromote:SetText("")
-			function buttonPromote:DoClick()
+			local btnPromote = createVGUI("YButton", content, 500, 50, 520, 1000)
+			btnPromote:SetText(YRP.lang_string("LID_promote") .. ": " .. promoteName)
+			function btnPromote:DoClick()
 				net.Start("promotePlayer")
 					net.WriteString(tmpTargetSteamID)
 				net.SendToServer()
-				_windowInteract:Close()
+				wInteract:Close()
 			end
-			function buttonPromote:Paint(pw, ph)
-				surfaceButton(self, pw, ph, YRP.lang_string("LID_promote") .. ": " .. promoteName)
+			function btnPromote:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
 			end
 		end
 
 		if demoteable then
-			local buttonDemote = createVGUI("DButton", _windowInteract, 530, 50, 545, 950 + 10 + 50)
-			buttonDemote:SetText("")
-			function buttonDemote:DoClick()
+			local btnDemote = createVGUI("YButton", content, 500, 50, 520, 1000 + 10 + 50)
+			btnDemote:SetText(YRP.lang_string("LID_demote") .. ": " .. demoteName)
+			function btnDemote:DoClick()
 				net.Start("demotePlayer")
 					net.WriteString(tmpTargetSteamID)
 				net.SendToServer()
-				_windowInteract:Close()
+				wInteract:Close()
 			end
-			function buttonDemote:Paint(pw, ph)
-				surfaceButton(self, pw, ph, YRP.lang_string("LID_demote") .. ": " .. demoteName)
+			function btnDemote:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
 			end
 		end
 	end
 
-	_windowInteract:Center()
-	_windowInteract:MakePopup()
+	wInteract:Center()
+	wInteract:MakePopup()
 end)

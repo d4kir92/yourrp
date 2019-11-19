@@ -726,7 +726,7 @@ net.Receive("settings_subscribe_role", function(len, ply)
 		role = role[1]
 	end
 
-	local roles = SQL_SELECT(DATABASE_NAME, "string_name, uniqueID", nil)
+	local roles = SQL_SELECT(DATABASE_NAME, "string_name, uniqueID, int_groupID", nil)
 	if !wk(roles) then
 		roles = {}
 	end

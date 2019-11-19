@@ -111,28 +111,17 @@ net.Receive("isidcardenabled", function(len)
 
 	isidcardenabled = net.ReadBool()
 	if isidcardenabled then
-		local identification = createD("DPanel", cc.frame, YRP.ctr(800), YRP.ctr(360), ScrW() - YRP.ctr(800) - YRP.ctr(100), ScrH() - YRP.ctr(400) - YRP.ctr(100))
+		local scale = 0.6
+		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
+		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
+		local x = GetGlobalDInt("int_" .. "background" .. "_x", 0)
+		local y = GetGlobalDInt("int_" .. "background" .. "_y", 0)
+		w = w * scale
+		h = h * scale
+		local identification = createD("DPanel", cc.frame, w, h, ScrW() - w - YRP.ctr(50), ScrH() - h - YRP.ctr(50))
 		function identification:Paint(pw, ph)
-			if isidcardenabled then
-				draw.RoundedBox(YRP.ctr(15), 0, 0, pw, ph, Color(255, 255, 255, 255))
-
-				draw.SimpleTextOutlined(YRP.lang_string("LID_identifycard"), "charText", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(GetHostName(), "charText", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-				draw.SimpleTextOutlined(ply:SteamID(), "charText", pw - YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-				draw.SimpleTextOutlined(YRP.lang_string("LID_name"), "charText", YRP.ctr(256 + 20), YRP.ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(character.rpname, "charText", YRP.ctr(256 + 20), YRP.ctr(130), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-				if GetGlobalDBool("bool_characters_gender", false) then
-					draw.SimpleTextOutlined(YRP.lang_string("LID_gender"), "charText", YRP.ctr(256 + 20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string(character.gender), "charText", YRP.ctr(256 + 20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-				end
-			end
+			drawIDCard(ply, scale)
 		end
-
-		local avatar = createD("AvatarImage", identification, YRP.ctr(256), YRP.ctr(256), YRP.ctr(10), YRP.ctr(360 - 10 - 256))
-		avatar:SetPlayer(ply)
 	end
 end)
 
@@ -583,10 +572,10 @@ function openCharacterCreation()
 		button.h = YRP.ctr(100)
 		button.x = ScrW2() - YRP.ctr(400 + 300 + 50)
 		button.y = ScrH() - YRP.ctr(100 + 50)
-		local charactersBack = createMD("DButton", cc.frame, button.w, button.h, button.x, button.y, YRP.ctr(10))
-		charactersBack:SetText("")
+		local charactersBack = createMD("YButton", cc.frame, button.w, button.h, button.x, button.y, YRP.ctr(10))
+		charactersBack:SetText("LID_back")
 		function charactersBack:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string("LID_back"))
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 		function charactersBack:DoClick()
 			cc.frame:Close()
@@ -600,19 +589,22 @@ function openCharacterCreation()
 	button.h = YRP.ctr(100)
 	button.x = ScrW2() + YRP.ctr(300 + 50)
 	button.y = ScrH() - YRP.ctr(100 + 50)
-	local charactersConfirm = createMD("DButton", cc.frame, button.w, button.h, button.x, button.y, YRP.ctr(10))
+	local charactersConfirm = createMD("YButton", cc.frame, button.w, button.h, button.x, button.y, YRP.ctr(10))
 	charactersConfirm:SetText("")
 	function testName()
 		if string.len(character.rpname) >= 3 then
 			if string.len(character.rpname) < 33 then
 				character.cause = "OK"
+				character.color = Color(100, 255, 100)
 				return true
 			else
 				character.cause = YRP.lang_string("LID_nameistolong")
+				character.color = Color(255, 100, 100)
 				return false
 			end
 		else
 			character.cause = YRP.lang_string("LID_nameistoshort")
+			character.color = Color(255, 255, 100)
 			return false
 		end
 	end
@@ -624,7 +616,10 @@ function openCharacterCreation()
 		else
 			text = character.cause
 		end
-		surfaceButton(self, pw, ph, YRP.lang_string(text))
+		self:SetText(text)
+		local tab = {}
+		tab.color = character.color
+		hook.Run("YButtonPaint", self, pw, ph, tab)
 	end
 	function charactersConfirm:DoClick()
 		if testName() then

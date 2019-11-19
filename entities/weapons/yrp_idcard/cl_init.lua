@@ -101,7 +101,7 @@ function YDrawIDCards(ply)
 									ply.htmlmat = ply.html:GetHTMLMaterial()
 									if ply.htmlmat != nil and !ply.html.found then
 										ply.html.found = true
-										timer.Simple(1, function()
+										timer.Simple(0.1, function()
 											ply.matname = ply.htmlmat:GetName()
 											local matdata =	{
 												["$basetexture"] = ply.matname,

@@ -485,7 +485,7 @@ net.Receive("Connect_Settings_General", function(len)
 				if !string.find(ele, "box") then
 					name = YRP.lang_string("LID_" .. ele)
 				end
-				local e = createD("DFrame", idbg, GetGlobalDInt("int_" .. ele .. "_w", 10), GetGlobalDInt("int_" .. ele .. "_h", 10), GetGlobalDInt("int_" .. ele .. "_x", 10), GetGlobalDInt("int_" .. ele .. "_y", 10))
+				local e = createD("YFrame", idbg, GetGlobalDInt("int_" .. ele .. "_w", 10), GetGlobalDInt("int_" .. ele .. "_h", 10), GetGlobalDInt("int_" .. ele .. "_x", 10), GetGlobalDInt("int_" .. ele .. "_y", 10))
 				if string.find(ele, "serverlogo") then
 					local size = 512
 					e.html = createD("DHTML", e, size, size, 0, 0)
@@ -511,6 +511,8 @@ net.Receive("Connect_Settings_General", function(len)
 
 				e:SetTitle("")
 				e:ShowCloseButton(false)
+				e:SetCloseButton(false)
+				e:SetLanguageChanger(false)
 				e:SetSizable(true)
 				e.ts = CurTime() + 1
 				e.ts2 = CurTime() + 1
@@ -535,6 +537,8 @@ net.Receive("Connect_Settings_General", function(len)
 					else
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
 					end
+
+					draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, 100))
 
 					local tx = 0
 					local ty = 0

@@ -300,6 +300,7 @@ countries["NL"] = "Netherlands"
 countries["NO"] = "Norway"
 countries["NZ"] = "New Zealand"
 
+countries["PA"] = "Panama"
 countries["PE"] = "Peru"
 countries["PH"] = "Philippines"
 countries["PL"] = "Poland"

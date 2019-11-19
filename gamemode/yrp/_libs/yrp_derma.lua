@@ -19,12 +19,13 @@ end
 
 function DrawPanel(panel, tab)
 	tab = tab or {}
+	tab.r = tab.r or 0
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.w = tab.w or panel:GetWide()
 	tab.h = tab.h or panel:GetTall()
 	tab.color = tab.color or Color(255, 255, 255)
-	draw.RoundedBox(0, tab.x, tab.y, tab.w, tab.h, tab.color)
+	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
 end
 
 function DHorizontalScroller(tab)
