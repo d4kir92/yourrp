@@ -385,7 +385,7 @@ function Player:GeneralLoadout()
 	--printGM("gm", "[GeneralLoadout] " .. self:YRPName())
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
-			SetGlobalDString(i, set)
+			SetGlobalDString(i, SQL_STR_OUT(set))
 		elseif string.StartWith(i, "bool_") then
 			SetGlobalDBool(i, tobool(set))
 		elseif string.StartWith(i, "int_") then

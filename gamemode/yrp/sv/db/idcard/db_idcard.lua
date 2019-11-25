@@ -12,6 +12,11 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
 end
 
+if SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") != nil then
+	SQL_UPDATE(DATABASE_NAME, "value = '0'", "name = 'int_background_x'")
+	SQL_UPDATE(DATABASE_NAME, "value = '0'", "name = 'int_background_y'")
+end
+
 --SQL_DROP_TABLE(DATABASE_NAME)
 
 local elements = {
@@ -26,7 +31,7 @@ local elements = {
 	"box2",
 	"box3",
 	"box4",
-	"grouplogo",
+	--"grouplogo",
 	"serverlogo"
 }
 

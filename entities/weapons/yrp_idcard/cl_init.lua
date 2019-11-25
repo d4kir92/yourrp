@@ -29,7 +29,7 @@ function YDrawIDCards(ply)
 				"box2",
 				"box3",
 				"box4",
-				"grouplogo",
+				--"grouplogo",
 				"serverlogo"
 			}
 

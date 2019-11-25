@@ -642,7 +642,10 @@ net.Receive("settings_add_role", function(len, ply)
 				SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 			end
 		end
+	else
+		SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 	end
+
 	local up = roles[count - 1]
 	if count == 1 then
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', ", "uniqueID = '" .. new_role.uniqueID .. "'")
@@ -650,8 +653,6 @@ net.Receive("settings_add_role", function(len, ply)
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', int_up = '" .. up.uniqueID .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 		SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_role.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
-
-	SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 
 	printGM("db", "Added new role: " .. new_role.uniqueID)
 
@@ -1500,4 +1501,12 @@ function CheckIfRoleExists(ply, ruid)
 
 		ply:KillSilent()
 	end
+end
+
+function GetRoleTable(rid)
+	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. rid .. "'")
+	if wk(result) then
+		result = result[1]
+	end
+	return result
 end

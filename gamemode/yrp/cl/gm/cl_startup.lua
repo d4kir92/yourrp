@@ -1345,7 +1345,6 @@ function drawStringBox(ent, instr, z, color)
 	end
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
-	local sca = ent:GetModelScale() / 4
 	local str = instr
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, 0.2)
 		surface.SetFont("YRP_18_500")
@@ -2009,7 +2008,7 @@ function drawIDCard(ply, scale, px, py)
 		"box2",
 		"box3",
 		"box4",
-		"grouplogo",
+		--"grouplogo",
 		"serverlogo"
 	}
 

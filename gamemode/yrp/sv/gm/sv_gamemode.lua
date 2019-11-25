@@ -923,3 +923,36 @@ function GM:PostCleanupMap()
 	YRP.msg("note", "RELOAD DOORS")
 	loadDoors()
 end
+
+
+
+-- TEST - TODO
+--[[
+function sendToDiscord(msg)
+	msg = msg or ""
+
+	local data = {
+		["username"] = "TESTNAME",
+		["icon_url"] = "http://i.imgur.com/XLgutLX.png",
+		["text"] = "test"
+	}
+
+	local newdata = util.TableToJSON(data)
+
+	http.Post(
+	"https://discordapp.com/api/webhooks/646291405194657802/TOkSVYZeXojEa0OR4bCOOZHv7AZdY76IdZ6OVJK3WRG4EAW4pYnRronMnhrrpGnIA45M",
+	newdata,
+	function( result, ... )
+		if result then
+			print( "Done!" )
+			print(result, ...)
+		end
+	end,
+	function( failed )
+		print( failed )
+	end,
+	{["Content-Type"] = "application/json"}
+	)
+end
+--sendToDiscord("TEST")
+]]

@@ -29,7 +29,7 @@ function Player:YRPGetLanguageShort()
 end
 
 function Player:HasAccess()
-	return self:GetDBool("bool_adminaccess", false)
+	return self:GetDBool("bool_adminaccess", false) or self:IsSuperAdmin()
 end
 
 function Player:LoadedGamemode()

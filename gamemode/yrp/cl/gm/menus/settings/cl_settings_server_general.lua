@@ -463,6 +463,7 @@ net.Receive("Connect_Settings_General", function(len)
 				for x = 0, ScrW(), gs do
 					draw.RoundedBox(0, x, 0, 1, ph, Color(255, 255, 255, 255))
 				end
+				drawIDCard(LocalPlayer(), 1)
 			end
 
 			local elements = {
@@ -477,7 +478,7 @@ net.Receive("Connect_Settings_General", function(len)
 				"box2",
 				"box3",
 				"box4",
-				"grouplogo",
+				--"grouplogo",
 				"serverlogo"
 			}
 			for i, ele in pairs(elements) do
@@ -486,6 +487,13 @@ net.Receive("Connect_Settings_General", function(len)
 					name = YRP.lang_string("LID_" .. ele)
 				end
 				local e = createD("YFrame", idbg, GetGlobalDInt("int_" .. ele .. "_w", 10), GetGlobalDInt("int_" .. ele .. "_h", 10), GetGlobalDInt("int_" .. ele .. "_x", 10), GetGlobalDInt("int_" .. ele .. "_y", 10))
+				if string.find(ele, "background") then
+					e:SetDraggable(false)
+					e.draggable = false
+				else
+					e:SetDraggable(true)
+					e.draggable = true
+				end
 				if string.find(ele, "serverlogo") then
 					local size = 512
 					e.html = createD("DHTML", e, size, size, 0, 0)
@@ -508,7 +516,7 @@ net.Receive("Connect_Settings_General", function(len)
 						end
 					end
 				end
-
+				e:SetHeaderHeight(YRP.ctr(100))
 				e:SetTitle("")
 				e:ShowCloseButton(false)
 				e:SetCloseButton(false)
@@ -517,30 +525,49 @@ net.Receive("Connect_Settings_General", function(len)
 				e.ts = CurTime() + 1
 				e.ts2 = CurTime() + 1
 				function e:Paint(pw, ph)
-					local br = 2
-					draw.RoundedBox(0, 0, 0, pw, br, Color(0, 0, 0))
-					draw.RoundedBox(0, 0, ph - br, pw, br, Color(0, 0, 0))
-					draw.RoundedBox(0, 0, 0, br, ph, Color(0, 0, 0))
-					draw.RoundedBox(0, pw - br, 0, br, ph, Color(0, 0, 0))
-					if ele != "background" and !string.find(ele,  "box") then
-						if !string.find(ele, "logo") or GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
-							local bgcolor = Color(255, 0, 0, 200)
-							if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
-								bgcolor = Color(0, 255, 0, 0)
-							end
-							draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
-						elseif e.mat != nil then
-							surface.SetDrawColor(255, 255, 255, 255)
-							surface.SetMaterial(e.mat)
-							surface.DrawTexturedRect(0, 0, pw, ph)
-						end
-					else
+					--[[if ele == "background" or string.find(ele,  "box") then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
+					end]]
+					local visible = false
+					local mx, my = gui.MousePos()
+					local px, py = self:GetPos()
+					if self:IsHovered() or mx > px and mx < px + pw and my > py and my < py + ph then
+						visible = true
 					end
 
-					draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, 100))
+					if self.toggle != nil then
+						self.toggle:SetVisible(visible)
+					end
+					if self.setting != nil then
+						self.setting:SetVisible(visible)
+					end
 
-					local tx = 0
+					if visible then
+						local br = 2
+						draw.RoundedBox(0, 0, 0, pw, br, Color(0, 0, 0))
+						draw.RoundedBox(0, 0, ph - br, pw, br, Color(0, 0, 0))
+						draw.RoundedBox(0, 0, 0, br, ph, Color(0, 0, 0))
+						draw.RoundedBox(0, pw - br, 0, br, ph, Color(0, 0, 0))
+						if ele != "background" and !string.find(ele,  "box") then
+							if !string.find(ele, "logo") or GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
+								local bgcolor = Color(255, 0, 0, 200)
+								if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
+									bgcolor = Color(0, 255, 0, 0)
+								end
+								draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
+							elseif e.mat != nil then
+								surface.SetDrawColor(255, 255, 255, 255)
+								surface.SetMaterial(e.mat)
+								surface.DrawTexturedRect(0, 0, pw, ph)
+							end
+						end
+
+						if self:IsDraggable() or e.draggable then
+							draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, 100))
+						end
+					end
+
+					--[[local tx = 0
 					local ty = 0
 					local ax = GetGlobalDInt("int_" .. ele .. "_ax", 0)
 					if ax == 0 then
@@ -560,7 +587,7 @@ net.Receive("Connect_Settings_General", function(len)
 						ay = 4
 						ty = ph
 					end
-					draw.SimpleText(name, "DermaDefault", tx, ty, Color(255, 255, 255, 255), ax, ay)
+					draw.SimpleText(name, "DermaDefault", tx, ty, Color(255, 255, 255, 255), ax, ay)]]
 
 					-- SIZE
 					local w, h = self:GetSize()
@@ -666,8 +693,8 @@ net.Receive("Connect_Settings_General", function(len)
 					X = X + YRP.ctr(50 + 2)
 				end
 
-				e.setting = createD("DButton", e, YRP.ctr(50), YRP.ctr(50), X, 0)
-				e.setting:SetText("")
+				e.setting = createD("YButton", e, YRP.ctr(250), YRP.ctr(50), X, 0)
+				e.setting:SetText("LID_settings")
 				function e.setting:DoClick()
 					local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 					win:SetTitle(name)
@@ -705,9 +732,13 @@ net.Receive("Connect_Settings_General", function(len)
 						net.SendToServer()
 					end
 
+					local halign = {}
+					halign[0] = "L"
+					halign[1] = "C"
+					halign[2] = "R"
 					for x = 0, 2 do
-						local ax = createD("DButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(470))
-						ax:SetText("")
+						local ax = createD("YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(470))
+						ax:SetText(halign[x])
 						function ax:DoClick()
 							net.Start("update_idcard_" .. "int_" .. ele .. "_ax")
 								net.WriteString("int_" .. ele .. "_ax")
@@ -715,9 +746,13 @@ net.Receive("Connect_Settings_General", function(len)
 							net.SendToServer()
 						end
 					end
+					local valign = {}
+					valign[0] = "T"
+					valign[1] = "C"
+					valign[2] = "B"
 					for x = 0, 2 do
-						local ay = createD("DButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(590))
-						ay:SetText("")
+						local ay = createD("YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(590))
+						ay:SetText(valign[x])
 						function ay:DoClick()
 							net.Start("update_idcard_" .. "int_" .. ele .. "_ay")
 								net.WriteString("int_" .. ele .. "_ay")

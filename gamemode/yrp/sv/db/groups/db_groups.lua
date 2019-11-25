@@ -491,3 +491,11 @@ if wk(old_groups) then
 		end
 	end
 end
+
+function GetGroupTable(gid)
+	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. gid .. "'")
+	if wk(result) then
+		result = result[1]
+	end
+	return result
+end
