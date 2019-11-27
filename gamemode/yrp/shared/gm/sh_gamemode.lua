@@ -17,8 +17,13 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
+<<<<<<< HEAD
 GM.VersionBeta = 143 --do NOT change this!
-GM.VersionCanary = 287 --do NOT change this!
+GM.VersionCanary = 288 --do NOT change this!
+=======
+GM.VersionBeta = 142 --do NOT change this!
+GM.VersionCanary = 286 --do NOT change this!
+>>>>>>> canary
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
