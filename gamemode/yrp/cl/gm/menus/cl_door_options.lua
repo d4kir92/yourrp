@@ -91,6 +91,7 @@ function buyWindow(door, tabBuilding)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "YRP_18_500", br, YRP.ctr(450), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ":", "YRP_18_500", br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_canbeowned") .. ":", "YRP_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "YRP_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
 		if tostring(door:GetDString("buildingID", "-1")) == "-1" then
 			draw.SimpleTextOutlined("Loading IDs", "YRP_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
@@ -171,10 +172,15 @@ function buyWindow(door, tabBuilding)
 		net.Receive("getBuildingGroups", function()
 			local _tmpGroups = net.ReadTable()
 
-			if _ComboBoxGroupName != NULL then
+			if pa(_ComboBoxGroupName) then
 				for k, v in pairs(_tmpGroups) do
 					if pa(_ComboBoxGroupName) then
-						_ComboBoxGroupName:AddChoice(v.string_name, v.uniqueID, false)
+						v.uniqueID = tonumber(v.uniqueID)
+						if v.uniqueID == 0 then
+							_ComboBoxGroupName:AddChoice(YRP.lang_string("LID_public"), v.uniqueID, false)
+						else
+							_ComboBoxGroupName:AddChoice(v.string_name, v.uniqueID, false)
+						end
 					else
 						break
 					end
@@ -200,6 +206,18 @@ function buyWindow(door, tabBuilding)
 				net.Start("changeBuildingPrice")
 					net.WriteString(tabBuilding.uniqueID)
 					net.WriteString(tabBuilding.buildingprice)
+				net.SendToServer()
+			end
+		end
+
+		local _TextEntrySL = createD("DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(550))
+		_TextEntrySL:SetText(tabBuilding.int_securitylevel)
+		function _TextEntrySL:OnChange()
+			tabBuilding.int_securitylevel = _TextEntrySL:GetValue()
+			if tabBuilding.int_securitylevel != nil then
+				net.Start("changeBuildingSL")
+					net.WriteString(tabBuilding.uniqueID)
+					net.WriteString(tabBuilding.int_securitylevel)
 				net.SendToServer()
 			end
 		end
@@ -246,6 +264,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 
 		draw.RoundedBox(0, 0, YRP.ctr(220), pw, ph - YRP.ctr(220), Color(255, 255, 100, 200))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "YRP_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "YRP_18_500", YRP.ctr(540), YRP.ctr(370), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
 		draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "FAILED"), "YRP_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", -1), "YRP_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
@@ -311,6 +330,18 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 				net.WriteString(tabBuilding.uniqueID)
 				net.WriteString(tabBuilding.name)
 			net.SendToServer()
+		end
+
+		local _TextEntrySL = createD("DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(540), YRP.ctr(370))
+		_TextEntrySL:SetText(tabBuilding.int_securitylevel)
+		function _TextEntrySL:OnChange()
+			tabBuilding.int_securitylevel = _TextEntrySL:GetValue()
+			if tabBuilding.int_securitylevel != nil then
+				net.Start("changeBuildingSL")
+					net.WriteString(tabBuilding.uniqueID)
+					net.WriteString(tabBuilding.int_securitylevel)
+				net.SendToServer()
+			end
 		end
 
 		local _buttonRemoveOwner = createD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(370))

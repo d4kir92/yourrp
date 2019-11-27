@@ -300,8 +300,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				cur_group.par = tonumber(net.ReadString())
 				gs.gplist.tab = groups
 				for i, group in pairs(groups) do
-					CreateLineGroup(gs.gplist, group)
-					group["int_position"] = tonumber(group["int_position"])
+					group.uniqueID = tonumber(group.uniqueID)
+					if group.uniqueID > 0 then
+						CreateLineGroup(gs.gplist, group)
+						group["int_position"] = tonumber(group["int_position"])
+					end
 				end
 
 				gs.gplist:SortByMember("int_position", true)
@@ -538,6 +541,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				if ea.typ == "role" then
 					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. ConvertToDarkRPJobName(ea.tab.string_name) .. "      RoleUID: " .. ea.tab.uniqueID
+				elseif ea.typ == "group" then
+					tab2.text = tab2.text .. "       GroupUID: " .. ea.tab.uniqueID
 				end
 				tab2.font = "mat1text"
 				DrawText(tab2)
@@ -548,7 +553,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local group = net.ReadTable()
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
-
+			
 			if group.uniqueID != nil then
 				net.Start("settings_subscribe_rolelist")
 					net.WriteString(group.uniqueID)
@@ -557,197 +562,205 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			group.uniqueID = tonumber(group.uniqueID)
-			cur_group.edi = group.uniqueID
+			if group.uniqueID > 0 then
+				cur_group.edi = group.uniqueID
 
-			ea.typ = "group"
-			ea.tab = group
+				ea.typ = "group"
+				ea.tab = group
 
-			for i, pnl in pairs(ea.background:GetChildren()) do
-				pnl:Remove()
-			end
-
-			ea[group.uniqueID] = ea[group.uniqueID] or {}
-
-
-
-			local info = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(540), YRP.ctr(20), YRP.ctr(20))
-			info:SetText("LID_general")
-			function info:Paint(pw, ph)
-				hook.Run("YGroupBoxPaint", self, pw, ph)
-			end
-
-			ea[group.uniqueID].info = info
-			ea.info = ea[group.uniqueID].info
-			function ea.info:OnRemove()
-				if cur_group.edi != group.uniqueID then
-					net.Start("settings_unsubscribe_group")
-						net.WriteString(group.uniqueID)
-					net.SendToServer()
-				end
-			end
-
-			local name = {}
-			name.parent = ea.info:GetContent()
-			name.uniqueID = group.uniqueID
-			name.header = "LID_name"
-			name.netstr = "update_group_string_name"
-			name.value = group.string_name
-			name.uniqueID = group.uniqueID
-			name.lforce = false
-			ea[group.uniqueID].name = DTextBox(name)
-
-			local hr = {}
-			hr.h = YRP.ctr(16)
-			hr.parent = ea.info:GetContent()
-			DHr(hr)
-
-			local color = {}
-			color.parent = ea.info:GetContent()
-			color.uniqueID = group.uniqueID
-			color.header = "LID_color"
-			color.netstr = "update_group_string_color"
-			color.value = group.string_color
-			color.uniqueID = group.uniqueID
-			color.lforce = false
-			ea[group.uniqueID].color = DColor(color)
-
-			DHr(hr)
-
-			local icon = {}
-			icon.parent = ea.info:GetContent()
-			icon.uniqueID = group.uniqueID
-			icon.header = "LID_icon"
-			icon.netstr = "update_group_string_icon"
-			icon.value = group.string_icon
-			icon.uniqueID = group.uniqueID
-			icon.lforce = false
-			ea[group.uniqueID].icon = DTextBox(icon)
-
-			DHr(hr)
-
-			local othergroups = {}
-			othergroups[0] = YRP.lang_string("LID_factions")
-			for i, tab in pairs(groups) do
-				othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
-			end
-
-			if group.uniqueID != 1 then
-				local parentgroup = {}
-				parentgroup.parent = ea.info:GetContent()
-				parentgroup.uniqueID = group.uniqueID
-				parentgroup.header = "LID_parentgroup"
-				parentgroup.netstr = "update_group_int_parentgroup"
-				parentgroup.value = group.int_parentgroup
-				parentgroup.uniqueID = group.uniqueID
-				parentgroup.lforce = false
-				parentgroup.choices = othergroups
-				ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
-			end
-
-
-
-			local restriction = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(1040), YRP.ctr(20))
-			restriction:SetText("LID_restriction")
-			function restriction:Paint(pw, ph)
-				hook.Run("YGroupBoxPaint", self, pw, ph)
-			end
-
-			ea[group.uniqueID].restriction = restriction
-			ea.restriction = ea[group.uniqueID].restriction
-
-			if group.uniqueID != 1 then
-				local gugs = string.Explode(",", group.string_usergroups)
-
-				local ugs = {}
-				ugs["ALL"] = {}
-				ugs["ALL"].checked = table.HasValue(gugs, "ALL")
-				ugs["ALL"]["choices"] = {}
-				for i, pl in pairs(player.GetAll()) do
-					ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
-					ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+				for i, pnl in pairs(ea.background:GetChildren()) do
+					pnl:Remove()
 				end
 
-				for i, ug in pairs(db_ugs) do
-					ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
-					ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+				ea[group.uniqueID] = ea[group.uniqueID] or {}
+
+
+
+				local info = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(540), YRP.ctr(20), YRP.ctr(20))
+				info:SetText("LID_general")
+				function info:Paint(pw, ph)
+					hook.Run("YGroupBoxPaint", self, pw, ph)
 				end
 
-				local usergroups = {}
-				usergroups.parent = ea.restriction:GetContent()
-				usergroups.uniqueID = group.uniqueID
-				usergroups.header = "LID_usergroups"
-				usergroups.netstr = "update_group_string_usergroups"
-				usergroups.value = group.string_usergroups
-				usergroups.uniqueID = group.uniqueID
-				usergroups.lforce = false
-				usergroups.choices = ugs
-				ea[group.uniqueID].usergroups = DCheckBoxes(usergroups)
-			end
+				ea[group.uniqueID].info = info
+				ea.info = ea[group.uniqueID].info
+				function ea.info:OnRemove()
+					if cur_group.edi != group.uniqueID then
+						net.Start("settings_unsubscribe_group")
+							net.WriteString(group.uniqueID)
+						net.SendToServer()
+					end
+				end
 
-			hr.parent = ea.restriction:GetContent()
-			DHr(hr)
+				local name = {}
+				name.parent = ea.info:GetContent()
+				name.uniqueID = group.uniqueID
+				name.header = "LID_name"
+				name.netstr = "update_group_string_name"
+				name.value = group.string_name
+				name.uniqueID = group.uniqueID
+				name.lforce = false
+				ea[group.uniqueID].name = DTextBox(name)
 
-			if group.uniqueID != 1 then
-				local requireslevel = {}
-				requireslevel.parent = ea.restriction:GetContent()
-				requireslevel.header = "LID_requireslevel"
-				requireslevel.netstr = "update_group_int_requireslevel"
-				requireslevel.value = group.int_requireslevel
-				requireslevel.uniqueID = group.uniqueID
-				requireslevel.lforce = false
-				requireslevel.min = 1
-				requireslevel.max = 100
-				ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
-			end
+				local hr = {}
+				hr.h = YRP.ctr(16)
+				hr.parent = ea.info:GetContent()
+				DHr(hr)
 
-			DHr(hr)
-
-			local groupvoicechat = {}
-			groupvoicechat.parent = ea.restriction:GetContent()
-			groupvoicechat.uniqueID = group.uniqueID
-			groupvoicechat.header = "LID_canusegroupvoicechat"
-			groupvoicechat.netstr = "update_group_bool_groupvoicechat"
-			groupvoicechat.value = group.bool_groupvoicechat
-			groupvoicechat.uniqueID = group.uniqueID
-			groupvoicechat.lforce = false
-			ea[group.uniqueID].groupvoicechat = DCheckBox(groupvoicechat)
-
-			DHr(hr)
-
-			if group.uniqueID != 1 then
-				local whitelist = {}
-				whitelist.parent = ea.restriction:GetContent()
-				whitelist.uniqueID = group.uniqueID
-				whitelist.header = "LID_useswhitelist"
-				whitelist.netstr = "update_group_bool_whitelist"
-				whitelist.value = group.bool_whitelist
-				whitelist.uniqueID = group.uniqueID
-				whitelist.lforce = false
-				ea[group.uniqueID].whitelist = DCheckBox(whitelist)
+				local color = {}
+				color.parent = ea.info:GetContent()
+				color.uniqueID = group.uniqueID
+				color.header = "LID_color"
+				color.netstr = "update_group_string_color"
+				color.value = group.string_color
+				color.uniqueID = group.uniqueID
+				color.lforce = false
+				ea[group.uniqueID].color = DColor(color)
 
 				DHr(hr)
 
-				local locked = {}
-				locked.parent = ea.restriction:GetContent()
-				locked.uniqueID = group.uniqueID
-				locked.header = "LID_locked"
-				locked.netstr = "update_group_bool_locked"
-				locked.value = group.bool_locked
-				locked.uniqueID = group.uniqueID
-				locked.lforce = false
-				ea[group.uniqueID].locked = DCheckBox(locked)
+				local icon = {}
+				icon.parent = ea.info:GetContent()
+				icon.uniqueID = group.uniqueID
+				icon.header = "LID_icon"
+				icon.netstr = "update_group_string_icon"
+				icon.value = group.string_icon
+				icon.uniqueID = group.uniqueID
+				icon.lforce = false
+				ea[group.uniqueID].icon = DTextBox(icon)
 
 				DHr(hr)
 
-				local visible = {}
-				visible.parent = ea.restriction:GetContent()
-				visible.uniqueID = group.uniqueID
-				visible.header = "LID_visible"
-				visible.netstr = "update_group_bool_visible"
-				visible.value = group.bool_visible
-				visible.uniqueID = group.uniqueID
-				visible.lforce = false
-				ea[group.uniqueID].visible = DCheckBox(visible)
+				local othergroups = {}
+				othergroups[0] = YRP.lang_string("LID_factions")
+				for i, tab in pairs(groups) do
+					othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+				end
+
+				if group.uniqueID > 1 then
+					local parentgroup = {}
+					parentgroup.parent = ea.info:GetContent()
+					parentgroup.uniqueID = group.uniqueID
+					parentgroup.header = "LID_parentgroup"
+					parentgroup.netstr = "update_group_int_parentgroup"
+					parentgroup.value = group.int_parentgroup
+					parentgroup.uniqueID = group.uniqueID
+					parentgroup.lforce = false
+					parentgroup.choices = othergroups
+					ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
+				end
+
+
+
+				local restriction = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(1040), YRP.ctr(20))
+				restriction:SetText("LID_restriction")
+				function restriction:Paint(pw, ph)
+					hook.Run("YGroupBoxPaint", self, pw, ph)
+				end
+
+				ea[group.uniqueID].restriction = restriction
+				ea.restriction = ea[group.uniqueID].restriction
+
+				hr.parent = ea.restriction:GetContent()
+
+				if group.uniqueID > 1 then
+					local gugs = string.Explode(",", group.string_usergroups)
+
+					local ugs = {}
+					ugs["ALL"] = {}
+					ugs["ALL"].checked = table.HasValue(gugs, "ALL")
+					ugs["ALL"]["choices"] = {}
+					for i, pl in pairs(player.GetAll()) do
+						ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())] or {}
+						ugs["ALL"]["choices"][string.upper(pl:GetUserGroup())].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup()))
+					end
+
+					for i, ug in pairs(db_ugs) do
+						ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+						ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+					end
+
+					local usergroups = {}
+					usergroups.parent = ea.restriction:GetContent()
+					usergroups.uniqueID = group.uniqueID
+					usergroups.header = "LID_usergroups"
+					usergroups.netstr = "update_group_string_usergroups"
+					usergroups.value = group.string_usergroups
+					usergroups.uniqueID = group.uniqueID
+					usergroups.lforce = false
+					usergroups.choices = ugs
+					ea[group.uniqueID].usergroups = DCheckBoxes(usergroups)
+
+					DHr(hr)
+				end
+
+				if group.uniqueID > 1 then
+					local requireslevel = {}
+					requireslevel.parent = ea.restriction:GetContent()
+					requireslevel.header = "LID_requireslevel"
+					requireslevel.netstr = "update_group_int_requireslevel"
+					requireslevel.value = group.int_requireslevel
+					requireslevel.uniqueID = group.uniqueID
+					requireslevel.lforce = false
+					requireslevel.min = 1
+					requireslevel.max = 100
+					ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
+
+					DHr(hr)
+				end
+
+
+				if group.uniqueID > 0 then
+					local groupvoicechat = {}
+					groupvoicechat.parent = ea.restriction:GetContent()
+					groupvoicechat.uniqueID = group.uniqueID
+					groupvoicechat.header = "LID_canusegroupvoicechat"
+					groupvoicechat.netstr = "update_group_bool_groupvoicechat"
+					groupvoicechat.value = group.bool_groupvoicechat
+					groupvoicechat.uniqueID = group.uniqueID
+					groupvoicechat.lforce = false
+					ea[group.uniqueID].groupvoicechat = DCheckBox(groupvoicechat)
+
+					DHr(hr)
+				end
+
+				if group.uniqueID > 1 then
+					local whitelist = {}
+					whitelist.parent = ea.restriction:GetContent()
+					whitelist.uniqueID = group.uniqueID
+					whitelist.header = "LID_useswhitelist"
+					whitelist.netstr = "update_group_bool_whitelist"
+					whitelist.value = group.bool_whitelist
+					whitelist.uniqueID = group.uniqueID
+					whitelist.lforce = false
+					ea[group.uniqueID].whitelist = DCheckBox(whitelist)
+
+					DHr(hr)
+				end
+
+				if group.uniqueID != 1 then
+					local locked = {}
+					locked.parent = ea.restriction:GetContent()
+					locked.uniqueID = group.uniqueID
+					locked.header = "LID_locked"
+					locked.netstr = "update_group_bool_locked"
+					locked.value = group.bool_locked
+					locked.uniqueID = group.uniqueID
+					locked.lforce = false
+					ea[group.uniqueID].locked = DCheckBox(locked)
+
+					DHr(hr)
+
+					local visible = {}
+					visible.parent = ea.restriction:GetContent()
+					visible.uniqueID = group.uniqueID
+					visible.header = "LID_visible"
+					visible.netstr = "update_group_bool_visible"
+					visible.value = group.bool_visible
+					visible.uniqueID = group.uniqueID
+					visible.lforce = false
+					ea[group.uniqueID].visible = DCheckBox(visible)
+				end
 			end
 		end)
 
@@ -987,7 +1000,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				maxa[i] = i
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local maxamount = {}
 				maxamount.parent = ea.info:GetContent()
 				maxamount.uniqueID = role.uniqueID
@@ -1002,7 +1015,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local amountpercentage = {}
 				amountpercentage.parent = ea.info:GetContent()
 				amountpercentage.header = "LID_amountpercentage"
@@ -1017,7 +1030,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local grps = {}
 				for i, tab in pairs(db_groups) do
 					grps[i] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
@@ -1084,7 +1097,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local prerole = {}
 				prerole.parent = ea.info:GetContent()
 				prerole.uniqueID = role.uniqueID
@@ -2028,7 +2041,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			hr.parent = ea.restriction:GetContent()
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local gugs = string.Explode(",", role.string_usergroups)
 
 				local ugs = {}
@@ -2059,7 +2072,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local requireslevel = {}
 				requireslevel.parent = ea.restriction:GetContent()
 				requireslevel.header = "LID_requireslevel"
@@ -2070,6 +2083,19 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				requireslevel.min = 1
 				requireslevel.max = 100
 				ea[role.uniqueID].requireslevel = DIntBox(requireslevel)
+
+				DHr(hr)
+
+				local securitylevel = {}
+				securitylevel.parent = ea.restriction:GetContent()
+				securitylevel.header = "LID_securitylevel"
+				securitylevel.netstr = "update_role_int_securitylevel"
+				securitylevel.value = role.int_securitylevel
+				securitylevel.uniqueID = role.uniqueID
+				securitylevel.lforce = false
+				securitylevel.min = 0
+				securitylevel.max = 10
+				ea[role.uniqueID].securitylevel = DIntBox(securitylevel)
 
 				DHr(hr)
 			end
@@ -2086,7 +2112,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local whitelist = {}
 				whitelist.parent = ea.restriction:GetContent()
 				whitelist.uniqueID = role.uniqueID
@@ -2100,7 +2126,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local locked = {}
 				locked.parent = ea.restriction:GetContent()
 				locked.uniqueID = role.uniqueID
@@ -2114,7 +2140,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local visible = {}
 				visible.parent = ea.restriction:GetContent()
 				visible.uniqueID = role.uniqueID
@@ -2128,7 +2154,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if role.uniqueID != 1 then
+			if role.uniqueID > 1 then
 				local bool_voteable = {}
 				bool_voteable.parent = ea.restriction:GetContent()
 				bool_voteable.uniqueID = role.uniqueID

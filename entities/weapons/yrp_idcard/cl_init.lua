@@ -25,6 +25,7 @@ function YDrawIDCards(ply)
 				"idcardid",
 				"faction",
 				"rpname",
+				"securitylevel",
 				"box1",
 				"box2",
 				"box3",
@@ -61,6 +62,8 @@ function YDrawIDCards(ply)
 								text = ply:GetRoleName()
 							elseif ele == "rpname" then
 								text = ply:RPName()
+							elseif ele == "securitylevel" then
+								text = YRP.lang_string("LID_" .. ele) .. " " .. ply:GetDInt("int_securitylevel", 0)
 							elseif ele == "faction" then
 								text = ply:GetFactionName()
 							elseif ele == "group" then
@@ -88,7 +91,8 @@ function YDrawIDCards(ply)
 								ty = y + h
 							end
 							color.a = 255
-							draw.SimpleText(text, "YRP_48_500", tx, ty, color, ax, ay)
+
+							draw.SimpleText(text, "YRP_" .. "36" .. "_500", tx, ty, color, ax, ay)
 						end
 					else
 						if logos[ele] == nil then
@@ -101,7 +105,7 @@ function YDrawIDCards(ply)
 									ply.htmlmat = ply.html:GetHTMLMaterial()
 									if ply.htmlmat != nil and !ply.html.found then
 										ply.html.found = true
-										timer.Simple(0.1, function()
+										timer.Simple(0.2, function()
 											ply.matname = ply.htmlmat:GetName()
 											local matdata =	{
 												["$basetexture"] = ply.matname,

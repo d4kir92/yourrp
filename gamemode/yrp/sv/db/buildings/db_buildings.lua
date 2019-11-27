@@ -19,6 +19,8 @@ SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_header", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_canbeowned", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "int_securitylevel", "TEXT DEFAULT 0")
+
 --db_drop_table(DATABASE_NAME_BUILDINGS)
 --db_is_empty(DATABASE_NAME_BUILDINGS)
 
@@ -155,6 +157,9 @@ function loadDoors()
 								end
 							end
 						end
+						if tonumber(w.groupID) == 0 then
+							v:Fire("Lock")
+						end
 					end
 
 					if !strEmpty(w.text_header) then
@@ -199,6 +204,7 @@ util.AddNetworkString("getBuildings")
 util.AddNetworkString("changeBuildingName")
 util.AddNetworkString("changeBuildingID")
 util.AddNetworkString("changeBuildingPrice")
+util.AddNetworkString("changeBuildingSL")
 
 util.AddNetworkString("changeBuildingHeader")
 util.AddNetworkString("changeBuildingDescription")
@@ -257,6 +263,29 @@ function lockDoor(ply, ent, nr)
 		end
 	else
 		return false
+	end
+end
+
+function openDoor(ply, ent, nr)
+	local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. nr .. "'")
+	if wk(_tmpBuildingTable) then
+		_tmpBuildingTable = _tmpBuildingTable[1]
+		_tmpBuildingTable.bool_canbeowned = tonumber(_tmpBuildingTable.bool_canbeowned)
+		if _tmpBuildingTable.bool_canbeowned == 0 then
+			_tmpBuildingTable.int_securitylevel = tonumber(_tmpBuildingTable.int_securitylevel)
+			if ply:GetDInt("int_securitylevel", 0) >= _tmpBuildingTable.int_securitylevel then
+				local locked = ent:GetSaveTable().m_bLocked
+				if locked then
+					ent:Fire("Unlock")
+				end
+				ent:Fire("Toggle")
+				if locked then
+					ent:Fire("Lock")
+				end
+			else
+				YRP.msg("NOT ALLOWED")
+			end
+		end
 	end
 end
 
@@ -355,10 +384,12 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID)
 
 	local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. _tmpGroupID)
-	for k, v in pairs(GetAllDoors()) do
-		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-			v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
-			v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
+	if wk(_tmpGroupName) then
+		for k, v in pairs(GetAllDoors()) do
+			if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
+				v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
+				v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
+			end
 		end
 	end
 end)
@@ -377,6 +408,14 @@ net.Receive("changeBuildingPrice", function(len, ply)
 	_tmpNewPrice = tonumber(_tmpNewPrice) or 99
 
 	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID)
+end)
+
+net.Receive("changeBuildingSL", function(len, ply)
+	local _tmpBuildingID = net.ReadString()
+	local _tmpNewSL = net.ReadString()
+	_tmpNewSL = tonumber(_tmpNewSL) or 0
+
+	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "int_securitylevel = " .. _tmpNewSL , "uniqueID = " .. _tmpBuildingID)
 end)
 
 util.AddNetworkString("CanBuildingBeOwned")

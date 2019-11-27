@@ -27,6 +27,7 @@ local elements = {
 	"idcardid",
 	"faction",
 	"rpname",
+	"securitylevel",
 	"box1",
 	"box2",
 	"box3",
@@ -101,6 +102,19 @@ function LoadIDCardSetting(force)
 					YRP.msg("note", "[LoadIDCardSetting] ELSE " .. name)
 				end
 			end
+		end
+	end
+
+	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ax'")) do
+		v.value = tonumber(v.value)
+		if v.value > 2 then
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+		end
+	end
+	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'")) do
+		v.value = tonumber(v.value)
+		if v.value > 2 then
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
 		end
 	end
 
