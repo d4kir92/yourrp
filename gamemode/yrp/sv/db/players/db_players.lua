@@ -210,10 +210,13 @@ function GetFactionTable(uid)
 	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
 	if wk(group) then
 		group = group[1]
-		local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
-		if wk(undergroup) then
-			undergroup = undergroup[1]
-			return GetFactionTable(undergroup.uniqueID)
+		group.int_parentgroup = tonumber(group.int_parentgroup)
+		if group.int_parentgroup != 0 then
+			local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+			if wk(undergroup) then
+				undergroup = undergroup[1]
+				return GetFactionTable(undergroup.uniqueID)
+			end
 		end
 		return group
 	end
@@ -310,6 +313,8 @@ function set_role_values(ply, pmid)
 
 			ply:SetDInt("int_role_cooldown", tonumber(rolTab.int_cooldown))
 			ply:SetDString("int_roleondeath", rolTab.int_roleondeath)
+
+			ply:SetDInt("int_securitylevel", rolTab.int_securitylevel)
 
 			local _licenseIDs = string.Explode(",", rolTab.string_licenses)
 			for i, lic in pairs(_licenseIDs) do

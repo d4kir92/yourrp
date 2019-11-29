@@ -23,6 +23,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 
+if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 0") == nil then
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible", "-1, 'PUBLIC', '255,255,255', 0, 0, 0, 0")
+end
+SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '-1'", "uniqueID = '0'")
+
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	printGM("note", DATABASE_NAME .. " has not the default group")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0")

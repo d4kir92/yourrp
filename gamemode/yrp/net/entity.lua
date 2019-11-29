@@ -141,9 +141,9 @@ function ENTITY:SetDInt(key, value)
 		if isstring(key) and isnumber(tonumber(value)) then
 			self.NWTAB = self.NWTAB or {}
 			self.NWTAB["INT"] = self.NWTAB["INT"] or {}
-			self.NWTAB["INT"][key] = value
+			self.NWTAB["INT"][key] = tonumber(value)
 			if SERVER then
-				self:SendDInt(key, value)
+				self:SendDInt(key, tonumber(value))
 			end
 		else
 			YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
@@ -173,7 +173,8 @@ function ENTITY:GetDInt(key, value)
 	if self:IsValid() then
 	  self.NWTAB = self.NWTAB or {}
 		self.NWTAB["INT"] = self.NWTAB["INT"] or {}
-		return self.NWTAB["INT"][key] or value
+		local result = self.NWTAB["INT"][key] or value
+		return tonumber(result)
 	else
 		return -1
 	end

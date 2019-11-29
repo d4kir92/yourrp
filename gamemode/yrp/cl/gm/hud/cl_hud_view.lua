@@ -6,7 +6,11 @@ function showOwner(eyeTrace)
 	elseif wk(eyeTrace.Entity:GetRPOwner()) then
 		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "sef", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	elseif !strEmpty(eyeTrace.Entity:GetDString("ownerRPName")) or !strEmpty(eyeTrace.Entity:GetDString("ownerGroup")) then
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetDString("ownerRPName", "") .. eyeTrace.Entity:GetDString("ownerGroup", ""), "sef", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		local groupname = eyeTrace.Entity:GetDString("ownerGroup", "")
+		if string.lower(groupname) == "public" then
+			groupname = YRP.lang_string("LID_public")
+		end
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetDString("ownerRPName", "") .. groupname, "sef", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 

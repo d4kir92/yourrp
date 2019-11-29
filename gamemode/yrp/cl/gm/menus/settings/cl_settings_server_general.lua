@@ -474,6 +474,7 @@ net.Receive("Connect_Settings_General", function(len)
 				"idcardid",
 				"faction",
 				"rpname",
+				"securitylevel",
 				"box1",
 				"box2",
 				"box3",
@@ -494,29 +495,9 @@ net.Receive("Connect_Settings_General", function(len)
 					e:SetDraggable(true)
 					e.draggable = true
 				end
-				if string.find(ele, "serverlogo") then
-					local size = 512
-					e.html = createD("DHTML", e, size, size, 0, 0)
-					e.html:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), size, size))
-					function e.html:Paint(pw, ph)
-						e.htmlmat = e.html:GetHTMLMaterial()
-						if e.htmlmat != nil and !e.html.found then
-							e.html.found = true
-							timer.Simple(1, function()
-								e.matname = e.htmlmat:GetName()
-								local matdata =	{
-									["$basetexture"] = e.matname,
-									["$translucent"] = 1,
-									["$model"] = 1
-								}
-								local uid = string.Replace(e.matname, "__vgui_texture_", "")
-								e.mat = CreateMaterial("WebMaterial_" .. uid, "VertexLitGeneric", matdata)
-								e.html:Remove()
-							end)
-						end
-					end
-				end
 				e:SetHeaderHeight(YRP.ctr(100))
+				e:SetMinWidth(YRP.ctr(40))
+				e:SetMinHeight(YRP.ctr(40))
 				e:SetTitle("")
 				e:ShowCloseButton(false)
 				e:SetCloseButton(false)
@@ -524,6 +505,7 @@ net.Receive("Connect_Settings_General", function(len)
 				e:SetSizable(true)
 				e.ts = CurTime() + 1
 				e.ts2 = CurTime() + 1
+				e.ts3 = CurTime() + 1
 				function e:Paint(pw, ph)
 					--[[if ele == "background" or string.find(ele,  "box") then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
@@ -531,7 +513,17 @@ net.Receive("Connect_Settings_General", function(len)
 					local visible = false
 					local mx, my = gui.MousePos()
 					local px, py = self:GetPos()
-					if self:IsHovered() or mx > px and mx < px + pw and my > py and my < py + ph then
+					self.inbg = false
+					if GetGlobalDInt("int_" .. ele .. "_x", 0) < GetGlobalDInt("int_" .. "background" .. "_w", 0) and GetGlobalDInt("int_" .. ele .. "_y", 0) < GetGlobalDInt("int_" .. "background" .. "_h", 0) then	
+						self.inbg = true
+					end
+					if self:IsHovered() then
+						visible = true
+					elseif mx > px and mx < px + pw and my > py and my < py + ph then
+						visible = true
+					elseif GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
+						visible = true
+					elseif GetGlobalDInt("int_" .. ele .. "_x", 0) > GetGlobalDInt("int_" .. "background" .. "_w", 0) or GetGlobalDInt("int_" .. ele .. "_y", 0) > GetGlobalDInt("int_" .. "background" .. "_h", 0) then
 						visible = true
 					end
 
@@ -542,52 +534,49 @@ net.Receive("Connect_Settings_General", function(len)
 						self.setting:SetVisible(visible)
 					end
 
+					local a1 = 1
+					local a2 = 2
+					local a3 = 100
 					if visible then
-						local br = 2
-						draw.RoundedBox(0, 0, 0, pw, br, Color(0, 0, 0))
-						draw.RoundedBox(0, 0, ph - br, pw, br, Color(0, 0, 0))
-						draw.RoundedBox(0, 0, 0, br, ph, Color(0, 0, 0))
-						draw.RoundedBox(0, pw - br, 0, br, ph, Color(0, 0, 0))
-						if ele != "background" and !string.find(ele,  "box") then
-							if !string.find(ele, "logo") or GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
-								local bgcolor = Color(255, 0, 0, 200)
-								if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
-									bgcolor = Color(0, 255, 0, 0)
-								end
-								draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
-							elseif e.mat != nil then
-								surface.SetDrawColor(255, 255, 255, 255)
-								surface.SetMaterial(e.mat)
-								surface.DrawTexturedRect(0, 0, pw, ph)
+						a1 = 200
+						a2 = 100
+						a3 = 200
+					end
+					if self.inbg and (mx > GetGlobalDInt("int_" .. "background" .. "_w", 0) or my > GetGlobalDInt("int_" .. "background" .. "_h", 0)) then
+						a1 = 0
+						a2 = 0
+						a3 = 0
+					end
+					local br = 2
+					draw.RoundedBox(0, 0, 0, pw, br, Color(0, 0, 0, a3))
+					draw.RoundedBox(0, 0, ph - br, pw, br, Color(0, 0, 0, a3))
+					draw.RoundedBox(0, 0, 0, br, ph, Color(0, 0, 0, a3))
+					draw.RoundedBox(0, pw - br, 0, br, ph, Color(0, 0, 0, a3))
+					local lon = pw
+					if ph > pw then
+						lon = ph
+					end
+					if pw == ph then
+						surface.SetDrawColor(255, 255, 255, a3)
+						surface.DrawLine(pw / 2, 0, pw / 2, ph)
+						surface.DrawLine(0, ph / 2, pw, ph / 2)
+						surface.DrawLine(0, 0, lon, lon)
+					end
+					if ele != "background" and !string.find(ele,  "box") then
+						if !string.find(ele, "logo") or GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
+							local bgcolor = Color(255, 0, 0, a1)
+							if GetGlobalDBool("bool_" .. ele .. "_visible", false) == true then
+								bgcolor = Color(0, 255, 0, 1)
 							end
-						end
-
-						if self:IsDraggable() or e.draggable then
-							draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, 100))
+							draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
 						end
 					end
 
-					--[[local tx = 0
-					local ty = 0
-					local ax = GetGlobalDInt("int_" .. ele .. "_ax", 0)
-					if ax == 0 then
-						tx = 0
-					elseif ax == 1 then
-						tx = pw / 2
-					elseif ax == 2 then
-						tx = pw
+					if self:IsDraggable() or e.draggable then
+						draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, a2))
 					end
-					local ay = GetGlobalDInt("int_" .. ele .. "_ay", 0)
-					if ay == 0 then
-						ay = 3
-						ty = 0
-					elseif ay == 1 then
-						ty = ph / 2
-					elseif ay == 2 then
-						ay = 4
-						ty = ph
-					end
-					draw.SimpleText(name, "DermaDefault", tx, ty, Color(255, 255, 255, 255), ax, ay)]]
+
+					draw.SimpleText(name, "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, a3), 1, 1)
 
 					-- SIZE
 					local w, h = self:GetSize()
@@ -637,6 +626,12 @@ net.Receive("Connect_Settings_General", function(len)
 						y = y - y % gs
 						wrongpos = true
 					end
+					if ele == "background" and (x != 0 or y != 0) then
+						x = 0
+						y = 0
+						wrongpos = true
+					end
+
 					if wrongpos then
 						self:SetPos(x, y)
 					end
@@ -678,6 +673,33 @@ net.Receive("Connect_Settings_General", function(len)
 							net.SendToServer()
 						end
 					end
+
+					if e.col != nil then
+						local r = e.col.r
+						local g = e.col.g
+						local b = e.col.b
+						local a = e.col.a
+						if e.ts3 <= CurTime() then
+							print("update color")
+							e.ts3 = CurTime() + 1
+							net.Start("update_idcard_" .. "int_" .. ele .. "_r")
+								net.WriteString("int_" .. ele .. "_r")
+								net.WriteString(r)
+							net.SendToServer()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_g")
+								net.WriteString("int_" .. ele .. "_g")
+								net.WriteString(g)
+							net.SendToServer()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_b")
+								net.WriteString("int_" .. ele .. "_b")
+								net.WriteString(b)
+							net.SendToServer()
+							net.Start("update_idcard_" .. "int_" .. ele .. "_a")
+								net.WriteString("int_" .. ele .. "_a")
+								net.WriteString(a)
+							net.SendToServer()
+						end
+					end
 				end
 
 				local X = 0
@@ -714,22 +736,7 @@ net.Receive("Connect_Settings_General", function(len)
 					win.color = createD("DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, 0)
 					win.color:SetColor(Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
 					function win.color:ValueChanged(col)
-						net.Start("update_idcard_" .. "int_" .. ele .. "_r")
-							net.WriteString("int_" .. ele .. "_r")
-							net.WriteString(col.r)
-						net.SendToServer()
-						net.Start("update_idcard_" .. "int_" .. ele .. "_g")
-							net.WriteString("int_" .. ele .. "_g")
-							net.WriteString(col.g)
-						net.SendToServer()
-						net.Start("update_idcard_" .. "int_" .. ele .. "_b")
-							net.WriteString("int_" .. ele .. "_b")
-							net.WriteString(col.b)
-						net.SendToServer()
-						net.Start("update_idcard_" .. "int_" .. ele .. "_a")
-							net.WriteString("int_" .. ele .. "_a")
-							net.WriteString(col.a)
-						net.SendToServer()
+						e.col = col
 					end
 
 					local halign = {}
