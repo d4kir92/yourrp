@@ -1499,229 +1499,231 @@ function Debug3DText(ply, str, pos, color)
 	cam.End3D2D()
 end
 
-function drawPlates(ply)
-	local renderdist = 550
-	local _distance = 200
+function drawPlates()
+	for i, ply in pairs(player.GetAll()) do
+		local renderdist = 550
+		local _distance = 200
 
-	if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() then
-		local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
-		local _height = 24 -- 31
-		local color = ply:GetColor()
-		color.a = color.a - 160
-		color.a = renderalpha
+		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() then
+			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
+			local _height = 24 -- 31
+			local color = ply:GetColor()
+			color.a = color.a - 160
+			color.a = renderalpha
 
-		if color.a <= 0 then
-			color.a = 10
-		end
-
-		if GetGlobalDBool("bool_server_debug_voice", false) then
-			if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
-				render.SetColorMaterial()
-				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, Color(100, 100, 255, 10))
-				Debug3DText(ply, "Local Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_local_range", 1)), Color(100, 100, 255, 200))
-			end
-			if !GetGlobalDBool("bool_voice_channels", false) then
-				render.SetColorMaterial()
-				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, Color(255, 100, 100, 10))
-				Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
-			end
-		end
-
-		if LocalPlayer():GetDBool("bool_canuseesp", false) then
-			render.SetColorMaterial()
-			local cent = ply:OBBCenter()
-			render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 1))
-		end
-
-		if GetGlobalDBool("bool_tag_on_head", false) then
-			if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
-				local plyvol = ply:VoiceVolume() * 200
-				local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
-				YRP.DrawSymbol(ply, "voice", 18, voicecolor)
+			if color.a <= 0 then
+				color.a = 10
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
-				YRP.DrawSymbol(ply, "chat", 18, color)
-			end
-
-			if GetGlobalDBool("bool_tag_on_head_armor", false) then
-				_height = _height + 1
-				local str = ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100)
-				local col = ply:HudValue("AR", "BA")
-				drawBar(ply, str, _height, color, ply:Armor(), ply:GetDInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
-				_height = _height + 6
-			end
-
-			if GetGlobalDBool("bool_tag_on_head_health", false) then
-				_height = _height + 1
-				local str = ply:Health() .. "/" .. ply:GetMaxHealth()
-				local col = ply:HudValue("HP", "BA")
-				drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a))
-				_height = _height + 6
-			end
-
-			if GetGlobalDBool("bool_tag_on_head_clan", false) then
-				drawString(ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, color)
-				_height = _height + 5
-			end
-
-			if GetGlobalDBool("bool_tag_on_head_name", false) then
-				drawString(ply, ply:RPName(), _height, color)
-				_height = _height + 5
-			end
-
-			if IsLevelSystemEnabled() and GetGlobalDBool("bool_tag_on_head_level", false) then
-				local lvl = ply:Level()
-				local t = {}
-				t["LEVEL"] = lvl
-				drawString(ply, YRP.lang_string("LID_levelx", t), _height, color)
-				_height = _height + 5
-			end
-
-			if ply:AFK() or ply:DND() then
-				local onlinestatus = ""
-				local onlinecolor = Color(255, 255, 255, 255)
-				if GetGlobalDBool("isdnd", false) then
-					onlinestatus = YRP.lang_string("LID_dnd")
-					onlinecolor = Color(255, 0, 0, 255)
-				elseif ply:AFK() then
-					onlinestatus = YRP.lang_string("LID_afk")
-					onlinecolor = Color(255, 255, 0, 255)
+			if GetGlobalDBool("bool_server_debug_voice", false) then
+				if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
+					render.SetColorMaterial()
+					render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, Color(100, 100, 255, 10))
+					Debug3DText(ply, "Local Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_local_range", 1)), Color(100, 100, 255, 200))
 				end
-				onlinecolor.a = color.a
-				drawString(ply, "<" .. string.upper(onlinestatus) .. ">", _height, onlinecolor)
-				_height = _height + 5
+				if !GetGlobalDBool("bool_voice_channels", false) then
+					render.SetColorMaterial()
+					render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, Color(255, 100, 100, 10))
+					Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+				end
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_rolename", false) then
-				local rc = ply:GetRoleColor()
-				rc.a = color.a
-				drawString(ply, ply:GetRoleName(), _height, rc)
-				_height = _height + 5
+			if LocalPlayer():GetDBool("bool_canuseesp", false) then
+				render.SetColorMaterial()
+				local cent = ply:OBBCenter()
+				render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 1))
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_groupname", false) then
-				local gc = ply:GetGroupColor()
-				gc.a = color.a
-				drawString(ply, ply:GetGroupName(), _height, gc)
-				_height = _height + 5
+			if GetGlobalDBool("bool_tag_on_head", false) then
+				if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
+					local plyvol = ply:VoiceVolume() * 200
+					local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
+					YRP.DrawSymbol(ply, "voice", 18, voicecolor)
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
+					YRP.DrawSymbol(ply, "chat", 18, color)
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_armor", false) then
+					_height = _height + 1
+					local str = ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100)
+					local col = ply:HudValue("AR", "BA")
+					drawBar(ply, str, _height, color, ply:Armor(), ply:GetDInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
+					_height = _height + 6
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_health", false) then
+					_height = _height + 1
+					local str = ply:Health() .. "/" .. ply:GetMaxHealth()
+					local col = ply:HudValue("HP", "BA")
+					drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a))
+					_height = _height + 6
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_clan", false) then
+					drawString(ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, color)
+					_height = _height + 5
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_name", false) then
+					drawString(ply, ply:RPName(), _height, color)
+					_height = _height + 5
+				end
+
+				if IsLevelSystemEnabled() and GetGlobalDBool("bool_tag_on_head_level", false) then
+					local lvl = ply:Level()
+					local t = {}
+					t["LEVEL"] = lvl
+					drawString(ply, YRP.lang_string("LID_levelx", t), _height, color)
+					_height = _height + 5
+				end
+
+				if ply:AFK() or ply:DND() then
+					local onlinestatus = ""
+					local onlinecolor = Color(255, 255, 255, 255)
+					if GetGlobalDBool("isdnd", false) then
+						onlinestatus = YRP.lang_string("LID_dnd")
+						onlinecolor = Color(255, 0, 0, 255)
+					elseif ply:AFK() then
+						onlinestatus = YRP.lang_string("LID_afk")
+						onlinecolor = Color(255, 255, 0, 255)
+					end
+					onlinecolor.a = color.a
+					drawString(ply, "<" .. string.upper(onlinestatus) .. ">", _height, onlinecolor)
+					_height = _height + 5
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_rolename", false) then
+					local rc = ply:GetRoleColor()
+					rc.a = color.a
+					drawString(ply, ply:GetRoleName(), _height, rc)
+					_height = _height + 5
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_groupname", false) then
+					local gc = ply:GetGroupColor()
+					gc.a = color.a
+					drawString(ply, ply:GetGroupName(), _height, gc)
+					_height = _height + 5
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_factionname", false) then
+					local fc = ply:GetFactionColor()
+					fc.a = color.a
+					drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, fc)
+					_height = _height + 5
+				end
+
+				if GetGlobalDBool("bool_tag_on_head_usergroup", false) then
+					local ugcolor = ply:GetUserGroupColor()
+					ugcolor.a = color.a
+					drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
+					_height = _height + 5
+				end
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_factionname", false) then
-				local fc = ply:GetFactionColor()
-				fc.a = color.a
-				drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, fc)
-				_height = _height + 5
+			_height = _height + 2
+
+			if ply:GetDBool("tag_ug", false) or (GetGlobalDBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
+
+				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
+				_height = _height + 9
 			end
 
-			if GetGlobalDBool("bool_tag_on_head_usergroup", false) then
-				local ugcolor = ply:GetUserGroupColor()
-				ugcolor.a = color.a
-				drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
-				_height = _height + 5
+			if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
+				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
+				_height = _height + 9
+			end
+
+			if GetGlobalDBool("bool_tag_on_side", false) then
+				local _alpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
+
+				if ply:GetColor().a < _alpha then
+					_alpha = ply:GetColor().a
+				end
+
+				local _z = 50
+				local _x = -10
+				local _y = 18
+				local _w = 160
+				local _h = 20
+				local _d = 2
+
+				if GetGlobalDBool("bool_tag_on_side_name", false) then
+					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["na"])
+					_z = _z + _d
+				end
+
+				if GetGlobalDBool("bool_tag_on_side_rolename", false) then
+					local rc = ply:GetRoleColor()
+					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, ply:GetColor().a), _alpha, _icons["rn"])
+					_z = _z + _d
+				end
+
+				if GetGlobalDBool("bool_tag_on_side_groupname", false) then
+					local _color = ply:GetDString("groupColor", "255,0,0")
+					_color = string.Explode(",", _color)
+					_color = Color(_color[1], _color[2], _color[3])
+					local gc = ply:GetGroupColor()
+					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, ply:GetColor().a), _alpha, _icons["gn"])
+					_z = _z + _d
+				end
+
+				if GetGlobalDBool("bool_tag_on_side_factionname", false) then
+					local _color = ply:GetDString("factionColor", "255,0,0")
+					_color = string.Explode(",", _color)
+					_color = Color(_color[1], _color[2], _color[3])
+					local fc = ply:GetFactionColor()
+					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, ply:GetColor().a), _alpha, _icons["gn"])
+					_z = _z + _d
+				end
+
+				if GetGlobalDBool("bool_tag_on_side_level", false) then
+					local lvl = ply:Level()
+					local t = {}
+					t["LEVEL"] = lvl
+					drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["le"])
+					_z = _z + _d
+				end
+
+				if GetGlobalDBool("bool_tag_on_side_health", false) then
+					local col = ply:HudValue("HP", "BA")
+					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
+					_z = _z + _d
+				end
+
+				if GetGlobalDBool("bool_tag_on_side_armor", false) then
+					local col = ply:HudValue("AR", "BA")
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					_z = _z + _d
+				end
+
+				if LocalPlayer():HasAccess() then
+					local col = ply:HudValue("ST", "BA")
+					drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					_z = _z + _d
+					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
+					_z = _z + _d
+					local ugcolor = ply:GetUserGroupColor()
+					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, ply:GetColor().a), _alpha, _icons["ug"])
+					_z = _z + _d
+					drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
+					_z = _z + _d
+					local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
+					local _mMin = CurTime() + ply:GetDInt("salarytime", 0) - ply:GetDInt("nextsalarytime", 0)
+					local _mMax = ply:GetDInt("salarytime", 0) + 1
+					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
+					_z = _z + _d
+				end
 			end
 		end
 
-		_height = _height + 2
-
-		if ply:GetDBool("tag_ug", false) or (GetGlobalDBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and ply:GetColor().a > 10 then
-
-			drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, ply:GetColor().a))
-			_height = _height + 9
-		end
-
-		if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
-			drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, ply:GetColor().a))
-			_height = _height + 9
-		end
-
-		if GetGlobalDBool("bool_tag_on_side", false) then
-			local _alpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
-
-			if ply:GetColor().a < _alpha then
-				_alpha = ply:GetColor().a
-			end
-
-			local _z = 50
-			local _x = -10
-			local _y = 18
-			local _w = 160
-			local _h = 20
-			local _d = 2
-
-			if GetGlobalDBool("bool_tag_on_side_name", false) then
-				drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["na"])
-				_z = _z + _d
-			end
-
-			if GetGlobalDBool("bool_tag_on_side_rolename", false) then
-				local rc = ply:GetRoleColor()
-				drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, ply:GetColor().a), _alpha, _icons["rn"])
-				_z = _z + _d
-			end
-
-			if GetGlobalDBool("bool_tag_on_side_groupname", false) then
-				local _color = ply:GetDString("groupColor", "255,0,0")
-				_color = string.Explode(",", _color)
-				_color = Color(_color[1], _color[2], _color[3])
-				local gc = ply:GetGroupColor()
-				drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, ply:GetColor().a), _alpha, _icons["gn"])
-				_z = _z + _d
-			end
-
-			if GetGlobalDBool("bool_tag_on_side_factionname", false) then
-				local _color = ply:GetDString("factionColor", "255,0,0")
-				_color = string.Explode(",", _color)
-				_color = Color(_color[1], _color[2], _color[3])
-				local fc = ply:GetFactionColor()
-				drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, ply:GetColor().a), _alpha, _icons["gn"])
-				_z = _z + _d
-			end
-
-			if GetGlobalDBool("bool_tag_on_side_level", false) then
-				local lvl = ply:Level()
-				local t = {}
-				t["LEVEL"] = lvl
-				drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["le"])
-				_z = _z + _d
-			end
-
-			if GetGlobalDBool("bool_tag_on_side_health", false) then
-				local col = ply:HudValue("HP", "BA")
-				drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
-				_z = _z + _d
-			end
-
-			if GetGlobalDBool("bool_tag_on_side_armor", false) then
-				local col = ply:HudValue("AR", "BA")
-				drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
-				_z = _z + _d
-			end
-
-			if LocalPlayer():HasAccess() then
-				local col = ply:HudValue("ST", "BA")
-				drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
-				_z = _z + _d
-				drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sn"])
-				_z = _z + _d
-				local ugcolor = ply:GetUserGroupColor()
-				drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, ply:GetColor().a), _alpha, _icons["ug"])
-				_z = _z + _d
-				drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["sa"])
-				_z = _z + _d
-				local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
-				local _mMin = CurTime() + ply:GetDInt("salarytime", 0) - ply:GetDInt("nextsalarytime", 0)
-				local _mMax = ply:GetDInt("salarytime", 0) + 1
-				drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, ply:GetColor().a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
-				_z = _z + _d
-			end
-		end
+		ply:drawPlayerInfo()
+		ply:drawWantedInfo()
 	end
-
-	ply:drawPlayerInfo()
-	ply:drawWantedInfo()
 end
-hook.Add("PostPlayerDraw", "yrp_draw_plates", drawPlates)
+hook.Add("PostDrawTranslucentRenderables", "yrp_draw_plates", drawPlates)
 
 function draw3DText(text, x, y, color)
 	color = color or Color(255, 255, 255, 255)

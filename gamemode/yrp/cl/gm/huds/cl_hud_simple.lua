@@ -33,6 +33,10 @@ function HUDSimpleBG(tab)
 
 				Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
 			else
+				if tab.a != nil then
+					Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
+					Simple[tab.element]["background"].color.a = tab.a * Simple[tab.element]["background"].color.a
+				end
 				HudBox(Simple[tab.element]["background"])
 			end
 		end
@@ -499,7 +503,8 @@ function HUDSimple()
 			local CH = {}
 			CH.element = "CH"
 			CH.r = YRP.ctr(16)
-			CH.visiblefunc = IsChatVisible
+			CH.a = ChatAlpha()
+			--CH.visiblefunc = IsChatVisible
 			HUDSimpleBG(CH)
 		end
 		if GetGlobalDBool("bool_hunger", false) then

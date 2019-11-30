@@ -680,7 +680,6 @@ net.Receive("Connect_Settings_General", function(len)
 						local b = e.col.b
 						local a = e.col.a
 						if e.ts3 <= CurTime() then
-							print("update color")
 							e.ts3 = CurTime() + 1
 							net.Start("update_idcard_" .. "int_" .. ele .. "_r")
 								net.WriteString("int_" .. ele .. "_r")
