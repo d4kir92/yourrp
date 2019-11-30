@@ -281,7 +281,7 @@ end
 
 local fac = fac or 1
 function OpenSBS()
-	if sbs.frame == nil then
+	if pa(sbs.frame) == false then
 		sbs.frame = createD("DFrame", nil, BFW(), BFH(), BPX(), BPY())
 		sbs.frame:SetDraggable(false)
 		sbs.frame:ShowCloseButton(false)
