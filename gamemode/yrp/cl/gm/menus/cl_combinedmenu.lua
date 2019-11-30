@@ -13,18 +13,16 @@ end
 
 function CloseCombinedMenu()
 	cm.open = false
-	if cm.win != nil then
-		--cm.win:Remove()
-		--cm.win = nil
+	if pa(cm.win) then
+		cm.win:Hide()
 	end
-	cm.win:Hide()
 end
 
 function OpenCombinedMenu()
 	cm.open = true
 	local br = YRP.ctr(20)
 	local menuw = YRP.ctr(400)
-	if cm.win == nil then
+	if pa(cm.win) == false then
 		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
 		cm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
 		cm.win:MakePopup()
@@ -130,6 +128,7 @@ function OpenCombinedMenu()
 
 			id = id + 1
 		end
+	elseif pa(cm.win) then
+		cm.win:Show()
 	end
-	cm.win:Show()
 end
