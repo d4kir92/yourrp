@@ -250,7 +250,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
-			local text = YRP.lang_string("LID_underroles") .. " ▶"
+			local text = YRP.lang_string("LID_undergroups") .. " ▶"
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
 			ch:SetWide(tw)

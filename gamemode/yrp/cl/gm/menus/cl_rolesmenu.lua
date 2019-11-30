@@ -89,7 +89,6 @@ function createRoleBox(rol, parent, mainparent)
 		end
 		_rol.gr:SetText("")
 		function _rol.gr:DoClick()
-			surface.PlaySound("garrysmod/content_downloaded.wav")
 			pmid = 1
 			ROLEMENU.pms:Clear()
 			for i, pmtab in pairs(rol.pms) do

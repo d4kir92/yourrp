@@ -38,6 +38,7 @@ function ChatIsClosedForChat()
 	return chatclosedforkeybinds
 end
 
+local chatAlpha = 0
 function checkChatVisible()
 	if yrpChat.window != nil then
 		if _chatIsOpen then
@@ -52,10 +53,27 @@ function checkChatVisible()
 		if GetGlobalDBool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
-		yrpChat.richText:SetVisible(_showChat)
-		yrpChat.writeField:SetVisible(_showChat)
-		yrpChat.comboBox:SetVisible(_showChat)
+		if _showChat then
+			chatAlpha = chatAlpha + 0.1
+		else
+			chatAlpha = chatAlpha - 0.01
+		end
+		if chatAlpha < 0 then
+			chatAlpha = 0
+			yrpChat.richText:SetVisible(_showChat)
+			yrpChat.writeField:SetVisible(_showChat)
+			yrpChat.comboBox:SetVisible(_showChat)
+		elseif chatAlpha > 1 then
+			chatAlpha = 1
+			yrpChat.richText:SetVisible(_showChat)
+			yrpChat.writeField:SetVisible(_showChat)
+			yrpChat.comboBox:SetVisible(_showChat)
+		end
 	end
+end
+
+function ChatAlpha()
+	return chatAlpha
 end
 
 function IsChatVisible()
@@ -98,6 +116,7 @@ function InitYRPChat()
 		yrpChat.window:SetDraggable(false)
 
 		yrpChat.richText = createD("RichText", yrpChat.window, 1, 1, 1, 1)
+		yrpChat.richText:GotoTextEnd()
 
 		yrpChat.comboBox = createD("DComboBox", yrpChat.window, 1, 1, 1, 1)
 		update_chat_choices()
@@ -198,6 +217,10 @@ function InitYRPChat()
 			_chatIsOpen = true
 			gamemode.Call("StartChat")
 
+			yrpChat.richText:SetVisible(true)
+			yrpChat.writeField:SetVisible(true)
+			yrpChat.comboBox:SetVisible(true)
+
 			chatclosedforkeybinds = false
 		end
 
@@ -222,12 +245,14 @@ function InitYRPChat()
 		function chat.AddText(...)
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
+			_delay = 3
 			for _, obj in pairs(args) do
 				if type(obj) == "table" then
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(obj.r, obj.g, obj.b, 255)
 					end
 				elseif type(obj) == "string" then
+					_delay = _delay + string.len(obj)
 					local _text = string.Explode(" ", obj)
 					for k, str in pairs(_text) do
 						if k > 1 then
@@ -285,13 +310,19 @@ function InitYRPChat()
 						yrpChat.richText:AppendText(obj:Nick())
 					end
 				end
-				_fadeout = CurTime() + _delay
 			end
+
+			_delay = _delay / 10
+			_delay = math.Clamp(_delay, 2, 30)
+			_fadeout = CurTime() + _delay
+
 			yrpChat.richText:GotoTextEnd()
 			oldAddText (...)
 		end
 
 		LocalPlayer():ConCommand("say \"" .. "!help" .. "\"")
+
+		yrpChat.richText:GotoTextEnd()
 	else
 		timer.Simple(1, function()
 			printGM("error", "Chat creation failed! " .. tostring(yrpChat) .. " " .. tostring(yrpChat.window) .. "." )
