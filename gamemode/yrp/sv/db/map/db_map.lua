@@ -10,12 +10,15 @@ SQL_ADD_COLUMN(_db_name, "angle", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "type", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "linkID", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(_db_name, "int_respawntime", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(_db_name, "int_amount", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(_db_name, "string_classname", "TEXT DEFAULT 'npc_zombie'")
 
 --db_drop_table(_db_name)
 --db_is_empty(_db_name)
 
 function teleportToPoint(ply, pos)
-	printGM("note", "teleportToPoint " .. tostring(pos))
+	--printGM("note", "teleportToPoint " .. tostring(pos))
 	tp_to(ply, Vector(pos[1], pos[2], pos[3]))
 end
 
@@ -40,7 +43,9 @@ function teleportToSpawnpoint(ply)
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 					_tmp = string.Explode(",", _randomSpawnPoint.angle)
-					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+					if ply:IsPlayer() then
+						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+					end
 					return true
 				elseif _tmpGroupSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
@@ -49,7 +54,9 @@ function teleportToSpawnpoint(ply)
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 					_tmp = string.Explode(",", _randomSpawnPoint.angle)
-					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+					if ply:IsPlayer() then
+						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+					end
 					return true
 				else
 					local _has_ug = true
@@ -68,7 +75,9 @@ function teleportToSpawnpoint(ply)
 								local _tmp = string.Explode(",", _randomSpawnPoint.position)
 								tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 								_tmp = string.Explode(",", _randomSpawnPoint.angle)
-								ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+								if ply:IsPlayer() then
+									ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+								end
 								return true
 							end
 						else
@@ -188,4 +197,33 @@ net.Receive("teleportto", function(len, ply)
 			ply:SetPos(Vector(_entry[1], _entry[2], _entry[3]))
 		end
 	end
+end)
+
+
+
+util.AddNetworkString("update_map_int_respawntime")
+net.Receive("update_map_int_respawntime", function(len, ply)
+	local uid = net.ReadString()
+	local i = net.ReadString()
+
+	SQL_UPDATE(_db_name, "int_respawntime = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	UpdateSpawnerTable()
+end)
+
+util.AddNetworkString("update_map_int_amount")
+net.Receive("update_map_int_amount", function(len, ply)
+	local uid = net.ReadString()
+	local i = net.ReadString()
+
+	SQL_UPDATE(_db_name, "int_amount = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	UpdateSpawnerTable()
+end)
+
+util.AddNetworkString("update_map_string_classname")
+net.Receive("update_map_string_classname", function(len, ply)
+	local uid = net.ReadString()
+	local s = net.ReadString()
+
+	SQL_UPDATE(_db_name, "string_classname = '" .. s .. "'", "uniqueID = '" .. uid .. "'")
+	UpdateSpawnerTable()
 end)

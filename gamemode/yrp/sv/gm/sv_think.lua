@@ -310,3 +310,63 @@ end)
 function RestartServer()
 	game.ConsoleCommand("_restart")
 end
+
+function UpdateSpawnerTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local spawner = {}
+			spawner.pos = v.position
+			spawner.uniqueID = v.uniqueID
+			if !table.HasValue(t, spawner) then
+				table.insert(t, spawner)
+			end
+		end
+	end
+	SetGlobalDTable("yrp_spawner", t)
+end
+UpdateSpawnerTable()
+
+local YNPCs = {}
+local delay = CurTime()
+hook.Add("Think", "yrp_spawner_think", function()
+	if delay < CurTime() then
+		delay = CurTime() + 1
+
+		local t = GetGlobalDTable("yrp_spawner")
+		for _, v in pairs(t) do
+			local pos = StringToVector(v.pos)
+			if YNPCs[v.uniqueID] == nil then
+				YNPCs[v.uniqueID] = {}
+				YNPCs[v.uniqueID].npcs = {}
+				YNPCs[v.uniqueID].delay = CurTime()
+			end
+
+			local npc_spawner = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+			if wk(npc_spawner) then
+				npc_spawner = npc_spawner[1]
+				npc_spawner.int_amount = tonumber(npc_spawner.int_amount)
+				npc_spawner.int_respawntime = tonumber(npc_spawner.int_respawntime)
+				for _, npc in pairs(YNPCs[v.uniqueID].npcs) do
+					if !npc:IsValid() then
+						YRP.msg("gm", "A NPC Died, start respawning...")
+						table.RemoveByValue(YNPCs[v.uniqueID].npcs, npc)
+						YNPCs[v.uniqueID].delay = CurTime() + npc_spawner.int_respawntime
+					end
+				end
+
+				if YNPCs[v.uniqueID].delay < CurTime() and table.Count(YNPCs[v.uniqueID].npcs) < npc_spawner.int_amount then
+					npc_spawner.delay = CurTime() + npc_spawner.int_respawntime
+					local npc = ents.Create(npc_spawner.string_classname)
+					if npc:IsValid() then
+						npc:Spawn()
+						teleportToPoint(npc, pos)
+
+						table.insert(YNPCs[v.uniqueID].npcs, npc)
+					end
+				end
+			end
+		end
+	end
+end)

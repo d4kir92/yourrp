@@ -49,12 +49,19 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
+<<<<<<< HEAD
 	if SERVER and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
 		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < 90 then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				openDoor(self:GetOwner(), ent, ent:GetDString("buildingID", "Failed")) 
 			end
+=======
+	if SERVER then
+		local ent = self:GetOwner():GetEyeTrace().Entity
+		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < 90 then
+			openDoor(self:GetOwner(), ent, 0)
+>>>>>>> canary
 		end
 	end
 end

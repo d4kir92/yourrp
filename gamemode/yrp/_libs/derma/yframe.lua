@@ -107,6 +107,10 @@ function PANEL:GetContent()
 	return self.con
 end
 
+function PANEL:Paint(pw, ph)
+	hook.Run("YFramePaint", self, pw, ph)
+end
+
 function PANEL:Init()
 	if self._lc == nil then
 		self._lc = true
