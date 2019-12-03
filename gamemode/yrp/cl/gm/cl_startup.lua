@@ -1504,7 +1504,7 @@ function drawPlates()
 		local renderdist = 550
 		local _distance = 200
 
-		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() then
+		if ply != LocalPlayer() and LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() then
 			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
 			local _height = 24 -- 31
 			local color = ply:GetColor()

@@ -49,7 +49,12 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	
+	if SERVER then
+		local ent = self:GetOwner():GetEyeTrace().Entity
+		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < 90 then
+			openDoor(self:GetOwner(), ent, 0)
+		end
+	end
 end
 
 function SWEP:SecondaryAttack()

@@ -23,17 +23,22 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 0") == nil then
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible", "-1, 'PUBLIC', '255,255,255', 0, 0, 0, 0")
+-- PUBLIC GROUP
+if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0")
 end
-SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '-1'", "uniqueID = '0'")
+SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '-1'", "uniqueID = '-1'")
+SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
 
+-- DEFAULT GROUP
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	printGM("note", DATABASE_NAME .. " has not the default group")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0")
 end
+
 --db_drop_table(DATABASE_NAME)
 
+-- Local Table
 local yrp_ply_groups = {}
 local _init_ply_groups = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_ply_groups) then
@@ -45,6 +50,7 @@ HANDLER_GROUPSANDROLES["groupslist"] = {}
 HANDLER_GROUPSANDROLES["groups"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 
+-- Network Things
 for str, val in pairs(yrp_ply_groups) do
 	if string.find(str, "string_") then
 		local tab = {}
@@ -243,7 +249,7 @@ function SendGroupList(uid)
 	SortGroups(uid)
 
 	local tbl_parentgroup = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-	if !wk(tbl_parentgroup) then
+	if !wk(tbl_parentgroup) or uid < 1 then
 		tbl_parentgroup = {}
 	else
 		tbl_parentgroup = tbl_parentgroup[1]
@@ -431,34 +437,73 @@ net.Receive("settings_unsubscribe_grouplist", function(len, ply)
 	UnsubscribeGroupList(ply, uid)
 end)
 
-function DeleteGroup(guid)
+function RemoveUnusedGroups()
+	local count = 0
+	local all_groups = SQL_SELECT("yrp_ply_groups", "*", nil)
+	for i, grp in pairs(all_groups) do
+		grp.int_parentgroup = tonumber(grp.int_parentgroup)
+		if grp.int_parentgroup > 0 then
+			local parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. grp.int_parentgroup .. "'")
+			if parentgroup == nil then
+				count = count + 1
+				SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = '" .. grp.uniqueID .. "'")
+			end
+		end
+	end
+	if count > 0 then
+		RemoveUnusedGroups()
+	end
+end
+
+function RemoveUnusedRoles()
+	local count = 0
+	local all_roles = SQL_SELECT("yrp_ply_roles", "*", nil)
+	for i, rol in pairs(all_roles) do
+		rol.int_groupID = tonumber(rol.int_groupID)
+		if rol.int_groupID > 0 then
+			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. rol.int_groupID .. "'")
+			if group == nil then
+				count = count + 1
+				SQL_DELETE_FROM("yrp_ply_roles", "uniqueID = '" .. rol.uniqueID .. "'")
+			end
+		end
+	end
+	if count > 0 then
+		RemoveUnusedRoles()
+	end
+end
+
+function DeleteGroup(guid, recursive)
 	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
 	if wk(group) then
 		group = group[1]
 		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. guid .. "'")
 
-		local roles = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. group.uniqueID .. "'")
-		if wk(roles) then
-			for i, role in pairs(roles) do
-				SQL_DELETE_FROM("yrp_ply_roles", "uniqueID = '" .. role.uniqueID .. "'")
+		if recursive then
+			-- Delete Groups Recursive
+			RemoveUnusedGroups()
+
+			-- Delete Roles Recursive
+			RemoveUnusedRoles()
+		else
+			-- Position richtig anordnen
+			local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
+			if wk(siblings) then
+				for i, sibling in pairs(siblings) do
+					sibling.int_position = tonumber(sibling.int_position)
+				end
+				local count = 0
+				for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+					count = count + 1
+					SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+				end
 			end
 		end
 
-		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
-		if wk(siblings) then
-			for i, sibling in pairs(siblings) do
-				sibling.int_position = tonumber(sibling.int_position)
-			end
-			local count = 0
-			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
-				count = count + 1
-				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			end
-		end
-
+		MoveUnusedGroups()
 		MoveUnusedRolesToDefault()
 
-		group.int_parentgroup = tonumber(group.int_parentgroup)
+		group.int_parentgroup = tonumber(group.int_parentgroup) or 1
 		SendGroupList(group.int_parentgroup)
 	end
 end
@@ -466,11 +511,11 @@ end
 util.AddNetworkString("settings_delete_group")
 net.Receive("settings_delete_group", function(len, ply)
 	local guid = tonumber(net.ReadString())
-	DeleteGroup(guid)
+	local recursive = net.ReadBool()
+	DeleteGroup(guid, recursive)
 end)
 
 util.AddNetworkString("get_grps")
-
 net.Receive("get_grps", function(len, ply)
 	local _uid = tonumber(net.ReadString())
 

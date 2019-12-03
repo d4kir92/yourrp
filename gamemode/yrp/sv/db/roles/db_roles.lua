@@ -81,7 +81,7 @@ end
 
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
-function RemoveUnusedGroups()
+function MoveUnusedGroups()
 	local count = 0
 	local all_groups = SQL_SELECT("yrp_ply_groups", "*", nil)
 	for i, group in pairs(all_groups) do
@@ -91,12 +91,12 @@ function RemoveUnusedGroups()
 			if parentgroup == nil then
 				count = count + 1
 				YRP.msg("note", "Group is out of space: " .. group.string_name)
-				SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = '" .. group.uniqueID .. "'")
+				SQL_UPDATE("yrp_ply_groups", "int_parentgroup = '" .. "1" .. "'", "uniqueID = '" .. group.uniqueID .. "'")
 			end
 		end
 	end
 	if count > 0 then
-		RemoveUnusedGroups()
+		MoveUnusedGroups()
 	end
 end
 
@@ -111,7 +111,7 @@ function MoveUnusedRolesToDefault()
 				SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 			end
 
-			RemoveUnusedGroups()
+			MoveUnusedGroups()
 			-- if group not exists move it to default group
 			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 			if !wk(group) then
@@ -344,12 +344,12 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateInt(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
-			if tab.netstr == "update_int_parentrole" then
+			if tab.netstr == "update_role_int_prerole" then
 				if wk(cur) then
 					cur = cur[1]
-					SendGroupList(tonumber(cur.int_parentrole))
+					SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
 				end
-				SendGroupList(int)
+				SendRoleList(nil, tonumber(cur.int_groupID), 0)
 			end
 		end)
 	elseif string.find(str, "float_") then
@@ -368,7 +368,7 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateFloat(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastFloat(tab)
-			if tab.netstr == "update_float_parentrole" then
+			if tab.netstr == "update_role_int_prerole" then
 				if wk(cur) then
 					cur = cur[1]
 					SendGroupList(tonumber(cur.float_parentrole))
@@ -392,7 +392,7 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateInt(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
-			if tab.netstr == "update_int_parentrole" then
+			if tab.netstr == "update_role_int_prerole" then
 				if wk(cur) then
 					cur = cur[1]
 					SendGroupList(tonumber(cur.int_parentrole))
@@ -1347,15 +1347,27 @@ net.Receive("openInteractMenu", function(len, ply)
 									tmpPromote = true
 									tmpPromoteName = tmpTableSearch[1].string_name
 								end
-								if tmpSearchUniqueID == 0 then
+
+								if tmpSearchUniqueID == 0 or tmpPromote and tmpDemote then
+									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 then
+										print(tmpTargetRole[1].uniqueID)
+										tmpDemote = true
+										local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
+										tmpDemoteName = tmp[1].string_name
+									end
+									if !tmpPromote and tonumber(tmpTargetRole[1].uniqueID) == 1 then
+										-- von CIV to First Role
+										tmpPromote = true
+										tmpPromoteName = tmpTableSearch[1].string_name
+									end
 									tmpSearch = false
 								end
 							end
 							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
 
-							--Only look for 10 preroles
+							--Only look for 30 preroles
 							tmpCounter = tmpCounter + 1
-							if tmpCounter >= 10 then
+							if tmpCounter >= 30 then
 								printGM("note", "You have a loop in your preroles!")
 								tmpSearch = false
 							end
@@ -1424,7 +1436,13 @@ net.Receive("promotePlayer", function(len, ply)
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
 		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 		local tmpTableTargetPromoteRole = SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
-		local tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
+		local tmpTableTargetGroup = nil
+		if tmpTableTargetPromoteRole != nil then
+			tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
+		else
+			tmpTableTargetPromoteRole = SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. 0 .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
+			tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
+		end
 
 		tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
@@ -1464,8 +1482,13 @@ net.Receive( "demotePlayer", function( len, ply )
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
 		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
 		local tmpTableTargetDemoteRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole )
-		local tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].int_groupID )
-
+		local tmpTableTargetGroup = nil
+		if tmpTableTargetDemoteRole != nil then
+			tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].int_groupID )
+		else
+			tmpTableTargetDemoteRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
+			tmpTableTargetGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '1'")
+		end
 		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
 

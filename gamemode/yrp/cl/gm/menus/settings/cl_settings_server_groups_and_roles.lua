@@ -33,7 +33,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		gs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
 		gs.bac:SetText("")
 		function gs.bac:Paint(pw, ph)
-			if cur_group.cur == cur_group.par then
+			if cur_group.par < 0 then
 				local tab = {}
 				tab.color = YRPGetColor("3")
 				DrawPanel(self, tab)
@@ -52,7 +52,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function gs.bac:DoClick()
-			if cur_group.cur != cur_group.par then
+			if cur_group.par >= 0 then
 				gs.gplist:ClearList()
 				net.Start("settings_unsubscribe_grouplist")
 					net.WriteString(cur_group.cur)
@@ -424,6 +424,33 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.rplist:Clear()
 		end
 
+		net.Receive("settings_role_update_name", function(le)
+			if pa(rs.rplist) then
+				local _uid = tonumber(net.ReadString())
+				local name = net.ReadString()
+				rs.rplist[_uid].text = name
+			end
+		end)
+
+		net.Receive("settings_role_update_color", function(le)
+			if pa(rs) then
+				local _uid = tonumber(net.ReadString())
+				local color = net.ReadString()
+				if isnumber(_uid) and rs.rplist[_uid] != nil then
+					rs.rplist[_uid].string_color = stc(color)
+				end
+			end
+		end)
+
+		net.Receive("settings_role_update_icon", function(le)
+			if pa(rs.rplist) then
+				local _uid = tonumber(net.ReadString())
+				local icon = net.ReadString()
+				rs.rplist[_uid].string_icon = icon
+				rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
+			end
+		end)
+
 		PARENT.ea = {}
 		local ea = PARENT.ea
 
@@ -461,14 +488,42 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 		function ea.del:DoClick()
 			if ea.typ == "group" and tonumber(ea.tab.uniqueID) != 1 then
-				net.Start("settings_delete_group")
-					net.WriteString(ea.tab.uniqueID)
-				net.SendToServer()
-				for i, pnl in pairs(ea.background:GetChildren()) do
-					pnl:Remove()
+				local win = createD("YFrame", nil, YRP.ctr(660), YRP.ctr(300), 0, 0)
+				win:SetHeaderHeight(YRP.ctr(100))
+				win:Center()
+				win:MakePopup()
+				win:SetTitle(YRP.lang_string("LID_areyousure"))
+				function win:Paint(pw, ph)
+					hook.Run("YFramePaint", self, pw, ph)
 				end
-				ea.typ = nil
-				ea.tab = nil
+				local content = win:GetContent()
+				function content:Paint(pw, ph)
+					draw.SimpleText("Recursive", "DermaDefault",  YRP.ctr(60), YRP.ctr(50 + 20 + 25), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+
+				local recursive = createD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(50 + 20))
+
+				local _yes = createD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), 0, 0)
+				_yes:SetText(YRP.lang_string("LID_yes"))
+				function _yes:DoClick()
+					net.Start("settings_delete_group")
+						net.WriteString(ea.tab.uniqueID)
+						net.WriteBool(recursive:GetValue())
+					net.SendToServer()
+
+					for i, pnl in pairs(ea.background:GetChildren()) do
+						pnl:Remove()
+					end
+					ea.typ = nil
+					ea.tab = nil
+					win:Close()
+				end
+
+				local _no = createD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), 0)
+				_no:SetText(YRP.lang_string("LID_no"))
+				function _no:DoClick()
+					win:Close()
+				end
 			elseif ea.typ == "role" and wk(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
 				net.Start("settings_delete_role")
 					net.WriteString(ea.tab.uniqueID)
@@ -507,7 +562,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function ea.dup:DoClick()
-			if ea.tab.uniqueID != 1 then
+			if ea.tab.uniqueID != nil and ea.tab.uniqueID != 1 then
 				if ea.typ == "group" then
 					net.Start("duplicated_group")
 						net.WriteString(ea.tab.uniqueID)
@@ -634,7 +689,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local othergroups = {}
 				othergroups[0] = YRP.lang_string("LID_factions")
 				for i, tab in pairs(groups) do
-					othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+					tab.uniqueID = tonumber(tab.uniqueID)
+					if tab.uniqueID > 0 then
+						othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+					end
 				end
 
 				if group.uniqueID > 1 then
@@ -643,7 +701,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					parentgroup.uniqueID = group.uniqueID
 					parentgroup.header = "LID_parentgroup"
 					parentgroup.netstr = "update_group_int_parentgroup"
-					parentgroup.value = group.int_parentgroup
+					parentgroup.value = tonumber(group.int_parentgroup)
 					parentgroup.uniqueID = group.uniqueID
 					parentgroup.lforce = false
 					parentgroup.choices = othergroups

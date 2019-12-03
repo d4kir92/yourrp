@@ -36,24 +36,35 @@ end
 function tp_to(ply, pos)
 	local _pos = Vector(pos[1], pos[2], pos[3])
 	local _angle = Angle(0, 0, 0)
-	local _tmpAngle = ply:EyeAngles()
+	local _tmpAngle = ply:EyeAngles() or ply:GetAngles()
 	if ply:IsValid() then
-		ply:SetEyeAngles(_angle)
-
+		if ply:IsPlayer() then
+			ply:SetEyeAngles(_angle)
+		else
+			ply:SetAngles(_angle)
+		end
 		if enough_space(ply, _pos + Vector(0, 0, 2)) then
 			local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2))
 
 			ply:SetPos(__pos)
-			ply:SetEyeAngles(_tmpAngle)
+			if ply:IsPlayer() then
+				ply:SetEyeAngles(_tmpAngle)
+			else
+				ply:SetAngles(_tmpAngle)
+			end
 		else
 			for i = 1, 3 do
 				for j = 0, 360, 45 do
-					_angle:RotateAroundAxis(ply:GetForward(), 45)
+					_angle:RotateAroundAxis(ply:GetUp(), 45)
 					local _enough_space = enough_space(ply, _pos + Vector(0, 0, 2) + _angle:Forward() * 44 * i)
 					if _enough_space then
 						local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2) + _angle:Forward() * 44 * i)
 						ply:SetPos(__pos)
-						ply:SetEyeAngles(_tmpAngle)
+						if ply:IsPlayer() then
+							ply:SetEyeAngles(_tmpAngle)
+						else
+							ply:SetAngles(_tmpAngle)
+						end
 						return
 					end
 				end

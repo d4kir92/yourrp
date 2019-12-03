@@ -12,7 +12,7 @@ SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "keynr", "INTEGER DEFAULT -1")
 --db_is_empty(DATABASE_NAME_DOORS)
 
 local DATABASE_NAME_BUILDINGS = "yrp_" .. GetMapNameDB() .. "_buildings"
-SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT -1")
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
@@ -46,17 +46,6 @@ function IsUnderGroupOf(ply, uid)
 	group = group[1]
 	return IsUnderGroup(group.uniqueID, uid)
 end
---[[
-if wk(group) then
-	group = group[1]
-	local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
-	if wk(undergroup) then
-		undergroup = undergroup[1]
-		return GetFactionTable(undergroup.uniqueID)
-	end
-	return group
-end
-]]--
 
 function allowedToUseDoor(id, ply)
 	if ply:HasAccess() then
@@ -267,11 +256,13 @@ function lockDoor(ply, ent, nr)
 end
 
 function openDoor(ply, ent, nr)
-	local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. nr .. "'")
+	local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. ent:GetDString("buildingID", "-1") .. "'")
 	if wk(_tmpBuildingTable) then
 		_tmpBuildingTable = _tmpBuildingTable[1]
 		_tmpBuildingTable.bool_canbeowned = tonumber(_tmpBuildingTable.bool_canbeowned)
-		if _tmpBuildingTable.bool_canbeowned == 0 then
+		_tmpBuildingTable.groupID = tonumber(_tmpBuildingTable.groupID)
+
+		if _tmpBuildingTable.bool_canbeowned == 0 or _tmpBuildingTable.groupID == -1 then
 			_tmpBuildingTable.int_securitylevel = tonumber(_tmpBuildingTable.int_securitylevel)
 			if ply:GetDInt("int_securitylevel", 0) >= _tmpBuildingTable.int_securitylevel then
 				local locked = ent:GetSaveTable().m_bLocked
@@ -283,9 +274,13 @@ function openDoor(ply, ent, nr)
 					ent:Fire("Lock")
 				end
 			else
-				YRP.msg("NOT ALLOWED")
+				YRP.msg("note", "Building: NOT ALLOWED TO OPEN")
 			end
+		else
+			YRP.msg("note", "Building must be not ownable or PUBLIC")
 		end
+	else
+		YRP.msg("note", "Building not found!")
 	end
 end
 
@@ -313,7 +308,7 @@ net.Receive("removeOwner", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'")
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = 0", "uniqueID = '" .. _tmpBuildingID .. "'")
 
 	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
@@ -330,7 +325,7 @@ net.Receive("sellBuilding", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = -1", "uniqueID = '" .. _tmpBuildingID .. "'")
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = 0", "uniqueID = '" .. _tmpBuildingID .. "'")
 
 	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
