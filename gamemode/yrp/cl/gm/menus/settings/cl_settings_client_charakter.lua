@@ -57,12 +57,8 @@ hook.Add("open_client_character", "open_client_character", function()
 
 		settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 		function settingsWindow.window.site:Paint(pw, ph)
-			draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "sef", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-
-			draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "sef", YRP.ctr(10), YRP.ctr(45 + 150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined("MOVED TO F4/H", "sef", YRP.ctr(100), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		end
-
-		net.Start("getCharakterList")
-		net.SendToServer()
 	end
 end)

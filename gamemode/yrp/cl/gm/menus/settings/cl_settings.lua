@@ -123,8 +123,8 @@ function OpenSettings()
 	--Sites
 	local _client = YRP.lang_string("LID_settings_client") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_client)
-	settingsWindow.window:AddSite("open_client_character", "LID_settings_character", _client, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_client_keybinds", "LID_settings_keybinds", _client, "icon16/keyboard.png")
+	settingsWindow.window:AddSite("open_client_character", "LID_character", _client, "icon16/user_edit.png")
+	settingsWindow.window:AddSite("open_client_keybinds", "LID_keybinds", _client, "icon16/keyboard.png")
 
 	local _server_admin = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)

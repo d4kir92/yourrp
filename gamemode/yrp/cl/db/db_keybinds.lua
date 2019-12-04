@@ -1,35 +1,38 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-KEYBINDS = KEYBINDS or {}
-KEYBINDS["menu_character_selection"] = KEY_F2
-KEYBINDS["menu_role"] = KEY_F4
-KEYBINDS["menu_buy"] = KEY_F11
-KEYBINDS["menu_settings"] = KEY_F8
-KEYBINDS["menu_inventory"] = KEY_I
-KEYBINDS["menu_options_vehicle"] = KEY_O
-KEYBINDS["menu_options_door"] = KEY_O
-KEYBINDS["menu_appearance"] = KEY_P
-KEYBINDS["menu_emotes"] = KEY_N
-KEYBINDS["menu_laws"] = KEY_L
+YRPKEYBINDS = YRPKEYBINDS or {}
+YRPKEYBINDS["menu_character_selection"] = KEY_F2
+YRPKEYBINDS["menu_role"] = KEY_F4
+YRPKEYBINDS["menu_buy"] = KEY_F11
+YRPKEYBINDS["menu_settings"] = KEY_F8
+YRPKEYBINDS["menu_inventory"] = KEY_I
+YRPKEYBINDS["menu_options_vehicle"] = KEY_O
+YRPKEYBINDS["menu_options_door"] = KEY_O
+YRPKEYBINDS["menu_appearance"] = KEY_P
+YRPKEYBINDS["menu_emotes"] = KEY_N
+YRPKEYBINDS["menu_laws"] = KEY_L
 
-KEYBINDS["view_switch"] = KEY_T
-KEYBINDS["view_zoom_out"] = KEY_PAD_PLUS
-KEYBINDS["view_zoom_in"] = KEY_PAD_MINUS
-KEYBINDS["view_up"] = KEY_PAD_8
-KEYBINDS["view_down"] = KEY_PAD_5
-KEYBINDS["view_right"] = KEY_PAD_6
-KEYBINDS["view_left"] = KEY_PAD_4
-KEYBINDS["view_spin_right"] = KEY_PAD_9
-KEYBINDS["view_spin_left"] = KEY_PAD_7
+YRPKEYBINDS["menu_char"] = KEY_H
+YRPKEYBINDS["menu_keybinds"] = KEY_J
 
-KEYBINDS["toggle_mouse"] = KEY_F3
-KEYBINDS["toggle_map"] = KEY_M
-KEYBINDS["speak_next"] = KEY_PAGEUP
-KEYBINDS["speak_prev"] = KEY_PAGEDOWN
-KEYBINDS["drop_item"] = KEY_G
+YRPKEYBINDS["view_switch"] = KEY_T
+YRPKEYBINDS["view_zoom_out"] = KEY_PAD_PLUS
+YRPKEYBINDS["view_zoom_in"] = KEY_PAD_MINUS
+YRPKEYBINDS["view_up"] = KEY_PAD_8
+YRPKEYBINDS["view_down"] = KEY_PAD_5
+YRPKEYBINDS["view_right"] = KEY_PAD_6
+YRPKEYBINDS["view_left"] = KEY_PAD_4
+YRPKEYBINDS["view_spin_right"] = KEY_PAD_9
+YRPKEYBINDS["view_spin_left"] = KEY_PAD_7
 
-KEYBINDS["sp_open"] = KEY_UP
-KEYBINDS["sp_close"] = KEY_DOWN
+YRPKEYBINDS["toggle_mouse"] = KEY_F3
+YRPKEYBINDS["toggle_map"] = KEY_M
+YRPKEYBINDS["speak_next"] = KEY_PAGEUP
+YRPKEYBINDS["speak_prev"] = KEY_PAGEDOWN
+YRPKEYBINDS["drop_item"] = KEY_G
+
+YRPKEYBINDS["sp_open"] = KEY_UP
+YRPKEYBINDS["sp_close"] = KEY_DOWN
 
 net.Receive("SetServerKeybinds", function(len)
 	local keytab = net.ReadTable()
@@ -101,7 +104,7 @@ function check_yrp_keybinds()
 
 	SQL_ADD_COLUMN(_db_name, "version", "INT DEFAULT " .. yrp_keybinds.version)
 	-- Keybind Cols
-	for i, keybind in pairs(KEYBINDS) do
+	for i, keybind in pairs(YRPKEYBINDS) do
 		SQL_ADD_COLUMN(_db_name, i, "INT DEFAULT " .. keybind)
 	end
 
@@ -125,7 +128,7 @@ end
 check_yrp_keybinds()
 
 function ResetKeybinds()
-	for i, keybind in pairs(KEYBINDS) do
+	for i, keybind in pairs(YRPKEYBINDS) do
 		set_keybind(i, keybind)
 	end
 end

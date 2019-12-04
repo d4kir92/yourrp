@@ -3,7 +3,8 @@
 local cm = {}
 cm.open = false
 cm.currentsite = "help"
-function ToggleCombinedMenu()
+function ToggleCombinedMenu(id)
+	cm.currentsite = id
 	if !cm.open and isNoMenuOpen() then
 		OpenCombinedMenu()
 	elseif cm.open then
@@ -91,8 +92,16 @@ function OpenCombinedMenu()
 		sites.shops.id = 3
 		sites.shops.name = "LID_settings_shops"
 		sites.shops.content = CreateBuyMenuContent
+		sites.character = {}
+		sites.character.id = 4
+		sites.character.name = "LID_character"
+		sites.character.content = CreateCharContent
+		sites.keybinds = {}
+		sites.keybinds.id = 5
+		sites.keybinds.name = "LID_keybinds"
+		sites.keybinds.content = CreateKeybindsContent
 		sites.feedback = {}
-		sites.feedback.id = 4
+		sites.feedback.id = 6
 		sites.feedback.name = "LID_feedback"
 		sites.feedback.content = CreateFeedbackContent
 
@@ -101,6 +110,7 @@ function OpenCombinedMenu()
 			cm.sites[name] = createD("YButton", cm.menu, menuw, YRP.ctr(80), 0, menuw + id * (YRP.ctr(80) + br))
 			local site = cm.sites[name]
 			site:SetText("")
+			site.id = v.id
 			function site:Paint(pw, ph)
 				local color = Color(40, 40, 40, 255)
 				if self:IsHovered() then
@@ -117,12 +127,12 @@ function OpenCombinedMenu()
 			end
 			function site:DoClick()
 				cm.menu:ClearSelection()
-				cm.currentsite = name
+				cm.currentsite = self.id
 				self.selected = true
 				v.content(cm.site) --CreateHelpMenuContent(cm.site)
 			end
 
-			if cm.currentsite == name then
+			if cm.currentsite == site.id then
 				site:DoClick()
 			end
 

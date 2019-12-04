@@ -41,10 +41,14 @@ end
 
 function IsUnderGroupOf(ply, uid)
 	local ply_group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply:GetDString("groupUniqueID", "Failed") .. "'")
-	ply_group = ply_group[1]
-	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'")
-	group = group[1]
-	return IsUnderGroup(group.uniqueID, uid)
+	if wk(ply_group) then
+		ply_group = ply_group[1]
+		local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'")
+		group = group[1]
+		return IsUnderGroup(group.uniqueID, uid)
+	else
+		return false
+	end
 end
 
 function allowedToUseDoor(id, ply)
@@ -347,23 +351,26 @@ net.Receive("buyBuilding", function(len, ply)
 		local _tmpBuildingID = net.ReadString()
 		local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-		if ply:canAfford(_tmpTable[1].buildingprice) and (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) == -1 then
-			ply:addMoney(- _tmpTable[1].buildingprice)
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'")
-			local tabChar = SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
-			if wk(tabChar) then
-				tabChar = tabChar[1]
-			end
-			for k, v in pairs(GetAllDoors()) do
-				if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetDTable("owner", tabChar)
-					v:SetDString("ownerRPName", tabChar.rpname)
-					v:SetDString("ownerCharID", ply:CharID())
-					v:SetDBool("bool_hasowner", true)
+		if ply:canAfford(_tmpTable[1].buildingprice) then
+			if (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) <= 0 then
+				ply:addMoney(- _tmpTable[1].buildingprice)
+				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'")
+				local tabChar = SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
+				if wk(tabChar) then
+					tabChar = tabChar[1]
 				end
+				for k, v in pairs(GetAllDoors()) do
+					if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
+						v:SetDTable("owner", tabChar)
+						v:SetDString("ownerRPName", tabChar.rpname)
+						v:SetDString("ownerCharID", ply:CharID())
+						v:SetDBool("bool_hasowner", true)
+					end
+				end
+				printGM("gm", ply:RPName() .. " has buyed a door")
+			else
+				printGM("gm", ply:RPName() .. " has already an owner!")
 			end
-
-			printGM("gm", ply:RPName() .. " has buyed a door")
 		else
 			printGM("gm", ply:RPName() .. " has not enough money to buy door")
 		end

@@ -347,6 +347,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					ply:SetDString("money", chaTab.money)
 					ply:SetDString("moneybank", chaTab.moneybank)
 					ply:SetDString("rpname", SQL_STR_OUT(chaTab.rpname))
+					ply:SetDString("rpdescription", SQL_STR_OUT(chaTab.rpdescription))
 
 					setbodygroups(ply)
 				else
