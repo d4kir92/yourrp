@@ -533,7 +533,7 @@ function GM:PlayerSay(sender, text, teamChat)
 	end
 
 	if GetGlobalBool("bool_msg_channel_chat", false) then
-		MsgC(GetRealmColor(), "[", Color(0, 100, 225), "YRP", GetRealmColor(), "|", Color(0, 0, 255),"CHAT", GetRealmColor(), "] ", pk.command_color, "[" .. string.upper(pk.command) .. "] ", pk.text_color, pk.groupname .. " " .. pk.rolename .. " " .. pk.steamname .. " [" .. pk.rpname .. "]", ": ", pk.text .. "\n")
+		MsgC(GetRealmColor(), "\n[", Color(0, 100, 225), "YRP", GetRealmColor(), "|", Color(0, 0, 255),"CHAT", GetRealmColor(), "] ", pk.command_color, "[" .. string.upper(pk.command) .. "] ", pk.text_color, pk.groupname .. " " .. pk.rolename .. " " .. pk.steamname .. " [" .. pk.rpname .. "]", ": ", pk.text .. "\n")
 	end
 
 	if paket.command == "admin" then

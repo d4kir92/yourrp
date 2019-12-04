@@ -55,9 +55,12 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 end
 
 function close_all()
+	CloseCombinedMenu()
 	CloseHelpMenu()
 	CloseEmotesMenu()
 	closeFeedbackMenu()
+	closeCharMenu()
+	closeKeybindsMenu()
 	closeCharacterSelection()
 	close_appearance()
 	CloseInventory()
@@ -90,7 +93,7 @@ function useFunction(string)
 			ToggleEmotesMenu()
 		elseif string == "ToggleLawsMenu" then
 			ToggleLawsMenu()
-		elseif string == "openCharMenu" then
+		elseif string == "openCharacterMenu" then
 			done_tutorial("tut_cs")
 			toggleCharacterSelection()
 		elseif string == "openAppearance" then
@@ -158,8 +161,22 @@ function useFunction(string)
 		elseif string == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
-			if string == "OpenHelpMenu" or string == "OpenRoleMenu" or string == "OpenBuyMenu" or string == "openFeedbackMenu" then
-				ToggleCombinedMenu()
+			local id = 0
+			if string == "OpenHelpMenu" then
+				id = 1
+			elseif string == "OpenRoleMenu" then
+				id = 2
+			elseif string == "OpenBuyMenu" then
+				id = 3
+			elseif string == "openCharMenu" then
+				id = 4
+			elseif string == "openKeybindsMenu" then
+				id = 5
+			elseif string == "openFeedbackMenu" then
+				id = 6
+			end
+			if id > 0 then
+				ToggleCombinedMenu(id)
 			end
 		elseif !GetGlobalDBool("bool_yrp_combined_menu", false) then
 			if string == "OpenHelpMenu" then
@@ -175,6 +192,10 @@ function useFunction(string)
 				ToggleBuyMenu()
 			elseif string == "openFeedbackMenu" then
 				toggleFeedbackMenu()
+			elseif string == "openCharMenu" then
+				toggleCharMenu()
+			elseif string == "openKeybindsMenu" then
+				toggleKeybindsMenu()
 			end
 		end
 	end
@@ -452,6 +473,9 @@ function KeyPress()
 	keyPressed(KEY_F1, "OpenHelpMenu")
 	keyPressed(KEY_F7, "openFeedbackMenu")
 
+	keyPressed(get_keybind("menu_char"), "openCharMenu")
+	keyPressed(get_keybind("menu_keybinds"), "openKeybindsMenu")
+
 	keyPressed(get_keybind("menu_emotes"), "ToggleEmotesMenu")
 
 	keyPressed(get_keybind("menu_laws"), "ToggleLawsMenu")
@@ -461,7 +485,7 @@ function KeyPress()
 	keyPressed(get_keybind("menu_inventory"), "openInventory")
 	keyPressed(get_keybind("menu_appearance"), "openAppearance")
 
-	keyPressed(get_keybind("menu_character_selection"), "openCharMenu")
+	keyPressed(get_keybind("menu_character_selection"), "openCharacterMenu")
 	keyPressed(get_keybind("menu_role"), "OpenRoleMenu")
 	keyPressed(get_keybind("menu_buy"), "OpenBuyMenu")
 

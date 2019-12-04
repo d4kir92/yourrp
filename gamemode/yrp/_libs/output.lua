@@ -287,6 +287,7 @@ countries["KR"] = "Korea"
 countries["KW"] = "Kuwait"
 countries["KZ"] = "Kazakhstan"
 
+countries["LI"] = "Liechtenstein"
 countries["LT"] = "Lithuania"
 countries["LU"] = "Luxembourg"
 countries["LV"] = "Latvia"

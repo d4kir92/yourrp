@@ -608,7 +608,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local group = net.ReadTable()
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
-			
+
 			if group.uniqueID != nil then
 				net.Start("settings_subscribe_rolelist")
 					net.WriteString(group.uniqueID)
@@ -1330,19 +1330,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						function pmwin.float_min:OnValueChange(val)
 							val = tonumber(val)
 							maxval = tonumber(pmwin.float_max:GetValue())
-							if isnumber(val) and isnumber(maxval) then
-								if val > maxval then
-									pmwin.float_max:SetValue(val)
-								end
+							if isnumber(val) and isnumber(maxval) and val > maxval then
+								pmwin.float_max:SetValue(val)
 							end
 						end
 						function pmwin.float_max:OnValueChange(val)
 							val = tonumber(val)
 							minval = tonumber(pmwin.float_min:GetValue())
-							if isnumber(val) and isnumber(minval) then
-								if val < minval then
-									pmwin.float_min:SetValue(val)
-								end
+							if isnumber(val) and isnumber(minval) and val < minval then
+								pmwin.float_min:SetValue(val)
 							end
 						end
 
@@ -1439,12 +1435,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 											d_pm.PrintName = v.PrintName
 											function d_pm:Paint(pw, ph)
 												local text = YRP.lang_string("LID_notadded")
-												local color = Color(255, 255, 255)
+												local col = Color(255, 255, 255)
 												if table.HasValue(pmwin.pms, self.WorldModel) then
-													color = Color(0, 255, 0)
+													col = Color(0, 255, 0)
 													text = YRP.lang_string("LID_added")
 												end
-												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
 												draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -1588,12 +1584,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 											d_pm.PrintName = v.PrintName
 											function d_pm:Paint(pw, ph)
 												local text = YRP.lang_string("LID_notadded")
-												local color = Color(255, 255, 255)
+												local col = Color(255, 255, 255)
 												if table.HasValue(pmwin.pms, self.WorldModel) then
-													color = Color(0, 255, 0)
+													col = Color(0, 255, 0)
 													text = YRP.lang_string("LID_added")
 												end
-												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
 												draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 

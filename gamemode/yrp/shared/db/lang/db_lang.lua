@@ -265,6 +265,8 @@ function YRP.LoadLanguage(short, init)
 	return true
 end
 
+--[[
+
 function YRP.sendTranslationProgress(player)
 	if (IsValid(player) and player:IsPlayer()) then
 		net.Start("receiveTranslationProgress")
@@ -346,6 +348,8 @@ if CLIENT then
 net.Start("requestTranslationProgress")
 net.SendToServer()
 end
+
+]]--
 
 function YRP.add_language(short)
 	short = tostring(short)

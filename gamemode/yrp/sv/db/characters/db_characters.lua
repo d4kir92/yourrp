@@ -348,6 +348,7 @@ util.AddNetworkString("change_rpdescription")
 net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
+	ply:SetDString("rpdescription", SQL_STR_IN(_new_rp_description))
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
 		ply:SetDString("rpdescription" .. i, SQL_STR_IN(v))
 	end

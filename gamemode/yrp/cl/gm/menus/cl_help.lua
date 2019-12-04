@@ -632,11 +632,11 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _allProgressTexts = {}
 
 		for sho, language in SortedPairs(YRP.GetAllLanguages()) do
-			local text = language.language .. "/" .. language.inenglish .. " ("
+			local text = language.language .. "/" .. language.inenglish
 
 			if language.percentage != nil then
 				language.percentage = tonumber(language.percentage)
-				text = text .. language.percentage .. "%)"
+				text = text .. " (" .. language.percentage .. "%)"
 			end
 
 			_allProgressTexts[sho] = text
@@ -654,7 +654,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 		local _icon_w = _icon_h * 1.478
 		local _w = YRP.ctr(800) -- _longestProgressText + YRP.ctr(_icon_w + 20 + 20)
 
-		local LANGUAGES = createD("YGroupBox", Parent, _w, Parent:GetTall(), Parent:GetWide() / 2 - _w / 2, 0)
+		local LANGUAGES = createD("YGroupBox", Parent, _w, Parent:GetTall() - YRP.ctr(25), Parent:GetWide() / 2 - _w / 2, 0)
 		LANGUAGES:SetText("Languages")
 		function LANGUAGES:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
