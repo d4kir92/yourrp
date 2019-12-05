@@ -489,10 +489,10 @@ function KeyPress()
 	keyPressed(get_keybind("menu_role"), "OpenRoleMenu")
 	keyPressed(get_keybind("menu_buy"), "OpenBuyMenu")
 
-	keyPressed(KEY_E, "openInteractMenu", 100)
+	keyPressed(KEY_E, "openInteractMenu", GetGlobalDInt("int_door_distance", 180))
 
-	keyPressed(get_keybind("menu_options_door"), "openOptions", 100)
-	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", 100)
+	keyPressed(get_keybind("menu_options_door"), "openOptions", GetGlobalDInt("int_door_distance", 180))
+	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", GetGlobalDInt("int_door_distance", 180))
 
 	keyPressed(get_keybind("toggle_map"), "openMap")
 

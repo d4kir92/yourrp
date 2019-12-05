@@ -55,8 +55,9 @@ function SWEP:PrimaryAttack()
 		local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 		if tr.Hit then
 			self.target = tr.Entity
+			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
-			if class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating" then
+			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 180) and (class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating") then
 				ply:StartCasting("lockpick", "lid_lockpicking", 0, self.target, 3, 50, 1, false)
 				ply:EmitSound("doors/door_locked2.wav", 75, 100, 1, CHAN_AUTO)
 				timer.Create("lockpick_loop", 2, 3, function()
