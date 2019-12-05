@@ -10,7 +10,8 @@ SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
 SQL_ADD_COLUMN(_db_name, "roleID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "groupID", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(_db_name, "string_idcardid", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(_db_name, "text_idstructure", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(_db_name, "text_idcardid", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(_db_name, "playermodelID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "skin", "INT DEFAULT 1")
@@ -553,8 +554,8 @@ net.Receive("DeleteCharacter", function(len, ply)
 			local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 			if _first_character != nil then
 				_first_character = _first_character[1]
-				local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
-				local test = SQL_SELECT("yrp_players", "*", nil)
+				SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
+				SQL_SELECT("yrp_players", "*", nil)
 			end
 			ply:Spawn()
 		else
@@ -621,7 +622,7 @@ util.AddNetworkString("EnterWorld")
 net.Receive("EnterWorld", function(len, ply)
 	local char = net.ReadString()
 	if char != nil then
-		local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(char), "SteamID = '" .. ply:SteamID() .. "'")
+		SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(char), "SteamID = '" .. ply:SteamID() .. "'")
 		ply:Spawn()
 	else
 		printGM("gm", "No valid character selected")

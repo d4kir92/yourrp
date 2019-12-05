@@ -111,7 +111,7 @@ net.Receive("isidcardenabled", function(len)
 
 	isidcardenabled = net.ReadBool()
 	if isidcardenabled then
-		local scale = 0.6
+		local scale = 1.0
 		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
 		local x = GetGlobalDInt("int_" .. "background" .. "_x", 0)

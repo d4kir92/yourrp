@@ -829,16 +829,16 @@ function canhear(listener, talker)
 	local l_guid = tonumber(listener:GetDString("groupUniqueID"))
 	local dist = listener:GetPos():Distance(talker:GetPos())
 	if t_speak_channel == 2 then -- GLOBAL
-		--print(listener, talker, "GLOBAL ||| t_speak_channel == 2")
+		--p(listener, talker, "GLOBAL ||| t_speak_channel == 2")
 		return true -- if talker is globalvoice
 	elseif t_speak_channel == 1 and t_guid == l_guid then
-		--print(listener, talker, "SAME GROUP ||| t_speak_channel == 1 and t_guid == l_guid")
+		--p(listener, talker, "SAME GROUP ||| t_speak_channel == 1 and t_guid == l_guid")
 		return true -- if talker is groupvoice and same group
 	elseif t_speak_channel == 1 and dist < GetVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled() then
-		--print(listener, talker, "GROUP LOCAL VOICE RANGE |||| dist < GetVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled()")
+		--p(listener, talker, "GROUP LOCAL VOICE RANGE |||| dist < GetVoiceChatLocalRange() and IsLocalGroupVoiceChatEnabled()")
 		return true -- is near groupvoicerange
 	elseif dist < GetVoiceChatLocalRange() then -- LOCAL
-		--print(listener, talker, "LOCAL VOICE RANGE |||| dist < GetVoiceChatLocalRange()")
+		--p(listener, talker, "LOCAL VOICE RANGE |||| dist < GetVoiceChatLocalRange()")
 		return true -- if near local range
 	else
 		return false
@@ -848,7 +848,7 @@ end
 function IsInMaxVoiceRange(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
 	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
-	--print(listener, talker, result)
+	--p(listener, talker, result)
 	return result
 end
 
@@ -945,12 +945,12 @@ function sendToDiscord(msg)
 	newdata,
 	function( result, ... )
 		if result then
-			print( "Done!" )
-			print(result, ...)
+			p( "Done!" )
+			p(result, ...)
 		end
 	end,
 	function( failed )
-		print( failed )
+		p( failed )
 	end,
 	{["Content-Type"] = "application/json"}
 	)

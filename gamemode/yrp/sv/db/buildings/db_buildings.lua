@@ -140,7 +140,7 @@ function loadDoors()
 							end
 						end
 					else
-						if tonumber(w.groupID) != -1 then
+						if tonumber(w.groupID) != 0 then
 							local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. w.groupID)
 							if wk(_tmpGroupName) then
 								_tmpGroupName = _tmpGroupName[1]
@@ -150,9 +150,15 @@ function loadDoors()
 								end
 							end
 						end
-						if tonumber(w.groupID) == 0 then
-							v:Fire("Lock")
-						end
+					end
+
+					w.int_securitylevel = tonumber(w.int_securitylevel)
+					if w.int_securitylevel > 0 then
+						v:SetDInt("int_securitylevel", w.int_securitylevel)
+					end
+
+					if v:GetDInt("int_securitylevel", 0) > 0 then
+						v:Fire("Lock")
 					end
 
 					if !strEmpty(w.text_header) then
@@ -391,6 +397,7 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 			if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 				v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
 				v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
+				v:SetDBool("bool_hasowner", true)
 			end
 		end
 	end
@@ -412,12 +419,24 @@ net.Receive("changeBuildingPrice", function(len, ply)
 	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID)
 end)
 
+function SetSecurityLevel(id, sl)
+	for i, door in pairs(GetAllDoors()) do
+		if door:GetDString("buildingID", -1) == id then
+			door:SetDInt("int_securitylevel", sl)
+			if door:GetDInt("int_securitylevel", 0) > 0 then
+				door:Fire("Lock")
+			end
+		end
+	end
+end
+
 net.Receive("changeBuildingSL", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewSL = net.ReadString()
 	_tmpNewSL = tonumber(_tmpNewSL) or 0
 
 	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "int_securitylevel = " .. _tmpNewSL , "uniqueID = " .. _tmpBuildingID)
+	SetSecurityLevel(_tmpBuildingID, _tmpNewSL)
 end)
 
 util.AddNetworkString("CanBuildingBeOwned")

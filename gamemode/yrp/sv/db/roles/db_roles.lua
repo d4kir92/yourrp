@@ -68,7 +68,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "1, 'Civilian', '0,0,255', 1, 0")
 end
 
-local yrp_ply_roles =  SQL_SELECT(DATABASE_NAME, "*", nil)
+--[[local yrp_ply_roles =  SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(yrp_ply_roles) then
 	for i, v in pairs(yrp_ply_roles) do
 		local rid = v.uniqueID
@@ -77,7 +77,7 @@ if wk(yrp_ply_roles) then
 			SQL_UPDATE("yrp_ply_roles", "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. rid .. "'")
 		end
 	end
-end
+end]]
 
 SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
 
@@ -643,8 +643,8 @@ net.Receive("settings_add_role", function(len, ply)
 				SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 			end
 		end
-	else
-		SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+	--else
+		--SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 	end
 
 	local up = roles[count - 1]
@@ -1350,7 +1350,6 @@ net.Receive("openInteractMenu", function(len, ply)
 
 								if tmpSearchUniqueID == 0 or tmpPromote and tmpDemote then
 									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 then
-										print(tmpTargetRole[1].uniqueID)
 										tmpDemote = true
 										local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
 										tmpDemoteName = tmp[1].string_name

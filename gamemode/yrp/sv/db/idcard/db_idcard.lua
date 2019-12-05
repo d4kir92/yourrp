@@ -47,7 +47,8 @@ local names = {
 	"int_ELEMENT_b",
 	"int_ELEMENT_a",
 	"int_ELEMENT_ax",
-	"int_ELEMENT_ay"
+	"int_ELEMENT_ay",
+	"int_ELEMENT_colortype"
 }
 
 -- CONFIG
@@ -86,6 +87,11 @@ function LoadIDCardSetting(force)
 							v = 0
 						end
 
+						if string.StartWith(n, "bool_") then
+							SetGlobalDBool(n, tobool(v))
+						elseif string.StartWith(n, "int_") then
+							SetGlobalDInt(n, v)
+						end
 						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")
 						LoadIDCardSetting(true)
 					end)
@@ -114,6 +120,13 @@ function LoadIDCardSetting(force)
 	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'")) do
 		v.value = tonumber(v.value)
 		if v.value > 2 then
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+		end
+	end
+
+	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'")) do
+		v.value = tonumber(v.value)
+		if v.value > 2 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
 		end
 	end

@@ -44,7 +44,7 @@ end
 
 util.AddNetworkString("send_slot_content")
 function SendSlotContent(ply, CharID, SName)
-	--print("SendSlotContent", ply, CharID, SName)
+	--p("SendSlotContent", ply, CharID, SName)
 	local storage = LoadSlot(CharID, SName) -- Create / Get Storage
 	local items = LoadSlotItems(storage.uniqueID)
 	if SName == "bag0" and table.Count(items) <= 0 then
@@ -147,7 +147,7 @@ function LoadStorage(suid)
 	stortab.cols[1] = "*"
 	stortab.where = "uniqueID = '" .. suid .. "'"
 	local stor = SQL.SELECT(stortab)
-	--print(stor)
+	--p(stor)
 	if wk(stor) then
 		stor = stor[1]
 	end
@@ -162,7 +162,7 @@ end
 
 util.AddNetworkString("send_storage_content")
 function SendStorageContent(ply, suid)
-	--print("SendStorageContent", ply, suid)
+	--p("SendStorageContent", ply, suid)
 	local storage = LoadStorage(suid) -- Create / Get Storage
 
 	local items = LoadStorageItems(storage.uniqueID)
