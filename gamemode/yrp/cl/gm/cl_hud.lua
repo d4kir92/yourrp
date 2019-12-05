@@ -29,21 +29,23 @@ function GM:DrawDeathNotice(x, y)
 end
 
 hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
-	local lply = LocalPlayer()
-	if lply:IsValid() then
-		local hide = {
-			CHudHealth = true,
-			CHudBattery = true,
-			CHudAmmo = true,
-			CHudSecondaryAmmo = true,
-			CHudCrosshair = GetGlobalDBool("bool_yrp_crosshair", false),
-			CHudVoiceStatus = false
-		}
+	if GetGlobalDBool("bool_yrp_hud", false) then
+		local lply = LocalPlayer()
+		if lply:IsValid() then
+			local hide = {
+				CHudHealth = true,
+				CHudBattery = true,
+				CHudAmmo = true,
+				CHudSecondaryAmmo = true,
+				CHudCrosshair = GetGlobalDBool("bool_yrp_crosshair", false),
+				CHudVoiceStatus = false
+			}
 
-		if g_VoicePanelList != nil then
-			g_VoicePanelList:SetVisible(false)
+			if g_VoicePanelList != nil then
+				g_VoicePanelList:SetVisible(false)
+			end
+			if (hide[ name ]) then return false end
 		end
-		if (hide[ name ]) then return false end
 	end
 end)
 
@@ -181,31 +183,33 @@ end)
 local HUD_AVATAR = nil
 local PAvatar = vgui.Create("DPanel")
 function PAvatar:Paint(pw, ph)
-	render.ClearStencil()
-	render.SetStencilEnable(true)
+	if GetGlobalDBool("bool_yrp_hud", false) then
+		render.ClearStencil()
+		render.SetStencilEnable(true)
 
-		render.SetStencilWriteMask(1)
-		render.SetStencilTestMask(1)
+			render.SetStencilWriteMask(1)
+			render.SetStencilTestMask(1)
 
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
 
-		render.SetStencilFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+			render.SetStencilFailOperation(STENCILOPERATION_INCR)
+			render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+			render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
-		render.SetStencilReferenceValue(1)
+			render.SetStencilReferenceValue(1)
 
-		drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
+			drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
 
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-		if HUD_AVATAR != nil then
-			HUD_AVATAR:SetPaintedManually(false)
-			HUD_AVATAR:PaintManual()
-			HUD_AVATAR:SetPaintedManually(true)
-		end
+			if HUD_AVATAR != nil then
+				HUD_AVATAR:SetPaintedManually(false)
+				HUD_AVATAR:PaintManual()
+				HUD_AVATAR:SetPaintedManually(true)
+			end
 
-	render.SetStencilEnable(false)
+		render.SetStencilEnable(false)
+	end
 end
 timer.Simple(1, function()
 	HUD_AVATAR = vgui.Create("AvatarImage", PAvatar)
@@ -216,25 +220,27 @@ timer.Simple(1, function()
 	ava.y = 0
 	ava.version = -1
 	function HUD_AVATAR:Think()
-		local lply = LocalPlayer()
-		if lply:GetDInt("hud_version", 0) != ava.version then
-			ava.version = lply:GetDInt("hud_version", 0)
+		if GetGlobalDBool("bool_yrp_hud", false) then
+			local lply = LocalPlayer()
+			if lply:GetDInt("hud_version", 0) != ava.version then
+				ava.version = lply:GetDInt("hud_version", 0)
 
-			ava.w = lply:HudValue("AV", "SIZE_W")
-			ava.h = lply:HudValue("AV", "SIZE_H")
-			ava.x = lply:HudValue("AV", "POSI_X")
-			ava.y = lply:HudValue("AV", "POSI_Y")
-			ava.visible = lply:HudValue("AV", "VISI")
+				ava.w = lply:HudValue("AV", "SIZE_W")
+				ava.h = lply:HudValue("AV", "SIZE_H")
+				ava.x = lply:HudValue("AV", "POSI_X")
+				ava.y = lply:HudValue("AV", "POSI_Y")
+				ava.visible = lply:HudValue("AV", "VISI")
 
-			PAvatar:SetPos(ava.x, ava.y)
-			PAvatar:SetSize(ava.h, ava.h)
-			self:SetPlayer(LocalPlayer(), ava.h)
-			if !ava.visible then
-				PAvatar:SetSize(0, 0)
+				PAvatar:SetPos(ava.x, ava.y)
+				PAvatar:SetSize(ava.h, ava.h)
+				self:SetPlayer(LocalPlayer(), ava.h)
+				if !ava.visible then
+					PAvatar:SetSize(0, 0)
+				end
+
+				self:SetPos(0, 0)
+				self:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
 			end
-
-			self:SetPos(0, 0)
-			self:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
 		end
 	end
 end)
@@ -256,54 +262,56 @@ YRP_PM.y = 0
 YRP_PM.version = -1
 YRP_PM.model = ""
 function YRP_PM:Think()
-	local lply = LocalPlayer()
-	if !lply:IsValid() then return end
-	if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetModel() then
-		YRP_PM.version = lply:GetDInt("hud_version", 0)
-		YRP_PM.model = lply:GetModel()
+	if GetGlobalDBool("bool_yrp_hud", false) then
+		local lply = LocalPlayer()
+		if !lply:IsValid() then return end
+		if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetModel() then
+			YRP_PM.version = lply:GetDInt("hud_version", 0)
+			YRP_PM.model = lply:GetModel()
 
-		YRP_PM.w = lply:HudValue("PM", "SIZE_W")
-		YRP_PM.h = lply:HudValue("PM", "SIZE_H")
-		YRP_PM.x = lply:HudValue("PM", "POSI_X")
-		YRP_PM.y = lply:HudValue("PM", "POSI_Y")
-		YRP_PM.visible = lply:HudValue("PM", "VISI")
+			YRP_PM.w = lply:HudValue("PM", "SIZE_W")
+			YRP_PM.h = lply:HudValue("PM", "SIZE_H")
+			YRP_PM.x = lply:HudValue("PM", "POSI_X")
+			YRP_PM.y = lply:HudValue("PM", "POSI_Y")
+			YRP_PM.visible = lply:HudValue("PM", "VISI")
 
-		YRP_PM:SetPos(YRP_PM.x, YRP_PM.y)
-		YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
-		YRP_PM:SetModel(YRP_PM.model)
+			YRP_PM:SetPos(YRP_PM.x, YRP_PM.y)
+			YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
+			YRP_PM:SetModel(YRP_PM.model)
 
-		local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
-		if lb != nil then
-			local eyepos = YRP_PM.Entity:GetBonePosition(lb)
-			eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
-			YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
-			YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
-			YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
-		else
-			YRP_PM:SetLookAt(Vector(0, 0, 40))
-			YRP_PM:SetCamPos(Vector(50, 50, 50))
+			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
+			if lb != nil then
+				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
+				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
+				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
+				YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+			else
+				YRP_PM:SetLookAt(Vector(0, 0, 40))
+				YRP_PM:SetCamPos(Vector(50, 50, 50))
+			end
+
+			if !YRP_PM.visible then
+				YRP_PM:SetModel("")
+			end
 		end
 
-		if !YRP_PM.visible then
-			YRP_PM:SetModel("")
+		if lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "") then
+			SL.version = lply:GetDInt("hud_version", 0)
+			SL.visible = lply:HudValue("SL", "VISI")
+			SL.url = GetGlobalDString("text_server_logo", "")
+
+			SL.w = lply:HudValue("SL", "SIZE_W")
+			SL.h = lply:HudValue("SL", "SIZE_H")
+			SL.x = lply:HudValue("SL", "POSI_X")
+			SL.y = lply:HudValue("SL", "POSI_Y")
+
+			SL:SetPos(SL.x, SL.y)
+			SL:SetSize(SL.h, SL.h)
+			SL:SetHTML(GetHTMLImage(SL.url, SL.h, SL.h))
+
+			SL:SetVisible(SL.visible)
 		end
-	end
-
-	if lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "") then
-		SL.version = lply:GetDInt("hud_version", 0)
-		SL.visible = lply:HudValue("SL", "VISI")
-		SL.url = GetGlobalDString("text_server_logo", "")
-
-		SL.w = lply:HudValue("SL", "SIZE_W")
-		SL.h = lply:HudValue("SL", "SIZE_H")
-		SL.x = lply:HudValue("SL", "POSI_X")
-		SL.y = lply:HudValue("SL", "POSI_Y")
-
-		SL:SetPos(SL.x, SL.y)
-		SL:SetSize(SL.h, SL.h)
-		SL:SetHTML(GetHTMLImage(SL.url, SL.h, SL.h))
-
-		SL:SetVisible(SL.visible)
 	end
 end
 

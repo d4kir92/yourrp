@@ -1016,7 +1016,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			hr.parent = ea.info:GetContent()
 			DHr(hr)
 
-			local idstructure = {}
+			--[[local idstructure = {}
 			idstructure.parent = ea.info:GetContent()
 			idstructure.uniqueID = role.uniqueID
 			idstructure.header = YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)"
@@ -1026,7 +1026,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			idstructure.lforce = false
 			ea[role.uniqueID].idstructure = DTextBox(idstructure)
 
-			DHr(hr)
+			DHr(hr)]]
 
 			local color = {}
 			color.parent = ea.info:GetContent()

@@ -82,7 +82,7 @@ net.Receive("openInteractMenu", function(len)
 
 	local content = wInteract:GetContent()
 	function content:Paint(pw, ph)
-		drawIDCard(ply, 0.6, YRP.ctr(10), YRP.ctr(10))
+		drawIDCard(ply, 1.0, YRP.ctr(10), YRP.ctr(10))
 
 		--[[ Licenses ]]--
 		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))

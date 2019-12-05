@@ -2029,6 +2029,17 @@ function drawIDCard(ply, scale, px, py)
 			color.b = GetGlobalDInt("int_" .. ele .. "_b", 0)
 			color.a = GetGlobalDInt("int_" .. ele .. "_a", 0)
 
+			local colortype = GetGlobalDInt("int_" .. ele .. "_colortype", 0)
+			if colortype == 2 then
+				color = ply:GetFactionColor()
+			elseif colortype == 3 then
+				color = ply:GetGroupColor()
+			elseif colortype == 4 then
+				color = ply:GetRoleColor()
+			elseif colortype == 5 then
+				color = ply:GetUserGroupColor()
+			end
+
 			local ax = GetGlobalDInt("int_" .. ele .. "_ax", 0)
 			local ay = GetGlobalDInt("int_" .. ele .. "_ay", 0)
 
@@ -2082,7 +2093,7 @@ function drawIDCard(ply, scale, px, py)
 					color.a = 255
 
 					local ft = GetFontSizeTable()
-					local fs = math.Round(10 * scale, 0)
+					local fs = math.Round(10, 0)
 					draw.SimpleText(text, "YRP_" .. ft[fs] .. "_500", tx, ty, color, ax, ay)
 				end
 			else
@@ -2096,15 +2107,17 @@ function drawIDCard(ply, scale, px, py)
 							ply.htmlmat = ply.html:GetHTMLMaterial()
 							if ply.htmlmat != nil and !ply.html.found then
 								ply.html.found = true
-								timer.Simple(0.2, function()
+								timer.Simple(0.5, function()
 									ply.matname = ply.htmlmat:GetName()
 									local matdata =	{
 										["$basetexture"] = ply.matname,
+										["$model"] = 1,
 										["$translucent"] = 1,
-										["$model"] = 1
+										["$vertexalpha"] = 1,
+										["$vertexcolor"] = 1
 									}
 									local uid = string.Replace(ply.matname, "__vgui_texture_", "")
-									mats[ele] = CreateMaterial("WebMaterial_" .. uid, "VertexLitGeneric", matdata)
+									mats[ele] = CreateMaterial("WebMaterial_" .. uid, "UnlitGeneric", matdata)
 									ply.html:Remove()
 								end)
 							end

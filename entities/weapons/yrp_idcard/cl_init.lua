@@ -1,11 +1,11 @@
 
 include("shared.lua")
 
-local logos = {}
-local mats = {}
+--local logos = {}
+--local mats = {}
 
 function YDrawIDCards()
-	for i, ply in pairs(player.GetAll()) do
+	for _, ply in pairs(player.GetAll()) do
 		if ply:GetPos():Distance(LocalPlayer():GetPos()) < 400 and ply:GetActiveWeapon().ClassName == "yrp_idcard" then
 			local ang = Angle(0, ply:EyeAngles().y - 270, ply:EyeAngles().p + 90)
 			local sca = 0.01
@@ -18,6 +18,7 @@ function YDrawIDCards()
 
 			cam.Start3D2D(pos + ply:EyeAngles():Forward() * correction, ang, sca)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 			local elements = {
 				"background",
@@ -37,6 +38,10 @@ function YDrawIDCards()
 			}
 =======
 				local elements = {
+=======
+				drawIDCard(ply)
+				--[[local elements = {
+>>>>>>> canary
 					"background",
 					"hostname",
 					"role",
@@ -44,6 +49,7 @@ function YDrawIDCards()
 					"idcardid",
 					"faction",
 					"rpname",
+					"securitylevel",
 					"box1",
 					"box2",
 					"box3",
@@ -103,6 +109,8 @@ function YDrawIDCards()
 									text = ply:GetRoleName()
 								elseif ele == "rpname" then
 									text = ply:RPName()
+								elseif ele == "securitylevel" then
+									text = YRP.lang_string("LID_" .. ele) .. " " .. ply:GetDInt("int_securitylevel", 0)
 								elseif ele == "faction" then
 									text = ply:GetFactionName()
 								elseif ele == "group" then
@@ -131,7 +139,10 @@ function YDrawIDCards()
 									ty = y + h
 								end
 								color.a = 255
-								draw.SimpleText(text, "YRP_48_500", tx, ty, color, ax, ay)
+
+								local ft = GetFontSizeTable()
+								local fs = math.Round(10, 0)
+								draw.SimpleText(text, "YRP_" .. ft[fs] .. "_500", tx, ty, color, ax, ay)
 							end
 <<<<<<< HEAD
 							color.a = 255
@@ -172,7 +183,7 @@ function YDrawIDCards()
 										ply.htmlmat = ply.html:GetHTMLMaterial()
 										if ply.htmlmat != nil and !ply.html.found then
 											ply.html.found = true
-											timer.Simple(0.1, function()
+											timer.Simple(0.5, function()
 												ply.matname = ply.htmlmat:GetName()
 												local matdata =	{
 													["$basetexture"] = ply.matname,
@@ -195,11 +206,23 @@ function YDrawIDCards()
 							end
 						end
 					end
-				end
+				end]]
 
 			cam.End3D2D()
 		end
 	end
 end
-
 hook.Add("PostDrawTranslucentRenderables", "yrp_draw_idcards", YDrawIDCards)
+
+hook.Add("HUDPaint", "yrp_yrp_idcard", function()
+	local ply = LocalPlayer()
+	local weapon = ply:GetActiveWeapon()
+	if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then
+		local scale = 1.0
+		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
+		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
+		w = w * scale
+		h = h * scale
+		drawIDCard(ply, scale, ScrW() - w - YRP.ctr(200), ScrH() - h - YRP.ctr(200))
+	end
+end)

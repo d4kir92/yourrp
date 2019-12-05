@@ -446,6 +446,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_usergroup, "LID_showusergroup", "update_bool_yrp_chat_show_usergroup")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_idcardid, "LID_showidcardid", "update_bool_yrp_chat_show_idcardid")
 
+		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "update_text_idstructure")
 		local gs = 8
 		local idcard_change = createD("YButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
 		idcard_change:SetText("LID_change")
@@ -514,7 +515,7 @@ net.Receive("Connect_Settings_General", function(len)
 					local mx, my = gui.MousePos()
 					local px, py = self:GetPos()
 					self.inbg = false
-					if GetGlobalDInt("int_" .. ele .. "_x", 0) < GetGlobalDInt("int_" .. "background" .. "_w", 0) and GetGlobalDInt("int_" .. ele .. "_y", 0) < GetGlobalDInt("int_" .. "background" .. "_h", 0) then	
+					if GetGlobalDInt("int_" .. ele .. "_x", 0) < GetGlobalDInt("int_" .. "background" .. "_w", 0) and GetGlobalDInt("int_" .. ele .. "_y", 0) < GetGlobalDInt("int_" .. "background" .. "_h", 0) then
 						self.inbg = true
 					end
 					if self:IsHovered() then
@@ -717,7 +718,7 @@ net.Receive("Connect_Settings_General", function(len)
 				e.setting = createD("YButton", e, YRP.ctr(250), YRP.ctr(50), X, 0)
 				e.setting:SetText("LID_settings")
 				function e.setting:DoClick()
-					local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+					local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(1000), 0, 0)
 					win:SetTitle(name)
 					win:SetHeaderHeight(YRP.ctr(100))
 					win:MakePopup()
@@ -727,15 +728,36 @@ net.Receive("Connect_Settings_General", function(len)
 					end
 					local content = win:GetContent()
 					function content:Paint(pw, ph)
-						draw.SimpleText("TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(460), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText("TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(580), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText("TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText("TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 					end
 					win.ele = ele
 
-					win.color = createD("DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, 0)
+					win.colortype = createD("DComboBox", win:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, YRP.ctr(0))
+					local cho = {}
+					cho[1] = YRP.lang_string("LID_custom") .. "-" .. YRP.lang_string("LID_color")
+					cho[2] = YRP.lang_string("LID_faction") .. "-" .. YRP.lang_string("LID_color")
+					cho[3] = YRP.lang_string("LID_group") .. "-" .. YRP.lang_string("LID_color")
+					cho[4] = YRP.lang_string("LID_role") .. "-" .. YRP.lang_string("LID_color")
+					cho[5] = YRP.lang_string("LID_usergroup") .. "-" .. YRP.lang_string("LID_color")
+					for id, v in pairs(cho) do
+						local selected = false
+						if id == GetGlobalDInt("int_" .. ele .. "_colortype", 0) then
+							selected = true
+						end
+						win.colortype:AddChoice(YRP.lang_string(v), id, selected)
+					end
+					function win.colortype:OnSelect(index, value)
+						net.Start("update_idcard_" .. "int_" .. ele .. "_colortype")
+							net.WriteString("int_" .. ele .. "_colortype")
+							net.WriteString(index)
+						net.SendToServer()
+					end
+
+					win.color = createD("DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, YRP.ctr(50))
 					win.color:SetColor(Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
-					function win.color:ValueChanged(col)
-						e.col = col
+					function win.color:ValueChanged(colo)
+						e.col = colo
 					end
 
 					local halign = {}
@@ -743,7 +765,7 @@ net.Receive("Connect_Settings_General", function(len)
 					halign[1] = "C"
 					halign[2] = "R"
 					for x = 0, 2 do
-						local ax = createD("YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(470))
+						local ax = createD("YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(570))
 						ax:SetText(halign[x])
 						function ax:DoClick()
 							net.Start("update_idcard_" .. "int_" .. ele .. "_ax")
@@ -757,7 +779,7 @@ net.Receive("Connect_Settings_General", function(len)
 					valign[1] = "C"
 					valign[2] = "B"
 					for x = 0, 2 do
-						local ay = createD("YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(590))
+						local ay = createD("YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(690))
 						ay:SetText(valign[x])
 						function ay:DoClick()
 							net.Start("update_idcard_" .. "int_" .. ele .. "_ay")

@@ -112,66 +112,60 @@ function YFAR(str, f, r)
 end
 
 function IsCardIDUnique(ply, id)
-	local charTab = SQL_SELECT("yrp_characters", "*", "string_idcardid = '" .. id .. "'" )
+	local charTab = SQL_SELECT("yrp_characters", "*", "text_idcardid = '" .. id .. "'" )
 	if wk(charTab) then
 		return false
 	end
 	return true
 end
 
-function SetIDCardID(ply, rid, old_rid, try)
+function CreateNewIDCardID(ply, try)
 	try = try or 0
-	rid = tonumber(rid)
-	old_rid = tonumber(old_rid)
+
 	local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	local numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 	local digits = table.Add(letters, numbers)
 
-	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
+	local idstructure = GetIDStructure()
 
-	if wk(role) then
-		role = role[1]
-		local idstructure = role.string_idstructure
+	while (string.find(idstructure, "!D")) do
+		idstructure = YFAR(idstructure, "!D", table.Random(digits))
+	end
 
-		while (string.find(idstructure, "!D")) do
-			idstructure = YFAR(idstructure, "!D", table.Random(digits))
-		end
+	while (string.find(idstructure, "!L")) do
+		idstructure = YFAR(idstructure, "!L", table.Random(letters))
+	end
 
-		while (string.find(idstructure, "!L")) do
-			idstructure = YFAR(idstructure, "!L", table.Random(letters))
-		end
+	while (string.find(idstructure, "!N")) do
+		idstructure = YFAR(idstructure, "!N", table.Random(numbers))
+	end
 
-		while (string.find(idstructure, "!N")) do
-			idstructure = YFAR(idstructure, "!N", table.Random(numbers))
-		end
-
-		-- Remove bad symbols
-		local result = {}
-		for i, v in pairs(string.Explode("", idstructure)) do
-			if string.byte(v) != 167 and string.byte(v) != 194 then
-				table.insert(result, v)
-			end
-		end
-		idstructure = table.concat(result, "")
-
-		if IsCardIDUnique(ply, idstructure) then
-			if old_rid != rid then
-				SQL_UPDATE("yrp_characters", "string_idcardid = '" .. idstructure .. "'")
-				ply:SetDString("idcardid", idstructure)
-			else
-				local char = ply:GetChaTab()
-				ply:SetDString("idcardid", char.string_idcardid)
-			end
-		elseif try < 32 then
-			try = try + 1
-			SetIDCardID(ply, rid, old_rid, try)
-		else
-			if idstructure == "%%%%-%%%%-%%%%" or strEmpty(idstructure) then
-				SQL_UPDATE("yrp_ply_roles", "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. rid .. "'")
-			end
-			YRP.msg("note", "!!! Hit max tries generating new IDcardID !!!")
+	-- Remove bad symbols
+	local result = {}
+	for i, v in pairs(string.Explode("", idstructure)) do
+		if string.byte(v) != 167 and string.byte(v) != 194 then
+			table.insert(result, v)
 		end
 	end
+	local idcardid = table.concat(result, "")
+
+	if IsCardIDUnique(ply, idstructure) then
+		SQL_UPDATE("yrp_characters", "text_idcardid = '" .. idcardid .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+	elseif try < 32 then
+		try = try + 1
+		CreateNewIDCardID(ply, try)
+	end
+end
+
+function SetIDCardID(ply)
+	local char = ply:GetChaTab()
+	local idstructure = GetIDStructure()
+	if idstructure != char.text_idstructure then
+		SQL_UPDATE("yrp_characters", "text_idstructure = '" .. idstructure .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+		CreateNewIDCardID(ply)
+	end
+	char = ply:GetChaTab()
+	ply:SetDString("idcardid", char.text_idcardid)
 end
 
 function set_role(ply, rid)
@@ -187,7 +181,7 @@ function set_role(ply, rid)
 		local _old_uid = ply:GetDString("roleUniqueID", "1")
 		ply:SetDString("roleUniqueID", rid)
 
-		SetIDCardID(ply, rid, old_rid)
+		SetIDCardID(ply)
 
 		if _role != nil then
 			_role = tonumber(_role[1].int_groupID)
@@ -432,8 +426,6 @@ function add_yrp_player(ply, steamid)
 		else
 			printGM("error", "add_yrp_player failed! _insert: " .. tostring(_insert))
 		end
-	else
-		YRP.msg("error", "[add_yrp_player] FAILED (" .. tostring(_result) .. ")")
 	end
 end
 
