@@ -14,16 +14,22 @@ function showOwner(eyeTrace)
 	end
 end
 
+function showSecurityLevel(door)
+	if door:GetDInt("int_securitylevel", 0) > 0 then
+		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ": " ..	door:GetDInt("int_securitylevel", 0), "sef", ScrW() / 2, ScrH2() + YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+end
+
 function HudView()
 	local ply = LocalPlayer()
 	local _eyeTrace = ply:GetEyeTrace()
 
 	if ea(_eyeTrace.Entity) then
-		if _eyeTrace.Entity:GetPos():Distance(ply:GetPos()) > 100 then
+		if _eyeTrace.Entity:GetPos():Distance(ply:GetPos()) > GetGlobalDInt("int_door_distance", 200) then
 			return
 		end
 
-		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
+		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < GetGlobalDInt("int_door_distance", 200) then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopen", tab), "sef", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -33,6 +39,7 @@ function HudView()
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
 				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "sef", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				showOwner(_eyeTrace)
+				showSecurityLevel(_eyeTrace.Entity)
 			end
 		elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
 			local tab = {}

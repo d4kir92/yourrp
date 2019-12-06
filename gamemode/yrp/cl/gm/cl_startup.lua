@@ -1504,6 +1504,29 @@ function drawPlates()
 		local renderdist = 550
 		local _distance = 200
 
+		if GetGlobalDBool("bool_server_debug_voice", false) and LocalPlayer():GetPos():Distance(ply:GetPos()) < 1000 then
+			if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
+				local col = Color(255, 100, 100, 120)
+				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_local_range", 1) then
+					col = Color(100, 255, 100, 120)
+				end
+				render.SetColorMaterial()
+				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, col)
+				render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, col, true)
+				Debug3DText(ply, "Local Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_local_range", 1)), Color(100, 100, 255, 200))
+			end
+			if !GetGlobalDBool("bool_voice_channels", false) then
+				local col = Color(255, 100, 100, 120)
+				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
+					col = Color(100, 255, 100, 120)
+				end
+				render.SetColorMaterial()
+				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
+				render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col, true)
+				Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+			end
+		end
+
 		if ply != LocalPlayer() and LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() then
 			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
 			local _height = 24 -- 31
@@ -1513,19 +1536,6 @@ function drawPlates()
 
 			if color.a <= 0 then
 				color.a = 10
-			end
-
-			if GetGlobalDBool("bool_server_debug_voice", false) then
-				if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
-					render.SetColorMaterial()
-					render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, Color(100, 100, 255, 10))
-					Debug3DText(ply, "Local Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_local_range", 1)), Color(100, 100, 255, 200))
-				end
-				if !GetGlobalDBool("bool_voice_channels", false) then
-					render.SetColorMaterial()
-					render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, Color(255, 100, 100, 10))
-					Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
-				end
 			end
 
 			if LocalPlayer():GetDBool("bool_canuseesp", false) then
@@ -1763,18 +1773,14 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 			draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
 
 			if GetGlobalDBool("bool_voice_channels", false) then
-				local channel = "X"
-				if p:GetDInt("speak_channel", -1) == 1 then
-					channel = YRP.lang_string("LID_speakgroup") .. " [" .. p:GetGroupName() .. "]"
-				elseif p:GetDInt("speak_channel", -1) == 2 then
-					channel = YRP.lang_string("LID_speakglobal")
-				else
-					channel = YRP.lang_string("LID_speaklocal")
-				end
-				draw3DText(channel .. " (ID: " .. p:GetDInt("speak_channel", -1) .. ")", ScrCen.x, ScrCen.y, Color(255, 255, 0, 255))
+				draw3DText(get_speak_channel_name(p) .. " (ID: " .. p:GetDInt("speak_channel", -1) .. ")", ScrCen.x, ScrCen.y, Color(255, 255, 0, 255))
 			end
 			if p:GetDBool("yrp_speaking", false) then
-				draw3DText("IS SPEAKING! [Volume: " .. math.Round(p:VoiceVolume(), 2) .. "]", ScrCen.x, ScrCen.y + 20, Color(0, 255, 0, 255))
+				local text = "IS SPEAKING!"
+				if p != LocalPlayer() then
+					text = text .. " [Volume: " .. math.Round(p:VoiceVolume(), 2) .. "]"
+				end
+				draw3DText(text, ScrCen.x, ScrCen.y + 20, Color(0, 255, 0, 255))
 			end
 		end
 	end
@@ -1897,10 +1903,10 @@ function loadDoorTexts()
 
 					if x > y then
 						ang = Angle(0, v:GetAngles().y, 90)
-						pos = pos + v:GetRight() * y / 2
+						pos = pos + v:GetRight() * y * 0.7
 					else
 						ang = Angle(0, v:GetAngles().y + 90, 90)
-						pos = pos + v:GetForward() * x / 2
+						pos = pos + v:GetForward() * x * 0.7
 					end
 
 					--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
@@ -1941,10 +1947,10 @@ function loadDoorTexts()
 
 					if x > y then
 						ang = Angle(0, v:GetAngles().y, 90)
-						pos = pos - v:GetRight() * y / 2
+						pos = pos - v:GetRight() * y * 0.7
 					else
 						ang = Angle(0, v:GetAngles().y + 90, 90)
-						pos = pos - v:GetForward() * x / 2
+						pos = pos - v:GetForward() * x * 0.7
 					end
 
 					ang = ang + Angle(0, 180, 0)
@@ -1983,11 +1989,11 @@ function loadDoorTexts()
 		end)
 	end
 end
-timer.Simple(3, function()
+timer.Simple(5, function()
 	loadDoorTexts()
 end)
 net.Receive("loaded_doors", function()
-	timer.Simple(1, function()
+	timer.Simple(5, function()
 		loadDoorTexts()
 	end)
 end)
@@ -2092,9 +2098,9 @@ function drawIDCard(ply, scale, px, py)
 					end
 					color.a = 255
 
-					local ft = GetFontSizeTable()
-					local fs = math.Round(10, 0)
-					draw.SimpleText(text, "YRP_" .. ft[fs] .. "_500", tx, ty, color, ax, ay)
+					local fs = math.Round(36 * scale, 0)
+					fs = math.Clamp(fs, 4, 72)
+					draw.SimpleText(text, "Y_" .. fs .. "_500", tx, ty, color, ax, ay)
 				end
 			else
 				if logos[ele] == nil then

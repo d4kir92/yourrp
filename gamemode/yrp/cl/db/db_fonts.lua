@@ -134,6 +134,16 @@ end
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
+	for s = 4, 72 do
+		createFont("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
+		createFont("Y_" .. s .. "_600", YRP.GetFont(), s, 600, false)
+		createFont("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+
+		createFont("Y_O_" .. s .. "_500", YRP.GetFont(), s, 500, true)
+		createFont("Y_O_" .. s .. "_600", YRP.GetFont(), s, 600, true)
+		createFont("Y_O_" .. s .. "_700", YRP.GetFont(), s, 700, true)
+	end
+
 	for i, s in pairs(GetFontSizeTable()) do
 		createFont("YRP_" .. s .. "_500", YRP.GetFont(), s, 500, false)
 		createFont("YRP_" .. s .. "_600", YRP.GetFont(), s, 600, false)

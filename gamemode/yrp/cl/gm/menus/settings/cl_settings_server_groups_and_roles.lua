@@ -1585,7 +1585,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 											function d_pm:Paint(pw, ph)
 												local text = YRP.lang_string("LID_notadded")
 												local col = Color(255, 255, 255)
-												if table.HasValue(pmwin.pms, self.WorldModel) then
+												if pmwin.pms != nil and table.HasValue(pmwin.pms, self.WorldModel) then
 													col = Color(0, 255, 0)
 													text = YRP.lang_string("LID_added")
 												end
@@ -2163,6 +2163,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_voiceglobal.uniqueID = role.uniqueID
 			bool_voiceglobal.lforce = false
 			ea[role.uniqueID].bool_voiceglobal = DCheckBox(bool_voiceglobal)
+
+			DHr(hr)
+
+			local bool_voicefaction = {}
+			bool_voicefaction.parent = ea.restriction:GetContent()
+			bool_voicefaction.uniqueID = role.uniqueID
+			bool_voicefaction.header = "LID_canusefactionvoicechat"
+			bool_voicefaction.netstr = "update_role_bool_voicefaction"
+			bool_voicefaction.value = role.bool_voicefaction
+			bool_voicefaction.uniqueID = role.uniqueID
+			bool_voicefaction.lforce = false
+			ea[role.uniqueID].bool_voicefaction = DCheckBox(bool_voicefaction)
 
 			DHr(hr)
 

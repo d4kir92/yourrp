@@ -158,6 +158,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_max", "TEXT DEFAULT '10'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_gender", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_othergender", "INT DEFAULT 0")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1")
+
 --[[ Social Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ' '")
@@ -1178,7 +1180,11 @@ net.Receive("update_bool_characters_othergender", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_characters_othergender", "bool_characters_othergender", b)
 end)
-
+util.AddNetworkString("update_bool_characters_changeable_name")
+net.Receive("update_bool_characters_changeable_name", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_characters_changeable_name", "bool_characters_changeable_name", b)
+end)
 
 
 --[[ SOCIAL SETTINGS ]]--

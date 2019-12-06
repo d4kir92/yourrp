@@ -126,7 +126,7 @@ function LoadIDCardSetting(force)
 
 	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'")) do
 		v.value = tonumber(v.value)
-		if v.value > 2 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
+		if v.value > 5 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
 		end
 	end

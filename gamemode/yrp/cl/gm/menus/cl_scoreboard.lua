@@ -486,33 +486,6 @@ function OpenSBS()
 			function pl.sbp:DoClick()
 				OpenPlayerOptions(pl)
 			end
-			pl.sbp.col = i % 2 * 100
-			pl.sbp.color = pl:GetGroupColor()
-			if pl.sbp.color.r >= 240 then
-				pl.sbp.color = Color(pl.sbp.color.r - 20, pl.sbp.color.g - 20, pl.sbp.color.b - 20, 100)
-			else
-				pl.sbp.color = Color(pl.sbp.color.r + 20, pl.sbp.color.g + 20, pl.sbp.color.b + 20, 100)
-			end
-
-			pl.sbp.pt = string.FormattedTime(pl:GetDFloat("uptime_current", 0))
-			if pl.sbp.pt.m < 10 then
-				pl.sbp.pt.m = "0" .. pl.sbp.pt.m
-			end
-			if pl.sbp.pt.h < 10 then
-				pl.sbp.pt.h = "0" .. pl.sbp.pt.h
-			end
-			pl.sbp.playtime = pl.sbp.pt.h .. ":" .. pl.sbp.pt.m
-			pl.sbp.os = pl:GetDString("yrp_os", "other")
-			pl.sbp.lang = pl:GetLanguageShort()
-
-			local country = pl:GetCountry()
-			pl.sbp.country = country
-			local countryshort = pl:GetCountryShort()
-			pl.sbp.cc = string.lower(countryshort)
-			if tostring(YRP.GetDesignIcon("flag_" .. pl.sbp.cc)) == "Material [vgui/material/icon_clear]" and mc[pl.sbp.cc] == nil and string.upper(pl.sbp.cc) != "LOADING" and YRP.AllIconsLoaded() then
-				mc[pl.sbp.cc] = true
-				YRP.msg("mis", "Missing Country: " .. string.upper(pl.sbp.cc))
-			end
 
 			if !strEmpty(pl:GetDString("roleIcon", "")) then
 				pl.sbp.ricon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
@@ -525,6 +498,34 @@ function OpenSBS()
 				if !pl:IsValid() then
 					self:Remove()
 				else
+					pl.sbp.col = i % 2 * 100
+					pl.sbp.color = pl:GetGroupColor()
+					if pl.sbp.color.r >= 240 then
+						pl.sbp.color = Color(pl.sbp.color.r - 20, pl.sbp.color.g - 20, pl.sbp.color.b - 20, 100)
+					else
+						pl.sbp.color = Color(pl.sbp.color.r + 20, pl.sbp.color.g + 20, pl.sbp.color.b + 20, 100)
+					end
+
+					pl.sbp.pt = string.FormattedTime(pl:GetDFloat("uptime_current", 0))
+					if pl.sbp.pt.m < 10 then
+						pl.sbp.pt.m = "0" .. pl.sbp.pt.m
+					end
+					if pl.sbp.pt.h < 10 then
+						pl.sbp.pt.h = "0" .. pl.sbp.pt.h
+					end
+					pl.sbp.playtime = pl.sbp.pt.h .. ":" .. pl.sbp.pt.m
+					pl.sbp.os = pl:GetDString("yrp_os", "other")
+					pl.sbp.lang = pl:GetLanguageShort()
+
+					local country = pl:GetCountry()
+					pl.sbp.country = country
+					local countryshort = pl:GetCountryShort()
+					pl.sbp.cc = string.lower(countryshort)
+					if tostring(YRP.GetDesignIcon("flag_" .. pl.sbp.cc)) == "Material [vgui/material/icon_clear]" and mc[pl.sbp.cc] == nil and string.upper(pl.sbp.cc) != "LOADING" and YRP.AllIconsLoaded() then
+						mc[pl.sbp.cc] = true
+						YRP.msg("mis", "Missing Country: " .. string.upper(pl.sbp.cc))
+					end
+
 					self.bg = self.color
 					if self:IsHovered() then
 						self.bg = Color(255, 255, 0, 255)
@@ -772,38 +773,39 @@ function OpenSBS()
 				function pl.usbp:DoClick()
 					OpenPlayerOptions(pl)
 				end
-				pl.usbp.col = i % 2 * 100
-				pl.usbp.color = Color(255, 255, 255, 255)
-				if pl.usbp.color.r >= 240 then
-					pl.usbp.color = Color(pl.usbp.color.r - 20, pl.usbp.color.g - 20, pl.usbp.color.b - 20, 100)
-				else
-					pl.usbp.color = Color(pl.usbp.color.r + 20, pl.usbp.color.g + 20, pl.usbp.color.b + 20, 100)
-				end
-
-				pl.usbp.pt = string.FormattedTime(pl:GetDFloat("uptime_current", 0))
-				if pl.usbp.pt.m < 10 then
-					pl.usbp.pt.m = "0" .. pl.usbp.pt.m
-				end
-				if pl.usbp.pt.h < 10 then
-					pl.usbp.pt.h = "0" .. pl.usbp.pt.h
-				end
-				pl.usbp.playtime = pl.usbp.pt.h .. ":" .. pl.usbp.pt.m
-				pl.usbp.os = pl:GetDString("yrp_os", "other")
-				pl.usbp.lang = pl:GetLanguageShort()
-
-				local country = pl:GetCountry()
-				pl.usbp.country = country
-				local countryshort = pl:GetCountryShort()
-				pl.usbp.cc = string.lower(countryshort)
-				if tostring(YRP.GetDesignIcon("flag_" .. pl.usbp.cc)) == "Material [vgui/material/icon_clear]" and mc[pl.usbp.cc] == nil and string.upper(pl.usbp.cc) != "LOADING" and YRP.AllIconsLoaded() then
-					mc[pl.usbp.cc] = true
-					YRP.msg("mis", "Missing Country: " .. string.upper(pl.usbp.cc))
-				end
 
 				function pl.usbp:Paint(pw, ph)
 					if !pl:IsValid() then
 						self:Remove()
 					else
+						pl.usbp.col = i % 2 * 100
+						pl.usbp.color = Color(255, 255, 255, 255)
+						if pl.usbp.color.r >= 240 then
+							pl.usbp.color = Color(pl.usbp.color.r - 20, pl.usbp.color.g - 20, pl.usbp.color.b - 20, 100)
+						else
+							pl.usbp.color = Color(pl.usbp.color.r + 20, pl.usbp.color.g + 20, pl.usbp.color.b + 20, 100)
+						end
+
+						pl.usbp.pt = string.FormattedTime(pl:GetDFloat("uptime_current", 0))
+						if pl.usbp.pt.m < 10 then
+							pl.usbp.pt.m = "0" .. pl.usbp.pt.m
+						end
+						if pl.usbp.pt.h < 10 then
+							pl.usbp.pt.h = "0" .. pl.usbp.pt.h
+						end
+						pl.usbp.playtime = pl.usbp.pt.h .. ":" .. pl.usbp.pt.m
+						pl.usbp.os = pl:GetDString("yrp_os", "other")
+						pl.usbp.lang = pl:GetLanguageShort()
+
+						local country = pl:GetCountry()
+						pl.usbp.country = country
+						local countryshort = pl:GetCountryShort()
+						pl.usbp.cc = string.lower(countryshort)
+						if tostring(YRP.GetDesignIcon("flag_" .. pl.usbp.cc)) == "Material [vgui/material/icon_clear]" and mc[pl.usbp.cc] == nil and string.upper(pl.usbp.cc) != "LOADING" and YRP.AllIconsLoaded() then
+							mc[pl.usbp.cc] = true
+							YRP.msg("mis", "Missing Country: " .. string.upper(pl.usbp.cc))
+						end
+	
 						self.bg = self.color
 						if self:IsHovered() then
 							self.bg = Color(255, 255, 0, 255)

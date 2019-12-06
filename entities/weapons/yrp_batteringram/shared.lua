@@ -55,8 +55,9 @@ function SWEP:PrimaryAttack()
 		local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 		if tr.Hit then
 			self.target = tr.Entity
+			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
-			if class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating" then
+			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 200) and (class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating") then
 				self.target:Fire("Unlock")
 				self.target:Fire("Open")
 

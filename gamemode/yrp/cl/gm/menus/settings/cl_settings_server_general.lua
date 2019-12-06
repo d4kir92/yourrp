@@ -894,6 +894,9 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_gender, "LID_gender", "update_bool_characters_gender")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_othergender, "LID_genderother", "update_bool_characters_othergender", 50)
 
+		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name")
+
 
 
 		--[[ SOCIAL SETTINGS ]]--
