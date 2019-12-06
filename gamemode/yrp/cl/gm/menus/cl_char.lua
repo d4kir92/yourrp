@@ -49,37 +49,42 @@ function CreateCharContent(parent)
 	CHAR.content = parent
 
 
-
-	local cl_rpNamelabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(20))
-	cl_rpNamelabel:SetText("")
-	function cl_rpNamelabel:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_name"), "sef", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
-
-	local cl_rpName = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(70))
-	cl_rpName:SetText(LocalPlayer():RPName())
-	function cl_rpName:OnChange()
-		if #self:GetText() > 32 then
-			self:SetText(string.sub(self:GetText(), 0, 32))
+	local Y = 20
+	if GetGlobalDBool("bool_characters_changeable_name", false) then
+		local cl_rpNamelabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(Y))
+		cl_rpNamelabel:SetText("")
+		function cl_rpNamelabel:Paint(pw, ph)
+			draw.SimpleText(YRP.lang_string("LID_name"), "sef", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
+		Y = Y + 50
+		local cl_rpName = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(70))
+		cl_rpName:SetText(LocalPlayer():RPName())
+		function cl_rpName:OnChange()
+			if #self:GetText() > 32 then
+				self:SetText(string.sub(self:GetText(), 0, 32))
+			end
+		end
+		Y = Y + 70
 	end
 
 
 
-	local cl_rpDescriptionlabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(140))
+	local cl_rpDescriptionlabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(Y))
 	cl_rpDescriptionlabel:SetText("")
 	function cl_rpDescriptionlabel:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string("LID_description"), "sef", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
-
-	local cl_rpDescription = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(200), YRP.ctr(10), YRP.ctr(190))
+	Y = Y + 50
+	local cl_rpDescription = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(200), YRP.ctr(10), YRP.ctr(Y))
 	cl_rpDescription:SetMultiline(true)
 	cl_rpDescription:SetText(LocalPlayer():GetDString("rpdescription", "FAIL"))
 	function cl_rpDescription:OnChange()
 
 	end
+	Y = Y + 250
 
-	local cl_save = createD("YButton", parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(500))
+
+	local cl_save = createD("YButton", parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(Y))
 	cl_save:SetText("LID_change")
 	function cl_save:Paint(pw, ph)
 		if CurTime() > save_delay then
@@ -92,9 +97,11 @@ function CreateCharContent(parent)
 	function cl_save:DoClick()
 		if CurTime() > save_delay then
 			save_delay = CurTime() + 4
-			net.Start("change_rpname")
-				net.WriteString(cl_rpName:GetText())
-			net.SendToServer()
+			if GetGlobalDBool("bool_characters_changeable_name", false) then
+				net.Start("change_rpname")
+					net.WriteString(cl_rpName:GetText())
+				net.SendToServer()
+			end
 
 			net.Start("change_rpdescription")
 				net.WriteString(cl_rpDescription:GetText())

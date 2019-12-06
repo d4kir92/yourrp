@@ -51,7 +51,7 @@ end
 function SWEP:PrimaryAttack()
 	if SERVER then
 		local ent = self:GetOwner():GetEyeTrace().Entity
-		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 180) then
+		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 200) then
 			openDoor(self:GetOwner(), ent, 0)
 		end
 	end

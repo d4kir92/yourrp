@@ -25,11 +25,11 @@ function HudView()
 	local _eyeTrace = ply:GetEyeTrace()
 
 	if ea(_eyeTrace.Entity) then
-		if _eyeTrace.Entity:GetPos():Distance(ply:GetPos()) > GetGlobalDInt("int_door_distance", 180) then
+		if _eyeTrace.Entity:GetPos():Distance(ply:GetPos()) > GetGlobalDInt("int_door_distance", 200) then
 			return
 		end
 
-		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < GetGlobalDInt("int_door_distance", 180) then
+		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < GetGlobalDInt("int_door_distance", 200) then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopen", tab), "sef", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

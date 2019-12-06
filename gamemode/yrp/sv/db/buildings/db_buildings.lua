@@ -127,7 +127,6 @@ function loadDoors()
 					v:SetDBool("bool_canbeowned", w.bool_canbeowned)
 					v:SetDTable("building", w)
 					v:SetDBool("bool_hasowner", false)
-
 					if !strEmpty(w.ownerCharID) then
 						local tabChar = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
 						if wk(tabChar) then
@@ -157,8 +156,14 @@ function loadDoors()
 						v:SetDInt("int_securitylevel", w.int_securitylevel)
 					end
 
+					--[[v:Fire("Open")
+					timer.Simple(10, function()
+						v:Fire("Close")
+					end)]]
 					if v:GetDInt("int_securitylevel", 0) > 0 then
 						v:Fire("Lock")
+					else
+						v:Fire("Unlock")
 					end
 
 					if !strEmpty(w.text_header) then
@@ -327,6 +332,7 @@ net.Receive("removeOwner", function(len, ply)
 			v:SetDString("ownerGroup", "")
 			v:SetDString("ownerCharID", "")
 			v:SetDBool("bool_hasowner", false)
+			v:Fire("Unlock")
 		end
 	end
 end)
@@ -425,6 +431,8 @@ function SetSecurityLevel(id, sl)
 			door:SetDInt("int_securitylevel", sl)
 			if door:GetDInt("int_securitylevel", 0) > 0 then
 				door:Fire("Lock")
+			else
+				door:Fire("Unlock")
 			end
 		end
 	end
@@ -561,7 +569,7 @@ net.Receive("changeBuildingDescription", function(len, ply)
 end)
 
 net.Receive("getBuildings", function(len, ply)
-	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
+	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", nil)
 	if wk(_tmpTable) then
 		for k, building in pairs(_tmpTable) do
 			building.name = SQL_STR_OUT(building.name)

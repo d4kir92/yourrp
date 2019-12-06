@@ -8,7 +8,7 @@ function YDrawIDCards()
 	for _, ply in pairs(player.GetAll()) do
 		if ply:GetPos():Distance(LocalPlayer():GetPos()) < 400 and ply:GetActiveWeapon().ClassName == "yrp_idcard" then
 			local ang = Angle(0, ply:EyeAngles().y - 270, ply:EyeAngles().p + 90)
-			local sca = 0.01
+			local sca = 0.016
 
 			local correction = 3
 			if ply:LookupBone("ValveBiped.Bip01_R_Hand") then
@@ -143,7 +143,7 @@ hook.Add("HUDPaint", "yrp_yrp_idcard", function()
 	local ply = LocalPlayer()
 	local weapon = ply:GetActiveWeapon()
 	if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then
-		local scale = 1.0
+		local scale = YRP.ctr(700) / GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
 		w = w * scale

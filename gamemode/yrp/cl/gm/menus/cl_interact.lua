@@ -82,7 +82,13 @@ net.Receive("openInteractMenu", function(len)
 
 	local content = wInteract:GetContent()
 	function content:Paint(pw, ph)
-		drawIDCard(ply, 1.0, YRP.ctr(10), YRP.ctr(10))
+		local scaleW = pw / (GetGlobalDInt("int_" .. "background" .. "_w", 100) + 20)
+		local scaleH = YRP.ctr(470) / (GetGlobalDInt("int_" .. "background" .. "_h", 100) + 20)
+		local scale = scaleW
+		if scaleH < scaleW then
+			scale = scaleH
+		end
+		drawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
 
 		--[[ Licenses ]]--
 		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))

@@ -255,12 +255,15 @@ end
 
 local clicked = false
 
-function get_speak_channel_name(id)
+function get_speak_channel_name(ply)
+	local id = ply:GetDInt("speak_channel", 0)
 	if id == 0 then
 		return YRP.lang_string("LID_speaklocal")
 	elseif id == 1 then
-		return YRP.lang_string("LID_speakgroup")
+		return YRP.lang_string("LID_speakgroup") .. " [" .. ply:GetGroupName() .. "]"
 	elseif id == 2 then
+		return YRP.lang_string("LID_speakfaction") .. " [" .. ply:GetFactionName() .. "]"
+	elseif id == 3 then
 		return YRP.lang_string("LID_speakglobal")
 	end
 end
@@ -447,7 +450,7 @@ function KeyPress()
 
 					timer.Simple(0.4, function()
 						clicked = false
-						notification.AddLegacy(get_speak_channel_name(LocalPlayer():GetDInt("speak_channel")), NOTIFY_GENERIC, 3)
+						notification.AddLegacy(get_speak_channel_name(LocalPlayer()), NOTIFY_GENERIC, 3)
 					end)
 				end
 
@@ -459,7 +462,7 @@ function KeyPress()
 
 					timer.Simple(0.4, function()
 						clicked = false
-						notification.AddLegacy(get_speak_channel_name(LocalPlayer():GetDInt("speak_channel")), NOTIFY_GENERIC, 3)
+						notification.AddLegacy(get_speak_channel_name(LocalPlayer()), NOTIFY_GENERIC, 3)
 					end)
 				end
 			end
@@ -489,10 +492,10 @@ function KeyPress()
 	keyPressed(get_keybind("menu_role"), "OpenRoleMenu")
 	keyPressed(get_keybind("menu_buy"), "OpenBuyMenu")
 
-	keyPressed(KEY_E, "openInteractMenu", GetGlobalDInt("int_door_distance", 180))
+	keyPressed(KEY_E, "openInteractMenu", GetGlobalDInt("int_door_distance", 200))
 
-	keyPressed(get_keybind("menu_options_door"), "openOptions", GetGlobalDInt("int_door_distance", 180))
-	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", GetGlobalDInt("int_door_distance", 180))
+	keyPressed(get_keybind("menu_options_door"), "openOptions", GetGlobalDInt("int_door_distance", 200))
+	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", GetGlobalDInt("int_door_distance", 200))
 
 	keyPressed(get_keybind("toggle_map"), "openMap")
 

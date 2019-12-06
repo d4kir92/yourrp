@@ -178,7 +178,7 @@ function Player:SetRPName(str)
 		newname = SQL_STR_OUT(newname)
 		self:SetDString("rpname", newname)
 
-		printGM("note", oldname .." changed name to " .. newname, true)
+		printGM("note", oldname .. " changed name to " .. newname, true)
 	end
 end
 

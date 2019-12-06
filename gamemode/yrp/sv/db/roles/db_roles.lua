@@ -48,6 +48,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voiceglobal", "INTEGER DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_voicefaction", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_securitylevel", "INTEGER DEFAULT 0")
 
@@ -520,7 +521,7 @@ function SendRoleList(ply, gro, pre)
 end
 
 -- Duplicate
-function DuplicateRole(ply, ruid, guid)
+function DuplicateRole(ruid)
 	ruid = ruid or "-1"
 	ruid = tonumber(ruid)
 	if ruid > -1 then
@@ -558,7 +559,7 @@ end
 util.AddNetworkString("duplicated_role")
 net.Receive("duplicated_role", function(len, ply)
 	local ruid = tonumber(net.ReadString())
-	DuplicateRole(ruid, nil)
+	DuplicateRole(ruid)
 end)
 
 -- Role menu

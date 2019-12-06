@@ -114,7 +114,7 @@ function drop_money(sender, text)
 	if isnumber(_money) then
 		local _moneyAmount = math.abs(_money)
 		if sender:canAfford(_moneyAmount) then
-			local _money = ents.Create("yrp_money")
+			local emoney = ents.Create("yrp_money")
 			sender:addMoney(-_moneyAmount)
 			local tr = util.TraceHull({
 				start = sender:GetPos() + sender:GetUp() * 74,
@@ -134,15 +134,15 @@ function drop_money(sender, text)
 					mask = MASK_SHOT_HULL
 				})
 				if tr2.Hit then
-					_money:SetPos(sender:GetPos() + sender:GetUp() * 74)
+					emoney:SetPos(sender:GetPos() + sender:GetUp() * 74)
 				else
-					_money:SetPos(sender:GetPos() + sender:GetUp() * 74 - sender:GetForward() * 64)
+					emoney:SetPos(sender:GetPos() + sender:GetUp() * 74 - sender:GetForward() * 64)
 				end
 			else
-				_money:SetPos(sender:GetPos() + sender:GetUp() * 74 + sender:GetForward() * 64)
+				emoney:SetPos(sender:GetPos() + sender:GetUp() * 74 + sender:GetForward() * 64)
 			end
-			_money:Spawn()
-			_money:SetMoney(_moneyAmount)
+			emoney:Spawn()
+			emoney:SetMoney(_moneyAmount)
 			printGM("note", sender:Nick() .. " dropped " .. _moneyAmount .. " money")
 			return ""
 		else
@@ -502,8 +502,12 @@ function GM:PlayerSay(sender, text, teamChat)
 	end
 
 	if paket.command == "rpname" or paket.command == "name" or paket.command == "nick" then
-		sender:SetRPName(paket.text)
-		return ""
+		if GetGlobalDBool("bool_characters_changeable_name", false) then
+			sender:SetRPName(paket.text)
+			return ""
+		else
+			sender:ChatPrint("SetRPName is not enabled.")
+		end
 	end
 
 	local pk = {}
@@ -592,6 +596,10 @@ function GM:PlayerSay(sender, text, teamChat)
 				net.Send(receiver)
 			end
 		end
+		return ""
+	end
+
+	if !paket.isyrpcommand then
 		return ""
 	end
 
