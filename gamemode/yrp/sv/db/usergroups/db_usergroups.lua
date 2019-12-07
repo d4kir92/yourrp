@@ -13,6 +13,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ' '")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
@@ -127,20 +129,13 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	_str = _str .. "bool_usergroups, "
 	_str = _str .. "bool_ac_database, "
 	_str = _str .. "bool_status, "
-	_str = _str .. "bool_yourrp_addons"
+	_str = _str .. "bool_yourrp_addons, "
+	_str = _str .. "int_position"
 
 	local _str2 = "'superadmin', "
 	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-
-	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
-end
-
-if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
-	local _str = "string_name"
-
-	local _str2 = "'user'"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 
 	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
@@ -149,6 +144,14 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
 	local _str = "string_name"
 
 	local _str2 = "'admin'"
+
+	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+end
+
+if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
+	local _str = "string_name"
+
+	local _str2 = "'user'"
 
 	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
@@ -195,15 +198,33 @@ if unremoveable == nil then
 	_str = _str .. "bool_ac_database, "
 	_str = _str .. "bool_status, "
 	_str = _str .. "bool_yourrp_addons, "
-	_str = _str .. "bool_removeable"
+	_str = _str .. "bool_removeable, "
+	_str = _str .. "int_position"
 
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 0"
+	_str2 = _str2 .. ", 0, 0"
 
 	SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
 end
+
+function SortUserGroups()
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", nil)
+
+	if wk(siblings) then
+		for i, sibling in pairs(siblings) do
+			sibling.int_position = tonumber(sibling.int_position)
+		end
+
+		local count = 0
+		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+			count = count + 1
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+		end
+	end
+end
+SortUserGroups()
 
 --[[ Global Handler ]]--
 local HANDLER_USERGROUPS = {}
@@ -309,6 +330,18 @@ net.Receive("usergroup_add", function(len, ply)
 	SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 	printGM("gm", ply:YRPName() .. " added a new UserGroup")
 
+	local usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
+
+	local count = tonumber(table.Count(usergroups))
+	local new_usergroup = usergroups[count]
+	local up = usergroups[count - 1]
+	if count == 1 then
+		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_usergroup.uniqueID .. "'")
+	else
+		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_usergroup.uniqueID .. "'")
+		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_usergroup.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
+	end
+
 	local _tmp = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _ugs = {}
 	for i, ug in pairs(_tmp) do
@@ -325,6 +358,9 @@ util.AddNetworkString("usergroup_rem")
 net.Receive("usergroup_rem", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+
+	SortUserGroups()
+
 	printGM("gm", ply:YRPName() .. " removed UserGroup (" .. uid .. ")")
 
 	for i, pl in pairs(HANDLER_USERGROUPS) do
@@ -1151,7 +1187,7 @@ function RenderNoClip(ply, alpha)
 				if IsNoClipStealthEnabled() then
 					_alpha = 0
 				else
-					_alpha = 180
+					_alpha = 120
 				end
 			end
 
@@ -1164,10 +1200,10 @@ function RenderNoClip(ply, alpha)
 			RenderEquipments(ply, RENDERMODE_TRANSALPHA, Color(255, 255, 255, _alpha))
 		end
 
-		local model = GetGlobalDString("text_noclip_mdl", "")
-		if !strEmpty(model) then
-			ply:SetModel(model)
-		end
+		--local model = GetGlobalDString("text_noclip_mdl", "")
+		--if !strEmpty(model) then
+			--ply:SetModel(model)
+		--end
 	end
 end
 
@@ -1268,8 +1304,8 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 				if tobool(_tmp.bool_noclip) then
 
 					if IsNoClipModelEnabled() then
-						local mdl = pl:GetDString("text_noclip_mdl", "")
-						if mdl != "" then
+						local mdl = GetGlobalDString("text_noclip_mdl", "")
+						if !strEmpty(mdl) then
 							pl:SetModel(mdl)
 						end
 					end
@@ -1294,16 +1330,15 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 end)
 
 function GM:PhysgunPickup(pl, ent)
-	if pl:HasAccess() then
-		return true
-	end
 	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_physgunpickup) then
 			if ent:IsPlayer() then
 				if tobool(tabUsergroup.bool_physgunpickupplayer) then
-					return true
+					if ent:GetDInt("int_position", 0) >= pl:GetDInt("int_position", 0) then -- ent (target) > position as pl
+						return true
+					end
 				else
 					net.Start("yrp_info")
 						net.WriteString("physgunpickupplayer")
@@ -1550,6 +1585,7 @@ function Player:UserGroupLoadout()
 		self:SetDBool("bool_canuseesp", tobool(UG.bool_canuseesp))
 		self:SetDBool("bool_canusecontextmenu", tobool(UG.bool_canusecontextmenu))
 		self:SetDBool("bool_canusespawnmenu", tobool(UG.bool_canusespawnmenu))
+		self:SetDInt("int_position", UG.int_position)
 	end
 end
 
@@ -1558,4 +1594,64 @@ net.Receive("yrp_restartserver", function(len, ply)
 	if ply:HasAccess() then
 		RestartServer()
 	end
+end)
+
+util.AddNetworkString("UpdateUsergroupsList")
+function ReloadUsergroupsList()
+	local ugs = SQL_SELECT(DATABASE_NAME, "*", nil)
+	for i, pl in pairs(HANDLER_USERGROUPS) do
+		net.Start("UpdateUsergroupsList")
+			net.WriteTable(ugs)
+		net.Send(pl)
+	end
+end
+
+util.AddNetworkString("settings_usergroup_position_up")
+net.Receive("settings_usergroup_position_up", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local usergroup = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	usergroup = usergroup[1]
+
+	usergroup.int_position = tonumber(usergroup.int_position)
+
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", nil)
+
+	for i, sibling in pairs(siblings) do
+		sibling.int_position = tonumber(sibling.int_position)
+	end
+
+	local count = 0
+	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+		count = count + 1
+		if tonumber(sibling.int_position) == usergroup.int_position - 1 then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. usergroup.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+		end
+	end
+	ReloadUsergroupsList()
+end)
+
+util.AddNetworkString("settings_usergroup_position_dn")
+net.Receive("settings_usergroup_position_dn", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	group = group[1]
+
+	group.int_position = tonumber(group.int_position)
+
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", nil)
+
+	for i, sibling in pairs(siblings) do
+		sibling.int_position = tonumber(sibling.int_position)
+	end
+
+	local count = 0
+	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+		count = count + 1
+		if tonumber(sibling.int_position) == group.int_position + 1 then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. group.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+		end
+	end
+	ReloadUsergroupsList()
 end)

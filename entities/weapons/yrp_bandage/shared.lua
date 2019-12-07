@@ -53,7 +53,7 @@ function SWEP:PrimaryAttack()
 			if tr.Hit then
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
-					ply:StartCasting("bandage", "bandaging", 0, self.target, 3, 100, 1, false)
+					ply:StartCasting("bandage", "LID_bandaging", 0, self.target, 3, 100, 1, false)
 				end
 			end
 		end
@@ -74,7 +74,7 @@ function SWEP:SecondaryAttack()
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
 			_target = ply
-			ply:StartCasting("bandage", "bandaging", 0, _target, 3, 100, 1, false)
+			ply:StartCasting("bandage", "LID_bandaging", 0, _target, 3, 100, 1, false)
 		end
 	end
 end

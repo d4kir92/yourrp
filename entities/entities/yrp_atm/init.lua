@@ -240,6 +240,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 						else
 							printGM("note", "self.money is not a number.")
 						end
+
 						self.money = nil
 					end
 				end
@@ -288,12 +289,12 @@ function ENT:Think()
 
 			self:SetDString("prevstatus", "withdraw")
 
-			self.buttons.withdraw5 = self:createButton(self, 49.74, 7.14, 8.8, nil, -5, nil)
-			self.buttons.withdraw10 = self:createButton(self, 48.0, 8.84, 8.8, nil, -10, nil)
-			self.buttons.withdraw20 = self:createButton(self, 46.36, 10.54, 8.8, nil, -20, nil)
+			self.buttons.withdraw5 = self:createButton(self, 49.74, 7.14, 8.8, "home", -5, nil)
+			self.buttons.withdraw10 = self:createButton(self, 48.0, 8.84, 8.8, "home", -10, nil)
+			self.buttons.withdraw20 = self:createButton(self, 46.36, 10.54, 8.8, "home", -20, nil)
 
-			self.buttons.withdraw50 = self:createButton(self, 49.74, 7.14, -0.8, nil, -50, nil)
-			self.buttons.withdraw100 = self:createButton(self, 48.0, 8.84, -0.8, nil, -100, nil)
+			self.buttons.withdraw50 = self:createButton(self, 49.74, 7.14, -0.8, "home", -50, nil)
+			self.buttons.withdraw100 = self:createButton(self, 48.0, 8.84, -0.8, "home", -100, nil)
 			self.buttons.withdraw200 = self:createButton(self, 46.36, 10.54, -0.8, "other", nil, nil)
 
 			self.buttons.withdrawBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)
@@ -304,12 +305,12 @@ function ENT:Think()
 
 			self:SetDString("prevstatus", "deposit")
 
-			self.buttons.deposit5 = self:createButton(self, 49.74, 7.14, 8.8, nil, 5, nil)
-			self.buttons.deposit10 = self:createButton(self, 48.0, 8.84, 8.8, nil, 10, nil)
-			self.buttons.deposit20 = self:createButton(self, 46.36, 10.54, 8.8, nil, 20, nil)
+			self.buttons.deposit5 = self:createButton(self, 49.74, 7.14, 8.8, "home", 5, nil)
+			self.buttons.deposit10 = self:createButton(self, 48.0, 8.84, 8.8, "home", 10, nil)
+			self.buttons.deposit20 = self:createButton(self, 46.36, 10.54, 8.8, "home", 20, nil)
 
-			self.buttons.deposit50 = self:createButton(self, 49.74, 7.14, -0.8, nil, 50, nil)
-			self.buttons.deposit100 = self:createButton(self, 48.0, 8.84, -0.8, nil, 100, nil)
+			self.buttons.deposit50 = self:createButton(self, 49.74, 7.14, -0.8, "home", 50, nil)
+			self.buttons.deposit100 = self:createButton(self, 48.0, 8.84, -0.8, "home", 100, nil)
 			self.buttons.deposit200 = self:createButton(self, 46.36, 10.54, -0.8, "other", nil, nil)
 
 			self.buttons.depositBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)

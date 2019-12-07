@@ -83,7 +83,7 @@ function Player:GetMaxStamina()
 end
 
 function Player:Hunger()
-	return self:GetDFloat("hunger", 100.0)
+	return math.Round(self:GetDFloat("hunger", 100.0), 1)
 end
 
 function Player:GetMaxHunger()
@@ -91,7 +91,7 @@ function Player:GetMaxHunger()
 end
 
 function Player:Thirst()
-	return self:GetDFloat("thirst", 100.0)
+	return math.Round(self:GetDFloat("thirst", 100.0), 1)
 end
 
 function Player:GetMaxThirst()
@@ -107,7 +107,7 @@ function Player:NextSalaryTime()
 end
 
 function Player:GetCastName()
-	return self:GetDString("castname", "")
+	return YRP.lang_string(self:GetDString("castname", ""))
 end
 
 function Player:CastTimeCurrent()

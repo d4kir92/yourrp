@@ -339,8 +339,8 @@ net.Receive("settings_add_group", function(len, ply)
 	if count == 1 then
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_group.uniqueID .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', int_up = '" .. up.uniqueID .. "'", "uniqueID = '" .. new_group.uniqueID .. "'")
-		SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_group.uniqueID .. "'")
+		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
 	printGM("db", "Added new group: " .. new_group.uniqueID)

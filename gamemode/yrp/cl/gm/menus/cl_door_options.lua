@@ -240,6 +240,11 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	openMenu()
 	local ply = LocalPlayer()
 
+	local OWNER = false
+	if door:GetDString("ownerGroup", "") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
+		OWNER = true
+	end
+
 	yrp_door.window = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(580), 0, 0)
 	yrp_door.window:SetHeaderHeight(YRP.ctr(100))
 	yrp_door.window:Center()
@@ -258,9 +263,11 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		local owner = tabOwner.rpname or tabGroup.string_name
 		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", YRP.ctr(20), YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined(YRP.lang_string("LID_header"), "YRP_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_description"), "YRP_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetDString("level", -1), "sef", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		if OWNER then
+			draw.SimpleTextOutlined(YRP.lang_string("LID_header"), "YRP_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_description"), "YRP_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetDString("level", -1), "sef", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		end
 
 		draw.RoundedBox(0, 0, YRP.ctr(220), pw, ph - YRP.ctr(220), Color(255, 255, 100, 200))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "YRP_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
@@ -287,7 +294,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	end
 	]]--
 
-	if door:GetDString("ownerGroup", "") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
+	if OWNER then
 		local _ButtonSell = createD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(150))
 		_ButtonSell:SetText(YRP.lang_string("LID_sell") .. " (+" .. GetGlobalDString("text_money_pre", "") .. tabBuilding.buildingprice / 2 .. GetGlobalDString("text_money_pos", "") .. ")")
 		function _ButtonSell:DoClick()
@@ -299,26 +306,26 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		--function _ButtonSell:Paint(pw, ph)
 			--surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. GetGlobalDString("text_money_pre", "") .. _price / 2 .. GetGlobalDString("text_money_pos", "") .. ")")
 		--end
-	end
 
-	local _header = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50))
-	_header:SetText(SQL_STR_OUT(tabBuilding.text_header))
-	function _header:OnChange()
-		tabBuilding.text_header = _header:GetText()
-		net.Start("changeBuildingHeader")
-			net.WriteString(tabBuilding.uniqueID)
-			net.WriteString(tabBuilding.text_header)
-		net.SendToServer()
-	end
+		local _header = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50))
+		_header:SetText(SQL_STR_OUT(tabBuilding.text_header))
+		function _header:OnChange()
+			tabBuilding.text_header = _header:GetText()
+			net.Start("changeBuildingHeader")
+				net.WriteString(tabBuilding.uniqueID)
+				net.WriteString(tabBuilding.text_header)
+			net.SendToServer()
+		end
 
-	local _description = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(150))
-	_description:SetText(SQL_STR_OUT(tabBuilding.text_description))
-	function _description:OnChange()
-		tabBuilding.text_description = _description:GetText()
-		net.Start("changeBuildingDescription")
-			net.WriteString(tabBuilding.uniqueID)
-			net.WriteString(tabBuilding.text_description)
-		net.SendToServer()
+		local _description = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(150))
+		_description:SetText(SQL_STR_OUT(tabBuilding.text_description))
+		function _description:OnChange()
+			tabBuilding.text_description = _description:GetText()
+			net.Start("changeBuildingDescription")
+				net.WriteString(tabBuilding.uniqueID)
+				net.WriteString(tabBuilding.text_description)
+			net.SendToServer()
+		end
 	end
 
 	if ply:HasAccess() then

@@ -45,6 +45,14 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_simple", function()
 	RegisterHUDDesign(HUD_Simple)
 end)
 
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_space", function()
+	local HUD_Space = {}
+	HUD_Space.name = "Space"
+	HUD_Space.author = "D4KiR"
+	HUD_Space.progress = 90
+	RegisterHUDDesign(HUD_Space)
+end)
+
 hook.Add("RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
 	local HUD_FO76 = {}
 	HUD_FO76.name = "Fallout 76"
