@@ -547,18 +547,18 @@ local function yrpCalcView(ply, pos, angles, fov)
 			end
 		end
 
+		local _view_range = ply.view_range or 0
+		if _view_range < 0 then
+			_view_range = 0
+		end
+		local dist = _view_range * ply:GetModelScale()
+
 		local view = {}
 		if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
 			if ply:LookupBone("ValveBiped.Bip01_Head1") != nil then
 				pos2 = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * ply:GetModelScale())
 			end
 			if ply:GetMoveType() == MOVETYPE_NOCLIP and ply:GetModel() == "models/crow.mdl" then
-				local _view_range = ply.view_range or 0
-				if _view_range < 0 then
-					_view_range = 0
-				end
-				local dist = _view_range * ply:GetModelScale()
-
 				local _tmpThick = 4
 				local _minDistFor = 8
 				local _minDistBac = 40
@@ -674,10 +674,12 @@ end
 hook.Add("CalcView", "MyCalcView", yrpCalcView)
 
 function showPlayermodel()
-	if _drawViewmodel or LocalPlayer():IsPlayingTaunt() then
-		return true
-	else
-		return false
+	if !LocalPlayer():InVehicle() then
+		if _drawViewmodel or LocalPlayer():IsPlayingTaunt() then
+			return true
+		else
+			return false
+		end
 	end
 end
 hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)

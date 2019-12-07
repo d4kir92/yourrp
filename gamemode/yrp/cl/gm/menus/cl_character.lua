@@ -105,26 +105,6 @@ character.amount = 0
 
 local cc = {}
 
-local isidcardenabled = false
-net.Receive("isidcardenabled", function(len)
-	local ply = LocalPlayer()
-
-	isidcardenabled = net.ReadBool()
-	if isidcardenabled then
-		local scale = 1.0
-		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
-		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
-		local x = GetGlobalDInt("int_" .. "background" .. "_x", 0)
-		local y = GetGlobalDInt("int_" .. "background" .. "_y", 0)
-		w = w * scale
-		h = h * scale
-		local identification = createD("DPanel", cc.frame, w, h, ScrW() - w - YRP.ctr(50), ScrH() - h - YRP.ctr(50))
-		function identification:Paint(pw, ph)
-			drawIDCard(ply, scale)
-		end
-	end
-end)
-
 function openCharacterCreation()
 	openMenu()
 	character.cause = YRP.lang_string("LID_enteraname")
@@ -634,9 +614,6 @@ function openCharacterCreation()
 	end
 
 	cc.frame:MakePopup()
-
-	net.Start("isidcardenabled")
-	net.SendToServer()
 end
 
 local _cs = {}

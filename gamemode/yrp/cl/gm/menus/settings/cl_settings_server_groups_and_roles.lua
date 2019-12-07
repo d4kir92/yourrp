@@ -623,10 +623,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				ea.typ = "group"
 				ea.tab = group
 
-				for i, pnl in pairs(ea.background:GetChildren()) do
-					pnl:Remove()
+				if pa(ea.background) then
+					for i, pnl in pairs(ea.background:GetChildren()) do
+						pnl:Remove()
+					end
+				else
+					return
 				end
-
 				ea[group.uniqueID] = ea[group.uniqueID] or {}
 
 

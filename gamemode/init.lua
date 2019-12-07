@@ -34,6 +34,7 @@ AddCSLuaFile("yrp/cl/gm/cl_chat.lua")
 AddCSLuaFile("yrp/cl/gm/cl_think.lua")
 
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_simple.lua")
+AddCSLuaFile("yrp/cl/gm/huds/cl_hud_space.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_fallout76.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_icons.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_circles.lua")

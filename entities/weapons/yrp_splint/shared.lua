@@ -53,7 +53,7 @@ function SWEP:PrimaryAttack()
 			if tr.Hit then
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
-					ply:StartCasting("splint", "splinting", 0, self.target, 3, 100, 1, false)
+					ply:StartCasting("splint", "LID_splinting", 0, self.target, 3, 100, 1, false)
 				end
 			end
 		else
@@ -75,7 +75,7 @@ function SWEP:SecondaryAttack()
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
 			_target = ply
-			ply:StartCasting("splint", "splinting", 0, _target, 3, 100, 1, false)
+			ply:StartCasting("splint", "LID_splinting", 0, _target, 3, 100, 1, false)
 		else
 			self:Remove()
 		end

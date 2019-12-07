@@ -249,7 +249,7 @@ end
 
 --[[ GETTER ]]--
 function YRPDebug()
-	return tobool(yrp_general.bool_server_debug)
+	return GetGlobalDBool("bool_server_debug", false)
 end
 
 function YRPErrorMod()
@@ -257,24 +257,24 @@ function YRPErrorMod()
 end
 
 function YRPIsAutomaticServerReloadingEnabled()
-	return tobool(yrp_general.bool_server_reload)
+	return GetGlobalDBool("bool_server_reload", false)
 end
 
 
 function IsNoClipEffectEnabled()
-	return tobool(yrp_general.bool_noclip_effect)
+	return GetGlobalDBool("bool_noclip_effect", false)
 end
 
 function IsNoClipStealthEnabled()
-	return tobool(yrp_general.bool_noclip_stealth)
+	return GetGlobalDBool("bool_noclip_stealth", false)
 end
 
 function IsNoClipTagsEnabled()
-	return tobool(yrp_general.bool_noclip_tags)
+	return GetGlobalDBool("bool_noclip_tags", false)
 end
 
 function IsNoClipModelEnabled()
-	return tobool(yrp_general.bool_noclip_model)
+	return GetGlobalDBool("bool_noclip_model", false)
 end
 
 
@@ -314,45 +314,45 @@ end
 
 
 function IsDropItemsOnDeathEnabled()
-	return tobool(yrp_general.bool_drop_items_on_death)
+	return GetGlobalDBool("bool_drop_items_on_death", false)
 end
 
 function IsDealerImmortal()
-	return !tobool(yrp_general.bool_dealers_can_take_damage)
+	return !GetGlobalDBool("bool_dealers_can_take_damage", false)
 end
 
 function IsRealisticEnabled()
-	return tobool(yrp_general.bool_realistic)
+	return GetGlobalDBool("bool_realistic", false)
 end
 
 function PlayersCanDropWeapons()
-	return tobool(yrp_general.bool_players_can_drop_weapons)
+	return GetGlobalDBool("bool_players_can_drop_weapons", false)
 end
 
 function IsSuicideDisabled()
-	return tobool(yrp_general.bool_suicide_disabled)
+	return GetGlobalDBool("bool_suicide_disabled", false)
 end
 
 function IsDropMoneyOnDeathEnabled()
-	return tobool(yrp_general.bool_drop_money_on_death)
+	return GetGlobalDBool("bool_drop_money_on_death", false)
 end
 
 
 
 function IsVoiceEnabled()
-	return tobool(yrp_general.bool_voice)
+	return GetGlobalDBool("bool_voice", false)
 end
 
 function Is3DVoiceEnabled()
-	return tobool(yrp_general.bool_voice_3d)
+	return GetGlobalDBool("bool_voice_3d", false)
 end
 
 function IsVoiceChannelsEnabled()
-	return tobool(yrp_general.bool_voice_channels)
+	return GetGlobalDBool("bool_voice_channels", false)
 end
 
 function IsLocalGroupVoiceChatEnabled()
-	return tobool(yrp_general.bool_voice_group_local)
+	return GetGlobalDBool("bool_voice_group_local", false)
 end
 
 function GetVoiceChatLocalRange()

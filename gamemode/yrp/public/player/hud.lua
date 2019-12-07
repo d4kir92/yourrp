@@ -67,6 +67,50 @@ if CLIENT then
 		end
 		return ele
 	end
+
+	function Player:HudElementVisible(element)
+		if element == "CA" then
+			return self:GetDBool("iscasting", false)
+		elseif element == "LO" then
+			return self:Lockdown()
+		elseif element == "HU" then
+			return GetGlobalDBool("bool_hunger", false)
+		elseif element == "TH" then
+			return GetGlobalDBool("bool_thirst", false)
+		elseif element == "ST" then
+			return GetGlobalDBool("bool_stamina", false)
+		elseif element == "CH" then
+			return GetGlobalDBool("bool_yrp_chat", false)
+		elseif element == "XP" then
+			return IsLevelSystemEnabled()
+		elseif element == "WP" then
+			local weapon = lply:GetActiveWeapon()
+			if weapon:IsValid() then
+				local clip1 = weapon:Clip1()
+				local clip1max = weapon:GetMaxClip1()
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+				return clip1max > 0
+			end
+			return false
+		elseif element == "WS" then
+			local weapon = lply:GetActiveWeapon()
+			if weapon:IsValid() then
+				local clip2 = weapon:Clip2()
+				local clip2max = weapon:GetMaxClip2()
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+				return clip2max > 0 or ammo2 > 0
+			end
+			return false
+		end
+		return true
+	end
+
+	function Player:HudElementAlpha(element, a)
+		if element == "CH" then
+			return ChatAlpha()
+		end
+		return a
+	end
 end
 
 function Player:Lockdown()

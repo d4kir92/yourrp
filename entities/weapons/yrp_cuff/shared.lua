@@ -55,7 +55,7 @@ function SWEP:PrimaryAttack()
 		if tr.Hit then
 			self.target = tr.Entity
 			if tr.Entity:IsPlayer() then
-				ply:StartCasting("tieup", "tieup", 0, self.target, 3, 100, 1, false)
+				ply:StartCasting("tieup", "LID_tieup", 0, self.target, 3, 100, 1, false)
 			end
 		end
 	end
@@ -113,7 +113,7 @@ function SWEP:SecondaryAttack()
 		if tr.Hit then
 			self.target = tr.Entity
 			if tr.Entity:IsPlayer() then
-				ply:StartCasting("unleash", "unleash", 0, self.target, 3, 100, 1, false)
+				ply:StartCasting("unleash", "LID_unleash", 0, self.target, 3, 100, 1, false)
 			end
 		end
 	end

@@ -326,6 +326,12 @@ net.Receive("Connect_Settings_General", function(len)
 				tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName(v)
 			end
 
+			count = count + 1
+			tmpTable[count] = {}
+			tmpTable[count].WorldModel = "models/crow.mdl"
+			tmpTable[count].ClassName = "npc_crow"
+			tmpTable[count].PrintName = "CROW"
+
 			LocalPlayer():SetDString("WorldModel", GEN.bool_noclip_mdl)
 			OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
 		end

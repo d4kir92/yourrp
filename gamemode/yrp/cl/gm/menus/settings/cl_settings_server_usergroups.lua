@@ -523,13 +523,13 @@ function AddUG(tbl)
 	_ug:SetText("")
 	function _ug:Paint(pw, ph)
 		self.string_color = StringToColor(UGS[self.uid].string_color)
-		surfaceButton(self, pw, ph, string.upper(UGS[self.uid].string_name), self.string_color, ph + YRP.ctr(20), ph / 2, 0, 1, false)
+		surfaceButton(self, pw, ph, string.upper(UGS[self.uid].string_name), self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
 
 		if UGS[tonumber(tbl.uniqueID)].string_icon == "" then
-			surfaceBox(YRP.ctr(4), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color(255, 255, 255, 255))
+			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color(255, 255, 255, 255))
 		end
 		if self.uid == tonumber(CURRENT_USERGROUP) then
-			surfaceSelected(self, pw - ph, ph, ph)
+			surfaceSelected(self, pw - YRP.ctr(40), ph, YRP.ctr(40))
 		end
 	end
 
@@ -544,13 +544,71 @@ function AddUG(tbl)
 		net.SendToServer()
 	end
 
+	local P = DUGS[tonumber(tbl.uniqueID)]
+	P.int_position = tonumber(tbl.int_position)
+	P.uniqueID = tonumber(tbl.uniqueID)
+
+	local UP = createD("DButton", P, YRP.ctr(40), P:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
+	UP:SetText("")
+	local up = UP
+	function up:Paint(pw, ph)
+		if P.int_position > 2 then
+			local tab = {}
+			tab.r = pw / 2
+			tab.color = Color(255, 255, 100)
+			DrawPanel(self, tab)
+			local tab2 = {}
+			tab2.x = pw / 2
+			tab2.y = ph / 2
+			tab2.ax = 1
+			tab2.ay = 1
+			tab2.text = "▲"
+			tab2.font = "mat1text"
+			DrawText(tab2)
+		end
+	end
+	function up:DoClick()
+		if P.int_position > 2 then
+			net.Start("settings_usergroup_position_up")
+				net.WriteString(P.uniqueID)
+			net.SendToServer()
+		end
+	end
+
+	local DO = createD("DButton", P, YRP.ctr(40), P:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), P:GetTall() / 2 + YRP.ctr(5))
+	DO:SetText("")
+	local dn = DO
+	function dn:Paint(pw, ph)
+		if P.int_position < table.Count(UGS) + 1 then
+			local tab = {}
+			tab.r = pw / 2
+			tab.color = Color(255, 255, 100)
+			DrawPanel(self, tab)
+			local tab2 = {}
+			tab2.x = pw / 2
+			tab2.y = ph / 2
+			tab2.ax = 1
+			tab2.ay = 1
+			tab2.text = "▼"
+			tab2.font = "mat1text"
+			DrawText(tab2)
+		end
+	end
+	function dn:DoClick()
+		if P.int_position < table.Count(UGS) + 1 then
+			net.Start("settings_usergroup_position_dn")
+				net.WriteString(P.uniqueID)
+			net.SendToServer()
+		end
+	end
+
 	if UGS[tonumber(tbl.uniqueID)].string_icon != "" then
 		local _icon = {}
 		_icon.size = YRP.ctr(100 - 16)
 		_icon.br = YRP.ctr(8)
 
 		local HTMLCODE = GetHTMLImage(tbl.string_icon, _icon.size, _icon.size)
-		local html = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br, _icon.br)
+		local html = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
 		html:SetHTML(HTMLCODE)
 	end
 
@@ -576,11 +634,29 @@ end)
 
 net.Receive("usergroup_add", function(len)
 	local ugs = net.ReadTable()
-	for i, ug in SortedPairsByMemberValue(ugs, "string_name", false) do
+	for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
 		if DUGS[tonumber(ug.uniqueID)] == nil and tobool(ug.bool_removeable) then
 			AddUG(ug)
 		end
 	end
+end)
+
+function UpdateUsergroupsList(ugs)
+	local PARENT = settingsWindow.window.site
+	if pa(PARENT) then
+		UGS = {}
+		PARENT.ugs:Clear()
+		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+			if tobool(ug.bool_removeable) then
+				AddUG(ug)
+			end
+		end
+	end
+end
+
+net.Receive("UpdateUsergroupsList", function()
+	local ugs = net.ReadTable()
+	UpdateUsergroupsList(ugs)
 end)
 
 net.Receive("Connect_Settings_UserGroups", function(len)
@@ -644,11 +720,7 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 			end
 			PARENT.ugs:EnableVerticalScrollbar(true)
 
-			for i, ug in SortedPairsByMemberValue(ugs, "string_name", false) do
-				if tobool(ug.bool_removeable) then
-					AddUG(ug)
-				end
-			end
+			UpdateUsergroupsList(ugs)
 		end
 	end
 end)

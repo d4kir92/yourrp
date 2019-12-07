@@ -143,7 +143,7 @@ hook.Add("HUDPaint", "yrp_yrp_idcard", function()
 	local ply = LocalPlayer()
 	local weapon = ply:GetActiveWeapon()
 	if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then
-		local scale = YRP.ctr(700) / GetGlobalDInt("int_" .. "background" .. "_w", 100)
+		local scale = YRP.ctr(900) / GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
 		w = w * scale
