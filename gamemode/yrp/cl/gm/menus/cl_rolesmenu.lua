@@ -55,11 +55,14 @@ function createRoleBox(rol, parent, mainparent)
 					return
 				end
 
-				local eyepos = p.Entity:GetBonePosition( p.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-				if eyepos then
-					p:SetLookAt( eyepos )
-					p:SetCamPos( eyepos-Vector( -18, 0, 0 ) )	-- Move cam in front of eyes
-					p.Entity:SetEyeTarget( eyepos-Vector( -18, 0, 0 ) )
+				local head = p.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
+				if head then
+					local eyepos = p.Entity:GetBonePosition( head )
+					if eyepos then
+						p:SetLookAt( eyepos )
+						p:SetCamPos( eyepos-Vector( -18, 0, 0 ) )	-- Move cam in front of eyes
+						p.Entity:SetEyeTarget( eyepos-Vector( -18, 0, 0 ) )
+					end
 				end
 			end
 		end
