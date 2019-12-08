@@ -6,8 +6,6 @@ CHAR.open = false
 function toggleCharMenu()
 	if !CHAR.open and isNoMenuOpen() then
 		openCharMenu()
-	else
-		closeCharMenu()
 	end
 end
 
@@ -50,6 +48,7 @@ function CreateCharContent(parent)
 
 
 	local Y = 20
+	local cl_rpName = nil
 	if GetGlobalDBool("bool_characters_changeable_name", false) then
 		local cl_rpNamelabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(Y))
 		cl_rpNamelabel:SetText("")
@@ -57,7 +56,7 @@ function CreateCharContent(parent)
 			draw.SimpleText(YRP.lang_string("LID_name"), "sef", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		Y = Y + 50
-		local cl_rpName = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(70))
+		cl_rpName = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(70))
 		cl_rpName:SetText(LocalPlayer():RPName())
 		function cl_rpName:OnChange()
 			if #self:GetText() > 32 then

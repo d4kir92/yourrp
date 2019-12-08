@@ -21,8 +21,6 @@ end
 function toggleKeybindsMenu()
 	if !KEYBINDS.open and isNoMenuOpen() then
 		openKeybindsMenu()
-	else
-		closeKeybindsMenu()
 	end
 end
 

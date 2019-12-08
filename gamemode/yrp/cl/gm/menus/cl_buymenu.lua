@@ -24,14 +24,16 @@ function createShopItem(item, duid)
 	item.int_level = tonumber(item.int_level)
 	local _w = 2000
 	local _h = 400
+	local br = 1
 	local _i = createD("DPanel", nil, ctrb(_w), ctrb(_h), 0, 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
 	if item.WorldModel != nil then
 		if item.WorldModel != "" then
-			_i.model = createD("DModelPanel", _i, ctrb(_w / 2), ctrb(_h), ctrb(0), ctrb(0))
+			_i.model = createD("DModelPanel", _i, ctrb(_w / 2) - 2 * br, ctrb(_h) - 2 * br, ctrb(0) + br, ctrb(0) + br)
 			_i.model:SetModel(item.WorldModel)
 
 			if ea(_i.model.Entity) then
@@ -45,7 +47,7 @@ function createShopItem(item, duid)
 					_range = _y
 				end
 
-				local _z = _mins.z + (_maxs.z - _mins.z) * 2 / 3
+				local _z = _mins.z + (_maxs.z - _mins.z) * 0.60
 
 				_i.model:SetLookAt(Vector(0, 0, _z))
 				_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.6, 0, 0))
@@ -56,7 +58,7 @@ function createShopItem(item, duid)
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, ctrb(_w / 2), ctrb(50), 0, 0)
+		_i.name = createD("DPanel", _i, ctrb(_w / 2), ctrb(50), br, br)
 		_i.name.name = SQL_STR_OUT(item.name)
 		if item.type == "licenses" then
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
@@ -80,7 +82,7 @@ function createShopItem(item, duid)
 
 	item.description = SQL_STR_OUT(item.description)
 	if item.description != "" then
-		_i.description = createD("DTextEntry", _i, ctrb(_w / 2), ctrb(_h - 100), ctrb(_w / 2), ctrb(0))
+		_i.description = createD("DTextEntry", _i, ctrb(_w / 2), ctrb(_h - 100), ctrb(_w / 2) - br, ctrb(0) + br)
 		_i.description:SetMultiline(true)
 		_i.description:SetEditable(false)
 		_i.description:SetText(SQL_STR_OUT(item.description))
@@ -98,7 +100,7 @@ function createShopItem(item, duid)
 				surfaceText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 			end
 		else
-			_i.buy = createD("DButton", _i, ctrb(_w / 2), ctrb(50), ctrb(_w / 2), ctrb(350))
+			_i.buy = createD("DButton", _i, ctrb(_w / 2) - br, ctrb(50), ctrb(_w / 2), ctrb(350) - br)
 			_i.buy:SetText("")
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
@@ -144,14 +146,16 @@ end
 function createStorageItem(item, duid)
 	local _w = 800
 	local _h = 400
+	local br = 1
 	local _i = createD("DPanel", nil, ctrb(_w), ctrb(_h), 0, 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
 	if item.WorldModel != nil then
 		if item.WorldModel != "" then
-			_i.model = createD("DModelPanel", _i, ctrb(_w - 50), ctrb(_h), ctrb(0), ctrb(0))
+			_i.model = createD("DModelPanel", _i, ctrb(_w - 50) - 2 * br, ctrb(_h) - 2 * br, ctrb(0) + br, ctrb(0) + br)
 			_i.model:SetModel(item.WorldModel)
 			if _i.model.Entity != NULL and _i.model.Entity != nil then
 				local _mins, _maxs = _i.model.Entity:GetRenderBounds()
@@ -183,7 +187,7 @@ function createStorageItem(item, duid)
 	end
 
 	if item.type != "licenses" then
-		_i.spawn = createD("DButton", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
+		_i.spawn = createD("DButton", _i, ctrb(_w) - 2 * br, ctrb(50), ctrb(0) + br, ctrb(350) - br)
 		_i.spawn:SetText("")
 		_i.spawn.item = item
 		_i.spawn.action = 0

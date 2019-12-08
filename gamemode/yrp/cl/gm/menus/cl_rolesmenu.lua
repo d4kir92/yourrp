@@ -31,40 +31,68 @@ local _adminonly = Material("icon16/shield.png")
 local pmid = 1
 function createRoleBox(rol, parent, mainparent)
 	if rol != nil then
-		local _rol = createD("DPanel", parent, YRP.ctr(400), YRP.ctr(400), 0, 0)
+		local RW = YRP.ctr(600)
+		local RH = YRP.ctr(150)
+		local _rol = createD("DPanel", parent, RW, RH, 0, 0)
 		function _rol:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
-			drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0, 255), YRP.ctr(4))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+			drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 		end
 		_rol.tbl = rol
 
 		-- Role Playermodel --
 		local pm = _rol.tbl.pms[1] or {}
 		if pm.string_model != nil and pm.string_model != "" then
-			local p = createD("DModelPanel", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
+			local p = createD("DModelPanel", _rol, _rol:GetTall() - 2, _rol:GetTall() - 2, 1, 1)
 			p:SetModel(pm.string_model)
-			local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
-			p.Entity:SetModelScale(randsize, 0)
+			--local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
+			--p.Entity:SetModelScale(randsize, 0)
+
+			if p.Entity:IsValid() then
+				function p:LayoutEntity( ent )
+					ent:SetSequence( ent:LookupSequence("menu_gman") )
+					p:RunAnimation()
+					return
+				end
+
+				local eyepos = p.Entity:GetBonePosition( p.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+				if eyepos then
+					p:SetLookAt( eyepos )
+					p:SetCamPos( eyepos-Vector( -18, 0, 0 ) )	-- Move cam in front of eyes
+					p.Entity:SetEyeTarget( eyepos-Vector( -18, 0, 0 ) )
+				end
+			end
 		end
 
 		-- Role Name --
-		_rol.rn = createD("DPanel", _rol, _rol:GetWide(), YRP.ctr(60), 0, 0)
+		_rol.rn = createD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
 		_rol.rn.rolename = _rol.rn:GetParent().tbl.string_name
 		_rol.rn.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rn:Paint(pw, ph)
-			surfaceText(self.rolename, "roleInfoHeader", pw / 2, ph / 2, self.rolecolor, 1, 1)
+			surfaceText(self.rolename, "Y_24_700", ph + YRP.ctr(10), ph / 3, self.rolecolor, 0, 1)
+		end
+
+		-- Role Salary --
+		_rol.rs = createD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
+		_rol.rs.rolesalary = _rol.rs:GetParent().tbl.int_salary
+		_rol.rs.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
+		function _rol.rs:Paint(pw, ph)
+			surfaceText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_700", ph + YRP.ctr(10), ph / 3 * 2, Color(255, 255, 255, 255), 0, 1)
 		end
 
 		-- Role MaxAmount --
 		if tonumber(rol.int_maxamount) > 0 then
-			_rol.ma = createD("DPanel", _rol, _rol:GetWide(), YRP.ctr(60), 0, _rol:GetTall() - YRP.ctr(60))
+			_rol.ma = createD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
 			function _rol.ma:Paint(pw, ph)
 				local _br = 4
 				pw = pw - 2 * YRP.ctr(4)
 				ph = ph - 1 * YRP.ctr(4)
 
 				--Background
-				--draw.RoundedBox(0, YRP.ctr(_br), 0, pw, ph, Color(255, 255, 255, 100))
+				local w = 80
+				local h = 40
+				local br = 20
+				draw.RoundedBox(4, pw - YRP.ctr(w + br), ph - YRP.ctr(h + br), YRP.ctr(w), YRP.ctr(h), Color(200, 200, 200, 60))
 
 				--Maxamount
 				--draw.RoundedBox(0, YRP.ctr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color(255, 0, 0, 255))
@@ -72,7 +100,7 @@ function createRoleBox(rol, parent, mainparent)
 				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
 					color = Color(255, 0, 0)
 				end
-				surfaceText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Roboto14B", pw - YRP.ctr(20), ph / 2, color, 2, 1)
+				surfaceText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_700", pw - YRP.ctr(w / 2 + br), ph - YRP.ctr(h / 2 + br) * 1.1, color, 1, 1)
 
 				--BR
 				--drawRBBR(0, YRP.ctr(_br), 0, pw, ph, Color(0, 0, 0, 255), YRP.ctr(4))
@@ -84,7 +112,7 @@ function createRoleBox(rol, parent, mainparent)
 		function _rol.gr:Paint(pw, ph)
 			--hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinformation"))
 			if self:IsHovered() then
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 60))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 60))
 			end
 		end
 		_rol.gr:SetText("")
@@ -187,7 +215,9 @@ end
 
 function addRoleRow(rol, parent)
 	if pa(parent) then
-		local _rr = createD("DHorizontalScroller", parent.content, YRP.ctr(400), YRP.ctr(400), 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing()), YRP.ctr(400), 0, 0)
+		local RRW = YRP.ctr(600)
+		local RRH = YRP.ctr(150)
+		local _rr = createD("DHorizontalScroller", parent.content, RRW, RRH, 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing()), YRP.ctr(400), 0, 0)
 		_rr:SetOverlap(YRP.ctr(-30))
 		function _rr:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))

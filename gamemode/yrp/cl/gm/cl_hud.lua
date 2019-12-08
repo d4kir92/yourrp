@@ -258,9 +258,9 @@ function YRP_PM:Think()
 	if GetGlobalDBool("bool_yrp_hud", false) then
 		local lply = LocalPlayer()
 		if !lply:IsValid() then return end
-		if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetModel() then
+		if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
 			YRP_PM.version = lply:GetDInt("hud_version", 0)
-			YRP_PM.model = lply:GetModel()
+			YRP_PM.model = lply:GetPlayerModel()
 
 			YRP_PM.w = lply:HudValue("PM", "SIZE_W")
 			YRP_PM.h = lply:HudValue("PM", "SIZE_H")
@@ -274,10 +274,11 @@ function YRP_PM:Think()
 
 			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 			if lb != nil then
+				print("FOUND HEAD")
 				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
 				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
 				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
-				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-20, 0, 0))	-- Move cam in front of eyes
+				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-26, 0, 0))	-- Move cam in front of eyes
 				YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
 			else
 				YRP_PM:SetLookAt(Vector(0, 0, 40))

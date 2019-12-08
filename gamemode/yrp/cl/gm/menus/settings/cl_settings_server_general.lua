@@ -390,6 +390,8 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_removebuildingowner, "LID_removethebuildingowneratdisconnect", "update_bool_removebuildingowner")
 		CreateNumberWangLine(GAMEMODE_SETTINGS:GetContent(), GEN.text_removebuildingownertime, "LID_timeremovethebuildingowneratdisconnect", "update_text_removebuildingownertime")
+		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
+		CreateNumberWangLine(GAMEMODE_SETTINGS:GetContent(), GEN.int_ttlsweps, "LID_ttlsweps", "update_int_ttlsweps")
 
 
 

@@ -242,41 +242,6 @@ function Player:RemoveVisual(cname)
 	return false
 end
 
-function Player:DropSWEP(cname)
-	local _cname = cname
-	local cont = true
-
-	if cont then
-		self:RemoveWeapon(_cname)
-		self:RemoveVisual(_cname)
-		local ent = ents.Create(_cname)
-
-		if ent.WorldModel == "" then
-			ent.WorldModel = "models/hunter/blocks/cube025x025x025.mdl"
-		end
-
-		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
-		ent:SetAngles(self:GetAngles())
-		ent:SetDBool("ispickupable", false)
-
-		timer.Simple(1, function()
-			ent:SetDBool("ispickupable", true)
-		end)
-
-		ent:Spawn()
-
-		if ent:GetPhysicsObject():IsValid() then
-			ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
-		end
-	end
-end
-
-function Player:DropSWEPSilence(cname)
-	local _cname = cname
-	self:RemoveWeapon(_cname)
-	self:RemoveVisual(_cname)
-end
-
 function Player:DropBackpackStorage()
 	if not rv then
 		local _char_id = self:CharID()
@@ -521,27 +486,3 @@ net.Receive("drop_item", function(len, ply)
 	end
 end)
 
-util.AddNetworkString("dropswep")
-
-net.Receive("dropswep", function(len, ply)
-	local _enabled = PlayersCanDropWeapons()
-	local _dropped = false
-
-	if _enabled then
-		local _weapon = ply:GetActiveWeapon()
-
-		if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
-			local _wclass = _weapon:GetClass() or ""
-			if ply:IsAllowedToDropSWEP(_wclass) then
-				ply:DropSWEP(_wclass)
-				_dropped = true
-			end
-		end
-	else
-		printGM("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
-	end
-
-	net.Start("dropswep")
-	net.WriteBool(_dropped)
-	net.Send(ply)
-end)

@@ -1528,8 +1528,8 @@ function drawPlates()
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
-			if LocalPlayer().view_range <= 0 then
-				return
+			if LocalPlayer().view_range <= 0 and ply == LocalPlayer() then
+				continue
 			end
 			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
 			local _height = 24 -- 31
@@ -2097,6 +2097,7 @@ function drawIDCard(ply, scale, px, py)
 
 					local fs = math.Round(36 * scale, 0)
 					fs = math.Clamp(fs, 4, 72)
+					fs = math.Round(fs, 0)
 					draw.SimpleText(text, "Y_" .. fs .. "_500", tx, ty, color, ax, ay)
 				end
 			else

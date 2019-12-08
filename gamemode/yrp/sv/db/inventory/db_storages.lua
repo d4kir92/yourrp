@@ -132,6 +132,13 @@ function Player:DropSWEP(cname, force)
 		ent:SetDInt("clip1max", clip1max)
 		ent:SetDInt("clip2max", clip2max)
 
+		local ttl = math.Clamp(GetGlobalDInt("int_ttlsweps", 60), 1, 3600)
+		timer.Simple(ttl, function()
+			if ea(ent) and !ent:GetOwner():IsValid() then
+				ent:Remove()
+			end
+		end)
+
 		if ent:GetPhysicsObject():IsValid() then
 			ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
 		end

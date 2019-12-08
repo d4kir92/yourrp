@@ -33,11 +33,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		gs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
 		gs.bac:SetText("")
 		function gs.bac:Paint(pw, ph)
-			if cur_group.par < 0 then
-				local tab = {}
-				tab.color = YRPGetColor("3")
-				DrawPanel(self, tab)
-			else
+			if cur_group.cur > 0 then
 				local tab = {}
 				tab.color = Color(255, 255, 0)
 				DrawPanel(self, tab)
@@ -49,10 +45,14 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.text = "◀"
 				tab2.font = "mat1text"
 				DrawText(tab2)
+			else
+				local tab = {}
+				tab.color = YRPGetColor("3")
+				DrawPanel(self, tab)
 			end
 		end
 		function gs.bac:DoClick()
-			if cur_group.par >= 0 then
+			if cur_group.cur > 0 then
 				gs.gplist:ClearList()
 				net.Start("settings_unsubscribe_grouplist")
 					net.WriteString(cur_group.cur)
@@ -1094,7 +1094,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			if role.uniqueID > 1 then
 				local grps = {}
 				for i, tab in pairs(db_groups) do
-					grps[i] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+					tab.uniqueID = tonumber(tab.uniqueID)
+					if tab.uniqueID != -1 then
+						grps[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
+					end
 				end
 
 				local int_groupID = {}

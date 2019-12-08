@@ -41,6 +41,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_darkrp", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_chat", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_debug", "INT DEFAULT 0")
 
+
+
 --[[ Gamemode Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'")
 
@@ -62,6 +64,10 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600'")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "int_ttlsweps", "INT DEFAULT 60")
+
+
 
 --[[ Gamemode Systems ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INT DEFAULT 1")
@@ -90,6 +96,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_local_range", "INT DEFAULT 300")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
+
+
 
 --[[ Gamemode Visuals ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_combined_menu", "INT DEFAULT 1")
@@ -142,6 +150,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_health", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_armor", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
 
+
+
 --[[ Money Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
@@ -151,6 +161,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_money_model", "TEXT DEFAULT 'models/props/cs
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
 
+
+
 --[[ Characters Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_money_start", "TEXT DEFAULT '500'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_max", "TEXT DEFAULT '10'")
@@ -159,6 +171,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_gender", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_othergender", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1")
+
+
 
 --[[ Social Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
@@ -682,6 +696,16 @@ net.Receive("update_text_removebuildingownertime", function(len, ply)
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_removebuildingownertime", "text_removebuildingownertime", str)
 end)
+
+util.AddNetworkString("update_int_ttlsweps")
+net.Receive("update_int_ttlsweps", function(len, ply)
+	local int = net.ReadString()
+	if isnumber(tonumber(int)) then
+		GeneralUpdateInt(ply, "update_int_ttlsweps", "int_ttlsweps", int)
+	end
+end)
+
+
 
 --[[ GAMEMODE SYSTEMS ]]--
 util.AddNetworkString("update_bool_hunger")

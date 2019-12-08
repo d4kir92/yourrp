@@ -7,7 +7,7 @@ function ToggleCombinedMenu(id)
 	cm.currentsite = id
 	if !cm.open and isNoMenuOpen() then
 		OpenCombinedMenu()
-	elseif cm.open then
+	elseif cm.open and cm.currentsite != 4 and cm.currentsite != 5 then
 		CloseCombinedMenu()
 	end
 end

@@ -10,8 +10,6 @@ local XP = "vgui/material/icon_star.png"
 local MO = "icon16/money.png"
 local SA = "icon16/money_add.png"
 local CA = "vgui/material/icon_timer.png"
-local WP = "vgui/material/icon_timer.png"
-local WS = "vgui/material/icon_timer.png"
 
 local SPACE = {}
 local ELES = {}
@@ -99,6 +97,13 @@ function HUDSpace()
 			lply:CastTimeMax(),
 			CA,
 			lply:GetCastName()
+		}
+
+		ELES["BA"] = {
+			system.BatteryPower(),
+			100,
+			BA,
+			system.BatteryPower() .. "%"
 		}
 
 		local t = {}
@@ -251,6 +256,7 @@ function HUDSpace()
 					SPACE[ele].XFontCenter = SPACE[ele].BackgroundX + ax
 					SPACE[ele].YFontCenter = SPACE[ele].BackgroundY + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
+					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
 					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_600"
 				elseif etab[5] == 1 then
 					--
@@ -274,6 +280,7 @@ function HUDSpace()
 					SPACE[ele].XFontCenter = SPACE[ele].x + ax
 					SPACE[ele].YFontCenter = SPACE[ele].y + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
+					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
 					SPACE[ele].font = "Y_O_" .. SPACE[ele].fs .. "_600"
 				end
 			end
