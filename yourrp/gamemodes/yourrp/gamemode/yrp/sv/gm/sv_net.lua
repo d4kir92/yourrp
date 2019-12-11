@@ -19,7 +19,7 @@ end)
 
 --Restart Server
 net.Receive( "restartServer", function( len, ply )
-  if not ply:IsSuperAdmin then
+  if not ply:IsSuperAdmin() then
      ply:ChatPrint "You need to be admin to do this"
      return
   end
@@ -29,7 +29,7 @@ net.Receive( "restartServer", function( len, ply )
 end)
 
 net.Receive( "updateServer", function( len, ply )
-  if not ply:IsSuperAdmin then
+  if not ply:IsSuperAdmin() then
      ply:ChatPrint "You need to be admin to do this"
      return
   end
@@ -61,7 +61,7 @@ net.Receive( "updateServer", function( len, ply )
 end)
 
 net.Receive( "cancelRestartServer", function( len, ply )
-  if not ply:IsSuperAdmin then
+  if not ply:IsSuperAdmin() then
      ply:ChatPrint "You need to be admin to do this"
      return
   end
