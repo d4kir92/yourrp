@@ -19,11 +19,20 @@ end)
 
 --Restart Server
 net.Receive( "restartServer", function( len, ply )
+  if not ply:IsSuperAdmin then
+     ply:ChatPrint "You need to be admin to do this"
+     return
+  end
+		
   printGM( "gm", "RunConsoleCommand(_restart)" )
   RunConsoleCommand( "_restart" )
 end)
 
 net.Receive( "updateServer", function( len, ply )
+  if not ply:IsSuperAdmin then
+     ply:ChatPrint "You need to be admin to do this"
+     return
+  end
   local _tmpString = net.ReadString()
   local _result = SQL_UPDATE( "yrp_general", "text_gamemode_name = '" .. SQL_STR_IN( _tmpString ) .. "'" )
   if worked( _result, "text_gamemode_name failed" ) then
@@ -52,6 +61,10 @@ net.Receive( "updateServer", function( len, ply )
 end)
 
 net.Receive( "cancelRestartServer", function( len, ply )
+  if not ply:IsSuperAdmin then
+     ply:ChatPrint "You need to be admin to do this"
+     return
+  end
   timer.Remove( "timerRestartServer" )
   local message = "Restart Server CANCELED!"
   PrintMessage( HUD_PRINTCENTER, message )
