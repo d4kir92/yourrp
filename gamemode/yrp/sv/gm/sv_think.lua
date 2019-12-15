@@ -370,3 +370,22 @@ hook.Add("Think", "yrp_spawner_think", function()
 		end
 	end
 end)
+
+hook.Add( "KeyPress", "keypress_use_hi", function( ply, key )
+	if ( key == IN_USE ) then
+		local tr = util.TraceLine( {
+			start = ply:EyePos(),
+			endpos = ply:EyePos() + ply:EyeAngles():Forward() * GetGlobalDInt("int_door_distance", 200),
+			filter = function( ent ) if ( ent:GetClass() == "func_door" ) then return true end end
+		} )
+
+		local ent = tr.Entity
+		if IsValid(ent) then
+			local hitclass = ent:GetClass()
+			if hitclass == "func_door" then
+				local door = ent
+				openDoor(ply, door)
+			end
+		end
+	end
+end )

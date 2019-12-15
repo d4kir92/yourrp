@@ -10,8 +10,12 @@ include("player/interface.lua")
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")
 
+function IsPlayerIntroductionEnabled()
+	return false -- GetGlobalDBool("bool_players_need_to_introduce", false)
+end
+
 function Player:IsUnknown()
-	if CLIENT and GetGlobalDBool("bool_players_need_to_introduce", false) and self != LocalPlayer() then
+	if CLIENT and IsPlayerIntroductionEnabled() and self != LocalPlayer() then
 		return true
 	end
 	return false

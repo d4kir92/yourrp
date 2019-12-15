@@ -751,6 +751,9 @@ net.Receive("update_bool_building_system", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_building_system", "bool_building_system", b)
 end)
 
+function IsInventorySystemEnabled()
+	return false -- GetGlobalDBool("bool_inventory_system", false)
+end
 util.AddNetworkString("update_bool_inventory_system")
 net.Receive("update_bool_inventory_system", function(len, ply)
 	local b = btn(net.ReadBool())

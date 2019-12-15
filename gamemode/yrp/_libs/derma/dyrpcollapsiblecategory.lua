@@ -23,8 +23,8 @@ function PANEL:Init()
 			_hl = 70
 		end
 
-		draw.RoundedBoxEx(ctrb(30), 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl), true, true, not self:IsOpen(), not self:IsOpen())
-		surfaceText(self.headertext, "roleInfoHeader", ph / 2, ph / 2, Color(255, 255, 255), 0, 1)
+		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl), true, true, not self:IsOpen(), not self:IsOpen())
+		draw.SimpleText(self.headertext, "roleInfoHeader", ph / 2, ph / 2, Color(255, 255, 255), 0, 1)
 		local _box = ctrb(50)
 		local _dif = 50
 		local _br = (ph - _box) / 2
@@ -35,7 +35,7 @@ function PANEL:Init()
 		end
 
 		draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif))
-		surfaceText(_tog, "roleInfoHeader", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
+		draw.SimpleText(_tog, "roleInfoHeader", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
 
 		if tobool(self.locked) then
 			YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0))

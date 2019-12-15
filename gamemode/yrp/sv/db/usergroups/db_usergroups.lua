@@ -27,6 +27,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_general", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupsandroles", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_money", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_licenses", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_shops", "INT DEFAULT 0")
@@ -248,8 +249,36 @@ net.Receive("Disconnect_Settings_UserGroups", function(len, ply)
 	RemFromHandler_UserGroups(ply)
 end)
 
+local function ConvertToMains(tab)
+	local res = {}
+
+	for i, v in pairs(tab) do
+		if !strEmpty(v) and !string.StartWith(v, "\t") and !string.find(v, "{") and !string.find(v, "}") then
+			local ug = string.Replace(v, "\"", "")
+			ug = string.Replace(ug, "\t", "")
+			table.insert(res, string.lower(ug))
+		end
+	end
+
+	return res
+end
+
+function GetULXUserGroups()
+	local f = file.Read("ulib/groups.txt", "DATA")
+	f = string.Explode("\n", f)
+	f = ConvertToMains(f)
+	for i, v in pairs(f) do
+		local dbug = SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. v .. "'")
+		if dbug == nil then
+			SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. v .. "'")
+		end
+	end
+end
+
 util.AddNetworkString("Connect_Settings_UserGroups")
 net.Receive("Connect_Settings_UserGroups", function(len, ply)
+	GetULXUserGroups()
+
 	printGM("gm", "Connect_Settings_UserGroups => " .. ply:YRPName())
 	if ply:CanAccess("bool_usergroups") then
 		AddToHandler_UserGroups(ply)
@@ -756,6 +785,13 @@ net.Receive("usergroup_update_bool_players", function(len, ply)
 	UGCheckBox(ply, uid, "bool_players", bool_players)
 end)
 
+util.AddNetworkString("usergroup_update_bool_whitelist")
+net.Receive("usergroup_update_bool_whitelist", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_whitelist = net.ReadString()
+	UGCheckBox(ply, uid, "bool_whitelist", bool_whitelist)
+end)
+
 util.AddNetworkString("usergroup_update_bool_vehicles")
 net.Receive("usergroup_update_bool_vehicles", function(len, ply)
 	local uid = tonumber(net.ReadString())
@@ -991,6 +1027,7 @@ end)
 local Entity = FindMetaTable("Entity")
 function Entity:YRPSetOwner(ply)
 	self:SetDEntity("yrp_owner", ply)
+	self:SetOwner(ply)
 end
 
 function Entity:YRPRemoveOwner()

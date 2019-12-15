@@ -294,6 +294,7 @@ countries["LV"] = "Latvia"
 
 countries["MA"] = "Morocco"
 countries["ME"] = "Montenegro"
+countries["MK"] = "North Macedonia"
 countries["MX"] = "Mexico"
 countries["MY"] = "Malaysia"
 

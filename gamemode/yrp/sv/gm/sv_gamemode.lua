@@ -940,6 +940,11 @@ end
 function GM:PostCleanupMap()
 	-- Rebuild Doors
 	YRP.msg("note", "RELOAD DOORS")
+
+	for i, p in pairs(player.GetAll()) do
+		SendDEntities(p)
+	end
+
 	loadDoors()
 end
 

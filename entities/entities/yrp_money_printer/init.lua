@@ -8,89 +8,110 @@ include("shared.lua")
 util.AddNetworkString("getMoneyPrintMenu")
 
 util.AddNetworkString("upgradeCPU")
-net.Receive("upgradeCPU", function(len, ply)
+net.Receive("upgradeCPU", function(len)
 	local mp = net.ReadEntity()
-	local cost = mp:GetDInt("cpuCost")
-	if ply:canAfford(cost) and mp:GetDInt("cpu") < mp:GetDInt("cpuMax") then
-		ply:addMoney(-cost)
-		mp:SetDInt("cpu", mp:GetDInt("cpu") + 1)
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local cost = mp:GetDInt("cpuCost")
+		if ply:canAfford(cost) and mp:GetDInt("cpu") < mp:GetDInt("cpuMax") then
+			ply:addMoney(-cost)
+			mp:SetDInt("cpu", mp:GetDInt("cpu") + 1)
 
-		mp.delay = CurTime()
+			mp.delay = CurTime()
+		end
 	end
 end)
 
 util.AddNetworkString("upgradeCooler")
-net.Receive("upgradeCooler", function(len, ply)
+net.Receive("upgradeCooler", function(len)
 	local mp = net.ReadEntity()
-	local cost = mp:GetDInt("coolerCost")
-	if ply:canAfford(cost) and mp:GetDInt("cooler") < mp:GetDInt("coolerMax") then
-		ply:addMoney(-cost)
-		mp:SetDInt("cooler", mp:GetDInt("cooler") + 1)
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local cost = mp:GetDInt("coolerCost")
+		if ply:canAfford(cost) and mp:GetDInt("cooler") < mp:GetDInt("coolerMax") then
+			ply:addMoney(-cost)
+			mp:SetDInt("cooler", mp:GetDInt("cooler") + 1)
 
-		mp.delay = CurTime()
+			mp.delay = CurTime()
+		end
 	end
 end)
 
 util.AddNetworkString("upgradePrinter")
-net.Receive("upgradePrinter", function(len, ply)
+net.Receive("upgradePrinter", function(len)
 	local mp = net.ReadEntity()
-	local cost = mp:GetDInt("printerCost")
-	if ply:canAfford(cost) and mp:GetDInt("printer") < mp:GetDInt("printerMax") then
-		ply:addMoney(-cost)
-		mp:SetDInt("printer", mp:GetDInt("printer") + 1)
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local cost = mp:GetDInt("printerCost")
+		if ply:canAfford(cost) and mp:GetDInt("printer") < mp:GetDInt("printerMax") then
+			ply:addMoney(-cost)
+			mp:SetDInt("printer", mp:GetDInt("printer") + 1)
+		end
 	end
 end)
 
 util.AddNetworkString("upgradeStorage")
-net.Receive("upgradeStorage", function(len, ply)
+net.Receive("upgradeStorage", function(len)
 	local mp = net.ReadEntity()
-	local cost = mp:GetDInt("storageCost")
-	if ply:canAfford(cost) and mp:GetDInt("storage") < mp:GetDInt("storageMax") then
-		ply:addMoney(-cost)
-		mp:SetDInt("storage", mp:GetDInt("storage") + 1)
-		mp:SetDInt("moneyMax", mp:GetDInt("moneyMax") + 1000)
-		mp:SetDInt("fuelMax", mp:GetDInt("fuelMax") + 10)
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local cost = mp:GetDInt("storageCost")
+		if ply:canAfford(cost) and mp:GetDInt("storage") < mp:GetDInt("storageMax") then
+			ply:addMoney(-cost)
+			mp:SetDInt("storage", mp:GetDInt("storage") + 1)
+			mp:SetDInt("moneyMax", mp:GetDInt("moneyMax") + 1000)
+			mp:SetDInt("fuelMax", mp:GetDInt("fuelMax") + 10)
+		end
 	end
 end)
 
 util.AddNetworkString("fuelUp")
-net.Receive("fuelUp", function(len, ply)
+net.Receive("fuelUp", function(len)
 	local mp = net.ReadEntity()
-	local cost = mp:GetDInt("fuelCost")
-	if ply:canAfford(cost) and mp:GetDInt("fuel") < mp:GetDInt("fuelMax") then
-		ply:addMoney(-cost)
-		mp:SetDInt("fuel", mp:GetDInt("fuel") + 10)
-		if mp:GetDInt("fuel") > mp:GetDInt("fuelMax") then
-			mp:SetDInt("fuel", mp:GetDInt("fuelMax"))
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local cost = mp:GetDInt("fuelCost")
+		if ply:canAfford(cost) and mp:GetDInt("fuel") < mp:GetDInt("fuelMax") then
+			ply:addMoney(-cost)
+			mp:SetDInt("fuel", mp:GetDInt("fuel") + 10)
+			if mp:GetDInt("fuel") > mp:GetDInt("fuelMax") then
+				mp:SetDInt("fuel", mp:GetDInt("fuelMax"))
+			end
 		end
 	end
 end)
 
 util.AddNetworkString("repairMP")
-net.Receive("repairMP", function(len, ply)
+net.Receive("repairMP", function(len)
 	local mp = net.ReadEntity()
-	local cost = mp:GetDInt("hpCost")
-	if ply:canAfford(cost) and mp:GetDInt("hp") < mp:GetDInt("hpMax") then
-		ply:addMoney(-cost)
-		mp:SetDInt("hp", mp:GetDInt("hp") + 10)
-		if mp:GetDInt("hp") > mp:GetDInt("hpMax") then
-			mp:SetDInt("hp", mp:GetDInt("hpMax"))
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local cost = mp:GetDInt("hpCost")
+		if ply:canAfford(cost) and mp:GetDInt("hp") < mp:GetDInt("hpMax") then
+			ply:addMoney(-cost)
+			mp:SetDInt("hp", mp:GetDInt("hp") + 10)
+			if mp:GetDInt("hp") > mp:GetDInt("hpMax") then
+				mp:SetDInt("hp", mp:GetDInt("hpMax"))
+			end
 		end
 	end
 end)
 
 util.AddNetworkString("withdrawMoney")
-net.Receive("withdrawMoney", function(len, ply)
+net.Receive("withdrawMoney", function(len)
 	local mp = net.ReadEntity()
-	local withdraw = mp:GetDInt("money")
+	local ply = mp:GetOwner()
+	if mp:GetClass() == "yrp_money_printer" then
+		local withdraw = mp:GetDInt("money", 0)
 
-	ply:addMoney(withdraw)
+		ply:addMoney(withdraw)
 
-	mp:SetDInt("money", 0)
+		mp:SetDInt("money", 0)
+	end
 end)
 
 util.AddNetworkString("startMoneyPrinter")
-net.Receive("startMoneyPrinter", function(len, ply)
+net.Receive("startMoneyPrinter", function(len)
 	local mp = net.ReadEntity()
 	if mp:GetDBool("working") then
 		mp:SetDBool("working", false)

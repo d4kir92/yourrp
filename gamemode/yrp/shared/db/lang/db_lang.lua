@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+YRP = YRP or {}
+
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
 yrp_current_lang.get_language = "Unknown"

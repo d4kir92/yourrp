@@ -376,7 +376,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_drop_items_on_death, "LID_dropitemsondeath", "update_bool_drop_items_on_death")
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
-		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_need_to_introduce, "LID_playerintroduction", "update_bool_players_need_to_introduce")
+		--CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_need_to_introduce, "LID_playerintroduction", "update_bool_players_need_to_introduce")
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_can_drop_weapons, "LID_playerscandropweapons", "update_bool_players_can_drop_weapons")
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_dealers_can_take_damage, "LID_dealerscantakedamage", "update_bool_dealers_can_take_damage")
@@ -412,7 +412,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_stamina, "LID_stamina", "update_bool_stamina")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_building_system, "LID_buildingsystem", "update_bool_building_system")
-		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_inventory_system, "LID_inventorysystem", "update_bool_inventory_system")
+		--CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_inventory_system, "LID_inventorysystem", "update_bool_inventory_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_realistic_system, "LID_realisticsystem", "update_bool_realistic_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_level_system, "LID_levelsystem", "update_bool_level_system")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
@@ -465,7 +465,7 @@ net.Receive("Connect_Settings_General", function(len)
 			idbg:SetTitle("")
 			idbg:SetDraggable(false)
 			function idbg:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 				for y = 0, ScrH(), gs do
 					draw.RoundedBox(0, 0, y, pw, 1, Color(255, 255, 255, 255))
 				end
@@ -571,7 +571,7 @@ net.Receive("Connect_Settings_General", function(len)
 						surface.DrawLine(0, ph / 2, pw, ph / 2)
 						surface.DrawLine(0, 0, lon, lon)
 					end
-					if ele != "background" and !string.find(ele,  "box") then
+					--if ele != "background" and !string.find(ele,  "box") then
 						if !string.find(ele, "logo") or GetGlobalDBool("bool_" .. ele .. "_visible", false) == false then
 							local bgcolor = Color(255, 0, 0, a1)
 							if GetGlobalDBool("bool_" .. ele .. "_visible", false) == true then
@@ -579,7 +579,7 @@ net.Receive("Connect_Settings_General", function(len)
 							end
 							draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
 						end
-					end
+					--end
 
 					if self:IsDraggable() or e.draggable then
 						draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, a2))

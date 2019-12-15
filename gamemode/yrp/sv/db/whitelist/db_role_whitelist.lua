@@ -21,7 +21,7 @@ util.AddNetworkString("whitelistPlayerRemove")
 util.AddNetworkString("yrpInfoBox")
 
 function sendRoleWhitelist(ply)
-	if ply:CanAccess("bool_players") then
+	if ply:CanAccess("bool_players") or ply:CanAccess("bool_whitelist") then
 		local _tmpWhiteList = SQL_SELECT("yrp_role_whitelist", "*", nil)
 		local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
 		local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "string_name, uniqueID", nil)

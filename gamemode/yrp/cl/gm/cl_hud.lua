@@ -274,7 +274,6 @@ function YRP_PM:Think()
 
 			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 			if lb != nil then
-				print("FOUND HEAD")
 				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
 				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
 				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))

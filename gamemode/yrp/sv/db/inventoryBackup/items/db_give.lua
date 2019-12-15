@@ -338,7 +338,7 @@ function Player:Give(cname, noammo)
 		_noAmmo = false
 	end
 
-	if self:GetDBool("bool_inventory_system", false) then
+	if IsInventorySystemEnabled() then
 		return self:PutInInventory(cname, noammo)
 	else
 		return self:ForceEquip(cname, noammo)
@@ -356,7 +356,7 @@ function Player:GiveAmmo(amount, atype, hidePopup)
 		_hide_popup = false
 	end
 
-	if self:GetDBool("bool_inventory_system", false) then
+	if IsInventorySystemEnabled() then
 		self:LegacyGiveAmmo(amount, atype)
 		--self:AddItemAmmo(amount, atype)
 	else
@@ -424,7 +424,7 @@ end
 function Player:StripWeapon(weapon)
 	printGM("note", "StripWeapon(" .. tostring(weapon) .. ")")
 
-	if self:GetDBool("bool_inventory_system", false) then
+	if IsInventorySystemEnabled() then
 		self:RemoveWeaponFromInventory(weapon)
 		self:LegacyStripWeapon(weapon)
 	else
@@ -455,7 +455,7 @@ function Player:IsAllowedToDropSWEP(cname)
 end
 
 function GM:PlayerCanPickupWeapon(ply, wep)
-	if not ply:GetDBool("bool_inventory_system", false) then
+	if not IsInventorySystemEnabled() then
 		--[[ Inventory OFF ]]
 		--
 		return wep:GetDBool("ispickupable", true)

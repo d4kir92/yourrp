@@ -279,7 +279,7 @@ function openDoor(ply, ent, nr)
 
 		if _tmpBuildingTable.bool_canbeowned == 0 or _tmpBuildingTable.groupID == -1 then
 			_tmpBuildingTable.int_securitylevel = tonumber(_tmpBuildingTable.int_securitylevel)
-			if ply:GetDInt("int_securitylevel", 0) >= _tmpBuildingTable.int_securitylevel then
+			if ply:GetDInt("int_securitylevel", 0) >= _tmpBuildingTable.int_securitylevel and ply:HasWeapon("yrp_idcard") then
 				local locked = ent:GetSaveTable().m_bLocked
 				if locked then
 					ent:Fire("Unlock")
@@ -289,7 +289,8 @@ function openDoor(ply, ent, nr)
 					ent:Fire("Lock")
 				end
 			else
-				YRP.msg("note", "Building: NOT ALLOWED TO OPEN")
+				--YRP.msg("note", "Building: NOT ALLOWED TO OPEN")
+				ent:EmitSound("doors/default_locked.wav", 75, 100, 1, CHAN_AUTO )
 			end
 		else
 			YRP.msg("note", "Building must be not ownable or PUBLIC")

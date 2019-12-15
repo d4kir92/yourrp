@@ -71,11 +71,10 @@ function HUDSpace()
 			}
 
 			ELES["WN"] = {
-				0,
+				1,
+				1,
 				nil,
-				nil,
-				weapon:GetPrintName(),
-				2
+				weapon:GetPrintName()
 			}
 		end
 
@@ -281,7 +280,7 @@ function HUDSpace()
 					SPACE[ele].YFontCenter = SPACE[ele].y + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
-					SPACE[ele].font = "Y_O_" .. SPACE[ele].fs .. "_600"
+					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_600"
 				end
 			end
 		elseif table.Count(SPACE) > 0 then

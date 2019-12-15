@@ -1,5 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+YRP = YRP or {}
 function YRPSendIsReady()
 	local info = {}
 	info.iswindows = system.IsWindows()

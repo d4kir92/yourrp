@@ -127,7 +127,6 @@ net.Receive("get_menu_bodygroups", function(len)
 					net.Start("inv_pm_up")
 						net.WriteInt(_tmpPM.cur, 16)
 					net.SendToServer()
-					print("UP", _pms[_tmpPM.cur])
 					_appe.r.pm.Entity:SetModel(_pms[_tmpPM.cur])
 				end
 
@@ -145,7 +144,6 @@ net.Receive("get_menu_bodygroups", function(len)
 					net.Start("inv_pm_do")
 						net.WriteInt(_tmpPM.cur, 16)
 					net.SendToServer()
-					print("DO", _pms[_tmpPM.cur])
 					_appe.r.pm.Entity:SetModel(_pms[_tmpPM.cur])
 				end
 

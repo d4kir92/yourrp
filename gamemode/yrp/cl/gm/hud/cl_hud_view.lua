@@ -3,9 +3,9 @@
 function showOwner(eyeTrace)
 	if eyeTrace.Entity:GetRPOwner() == LocalPlayer() then
 		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. YRP.lang_string("LID_you"), "sef", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	elseif wk(eyeTrace.Entity:GetRPOwner()) then
+	elseif wk(eyeTrace.Entity:GetRPOwner()) and eyeTrace.Entity:IsPlayer() then
 		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "sef", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	elseif !strEmpty(eyeTrace.Entity:GetDString("ownerRPName")) or !strEmpty(eyeTrace.Entity:GetDString("ownerGroup")) then
+	elseif !strEmpty(eyeTrace.Entity:GetDString("ownerRPName", "")) or !strEmpty(eyeTrace.Entity:GetDString("ownerGroup", "")) then
 		local groupname = eyeTrace.Entity:GetDString("ownerGroup", "")
 		if string.lower(groupname) == "public" then
 			groupname = YRP.lang_string("LID_public")

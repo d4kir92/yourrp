@@ -1399,14 +1399,15 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 	local sca = ply:GetModelScale() / 4
 	local str = stri
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-	surface.SetFont("3d2d_string")
-	local _tw, _th = surface.GetTextSize(str)
-	_tw = math.Round(_tw * 1.00, 0)
-	_th = _th
-	local w = 200
-	surfaceBox(-w / 2 - 2, 2 - 2, w + 4, 20 + 4, Color(0, 0, 0, barcolor.a))
-	surfaceBox(-w / 2, 2, w * cur / max, 20, barcolor)
-	surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+		surface.SetFont("3d2d_string")
+		local _tw, _th = surface.GetTextSize(str)
+		_tw = math.Round(_tw * 1.00, 0)
+		_th = _th
+		local w = 200
+		local r = 4
+		draw.RoundedBox(r, -w / 2 - 2, 2 - 2, w + 4, 20 + 4, Color(0, 0, 0, barcolor.a))
+		draw.RoundedBox(r / 2, -w / 2, 2, w * cur / max, 20, barcolor)
+		surfaceText(str, "3d2d_string", 0, _th / 2 - 0.2, color, 1, 1)
 	cam.End3D2D()
 end
 
@@ -1860,6 +1861,32 @@ net.Receive("yrp_message", function(len)
 	end
 end)
 
+function DrawDoorText(door)
+	local header = SQL_STR_OUT(door:GetDString("text_header", ""))
+	surface.SetFont("Roboto24B")
+	local head_size = surface.GetTextSize(header)
+	surface.SetTextColor(255, 255, 255)
+	surface.SetTextPos(- head_size / 2, -80)
+	surface.DrawText(header)
+
+	local description = SQL_STR_OUT(door:GetDString("text_description", ""))
+	surface.SetFont("Roboto14")
+	local desc_size = surface.GetTextSize(description)
+	surface.SetTextColor(255, 255, 255)
+	surface.SetTextPos(- desc_size / 2, -50)
+	surface.DrawText(description)
+
+	local sl = door:GetDInt("int_securitylevel", 0)
+	if sl > 0 then
+		local int_securitylevel = YRP.lang_string("LID_securitylevel") .. ": " .. sl
+		surface.SetFont("Roboto24B")
+		local secu_size = surface.GetTextSize(int_securitylevel)
+		surface.SetTextColor(255, 255, 255)
+		surface.SetTextPos(- secu_size / 2, -20)
+		surface.DrawText(int_securitylevel)
+	end
+end
+
 local loadattempts = 0
 function loadDoorTexts()
 	loadattempts = loadattempts + 1
@@ -1909,19 +1936,7 @@ function loadDoorTexts()
 					--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
 
 					cam.Start3D2D(pos, ang, 0.2)
-						local header = SQL_STR_OUT(v:GetDString("text_header", ""))
-						local head_size = surface.GetTextSize(header)
-						surface.SetFont("Roboto24B")
-						surface.SetTextColor(255, 255, 255)
-						surface.SetTextPos(- head_size / 2, -80)
-						surface.DrawText(header)
-
-						local description = SQL_STR_OUT(v:GetDString("text_description", ""))
-						surface.SetFont("Roboto14")
-						local desc_size = surface.GetTextSize(description)
-						surface.SetTextColor(255, 255, 255)
-						surface.SetTextPos(- desc_size / 2, -50)
-						surface.DrawText(description)
+						DrawDoorText(v)
 
 						--[[if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
 							local canbeowned = YRP.lang_string("LID_canbeowned")
@@ -1953,19 +1968,7 @@ function loadDoorTexts()
 					ang = ang + Angle(0, 180, 0)
 
 					cam.Start3D2D(pos, ang, 0.2)
-						header = SQL_STR_OUT(v:GetDString("text_header", ""))
-						surface.SetFont("Roboto24B")
-						head_size = surface.GetTextSize(header)
-						surface.SetTextColor(255, 255, 255)
-						surface.SetTextPos(- head_size / 2, -80)
-						surface.DrawText(header)
-
-						description = SQL_STR_OUT(v:GetDString("text_description", ""))
-						surface.SetFont("Roboto14")
-						desc_size = surface.GetTextSize(description)
-						surface.SetTextColor(255, 255, 255)
-						surface.SetTextPos(- desc_size / 2, -40)
-						surface.DrawText(description)
+						DrawDoorText(v)
 
 						--[[if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
 							local canbeowned = YRP.lang_string("LID_canbeowned")

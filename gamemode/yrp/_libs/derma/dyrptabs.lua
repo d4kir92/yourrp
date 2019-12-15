@@ -53,10 +53,10 @@ function PANEL:Init()
 			end
 
 			if self:IsHovered() then
-				draw.RoundedBoxEx((ph / 2) - ctrb(_br), ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), Color(255, 255, 255, 254), true, true)
+				draw.RoundedBoxEx(0, ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), Color(255, 255, 255, 254), true, true)
 			end
 
-			draw.RoundedBoxEx((ph / 2) - ctrb(_br), ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), _color, true, true)
+			draw.RoundedBoxEx(0, ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), _color, true, true)
 			surfaceText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 

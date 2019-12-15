@@ -1,14 +1,16 @@
 -- Networking
 local ENTITY = FindMetaTable("Entity")
 
+ENTS = ENTS or {}
+
 local ENTDELAY = 0.05
 
 -- STRING
 if SERVER then
 	util.AddNetworkString("SetDString")
-	function ENTITY:SendDString(key, value, ply)
+	function SendDString(entindex, key, value, ply)
 		net.Start("SetDString")
-			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteUInt(entindex, 16)
 			net.WriteString(key)
 			net.WriteString(value)
 		if IsValid(ply) then
@@ -18,54 +20,46 @@ if SERVER then
 		end
 	end
 end
-function ENTITY:SetDString(key, value)
+function SetDString(entindex, key, value)
 	value = tostring(value)
-	if self:IsValid() then
-		if isstring(key) and value != "nil" then
-			self.NWTAB = self.NWTAB or {}
-			self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
-			self.NWTAB["STRING"][key] = value
-			if SERVER then
-				self:SendDString(key, value)
-			end
+	if isstring(key) and value != "nil" then
+		ENTS[entindex] = ENTS[entindex] or {}
+		ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
+		ENTS[entindex]["STRING"][key] = value
+		if SERVER then
+			SendDString(entindex, key, value)
 		end
 	end
+end
+function ENTITY:SetDString(key, value)
+	local entindex = self:EntIndex()
+	SetDString(entindex, key, value)
 end
 if CLIENT then
 	net.Receive("SetDString", function(len)
-		local ENTINDEX = net.ReadUInt(16)
+		local entindex = net.ReadUInt(16)
 		local key = net.ReadString()
 		local value = net.ReadString()
-		local ENT = Entity(ENTINDEX)
-		if ENT != NULL then
-			ENT:SetDString(key, value)
-		else
-			timer.Simple(ENTDELAY, function()
-				ENT = Entity(ENTINDEX)
-				if ENT != NULL then
-					ENT:SetDString(key, value)
-				end
-			end)
-		end
+		SetDString(entindex, key, value)
 	end)
 end
-
+function GetDString(entindex, key, value)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
+	local result = ENTS[entindex]["STRING"][key] or value
+	return tostring(result)
+end
 function ENTITY:GetDString(key, value)
-	if self:IsValid() then
-		self.NWTAB = self.NWTAB or {}
-		self.NWTAB["STRING"] = self.NWTAB["STRING"] or {}
-		return self.NWTAB["STRING"][key] or value
-	else
-		return ""
-	end
+	local entindex = self:EntIndex()
+	return GetDString(entindex, key, value)
 end
 
 -- BOOL
 if SERVER then
 	util.AddNetworkString("SetDBool")
-	function ENTITY:SendDBool(key, value, ply)
+	function SendDBool(entindex, key, value, ply)
 		net.Start("SetDBool")
-			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteUInt(entindex, 16)
 			net.WriteString(key)
 			net.WriteBool(value)
 		if IsValid(ply) then
@@ -75,58 +69,50 @@ if SERVER then
 		end
 	end
 end
-function ENTITY:SetDBool(key, value)
-	if self:IsValid() then
-		if isstring(key) and isbool(value) then
-			self.NWTAB = self.NWTAB or {}
-			self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
-			self.NWTAB["BOOL"][key] = value
-			if SERVER then
-				self:SendDBool(key, value)
-			end
+function SetDBool(entindex, key, value)
+	if isstring(key) and isbool(value) then
+		ENTS[entindex] = ENTS[entindex] or {}
+		ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
+		ENTS[entindex]["BOOL"][key] = value
+		if SERVER then
+			SendDBool(entindex, key, value)
 		end
 	end
 end
+function ENTITY:SetDBool(key, value)
+	local entindex = self:EntIndex()
+	SetDBool(entindex, key, value)
+end
 if CLIENT then
 	net.Receive("SetDBool", function(len)
-		local ENTINDEX = net.ReadUInt(16)
+		local entindex = net.ReadUInt(16)
 		local key = net.ReadString()
 		local value = net.ReadBool()
-		local ENT = Entity(ENTINDEX)
-		if ENT != NULL then
-			ENT:SetDBool(key, value)
-		else
-			timer.Simple(ENTDELAY, function()
-				ENT = Entity(ENTINDEX)
-				if ENT != NULL then
-					ENT:SetDBool(key, value)
-				end
-			end)
-		end
+		SetDBool(entindex, key, value)
 	end)
 end
-
+function GetDBool(entindex, key, value)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
+	local result = ENTS[entindex]["BOOL"][key] or value
+	return tobool(result)
+end
 function ENTITY:GetDBool(key, value)
-	if self:IsValid() then
-	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["BOOL"] = self.NWTAB["BOOL"] or {}
-		local result = self.NWTAB["BOOL"][key]
-		if isbool(result) then
-			return result
-		else
-			return value
-		end
+	local entindex = self:EntIndex()
+	local result = GetDBool(entindex, key, value)
+	if isbool(result) then
+		return result
 	else
-		return false
+		return value
 	end
 end
 
 -- INT
 if SERVER then
 	util.AddNetworkString("SetDInt")
-	function ENTITY:SendDInt(key, value, ply)
+	function SendDInt(entindex, key, value, ply)
 		net.Start("SetDInt")
-			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteUInt(entindex, 16)
 			net.WriteString(key)
 			net.WriteInt(value, 32)
 		if IsValid(ply) then
@@ -136,56 +122,52 @@ if SERVER then
 		end
 	end
 end
-function ENTITY:SetDInt(key, value)
-	if self:IsValid() then
-		if isstring(key) and isnumber(tonumber(value)) then
-			self.NWTAB = self.NWTAB or {}
-			self.NWTAB["INT"] = self.NWTAB["INT"] or {}
-			self.NWTAB["INT"][key] = tonumber(value)
-			if SERVER then
-				self:SendDInt(key, tonumber(value))
-			end
-		else
-			YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
+function SetDInt(entindex, key, value)
+	if isstring(key) and isnumber(tonumber(value)) then
+		ENTS[entindex] = ENTS[entindex] or {}
+		ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
+		ENTS[entindex]["INT"][key] = tonumber(value)
+		if SERVER then
+			SendDInt(entindex, key, tonumber(value))
 		end
+	else
+		YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
 	end
+end
+function ENTITY:SetDInt(key, value)
+	local entindex = self:EntIndex()
+	SetDInt(entindex, key, value)
 end
 if CLIENT then
 	net.Receive("SetDInt", function(len)
-		local ENTINDEX = net.ReadUInt(16)
+		local entindex = net.ReadUInt(16)
 		local key = net.ReadString()
 		local value = net.ReadInt(32)
-		local ENT = Entity(ENTINDEX)
-		if ENT != NULL then
-			ENT:SetDInt(key, value)
-		else
-			timer.Simple(ENTDELAY, function()
-				ENT = Entity(ENTINDEX)
-				if ENT != NULL then
-					ENT:SetDInt(key, value)
-				end
-			end)
-		end
+		SetDInt(entindex, key, value)
 	end)
 end
-
+function GetDInt(entindex, key, value)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
+	local result = ENTS[entindex]["INT"][key] or value
+	return tonumber(result)
+end
 function ENTITY:GetDInt(key, value)
+	local entindex = self:EntIndex()
 	if self:IsValid() then
-	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["INT"] = self.NWTAB["INT"] or {}
-		local result = self.NWTAB["INT"][key] or value
-		return tonumber(result)
+		return GetDInt(entindex, key, value)
 	else
-		return -1
+		YRP.msg("note", "[GetDInt] ELSE")
+		return value
 	end
 end
 
 -- FLOAT
 if SERVER then
 	util.AddNetworkString("SetDFloat")
-	function ENTITY:SendDFloat(key, value, ply)
+	function SendDFloat(entindex, key, value, ply)
 		net.Start("SetDFloat")
-			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteUInt(entindex, 16)
 			net.WriteString(key)
 			net.WriteFloat(value)
 		if IsValid(ply) then
@@ -195,44 +177,40 @@ if SERVER then
 		end
 	end
 end
-function ENTITY:SetDFloat(key, value)
-	if self:IsValid() then
-		if isstring(key) and isnumber(tonumber(value)) then
-			self.NWTAB = self.NWTAB or {}
-			self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
-			self.NWTAB["FLOAT"][key] = value
-			if SERVER then
-				self:SendDFloat(key, value)
-			end
-		else
-			YRP.msg("note", "[SetDFloat] " .. tostring(key) .. tostring(value))
+function SetDFloat(entindex, key, value)
+	if isstring(key) and isnumber(tonumber(value)) then
+		ENTS[entindex] = ENTS[entindex] or {}
+		ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
+		ENTS[entindex]["FLOAT"][key] = value
+		if SERVER then
+			SendDFloat(entindex, key, value)
 		end
+	else
+		YRP.msg("note", "[SetDFloat] " .. tostring(key) .. tostring(value))
 	end
+end
+function ENTITY:SetDFloat(key, value)
+	local entindex = self:EntIndex()
+	SetDFloat(entindex, key, value)
 end
 if CLIENT then
 	net.Receive("SetDFloat", function(len)
-		local ENTINDEX = net.ReadUInt(16)
+		local entindex = net.ReadUInt(16)
 		local key = net.ReadString()
 		local value = net.ReadFloat()
-		local ENT = Entity(ENTINDEX)
-		if ENT != NULL then
-			ENT:SetDFloat(key, value)
-		else
-			timer.Simple(ENTDELAY, function()
-				ENT = Entity(ENTINDEX)
-				if ENT != NULL then
-					ENT:SetDFloat(key, value)
-				end
-			end)
-		end
+		SetDFloat(entindex, key, value)
 	end)
 end
-
+function GetDFloat(entindex, key, value)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
+	local result = ENTS[entindex]["FLOAT"][key] or value
+	return tonumber(result)
+end
 function ENTITY:GetDFloat(key, value)
+	local entindex = self:EntIndex()
 	if self:IsValid() then
-	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["FLOAT"] = self.NWTAB["FLOAT"] or {}
-		return self.NWTAB["FLOAT"][key] or value
+		return GetDFloat(entindex, key, value)
 	else
 		return -1.0
 	end
@@ -241,9 +219,9 @@ end
 -- ENTITY
 if SERVER then
 	util.AddNetworkString("SetDEntity")
-	function ENTITY:SendDEntity(key, value, ply)
+	function SendDEntity(entindex, key, value, ply)
 		net.Start("SetDEntity")
-			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteUInt(entindex, 16)
 			net.WriteString(key)
 			net.WriteEntity(value)
 		if IsValid(ply) then
@@ -253,55 +231,51 @@ if SERVER then
 		end
 	end
 end
-function ENTITY:SetDEntity(key, value)
-	if self:IsValid() then
-		if isstring(key) and isentity(value) then
-			self.NWTAB = self.NWTAB or {}
-			self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
-			self.NWTAB["ENTITY"][key] = value
-			if SERVER then
-				self:SendDEntity(key, value)
-			end
-		else
-			YRP.msg("note", "[SetDEntity] " .. tostring(key) .. tostring(value))
+function SetDEntity(entindex, key, value)
+	if isstring(key) and isentity(value) then
+		ENTS[entindex] = ENTS[entindex] or {}
+		ENTS[entindex]["ENTITY"] = ENTS[entindex]["ENTITY"] or {}
+		ENTS[entindex]["ENTITY"][key] = value
+		if SERVER then
+			SendDEntity(entindex, key, value)
 		end
+	else
+		YRP.msg("note", "[SetDEntity] " .. tostring(key) .. tostring(value))
 	end
+end
+function ENTITY:SetDEntity(key, value)
+	local entindex = self:EntIndex()
+	SetDEntity(entindex, key, value)
 end
 if CLIENT then
 	net.Receive("SetDEntity", function(len)
-		local ENTINDEX = net.ReadUInt(16)
+		local entindex = net.ReadUInt(16)
 		local key = net.ReadString()
 		local value = net.ReadEntity()
-		local ENT = Entity(ENTINDEX)
-		if ENT != NULL then
-			ENT:SetDEntity(key, value)
-		else
-			timer.Simple(ENTDELAY, function()
-				ENT = Entity(ENTINDEX)
-				if ENT != NULL then
-					ENT:SetDEntity(key, value)
-				end
-			end)
-		end
+		SetDEntity(entindex, key, value)
 	end)
 end
-
+function GetDEntity(entindex, key, value)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["ENTITY"] = ENTS[entindex]["ENTITY"] or {}
+	local result = ENTS[entindex]["ENTITY"][key] or value
+	return result
+end
 function ENTITY:GetDEntity(key, value)
+	local entindex = self:EntIndex()
 	if self:IsValid() then
-	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["ENTITY"] = self.NWTAB["ENTITY"] or {}
-		return self.NWTAB["ENTITY"][key] or value
+		return GetDEntity(entindex, key, value)
 	else
-		return NULL
+		return value
 	end
 end
 
 -- TABLE
 if SERVER then
 	util.AddNetworkString("SetDTable")
-	function ENTITY:SendDTable(key, value, ply)
+	function SendDTable(entindex, key, value, ply)
 		net.Start("SetDTable")
-			net.WriteUInt(self:EntIndex(), 16)
+			net.WriteUInt(entindex, 16)
 			net.WriteString(key)
 			net.WriteTable(value)
 		if IsValid(ply) then
@@ -311,71 +285,102 @@ if SERVER then
 		end
 	end
 end
-function ENTITY:SetDTable(key, value)
-	if self:IsValid() then
-		if isstring(key) and istable(value) then
-			self.NWTAB = self.NWTAB or {}
-			self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
-			self.NWTAB["TABLE"][key] = value
-			if SERVER then
-				self:SendDTable(key, value)
-			end
-		else
-			YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
+function SetDTable(entindex, key, value)
+	if isstring(key) and istable(value) then
+		ENTS[entindex] = ENTS[entindex] or {}
+		ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
+		ENTS[entindex]["TABLE"][key] = value
+		if SERVER then
+			SendDTable(entindex, key, value)
 		end
+	else
+		YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
 	end
+end
+function ENTITY:SetDTable(key, value)
+	local entindex = self:EntIndex()
+	SetDTable(entindex, key, value)
 end
 if CLIENT then
 	net.Receive("SetDTable", function(len)
-		local ENTINDEX = net.ReadUInt(16)
+		local entindex = net.ReadUInt(16)
 		local key = net.ReadString()
 		local value = net.ReadTable()
-		local ENT = Entity(ENTINDEX)
-		if ENT != NULL then
-			ENT:SetDTable(key, value)
-		else
-			timer.Simple(ENTDELAY, function()
-				ENT = Entity(ENTINDEX)
-				if ENT != NULL then
-					ENT:SetDTable(key, value)
-				end
-			end)
-		end
+		SetDTable(entindex, key, value)
 	end)
 end
-
+function GetDTable(entindex, key, value)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
+	local result = ENTS[entindex]["TABLE"][key] or value
+	return result
+end
 function ENTITY:GetDTable(key, value)
+	local entindex = self:EntIndex()
 	if self:IsValid() then
-	  self.NWTAB = self.NWTAB or {}
-		self.NWTAB["TABLE"] = self.NWTAB["TABLE"] or {}
-		return self.NWTAB["TABLE"][key] or value
+		return GetDTable(entindex, key, value)
 	else
-		return NULL
+		return value
 	end
 end
 
 -- INIT
+function SetDInit(entindex)
+	ENTS[entindex] = ENTS[entindex] or {}
+	ENTS[entindex]["INIT"] = true
+end
+function ENTITY:SetDInit(key, value)
+	local entindex = self:EntIndex()
+	SetDInit(entindex, key, value)
+end
+if SERVER then
+	util.AddNetworkString("SetDInit")
+	function SendDInit(entindex, ply)
+		net.Start("SetDInit")
+			net.WriteUInt(entindex, 16)
+		if IsValid(ply) then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
+	end
+end
+if CLIENT then
+	net.Receive("SetDInit", function(len)
+		local entindex = net.ReadUInt(16)
+		SetDInit(entindex)
+	end)
+end
+
 if SERVER then
 	util.AddNetworkString("request_dentites")
 
 	function SendDEntities(ply)
 		for j, ent in pairs(ents.GetAll()) do
-			ent.NWTAB = ent.NWTAB or {}
-			ent.NWTAB["BOOL"] = ent.NWTAB["BOOL"] or {}
-			for i, v in pairs(ent.NWTAB["BOOL"]) do
-				ent:SendDBool(i, v, ply)
-			end
-			ent.NWTAB["STRING"] = ent.NWTAB["STRING"] or {}
-			for i, v in pairs(ent.NWTAB["STRING"]) do
-				ent:SendDString(i, v, ply)
-			end
-			ent.NWTAB["INT"] = ent.NWTAB["INT"] or {}
-			for i, v in pairs(ent.NWTAB["INT"]) do
-				ent:SendDInt(i, v, ply)
-			end
-			ent.NWTAB["FLOAT"] = ent.NWTAB["FLOAT"] or {}
-			for i, v in pairs(ent.NWTAB["FLOAT"]) do
-				ent:SendDFloat(i, v, ply)
+			if ent.EntIndex != nil then
+				local entindex = ent:EntIndex()
+				ENTS[entindex] = ENTS[entindex] or {}
+				ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
+				for i, v in pairs(ENTS[entindex]["BOOL"]) do
+					SendDBool(entindex, i, v, ply)
+				end
+				ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
+				for i, v in pairs(ENTS[entindex]["STRING"]) do
+					SendDString(entindex, i, v, ply)
+				end
+				ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
+				for i, v in pairs(ENTS[entindex]["INT"]) do
+					SendDInt(entindex, i, v, ply)
+				end
+				ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
+				for i, v in pairs(ENTS[entindex]["FLOAT"]) do
+					SendDFloat(entindex, i, v, ply)
+				end
+				ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
+				for i, v in pairs(ENTS[entindex]["TABLE"]) do
+					SendDTable(entindex, i, v, ply)
+				end
+				SendDInit(entindex, ply)
 			end
 		end
 	end

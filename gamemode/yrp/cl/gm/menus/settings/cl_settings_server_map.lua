@@ -6,13 +6,18 @@ net.Receive("getMapList", function(len)
 	if wk(settingsWindow.window) then
 		if len > 512000 then
 			printGM("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
-		else
-			printGM("gm", "getMapList - len: " .. len .. "/" .. "512000")
 		end
 		local ply = LocalPlayer()
 		if pa(settingsWindow.window) then
 			local _tmpTable = net.ReadTable()
 			_dealers = net.ReadTable()
+
+			YRP.msg("note", "-----------------------------------------")
+			YRP.msg("note", "F8 Map DEBUG")
+			YRP.msg("note", "Net Message Len: " .. len)
+			YRP.msg("note", "MAP TABLE COUNT: " .. table.Count(_tmpTable))
+			YRP.msg("note", "DEALER TABLE COUNT: " .. table.Count(_dealers))
+			YRP.msg("note", "-----------------------------------------")
 
 			function settingsWindow.window.site:Paint(pw, ph)
 				draw.RoundedBox(4, 0, 0, pw, ph, get_dbg_col())
@@ -382,6 +387,26 @@ function GetMapList()
 	end
 end
 
+net.Receive("getMapListGroups", function(len)
+	local entries = tonumber(net.ReadString())
+	local id = tonumber(net.ReadString())
+	_groups[id] = net.ReadTable()
+	if id == entries then
+		gar.g = true
+	end
+	GetMapList()
+end)
+
+net.Receive("getMapListRoles", function(len)
+	local entries = tonumber(net.ReadString())
+	local id = tonumber(net.ReadString())
+	_roles[id] = net.ReadTable()
+	if id == entries then
+		gar.r = true
+	end
+	GetMapList()
+end)
+
 hook.Add("open_server_map", "open_server_map", function()
 	SaveLastSite()
 
@@ -393,27 +418,9 @@ hook.Add("open_server_map", "open_server_map", function()
 	gar.g = false
 	gar.r = false
 
-	net.Receive("getMapListGroups", function(len)
-		local entries = tonumber(net.ReadString())
-		local id = tonumber(net.ReadString())
-		_groups[id] = net.ReadTable()
-		if id == entries then
-			gar.g = true
-		end
-		GetMapList()
-	end)
 	net.Start("getMapListGroups")
 	net.SendToServer()
 
-	net.Receive("getMapListRoles", function(len)
-		local entries = tonumber(net.ReadString())
-		local id = tonumber(net.ReadString())
-		_roles[id] = net.ReadTable()
-		if id == entries then
-			gar.r = true
-		end
-		GetMapList()
-	end)
 	net.Start("getMapListRoles")
 	net.SendToServer()
 end)

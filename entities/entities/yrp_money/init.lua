@@ -30,8 +30,10 @@ function ENT:SetMoney(money)
 end
 
 function ENT:Use(activator, caller)
-	activator:addMoney(self:GetMoney())
-	self:Remove()
+	if activator:IsPlayer() then
+		activator:addMoney(self:GetMoney())
+		self:Remove()
+	end
 end
 
 function ENT:StartTouch(ent)

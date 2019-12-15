@@ -20,20 +20,21 @@ function CloseBuyMenu()
 	end
 end
 
-function createShopItem(item, duid)
+function createShopItem(item, duid, line, id)
 	item.int_level = tonumber(item.int_level)
-	local _w = 2000
-	local _h = 400
-	local br = 1
-	local _i = createD("DPanel", nil, ctrb(_w), ctrb(_h), 0, 0)
+	local W = 600
+	local H = 650 + 2 * 20
+	local BR = 40
+	local _i = createD("DPanel", line, ctrb(W), ctrb(H), id * YRP.ctr(W + BR), 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
+		--draw.RoundedBox(0, 0, 0, pw, pw, Color(255, 40, 40, 255))
+		--drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
 	if item.WorldModel != nil then
 		if item.WorldModel != "" then
-			_i.model = createD("DModelPanel", _i, ctrb(_w / 2) - 2 * br, ctrb(_h) - 2 * br, ctrb(0) + br, ctrb(0) + br)
+			_i.model = createD("DModelPanel", _i, ctrb(W), ctrb(W), ctrb(0), ctrb(0))
 			_i.model:SetModel(item.WorldModel)
 
 			if ea(_i.model.Entity) then
@@ -47,10 +48,10 @@ function createShopItem(item, duid)
 					_range = _y
 				end
 
-				local _z = _mins.z + (_maxs.z - _mins.z) * 0.60
+				local _z = _mins.z + (_maxs.z - _mins.z) * 0.46
 
 				_i.model:SetLookAt(Vector(0, 0, _z))
-				_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.6, 0, 0))
+				_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.1, 0, 0))
 			end
 		else
 			printGM("note", "[BuyMenu] WorldModel empty.")
@@ -58,61 +59,67 @@ function createShopItem(item, duid)
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, ctrb(_w / 2), ctrb(50), br, br)
+		_i.name = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(0))
 		_i.name.name = SQL_STR_OUT(item.name)
 		if item.type == "licenses" then
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
 		end
 		function _i.name:Paint(pw, ph)
-			surfaceText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if item.price != nil then
-		_i.price = createD("DPanel", _i, ctrb(_w / 2), ctrb(50), ctrb(_w / 2), ctrb(300))
+		_i.price = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W - 50))
 		function _i.price:Paint(pw, ph)
-			surfaceText(formatMoney(item.price, LocalPlayer()), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
-		_i.price = createD("DPanel", _i, ctrb(_w / 2), ctrb(50), 0, ctrb(50))
+		_i.price = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W - 100))
 		function _i.price:Paint(pw, ph)
-			surfaceText("[" .. YRP.lang_string("LID_permanent") .. "]", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 
-	item.description = SQL_STR_OUT(item.description)
+	--[[item.description = SQL_STR_OUT(item.description)
 	if item.description != "" then
-		_i.description = createD("DTextEntry", _i, ctrb(_w / 2), ctrb(_h - 100), ctrb(_w / 2) - br, ctrb(0) + br)
+		_i.description = createD("DTextEntry", _i, ctrb(W / 2), ctrb(H - 210), ctrb(W / 2), ctrb(110))
 		_i.description:SetMultiline(true)
 		_i.description:SetEditable(false)
 		_i.description:SetText(SQL_STR_OUT(item.description))
-	end
+
+		_i.description.Paint = function(self)
+			surface.SetDrawColor(0, 0, 0)
+			--surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
+			self:DrawTextEntryText(Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255))
+		end
+	end]]
 
 	if LocalPlayer():HasLicense(item.licenseID) then
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
-			_i.require = createD("DPanel", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
+			_i.require = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
 				local _color = Color(255, 0, 0)
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
 				local tab = {}
 				tab["LEVEL"] = self.level
-				surfaceText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
-			_i.buy = createD("DButton", _i, ctrb(_w / 2) - br, ctrb(50), ctrb(_w / 2), ctrb(350) - br)
+			_i.buy = createD("DButton", _i, ctrb(W - 20 * 2), ctrb(50), ctrb(20), ctrb(W + 20))
 			_i.buy:SetText("")
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
-				local _color = Color(0, 255, 0)
+				local _color = Color(100, 255, 100)
 				if !LocalPlayer():canAfford(item.price) then
-					_color = Color(255, 0, 0)
+					_color = Color(255, 100, 100)
 				end
 				if self:IsHovered() then
-					_color = Color(255, 255, 0)
+					_color = Color(255, 255, 100)
 				end
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
-				surfaceText(YRP.lang_string("LID_buy"), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+				draw.SimpleText(YRP.lang_string("LID_buy"), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 			function _i.buy:DoClick()
 				net.Start("item_buy")
@@ -123,7 +130,7 @@ function createShopItem(item, duid)
 			end
 		end
 	else
-		_i.require = createD("DPanel", _i, ctrb(_w), ctrb(50), ctrb(0), ctrb(350))
+		_i.require = createD("DPanel", _i, ctrb(W - 2 * 20), ctrb(50), ctrb(20), ctrb(W + 20))
 		_i.require.text = "[NOT FOUND]"
 		net.Receive("GetLicenseName", function(len)
 			local tmp = net.ReadString()
@@ -135,19 +142,18 @@ function createShopItem(item, duid)
 			net.WriteInt(item.licenseID, 32)
 		net.SendToServer()
 		function _i.require:Paint(pw, ph)
-			local _color = Color(255, 0, 0)
+			local _color = Color(255, 100, 100)
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			surfaceText(YRP.lang_string("LID_requires") .. ": " .. self.text, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. self.text, "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 		end
 	end
 	return _i
 end
 
 function createStorageItem(item, duid)
-	local _w = 800
-	local _h = 400
-	local br = 1
-	local _i = createD("DPanel", nil, ctrb(_w), ctrb(_h), 0, 0)
+	local W = 800
+	local H = 400
+	local _i = createD("DPanel", nil, ctrb(W), ctrb(H), 0, 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
 		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
@@ -155,7 +161,7 @@ function createStorageItem(item, duid)
 	_i.item = item
 	if item.WorldModel != nil then
 		if item.WorldModel != "" then
-			_i.model = createD("DModelPanel", _i, ctrb(_w - 50) - 2 * br, ctrb(_h) - 2 * br, ctrb(0) + br, ctrb(0) + br)
+			_i.model = createD("DModelPanel", _i, ctrb(W - 50), ctrb(H), ctrb(0), ctrb(0))
 			_i.model:SetModel(item.WorldModel)
 			if _i.model.Entity != NULL and _i.model.Entity != nil then
 				local _mins, _maxs = _i.model.Entity:GetRenderBounds()
@@ -179,15 +185,15 @@ function createStorageItem(item, duid)
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, ctrb(_w), ctrb(50), 0, 0)
+		_i.name = createD("DPanel", _i, ctrb(W), ctrb(50), 0, 0)
 		_i.name.name = SQL_STR_OUT(item.name)
 		function _i.name:Paint(pw, ph)
-			surfaceText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 
 	if item.type != "licenses" then
-		_i.spawn = createD("DButton", _i, ctrb(_w) - 2 * br, ctrb(50), ctrb(0) + br, ctrb(350) - br)
+		_i.spawn = createD("DButton", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(H - 50))
 		_i.spawn:SetText("")
 		_i.spawn.item = item
 		_i.spawn.action = 0
@@ -197,15 +203,15 @@ function createStorageItem(item, duid)
 			_i.spawn.name = "LID_tostore"
 		end
 		function _i.spawn:Paint(pw, ph)
-			local _color = Color(0, 255, 0)
+			local _color = Color(100, 255, 100)
 			if !LocalPlayer():canAfford(item.price) then
-				_color = Color(255, 0, 0)
+				_color = Color(255, 100, 100)
 			end
 			if self:IsHovered() then
-				_color = Color(255, 255, 0)
+				_color = Color(255, 255, 100)
 			end
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			surfaceText(YRP.lang_string(self.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(YRP.lang_string(self.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		function _i.spawn:DoClick()
 			if self.action == 0 then
@@ -250,20 +256,39 @@ net.Receive("shop_get_tabs", function(len)
 						BUYMENU.shop:Clear()
 
 						for j, cat in pairs(_cats) do
+							local BR = 40
 							local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
 							_cat.uid = cat.uniqueID
 							_cat:SetHeaderHeight(ctrb(100))
 							_cat:SetHeader(SQL_STR_OUT(cat.name))
-							_cat:SetSpacing(30)
+							_cat:SetSpacing(YRP.ctr(BR * 2))
 							_cat.color = Color(80, 80, 80)
 							_cat.color2 = Color(60, 60, 60)
 							function _cat:DoClick()
 								if self:IsOpen() then
 									net.Receive("shop_get_items", function(l)
 										local _items = net.ReadTable()
+										self.hs = self.hs or {}
+										local hid = 0
+										local id = 0
 										for k, item in pairs(_items) do
-											local _item = createShopItem(item, _dealer_uid)
-											self:Add(_item)
+											if id == 0 then
+												hid = hid + 1
+												self.hs[hid] = createD("DPanel", nil, YRP.ctr(600 * 3 + BR * 2), YRP.ctr(650 + 2 * 20), 0, 0)
+												local line = self.hs[hid]
+												function line:Paint(pw, ph)
+
+												end
+
+												self:Add(line)
+											end
+
+											local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
+
+											id = id + 1
+											if id >= 3 then
+												id = 0
+											end
 										end
 									end)
 									net.Start("shop_get_items")
@@ -283,7 +308,7 @@ net.Receive("shop_get_tabs", function(len)
 							_remove.uid = _uid
 							function _remove:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-								surfaceText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+								draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 							end
 							function _remove:DoClick()
 								net.Start("dealer_rem_tab")
@@ -362,12 +387,12 @@ net.Receive("shop_get_tabs", function(len)
 			BUYMENU.addtab = createD("DButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(90), BUYMENU.content:GetWide() - YRP.ctr(100 + 100), YRP.ctr(10))
 			BUYMENU.addtab:SetText("")
 			function BUYMENU.addtab:Paint(pw, ph)
-				local _color = Color(0, 255, 0, 255)
+				local _color = Color(100, 255, 100, 255)
 				if self:IsHovered() then
-					_color = Color(255, 255, 0, 255)
+					_color = Color(255, 255, 100, 255)
 				end
 				draw.RoundedBoxEx(ph / 2, 0, 0, pw, ph, _color, true, true)
-				surfaceText(" + ", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+				draw.SimpleText(" + ", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 			end
 			function BUYMENU.addtab:DoClick()
 				local _tmp = createD("DFrame", nil, YRP.ctr(420), YRP.ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)
@@ -467,15 +492,15 @@ net.Receive("shop_get_tabs", function(len)
 							tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName(v)
 						end
 						_globalWorking = _dealer.WorldModel
-						hook.Add("close_dealer_worldmodel", "close_dealer_worldmodel_hook", function()
+						hook.Add("close_dealerWorldmodel", "close_dealerWorldmodelHook", function()
 							_dealer.WorldModel = LocalPlayer():GetDString("WorldModel")
 
-							net.Start("dealer_edit_worldmodel")
+							net.Start("dealer_editWorldmodel")
 								net.WriteString(_dealer.uniqueID)
 								net.WriteString(_dealer.WorldModel)
 							net.SendToServer()
 						end)
-						openSingleSelector(tmpTable, "close_dealer_worldmodel")
+						openSingleSelector(tmpTable, "close_dealerWorldmodel")
 					end
 
 					local _storages = net.ReadTable()

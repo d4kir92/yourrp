@@ -93,7 +93,7 @@ function CloseSettings()
 	end
 end
 
-local _save_site = "open_client_character"
+local _save_site = "open_server_general"
 
 function SaveLastSite()
 	if pa(settingsWindow) and settingsWindow.window.lastsite != "" then
@@ -121,10 +121,10 @@ function OpenSettings()
 	end
 
 	--Sites
-	local _client = YRP.lang_string("LID_settings_client") .. " [PROTOTYPES]"
+	--[[local _client = YRP.lang_string("LID_settings_client") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_client)
 	settingsWindow.window:AddSite("open_client_character", "LID_character", _client, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_client_keybinds", "LID_keybinds", _client, "icon16/keyboard.png")
+	settingsWindow.window:AddSite("open_client_keybinds", "LID_keybinds", _client, "icon16/keyboard.png")]]
 
 	local _server_admin = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
 	settingsWindow.window:AddCategory(_server_admin)

@@ -669,10 +669,10 @@ function openCharacterSelection()
 				Derma_DrawBackgroundBlur(self, 0)
 
 				-- Header of Menu
-				draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection"), "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(YRP.lang_string("LID_characterselection"), "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				-- Current Character Name
-				draw.SimpleTextOutlined(_cur, "HudHeader", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(_cur, "HudHeader", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				-- Get Newest Background for the Menu
 				local oldurl = _cs.frame.bg.url
@@ -690,14 +690,14 @@ function openCharacterSelection()
 			local charactersBackground = createD("DPanel", _cs.frame, YRP.ctr(800), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
 			charactersBackground.text = YRP.lang_string("LID_siteisloading")
 			function charactersBackground:Paint(pw, ph)
-				paintMD(pw, ph, nil, Color(20, 20, 20, 100))
+				paintMD(pw, ph, nil, Color(40, 40, 40, 255))
 
 				-- Current and Max Count of Possible Characters
 				local acur = character.amount or -1
 				local amax = l.max or -1
-				draw.SimpleTextOutlined(acur .. "/" .. amax, "HudHeader", pw / 2, ph - YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(acur .. "/" .. amax, "HudHeader", pw / 2, ph - YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-				draw.SimpleTextOutlined(self.text, "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+				draw.SimpleText(self.text, "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			local charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - YRP.ctr(200), ScrH() - YRP.ctr(200), ScrW2() - (ScrH() - YRP.ctr(200)) / 2, 0)
@@ -815,11 +815,11 @@ function openCharacterSelection()
 
 								function tmpChar:Paint(pw, ph)
 									if tmpChar:IsHovered() then
-										paintMD(pw, ph, nil, Color(255, 255, 255, 100))
+										paintMD(pw, ph, nil, Color(255, 255, 255, 10))
 									end
 									if curChar == self.charid then
 										paintMD(pw, ph, nil, Color(100, 100, 255, 160))
-										local _br = 4
+										--[[local _br = 4
 										local _w = 50
 										local _h = 10
 										draw.RoundedBox(0, YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
@@ -833,10 +833,11 @@ function openCharacterSelection()
 
 										draw.RoundedBox(0, pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
 										draw.RoundedBox(0, pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+										]]
 									end
-									draw.SimpleTextOutlined(self.rpname, "YRP_30_700", YRP.ctr(30), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-									draw.SimpleTextOutlined(self.grp, "YRP_18_500", YRP.ctr(30), YRP.ctr(105), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-									draw.SimpleTextOutlined(SQL_STR_OUT(self.map), "YRP_18_500", YRP.ctr(30), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+									draw.SimpleText(self.rpname, "YRP_30_700", YRP.ctr(30), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(self.grp, "YRP_18_500", YRP.ctr(30), YRP.ctr(105), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(SQL_STR_OUT(self.map), "YRP_18_500", YRP.ctr(30), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 								function tmpChar:DoClick()
 									curChar = self.charid
