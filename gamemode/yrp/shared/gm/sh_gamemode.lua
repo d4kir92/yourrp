@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 153 --do NOT change this!
-GM.VersionCanary = 308 --do NOT change this!
+GM.VersionBeta = 154 --do NOT change this!
+GM.VersionCanary = 309 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -298,6 +298,28 @@ if CLIENT then
 elseif SERVER then
 	-- "removes" voice icons
 	RunConsoleCommand("mp_show_voice_icons", "0")
+end
+
+function GetAllDoors()
+	local propDoors = ents.FindByClass("prop_door")
+	local propDoorRs = ents.FindByClass("prop_door_rotating")
+	local funcDoors = ents.FindByClass("func_door")
+	local funcDoorRs = ents.FindByClass("func_door_rotating")
+
+	local doors = {}
+	for i, v in pairs(propDoors) do
+		table.insert(doors, v)
+	end
+	for i, v in pairs(propDoorRs) do
+		table.insert(doors, v)
+	end
+	for i, v in pairs(funcDoors) do
+		table.insert(doors, v)
+	end
+	for i, v in pairs(funcDoorRs) do
+		table.insert(doors, v)
+	end
+	return doors
 end
 
 -- Reconnect

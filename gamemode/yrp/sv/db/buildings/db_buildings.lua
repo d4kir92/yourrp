@@ -500,28 +500,6 @@ net.Receive("changeBuildingName", function(len, ply)
 	end
 end)
 
-function GetAllDoors()
-	local propDoors = ents.FindByClass("prop_door")
-	local propDoorRs = ents.FindByClass("prop_door_rotating")
-	local funcDoors = ents.FindByClass("func_door")
-	local funcDoorRs = ents.FindByClass("func_door_rotating")
-
-	local doors = {}
-	for i, v in pairs(propDoors) do
-		table.insert(doors, v)
-	end
-	for i, v in pairs(propDoorRs) do
-		table.insert(doors, v)
-	end
-	for i, v in pairs(funcDoors) do
-		table.insert(doors, v)
-	end
-	for i, v in pairs(funcDoorRs) do
-		table.insert(doors, v)
-	end
-	return doors
-end
-
 function ChangeBuildingString(uid, net_str, new_str)
 	for i, v in pairs(GetAllDoors()) do
 		if uid == tonumber(v:GetDString("buildingID")) then

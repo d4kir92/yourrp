@@ -1027,7 +1027,6 @@ end)
 local Entity = FindMetaTable("Entity")
 function Entity:YRPSetOwner(ply)
 	self:SetDEntity("yrp_owner", ply)
-	self:SetOwner(ply)
 end
 
 function Entity:YRPRemoveOwner()

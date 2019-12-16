@@ -24,12 +24,18 @@ function HudView()
 	local ply = LocalPlayer()
 	local _eyeTrace = ply:GetEyeTrace()
 
-	if ea(_eyeTrace.Entity) then
-		if _eyeTrace.Entity:GetPos():Distance(ply:GetPos()) > GetGlobalDInt("int_door_distance", 200) then
+	local ent = _eyeTrace.Entity
+	if ea(ent) then
+		local plypos = ply:GetPos()
+		local entpos = ent:WorldSpaceCenter()
+		if entpos == Vector(0, 0, 0) then
+			entpos = ent:GetPos()
+		end
+		if entpos:Distance(plypos) > GetGlobalDInt("int_door_distance", 200) then
 			return
 		end
 
-		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < GetGlobalDInt("int_door_distance", 200) then
+		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and plypos:Distance(entpos) < GetGlobalDInt("int_door_distance", 200) then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopen", tab), "sef", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -65,11 +71,11 @@ function HudView()
 				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 				draw.SimpleTextOutlined(YRP.lang_string("LID_presstotrade", key), "sef", ScrW() / 2, ScrH2() + YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
-		elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
+		elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and plypos:Distance(entpos) < 150 then
 			local key = {}
 			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstochangeyourclothes", key), "sef", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		elseif _eyeTrace.Entity:HasStorage() and ply:GetPos():Distance(_eyeTrace.Entity:GetPos()) < 150 then
+		elseif _eyeTrace.Entity:HasStorage() and plypos:Distance(entpos) < 150 then
 			local key = {}
 			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			key["NAME"] = _eyeTrace.Entity:StorageName()

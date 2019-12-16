@@ -1891,97 +1891,58 @@ local loadattempts = 0
 function loadDoorTexts()
 	loadattempts = loadattempts + 1
 	if GetGlobalBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
-		local _allPropDoors = ents.FindByClass("prop_door")
-		local _allPropDoorRs = ents.FindByClass("prop_door_rotating")
-		local _allFuncDoors = ents.FindByClass("func_door")
-		local _allFuncDoorRs = ents.FindByClass("func_door_rotating")
-
-		local _allDoors = {}
-		for i, v in pairs(_allPropDoors) do
-			table.insert(_allDoors, v)
-		end
-		for i, v in pairs(_allPropDoorRs) do
-			table.insert(_allDoors, v)
-		end
-		for i, v in pairs(_allFuncDoors) do
-			table.insert(_allDoors, v)
-		end
-		for i, v in pairs(_allFuncDoorRs) do
-			table.insert(_allDoors, v)
-		end
-
-		for k, v in pairs(_allDoors) do
-			hook.Remove("PostDrawOpaqueRenderables", "door_info_" .. k)
-		end
-
-		for k, v in pairs(_allDoors) do
-			hook.Add("PostDrawOpaqueRenderables", "door_info_" .. k, function()
-				if v != nil and v != NULL and LocalPlayer():GetPos():Distance(v:GetPos()) < 500 then
+		hook.Remove("PostDrawOpaqueRenderables", "yrp_door_info")
+		hook.Add("PostDrawOpaqueRenderables", "yrp_door_info", function()
+			local DOORS = GetAllDoors()
+			for i, door in pairs(DOORS) do
+				if door != nil and door != NULL and LocalPlayer():GetPos():Distance(door:GetPos()) < 500 then
 					local ang = Angle(0, 0, 0)
-					local mins = v:OBBMins()
-					local maxs = v:OBBMaxs()
+					local mins = door:OBBMins()
+					local maxs = door:OBBMaxs()
 					local x = maxs.x - mins.x
 					local y = maxs.y - mins.y
 
-					local pos = v:LocalToWorld(v:OBBCenter())
+					local pos = door:LocalToWorld(door:OBBCenter())
 
 					if x > y then
-						ang = Angle(0, v:GetAngles().y, 90)
-						pos = pos + v:GetRight() * y * 0.7
+						ang = Angle(0, door:GetAngles().y, 90)
+						pos = pos + door:GetRight() * y * 0.7
 					else
-						ang = Angle(0, v:GetAngles().y + 90, 90)
-						pos = pos + v:GetForward() * x * 0.7
+						ang = Angle(0, door:GetAngles().y + 90, 90)
+						pos = pos + door:GetForward() * x * 0.7
 					end
 
 					--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
 
 					cam.Start3D2D(pos, ang, 0.2)
-						DrawDoorText(v)
-
-						--[[if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
-							local canbeowned = YRP.lang_string("LID_canbeowned")
-							surface.SetFont("Roboto18B")
-							local canb_size = surface.GetTextSize(canbeowned)
-							surface.SetTextColor(255, 255, 20, 255)
-							surface.SetTextPos(- canb_size / 2, -20)
-							surface.DrawText(canbeowned)
-						end]]
+						DrawDoorText(door)
 					cam.End3D2D()
 
 					ang = Angle(0, 180, 0)
 
-					mins = v:OBBMins()
-					maxs = v:OBBMaxs()
+					mins = door:OBBMins()
+					maxs = door:OBBMaxs()
 					x = maxs.x - mins.x
 					y = maxs.y - mins.y
 
-					pos = v:LocalToWorld(v:OBBCenter())
+					pos = door:LocalToWorld(door:OBBCenter())
 
 					if x > y then
-						ang = Angle(0, v:GetAngles().y, 90)
-						pos = pos - v:GetRight() * y * 0.7
+						ang = Angle(0, door:GetAngles().y, 90)
+						pos = pos - door:GetRight() * y * 0.7
 					else
-						ang = Angle(0, v:GetAngles().y + 90, 90)
-						pos = pos - v:GetForward() * x * 0.7
+						ang = Angle(0, door:GetAngles().y + 90, 90)
+						pos = pos - door:GetForward() * x * 0.7
 					end
 
 					ang = ang + Angle(0, 180, 0)
 
 					cam.Start3D2D(pos, ang, 0.2)
-						DrawDoorText(v)
-
-						--[[if LocalPlayer():HasAccess() and !v:GetDBool("bool_hasowner", false) then
-							local canbeowned = YRP.lang_string("LID_canbeowned")
-							surface.SetFont("Roboto18B")
-							local canb_size = surface.GetTextSize(canbeowned)
-							surface.SetTextColor(255, 255, 20, 255)
-							surface.SetTextPos(- canb_size / 2, -20)
-							surface.DrawText(canbeowned)
-						end]]
+						DrawDoorText(door)
 					cam.End3D2D()
 				end
-			end)
-		end
+			end
+		end)
 		printGM("gm", "loaded door texts")
 	elseif loadattempts < 10 then
 		timer.Simple(2, function()
