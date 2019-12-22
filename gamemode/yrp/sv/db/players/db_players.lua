@@ -286,9 +286,34 @@ function set_role_values(ply, pmid)
 			ply:SetDFloat("staminup", tonumber(rolTab.float_stup))
 			ply:SetDFloat("stamindown", tonumber(rolTab.float_stdn))
 
-			ply:SetDInt("GetMaxAbility", tonumber(rolTab.int_abmax))
-			ply:SetDFloat("GetRegAbility", tonumber(rolTab.float_abup))
-			ply:SetDInt("GetCurAbility", tonumber(rolTab.int_ab))
+			local abtype = rolTab.string_ability
+			ply:SetDString("GetAbilityType", abtype)
+			if abtype == "none" then
+				ply:SetDInt("GetMaxAbility", 1)
+				ply:SetDInt("GetCurAbility", 0)
+				ply:SetDFloat("GetRegAbility", 0)
+				ply:SetDFloat("GetRegTick", 0)
+			elseif abtype == "rage" then
+				ply:SetDInt("GetMaxAbility", 100)
+				ply:SetDInt("GetCurAbility", 0)
+				ply:SetDFloat("GetRegAbility", 0)
+				ply:SetDFloat("GetRegTick", 0)
+			elseif abtype == "mana" then
+				ply:SetDInt("GetMaxAbility", 100)
+				ply:SetDInt("GetCurAbility", 0)
+				ply:SetDFloat("GetRegAbility", 0.4)
+				ply:SetDFloat("GetRegTick", 1)
+			elseif abtype == "energy" then
+				ply:SetDInt("GetMaxAbility", 100)
+				ply:SetDInt("GetCurAbility", 0)
+				ply:SetDFloat("GetRegAbility", 1)
+				ply:SetDFloat("GetRegTick", 0.05)
+			elseif abtype == "force" then
+				ply:SetDInt("GetMaxAbility", 100)
+				ply:SetDInt("GetCurAbility", 0)
+				ply:SetDFloat("GetRegAbility", 1)
+				ply:SetDFloat("GetRegTick", 0.1)
+			end
 
 			ply:SetJumpPower(tonumber(rolTab.int_powerjump)) -- * rolTab.playermodelsize)
 			ply:SetDString("salary", rolTab.int_salary)
@@ -655,7 +680,7 @@ function canGetRole(ply, roleID, want)
 					printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
 					net.Start("yrp_info2")
 						net.WriteString(text)
-					net.Broadcast()
+					net.Send(ply)
 					return false
 				else
 					return true
@@ -681,7 +706,7 @@ function canGetRole(ply, roleID, want)
 					printGM("gm", "[canGetRole] " .. text)
 					net.Start("yrp_info2")
 						net.WriteString(text)
-					net.Broadcast()
+					net.Send(ply)
 					return false
 				end
 			else
@@ -690,7 +715,7 @@ function canGetRole(ply, roleID, want)
 					printGM("gm", "[canGetRole] " .. text)
 					net.Start("yrp_info2")
 						net.WriteString(text)
-					net.Broadcast()
+					net.Send(ply)
 					return false
 				end
 			end
@@ -700,7 +725,7 @@ function canGetRole(ply, roleID, want)
 				printGM("gm", "[canGetRole] " .. text)
 				net.Start("yrp_info2")
 					net.WriteString(text)
-				net.Broadcast()
+				net.Send(ply)
 				return false
 			end
 
@@ -712,7 +737,7 @@ function canGetRole(ply, roleID, want)
 					printGM("gm", "[canGetRole] " .. text)
 					net.Start("yrp_info2")
 						net.WriteString(text)
-					net.Broadcast()
+					net.Send(ply)
 					return false
 				end
 			end
@@ -726,7 +751,7 @@ function canGetRole(ply, roleID, want)
 				printGM("gm", "[canGetRole] " .. text)
 				net.Start("yrp_info2")
 					net.WriteString(text)
-				net.Broadcast()
+				net.Send(ply)
 				return false
 			end
 			return true
@@ -735,7 +760,7 @@ function canGetRole(ply, roleID, want)
 			printGM("gm", "[canGetRole] " .. text)
 			net.Start("yrp_info2")
 				net.WriteString(text)
-			net.Broadcast()
+			net.Send(ply)
 			return false
 		end
 	end
@@ -796,6 +821,6 @@ net.Receive("wantRole", function(len, ply)
 	else
 		net.Start("yrp_info2")
 			net.WriteString("not allowed to get this role")
-		net.Broadcast()
+		net.Send(ply)
 	end
 end)

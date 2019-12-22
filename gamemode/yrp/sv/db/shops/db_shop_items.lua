@@ -291,7 +291,10 @@ function spawnItem(ply, item, duid)
 		ent.yrpowner = ply
 	elseif item.type ~= "weapons" then
 		ent = ents.Create(item.ClassName)
-		if ent == NULL then return end
+		if ent == NULL then
+			printGM("note", "ent == NULL")
+			return
+		end
 		ent:SetDString("item_uniqueID", item.uniqueID)
 		ent:SetDString("ownerRPName", ply:RPName())
 		ent:SetOwner(ply)
@@ -346,8 +349,8 @@ function spawnItem(ply, item, duid)
 				if hullTrace.Hit then
 					printGM("note", "[spawnItem] NOT ENOUGH SPACE")
 					net.Start("yrp_info2")
-					net.WriteString("notenoughspace")
-					net.WriteString("(" .. tostring(hullTrace.Entity) .. ")")
+						net.WriteString("notenoughspace")
+						net.WriteString("(" .. tostring(hullTrace.Entity) .. ")")
 					net.Send(ply)
 					ent:Remove()
 
@@ -457,6 +460,7 @@ net.Receive("item_buy", function(len, ply)
 				if _spawned then
 					ply:addMoney(-tonumber(_item.price))
 				else
+					printGM("note", "Failed to spawn item from shop " .. tostring(_spawned))
 					return false
 				end
 			end

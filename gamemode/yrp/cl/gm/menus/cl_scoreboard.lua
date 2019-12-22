@@ -310,7 +310,7 @@ function OpenSBS()
 				self:ShowCloseButton(false)
 			end
 
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 254)) -- Background
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 250)) -- Background
 
 			if strEmpty(_server_logo) then
 				draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw - YRP.ctr(512), YRP.ctr(100), Color(100, 100, 255, 100)) -- Stripe

@@ -1,6 +1,10 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local boxspace = YRP.ctr(20)
+local tx, ty = 0
+local visible = true
+local cur_delay = CurTime()
+local cur_alpha = 255
 
 net.Receive("get_design_settings", function(len)
 	local lply = LocalPlayer()
@@ -78,6 +82,25 @@ net.Receive("get_design_settings", function(len)
 			function editarea:Paint(pw, ph)
 				-- draw.SimpleText(table.Count(editarea["settingswindows"]), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				if table.Count(editarea["settingswindows"]) == 0 then
+					local cx, cy = input.GetCursorPos()
+					if cur_delay < CurTime() then
+						cur_delay = CurTime() + 0.1
+						if cx != tx or cy != ty or input.IsMouseDown(MOUSE_FIRST) then
+							tx = cx
+							ty = cy
+							visible = true
+						else
+							visible = false
+						end
+					end
+
+					if visible then
+						cur_alpha = cur_alpha + 12
+					else
+						cur_alpha = cur_alpha - 6
+					end
+					cur_alpha = math.Clamp(cur_alpha, 0, 255)
+
 					-- X
 					local count = 0
 					for x = 0, ScW(), boxspace do
@@ -102,7 +125,7 @@ net.Receive("get_design_settings", function(len)
 						if ScW() / 2 == x then
 							color = Color(0, 0, 255, 255)
 						end
-
+						color.a = cur_alpha
 						draw.RoundedBox(0, x-1, 0, 2, ph, color)
 						count = count + 1
 					end
@@ -131,7 +154,7 @@ net.Receive("get_design_settings", function(len)
 						if ScH() / 2 == y then
 							color = Color(0, 0, 255, 255)
 						end
-
+						color.a = cur_alpha
 						draw.RoundedBox(0, 0, y-1, pw, 2, color)
 						count = count + 1
 					end
@@ -182,31 +205,27 @@ net.Receive("get_design_settings", function(len)
 				table.insert(editarea["windows"], win)
 				function win:Paint(pw, ph)
 					if win.visible then
-						local alpha = 255
-						if table.Count(editarea["settingswindows"]) > 0 then
-							alpha = 100
-						end
 						-- Background
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, alpha-40))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, math.Clamp(cur_alpha, 0, 200)))
 
 						-- Corner
-						draw.RoundedBox(0, pw - YRP.ctr(8 + 16), ph - YRP.ctr(8 + 4), YRP.ctr(16), YRP.ctr(4), Color(255, 255, 255, alpha))
-						draw.RoundedBox(0, pw - YRP.ctr(8 + 4), ph - YRP.ctr(8 + 16), YRP.ctr(4), YRP.ctr(16), Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, pw - YRP.ctr(8 + 16), ph - YRP.ctr(8 + 4), YRP.ctr(16), YRP.ctr(4), Color(255, 255, 255, cur_alpha))
+						draw.RoundedBox(0, pw - YRP.ctr(8 + 4), ph - YRP.ctr(8 + 16), YRP.ctr(4), YRP.ctr(16), Color(255, 255, 255, cur_alpha))
 
 						-- Center
 						local w = YRP.ctr(16)
 						local h = YRP.ctr(4)
 						local space = YRP.ctr(8)
-						draw.RoundedBox(0, space, ph / 2 - h / 2, w, h, Color(255, 255, 255, alpha))
-						draw.RoundedBox(0, pw / 2 - h / 2, space, h, w, Color(255, 255, 255, alpha))
-						draw.RoundedBox(0, pw - (space + w), ph / 2 - h / 2, w, h, Color(255, 255, 255, alpha))
-						draw.RoundedBox(0, pw / 2 - h / 2, ph - (space + w), h, w, Color(255, 255, 255, alpha))
+						draw.RoundedBox(0, space, ph / 2 - h / 2, w, h, Color(255, 255, 255, cur_alpha))
+						draw.RoundedBox(0, pw / 2 - h / 2, space, h, w, Color(255, 255, 255, cur_alpha))
+						draw.RoundedBox(0, pw - (space + w), ph / 2 - h / 2, w, h, Color(255, 255, 255, cur_alpha))
+						draw.RoundedBox(0, pw / 2 - h / 2, ph - (space + w), h, w, Color(255, 255, 255, cur_alpha))
 
 						-- Dragbar
-						draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), Color(0, 0, 255, alpha - 40))
+						draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), Color(0, 0, 255, math.Clamp(cur_alpha, 0, 200)))
 
 						-- Name
-						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(36 + 8 + 8), YRP.ctr(20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(36 + 8 + 8), YRP.ctr(20), Color(255, 255, 255, cur_alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 						-- Border
 						local tbr = {}
@@ -215,7 +234,7 @@ net.Receive("get_design_settings", function(len)
 						tbr.h = ph
 						tbr.x = 0
 						tbr.y = 0
-						tbr.color = Color(255, 255, 0, alpha)
+						tbr.color = Color(255, 255, 0, cur_alpha)
 						HudBoxBr(tbr)
 
 						local x, y = self:GetPos()
@@ -624,14 +643,13 @@ net.Receive("get_design_settings", function(len)
 				end
 				function win.setting:Paint(pw, ph)
 					if win.visible then
-						local alpha = 255
-						local color = Color(255, 255, 255, alpha)
+						local color = Color(255, 255, 255, cur_alpha)
 						if self:IsHovered() then
-							color = Color(255, 255, 0, alpha)
+							color = Color(255, 255, 0, cur_alpha)
 						end
 						draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 
-						YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), Color(0, 0, 0, alpha))
+						YRP.DrawIcon(YRP.GetDesignIcon("settings"), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), Color(0, 0, 0, cur_alpha))
 					end
 				end
 
@@ -716,10 +734,10 @@ net.Receive("get_design_settings", function(len)
 			CA.name = "LID_castbar"
 			AddElement(CA)
 
-			--[[local AB = {}
+			local AB = {}
 			AB.element = "AB"
 			AB.name = "LID_abilitybar"
-			AddElement(AB)]]--
+			AddElement(AB)
 
 			local WP = {}
 			WP.element = "WP"
@@ -850,7 +868,6 @@ net.Receive("get_design_settings", function(len)
 
 
 		-- HUD Reset Settings
-		--[[
 		local hud_reset_settings = createD("DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		hud_reset_settings:SetText("")
 		function hud_reset_settings:Paint(pw, ph)
@@ -870,7 +887,7 @@ net.Receive("get_design_settings", function(len)
 			end
 			AreYouSure(YesFunction)
 		end
-		GRP_HUD:AddItem(hud_reset_settings)]]
+		GRP_HUD:AddItem(hud_reset_settings)
 
 
 

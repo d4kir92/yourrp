@@ -387,10 +387,10 @@ function DefaultHUDSettings(reset)
 	AB.floats.SIZE_W = 0.11458333581686
 	AB.floats.SIZE_H = 0.027777777984738
 	AB.bools = {}
-	AB.bools.VISI = 0
+	AB.bools.VISI = 1
 	AB.bools.ROUN = 0
 	AB.bools.ICON = 1
-	AB.bools.TEXT = 1
+	AB.bools.TEXT = 0
 	AB.bools.PERC = 1
 	AB.bools.BACK = 1
 	AB.bools.BORD = 0

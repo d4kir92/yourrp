@@ -454,14 +454,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		PARENT.ea = {}
 		local ea = PARENT.ea
 
-		ea.background = createD("DPanel", PARENT, ScrW() - YRP.ctr(860), ScrH() - YRP.ctr(200), YRP.ctr(840), YRP.ctr(80))
-		function ea.background:Paint(pw, ph)
+		ea.background = createD("DHorizontalScroller", PARENT, ScrW() - YRP.ctr(860), ScrH() - YRP.ctr(200), YRP.ctr(840), YRP.ctr(80))
+		ea.background:SetOverlap(-YRP.ctr(20))
+		--[[function ea.background:Paint(pw, ph)
 			if ea.typ != nil then
 				local tab = {}
 				tab.color = Color(20, 20, 20, 255)
 				DrawPanel(self, tab)
 			end
-		end
+		end]]
 
 		ea.del = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(840), YRP.ctr(20))
 		ea.del:SetText("")
@@ -511,9 +512,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						net.WriteBool(recursive:GetValue())
 					net.SendToServer()
 
-					for i, pnl in pairs(ea.background:GetChildren()) do
-						pnl:Remove()
-					end
+					ea.background:Clear()
+
 					ea.typ = nil
 					ea.tab = nil
 					win:Close()
@@ -528,9 +528,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.Start("settings_delete_role")
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
-				for i, pnl in pairs(ea.background:GetChildren()) do
-					pnl:Remove()
-				end
+
+				ea.background:Clear()
+
 				ea.typ = nil
 				ea.tab = nil
 			end
@@ -623,22 +623,19 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				ea.typ = "group"
 				ea.tab = group
 
-				if pa(ea.background) then
-					for i, pnl in pairs(ea.background:GetChildren()) do
-						pnl:Remove()
-					end
-				else
-					return
-				end
 				ea[group.uniqueID] = ea[group.uniqueID] or {}
 
+				ea.background:Clear()
 
+				local col1 = createD("DPanelList", ea.background, YRP.ctr(1000), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+				col1:SetSpacing(YRP.ctr(20))
 
-				local info = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(540), YRP.ctr(20), YRP.ctr(20))
+				local info = createD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(540), YRP.ctr(0), YRP.ctr(0))
 				info:SetText("LID_general")
 				function info:Paint(pw, ph)
 					hook.Run("YGroupBoxPaint", self, pw, ph)
 				end
+				col1:AddItem(info)
 
 				ea[group.uniqueID].info = info
 				ea.info = ea[group.uniqueID].info
@@ -713,11 +710,14 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 
 
-				local restriction = createD("YGroupBox", ea.background, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(1040), YRP.ctr(20))
+				local restriction = createD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(0), YRP.ctr(0))
 				restriction:SetText("LID_restriction")
 				function restriction:Paint(pw, ph)
 					hook.Run("YGroupBoxPaint", self, pw, ph)
 				end
+				col1:AddItem(restriction)
+
+				ea.background:AddPanel(col1)
 
 				ea[group.uniqueID].restriction = restriction
 				ea.restriction = ea[group.uniqueID].restriction
@@ -978,21 +978,19 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea.typ = "role"
 			ea.tab = role
 
-			if wk(ea.background) then
-				for i, pnl in pairs(ea.background:GetChildren()) do
-					pnl:Remove()
-				end
-			end
-
 			ea[role.uniqueID] = ea[role.uniqueID] or {}
 
+			ea.background:Clear()
 
+			local col1 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			col1:SetSpacing(YRP.ctr(20))
 
-			local info = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(866), YRP.ctr(20), YRP.ctr(20))
+			local info = createD("YGroupBox", col1, YRP.ctr(800), YRP.ctr(866), YRP.ctr(20), YRP.ctr(20))
 			info:SetText("LID_general")
 			function info:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
+			col1:AddItem(info)
 
 			ea[role.uniqueID].info = info
 			ea.info = ea[role.uniqueID].info
@@ -1200,11 +1198,14 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 
 			-- FLAGS
-			local flags = createD("YGroupBox", ea.background, ea.info:GetWide(), YRP.ctr(800), YRP.ctr(20), ea.info.y + ea.info:GetTall() + YRP.ctr(20))
+			local flags = createD("YGroupBox", col1, ea.info:GetWide(), YRP.ctr(800), YRP.ctr(20), ea.info.y + ea.info:GetTall() + YRP.ctr(20))
 			flags:SetText("LID_flags")
 			function flags:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
+			col1:AddItem(flags)
+
+			ea.background:AddPanel(col1)
 
 			ea[role.uniqueID].flags = flags
 			ea.flags = ea[role.uniqueID].flags
@@ -1279,13 +1280,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea.flags:AutoSize(true)
 
-
+			local col2 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			col2:SetSpacing(YRP.ctr(20))
 
 			local appearance = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(800), YRP.ctr(840), YRP.ctr(20))
 			appearance:SetText("LID_appearance")
 			function appearance:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
+			col2:AddItem(appearance)
 
 			ea[role.uniqueID].appearance = appearance
 			ea.appearance = ea[role.uniqueID].appearance
@@ -1773,6 +1776,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function equipment:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
+			col2:AddItem(equipment)
+			ea.background:AddPanel(col2)
 
 			ea[role.uniqueID].equipment = equipment
 			ea.equipment = ea[role.uniqueID].equipment
@@ -2088,13 +2093,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea.equipment:AutoSize(true)
 
-
+			local col3 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			col3:SetSpacing(YRP.ctr(20))
 
 			local restriction = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(800), YRP.ctr(1660), YRP.ctr(20))
 			restriction:SetText("LID_restriction")
 			function restriction:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
+			col3:AddItem(restriction)
+			ea.background:AddPanel(col3)
 
 			ea[role.uniqueID].restriction = restriction
 			ea.restriction = ea[role.uniqueID].restriction
@@ -2253,13 +2261,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea.restriction:AutoSize(true)
 
+			local col4 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			col4:SetSpacing(YRP.ctr(20))
 
-
-			local attributes = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1000), ea.restriction.x, ea.restriction.y + ea.restriction:GetTall() + YRP.ctr(20))
+			local attributes = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1000), ea.restriction.x + ea.restriction:GetWide() + YRP.ctr(20), YRP.ctr(20))
 			attributes:SetText("LID_attributes")
 			function attributes:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
+			col4:AddItem(attributes)
+			ea.background:AddPanel(col4)
 
 			ea[role.uniqueID].attributes = attributes
 			ea.attributes = ea[role.uniqueID].attributes
@@ -2371,6 +2382,52 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			stamina.color2 = Color(200, 200, 0)
 			stamina.color3 = Color(160, 160, 0)
 			ea[role.uniqueID].stamina = DAttributeBar(stamina)
+
+			DHr(hr)
+
+			local abis = {"none", "mana", "force", "rage", "energy"}
+			local tab_a = {}
+			for i, v in pairs(abis) do
+				tab_a[string.lower(v)] = YRP.lang_string("LID_" .. string.lower(v))
+			end
+
+			local string_ability = {}
+			string_ability.parent = ea.attributes:GetContent()
+			string_ability.uniqueID = role.uniqueID
+			string_ability.header = YRP.lang_string("LID_ability")
+			string_ability.netstr = "update_role_string_ability"
+			string_ability.value = role.string_ability
+			string_ability.uniqueID = role.uniqueID
+			string_ability.lforce = false
+			string_ability.choices = tab_a
+			ea[role.uniqueID].string_ability = DComboBox(string_ability)
+
+			local ability = {}
+			ability.parent = ea.attributes:GetContent()
+			ability.uniqueID = role.uniqueID
+			ability.header = YRP.lang_string("LID_ability")
+			ability.netstr = "ab"
+			ability.uniqueID = role.uniqueID
+			ability.lforce = false
+
+			ability.dnw = {}
+
+			ability.dnw[1] = {}
+			ability.dnw[1].value = role.int_ab
+			ability.dnw[1].min = 1
+			ability.dnw[1].max = GetMaxInt()
+			ability.dnw[1].netstr = "update_role_" .. "int_" .. "ab"
+
+			ability.dnw[2] = {}
+			ability.dnw[2].value = role.int_abmax
+			ability.dnw[2].min = 1
+			ability.dnw[2].max = GetMaxInt()
+			ability.dnw[2].netstr = "update_role_" .. "int_" .. "abmax"
+
+			ability.color = Color(255, 255, 0)
+			ability.color2 = Color(200, 200, 0)
+			ability.color3 = Color(160, 160, 0)
+			ea[role.uniqueID].ability = DAttributeBar(ability)
 
 			DHr(hr)
 

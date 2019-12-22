@@ -131,12 +131,15 @@ function broken(ply)
 end
 
 function reg_ab(ply)
-	ply:SetDInt("GetCurAbility", ply:GetDInt("GetCurAbility", 0) + ply:GetDInt("GetRegAbility", 1))
+	local reg = ply:GetDFloat("GetRegAbility", 0.0)
+	local tick = ply:GetDFloat("GetRegTick", 1.0)
 
-	if ply:GetDInt("GetCurAbility") > ply:GetDInt("GetMaxAbility") then
-		ply:SetDInt("GetCurAbility", ply:GetDInt("GetMaxAbility"))
-	elseif ply:GetDInt("GetCurAbility") < 0 then
-		ply:SetDInt("GetCurAbility", 0)
+	ply.abdelay = ply.abdelay or 0
+	ply.abdelay = math.Round(ply.abdelay, 1)
+
+	if reg != 0.0 and ply.abdelay < CurTime() then
+		ply.abdelay = CurTime() + tick
+		ply:SetDInt("GetCurAbility", math.Clamp(ply:GetDInt("GetCurAbility", 0) + reg, 0, ply:GetDInt("GetMaxAbility")))
 	end
 end
 
@@ -180,43 +183,51 @@ function dealerAlive(uid)
 end
 
 local _time = 0
-timer.Create("ServerThink", 1, 0, function()
+local TICK = 0.01
+timer.Create("ServerThink", TICK, 0, function()
 	local _all_players = player.GetAll()
 
-	for k, ply in pairs(_all_players) do
-		ply:addSecond()
+	if _time % 1.0 < TICK then	-- Every second
+		for k, ply in pairs(_all_players) do
+			ply:addSecond()
+			if ply:GetDBool("loaded", false) then
+				anti_bunnyhop(ply)
 
+				if !ply:GetDBool("inCombat") then
+					reg_hp(ply)	 --HealthReg
+					reg_ar(ply)	 --ArmorReg
+					ply:SetDInt("yrp_stars", 0)
+				end
+
+				if ply:IsBleeding() then
+					local effect = EffectData()
+					effect:SetOrigin(ply:GetPos() - ply:GetBleedingPosition())
+					effect:SetScale(1)
+					util.Effect("bloodimpact", effect)
+					ply:TakeDamage(0.5, ply, ply)
+				end
+
+				if GetGlobalDBool("bool_hunger", false) then
+					con_hg(ply, _time)
+				end
+				if GetGlobalDBool("bool_thirst", false) then
+					con_th(ply)
+				end
+				if GetGlobalDBool("bool_stamina", false) then
+					con_st(ply)
+				end
+
+				time_jail(ply)
+				check_salary(ply)
+				broken(ply)
+			end
+		end
+	end
+
+	for k, ply in pairs(_all_players) do -- Every 0.1 seconds
 		if ply:GetDBool("loaded", false) then
-			anti_bunnyhop(ply)
-
-			if !ply:GetDBool("inCombat") then
-				reg_hp(ply)	 --HealthReg
-				reg_ar(ply)	 --ArmorReg
-				ply:SetDInt("yrp_stars", 0)
-			end
-
-			if ply:IsBleeding() then
-				local effect = EffectData()
-				effect:SetOrigin(ply:GetPos() - ply:GetBleedingPosition())
-				effect:SetScale(1)
-				util.Effect("bloodimpact", effect)
-				ply:TakeDamage(0.5, ply, ply)
-			end
-
-			if GetGlobalDBool("bool_hunger", false) then
-				con_hg(ply, _time)
-			end
-			if GetGlobalDBool("bool_thirst", false) then
-				con_th(ply)
-			end
-			if GetGlobalDBool("bool_stamina", false) then
-				con_st(ply)
-			end
-
+			-- Every 0.1
 			reg_ab(ply)
-			time_jail(ply)
-			check_salary(ply)
-			broken(ply)
 		end
 	end
 
@@ -304,7 +315,7 @@ timer.Create("ServerThink", 1, 0, function()
 	elseif _time == 30 then
 		IsServerInfoOutdated()
 	end
-	_time = _time + 1
+	_time = _time + TICK
 end)
 
 function RestartServer()

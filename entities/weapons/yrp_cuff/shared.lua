@@ -64,7 +64,7 @@ end
 if CLIENT then
 
 	function DrawCuff(ply)
-		if ply:GetDBool("cuffed") then
+		if ply:GetDBool("cuffed", false) then
 			local _r_hand = ply:LookupBone("ValveBiped.Bip01_R_Hand")
 			if _r_hand != nil then
 				local startPos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -83,7 +83,7 @@ end
 
 if SERVER then
 	hook.Add("yrp_castdone_tieup", "tieup", function(args)
-		if !args.target:GetDBool("cuffed") then
+		if !args.target:GetDBool("cuffed", false) then
 			args.target:Give("yrp_cuffed")
 			args.target:SetActiveWeapon("yrp_cuffed")
 			args.target:SelectWeapon("yrp_cuffed")

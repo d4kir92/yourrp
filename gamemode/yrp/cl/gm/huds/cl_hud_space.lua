@@ -10,6 +10,7 @@ local XP = "vgui/material/icon_star.png"
 local MO = "icon16/money.png"
 local SA = "icon16/money_add.png"
 local CA = "vgui/material/icon_timer.png"
+local AB = "icon16/wand.png"
 
 local SPACE = {}
 local ELES = {}
@@ -26,6 +27,13 @@ function HUDSpace()
 			lply:Armor(),
 			lply:GetMaxArmor(),
 			AR
+		}
+
+		ELES["AB"] = {
+			lply:Ability(),
+			lply:GetMaxAbility(),
+			AB,
+			lply:Ability() / lply:GetMaxAbility() * 100 .. "%",
 		}
 
 		ELES["ST"] = {
@@ -61,7 +69,7 @@ function HUDSpace()
 			}
 			local a2 = ammo2
 			if clip2max > 0 then
-				a2 = clip2 .. "/" .. clip2max .. " | " .. a2
+				--a2 = clip2 .. "/" .. clip2max .. " | " .. a2
 			end
 			ELES["WS"] = {
 				clip2,
@@ -294,14 +302,18 @@ function HUDSpace()
 					if Visible and c != nil and lply:HudElementVisible(ele) then
 						local Alpha = lply:HudElementAlpha(ele, 160)
 						local text = etab[4] or c
-						local percent = 1
+						SPACE[ele].newc = 1
 						if etab[4] == nil and m != nil then
 							text = text .. "/" .. m
 						end
 						if m != nil then
-							percent = c / m
+							SPACE[ele].newc = c / m
 						end
-
+						SPACE[ele].oldc = SPACE[ele].oldc or 0
+						if SPACE[ele].newc == 0 then
+							SPACE[ele].oldc = 0
+						end
+						SPACE[ele].oldc = Lerp(10 * FrameTime(), SPACE[ele].oldc, SPACE[ele].newc)
 
 						local w = SPACE[ele].w
 						local h = SPACE[ele].h
@@ -339,7 +351,7 @@ function HUDSpace()
 
 							-- BAR
 							draw.RoundedBox(BarH / 4, BarX, BarY, BarW, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 30))
-							draw.RoundedBox(BarH / 4, BarX, BarY, BarW * percent, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 180))
+							draw.RoundedBox(BarH / 4, BarX, BarY, BarW * SPACE[ele].oldc, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 180))
 
 							-- ICON
 							if etab[3] != nil then

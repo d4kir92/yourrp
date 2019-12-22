@@ -522,10 +522,9 @@ function HUDSimple()
 			CA.element = "CA"
 			HUDSimpleBG(CA)
 		end
-		--[[local AB = {}
+		local AB = {}
 		AB.element = "AB"
 		HUDSimpleBG(AB)
-		]]
 		local WP = {}
 		WP.element = "WP"
 		WP.visible = false
@@ -730,16 +729,15 @@ function HUDSimple()
 			CA.icon = Material("icon16/hourglass.png")
 			HUDSimpleBAR(CA)
 		end
-		--[[
+
 		AB = {}
 		AB.element = "AB"
 		AB.cur = lply:Ability()
 		AB.max = lply:GetMaxAbility()
-		AB.text = math.Round(lply:Ability(), 1) .. " / " .. math.Round(lply:GetMaxAbility(), 1)
+		AB.text = math.Round(lply:Ability(), 0) .. " / " .. math.Round(lply:GetMaxAbility(), 0)
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
 		AB.icon = Material("icon16/wand.png")
 		HUDSimpleBAR(AB)
-		]]
 
 		if WP.visible then
 			HUDSimpleBAR(WP)
@@ -919,11 +917,11 @@ function HUDSimple()
 			CA.element = "CA"
 			HUDSimpleBR(CA)
 		end
-		--[[
+
 		AB = {}
 		AB.element = "AB"
 		HUDSimpleBR(AB)
-		]]
+
 		WP.element = "WP"
 		if WP.visible then
 			HUDSimpleBR(WP)

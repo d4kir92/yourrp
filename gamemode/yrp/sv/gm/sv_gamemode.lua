@@ -564,8 +564,11 @@ end
 
 function GM:GetFallDamage(ply, speed)
 	local _damage = speed * CustomFalldamageMultiplier()
+	if ply:GetDString("GetAbilityType", "none") == "force" then
+		return 0
+	end
 	if IsCustomFalldamageEnabled() then
-		if speed > ply:GetModelScale()*120 then
+		if speed > ply:GetModelScale() * 120 then
 			if IsBonefracturingEnabled() then
 				local _rand = math.Round(math.Rand(0, 1), 0)
 				if _rand == 0 then

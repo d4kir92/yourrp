@@ -14,7 +14,6 @@ SWEP.Slot = 1
 SWEP.SlotPos = 1
 
 SWEP.DrawAmmo = false
-
 SWEP.DrawCrosshair = true
 
 SWEP.Spawnable = true
@@ -31,8 +30,6 @@ SWEP.Primary.Automatic = false
 
 SWEP.Primary.Ammo = "none"
 SWEP.Secondary.Ammo = "none"
-
-SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "melee"
 function SWEP:Initialize()

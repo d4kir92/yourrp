@@ -543,7 +543,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 		if weapon != NULL and weapon:GetClass() != nil then
 			local _weaponName = string.lower(tostring(ply:GetActiveWeapon():GetClass()))
 			if string.find(_weaponName, "lightsaber", 0, false) then
-				disablethirdperson = true
+				--disablethirdperson = true
 			end
 		end
 

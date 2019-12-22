@@ -33,10 +33,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_stup", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_stdn", "INTEGER DEFAULT 0.5")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_abart", "TEXT DEFAULT 'mana'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 50")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 1000")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "INTEGER DEFAULT 5")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ability", "TEXT DEFAULT 'none'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 100")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 100")
+--SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "INTEGER DEFAULT 5")
+--SQL_ADD_COLUMN(DATABASE_NAME, "float_abdn", "INTEGER DEFAULT 5")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 150")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240")
@@ -648,7 +649,7 @@ net.Receive("settings_add_role", function(len, ply)
 		--SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 	end
 
-	local up = roles[count - 1]
+	--local up = roles[count - 1]
 	if count == 1 then
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', ", "uniqueID = '" .. new_role.uniqueID .. "'")
 	else

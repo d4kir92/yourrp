@@ -29,9 +29,19 @@ if CLIENT then
 		elseif table.HasValue(hbools, art) then
 			return YRPHUD("bool_HUD_" .. element .. "_" .. art, false) --self:GetDBool("bool_HUD_" .. element .. "_" .. art, false)
 		elseif table.HasValue(hcolors, art) then
-			local hcolor = YRPHUD("color_HUD_" .. element .. "_" .. art, "255, 0, 0") -- self:GetDString("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
-			hcolor = string.Explode(",", hcolor)
-			return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
+			if element == "AB" then
+				local abcolors = {}
+				abcolors["none"] = Color(0, 0, 0, 0)
+				abcolors["mana"] = Color(100, 100, 255, 255)
+				abcolors["rage"] = Color(255, 0, 0, 255)
+				abcolors["energy"] = Color(255, 255, 0, 255)
+				abcolors["force"] = Color(100, 100, 255, 255)
+				return abcolors[self:GetDString("GetAbilityType", "none")]
+			else
+				local hcolor = YRPHUD("color_HUD_" .. element .. "_" .. art, "255, 0, 0") -- self:GetDString("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
+				hcolor = string.Explode(",", hcolor)
+				return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
+			end
 		elseif table.HasValue(hints, art) then
 			local ay = YRPHUD("int_HUD_" .. element .. "_" .. art, -1)
 			if art == "AY" then
@@ -98,7 +108,7 @@ if CLIENT then
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
 				local ammo2 = self:GetAmmoCount(weapon:GetSecondaryAmmoType())
-				return clip2max > 0 or ammo2 > 0
+				return ammo2 > 0
 			end
 			return false
 		elseif element == "BA" then

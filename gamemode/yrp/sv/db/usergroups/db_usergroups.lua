@@ -59,6 +59,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_bodygroups", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickup", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
@@ -946,6 +947,15 @@ net.Receive("usergroup_update_bool_physgunpickupworld", function(len, ply)
 	UGCheckBox(ply, uid, "bool_physgunpickupworld", bool_physgunpickupworld)
 end)
 
+util.AddNetworkString("usergroup_update_bool_physgunpickupotherowner")
+net.Receive("usergroup_update_bool_physgunpickupotherowner", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_physgunpickupotherowner = net.ReadString()
+	UGCheckBox(ply, uid, "bool_physgunpickupotherowner", bool_physgunpickupotherowner)
+end)
+
+
+
 util.AddNetworkString("usergroup_update_bool_canseeteammatesonmap")
 net.Receive("usergroup_update_bool_canseeteammatesonmap", function(len, ply)
 	local uid = tonumber(net.ReadString())
@@ -1387,7 +1397,7 @@ function GM:PhysgunPickup(pl, ent)
 				else
 					return false
 				end
-			elseif ent:GetRPOwner() == pl then
+			elseif ent:GetRPOwner() == pl or tobool(tabUsergroup.bool_physgunpickupotherowner) then
 				return true
 			end
 		elseif ent:GetRPOwner() == pl then

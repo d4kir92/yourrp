@@ -32,29 +32,25 @@ function createShopItem(item, duid, line, id)
 		--drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
-	if item.WorldModel != nil then
-		if item.WorldModel != "" then
-			_i.model = createD("DModelPanel", _i, ctrb(W), ctrb(W), ctrb(0), ctrb(0))
-			_i.model:SetModel(item.WorldModel)
+	if item.WorldModel != nil and item.WorldModel != "" then
+		_i.model = createD("DModelPanel", _i, ctrb(W), ctrb(W), ctrb(0), ctrb(0))
+		_i.model:SetModel(item.WorldModel)
 
-			if ea(_i.model.Entity) then
-				local _mins, _maxs = _i.model.Entity:GetRenderBounds()
-				local _x = _maxs.x - _mins.x
-				local _y = _maxs.y - _mins.y
-				local _range = 0
-				if _x > _y then
-					_range = _x
-				elseif _y > _x then
-					_range = _y
-				end
-
-				local _z = _mins.z + (_maxs.z - _mins.z) * 0.46
-
-				_i.model:SetLookAt(Vector(0, 0, _z))
-				_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.1, 0, 0))
+		if ea(_i.model.Entity) then
+			local _mins, _maxs = _i.model.Entity:GetRenderBounds()
+			local _x = _maxs.x - _mins.x
+			local _y = _maxs.y - _mins.y
+			local _range = 0
+			if _x > _y then
+				_range = _x
+			elseif _y > _x then
+				_range = _y
 			end
-		else
-			printGM("note", "[BuyMenu] WorldModel empty.")
+
+			local _z = _mins.z + (_maxs.z - _mins.z) * 0.46
+
+			_i.model:SetLookAt(Vector(0, 0, _z))
+			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.1, 0, 0))
 		end
 	end
 
@@ -159,28 +155,24 @@ function createStorageItem(item, duid)
 		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
-	if item.WorldModel != nil then
-		if item.WorldModel != "" then
-			_i.model = createD("DModelPanel", _i, ctrb(W - 50), ctrb(H), ctrb(0), ctrb(0))
-			_i.model:SetModel(item.WorldModel)
-			if _i.model.Entity != NULL and _i.model.Entity != nil then
-				local _mins, _maxs = _i.model.Entity:GetRenderBounds()
-				local _x = _maxs.x - _mins.x
-				local _y = _maxs.y - _mins.y
-				local _range = 0
-				if _x > _y then
-					_range = _x
-				elseif _y > _x then
-					_range = _y
-				end
-
-				local _z = _mins.z + (_maxs.z - _mins.z) * 2 / 3
-
-				_i.model:SetLookAt(Vector(0, 0, _z))
-				_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.6, 0, 0))
+	if item.WorldModel != nil and item.WorldModel != "" then
+		_i.model = createD("DModelPanel", _i, ctrb(W - 50), ctrb(H), ctrb(0), ctrb(0))
+		_i.model:SetModel(item.WorldModel)
+		if _i.model.Entity != NULL and _i.model.Entity != nil then
+			local _mins, _maxs = _i.model.Entity:GetRenderBounds()
+			local _x = _maxs.x - _mins.x
+			local _y = _maxs.y - _mins.y
+			local _range = 0
+			if _x > _y then
+				_range = _x
+			elseif _y > _x then
+				_range = _y
 			end
-		else
-			printGM("note", "[BuyMenu] WorldModel empty 2.")
+
+			local _z = _mins.z + (_maxs.z - _mins.z) * 2 / 3
+
+			_i.model:SetLookAt(Vector(0, 0, _z))
+			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.6, 0, 0))
 		end
 	end
 
@@ -495,7 +487,7 @@ net.Receive("shop_get_tabs", function(len)
 						hook.Add("close_dealerWorldmodel", "close_dealerWorldmodelHook", function()
 							_dealer.WorldModel = LocalPlayer():GetDString("WorldModel")
 
-							net.Start("dealer_editWorldmodel")
+							net.Start("dealer_edit_worldmodel")
 								net.WriteString(_dealer.uniqueID)
 								net.WriteString(_dealer.WorldModel)
 							net.SendToServer()

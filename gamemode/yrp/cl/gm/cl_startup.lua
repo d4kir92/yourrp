@@ -1827,18 +1827,22 @@ net.Receive("yrp_noti", function(len)
 	end
 end)
 
+local delay = 0
 net.Receive("yrp_info", function(len)
 	local ply = LocalPlayer()
-	if ply:IsValid() then
+	if ply:IsValid() and delay < CurTime() then
+		delay = CurTime() + 1
 		local _str = net.ReadString()
 		_str = YRP.lang_string("LID_notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
 		notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 	end
 end)
 
+local delay2 = 0
 net.Receive("yrp_info2", function(len)
 	local ply = LocalPlayer()
-	if ply:IsValid() then
+	if ply:IsValid() and delay2 < CurTime() then
+		delay2 = CurTime() + 1
 		local _str = net.ReadString()
 		_str = YRP.lang_string(_str)
 		local _str2 = net.ReadString()

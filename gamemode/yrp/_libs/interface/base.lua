@@ -712,14 +712,15 @@ function DAttributeBar(tab)
 	tab.dnw[2].x = tab.w / tab.len
 	pnl.ma = DNumberWang(tab.dnw[2])
 
-	tab.dnw[3].uniqueID = tab.uniqueID
-	tab.dnw[3].parent = tab.parent
-	tab.dnw[3].w = tab.w / tab.len
-	tab.dnw[3].h = tab.h
-	tab.dnw[3].len = tab.len
-	tab.dnw[3].x = tab.w / tab.len * 2
-	pnl.up = DNumberWang(tab.dnw[3])
-
+	if tab.dnw[3] != nil then
+		tab.dnw[3].uniqueID = tab.uniqueID
+		tab.dnw[3].parent = tab.parent
+		tab.dnw[3].w = tab.w / tab.len
+		tab.dnw[3].h = tab.h
+		tab.dnw[3].len = tab.len
+		tab.dnw[3].x = tab.w / tab.len * 2
+		pnl.up = DNumberWang(tab.dnw[3])
+	end
 	if tab.dnw[4] != nil then
 		tab.dnw[4].uniqueID = tab.uniqueID
 		tab.dnw[4].parent = tab.parent

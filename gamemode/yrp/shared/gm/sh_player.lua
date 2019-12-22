@@ -238,7 +238,15 @@ if SERVER then
 		self:SetDBool("broken_arm_left", false)
 	end
 
-	function Player:StopCasting()
+	function Player:StopCasting(cost)
+		cost = cost or 0
+
+		if self:GetDInt("GetCurAbility", 0) >= cost then
+			self:SetDInt("GetCurAbility", self:GetDInt("GetCurAbility", 0) - cost)
+		else
+			return
+		end
+
 		--[[ successfull casting ]]--
 		self:SetDBool("iscasting", false)
 
@@ -278,6 +286,12 @@ if SERVER then
 		--[[ cancel other spells ]]--
 		self:InteruptCasting()
 
+		target = target or self
+
+		if self:GetDInt("GetCurAbility", 0) < cost then
+			return
+		end
+
 		--[[ Setup ]]--
 		self:SetDString("castnet", net_str)
 		self:SetDInt("castmode", mode or 0)
@@ -292,18 +306,20 @@ if SERVER then
 		elseif self:GetDInt("castmode") == 1 then
 			self:SetDFloat("castcur", self:GetDFloat("castmax"))
 		end
-		self:SetDEntity("casttarget", target or self)
+		self:SetDEntity("casttarget", target)
 		self:SetDFloat("castrange", range or 0.0)
+
+		local tick = 0.1
 
 		--[[ Start casting ]]--
 		self:SetDBool("iscasting", true)
-		timer.Create(self:SteamID() .. "castduration", 0.1, 0, function()
+		timer.Create(self:SteamID() .. "castduration", tick, 0, function()
 
 			--printGM("note", self:GetDString("castname") .. " " .. tostring(self:GetDFloat("castcur")))
 
 			--[[ Casting ]]--
 			if self:GetDInt("castmode") == 0 then
-				self:SetDFloat("castcur", self:GetDFloat("castcur") + 0.1)
+				self:SetDFloat("castcur", self:GetDFloat("castcur") + tick)
 				if !self:GetDBool("castcanmove") then
 					local _o_pos = self:GetNWVector("castposition")
 					local _c_pos = self:GetPos()
@@ -318,15 +334,15 @@ if SERVER then
 					end
 				end
 				if self:GetDFloat("castcur") >= self:GetDFloat("castmax") then
-					self:StopCasting()
+					self:StopCasting(cost)
 					timer.Remove(self:SteamID() .. "castduration")
 				end
 
 			--[[ Channeling ]]--
 			elseif self:GetDInt("castmode") == 1 then
-				self:SetDFloat("castcur", self:GetDFloat("castcur") - 0.1)
+				self:SetDFloat("castcur", self:GetDFloat("castcur") - tick)
 				if self:GetDFloat("castcur") <= 0.0 then
-					self:StopCasting()
+					self:StopCasting(cost)
 					timer.Remove(self:SteamID() .. "castduration")
 				end
 			end
