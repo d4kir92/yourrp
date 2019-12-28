@@ -93,6 +93,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_3d", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_radio", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_local_range", "INT DEFAULT 300")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
@@ -351,7 +352,14 @@ function IsDropMoneyOnDeathEnabled()
 	return GetGlobalDBool("bool_drop_money_on_death", false)
 end
 
-
+util.AddNetworkString("do_act")
+net.Receive("do_act", function(len, ply)
+	local act = net.ReadString()
+	net.Start("do_act")
+		net.WriteEntity(ply)
+		net.WriteString(act)
+	net.Broadcast()
+end)
 
 function IsVoiceEnabled()
 	return GetGlobalDBool("bool_voice", false)
@@ -363,6 +371,10 @@ end
 
 function IsVoiceChannelsEnabled()
 	return GetGlobalDBool("bool_voice_channels", false)
+end
+
+function IsVoiceRadioEnabled()
+	return GetGlobalDBool("bool_voice_radio", false)
 end
 
 function IsLocalGroupVoiceChatEnabled()
@@ -832,6 +844,12 @@ util.AddNetworkString("update_bool_voice_channels")
 net.Receive("update_bool_voice_channels", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_voice_channels", "bool_voice_channels", b)
+end)
+
+util.AddNetworkString("update_bool_voice_radio")
+net.Receive("update_bool_voice_radio", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_voice_radio", "bool_voice_radio", b)
 end)
 
 util.AddNetworkString("update_bool_voice_group_local")

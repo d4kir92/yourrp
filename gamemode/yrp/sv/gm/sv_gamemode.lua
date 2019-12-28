@@ -285,7 +285,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	timer.Simple(2, function()
 		SendDGlobals(ply)
-		SendDEntities(ply)
+		SendDEntities(ply, "PlayerAuthed")
 	end)
 end)
 
@@ -348,6 +348,9 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					ply:SetDString("moneybank", chaTab.moneybank)
 					ply:SetDString("rpname", SQL_STR_OUT(chaTab.rpname))
 					ply:SetDString("rpdescription", SQL_STR_OUT(chaTab.rpdescription))
+					for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
+						ply:SetDString("rpdescription" .. i, SQL_STR_OUT(v))
+					end
 
 					setbodygroups(ply)
 				else
@@ -764,45 +767,79 @@ end)
 --[[ SPEAK Channels ]] --
 util.AddNetworkString("press_speak_next")
 net.Receive("press_speak_next", function(len, ply)
-	if GetGlobalDBool("bool_voice", false) and GetGlobalDBool("bool_voice_channels", false) then
-		ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) + 1)
-		if ply:GetDInt("speak_channel", 0) == 2 then
-			if !ply:GetDBool("yrp_voice_faction", false) then
-				ply:SetDInt("speak_channel", 3)
+	if GetGlobalDBool("bool_voice", false) then
+		if GetGlobalDBool("bool_voice_channels", false) then
+			ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) + 1)
+			if ply:GetDInt("speak_channel", 0) == 2 then
+				if !ply:GetDBool("yrp_voice_faction", false) then
+					ply:SetDInt("speak_channel", 3)
+				end
 			end
-		end
-		if ply:GetDInt("speak_channel", 0) == 3 then
-			if !ply:GetDBool("yrp_voice_global", false) then
+			if ply:GetDInt("speak_channel", 0) == 3 then
+				if !ply:GetDBool("yrp_voice_global", false) then
+					ply:SetDInt("speak_channel", 0)
+				end
+			end
+			if ply:GetDInt("speak_channel", 0) > 3 then
 				ply:SetDInt("speak_channel", 0)
 			end
+		elseif GetGlobalDBool("bool_voice_radio", false) then
+			ply.speakinterval = ply.speakinterval or 0
+			ply.speakdir = ply.speakdir or 1
+			ply.speakdelay = ply.speakdelay or CurTime()
+			if ply.speakdelay < CurTime() then
+				ply.speakdelay = CurTime() + 0.2
+				ply.speakdir = 0
+			end
+			if ply.speakdir == 1 then
+				ply.speakinterval = 1
+			else
+				ply.speakinterval = 0.1
+			end
+			ply.speakdir = 1
+			local newval = ply:GetDFloat("voice_channel", 0.0, 1) + ply.speakinterval
+			newval = math.Clamp(newval, 0.0, 110,0)
+			ply:SetDFloat("voice_channel", newval)
 		end
-		if ply:GetDInt("speak_channel", 0) > 3 then
-			ply:SetDInt("speak_channel", 0)
-		end
-	else
-		ply:SetDInt("speak_channel", 0)
 	end
 end)
 
 util.AddNetworkString("press_speak_prev")
 net.Receive("press_speak_prev", function(len, ply)
-	if GetGlobalDBool("bool_voice", false) and GetGlobalDBool("bool_voice_channels", false) then
-		ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) - 1)
-		if ply:GetDInt("speak_channel", 0) < 0 then
-			if ply:GetDBool("yrp_voice_global", false) then
-				ply:SetDInt("speak_channel", 3)
-			elseif ply:GetDBool("yrp_voice_faction", false) then
-				ply:SetDInt("speak_channel", 2)
+	if GetGlobalDBool("bool_voice", false) then
+		if GetGlobalDBool("bool_voice_channels", false) then
+			ply:SetDInt("speak_channel", ply:GetDInt("speak_channel", 0) - 1)
+			if ply:GetDInt("speak_channel", 0) < 0 then
+				if ply:GetDBool("yrp_voice_global", false) then
+					ply:SetDInt("speak_channel", 3)
+				elseif ply:GetDBool("yrp_voice_faction", false) then
+					ply:SetDInt("speak_channel", 2)
+				else
+					ply:SetDInt("speak_channel", 1)
+				end
+			elseif ply:GetDInt("speak_channel", 0) == 2 then
+				if !ply:GetDBool("yrp_voice_faction", false) then
+					ply:SetDInt("speak_channel", 1)
+				end
+			end
+		elseif GetGlobalDBool("bool_voice_radio", false) then
+			ply.speakinterval = ply.speakinterval or 0
+			ply.speakdir = ply.speakdir or -1
+			ply.speakdelay = ply.speakdelay or CurTime()
+			if ply.speakdelay < CurTime() then
+				ply.speakdelay = CurTime() + 0.2
+				ply.speakdir = 0
+			end
+			if ply.speakdir == -1 then
+				ply.speakinterval = 1
 			else
-				ply:SetDInt("speak_channel", 1)
+				ply.speakinterval = 0.1
 			end
-		elseif ply:GetDInt("speak_channel", 0) == 2 then
-			if !ply:GetDBool("yrp_voice_faction", false) then
-				ply:SetDInt("speak_channel", 1)
-			end
+			ply.speakdir = -1
+			local newval = ply:GetDFloat("voice_channel", 0.0, 1) - ply.speakinterval
+			newval = math.Clamp(newval, 0.0, 110,0)
+			ply:SetDFloat("voice_channel", newval)
 		end
-	else
-		ply:SetDInt("speak_channel", 0)
 	end
 end)
 
@@ -866,6 +903,15 @@ function canhear(listener, talker)
 	end
 end
 
+function canhearChannel(listener, talker)
+	local l_speak_channel = tonumber(listener:GetDFloat("voice_channel", 0, 1))
+	local t_speak_channel = tonumber(talker:GetDFloat("voice_channel", 0, 1))
+	if t_speak_channel == l_speak_channel then
+		return true
+	end
+	return false
+end
+
 function IsInMaxVoiceRange(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
 	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
@@ -879,6 +925,8 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 			if Is3DVoiceEnabled() then
 				if IsVoiceChannelsEnabled() then
 					return canhear(listener, talker), hearfaded(listener, talker)	-- 3D Voice chat + voice channels
+				elseif IsVoiceRadioEnabled() then
+					return canhearChannel(listener, talker), false
 				else
 					return IsInMaxVoiceRange(listener, talker), true	-- 3D Voice enabled
 				end
@@ -945,7 +993,7 @@ function GM:PostCleanupMap()
 	YRP.msg("note", "RELOAD DOORS")
 
 	for i, p in pairs(player.GetAll()) do
-		SendDEntities(p)
+		SendDEntities(p, "PostCleanupMap")
 	end
 
 	loadDoors()

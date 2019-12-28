@@ -467,10 +467,9 @@ function OpenSBS()
 
 	sbs.stab:Clear()
 
-	local allplys = player.GetAll()
 	local rplys = {}
 	local uplys = {}
-	for i, pl in SortedPairsByMemberValue(allplys, GetFactionUniqueID) do
+	for i, pl in SortedPairsByMemberValue(player.GetAll(), GetFactionUniqueID) do
 		pl["group"] = pl:GetGroupName()
 		if pl:GetGroupName() != "NO GROUP SELECTED" then
 			table.insert(rplys, pl)
@@ -482,6 +481,7 @@ function OpenSBS()
 	for i, pl in SortedPairsByMemberValue(rplys, "group") do
 		if pl.sbp == nil then
 			pl.sbp = createD("DButton", sbs.stab, BFW(), YRP.ctr(128), 0, 0)
+			pl.sbp.pl = pl
 			pl.sbp:SetText("")
 			function pl.sbp:DoClick()
 				OpenPlayerOptions(pl)
@@ -495,7 +495,8 @@ function OpenSBS()
 			end
 
 			function pl.sbp:Paint(pw, ph)
-				if !pl:IsValid() then
+				if !self.pl:IsValid() then
+					pl.sbp = nil
 					self:Remove()
 				else
 					pl.sbp.col = i % 2 * 100

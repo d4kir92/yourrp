@@ -269,6 +269,16 @@ function Player:SendTeamsToPlayer()
 end
 -- darkrp
 
+function UpdatePrerolesGroupIDs(uid, gid)
+	local preroles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'")
+	if wk(preroles) then
+		for i, prerole in pairs(preroles) do
+			SQL_UPDATE(DATABASE_NAME, "int_groupID = '" .. gid .. "'", "uniqueID = '" .. prerole.uniqueID .. "'")
+			UpdatePrerolesGroupIDs(prerole.uniqueID, gid)
+		end
+	end
+end
+
 local yrp_ply_roles = {}
 local _init_ply_roles = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_ply_roles) then
@@ -352,6 +362,8 @@ for str, val in pairs(yrp_ply_roles) do
 					SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
 				end
 				SendRoleList(nil, tonumber(cur.int_groupID), 0)
+			elseif tab.netstr == "update_role_int_groupID" then
+				UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
 			end
 		end)
 	elseif string.find(str, "float_") then
@@ -477,7 +489,13 @@ function SendRoleList(ply, gro, pre)
 	if gro != nil and pre != nil then
 		SortRoles(gro, pre)
 
-		local tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
+		local tbl_roles = nil
+		if pre > 0 then
+			tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. pre .. "'")
+		else
+			tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
+		end
+
 		if !wk(tbl_roles) then
 			tbl_roles = {}
 		end

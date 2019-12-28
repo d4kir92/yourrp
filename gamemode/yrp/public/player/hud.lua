@@ -113,6 +113,8 @@ if CLIENT then
 			return false
 		elseif element == "BA" then
 			return system.BatteryPower() < 100
+		elseif element == "CON" then
+			return not strEmpty(self:Condition())
 		end
 		return true
 	end

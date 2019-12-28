@@ -21,10 +21,18 @@ net.Receive("setting_players", function(len)
 
 		function _giveListView:OnRowRightClick(lineID, line)
 			local _tmpSteamID = line:GetValue(1)
+			local ply = nil
+			for i, v in pairs(player.GetAll()) do
+				if v:SteamID() == _tmpSteamID then
+					ply = v
+					break
+				end
+			end
+
 			local tmpX, tmpY = gui.MousePos()
 			tmpX = tmpX - YRP.ctr(4)
 			tmpY = tmpY - YRP.ctr(4)
-			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
 			_tmpPanel:SetPos(tmpX, tmpY)
 			_tmpPanel.ready = false
 			timer.Simple(0.2, function()
@@ -91,9 +99,38 @@ net.Receive("setting_players", function(len)
 				_giveFrame:MakePopup()
 			end
 
+			local _buttonSetID = createVGUI("DButton", _tmpPanel, 400, 50, 10, 70)
+			_buttonSetID:SetText(YRP.lang_string("LID_setidcardid"))
+			function _buttonSetID:DoClick()
+				local _idcardidFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
+				_idcardidFrame:Center()
+				_idcardidFrame:ShowCloseButton(true)
+				_idcardidFrame:SetDraggable(true)
+				_idcardidFrame:SetTitle(YRP.lang_string("LID_setidcardid"))
+
+				local _newidcardid = createVGUI("DTextEntry", _idcardidFrame, 380, 50, 10, 60)
+				_newidcardid:SetText(ply:GetDString("idcardid", "FAILED"))
+
+				local _idcardidButton = createVGUI("DButton", _idcardidFrame, 380, 50, 10, 60 + 10 + 50)
+				_idcardidButton:SetText(YRP.lang_string("LID_setidcardid"))
+				function _idcardidButton:DoClick()
+					net.Start("set_idcardid")
+						net.WriteEntity(ply)
+						net.WriteString(_newidcardid:GetText())
+					net.SendToServer()
+					_idcardidFrame:Close()
+				end
+
+				function _idcardidFrame:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
+				end
+
+				_idcardidFrame:MakePopup()
+			end
+
 			function _tmpPanel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
-				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and _tmpPanel.ready == true then
+				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and _tmpPanel.ready == true then
 					_tmpPanel:Remove()
 				end
 			end

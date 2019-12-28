@@ -37,7 +37,7 @@ function PlayerLoadedGame(ply)
 	ply:DesignLoadout()
 	ply:GeneralLoadout()
 	SendDGlobals(ply)
-	SendDEntities(ply)
+	--SendDEntities(ply, "PlayerLoadedGame")
 
 	ply:SetDBool("finishedloading", true)
 

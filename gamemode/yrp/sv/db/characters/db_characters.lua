@@ -3,58 +3,61 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_characters"
+local DATABASE_NAME = "yrp_characters"
 
-SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
+SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
 
-SQL_ADD_COLUMN(_db_name, "roleID", "INT DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "groupID", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "roleID", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "groupID", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(_db_name, "text_idstructure", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(_db_name, "text_idcardid", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_idcardid", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(_db_name, "playermodelID", "INT DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "skin", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "playermodelID", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "skin", "INT DEFAULT 1")
 
 --[[ LEVEL ]]--
-SQL_ADD_COLUMN(_db_name, "int_level", "INT DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "int_xp", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_xp", "INT DEFAULT 0")
 
 for i = 0, 19 do
-	SQL_ADD_COLUMN(_db_name, "bg" .. i, "INT DEFAULT 0")
+	SQL_ADD_COLUMN(DATABASE_NAME, "bg" .. i, "INT DEFAULT 0")
 end
 
-SQL_ADD_COLUMN(_db_name, "storage", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "storage", "TEXT DEFAULT ' '")
 
-SQL_ADD_COLUMN(_db_name, "keynrs", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "rpname", "TEXT DEFAULT 'ID_RPNAME'")
-SQL_ADD_COLUMN(_db_name, "rpdescription", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "gender", "TEXT DEFAULT 'gendermale'")
-SQL_ADD_COLUMN(_db_name, "money", "TEXT DEFAULT '250'")
-SQL_ADD_COLUMN(_db_name, "moneybank", "TEXT DEFAULT '500'")
-SQL_ADD_COLUMN(_db_name, "position", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(_db_name, "angle", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(_db_name, "map", "TEXT DEFAULT 'gm_construct'")
+SQL_ADD_COLUMN(DATABASE_NAME, "keynrs", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "rpname", "TEXT DEFAULT 'ID_RPNAME'")
+SQL_ADD_COLUMN(DATABASE_NAME, "rpdescription", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "gender", "TEXT DEFAULT 'gendermale'")
+SQL_ADD_COLUMN(DATABASE_NAME, "money", "TEXT DEFAULT '250'")
+SQL_ADD_COLUMN(DATABASE_NAME, "moneybank", "TEXT DEFAULT '500'")
+SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT '0,0,0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT '0,0,0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "int_warnings", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_violations", "INT DEFAULT 0")
 
 --[[ EQUIPMENT ]]--
-SQL_ADD_COLUMN(_db_name, "eqbp", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqbag1", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqbag2", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqbag3", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqbag4", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbp", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag1", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag2", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag3", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag4", "TEXT DEFAULT ' '")
 
-SQL_ADD_COLUMN(_db_name, "eqwpp1", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqwpp2", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqwps1", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqwps2", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "eqwpg", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqwpp1", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqwpp2", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqwps1", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqwps2", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqwpg", "TEXT DEFAULT ' '")
 
-if SQL_SELECT(_db_name, "*", "uniqueID = 1") == nil then
-	local _result = SQL_INSERT_INTO(_db_name, "uniqueID", "1")
+if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "1")
 end
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 local Player = FindMetaTable("Player")
 function Player:CharacterLoadout()
@@ -64,6 +67,16 @@ function Player:CharacterLoadout()
 		self:SetDString("int_xp", chatab.int_xp)
 		self:SetDString("int_level", chatab.int_level)
 		self:SetDString("charid", chatab.uniqueID)
+
+		self:SetDInt("int_warnings", chatab.int_warnings)
+		self:SetDInt("int_violations", chatab.int_violations)
+
+		local levelsystem = SQL_SELECT("yrp_levelsystem", "*", nil)
+		if wk(levelsystem) then
+			levelsystem = levelsystem[1]
+			self:SetDString("int_xp_for_levelup", levelsystem.int_xp_for_levelup)
+			self:SetDString("float_multiplier", levelsystem.float_multiplier)
+		end
 	end
 end
 
@@ -186,7 +199,7 @@ util.AddNetworkString("update_slot_weapon_primary_1")
 net.Receive("update_slot_weapon_primary_1", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(_db_name, "eqwpp1", "uniqueID = '" .. _charid .. "'")
+		local _uid = SQL_SELECT(DATABASE_NAME, "eqwpp1", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqwpp1
 			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
@@ -206,7 +219,7 @@ util.AddNetworkString("update_slot_weapon_primary_2")
 net.Receive("update_slot_weapon_primary_2", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(_db_name, "eqwpp2", "uniqueID = '" .. _charid .. "'")
+		local _uid = SQL_SELECT(DATABASE_NAME, "eqwpp2", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqwpp2
 			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
@@ -226,7 +239,7 @@ util.AddNetworkString("update_slot_weapon_secondary_1")
 net.Receive("update_slot_weapon_secondary_1", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(_db_name, "eqwps1", "uniqueID = '" .. _charid .. "'")
+		local _uid = SQL_SELECT(DATABASE_NAME, "eqwps1", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqwps1
 			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
@@ -246,7 +259,7 @@ util.AddNetworkString("update_slot_weapon_secondary_2")
 net.Receive("update_slot_weapon_secondary_2", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(_db_name, "eqwps2", "uniqueID = '" .. _charid .. "'")
+		local _uid = SQL_SELECT(DATABASE_NAME, "eqwps2", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqwps2
 			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
@@ -266,7 +279,7 @@ util.AddNetworkString("update_slot_weapon_gadget")
 net.Receive("update_slot_weapon_gadget", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(_db_name, "eqwpg", "uniqueID = '" .. _charid .. "'")
+		local _uid = SQL_SELECT(DATABASE_NAME, "eqwpg", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqwpg
 			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
@@ -312,7 +325,7 @@ util.AddNetworkString("update_slot_backpack")
 net.Receive("update_slot_backpack", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(_db_name, "eqbp", "uniqueID = '" .. _charid .. "'")
+		local _uid = SQL_SELECT(DATABASE_NAME, "eqbp", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqbp
 			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
@@ -349,9 +362,9 @@ util.AddNetworkString("change_rpdescription")
 net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetDString("rpdescription", SQL_STR_IN(_new_rp_description))
+	ply:SetDString("rpdescription", SQL_STR_OUT(_new_rp_description))
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-		ply:SetDString("rpdescription" .. i, SQL_STR_IN(v))
+		ply:SetDString("rpdescription" .. i, SQL_STR_OUT(v))
 	end
 end)
 
@@ -478,7 +491,7 @@ function send_characters(ply)
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
 	local _charCount = 0
-	if worked(chaTab, "[send_characters] yrp_get_characters") then
+	if wk(chaTab) then
 		for k, v in pairs(chaTab) do
 			if v.roleID != nil and v.groupID != nil then
 				_charCount = _charCount + 1
@@ -722,5 +735,76 @@ net.Receive("inv_pm_do", function(len, ply)
 		SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
 		ply:UpdateBackpack()
 		SendBodyGroups(ply)
+	end
+end)
+
+util.AddNetworkString("warning_up")
+net.Receive("warning_up", function(len, ply)
+	local p = net.ReadEntity()
+	local ptab = SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
+	if wk(ptab) then
+		local int_warnings = ptab[1].int_warnings
+		int_warnings = int_warnings + 1
+		int_warnings = math.Clamp(int_warnings, 0, 10)
+
+		SQL_UPDATE(DATABASE_NAME, "int_warnings = '" .. int_warnings .. "'", "uniqueID = '" .. p:CharID() .. "'")
+
+		p:SetDInt("int_warnings", int_warnings)
+	end
+end)
+
+util.AddNetworkString("warning_dn")
+net.Receive("warning_dn", function(len, ply)
+	local p = net.ReadEntity()
+	local ptab = SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
+	if wk(ptab) then
+		local int_warnings = ptab[1].int_warnings
+		int_warnings = int_warnings - 1
+		int_warnings = math.Clamp(int_warnings, 0, 10)
+
+		SQL_UPDATE(DATABASE_NAME, "int_warnings = '" .. int_warnings .. "'", "uniqueID = '" .. p:CharID() .. "'")
+
+		p:SetDInt("int_warnings", int_warnings)
+	end
+end)
+
+util.AddNetworkString("violation_up")
+net.Receive("violation_up", function(len, ply)
+	local p = net.ReadEntity()
+	local ptab = SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
+	if wk(ptab) then
+		local int_violations = ptab[1].int_violations
+		int_violations = int_violations + 1
+		int_violations = math.Clamp(int_violations, 0, 10)
+
+		SQL_UPDATE(DATABASE_NAME, "int_violations = '" .. int_violations .. "'", "uniqueID = '" .. p:CharID() .. "'")
+
+		p:SetDInt("int_violations", int_violations)
+	end
+end)
+
+util.AddNetworkString("violation_dn")
+net.Receive("violation_dn", function(len, ply)
+	local p = net.ReadEntity()
+	local ptab = SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
+	if wk(ptab) then
+		local int_violations = ptab[1].int_violations
+		int_violations = int_violations - 1
+		int_violations = math.Clamp(int_violations, 0, 10)
+
+		SQL_UPDATE(DATABASE_NAME, "int_violations = '" .. int_violations .. "'", "uniqueID = '" .. p:CharID() .. "'")
+
+		p:SetDInt("int_violations", int_violations)
+	end
+end)
+
+util.AddNetworkString("set_idcardid")
+net.Receive("set_idcardid", function(len, ply)
+	local p = net.ReadEntity()
+	local text_idcardid = net.ReadString()
+	local ptab = SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
+	if wk(ptab) then
+		SQL_UPDATE(DATABASE_NAME, "text_idcardid = '" .. text_idcardid .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		p:SetDString("idcardid", text_idcardid)
 	end
 end)

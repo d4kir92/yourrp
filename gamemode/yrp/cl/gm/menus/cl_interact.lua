@@ -4,6 +4,7 @@ local tmpTargetSteamID = ""
 function toggleInteractMenu()
 	local ply = LocalPlayer()
 	local eyeTrace = ply:GetEyeTrace()
+	--openInteractMenu(LocalPlayer():SteamID())
 	if eyeTrace.Entity:IsPlayer() and isNoMenuOpen() then
 		openInteractMenu(eyeTrace.Entity:SteamID())
 	else
@@ -44,7 +45,7 @@ net.Receive("openInteractMenu", function(len)
 
 	local licenses = ply:GetLicenseNames()
 
-	wInteract = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1260), 0, 0)
+	wInteract = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
 	wInteract:SetHeaderHeight(YRP.ctr(100))
 	function wInteract:OnClose()
 		closeMenu()
@@ -107,10 +108,52 @@ net.Receive("openInteractMenu", function(len)
 		_tmpDescription:SetText(tmpRPDescription)
 	end
 
-	local btnTrade = createVGUI("YButton", content, 500, 50, 10, 1000)
+	--[[local btnTrade = createVGUI("YButton", content, 500, 50, 10, 1000)
 	btnTrade:SetText(YRP.lang_string("LID_trade") .. " (in future update)")
 	function btnTrade:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
+	end]]
+
+	if LocalPlayer():GetDBool("bool_iscp", false) then
+		local btnVerwarnungUp = createVGUI("YButton", content, 50, 50, 10, 1000)
+		btnVerwarnungUp:SetText("⮝")
+		function btnVerwarnungUp:DoClick()
+			net.Start("warning_up")
+				net.WriteEntity(ply)
+			net.SendToServer()
+		end
+		local btnVerwarnungDn = createVGUI("YButton", content, 50, 50, 10, 1050)
+		btnVerwarnungDn:SetText("⮟")
+		function btnVerwarnungDn:DoClick()
+			net.Start("warning_dn")
+				net.WriteEntity(ply)
+			net.SendToServer()
+		end
+		local btnVerwarnung = createVGUI("YLabel", content, 450, 100, 60, 1000)
+		function btnVerwarnung:Paint(pw, ph)
+			hook.Run("YLabelPaint", self, pw, ph)
+			btnVerwarnung:SetText("LID_warnings" .. ": " .. ply:GetDInt("int_warnings", -1))
+		end
+
+		local btnVerstoesseUp = createVGUI("YButton", content, 50, 50, 10, 1110)
+		btnVerstoesseUp:SetText("⮝")
+		function btnVerstoesseUp:DoClick()
+			net.Start("violation_up")
+				net.WriteEntity(ply)
+			net.SendToServer()
+		end
+		local btnVerstoesseDn = createVGUI("YButton", content, 50, 50, 10, 1160)
+		btnVerstoesseDn:SetText("⮟")
+		function btnVerstoesseDn:DoClick()
+			net.Start("violation_dn")
+				net.WriteEntity(ply)
+			net.SendToServer()
+		end
+		local btnVerstoesse = createVGUI("YLabel", content, 450, 100, 60, 1110)
+		function btnVerstoesse:Paint(pw, ph)
+			hook.Run("YLabelPaint", self, pw, ph)
+			btnVerstoesse:SetText("LID_violations" .. ": " .. ply:GetDInt("int_violations", -1))
+		end
 	end
 
 	if isInstructor then

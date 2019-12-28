@@ -354,7 +354,9 @@ function Player:XPMultiplier()
 end
 
 function Player:GetMaxXP()
-	return tonumber(math.Round(math.pow(self:Level(), 1.5), self:XPMultiplier())) + self:XPForLevelUp()
+	local exp = math.pow(self:Level(), self:XPMultiplier())
+	local res = math.Round(exp + self:XPForLevelUp(), 1)
+	return tonumber(res)
 end
 
 --[[ Role ]]--

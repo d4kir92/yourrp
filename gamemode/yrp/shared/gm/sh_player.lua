@@ -513,21 +513,21 @@ timer.Simple(10, function()
 	function team.GetName(index)
 		for k, v in pairs(player.GetAll()) do
 			if v:Team() == index then
-				return v:GetDString("groupName", "NO TEAM")
+				return v:GetDString("roleName", "NO TEAM") -- darkrp team is role!
 			end
 		end
-		return "FAIL"
+		return "FAILED TO FIND TEAMNAME"
 	end
 
 	function team.GetColor(index)
 		for k, v in pairs(player.GetAll()) do
 			if v:Team() == index then
-				local _color = v:GetDString("groupColor", "255,0,0")
+				local _color = v:GetDString("roleColor", "255,0,0") -- darkrp team is role!
 				_color = string.Explode(",", _color)
 				return Color(_color[1], _color[2], _color[3])
 			end
-			return Color(255, 0, 0)
 		end
+		return Color(255, 0, 0)
 	end
 end)
 
@@ -590,3 +590,4 @@ function Player:HasLicense(license)
 	end
 	return false
 end
+

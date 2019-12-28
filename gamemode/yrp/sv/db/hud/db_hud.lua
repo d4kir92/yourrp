@@ -575,6 +575,34 @@ function DefaultHUDSettings(reset)
 	CON.ints.TS = 24
 	AddHUDElement(CON, reset)
 
+	local FR = {}
+	FR.element = "FR"
+	FR.floats = {}
+	FR.floats.POSI_X = 0.41666665673256
+	FR.floats.POSI_Y = 0.1064814850688
+	FR.floats.SIZE_W = 0.16666667163372
+	FR.floats.SIZE_H = 0.027777777984738
+	FR.bools = {}
+	FR.bools.VISI = 1
+	FR.bools.ROUN = 0
+	FR.bools.IFR = 1
+	FR.bools.TEXT = 1
+	FR.bools.PERC = 1
+	FR.bools.BACK = 1
+	FR.bools.BORD = 0
+	FR.bools.EXTR = 1
+	FR.colors = {}
+	FR.colors.TE = "255, 255, 255, 255"
+	FR.colors.TB = "0, 0, 0, 255"
+	FR.colors.BG = "0, 0, 0, 120"
+	FR.colors.BA = "0, 0, 0, 180"
+	FR.colors.BR = "0, 0, 0, 180"
+	FR.ints = {}
+	FR.ints.AX = 1
+	FR.ints.AY = 1
+	FR.ints.TS = 24
+	AddHUDElement(FR, reset)
+
 	local PE = {}
 	PE.element = "PE"
 	PE.floats = {}

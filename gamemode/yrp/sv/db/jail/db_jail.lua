@@ -17,12 +17,11 @@ function teleportToReleasepoint(ply)
 	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'")
 
 	if _tmpTele != nil then
+		ply:Spawn()
 		local _tmp = string.Explode(",", _tmpTele[1].position)
 		tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 		_tmp = string.Explode(",", _tmpTele[1].angle)
 		ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-
-		ply:Spawn()
 	else
 		local _str = YRP.lang_string("LID_noreleasepoint")
 		printGM("note", "[teleportToReleasepoint] " .. _str)
@@ -38,12 +37,24 @@ function teleportToJailpoint(ply)
 	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
 
 	if _tmpTele != nil then
-		local _tmp = string.Explode(",", _tmpTele[1].position)
-		tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-		_tmp = string.Explode(",", _tmpTele[1].angle)
-		ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+		for i, v in pairs(_tmpTele) do
+			local _tmp = string.Explode(",", v.position)
+			local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
+			local oplys = ents.FindInSphere(vec, 80)
+			local empty = true
+			for j, p in pairs(oplys) do
+				if p:IsPlayer() then
+					empty = false
+				end
+			end
+			if empty then
+				tp_to(ply, vec)
+				_tmp = string.Explode(",", v.angle)
+				ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 
-		ply:StripWeapons()
+				ply:StripWeapons()
+			end
+		end
 	else
 		local _str = YRP.lang_string("LID_nojailpoint")
 		printGM("note", "[teleportToJailpoint] " .. _str)

@@ -115,6 +115,8 @@ function show_voice_info(ply)
 			_voice_text = YRP.lang_string("LID_youarespeaking")
 			if GetGlobalDBool("bool_voice_channels", false) then
 				_voice_text = get_speak_channel_name(ply)
+			elseif GetGlobalDBool("bool_voice_radio", false) then
+				_voice_text = "F: " .. tostring(ply:GetDFloat("voice_channel", 0.0, 1))
 			end
 		else
 			_voice_text = YRP.lang_string("LID_voicechatisdisabled")

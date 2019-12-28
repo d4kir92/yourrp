@@ -173,6 +173,9 @@ net.Receive("dbInsertIntoMap", function(len, ply)
 	else
 		printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 	end
+	UpdateSpawnerTable()
+	UpdateJailpointTable()
+	UpdateReleasepointTable()
 end)
 
 util.AddNetworkString("dealer_settings")

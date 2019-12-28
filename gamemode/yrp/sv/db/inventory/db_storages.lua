@@ -37,7 +37,7 @@ function Player:Give(weaponClassName, bNoAmmo)
 			end
 		end
 	else
-		YRP.msg("note", tostring(weaponClassName) .. " must be a none swep.")
+		YRP.msg("note", tostring(weaponClassName) .. " must be a none swep or missing from collection.")
 	end
 	return wep
 end

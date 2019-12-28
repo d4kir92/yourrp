@@ -201,16 +201,19 @@ if CLIENT then
 		SetDFloat(entindex, key, value)
 	end)
 end
-function GetDFloat(entindex, key, value)
+function GetDFloat(entindex, key, value, d)
 	ENTS[entindex] = ENTS[entindex] or {}
 	ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
 	local result = ENTS[entindex]["FLOAT"][key] or value
+	if d != nil then
+		result = math.Round(tonumber(result), d)
+	end
 	return tonumber(result)
 end
-function ENTITY:GetDFloat(key, value)
+function ENTITY:GetDFloat(key, value, d)
 	local entindex = self:EntIndex()
 	if self:IsValid() then
-		return GetDFloat(entindex, key, value)
+		return GetDFloat(entindex, key, value, d)
 	else
 		return -1.0
 	end
@@ -355,36 +358,40 @@ end
 if SERVER then
 	util.AddNetworkString("request_dentites")
 
-	function SendDEntities(ply)
+	function SendDEntities(ply, funcname)
 		for j, ent in pairs(ents.GetAll()) do
 			if ent.EntIndex != nil then
-				local entindex = ent:EntIndex()
-				ENTS[entindex] = ENTS[entindex] or {}
-				ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
-				for i, v in pairs(ENTS[entindex]["BOOL"]) do
-					SendDBool(entindex, i, v, ply)
-				end
-				ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
-				for i, v in pairs(ENTS[entindex]["STRING"]) do
-					SendDString(entindex, i, v, ply)
-				end
-				ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
-				for i, v in pairs(ENTS[entindex]["INT"]) do
-					SendDInt(entindex, i, v, ply)
-				end
-				ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
-				for i, v in pairs(ENTS[entindex]["FLOAT"]) do
-					SendDFloat(entindex, i, v, ply)
-				end
-				ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
-				for i, v in pairs(ENTS[entindex]["TABLE"]) do
-					SendDTable(entindex, i, v, ply)
-				end
-				SendDInit(entindex, ply)
+				timer.Simple(j * 0.002, function()
+					local entindex = ent:EntIndex()
+					ENTS[entindex] = ENTS[entindex] or {}
+					ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
+					for i, v in pairs(ENTS[entindex]["BOOL"]) do
+						SendDBool(entindex, i, v, ply)
+					end
+					ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
+					for i, v in pairs(ENTS[entindex]["STRING"]) do
+						SendDString(entindex, i, v, ply)
+					end
+					ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
+					for i, v in pairs(ENTS[entindex]["INT"]) do
+						SendDInt(entindex, i, v, ply)
+					end
+					ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
+					for i, v in pairs(ENTS[entindex]["FLOAT"]) do
+						SendDFloat(entindex, i, v, ply)
+					end
+					ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
+					for i, v in pairs(ENTS[entindex]["TABLE"]) do
+						SendDTable(entindex, i, v, ply)
+					end
+
+					-- DONE
+					SendDInit(entindex, ply)
+				end)
 			end
 		end
 	end
 	net.Receive("request_dentites", function(len, ply)
-		SendDEntities(ply)
+		SendDEntities(ply, "request_dentites")
 	end)
 end

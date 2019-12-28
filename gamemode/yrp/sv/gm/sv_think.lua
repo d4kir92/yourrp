@@ -339,6 +339,40 @@ function UpdateSpawnerTable()
 end
 UpdateSpawnerTable()
 
+function UpdateJailpointTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local spawner = {}
+			spawner.pos = v.position
+			spawner.uniqueID = v.uniqueID
+			if !table.HasValue(t, spawner) then
+				table.insert(t, spawner)
+			end
+		end
+	end
+	SetGlobalDTable("yrp_jailpoints", t)
+end
+UpdateJailpointTable()
+
+function UpdateReleasepointTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'releasepoint'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local spawner = {}
+			spawner.pos = v.position
+			spawner.uniqueID = v.uniqueID
+			if !table.HasValue(t, spawner) then
+				table.insert(t, spawner)
+			end
+		end
+	end
+	SetGlobalDTable("yrp_releasepoints", t)
+end
+UpdateReleasepointTable()
+
 local YNPCs = {}
 local delay = CurTime()
 hook.Add("Think", "yrp_spawner_think", function()

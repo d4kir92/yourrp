@@ -1501,9 +1501,14 @@ function Debug3DText(ply, str, pos, color)
 end
 
 function drawPlates()
+	local renderdist = 550
+	local _distance = 200
+
 	for i, ply in pairs(player.GetAll()) do
-		local renderdist = 550
-		local _distance = 200
+		ply["distance"] = LocalPlayer():GetPos():Distance(ply:GetPos())
+	end
+
+	for i, ply in SortedPairsByMemberValue(player.GetAll(), "distance", true) do
 
 		if GetGlobalDBool("bool_server_debug_voice", false) and LocalPlayer():GetPos():Distance(ply:GetPos()) < 1000 then
 			if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
@@ -1529,7 +1534,7 @@ function drawPlates()
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
-			if LocalPlayer().view_range <= 0 and ply == LocalPlayer() then
+			if LocalPlayer().view_range != nil and LocalPlayer().view_range <= 0 and ply == LocalPlayer() then
 				continue
 			end
 			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
@@ -1547,6 +1552,11 @@ function drawPlates()
 			end
 
 			if GetGlobalDBool("bool_tag_on_head", false) then
+				if false then -- DISTANCE DEBUG
+					render.SetColorMaterial()
+					render.DrawSphere(ply:GetPos() + Vector(0, 0, 30), 80, 16, 16, Color( 0, 0, 255, 100 ) )
+				end
+
 				if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
 					local plyvol = ply:VoiceVolume() * 200
 					local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)

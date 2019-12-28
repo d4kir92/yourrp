@@ -54,23 +54,24 @@ function AddEmote(name, cmd)
 	_new.cmd = cmd
 	table.insert(_emotes, _new)
 end
+AddEmote("LID_emotedancenormal", ACT_GMOD_TAUNT_DANCE) --"dance"
+AddEmote("LID_emotedancesexy", ACT_GMOD_TAUNT_MUSCLE) --"muscle"
+AddEmote("LID_emotedancerobot", ACT_GMOD_TAUNT_ROBOT) --"robot"
+AddEmote("LID_emoteimitiationzombie", ACT_GMOD_GESTURE_TAUNT_ZOMBIE) --"zombie"
+AddEmote("LID_emotewave", ACT_GMOD_GESTURE_WAVE) --"wave"
+AddEmote("LID_emotesalute", ACT_GMOD_TAUNT_SALUTE) --"salute"
+AddEmote("LID_emotebow", ACT_GMOD_GESTURE_BOW) --"bow"
+AddEmote("LID_emotebecon", ACT_GMOD_GESTURE_BECON) --"becon"
+AddEmote("LID_emotelaugh", ACT_GMOD_TAUNT_LAUGH) --"laugh"
+AddEmote("LID_emotepers", ACT_GMOD_TAUNT_PERSISTENCE) --"pers"
+AddEmote("LID_emotecheer", ACT_GMOD_TAUNT_CHEER) --"cheer"
+AddEmote("LID_emoteagree", ACT_GMOD_GESTURE_AGREE) --"agree"
+AddEmote("LID_emotedisagree", ACT_GMOD_GESTURE_DISAGREE) --"disagree"
+AddEmote("LID_emotehalt", ACT_SIGNAL_HALT) --"halt"
+AddEmote("LID_emotegroup", ACT_SIGNAL_GROUP) --"group"
+AddEmote("LID_emoteforward", ACT_SIGNAL_FORWARD) --"forward"
+AddEmote("LID_give", ACT_GMOD_GESTURE_ITEM_GIVE)
 
-AddEmote("LID_emotedancenormal", "dance")
-AddEmote("LID_emotedancesexy", "muscle")
-AddEmote("LID_emotedancerobot", "robot")
-AddEmote("LID_emoteimitiationzombie", "zombie")
-AddEmote("LID_emotewave", "wave")
-AddEmote("LID_emotesalute", "salute")
-AddEmote("LID_emotebow", "bow")
-AddEmote("LID_emotebecon", "becon")
-AddEmote("LID_emotelaugh", "laugh")
-AddEmote("LID_emotepers", "pers")
-AddEmote("LID_emotecheer", "cheer")
-AddEmote("LID_emoteagree", "agree")
-AddEmote("LID_emotedisagree", "disagree")
-AddEmote("LID_emotehalt", "halt")
-AddEmote("LID_emotegroup", "group")
-AddEmote("LID_emoteforward", "forward")
 local _vec_emo = {}
 local _seg = #GetEmotes()
 
@@ -144,10 +145,10 @@ function OpenEmotesMenu()
 				table.insert(_quad, _test[e][i + 1])
 				table.insert(_quad, _test[e][#_test[e] - i])
 				table.insert(_quad, _test[e][#_test[e] - (i - 1)])
-				local _color = Color(220, 220, 220, 120)
+				local _color = Color(40, 40, 40, 120)
 
 				if e == _em.emotes.select then
-					_color = Color(255, 255, 0, 255)
+					_color = Color(255, 255, 255, 120)
 				end
 
 				surface.SetDrawColor(_color.r, _color.g, _color.b, _color.a)
@@ -162,18 +163,24 @@ function OpenEmotesMenu()
 		end
 	end
 
+	net.Receive("do_act", function(len)
+		local ply = net.ReadEntity()
+		local act = net.ReadString()
+		ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, act, true )
+	end)
+
 	function _em.emotes:DoClick()
 		if self.select ~= nil then
 			local _sel = self.select
-			LocalPlayer():SetDBool("istaunting", true)
 			CloseEmotesMenu()
 
-			timer.Simple(0.01, function()
-				if _sel ~= nil and GetEmotes()[_sel] ~= nil then
-					LocalPlayer():SetDBool("istaunting", false)
-					RunConsoleCommand("act", GetEmotes()[_sel].cmd)
-				end
-			end)
+			if _sel ~= nil and GetEmotes()[_sel] ~= nil then
+				--RunConsoleCommand("act", GetEmotes()[_sel].cmd)
+				--LocalPlayer():AnimRestartGesture( GESTURE_SLOT_CUSTOM, GetEmotes()[_sel].cmd, true )
+				net.Start("do_act")
+					net.WriteString(GetEmotes()[_sel].cmd)
+				net.SendToServer()
+			end
 		end
 	end
 end

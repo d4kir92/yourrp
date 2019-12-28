@@ -192,6 +192,21 @@ function HUDSpace()
 			2
 		}
 
+		ELES["CON"] = {
+			0,
+			nil,
+			nil,
+			lply:Condition()
+		}
+
+		ELES["FR"] = {
+			0,
+			nil,
+			nil,
+			"F: " .. tostring(lply:GetDFloat("voice_channel", 0, 1)),
+			2
+		}
+
 		if lply:GetDInt("hud_version", 0) != SPACE["version"] then
 			-- LOAD VARIABLES
 			SPACE["version"] = lply:GetDInt("hud_version", 0)

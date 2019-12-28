@@ -448,22 +448,39 @@ function KeyPress()
 					net.Start("press_speak_next")
 					net.SendToServer()
 
-					timer.Simple(0.4, function()
-						clicked = false
-						notification.AddLegacy(get_speak_channel_name(LocalPlayer()), NOTIFY_GENERIC, 3)
-					end)
-				end
+					speak_dir = speak_dir or 0.3
+					speak_dir = speak_dir - 0.1
+					speak_dir = math.Clamp(speak_dir, 0.01, 0.3)
 
-				if input.IsKeyDown(get_keybind("speak_prev")) and !clicked then
+					timer.Simple(speak_dir, function()
+						clicked = false
+						local text = ""
+						if GetGlobalDBool("bool_voice_channels", false) then
+							text = get_speak_channel_name(ply)
+							notification.AddLegacy(text, NOTIFY_GENERIC, 3)
+						end
+					end)
+				elseif input.IsKeyDown(get_keybind("speak_prev")) and !clicked then
 					done_tutorial("tut_sp")
 					clicked = true
 					net.Start("press_speak_prev")
 					net.SendToServer()
 
-					timer.Simple(0.4, function()
+					speak_dir = speak_dir or 0.3
+					speak_dir = speak_dir - 0.1
+					speak_dir = math.Clamp(speak_dir, 0.01, 0.3)
+
+					timer.Simple(speak_dir, function()
 						clicked = false
-						notification.AddLegacy(get_speak_channel_name(LocalPlayer()), NOTIFY_GENERIC, 3)
+						local text = ""
+						if GetGlobalDBool("bool_voice_channels", false) then
+							text = get_speak_channel_name(ply)
+							notification.AddLegacy(text, NOTIFY_GENERIC, 3)
+						end
 					end)
+				elseif !clicked then
+					speak_dir = speak_dir or 0.3
+					speak_dir = 0.3
 				end
 			end
 		end
@@ -515,6 +532,22 @@ local _savePos = Vector(0, 0, 0)
 _lookAtEnt = nil
 _drawViewmodel = false
 
+local PLAYER = FindMetaTable("Player")
+function TauntCamera()
+	local CAM = {}
+	CAM.ShouldDrawLocalPlayer = function( self, ply, on )
+		return true
+	end
+	CAM.CalcView = function( self, view, ply, on )
+		return true
+	end
+	CAM.CreateMove = function( self, cmd, ply, on )
+		return true
+	end
+	return CAM
+end
+PLAYER.TauntCam = TauntCamera()
+
 local oldang = Angle(0, 0, 0)
 local function yrpCalcView(ply, pos, angles, fov)
 	ply.view_range = ply.view_range or 0
@@ -528,7 +561,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 	ply.view_x_c = ply.view_x_c or 0
 	ply.view_s_c = ply.view_s_c or 0
 
-	if ply:Alive() and !ply:IsPlayingTaunt() then
+	if ply:Alive() then --and !ply:IsPlayingTaunt() then
 
 		if ply:AFK() then
 			if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
@@ -550,6 +583,10 @@ local function yrpCalcView(ply, pos, angles, fov)
 		local _view_range = ply.view_range or 0
 		if _view_range < 0 then
 			_view_range = 0
+		end
+		if ply:IsPlayingTaunt() then
+			disablethirdperson = false
+			_view_range = 200
 		end
 		local dist = _view_range * ply:GetModelScale()
 
@@ -580,7 +617,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 						pos.z = _head
 					end
 					--Thirdperson
-					local dist = ply.view_range * ply:GetModelScale()
+					dist = ply.view_range * ply:GetModelScale()
 
 					local _tmpThick = 4
 					local _minDistFor = 8
@@ -588,12 +625,19 @@ local function yrpCalcView(ply, pos, angles, fov)
 					angles = angles + Angle(0, ply.view_s, 0)
 					local _pos_change = angles:Up() * ply.view_z + angles:Right() * ply.view_x
 
-						--ply.view_s
-
 					local tr = util.TraceHull({
 						start = pos + angles:Forward() * _minDistFor,
 						endpos = pos - (angles:Forward() * dist) + _pos_change,
-						filter = {LocalPlayer(),weapon},
+						filter = function( ent )
+							if ent:GetCollisionGroup() == 20 then
+								return false
+							elseif ent == LocalPlayer() then
+								return false
+							elseif ent == weapon then
+								return false
+							end
+							return true
+						end,
 						mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
 						maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
 						mask = MASK_SHOT_HULL
@@ -675,7 +719,7 @@ hook.Add("CalcView", "MyCalcView", yrpCalcView)
 
 function showPlayermodel()
 	if !LocalPlayer():InVehicle() then
-		if _drawViewmodel or LocalPlayer():IsPlayingTaunt() then
+		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
 			return true
 		else
 			return false

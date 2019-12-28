@@ -432,6 +432,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_channels, YRP.lang_string("LID_voicechatchannels"), "update_bool_voice_channels", 50)
 		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_local_range, YRP.lang_string("LID_localvoicechatdistance"), "update_int_voice_local_range", 100)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_group_local, YRP.lang_string("LID_groupvoicechatisaudiblelocally"), "update_bool_voice_group_local", 100)
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_radio, YRP.lang_string("LID_voicechatradio"), "update_bool_voice_radio", 50)
 
 
 
