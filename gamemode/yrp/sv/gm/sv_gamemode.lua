@@ -764,6 +764,22 @@ hook.Add("ScaleNPCDamage", "YRP_ScaleNPCDamage", function(npc, hitgroup, dmginfo
 	end
 end)
 
+util.AddNetworkString("leave_channel_sound")
+util.AddNetworkString("join_channel_sound")
+function SendJoinLeave(ply, old, new)
+	for i, p in pairs(player.GetAll()) do
+		if p != ply then
+			if old == p:GetDFloat("voice_channel", 0.1, 1) then
+				net.Start("leave_channel_sound")
+				net.Send(p)
+			elseif new == p:GetDFloat("voice_channel", 0.1, 1) then
+				net.Start("join_channel_sound")
+				net.Send(p)
+			end
+		end
+	end
+end
+
 --[[ SPEAK Channels ]] --
 util.AddNetworkString("press_speak_next")
 net.Receive("press_speak_next", function(len, ply)
@@ -788,7 +804,7 @@ net.Receive("press_speak_next", function(len, ply)
 			ply.speakdir = ply.speakdir or 1
 			ply.speakdelay = ply.speakdelay or CurTime()
 			if ply.speakdelay < CurTime() then
-				ply.speakdelay = CurTime() + 0.2
+				ply.speakdelay = CurTime() + 0.1
 				ply.speakdir = 0
 			end
 			if ply.speakdir == 1 then
@@ -797,9 +813,16 @@ net.Receive("press_speak_next", function(len, ply)
 				ply.speakinterval = 0.1
 			end
 			ply.speakdir = 1
-			local newval = ply:GetDFloat("voice_channel", 0.0, 1) + ply.speakinterval
-			newval = math.Clamp(newval, 0.0, 110,0)
-			ply:SetDFloat("voice_channel", newval)
+			local oldchannel = ply:GetDFloat("voice_channel", 0.1, 1)
+			local newchannel = oldchannel + ply.speakinterval
+			local min = 0.1
+			if ply:GetDBool("yrp_voice_global", false) then
+				min = 0.0
+			end
+			newchannel = math.Clamp(newchannel, min, 110,0)
+			ply:SetDFloat("voice_channel", newchannel)
+
+			SendJoinLeave(ply, oldchannel, newchannel)
 		end
 	end
 end)
@@ -827,7 +850,7 @@ net.Receive("press_speak_prev", function(len, ply)
 			ply.speakdir = ply.speakdir or -1
 			ply.speakdelay = ply.speakdelay or CurTime()
 			if ply.speakdelay < CurTime() then
-				ply.speakdelay = CurTime() + 0.2
+				ply.speakdelay = CurTime() + 0.1
 				ply.speakdir = 0
 			end
 			if ply.speakdir == -1 then
@@ -836,9 +859,16 @@ net.Receive("press_speak_prev", function(len, ply)
 				ply.speakinterval = 0.1
 			end
 			ply.speakdir = -1
-			local newval = ply:GetDFloat("voice_channel", 0.0, 1) - ply.speakinterval
-			newval = math.Clamp(newval, 0.0, 110,0)
-			ply:SetDFloat("voice_channel", newval)
+			local oldchannel = ply:GetDFloat("voice_channel", 0.1, 1)
+			local newchannel = oldchannel - ply.speakinterval
+			local min = 0.1
+			if ply:GetDBool("yrp_voice_global", false) then
+				min = 0.0
+			end
+			newchannel = math.Clamp(newchannel, min, 110,0)
+			ply:SetDFloat("voice_channel", newchannel)
+
+			SendJoinLeave(ply, oldchannel, newchannel)
 		end
 	end
 end)
@@ -861,7 +891,7 @@ net.Receive("yrp_voice_end", function(len, ply)
 	ply:SetDBool("yrp_speaking", false)
 end)
 
-function hearfaded(listener, talker)
+function HearFaded(listener, talker)
 	local t_speak_channel = tonumber(talker:GetDInt("speak_channel", 0))
 	local t_guid = tonumber(talker:GetDString("groupUniqueID", "0"))
 	local l_guid = tonumber(listener:GetDString("groupUniqueID", "0"))
@@ -875,7 +905,7 @@ function hearfaded(listener, talker)
 	return false
 end
 
-function canhear(listener, talker)
+function CanHear(listener, talker)
 	local t_speak_channel = tonumber(talker:GetDInt("speak_channel", 0))
 	local t_guid = tonumber(talker:GetDString("groupUniqueID", "0"))
 	local l_guid = tonumber(listener:GetDString("groupUniqueID", "0"))
@@ -903,10 +933,21 @@ function canhear(listener, talker)
 	end
 end
 
-function canhearChannel(listener, talker)
-	local l_speak_channel = tonumber(listener:GetDFloat("voice_channel", 0, 1))
-	local t_speak_channel = tonumber(talker:GetDFloat("voice_channel", 0, 1))
-	if t_speak_channel == l_speak_channel then
+function HearFadedChannel(listener, talker)
+	local l_speak_channel = tonumber(listener:GetDFloat("voice_channel", 0.1, 1))
+	local t_speak_channel = tonumber(talker:GetDFloat("voice_channel", 0.1, 1))
+	local dist = listener:GetPos():Distance(talker:GetPos())
+	if t_speak_channel != l_speak_channel and t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
+		return true
+	end
+	return false
+end
+
+function CanHearChannel(listener, talker)
+	local l_speak_channel = tonumber(listener:GetDFloat("voice_channel", 0.1, 1))
+	local t_speak_channel = tonumber(talker:GetDFloat("voice_channel", 0.1, 1))
+	local dist = listener:GetPos():Distance(talker:GetPos())
+	if t_speak_channel == l_speak_channel or t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
 		return true
 	end
 	return false
@@ -924,9 +965,9 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 		if listener != talker then
 			if Is3DVoiceEnabled() then
 				if IsVoiceChannelsEnabled() then
-					return canhear(listener, talker), hearfaded(listener, talker)	-- 3D Voice chat + voice channels
+					return CanHear(listener, talker), HearFaded(listener, talker)	-- 3D Voice chat + voice channels
 				elseif IsVoiceRadioEnabled() then
-					return canhearChannel(listener, talker), false
+					return CanHearChannel(listener, talker)--, HearFadedChannel(listener, talker)
 				else
 					return IsInMaxVoiceRange(listener, talker), true	-- 3D Voice enabled
 				end

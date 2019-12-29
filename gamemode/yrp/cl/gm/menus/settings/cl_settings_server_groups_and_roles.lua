@@ -630,7 +630,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local col1 = createD("DPanelList", ea.background, YRP.ctr(1000), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 				col1:SetSpacing(YRP.ctr(20))
 
-				local info = createD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(540), YRP.ctr(0), YRP.ctr(0))
+				local info = createD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(610), YRP.ctr(0), YRP.ctr(0))
 				info:SetText("LID_general")
 				function info:Paint(pw, ph)
 					hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -707,6 +707,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					parentgroup.choices = othergroups
 					ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
 				end
+
+				DHr(hr)
+
+				local iscp = {}
+				iscp.parent = ea.info:GetContent()
+				iscp.uniqueID = group.uniqueID
+				iscp.header = "LID_iscp"
+				iscp.netstr = "update_group_bool_iscp"
+				iscp.value = group.bool_iscp
+				iscp.uniqueID = group.uniqueID
+				ea[group.uniqueID].iscp = DCheckBox(iscp)
 
 
 

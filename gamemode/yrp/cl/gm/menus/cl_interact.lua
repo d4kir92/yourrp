@@ -114,7 +114,7 @@ net.Receive("openInteractMenu", function(len)
 		hook.Run("YButtonPaint", self, pw, ph)
 	end]]
 
-	if LocalPlayer():GetDBool("bool_iscp", false) then
+	if LocalPlayer():isCP() then
 		local btnVerwarnungUp = createVGUI("YButton", content, 50, 50, 10, 1000)
 		btnVerwarnungUp:SetText("⮝")
 		function btnVerwarnungUp:DoClick()
@@ -132,7 +132,7 @@ net.Receive("openInteractMenu", function(len)
 		local btnVerwarnung = createVGUI("YLabel", content, 450, 100, 60, 1000)
 		function btnVerwarnung:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
-			btnVerwarnung:SetText("LID_warnings" .. ": " .. ply:GetDInt("int_warnings", -1))
+			btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. ply:GetDInt("int_warnings", -1))
 		end
 
 		local btnVerstoesseUp = createVGUI("YButton", content, 50, 50, 10, 1110)
@@ -152,7 +152,7 @@ net.Receive("openInteractMenu", function(len)
 		local btnVerstoesse = createVGUI("YLabel", content, 450, 100, 60, 1110)
 		function btnVerstoesse:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
-			btnVerstoesse:SetText("LID_violations" .. ": " .. ply:GetDInt("int_violations", -1))
+			btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. ply:GetDInt("int_violations", -1))
 		end
 	end
 

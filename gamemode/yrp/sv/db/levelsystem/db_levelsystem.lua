@@ -156,9 +156,7 @@ function Player:AddXP(xp)
 		local lvl = tonumber(chatab.int_level)
 		local lvlmulti = tonumber(lvltab.float_multiplier)
 		local xpforlvl = tonumber(lvltab.int_xp_for_levelup)
-
-		local exp = math.pow(lvl, lvlmulti)
-		local maxxp = math.Round(exp + xpforlvl, 1)
+		local maxxp = self:GetMaxXP()
 
 		local curlvl = self:Level()
 		local maxlvl = self:GetMaxLevel()
@@ -180,7 +178,7 @@ function Player:AddXP(xp)
 			elseif newxp > maxxp then
 				self:SetDString("int_xp", maxxp)
 			else
-				YRP.msg("error", "AddXP ELSE " .. tostring(curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp))
+				--YRP.msg("error", "AddXP ELSE " .. tostring(curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp))
 			end
 		elseif xp < 0 then
 			local newxp = curxp + xp

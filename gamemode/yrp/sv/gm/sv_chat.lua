@@ -590,7 +590,7 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "service" then
 		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetDBool("bool_iscp", false) or receiver == sender then
+			if receiver:isCP() or receiver == sender then
 				net.Start("yrp_player_say")
 					net.WriteTable(pk)
 				net.Send(receiver)

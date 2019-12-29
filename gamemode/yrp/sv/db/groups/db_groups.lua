@@ -21,6 +21,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupvoicechat", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscp", "INTEGER DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 
 -- PUBLIC GROUP
@@ -132,23 +134,16 @@ for str, val in pairs(yrp_ply_groups) do
 		util.AddNetworkString(tab.netstr)
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString())
-			local int = tonumber(net.ReadString())
-			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			local bool = tonumber(net.ReadString())
 			tab.ply = ply
 			tab.id = str
-			tab.value = int
+			tab.value = bool
 			tab.db = DATABASE_NAME
 			tab.uniqueID = uid
-			UpdateInt(tab)
+			pTab(tab)
+			UpdateBool(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
-			BroadcastInt(tab)
-			if tab.netstr == "update_group_int_parentgroup" then
-				if wk(cur) then
-					cur = cur[1]
-					SendGroupList(tonumber(cur.int_parentgroup))
-				end
-				SendGroupList(int)
-			end
+			BroadcastBool(tab)
 		end)
 	end
 end

@@ -182,7 +182,7 @@ end
 
 function Player:isCP()
 	--Description: Whether this player is part of the police force (mayor, cp, chief).
-	return self:GetDBool("bool_iscp", false)
+	return self:GetDBool("bool_iscp", false) or self:GetDBool("groupiscp", false)
 end
 
 function Player:isHitman()

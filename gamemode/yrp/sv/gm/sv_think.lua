@@ -175,7 +175,7 @@ end
 
 function dealerAlive(uid)
 	for j, npc in pairs(ents.GetAll()) do
-		if npc:IsNPC() and tostring(npc:GetDString("dealerID", "FAILED")) == tostring(uid) then
+		if npc:IsNPC() and tonumber(npc:GetDString("dealerID", "0")) == tonumber(uid) then
 			return true
 		end
 	end
@@ -184,6 +184,7 @@ end
 
 local _time = 0
 local TICK = 0.01
+local DEC = 2
 timer.Create("ServerThink", TICK, 0, function()
 	local _all_players = player.GetAll()
 
@@ -231,7 +232,7 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 60 == 0 then
+	if _time % 60.0 == 1 then
 		if YRP.XPPerMinute != nil then
 			local xp_per_minute = YRP.XPPerMinute()
 			for i, p in pairs(player.GetAll()) do
@@ -240,19 +241,19 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 30 == 0 then
+	if _time % 30.0 == 0 then
 		for i, ply in pairs(_all_players) do
-			if ply:GetRoleName() == nil and ply:Alive() then
-				if !ply:IsBot() then
-					ply:KillSilent()
-				end
+			if ply:GetRoleName() == nil and ply:Alive() and !ply:IsBot() then
+				ply:KillSilent()
 			end
 		end
+
 		local _dealers = SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
-		if _dealers != nil and _dealers != false then
+		if wk(_dealers) then
 			for i, dealer in pairs(_dealers) do
-				if tostring(dealer.uniqueID) != "1" and !dealerAlive(dealer.uniqueID) then
+				if tonumber(dealer.uniqueID) != 1 and !dealerAlive(dealer.uniqueID) then
 					local _del = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
+					pTab(_del)
 					if _del != nil then
 						printGM("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
 						_del = _del[1]
@@ -316,6 +317,7 @@ timer.Create("ServerThink", TICK, 0, function()
 		IsServerInfoOutdated()
 	end
 	_time = _time + TICK
+	_time = math.Round(_time, DEC)
 end)
 
 function RestartServer()

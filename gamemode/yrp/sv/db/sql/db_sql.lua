@@ -89,6 +89,17 @@ function BroadcastFloat(tab)
 	end
 end
 
+function BroadcastBool(tab)
+	for i, pl in pairs(tab.handler) do
+		if pl != tab.ply or tab.force then
+			net.Start(tab.netstr)
+				net.WriteString(tab.uniqueID)
+				net.WriteString(tab.value)
+			net.Send(pl)
+		end
+	end
+end
+
 function UpdateValue(tab)
 	tab.uniqueID = tab.uniqueID or 1
 	sql.Query("UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
@@ -106,6 +117,11 @@ end
 
 function UpdateFloat(tab)
 	printGM("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
+	UpdateValue(tab)
+end
+
+function UpdateBool(tab)
+	printGM("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value)
 	UpdateValue(tab)
 end
 

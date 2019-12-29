@@ -63,6 +63,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseefrequency", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusecontextmenu", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusespawnmenu", "INT DEFAULT 1")
@@ -991,6 +992,12 @@ net.Receive("usergroup_update_bool_canusespawnmenu", function(len, ply)
 	UGCheckBox(ply, uid, "bool_canusespawnmenu", bool_canusespawnmenu)
 end)
 
+util.AddNetworkString("usergroup_update_bool_canseefrequency")
+net.Receive("usergroup_update_bool_canseefrequency", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_canseefrequency = net.ReadString()
+	UGCheckBox(ply, uid, "bool_canseefrequency", bool_canseefrequency)
+end)
 
 
 -- Functions
@@ -1631,6 +1638,7 @@ function Player:UserGroupLoadout()
 		self:SetDBool("bool_canuseesp", tobool(UG.bool_canuseesp))
 		self:SetDBool("bool_canusecontextmenu", tobool(UG.bool_canusecontextmenu))
 		self:SetDBool("bool_canusespawnmenu", tobool(UG.bool_canusespawnmenu))
+		self:SetDBool("bool_canseefrequency", tobool(UG.bool_canseefrequency))
 		self:SetDInt("int_position", UG.int_position)
 	end
 end

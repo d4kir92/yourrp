@@ -1523,8 +1523,17 @@ function drawPlates()
 			end
 			if !GetGlobalDBool("bool_voice_channels", false) then
 				local col = Color(255, 100, 100, 120)
-				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
-					col = Color(100, 255, 100, 120)
+				if ply == LocalPlayer() then
+					local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalDInt("int_voice_max_range", 1))
+					for j, ent in pairs(esphere) do
+						if ent:IsPlayer() and ent != LocalPlayer() then
+							col = Color(100, 255, 100, 120)
+						end
+					end
+				else
+					if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
+						col = Color(100, 255, 100, 120)
+					end
 				end
 				render.SetColorMaterial()
 				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
@@ -1641,6 +1650,13 @@ function drawPlates()
 					local ugcolor = ply:GetUserGroupColor()
 					ugcolor.a = color.a
 					drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
+					_height = _height + 5
+				end
+
+				if LocalPlayer():GetDString("groupUniqueID", 0) == ply:GetDString("groupUniqueID", 0) and GetGlobalDBool("bool_tag_on_head_frequency", false) and LocalPlayer():GetDBool("bool_canseefrequency", false) then
+					local ugcolor = Color(255, 255, 255)
+					ugcolor.a = color.a
+					drawString(ply, YRP.lang_string("LID_frequency") .. ": " .. tostring(ply:GetDFloat("voice_channel", 0.1, 1)), _height, ugcolor)
 					_height = _height + 5
 				end
 			end
@@ -1778,10 +1794,12 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 				draw3DText(YRP.lang_string("LID_distance") .. ": " .. dist .. "m", ScrCen.x, ScrCen.y - 40)
 			end
 
-			draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
+			draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. "[" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
 
 			if GetGlobalDBool("bool_voice_channels", false) then
 				draw3DText(get_speak_channel_name(p) .. " (ID: " .. p:GetDInt("speak_channel", -1) .. ")", ScrCen.x, ScrCen.y, Color(255, 255, 0, 255))
+			else
+				draw3DText(YRP.lang_string("LID_frequency") .. ": " .. tostring(p:GetDFloat("voice_channel", 0.1, 1)), ScrCen.x, ScrCen.y, Color(255, 255, 100, 255))
 			end
 			if p:GetDBool("yrp_speaking", false) then
 				local text = "IS SPEAKING!"
@@ -2115,3 +2133,11 @@ function drawIDCard(ply, scale, px, py)
 		end
 	end
 end
+
+net.Receive("leave_channel_sound", function()
+	notification.AddLegacy(YRP.lang_string("LID_someonehasleftthefrequency"), NOTIFY_GENERIC, 3)
+end)
+
+net.Receive("join_channel_sound", function()
+	notification.AddLegacy(YRP.lang_string("LID_someonehasjoinedthefrequency"), NOTIFY_GENERIC, 3)
+end)

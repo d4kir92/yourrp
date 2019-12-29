@@ -496,7 +496,6 @@ function OpenSBS()
 
 			function pl.sbp:Paint(pw, ph)
 				if !self.pl:IsValid() then
-					pl.sbp = nil
 					self:Remove()
 				else
 					pl.sbp.col = i % 2 * 100

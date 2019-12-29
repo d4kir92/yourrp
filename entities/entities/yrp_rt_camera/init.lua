@@ -5,16 +5,13 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-util.AddNetworkString("openLawBoard")
-
 function ENT:Initialize()
-	self:SetModel("models/props_combine/combine_intmonitor001.mdl")
+	self:SetModel("models/maxofs2d/camera.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 
 	self:SetPos(self:GetPos() + Vector(0,0,100))
-	self:DropToFloor()
 	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
@@ -22,16 +19,9 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	local tmpTable = SQL_SELECT("yrp_jail", "*", nil)
 
-	if tmpTable == nil or tmpTable == false then
-		tmpTable = {}
-	end
-	net.Start("openLawBoard")
-		net.WriteTable(tmpTable)
-	net.Send(caller)
 end
 
-function ENT:Think()
+function ENT:OnRemove()
 
 end

@@ -384,6 +384,7 @@ function set_role_values(ply, pmid)
 			ply:SetDString("groupColor", groTab.string_color)
 			ply:SetDString("groupIcon", groTab.string_icon)
 			--ply:SetTeam(tonumber(groTab.uniqueID))
+			ply:SetDBool("groupiscp", tobool(groTab.bool_iscp))
 
 			local faction = GetFactionTable(groTab.uniqueID)
 			ply:SetDString("factionName", faction.string_name)

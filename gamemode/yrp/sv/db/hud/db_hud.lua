@@ -585,7 +585,7 @@ function DefaultHUDSettings(reset)
 	FR.bools = {}
 	FR.bools.VISI = 1
 	FR.bools.ROUN = 0
-	FR.bools.IFR = 1
+	FR.bools.ICON = 1
 	FR.bools.TEXT = 1
 	FR.bools.PERC = 1
 	FR.bools.BACK = 1
