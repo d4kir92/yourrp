@@ -51,30 +51,43 @@ function IsUnderGroupOf(ply, uid)
 	end
 end
 
-function allowedToUseDoor(id, ply)
+function allowedToUseDoor(id, ply, door)
 	if ply:HasAccess() then
 		return true
 	else
 		local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. id .. "'")
 		if wk(_tmpBuildingTable) then
+			local bui_cuid = _tmpBuildingTable[1].ownerCharID
+			local bui_guid = _tmpBuildingTable[1].groupID
 
-			if (tostring(_tmpBuildingTable[1].ownerCharID) == "" or tostring(_tmpBuildingTable[1].ownerCharID) == " ") and tonumber(_tmpBuildingTable[1].groupID) == -1 then
+			if (tostring(bui_cuid) == "" or tostring(bui_cuid) == " ") and tonumber(_tmpBuildingTable[1].groupID) == -1 then
 				return true
 			else
-				local _tmpChaTab = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. _tmpBuildingTable[1].ownerCharID)
-				if wk(_tmpChaTab) then
-					local _tmpGroupTable = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. _tmpChaTab[1].groupID)
+				local _tmpChaTab = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. bui_cuid)
 
-					if tostring(_tmpBuildingTable[1].ownerCharID) == tostring(ply:CharID()) or tonumber(_tmpBuildingTable[1].groupID) == tonumber(_tmpGroupTable[1].uniqueID) then
+				local removeowner = false
+				if !wk(_tmpChaTab) then -- If char not available anymore => remove ownership
+					SQL_UPDATE(DATABASE_NAME_BUILDINGS, "ownerCharID = '" .. "" .. "'", "uniqueID = '" .. id .. "'")
+					
+					door:SetDTable("owner", {})
+					door:SetDString("ownerRPName", "")
+					door:SetDString("ownerGroup", "")
+					door:SetDString("ownerCharID", "")
+					door:SetDBool("bool_hasowner", false)
+					door:Fire("Unlock")
+				else
+					local grp_id = ply:GetGroupUID()
+
+					if tostring(bui_cuid) == tostring(ply:CharID()) then
 						return true
-					elseif IsUnderGroupOf(ply, _tmpBuildingTable[1].groupID) then
+					elseif tonumber(bui_guid) == tonumber(grp_id) then
+						return true
+					elseif IsUnderGroupOf(ply, bui_guid) then
 						return true
 					else
 						printGM("note", "[allowedToUseDoor] not allowed")
 						return false
 					end
-				else
-					printGM("note", "[allowedToUseDoor] buildings database not available, maybe database corrupt: " .. tostring(_tmpChaTab))
 					return false
 				end
 			end
@@ -222,6 +235,11 @@ util.AddNetworkString("removeOwner")
 util.AddNetworkString("sellBuilding")
 
 util.AddNetworkString("lockDoor")
+
+util.AddNetworkString("addnewbuilding")
+net.Receive("addnewbuilding", function()
+	SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
+end)
 
 function canLock(ply, tab)
 	if !strEmpty(tab.ownerCharID) then
@@ -478,6 +496,7 @@ function lookForEmptyBuildings()
 		end
 	end
 end
+lookForEmptyBuildings()
 
 net.Receive("changeBuildingID", function(len, ply)
 	local _tmpDoor = net.ReadEntity()
@@ -551,8 +570,30 @@ net.Receive("getBuildings", function(len, ply)
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", nil)
 	if wk(_tmpTable) then
 		for k, building in pairs(_tmpTable) do
+			local _doors = 0
+			_tmpDoors = ents.FindByClass("prop_door_rotating")
+			for j, d in pairs(_tmpDoors) do
+				if tonumber(d:GetDString("buildingID", "-1")) == tonumber(building.uniqueID) then
+					_doors = _doors + 1
+				end
+			end
+			_tmpFDoors = ents.FindByClass("func_door")
+			for j, d in pairs(_tmpFDoors) do
+				if tonumber(d:GetDString("buildingID", "-1")) == tonumber(building.uniqueID) then
+					_doors = _doors + 1
+				end
+			end
+			_tmpFRDoors = ents.FindByClass("func_door_rotating")
+			for j, d in pairs(_tmpFRDoors) do
+				if tonumber(d:GetDString("buildingID", "-1")) == tonumber(building.uniqueID) then
+					_doors = _doors + 1
+				end
+			end
+
 			building.name = SQL_STR_OUT(building.name)
+			building.doors = _doors
 		end
+
 		net.Start("getBuildings")
 			net.WriteTable(_tmpTable)
 		net.Send(ply)
@@ -590,7 +631,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 				end
 			end
 
-			if allowedToUseDoor(buid, ply) then
+			if allowedToUseDoor(buid, ply, door) then
 				net.Start("getBuildingInfo")
 					net.WriteEntity(door)
 					net.WriteTable(tabBuilding)

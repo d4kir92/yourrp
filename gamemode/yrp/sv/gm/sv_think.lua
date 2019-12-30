@@ -253,7 +253,6 @@ timer.Create("ServerThink", TICK, 0, function()
 			for i, dealer in pairs(_dealers) do
 				if tonumber(dealer.uniqueID) != 1 and !dealerAlive(dealer.uniqueID) then
 					local _del = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
-					pTab(_del)
 					if _del != nil then
 						printGM("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
 						_del = _del[1]

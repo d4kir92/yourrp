@@ -140,7 +140,7 @@ function buyWindow(door, tabBuilding)
 			if _ComboBoxHouseName != NULL then
 				for k, v in pairs(_tmpBuildings) do
 					if pa(_ComboBoxHouseName) then
-						_ComboBoxHouseName:AddChoice(v.name, v.uniqueID, false)
+						_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP.lang_string("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, false)
 					else
 						break
 					end
@@ -162,7 +162,9 @@ function buyWindow(door, tabBuilding)
 		local _ButtonAddNew = createD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(350))
 		_ButtonAddNew:SetText("LID_addanewbuilding")
 		function _ButtonAddNew:DoClick()
-
+			net.Start("addnewbuilding")
+			net.SendToServer()
+			yrp_door.window:Close()
 		end
 
 		local _ComboBoxGroupName = createD("DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450))
@@ -245,6 +247,26 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		OWNER = true
 	end
 
+	local _doors = 0
+	local _tmpDoors = ents.FindByClass("prop_door_rotating")
+	for k, v in pairs(_tmpDoors) do
+		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+			_doors = _doors + 1
+		end
+	end
+	local _tmpFDoors = ents.FindByClass("func_door")
+	for k, v in pairs(_tmpFDoors) do
+		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+			_doors = _doors + 1
+		end
+	end
+	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
+	for k, v in pairs(_tmpFRDoors) do
+		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+			_doors = _doors + 1
+		end
+	end
+
 	yrp_door.window = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(580), 0, 0)
 	yrp_door.window:SetHeaderHeight(YRP.ctr(100))
 	yrp_door.window:Center()
@@ -260,6 +282,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	end
 	function yrp_door.window.con:Paint(pw, ph)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "sef", YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "sef", YRP.ctr(20), YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		local owner = tabOwner.rpname or tabGroup.string_name
 		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", YRP.ctr(20), YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 

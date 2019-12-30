@@ -414,6 +414,10 @@ function Player:GetFactionColor() -- Faction Color
 end
 
 --[[ Group ]]--
+function Player:GetGroupUID() -- Group UID
+	return tonumber(self:YRPGetGroupUID()) -- return X (number)
+end
+
 function Player:GetGroupName() -- Group Name / "Category" Name
 	local GroupName = self:YRPGetGroupName()
 	if self:IsUnknown() then

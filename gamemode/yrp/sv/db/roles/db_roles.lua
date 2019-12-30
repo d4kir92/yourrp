@@ -1369,7 +1369,8 @@ net.Receive("openInteractMenu", function(len, ply)
 								end
 
 								if tmpSearchUniqueID == 0 or tmpPromote and tmpDemote then
-									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 then
+									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 and tonumber(tmpTargetRole[1].int_groupID) == ply:GetGroupUID() then
+										-- von First Role to CIV
 										tmpDemote = true
 										local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
 										tmpDemoteName = tmp[1].string_name

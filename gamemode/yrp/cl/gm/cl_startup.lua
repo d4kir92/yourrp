@@ -1653,7 +1653,7 @@ function drawPlates()
 					_height = _height + 5
 				end
 
-				if LocalPlayer():GetDString("groupUniqueID", 0) == ply:GetDString("groupUniqueID", 0) and GetGlobalDBool("bool_tag_on_head_frequency", false) and LocalPlayer():GetDBool("bool_canseefrequency", false) then
+				if GetGlobalDBool("bool_tag_on_head_frequency", false) and LocalPlayer():GetDBool("bool_canseefrequency", false) then
 					local ugcolor = Color(255, 255, 255)
 					ugcolor.a = color.a
 					drawString(ply, YRP.lang_string("LID_frequency") .. ": " .. tostring(ply:GetDFloat("voice_channel", 0.1, 1)), _height, ugcolor)

@@ -241,9 +241,9 @@ if SERVER then
 	function Player:StopCasting(cost)
 		cost = cost or 0
 
-		if self:GetDInt("GetCurAbility", 0) >= cost then
+		if self:GetDString("GetAbilityType", "none") != "none" and self:GetDInt("GetCurAbility", 0) >= cost then
 			self:SetDInt("GetCurAbility", self:GetDInt("GetCurAbility", 0) - cost)
-		else
+		elseif self:GetDString("GetAbilityType", "none") != "none" then
 			return
 		end
 
@@ -288,7 +288,7 @@ if SERVER then
 
 		target = target or self
 
-		if self:GetDInt("GetCurAbility", 0) < cost then
+		if self:GetDString("GetAbilityType", "none") != "none" and self:GetDInt("GetCurAbility", 0) < cost then
 			return
 		end
 
@@ -558,6 +558,11 @@ function Player:YRPGetFactionColor()
 	_gc = string.Explode(",", _gc)
 	_gc = Color(_gc[1], _gc[2], _gc[3], _gc[4] or 255)
 	return _gc
+end
+
+function Player:YRPGetGroupUID()
+	local _gn = self:GetDString("groupUniqueID", "0")
+	return tonumber(_gn)
 end
 
 function Player:YRPGetGroupName()

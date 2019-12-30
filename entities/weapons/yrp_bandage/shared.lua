@@ -53,6 +53,7 @@ function SWEP:PrimaryAttack()
 			if tr.Hit then
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
+					--StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
 					ply:StartCasting("bandage", "LID_bandaging", 0, self.target, 3, 100, 1, false)
 				end
 			end

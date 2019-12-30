@@ -140,7 +140,6 @@ for str, val in pairs(yrp_ply_groups) do
 			tab.value = bool
 			tab.db = DATABASE_NAME
 			tab.uniqueID = uid
-			pTab(tab)
 			UpdateBool(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 			BroadcastBool(tab)
