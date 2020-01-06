@@ -489,10 +489,11 @@ end
 
 function lookForEmptyBuildings()
 	local _allBuildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-
-	for k, v in pairs(_allBuildings) do
-		if !hasDoors(v.uniqueID) then
-			SQL_DELETE_FROM("yrp_" .. GetMapNameDB() .. "_buildings", "uniqueID = " .. tonumber(v.uniqueID))
+	if wk(_allBuildings) then
+		for k, v in pairs(_allBuildings) do
+			if !hasDoors(v.uniqueID) then
+				SQL_DELETE_FROM("yrp_" .. GetMapNameDB() .. "_buildings", "uniqueID = " .. tonumber(v.uniqueID))
+			end
 		end
 	end
 end

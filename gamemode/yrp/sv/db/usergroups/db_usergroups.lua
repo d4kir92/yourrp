@@ -1406,6 +1406,10 @@ function GM:PhysgunPickup(pl, ent)
 				end
 			elseif ent:GetRPOwner() == pl or tobool(tabUsergroup.bool_physgunpickupotherowner) then
 				return true
+			elseif pl:HasAccess() then
+				return true
+			else
+				return false
 			end
 		elseif ent:GetRPOwner() == pl then
 			return true
@@ -1424,7 +1428,6 @@ end
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) then
-		printGM("gm", "CanTool: " .. tool)
 		if tool == "remover" then
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_removetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if _tmp != nil and _tmp != false then

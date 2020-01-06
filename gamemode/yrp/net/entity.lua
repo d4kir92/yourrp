@@ -395,3 +395,8 @@ if SERVER then
 		SendDEntities(ply, "request_dentites")
 	end)
 end
+
+function GM:EntityRemoved( ent )
+	local entindex = ent:EntIndex()
+	ENTS[entindex] = nil
+end

@@ -60,3 +60,10 @@ end
 function SWEP:SecondaryAttack()
 
 end
+
+local wave = Material( "vgui/entities/yrp_idcard.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
+end

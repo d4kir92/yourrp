@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = "Leftclick - arrest\nRightclick - unarrest"
 
-SWEP.Category = "[YourRP] Admin"
+SWEP.Category = "[YourRP] Civil Protection"
 
 SWEP.PrintName = "Arrest stick"
 SWEP.Language = "en"
@@ -68,9 +68,7 @@ function SWEP:PrimaryAttack()
 		ply:EmitSound(hitsound)
 		if tr.Entity:IsPlayer() then
 			if SERVER then
-				teleportToJailpoint(tr.Entity)
-				tr.Entity:SetDBool("injail", true)
-				tr.Entity:SetDInt("jailtime", 2*60)
+				teleportToJailpoint(tr.Entity, 2 * 60)
 			end
 		end
 	else
@@ -97,7 +95,6 @@ function SWEP:SecondaryAttack()
 		if tr.Entity:IsPlayer() then
 			if SERVER then
 				teleportToReleasepoint(tr.Entity)
-				tr.Entity:SetDBool("injail", false)
 			end
 		end
 	else
@@ -106,4 +103,11 @@ function SWEP:SecondaryAttack()
 
 		ply:EmitSound(swingsound)
 	end
+end
+
+local wave = Material( "vgui/entities/yrp_arrest_stick.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end

@@ -40,6 +40,8 @@ AddCSLuaFile("derma/ybag.lua")
 AddCSLuaFile("derma/yitem.lua")
 AddCSLuaFile("derma/yslot.lua")
 
+AddCSLuaFile("derma/ytabs.lua")
+
 if CLIENT then
 	include("derma.lua")
 	include("yrp_derma.lua")
@@ -64,6 +66,8 @@ if CLIENT then
 	include("derma/ybag.lua")
 	include("derma/yitem.lua")
 	include("derma/yslot.lua")
+
+	include("derma/ytabs.lua")
 end
 
 print("Loaded _libs_includes.lua")

@@ -306,7 +306,7 @@ function HUDSpace()
 					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_600"
 				end
 			end
-		elseif table.Count(SPACE) > 0 then
+		elseif table.Count(SPACE) > 0 and lply:Alive() then
 			-- DRAW HUD
 			for ele, etab in pairs(ELES) do
 				if SPACE[ele] != nil then

@@ -13,8 +13,6 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 
-	self:SetPos(self:GetPos() + Vector(0,0,100))
-	self:DropToFloor()
 	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
@@ -35,3 +33,17 @@ end
 function ENT:Think()
 
 end
+
+util.AddNetworkString("jail")
+net.Receive("jail", function(len, ply)
+	local target = net.ReadEntity()
+
+	teleportToJailpoint(target)
+end)
+
+util.AddNetworkString("unjail")
+net.Receive("unjail", function(len, ply)
+	local target = net.ReadEntity()
+
+	teleportToReleasepoint(target)
+end)

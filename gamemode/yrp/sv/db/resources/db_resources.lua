@@ -8,30 +8,46 @@ hr_pre("gm")
 printGM("gm", "Loading Resources")
 printGM("gm", "")
 
+
+
 -- YourRP Content
 resource.AddWorkshop("1189643820")
 
 -- Food and Household items
--- resource.AddWorkshop("108024198")
+resource.AddWorkshop("108024198")
+
+-- Bandage
+resource.AddWorkshop("816191432")
+
+-- Cuffs
+resource.AddWorkshop("314312925")
+
+-- Key
+resource.AddWorkshop("182308069")
+
+
 
 --Server Workshop Collection
 local _wsitems = engine.GetAddons()
-printGM("gm", #_wsitems .. " Workshop files that will be send to Clients")
-printGM("gm", "")
 printGM("gm", "Nr.\t\tName")
 --printGM("gm", " Nr.\tID\t\tName")
-local _mounted = 0
+local i = 0
+local d = 0
 for k, ws in pairs(_wsitems) do
-	if ws.mounted then
+	i = i + 1
+
+	if ws.mounted and ws.downloaded then
 		printGM("gm", "+[" .. k .. "]\t[" .. tostring(ws.title) .. "]")
 		--printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "]")
 
 		resource.AddWorkshop(tostring(ws.wsid))
-		_mounted = _mounted + 1
+		d = d + 1
+	else
+		YRP.msg("gm", ">>> Addon [" .. ws.title .. "] not mounted or downloaded <<<")
 	end
 end
 printGM("gm", "")
-printGM("gm", "=> " .. tostring(_mounted) .. "/" .. tostring(#_wsitems) .. " mounted")
+printGM("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
 printGM("gm", "")
 
 printGM("gm", "Loaded Resources")

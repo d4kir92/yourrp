@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = "This item can unlock/lock the door that you owned"
 SWEP.Instructions = "Left Click - Unlock door\nRight Click - Lock door"
 
-SWEP.Category = "[YourRP] Custom"
+SWEP.Category = "[YourRP] Roleplay"
 
 SWEP.PrintName = "Key"
 SWEP.Language = "en"
@@ -20,9 +20,10 @@ SWEP.DrawCrosshair = false
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = ""
+SWEP.ViewModel = "models/weapons/c_keys.mdl"
 SWEP.WorldModel = ""
 SWEP.notdropable = true
+SWEP.UseHands = true
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -93,4 +94,11 @@ function SWEP:SecondaryAttack()
 			end
 		end
 	end
+end
+
+local wave = Material( "vgui/entities/yrp_key.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end

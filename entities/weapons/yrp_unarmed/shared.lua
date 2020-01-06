@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "[YourRP] Custom"
+SWEP.Category = "[YourRP] Roleplay"
 
 SWEP.PrintName = "Unarmed"
 SWEP.Language = "en"
@@ -54,4 +54,11 @@ end
 
 function SWEP:SecondaryAttack()
 
+end
+
+local wave = Material( "vgui/entities/yrp_unarmed.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end

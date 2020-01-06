@@ -14,22 +14,21 @@ SWEP.Slot = 5
 SWEP.SlotPos = 1
 
 SWEP.DrawAmmo = false
-
 SWEP.DrawCrosshair = false
+
+SWEP.UseHands = true
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/props_junk/PopCan01a.mdl"
-SWEP.WorldModel = "models/props_junk/PopCan01a.mdl"
+SWEP.ViewModel = "models/weapons/c_medkit.mdl"
+SWEP.WorldModel = "models/healthvial.mdl"
 
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "bandage"
 SWEP.Secondary.Ammo = "bandagesecondary"
-
-SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "fist"
 function SWEP:Initialize()
@@ -78,4 +77,11 @@ function SWEP:SecondaryAttack()
 			ply:StartCasting("bandage", "LID_bandaging", 0, _target, 3, 100, 1, false)
 		end
 	end
+end
+
+local wave = Material( "vgui/entities/yrp_bandage.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end

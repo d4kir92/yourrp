@@ -1666,9 +1666,7 @@ util.AddNetworkString("tp_jail")
 net.Receive("tp_jail", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		teleportToJailpoint(_target)
-		_target:SetDBool("injail", true)
-		_target:SetDInt("jailtime", 5 * 60)
+		teleportToJailpoint(_target, 5 * 60 )
 	end
 end)
 util.AddNetworkString("tp_unjail")
@@ -1676,7 +1674,6 @@ net.Receive("tp_unjail", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		teleportToReleasepoint(_target)
-		_target:SetDBool("injail", false)
 	end
 end)
 

@@ -4,7 +4,7 @@ SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
 SWEP.Instructions = ""
 
-SWEP.Category = "[YourRP] Weapon"
+SWEP.Category = "[YourRP] Civil Protection"
 
 SWEP.PrintName = "Battering ram"
 SWEP.Language = "en"

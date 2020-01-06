@@ -77,6 +77,9 @@ function save_clients(string)
 	else
 		printGM("db", "no saving, because db reset")
 	end
+
+	SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
+	--local pp = SQL_SELECT("permaprops", "*")
 end
 
 function updateRoleUses(rid)

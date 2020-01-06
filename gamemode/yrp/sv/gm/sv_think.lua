@@ -15,13 +15,16 @@ net.Receive("client_lang", function(len, ply)
 end)
 
 function reg_hp(ply)
-	local hpreg = ply:GetDInt("HealthReg")
+	local hpreg = ply:GetDInt("HealthReg", nil)
 	if hpreg != nil then
-		ply:Heal(hpreg)
-		if ply:Health() > ply:GetMaxHealth() then
-			ply:SetHealth(ply:GetMaxHealth())
-		elseif ply:Health() < 0 then
+		if ply:Health() <= 0 then
 			ply:Kill()
+		end
+		if ply:Alive() then
+			ply:Heal(hpreg)
+			if ply:Health() <= 0 then
+				ply:Kill()
+			end
 		end
 	end
 end
@@ -182,6 +185,18 @@ function dealerAlive(uid)
 	return false
 end
 
+function teleporterAlive(uid)
+	for j, tel in pairs(ents.GetAll()) do
+		if tel:GetClass() == "yrp_teleporter" then
+			if tel:GetDInt("yrp_teleporter_uid", nil) != nil and tonumber(tel:GetDInt("yrp_teleporter_uid", nil)) == tonumber(uid) then
+				return true
+			end
+			tel.PermaProps = true
+		end
+	end
+	return false
+end
+
 local _time = 0
 local TICK = 0.01
 local DEC = 2
@@ -241,7 +256,9 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 30.0 == 0 then
+	if _time % 30.0 == 1 or GetGlobalDBool("yrp_update_teleporters", false) then
+		SetGlobalDBool("yrp_update_teleporters", false)
+
 		for i, ply in pairs(_all_players) do
 			if ply:GetRoleName() == nil and ply:Alive() and !ply:IsBot() then
 				ply:KillSilent()
@@ -274,6 +291,32 @@ timer.Create("ServerThink", TICK, 0, function()
 						end)
 					end
 				end
+			end
+		end
+
+		local teleporters = SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
+		if wk(teleporters) then
+			if table.Count(teleporters) < 100 then
+				for i, teleporter in pairs(teleporters) do
+					if !teleporterAlive(teleporter.uniqueID) then
+						local tp = ents.Create("yrp_teleporter")
+						if ( IsValid( tp ) ) then
+							local pos = string.Explode(",", teleporter.string_position)
+							pos = Vector(pos[1], pos[2], pos[3])
+							tp:SetPos(pos - tp:GetUp() * 5)
+							local ang = string.Explode(",", teleporter.string_angle)
+							ang = Angle(ang[1], ang[2], ang[3])
+							tp:SetAngles(ang)
+							tp:SetDInt("yrp_teleporter_uid", tonumber(teleporter.uniqueID))
+							tp:SetDString("string_name", teleporter.string_name)
+							tp:SetDString("string_target", teleporter.string_target)
+							tp:Spawn()
+							tp.PermaProps = true
+						end
+					end
+				end
+			else
+				YRP.msg("note", "There are a lot of Teleporters!")
 			end
 		end
 	end

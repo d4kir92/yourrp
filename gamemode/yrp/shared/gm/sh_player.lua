@@ -428,10 +428,8 @@ if SERVER then
 	end
 
 	function Player:Heal(amount)
-		self:SetHealth(self:Health() + amount)
-		if self:Health() > self:GetMaxHealth() then
-			self:SetHealth(self:GetMaxHealth())
-		end
+		local newhp = math.Clamp(self:Health() + amount, 0, self:GetMaxHealth())
+		self:SetHealth(newhp)
 	end
 
 	function Player:StartBleeding()

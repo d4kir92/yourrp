@@ -14,10 +14,9 @@ SWEP.Slot = 1
 SWEP.SlotPos = 1
 
 SWEP.DrawAmmo = false
+SWEP.DrawCrosshair = true
 
-SWEP.DrawCrosshair = false
-
-SWEP.Spawnable = true
+SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 
 SWEP.ViewModel = ""
@@ -25,15 +24,10 @@ SWEP.WorldModel = ""
 SWEP.notdropable = true
 
 SWEP.Primary.ClipSize = -1
-
 SWEP.Primary.DefaultClip = -1
-
 SWEP.Primary.Automatic = false
-
 SWEP.Primary.Ammo = "none"
 SWEP.Secondary.Ammo = "none"
-
-SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "duel"
 function SWEP:Initialize()

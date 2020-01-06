@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #SCOREBOARD
+
 -- CONFIG
 local scolen = {}
 scolen["leve"] = 160
@@ -915,6 +917,11 @@ function OpenSBS()
 	end
 	SetIsScoreboardOpen(true)
 end
+
+timer.Simple(4, function()
+	OpenSBS()
+	CloseSBS()
+end)
 
 function GM:ScoreboardShow()
 	OpenSBS()

@@ -14,6 +14,9 @@ SQL_ADD_COLUMN(_db_name, "time", "INT DEFAULT 1")
 --db_is_empty(_db_name)
 
 function teleportToReleasepoint(ply)
+	ply:SetDBool("injail", false)
+	ply:SetDInt("jailtime", 0)
+
 	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'")
 
 	if _tmpTele != nil then
@@ -33,10 +36,15 @@ function teleportToReleasepoint(ply)
 	end
 end
 
-function teleportToJailpoint(ply)
+function teleportToJailpoint(ply, tim)
+	ply:SetDBool("injail", true)
+	if tim != nil then
+		ply:SetDInt("jailtime", tim)
+	end
+
 	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
 
-	if _tmpTele != nil then
+	if wk(_tmpTele) then
 		for i, v in pairs(_tmpTele) do
 			local _tmp = string.Explode(",", v.position)
 			local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
@@ -72,8 +80,6 @@ function clean_up_jail(ply)
 	if _tmpTable != nil then
 		SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. ply:SteamID() .. "'")
 	end
-	ply:SetDBool("injail", false)
-	ply:SetDInt("jailtime", 0)
 
 	teleportToReleasepoint(ply)
 end
@@ -106,9 +112,12 @@ util.AddNetworkString("dbRemJail")
 net.Receive("dbRemJail", function(len, ply)
 	local _uid = net.ReadString()
 
+	local _SteamID = SQL_SELECT("yrp_jail", "*", "uniqueID = '" .. _uid .. "'")
+
 	local _res = SQL_DELETE_FROM("yrp_jail", "uniqueID = " .. _uid)
 
-	local _SteamID = net.ReadString()
+	_SteamID = _SteamID[1].SteamID
+
 	local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
 
 	local _in_jailboard = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
