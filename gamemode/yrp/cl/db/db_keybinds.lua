@@ -31,6 +31,8 @@ YRPKEYBINDS["speak_next"] = KEY_PAGEUP
 YRPKEYBINDS["speak_prev"] = KEY_PAGEDOWN
 YRPKEYBINDS["drop_item"] = KEY_G
 
+YRPKEYBINDS["menu_interact"] = KEY_E
+
 YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
 

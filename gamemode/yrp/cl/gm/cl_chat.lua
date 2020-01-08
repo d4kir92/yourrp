@@ -243,11 +243,14 @@ function InitYRPChat()
 
 		local oldAddText = chat.AddText
 		function chat.AddText(...)
+			local yrp = false
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
 			_delay = 3
-			for _, obj in pairs(args) do
-				if type(obj) == "table" then
+			for i, obj in pairs(args) do
+				if type(obj) == "boolean" and i == 1 then
+					yrp = true
+				elseif type(obj) == "table" then
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(obj.r, obj.g, obj.b, 255)
 					end
@@ -280,8 +283,8 @@ function InitYRPChat()
 							if _l.l_www then
 								_link = "https://" .. _link
 							end
-							if !strEmpty(_link) then
-								if _l.secure then
+							if !strEmpty(_link) and yrp then
+								if _l.l_secure then
 									yrpChat.richText:InsertColorChange(200, 200, 255, 255)
 								else
 									yrpChat.richText:InsertColorChange(255, 100, 100, 255)
@@ -303,12 +306,14 @@ function InitYRPChat()
 							yrpChat.richText:AppendText(str)
 						end
 					end
-				elseif type(obj) != "number" and obj:IsPlayer() then
+				elseif type(obj) == "entity" and obj:IsPlayer() then
 					local col = GAMEMODE:GetTeamColor(obj)
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
+				else
+					YRP.msg("error", "TYPE: " .. type(obj) .. " obj: " .. tostring(obj))
 				end
 			end
 
@@ -323,11 +328,15 @@ function InitYRPChat()
 		LocalPlayer():ConCommand("say \"" .. "!help" .. "\"")
 
 		yrpChat.richText:GotoTextEnd()
+
+		timer.Simple(4, function()
+			yrpChat.richText:GotoTextEnd()
+		end)
 	else
-		timer.Simple(1, function()
+		--[[timer.Simple(1, function()
 			printGM("error", "Chat creation failed! " .. tostring(yrpChat) .. " " .. tostring(yrpChat.window) .. "." )
 			InitYRPChat()
-		end)
+		end)]]
 	end
 end
 
@@ -494,7 +503,7 @@ net.Receive("yrp_player_say", function(len)
 		table.insert(_unpack, _tmp.text_color)
 		table.insert(_unpack, tostring(_tmp.text))
 
-		chat.AddText(unpack(_unpack))
+		chat.AddText(true, unpack(_unpack))
 		chat.PlaySound()
 	end
 end)

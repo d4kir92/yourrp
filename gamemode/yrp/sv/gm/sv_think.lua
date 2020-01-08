@@ -203,12 +203,10 @@ local DEC = 2
 timer.Create("ServerThink", TICK, 0, function()
 	local _all_players = player.GetAll()
 
-	if _time % 1.0 < TICK then	-- Every second
+	if _time % 1.0 == 0 then	-- Every second
 		for k, ply in pairs(_all_players) do
 			ply:addSecond()
 			if ply:GetDBool("loaded", false) then
-				anti_bunnyhop(ply)
-
 				if !ply:GetDBool("inCombat") then
 					reg_hp(ply)	 --HealthReg
 					reg_ar(ply)	 --ArmorReg
@@ -324,8 +322,6 @@ timer.Create("ServerThink", TICK, 0, function()
 	if _time % GetBackupCreateTime() == 0 then
 		RemoveOldBackups()
 		CreateBackup()
-
-		SearchForCollectionID()
 	end
 
 	local _auto_save = 300
@@ -391,6 +387,7 @@ function UpdateJailpointTable()
 			local spawner = {}
 			spawner.pos = v.position
 			spawner.uniqueID = v.uniqueID
+			spawner.name = v.name
 			if !table.HasValue(t, spawner) then
 				table.insert(t, spawner)
 			end

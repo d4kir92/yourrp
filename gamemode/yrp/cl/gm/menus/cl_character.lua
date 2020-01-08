@@ -1,9 +1,5 @@
 --Copyright (C) 2017 - 2019 Arno Zura (https: /  / www.gnu.org / licenses / gpl.txt)
 
---[[ Local Variables ]]--
-local l = {}
-l.max = 99
-
 function createMDBox(derma, parent, w, h, x, y, height, color)
 	local tmpMD = vgui.Create(derma, parent)
 	tmpMD:SetSize(w + height, h + height)
@@ -694,8 +690,12 @@ function openCharacterSelection()
 
 				-- Current and Max Count of Possible Characters
 				local acur = character.amount or -1
-				local amax = l.max or -1
-				draw.SimpleText(acur .. "/" .. amax, "HudHeader", pw / 2, ph - YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				local amax = LocalPlayer():GetDInt("int_characters_max", 1)
+				local color = Color(255, 255, 255, 255)
+				if acur > amax then
+					color = Color(255, 100, 100, 255)
+				end
+				draw.SimpleText(acur .. "/" .. amax, "HudHeader", pw / 2, ph - YRP.ctr(60), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				draw.SimpleText(self.text, "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
@@ -740,8 +740,6 @@ function openCharacterSelection()
 					if _characters != nil and pa(_characters) then
 						character.amount = #_characters or 0
 						character.amount = tonumber(character.amount)
-						l.max = _characters.chars.max or 99
-						l.max = tonumber(l.max)
 
 						if #_characters < 1 then
 							if pa(_cs.frame) then
@@ -838,28 +836,35 @@ function openCharacterSelection()
 									draw.SimpleText(self.rpname, "YRP_30_700", YRP.ctr(30), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.grp, "YRP_18_500", YRP.ctr(30), YRP.ctr(105), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(SQL_STR_OUT(self.map), "YRP_18_500", YRP.ctr(30), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+									if i > LocalPlayer():GetDInt("int_characters_max", 1) then
+										paintMD(pw, ph, nil, Color(255, 100, 100, 100))
+										draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									end
 								end
 								function tmpChar:DoClick()
-									curChar = self.charid
-									_cur = self.rpname
-									if self.playermodels != nil and self.playermodelID != nil then
-										local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
-										if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
-											if !strEmpty(_playermodel) then
-												charplayermodel:SetModel(_playermodel)
-											else
-												charplayermodel:SetModel("models / player / skeleton.mdl")
-											end
-											if charplayermodel.Entity != nil then
-												charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
-												charplayermodel.Entity:SetSkin(self.skin)
-												for bgx = 0, 19 do
-													charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
+									if i <= LocalPlayer():GetDInt("int_characters_max", 1) then
+										curChar = self.charid
+										_cur = self.rpname
+										if self.playermodels != nil and self.playermodelID != nil then
+											local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
+											if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
+												if !strEmpty(_playermodel) then
+													charplayermodel:SetModel(_playermodel)
+												else
+													charplayermodel:SetModel("models / player / skeleton.mdl")
+												end
+												if charplayermodel.Entity != nil then
+													charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
+													charplayermodel.Entity:SetSkin(self.skin)
+													for bgx = 0, 19 do
+														charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
+													end
 												end
 											end
+										else
+											printGM("note", "Character role has no playermodel!")
 										end
-									else
-										printGM("note", "Character role has no playermodel!")
 									end
 								end
 
@@ -915,12 +920,12 @@ function openCharacterSelection()
 			local charactersCreate = createD("YButton", characterList, YRP.ctr(80), YRP.ctr(80), characterList:GetWide() - YRP.ctr(80) - br, characterList:GetTall() - YRP.ctr(80) - br)
 			charactersCreate:SetText("")
 			function charactersCreate:Paint(pw, ph)
-				if character.amount < l.max then
+				if character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
 					hook.Run("YAddPaint", self, pw, ph)
 				end
 			end
 			function charactersCreate:DoClick()
-				if character.amount < l.max then
+				if character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
 					if pa(_cs.frame) then
 						_cs.frame:Close()
 					end
@@ -950,7 +955,7 @@ function openCharacterSelection()
 
 			charactersEnter:SetText("")
 			function charactersEnter:DoClick()
-				if LocalPlayer() != nil and curChar != " - 1" then
+				if LocalPlayer() != nil and curChar != "-1" then
 					if LocalPlayer():Alive() then
 						net.Start("LogOut")
 						net.SendToServer()

@@ -361,7 +361,7 @@ if SERVER then
 	function SendDEntities(ply, funcname)
 		for j, ent in pairs(ents.GetAll()) do
 			if ent.EntIndex != nil then
-				timer.Simple(j * 0.02, function()
+				--timer.Simple(j * 0.01, function()
 					local entindex = ent:EntIndex()
 					ENTS[entindex] = ENTS[entindex] or {}
 					ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
@@ -387,7 +387,7 @@ if SERVER then
 
 					-- DONE
 					SendDInit(entindex, ply)
-				end)
+				--end)
 			end
 		end
 	end

@@ -22,9 +22,18 @@ end
 function ENT:Use(activator, caller)
 	local tmpTable = SQL_SELECT("yrp_jail", "*", nil)
 
-	if tmpTable == nil or tmpTable == false then
+	if !wk(tmpTable) then
 		tmpTable = {}
 	end
+
+	for i, v in pairs(tmpTable) do
+		local cells = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'")
+		if wk(cells) then
+			cells = cells[1]
+			v.cellname = cells.name
+		end
+	end
+
 	net.Start("openLawBoard")
 		net.WriteTable(tmpTable)
 	net.Send(caller)
@@ -38,12 +47,19 @@ util.AddNetworkString("jail")
 net.Receive("jail", function(len, ply)
 	local target = net.ReadEntity()
 
-	teleportToJailpoint(target)
+	local jail = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:SteamID() .. "'")
+	if wk(jail) then
+		jail = jail[1]
+		local time = jail.time
+		teleportToJailpoint(target, time)
+	end
 end)
 
 util.AddNetworkString("unjail")
 net.Receive("unjail", function(len, ply)
 	local target = net.ReadEntity()
+
+	SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:SteamID() .. "'")
 
 	teleportToReleasepoint(target)
 end)

@@ -167,7 +167,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
 
 --[[ Characters Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_money_start", "TEXT DEFAULT '500'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_max", "TEXT DEFAULT '10'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_gender", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_othergender", "INT DEFAULT 0")
@@ -1209,13 +1208,7 @@ end)
 
 
 
---[[ SOCIAL SETTINGS ]]--
-util.AddNetworkString("update_text_characters_max")
-net.Receive("update_text_characters_max", function(len, ply)
-	local str = net.ReadString()
-	GeneralUpdateString(ply, "update_text_characters_max", "text_characters_max", str)
-end)
-
+--[[ CHARACTERS SETTINGS ]]--
 util.AddNetworkString("update_text_characters_money_start")
 net.Receive("update_text_characters_money_start", function(len, ply)
 	local str = net.ReadString()

@@ -15,6 +15,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ' '")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "int_characters_max", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
@@ -643,6 +645,31 @@ net.Receive("usergroup_sent_dn", function(len, ply)
 	end
 end)
 
+function UGUpdateInt(ply, uid, name, value)
+	name = name or "UNNAMED"
+	name = string.lower(name)
+	SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. uid .. "'")
+
+	printGM("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
+
+	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
+		net.Start("usergroup_update_" .. name)
+			net.WriteString(value)
+		net.Send(pl)
+	end
+
+	local ug = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	if wk(ug) then
+		ug = ug[1]
+		ug.string_name = string.lower(ug.string_name)
+		for i, pl in pairs(player.GetAll()) do
+			if string.lower(pl:GetUserGroup()) == ug.string_name then
+				pl:SetDInt(name, value)
+			end
+		end
+	end
+end
+
 function UGCheckBox(ply, uid, name, value)
 	name = name or "UNNAMED"
 	name = string.lower(name)
@@ -998,6 +1025,16 @@ net.Receive("usergroup_update_bool_canseefrequency", function(len, ply)
 	local bool_canseefrequency = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canseefrequency", bool_canseefrequency)
 end)
+
+
+
+util.AddNetworkString("usergroup_update_int_characters_max")
+net.Receive("usergroup_update_int_characters_max", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local int_characters_max = net.ReadString()
+	UGUpdateInt(ply, uid, "int_characters_max", int_characters_max)
+end)
+
 
 
 -- Functions
@@ -1643,6 +1680,7 @@ function Player:UserGroupLoadout()
 		self:SetDBool("bool_canusespawnmenu", tobool(UG.bool_canusespawnmenu))
 		self:SetDBool("bool_canseefrequency", tobool(UG.bool_canseefrequency))
 		self:SetDInt("int_position", UG.int_position)
+		self:SetDInt("int_characters_max", UG.int_characters_max)
 	end
 end
 

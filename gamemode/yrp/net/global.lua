@@ -187,25 +187,41 @@ if SERVER then
 	util.AddNetworkString("request_dglobals")
 
 	function SendDGlobals(ply)
+		local c = 0
 		NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
 		for i, v in pairs(NWGlobal["BOOL"]) do
-			SendGlobalDBool(i, v, ply)
+			c = c + 1
+			--timer.Simple(c * 0.01, function()
+				SendGlobalDBool(i, v, ply)
+			--end)
 		end
 		NWGlobal["STRING"] = NWGlobal["STRING"] or {}
 		for i, v in pairs(NWGlobal["STRING"]) do
-			SendGlobalDString(i, v, ply)
+			c = c + 1
+			--timer.Simple(c * 0.01, function()
+				SendGlobalDString(i, v, ply)
+			--end)
 		end
 		NWGlobal["INT"] = NWGlobal["INT"] or {}
 		for i, v in pairs(NWGlobal["INT"]) do
-			SendGlobalDInt(i, v, ply)
+			c = c + 1
+			--timer.Simple(c * 0.01, function()
+				SendGlobalDInt(i, v, ply)
+			--end)
 		end
 		NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
 		for i, v in pairs(NWGlobal["FLOAT"]) do
-			SendGlobalDFloat(i, v, ply)
+			c = c + 1
+			--timer.Simple(c * 0.01, function()
+				SendGlobalDFloat(i, v, ply)
+			--end)
 		end
 		NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
 		for i, v in pairs(NWGlobal["TABLE"]) do
-			SendGlobalDTable(i, v, ply)
+			c = c + 1
+			--timer.Simple(c * 0.01, function()
+				SendGlobalDTable(i, v, ply)
+			--end)
 		end
 	end
 	net.Receive("request_dglobals", function(len, ply)

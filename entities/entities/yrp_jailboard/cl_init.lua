@@ -52,45 +52,51 @@ net.Receive("openLawBoard", function(len)
 			function addButton:DoClick()
 				local _SteamID = nil
 				local _nick = ""
-				local addWindow = createVGUI("DFrame", nil, 400, 420, 0, 0)
-				addWindow:SetTitle("")
+				local _Cell = nil
+				local addWindow = createVGUI("YFrame", nil, 800, 820, 0, 0)
+				addWindow:SetHeaderHeight(YRP.ctr(100))
+				addWindow:SetTitle("LID_add")
 				addWindow:Center()
 
 				function addWindow:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 250))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_add"), "sef", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_player"), "sef", YRP.ctr(10), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_note"), "sef", YRP.ctr(10), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_timeinsec"), "sef", YRP.ctr(10), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					hook.Run("YFramePaint", self, pw, ph)
+				end
+				local content = addWindow:GetContent()
+				function content:Paint(pw, ph)
+					draw.SimpleTextOutlined(YRP.lang_string("LID_player"), "sef", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_cell"), "sef", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_note"), "sef", YRP.ctr(10), YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(YRP.lang_string("LID_timeinsec"), "sef", YRP.ctr(10), YRP.ctr(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 				end
 
-				local _player = createVGUI("DComboBox", addWindow, 380, 50, 10, 100)
-
+				local _player = createVGUI("DComboBox", addWindow:GetContent(), 380, 50, 10, 50)
 				for k, v in pairs(player.GetAll()) do
 					_player:AddChoice(v:RPName(), v:SteamID())
 				end
-
 				function _player:OnSelect(index, value, data)
 					_SteamID = data
 					_nick = value
 				end
 
-				local _reason = createVGUI("DTextEntry", addWindow, 380, 50, 10, 200)
-				local _time = createVGUI("DNumberWang", addWindow, 380, 50, 10, 300)
-				local _add = createVGUI("DButton", addWindow, 380, 50, 10, 360)
-				_add:SetText("")
-
-				function _add:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 255))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_add"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				local _cell = createVGUI("DComboBox", addWindow:GetContent(), 380, 50, 10, 150)
+				for k, v in pairs(GetGlobalDTable("yrp_jailpoints")) do
+					_cell:AddChoice(v.name, v.uniqueID)
+				end
+				function _cell:OnSelect(index, value, data)
+					_Cell = data
 				end
 
+				local _reason = createVGUI("DTextEntry", addWindow:GetContent(), 380, 50, 10, 250)
+				local _time = createVGUI("DNumberWang", addWindow:GetContent(), 380, 50, 10, 350)
+				local _add = createVGUI("YButton", addWindow:GetContent(), 380, 50, 10, 420)
+				_add:SetText("LID_add")
+
 				function _add:DoClick()
-					if _SteamID ~= nil then
-						local _insert = "'" .. _SteamID .. "', '" .. SQL_STR_IN(_reason:GetText()) .. "', " .. db_int(_time:GetValue()) .. ", '" .. SQL_STR_IN(_nick) .. "'"
+					if _SteamID != nil and _Cell != nil then
+						local _insert = "'" .. _SteamID .. "', '" .. SQL_STR_IN(_reason:GetText()) .. "', " .. db_int(_time:GetValue()) .. ", '" .. SQL_STR_IN(_nick) .. "', '" .. _Cell .. "'"
 						net.Start("dbAddJail")
 						net.WriteString("yrp_jail")
-						net.WriteString("SteamID, reason, time, nick")
+						net.WriteString("SteamID, reason, time, nick, cell")
 						net.WriteString(_insert)
 						net.WriteString(_SteamID)
 						net.SendToServer()
@@ -177,6 +183,7 @@ net.Receive("openLawBoard", function(len)
 						net.Start("unjail")
 							net.WriteEntity(target)
 						net.SendToServer()
+						window:Close()
 					end
 				end
 			end
@@ -215,7 +222,7 @@ net.Receive("openLawBoard", function(len)
 					end
 					draw.RoundedBox(0, 0, 0, pw, ph, color)
 					draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. v.nick, "Y_25_500", YRP.ctr(20), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_cell") .. ": " .. SQL_STR_OUT(v.uniqueID), "sef", YRP.ctr(20), YRP.ctr(95), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
+					draw.SimpleTextOutlined(YRP.lang_string("LID_cell") .. ": " .. SQL_STR_OUT(v.cellname), "sef", YRP.ctr(20), YRP.ctr(95), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
 					draw.SimpleTextOutlined(YRP.lang_string("LID_note") .. ": " .. SQL_STR_OUT(v.reason), "sef", YRP.ctr(20), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
 					draw.SimpleTextOutlined(YRP.lang_string("LID_time") .. ": " .. v.time, "sef", YRP.ctr(20), ph - YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end

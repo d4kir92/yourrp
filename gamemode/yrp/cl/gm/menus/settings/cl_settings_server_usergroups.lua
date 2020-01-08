@@ -451,6 +451,27 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	GAMEPLAY:AutoSize(true)
 
+	function GAMEPLAYAddIntBox(name, lstr)
+		local tmp = createD("DPanel", PARENT, GAMEPLAY:GetWide() - YRP.ctr(40), YRP.ctr(100), 0, 0)
+		function tmp:Paint(pw, ph)
+			--
+		end
+
+		tmp.lbl = createD("YLabel", tmp, tmp:GetWide(), YRP.ctr(50), 0, 0)
+		tmp.lbl:SetText(lstr)
+
+		tmp.cb = createD("DNumberWang", tmp, tmp:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
+		tmp.cb:SetValue(ug[name])
+		function tmp.cb:OnValueChanged(val)
+			net.Start("usergroup_update_" .. name)
+				net.WriteString(CURRENT_USERGROUP)
+				net.WriteString(val)
+			net.SendToServer()
+		end
+
+		GAMEPLAY:AddItem(tmp)
+	end
+
 	function GAMEPLAYAddCheckBox(name, lstr)
 		local tmp = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 		function tmp:Paint(pw, ph)
@@ -514,6 +535,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_canusecontextmenu", "LID_gp_canusecontextmenu")
 	GAMEPLAYAddCheckBox("bool_canusespawnmenu", "LID_gp_canusespawnmenu")
+
+	GAMEPLAYAddHr()
+	GAMEPLAYAddIntBox("int_characters_max", "LID_charactersmax")
 end)
 
 function AddUG(tbl)

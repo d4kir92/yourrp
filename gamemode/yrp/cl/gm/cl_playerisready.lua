@@ -39,8 +39,8 @@ function YRPSendIsReady()
 	end)
 end
 
-function GM:InitPostEntity()
+hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	printGM("note", "All entities are loaded.")
 
 	YRPSendIsReady()
-end
+end)

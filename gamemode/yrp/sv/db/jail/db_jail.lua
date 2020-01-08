@@ -5,10 +5,11 @@
 
 local _db_name = "yrp_jail"
 
-SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "nick", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(_db_name, "nick", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(_db_name, "reason", "TEXT DEFAULT '-'")
 SQL_ADD_COLUMN(_db_name, "time", "INT DEFAULT 1")
+SQL_ADD_COLUMN(_db_name, "cell", "INT DEFAULT 1")
 
 --db_drop_table(_db_name)
 --db_is_empty(_db_name)
@@ -39,38 +40,40 @@ end
 function teleportToJailpoint(ply, tim)
 	ply:SetDBool("injail", true)
 	if tim != nil then
-		ply:SetDInt("jailtime", tim)
-	end
+		local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
 
-	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
+		if wk(_tmpTele) then
+			for i, v in pairs(_tmpTele) do
+				local _tmp = string.Explode(",", v.position)
+				local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
+				local oplys = ents.FindInSphere(vec, 80)
+				local empty = true
+				for j, p in pairs(oplys) do
+					if p:IsPlayer() then
+						empty = false
+					end
+				end
+				if empty then
+					-- DONE
+					ply:SetDInt("int_arrests", ply:GetDTInt("int_arrests", 0))
+					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetDTInt("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
 
-	if wk(_tmpTele) then
-		for i, v in pairs(_tmpTele) do
-			local _tmp = string.Explode(",", v.position)
-			local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
-			local oplys = ents.FindInSphere(vec, 80)
-			local empty = true
-			for j, p in pairs(oplys) do
-				if p:IsPlayer() then
-					empty = false
+					tp_to(ply, vec)
+					_tmp = string.Explode(",", v.angle)
+					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+
+					ply:StripWeapons()
 				end
 			end
-			if empty then
-				tp_to(ply, vec)
-				_tmp = string.Explode(",", v.angle)
-				ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+		else
+			local _str = YRP.lang_string("LID_nojailpoint")
+			printGM("note", "[teleportToJailpoint] " .. _str)
 
-				ply:StripWeapons()
-			end
+			net.Start("yrp_noti")
+				net.WriteString("nojailpoint")
+				net.WriteString("")
+			net.Broadcast()
 		end
-	else
-		local _str = YRP.lang_string("LID_nojailpoint")
-		printGM("note", "[teleportToJailpoint] " .. _str)
-
-		net.Start("yrp_noti")
-			net.WriteString("nojailpoint")
-			net.WriteString("")
-		net.Broadcast()
 	end
 end
 
@@ -137,3 +140,7 @@ net.Receive("dbRemJail", function(len, ply)
 		end
 	end
 end)
+
+local notes = "yrp_jail_notes"
+SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(_db_name, "note", "TEXT DEFAULT ''")

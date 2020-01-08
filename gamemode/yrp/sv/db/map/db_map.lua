@@ -204,6 +204,15 @@ end)
 
 
 
+util.AddNetworkString("update_map_name")
+net.Receive("update_map_name", function(len, ply)
+	local uid = net.ReadString()
+	local i = net.ReadString()
+
+	SQL_UPDATE(_db_name, "name = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	UpdateJailpointTable()
+end)
+
 util.AddNetworkString("update_map_int_respawntime")
 net.Receive("update_map_int_respawntime", function(len, ply)
 	local uid = net.ReadString()

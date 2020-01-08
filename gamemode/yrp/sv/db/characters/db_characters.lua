@@ -38,6 +38,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_warnings", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_violations", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_arrests", "INT DEFAULT 0")
 
 --[[ EQUIPMENT ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "eqbp", "TEXT DEFAULT ' '")
@@ -70,6 +71,7 @@ function Player:CharacterLoadout()
 
 		self:SetDInt("int_warnings", chatab.int_warnings)
 		self:SetDInt("int_violations", chatab.int_violations)
+		self:SetDInt("int_arrests", chatab.int_arrests)
 
 		local levelsystem = SQL_SELECT("yrp_levelsystem", "*", nil)
 		if wk(levelsystem) then
@@ -479,14 +481,6 @@ function send_characters(ply)
 	local netTable = {}
 
 	local chars = {}
-	chars.max = 99
-
-	local generalTab = SQL_SELECT("yrp_general", "*", nil)
-	if wk(generalTab) then
-		generalTab = generalTab[1]
-
-		chars.max = generalTab.text_characters_max or chars.max
-	end
 
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
@@ -534,6 +528,8 @@ function send_characters(ply)
 				YRP.msg("note", "[send_characters] roleid != nil or groupid != nil")
 			end
 		end
+	else
+		printGM("note", "[send_characters] chaTab failed! " .. tostring(chaTab))
 	end
 
 	local plytab = ply:GetPlyTab()

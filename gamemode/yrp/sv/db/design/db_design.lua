@@ -79,11 +79,11 @@ end)
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
-function Player:DesignLoadout()
+function Player:DesignLoadout(from)
 	self:SetDInt("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
-	printGM("debug", "[DesignLoadout] " .. self:YRPName())
+	printGM("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. from)
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
@@ -102,7 +102,7 @@ net.Receive("ply_changed_resolution", function(len, ply)
 		once = true
 		return
 	end
-	ply:DesignLoadout()
+	ply:DesignLoadout("ply_changed_resolution")
 end)
 
 util.AddNetworkString("change_hud_design")

@@ -1080,6 +1080,6 @@ net.Receive("reset_hud_settings", function(len, ply)
 	YRP.msg("db", "Reset Hud Settings by " .. ply:YRPName())
 	DefaultHUDSettings(true)
 	for i, v in pairs(player.GetAll()) do
-		ply:DesignLoadout()
+		ply:DesignLoadout("reset_hud_settings")
 	end
 end)

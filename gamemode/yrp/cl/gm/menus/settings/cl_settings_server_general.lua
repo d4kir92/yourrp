@@ -897,7 +897,6 @@ net.Receive("Connect_Settings_General", function(len)
 		end
 		General_Slider:AddPanel(CHARACTERS_SETTINGS)
 
-		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_max, "LID_charactersmax", "update_text_characters_max")
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_money_start, "LID_charactersmoneystart", "update_text_characters_money_start")
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())

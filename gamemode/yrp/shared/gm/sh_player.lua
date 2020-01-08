@@ -52,6 +52,8 @@ function Player:GetPlyTab()
 				else
 					YRP.msg("error", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]" )
 				end
+			else
+				YRP.msg("note", "[GetPlyTab] LoadedGamemode failed [" .. tostring(steamid) .. "]" )
 			end
 		else
 			printGM("error", "[GetPlyTab] player is invalid. (" .. tostring(self:SteamID()) .. ") IsPlayer()?: " .. tostring(self:IsPlayer()))
