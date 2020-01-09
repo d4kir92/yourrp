@@ -63,12 +63,15 @@ function YRP.GetFont()
 	return font
 end
 
+local savedfonts = {}
+
 function YRP.SetFont(fontname)
 	if wk(fontname) then
 		local fontID = string.lower(fontname)
 		local fontTab = fonts[fontID]
 		font = fontTab.name or ""
 		fontscale = fontTab.scale or ""
+		table.Empty(savedfonts)
 		YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
 		changeFontSize()
 	end
@@ -104,14 +107,12 @@ end
 
 local _weight = 500
 
-local fonts = {}
-
 function yrp_create_font(_name, _font, _size, __weight, _outline, _shadow)
 	if wk(_name) and wk(_font) and wk(_size) then
-		if table.HasValue(fonts, _name) then
+		if table.HasValue(savedfonts, _name) then
 			--
 		else
-			table.insert(fonts, _name)
+			table.insert(savedfonts, _name)
 			surface.CreateFont(_name, {
 				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 				extended = true,
