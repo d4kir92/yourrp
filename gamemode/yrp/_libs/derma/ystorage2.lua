@@ -83,7 +83,7 @@ net.Receive("yrp_place_item", function(len, ply)
 	test.uid = iuid
 	test:SetModel(item.text_worldmodel)
 	function test:PaintOver(pw, ph)
-		draw.SimpleText(item.text_printname, "Roboto12", pw / 2, ph - YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(item.text_printname, "Y_12_500", pw / 2, ph - YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	test:Droppable("yrp_item")
 

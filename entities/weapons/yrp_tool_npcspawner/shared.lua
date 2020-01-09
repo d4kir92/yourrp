@@ -150,22 +150,26 @@ if CLIENT then
 end
 
 function SWEP:PrimaryAttack()
-	if SERVER then
-		local ply = self:GetOwner()
+	self.pdelay = self.pdelay or 0
+	if self.pdelay < CurTime() then
+		self.pdelay = CurTime() + 0.4
+		if SERVER then
+			local ply = self:GetOwner()
 
-		local pos = Vector(0, 0, 0)
-		local tr = util.TraceLine( {
-			start = ply:EyePos(),
-			endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
-			filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
-		} )
-		pos = tr.HitPos or pos
+			local pos = Vector(0, 0, 0)
+			local tr = util.TraceLine( {
+				start = ply:EyePos(),
+				endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
+				filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
+			} )
+			pos = tr.HitPos or pos
 
-		SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner" .. "', 'Spawner'")
+			SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner" .. "', 'Spawner'")
 
-		YRP.msg("db", "Added Spawner")
+			YRP.msg("db", "Added Spawner")
 
-		UpdateSpawnerTable()
+			UpdateSpawnerTable()
+		end
 	end
 end
 

@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 160 --do NOT change this!
-GM.VersionCanary = 322 --do NOT change this!
+GM.VersionBeta = 161 --do NOT change this!
+GM.VersionCanary = 323 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -355,7 +355,7 @@ if CLIENT then
 			local time = math.Round((server_pong + recon_sec) - CurTime(), 0)
 			local tab = {}
 			tab["SECONDS"] = time
-			draw.SimpleText(YRP.lang_string("LID_lostconnection") .. "! " .. YRP.lang_string("LID_retryinxsec", tab), "YRP_36_500", ScrW() / 2, ScrH() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_lostconnection") .. "! " .. YRP.lang_string("LID_retryinxsec", tab), "Y_36_500", ScrW() / 2, ScrH() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end)
 elseif SERVER then

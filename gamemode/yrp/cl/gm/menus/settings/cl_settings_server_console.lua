@@ -16,7 +16,7 @@ net.Receive("Connect_Settings_Console", function(len)
 		PARENT.consolebackground = createD("DPanel", PARENT, YRP.ctr(1000), ScrH() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 
 		PARENT.console = createD("RichText", PARENT.consolebackground, YRP.ctr(1000), ScrH() - YRP.ctr(140) - YRP.ctr(50), 0, 0)
-		PARENT.console:SetFontInternal("Roboto18B")
+		PARENT.console:SetFontInternal("Y_18_700")
 		PARENT.console:InsertColorChange(0, 0, 0, 255)
 
 		PARENT.consoletext = createD("DTextEntry", PARENT.consolebackground, YRP.ctr(1000), YRP.ctr(50), 0, ScrH() - YRP.ctr(140) - YRP.ctr(50))

@@ -86,18 +86,18 @@ function buyWindow(door, tabBuilding)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "sef", br, YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		draw.RoundedBox(0, 0, YRP.ctr(200), pw, ph - YRP.ctr(200), Color(255, 255, 100, 200))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "YRP_18_500", br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_building") .. ":", "YRP_18_500", br, YRP.ctr(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "YRP_18_500", br, YRP.ctr(450), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ":", "YRP_18_500", br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_canbeowned") .. ":", "YRP_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "YRP_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_building") .. ":", "Y_18_500", br, YRP.ctr(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "Y_18_500", br, YRP.ctr(450), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ":", "Y_18_500", br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_canbeowned") .. ":", "Y_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
 		if tostring(door:GetDString("buildingID", "-1")) == "-1" then
-			draw.SimpleTextOutlined("Loading IDs", "YRP_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("Loading IDs", "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		else
-			draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "-1"), "YRP_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", "-1"), "YRP_18_500", pw - br, YRP.ctr(290), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "-1"), "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", "-1"), "Y_18_500", pw - br, YRP.ctr(290), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		end
 	end
 
@@ -287,17 +287,17 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", YRP.ctr(20), YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		if OWNER then
-			draw.SimpleTextOutlined(YRP.lang_string("LID_header"), "YRP_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_description"), "YRP_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_header"), "Y_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_description"), "Y_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 			--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetDString("level", -1), "sef", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		end
 
 		draw.RoundedBox(0, 0, YRP.ctr(220), pw, ph - YRP.ctr(220), Color(255, 255, 100, 200))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "YRP_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "YRP_18_500", YRP.ctr(540), YRP.ctr(370), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", YRP.ctr(540), YRP.ctr(370), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "FAILED"), "YRP_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", -1), "YRP_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "FAILED"), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 	end
 	function yrp_door.window:OnClose()
 		closeMenu()

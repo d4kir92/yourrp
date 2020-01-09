@@ -560,11 +560,16 @@ net.Receive("DeleteCharacter", function(len, ply)
 		if result == nil then
 			printGM("db", "DeleteCharacter: success"	)
 			ply:KillSilent()
-			local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
-			if _first_character != nil then
-				_first_character = _first_character[1]
-				SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
-				SQL_SELECT("yrp_players", "*", nil)
+			local steamid = ply:SteamID()
+			if wk(steamid) then
+				local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
+				if _first_character != nil then
+					_first_character = _first_character[1]
+					SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. steamid .. "'")
+					SQL_SELECT("yrp_players", "*", nil)
+				end
+			else
+				YRP.msg("error", "STEAMID FAILED => " .. tostring(steamid) .. " [" .. tostring(ply) .. "]")
 			end
 			ply:Spawn()
 		else
@@ -630,11 +635,11 @@ end)
 util.AddNetworkString("EnterWorld")
 net.Receive("EnterWorld", function(len, ply)
 	local char = net.ReadString()
-	if char != nil then
+	if wk(char) then
 		SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(char), "SteamID = '" .. ply:SteamID() .. "'")
 		ply:Spawn()
 	else
-		printGM("gm", "No valid character selected")
+		printGM("gm", "No valid character selected (" .. tostring(char) .. ")")
 	end
 end)
 

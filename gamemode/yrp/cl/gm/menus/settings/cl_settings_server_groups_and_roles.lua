@@ -594,9 +594,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				else
 					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
 				end
-				if ea.typ == "role" then
+				if ea.typ == "role" and ea.tab.uniqueID != nil then
 					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. ConvertToDarkRPJobName(ea.tab.string_name) .. "      RoleUID: " .. ea.tab.uniqueID
-				elseif ea.typ == "group" then
+				elseif ea.typ == "group" and ea.tab.uniqueID != nil then
 					tab2.text = tab2.text .. "       GroupUID: " .. ea.tab.uniqueID
 				end
 				tab2.font = "mat1text"
@@ -985,6 +985,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			role.uniqueID = tonumber(role.uniqueID)
 			cur_role.gro = role.int_groupID
 			cur_role.edi = role.uniqueID
+
+			if !pa(ea) then
+				YRP.msg("note", "Closed F8/Switched f8 site?")
+				return
+			end
 
 			ea.typ = "role"
 			ea.tab = role

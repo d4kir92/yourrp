@@ -279,7 +279,7 @@ function HUDSpace()
 					SPACE[ele].YFontCenter = SPACE[ele].BackgroundY + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
-					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_600"
+					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_700"
 				elseif etab[5] == 1 then
 					--
 				elseif etab[5] == 2 then
@@ -303,7 +303,7 @@ function HUDSpace()
 					SPACE[ele].YFontCenter = SPACE[ele].y + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
-					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_600"
+					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_700"
 				end
 			end
 		elseif table.Count(SPACE) > 0 and lply:Alive() then

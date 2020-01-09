@@ -93,7 +93,7 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 	if fontsize <= 0 then
 		fontsize = 14
 	end
-	local font = "YRP_" .. fontsize .. "_500"
+	local font = "Y_" .. fontsize .. "_500"
 
 	draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0))
 end
@@ -109,7 +109,7 @@ function HUDCirclesDrawText(ele, text)
 	if fontsize <= 0 then
 		fontsize = 14
 	end
-	local font = "YRP_" .. fontsize .. "_500"
+	local font = "Y_" .. fontsize .. "_500"
 
 	local ax = lply:HudValue(ele, "AX")
 	local ay = lply:HudValue(ele, "AY")

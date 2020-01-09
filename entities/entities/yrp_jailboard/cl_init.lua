@@ -95,10 +95,15 @@ net.Receive("openLawBoard", function(len)
 					if _SteamID != nil and _Cell != nil then
 						local _insert = "'" .. _SteamID .. "', '" .. SQL_STR_IN(_reason:GetText()) .. "', " .. db_int(_time:GetValue()) .. ", '" .. SQL_STR_IN(_nick) .. "', '" .. _Cell .. "'"
 						net.Start("dbAddJail")
-						net.WriteString("yrp_jail")
-						net.WriteString("SteamID, reason, time, nick, cell")
-						net.WriteString(_insert)
-						net.WriteString(_SteamID)
+							net.WriteString("yrp_jail")
+							net.WriteString("SteamID, reason, time, nick, cell")
+							net.WriteString(_insert)
+							net.WriteString(_SteamID)
+						net.SendToServer()
+
+						net.Start("AddJailNote")
+							net.WriteString(_SteamID)
+							net.WriteString(_reason:GetText())
 						net.SendToServer()
 					end
 				end
@@ -252,8 +257,198 @@ net.Receive("openLawBoard", function(len)
 		end)
 
 		window.tabs:AddOption("LID_records", function(parent)
-			local p = createD("YLabel", parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
-			p:SetText(YRP.lang_string("LID_wip"))
+			-- PlayerListHeader
+			local p = createD("YLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+			p:SetText(YRP.lang_string("LID_players"))
+			-- PlayerList
+			local plist = createD("DScrollPanel", parent, p:GetWide(), YRP.ctr(800), YRP.ctr(20), YRP.ctr(20 + 50))
+			function plist:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+			end
+			plist.btn = 0
+			plist.ply = NULL
+			-- RIGHT
+			plist.notes = createD("YPanel", parent, YRP.ctr(1000), YRP.ctr(1000), YRP.ctr(20 + 800 + 20), YRP.ctr(20))
+			plist.notes.curnote = 0
+			function plist.notes:Paint(pw, ph)
+
+			end
+			function plist.notes:UpdatePlayerNotes()
+				self:Clear()
+				self.addNote = createD("YButton", self, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
+				self.addNote:SetText("+")
+				function self.addNote:Paint(pw, ph)
+					local tab = {}
+					tab.color = Color(100, 255, 100)
+					hook.Run("YButtonPaint", self, pw, ph, tab)
+				end
+				function self.addNote:DoClick()
+					local win = createD("YFrame", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
+					win:SetTitle("")
+					win:SetHeaderHeight(YRP.ctr(100))
+					win:Center()
+					win:MakePopup()
+
+					local content = win:GetContent()
+
+					win.text = createD("DTextEntry", content, content:GetWide(), YRP.ctr(50), 0, 0)
+
+					win.send = createD("YButton", content, content:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
+					win.send:SetText("LID_send")
+					function win.send:DoClick()
+						net.Start("AddJailNote")
+							net.WriteString(plist.ply:SteamID())
+							net.WriteString(win.text:GetText())
+						net.SendToServer()
+
+						plist.notes:UpdatePlayerNotes()
+						win:Close()
+					end
+				end
+
+				self.remNote = createD("YButton", self, YRP.ctr(50), YRP.ctr(50), self:GetWide() - YRP.ctr(50), YRP.ctr(0))
+				self.remNote:SetText("-")
+				function self.remNote:Paint(pw, ph)
+					if plist.notes.curnote > 0 then
+						local tab = {}
+						tab.color = Color(255, 100, 100)
+						hook.Run("YButtonPaint", self, pw, ph, tab)
+					end
+				end
+				function self.remNote:DoClick()
+					if plist.notes.curnote > 0 then
+						net.Start("RemoveJailNote")
+							net.WriteString(plist.notes.curnote)
+						net.SendToServer()
+
+						plist.notes:UpdatePlayerNotes()
+					end
+				end
+
+				self.nlist = createD("DScrollPanel", self, self:GetWide(), self:GetTall() - YRP.ctr(50), 0, YRP.ctr(50))
+				function self.nlist:Paint(pw, ph)
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 40, 40, 255))
+				end
+
+				net.Start("getPlayerNotes")
+					net.WriteEntity(plist.ply)
+				net.SendToServer()
+			end
+			net.Receive("getPlayerNotes", function()
+				local par = plist.notes
+				local notes = net.ReadTable()
+				for i, note in pairs(notes) do
+					note.uniqueID = tonumber(note.uniqueID)
+					local n = createD("YButton", par.nlist, par:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) * (i - 1))
+					n:SetText(note.note)
+					function n:Paint(pw, ph)
+						local tab = {}
+						tab.color = Color(100, 100, 255, 255)
+						if note.uniqueID == par.curnote then
+							tab.color = Color(255, 255, 100, 255)
+						end
+						hook.Run("YButtonPaint", self, pw, ph, tab)
+					end
+					function n:DoClick()
+						par.curnote = note.uniqueID
+					end
+				end
+			end)
+			-- PlayerLines
+			for i, v in pairs(player.GetAll()) do
+				local pline = createD("YButton", plist, p:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) * (i - 1))
+				pline:SetText(v:RPName())
+				function pline:Paint(pw, ph)
+					local color = Color(120, 120, 120, 255)
+					if plist.btn == self then
+						color = Color(255, 255, 100, 255)
+					elseif self:IsHovered() then
+						color = Color(255, 255, 255, 255)
+					end
+					draw.RoundedBox(0, 0, 0, pw, ph, color)
+					draw.SimpleText(self:GetText(), "Y_18_500", YRP.ctr(20), ph / 2, Color(0, 0, 0, 255), 0, 1)
+				end
+				function pline:DoClick()
+					plist.btn = self
+					plist.ply = v
+					plist.notes:UpdatePlayerNotes()
+				end
+
+				plist:Add(pline)
+			end
+
+			-- Playerinfo
+			local pinfo = createD("YPanel", parent, YRP.ctr(800), YRP.ctr(800), YRP.ctr(20), YRP.ctr(890))
+			function pinfo:Paint(pw, ph)
+				if plist.ply:IsPlayer() then
+					local scale = self:GetWide() / GetGlobalDInt("int_" .. "background" .. "_w", 100)
+					drawIDCard(plist.ply, scale, 0, 0)
+				end
+			end
+
+			local btnVerwarnungUp = createVGUI("YButton", parent, 50, 50, 20, 1310)
+			btnVerwarnungUp:SetText("⮝")
+			function btnVerwarnungUp:DoClick()
+				if plist.ply:IsPlayer() then
+					net.Start("warning_up")
+						net.WriteEntity(plist.ply)
+					net.SendToServer()
+				end
+			end
+			local btnVerwarnungDn = createVGUI("YButton", parent, 50, 50, 20, 1360)
+			btnVerwarnungDn:SetText("⮟")
+			function btnVerwarnungDn:DoClick()
+				if plist.ply:IsPlayer() then
+					net.Start("warning_dn")
+						net.WriteEntity(plist.ply)
+					net.SendToServer()
+				end
+			end
+			local btnVerwarnung = createVGUI("YLabel", parent, 450, 100, 70, 1310)
+			btnVerwarnung:SetText("")
+			function btnVerwarnung:Paint(pw, ph)
+				if plist.ply:IsPlayer() then
+					hook.Run("YLabelPaint", self, pw, ph)
+					btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. plist.ply:GetDInt("int_warnings", -1))
+				end
+			end
+
+			local btnVerstoesseUp = createVGUI("YButton", parent, 50, 50, 20, 1430)
+			btnVerstoesseUp:SetText("⮝")
+			function btnVerstoesseUp:DoClick()
+				if plist.ply:IsPlayer() then
+					net.Start("violation_up")
+						net.WriteEntity(plist.ply)
+					net.SendToServer()
+				end
+			end
+			local btnVerstoesseDn = createVGUI("YButton", parent, 50, 50, 20, 1480)
+			btnVerstoesseDn:SetText("⮟")
+			function btnVerstoesseDn:DoClick()
+				if plist.ply:IsPlayer() then
+					net.Start("violation_dn")
+						net.WriteEntity(plist.ply)
+					net.SendToServer()
+				end
+			end
+			local btnVerstoesse = createVGUI("YLabel", parent, 450, 100, 70, 1430)
+			btnVerstoesse:SetText("")
+			function btnVerstoesse:Paint(pw, ph)
+				if plist.ply:IsPlayer() then
+					hook.Run("YLabelPaint", self, pw, ph)
+					btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. plist.ply:GetDInt("int_violations", -1))
+				end
+			end
+
+			local btnArrests = createVGUI("YLabel", parent, 450, 100, 70, 1550)
+			btnArrests:SetText("")
+			function btnArrests:Paint(pw, ph)
+				if plist.ply:IsPlayer() then
+					hook.Run("YLabelPaint", self, pw, ph)
+					btnArrests:SetText(YRP.lang_string("LID_arrests") .. ": " .. plist.ply:GetDInt("int_arrests", -1))
+				end
+			end
+
 		end)
 
 		window.tabs:GoToSite("LID_prisoners")

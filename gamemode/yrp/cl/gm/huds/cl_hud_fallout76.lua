@@ -104,14 +104,14 @@ function FO76Element(tab)
 		FO76["TEXT"][tab.element].y = y + h / 2
 		FO76["TEXT"][tab.element].ax = 1
 		FO76["TEXT"][tab.element].ay = 1
-		FO76["TEXT"][tab.element].font = "Roboto18B"
+		FO76["TEXT"][tab.element].font = "Y_18_700"
 		FO76["TEXT"][tab.element].color = FOColor()
 
 		FO76["CENTERTEXT"][tab.element].x = x + w / 2
 		FO76["CENTERTEXT"][tab.element].y = y + h / 2
 		FO76["CENTERTEXT"][tab.element].ax = 1
 		FO76["CENTERTEXT"][tab.element].ay = 1
-		FO76["CENTERTEXT"][tab.element].font = "Roboto18B"
+		FO76["CENTERTEXT"][tab.element].font = "Y_18_700"
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
 
 		FO76["BR"][tab.element].r = 0
@@ -177,7 +177,7 @@ function FO76Name(tab)
 		FO76["NAME"][tab.element].y = y
 		FO76["NAME"][tab.element].ax = ax or 1
 		FO76["NAME"][tab.element].ay = ay or 1
-		FO76["NAME"][tab.element].font = "Roboto" .. fontsize .. "B"
+		FO76["NAME"][tab.element].font = "Y_" .. fontsize .. "_700"
 		FO76["NAME"][tab.element].color = tab.tcolor or FOColor()
 	else
 		FO76["NAME"][tab.element].text = tab.text
@@ -207,7 +207,7 @@ function FO76Numbers(tab)
 		FO76["NUM"][tab.element].y = y + h / 2
 		FO76["NUM"][tab.element].ax = 1
 		FO76["NUM"][tab.element].ay = 1
-		FO76["NUM"][tab.element].font = "Roboto" .. fontsize .. "B"
+		FO76["NUM"][tab.element].font = "Y_" .. fontsize .. "_700"
 		FO76["NUM"][tab.element].color = FOColor()
 	else
 		FO76["NUM"][tab.element].text = tab.text
@@ -280,7 +280,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["degree"].y = y + h * 0.30
 			FO76[tab.element]["degree"].ax = 1
 			FO76[tab.element]["degree"].ay = 1
-			FO76[tab.element]["degree"].font = "Roboto14"
+			FO76[tab.element]["degree"].font = "Y_14_500"
 			FO76[tab.element]["degree"].color = FOColor()
 			FO76[tab.element]["degree"].brcolor = Color(0, 0, 0)
 
@@ -290,7 +290,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].y = y + h * 0.70
 			FO76[tab.element]["north"].ax = 1
 			FO76[tab.element]["north"].ay = 1
-			FO76[tab.element]["north"].font = "Roboto14"
+			FO76[tab.element]["north"].font = "Y_14_500"
 			FO76[tab.element]["north"].color = FOColor()
 			FO76[tab.element]["north"].brcolor = Color(0, 0, 0)
 			FO76[tab.element]["north"].text = YRP.lang_string("LID_north_short")
@@ -301,7 +301,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].y = y + h * 0.70
 			FO76[tab.element]["south"].ax = 1
 			FO76[tab.element]["south"].ay = 1
-			FO76[tab.element]["south"].font = "Roboto14"
+			FO76[tab.element]["south"].font = "Y_14_500"
 			FO76[tab.element]["south"].color = FOColor()
 			FO76[tab.element]["south"].brcolor = Color(0, 0, 0)
 			FO76[tab.element]["south"].text = YRP.lang_string("LID_south_short")
@@ -312,7 +312,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].y = y + h * 0.70
 			FO76[tab.element]["east"].ax = 1
 			FO76[tab.element]["east"].ay = 1
-			FO76[tab.element]["east"].font = "Roboto14"
+			FO76[tab.element]["east"].font = "Y_14_500"
 			FO76[tab.element]["east"].color = FOColor()
 			FO76[tab.element]["east"].brcolor = Color(0, 0, 0)
 			FO76[tab.element]["east"].text = YRP.lang_string("LID_east_short")
@@ -323,7 +323,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].y = y + h * 0.70
 			FO76[tab.element]["west"].ax = 1
 			FO76[tab.element]["west"].ay = 1
-			FO76[tab.element]["west"].font = "Roboto14"
+			FO76[tab.element]["west"].font = "Y_14_500"
 			FO76[tab.element]["west"].color = FOColor()
 			FO76[tab.element]["west"].brcolor = Color(0, 0, 0)
 			FO76[tab.element]["west"].text = YRP.lang_string("LID_west_short")

@@ -3,6 +3,40 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
+local DBNotes = "yrp_jail_notes"
+SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
+
+util.AddNetworkString("getPlayerNotes")
+net.Receive("getPlayerNotes", function(len, ply)
+	local p = net.ReadEntity()
+
+	local notes = SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:SteamID() .. "'")
+
+	if !wk(notes) then
+		notes = {}
+	end
+	net.Start("getPlayerNotes")
+		net.WriteTable(notes)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("AddJailNote")
+net.Receive("AddJailNote", function(len, ply)
+	local steamid = net.ReadString()
+	local note = net.ReadString()
+
+	SQL_INSERT_INTO(DBNotes, "note, SteamID", "'" .. note .. "', '" .. steamid .. "'")
+end)
+
+util.AddNetworkString("RemoveJailNote")
+net.Receive("RemoveJailNote", function(len, ply)
+	local uid = net.ReadString()
+
+	SQL_DELETE_FROM(DBNotes, "uniqueID = '" .. uid .. "'")
+end)
+
+
 local _db_name = "yrp_jail"
 
 SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ''")
@@ -55,8 +89,8 @@ function teleportToJailpoint(ply, tim)
 				end
 				if empty then
 					-- DONE
-					ply:SetDInt("int_arrests", ply:GetDTInt("int_arrests", 0))
-					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetDTInt("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+					ply:SetDInt("int_arrests", ply:GetDInt("int_arrests", 0) + 1)
+					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetDInt("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
 
 					tp_to(ply, vec)
 					_tmp = string.Explode(",", v.angle)
@@ -93,19 +127,22 @@ net.Receive("dbAddJail", function(len, ply)
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
 	local _tmpDBVal = net.ReadString()
-	if sql.TableExists(_tmpDBTable) then
-		SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
-	else
-		printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
-	end
-
+	
 	local _SteamID = net.ReadString()
-	local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-	for k, v in pairs(player.GetAll()) do
-		if v:SteamID() == _SteamID then
-			printGM("note", v:Nick() .. " added to jail")
-			v:SetDBool("injail", true)
-			v:SetDInt("jailtime", _tmpTable[1].time)
+	for i, p in pairs(player.GetAll()) do
+		if _SteamID == p:SteamID() then
+			if sql.TableExists(_tmpDBTable) then
+				SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
+
+				local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
+
+				printGM("note", p:Nick() .. " added to jail")
+				p:SetDBool("injail", true)
+				p:SetDInt("jailtime", _tmpTable[1].time)
+			else
+				printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
+			end
+			break
 		end
 	end
 end)
@@ -119,28 +156,25 @@ net.Receive("dbRemJail", function(len, ply)
 
 	local _res = SQL_DELETE_FROM("yrp_jail", "uniqueID = " .. _uid)
 
-	_SteamID = _SteamID[1].SteamID
+	if wk(_SteamID) then
+		_SteamID = _SteamID[1].SteamID
+		local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
 
-	local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-
-	local _in_jailboard = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-	if _in_jailboard != nil then
-		for k, v in pairs(player.GetAll()) do
-			if v:SteamID() == _SteamID then
-				v:SetDBool("injail", true)
-				v:SetDInt("jailtime", _in_jailboard[1].time)
+		local _in_jailboard = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
+		if _in_jailboard != nil then
+			for k, v in pairs(player.GetAll()) do
+				if v:SteamID() == _SteamID then
+					v:SetDBool("injail", true)
+					v:SetDInt("jailtime", _in_jailboard[1].time)
+				end
 			end
-		end
-	else
-		for k, v in pairs(player.GetAll()) do
-			if v:SteamID() == _SteamID then
-				v:SetDBool("injail", false)
-				v:SetDInt("jailtime", 0)
+		else
+			for k, v in pairs(player.GetAll()) do
+				if v:SteamID() == _SteamID then
+					v:SetDBool("injail", false)
+					v:SetDInt("jailtime", 0)
+				end
 			end
 		end
 	end
 end)
-
-local notes = "yrp_jail_notes"
-SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(_db_name, "note", "TEXT DEFAULT ''")

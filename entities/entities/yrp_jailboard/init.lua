@@ -31,6 +31,8 @@ function ENT:Use(activator, caller)
 		if wk(cells) then
 			cells = cells[1]
 			v.cellname = cells.name
+		else
+			v.cellname = "DELETED CELL"
 		end
 	end
 

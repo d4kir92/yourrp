@@ -267,92 +267,6 @@ function YRP.LoadLanguage(short, init)
 	return true
 end
 
---[[
-
-function YRP.sendTranslationProgress(player)
-	if (IsValid(player) and player:IsPlayer()) then
-		net.Start("receiveTranslationProgress")
-		local percentages = {}
-
-		for key, val in pairs(yrp_button_info) do
-			key = tostring(key)
-			percentages[key] = val.percentage
-		end
-
-		net.WriteTable(percentages)
-		printGM("lang", "Send translation progress to " .. player:GetName())
-		net.Send(player)
-	end
-end
-
-if SERVER then
-	util.AddNetworkString("requestTranslationProgress")
-
-	local requestTranslationProgress = function(len, player)
-		YRP.sendTranslationProgress(player)
-	end
-
-	net.Receive("requestTranslationProgress", requestTranslationProgress)
-	util.AddNetworkString("receiveTranslationProgress")
-elseif CLIENT then
-	local receiveTranslationProgress = function(len)
-		local percentages = net.ReadTable()
-
-		for key, val in pairs(percentages) do
-			key = tostring(key)
-
-			if (yrp_button_info[key] != nil) then
-				yrp_button_info[key]["percentage"] = val
-			end
-		end
-
-		printGM("lang", "Received translation progress from server.")
-	end
-
-	net.Receive("receiveTranslationProgress", receiveTranslationProgress)
-end
-
-
-function YRP.fetch_translation_progress()
-	hook.Remove("Tick", "translation_progress_fetch")
-
-	if SERVER then
-		printGM("lang", "Get Translation progress from web...")
-
-		http.Fetch("https://yourrp.noserver4u.de/api/projects/yourrp/languages/?format=json", function(body, len, headers, code)
-			if tonumber(code) == 200 and wk(body) then
-				for key, val in pairs(util.JSONToTable(body)) do
-					if val != nil then
-						if yrp_button_info[string.lower(val.code)] == nil then
-							yrp_button_info[string.lower(val.code)] = {}
-						end
-
-						yrp_button_info[string.lower(val.code)]["percentage"] = val.translated_percent
-					end
-				end
-
-				printGM("lang", "Translation progress successfully received!")
-			else
-				printGM("lang", "Failed to receive translation progress: " .. code)
-			end
-		end, function(error)
-			printGM("lang", "[translation progress] http.fetch error:" .. error)
-		end, {
-			Authorization = "Token WmgbTcBqV7oS4KgxegwzWfvdfJZZk90b1KRafwej"
-		})
-	elseif CLIENT then
-		printGM("lang", "Request translation progress from server.")
-		net.Start("requestTranslationProgress")
-		net.SendToServer()
-	end
-end
-if CLIENT then
-net.Start("requestTranslationProgress")
-net.SendToServer()
-end
-
-]]--
-
 function YRP.add_language(short)
 	short = tostring(short)
 
@@ -389,8 +303,6 @@ if CLIENT then
 		end
 	end
 end
-
-hook.Add("Tick", "translation_progress_fetch", YRP.fetch_translation_progress)
 
 function YRP.initLang()
 	hr_pre("lang")

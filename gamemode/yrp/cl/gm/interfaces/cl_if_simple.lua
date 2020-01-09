@@ -19,7 +19,7 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 		draw.RoundedBox(0, x, y, w, h, Color(20, 20, 20, 200))
 
 		if self.GetTitle != nil then
-			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Roboto18", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		return true
 	end
@@ -56,7 +56,7 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 		tcolor = tab.tcolor or tcolor
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Roboto18", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
@@ -83,7 +83,7 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 			ty = YRP.ctr(20)
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Roboto18", tx, ty, tcolor, ax, ay)
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
 		return true
 	end
 end)
@@ -177,7 +177,7 @@ hook.Add("YGroupBoxPaint", "YGroupBox_Simple", function(self, pw, ph, tab)
 		local x, y = self.con:GetPos()
 		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 255))
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "YRP_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

@@ -32,7 +32,7 @@ function OpenCombinedMenu()
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
 			--draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(40, 40, 40, 255))
 
-			--draw.SimpleText(self:GetTitle(), "YRP_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			--draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 			hook.Run("YFramePaint", self, pw, ph)
 
@@ -46,11 +46,11 @@ function OpenCombinedMenu()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
 
 			local gm = "YourRP by D4KiR"
-			draw.SimpleText(gm, "YRP_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			draw.SimpleText(gm, "Y_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 			local vert = "Version:"
 			local vern = GAMEMODE.Version
-			draw.SimpleText(vert, "YRP_18_500", br, ph - br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-			draw.SimpleText(vern, "YRP_18_500", br + YRP.ctr(120), ph - br, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			draw.SimpleText(vert, "Y_18_500", br, ph - br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			draw.SimpleText(vern, "Y_18_500", br + YRP.ctr(120), ph - br, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 		end
 
 		cm.logo = createD("DHTML", cm.menu, menuw, menuw, br, br)
@@ -119,7 +119,7 @@ function OpenCombinedMenu()
 					color = Color(60, 60, 60, 255)
 				end
 				draw.RoundedBox(0, 0, 0, pw, ph, color)
-				draw.SimpleText(YRP.lang_string(v.name), "YRP_18_500", br + br, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string(v.name), "Y_18_500", br + br, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 				if self.selected then
 					draw.RoundedBox(0, 0, 0, YRP.ctr(10), ph, Color(140, 140, 255, 255))

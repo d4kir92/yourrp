@@ -833,9 +833,9 @@ function openCharacterSelection()
 										draw.RoundedBox(0, pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
 										]]
 									end
-									draw.SimpleText(self.rpname, "YRP_30_700", YRP.ctr(30), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.grp, "YRP_18_500", YRP.ctr(30), YRP.ctr(105), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(SQL_STR_OUT(self.map), "YRP_18_500", YRP.ctr(30), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(self.rpname, "Y_30_700", YRP.ctr(30), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(self.grp, "Y_18_500", YRP.ctr(30), YRP.ctr(105), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(SQL_STR_OUT(self.map), "Y_18_500", YRP.ctr(30), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 									if i > LocalPlayer():GetDInt("int_characters_max", 1) then
 										paintMD(pw, ph, nil, Color(255, 100, 100, 100))

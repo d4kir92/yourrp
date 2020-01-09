@@ -95,12 +95,6 @@ function con_st(ply)
 	end
 end
 
-hook.Add("Tick", "yrp_keydown", function()
-	for k, ply in pairs(player.GetAll()) do
-		anti_bunnyhop(ply)
-	end
-end)
-
 function anti_bunnyhop(ply)
 	if ply:KeyDown(IN_JUMP) and ply:GetDBool("canjump", true) then
 		ply:SetDBool("canjump", false)
@@ -112,6 +106,12 @@ function anti_bunnyhop(ply)
 		end)
 	end
 end
+
+hook.Add("Tick", "yrp_keydown", function()
+	for k, ply in pairs(player.GetAll()) do
+		anti_bunnyhop(ply)
+	end
+end)
 
 function broken(ply)
 	if IsBonefracturingEnabled() and !ply:Slowed() then

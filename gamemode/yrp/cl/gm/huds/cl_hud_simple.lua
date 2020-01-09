@@ -92,7 +92,7 @@ function HUDSimpleBAR(tab)
 			if fontsize <= 0 then
 				fontsize = 14
 			end
-			Simple[tab.element]["text"].font = "YRP_" .. fontsize .. "_500"
+			Simple[tab.element]["text"].font = "Y_" .. fontsize .. "_500"
 			Simple[tab.element]["text"].color = lply:HudValue(tab.element, "TE")
 			Simple[tab.element]["text"].brcolor = lply:HudValue(tab.element, "TB")
 
@@ -269,7 +269,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["degree"].y = y + h * 0.50
 			Simple["COM"]["degree"].ax = 1
 			Simple["COM"]["degree"].ay = 1
-			Simple["COM"]["degree"].font = "YRP_" .. fontsize .. "_700"
+			Simple["COM"]["degree"].font = "Y_" .. fontsize .. "_700"
 			Simple["COM"]["degree"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["degree"].brcolor = lply:HudValue("COM", "TB")
 
@@ -279,7 +279,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["north"].y = y + h * 0.50
 			Simple["COM"]["north"].ax = 1
 			Simple["COM"]["north"].ay = 1
-			Simple["COM"]["north"].font = "YRP_" .. nextfontsize .. "_700"
+			Simple["COM"]["north"].font = "Y_" .. nextfontsize .. "_700"
 			Simple["COM"]["north"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["north"].brcolor = lply:HudValue("COM", "TB")
 			Simple["COM"]["north"].text = YRP.lang_string("LID_north_short")
@@ -290,7 +290,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["south"].y = y + h * 0.50
 			Simple["COM"]["south"].ax = 1
 			Simple["COM"]["south"].ay = 1
-			Simple["COM"]["south"].font = "YRP_" .. nextfontsize .. "_500"
+			Simple["COM"]["south"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["south"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["south"].brcolor = lply:HudValue("COM", "TB")
 			Simple["COM"]["south"].text = YRP.lang_string("LID_south_short")
@@ -301,7 +301,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["east"].y = y + h * 0.50
 			Simple["COM"]["east"].ax = 1
 			Simple["COM"]["east"].ay = 1
-			Simple["COM"]["east"].font = "YRP_" .. nextfontsize .. "_500"
+			Simple["COM"]["east"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["east"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["east"].brcolor = lply:HudValue("COM", "TB")
 			Simple["COM"]["east"].text = YRP.lang_string("LID_east_short")
@@ -312,7 +312,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["west"].y = y + h * 0.50
 			Simple["COM"]["west"].ax = 1
 			Simple["COM"]["west"].ay = 1
-			Simple["COM"]["west"].font = "YRP_" .. nextfontsize .. "_500"
+			Simple["COM"]["west"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["west"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["west"].brcolor = lply:HudValue("COM", "TB")
 			Simple["COM"]["west"].text = YRP.lang_string("LID_west_short")
@@ -328,7 +328,7 @@ function HUDSimpleCompass()
 					Simple["COM"][i .. "num"].ay = 1
 					Simple["COM"][i .. "num"].text = (i + 180) % 360
 					Simple["COM"][i .. "num"].color = Color(255, 255, 255, 200)
-					Simple["COM"][i .. "num"].font = "YRP_" .. fontsize .. "_500"
+					Simple["COM"][i .. "num"].font = "Y_" .. fontsize .. "_500"
 					Simple["COM"][i .. "num"].color = lply:HudValue("COM", "TE")
 					Simple["COM"][i .. "num"].brcolor = lply:HudValue("COM", "TB")
 				end

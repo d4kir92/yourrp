@@ -66,6 +66,7 @@ table.insert(_dbs, "yrp_shop_items")
 table.insert(_dbs, "yrp_shop_categories")
 table.insert(_dbs, "yrp_dealers")
 table.insert(_dbs, "yrp_jail")
+table.insert(_dbs, "yrp_jail_notes")
 table.insert(_dbs, "yrp_interface")
 
 function GetDBNames()

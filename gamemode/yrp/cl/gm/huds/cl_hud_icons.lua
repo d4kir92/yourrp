@@ -31,7 +31,7 @@ function HUDIconsDrawText(ele, text)
 	end
 	x = x + h / 16 + (w - h / 8) / 2 * ax
 	y = y + h / 16 + (h - h / 8) / 2 * ay
-	local font = "YRP_" .. fontsize .. "_500"
+	local font = "Y_" .. fontsize .. "_500"
 
 	draw.SimpleTextOutlined(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0))
 end
@@ -75,7 +75,7 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 	if fontsize <= 0 then
 		fontsize = 14
 	end
-	local font = "YRP_" .. fontsize .. "_500"
+	local font = "Y_" .. fontsize .. "_500"
 
 	draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 end

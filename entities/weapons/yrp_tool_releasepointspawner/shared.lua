@@ -53,32 +53,36 @@ end
 local size = 8
 
 function SWEP:PrimaryAttack()
-	if CLIENT then
-		local ply = LocalPlayer()
-		net.Start("dbInsertIntoMap")
-			net.WriteString("yrp_" .. GetMapNameDB())
-			net.WriteString("position, angle, type")
-			local tmpPos = string.Explode(" ", tostring(ply:GetPos()))
-			local tmpAng = string.Explode(" ", tostring(ply:GetAngles()))
-			local tmpString = "'" .. tonumber(tmpPos[1]) .. "," .. tonumber(tmpPos[2]) .. "," .. tonumber(tmpPos[3] + 4) .. "', '" .. tonumber(tmpAng[1]) .. "," .. tonumber(tmpAng[2]) .. "," .. tonumber(tmpAng[3]) .. "', 'releasepoint'"
-			net.WriteString(tmpString)
-		net.SendToServer()
-	end
+	self.pdelay = self.pdelay or 0
+	if self.pdelay < CurTime() then
+		self.pdelay = CurTime() + 0.4
+		if CLIENT then
+			local ply = LocalPlayer()
+			net.Start("dbInsertIntoMap")
+				net.WriteString("yrp_" .. GetMapNameDB())
+				net.WriteString("position, angle, type")
+				local tmpPos = string.Explode(" ", tostring(ply:GetPos()))
+				local tmpAng = string.Explode(" ", tostring(ply:GetAngles()))
+				local tmpString = "'" .. tonumber(tmpPos[1]) .. "," .. tonumber(tmpPos[2]) .. "," .. tonumber(tmpPos[3] + 4) .. "', '" .. tonumber(tmpAng[1]) .. "," .. tonumber(tmpAng[2]) .. "," .. tonumber(tmpAng[3]) .. "', 'releasepoint'"
+				net.WriteString(tmpString)
+			net.SendToServer()
+		end
 
-	if SERVER then
-		local ply = self:GetOwner()
+		if SERVER then
+			local ply = self:GetOwner()
 
-		local pos = Vector(0, 0, 0)
-		local tr = util.TraceLine( {
-			start = ply:EyePos(),
-			endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
-			filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
-		} )
-		pos = tr.HitPos or pos
+			local pos = Vector(0, 0, 0)
+			local tr = util.TraceLine( {
+				start = ply:EyePos(),
+				endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
+				filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
+			} )
+			pos = tr.HitPos or pos
 
-		YRP.msg("db", "Added Releasepoint")
+			YRP.msg("db", "Added Releasepoint")
 
-		UpdateReleasepointTable()
+			UpdateReleasepointTable()
+		end
 	end
 end
 
