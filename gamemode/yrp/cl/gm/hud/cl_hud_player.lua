@@ -226,9 +226,6 @@ function HudPlayer(ply)
 			if !contextMenuOpen then
 				hudThirdperson(ply)
 			end
-		else
-			drawRBox(0, 0, 0, ScrW() * ctrF(ScrH()), ScrH() * ctrF(ScrH()), Color(255, 0, 0, 100))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_dead") .. "! " .. YRP.lang_string("LID_respawning") .. "...", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 	else
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0))

@@ -196,7 +196,8 @@ function InitYRPChat()
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.richText:PerformLayout()
-			self:SetFontInternal("YRP_CHAT")
+			local ts = LocalPlayer():HudValue("CH", "TS")
+			self:SetFontInternal("Y_" .. ts .. "_700")
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)

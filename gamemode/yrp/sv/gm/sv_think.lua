@@ -14,17 +14,19 @@ net.Receive("client_lang", function(len, ply)
 	ply:SetDString("client_lang", _lang or "NONE")
 end)
 
+function YDeath(ply)
+	ply:Kill()
+end
+
 function reg_hp(ply)
 	local hpreg = ply:GetDInt("HealthReg", nil)
-	if hpreg != nil then
+	if wk(hpreg) and ply:Alive() then
 		if ply:Health() <= 0 then
-			ply:Kill()
+			YDeath(ply)
 		end
-		if ply:Alive() then
-			ply:Heal(hpreg)
-			if ply:Health() <= 0 then
-				ply:Kill()
-			end
+		ply:Heal(hpreg)
+		if ply:Health() <= 0 then
+			YDeath(ply)
 		end
 	end
 end

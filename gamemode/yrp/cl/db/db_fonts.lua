@@ -142,18 +142,13 @@ end
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
-	for s = 4, 72 do
+	for s = 4, 100 do
 		yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
 		yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
 
 		yrp_create_font("Y_O_" .. s .. "_500", YRP.GetFont(), s, 500, true)
 		yrp_create_font("Y_O_" .. s .. "_700", YRP.GetFont(), s, 700, true)
 	end
-
-	--[[ DESIGNS ]]--
-	yrp_hud = yrp_hud or {}
-	local chatfontsize = yrp_hud["int_HUD_CH_TS"] or 18
-	yrp_create_font("YRP_CHAT", YRP.GetFont(), chatfontsize, _weight, true)
 
 	--[[ DESIGNS ]]--
 	yrp_create_font("mat1header", YRP.GetFont(), 22, _weight, false)

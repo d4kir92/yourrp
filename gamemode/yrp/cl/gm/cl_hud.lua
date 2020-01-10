@@ -38,7 +38,9 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 				CHudAmmo = true,
 				CHudSecondaryAmmo = true,
 				CHudCrosshair = GetGlobalDBool("bool_yrp_crosshair", false),
-				CHudVoiceStatus = false
+				CHudVoiceStatus = false,
+				CHudDamageIndicator = true,
+				CHudDeathNotice = true
 			}
 
 			if g_VoicePanelList != nil then

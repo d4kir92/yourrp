@@ -2141,3 +2141,96 @@ end)
 net.Receive("join_channel_sound", function()
 	notification.AddLegacy(YRP.lang_string("LID_someonehasjoinedthefrequency"), NOTIFY_GENERIC, 3)
 end)
+
+
+-- #DEATHSCREEN, #RESPAWNING, #CHANGECHARACTER
+local dsd = CurTime() + 10
+hook.Add("Think", "openDeathScreen", function(len)
+	if !LocalPlayer():Alive() and isNoMenuOpen() and dsd < CurTime() and LocalPlayer():CharID() > 0 then
+		local win = createD("DFrame", nil, ScW(), ScH(), 0, 0)
+		win:SetTitle("")
+		win:MakePopup()
+		win:Center()
+		win:SetDraggable(false)
+		win:ShowCloseButton(false)
+		win.systime = SysTime()
+		function win:Paint(pw, ph)
+			if LocalPlayer():Alive() or LocalPlayer():CharID() <= 0 then
+				self:Remove()
+			end
+			Derma_DrawBackgroundBlur(self, self.systime)
+			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180))
+			if LocalPlayer():GetDInt("int_deathtimestamp_max", 0) <= CurTime() then
+				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_700", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			else
+				draw.SimpleText(YRP.lang_string("LID_youreunconsious") .. ".", "Y_50_700", pw / 2, YRP.ctr(300 + 500 / 3), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+				local tab = {}
+				tab["X"] = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_max", 0) - CurTime(), 0)
+				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_700", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+		end
+
+		win.respawn = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScH() - YRP.ctr(400))
+		win.respawn:SetText("LID_respawnnow")
+		function win.respawn:DoClick()
+			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+				net.Start("EnterWorld")
+					net.WriteString(LocalPlayer():CharID())
+				net.SendToServer()
+				win:Close()
+				dsd = CurTime() + 1
+			end
+		end
+		function win.respawn:Paint(pw, ph)
+			local tab = {}
+			tab.color = Color(56, 118, 29, 255)
+			tab.tcolor = Color(255, 255, 255, 255)
+			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+				hook.Run("YButtonPaint", self, pw, ph, tab)
+			else
+				tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
+				hook.Run("YButtonPaint", self, pw, ph, tab)
+			end
+		end
+
+		win.changecharacter = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScH() - YRP.ctr(250))
+		win.changecharacter:SetText("LID_changecharacter")
+		function win.changecharacter:DoClick()
+			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+				win:Close()
+				openCharacterSelection()
+				dsd = CurTime() + 1
+			end
+		end
+		function win.changecharacter:Paint(pw, ph)
+			local tab = {}
+			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+				hook.Run("YButtonPaint", self, pw, ph)
+			else
+				tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
+				hook.Run("YButtonPaint", self, pw, ph, tab)
+			end
+		end
+	end
+end)
+
+local yrp_icon = Material("yrp/yrp_icon")
+
+local loading = createD("DFrame", nil, ScW(), ScH(), 0, 0)
+loading:SetTitle("")
+loading:Center()
+function loading:Paint(pw, ph)
+	self:MoveToFront()
+	draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
+
+	surface.SetDrawColor(255, 255, 255, 255)
+	surface.SetMaterial(yrp_icon)
+	surface.DrawTexturedRect(pw / 2 - YRP.ctr(800) / 2, ph / 2 - YRP.ctr(800) / 2, YRP.ctr(800), YRP.ctr(800))
+
+	draw.SimpleText(YRP.lang_string("LID_loading"), "Y_50_500", pw / 2, ph / 2 + YRP.ctr(500), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+	if LocalPlayer():GetDBool("finishedloading", false) and LOADED_CHARS then
+		self:Remove()
+	end
+end

@@ -14,11 +14,17 @@ function PANEL:Init()
 	function self.site:Paint(pw, ph)
 	end
 
+	self.tabwide = 400
+
 	self.tabs = {}
 end
 
 function PANEL:Think()
 
+end
+
+function PANEL:SetTabWide(num)
+	self.tabwide = num
 end
 
 function PANEL:AddOption(name, func)
@@ -31,9 +37,10 @@ function PANEL:AddOption(name, func)
 		self.tabs:GoToSite(name)
 	end
 	function tab:Paint(pw, ph)
+		self:SetWide(YRP.ctr(self.tabs.tabwide))
 		self.color = Color(100, 100, 255)
 		self.h = self.h or 0
-		self.delay = 0.5
+		self.delay = 0.8
 		if self.tabs.current == name then
 			self.h = self.h + self.delay
 			self.color = Color(100, 100, 255)

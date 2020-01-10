@@ -548,6 +548,7 @@ function TauntCamera()
 end
 PLAYER.TauntCam = TauntCamera()
 
+-- #THIRDPERSON
 local oldang = Angle(0, 0, 0)
 local function yrpCalcView(ply, pos, angles, fov)
 	ply.view_range = ply.view_range or 0
@@ -591,7 +592,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 		local dist = _view_range * ply:GetModelScale()
 
 		local view = {}
-		if ply:Alive() and ply:GetModel() != "models/player.mdl" and !ply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
+		if ply:GetModel() != "models/player.mdl" and !ply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
 			if ply:LookupBone("ValveBiped.Bip01_Head1") != nil then
 				pos2 = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * ply:GetModelScale())
 			end
@@ -712,6 +713,34 @@ local function yrpCalcView(ply, pos, angles, fov)
 					end
 				end
 			end
+		end
+	else
+		local entindex = ply:GetDInt("ent_ragdollindex")
+
+		if entindex then
+			local ent = Entity(entindex)
+			if !IsValid(ent) then
+				return
+			end
+			if ent:LookupBone("ValveBiped.Bip01_Head1") != nil then
+				pos, angles = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
+				pos = pos + angles:Forward() * 10
+				t = t or 0
+				t = t + 1
+				angles:RotateAroundAxis(angles:Forward(), -90)--90)
+				angles:RotateAroundAxis(angles:Right(), -90)--90)
+				angles:RotateAroundAxis(angles:Up(), 0)
+				--angles = angles + Angle(0, 0, -90)
+			end
+	
+			local view = {}
+
+			view.origin = pos
+			view.angles = angles
+			view.fov = fov
+			view.drawviewer = true
+
+			return view
 		end
 	end
 end

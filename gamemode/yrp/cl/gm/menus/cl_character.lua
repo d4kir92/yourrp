@@ -630,6 +630,8 @@ function closeCharacterSelection()
 	end
 end
 
+LOADED_CHARS = LOADED_CHARS or false
+
 local curChar = " - 1"
 local _cur = ""
 function openCharacterSelection()
@@ -701,7 +703,7 @@ function openCharacterSelection()
 			end
 
 			local charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - YRP.ctr(200), ScrH() - YRP.ctr(200), ScrW2() - (ScrH() - YRP.ctr(200)) / 2, 0)
-			charplayermodel:SetModel("models / player / skeleton.mdl")
+			charplayermodel:SetModel("models/player/skeleton.mdl")
 			charplayermodel:SetAnimated(true)
 			charplayermodel.Angles = Angle(0, 0, 0)
 			charplayermodel:RunAnimation()
@@ -877,6 +879,10 @@ function openCharacterSelection()
 						end
 					end
 				end
+
+				timer.Simple(1, function()
+					LOADED_CHARS = true
+				end)
 			end)
 
 			printGM("gm", "ask for characterlist")

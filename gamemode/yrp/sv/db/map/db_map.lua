@@ -3,19 +3,19 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_" .. GetMapNameDB()
+local DATABASE_NAME = "yrp_" .. GetMapNameDB()
 
-SQL_ADD_COLUMN(_db_name, "position", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "angle", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "type", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "linkID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "int_respawntime", "TEXT DEFAULT '1'")
-SQL_ADD_COLUMN(_db_name, "int_amount", "TEXT DEFAULT '1'")
-SQL_ADD_COLUMN(_db_name, "string_classname", "TEXT DEFAULT 'npc_zombie'")
+SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "linkID", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_respawntime", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 function teleportToPoint(ply, pos)
 	--printGM("note", "teleportToPoint " .. tostring(pos))
@@ -168,11 +168,13 @@ net.Receive("dbInsertIntoMap", function(len, ply)
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
 	local _tmpDBVal = net.ReadString()
+
 	if sql.TableExists(_tmpDBTable) then
 		SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
 	else
 		printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 	end
+
 	UpdateSpawnerTable()
 	UpdateJailpointTable()
 	UpdateReleasepointTable()
@@ -180,7 +182,7 @@ end)
 
 util.AddNetworkString("dealer_settings")
 net.Receive("dealer_settings", function(len, ply)
-	local _storages = SQL_SELECT(_db_name, "*", "type = 'Storagepoint'")
+	local _storages = SQL_SELECT(DATABASE_NAME, "*", "type = 'Storagepoint'")
 	if _storages == nil or _storages == false then
 		_storages = {}
 	end
@@ -193,11 +195,13 @@ util.AddNetworkString("teleportto")
 net.Receive("teleportto", function(len, ply)
 	if ply:HasAccess() then
 		local _uid = net.ReadString()
-		local _entry = SQL_SELECT(_db_name, "*", "uniqueID = '" .. _uid .. "'")
+		local _entry = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _uid .. "'")
 		if _entry != nil then
 			_entry = _entry[1]
-			_entry = string.Explode(",", _entry.position)
-			ply:SetPos(Vector(_entry[1], _entry[2], _entry[3]))
+			local pos = string.Explode(",", _entry.position)
+			local ang = string.Explode(",", _entry.angle)
+			ply:SetPos(Vector(pos[1], pos[2], pos[3]))
+			ply:SetEyeAngles(Angle(ang[1], ang[2], ang[3]))
 		end
 	end
 end)
@@ -209,7 +213,7 @@ net.Receive("update_map_name", function(len, ply)
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
-	SQL_UPDATE(_db_name, "name = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, "name = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
 	UpdateJailpointTable()
 end)
 
@@ -218,7 +222,7 @@ net.Receive("update_map_int_respawntime", function(len, ply)
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
-	SQL_UPDATE(_db_name, "int_respawntime = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, "int_respawntime = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
 	UpdateSpawnerTable()
 end)
 
@@ -227,7 +231,7 @@ net.Receive("update_map_int_amount", function(len, ply)
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
-	SQL_UPDATE(_db_name, "int_amount = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, "int_amount = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
 	UpdateSpawnerTable()
 end)
 
@@ -236,6 +240,83 @@ net.Receive("update_map_string_classname", function(len, ply)
 	local uid = net.ReadString()
 	local s = net.ReadString()
 
-	SQL_UPDATE(_db_name, "string_classname = '" .. s .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, "string_classname = '" .. s .. "'", "uniqueID = '" .. uid .. "'")
 	UpdateSpawnerTable()
+end)
+
+-- NEW MAP PAGE
+util.AddNetworkString("getMapSite")
+net.Receive("getMapSite", function(len, ply)
+	if ply:CanAccess("bool_map") then
+		net.Start("getMapSite")
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("getMapTab")
+net.Receive("getMapTab", function(len, ply)
+	if ply:CanAccess("bool_map") then
+		local tab = net.ReadString()
+
+		local grp = false
+		local rol = false
+
+		local dbTab = {}
+		if tab == "jailpoints" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "jailpoint" .. "'")
+		elseif tab == "releasepoints" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "releasepoint" .. "'")
+		elseif tab == "groupspawnpoints" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "GroupSpawnpoint" .. "'")
+			grp = true
+			if wk(dbTab) then
+				for i, v in pairs(dbTab) do
+					local g = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = '" .. v.linkID .. "'")
+					if wk(g) then
+						g = g[1]
+						v.name = g.string_name
+					end
+				end
+			end
+		elseif tab == "rolespawnpoints" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "RoleSpawnpoint" .. "'")
+			grp = true
+			rol = true
+			if wk(dbTab) then
+				for i, v in pairs(dbTab) do
+					local r = SQL_SELECT("yrp_ply_roles", "string_name", "uniqueID = '" .. v.linkID .. "'")
+					if wk(r) then
+						r = r[1]
+						v.name = r.string_name
+					end
+				end
+			end
+		elseif tab == "dealers" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "dealer" .. "'")
+		elseif tab == "storagepoints" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "Storagepoint" .. "'")
+		elseif tab == "other" then
+			dbTab = SQL_SELECT(DATABASE_NAME, "*", "NOT type = 'dealer' AND NOT type = 'Storagepoint' AND NOT type = 'RoleSpawnpoint' AND NOT type = 'GroupSpawnpoint' AND NOT type = 'jailpoint' AND NOT type = 'releasepoint'")
+		end
+
+		local dbGrp = {}
+		local dbRol = {}
+		if grp then
+			dbGrp = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+		end
+		if rol then
+			dbRol = SQL_SELECT("yrp_ply_roles", "uniqueID, int_groupID, string_name", nil)
+		end
+
+		if !wk(dbTab) then
+			dbTab = {}
+		end
+
+		net.Start("getMapTab")
+			net.WriteString(tab)
+			net.WriteTable(dbTab)
+			net.WriteTable(dbGrp)
+			net.WriteTable(dbRol)
+		net.Send(ply)
+	end
 end)

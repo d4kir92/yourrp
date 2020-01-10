@@ -131,7 +131,6 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_admin, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_admin, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_admin, "icon16/basket_edit.png")
-	settingsWindow.window:AddSite("open_server_map", "LID_settings_map", _server_admin, "icon16/map.png")
 	settingsWindow.window:AddSite("open_server_whitelist", "Whitelist", _server_admin, "icon16/page_white_key.png")
 
 
@@ -149,15 +148,22 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_groups_and_roles", "LID_settings_groupsandroles", _settings_server_gameplay, "icon16/group.png")
 	settingsWindow.window:AddSite("open_server_levelsystem", "LID_levelsystem", _settings_server_gameplay, "icon16/layers.png")
 	settingsWindow.window:AddSite("open_server_design", "LID_settings_design", _settings_server_gameplay, "icon16/photo.png")
+	settingsWindow.window:AddSite("open_server_map", "LID_settings_map", _settings_server_gameplay, "icon16/map.png")
+	
+
 
 	local _settings_server_management = "LID_settings_server_management"
 	settingsWindow.window:AddCategory(_settings_server_management)
 	settingsWindow.window:AddSite("open_server_database", "LID_settings_database", _settings_server_management, "icon16/database.png")
 	settingsWindow.window:AddSite("open_server_usergroups", "LID_settings_usergroups", _settings_server_management, "icon16/group_go.png")
 
+
+	
 	local _server_addons = "LID_settings_server_addons"
 	settingsWindow.window:AddCategory(_server_addons)
 	settingsWindow.window:AddSite("open_server_yourrp_addons", "LID_settings_yourrp_addons", _server_addons, "icon16/plugin.png")
+
+
 
 	--StartSite
 	settingsWindow.window.cursite = "character"
