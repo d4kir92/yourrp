@@ -11,8 +11,3 @@ function GM:InitPostEntity()
 		get_map_coords()
 	end)
 end
-
-chat = chat or {}
-function chat.AddText(...)
-	print("[chat.AddText] THIS IS A CLIENTSIDE FUNCTION, ...")
-end

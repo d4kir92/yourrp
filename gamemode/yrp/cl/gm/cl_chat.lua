@@ -214,7 +214,6 @@ function InitYRPChat()
 			end
 		end
 		function yrpChat:openChatbox(bteam)
-			print("OPENCHATBOX")
 			yrpChat.window:MakePopup()
 			yrpChat.writeField:RequestFocus()
 
@@ -360,7 +359,6 @@ timer.Create("yrp_init_chat", 1, 0, function()
 end)
 
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	print(bind)
 	if GetGlobalDBool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
@@ -370,7 +368,7 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 		else
 			return
 		end
-		print("CHAT", bind, pressed)
+
 		if yrpChat.window != nil then
 			yrpChat:openChatbox(bTeam)
 		end
