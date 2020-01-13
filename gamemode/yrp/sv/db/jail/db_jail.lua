@@ -97,6 +97,7 @@ function teleportToJailpoint(ply, tim)
 					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 
 					ply:StripWeapons()
+					break -- important
 				end
 			end
 		else

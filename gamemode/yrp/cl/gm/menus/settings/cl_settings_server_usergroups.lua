@@ -462,6 +462,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 		tmp.cb = createD("DNumberWang", tmp, tmp:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
 		tmp.cb:SetValue(ug[name])
+		tmp.cb:SetMax(100)
+		tmp.cb:SetMin(1)
 		function tmp.cb:OnValueChanged(val)
 			net.Start("usergroup_update_" .. name)
 				net.WriteString(CURRENT_USERGROUP)
@@ -607,7 +609,7 @@ function AddUG(tbl)
 	DO:SetText("")
 	local dn = DO
 	function dn:Paint(pw, ph)
-		if P.int_position < table.Count(UGS) + 1 then
+		if P.int_position <= table.Count(UGS) then
 			local tab = {}
 			tab.r = pw / 2
 			tab.color = Color(255, 255, 100)
@@ -623,7 +625,7 @@ function AddUG(tbl)
 		end
 	end
 	function dn:DoClick()
-		if P.int_position < table.Count(UGS) + 1 then
+		if P.int_position <= table.Count(UGS) then
 			net.Start("settings_usergroup_position_dn")
 				net.WriteString(P.uniqueID)
 			net.SendToServer()
@@ -674,9 +676,20 @@ function UpdateUsergroupsList(ugs)
 	if pa(PARENT) then
 		UGS = {}
 		PARENT.ugs:Clear()
+
 		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-			if tobool(ug.bool_removeable) then
-				AddUG(ug)
+			ug.int_position = tonumber(ug.int_position)
+			if ug.int_position < 10 then
+				if tobool(ug.bool_removeable) then
+					AddUG(ug)
+				end
+			end
+		end
+		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+			if ug.int_position >= 10 then
+				if tobool(ug.bool_removeable) then
+					AddUG(ug)
+				end
 			end
 		end
 	end

@@ -905,11 +905,11 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name")
-
+		
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_min") .. "]", "update_int_deathtimestamp_min")
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_max") .. "]", "update_int_deathtimestamp_max")
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath, "LID_spawncorpseondeath", "update_bool_spawncorpseondeath")
 		
-
 
 
 		--[[ SOCIAL SETTINGS ]]--

@@ -1,6 +1,9 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 YRP = YRP or {}
+
+rToSv = rToSv or false
+
 function YRPSendIsReady()
 	local info = {}
 	info.iswindows = system.IsWindows()
@@ -12,13 +15,15 @@ function YRPSendIsReady()
 		net.WriteTable(info)
 	net.SendToServer()
 
+	rToSv = true
+
 	YRP.initLang()
 
 	if tobool(get_tutorial("tut_welcome")) then
 		OpenHelpMenu()
 	end
 
-	timer.Simple(4, function()
+	timer.Simple(1, function()
 		local _wsitems = engine.GetAddons()
 		printGM("note", "[" .. #_wsitems .. " Workshop items]")
 		printGM("note", " Nr.\tID\t\tName Mounted")
@@ -42,5 +47,14 @@ end
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	printGM("note", "All entities are loaded.")
 
-	YRPSendIsReady()
+	timer.Simple(1, function()
+		YRPSendIsReady()
+	end)
+end)
+
+timer.Simple(40, function()
+	if !rToSv then
+		YRP.msg("error", "YRPSendIsReady FAILED")
+		YRPSendIsReady()
+	end
 end)

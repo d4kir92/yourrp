@@ -584,7 +584,7 @@ end)
 
 function isWhitelisted(ply, id)
 	local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. id)
-	if _role != nil then
+	if wk(_role) then
 		_role = _role[1]
 
 		local steamid = ply:SteamID() or ply:UniqueID()
@@ -609,6 +609,9 @@ function isWhitelisted(ply, id)
 			elseif worked(_plyAllowedGroup, "_plyAllowedGroup", true) then
 				printGM("gm", ply:RPName() .. " is group whitelisted.")
 				return true
+			else
+				printGM("gm", ply:RPName() .. " is not role and not group whitelisted.")
+				return false
 			end
 		end
 	end

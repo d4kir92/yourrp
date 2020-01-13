@@ -2144,19 +2144,24 @@ end)
 
 
 -- #DEATHSCREEN, #RESPAWNING, #CHANGECHARACTER
-local dsd = CurTime() + 10
+local dsd = CurTime() + 2
+local ds = ds or false
 hook.Add("Think", "openDeathScreen", function(len)
-	if !LocalPlayer():Alive() and isNoMenuOpen() and dsd < CurTime() and LocalPlayer():CharID() > 0 then
+	if !LocalPlayer():Alive() and isNoMenuOpen() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds then
+		ds = true
 		local win = createD("DFrame", nil, ScW(), ScH(), 0, 0)
 		win:SetTitle("")
-		win:MakePopup()
+		--win:MakePopup()
+		gui.EnableScreenClicker(true)
 		win:Center()
 		win:SetDraggable(false)
 		win:ShowCloseButton(false)
 		win.systime = SysTime()
 		function win:Paint(pw, ph)
 			if LocalPlayer():Alive() or LocalPlayer():CharID() <= 0 then
+				ds = false
 				self:Remove()
+				gui.EnableScreenClicker(false)
 			end
 			Derma_DrawBackgroundBlur(self, self.systime)
 			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180))
@@ -2169,6 +2174,10 @@ hook.Add("Think", "openDeathScreen", function(len)
 				tab["X"] = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_max", 0) - CurTime(), 0)
 				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_700", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
+
+			if input.IsMouseDown(MOUSE_FIRST) or input.IsMouseDown(MOUSE_RIGHT) then
+				gui.EnableScreenClicker(true)
+			end
 		end
 
 		win.respawn = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScH() - YRP.ctr(400))
@@ -2178,7 +2187,9 @@ hook.Add("Think", "openDeathScreen", function(len)
 				net.Start("EnterWorld")
 					net.WriteString(LocalPlayer():CharID())
 				net.SendToServer()
+				ds = false
 				win:Close()
+				gui.EnableScreenClicker(false)
 				dsd = CurTime() + 1
 			end
 		end
@@ -2197,20 +2208,14 @@ hook.Add("Think", "openDeathScreen", function(len)
 		win.changecharacter = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScH() - YRP.ctr(250))
 		win.changecharacter:SetText("LID_changecharacter")
 		function win.changecharacter:DoClick()
-			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
-				win:Close()
-				openCharacterSelection()
-				dsd = CurTime() + 1
-			end
+			ds = false
+			win:Close()
+			gui.EnableScreenClicker(false)
+			openCharacterSelection()
+			dsd = CurTime() + 1
 		end
 		function win.changecharacter:Paint(pw, ph)
-			local tab = {}
-			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
-				hook.Run("YButtonPaint", self, pw, ph)
-			else
-				tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
-				hook.Run("YButtonPaint", self, pw, ph, tab)
-			end
+			hook.Run("YButtonPaint", self, pw, ph)
 		end
 	end
 end)

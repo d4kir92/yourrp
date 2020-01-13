@@ -176,6 +176,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1"
 SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 20")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 60")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1")
+
 
 
 --[[ Social Settings ]]--
@@ -1241,13 +1243,17 @@ net.Receive("update_int_deathtimestamp_min", function(len, ply)
 		GeneralUpdateInt(ply, "update_int_deathtimestamp_min", "int_deathtimestamp_min", int)
 	end
 end)
-
 util.AddNetworkString("update_int_deathtimestamp_max")
 net.Receive("update_int_deathtimestamp_max", function(len, ply)
 	local int = net.ReadString()
 	if isnumber(tonumber(int)) then
 		GeneralUpdateInt(ply, "update_int_deathtimestamp_max", "int_deathtimestamp_max", int)
 	end
+end)
+util.AddNetworkString("update_bool_spawncorpseondeath")
+net.Receive("update_bool_spawncorpseondeath", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_spawncorpseondeath", "bool_spawncorpseondeath", b)
 end)
 
 

@@ -946,7 +946,10 @@ function openCharacterSelection()
 			local charactersEnter = createD("YButton", _cs.frame, button.w, button.h, button.x, button.y) -- createMDButton(_cs.frame, button.w, button.h, button.x, button.y, YRP.ctr(0), YRP.lang_string("LID_enterworld"))
 			function charactersEnter:Paint(pw, ph)
 				local tab = {}
-				tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
+				tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
+				if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+					tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
+				end
 				if LocalPlayer() != nil and LocalPlayer():Alive() then
 					tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
 					tab.tcolor = Color(255, 100, 100, 255)
@@ -961,7 +964,7 @@ function openCharacterSelection()
 
 			charactersEnter:SetText("")
 			function charactersEnter:DoClick()
-				if LocalPlayer() != nil and curChar != "-1" then
+				if LocalPlayer() != nil and curChar != "-1" and LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
 					if LocalPlayer():Alive() then
 						net.Start("LogOut")
 						net.SendToServer()

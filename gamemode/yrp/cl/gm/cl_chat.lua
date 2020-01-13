@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #CHAT
+
 local yrpChat = {}
 
 local _delay = 4
@@ -212,6 +214,7 @@ function InitYRPChat()
 			end
 		end
 		function yrpChat:openChatbox(bteam)
+			print("OPENCHATBOX")
 			yrpChat.window:MakePopup()
 			yrpChat.writeField:RequestFocus()
 
@@ -249,13 +252,14 @@ function InitYRPChat()
 			yrpChat.richText:AppendText("\n")
 			_delay = 3
 			for i, obj in pairs(args) do
-				if type(obj) == "boolean" and i == 1 then
+				local t = string.lower(type(obj))
+				if t == "boolean" and i == 1 then
 					yrp = true
-				elseif type(obj) == "table" then
+				elseif t == "table" then
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(obj.r, obj.g, obj.b, 255)
 					end
-				elseif type(obj) == "string" then
+				elseif t == "string" then
 					_delay = _delay + string.len(obj)
 					local _text = string.Explode(" ", obj)
 					for k, str in pairs(_text) do
@@ -307,14 +311,20 @@ function InitYRPChat()
 							yrpChat.richText:AppendText(str)
 						end
 					end
-				elseif type(obj) == "entity" and obj:IsPlayer() then
+				elseif t == "entity" and obj:IsPlayer() then
+					local col = GAMEMODE:GetTeamColor(obj)
+					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
+						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
+						yrpChat.richText:AppendText(obj:Nick())
+					end
+				elseif t == "palyer" and obj:IsPlayer() then
 					local col = GAMEMODE:GetTeamColor(obj)
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
 				else
-					YRP.msg("error", "TYPE: " .. type(obj) .. " obj: " .. tostring(obj))
+					YRP.msg("error", "TYPE: " .. t .. " obj: " .. tostring(obj))
 				end
 			end
 
@@ -350,6 +360,7 @@ timer.Create("yrp_init_chat", 1, 0, function()
 end)
 
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
+	print(bind)
 	if GetGlobalDBool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
@@ -359,6 +370,7 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 		else
 			return
 		end
+		print("CHAT", bind, pressed)
 		if yrpChat.window != nil then
 			yrpChat:openChatbox(bTeam)
 		end

@@ -491,9 +491,13 @@ function OpenSBS()
 
 			if !strEmpty(pl:GetDString("roleIcon", "")) then
 				pl.sbp.ricon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
+			elseif pl.sbp.ricon != nil then
+				pl.sbp.ricon:Remove()
 			end
 			if !strEmpty(pl:GetDString("groupIcon", "")) then
 				pl.sbp.gicon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
+			elseif pl.sbp.gicon != nil then
+				pl.sbp.gicon:Remove()
 			end
 
 			function pl.sbp:Paint(pw, ph)
@@ -575,8 +579,11 @@ function OpenSBS()
 								end
 								pl.sbp.ricon:SetPos(YRP.ctr(x * fac + 2), ry - YRP.ctr(30))
 							end
-
-							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", YRP.ctr(x * fac + 64 + 10), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							local iconx = 0
+							if !strEmpty(pl:GetDString("roleIcon", "")) then
+								iconx = 64
+							end
+							draw.SimpleTextOutlined(pl:GetRoleName(), "sef", YRP.ctr(x * fac + iconx + 10), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						if GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 							self.grpicon = self.grpicon or ""
@@ -593,7 +600,11 @@ function OpenSBS()
 							if pl:GetFactionName() != pl:GetGroupName() then
 								grpname = "[" .. pl:GetFactionName() .. "] " .. grpname
 							end
-							draw.SimpleTextOutlined(grpname, "sef", YRP.ctr(x * fac + 64 + 10), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							local iconx = 0
+							if !strEmpty(pl:GetDString("groupIcon", "")) then
+								iconx = 64
+							end
+							draw.SimpleTextOutlined(grpname, "sef", YRP.ctr(x * fac + iconx + 10), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 						x = x + scolen["role"]
 					end

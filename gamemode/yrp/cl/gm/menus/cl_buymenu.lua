@@ -237,118 +237,54 @@ net.Receive("shop_get_tabs", function(len)
 		end
 
 		for i, tab in pairs(_tabs) do
-			local _tab = BUYMENU.tabs:AddTab(SQL_STR_OUT(tab.name), tab.uniqueID)
+			if pa(BUYMENU) then
+				local _tab = BUYMENU.tabs:AddTab(SQL_STR_OUT(tab.name), tab.uniqueID)
 
-			function _tab:GetCategories()
-				net.Receive("shop_get_categories", function(le)
-					if BUYMENU.shop:IsValid() then
-						local _uid = net.ReadString()
-						local _cats = net.ReadTable()
-
-						BUYMENU.shop:Clear()
-
-						for j, cat in pairs(_cats) do
-							local BR = 40
-							local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
-							_cat.uid = cat.uniqueID
-							_cat:SetHeaderHeight(ctrb(100))
-							_cat:SetHeader(SQL_STR_OUT(cat.name))
-							_cat:SetSpacing(YRP.ctr(BR * 2))
-							_cat.color = Color(80, 80, 80)
-							_cat.color2 = Color(60, 60, 60)
-							function _cat:DoClick()
-								if self:IsOpen() then
-									net.Receive("shop_get_items", function(l)
-										local _items = net.ReadTable()
-										self.hs = self.hs or {}
-										local hid = 0
-										local id = 0
-										for k, item in pairs(_items) do
-											if id == 0 then
-												hid = hid + 1
-												self.hs[hid] = createD("DPanel", nil, YRP.ctr(600 * 3 + BR * 2), YRP.ctr(650 + 2 * 20), 0, 0)
-												local line = self.hs[hid]
-												function line:Paint(pw, ph)
-
-												end
-
-												self:Add(line)
-											end
-
-											local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
-
-											id = id + 1
-											if id >= 3 then
-												id = 0
-											end
-										end
-									end)
-									net.Start("shop_get_items")
-										net.WriteString(self.uid)
-									net.SendToServer()
-								else
-									self:ClearContent()
-								end
-							end
-
-							BUYMENU.shop:AddItem(_cat)
-							BUYMENU.shop:Rebuild()
-						end
-						if LocalPlayer():HasAccess() then
-							local _remove = createD("DButton", _cat, YRP.ctr(400), YRP.ctr(100), 0, 0)
-							_remove:SetText("")
-							_remove.uid = _uid
-							function _remove:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-								draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
-							end
-							function _remove:DoClick()
-								net.Start("dealer_rem_tab")
-									net.WriteString(_dealer_uid)
-									net.WriteString(self.uid)
-								net.SendToServer()
-								CloseBuyMenu()
-							end
-							BUYMENU.shop:AddItem(_remove)
-							BUYMENU.shop:Rebuild()
-						end
-					end
-				end)
-				net.Start("shop_get_categories")
-					net.WriteString(_tab.tbl)
-				net.SendToServer()
-			end
-			function _tab:Click()
-				_tab.GetCategories()
-			end
-			if tab.haspermanent then
-				local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. SQL_STR_OUT(tab.name), tab.uniqueID)
-				function _tab2:GetCategories()
+				function _tab:GetCategories()
 					net.Receive("shop_get_categories", function(le)
-						local _uid = net.ReadString()
-						local _cats = net.ReadTable()
+						if BUYMENU.shop:IsValid() then
+							local _uid = net.ReadString()
+							local _cats = net.ReadTable()
 
-						if wk(BUYMENU.content) then
 							BUYMENU.shop:Clear()
 
 							for j, cat in pairs(_cats) do
-								local _c = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
-								_c.uid = cat.uniqueID
-								_c:SetHeaderHeight(ctrb(100))
-								_c:SetHeader(SQL_STR_OUT(cat.name))
-								_c:SetSpacing(30)
-								_c.color = Color(80, 80, 80)
-								_c.color2 = Color(60, 60, 60)
-								function _c:DoClick()
+								local BR = 40
+								local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
+								_cat.uid = cat.uniqueID
+								_cat:SetHeaderHeight(ctrb(100))
+								_cat:SetHeader(SQL_STR_OUT(cat.name))
+								_cat:SetSpacing(YRP.ctr(BR * 2))
+								_cat.color = Color(80, 80, 80)
+								_cat.color2 = Color(60, 60, 60)
+								function _cat:DoClick()
 									if self:IsOpen() then
-										net.Receive("shop_get_items_storage", function(l)
+										net.Receive("shop_get_items", function(l)
 											local _items = net.ReadTable()
+											self.hs = self.hs or {}
+											local hid = 0
+											local id = 0
 											for k, item in pairs(_items) do
-												local _item = createStorageItem(item, _dealer_uid)
-												self:Add(_item)
+												if id == 0 then
+													hid = hid + 1
+													self.hs[hid] = createD("DPanel", nil, YRP.ctr(600 * 3 + BR * 2), YRP.ctr(650 + 2 * 20), 0, 0)
+													local line = self.hs[hid]
+													function line:Paint(pw, ph)
+
+													end
+
+													self:Add(line)
+												end
+
+												local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
+
+												id = id + 1
+												if id >= 3 then
+													id = 0
+												end
 											end
 										end)
-										net.Start("shop_get_items_storage")
+										net.Start("shop_get_items")
 											net.WriteString(self.uid)
 										net.SendToServer()
 									else
@@ -356,7 +292,25 @@ net.Receive("shop_get_tabs", function(len)
 									end
 								end
 
-								BUYMENU.shop:AddItem(_c)
+								BUYMENU.shop:AddItem(_cat)
+								BUYMENU.shop:Rebuild()
+							end
+							if LocalPlayer():HasAccess() then
+								local _remove = createD("DButton", _cat, YRP.ctr(400), YRP.ctr(100), 0, 0)
+								_remove:SetText("")
+								_remove.uid = _uid
+								function _remove:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+									draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+								end
+								function _remove:DoClick()
+									net.Start("dealer_rem_tab")
+										net.WriteString(_dealer_uid)
+										net.WriteString(self.uid)
+									net.SendToServer()
+									CloseBuyMenu()
+								end
+								BUYMENU.shop:AddItem(_remove)
 								BUYMENU.shop:Rebuild()
 							end
 						end
@@ -365,17 +319,67 @@ net.Receive("shop_get_tabs", function(len)
 						net.WriteString(_tab.tbl)
 					net.SendToServer()
 				end
-				function _tab2:Click()
-					_tab2.GetCategories()
+				function _tab:Click()
+					_tab.GetCategories()
 				end
-			end
+				if tab.haspermanent then
+					local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. SQL_STR_OUT(tab.name), tab.uniqueID)
+					function _tab2:GetCategories()
+						net.Receive("shop_get_categories", function(le)
+							local _uid = net.ReadString()
+							local _cats = net.ReadTable()
 
-			if i == 1 then
-				_tab.GetCategories()
+							if wk(BUYMENU.content) then
+								BUYMENU.shop:Clear()
+
+								for j, cat in pairs(_cats) do
+									local _c = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
+									_c.uid = cat.uniqueID
+									_c:SetHeaderHeight(ctrb(100))
+									_c:SetHeader(SQL_STR_OUT(cat.name))
+									_c:SetSpacing(30)
+									_c.color = Color(80, 80, 80)
+									_c.color2 = Color(60, 60, 60)
+									function _c:DoClick()
+										if self:IsOpen() then
+											net.Receive("shop_get_items_storage", function(l)
+												local _items = net.ReadTable()
+												for k, item in pairs(_items) do
+													local _item = createStorageItem(item, _dealer_uid)
+													self:Add(_item)
+												end
+											end)
+											net.Start("shop_get_items_storage")
+												net.WriteString(self.uid)
+											net.SendToServer()
+										else
+											self:ClearContent()
+										end
+									end
+
+									BUYMENU.shop:AddItem(_c)
+									BUYMENU.shop:Rebuild()
+								end
+							end
+						end)
+						net.Start("shop_get_categories")
+							net.WriteString(_tab.tbl)
+						net.SendToServer()
+					end
+					function _tab2:Click()
+						_tab2.GetCategories()
+					end
+				end
+
+				if i == 1 then
+					_tab.GetCategories()
+				end
+			else
+				break
 			end
 		end
 
-		if LocalPlayer():HasAccess() then
+		if LocalPlayer():HasAccess() and pa(BUYMENU) then
 			BUYMENU.addtab = createD("DButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(90), BUYMENU.content:GetWide() - YRP.ctr(100 + 100), YRP.ctr(10))
 			BUYMENU.addtab:SetText("")
 			function BUYMENU.addtab:Paint(pw, ph)
@@ -432,7 +436,7 @@ net.Receive("shop_get_tabs", function(len)
 		end
 
 		--[[ Settings ]]--
-		if LocalPlayer():HasAccess() then
+		if LocalPlayer():HasAccess() and pa(BUYMENU) then
 			BUYMENU.settings = createD("YButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(80), BUYMENU.content:GetWide() - YRP.ctr(100), YRP.ctr(10))
 			BUYMENU.settings:SetText("")
 			function BUYMENU.settings:Paint(pw, ph)

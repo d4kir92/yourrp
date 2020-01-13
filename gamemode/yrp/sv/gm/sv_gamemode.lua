@@ -319,16 +319,24 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 	ply:SetDInt("int_deathtimestamp_max", CurTime() + GetGlobalDInt("int_deathtimestamp_max", 60))
 
 	-- NEW RAGDOLL
-	ply.rd = ents.Create("prop_ragdoll")
-	if IsValid(ply.rd) then
-		ply.rd:SetModel(ply:GetModel())
-		ply.rd:SetPos(ply:GetPos())
-		ply.rd:SetAngles(ply:GetAngles())
-		ply.rd:SetVelocity(ply:GetVelocity())
-		ply.rd:Spawn()
-		ply.rd.ply = ply
+	if GetGlobalDBool("bool_spawncorpseondeath", true) then
+		ply.rd = ents.Create("prop_ragdoll")
+		if IsValid(ply.rd) then
+			ply.rd:SetModel(ply:GetModel())
+			ply.rd:SetPos(ply:GetPos())
+			ply.rd:SetAngles(ply:GetAngles())
+			ply.rd:SetVelocity(ply:GetVelocity())
+			ply.rd:Spawn()
+			ply.rd.ply = ply
 
-		ply:SetDInt("ent_ragdollindex", ply.rd:EntIndex())
+			timer.Simple(GetGlobalDInt("int_deathtimestamp_max", 60), function()
+				if IsValid(ply.rd) then
+					ply.rd:Remove()
+				end
+			end)
+
+			ply:SetDInt("ent_ragdollindex", ply.rd:EntIndex())
+		end
 	end
 end
 

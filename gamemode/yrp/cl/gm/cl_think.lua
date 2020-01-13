@@ -725,12 +725,10 @@ local function yrpCalcView(ply, pos, angles, fov)
 			if ent:LookupBone("ValveBiped.Bip01_Head1") != nil then
 				pos, angles = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
 				pos = pos + angles:Forward() * 10
-				t = t or 0
-				t = t + 1
+
 				angles:RotateAroundAxis(angles:Forward(), -90)--90)
 				angles:RotateAroundAxis(angles:Right(), -90)--90)
 				angles:RotateAroundAxis(angles:Up(), 0)
-				--angles = angles + Angle(0, 0, -90)
 			end
 	
 			local view = {}
