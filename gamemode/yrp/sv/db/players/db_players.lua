@@ -376,6 +376,9 @@ function set_role_values(ply, pmid)
 					end
 				end
 			end
+
+			-- Darkrp Team
+			ply:SetTeam(rolTab.uniqueID)
 		else
 			printGM("note", "[SET ROLE VALUES] No role selected -> Suicide")
 			ply:KillSilent()
@@ -386,7 +389,7 @@ function set_role_values(ply, pmid)
 			ply:SetDString("groupUniqueID", groTab.uniqueID)
 			ply:SetDString("groupColor", groTab.string_color)
 			ply:SetDString("groupIcon", groTab.string_icon)
-			--ply:SetTeam(tonumber(groTab.uniqueID))
+
 			ply:SetDBool("groupiscp", tobool(groTab.bool_iscp))
 
 			local faction = GetFactionTable(groTab.uniqueID)
@@ -496,8 +499,6 @@ function check_yrp_client(ply, steamid)
 	printGM("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
 
 	check_yrp_player(ply, steamid)
-
-	ply:SendTeamsToPlayer()
 
 	save_clients("check_yrp_client")
 end

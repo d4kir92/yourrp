@@ -88,6 +88,18 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	end
 end)
 
+hook.Add("YPanelPaint", "YPanel_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		local color = lply:InterfaceValue("YFrame", "HB")
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		return true
+	end
+end)
+
 hook.Add("YAddPaint", "YAdd_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 

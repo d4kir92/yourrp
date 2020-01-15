@@ -20,7 +20,7 @@ SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
 SWEP.UseHands = true
-SWEP.ViewModel = "models/katharsmodels/handcuffs/handcuffs-1.mdl"
+SWEP.ViewModel = "models/perp2/v_fists.mdl"
 SWEP.WorldModel = "models/katharsmodels/handcuffs/handcuffs-1.mdl"
 
 SWEP.Primary.ClipSize = -1

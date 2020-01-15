@@ -10,10 +10,12 @@ end
 
 function PANEL:Init()
 	self.hs = createD("DHorizontalScroller", self, 0, 0, 0, 0)
+	self.hs:SetOverlap(-YRP.ctr(20))
 	self.site = createD("DPanel", self, 0, 0, 0, 0)
 	function self.site:Paint(pw, ph)
 	end
 
+	self.auto = true
 	self.tabwide = 400
 
 	self.tabs = {}
@@ -27,6 +29,10 @@ function PANEL:SetTabWide(num)
 	self.tabwide = num
 end
 
+function PANEL:SetAutoTab(b)
+	self.auto = b
+end
+
 function PANEL:AddOption(name, func)
 	self:UPDATESIZE()
 
@@ -37,7 +43,13 @@ function PANEL:AddOption(name, func)
 		self.tabs:GoToSite(name)
 	end
 	function tab:Paint(pw, ph)
-		self:SetWide(YRP.ctr(self.tabs.tabwide))
+		if self.tabs.auto then
+			surface.SetFont("Y_25_500")
+			local tw, th = surface.GetTextSize(YRP.lang_string(name))
+			self:SetWide(tw + YRP.ctr(80))
+		else
+			self:SetWide(YRP.ctr(self.tabs.tabwide))
+		end
 		self.color = Color(100, 100, 255)
 		self.h = self.h or 0
 		self.delay = 0.8
@@ -51,6 +63,8 @@ function PANEL:AddOption(name, func)
 			self.h = self.h - self.delay
 		end
 		self.h = math.Clamp(self.h, 0, 10)
+	
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
 
 		draw.RoundedBox(0, YRP.ctr(20), ph - YRP.ctr(self.h), pw - YRP.ctr(40), YRP.ctr(self.h), self.color)
 

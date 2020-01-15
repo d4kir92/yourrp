@@ -59,6 +59,7 @@ if SERVER then
 		if args.target.ply then
 			local ply = args.target.ply
 			local pos = ply:GetPos()
+			ply.ignorespawnpoint = true
 			ply:Spawn()
 			ply:SetPos(pos)
 		end

@@ -5,43 +5,45 @@ YRP = YRP or {}
 rToSv = rToSv or false
 
 function YRPSendIsReady()
-	local info = {}
-	info.iswindows = system.IsWindows()
-	info.islinux = system.IsLinux()
-	info.isosx = system.IsOSX()
-	info.country = system.GetCountry()
+	if !rToSv then
+		rToSv = true
 
-	net.Start("yrp_player_is_ready")
-		net.WriteTable(info)
-	net.SendToServer()
+		local info = {}
+		info.iswindows = system.IsWindows()
+		info.islinux = system.IsLinux()
+		info.isosx = system.IsOSX()
+		info.country = system.GetCountry()
 
-	rToSv = true
+		net.Start("yrp_player_is_ready")
+			net.WriteTable(info)
+		net.SendToServer()
 
-	YRP.initLang()
+		YRP.initLang()
 
-	if tobool(get_tutorial("tut_welcome")) then
-		OpenHelpMenu()
-	end
-
-	timer.Simple(1, function()
-		local _wsitems = engine.GetAddons()
-		printGM("note", "[" .. #_wsitems .. " Workshop items]")
-		printGM("note", " Nr.\tID\t\tName Mounted")
-
-		for k, ws in pairs(_wsitems) do
-			if !ws.mounted then
-				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
-				if IsValid(ws.path) then
-					game.MountGMA(tostring(ws.path))
-				else
-					YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
-				end
-			end
+		if tobool(get_tutorial("tut_welcome")) then
+			OpenHelpMenu()
 		end
 
-		printGM("note", "Workshop Addons Done")
-		playerfullready = true
-	end)
+		timer.Simple(1, function()
+			local _wsitems = engine.GetAddons()
+			printGM("note", "[" .. #_wsitems .. " Workshop items]")
+			printGM("note", " Nr.\tID\t\tName Mounted")
+
+			for k, ws in pairs(_wsitems) do
+				if !ws.mounted then
+					printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
+					if IsValid(ws.path) then
+						game.MountGMA(tostring(ws.path))
+					else
+						YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
+					end
+				end
+			end
+
+			printGM("note", "Workshop Addons Done")
+			playerfullready = true
+		end)
+	end
 end
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()

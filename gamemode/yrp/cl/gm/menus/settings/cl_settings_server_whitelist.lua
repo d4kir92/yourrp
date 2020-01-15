@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #WHITELISTESETTINGS
+
 net.Receive("getRoleWhitelist", function(len)
 	if pa(settingsWindow.window) then
 		function settingsWindow.window.site:Paint(pw, ph)
@@ -12,18 +14,21 @@ net.Receive("getRoleWhitelist", function(len)
 		local _tmpGroupList = net.ReadTable()
 
 		local _whitelistListView = createD("DListView", settingsWindow.window.site, ScW() - YRP.ctr(20 + 10 + 500), ScrH() - YRP.ctr(180), YRP.ctr(10), YRP.ctr(10 + 50))
-		_whitelistListView:AddColumn("uniqueID")
-		_whitelistListView:AddColumn("SteamID")
+		_whitelistListView:AddColumn("uniqueID"):SetFixedWidth(YRP.ctr(200))
+		_whitelistListView:AddColumn("SteamID"):SetFixedWidth(YRP.ctr(260))
 		_whitelistListView:AddColumn(YRP.lang_string("LID_nick"))
+		_whitelistListView:AddColumn(YRP.lang_string("LID_name"))
 		_whitelistListView:AddColumn(YRP.lang_string("LID_group"))
 		_whitelistListView:AddColumn(YRP.lang_string("LID_role"))
+		_whitelistListView:AddColumn(YRP.lang_string("LID_time")):SetFixedWidth(YRP.ctr(260))
+		_whitelistListView:AddColumn(YRP.lang_string("LID_status"))
 
 		for k, v in pairs(_tmpWhiteList) do
 			for l, w in pairs(_tmpRoleList) do
 				if (w.uniqueID == v.roleID) then
 					for m, x in pairs(_tmpGroupList) do
 						if (x.uniqueID == w.int_groupID) then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), x.string_name, w.string_name)
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), SQL_STR_OUT(v.name), x.string_name, w.string_name, v.date, v.status)
 							break
 						end
 					end
@@ -31,10 +36,10 @@ net.Receive("getRoleWhitelist", function(len)
 				elseif v.roleID == "-1" then
 					for m, x in pairs(_tmpGroupList) do
 						if (x.uniqueID == v.groupID) then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), x.string_name, "")
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), SQL_STR_OUT(v.name), x.string_name, "", v.date, v.status)
 							break
 						elseif v.groupID == "-1" then
-							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"))
+							_whitelistListView:AddLine(v.uniqueID, v.SteamID, SQL_STR_OUT(v.nick), SQL_STR_OUT(v.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), v.date, v.status)
 							break
 						end
 					end

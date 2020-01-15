@@ -129,16 +129,16 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 
 		local CatColor = team.GetColor(ply:Team())
 		if GAMEMODE.Name == "Sandbox" then
-				CatColor = Color(100, 150, 245, 255)
-				if ply:Team() == TEAM_CONNECTING then
-						CatColor = Color(200, 120, 50, 255)
-				elseif ply:IsAdmin() then
-						CatColor = Color(30, 200, 50, 255)
-				end
+			CatColor = Color(100, 150, 245, 255)
+			if ply:Team() == TEAM_CONNECTING then
+					CatColor = Color(200, 120, 50, 255)
+			elseif ply:IsAdmin() then
+					CatColor = Color(30, 200, 50, 255)
+			end
 
-				if ply:GetFriendStatus() == "friend" then
-						CatColor = Color(236, 181, 113, 255)
-				end
+			if ply:GetFriendStatus() == "friend" then
+					CatColor = Color(236, 181, 113, 255)
+			end
 		end
 		FAdmin.ScoreBoard.Player.Controls.ButtonCat = FAdmin.ScoreBoard.Player.Controls.ButtonCat or vgui.Create("FAdminPlayerCatagory")
 		FAdmin.ScoreBoard.Player.Controls.ButtonCat:SetLabel("	Player options!")

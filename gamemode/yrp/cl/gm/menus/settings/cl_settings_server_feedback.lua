@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #FEEDBACKSETTINGS
+
 local _avatars = {}
 function GetAvatarUrl(steamid)
 	local steamid64 = util.SteamIDTo64(steamid)
@@ -19,6 +21,144 @@ function GetAvatarUrl(steamid)
 	)
 end
 
+function BuildFeedbackLine(parent, tab)
+	for i, v in pairs(tab) do
+		tab[i] = SQL_STR_OUT(v)
+	end
+
+	tab.rows = string.Explode("\n", tab.feedback)
+	tab.rows = #tab.rows
+	tab.rows = math.Clamp(tab.rows, 3, 50)
+
+	-- LINE
+	local _fb = createD("YPanel", parent, parent:GetWide(), YRP.ctr(90) + YRP.ctr(50) * tab.rows, 0, 0)
+	_fb.steamid64 = util.SteamIDTo64(tab.steamid)
+	function _fb:Paint(pw, ph)
+		hook.Run("YPanelPaint", self, pw, ph)
+	end
+
+	-- STEAMNAME
+	_fb.steamnamel = createD("YLabel", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+	_fb.steamnamel:SetText("LID_steamname")
+	_fb.steamnamete = createD("DTextEntry", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(70))
+	_fb.steamnamete:SetEditable(false)
+	_fb.steamnamete:SetFont("Y_23_500")
+	_fb.steamnamete:SetText(tab.steamname or "NO STEAMNAME AVAILABLE")
+
+	-- RPNAME
+	_fb.rpnamel = createD("YLabel", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(440), YRP.ctr(20))
+	_fb.rpnamel:SetText("LID_rpname")
+	_fb.rpnamete = createD("DTextEntry", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(440), YRP.ctr(70))
+	_fb.rpnamete:SetEditable(false)
+	_fb.rpnamete:SetFont("Y_23_500")
+	_fb.rpnamete:SetText(tab.rpname or "NO RPNAME AVAILABLE")
+
+	-- TITEL
+	_fb.titlel = createD("YLabel", _fb, YRP.ctr(800), YRP.ctr(50), YRP.ctr(860), YRP.ctr(20))
+	_fb.titlel:SetText("LID_title")
+	_fb.titlete = createD("DTextEntry", _fb, YRP.ctr(800), YRP.ctr(50) * tab.rows, YRP.ctr(860), YRP.ctr(70))
+	_fb.titlete:SetEditable(false)
+	_fb.titlete:SetMultiline(true)
+	_fb.titlete:SetFont("Y_23_500")
+	_fb.titlete:SetText(tab.title or "NO TITLE AVAILABLE")
+
+	-- FEEDBACK
+	_fb.feedbackp = createD("YLabel", _fb, YRP.ctr(1200), YRP.ctr(50), YRP.ctr(1680), YRP.ctr(20))
+	_fb.feedbackp:SetText("LID_settings_fb_feedback")
+	_fb.feedbackte = createD("DTextEntry", _fb, YRP.ctr(1200), YRP.ctr(50) * tab.rows, YRP.ctr(1680), YRP.ctr(70))
+	_fb.feedbackte:SetEditable(false)
+	_fb.feedbackte:SetMultiline(true)
+	_fb.feedbackte:SetFont("Y_23_500")
+	_fb.feedbackte:SetText(tab.feedback or "NO FEEDBACK AVAILABLE")
+
+	-- CONTACT
+	_fb.contactl = createD("YLabel", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2900), YRP.ctr(20))
+	_fb.contactl:SetText("LID_contact")
+	_fb.contactte = createD("DTextEntry", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2900), YRP.ctr(70))
+	_fb.contactte:SetEditable(false)
+	_fb.contactte:SetFont("Y_23_500")
+	_fb.contactte:SetText(tab.contact or "NO CONTACT AVAILABLE")
+
+	-- PROFILE
+	_fb.profile = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(20))
+	_fb.profile:SetText("LID_openprofile")
+	function _fb.profile:DoClick()
+		gui.OpenURL("http://steamcommunity.com/profiles/" .. _fb.steamid64)
+	end
+
+	-- MOVETO
+	if tab.status == "open" then
+		_fb.statusbtn2 = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(90))
+		_fb.statusbtn2:SetText("LID_movetowip")
+
+		_fb.statusbtn3 = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(160))
+		_fb.statusbtn3:SetText("LID_movetoclosed")
+	elseif tab.status == "wip" then
+		_fb.statusbtn1 = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(90))
+		_fb.statusbtn1:SetText("LID_movetoopen")
+
+		_fb.statusbtn3 = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(160))
+		_fb.statusbtn3:SetText("LID_movetoclosed")
+	elseif tab.status == "closed" then
+		_fb.statusbtn1 = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(90))
+		_fb.statusbtn1:SetText("LID_movetoopen")
+
+		_fb.statusbtn2 = createD("YButton", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3420), YRP.ctr(160))
+		_fb.statusbtn2:SetText("LID_movetowip")
+	end
+
+	if _fb.statusbtn1 then
+		function _fb.statusbtn1:DoClick()
+			net.Start("fb_movetoopen")
+				net.WriteString(tab.uniqueID)
+			net.SendToServer()
+
+			tab.status = "open"
+
+			_fb:Remove()
+		end
+	end
+
+	if _fb.statusbtn2 then
+		function _fb.statusbtn2:DoClick()
+			net.Start("fb_movetowip")
+				net.WriteString(tab.uniqueID)
+			net.SendToServer()
+
+			tab.status = "wip"
+
+			_fb:Remove()
+		end
+	end
+
+	if _fb.statusbtn3 then
+		function _fb.statusbtn3:DoClick()
+			net.Start("fb_movetoclosed")
+				net.WriteString(tab.uniqueID)
+			net.SendToServer()
+
+			tab.status = "closed"
+
+			_fb:Remove()
+		end
+	end
+
+	return _fb
+end
+
+function BuildFeedback(parent, tab, status)
+	local list = createD("DScrollPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
+
+	for i, v in pairs(tab) do
+		if v.status == status then
+			local line = BuildFeedbackLine(list, v)
+			line:Dock( TOP )
+			line:DockMargin( 0, 0, 0, YRP.ctr(20) )
+			list:AddItem(line)
+		end
+	end
+end
+
 net.Receive("get_feedback", function()
 	local ply = LocalPlayer()
 	local _fbt = net.ReadTable()
@@ -28,87 +168,23 @@ net.Receive("get_feedback", function()
 			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
 		end
 
-		local FEEDBACK = createD("YGroupBox", settingsWindow.window.site, ScrW() - YRP.ctr(40), settingsWindow.window.site:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
-		FEEDBACK:SetText("LID_settings_fb_feedbacks")
-		function FEEDBACK:Paint(pw, ph)
-			hook.Run("YGroupBoxPaint", self, pw, ph)
-		end
+		local site = settingsWindow.window.site
 
-		for i, fb in pairs(_fbt) do
-			GetAvatarUrl(fb.steamid)
+		local tabs = createD("YTabs", site, ScW(), ScH() - YRP.ctr(100), 0, 0)
 
-			local _fb = createD("DPanel", nil, FEEDBACK:GetContent():GetWide(), YRP.ctr(400), 0, 0)
-			_fb.steamid64 = util.SteamIDTo64(fb.steamid)
-			_fb.avatar = createD("HTML", _fb, YRP.ctr(400), YRP.ctr(400), YRP.ctr(10), YRP.ctr(10))
-			function _fb:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 100))
+		tabs:AddOption("LID_opentickets", function(parent)
+			BuildFeedback(parent, _fbt, "open")
+		end)
 
-				paintBr(pw, ph, Color(0, 0, 0, 255))
+		tabs:AddOption("LID_ticketsinprocess", function(parent)
+			BuildFeedback(parent, _fbt, "wip")
+		end)
 
-				--surfaceText(fb.steamname or "NO STEAMNAME", "mat1header", YRP.ctr(200 + 10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-				--surfaceText(fb.title, "mat1header", YRP.ctr(800), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-				--surfaceText(fb.feedback, "mat1header", YRP.ctr(1200), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-				--surfaceText(fb.contact, "mat1header", YRP.ctr(2000), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
+		tabs:AddOption("LID_closedtickets", function(parent)
+			BuildFeedback(parent, _fbt, "closed")
+		end)
 
-				if _avatars[self.steamid64] != nil then
-					_fb.avatar:SetHTML(_avatars[self.steamid64])
-				end
-			end
-
-
-
-			_fb.steamnamep = createD("DPanel", _fb, YRP.ctr(400), YRP.ctr(60), YRP.ctr(220), YRP.ctr(10))
-			function _fb.steamnamep:Paint(pw, ph)
-				surfacePanel(self, pw, ph, YRP.lang_string("LID_steamname"))
-			end
-			_fb.steamnamete = createD("DTextEntry", _fb, YRP.ctr(400), YRP.ctr(110), YRP.ctr(220), YRP.ctr(80))
-			_fb.steamnamete:SetEditable(false)
-			_fb.steamnamete:SetText(fb.steamname or "NO STEAMNAME AVAILABLE")
-
-
-
-			_fb.titlep = createD("DPanel", _fb, YRP.ctr(500), YRP.ctr(60), YRP.ctr(630), YRP.ctr(10))
-			function _fb.titlep:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "LID_settings_fb_title")
-			end
-			_fb.titlete = createD("DTextEntry", _fb, YRP.ctr(500), YRP.ctr(110), YRP.ctr(630), YRP.ctr(80))
-			_fb.titlete:SetEditable(false)
-			_fb.titlete:SetText(fb.title or "NO TITLE AVAILABLE")
-
-
-
-			_fb.feedbackp = createD("DPanel", _fb, YRP.ctr(1200), YRP.ctr(60), YRP.ctr(1140), YRP.ctr(10))
-			function _fb.feedbackp:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "LID_settings_fb_feedback")
-			end
-			_fb.feedbackte = createD("DTextEntry", _fb, YRP.ctr(1200), YRP.ctr(310), YRP.ctr(1140), YRP.ctr(80))
-			_fb.feedbackte:SetEditable(false)
-			_fb.feedbackte:SetMultiline(true)
-			_fb.feedbackte:SetText(fb.feedback or "NO FEEDBACK AVAILABLE")
-
-
-
-			_fb.contactp = createD("DPanel", _fb, YRP.ctr(500), YRP.ctr(60), YRP.ctr(2350), YRP.ctr(10))
-			function _fb.contactp:Paint(pw, ph)
-				surfacePanel(self, pw, ph, "LID_settings_fb_contact")
-			end
-			_fb.contactte = createD("DTextEntry", _fb, YRP.ctr(500), YRP.ctr(110), YRP.ctr(2350), YRP.ctr(80))
-			_fb.contactte:SetEditable(false)
-			_fb.contactte:SetText(fb.contact or "NO CONTACT AVAILABLE")
-
-
-
-			_fb.profile = createD("DButton", _fb, YRP.ctr(600), YRP.ctr(60), YRP.ctr(2860), YRP.ctr(10))
-			_fb.profile:SetText("")
-			function _fb.profile:Paint(pw, ph)
-				surfaceButton(self, pw, ph, YRP.lang_string("LID_openprofile"))
-			end
-			function _fb.profile:DoClick()
-				gui.OpenURL("http://steamcommunity.com/profiles/" .. _fb.steamid64)
-			end
-
-			FEEDBACK:AddItem(_fb)
-		end
+		tabs:GoToSite("LID_opentickets")
 	end
 end)
 

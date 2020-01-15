@@ -1275,11 +1275,15 @@ end
 
 yrp_hud = yrp_hud or {}
 function YRPHUD(name, failed)
-	local value = yrp_hud[name]
-	if value != nil then
-		return value
+	if LocalPlayer():LoadedGamemode() then
+		local value = yrp_hud[name]
+		if value != nil then
+			return value
+		else
+			YRP.msg("error", "YRPHUD FAILED: " .. name)
+			return failed
+		end
 	else
-		YRP.msg("error", "YRPHUD FAILED: " .. name)
 		return failed
 	end
 end

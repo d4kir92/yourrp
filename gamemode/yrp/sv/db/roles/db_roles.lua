@@ -244,6 +244,11 @@ function ConvertToDarkRPJob(tab)
 	_job.category = gname or "invalid group"
 	_job.command = ConvertToDarkRPJobName(tab.string_name)
 
+	-- YRP
+	_job.color = string.Explode(",", tab.string_color)
+	_job.color = Color(_job.color[1], _job.color[2], _job.color[3], _job.color[4])
+	_job.uniqueID = tonumber(tab.uniqueID)
+
 	return _job
 end
 
@@ -1430,9 +1435,12 @@ function removeFromWhitelist( SteamID, roleID )
 	end
 end
 
-function addToWhitelist( SteamID, roleID, groupID, nick )
+function addToWhitelist( SteamID, roleID, groupID, nick, ply, target )
 	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
-		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID )
+		local dat = util.DateStamp()
+		local status = "Promoted by " .. ply:SteamName()
+		local name = target:SteamName()
+		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		printGM( "note", "is already in whitelist")
 	end
@@ -1469,7 +1477,7 @@ net.Receive("promotePlayer", function(len, ply)
 
 		for k, v in pairs(player.GetAll()) do
 			if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
-				addToWhitelist( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick() )
+				addToWhitelist( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick(), ply, v )
 				break
 			end
 		end

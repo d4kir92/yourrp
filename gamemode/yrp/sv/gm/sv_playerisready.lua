@@ -41,6 +41,8 @@ function PlayerLoadedGame(ply)
 		SendDEntities(ply, "PlayerLoadedGame")
 	end)
 
+	ply:SendTeamsToPlayer()
+
 	ply:SetDBool("finishedloading", true)
 
 	ply:KillSilent()

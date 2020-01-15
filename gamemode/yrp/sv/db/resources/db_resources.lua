@@ -3,6 +3,8 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
+-- #Resources #Content #Addons
+
 hr_pre("gm")
 
 printGM("gm", "Loading Resources")

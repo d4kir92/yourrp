@@ -506,7 +506,7 @@ function Player:YRPName()
 end
 
 function Player:Team()
-	return tonumber(self:GetDString("groupUniqueID", "-1"))
+	return tonumber(self:GetDString("roleUniqueID", "-1"))
 end
 
 timer.Simple(10, function()

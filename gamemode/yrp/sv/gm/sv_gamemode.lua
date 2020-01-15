@@ -43,7 +43,7 @@ end
 util.AddNetworkString("yrp_askforinfo")
 function GM:PlayerInitialSpawn(ply)
 	--printGM("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
-	--ply:KillSilent()
+	ply:KillSilent()
 	net.Start("yrp_askforinfo")
 	net.Send(ply)
 
@@ -89,7 +89,7 @@ function YRP:Loadout(ply)
 
 	ply:SetDInt("speak_channel", 0)
 
-	ply:DesignLoadout("Loadout")
+	--ply:DesignLoadout("Loadout")
 	ply:UserGroupLoadout()
 	ply:GeneralLoadout()
 

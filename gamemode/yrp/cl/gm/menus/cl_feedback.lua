@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #FEEDBACK
+
 FEEDBACK = FEEDBACK or {}
 FEEDBACK.open = false
 
@@ -17,6 +19,8 @@ function closeFeedbackMenu()
 		closeMenu()
 		FEEDBACK.window:Remove()
 		FEEDBACK.window = nil
+	elseif pa(FEEDBACK.content) then
+		FEEDBACK.content:GetParent():Close()
 	end
 end
 
@@ -60,20 +64,20 @@ function CreateFeedbackContent(parent)
 
 	FEEDBACK.titleP = createD("DPanel", FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170))
 	function FEEDBACK.titleP:Paint(pw, ph)
-		surfaceText(YRP.lang_string("LID_title"), "roleInfoHeader", YRP.ctr(20), ph / 2, Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_title"), "Y_25_700", YRP.ctr(0), ph / 2, Color(255, 255, 255), 0, 1)
 	end
 	FEEDBACK.titleT = createD("DTextEntry", FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220))
 
 	FEEDBACK.feedbackP = createD("DPanel", FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300))
 	function FEEDBACK.feedbackP:Paint(pw, ph)
-		surfaceText(YRP.lang_string("LID_feedback") .. " (" .. YRP.lang_string("LID_problems") .. ", " .. YRP.lang_string("LID_suggestions") .. ", ...)", "roleInfoHeader", YRP.ctr(20), ph/2, Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_feedback") .. " (" .. YRP.lang_string("LID_problems") .. ", " .. YRP.lang_string("LID_suggestions") .. ", ...)", "Y_25_700", YRP.ctr(0), ph/2, Color(255, 255, 255), 0, 1)
 	end
 	FEEDBACK.feedbackT = createD("DTextEntry", FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350))
 	FEEDBACK.feedbackT:SetMultiline(true)
 
 	FEEDBACK.contactP = createD("DPanel", FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900))
 	function FEEDBACK.contactP:Paint(pw, ph)
-		surfaceText(YRP.lang_string("LID_contact") .. " (" .. YRP.lang_string("LID_notrequired") .. ")", "roleInfoHeader", YRP.ctr(20), ph/2, Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_contact") .. " (" .. YRP.lang_string("LID_notrequired") .. ")", "Y_25_700", YRP.ctr(0), ph/2, Color(255, 255, 255), 0, 1)
 	end
 	FEEDBACK.contactT = createD("DTextEntry", FEEDBACK.content, FEEDBACK.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950))
 
@@ -106,6 +110,7 @@ function CreateFeedbackContent(parent)
 			_net_table.contact = FEEDBACK.contactT:GetText() or "FAILED"
 			_net_table.steamid = LocalPlayer():SteamID() or "FAILED"
 			_net_table.steamname = LocalPlayer():SteamName() or "FAILED"
+			_net_table.rpname = LocalPlayer():RPName() or "FAILED"
 			net.Start("add_feedback")
 				net.WriteTable(_net_table)
 			net.SendToServer()

@@ -102,7 +102,7 @@ net.Receive("ply_changed_resolution", function(len, ply)
 		once = true
 		return
 	end
-	ply:DesignLoadout("ply_changed_resolution")
+	--ply:DesignLoadout("ply_changed_resolution")
 end)
 
 util.AddNetworkString("change_hud_design")

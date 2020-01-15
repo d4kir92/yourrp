@@ -2,8 +2,9 @@
 
 local cm = {}
 cm.open = false
-cm.currentsite = "help"
+cm.currentsite = 0
 function ToggleCombinedMenu(id)
+	id = tonumber(id)
 	cm.currentsite = id
 	if !cm.open and isNoMenuOpen() then
 		OpenCombinedMenu()
@@ -110,7 +111,7 @@ function OpenCombinedMenu()
 			cm.sites[name] = createD("YButton", cm.menu, menuw, YRP.ctr(80), 0, menuw + id * (YRP.ctr(80) + br))
 			local site = cm.sites[name]
 			site:SetText("")
-			site.id = v.id
+			site.id = tonumber(v.id)
 			function site:Paint(pw, ph)
 				local color = Color(40, 40, 40, 255)
 				if self:IsHovered() then
@@ -140,5 +141,10 @@ function OpenCombinedMenu()
 		end
 	elseif pa(cm.win) then
 		cm.win:Show()
+		for i, site in pairs(cm.sites) do
+			if cm.currentsite == site.id then
+				site:DoClick()
+			end
+		end
 	end
 end

@@ -3,22 +3,25 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_feedback"
+-- #FEEDBACKDATABASE
 
-SQL_ADD_COLUMN(_db_name, "title", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(_db_name, "feedback", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(_db_name, "contact", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(_db_name, "steamid", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(_db_name, "steamname", "TEXT DEFAULT 'UNNAMED'")
+local DATABASE_NAME = "yrp_feedback"
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+SQL_ADD_COLUMN(DATABASE_NAME, "title", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "feedback", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "contact", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "steamid", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "steamname", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "rpname", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "status", "TEXT DEFAULT 'open'")
+
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 util.AddNetworkString("get_feedback")
-
 net.Receive("get_feedback", function(len, ply)
 	if ply:CanAccess("bool_feedback") then
-		local _result = SQL_SELECT(_db_name, "*", nil)
+		local _result = SQL_SELECT(DATABASE_NAME, "*", nil)
 		if _result == nil or _result == false then
 			_result = {}
 		end
@@ -30,12 +33,32 @@ net.Receive("get_feedback", function(len, ply)
 end)
 
 util.AddNetworkString("add_feedback")
-
 net.Receive("add_feedback", function(len, ply)
 	local _fb = net.ReadTable()
-	local _insert = SQL_INSERT_INTO(_db_name, "title, feedback, contact, steamid, steamname", "'" .. SQL_STR_IN(_fb.title) .. "', '" .. SQL_STR_IN(_fb.feedback) .. "', '" .. SQL_STR_IN(_fb.contact) .. "', '" .. SQL_STR_IN(_fb.steamid) .. "', '" .. SQL_STR_IN(_fb.steamname) .. "'")
+	local _insert = SQL_INSERT_INTO(DATABASE_NAME, "title, feedback, contact, steamid, steamname, rpname", "'" .. SQL_STR_IN(_fb.title) .. "', '" .. SQL_STR_IN(_fb.feedback) .. "', '" .. SQL_STR_IN(_fb.contact) .. "', '" .. SQL_STR_IN(_fb.steamid) .. "', '" .. SQL_STR_IN(_fb.steamname) .. "', '" .. SQL_STR_IN(_fb.rpname) .. "'")
 	net.Start("yrp_noti")
 		net.WriteString("newfeedback")
 		net.WriteString("")
 	net.Broadcast()
+end)
+
+util.AddNetworkString("fb_movetoopen")
+net.Receive("fb_movetowip", function(len, ply)
+	local uid = net.ReadString()
+
+	SQL_UPDATE(DATABASE_NAME, "status = 'open'", "uniqueID = '" .. uid .. "'")
+end)
+
+util.AddNetworkString("fb_movetowip")
+net.Receive("fb_movetowip", function(len, ply)
+	local uid = net.ReadString()
+
+	SQL_UPDATE(DATABASE_NAME, "status = 'wip'", "uniqueID = '" .. uid .. "'")
+end)
+
+util.AddNetworkString("fb_movetoclosed")
+net.Receive("fb_movetoclosed", function(len, ply)
+	local uid = net.ReadString()
+
+	SQL_UPDATE(DATABASE_NAME, "status = 'closed'", "uniqueID = '" .. uid .. "'")
 end)

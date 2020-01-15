@@ -757,8 +757,12 @@ hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
 
 net.Receive("send_team", function(len)
 	local teamname = net.ReadString()
-	local team = net.ReadTable()
+	local teamTab = net.ReadTable()
+	local teamcolor = teamTab.color
+	local teamuid = teamTab.uniqueID
 
 	_G[teamname] = team
-	table.insert(RPExtraTeams, team)
+	table.insert(RPExtraTeams, teamTab)
+
+	team.SetUp(teamuid, teamname, teamcolor)
 end)
