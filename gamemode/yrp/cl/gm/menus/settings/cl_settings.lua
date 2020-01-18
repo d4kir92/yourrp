@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #WHITELIST
+
 -- OLD Sites
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
@@ -121,18 +123,12 @@ function OpenSettings()
 	end
 
 	--Sites
-	--[[local _client = YRP.lang_string("LID_settings_client") .. " [PROTOTYPES]"
-	settingsWindow.window:AddCategory(_client)
-	settingsWindow.window:AddSite("open_client_character", "LID_character", _client, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_client_keybinds", "LID_keybinds", _client, "icon16/keyboard.png")]]
-
-	local _server_admin = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
-	settingsWindow.window:AddCategory(_server_admin)
-	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_admin, "icon16/user_edit.png")
-	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_admin, "icon16/vcard_edit.png")
-	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_admin, "icon16/basket_edit.png")
-	settingsWindow.window:AddSite("open_server_whitelist", "Whitelist", _server_admin, "icon16/page_white_key.png")
-
+	local _server_prototypes = YRP.lang_string("LID_settings_server") .. " [PROTOTYPES]"
+	settingsWindow.window:AddCategory(_server_prototypes)
+	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_prototypes, "icon16/user_edit.png")
+	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_prototypes, "icon16/vcard_edit.png")
+	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_prototypes, "icon16/basket_edit.png")
+	
 
 
 	local _settings_server_maintance = "LID_settings_server_maintance"
@@ -156,6 +152,7 @@ function OpenSettings()
 	settingsWindow.window:AddCategory(_settings_server_management)
 	settingsWindow.window:AddSite("open_server_database", "LID_settings_database", _settings_server_management, "icon16/database.png")
 	settingsWindow.window:AddSite("open_server_usergroups", "LID_settings_usergroups", _settings_server_management, "icon16/group_go.png")
+	settingsWindow.window:AddSite("open_server_whitelist", "LID_whitelist", _settings_server_management, "icon16/page_white_key.png")
 
 
 	

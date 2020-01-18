@@ -54,9 +54,9 @@ hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	end)
 end)
 
-timer.Simple(40, function()
+timer.Simple(60, function()
 	if !rToSv then
-		YRP.msg("error", "YRPSendIsReady FAILED")
+		YRP.msg("error", "SEND IS READY FAILED " .. tostring(rToSv) .. tostring(LOADED_CHARS))
 		YRPSendIsReady()
 	end
 end)

@@ -26,20 +26,35 @@ util.AddNetworkString("whitelistPlayerRemove")
 util.AddNetworkString("yrpInfoBox")
 
 function sendRoleWhitelist(ply)
+	local tabW = SQL_SELECT("yrp_role_whitelist", "*", nil)
+	for i, v in pairs(tabW) do
+		v.groupID = tonumber(v.groupID)
+		v.roleID = tonumber(v.roleID)
+
+		if v.groupID > 0 then
+			local tabG = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. v.groupID .. "'")
+			if !wk(tabG) then
+				SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'")
+			end
+		end
+		if v.roleID > 0 then
+			local tabR = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. v.roleID .. "'")
+			if !wk(tabR) then
+				SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'")
+			end
+		end
+	end
+
 	if ply:CanAccess("bool_players") or ply:CanAccess("bool_whitelist") then
 		local _tmpWhiteList = SQL_SELECT("yrp_role_whitelist", "*", nil)
 		local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
 		local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "string_name, uniqueID", nil)
 
-		if _tmpWhiteList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
-			net.Start("getRoleWhitelist")
-				net.WriteTable(_tmpWhiteList)
-				net.WriteTable(_tmpRoleList)
-				net.WriteTable(_tmpGroupList)
-			net.Send(ply)
-		elseif _tmpRoleList != nil and _tmpGroupList != nil then
-			printGM("note", "sendRoleWhitelist Whitelist is empty")
+		if !wk(_tmpWhiteList) then
 			_tmpWhiteList = {}
+		end
+
+		if _tmpRoleList != nil and _tmpGroupList != nil then
 			net.Start("getRoleWhitelist")
 				net.WriteTable(_tmpWhiteList)
 				net.WriteTable(_tmpRoleList)
@@ -90,6 +105,7 @@ net.Receive("whitelistPlayerGroup", function(len, ply)
 		for k, v in pairs(player.GetAll()) do
 			if v:SteamID() == _SteamID then
 				_nick = v:Nick()
+				target = v
 			end
 		end
 		local _groupID = net.ReadInt(16)
@@ -97,8 +113,8 @@ net.Receive("whitelistPlayerGroup", function(len, ply)
 
 		local dat = util.DateStamp()
 		local status = "Manually by " .. ply:SteamName()
-
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", '" .. dat .. "', '" .. status .. "'")
+		local name = target:SteamName()
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 	end
 	sendRoleWhitelist(ply)
 end)
@@ -110,9 +126,14 @@ net.Receive("whitelistPlayerAll", function(len, ply)
 		for k, v in pairs(player.GetAll()) do
 			if v:SteamID() == _SteamID then
 				_nick = v:Nick()
+				target = v
 			end
 		end
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. "-1" .. ", " .. "-1")
+
+		local dat = util.DateStamp()
+		local status = "Manually by " .. ply:SteamName()
+		local name = target:SteamName()
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. "-1" .. ", " .. "-1" .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 	end
 	sendRoleWhitelist(ply)
 end)

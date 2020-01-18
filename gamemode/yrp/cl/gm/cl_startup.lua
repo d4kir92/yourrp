@@ -2153,7 +2153,7 @@ local ds = ds or false
 hook.Add("Think", "openDeathScreen", function(len)
 	if !LocalPlayer():Alive() and isNoMenuOpen() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds then
 		ds = true
-		local win = createD("DFrame", nil, ScW(), ScH(), 0, 0)
+		local win = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle("")
 		--win:MakePopup()
 		gui.EnableScreenClicker(true)
@@ -2226,10 +2226,23 @@ end)
 
 local yrp_icon = Material("yrp/yrp_icon")
 
-local loading = createD("DFrame", nil, ScW(), ScH(), 0, 0)
+local loading = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 loading:SetTitle("")
 loading:Center()
+loading:ShowCloseButton(false)
+loading.d = CurTime() + 1
+loading.t = 0
 function loading:Paint(pw, ph)
+	if self.d < CurTime() then
+		self.d = CurTime() + 1
+		self.t = self.t + 1
+
+		if self.t >= 60 then
+			YRP.msg("error", "loading => 60+ " .. tostring(rToSv) .. " " .. tostring(LOADED_CHARS) .. " " .. tostring(LocalPlayer():GetDBool("finishedloading", false)))
+			self:Remove()
+		end
+	end
+
 	self:MoveToFront()
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
 

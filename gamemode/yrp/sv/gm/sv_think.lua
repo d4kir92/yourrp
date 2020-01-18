@@ -200,8 +200,8 @@ function teleporterAlive(uid)
 end
 
 local _time = 0
-local TICK = 0.01
-local DEC = 2
+local TICK = 0.1
+local DEC = 1
 timer.Create("ServerThink", TICK, 0, function()
 	local _all_players = player.GetAll()
 

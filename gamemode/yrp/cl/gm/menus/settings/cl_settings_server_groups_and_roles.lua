@@ -1322,29 +1322,31 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.Receive("get_all_playermodels", function()
 					local pms = net.ReadTable()
 
-					local win = createD("DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
-					win:SetTitle("")
+					local win = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
+					win:SetHeaderHeight(YRP.ctr(100))
+					win:SetTitle("LID_search")
 					win:Center()
 					win:MakePopup()
-					function win:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-						draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 150), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-					end
 
-					win.add = createD("DButton", win, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
+					local content = win:GetContent()
+					win.add = createD("YButton", content, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
 					win.add:SetText("+")
 					function win.add:DoClick()
 						win:Close()
 
-						local pmwin = createD("DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+						local pmwin = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
+						pmwin:SetHeaderHeight(YRP.ctr(100))
 						pmwin:Center()
 						pmwin:MakePopup()
 						pmwin:SetTitle("")
-						pmwin.pms = {}
-						pmwin.name = createD("DTextEntry", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20 + 200 + 20 + 100), YRP.ctr(50 + 20))
 
-						pmwin.float_min = createD("DNumberWang", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(200))
-						pmwin.float_max = createD("DNumberWang", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(200))
+						local pmcontent = pmwin:GetContent()
+
+						pmwin.pms = {}
+						pmwin.name = createD("DTextEntry", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20 + 200 + 20 + 100), YRP.ctr(50 + 20))
+
+						pmwin.float_min = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(200))
+						pmwin.float_max = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(200))
 
 						pmwin.float_min:SetMinMax(0.1, 100.0)
 						pmwin.float_max:SetMinMax(0.1, 100.0)
@@ -1367,7 +1369,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 
-						pmwin.list = createD("DPanelList", pmwin, pmwin:GetWide() - YRP.ctr(40), YRP.ctr(400), YRP.ctr(20), YRP.ctr(300))
+						pmwin.list = createD("DPanelList", pmcontent, pmcontent:GetWide() - YRP.ctr(40), pmcontent:GetTall() - YRP.ctr(20 + 50 + 20 + 300 + 20 + 20), YRP.ctr(20), YRP.ctr(300 + 20))
 						pmwin.list:EnableVerticalScrollbar(true)
 						pmwin.list:SetSpacing(10)
 						function pmwin.list:RefreshList()
@@ -1388,18 +1390,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						end
 
 						function pmwin:Paint(pw, ph)
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+							hook.Run("YFramePaint", self, pw, ph)
 
-							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 200 + 20 + 200 + 20 + 100), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 200 + 20 + 200 + 20 + 120), YRP.ctr(210), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(20), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(310), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(310), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(20 + 200 + 20), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
-							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(420), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 						end
 
-						pmwin.selpm = createD("DButton", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
+						pmwin.selpm = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
 						pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
 						function pmwin.selpm:DoClick()
 							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
@@ -1544,7 +1545,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 
-						pmwin.selnpm = createD("DButton", pmwin, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(50 + 20))
+						pmwin.selnpm = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(50 + 20))
 						pmwin.selnpm:SetText(YRP.lang_string("LID_othermodels"))
 						function pmwin.selnpm:DoClick()
 							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
@@ -1693,7 +1694,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 
-						pmwin.add = createD("DButton", pmwin, YRP.ctr(200), YRP.ctr(50), pmwin:GetWide() / 2 - YRP.ctr(200 / 2), pmwin:GetTall() - YRP.ctr(50 + 20))
+						pmwin.add = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), pmcontent:GetWide() / 2 - YRP.ctr(200 / 2), pmcontent:GetTall() - YRP.ctr(50 + 20))
 						pmwin.add:SetText(YRP.lang_string("LID_add"))
 						function pmwin.add:DoClick()
 							if pmwin.WorldModel != "" then
@@ -1707,11 +1708,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 									net.WriteString(max)
 								net.SendToServer()
 								pmwin:Close()
-						end
+							end
 						end
 					end
 
-					win.dpl = createD("DPanelList", win, YRP.ctr(800) - YRP.ctr(20 * 2), YRP.ctr(800) - YRP.ctr(50 + 20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
+					win.dpl = createD("DPanelList", content, content:GetWide() - YRP.ctr(20 * 2), content:GetTall() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
 					win.dpl:EnableVerticalScrollbar(true)
 					function win.dpl:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
@@ -1755,7 +1756,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 					win:Search("")
 
-					win.search = createD("DTextEntry", win, win:GetWide() - YRP.ctr(20 + 150 + 20), YRP.ctr(50), YRP.ctr(20 + 150), YRP.ctr(50 + 20))
+					win.search = createD("DTextEntry", content, content:GetWide() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(50), YRP.ctr(20 + 50 + 20), YRP.ctr(20))
 					function win.search:OnChange()
 						win:Search(self:GetText())
 					end

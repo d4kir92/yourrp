@@ -310,7 +310,7 @@ function set_role_values(ply, pmid)
 				ply:SetDInt("GetMaxAbility", 100)
 				ply:SetDInt("GetCurAbility", 0)
 				ply:SetDFloat("GetRegAbility", 1)
-				ply:SetDFloat("GetRegTick", 0.05)
+				ply:SetDFloat("GetRegTick", 0.1)
 			elseif abtype == "force" then
 				ply:SetDInt("GetMaxAbility", 100)
 				ply:SetDInt("GetCurAbility", 0)
