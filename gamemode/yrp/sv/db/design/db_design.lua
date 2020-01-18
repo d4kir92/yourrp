@@ -94,6 +94,12 @@ function Player:DesignLoadout(from)
 	self:SetDInt("yrp_loading", 100)
 end
 
+util.AddNetworkString("rebuildHud")
+net.Receive("rebuildHud", function(len, ply)
+	print("FAILED")
+	--ply:DesignLoadout("rebuildHud")
+end)
+
 local once = false
 util.AddNetworkString("ply_changed_resolution")
 net.Receive("ply_changed_resolution", function(len, ply)

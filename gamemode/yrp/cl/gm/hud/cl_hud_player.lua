@@ -228,7 +228,7 @@ function HudPlayer(ply)
 			end
 		end
 	else
-		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0))
+		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 100))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 end

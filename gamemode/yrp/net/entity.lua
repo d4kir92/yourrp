@@ -1,8 +1,8 @@
 -- Networking
 local ENTITY = FindMetaTable("Entity")
 
-ENTS = ENTS or {}
-
+local ENTS = ENTS or {}
+print(#ENTS)
 local ENTDELAY = 0.05
 
 -- STRING

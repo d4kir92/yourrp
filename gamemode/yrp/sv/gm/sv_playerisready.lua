@@ -37,9 +37,7 @@ function PlayerLoadedGame(ply)
 	SendDGlobals(ply)
 	ply:DesignLoadout("PlayerLoadedGame")
 	ply:GeneralLoadout()
-	timer.Simple(2, function()
-		SendDEntities(ply, "PlayerLoadedGame")
-	end)
+	SendDEntities(ply, "PlayerLoadedGame")
 
 	ply:SendTeamsToPlayer()
 
