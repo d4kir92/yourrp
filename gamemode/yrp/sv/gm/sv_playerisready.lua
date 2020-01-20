@@ -36,7 +36,6 @@ function PlayerLoadedGame(ply)
 	-- Send Server Settings
 	SendDGlobals(ply)
 	ply:DesignLoadout("PlayerLoadedGame")
-	ply:GeneralLoadout()
 	SendDEntities(ply, "PlayerLoadedGame")
 
 	ply:SendTeamsToPlayer()

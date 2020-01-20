@@ -199,7 +199,9 @@ function InitYRPChat()
 
 		function yrpChat.richText:PerformLayout()
 			local ts = LocalPlayer():HudValue("CH", "TS")
-			self:SetFontInternal("Y_" .. ts .. "_700")
+			if ts > 0 then
+				self:SetFontInternal("Y_" .. ts .. "_700")
+			end
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
@@ -337,6 +339,7 @@ function InitYRPChat()
 
 		LocalPlayer():ConCommand("say \"" .. "!help" .. "\"")
 
+		yrpChat.richText:GotoTextEnd()
 		yrpChat.richText:GotoTextEnd()
 
 		timer.Simple(4, function()

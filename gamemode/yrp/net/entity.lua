@@ -2,7 +2,7 @@
 local ENTITY = FindMetaTable("Entity")
 
 local ENTS = ENTS or {}
-print(#ENTS)
+
 local ENTDELAY = 0.05
 
 -- STRING
@@ -361,33 +361,38 @@ if SERVER then
 	function SendDEntities(ply, funcname)
 		for j, ent in pairs(ents.GetAll()) do
 			if ent.EntIndex != nil then
-				--timer.Simple(j * 0.01, function()
-					local entindex = ent:EntIndex()
-					ENTS[entindex] = ENTS[entindex] or {}
-					ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
-					for i, v in pairs(ENTS[entindex]["BOOL"]) do
-						SendDBool(entindex, i, v, ply)
-					end
-					ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
-					for i, v in pairs(ENTS[entindex]["STRING"]) do
-						SendDString(entindex, i, v, ply)
-					end
-					ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
-					for i, v in pairs(ENTS[entindex]["INT"]) do
-						SendDInt(entindex, i, v, ply)
-					end
-					ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
-					for i, v in pairs(ENTS[entindex]["FLOAT"]) do
-						SendDFloat(entindex, i, v, ply)
-					end
-					ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
-					for i, v in pairs(ENTS[entindex]["TABLE"]) do
-						SendDTable(entindex, i, v, ply)
-					end
+				ply:SetDInt("yrp_load_ent", 0)
+				local entindex = ent:EntIndex()
+				ENTS[entindex] = ENTS[entindex] or {}
+				ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
+				for i, v in pairs(ENTS[entindex]["BOOL"]) do
+					SendDBool(entindex, i, v, ply)
+				end
+				ply:SetDInt("yrp_load_ent", 10)
+				ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
+				for i, v in pairs(ENTS[entindex]["STRING"]) do
+					SendDString(entindex, i, v, ply)
+				end
+				ply:SetDInt("yrp_load_ent", 30)
+				ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
+				for i, v in pairs(ENTS[entindex]["INT"]) do
+					SendDInt(entindex, i, v, ply)
+				end
+				ply:SetDInt("yrp_load_ent", 50)
+				ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
+				for i, v in pairs(ENTS[entindex]["FLOAT"]) do
+					SendDFloat(entindex, i, v, ply)
+				end
+				ply:SetDInt("yrp_load_ent", 70)
+				ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
+				for i, v in pairs(ENTS[entindex]["TABLE"]) do
+					SendDTable(entindex, i, v, ply)
+				end
+				ply:SetDInt("yrp_load_ent", 90)
 
-					-- DONE
-					SendDInit(entindex, ply)
-				--end)
+				-- DONE
+				SendDInit(entindex, ply)
+				ply:SetDInt("yrp_load_ent", 100)
 			end
 		end
 	end

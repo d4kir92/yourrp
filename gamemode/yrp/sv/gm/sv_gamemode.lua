@@ -89,9 +89,7 @@ function YRP:Loadout(ply)
 
 	ply:SetDInt("speak_channel", 0)
 
-	--ply:DesignLoadout("Loadout")
 	ply:UserGroupLoadout()
-	ply:GeneralLoadout()
 
 	ply:LockdownLoadout()
 

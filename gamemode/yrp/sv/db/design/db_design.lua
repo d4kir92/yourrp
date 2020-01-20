@@ -96,8 +96,8 @@ end
 
 util.AddNetworkString("rebuildHud")
 net.Receive("rebuildHud", function(len, ply)
-	print("FAILED")
-	--ply:DesignLoadout("rebuildHud")
+	YRP.msg("note", "FAILED HUD => REBUILD HUD")
+	ply:DesignLoadout("rebuildHud")
 end)
 
 local once = false

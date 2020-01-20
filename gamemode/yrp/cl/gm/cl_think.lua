@@ -272,18 +272,18 @@ local afktime = CurTime()
 local _view_delay = true
 local blink_delay = 0
 local setup = false
-local hudD = CurTime() + 30
+local hudD = CurTime() + 60
 local hudFail = false
 function KeyPress()
 	local ply = LocalPlayer()
 
 	if hudD < CurTime() then
-		hudD = CurTime() + 30
+		hudD = CurTime() + 60
 		if ply:GetDInt("hud_version", -1) < 0 and !hudFail then
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg("error", "hud version outdated! " .. tostring(ply:GetDInt("hud_version", -1)))
+			YRP.msg("error", "hud version outdated! " .. tostring(ply:GetDInt("hud_version", -1)) .. " " .. printReadyError())
 		end
 	end
 

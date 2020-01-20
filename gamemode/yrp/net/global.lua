@@ -188,42 +188,32 @@ if SERVER then
 	util.AddNetworkString("request_dglobals")
 
 	function SendDGlobals(ply)
-		local c = 0
+		ply:SetDInt("yrp_load_glo", 0)
 		NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
 		for i, v in pairs(NWGlobal["BOOL"]) do
-			c = c + 1
-			--timer.Simple(c * 0.01, function()
-				SendGlobalDBool(i, v, ply)
-			--end)
+			SendGlobalDBool(i, v, ply)
 		end
+		ply:SetDInt("yrp_load_glo", 10)
 		NWGlobal["STRING"] = NWGlobal["STRING"] or {}
 		for i, v in pairs(NWGlobal["STRING"]) do
-			c = c + 1
-			--timer.Simple(c * 0.01, function()
-				SendGlobalDString(i, v, ply)
-			--end)
+			SendGlobalDString(i, v, ply)
 		end
+		ply:SetDInt("yrp_load_glo", 25)
 		NWGlobal["INT"] = NWGlobal["INT"] or {}
 		for i, v in pairs(NWGlobal["INT"]) do
-			c = c + 1
-			--timer.Simple(c * 0.01, function()
-				SendGlobalDInt(i, v, ply)
-			--end)
+			SendGlobalDInt(i, v, ply)
 		end
+		ply:SetDInt("yrp_load_glo", 50)
 		NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
 		for i, v in pairs(NWGlobal["FLOAT"]) do
-			c = c + 1
-			--timer.Simple(c * 0.01, function()
-				SendGlobalDFloat(i, v, ply)
-			--end)
+			SendGlobalDFloat(i, v, ply)
 		end
+		ply:SetDInt("yrp_load_glo", 75)
 		NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
 		for i, v in pairs(NWGlobal["TABLE"]) do
-			c = c + 1
-			--timer.Simple(c * 0.01, function()
-				SendGlobalDTable(i, v, ply)
-			--end)
+			SendGlobalDTable(i, v, ply)
 		end
+		ply:SetDInt("yrp_load_glo", 100)
 	end
 	net.Receive("request_dglobals", function(len, ply)
 		SendDGlobals(ply)

@@ -2224,6 +2224,9 @@ hook.Add("Think", "openDeathScreen", function(len)
 	end
 end)
 
+
+
+-- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
 
 local loading = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -2232,13 +2235,16 @@ loading:Center()
 loading:ShowCloseButton(false)
 loading.d = CurTime() + 1
 loading.t = 0
+loading.tmax = 60
 function loading:Paint(pw, ph)
+	local lply = LocalPlayer()
+
 	if self.d < CurTime() then
 		self.d = CurTime() + 1
 		self.t = self.t + 1
 
-		if self.t >= 60 then
-			YRP.msg("error", "loading => 60+ " .. tostring(rToSv) .. " " .. tostring(LOADED_CHARS) .. " " .. tostring(LocalPlayer():GetDBool("finishedloading", false)))
+		if self.t >= self.tmax then
+			YRP.msg("error", "loading => " .. self.tmax .. "+ " .. tostring(rToSv) .. " " .. tostring(LOADED_CHARS) .. " " .. tostring(LocalPlayer():GetDBool("finishedloading", false)))
 			self:Remove()
 		end
 	end
@@ -2251,6 +2257,16 @@ function loading:Paint(pw, ph)
 	surface.DrawTexturedRect(pw / 2 - YRP.ctr(800) / 2, ph / 2 - YRP.ctr(800) / 2, YRP.ctr(800), YRP.ctr(800))
 
 	draw.SimpleText(YRP.lang_string("LID_loading"), "Y_50_500", pw / 2, ph / 2 + YRP.ctr(500), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+	local w = YRP.ctr(800)
+	local h = YRP.ctr(50)
+	draw.RoundedBox(h / 2, pw / 2 - w / 2, ph / 2 + YRP.ctr(600), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
+	draw.RoundedBox(h / 2, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
+
+	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(625), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_20_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	if LocalPlayer():GetDBool("finishedloading", false) and LOADED_CHARS then
 		self:Remove()

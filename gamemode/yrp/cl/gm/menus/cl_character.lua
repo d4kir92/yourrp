@@ -880,9 +880,7 @@ function openCharacterSelection()
 					end
 				end
 
-				timer.Simple(1, function()
-					LOADED_CHARS = true
-				end)
+				LOADED_CHARS = true
 			end)
 
 			printGM("gm", "ask for characterlist")

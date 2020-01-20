@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-YRP = YRP or {}
+-- #SENDISREADY
 
-rToSv = rToSv or false
+local rToSv = rToSv or false
 
 function YRPSendIsReady()
 	if !rToSv then
@@ -24,39 +24,59 @@ function YRPSendIsReady()
 			OpenHelpMenu()
 		end
 
-		timer.Simple(1, function()
-			local _wsitems = engine.GetAddons()
-			printGM("note", "[" .. #_wsitems .. " Workshop items]")
-			printGM("note", " Nr.\tID\t\tName Mounted")
+		local _wsitems = engine.GetAddons()
+		printGM("note", "[" .. #_wsitems .. " Workshop items]")
+		printGM("note", " Nr.\tID\t\tName Mounted")
 
-			for k, ws in pairs(_wsitems) do
-				if !ws.mounted then
-					printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
-					if IsValid(ws.path) then
-						game.MountGMA(tostring(ws.path))
-					else
-						YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
-					end
+		for k, ws in pairs(_wsitems) do
+			if !ws.mounted then
+				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
+				if IsValid(ws.path) then
+					game.MountGMA(tostring(ws.path))
+				else
+					YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
 				end
 			end
+		end
 
-			printGM("note", "Workshop Addons Done")
-			playerfullready = true
-		end)
+		printGM("note", "Workshop Addons Done")
+		playerfullready = true
 	end
 end
 
+local hookinitpostentity = false
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	printGM("note", "All entities are loaded.")
 
+	hookinitpostentity = true
+
+	YRPSendIsReady()
 	timer.Simple(1, function()
 		YRPSendIsReady()
 	end)
 end)
 
-timer.Simple(60, function()
-	if !rToSv then
-		YRP.msg("error", "SEND IS READY FAILED " .. tostring(rToSv) .. tostring(LOADED_CHARS))
+local initpostentity = false
+function GM:InitPostEntity()
+	printGM("note", "All Entities have initialized.")
+
+	initpostentity = true
+
+	YRPSendIsReady()
+	timer.Simple(1, function()
 		YRPSendIsReady()
+	end)
+end
+
+function printReadyError()
+	return "rToSv: " .. tostring(rToSv) .. " LOADED_CHARS: " .. tostring(LOADED_CHARS) .. " hookinitpostentity: " .. tostring(hookinitpostentity) .. " initpostentity: " .. tostring(initpostentity)
+end
+
+timer.Simple(30, function()
+	if !rToSv then
+		YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())
+		YRPSendIsReady()
+	else
+		YRP.msg("note", "SEND IS READY WORKED " .. printReadyError())
 	end
 end)

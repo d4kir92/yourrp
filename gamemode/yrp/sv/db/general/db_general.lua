@@ -419,10 +419,7 @@ function SetYRPCollectionID(cid)
 	end
 end
 
---[[ LOADOUT ]]--
-local Player = FindMetaTable("Player")
-function Player:GeneralLoadout()
-	--printGM("gm", "[GeneralLoadout] " .. self:YRPName())
+function GeneralDB()
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
 			SetGlobalDString(i, SQL_STR_OUT(set))
@@ -433,8 +430,7 @@ function Player:GeneralLoadout()
 		end
 	end
 end
-
-
+GeneralDB()
 
 --[[ UPDATES ]]--
 function GeneralSendToOther(ply, netstr, str)
