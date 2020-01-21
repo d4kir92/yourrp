@@ -636,7 +636,7 @@ util.AddNetworkString("EnterWorld")
 net.Receive("EnterWorld", function(len, ply)
 	local char = net.ReadString()
 	if wk(char) then
-		SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(char), "SteamID = '" .. ply:SteamID() .. "'")
+		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID = '" .. ply:SteamID() .. "'")
 		ply:Spawn()
 	else
 		printGM("gm", "No valid character selected (" .. tostring(char) .. ")")

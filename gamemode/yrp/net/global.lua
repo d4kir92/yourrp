@@ -1,6 +1,6 @@
 -- Networking
 
-local NWGlobal = NWGlobal or {}
+NWGlobal = NWGlobal or {}
 
 -- BOOL
 if SERVER then

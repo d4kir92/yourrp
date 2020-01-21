@@ -39,7 +39,7 @@ end
 function Player:GetPlyTab()
 	if SERVER then
 		if self:IsValid() then
-			if self:LoadedGamemode() then
+			if self:GetDBool("finishedloadingcharacter", false) then
 				local steamid = self:SteamID() or self:UniqueID()
 				if steamid != nil and steamid != false and steamid != "" then
 					local yrp_players = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
@@ -65,7 +65,7 @@ end
 function Player:IsCharacterValid()
 	if SERVER then
 		if self:IsValid() then
-			if self:LoadedGamemode() then
+			if self:GetDBool("finishedloadingcharacter", false) then
 				local _cha_tab = self:GetChaTab()
 				if _cha_tab == false then
 					return false
@@ -82,7 +82,7 @@ end
 function Player:HasCharacterSelected()
 	if SERVER then
 		if self:IsValid() then
-			if self:LoadedGamemode() then
+			if self:GetDBool("finishedloadingcharacter", false) then
 				--printGM("note", self:YRPName() .. " HasCharacterSelected?")
 				local _ply_tab = self:GetPlyTab()
 				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
@@ -99,7 +99,7 @@ end
 function Player:GetChaTab()
 	if SERVER then
 		if self:IsValid() then
-			if self:LoadedGamemode() then
+			if self:GetDBool("finishedloadingcharacter", false) then
 				local _tmp = self:GetPlyTab()
 				if wk(_tmp) then
 					local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'")
@@ -125,7 +125,7 @@ end
 function Player:GetRolTab()
 	if SERVER then
 		if self:IsValid() then
-			if self:LoadedGamemode() then
+			if self:GetDBool("finishedloadingcharacter", false) then
 				local yrp_characters = self:GetChaTab()
 				if wk(yrp_characters) and wk(yrp_characters.roleID) then
 					local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
@@ -150,7 +150,7 @@ end
 function Player:GetGroTab()
 	if SERVER then
 		if self:IsValid() then
-			if self:LoadedGamemode() then
+			if self:GetDBool("finishedloadingcharacter", false) then
 				local yrp_characters = self:GetChaTab()
 				if wk(yrp_characters) and wk(yrp_characters.groupID) then
 					local yrp_groups = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)

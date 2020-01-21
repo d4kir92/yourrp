@@ -632,7 +632,7 @@ end
 
 LOADED_CHARS = LOADED_CHARS or false
 
-local curChar = " - 1"
+local curChar = "-1"
 local _cur = ""
 function openCharacterSelection()
 	if true then
@@ -771,7 +771,7 @@ function openCharacterSelection()
 
 								tmpChar.charid = _characters[i].char.uniqueID or "UID INVALID"
 								tmpChar.rpname = _characters[i].char.rpname or "RPNAME INVALID"
-								tmpChar.level = _characters[i].char.int_level or " - 1"
+								tmpChar.level = _characters[i].char.int_level or "-1"
 								tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
 								tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
 								tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
@@ -966,7 +966,7 @@ function openCharacterSelection()
 					if LocalPlayer():Alive() then
 						net.Start("LogOut")
 						net.SendToServer()
-					else
+					elseif curChar != nil then
 						net.Start("EnterWorld")
 							net.WriteString(curChar)
 						net.SendToServer()

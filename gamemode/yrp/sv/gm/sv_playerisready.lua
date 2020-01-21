@@ -37,21 +37,21 @@ function PlayerLoadedGame(ply)
 
 	ply:KillSilent()
 
-	-- Send Server Settings
 	SendDGlobals(ply)
 	ply:DesignLoadout("PlayerLoadedGame")
-	timer.Simple(1, function()
-		SendDEntities(ply, "PlayerLoadedGame")
-	end)
+	ply:SendTeamsToPlayer()
+	
+	ply:SetDBool("finishedloadingcharacter", true)
 
-	timer.Simple(2, function()
-		ply:SendTeamsToPlayer()
-		ply:SetDBool("finishedloading", true)
+	SendDEntities(ply, "PlayerLoadedGame")
 
+	timer.Simple(6, function()
 		net.Start("yrp_noti")
 			net.WriteString("playerisready")
 			net.WriteString(ply:Nick())
 		net.Broadcast()
+
+		ply:SetDBool("finishedloading", true)
 	end)
 end
 

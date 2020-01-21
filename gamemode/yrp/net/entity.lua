@@ -1,7 +1,7 @@
 -- Networking
 local ENTITY = FindMetaTable("Entity")
 
-local ENTS = ENTS or {}
+ENTS = ENTS or {}
 
 local ENTDELAY = 0.05
 
@@ -355,44 +355,66 @@ if CLIENT then
 	end)
 end
 
+local sending = false
 if SERVER then
 	util.AddNetworkString("request_dentites")
 
 	function SendDEntities(ply, funcname)
+		sending = true
 		for j, ent in pairs(ents.GetAll()) do
 			if ent.EntIndex != nil then
-				ply:SetDInt("yrp_load_ent", 0)
 				local entindex = ent:EntIndex()
 				ENTS[entindex] = ENTS[entindex] or {}
 				ENTS[entindex]["BOOL"] = ENTS[entindex]["BOOL"] or {}
-				for i, v in pairs(ENTS[entindex]["BOOL"]) do
-					SendDBool(entindex, i, v, ply)
-				end
-				ply:SetDInt("yrp_load_ent", 10)
 				ENTS[entindex]["STRING"] = ENTS[entindex]["STRING"] or {}
-				for i, v in pairs(ENTS[entindex]["STRING"]) do
-					SendDString(entindex, i, v, ply)
-				end
-				ply:SetDInt("yrp_load_ent", 30)
 				ENTS[entindex]["INT"] = ENTS[entindex]["INT"] or {}
-				for i, v in pairs(ENTS[entindex]["INT"]) do
-					SendDInt(entindex, i, v, ply)
-				end
-				ply:SetDInt("yrp_load_ent", 50)
 				ENTS[entindex]["FLOAT"] = ENTS[entindex]["FLOAT"] or {}
-				for i, v in pairs(ENTS[entindex]["FLOAT"]) do
-					SendDFloat(entindex, i, v, ply)
-				end
-				ply:SetDInt("yrp_load_ent", 70)
 				ENTS[entindex]["TABLE"] = ENTS[entindex]["TABLE"] or {}
-				for i, v in pairs(ENTS[entindex]["TABLE"]) do
-					SendDTable(entindex, i, v, ply)
-				end
-				ply:SetDInt("yrp_load_ent", 90)
 
-				-- DONE
-				SendDInit(entindex, ply)
-				ply:SetDInt("yrp_load_ent", 100)
+				ply:SetDInt("yrp_load_ent", 0)
+
+				timer.Simple(1, function()
+					--print(ply, ENTS, entindex)
+					ply:SetDInt("yrp_load_ent", 10)
+					for i, v in pairs(ENTS[entindex]["BOOL"]) do
+						SendDBool(entindex, i, v, ply)
+					end
+				end)
+
+				timer.Simple(2, function()
+					ply:SetDInt("yrp_load_ent", 30)
+					for i, v in pairs(ENTS[entindex]["STRING"]) do
+						SendDString(entindex, i, v, ply)
+					end
+				end)
+
+				timer.Simple(3, function()
+					ply:SetDInt("yrp_load_ent", 50)
+					for i, v in pairs(ENTS[entindex]["INT"]) do
+						SendDInt(entindex, i, v, ply)
+					end
+				end)
+
+				timer.Simple(4, function()
+					ply:SetDInt("yrp_load_ent", 70)
+					for i, v in pairs(ENTS[entindex]["FLOAT"]) do
+						SendDFloat(entindex, i, v, ply)
+					end
+				end)
+
+				timer.Simple(5, function()
+					ply:SetDInt("yrp_load_ent", 90)
+					for i, v in pairs(ENTS[entindex]["TABLE"]) do
+						SendDTable(entindex, i, v, ply)
+					end
+				end)
+
+				timer.Simple(6, function()
+					SendDInit(entindex, ply)
+					ply:SetDInt("yrp_load_ent", 100)
+					
+					sending = false
+				end)
 			end
 		end
 	end
@@ -401,7 +423,17 @@ if SERVER then
 	end)
 end
 
+function RemoveFromEntTable( ent )
+	if !sending then
+		local entindex = ent:EntIndex()
+		ENTS[entindex] = nil
+	else
+		timer.Simple(1, function()
+			RemoveFromEntTable( ent )
+		end)
+	end
+end
+
 function GM:EntityRemoved( ent )
-	local entindex = ent:EntIndex()
-	ENTS[entindex] = nil
+	RemoveFromEntTable( ent )
 end

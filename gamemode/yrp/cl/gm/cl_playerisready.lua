@@ -4,6 +4,11 @@
 
 local rToSv = rToSv or false
 
+local initpostentity = false
+local hookinitpostentity = false
+
+local d = 0
+
 function YRPSendIsReady()
 	if !rToSv then
 		rToSv = true
@@ -44,28 +49,28 @@ function YRPSendIsReady()
 	end
 end
 
-local hookinitpostentity = false
+hook.Add("Think", "yrp_think_ready", function()
+	if d != 0 then
+		if d < CurTime() then
+			if !rToSv then
+				YRPSendIsReady()
+			end
+		end
+	elseif hookinitpostentity and initpostentity then
+		d = CurTime() + 1
+	end
+end)
+
 hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
 	printGM("note", "All entities are loaded.")
 
 	hookinitpostentity = true
-
-	YRPSendIsReady()
-	timer.Simple(1, function()
-		YRPSendIsReady()
-	end)
 end)
 
-local initpostentity = false
 function GM:InitPostEntity()
 	printGM("note", "All Entities have initialized.")
 
 	initpostentity = true
-
-	YRPSendIsReady()
-	timer.Simple(1, function()
-		YRPSendIsReady()
-	end)
 end
 
 function printReadyError()
