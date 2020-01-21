@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #SENDISREADY
+
 function PlayerLoadedGame(ply)
 	printGM("note", tostring(ply:YRPName()) .. " finished loading.")
 	local tab = net.ReadTable()
@@ -33,21 +35,24 @@ function PlayerLoadedGame(ply)
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
+	ply:KillSilent()
+
 	-- Send Server Settings
 	SendDGlobals(ply)
 	ply:DesignLoadout("PlayerLoadedGame")
-	SendDEntities(ply, "PlayerLoadedGame")
+	timer.Simple(1, function()
+		SendDEntities(ply, "PlayerLoadedGame")
+	end)
 
-	ply:SendTeamsToPlayer()
+	timer.Simple(2, function()
+		ply:SendTeamsToPlayer()
+		ply:SetDBool("finishedloading", true)
 
-	ply:SetDBool("finishedloading", true)
-
-	ply:KillSilent()
-
-	net.Start("yrp_noti")
-		net.WriteString("playerisready")
-		net.WriteString(ply:Nick())
-	net.Broadcast()
+		net.Start("yrp_noti")
+			net.WriteString("playerisready")
+			net.WriteString(ply:Nick())
+		net.Broadcast()
+	end)
 end
 
 util.AddNetworkString("yrp_player_is_ready")
