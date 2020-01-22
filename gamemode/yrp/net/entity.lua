@@ -374,7 +374,6 @@ if SERVER then
 				ply:SetDInt("yrp_load_ent", 0)
 
 				timer.Simple(1, function()
-					--print(ply, ENTS, entindex)
 					ply:SetDInt("yrp_load_ent", 10)
 					for i, v in pairs(ENTS[entindex]["BOOL"]) do
 						SendDBool(entindex, i, v, ply)

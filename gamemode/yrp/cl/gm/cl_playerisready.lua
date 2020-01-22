@@ -4,10 +4,10 @@
 
 local rToSv = rToSv or false
 
-local initpostentity = false
-local hookinitpostentity = false
+local initpostentity = initpostentity or false
+local hookinitpostentity = hookinitpostentity or false
 
-local d = 0
+local d = d or 0
 
 function YRPSendIsReady()
 	if !rToSv then

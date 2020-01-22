@@ -15,8 +15,8 @@ function YRP.AddFont(fontname, scale)
 	end
 end
 
-YRP.AddFont("Aniron", 1.2)
 YRP.AddFont("AmazDooMLeft", 1)
+YRP.AddFont("Aniron", 1.2)
 YRP.AddFont("Arial", 0.94)
 
 YRP.AddFont("Caribbean", 0.7)

@@ -7,7 +7,7 @@ GM.BaseName = "YourRP" -- DO NOT CHANGE THIS, thanks
 DeriveGamemode("sandbox")
 
 -- >>> do NOT change this! (it can cause crashes and more!) <<<
-GM.ShortName = "YRP"	--do NOT change this!
+GM.ShortName = "YRP" --do NOT change this!
 GM.Author = "D4KiR" --do NOT change this!
 GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
 GM.Email = GM.Discord --do NOT change this!
@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 168 --do NOT change this!
-GM.VersionCanary = 338 --do NOT change this!
+GM.VersionBeta = 169 --do NOT change this!
+GM.VersionCanary = 339 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser

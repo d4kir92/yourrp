@@ -2235,8 +2235,11 @@ loading:Center()
 loading:ShowCloseButton(false)
 loading.d = CurTime() + 1
 loading.t = 0
-loading.tmax = 60
+loading.tmax = 120
+loading:MakePopup()
 function loading:Paint(pw, ph)
+	self:MoveToFront()
+
 	local lply = LocalPlayer()
 
 	if self.d < CurTime() then
@@ -2249,7 +2252,6 @@ function loading:Paint(pw, ph)
 		end
 	end
 
-	self:MoveToFront()
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
 
 	surface.SetDrawColor(255, 255, 255, 255)
