@@ -264,13 +264,15 @@ net.Receive("shop_get_tabs", function(len)
 											self.hs = self.hs or {}
 											local hid = 0
 											local id = 0
+											local w = YRP.ctr(600 + BR)
+											local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
 											for k, item in pairs(_items) do
 												if id == 0 then
 													hid = hid + 1
-													self.hs[hid] = createD("DPanel", nil, YRP.ctr(600 * 3 + BR * 2), YRP.ctr(650 + 2 * 20), 0, 0)
+													self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
 													local line = self.hs[hid]
 													function line:Paint(pw, ph)
-
+														--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
 													end
 
 													self:Add(line)
@@ -279,7 +281,7 @@ net.Receive("shop_get_tabs", function(len)
 												local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
 
 												id = id + 1
-												if id >= 3 then
+												if id >= idmax then
 													id = 0
 												end
 											end
@@ -535,6 +537,8 @@ function CreateBuyMenuContent(parent, uid)
 	BUYMENU.shop:SetSpacing(20)
 	BUYMENU.shop:SetNoSizing(false)
 	function BUYMENU.shop:Paint(pw, ph)
+		self:SetWide(BUYMENU.content:GetWide())
+		self:SetTall(BUYMENU.content:GetTall())
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
 	end
 
@@ -560,6 +564,7 @@ function OpenBuyMenu(uid)
 	BUYMENU.window.standalone = true
 	BUYMENU.window:Center()
 	BUYMENU.window:SetDraggable(true)
+	--BUYMENU.window:SetSizable(true)
 	BUYMENU.window:SetHeaderHeight(YRP.ctr(100))
 	function BUYMENU.window:OnClose()
 		closeMenu()

@@ -2,10 +2,10 @@
 
 -- #SENDISREADY
 
-local rToSv = rToSv or false
+rToSv = rToSv or false
 
-local initpostentity = initpostentity or false
-local hookinitpostentity = hookinitpostentity or false
+initpostentity = initpostentity or false
+hookinitpostentity = hookinitpostentity or false
 
 local d = d or 0
 
@@ -77,7 +77,7 @@ function printReadyError()
 	return "rToSv: " .. tostring(rToSv) .. " LOADED_CHARS: " .. tostring(LOADED_CHARS) .. " hookinitpostentity: " .. tostring(hookinitpostentity) .. " initpostentity: " .. tostring(initpostentity)
 end
 
-timer.Simple(30, function()
+timer.Simple(60, function()
 	if !rToSv then
 		YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())
 		YRPSendIsReady()
