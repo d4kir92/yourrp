@@ -2247,7 +2247,7 @@ function loading:Paint(pw, ph)
 		self.t = self.t + 1
 
 		if self.t >= self.tmax then
-			YRP.msg("error", "loading => " .. self.tmax .. "+ " .. tostring(rToSv) .. " " .. tostring(LOADED_CHARS) .. " " .. tostring(LocalPlayer():GetDBool("finishedloading", false)))
+			YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false)) .. " " .. printReadyError())
 			self:Remove()
 		end
 	end

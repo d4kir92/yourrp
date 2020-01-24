@@ -77,7 +77,7 @@ function printReadyError()
 	return "rToSv: " .. tostring(rToSv) .. " LOADED_CHARS: " .. tostring(LOADED_CHARS) .. " hookinitpostentity: " .. tostring(hookinitpostentity) .. " initpostentity: " .. tostring(initpostentity)
 end
 
-timer.Simple(60, function()
+timer.Simple(120, function()
 	if !rToSv then
 		YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())
 		YRPSendIsReady()

@@ -135,6 +135,10 @@ net.Receive("getMapTab", function(len)
 	local dbGrp = net.ReadTable()
 	local dbRol = net.ReadTable()
 
+	if !pa(settingsWindow) then return end
+	if !pa(settingsWindow.window) then return end
+	if !pa(settingsWindow.window.site) then return end
+
 	local parent = settingsWindow.window.site.tabpage
 
 	parent:Clear()

@@ -198,6 +198,7 @@ net.Receive("GetLicenseName", function(len, ply)
 	if wk(lic) then
 		lic = lic[1]
 		net.Start("GetLicenseName")
+			net.WriteString(id)
 			net.WriteString(lic.name)
 		net.Send(ply)
 	end

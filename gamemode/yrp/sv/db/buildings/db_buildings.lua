@@ -322,17 +322,19 @@ function BuildingRemoveOwner(SteamID)
 	YRP.msg("db", "BuildingRemoveOwner(" .. tostring(SteamID) .. ")")
 	local chars = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. SteamID .. "'")
 
-	for i, c in pairs(chars) do
-		local charid = c.uniqueID
-		for k, v in pairs(GetAllDoors()) do
-			if v:GetDString("ownerCharID") == charid then
-				v:SetDTable("owner", {})
-				v:SetDString("ownerRPName", "")
-				v:SetDString("ownerGroup", "")
-				v:SetDString("ownerCharID", "")
-				v:SetDBool("bool_hasowner", false)
-				v:Fire("Unlock")
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetDString("uniqueID") .. "'")
+	if wk(chars) then
+		for i, c in pairs(chars) do
+			local charid = c.uniqueID
+			for k, v in pairs(GetAllDoors()) do
+				if v:GetDString("ownerCharID") == charid then
+					v:SetDTable("owner", {})
+					v:SetDString("ownerRPName", "")
+					v:SetDString("ownerGroup", "")
+					v:SetDString("ownerCharID", "")
+					v:SetDBool("bool_hasowner", false)
+					v:Fire("Unlock")
+					SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetDString("uniqueID") .. "'")
+				end
 			end
 		end
 	end

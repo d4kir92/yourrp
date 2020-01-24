@@ -52,6 +52,10 @@ function F8RequireUG(site, usergroups)
 	local ply = LocalPlayer()
 	local ugs = string.Explode(", ", usergroups)
 
+	if !pa(settingsWindow) then return end
+	if !pa(settingsWindow.window) then return end
+	if !pa(settingsWindow.window.site) then return end
+
 	local allugs = {}
 	allugs["USERGROUPS"] = usergroups
 	function settingsWindow.window.site:Paint(w, h)
@@ -74,9 +78,16 @@ function F8RequireUG(site, usergroups)
 	end
 end
 
+local delaysettings = 0
 function toggleSettings()
 	if isNoMenuOpen() then
-		OpenSettings()
+		if delaysettings < CurTime() then
+			delaysettings = CurTime() + 2
+			OpenSettings()
+		else
+			CloseSettings()
+			notification.AddLegacy("SETTINGS MENU IS ON COOLDOWN", NOTIFY_GENERIC, 2)
+		end
 	else
 		CloseSettings()
 	end
