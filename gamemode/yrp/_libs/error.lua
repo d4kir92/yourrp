@@ -228,10 +228,11 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error(realm, str)
 	local entry = {}
-	if CLIENT and !LocalPlayer():GetDBool("isserverdedicated", false) then
-		return false
-	elseif SERVER and !game.IsDedicated() then
-		return false
+	local dedi = "UNKNOWN"
+	if CLIENT then
+		dedi = tostring(LocalPlayer():GetDBool("isserverdedicated", false))
+	elseif SERVER then
+		dedi = tostring(game.IsDedicated())
 	end
 	timer.Create("wait_for_gamemode" .. str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
@@ -247,6 +248,7 @@ function send_error(realm, str)
 			entry["entry.1274096098"] = tostring(gmod.GetGamemode().VersionCanary)
 			entry["entry.2045173320"] = string.upper(gmod.GetGamemode().VersionSort) or "UNKNOWN"
 			entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
+			entry["entry.1029765769"] = dedi
 			if CLIENT then
 				local ply = LocalPlayer()
 				local _steamid = "UNKNOWN"
@@ -289,7 +291,7 @@ function send_error(realm, str)
 				end)
 			end
 
-			timer.Remove("wait_for_gamemode"..str)
+			timer.Remove("wait_for_gamemode" .. str)
 		end
 	end)
 end
@@ -318,12 +320,12 @@ function CanSendError()
 		if game.MaxPlayers() > 1 then
 			if CLIENT then
 				local lply = LocalPlayer()
-				if lply:IsValid() and lply:GetDBool("isserverdedicated", false) then
+				if lply:IsValid() then
 					if tick % 10 == 0 then
 						return true
 					end
 				end
-			elseif SERVER and game.IsDedicated() then
+			elseif SERVER then
 				if tick % 10 == 0 then
 					return true
 				end

@@ -610,6 +610,7 @@ function openCharacterCreation()
 	end
 
 	cc.frame:MakePopup()
+	LocalPlayer():SetDBool("loadedchars", true)
 end
 
 local _cs = {}
@@ -629,8 +630,6 @@ function closeCharacterSelection()
 		_cs.frame = nil
 	end
 end
-
-LOADED_CHARS = LOADED_CHARS or false
 
 local curChar = "-1"
 local _cur = ""
@@ -880,7 +879,7 @@ function openCharacterSelection()
 					end
 				end
 
-				LOADED_CHARS = true
+				LocalPlayer():SetDBool("loadedchars", true)
 			end)
 
 			printGM("gm", "ask for characterlist")

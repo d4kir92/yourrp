@@ -157,7 +157,6 @@ function ENTITY:GetDInt(key, value)
 	if self:IsValid() then
 		return GetDInt(entindex, key, value)
 	else
-		YRP.msg("note", "[GetDInt] ELSE")
 		return value
 	end
 end

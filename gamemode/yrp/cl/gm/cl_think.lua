@@ -163,6 +163,7 @@ function useFunction(string)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
 			local id = 0
 			if string == "OpenHelpMenu" then
+				done_tutorial("tut_f1info", 10)
 				id = 1
 			elseif string == "OpenRoleMenu" then
 				id = 2
@@ -173,6 +174,7 @@ function useFunction(string)
 			elseif string == "openKeybindsMenu" then
 				id = 5
 			elseif string == "openFeedbackMenu" then
+				done_tutorial("tut_feedback")
 				id = 6
 			end
 			if id > 0 then

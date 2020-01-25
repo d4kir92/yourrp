@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
--- #SENDISREADY
+-- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
 function PlayerLoadedGame(ply)
 	printGM("note", tostring(ply:YRPName()) .. " finished loading.")

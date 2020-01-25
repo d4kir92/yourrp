@@ -2247,30 +2247,42 @@ function loading:Paint(pw, ph)
 		self.t = self.t + 1
 
 		if self.t >= self.tmax then
-			YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false)) .. " " .. printReadyError())
+			YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
 			self:Remove()
 		end
 	end
 
+	-- BG, Background
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
-
+	
+	-- LOGO
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.SetMaterial(yrp_icon)
 	surface.DrawTexturedRect(pw / 2 - YRP.ctr(800) / 2, ph / 2 - YRP.ctr(800) / 2, YRP.ctr(800), YRP.ctr(800))
 
+	-- LOADING TEXT
 	draw.SimpleText(YRP.lang_string("LID_loading"), "Y_50_500", pw / 2, ph / 2 + YRP.ctr(500), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
+	
+	-- BAR VALUES
 	local w = YRP.ctr(800)
 	local h = YRP.ctr(50)
-	draw.RoundedBox(h / 2, pw / 2 - w / 2, ph / 2 + YRP.ctr(600), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
-	draw.RoundedBox(h / 2, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
 
+	-- BAR BG
+	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(600), w, h, Color(80, 80, 80, 255))
+	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
+
+	-- BAR
+	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(600), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
+	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
+
+	-- BAR TEXT
 	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(625), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
+	-- TIME
 	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_20_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-	if LocalPlayer():GetDBool("finishedloading", false) and LOADED_CHARS then
+	if LocalPlayer():GetDBool("finishedloading", false) and LocalPlayer():GetDBool("loadedchars", false) then
 		self:Remove()
 	end
 end

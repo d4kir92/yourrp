@@ -269,6 +269,9 @@ end
 
 function GetULXUserGroups()
 	local f = file.Read("ulib/groups.txt", "DATA")
+
+	if !wk(f) then return end
+
 	f = string.Explode("\n", f)
 	f = ConvertToMains(f)
 	for i, v in pairs(f) do

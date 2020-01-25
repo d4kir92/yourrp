@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
--- #SENDISREADY
+-- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
 rToSv = rToSv or false
 
@@ -74,7 +74,7 @@ function GM:InitPostEntity()
 end
 
 function printReadyError()
-	return "rToSv: " .. tostring(rToSv) .. " LOADED_CHARS: " .. tostring(LOADED_CHARS) .. " hookinitpostentity: " .. tostring(hookinitpostentity) .. " initpostentity: " .. tostring(initpostentity)
+	return "finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false)) .. " rToSv: " .. tostring(rToSv) .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false)) .. " hookinitpostentity: " .. tostring(hookinitpostentity) .. " initpostentity: " .. tostring(initpostentity)
 end
 
 timer.Simple(120, function()
