@@ -2235,7 +2235,7 @@ loading:Center()
 loading:ShowCloseButton(false)
 loading.d = CurTime() + 1
 loading.t = 0
-loading.tmax = 120
+loading.tmax = 60
 loading:MakePopup()
 function loading:Paint(pw, ph)
 	self:MoveToFront()
@@ -2247,8 +2247,12 @@ function loading:Paint(pw, ph)
 		self.t = self.t + 1
 
 		if self.t >= self.tmax then
-			YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
-			self:Remove()
+			if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
+				YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
+				self:Remove()
+			elseif self.t > self.tmax then
+				self.t = 0
+			end
 		end
 	end
 

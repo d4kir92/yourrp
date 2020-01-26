@@ -318,7 +318,7 @@ function InitYRPChat()
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
-				elseif t == "palyer" and obj:IsPlayer() then
+				elseif t == "player" and obj:IsPlayer() then
 					local col = GAMEMODE:GetTeamColor(obj)
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)

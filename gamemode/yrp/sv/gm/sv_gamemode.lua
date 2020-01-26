@@ -40,12 +40,12 @@ function GM:PlayerConnect(name, ip)
 	PrintMessage(HUD_PRINTTALK, name .. " is connecting to the Server.")
 end
 
-util.AddNetworkString("yrp_askforinfo")
 function GM:PlayerInitialSpawn(ply)
 	--printGM("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
+
+	if !IsValid(ply) then return end
+
 	ply:KillSilent()
-	net.Start("yrp_askforinfo")
-	net.Send(ply)
 
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()

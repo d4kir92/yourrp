@@ -274,13 +274,13 @@ local afktime = CurTime()
 local _view_delay = true
 local blink_delay = 0
 local setup = false
-local hudD = CurTime() + 120
+local hudD = CurTime() + 240
 local hudFail = hudFail or false
 function KeyPress()
 	local ply = LocalPlayer()
 
 	if hudD < CurTime() then
-		hudD = CurTime() + 120
+		hudD = CurTime() + 240
 		if ply:GetDInt("hud_version", -1) < 0 and !hudFail then
 			hudFail = true
 			net.Start("rebuildHud")

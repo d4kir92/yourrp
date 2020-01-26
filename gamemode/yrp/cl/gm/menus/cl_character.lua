@@ -624,7 +624,7 @@ function toggleCharacterSelection()
 end
 
 function closeCharacterSelection()
-	if _cs.frame != nil then
+	if _cs.frame != nil and LocalPlayer():GetDBool("loadedchars", false) == true then
 		closeMenu()
 		_cs.frame:Remove()
 		_cs.frame = nil

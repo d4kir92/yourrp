@@ -74,14 +74,36 @@ function GM:InitPostEntity()
 end
 
 function printReadyError()
-	return "finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false)) .. " rToSv: " .. tostring(rToSv) .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false)) .. " hookinitpostentity: " .. tostring(hookinitpostentity) .. " initpostentity: " .. tostring(initpostentity)
+	local lply = LocalPlayer()
+
+	local str = "finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false))
+	str = str .. " rToSv: " .. tostring(rToSv)
+	str = str .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false))
+	str = str .. " hookinitpostentity: " .. tostring(hookinitpostentity)
+	str = str .. " initpostentity: " .. tostring(initpostentity)
+	str = str .. " initpostentity: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
+	str = str .. " initpostentity: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
+
+	return str
 end
 
-timer.Simple(120, function()
+local failed = failed or false
+timer.Create("yrp_sendready", 60, 0, function()
+	local lply = LocalPlayer()
 	if !rToSv then
-		YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())
-		YRPSendIsReady()
+		failed = true
+		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
+			YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())
+			YRPSendIsReady()
+		else
+			YRP.msg("error", "SEND IS READY FAILED 2 " .. printReadyError())
+		end
 	else
-		YRP.msg("note", "SEND IS READY WORKED " .. printReadyError())
+		if failed then
+			YRP.msg("error", "SEND IS READY WORKED ERROR: " .. printReadyError())
+		else
+			YRP.msg("note", "SEND IS READY WORKED")
+			timer.Remove("yrp_sendready")
+		end
 	end
 end)

@@ -47,7 +47,7 @@ function Player:GetPlyTab()
 						self.plytab = yrp_players[1]
 						return self.plytab
 					else
-						YRP.msg("error", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]")
+						YRP.msg("note", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]")
 					end
 				else
 					YRP.msg("error", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]" )
@@ -112,7 +112,7 @@ function Player:GetChaTab()
 						YRP.msg("error", "[GetChaTab] yrp_characters failed [" .. tostring(yrp_characters) .. "]")
 					end
 				else
-					YRP.msg("error", "[GetChaTab] failed: " .. "PlyTab: " .. tostring(_tmp))
+					YRP.msg("note", "[GetChaTab] failed: " .. "PlyTab: " .. tostring(_tmp))
 				end
 			end
 		else
