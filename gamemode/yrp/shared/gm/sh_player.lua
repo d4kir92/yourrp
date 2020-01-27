@@ -331,6 +331,7 @@ if SERVER then
 					if _c_pos.x + _space < _o_pos.x or _c_pos.x - _space > _o_pos.x or _c_pos.y + _space < _o_pos.y or _c_pos.y - _space > _o_pos.y then
 						self:InteruptCasting()
 					end
+					if !IsValid(target) then return end
 					if self:OBBCenter():Distance(target:OBBCenter()) > self:GetDFloat("castrange") then
 						self:InteruptCasting()
 					end

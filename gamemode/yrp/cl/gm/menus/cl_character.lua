@@ -975,7 +975,7 @@ function openCharacterSelection()
 					end
 				end
 			end
-
+			
 			_cs.frame:MakePopup()
 		end
 	end

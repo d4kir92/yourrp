@@ -184,36 +184,62 @@ function GetGlobalDTable(index, def)
 end
 
 -- INIT
+local sending = false
 if SERVER then
 	util.AddNetworkString("request_dglobals")
 
 	function SendDGlobals(ply)
-		ply:SetDInt("yrp_load_glo", 0)
-		NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
-		for i, v in pairs(NWGlobal["BOOL"]) do
-			SendGlobalDBool(i, v, ply)
+		if !sending then
+			sending = true
+
+			ply:SetDInt("yrp_load_glo", 0)
+			NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
+			NWGlobal["STRING"] = NWGlobal["STRING"] or {}
+			NWGlobal["INT"] = NWGlobal["INT"] or {}
+			NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
+			NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
+		
+			timer.Simple(1, function()
+				for i, v in pairs(NWGlobal["BOOL"]) do
+					SendGlobalDBool(i, v, ply)
+				end
+				ply:SetDInt("yrp_load_glo", 10)
+			end)
+
+			timer.Simple(1.5, function()
+				for i, v in pairs(NWGlobal["STRING"]) do
+					SendGlobalDString(i, v, ply)
+				end
+				ply:SetDInt("yrp_load_glo", 25)
+			end)
+
+			timer.Simple(2, function()
+				for i, v in pairs(NWGlobal["INT"]) do
+					SendGlobalDInt(i, v, ply)
+				end
+				ply:SetDInt("yrp_load_glo", 50)
+			end)
+
+			timer.Simple(2.5, function()
+				for i, v in pairs(NWGlobal["FLOAT"]) do
+					SendGlobalDFloat(i, v, ply)
+				end
+				ply:SetDInt("yrp_load_glo", 75)
+			end)
+
+			timer.Simple(3, function()
+				for i, v in pairs(NWGlobal["TABLE"]) do
+					SendGlobalDTable(i, v, ply)
+				end
+				ply:SetDInt("yrp_load_glo", 100)
+
+				sending = false
+			end)
+		else
+			timer.Simple(0.9, function()
+				SendDGlobals(ply)
+			end)
 		end
-		ply:SetDInt("yrp_load_glo", 10)
-		NWGlobal["STRING"] = NWGlobal["STRING"] or {}
-		for i, v in pairs(NWGlobal["STRING"]) do
-			SendGlobalDString(i, v, ply)
-		end
-		ply:SetDInt("yrp_load_glo", 25)
-		NWGlobal["INT"] = NWGlobal["INT"] or {}
-		for i, v in pairs(NWGlobal["INT"]) do
-			SendGlobalDInt(i, v, ply)
-		end
-		ply:SetDInt("yrp_load_glo", 50)
-		NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
-		for i, v in pairs(NWGlobal["FLOAT"]) do
-			SendGlobalDFloat(i, v, ply)
-		end
-		ply:SetDInt("yrp_load_glo", 75)
-		NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
-		for i, v in pairs(NWGlobal["TABLE"]) do
-			SendGlobalDTable(i, v, ply)
-		end
-		ply:SetDInt("yrp_load_glo", 100)
 	end
 	net.Receive("request_dglobals", function(len, ply)
 		SendDGlobals(ply)

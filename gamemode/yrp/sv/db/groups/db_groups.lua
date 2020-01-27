@@ -296,8 +296,10 @@ function DuplicateGroup(guid)
 		last = last[table.Count(last)]
 
 		local roles = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
-		for i, role in pairs(roles) do
-			DuplicateRole(role.uniqueID, last.uniqueID)
+		if wk(roles) then
+			for i, role in pairs(roles) do
+				DuplicateRole(role.uniqueID, last.uniqueID)
+			end
 		end
 
 		SendGroupList(group.int_parentgroup)

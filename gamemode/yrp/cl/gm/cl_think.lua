@@ -274,10 +274,12 @@ local afktime = CurTime()
 local _view_delay = true
 local blink_delay = 0
 local setup = false
-local hudD = CurTime() + 240
+local hudD = nil
 local hudFail = hudFail or false
 function KeyPress()
 	local ply = LocalPlayer()
+
+	hudD = hudD or CurTime() + 240
 
 	if hudD < CurTime() then
 		hudD = CurTime() + 240

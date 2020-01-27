@@ -100,7 +100,7 @@ timer.Create("yrp_sendready", 60, 0, function()
 		end
 	else
 		if failed then
-			YRP.msg("error", "SEND IS READY WORKED ERROR: " .. printReadyError())
+			--YRP.msg("error", "SEND IS READY WORKED ERROR: " .. printReadyError())
 		else
 			YRP.msg("note", "SEND IS READY WORKED")
 			timer.Remove("yrp_sendready")

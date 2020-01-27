@@ -541,6 +541,10 @@ function send_characters(ply)
 		net.Start("yrp_get_characters")
 			net.WriteTable(netTable)
 		net.Send(ply)
+
+		timer.Simple(2, function()
+			ply:SetDBool("loadedchars", true)
+		end)
 	else
 		printGM("note", "[send_characters] plytab failed! " .. tostring(plytab))
 	end

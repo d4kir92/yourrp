@@ -21,7 +21,11 @@ function ENT:Use(activator, caller)
 	if !activator:IsValid() then
 		return
 	end
+
 	local weap = activator:GetActiveWeapon()
+
+	if !IsValid(weap) then return end
+
 	local pram = weap:GetPrimaryAmmoType()
 	activator:GiveAmmo(1, pram)
 	self:Remove()

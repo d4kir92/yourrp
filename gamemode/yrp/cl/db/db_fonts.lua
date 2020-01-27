@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local font = "Ubuntu"
-local fontscale = 1
-local fonts = {}
+local font = font or "Ubuntu"
+local fontscale = fontscale or 1
+local fonts = fonts or {}
 
 function YRP.AddFont(fontname, scale)
 	fontname = fontname or ""
@@ -69,11 +69,15 @@ function YRP.SetFont(fontname)
 	if wk(fontname) then
 		local fontID = string.lower(fontname)
 		local fontTab = fonts[fontID]
-		font = fontTab.name or ""
-		fontscale = fontTab.scale or ""
-		table.Empty(savedfonts)
-		YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
-		changeFontSize()
+		if wk(fontTab) then
+			font = fontTab.name or ""
+			fontscale = fontTab.scale or ""
+			table.Empty(savedfonts)
+			YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
+			changeFontSize()
+		else
+			YRP.msg("error", "fontname: " .. tostring(fontname) .. " fontTab: " .. tostring(fontTab))
+		end
 	end
 end
 
