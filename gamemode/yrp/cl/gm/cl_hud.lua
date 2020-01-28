@@ -129,7 +129,6 @@ function show_voice_info(ply)
 end
 
 local _yrp_icon = Material("vgui/yrp/logo100_beta.png")
-local _yrp_testing = Material("yrp/warn_testing.png")
 local star = Material("vgui/material/icon_star.png")
 
 function DrawEquipment(ply, name)
@@ -412,16 +411,8 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		end
 	end
 
-	if !ply:GetDBool("serverdedicated", false) then
-		if !string.find(tostring(_yrp_testing), "error") then
-			local icon = {}
-			icon.s = 165 * 2
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(_yrp_testing	)
-			surface.DrawTexturedRect(ScrW() - YRP.ctr(icon.s), 0, YRP.ctr(icon.s), YRP.ctr(icon.s))
-		else
-			draw.SimpleText("YOURRP CONTENT IS MISSING/OUTDATED!", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
+	if !HasYRPContent() then
+		draw.SimpleText("YOURRP CONTENT IS MISSING/OUTDATED!", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
---##############################################################################
+

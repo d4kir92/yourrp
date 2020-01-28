@@ -2235,7 +2235,7 @@ loading:Center()
 loading:ShowCloseButton(false)
 loading.d = CurTime() + 1
 loading.t = 0
-loading.tmax = 60
+loading.tmax = 120
 loading:MakePopup()
 function loading:Paint(pw, ph)
 	self:MoveToFront()
@@ -2284,7 +2284,7 @@ function loading:Paint(pw, ph)
 	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	-- TIME
-	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_20_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_12_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	if LocalPlayer():GetDBool("finishedloading", false) and LocalPlayer():GetDBool("loadedchars", false) then
 		self:Remove()

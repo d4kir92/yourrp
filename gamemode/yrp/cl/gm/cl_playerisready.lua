@@ -88,7 +88,7 @@ function printReadyError()
 end
 
 local failed = failed or false
-timer.Create("yrp_sendready", 60, 0, function()
+timer.Create("yrp_sendready", 120, 0, function()
 	local lply = LocalPlayer()
 	if !rToSv then
 		failed = true

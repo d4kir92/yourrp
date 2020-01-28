@@ -976,6 +976,7 @@ function openCharacterSelection()
 				end
 			end
 			
+			LocalPlayer():SetDBool("loadedchars", true)
 			_cs.frame:MakePopup()
 		end
 	end

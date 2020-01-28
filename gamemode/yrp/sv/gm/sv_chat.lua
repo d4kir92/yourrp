@@ -209,7 +209,10 @@ function add_money(sender, text)
 		local _money = tonumber(_table[3])
 		if isnumber(_money) then
 			local _receiver = get_player_by_name(_name)
-			if worked(_receiver, "money receiver not found!") then
+			if wk(_receiver) then
+				if _receiver.addMoney == nil then
+					return ""
+				end
 				_receiver:addMoney(_money)
 				return ""
 			else

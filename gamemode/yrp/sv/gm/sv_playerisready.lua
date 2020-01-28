@@ -38,6 +38,7 @@ function PlayerLoadedGame(ply)
 	ply:KillSilent()
 
 	SendDGlobals(ply)
+
 	ply:DesignLoadout("PlayerLoadedGame")
 	ply:SendTeamsToPlayer()
 	
@@ -45,13 +46,13 @@ function PlayerLoadedGame(ply)
 
 	SendDEntities(ply, "PlayerLoadedGame")
 
+	ply:SetDBool("finishedloading", true)
+
 	timer.Simple(6, function()
 		net.Start("yrp_noti")
 			net.WriteString("playerisready")
 			net.WriteString(ply:Nick())
 		net.Broadcast()
-
-		ply:SetDBool("finishedloading", true)
 	end)
 end
 

@@ -325,14 +325,10 @@ function addGroup(grp, parent)
 		end
 
 		if pa(parent) then
-			print("parent", grp.int_parentgroup)
 			--if tostring(grp.int_parentgroup) != "0" then -- removed to make it work for under one by one
-				--print("!= 0")
 				if parent.AddItem then -- first additem!
-					print("ADDITEM")
 					parent:AddItem(_grp)
 				elseif parent.Add then
-					print("ADD")
 					parent:Add(_grp)
 				else
 					YRP.msg("error", "grp.int_parentgroup: " .. type(grp.int_parentgroup) .. " | " .. "parent.Add: " .. tostring(parent.Add))

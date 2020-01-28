@@ -554,12 +554,12 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 						if hitgroup == HITGROUP_LEFTARM then
 							ply:SetDBool("broken_arm_left", true)
 
-							ply:SetActiveWeapon("yrp_unarmed")
+							--ply:SetActiveWeapon("yrp_unarmed")
 							ply:SelectWeapon("yrp_unarmed")
 						elseif hitgroup == HITGROUP_RIGHTARM then
 							ply:SetDBool("broken_arm_right", true)
 
-							ply:SetActiveWeapon("yrp_unarmed")
+							--ply:SetActiveWeapon("yrp_unarmed")
 							ply:SelectWeapon("yrp_unarmed")
 						end
 					end
