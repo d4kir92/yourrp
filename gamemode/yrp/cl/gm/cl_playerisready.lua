@@ -81,8 +81,9 @@ function printReadyError()
 	str = str .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false))
 	str = str .. " hookinitpostentity: " .. tostring(hookinitpostentity)
 	str = str .. " initpostentity: " .. tostring(initpostentity)
-	str = str .. " initpostentity: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
-	str = str .. " initpostentity: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
+	str = str .. " ENTS: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
+	str = str .. " GLOS: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
+	str = str .. " dedi: " .. tostring(lply:GetDBool("isserverdedicated", false))
 
 	return str
 end

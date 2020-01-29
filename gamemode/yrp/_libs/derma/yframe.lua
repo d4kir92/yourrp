@@ -148,7 +148,7 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self.langu != nil and self._lc != nil then
+	if IsValid(self.langu) and self.langu != nil and self._lc != nil then
 		self.langu:SetVisible(self._lc)
 	end
 	if self.close != nil and self._cb != nil then
@@ -162,8 +162,10 @@ function PANEL:Think()
 		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 
-		self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
-		self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+		if IsValid(self.langu) then
+			self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+			self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+		end
 	end
 
 	local mousex = math.Clamp( gui.MouseX(), 1, ScrW() - 1 )

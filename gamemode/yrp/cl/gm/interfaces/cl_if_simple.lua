@@ -14,12 +14,14 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 
 		draw.RoundedBox(0, 0, hh, pw, ph - hh, Color(60, 60, 60, 200)) --lply:InterfaceValue("YFrame", "BG"))
 
-		local x, y = self:GetContent():GetPos()
-		local w, h = self:GetContent():GetSize()
-		draw.RoundedBox(0, x, y, w, h, Color(20, 20, 20, 200))
+		if IsValid(self:GetContent()) then
+			local x, y = self:GetContent():GetPos()
+			local w, h = self:GetContent():GetSize()
+			draw.RoundedBox(0, x, y, w, h, Color(20, 20, 20, 200))
 
-		if self.GetTitle != nil then
-			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			if self.GetTitle != nil then
+				draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 		end
 		return true
 	end

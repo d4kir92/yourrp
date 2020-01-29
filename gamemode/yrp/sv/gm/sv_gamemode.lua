@@ -45,7 +45,9 @@ function GM:PlayerInitialSpawn(ply)
 
 	if !IsValid(ply) then return end
 
-	ply:KillSilent()
+	if IsValid(ply) and ply.KillSilent then
+		ply:KillSilent()
+	end
 
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()
@@ -70,7 +72,9 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
-	ply:KillSilent()
+	if IsValid(ply) and ply.KillSilent then
+		ply:KillSilent()
+	end
 
 	printGM("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
@@ -301,7 +305,15 @@ function IsNoRoleSwep(ply, cname)
 	end
 end
 
+local PLAYER = FindMetaTable("Player")
+PLAYER.OldGetRagdollEntity = PLAYER.OldGetRagdollEntity or PLAYER.GetRagdollEntity
+function PLAYER:GetRagdollEntity()
+	return self.rd or self:OldGetRagdollEntity() or NULL
+end
+
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
+
+	ply:CreateRagdoll()
 
 	ply:AddDeaths( 1 )
 
@@ -318,6 +330,11 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 	-- NEW RAGDOLL
 	if GetGlobalDBool("bool_spawncorpseondeath", true) then
+
+		if ply:GetRagdollEntity() != NULL then
+			ply:GetRagdollEntity():Remove()
+		end
+	
 		ply.rd = ents.Create("prop_ragdoll")
 		if IsValid(ply.rd) then
 			ply.rd:SetModel(ply:GetModel())

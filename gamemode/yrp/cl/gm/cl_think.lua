@@ -351,7 +351,7 @@ function KeyPress()
 					afktime = CurTime()
 				end
 			end
-			if afktime + 300 < CurTime() then
+			if afktime + 300 < CurTime() then -- AFKTIME
 				net.Start("setafk")
 				net.SendToServer()
 			end

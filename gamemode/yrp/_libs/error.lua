@@ -230,18 +230,21 @@ local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3o
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 function send_error(realm, str)
 	local entry = {}
+
 	local dedi = "UNKNOWN"
 	if CLIENT then
 		dedi = tostring(LocalPlayer():GetDBool("isserverdedicated", false))
 	elseif SERVER then
 		dedi = tostring(game.IsDedicated())
 	end
+	dedi = string.upper(dedi)
+
 	timer.Create("wait_for_gamemode" .. str, 1, 0, function()
 		if gmod.GetGamemode() != nil then
 			isdbfull(str)
 			ismalformed(str)
 
-			entry["entry.915525654"] = tostring(str)
+			entry["entry.915525654"] = "[D: " .. tostring(dedi) .. "] " .. tostring(str)
 			entry["entry.58745995"] = tostring(realm)
 			entry["entry.1306533151"] = GetMapName() or "MAPNAME"
 			entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"

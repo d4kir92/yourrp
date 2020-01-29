@@ -35,7 +35,9 @@ function PlayerLoadedGame(ply)
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
-	ply:KillSilent()
+	if IsValid(ply) and ply.KillSilent then
+		ply:KillSilent()
+	end
 
 	SendDGlobals(ply)
 
