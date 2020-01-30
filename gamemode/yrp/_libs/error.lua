@@ -68,7 +68,15 @@ function yts(str , str2)
 end
 
 function ErrorValidToSend(str)
-	if string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
+	local tab = string.Explode("\n", str)
+	local gmbug = false
+	for i, v in pairs(tab) do
+		if i == 1 and (yts(v, "yourrp") or yts(v, "yrp")) then
+			gmbug = true
+		end
+	end
+
+	if gmbug and string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
 		return true
 	else
 		return false

@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 176 --do NOT change this!
-GM.VersionCanary = 355 --do NOT change this!
+GM.VersionBeta = 177 --do NOT change this!
+GM.VersionCanary = 356 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -550,3 +550,5 @@ if system.IsLinux() then
 		Msg(color_clear_sequence)
 	end
 end
+
+

@@ -72,17 +72,16 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
-	if IsValid(ply) and ply.KillSilent then
-		ply:KillSilent()
-	end
-
 	printGM("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
-	--ply:KillSilent()
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
+
+	if IsValid(ply) and ply.KillSilent then
+		ply:KillSilent()
+	end
 end)
 
 YRP = YRP or {}

@@ -35,10 +35,6 @@ function PlayerLoadedGame(ply)
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
-	if IsValid(ply) and ply.KillSilent then
-		ply:KillSilent()
-	end
-
 	SendDGlobals(ply)
 
 	ply:DesignLoadout("PlayerLoadedGame")
@@ -56,6 +52,10 @@ function PlayerLoadedGame(ply)
 			net.WriteString(ply:Nick())
 		net.Broadcast()
 	end)
+
+	if IsValid(ply) and ply.KillSilent then
+		ply:KillSilent()
+	end
 end
 
 util.AddNetworkString("yrp_player_is_ready")
