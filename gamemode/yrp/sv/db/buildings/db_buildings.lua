@@ -295,7 +295,9 @@ function openDoor(ply, ent, nr)
 		_tmpBuildingTable.bool_canbeowned = tonumber(_tmpBuildingTable.bool_canbeowned)
 		_tmpBuildingTable.groupID = tonumber(_tmpBuildingTable.groupID)
 
-		if _tmpBuildingTable.bool_canbeowned == 0 or _tmpBuildingTable.groupID == -1 then
+		if canLock(ply, _tmpBuildingTable) then
+			ent:Fire("Toggle")
+		elseif _tmpBuildingTable.bool_canbeowned == 0 or _tmpBuildingTable.groupID == -1 then
 			_tmpBuildingTable.int_securitylevel = tonumber(_tmpBuildingTable.int_securitylevel)
 			if ply:GetDInt("int_securitylevel", 0) >= _tmpBuildingTable.int_securitylevel and ply:HasWeapon("yrp_idcard") then
 				local locked = ent:GetSaveTable().m_bLocked

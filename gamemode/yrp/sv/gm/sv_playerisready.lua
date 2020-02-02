@@ -44,19 +44,26 @@ function PlayerLoadedGame(ply)
 
 	SendDEntities(ply, "PlayerLoadedGame")
 
-	ply:SetDBool("finishedloading", true)
-
-	timer.Simple(6, function()
-		net.Start("yrp_noti")
-			net.WriteString("playerisready")
-			net.WriteString(ply:Nick())
-		net.Broadcast()
-	end)
+	ply.lgtime = CurTime() + 6
 
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
 	end
 end
+
+hook.Add("Think", "yrp_loaded_game", function()
+	for i, ply in pairs(player.GetAll()) do
+		if ply.lgtime and ply.lgtime < CurTime() then
+			ply.lgtime = nil
+			ply:SetDBool("finishedloading", true)
+
+			net.Start("yrp_noti")
+				net.WriteString("playerisready")
+				net.WriteString(ply:Nick())
+			net.Broadcast()
+		end
+	end
+end)
 
 util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)

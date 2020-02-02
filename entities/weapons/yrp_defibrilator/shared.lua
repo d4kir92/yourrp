@@ -56,12 +56,14 @@ end
 
 if SERVER then
 	hook.Add("yrp_castdone_revive", "revive", function(args)
-		if args.target.ply then
+		if IsValid(args.target.ply) then
 			local ply = args.target.ply
 			local pos = ply:GetPos()
-			ply.ignorespawnpoint = true
-			ply:Spawn()
-			ply:SetPos(pos)
+			if IsValid(pos) then
+				ply.ignorespawnpoint = true
+				ply:Spawn()
+				ply:SetPos(pos)
+			end
 		end
 	end)
 end

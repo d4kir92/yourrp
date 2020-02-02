@@ -11,6 +11,7 @@ function YDrawIDCards()
 			local sca = 0.016
 
 			local correction = 3
+			local pos = ply:GetPos()
 			if ply:LookupBone("ValveBiped.Bip01_R_Hand") then
 				pos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Hand"))
 				correction = 6

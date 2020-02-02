@@ -1695,9 +1695,11 @@ end)
 function DoRagdoll(ply)
 	ply:SetDBool("ragdolled", true)
 
+	local scale = ply:GetModelScale() or 1
+
 	local tmp = ents.Create("prop_ragdoll")
 	tmp:SetModel(ply:GetModel())
-	tmp:SetModelScale(ply:GetModelScale(), 0)
+	tmp:SetModelScale(scale, 0)
 	tmp:SetPos(ply:GetPos() + Vector(0, 0, 0))
 	tmp:Spawn()
 
