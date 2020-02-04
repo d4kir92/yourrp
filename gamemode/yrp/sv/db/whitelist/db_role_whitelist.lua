@@ -28,7 +28,9 @@ util.AddNetworkString("yrpInfoBox")
 function sendRoleWhitelist(ply)
 	local tabW = SQL_SELECT("yrp_role_whitelist", "*", nil)
 
-	if !wk(tabW) then return end
+	if !wk(tabW) then
+		tabW = {}
+	end
 
 	for i, v in pairs(tabW) do
 		v.groupID = tonumber(v.groupID)

@@ -142,7 +142,7 @@ function DrawEquipment(ply, name)
 	end
 end
 
-local oldlevel = nil
+local oldlevel = oldlevel or nil
 hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	local ply = LocalPlayer()
 
@@ -159,12 +159,19 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 			levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400))
 			levelup:ShowCloseButton(false)
 			levelup:SetTitle("")
-
+			levelup.LID_levelup = YRP.lang_string("LID_levelup")
+			local tab = {}
+			tab["LEVEL"] = ply:Level()
+			levelup.LID_levelx = YRP.lang_string("LID_levelx", tab)
+			levelup.lucolor = Color(255, 255, 100, 255)
+			levelup.lxcolor = Color(255, 255, 100, 255)
+			levelup.brcolor = Color(0, 0, 0, 255)
 			function levelup:Paint(pw, ph)
-				draw.SimpleTextOutlined(YRP.lang_string("LID_levelup"), "HudHeader", pw / 2, ph / 2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				local tab = {}
-				tab["LEVEL"] = ply:Level()
-				draw.SimpleTextOutlined(YRP.lang_string("LID_levelx", tab), "HudBars", pw / 2, ph / 2 + YRP.ctr(80), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				local pw2 = pw / 2
+				local ph2 = ph / 2
+				local ph3 = ph2 + YRP.ctr(80)
+				draw.SimpleTextOutlined(self.LID_levelup, "HudHeader", pw2, ph2, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
+				draw.SimpleTextOutlined(self.LID_levelx, "HudBars", pw2, ph3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
 				if oldlevel != ply:Level() then
 					self:Remove()
 				end
