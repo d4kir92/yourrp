@@ -1,5 +1,35 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+function GetPlayerByName(name)
+	for i, ply in pairs(player.GetAll()) do
+		if string.find(ply:RPName(), name) or string.find(ply:SteamName(), name) then
+			return ply
+		end
+	end
+
+	return NULL
+end
+
+function GetPlayerByRPName(name)
+	for i, ply in pairs(player.GetAll()) do
+		if string.find(ply:RPName(), name) then
+			return ply
+		end
+	end
+
+	return NULL
+end
+
+function GetPlayerBySteamName(name)
+	for i, ply in pairs(player.GetAll()) do
+		if string.find(ply:SteamName(), name) then
+			return ply
+		end
+	end
+
+	return NULL
+end
+
 local Player = FindMetaTable("Player")
 
 function Player:YRPEat(num)
