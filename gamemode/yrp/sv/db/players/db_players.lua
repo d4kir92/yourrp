@@ -103,6 +103,10 @@ function SetRole(ply, rid, force, pmid)
 	ply:SetDBool("switchrole", false)
 end
 
+function GiveRole(ply, rid, force)
+	SetRole(ply, rid, force, nil)
+end
+
 function YFAR(str, f, r)
 	-- Y Find And Replace
 	local s, e = string.find(str, f)

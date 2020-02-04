@@ -53,7 +53,7 @@ end
 
 hook.Add("Think", "yrp_loaded_game", function()
 	for i, ply in pairs(player.GetAll()) do
-		if ply.lgtime and ply.lgtime < CurTime() then
+		if ply.lgtime and ply.lgtime < CurTime() then -- Only goes here, when a player fully loaded
 			ply.lgtime = nil
 			ply:SetDBool("finishedloading", true)
 

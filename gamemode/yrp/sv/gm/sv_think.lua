@@ -109,12 +109,6 @@ function anti_bunnyhop(ply)
 	end
 end
 
-hook.Add("Tick", "yrp_keydown", function()
-	for k, ply in pairs(player.GetAll()) do
-		anti_bunnyhop(ply)
-	end
-end)
-
 function broken(ply)
 	if IsBonefracturingEnabled() and !ply:Slowed() then
 		if ply:GetDBool("broken_leg_left") and ply:GetDBool("broken_leg_right") then
@@ -236,6 +230,8 @@ timer.Create("ServerThink", TICK, 0, function()
 				time_jail(ply)
 				check_salary(ply)
 				broken(ply)
+
+				anti_bunnyhop(ply)
 			end
 		end
 	end
