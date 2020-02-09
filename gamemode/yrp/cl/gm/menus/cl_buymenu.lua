@@ -28,6 +28,7 @@ net.Receive("GetLicenseName", function(len)
 end)
 
 function createShopItem(item, duid, line, id)
+	print("[BUYMENU] createShopItem")
 	item.int_level = tonumber(item.int_level)
 	local W = 600
 	local H = 650 + 2 * 20
@@ -35,8 +36,6 @@ function createShopItem(item, duid, line, id)
 	local _i = createD("DPanel", line, ctrb(W), ctrb(H), id * YRP.ctr(W + BR), 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-		--draw.RoundedBox(0, 0, 0, pw, pw, Color(255, 40, 40, 255))
-		--drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
 	if item.WorldModel != nil and item.WorldModel != "" then
@@ -84,22 +83,10 @@ function createShopItem(item, duid, line, id)
 		end
 	end
 
-	--[[item.description = SQL_STR_OUT(item.description)
-	if item.description != "" then
-		_i.description = createD("DTextEntry", _i, ctrb(W / 2), ctrb(H - 210), ctrb(W / 2), ctrb(110))
-		_i.description:SetMultiline(true)
-		_i.description:SetEditable(false)
-		_i.description:SetText(SQL_STR_OUT(item.description))
-
-		_i.description.Paint = function(self)
-			surface.SetDrawColor(0, 0, 0)
-			--surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
-			self:DrawTextEntryText(Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255))
-		end
-	end]]
-
 	if LocalPlayer():HasLicense(item.licenseID) then
+		print("[BUYMENU] HAS LICENSE")
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
+			print("[BUYMENU] LEVEL HIGH ENOUGH")
 			_i.require = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
@@ -110,6 +97,7 @@ function createShopItem(item, duid, line, id)
 				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
+			print("[BUYMENU] BUY BUTTON")
 			_i.buy = createD("DButton", _i, ctrb(W - 20 * 2), ctrb(50), ctrb(20), ctrb(W + 20))
 			_i.buy:SetText("")
 			_i.buy.item = item
@@ -133,6 +121,7 @@ function createShopItem(item, duid, line, id)
 			end
 		end
 	else
+		print("[BUYMENU] HAS NOT THE LICENSE")
 		_i.require = createD("DPanel", _i, ctrb(W - 2 * 20), ctrb(50), ctrb(20), ctrb(W + 20))
 		lnames[item.licenseID] = lnames[item.licenseID] or item.licenseID
 		net.Start("GetLicenseName")
@@ -232,7 +221,10 @@ net.Receive("shop_get_tabs", function(len)
 	local _tabs = net.ReadTable()
 
 	if !pa(BUYMENU) then return end
-	if !pa(BUYMENU.tabs) then return end
+	if !pa(BUYMENU.tabs) then
+		YRP.msg("error", "!pa(BUYMENU.tabs)")
+		return
+	end
 
 	BUYMENU.dUID = _dealer_uid
 	if BUYMENU.content:GetParent().standalone then
@@ -246,7 +238,7 @@ net.Receive("shop_get_tabs", function(len)
 		local _tab = BUYMENU.tabs:AddTab(SQL_STR_OUT(tab.name), tab.uniqueID)
 
 		function _tab:GetCategories()
-			net.Receive("shop_get_categories", function(le)
+			net.Receive("yrp_shop_get_categories", function(le)
 				if BUYMENU.shop:IsValid() then
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
@@ -264,7 +256,8 @@ net.Receive("shop_get_tabs", function(len)
 						_cat.color2 = Color(60, 60, 60)
 						function _cat:DoClick()
 							if self:IsOpen() then
-								net.Receive("shop_get_items", function(l)
+								print("[BUYMENU] CATEGORY OPEN")
+								net.Receive("yrp_shop_get_items", function(l)
 									local _items = net.ReadTable()
 									self.hs = self.hs or {}
 									local hid = 0
@@ -273,6 +266,7 @@ net.Receive("shop_get_tabs", function(len)
 									local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
 									for k, item in pairs(_items) do
 										if id == 0 then
+											print("[BUYMENU] CREATE LINE")
 											hid = hid + 1
 											self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
 											local line = self.hs[hid]
@@ -291,7 +285,7 @@ net.Receive("shop_get_tabs", function(len)
 										end
 									end
 								end)
-								net.Start("shop_get_items")
+								net.Start("yrp_shop_get_items")
 									net.WriteString(self.uid)
 								net.SendToServer()
 							else
@@ -322,7 +316,7 @@ net.Receive("shop_get_tabs", function(len)
 					end
 				end
 			end)
-			net.Start("shop_get_categories")
+			net.Start("yrp_shop_get_categories")
 				net.WriteString(_tab.tbl)
 			net.SendToServer()
 		end
@@ -332,7 +326,7 @@ net.Receive("shop_get_tabs", function(len)
 		if tab.haspermanent then
 			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. SQL_STR_OUT(tab.name), tab.uniqueID)
 			function _tab2:GetCategories()
-				net.Receive("shop_get_categories", function(le)
+				net.Receive("yrp_shop_get_categories", function(le)
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
 
@@ -369,7 +363,7 @@ net.Receive("shop_get_tabs", function(len)
 						end
 					end
 				end)
-				net.Start("shop_get_categories")
+				net.Start("yrp_shop_get_categories")
 					net.WriteString(_tab.tbl)
 				net.SendToServer()
 			end

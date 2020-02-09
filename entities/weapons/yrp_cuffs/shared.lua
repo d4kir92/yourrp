@@ -80,7 +80,7 @@ if SERVER then
 	hook.Add("yrp_castdone_tieup", "tieup", function(args)
 		if !args.target:GetDBool("cuffed", false) then
 			args.target:Give("yrp_cuffed")
-			args.target:SetActiveWeapon("yrp_cuffed")
+			-- args.target:SetActiveWeapon("yrp_cuffed")
 			args.target:SelectWeapon("yrp_cuffed")
 			args.target:SetDBool("cuffed", true)
 		end

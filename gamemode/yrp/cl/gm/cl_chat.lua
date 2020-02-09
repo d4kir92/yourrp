@@ -324,6 +324,8 @@ function InitYRPChat()
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
+				elseif t == "number" then
+					yrpChat.richText:AppendText(obj)
 				else
 					YRP.msg("error", "TYPE: " .. t .. " obj: " .. tostring(obj))
 				end

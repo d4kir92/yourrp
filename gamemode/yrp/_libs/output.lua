@@ -266,6 +266,7 @@ countries["FR"] = "France"
 
 countries["GB"] = "Great Britain"
 countries["GG"] = "Guernsey"
+countries["GI"] = "Gibraltar"
 countries["GR"] = "Greece"
 
 countries["HO"] = "Hong Kong"

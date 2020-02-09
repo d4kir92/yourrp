@@ -8,7 +8,7 @@ include("shared.lua")
 util.AddNetworkString("getMoneyPrintMenu")
 
 util.AddNetworkString("upgradeCPU")
-net.Receive("upgradeCPU", function(len)
+net.Receive("upgradeCPU", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -23,7 +23,7 @@ net.Receive("upgradeCPU", function(len)
 end)
 
 util.AddNetworkString("upgradeCooler")
-net.Receive("upgradeCooler", function(len)
+net.Receive("upgradeCooler", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -38,7 +38,7 @@ net.Receive("upgradeCooler", function(len)
 end)
 
 util.AddNetworkString("upgradePrinter")
-net.Receive("upgradePrinter", function(len)
+net.Receive("upgradePrinter", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -51,7 +51,7 @@ net.Receive("upgradePrinter", function(len)
 end)
 
 util.AddNetworkString("upgradeStorage")
-net.Receive("upgradeStorage", function(len)
+net.Receive("upgradeStorage", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -66,7 +66,7 @@ net.Receive("upgradeStorage", function(len)
 end)
 
 util.AddNetworkString("fuelUp")
-net.Receive("fuelUp", function(len)
+net.Receive("fuelUp", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -82,7 +82,7 @@ net.Receive("fuelUp", function(len)
 end)
 
 util.AddNetworkString("repairMP")
-net.Receive("repairMP", function(len)
+net.Receive("repairMP", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -98,7 +98,7 @@ net.Receive("repairMP", function(len)
 end)
 
 util.AddNetworkString("withdrawMoney")
-net.Receive("withdrawMoney", function(len)
+net.Receive("withdrawMoney", function(len, ply)
 	local mp = net.ReadEntity()
 	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
@@ -111,7 +111,7 @@ net.Receive("withdrawMoney", function(len)
 end)
 
 util.AddNetworkString("startMoneyPrinter")
-net.Receive("startMoneyPrinter", function(len)
+net.Receive("startMoneyPrinter", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetDBool("working") then
 		mp:SetDBool("working", false)

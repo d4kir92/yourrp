@@ -60,9 +60,9 @@ net.Receive("category_edit_name", function(len, ply)
 	printGM("db", "category_edit_name: " .. db_worked(_new))
 end)
 
-util.AddNetworkString("shop_get_categories")
+util.AddNetworkString("yrp_shop_get_categories")
 
-net.Receive("shop_get_categories", function(len, ply)
+net.Receive("yrp_shop_get_categories", function(len, ply)
 	local _uid = net.ReadString()
 	local _cats = SQL_SELECT(_db_name, "*", "shopID = '" .. _uid .. "'")
 	local _nw = {}
@@ -70,7 +70,7 @@ net.Receive("shop_get_categories", function(len, ply)
 		_nw = _cats
 	end
 
-	net.Start("shop_get_categories")
+	net.Start("yrp_shop_get_categories")
 		net.WriteString(_uid)
 		net.WriteTable(_nw)
 	net.Send(ply)

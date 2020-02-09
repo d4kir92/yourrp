@@ -161,9 +161,9 @@ net.Receive("shop_get_items_storage", function(len, ply)
 	end
 end)
 
-util.AddNetworkString("shop_get_items")
+util.AddNetworkString("yrp_shop_get_items")
 
-net.Receive("shop_get_items", function(len, ply)
+net.Receive("yrp_shop_get_items", function(len, ply)
 	local _uid = net.ReadString()
 	local _items = SQL_SELECT(_db_name, "*", "categoryID = '" .. _uid .. "'")
 	local _nw = {}
@@ -172,7 +172,7 @@ net.Receive("shop_get_items", function(len, ply)
 		_nw = _items
 	end
 
-	net.Start("shop_get_items")
+	net.Start("yrp_shop_get_items")
 	net.WriteTable(_nw)
 	net.Send(ply)
 end)

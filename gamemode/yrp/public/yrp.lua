@@ -13,3 +13,17 @@ end
 function IsLevelSystemEnabled()
 	return GetGlobalDBool("bool_level_system", false)
 end
+
+if SERVER then
+	function TelportToSpawnpoint(ply)
+		teleportToSpawnpoint(ply)
+	end
+
+	function TeleportToJailpoint(ply, time)
+		teleportToJailpoint(ply, tim)
+	end
+
+	function TeleportToReleasepoint(ply)
+		teleportToReleasepoint(ply)
+	end
+end
