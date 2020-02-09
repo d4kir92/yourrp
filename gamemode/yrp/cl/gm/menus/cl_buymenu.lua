@@ -33,13 +33,13 @@ function createShopItem(item, duid, line, id)
 	local W = 600
 	local H = 650 + 2 * 20
 	local BR = 40
-	local _i = createD("DPanel", line, ctrb(W), ctrb(H), id * YRP.ctr(W + BR), 0)
+	local _i = createD("DPanel", line, YRP.ctr(W), YRP.ctr(H), id * YRP.ctr(W + BR), 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
 	end
 	_i.item = item
 	if item.WorldModel != nil and item.WorldModel != "" then
-		_i.model = createD("DModelPanel", _i, ctrb(W), ctrb(W), ctrb(0), ctrb(0))
+		_i.model = createD("DModelPanel", _i, YRP.ctr(W), YRP.ctr(W), YRP.ctr(0), YRP.ctr(0))
 		_i.model:SetModel(item.WorldModel)
 
 		if ea(_i.model.Entity) then
@@ -61,7 +61,7 @@ function createShopItem(item, duid, line, id)
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(0))
+		_i.name = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
 		_i.name.name = SQL_STR_OUT(item.name)
 		if item.type == "licenses" then
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
@@ -71,13 +71,13 @@ function createShopItem(item, duid, line, id)
 		end
 	end
 	if item.price != nil then
-		_i.price = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W - 50))
+		_i.price = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(W - 50))
 		function _i.price:Paint(pw, ph)
 			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
-		_i.price = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W - 100))
+		_i.price = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(W - 100))
 		function _i.price:Paint(pw, ph)
 			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
@@ -87,7 +87,7 @@ function createShopItem(item, duid, line, id)
 		print("[BUYMENU] HAS LICENSE")
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
 			print("[BUYMENU] LEVEL HIGH ENOUGH")
-			_i.require = createD("DPanel", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(W))
+			_i.require = createD("DPanel", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
 				local _color = Color(255, 0, 0)
@@ -97,8 +97,9 @@ function createShopItem(item, duid, line, id)
 				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
-			print("[BUYMENU] BUY BUTTON")
-			_i.buy = createD("DButton", _i, ctrb(W - 20 * 2), ctrb(50), ctrb(20), ctrb(W + 20))
+			print("[BUYMENU] BUY BUTTON W: " .. tostring(W) .. " w: " .. YRP.ctr(W - 20 * 2) .. " h: " .. YRP.ctr(50) .. " x: " .. YRP.ctr(20) .. " y: " .. YRP.ctr(W + 20))
+			print("[BUYMENU] ScrW(): " .. ScrW() .. " ScrH() " .. ScrH())
+			_i.buy = createD("DButton", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 			_i.buy:SetText("")
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
@@ -122,7 +123,7 @@ function createShopItem(item, duid, line, id)
 		end
 	else
 		print("[BUYMENU] HAS NOT THE LICENSE")
-		_i.require = createD("DPanel", _i, ctrb(W - 2 * 20), ctrb(50), ctrb(20), ctrb(W + 20))
+		_i.require = createD("DPanel", _i, YRP.ctr(W - 2 * 20), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 		lnames[item.licenseID] = lnames[item.licenseID] or item.licenseID
 		net.Start("GetLicenseName")
 			net.WriteInt(item.licenseID, 32)
@@ -139,14 +140,14 @@ end
 function createStorageItem(item, duid)
 	local W = 800
 	local H = 400
-	local _i = createD("DPanel", nil, ctrb(W), ctrb(H), 0, 0)
+	local _i = createD("DPanel", nil, YRP.ctr(W), YRP.ctr(H), 0, 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
 		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
 	if item.WorldModel != nil and item.WorldModel != "" then
-		_i.model = createD("DModelPanel", _i, ctrb(W - 50), ctrb(H), ctrb(0), ctrb(0))
+		_i.model = createD("DModelPanel", _i, YRP.ctr(W - 50), YRP.ctr(H), YRP.ctr(0), YRP.ctr(0))
 		_i.model:SetModel(item.WorldModel)
 		if _i.model.Entity != NULL and _i.model.Entity != nil then
 			local _mins, _maxs = _i.model.Entity:GetRenderBounds()
@@ -167,7 +168,7 @@ function createStorageItem(item, duid)
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, ctrb(W), ctrb(50), 0, 0)
+		_i.name = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), 0, 0)
 		_i.name.name = SQL_STR_OUT(item.name)
 		function _i.name:Paint(pw, ph)
 			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
@@ -175,7 +176,7 @@ function createStorageItem(item, duid)
 	end
 
 	if item.type != "licenses" then
-		_i.spawn = createD("DButton", _i, ctrb(W), ctrb(50), ctrb(0), ctrb(H - 50))
+		_i.spawn = createD("DButton", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(H - 50))
 		_i.spawn:SetText("")
 		_i.spawn.item = item
 		_i.spawn.action = 0
@@ -247,9 +248,9 @@ net.Receive("shop_get_tabs", function(len)
 
 					for j, cat in pairs(_cats) do
 						local BR = 40
-						local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
+						local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), YRP.ctr(100), 0, 0)
 						_cat.uid = cat.uniqueID
-						_cat:SetHeaderHeight(ctrb(100))
+						_cat:SetHeaderHeight(YRP.ctr(100))
 						_cat:SetHeader(SQL_STR_OUT(cat.name))
 						_cat:SetSpacing(YRP.ctr(BR * 2))
 						_cat.color = Color(80, 80, 80)
@@ -334,9 +335,9 @@ net.Receive("shop_get_tabs", function(len)
 						BUYMENU.shop:Clear()
 
 						for j, cat in pairs(_cats) do
-							local _c = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), ctrb(100), 0, 0)
+							local _c = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), YRP.ctr(100), 0, 0)
 							_c.uid = cat.uniqueID
-							_c:SetHeaderHeight(ctrb(100))
+							_c:SetHeaderHeight(YRP.ctr(100))
 							_c:SetHeader(SQL_STR_OUT(cat.name))
 							_c:SetSpacing(30)
 							_c.color = Color(80, 80, 80)
@@ -452,7 +453,7 @@ net.Receive("shop_get_tabs", function(len)
 		end
 		function BUYMENU.settings:DoClick()
 			net.Receive("dealer_settings", function(le)
-				local _set = createD("DFrame", nil, ctrb(600), ctrb(60 + 110 + 110 + 110), 0, 0)
+				local _set = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60 + 110 + 110 + 110), 0, 0)
 				_set:SetTitle("")
 				_set:Center()
 				_set:MakePopup()
@@ -461,7 +462,7 @@ net.Receive("shop_get_tabs", function(len)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 				end
 
-				_set.name = createD("DYRPPanelPlus", _set, ctrb(560), ctrb(100), ctrb(20), ctrb(60))
+				_set.name = createD("DYRPPanelPlus", _set, YRP.ctr(560), YRP.ctr(100), YRP.ctr(20), YRP.ctr(60))
 				_set.name:INITPanel("DTextEntry")
 				_set.name:SetHeader(YRP.lang_string("LID_name"))
 				_set.name:SetText(_dealer.name)
@@ -473,7 +474,7 @@ net.Receive("shop_get_tabs", function(len)
 					net.SendToServer()
 				end
 
-				_set.name = createD("DYRPPanelPlus", _set, ctrb(560), ctrb(100), ctrb(20), ctrb(170))
+				_set.name = createD("DYRPPanelPlus", _set, YRP.ctr(560), YRP.ctr(100), YRP.ctr(20), YRP.ctr(170))
 				_set.name:INITPanel("YButton")
 				_set.name:SetHeader(YRP.lang_string("LID_appearance"))
 				_set.name.plus:SetText("LID_change")
@@ -504,7 +505,7 @@ net.Receive("shop_get_tabs", function(len)
 				end
 
 				local _storages = net.ReadTable()
-				_set.storagepoint = createD("DYRPPanelPlus", _set, ctrb(560), ctrb(100), ctrb(20), ctrb(280))
+				_set.storagepoint = createD("DYRPPanelPlus", _set, YRP.ctr(560), YRP.ctr(100), YRP.ctr(20), YRP.ctr(280))
 				_set.storagepoint:INITPanel("DComboBox")
 				_set.storagepoint:SetHeader(YRP.lang_string("LID_storagepoint"))
 				for i, storage in pairs(_storages) do
