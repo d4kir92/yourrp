@@ -10,7 +10,6 @@ util.AddNetworkString("getMoneyPrintMenu")
 util.AddNetworkString("upgradeCPU")
 net.Receive("upgradeCPU", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("cpuCost")
 		if ply:canAfford(cost) and mp:GetDInt("cpu") < mp:GetDInt("cpuMax") then
@@ -25,7 +24,6 @@ end)
 util.AddNetworkString("upgradeCooler")
 net.Receive("upgradeCooler", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("coolerCost")
 		if ply:canAfford(cost) and mp:GetDInt("cooler") < mp:GetDInt("coolerMax") then
@@ -40,7 +38,6 @@ end)
 util.AddNetworkString("upgradePrinter")
 net.Receive("upgradePrinter", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("printerCost")
 		if ply:canAfford(cost) and mp:GetDInt("printer") < mp:GetDInt("printerMax") then
@@ -53,7 +50,6 @@ end)
 util.AddNetworkString("upgradeStorage")
 net.Receive("upgradeStorage", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("storageCost")
 		if ply:canAfford(cost) and mp:GetDInt("storage") < mp:GetDInt("storageMax") then
@@ -68,7 +64,6 @@ end)
 util.AddNetworkString("fuelUp")
 net.Receive("fuelUp", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("fuelCost")
 		if ply:canAfford(cost) and mp:GetDInt("fuel") < mp:GetDInt("fuelMax") then
@@ -84,7 +79,6 @@ end)
 util.AddNetworkString("repairMP")
 net.Receive("repairMP", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("hpCost")
 		if ply:canAfford(cost) and mp:GetDInt("hp") < mp:GetDInt("hpMax") then
@@ -100,7 +94,6 @@ end)
 util.AddNetworkString("withdrawMoney")
 net.Receive("withdrawMoney", function(len, ply)
 	local mp = net.ReadEntity()
-	local ply = mp:GetRPOwner()
 	if mp:GetClass() == "yrp_money_printer" then
 		local withdraw = mp:GetDInt("money", 0)
 
