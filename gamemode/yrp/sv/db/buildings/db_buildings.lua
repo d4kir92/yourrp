@@ -122,13 +122,15 @@ function loadDoors()
 	printGM("db", "[Buildings] Setting up Doors!")
 	local _tmpDoors = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 
-	for i, door in pairs(GetAllDoors()) do
-		if worked(_tmpDoors[i], "loadDoors 2") then
-			door:SetDString("buildingID", _tmpDoors[i].buildingID)
-			door:SetDString("uniqueID", i)
-			HasUseFunction(door)
-		else
-			printGM("note", "[Buildings] more doors, then in list!")
+	if wk(_tmpDoors) then
+		for i, door in pairs(GetAllDoors()) do
+			if worked(_tmpDoors[i], "loadDoors 2") then
+				door:SetDString("buildingID", _tmpDoors[i].buildingID)
+				door:SetDString("uniqueID", i)
+				HasUseFunction(door)
+			else
+				printGM("note", "[Buildings] more doors, then in list!")
+			end
 		end
 	end
 

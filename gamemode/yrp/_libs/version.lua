@@ -14,8 +14,13 @@ function GetValue(body, name)
 	local keys = "*" .. name .. "*"
 	local keye = "*/" .. name .. "*"
 	local spos = string.find(body, keys, 1, false)
-	local epos = string.find(body, keye, 1, false)
-	return tonumber(string.sub(body, spos + string.len(keys) , epos - 1))
+	if spos then
+		local epos = string.find(body, keye, 1, false)
+		if epos then
+			return tonumber(string.sub(body, spos + string.len(keys) , epos - 1))
+		end
+	end
+	return 0
 end
 
 local test = {}
