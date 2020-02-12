@@ -336,6 +336,10 @@ function Player:FormattedSalaryRounded(round)
 	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:Salary(), round) .. GetGlobalDString("text_money_pos", "")
 end
 
+function Player:AddMoney(money)
+	self:addMoney(money)
+end
+
 --[[ Character ]]--
 function Player:Level()
 	return tonumber(self:GetDString("int_level", "1"))

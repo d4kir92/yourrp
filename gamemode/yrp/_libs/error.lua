@@ -68,6 +68,11 @@ function yts(str , str2)
 end
 
 function ErrorValidToSend(str)
+
+	if game.SinglePlayer() then
+		return false
+	end
+
 	local tab = string.Explode("\n", str)
 	local gmbug = false
 	for i, v in pairs(tab) do
