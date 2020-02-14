@@ -16,8 +16,8 @@ function PANEL:Init()
 
 	self.numberwang = createD("DNumberWang", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50))
 
-	function self:SetText(text)
-		self.numberwang:SetText(text)
+	function self:SetValue(val)
+		self.numberwang:SetValue(val)
 	end
 end
 

@@ -9,6 +9,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Simple', 'Impact'")
@@ -90,6 +91,7 @@ function Player:DesignLoadout(from)
 		self:SetDString("string_hud_design", setting.string_hud_design)
 		SetGlobalDString("string_interface_design", setting.string_interface_design)
 		SetGlobalDString("string_hud_profile", setting.string_hud_profile)
+		SetGlobalDInt("int_headerheight", setting.int_headerheight)
 	end
 	self:SetDInt("yrp_loading", 100)
 end
@@ -199,4 +201,13 @@ net.Receive("yrp_update_font", function(len, ply)
 	for i, p in pairs(player.GetAll()) do
 		SendFontName(p)
 	end
+end)
+
+util.AddNetworkString("yrp_change_headerheight")
+net.Receive("yrp_change_headerheight", function(len, ply)
+	local newheaderheight = net.ReadString()
+	newheaderheight = tonumber(newheaderheight)
+
+	SQL_UPDATE(DATABASE_NAME, "int_headerheight = '" .. newheaderheight .. "'", "uniqueID = '1'")
+	SetGlobalDInt("int_headerheight", newheaderheight)
 end)

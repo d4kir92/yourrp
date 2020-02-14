@@ -3,7 +3,8 @@
 local Player = FindMetaTable("Player")
 
 -- GIVE
-if Player.OldGive == nil then
+--[[
+	if Player.OldGive == nil then
 	Player.OldGive = Player.Give
 end
 
@@ -70,22 +71,12 @@ hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 		owner:GiveAmmo(wep:GetDInt("clip2", 0), sammo)
 	end
 end)
+]]
 
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
 
-	local canpickup = ply.canpickup
-	ply.canpickup = false
-
-	local swep = weapons.GetStored(wep:GetClass())
-	if IsValid(swep) then
-		wep.PrimaryAmmo = 0
-		wep.Secondary = 0
-		--swep.Primary.DefaultClip = 0
-		--swep.Secondary.DefaultClip = 0
-	end
-
-	if canpickup then
+	if wep.dropped and wep:GetDBool("canpickup", false) or wep.dropped == nil then
 		return true
 	elseif ply:KeyPressed(IN_USE) then
 		ply.noammo = true
@@ -110,11 +101,12 @@ function Player:DropSWEP(cname, force)
 	if self.dropdelay < CurTime() or force then
 		self.dropdelay = CurTime() + 1
 		local wep = self:GetWeapon(cname)
-		local clip1 = wep:Clip1()
+		wep:SetDBool("canpickup", false)
+		--[[local clip1 = wep:Clip1()
 		local clip2 = wep:Clip2()
 		local clip1max = wep:GetMaxClip1()
 		local clip2max = wep:GetMaxClip2()
-
+		]]
 		self:RemoveWeapon(cname)
 
 		local ent = ents.Create(cname)
@@ -125,12 +117,13 @@ function Player:DropSWEP(cname, force)
 
 		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 		ent:SetAngles(self:GetAngles())
-		self.canpickup = false
+		ent:SetDBool("canpickup", false)
+		ent.dropped = true
 		ent:Spawn()
-		ent:SetDInt("clip1", clip1)
+		--[[ent:SetDInt("clip1", clip1)
 		ent:SetDInt("clip2", clip2)
 		ent:SetDInt("clip1max", clip1max)
-		ent:SetDInt("clip2max", clip2max)
+		ent:SetDInt("clip2max", clip2max)]]
 
 		local ttl = math.Clamp(GetGlobalDInt("int_ttlsweps", 60), 1, 3600)
 		timer.Simple(ttl, function()

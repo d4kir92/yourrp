@@ -222,10 +222,7 @@ net.Receive("shop_get_tabs", function(len)
 	local _tabs = net.ReadTable()
 
 	if !pa(BUYMENU) then return end
-	if !pa(BUYMENU.tabs) then
-		YRP.msg("error", "!pa(BUYMENU.tabs)")
-		return
-	end
+	if !pa(BUYMENU.tabs) then return end
 
 	BUYMENU.dUID = _dealer_uid
 	if BUYMENU.content:GetParent().standalone then

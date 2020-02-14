@@ -340,6 +340,10 @@ function Player:AddMoney(money)
 	self:addMoney(money)
 end
 
+function Player:AddMoneyBank(money)
+	self:addMoneyBank(money)
+end
+
 --[[ Character ]]--
 function Player:Level()
 	return tonumber(self:GetDString("int_level", "1"))

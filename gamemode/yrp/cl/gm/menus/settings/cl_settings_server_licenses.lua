@@ -53,7 +53,7 @@ net.Receive("get_licenses", function()
 			_li.price = createD("DYRPNumberWang", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600))
 			_li.price.numberwang.tbl = tbl
 			_li.price:SetHeader(YRP.lang_string("LID_price"))
-			_li.price:SetText(SQL_STR_OUT(tbl.price))
+			_li.price:SetValue(SQL_STR_OUT(tbl.price))
 			function _li.price.numberwang:OnChange()
 				self.tbl.price = self:GetValue()
 				net.Start("edit_licence_price")

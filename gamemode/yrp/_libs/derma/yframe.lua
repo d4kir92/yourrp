@@ -11,7 +11,7 @@ function PANEL:SetLanguageChanger(b)
 end
 
 function PANEL:GetHeaderHeight()
-	return self._headerheight or 24
+	return self._headerheight
 end
 
 function PANEL:SetHeaderHeight(num)
@@ -29,6 +29,7 @@ end
 
 function PANEL:SetBorder(b)
 	self._border = b
+	self:UpdateSize()
 end
 
 function PANEL:SetCloseButton( bShow )
@@ -97,6 +98,10 @@ function PANEL:UpdateSize()
 	local ph = self:GetTall()
 	self.con:SetSize(pw - 2 * br, ph - header - 2 * br)
 	self.con:SetPos(br, header + br)
+	self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
+	self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+	self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
 end
 
 function PANEL:OnSizeChanged(pw, ph)
@@ -119,7 +124,7 @@ function PANEL:Init()
 		self._cb = true
 	end
 
-	self._headerheight = 24
+	self._headerheight = YRP.ctr(GetGlobalDInt("int_headerheight", 100))
 	self._border = 20
 
 	self:ShowCloseButton(false)
@@ -134,7 +139,7 @@ function PANEL:Init()
 		self.main:Close()
 	end
 
-	self.langu = YRP.DChangeLanguage(self, self:GetWide() - YRP.ctr(60 * 1.4903 + 20 + 60 + 20), YRP.ctr(20), YRP.ctr(60), true)
+	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.6, true)
 
 	self.con = createD("YPanel", self, 10, 10, 0, 0)
 	function self.con:Paint(pw, ph)
@@ -148,6 +153,11 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
+	if self._headerheight != YRP.ctr(GetGlobalDInt("int_headerheight", 100)) then
+		self._headerheight = YRP.ctr(GetGlobalDInt("int_headerheight", 100))
+		self:UpdateSize()
+	end
+
 	if IsValid(self.langu) and self.langu != nil and self._lc != nil then
 		self.langu:SetVisible(self._lc)
 	end

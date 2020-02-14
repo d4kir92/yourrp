@@ -27,6 +27,7 @@ net.Receive("get_design_settings", function(len)
 		end
 
 		-- HUD Design
+		
 		local hud_design_bg = createD("DPanel", nil, GRP_HUD:GetWide(), YRP.ctr(100), 0, 0)
 		function hud_design_bg:Paint(pw, ph)
 			--
@@ -784,13 +785,6 @@ net.Receive("get_design_settings", function(len)
 			COM.name = "LID_compass"
 			AddElement(COM)
 
-			--[[
-			local MI = {}
-			MI.element = "MI"
-			MI.name = "LID_minimap"
-			AddElement(MI)
-			]]--
-
 			local LO = {}
 			LO.element = "LO"
 			LO.name = "LID_lockdown"
@@ -870,6 +864,7 @@ net.Receive("get_design_settings", function(len)
 				net.WriteString(profile_name)
 			net.SendToServer()
 		end
+
 
 
 		-- HUD Reset Settings
@@ -973,6 +968,21 @@ net.Receive("get_design_settings", function(len)
 					ele:Remove()
 				end
 
+				-- HeaderHeight
+				local if_hh = createD("DYRPNumberWang", nil, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600))
+				if_hh:SetHeader(YRP.lang_string("LID_headerheight"))
+				if_hh:SetValue(GetGlobalDInt("int_headerheight", 100))
+				if_hh.numberwang:SetMin(50)
+				if_hh.numberwang:SetMax(150)
+				function if_hh.numberwang:OnValueChanged()
+					net.Start("yrp_change_headerheight")
+						net.WriteString(self:GetValue())
+					net.SendToServer()
+				end
+				GRP_IF:AddItem(if_hh)
+
+
+				
 				local reset_interface = createD("YButton", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
 				reset_interface:SetText("LID_reset")
 				function reset_interface:DoClick()
@@ -1021,12 +1031,12 @@ net.Receive("get_design_settings", function(len)
 		pv_win:SetTitle("LID_window")
 		function pv_win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
-			self:MoveToFront()
+			--self:MoveToFront()
 		end
 		pv_win:SetHeaderHeight(YRP.ctr(100))
 		pv_win:MakePopup()
 
-		local pv_btn = createD("YButton", pv_win, YRP.ctr(300), YRP.ctr(100), YRP.ctr(20), YRP.ctr(100 + 20))
+		local pv_btn = createD("YButton", pv_win:GetContent(), YRP.ctr(300), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20))
 		pv_btn:SetText("LID_button")
 		function pv_btn:Paint(pw, ph)
 			local tab = {}
@@ -1039,25 +1049,25 @@ net.Receive("get_design_settings", function(len)
 			hook.Run("YButtonPaint", self, pw, ph, tab)
 		end
 
-		local pv_lbl = createD("YLabel", pv_win, YRP.ctr(300), YRP.ctr(100), YRP.ctr(20 + 300 + 20), YRP.ctr(100 + 20))
+		local pv_lbl = createD("YLabel", pv_win:GetContent(), YRP.ctr(300), YRP.ctr(100), YRP.ctr(20 + 300 + 20), YRP.ctr(20))
 		pv_lbl:SetText("LID_label")
 		function pv_lbl:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
 		end
 
-		local pv_add = createD("YButton", pv_win, YRP.ctr(80), YRP.ctr(80), YRP.ctr(20), YRP.ctr(20 + 80 + 20 + 100 + 20))
+		local pv_add = createD("YButton", pv_win:GetContent(), YRP.ctr(80), YRP.ctr(80), YRP.ctr(20), YRP.ctr(20 + 80 + 20 + 20))
 		pv_add:SetText("LID_button")
 		function pv_add:Paint(pw, ph)
 			hook.Run("YAddPaint", self, pw, ph)
 		end
 
-		local pv_remove = createD("YButton", pv_win, YRP.ctr(80), YRP.ctr(80), YRP.ctr(20 + 80 + 20), YRP.ctr(20 + 80 + 20 + 100 + 20))
+		local pv_remove = createD("YButton", pv_win:GetContent(), YRP.ctr(80), YRP.ctr(80), YRP.ctr(20 + 80 + 20), YRP.ctr(20 + 80 + 20 + 20))
 		pv_remove:SetText("LID_button")
 		function pv_remove:Paint(pw, ph)
 			hook.Run("YRemovePaint", self, pw, ph)
 		end
 
-		local pv_groupbox = createD("YGroupBox", pv_win, YRP.ctr(400), YRP.ctr(400), YRP.ctr(20), YRP.ctr(20 + 80 + 20 + 80 + 20 + 100 + 20))
+		local pv_groupbox = createD("YGroupBox", pv_win:GetContent(), YRP.ctr(400), YRP.ctr(400), YRP.ctr(20), YRP.ctr(20 + 80 + 20 + 80 + 20 + 20))
 		pv_groupbox:SetText("LID_groupbox")
 		function pv_groupbox:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
