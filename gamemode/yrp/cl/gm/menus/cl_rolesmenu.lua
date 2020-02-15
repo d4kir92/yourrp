@@ -462,7 +462,9 @@ function CreateRoleMenuContent(parent)
 				net.WriteInt(self.uniqueID, 16)
 				net.WriteInt(pmid, 16)
 			net.SendToServer()
-			ROLEMENU.content:GetParent():Close()
+			if pa(ROLEMENU.content) and ROLEMENU.content:GetParent().Close != nil then
+				ROLEMENU.content:GetParent():Close()
+			end
 		end
 	end
 

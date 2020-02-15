@@ -486,14 +486,17 @@ function Player:canAfford(money)
 	if money == nil then return false end
 	if self:GetDString("money") == nil then return false end
 
-	local _tmpMoney = math.abs(tonumber(money))
-	if isnumber(_tmpMoney) then
-		if tonumber(self:GetDString("money")) >= _tmpMoney then
+	if isnumber(tonumber(money)) then
+		money = math.abs(tonumber(money))
+		local curmoney = tonumber(self:GetDString("money"))
+
+		if curmoney >= money then
 			return true
 		else
 			return false
 		end
 	else
+		YRP.msg("note", "canAfford needs a number as input!")
 		return false
 	end
 end

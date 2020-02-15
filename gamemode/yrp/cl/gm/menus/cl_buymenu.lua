@@ -428,7 +428,9 @@ net.Receive("shop_get_tabs", function(len)
 						net.WriteString(_uid)
 					net.SendToServer()
 				end
-				self:GetParent():Close()
+				if self:GetParent().Close != nil then
+					self:GetParent():Close()
+				end
 				CloseBuyMenu()
 			end
 		end

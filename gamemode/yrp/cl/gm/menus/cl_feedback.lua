@@ -19,8 +19,10 @@ function closeFeedbackMenu()
 		closeMenu()
 		FEEDBACK.window:Remove()
 		FEEDBACK.window = nil
-	elseif pa(FEEDBACK.content) then
-		FEEDBACK.content:GetParent():Close()
+	elseif pa(FEEDBACK.content) and pa(FEEDBACK.content:GetParent()) then
+		if FEEDBACK.content:GetParent().Close != nil then
+			FEEDBACK.content:GetParent():Close()
+		end
 	end
 end
 

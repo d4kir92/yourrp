@@ -447,9 +447,10 @@ net.Receive("item_buy", function(len, ply)
 
 	if _item ~= nil then
 		_item = _item[1]
+		_item.name = SQL_STR_OUT(tostring(_item.name))
 
 		if ply:canAfford(tonumber(_item.price)) then
-			printGM("gm", ply:YRPName() .. " buyed " .. tostring(_item.name))
+			printGM("gm", ply:YRPName() .. " buyed " .. _item.name)
 
 			if _item.type == "licenses" then
 				ply:AddLicense(_item.ClassName)

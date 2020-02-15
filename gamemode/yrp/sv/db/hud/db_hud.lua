@@ -954,9 +954,7 @@ function Player:HudLoadout()
 			net.WriteTable(hudeles)
 		net.Send(self)
 	end
-	timer.Simple(1, function()
-		self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
-	end)
+	self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
 end
 
 local hud_f = 0
