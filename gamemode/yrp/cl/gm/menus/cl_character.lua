@@ -88,12 +88,12 @@ function createMD(derma, parent, w, h, x, y, height)
 	return tmpD
 end
 
-function paintMD(w, h, string, color)
-	if string == nil then
-		string = ""
+function paintMD(w, h, str, color)
+	if str == nil then
+		str = ""
 	end
 	draw.RoundedBox(0, 0, 0, w, h, color)
-	draw.SimpleTextOutlined(string, "HudBars", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	draw.SimpleTextOutlined(str, "HudBars", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 end
 
 local character = {}

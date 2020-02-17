@@ -114,3 +114,22 @@ end)
 concommand.Add("yrp_usergroup", function(ply, cmd, args)
 	changeUserGroup(ply, cmd, args)
 end)
+
+concommand.Add("yrp_givelicense", function(ply, cmd, args)
+	if #args != 2 then
+		YRP.msg("note", "to much/less commands")
+	end
+
+	local name = args[1]
+	local lname = args[2]
+
+	local ply = GetPlayerByName(name)
+
+	local lid = GetLicenseIDByName(lname)
+
+	if IsValid(ply) and wk(lid) then
+		GiveLicense(ply, lid)
+	else
+		YRP.msg("note", "[yrp_givelicense] Not found")
+	end
+end)

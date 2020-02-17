@@ -2,7 +2,7 @@
 
 function GetPlayerByName(name)
 	for i, ply in pairs(player.GetAll()) do
-		if string.find(ply:RPName(), name) or string.find(ply:SteamName(), name) then
+		if string.find(string.lower(ply:RPName()), string.lower(name)) or string.find(string.lower(ply:SteamName()), string.lower(name)) then
 			return ply
 		end
 	end
@@ -484,17 +484,17 @@ end
 
 function Player:canAfford(money)
 	if money == nil then return false end
-	if self:GetDString("money") == nil then return false end
+	if self:GetDString("money", 0) == nil then return false end
 
 	if isnumber(tonumber(money)) then
 		money = math.abs(tonumber(money))
-		local curmoney = tonumber(self:GetDString("money"))
-
+		local curmoney = tonumber(self:GetDString("money", 0))
 		if curmoney >= money then
 			return true
 		else
 			return false
 		end
+		return false
 	else
 		YRP.msg("note", "canAfford needs a number as input!")
 		return false

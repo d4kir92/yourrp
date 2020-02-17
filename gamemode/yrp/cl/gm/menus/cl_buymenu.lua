@@ -28,7 +28,7 @@ net.Receive("GetLicenseName", function(len)
 end)
 
 function createShopItem(item, duid, line, id)
-	print("[BUYMENU] createShopItem")
+	YRP.msg("note", "[BUYMENU] createShopItem")
 	item.int_level = tonumber(item.int_level)
 	local W = 600
 	local H = 650 + 2 * 20
@@ -84,9 +84,9 @@ function createShopItem(item, duid, line, id)
 	end
 
 	if LocalPlayer():HasLicense(item.licenseID) then
-		print("[BUYMENU] HAS LICENSE")
+		YRP.msg("note", "[BUYMENU] HAS LICENSE")
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
-			print("[BUYMENU] LEVEL HIGH ENOUGH")
+			YRP.msg("note", "[BUYMENU] LEVEL HIGH ENOUGH")
 			_i.require = createD("DPanel", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
@@ -97,8 +97,8 @@ function createShopItem(item, duid, line, id)
 				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
-			print("[BUYMENU] BUY BUTTON W: " .. tostring(W) .. " w: " .. YRP.ctr(W - 20 * 2) .. " h: " .. YRP.ctr(50) .. " x: " .. YRP.ctr(20) .. " y: " .. YRP.ctr(W + 20))
-			print("[BUYMENU] ScrW(): " .. ScrW() .. " ScrH() " .. ScrH())
+			YRP.msg("note", "[BUYMENU] BUY BUTTON W: " .. tostring(W) .. " w: " .. YRP.ctr(W - 20 * 2) .. " h: " .. YRP.ctr(50) .. " x: " .. YRP.ctr(20) .. " y: " .. YRP.ctr(W + 20))
+			YRP.msg("note", "[BUYMENU] ScrW(): " .. ScrW() .. " ScrH() " .. ScrH())
 			_i.buy = createD("DButton", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 			_i.buy:SetText("")
 			_i.buy.item = item
@@ -122,7 +122,7 @@ function createShopItem(item, duid, line, id)
 			end
 		end
 	else
-		print("[BUYMENU] HAS NOT THE LICENSE")
+		YRP.msg("note", "[BUYMENU] HAS NOT THE LICENSE")
 		_i.require = createD("DPanel", _i, YRP.ctr(W - 2 * 20), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 		lnames[item.licenseID] = lnames[item.licenseID] or item.licenseID
 		net.Start("GetLicenseName")
@@ -254,7 +254,7 @@ net.Receive("shop_get_tabs", function(len)
 						_cat.color2 = Color(60, 60, 60)
 						function _cat:DoClick()
 							if self:IsOpen() then
-								print("[BUYMENU] CATEGORY OPEN")
+								YRP.msg("note", "[BUYMENU] CATEGORY OPEN")
 								net.Receive("yrp_shop_get_items", function(l)
 									local _items = net.ReadTable()
 									self.hs = self.hs or {}
@@ -264,7 +264,7 @@ net.Receive("shop_get_tabs", function(len)
 									local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
 									for k, item in pairs(_items) do
 										if id == 0 then
-											print("[BUYMENU] CREATE LINE")
+											YRP.msg("note", "[BUYMENU] CREATE LINE")
 											hid = hid + 1
 											self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
 											local line = self.hs[hid]

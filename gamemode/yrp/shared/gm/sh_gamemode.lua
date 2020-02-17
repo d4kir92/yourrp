@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 184 --do NOT change this!
-GM.VersionCanary = 371 --do NOT change this!
+GM.VersionBeta = 185 --do NOT change this!
+GM.VersionCanary = 372 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -198,6 +198,11 @@ function PrintHelp()
 	printGM("note", "	1: Shows hud, 0: Hide hud")
 	printGM("note", "yrp_togglesettings")
 	printGM("note", "	Toggle settings menu")
+	hr_pos("note")
+
+	hr_pre("note")
+	printGM("note", "Server Commands:")
+	printGM("note", "yrp_givelicense NAME LICENSENAME")
 	hr_pos("note")
 end
 

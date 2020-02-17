@@ -2237,6 +2237,8 @@ loading.d = CurTime() + 1
 loading.t = 0
 loading.tmax = 120
 loading:MakePopup()
+loading.r = 0
+loading.rdir = 1
 function loading:Paint(pw, ph)
 	self:MoveToFront()
 
@@ -2259,32 +2261,50 @@ function loading:Paint(pw, ph)
 	-- BG, Background
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
 	
+
+
 	-- LOGO
+	local logosize = 512 / 4
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.SetMaterial(yrp_icon)
-	surface.DrawTexturedRect(pw / 2 - YRP.ctr(800) / 2, ph / 2 - YRP.ctr(800) / 2, YRP.ctr(800), YRP.ctr(800))
+	surface.DrawTexturedRectRotated(YRP.ctr(logosize) * 0.8, YRP.ctr(logosize) * 0.8, YRP.ctr(logosize), YRP.ctr(logosize), self.r)
+	if self.rdir > 0 then
+		self.r = self.r + 0.1
+		if self.r >= 10 then
+			self.rdir = -1
+		end
+	else
+		self.r = self.r - 0.1
+		if self.r <= -10 then
+			self.rdir = 1
+		end
+	end
+
 
 	-- LOADING TEXT
-	draw.SimpleText(YRP.lang_string("LID_loading"), "Y_50_500", pw / 2, ph / 2 + YRP.ctr(500), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	
+
+
 	-- BAR VALUES
-	local w = YRP.ctr(800)
-	local h = YRP.ctr(50)
-
+	local w = YRP.ctr(1000)
+	local h = YRP.ctr(60)
 	-- BAR BG
-	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(600), w, h, Color(80, 80, 80, 255))
+	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w, h, Color(80, 80, 80, 255))
 	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
-
 	-- BAR
-	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(600), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
+	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
 	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
-
 	-- BAR TEXT
-	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(625), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_700", pw / 2, ph / 2 + YRP.ctr(605), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_700", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
+
+	
 	-- TIME
-	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_12_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_16_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+
 
 	if LocalPlayer():GetDBool("finishedloading", false) and LocalPlayer():GetDBool("loadedchars", false) then
 		self:Remove()

@@ -3,17 +3,17 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_licenses"
+local DATABASE_NAME = "yrp_licenses"
 
-SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(_db_name, "description", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(_db_name, "price", "TEXT DEFAULT '100'")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT '-'")
+SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 function send_licenses(ply)
-	local _all = SQL_SELECT(_db_name, "*", nil)
+	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -25,7 +25,7 @@ end
 
 util.AddNetworkString("get_all_licenses")
 net.Receive("get_all_licenses", function(len, ply)
-	local _all = SQL_SELECT(_db_name, "*", nil)
+	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -43,7 +43,7 @@ net.Receive("get_licenses", function(len, ply)
 end)
 
 function sendlicenses(ply)
-	local _all = SQL_SELECT(_db_name, "*", nil)
+	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -59,56 +59,56 @@ net.Receive("getlicenses", function(len, ply)
 	sendlicenses(ply)
 end)
 
-util.AddNetworkString("licence_add")
+util.AddNetworkString("license_add")
 
-net.Receive("licence_add", function(len, ply)
-	local _new = SQL_INSERT_INTO(_db_name, "name", "'new licence'")
-	printGM("db", "Add new licence: " .. tostring(_new))
+net.Receive("license_add", function(len, ply)
+	local _new = SQL_INSERT_INTO(DATABASE_NAME, "name", "'new license'")
+	printGM("db", "Add new license: " .. tostring(_new))
 
 	send_licenses(ply)
 end)
 
-util.AddNetworkString("licence_rem")
+util.AddNetworkString("license_rem")
 
-net.Receive("licence_rem", function(len, ply)
+net.Receive("license_rem", function(len, ply)
 	local _uid = net.ReadString()
-	local _new = SQL_DELETE_FROM(_db_name, "uniqueID = " .. _uid)
-	printGM("db", "Removed licence: " .. tostring(_uid))
+	local _new = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
+	printGM("db", "Removed license: " .. tostring(_uid))
 
 	send_licenses(ply)
 end)
 
-util.AddNetworkString("edit_licence_name")
+util.AddNetworkString("edit_license_name")
 
-net.Receive("edit_licence_name", function(len, ply)
+net.Receive("edit_license_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(_db_name, "name = '" .. _new_name .. "'", "uniqueID = " .. _uid)
-	printGM("db", "edit_licence_name: " .. tostring(SQL_STR_OUT(_new_name)))
+	local _edit = SQL_UPDATE(DATABASE_NAME, "name = '" .. _new_name .. "'", "uniqueID = " .. _uid)
+	printGM("db", "edit_license_name: " .. tostring(SQL_STR_OUT(_new_name)))
 end)
 
-util.AddNetworkString("edit_licence_description")
+util.AddNetworkString("edit_license_description")
 
-net.Receive("edit_licence_description", function(len, ply)
+net.Receive("edit_license_description", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_description = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(_db_name, "description = '" .. _new_description .. "'", "uniqueID = " .. _uid)
-	printGM("db", "edit_licence_description: " .. tostring(SQL_STR_OUT(_new_description)))
+	local _edit = SQL_UPDATE(DATABASE_NAME, "description = '" .. _new_description .. "'", "uniqueID = " .. _uid)
+	printGM("db", "edit_license_description: " .. tostring(SQL_STR_OUT(_new_description)))
 end)
 
-util.AddNetworkString("edit_licence_price")
+util.AddNetworkString("edit_license_price")
 
-net.Receive("edit_licence_price", function(len, ply)
+net.Receive("edit_license_price", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_price = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(_db_name, "price = " .. _new_price, "uniqueID = " .. _uid)
-	printGM("db", "edit_licence_price: " .. tostring(SQL_STR_OUT(_new_price)))
+	local _edit = SQL_UPDATE(DATABASE_NAME, "price = " .. _new_price, "uniqueID = " .. _uid)
+	printGM("db", "edit_license_price: " .. tostring(SQL_STR_OUT(_new_price)))
 end)
 
 util.AddNetworkString("get_all_licenses_simple")
 
 net.Receive("get_all_licenses_simple", function(len, ply)
-	local _all = SQL_SELECT(_db_name, "name, uniqueID", nil)
+	local _all = SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	if _all == false or _all == nil then
 		_all = {}
 	end
@@ -180,7 +180,7 @@ function Player:AddLicense(license)
 		local ids = string.Explode(",", _licenseIDs)
 		local lnames = {}
 		for i, id in pairs(ids) do
-			local lic = SQL_SELECT(_db_name, "name", "uniqueID = '" .. id .. "'")
+			local lic = SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
 			if wk(lic) then
 				lic = lic[1]
 				table.insert(lnames, lic.name)
@@ -194,7 +194,7 @@ end
 util.AddNetworkString("GetLicenseName")
 net.Receive("GetLicenseName", function(len, ply)
 	local id = net.ReadInt(32)
-	local lic = SQL_SELECT(_db_name, "name", "uniqueID = '" .. id .. "'")
+	local lic = SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
 	if wk(lic) then
 		lic = lic[1]
 		net.Start("GetLicenseName")
@@ -203,3 +203,38 @@ net.Receive("GetLicenseName", function(len, ply)
 		net.Send(ply)
 	end
 end)
+
+function GetLicenseIDByName(lname)
+	if lname == nil then
+		YRP.msg("note", "GetLicenseIDByName: " .. "NAME == " .. tostring(lname))
+		return nil
+	end
+
+	lname = SQL_STR_IN(lname)
+	lname = string.lower(lname)
+
+	local tab = SQL_SELECT(DATABASE_NAME, "*")
+	local lid = nil
+
+	if !wk(tab) then return nil end
+
+	for i, lic in pairs(tab) do
+		lic.name = SQL_STR_OUT(lic.name)
+		lic.name = string.lower(lic.name)
+
+		if string.find(lic.name, lname) then
+			lid = lic.uniqueID
+		end
+	end
+
+	return tonumber(lid)
+end
+
+function GiveLicense(ply, lid)
+	if !IsValid(ply) then return end
+	if !wk(lid) then return end
+
+	YRP.msg("gm", "Give " .. ply:RPName() .. " LicenseID " .. lid)
+
+	ply:AddLicense(lid)
+end

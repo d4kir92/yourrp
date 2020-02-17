@@ -21,11 +21,11 @@ paket.text = "TESTTEXT"
 paket.sender = "UNKNOWN"
 paket.usergroup = ""
 
-function is_chat_command(string, command)
-	if string != nil and command != nil then
+function is_chat_command(str, command)
+	if str != nil and command != nil then
 		local _size = string.len(string.lower(command))
-		local _slash = string.sub(string.lower(string), 1, 1 + _size) == "/" .. string.lower(command)
-		local _call = string.sub(string.lower(string), 1, 1 + _size) == "!" .. string.lower(command)
+		local _slash = string.sub(string.lower(str), 1, 1 + _size) == "/" .. string.lower(command)
+		local _call = string.sub(string.lower(str), 1, 1 + _size) == "!" .. string.lower(command)
 		if _slash or _call then
 			paket.iscommand = true
 			return true
@@ -38,19 +38,23 @@ function is_chat_command(string, command)
 	return false
 end
 
-function get_player_by_name(string)
+function get_player_by_name(str)
+	if !IsValid(str) then return NULL end
+
 	for k, ply in pairs(player.GetAll()) do
-		if string.find(string.lower(ply:Nick()), string.lower(string), 1, false) or string.find(string.lower(ply:RPName()), string.lower(string), 1, false) or string.find(string.lower(ply:SteamName()), string.lower(string), 1, false) then
+		if string.find(string.lower(ply:Nick()), string.lower(str), 1, false)
+		or string.find(string.lower(ply:RPName()), string.lower(str), 1, false)
+		or string.find(string.lower(ply:SteamName()), string.lower(str), 1, false) then
 			return ply
 		end
 	end
 	return NULL
 end
 
-function print_warning(string)
+function print_warning(str)
 	local _table = {}
 	_table[1] = Color(255, 0, 0)
-	_table[2] = string
+	_table[2] = str
 	net.Start("yrp_player_say")
 		net.WriteTable(_table)
 	net.Broadcast()
@@ -85,6 +89,8 @@ function print_help(sender)
 		sender:ChatPrint("setlevel NAME AMOUNT - sets level of NAME")
 
 		sender:ChatPrint("addxp NAME AMOUNT - adds xp to NAME")
+
+		sender:ChatPrint("givelicense NAME LICENSENAME")
 	end
 	sender:ChatPrint("")
 	return ""
@@ -504,6 +510,24 @@ function GM:PlayerSay(sender, text, teamChat)
 	if paket.command == "sleep" then
 		do_sleep(sender)
 		return ""
+	end
+
+	if paket.command == "givelicense" then
+		text = string.sub(text, 14)
+		print(text)
+		local args = string.Explode(" ", text)
+		local name = args[1]
+		local lname = args[2]
+	
+		local ply = GetPlayerByName(name)
+	
+		local lid = GetLicenseIDByName(lname)
+	
+		if IsValid(ply) and wk(lid) then
+			GiveLicense(ply, lid)
+		else
+			YRP.msg("note", "[yrp_givelicense] Not found")
+		end
 	end
 
 	if paket.command == "rpname" or paket.command == "name" or paket.command == "nick" then

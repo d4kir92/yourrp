@@ -25,8 +25,8 @@ net.Receive("setting_players", function(len, ply)
 end)
 
 g_db_reseted = false
-function save_clients(string)
-	printGM("db", string.upper("[Saving all clients] [" .. string .. "]"))
+function save_clients(str)
+	printGM("db", string.upper("[Saving all clients] [" .. str .. "]"))
 	if !g_db_reseted then
 		for k, ply in pairs(player.GetAll()) do
 

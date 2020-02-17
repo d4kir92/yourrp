@@ -20,9 +20,9 @@ YRP = YRP or {}
 _yrp = {}
 
 -- ADD LUAS
-function add_luas(string)
-	AddCSLuaFile(string)
-	include(string)
+function add_luas(str)
+	AddCSLuaFile(str)
+	include(str)
 end
 
 add_luas("yrp/net/entity.lua")

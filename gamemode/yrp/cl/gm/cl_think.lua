@@ -72,44 +72,44 @@ function close_all()
 	closeSP()
 end
 
-function useFunction(string)
-	if string == nil then
+function useFunction(str)
+	if str == nil then
 		return
 	end
 	local ply = LocalPlayer()
 	local eyeTrace = ply:GetEyeTrace()
 
-	if string == "close_all" then
+	if str == "close_all" then
 		close_all()
 	end
 
 	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
 		--Menues
-		if string == "openSP" then
+		if str == "openSP" then
 			openSP()
-		elseif string == "closeSP" then
+		elseif str == "closeSP" then
 			closeSP()
-		elseif string == "ToggleEmotesMenu" then
+		elseif str == "ToggleEmotesMenu" then
 			ToggleEmotesMenu()
-		elseif string == "ToggleLawsMenu" then
+		elseif str == "ToggleLawsMenu" then
 			ToggleLawsMenu()
-		elseif string == "openCharacterMenu" then
+		elseif str == "openCharacterMenu" then
 			done_tutorial("tut_cs")
 			toggleCharacterSelection()
-		elseif string == "openAppearance" then
+		elseif str == "openAppearance" then
 			toggleAppearanceMenu()
-		elseif string == "openInventory" then
+		elseif str == "openInventory" then
 			done_tutorial("tut_mi")
 			ToggleInventory()
-		elseif string == "openSettings" then
+		elseif str == "openSettings" then
 			done_tutorial("tut_ms")
 			toggleSettings()
-		elseif string == "openMap" then
+		elseif str == "openMap" then
 			done_tutorial("tut_tma")
 			toggleMap()
-		elseif string == "openInteractMenu" then
+		elseif str == "openInteractMenu" then
 			toggleInteractMenu()
-		elseif string == "openOptions" then
+		elseif str == "openOptions" then
 			if eyeTrace.Entity != NULL then
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 					toggleDoorOptions(eyeTrace.Entity)
@@ -119,11 +119,11 @@ function useFunction(string)
 			end
 
 		--When scoreboard open, enable mouse
-		elseif string == "scoreboard" and IsScoreboardOpen() then
+		elseif str == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
 
 		--Inventory
-		elseif string == "dropitem" and !mouseVisible() then
+		elseif str == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.lang_string("LID_weapon")
@@ -148,32 +148,32 @@ function useFunction(string)
 			end
 
 		--Mouse changer
-		elseif string == "F11Toggle" then
+		elseif str == "F11Toggle" then
 			done_tutorial("tut_tmo")
 			gui.EnableScreenClicker(!vgui.CursorVisible())
 
-		elseif string == "vyes" and !mouseVisible() then
+		elseif str == "vyes" and !mouseVisible() then
 			net.Start("voteYes")
 			net.SendToServer()
-		elseif string == "vno" and !mouseVisible() then
+		elseif str == "vno" and !mouseVisible() then
 			net.Start("voteNo")
 			net.SendToServer()
-		elseif string == "scoreboard" and IsScoreboardOpen() then
+		elseif str == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
 			local id = 0
-			if string == "OpenHelpMenu" then
+			if str == "OpenHelpMenu" then
 				done_tutorial("tut_f1info", 10)
 				id = 1
-			elseif string == "OpenRoleMenu" then
+			elseif str == "OpenRoleMenu" then
 				id = 2
-			elseif string == "OpenBuyMenu" then
+			elseif str == "OpenBuyMenu" then
 				id = 3
-			elseif string == "openCharMenu" then
+			elseif str == "openCharMenu" then
 				id = 4
-			elseif string == "openKeybindsMenu" then
+			elseif str == "openKeybindsMenu" then
 				id = 5
-			elseif string == "openFeedbackMenu" then
+			elseif str == "openFeedbackMenu" then
 				done_tutorial("tut_feedback")
 				id = 6
 			end
@@ -181,29 +181,29 @@ function useFunction(string)
 				ToggleCombinedMenu(id)
 			end
 		elseif !GetGlobalDBool("bool_yrp_combined_menu", false) then
-			if string == "OpenHelpMenu" then
+			if str == "OpenHelpMenu" then
 				done_tutorial("tut_welcome")
 				done_tutorial("tut_feedback")
 				done_tutorial("tut_f1info", 10)
 				ToggleHelpMenu()
-			elseif string == "OpenRoleMenu" then
+			elseif str == "OpenRoleMenu" then
 				done_tutorial("tut_mr")
 				ToggleRoleMenu()
-			elseif string == "OpenBuyMenu" then
+			elseif str == "OpenBuyMenu" then
 				done_tutorial("tut_mb")
 				ToggleBuyMenu()
-			elseif string == "openFeedbackMenu" then
+			elseif str == "openFeedbackMenu" then
 				toggleFeedbackMenu()
-			elseif string == "openCharMenu" then
+			elseif str == "openCharMenu" then
 				toggleCharMenu()
-			elseif string == "openKeybindsMenu" then
+			elseif str == "openKeybindsMenu" then
 				toggleKeybindsMenu()
 			end
 		end
 	end
 end
 
-function keyDown(key, string, distance)
+function keyDown(key, str, distance)
 	local ply = LocalPlayer()
 	local plyTrace = ply:GetEyeTrace()
 	local _return = false
@@ -219,8 +219,8 @@ function keyDown(key, string, distance)
 		if ply:KeyDown(key) and !keys[tostring(key)] then
 			keys[tostring(key)] = true
 			timer.Simple(0.2, function()
-				if string != nil then
-					useFunction(string)
+				if str != nil then
+					useFunction(str)
 				end
 				keys[tostring(key)] = false
 			end)
@@ -228,7 +228,7 @@ function keyDown(key, string, distance)
 	end
 end
 
-function keyPressed(key, string, distance)
+function keyPressed(key, str, distance)
 	if ChatIsClosedForChat() then
 		local ply = LocalPlayer()
 		local plyTrace = ply:GetEyeTrace()
@@ -245,8 +245,8 @@ function keyPressed(key, string, distance)
 			if input.IsKeyDown(key) and !keys[tostring(key)] then
 				keys[tostring(key)] = true
 				timer.Simple(0.14, function()
-					if string != nil then
-						useFunction(string)
+					if str != nil then
+						useFunction(str)
 					end
 					keys[tostring(key)] = false
 				end)

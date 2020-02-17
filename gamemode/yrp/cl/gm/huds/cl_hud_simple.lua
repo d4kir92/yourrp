@@ -7,7 +7,7 @@ end
 local Simple = {}
 function HUDSimpleBG(tab)
 	local lply = LocalPlayer()
-	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BACK") then
+	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BACK") and lply:HudElementVisible(tab.element) then
 		tab.visiblefunc = tab.visiblefunc or fake_true
 		if tab.visiblefunc() then
 			Simple[tab.element] = Simple[tab.element] or {}
@@ -45,7 +45,7 @@ end
 
 function HUDSimpleBAR(tab)
 	local lply = LocalPlayer()
-	if lply:HudValue(tab.element, "VISI") then
+	if lply:HudValue(tab.element, "VISI") and lply:HudElementVisible(tab.element) then
 		Simple[tab.element] = Simple[tab.element] or {}
 		Simple[tab.element]["bar"] = Simple[tab.element]["bar"] or {}
 		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
@@ -144,7 +144,7 @@ end
 
 function HUDSimpleBR(tab)
 	local lply = LocalPlayer()
-	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BORD") then
+	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BORD") and lply:HudElementVisible(tab.element) then
 		tab.visiblefunc = tab.visiblefunc or fake_true
 		if lply:HudValue(tab.element, "VISI") and tab.visiblefunc() then
 			Simple[tab.element] = Simple[tab.element] or {}

@@ -36,10 +36,10 @@ function roundMoney(_money, round)
 	end
 end
 
-function showIcon(string, material)
+function showIcon(str, material)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.SetMaterial(material)
-	surface.DrawTexturedRect(anchorW(HudV(string .. "aw")) + YRP.ctr(HudV(string .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(string .. "ah")) + YRP.ctr(HudV(string .. "py")) + YRP.ctr(HudV(string .. "sh")/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
+	surface.DrawTexturedRect(anchorW(HudV(str .. "aw")) + YRP.ctr(HudV(str .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(str .. "ah")) + YRP.ctr(HudV(str .. "py")) + YRP.ctr(HudV(str .. "sh")/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
 end
 
 hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()

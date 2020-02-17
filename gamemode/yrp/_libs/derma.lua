@@ -760,16 +760,16 @@ function getMDSColor()
 	return colorToMode(tmp)
 end
 
-function get_color(mystring)
-	return _yrp_derma.colors[mystring]
+function get_color(str)
+	return _yrp_derma.colors[str]
 end
 
-function addColor(mystring, r, g, b, a)
-	_yrp_derma.colors[mystring] = {}
-	_yrp_derma.colors[mystring].r = r
-	_yrp_derma.colors[mystring].g = g
-	_yrp_derma.colors[mystring].b = b
-	_yrp_derma.colors[mystring].a = a
+function addColor(str, r, g, b, a)
+	_yrp_derma.colors[str] = {}
+	_yrp_derma.colors[str].r = r
+	_yrp_derma.colors[str].g = g
+	_yrp_derma.colors[str].b = b
+	_yrp_derma.colors[str].a = a
 end
 
 addColor("epicBlue", 23, 113, 240, 100)
