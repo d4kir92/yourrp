@@ -15,6 +15,7 @@ include("gm/huds/cl_hud_icons.lua")
 include("gm/huds/cl_hud_circles.lua")
 
 include("gm/interfaces/cl_if_simple.lua")
+include("gm/interfaces/cl_if_blur.lua")
 
 include("gm/hud/cl_hud_crosshair.lua")
 include("gm/hud/cl_hud_map.lua")

@@ -31,14 +31,7 @@ function OpenCombinedMenu()
 		--cm.win:SetHeaderHeight(YRP.ctr(100))
 		cm.win:SetBorder(0)
 		function cm.win:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
-			--draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(40, 40, 40, 255))
-
-			--draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
 			hook.Run("YFramePaint", self, pw, ph)
-
-			--draw.RoundedBox(0, 0, self:GetHeaderHeight(), pw, ph - self:GetHeaderHeight(), Color(60, 60, 60, 255))
 		end
 
 		local content = cm.win:GetContent()
@@ -46,7 +39,8 @@ function OpenCombinedMenu()
 		cm.menu = createD("YPanel", content, menuw, BFH() - cm.win:GetHeaderHeight(), 0, 0)
 		cm.menu:SetText("")
 		function cm.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+			hook.Run("YPanelPaint", self, pw, ph)
 
 			local gm = "YourRP by D4KiR"
 			draw.SimpleText(gm, "Y_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -65,8 +59,9 @@ function OpenCombinedMenu()
 		cm.site:SetHeaderHeight(cm.win:GetHeaderHeight())
 		function cm.site:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(120, 120, 120, 255))
-
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
+			local tab = {}
+			tab.color = Color(60, 60, 60, 255)
+			hook.Run("YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
 		end
 
 		-- SITES
@@ -115,14 +110,15 @@ function OpenCombinedMenu()
 			site:SetText("")
 			site.id = tonumber(v.id)
 			function site:Paint(pw, ph)
-				local color = Color(40, 40, 40, 255)
+				local lply = LocalPlayer()
+				local color = lply:InterfaceValue("YFrame", "HB")
 				if self:IsHovered() then
-					color = Color(80, 80, 80, 255)
+					color = lply:InterfaceValue("YFrame", "HI")
 				elseif self.selected then
-					color = Color(60, 60, 60, 255)
+					color = lply:InterfaceValue("YFrame", "HI")
 				end
 				draw.RoundedBox(0, 0, 0, pw, ph, color)
-				draw.SimpleText(YRP.lang_string(v.name), "Y_18_500", br + br, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string(v.name), "Y_18_500", br + br, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 				if self.selected then
 					draw.RoundedBox(0, 0, 0, YRP.ctr(10), ph, Color(140, 140, 255, 255))

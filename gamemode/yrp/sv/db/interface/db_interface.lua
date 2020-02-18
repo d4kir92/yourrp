@@ -12,37 +12,33 @@ SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ' '")
 
 local INTERFACES = {}
 function AddIFElement(tab)
-	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_ST'")
-	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_SC'")
-	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_HC'")
-	SQL_DELETE_FROM(DATABASE_NAME, "name = 'color_IF_Simple_YButton_HT'")
-
 	for name, value in pairs(tab.floats) do
-		local _name = "float_IF_" .. tab.element .. "_" .. name
+		local _name = "float_IF_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	for name, value in pairs(tab.bools) do
-		local _name = "bool_IF_" .. tab.element .. "_" .. name
+		local _name = "bool_IF_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	for name, value in pairs(tab.colors) do
-		local _name = "color_IF_" .. tab.element .. "_" .. name
+		local _name = "color_IF_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	if tab.ints != nil then
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. tab.element .. "_" .. name
+			local _name = "int_IF_" .. name
 			if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 				SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 			end
 		end
 	end
+
 	INTERFACES[tab.element] = tab
 end
 
@@ -57,13 +53,40 @@ Simple.bools.Rounded = 0;
 Simple.colors = {}
 Simple.colors.YFrame_HT = "255, 255, 255, 255"
 Simple.colors.YFrame_HB = "40, 40, 40, 255"
+Simple.colors.YFrame_HI = "80, 80, 80, 255"
 Simple.colors.YFrame_BG = "0, 0, 0, 200"
-Simple.colors.YButton_NC = "180, 180, 255, 255"
-Simple.colors.YButton_NT = "0, 0, 0, 255"
+Simple.colors.YButton_NT = "0, 0, 0, 255"		-- Normal Textcolor
+Simple.colors.YButton_NC = "180, 180, 255, 255"	-- Normal Color
+Simple.colors.YButton_HC = "220, 220, 255, 255"	-- Hovered Color
+Simple.colors.YButton_PC = "130, 130, 255, 255"	-- Pressed Color
+Simple.colors.YButton_SC = "210, 210, 255, 255"	-- Selected Color
 
 Simple.ints = {}
 
 AddIFElement(Simple)
+
+local Blur = {}
+Blur.element = "Blur"
+
+Blur.floats = {}
+
+Blur.bools = {}
+Blur.bools.Rounded = 0;
+
+Blur.colors = {}
+Blur.colors.YFrame_HT = "255, 255, 255, 255"	-- Header Textcolor
+Blur.colors.YFrame_HB = "40, 40, 40, 80"		-- Header Backgroundcolor
+Blur.colors.YFrame_HI = "80, 80, 80, 80"		-- Highlight Color
+Blur.colors.YFrame_BG = "255, 255, 255, 80"		-- Background Color
+Blur.colors.YButton_NT = "0, 0, 0, 255"			-- Normal Textcolor
+Blur.colors.YButton_NC = "200, 200, 200, 80"	-- Normal Color
+Blur.colors.YButton_HC = "255, 255, 255, 80"	-- Hovered Color
+Blur.colors.YButton_PC = "150, 150, 150, 80"	-- Pressed Color
+Blur.colors.YButton_SC = "220, 220, 220, 80"	-- Selected Color
+
+Blur.ints = {}
+
+AddIFElement(Blur)
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
@@ -115,27 +138,32 @@ net.Receive("update_interface_color", function(len, ply)
 	IFLoadoutAll()
 end)
 
-util.AddNetworkString("reset_interface_design")
-net.Receive("reset_interface_design", function(len, ply)
+function ResetDesign()
 	local tab = INTERFACES[GetGlobalDString("string_interface_design", "")]
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
-			local _name = "float_IF_" .. tab.element .. "_" .. name
+			local _name = "float_IF_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.bools) do
-			local _name = "bool_IF_" .. tab.element .. "_" .. name
+			local _name = "bool_IF_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.colors) do
-			local _name = "color_IF_" .. tab.element .. "_" .. name
+			local _name = "color_IF_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. tab.element .. "_" .. name
+			local _name = "int_IF_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 	end
 
 	IFLoadoutAll()
+end
+
+util.AddNetworkString("reset_interface_design")
+net.Receive("reset_interface_design", function(len, ply)
+	ResetDesign()
 end)
+

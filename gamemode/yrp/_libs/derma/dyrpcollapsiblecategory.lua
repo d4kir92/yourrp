@@ -23,7 +23,7 @@ function PANEL:Init()
 			_hl = 70
 		end
 
-		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl), true, true, not self:IsOpen(), not self:IsOpen())
+		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen())
 		draw.SimpleText(self.headertext, "roleInfoHeader", ph / 2, ph / 2, Color(255, 255, 255), 0, 1)
 		local _box = ctrb(50)
 		local _dif = 50

@@ -1,5 +1,38 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
+function DrawRectBlur(px, py, pw, ph, blur, col)
+    render.ClearStencil()
+    render.SetStencilEnable(true)
+		render.SetStencilReferenceValue(1)
+		render.SetStencilTestMask(1)
+		render.SetStencilWriteMask(1)
+		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+		render.SetStencilFailOperation(STENCILOPERATION_REPLACE)
+		render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
+		render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
+
+		surface.SetDrawColor(255, 255, 255, 255)
+		draw.NoTexture() 
+    	surface.DrawRect(px, py, pw, ph)
+
+		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+		render.SetStencilFailOperation(STENCILOPERATION_KEEP)
+		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+	
+		surface.SetMaterial(MaterialBlur)
+		surface.SetDrawColor(255, 255, 255, 255)
+		for i = 0, 1, 0.5 do
+			MaterialBlur:SetFloat('$blur', blur *i)
+			MaterialBlur:Recompute()
+			render.UpdateScreenEffectTexture()
+			surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+		end
+
+    render.SetStencilEnable(false)
+end
+
 function DrawText(tab)
 	tab = tab or {}
 	tab.x = tab.x or 0

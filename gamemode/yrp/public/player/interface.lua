@@ -9,14 +9,14 @@ end
 function Player:InterfaceValue(element, art)
 	local ifloats = {}
 	local ibools = {}
-	local icolors = {"BG", "HT", "HB", "NC", "HC", "SC", "NT", "HT", "ST"}
+	local icolors = {"BG", "HT", "HI", "HB", "NC", "HC", "PC", "SC", "NT", "HT", "ST"}
 	local iints = {}
 	if table.HasValue(ifloats, art) then
 		return 0.0
 	elseif table.HasValue(ibools, art) then
 		return false
 	elseif table.HasValue(icolors, art) then
-		local icolor = self:GetDString("color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "255, 0, 0")
+		local icolor = self:GetDString("color_IF_" .. element .. "_" .. art, "255, 0, 0")
 		icolor = string.Explode(",", icolor)
 		return Color(icolor[1], icolor[2], icolor[3], icolor[4] or 255)
 	elseif table.HasValue(iints, art) then
@@ -28,7 +28,7 @@ end
 function Player:InterfaceElement(element)
 	local ifloats = {}
 	local ibools = {}
-	local icolors = {"BG", "HT", "HB"}
+	local icolors = {"BG", "HT", "HI", "HB", "NC", "HC", "PC", "SC", "NT", "HT", "ST"}
 	local iints = {}
 
 	local ele = {}

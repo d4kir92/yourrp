@@ -514,7 +514,6 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "givelicense" then
 		text = string.sub(text, 14)
-		print(text)
 		local args = string.Explode(" ", text)
 		local name = args[1]
 		local lname = args[2]

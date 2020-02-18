@@ -140,8 +140,14 @@ end
 local IF_Simple = {}
 IF_Simple.name = "Simple"
 IF_Simple.author = "D4KiR"
-IF_Simple.progress = 40
+IF_Simple.progress = 100
 RegisterInterfaceDesign(IF_Simple)
+
+local IF_Blur = {}
+IF_Blur.name = "Blur"
+IF_Blur.author = "D4KiR"
+IF_Blur.progress = 50
+RegisterInterfaceDesign(IF_Blur)
 
 util.AddNetworkString("change_interface_design")
 net.Receive("change_interface_design", function(len, ply)
@@ -149,6 +155,8 @@ net.Receive("change_interface_design", function(len, ply)
 	printGM("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
 	SetGlobalDString("string_interface_design", string_interface_design)
+
+	ResetDesign()
 end)
 
 -- F8 Design Page

@@ -35,7 +35,7 @@ function createShopItem(item, duid, line, id)
 	local BR = 40
 	local _i = createD("DPanel", line, YRP.ctr(W), YRP.ctr(H), id * YRP.ctr(W + BR), 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
 	end
 	_i.item = item
 	if item.WorldModel != nil and item.WorldModel != "" then
@@ -138,11 +138,12 @@ function createShopItem(item, duid, line, id)
 end
 
 function createStorageItem(item, duid)
+	local lply = LocalPlayer()
 	local W = 800
 	local H = 400
 	local _i = createD("DPanel", nil, YRP.ctr(W), YRP.ctr(H), 0, 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
 		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 	end
 	_i.item = item
@@ -237,6 +238,7 @@ net.Receive("shop_get_tabs", function(len)
 
 		function _tab:GetCategories()
 			net.Receive("yrp_shop_get_categories", function(le)
+				local lply = LocalPlayer()
 				if BUYMENU.shop:IsValid() then
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
@@ -250,8 +252,8 @@ net.Receive("shop_get_tabs", function(len)
 						_cat:SetHeaderHeight(YRP.ctr(100))
 						_cat:SetHeader(SQL_STR_OUT(cat.name))
 						_cat:SetSpacing(YRP.ctr(BR * 2))
-						_cat.color = Color(80, 80, 80)
-						_cat.color2 = Color(60, 60, 60)
+						_cat.color = lply:InterfaceValue("YFrame", "HI")
+						_cat.color2 = lply:InterfaceValue("YFrame", "HB")
 						function _cat:DoClick()
 							if self:IsOpen() then
 								YRP.msg("note", "[BUYMENU] CATEGORY OPEN")
@@ -337,8 +339,8 @@ net.Receive("shop_get_tabs", function(len)
 							_c:SetHeaderHeight(YRP.ctr(100))
 							_c:SetHeader(SQL_STR_OUT(cat.name))
 							_c:SetSpacing(30)
-							_c.color = Color(80, 80, 80)
-							_c.color2 = Color(60, 60, 60)
+							_c.color = lply:InterfaceValue("YFrame", "HI")
+							_c.color2 = lply:InterfaceValue("YFrame", "HB")
 							function _c:DoClick()
 								if self:IsOpen() then
 									net.Receive("shop_get_items_storage", function(l)
@@ -544,8 +546,8 @@ function CreateBuyMenuContent(parent, uid)
 	end
 
 	BUYMENU.tabs = createD("DYRPTabs", BUYMENU.content, BUYMENU.content:GetWide(), YRP.ctr(100), 0, 0)
-	BUYMENU.tabs:SetSelectedColor(Color(100, 100, 100, 240))
-	BUYMENU.tabs:SetUnselectedColor(Color(0, 0, 0, 240))
+	BUYMENU.tabs:SetSelectedColor(lply:InterfaceValue("YButton", "SC"))
+	BUYMENU.tabs:SetUnselectedColor(lply:InterfaceValue("YButton", "NC"))
 	BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide(), YRP.ctr(100))
 	if LocalPlayer():HasAccess() then
 		BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100))

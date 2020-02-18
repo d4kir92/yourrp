@@ -36,7 +36,7 @@ function createRoleBox(rol, parent, mainparent)
 		local RH = YRP.ctr(150)
 		local _rol = createD("DPanel", parent, RW, RH, 0, 0)
 		function _rol:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
 			--drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 		end
 		_rol.tbl = rol
@@ -266,8 +266,8 @@ function addGroup(grp, parent)
 		_grp:SetSpacing(30)
 		_grp.color = string.Explode(",", grp.string_color)
 		_grp.color = Color(_grp.color[1], _grp.color[2], _grp.color[3])
-		local headeralpha = 255
-		local contentalpha = 255
+		local headeralpha = lply:InterfaceValue("YButton", "HC").a
+		local contentalpha = lply:InterfaceValue("YFrame", "BG").a
 		_grp.tbl = grp
 		_grp.locked = tobool(grp.bool_locked)
 		local BR = YRP.ctr(30)

@@ -145,7 +145,6 @@ end
 local oldlevel = oldlevel or nil
 hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	local ply = LocalPlayer()
-
 	if IsLevelSystemEnabled() then
 		if oldlevel == nil then
 			ply:Level()
