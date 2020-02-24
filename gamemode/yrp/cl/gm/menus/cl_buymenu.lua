@@ -35,7 +35,7 @@ function createShopItem(item, duid, line, id)
 	local BR = 40
 	local _i = createD("DPanel", line, YRP.ctr(W), YRP.ctr(H), id * YRP.ctr(W + BR), 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
+		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HI"))
 	end
 	_i.item = item
 	if item.WorldModel != nil and item.WorldModel != "" then
@@ -259,29 +259,31 @@ net.Receive("shop_get_tabs", function(len)
 								YRP.msg("note", "[BUYMENU] CATEGORY OPEN")
 								net.Receive("yrp_shop_get_items", function(l)
 									local _items = net.ReadTable()
-									self.hs = self.hs or {}
-									local hid = 0
-									local id = 0
-									local w = YRP.ctr(600 + BR)
-									local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
-									for k, item in pairs(_items) do
-										if id == 0 then
-											YRP.msg("note", "[BUYMENU] CREATE LINE")
-											hid = hid + 1
-											self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
-											local line = self.hs[hid]
-											function line:Paint(pw, ph)
-												--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+									if IsValid(self) then
+										self.hs = self.hs or {}
+										local hid = 0
+										local id = 0
+										local w = YRP.ctr(600 + BR)
+										local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
+										for k, item in pairs(_items) do
+											if id == 0 then
+												YRP.msg("note", "[BUYMENU] CREATE LINE")
+												hid = hid + 1
+												self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
+												local line = self.hs[hid]
+												function line:Paint(pw, ph)
+													--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+												end
+
+												self:Add(line)
 											end
 
-											self:Add(line)
-										end
+											local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
 
-										local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
-
-										id = id + 1
-										if id >= idmax then
-											id = 0
+											id = id + 1
+											if id >= idmax then
+												id = 0
+											end
 										end
 									end
 								end)
@@ -532,30 +534,32 @@ end)
 
 function CreateBuyMenuContent(parent, uid)
 	uid = uid or 1
+	
+	if IsValid(parent) then
+		BUYMENU.content = parent
+		--[[ Shop ]]--
+		BUYMENU.shop = createD("DPanelList", BUYMENU.content, BUYMENU.content:GetWide(), BUYMENU.content:GetTall() - YRP.ctr(100), YRP.ctr(0), YRP.ctr(100))
+		BUYMENU.shop:EnableVerticalScrollbar(true)
+		BUYMENU.shop:SetSpacing(20)
+		BUYMENU.shop:SetNoSizing(false)
+		function BUYMENU.shop:Paint(pw, ph)
+			self:SetWide(BUYMENU.content:GetWide())
+			self:SetTall(BUYMENU.content:GetTall())
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
+		end
 
-	BUYMENU.content = parent
-	--[[ Shop ]]--
-	BUYMENU.shop = createD("DPanelList", BUYMENU.content, BUYMENU.content:GetWide(), BUYMENU.content:GetTall() - YRP.ctr(100), YRP.ctr(0), YRP.ctr(100))
-	BUYMENU.shop:EnableVerticalScrollbar(true)
-	BUYMENU.shop:SetSpacing(20)
-	BUYMENU.shop:SetNoSizing(false)
-	function BUYMENU.shop:Paint(pw, ph)
-		self:SetWide(BUYMENU.content:GetWide())
-		self:SetTall(BUYMENU.content:GetTall())
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
+		BUYMENU.tabs = createD("DYRPTabs", BUYMENU.content, BUYMENU.content:GetWide(), YRP.ctr(100), 0, 0)
+		BUYMENU.tabs:SetSelectedColor(lply:InterfaceValue("YButton", "SC"))
+		BUYMENU.tabs:SetUnselectedColor(lply:InterfaceValue("YButton", "NC"))
+		BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide(), YRP.ctr(100))
+		if LocalPlayer():HasAccess() then
+			BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100))
+		end
+
+		net.Start("shop_get_tabs")
+			net.WriteString(uid)
+		net.SendToServer()
 	end
-
-	BUYMENU.tabs = createD("DYRPTabs", BUYMENU.content, BUYMENU.content:GetWide(), YRP.ctr(100), 0, 0)
-	BUYMENU.tabs:SetSelectedColor(lply:InterfaceValue("YButton", "SC"))
-	BUYMENU.tabs:SetUnselectedColor(lply:InterfaceValue("YButton", "NC"))
-	BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide(), YRP.ctr(100))
-	if LocalPlayer():HasAccess() then
-		BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100))
-	end
-
-	net.Start("shop_get_tabs")
-		net.WriteString(uid)
-	net.SendToServer()
 end
 
 function OpenBuyMenu(uid)

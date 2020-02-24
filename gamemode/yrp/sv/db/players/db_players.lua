@@ -488,7 +488,7 @@ function check_yrp_player(ply, steamid)
 				end
 			end
 		else
-			YRP.msg("error", "[check_yrp_player] FAILED (" .. tostring(_result) .. ")")
+			YRP.msg("note", "[check_yrp_player] FAILED (" .. tostring(_result) .. ")")
 		end
 	else
 		YRP.msg("error", "SteamID FAILED [" .. tostring(steamid) .. "]")

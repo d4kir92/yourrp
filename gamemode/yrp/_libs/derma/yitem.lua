@@ -38,7 +38,7 @@ function PANEL:DoClick()
 		print("---------------------")
 		print("self.suid", self.suid)
 		print("ITEMS[self.suid].storage", ITEMS[self.suid].storage)
-		pTab( ITEMS)
+		pTab(ITEMS)
 		print("__________________________________")
 		if ITEMS[self.suid].storage == nil then
 			print("IS NIL => join storage")

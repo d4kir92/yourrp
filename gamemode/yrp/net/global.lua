@@ -1,6 +1,6 @@
 -- Networking
 
-NWGlobal = NWGlobal or {}
+YRP_NW_Globals = YRP_NW_Globals or {}
 
 -- BOOL
 if SERVER then
@@ -17,8 +17,8 @@ if SERVER then
 	end
 end
 function SetGlobalDBool(index, bo)
-	NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
-	NWGlobal["BOOL"][index] = bo
+	YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
+	YRP_NW_Globals["BOOL"][index] = bo
 	if SERVER then
 		SendGlobalDBool(index, bo)
 	end
@@ -32,8 +32,8 @@ if CLIENT then
 end
 
 function GetGlobalDBool(index, def)
-	NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
-	local result = NWGlobal["BOOL"][index]
+	YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
+	local result = YRP_NW_Globals["BOOL"][index]
 	if isbool(result) then
 		return result
 	elseif isbool(def) then
@@ -58,8 +58,8 @@ if SERVER then
 	end
 end
 function SetGlobalDString(index, str)
-	NWGlobal["STRING"] = NWGlobal["STRING"] or {}
-	NWGlobal["STRING"][index] = str
+	YRP_NW_Globals["STRING"] = YRP_NW_Globals["STRING"] or {}
+	YRP_NW_Globals["STRING"][index] = str
 	if SERVER then
 		SendGlobalDString(index, str)
 	end
@@ -73,8 +73,8 @@ if CLIENT then
 end
 
 function GetGlobalDString(index, def)
-	NWGlobal["STRING"] = NWGlobal["STRING"] or {}
-	local result = NWGlobal["STRING"][index]
+	YRP_NW_Globals["STRING"] = YRP_NW_Globals["STRING"] or {}
+	local result = YRP_NW_Globals["STRING"][index]
 	return result or def
 end
 
@@ -93,8 +93,8 @@ if SERVER then
 	end
 end
 function SetGlobalDInt(index, int)
-	NWGlobal["INT"] = NWGlobal["INT"] or {}
-	NWGlobal["INT"][index] = int
+	YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
+	YRP_NW_Globals["INT"][index] = int
 	if SERVER then
 		SendGlobalDInt(index, int)
 	end
@@ -108,8 +108,8 @@ if CLIENT then
 end
 
 function GetGlobalDInt(index, def)
-	NWGlobal["INT"] = NWGlobal["INT"] or {}
-	local result = NWGlobal["INT"][index]
+	YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
+	local result = YRP_NW_Globals["INT"][index]
 	return result or def
 end
 
@@ -128,8 +128,8 @@ if SERVER then
 	end
 end
 function SetGlobalDFloat(index, flo)
-	NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
-	NWGlobal["FLOAT"][index] = flo
+	YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
+	YRP_NW_Globals["FLOAT"][index] = flo
 	if SERVER then
 		SendGlobalDFloat(index, flo)
 	end
@@ -143,8 +143,8 @@ if CLIENT then
 end
 
 function GetGlobalDFloat(index, def)
-	NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
-	local result = NWGlobal["FLOAT"][index]
+	YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
+	local result = YRP_NW_Globals["FLOAT"][index]
 	return result or def
 end
 
@@ -163,8 +163,8 @@ if SERVER then
 	end
 end
 function SetGlobalDTable(index, tab)
-	NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
-	NWGlobal["TABLE"][index] = tab
+	YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
+	YRP_NW_Globals["TABLE"][index] = tab
 	if SERVER then
 		SendGlobalDTable(index, tab)
 	end
@@ -178,8 +178,8 @@ if CLIENT then
 end
 
 function GetGlobalDTable(index, def)
-	NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
-	local result = NWGlobal["TABLE"][index]
+	YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
+	local result = YRP_NW_Globals["TABLE"][index]
 	return result or def or {}
 end
 
@@ -193,42 +193,42 @@ if SERVER then
 			sending = true
 
 			ply:SetDInt("yrp_load_glo", 0)
-			NWGlobal["BOOL"] = NWGlobal["BOOL"] or {}
-			NWGlobal["STRING"] = NWGlobal["STRING"] or {}
-			NWGlobal["INT"] = NWGlobal["INT"] or {}
-			NWGlobal["FLOAT"] = NWGlobal["FLOAT"] or {}
-			NWGlobal["TABLE"] = NWGlobal["TABLE"] or {}
+			YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
+			YRP_NW_Globals["STRING"] = YRP_NW_Globals["STRING"] or {}
+			YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
+			YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
+			YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
 		
 			timer.Simple(1, function()
-				for i, v in pairs(NWGlobal["BOOL"]) do
+				for i, v in pairs(YRP_NW_Globals["BOOL"]) do
 					SendGlobalDBool(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 10)
 			end)
 
 			timer.Simple(1.5, function()
-				for i, v in pairs(NWGlobal["STRING"]) do
+				for i, v in pairs(YRP_NW_Globals["STRING"]) do
 					SendGlobalDString(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 25)
 			end)
 
 			timer.Simple(2, function()
-				for i, v in pairs(NWGlobal["INT"]) do
+				for i, v in pairs(YRP_NW_Globals["INT"]) do
 					SendGlobalDInt(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 50)
 			end)
 
 			timer.Simple(2.5, function()
-				for i, v in pairs(NWGlobal["FLOAT"]) do
+				for i, v in pairs(YRP_NW_Globals["FLOAT"]) do
 					SendGlobalDFloat(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 75)
 			end)
 
 			timer.Simple(3, function()
-				for i, v in pairs(NWGlobal["TABLE"]) do
+				for i, v in pairs(YRP_NW_Globals["TABLE"]) do
 					SendGlobalDTable(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 100)

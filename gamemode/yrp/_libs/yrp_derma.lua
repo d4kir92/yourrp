@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
-function DrawRectBlur(px, py, pw, ph, blur, col)
+function DrawRectBlur(px, py, pw, ph, blur)
     render.ClearStencil()
     render.SetStencilEnable(true)
 		render.SetStencilReferenceValue(1)
@@ -23,8 +23,8 @@ function DrawRectBlur(px, py, pw, ph, blur, col)
 	
 		surface.SetMaterial(MaterialBlur)
 		surface.SetDrawColor(255, 255, 255, 255)
-		for i = 0, 1, 0.5 do
-			MaterialBlur:SetFloat('$blur', blur *i)
+		for i = 0, 1, 0.1 do
+			MaterialBlur:SetFloat('$blur', blur * i)
 			MaterialBlur:Recompute()
 			render.UpdateScreenEffectTexture()
 			surface.DrawTexturedRect(0, 0, ScrW(), ScrH())

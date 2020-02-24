@@ -516,8 +516,7 @@ net.Receive("get_grps", function(len, ply)
 	local _uid = tonumber(net.ReadString())
 
 	local _get_grps = SQL_SELECT("yrp_ply_groups", "*", "int_parentgroup = " .. _uid)
-	if _get_grps != nil then
-
+	if wk(_get_grps) then
 		net.Start("get_grps")
 			net.WriteTable(_get_grps)
 		net.Send(ply)
