@@ -259,7 +259,7 @@ net.Receive("getMapTab", function(len)
 					net.Start("dbInsertIntoMap")
 						net.WriteString("yrp_" .. GetMapNameDB())
 						net.WriteString("position, angle, name, type")
-						local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', '" .. tostring(addWin.name) .. "', '" .. addWin.type .. "'"
+						local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', '" .. SQL_STR_IN(tostring(addWin.name)) .. "', '" .. addWin.type .. "'"
 						net.WriteString(addStr)
 					net.SendToServer()
 				end

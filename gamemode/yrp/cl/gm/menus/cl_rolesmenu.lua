@@ -133,7 +133,7 @@ function createRoleBox(rol, parent, mainparent)
 				end
 
 				local dmp = createD("DModelPanel", bgpm, YRP.ctr(200), YRP.ctr(400), 0, 0)
-				timer.Simple(i * 0.4, function()
+				timer.Simple(i * 0.3, function()
 					if IsValid(dmp) then
 						dmp:SetModel(pmtab.string_model)
 						local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
@@ -319,10 +319,6 @@ function addGroup(grp, parent)
 			end
 		end
 
-		if tonumber(grp.uniqueID) == 1 then
-			_grp.header:DoClick()
-		end
-
 		if grp.string_icon != "" then
 			_grp.icon = createD("DHTML", _grp, _grp:GetTall() - 2 * BR, _grp:GetTall() - 2 * BR, BR, BR)
 			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
@@ -355,8 +351,20 @@ end
 function getGroups(uid, parent)
 	net.Receive("get_grps", function(len)
 		local _groups = net.ReadTable()
+		local dg = nil -- Default Group
 		for i, grp in SortedPairsByMemberValue(_groups, "int_position") do
-			addGroup(grp, parent)
+			grp.uniqueID = tonumber(grp.uniqueID)
+			local g = addGroup(grp, parent)
+			if grp.uniqueID == 1 then
+				dg = g
+			end
+		end
+		if wk(dg) then
+			timer.Simple(0.2, function()
+				if wk(dg) then
+					dg.header:DoClick()
+				end
+			end)
 		end
 	end)
 

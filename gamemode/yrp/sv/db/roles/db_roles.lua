@@ -1525,7 +1525,7 @@ net.Receive( "demotePlayer", function( len, ply )
 
 		printGM( "note", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-		printGM( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
+		printGM( "note", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
 	else
 		printGM( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
