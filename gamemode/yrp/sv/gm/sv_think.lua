@@ -196,6 +196,7 @@ end
 local _time = 0
 local TICK = 0.1
 local DEC = 1
+timer.Remove("ServerThink")
 timer.Create("ServerThink", TICK, 0, function()
 	local _all_players = player.GetAll()
 
@@ -206,7 +207,9 @@ timer.Create("ServerThink", TICK, 0, function()
 				if !ply:GetDBool("inCombat") then
 					reg_hp(ply)	 --HealthReg
 					reg_ar(ply)	 --ArmorReg
-					ply:SetDInt("yrp_stars", 0)
+					if ply:GetDInt("yrp_stars", 0) != 0 then
+						ply:SetDInt("yrp_stars", 0)
+					end
 				end
 
 				if ply:IsBleeding() then
@@ -253,12 +256,8 @@ timer.Create("ServerThink", TICK, 0, function()
 	end
 
 	if _time % 30.0 == 1 or GetGlobalDBool("yrp_update_teleporters", false) then
-		SetGlobalDBool("yrp_update_teleporters", false)
-
-		for i, ply in pairs(_all_players) do
-			if ply:GetRoleName() == nil and ply:Alive() and !ply:IsBot() then
-				ply:KillSilent()
-			end
+		if GetGlobalDBool("yrp_update_teleporters", true) != false then
+			SetGlobalDBool("yrp_update_teleporters", false)
 		end
 
 		local _dealers = SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")

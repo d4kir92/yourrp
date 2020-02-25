@@ -370,7 +370,7 @@ function SendAllErrors(str)
 	send_errors("server", _sv_errors)
 end
 
-timer.Create("update_error_tables", 1, 0, function()
+timer.Create("update_error_tables", 10, 0, function()
 	if CanSendError() then
 		SendAllErrors()
 	end

@@ -27,9 +27,11 @@ function SetDString(entindex, key, value)
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
-		YRP_NW_Ents[entindex]["STRING"][key] = value
-		if SERVER then
-			SendDString(entindex, key, value)
+		if YRP_NW_Ents[entindex]["STRING"][key] != value then
+			YRP_NW_Ents[entindex]["STRING"][key] = value
+			if SERVER then
+				SendDString(entindex, key, value)
+			end
 		end
 	end
 end
@@ -77,9 +79,11 @@ function SetDBool(entindex, key, value)
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
-		YRP_NW_Ents[entindex]["BOOL"][key] = value
-		if SERVER then
-			SendDBool(entindex, key, value)
+		if YRP_NW_Ents[entindex]["BOOL"][key] != value then
+			YRP_NW_Ents[entindex]["BOOL"][key] = value
+			if SERVER then
+				SendDBool(entindex, key, value)
+			end
 		end
 	end
 end
@@ -132,9 +136,11 @@ function SetDInt(entindex, key, value)
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
-		YRP_NW_Ents[entindex]["INT"][key] = tonumber(value)
-		if SERVER then
-			SendDInt(entindex, key, tonumber(value))
+		if YRP_NW_Ents[entindex]["INT"][key] != value then
+			YRP_NW_Ents[entindex]["INT"][key] = tonumber(value)
+			if SERVER then
+				SendDInt(entindex, key, tonumber(value))
+			end
 		end
 	else
 		YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
@@ -188,9 +194,11 @@ function SetDFloat(entindex, key, value)
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
-		YRP_NW_Ents[entindex]["FLOAT"][key] = value
-		if SERVER then
-			SendDFloat(entindex, key, value)
+		if YRP_NW_Ents[entindex]["FLOAT"][key] != value then
+			YRP_NW_Ents[entindex]["FLOAT"][key] = value
+			if SERVER then
+				SendDFloat(entindex, key, value)
+			end
 		end
 	else
 		YRP.msg("note", "[SetDFloat] " .. tostring(key) .. tostring(value))
@@ -247,9 +255,11 @@ function SetDEntity(entindex, key, value)
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["ENTITY"] = YRP_NW_Ents[entindex]["ENTITY"] or {}
-		YRP_NW_Ents[entindex]["ENTITY"][key] = value
-		if SERVER then
-			SendDEntity(entindex, key, value)
+		if YRP_NW_Ents[entindex]["ENTITY"][key] != value then
+			YRP_NW_Ents[entindex]["ENTITY"][key] = value
+			if SERVER then
+				SendDEntity(entindex, key, value)
+			end
 		end
 	else
 		YRP.msg("note", "[SetDEntity] " .. tostring(key) .. tostring(value))
@@ -303,9 +313,11 @@ function SetDTable(entindex, key, value)
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
-		YRP_NW_Ents[entindex]["TABLE"][key] = value
-		if SERVER then
-			SendDTable(entindex, key, value)
+		if YRP_NW_Ents[entindex]["TABLE"][key] != value then
+			YRP_NW_Ents[entindex]["TABLE"][key] = value
+			if SERVER then
+				SendDTable(entindex, key, value)
+			end
 		end
 	else
 		YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
