@@ -18,9 +18,11 @@ if SERVER then
 end
 function SetGlobalDBool(index, bo)
 	YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
-	YRP_NW_Globals["BOOL"][index] = bo
-	if SERVER then
-		SendGlobalDBool(index, bo)
+	if YRP_NW_Globals["BOOL"][index] != bo then
+		YRP_NW_Globals["BOOL"][index] = bo
+		if SERVER then
+			SendGlobalDBool(index, bo)
+		end
 	end
 end
 if CLIENT then
@@ -59,9 +61,11 @@ if SERVER then
 end
 function SetGlobalDString(index, str)
 	YRP_NW_Globals["STRING"] = YRP_NW_Globals["STRING"] or {}
-	YRP_NW_Globals["STRING"][index] = str
-	if SERVER then
-		SendGlobalDString(index, str)
+	if YRP_NW_Globals["STRING"][index] != str then
+		YRP_NW_Globals["STRING"][index] = str
+		if SERVER then
+			SendGlobalDString(index, str)
+		end
 	end
 end
 if CLIENT then
@@ -94,9 +98,11 @@ if SERVER then
 end
 function SetGlobalDInt(index, int)
 	YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
-	YRP_NW_Globals["INT"][index] = int
-	if SERVER then
-		SendGlobalDInt(index, int)
+	if YRP_NW_Globals["INT"][index] != int then
+		YRP_NW_Globals["INT"][index] = int
+		if SERVER then
+			SendGlobalDInt(index, int)
+		end
 	end
 end
 if CLIENT then
@@ -129,9 +135,11 @@ if SERVER then
 end
 function SetGlobalDFloat(index, flo)
 	YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
-	YRP_NW_Globals["FLOAT"][index] = flo
-	if SERVER then
-		SendGlobalDFloat(index, flo)
+	if YRP_NW_Globals["FLOAT"][index] != flo then
+		YRP_NW_Globals["FLOAT"][index] = flo
+		if SERVER then
+			SendGlobalDFloat(index, flo)
+		end
 	end
 end
 if CLIENT then
@@ -164,9 +172,11 @@ if SERVER then
 end
 function SetGlobalDTable(index, tab)
 	YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
-	YRP_NW_Globals["TABLE"][index] = tab
-	if SERVER then
-		SendGlobalDTable(index, tab)
+	if YRP_NW_Globals["TABLE"][index] != tab then
+		YRP_NW_Globals["TABLE"][index] = tab
+		if SERVER then
+			SendGlobalDTable(index, tab)
+		end
 	end
 end
 if CLIENT then

@@ -38,19 +38,6 @@ function is_chat_command(str, command)
 	return false
 end
 
-function get_player_by_name(str)
-	if !IsValid(str) then return NULL end
-
-	for k, ply in pairs(player.GetAll()) do
-		if string.find(string.lower(ply:Nick()), string.lower(str), 1, false)
-		or string.find(string.lower(ply:RPName()), string.lower(str), 1, false)
-		or string.find(string.lower(ply:SteamName()), string.lower(str), 1, false) then
-			return ply
-		end
-	end
-	return NULL
-end
-
 function print_warning(str)
 	local _table = {}
 	_table[1] = Color(255, 0, 0)
@@ -192,8 +179,12 @@ function set_money(sender, text)
 		local _name = _table[2]
 		local _money = tonumber(_table[3])
 		if isnumber(_money) then
-			local ply = get_player_by_name(_name)
+			local ply = GetPlayerByName(_name)
 			if ply != NULL then
+				if ply.addMoney == nil then
+					ply:ChatPrint("Command-FAILED: Is not a Player")
+					return ""
+				end
 				ply:SetMoney(_money)
 				printGM("note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
 				return ""
@@ -214,15 +205,17 @@ function add_money(sender, text)
 		local _name = _table[2]
 		local _money = tonumber(_table[3])
 		if isnumber(_money) then
-			local _receiver = get_player_by_name(_name)
-			if wk(_receiver) then
-				if _receiver.addMoney == nil then
+			local ply = GetPlayerByName(_name)
+			if ply != NULL then
+				if ply.addMoney == nil then
+					ply:ChatPrint("Command-FAILED: Is not a Player")
 					return ""
 				end
-				_receiver:addMoney(_money)
+				ply:addMoney(_money)
+				printGM("note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick())
 				return ""
 			else
-				sender:ChatPrint("Command-FAILED NAME not found")
+				sender:ChatPrint("Command-FAILED: Player not found")
 			end
 		end
 	else
@@ -236,7 +229,7 @@ function add_xp(sender, text)
 		local _name = _table[2]
 		local _xp = tonumber(_table[3])
 		if isnumber(_xp) then
-			local _receiver = get_player_by_name(_name)
+			local _receiver = GetPlayerByName(_name)
 			if worked(_receiver, "xp receiver not found!") then
 				_receiver:AddXP(_xp)
 				return ""
@@ -255,7 +248,7 @@ function add_level(sender, text)
 		local _name = _table[2]
 		local _lvl = tonumber(_table[3])
 		if isnumber(_lvl) then
-			local _receiver = get_player_by_name(_name)
+			local _receiver = GetPlayerByName(_name)
 			if worked(_receiver, "level receiver not found!") then
 				_receiver:AddLevel(_lvl)
 				return ""
@@ -274,7 +267,7 @@ function set_level(sender, text)
 		local _name = _table[2]
 		local _lvl = tonumber(_table[3])
 		if isnumber(_lvl) then
-			local _receiver = get_player_by_name(_name)
+			local _receiver = GetPlayerByName(_name)
 			if worked(_receiver, "level receiver not found!") then
 				_receiver:SetLevel(_lvl)
 				return ""
