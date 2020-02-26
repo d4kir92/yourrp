@@ -1617,12 +1617,15 @@ function drawPlates()
 				if ply:AFK() or ply:DND() then
 					local onlinestatus = ""
 					local onlinecolor = Color(255, 255, 255, 255)
-					if GetGlobalDBool("isdnd", false) then
+					if ply:DND() then
 						onlinestatus = YRP.lang_string("LID_dnd")
 						onlinecolor = Color(255, 0, 0, 255)
 					elseif ply:AFK() then
 						onlinestatus = YRP.lang_string("LID_afk")
 						onlinecolor = Color(255, 255, 0, 255)
+					else
+						onlinestatus = "FAILED REPORT DEV"
+						onlinecolor = Color(255, 0, 0, 255)
 					end
 					onlinecolor.a = color.a
 					drawString(ply, "<" .. string.upper(onlinestatus) .. ">", _height, onlinecolor)

@@ -350,6 +350,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			end)
 
 			ply:SetDInt("ent_ragdollindex", ply.rd:EntIndex())
+		else
+			YRP.msg("error", "Spawn Defi Ragdoll... FAILED: ply.rd is not valid")
 		end
 	end
 end

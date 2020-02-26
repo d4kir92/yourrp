@@ -41,6 +41,10 @@ function Player:DND()
 	return self:GetDBool("isdnd", false)
 end
 
+function Player:IDCardID()
+	return self:GetDString("idcardid", "Unknown")
+end
+
 function Player:GetLanguage() -- The Language the player selected
 	return self:YRPGetLanguage() -- return string
 end

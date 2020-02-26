@@ -492,12 +492,12 @@ function OpenSBS()
 
 			if !strEmpty(pl:GetDString("roleIcon", "")) then
 				pl.sbp.ricon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
-			elseif pl.sbp.ricon != nil then
+			elseif pa(pl.sbp.ricon) then
 				pl.sbp.ricon:Remove()
 			end
 			if !strEmpty(pl:GetDString("groupIcon", "")) then
 				pl.sbp.gicon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
-			elseif pl.sbp.gicon != nil then
+			elseif pa(pl.sbp.gicon) then
 				pl.sbp.gicon:Remove()
 			end
 
@@ -577,8 +577,13 @@ function OpenSBS()
 									self.rolicon = pl:GetDString("roleIcon", "")
 									local text_ricon = GetHTMLImage(self.rolicon, YRP.ctr(60), YRP.ctr(60))
 									pl.sbp.ricon:SetHTML(text_ricon)
+								elseif pa(pl.sbp.ricon) then
+									if strEmpty(pl:GetDString("roleIcon", "")) then
+										pl.sbp.ricon:Remove()
+									else
+										pl.sbp.ricon:SetPos(YRP.ctr(x * fac + 2), ry - YRP.ctr(30))
+									end
 								end
-								pl.sbp.ricon:SetPos(YRP.ctr(x * fac + 2), ry - YRP.ctr(30))
 							end
 							local iconx = 0
 							if !strEmpty(pl:GetDString("roleIcon", "")) then
@@ -593,8 +598,13 @@ function OpenSBS()
 									self.grpicon = pl:GetDString("groupIcon", "")
 									local text_gicon = GetHTMLImage(self.grpicon, YRP.ctr(60), YRP.ctr(60))
 									pl.sbp.gicon:SetHTML(text_gicon)
+								elseif pa(pl.sbp.gicon) then
+									if strEmpty(pl:GetDString("groupIcon", "")) then
+										pl.sbp.gicon:Remove()
+									else
+										pl.sbp.gicon:SetPos(YRP.ctr(x * fac + 2), gy - YRP.ctr(30))
+									end
 								end
-								pl.sbp.gicon:SetPos(YRP.ctr(x * fac + 2), gy - YRP.ctr(30))
 							end
 
 							local grpname = pl:GetGroupName()

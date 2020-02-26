@@ -59,7 +59,7 @@ if SERVER then
 		if IsValid(args.target.ply) then
 			local ply = args.target.ply
 			local pos = ply:GetPos()
-			if IsValid(pos) then
+			if pos != nil then
 				ply.ignorespawnpoint = true
 				ply:Spawn()
 				ply:SetPos(pos)
