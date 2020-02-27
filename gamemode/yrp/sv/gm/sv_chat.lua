@@ -78,6 +78,8 @@ function print_help(sender)
 		sender:ChatPrint("addxp NAME AMOUNT - adds xp to NAME")
 
 		sender:ChatPrint("givelicense NAME LICENSENAME")
+
+		sender:ChatPrint("revive NAME")
 	end
 	sender:ChatPrint("")
 	return ""
@@ -146,7 +148,7 @@ function drop_money(sender, text)
 	else
 		printGM("note", "Failed dropmoney")
 	end
-	sender:ChatPrint("Command-FAILED")
+	sender:ChatPrint("\nCommand-FAILED")
 end
 
 function do_suicide(sender)
@@ -182,7 +184,7 @@ function set_money(sender, text)
 			local ply = GetPlayerByName(_name)
 			if ply != NULL then
 				if ply.addMoney == nil then
-					ply:ChatPrint("Command-FAILED: Is not a Player")
+					sender:ChatPrint("\nCommand-FAILED: Is not a Player")
 					return ""
 				end
 				ply:SetMoney(_money)
@@ -193,7 +195,27 @@ function set_money(sender, text)
 				return ""
 			end
 		end
-		sender:ChatPrint("Command-FAILED")
+		sender:ChatPrint("\nCommand-FAILED")
+	else
+		printGM("note", sender:YRPName() .. " tried to use setmoney!")
+	end
+end
+
+function revive(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode(" ", text, false)
+		local _name = _table[2]
+		local ply = GetPlayerByName(_name)
+		if IsValid(ply) and ply:IsPlayer() then
+			if ply:Alive() then
+				sender:ChatPrint("\nCommand-FAILED: Player alive")
+				return ""
+			end
+			ply:Revive(ply:GetPos())
+			return ""
+		else
+			sender:ChatPrint("\nCommand-FAILED")
+		end
 	else
 		printGM("note", sender:YRPName() .. " tried to use setmoney!")
 	end
@@ -208,14 +230,14 @@ function add_money(sender, text)
 			local ply = GetPlayerByName(_name)
 			if ply != NULL then
 				if ply.addMoney == nil then
-					ply:ChatPrint("Command-FAILED: Is not a Player")
+					sender:ChatPrint("\nCommand-FAILED: Is not a Player")
 					return ""
 				end
 				ply:addMoney(_money)
 				printGM("note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick())
 				return ""
 			else
-				sender:ChatPrint("Command-FAILED: Player not found")
+				sender:ChatPrint("\nCommand-FAILED: Player not found")
 			end
 		end
 	else
@@ -234,7 +256,7 @@ function add_xp(sender, text)
 				_receiver:AddXP(_xp)
 				return ""
 			else
-				sender:ChatPrint("Command-FAILED NAME not found")
+				sender:ChatPrint("\nCommand-FAILED NAME not found")
 			end
 		end
 	else
@@ -253,7 +275,7 @@ function add_level(sender, text)
 				_receiver:AddLevel(_lvl)
 				return ""
 			else
-				sender:ChatPrint("Command-FAILED NAME not found")
+				sender:ChatPrint("\nCommand-FAILED NAME not found")
 			end
 		end
 	else
@@ -272,7 +294,7 @@ function set_level(sender, text)
 				_receiver:SetLevel(_lvl)
 				return ""
 			else
-				sender:ChatPrint("Command-FAILED NAME not found")
+				sender:ChatPrint("\nCommand-FAILED NAME not found")
 			end
 		end
 	else
@@ -502,6 +524,11 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	if paket.command == "sleep" then
 		do_sleep(sender)
+		return ""
+	end
+
+	if paket.command == "revive" then
+		revive(sender, text)
 		return ""
 	end
 

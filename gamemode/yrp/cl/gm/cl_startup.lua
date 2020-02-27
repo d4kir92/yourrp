@@ -1553,10 +1553,36 @@ function drawPlates()
 			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)
 			local _height = 24 -- 31
 			local color = ply:GetColor()
-			if renderalpha < color.a then
+			local color2 = ply:GetColor()
+			ply.headalpha = ply.headalpha or 0
+			ply.sidealpha = ply.sidealpha or 0
+			if GetGlobalDBool("bool_tag_on_head_target", false) then
+				local pt = LocalPlayer():GetEyeTrace()
+				if ply == pt.Entity then
+					ply.headalpha = ply.headalpha + 5
+				else
+					ply.headalpha = ply.headalpha - 5
+				end
+				ply.headalpha = math.Clamp(ply.headalpha, 0, 240)
+				color.a = ply.headalpha
+			elseif renderalpha < color.a then
 				color.a = renderalpha
 			end
-			color.a = math.Clamp(color.a, 0, 200)
+			color.a = math.Clamp(color.a, 0, 240)
+
+			if GetGlobalDBool("bool_tag_on_side_target", false) then
+				local pt = LocalPlayer():GetEyeTrace()
+				if ply == pt.Entity then
+					ply.sidealpha = ply.sidealpha + 5
+				else
+					ply.sidealpha = ply.sidealpha - 5
+				end
+				ply.sidealpha = math.Clamp(ply.sidealpha, 0, 240)
+				color2.a = ply.sidealpha
+			elseif renderalpha < color2.a then
+				color2.a = renderalpha
+			end
+			color2.a = math.Clamp(color2.a, 0, 240)
 
 			if LocalPlayer():GetDBool("bool_canuseesp", false) then
 				render.SetColorMaterial()
@@ -1577,7 +1603,7 @@ function drawPlates()
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
-					YRP.DrawSymbol(ply, "chat", 18, color)
+					YRP.DrawSymbol(ply, "chat", 18, Color(255, 255, 255, 255))
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_armor", false) then
@@ -1682,7 +1708,7 @@ function drawPlates()
 			end
 
 			if GetGlobalDBool("bool_tag_on_side", false) then
-				local _alpha = color.a --255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
+				local _alpha = color2.a --255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
 
 				local _z = 50
 				local _x = -10
@@ -1692,13 +1718,13 @@ function drawPlates()
 				local _d = 2
 
 				if GetGlobalDBool("bool_tag_on_side_name", false) then
-					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["na"])
+					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["na"])
 					_z = _z + _d
 				end
 
 				if GetGlobalDBool("bool_tag_on_side_rolename", false) then
 					local rc = ply:GetRoleColor()
-					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, color.a), _alpha, _icons["rn"])
+					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, _alpha), _alpha, _icons["rn"])
 					_z = _z + _d
 				end
 
@@ -1707,7 +1733,7 @@ function drawPlates()
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local gc = ply:GetGroupColor()
-					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, color.a), _alpha, _icons["gn"])
+					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, _alpha), _alpha, _icons["gn"])
 					_z = _z + _d
 				end
 
@@ -1716,7 +1742,7 @@ function drawPlates()
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local fc = ply:GetFactionColor()
-					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, color.a), _alpha, _icons["gn"])
+					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, _alpha), _alpha, _icons["gn"])
 					_z = _z + _d
 				end
 
@@ -1724,37 +1750,37 @@ function drawPlates()
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
-					drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["le"])
+					drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["le"])
 					_z = _z + _d
 				end
 
 				if GetGlobalDBool("bool_tag_on_side_health", false) then
 					local col = ply:HudValue("HP", "BA")
-					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
+					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if GetGlobalDBool("bool_tag_on_side_armor", false) then
 					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
 					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					drawPlayerInfo(ply, ply:GetDString("GetCurStamina", "") .. "/" .. ply:GetDString("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetDString("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
-					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["sn"])
+					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sn"])
 					_z = _z + _d
 					local ugcolor = ply:GetUserGroupColor()
-					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, color.a), _alpha, _icons["ug"])
+					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, _alpha), _alpha, _icons["ug"])
 					_z = _z + _d
-					drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["sa"])
+					drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
 					_z = _z + _d
 					local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
 					local _mMin = CurTime() + ply:GetDInt("salarytime", 0) - ply:GetDInt("nextsalarytime", 0)
 					local _mMax = ply:GetDInt("salarytime", 0) + 1
-					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, color.a), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
+					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 					_z = _z + _d
 				end
 			end

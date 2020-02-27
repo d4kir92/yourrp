@@ -385,8 +385,8 @@ if SERVER then
 	util.AddNetworkString("request_dentites")
 
 	function SendDEntities(ply, funcname)
-		if !sending then
-			sending = true
+		---if !sending then
+			--sending = true
 			for j, ent in pairs(ents.GetAll()) do
 				if ent.EntIndex != nil then
 					local entindex = ent:EntIndex()
@@ -443,12 +443,12 @@ if SERVER then
 					end)
 				end
 			end
-		else
+		--else
 			-- IF SENDING ALREADY => Wait for finish*
-			timer.Simple(0.9, function()
-				SendDEntities(ply, funcname)
-			end)
-		end
+			--timer.Simple(0.9, function()
+				--SendDEntities(ply, funcname)
+			--end)
+		--end
 	end
 
 	net.Receive("request_dentites", function(len, ply)

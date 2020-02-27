@@ -307,7 +307,7 @@ end
 local PLAYER = FindMetaTable("Player")
 PLAYER.OldGetRagdollEntity = PLAYER.OldGetRagdollEntity or PLAYER.GetRagdollEntity
 function PLAYER:GetRagdollEntity()
-	return self.rd or self:OldGetRagdollEntity() or NULL
+	return self:OldGetRagdollEntity() or self.rd or NULL
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
@@ -329,10 +329,6 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 	-- NEW RAGDOLL
 	if GetGlobalDBool("bool_spawncorpseondeath", true) then
-
-		if ply:GetRagdollEntity() != NULL then
-			ply:GetRagdollEntity():Remove()
-		end
 	
 		ply.rd = ents.Create("prop_ragdoll")
 		if IsValid(ply.rd) then
@@ -342,6 +338,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			ply.rd:SetVelocity(ply:GetVelocity())
 			ply.rd:Spawn()
 			ply.rd.ply = ply
+			ply.rd.removeable = false
 
 			timer.Simple(GetGlobalDInt("int_deathtimestamp_max", 60), function()
 				if IsValid(ply.rd) then
@@ -350,6 +347,15 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			end)
 
 			ply:SetDInt("ent_ragdollindex", ply.rd:EntIndex())
+
+			local oldragdoll = ply:GetRagdollEntity()
+			if oldragdoll != NULL then
+				if oldragdoll.removeable == nil then
+					oldragdoll:Remove() -- Removes Default one
+				end
+			else
+				YRP.msg("note", "GetRagdollEntity does not exists.")
+			end
 		else
 			YRP.msg("error", "Spawn Defi Ragdoll... FAILED: ply.rd is not valid")
 		end

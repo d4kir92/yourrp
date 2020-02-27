@@ -10,6 +10,14 @@ include("player/interface.lua")
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")
 
+function Player:Revive(pos)
+	self.ignorespawnpoint = true
+	self:Spawn()
+	if wk(pos) then
+		self:SetPos(pos)
+	end
+end
+
 function IsPlayerIntroductionEnabled()
 	return false -- GetGlobalDBool("bool_players_need_to_introduce", false)
 end

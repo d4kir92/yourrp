@@ -199,8 +199,8 @@ if SERVER then
 	util.AddNetworkString("request_dglobals")
 
 	function SendDGlobals(ply)
-		if !sending then
-			sending = true
+		--if !sending then
+			--sending = true
 
 			ply:SetDInt("yrp_load_glo", 0)
 			YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
@@ -245,11 +245,11 @@ if SERVER then
 
 				sending = false
 			end)
-		else
-			timer.Simple(0.9, function()
-				SendDGlobals(ply)
-			end)
-		end
+		--else
+			--timer.Simple(0.9, function()
+				--SendDGlobals(ply)
+			--end)
+		--end
 	end
 	net.Receive("request_dglobals", function(len, ply)
 		SendDGlobals(ply)

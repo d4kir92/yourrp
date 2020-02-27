@@ -1376,17 +1376,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						function pmwin.list:RefreshList()
 							self:Clear()
 							for i, pm in pairs(pmwin.pms) do
-								local line = createD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
-								line.pm = pm
-								function line:Paint(pw, ph)
-									draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255))
-									draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-								end
+								timer.Simple(i * 0.2, function()
+									if pa(pmwin) and pa(pmwin.list) then
+										local line = createD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
+										line.pm = pm
+										function line:Paint(pw, ph)
+											draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255))
+											draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										end
 
-								line.dmp = createD("DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
-								line.dmp:SetModel(pm)
+										line.dmp = createD("DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
+										line.dmp:SetModel(pm)
 
-								pmwin.list:AddItem(line)
+										pmwin.list:AddItem(line)
+									end
+								end)
 							end
 						end
 
@@ -1443,76 +1447,84 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							--pmsel.dpl:SetSpacing(10)
 							function pmsel:RefreshPage()
 								pmsel.dpl:Clear()
-								local count = 0
-								local fcount = 0
-								local nothingfound = true
-								local px = 0
-								local py = 0
-
+								self.count = 0
+								self.fcount = 0
+								self.nothingfound = true
+								self.px = 0
+								self.py = 0
+								self.sid = self.sid or 0
+								self.sid = self.sid + 1
+								self.searching = true
 								for i, v in pairs(cl_pms) do
-									if string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
-										nothingfound = false
-										count = count + 1
-										if count > pmsel.nr and count <= pmsel.nr + perpage then
-											fcount = fcount + 1
-											local d_pm = createD("DPanel", pmsel.dpl, size, size, px * space, py * space)
-											d_pm:SetText("")
-											d_pm.WorldModel = v.WorldModel
-											d_pm.ClassName = v.ClassName
-											d_pm.PrintName = v.PrintName
-											function d_pm:Paint(pw, ph)
-												local text = YRP.lang_string("LID_notadded")
-												local col = Color(255, 255, 255)
-												if table.HasValue(pmwin.pms, self.WorldModel) then
-													col = Color(0, 255, 0)
-													text = YRP.lang_string("LID_added")
+									if pa(pmsel) then
+										if self.searching and string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
+											self.nothingfound = false
+											self.count = self.count + 1
+											if self.count > pmsel.nr and self.count <= pmsel.nr + perpage then
+												self.fcount = self.fcount + 1
+												local d_pm = createD("DPanel", pmsel.dpl, size, size, self.px * space, self.py * space)
+												d_pm:SetText("")
+												d_pm.WorldModel = v.WorldModel
+												d_pm.ClassName = v.ClassName
+												d_pm.PrintName = v.PrintName
+												function d_pm:Paint(pw, ph)
+													local text = YRP.lang_string("LID_notadded")
+													local col = Color(255, 255, 255)
+													if table.HasValue(pmwin.pms, self.WorldModel) then
+														col = Color(0, 255, 0)
+														text = YRP.lang_string("LID_added")
+													end
+													draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
+
+													draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+													draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+													draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 												end
-												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
-												draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-												draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-												draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-											end
-
-											local msize = d_pm:GetTall() * 0.75
-											local mbr = (d_pm:GetTall() - msize) / 2
-											local my = d_pm:GetTall() * 0.10
-											if v.WorldModel != "" then
-												d_pm.model = createD("DModelPanel", d_pm, msize, msize, mbr, my)
-												d_pm.model:SetModel(v.WorldModel)
-											else
-												d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
-												function d_pm.model:Paint(pw, ph)
-													draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-													draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+												local msize = d_pm:GetTall() * 0.75
+												local mbr = (d_pm:GetTall() - msize) / 2
+												local my = d_pm:GetTall() * 0.10
+												if v.WorldModel != "" then
+													d_pm.model = createD("DModelPanel", d_pm, msize, msize, mbr, my)
+													timer.Simple(0.1 * self.fcount, function()
+														if pa(d_pm) then
+															d_pm.model:SetModel(v.WorldModel)
+														end
+													end)
+												else
+													d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
+													function d_pm.model:Paint(pw, ph)
+														draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+														draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+													end
 												end
-											end
-											d_pm.btn = createD("DButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
-											d_pm.btn:SetText("")
-											function d_pm.btn:DoClick()
-												if !table.HasValue(pmwin.pms, v.WorldModel) then
-													table.insert(pmwin.pms, v.WorldModel)
-												elseif table.HasValue(pmwin.pms, v.WorldModel) then
-													table.RemoveByValue(pmwin.pms, v.WorldModel)
+												d_pm.btn = createD("DButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+												d_pm.btn:SetText("")
+												function d_pm.btn:DoClick()
+													if !table.HasValue(pmwin.pms, v.WorldModel) then
+														table.insert(pmwin.pms, v.WorldModel)
+													elseif table.HasValue(pmwin.pms, v.WorldModel) then
+														table.RemoveByValue(pmwin.pms, v.WorldModel)
+													end
+													pmwin.list:RefreshList()
 												end
-												pmwin.list:RefreshList()
-											end
-											function d_pm.btn:Paint(pw, ph)
+												function d_pm.btn:Paint(pw, ph)
 
-											end
+												end
 
-											px = px + 1
-											if px > x_max - 1 then
-												px = 0
-												py = py + 1
+												self.px = self.px + 1
+												if self.px > x_max - 1 then
+													self.px = 0
+													self.py = self.py + 1
+												end
 											end
 										end
 									end
 								end
-								if fcount <= 0 then
+								if self.fcount <= 0 then
 									pmsel.nr = pmsel.nr - perpage
-									if !nothingfound then
+									if !self.nothingfound then
 										self:RefreshPage()
 									end
 								end
@@ -1538,7 +1550,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel.nr = pmsel.nr + perpage
 								pmsel:RefreshPage()
 							end
-							pmsel:Search("")
+							timer.Simple(1, function()
+								if pa(pmsel) then
+									pmsel:Search("")
+								end
+							end)
 
 							pmsel.search = createD("DTextEntry", pmsel, ScW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50 + 20))
 							function pmsel.search:OnChange()
@@ -1592,76 +1608,81 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							--pmsel.dpl:SetSpacing(10)
 							function pmsel:RefreshPage()
 								pmsel.dpl:Clear()
-								local count = 0
-								local fcount = 0
-								local nothingfound = true
-								local px = 0
-								local py = 0
-
+								self.count = 0
+								self.fcount = 0
+								self.nothingfound = true
+								self.px = 0
+								self.py = 0
 								for i, v in pairs(cl_pms) do
-									if string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
-										nothingfound = false
-										count = count + 1
-										if count > pmsel.nr and count <= pmsel.nr + perpage then
-											fcount = fcount + 1
-											local d_pm = createD("DPanel", pmsel.dpl, size, size, px * space, py * space)
-											d_pm:SetText("")
-											d_pm.WorldModel = v.WorldModel
-											d_pm.ClassName = v.ClassName
-											d_pm.PrintName = v.PrintName
-											function d_pm:Paint(pw, ph)
-												local text = YRP.lang_string("LID_notadded")
-												local col = Color(255, 255, 255)
-												if pmwin.pms != nil and table.HasValue(pmwin.pms, self.WorldModel) then
-													col = Color(0, 255, 0)
-													text = YRP.lang_string("LID_added")
+									if pa(pmsel) then
+										if string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
+											self.nothingfound = false
+											self.count = self.count + 1
+											if self.count > pmsel.nr and self.count <= pmsel.nr + perpage then
+												self.fcount = self.fcount + 1
+												local d_pm = createD("DPanel", pmsel.dpl, size, size, self.px * space, self.py * space)
+												d_pm:SetText("")
+												d_pm.WorldModel = v.WorldModel
+												d_pm.ClassName = v.ClassName
+												d_pm.PrintName = v.PrintName
+												function d_pm:Paint(pw, ph)
+													local text = YRP.lang_string("LID_notadded")
+													local col = Color(255, 255, 255)
+													if pmwin.pms != nil and table.HasValue(pmwin.pms, self.WorldModel) then
+														col = Color(0, 255, 0)
+														text = YRP.lang_string("LID_added")
+													end
+													draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
+
+													draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+													draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+													draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 												end
-												draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
-												draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-												draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-												draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-											end
-
-											local msize = d_pm:GetTall() * 0.75
-											local mbr = (d_pm:GetTall() - msize) / 2
-											local my = d_pm:GetTall() * 0.10
-											if v.WorldModel != "" then
-												d_pm.model = createD("DModelPanel", d_pm, msize, msize, mbr, my)
-												d_pm.model:SetModel(v.WorldModel)
-											else
-												d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
-												function d_pm.model:Paint(pw, ph)
-													draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-													draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+												local msize = d_pm:GetTall() * 0.75
+												local mbr = (d_pm:GetTall() - msize) / 2
+												local my = d_pm:GetTall() * 0.10
+												if v.WorldModel != "" then
+													d_pm.model = createD("DModelPanel", d_pm, msize, msize, mbr, my)
+													timer.Simple(0.1 * self.fcount, function()
+														if pa(d_pm) then
+															d_pm.model:SetModel(v.WorldModel)
+														end
+													end)
+												else
+													d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
+													function d_pm.model:Paint(pw, ph)
+														draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+														draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+													end
 												end
-											end
-											d_pm.btn = createD("DButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
-											d_pm.btn:SetText("")
-											function d_pm.btn:DoClick()
-												if !table.HasValue(pmwin.pms, v.WorldModel) then
-													table.insert(pmwin.pms, v.WorldModel)
-												elseif table.HasValue(pmwin.pms, v.WorldModel) then
-													table.RemoveByValue(pmwin.pms, v.WorldModel)
+												d_pm.btn = createD("DButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+												d_pm.btn:SetText("")
+												function d_pm.btn:DoClick()
+													if !table.HasValue(pmwin.pms, v.WorldModel) then
+														table.insert(pmwin.pms, v.WorldModel)
+													elseif table.HasValue(pmwin.pms, v.WorldModel) then
+														table.RemoveByValue(pmwin.pms, v.WorldModel)
+													end
+													pmwin.list:RefreshList()
 												end
-												pmwin.list:RefreshList()
-											end
-											function d_pm.btn:Paint(pw, ph)
+												function d_pm.btn:Paint(pw, ph)
 
-											end
+												end
 
-											px = px + 1
-											if px > x_max - 1 then
-												px = 0
-												py = py + 1
+												self.px = self.px + 1
+												if self.px > x_max - 1 then
+													self.px = 0
+													self.py = self.py + 1
+												end
 											end
 										end
 									end
 								end
-								if fcount <= 0 then
+								if self.fcount <= 0 then
 									pmsel.nr = pmsel.nr - perpage
-									if !nothingfound then
+									if !self.nothingfound then
 										self:RefreshPage()
 									end
 								end
@@ -1687,7 +1708,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel.nr = pmsel.nr + perpage
 								pmsel:RefreshPage()
 							end
-							pmsel:Search("")
+							timer.Simple(1, function()
+								if pa(pmsel) then
+									pmsel:Search("")
+								end
+							end)
 
 							pmsel.search = createD("DTextEntry", pmsel, ScW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50 + 20))
 							function pmsel.search:OnChange()
@@ -1719,41 +1744,65 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 					end
 
-					function win:Search(strsearch)
-						self.dpl:Clear()
-						for i, pm in pairs(pms) do
-							if string.find(string.lower(pm.string_name), strsearch) or string.find(string.lower(pm.string_models), strsearch) then
-								local line = createD("DButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
-								line.string_name = pm.string_name
-								line.models = string.Explode(",", pm.string_models)
-								line:SetText("")
-								function line:DoClick()
-									net.Start("add_role_playermodel")
-										net.WriteInt(role.uniqueID, 32)
-										net.WriteInt(pm.uniqueID, 32)
-									net.SendToServer()
-									win:Close()
-								end
-								function line:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140))
-									draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-								end
+					win.delay = 0.2
+					win.i = 1
+					win.etime = CurTime()
+					win.searching = false
+					function win:Think()
+						if self.searching then
+							if CurTime() > self.etime then
+								if pms[self.i] != nil then
+									local pm = pms[self.i]
+									if pa(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
+										local line = createD("DButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
+										line.string_name = pm.string_name
+										line.models = string.Explode(",", pm.string_models)
+										line:SetText("")
+										function line:DoClick()
+											net.Start("add_role_playermodel")
+												net.WriteInt(role.uniqueID, 32)
+												net.WriteInt(pm.uniqueID, 32)
+											net.SendToServer()
+											win:Close()
+										end
+										function line:Paint(pw, ph)
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140))
+											draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+											draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										end
 
-								if line.models[1] != nil then
-									line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
-									line.model:SetModel(line.models[1])
-								else
-									line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
-									function line.model:Paint(pw, ph)
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-										draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										if line.models[1] != nil then
+											line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+											line.model:SetModel(line.models[1])
+										else
+											line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+											function line.model:Paint(pw, ph)
+												draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+												draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+											end
+										end
+
+										win.dpl:AddItem(line)
 									end
+									self.etime = CurTime() + self.delay
+									self.i = self.i + 1
+								else
+									self.searching = false
 								end
-
-								win.dpl:AddItem(line)
 							end
+						else
+							self.i = 1
 						end
+					end
+				
+					function win:Search(strsearch)
+						self.searchstr = strsearch
+
+						self.searching = false
+
+						self.i = 1
+						self.dpl:Clear()
+						self.searching = true
 					end
 					win:Search("")
 

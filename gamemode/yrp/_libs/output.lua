@@ -329,6 +329,8 @@ countries["US"] = "USA"
 countries["VE"] = "Venezuela"
 countries["VN"] = "Vietnam"
 
+countries["ZA"] = "South Africa"
+
 function GetCountryName(id)
 	id = string.upper(id)
 	local countryname = countries[id]
