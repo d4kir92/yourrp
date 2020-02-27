@@ -49,15 +49,24 @@ function YRPSendIsReady()
 	end
 end
 
+local count = 0
+local init = false
+local noinit = false
 hook.Add("Think", "yrp_think_ready", function()
-	if d != 0 then
-		if d < CurTime() then
-			if !rToSv then
-				YRPSendIsReady()
-			end
+	if rToSv then return end
+
+	if init or noinit then
+		if !rToSv then
+			YRPSendIsReady()
 		end
-	elseif hookinitpostentity and initpostentity then
+	elseif hookinitpostentity or initpostentity then
+		init = true
+	elseif d < CurTime() then
 		d = CurTime() + 1
+		count = count + 1
+		if count > 60 then
+			noinit = true
+		end
 	end
 end)
 

@@ -207,6 +207,16 @@ function HUDSpace()
 			2
 		}
 
+		for id = 1, 10 do
+			ELES["BOX" .. id] = {
+				0,
+				nil,
+				nil,
+				nil,
+				3
+			}
+		end
+
 		if lply:GetDInt("hud_version", 0) != SPACE["version"] then
 			-- LOAD VARIABLES
 			SPACE["version"] = lply:GetDInt("hud_version", 0)
@@ -304,6 +314,8 @@ function HUDSpace()
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
 					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_700"
+				elseif etab[5] == 3 then
+					
 				end
 			end
 		elseif table.Count(SPACE) > 0 and lply:Alive() then
@@ -348,12 +360,13 @@ function HUDSpace()
 						local YFontCenter = SPACE[ele].YFontCenter
 						local font = SPACE[ele].font
 
+						local BarColor = SPACE[ele].BarColor
+
 						if etab[5] == nil then
 							local BarW = SPACE[ele].BarW
 							local BarH = SPACE[ele].BarH
 							local BarX = SPACE[ele].BarX
 							local BarY = SPACE[ele].BarY
-							local BarColor = SPACE[ele].BarColor
 
 							local IconW = SPACE[ele].IconW
 							local IconH = SPACE[ele].IconH
@@ -383,6 +396,8 @@ function HUDSpace()
 							draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, 160 * Alpha))
 						elseif etab[5] == 2 then
 							draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
+						elseif etab[5] == 3 then
+							draw.RoundedBox(0, x, y, w, h, Color(BarColor.r, BarColor.g, BarColor.b, BarColor.a))
 						end
 					end
 				else

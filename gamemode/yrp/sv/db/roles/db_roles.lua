@@ -637,9 +637,11 @@ net.Receive("settings_subscribe_prerolelist", function(len, ply)
 	local pre = tonumber(net.ReadString())
 
 	pre = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
-	pre = tonumber(pre[1].int_prerole)
-	SubscribeRoleList(ply, gro, pre)
-	SendRoleList(ply, gro, pre)
+	if wk(pre) then
+		pre = tonumber(pre[1].int_prerole)
+		SubscribeRoleList(ply, gro, pre)
+		SendRoleList(ply, gro, pre)
+	end
 end)
 
 util.AddNetworkString("settings_add_role")
