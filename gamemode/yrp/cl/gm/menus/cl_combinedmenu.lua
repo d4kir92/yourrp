@@ -25,56 +25,6 @@ function OpenCombinedMenu()
 	local br = YRP.ctr(20)
 	local menuw = YRP.ctr(400)
 	if pa(cm.win) == false then
-		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-		cm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
-		cm.win:MakePopup()
-		--cm.win:SetHeaderHeight(YRP.ctr(100))
-		cm.win:SetBorder(0)
-		function cm.win:Paint(pw, ph)
-			hook.Run("YFramePaint", self, pw, ph)
-		end
-
-		local content = cm.win:GetContent()
-		-- MENU
-		cm.menu = createD("YPanel", content, menuw, BFH() - cm.win:GetHeaderHeight(), 0, 0)
-		cm.menu:SetText("")
-		function cm.menu:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-			hook.Run("YPanelPaint", self, pw, ph)
-
-			local gm = "YourRP by D4KiR"
-			draw.SimpleText(gm, "Y_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-			local vert = "Version:"
-			local vern = GAMEMODE.Version
-			draw.SimpleText(vert, "Y_18_500", br, ph - br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-			draw.SimpleText(vern, "Y_18_500", br + YRP.ctr(120), ph - br, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		end
-
-		cm.logo = createD("DHTML", cm.menu, menuw, menuw, br, br)
-		cm.logo:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), menuw - br * 2, menuw - br * 2))
-
-		-- SITE
-		cm.site = createD("YPanel", content, BFW() - menuw, BFH() - cm.win:GetHeaderHeight(), menuw, 0)
-		cm.site:SetText("")
-		cm.site:SetHeaderHeight(cm.win:GetHeaderHeight())
-		function cm.site:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(120, 120, 120, 255))
-			local tab = {}
-			tab.color = Color(60, 60, 60, 255)
-			hook.Run("YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
-		end
-
-		-- SITES
-		cm.sites = {}
-		function cm.menu:ClearSelection()
-			for i, child in pairs(cm.site:GetChildren()) do
-				child:Remove()
-			end
-
-			for i, v in pairs(cm.sites) do
-				v.selected = false
-			end
-		end
 
 		-- HELP
 		local sites = {}
@@ -102,6 +52,76 @@ function OpenCombinedMenu()
 		sites.feedback.id = 6
 		sites.feedback.name = "LID_feedback"
 		sites.feedback.content = CreateFeedbackContent
+		-- HELP
+
+		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
+		cm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+		cm.win:MakePopup()
+		--cm.win:SetHeaderHeight(YRP.ctr(100))
+		cm.win:SetBorder(0)
+		function cm.win:Paint(pw, ph)
+			if SQL_STR_OUT(GetGlobalDString("text_server_name", "")) != self:GetTitle() then
+				self:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+			end
+			hook.Run("YFramePaint", self, pw, ph)
+		end
+
+		local content = cm.win:GetContent()
+		-- MENU
+		cm.menu = createD("YPanel", content, menuw, BFH() - cm.win:GetHeaderHeight(), 0, 0)
+		cm.menu:SetText("")
+		function cm.menu:Paint(pw, ph)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
+			hook.Run("YPanelPaint", self, pw, ph)
+
+			local gm = "YourRP by D4KiR"
+			draw.SimpleText(gm, "Y_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			local vert = "Version:"
+			local vern = GAMEMODE.Version
+			draw.SimpleText(vert, "Y_18_500", br, ph - br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			draw.SimpleText(vern, "Y_18_500", br + YRP.ctr(120), ph - br, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		end
+
+		cm.logo = createD("DHTML", cm.menu, menuw, menuw, br, br)
+		cm.logo:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), menuw - br * 2, menuw - br * 2))
+		TestHTML(cm.logo, GetGlobalDString("text_server_logo", ""), false)
+
+		-- SITE
+		local visi = nil
+		cm.site = createD("YPanel", content, BFW() - menuw, BFH() - cm.win:GetHeaderHeight(), menuw, 0)
+		cm.site:SetText("")
+		cm.site:SetHeaderHeight(cm.win:GetHeaderHeight())
+		function cm.site:Paint(pw, ph)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(120, 120, 120, 255))
+			local tab = {}
+			tab.color = Color(60, 60, 60, 255)
+			hook.Run("YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
+
+			if visi != cm.logo:IsVisible() then
+				visi = cm.logo:IsVisible()
+				if cm.logo:IsVisible() then
+					for name, site in SortedPairsByMemberValue(sites, "id", false) do
+						cm.sites[name]:SetPos(0, menuw + (site.id - 1) * (YRP.ctr(80) + br))
+					end
+				else
+					for name, site in SortedPairsByMemberValue(sites, "id", false) do
+						cm.sites[name]:SetPos(0, br + (site.id - 1) * (YRP.ctr(80) + br))
+					end
+				end
+			end
+		end
+
+		-- SITES
+		cm.sites = {}
+		function cm.menu:ClearSelection()
+			for i, child in pairs(cm.site:GetChildren()) do
+				child:Remove()
+			end
+
+			for i, v in pairs(cm.sites) do
+				v.selected = false
+			end
+		end
 
 		local id = 0
 		for name, v in SortedPairsByMemberValue(sites, "id", false) do

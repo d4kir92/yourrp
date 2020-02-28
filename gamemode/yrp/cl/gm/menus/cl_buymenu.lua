@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https: /  / www.gnu.org / licenses / gpl.txt)
 
+-- #buymenu #buy
+
 BUYMENU = BUYMENU or {}
 BUYMENU.open = false
 
@@ -99,11 +101,11 @@ function createShopItem(item, duid, line, id)
 		else
 			YRP.msg("note", "[BUYMENU] BUY BUTTON W: " .. tostring(W) .. " w: " .. YRP.ctr(W - 20 * 2) .. " h: " .. YRP.ctr(50) .. " x: " .. YRP.ctr(20) .. " y: " .. YRP.ctr(W + 20))
 			YRP.msg("note", "[BUYMENU] ScrW(): " .. ScrW() .. " ScrH() " .. ScrH())
-			_i.buy = createD("DButton", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
+			_i.buy = createD("YButton", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
 			_i.buy:SetText("")
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
-				local _color = Color(100, 255, 100)
+				local _color = Color(34, 139, 34)
 				if !LocalPlayer():canAfford(item.price) then
 					_color = Color(255, 100, 100)
 				end
@@ -303,7 +305,7 @@ net.Receive("shop_get_tabs", function(len)
 						_remove:SetText("")
 						_remove.uid = _uid
 						function _remove:Paint(pw, ph)
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(200, 50, 50))
 							draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 						end
 						function _remove:DoClick()
@@ -386,9 +388,9 @@ net.Receive("shop_get_tabs", function(len)
 		BUYMENU.addtab = createD("DButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(90), BUYMENU.content:GetWide() - YRP.ctr(100 + 100), YRP.ctr(10))
 		BUYMENU.addtab:SetText("")
 		function BUYMENU.addtab:Paint(pw, ph)
-			local _color = Color(100, 255, 100, 255)
+			local _color = Color(50, 200, 50, 255)
 			if self:IsHovered() then
-				_color = Color(255, 255, 100, 255)
+				_color = Color(200, 200, 50, 255)
 			end
 			draw.RoundedBoxEx(ph / 2, 0, 0, pw, ph, _color, true, true)
 			draw.SimpleText(" + ", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)

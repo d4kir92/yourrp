@@ -10,6 +10,7 @@ include("cl_settings_server_licenses.lua")
 include("cl_settings_server_shops.lua")
 include("cl_settings_server_map.lua")
 include("cl_settings_server_whitelist.lua")
+include("cl_settings_server_logs.lua")
 
 -- CLIENT
 
@@ -139,6 +140,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_prototypes, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_prototypes, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_prototypes, "icon16/basket_edit.png")
+	settingsWindow.window:AddSite("open_server_logs", "LID_logs", _server_prototypes, "icon16/note.png")
 	
 
 
@@ -192,7 +194,7 @@ function OpenSettings()
 		end
 
 		local _color = GetVersionColor()
-		draw.SimpleTextOutlined(_singleplayer .. " (" .. GAMEMODE.dedicated .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", YRP.ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(_singleplayer .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", YRP.ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	YRP.DChangeLanguage(settingsWindow.window, ScrW() - YRP.ctr(120 + 10 + 80 + 10), YRP.ctr(10), YRP.ctr(120))

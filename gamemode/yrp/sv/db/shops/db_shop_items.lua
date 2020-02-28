@@ -1,6 +1,9 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
+
+-- #buymenu #shops
+
 local _db_name = "yrp_shop_items"
 SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT 'UNNAMED'")
 SQL_ADD_COLUMN(_db_name, "description", "TEXT DEFAULT 'UNNAMED'")
@@ -15,8 +18,10 @@ SQL_ADD_COLUMN(_db_name, "type", "TEXT DEFAULT 'weapons'")
 SQL_ADD_COLUMN(_db_name, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
 SQL_ADD_COLUMN(_db_name, "PrintName", "TEXT DEFAULT 'unnamed item'")
 SQL_ADD_COLUMN(_db_name, "WorldModel", "TEXT DEFAULT ' '")
+
 --db_drop_table(_db_name)
 --db_is_empty(_db_name)
+
 util.AddNetworkString("get_shop_items")
 
 function send_shop_items(ply, uid)
@@ -38,7 +43,6 @@ net.Receive("get_shop_items", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_add")
-
 net.Receive("shop_item_add", function(len, ply)
 	local _catID = net.ReadString()
 	local _new = SQL_INSERT_INTO(_db_name, "categoryID", _catID)
@@ -47,7 +51,6 @@ net.Receive("shop_item_add", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_rem")
-
 net.Receive("shop_item_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _catID = net.ReadString()
@@ -57,7 +60,6 @@ net.Receive("shop_item_rem", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_name")
-
 net.Receive("shop_item_edit_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
@@ -67,7 +69,6 @@ net.Receive("shop_item_edit_name", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_desc")
-
 net.Receive("shop_item_edit_desc", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_desc = net.ReadString()
@@ -77,7 +78,6 @@ net.Receive("shop_item_edit_desc", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_price")
-
 net.Receive("shop_item_edit_price", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_price = net.ReadString()
@@ -96,7 +96,6 @@ net.Receive("shop_item_edit_level", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_quan")
-
 net.Receive("shop_item_edit_quan", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_quan = net.ReadString()
@@ -106,7 +105,6 @@ net.Receive("shop_item_edit_quan", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_cool")
-
 net.Receive("shop_item_edit_cool", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_cool = net.ReadString()
@@ -116,7 +114,6 @@ net.Receive("shop_item_edit_cool", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_lice")
-
 net.Receive("shop_item_edit_lice", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_lice = net.ReadString()
@@ -127,7 +124,6 @@ net.Receive("shop_item_edit_lice", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_perm")
-
 net.Receive("shop_item_edit_perm", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_perm = net.ReadString()
@@ -137,7 +133,6 @@ net.Receive("shop_item_edit_perm", function(len, ply)
 end)
 
 util.AddNetworkString("shop_get_items_storage")
-
 net.Receive("shop_get_items_storage", function(len, ply)
 	local _uid = net.ReadString()
 	local _cha_perm = SQL_SELECT("yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'")
@@ -162,7 +157,6 @@ net.Receive("shop_get_items_storage", function(len, ply)
 end)
 
 util.AddNetworkString("yrp_shop_get_items")
-
 net.Receive("yrp_shop_get_items", function(len, ply)
 	local _uid = net.ReadString()
 	local _items = SQL_SELECT(_db_name, "*", "categoryID = '" .. _uid .. "'")
@@ -178,7 +172,6 @@ net.Receive("yrp_shop_get_items", function(len, ply)
 end)
 
 util.AddNetworkString("shop_item_edit_base")
-
 net.Receive("shop_item_edit_base", function(len, ply)
 	local _uid = net.ReadString()
 	local _wm = net.ReadString()
@@ -252,194 +245,116 @@ function SpawnVehicle(item, pos, ang)
 end
 
 util.AddNetworkString("yrp_info2")
-
 function spawnItem(ply, item, duid)
-	local _distSpace = 8
-	local _distMax = 800
-	local _angle = Angle(0, ply:EyeAngles().p, 0)
-	local ent = {}
-	local _pos_end = ply:GetPos()
+	local TARGETPOS = nil
+	
+	local mins = Vector(10, 10, 10)
+	local maxs = Vector(-10, -10, -10)
 
-	if item.type == "vehicles" then
-		local _sps = SQL_SELECT("yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'")
+	local dist = 10
 
-		if _sps ~= nil and _sps ~= false then
-			_sps = _sps[1].storagepoints
-			local _storagepoint = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'")
+	local wm = ents.Create("prop_physics")
+	if IsValid(wm) then
+		wm:SetModel(item.WorldModel)
 
-			if _storagepoint ~= nil and _storagepoint ~= false then
-				_storagepoint = _storagepoint[1]
-				local _ang = string.Explode(",", _storagepoint.angle)
-				_angle = Angle(0, _ang[2], 0)
-				local _pos = string.Explode(",", _storagepoint.position)
-				_position = Vector(_pos[1], _pos[2], _pos[3])
-				_pos_end = _position
-			end
-		end
+		mins = wm:OBBMins()
+		maxs = wm:OBBMaxs()
 
-		ent = SpawnVehicle(item, _pos_end, _angle)
+		dist = math.max(maxs.x - mins.x, maxs.y - mins.y)
 
-		if not ent:IsValid() then
-			printGM("note", "[spawnItem] Vehicle is not valid: Vehicle not exists anymore on server!")
+		dist = dist + 10
+		dist = math.Clamp(dist, 32, 4000)
 
-			return false
-		end
-
-		SQL_INSERT_INTO("yrp_vehicles", "ClassName, ownerCharID, item_id", "'" .. SQL_STR_IN(item.ClassName) .. "', '" .. ply:CharID() .. "', '" .. item.uniqueID .. "'")
-		ent:SetDString("item_uniqueID", item.uniqueID)
-		ent:SetDString("ownerRPName", ply:RPName())
-		ent.yrpowner = ply
-	elseif item.type ~= "weapons" then
-		ent = ents.Create(item.ClassName)
-		if ent == NULL then
-			printGM("note", "ent == NULL")
-			return
-		end
-		ent:SetDString("item_uniqueID", item.uniqueID)
-		ent:SetDString("ownerRPName", ply:RPName())
-		ent:SetOwner(ply)
-		ent:SetCreator(ply)
+		wm:Remove()
 	end
 
-	if item.type == "weapons" then
-		ply:Give(item.ClassName)
+	local DEALER = SQL_SELECT("yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'")
+    if wk(DEALER) then
+		DEALER = DEALER[1]
+		local SPUID = DEALER.storagepoints
+		local SP = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'")
+		if wk(SP) then
+			SP = SP[1]
+			printGM("gm", "[spawnItem] Item To Storagepoint")
 
-		return true
-	else
-		ent:YRPSetOwner(ply)
-		local _sps = SQL_SELECT("yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'")
-
-		if _sps ~= nil and _sps ~= false then
-			_sps = _sps[1].storagepoints
-			local _storagepoint = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. _sps .. "'")
-
-			if _storagepoint ~= nil and _storagepoint ~= false then
-				_storagepoint = _storagepoint[1]
-				printGM("gm", "[spawnItem] Item To Storagepoint")
-				-- Position
-				local _pos = string.Explode(",", _storagepoint.position)
-				local _edit = Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 4)
-				local _height = Vector(0, 0, 14)
-
-				if item.type == "vehicles" and ent.Custom ~= nil and string.lower(ent.Custom) == "scars" then
-					_height = Vector(0, 0, 24)
-				end
-
-				_pos = Vector(_pos[1], _pos[2], _pos[3]) + _edit + _height
-				_pos_end = _pos
-				ent:SetPos(_pos_end)
-
-				-- Angle
-				if ent.Custom ~= "simfphys" then
-					local _ang = string.Explode(",", _storagepoint.angle)
-					_ang = Angle(0, _ang[2], 0)
-					ent:SetAngles(_ang)
-				end
-
-				local _mins = ent:OBBMins() + _edit
-				local _maxs = ent:OBBMaxs() + _edit
-				local tr = {}
-				tr.start = _pos
-				tr.endpos = _pos
-				tr.mins = _mins
-				tr.maxs = _maxs
-				tr.filter = {ent, ent:GetChildren()}
-				local hullTrace = util.TraceHull(tr)
-
-				if hullTrace.Hit then
-					printGM("note", "[spawnItem] NOT ENOUGH SPACE")
-					net.Start("yrp_info2")
-						net.WriteString("notenoughspace")
-						net.WriteString("(" .. tostring(hullTrace.Entity) .. ")")
-					net.Send(ply)
-					ent:Remove()
-
-					return false
-				end
-
-				if ent.Custom ~= "simfphys" then
-					local tr2 = util.TraceHull({
-						start = _pos_end + Vector(0, 0, 128),
-						endpos = _pos_end - Vector(0, 0, 128),
-						maxs = maxs,
-						mins = mins,
-						filter = ent
-					})
-
-					ClassName = ent:GetClass()
-					if ent.SpawnFunction ~= nil then
-						ent:SpawnFunction(ply, tr2, ent:GetClass())
-					else
-						ent:Spawn()
-					end
-
-					ent:Activate()
-					ent:SetPos(_pos_end)
-				end
-
-				return true
-			end
+			local pos = string.Explode(",", SP.position)
+			TARGETPOS = Vector(pos[1], pos[2], pos[3])
 		end
+	end
 
+	if TARGETPOS == nil then
+		TARGETPOS = ply:GetPos()
 		printGM("gm", "[spawnItem] Item To Player")
-		_angle = ply:EyeAngles()
-		ent:SetPos(ply:GetPos() + Vector(0, 0, math.abs(ent:OBBMins().z)) + Vector(0, 0, 32))
+	end
 
-		for dist = 0, _distMax, _distSpace do
-			for ang = 0, 360, 45 do
-				if ang ~= 0 then
-					_angle = _angle + Angle(0, 45, 0)
-				end
+	TARGETPOS = TARGETPOS + Vector(0, 0, 50)
 
-				local tr = {}
-				tr.start = ent:GetPos() + _angle:Forward() * dist
-				tr.endpos = ent:GetPos() + _angle:Forward() * dist
-				tr.filter = ent
-				tr.mins = ent:OBBMins() * 1.1 --1.1 because so that no one get stuck
-				tr.maxs = ent:OBBMaxs() * 1.1 --1.1 because so that no one get stuck
-				tr.mask = MASK_SHOT_HULL
-				local _result = util.TraceHull(tr)
+	local foundpos = false
+	local ang = Angle(0, 0, 0)
+	for i = 0, 315, 45 do
+		ang = Angle(0, i, 0)
+		local pos = TARGETPOS + ang:Forward() * dist
 
-				if not _result.Hit then
-					_pos_end = ent:GetPos() + _angle:Forward() * dist
-					ent:SetPos(_pos_end)
+		local tr = util.TraceHull( {
+			start = pos,
+			endpos = pos,
+			mins = mins,
+			maxs = maxs,
+			mask = MASK_SHOT_HULL
+		} )
 
-					printGM("gm", "[spawnItem] Spawn Item")
-
-					local tr2 = util.TraceHull({
-						start = _pos_end + Vector(0, 0, 128),
-						endpos = _pos_end - Vector(0, 0, 128),
-						maxs = maxs,
-						mins = mins,
-						filter = ent
-					})
-
-					ClassName = ent:GetClass()
-					if ent.SpawnFunction ~= nil then
-						ent:SpawnFunction(ply, tr2, ent:GetClass())
-					else
-						ent:Spawn()
-					end
-
-					ent:Activate()
-					ent:SetPos(_pos_end)
-
-					printGM("gm", "[spawnItem] Enough Space")
-
-					return true
-				end
-			end
+		if !tr.Hit then
+			TARGETPOS = pos
+			foundpos = true
 		end
+	end
 
-		printGM("note", "[spawnItem] Not Enough Space")
-
-		ent:Remove()
+	if !foundpos then
 		return false
 	end
+
+	local tr = util.TraceHull( {
+		start = TARGETPOS + Vector(0, 0, 40),
+		endpos = TARGETPOS - Vector(0, 0, 400),
+		mins = mins,
+		maxs = maxs,
+		mask = MASK_SHOT_HULL
+	} )
+
+	if tr.Hit then
+		local ent = nil
+
+		local ENT = scripted_ents.GetStored(item.ClassName)
+		if ENT != nil then
+			ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
+			printGM("gm", "[spawnItem] Spawned 1")
+			return true
+		else
+			local vehicle = list.Get( "simfphys_vehicles" )[ item.ClassName ]
+			if vehicle then
+				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
+				printGM("gm", "[spawnItem] Spawned 3")
+				return true
+			else
+				ent = ents.Create(item.ClassName)
+				if IsValid(ent) then
+					ent:SetPos(tr.HitPos)
+					ent:Spawn()
+	
+					printGM("gm", "[spawnItem] Spawned 2")
+					return true
+				else
+					YRP.msg("note", "Not valid " .. item.ClassName)
+				end
+			end
+		end
+	else
+		YRP.msg("note", "Not enough space for item")
+	end
+	return false
 end
 
 util.AddNetworkString("item_buy")
-
 net.Receive("item_buy", function(len, ply)
 	local _tab = net.ReadTable()
 	local _dealer_uid = net.ReadString()
@@ -488,7 +403,6 @@ net.Receive("item_buy", function(len, ply)
 end)
 
 util.AddNetworkString("item_spawn")
-
 net.Receive("item_spawn", function(len, ply)
 	local _tab = net.ReadTable()
 	local _dealer_uid = net.ReadString()
@@ -507,7 +421,6 @@ net.Receive("item_spawn", function(len, ply)
 end)
 
 util.AddNetworkString("item_despawn")
-
 net.Receive("item_despawn", function(len, ply)
 	local _tab = net.ReadTable()
 	local _item = SQL_SELECT(_db_name, "*", "uniqueID = " .. _tab.uniqueID)

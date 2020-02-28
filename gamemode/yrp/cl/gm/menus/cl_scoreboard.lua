@@ -351,9 +351,11 @@ function OpenSBS()
 		if !strEmpty(_server_logo) then
 			local ServerLogo = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), YRP.ctr(4), YRP.ctr(4))
 			ServerLogo:SetHTML(text_server_logo)
+			--TestHTML(ServerLogo, text_server_logo, false)
 			if _mapPNG == false then
 				local ServerLogo2 = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), sbs.frame:GetWide() - YRP.ctr(256 + 4), YRP.ctr(4))
 				ServerLogo2:SetHTML(text_server_logo)
+				--TestHTML(ServerLogo2, text_server_logo, false)
 			end
 		end
 
@@ -492,11 +494,13 @@ function OpenSBS()
 
 			if !strEmpty(pl:GetDString("roleIcon", "")) then
 				pl.sbp.ricon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
+				TestHTML(pl.sbp.ricon, pl:GetDString("roleIcon", ""), false)
 			elseif pa(pl.sbp.ricon) then
 				pl.sbp.ricon:Remove()
 			end
 			if !strEmpty(pl:GetDString("groupIcon", "")) then
 				pl.sbp.gicon = createD("DHTML", pl.sbp, YRP.ctr(60), YRP.ctr(60), 0, 0)
+				TestHTML(pl.sbp.gicon, pl:GetDString("groupIcon", ""), false)
 			elseif pa(pl.sbp.gicon) then
 				pl.sbp.gicon:Remove()
 			end

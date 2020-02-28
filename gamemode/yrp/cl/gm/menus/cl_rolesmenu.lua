@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+--#roles #rolesmenu #groups #factions
+
 ROLEMENU = ROLEMENU or {}
 ROLEMENU.open = false
 local _info = nil
@@ -272,6 +274,7 @@ function addGroup(grp, parent)
 		_grp.color = Color(_grp.color[1], _grp.color[2], _grp.color[3])
 		local headeralpha = lply:InterfaceValue("YButton", "HC").a
 		local contentalpha = lply:InterfaceValue("YFrame", "BG").a
+		local contentdarker = 8
 		_grp.tbl = grp
 		_grp.locked = tobool(grp.bool_locked)
 		local BR = YRP.ctr(30)
@@ -305,7 +308,7 @@ function addGroup(grp, parent)
 			end
 		end
 		function _grp:PaintContent(pw, ph)
-			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r - 200, self.color.g - 200, self.color.b - 200, contentalpha), false, false, true, true)
+			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r - contentdarker, self.color.g - contentdarker, self.color.b - contentdarker, contentalpha), false, false, true, true)
 		end
 		_grp:SetHeaderHeight(YRP.ctr(100))
 
@@ -359,13 +362,11 @@ function getGroups(uid, parent)
 				dg = g
 			end
 		end
-		if wk(dg) then
-			timer.Simple(0.2, function()
-				if wk(dg) then
-					dg.header:DoClick()
-				end
-			end)
-		end
+		timer.Simple(0.2, function()
+			if wk(dg) and wk(dg.header) then
+				dg.header:DoClick()
+			end
+		end)
 	end)
 
 	net.Start("get_grps")

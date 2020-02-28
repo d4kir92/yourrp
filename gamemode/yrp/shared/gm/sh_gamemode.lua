@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 193 --do NOT change this!
-GM.VersionCanary = 389 --do NOT change this!
+GM.VersionBeta = 194 --do NOT change this!
+GM.VersionCanary = 390 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -34,6 +34,7 @@ for i, wsi in pairs(engine.GetAddons()) do
 		VERSIONART = "workshop"
 	end
 end
+GM.Art = VERSIONART
 
 function ChangeChannel(channel)
 	if channel == "stable" or channel == "beta" or channel == "canary" then

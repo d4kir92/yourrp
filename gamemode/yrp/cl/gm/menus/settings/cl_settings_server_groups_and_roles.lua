@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+--#roles #groups #settings
+
 net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 	if pa(settingsWindow) and pa(settingsWindow.window) then
 		function settingsWindow.window.site:Paint(pw, ph)
@@ -142,6 +144,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local icon = net.ReadString()
 				gs.gplist[_uid].string_icon = icon
 				gs.gplist[_uid].ico:SetHTML(GetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall()))
+				TestHTML(gs.gplist[_uid].ico, gs.gplist[_uid].string_icon, false)
 			end
 		end)
 
@@ -196,6 +199,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function ico:Paint(pw, ph)
 			end
 			ico:SetHTML(GetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall()))
+			TestHTML(ico, group.string_icon, false)
 
 			gs.gplist[group.uniqueID].up = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
 			gs.gplist[group.uniqueID].up:SetText("")
@@ -448,6 +452,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local icon = net.ReadString()
 				rs.rplist[_uid].string_icon = icon
 				rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
+				TestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
 			end
 		end)
 
@@ -887,6 +892,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			function ico:Paint(pw, ph)
 			end
 			ico:SetHTML(GetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall()))
+			TestHTML(ico, role.string_icon, false)
 
 			rs.rplist[role.uniqueID].up = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
 			rs.rplist[role.uniqueID].up:SetText("")

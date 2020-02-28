@@ -1563,7 +1563,8 @@ function drawPlates()
 				else
 					ply.headalpha = ply.headalpha - 5
 				end
-				ply.headalpha = math.Clamp(ply.headalpha, 0, 240)
+				local maxalpha = math.Clamp(color.a, 0, 240)
+				ply.headalpha = math.Clamp(ply.headalpha, 0, maxalpha)
 				color.a = ply.headalpha
 			elseif renderalpha < color.a then
 				color.a = renderalpha
@@ -1598,12 +1599,14 @@ function drawPlates()
 
 				if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
 					local plyvol = ply:VoiceVolume() * 200
-					local voicecolor = Color(color.r, color.g, color.b, 55 + plyvol)
+					plyvol = 55 + plyvol
+					plyvol = math.Clamp(plyvol, 0, color.a)
+					local voicecolor = Color(color.r, color.g, color.b, plyvol)
 					YRP.DrawSymbol(ply, "voice", 18, voicecolor)
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
-					YRP.DrawSymbol(ply, "chat", 18, Color(255, 255, 255, 255))
+					YRP.DrawSymbol(ply, "chat", 18, Color(255, 255, 255, color.a))
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_armor", false) then

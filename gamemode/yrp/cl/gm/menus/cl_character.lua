@@ -641,6 +641,7 @@ function openCharacterSelection()
 
 		if !pa(_cs.frame) then
 			_cs.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+			_cs.frame:Hide()
 			_cs.frame:SetTitle("")
 			_cs.frame:ShowCloseButton(false)
 			_cs.frame:SetDraggable(false)
@@ -975,6 +976,8 @@ function openCharacterSelection()
 					end
 				end
 			end
+
+			_cs.frame:Show()
 			
 			LocalPlayer():SetDBool("loadedchars", true)
 			_cs.frame:MakePopup()

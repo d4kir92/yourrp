@@ -8,6 +8,10 @@ local CURRENT_USERGROUP = nil
 
 local DUGS = DUGS or {}
 
+local _icon = {}
+_icon.size = YRP.ctr(100 - 16)
+_icon.br = YRP.ctr(8)
+
 net.Receive("Connect_Settings_UserGroup", function(len)
 	local ug = net.ReadTable()
 	CURRENT_USERGROUP = tonumber(ug.uniqueID)
@@ -78,7 +82,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- ICON
-	local ICON = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20 + 100 + 20 + 100 + 20))
+	UGS[CURRENT_USERGROUP].ICON = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20 + 100 + 20 + 100 + 20))
+	local ICON = UGS[CURRENT_USERGROUP].ICON
 	ICON:INITPanel("DTextEntry")
 	ICON:SetHeader(YRP.lang_string("LID_icon"))
 	ICON:SetText(ug.string_icon)
@@ -90,9 +95,18 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		net.SendToServer()
 	end
 	net.Receive("usergroup_update_icon", function(len2)
-		local icon = net.ReadString()
-		UGS[CURRENT_USERGROUP].string_icon = icon
+		local string_icon = net.ReadString()
+		UGS[CURRENT_USERGROUP].string_icon = string_icon
 		ICON:SetText(UGS[CURRENT_USERGROUP].string_icon)
+
+		local HTMLCODE = GetHTMLImage(UGS[CURRENT_USERGROUP].string_icon, _icon.size, _icon.size)
+		local icon = UGS[tonumber(tbl.uniqueID)].icon
+		if strEmpty(HTMLCODE) then
+			icon:SetHTML("")
+		else
+			icon:SetHTML(HTMLCODE)
+		end
+		TestHTML(icon, UGS[CURRENT_USERGROUP].string_icon, false)
 	end)
 
 	-- SWEPS
@@ -555,7 +569,7 @@ function AddUG(tbl)
 		self.string_color = StringToColor(UGS[self.uid].string_color)
 		surfaceButton(self, pw, ph, string.upper(UGS[self.uid].string_name), self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
 
-		if UGS[tonumber(tbl.uniqueID)].string_icon == "" then
+		if strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon) then
 			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color(255, 255, 255, 255))
 		end
 		if self.uid == tonumber(CURRENT_USERGROUP) then
@@ -632,15 +646,17 @@ function AddUG(tbl)
 		end
 	end
 
-	if UGS[tonumber(tbl.uniqueID)].string_icon != "" then
-		local _icon = {}
-		_icon.size = YRP.ctr(100 - 16)
-		_icon.br = YRP.ctr(8)
-
+	--if !strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon != "" then
 		local HTMLCODE = GetHTMLImage(tbl.string_icon, _icon.size, _icon.size)
-		local html = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
-		html:SetHTML(HTMLCODE)
-	end
+		UGS[tonumber(tbl.uniqueID)].icon = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
+		local icon = UGS[tonumber(tbl.uniqueID)].icon
+		if strEmpty(HTMLCODE) then
+			icon:SetHTML("")
+		else
+			icon:SetHTML(HTMLCODE)
+		end
+		TestHTML(icon, tbl.string_icon, false)
+	--end
 
 	PARENT.ugs:AddItem(_ug)
 end
@@ -696,6 +712,9 @@ function UpdateUsergroupsList(ugs)
 end
 
 net.Receive("UpdateUsergroupsList", function()
+	_icon.size = YRP.ctr(100 - 16)
+	_icon.br = YRP.ctr(8)
+
 	local ugs = net.ReadTable()
 	UpdateUsergroupsList(ugs)
 end)

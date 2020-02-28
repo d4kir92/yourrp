@@ -4,7 +4,7 @@ function DrawSelector(btn, w, h, text, selected, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	draw.SimpleTextOutlined(text, "mat1header", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleText(text, "mat1header", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
 
 	if btn.ani_h == nil then
 		btn.ani_h = 0
@@ -88,8 +88,8 @@ function PANEL:SiteNotFound()
 	self:ClearSite()
 
 	function self.site:Paint(pw, ph)
-		draw.SimpleTextOutlined("[Site Not Found]", "mat1text", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1, YRP.ctr(1), Color(0, 0, 0))
-		draw.SimpleTextOutlined("[" .. YRP.lang_string("LID_wip") .. "]", "mat1text", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1, YRP.ctr(1), Color(0, 0, 0))
+		draw.SimpleText("[Site Not Found]", "mat1text", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleText("[" .. YRP.lang_string("LID_wip") .. "]", "mat1text", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
 	end
 end
 

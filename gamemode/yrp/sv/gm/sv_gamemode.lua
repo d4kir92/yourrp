@@ -51,7 +51,7 @@ function GM:PlayerInitialSpawn(ply)
 
 	if ply:HasCharacterSelected() then
 		local rolTab = ply:GetRolTab()
-		if rolTab != nil then
+		if wk(rolTab) then
 			timer.Simple(1, function()
 
 				SetRole(ply, rolTab.uniqueID)

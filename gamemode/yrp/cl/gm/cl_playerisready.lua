@@ -70,7 +70,7 @@ hook.Add("Think", "yrp_think_ready", function()
 	end
 end)
 
-hook.Add("InitPostEntity", "yrp_InitPostEntity", function()
+hook.Add("InitPostEntity", "yrp_InitPostEntity_ready", function()
 	printGM("note", "All entities are loaded.")
 
 	hookinitpostentity = true

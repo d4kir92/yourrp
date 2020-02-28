@@ -1270,3 +1270,38 @@ function drawRoundedBoxBR(r, x, y, w, h, color, br)
 		render.SetStencilEnable(false)
 	end
 end
+
+function TestHTML(pnl, url, rem)
+	if rem == nil then
+		rem = true
+	end
+
+	if strEmpty(url) then
+		if rem then
+			pnl:Remove()
+		else
+			pnl:SetVisible(false)
+		end
+	else
+		http.Fetch(url,
+			function( body, len, headers, code )
+				if code != 200 then
+					if rem then
+						pnl:Remove()
+					else
+						pnl:SetVisible(false)
+					end
+				else
+					pnl:SetVisible(true)
+				end
+			end,
+			function( error )
+				if rem then
+					pnl:Remove()
+				else
+					pnl:SetVisible(false)
+				end
+			end
+		)
+	end
+end

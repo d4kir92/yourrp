@@ -489,15 +489,15 @@ end)
 util.AddNetworkString("usergroup_update_icon")
 net.Receive("usergroup_update_icon", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local icon = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "icon = '" .. icon .. "'", "uniqueID = '" .. uid .. "'")
+	local string_icon = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_icon = '" .. string_icon .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated icon of usergroup (" .. uid .. ") to [" .. icon .. "]")
+	printGM("db", ply:YRPName() .. " updated string_icon of usergroup (" .. uid .. ") to [" .. string_icon .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		if pl != ply then
 			net.Start("usergroup_update_icon")
-				net.WriteString(icon)
+				net.WriteString(string_icon)
 			net.Send(pl)
 		end
 	end

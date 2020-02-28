@@ -1,9 +1,10 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
-function DrawRectBlur(px, py, pw, ph, blur)
+function DrawRectBlur(pnl, px, py, sw, sh, blur)
     render.ClearStencil()
-    render.SetStencilEnable(true)
+	render.SetStencilEnable(true)
+
 		render.SetStencilReferenceValue(1)
 		render.SetStencilTestMask(1)
 		render.SetStencilWriteMask(1)
@@ -14,22 +15,23 @@ function DrawRectBlur(px, py, pw, ph, blur)
 
 		surface.SetDrawColor(255, 255, 255, 255)
 		draw.NoTexture() 
-    	surface.DrawRect(px, py, pw, ph)
+    	surface.DrawRect(px, py, sw, sh)
 
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 		render.SetStencilFailOperation(STENCILOPERATION_KEEP)
 		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
 		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-	
+
+		local x, y = pnl:LocalToScreen(0, 0)
+		surface.SetDrawColor(255, 255, 255)
 		surface.SetMaterial(MaterialBlur)
-		surface.SetDrawColor(255, 255, 255, 255)
-		for i = 0, 1, 0.1 do
-			MaterialBlur:SetFloat('$blur', blur * i)
+		for i = 1, 3 do
+			MaterialBlur:SetFloat("$blur", (i / 3) * blur)
 			MaterialBlur:Recompute()
 			render.UpdateScreenEffectTexture()
-			surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+			surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH())
 		end
-
+	
     render.SetStencilEnable(false)
 end
 

@@ -57,7 +57,7 @@ function PANEL:Init()
 			end
 
 			draw.RoundedBoxEx(0, ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), _color, true, true)
-			surfaceText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 		end
 
 		function _tmp:DoClick()

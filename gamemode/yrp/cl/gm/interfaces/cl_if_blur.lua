@@ -10,8 +10,7 @@ hook.Add("YFramePaint", "YFrame_Blur", function(self, pw, ph, tab)
 			hh = self:GetHeaderHeight()
 		end
 
-		DrawRectBlur(0, 0, pw, ph, 5)
-		--draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB"))
+		DrawRectBlur(self, 0, 0, pw, ph, 5) --draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB"))
 
 		draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB")) --lply:InterfaceValue("YFrame", "BG"))
 

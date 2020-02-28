@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+--#help #keybinds #website
+
 HELPMENU = HELPMENU or {}
 HELPMENU.open = false
 
@@ -183,7 +185,7 @@ net.Receive("getsitehelp", function(len)
 		local version = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
 
 		function version:Paint(pw, ph)
-			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1)
+			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion()
 	end
@@ -686,7 +688,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 				hook.Run("YButtonPaint", self, pw, ph)
 				--surfaceButton(self, pw, ph, "")
-				surfaceText(_allProgressTexts[sho], "mat1text", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
+				draw.SimpleText(_allProgressTexts[sho], "mat1text", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
 				YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.language.short)), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 			end
 
