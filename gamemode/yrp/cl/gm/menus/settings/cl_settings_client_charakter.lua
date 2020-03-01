@@ -52,13 +52,5 @@ end)
 hook.Add("open_client_character", "open_client_character", function()
 	if pa(settingsWindow) then
 		SaveLastSite()
-		local w = settingsWindow.window.sitepanel:GetWide()
-		local h = settingsWindow.window.sitepanel:GetTall()
-
-		settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
-			draw.SimpleTextOutlined("MOVED TO F4/H", "sef", YRP.ctr(100), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		end
 	end
 end)

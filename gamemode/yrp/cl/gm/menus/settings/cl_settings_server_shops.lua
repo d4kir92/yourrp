@@ -416,13 +416,9 @@ hook.Add("open_server_shops", "open_server_shops", function()
 	SaveLastSite()
 	local ply = LocalPlayer()
 
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
+	local w = settingsWindow.window.site:GetWide()
+	local h = settingsWindow.window.site:GetTall()
 
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-	function settingsWindow.window.site:Paint(w, h)
-		--
-	end
 	_sh.ea = createD("DPanel", settingsWindow.window.site, ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 	function _sh.ea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))

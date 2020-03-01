@@ -722,9 +722,6 @@ end)
 net.Receive("Connect_Settings_UserGroups", function(len)
 	if pa(settingsWindow) then
 		if settingsWindow.window != nil then
-			function settingsWindow.window.site:Paint(pw, ph)
-				draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-			end
 
 			CURRENT_USERGROUP = nil
 
@@ -788,11 +785,6 @@ end)
 hook.Add("open_server_usergroups", "open_server_usergroups", function()
 	SaveLastSite()
 	if pa(settingsWindow) then
-		local w = settingsWindow.window.sitepanel:GetWide()
-		local h = settingsWindow.window.sitepanel:GetTall()
-
-		settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-
 		net.Start("Connect_Settings_UserGroups")
 		net.SendToServer()
 	end

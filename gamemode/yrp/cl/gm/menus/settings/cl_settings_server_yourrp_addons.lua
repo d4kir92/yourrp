@@ -94,9 +94,6 @@ end
 
 net.Receive("Connect_Settings_YourRP_Addons", function(len)
 	if pa(settingsWindow) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
 
 		local PARENT = settingsWindow.window.site
 
@@ -107,7 +104,7 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 
 		local YRPA = net.ReadTable()
 
-		local yrp_addons = createD("DPanelList", PARENT, YRP.ctr(1600), ScrH() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
+		local yrp_addons = createD("DPanelList", PARENT, YRP.ctr(1600), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 		yrp_addons:EnableVerticalScrollbar(true)
 		yrp_addons:SetSpacing(10)
 		function yrp_addons:Paint(pw, ph)
@@ -142,9 +139,7 @@ end)
 
 hook.Add("open_server_yourrp_addons", "open_server_yourrp_addons", function()
 	SaveLastSite()
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
+
 	net.Start("Connect_Settings_YourRP_Addons")
 	net.SendToServer()
 end)

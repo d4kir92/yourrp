@@ -326,9 +326,14 @@ function spawnItem(ply, item, duid)
 
 		local ENT = scripted_ents.GetStored(item.ClassName)
 		if ENT != nil then
-			ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
-			printGM("gm", "[spawnItem] Spawned 1")
-			return true
+			if ENT.t != nil and ENT.t.SpawnFunction != nil then
+				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
+				printGM("gm", "[spawnItem] Spawned 1")
+				return true
+			else
+				YRP.msg("note", "[spawnItem] failed: " .. item.ClassName .. " " .. tostring(ENT.t.SpawnFunction))
+				return false
+			end
 		else
 			local vehicle = list.Get( "simfphys_vehicles" )[ item.ClassName ]
 			if vehicle then

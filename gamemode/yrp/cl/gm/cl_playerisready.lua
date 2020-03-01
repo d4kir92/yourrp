@@ -64,7 +64,7 @@ hook.Add("Think", "yrp_think_ready", function()
 	elseif d < CurTime() then
 		d = CurTime() + 1
 		count = count + 1
-		if count > 60 then
+		if count > 4 and wk(system.GetCountry()) then
 			noinit = true
 		end
 	end

@@ -164,9 +164,6 @@ net.Receive("get_feedback", function()
 	local _fbt = net.ReadTable()
 
 	if settingsWindow.window != nil then
-		function settingsWindow.window.site:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
 
 		local site = settingsWindow.window.site
 
@@ -191,14 +188,6 @@ end)
 hook.Add("open_server_feedback", "open_server_feedback", function()
 	SaveLastSite()
 	local ply = LocalPlayer()
-
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-	function settingsWindow.window.site:Paint(w, h)
-		--
-	end
 
 	net.Start("get_feedback")
 	net.SendToServer()

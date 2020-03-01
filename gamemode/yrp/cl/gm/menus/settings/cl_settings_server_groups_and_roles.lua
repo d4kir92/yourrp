@@ -4,9 +4,6 @@
 
 net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 	if pa(settingsWindow) and pa(settingsWindow.window) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
 
 		local PARENT = settingsWindow.window.site
 
@@ -459,7 +456,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		PARENT.ea = {}
 		local ea = PARENT.ea
 
-		ea.background = createD("DHorizontalScroller", PARENT, ScrW() - YRP.ctr(860), ScrH() - YRP.ctr(200), YRP.ctr(840), YRP.ctr(80))
+		ea.background = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(860), PARENT:GetTall() - YRP.ctr(20 + 60 + 20), YRP.ctr(840), YRP.ctr(20 + 60))
 		ea.background:SetOverlap(-YRP.ctr(20))
 		--[[function ea.background:Paint(pw, ph)
 			if ea.typ != nil then
@@ -581,7 +578,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 
-		ea.top = createD("DPanel", PARENT, ScrW() - YRP.ctr(980), YRP.ctr(60), YRP.ctr(960), YRP.ctr(20))
+		ea.top = createD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(980), YRP.ctr(60), YRP.ctr(960), YRP.ctr(20))
 		function ea.top:Paint(pw, ph)
 			if ea.typ != nil then
 				local tab = {}
@@ -2570,9 +2567,7 @@ end)
 
 hook.Add("open_server_groups_and_roles", "open_server_groups_and_roles", function()
 	SaveLastSite()
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
+
 	net.Start("Subscribe_Settings_GroupsAndRoles")
 	net.SendToServer()
 end)

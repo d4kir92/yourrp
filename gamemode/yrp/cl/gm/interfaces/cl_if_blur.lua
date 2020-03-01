@@ -174,6 +174,32 @@ hook.Add("YClosePaint", "YClose_Blur", function(self, pw, ph, tab)
 	end
 end)
 
+hook.Add("YMaxPaint", "YMax_Blur", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	if GetGlobalDString("string_interface_design") == "Blur" then
+		local color = Color(205, 205, 100)
+		if self:IsDown() or self:IsPressed() then
+			color.r = color.r - 50
+			color.g = color.g - 50
+			color.b = color.b - 50
+		elseif self:IsHovered() then
+			color.r = color.r + 50
+			color.g = color.g + 50
+			color.b = color.b + 50
+		end
+		surface.SetDrawColor(color)
+		surface.SetMaterial(YRP.GetDesignIcon("circle"))
+		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		local br = ph * 0.1
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(YRP.GetDesignIcon("square"))
+		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		return true
+	end
+end)
+
 hook.Add("YGroupBoxPaint", "YGroupBox_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 

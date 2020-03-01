@@ -401,6 +401,7 @@ YRP.AddDesignIcon("chat", "vgui/material/icon_chat.png")
 YRP.AddDesignIcon("voice", "vgui/material/icon_voice.png")
 YRP.AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
 YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
+YRP.AddDesignIcon("square", "vgui/material/icon_square.png")
 YRP.AddDesignIcon("launch", "vgui/material/icon_launch.png")
 YRP.AddDesignIcon("lock", "vgui/material/icon_lock.png")
 YRP.AddDesignIcon("steam", "vgui/material/icon_steam.png")
@@ -857,27 +858,54 @@ function paintMDBackground(derma, pw, ph)
 end
 
 function createMDMenu(parent, w, h, x, y)
-	local tmp = createD("DFrame", parent, w, h, x, y)
-	tmp:ShowCloseButton(false)
+	local tmp = createD("YFrame", parent, w, h, x, y)
+	tmp:SetBorder(0)
 	tmp:SetDraggable(true)
+	tmp:SetMinWidth(100)
+	tmp:SetMinHeight(100)
+	tmp:Sizable(true)
 	tmp:SetTitle("")
 	tmp.sites = {}
+	tmp.cats = {}
 	tmp.cat = {}
+
+	local BarW = YRP.ctr(140)
+	local IconSize = YRP.ctr(100)
+	local BR = (BarW - IconSize) / 2
+
+	local logoS = tmp:GetHeaderHeight() - YRP.ctr(20)
+	tmp.logo = createD("YPanel", tmp, YRP.ctr(400), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
+	tmp.logo.yrp = Material("vgui/yrp/logo100_beta.png")
+	function tmp.logo:Paint(pw, ph)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(self.yrp)
+		surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
+
+		if self.w != YRP.ctr(400) or self.h != logoS or self.x != tmp:GetWide() / 2 - YRP.ctr(200) or self.y != YRP.ctr(10) then
+			self.w = YRP.ctr(400)
+			self.h = logoS
+			self.x = tmp:GetWide() / 2 - YRP.ctr(200)
+			self.y = YRP.ctr(10)
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
+	end
 
 	function tmp:AddCategory(cat)
 		local tmpNr = #tmp.cat + 1
 		self.cat[tmpNr] = cat
-		self.sites[cat] = {}
+		self.cats[cat] = {}
 	end
 
 	function tmp:AddSite(hook, site, cat, icon)
 		local material = Material(icon)
-		local tmpNrMax = #tmp.sites[cat]
+		local tmpNrMax = #tmp.cats[cat]
 		local tmpNr = tmpNrMax + 1
-		self.sites[cat][tmpNr] = {}
-		self.sites[cat][tmpNr].hook = hook
-		self.sites[cat][tmpNr].site = site
-		self.sites[cat][tmpNr].material = material
+		self.cats[cat][tmpNr] = {}
+		self.cats[cat][tmpNr].hook = hook
+		self.cats[cat][tmpNr].site = site
+		self.cats[cat][tmpNr].material = material
 	end
 
 	tmp.sitepanel = createD("DPanel", tmp, w, h - YRP.ctr(100), 0, YRP.ctr(100))
@@ -887,43 +915,50 @@ function createMDMenu(parent, w, h, x, y)
 	end
 
 	function tmp:SwitchToSite(_hook)
+		self.site:Clear()
+		
 		self.lastsite = _hook
-
-		if self.site ~= nil then
-			self.site:Remove()
-		end
+		tmp.cursite = tmp.sites[_hook].site
+		tmp:SetTitle(string.upper(YRP.lang_string(tmp.sites[_hook].site)))
 
 		hook.Call(_hook)
 	end
 
-	function tmp:openMenu()
-		self.menu = createD("DPanelList", self, YRP.ctr(600), h - YRP.ctr(100), 0, YRP.ctr(100))
-		self.menu:EnableVerticalScrollbar(true)
+	tmp.menu = createD("DPanel", tmp, BarW, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50), 0, tmp:GetHeaderHeight())
+	tmp.menulist = createD("DPanelList", tmp.menu, IconSize, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50) - 2 * BR, BR, BR)
+	tmp.menulist:EnableVerticalScrollbar(true)
 
-		function self.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, YRP.ctr(600), ph, YRPGetColor("5"))
-			local mx = select(1,gui.MousePos())
+	function tmp.menu:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetColor("5"))
 
-			if mx > YRP.ctr(600) then
-				self:Remove()
-			end
+		if self.w != BarW or self.h != tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50) or self.x != 0 or self.y != tmp:GetHeaderHeight() then
+			self.w = BarW
+			self.h = tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50)
+			self.x = 0
+			self.y = tmp:GetHeaderHeight()
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+			tmp.menulist:SetSize(IconSize, self.h)
+			tmp.menulist:SetPos(BR, BR)
 		end
+	end
 
-		local posY = 100
+	local posY = 0
 
-		for k, v in pairs(self.cat) do
-			local tmpCat = createD("DPanel", self.menu, YRP.ctr(600 - 20), YRP.ctr(50), YRP.ctr(10), YRP.ctr(posY))
-
+	function tmp:CreateMenu()
+		for k, v in pairs(tmp.cat) do
+			local tmpCat = createD("DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY))
 			function tmpCat:Paint(pw, ph)
 				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "windowTitle", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
-
-			self.menu:AddItem(tmpCat)
+			tmp.menulist:AddItem(tmpCat)
 
 			--posY = posY + 50 + 10
-			if self.sites[v] ~= nil then
-				for _l, _w in pairs(self.sites[v]) do
-					local tmp2 = createD("DButton", self.menu, YRP.ctr(600 - 20), YRP.ctr(80), YRP.ctr(10), YRP.ctr(posY))
+			if tmp.cats[v] ~= nil then
+				for _l, _w in pairs(tmp.cats[v]) do
+					tmp.sites[_w.hook] = createD("DButton", nil, IconSize, IconSize, BR, YRP.ctr(posY))
+					local tmp2 = tmp.sites[_w.hook]
 					tmp2:SetText("")
 					tmp2.hook = string.lower(_w.hook)
 					tmp2.site = string.upper(_w.site)
@@ -933,46 +968,79 @@ function createMDMenu(parent, w, h, x, y)
 
 						if tmp.cursite == self.site then
 							color = YRPGetColor("3")
-						elseif self:IsHovered() then
+						elseif tmp:IsHovered() then
 							color = YRPGetColor("1")
 						end
 
-						draw.RoundedBox(0, 0, 0, pw, ph, color)
+						draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 
 						if _w.material ~= nil then
 							surface.SetDrawColor(255, 255, 255, 255)
 							surface.SetMaterial(_w.material)
-							surface.DrawTexturedRect(YRP.ctr(24), YRP.ctr(24), YRP.ctr(32), YRP.ctr(32))
+							surface.DrawTexturedRect(BR, BR, IconSize - 2 * BR, IconSize - 2 * BR)
 						end
 
-						draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "mat1text", YRP.ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+						--draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "mat1text", YRP.ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					end
 
 					function tmp2:DoClick()
-						tmp.cursite = self.site
 						tmp:SwitchToSite(self.hook)
-						tmp.menu:Remove()
 					end
 
-					self.menu:AddItem(tmp2)
-					local tmpHr2 = createD("DPanel", self.menu, YRP.ctr(600 - 20), YRP.ctr(6), YRP.ctr(10), YRP.ctr(posY))
+					tmp.menulist:AddItem(tmp2)
+					local tmpHr2 = createD("DPanel", nil, IconSize, YRP.ctr(20), 0, YRP.ctr(posY))
 
 					function tmpHr2:Paint(pw, ph)
 					end
 
-					self.menu:AddItem(tmpHr2)
+					tmp.menulist:AddItem(tmpHr2)
 					--posY = posY + 80 + 10
 				end
 
-				local tmpHr = createD("DPanel", self.menu, YRP.ctr(600 - 20), YRP.ctr(20), YRP.ctr(10), YRP.ctr(posY))
-
+				local tmpHr = createD("DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY))
 				function tmpHr:Paint(pw, ph)
 					--draw.SimpleTextOutlined("test", "windowTitle", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
-				self.menu:AddItem(tmpHr)
+				tmp.menulist:AddItem(tmpHr)
 			end
 		end
+	end
+
+	local CONTENT = tmp:GetContent()
+	tmp.site = createD("YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP.ctr(50), BarW, tmp:GetHeaderHeight())
+	function tmp.site:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
+
+		if self.w != CONTENT:GetWide() - BarW or self.h != CONTENT:GetTall() - YRP.ctr(50) or self.x != BarW or self.y != tmp:GetHeaderHeight() then
+			self.w = CONTENT:GetWide() - BarW
+			self.h = CONTENT:GetTall() - YRP.ctr(50)
+			self.x = BarW
+			self.y = tmp:GetHeaderHeight()
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
+	end
+
+	-- BOTTOMBAR
+	tmp.bot = createD("YPanel", tmp, 10, 10, 0, 0)
+	function tmp.bot:Paint(pw, ph)
+		if self.w != tmp:GetWide() or self.h != YRP.ctr(50) or self.x != 0 or self.y != tmp:GetTall() - YRP.ctr(50) then
+			self.w = tmp:GetWide()
+			self.h = YRP.ctr(50)
+			self.x = 0
+			self.y = tmp:GetTall() - YRP.ctr(50)
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
+
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
+
+		draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_14_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_14_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_14_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	return tmp

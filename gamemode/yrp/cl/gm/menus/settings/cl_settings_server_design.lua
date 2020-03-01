@@ -14,10 +14,6 @@ net.Receive("get_design_settings", function(len)
 	local hud_profiles = net.ReadTable()
 
 	if pa(settingsWindow.window) then
-		settingsWindow.window.site:SetWide(YRP.ctr(20 + 1000 + 20 + 1000 + 20))
-		function settingsWindow.window.site:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
 
 		local Parent = settingsWindow.window.site
 		local GRP_HUD = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20), YRP.ctr(20))
@@ -1027,7 +1023,8 @@ net.Receive("get_design_settings", function(len)
 			end
 		end)
 
-		local pv_win = createD("YFrame", Parent, YRP.ctr(1000), YRP.ctr(1000), YRP.ctr(20 + 1000 + 20 + 1000 + 20 + 20), YRP.ctr(120))
+		local px, py = settingsWindow.window:GetPos()
+		local pv_win = createD("YFrame", Parent, YRP.ctr(1000), YRP.ctr(1000), px + YRP.ctr(2200), YRP.ctr(120))
 		pv_win:SetTitle("LID_window")
 		function pv_win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
@@ -1077,11 +1074,6 @@ end)
 
 hook.Add("open_server_design", "open_server_design", function()
 	SaveLastSite()
-
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 
 	net.Start("get_design_settings")
 	net.SendToServer()

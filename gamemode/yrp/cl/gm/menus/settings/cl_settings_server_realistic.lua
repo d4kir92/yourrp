@@ -2,9 +2,6 @@
 
 net.Receive("Connect_Settings_Realistic", function(len)
 	if pa(settingsWindow) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
 
 		local PARENT = settingsWindow.window.site
 
@@ -19,8 +16,8 @@ net.Receive("Connect_Settings_Realistic", function(len)
 		scroller.parent = PARENT
 		scroller.x = br
 		scroller.y = br
-		scroller.w = ScW() - 2 * br
-		scroller.h = ScrH() - YRP.ctr(100) - 2 * br
+		scroller.w = PARENT:GetWide() - 2 * br
+		scroller.h = PARENT:GetTall() - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 
 		local General = createD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
@@ -29,6 +26,15 @@ net.Receive("Connect_Settings_Realistic", function(len)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
 		end
 		Scroller:AddPanel(General)
+		function Scroller:Paint(pw, ph)
+			if self.w != PARENT:GetWide() or self.h != PARENT:GetTall() then
+				self.w = PARENT:GetWide()
+				self.w = PARENT:GetTall()
+
+				self:SetSize(PARENT:GetWide() - YRP.ctr(2 * 20), PARENT:GetTall() - YRP.ctr(2 * 20))
+				self:SetPos(YRP.ctr(20), YRP.ctr(20))
+			end
+		end
 
 		local dhr = {}
 		dhr.parent = General
@@ -100,9 +106,7 @@ end)
 
 hook.Add("open_server_realistic", "open_server_realistic", function()
 	SaveLastSite()
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
+	
 	net.Start("Connect_Settings_Realistic")
 	net.SendToServer()
 end)

@@ -260,10 +260,6 @@ end
 net.Receive("Connect_Settings_General", function(len)
 	if pa(settingsWindow) and settingsWindow.window != nil then
 
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(4, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
-
 		local PARENT = settingsWindow.window.site
 
 		function PARENT:OnRemove()
@@ -275,9 +271,17 @@ net.Receive("Connect_Settings_General", function(len)
 
 
 
-		local General_Slider = createD("DHorizontalScroller", PARENT, ScrW() - YRP.ctr(2 * 20), ScrH() - YRP.ctr(100 + 20 + 20), YRP.ctr(20), YRP.ctr(20))
+		local General_Slider = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(2 * 20), PARENT:GetTall() - YRP.ctr(2 * 20), YRP.ctr(20), YRP.ctr(20))
 		General_Slider:SetOverlap(- YRP.ctr(20))
+		function General_Slider:Paint(pw, ph)
+			if self.w != PARENT:GetWide() or self.h != PARENT:GetTall() then
+				self.w = PARENT:GetWide()
+				self.w = PARENT:GetTall()
 
+				self:SetSize(PARENT:GetWide() - YRP.ctr(2 * 20), PARENT:GetTall() - YRP.ctr(2 * 20))
+				self:SetPos(YRP.ctr(20), YRP.ctr(20))
+			end
+		end
 
 
 		--[[ SERVER SETTINGS ]]--
@@ -944,8 +948,6 @@ hook.Add("open_server_general", "open_server_general", function()
 
 	local w = settingsWindow.window.sitepanel:GetWide()
 	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 
 	net.Start("Connect_Settings_General")
 	net.SendToServer()

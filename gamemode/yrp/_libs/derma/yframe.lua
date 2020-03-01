@@ -70,6 +70,26 @@ function PANEL:ChangedSize()
 
 end
 
+function PANEL:SetMaximised(b, von)
+	if von != nil then
+		if b != nil then
+			self.maximised = b
+		else
+			self.maximised = !self.maximised
+		end
+
+		LocalPlayer():SetDBool("settingsmaximised", self.maximised)
+
+		if self.maximised then
+			self:SetPos(0, 0)
+			self:SetSize(ScrW(), ScrH())
+		else
+			self:SetSize(BFW(), BFH())
+			self:Center()
+		end
+	end
+end
+
 function PANEL:Sizable(b)
 	self.btnMaxim:SetDisabled(!b)
 
@@ -139,10 +159,21 @@ function PANEL:Init()
 		self.main:Close()
 	end
 
+	self.btnmax = createD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.btnmax:SetText("[ ]")
+	self.btnmax.main = self
+	function self.btnmax:Paint(pw, ph)
+		hook.Run("YMaxPaint", self, pw, ph)
+	end
+	function self.btnmax:DoClick()
+		self.main:SetMaximised(nil, "BTN")
+	end
+
 	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.6, true)
 
-	self.con = createD("YPanel", self, 10, 10, 0, 0)
+	self.con = createD("YPanel", self, 1000, 1000, 0, 0)
 	function self.con:Paint(pw, ph)
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
 	end
 
 	self.sw = self:GetWide()
@@ -172,9 +203,21 @@ function PANEL:Think()
 		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 
-		if IsValid(self.langu) then
-			self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
-			self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+		if self:GetSizable() then
+			self.btnmax:SetVisible(true)
+			self.btnmax:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
+			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
+
+			if IsValid(self.langu) then
+				self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+				self.langu:SetPos(self.btnmax:GetPos() - self.langu:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
+			end
+		else
+			self.btnmax:SetVisible(false)
+			if IsValid(self.langu) then
+				self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+				self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+			end
 		end
 	end
 

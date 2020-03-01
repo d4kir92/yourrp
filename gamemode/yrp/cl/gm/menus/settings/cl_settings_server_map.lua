@@ -324,14 +324,6 @@ end)
 hook.Add("open_server_map", "open_server_map", function()
 	SaveLastSite()
 
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-	function settingsWindow.window.site:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-	end
-
 	net.Start("getMapSite")
 	net.SendToServer()
 end)

@@ -103,7 +103,14 @@ function GetDBool(entindex, key, value)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 	YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
-	local result = YRP_NW_Ents[entindex]["BOOL"][key] or value
+	local result = YRP_NW_Ents[entindex]["BOOL"][key]
+	if isbool(result) then
+		return result
+	elseif isbool(value) then
+		return value
+	else
+		return false
+	end
 	return tobool(result)
 end
 function ENTITY:GetDBool(key, value)

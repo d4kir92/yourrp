@@ -2,11 +2,6 @@
 
 net.Receive("setting_players", function(len)
 	if pa(settingsWindow.window) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			--draw.RoundedBox(4, 0, 0, pw, ph, get_dbg_col())
-			surfaceText(YRP.lang_string("LID_players"), "roleInfoHeader", YRP.ctr(10), YRP.ctr(10 + 25), Color(255, 255, 255), 0, 1)
-		end
-
 		local _giveListView = createD("DListView", settingsWindow.window.site, ScW() - YRP.ctr(20), ScrH() - YRP.ctr(180), YRP.ctr(10), YRP.ctr(10 + 50))
 		_giveListView:AddColumn("SteamID")
 		_giveListView:AddColumn(YRP.lang_string("LID_nick"))
@@ -141,11 +136,6 @@ end)
 
 hook.Add("open_server_give", "open_server_give", function()
 	SaveLastSite()
-
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 
 	net.Start("setting_players")
 	net.SendToServer()

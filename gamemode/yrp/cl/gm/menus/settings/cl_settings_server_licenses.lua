@@ -82,15 +82,6 @@ hook.Add("open_server_licenses", "open_server_licenses", function()
 	SaveLastSite()
 	local ply = LocalPlayer()
 
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
-
-	function settingsWindow.window.site:Paint(w, h)
-		--
-	end
-
 	net.Start("get_licenses")
 	net.SendToServer()
 end)

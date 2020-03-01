@@ -259,9 +259,6 @@ end
 
 net.Receive("getRoleWhitelist", function(len)
 	if pa(settingsWindow.window) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-		end
 
 		local site = settingsWindow.window.site
 
@@ -296,11 +293,6 @@ end)
 hook.Add("open_server_whitelist", "open_server_whitelist", function()
 	SaveLastSite()
 	local ply = LocalPlayer()
-
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 
 	net.Start("getRoleWhitelist")
 	net.SendToServer()

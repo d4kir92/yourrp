@@ -43,6 +43,7 @@ _yrp_settings.materials.light = {}
 _yrp_settings.materials.light.close = Material("vgui/yrp/light_close.png")
 _yrp_settings.materials.light.settings = Material("vgui/yrp/light_settings.png")
 _yrp_settings.materials.light.burger = Material("vgui/yrp/light_burger.png")
+
 settingsWindow = settingsWindow or {}
 
 function get_icon_burger_menu()
@@ -108,7 +109,7 @@ function CloseSettings()
 end
 
 local _save_site = "open_server_general"
-
+local maximised = false
 function SaveLastSite()
 	if pa(settingsWindow) and settingsWindow.window.lastsite != "" then
 		_save_site = settingsWindow.window.lastsite
@@ -120,11 +121,8 @@ function OpenSettings()
 
 	YRPCheckVersion()
 
-	settingsWindow.window = createMDMenu(nil, ScrW(), ScrH(), 0, 0)
-
-	function settingsWindow.window:Paint(pw, ph)
-		--
-	end
+	settingsWindow.window = createMDMenu(nil, BFW(), BFH(), BPX(), BPY())
+	settingsWindow.window:SetMaximised(maximised)
 
 	function settingsWindow.window:OnClose()
 		closeMenu()
@@ -140,7 +138,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_prototypes, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_prototypes, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_prototypes, "icon16/basket_edit.png")
-	settingsWindow.window:AddSite("open_server_logs", "LID_logs", _server_prototypes, "icon16/note.png")
+	--settingsWindow.window:AddSite("open_server_logs", "LID_logs", _server_prototypes, "icon16/note.png")
 	
 
 
@@ -175,117 +173,17 @@ function OpenSettings()
 
 
 
+	settingsWindow.window:CreateMenu()
+
+
+
 	--StartSite
-	settingsWindow.window.cursite = "character"
 	settingsWindow.window:SwitchToSite(_save_site)
-	--Mainbar
-	local mainBar = createD("DPanel", settingsWindow.window, ScrW(), YRP.ctr(100), 0, 0)
+	settingsWindow.window:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
+	--"https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg")
+	--"https://discord.gg/CXXDCMJ")
 
-	function mainBar:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetColor("5"))
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(_yrp_settings.materials.logo100)
-		surface.DrawTexturedRect(YRP.ctr(610), YRP.ctr(10), YRP.ctr(400 * 0.6), YRP.ctr(130 * 0.6))
-
-		local _singleplayer = ""
-
-		if game.SinglePlayer() then
-			_singleplayer = "Singleplayer"
-		end
-
-		local _color = GetVersionColor()
-		draw.SimpleTextOutlined(_singleplayer .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", YRP.ctr(610 + 400 * 0.6 + 10), ph / 2, Color(_color.r, _color.g, _color.b, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	YRP.DChangeLanguage(settingsWindow.window, ScrW() - YRP.ctr(120 + 10 + 80 + 10), YRP.ctr(10), YRP.ctr(120))
-	local feedback = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(500 + 10 + 120 + 10 + 80 + 10), YRP.ctr(10))
-	feedback:SetText("")
-
-	function feedback:Paint(pw, ph)
-		local color = YRPGetColor("2")
-
-		if self:IsHovered() then
-			color = YRPGetColor("1")
-		end
-
-		color.a = 200
-		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		draw.SimpleTextOutlined(YRP.lang_string("LID_givefeedback"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function feedback:DoClick()
-		CloseSettings()
-		openFeedbackMenu()
-	end
-
-	local _bg = createD("HTML", settingsWindow.window, YRP.ctr(500 - 8), YRP.ctr(80 - 12), ScrW() - YRP.ctr(820 + 500 + 10 - 6), YRP.ctr(10 + 6))
-	_bg:OpenURL("https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg")
-	local liveSupport = createD("DButton", settingsWindow.window, YRP.ctr(500), YRP.ctr(80), ScrW() - YRP.ctr(500 + 10 + 500 + 10 + 120 + 10 + 80 + 10), YRP.ctr(10))
-	liveSupport:SetText("")
-
-	function liveSupport:DoClick()
-		gui.OpenURL("https://discord.gg/CXXDCMJ")
-	end
-
-	function liveSupport:Paint(pw, ph)
-		local color = YRPGetColor("2")
-
-		if self:IsHovered() then
-			color = YRPGetColor("1")
-		end
-
-		color.a = 200
-		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		draw.SimpleTextOutlined(YRP.lang_string("LID_getlivesupport"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	local exitButton = createD("DButton", mainBar, YRP.ctr(80), YRP.ctr(80), ScrW() - YRP.ctr(80 + 10), YRP.ctr(10))
-	exitButton:SetText("")
-
-	function exitButton:Paint(pw, ph)
-		local color = YRPGetColor("2")
-
-		if self:IsHovered() then
-			color = YRPGetColor("1")
-		end
-
-		draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
-		surface.SetDrawColor(YRPGetColor("6"))
-		surface.SetMaterial(_yrp_settings.materials[_yrp_settings.design.mode].close)
-		surface.DrawTexturedRect(YRP.ctr(15), YRP.ctr(15), YRP.ctr(50), YRP.ctr(50))
-	end
-
-	function exitButton:DoClick()
-		if settingsWindow.window != nil then
-			settingsWindow.window:Remove()
-			settingsWindow.window = nil
-		end
-	end
-
-	local burgerMenu = createD("DButton", mainBar, YRP.ctr(600 - 10 * 2), YRP.ctr(80), YRP.ctr(10), YRP.ctr(10))
-	burgerMenu:SetText("")
-
-	function burgerMenu:Paint(pw, ph)
-		draw.RoundedBox(ph / 2, 0, 0, pw, ph, YRPGetColor("4"))
-		local color = YRPGetColor("2")
-
-		if self:IsHovered() then
-			color = YRPGetColor("1")
-		end
-
-		draw.RoundedBox(ph / 2, 0, 0, ph, ph, color)
-		surface.SetDrawColor(YRPGetColor("6"))
-		surface.SetMaterial(_yrp_settings.materials[_yrp_settings.design.mode].burger)
-		surface.DrawTexturedRect(YRP.ctr(15), YRP.ctr(15), YRP.ctr(50), YRP.ctr(50))
-		draw.SimpleTextOutlined(string.upper(YRP.lang_string("LID_menu")), "mat1text", YRP.ctr(90), YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-	end
-
-	function burgerMenu:DoClick()
-		if pa(settingsWindow.window) then
-			settingsWindow.window:openMenu()
-		end
-	end
-
+	
 	settingsWindow.window:MakePopup()
 end
 

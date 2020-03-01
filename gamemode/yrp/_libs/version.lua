@@ -113,7 +113,10 @@ if CLIENT then
 	local check_window = 0
 	-- CONFIG
 
+	local once = false
 	function VersionWindow()
+		if once then return end
+		once = true
 		if check_window < CurTime() and LocalPlayer():HasAccess() then
 			check_window = CurTime() + 5
 			local frame = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(590), 0, 0)
@@ -173,9 +176,6 @@ function YRPCheckVersion()
 					if serverart == "OUTDATED" then
 						GAMEMODE.versioncolor = Color(255, 0, 0)
 						GAMEMODE.isoutdated = true
-						if CLIENT then
-							VersionWindow()
-						end
 						serverart = "CANARY"
 					else
 						GAMEMODE.isoutdated = false

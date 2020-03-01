@@ -20,7 +20,7 @@ SWEP.DrawCrosshair = false
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/c_keys.mdl"
+SWEP.ViewModel = ""
 SWEP.WorldModel = ""
 SWEP.notdropable = true
 SWEP.UseHands = true

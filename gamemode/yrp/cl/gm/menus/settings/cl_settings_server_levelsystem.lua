@@ -5,9 +5,6 @@ net.Receive("get_levelsystem_settings", function(len)
 	local setting = net.ReadTable()
 
 	if pa(settingsWindow.window) then
-		function settingsWindow.window.site:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 254))
-		end
 
 		local Parent = settingsWindow.window.site
 
@@ -356,11 +353,6 @@ end)
 
 hook.Add("open_server_levelsystem", "open_server_levelsystem", function()
 	SaveLastSite()
-
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
-	settingsWindow.window.site = createD("DPanel", settingsWindow.window.sitepanel, w, h, 0, 0)
 
 	net.Start("get_levelsystem_settings")
 	net.SendToServer()
