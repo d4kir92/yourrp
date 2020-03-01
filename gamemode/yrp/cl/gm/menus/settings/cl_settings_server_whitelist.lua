@@ -3,7 +3,7 @@
 -- #WHITELISTESETTINGS
 
 function BuildWhitelist(parent, tabW, tabR, tabG, tab)
-	local list = createD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+	local list = createD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 	list:AddColumn("uniqueID"):SetFixedWidth(80)
 	list:AddColumn("SteamID"):SetFixedWidth(130)
 	list:AddColumn(YRP.lang_string("LID_nick"))
@@ -12,6 +12,17 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 	list:AddColumn(YRP.lang_string("LID_role"))
 	list:AddColumn(YRP.lang_string("LID_time")):SetFixedWidth(130)
 	list:AddColumn(YRP.lang_string("LID_status"))
+	function list:Think()
+		if self.w != parent:GetWide() - YRP.ctr(60 + 500) or self.h != parent:GetTall() - YRP.ctr(40) or self.x != YRP.ctr(20) or self.y != YRP.ctr(20) then
+			self.w = parent:GetWide() - YRP.ctr(60 + 500)
+			self.h = parent:GetTall() - YRP.ctr(40)
+			self.x = YRP.ctr(20)
+			self.y = YRP.ctr(20)
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
+	end
 
 	for k, whi in pairs(tabW) do
 		tabW[k].uniqueID = tonumber(whi.uniqueID)
@@ -85,7 +96,7 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 		end
 	end
 
-	local btnAdd = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), ScW() - YRP.ctr(20 + 500), YRP.ctr(20))
+	local btnAdd = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20))
 	btnAdd:SetText(YRP.lang_string("LID_addentry") .. " (" .. YRP.lang_string("LID_role") .. ")")
 	function btnAdd:DoClick()
 		local _whitelistFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
@@ -146,11 +157,19 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 
 		_whitelistFrame:MakePopup()
 	end
-	function btnAdd:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
+	function btnAdd:Think()
+		if self.w != YRP.ctr(500) or self.h != YRP.ctr(50) or self.x != parent:GetWide() - YRP.ctr(20 + 500) or self.y != YRP.ctr(20) then
+			self.w = YRP.ctr(500)
+			self.h = YRP.ctr(50)
+			self.x = parent:GetWide() - YRP.ctr(20 + 500)
+			self.y = YRP.ctr(20)
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
 	end
 
-	local btnGroup = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), ScW() - YRP.ctr(20 + 500), YRP.ctr(90))
+	local btnGroup = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(90))
 	btnGroup:SetText(YRP.lang_string("LID_addentry") .. " (" .. YRP.lang_string("LID_group") .. ")")
 	function btnGroup:DoClick()
 		local _whitelistFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
@@ -191,11 +210,19 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 
 		_whitelistFrame:MakePopup()
 	end
-	function btnGroup:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
+	function btnGroup:Think()
+		if self.w != YRP.ctr(500) or self.h != YRP.ctr(50) or self.x != parent:GetWide() - YRP.ctr(20 + 500) or self.y != YRP.ctr(90) then
+			self.w = YRP.ctr(500)
+			self.h = YRP.ctr(50)
+			self.x = parent:GetWide() - YRP.ctr(20 + 500)
+			self.y = YRP.ctr(90)
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
 	end
 
-	local btnAll = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), ScW() - YRP.ctr(20 + 500), YRP.ctr(160))
+	local btnAll = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(160))
 	btnAll:SetText(YRP.lang_string("LID_addentry") .. " (" .. YRP.lang_string("LID_all") .. ")")
 	function btnAll:DoClick()
 		local _whitelistFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
@@ -229,11 +256,19 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 
 		_whitelistFrame:MakePopup()
 	end
-	function btnAll:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
+	function btnAll:Think(pw, ph)
+		if self.w != YRP.ctr(500) or self.h != YRP.ctr(50) or self.x != parent:GetWide() - YRP.ctr(20 + 500) or self.y != YRP.ctr(160) then
+			self.w = YRP.ctr(500)
+			self.h = YRP.ctr(50)
+			self.x = parent:GetWide() - YRP.ctr(20 + 500)
+			self.y = YRP.ctr(160)
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+		end
 	end
 
-	local btnRem = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), ScW() - YRP.ctr(20 + 500), YRP.ctr(230))
+	local btnRem = createD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(230))
 	btnRem:SetText(YRP.lang_string("LID_removeentry"))
 	function btnRem:DoClick()
 		if list:GetSelectedLine() != nil then
@@ -248,6 +283,17 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 	function btnRem:Paint(pw, ph)
 		if list:GetSelectedLine() != nil then
 			hook.Run("YButtonPaint", self, pw, ph)
+		end
+	end
+	function btnRem:Think()
+		if self.w != YRP.ctr(500) or self.h != YRP.ctr(50) or self.x != parent:GetWide() - YRP.ctr(20 + 500) or self.y != YRP.ctr(230) then
+			self.w = YRP.ctr(500)
+			self.h = YRP.ctr(50)
+			self.x = parent:GetWide() - YRP.ctr(20 + 500)
+			self.y = YRP.ctr(230)
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
 		end
 	end
 
@@ -268,6 +314,9 @@ net.Receive("getRoleWhitelist", function(len)
 
 		-- TABS
 		local tabs = createD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+		function tabs:Think()
+			self:SetSize(site:GetWide(), site:GetTall())
+		end
 
 		tabs:AddOption("LID_all", function(parent)
 			BuildWhitelist(parent, tabW, tabR, tabG, "LID_all")

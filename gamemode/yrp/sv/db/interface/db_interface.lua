@@ -13,26 +13,26 @@ SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ' '")
 local INTERFACES = {}
 function AddIFElement(tab)
 	for name, value in pairs(tab.floats) do
-		local _name = "float_IF_" .. name
+		local _name = "float_IF_" .. tab.element .. "_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	for name, value in pairs(tab.bools) do
-		local _name = "bool_IF_" .. name
+		local _name = "bool_IF_" .. tab.element .. "_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	for name, value in pairs(tab.colors) do
-		local _name = "color_IF_" .. name
+		local _name = "color_IF_" .. tab.element .. "_" .. name
 		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	if tab.ints != nil then
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. name
+			local _name = "int_IF_" .. tab.element .. "_" .. name
 			if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 				SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 			end
@@ -41,6 +41,8 @@ function AddIFElement(tab)
 
 	INTERFACES[tab.element] = tab
 end
+
+
 
 local Simple = {}
 Simple.element = "Simple"
@@ -65,6 +67,8 @@ Simple.ints = {}
 
 AddIFElement(Simple)
 
+
+
 local Blur = {}
 Blur.element = "Blur"
 
@@ -87,6 +91,8 @@ Blur.colors.YButton_SC = "220, 220, 220, 80"	-- Selected Color
 Blur.ints = {}
 
 AddIFElement(Blur)
+
+
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
@@ -120,7 +126,9 @@ end
 util.AddNetworkString("get_interface_settings")
 net.Receive("get_interface_settings", function(len, ply)
 	local element = net.ReadString()
+
 	local tab = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
+
 	if wk(tab) then
 		table.SortByMember(tab, "name", true)
 		net.Start("get_interface_settings")

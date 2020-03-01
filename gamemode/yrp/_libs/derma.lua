@@ -1010,7 +1010,7 @@ function createMDMenu(parent, w, h, x, y)
 	local CONTENT = tmp:GetContent()
 	tmp.site = createD("YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP.ctr(50), BarW, tmp:GetHeaderHeight())
 	function tmp.site:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 254))
 
 		if self.w != CONTENT:GetWide() - BarW or self.h != CONTENT:GetTall() - YRP.ctr(50) or self.x != BarW or self.y != tmp:GetHeaderHeight() then
 			self.w = CONTENT:GetWide() - BarW
@@ -1026,21 +1026,21 @@ function createMDMenu(parent, w, h, x, y)
 	-- BOTTOMBAR
 	tmp.bot = createD("YPanel", tmp, 10, 10, 0, 0)
 	function tmp.bot:Paint(pw, ph)
-		if self.w != tmp:GetWide() or self.h != YRP.ctr(50) or self.x != 0 or self.y != tmp:GetTall() - YRP.ctr(50) then
-			self.w = tmp:GetWide()
-			self.h = YRP.ctr(50)
-			self.x = 0
-			self.y = tmp:GetTall() - YRP.ctr(50)
-			self:SetSize(self.w, self.h)
-			self:SetPos(self.x, self.y)
-		end
-
-
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
 
 		draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_14_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_14_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_14_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	end
+	function tmp.bot:Think()
+		if self.w != tmp:GetWide() or self.h != YRP.ctr(50) or self.px != 0 or self.py != tmp:GetTall() - YRP.ctr(50) then
+			self.w = tmp:GetWide()
+			self.h = YRP.ctr(50)
+			self.px = 0
+			self.py = tmp:GetTall() - YRP.ctr(50)
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.px, self.py)
+		end
 	end
 
 	return tmp

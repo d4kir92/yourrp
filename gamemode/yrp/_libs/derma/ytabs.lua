@@ -13,16 +13,13 @@ function PANEL:Init()
 	self.hs:SetOverlap(-YRP.ctr(20))
 	self.site = createD("DPanel", self, 0, 0, 0, 0)
 	function self.site:Paint(pw, ph)
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 200))
 	end
 
 	self.auto = true
 	self.tabwide = 400
 
 	self.tabs = {}
-end
-
-function PANEL:Think()
-
 end
 
 function PANEL:SetTabWide(num)
@@ -82,7 +79,15 @@ function PANEL:GoToSite(name)
 end
 
 function PANEL:Paint(w, h)
+	local x, y = self:GetPos()
+	if self.sw != w or self.sh != h or self.px != x or self.py != y then
+		self.sw = w
+		self.sh = h
+		self.px = x
+		self.py = y
 
+		self:UPDATESIZE()
+	end
 end
 
 vgui.Register("YTabs", PANEL, "Panel")
