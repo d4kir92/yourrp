@@ -173,6 +173,14 @@ function YRPCheckVersion()
 				if body != nil then
 					local serverart = string.upper(GAMEMODE.VersionSort)
 
+					if serverart == "OUTDATED" then	
+						GAMEMODE.versioncolor = Color(255, 0, 0)	
+						GAMEMODE.isoutdated = true	
+						serverart = "CANARY"	
+					else	
+						GAMEMODE.isoutdated = false	
+					end
+
 					on.stable = GetValue(body, "V" .. serverart .. "STABLE")
 					on.beta = GetValue(body, "V" .. serverart .. "BETA")
 					on.canary = GetValue(body, "V" .. serverart .. "CANARY")
