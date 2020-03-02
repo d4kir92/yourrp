@@ -138,7 +138,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite("open_server_give", "LID_settings_players", _server_prototypes, "icon16/user_edit.png")
 	settingsWindow.window:AddSite("open_server_licenses", "LID_settings_licenses", _server_prototypes, "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite("open_server_shops", "LID_settings_shops", _server_prototypes, "icon16/basket_edit.png")
-	--settingsWindow.window:AddSite("open_server_logs", "LID_logs", _server_prototypes, "icon16/note.png")
+	settingsWindow.window:AddSite("open_server_logs", "LID_logs", _server_prototypes, "icon16/note.png")
 	
 
 

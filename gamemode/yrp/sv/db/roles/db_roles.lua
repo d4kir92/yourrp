@@ -1438,6 +1438,8 @@ function removeFromWhitelist( SteamID, roleID )
 end
 
 function addToWhitelist( SteamID, roleID, groupID, nick, ply, target )
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. roleID .. " " .. groupID .. "'")
+
 	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
 		local dat = util.DateStamp()
 		local status = "Promoted by " .. ply:SteamName()

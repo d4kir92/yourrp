@@ -87,15 +87,17 @@ net.Receive("whitelistPlayer", function(len, ply)
 				target = v
 			end
 		end
-		local _roleID = net.ReadInt(16)
-		local _dbRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. _roleID)
-		if wk(_dbRole) then
-			local _groupID = _dbRole[1].int_groupID
+		local roleID = net.ReadInt(16)
+		local DBRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. roleID)
+		if wk(DBRole) then
+			DBRole = DBRole[1]
+			local _groupID = DBRole.int_groupID
 
 			local dat = util.DateStamp()
 			local status = "Manually by " .. ply:SteamName()
 			local name = target:SteamName()
-			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. _roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+			SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Role: " .. DBRole.string_name .. "'")
 		else
 			printGM("note", "whitelistPlayer FAILED! CALL DEVS")
 		end
@@ -113,13 +115,16 @@ net.Receive("whitelistPlayerGroup", function(len, ply)
 				target = v
 			end
 		end
-		local _groupID = net.ReadInt(16)
-		local _dbRole = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. _groupID)
-
+		local groupID = net.ReadInt(16)
+		local DBGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. groupID)
+		if wk(DBGroup) then
+			DBGroup = DBGroup[1]
+		end
 		local dat = util.DateStamp()
 		local status = "Manually by " .. ply:SteamName()
 		local name = target:SteamName()
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Group: " .. DBGroup.string_name .. "'")
 	end
 	sendRoleWhitelist(ply)
 end)
@@ -139,6 +144,7 @@ net.Receive("whitelistPlayerAll", function(len, ply)
 		local status = "Manually by " .. ply:SteamName()
 		local name = target:SteamName()
 		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. "-1" .. ", " .. "-1" .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. "ALL" .. "'")
 	end
 	sendRoleWhitelist(ply)
 end)

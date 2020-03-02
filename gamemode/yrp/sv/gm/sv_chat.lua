@@ -449,6 +449,8 @@ end)
 function GM:PlayerSay(sender, text, teamChat)
 	unpack_paket(sender, text)
 
+	SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_chat', '" .. sender:SteamID64() .. "', '" .. text .. "'")
+
 	paket.command = string.lower(paket.command)
 
 	if paket.command == "general" or paket.command == "ooc" or paket.command == "advert" then

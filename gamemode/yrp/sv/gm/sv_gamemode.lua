@@ -5,6 +5,8 @@ function GM:PlayerDisconnected(ply)
 	printGM("gm", "[PlayerDisconnected] " .. ply:YRPName())
 	save_clients("PlayerDisconnected")
 
+	SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "disconnected" .. "'")
+
 	local _rol_tab = ply:GetRolTab()
 	if wk(_rol_tab) then
 		if tonumber(_rol_tab.int_maxamount) > 0 then
@@ -363,6 +365,10 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 end
 
 hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmg:GetDamage() .. "'")
+
+
 	--printGM("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
 	local _reward = tonumber(ply:GetDString("hitreward"))
 	if isnumber(_reward) and attacker:IsPlayer() then

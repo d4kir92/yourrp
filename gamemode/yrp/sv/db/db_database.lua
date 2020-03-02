@@ -46,6 +46,7 @@ table.insert(_dbs, "yrp_levelsystem")
 table.insert(_dbs, "yrp_hud")
 table.insert(_dbs, "yrp_laws")
 table.insert(_dbs, "yrp_lockdown")
+table.insert(_dbs, "yrp_logs")
 table.insert(_dbs, "yrp_i_storages")
 table.insert(_dbs, "yrp_i_items")
 table.insert(_dbs, "yrp_keybinds")
@@ -151,6 +152,7 @@ include("hud/db_hud.lua")
 
 include("laws/db_laws.lua")
 include("lockdown/db_lockdown.lua")
+include("logs/db_logs.lua")
 
 include("inventory/db_storages.lua")
 

@@ -870,7 +870,7 @@ function createMDMenu(parent, w, h, x, y)
 	tmp.cat = {}
 
 	local BarW = YRP.ctr(140)
-	local IconSize = YRP.ctr(100)
+	local IconSize = YRP.ctr(94)
 	local BR = (BarW - IconSize) / 2
 
 	-- LOGO
