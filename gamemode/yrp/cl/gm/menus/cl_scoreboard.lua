@@ -483,6 +483,10 @@ function OpenSBS()
 		end
 	end
 
+	table.sort(rplys, function(a, b)
+		return IsUnderGroup(b:YRPGetGroupUID(), a:YRPGetGroupUID())
+	end)
+
 	for i, pl in SortedPairsByMemberValue(rplys, "group") do
 		if pl.sbp == nil then
 			pl.sbp = createD("DButton", sbs.stab, BFW(), YRP.ctr(128), 0, 0)

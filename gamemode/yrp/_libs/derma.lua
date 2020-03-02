@@ -873,23 +873,58 @@ function createMDMenu(parent, w, h, x, y)
 	local IconSize = YRP.ctr(100)
 	local BR = (BarW - IconSize) / 2
 
+	-- LOGO
 	local logoS = tmp:GetHeaderHeight() - YRP.ctr(20)
-	tmp.logo = createD("YPanel", tmp, YRP.ctr(400), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
+	tmp.logo = createD("YPanel", tmp, YRP.ctr(200), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
 	tmp.logo.yrp = Material("vgui/yrp/logo100_beta.png")
 	function tmp.logo:Paint(pw, ph)
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(self.yrp)
 		surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
 
-		if self.w != YRP.ctr(400) or self.h != logoS or self.x != tmp:GetWide() / 2 - YRP.ctr(200) or self.y != YRP.ctr(10) then
-			self.w = YRP.ctr(400)
+		self.w = self.w or 0
+		if self.w != 400 * logoS / 130 or self.h != logoS or self.x != tmp:GetWide() / 2 - self.w or self.y != YRP.ctr(10) then
+			self.w = 400 * logoS / 130
 			self.h = logoS
-			self.x = tmp:GetWide() / 2 - YRP.ctr(200)
+			self.x = tmp:GetWide() / 2 - self.w
 			self.y = YRP.ctr(10)
 
 			self:SetSize(self.w, self.h)
 			self:SetPos(self.x, self.y)
 		end
+	end
+
+	-- DISCORD
+	local icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
+	local icon_x, icon_y = tmp.logo:GetPos()
+	icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
+	tmp.discord = createD("YPanel", tmp, icon_size, icon_size, icon_x, icon_y)
+	tmp.discord.logo = createD("DHTML", tmp.discord, icon_size, icon_size, 0, 0)
+	tmp.discord.btn = createD("DButton", tmp.discord, icon_size, icon_size, 0, 0)
+	tmp.discord.btn:SetText("")
+	local img = GetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
+	tmp.discord.logo:SetHTML(img)
+	function tmp.discord:Paint(pw, ph)
+		icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
+		icon_x, icon_y = tmp.logo:GetPos()
+		icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
+		if self.w != icon_size or self.h != icon_size or self.x != icon_x or self.y != icon_y then
+			self.w = icon_size
+			self.h = icon_size
+			self.x = icon_x
+			self.y = icon_y
+
+			self:SetSize(self.w, self.h)
+			self:SetPos(self.x, self.y)
+			self.logo:SetSize(self.w, self.h)
+			self.btn:SetSize(self.w, self.h)
+		end
+	end
+	function tmp.discord.btn:Paint(pw, ph)
+	end
+	function tmp.discord.btn:DoClick()
+		gui.OpenURL("https://discord.gg/CXXDCMJ")
 	end
 
 	function tmp:AddCategory(cat)
@@ -1010,7 +1045,9 @@ function createMDMenu(parent, w, h, x, y)
 	local CONTENT = tmp:GetContent()
 	tmp.site = createD("YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP.ctr(50), BarW, tmp:GetHeaderHeight())
 	function tmp.site:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 254))
+		local color = LocalPlayer():InterfaceValue("YFrame", "HB")
+
+		draw.RoundedBox(0, 0, 0, pw, ph, color)
 
 		if self.w != CONTENT:GetWide() - BarW or self.h != CONTENT:GetTall() - YRP.ctr(50) or self.x != BarW or self.y != tmp:GetHeaderHeight() then
 			self.w = CONTENT:GetWide() - BarW
@@ -1029,7 +1066,7 @@ function createMDMenu(parent, w, h, x, y)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
 
 		draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_14_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_14_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_14_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_14_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 	function tmp.bot:Think()

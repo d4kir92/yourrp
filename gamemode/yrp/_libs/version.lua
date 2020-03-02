@@ -100,7 +100,7 @@ function IsYRPOutdated()
 end
 
 function GetVersionColor()
-	return GAMEMODE.versioncolor or Color(255, 255, 0)
+	return GAMEMODE.versioncolor or Color(255, 255, 255)
 end
 
 local on = {}
@@ -173,21 +173,15 @@ function YRPCheckVersion()
 				if body != nil then
 					local serverart = string.upper(GAMEMODE.VersionSort)
 
-					if serverart == "OUTDATED" then
-						GAMEMODE.versioncolor = Color(255, 0, 0)
-						GAMEMODE.isoutdated = true
-						serverart = "CANARY"
-					else
-						GAMEMODE.isoutdated = false
-					end
-
 					on.stable = GetValue(body, "V" .. serverart .. "STABLE")
 					on.beta = GetValue(body, "V" .. serverart .. "BETA")
 					on.canary = GetValue(body, "V" .. serverart .. "CANARY")
 
 					if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary then
-						GAMEMODE.versioncolor = Color(0, 255, 0)
+						GAMEMODE.versioncolor = Color(255, 255, 255)
+						GAMEMODE.isoutdated = false
 					else
+						GAMEMODE.isoutdated = true
 						GAMEMODE.versioncolor = Color(255, 0, 0)
 						if CLIENT then
 							VersionWindow()

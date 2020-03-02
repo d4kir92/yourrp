@@ -79,6 +79,9 @@ if CLIENT then
 	end
 
 	function Player:HudElementVisible(element)
+		if !self:HudValue(element, "VISI") then
+			return false
+		end
 		if element == "CA" then
 			return self:GetDBool("iscasting", false)
 		elseif element == "LO" then
@@ -119,6 +122,17 @@ if CLIENT then
 			return GetGlobalDBool("bool_voice_radio", false) and not GetGlobalDBool("bool_voice_channels", false)
 		elseif element == "AB" then
 			return self:GetDString("GetAbilityType", "none") != "none"
+		elseif element == "HP" then
+		elseif element == "AR" then
+		elseif element == "WN" then
+			local weapon = self:GetActiveWeapon()
+			if weapon:IsValid() then
+				return true
+			else
+				return false
+			end
+		else
+			-- 
 		end
 		return true
 	end

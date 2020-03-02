@@ -43,7 +43,7 @@ function FO76BG(tab)
 		FO76["BR"][tab.element].x = x
 		FO76["BR"][tab.element].y = y
 		FO76["BR"][tab.element].color = Color(0, 0, 0, 255)
-	else
+	elseif lply:HudElementVisible(tab.element) then
 		HudBox(FO76["BG"][tab.element])
 		HudBoxBr(FO76["BR"][tab.element])
 	end
@@ -57,8 +57,8 @@ function FO76Element(tab)
 	FO76["TEXT"][tab.element] = FO76["TEXT"][tab.element] or {}
 	FO76["CENTERTEXT"][tab.element] = FO76["CENTERTEXT"][tab.element] or {}
 	FO76["BR"][tab.element] = FO76["BR"][tab.element] or {}
-	if lply:HudValue("hud_version", 0) != FO76["BG"][tab.element]["version"] then
-		FO76["BG"][tab.element]["version"] = lply:HudValue("hud_version", 0)
+	if lply:HudValue("hud_version", 0) != FO76["BGBar"][tab.element]["version"] then
+		FO76["BGBar"][tab.element]["version"] = lply:HudValue("hud_version", 0)
 
 		local w = lply:HudValue(tab.element, "SIZE_W")
 		local h = lply:HudValue(tab.element, "SIZE_H")
@@ -120,7 +120,7 @@ function FO76Element(tab)
 		FO76["BR"][tab.element].x = x + h
 		FO76["BR"][tab.element].y = y + (h - tab.thickness) / 2
 		FO76["BR"][tab.element].color = Color(0, 0, 0, 255)
-	else
+	elseif lply:HudElementVisible(tab.element) then
 		HudBox(FO76["BG"][tab.element])
 		HudBox(FO76["BGBar"][tab.element])
 
@@ -179,7 +179,7 @@ function FO76Name(tab)
 		FO76["NAME"][tab.element].ay = ay or 1
 		FO76["NAME"][tab.element].font = "Y_" .. fontsize .. "_700"
 		FO76["NAME"][tab.element].color = tab.tcolor or FOColor()
-	else
+	elseif lply:HudElementVisible(tab.element) then
 		FO76["NAME"][tab.element].text = tab.text
 		HudText(FO76["NAME"][tab.element])
 	end
@@ -209,7 +209,7 @@ function FO76Numbers(tab)
 		FO76["NUM"][tab.element].ay = 1
 		FO76["NUM"][tab.element].font = "Y_" .. fontsize .. "_700"
 		FO76["NUM"][tab.element].color = FOColor()
-	else
+	elseif lply:HudElementVisible(tab.element) then
 		FO76["NUM"][tab.element].text = tab.text
 		HudText(FO76["NUM"][tab.element])
 	end

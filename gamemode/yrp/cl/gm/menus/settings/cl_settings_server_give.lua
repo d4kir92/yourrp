@@ -2,7 +2,8 @@
 
 net.Receive("setting_players", function(len)
 	if pa(settingsWindow.window) then
-		local _giveListView = createD("DListView", settingsWindow.window.site, ScW() - YRP.ctr(20), ScrH() - YRP.ctr(180), YRP.ctr(10), YRP.ctr(10 + 50))
+		local PARENT = settingsWindow.window.site
+		local _giveListView = createD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		_giveListView:AddColumn("SteamID")
 		_giveListView:AddColumn(YRP.lang_string("LID_nick"))
 		_giveListView:AddColumn(YRP.lang_string("LID_name"))

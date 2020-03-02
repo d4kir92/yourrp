@@ -16,7 +16,7 @@ local SPACE = {}
 local ELES = {}
 function HUDSpace()
 	local lply = LocalPlayer()
-
+	
 	if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Space" then
 		ELES["HP"] = {
 			lply:Health(),
