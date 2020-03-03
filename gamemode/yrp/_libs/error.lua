@@ -350,7 +350,7 @@ function CanSendError()
 			end
 		end
 	else
-		if tick % 10 == 0 and IsYRPOutdated() != nil then
+		if tick % 120 == 0 and IsYRPOutdated() != nil then
 			if IsYRPOutdated() then
 				printGM("note", "Gamemode is outdated!")
 			end

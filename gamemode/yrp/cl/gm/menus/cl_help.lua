@@ -241,6 +241,7 @@ net.Receive("getsiteserverrules", function(len)
 		page.serverrules = createD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(50), 0, YRP.ctr(50))
 
 		function page.serverrules:PerformLayout()
+			self:SetUnderlineFont("mat1text")
 			self:SetFontInternal("mat1text")
 		end
 

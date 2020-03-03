@@ -13,6 +13,7 @@ net.Receive("Connect_Settings_Console", function(len)
 		end
 
 		PARENT.console = createD("RichText", PARENT.consolebackground, YRP.ctr(1000), PARENT:GetTall() - YRP.ctr(40) - YRP.ctr(50), 0, 0)
+		PARENT.console:SetUnderlineFont("Y_18_700")
 		PARENT.console:SetFontInternal("Y_18_700")
 		PARENT.console:InsertColorChange(0, 0, 0, 255)
 

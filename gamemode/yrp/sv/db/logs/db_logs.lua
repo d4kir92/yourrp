@@ -13,6 +13,18 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_target_steamid", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
 
+local showafter =	60*60*24
+local deleteafter =	60*60*24*2
+
+local logTab = SQL_SELECT(DATABASE_NAME, "*", nil)
+if wk(logTab) then
+	for i, t in pairs(logTab) do
+		if os.time() - deleteafter > tonumber(t.string_timestamp) then
+			SQL_DELETE_FROM(DATABASE, "uniqueID = '" .. t.uniqueID .. "'")
+		end
+	end
+end
+
 util.AddNetworkString("yrpgetlogs")
 net.Receive("yrpgetlogs", function(len, ply)
 	local tab = net.ReadString()
@@ -21,7 +33,7 @@ net.Receive("yrpgetlogs", function(len, ply)
 	local nettab = {}
 	if wk(dbtab) then
 		for i, t in pairs(dbtab) do
-			if os.time() - 60*60*24 < tonumber(t.string_timestamp) then
+			if os.time() - showafter < tonumber(t.string_timestamp) then
 				table.insert(nettab, t)
 			else
 				SQL_DELETE_FROM(DATABASE, "uniqueID = '" .. t.uniqueID .. "'")

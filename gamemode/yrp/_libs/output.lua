@@ -20,6 +20,13 @@ function strEmpty(str)
 	return true
 end
 
+function strUrl(str)
+	if !strEmpty(str) and #string.Explode(".", str) > 1 then
+		return true
+	end
+	return false
+end
+
 function hr()
 	print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
 end

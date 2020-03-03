@@ -13,7 +13,8 @@ end
 
 function BuildLogs(parent, typ)
 	parent.list = createD("DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
-	
+	parent.list:EnableVerticalScrollbar()
+
 	net.Start("yrpgetlogs")
 		net.WriteString(typ)
 	net.SendToServer()
@@ -36,6 +37,7 @@ function BuildLogs(parent, typ)
 				if typ == "LID_chat" then
 					local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
 					function rt:PerformLayout()
+						self:SetUnderlineFont("Y_18_500")
 						self:SetFontInternal("Y_18_500")
 						self:SetBGColor(Color(0, 0, 0))
 					end
@@ -59,6 +61,8 @@ function BuildLogs(parent, typ)
 				elseif typ == "LID_connections" then
 					local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
 					function rt:PerformLayout()
+						self.m_FontName = "Y_18_500"
+						self:SetUnderlineFont("Y_18_500")
 						self:SetFontInternal("Y_18_500")
 						self:SetBGColor(Color(0, 0, 0))
 					end
@@ -82,6 +86,8 @@ function BuildLogs(parent, typ)
 				elseif typ == "LID_kills" then
 					local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
 					function rt:PerformLayout()
+						self.m_FontName = "Y_18_500"
+						self:SetUnderlineFont("Y_18_500")
 						self:SetFontInternal("Y_18_500")
 						self:SetBGColor(Color(0, 0, 0))
 					end
@@ -114,6 +120,8 @@ function BuildLogs(parent, typ)
 				elseif typ == "LID_whitelist" then
 					local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
 					function rt:PerformLayout()
+						self.m_FontName = "Y_18_500"
+						self:SetUnderlineFont("Y_18_500")
 						self:SetFontInternal("Y_18_500")
 						self:SetBGColor(Color(0, 0, 0))
 					end

@@ -163,11 +163,13 @@ function createRoleBox(rol, parent, mainparent)
 			ROLEMENU.info.rolecolor = rol.string_color
 
 			ROLEMENU.infodesc:SetText("")
+			ROLEMENU.infodesc:SetUnderlineFont("roleInfoText")
 			ROLEMENU.infodesc:SetFontInternal("roleInfoText")
 			ROLEMENU.infodesc:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infodesc:AppendText(rol.string_description)
 
 			ROLEMENU.infosweps:SetText("")
+			ROLEMENU.infosweps:SetUnderlineFont("roleInfoText")
 			ROLEMENU.infosweps:SetFontInternal("roleInfoText")
 			ROLEMENU.infosweps:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.string_sweps)))
@@ -285,7 +287,7 @@ function addGroup(grp, parent)
 			end
 			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, headeralpha), true, true, !self:IsOpen(), !self:IsOpen())
 			local _x = ph / 2
-			if grp.string_icon != "" then
+			if strUrl(grp.string_icon) then
 				_x = ph
 			end
 			local name = self.tbl.string_name
@@ -321,8 +323,8 @@ function addGroup(grp, parent)
 				end
 			end
 		end
-
-		if grp.string_icon != "" then
+		
+		if strUrl(grp.string_icon) then
 			_grp.icon = createD("DHTML", _grp, _grp:GetTall() - 2 * BR, _grp:GetTall() - 2 * BR, BR, BR)
 			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
 		end

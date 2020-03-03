@@ -449,7 +449,9 @@ end)
 function GM:PlayerSay(sender, text, teamChat)
 	unpack_paket(sender, text)
 
-	SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_chat', '" .. sender:SteamID64() .. "', '" .. text .. "'")
+	if text != "!help" then
+		SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_chat', '" .. sender:SteamID64() .. "', '" .. text .. "'")
+	end
 
 	paket.command = string.lower(paket.command)
 
