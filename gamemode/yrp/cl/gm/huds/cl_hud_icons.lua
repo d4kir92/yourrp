@@ -13,71 +13,75 @@ local CA = Material("vgui/material/icon_timer.png")
 
 function HUDIconsDrawText(ele, text)
 	local lply = LocalPlayer()
-	local w = lply:HudValue(ele, "SIZE_W")
-	local h = lply:HudValue(ele, "SIZE_H")
-	local x = lply:HudValue(ele, "POSI_X")
-	local y = lply:HudValue(ele, "POSI_Y")
+	if lply:HudElementVisible(ele) then
+		local w = lply:HudValue(ele, "SIZE_W")
+		local h = lply:HudValue(ele, "SIZE_H")
+		local x = lply:HudValue(ele, "POSI_X")
+		local y = lply:HudValue(ele, "POSI_Y")
 
-	local fontsize = lply:HudValue(ele, "TS")
-	if fontsize <= 0 then
-		fontsize = 14
-	end
-	local ax = lply:HudValue(ele, "AX")
-	local ay = lply:HudValue(ele, "AY")
-	if ay == 3 then
-		ay = 0
-	elseif ay == 4 then
-		ay = 2
-	end
-	x = x + h / 16 + (w - h / 8) / 2 * ax
-	y = y + h / 16 + (h - h / 8) / 2 * ay
-	local font = "Y_" .. fontsize .. "_500"
+		local fontsize = lply:HudValue(ele, "TS")
+		if fontsize <= 0 then
+			fontsize = 14
+		end
+		local ax = lply:HudValue(ele, "AX")
+		local ay = lply:HudValue(ele, "AY")
+		if ay == 3 then
+			ay = 0
+		elseif ay == 4 then
+			ay = 2
+		end
+		x = x + h / 16 + (w - h / 8) / 2 * ax
+		y = y + h / 16 + (h - h / 8) / 2 * ay
+		local font = "Y_" .. fontsize .. "_500"
 
-	draw.SimpleTextOutlined(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0))
+	end
 end
 
 function HUDIconsDrawIcon(ele, icon, perc, text)
 	perc = math.Round(perc, 3)
 	local lply = LocalPlayer()
-	local h = lply:HudValue(ele, "SIZE_H")
-	local x = lply:HudValue(ele, "POSI_X")
-	local y = lply:HudValue(ele, "POSI_Y")
-	local size = h
-	--draw.RoundedBox(0, x, y, h, h, Color(0, 0, 0, 60))
+	if lply:HudElementVisible(ele) then
+		local h = lply:HudValue(ele, "SIZE_H")
+		local x = lply:HudValue(ele, "POSI_X")
+		local y = lply:HudValue(ele, "POSI_Y")
+		local size = h
+		--draw.RoundedBox(0, x, y, h, h, Color(0, 0, 0, 60))
 
-	surface.SetDrawColor(0, 0, 0, 200)
-	surface.SetMaterial(icon)
-	surface.DrawTexturedRect(x, y, size, size)
-
-	render.ClearStencil()
-	render.SetStencilEnable(true)
-		render.SetStencilWriteMask(1)
-		render.SetStencilTestMask(1)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
-		render.SetStencilFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-		render.SetStencilReferenceValue(1)
-
-		draw.NoTexture()
-		surface.SetDrawColor(Color(255, 0, 0))
-		surface.DrawTexturedRect(x, y + size - size * perc, size, size * perc)
-
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
-
-		surface.SetDrawColor(lply:HudValue(ele, "BA"))
+		surface.SetDrawColor(0, 0, 0, 200)
 		surface.SetMaterial(icon)
 		surface.DrawTexturedRect(x, y, size, size)
 
-	render.SetStencilEnable(false)
+		render.ClearStencil()
+		render.SetStencilEnable(true)
+			render.SetStencilWriteMask(1)
+			render.SetStencilTestMask(1)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+			render.SetStencilFailOperation(STENCILOPERATION_INCR)
+			render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+			render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+			render.SetStencilReferenceValue(1)
 
-	local fontsize = lply:HudValue(ele, "TS")
-	if fontsize <= 0 then
-		fontsize = 14
+			draw.NoTexture()
+			surface.SetDrawColor(Color(255, 0, 0))
+			surface.DrawTexturedRect(x, y + size - size * perc, size, size * perc)
+
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+
+			surface.SetDrawColor(lply:HudValue(ele, "BA"))
+			surface.SetMaterial(icon)
+			surface.DrawTexturedRect(x, y, size, size)
+
+		render.SetStencilEnable(false)
+
+		local fontsize = lply:HudValue(ele, "TS")
+		if fontsize <= 0 then
+			fontsize = 14
+		end
+		local font = "Y_" .. fontsize .. "_500"
+
+		draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
-	local font = "Y_" .. fontsize .. "_500"
-
-	draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 end
 
 local fps = 0

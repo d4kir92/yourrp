@@ -1538,7 +1538,7 @@ end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) then
-		printGM("gm", "CanProperty: " .. property)
+		--printGM("gm", "CanProperty: " .. property)
 		if property == "ignite" then
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_ignite", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if _tmp != nil and _tmp != false then

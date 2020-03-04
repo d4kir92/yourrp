@@ -4,7 +4,7 @@ CHAR = CHAR or {}
 CHAR.open = false
 
 function toggleCharMenu()
-	if !CHAR.open and isNoMenuOpen() then
+	if !CHAR.open and YRPIsNoMenuOpen() then
 		openCharMenu()
 	end
 end

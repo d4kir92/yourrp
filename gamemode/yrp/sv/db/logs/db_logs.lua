@@ -36,7 +36,7 @@ net.Receive("yrpgetlogs", function(len, ply)
 			if os.time() - showafter < tonumber(t.string_timestamp) then
 				table.insert(nettab, t)
 			else
-				SQL_DELETE_FROM(DATABASE, "uniqueID = '" .. t.uniqueID .. "'")
+				SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
 			end
 		end
 	end

@@ -6,7 +6,7 @@ FEEDBACK = FEEDBACK or {}
 FEEDBACK.open = false
 
 function toggleFeedbackMenu()
-	if !FEEDBACK.open and isNoMenuOpen() then
+	if !FEEDBACK.open and YRPIsNoMenuOpen() then
 		openFeedbackMenu()
 	else
 		closeFeedbackMenu()

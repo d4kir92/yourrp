@@ -5,7 +5,7 @@ function toggleInteractMenu()
 	local ply = LocalPlayer()
 	local eyeTrace = ply:GetEyeTrace()
 	--openInteractMenu(LocalPlayer():SteamID())
-	if eyeTrace.Entity:IsPlayer() and isNoMenuOpen() then
+	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
 			openInteractMenu(eyeTrace.Entity:SteamID())
 		end

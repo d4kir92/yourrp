@@ -263,7 +263,7 @@ net.Receive("get_menu_bodygroups", function(len)
 end)
 
 function toggleAppearanceMenu()
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		open_appearance()
 	else
 		close_appearance()

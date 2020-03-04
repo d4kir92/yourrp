@@ -34,88 +34,92 @@ end
 function HUDCirclesDrawIcon(ele, icon, perc, text)
 	perc = math.Round(perc, 3)
 	local lply = LocalPlayer()
-	local color = lply:HudValue(ele, "BA")
-	local h = lply:HudValue(ele, "SIZE_H")
-	local x = lply:HudValue(ele, "POSI_X")
-	local y = lply:HudValue(ele, "POSI_Y")
-	local size = h
-	local midx = x + h / 2
-	local midy = y + h / 2
-	local br = YRP.ctr(12)
-	local barsize = h - br * 2
-	local fill = barsize * perc
+	if lply:HudElementVisible(ele) then
+		local color = lply:HudValue(ele, "BA")
+		local h = lply:HudValue(ele, "SIZE_H")
+		local x = lply:HudValue(ele, "POSI_X")
+		local y = lply:HudValue(ele, "POSI_Y")
+		local size = h
+		local midx = x + h / 2
+		local midy = y + h / 2
+		local br = YRP.ctr(12)
+		local barsize = h - br * 2
+		local fill = barsize * perc
 
-	--draw.RoundedBox(0, x, y, h, h, Color(255, 255, 0, 100))
+		--draw.RoundedBox(0, x, y, h, h, Color(255, 255, 0, 100))
 
-	-- BAR
-	render.ClearStencil()
-	render.SetStencilEnable(true)
-		render.SetStencilWriteMask(1)
-		render.SetStencilTestMask(1)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
-		render.SetStencilFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-		render.SetStencilReferenceValue(1)
+		-- BAR
+		render.ClearStencil()
+		render.SetStencilEnable(true)
+			render.SetStencilWriteMask(1)
+			render.SetStencilTestMask(1)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+			render.SetStencilFailOperation(STENCILOPERATION_INCR)
+			render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+			render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+			render.SetStencilReferenceValue(1)
 
-		drawC(midx, midy, barsize / 2, 32, Color(0, 0, 0, 255))
+			drawC(midx, midy, barsize / 2, 32, Color(0, 0, 0, 255))
 
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-		draw.RoundedBox(0, x + br, y + br + barsize - fill, barsize, fill, color)
+			draw.RoundedBox(0, x + br, y + br + barsize - fill, barsize, fill, color)
 
-	render.SetStencilEnable(false)
+		render.SetStencilEnable(false)
 
-	-- BR
-	render.ClearStencil()
-	render.SetStencilEnable(true)
-		render.SetStencilWriteMask(1)
-		render.SetStencilTestMask(1)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
-		render.SetStencilFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-		render.SetStencilReferenceValue(1)
+		-- BR
+		render.ClearStencil()
+		render.SetStencilEnable(true)
+			render.SetStencilWriteMask(1)
+			render.SetStencilTestMask(1)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+			render.SetStencilFailOperation(STENCILOPERATION_INCR)
+			render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+			render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+			render.SetStencilReferenceValue(1)
 
-		drawC(midx, midy, (h / 2) - 6, 32, Color(0, 0, 0, 100))
+			drawC(midx, midy, (h / 2) - 6, 32, Color(0, 0, 0, 100))
 
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
+			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
-		drawC(midx, midy, h / 2, 32, Color(0, 0, 0, 255))
+			drawC(midx, midy, h / 2, 32, Color(0, 0, 0, 255))
 
-	render.SetStencilEnable(false)
+		render.SetStencilEnable(false)
 
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.SetMaterial(icon)
-	surface.DrawTexturedRect(x + h / 2 - 32, y + h / 2 - 32, 64, 64)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(icon)
+		surface.DrawTexturedRect(x + h / 2 - 32, y + h / 2 - 32, 64, 64)
 
-	local fontsize = lply:HudValue(ele, "TS")
-	if fontsize <= 0 then
-		fontsize = 14
+		local fontsize = lply:HudValue(ele, "TS")
+		if fontsize <= 0 then
+			fontsize = 14
+		end
+		local font = "Y_" .. fontsize .. "_500"
+
+		draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0))
 	end
-	local font = "Y_" .. fontsize .. "_500"
-
-	draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0))
 end
 
 function HUDCirclesDrawText(ele, text)
 	local lply = LocalPlayer()
-	local w = lply:HudValue(ele, "SIZE_W")
-	local h = lply:HudValue(ele, "SIZE_H")
-	local x = lply:HudValue(ele, "POSI_X")
-	local y = lply:HudValue(ele, "POSI_Y")
+	if lply:HudElementVisible(ele) then
+		local w = lply:HudValue(ele, "SIZE_W")
+		local h = lply:HudValue(ele, "SIZE_H")
+		local x = lply:HudValue(ele, "POSI_X")
+		local y = lply:HudValue(ele, "POSI_Y")
 
-	local fontsize = lply:HudValue(ele, "TS")
-	if fontsize <= 0 then
-		fontsize = 14
+		local fontsize = lply:HudValue(ele, "TS")
+		if fontsize <= 0 then
+			fontsize = 14
+		end
+		local font = "Y_" .. fontsize .. "_500"
+
+		local ax = lply:HudValue(ele, "AX")
+		local ay = lply:HudValue(ele, "AY")
+		local midx = x + (ax * w) / 2
+		local midy = y + (ay * h) / 2
+		draw.SimpleTextOutlined(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color(0, 0, 0))
 	end
-	local font = "Y_" .. fontsize .. "_500"
-
-	local ax = lply:HudValue(ele, "AX")
-	local ay = lply:HudValue(ele, "AY")
-	local midx = x + (ax * w) / 2
-	local midy = y + (ay * h) / 2
-	draw.SimpleTextOutlined(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color(0, 0, 0))
 end
 
 function HUDCircles()

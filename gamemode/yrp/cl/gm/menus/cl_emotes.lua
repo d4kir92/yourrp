@@ -2,7 +2,7 @@
 local _em = {}
 
 function ToggleEmotesMenu()
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		OpenEmotesMenu()
 	else
 		CloseEmotesMenu()

@@ -72,15 +72,24 @@ function YRP.replace_string(in_str, tab)
 	return in_str
 end
 
-function HasYRPContent()
-	local hascontent = false
+local hascontent = false
+local hasfakecontent = false
+function YRPTestContentAddons()
 	for i, addon in pairs(engine.GetAddons()) do
 		if addon.wsid == "1189643820" and addon.mounted and addon.downloaded then
 			hascontent = true
-			break
+		elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
+			hasfakecontent = true
 		end
 	end
+end
+function HasYRPContent()
+	YRPTestContentAddons()
 	return hascontent
+end
+function HasYRPFakeContent()
+	YRPTestContentAddons()
+	return hasfakecontent
 end
 
 local nf = {}
@@ -91,7 +100,7 @@ function YRP.lang_string(var, vals)
 		if !wk(_string) then
 			if nf[var] == nil and string.StartWith(var, "LID_") then
 				nf[var] = var
-				if !string.find(var, " ") and !string.find(var, ":") and !string.find(var, "-") and HasYRPContent() then
+				if !string.find(var, " ") and !string.find(var, ":") and !string.find(var, "-") and HasYRPContent() and !HasYRPFakeContent() then
 					printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
 				end
 			end

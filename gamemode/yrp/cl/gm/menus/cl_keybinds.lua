@@ -19,7 +19,7 @@ function createDKeybinder(parent, w, h, x, y, keybind)
 end
 
 function toggleKeybindsMenu()
-	if !KEYBINDS.open and isNoMenuOpen() then
+	if !KEYBINDS.open and YRPIsNoMenuOpen() then
 		openKeybindsMenu()
 	end
 end

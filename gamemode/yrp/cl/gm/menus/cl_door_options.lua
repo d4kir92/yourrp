@@ -3,7 +3,7 @@
 local yrp_door = {}
 
 function toggleDoorOptions(door)
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		openDoorOptions(door)
 	elseif !mouseVisible then
 		closeDoorOptions()

@@ -2,7 +2,7 @@
 local _la = {}
 
 function ToggleLawsMenu()
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		OpenLawsMenu()
 	end
 end

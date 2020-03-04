@@ -82,7 +82,7 @@ end
 
 local delaysettings = 0
 function toggleSettings()
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		if delaysettings < CurTime() then
 			delaysettings = CurTime() + 2
 			OpenSettings()

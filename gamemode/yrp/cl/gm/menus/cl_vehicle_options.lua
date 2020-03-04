@@ -3,7 +3,7 @@
 local yrp_vehicle = {}
 
 function toggleVehicleOptions(vehicle, vehicleID)
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		openVehicleOptions(vehicle, vehicleID)
 	else
 		closeVehicleOptions()

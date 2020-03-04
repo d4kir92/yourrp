@@ -13,7 +13,7 @@ function getCoords()
 end
 
 function toggleMap()
-	if isNoMenuOpen() and !_map.open then
+	if YRPIsNoMenuOpen() and !_map.open then
 		_map.open = true
 		openMenu()
 		net.Start("askCoords")

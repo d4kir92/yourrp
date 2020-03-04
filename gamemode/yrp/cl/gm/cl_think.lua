@@ -357,7 +357,7 @@ function KeyPress()
 			end
 		end
 
-		if isNoMenuOpen() then
+		if !vgui.CursorVisible() then
 			if input.IsKeyDown(get_keybind("view_switch")) then
 				--[[ When toggle view ]]--
 				if _view_delay then

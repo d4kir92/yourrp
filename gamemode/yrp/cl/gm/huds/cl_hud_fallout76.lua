@@ -69,9 +69,17 @@ function FO76Element(tab)
 		tab.br = 0.08
 
 		FO76["BG"][tab.element].r = 0
-		FO76["BG"][tab.element].w = w - h
+		if lply:HudValue(tab.element, "TEXT") then
+			FO76["BG"][tab.element].w = w - h
+		else
+			FO76["BG"][tab.element].w = w
+		end
 		FO76["BG"][tab.element].h = tab.thickness
-		FO76["BG"][tab.element].x = x + h
+		if lply:HudValue(tab.element, "TEXT") then
+			FO76["BG"][tab.element].x = x + h
+		else
+			FO76["BG"][tab.element].x = x
+		end
 		FO76["BG"][tab.element].y = y + (h - tab.thickness) / 2
 		FO76["BG"][tab.element].color = Color(0, 0, 0, 100)
 
@@ -85,9 +93,17 @@ function FO76Element(tab)
 		FO76["BGBar"][tab.element].color = FOColorBG()
 
 		local m = {}
-		m.x = x + h
+		if lply:HudValue(tab.element, "TEXT") then
+			m.x = x + h
+		else
+			m.x = x
+		end
 		m.y = y + (h - tab.thickness) / 2
-		m.w = w - h
+		if lply:HudValue(tab.element, "TEXT") then
+			m.w = w - h
+		else
+			m.w = w
+		end
 		m.h = tab.thickness
 
 		FO76["Bar"][tab.element].r = 0
@@ -115,9 +131,17 @@ function FO76Element(tab)
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
 
 		FO76["BR"][tab.element].r = 0
-		FO76["BR"][tab.element].w = w - h
+		if lply:HudValue(tab.element, "TEXT") then
+			FO76["BR"][tab.element].w = w - h
+		else
+			FO76["BR"][tab.element].w = w
+		end
 		FO76["BR"][tab.element].h = tab.thickness
-		FO76["BR"][tab.element].x = x + h
+		if lply:HudValue(tab.element, "TEXT") then
+			FO76["BR"][tab.element].x = x + h
+		else
+			FO76["BR"][tab.element].x = x
+		end
 		FO76["BR"][tab.element].y = y + (h - tab.thickness) / 2
 		FO76["BR"][tab.element].color = Color(0, 0, 0, 255)
 	elseif lply:HudElementVisible(tab.element) then
@@ -129,14 +153,18 @@ function FO76Element(tab)
 		end
 		HudBox(FO76["Bar"][tab.element])
 
-		if tab.text != nil then
+		if tab.text != nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["TEXT"][tab.element].text = tab.text
 			HudText(FO76["TEXT"][tab.element])
+		else
+			FO76["TEXT"][tab.element].text = ""
 		end
 
-		if tab.centertext != nil then
+		if tab.centertext != nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["CENTERTEXT"][tab.element].text = tab.centertext
 			HudText(FO76["CENTERTEXT"][tab.element])
+		else
+			FO76["CENTERTEXT"][tab.element].text = ""
 		end
 
 		HudBoxBr(FO76["BR"][tab.element])

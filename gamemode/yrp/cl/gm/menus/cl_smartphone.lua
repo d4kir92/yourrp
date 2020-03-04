@@ -12,7 +12,7 @@ end
 
 function openSP()
 	if GetGlobalDBool("bool_smartphone_system") then
-		if isNoMenuOpen() and (!sp.visible or sp.visible == nil) then
+		if YRPIsNoMenuOpen() and (!sp.visible or sp.visible == nil) then
 			openMenu()
 			local _w = ctrb(560)
 			local _h = ctrb(1000)

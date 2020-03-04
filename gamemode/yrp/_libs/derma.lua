@@ -546,8 +546,7 @@ end
 --[[ OLD ]]
 --
 local _menuOpen = false
-
-function isNoMenuOpen()
+function YRPIsNoMenuOpen()
 	if not vgui.CursorVisible() then
 		return true
 	else
@@ -1390,21 +1389,25 @@ function TestHTML(pnl, url, rem)
 	else
 		http.Fetch(url,
 			function( body, len, headers, code )
-				if code != 200 then
+				if pa(pnl) then
+					if code != 200 then
+						if rem then
+							pnl:Remove()
+						else
+							pnl:SetVisible(false)
+						end
+					else
+						pnl:SetVisible(true)
+					end
+				end
+			end,
+			function( error )
+				if pa(pnl) then
 					if rem then
 						pnl:Remove()
 					else
 						pnl:SetVisible(false)
 					end
-				else
-					pnl:SetVisible(true)
-				end
-			end,
-			function( error )
-				if rem then
-					pnl:Remove()
-				else
-					pnl:SetVisible(false)
 				end
 			end
 		)

@@ -204,7 +204,7 @@ function YRP.msg(chan, str_msg, tochat)
 					REALM = "SERVER"
 				end
 				send_error(REALM, "[" .. cn .. "] " .. msg)
-				if CLIENT and cn == "ERROR" then
+				if CLIENT and cn == "ERROR" and createD != nil then
 					local err = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
 					err:ShowCloseButton(false)
 					err:SetDraggable(false)

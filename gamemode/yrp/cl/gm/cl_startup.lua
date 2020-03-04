@@ -2183,7 +2183,7 @@ end)
 local dsd = CurTime() + 2
 local ds = ds or false
 hook.Add("Think", "openDeathScreen", function(len)
-	if !LocalPlayer():Alive() and isNoMenuOpen() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds then
+	if !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds then
 		ds = true
 		local win = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle("")

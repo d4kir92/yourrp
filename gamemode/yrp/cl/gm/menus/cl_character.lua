@@ -616,7 +616,7 @@ end
 local _cs = {}
 
 function toggleCharacterSelection()
-	if isNoMenuOpen() then
+	if YRPIsNoMenuOpen() then
 		openCharacterSelection()
 	else
 		closeCharacterSelection()

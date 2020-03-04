@@ -6,7 +6,7 @@ BUYMENU = BUYMENU or {}
 BUYMENU.open = false
 
 function ToggleBuyMenu()
-	if !BUYMENU.open and isNoMenuOpen() then
+	if !BUYMENU.open and YRPIsNoMenuOpen() then
 		OpenBuyMenu()
 	else
 		CloseBuyMenu()

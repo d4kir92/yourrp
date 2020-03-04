@@ -95,7 +95,7 @@ end
 
 if CLIENT then
 	net.Receive("yrp_jailpoints_options", function()
-		if isNoMenuOpen() then
+		if YRPIsNoMenuOpen() then
 			local stab = net.ReadTable()
 
 			local w = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)

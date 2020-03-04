@@ -7,7 +7,7 @@ ROLEMENU.open = false
 local _info = nil
 
 function ToggleRoleMenu()
-	if !ROLEMENU.open and isNoMenuOpen() then
+	if !ROLEMENU.open and YRPIsNoMenuOpen() then
 		OpenRoleMenu()
 	else
 		CloseRoleMenu()
@@ -163,13 +163,17 @@ function createRoleBox(rol, parent, mainparent)
 			ROLEMENU.info.rolecolor = rol.string_color
 
 			ROLEMENU.infodesc:SetText("")
-			ROLEMENU.infodesc:SetUnderlineFont("roleInfoText")
+			if ROLEMENU.infodesc.SetUnderlineFont != nil then
+				ROLEMENU.infodesc:SetUnderlineFont("roleInfoText")
+			end
 			ROLEMENU.infodesc:SetFontInternal("roleInfoText")
 			ROLEMENU.infodesc:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infodesc:AppendText(rol.string_description)
 
 			ROLEMENU.infosweps:SetText("")
-			ROLEMENU.infosweps:SetUnderlineFont("roleInfoText")
+			if ROLEMENU.infosweps.SetUnderlineFont != nil then
+				ROLEMENU.infosweps:SetUnderlineFont("roleInfoText")
+			end
 			ROLEMENU.infosweps:SetFontInternal("roleInfoText")
 			ROLEMENU.infosweps:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.string_sweps)))

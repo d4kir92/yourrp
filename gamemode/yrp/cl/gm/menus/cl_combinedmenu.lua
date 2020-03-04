@@ -6,7 +6,7 @@ cm.currentsite = 0
 function ToggleCombinedMenu(id)
 	id = tonumber(id)
 	cm.currentsite = id
-	if !cm.open and isNoMenuOpen() then
+	if !cm.open and YRPIsNoMenuOpen() then
 		OpenCombinedMenu()
 	elseif cm.open and cm.currentsite != 4 and cm.currentsite != 5 then
 		CloseCombinedMenu()

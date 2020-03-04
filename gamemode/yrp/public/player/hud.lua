@@ -79,7 +79,7 @@ if CLIENT then
 	end
 
 	function Player:HudElementVisible(element)
-		if !self:HudValue(element, "VISI") then
+		if self:HudValue(element, "VISI") == false then
 			return false
 		end
 		if element == "CA" then

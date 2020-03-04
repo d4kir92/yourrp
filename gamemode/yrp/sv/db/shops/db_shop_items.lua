@@ -246,6 +246,11 @@ end
 
 util.AddNetworkString("yrp_info2")
 function spawnItem(ply, item, duid)
+	if item.type == "weapons" then
+		ply:Give(item.ClassName)
+		return true
+	end
+
 	local TARGETPOS = nil
 	
 	local mins = Vector(10, 10, 10)

@@ -6,7 +6,7 @@ HELPMENU = HELPMENU or {}
 HELPMENU.open = false
 
 function ToggleHelpMenu()
-	if !HELPMENU.open and isNoMenuOpen() then
+	if !HELPMENU.open and YRPIsNoMenuOpen() then
 		OpenHelpMenu()
 	else
 		CloseHelpMenu()
@@ -241,7 +241,9 @@ net.Receive("getsiteserverrules", function(len)
 		page.serverrules = createD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(50), 0, YRP.ctr(50))
 
 		function page.serverrules:PerformLayout()
-			self:SetUnderlineFont("mat1text")
+			if self.SetUnderlineFont != nil then
+				self:SetUnderlineFont("mat1text")
+			end
 			self:SetFontInternal("mat1text")
 		end
 
