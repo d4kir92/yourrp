@@ -94,6 +94,8 @@ function printReadyError()
 	str = str .. " ENTS: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
 	str = str .. " GLOS: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
 	str = str .. " dedi: " .. tostring(lply:GetDBool("isserverdedicated", false))
+	str = str .. " country: " .. tostring(system.GetCountry())
+	str = str .. " count: " .. tostring(count)
 
 	return str
 end
