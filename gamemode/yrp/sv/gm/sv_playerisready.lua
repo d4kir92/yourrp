@@ -62,7 +62,9 @@ hook.Add("Think", "yrp_loaded_game", function()
 				net.WriteString(ply:Nick())
 			net.Broadcast()
 
-			SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'")
+			if os.time() != nil and ply.SteamID64 != nil then
+				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'")
+			end
 		end
 	end
 end)
