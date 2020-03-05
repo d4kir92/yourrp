@@ -15,11 +15,11 @@ function BuildLogs(parent, typ)
 	parent.list = createD("DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	parent.list:EnableVerticalScrollbar()
 
-	net.Start("yrpgetlogs")
+	net.Start("yrp_get_logs")
 		net.WriteString(typ)
 	net.SendToServer()
 
-	net.Receive("yrpgetlogs", function(len)
+	net.Receive("yrp_get_logs", function(len)
 		local tab = net.ReadTable()
 		for i, v in pairs(tab) do
 			local source = GetPlayerBySteamID64(v.string_source_steamid)

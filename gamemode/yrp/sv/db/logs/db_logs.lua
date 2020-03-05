@@ -20,13 +20,13 @@ local logTab = SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(logTab) then
 	for i, t in pairs(logTab) do
 		if os.time() - deleteafter > tonumber(t.string_timestamp) then
-			SQL_DELETE_FROM(DATABASE, "uniqueID = '" .. t.uniqueID .. "'")
+			SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
 		end
 	end
 end
 
-util.AddNetworkString("yrpgetlogs")
-net.Receive("yrpgetlogs", function(len, ply)
+util.AddNetworkString("yrp_get_logs")
+net.Receive("yrp_get_logs", function(len, ply)
 	local tab = net.ReadString()
 
 	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "string_typ = '" .. tab .. "'")
@@ -43,7 +43,7 @@ net.Receive("yrpgetlogs", function(len, ply)
 
 	table.SortByMember(nettab, "string_timestamp")
 
-	net.Start("yrpgetlogs")
+	net.Start("yrp_get_logs")
 		net.WriteTable(nettab)
 	net.Send(ply)
 end)

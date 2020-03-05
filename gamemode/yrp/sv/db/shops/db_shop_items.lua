@@ -178,7 +178,9 @@ net.Receive("shop_item_edit_base", function(len, ply)
 	local _cn = net.ReadString()
 	local _pn = net.ReadString()
 	local _type = net.ReadString()
-	local _new = SQL_UPDATE(_db_name, "WorldModel = '" .. _wm .. "', ClassName = '" .. _cn .. "', PrintName = '" .. _pn .. "', type = '" .. _type .. "'", "uniqueID = " .. _uid)
+
+	local _new = SQL_UPDATE(_db_name, "WorldModel = '" .. _wm .. "', ClassName = '" .. _cn .. "', PrintName = '" .. SQL_STR_IN(_pn) .. "', type = '" .. _type .. "'", "uniqueID = " .. _uid)
+
 	printGM("db", "shop_item_edit_base: " .. db_worked(_new))
 end)
 
@@ -336,8 +338,17 @@ function spawnItem(ply, item, duid)
 				printGM("gm", "[spawnItem] Spawned 1")
 				return true
 			else
-				YRP.msg("note", "[spawnItem] failed: " .. item.ClassName .. " " .. tostring(ENT.t.SpawnFunction))
-				return false
+				ent = ents.Create(item.ClassName)
+				if IsValid(ent) then
+					ent:SetPos(tr.HitPos)
+					ent:Spawn()
+	
+					printGM("gm", "[spawnItem] Spawned 2")
+					return true
+				else
+					YRP.msg("note", "Not valid " .. item.ClassName)
+					return false
+				end
 			end
 		else
 			local vehicle = list.Get( "simfphys_vehicles" )[ item.ClassName ]
@@ -351,10 +362,11 @@ function spawnItem(ply, item, duid)
 					ent:SetPos(tr.HitPos)
 					ent:Spawn()
 	
-					printGM("gm", "[spawnItem] Spawned 2")
+					printGM("gm", "[spawnItem] Spawned 4")
 					return true
 				else
 					YRP.msg("note", "Not valid " .. item.ClassName)
+					return false
 				end
 			end
 		end
