@@ -62,6 +62,9 @@ function buyWindow(door, tabBuilding)
 
 	local br = YRP.ctr(20)
 	yrp_door.window = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(760), 0, 0)
+	if !ply:HasAccess() then
+		yrp_door.window:SetTall(YRP.ctr(300))
+	end
 	yrp_door.window:SetHeaderHeight(YRP.ctr(100))
 	yrp_door.window:Center()
 	yrp_door.window:MakePopup()
@@ -268,6 +271,9 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	end
 
 	yrp_door.window = createD("YFrame", nil, YRP.ctr(1100), YRP.ctr(580), 0, 0)
+	if !ply:HasAccess() then
+		yrp_door.window:SetTall(YRP.ctr(340))
+	end
 	yrp_door.window:SetHeaderHeight(YRP.ctr(100))
 	yrp_door.window:Center()
 	yrp_door.window:MakePopup()

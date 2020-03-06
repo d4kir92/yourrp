@@ -638,22 +638,14 @@ net.Receive("getBuildingInfo", function(len, ply)
 				end
 			end
 
-			if allowedToUseDoor(buid, ply, door) then
+			--if allowedToUseDoor(buid, ply, door) then
 				net.Start("getBuildingInfo")
 					net.WriteEntity(door)
 					net.WriteTable(tabBuilding)
 					net.WriteTable(tabOwner)
 					net.WriteTable(tabGroup)
-				--[[
-					net.WriteBool(true)
-					net.WriteEntity(_tmpDoor)
-					net.WriteString(_tmpBuildingID)
-					net.WriteTable(_tmpTable)
-					net.WriteString(owner)
-					net.WriteString(_tmpTable.text_header)
-					net.WriteString(_tmpTable.text_description)]]
 				net.Send(ply)
-			end
+			--end
 		else
 			printGM("note", "getBuildingInfo -> Building not found in Database.")
 			net.Start("getBuildingInfo")

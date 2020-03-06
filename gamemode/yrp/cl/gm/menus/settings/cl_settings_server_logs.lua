@@ -45,7 +45,7 @@ function BuildLogs(parent, typ)
 					end
 					function rt:ActionSignal(signalName, signalValue)
 						if ( signalName == "TextClicked" ) then
-							if ( signalValue == v.string_source_steamid ) then
+							if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 								gui.OpenURL(source:ShowProfile()) 
 							elseif ( signalValue == v.string_target_steamid ) then
 								gui.OpenURL(target:ShowProfile()) 
@@ -72,7 +72,7 @@ function BuildLogs(parent, typ)
 					end
 					function rt:ActionSignal(signalName, signalValue)
 						if ( signalName == "TextClicked" ) then
-							if ( signalValue == v.string_source_steamid ) then
+							if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 								gui.OpenURL(source:ShowProfile()) 
 							elseif ( signalValue == v.string_target_steamid ) then
 								gui.OpenURL(target:ShowProfile()) 
@@ -99,7 +99,7 @@ function BuildLogs(parent, typ)
 					end
 					function rt:ActionSignal(signalName, signalValue)
 						if ( signalName == "TextClicked" ) then
-							if ( signalValue == v.string_source_steamid ) then
+							if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 								gui.OpenURL(source:ShowProfile()) 
 							elseif ( signalValue == v.string_target_steamid ) then
 								gui.OpenURL(target:ShowProfile()) 
@@ -135,7 +135,7 @@ function BuildLogs(parent, typ)
 					end
 					function rt:ActionSignal(signalName, signalValue)
 						if ( signalName == "TextClicked" ) then
-							if ( signalValue == v.string_source_steamid ) then
+							if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 								gui.OpenURL(source:ShowProfile()) 
 							elseif ( signalValue == v.string_target_steamid ) then
 								gui.OpenURL(target:ShowProfile()) 

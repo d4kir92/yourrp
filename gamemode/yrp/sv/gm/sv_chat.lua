@@ -271,7 +271,7 @@ function add_level(sender, text)
 		local _lvl = tonumber(_table[3])
 		if isnumber(_lvl) then
 			local _receiver = GetPlayerByName(_name)
-			if worked(_receiver, "level receiver not found!") then
+			if wk(_receiver) and _receiver.AddLevel != nil then
 				_receiver:AddLevel(_lvl)
 				return ""
 			else
