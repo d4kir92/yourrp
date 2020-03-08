@@ -184,15 +184,15 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	return background
 end
 
-function CreateNumberWangLine(dpanellist, value, lstr, netstr, fixx)
+function CreateNumberWangLine(dpanellist, value, lstr, netstr, fixx, max, min)
 	local background = createD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10) + YRP.ctr(fixx), ph * 1 / 4, 0, 1)
 	end
 
-	background.numberwang = createD("DNumberWang", background, dpanellist:GetWide() - YRP.ctr(10 * 2) - YRP.ctr(fixx), YRP.ctr(50), YRP.ctr(10) + YRP.ctr(fixx), YRP.ctr(50))
-	background.numberwang:SetMax(999999999999)
-	background.numberwang:SetMin(-999999999999)
+	background.numberwang = createD("DNumberWang", background, dpanellist:GetWide() - YRP.ctr(20 * 2) - YRP.ctr(fixx), YRP.ctr(50), YRP.ctr(10) + YRP.ctr(fixx), YRP.ctr(50))
+	background.numberwang:SetMax(max or 999999999999)
+	background.numberwang:SetMin(min or -999999999999)
 	background.numberwang:SetValue(value)
 	background.numberwang.serverside = false
 
@@ -458,6 +458,9 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_groupname, "LID_showgroupname", "update_bool_yrp_chat_show_groupname")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_usergroup, "LID_showusergroup", "update_bool_yrp_chat_show_usergroup")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_show_idcardid, "LID_showidcardid", "update_bool_yrp_chat_show_idcardid")
+		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.lang_string("LID_localchatrange"), "update_int_yrp_chat_range_local", 50, 1000, 10)
+		
+		--GetGlobalDInt("int_yrp_chat_range_local", 400)
 
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "update_text_idstructure")
 		local gs = 8

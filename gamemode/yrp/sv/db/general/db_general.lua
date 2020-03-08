@@ -108,6 +108,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_factionname", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_groupname", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_usergroup", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_yrp_chat_range_local", "INT DEFAULT 400")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
@@ -933,6 +934,14 @@ util.AddNetworkString("update_bool_yrp_chat_show_idcardid")
 net.Receive("update_bool_yrp_chat_show_idcardid", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_yrp_chat_show_idcardid", "bool_yrp_chat_show_idcardid", b)
+end)
+
+util.AddNetworkString("update_int_yrp_chat_range_local")
+net.Receive("update_int_yrp_chat_range_local", function(len, ply)
+	local int = net.ReadString()
+	if isnumber(tonumber(int)) then
+		GeneralUpdateInt(ply, "update_int_yrp_chat_range_local", "int_yrp_chat_range_local", int)
+	end
 end)
 
 
