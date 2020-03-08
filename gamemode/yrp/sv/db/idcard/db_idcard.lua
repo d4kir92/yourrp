@@ -111,23 +111,31 @@ function LoadIDCardSetting(force)
 		end
 	end
 
-	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ax'")) do
-		v.value = tonumber(v.value)
-		if v.value > 2 then
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+	local tab = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ax'")
+	if wk(tab) then
+		for i, v in pairs(tab) do
+			v.value = tonumber(v.value)
+			if v.value > 2 then
+				SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+			end
 		end
 	end
-	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'")) do
-		v.value = tonumber(v.value)
-		if v.value > 2 then
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+	local tab2 = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'")
+	if wk(tab2) then
+		for i, v in pairs(tab2) do
+			v.value = tonumber(v.value)
+			if v.value > 2 then
+				SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+			end
 		end
 	end
-
-	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'")) do
-		v.value = tonumber(v.value)
-		if v.value > 5 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+	local tab3 = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'")
+	if wk(tab3) then
+		for i, v in pairs(tab3) do
+			v.value = tonumber(v.value)
+			if v.value > 5 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
+				SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+			end
 		end
 	end
 

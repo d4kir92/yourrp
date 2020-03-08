@@ -2,16 +2,16 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
-rToSv = rToSv or false
+yrp_rToSv = yrp_rToSv or false
 
-initpostentity = initpostentity or false
-hookinitpostentity = hookinitpostentity or false
+yrp_initpostentity = yrp_initpostentity or false
+yrp_hookinitpostentity = yrp_hookinitpostentity or false
 
 local d = d or 0
 
 function YRPSendIsReady()
-	if !rToSv then
-		rToSv = true
+	if !yrp_rToSv then
+		yrp_rToSv = true
 
 		local info = {}
 		info.iswindows = system.IsWindows()
@@ -49,23 +49,23 @@ function YRPSendIsReady()
 	end
 end
 
-local count = 0
-local init = false
-local noinit = false
+local YRP_COUNT = 0
+local YRP_INIT = false
+local YRP_NOINIT = false
 hook.Add("Think", "yrp_think_ready", function()
-	if rToSv then return end
+	if yrp_rToSv then return end
 
-	if init or noinit then
-		if !rToSv then
+	if YRP_INIT or YRP_NOINIT then
+		if !yrp_rToSv then
 			YRPSendIsReady()
 		end
-	elseif hookinitpostentity or initpostentity then
-		init = true
+	elseif yrp_hookinitpostentity or yrp_initpostentity then
+		YRP_INIT = true
 	elseif d < CurTime() then
 		d = CurTime() + 1
-		count = count + 1
-		if count > 4 and wk(system.GetCountry()) then
-			noinit = true
+		YRP_COUNT = YRP_COUNT + 1
+		if YRP_COUNT > 4 and wk(system.GetCountry()) then
+			YRP_NOINIT = true
 		end
 	end
 end)
@@ -73,29 +73,29 @@ end)
 hook.Add("InitPostEntity", "yrp_InitPostEntity_ready", function()
 	printGM("note", "All entities are loaded.")
 
-	hookinitpostentity = true
+	yrp_hookinitpostentity = true
 end)
 
 function GM:InitPostEntity()
 	printGM("note", "All Entities have initialized.")
 
-	initpostentity = true
+	yrp_initpostentity = true
 end
 
 function printReadyError()
 	local lply = LocalPlayer()
 
 	local str = "finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false))
-	str = str .. " rToSv: " .. tostring(rToSv)
+	str = str .. " yrp_rToSv: " .. tostring(yrp_rToSv)
 	str = str .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false))
-	str = str .. " hookinitpostentity: " .. tostring(hookinitpostentity)
-	str = str .. " initpostentity: " .. tostring(initpostentity)
-	str = str .. " noinit: " .. tostring(noinit)
+	str = str .. " yrp_hookinitpostentity: " .. tostring(yrp_hookinitpostentity)
+	str = str .. " yrp_initpostentity: " .. tostring(yrp_initpostentity)
+	str = str .. " YRP_NOINIT: " .. tostring(YRP_NOINIT)
 	str = str .. " ENTS: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
 	str = str .. " GLOS: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
 	str = str .. " dedi: " .. tostring(lply:GetDBool("isserverdedicated", false))
 	str = str .. " country: " .. tostring(system.GetCountry())
-	str = str .. " count: " .. tostring(count)
+	str = str .. " YRP_COUNT: " .. tostring(YRP_COUNT)
 
 	return str
 end
@@ -103,7 +103,7 @@ end
 local failed = failed or false
 timer.Create("yrp_sendready", 120, 0, function()
 	local lply = LocalPlayer()
-	if !rToSv then
+	if !yrp_rToSv then
 		failed = true
 		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
 			YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())

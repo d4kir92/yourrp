@@ -31,47 +31,47 @@ function retry_load_database()
 	end)
 end
 
-local _dbs = {}
-table.insert(_dbs, "yrp_usergroups")
-table.insert(_dbs, "yrp_general")
-table.insert(_dbs, "yrp_ply_groups")
-table.insert(_dbs, "yrp_ply_roles")
-table.insert(_dbs, "yrp_realistic")
-table.insert(_dbs, "yrp_feedback")
-table.insert(_dbs, "yrp_sql")
-table.insert(_dbs, "yrp_flags")
-table.insert(_dbs, "yrp_playermodels")
-table.insert(_dbs, "yrp_design")
-table.insert(_dbs, "yrp_levelsystem")
-table.insert(_dbs, "yrp_hud")
-table.insert(_dbs, "yrp_laws")
-table.insert(_dbs, "yrp_lockdown")
-table.insert(_dbs, "yrp_logs")
-table.insert(_dbs, "yrp_i_storages")
-table.insert(_dbs, "yrp_i_items")
-table.insert(_dbs, "yrp_keybinds")
-table.insert(_dbs, "yrp_profiles_hud")
-table.insert(_dbs, "yrp_idcard")
+local YRP_DBS = {}
+table.insert(YRP_DBS, "yrp_usergroups")
+table.insert(YRP_DBS, "yrp_general")
+table.insert(YRP_DBS, "yrp_ply_groups")
+table.insert(YRP_DBS, "yrp_ply_roles")
+table.insert(YRP_DBS, "yrp_realistic")
+table.insert(YRP_DBS, "yrp_feedback")
+table.insert(YRP_DBS, "yrp_sql")
+table.insert(YRP_DBS, "yrp_flags")
+table.insert(YRP_DBS, "yrp_playermodels")
+table.insert(YRP_DBS, "yrp_design")
+table.insert(YRP_DBS, "yrp_levelsystem")
+table.insert(YRP_DBS, "yrp_hud")
+table.insert(YRP_DBS, "yrp_laws")
+table.insert(YRP_DBS, "yrp_lockdown")
+table.insert(YRP_DBS, "yrp_logs")
+table.insert(YRP_DBS, "yrp_i_storages")
+table.insert(YRP_DBS, "yrp_i_items")
+table.insert(YRP_DBS, "yrp_keybinds")
+table.insert(YRP_DBS, "yrp_profiles_hud")
+table.insert(YRP_DBS, "yrp_idcard")
 
-table.insert(_dbs, "yrp_players")
-table.insert(_dbs, "yrp_" .. GetMapNameDB())
-table.insert(_dbs, "yrp_" .. GetMapNameDB() .. "_doors")
-table.insert(_dbs, "yrp_" .. GetMapNameDB() .. "_buildings")
-table.insert(_dbs, "yrp_role_whitelist")
-table.insert(_dbs, "yrp_characters")
-table.insert(_dbs, "yrp_vehicles")
-table.insert(_dbs, "yrp_agents")
-table.insert(_dbs, "yrp_licenses")
-table.insert(_dbs, "yrp_shops")
-table.insert(_dbs, "yrp_shop_items")
-table.insert(_dbs, "yrp_shop_categories")
-table.insert(_dbs, "yrp_dealers")
-table.insert(_dbs, "yrp_jail")
-table.insert(_dbs, "yrp_jail_notes")
-table.insert(_dbs, "yrp_interface")
+table.insert(YRP_DBS, "yrp_players")
+table.insert(YRP_DBS, "yrp_" .. GetMapNameDB())
+table.insert(YRP_DBS, "yrp_" .. GetMapNameDB() .. "_doors")
+table.insert(YRP_DBS, "yrp_" .. GetMapNameDB() .. "_buildings")
+table.insert(YRP_DBS, "yrp_role_whitelist")
+table.insert(YRP_DBS, "yrp_characters")
+table.insert(YRP_DBS, "yrp_vehicles")
+table.insert(YRP_DBS, "yrp_agents")
+table.insert(YRP_DBS, "yrp_licenses")
+table.insert(YRP_DBS, "yrp_shops")
+table.insert(YRP_DBS, "yrp_shop_items")
+table.insert(YRP_DBS, "yrp_shop_categories")
+table.insert(YRP_DBS, "yrp_dealers")
+table.insert(YRP_DBS, "yrp_jail")
+table.insert(YRP_DBS, "yrp_jail_notes")
+table.insert(YRP_DBS, "yrp_interface")
 
 function GetDBNames()
-	return _dbs
+	return YRP_DBS
 end
 
 local _db_reseted = false
@@ -80,7 +80,7 @@ function reset_database()
 
 	_db_reseted = true
 
-	for k, v in pairs(_dbs) do
+	for k, v in pairs(YRP_DBS) do
 		db_drop_table(v)
 	end
 	printGM("db", "DONE reset Database")
@@ -121,7 +121,7 @@ function db_init_database()
 	hr_pre("db")
 	printGM("db", "LOAD DATABASES")
 
-	for i, db in pairs(_dbs) do
+	for i, db in pairs(YRP_DBS) do
 		SQL_INIT_DATABASE(db)
 	end
 

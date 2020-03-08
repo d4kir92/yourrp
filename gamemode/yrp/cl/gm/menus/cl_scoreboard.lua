@@ -576,7 +576,7 @@ function OpenSBS()
 						end
 						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) then
 							self.rolicon = self.rolicon or ""
-							if pl.sbp.ricon != nil then
+							if pa(pl.sbp.ricon) then
 								if self.rolicon != pl:GetDString("roleIcon", "") then
 									self.rolicon = pl:GetDString("roleIcon", "")
 									local text_ricon = GetHTMLImage(self.rolicon, YRP.ctr(60), YRP.ctr(60))
