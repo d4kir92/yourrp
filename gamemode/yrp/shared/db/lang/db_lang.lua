@@ -94,28 +94,32 @@ end
 
 local nf = {}
 function YRP.lang_string(var, vals)
-	var = tostring(var)
-	if yrp_current_lang["lid_initauthor"] != nil then
-		local _string = yrp_current_lang[string.lower(var)]
-		if !wk(_string) then
-			if nf[var] == nil and string.StartWith(var, "LID_") then
-				nf[var] = var
-				if !string.find(var, " ") and !string.find(var, ":") and !string.find(var, "-") and HasYRPContent() and !HasYRPFakeContent() then
-					printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+	if LocalPlayer():LoadedGamemode() then
+		var = tostring(var)
+		if yrp_current_lang["lid_initauthor"] != nil then
+			local _string = yrp_current_lang[string.lower(var)]
+			if !wk(_string) then
+				if nf[var] == nil and string.StartWith(var, "LID_") then
+					nf[var] = var
+					if !string.find(var, " ") and !string.find(var, ":") and !string.find(var, "-") and HasYRPContent() and !HasYRPFakeContent() then
+						printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+					end
+				end
+				return var
+			end
+			if wk(vals) then
+				if type(vals) == "string" then
+					return YRP.lang_string(var)
+				else
+					for id, val in pairs(vals) do
+						_string = string.Replace(_string, "%" .. id .. "%", val)
+					end
 				end
 			end
+			return _string
+		else
 			return var
 		end
-		if wk(vals) then
-			if type(vals) == "string" then
-				return YRP.lang_string(var)
-			else
-				for id, val in pairs(vals) do
-					_string = string.Replace(_string, "%" .. id .. "%", val)
-				end
-			end
-		end
-		return _string
 	else
 		return var
 	end

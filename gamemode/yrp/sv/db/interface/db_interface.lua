@@ -150,19 +150,19 @@ function ResetDesign()
 	local tab = INTERFACES[GetGlobalDString("string_interface_design", "")]
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
-			local _name = "float_IF_" .. name
+			local _name = "float_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.bools) do
-			local _name = "bool_IF_" .. name
+			local _name = "bool_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.colors) do
-			local _name = "color_IF_" .. name
+			local _name = "color_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. name
+			local _name = "int_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 	end

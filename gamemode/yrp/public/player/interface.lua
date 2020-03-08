@@ -16,7 +16,7 @@ function Player:InterfaceValue(element, art)
 	elseif table.HasValue(ibools, art) then
 		return false
 	elseif table.HasValue(icolors, art) then
-		local icolor = self:GetDString("color_IF_" .. element .. "_" .. art, "255, 0, 0")
+		local icolor = self:GetDString("color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "255, 0, 0")
 		icolor = string.Explode(",", icolor)
 		return Color(icolor[1], icolor[2], icolor[3], icolor[4] or 255)
 	elseif table.HasValue(iints, art) then
