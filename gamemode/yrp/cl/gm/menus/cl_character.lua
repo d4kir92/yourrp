@@ -117,10 +117,7 @@ function openCharacterCreation()
 	character.playermodelID = 1
 	character.skin = 1
 
-	character.description = {}
-	for i = 1, 6 do
-		character.description[i] = ""
-	end
+
 
 	cc.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 	cc.frame:SetTitle("")
@@ -282,13 +279,12 @@ function openCharacterCreation()
 		draw.SimpleTextOutlined(YRP.lang_string("LID_armor") .. ": " .. character.ar .. " / " .. character.armax, "HudBars", YRP.ctr(10), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_salary") .. ": " .. character.salary, "HudBars", YRP.ctr(10), YRP.ctr(280), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "HudBars", YRP.ctr(10), YRP.ctr(340), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.description[1], "HudBars", YRP.ctr(10), YRP.ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.description[2] , "HudBars", YRP.ctr(10), YRP.ctr(460), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.description[3], "HudBars", YRP.ctr(10), YRP.ctr(520), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.description[4], "HudBars", YRP.ctr(10), YRP.ctr(580), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.description[5], "HudBars", YRP.ctr(10), YRP.ctr(640), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(character.description[6], "HudBars", YRP.ctr(10), YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
+
+	local charactersRoleDesc = createD("RichText", charactersRole, data.w, YRP.ctr(320), 0, YRP.ctr(370))
+	charactersRoleDesc:SetText("")
+
+
 
 	local characterPlayermodel = createMD("DModelPanel", cc.frame, YRP.ctr(1600), YRP.ctr(2160), ScrW2() - YRP.ctr(1600 / 2), ScrH2() - YRP.ctr(2160 / 2), YRP.ctr(5))
 	characterPlayermodel.bodygroups = {}
@@ -485,6 +481,7 @@ function openCharacterCreation()
 			character.armax = tmpTable[1].int_armax
 			character.salary = tmpTable[1].int_salary
 			character.description = tmpTable[1].string_description
+			charactersRoleDesc:SetText(character.description)
 			character.playermodels = string.Explode(",", tmpTable[1].string_playermodels)
 			character.playermodelID = 1
 			character.playermodelsize = tmpTable[1].int_playermodelsize or 1
@@ -575,12 +572,12 @@ function openCharacterCreation()
 				return true
 			else
 				character.cause = YRP.lang_string("LID_nameistolong")
-				character.color = Color(255, 100, 100)
+				character.color = LocalPlayer():InterfaceValue("YButton", "NC")
 				return false
 			end
 		else
 			character.cause = YRP.lang_string("LID_nameistoshort")
-			character.color = Color(255, 255, 100)
+			character.color = LocalPlayer():InterfaceValue("YButton", "NC")
 			return false
 		end
 	end
