@@ -94,14 +94,14 @@ end
 
 function PrintLIDError(var)
 	if !string.find(var, " ") and !string.find(var, ":") and !string.find(var, "-") and HasYRPContent() and !HasYRPFakeContent() then
-		printGM("error", "Translation string [" .. var .. "] not found, sent to Dev. Wait for next update!")
+		printGM("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!")
 	end
 end
 
 local nf = {}
 function YRP.lang_string(var, vals)
 	var = tostring(var)
-	if yrp_current_lang["lid_initauthor"] != nil then
+	if yrp_current_lang[string.lower(var)] != nil then
 		local _string = yrp_current_lang[string.lower(var)]
 		if !wk(_string) then
 			if nf[var] == nil and string.StartWith(var, "LID_") then
@@ -127,6 +127,7 @@ function YRP.lang_string(var, vals)
 		end
 		return _string
 	else
+		YRP.msg("error", "[YRP.lang_string] FAILED: " .. tostring(var))
 		return var
 	end
 end
