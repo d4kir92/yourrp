@@ -99,7 +99,7 @@ end
 function SetGlobalDInt(index, int)
 	YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
 	if YRP_NW_Globals["INT"][index] != int or YRP_NW_Globals["INT"][index] == nil then
-		YRP_NW_Globals["INT"][index] = int
+		YRP_NW_Globals["INT"][index] = tonumber(int)
 		if SERVER then
 			SendGlobalDInt(index, int)
 		end
@@ -116,7 +116,8 @@ end
 function GetGlobalDInt(index, def)
 	YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
 	local result = YRP_NW_Globals["INT"][index]
-	return result or def
+	result = result or def
+	return tonumber(result)
 end
 
 -- FLOAT

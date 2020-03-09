@@ -64,7 +64,7 @@ hook.Add("Think", "yrp_think_ready", function()
 	elseif d < CurTime() then
 		d = CurTime() + 1
 		YRP_COUNT = YRP_COUNT + 1
-		if YRP_COUNT > 4 and wk(system.GetCountry()) then
+		if YRP_COUNT > 4 and wk(system.GetCountry()) and YRP.initLang != nil then
 			YRP_NOINIT = true
 		end
 	end

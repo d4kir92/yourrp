@@ -252,66 +252,68 @@ function send_error(realm, str)
 	end
 	dedi = string.upper(dedi)
 
-	timer.Create("wait_for_gamemode" .. str, 1, 0, function()
-		if gmod.GetGamemode() != nil then
-			isdbfull(str)
-			ismalformed(str)
+	if ErrorValidToSend(str) then
+		timer.Create("wait_for_gamemode" .. str, 1, 0, function()
+			if gmod.GetGamemode() != nil then
+				isdbfull(str)
+				ismalformed(str)
 
-			entry["entry.915525654"] = "[D: " .. tostring(dedi) .. "] " .. tostring(str)
-			entry["entry.58745995"] = tostring(realm)
-			entry["entry.1306533151"] = GetMapName() or "MAPNAME"
-			entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
-			entry["entry.1883727441"] = tostring(gmod.GetGamemode().VersionStable)
-			entry["entry.1007479965"] = tostring(gmod.GetGamemode().VersionBeta)
-			entry["entry.1274096098"] = tostring(gmod.GetGamemode().VersionCanary)
-			entry["entry.2045173320"] = string.upper(gmod.GetGamemode().VersionSort) or "UNKNOWN"
-			entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
-			entry["entry.1029765769"] = dedi
-			if CLIENT then
-				local ply = LocalPlayer()
-				local _steamid = "UNKNOWN"
-				if ea(ply) then
-					_steamid = ply:SteamID()
+				entry["entry.915525654"] = "[D: " .. tostring(dedi) .. "] " .. tostring(str)
+				entry["entry.58745995"] = tostring(realm)
+				entry["entry.1306533151"] = GetMapName() or "MAPNAME"
+				entry["entry.2006356340"] = gmod.GetGamemode():GetGameDescription() or "GAMEMODENAME"
+				entry["entry.1883727441"] = tostring(gmod.GetGamemode().VersionStable)
+				entry["entry.1007479965"] = tostring(gmod.GetGamemode().VersionBeta)
+				entry["entry.1274096098"] = tostring(gmod.GetGamemode().VersionCanary)
+				entry["entry.2045173320"] = string.upper(gmod.GetGamemode().VersionSort) or "UNKNOWN"
+				entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
+				entry["entry.1029765769"] = dedi
+				if CLIENT then
+					local ply = LocalPlayer()
+					local _steamid = "UNKNOWN"
+					if ea(ply) then
+						_steamid = ply:SteamID()
+					end
+					entry["entry.1898856001"] = tostring(_steamid)
+				else
+					entry["entry.1898856001"] = "SERVER"
 				end
-				entry["entry.1898856001"] = tostring(_steamid)
-			else
-				entry["entry.1898856001"] = "SERVER"
-			end
 
-			if first_time_error then
-				entry["entry.1893317510"] = "YES"
-			elseif !first_time_error then
-				entry["entry.1893317510"] = "NO"
-			else
-				entry["entry.1893317510"] = "-"
-			end
-			entry["entry.471979789"] = string.upper(tostring(!game.SinglePlayer()))
+				if first_time_error then
+					entry["entry.1893317510"] = "YES"
+				elseif !first_time_error then
+					entry["entry.1893317510"] = "NO"
+				else
+					entry["entry.1893317510"] = "-"
+				end
+				entry["entry.471979789"] = string.upper(tostring(!game.SinglePlayer()))
 
-			if realm != "server_all" then
-				http.Post(_url, entry, function(result)
-					if result then
-						printGM("gm", "[SENT ERROR TO DEVELOPER] " .. str)
-					end
-				end, function(failed)
-					if tostring(failed) != "unsuccessful" then
-						printGM("error", "ERROR1: " .. tostring(failed))
-					end
-				end)
-			else
-				http.Post(_url2, entry, function(result)
-					if result then
-						printGM("gm", "[SENT ERROR TO DEVELOPER 2] " .. str)
-					end
-				end, function(failed)
-					if tostring(failed) != "unsuccessful" then
-						printGM("error", "ERROR2: " .. tostring(failed))
-					end
-				end)
-			end
+				if realm != "server_all" then
+					http.Post(_url, entry, function(result)
+						if result then
+							printGM("gm", "[SENT ERROR TO DEVELOPER] " .. str)
+						end
+					end, function(failed)
+						if tostring(failed) != "unsuccessful" then
+							printGM("error", "ERROR1: " .. tostring(failed))
+						end
+					end)
+				else
+					http.Post(_url2, entry, function(result)
+						if result then
+							printGM("gm", "[SENT ERROR TO DEVELOPER 2] " .. str)
+						end
+					end, function(failed)
+						if tostring(failed) != "unsuccessful" then
+							printGM("error", "ERROR2: " .. tostring(failed))
+						end
+					end)
+				end
 
-			timer.Remove("wait_for_gamemode" .. str)
-		end
-	end)
+				timer.Remove("wait_for_gamemode" .. str)
+			end
+		end)
+	end
 end
 
 local _sended = {}
