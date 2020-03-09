@@ -29,23 +29,25 @@ util.AddNetworkString("yrp_get_logs")
 net.Receive("yrp_get_logs", function(len, ply)
 	local tab = net.ReadString()
 
-	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "string_typ = '" .. tab .. "'")
-	local nettab = {}
-	if wk(dbtab) then
-		for i, t in pairs(dbtab) do
-			if os.time() - showafter < tonumber(t.string_timestamp) then
-				table.insert(nettab, t)
-			else
-				SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
+	if ply:CanAccess("bool_logs") then
+		local dbtab = SQL_SELECT(DATABASE_NAME, "*", "string_typ = '" .. tab .. "'")
+		local nettab = {}
+		if wk(dbtab) then
+			for i, t in pairs(dbtab) do
+				if os.time() - showafter < tonumber(t.string_timestamp) then
+					table.insert(nettab, t)
+				else
+					SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
+				end
 			end
 		end
+
+		table.SortByMember(nettab, "string_timestamp")
+
+		net.Start("yrp_get_logs")
+			net.WriteTable(nettab)
+		net.Send(ply)
 	end
-
-	table.SortByMember(nettab, "string_timestamp")
-
-	net.Start("yrp_get_logs")
-		net.WriteTable(nettab)
-	net.Send(ply)
 end)
 
 -- %source% killed %target%

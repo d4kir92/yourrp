@@ -441,6 +441,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
 	ACCESSAddCheckBox("bool_status", "LID_settings_status")
 	ACCESSAddCheckBox("bool_feedback", "LID_settings_feedback")
+	ACCESSAddCheckBox("bool_logs", "LID_logs")
 	ACCESSAddHr()
 	-- Gameplay
 	ACCESSAddCheckBox("bool_general", "LID_settings_general")

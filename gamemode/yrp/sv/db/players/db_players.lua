@@ -381,6 +381,10 @@ function set_role_values(ply, pmid)
 				end
 			end
 
+			ply:SetDFloat("float_dmgtype_burn", tonumber(rolTab.float_dmgtype_burn))
+			ply:SetDFloat("float_dmgtype_bullet", tonumber(rolTab.float_dmgtype_bullet))
+			ply:SetDFloat("float_dmgtype_energybeam", tonumber(rolTab.float_dmgtype_energybeam))
+
 			-- Darkrp Team
 			ply:SetTeam(rolTab.uniqueID)
 		else

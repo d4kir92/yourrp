@@ -502,12 +502,22 @@ hook.Add("EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 	if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
 		local hitfactor = GetHitFactorEntities() or 1
 		dmginfo:ScaleDamage(hitfactor)
-	end
-	if ent:IsVehicle() then
+	elseif ent:IsVehicle() then
 		local hitfactor = GetHitFactorVehicles() or 1
 		dmginfo:ScaleDamage(hitfactor)
+	elseif ent:IsPlayer() then
+		if dmginfo:GetDamageType() == DMG_BURN then
+			dmginfo:ScaleDamage(ent:GetDFloat("float_dmgtype_burn", 1.0))
+		elseif dmginfo:GetDamageType() == DMG_BULLET then
+			dmginfo:ScaleDamage(ent:GetDFloat("float_dmgtype_bullet", 1.0))
+		elseif dmginfo:GetDamageType() == DMG_ENERGYBEAM then
+			dmginfo:ScaleDamage(ent:GetDFloat("float_dmgtype_energybeam", 1.0))
+		else
+			dmginfo:ScaleDamage(1)
+		end
+	else
+		dmginfo:ScaleDamage(1)
 	end
-	dmginfo:ScaleDamage(1)
 end)
 
 function SlowThink(ent)
@@ -559,56 +569,52 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 
 		SlowThink(ply)
 
-		if true then
-			if IsBleedingEnabled() then
-				local _rand = math.Rand(0, 100)
-				if _rand < GetBleedingChance() then
-					ply:StartBleeding()
-					ply:SetBleedingPosition(ply:GetPos() - dmginfo:GetDamagePosition())
+		if IsBleedingEnabled() then
+			local _rand = math.Rand(0, 100)
+			if _rand < GetBleedingChance() then
+				ply:StartBleeding()
+				ply:SetBleedingPosition(ply:GetPos() - dmginfo:GetDamagePosition())
+			end
+		end
+		if hitgroup == HITGROUP_HEAD then
+			if IsHeadshotDeadlyPlayer() then
+				dmginfo:ScaleDamage(ply:GetMaxHealth())
+			else
+				dmginfo:ScaleDamage(GetHitFactorPlayerHead())
+			end
+		elseif hitgroup == HITGROUP_CHEST then
+			dmginfo:ScaleDamage(GetHitFactorPlayerChes())
+		elseif hitgroup == HITGROUP_STOMACH then
+			dmginfo:ScaleDamage(GetHitFactorPlayerStom())
+		elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+			dmginfo:ScaleDamage(GetHitFactorPlayerArms())
+			if IsBonefracturingEnabled() then
+				local _break = math.Round(math.Rand(0, 100), 0)
+				if _break <= GetBrokeChanceArms() then
+					if hitgroup == HITGROUP_LEFTARM then
+						ply:SetDBool("broken_arm_left", true)
+
+						--ply:SetActiveWeapon("yrp_unarmed")
+						ply:SelectWeapon("yrp_unarmed")
+					elseif hitgroup == HITGROUP_RIGHTARM then
+						ply:SetDBool("broken_arm_right", true)
+
+						--ply:SetActiveWeapon("yrp_unarmed")
+						ply:SelectWeapon("yrp_unarmed")
+					end
 				end
 			end
-			if hitgroup == HITGROUP_HEAD then
-				if IsHeadshotDeadlyPlayer() then
-					dmginfo:ScaleDamage(ply:GetMaxHealth())
-				else
-					dmginfo:ScaleDamage(GetHitFactorPlayerHead())
-				end
-		 	elseif hitgroup == HITGROUP_CHEST then
-				dmginfo:ScaleDamage(GetHitFactorPlayerChes())
-			elseif hitgroup == HITGROUP_STOMACH then
-				dmginfo:ScaleDamage(GetHitFactorPlayerStom())
-			elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-				dmginfo:ScaleDamage(GetHitFactorPlayerArms())
-				if IsBonefracturingEnabled() then
-					local _break = math.Round(math.Rand(0, 100), 0)
-					if _break <= GetBrokeChanceArms() then
-						if hitgroup == HITGROUP_LEFTARM then
-							ply:SetDBool("broken_arm_left", true)
-
-							--ply:SetActiveWeapon("yrp_unarmed")
-							ply:SelectWeapon("yrp_unarmed")
-						elseif hitgroup == HITGROUP_RIGHTARM then
-							ply:SetDBool("broken_arm_right", true)
-
-							--ply:SetActiveWeapon("yrp_unarmed")
-							ply:SelectWeapon("yrp_unarmed")
-						end
+		elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+			dmginfo:ScaleDamage(GetHitFactorPlayerLegs())
+			if IsBonefracturingEnabled() then
+				local _break = math.Round(math.Rand(0, 100), 0)
+				if _break <= GetBrokeChanceLegs() then
+					if hitgroup == HITGROUP_LEFTLEG then
+						ply:SetDBool("broken_leg_left", true)
+					elseif hitgroup == HITGROUP_RIGHTLEG then
+						ply:SetDBool("broken_leg_right", true)
 					end
 				end
-			elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-				dmginfo:ScaleDamage(GetHitFactorPlayerLegs())
-				if IsBonefracturingEnabled() then
-					local _break = math.Round(math.Rand(0, 100), 0)
-					if _break <= GetBrokeChanceLegs() then
-						if hitgroup == HITGROUP_LEFTLEG then
-							ply:SetDBool("broken_leg_left", true)
-						elseif hitgroup == HITGROUP_RIGHTLEG then
-							ply:SetDBool("broken_leg_right", true)
-						end
-					end
-				end
-			else
-				dmginfo:ScaleDamage(1)
 			end
 		else
 			dmginfo:ScaleDamage(1)

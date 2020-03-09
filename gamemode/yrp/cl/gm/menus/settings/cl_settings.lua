@@ -60,7 +60,8 @@ function F8RequireUG(site, usergroups)
 
 	local allugs = {}
 	allugs["USERGROUPS"] = usergroups
-	function settingsWindow.window.site:Paint(w, h)
+	local notallowed = createD("DPanel", settingsWindow.window.site, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), 0, 0)
+	function notallowed:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
 		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "roleInfoHeader", w / 2, h / 2, Color(255, 0, 0), 1, 1)
 

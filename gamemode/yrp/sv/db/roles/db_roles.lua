@@ -65,6 +65,10 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_burn", "INTEGER DEFAULT 1.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "INTEGER DEFAULT 1.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "INTEGER DEFAULT 1.0")
+
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	printGM("note", DATABASE_NAME .. " has not the default role")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "1, 'Civilian', '0,0,255', 1, 0")

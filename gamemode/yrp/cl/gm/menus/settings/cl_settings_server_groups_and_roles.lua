@@ -2334,7 +2334,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local col4 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 			col4:SetSpacing(YRP.ctr(20))
 
-			local attributes = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1000), ea.restriction.x + ea.restriction:GetWide() + YRP.ctr(20), YRP.ctr(20))
+			local attributes = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1400), ea.restriction.x + ea.restriction:GetWide() + YRP.ctr(20), YRP.ctr(20))
 			attributes:SetText("LID_attributes")
 			function attributes:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -2537,6 +2537,28 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			powerjump.min = 1
 			powerjump.max = 999999
 			ea[role.uniqueID].powerjump = DIntBox(powerjump)
+
+			DHr(hr)
+
+			local dmgtypes = {
+				"burn",
+				"bullet",
+				"energybeam"
+			}
+			for i, dmgtype in pairs(dmgtypes) do
+				local d = {}
+				d.parent = ea.attributes:GetContent()
+				d.header = "LID_" .. "dmgtype_" .. dmgtype
+				d.netstr = "update_role_float_" .. "dmgtype_" .. dmgtype
+				d.value = role["float_" .. "dmgtype_" .. dmgtype] or 1.0
+				d.uniqueID = role.uniqueID
+				d.lforce = false
+				d.min = -10.0
+				d.max = 10.0
+				ea[role.uniqueID][dmgtype] = DIntBox(d)
+			end
+
+			DHr(hr)
 
 			ea.attributes:AutoSize(true)
 		end)
