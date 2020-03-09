@@ -48,17 +48,13 @@ function createShopItem(item, duid, line, id)
 			local _mins, _maxs = _i.model.Entity:GetRenderBounds()
 			local _x = _maxs.x - _mins.x
 			local _y = _maxs.y - _mins.y
-			local _range = 0
-			if _x > _y then
-				_range = _x
-			elseif _y > _x then
-				_range = _y
-			end
+			local _z = _maxs.z - _mins.z
+			local _range = math.max(_x, _y, _z)
 
-			local _z = _mins.z + (_maxs.z - _mins.z) * 0.46
+			_z = _mins.z + (_maxs.z - _mins.z) * 0.46
 
 			_i.model:SetLookAt(Vector(0, 0, _z))
-			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.1, 0, 0))
+			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range, 0, 0))
 		end
 	end
 
@@ -156,17 +152,12 @@ function createStorageItem(item, duid)
 			local _mins, _maxs = _i.model.Entity:GetRenderBounds()
 			local _x = _maxs.x - _mins.x
 			local _y = _maxs.y - _mins.y
-			local _range = 0
-			if _x > _y then
-				_range = _x
-			elseif _y > _x then
-				_range = _y
-			end
+			local _range = math.max(_x, _y, _z)
 
-			local _z = _mins.z + (_maxs.z - _mins.z) * 2 / 3
+			_z = _mins.z + (_maxs.z - _mins.z) * 0.46
 
 			_i.model:SetLookAt(Vector(0, 0, _z))
-			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range * 1.6, 0, 0))
+			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range, 0, 0))
 		end
 	end
 

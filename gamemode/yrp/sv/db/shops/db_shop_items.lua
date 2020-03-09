@@ -392,6 +392,9 @@ net.Receive("item_buy", function(len, ply)
 			if _item.type == "licenses" then
 				ply:AddLicense(_item.ClassName)
 				ply:addMoney(-tonumber(_item.price))
+			elseif _item.type == "roles" then
+				local rid = _item.ClassName
+				SetRole(ply, rid, true)
 			else
 				local _spawned = spawnItem(ply, _item, _dealer_uid)
 

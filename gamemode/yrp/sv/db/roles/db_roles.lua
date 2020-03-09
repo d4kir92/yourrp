@@ -1566,3 +1566,19 @@ function GetRoleTable(rid)
 	end
 	return result
 end
+
+util.AddNetworkString("getallroles")
+net.Receive("getallroles", function(len, ply)
+	local dbtab = SQL_SELECT(DATABASE_NAME, "*", nil)
+	if wk(dbtab) then
+		for i, v in pairs(dbtab) do
+			local pms = string.Explode(",", GetPlayermodelsOfRole(v.uniqueID))
+			if pms[1] != nil then
+				v.WorldModel = pms[1] or ""
+			end
+		end
+		net.Start("getallroles")
+			net.WriteTable(dbtab)
+		net.Send(ply)
+	end
+end)

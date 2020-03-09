@@ -1359,7 +1359,7 @@ function drawStringBox(ent, instr, z, color)
 		local box = {}
 		box.w = tw + 5 * br + th
 		box.h = th + 2 * br
-		draw.RoundedBox(box.h / 2, - box.w / 2, 0, box.w, box.h, Color(0, 0, 0, 160))
+		draw.RoundedBox(math.Round(box.h / 2 - (box.h / 2) % 1, 0), - box.w / 2, 0, box.w, box.h, Color(0, 0, 0, 160))
 
 		local ico = {}
 		ico.w = th * 0.8

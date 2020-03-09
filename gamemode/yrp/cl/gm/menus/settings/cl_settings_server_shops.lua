@@ -338,6 +338,7 @@ net.Receive("get_shop_items", function()
 				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_entities"), "entities")
 				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_vehicles"), "vehicles")
 				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_licenses"), "licenses")
+				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_roles"), "roles")
 				_sh._sit.type.plus.tbl = tbl
 				function _sh._sit.type.plus:OnSelect(panel, index, value)
 					local _itemlist = {}
@@ -381,6 +382,20 @@ net.Receive("get_shop_items", function()
 							for i, lic in pairs(_itemlist) do
 								lic.PrintName = SQL_STR_OUT(lic.name)
 								lic.ClassName = lic.uniqueID
+							end
+
+							openSingleSelector(_itemlist, "selected_shop_item")
+						end)
+					elseif value == "roles" then
+						net.Start("getallroles")
+						net.SendToServer()
+						net.Receive("getallroles", function()
+							local _net_tab = net.ReadTable()
+							_itemlist = _net_tab
+							for i, rol in pairs(_itemlist) do
+								rol.PrintName = SQL_STR_OUT(rol.string_name)
+								rol.WorldModel = rol.WorldModel
+								rol.ClassName = rol.uniqueID
 							end
 
 							openSingleSelector(_itemlist, "selected_shop_item")
