@@ -127,7 +127,6 @@ function YRP.lang_string(var, vals)
 		end
 		return _string
 	else
-		YRP.msg("error", "[YRP.lang_string] FAILED: " .. tostring(var))
 		return var
 	end
 end
