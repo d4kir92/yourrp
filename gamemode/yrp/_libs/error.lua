@@ -69,7 +69,7 @@ end
 
 function ErrorValidToSend(str)
 
-	if game.SinglePlayer() or game.GetIPAddress() == "loopback" then
+	if game.SinglePlayer() then --or game.GetIPAddress() == "loopback" then
 		return false
 	end
 
