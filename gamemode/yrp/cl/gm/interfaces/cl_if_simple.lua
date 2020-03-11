@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
@@ -68,8 +68,35 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 
 	local lply = LocalPlayer()
 	if GetGlobalDString("string_interface_design") == "Simple" then
-		local color = lply:InterfaceValue("YButton", "NC")
-		local tcolor = lply:InterfaceValue("YButton", "NT")
+		local color = lply:InterfaceValue("YFrame", "HI")
+		local tcolor = lply:InterfaceValue("YFrame", "HT")
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+
+		local ax = tab.ax or TEXT_ALIGN_CENTER
+		local ay = tab.ay or TEXT_ALIGN_CENTER
+
+		local tx = pw / 2
+		if ax == 0 then
+			tx = YRP.ctr(20)
+		end
+		local ty = ph / 2
+		if ay == 3 then
+			ty = YRP.ctr(20)
+		end
+
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+		return true
+	end
+end)
+
+hook.Add("YTextFieldPaint", "YLabel_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		local color = Color(50, 50, 50)
+		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
@@ -95,7 +122,7 @@ hook.Add("YPanelPaint", "YPanel_Simple", function(self, pw, ph, tab)
 
 	local lply = LocalPlayer()
 	if GetGlobalDString("string_interface_design") == "Simple" then
-		local color = tab.color or lply:InterfaceValue("YFrame", "HB")
+		local color = tab.color or lply:InterfaceValue("YFrame", "HI")
 
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 		return true

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -587,7 +587,7 @@ function CreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7"
+		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, rpdescription"
 		local vals = "'" .. steamid .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tab.rpname) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tab.gender) .. "', "
@@ -605,7 +605,8 @@ function CreateCharacter(ply, tab)
 		vals = vals .. tonumber(tab.bg[4]) .. ", "
 		vals = vals .. tonumber(tab.bg[5]) .. ", "
 		vals = vals .. tonumber(tab.bg[6]) .. ", "
-		vals = vals .. tonumber(tab.bg[7])
+		vals = vals .. tonumber(tab.bg[7]) .. ", "
+		vals = vals .. "'" .. tostring(tab.rpdescription) .. "'"
 		local char = SQL_INSERT_INTO("yrp_characters", cols, vals)
 		if char == nil then
 			local chars = SQL_SELECT("yrp_characters", "*", nil)

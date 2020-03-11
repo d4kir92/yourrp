@@ -1,5 +1,5 @@
 --[[
-Copyright (C) 2017-2019 Arno Zura
+Copyright (C) 2017-2020 Arno Zura
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -61,6 +61,10 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_scoreboard.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_vehicle_options.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_combinedmenu.lua")
+
+AddCSLuaFile("yrp/cl/gm/menus/cl_factionselection.lua")
+AddCSLuaFile("yrp/cl/gm/menus/cl_roleselection.lua")
+AddCSLuaFile("yrp/cl/gm/menus/cl_charactersettings.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_console.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_status.lua")

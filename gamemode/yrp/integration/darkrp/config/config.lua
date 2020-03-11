@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- this config will not be used! its only here to remove some bugs!
 -- in yourrp you can set everything up

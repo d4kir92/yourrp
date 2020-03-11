@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 hook.Add("YFramePaint", "YFrame_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
@@ -89,7 +89,7 @@ hook.Add("YPanelPaint", "YPanel_Blur", function(self, pw, ph, tab)
 
 	local lply = LocalPlayer()
 	if GetGlobalDString("string_interface_design") == "Blur" then
-		local color = lply:InterfaceValue("YFrame", "HB")
+		local color = lply:InterfaceValue("YFrame", "HI")
 
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 		return true

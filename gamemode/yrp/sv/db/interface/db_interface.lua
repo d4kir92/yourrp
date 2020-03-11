@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -55,6 +55,7 @@ Simple.bools.Rounded = 0;
 Simple.colors = {}
 Simple.colors.YFrame_HT = "255, 255, 255, 255"
 Simple.colors.YFrame_HB = "40, 40, 40, 255"
+Simple.colors.YFrame_NC = "40, 40, 40, 255"		-- Normal Color
 Simple.colors.YFrame_HI = "80, 80, 80, 255"
 Simple.colors.YFrame_BG = "0, 0, 0, 200"
 Simple.colors.YButton_NT = "0, 0, 0, 255"		-- Normal Textcolor
@@ -80,6 +81,7 @@ Blur.bools.Rounded = 0;
 Blur.colors = {}
 Blur.colors.YFrame_HT = "255, 255, 255, 255"	-- Header Textcolor
 Blur.colors.YFrame_HB = "40, 40, 40, 80"		-- Header Backgroundcolor
+Blur.colors.YFrame_NC = "40, 40, 40, 80"		-- Normal Color
 Blur.colors.YFrame_HI = "80, 80, 80, 80"		-- Highlight Color
 Blur.colors.YFrame_BG = "255, 255, 255, 80"		-- Background Color
 Blur.colors.YButton_NT = "0, 0, 0, 255"			-- Normal Textcolor

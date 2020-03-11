@@ -1,4 +1,12 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
+function TextColor(bgcol)
+	local sum = bgcol.r + bgcol.g + bgcol.b
+	if sum > 255 then
+		return Color(0, 0, 0)
+	end
+	return Color(255, 255, 255)
+end
 
 function AreYouSure(yes, no)
 	local win = createVGUI("YFrame", nil, 630, 50 + 10 + 50 + 10, 0, 0)

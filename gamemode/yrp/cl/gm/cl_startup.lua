@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local searchIcon = Material("icon16/magnifier.png")
 
@@ -262,6 +262,35 @@ function GetSWEPWorldModel(ClassName)
 
 		if tostring(v.ClassName) == tostring(ClassName) and v.WorldModel != nil then
 			return v.WorldModel
+		end
+	end
+
+	return ""
+end
+
+function GetSWEPPrintName(ClassName)
+	local sweps = weapons.GetList()
+	local _weaplist = list.Get("Weapon")
+
+	for k, v in pairs(_weaplist) do
+		table.insert(sweps, v)
+	end
+
+	for k, v in pairs(sweps) do
+		if v.WorldModel == nil then
+			v.WorldModel = v.Model or ""
+		end
+
+		if v.PrintName == nil then
+			v.PrintName = v.Name or ""
+		end
+
+		if v.ClassName == nil then
+			v.ClassName = v.Class or ""
+		end
+
+		if tostring(v.ClassName) == tostring(ClassName) and v.PrintName != nil then
+			return v.PrintName
 		end
 	end
 

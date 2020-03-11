@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -6,11 +6,12 @@
 local DATABASE_NAME = "yrp_ply_groups"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
@@ -544,3 +545,94 @@ function GetGroupTable(gid)
 	end
 	return result
 end
+
+-- Faction Selection
+util.AddNetworkString("yrp_factionselection_getfactions")
+net.Receive("yrp_factionselection_getfactions", function(len, ply)
+	local dbtab = SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description", "int_parentgroup = '0'")
+
+	local nettab = {}
+	if wk(dbtab) then
+		nettab = dbtab
+	end
+
+	net.Start("yrp_factionselection_getfactions")
+		net.WriteTable(nettab)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_roleselection_getgroups")
+net.Receive("yrp_roleselection_getgroups", function(len, ply)
+	local fuid = net.ReadString()
+	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. fuid .. "'")
+
+	local nettab = {}
+	if wk(dbtab) then
+		nettab = dbtab
+	end
+
+	net.Start("yrp_roleselection_getgroups")
+		net.WriteTable(nettab)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_roleselection_getcontent")
+net.Receive("yrp_roleselection_getcontent", function(len, ply)
+	local guid = net.ReadString()
+	local roltab = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
+	local grptab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'")
+
+	if !wk(roltab) then
+		roltab = {}
+	else
+		for i, v in pairs(roltab) do
+			v.pms = GetPlayermodelsOfRole(v.uniqueID)
+		end
+	end
+	if !wk(grptab) then
+		grptab = {}
+	end
+
+	net.Start("yrp_roleselection_getcontent")
+		net.WriteTable(roltab)
+		net.WriteTable(grptab)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_roleselection_getrole")
+net.Receive("yrp_roleselection_getrole", function(len, ply)
+	local ruid = net.ReadString()
+	local roltab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
+	
+	if !wk(roltab) then
+		roltab = {}
+	else
+		for i, v in pairs(roltab) do
+			v.pms = GetPlayermodelsOfRole(v.uniqueID)
+		end
+		roltab = roltab[1]
+	end
+
+	net.Start("yrp_roleselection_getrole")
+		net.WriteTable(roltab)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_char_getrole")
+net.Receive("yrp_char_getrole", function(len, ply)
+	local ruid = net.ReadString()
+	local roltab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
+	
+	if !wk(roltab) then
+		roltab = {}
+	else
+		for i, v in pairs(roltab) do
+			v.pms = GetPlayermodelsOfRole(v.uniqueID)
+		end
+		roltab = roltab[1]
+	end
+
+	net.Start("yrp_char_getrole")
+		net.WriteTable(roltab)
+	net.Send(ply)
+end)

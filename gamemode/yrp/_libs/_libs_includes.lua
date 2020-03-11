@@ -1,4 +1,4 @@
---Copyright (C) 2017-2019 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 print("Loading _libs_includes.lua")
 
@@ -21,6 +21,7 @@ AddCSLuaFile("yrp_derma.lua")
 AddCSLuaFile("derma/yframe.lua")
 AddCSLuaFile("derma/ygroupbox.lua")
 AddCSLuaFile("derma/ybutton.lua")
+AddCSLuaFile("derma/ycollapsiblecategory.lua")
 AddCSLuaFile("derma/ylabel.lua")
 AddCSLuaFile("derma/ypanel.lua")
 AddCSLuaFile("derma/ycolormenu.lua")
@@ -41,6 +42,7 @@ AddCSLuaFile("derma/yitem.lua")
 AddCSLuaFile("derma/yslot.lua")
 
 AddCSLuaFile("derma/ytabs.lua")
+AddCSLuaFile("derma/ymodelpanel.lua")
 
 if CLIENT then
 	include("derma.lua")
@@ -48,6 +50,7 @@ if CLIENT then
 	include("derma/yframe.lua")
 	include("derma/ygroupbox.lua")
 	include("derma/ybutton.lua")
+	include("derma/ycollapsiblecategory.lua")
 	include("derma/ylabel.lua")
 	include("derma/ypanel.lua")
 	include("derma/ycolormenu.lua")
@@ -68,6 +71,7 @@ if CLIENT then
 	include("derma/yslot.lua")
 
 	include("derma/ytabs.lua")
+	include("derma/ymodelpanel.lua")
 end
 
 print("Loaded _libs_includes.lua")
