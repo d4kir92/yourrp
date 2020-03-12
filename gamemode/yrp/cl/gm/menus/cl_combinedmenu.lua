@@ -72,7 +72,7 @@ function OpenCombinedMenu()
 		cm.menu:SetText("")
 		function cm.menu:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
-			hook.Run("YPanelPaint", self, pw, ph)
+			--hook.Run("YPanelPaint", self, pw, ph)
 
 			local gm = "YourRP by D4KiR"
 			draw.SimpleText(gm, "Y_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)

@@ -5,7 +5,7 @@ local config = {}
 -- CONFIG --
 
 -- List Width
-config.w = 2200
+config.w = 2500
 -- List Height
 config.h = 1400
 -- BR
@@ -32,7 +32,7 @@ function CreateFactionSelectionContent()
 	local list = createD("DScrollPanel", site, YRP.ctr(config.w), YRP.ctr(config.h), 0, 0)
 	list:Center()
 	function list:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+		--draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
 	end
 	local sbar = list:GetVBar()
 	function sbar:Paint(w, h)
@@ -57,11 +57,14 @@ function CreateFactionSelectionContent()
 		end
 
 		local btn = {}
-		btn.w = 400
-		btn.h = 50
+		btn.w = 500
+		btn.h = 75
 
 		local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
 		back:SetText("LID_back")
+		function back:Paint(pw, ph)
+			hook.Run("YButtonRPaint", self, pw, ph)
+		end
 		function back:DoClick()
 			parent:Remove()
 			openCharacterSelection()
@@ -78,7 +81,7 @@ function CreateFactionSelectionContent()
 		local y = 0
 		if table.Count(ftab) > 1 then -- If more then 1 Faction
 			local w = YRP.ctr(config.w - 3 * config.br) / 2
-			local h = YRP.ctr(400)
+			local h = YRP.ctr(500)
 			if table.Count(ftab) > 4 then
 				list:SetWide(YRP.ctr(config.w) + sbar:GetWide())
 			end
@@ -100,18 +103,18 @@ function CreateFactionSelectionContent()
 						logo:SetHTML(GetHTMLImage(url, logo:GetWide(), logo:GetTall()))
 					end
 
-					local name = createD("DPanel", faction, w - h, YRP.ctr(100), h, 0)
+					local name = createD("DPanel", faction, w, YRP.ctr(100), h, 0)
 					function name:Paint(pw, ph)
-						draw.SimpleText(fac.string_name, "Y_26_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(fac.string_name, "Y_26_700", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					local description = createD("RichText", faction, w - h, h - YRP.ctr(100), h, YRP.ctr(100))
 					description:SetText(fac.string_description)
 					function description:PerformLayout()
 						if self.SetUnderlineFont != nil then
-							self:SetUnderlineFont("Y_" .. 18 .. "_500")
+							self:SetUnderlineFont("Y_16_500")
 						end
-						self:SetFontInternal("Y_" .. 18 .. "_500")
+						self:SetFontInternal("Y_16_500")
 
 						self:SetFGColor(Color(255, 255, 255))
 					end

@@ -416,7 +416,11 @@ function OpenRoleMenu()
 end
 
 function CreateRoleMenuContent(parent)
-	ROLEMENU.content = parent
+	LocalPlayer():SetDBool("cc", false)
+	LocalPlayer():SetDString("charcreate_fuid", LocalPlayer():GetFactionUniqueID())
+	RoleMenu = parent
+	CreateRoleSelectionContent()
+	--[[ROLEMENU.content = parent
 	ROLEMENU.info = createD("DPanel", ROLEMENU.content, YRP.ctr(800), ROLEMENU.content:GetTall() - YRP.ctr(20 + 20), ROLEMENU.content:GetWide() - YRP.ctr(20) - YRP.ctr(800), YRP.ctr(20))
 	ROLEMENU.info.rolename = YRP.lang_string("LID_none")
 	ROLEMENU.info.rolesala = YRP.lang_string("LID_none")
@@ -497,5 +501,5 @@ function CreateRoleMenuContent(parent)
 		draw.RoundedBox(0, 0, 0, pw, ph, contentcolor)
 	end
 
-	getGroups(0, ROLEMENU.pl)
+	getGroups(0, ROLEMENU.pl)]]
 end

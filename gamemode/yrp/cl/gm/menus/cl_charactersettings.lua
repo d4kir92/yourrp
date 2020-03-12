@@ -10,6 +10,8 @@ config.w = 2200
 config.h = 1400
 -- BR
 config.br = 20
+-- Header Height
+config.hh = 80
 
 -- CONFIG --
 
@@ -41,10 +43,10 @@ function CreateCharacterSettingsContent()
 
 
 	-- DEBUG
-	local debug = createD("DButton", site, 25, 25, 400, 0)
+	--[[local debug = createD("DButton", site, 25, 25, 400, 0)
 	function debug:DoClick()
 		parent:Remove()
-	end
+	end]]
 
 
 
@@ -54,10 +56,13 @@ function CreateCharacterSettingsContent()
 	end
 
 	local btn = {}
-	btn.w = 400
-	btn.h = 50
+	btn.w = 500
+	btn.h = 75
 	local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
 	back:SetText("LID_back")
+	function back:Paint(pw, ph)
+		hook.Run("YButtonRPaint", self, pw, ph)
+	end
 	function back:DoClick()
 		parent:Clear()
 
@@ -71,31 +76,31 @@ function CreateCharacterSettingsContent()
 	
 
 		-- TOP
-		local descheader = createD("YLabel", win, YRP.ctr(config.w - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
+		local descheader = createD("YLabel", win, YRP.ctr(config.w - 2 * 20), YRP.ctr(config.hh), YRP.ctr(20), YRP.ctr(20))
 		descheader:SetText(rol.string_name)
 
 
 
 		-- LEFT
-		local wip = createD("YLabel", win, ew, YRP.ctr(config.h - 120), YRP.ctr(20), YRP.ctr(20 + 60 + 20))
+		local wip = createD("YLabel", win, ew, YRP.ctr(config.h - config.hh - 3 * config.br), YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
 		wip:SetText("LID_wip")
 
 
 
 		-- MID
-		local pmsheader = createD("YLabel", win, ew, YRP.ctr(60), ew + 2 * YRP.ctr(20), YRP.ctr(20 + 60 + 20))
+		local pmsheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
 		pmsheader:SetText("LID_character")
 
-		local pmsbg = createD("YPanel", win, ew, YRP.ctr(config.h - 260), ew + 2 * YRP.ctr(20), YRP.ctr(160))
+		local pmsbg = createD("YPanel", win, ew, YRP.ctr(config.h - 320), ew + 2 * YRP.ctr(20), YRP.ctr(200))
 		function pmsbg:Paint(pw, ph)
 			hook.Run("YTextFieldPaint", self, pw, ph)
 		end
 
-		local pms = createD("DModelPanel", win, ew, YRP.ctr(config.h - 260), ew + 2 * YRP.ctr(20), YRP.ctr(160))
+		local pms = createD("DModelPanel", win, ew, YRP.ctr(config.h - 320), ew + 2 * YRP.ctr(20), YRP.ctr(200))
 		pms.models = string.Explode(",", rol.pms)
 		pms:SetCamPos( Vector( 50, 50, 50 ) )
 		pms:SetLookAt( Vector( 0, 0, 40 ) )
-		pms:SetFOV( 45 )
+		pms:SetFOV( 50 )
 		pms:SetAnimated(true)
 		pms.Angles = Angle(0, 0, 0)
 		function pms:DragMousePress()
@@ -122,7 +127,7 @@ function CreateCharacterSettingsContent()
 		end
 
 		lply:SetDString("charcreate_name", "")
-		local confirm = createD("YButton", win, ew, YRP.ctr(60), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 80))
+		local confirm = createD("YButton", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 100))
 		confirm:SetText("LID_enteraname")
 		function confirm:Paint(pw, ph)
 			local tab = {}
@@ -166,21 +171,39 @@ function CreateCharacterSettingsContent()
 
 
 		-- RIGHT
-		local nameheader = createD("YLabel", win, ew, YRP.ctr(60), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(100))
+		local nameheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
 		nameheader:SetText("LID_name")
 
-		local name = createD("DTextEntry", win, ew, YRP.ctr(60), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(160))
+		local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(200))
 		name:SetText("")
+		function name:PerformLayout()
+			if self.SetUnderlineFont != nil then
+				self:SetUnderlineFont("Y_16_500")
+			end
+			self:SetFontInternal("Y_16_500")
+
+			self:SetFGColor(Color(255, 255, 255))
+			self:SetBGColor(Color(0, 0, 0))
+		end
 		function name:OnChange()
 			lply:SetDString("charcreate_name", name:GetText())
 		end
 
-		local descheader = createD("YLabel", win, ew, YRP.ctr(60), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(240))
+		local descheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(300))
 		descheader:SetText("LID_description")
 		
-		local desc = createD("DTextEntry", win, ew, YRP.ctr(config.h - 320), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(300))
+		local desc = createD("DTextEntry", win, ew, YRP.ctr(config.h - 400), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(380))
 		desc:SetMultiline(true)
 		desc:SetText("")
+		function desc:PerformLayout()
+			if self.SetUnderlineFont != nil then
+				self:SetUnderlineFont("Y_16_500")
+			end
+			self:SetFontInternal("Y_16_500")
+
+			self:SetFGColor(Color(255, 255, 255))
+			self:SetBGColor(Color(0, 0, 0))
+		end
 		function desc:OnChange()
 			lply:SetDString("charcreate_desc", name:GetText())
 		end

@@ -63,6 +63,38 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 	end
 end)
 
+hook.Add("YButtonRPaint", "YButtonR_Simple", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if GetGlobalDString("string_interface_design") == "Simple" then
+		local color = Color(126, 126, 126)
+		local tcolor = lply:InterfaceValue("YButton", "NT")
+		if self:IsDown() or self:IsPressed() then
+			if not self.clicked then
+				self.clicked = true
+				surface.PlaySound("garrysmod/ui_click.wav")
+			end
+			color = Color(197, 52, 52)
+		elseif self:IsHovered() then
+			if not self.hovering then
+				self.hovering = true
+				surface.PlaySound("garrysmod/ui_hover.wav")
+			end
+			color = Color(206, 111, 111)
+		else
+			self.hovering = false
+			self.clicked = false
+		end
+		color = tab.color or color
+		tcolor = tab.tcolor or tcolor
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		return true
+	end
+end)
+
 hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
@@ -85,7 +117,7 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 			ty = YRP.ctr(20)
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_24_500", tx, ty, tcolor, ax, ay)
 		return true
 	end
 end)
@@ -112,7 +144,7 @@ hook.Add("YTextFieldPaint", "YLabel_Simple", function(self, pw, ph, tab)
 			ty = YRP.ctr(20)
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_16_500", tx, ty, tcolor, ax, ay)
 		return true
 	end
 end)
@@ -159,15 +191,11 @@ hook.Add("YRemovePaint", "YRemove_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	if GetGlobalDString("string_interface_design") == "Simple" then
-		local color = Color(205, 100, 100)
+		local color = Color(126, 126, 126)
 		if self:IsDown() or self:IsPressed() then
-			color.r = color.r - 50
-			color.g = color.g - 50
-			color.b = color.b - 50
+			color = Color(197, 52, 52)
 		elseif self:IsHovered() then
-			color.r = color.r + 50
-			color.g = color.g + 50
-			color.b = color.b + 50
+			color = Color(206, 111, 111)
 		end
 		surface.SetDrawColor(color)
 		surface.SetMaterial(YRP.GetDesignIcon("circle"))

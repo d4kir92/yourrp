@@ -37,6 +37,7 @@ function openCharacterCreation()
 
 
 		
+		LocalPlayer():SetDBool("cc", true)
 		CreateFactionSelectionContent()
 	end
 	LocalPlayer():SetDBool("loadedchars", true)
@@ -63,6 +64,7 @@ end
 local curChar = "-1"
 local _cur = ""
 function openCharacterSelection()
+	local fw = 860
 	local br = YRP.ctr(20)
 
 	local character = {}
@@ -116,7 +118,7 @@ function openCharacterSelection()
 		YRP.DChangeLanguage(_cs.frame, ScrW() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 
 		local border = YRP.ctr(50)
-		local charactersBackground = createD("DPanel", _cs.frame, YRP.ctr(800), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
+		local charactersBackground = createD("DPanel", _cs.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
 		charactersBackground.text = YRP.lang_string("LID_siteisloading")
 		function charactersBackground:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
@@ -160,7 +162,7 @@ function openCharacterSelection()
 			end
 		end
 
-		local characterList = createD("DScrollPanel", charactersBackground, YRP.ctr(800), ScrH() - (2 * border), 0, 0)
+		local characterList = createD("DScrollPanel", charactersBackground, YRP.ctr(fw), ScrH() - (2 * border), 0, 0)
 
 		net.Receive("yrp_get_characters", function(len)
 			printGM("gm", "received characterlist")
@@ -191,7 +193,7 @@ function openCharacterSelection()
 					for i = 1, #_characters do
 						if _characters[i].char != nil then
 							cache[i] = {}
-							cache[i].tmpChar = createD("YButton", characterList, YRP.ctr(800) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, br)
+							cache[i].tmpChar = createD("YButton", characterList, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, br)
 							local tmpChar = cache[i].tmpChar
 							tmpChar:SetText("")
 
@@ -205,6 +207,7 @@ function openCharacterSelection()
 							tmpChar.level = _characters[i].char.int_level or "-1"
 							tmpChar.rolename = _characters[i].role.string_name or "ROLE INVALID"
 							tmpChar.factionID = _characters[i].faction.string_name or "FACTION INVALID"
+							tmpChar.factionIcon = _characters[i].faction.string_icon or ""
 							tmpChar.groupID = _characters[i].group.string_name or "GROUP INVALID"
 							tmpChar.map = SQL_STR_OUT(_characters[i].char.map)
 							tmpChar.playermodelID = _characters[i].char.playermodelID
@@ -237,23 +240,30 @@ function openCharacterSelection()
 							tmpChar.bg18 = _characters[i].char.bg18 or 0
 							tmpChar.bg19 = _characters[i].char.bg19 or 0
 
-							tmpChar.grp = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. " " .. tmpChar.rolename
-							if tmpChar.groupID == tmpChar.factionID then
-								tmpChar.grp = tmpChar.grp .. " [" .. tmpChar.factionID .. "]"
-							else
-								tmpChar.grp = tmpChar.grp .. " " .. tmpChar.groupID .. " [" .. tmpChar.factionID .. "]"
+							tmpChar.grp = tmpChar.groupID
+							tmpChar.fac = tmpChar.factionID
+							if tmpChar.grp == tmpChar.fac then
+								tmpChar.grp = ""
 							end
+							tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. " " .. tmpChar.rolename
 
 							function tmpChar:Paint(pw, ph)
-								if tmpChar:IsHovered() then
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
-								end
+								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
 								if curChar == self.charid then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
 								end
-								draw.SimpleText(self.rpname, "Y_30_700", YRP.ctr(30), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-								draw.SimpleText(self.grp, "Y_18_500", YRP.ctr(30), YRP.ctr(105), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-								draw.SimpleText(SQL_STR_OUT(self.map), "Y_18_500", YRP.ctr(30), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								if tmpChar:IsHovered() then
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+								end
+
+								local x = 30
+								if !strEmpty(self.factionIcon) then
+									x = ph * 2
+								end
+								draw.SimpleText(self.rpname, "Y_32_700", YRP.ctr(x), YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.fac, "Y_18_500", YRP.ctr(x), YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.grp, "Y_18_500", YRP.ctr(x), YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.rol, "Y_18_500", YRP.ctr(x), YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 								if i > LocalPlayer():GetDInt("int_characters_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
@@ -284,6 +294,11 @@ function openCharacterSelection()
 										printGM("note", "Character role has no playermodel!")
 									end
 								end
+							end
+
+							if !strEmpty(tmpChar.factionIcon) then
+								local icon = createD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.1, tmpChar:GetTall() * 0.1)
+								icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, icon:GetWide(), icon:GetTall()))
 							end
 
 							if _characters[i].char.uniqueID == _characters.plytab.CurrentCharacter then

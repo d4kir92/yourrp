@@ -59,10 +59,10 @@ Simple.colors.YFrame_NC = "40, 40, 40, 255"		-- Normal Color
 Simple.colors.YFrame_HI = "80, 80, 80, 255"
 Simple.colors.YFrame_BG = "0, 0, 0, 200"
 Simple.colors.YButton_NT = "0, 0, 0, 255"		-- Normal Textcolor
-Simple.colors.YButton_NC = "180, 180, 255, 255"	-- Normal Color
-Simple.colors.YButton_HC = "220, 220, 255, 255"	-- Hovered Color
-Simple.colors.YButton_PC = "130, 130, 255, 255"	-- Pressed Color
-Simple.colors.YButton_SC = "210, 210, 255, 255"	-- Selected Color
+Simple.colors.YButton_NC = "93, 166, 251, 255"	-- Normal Color
+Simple.colors.YButton_HC = "148, 197, 255, 255"	-- Hovered Color
+Simple.colors.YButton_PC = "50, 144, 254, 255"	-- Pressed Color
+Simple.colors.YButton_SC = "50, 144, 254, 255"	-- Selected Color
 
 Simple.ints = {}
 

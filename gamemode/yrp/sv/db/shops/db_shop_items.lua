@@ -249,7 +249,9 @@ end
 util.AddNetworkString("yrp_info2")
 function spawnItem(ply, item, duid)
 	if item.type == "weapons" then
-		ply:Give(item.ClassName)
+		local wep = ply:Give(item.ClassName)
+		wep:SetDString( "item_uniqueID", item.uniqueID )
+		wep:SetDEntity("yrp_owner", ent)
 		return true
 	end
 
@@ -335,6 +337,10 @@ function spawnItem(ply, item, duid)
 		if ENT != nil then
 			if ENT.t != nil and ENT.t.SpawnFunction != nil then
 				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
+
+				ent:SetDString( "item_uniqueID", item.uniqueID )
+				ent:SetDEntity("yrp_owner", ent)
+
 				printGM("gm", "[spawnItem] Spawned 1")
 				return true
 			else
@@ -342,7 +348,10 @@ function spawnItem(ply, item, duid)
 				if IsValid(ent) then
 					ent:SetPos(tr.HitPos)
 					ent:Spawn()
-	
+					
+					ent:SetDString( "item_uniqueID", item.uniqueID )
+					ent:SetDEntity("yrp_owner", ent)
+
 					printGM("gm", "[spawnItem] Spawned 2")
 					return true
 				else
@@ -354,6 +363,10 @@ function spawnItem(ply, item, duid)
 			local vehicle = list.Get( "simfphys_vehicles" )[ item.ClassName ]
 			if vehicle then
 				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
+
+				ent:SetDString( "item_uniqueID", item.uniqueID )
+				ent:SetDEntity("yrp_owner", ent)
+
 				printGM("gm", "[spawnItem] Spawned 3")
 				return true
 			else
@@ -361,7 +374,10 @@ function spawnItem(ply, item, duid)
 				if IsValid(ent) then
 					ent:SetPos(tr.HitPos)
 					ent:Spawn()
-	
+
+					ent:SetDString( "item_uniqueID", item.uniqueID )
+					ent:SetDEntity("yrp_owner", ent)
+			
 					printGM("gm", "[spawnItem] Spawned 4")
 					return true
 				else

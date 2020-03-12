@@ -241,7 +241,7 @@ end
 
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
 local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
-function send_error(realm, str)
+function send_error(realm, str, force)
 	local entry = {}
 
 	local dedi = "UNKNOWN"
@@ -252,7 +252,7 @@ function send_error(realm, str)
 	end
 	dedi = string.upper(dedi)
 
-	if ErrorValidToSend(str) then
+	if ErrorValidToSend(str) or force then
 		timer.Create("wait_for_gamemode" .. str, 1, 0, function()
 			if gmod.GetGamemode() != nil then
 				isdbfull(str)

@@ -152,6 +152,7 @@ function createStorageItem(item, duid)
 			local _mins, _maxs = _i.model.Entity:GetRenderBounds()
 			local _x = _maxs.x - _mins.x
 			local _y = _maxs.y - _mins.y
+			local _z = _maxs.z - _mins.z
 			local _range = math.max(_x, _y, _z)
 
 			_z = _mins.z + (_maxs.z - _mins.z) * 0.46
@@ -201,6 +202,17 @@ function createStorageItem(item, duid)
 					net.WriteTable(self.item)
 				net.SendToServer()
 			end
+
+			_i.spawn.action = 0
+			_i.spawn.name = "LID_tospawn"
+			if IsEntityAlive(LocalPlayer(), item.uniqueID) then
+				_i.spawn.action = 1
+				_i.spawn.name = "LID_tostore"
+			else
+				_i.spawn.action = 0
+				_i.spawn.name = "LID_tospawn"
+			end
+
 			CloseBuyMenu()
 		end
 	end

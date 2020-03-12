@@ -564,7 +564,7 @@ end)
 util.AddNetworkString("yrp_roleselection_getgroups")
 net.Receive("yrp_roleselection_getgroups", function(len, ply)
 	local fuid = net.ReadString()
-	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. fuid .. "'")
+	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. fuid .. "'")
 
 	local nettab = {}
 	if wk(dbtab) then

@@ -39,6 +39,10 @@ function PANEL:SetGroupUID(uid)
 	self._guid = uid
 end
 
+function PANEL:SetFixedHeight(h)
+	self._fh = h
+end
+
 function PANEL:Init()
 	self:SetText("")
 
@@ -89,7 +93,7 @@ function PANEL:Init()
 			x = ph / 2
 		end
 
-		draw.SimpleText(base._htext, "DermaDefault", x, ph / 2, TextColor(base._hcol), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(base._htext, "Y_34_700", x, ph / 2, TextColor(base._hcol), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	function self.btn:DoClick()
 		base._open = !base._open
@@ -177,20 +181,29 @@ function PANEL:Init()
 				local h = rh * 3.5
 				if base.con:GetCanvas():GetTall() < h then
 					h = base.con:GetCanvas():GetTall()
-					h = math.Clamp(h, YRP.ctr(100), 999)
+					h = math.Clamp(h, YRP.ctr(100), YRP.ctr(999))
+					if base._fh then
+						h = base._fh
+					end
+					h = YRP.ctr(h)
 
 					base:SetTall(h + YRP.ctr(100 + 2 * 20))
 					base.btn:SetTall(YRP.ctr(100))
 					base.con:SetTall(h)
 					base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
-
+				
 					base.con:Rebuild()
 					base._list:Rebuild()
 				else
 					h = rh * 3.5
-					base:SetTall(YRP.ctr(h))
+					if base._fh then
+						h = base._fh
+					end
+					h = YRP.ctr(h)
+
+					base:SetTall(h)
 					base.btn:SetTall(YRP.ctr(100))
-					base.con:SetTall(YRP.ctr(h - 100) - 2 * YRP.ctr(20))
+					base.con:SetTall(h - YRP.ctr(100) - 2 * YRP.ctr(20))
 					base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
 					
 					base.con:Rebuild()

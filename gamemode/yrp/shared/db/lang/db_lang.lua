@@ -108,13 +108,7 @@ function YRP.lang_string(var, vals)
 		if !wk(translation) then
 			if nf[var] == nil then
 				nf[var] = var
-				if CLIENT then
-					if LocalPlayer():LoadedGamemode() then
-						PrintLIDError(var)
-					end
-				elseif SERVER then
-					PrintLIDError(var)
-				end
+				PrintLIDError(var)
 			end
 			return var
 		end
