@@ -107,55 +107,66 @@ function PANEL:Init()
 				local x = 0
 				local y = 0
 				for i, rol in pairs(roltab) do
-					local w = rw
-					local h = rh
-					local rlist = createD("DPanel", nil, 10, YRP.ctr(h), 0, 0)
-					function rlist:Paint(pw, ph)
-						--draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(0, 0, 255))
-					end
+					rol.int_prerole = tonumber(rol.int_prerole)
+					if rol.int_prerole == 0 then
+						local w = rw
+						local h = rh
+						local rlist = createD("DPanel", nil, 10, YRP.ctr(h), 0, 0)
+						function rlist:Paint(pw, ph)
+							--draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(0, 0, 255))
+						end
 
-					local r = createD("DPanel", rlist, YRP.ctr(w), YRP.ctr(h), 0, 0)
-					function r:Paint(pw, ph)
-						draw.RoundedBox(ph / 2, 0, 0, pw, ph, StringToColor(rol.string_color))
-						draw.SimpleText(rol.string_name, "Y_18_700", ph + YRP.ctr(20), ph / 3, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-						draw.SimpleText(MoneyFormat(rol.int_salary), "Y_18_700", ph + YRP.ctr(20), ph / 3 * 2, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-					end
+						local r = createD("DPanel", rlist, YRP.ctr(w), YRP.ctr(h), 0, 0)
+						function r:Paint(pw, ph)
+							draw.RoundedBox(ph / 2, 0, 0, pw, ph, StringToColor(rol.string_color))
+							draw.SimpleText(rol.string_name, "Y_18_700", ph + YRP.ctr(20), ph / 3, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(MoneyFormat(rol.int_salary), "Y_18_700", ph + YRP.ctr(20), ph / 3 * 2, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						end
 
-					local pm = createD("YModelPanel", r, YRP.ctr(h), YRP.ctr(h), 0, 0)
-					rol.pms = string.Explode(",", rol.pms)
-					if !strEmpty(rol.pms[1]) then
-						pm:SetModel(rol.pms[1])
-						if pm.panel.Entity:IsValid() then
-							function pm.panel:LayoutEntity( ent )
-								ent:SetSequence( ent:LookupSequence("menu_gman") )
-								pm.panel:RunAnimation()
-								return
-							end
-			
-							local head = pm.panel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
-							if head then
-								local eyepos = pm.panel.Entity:GetBonePosition( head )
-								if eyepos then
-									pm.panel:SetLookAt( eyepos )
-									pm.panel:SetCamPos( eyepos-Vector( -20, 0, 0 ) )	-- Move cam in front of eyes
-									pm.panel.Entity:SetEyeTarget( eyepos-Vector( -20, 0, 0 ) )
+						local pm = createD("YModelPanel", r, YRP.ctr(h), YRP.ctr(h), 0, 0)
+						rol.pms = string.Explode(",", rol.pms)
+						if !strEmpty(rol.pms[1]) then
+							pm:SetModel(rol.pms[1])
+							if pm.panel.Entity:IsValid() then
+								function pm.panel:LayoutEntity( ent )
+									ent:SetSequence( ent:LookupSequence("menu_gman") )
+									pm.panel:RunAnimation()
+									return
+								end
+				
+								local head = pm.panel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
+								if head then
+									local eyepos = pm.panel.Entity:GetBonePosition( head )
+									if eyepos then
+										pm.panel:SetLookAt( eyepos )
+										pm.panel:SetCamPos( eyepos-Vector( -20, 0, 0 ) )	-- Move cam in front of eyes
+										pm.panel.Entity:SetEyeTarget( eyepos-Vector( -20, 0, 0 ) )
+									end
 								end
 							end
 						end
+
+						local btn = createD("DButton", r, r:GetWide(), r:GetTall(), 0, 0)
+						btn:SetText("")
+						function btn:Paint(pw, ph)
+
+						end
+						function btn:DoClick()
+							lply:SetDString("charcreate_ruid", rol.uniqueID)
+
+							CreateRolePreviewContent()
+						end
+
+						base.con:AddItem(rlist)
+
+						--[[rol.uniqueID = tonumber(rol.uniqueID)
+						for i, nextrol in pairs(roltab) do
+							nextrol.int_prerole = tonumber(nextrol.int_prerole)
+							if nextrol.int_prerole == rol.uniqueID then
+								pTab(nextrol)
+							end
+						end]]
 					end
-
-					local btn = createD("DButton", r, r:GetWide(), r:GetTall(), 0, 0)
-					btn:SetText("")
-					function btn:Paint(pw, ph)
-
-					end
-					function btn:DoClick()
-						lply:SetDString("charcreate_ruid", rol.uniqueID)
-
-						CreateRolePreviewContent()
-					end
-
-					base.con:AddItem(rlist)
 				end
 				
 				local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
