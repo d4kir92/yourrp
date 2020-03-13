@@ -102,135 +102,147 @@ function PANEL:Init()
 				local roltab = net.ReadTable()
 				local grptab = net.ReadTable()
 				
-				local rw = 660
-				local rh = 160
-				local x = 0
-				local y = 0
-				for i, rol in pairs(roltab) do
-					rol.int_prerole = tonumber(rol.int_prerole)
-					if rol.int_prerole == 0 then
-						local w = rw
-						local h = rh
-						local rlist = createD("DPanel", nil, 10, YRP.ctr(h), 0, 0)
-						function rlist:Paint(pw, ph)
-							--draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(0, 0, 255))
-						end
+				if pa(base) then
+					local rw = 660
+					local rh = 160
+					local x = 0
+					local y = 0
+					for i, rol in pairs(roltab) do
+						rol.int_prerole = tonumber(rol.int_prerole)
+						if rol.int_prerole == 0 then
+							local w = rw
+							local h = rh
+							local rlist = createD("DPanel", nil, 10, YRP.ctr(h), 0, 0)
+							function rlist:Paint(pw, ph)
+								--draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(0, 0, 255))
+							end
 
-						local r = createD("DPanel", rlist, YRP.ctr(w), YRP.ctr(h), 0, 0)
-						function r:Paint(pw, ph)
-							draw.RoundedBox(ph / 2, 0, 0, pw, ph, StringToColor(rol.string_color))
-							draw.SimpleText(rol.string_name, "Y_18_700", ph + YRP.ctr(20), ph / 3, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-							draw.SimpleText(MoneyFormat(rol.int_salary), "Y_18_700", ph + YRP.ctr(20), ph / 3 * 2, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-						end
+							local r = createD("DPanel", rlist, YRP.ctr(w), YRP.ctr(h), 0, 0)
+							function r:Paint(pw, ph)
+								draw.RoundedBox(ph / 2, 0, 0, pw, ph, StringToColor(rol.string_color))
+								draw.SimpleText(rol.string_name, "Y_18_700", ph + YRP.ctr(20), ph / 3, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(MoneyFormat(rol.int_salary), "Y_18_700", ph + YRP.ctr(20), ph / 3 * 2, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							end
 
-						local pm = createD("YModelPanel", r, YRP.ctr(h), YRP.ctr(h), 0, 0)
-						rol.pms = string.Explode(",", rol.pms)
-						if !strEmpty(rol.pms[1]) then
-							pm:SetModel(rol.pms[1])
-							if pm.panel.Entity:IsValid() then
-								function pm.panel:LayoutEntity( ent )
-									ent:SetSequence( ent:LookupSequence("menu_gman") )
-									pm.panel:RunAnimation()
-									return
-								end
-				
-								local head = pm.panel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
-								if head then
-									local eyepos = pm.panel.Entity:GetBonePosition( head )
-									if eyepos then
-										pm.panel:SetLookAt( eyepos )
-										pm.panel:SetCamPos( eyepos-Vector( -20, 0, 0 ) )	-- Move cam in front of eyes
-										pm.panel.Entity:SetEyeTarget( eyepos-Vector( -20, 0, 0 ) )
+							local pm = createD("YModelPanel", r, YRP.ctr(h), YRP.ctr(h), 0, 0)
+							rol.pms = string.Explode(",", rol.pms)
+							if !strEmpty(rol.pms[1]) then
+								pm:SetModel(rol.pms[1])
+								if pm.panel.Entity:IsValid() then
+									function pm.panel:LayoutEntity( ent )
+										ent:SetSequence( ent:LookupSequence("menu_gman") )
+										pm.panel:RunAnimation()
+										return
+									end
+					
+									local head = pm.panel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
+									if head then
+										local eyepos = pm.panel.Entity:GetBonePosition( head )
+										if eyepos then
+											pm.panel:SetLookAt( eyepos )
+											pm.panel:SetCamPos( eyepos-Vector( -20, 0, 0 ) )	-- Move cam in front of eyes
+											pm.panel.Entity:SetEyeTarget( eyepos-Vector( -20, 0, 0 ) )
+										end
 									end
 								end
 							end
-						end
 
-						local btn = createD("DButton", r, r:GetWide(), r:GetTall(), 0, 0)
-						btn:SetText("")
-						function btn:Paint(pw, ph)
+							local btn = createD("DButton", r, r:GetWide(), r:GetTall(), 0, 0)
+							btn:SetText("")
+							function btn:Paint(pw, ph)
 
-						end
-						function btn:DoClick()
-							lply:SetDString("charcreate_ruid", rol.uniqueID)
-
-							CreateRolePreviewContent()
-						end
-
-						base.con:AddItem(rlist)
-
-						--[[rol.uniqueID = tonumber(rol.uniqueID)
-						for i, nextrol in pairs(roltab) do
-							nextrol.int_prerole = tonumber(nextrol.int_prerole)
-							if nextrol.int_prerole == rol.uniqueID then
-								pTab(nextrol)
 							end
-						end]]
+							function btn:DoClick()
+								lply:SetDString("charcreate_ruid", rol.uniqueID)
+
+								CreateRolePreviewContent()
+							end
+
+							if pa(base.con) then
+								base.con:AddItem(rlist)
+							else
+								rlist:Remove()
+								break
+							end
+
+							--[[rol.uniqueID = tonumber(rol.uniqueID)
+							for i, nextrol in pairs(roltab) do
+								nextrol.int_prerole = tonumber(nextrol.int_prerole)
+								if nextrol.int_prerole == rol.uniqueID then
+									pTab(nextrol)
+								end
+							end]]
+						end
 					end
-				end
-				
-				local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
-				local gh = base._h
-				for i, grp in pairs(grptab) do
-					local w = gw
-					local h = gh
-					local group = createD("YCollapsibleCategory", base.con, w, h, 0, 0)
-					group:SetS(w, h)
-					group:SetHeader(grp.string_name)
-					group:SetIcon(grp.string_icon)
-					group:SetList(base.con)
-					group:SetHeaderColor(StringToColor(grp.string_color))
-					group:SetContentColor(StringToColor(grp.string_color))
-					group:SetGroupUID(grp.uniqueID)
+					
+					local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
+					local gh = base._h
+					for i, grp in pairs(grptab) do
+						local w = gw
+						local h = gh
+						local group = createD("YCollapsibleCategory", base.con, w, h, 0, 0)
+						group:SetS(w, h)
+						group:SetHeader(grp.string_name)
+						group:SetIcon(grp.string_icon)
+						group:SetList(base.con)
+						group:SetHeaderColor(StringToColor(grp.string_color))
+						group:SetContentColor(StringToColor(grp.string_color))
+						group:SetGroupUID(grp.uniqueID)
 
-					base.con:AddItem(group)
-				end
+						if pa(base.con) then
+							base.con:AddItem(group)
+						else
+							group:Remove()
+							break
+						end
+					end
 
-				base.con:Rebuild()
-				base._list:Rebuild()
+					base.con:Rebuild()
+					base._list:Rebuild()
 
-				local h = rh * 3.5
-				if base.con:GetCanvas():GetTall() < h then
+					local h = rh * 3.5
+					if base.con:GetCanvas():GetTall() < h then
+						h = base.con:GetCanvas():GetTall()
+						h = math.Clamp(h, YRP.ctr(100), YRP.ctr(999))
+						if base._fh then
+							h = base._fh
+						end
+						h = YRP.ctr(h)
+
+						base:SetTall(h + YRP.ctr(100 + 2 * 20))
+						base.btn:SetTall(YRP.ctr(100))
+						base.con:SetTall(h)
+						base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
+					
+						base.con:Rebuild()
+						base._list:Rebuild()
+					else
+						h = rh * 3.5
+						if base._fh then
+							h = base._fh
+						end
+						h = YRP.ctr(h)
+
+						base:SetTall(h)
+						base.btn:SetTall(YRP.ctr(100))
+						base.con:SetTall(h - YRP.ctr(100) - 2 * YRP.ctr(20))
+						base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
+						
+						base.con:Rebuild()
+						base._list:Rebuild()
+					end
+
+					-- FullSize
+					--[[
 					h = base.con:GetCanvas():GetTall()
-					h = math.Clamp(h, YRP.ctr(100), YRP.ctr(999))
-					if base._fh then
-						h = base._fh
-					end
-					h = YRP.ctr(h)
-
 					base:SetTall(h + YRP.ctr(100 + 2 * 20))
 					base.btn:SetTall(YRP.ctr(100))
 					base.con:SetTall(h)
 					base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
-				
-					base.con:Rebuild()
-					base._list:Rebuild()
-				else
-					h = rh * 3.5
-					if base._fh then
-						h = base._fh
-					end
-					h = YRP.ctr(h)
 
-					base:SetTall(h)
-					base.btn:SetTall(YRP.ctr(100))
-					base.con:SetTall(h - YRP.ctr(100) - 2 * YRP.ctr(20))
-					base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
-					
 					base.con:Rebuild()
-					base._list:Rebuild()
+					base._list:Rebuild()]]
 				end
-
-				-- FullSize
-				--[[
-				h = base.con:GetCanvas():GetTall()
-				base:SetTall(h + YRP.ctr(100 + 2 * 20))
-				base.btn:SetTall(YRP.ctr(100))
-				base.con:SetTall(h)
-				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
-
-				base.con:Rebuild()
-				base._list:Rebuild()]]
 			end)
 			net.Start("yrp_roleselection_getcontent")
 				net.WriteString(base._guid)

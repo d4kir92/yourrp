@@ -122,7 +122,7 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YTextFieldPaint", "YLabel_Simple", function(self, pw, ph, tab)
+hook.Add("YTextFieldPaint", "YTextFieldPaint_Simple", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()

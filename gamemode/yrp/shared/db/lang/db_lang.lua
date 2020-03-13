@@ -74,22 +74,30 @@ end
 
 local hascontent = false
 local hasfakecontent = false
+local searchedforcontent = false
 function YRPTestContentAddons()
-	for i, addon in pairs(engine.GetAddons()) do
-		if addon.wsid == "1189643820" and addon.mounted and addon.downloaded then
-			hascontent = true
-		elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
-			hasfakecontent = true
+	if !searchedforcontent and SERVER then
+		searchedforcontent = true
+		for i, addon in pairs(engine.GetAddons()) do
+			addon.wsid = tostring(addon.wsid)
+			if addon.wsid == "1189643820" then
+				if addon.mounted and addon.downloaded then
+					hascontent = true
+					SetGlobalDBool("hascontent", true)
+				end
+			elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
+				hasfakecontent = true
+				SetGlobalDBool("hasfakecontent", true)
+			end
 		end
 	end
 end
+YRPTestContentAddons()
 function HasYRPContent()
-	YRPTestContentAddons()
-	return hascontent
+	return GetGlobalDBool("hascontent", false)
 end
 function HasYRPFakeContent()
-	YRPTestContentAddons()
-	return hasfakecontent
+	return GetGlobalDBool("hasfakecontent", false)
 end
 
 function PrintLIDError(var)

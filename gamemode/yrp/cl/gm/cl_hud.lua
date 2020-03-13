@@ -418,7 +418,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	if !HasYRPContent() then
-		draw.SimpleText("YOURRP CONTENT IS MISSING/OUTDATED!", "HudBars", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
 

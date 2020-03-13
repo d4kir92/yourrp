@@ -15,6 +15,10 @@ config.br = 20
 
 
 
+local menu = nil
+
+
+
 function CreateRolePreviewContent()
 	local lply = LocalPlayer()
 
@@ -32,6 +36,13 @@ function CreateRolePreviewContent()
 	end
 	local ew = YRP.ctr(nw - 4 * 20) / 3
 	local hh = 80
+
+
+
+	if pa(menu) then
+		menu:Hide()
+	end
+
 
 
 	-- Fake POPUP
@@ -274,6 +285,9 @@ function CreateRolePreviewContent()
 		end
 		function back:DoClick()
 			if lply:GetDBool("rolepreview", false) then
+				if pa(menu) then
+					menu:Show()
+				end
 				win:Remove()
 				lply:SetDBool("rolepreview", false)
 			end
@@ -315,6 +329,8 @@ function CreateRoleSelectionContent()
 		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
 	end
 	win:Center()
+
+	menu = win
 
 	-- List of Groups
 	local list = createD("DPanelList", win, YRP.ctr(nw - 2 * config.br), YRP.ctr(nh - 2 * config.br), YRP.ctr(config.br), YRP.ctr(config.br))

@@ -57,6 +57,38 @@ hook.Add("YButtonPaint", "YButton_Blur", function(self, pw, ph, tab)
 	end
 end)
 
+hook.Add("YButtonRPaint", "YButtonR_Blur", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if GetGlobalDString("string_interface_design") == "Blur" then
+		local color = Color(126, 126, 126)
+		local tcolor = lply:InterfaceValue("YButton", "NT")
+		if self:IsDown() or self:IsPressed() then
+			if not self.clicked then
+				self.clicked = true
+				surface.PlaySound("garrysmod/ui_click.wav")
+			end
+			color = Color(197, 52, 52)
+		elseif self:IsHovered() then
+			if not self.hovering then
+				self.hovering = true
+				surface.PlaySound("garrysmod/ui_hover.wav")
+			end
+			color = Color(206, 111, 111)
+		else
+			self.hovering = false
+			self.clicked = false
+		end
+		color = tab.color or color
+		tcolor = tab.tcolor or tcolor
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
+
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		return true
+	end
+end)
+
 hook.Add("YLabelPaint", "YLabel_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
@@ -80,6 +112,33 @@ hook.Add("YLabelPaint", "YLabel_Blur", function(self, pw, ph, tab)
 		end
 
 		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+		return true
+	end
+end)
+
+hook.Add("YTextFieldPaint", "YTextFieldPaint_Blur", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if GetGlobalDString("string_interface_design") == "Blur" then
+		local color = lply:InterfaceValue("YFrame", "NC")
+		local tcolor = lply:InterfaceValue("YFrame", "HT")
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+
+		local ax = tab.ax or TEXT_ALIGN_CENTER
+		local ay = tab.ay or TEXT_ALIGN_CENTER
+
+		local tx = pw / 2
+		if ax == 0 then
+			tx = YRP.ctr(20)
+		end
+		local ty = ph / 2
+		if ay == 3 then
+			ty = YRP.ctr(20)
+		end
+
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_16_500", tx, ty, tcolor, ax, ay)
 		return true
 	end
 end)
