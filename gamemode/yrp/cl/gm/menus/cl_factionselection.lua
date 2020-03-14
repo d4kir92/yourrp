@@ -24,12 +24,19 @@ function CreateFactionSelectionContent()
 
 
 
+	local nw = config.w
+	local nh = config.h
+	if !LocalPlayer():GetDBool("cc", true) then
+		nw = parent:GetWide() * 2
+		nh = parent:GetTall() * 2
+	end
+
 	local site = createD("DPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	function site:Paint(pw, ph)
 	end
 
 	-- List of Factions
-	local list = createD("DScrollPanel", site, YRP.ctr(config.w), YRP.ctr(config.h), 0, 0)
+	local list = createD("DScrollPanel", site, YRP.ctr(nw), YRP.ctr(nh), 0, 0)
 	list:Center()
 	function list:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
@@ -82,14 +89,14 @@ function CreateFactionSelectionContent()
 
 		if table.Count(ftab) > 1 then -- If more then 1 Faction
 			lply:SetDBool("onefaction", false)
-			local w = YRP.ctr(config.w - 3 * config.br) / 2
+			local w = YRP.ctr(nw - 3 * config.br) / 2
 			local h = YRP.ctr(500)
 			if table.Count(ftab) > 4 then
-				list:SetWide(YRP.ctr(config.w) + sbar:GetWide())
+				list:SetWide(YRP.ctr(nw) + sbar:GetWide())
 			end
 
 			-- Recalculate Height
-			local sh = math.Clamp(YRP.ctr(config.br) + table.Count(ftab) / 2 * (h + YRP.ctr(config.br)), 100, YRP.ctr(config.h))
+			local sh = math.Clamp(YRP.ctr(config.br) + table.Count(ftab) / 2 * (h + YRP.ctr(config.br)), 100, YRP.ctr(nh))
 			list:SetTall(sh)
 			list:Center()
 

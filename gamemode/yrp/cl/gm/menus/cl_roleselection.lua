@@ -412,15 +412,19 @@ function CreateRoleSelectionContent()
 			group:SetGroupUID(grp.uniqueID)
 			group:SetFixedHeight(nh - 2 * config.br)
 
-			--[[local changefaction = createD("DButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
-			changefaction:SetText("")
-			function changefaction:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-				draw.SimpleText("LID_changefaction", "Y_18_500", pw / 2, ph / 2, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if !LocalPlayer():GetDBool("cc", false) then
+				local changefaction = createD("DButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 46), YRP.ctr(20))
+				changefaction:SetText("")
+				function changefaction:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+					draw.SimpleText("LID_changefaction", "Y_18_500", pw / 2, ph / 2, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+				function changefaction:DoClick()
+					LocalPlayer():SetDBool("cc", false)
+					menu:Hide()
+					CreateFactionSelectionContent()
+				end
 			end
-			function changefaction:DoClick()
-
-			end]]
 
 			list:AddItem(group)
 
