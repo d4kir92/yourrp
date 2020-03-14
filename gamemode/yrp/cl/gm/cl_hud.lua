@@ -326,6 +326,24 @@ function YRP_PM:LayoutEntity(ent)
 	return
 end
 
+local tested = false
+function TestYourRPContent()
+	if !tested then
+		tested = true
+		local str = ""
+		local files, directories = file.Find("addons/*", "GAME")
+		for i, v in pairs(files) do
+			if string.find(v, "1189643820") and v != "yourrp_content_1189643820.gma" then
+				if str != "" then
+					str = str .. "\n"
+				end
+				str = str .. v
+			end
+		end
+		LocalPlayer():SetDString("badyourrpcontent", str)
+	end
+end
+
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 
@@ -419,6 +437,14 @@ hook.Add("HUDPaint", "yrp_hud", function()
 
 	if !HasYRPContent() then
 		draw.SimpleText("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	if LocalPlayer():GetDString("badyourrpcontent", "") != "" then
+		draw.SimpleText("You have bad addons installed (addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		local addons = string.Explode("\n", LocalPlayer():GetDString("badyourrpcontent", ""))
+		for i, v in pairs(addons) do
+			draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
 	end
 end)
 

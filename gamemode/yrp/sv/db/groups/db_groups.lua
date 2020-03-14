@@ -39,6 +39,14 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0")
 end
 
+for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", nil)) do
+	v.uniqueID = tonumber(v.uniqueID)
+	v.int_parentgroup = tonumber(v.int_parentgroup)
+	if v.uniqueID != -1 and v.int_parentgroup == v.uniqueID then
+		SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '0'", "uniqueID = '" .. v.uniqueID .. "'")
+	end
+end
+
 --db_drop_table(DATABASE_NAME)
 
 -- Local Table

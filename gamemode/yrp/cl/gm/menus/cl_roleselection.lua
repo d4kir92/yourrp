@@ -312,7 +312,7 @@ function CreateRoleSelectionContent()
 	lply:SetDBool("rolepreview", false)
 
 
-
+	
 	local site = createD("DPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	function site:Paint(pw, ph)
 	end
@@ -373,7 +373,10 @@ function CreateRoleSelectionContent()
 			end
 		end
 		function back:DoClick()
-			if !lply:GetDBool("rolepreview", false) then
+			if lply:GetDBool("onefaction", true) then
+				parent:Remove()
+				openCharacterSelection()
+			elseif !lply:GetDBool("rolepreview", false) then
 				parent:Clear()
 
 				CreateFactionSelectionContent()
@@ -408,6 +411,16 @@ function CreateRoleSelectionContent()
 			group:SetContentColor(StringToColor(grp.string_color))
 			group:SetGroupUID(grp.uniqueID)
 			group:SetFixedHeight(nh - 2 * config.br)
+
+			--[[local changefaction = createD("DButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
+			changefaction:SetText("")
+			function changefaction:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+				draw.SimpleText("LID_changefaction", "Y_18_500", pw / 2, ph / 2, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			function changefaction:DoClick()
+
+			end]]
 
 			list:AddItem(group)
 

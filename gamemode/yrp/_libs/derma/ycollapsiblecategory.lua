@@ -169,7 +169,7 @@ function PANEL:Init()
 							for i, nextrol in pairs(roltab) do
 								nextrol.int_prerole = tonumber(nextrol.int_prerole)
 								if nextrol.int_prerole == rol.uniqueID then
-									pTab(nextrol)
+									--pTab(nextrol)
 								end
 							end]]
 						end

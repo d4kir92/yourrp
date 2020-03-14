@@ -46,6 +46,8 @@ function YRPSendIsReady()
 
 		printGM("note", "Workshop Addons Done")
 		playerfullready = true
+
+		--TestYourRPContent()
 	end
 end
 

@@ -79,7 +79,9 @@ function CreateFactionSelectionContent()
 
 		local x = 0
 		local y = 0
+
 		if table.Count(ftab) > 1 then -- If more then 1 Faction
+			lply:SetDBool("onefaction", false)
 			local w = YRP.ctr(config.w - 3 * config.br) / 2
 			local h = YRP.ctr(500)
 			if table.Count(ftab) > 4 then
@@ -145,7 +147,11 @@ function CreateFactionSelectionContent()
 				end
 			end
 		else -- If not Enough Factions
+			lply:SetDString("charcreate_fuid", "1")
+			lply:SetDBool("onefaction", true)
+			parent:Clear()
 
+			CreateRoleSelectionContent()
 		end
 	end)
 	net.Start("yrp_factionselection_getfactions")

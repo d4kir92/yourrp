@@ -704,7 +704,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				othergroups[0] = YRP.lang_string("LID_factions")
 				for i, tab in pairs(groups) do
 					tab.uniqueID = tonumber(tab.uniqueID)
-					if tab.uniqueID > 0 then
+					group.uniqueID = tonumber(group.uniqueID)
+					if tab.uniqueID > 0 and tab.uniqueID != group.uniqueID then
 						othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 					end
 				end

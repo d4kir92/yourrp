@@ -212,7 +212,14 @@ function GetFactionTable(uid)
 	if wk(group) then
 		group = group[1]
 		group.int_parentgroup = tonumber(group.int_parentgroup)
-		if group.int_parentgroup != 0 then
+		group.uniqueID = tonumber(group.uniqueID)
+		if group.int_parentgroup == group.uniqueID then
+			local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'")
+			if wk(undergroup) then
+				undergroup = undergroup[1]
+				return undergroup
+			end
+		elseif group.int_parentgroup != 0 then
 			local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
 			if wk(undergroup) then
 				undergroup = undergroup[1]
@@ -221,6 +228,12 @@ function GetFactionTable(uid)
 		end
 		return group
 	end
+	local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'")
+	if wk(undergroup) then
+		undergroup = undergroup[1]
+		return undergroup
+	end
+	return {}
 end
 
 function set_role_values(ply, pmid)
