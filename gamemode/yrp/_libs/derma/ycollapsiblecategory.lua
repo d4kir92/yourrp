@@ -44,6 +44,7 @@ function PANEL:SetFixedHeight(h)
 end
 
 function PANEL:Init()
+	local lply = LocalPlayer()
 	self:SetText("")
 
 	self._open = false
@@ -108,7 +109,23 @@ function PANEL:Init()
 					local x = 0
 					local y = 0
 					for i, rol in pairs(roltab) do
+						rol.string_usergroups = string.Explode(",", rol.string_usergroups)
+						rol.bool_visible = tobool(rol.bool_visible)
+						rol.bool_locked = tobool(rol.bool_locked)
+						rol.int_uses = tonumber(rol.int_uses)
+						rol.int_maxamount = tonumber(rol.int_maxamount)
 						rol.int_prerole = tonumber(rol.int_prerole)
+
+						-- Restrictions
+						if !table.HasValue(rol.string_usergroups, "ALL") then
+							if !table.HasValue(rol.string_usergroups, string.upper(lply:GetUserGroup())) then
+								continue
+							end
+						end
+						if !rol.bool_visible then
+							continue
+						end
+
 						if rol.int_prerole == 0 then
 							local w = rw
 							local h = rh
@@ -122,6 +139,79 @@ function PANEL:Init()
 								draw.RoundedBox(ph / 2, 0, 0, pw, ph, StringToColor(rol.string_color))
 								draw.SimpleText(rol.string_name, "Y_18_700", ph + YRP.ctr(20), ph / 3, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(MoneyFormat(rol.int_salary), "Y_18_700", ph + YRP.ctr(20), ph / 3 * 2, TextColor(StringToColor(rol.string_color)), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								if rol.int_maxamount > 0 then
+									local rcol = StringToColor(rol.string_color)
+									if rcol.r + rcol.g + rcol.b > 120 then
+										rcol.r = rcol.r - 20
+										rcol.g = rcol.g - 20
+										rcol.b = rcol.b - 20
+									else
+										rcol.r = rcol.r + 20
+										rcol.g = rcol.g + 20
+										rcol.b = rcol.b + 20
+									end
+									render.ClearStencil()
+									render.SetStencilEnable( true )
+									render.SetStencilWriteMask( 1 )
+									render.SetStencilTestMask( 1 )
+									render.SetStencilFailOperation( STENCILOPERATION_REPLACE )
+									render.SetStencilPassOperation( STENCILOPERATION_ZERO )
+									render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
+									render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+									render.SetStencilReferenceValue( 1 )
+
+									draw.NoTexture()
+									surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+									drawCircle(pw - ph / 2, ph / 2, ph / 2 + 1, 32)
+
+									render.SetStencilFailOperation( STENCILOPERATION_ZERO )
+									render.SetStencilPassOperation( STENCILOPERATION_REPLACE )
+									render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
+									render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+									render.SetStencilReferenceValue( 1 )
+
+									draw.RoundedBox(0, pw - ph, 0, ph, ph, rcol)
+
+									render.SetStencilEnable(false)
+									render.ClearStencil()
+
+
+									if rcol.r + rcol.g + rcol.b > 120 then
+										rcol.r = rcol.r - 20
+										rcol.g = rcol.g - 20
+										rcol.b = rcol.b - 20
+									else
+										rcol.r = rcol.r + 20
+										rcol.g = rcol.g + 20
+										rcol.b = rcol.b + 20
+									end
+									render.ClearStencil()
+									render.SetStencilEnable( true )
+									render.SetStencilWriteMask( 1 )
+									render.SetStencilTestMask( 1 )
+									render.SetStencilFailOperation( STENCILOPERATION_REPLACE )
+									render.SetStencilPassOperation( STENCILOPERATION_ZERO )
+									render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
+									render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
+									render.SetStencilReferenceValue( 1 )
+
+									draw.NoTexture()
+									surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+									drawCircle(pw - ph / 2, ph / 2, ph / 2 + 1, 32)
+
+									render.SetStencilFailOperation( STENCILOPERATION_ZERO )
+									render.SetStencilPassOperation( STENCILOPERATION_REPLACE )
+									render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
+									render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
+									render.SetStencilReferenceValue( 1 )
+
+									draw.RoundedBox(0, pw - ph, 0, ph * rol.int_uses / rol.int_maxamount, ph, rcol)
+
+									render.SetStencilEnable(false)
+									render.ClearStencil()
+
+									draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_18_700", pw - ph / 2, ph / 2, TextColor(rcol), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
 							end
 
 							local pm = createD("YModelPanel", r, YRP.ctr(h), YRP.ctr(h), 0, 0)
@@ -150,12 +240,16 @@ function PANEL:Init()
 							local btn = createD("DButton", r, r:GetWide(), r:GetTall(), 0, 0)
 							btn:SetText("")
 							function btn:Paint(pw, ph)
-
+								if rol.bool_locked then
+									YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(40), ph - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20), TextColor(StringToColor(rol.string_color)))
+								end
 							end
 							function btn:DoClick()
-								lply:SetDString("charcreate_ruid", rol.uniqueID)
+								if !rol.bool_locked or lply:HasAccess() then
+									lply:SetDString("charcreate_ruid", rol.uniqueID)
 
-								CreateRolePreviewContent()
+									CreateRolePreviewContent()
+								end
 							end
 
 							if pa(base.con) then

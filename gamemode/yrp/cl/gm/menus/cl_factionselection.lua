@@ -106,18 +106,22 @@ function CreateFactionSelectionContent()
 				if fac.uniqueID != -1 then
 					local faction = createD("YPanel", nil, w, h, YRP.ctr(config.br) + x * (w + YRP.ctr(config.br)), YRP.ctr(config.br) + y * (h + YRP.ctr(config.br)))
 
+					local px = YRP.ctr(20)
+					local sw = w - 2 * YRP.ctr(20)
 					local url = fac.string_icon
 					if !strEmpty(url) then
+						px = h + YRP.ctr(20)
+						sw = w - h - 2 * YRP.ctr(20)
 						local logo = createD("DHTML", faction, h - 2 * YRP.ctr(config.br), h - 2 * YRP.ctr(config.br), YRP.ctr(config.br), YRP.ctr(config.br))
 						logo:SetHTML(GetHTMLImage(url, logo:GetWide(), logo:GetTall()))
 					end
 
-					local name = createD("DPanel", faction, w, YRP.ctr(100), h, 0)
+					local name = createD("DPanel", faction, sw, YRP.ctr(100), px, 0)
 					function name:Paint(pw, ph)
 						draw.SimpleText(fac.string_name, "Y_26_700", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
-					local description = createD("RichText", faction, w - h, h - YRP.ctr(100), h, YRP.ctr(100))
+					local description = createD("RichText", faction, sw, h - YRP.ctr(100), px, YRP.ctr(100))
 					description:SetText(fac.string_description)
 					function description:PerformLayout()
 						if self.SetUnderlineFont != nil then

@@ -251,6 +251,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
+			surface.SetFont("Y_14_500")
 			local text = YRP.lang_string("LID_undergroups") .. " ▶"
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
@@ -266,7 +267,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = text
-				tab2.font = "mat1text"
+				tab2.font = "Y_14_500"
 				DrawText(tab2)
 			end
 			function ch:DoClick()
@@ -632,7 +633,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local col1 = createD("DPanelList", ea.background, YRP.ctr(1000), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 				col1:SetSpacing(YRP.ctr(20))
 
-				local info = createD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(720), YRP.ctr(0), YRP.ctr(0))
+				local info = createD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(920), YRP.ctr(0), YRP.ctr(0))
 				info:SetText("LID_general")
 				function info:Paint(pw, ph)
 					hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -688,15 +689,17 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 				DHr(hr)
 
-				local icon = {}
-				icon.parent = ea.info:GetContent()
-				icon.uniqueID = group.uniqueID
-				icon.header = "LID_description"
-				icon.netstr = "update_group_string_description"
-				icon.value = group.string_description
-				icon.uniqueID = group.uniqueID
-				icon.lforce = false
-				ea[group.uniqueID].icon = DTextBox(icon)
+				local desc = {}
+				desc.parent = ea.info:GetContent()
+				desc.uniqueID = group.uniqueID
+				desc.header = "LID_description"
+				desc.netstr = "update_group_string_description"
+				desc.value = group.string_description
+				desc.uniqueID = group.uniqueID
+				desc.lforce = false
+				desc.multiline = true
+				desc.h = 140
+				ea[group.uniqueID].desc = DTextBox(desc)
 
 				DHr(hr)
 
@@ -958,6 +961,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
 			local text = YRP.lang_string("LID_nextranks") .. " ▶"
+			surface.SetFont("Y_14_500")
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
 			ch:SetWide(tw)
@@ -972,7 +976,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = text
-				tab2.font = "mat1text"
+				tab2.font = "Y_14_500"
 				DrawText(tab2)
 			end
 			function ch:DoClick()
@@ -1152,6 +1156,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			string_description.value = role.string_description
 			string_description.uniqueID = role.uniqueID
 			string_description.lforce = false
+			string_description.multiline = true
+			string_description.h = 140
 			ea[role.uniqueID].string_description = DTextBox(string_description)
 
 			DHr(hr)

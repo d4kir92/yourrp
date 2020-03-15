@@ -275,17 +275,22 @@ function Player:Salary()
 	return tonumber(self:GetDString("salary", "0"))
 end
 
-function string.point(number)
-	if ( isnumber( number ) ) then
-		number = string.format( "%f", number )
-		number = string.match( number, "^(.-)%.?0*$" ) -- Remove trailing zeros
+function string.point(num)
+	if num == nil then
+		return num
 	end
+
+	if ( isnumber( num ) ) then
+		num = string.format( "%f", num )
+		num = string.match( num, "^(.-)%.?0*$" ) -- Remove trailing zeros
+	end
+
 	local k
 	while true do
-		number, k = string.gsub( number, "^(-?%d+)(%d%d%d)", "%1.%2" )
+		num, k = string.gsub( num, "^(-?%d+)(%d%d%d)", "%1.%2" )
 		if ( k == 0 ) then break end
 	end
-	return number
+	return num
 end
 
 if CLIENT then

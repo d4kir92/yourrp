@@ -94,10 +94,10 @@ hook.Add("YLabelPaint", "YLabel_Blur", function(self, pw, ph, tab)
 
 	local lply = LocalPlayer()
 	if GetGlobalDString("string_interface_design") == "Blur" then
-		local color = lply:InterfaceValue("YButton", "NC")
-		local tcolor = lply:InterfaceValue("YButton", "NT")
+		local color = lply:InterfaceValue("YFrame", "BG")
+		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
 
 		local ax = tab.ax or TEXT_ALIGN_CENTER
 		local ay = tab.ay or TEXT_ALIGN_CENTER
@@ -124,8 +124,8 @@ hook.Add("YTextFieldPaint", "YTextFieldPaint_Blur", function(self, pw, ph, tab)
 		local color = lply:InterfaceValue("YFrame", "NC")
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
-
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+		
 		local ax = tab.ax or TEXT_ALIGN_CENTER
 		local ay = tab.ay or TEXT_ALIGN_CENTER
 
@@ -150,7 +150,7 @@ hook.Add("YPanelPaint", "YPanel_Blur", function(self, pw, ph, tab)
 	if GetGlobalDString("string_interface_design") == "Blur" then
 		local color = lply:InterfaceValue("YFrame", "HI")
 
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
 		return true
 	end
 end)

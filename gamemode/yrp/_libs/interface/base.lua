@@ -515,7 +515,7 @@ function DTextBox(tab)
 			text.text = tab.header .. ":"
 		end
 		text.x = YRP.ctr(10)
-		text.y = ph / 4
+		text.y = YRP.ctr(25)
 		text.font = "mat1text"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
@@ -535,8 +535,9 @@ function DTextBox(tab)
 		end
 	end
 
-	pnl.DTextEntry = createD("DTextEntry", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DTextEntry = createD("DTextEntry", pnl.line, tab.w, tab.h - YRP.ctr(50), tab.brx, YRP.ctr(50))
 	pnl.DTextEntry:SetText(tab.value)
+	pnl.DTextEntry:SetMultiline(tab.multiline or false)
 	pnl.DTextEntry.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DTextEntry:OnChange()
