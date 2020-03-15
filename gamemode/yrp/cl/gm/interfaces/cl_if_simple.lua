@@ -144,7 +144,7 @@ hook.Add("YTextFieldPaint", "YTextFieldPaint_Simple", function(self, pw, ph, tab
 			ty = YRP.ctr(20)
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_16_500", tx, ty, tcolor, ax, ay)
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
 		return true
 	end
 end)

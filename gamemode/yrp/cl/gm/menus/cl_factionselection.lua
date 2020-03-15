@@ -125,9 +125,9 @@ function CreateFactionSelectionContent()
 					description:SetText(fac.string_description)
 					function description:PerformLayout()
 						if self.SetUnderlineFont != nil then
-							self:SetUnderlineFont("Y_16_500")
+							self:SetUnderlineFont("Y_18_500")
 						end
-						self:SetFontInternal("Y_16_500")
+						self:SetFontInternal("Y_18_500")
 
 						self:SetFGColor(Color(255, 255, 255))
 					end

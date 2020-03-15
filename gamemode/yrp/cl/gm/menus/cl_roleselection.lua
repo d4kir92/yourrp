@@ -81,9 +81,9 @@ function CreateRolePreviewContent()
 		local desc = createD("RichText", win, ew -  YRP.ctr(20 + 20), YRP.ctr(nh - (20 + hh + 20 + hh + 20) - (hh + 20 + hh) - 20 - 20), YRP.ctr(40), YRP.ctr(20 + hh + 20 + hh + 20))
 		function desc:PerformLayout()
 			if self.SetUnderlineFont != nil then
-				self:SetUnderlineFont("Y_16_500")
+				self:SetUnderlineFont("Y_18_500")
 			end
-			self:SetFontInternal("Y_16_500")
+			self:SetFontInternal("Y_18_500")
 
 			self:SetBGColor(Color(50, 50, 50))
 			self:SetFGColor(Color(255, 255, 255))
@@ -188,7 +188,7 @@ function CreateRolePreviewContent()
 		function swepsbg:Paint(pw, ph)
 			hook.Run("YTextFieldPaint", self, pw, ph)
 
-			draw.SimpleText(GetSWEPPrintName(lply:GetDString("preview_swep", "NO SWEPs")), "Y_16_500", pw / 2, YRP.ctr(50), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetSWEPPrintName(lply:GetDString("preview_swep", "NO SWEPs")), "Y_18_500", pw / 2, YRP.ctr(50), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local sweps = createD("DModelPanel", win, ew, YRP.ctr(nh - 20 - hh - 20 - hh - 20 - hh - 20 - 20 - hh ), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh))

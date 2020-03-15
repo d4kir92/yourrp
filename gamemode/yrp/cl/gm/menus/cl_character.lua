@@ -245,7 +245,10 @@ function openCharacterSelection()
 							if tmpChar.grp == tmpChar.fac then
 								tmpChar.grp = ""
 							end
-							tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. " " .. tmpChar.rolename
+							tmpChar.rol = tmpChar.rolename
+							if IsLevelSystemEnabled() then
+								tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
+							end
 
 							function tmpChar:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))

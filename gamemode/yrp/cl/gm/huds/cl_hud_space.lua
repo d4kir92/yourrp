@@ -289,6 +289,7 @@ function HUDSpace()
 					SPACE[ele].YFontCenter = SPACE[ele].BackgroundY + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
+					SPACE[ele].fs = lply:HudValue(ele, "TS")
 					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_700"
 				elseif etab[5] == 1 then
 					--
@@ -313,6 +314,7 @@ function HUDSpace()
 					SPACE[ele].YFontCenter = SPACE[ele].y + ay
 					SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 					SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
+					SPACE[ele].fs = lply:HudValue(ele, "TS")
 					SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_700"
 				elseif etab[5] == 3 then
 					
