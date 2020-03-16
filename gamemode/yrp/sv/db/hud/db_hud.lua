@@ -910,6 +910,62 @@ function DefaultHUDSettings(reset)
 	SN.ints.AY = 1
 	SN.ints.TS = 24
 	AddHUDElement(SN, reset)
+	
+	local RA = {}
+	RA.element = "RA"
+	RA.floats = {}
+	RA.floats.POSI_X = 0.41666665673256
+	RA.floats.POSI_Y = 0.96759259700775
+	RA.floats.SIZE_W = 0.16666667163372
+	RA.floats.SIZE_H = 0.027777777984738
+	RA.bools = {}
+	RA.bools.VISI = 1
+	RA.bools.ROUN = 0
+	RA.bools.ICON = 1
+	RA.bools.TEXT = 0
+	RA.bools.PERC = 1
+	RA.bools.BACK = 1
+	RA.bools.BORD = 0
+	RA.bools.EXTR = 1
+	RA.colors = {}
+	RA.colors.TE = "255, 255, 255, 255"
+	RA.colors.TB = "0, 0, 0, 255"
+	RA.colors.BG = "0, 0, 0, 120"
+	RA.colors.BA = "40, 223, 40, 180"
+	RA.colors.BR = "40, 223, 40, 180"
+	RA.ints = {}
+	RA.ints.AX = 1
+	RA.ints.AY = 1
+	RA.ints.TS = 24
+	AddHUDElement(RA, reset)
+
+	local HY = {}
+	HY.element = "HY"
+	HY.floats = {}
+	HY.floats.POSI_X = 0.41666665673256
+	HY.floats.POSI_Y = 0.96759259700775
+	HY.floats.SIZE_W = 0.16666667163372
+	HY.floats.SIZE_H = 0.027777777984738
+	HY.bools = {}
+	HY.bools.VISI = 1
+	HY.bools.ROUN = 0
+	HY.bools.ICON = 1
+	HY.bools.TEXT = 0
+	HY.bools.PERC = 1
+	HY.bools.BACK = 1
+	HY.bools.BORD = 0
+	HY.bools.EXTR = 1
+	HY.colors = {}
+	HY.colors.TE = "255, 255, 255, 255"
+	HY.colors.TB = "0, 0, 0, 255"
+	HY.colors.BG = "0, 0, 0, 120"
+	HY.colors.BA = "138, 43, 226, 180"
+	HY.colors.BR = "138, 43, 226, 180"
+	HY.ints = {}
+	HY.ints.AX = 1
+	HY.ints.AY = 1
+	HY.ints.TS = 24
+	AddHUDElement(HY, reset)
 
 	for i = 1, 10 do
 		BOX = {}

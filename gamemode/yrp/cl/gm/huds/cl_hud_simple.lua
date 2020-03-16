@@ -450,6 +450,22 @@ local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
+
+local icons = {}
+icons["RA"] = YRP.GetDesignIcon("radiation")
+icons["HP"] = Material("icon16/heart.png")
+icons["AR"] = Material("icon16/shield.png")
+icons["MO"] = Material("icon16/money.png")
+icons["SA"] = Material("icon16/money_add.png")
+icons["RO"] = Material("icon16/user.png")
+icons["ST"] = Material("icon16/lightning.png")
+icons["HU"] = Material("icon16/cake.png")
+icons["TH"] = Material("icon16/cup.png")
+icons["HY"] = YRP.GetDesignIcon("hygiene")
+icons["CA"] = Material("icon16/hourglass.png")
+icons["AB"] = Material("icon16/wand.png")
+icons["BA"] = Material("icon16/computer.png")
+
 function HUDSimple()
 	local lply = LocalPlayer()
 
@@ -498,6 +514,16 @@ function HUDSimple()
 			local ST = {}
 			ST.element = "ST"
 			HUDSimpleBG(ST)
+		end
+		if GetGlobalDBool("bool_radiation", false) then
+			local RA = {}
+			RA.element = "RA"
+			HUDSimpleBG(RA)
+		end
+		if GetGlobalDBool("bool_hygiene", false) then
+			local HY = {}
+			HY.element = "HY"
+			HUDSimpleBG(HY)
 		end
 		if GetGlobalDBool("bool_yrp_chat", false) then
 			local CH = {}
@@ -649,7 +675,7 @@ function HUDSimple()
 		HP.max = lply:GetMaxHealth()
 		HP.text = lply:Health() .. "/" .. lply:GetMaxHealth()
 		HP.percentage = math.Round(lply:Health() / lply:GetMaxHealth() * 100, 0) .. "%"
-		HP.icon = Material("icon16/heart.png")
+		HP.icon = icons["HP"]
 		HUDSimpleBAR(HP)
 		AR = {}
 		AR.element = "AR"
@@ -657,7 +683,7 @@ function HUDSimple()
 		AR.max = lply:GetMaxArmor()
 		AR.text = lply:Armor() .. "/" .. lply:GetMaxArmor()
 		AR.percentage = math.Round(lply:Armor() / lply:GetMaxArmor() * 100) .. "%"
-		AR.icon = Material("icon16/shield.png")
+		AR.icon = icons["AR"]
 		HUDSimpleBAR(AR)
 		XP = {}
 		if IsLevelSystemEnabled() then
@@ -672,21 +698,21 @@ function HUDSimple()
 		MO.cur = 1
 		MO.max = 1
 		MO.text = lply:FormattedMoneyRounded(1)
-		MO.icon = Material("icon16/money.png")
+		MO.icon = icons["MO"]
 		HUDSimpleBAR(MO)
 		SA = {}
 		SA.element = "SA"
 		SA.cur = CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()
 		SA.max = lply:SalaryTime()
 		SA.text = "+" .. lply:FormattedSalaryRounded(1)
-		SA.icon = Material("icon16/money_add.png")
+		SA.icon = icons["SA"]
 		HUDSimpleBAR(SA)
 		RO = {}
 		RO.element = "RO"
 		RO.cur = 1
 		RO.max = 1
 		RO.text = lply:GetRoleName()
-		RO.icon = Material("icon16/user.png")
+		RO.icon = icons["RO"]
 		RO.tcolor = lply:GetRoleColor()
 		HUDSimpleBAR(RO)
 		if GetGlobalDBool("bool_stamina", false) then
@@ -696,7 +722,7 @@ function HUDSimple()
 			ST.max = lply:GetMaxStamina()
 			ST.text = lply:Stamina() .. " / " .. lply:GetMaxStamina()
 			ST.percentage = math.Round(lply:Stamina() / lply:GetMaxStamina() * 100, 0) .. "%"
-			ST.icon = Material("icon16/lightning.png")
+			ST.icon = icons["ST"]
 			HUDSimpleBAR(ST)
 		end
 		if GetGlobalDBool("bool_hunger", false) then
@@ -706,7 +732,7 @@ function HUDSimple()
 			HU.max = lply:GetMaxHunger()
 			HU.text = math.Round(lply:Hunger(), 1) .. " / " .. math.Round(lply:GetMaxHunger(), 0)
 			HU.percentage = math.Round(lply:Hunger() / lply:GetMaxHunger() * 100, 0) .. "%"
-			HU.icon = Material("icon16/cake.png")
+			HU.icon = icons["HU"]
 			HUDSimpleBAR(HU)
 		end
 		if GetGlobalDBool("bool_thirst", false) then
@@ -716,8 +742,28 @@ function HUDSimple()
 			TH.max = lply:GetMaxThirst()
 			TH.text = math.Round(lply:Thirst(), 1) .. " / " .. math.Round(lply:GetMaxThirst(), 0)
 			TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 0) .. "%"
-			TH.icon = Material("icon16/cup.png")
+			TH.icon = icons["TH"]
 			HUDSimpleBAR(TH)
+		end
+		if GetGlobalDBool("bool_radiation", false) then
+			local RA = {}
+			RA.element = "RA"
+			RA.cur = lply:Radiation()
+			RA.max = lply:GetMaxRadiation()
+			RA.text = lply:Radiation() .. " / " .. lply:GetMaxRadiation()
+			RA.percentage = math.Round(lply:Radiation() / lply:GetMaxRadiation() * 100, 0) .. "%"
+			RA.icon = icons["RA"]
+			HUDSimpleBAR(RA)
+		end
+		if GetGlobalDBool("bool_hygiene", false) then
+			local HY = {}
+			HY.element = "HY"
+			HY.cur = lply:Hygiene()
+			HY.max = lply:GetMaxHygiene()
+			HY.text = lply:Hygiene() .. " / " .. lply:GetMaxHygiene()
+			HY.percentage = math.Round(lply:Hygiene() / lply:GetMaxHygiene() * 100, 0) .. "%"
+			HY.icon = YRP.GetDesignIcon("hygiene")
+			HUDSimpleBAR(HY)
 		end
 		if lply:GetDBool("iscasting", false) then
 			local CA = {}
@@ -726,7 +772,7 @@ function HUDSimple()
 			CA.max = lply:CastTimeMax()
 			CA.text = lply:GetCastName()
 			CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 1) .. "%"
-			CA.icon = Material("icon16/hourglass.png")
+			CA.icon = icons["CA"]
 			HUDSimpleBAR(CA)
 		end
 
@@ -736,7 +782,7 @@ function HUDSimple()
 		AB.max = lply:GetMaxAbility()
 		AB.text = math.Round(lply:Ability(), 0) .. " / " .. math.Round(lply:GetMaxAbility(), 0)
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
-		AB.icon = Material("icon16/wand.png")
+		AB.icon = icons["AB"]
 		HUDSimpleBAR(AB)
 
 		if WP.visible then
@@ -756,7 +802,7 @@ function HUDSimple()
 			BA.cur = batterypower
 			BA.max = 100
 			BA.text = batterypower .. "%"
-			BA.icon = Material("icon16/computer.png")
+			BA.icon = icons["BA"]
 			HUDSimpleBAR(BA)
 		end
 		if lply:Condition() != "" then
@@ -894,6 +940,16 @@ function HUDSimple()
 			local ST = {}
 			ST.element = "ST"
 			HUDSimpleBR(ST)
+		end
+		if GetGlobalDBool("bool_radiation", false) then
+			local RA = {}
+			RA.element = "RA"
+			HUDSimpleBR(RA)
+		end
+		if GetGlobalDBool("bool_hygiene", false) then
+			local HY = {}
+			HY.element = "HY"
+			HUDSimpleBR(HY)
 		end
 		if GetGlobalDBool("bool_yrp_chat", false) then
 			local CH = {}

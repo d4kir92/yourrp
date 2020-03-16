@@ -446,5 +446,15 @@ hook.Add("HUDPaint", "yrp_hud", function()
 			draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 	end
+
+	if GetGlobalDBool("bool_radiation", false) then
+		LocalPlayer().radiation = LocalPlayer().radiation or CurTime()
+		if LocalPlayer().radiation < CurTime() then
+			LocalPlayer().radiation = CurTime() + math.Rand(0.1, 0.5)
+			if IsInsideRadiation(LocalPlayer()) then
+				LocalPlayer():EmitSound("tools/ifm/ifm_snap.wav")
+			end
+		end
+	end
 end)
 

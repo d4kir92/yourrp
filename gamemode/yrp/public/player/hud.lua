@@ -92,6 +92,10 @@ if CLIENT then
 			return GetGlobalDBool("bool_thirst", false)
 		elseif element == "ST" then
 			return GetGlobalDBool("bool_stamina", false)
+		elseif element == "RA" then
+			return GetGlobalDBool("bool_radiation", false)
+		elseif element == "HY" then
+			return GetGlobalDBool("bool_hygiene", false)
 		elseif element == "CH" then
 			return GetGlobalDBool("bool_yrp_chat", false)
 		elseif element == "XP" then

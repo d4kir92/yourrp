@@ -251,12 +251,12 @@ function openCharacterSelection()
 							end
 
 							function tmpChar:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
+								--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
 								if curChar == self.charid then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
 								end
 								if tmpChar:IsHovered() then
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 								end
 
 								local x = 30
@@ -383,7 +383,7 @@ function openCharacterSelection()
 			end
 			if LocalPlayer() != nil and LocalPlayer():Alive() then
 				tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
-				tab.tcolor = Color(255, 100, 100, 255)
+				tab.color = Color(255, 100, 100, 255)
 			end
 
 			local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)

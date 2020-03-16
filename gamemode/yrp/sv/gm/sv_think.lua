@@ -49,7 +49,7 @@ function con_hg(ply, time)
 		ply:SetDFloat("hunger", 0.0)
 	end
 	if tonumber(ply:GetDFloat("hunger", 0.0)) < 20.0 then
-		ply:TakeDamage(ply:GetMaxHealth() / 100)
+		ply:TakeDamage(ply:GetMaxHealth() / 50)
 	elseif GetGlobalDBool("bool_hunger_health_regeneration", false) then
 		local tickrate = tonumber(ply:GetDString("text_hunger_health_regeneration_tickrate", 1))
 		if tickrate >= 1 and time % tickrate == 0 then
@@ -67,7 +67,28 @@ function con_th(ply)
 		ply:SetDFloat("thirst", 0.0)
 	end
 	if tonumber(ply:GetDFloat("thirst", 0.0)) < 20.0 then
-		ply:TakeDamage(ply:GetMaxHealth() / 100)
+		ply:TakeDamage(ply:GetMaxHealth() / 50)
+	end
+end
+
+function con_hy(ply)
+	ply:SetDFloat("GetCurHygiene", tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) - 0.02)
+	if tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) < 0.0 then
+		ply:SetDFloat("GetCurHygiene", 0.0)
+	end
+	if tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) < 20.0 then
+		ply:TakeDamage(ply:GetMaxHealth() / 50)
+	end
+end
+
+function con_ra(ply)
+	if IsInsideRadiation(ply) then
+		ply:SetDFloat("GetCurRadiation", math.Clamp(tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) + 0.5, 0, 100))
+	else
+		ply:SetDFloat("GetCurRadiation", math.Clamp(tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) - 0.08, 0, 100))
+	end
+	if tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) > 80.0 then
+		ply:TakeDamage(ply:GetMaxHealth() / 50)
 	end
 end
 
@@ -228,6 +249,12 @@ timer.Create("ServerThink", TICK, 0, function()
 				end
 				if GetGlobalDBool("bool_stamina", false) then
 					con_st(ply)
+				end
+				if GetGlobalDBool("bool_hygiene", false) then
+					con_hy(ply)
+				end
+				if GetGlobalDBool("bool_radiation", false) then
+					con_ra(ply)
 				end
 
 				time_jail(ply)
@@ -410,6 +437,24 @@ function UpdateReleasepointTable()
 	SetGlobalDTable("yrp_releasepoints", t)
 end
 UpdateReleasepointTable()
+
+function UpdateRadiationTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'radiation'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local spawner = {}
+			spawner.pos = v.position
+			spawner.uniqueID = v.uniqueID
+			spawner.name = v.name
+			if !table.HasValue(t, spawner) then
+				table.insert(t, spawner)
+			end
+		end
+	end
+	SetGlobalDTable("yrp_radiation", t)
+end
+UpdateRadiationTable()
 
 local YNPCs = {}
 local delay = CurTime()

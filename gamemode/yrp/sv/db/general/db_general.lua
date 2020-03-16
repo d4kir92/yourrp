@@ -75,6 +75,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger_health_regeneration", "INT DEFAULT 1"
 SQL_ADD_COLUMN(DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT DEFAULT '10'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_radiation", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_hygiene", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_map_system", "INT DEFAULT 1")
@@ -752,6 +754,18 @@ util.AddNetworkString("update_bool_stamina")
 net.Receive("update_bool_stamina", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_stamina", "bool_stamina", b)
+end)
+
+util.AddNetworkString("update_bool_radiation")
+net.Receive("update_bool_radiation", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_radiation", "bool_radiation", b)
+end)
+
+util.AddNetworkString("update_bool_hygiene")
+net.Receive("update_bool_hygiene", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_hygiene", "bool_hygiene", b)
 end)
 
 

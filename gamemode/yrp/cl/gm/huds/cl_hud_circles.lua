@@ -12,6 +12,8 @@ local WP = Material("vgui/material/icon_add.png")
 local WS = Material("vgui/material/icon_add_circle.png")
 local MO = Material("vgui/material/icon_add.png")
 local SA = Material("vgui/material/icon_add_circle.png")
+local RA = YRP.GetDesignIcon("radiation")
+local HY = YRP.GetDesignIcon("hygiene")
 
 function drawC(x, y, radius, seg, color)
 	surface.SetDrawColor(color)
@@ -133,6 +135,9 @@ function HUDCircles()
 		HUDCirclesDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxThirst())
 
 		HUDCirclesDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
+
+		HUDCirclesDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
+		HUDCirclesDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
 
 		if IsLevelSystemEnabled() then
 			local tab = {}

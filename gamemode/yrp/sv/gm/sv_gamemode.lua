@@ -163,6 +163,8 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 				ply:SetDFloat("hunger", 100)
 				ply:SetDFloat("thirst", 100)
+				ply:SetDFloat("GetCurHygiene", 100)
+				ply:SetDFloat("GetCurRadiation", 0)
 			else
 				YRP.msg("error", "[PlayerLoadout] failed at plytab.")
 			end

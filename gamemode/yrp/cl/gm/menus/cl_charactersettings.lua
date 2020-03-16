@@ -81,12 +81,6 @@ function CreateCharacterSettingsContent()
 
 
 
-		-- LEFT
-		local wip = createD("YLabel", win, ew, YRP.ctr(config.h - config.hh - 3 * config.br), YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
-		wip:SetText("LID_wip")
-
-
-
 		-- MID
 		local pmsheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
 		pmsheader:SetText("LID_character")
@@ -156,8 +150,8 @@ function CreateCharacterSettingsContent()
 				character.playermodelID = lply:GetDString("charcreate_rpmid")
 				character.skin = 1
 				character.bg = {}
-				for i = 0, 7 do
-					character.bg[i] = 1
+				for i = 0, 19 do
+					character.bg[i] = lply:GetDInt("charcreate_bg" .. i, 0)
 				end
 
 				net.Start("CreateCharacter")
@@ -168,6 +162,76 @@ function CreateCharacterSettingsContent()
 				openCharacterSelection()
 			end
 		end
+
+
+		
+		-- LEFT
+		if pms.Entity != nil then
+			local bgs = pms.Entity:GetBodyGroups()
+			local appeheader = createD("YLabel", win, ew, YRP.ctr(config.hh), YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
+			appeheader:SetText("LID_appearance")
+			local appe = createD("DPanelList", win, ew, YRP.ctr(config.h - 2 * config.hh - 3 * config.br), YRP.ctr(20), YRP.ctr(20 + config.hh + 20 + config.hh))
+			appe:EnableVerticalScrollbar()
+			function appe:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+			end
+			local sbar = appe.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+			end
+			appe:SetSpacing(YRP.ctr(config.br))
+
+			for _, bg in pairs(bgs) do
+				lply:SetDInt("charcreate_bg" .. bg.id, 0)
+				if table.Count(bg.submodels) > 1 then
+					local pbg = createD("DPanel", nil, ew, YRP.ctr(config.hh * 2), 0, 0)
+					function pbg:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
+						draw.SimpleText(lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_700", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					end
+
+					local skinup = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh * 0.1))
+					skinup:SetText("▲")
+					function skinup:Paint(pw, ph)
+						if lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
+							hook.Run("YButtonPaint", self, pw, ph)
+						end
+					end
+					function skinup:DoClick()
+						if lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
+							lply:SetDInt("charcreate_bg" .. bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1)
+							pms.Entity:SetBodygroup(bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0))
+						end
+					end
+
+					local skindn = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh + config.hh * 0.1))
+					skindn:SetText("▼")
+					function skindn:Paint(pw, ph)
+						if lply:GetDInt("charcreate_bg" .. bg.id, 0) > 0 then
+							hook.Run("YButtonPaint", self, pw, ph)
+						end
+					end
+					function skindn:DoClick()
+						if lply:GetDInt("charcreate_bg" .. bg.id, 0) > 0 then
+							lply:SetDInt("charcreate_bg" .. bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0) - 1)
+							pms.Entity:SetBodygroup(bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0))
+						end
+					end
+
+					appe:AddItem(pbg)
+				end
+			end
+		end
+
 
 
 		-- RIGHT

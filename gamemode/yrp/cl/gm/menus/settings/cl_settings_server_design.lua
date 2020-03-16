@@ -806,6 +806,16 @@ net.Receive("get_design_settings", function(len)
 			SN.name = "LID_hostname"
 			AddElement(SN)
 
+			local RA = {}
+			RA.element = "RA"
+			RA.name = "LID_radiation"
+			AddElement(RA)
+
+			local HY = {}
+			HY.element = "HY"
+			HY.name = "LID_hygiene"
+			AddElement(HY)
+
 			function editarea:DoClick()
 				if table.Count(editarea["settingswindows"]) == 0 then
 					for i, child in pairs(self:GetChildren()) do

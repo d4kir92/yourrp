@@ -353,10 +353,11 @@ end
 
 function YRP.GetDesignIcon(name)
 	if _icons[name] ~= nil then
-		return _icons[name]
-	else
-		return _icons["clear"]
+		if tostring(_icons[name]) != "Material [___error]" then
+			return _icons[name]
+		end
 	end
+	return _icons["clear"]
 end
 
 function YRP.DrawIcon(material, w, h, x, y, color)
@@ -432,6 +433,9 @@ YRP.AddDesignIcon("add", "vgui/material/icon_add.png")
 YRP.AddDesignIcon("remove", "vgui/material/icon_remove.png")
 
 YRP.AddDesignIcon("shopping_cart", "vgui/material/icon_shop_cart.png")
+
+YRP.AddDesignIcon("radiation", "vgui/material/icon_radiation.png")
+YRP.AddDesignIcon("hygiene", "vgui/material/icon_hygiene.png")
 
 YRP.iconsloaded = true
 

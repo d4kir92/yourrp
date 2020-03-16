@@ -12,6 +12,9 @@ local SA = "icon16/money_add.png"
 local CA = "vgui/material/icon_timer.png"
 local AB = "icon16/wand.png"
 
+local RA = YRP.GetDesignIcon("radiation")
+local HY = YRP.GetDesignIcon("hygiene")
+
 local SPACE = {}
 local ELES = {}
 function HUDSpace()
@@ -158,6 +161,18 @@ function HUDSpace()
 			nil,
 			SQL_STR_OUT(GetGlobalDString("text_server_name", "SERVERNAME")),
 			2
+		}
+
+		ELES["RA"] = {
+			lply:Radiation(),
+			lply:GetMaxRadiation(),
+			RA
+		}
+
+		ELES["HY"] = {
+			lply:Hygiene(),
+			lply:GetMaxHygiene(),
+			HY
 		}
 
 		ELES["LO"] = {

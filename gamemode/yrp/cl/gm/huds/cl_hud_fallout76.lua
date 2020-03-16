@@ -467,6 +467,19 @@ function HUD_FO76()
 		TH.max = lply:GetMaxHunger()
 		FO76Element(TH)
 
+		local RA = {}
+		RA.element = "RA"
+		RA.text = YRP.lang_string("LID_ra")
+		RA.cur = lply:Radiation()
+		RA.max = lply:GetMaxRadiation()
+		FO76Element(RA)
+
+		local HY = {}
+		HY.element = "HY"
+		HY.text = YRP.lang_string("LID_hy")
+		HY.cur = lply:Hygiene()
+		HY.max = lply:GetMaxHygiene()
+		FO76Element(HY)
 		--[[
 		local AB = {}
 		AB.element = "AB"

@@ -588,7 +588,10 @@ function CreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, rpdescription"
+		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription"
+		for i = 0, 19 do
+			cols = cols .. ", bg" .. i
+		end
 		local vals = "'" .. steamid .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tab.rpname) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tab.gender) .. "', "
@@ -599,15 +602,10 @@ function CreateCharacter(ply, tab)
 		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
-		vals = vals .. tonumber(tab.bg[0]) .. ", "
-		vals = vals .. tonumber(tab.bg[1]) .. ", "
-		vals = vals .. tonumber(tab.bg[2]) .. ", "
-		vals = vals .. tonumber(tab.bg[3]) .. ", "
-		vals = vals .. tonumber(tab.bg[4]) .. ", "
-		vals = vals .. tonumber(tab.bg[5]) .. ", "
-		vals = vals .. tonumber(tab.bg[6]) .. ", "
-		vals = vals .. tonumber(tab.bg[7]) .. ", "
 		vals = vals .. "'" .. tostring(tab.rpdescription) .. "'"
+		for i = 0, 19 do
+			vals = vals .. ", " .. tonumber(tab.bg[i])
+		end
 		local char = SQL_INSERT_INTO("yrp_characters", cols, vals)
 		if char == nil then
 			local chars = SQL_SELECT("yrp_characters", "*", nil)

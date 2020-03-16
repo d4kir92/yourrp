@@ -18,6 +18,8 @@ hud["mo"] = 0
 hud["st"] = 0
 hud["bl"] = 0
 hud["rt"] = 0
+hud["ra"] = 0
+hud["hy"] = 0
 
 function roundMoney(_money, round)
 	if _money != nil then

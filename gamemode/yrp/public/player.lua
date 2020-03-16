@@ -114,6 +114,22 @@ function Player:GetMaxThirst()
 	return 100.0
 end
 
+function Player:Radiation()
+	return self:GetDFloat("GetCurRadiation", 1)
+end
+
+function Player:GetMaxRadiation()
+	return self:GetDFloat("GetMaxRadiation", 100)
+end
+
+function Player:Hygiene()
+	return self:GetDFloat("GetCurHygiene", 1)
+end
+
+function Player:GetMaxHygiene()
+	return self:GetDFloat("GetMaxHygiene", 100)
+end
+
 function Player:SalaryTime()
 	return self:GetDInt("salarytime", 0)
 end

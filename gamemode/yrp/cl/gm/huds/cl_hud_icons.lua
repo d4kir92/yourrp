@@ -99,6 +99,9 @@ function HUDIcons()
 		HUDIconsDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxStamina())
 		HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
 
+		HUDIconsDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
+		HUDIconsDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
+
 		if IsLevelSystemEnabled() then
 			local tab = {}
 			tab["LEVEL"] = lply:Level()

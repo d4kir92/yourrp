@@ -1366,10 +1366,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						local pmcontent = pmwin:GetContent()
 
 						pmwin.pms = {}
-						pmwin.name = createD("DTextEntry", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20 + 200 + 20 + 100), YRP.ctr(50 + 20))
+						pmwin.name = createD("DTextEntry", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20 + 300 + 20 + 100), YRP.ctr(50 + 20))
 
-						pmwin.float_min = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(200))
-						pmwin.float_max = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(200))
+						pmwin.float_min = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(210))
+						pmwin.float_max = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(210))
 
 						pmwin.float_min:SetMinMax(0.1, 100.0)
 						pmwin.float_max:SetMinMax(0.1, 100.0)
@@ -1419,15 +1419,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						function pmwin:Paint(pw, ph)
 							hook.Run("YFramePaint", self, pw, ph)
 
-							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 200 + 20 + 200 + 20 + 120), YRP.ctr(210), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(310), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(310), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(420), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 						end
 
-						pmwin.selpm = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
+						pmwin.selpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
 						pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
 						function pmwin.selpm:DoClick()
 							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
@@ -1584,7 +1584,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 
-						pmwin.selnpm = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(50 + 20))
+						pmwin.selnpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20), YRP.ctr(50 + 20))
 						pmwin.selnpm:SetText(YRP.lang_string("LID_othermodels"))
 						function pmwin.selnpm:DoClick()
 							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
