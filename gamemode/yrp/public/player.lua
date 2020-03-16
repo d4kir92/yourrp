@@ -115,19 +115,19 @@ function Player:GetMaxThirst()
 end
 
 function Player:Radiation()
-	return self:GetDFloat("GetCurRadiation", 1)
+	return math.Round(self:GetDFloat("GetCurRadiation", 1), 1)
 end
 
 function Player:GetMaxRadiation()
-	return self:GetDFloat("GetMaxRadiation", 100)
+	return math.Round(self:GetDFloat("GetMaxRadiation", 100), 1)
 end
 
 function Player:Hygiene()
-	return self:GetDFloat("GetCurHygiene", 1)
+	return math.Round(self:GetDFloat("GetCurHygiene", 1), 1)
 end
 
 function Player:GetMaxHygiene()
-	return self:GetDFloat("GetMaxHygiene", 100)
+	return math.Round(self:GetDFloat("GetMaxHygiene", 100), 1)
 end
 
 function Player:SalaryTime()

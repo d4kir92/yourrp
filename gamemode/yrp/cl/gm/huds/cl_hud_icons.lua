@@ -11,6 +11,9 @@ local MO = Material("icon16/money.png")
 local SA = Material("icon16/money_add.png")
 local CA = Material("vgui/material/icon_timer.png")
 
+local RA = YRP.GetDesignIcon("radiation")
+local HY = YRP.GetDesignIcon("hygiene")
+
 function HUDIconsDrawText(ele, text)
 	local lply = LocalPlayer()
 	if lply:HudElementVisible(ele) then

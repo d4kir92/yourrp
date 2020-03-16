@@ -1,16 +1,16 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local HP = "vgui/material/icon_favorite.png"
-local AR = "vgui/material/icon_security.png"
-local ST = "vgui/material/icon_flash.png"
-local BA = "vgui/material/icon_battery.png"
-local HU = "vgui/material/icon_restaurant.png"
-local TH = "vgui/material/icon_drink.png"
-local XP = "vgui/material/icon_star.png"
-local MO = "icon16/money.png"
-local SA = "icon16/money_add.png"
-local CA = "vgui/material/icon_timer.png"
-local AB = "icon16/wand.png"
+local HP = Material("vgui/material/icon_favorite.png")
+local AR = Material("vgui/material/icon_security.png")
+local ST = Material("vgui/material/icon_flash.png")
+local BA = Material("vgui/material/icon_battery.png")
+local HU = Material("vgui/material/icon_restaurant.png")
+local TH = Material("vgui/material/icon_drink.png")
+local XP = Material("vgui/material/icon_star.png")
+local MO = Material("icon16/money.png")
+local SA = Material("icon16/money_add.png")
+local CA = Material("vgui/material/icon_timer.png")
+local AB = Material("icon16/wand.png")
 
 local RA = YRP.GetDesignIcon("radiation")
 local HY = YRP.GetDesignIcon("hygiene")
@@ -269,7 +269,7 @@ function HUDSpace()
 					SPACE[ele].IconH = icon_size
 					SPACE[ele].IconX = DB.POSI_X
 					SPACE[ele].IconY = DB.POSI_Y
-					SPACE[ele].IconMaterial = Material(etab[3])
+					SPACE[ele].IconMaterial = etab[3]
 				else
 					SPACE[ele].BackgroundW = DB.SIZE_W
 					SPACE[ele].BackgroundH = DB.SIZE_H
