@@ -311,9 +311,7 @@ function open_appearance()
 		net.Start("get_menu_bodygroups")
 		net.SendToServer()
 	else
-		function _yrp_appearance.left:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string("LID_disabled"))
-		end
+		_yrp_appearance.window:Remove()
 	end
 
 	_yrp_appearance.window:MakePopup()

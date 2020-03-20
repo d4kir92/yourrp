@@ -25,7 +25,7 @@ function BuildLogs(parent, typ)
 			for i, v in pairs(tab) do
 				local source = GetPlayerBySteamID64(v.string_source_steamid)
 				local target = GetPlayerBySteamID64(v.string_target_steamid)
-				if source != NULL then
+				if wk(source) then
 					local line = createD("YPanel", nil, parent:GetWide(), YRP.ctr(50))
 
 
@@ -73,7 +73,7 @@ function BuildLogs(parent, typ)
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
-								if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
+								if source != nil and ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 									gui.OpenURL(source:ShowProfile()) 
 								elseif ( signalValue == v.string_target_steamid ) then
 									gui.OpenURL(target:ShowProfile()) 

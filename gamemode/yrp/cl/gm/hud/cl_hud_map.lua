@@ -199,14 +199,7 @@ function openMap()
 			closeMenu()
 		end
 	else
-		_info = createD("DFrame", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
-		_info:SetTitle("")
-		function _info:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, "map")
-			surfaceText(YRP.lang_string("LID_disabled"), "mat1text", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
-		end
-		_info:MakePopup()
-		_info:Center()
+		
 	end
 end
 

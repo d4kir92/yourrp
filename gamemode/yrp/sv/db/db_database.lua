@@ -47,8 +47,6 @@ table.insert(YRP_DBS, "yrp_hud")
 table.insert(YRP_DBS, "yrp_laws")
 table.insert(YRP_DBS, "yrp_lockdown")
 table.insert(YRP_DBS, "yrp_logs")
-table.insert(YRP_DBS, "yrp_i_storages")
-table.insert(YRP_DBS, "yrp_i_items")
 table.insert(YRP_DBS, "yrp_keybinds")
 table.insert(YRP_DBS, "yrp_profiles_hud")
 table.insert(YRP_DBS, "yrp_idcard")
@@ -69,6 +67,10 @@ table.insert(YRP_DBS, "yrp_dealers")
 table.insert(YRP_DBS, "yrp_jail")
 table.insert(YRP_DBS, "yrp_jail_notes")
 table.insert(YRP_DBS, "yrp_interface")
+
+table.insert(YRP_DBS, "yrp_inventory_storages")
+table.insert(YRP_DBS, "yrp_inventory_slots")
+table.insert(YRP_DBS, "yrp_inventory_items")
 
 function GetDBNames()
 	return YRP_DBS
@@ -154,11 +156,6 @@ include("laws/db_laws.lua")
 include("lockdown/db_lockdown.lua")
 include("logs/db_logs.lua")
 
-include("inventory/db_storages.lua")
-
-include("inventory/db_i_storages.lua")
-include("inventory/db_i_items.lua")
-
 include("keybinds/db_keybinds.lua")
 
 include("profiles_hud/db_profiles_hud.lua")
@@ -184,3 +181,8 @@ include("shops/db_shop_categories.lua")
 include("dealers/db_dealers.lua")
 include("feedback/db_feedback.lua")
 include("interface/db_interface.lua")
+
+include("inventory/db_inventory_player.lua")
+include("inventory/db_inventory_storages.lua")
+include("inventory/db_inventory_slots.lua")
+include("inventory/db_inventory_items.lua")

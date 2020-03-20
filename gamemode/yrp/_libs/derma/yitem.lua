@@ -2,104 +2,106 @@
 
 local PANEL = {}
 
-itemsize = itemsize or 100
-
 function PANEL:Paint(pw, ph)
 	draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 100))
-end
 
-function PANEL:SetFixed(b)
-	self.fixed = b
-end
-
-function PANEL:GetFixed()
-	return self.fixed
-end
-
-function PANEL:SetTyp(t)
-	self.typ = t
-end
-
-function PANEL:SetModel(m)
-	self.model:SetModel(m)
-	self.model:SetWide(self:GetWide())
-	self.model:SetTall(self:GetTall())
-end
-
-function PANEL:SetStorage(suid)
-	self.suid = tonumber(suid)
-end
-
-local ITEMS = ITEMS or {}
-function PANEL:DoClick()
-	if self.suid != nil then
-		ITEMS[self.suid] = self
-
-		print("---------------------")
-		print("self.suid", self.suid)
-		print("ITEMS[self.suid].storage", ITEMS[self.suid].storage)
-		pTab(ITEMS)
-		print("__________________________________")
-		if ITEMS[self.suid].storage == nil then
-			print("IS NIL => join storage")
-			print(self.suid)
-			net.Start("join_storage")
-				net.WriteString(self.suid)
-			net.SendToServer()
-		else
-			print("ELSE")
-			ITEMS[self.suid].storage:Remove()
-			ITEMS[self.suid].storage = nil
+	if self.mdl:GetWide() != pw or self.mdl:GetTall() != ph then
+		self.mdl:SetSize(pw, ph)
+	end
+	if self._world then
+		if !IsValid(self:GetE()) then
+			self:Remove()
 		end
 	end
 end
 
-hook.Add("close_inventory", "yrp_close_inventory", function()
-	for i, v in pairs(ITEMS) do
-		if v.storage != nil then
-			v.storage:Remove()
-			v.storage = nil
-		end
-	end
-end)
+function PANEL:GetItemID()
+	return self._itemID
+end
 
-net.Receive("send_storage_content", function(len)
-	local suid = tonumber(net.ReadString())
-	local storage = net.ReadTable()
-	local items = net.ReadTable()
+function PANEL:SetItemID(itemID)
+	self._itemID = itemID
+end
 
-	ITEMS[suid] = ITEMS[suid] or {}
+function PANEL:SetModel(mdl)
+	self.mdl:SetModel(mdl)
+end
 
-	ITEMS[suid].storage = createD("YStorage", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
-	local st = ITEMS[suid].storage
-	st:SetPos(ScW() - st:GetWide() - YRP.ctr(20), ScH() - st:GetTall() - ItemSize() - YRP.ctr(60))
+function PANEL:GetE()
+	return self._e
+end
 
-	for i, v in pairs(items) do
-		print(i, v)
-	end
-
-	function st:OnRemove()
-		local s = self:GetStorage()
-		if s != nil then
-			net.Start("leave_storage")
-				net.WriteString(s)
-			net.SendToServer()
-		end
-	end
-end)
+function PANEL:SetE(e)
+	self._e = e
+	self._world = true
+end
 
 function PANEL:Init()
-	self.fixed = false
-	self:SetTyp("item")
-
 	self:SetText("")
 
-	self.model = createD("SpawnIcon", self, self:GetWide(), self:GetTall(), 0, 0)
-	function self.model:DoClick()
-		self:GetParent():DoClick()
+	self._world = false
+
+	self.mdl = createD("SpawnIcon", self, self:GetWide(), self:GetTall(), 0, 0)
+	self.mdl.main = self
+	function self:DoClick()
+		net.Start("yrp_item_clicked")
+			net.WriteString(self:GetItemID())
+		net.SendToServer()
+	end
+	function self.mdl:DoClick()
+		self.main:DoClick()
+	end
+	function self.mdl:DoRightClick()
+		-- RIGHTCLICK
 	end
 
-	self:Droppable("yrp_slot")
+	function self.mdl:PaintOver(pw, ph)
+		draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 1))
+	end
+
+	self.mdl:Droppable("yrp_slot")
 end
+
+net.Receive("yrp_storage_open", function(len)
+	local lply = LocalPlayer()
+
+	local storage = net.ReadTable()
+	local isinv = net.ReadBool()
+
+	local sto = GetStoragePanel(storage.uniqueID)
+
+	if sto != nil then
+		sto:GetParent():Remove()
+	else
+		local br = YRP.ctr(20)
+		local sp = YRP.ctr(10)
+
+		local ww = ItemSize() * 4 + br * 2 + sp * 3
+		local wh = ItemSize() * 4 + br * 2 + sp * 3 + YRP.ctr(50)
+
+		local bag = createD("DFrame", nil, ww, wh, 0, 0)
+		if isinv then
+			bag:SetPos(lply.invx - ww, lply.invy - wh)
+
+			lply.invy = lply.invy - wh - YRP.ctr(20)
+		else
+			bag:Center()
+		end
+		bag:MakePopup()
+		bag:SetTitle("BAG")
+		function bag:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+			if Inventory() == nil then
+				self:Remove()
+			end
+		end
+		
+		local sw = ItemSize() * 4 + sp * 3
+		local sh = ItemSize() * 4 + sp * 3
+
+		bag.storage = createD("YStorage", bag, sw, sh, br, br + YRP.ctr(50))
+		bag.storage:SetStorageID(storage.uniqueID)
+	end
+end)
 
 vgui.Register("YItem", PANEL, "DButton")

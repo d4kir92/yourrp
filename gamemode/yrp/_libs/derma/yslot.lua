@@ -2,8 +2,6 @@
 
 local PANEL = {}
 
-itemsize = itemsize or 100
-
 function PANEL:Paint(pw, ph)
 	draw.RoundedBox(5, 0, 0, pw, ph, Color(80, 80, 80, 255))
 	if self.name != nil then
@@ -11,71 +9,128 @@ function PANEL:Paint(pw, ph)
 	end
 end
 
-function PANEL:AllowedToDrop(item)
-	return table.HasValue(self.allowed, item.typ)
-end
+local YRP_SLOTS = YRP_SLOTS or {}
 
-function PANEL:AddAllowed(a)
-	table.insert(self.allowed, a)
-end
-
-function PANEL:RemoveAllowed(a)
-	table.RemoveByValue(self.allowed, a)
-end
-
-local SLOTS = SLOTS or {}
-
-function PANEL:SetSlot(name)
-	self.name = name
-	SLOTS[self.name] = self
-	net.Start("join_slot")
-		net.WriteString(self.name)
-	net.SendToServer()
-end
-net.Receive("send_slot_content", function(len)
-	local slot = net.ReadString()
-	local yrp_slot = SLOTS[slot]
-	local items = net.ReadTable()
-
-	for i, item in pairs(items) do
-		local yitem = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
-		yitem:SetText("") --item.text_printname)
-		yitem:SetTyp("bag")
-		if slot == "bag0" then
-			yitem:SetFixed(true)
+function GetSlotPanel(slotID)
+	if wk(slotID) then
+		slotID = tonumber(slotID)
+		if wk(YRP_SLOTS[slotID]) then
+			return YRP_SLOTS[slotID]
+		else
+			YRP.msg("note", "[GetSlotPanel] no panel with: " .. tostring(slotID))
 		end
-
-		item.text_has_storage = tonumber(item.text_has_storage)
-		if item.text_has_storage > 0 then -- is a storage
-			yitem:SetStorage(item.text_has_storage)
-		end
-
-		yitem:SetModel(item.text_worldmodel)
-		yrp_slot:AddItem(yitem)
+	else
+		YRP.msg("note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID))
 	end
-end)
+end
+
+function SetSlotPanel(slotID, pnl)
+	if wk(slotID) then
+		slotID = tonumber(slotID)
+		if !wk(YRP_SLOTS[slotID]) then
+			YRP_SLOTS[slotID] = pnl
+		else
+			YRP.msg("note", "[SetSlotPanel] there is already a Slot with slotID: " .. tostring(slotID))
+		end
+	else
+		YRP.msg("note", "[SetSlotPanel] slotID is invalid: " .. tostring(slotID))
+	end
+end
+
+function RemoveSlotPanel(slotID, pnl)
+	if wk(YRP_SLOTS[slotID]) then
+		YRP_SLOTS[slotID] = nil
+	end
+end
+
+function PANEL:GetSlotID()
+	return self._slotID
+end
+
+function PANEL:SetSlotID(slotID)
+	if wk(slotID) then
+		slotID = tonumber(slotID)
+
+		self._slotID = slotID
+
+		SetSlotPanel(self._slotID, self)
+
+		self.name = "ID: " .. slotID -- REMOVEME
+
+		net.Start("yrp_slot_connect")
+			net.WriteString(self._slotID)
+		net.SendToServer()
+	end
+end
 
 function PANEL:OnRemove()
-	net.Start("leave_slot")
-		net.WriteString(self.name)
-	net.SendToServer()
+	if wk(self._slotID) then
+		net.Start("yrp_slot_disconnect")
+			net.WriteString(self._slotID)
+		net.SendToServer()
+		RemoveSlotPanel(self:GetSlotID(), self)
+	end
 end
 
 function PANEL:Init()
-	self.allowed = {}
-	self:AddAllowed("item")
+	--[[self:SetText("")
 
-	self:SetText("")
+	self._slotid = 0
+	]]
 
 	self:Receiver("yrp_slot",
 	function(receiver, panels, bDoDrop, Command, x, y)
 		if bDoDrop then
 			local item = panels[1]
-			if !item:GetFixed() and self:AllowedToDrop(item) then
-				receiver:AddItem(item)
+			
+			local itemID = item.main:GetItemID()
+			local slotID = receiver:GetSlotID()
+			local e = item.main:GetE()
+
+			if slotID != nil then
+				net.Start("yrp_item_move")
+					net.WriteString(itemID or "0")
+					net.WriteString(slotID)
+					net.WriteEntity(e)
+				net.SendToServer()
+			else
+				net.Start("yrp_item_drop")
+					net.WriteString(itemID)
+				net.SendToServer()
+
+				receiver:AddItem(item.main)
 			end
 		end
 	end, {})
 end
+
+net.Receive("yrp_item_store", function(len)
+	local slotID = net.ReadString()
+	local item = net.ReadTable()
+
+	slotID = tonumber(slotID)
+
+	local slot = GetSlotPanel(slotID)
+	if pa(slot) then
+		local i = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
+		i:SetItemID(item.uniqueID)
+		i:SetModel(item.text_worldmodel)
+		if item.isinv then
+			i:DoClick()
+		end
+
+		slot:AddItem(i)
+	end
+end)
+
+net.Receive("yrp_item_unstore", function(len)
+	local slotID = net.ReadString()
+
+	slotID = tonumber(slotID)
+
+	local slot = GetSlotPanel(slotID)
+
+	slot:Clear()
+end)
 
 vgui.Register("YSlot", PANEL, "DScrollPanel")

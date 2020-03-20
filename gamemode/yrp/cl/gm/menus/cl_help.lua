@@ -64,6 +64,8 @@ function nicekey(key_str)
 end
 
 function AddKeybind(plist, keybind, lstr, icon, disabled)
+	local lply = LocalPlayer()
+	if disabled and !lply:HasAccess() then return end
 	local kb = createD("DPanel", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
 	kb.key = keybind
 
@@ -74,7 +76,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 
 		if disabled != nil and !GetGlobalDBool(disabled) then
 			text = "[" .. YRP.lang_string("LID_disabled") .. "] "
-			color = Color(255, 0, 0, 255)
+			color = Color(255, 255, 100, 255)
 		end
 
 		text = text .. YRP.lang_string(lstr)

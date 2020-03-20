@@ -27,3 +27,7 @@ if SERVER then
 
 
 end
+
+function IsInventorySystemEnabled()
+	return GetGlobalDBool("bool_inventory_system", false)
+end

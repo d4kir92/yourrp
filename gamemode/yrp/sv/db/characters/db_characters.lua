@@ -40,12 +40,15 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_warnings", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_violations", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_arrests", "INT DEFAULT 0")
 
---[[ EQUIPMENT ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "eqbp", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "eqbag1", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "eqbag2", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "eqbag3", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "eqbag4", "TEXT DEFAULT ' '")
+--[[ EQUIPMENT NEW ]]--
+SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "TEXT DEFAULT '0'")
+
+--[[ EQUIPMENT OLD ]]--
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag0", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag1", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag2", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag3", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "eqbag4", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "eqwpp1", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "eqwpp2", "TEXT DEFAULT ' '")
@@ -72,6 +75,10 @@ function Player:CharacterLoadout()
 		self:SetDInt("int_warnings", chatab.int_warnings)
 		self:SetDInt("int_violations", chatab.int_violations)
 		self:SetDInt("int_arrests", chatab.int_arrests)
+
+		for i = 0, 4 do
+			self:SetDString("eqbag" .. i, chatab["eqbag" .. i])
+		end
 
 		local levelsystem = SQL_SELECT("yrp_levelsystem", "*", nil)
 		if wk(levelsystem) then
@@ -624,6 +631,7 @@ function CreateCharacter(ply, tab)
 	else
 		printGM("note", "[CreateCharacter] role not found!")
 	end
+	CreateCharacterStorages()
 end
 
 net.Receive("CreateCharacter", function(len, ply)
