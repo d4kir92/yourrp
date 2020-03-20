@@ -75,7 +75,9 @@ function CreateCharacterStorages()
 		end
 	end
 end
-CreateCharacterStorages()
+timer.Simple(4, function()
+	CreateCharacterStorages()
+end)
 
 
 
