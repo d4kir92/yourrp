@@ -32,10 +32,12 @@ function OpenCombinedMenu()
 		sites.help.id = 1
 		sites.help.name = "LID_help"
 		sites.help.content = CreateHelpMenuContent
-		sites.roles = {}
-		sites.roles.id = 2
-		sites.roles.name = "LID_roles"
-		sites.roles.content = CreateRoleMenuContent
+		if GetGlobalDBool("bool_players_can_switch_role", false) then
+			sites.roles = {}
+			sites.roles.id = 2
+			sites.roles.name = "LID_roles"
+			sites.roles.content = CreateRoleMenuContent
+		end
 		sites.shops = {}
 		sites.shops.id = 3
 		sites.shops.name = "LID_settings_shops"
@@ -123,13 +125,19 @@ function OpenCombinedMenu()
 			end
 		end
 
-		local id = 0
+		local c = 0
 		for name, v in SortedPairsByMemberValue(sites, "id", false) do
-			cm.sites[name] = createD("YButton", cm.menu, menuw, YRP.ctr(80), 0, menuw + id * (YRP.ctr(80) + br))
+			cm.sites[name] = createD("YButton", cm.menu, menuw, YRP.ctr(80), 0, menuw + c * (YRP.ctr(80) + br))
 			local site = cm.sites[name]
 			site:SetText("")
 			site.id = tonumber(v.id)
 			function site:Paint(pw, ph)
+				if v.name == "LID_roles" then
+					if !GetGlobalDBool("bool_players_can_switch_role", false) then
+						cm.menu:Remove()
+					end
+				end
+
 				local lply = LocalPlayer()
 				local color = lply:InterfaceValue("YFrame", "HB")
 				if self:IsHovered() then
@@ -154,8 +162,7 @@ function OpenCombinedMenu()
 			if cm.currentsite == site.id then
 				site:DoClick()
 			end
-
-			id = id + 1
+			c = c + 1
 		end
 	elseif pa(cm.win) then
 		cm.win:Show()

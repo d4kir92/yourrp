@@ -9,7 +9,6 @@ SQL.ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
 
 
 function CreateStorage(size, inv)
-	print("CreateStorage", size)
 	local result = SQL_INSERT_INTO(DATABASE_NAME, "int_storage_size", "'" .. size .. "'")
 
 	if result == nil then
@@ -45,15 +44,14 @@ function GetCharacterStorage(ply)
 			storage = storage[1]
 			return storage
 		else
-			print("GetCharacterStorage no storage")
+			YRP.msg("db", "[GetCharacterStorage] no storage")
 		end
 	end
-	print("GetCharacterStorage FAILED")
+	YRP.msg("db", "[GetCharacterStorage] FAILED")
 	return {}
 end
 
 function CreateCharacterStorages()
-	print("CreateCharacterStorages")
 	local chars = SQL_SELECT("yrp_characters", "*", nil)
 	if wk(chars) then
 		for _, char in pairs(chars) do
@@ -69,8 +67,6 @@ function CreateCharacterStorages()
 				if wk(bagsStorage) then
 					SQL_UPDATE("yrp_characters", "int_storageID = '" .. bagsStorage.uniqueID .. "'", "uniqueID = '" .. char.uniqueID .. "'")
 				end
-			else
-				print("char.uniqueID", char.uniqueID, "char.int_storageID", char.int_storageID)
 			end
 		end
 	end
@@ -102,7 +98,6 @@ end)
 
 util.AddNetworkString("yrp_storage_open")
 function OpenStorage(ply, storageID)
-	print("OpenStorage", ply, storageID)
 	storageID = tonumber(storageID)
 
 	local storage = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'")

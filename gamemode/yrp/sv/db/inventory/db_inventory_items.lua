@@ -21,7 +21,6 @@ SQL.ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/hunter/bl
 
 function CreateItem(slotID, tab)
 	slotID = tonumber(slotID)
-	print("CreateItem", slotID, tab)
 
 	tab = tab or {}
 
@@ -55,8 +54,6 @@ function CreateItem(slotID, tab)
 end
 
 function CreateItemByEntity(slotID, entity)
-	print("CreateItemByEntity", slotID, entity)
-
 	if entity:IsPlayer() or entity:IsWorld() or entity:CreatedByMap() or entity:GetOwner():IsPlayer() or strEmpty(entity:GetModel()) or entity:IsVehicle() then
 		YRP.msg("db", "[CreateItemByEntity] INVALID")
 		return
@@ -93,7 +90,6 @@ end
 util.AddNetworkString("yrp_item_unstore")
 function UnstoreItem(slotID, ply)
 	slotID = tonumber(slotID)
-	print("UnstoreItem", slotID, ply)
 
 	if ply != nil then
 		net.Start("yrp_item_unstore")
@@ -111,8 +107,7 @@ end
 util.AddNetworkString("yrp_item_store")
 function StoreItem(slotID, itemTable, ply)
 	slotID = tonumber(slotID)
-	print("StoreItem", slotID, itemTable, ply)
-	
+
 	itemTable.isinv = false
 	if ply then
 		itemTable.int_slotID = tonumber(itemTable.int_slotID)
@@ -178,7 +173,6 @@ end
 function MoveItem(itemID, slotID)
 	itemID = tonumber(itemID)
 	slotID = tonumber(slotID)
-	print("MoveItem", itemID, slotID)
 
 	local item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 
@@ -188,7 +182,10 @@ function MoveItem(itemID, slotID)
 		item = item[1]
 		slot = slot[1]
 
+		slot.int_storageID = tonumber(slot.int_storageID )
 		item.int_fixed = tonumber(item.int_fixed)
+		item.int_storageID = tonumber(item.int_storageID)
+
 		if item.int_fixed == 1 then
 			YRP.msg("db", "[MoveItem] Item is fixed")
 			return
@@ -196,6 +193,11 @@ function MoveItem(itemID, slotID)
 	
 		if slot.text_type == "bag" and item.text_type != "bag" then
 			YRP.msg("db", "[MoveItem] Only Bags are allowed here")
+			return
+		end
+
+		if slot.int_storageID == item.int_storageID then
+			YRP.msg("db", "You cant put bag into bag (self)")
 			return
 		end
 	

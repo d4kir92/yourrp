@@ -14,7 +14,7 @@ function GetStoragePanel(storageID)
 		if wk(YRP_STORAGES[storageID]) then
 			return YRP_STORAGES[storageID]
 		else
-			YRP.msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
+			--YRP.msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
 		end
 	else
 		YRP.msg("note", "[GetStoragePanel] storageID is invalid: " .. tostring(storageID))

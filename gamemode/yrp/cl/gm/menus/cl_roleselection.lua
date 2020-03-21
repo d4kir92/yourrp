@@ -393,38 +393,44 @@ function CreateRoleSelectionContent()
 
 	-- Groups
 	net.Receive("yrp_roleselection_getgroups", function(len)
-		local gtab = net.ReadTable()
+		if pa(list) then
+			local gtab = net.ReadTable()
 
-		local w = YRP.ctr(nw - 2 * config.br)
-		local h = YRP.ctr(100)
+			local w = YRP.ctr(nw - 2 * config.br)
+			local h = YRP.ctr(100)
 
-		for i, grp in pairs(gtab) do
-			grp.uniqueID = tonumber(grp.uniqueID)
-			
-			-- Category Group
-			local group = createD("YCollapsibleCategory", list, w, h, 0, 0)
-			group:SetS(w, h)
-			group:SetHeader(grp.string_name)
-			group:SetIcon(grp.string_icon)
-			group:SetList(list)
-			group:SetHeaderColor(StringToColor(grp.string_color))
-			group:SetContentColor(StringToColor(grp.string_color))
-			group:SetGroupUID(grp.uniqueID)
-			group:SetFixedHeight(nh - 2 * config.br)
+			for i, grp in pairs(gtab) do
+				grp.uniqueID = tonumber(grp.uniqueID)
+				
+				if pa(list) then
+					-- Category Group
+					local group = createD("YCollapsibleCategory", list, w, h, 0, 0)
+					group:SetS(w, h)
+					group:SetHeader(grp.string_name)
+					group:SetIcon(grp.string_icon)
+					group:SetList(list)
+					group:SetHeaderColor(StringToColor(grp.string_color))
+					group:SetContentColor(StringToColor(grp.string_color))
+					group:SetGroupUID(grp.uniqueID)
+					group:SetFixedHeight(nh - 2 * config.br)
 
-			if !LocalPlayer():GetDBool("cc", false) then
-				local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 46), YRP.ctr(20))
-				changefaction:SetText("LID_changefaction")
-				function changefaction:DoClick()
-					LocalPlayer():SetDBool("cc", false)
-					menu:Hide()
-					CreateFactionSelectionContent()
+					if !LocalPlayer():GetDBool("cc", false) then
+						local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 46), YRP.ctr(20))
+						changefaction:SetText("LID_changefaction")
+						function changefaction:DoClick()
+							LocalPlayer():SetDBool("cc", false)
+							menu:Hide()
+							CreateFactionSelectionContent()
+						end
+					end
+
+					list:AddItem(group)
+
+					group.btn:DoClick()
+				else
+					break
 				end
 			end
-
-			list:AddItem(group)
-
-			group.btn:DoClick()
 		end
 	end)
 	net.Start("yrp_roleselection_getgroups")

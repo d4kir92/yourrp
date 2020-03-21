@@ -9,7 +9,6 @@ SQL.ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
 
 
 function CreateSlot(storageID, inv)
-	print("CreateSlot", storageID)
 	storageID = tonumber(storageID)
 	if wk(storageID) then
 		if inv then
@@ -23,7 +22,6 @@ function CreateSlot(storageID, inv)
 end
 
 function GetStorageSlots(storageID)
-	print("GetStorageSlots", storageID)
 	storageID = tonumber(storageID)
 	if wk(storageID) then
 		local slots = {}
@@ -53,14 +51,12 @@ end
 
 function IsConnectedToSlot(ply, slotID)
 	slotID = tonumber(slotID)
-	--print("IsConnectedToSlot", ply, slotID)
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 	return table.HasValue(YRP_SLOTS_PLYS[slotID], ply)
 end
 
 function ConnectToSlot(ply, slotID)
 	slotID = tonumber(slotID)
-	--print("ConnectToSlot", ply, slotID)
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 	
 	if !IsConnectedToSlot(ply, slotID) then
@@ -78,7 +74,6 @@ end
 
 function DisconnectFromSlot(ply, slotID)
 	slotID = tonumber(slotID)
-	--print("DisconnectFromSlot", ply, slotID)
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 
 	if IsConnectedToSlot(ply, slotID) then

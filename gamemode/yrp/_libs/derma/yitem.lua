@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 100))
+	--draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 100))
 
 	if self.mdl:GetWide() != pw or self.mdl:GetTall() != ph then
 		self.mdl:SetSize(pw, ph)
@@ -44,9 +44,13 @@ function PANEL:Init()
 	self.mdl = createD("SpawnIcon", self, self:GetWide(), self:GetTall(), 0, 0)
 	self.mdl.main = self
 	function self:DoClick()
-		net.Start("yrp_item_clicked")
-			net.WriteString(self:GetItemID())
-		net.SendToServer()
+		if self:GetItemID() != nil then
+			net.Start("yrp_item_clicked")
+				net.WriteString(self:GetItemID())
+			net.SendToServer()
+		else
+			YRP.msg("note", "[YItem] self:GetItemID() == nil")
+		end
 	end
 	function self.mdl:DoClick()
 		self.main:DoClick()
@@ -56,7 +60,7 @@ function PANEL:Init()
 	end
 
 	function self.mdl:PaintOver(pw, ph)
-		draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 1))
+		--draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 1))
 	end
 
 	self.mdl:Droppable("yrp_slot")
@@ -83,14 +87,25 @@ net.Receive("yrp_storage_open", function(len)
 		if isinv then
 			bag:SetPos(lply.invx - ww, lply.invy - wh)
 
-			lply.invy = lply.invy - wh - YRP.ctr(20)
+			if lply.invy - wh - YRP.ctr(20) < YRP.ctr(20) then
+				lply.invx = lply.invx - ww - YRP.ctr(20)
+				lply.invy = ScH() - (ItemSize() + YRP.ctr(60))
+
+				bag:SetPos(lply.invx - ww, lply.invy - wh)
+
+				lply.invy = lply.invy - wh - YRP.ctr(20)
+			else
+				lply.invy = lply.invy - wh - YRP.ctr(20)
+			end
 		else
 			bag:Center()
 		end
 		bag:MakePopup()
-		bag:SetTitle("BAG")
+		bag:SetTitle("")
 		function bag:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+			draw.SimpleText(YRP.lang_string("LID_bag"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
 			if Inventory() == nil then
 				self:Remove()
 			end

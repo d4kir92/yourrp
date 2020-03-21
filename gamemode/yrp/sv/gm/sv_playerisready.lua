@@ -53,7 +53,7 @@ end
 
 hook.Add("Think", "yrp_loaded_game", function()
 	for i, ply in pairs(player.GetAll()) do
-		if ply.lgtime and ply.lgtime < CurTime() then -- Only goes here, when a player fully loaded
+		if ply.lgtime and ply.lgtime < CurTime() and ply:SteamID64() != nil then -- Only goes here, when a player fully loaded
 			ply.lgtime = nil
 			ply:SetDBool("finishedloading", true)
 
@@ -62,7 +62,7 @@ hook.Add("Think", "yrp_loaded_game", function()
 				net.WriteString(ply:Nick())
 			net.Broadcast()
 
-			if os.time() != nil and ply.SteamID64 != nil and SQL_INSERT_INTO != nil then
+			if os.time() != nil and SQL_INSERT_INTO != nil then
 				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'")
 			end
 		end

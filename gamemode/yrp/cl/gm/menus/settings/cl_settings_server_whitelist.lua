@@ -191,7 +191,7 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 		local _whitelistButton = createVGUI("DButton", _whitelistFrame, 380, 50, 10, 400)
 		_whitelistButton:SetText(YRP.lang_string("LID_whitelistplayer"))
 		function _whitelistButton:DoClick()
-			if _whitelistComboBoxPlys:GetOptionData(_whitelistComboBoxPlys:GetSelectedID()) != nil then
+			if _whitelistComboBoxPlys:GetOptionData(_whitelistComboBoxPlys:GetSelectedID()) != nil and _whitelistComboBox:GetOptionData(_whitelistComboBox:GetSelectedID()) != nil then
 				net.Start("whitelistPlayerGroup")
 					net.WriteString(_whitelistComboBoxPlys:GetOptionData(_whitelistComboBoxPlys:GetSelectedID()))
 					net.WriteInt(_whitelistComboBox:GetOptionData(_whitelistComboBox:GetSelectedID()), 16)

@@ -67,7 +67,7 @@ function OpenInventory(target)
 							self:Remove()
 						end
 						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
-						draw.SimpleText(YRP.lang_string("LID_environment"), "Y_15_500", YRP.ctr(25), YRP.ctr(25), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.lang_string("LID_environment"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 					local envsto = createD("YStorage", env, ItemSize() * 4 + YRP.ctr(inv.br) * 3, ItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp))
 					envsto:SetStorageID(0, nettab)
