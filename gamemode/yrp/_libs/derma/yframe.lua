@@ -122,6 +122,8 @@ function PANEL:UpdateSize()
 	self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 	self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
 	self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
+
+	self:ChangedSize()
 end
 
 function PANEL:OnSizeChanged(pw, ph)

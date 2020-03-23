@@ -83,7 +83,9 @@ function BuildLogs(parent, typ)
 
 						rt:InsertColorChange(100, 100, 255, 255)
 						rt:InsertClickableTextStart(v.string_source_steamid)
-						rt:AppendText(source:RPName())
+						if source.RPName != nil then
+							rt:AppendText(source:RPName())
+						end
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)

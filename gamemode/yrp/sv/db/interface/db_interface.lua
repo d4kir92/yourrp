@@ -53,12 +53,12 @@ Simple.bools = {}
 Simple.bools.Rounded = 0;
 
 Simple.colors = {}
-Simple.colors.YFrame_HT = "255, 255, 255, 255"
-Simple.colors.YFrame_HB = "40, 40, 40, 255"
+Simple.colors.YFrame_HT = "255, 255, 255, 255"	-- Header Textcolor
+Simple.colors.YFrame_HB = "40, 40, 40, 255"		-- Header Backgroundcolor
 Simple.colors.YFrame_NC = "40, 40, 40, 255"		-- Normal Color
 Simple.colors.YFrame_PC = "50, 50, 50, 255"
-Simple.colors.YFrame_HI = "80, 80, 80, 255"
-Simple.colors.YFrame_BG = "0, 0, 0, 200"
+Simple.colors.YFrame_HI = "80, 80, 80, 255"		-- Highlight Color
+Simple.colors.YFrame_BG = "0, 0, 0, 200"		-- Background Color
 Simple.colors.YButton_NT = "0, 0, 0, 255"		-- Normal Textcolor
 Simple.colors.YButton_NC = "93, 166, 251, 255"	-- Normal Color
 Simple.colors.YButton_HC = "148, 197, 255, 255"	-- Hovered Color

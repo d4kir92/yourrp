@@ -951,9 +951,6 @@ end)
 hook.Add("open_server_general", "open_server_general", function()
 	SaveLastSite()
 
-	local w = settingsWindow.window.sitepanel:GetWide()
-	local h = settingsWindow.window.sitepanel:GetTall()
-
 	net.Start("Connect_Settings_General")
 	net.SendToServer()
 end)

@@ -250,9 +250,14 @@ util.AddNetworkString("yrp_info2")
 function spawnItem(ply, item, duid)
 	if item.type == "weapons" then
 		local wep = ply:Give(item.ClassName)
-		wep:SetDString( "item_uniqueID", item.uniqueID )
-		wep:SetDEntity("yrp_owner", ent)
-		return true
+		if wk(wep) then
+			wep:SetDString("item_uniqueID", item.uniqueID)
+			wep:SetDEntity("yrp_owner", ent)
+			return true
+		else
+			YRP.msg("note", "Class " .. item.ClassName .. " dont give weapon")
+			return false
+		end
 	end
 
 	local TARGETPOS = nil
@@ -398,7 +403,7 @@ net.Receive("item_buy", function(len, ply)
 	local _dealer_uid = net.ReadString()
 	local _item = SQL_SELECT(_db_name, "*", "uniqueID = " .. _tab.uniqueID)
 
-	if _item ~= nil then
+	if wk(_item) then
 		_item = _item[1]
 		_item.name = SQL_STR_OUT(tostring(_item.name))
 
@@ -452,7 +457,7 @@ net.Receive("item_spawn", function(len, ply)
 	if wk(_tab) and wk(_dealer_uid) then
 		local _item = SQL_SELECT(_db_name, "*", "uniqueID = " .. _tab.uniqueID)
 
-		if _item ~= nil then
+		if wk(_item) then
 			_item = _item[1]
 
 			if not IsEntityAlive(ply, _item.uniqueID) then

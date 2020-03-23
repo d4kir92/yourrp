@@ -185,14 +185,21 @@ end
 if SERVER then
 	util.AddNetworkString("SetDFloat")
 	function SendDFloat(entindex, key, value, ply)
-		net.Start("SetDFloat")
-			net.WriteUInt(entindex, 16)
-			net.WriteString(key)
-			net.WriteFloat(value)
-		if IsValid(ply) then
-			net.Send(ply)
+		if net.BytesLeft() == nil then
+			net.Start("SetDFloat")
+				net.WriteUInt(entindex, 16)
+				net.WriteString(key)
+				net.WriteFloat(value)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		else
-			net.Broadcast()
+			--print("FAIL", key, value, net.BytesLeft())
+			timer.Simple(0.1, function()
+				SendDFloat(entindex, key, value, ply)
+			end)
 		end
 	end
 end

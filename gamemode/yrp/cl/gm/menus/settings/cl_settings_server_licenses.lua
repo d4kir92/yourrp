@@ -6,8 +6,8 @@ net.Receive("get_licenses", function()
 
 	if settingsWindow.window != nil then
 
-		local spw = settingsWindow.window.sitepanel:GetWide()
-		local sph = settingsWindow.window.sitepanel:GetTall()
+		local spw = settingsWindow.window.site:GetWide()
+		local sph = settingsWindow.window.site:GetTall()
 
 		_li.ea = createD("DPanel", settingsWindow.window.site, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 		function _li.ea:Paint(pw, ph)

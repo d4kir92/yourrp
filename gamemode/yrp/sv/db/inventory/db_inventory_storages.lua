@@ -82,18 +82,22 @@ util.AddNetworkString("get_inventory")
 net.Receive("get_inventory", function(len, ply)
 	local storage = GetCharacterStorage(ply)
 
-	local nettab = {}
-	local es = ents.FindInSphere(ply:GetPos(), 100)
-	for i, ent in pairs(es) do
-		if !ent:IsPlayer() and !ent:IsWorld() and !ent:CreatedByMap() and !ent:GetOwner():IsPlayer() and !strEmpty(ent:GetModel()) and ent:GetModel() != "models/error.mdl" and !ent:IsVehicle() then
-			table.insert(nettab, ent)
+	if wk(storage) then
+		local nettab = {}
+		local es = ents.FindInSphere(ply:GetPos(), 100)
+		for i, ent in pairs(es) do
+			if !ent:IsPlayer() and !ent:IsWorld() and !ent:CreatedByMap() and !ent:GetOwner():IsPlayer() and !strEmpty(ent:GetModel()) and ent:GetModel() != "models/error.mdl" and !ent:IsVehicle() then
+				table.insert(nettab, ent)
+			end
 		end
-	end
 
-	net.Start("get_inventory")
-		net.WriteString(storage.uniqueID)
-		net.WriteTable(nettab)
-	net.Send(ply)
+		net.Start("get_inventory")
+			net.WriteString(storage.uniqueID)
+			net.WriteTable(nettab)
+		net.Send(ply)
+	else
+		YRP.msg("db", "[get_inventory] No GetCharacterStorage")
+	end
 end)
 
 util.AddNetworkString("yrp_storage_open")

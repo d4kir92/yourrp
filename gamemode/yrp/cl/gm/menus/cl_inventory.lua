@@ -29,7 +29,7 @@ function Inventory()
 end
 
 function OpenInventory(target)
-	if IsInventorySystemEnabled() then
+	if IsInventorySystemEnabled() and YRPIsNoMenuOpen() then
 		inv.open = true
 
 		local lply = LocalPlayer()
