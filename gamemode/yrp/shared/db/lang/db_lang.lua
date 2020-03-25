@@ -110,30 +110,35 @@ local nf = {}
 function YRP.lang_string(var, vals)
 	var = tostring(var)
 	if string.StartWith(var, "LID_") then
-		local translation = yrp_current_lang[string.lower(var)]
+		local va = "LID_" .. string.lower(string.sub(var, 5))
+		if va == var then
+			local translation = yrp_current_lang[string.lower(var)]
 
-		-- IF NOT FOUND
-		if !wk(translation) then
-			if nf[var] == nil then
-				nf[var] = var
-				PrintLIDError(var)
+			-- IF NOT FOUND
+			if !wk(translation) then
+				if nf[var] == nil then
+					nf[var] = var
+					PrintLIDError(var)
+				end
+				return var
 			end
-			return var
-		end
 
-		-- IF HAVE VALS
-		if wk(vals) then
-			if type(vals) == "string" then
-				return YRP.lang_string(var)
-			else
-				for id, val in pairs(vals) do
-					translation = string.Replace(translation, "%" .. id .. "%", val)
+			-- IF HAVE VALS
+			if wk(vals) then
+				if type(vals) == "string" then
+					return YRP.lang_string(var)
+				else
+					for id, val in pairs(vals) do
+						translation = string.Replace(translation, "%" .. id .. "%", val)
+					end
 				end
 			end
-		end
 
-		-- RETURN TRANSLATION
-		return translation
+			-- RETURN TRANSLATION
+			return translation
+		else
+			-- INVALID
+		end
 	end
 
 	-- RETURN VAR
@@ -239,6 +244,7 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/settingsstatus/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsscale/lang_" .. short .. ".properties")
 	else
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end

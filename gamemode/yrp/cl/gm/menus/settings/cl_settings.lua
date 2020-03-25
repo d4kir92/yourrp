@@ -2,7 +2,6 @@
 
 -- #WHITELIST
 
--- OLD Sites
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
 include("cl_settings_server_give.lua")
@@ -10,11 +9,10 @@ include("cl_settings_server_licenses.lua")
 include("cl_settings_server_shops.lua")
 include("cl_settings_server_map.lua")
 include("cl_settings_server_whitelist.lua")
+include("cl_settings_server_blacklist.lua")
 include("cl_settings_server_logs.lua")
+include("cl_settings_server_scale.lua")
 
--- CLIENT
-
---SERVER
 include("cl_settings_server_console.lua")
 include("cl_settings_server_status.lua")
 include("cl_settings_server_feedback.lua")
@@ -261,7 +259,7 @@ function OpenSettings()
 
 		self.site = createD("DPanel", self, 10, 10, 0, 0)
 		function self.site:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HI"))
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
 		end
 
 		self:ChangedSize()
@@ -421,6 +419,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png")
 	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_shops", "LID_settings_shops", "icon16/basket_edit.png")
 	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_logs", "LID_logs", "icon16/note.png")
+	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_scale", "LID_scale", "icon16/arrow_out.png")
 	
 	local SV_MAINTANCE = "LID_settings_server_maintance"
 	settingsWindow.window:AddCategory(SV_MAINTANCE, "icon16/bell_error.png")
@@ -442,6 +441,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_database", "LID_settings_database", "icon16/database_gear.png")
 	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_usergroups", "LID_settings_usergroups", "icon16/group_go.png")
 	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_key.png")
+	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_blacklist", "LID_blacklist", "icon16/page_error.png")
 
 	local YRP_ADDONS = "LID_settings_server_addons"
 	settingsWindow.window:AddCategory(YRP_ADDONS, "icon16/plugin.png")
@@ -469,3 +469,29 @@ net.Receive("setting_hasnoaccess", function(len)
 	local usergroups = net.ReadString()
 	F8RequireUG(YRP.lang_string(site), usergroups)
 end)
+
+--[[
+settings_players		-- Give Role, ...
+settings_licenses		-- Manage Licenses
+settings_shops			-- Manage Shops
+logs					-- LOGS: Kills, connections, spawns, ...
+scale?					-- NEW! Scale hunger, thirst, radiation, hygiene
+
+server_console			-- Server console, commands, ...
+settings_status			-- Status about the gamemode, whats missing, ...
+settings_feedback		-- Tickets from players, ...
+
+settings_general		-- General server/gamemode settings, THIS MAY SPLIT SOMEDAY
+settings_realistic		-- Realistic things, like damage, ...
+settings_groupsandroles	-- Factions, Groups, ROLES, ...
+levelsystem				-- Manage levelsystem
+settings_design			-- Design of interface and HUD, also font
+settings_map			-- Map things for gamemode, Spawnpoints, dealers, ...
+	
+settings_database		-- Database tables, remove or change to mysql
+settings_usergroup		-- Manage Usergroups
+whitelist				-- Whitelist roles, groups, ...
+blacklist				-- NEW! disallow items for inventory pickup 
+
+settings_yourrp_addons	-- Other yourrp addons are here
+]]

@@ -821,3 +821,12 @@ net.Receive("set_idcardid", function(len, ply)
 		p:SetDString("idcardid", text_idcardid)
 	end
 end)
+
+util.AddNetworkString("removearrests")
+net.Receive("removearrests", function(len, ply)
+	local p = net.ReadEntity()
+	if wk(p:CharID()) then
+		SQL_UPDATE(DATABASE_NAME, "int_arrests = '" .. 0 .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		p:SetDInt("int_arrests", 0)
+	end
+end)

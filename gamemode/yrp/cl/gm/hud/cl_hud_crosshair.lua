@@ -31,15 +31,15 @@ local alphaFade = 1
 local reloading = 0
 local aimdownsights = 0
 function HudCrosshair()
-	local ply = LocalPlayer()
-	if ply:Alive() and GetGlobalDBool("bool_yrp_crosshair", false) then
+	local lply = LocalPlayer()
+	if lply:Alive() and GetGlobalDBool("bool_yrp_crosshair", false) then
 		if !contextMenuOpen then
-			local weapon = ply:GetActiveWeapon()
+			local weapon = lply:GetActiveWeapon()
 			if weapon != NULL then
 				if weapon.DrawCrosshair or isHl2Weapon(weapon) then
 					local nextPrimary = weapon:GetNextPrimaryFire()
 
-					if nextPrimary <= CurTime()+0.1 and ply:KeyDown(IN_ATTACK) then
+					if nextPrimary <= CurTime()+0.1 and lply:KeyDown(IN_ATTACK) then
 						ch_attack1 = ch_attack1 + 2
 					else
 						ch_attack1 = ch_attack1 - 1
@@ -50,21 +50,21 @@ function HudCrosshair()
 						ch_attack1 = 6
 					end
 
-					if ply:KeyDown(IN_RELOAD) and aimdownsights == 0 then
+					if lply:KeyDown(IN_RELOAD) and aimdownsights == 0 then
 						alphaFade = 0
 						aimdownsights = 1
 						timer.Simple(weapon:GetNextPrimaryFire() - CurTime(), function()
 							aimdownsights = 0
 						end)
 					end
-					if ply:KeyDown(IN_ATTACK2) and reloading == 0 then
+					if lply:KeyDown(IN_ATTACK2) and reloading == 0 then
 						alphaFade = 0
 						reloading = 1
 						timer.Simple(weapon:GetNextPrimaryFire() - CurTime(), function()
 							reloading = 0
 						end)
 					end
-					if ply:KeyDown(IN_SPEED) and ply:KeyDown(IN_FORWARD) and reloading == 0 then
+					if lply:KeyDown(IN_SPEED) and lply:KeyDown(IN_FORWARD) and reloading == 0 then
 						alphaFade = alphaFade - 0.05
 						if alphaFade < 0.5 then
 							alphaFade = 0.5
@@ -82,41 +82,46 @@ function HudCrosshair()
 						end
 					end
 
-					if ply:GetDString("string_hud_design", "notloaded") != "notloaded" then
-						if ply:Alive() then
+					if lply:GetDString("string_hud_design", "notloaded") != "notloaded" then
+						if lply:Alive() then
 							if true then
 
 								if weapon:GetNetworkedBool("Ironsights") then
 									alphaFade = 0
 									return
 								end
-								local p = ply:GetEyeTrace().HitPos:ToScreen()
-								local x,y = p.x, p.y
+
+								-- Render Errors break this, restart game fix that
+								local ptr = lply:GetEyeTrace().HitPos:ToScreen()
+
+								--draw.SimpleText(ptr.x .. " " .. ptr.y, "DermaDefault", ScW() / 2, ScH() / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+								
+								local cx, cy = ptr.x, ptr.y
 
 								local gap = (8/2)
 								if ch_attack1 >= 1 then
 									gap = gap * ch_attack1
 								end
 
-								local w = 10
-								local h = 1
+								local sw = 10
+								local sh = 1
 
 								surface.SetDrawColor(0, 0, 0, 255 * alphaFade)
 
 								local br = 1
-								surface.DrawRect(x-w-gap-br, y-h/2-br, w+2*br, h+2*br)
-								surface.DrawRect(x+gap-br, y-h/2-br, w+2*br, h+2*br)
+								surface.DrawRect(cx-sw-gap-br, cy-sh/2-br, sw+2*br, sh+2*br)
+								surface.DrawRect(cx+gap-br, cy-sh/2-br, sw+2*br, sh+2*br)
 
-								surface.DrawRect(x-h/2-br, y-w-gap-br, h+2*br, w+2*br)
-								surface.DrawRect(x-h/2-br, y+gap-br, h+2*br, w+2*br)
+								surface.DrawRect(cx-sh/2-br, cy-sw-gap-br, sh+2*br, sw+2*br)
+								surface.DrawRect(cx-sh/2-br, cy+gap-br, sh+2*br, sw+2*br)
 
 								surface.SetDrawColor(0, 255, 0, 255 * alphaFade)
 
-								surface.DrawRect(x-w-gap, y-h/2, w, h)
-								surface.DrawRect(x+gap, y-h/2, w, h)
+								surface.DrawRect(cx-sw-gap, cy-sh/2, sw, sh)
+								surface.DrawRect(cx+gap, cy-sh/2, sw, sh)
 
-								surface.DrawRect(x-h/2, y-w-gap, h, w)
-								surface.DrawRect(x-h/2, y+gap, h, w)
+								surface.DrawRect(cx-sh/2, cy-sw-gap, sh, sw)
+								surface.DrawRect(cx-sh/2, cy+gap, sh, sw)
 							end
 						end
 					end

@@ -28,7 +28,7 @@ net.Receive("setting_players", function(len)
 			local tmpX, tmpY = gui.MousePos()
 			tmpX = tmpX - YRP.ctr(4)
 			tmpY = tmpY - YRP.ctr(4)
-			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
 			_tmpPanel:SetPos(tmpX, tmpY)
 			_tmpPanel.ready = false
 			timer.Simple(0.2, function()
@@ -124,9 +124,17 @@ net.Receive("setting_players", function(len)
 				_idcardidFrame:MakePopup()
 			end
 
+			local _buttonRemoveArrests = createVGUI("DButton", _tmpPanel, 400, 50, 10, 130)
+			_buttonRemoveArrests:SetText(YRP.lang_string("LID_removearrests"))
+			function _buttonRemoveArrests:DoClick()
+				net.Start("removearrests")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			end
+
 			function _tmpPanel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
-				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and _tmpPanel.ready == true then
+				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and !_buttonRemoveArrests:IsHovered() and _tmpPanel.ready == true then
 					_tmpPanel:Remove()
 				end
 			end

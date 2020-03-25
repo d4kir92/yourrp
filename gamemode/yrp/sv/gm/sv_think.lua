@@ -44,14 +44,14 @@ function reg_ar(ply)
 end
 
 function con_hg(ply, time)
-	ply:SetDFloat("hunger", tonumber(ply:GetDFloat("hunger", 0.0)) - 0.01)
-	if tonumber(ply:GetDFloat("hunger", 0.0)) < 0.0 then
-		ply:SetDFloat("hunger", 0.0)
-	end
+	local newval = tonumber(ply:GetDFloat("hunger", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_hunger", 1.0)
+	newval = math.Clamp(newval, 0.0, 100.0)
+	ply:SetDFloat("hunger", newval)
+
 	if tonumber(ply:GetDFloat("hunger", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 50)
 	elseif GetGlobalDBool("bool_hunger_health_regeneration", false) then
-		local tickrate = tonumber(ply:GetDString("text_hunger_health_regeneration_tickrate", 1))
+		local tickrate = tonumber(GetGlobalDString("text_hunger_health_regeneration_tickrate", 1))
 		if tickrate >= 1 and time % tickrate == 0 then
 			ply:SetHealth(ply:Health() + 1)
 			if ply:Health() > ply:GetMaxHealth() then
@@ -62,20 +62,18 @@ function con_hg(ply, time)
 end
 
 function con_th(ply)
-	ply:SetDFloat("thirst", tonumber(ply:GetDFloat("thirst", 0.0)) - 0.02)
-	if tonumber(ply:GetDFloat("thirst", 0.0)) < 0.0 then
-		ply:SetDFloat("thirst", 0.0)
-	end
+	local newval = tonumber(ply:GetDFloat("thirst", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_thirst", 1.0)
+	newval = math.Clamp(newval, 0.0, 100.0)
+	ply:SetDFloat("thirst", newval)
 	if tonumber(ply:GetDFloat("thirst", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 50)
 	end
 end
 
 function con_hy(ply)
-	ply:SetDFloat("GetCurHygiene", tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) - 0.02)
-	if tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) < 0.0 then
-		ply:SetDFloat("GetCurHygiene", 0.0)
-	end
+	local newval = tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_hygiene", 1.0)
+	newval = math.Clamp(newval, 0.0, 100.0)
+	ply:SetDFloat("GetCurHygiene", newval)
 	if tonumber(ply:GetDFloat("GetCurHygiene", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 50)
 	end
@@ -83,9 +81,9 @@ end
 
 function con_ra(ply)
 	if IsInsideRadiation(ply) then
-		ply:SetDFloat("GetCurRadiation", math.Clamp(tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) + 0.5, 0, 100))
+		ply:SetDFloat("GetCurRadiation", math.Clamp(tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) + 0.01 * GetGlobalDFloat("float_scale_radiation_in", 50.0), 0, 100))
 	else
-		ply:SetDFloat("GetCurRadiation", math.Clamp(tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) - 0.08, 0, 100))
+		ply:SetDFloat("GetCurRadiation", math.Clamp(tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_radiation_out", 8.0), 0, 100))
 	end
 	if tonumber(ply:GetDFloat("GetCurRadiation", 0.0)) > 80.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 50)
@@ -214,6 +212,18 @@ function teleporterAlive(uid)
 	return false
 end
 
+function holoAlive(uid)
+	for j, tel in pairs(ents.GetAll()) do
+		if tel:GetClass() == "yrp_holo" then
+			if tel:GetDInt("yrp_holo_uid", nil) != nil and tonumber(tel:GetDInt("yrp_holo_uid", nil)) == tonumber(uid) then
+				return true
+			end
+			tel.PermaProps = true
+		end
+	end
+	return false
+end
+
 local _time = 0
 local TICK = 0.1
 local DEC = 1
@@ -282,9 +292,12 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 30.0 == 1 or GetGlobalDBool("yrp_update_teleporters", false) then
+	if _time % 30.0 == 1 or GetGlobalDBool("yrp_update_teleporters", false) or GetGlobalDBool("yrp_update_holos", false) then
 		if GetGlobalDBool("yrp_update_teleporters", true) != false then
 			SetGlobalDBool("yrp_update_teleporters", false)
+		end
+		if GetGlobalDBool("yrp_update_holos", true) != false then
+			SetGlobalDBool("yrp_update_holos", false)
 		end
 
 		local _dealers = SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
@@ -339,6 +352,32 @@ timer.Create("ServerThink", TICK, 0, function()
 				end
 			else
 				YRP.msg("note", "There are a lot of Teleporters!")
+			end
+		end
+
+		local holos = SQL_SELECT("yrp_holos", "*", "string_map = '" .. game.GetMap() .. "'")
+		if wk(holos) then
+			if table.Count(holos) < 100 then
+				for i, holo in pairs(holos) do
+					if !holoAlive(holo.uniqueID) then
+						local tp = ents.Create("yrp_holo")
+						if ( IsValid( tp ) ) then
+							local pos = string.Explode(",", holo.string_position)
+							pos = Vector(pos[1], pos[2], pos[3])
+							tp:SetPos(pos - tp:GetUp() * 5)
+							local ang = string.Explode(",", holo.string_angle)
+							ang = Angle(ang[1], ang[2], ang[3])
+							tp:SetAngles(ang)
+							tp:SetDInt("yrp_holo_uid", tonumber(holo.uniqueID))
+							tp:SetDString("string_name", holo.string_name)
+							tp:SetDString("string_target", holo.string_target)
+							tp:Spawn()
+							tp.PermaProps = true
+						end
+					end
+				end
+			else
+				YRP.msg("note", "There are a lot of holos!")
 			end
 		end
 	end

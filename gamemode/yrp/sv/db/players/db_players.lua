@@ -79,6 +79,7 @@ function save_clients(str)
 	end
 
 	SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
+	SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
 	--local pp = SQL_SELECT("permaprops", "*")
 end
 

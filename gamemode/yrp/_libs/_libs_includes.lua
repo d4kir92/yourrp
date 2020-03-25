@@ -36,6 +36,8 @@ AddCSLuaFile("derma/DYRPMenu.lua")
 AddCSLuaFile("derma/DYRPHorizontalMenu.lua")
 AddCSLuaFile("interface/base.lua")
 
+AddCSLuaFile("derma/ynumberwang.lua")
+
 AddCSLuaFile("derma/ystorage.lua")
 AddCSLuaFile("derma/ybag.lua")
 AddCSLuaFile("derma/yitem.lua")
@@ -64,6 +66,8 @@ if CLIENT then
 	include("derma/DYRPMenu.lua")
 	include("derma/DYRPHorizontalMenu.lua")
 	include("interface/base.lua")
+
+	include("derma/ynumberwang.lua")
 
 	include("derma/ystorage.lua")
 	include("derma/ybag.lua")

@@ -202,7 +202,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ' '")
 --[[ OLD ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "access_jail", "TEXT DEFAULT -1")
 
-
+--[[ SCALE ]]--
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hunger", "INT DEFAULT 1.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "INT DEFAULT 1.5")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "INT DEFAULT 50.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "INT DEFAULT 8.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hygiene", "INT DEFAULT 1.0")
 
 local HANDLER_GENERAL = {}
 
@@ -432,6 +437,8 @@ function GeneralDB()
 			SetGlobalDBool(i, tobool(set))
 		elseif string.StartWith(i, "int_") then
 			SetGlobalDInt(i, tonumber(set))
+		elseif string.StartWith(i, "float_") then
+			SetGlobalDFloat(i, tonumber(set))
 		end
 	end
 end
@@ -470,6 +477,12 @@ function GeneralUpdateInt(ply, netstr, str, value)
 	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalDInt(str, value)
+end
+
+function GeneralUpdateFloat(ply, netstr, str, value)
+	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
+	GeneralUpdateValue(ply, netstr, str, value)
+	SetGlobalDFloat(str, value)
 end
 
 function GeneralUpdateGlobalValue(ply, netstr, str, value)
@@ -1371,6 +1384,38 @@ net.Receive("update_text_social_steamgroup", function(len, ply)
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "")
 	GeneralUpdateString(ply, "update_text_social_steamgroup", "text_social_steamgroup", str)
+end)
+
+
+
+util.AddNetworkString("update_float_scale_hunger")
+net.Receive("update_float_scale_hunger", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_hunger", "float_scale_hunger", flo)
+end)
+
+util.AddNetworkString("update_float_scale_thirst")
+net.Receive("update_float_scale_thirst", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_thirst", "float_scale_thirst", flo)
+end)
+
+util.AddNetworkString("update_float_scale_radiation_in")
+net.Receive("update_float_scale_radiation_in", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_radiation_in", "float_scale_radiation_in", flo)
+end)
+
+util.AddNetworkString("update_float_scale_radiation_out")
+net.Receive("update_float_scale_radiation_out", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_radiation_out", "float_scale_radiation_out", flo)
+end)
+
+util.AddNetworkString("update_float_scale_hygiene")
+net.Receive("update_float_scale_hygiene", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_hygiene", "float_scale_hygiene", flo)
 end)
 
 
