@@ -119,7 +119,7 @@ function YFAR(str, f, r)
 	end
 end
 
-function IsCardIDUnique(ply, id)
+function IsCardIDUnique(id)
 	local charTab = SQL_SELECT("yrp_characters", "*", "text_idcardid = '" .. id .. "'" )
 	if wk(charTab) then
 		return false
@@ -127,7 +127,7 @@ function IsCardIDUnique(ply, id)
 	return true
 end
 
-function CreateNewIDCardID(ply, try)
+function CreateNewIDCardID(charid, try)
 	try = try or 0
 
 	local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
@@ -160,11 +160,25 @@ function CreateNewIDCardID(ply, try)
 	end
 	local idcardid = table.concat(result, "")
 
-	if IsCardIDUnique(ply, idstructure) then
-		SQL_UPDATE("yrp_characters", "text_idcardid = '" .. idcardid .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+	if IsCardIDUnique(idstructure) then
+		SQL_UPDATE("yrp_characters", "text_idcardid = '" .. idcardid .. "'", "uniqueID = '" .. charid .. "'")
 	elseif try < 32 then
 		try = try + 1
-		CreateNewIDCardID(ply, try)
+		CreateNewIDCardID(charid, try)
+	end
+end
+
+function RecreateNewIDCardID()
+	for i, char in pairs(SQL_SELECT("yrp_characters", "*", nil)) do
+		CreateNewIDCardID(char.uniqueID)
+	end
+
+	for i, ply in pairs(player.GetAll()) do
+		local char = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. ply:CharID() .. "'")
+		if wk(char) then
+			char = char[1]
+			ply:SetDString("idcardid", char.text_idcardid)
+		end
 	end
 end
 
@@ -173,7 +187,7 @@ function SetIDCardID(ply)
 	local idstructure = GetIDStructure()
 	if idstructure != char.text_idstructure then
 		SQL_UPDATE("yrp_characters", "text_idstructure = '" .. idstructure .. "'", "uniqueID = '" .. ply:CharID() .. "'")
-		CreateNewIDCardID(ply)
+		CreateNewIDCardID(ply:CharID())
 	end
 	char = ply:GetChaTab()
 	ply:SetDString("idcardid", char.text_idcardid)

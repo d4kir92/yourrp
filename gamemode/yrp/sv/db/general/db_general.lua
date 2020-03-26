@@ -952,6 +952,7 @@ util.AddNetworkString("update_text_idstructure")
 net.Receive("update_text_idstructure", function(len, ply)
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_idstructure", "text_idstructure", str)
+	RecreateNewIDCardID()
 end)
 
 util.AddNetworkString("update_bool_yrp_chat_show_idcardid")
