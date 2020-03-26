@@ -768,7 +768,7 @@ hook.Add("CalcView", "MyCalcView", yrpCalcView)
 function showPlayermodel()
 	local lply = LocalPlayer()
 
-	if !LocalPlayer():InVehicle() and !LocalPlayer():Crouching() then
+	if !LocalPlayer():InVehicle() then
 		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
 			return true
 		else
