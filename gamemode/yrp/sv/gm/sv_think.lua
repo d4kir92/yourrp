@@ -92,12 +92,12 @@ end
 
 function con_st(ply)
 	if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:IsOnGround() or ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)) and !ply:InVehicle() then
-		ply:SetDInt("GetCurStamina", ply:GetDInt("GetCurStamina", 0) - (ply:GetDInt("stamindown", 1)))
+		ply:SetDInt("GetCurStamina", ply:GetDInt("GetCurStamina", 0) - (ply:GetDFloat("stamindown", 1)))
 		if ply:GetDInt("GetCurStamina", 0) < 0 then
 			ply:SetDInt("GetCurStamina", 0)
 		end
 	elseif ply:GetDFloat("thirst", 0) > 20 then
-		ply:SetDInt("GetCurStamina", ply:GetDInt("GetCurStamina", 0) + ply:GetDInt("staminup", 1))
+		ply:SetDInt("GetCurStamina", ply:GetDInt("GetCurStamina", 0) + ply:GetDFloat("staminup", 1))
 		if ply:GetDInt("GetCurStamina", 0) > ply:GetDInt("GetMaxStamina", 100) then
 			ply:SetDInt("GetCurStamina", ply:GetDInt("GetMaxStamina", 100))
 		end

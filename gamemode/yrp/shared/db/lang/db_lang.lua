@@ -245,6 +245,7 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties")
 		YRP.read_lang("resource/localization/yrp/settingsscale/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsblacklist/lang_" .. short .. ".properties")
 	else
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end

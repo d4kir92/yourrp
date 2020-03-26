@@ -87,7 +87,10 @@ net.Receive("get_inventory", function(len, ply)
 		local es = ents.FindInSphere(ply:GetPos(), 100)
 		for i, ent in pairs(es) do
 			if !ent:IsPlayer() and !ent:IsWorld() and !ent:CreatedByMap() and !ent:GetOwner():IsPlayer() and !strEmpty(ent:GetModel()) and ent:GetModel() != "models/error.mdl" and !ent:IsVehicle() then
-				table.insert(nettab, ent)
+				
+				if !InventoryBlacklisted(ent:GetClass()) then
+					table.insert(nettab, ent)
+				end
 			end
 		end
 

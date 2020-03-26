@@ -19,6 +19,20 @@ SQL.ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/hunter/bl
 
 
 
+function InventoryBlacklisted(cname)
+	local blacklist = GetGlobalDTable("yrp_blacklist_inventory", {})
+	
+	for i, black in pairs(blacklist) do
+		if string.find(cname, black.value) then
+			return true
+		end
+	end
+
+	return false
+end
+
+
+
 function CreateItem(slotID, tab)
 	slotID = tonumber(slotID)
 
@@ -31,12 +45,20 @@ function CreateItem(slotID, tab)
 		tab.int_storageID = tab.int_storageID or 0
 		tab.text_type = tab.text_type or "item"
 		tab.int_fixed = tab.int_fixed or "0"
+		
+		if InventoryBlacklisted(tab.text_classname) then
+			YRP.msg("note", "[CreateItem] blacklisted item! " .. tab.text_classname)
+			return false
+		end
 	
 		SQL_INSERT_INTO(
 			DATABASE_NAME,
 			"int_slotID, text_classname, text_printname, text_worldmodel, int_storageID, text_type, int_fixed",
 			"'" .. slotID .. "', '" .. tab.text_classname .. "', '" .. tab.text_printname .. "', '" .. tab.text_worldmodel .. "', '" .. tab.int_storageID .. "', '" .. tab.text_type .. "', '" .. tab.int_fixed .. "'"
 		)
+	else
+		YRP.msg("db", "[CreateItem] tab is wrong!")
+		return false
 	end
 
 	local last = {}
@@ -50,13 +72,15 @@ function CreateItem(slotID, tab)
 		StoreItem(slotID, last)
 	else
 		YRP.msg("note", "[CreateItem] not worked")
+		return false
 	end
+	return true
 end
 
 function CreateItemByEntity(slotID, entity)
 	if entity:IsPlayer() or entity:IsWorld() or entity:CreatedByMap() or entity:GetOwner():IsPlayer() or strEmpty(entity:GetModel()) or entity:IsVehicle() then
 		YRP.msg("db", "[CreateItemByEntity] INVALID")
-		return
+		return false
 	end
 
 	local tab = {}
@@ -69,12 +93,13 @@ function CreateItemByEntity(slotID, entity)
 		local storage = CreateStorage(entity.bag_size)
 		if wk(storage) then
 			tab.int_storageID = storage.uniqueID
-			CreateItem(slotID, tab)
+			return CreateItem(slotID, tab)
 		else
 			YRP.msg("db", "Failed to create backpack")
+			return false
 		end
 	else
-		CreateItem(slotID, tab)
+		return CreateItem(slotID, tab)
 	end
 end
 
@@ -216,9 +241,9 @@ function MoveItem(itemID, slotID)
 	else
 		local e = net.ReadEntity()
 
-		CreateItemByEntity(slotID, e)
+		local added = CreateItemByEntity(slotID, e)
 
-		if wk(e) then
+		if wk(e) and added then
 			e:Remove()
 		else
 			YRP.msg("db", "Item or Slot not exists")

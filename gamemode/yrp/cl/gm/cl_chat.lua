@@ -2,6 +2,59 @@
 
 -- #CHAT
 
+function ContainsIp(...)
+	local tab = {...}
+
+	local str = ""
+	for i, v in pairs(tab) do
+		if isstring(v) then
+			str = str .. v
+		end
+	end
+
+	tab = string.Explode(" ", str)
+
+	for i, v in pairs(tab) do
+		local ex = string.Explode(".", v)
+		if table.Count(ex) >= 4 then
+			local isip = true
+			for j, n in pairs(ex) do
+				if isnumber(tonumber(n)) then
+					if tonumber(n) > 255 then
+						isip = false
+						break
+					end
+				end
+			end
+			if isip then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+function ChatBlacklisted(...)
+	local tab = {...}
+	local blacklist = GetGlobalDTable("yrp_blacklist_chat", {})
+
+	local str = ""
+	for i, v in pairs(tab) do
+		if isstring(v) then
+			str = str .. v
+		end
+	end
+
+	for i, black in pairs(blacklist) do
+		if string.find(str, black.value) then
+			return true
+		end
+	end
+
+	return false
+end
+
 local yrpChat = {}
 
 local _delay = 4
@@ -251,6 +304,7 @@ function InitYRPChat()
 
 		local oldAddText = chat.AddText
 		function chat.AddText(...)
+			if ContainsIp(...) or ChatBlacklisted(...) then return end
 			local yrp = false
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")

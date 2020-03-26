@@ -29,10 +29,12 @@ sbs.icons.yrp = Material("yrp/yrp_icon")
 isScoreboardOpen = false
 function SetIsScoreboardOpen(bo)
 	isScoreboardOpen = bo
-	if bo and sbs.frame != nil then
-		sbs.frame:Show()
-	else
-		sbs.frame:Hide()
+	if pa(sbs.frame) then
+		if bo and sbs.frame != nil then
+			sbs.frame:Show()
+		else
+			sbs.frame:Hide()
+		end
 	end
 end
 
