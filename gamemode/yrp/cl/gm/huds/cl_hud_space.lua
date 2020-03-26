@@ -15,6 +15,10 @@ local AB = Material("icon16/wand.png")
 local RA = YRP.GetDesignIcon("radiation")
 local HY = YRP.GetDesignIcon("hygiene")
 
+local ID = Material("icon16/vcard.png")
+local FR = Material("icon16/user_comment.png")
+local CR = Material("icon16/clock.png")
+
 local SPACE = {}
 local ELES = {}
 function HUDSpace()
@@ -136,9 +140,9 @@ function HUDSpace()
 		ELES["CR"] = {
 			0,
 			nil,
-			nil,
+			CR,
 			os.date("%H:%M" , os.time()),
-			2
+			--2
 		}
 		ELES["PE"] = {
 			0,
@@ -202,9 +206,9 @@ function HUDSpace()
 		ELES["ID"] = {
 			0,
 			nil,
-			nil,
+			ID,
 			lply:GetDString("idcardid", ""),
-			2
+			--2
 		}
 
 		ELES["CON"] = {
@@ -217,9 +221,9 @@ function HUDSpace()
 		ELES["FR"] = {
 			0,
 			nil,
-			nil,
+			FR,
 			YRP.lang_string("LID_frequency") .. ": " .. tostring(lply:GetDFloat("voice_channel", 0.1, 1)),
-			2
+			--2
 		}
 
 		for id = 1, 10 do

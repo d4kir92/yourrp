@@ -30,13 +30,13 @@ function BuildLogs(parent, typ)
 
 
 
-					local ts = createD("YLabel", line, YRP.ctr(400), line:GetTall(), 0, 0)
+					local ts = createD("YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
 					ts:SetText(os.date("%H:%M:%S - %d/%m/%Y", tonumber(v.string_timestamp)))
 
 
 
 					if typ == "LID_chat" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
+						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							if self.SetUnderlineFont != nil then
 								self:SetUnderlineFont("Y_18_500")
@@ -62,7 +62,7 @@ function BuildLogs(parent, typ)
 						rt:InsertColorChange(255, 255, 255, 255)
 						rt:AppendText(": " .. SQL_STR_OUT(v.string_value))
 					elseif typ == "LID_connections" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
+						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
@@ -91,7 +91,7 @@ function BuildLogs(parent, typ)
 						rt:InsertColorChange(255, 255, 255, 255)
 						rt:AppendText(" " .. SQL_STR_OUT(v.string_value))
 					elseif typ == "LID_kills" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
+						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
@@ -127,7 +127,7 @@ function BuildLogs(parent, typ)
 						end
 						rt:InsertClickableTextEnd()
 					elseif typ == "LID_whitelist" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(400), line:GetTall(), YRP.ctr(400), 0)
+						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then

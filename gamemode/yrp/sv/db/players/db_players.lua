@@ -131,8 +131,11 @@ function CreateNewIDCardID(ply, try)
 	try = try or 0
 
 	local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
-	local numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-	local digits = table.Add(letters, numbers)
+	local numbers = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+	local digits = {
+		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+	}
 
 	local idstructure = GetIDStructure()
 

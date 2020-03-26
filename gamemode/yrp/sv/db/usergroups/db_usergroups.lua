@@ -1478,7 +1478,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) then
 		if tool == "remover" then
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_removetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
+			if wk(_tmp) then
 				_tmp = _tmp[1]
 				if tobool(_tmp.bool_removetool) then
 					return true
@@ -1489,7 +1489,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 					return false
 				end
 			else
-				printGM("db", "[remover] failed! UserGroup not found in database.")
+				YRP.msg("note", "[CanTool] [remover] failed! UserGroup not found in database.")
 				return false
 			end
 		elseif tool == "dynamite" then
@@ -1505,7 +1505,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 					return false
 				end
 			else
-				printGM("db", "[dynamite] failed! UserGroup not found in database.")
+				YRP.msg("note", "[CanTool] [dynamite] failed! UserGroup not found in database.")
 				return false
 			end
 		elseif tool == "creator" then
@@ -1521,7 +1521,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 					return false
 				end
 			else
-				printGM("db", "[customfunctions] failed! UserGroup not found in database.")
+				YRP.msg("note", "[CanTool] [customfunctions] failed! UserGroup not found in database.")
 				return false
 			end
 		else
@@ -1537,10 +1537,12 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 					return false
 				end
 			else
-				printGM("db", "[customfunctions] failed! UserGroup not found in database.")
+				YRP.msg("note", "[CanTool] [customfunctions] failed! UserGroup not found in database.")
 				return false
 			end
 		end
+	else
+		YRP.msg("note", "[CanTool] Player is not valid!")
 	end
 end)
 

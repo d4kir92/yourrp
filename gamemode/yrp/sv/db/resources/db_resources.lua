@@ -27,8 +27,6 @@ resource.AddWorkshop("314312925")
 -- Key
 resource.AddWorkshop("182308069")
 
-
-
 --Server Workshop Collection
 local _wsitems = engine.GetAddons()
 printGM("gm", "Nr.\t\tName")

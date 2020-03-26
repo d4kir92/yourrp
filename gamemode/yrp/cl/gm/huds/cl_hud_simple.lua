@@ -465,6 +465,9 @@ icons["HY"] = YRP.GetDesignIcon("hygiene")
 icons["CA"] = Material("icon16/hourglass.png")
 icons["AB"] = Material("icon16/wand.png")
 icons["BA"] = Material("icon16/computer.png")
+icons["ID"] = Material("icon16/vcard.png")
+icons["FR"] = Material("icon16/user_comment.png")
+icons["CR"] = Material("icon16/clock.png")
 
 function HUDSimple()
 	local lply = LocalPlayer()
@@ -490,6 +493,9 @@ function HUDSimple()
 		local CR = {}
 		CR.element = "CR"
 		HUDSimpleBG(CR)
+		local FR = {}
+		FR.element = "FR"
+		HUDSimpleBG(FR)
 		local HP = {}
 		HP.element = "HP"
 		HUDSimpleBG(HP)
@@ -662,13 +668,22 @@ function HUDSimple()
 		ID.cur = 0
 		ID.max = 1
 		ID.text = lply:GetDString("idcardid", "")
+		ID.icon = icons["ID"]
 		HUDSimpleBAR(ID)
 		CR = {}
 		CR.element = "CR"
 		CR.cur = 0
 		CR.max = 1
 		CR.text = os.date("%H:%M" , os.time())
+		CR.icon = icons["CR"]
 		HUDSimpleBAR(CR)
+		FR = {}
+		FR.element = "FR"
+		FR.cur = 0
+		FR.max = 1
+		FR.text = YRP.lang_string("LID_frequency") .. ": " .. tostring(lply:GetDFloat("voice_channel", 0.1, 1))
+		FR.icon = icons["FR"]
+		HUDSimpleBAR(FR)
 		HP = {}
 		HP.element = "HP"
 		HP.cur = lply:Health()

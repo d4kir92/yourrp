@@ -686,7 +686,11 @@ local function yrpCalcView(ply, pos, angles, fov)
 					end
 				elseif tonumber(ply.view_range) > -200 and tonumber(ply.view_range) <= 0 then
 					--Disabled
+					view.origin = pos
+					view.angles = angles
+					view.fov = fov
 					_drawViewmodel = false
+					return view
 				else
 					--Firstperson realistic
 					local dist = ply.view_range * ply:GetModelScale()
@@ -758,17 +762,27 @@ local function yrpCalcView(ply, pos, angles, fov)
 		end
 	end
 end
+hook.Remove("CalcView", "MyCalcView")
 hook.Add("CalcView", "MyCalcView", yrpCalcView)
 
 function showPlayermodel()
-	if !LocalPlayer():InVehicle() then
+	local lply = LocalPlayer()
+
+	if !LocalPlayer():InVehicle() and !LocalPlayer():Crouching() then
 		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
 			return true
 		else
 			return false
 		end
+	else
+		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
+			--
+		else
+			
+		end
 	end
 end
+hook.Remove("ShouldDrawLocalPlayer", "ShowPlayermodel")
 hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
 
 net.Receive("send_team", function(len)

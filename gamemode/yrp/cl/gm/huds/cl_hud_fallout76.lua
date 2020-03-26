@@ -69,13 +69,13 @@ function FO76Element(tab)
 		tab.br = 0.08
 
 		FO76["BG"][tab.element].r = 0
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT") or true then
 			FO76["BG"][tab.element].w = w - h
 		else
 			FO76["BG"][tab.element].w = w
 		end
 		FO76["BG"][tab.element].h = tab.thickness
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT") or true then
 			FO76["BG"][tab.element].x = x + h
 		else
 			FO76["BG"][tab.element].x = x
@@ -93,13 +93,13 @@ function FO76Element(tab)
 		FO76["BGBar"][tab.element].color = FOColorBG()
 
 		local m = {}
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT") or true then
 			m.x = x + h
 		else
 			m.x = x
 		end
 		m.y = y + (h - tab.thickness) / 2
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT") or true then
 			m.w = w - h
 		else
 			m.w = w
@@ -131,13 +131,13 @@ function FO76Element(tab)
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
 
 		FO76["BR"][tab.element].r = 0
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT") or true then
 			FO76["BR"][tab.element].w = w - h
 		else
 			FO76["BR"][tab.element].w = w
 		end
 		FO76["BR"][tab.element].h = tab.thickness
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT") or true then
 			FO76["BR"][tab.element].x = x + h
 		else
 			FO76["BR"][tab.element].x = x
@@ -153,7 +153,7 @@ function FO76Element(tab)
 		end
 		HudBox(FO76["Bar"][tab.element])
 
-		if tab.text != nil and lply:HudValue(tab.element, "TEXT") then
+		if tab.text != nil and lply:HudValue(tab.element, "TEXT") or true then
 			FO76["TEXT"][tab.element].text = tab.text
 			HudText(FO76["TEXT"][tab.element])
 		else
@@ -480,14 +480,14 @@ function HUD_FO76()
 		HY.cur = lply:Hygiene()
 		HY.max = lply:GetMaxHygiene()
 		FO76Element(HY)
-		--[[
+	
 		local AB = {}
 		AB.element = "AB"
 		AB.text = YRP.lang_string("LID_ab")
-		AB.cur = lply:Hunger()
-		AB.max = lply:GetMaxHunger()
+		AB.cur = lply:Ability()
+		AB.max = lply:GetMaxAbility()
 		FO76Element(AB)
-		]]
+
 
 		local XP = {}
 		if IsLevelSystemEnabled() then
@@ -605,6 +605,21 @@ function HUD_FO76()
 		MO.element = "MO"
 		MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. ")"
 		FO76Name(MO)
+
+		local CR = {}
+		CR.element = "CR"
+		CR.text = os.date("%H:%M" , os.time())
+		FO76Name(CR)
+
+		local ID = {}
+		ID.element = "ID"
+		ID.text = lply:GetDString("idcardid", "")
+		FO76Name(ID)
+
+		local FR = {}
+		FR.element = "FR"
+		FR.text = YRP.lang_string("LID_frequency") .. ": " .. tostring(lply:GetDFloat("voice_channel", 0.1, 1))
+		FO76Name(FR)
 
 		local batterypower = system.BatteryPower()
 		if batterypower <= 100 then
