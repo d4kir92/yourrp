@@ -179,12 +179,14 @@ end
 
 function ENT:Destroy()
 	local explosion = ents.Create("env_explosion")
-	explosion:SetKeyValue("spawnflags", 144)
-	explosion:SetKeyValue("iMagnitude", 15)  -- Damage
-	explosion:SetKeyValue("iRadiusOverride", 200) -- Radius
-	explosion:SetPos(self:GetPos()) -- inside money printer
-	explosion:Spawn()
-	explosion:Fire("explode", "", 0)
+	if wk(explosion) then
+		explosion:SetKeyValue("spawnflags", 144)
+		explosion:SetKeyValue("iMagnitude", 15)  -- Damage
+		explosion:SetKeyValue("iRadiusOverride", 200) -- Radius
+		explosion:SetPos(self:GetPos()) -- inside money printer
+		explosion:Spawn()
+		explosion:Fire("explode", "", 0)
+	end
 
 	self:Remove()
 end

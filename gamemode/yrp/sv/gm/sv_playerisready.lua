@@ -74,6 +74,7 @@ end)
 util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)
 	if ply:IsValid() then
+		ply:SetDBool("yrp_received_ready", true)
 		PlayerLoadedGame(ply)
 	else
 		YRP.msg("error", "[yrp_player_is_ready] failed! [" .. tostring(ply:YRPName()) .. "] [" .. tostring(ply:SteamID()) .. "]")

@@ -54,7 +54,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	COLOR:SetHeader(YRP.lang_string("LID_color"))
 	COLOR.plus:SetText("")
 	function COLOR.plus:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string("LID_change"), StringToColor(UGS[CURRENT_USERGROUP].string_color))
+		if wk(UGS[CURRENT_USERGROUP]) then
+			surfaceButton(self, pw, ph, YRP.lang_string("LID_change"), StringToColor(UGS[CURRENT_USERGROUP].string_color))
+		end
 	end
 	function COLOR.plus:DoClick()
 		local window = createD("DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
@@ -159,12 +161,14 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end
 	function SWEPS.preview:PaintOver(pw, ph)
-		if self.oldcur != self.cur then
-			self.oldcur = self.cur
-			self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[self.cur]))
+		if wk(UGS[CURRENT_USERGROUP]) then
+			if self.oldcur != self.cur then
+				self.oldcur = self.cur
+				self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[self.cur]))
+			end
+			surfaceText(self.cur .. "/" .. self.max, "mat1text", pw / 2, ph - YRP.ctr(30), Color(255, 255, 255), 1, 1)
+			surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "mat1text", pw / 2, ph - YRP.ctr(70), Color(255, 255, 255), 1, 1)
 		end
-		surfaceText(self.cur .. "/" .. self.max, "mat1text", pw / 2, ph - YRP.ctr(30), Color(255, 255, 255), 1, 1)
-		surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "mat1text", pw / 2, ph - YRP.ctr(70), Color(255, 255, 255), 1, 1)
 	end
 
 	SWEPS.preview.prev = createD("DButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500 - 50) / 2)
@@ -749,14 +753,14 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 			local _ug_rem = createD("DButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + 500 - 50), YRP.ctr(20))
 			_ug_rem:SetText("")
 			function _ug_rem:Paint(pw, ph)
-				if CURRENT_USERGROUP != nil then
+				if wk(UGS[CURRENT_USERGROUP]) then
 					if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
 						surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
 					end
 				end
 			end
 			function _ug_rem:DoClick()
-				if CURRENT_USERGROUP != nil then
+				if wk(UGS[CURRENT_USERGROUP]) then
 					if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
 						net.Start("usergroup_rem")
 							net.WriteString(CURRENT_USERGROUP)

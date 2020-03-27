@@ -379,6 +379,8 @@ net.Receive("usergroup_add", function(len, ply)
 		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_usergroup.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
+	SortUserGroups()
+
 	local _tmp = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _ugs = {}
 	for i, ug in pairs(_tmp) do

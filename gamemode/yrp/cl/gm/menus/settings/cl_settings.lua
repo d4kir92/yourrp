@@ -107,8 +107,8 @@ function CloseSettings()
 	end
 end
 
-local SAVE_CATE = "" --"LID_settings_server_gameplay"
-local SAVE_SITE = "" --"open_server_general"
+local SAVE_CATE = "LID_management" --"LID_settings_server_gameplay"
+local SAVE_SITE = "open_server_status" --"open_server_general"
 local maximised = false
 function SaveLastSite()
 	
@@ -246,7 +246,7 @@ function OpenSettings()
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
 		end
 		self.menu = createD("DPanelList", self.menubg, 10, 10, 0, 0)
-		self.menu:SetSpacing(self._mb)
+		self.menu:SetSpacing(self._mb * 2)
 
 		self.botbar = createD("DPanel", self, 10, 10, 0, 0)
 		function self.botbar:Paint(pw, ph)
@@ -289,30 +289,30 @@ function OpenSettings()
 			cat.btn.name = cname
 			cat.btn.list = cat.list
 			function cat.btn:Paint(pw, ph)
-				self.r = self.r or 0
+				--self.r = self.r or 0
 				self.col = self.cor or lply:InterfaceValue("YFrame", "HI")
 				if self._sel then
 					self.col = lply:InterfaceValue("YFrame", "HI")
-					self.col.r = math.Clamp(self.col.r + 20, 0, 255)
-					self.col.g = math.Clamp(self.col.g + 20, 0, 255)
-					self.col.b = math.Clamp(self.col.b + 20, 0, 255)
+					self.col.r = math.Clamp(self.col.r + 30, 0, 255)
+					self.col.g = math.Clamp(self.col.g + 30, 0, 255)
+					self.col.b = math.Clamp(self.col.b + 30, 0, 255)
 				else
 					self.col = lply:InterfaceValue("YFrame", "HI")
 				end
 
 				if self:IsHovered() or self._sel then
-					self.r = self.r - 1
+					--self.r = self.r - 1
 				else
-					self.r = self.r + 1
+					--self.r = self.r + 1
 				end
-				self.r = math.Clamp(self.r, 10, ph / 2)
-				draw.RoundedBox(self.r, 0, 0, pw, ph, self.col)
+				--self.r = math.Clamp(self.r, 10, ph / 2)
+				draw.RoundedBox(0, 0, 0, pw, ph, self.col)
 
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(c.icon)
-				surface.DrawTexturedRect(ph * 0.2, ph * 0.2, ph * 0.6, ph * 0.6)
+				surface.DrawTexturedRect(ph * 0.1, ph * 0.1, ph * 0.8, ph * 0.8)
 
-				--draw.SimpleText(string.sub(YRP.lang_string(self.name), 1, 3), "Y_30_500", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string(self.name), "Y_14_700", pw / 2, ph - YRP.ctr(20), Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function cat.btn:Close()
 				self._sel = false
@@ -349,7 +349,7 @@ function OpenSettings()
 				site.name = s.lstr
 				site.icon = s.icon
 				function site:Paint(pw, ph)
-					self.r = self.r or 0
+					--self.r = self.r or 0
 					self.col = self.cor or lply:InterfaceValue("YFrame", "HI")
 					if self._sel then
 						self.col = lply:InterfaceValue("YFrame", "HI")
@@ -361,18 +361,18 @@ function OpenSettings()
 					end
 
 					if self:IsHovered() or self._sel then
-						self.r = self.r - 1
+						--self.r = self.r - 1
 					else
-						self.r = self.r + 1
+						--self.r = self.r + 1
 					end
-					self.r = math.Clamp(self.r, 10, ph / 2)
-					draw.RoundedBox(self.r, 0, 0, pw, ph, self.col)
+					--self.r = math.Clamp(self.r, 10, ph / 2)
+					draw.RoundedBox(ph / 2, 0, 0, pw, ph, self.col)
 	
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(self.icon)
 					surface.DrawTexturedRect(ph * 0.2, ph * 0.2, ph * 0.6, ph * 0.6)
 	
-					--draw.SimpleText(string.sub(YRP.lang_string(self.name), 1, 3), "Y_30_500", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string(self.name), "Y_14_700", YRP.ctr(10), ph - YRP.ctr(20), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 				function site:DoClick()
 					SAVE_CATE = cname
@@ -413,43 +413,46 @@ function OpenSettings()
 
 
 	--Sites
-	local SV_PROTOTYPES = "LID_settings_server"
-	settingsWindow.window:AddCategory(SV_PROTOTYPES, "icon16/brick_error.png")
-	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_give", "LID_settings_players", "icon16/user_edit.png")
-	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png")
-	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_shops", "LID_settings_shops", "icon16/basket_edit.png")
-	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_logs", "LID_logs", "icon16/note.png")
-	settingsWindow.window:AddSite(SV_PROTOTYPES, "open_server_scale", "LID_scale", "icon16/arrow_out.png")
-	
-	local SV_MAINTANCE = "LID_settings_server_maintance"
-	settingsWindow.window:AddCategory(SV_MAINTANCE, "icon16/bell_error.png")
-	settingsWindow.window:AddSite(SV_MAINTANCE, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png")
-	settingsWindow.window:AddSite(SV_MAINTANCE, "open_server_status", "LID_settings_status", "icon16/error.png")
-	settingsWindow.window:AddSite(SV_MAINTANCE, "open_server_feedback", "LID_settings_feedback", "icon16/page_lightning.png")
+	local SV_MANAGEMENT = "LID_management"
+	settingsWindow.window:AddCategory(SV_MANAGEMENT, "icon16/application_view_list.png")
+	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_status", "LID_settings_status", "icon16/error.png")
+	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group.png")
+	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_map", "LID_settings_map", "icon16/map.png")
+	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_realistic", "LID_settings_realistic", "icon16/bomb.png")
+	-- money
+	-- characters
+	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_levelsystem", "LID_levelsystem", "icon16/layers.png")
 
-	local SV_GAMEPLAY = "LID_settings_server_gameplay"
-	settingsWindow.window:AddCategory(SV_GAMEPLAY, "icon16/controller.png")
-	settingsWindow.window:AddSite(SV_GAMEPLAY, "open_server_general", "LID_settings_general", "icon16/server.png")
-	settingsWindow.window:AddSite(SV_GAMEPLAY, "open_server_realistic", "LID_settings_realistic", "icon16/bomb.png")
-	settingsWindow.window:AddSite(SV_GAMEPLAY, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group.png")
-	settingsWindow.window:AddSite(SV_GAMEPLAY, "open_server_levelsystem", "LID_levelsystem", "icon16/layers.png")
-	settingsWindow.window:AddSite(SV_GAMEPLAY, "open_server_design", "LID_settings_design", "icon16/photo.png")
-	settingsWindow.window:AddSite(SV_GAMEPLAY, "open_server_map", "LID_settings_map", "icon16/map.png")
-	
-	local SV_MANAGEMENT = "LID_settings_server_management"
-	settingsWindow.window:AddCategory(SV_MANAGEMENT, "icon16/database.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_database", "LID_settings_database", "icon16/database_gear.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_usergroups", "LID_settings_usergroups", "icon16/group_go.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_key.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_blacklist", "LID_blacklist", "icon16/page_error.png")
+	local SV_ROLEPLAY = "LID_roleplay"
+	settingsWindow.window:AddCategory(SV_ROLEPLAY, "vgui/material/icon_roleplay.png")
+	settingsWindow.window:AddSite(SV_ROLEPLAY, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png")
+	settingsWindow.window:AddSite(SV_ROLEPLAY, "open_server_shops", "LID_settings_shops", "icon16/basket_edit.png")
 
-	local YRP_ADDONS = "LID_settings_server_addons"
-	settingsWindow.window:AddCategory(YRP_ADDONS, "icon16/plugin.png")
-	settingsWindow.window:AddSite(YRP_ADDONS, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin_go.png")
+	local SV_PLAYERMANAGEMENT = "LID_playermanagement"
+	settingsWindow.window:AddCategory(SV_PLAYERMANAGEMENT, "icon16/user.png")
+	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_give", "LID_settings_players", "icon16/user_edit.png")
+	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_key.png")
+	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_blacklist", "LID_blacklist", "icon16/page_error.png")
+	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_feedback", "LID_settings_feedback", "icon16/page_lightning.png")
+	
+	local SV_SERVER = "LID_server"
+	settingsWindow.window:AddCategory(SV_SERVER, "icon16/server.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/server.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_usergroups", "LID_settings_usergroups", "icon16/group_go.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_design", "LID_settings_design", "icon16/photo.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_scale", "LID_scale", "icon16/arrow_out.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_logs", "LID_logs", "icon16/note.png")
+	-- Socials
+
+	local YRP_YOURRP = "YourRP"
+	settingsWindow.window:AddCategory(YRP_YOURRP, "vgui/yrp/icon24.png")
+	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin_go.png")
+
+
 
 	settingsWindow.window:CreateMenu()
-
-
 	settingsWindow.window:SwitchToSite(SAVE_CATE, SAVE_SITE)
 	
 	--[[
@@ -487,7 +490,7 @@ settings_groupsandroles	-- Factions, Groups, ROLES, ...
 levelsystem				-- Manage levelsystem
 settings_design			-- Design of interface and HUD, also font
 settings_map			-- Map things for gamemode, Spawnpoints, dealers, ...
-	
+
 settings_database		-- Database tables, remove or change to mysql
 settings_usergroup		-- Manage Usergroups
 whitelist				-- Whitelist roles, groups, ...

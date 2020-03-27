@@ -9,19 +9,43 @@ yrp_hookinitpostentity = yrp_hookinitpostentity or false
 
 local d = d or 0
 
+local serverreceived = false
+
+function YRPSendIsReadyPingPong()	-- IMPORTANT
+	local lply = LocalPlayer()
+
+	local info = {}
+	info.iswindows = system.IsWindows()
+	info.islinux = system.IsLinux()
+	info.isosx = system.IsOSX()
+	info.country = system.GetCountry()
+	
+	local b, bb = net.BytesLeft()
+	if b and b > 0 then
+		YRP.msg("note", "Already running a net message, retry sending ready message.")
+		timer.Simple(0.5, function()
+			YRPSendIsReadyPingPong()
+		end)
+	else
+		net.Start("yrp_player_is_ready")
+			net.WriteTable(info)
+		net.SendToServer()
+
+		timer.Simple(3, function()
+			if !lply:GetDBool("yrp_received_ready") then
+				YRP.msg("note", "Retry sending ready message.")
+				YRPSendIsReadyPingPong()
+			end
+		end)
+	end
+end
+
 function YRPSendIsReady()
 	if !yrp_rToSv then
 		yrp_rToSv = true
 
-		local info = {}
-		info.iswindows = system.IsWindows()
-		info.islinux = system.IsLinux()
-		info.isosx = system.IsOSX()
-		info.country = system.GetCountry()
-
-		net.Start("yrp_player_is_ready")
-			net.WriteTable(info)
-		net.SendToServer()
+		-- IMPORTANT
+		YRPSendIsReadyPingPong()
 
 		YRP.initLang()
 
@@ -87,7 +111,7 @@ end
 function printReadyError()
 	local lply = LocalPlayer()
 
-	local str = "finishedloading: " .. tostring(LocalPlayer():GetDBool("finishedloading", false))
+	local str = "yrp_received_ready: " .. tostring(LocalPlayer():GetDBool("yrp_received_ready", false))
 	str = str .. " yrp_rToSv: " .. tostring(yrp_rToSv)
 	str = str .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false))
 	str = str .. " yrp_hookinitpostentity: " .. tostring(yrp_hookinitpostentity)

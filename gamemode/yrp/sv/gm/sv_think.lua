@@ -105,8 +105,8 @@ function con_st(ply)
 
 	if !ply:Slowed() then
 		if ply:GetDInt("GetCurStamina", 0) <= 20 or ply:GetDFloat("thirst", 0) < 20 then
-			ply:SetRunSpeed(ply:GetDInt("speedrun", 0) * 0.1)
-			ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0) * 0.1)
+			ply:SetRunSpeed(ply:GetDInt("speedrun", 0) * 0.6)
+			ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0) * 0.6)
 			ply:SetCanWalk(false)
 		else
 			ply:SetRunSpeed(ply:GetDInt("speedrun", 0))
@@ -140,11 +140,6 @@ function broken(ply)
 			ply:SetRunSpeed(ply:GetDInt("speedrun", 0)*0.25)
 			ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0)*0.25)
 			ply:SetCanWalk(false)
-		else
-			--[[print("ELSE")
-			ply:SetRunSpeed(ply:GetDInt("speedrun", 0))
-			ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0))
-			ply:SetCanWalk(true)]]
 		end
 	end
 end
