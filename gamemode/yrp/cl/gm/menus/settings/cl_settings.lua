@@ -107,8 +107,8 @@ function CloseSettings()
 	end
 end
 
-local SAVE_CATE = "LID_management" --"LID_settings_server_gameplay"
-local SAVE_SITE = "open_server_status" --"open_server_general"
+local SAVE_CATE = "LID_usermanagement" --"LID_settings_server_gameplay"
+local SAVE_SITE = "open_server_give" --"open_server_general"
 local maximised = false
 function SaveLastSite()
 	
@@ -413,42 +413,42 @@ function OpenSettings()
 
 
 	--Sites
-	local SV_MANAGEMENT = "LID_management"
-	settingsWindow.window:AddCategory(SV_MANAGEMENT, "icon16/application_view_list.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_status", "LID_settings_status", "icon16/error.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_map", "LID_settings_map", "icon16/map.png")
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_realistic", "LID_settings_realistic", "icon16/bomb.png")
-	-- money
-	-- characters
-	settingsWindow.window:AddSite(SV_MANAGEMENT, "open_server_levelsystem", "LID_levelsystem", "icon16/layers.png")
+	local SV_USERMANAGEMENT = "LID_usermanagement"
+	settingsWindow.window:AddCategory(SV_USERMANAGEMENT, "icon16/user.png")
+	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_give", "LID_settings_players", "icon16/group.png")
+	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_add.png")
 
-	local SV_ROLEPLAY = "LID_roleplay"
-	settingsWindow.window:AddCategory(SV_ROLEPLAY, "vgui/material/icon_roleplay.png")
-	settingsWindow.window:AddSite(SV_ROLEPLAY, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png")
-	settingsWindow.window:AddSite(SV_ROLEPLAY, "open_server_shops", "LID_settings_shops", "icon16/basket_edit.png")
-
-	local SV_PLAYERMANAGEMENT = "LID_playermanagement"
-	settingsWindow.window:AddCategory(SV_PLAYERMANAGEMENT, "icon16/user.png")
-	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_give", "LID_settings_players", "icon16/user_edit.png")
-	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_key.png")
-	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_blacklist", "LID_blacklist", "icon16/page_error.png")
-	settingsWindow.window:AddSite(SV_PLAYERMANAGEMENT, "open_server_feedback", "LID_settings_feedback", "icon16/page_lightning.png")
+	local SV_MODERATION = "LID_moderation"
+	settingsWindow.window:AddCategory(SV_MODERATION, "icon16/shield.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_status", "LID_settings_status", "icon16/error.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group_edit.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_map", "LID_settings_map", "icon16/map_edit.png")
+	-- character [vcard_edit.png] Character
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_logs", "LID_logs", "icon16/page_white_error.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_blacklist", "LID_blacklist", "icon16/page_white_delete.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_feedback", "LID_settings_feedback", "icon16/user_comment.png")
+	
+	local SV_ADMINISTRATION = "LID_administration"
+	settingsWindow.window:AddCategory(SV_ADMINISTRATION, "icon16/lightning.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_realistic", "LID_settings_realistic", "icon16/rainbow.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_shops", "LID_settings_shops", "icon16/cart_edit.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_usergroups", "LID_settings_usergroups", "icon16/user_edit.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_levelsystem", "LID_levelsystem", "icon16/wand.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_design", "LID_settings_design", "icon16/picture_edit.png")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_scale", "LID_scale", "icon16/arrow_out.png")
+	-- money money.png
 	
 	local SV_SERVER = "LID_server"
-	settingsWindow.window:AddCategory(SV_SERVER, "icon16/server.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/server.png")
+	settingsWindow.window:AddCategory(SV_SERVER, "icon16/wrench_orange.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/world.png")
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_usergroups", "LID_settings_usergroups", "icon16/group_go.png")
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_design", "LID_settings_design", "icon16/photo.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_scale", "LID_scale", "icon16/arrow_out.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_logs", "LID_logs", "icon16/note.png")
-	-- Socials
+	-- Socials [television.png]
 
 	local YRP_YOURRP = "YourRP"
 	settingsWindow.window:AddCategory(YRP_YOURRP, "vgui/yrp/icon24.png")
-	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin_go.png")
+	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin.png")
 
 
 
