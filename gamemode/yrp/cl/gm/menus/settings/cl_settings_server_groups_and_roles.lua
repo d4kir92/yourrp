@@ -42,7 +42,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = "◀"
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				DrawText(tab2)
 			else
 				local tab = {}
@@ -72,7 +72,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			tab2.y = ph / 2
 			tab2.ax = 1
 			tab2.ay = 1
-			tab2.font = "mat1text"
+			tab2.font = "Y_18_500"
 			if self.group != nil then
 				if self.group != "" then
 					local inp = {}
@@ -99,7 +99,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			tab2.ax = 1
 			tab2.ay = 1
 			tab2.text = "+"
-			tab2.font = "mat1text"
+			tab2.font = "Y_18_500"
 			DrawText(tab2)
 		end
 		function gs.add:DoClick()
@@ -172,7 +172,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 0
 				tab2.ay = 0
 				tab2.text = self.text
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				tab2.lforce = false
 				DrawText(tab2)
 
@@ -182,7 +182,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab3.ax = 0
 				tab3.ay = 4
 				tab3.text = "POSITION: " .. group.int_position
-				tab3.font = "mat1text"
+				tab3.font = "Y_18_500"
 				DrawText(tab3)]]
 			end
 			function pnl:DoClick()
@@ -213,7 +213,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.ax = 1
 					tab2.ay = 1
 					tab2.text = "▲"
-					tab2.font = "mat1text"
+					tab2.font = "Y_18_500"
 					DrawText(tab2)
 				end
 			end
@@ -238,7 +238,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.ax = 1
 					tab2.ay = 1
 					tab2.text = "▼"
-					tab2.font = "mat1text"
+					tab2.font = "Y_18_500"
 					DrawText(tab2)
 				end
 			end
@@ -329,7 +329,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.y = ph / 2
 				tab2.ax = 1
 				tab2.ay = 1
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				if self.headername != nil then
 					local inp = {}
 					inp.group = self.headername
@@ -358,7 +358,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						tab2.ax = 1
 						tab2.ay = 1
 						tab2.text = "◀"
-						tab2.font = "mat1text"
+						tab2.font = "Y_18_500"
 						DrawText(tab2)
 						--[[
 					end
@@ -397,7 +397,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = "+"
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				DrawText(tab2)
 			end
 		end
@@ -482,7 +482,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.y = ph / 2
 				tab2.ax = 0
 				tab2.text = "-"
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				DrawText(tab2)
 			elseif ea.typ != nil then
 				local tab = {}
@@ -555,7 +555,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.y = ph / 2
 					tab2.ax = 0
 					tab2.text = "[ ]"
-					tab2.font = "mat1text"
+					tab2.font = "Y_18_500"
 					DrawText(tab2)
 				end
 			elseif ea.typ != nil then
@@ -602,7 +602,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				elseif ea.typ == "group" and ea.tab.uniqueID != nil then
 					tab2.text = tab2.text .. "       GroupUID: " .. ea.tab.uniqueID
 				end
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				DrawText(tab2)
 			end
 		end
@@ -881,7 +881,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 0
 				tab2.ay = 0
 				tab2.text = self.text
-				tab2.font = "mat1text"
+				tab2.font = "Y_18_500"
 				tab2.lforce = false
 				DrawText(tab2)
 
@@ -891,7 +891,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab3.ax = 0
 				tab3.ay = 4
 				tab3.text = "POSITION: " .. role.int_position
-				tab3.font = "mat1text"
+				tab3.font = "Y_18_500"
 				DrawText(tab3)]]
 			end
 			function pnl:DoClick()
@@ -922,7 +922,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.ax = 1
 					tab2.ay = 1
 					tab2.text = "▲"
-					tab2.font = "mat1text"
+					tab2.font = "Y_18_500"
 					DrawText(tab2)
 				end
 			end
@@ -947,7 +947,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.ax = 1
 					tab2.ay = 1
 					tab2.text = "▼"
-					tab2.font = "mat1text"
+					tab2.font = "Y_18_500"
 					DrawText(tab2)
 				end
 			end

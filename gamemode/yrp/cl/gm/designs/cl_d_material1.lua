@@ -3,7 +3,7 @@
 local _mat1 = {}
 _mat1.author = "D4KiR"
 _mat1.name = "Material Design 1"
-_mat1.textFont = "mat1text"
+_mat1.textFont = "Y_18_500"
 RegisterDesign(_mat1)
 
 function _mat1.GetAlpha()
@@ -114,7 +114,7 @@ function _mat1.DrawWindow(window, pw, ph, title)
 	end
 
 	--[[ Title ]]--
-	surfaceText(YRP.lang_string(_title), "mat1header", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255), 0, 1, 1)
+	surfaceText(YRP.lang_string(_title), "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255), 0, 1, 1)
 end
 
 RegisterWindowFunction(_mat1.name, _mat1.DrawWindow)

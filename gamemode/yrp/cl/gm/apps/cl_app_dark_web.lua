@@ -26,7 +26,7 @@ function testApp(display, x, y, w, h)
 		--[[ if Agent ]]--
 		local _we = createD("DPanel", _dw, ctrb(800), ctrb(100), 0, 0)
 		function _we:Paint(pw, ph)
-			surfaceText("Welcome Agent", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText("Welcome Agent", "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
 		end
 
 		local _target_model = createD("DModelPanel", _dw, ctrb(800), ctrb(800), ctrb(400), ctrb(100))
@@ -34,22 +34,22 @@ function testApp(display, x, y, w, h)
 		local _target_rpname = createD("DPanel", _dw, ctrb(400), ctrb(100), ctrb(1200), ctrb(100))
 		_target_rpname.rpname = YRP.lang_string("LID_none")
 		function _target_rpname:Paint(pw, ph)
-			surfaceText("Target" .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
-			surfaceText(self.rpname, "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
+			surfaceText("Target" .. ":", "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText(self.rpname, "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
 		end
 
 		local _target_reward = createD("DPanel", _dw, ctrb(400), ctrb(100), ctrb(1200), ctrb(250))
 		_target_reward.reward = YRP.lang_string("LID_none")
 		function _target_reward:Paint(pw, ph)
-			surfaceText("Reward" .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
-			surfaceText(self.reward, "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
+			surfaceText("Reward" .. ":", "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText(self.reward, "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
 		end
 
 		local _target_description = createD("DPanel", _dw, ctrb(400), ctrb(100), ctrb(1200), ctrb(400))
 		_target_description.description = YRP.lang_string("LID_none")
 		function _target_description:Paint(pw, ph)
-			surfaceText(YRP.lang_string("LID_description") .. ":", "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
-			surfaceText(self.description, "HudBars", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
+			surfaceText(YRP.lang_string("LID_description") .. ":", "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 2)
+			surfaceText(self.description, "Y_24_500", ctrb(10), ph/2, Color(255, 255, 255), 0, 0)
 		end
 
 		local _target_accept = createD("DButton", _dw, ctrb(400), ctrb(50), ctrb(1200), ctrb(550))
@@ -125,7 +125,7 @@ function testApp(display, x, y, w, h)
 			function _newhit:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, "Create Hit")
 
-				surfaceText("Target" .. ":", "apph1", ctrb(10), ctrb(100), Color(255, 255, 255), 0, 2)
+				surfaceText("Target" .. ":", "Y_36_500", ctrb(10), ctrb(100), Color(255, 255, 255), 0, 2)
 			end
 
 			local _pb = createD("DComboBox", _newhit, ctrb(400), ctrb(50), ctrb(10), ctrb(100))
@@ -140,12 +140,12 @@ function testApp(display, x, y, w, h)
 				self._hi = createD("DPanel", _newhit, ctrb(600), ctrb(1000), ctrb(600), ctrb(100))
 				self._hi.target = value
 				function self._hi:Paint(pw, ph)
-					surfaceText(YRP.lang_string("Target") .. ":", "apph1", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 2)
-					surfaceText(self.target, "apph1", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 0)
+					surfaceText(YRP.lang_string("Target") .. ":", "Y_36_500", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 2)
+					surfaceText(self.target, "Y_36_500", ctrb(10), ctrb(50), Color(255, 255, 255), 0, 0)
 
-					surfaceText(YRP.lang_string("Reward") .. ":", "apph1", ctrb(10), ctrb(150), Color(255, 255, 255), 0, 2)
+					surfaceText(YRP.lang_string("Reward") .. ":", "Y_36_500", ctrb(10), ctrb(150), Color(255, 255, 255), 0, 2)
 
-					surfaceText(YRP.lang_string("LID_description") .. ":", "apph1", ctrb(10), ctrb(250), Color(255, 255, 255), 0, 2)
+					surfaceText(YRP.lang_string("LID_description") .. ":", "Y_36_500", ctrb(10), ctrb(250), Color(255, 255, 255), 0, 2)
 				end
 
 				local _hr = createD("DNumberWang", self._hi, ctrb(400), ctrb(50), ctrb(10), ctrb(150))

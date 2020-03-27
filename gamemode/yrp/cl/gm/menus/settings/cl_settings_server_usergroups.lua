@@ -166,8 +166,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 				self.oldcur = self.cur
 				self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[self.cur]))
 			end
-			surfaceText(self.cur .. "/" .. self.max, "mat1text", pw / 2, ph - YRP.ctr(30), Color(255, 255, 255), 1, 1)
-			surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "mat1text", pw / 2, ph - YRP.ctr(70), Color(255, 255, 255), 1, 1)
+			surfaceText(self.cur .. "/" .. self.max, "Y_18_500", pw / 2, ph - YRP.ctr(30), Color(255, 255, 255), 1, 1)
+			surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "Y_18_500", pw / 2, ph - YRP.ctr(70), Color(255, 255, 255), 1, 1)
 		end
 	end
 
@@ -429,39 +429,45 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 		ACCESS:AddItem(tmp)
 	end
+
 	ACCESSAddCheckBox("bool_adminaccess", "LID_yrp_adminaccess", Color(255, 255, 0, 255))
+
 	ACCESSAddHr()
-	-- OLD
-	ACCESSAddCheckBox("bool_money", "LID_settings_money")
-	ACCESSAddCheckBox("bool_licenses", "LID_settings_licenses")
-	ACCESSAddCheckBox("bool_shops", "LID_settings_shops")
-	ACCESSAddCheckBox("bool_map", "LID_settings_map")
+	-- LID_usermanagement
 	ACCESSAddCheckBox("bool_players", "LID_settings_players")
 	ACCESSAddCheckBox("bool_whitelist", "LID_whitelist")
+
 	ACCESSAddHr()
-	ACCESSAddHr()
-	ACCESSAddHr()
-	-- Maintance
-	ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
+	-- LID_moderation
 	ACCESSAddCheckBox("bool_status", "LID_settings_status")
-	ACCESSAddCheckBox("bool_feedback", "LID_settings_feedback")
-	ACCESSAddCheckBox("bool_logs", "LID_logs")
-	ACCESSAddHr()
-	-- Gameplay
-	ACCESSAddCheckBox("bool_general", "LID_settings_general")
-	ACCESSAddCheckBox("bool_realistic", "LID_settings_realistic")
 	ACCESSAddCheckBox("bool_groupsandroles", "LID_settings_groupsandroles")
+	ACCESSAddCheckBox("bool_map", "LID_settings_map")
+	-- >> character 
+	ACCESSAddCheckBox("bool_logs", "LID_logs")
+	ACCESSAddCheckBox("bool_blacklist", "LID_blacklist")
+	ACCESSAddCheckBox("bool_feedback", "LID_settings_feedback")
+
+	ACCESSAddHr()
+	-- LID_administration
+	ACCESSAddCheckBox("bool_realistic", "LID_settings_realistic")
+	ACCESSAddCheckBox("bool_shops", "LID_settings_shops")
+	ACCESSAddCheckBox("bool_licenses", "LID_settings_licenses")
+	ACCESSAddCheckBox("bool_usergroups", "LID_settings_usergroups", Color(255, 0, 0, 255))
 	ACCESSAddCheckBox("bool_levelsystem", "LID_levelsystem")
 	ACCESSAddCheckBox("bool_design", "LID_settings_design")
+	ACCESSAddCheckBox("bool_scale", "LID_scale")
+	ACCESSAddCheckBox("bool_money", "LID_money")
+	
 	ACCESSAddHr()
-	-- Management
+	-- LID_server
+	ACCESSAddCheckBox("bool_general", "LID_settings_general")
+	ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
 	ACCESSAddCheckBox("bool_ac_database", "LID_settings_database", Color(255, 0, 0, 255))
-	ACCESSAddCheckBox("bool_usergroups", "LID_settings_usergroups", Color(255, 0, 0, 255))
+	-- Socials [television.png]
+	
 	ACCESSAddHr()
-	-- Addons
+	-- YourRP
 	ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
-
-
 
 	local GAMEPLAY = createD("YGroupBox", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20 + 800 + 20), YRP.ctr(20))
 	GAMEPLAY:SetText("LID_gameplayrestrictions")
@@ -612,7 +618,7 @@ function AddUG(tbl)
 			tab2.ax = 1
 			tab2.ay = 1
 			tab2.text = "▲"
-			tab2.font = "mat1text"
+			tab2.font = "Y_18_500"
 			DrawText(tab2)
 		end
 	end
@@ -639,7 +645,7 @@ function AddUG(tbl)
 			tab2.ax = 1
 			tab2.ay = 1
 			tab2.text = "▼"
-			tab2.font = "mat1text"
+			tab2.font = "Y_18_500"
 			DrawText(tab2)
 		end
 	end
@@ -772,7 +778,7 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 			local _ugs_title = createD("DPanel", PARENT, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
 			function _ugs_title:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-				surfaceText(YRP.lang_string("LID_usergroups"), "Settings_Header", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+				surfaceText(YRP.lang_string("LID_usergroups"), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 
 			--[[ UserGroupsList ]]--

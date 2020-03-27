@@ -53,7 +53,7 @@ function CreateCharContent(parent)
 		local cl_rpNamelabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(Y))
 		cl_rpNamelabel:SetText("")
 		function cl_rpNamelabel:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_name"), "sef", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_name"), "Y_24_500", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		Y = Y + 50
 		cl_rpName = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(70))
@@ -71,7 +71,7 @@ function CreateCharContent(parent)
 	local cl_rpDescriptionlabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(10), YRP.ctr(Y))
 	cl_rpDescriptionlabel:SetText("")
 	function cl_rpDescriptionlabel:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_description"), "sef", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_description"), "Y_24_500", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	Y = Y + 50
 	local cl_rpDescription = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(200), YRP.ctr(10), YRP.ctr(Y))
@@ -90,7 +90,7 @@ function CreateCharContent(parent)
 			hook.Run("YButtonPaint", self, pw, ph)
 		else
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_cooldown"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_cooldown"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 	end
 	function cl_save:DoClick()

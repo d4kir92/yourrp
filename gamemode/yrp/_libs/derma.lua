@@ -260,7 +260,7 @@ function RegisterDesign(tab)
 		yrp_if[tab.name] = {}
 		yrp_if[tab.name].author = tab.author or "NO AUTHOR"
 		yrp_if[tab.name].name = tab.name or "NO Name"
-		yrp_if[tab.name].textFont = tab.textFont or "mat1text"
+		yrp_if[tab.name].textFont = tab.textFont or "Y_18_500"
 	end
 end
 
@@ -601,7 +601,7 @@ function paintButton(derma, pw, ph, mytext)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.lang_string(mytext), "windowTitle", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.lang_string(mytext), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 end
 
 function paintPanel(derma, pw, ph, color)
@@ -996,7 +996,7 @@ function createMDMenu(parent, w, h, x, y)
 		for k, v in pairs(tmp.cat) do
 			local tmpCat = createD("DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY))
 			function tmpCat:Paint(pw, ph)
-				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "windowTitle", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "Y_18_700", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			tmp.menulist:AddItem(tmpCat)
 
@@ -1026,7 +1026,7 @@ function createMDMenu(parent, w, h, x, y)
 							surface.DrawTexturedRect(BR, BR, IconSize - 2 * BR, IconSize - 2 * BR)
 						end
 
-						--draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "mat1text", YRP.ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+						--draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site)), "Y_18_500", YRP.ctr(80 + 10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					end
 
 					function tmp2:DoClick()
@@ -1045,7 +1045,7 @@ function createMDMenu(parent, w, h, x, y)
 
 				local tmpHr = createD("DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY))
 				function tmpHr:Paint(pw, ph)
-					--draw.SimpleTextOutlined("test", "windowTitle", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					--draw.SimpleTextOutlined("test", "Y_18_700", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
 				tmp.menulist:AddItem(tmpHr)
@@ -1112,8 +1112,8 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 			draw.RoundedBox(0, pw / 2, 0, pw / 2, ph, get_dsbg_col())
 		end
 
-		draw.SimpleTextOutlined(YRP.lang_string("LID_dark"), "HudBars", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_light"), "HudBars", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_dark"), "Y_24_500", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_light"), "Y_24_500", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function tmp:DoClick()

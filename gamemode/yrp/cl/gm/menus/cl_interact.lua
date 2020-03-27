@@ -96,13 +96,13 @@ net.Receive("openInteractMenu", function(len)
 		--[[ Licenses ]]--
 		if LocalPlayer():isCP() then
 			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "charTitle", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 		end
 	
 		--[[ Description ]]--
 		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "charTitle", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 	end
 
 	if idcard then

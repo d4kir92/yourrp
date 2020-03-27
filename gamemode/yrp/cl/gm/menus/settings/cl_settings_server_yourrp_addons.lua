@@ -128,7 +128,7 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 				tab.y = ph / 2
 				tab.ax = 1
 				tab.ay = 1
-				tab.font = "mat1text"
+				tab.font = "Y_18_500"
 				tab.text = "empty"
 				DrawText(tab)
 			end

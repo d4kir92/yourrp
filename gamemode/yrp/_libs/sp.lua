@@ -100,7 +100,7 @@ function createSmartphone(parent, w, h, x, y)
 				if #_appName > 8 then
 					_appName = string.sub(_appName, 1, 8) .. "..."
 				end
-				draw.SimpleTextOutlined(_appName, "appname", ctrb(40) + _x*ctrb(64) + _x*ctrb(40) + ctrb(64/2), ctrb(40) + ctrb(40) + _y*ctrb(64) + _y*ctrb(40+30) + ctrb(64+20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(_appName, "Y_14_500", ctrb(40) + _x*ctrb(64) + _x*ctrb(40) + ctrb(64/2), ctrb(40) + ctrb(40) + _y*ctrb(64) + _y*ctrb(40+30) + ctrb(64+20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255))
 			end
 		end
 	end

@@ -4,7 +4,7 @@ function DrawSelector(btn, w, h, text, selected, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	draw.SimpleText(text, "mat1header", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
+	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
 
 	if btn.ani_h == nil then
 		btn.ani_h = 0
@@ -88,8 +88,8 @@ function PANEL:SiteNotFound()
 	self:ClearSite()
 
 	function self.site:Paint(pw, ph)
-		draw.SimpleText("[Site Not Found]", "mat1text", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
-		draw.SimpleText("[" .. YRP.lang_string("LID_wip") .. "]", "mat1text", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleText("[Site Not Found]", "Y_18_500", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleText("[" .. YRP.lang_string("LID_wip") .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
 	end
 end
 
@@ -102,7 +102,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	local TAB = createD("DButton", self, GetTextLength(YRP.lang_string(name), "mat1header") + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
+	local TAB = createD("DButton", self, GetTextLength(YRP.lang_string(name), "Y_22_500") + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr

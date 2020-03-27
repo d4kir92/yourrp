@@ -57,7 +57,7 @@ function DCheckBoxes(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -71,7 +71,7 @@ function DCheckBoxes(tab)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 		local change = {}
 		change.text = "[" .. YRP.lang_string("LID_change") .. "] (" .. tab.value .. ")"
-		change.font = "mat1header"
+		change.font = "Y_22_500"
 		change.x = YRP.ctr(10)
 		change.y = ph / 2
 		change.ax = 0
@@ -114,7 +114,7 @@ function DCheckBoxes(tab)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 					local ta = {}
 					ta.text = i
-					ta.font = "mat1header"
+					ta.font = "Y_22_500"
 					ta.x = YRP.ctr(60)
 					ta.y = ph / 2
 					ta.ax = 0
@@ -139,7 +139,7 @@ function DCheckBoxes(tab)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 						local ta = {}
 						ta.text = j
-						ta.font = "mat1header"
+						ta.font = "Y_22_500"
 						ta.x = YRP.ctr(110)
 						ta.y = ph / 2
 						ta.ax = 0
@@ -207,7 +207,7 @@ function DCheckBox(tab)
 		end
 		text.x = YRP.ctr(60)
 		text.y = ph / 2
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -278,7 +278,7 @@ function DComboBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -349,7 +349,7 @@ function DColor(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -364,7 +364,7 @@ function DColor(tab)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 		local change = {}
 		change.text = "change"
-		change.font = "mat1header"
+		change.font = "Y_22_500"
 		change.x = pw / 2
 		change.y = ph / 2
 		DrawText(change)
@@ -441,7 +441,7 @@ function DIntBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -516,7 +516,7 @@ function DTextBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = YRP.ctr(25)
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -527,7 +527,7 @@ function DTextBox(tab)
 			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
-			DMG.font = "mat1header"
+			DMG.font = "Y_22_500"
 			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
@@ -685,7 +685,7 @@ function DAttributeBar(tab)
 			end
 			text.x = YRP.ctr(10)
 			text.y = ph / 2
-			text.font = "mat1text"
+			text.font = "Y_18_500"
 			text.color = Color(255, 255, 255, 255)
 			text.br = 1
 			text.ax = 0
@@ -763,7 +763,7 @@ function DStringListBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = YRP.ctr(25)
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0

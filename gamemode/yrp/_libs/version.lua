@@ -135,17 +135,17 @@ if CLIENT then
 			function frame.con:Paint(pw, ph)
 				local tab = {}
 				tab["yrp"] = "YourRP"
-				draw.SimpleTextOutlined(YRP.lang_string("LID_newyourrpversionavailable", tab), "HudBars", pw / 2, YRP.ctr(50), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_currentversion") .. ":", "HudBars", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_newyourrpversionavailable", tab), "Y_24_500", pw / 2, YRP.ctr(50), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_currentversion") .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				draw.SimpleTextOutlined(YRP.lang_string("LID_client") .. ": ", "HudBars", pw / 2, YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(GAMEMODE.Version, "HudBars", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_client") .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(GAMEMODE.Version, "Y_24_500", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. ") " .. YRP.lang_string("LID_server") .. ": ", "HudBars", pw / 2, YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "HudBars", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined("(" .. string.upper(GAMEMODE.dedicated) .. ") " .. YRP.lang_string("LID_server") .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				draw.SimpleTextOutlined(YRP.lang_string("LID_workshopversion") .. ": ", "HudBars", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")", "HudBars", pw / 2, YRP.ctr(300), Color(0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_workshopversion") .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")", "Y_24_500", pw / 2, YRP.ctr(300), Color(0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 
 			local showChanges = createD("YButton", frame.con, YRP.ctr(500), YRP.ctr(80), frame.con:GetWide() / 2 - YRP.ctr(250), YRP.ctr(350))

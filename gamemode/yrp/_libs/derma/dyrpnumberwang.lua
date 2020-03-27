@@ -11,7 +11,7 @@ function PANEL:Init()
 
 	function self.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-		surfaceText(SQL_STR_OUT(self.text), "SettingsNormal", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+		surfaceText(SQL_STR_OUT(self.text), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 	end
 
 	self.numberwang = createD("DNumberWang", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50))

@@ -100,10 +100,10 @@ function openCharacterSelection()
 			Derma_DrawBackgroundBlur(self, 0)
 
 			-- Header of Menu
-			draw.SimpleText(YRP.lang_string("LID_characterselection"), "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			-- Current Character Name
-			draw.SimpleText(_cur, "HudHeader", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(_cur, "Y_36_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			-- Get Newest Background for the Menu
 			local oldurl = _cs.frame.bg.url
@@ -130,9 +130,9 @@ function openCharacterSelection()
 			if acur > amax then
 				color = Color(255, 100, 100, 255)
 			end
-			draw.SimpleText(acur .. "/" .. amax, "HudHeader", pw / 2, ph - YRP.ctr(60), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2, ph - YRP.ctr(60), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-			draw.SimpleText(self.text, "HudHeader", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - YRP.ctr(200), ScrH() - YRP.ctr(200), ScrW2() - (ScrH() - YRP.ctr(200)) / 2, 0)
@@ -389,7 +389,7 @@ function openCharacterSelection()
 			local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
 			if !hasdesign then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-				draw.SimpleTextOutlined(tab.text, "HudBars", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(tab.text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
 		end
 

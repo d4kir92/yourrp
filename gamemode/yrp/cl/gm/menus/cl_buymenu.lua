@@ -65,19 +65,19 @@ function createShopItem(item, duid, line, id)
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
 		end
 		function _i.name:Paint(pw, ph)
-			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if item.price != nil then
 		_i.price = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(W - 50))
 		function _i.price:Paint(pw, ph)
-			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
 		_i.price = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(W - 100))
 		function _i.price:Paint(pw, ph)
-			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 
@@ -92,7 +92,7 @@ function createShopItem(item, duid, line, id)
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
 				local tab = {}
 				tab["LEVEL"] = self.level
-				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
 			YRP.msg("note", "[BUYMENU] BUY BUTTON W: " .. tostring(W) .. " w: " .. YRP.ctr(W - 20 * 2) .. " h: " .. YRP.ctr(50) .. " x: " .. YRP.ctr(20) .. " y: " .. YRP.ctr(W + 20))
@@ -109,7 +109,7 @@ function createShopItem(item, duid, line, id)
 					_color = Color(255, 255, 100)
 				end
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
-				draw.SimpleText(YRP.lang_string("LID_buy"), "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+				draw.SimpleText(YRP.lang_string("LID_buy"), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 			function _i.buy:DoClick()
 				net.Start("item_buy")
@@ -129,7 +129,7 @@ function createShopItem(item, duid, line, id)
 		function _i.require:Paint(pw, ph)
 			local _color = Color(255, 100, 100)
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. lnames[item.licenseID], "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+			draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. lnames[item.licenseID], "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 		end
 	end
 	return _i
@@ -166,7 +166,7 @@ function createStorageItem(item, duid)
 		_i.name = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), 0, 0)
 		_i.name.name = SQL_STR_OUT(item.name)
 		function _i.name:Paint(pw, ph)
-			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 
@@ -189,7 +189,7 @@ function createStorageItem(item, duid)
 				_color = Color(255, 255, 100)
 			end
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			draw.SimpleText(YRP.lang_string(self.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(YRP.lang_string(self.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		function _i.spawn:DoClick()
 			if self.action == 0 then
@@ -309,7 +309,7 @@ net.Receive("shop_get_tabs", function(len)
 						_remove.uid = _uid
 						function _remove:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(200, 50, 50))
-							draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+							draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 						end
 						function _remove:DoClick()
 							net.Start("dealer_rem_tab")
@@ -396,7 +396,7 @@ net.Receive("shop_get_tabs", function(len)
 				_color = Color(200, 200, 50, 255)
 			end
 			draw.RoundedBoxEx(ph / 2, 0, 0, pw, ph, _color, true, true)
-			draw.SimpleText(" + ", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(" + ", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		function BUYMENU.addtab:DoClick()
 			local _tmp = createD("DFrame", nil, YRP.ctr(420), YRP.ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)

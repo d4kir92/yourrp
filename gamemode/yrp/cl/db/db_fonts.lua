@@ -138,11 +138,6 @@ function yrp_create_font(_name, _font, _size, __weight, _outline, _shadow)
 	end
 end
 
-function changeFontSizeOf(_font, _size)
-	printGM("note", "changeFontSizeOf" .. _font .. _size)
-	yrp_create_font(_font, YRP.GetFont(), _size, _weight, false)
-end
-
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
@@ -154,85 +149,6 @@ function changeFontSize()
 		yrp_create_font("Y_O_" .. s .. "_700", YRP.GetFont(), s, 700, true)
 	end
 
-	--[[ DESIGNS ]]--
-	yrp_create_font("mat1header", YRP.GetFont(), 22, _weight, false)
-	yrp_create_font("mat1text", YRP.GetFont(), 18, 0, false)
-
-	--[[ EMOTES ]]--
-	yrp_create_font("emotes", YRP.GetFont(), 22, _weight, false)
-
-	--[[ 3D2D ]]--
-	yrp_create_font("3d2d_string", YRP.GetFont(), 22, _weight, false)
-
-	--[[ Settings ]]--
-	yrp_create_font("Settings_Normal", YRP.GetFont(), 22, _weight, false)
-	yrp_create_font("Settings_Header", YRP.GetFont(), 26, _weight, false)
-
-	yrp_create_font("apph1", YRP.GetFont(), YRP.fonttr(36), _weight, false)
-	yrp_create_font("appt", YRP.GetFont(), YRP.fonttr(30), _weight, false)
-
-	yrp_create_font("appname", YRP.GetFont(), ctrb(28), _weight, false)
-
-	yrp_create_font("plates", YRP.GetFont(), 30, _weight, false)
-	yrp_create_font("plyinfo", YRP.GetFont(), 18, _weight, false)
-
-	yrp_create_font("mdMenu", YRP.GetFont(), 17, 700, false)
-
-	yrp_create_font("windowTitle", YRP.GetFont(), 18, 700, false)
-
-	yrp_create_font("HudSettings", YRP.GetFont(), 24, _weight, false)
-
-	yrp_create_font("HudDefault", YRP.GetFont(), 72, _weight, false)
-
-	yrp_create_font("SettingsNormal", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("SettingsHeader", YRP.GetFont(), 30, _weight, false)
-
-	yrp_create_font("roleInfoHeader", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("roleInfoText", YRP.GetFont(), 20, _weight, false)
-
-	yrp_create_font("charTitle", YRP.GetFont(), 20, 700, false)
-	yrp_create_font("charHeader", YRP.GetFont(), 20, 700, false)
-	yrp_create_font("charText", YRP.GetFont(), 20, 700, false)
-
-	yrp_create_font("pmT", YRP.GetFont(), 18, _weight, false)
-	yrp_create_font("weaponT", YRP.GetFont(), 14, _weight, false)
-
-	yrp_create_font("HudBars", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("HudHeader", YRP.GetFont(), 36, _weight, false)
-	yrp_create_font("HudVersion", YRP.GetFont(), 30, 700, false)
-
-	yrp_create_font("72", YRP.GetFont(), 72, _weight, false)
-	--Creating
-	yrp_create_font("mmsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("hpsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("arsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("wpsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("wssf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("wnsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("ttsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("mosf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("mhsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("mtsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("mssf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("vtsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("cbsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("masf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("casf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("stsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("xpsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("utsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("blsf", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("rtsf", YRP.GetFont(), 24, _weight, false)
-
-	yrp_create_font("sef", YRP.GetFont(), 24, 1, false)
-
-	yrp_create_font("ScoreBoardTitle", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("ScoreBoardNormal", YRP.GetFont(), 20, _weight, false)
-
-	yrp_create_font("ATM_Header", YRP.GetFont(), 80, _weight, false)
-	yrp_create_font("ATM_Normal", YRP.GetFont(), 60, _weight, false)
-	yrp_create_font("ATM_Name", YRP.GetFont(), 40, _weight, false)
-
 	--DarkRP Fonts
 	yrp_create_font("DarkRPHUD1", YRP.GetFont(), 16, _weight, false)
 	yrp_create_font("DarkRPHUD2", YRP.GetFont(), 24, _weight, false)
@@ -241,8 +157,8 @@ function changeFontSize()
 	yrp_create_font("Trebuchet24", YRP.GetFont(), 24, _weight, false)
 	yrp_create_font("Trebuchet48", YRP.GetFont(), 48, _weight, false)
 	yrp_create_font("TabLarge", YRP.GetFont(), 16, 700, false)
-	yrp_create_font("UiBold", YRP.GetFont(), 16, 800, false)
-	yrp_create_font("HUDNumber5", YRP.GetFont(), 30, 800, false)
+	yrp_create_font("UiBold", YRP.GetFont(), 16, 700, false)
+	yrp_create_font("HUDNumber5", YRP.GetFont(), 30, 700, false)
 	yrp_create_font("ScoreboardHeader", YRP.GetFont(), 32, _weight, false)
 	yrp_create_font("ScoreboardSubtitle", YRP.GetFont(), 24, _weight, false)
 	yrp_create_font("ScoreboardPlayerName", YRP.GetFont(), 19, _weight, false)

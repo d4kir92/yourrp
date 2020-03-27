@@ -10,10 +10,10 @@ function OpenHelpTranslatingWindow()
 
 	function window:Paint(pw, ph)
 		surfaceWindow(self, pw, ph, "Help translating")
-		draw.SimpleTextOutlined("If you want to add a new language or help translating an existing language,", "mat1text", YRP.ctr(10), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined("please do this:", "mat1text", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined("First go to the translation-website and register there:", "mat1text", YRP.ctr(10), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined("Then write D4KiR on the discord server to get rights for translating:", "mat1text", YRP.ctr(10), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("If you want to add a new language or help translating an existing language,", "Y_18_500", YRP.ctr(10), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("please do this:", "Y_18_500", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("First go to the translation-website and register there:", "Y_18_500", YRP.ctr(10), YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("Then write D4KiR on the discord server to get rights for translating:", "Y_18_500", YRP.ctr(10), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 	end
 
 	window.translationsite = createD("DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200))
@@ -317,7 +317,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "sef", pw / 2, ph - YRP.ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function frame:OnClose()
@@ -451,7 +451,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
 
 							if self.text != "" then
-								surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
+								surfaceText(string.upper(self.text) .. "!", "Y_30_500", pw / 2, ph / 2, self.color, 1, 1)
 							end
 						end
 					end
@@ -508,7 +508,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 						surfaceBox(_x_, _y_, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
 						surfaceText(_test, "DermaDefaultBold", _x_ + YRP.ctr(4), _y_ + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
 						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - YRP.ctr(10), YRP.ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(255, 255, 255, 255))
-						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+						draw.SimpleTextOutlined(text, "Y_24_500", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 					end
 
 					function tmpButton:DoClick()
@@ -549,7 +549,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -564,7 +564,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -621,7 +621,7 @@ function OpenSingleSelector(tab, closeF)
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "sef", pw / 2, ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 	end
 
 	function frame:OnClose()
@@ -718,7 +718,7 @@ function OpenSingleSelector(tab, closeF)
 					_tmpName:SetText("")
 
 					function _tmpName:Paint(pw, ph)
-						draw.SimpleTextOutlined(item.PrintName, "pmT", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+						draw.SimpleTextOutlined(item.PrintName, "Y_18_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 					end
 
 					function _tmpName:DoClick()
@@ -745,7 +745,7 @@ function OpenSingleSelector(tab, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -760,7 +760,7 @@ function OpenSingleSelector(tab, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -796,7 +796,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "sef", pw / 2, ph - YRP.ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function frame:OnClose()
@@ -939,7 +939,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
 
 							if self.text != "" then
-								surfaceText(string.upper(self.text) .. "!", "plates", pw / 2, ph / 2, self.color, 1, 1)
+								surfaceText(string.upper(self.text) .. "!", "Y_30_500", pw / 2, ph / 2, self.color, 1, 1)
 							end
 						end
 					end
@@ -996,7 +996,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 						surfaceBox(_x_, _y_, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
 						surfaceText(_test, "DermaDefaultBold", _x_ + YRP.ctr(4), _y_ + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
 						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - YRP.ctr(10), YRP.ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(255, 255, 255, 255))
-						draw.SimpleTextOutlined(text, "HudBars", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+						draw.SimpleTextOutlined(text, "Y_24_500", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 					end
 
 					function tmpButton:DoClick()
@@ -1042,7 +1042,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -1057,7 +1057,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -1114,7 +1114,7 @@ function openSingleSelector(tab, closeF)
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "sef", pw / 2, ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 	end
 
 	function frame:OnClose()
@@ -1212,7 +1212,7 @@ function openSingleSelector(tab, closeF)
 					_tmpName:SetText("")
 
 					function _tmpName:Paint(pw, ph)
-						draw.SimpleTextOutlined(item.PrintName, "pmT", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+						draw.SimpleTextOutlined(item.PrintName, "Y_18_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 					end
 
 					function _tmpName:DoClick()
@@ -1239,7 +1239,7 @@ function openSingleSelector(tab, closeF)
 
 	function nextB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function nextB:DoClick()
@@ -1254,7 +1254,7 @@ function openSingleSelector(tab, closeF)
 
 	function prevB:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	function prevB:DoClick()
@@ -1284,7 +1284,7 @@ net.Receive("yrpInfoBox", function(len)
 
 	function _tmp:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 80))
-		draw.SimpleTextOutlined(_text, "sef", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(_text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	local closeButton = createVGUI("DButton", _tmp, 200, 50, 400 - 100, 400 - 50)
@@ -1330,7 +1330,7 @@ net.Receive("yrp_hud_info", function(len)
 		end
 	end
 
-	changeFontSize()
+	--changeFontSize()
 end)
 
 --Remove Ragdolls after 60 sec
@@ -1382,7 +1382,7 @@ function drawStringBox(ent, instr, z, color)
 	cam.Start3D2D(pos + Vector(0, 0, z), ang, 0.2)
 		surface.SetFont("Y_18_500")
 		local tw, th = surface.GetTextSize(str)
-		--surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+		--surfaceText(str, "Y_22_500", 0, _th / 2 + 1, color, 1, 1)
 
 		local br = 4
 		local box = {}
@@ -1413,11 +1413,11 @@ function drawString(ply, instr, z, color)
 	local sca = ply:GetModelScale() / 4
 	local str = instr
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-		surface.SetFont("3d2d_string")
+		surface.SetFont("Y_22_500")
 		local _tw, _th = surface.GetTextSize(str)
 		_tw = math.Round(_tw * 1.08, 0)
 		_th = _th
-		surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+		surfaceText(str, "Y_22_500", 0, _th / 2 + 1, color, 1, 1)
 	cam.End3D2D()
 end
 
@@ -1432,7 +1432,7 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 	local sca = ply:GetModelScale() / 4
 	local str = stri
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-		surface.SetFont("3d2d_string")
+		surface.SetFont("Y_22_500")
 		local _tw, _th = surface.GetTextSize(str)
 		_tw = math.Round(_tw * 1.00, 0)
 		_th = _th
@@ -1440,7 +1440,7 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 		local r = 4
 		draw.RoundedBox(r, -w / 2 - 2, 2 - 2, w + 4, 20 + 4, Color(0, 0, 0, barcolor.a))
 		draw.RoundedBox(r / 2, -w / 2, 2, w * cur / max, 20, barcolor)
-		surfaceText(str, "3d2d_string", 0, _th / 2 - 0.2, color, 1, 1)
+		surfaceText(str, "Y_22_500", 0, _th / 2 - 0.2, color, 1, 1)
 	cam.End3D2D()
 end
 
@@ -1455,13 +1455,13 @@ function drawPlate(ply, stri, z, color)
 	local sca = ply:GetModelScale() / 4
 	local str = stri
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-	surface.SetFont("plates")
+	surface.SetFont("Y_30_500")
 	local _tw, _th = surface.GetTextSize(str)
 	_tw = math.Round(_tw * 1.08, 0)
 	_th = _th
 	color.a = math.Round(color.a * 0.5, 0)
 	surfaceBox(-_tw / 2, 0, _tw, _th, color)
-	surfaceText(str, "plates", 0, _th / 2 + 1, Color(255, 255, 255, color.a + 1), 1, 1)
+	surfaceText(str, "Y_30_500", 0, _th / 2 + 1, Color(255, 255, 255, color.a + 1), 1, 1)
 	cam.End3D2D()
 end
 
@@ -1480,7 +1480,7 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	local str = _str
 	--cam.Start3D2D(pos + Vector(0, 0, z) + ply:GetRight() * y + ply:GetForward() * x, ang, sca)
 	cam.Start3D2D(pos + Vector(0, 0, z) + LocalPlayer():GetRight() * y + LocalPlayer():GetForward() * x, ang, sca)
-	surface.SetFont("plyinfo")
+	surface.SetFont("Y_18_500")
 	local _tw, _th = surface.GetTextSize(str)
 	_tw = _tw + 8
 	_th = _th
@@ -1504,7 +1504,7 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	end
 
 	color.a = alpha
-	surfaceText(str, "plyinfo", 5 + h, h / 2, Color(color.r, color.g, color.b, color.a + 1), 0, 1)
+	surfaceText(str, "Y_18_500", 5 + h, h / 2, Color(color.r, color.g, color.b, color.a + 1), 0, 1)
 	cam.End3D2D()
 end
 
@@ -1526,10 +1526,10 @@ function Debug3DText(ply, str, pos, color)
 	local _tw, _th = surface.GetTextSize(str)
 	local yaw = LocalPlayer():GetAngles().y
 	cam.Start3D2D(pos + Vector(0, 0, _th), Angle(0, yaw - 90, 90), 1)
-		surface.SetFont("3d2d_string")
+		surface.SetFont("Y_22_500")
 		_tw = math.Round(_tw * 1.08, 0)
 		_th = _th
-		surfaceText(str, "3d2d_string", 0, _th / 2 + 1, color, 1, 1)
+		surfaceText(str, "Y_22_500", 0, _th / 2 + 1, color, 1, 1)
 	cam.End3D2D()
 end
 

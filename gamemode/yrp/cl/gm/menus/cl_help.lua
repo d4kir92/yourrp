@@ -70,7 +70,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 	kb.key = keybind
 
 	function kb:Paint(pw, ph)
-		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), 0, 1)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
@@ -80,8 +80,8 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		end
 
 		text = text .. YRP.lang_string(lstr)
-		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "mat1text", ph + YRP.ctr(10), ph / 2, color, 0, 1)
-		draw.SimpleText(text, "mat1text", ph + YRP.ctr(300), ph / 2, color, 0, 1)
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
+		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(300), ph / 2, color, 0, 1)
 		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
 	end
 
@@ -108,7 +108,7 @@ net.Receive("getsitehelp", function(len)
 			local wm = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function wm:Paint(pw, ph)
-				draw.SimpleText(welcome_message, "mat1header", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+				draw.SimpleText(welcome_message, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
 			end
 
 			posy = posy + wm:GetTall() + YRP.ctr(20)
@@ -118,7 +118,7 @@ net.Receive("getsitehelp", function(len)
 			local mo = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function mo:Paint(pw, ph)
-				draw.SimpleText(YRP.lang_string("LID_motd") .. ": " .. motd, "mat1header", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+				draw.SimpleText(YRP.lang_string("LID_motd") .. ": " .. motd, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
 			end
 
 			posy = posy + mo:GetTall() + YRP.ctr(20)
@@ -187,7 +187,7 @@ net.Receive("getsitehelp", function(len)
 		local version = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
 
 		function version:Paint(pw, ph)
-			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "mat1header", pw, ph / 2, GetVersionColor(), 2, 1)
+			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion()
 	end
@@ -206,8 +206,8 @@ net.Receive("getsitestaff", function(len)
 			function tmp:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 				if ea(pl) then
-					draw.SimpleText(YRP.lang_string("LID_name") .. ": " .. pl:RPName(), "mat1text", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-					draw.SimpleText(YRP.lang_string("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "mat1text", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.lang_string("LID_name") .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.lang_string("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
 				end
 			end
 
@@ -237,16 +237,16 @@ net.Receive("getsiteserverrules", function(len)
 		local page = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_rules"), "mat1header", 0, 0, Color(255, 255, 255, 255), 0, 0)
+			draw.SimpleText(YRP.lang_string("LID_rules"), "Y_22_500", 0, 0, Color(255, 255, 255, 255), 0, 0)
 		end
 
 		page.serverrules = createD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(50), 0, YRP.ctr(50))
 
 		function page.serverrules:PerformLayout()
 			if self.SetUnderlineFont != nil then
-				self:SetUnderlineFont("mat1text")
+				self:SetUnderlineFont("Y_18_500")
 			end
-			self:SetFontInternal("mat1text")
+			self:SetFontInternal("Y_18_500")
 		end
 
 		page.serverrules:InsertColorChange(255, 255, 255, 255)
@@ -693,7 +693,7 @@ net.Receive("getsiteyourrptranslations", function(len)
 
 				hook.Run("YButtonPaint", self, pw, ph)
 				--surfaceButton(self, pw, ph, "")
-				draw.SimpleText(_allProgressTexts[sho], "mat1text", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
+				draw.SimpleText(_allProgressTexts[sho], "Y_18_500", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
 				YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.language.short)), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 			end
 

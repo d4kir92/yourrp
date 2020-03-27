@@ -141,13 +141,13 @@ function openMap()
 				surface.SetDrawColor(100, 100, 255, 255)
 				surface.SetMaterial(YRP.GetDesignIcon("navigation"))
 				surface.DrawTexturedRectRotated(x, y, w, h, rot)
-				draw.SimpleTextOutlined(YRP.lang_string("LID_you"), "sef", plyPos.x, plyPos.y-YRP.ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_you"), "Y_24_500", plyPos.x, plyPos.y-YRP.ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				--Coords
-				draw.SimpleTextOutlined(math.Round(ply:GetPos().x, 0), "sef", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(", " .. math.Round(ply:GetPos().y, 0), "sef", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(math.Round(ply:GetPos().x, 0), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(", " .. math.Round(ply:GetPos().y, 0), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
-				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "HudBars", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 				if lply:GetDBool("bool_canseeteammatesonmap", false) or lply:GetDBool("bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll()) do
@@ -184,7 +184,7 @@ function openMap()
 							surface.SetDrawColor(pl_col)
 							surface.SetMaterial(YRP.GetDesignIcon("navigation"))
 							surface.DrawTexturedRectRotated(ppx, ppy, psw, psh, prot)
-							draw.SimpleTextOutlined(pl:Nick(), "sef", tmp.x, tmp.y - YRP.ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+							draw.SimpleTextOutlined(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP.ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 						end
 					end
 				end

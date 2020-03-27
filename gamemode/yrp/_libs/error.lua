@@ -208,7 +208,7 @@ function isdbfull(str)
 			FRAME:MakePopup()
 			function FRAME:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, "INFO")
-				surfaceText("YOUR DATABASE IS FULL! (Your Disk)", "mat1header", pw/2, YRP.ctr(100), Color(255, 255, 255, 255), 1, 1)
+				surfaceText("YOUR DATABASE IS FULL! (Your Disk)", "Y_22_500", pw/2, YRP.ctr(100), Color(255, 255, 255, 255), 1, 1)
 			end
 		end
 	end
@@ -223,8 +223,8 @@ function ismalformed(str)
 			FRAME:MakePopup()
 			function FRAME:Paint(pw, ph)
 				surfaceWindow(self, pw, ph, "INFO")
-				surfaceText("YOUR DATABASE IS MALFORMED, please join the Discord and tell the DEVs!", "mat1header", pw/2, YRP.ctr(100), Color(255, 255, 255, 255), 1, 1)
-				surfaceText("Stop Game, delete .../garrysmod/garrysmod/cl.db to fix this problem", "mat1header", pw/2, YRP.ctr(150), Color(255, 255, 255, 255), 1, 1)
+				surfaceText("YOUR DATABASE IS MALFORMED, please join the Discord and tell the DEVs!", "Y_22_500", pw/2, YRP.ctr(100), Color(255, 255, 255, 255), 1, 1)
+				surfaceText("Stop Game, delete .../garrysmod/garrysmod/cl.db to fix this problem", "Y_22_500", pw/2, YRP.ctr(150), Color(255, 255, 255, 255), 1, 1)
 			end
 
 			FRAME.discord = createD("DButton", FRAME, YRP.ctr(400), YRP.ctr(50), YRP.ctr(900-200), YRP.ctr(200))

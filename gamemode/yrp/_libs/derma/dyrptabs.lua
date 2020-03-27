@@ -29,7 +29,7 @@ function PANEL:Init()
 	end
 
 	function self:AddTab(str, tbl)
-		surface.SetFont("roleInfoHeader")
+		surface.SetFont("Y_24_500")
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
 
@@ -57,7 +57,7 @@ function PANEL:Init()
 			end
 
 			draw.RoundedBoxEx(0, ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), _color, true, true)
-			draw.SimpleText(self.name, "roleInfoHeader", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 		end
 
 		function _tmp:DoClick()

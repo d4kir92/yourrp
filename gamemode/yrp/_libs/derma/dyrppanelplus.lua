@@ -13,7 +13,7 @@ function PANEL:Init()
 
 	function self.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		surfaceText(YRP.lang_string(SQL_STR_OUT(self.text)), "Settings_Header", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+		surfaceText(YRP.lang_string(SQL_STR_OUT(self.text)), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 	end
 end
 

@@ -105,7 +105,7 @@ function show_global_voice_info(ply)
 	if _showGlobalVoice then
 		local tab = {}
 		tab["NAME"] = ply:RPName()
-		draw.SimpleTextOutlined(YRP.lang_string("LID_makesanannoucment", tab) .. "!", "HudBars", ScrW2(), YRP.ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_makesanannoucment", tab) .. "!", "Y_24_500", ScrW2(), YRP.ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -124,7 +124,7 @@ function show_voice_info(ply)
 			_voice_text = YRP.lang_string("LID_voicechatisdisabled")
 		end
 
-		draw.SimpleTextOutlined(_voice_text, "HudBars", ScrW2(), YRP.ctr(500), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(_voice_text, "Y_24_500", ScrW2(), YRP.ctr(500), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -169,8 +169,8 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 				local pw2 = pw / 2
 				local ph2 = ph / 2
 				local ph3 = ph2 + YRP.ctr(80)
-				draw.SimpleTextOutlined(self.LID_levelup, "HudHeader", pw2, ph2, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
-				draw.SimpleTextOutlined(self.LID_levelx, "HudBars", pw2, ph3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
+				draw.SimpleTextOutlined(self.LID_levelup, "Y_36_500", pw2, ph2, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
+				draw.SimpleTextOutlined(self.LID_levelx, "Y_24_500", pw2, ph3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
 				if oldlevel != ply:Level() then
 					self:Remove()
 				end
@@ -354,13 +354,13 @@ hook.Add("HUDPaint", "yrp_hud", function()
 
 	if GetGlobalDBool("blinded", false) then
 		surfaceBox(0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
-		surfaceText(YRP.lang_string("LID_blinded"), "SettingsHeader", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
+		surfaceText(YRP.lang_string("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
 	end
 	if ply:IsFlagSet(FL_FROZEN) then
-		surfaceText(YRP.lang_string("LID_frozen"), "SettingsHeader", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
+		surfaceText(YRP.lang_string("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
 	end
 	if ply:GetDBool("cloaked", false) then
-		surfaceText(YRP.lang_string("LID_cloaked"), "SettingsHeader", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
+		surfaceText(YRP.lang_string("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
 	end
 
 	DrawEquipment(ply, "backpack")
@@ -380,12 +380,12 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	show_global_voice_info(ply)
 
 	if game.SinglePlayer() then
-		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "72", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 
 	local _target = LocalPlayer():GetDString("hittargetName", "")
 	if !strEmpty(_target) then
-		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetDString("hittargetName", ""), "HudBars", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
+		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetDString("hittargetName", ""), "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
 		LocalPlayer():drawHitInfo()
 	end
 

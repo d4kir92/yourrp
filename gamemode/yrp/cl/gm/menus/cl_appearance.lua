@@ -49,7 +49,7 @@ net.Receive("get_menu_bodygroups", function(len)
 
 				function _yrp_appearance.left:Paint(pw, ph)
 					--surfacePanel(self, pw, ph)
-					--draw.SimpleTextOutlined(YRP.lang_string("LID_appearance"), "HudBars", pw/2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+					--draw.SimpleTextOutlined(YRP.lang_string("LID_appearance"), "Y_24_500", pw/2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 				end
 
 				_appe.r.play = createD("DButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200))
@@ -255,7 +255,7 @@ net.Receive("get_menu_bodygroups", function(len)
 			local tab = {}
 			tab.x = pw / 2
 			tab.y = ph / 2
-			tab.font = "mat1header"
+			tab.font = "Y_22_500"
 			tab.text = "Role Has No Playermodel!"
 			DrawText(tab)
 		end

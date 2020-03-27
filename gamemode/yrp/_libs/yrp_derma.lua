@@ -101,7 +101,7 @@ function DGroup(tab)
 		text.text = tab.name
 		text.x = pw / 2
 		text.y = ph / 2
-		text.font = "mat1header"
+		text.font = "Y_22_500"
 		text.color = Color(0, 0, 0, 255)
 		text.br = 0
 		text.ax = 1
@@ -152,7 +152,7 @@ function DName(tab)
 		text.text = YRP.lang_string(tab.name)
 		text.x = YRP.ctr(10)
 		text.y = ph / 2
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -187,7 +187,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		text.text = YRP.lang_string(name) .. ":"
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -243,7 +243,7 @@ function DBoolLine(tab, value, str, netstr)
 		text.text = YRP.lang_string(str)
 		text.x = tab.brx + tab.h + YRP.ctr(10)
 		text.y = ph / 2
-		text.font = "mat1header"
+		text.font = "Y_22_500"
 		text.color = Color(0, 0, 0, 255)
 		text.br = 0
 		text.ax = 0
@@ -303,7 +303,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		text.text = YRP.lang_string(name)
 		text.x = tab.brx + YRP.ctr(200) + YRP.ctr(10)
 		text.y = ph / 2
-		text.font = "mat1header"
+		text.font = "Y_22_500"
 		text.color = Color(0, 0, 0, 255)
 		text.br = 0
 		text.ax = 0
@@ -314,7 +314,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
-			DMG.font = "mat1header"
+			DMG.font = "Y_22_500"
 			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 0
 			DMG.ax = 2
@@ -381,7 +381,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		text.text = YRP.lang_string(name) .. ":"
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -449,7 +449,7 @@ function DStringBox(tab, str, name, netstr)
 		text.text = YRP.lang_string(name) .. ":"
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "mat1text"
+		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -460,7 +460,7 @@ function DStringBox(tab, str, name, netstr)
 			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
-			DMG.font = "mat1header"
+			DMG.font = "Y_22_500"
 			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
@@ -536,7 +536,7 @@ function DHeader(tab, header)
 		head.text = YRP.lang_string(header)
 		head.x = YRP.ctr(10)
 		head.y = ph / 2
-		head.font = "mat1header"
+		head.font = "Y_22_500"
 		head.color = Color(0, 0, 0, 255)
 		head.br = 0
 		head.ax = 0

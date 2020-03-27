@@ -84,9 +84,9 @@ function buyWindow(door, tabBuilding)
 		closeMenu()
 	end
 	function yrp_door.window.con:Paint(pw, ph)
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "sef", br, br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalDString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalDString("text_money_pos", ""), "sef", br, YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "sef", br, YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "Y_24_500", br, br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalDString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalDString("text_money_pos", ""), "Y_24_500", br, YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "Y_24_500", br, YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		draw.RoundedBox(0, 0, YRP.ctr(200), pw, ph - YRP.ctr(200), Color(255, 255, 100, 200))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
@@ -287,15 +287,15 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 	function yrp_door.window.con:Paint(pw, ph)
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "sef", YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "sef", YRP.ctr(20), YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "Y_24_500", YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "Y_24_500", YRP.ctr(20), YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		local owner = tabOwner.rpname or tabGroup.string_name
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "sef", YRP.ctr(20), YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "Y_24_500", YRP.ctr(20), YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		if OWNER then
 			draw.SimpleTextOutlined(YRP.lang_string("LID_header"), "Y_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_description"), "Y_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-			--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetDString("level", -1), "sef", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+			--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetDString("level", -1), "Y_24_500", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		end
 
 		draw.RoundedBox(0, 0, YRP.ctr(220), pw, ph - YRP.ctr(220), Color(255, 255, 100, 200))

@@ -9,7 +9,7 @@ function paintDBButton(self, pw, ph, color, text)
 	end
 
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
-	surfaceText(text, "SettingsNormal", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+	surfaceText(text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 end
 
 function PANEL:Init()
@@ -84,7 +84,7 @@ function PANEL:Init()
 
 	function self.listheader:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0))
-		surfaceText(self.textpre .. " " .. YRP.lang_string(self.text) .. " " .. self.textpos, "SettingsNormal", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+		surfaceText(self.textpre .. " " .. YRP.lang_string(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 	end
 
 	--[[ List ]]
@@ -145,7 +145,7 @@ function PANEL:Init()
 			end
 
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			surfaceText(SQL_STR_OUT(self.tbl.name), "SettingsNormal", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			surfaceText(SQL_STR_OUT(self.tbl.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 
 		function _new:DoClick()

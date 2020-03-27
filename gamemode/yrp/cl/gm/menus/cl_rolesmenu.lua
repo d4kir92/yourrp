@@ -164,17 +164,17 @@ function createRoleBox(rol, parent, mainparent)
 
 			ROLEMENU.infodesc:SetText("")
 			if ROLEMENU.infodesc.SetUnderlineFont != nil then
-				ROLEMENU.infodesc:SetUnderlineFont("roleInfoText")
+				ROLEMENU.infodesc:SetUnderlineFont("Y_20_500")
 			end
-			ROLEMENU.infodesc:SetFontInternal("roleInfoText")
+			ROLEMENU.infodesc:SetFontInternal("Y_20_500")
 			ROLEMENU.infodesc:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infodesc:AppendText(rol.string_description)
 
 			ROLEMENU.infosweps:SetText("")
 			if ROLEMENU.infosweps.SetUnderlineFont != nil then
-				ROLEMENU.infosweps:SetUnderlineFont("roleInfoText")
+				ROLEMENU.infosweps:SetUnderlineFont("Y_20_500")
 			end
-			ROLEMENU.infosweps:SetFontInternal("roleInfoText")
+			ROLEMENU.infosweps:SetFontInternal("Y_20_500")
 			ROLEMENU.infosweps:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.string_sweps)))
 
@@ -200,7 +200,7 @@ function createBouncer(parent, mainparent)
 		parent:SetWide(mainparent:GetWide() - YRP.ctr(140))
 		local _bou = createD("DPanel", parent, YRP.ctr(50), YRP.ctr(200), 0, 0)
 		function _bou:Paint(pw, ph)
-			surfaceText("➔", "roleInfoHeader", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			surfaceText("➔", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		if parent.AddPanel != nil then
 			parent:AddPanel(_bou)
@@ -298,7 +298,7 @@ function addGroup(grp, parent)
 			if tonumber(self.tbl.int_parentgroup) == 0 then
 				name = YRP.lang_string("LID_faction") .. ": " .. name
 			end
-			draw.SimpleText(name, "roleInfoHeader", _x, ph / 2, Color(255, 255, 255), 0, 1)
+			draw.SimpleText(name, "Y_24_500", _x, ph / 2, Color(255, 255, 255), 0, 1)
 
 			local _box = YRP.ctr(50)
 			local _dif = 50
@@ -308,7 +308,7 @@ function addGroup(grp, parent)
 				_tog = "▲"
 			end
 			draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif, headeralpha))
-			draw.SimpleText(_tog, "roleInfoHeader", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(_tog, "Y_24_500", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
 			if tobool(grp.bool_locked) then
 				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0, 200))
 			end
@@ -431,30 +431,30 @@ function CreateRoleMenuContent(parent)
 
 		-- Role Appearance --
 		draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_appearance"), "roleInfoHeader", YRP.ctr(25), YRP.ctr(25), Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_appearance"), "Y_24_500", YRP.ctr(25), YRP.ctr(25), Color(255, 255, 255), 0, 1)
 		draw.RoundedBox(0, 0, YRP.ctr(50), pw, YRP.ctr(400), contentcolor)
 
 		-- Role Name --
 		draw.RoundedBox(0, 0, YRP.ctr(500), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_role"), "roleInfoHeader", YRP.ctr(25), YRP.ctr(500 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_role"), "Y_24_500", YRP.ctr(25), YRP.ctr(500 + 25), Color(255, 255, 255), 0, 1)
 		draw.RoundedBox(0, 0, YRP.ctr(500 + 50), pw, YRP.ctr(50), contentcolor)
-		surfaceText(self.rolename, "roleInfoText", YRP.ctr(25), YRP.ctr(500 + 50 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(self.rolename, "Y_20_500", YRP.ctr(25), YRP.ctr(500 + 50 + 25), Color(255, 255, 255), 0, 1)
 
 		-- Role Description --
 		draw.RoundedBox(0, 0, YRP.ctr(650), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_description"), "roleInfoHeader", YRP.ctr(25), YRP.ctr(650 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_description"), "Y_24_500", YRP.ctr(25), YRP.ctr(650 + 25), Color(255, 255, 255), 0, 1)
 		draw.RoundedBox(0, 0, YRP.ctr(650 + 50), pw, YRP.ctr(200), contentcolor)
 
 		-- Role Equipment --
 		draw.RoundedBox(0, 0, YRP.ctr(950), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_sweps"), "roleInfoHeader", YRP.ctr(25), YRP.ctr(950 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_sweps"), "Y_24_500", YRP.ctr(25), YRP.ctr(950 + 25), Color(255, 255, 255), 0, 1)
 		draw.RoundedBox(0, 0, YRP.ctr(950 + 50), pw, YRP.ctr(100), contentcolor)
 
 		-- Role Salary --
 		draw.RoundedBox(0, 0, YRP.ctr(1150), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_salary"), "roleInfoHeader", YRP.ctr(25), YRP.ctr(1150 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string("LID_salary"), "Y_24_500", YRP.ctr(25), YRP.ctr(1150 + 25), Color(255, 255, 255), 0, 1)
 		draw.RoundedBox(0, 0, YRP.ctr(1150 + 50), pw, YRP.ctr(50), contentcolor)
-		surfaceText(formatMoney(self.rolesala, LocalPlayer()), "roleInfoText", YRP.ctr(25), YRP.ctr(1150 + 50 + 25), Color(255, 255, 255), 0, 1)
+		surfaceText(formatMoney(self.rolesala, LocalPlayer()), "Y_20_500", YRP.ctr(25), YRP.ctr(1150 + 50 + 25), Color(255, 255, 255), 0, 1)
 	end
 
 	ROLEMENU.pms = createD("DHorizontalScroller", ROLEMENU.info, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(50))

@@ -95,7 +95,7 @@ function CreateKeybindsContent(parent)
 	table.insert(keybinds, {YRP.lang_string("LID_keybinds"), "menu_keybinds"})
 	function background:Paint(pw, ph)
 		for i, v in pairs(keybinds) do
-			draw.SimpleTextOutlined(YRP.lang_string(v[1]), "sef", YRP.ctr(_wide), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string(v[1]), "Y_24_500", YRP.ctr(_wide), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		end
 	end
 

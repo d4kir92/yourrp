@@ -38,6 +38,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_feedback", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_usergroups", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_logs", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_blacklist", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_scale", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_vehicles", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapons", "INT DEFAULT 0")
@@ -811,6 +813,20 @@ net.Receive("usergroup_update_bool_logs", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local bool_logs = net.ReadString()
 	UGCheckBox(ply, uid, "bool_logs", bool_logs)
+end)
+
+util.AddNetworkString("usergroup_update_bool_blacklist")
+net.Receive("usergroup_update_bool_blacklist", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_blacklist = net.ReadString()
+	UGCheckBox(ply, uid, "bool_blacklist", bool_blacklist)
+end)
+
+util.AddNetworkString("usergroup_update_bool_scale")
+net.Receive("usergroup_update_bool_scale", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_scale = net.ReadString()
+	UGCheckBox(ply, uid, "bool_scale", bool_scale)
 end)
 
 util.AddNetworkString("usergroup_update_bool_groupsandroles")
@@ -1687,15 +1703,14 @@ function Player:UserGroupLoadout()
 			self:Give(swep)
 		end
 		self:SetDString("usergroupColor", UG.string_color)
-		self:SetDBool("bool_adminaccess", tobool(UG.bool_adminaccess))
-		self:SetDBool("bool_canseeteammatesonmap", tobool(UG.bool_canseeteammatesonmap))
-		self:SetDBool("bool_canseeenemiesonmap", tobool(UG.bool_canseeenemiesonmap))
-		self:SetDBool("bool_canuseesp", tobool(UG.bool_canuseesp))
-		self:SetDBool("bool_canusecontextmenu", tobool(UG.bool_canusecontextmenu))
-		self:SetDBool("bool_canusespawnmenu", tobool(UG.bool_canusespawnmenu))
-		self:SetDBool("bool_canseefrequency", tobool(UG.bool_canseefrequency))
 		self:SetDInt("int_position", UG.int_position)
 		self:SetDInt("int_characters_max", UG.int_characters_max)
+
+		for i, v in pairs(UG) do
+			if string.StartWith(i, "bool_") then
+				self:SetDBool(i, tobool(v))
+			end
+		end
 	end
 end
 

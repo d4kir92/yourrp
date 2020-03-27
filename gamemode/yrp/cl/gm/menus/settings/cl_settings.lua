@@ -61,13 +61,13 @@ function F8RequireUG(site, usergroups)
 	local notallowed = createD("DPanel", settingsWindow.window.site, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), 0, 0)
 	function notallowed:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
-		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "roleInfoHeader", w / 2, h / 2, Color(255, 0, 0), 1, 1)
+		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color(255, 0, 0), 1, 1)
 
 		if site != "usergroups" then
-			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "roleInfoHeader", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
 		else
-			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "roleInfoHeader", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
-			surfaceText("(In Server Console) Example:", "roleInfoHeader", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText("(In Server Console) Example:", "Y_24_500", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
 
@@ -107,8 +107,8 @@ function CloseSettings()
 	end
 end
 
-local SAVE_CATE = "LID_usermanagement" --"LID_settings_server_gameplay"
-local SAVE_SITE = "open_server_give" --"open_server_general"
+local SAVE_CATE = "" --"LID_settings_server_gameplay"
+local SAVE_SITE = "" --"open_server_general"
 local maximised = false
 function SaveLastSite()
 	
@@ -200,7 +200,11 @@ function OpenSettings()
 		self.cats[str].sites = self.cats[str].sites or {}
 	end
 
-	function settingsWindow.window:AddSite(cat, str, lstr, icon)
+	function settingsWindow.window:AddSite(cat, str, lstr, icon, bo)
+		if !lply:GetDBool(bo, false) then
+			return
+		end
+
 		self.cats[cat].sites[str] = self.cats[cat].sites[str] or {}
 		self.cats[cat].sites[str].lstr = lstr
 		self.cats[cat].sites[str].icon = Material(icon)
@@ -236,9 +240,9 @@ function OpenSettings()
 	end
 
 	function settingsWindow.window:CreateMenu()
-		self._is = YRP.ctr(100) 					-- Icon Size
+		self._is = YRP.ctr(120) 					-- Icon Size
 		self._mb = YRP.ctr(20)						-- Menu Border
-		self._mw = YRP.ctr(100) + 2 * self._mb		-- Menu Width
+		self._mw = self._is + 2 * self._mb		-- Menu Width
 		self._bh = YRP.ctr(50)						-- Bottombar Height
 
 		self.menubg = createD("DPanel", self, 10, 10, 0, 0)
@@ -312,7 +316,17 @@ function OpenSettings()
 				surface.SetMaterial(c.icon)
 				surface.DrawTexturedRect(ph * 0.1, ph * 0.1, ph * 0.8, ph * 0.8)
 
-				draw.SimpleText(YRP.lang_string(self.name), "Y_14_700", pw / 2, ph - YRP.ctr(20), Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				local text = YRP.lang_string(self.name)
+				surface.SetFont("Y_18_700")
+				local tw, th = surface.GetTextSize(text)
+				self.tx = self.tx or pw / 2
+				if tw > pw then
+					self.tx = self.tx - 0.5
+					if self.tx < -tw / 1.5 then
+						self.tx = tw * 1.5
+					end
+				end
+				draw.SimpleText(text, "Y_18_700", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function cat.btn:Close()
 				self._sel = false
@@ -342,6 +356,10 @@ function OpenSettings()
 				end
 			end
 			settingsWindow.window.cats[cname].btn = cat.btn
+			if table.Count(c.sites) == 0 then
+				cat:Remove()
+				continue
+			end
 			for i, s in SortedPairsByMemberValue(c.sites, "id") do
 				local site = createD("DButton", nil, cat.btn.main._is, cat.btn.main._is, 0, 0)
 				site:SetText("")
@@ -372,7 +390,17 @@ function OpenSettings()
 					surface.SetMaterial(self.icon)
 					surface.DrawTexturedRect(ph * 0.2, ph * 0.2, ph * 0.6, ph * 0.6)
 	
-					draw.SimpleText(YRP.lang_string(self.name), "Y_14_700", YRP.ctr(10), ph - YRP.ctr(20), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					local text = YRP.lang_string(self.name)
+					surface.SetFont("Y_18_700")
+					local tw, th = surface.GetTextSize(text)
+					self.tx = self.tx or pw / 2
+					if tw > pw then
+						self.tx = self.tx - 0.5
+						if self.tx < -tw / 1.5 then
+							self.tx = tw * 1.5
+						end
+					end
+					draw.SimpleText(text, "Y_18_700", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function site:DoClick()
 					SAVE_CATE = cname
@@ -405,9 +433,25 @@ function OpenSettings()
 	end
 
 	function settingsWindow.window:SwitchToSite(cat, site)
-		if strEmpty(site) then return end
-		self.cats[cat].btn:DoClick()
-		self.cats[cat].sites[site].btn:DoClick()
+		if self.cats[cat] != nil then
+			self.cats[cat].btn:DoClick()
+			if self.cats[cat].sites[site] != nil then
+				function self.site:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+				end
+				self.cats[cat].sites[site].btn:DoClick()
+			else
+				function self.site:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+					draw.SimpleText(YRP.lang_string("LID_settings_yourusergrouphasnopermission"), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+			end
+		else
+			function self.site:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+				draw.SimpleText(YRP.lang_string("LID_settings_yourusergrouphasnopermission"), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+		end
 	end
 
 
@@ -415,40 +459,40 @@ function OpenSettings()
 	--Sites
 	local SV_USERMANAGEMENT = "LID_usermanagement"
 	settingsWindow.window:AddCategory(SV_USERMANAGEMENT, "icon16/user.png")
-	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_give", "LID_settings_players", "icon16/group.png")
-	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_add.png")
+	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_give", "LID_settings_players", "icon16/group.png", "bool_players")
+	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_add.png", "bool_whitelist")
 
 	local SV_MODERATION = "LID_moderation"
 	settingsWindow.window:AddCategory(SV_MODERATION, "icon16/shield.png")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_status", "LID_settings_status", "icon16/error.png")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group_edit.png")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_map", "LID_settings_map", "icon16/map_edit.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_status", "LID_settings_status", "icon16/error.png", "bool_status")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group_edit.png", "bool_groupsandroles")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_map", "LID_settings_map", "icon16/map_edit.png", "bool_map")
 	-- character [vcard_edit.png] Character
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_logs", "LID_logs", "icon16/page_white_error.png")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_blacklist", "LID_blacklist", "icon16/page_white_delete.png")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_feedback", "LID_settings_feedback", "icon16/user_comment.png")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_logs", "LID_logs", "icon16/page_white_error.png", "bool_logs")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_blacklist", "LID_blacklist", "icon16/page_white_delete.png", "bool_blacklist")
+	settingsWindow.window:AddSite(SV_MODERATION, "open_server_feedback", "LID_settings_feedback", "icon16/user_comment.png", "bool_feedback")
 	
 	local SV_ADMINISTRATION = "LID_administration"
 	settingsWindow.window:AddCategory(SV_ADMINISTRATION, "icon16/lightning.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_realistic", "LID_settings_realistic", "icon16/rainbow.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_shops", "LID_settings_shops", "icon16/cart_edit.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_usergroups", "LID_settings_usergroups", "icon16/user_edit.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_levelsystem", "LID_levelsystem", "icon16/wand.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_design", "LID_settings_design", "icon16/picture_edit.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_scale", "LID_scale", "icon16/arrow_out.png")
-	-- money money.png
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_realistic", "LID_settings_realistic", "icon16/rainbow.png", "bool_realistic")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_shops", "LID_settings_shops", "icon16/cart_edit.png", "bool_shops")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png", "bool_licenses")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_usergroups", "LID_settings_usergroups", "icon16/user_edit.png", "bool_usergroups")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_levelsystem", "LID_levelsystem", "icon16/wand.png", "bool_levelsystem")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_design", "LID_settings_design", "icon16/picture_edit.png", "bool_design")
+	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_scale", "LID_scale", "icon16/arrow_out.png", "bool_scale")
+	-- money money.png "bool_money"
 	
 	local SV_SERVER = "LID_server"
 	settingsWindow.window:AddCategory(SV_SERVER, "icon16/wrench_orange.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/world.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/world.png", "bool_general")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png", "bool_console")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png", "bool_ac_database")
 	-- Socials [television.png]
 
 	local YRP_YOURRP = "YourRP"
 	settingsWindow.window:AddCategory(YRP_YOURRP, "vgui/yrp/icon24.png")
-	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin.png")
+	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin.png", "bool_yourrp_addons")
 
 
 

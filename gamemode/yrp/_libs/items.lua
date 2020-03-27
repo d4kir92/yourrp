@@ -414,7 +414,7 @@ if CLIENT then
 				surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
 				surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
 
-				surfaceText(tab.PrintName, "mat1text", YRP.ctr(20), YRP.ctr(10), Color(255, 255, 255), 0, 0)
+				surfaceText(tab.PrintName, "Y_18_500", YRP.ctr(20), YRP.ctr(10), Color(255, 255, 255), 0, 0)
 			end
 
 			local _item = createD("DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
