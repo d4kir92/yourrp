@@ -222,7 +222,7 @@ function HUDSpace()
 			0,
 			nil,
 			FR,
-			YRP.lang_string("LID_frequency") .. ": " .. tostring(lply:GetDFloat("voice_channel", 0.1, 1)),
+			lply:FrequencyText(),
 			--2
 		}
 

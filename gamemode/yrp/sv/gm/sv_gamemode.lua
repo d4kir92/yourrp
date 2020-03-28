@@ -775,6 +775,11 @@ net.Receive("yrp_voice_end", function(len, ply)
 	ply:SetDBool("yrp_speaking", false)
 end)
 
+util.AddNetworkString("yrp_mute_voice")
+net.Receive("yrp_mute_voice", function(len, ply)
+	ply:SetDBool("mute_voice", !ply:GetDBool("mute_voice", false))
+end)
+
 function HearFaded(listener, talker)
 	local t_speak_channel = tonumber(talker:GetDInt("speak_channel", 0))
 	local t_guid = tonumber(talker:GetDString("groupUniqueID", "0"))
@@ -831,7 +836,9 @@ function CanHearChannel(listener, talker)
 	local l_speak_channel = tonumber(listener:GetDFloat("voice_channel", 0.1, 1))
 	local t_speak_channel = tonumber(talker:GetDFloat("voice_channel", 0.1, 1))
 	local dist = listener:GetPos():Distance(talker:GetPos())
-	if t_speak_channel == l_speak_channel or t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
+	if listener:GetDBool("mute_voice", false) and dist < GetMaxVoiceRange() then
+		return true, true
+	elseif t_speak_channel == l_speak_channel or t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
 		return true
 	end
 	return false

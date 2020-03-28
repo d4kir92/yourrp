@@ -159,6 +159,7 @@ net.Receive("getsitehelp", function(len)
 		AddKeybindBr(keybinds)
 		AddKeybind(keybinds, GetKeybindName("speak_next"), "LID_nextvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("speak_prev"), "LID_previousvoicechannel", "record_voice_over", "bool_voice_channels")
+		AddKeybind(keybinds, GetKeybindName("mute_voice"), "LID_mutevoice", "")
 
 		HELPMENU.feedback = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20))
 		HELPMENU.feedback:SetText("LID_givefeedback")

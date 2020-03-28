@@ -681,7 +681,7 @@ function HUDSimple()
 		FR.element = "FR"
 		FR.cur = 0
 		FR.max = 1
-		FR.text = YRP.lang_string("LID_frequency") .. ": " .. tostring(lply:GetDFloat("voice_channel", 0.1, 1))
+		FR.text = lply:FrequencyText()
 		FR.icon = icons["FR"]
 		HUDSimpleBAR(FR)
 		HP = {}

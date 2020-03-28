@@ -15,6 +15,7 @@ end
 function CloseInventory()
 	inv.open = false
 	if inv.win != nil then
+		surface.PlaySound("ambient/materials/wood_creak4.wav")
 		inv.win:Remove()
 		inv.win = nil
 	end
@@ -31,6 +32,8 @@ end
 function OpenInventory(target)
 	if IsInventorySystemEnabled() and YRPIsNoMenuOpen() then
 		inv.open = true
+
+		surface.PlaySound("ambient/materials/shuffle1.wav")
 
 		local lply = LocalPlayer()
 

@@ -1655,8 +1655,10 @@ function drawPlates()
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_clan", false) then
-					drawString(ply, "<" .. "CLAN WILL BE AVAILABLE IN FUTURE" .. ">", _height, color)
-					_height = _height + 5
+					if !strEmpty(ply:GetDString("yrp_clan", "")) then
+						drawString(ply, "<" .. ply:GetDString("yrp_clan", "") .. ">", _height, color)
+						_height = _height + 5
+					end
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_name", false) then
@@ -1721,7 +1723,7 @@ function drawPlates()
 				if GetGlobalDBool("bool_tag_on_head_frequency", false) and LocalPlayer():GetDBool("bool_canseefrequency", false) then
 					local ugcolor = Color(255, 255, 255)
 					ugcolor.a = color.a
-					drawString(ply, YRP.lang_string("LID_frequency") .. ": " .. tostring(ply:GetDFloat("voice_channel", 0.1, 1)), _height, ugcolor)
+					drawString(ply, LocalPlayer():FrequencyText(), _height, ugcolor)
 					_height = _height + 5
 				end
 			end
@@ -1864,8 +1866,9 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 			if GetGlobalDBool("bool_voice_channels", false) then
 				draw3DText(get_speak_channel_name(p) .. " (ID: " .. p:GetDInt("speak_channel", -1) .. ")", ScrCen.x, ScrCen.y, Color(255, 255, 0, 255))
 			else
-				draw3DText(YRP.lang_string("LID_frequency") .. ": " .. tostring(p:GetDFloat("voice_channel", 0.1, 1)), ScrCen.x, ScrCen.y, Color(255, 255, 100, 255))
+				draw3DText(p:FrequencyText(), ScrCen.x, ScrCen.y, Color(255, 255, 100, 255))
 			end
+
 			if p:GetDBool("yrp_speaking", false) then
 				local text = "IS SPEAKING!"
 				if p != LocalPlayer() then

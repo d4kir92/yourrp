@@ -109,6 +109,9 @@ function useFunction(str)
 			toggleMap()
 		elseif str == "openInteractMenu" then
 			toggleInteractMenu()
+		elseif str == "mute_voice" then
+			net.Start("yrp_mute_voice")
+			net.SendToServer()
 		elseif str == "openOptions" then
 			if eyeTrace.Entity != NULL then
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
@@ -541,6 +544,8 @@ function KeyPress()
 
 	keyPressed(KEY_UP, "openSP")
 	keyPressed(KEY_DOWN, "closeSP")
+
+	keyPressed(get_keybind("mute_voice"), "mute_voice")
 end
 hook.Add("Think", "Thinker", KeyPress)
 

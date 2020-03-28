@@ -36,6 +36,8 @@ YRPKEYBINDS["menu_interact"] = KEY_E
 YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
 
+YRPKEYBINDS["mute_voice"] = KEY_HOME
+
 net.Receive("SetServerKeybinds", function(len)
 	local keytab = net.ReadTable()
 	for i, ktab in pairs(keytab) do

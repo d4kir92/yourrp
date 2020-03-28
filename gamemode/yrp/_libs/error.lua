@@ -69,7 +69,10 @@ end
 
 function ErrorValidToSend(str)
 
-	if game.SinglePlayer() or game.GetIPAddress() == "loopback" then
+	if game.SinglePlayer() then
+		return false
+	end
+	if game.GetIPAddress() == "loopback" then
 		return false
 	end
 
@@ -257,6 +260,11 @@ function send_error(realm, str, force)
 			if gmod.GetGamemode() != nil then
 				isdbfull(str)
 				ismalformed(str)
+
+				if game.GetIPAddress() == "loopback" then
+					timer.Remove("wait_for_gamemode" .. str)
+					return false
+				end
 
 				entry["entry.915525654"] = "[D: " .. tostring(dedi) .. "] " .. tostring(str)
 				entry["entry.58745995"] = tostring(realm)

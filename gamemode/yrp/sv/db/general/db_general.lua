@@ -60,6 +60,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_dealers_can_take_damage", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirdperson", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_view_distance", "TEXT DEFAULT '200'")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_ooc", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_looc", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
@@ -709,6 +711,18 @@ net.Receive("update_text_view_distance", function(len, ply)
 	GeneralUpdateString(ply, "update_text_view_distance", "text_view_distance", str)
 end)
 
+
+util.AddNetworkString("update_bool_ooc")
+net.Receive("update_bool_ooc", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_ooc", "bool_ooc", b)
+end)
+
+util.AddNetworkString("update_bool_looc")
+net.Receive("update_bool_looc", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_looc", "bool_looc", b)
+end)
 
 util.AddNetworkString("update_text_chat_advert")
 net.Receive("update_text_chat_advert", function(len, ply)

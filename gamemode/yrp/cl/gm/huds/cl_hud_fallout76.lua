@@ -618,7 +618,7 @@ function HUD_FO76()
 
 		local FR = {}
 		FR.element = "FR"
-		FR.text = YRP.lang_string("LID_frequency") .. ": " .. tostring(lply:GetDFloat("voice_channel", 0.1, 1))
+		FR.text = lply:FrequencyText()
 		FO76Name(FR)
 
 		local batterypower = system.BatteryPower()

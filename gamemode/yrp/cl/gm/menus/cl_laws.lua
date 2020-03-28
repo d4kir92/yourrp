@@ -39,7 +39,9 @@ function OpenLawsMenu()
 		if !lply:GetDBool("bool_" .. "ismayor", false) and !lply:GetDBool("bool_" .. "iscp", false) then
 			if _la.window:IsValid() then
 				_la.laws = createD("RichText", content, content:GetWide(), content:GetTall(), 0, 0)
-				_la.laws:SetText(laws)
+				for i, v in pairs(string.Explode("\n", laws)) do
+					_la.laws:AppendText(v .. "\n")
+				end
 			end
 		else
 			_la.window:SetWide(YRP.ctr(1600))
