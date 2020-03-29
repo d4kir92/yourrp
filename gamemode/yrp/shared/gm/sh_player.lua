@@ -33,20 +33,32 @@ end
 local Player = FindMetaTable("Player")
 
 function Player:YRPEat(num)
+	num = tonumber(num)
 	if isnumber(num) then
-		self:SetDFloat("hunger", self:GetDFloat("hunger", 0.0) + num)
-		if self:GetDFloat("hunger", 0.0) > 100.0 then
-			self:SetDFloat("hunger", 100.0)
-		end
+		local eatsounds = {
+			"npc/barnacle/barnacle_crunch2.wav",
+			"npc/barnacle/barnacle_crunch3.wav"
+		}
+		local name, nr = table.Random(eatsounds)
+		self:EmitSound(name)
+
+		local newhunger = math.Clamp(self:GetDFloat("hunger", 0.0) + num, 0, 100.0)
+		self:SetDFloat("hunger", newhunger)
 	end
 end
 
 function Player:YRPDrink(num)
+	num = tonumber(num)
 	if isnumber(num) then
-		self:SetDFloat("thirst", self:GetDFloat("thirst", 0.0) + num)
-		if self:GetDFloat("thirst", 0.0) > 100.0 then
-			self:SetDFloat("thirst", 100.0)
-		end
+		local drinksounds = {
+			"npc/barnacle/barnacle_gulp1.wav",
+			"npc/barnacle/barnacle_gulp2.wav"
+		}
+		local name, nr = table.Random(drinksounds)
+		self:EmitSound(name)
+
+		local newthirst = math.Clamp(self:GetDFloat("thirst", 0.0) + num, 0, 100.0)
+		self:SetDFloat("thirst", newthirst)
 	end
 end
 
