@@ -2067,6 +2067,14 @@ function drawIDCard(ply, scale, px, py)
 	scale = scale or 1
 	local elements = {
 		"background",
+		"box1",
+		"box2",
+		"box3",
+		"box4",
+		"box5",
+		"box6",
+		"box7",
+		"box8",
 		"hostname",
 		"role",
 		"group",
@@ -2074,10 +2082,6 @@ function drawIDCard(ply, scale, px, py)
 		"faction",
 		"rpname",
 		"securitylevel",
-		"box1",
-		"box2",
-		"box3",
-		"box4",
 		--"grouplogo",
 		"serverlogo"
 	}
@@ -2122,21 +2126,36 @@ function drawIDCard(ply, scale, px, py)
 				if string.find(ele, "background") or string.find(ele, "box") then
 					draw.RoundedBox(0, x, y, w, h, color)
 				else
-					local text = "LOAD"
+					local text = ""
 					if ele == "hostname" then
 						text = GetGlobalDString("text_server_name", "")
 					elseif ele == "role" then
-						text = ply:GetRoleName()
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_role") .. ": "
+						end
+						text = text .. ply:GetRoleName()
 					elseif ele == "rpname" then
-						text = ply:RPName()
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_name") .. ": "
+						end
+						text = text .. ply:RPName()
 					elseif ele == "securitylevel" then
 						text = YRP.lang_string("LID_" .. ele) .. " " .. ply:GetDInt("int_securitylevel", 0)
 					elseif ele == "faction" then
-						text = ply:GetFactionName()
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_faction") .. ": "
+						end
+						text = text .. ply:GetFactionName()
 					elseif ele == "group" then
-						text = ply:GetGroupName()
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_group") .. ": "
+						end
+						text = text .. ply:GetGroupName()
 					elseif ele == "idcardid" then
-						text = ply:GetDString("idcardid", "")
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_id") .. ": "
+						end
+						text = text .. ply:GetDString("idcardid", "")
 					end
 
 					local tx = 0

@@ -609,7 +609,7 @@ function CreateCharacter(ply, tab)
 		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
-		vals = vals .. "'" .. tostring(tab.rpdescription) .. "'"
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.rpdescription)) .. "'"
 		for i = 0, 19 do
 			vals = vals .. ", " .. tonumber(tab.bg[i])
 		end

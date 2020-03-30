@@ -210,6 +210,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "INT DEFAULT 1.5")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "INT DEFAULT 50.0")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "INT DEFAULT 8.0")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hygiene", "INT DEFAULT 1.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "INT DEFAULT 30.0")
 
 local HANDLER_GENERAL = {}
 
@@ -1433,6 +1434,11 @@ net.Receive("update_float_scale_hygiene", function(len, ply)
 	GeneralUpdateFloat(ply, "update_float_scale_hygiene", "float_scale_hygiene", flo)
 end)
 
+util.AddNetworkString("update_float_scale_stamina_jump")
+net.Receive("update_float_scale_stamina_jump", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_stamina_jump", "float_scale_stamina_jump", flo)
+end)
 
 
 function AddTab(tab, name, netstr)

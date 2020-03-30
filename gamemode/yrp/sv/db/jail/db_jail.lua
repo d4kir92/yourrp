@@ -71,7 +71,7 @@ function teleportToReleasepoint(ply)
 	end
 end
 
-function teleportToJailpoint(ply, tim)
+function teleportToJailpoint(ply, tim, police)
 	ply:SetDBool("injail", true)
 	if tim != nil then
 		local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
@@ -91,6 +91,9 @@ function teleportToJailpoint(ply, tim)
 					-- DONE
 					ply:SetDInt("int_arrests", ply:GetDInt("int_arrests", 0) + 1)
 					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetDInt("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+					if police and police:IsPlayer() then
+						SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID64() .. "', '" .. police:SteamID64() .. "'")
+					end
 
 					tp_to(ply, vec)
 					_tmp = string.Explode(",", v.angle)

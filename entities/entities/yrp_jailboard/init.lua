@@ -52,8 +52,8 @@ net.Receive("jail", function(len, ply)
 	local jail = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:SteamID() .. "'")
 	if wk(jail) then
 		jail = jail[1]
-		local time = jail.time
-		teleportToJailpoint(target, time)
+		local tim = jail.time
+		teleportToJailpoint(target, tim, ply)
 	end
 end)
 

@@ -68,7 +68,7 @@ function SWEP:PrimaryAttack()
 		ply:EmitSound(hitsound)
 		if tr.Entity:IsPlayer() then
 			if SERVER then
-				teleportToJailpoint(tr.Entity, 2 * 60)
+				teleportToJailpoint(tr.Entity, 2 * 60, ply)
 			end
 		end
 	else

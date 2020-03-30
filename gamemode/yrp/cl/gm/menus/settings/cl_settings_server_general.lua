@@ -485,6 +485,14 @@ net.Receive("Connect_Settings_General", function(len)
 
 			local elements = {
 				"background",
+				"box1",
+				"box2",
+				"box3",
+				"box4",
+				"box5",
+				"box6",
+				"box7",
+				"box8",
 				"hostname",
 				"role",
 				"group",
@@ -492,10 +500,6 @@ net.Receive("Connect_Settings_General", function(len)
 				"faction",
 				"rpname",
 				"securitylevel",
-				"box1",
-				"box2",
-				"box3",
-				"box4",
 				--"grouplogo",
 				"serverlogo"
 			}
@@ -746,6 +750,7 @@ net.Receive("Connect_Settings_General", function(len)
 					function content:Paint(pw, ph)
 						draw.SimpleText("TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 						draw.SimpleText("TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string("LID_title"), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 					win.ele = ele
 
@@ -803,6 +808,16 @@ net.Receive("Connect_Settings_General", function(len)
 								net.WriteString(x)
 							net.SendToServer()
 						end
+					end
+					X = X + YRP.ctr(50 + 2)
+
+					e.title = createD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(780))
+					e.title:SetChecked(GetGlobalDBool("bool_" .. ele .. "_title", false))
+					function e.title:OnChange(bVal)
+						net.Start("update_idcard_" .. "bool_" .. ele .. "_title")
+							net.WriteString("bool_" .. ele .. "_title")
+							net.WriteString(tostring(bVal))
+						net.SendToServer()
 					end
 					X = X + YRP.ctr(50 + 2)
 				end

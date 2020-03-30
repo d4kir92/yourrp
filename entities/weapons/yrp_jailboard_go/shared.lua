@@ -48,7 +48,7 @@ end
 
 function SWEP:PrimaryAttack()
 	if SERVER then
-		print("ATTACK")
+
 		local ply = self:GetOwner()
 
 		local tmpTable = SQL_SELECT("yrp_jail", "*", nil)

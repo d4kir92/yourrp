@@ -21,6 +21,14 @@ end
 
 local elements = {
 	"background",
+	"box1",
+	"box2",
+	"box3",
+	"box4",
+	"box5",
+	"box6",
+	"box7",
+	"box8",
 	"hostname",
 	"role",
 	"group",
@@ -28,10 +36,6 @@ local elements = {
 	"faction",
 	"rpname",
 	"securitylevel",
-	"box1",
-	"box2",
-	"box3",
-	"box4",
 	--"grouplogo",
 	"serverlogo"
 }
@@ -48,7 +52,8 @@ local names = {
 	"int_ELEMENT_a",
 	"int_ELEMENT_ax",
 	"int_ELEMENT_ay",
-	"int_ELEMENT_colortype"
+	"int_ELEMENT_colortype",
+	"bool_ELEMENT_title"
 }
 
 -- CONFIG

@@ -69,6 +69,18 @@ function BuildScaleSite()
 			net.SendToServer()
 		end
 		Y = Y + 120 + 50
+
+		local scale_stamina_jump = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
+		scale_stamina_jump:SetHeader("LID_scale_stamina_jump")
+		scale_stamina_jump:SetMin(0.01)
+		scale_stamina_jump:SetMax(100.0)
+		scale_stamina_jump:SetValue(GetGlobalDFloat("float_scale_stamina_jump", 0))
+		function scale_stamina_jump:OnValueChanged(val)
+			net.Start("update_float_scale_stamina_jump")
+				net.WriteFloat(val)
+			net.SendToServer()
+		end
+		Y = Y + 120 + 50
 	end
 end
 

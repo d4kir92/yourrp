@@ -12,6 +12,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_source_steamid", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_target_steamid", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_alttarget", "TEXT DEFAULT ''")
 
 local showafter =	60*60*24
 local deleteafter =	60*60*24*2
@@ -49,23 +50,3 @@ net.Receive("yrp_get_logs", function(len, ply)
 		net.Send(ply)
 	end
 end)
-
--- %source% killed %target%
--- %source% damaged %target% with %value% dmg
--- %source% wrote: %value%
--- %source% used command: %value%
--- %source% arrested %target%
--- %source% connected/disconnected
--- %source% added %target% into the whitelist
--- %source% spawned %value%
-
---[[
-❎ Kills (Wer wen gekillt hat)
-❎ Gesundheit (Wer wen wann womit getroffen hat)
-❎ Chat (Wer wann was geschrieben hat)
-❎ Commands (ULX, Vermilion, yourrp commands etc)
-❎ Arrests (Wer wann wen verhaftet hat)
-❎ Connections (wer wann gejoint/geleavt ist)
-❎ Whitelist log (wer wen wann eingetragen hat)
-❎ Spawn log (Props, Entities, Vehicles)
-]]

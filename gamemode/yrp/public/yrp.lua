@@ -19,8 +19,8 @@ if SERVER then
 		teleportToSpawnpoint(ply)
 	end
 
-	function TeleportToJailpoint(ply, time)
-		teleportToJailpoint(ply, tim)
+	function TeleportToJailpoint(ply, time, police)
+		teleportToJailpoint(ply, tim, police)
 	end
 
 	function TeleportToReleasepoint(ply)

@@ -1127,36 +1127,50 @@ end
 hook.Add("PlayerSpawnedVehicle", "yrp_vehicles_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Vehicle: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedSWEP", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Weapon: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedSENT", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Entity: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedEffect", "yrp_effects_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Effect: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedNPC", "yrp_npcs_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'NPC: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedProp", "yrp_props_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'PROP: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
+
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Ragdoll: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
