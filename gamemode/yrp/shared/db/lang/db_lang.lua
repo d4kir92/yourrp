@@ -111,12 +111,12 @@ function YRP.lang_string(var, vals)
 	var = tostring(var)
 	if string.StartWith(var, "LID_") then
 		local va = "LID_" .. string.lower(string.sub(var, 5))
-		if va == var then
+		if va == var then	-- if is not modified
 			local translation = yrp_current_lang[string.lower(var)]
 
 			-- IF NOT FOUND
 			if !wk(translation) then
-				if nf[var] == nil then
+				if nf[var] == nil and CLIENT and LocalPlayer():LoadedGamemode() then
 					nf[var] = var
 					PrintLIDError(var)
 				end

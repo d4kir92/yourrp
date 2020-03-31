@@ -249,7 +249,7 @@ function send_error(realm, str, force)
 
 	local dedi = "UNKNOWN"
 	if CLIENT then
-		dedi = tostring(LocalPlayer():GetDBool("isserverdedicated", false))
+		dedi = tostring(LocalPlayer():GetDBool("isserverdedicated"))
 	elseif SERVER then
 		dedi = tostring(game.IsDedicated())
 	end
@@ -257,7 +257,7 @@ function send_error(realm, str, force)
 
 	if ErrorValidToSend(str) or force then
 		timer.Create("wait_for_gamemode" .. str, 1, 0, function()
-			if gmod.GetGamemode() != nil then
+			if gmod.GetGamemode() != nil and SERVER or (CLIENT and LocalPlayer():LoadedGamemode()) then
 				isdbfull(str)
 				ismalformed(str)
 
@@ -380,9 +380,14 @@ function SendAllErrors(str)
 	send_errors("server", _sv_errors)
 end
 
-timer.Create("update_error_tables", 10, 0, function()
-	if CanSendError() then
-		SendAllErrors()
+local first = true
+timer.Create("update_error_tables", 20, 0, function()
+	if first then
+		first = false
+	else
+		if CanSendError() then
+			SendAllErrors("update_error_tables")
+		end
 	end
 	tick = tick + 1
 end)

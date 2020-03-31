@@ -464,6 +464,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
 	ACCESSAddCheckBox("bool_ac_database", "LID_settings_database", Color(255, 0, 0, 255))
 	-- Socials [television.png]
+	ACCESSAddCheckBox("bool_darkrp", "DarkRP", Color(255, 0, 0, 255))
 	
 	ACCESSAddHr()
 	-- YourRP

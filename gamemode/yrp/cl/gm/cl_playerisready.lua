@@ -119,7 +119,7 @@ function printReadyError()
 	str = str .. " YRP_NOINIT: " .. tostring(YRP_NOINIT)
 	str = str .. " ENTS: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
 	str = str .. " GLOS: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
-	str = str .. " dedi: " .. tostring(lply:GetDBool("isserverdedicated", false))
+	str = str .. " dedi: " .. tostring(lply:GetDBool("isserverdedicated"))
 	str = str .. " country: " .. tostring(system.GetCountry())
 	str = str .. " YRP_COUNT: " .. tostring(YRP_COUNT)
 

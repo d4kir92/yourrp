@@ -69,6 +69,8 @@ table.insert(YRP_DBS, "yrp_jail")
 table.insert(YRP_DBS, "yrp_jail_notes")
 table.insert(YRP_DBS, "yrp_interface")
 
+table.insert(YRP_DBS, "yrp_darkrp")
+
 table.insert(YRP_DBS, "yrp_inventory_storages")
 table.insert(YRP_DBS, "yrp_inventory_slots")
 table.insert(YRP_DBS, "yrp_inventory_items")
@@ -188,3 +190,54 @@ include("inventory/db_inventory_player.lua")
 include("inventory/db_inventory_storages.lua")
 include("inventory/db_inventory_slots.lua")
 include("inventory/db_inventory_items.lua")
+
+
+
+-- DarkRP
+local DATABASE_NAME = "yrp_darkrp"
+
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+
+util.AddNetworkString("yrp_darkrp_bool")
+net.Receive("yrp_darkrp_bool", function(len, ply)
+	local name = net.ReadString()
+	local b = net.ReadBool()
+
+	if !wk(SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
+		SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. "bool_" .. name .. "', '" .. tonum(b) .. "'")
+	else
+		SQL_UPDATE(DATABASE_NAME, "value = '" .. tonum(b) .. "'", "name = '" .. "bool_" .. name .. "'")
+	end
+	UpdateDarkRPTable()
+end)
+
+util.AddNetworkString("update_yrp_darkrp")
+function UpdateDarkRPTable(ply)
+	local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
+
+	local yrp_darkrp = {}
+	for i, v in pairs(tab) do
+		if string.StartWith(v.name, "bool_") then
+			yrp_darkrp[v.name] = tobool(v.value)
+		else
+			YRP.msg("db", v.name .. ": " .. v.value)
+		end
+	end
+
+	SetDarkRPTab(yrp_darkrp)
+	UpdateDarkRP(DarkRP)
+
+	if ply == nil then
+		net.Start("update_yrp_darkrp")
+			net.WriteTable(yrp_darkrp)
+		net.Broadcast()
+	else
+		net.Start("update_yrp_darkrp")
+			net.WriteTable(yrp_darkrp)
+		net.Send(ply)
+	end
+end
+timer.Simple(4, function()
+	UpdateDarkRPTable()
+end)

@@ -203,14 +203,18 @@ function YRP.msg(chan, str_msg, tochat)
 				if SERVER then
 					REALM = "SERVER"
 				end
-				send_error(REALM, "[" .. cn .. "] " .. msg, true)
+				if CLIENT then
+					send_error(REALM, "[" .. cn .. "] " .. msg .. " LoadedGamemode: " .. tostring(LocalPlayer():LoadedGamemode()), true)
+				else
+					send_error(REALM, "[" .. cn .. "] " .. msg, true)
+				end
 				if CLIENT and cn == "ERROR" and createD != nil then
-					local err = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
+					local err = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
 					err:ShowCloseButton(false)
 					err:SetDraggable(false)
 					err:SetTitle("")
 					function err:Paint(pw, ph)
-						draw.WordBox(YRP.ctr(10), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_700", Color(255, 0, 0), Color(255, 255, 255))
+						draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_700", Color(255, 0, 0), Color(0, 0, 0))
 					end
 					timer.Simple(8, function()
 						err:Remove()
@@ -301,6 +305,7 @@ countries["LU"] = "Luxembourg"
 countries["LV"] = "Latvia"
 
 countries["MA"] = "Morocco"
+countries["MD"] = "Moldova"
 countries["ME"] = "Montenegro"
 countries["MK"] = "North Macedonia"
 countries["MX"] = "Mexico"

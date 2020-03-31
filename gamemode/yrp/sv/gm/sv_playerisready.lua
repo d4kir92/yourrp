@@ -49,6 +49,8 @@ function PlayerLoadedGame(ply)
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
 	end
+
+	UpdateDarkRPTable(ply)
 end
 
 hook.Add("Think", "yrp_loaded_game", function()

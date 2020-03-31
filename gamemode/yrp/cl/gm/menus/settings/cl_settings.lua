@@ -25,6 +25,7 @@ include("cl_settings_server_design.lua")
 
 include("cl_settings_server_database.lua")
 include("cl_settings_server_usergroups.lua")
+include("cl_settings_server_darkrp.lua")
 
 include("cl_settings_server_yourrp_addons.lua")
 
@@ -433,6 +434,10 @@ function OpenSettings()
 	end
 
 	function settingsWindow.window:SwitchToSite(cat, site)
+		function self.site:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+		end
+	
 		if self.cats[cat] != nil then
 			self.cats[cat].btn:DoClick()
 			if self.cats[cat].sites[site] != nil then
@@ -482,14 +487,15 @@ function OpenSettings()
 	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_design", "LID_settings_design", "icon16/picture_edit.png", "bool_design")
 	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_scale", "LID_scale", "icon16/arrow_out.png", "bool_scale")
 	-- money money.png "bool_money"
-	
+
 	local SV_SERVER = "LID_server"
 	settingsWindow.window:AddCategory(SV_SERVER, "icon16/wrench_orange.png")
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/world.png", "bool_general")
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png", "bool_console")
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png", "bool_ac_database")
 	-- Socials [television.png]
-
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_darkrp", "DarkRP", "icon16/bomb.png", "bool_darkrp")
+	
 	local YRP_YOURRP = "YourRP"
 	settingsWindow.window:AddCategory(YRP_YOURRP, "vgui/yrp/icon24.png")
 	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin.png", "bool_yourrp_addons")
