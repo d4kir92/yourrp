@@ -76,18 +76,20 @@ function PANEL:SetStorageID(storageID, slots)
 					end
 	
 					local s = slots[c]
-	
-					local slot = createD("YSlot", nil, ItemSize(), ItemSize(), 0, 0)
-					slot:SetSlotID(s.uniqueID)
-		
-					line:AddPanel(slot)
-
-					local i = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
-					i:SetModel(s:GetModel())
-					i:SetE(s)
-					slot:AddItem(i)
-	
-					c = c + 1
+					
+					if s.uniqueID then
+						local slot = createD("YSlot", nil, ItemSize(), ItemSize(), 0, 0)
+						slot:SetSlotID(s.uniqueID)
+						
+						line:AddPanel(slot)
+						c = c + 1
+						if ea(s) then
+							local i = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
+							i:SetModel(s:GetModel())
+							i:SetE(s)
+							slot:AddItem(i)
+						end
+					end
 				end
 			end
 		end

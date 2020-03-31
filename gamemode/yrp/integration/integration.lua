@@ -187,7 +187,7 @@ function GetDarkRPVar(name, var)
 	if value != nil then
 		return value
 	else
-		YRP.msg("note", "[GetDarkRPVar] FAIL " .. tostring(name) .. ", " .. tostring(var))
+		--YRP.msg("note", "[GetDarkRPVar] FAIL " .. tostring(name) .. ", " .. tostring(var))
 		return var
 	end
 end
@@ -201,7 +201,7 @@ function UpdateDarkRP(tab)
 		elseif type(v) == "boolean" then
 			tab[i] = GetDarkRPVar("bool_" .. i, v)
 		else
-			YRP.msg("note", "[DarkRP-FAIL] Type: " .. type(v) .. " Name: " .. i .. " Value: " .. v)
+			--YRP.msg("note", "[DarkRP-FAIL] Type: " .. type(v) .. " Name: " .. i .. " Value: " .. v)
 		end
 	end
 end

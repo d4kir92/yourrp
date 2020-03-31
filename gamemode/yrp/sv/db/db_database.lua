@@ -203,7 +203,9 @@ util.AddNetworkString("yrp_darkrp_bool")
 net.Receive("yrp_darkrp_bool", function(len, ply)
 	local name = net.ReadString()
 	local b = net.ReadBool()
-
+	
+	name = SQL_STR_IN(name)
+	
 	if !wk(SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
 		SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. "bool_" .. name .. "', '" .. tonum(b) .. "'")
 	else
@@ -216,26 +218,30 @@ util.AddNetworkString("update_yrp_darkrp")
 function UpdateDarkRPTable(ply)
 	local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
 
-	local yrp_darkrp = {}
-	for i, v in pairs(tab) do
-		if string.StartWith(v.name, "bool_") then
-			yrp_darkrp[v.name] = tobool(v.value)
-		else
-			YRP.msg("db", v.name .. ": " .. v.value)
+	if wk(tab) then
+		local yrp_darkrp = {}
+		for i, v in pairs(tab) do
+			local name = SQL_STR_OUT(v.name)
+			local value = SQL_STR_OUT(v.value)
+			if string.StartWith(name, "bool_") then
+				yrp_darkrp[name] = tobool(value)
+			else
+				YRP.msg("db", name .. ": " .. value)
+			end
 		end
-	end
 
-	SetDarkRPTab(yrp_darkrp)
-	UpdateDarkRP(DarkRP)
+		SetDarkRPTab(yrp_darkrp)
+		UpdateDarkRP(DarkRP)
 
-	if ply == nil then
-		net.Start("update_yrp_darkrp")
-			net.WriteTable(yrp_darkrp)
-		net.Broadcast()
-	else
-		net.Start("update_yrp_darkrp")
-			net.WriteTable(yrp_darkrp)
-		net.Send(ply)
+		if ply == nil then
+			net.Start("update_yrp_darkrp")
+				net.WriteTable(yrp_darkrp)
+			net.Broadcast()
+		else
+			net.Start("update_yrp_darkrp")
+				net.WriteTable(yrp_darkrp)
+			net.Send(ply)
+		end
 	end
 end
 timer.Simple(4, function()
