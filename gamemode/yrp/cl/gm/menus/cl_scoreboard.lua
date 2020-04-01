@@ -617,7 +617,7 @@ function OpenSBS()
 								end
 
 								local grpname = pl:GetGroupName()
-								if pl:GetFactionName() != pl:GetGroupName() then
+								if pl:GetFactionName() != pl:GetGroupName() and GetGlobalDBool("bool_yrp_scoreboard_show_factionname", false) then
 									grpname = "[" .. pl:GetFactionName() .. "] " .. grpname
 								end
 								local iconx = 0

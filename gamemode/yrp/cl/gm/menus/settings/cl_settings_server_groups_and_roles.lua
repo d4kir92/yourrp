@@ -1002,6 +1002,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local db_ugs = net.ReadTable()
 			local db_groups = net.ReadTable()
 
+			if !wk(db_groups) or !wk(db_ugs) or !wk(roles) or !wk(role) then
+				return
+			end
+
 			role.uniqueID = tonumber(role.uniqueID)
 			cur_role.gro = role.int_groupID
 			cur_role.edi = role.uniqueID
