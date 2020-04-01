@@ -305,21 +305,33 @@ function spawnItem(ply, item, duid)
 
 	local foundpos = false
 	local ang = Angle(0, 0, 0)
-	for i = 0, 315, 45 do
-		ang = Angle(0, i, 0)
-		local pos = TARGETPOS + ang:Forward() * dist
+	local tr = util.TraceHull( {
+		start = TARGETPOS,
+		endpos = TARGETPOS,
+		mins = mins,
+		maxs = maxs,
+		mask = MASK_SHOT_HULL
+	} )
+	if !tr.Hit then
+		foundpos = true
+	else
+		for i = 0, 315, 45 do
+			ang = Angle(0, i, 0)
+			local pos = TARGETPOS + ang:Forward() * dist
 
-		local tr = util.TraceHull( {
-			start = pos,
-			endpos = pos,
-			mins = mins,
-			maxs = maxs,
-			mask = MASK_SHOT_HULL
-		} )
+			tr = util.TraceHull( {
+				start = pos,
+				endpos = pos,
+				mins = mins,
+				maxs = maxs,
+				mask = MASK_SHOT_HULL
+			} )
 
-		if !tr.Hit then
-			TARGETPOS = pos
-			foundpos = true
+			if !tr.Hit then
+				TARGETPOS = pos
+				foundpos = true
+				break
+			end
 		end
 	end
 
@@ -347,7 +359,7 @@ function spawnItem(ply, item, duid)
 				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 1")
-				return true
+				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
 				if IsValid(ent) then
@@ -358,7 +370,7 @@ function spawnItem(ply, item, duid)
 					ent:SetDEntity("yrp_owner", ent)
 
 					printGM("gm", "[spawnItem] Spawned 2")
-					return true
+					return true, ent
 				else
 					YRP.msg("note", "Not valid " .. item.ClassName)
 					return false
@@ -373,7 +385,7 @@ function spawnItem(ply, item, duid)
 				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 3")
-				return true
+				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
 				if IsValid(ent) then
@@ -384,7 +396,7 @@ function spawnItem(ply, item, duid)
 					ent:SetDEntity("yrp_owner", ent)
 			
 					printGM("gm", "[spawnItem] Spawned 4")
-					return true
+					return true, ent
 				else
 					YRP.msg("note", "Not valid " .. item.ClassName)
 					return false
@@ -418,10 +430,15 @@ net.Receive("item_buy", function(len, ply)
 				RemRolVals(ply)
 				SetRole(ply, rid, true)
 			else
-				local _spawned = spawnItem(ply, _item, _dealer_uid)
+				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)
 
 				if _spawned then
 					ply:addMoney(-tonumber(_item.price))
+
+					ent:SetDInt("item_uniqueID", _item.uniqueID)
+					if ent:IsVehicle() then
+						AddVehicle(ent, ply, _item)
+					end
 				else
 					printGM("note", "Failed to spawn item from shop " .. tostring(_spawned))
 					return false
@@ -461,7 +478,14 @@ net.Receive("item_spawn", function(len, ply)
 			_item = _item[1]
 
 			if not IsEntityAlive(ply, _item.uniqueID) then
-				spawnItem(ply, _item, _dealer_uid)
+				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)
+
+				if _spawned then
+					ent:SetDInt("item_uniqueID", _item.uniqueID)
+					if ent:IsVehicle() then
+						AddVehicle(ent, ply, _item)
+					end
+				end
 			end
 		end
 	end
