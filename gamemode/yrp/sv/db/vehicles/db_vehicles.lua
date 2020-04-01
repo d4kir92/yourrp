@@ -22,8 +22,6 @@ function AddVehicle(veh, ply, item)
 	local cname = veh:GetClass()
 	local iuid = item.uniqueID
 
-	print(charid, cname, iuid)
-
 	SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'")
 end
 

@@ -66,7 +66,7 @@ function SWEP:PrimaryAttack()
 				v.cellname = "DELETED CELL"
 			end
 		end
-		pTab(tmpTable)
+
 		net.Start("openLawBoard")
 			net.WriteTable(tmpTable)
 		net.Send(ply)

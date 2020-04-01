@@ -10,8 +10,7 @@ function BuildTable(tab, parent, name, tabx)
 
 	for i, v in pairs(tab) do
 		if type(v) == "function" then 
-			--print(i, v)
-			--continue
+			continue
 		elseif type(v) == "table" then
 			BuildTable(v, parent, i, tabx + YRP.ctr(40))
 		elseif type(v) == "boolean" then
@@ -30,8 +29,6 @@ function BuildTable(tab, parent, name, tabx)
 			end
 
 			parent:AddItem(pnl)
-		else
-			print(i, v, type(v))
 		end
 	end
 end
