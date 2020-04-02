@@ -393,17 +393,7 @@ function OpenRoleMenu()
 		ROLEMENU.window:SetHeaderHeight(50)
 		ROLEMENU.window:SetBackgroundBlur(true)
 		ROLEMENU.window.systime = SysTime()
-		--[[function ROLEMENU.window.ChangedSize()
-			ROLEMENU.window.pl:SetSize(self:GetWide() - ROLEMENU.window.info:GetWide() - 3 * YRP.ctr(20), self:GetTall() - self:GetHeaderHeight() - YRP.ctr(20 + 20))
-			ROLEMENU.window.pl:SetPos(YRP.ctr(20), self:GetHeaderHeight() + YRP.ctr(20))
 
-			for i, v in pairs(ROLEMENU.window.pl:GetChildren()) do
-				v:SetWide(self:GetWide() - ROLEMENU.window.info:GetWide() - 3 * YRP.ctr(20))
-			end
-
-			ROLEMENU.window.info:SetSize(YRP.ctr(800), self:GetTall() - self:GetHeaderHeight() - YRP.ctr(20 + 20))
-			ROLEMENU.window.info:SetPos(self:GetWide() - YRP.ctr(20) - YRP.ctr(800), self:GetHeaderHeight() + YRP.ctr(20))
-		end]]
 		function ROLEMENU.window:Paint(pw, ph)
 			Derma_DrawBackgroundBlur(self, self.systime)
 			hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_ROLEMENU.window") .. " [PROTOTYPE]")
@@ -418,88 +408,8 @@ end
 function CreateRoleMenuContent(parent)
 	LocalPlayer():SetDBool("cc", false)
 	LocalPlayer():SetDString("charcreate_fuid", LocalPlayer():GetFactionUniqueID())
+
 	RoleMenu = parent
-	CreateRoleSelectionContent()
-	--[[ROLEMENU.content = parent
-	ROLEMENU.info = createD("DPanel", ROLEMENU.content, YRP.ctr(800), ROLEMENU.content:GetTall() - YRP.ctr(20 + 20), ROLEMENU.content:GetWide() - YRP.ctr(20) - YRP.ctr(800), YRP.ctr(20))
-	ROLEMENU.info.rolename = YRP.lang_string("LID_none")
-	ROLEMENU.info.rolesala = YRP.lang_string("LID_none")
-	local headercolor = Color(40, 40, 40, 255)
-	local contentcolor = Color(40, 40, 40, 100)
-	function ROLEMENU.info:Paint(pw, ph)
-		if ROLEMENU.info.rolename == YRP.lang_string("LID_none") then return end
 
-		-- Role Appearance --
-		draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_appearance"), "Y_24_500", YRP.ctr(25), YRP.ctr(25), Color(255, 255, 255), 0, 1)
-		draw.RoundedBox(0, 0, YRP.ctr(50), pw, YRP.ctr(400), contentcolor)
-
-		-- Role Name --
-		draw.RoundedBox(0, 0, YRP.ctr(500), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_role"), "Y_24_500", YRP.ctr(25), YRP.ctr(500 + 25), Color(255, 255, 255), 0, 1)
-		draw.RoundedBox(0, 0, YRP.ctr(500 + 50), pw, YRP.ctr(50), contentcolor)
-		surfaceText(self.rolename, "Y_20_500", YRP.ctr(25), YRP.ctr(500 + 50 + 25), Color(255, 255, 255), 0, 1)
-
-		-- Role Description --
-		draw.RoundedBox(0, 0, YRP.ctr(650), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_description"), "Y_24_500", YRP.ctr(25), YRP.ctr(650 + 25), Color(255, 255, 255), 0, 1)
-		draw.RoundedBox(0, 0, YRP.ctr(650 + 50), pw, YRP.ctr(200), contentcolor)
-
-		-- Role Equipment --
-		draw.RoundedBox(0, 0, YRP.ctr(950), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_sweps"), "Y_24_500", YRP.ctr(25), YRP.ctr(950 + 25), Color(255, 255, 255), 0, 1)
-		draw.RoundedBox(0, 0, YRP.ctr(950 + 50), pw, YRP.ctr(100), contentcolor)
-
-		-- Role Salary --
-		draw.RoundedBox(0, 0, YRP.ctr(1150), pw, YRP.ctr(50), headercolor)
-		surfaceText(YRP.lang_string("LID_salary"), "Y_24_500", YRP.ctr(25), YRP.ctr(1150 + 25), Color(255, 255, 255), 0, 1)
-		draw.RoundedBox(0, 0, YRP.ctr(1150 + 50), pw, YRP.ctr(50), contentcolor)
-		surfaceText(formatMoney(self.rolesala, LocalPlayer()), "Y_20_500", YRP.ctr(25), YRP.ctr(1150 + 50 + 25), Color(255, 255, 255), 0, 1)
-	end
-
-	ROLEMENU.pms = createD("DHorizontalScroller", ROLEMENU.info, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(50))
-	ROLEMENU.pms:SetOverlap(-10)
-
-	ROLEMENU.infodesc = createD("RichText", ROLEMENU.info, YRP.ctr(800 - 20 - 20), YRP.ctr(200), YRP.ctr(20), YRP.ctr(650 + 50))
-	function ROLEMENU.infodesc:Paint(pw, ph)
-		if ROLEMENU.info.rolename == YRP.lang_string("LID_none") then return end
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
-	end
-
-	ROLEMENU.infosweps = createD("RichText", ROLEMENU.info, YRP.ctr(800 - 20 - 20), YRP.ctr(100), YRP.ctr(20), YRP.ctr(950 + 50))
-	function ROLEMENU.infosweps:Paint(pw, ph)
-		if ROLEMENU.info.rolename == YRP.lang_string("LID_none") then return end
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
-	end
-
-	ROLEMENU.infobutton = createD("YButton", ROLEMENU.info, YRP.ctr(800 - 2 * 20), YRP.ctr(100), YRP.ctr(20), ROLEMENU.info:GetTall() - YRP.ctr(100 + 20))
-	ROLEMENU.infobutton:SetText("LID_becomerole")
-	ROLEMENU.infobutton.rolename = ""
-	function ROLEMENU.infobutton:Paint(pw, ph)
-		if ROLEMENU.info.rolename == YRP.lang_string("LID_none") then return end
-		hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_becomerole"))
-	end
-	function ROLEMENU.infobutton:DoClick()
-		if self.uniqueID != nil then
-			net.Start("wantRole")
-				net.WriteInt(self.uniqueID, 16)
-				net.WriteInt(pmid, 16)
-			net.SendToServer()
-			if pa(ROLEMENU.content) and ROLEMENU.content:GetParent().Close != nil then
-				ROLEMENU.content:GetParent():Close()
-			end
-		end
-	end
-
-	-- Roles
-	ROLEMENU.pl = createD("DPanelList", ROLEMENU.content, ROLEMENU.content:GetWide() - ROLEMENU.info:GetWide() - 3 * YRP.ctr(20), ROLEMENU.content:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
-	ROLEMENU.pl:EnableVerticalScrollbar(true)
-	ROLEMENU.pl:SetSpacing(10)
-	--ROLEMENU.pl:SetNoSizing(true)
-
-	function ROLEMENU.pl:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, contentcolor)
-	end
-
-	getGroups(0, ROLEMENU.pl)]]
+	CreateRoleSelectionContent(parent)
 end

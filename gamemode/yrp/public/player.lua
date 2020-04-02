@@ -27,7 +27,7 @@ function Player:Revive(pos)
 end
 
 function IsPlayerIntroductionEnabled()
-	return false -- GetGlobalDBool("bool_players_need_to_introduce", false)
+	return GetGlobalDBool("bool_players_need_to_introduce", false)
 end
 
 function Player:IsUnknown()

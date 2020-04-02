@@ -10,19 +10,14 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 			hh = self:GetHeaderHeight()
 		end
 
-		draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB"))
+		draw.RoundedBox(0, 0, 0, pw, hh, Color(45, 45, 45, 255))
 
-		draw.RoundedBox(0, 0, hh, pw, ph - hh, Color(60, 60, 60, 200)) --lply:InterfaceValue("YFrame", "BG"))
+		draw.RoundedBox(0, 0, hh, pw, ph - hh, Color(25, 25, 25, 255)) --lply:InterfaceValue("YFrame", "BG"))
 
-		if IsValid(self:GetContent()) then
-			local x, y = self:GetContent():GetPos()
-			local w, h = self:GetContent():GetSize()
-			draw.RoundedBox(0, x, y, w, h, Color(20, 20, 20, 200))
-
-			if self.GetTitle != nil then
-				draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
+		if self.GetTitle != nil then
+			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
+
 		return true
 	end
 end)

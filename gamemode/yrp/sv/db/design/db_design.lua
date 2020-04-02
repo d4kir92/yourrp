@@ -124,7 +124,7 @@ net.Receive("change_hud_design", function(len, ply)
 end)
 
 -- Interface
-local INTERFACES = {}
+INTERFACES = INTERFACES or {}
 function RegisterInterfaceDesign(tab)
 	if tab.name == nil then
 		printGM("note", "RegisterDesign Failed! Missing Design Name")
@@ -134,6 +134,7 @@ function RegisterInterfaceDesign(tab)
 		return false
 	end
 	INTERFACES[tab.name] = tab
+	YRP.msg("db", "Added Interface Design (" .. tostring(tab.name) .. ")")
 	return true
 end
 

@@ -381,7 +381,7 @@ function spawnItem(ply, item, duid)
 			if vehicle then
 				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 
-				ent:SetDString( "item_uniqueID", item.uniqueID )
+				ent:SetDString("item_uniqueID", item.uniqueID)
 				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 3")
@@ -389,10 +389,27 @@ function spawnItem(ply, item, duid)
 			else
 				ent = ents.Create(item.ClassName)
 				if IsValid(ent) then
+					local veh = nil
+					for i, v in pairs(list.Get("Vehicles")) do
+						if v.Model == item.WorldModel then
+							veh = v
+						end
+					end
+
+					if veh != nil then
+						if veh.KeyValues != nil then
+							for i, v in pairs(veh.KeyValues) do
+								ent:SetKeyValue(i, v)
+							end
+						end
+					end
+
+					ent:SetModel(item.WorldModel)
 					ent:SetPos(tr.HitPos)
 					ent:Spawn()
+					ent:Activate()
 
-					ent:SetDString( "item_uniqueID", item.uniqueID )
+					ent:SetDString("item_uniqueID", item.uniqueID)
 					ent:SetDEntity("yrp_owner", ent)
 			
 					printGM("gm", "[spawnItem] Spawned 4")
@@ -435,9 +452,11 @@ net.Receive("item_buy", function(len, ply)
 				if _spawned then
 					ply:addMoney(-tonumber(_item.price))
 
-					ent:SetDInt("item_uniqueID", _item.uniqueID)
-					if ent:IsVehicle() then
-						AddVehicle(ent, ply, _item)
+					if ea(ent) then
+						ent:SetDInt("item_uniqueID", _item.uniqueID)
+						if ent:IsVehicle() then
+							AddVehicle(ent, ply, _item)
+						end
 					end
 				else
 					printGM("note", "Failed to spawn item from shop " .. tostring(_spawned))

@@ -300,48 +300,67 @@ end
 
 
 
-function CreateRoleSelectionContent()
+function CreateRoleSelectionContent(PARENT)
 	local lply = LocalPlayer()
 
 
 
-	local parent = CharacterMenu or RoleMenu
+	local parent = PARENT or CharacterMenu or RoleMenu
 	
 
 
 	lply:SetDBool("rolepreview", false)
 
 
+
+	local SW = nil
+	local SH = nil
+	if LocalPlayer():GetDBool("cc", true) then
+		SW = YRP.ctr(config.w)
+		SH = YRP.ctr(config.h)
+	else
+		SW = parent:GetWide()
+		SH = parent:GetTall()
+	end
+
 	
-	local site = createD("DPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
+	local site = createD("DPanel", parent, ScW(), ScH(), 0, 0)
 	function site:Paint(pw, ph)
+		if !LocalPlayer():GetDBool("cc", true) then
+			if self:GetWide() != parent:GetWide() then
+				SW = parent:GetWide()
+				SH = parent:GetTall()
+				self:SetSize(SW, SH)
+			end
+		end
 	end
 
-	local nw = config.w
-	local nh = config.h
-	if !LocalPlayer():GetDBool("cc", true) then
-		nw = parent:GetWide() * 2
-		nh = parent:GetTall() * 2
-	end
-
-	local win = createD("DPanel", site, YRP.ctr(nw), YRP.ctr(nh), 0, 0)
+	local win = createD("DPanel", site, SW, SH, 0, 0)
 	function win:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+
+		if win:GetWide() != SW then
+			win:SetWide(SW)
+		end
+		win:Center()
 	end
 	win:Center()
 
 	menu = win
 
 	-- List of Groups
-	local list = createD("DPanelList", win, YRP.ctr(nw - 2 * config.br), YRP.ctr(nh - 2 * config.br), YRP.ctr(config.br), YRP.ctr(config.br))
+	local list = createD("DPanelList", win, win:GetWide() - YRP.ctr(2 * config.br), win:GetTall() - YRP.ctr(2 * config.br), YRP.ctr(config.br), YRP.ctr(config.br))
 	list:EnableVerticalScrollbar()
 	list:SetSpacing(YRP.ctr(config.br))
 	function list:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+		if list:GetWide() != win:GetWide() - YRP.ctr(2 * config.br) then
+			list:SetWide(win:GetWide() - YRP.ctr(2 * config.br))
+		end
 	end
 	local sbar = list.VBar
 	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+		draw.RoundedBox(0, 0, 0, w, h, Color(255, 255, 255))
 	end
 	function sbar.btnUp:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -396,7 +415,7 @@ function CreateRoleSelectionContent()
 		if pa(list) then
 			local gtab = net.ReadTable()
 
-			local w = YRP.ctr(nw - 2 * config.br)
+			local w = list:GetWide() -- YRP.ctr(2 * config.br)
 			local h = YRP.ctr(100)
 
 			for i, grp in pairs(gtab) do
@@ -412,11 +431,23 @@ function CreateRoleSelectionContent()
 					group:SetHeaderColor(StringToColor(grp.string_color))
 					group:SetContentColor(StringToColor(grp.string_color))
 					group:SetGroupUID(grp.uniqueID)
-					group:SetFixedHeight(nh - 2 * config.br)
+					group:SetFixedHeight(list:GetTall() * 2)
+					function group:Think()
+						w = list:GetWide()
+						if w != self:GetWide() then
+							self:SetWide(w)
+						end
+					end
 
 					if !LocalPlayer():GetDBool("cc", false) then
-						local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 46), YRP.ctr(20))
+						local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
 						changefaction:SetText("LID_changefaction")
+						function changefaction:Think()
+							local px, py = self:GetPos()
+							if px != group:GetWide() - YRP.ctr(500 + 20) then
+								self:SetPos(group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
+							end
+						end
 						function changefaction:DoClick()
 							LocalPlayer():SetDBool("cc", false)
 							menu:Hide()

@@ -437,6 +437,16 @@ YRP.AddDesignIcon("shopping_cart", "vgui/material/icon_shop_cart.png")
 YRP.AddDesignIcon("radiation", "vgui/material/icon_radiation.png")
 YRP.AddDesignIcon("hygiene", "vgui/material/icon_hygiene.png")
 
+YRP.AddDesignIcon("dashboard", "vgui/material/icon_dashboard.png")
+YRP.AddDesignIcon("person_pin", "vgui/material/icon_person_pin.png")
+YRP.AddDesignIcon("accessibility", "vgui/material/icon_accessibility.png")
+YRP.AddDesignIcon("gavel", "vgui/material/icon_gavel.png")
+YRP.AddDesignIcon("web", "vgui/material/icon_web.png")
+YRP.AddDesignIcon("forum", "vgui/material/icon_forum.png")
+YRP.AddDesignIcon("policy", "vgui/material/icon_policy.png")
+YRP.AddDesignIcon("ts_white", "vgui/material/icon_teamspeak.png")
+YRP.AddDesignIcon("code", "vgui/material/icon_code.png")
+
 YRP.iconsloaded = true
 
 -- Flags

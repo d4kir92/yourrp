@@ -15,19 +15,7 @@ function CloseLawsMenu()
 	end
 end
 
-function OpenLawsMenu()
-	openMenu()
-	_la.window = createD("YFrame", nil, YRP.ctr(1200), YRP.ctr(1200), 0, 0)
-	_la.window:Center()
-	_la.window:MakePopup()
-	_la.window:SetTitle(YRP.lang_string("LID_laws"))
-	_la.window:SetHeaderHeight(YRP.ctr(100))
-	function _la.window:Paint(pw, ph)
-		hook.Run("YFramePaint", self, pw, ph)
-	end
-
-	local content = _la.window:GetContent()
-
+function CreateLawsContent(PARENT)
 	local lply = LocalPlayer()
 	net.Receive("get_laws", function(len)
 		local lawtab = net.ReadTable()
@@ -37,27 +25,21 @@ function OpenLawsMenu()
 		local lockdown = tobool(lawtab.bool_lockdown)
 
 		if !lply:GetDBool("bool_" .. "ismayor", false) and !lply:GetDBool("bool_" .. "iscp", false) then
-			if _la.window:IsValid() then
-				_la.laws = createD("RichText", content, content:GetWide(), content:GetTall(), 0, 0)
+			if PARENT:IsValid() then
+				_la.laws = createD("RichText", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 				for i, v in pairs(string.Explode("\n", laws)) do
 					_la.laws:AppendText(v .. "\n")
 				end
 			end
 		else
-			_la.window:SetWide(YRP.ctr(1600))
-			_la.window:SetTitle(YRP.lang_string("LID_laws") .. " | " .. YRP.lang_string("LID_lockdown"))
-			_la.window:Center()
-
-
-
 			-- LAWS
-			_la.lawsheader = createD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
+			_la.lawsheader = createD("YLabel", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
 			_la.lawsheader:SetText(YRP.lang_string("LID_laws"))
 			function _la.lawsheader:Paint(pw, ph)
 				hook.Run("YLabelPaint", self, pw, ph)
 			end
 
-			_la.laws = createD("DTextEntry", content, YRP.ctr(760), content:GetTall() - YRP.ctr(50), YRP.ctr(0), YRP.ctr(50))
+			_la.laws = createD("DTextEntry", PARENT, YRP.ctr(760), PARENT:GetTall() - YRP.ctr(50), YRP.ctr(0), YRP.ctr(50))
 			_la.laws:SetMultiline(true)
 			_la.laws:SetText("#" .. laws)
 			function _la.laws:OnChange()
@@ -69,13 +51,13 @@ function OpenLawsMenu()
 
 
 			-- LOCKDOWN
-			_la.lockdownheader = createD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0))
+			_la.lockdownheader = createD("YLabel", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0))
 			_la.lockdownheader:SetText(YRP.lang_string("LID_lockdowntext"))
 			function _la.lockdownheader:Paint(pw, ph)
 				hook.Run("YLabelPaint", self, pw, ph)
 			end
 
-			_la.lockdowntext = createD("DTextEntry", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
+			_la.lockdowntext = createD("DTextEntry", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
 			_la.lockdowntext:SetText("#" .. lockdowntext)
 			function _la.lockdowntext:OnChange()
 				net.Start("set_lockdowntext")
@@ -83,7 +65,7 @@ function OpenLawsMenu()
 				net.SendToServer()
 			end
 
-			_la.lockdowntoggle = createD("YButton", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(120))
+			_la.lockdowntoggle = createD("YButton", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(120))
 			_la.lockdowntoggle:SetPressed(lockdown)
 			local ld_enabled = YRP.lang_string("LID_lockdown") .. " (" .. YRP.lang_string("LID_enabled") .. ")"
 			local ld_disabled = YRP.lang_string("LID_lockdown") .. " (" .. YRP.lang_string("LID_disabled") .. ")"
@@ -111,7 +93,7 @@ function OpenLawsMenu()
 			-- Lockdown Alarms
 			local alarms = GetGlobalDTable("lockdown_alarms")
 
-			local l_alarms = createD("DPanelList", content, YRP.ctr(760), YRP.ctr(870), YRP.ctr(800), YRP.ctr(120 + 50 + 20))
+			local l_alarms = createD("DPanelList", PARENT, YRP.ctr(760), YRP.ctr(870), YRP.ctr(800), YRP.ctr(120 + 50 + 20))
 			l_alarms:SetSpacing(4)
 			function l_alarms:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
@@ -142,4 +124,21 @@ function OpenLawsMenu()
 
 	net.Start("get_laws")
 	net.SendToServer()
+end
+
+function OpenLawsMenu()
+	openMenu()
+	_la.window = createD("YFrame", nil, YRP.ctr(1600), YRP.ctr(1200), 0, 0)
+	_la.window:Center()
+	_la.window:MakePopup()
+	_la.window:SetTitle(YRP.lang_string("LID_laws"))
+	_la.window:SetHeaderHeight(YRP.ctr(100))
+	function _la.window:Paint(pw, ph)
+		hook.Run("YFramePaint", self, pw, ph)
+	end
+	_la.window:SetTitle(YRP.lang_string("LID_laws") .. " | " .. YRP.lang_string("LID_lockdown"))
+
+	local content = _la.window:GetContent()
+
+	CreateLawsContent(content)
 end

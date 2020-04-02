@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 235 --do NOT change this!
-GM.VersionCanary = 475 --do NOT change this!
+GM.VersionBeta = 236 --do NOT change this!
+GM.VersionCanary = 476 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -214,6 +214,10 @@ end)
 concommand.Add("yrp__help", function(ply, cmd, args)
 	PrintHelp()
 end)
+
+function YRPCollectionID()
+	return tonumber(GetGlobalDString("text_server_collectionid", "0"))
+end
 
 function PrintCollectionID()
 	hr_pre("note")

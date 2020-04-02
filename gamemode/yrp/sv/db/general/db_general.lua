@@ -311,13 +311,6 @@ function IsNoClipModelEnabled()
 	return GetGlobalDBool("bool_noclip_model", false)
 end
 
-
-function YRPCollectionID()
-	yrp_general.text_server_collectionid = yrp_general.text_server_collectionid or 0
-	return tonumber(yrp_general.text_server_collectionid)
-end
-
-
 function YRPGetMoneyModel()
 	local model = yrp_general.text_money_model
 	if model == "" then
@@ -1476,14 +1469,14 @@ net.Receive("gethelpmenu", function(len, ply)
 
 		AddTab(tabs, "LID_help", "getsitehelp")
 		AddTab(tabs, "LID_staff", "getsitestaff")
-		if !strEmpty(info.text_server_rules) then
+		--[[if !strEmpty(info.text_server_rules) then
 			AddTab(tabs, "LID_rules", "getsiteserverrules")
 		end
 		if !strEmpty(info.text_server_collectionid) and tonumber(info.text_server_collectionid) > 0 then
 			AddTab(tabs, "LID_collection", "getsitecollection")
-		end
+		end]]
 
-		if !strEmpty(info.text_social_website) or
+		--[[if !strEmpty(info.text_social_website) or
 			!strEmpty(info.text_social_forum) or
 			!strEmpty(info.text_social_discord) or
 			!strEmpty(info.text_social_teamspeak_ip) or
@@ -1520,7 +1513,7 @@ net.Receive("gethelpmenu", function(len, ply)
 			--if info.text_social_servers) then
 				--AddSubTab(subtabs, "LID_community", "servers", "getsitecommunityservers")
 			--end
-		end
+		end]]
 
 		AddTab(tabs, "YourRP - Roadmap", "getsiteyourrproadmap")
 
