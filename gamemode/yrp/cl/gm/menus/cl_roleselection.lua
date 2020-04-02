@@ -439,7 +439,7 @@ function CreateRoleSelectionContent(PARENT)
 						end
 					end
 
-					if !LocalPlayer():GetDBool("cc", false) then
+					if !LocalPlayer():GetDBool("cc", false) and GetGlobalDBool("bool_players_can_switch_faction", false) then
 						local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
 						changefaction:SetText("LID_changefaction")
 						function changefaction:Think()

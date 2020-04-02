@@ -2352,6 +2352,19 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			cooldown.max = 360
 			ea[role.uniqueID].cooldown = DIntBox(cooldown)
 
+			DHr(hr)
+
+			local int_namelength = {}
+			int_namelength.parent = ea.restriction:GetContent()
+			int_namelength.header = "LID_namelength"
+			int_namelength.netstr = "update_role_int_namelength"
+			int_namelength.value = role.int_namelength
+			int_namelength.uniqueID = role.uniqueID
+			int_namelength.lforce = false
+			int_namelength.min = 0
+			int_namelength.max = 64
+			ea[role.uniqueID].int_namelength = DIntBox(int_namelength)
+
 			ea.restriction:AutoSize(true)
 
 			local col4 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))

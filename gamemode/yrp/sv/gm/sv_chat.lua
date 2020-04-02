@@ -397,7 +397,9 @@ function unpack_paket(sender, text, iscommand)
 	end
 
 	paket.steamname = sender:SteamName()
-	paket.rpname = sender:RPName()
+	if GetGlobalDBool("bool_yrp_chat_show_name", false) then
+		paket.rpname = sender:RPName()
+	end
 	if GetGlobalDBool("bool_yrp_chat_show_usergroup", false) then
 		paket.usergroup = sender:GetUserGroup()
 		paket.usergroup_color = sender:GetUserGroupColor()

@@ -73,7 +73,7 @@ function CreateCharacterSettingsContent()
 
 	net.Receive("yrp_char_getrole", function(len)
 		local rol = net.ReadTable()
-	
+		rol.int_namelength = tonumber(rol.int_namelength)
 
 		-- TOP
 		local descheader = createD("YLabel", win, YRP.ctr(config.w - 2 * 20), YRP.ctr(config.hh), YRP.ctr(20), YRP.ctr(20))
@@ -126,11 +126,14 @@ function CreateCharacterSettingsContent()
 		function confirm:Paint(pw, ph)
 			local tab = {}
 			tab.color = lply:InterfaceValue("YButton", "NC")
-			local name = lply:GetDString("charcreate_name", "")
-			if string.len(name) > 32 then
+			local nam = lply:GetDString("charcreate_name", "")
+			if rol.int_namelength == 0 then
+				tab.color = Color(100, 255, 100)
+				confirm:SetText("LID_confirm")
+			elseif string.len(nam) > rol.int_namelength then
 				tab.color = Color(255, 100, 100)
 				confirm:SetText("LID_nameistolong")
-			elseif string.len(name) <= 0 then
+			elseif string.len(nam) <= 0 then
 				tab.color = Color(255, 255, 100)
 				confirm:SetText("LID_enteraname")
 			else
@@ -141,7 +144,7 @@ function CreateCharacterSettingsContent()
 		end
 		function confirm:DoClick()
 			local name = lply:GetDString("charcreate_name", "")
-			if string.len(name) <= 32 and string.len(name) > 0 then
+			if string.len(name) <= rol.int_namelength and string.len(name) > 0 or rol.int_namelength == 0 then
 				local character = {}
 				character.roleID = lply:GetDString("charcreate_ruid")
 				character.rpname = lply:GetDString("charcreate_name")
@@ -235,28 +238,39 @@ function CreateCharacterSettingsContent()
 
 
 		-- RIGHT
-		local nameheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
-		nameheader:SetText("LID_name")
+		local py = YRP.ctr(120)
+		local ph = YRP.ctr(config.h - 220)
+		if rol.int_namelength > 0 then
+			py = YRP.ctr(300)
+			ph = YRP.ctr(config.h - 400)
 
-		local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(200))
-		name:SetText("")
-		function name:PerformLayout()
-			if self.SetUnderlineFont != nil then
-				self:SetUnderlineFont("Y_18_500")
+			local nameheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
+			nameheader:SetText("LID_name")
+
+			local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(200))
+			name:SetText("")
+			function name:PerformLayout()
+				if self.SetUnderlineFont != nil then
+					self:SetUnderlineFont("Y_18_500")
+				end
+				self:SetFontInternal("Y_18_500")
+
+				self:SetFGColor(Color(255, 255, 255))
+				self:SetBGColor(Color(0, 0, 0))
 			end
-			self:SetFontInternal("Y_18_500")
-
-			self:SetFGColor(Color(255, 255, 255))
-			self:SetBGColor(Color(0, 0, 0))
+			function name:OnChange()
+				local nam = name:GetText()
+				lply:SetDString("charcreate_name", nam)
+				if #nam > rol.int_namelength then
+					--name:SetText(string.sub(nam, 1, rol.int_namelength))
+				end
+			end
 		end
-		function name:OnChange()
-			lply:SetDString("charcreate_name", name:GetText())
-		end
 
-		local descheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(300))
+		local descheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), py)
 		descheader:SetText("LID_description")
 		
-		local desc = createD("DTextEntry", win, ew, YRP.ctr(config.h - 400), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(380))
+		local desc = createD("DTextEntry", win, ew, ph, ew * 2 + 3 * YRP.ctr(20), py + YRP.ctr(80))
 		desc:SetMultiline(true)
 		desc:SetText("")
 		function desc:PerformLayout()

@@ -12,6 +12,7 @@ end
 
 function closeDoorOptions()
 	closeMenu()
+
 	yrp_door.window:Close()
 	yrp_door.window = nil
 end
@@ -139,20 +140,28 @@ function buyWindow(door, tabBuilding)
 
 		net.Receive("getBuildings", function()
 			local _tmpBuildings = net.ReadTable()
+			tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
 
+			_ComboBoxHouseName.setup = true
 			if _ComboBoxHouseName != NULL then
 				for k, v in pairs(_tmpBuildings) do
+					v.uniqueID = tonumber(v.uniqueID)
 					if pa(_ComboBoxHouseName) then
-						_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP.lang_string("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, false)
+						local isbuilding = false
+						if v.uniqueID == tabBuilding.uniqueID then
+							isbuilding = true
+						end
+						_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP.lang_string("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, isbuilding)
 					else
 						break
 					end
 				end
 			end
+			_ComboBoxHouseName.setup = false
 		end)
 		function _ComboBoxHouseName:OnSelect(index, value, data)
 			local _tmpData = _ComboBoxHouseName:GetOptionData(index)
-			if _tmpData != nil then
+			if _tmpData != nil and !self.setup then
 				tabBuilding.uniqueID = _ComboBoxHouseName:GetOptionData(index)
 				net.Start("changeBuildingID")
 					net.WriteEntity(door)

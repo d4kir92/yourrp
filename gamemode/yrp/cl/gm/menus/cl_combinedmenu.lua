@@ -353,7 +353,7 @@ function OpenCombinedMenu()
 					end
 
 					local lply = LocalPlayer()
-					local color = Color(45, 45, 45, 255)
+					local color = lply:InterfaceValue("YFrame", "HB")
 					if self:IsHovered() then
 						color = lply:InterfaceValue("YButton", "SC")
 						color.a = 120

@@ -574,7 +574,8 @@ net.Receive("changeBuildingDescription", function(len, ply)
 end)
 
 net.Receive("getBuildings", function(len, ply)
-	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", nil)
+	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", "name != 'Building'")
+
 	if wk(_tmpTable) then
 		for k, building in pairs(_tmpTable) do
 			local _doors = 0

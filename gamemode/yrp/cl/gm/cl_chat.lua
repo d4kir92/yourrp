@@ -507,7 +507,9 @@ net.Receive("yrp_player_say", function(len)
 			if !strEmpty(_tmp.rolename) then
 				_tmp.name = _tmp.name .. _tmp.rolename .. " "
 			end
-			_tmp.name = _tmp.name .. _tmp.rpname
+			if !strEmpty(_tmp.rpname) then
+				_tmp.name = _tmp.name .. _tmp.rpname
+			end
 		end
 	end
 

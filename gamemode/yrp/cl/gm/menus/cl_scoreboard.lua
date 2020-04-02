@@ -394,13 +394,24 @@ function OpenSBS()
 				act["idca"] = false
 			end
 
-			local naugname = YRP.lang_string("LID_name") .. "/" .. YRP.lang_string("LID_usergroup")
-			if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+			local naugname = "" --YRP.lang_string("LID_name") .. "/" .. YRP.lang_string("LID_usergroup")
+			if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
 				naugname = YRP.lang_string("LID_name")
 			end
-			draw.SimpleTextOutlined(naugname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-			x = x + scolen["name"]
-			act["name"] = true
+			if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+				if naugname != "" then
+					naugname = naugname .. "/" .. YRP.lang_string("LID_usergroup")
+				else
+					naugname = YRP.lang_string("LID_usergroup")
+				end
+			end
+			if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) or GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+				draw.SimpleTextOutlined(naugname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				x = x + scolen["name"]
+				act["name"] = true
+			else
+				act["name"] = false
+			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 				local rgname = YRP.lang_string("LID_role") .. "/" .. YRP.lang_string("LID_group")
@@ -566,11 +577,18 @@ function OpenSBS()
 						if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 							nay = ph / 2
 						end
-						draw.SimpleTextOutlined(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+						if !GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
+							ugy = ph / 2
+						end
+						if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
+							draw.SimpleTextOutlined(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+						end
 						if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 							draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "Y_24_500", YRP.ctr(x * fac), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
-						x = x + scolen["name"]
+						if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) or GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+							x = x + scolen["name"]
+						end
 						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 							local ry = ph / 4 * 1
 							local gy = ph / 4 * 3
@@ -858,11 +876,18 @@ function OpenSBS()
 							if !GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 								nay = ph / 2
 							end
-							draw.SimpleTextOutlined(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							if !GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
+								ugy = ph / 2
+							end
+							if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
+								draw.SimpleTextOutlined(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							end
 							if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 								draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "Y_24_500", YRP.ctr(x * fac), ugy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							end
-							x = x + scolen["name"]
+							if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) or GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
+								x = x + scolen["name"]
+							end
 						end
 
 						if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
