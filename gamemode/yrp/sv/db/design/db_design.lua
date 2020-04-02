@@ -5,8 +5,8 @@
 
 local DATABASE_NAME = "yrp_design"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
@@ -14,8 +14,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
 local fir = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 if fir == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Material', 'Material', 'Roboto'")
-elseif fir[1].string_interface_design == "Simple" then
-	SQL_UPDATE(DATABASE_NAME, "string_interface_design = 'Material'", "uniqueID = '" .. "Material" .. "'")
+elseif wk(fir) then
+	fir = fir[1]
+	if fir.string_interface_design == "Simple" then
+		SQL_UPDATE(DATABASE_NAME, "string_interface_design = 'Material'", "uniqueID = '" .. "1" .. "'")
+	end
 end
 
 --SQL_DROPTABLE(DATABASE_NAME)
