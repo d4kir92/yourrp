@@ -44,30 +44,30 @@ end
 
 
 
-local Simple = {}
-Simple.element = "Simple"
+local Material = {}
+Material.element = "Material"
 
-Simple.floats = {}
+Material.floats = {}
 
-Simple.bools = {}
-Simple.bools.Rounded = 0;
+Material.bools = {}
+Material.bools.Rounded = 0;
 
-Simple.colors = {}
-Simple.colors.YFrame_HT = "255, 255, 255, 255"	-- Header Textcolor
-Simple.colors.YFrame_HB = "40, 40, 40, 255"		-- Header Backgroundcolor
-Simple.colors.YFrame_NC = "40, 40, 40, 255"		-- Normal Color
-Simple.colors.YFrame_PC = "50, 50, 50, 255"		-- Pressed Color
-Simple.colors.YFrame_HI = "80, 80, 80, 255"		-- Highlight Color
-Simple.colors.YFrame_BG = "0, 0, 0, 200"		-- Background Color
-Simple.colors.YButton_NT = "0, 0, 0, 255"		-- Normal Textcolor
-Simple.colors.YButton_NC = "93, 166, 251, 255"	-- Normal Color
-Simple.colors.YButton_HC = "148, 197, 255, 255"	-- Hovered Color
-Simple.colors.YButton_PC = "50, 144, 254, 255"	-- Pressed Color
-Simple.colors.YButton_SC = "50, 144, 254, 255"	-- Selected Color
+Material.colors = {}
+Material.colors.YFrame_HT = "255, 255, 255, 255"	-- Header Textcolor
+Material.colors.YFrame_HB = "45, 45, 45, 255"		-- Header Backgroundcolor
+Material.colors.YFrame_NC = "45, 45, 45, 255"		-- Normal Color
+Material.colors.YFrame_PC = "55, 55, 55, 255"		-- Pressed Color
+Material.colors.YFrame_HI = "80, 80, 80, 255"		-- Highlight Color
+Material.colors.YFrame_BG = "25, 25, 25, 255"		-- Background Color
+Material.colors.YButton_NT = "0, 0, 0, 255"		-- Normal Textcolor
+Material.colors.YButton_NC = "93, 166, 251, 255"	-- Normal Color
+Material.colors.YButton_HC = "148, 197, 255, 255"	-- Hovered Color
+Material.colors.YButton_PC = "50, 144, 254, 255"	-- Pressed Color
+Material.colors.YButton_SC = "50, 144, 254, 255"	-- Selected Color
 
-Simple.ints = {}
+Material.ints = {}
 
-AddIFElement(Simple)
+AddIFElement(Material)
 
 
 
@@ -154,19 +154,19 @@ function ResetDesign()
 	local tab = INTERFACES[GetGlobalDString("string_interface_design", "")]
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
-			local _name = "float_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
+			local _name = "float_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.bools) do
-			local _name = "bool_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
+			local _name = "bool_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.colors) do
-			local _name = "color_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
+			local _name = "color_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. GetGlobalDString("string_interface_design", "Simple") .. "_" .. name
+			local _name = "int_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 	end

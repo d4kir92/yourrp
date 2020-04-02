@@ -58,7 +58,7 @@ function close_all()
 	CloseCombinedMenu()
 	CloseHelpMenu()
 	CloseEmotesMenu()
-	closeFeedbackMenu()
+	closeTicketMenu()
 	closeCharMenu()
 	closeKeybindsMenu()
 	closeCharacterSelection()
@@ -176,7 +176,7 @@ function useFunction(str)
 				id = 4
 			elseif str == "openKeybindsMenu" then
 				id = 5
-			elseif str == "openFeedbackMenu" then
+			elseif str == "openTicketMenu" then
 				done_tutorial("tut_feedback")
 				id = 6
 			end
@@ -195,8 +195,8 @@ function useFunction(str)
 			elseif str == "OpenBuyMenu" then
 				done_tutorial("tut_mb")
 				ToggleBuyMenu()
-			elseif str == "openFeedbackMenu" then
-				toggleFeedbackMenu()
+			elseif str == "openTicketMenu" then
+				toggleTicketMenu()
 			elseif str == "openCharMenu" then
 				toggleCharMenu()
 			elseif str == "openKeybindsMenu" then
@@ -510,7 +510,7 @@ function KeyPress()
 	keyPressed(IN_ATTACK2, "scoreboard")
 
 	keyPressed(KEY_F1, "OpenHelpMenu")
-	keyPressed(KEY_F7, "openFeedbackMenu")
+	keyPressed(KEY_F7, "openTicketMenu")
 
 	keyPressed(get_keybind("menu_char"), "openCharMenu")
 	keyPressed(get_keybind("menu_keybinds"), "openKeybindsMenu")

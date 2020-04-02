@@ -1133,7 +1133,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local grps = {}
 				for i, tab in pairs(db_groups) do
 					tab.uniqueID = tonumber(tab.uniqueID)
-					if tab.uniqueID != -1 then
+					if wk(tab.string_name) and wk(tab.uniqueID) and tab.uniqueID != -1 then
 						grps[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
 					end
 				end

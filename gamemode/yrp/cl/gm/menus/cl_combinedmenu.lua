@@ -240,9 +240,9 @@ function OpenCombinedMenu()
 		c = c + 1
 
 		sites[c] = {}
-		sites[c].name = "LID_feedback"
+		sites[c].name = "LID_ticket"
 		sites[c].icon = "feedback"
-		sites[c].content = CreateFeedbackContent
+		sites[c].content = CreateTicketContent
 		c = c + 1
 				
 		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
@@ -266,7 +266,7 @@ function OpenCombinedMenu()
 		cm.menu.expanded = lply:GetDBool("combined_expanded", true)
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_700"
 		function cm.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(45, 45, 45, 255))
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
 			--hook.Run("YPanelPaint", self, pw, ph)
 
 			--[[local gm = "YourRP by D4KiR"
@@ -309,7 +309,7 @@ function OpenCombinedMenu()
 		function cm.site:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 			local tab = {}
-			tab.color = Color(60, 60, 60, 255)
+			tab.color = lply:InterfaceValue("YFrame", "BG")
 			hook.Run("YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
 		end
 

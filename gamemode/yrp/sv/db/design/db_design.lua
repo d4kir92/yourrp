@@ -11,8 +11,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Simple', 'Impact'")
+local fir = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
+if fir == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Material', 'Material', 'Roboto'")
+elseif fir[1].string_interface_design == "Simple" then
+	SQL_UPDATE(DATABASE_NAME, "string_interface_design = 'Material'", "uniqueID = '" .. "Material" .. "'")
 end
 
 --SQL_DROPTABLE(DATABASE_NAME)
@@ -138,11 +141,11 @@ function RegisterInterfaceDesign(tab)
 	return true
 end
 
-local IF_Simple = {}
-IF_Simple.name = "Simple"
-IF_Simple.author = "D4KiR"
-IF_Simple.progress = 100
-RegisterInterfaceDesign(IF_Simple)
+local IF_Material = {}
+IF_Material.name = "Material"
+IF_Material.author = "D4KiR"
+IF_Material.progress = 100
+RegisterInterfaceDesign(IF_Material)
 
 local IF_Blur = {}
 IF_Blur.name = "Blur"

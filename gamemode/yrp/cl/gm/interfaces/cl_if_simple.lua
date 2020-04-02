@@ -1,18 +1,18 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
+hook.Add("YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
 		end
 
-		draw.RoundedBox(0, 0, 0, pw, hh, Color(45, 45, 45, 255))
+		draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB"))
 
-		draw.RoundedBox(0, 0, hh, pw, ph - hh, Color(25, 25, 25, 255)) --lply:InterfaceValue("YFrame", "BG"))
+		draw.RoundedBox(0, 0, hh, pw, ph - hh, lply:InterfaceValue("YFrame", "BG")) --lply:InterfaceValue("YFrame", "BG"))
 
 		if self.GetTitle != nil then
 			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -22,11 +22,11 @@ hook.Add("YFramePaint", "YFrame_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
+hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -58,11 +58,11 @@ hook.Add("YButtonPaint", "YButton_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YButtonRPaint", "YButtonR_Simple", function(self, pw, ph, tab)
+hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = Color(126, 126, 126)
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -90,11 +90,11 @@ hook.Add("YButtonRPaint", "YButtonR_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
+hook.Add("YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = lply:InterfaceValue("YFrame", "HI")
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
@@ -117,11 +117,11 @@ hook.Add("YLabelPaint", "YLabel_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YTextFieldPaint", "YTextFieldPaint_Simple", function(self, pw, ph, tab)
+hook.Add("YTextFieldPaint", "YTextFieldPaint_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = Color(50, 50, 50)
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
@@ -144,11 +144,11 @@ hook.Add("YTextFieldPaint", "YTextFieldPaint_Simple", function(self, pw, ph, tab
 	end
 end)
 
-hook.Add("YPanelPaint", "YPanel_Simple", function(self, pw, ph, tab)
+hook.Add("YPanelPaint", "YPanel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = tab.color or lply:InterfaceValue("YFrame", "HI")
 
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
@@ -156,10 +156,10 @@ hook.Add("YPanelPaint", "YPanel_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YAddPaint", "YAdd_Simple", function(self, pw, ph, tab)
+hook.Add("YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = Color(100, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -182,10 +182,10 @@ hook.Add("YAddPaint", "YAdd_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YRemovePaint", "YRemove_Simple", function(self, pw, ph, tab)
+hook.Add("YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = Color(126, 126, 126)
 		if self:IsDown() or self:IsPressed() then
 			color = Color(197, 52, 52)
@@ -204,10 +204,10 @@ hook.Add("YRemovePaint", "YRemove_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YClosePaint", "YClose_Simple", function(self, pw, ph, tab)
+hook.Add("YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -230,10 +230,10 @@ hook.Add("YClosePaint", "YClose_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YMaxPaint", "YMax_Simple", function(self, pw, ph, tab)
+hook.Add("YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = Color(205, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -256,10 +256,10 @@ hook.Add("YMaxPaint", "YMax_Simple", function(self, pw, ph, tab)
 	end
 end)
 
-hook.Add("YGroupBoxPaint", "YGroupBox_Simple", function(self, pw, ph, tab)
+hook.Add("YGroupBoxPaint", "YGroupBox_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Simple" then
+	if GetGlobalDString("string_interface_design") == "Material" then
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
 
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 255))

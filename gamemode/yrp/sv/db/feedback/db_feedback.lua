@@ -18,22 +18,22 @@ SQL_ADD_COLUMN(DATABASE_NAME, "status", "TEXT DEFAULT 'open'")
 --db_drop_table(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
-util.AddNetworkString("get_feedback")
-net.Receive("get_feedback", function(len, ply)
+util.AddNetworkString("get_ticket")
+net.Receive("get_ticket", function(len, ply)
 	if ply:CanAccess("bool_feedback") then
 		local _result = SQL_SELECT(DATABASE_NAME, "*", nil)
 		if _result == nil or _result == false then
 			_result = {}
 		end
 
-		net.Start("get_feedback")
+		net.Start("get_ticket")
 			net.WriteTable(_result)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString("add_feedback")
-net.Receive("add_feedback", function(len, ply)
+util.AddNetworkString("add_ticket")
+net.Receive("add_ticket", function(len, ply)
 	local _fb = net.ReadTable()
 	local _insert = SQL_INSERT_INTO(DATABASE_NAME, "title, feedback, contact, steamid, steamname, rpname", "'" .. SQL_STR_IN(_fb.title) .. "', '" .. SQL_STR_IN(_fb.feedback) .. "', '" .. SQL_STR_IN(_fb.contact) .. "', '" .. SQL_STR_IN(_fb.steamid) .. "', '" .. SQL_STR_IN(_fb.steamname) .. "', '" .. SQL_STR_IN(_fb.rpname) .. "'")
 	net.Start("yrp_noti")

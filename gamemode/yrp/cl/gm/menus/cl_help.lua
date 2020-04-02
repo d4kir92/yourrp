@@ -130,7 +130,7 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, "F1", "LID_help", "help")
 		AddKeybind(keybinds, GetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
 		AddKeybind(keybinds, GetKeybindName("menu_buy"), "LID_buymenu", "shop")
-		AddKeybind(keybinds, "F7", "LID_givefeedback", "feedback")
+		AddKeybind(keybinds, "F7", "LID_sendticket", "feedback")
 
 		AddKeybind(keybinds, GetKeybindName("menu_character_selection"), "LID_characterselection", "character")
 		AddKeybind(keybinds, GetKeybindName("toggle_mouse"), "LID_togglemouse", "mouse")
@@ -160,19 +160,6 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, GetKeybindName("speak_next"), "LID_nextvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("speak_prev"), "LID_previousvoicechannel", "record_voice_over", "bool_voice_channels")
 		AddKeybind(keybinds, GetKeybindName("mute_voice"), "LID_mutevoice", "")
-
-		HELPMENU.feedback = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20))
-		HELPMENU.feedback:SetText("LID_givefeedback")
-
-		function HELPMENU.feedback:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
-
-		function HELPMENU.feedback:DoClick()
-			CloseHelpMenu()
-			openFeedbackMenu()
-			--gui.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/viewform?usp=sf_link")
-		end
 
 		HELPMENU.discord = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20 + 50 + 20))
 		HELPMENU.discord:SetText("Get Live Support")
