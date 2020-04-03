@@ -1882,7 +1882,7 @@ end)
 
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	for i, ent in pairs(ents.GetAll()) do
-		if ent:IsNPC() and !ent:IsPlayer() and GetGlobalDBool("bool_tag_on_head_name", false) and ent:GetDString("dealerID", "") != "" then
+		if ent:IsNPC() and !ent:IsPlayer() and ent:GetDString("dealerID", "") != "" then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			if dist < 300 then
 				drawStringBox(ent, ent:GetDString("name", "Unnamed"), 20, Color(255, 255, 255))

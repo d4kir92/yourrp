@@ -248,10 +248,8 @@ net.Receive("getMapTab", function(len)
 					addWin.addName = createD("DTextEntry", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
 					Y = Y + 50
 					addWin.addName:SetText(addWin.name)
-					function addWin.addName:OnValueChange(str)
-						if tab == "storagepoints" then
-							addWin.name = str
-						end
+					function addWin.addName:OnChange()
+						addWin.name = self:GetText()
 					end
 
 					Y = Y + 50
