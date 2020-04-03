@@ -11,8 +11,8 @@ include("player/interface.lua")
 local Player = FindMetaTable("Player")
 
 function Player:FrequencyText()
-	if self:GetDBool("mute_voice", false) then
-		return YRP.lang_string("LID_youarespeaking") .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
+	if self:GetDBool("mute_voice", false) or self:GetDBool("bool_canusefrequencies", false) == false then
+		return YRP.lang_string("LID_speaklocal")
 	else
 		return YRP.lang_string("LID_frequency") .. ": " .. tostring(self:GetDFloat("voice_channel", 0.1, 1))
 	end

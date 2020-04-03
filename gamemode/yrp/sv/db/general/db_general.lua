@@ -51,6 +51,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_anti_bhop", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_suicide_disabled", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_on_death", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_role", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_need_to_introduce", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_drop_weapons", "INT DEFAULT 1")
@@ -674,6 +675,12 @@ util.AddNetworkString("update_bool_drop_items_on_death")
 net.Receive("update_bool_drop_items_on_death", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_drop_items_on_death", "bool_drop_items_on_death", b)
+end)
+
+util.AddNetworkString("update_bool_drop_items_role")
+net.Receive("update_bool_drop_items_role", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_drop_items_role", "bool_drop_items_role", b)
 end)
 
 util.AddNetworkString("update_bool_players_need_to_introduce")

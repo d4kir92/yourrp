@@ -259,7 +259,7 @@ function CreateCharacterSettingsContent()
 				self:SetBGColor(Color(0, 0, 0))
 			end
 			function name:OnChange()
-				local nam = name:GetText()
+				local nam = self:GetText()
 				lply:SetDString("charcreate_name", nam)
 				if #nam > rol.int_namelength then
 					--name:SetText(string.sub(nam, 1, rol.int_namelength))
@@ -283,7 +283,7 @@ function CreateCharacterSettingsContent()
 			self:SetBGColor(Color(0, 0, 0))
 		end
 		function desc:OnChange()
-			lply:SetDString("charcreate_desc", name:GetText())
+			lply:SetDString("charcreate_desc", self:GetText())
 		end
 	end)
 	net.Start("yrp_char_getrole")

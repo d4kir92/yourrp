@@ -118,11 +118,7 @@ function show_voice_info(ply)
 			if GetGlobalDBool("bool_voice_channels", false) then
 				_voice_text = get_speak_channel_name(ply)
 			elseif GetGlobalDBool("bool_voice_radio", false) then
-				if ply:GetDBool("mute_voice", false) then
-					_voice_text = _voice_text .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
-				else
-					_voice_text = _voice_text .. " (" .. YRP.lang_string("LID_frequency") .. ": " .. tostring(ply:GetDFloat("voice_channel", 0.1, 1)) .. ")"
-				end
+				_voice_text = _voice_text .. " (" .. ply:FrequencyText() .. ")"
 			end
 		else
 			_voice_text = YRP.lang_string("LID_voicechatisdisabled")
@@ -337,17 +333,21 @@ function TestYourRPContent()
 		local str = ""
 		local files, directories = file.Find("addons/*", "GAME")
 		for i, v in pairs(files) do
-			if string.find(v, "1189643820") and v != "yourrp_content_1189643820.gma" then
-				if str != "" then
-					str = str .. "\n"
+			if string.find(v, "1189643820") then
+				local ts = file.Time("addons/" .. v, "GAME")
+				if ts < 1585861486 then
+					if str != "" then
+						str = str .. "\n"
+					end
+					str = str .. v
 				end
-				str = str .. v
 			end
 		end
 		LocalPlayer():SetDString("badyourrpcontent", str)
+		LocalPlayer():SetDBool("badyourrpcontent", true)
 	end
 end
-
+TestYourRPContent()
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 
@@ -444,7 +444,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	if LocalPlayer():GetDString("badyourrpcontent", "") != "" then
-		draw.SimpleText("You have bad addons installed (addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Your addon is outdated, please delete/redownload (addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		local addons = string.Explode("\n", LocalPlayer():GetDString("badyourrpcontent", ""))
 		for i, v in pairs(addons) do
 			draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)

@@ -297,9 +297,25 @@ function IsNoUserGroupWeapon(ply, cname)
 end
 
 function IsNoRoleSwep(ply, cname)
+	if GetGlobalDBool("bool_drop_items_role", false) then
+		local _rol_tab = ply:GetRolTab()
+		if wk(_rol_tab) then
+			local _sweps = string.Explode(",", _rol_tab.string_sweps)
+			if !table.HasValue(_sweps, cname) then
+				return true
+			else
+				return false
+			end
+		end
+	else
+		return true
+	end
+end
+
+function IsNoNotDroppableRoleSwep(ply, cname)
 	local _rol_tab = ply:GetRolTab()
 	if wk(_rol_tab) then
-		local _sweps = string.Explode(",", _rol_tab.string_sweps)
+		local _sweps = string.Explode(",", _rol_tab.string_ndsweps)
 		if !table.HasValue(_sweps, cname) then
 			return true
 		else
@@ -391,7 +407,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		local _weapons = ply:GetWeapons()
 		local _cooldown_item = 120
 		for i, wep in pairs(_weapons) do
-			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
+			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) and IsNoNotDroppableRoleSwep(ply, wep:GetClass()) then
 				ply:DropSWEP(wep:GetClass(), true)
 				timer.Simple(_cooldown_item, function()
 					if wep:IsValid() then
@@ -846,7 +862,7 @@ function CanHearChannel(listener, talker)
 	local l_speak_channel = tonumber(listener:GetDFloat("voice_channel", 0.1, 1))
 	local t_speak_channel = tonumber(talker:GetDFloat("voice_channel", 0.1, 1))
 	local dist = listener:GetPos():Distance(talker:GetPos())
-	if listener:GetDBool("mute_voice", false) and dist < GetMaxVoiceRange() then
+	if (listener:GetDBool("mute_voice", false) and dist < GetMaxVoiceRange()) or !listener:GetDBool("bool_canusefrequencies", false) then
 		return true, true
 	elseif t_speak_channel == l_speak_channel or t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
 		return true

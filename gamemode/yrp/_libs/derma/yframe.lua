@@ -70,6 +70,10 @@ function PANEL:ChangedSize()
 
 end
 
+function PANEL:CanMaximise()
+	self.btnmax:SetVisible(true)
+end
+
 function PANEL:SetMaximised(b, von)
 	if von != nil then
 		if b != nil then
@@ -139,6 +143,8 @@ function PANEL:Paint(pw, ph)
 end
 
 function PANEL:Init()
+	self.maximised = false
+	
 	if self._lc == nil then
 		self._lc = true
 	end
@@ -164,6 +170,7 @@ function PANEL:Init()
 	self.btnmax = createD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 	self.btnmax:SetText("[ ]")
 	self.btnmax.main = self
+	self.btnmax:SetVisible(self.maximised)
 	function self.btnmax:Paint(pw, ph)
 		hook.Run("YMaxPaint", self, pw, ph)
 	end
@@ -206,7 +213,7 @@ function PANEL:Think()
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 
 		if self:GetSizable() then
-			self.btnmax:SetVisible(true)
+			--self.btnmax:SetVisible(true)
 			self.btnmax:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
 
@@ -215,7 +222,7 @@ function PANEL:Think()
 				self.langu:SetPos(self.btnmax:GetPos() - self.langu:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
 			end
 		else
-			self.btnmax:SetVisible(false)
+			--self.btnmax:SetVisible(false)
 			if IsValid(self.langu) then
 				self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
 				self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)

@@ -373,6 +373,9 @@ function unpack_paket(sender, text, iscommand)
 	elseif paket.command == "admin" then
 		paket.command_color = Color(255, 255, 0)
 		paket.text_color = Color(255, 255, 20)
+	elseif paket.command == "event" then
+		paket.command_color = Color(255, 255, 100)
+		paket.text_color = Color(255, 255, 100)
 	elseif paket.command == "faction" then
 		paket.command_color = Color(100, 100, 255)
 		paket.text_color = Color(160, 160, 255)

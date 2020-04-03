@@ -116,7 +116,7 @@ function YRP.lang_string(var, vals)
 
 			-- IF NOT FOUND
 			if !wk(translation) then
-				if nf[var] == nil and CLIENT and LocalPlayer():LoadedGamemode() then
+				if nf[var] == nil and CLIENT and LocalPlayer():LoadedGamemode() and LocalPlayer():GetDBool("badyourrpcontent", false) then
 					nf[var] = var
 					PrintLIDError(var)
 				end

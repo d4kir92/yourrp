@@ -1774,7 +1774,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					win.i = 1
 					win.etime = CurTime()
 					win.searching = false
-					function win:Think()
+					function win:Paint(pw, ph)
+						hook.Run("YFramePaint", self, pw, ph)
 						if self.searching then
 							if CurTime() > self.etime then
 								if pms[self.i] != nil then
@@ -2285,6 +2286,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
+			local bool_canusefrequencies = {}
+			bool_canusefrequencies.parent = ea.restriction:GetContent()
+			bool_canusefrequencies.uniqueID = role.uniqueID
+			bool_canusefrequencies.header = "LID_canusefrequencies"
+			bool_canusefrequencies.netstr = "update_role_bool_canusefrequencies"
+			bool_canusefrequencies.value = role.bool_canusefrequencies
+			bool_canusefrequencies.uniqueID = role.uniqueID
+			bool_canusefrequencies.lforce = false
+			ea[role.uniqueID].bool_canusefrequencies = DCheckBox(bool_canusefrequencies)
+
+			DHr(hr)
+
 			if role.uniqueID > 1 then
 				local whitelist = {}
 				whitelist.parent = ea.restriction:GetContent()
@@ -2595,6 +2608,45 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			DHr(hr)
+
+			if GetGlobalDBool("bool_hunger", false) then
+				local bool_hunger = {}
+				bool_hunger.parent = ea.attributes:GetContent()
+				bool_hunger.uniqueID = role.uniqueID
+				bool_hunger.header = "LID_hunger"
+				bool_hunger.netstr = "update_role_bool_hunger"
+				bool_hunger.value = role.bool_hunger
+				bool_hunger.uniqueID = role.uniqueID
+				ea[role.uniqueID].bool_hunger = DCheckBox(bool_hunger)
+
+				DHr(hr)
+			end
+
+			if GetGlobalDBool("bool_thirst", false) then
+				local bool_thirst = {}
+				bool_thirst.parent = ea.attributes:GetContent()
+				bool_thirst.uniqueID = role.uniqueID
+				bool_thirst.header = "LID_thirst"
+				bool_thirst.netstr = "update_role_bool_thirst"
+				bool_thirst.value = role.bool_thirst
+				bool_thirst.uniqueID = role.uniqueID
+				ea[role.uniqueID].bool_thirst = DCheckBox(bool_thirst)
+
+				DHr(hr)
+			end
+
+			if GetGlobalDBool("bool_stamina", false) then
+				local bool_stamina = {}
+				bool_stamina.parent = ea.attributes:GetContent()
+				bool_stamina.uniqueID = role.uniqueID
+				bool_stamina.header = "LID_stamina"
+				bool_stamina.netstr = "update_role_bool_stamina"
+				bool_stamina.value = role.bool_stamina
+				bool_stamina.uniqueID = role.uniqueID
+				ea[role.uniqueID].bool_stamina = DCheckBox(bool_stamina)
+
+				DHr(hr)
+			end
 
 			ea.attributes:AutoSize(true)
 		end)

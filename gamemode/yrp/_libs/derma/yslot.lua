@@ -93,7 +93,7 @@ function PANEL:Init()
 					net.WriteString(slotID)
 					net.WriteEntity(e)
 				net.SendToServer()
-			else
+			elseif itemID != nil then
 				net.Start("yrp_item_drop")
 					net.WriteString(itemID)
 				net.SendToServer()

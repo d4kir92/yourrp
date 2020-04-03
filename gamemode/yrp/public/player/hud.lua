@@ -123,7 +123,11 @@ if CLIENT then
 		elseif element == "CON" then
 			return not strEmpty(self:Condition())
 		elseif element == "FR" then
-			return GetGlobalDBool("bool_voice_radio", false) and not GetGlobalDBool("bool_voice_channels", false)
+			if self:GetDBool("bool_canusefrequencies", false) == false then
+				return false
+			else
+				return GetGlobalDBool("bool_voice_radio", false) and not GetGlobalDBool("bool_voice_channels", false)
+			end
 		elseif element == "AB" then
 			return self:GetDString("GetAbilityType", "none") != "none"
 		elseif element == "HP" then

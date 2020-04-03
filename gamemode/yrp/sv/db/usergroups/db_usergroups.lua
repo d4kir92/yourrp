@@ -1589,7 +1589,7 @@ end)
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) then
 		--printGM("gm", "CanProperty: " .. property)
-		if property == "ignite" then
+		if property == "ignite" or property == "extinguish" then
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_ignite", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if _tmp != nil and _tmp != false then
 				_tmp = _tmp[1]
@@ -1710,6 +1710,8 @@ hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 				net.Send(pl)
 				return false
 			end
+		else
+			YRP.msg("note", "Missing permissions => Property: " .. property)
 		end
 	end
 end)

@@ -125,13 +125,13 @@ function OpenSettings()
 	settingsWindow.window:Center()
 	settingsWindow.window:MakePopup()
 	settingsWindow.window:SetTitle("LID_chooseapage")
-	settingsWindow.window:SetMaximised(maximised)
 	settingsWindow.window:SetBorder(0)
 	settingsWindow.window:SetDraggable(true)
 	settingsWindow.window:SetMinWidth(100)
 	settingsWindow.window:SetMinHeight(100)
 	settingsWindow.window:Sizable(true)
 	settingsWindow.window:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
+	settingsWindow.window:CanMaximise()
 	
 	local tmp = settingsWindow.window
 

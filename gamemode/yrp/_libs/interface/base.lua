@@ -87,7 +87,8 @@ function DCheckBoxes(tab)
 				surfaceWindow(self, pw, ph, YRP.lang_string("LID_usergroups"))
 			end
 			window.cm = createD("DPanelList", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
-
+			window.cm:EnableVerticalScrollbar()
+			
 			function window:sendtoserver()
 				local str = {}
 				for i, choice in pairs(tab.choices) do
