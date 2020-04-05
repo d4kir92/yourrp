@@ -649,7 +649,9 @@ function DAttributeBar(tab)
 					if pnl.val3 > tab.dnw[2].value then
 						pnl.val3 = 0
 					elseif pnl.val3 < 0 then
-						pnl.val3 = tab.dnw[4].value
+						if tab.dnw[4] != nil then
+							pnl.val3 = tab.dnw[4].value
+						end
 					end
 				end
 				if tab.dnw[4] != nil then

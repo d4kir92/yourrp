@@ -147,6 +147,7 @@ net.Receive("getMapTab", function(len)
 	local parent = settingsWindow.window.site.tabs.site
 	--local parent = settingsWindow.window.site.tabpage
 
+	if !wk(parent) or !pa(parent) then return end
 	parent:Clear()
 
 	local mapList = createD("DListView", parent, parent:GetWide() - YRP.ctr(660), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))

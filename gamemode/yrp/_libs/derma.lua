@@ -1237,6 +1237,33 @@ function createCircle(x, y, radius, seg)
 	return cir
 end
 
+local sin,cos,rad = math.sin,math.cos,math.rad;
+function surface.CreatePoly(x, y, radius, quality, ang)
+	ang = ang or 360
+	local circle = {};
+    for i = 1, quality do
+        circle[i] = {};
+        circle[i].x = x + cos(rad(i*ang)/quality)*radius;
+        circle[i].y = y + sin(rad(i*ang)/quality)*radius;
+	end
+	return circle;
+end
+
+function draw.Circle( x, y, radius, seg )
+	local cir = {}
+
+	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+	for i = 0, seg do
+		local a = math.rad( ( i / seg ) * -360 )
+		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+	end
+
+	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
+	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+
+	surface.DrawPoly( cir )
+end
+
 function drawCircle(x, y, radius, seg)
 	local cir = {}
 

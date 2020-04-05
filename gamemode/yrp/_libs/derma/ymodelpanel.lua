@@ -47,7 +47,9 @@ function PANEL:Paint( w, h )
 
 	draw.NoTexture()
 	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-	DrawSpecial( w / 2, h / 2, h / 2 + 1, math.max(w, h) )
+	--DrawSpecial( w / 2, h / 2, h / 2 + 1, math.max(w, h) )
+	local diameter = h / 2
+	drawCircle(diameter, diameter, diameter, math.max(w, h))
 
 	render.SetStencilFailOperation( STENCILOPERATION_ZERO )
 	render.SetStencilPassOperation( STENCILOPERATION_REPLACE )

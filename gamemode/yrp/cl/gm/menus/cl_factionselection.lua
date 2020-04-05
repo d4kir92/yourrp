@@ -103,6 +103,15 @@ function CreateFactionSelectionContent()
 
 				for i, fac in pairs(ftab) do
 					fac.uniqueID = tonumber(fac.uniqueID)
+
+					fac.bool_visible_cc = tobool(fac.bool_visible_cc)
+					fac.bool_visible_rm = tobool(fac.bool_visible_rm)
+
+					if LocalPlayer():GetDBool("cc", true) == true and !fac.bool_visible_cc then
+						continue
+					elseif LocalPlayer():GetDBool("cc", false) == false and !fac.bool_visible_rm then
+						continue
+					end
 		
 					if fac.uniqueID != -1 then
 						local faction = createD("YPanel", nil, w, h, YRP.ctr(config.br) + x * (w + YRP.ctr(config.br)), YRP.ctr(config.br) + y * (h + YRP.ctr(config.br)))

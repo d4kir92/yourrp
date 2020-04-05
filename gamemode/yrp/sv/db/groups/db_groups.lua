@@ -19,7 +19,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupvoicechat", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscp", "INTEGER DEFAULT 0")
@@ -557,7 +558,7 @@ end
 -- Faction Selection
 util.AddNetworkString("yrp_factionselection_getfactions")
 net.Receive("yrp_factionselection_getfactions", function(len, ply)
-	local dbtab = SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description", "int_parentgroup = '0'")
+	local dbtab = SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description, bool_visible_cc, bool_visible_rm", "int_parentgroup = '0'")
 
 	local nettab = {}
 	if wk(dbtab) then

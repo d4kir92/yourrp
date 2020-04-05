@@ -844,12 +844,24 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					local visible = {}
 					visible.parent = ea.restriction:GetContent()
 					visible.uniqueID = group.uniqueID
-					visible.header = "LID_visible"
-					visible.netstr = "update_group_bool_visible"
-					visible.value = group.bool_visible
+					visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
+					visible.netstr = "update_group_bool_visible_cc"
+					visible.value = group.bool_visible_cc
 					visible.uniqueID = group.uniqueID
 					visible.lforce = false
 					ea[group.uniqueID].visible = DCheckBox(visible)
+
+					DHr(hr)
+
+					local visible2 = {}
+					visible2.parent = ea.restriction:GetContent()
+					visible2.uniqueID = group.uniqueID
+					visible2.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_rolemenu") .. ")"
+					visible2.netstr = "update_group_bool_visible_rm"
+					visible2.value = group.bool_visible_rm
+					visible2.uniqueID = group.uniqueID
+					visible2.lforce = false
+					ea[group.uniqueID].visible2 = DCheckBox(visible2)
 				end
 			end
 		end)
@@ -2330,12 +2342,24 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local visible = {}
 				visible.parent = ea.restriction:GetContent()
 				visible.uniqueID = role.uniqueID
-				visible.header = "LID_visible"
-				visible.netstr = "update_role_bool_visible"
+				visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
+				visible.netstr = "update_role_bool_visible_cc"
 				visible.value = role.bool_visible
 				visible.uniqueID = role.uniqueID
 				visible.lforce = false
 				ea[role.uniqueID].visible = DCheckBox(visible)
+
+				DHr(hr)
+
+				local visible2 = {}
+				visible2.parent = ea.restriction:GetContent()
+				visible2.uniqueID = role.uniqueID
+				visible2.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_rolemenu") .. ")"
+				visible2.netstr = "update_role_bool_visible_rm"
+				visible2.value = role.bool_visible_rm
+				visible2.uniqueID = role.uniqueID
+				visible2.lforce = false
+				ea[role.uniqueID].visible2 = DCheckBox(visible2)
 
 				DHr(hr)
 			end

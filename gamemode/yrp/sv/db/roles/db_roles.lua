@@ -60,7 +60,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_securitylevel", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible", "INTEGER DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ' '")
@@ -1591,4 +1592,31 @@ net.Receive("getallroles", function(len, ply)
 			net.WriteTable(dbtab)
 		net.Send(ply)
 	end
+end)
+
+util.AddNetworkString("get_next_ranks")
+net.Receive("get_next_ranks", function(len, ply)
+	local ruid = net.ReadString()
+	local rols = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
+
+	if wk(rols) then
+		net.Start("get_next_ranks")
+			net.WriteTable(rols)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("yrp_hasnext_ranks")
+net.Receive("yrp_hasnext_ranks", function(len, ply)
+	local ruid = net.ReadString()
+	local rols = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
+
+	local has = false
+	if wk(rols) then
+		has = true
+	end
+
+	net.Start("yrp_hasnext_ranks")
+		net.WriteBool(has)
+	net.Send(ply)
 end)

@@ -6,14 +6,14 @@
 local scolen = {}
 scolen["leve"] = 160
 scolen["idca"] = 340
-scolen["name"] = 480
-scolen["role"] = 480
+scolen["name"] = 460
+scolen["role"] = 460
 scolen["frag"] = 200
 scolen["lang"] = 200
 scolen["coun"] = 200
 scolen["oper"] = 200
-scolen["play"] = 160
-scolen["ping"] = 120
+scolen["play"] = 220
+scolen["ping"] = 100
 -- CONFIG
 
 local elePos = {}

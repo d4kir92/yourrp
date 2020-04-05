@@ -148,7 +148,7 @@ function loadDoors()
 							tabChar = tabChar[1]
 							if wk(tabChar.rpname) then
 								v:SetDTable("owner", tabChar)
-								v:SetDString("ownerRPName", tabChar.rpname)
+								v:SetDString("ownerRPName", SQL_STR_OUT(tabChar.rpname))
 								v:SetDString("ownerCharID", w.ownerCharID)
 								v:SetDBool("bool_hasowner", true)
 							end
@@ -399,7 +399,7 @@ net.Receive("buyBuilding", function(len, ply)
 				for k, v in pairs(GetAllDoors()) do
 					if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 						v:SetDTable("owner", tabChar)
-						v:SetDString("ownerRPName", tabChar.rpname)
+						v:SetDString("ownerRPName", SQL_STR_OUT(tabChar.rpname))
 						v:SetDString("ownerCharID", ply:CharID())
 						v:SetDBool("bool_hasowner", true)
 					end
