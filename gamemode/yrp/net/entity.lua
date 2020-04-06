@@ -427,7 +427,7 @@ if SERVER then
 
 					ply:SetDInt("yrp_load_ent", 0)
 
-					timer.Simple(7, function()
+					timer.Simple(16, function()
 						if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
 							ply:SetDInt("yrp_load_ent", 10)
 							for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
@@ -436,7 +436,7 @@ if SERVER then
 						end
 					end)
 
-					timer.Simple(9, function()
+					timer.Simple(18, function()
 						if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
 							ply:SetDInt("yrp_load_ent", 30)
 							for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
@@ -445,7 +445,7 @@ if SERVER then
 						end
 					end)
 
-					timer.Simple(11, function()
+					timer.Simple(20, function()
 						if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
 							ply:SetDInt("yrp_load_ent", 50)
 							for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
@@ -454,7 +454,7 @@ if SERVER then
 						end
 					end)
 
-					timer.Simple(13, function()
+					timer.Simple(22, function()
 						if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
 							ply:SetDInt("yrp_load_ent", 70)
 							for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
@@ -463,7 +463,7 @@ if SERVER then
 						end
 					end)
 
-					timer.Simple(15, function()
+					timer.Simple(24, function()
 						if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
 							ply:SetDInt("yrp_load_ent", 90)
 							for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
@@ -474,7 +474,7 @@ if SERVER then
 				end
 			end
 
-			timer.Simple(17, function()
+			timer.Simple(26, function()
 				SendDInit(entindex, ply)
 				ply:SetDInt("yrp_load_ent", 100)
 				

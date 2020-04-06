@@ -120,7 +120,7 @@ function ENT:Draw()
 				end
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(YRP.lang_string("lid_prev"), "Y_60_500", 200, 600 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_prev"), "Y_60_500", 200, 600 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.RoundedBox(0, 0, 850, 400, 100, Color(255, 255, 255))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_back"), "Y_60_500", 200, 850 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -137,7 +137,7 @@ function ENT:Draw()
 				end
 
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color(255, 255, 255))
-				draw.SimpleTextOutlined(YRP.lang_string("lid_next"), "Y_60_500", pw-200, 600 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(YRP.lang_string("LID_next"), "Y_60_500", pw-200, 600 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			elseif self.ent:GetDString("status") == "other" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255))
 				draw.SimpleTextOutlined(bankName, "Y_80_500", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))

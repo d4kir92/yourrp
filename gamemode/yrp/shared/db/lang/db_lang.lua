@@ -149,7 +149,7 @@ end
 local searching = {}	-- Anti spam
 local translations = {}	-- finished translations
 function GetTranslation(sentence, target, source)
-	if yrp_current_lang["lid_initauthor"] != nil then
+	if yrp_current_lang["LID_initauthor"] != nil then
 		target = target or YRP.lang_string("LID_initshort")
 		source = source or "auto"
 		searching[sentence] = searching[sentence] or false

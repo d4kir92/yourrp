@@ -21,7 +21,11 @@ net.Receive("get_perma_props", function(len, ply)
 		end
 
 		local mdl = createD("DModelPanel", line, h, h, 0, 0)
-		mdl:SetModel(pp.tab[i].model)
+		timer.Simple(0.5, function()
+			if pa(mdl) then
+				mdl:SetModel(pp.tab[i].model)
+			end
+		end)
 
 		local rem = createD("YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
 		rem:SetText("LID_remove")
