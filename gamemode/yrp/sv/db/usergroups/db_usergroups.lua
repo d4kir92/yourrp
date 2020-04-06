@@ -1829,7 +1829,7 @@ net.Receive("get_perma_props", function(len, ply)
 
 		local c = 0
 		for i, v in SortedPairsByMemberValue(sortedtab, "model") do
-			timer.Simple(c * 0.5, function()
+			timer.Simple(c * 1, function()
 				net.Start("get_perma_props")
 					net.WriteString(i)
 					net.WriteTable(v)

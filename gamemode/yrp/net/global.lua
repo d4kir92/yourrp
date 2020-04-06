@@ -197,8 +197,6 @@ end
 -- INIT
 local sending = false
 if SERVER then
-	util.AddNetworkString("request_dglobals")
-
 	function SendDGlobals(ply)
 		--if !sending then
 			--sending = true
@@ -210,38 +208,42 @@ if SERVER then
 			YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
 			YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
 		
-			timer.Simple(2, function()
+			timer.Simple(1, function()
 				for i, v in pairs(YRP_NW_Globals["BOOL"]) do
 					SendGlobalDBool(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 10)
 			end)
 
-			timer.Simple(4, function()
+			timer.Simple(2, function()
 				for i, v in pairs(YRP_NW_Globals["STRING"]) do
 					SendGlobalDString(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 25)
 			end)
 
-			timer.Simple(6, function()
+			timer.Simple(3, function()
 				for i, v in pairs(YRP_NW_Globals["INT"]) do
 					SendGlobalDInt(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 50)
 			end)
 
-			timer.Simple(8, function()
+			timer.Simple(4, function()
 				for i, v in pairs(YRP_NW_Globals["FLOAT"]) do
 					SendGlobalDFloat(i, v, ply)
 				end
 				ply:SetDInt("yrp_load_glo", 75)
 			end)
 
-			timer.Simple(10, function()
+			timer.Simple(5, function()
 				for i, v in pairs(YRP_NW_Globals["TABLE"]) do
 					SendGlobalDTable(i, v, ply)
 				end
+				ply:SetDInt("yrp_load_glo", 95)
+			end)
+
+			timer.Simple(6, function()
 				ply:SetDInt("yrp_load_glo", 100)
 
 				sending = false
@@ -252,7 +254,4 @@ if SERVER then
 			--end)
 		--end
 	end
-	net.Receive("request_dglobals", function(len, ply)
-		SendDGlobals(ply)
-	end)
 end

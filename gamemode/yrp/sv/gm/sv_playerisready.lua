@@ -2,8 +2,10 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
+local c = 0
 function PlayerLoadedGame(ply)
-	printGM("note", tostring(ply:YRPName()) .. " finished loading.")
+	c = c + 1
+	printGM("note", tostring(ply:YRPName()) .. " finished loading. c: " ..  c)
 	local tab = net.ReadTable()
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux

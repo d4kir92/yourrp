@@ -10,14 +10,16 @@ local ENTDELAY = 0.05
 if SERVER then
 	util.AddNetworkString("SetDString")
 	function SendDString(entindex, key, value, ply)
-		net.Start("SetDString")
-			net.WriteUInt(entindex, 16)
-			net.WriteString(key)
-			net.WriteString(value)
-		if IsValid(ply) then
-			net.Send(ply)
-		else
-			net.Broadcast()
+		if entindex != nil then
+			net.Start("SetDString")
+				net.WriteUInt(entindex, 16)
+				net.WriteString(key)
+				net.WriteString(value)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		end
 	end
 end
@@ -63,14 +65,16 @@ end
 if SERVER then
 	util.AddNetworkString("SetDBool")
 	function SendDBool(entindex, key, value, ply)
-		net.Start("SetDBool")
-			net.WriteUInt(entindex, 16)
-			net.WriteString(key)
-			net.WriteBool(value)
-		if IsValid(ply) then
-			net.Send(ply)
-		else
-			net.Broadcast()
+		if entindex != nil then
+			net.Start("SetDBool")
+				net.WriteUInt(entindex, 16)
+				net.WriteString(key)
+				net.WriteBool(value)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		end
 	end
 end
@@ -127,14 +131,16 @@ end
 if SERVER then
 	util.AddNetworkString("SetDInt")
 	function SendDInt(entindex, key, value, ply)
-		net.Start("SetDInt")
-			net.WriteUInt(entindex, 16)
-			net.WriteString(key)
-			net.WriteInt(value, 32)
-		if IsValid(ply) then
-			net.Send(ply)
-		else
-			net.Broadcast()
+		if entindex != nil then
+			net.Start("SetDInt")
+				net.WriteUInt(entindex, 16)
+				net.WriteString(key)
+				net.WriteInt(value, 32)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		end
 	end
 end
@@ -185,21 +191,23 @@ end
 if SERVER then
 	util.AddNetworkString("SetDFloat")
 	function SendDFloat(entindex, key, value, ply)
-		if net.BytesLeft() == nil then
-			net.Start("SetDFloat")
-				net.WriteUInt(entindex, 16)
-				net.WriteString(key)
-				net.WriteFloat(value)
-			if IsValid(ply) then
-				net.Send(ply)
+		if entindex != nil then
+			if net.BytesLeft() == nil then
+				net.Start("SetDFloat")
+					net.WriteUInt(entindex, 16)
+					net.WriteString(key)
+					net.WriteFloat(value)
+				if IsValid(ply) then
+					net.Send(ply)
+				else
+					net.Broadcast()
+				end
 			else
-				net.Broadcast()
+				--print("FAIL", key, value, net.BytesLeft())
+				timer.Simple(0.1, function()
+					SendDFloat(entindex, key, value, ply)
+				end)
 			end
-		else
-			--print("FAIL", key, value, net.BytesLeft())
-			timer.Simple(0.1, function()
-				SendDFloat(entindex, key, value, ply)
-			end)
 		end
 	end
 end
@@ -253,14 +261,16 @@ end
 if SERVER then
 	util.AddNetworkString("SetDEntity")
 	function SendDEntity(entindex, key, value, ply)
-		net.Start("SetDEntity")
-			net.WriteUInt(entindex, 16)
-			net.WriteString(key)
-			net.WriteEntity(value)
-		if IsValid(ply) then
-			net.Send(ply)
-		else
-			net.Broadcast()
+		if entindex != nil then
+			net.Start("SetDEntity")
+				net.WriteUInt(entindex, 16)
+				net.WriteString(key)
+				net.WriteEntity(value)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		end
 	end
 end
@@ -311,14 +321,16 @@ end
 if SERVER then
 	util.AddNetworkString("SetDTable")
 	function SendDTable(entindex, key, value, ply)
-		net.Start("SetDTable")
-			net.WriteUInt(entindex, 16)
-			net.WriteString(key)
-			net.WriteTable(value)
-		if IsValid(ply) then
-			net.Send(ply)
-		else
-			net.Broadcast()
+		if entindex != nil then
+			net.Start("SetDTable")
+				net.WriteUInt(entindex, 16)
+				net.WriteString(key)
+				net.WriteTable(value)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		end
 	end
 end
@@ -378,12 +390,14 @@ end
 if SERVER then
 	util.AddNetworkString("SetDInit")
 	function SendDInit(entindex, ply)
-		net.Start("SetDInit")
-			net.WriteUInt(entindex, 16)
-		if IsValid(ply) then
-			net.Send(ply)
-		else
-			net.Broadcast()
+		if entindex != nil then
+			net.Start("SetDInit")
+				net.WriteUInt(entindex, 16)
+			if IsValid(ply) then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
 		end
 	end
 end
@@ -396,8 +410,7 @@ end
 
 local sending = false
 if SERVER then
-	util.AddNetworkString("request_dentites")
-
+	local c = 0
 	function SendDEntities(ply, funcname)
 		---if !sending then
 			--sending = true
@@ -414,49 +427,59 @@ if SERVER then
 
 					ply:SetDInt("yrp_load_ent", 0)
 
-					timer.Simple(1, function()
-						ply:SetDInt("yrp_load_ent", 10)
-						for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
-							SendDBool(entindex, i, v, ply)
-						end
-					end)
-
-					timer.Simple(3, function()
-						ply:SetDInt("yrp_load_ent", 30)
-						for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
-							SendDString(entindex, i, v, ply)
-						end
-					end)
-
-					timer.Simple(5, function()
-						ply:SetDInt("yrp_load_ent", 50)
-						for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
-							SendDInt(entindex, i, v, ply)
-						end
-					end)
-
 					timer.Simple(7, function()
-						ply:SetDInt("yrp_load_ent", 70)
-						for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
-							SendDFloat(entindex, i, v, ply)
+						if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
+							ply:SetDInt("yrp_load_ent", 10)
+							for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
+								SendDBool(entindex, i, v, ply)
+							end
 						end
 					end)
 
 					timer.Simple(9, function()
-						ply:SetDInt("yrp_load_ent", 90)
-						for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
-							SendDTable(entindex, i, v, ply)
+						if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
+							ply:SetDInt("yrp_load_ent", 30)
+							for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
+								SendDString(entindex, i, v, ply)
+							end
 						end
 					end)
 
 					timer.Simple(11, function()
-						SendDInit(entindex, ply)
-						ply:SetDInt("yrp_load_ent", 100)
-						
-						sending = false
+						if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
+							ply:SetDInt("yrp_load_ent", 50)
+							for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
+								SendDInt(entindex, i, v, ply)
+							end
+						end
+					end)
+
+					timer.Simple(13, function()
+						if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
+							ply:SetDInt("yrp_load_ent", 70)
+							for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
+								SendDFloat(entindex, i, v, ply)
+							end
+						end
+					end)
+
+					timer.Simple(15, function()
+						if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
+							ply:SetDInt("yrp_load_ent", 90)
+							for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
+								SendDTable(entindex, i, v, ply)
+							end
+						end
 					end)
 				end
 			end
+
+			timer.Simple(17, function()
+				SendDInit(entindex, ply)
+				ply:SetDInt("yrp_load_ent", 100)
+				
+				sending = false
+			end)
 		--else
 			-- IF SENDING ALREADY => Wait for finish*
 			--timer.Simple(0.9, function()
@@ -464,10 +487,6 @@ if SERVER then
 			--end)
 		--end
 	end
-
-	net.Receive("request_dentites", function(len, ply)
-		SendDEntities(ply, "request_dentites")
-	end)
 end
 
 function RemoveFromEntTable( entindex )
