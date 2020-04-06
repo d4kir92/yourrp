@@ -21,6 +21,8 @@ SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_canbeowned", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "int_securitylevel", "TEXT DEFAULT 0")
 
+SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_lockdown", "INT DEFAULT 1")
+
 --db_drop_table(DATABASE_NAME_BUILDINGS)
 --db_is_empty(DATABASE_NAME_BUILDINGS)
 
@@ -573,7 +575,7 @@ net.Receive("changeBuildingDescription", function(len, ply)
 	end
 end)
 
-net.Receive("getBuildings", function(len, ply)
+function GetDoors()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", "name != 'Building'")
 
 	if wk(_tmpTable) then
@@ -601,11 +603,20 @@ net.Receive("getBuildings", function(len, ply)
 			building.name = SQL_STR_OUT(building.name)
 			building.doors = _doors
 		end
-
-		net.Start("getBuildings")
-			net.WriteTable(_tmpTable)
-		net.Send(ply)
 	end
+	if !wk(_tmpTable) then
+		_tmpTable = {}
+	end
+
+	return _tmpTable
+end
+
+net.Receive("getBuildings", function(len, ply)
+	local doors = GetDoors()
+
+	net.Start("getBuildings")
+		net.WriteTable(doors)
+	net.Send(ply)
 end)
 
 net.Receive("getBuildingInfo", function(len, ply)
@@ -656,4 +667,12 @@ net.Receive("getBuildingInfo", function(len, ply)
 	else
 		printGM("note", "getBuildingInfo -> BuildingID is not valid")
 	end
+end)
+
+util.AddNetworkString("update_lockdown_buildings")
+net.Receive("update_lockdown_buildings", function(len, ply)
+	local buid = net.ReadString()
+	local checked = net.ReadBool()
+
+	SQL_UPDATE(DATABASE_NAME_BUILDINGS, "bool_lockdown = '" .. tonum(checked) .. "'", "uniqueID = '" .. buid .. "'")
 end)

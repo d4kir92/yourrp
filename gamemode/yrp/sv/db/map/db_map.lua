@@ -180,7 +180,8 @@ net.Receive("dbInsertIntoMap", function(len, ply)
 		printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 	end
 
-	UpdateSpawnerTable()
+	UpdateSpawnerNPCTable()
+	UpdateSpawnerENTTable()
 	UpdateJailpointTable()
 	UpdateReleasepointTable()
 	UpdateRadiationTable()
@@ -229,7 +230,8 @@ net.Receive("update_map_int_respawntime", function(len, ply)
 	local i = net.ReadString()
 
 	SQL_UPDATE(DATABASE_NAME, "int_respawntime = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
-	UpdateSpawnerTable()
+	UpdateSpawnerNPCTable()
+	UpdateSpawnerENTTable()
 end)
 
 util.AddNetworkString("update_map_int_amount")
@@ -238,7 +240,8 @@ net.Receive("update_map_int_amount", function(len, ply)
 	local i = net.ReadString()
 
 	SQL_UPDATE(DATABASE_NAME, "int_amount = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
-	UpdateSpawnerTable()
+	UpdateSpawnerNPCTable()
+	UpdateSpawnerENTTable()
 end)
 
 util.AddNetworkString("update_map_string_classname")
@@ -247,7 +250,8 @@ net.Receive("update_map_string_classname", function(len, ply)
 	local s = net.ReadString()
 
 	SQL_UPDATE(DATABASE_NAME, "string_classname = '" .. s .. "'", "uniqueID = '" .. uid .. "'")
-	UpdateSpawnerTable()
+	UpdateSpawnerNPCTable()
+	UpdateSpawnerENTTable()
 end)
 
 -- NEW MAP PAGE

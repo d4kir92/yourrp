@@ -123,15 +123,28 @@ function con_st(ply, _time)
 		end
 
 		if !ply:Slowed() then
+			local rs = ply:GetDInt("speedrun", 0)
+			local ws = ply:GetDInt("speedwalk", 0)
+			local factor = 1
 			if ply:GetDInt("GetCurStamina", 0) <= 20 or ply:GetDFloat("thirst", 0) < 20 then
-				ply:SetRunSpeed(ply:GetDInt("speedrun", 0) * 0.6)
-				ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0) * 0.6)
-				ply:SetCanWalk(false)
-			else
-				ply:SetRunSpeed(ply:GetDInt("speedrun", 0))
-				ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0))
-				ply:SetCanWalk(true)
+				factor = 0.6
 			end
+
+			if IsBonefracturingEnabled() and !ply:Slowed() then
+				if ply:GetDBool("broken_leg_left") and ply:GetDBool("broken_leg_right") then
+					factor = 0.5
+				elseif ply:GetDBool("broken_leg_left") or ply:GetDBool("broken_leg_right") then
+					factor = 0.25
+				end
+			end
+
+			if factor == 1 then
+				ply:SetCanWalk(true)
+			else
+				ply:SetCanWalk(false)
+			end
+			ply:SetRunSpeed(rs * factor)
+			ply:SetWalkSpeed(ws * factor)
 		end
 	end
 end
@@ -145,22 +158,6 @@ function anti_bunnyhop(ply)
 			ply:SetDBool("jump_resetting", false)
 			ply:SetDBool("canjump", true)
 		end)
-	end
-end
-
-function broken(ply)
-	if IsBonefracturingEnabled() and !ply:Slowed() then
-		if ply:GetDBool("broken_leg_left") and ply:GetDBool("broken_leg_right") then
-			--[[ Both legs broken ]]--
-			ply:SetRunSpeed(ply:GetDInt("speedrun", 0)*0.5)
-			ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0)*0.5)
-			ply:SetCanWalk(false)
-		elseif ply:GetDBool("broken_leg_left") or ply:GetDBool("broken_leg_right") then
-			--[[ One leg broken ]]--
-			ply:SetRunSpeed(ply:GetDInt("speedrun", 0)*0.25)
-			ply:SetWalkSpeed(ply:GetDInt("speedwalk", 0)*0.25)
-			ply:SetCanWalk(false)
-		end
 	end
 end
 
@@ -282,7 +279,6 @@ timer.Create("ServerThink", TICK, 0, function()
 
 				time_jail(ply)
 				check_salary(ply)
-				broken(ply)
 
 				anti_bunnyhop(ply)
 			end
@@ -442,9 +438,9 @@ function RestartServer()
 	game.ConsoleCommand("_restart")
 end
 
-function UpdateSpawnerTable()
+function UpdateSpawnerNPCTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner'")
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local spawner = {}
@@ -455,9 +451,26 @@ function UpdateSpawnerTable()
 			end
 		end
 	end
-	SetGlobalDTable("yrp_spawner", t)
+	SetGlobalDTable("yrp_spawner_npc", t)
 end
-UpdateSpawnerTable()
+UpdateSpawnerNPCTable()
+
+function UpdateSpawnerENTTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local spawner = {}
+			spawner.pos = v.position
+			spawner.uniqueID = v.uniqueID
+			if !table.HasValue(t, spawner) then
+				table.insert(t, spawner)
+			end
+		end
+	end
+	SetGlobalDTable("yrp_spawner_ent", t)
+end
+UpdateSpawnerENTTable()
 
 function UpdateJailpointTable()
 	local t = {}
@@ -513,12 +526,13 @@ end
 UpdateRadiationTable()
 
 local YNPCs = {}
+local YENTs = {}
 local delay = CurTime()
 hook.Add("Think", "yrp_spawner_think", function()
 	if delay < CurTime() then
 		delay = CurTime() + 1
 
-		local t = GetGlobalDTable("yrp_spawner")
+		local t = GetGlobalDTable("yrp_spawner_npc")
 		for _, v in pairs(t) do
 			local pos = StringToVector(v.pos)
 			if YNPCs[v.uniqueID] == nil then
@@ -527,7 +541,7 @@ hook.Add("Think", "yrp_spawner_think", function()
 				YNPCs[v.uniqueID].delay = CurTime()
 			end
 
-			local npc_spawner = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+			local npc_spawner = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc' AND uniqueID = '" .. v.uniqueID .. "'")
 			if wk(npc_spawner) then
 				npc_spawner = npc_spawner[1]
 				npc_spawner.int_amount = tonumber(npc_spawner.int_amount)
@@ -548,6 +562,41 @@ hook.Add("Think", "yrp_spawner_think", function()
 						teleportToPoint(npc, pos)
 
 						table.insert(YNPCs[v.uniqueID].npcs, npc)
+					end
+				end
+			end
+		end
+
+		local t = GetGlobalDTable("yrp_spawner_ent")
+		for _, v in pairs(t) do
+			local pos = StringToVector(v.pos)
+			if YENTs[v.uniqueID] == nil then
+				YENTs[v.uniqueID] = {}
+				YENTs[v.uniqueID].ents = {}
+				YENTs[v.uniqueID].delay = CurTime()
+			end
+
+			local ent_spawner = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent' AND uniqueID = '" .. v.uniqueID .. "'")
+			if wk(ent_spawner) then
+				ent_spawner = ent_spawner[1]
+				ent_spawner.int_amount = tonumber(ent_spawner.int_amount)
+				ent_spawner.int_respawntime = tonumber(ent_spawner.int_respawntime)
+				for _, ent in pairs(YENTs[v.uniqueID].ents) do
+					if !ent:IsValid() then
+						YRP.msg("gm", "A ENT Died, start respawning...")
+						table.RemoveByValue(YENTs[v.uniqueID].ents, ent)
+						YENTs[v.uniqueID].delay = CurTime() + ent_spawner.int_respawntime
+					end
+				end
+
+				if YENTs[v.uniqueID].delay < CurTime() and table.Count(YENTs[v.uniqueID].ents) < ent_spawner.int_amount then
+					ent_spawner.delay = CurTime() + ent_spawner.int_respawntime
+					local ent = ents.Create(ent_spawner.string_classname)
+					if ent:IsValid() then
+						ent:Spawn()
+						teleportToPoint(ent, pos)
+
+						table.insert(YENTs[v.uniqueID].ents, ent)
 					end
 				end
 			end

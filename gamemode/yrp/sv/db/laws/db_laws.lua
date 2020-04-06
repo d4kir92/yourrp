@@ -27,8 +27,15 @@ net.Receive("get_laws", function(len, ply)
 			laws.bool_lockdown = lockdown.bool_lockdown
 			laws.string_lockdowntext = SQL_STR_OUT(lockdown.string_lockdowntext)
 		end
+
+		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, bool_lockdown, uniqueID", "name != 'Building'")
+		if !wk(buildings) then
+			buildings = {}
+		end
+
 		net.Start("get_laws")
 			net.WriteTable(laws)
+			net.WriteTable(buildings)
 		net.Send(ply)
 	end
 end)

@@ -92,13 +92,12 @@ function CreateLawsContent(PARENT)
 
 			-- Lockdown Alarms
 			local alarms = GetGlobalDTable("lockdown_alarms")
-
-			local l_alarms = createD("DPanelList", PARENT, YRP.ctr(760), YRP.ctr(870), YRP.ctr(800), YRP.ctr(120 + 50 + 20))
+			local l_alarms = createD("DPanelList", PARENT, YRP.ctr(760), YRP.ctr(400), YRP.ctr(800), YRP.ctr(120 + 50 + 20))
+			l_alarms:EnableVerticalScrollbar()
 			l_alarms:SetSpacing(4)
 			function l_alarms:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
 			end
-
 			for i, e in pairs(alarms) do
 				local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 				function line:Paint(pw, ph)
@@ -118,6 +117,38 @@ function CreateLawsContent(PARENT)
 				label:SetText(e.name)
 
 				l_alarms:AddItem(line)
+			end
+
+			-- Buildings
+			local buildings = net.ReadTable()
+			if table.Count(buildings) > 0 then
+				local l_buildings = createD("DPanelList", PARENT, YRP.ctr(760), YRP.ctr(400), YRP.ctr(800), YRP.ctr(120 + 50 + 20 + 400 + 20))
+				l_buildings:EnableVerticalScrollbar()
+				l_buildings:SetSpacing(4)
+				function l_buildings:Paint(pw, ph)
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+				end
+
+				for i, e in pairs(buildings) do
+					local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
+					function line:Paint(pw, ph)
+						--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
+					end
+
+					local a = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+					a:SetChecked(tobool(e.bool_lockdown))
+					function a:OnChange( bVal )
+						net.Start("update_lockdown_buildings")
+							net.WriteString(e.uniqueID)
+							net.WriteBool(bVal)
+						net.SendToServer()
+					end
+
+					local label = createD("YLabel", line, YRP.ctr(700), YRP.ctr(50), YRP.ctr(60), 0)
+					label:SetText(SQL_STR_OUT(e.name))
+
+					l_buildings:AddItem(line)
+				end
 			end
 		end
 	end)

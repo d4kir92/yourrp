@@ -22,9 +22,11 @@ function ENT:Use(activator, caller)
 		return
 	end
 	local weap = activator:GetActiveWeapon()
-	local pram = weap:GetPrimaryAmmoType()
-	activator:GiveAmmo(1, pram)
-	self:Remove()
+	if IsValid(weap) then
+		local pram = weap:GetPrimaryAmmoType()
+		activator:GiveAmmo(1, pram)
+		self:Remove()
+	end
 end
 
 function ENT:Think()

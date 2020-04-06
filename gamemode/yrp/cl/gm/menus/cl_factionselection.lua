@@ -115,6 +115,13 @@ function CreateFactionSelectionContent()
 		
 					if fac.uniqueID != -1 then
 						local faction = createD("YPanel", nil, w, h, YRP.ctr(config.br) + x * (w + YRP.ctr(config.br)), YRP.ctr(config.br) + y * (h + YRP.ctr(config.br)))
+						function faction:Paint(pw, ph)
+							if LocalPlayer():GetDBool("cc", false) then
+								draw.RoundedBox(YRP.ctr(10), 0, 0, w, h, lply:InterfaceValue("YFrame", "BG"))
+							else
+								draw.RoundedBox(YRP.ctr(10), 0, 0, w, h, lply:InterfaceValue("YFrame", "HB"))
+							end
+						end
 
 						local px = YRP.ctr(20)
 						local sw = w - 2 * YRP.ctr(20)
@@ -146,7 +153,7 @@ function CreateFactionSelectionContent()
 						join:SetText("")
 						function join:Paint(pw, ph)
 							if self:IsHovered() then
-								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+								draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 1))
 							end
 						end
 						function join:DoClick()

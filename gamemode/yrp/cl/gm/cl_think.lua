@@ -112,6 +112,8 @@ function useFunction(str)
 		elseif str == "mute_voice" then
 			net.Start("yrp_mute_voice")
 			net.SendToServer()
+		elseif str == "macro_menu" then
+			ToggleMacroMenu()
 		elseif str == "openOptions" then
 			if eyeTrace.Entity != NULL then
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
@@ -124,7 +126,6 @@ function useFunction(str)
 		--When scoreboard open, enable mouse
 		elseif str == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
-
 		--Inventory
 		elseif str == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
@@ -163,6 +164,10 @@ function useFunction(str)
 			net.SendToServer()
 		elseif str == "scoreboard" and IsScoreboardOpen() then
 			gui.EnableScreenClicker(true)
+		elseif string.StartWith(str, "m_") then
+			str = string.Replace(str, "m_", "")
+			local uid = tonumber(str)
+			UseMacro(uid)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
 			local id = 0
 			if str == "OpenHelpMenu" then
@@ -201,7 +206,7 @@ function useFunction(str)
 				toggleCharMenu()
 			elseif str == "openKeybindsMenu" then
 				toggleKeybindsMenu()
-			end
+			end			
 		end
 	end
 end
@@ -546,6 +551,11 @@ function KeyPress()
 	keyPressed(KEY_DOWN, "closeSP")
 
 	keyPressed(get_keybind("mute_voice"), "mute_voice")
+
+	keyPressed(get_keybind("macro_menu"), "macro_menu")
+	for i = 1, 49 do
+		keyPressed(get_keybind("m_" .. i), "m_" .. i)
+	end
 end
 hook.Add("Think", "Thinker", KeyPress)
 

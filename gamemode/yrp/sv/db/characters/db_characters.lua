@@ -646,6 +646,11 @@ end)
 
 util.AddNetworkString("EnterWorld")
 net.Receive("EnterWorld", function(len, ply)
+	local roltab = ply:GetRolTab()
+	if wk(roltab) then
+		updateRoleUses(roltab.uniqueID)
+	end
+
 	local char = net.ReadString()
 	if wk(char) then
 		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID = '" .. ply:SteamID() .. "'")

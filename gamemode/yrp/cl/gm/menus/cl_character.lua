@@ -121,7 +121,7 @@ function openCharacterSelection()
 		local charactersBackground = createD("DPanel", _cs.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
 		charactersBackground.text = YRP.lang_string("LID_siteisloading")
 		function charactersBackground:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "HB"))
+			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "NC"))
 
 			-- Current and Max Count of Possible Characters
 			local acur = character.amount or -1

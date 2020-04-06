@@ -48,7 +48,7 @@ function CreateRolePreviewContent()
 	-- Fake POPUP
 	local win = createD("DPanel", parent, YRP.ctr(nw), YRP.ctr(nh), 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
 	end
 	win:Center()
 
@@ -337,7 +337,7 @@ function CreateRoleSelectionContent(PARENT)
 
 	local win = createD("DPanel", site, SW, SH, 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
 
 		if win:GetWide() != SW then
 			win:SetWide(SW)

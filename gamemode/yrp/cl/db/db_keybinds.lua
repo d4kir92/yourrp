@@ -37,6 +37,11 @@ YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
 
 YRPKEYBINDS["mute_voice"] = KEY_HOME
+YRPKEYBINDS["macro_menu"] = KEY_INSERT
+
+for i = 1, 49 do
+	YRPKEYBINDS["m_" .. i] = 0
+end
 
 net.Receive("SetServerKeybinds", function(len)
 	local keytab = net.ReadTable()
@@ -48,13 +53,18 @@ end)
 local yrp_keybinds = {}
 yrp_keybinds.version = 2
 
+function KBTab()
+	return yrp_keybinds
+end
+
 function GetKeyBinds()
 	return yrp_keybinds
 end
 
-local _db_name = "yrp_keybinds"
+local DATABASE_NAME = "yrp_keybinds"
 
 function get_keybind(name)
+	name = tostring(name)
 	return tonumber(yrp_keybinds[name]) or -1
 end
 
@@ -69,7 +79,7 @@ function set_keybind(name, value)
 			end
 		end
 	end
-	SQL_UPDATE(_db_name, name .. " = " .. value, "uniqueID = " .. 1)
+	SQL_UPDATE(DATABASE_NAME, "'" .. name .. "' = '" .. value .. "'", "uniqueID = '" .. 1 .. "'")
 	yrp_keybinds[name] = value
 	return true
 end
@@ -90,40 +100,40 @@ end
 
 --db_drop_table("yrp_keybinds")
 function check_yrp_keybinds()
-	SQL_INIT_DATABASE(_db_name)
+	SQL_INIT_DATABASE(DATABASE_NAME)
 
-	local _check_version = SQL_SELECT(_db_name, "version", "uniqueID = 1")
+	local _check_version = SQL_SELECT(DATABASE_NAME, "version", "uniqueID = 1")
 	if _check_version != false and _check_version != nil then
 		printGM("note", "Checking keybinds version")
 		_check_version = _check_version[1]
 		if tonumber(_check_version.version) != tonumber(yrp_keybinds.version) then
 
 			printGM("note", "Keybinds OUTDATED!")
-			db_drop_table(_db_name)
-			SQL_INIT_DATABASE(_db_name)
+			db_drop_table(DATABASE_NAME)
+			SQL_INIT_DATABASE(DATABASE_NAME)
 		else
 			printGM("note", "Keybinds up to date")
 		end
 	end
 
-	SQL_ADD_COLUMN(_db_name, "version", "INT DEFAULT " .. yrp_keybinds.version)
+	SQL_ADD_COLUMN(DATABASE_NAME, "version", "INT DEFAULT " .. yrp_keybinds.version)
 	-- Keybind Cols
 	for i, keybind in pairs(YRPKEYBINDS) do
-		SQL_ADD_COLUMN(_db_name, i, "INT DEFAULT " .. keybind)
+		SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. keybind)
 	end
 
 
-	local _tmp = SQL_SELECT(_db_name, "*", "uniqueID = 1")
+	local _tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 	if _tmp == nil then
-		local _result = SQL_INSERT_INTO_DEFAULTVALUES(_db_name)
-		_tmp = SQL_SELECT(_db_name, "*", "uniqueID = 1")
+		local _result = SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
+		_tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 		if _tmp == nil or _tmp == false then
-			printGM("error", _db_name .. " has no entries.")
+			printGM("error", DATABASE_NAME .. " has no entries.")
 		end
 	end
 
-	if !db_is_empty(_db_name) then
-		local _tmp2 = SQL_SELECT(_db_name, "*", nil)
+	if !db_is_empty(DATABASE_NAME) then
+		local _tmp2 = SQL_SELECT(DATABASE_NAME, "*", nil)
 		_tmp2 = _tmp2[1]
 
 		yrp_keybinds = _tmp2

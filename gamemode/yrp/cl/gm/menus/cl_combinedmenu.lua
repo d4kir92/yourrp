@@ -266,7 +266,7 @@ function OpenCombinedMenu()
 		cm.menu.expanded = lply:GetDBool("combined_expanded", true)
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_700"
 		function cm.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
+			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
 			--hook.Run("YPanelPaint", self, pw, ph)
 
 			--[[local gm = "YourRP by D4KiR"

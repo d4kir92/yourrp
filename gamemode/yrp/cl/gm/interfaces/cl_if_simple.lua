@@ -10,9 +10,9 @@ hook.Add("YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 			hh = self:GetHeaderHeight()
 		end
 
-		draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB"))
+		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, hh, lply:InterfaceValue("YFrame", "HB"), true, true)
 
-		draw.RoundedBox(0, 0, hh, pw, ph - hh, lply:InterfaceValue("YFrame", "BG")) --lply:InterfaceValue("YFrame", "BG"))
+		draw.RoundedBoxEx(YRP.ctr(10), 0, hh, pw, ph - hh, lply:InterfaceValue("YFrame", "BG"), false, false, true, true) --lply:InterfaceValue("YFrame", "BG"))
 
 		if self.GetTitle != nil then
 			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -51,7 +51,7 @@ hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -83,7 +83,7 @@ hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -98,7 +98,7 @@ hook.Add("YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 		local color = lply:InterfaceValue("YFrame", "HI")
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		local ax = tab.ax or TEXT_ALIGN_CENTER
 		local ay = tab.ay or TEXT_ALIGN_CENTER
@@ -151,7 +151,7 @@ hook.Add("YPanelPaint", "YPanel_Material", function(self, pw, ph, tab)
 	if GetGlobalDString("string_interface_design") == "Material" then
 		local color = tab.color or lply:InterfaceValue("YFrame", "HI")
 
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 		return true
 	end
 end)
@@ -217,6 +217,8 @@ hook.Add("YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 			color.r = color.r + 50
 			color.g = color.g + 50
 			color.b = color.b + 50
+		else
+			color = Color(0, 0, 0, 0)
 		end
 		surface.SetDrawColor(color)
 		surface.SetMaterial(YRP.GetDesignIcon("circle"))
@@ -243,6 +245,8 @@ hook.Add("YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 			color.r = color.r + 50
 			color.g = color.g + 50
 			color.b = color.b + 50
+		else
+			color = Color(0, 0, 0, 0)
 		end
 		surface.SetDrawColor(color)
 		surface.SetMaterial(YRP.GetDesignIcon("circle"))

@@ -116,6 +116,7 @@ net.Receive("set_lockdown", function(len, ply)
 	end
 
 	if bool_lockdown then
+		-- LOCKDOWN START
 		YRP.msg("note", ply:RPName() .. " started a lockdown!")
 		sound.Add( {
 			name = "sound_lockdown",
@@ -128,10 +129,45 @@ net.Receive("set_lockdown", function(len, ply)
 		for i, speaker in pairs(_G["LOCKDOWN_ENTITIES"]) do
 			speaker:EmitSound("sound_lockdown")
 		end
+
+		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
+		local lockdoors = {}
+		for i, v in pairs(buildings) do
+			if tobool(v.bool_lockdown) then
+				table.insert(lockdoors, tonumber(v.uniqueID))
+			end
+		end
+
+		local doors = GetAllDoors()
+		for i, door in pairs(doors) do
+			local buid = tonumber(door:GetDString("buildingID", "-1"))
+			if table.HasValue(lockdoors, buid) then
+				door:Fire("Close")
+				door:Fire("Lock")
+			end
+		end
 	else
+		--LOCKDOWN END
 		YRP.msg("note", ply:RPName() .. " stopped the lockdown!")
 		for i, speaker in pairs(_G["LOCKDOWN_ENTITIES"]) do
 			speaker:StopSound("sound_lockdown")
+		end
+
+		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
+		local lockdoors = {}
+		for i, v in pairs(buildings) do
+			if tobool(v.bool_lockdown) then
+				table.insert(lockdoors, tonumber(v.uniqueID))
+			end
+		end
+
+		local doors = GetAllDoors()
+		for i, door in pairs(doors) do
+			local buid = tonumber(door:GetDString("buildingID", "-1"))
+			if table.HasValue(lockdoors, buid) then
+				door:Fire("Unlock")
+				door:Fire("Open")
+			end
 		end
 	end
 end)

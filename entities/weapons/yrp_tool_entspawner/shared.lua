@@ -6,9 +6,8 @@ SWEP.Instructions = "Leftclick - Create Spawner\nRightclick - Remove Spawner"
 
 SWEP.Category = "[YourRP] Admin"
 
-SWEP.PrintName = "Tool NPC Spawner"
+SWEP.PrintName = "Tool ENT Spawner"
 SWEP.Language = "en"
-SWEP.LanguageString = "LID_npcspawner"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1
@@ -44,7 +43,7 @@ end
 function SWEP:Reload()
 	local pos = ""
 
-	for i, v in pairs(GetGlobalDTable("yrp_spawner_npc")) do
+	for i, v in pairs(GetGlobalDTable("yrp_spawner_ent")) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -53,7 +52,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString("yrp_spawner_npc_options")
+	util.AddNetworkString("yrp_spawner_ent_options")
 end
 
 local size = 8
@@ -75,7 +74,7 @@ function SWEP:Think()
 			} )
 			pos = tr.HitPos or pos
 
-			for i, v in pairs(GetGlobalDTable("yrp_spawner_npc")) do
+			for i, v in pairs(GetGlobalDTable("yrp_spawner_ent")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(pos) < size * 2 then
 					YRP.msg("db", "Option Spawner")
@@ -83,7 +82,7 @@ function SWEP:Think()
 					local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
 					if wk(stab) then
 						stab = stab[1]
-						net.Start("yrp_spawner_npc_options")
+						net.Start("yrp_spawner_ent_options")
 							net.WriteTable(stab)
 						net.Send(ply)
 					end
@@ -96,14 +95,14 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive("yrp_spawner_npc_options", function()
+	net.Receive("yrp_spawner_ent_options", function()
 		local stab = net.ReadTable()
 
 		local w = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 		w:Center()
 		w:MakePopup()
 		w:SetHeaderHeight(YRP.ctr(100))
-		w:SetTitle("LID_npcspawner")
+		w:SetTitle("LID_entspawner")
 
 		-- Respawn time
 		w.respawntext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
@@ -135,10 +134,10 @@ if CLIENT then
 
 		-- ClassName
 		w.classnametext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300))
-		w.classnametext:SetText("LID_npc")
+		w.classnametext:SetText("LID_ent")
 		w.classname = createD("DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350))
 		w.classname:SetText(stab.string_classname)
-		for i, v in pairs(list.Get("NPC")) do
+		for i, v in pairs(list.Get("SpawnableEntities")) do
 			w.classname:AddChoice(i, i)
 		end
 		function w.classname:OnSelect()
@@ -165,11 +164,11 @@ function SWEP:PrimaryAttack()
 			} )
 			pos = tr.HitPos or pos
 
-			SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_npc" .. "', 'Spawner'")
+			SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name, string_classname", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_ent" .. "', 'Spawner', 'item_ammo_ar2'")
 
-			YRP.msg("db", "Added NPC Spawner")
+			YRP.msg("db", "Added ENT Spawner")
 
-			UpdateSpawnerNPCTable()
+			UpdateSpawnerENTTable()
 		end
 	end
 end
@@ -186,7 +185,7 @@ function SWEP:SecondaryAttack()
 		} )
 		pos = tr.HitPos or pos
 
-		for i, v in pairs(GetGlobalDTable("yrp_spawner_npc")) do
+		for i, v in pairs(GetGlobalDTable("yrp_spawner_ent")) do
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
 				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
@@ -194,7 +193,7 @@ function SWEP:SecondaryAttack()
 			end
 		end
 
-		UpdateSpawnerNPCTable()
+		UpdateSpawnerENTTable()
 	end
 end
 
@@ -209,15 +208,16 @@ if CLIENT then
 	local g = math.random(0, 255)
 	local b = math.random(0, 255)
 	local delay = CurTime()
-	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_spawner_npc", function()
-		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_npcspawner" then
+
+	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_spawner_ent", function()
+		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_entspawner" then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
 				r = math.random(0, 255)
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalDTable("yrp_spawner_npc")) do
+			for i, v in pairs(GetGlobalDTable("yrp_spawner_ent")) do
 				local pos = StringToVector(v.pos)
 				if LocalPlayer():GetPos():Distance(pos) < 6000 then
 					render.SetColorMaterial()

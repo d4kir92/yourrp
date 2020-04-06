@@ -75,6 +75,8 @@ table.insert(YRP_DBS, "yrp_inventory_storages")
 table.insert(YRP_DBS, "yrp_inventory_slots")
 table.insert(YRP_DBS, "yrp_inventory_items")
 
+table.insert(YRP_DBS, "yrp_macros")
+
 function GetDBNames()
 	return YRP_DBS
 end
@@ -191,6 +193,7 @@ include("inventory/db_inventory_storages.lua")
 include("inventory/db_inventory_slots.lua")
 include("inventory/db_inventory_items.lua")
 
+include("macros/db_macros.lua")
 
 
 -- DarkRP

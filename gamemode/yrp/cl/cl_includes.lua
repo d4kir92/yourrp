@@ -44,6 +44,8 @@ include("gm/menus/cl_factionselection.lua")
 include("gm/menus/cl_roleselection.lua")
 include("gm/menus/cl_charactersettings.lua")
 
+include("gm/menus/cl_macromenu.lua")
+
 include("gm/apps/cl_app_settings_yrp.lua")
 include("gm/apps/cl_app_settings_sp.lua")
 include("gm/apps/cl_app_dark_web.lua")

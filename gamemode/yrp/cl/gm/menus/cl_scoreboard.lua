@@ -315,7 +315,7 @@ function OpenSBS()
 				self:ShowCloseButton(false)
 			end
 
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 250)) -- Background
+			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(20, 20, 20, 250)) -- Background
 
 			if strEmpty(_server_logo) then
 				draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw - YRP.ctr(512), YRP.ctr(100), Color(100, 100, 255, 100)) -- Stripe
@@ -557,7 +557,7 @@ function OpenSBS()
 						if self:IsHovered() then
 							self.bg = Color(255, 255, 0, 255)
 						end
-						draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
+						draw.RoundedBox(0, 0, 0, pw + ph / 2, ph, self.bg)
 
 						local br = 40
 						local x = 128 + 10
@@ -731,7 +731,7 @@ function OpenSBS()
 
 						render.SetStencilReferenceValue(1)
 
-						drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
+						drawRoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 255))
 
 						render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
@@ -862,7 +862,7 @@ function OpenSBS()
 						if self:IsHovered() then
 							self.bg = Color(255, 255, 0, 255)
 						end
-						draw.RoundedBox(ph / 2, 0, 0, pw + ph / 2, ph, self.bg)
+						draw.RoundedBox(0, 0, 0, pw + ph / 2, ph, self.bg)
 
 						local x = 128 + 10
 
@@ -958,7 +958,7 @@ function OpenSBS()
 
 						render.SetStencilReferenceValue(1)
 
-						drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
+						drawRoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 255))
 
 						render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 

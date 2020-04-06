@@ -1600,6 +1600,10 @@ net.Receive("get_next_ranks", function(len, ply)
 	local rols = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
 
 	if wk(rols) then
+		for i, rol in pairs(rols) do
+			rols[i].pms = string.Explode(",", GetPlayermodelsOfRole(rol.uniqueID))
+		end
+
 		net.Start("get_next_ranks")
 			net.WriteTable(rols)
 		net.Send(ply)
@@ -1617,6 +1621,27 @@ net.Receive("yrp_hasnext_ranks", function(len, ply)
 	end
 
 	net.Start("yrp_hasnext_ranks")
+		net.WriteString(ruid)
 		net.WriteBool(has)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_want_role")
+net.Receive("yrp_want_role", function(len, ply)
+	local ruid = net.ReadString()
+	ruid = tonumber(ruid)
+	local rol = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
+
+	local result = "Role dont exists anymore"
+	if wk(rol) then
+		if canGetRole(ply, ruid, true) then
+			result = "worked"
+		else
+			result = "LID_youarenotwhitelisted"
+		end
+	end
+
+	net.Start("yrp_want_role")
+		net.WriteString(result)
 	net.Send(ply)
 end)

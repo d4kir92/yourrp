@@ -2,8 +2,32 @@
 
 local PANEL = {}
 
+local lply = LocalPlayer()
+
 local w = 10
 local h = 10
+
+net.Receive("yrp_want_role", function(len, ply)
+	local result = net.ReadString()
+
+	if result == "worked" then
+		CreateRolePreviewContent()
+	else
+		local popup = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
+		popup:Center()
+		popup:MakePopup()
+		popup:SetTitle(YRP.lang_string(result))
+
+		local ok = createD("YLabel", popup:GetContent(), YRP.ctr(760), YRP.ctr(120), popup:GetContent():GetWide() / 2 - YRP.ctr(760 / 2), popup:GetContent():GetTall() - YRP.ctr(60 + 20 + 120))
+		ok:SetText(YRP.lang_string(result))
+
+		local ok = createD("YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60))
+		ok:SetText(YRP.lang_string("LID_ok"))
+		function ok:DoClick()
+			popup:Close()
+		end
+	end
+end)
 
 function PANEL:SetHeader(txt)
 	self._htext = txt
@@ -50,7 +74,7 @@ end
 local NEXTS = {}
 
 function PANEL:Init()
-	local lply = LocalPlayer()
+	lply = LocalPlayer()
 	self:SetText("")
 
 	self._open = false
@@ -274,10 +298,11 @@ function PANEL:Init()
 		end
 		function btn:DoClick()
 			rol.int_prerole = tonumber(rol.int_prerole)
-			if rol.int_prerole == 0 and (!rol.bool_locked or lply:HasAccess()) then
+			if !rol.bool_locked or lply:HasAccess() then
 				lply:SetDString("charcreate_ruid", rol.uniqueID)
-
-				CreateRolePreviewContent()
+				net.Start("yrp_want_role")
+					net.WriteString(rol.uniqueID)
+				net.SendToServer()
 			end
 		end
 
@@ -330,6 +355,11 @@ function PANEL:Init()
 		end
 
 		net.Receive("yrp_hasnext_ranks", function(len)
+			local ruid = net.ReadString()
+			ruid = tonumber(ruid)
+
+			local nex = NEXTS[ruid]
+
 			local b = net.ReadBool()
 			if !b then
 				nex:Remove()
@@ -370,7 +400,7 @@ function PANEL:Init()
 						-- Restrictions
 						if !table.HasValue(rol.string_usergroups, "ALL") then
 							if !table.HasValue(rol.string_usergroups, string.upper(lply:GetUserGroup())) then
-								continue
+								--continue
 							end
 						end
 
@@ -468,17 +498,6 @@ function PANEL:Init()
 						base.con:Rebuild()
 						base._list:Rebuild()
 					end
-
-					-- FullSize
-					--[[
-					h = base.con:GetCanvas():GetTall()
-					base:SetTall(h + YRP.ctr(100 + 2 * 20))
-					base.btn:SetTall(YRP.ctr(100))
-					base.con:SetTall(h)
-					base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
-
-					base.con:Rebuild()
-					base._list:Rebuild()]]
 				end
 			end)
 			net.Start("yrp_roleselection_getcontent")

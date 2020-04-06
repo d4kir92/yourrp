@@ -104,6 +104,8 @@ AddCSLuaFile("yrp/cl/gm/apps/cl_app_dark_web.lua")
 AddCSLuaFile("yrp/cl/gm/designs/cl_d_material1.lua")
 AddCSLuaFile("yrp/cl/gm/designs/cl_d_futuristic.lua")
 
+AddCSLuaFile("yrp/cl/gm/menus/cl_macromenu.lua")
+
 --[[ includes ]]--
 include("shared.lua")
 
