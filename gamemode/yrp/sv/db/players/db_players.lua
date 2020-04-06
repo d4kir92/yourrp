@@ -735,12 +735,6 @@ function canGetRole(ply, roleID, want)
 				end
 			end
 
-			-- Visible
-			if tonumber(tmpTableRole.bool_visible) == 0 then
-				YRP.msg("note", "[canGetRole] " .. "not visible")
-				return false
-			end
-
 			-- Locked
 			if tonumber(tmpTableRole.bool_locked) == 1 then
 				YRP.msg("note", "[canGetRole] " .. "locked")

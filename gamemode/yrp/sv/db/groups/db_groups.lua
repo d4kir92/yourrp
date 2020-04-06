@@ -29,7 +29,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 
 -- PUBLIC GROUP
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0")
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
 end
 SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '-1'", "uniqueID = '-1'")
 SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")

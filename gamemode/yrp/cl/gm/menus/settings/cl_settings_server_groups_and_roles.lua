@@ -2344,7 +2344,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				visible.uniqueID = role.uniqueID
 				visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
 				visible.netstr = "update_role_bool_visible_cc"
-				visible.value = role.bool_visible
+				visible.value = role.bool_visible_cc
 				visible.uniqueID = role.uniqueID
 				visible.lforce = false
 				ea[role.uniqueID].visible = DCheckBox(visible)

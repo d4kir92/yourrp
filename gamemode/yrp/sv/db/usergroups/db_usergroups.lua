@@ -1818,18 +1818,25 @@ net.Receive("get_perma_props", function(len, ply)
 	local tab = SQL_SELECT("permaprops", "*", nil)
 
 	if wk(tab) then
-		local nettab = {}
+		local sortedtab = {}
 		for i, v in pairs(tab) do
 			v.content = util.JSONToTable(v.content)
-			nettab[i] = {}
-			nettab[i].id = v.id
-			nettab[i].model = v.content.Model
-			nettab[i].class = v.content.Class
+			sortedtab[i] = {}
+			sortedtab[i].id = v.id
+			sortedtab[i].model = v.content.Model
+			sortedtab[i].class = v.content.Class
 		end
 
-		net.Start("get_perma_props")
-			net.WriteTable(nettab)
-		net.Send(ply)
+		local c = 0
+		for i, v in SortedPairsByMemberValue(sortedtab, "model") do
+			timer.Simple(c * 0.05, function()
+				net.Start("get_perma_props")
+					net.WriteString(i)
+					net.WriteTable(v)
+				net.Send(ply)
+			end)
+			c = c + 1
+		end
 	end
 end)
 

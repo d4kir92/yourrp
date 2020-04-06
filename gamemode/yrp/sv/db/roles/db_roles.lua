@@ -222,7 +222,8 @@ if wk(wrongmainrole) then
 	SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '1'")
 	SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
 	SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "bool_visible = '1'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "bool_visible_rm = '1'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, "bool_visible_cc = '1'", "uniqueID = '1'")
 	SQL_UPDATE(DATABASE_NAME, "bool_locked = '0'", "uniqueID = '1'")
 	SQL_UPDATE(DATABASE_NAME, "bool_whitelist = '0'", "uniqueID = '1'")
 end

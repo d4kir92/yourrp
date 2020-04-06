@@ -211,10 +211,9 @@ end
 function addPreRole(rol, parent, mainparent)
 	_pr[rol.uniqueID] = parent
 	local _tmp = createBouncer(parent, mainparent)
-	if tonumber(rol.bool_visible) == 1 then
-		createRoleBox(rol, parent, mainparent)
-		getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
-	end
+
+	createRoleBox(rol, parent, mainparent)
+	getPreRole(rol.uniqueID, _pr[rol.uniqueID], mainparent)
 end
 
 function getPreRole(uid, parent, mainparent)
@@ -257,7 +256,7 @@ function getRoles(uid, parent)
 		local _roles = net.ReadTable()
 
 		for i, rol in pairs(_roles) do
-			if rol != nil and tonumber(rol.int_prerole) <= 0 and tonumber(rol.bool_visible) == 1 then
+			if rol != nil and tonumber(rol.int_prerole) <= 0 then
 				addRoleRow(rol, parent)
 			end
 		end
@@ -272,7 +271,7 @@ function getRoles(uid, parent)
 end
 
 function addGroup(grp, parent)
-	if parent != NULL and pa(parent) and tobool(grp.bool_visible) then
+	if parent != NULL and pa(parent) then
 		local _grp = createD("DYRPCollapsibleCategory", parent, parent:GetWide() - YRP.ctr(80), YRP.ctr(200), YRP.ctr(0), YRP.ctr(0))
 		_grp:SetHeader(grp.string_name)
 		_grp:SetSpacing(30)
