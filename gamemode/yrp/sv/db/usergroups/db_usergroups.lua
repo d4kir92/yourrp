@@ -41,6 +41,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_logs", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_blacklist", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_scale", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_darkrp", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_permaprops", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_vehicles", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapons", "INT DEFAULT 0")
@@ -716,6 +717,13 @@ net.Receive("usergroup_update_bool_darkrp", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local bool_darkrp = net.ReadString()
 	UGCheckBox(ply, uid, "bool_darkrp", bool_darkrp)
+end)
+
+util.AddNetworkString("usergroup_update_bool_permaprops")
+net.Receive("usergroup_update_bool_permaprops", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_permaprops = net.ReadString()
+	UGCheckBox(ply, uid, "bool_permaprops", bool_permaprops)
 end)
 
 util.AddNetworkString("usergroup_update_bool_console")
@@ -1803,4 +1811,31 @@ net.Receive("settings_usergroup_position_dn", function(len, ply)
 		end
 	end
 	ReloadUsergroupsList()
+end)
+
+util.AddNetworkString("get_perma_props")
+net.Receive("get_perma_props", function(len, ply)
+	local tab = SQL_SELECT("permaprops", "*", nil)
+
+	if wk(tab) then
+		local nettab = {}
+		for i, v in pairs(tab) do
+			v.content = util.JSONToTable(v.content)
+			nettab[i] = {}
+			nettab[i].id = v.id
+			nettab[i].model = v.content.Model
+			nettab[i].class = v.content.Class
+		end
+
+		net.Start("get_perma_props")
+			net.WriteTable(nettab)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("yrp_pp_remove")
+net.Receive("yrp_pp_remove", function(len, ply)
+	local ppid = net.ReadString()
+
+	SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
 end)

@@ -26,6 +26,7 @@ include("cl_settings_server_design.lua")
 include("cl_settings_server_database.lua")
 include("cl_settings_server_usergroups.lua")
 include("cl_settings_server_darkrp.lua")
+include("cl_settings_server_permaprops.lua")
 
 include("cl_settings_server_yourrp_addons.lua")
 
@@ -495,6 +496,7 @@ function OpenSettings()
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png", "bool_ac_database")
 	-- Socials [television.png]
 	settingsWindow.window:AddSite(SV_SERVER, "open_server_darkrp", "DarkRP", "icon16/bomb.png", "bool_darkrp")
+	settingsWindow.window:AddSite(SV_SERVER, "open_server_permaprops", "Perma Props", "icon16/brick.png", "bool_permaprops")
 	
 	local YRP_YOURRP = "YourRP"
 	settingsWindow.window:AddCategory(YRP_YOURRP, "vgui/yrp/icon24.png")
