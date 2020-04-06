@@ -421,35 +421,35 @@ if SERVER then
 						end
 					end)
 
-					timer.Simple(2, function()
+					timer.Simple(3, function()
 						ply:SetDInt("yrp_load_ent", 30)
 						for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
 							SendDString(entindex, i, v, ply)
 						end
 					end)
 
-					timer.Simple(3, function()
+					timer.Simple(5, function()
 						ply:SetDInt("yrp_load_ent", 50)
 						for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
 							SendDInt(entindex, i, v, ply)
 						end
 					end)
 
-					timer.Simple(4, function()
+					timer.Simple(7, function()
 						ply:SetDInt("yrp_load_ent", 70)
 						for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
 							SendDFloat(entindex, i, v, ply)
 						end
 					end)
 
-					timer.Simple(5, function()
+					timer.Simple(9, function()
 						ply:SetDInt("yrp_load_ent", 90)
 						for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
 							SendDTable(entindex, i, v, ply)
 						end
 					end)
 
-					timer.Simple(6, function()
+					timer.Simple(11, function()
 						SendDInit(entindex, ply)
 						ply:SetDInt("yrp_load_ent", 100)
 						
