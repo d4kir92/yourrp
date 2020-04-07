@@ -1817,23 +1817,42 @@ util.AddNetworkString("get_perma_props")
 net.Receive("get_perma_props", function(len, ply)
 	local tab = SQL_SELECT("permaprops", "*", nil)
 
+	ply.ppid = ply.ppid or 0
+
 	if wk(tab) then
+		ply.ppid = ply.ppid + 1
+		local ppid = ply.ppid
 		local sortedtab = {}
+		local c = 0
 		for i, v in pairs(tab) do
-			v.content = util.JSONToTable(v.content)
-			sortedtab[i] = {}
-			sortedtab[i].id = v.id
-			sortedtab[i].model = v.content.Model
-			sortedtab[i].class = v.content.Class
+			if v.map == game.GetMap() then
+				v.content = util.JSONToTable(v.content)
+
+				sortedtab[c] = {}
+				sortedtab[c].id = v.id
+				sortedtab[c].model = v.content.Model
+				sortedtab[c].class = v.content.Class
+
+				c = c + 1
+			end
 		end
 
 		local c = 0
-		for i, v in SortedPairsByMemberValue(sortedtab, "model") do
-			timer.Simple(c * 1, function()
-				net.Start("get_perma_props")
-					net.WriteString(i)
-					net.WriteTable(v)
-				net.Send(ply)
+		for i, v in pairs(sortedtab) do --SortedPairsByMemberValue(sortedtab, "model") do
+			if ply.ppid != ppid then
+				break
+			end
+			timer.Simple(c * 0.01, function()
+				if IsValid(ply) then
+					if ply.ppid != ppid then
+						return
+					end
+					v.max = table.Count(sortedtab)
+					net.Start("get_perma_props")
+						net.WriteString(c)
+						net.WriteTable(v)
+					net.Send(ply)
+				end
 			end)
 			c = c + 1
 		end
@@ -1845,4 +1864,24 @@ net.Receive("yrp_pp_remove", function(len, ply)
 	local ppid = net.ReadString()
 
 	SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
+end)
+
+util.AddNetworkString("yrp_pp_close")
+net.Receive("yrp_pp_close", function(len, ply)
+	ply.ppid = ply.ppid or 0
+	ply.ppid = ply.ppid + 1
+end)
+
+util.AddNetworkString("yrp_pp_teleport")
+net.Receive("yrp_pp_teleport", function(len, ply)
+	local ppid = net.ReadString()
+
+	local tab = SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
+	if wk(tab) then
+		tab = tab[1]
+
+		tab.content = util.JSONToTable(tab.content)
+
+		ply:SetPos(tab.content.Pos)
+	end
 end)

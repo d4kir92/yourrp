@@ -319,8 +319,8 @@ function set_role_values(ply, pmid)
 			ply:SetDInt("ArmorReg", tonumber(rolTab.int_arup))
 			ply:SetArmor(tonumber(rolTab.int_ar))
 
-			ply:SetDInt("GetMaxStamina", tonumber(rolTab.int_stmax))
-			ply:SetDInt("GetCurStamina", tonumber(rolTab.int_st))
+			ply:SetDFloat("GetMaxStamina", tonumber(rolTab.int_stmax))
+			ply:SetDFloat("GetCurStamina", tonumber(rolTab.int_st))
 			ply:SetDFloat("staminup", tonumber(rolTab.float_stup))
 			ply:SetDFloat("stamindown", tonumber(rolTab.float_stdn))
 
@@ -718,7 +718,7 @@ function canGetRole(ply, roleID, want)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 	local chatab = ply:GetChaTab()
 
-	if worked(tmpTableRole, "tmpTableRole") then
+	if wk(tmpTableRole) then
 		tmpTableRole = tmpTableRole[1]
 		if tonumber(tmpTableRole.int_uses) < tonumber(tmpTableRole.int_maxamount) or tonumber(tmpTableRole.int_maxamount) == 0 or tonumber(tmpTableRole.uniqueID) == ply:GetRoleUID() then
 			-- Admin only
@@ -806,7 +806,7 @@ function canGetRole(ply, roleID, want)
 			return false
 		end
 	end
-	printGM("error", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
+	printGM("note", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
 	return false
 end
 

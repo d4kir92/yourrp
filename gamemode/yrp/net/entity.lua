@@ -3,23 +3,58 @@ local ENTITY = FindMetaTable("Entity")
 
 -- CUSTOM
 YRP_NW_Ents = YRP_NW_Ents or {}
+YRP_QUEUE_Ents = YRP_QUEUE_Ents or {}
 
 local ENTDELAY = 0.05
 
+-- Delay when traffic
+local NETDELAY = 0.04
+
+-- Delay when no traffic but wrong entry
+local RETDELAY = 0.02
+
 -- STRING
 if SERVER then
+	YRP_QUEUE_Ents["STRING"] = YRP_QUEUE_Ents["STRING"] or {}
 	util.AddNetworkString("SetDString")
+
 	function SendDString(entindex, key, value, ply)
-		if entindex != nil then
-			net.Start("SetDString")
-				net.WriteUInt(entindex, 16)
-				net.WriteString(key)
-				net.WriteString(value)
-			if IsValid(ply) then
-				net.Send(ply)
+		if table.HasValue(YRP_QUEUE_Ents["STRING"], key) then
+			table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
+			table.insert(YRP_QUEUE_Ents["STRING"], 1, key)
+		else
+			table.insert(YRP_QUEUE_Ents["STRING"], key)
+		end
+
+		if entindex == nil then
+			table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
+			return
+		end
+
+		if net.BytesLeft() == nil then
+			-- If no traffic
+			if key == YRP_QUEUE_Ents["STRING"][1] then
+				net.Start("SetDString")
+					net.WriteUInt(entindex, 16)
+					net.WriteString(key)
+					net.WriteString(value)
+				if IsValid(ply) then
+					net.Send(ply)
+				else
+					net.Broadcast()
+				end
+				table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
 			else
-				net.Broadcast()
+				-- RETRY if not first entry
+				timer.Simple(RETDELAY, function()
+					SendDString(entindex, key, value, ply)
+				end)
 			end
+		else
+			-- RETRY later when no traffic
+			timer.Simple(NETDELAY, function()
+				SendDString(entindex, key, value, ply)
+			end)
 		end
 	end
 end
@@ -63,18 +98,46 @@ end
 
 -- BOOL
 if SERVER then
+	YRP_QUEUE_Ents["BOOL"] = YRP_QUEUE_Ents["BOOL"] or {}
 	util.AddNetworkString("SetDBool")
+
 	function SendDBool(entindex, key, value, ply)
-		if entindex != nil then
-			net.Start("SetDBool")
-				net.WriteUInt(entindex, 16)
-				net.WriteString(key)
-				net.WriteBool(value)
-			if IsValid(ply) then
-				net.Send(ply)
+		if table.HasValue(YRP_QUEUE_Ents["BOOL"], key) then
+			table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
+			table.insert(YRP_QUEUE_Ents["BOOL"], 1, key)
+		else
+			table.insert(YRP_QUEUE_Ents["BOOL"], key)
+		end
+
+		if entindex == nil then
+			table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
+			return
+		end
+
+		if net.BytesLeft() == nil then
+			-- If no traffic
+			if key == YRP_QUEUE_Ents["BOOL"][1] then
+				net.Start("SetDBool")
+					net.WriteUInt(entindex, 16)
+					net.WriteString(key)
+					net.WriteBool(value)
+				if IsValid(ply) then
+					net.Send(ply)
+				else
+					net.Broadcast()
+				end
+				table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
 			else
-				net.Broadcast()
+				-- RETRY if not first entry
+				timer.Simple(RETDELAY, function()
+					SendDBool(entindex, key, value, ply)
+				end)
 			end
+		else
+			-- RETRY later when no traffic
+			timer.Simple(NETDELAY, function()
+				SendDBool(entindex, key, value, ply)
+			end)
 		end
 	end
 end
@@ -129,18 +192,46 @@ end
 
 -- INT
 if SERVER then
+	YRP_QUEUE_Ents["INT"] = YRP_QUEUE_Ents["INT"] or {}
 	util.AddNetworkString("SetDInt")
+
 	function SendDInt(entindex, key, value, ply)
-		if entindex != nil then
-			net.Start("SetDInt")
-				net.WriteUInt(entindex, 16)
-				net.WriteString(key)
-				net.WriteInt(value, 32)
-			if IsValid(ply) then
-				net.Send(ply)
+		if table.HasValue(YRP_QUEUE_Ents["INT"], key) then
+			table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
+			table.insert(YRP_QUEUE_Ents["INT"], 1, key)
+		else
+			table.insert(YRP_QUEUE_Ents["INT"], key)
+		end
+
+		if entindex == nil then
+			table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
+			return
+		end
+
+		if net.BytesLeft() == nil then
+			-- If no traffic
+			if key == YRP_QUEUE_Ents["INT"][1] then
+				net.Start("SetDInt")
+					net.WriteUInt(entindex, 16)
+					net.WriteString(key)
+					net.WriteInt(value, 32)
+				if IsValid(ply) then
+					net.Send(ply)
+				else
+					net.Broadcast()
+				end
+				table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
 			else
-				net.Broadcast()
+				-- RETRY if not first entry
+				timer.Simple(RETDELAY, function()
+					SendDInt(entindex, key, value, ply)
+				end)
 			end
+		else
+			-- RETRY later when no traffic
+			timer.Simple(NETDELAY, function()
+				SendDInt(entindex, key, value, ply)
+			end)
 		end
 	end
 end
@@ -189,10 +280,25 @@ end
 
 -- FLOAT
 if SERVER then
+	YRP_QUEUE_Ents["FLOAT"] = YRP_QUEUE_Ents["FLOAT"] or {}
 	util.AddNetworkString("SetDFloat")
+
 	function SendDFloat(entindex, key, value, ply)
-		if entindex != nil then
-			if net.BytesLeft() == nil then
+		if table.HasValue(YRP_QUEUE_Ents["FLOAT"], key) then
+			table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
+			table.insert(YRP_QUEUE_Ents["FLOAT"], 1, key)
+		else
+			table.insert(YRP_QUEUE_Ents["FLOAT"], key)
+		end
+
+		if entindex == nil then
+			table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
+			return
+		end
+
+		if net.BytesLeft() == nil then
+			-- If no traffic
+			if key == YRP_QUEUE_Ents["FLOAT"][1] then
 				net.Start("SetDFloat")
 					net.WriteUInt(entindex, 16)
 					net.WriteString(key)
@@ -202,21 +308,29 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
+				table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
 			else
-				--print("FAIL", key, value, net.BytesLeft())
-				timer.Simple(0.1, function()
+				-- RETRY if not first entry
+				timer.Simple(RETDELAY, function()
 					SendDFloat(entindex, key, value, ply)
 				end)
 			end
+		else
+			-- RETRY later when no traffic
+			timer.Simple(NETDELAY, function()
+				SendDFloat(entindex, key, value, ply)
+			end)
 		end
 	end
 end
 function SetDFloat(entindex, key, value)
-	if isnumber(entindex) and isstring(key) and isnumber(tonumber(value)) then
+	if isnumber(entindex) and isstring(key) and wk(value) and isnumber(tonumber(value)) then
+		value = tonumber(value)
+
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 		YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
-		if YRP_NW_Ents[entindex]["FLOAT"][key] != value or YRP_NW_Ents[entindex]["FLOAT"][key] == nil then
+		if YRP_NW_Ents[entindex]["FLOAT"][key] == nil or YRP_NW_Ents[entindex]["FLOAT"][key] != value then
 			YRP_NW_Ents[entindex]["FLOAT"][key] = value
 			if SERVER then
 				SendDFloat(entindex, key, value)
@@ -259,18 +373,46 @@ end
 
 -- ENTITY
 if SERVER then
+	YRP_QUEUE_Ents["ENTITY"] = YRP_QUEUE_Ents["ENTITY"] or {}
 	util.AddNetworkString("SetDEntity")
+
 	function SendDEntity(entindex, key, value, ply)
-		if entindex != nil then
-			net.Start("SetDEntity")
-				net.WriteUInt(entindex, 16)
-				net.WriteString(key)
-				net.WriteEntity(value)
-			if IsValid(ply) then
-				net.Send(ply)
+		if table.HasValue(YRP_QUEUE_Ents["ENTITY"], key) then
+			table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
+			table.insert(YRP_QUEUE_Ents["ENTITY"], 1, key)
+		else
+			table.insert(YRP_QUEUE_Ents["ENTITY"], key)
+		end
+
+		if entindex == nil then
+			table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
+			return
+		end
+
+		if net.BytesLeft() == nil then
+			-- If no traffic
+			if key == YRP_QUEUE_Ents["ENTITY"][1] then
+				net.Start("SetDEntity")
+					net.WriteUInt(entindex, 16)
+					net.WriteString(key)
+					net.WriteEntity(value)
+				if IsValid(ply) then
+					net.Send(ply)
+				else
+					net.Broadcast()
+				end
+				table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
 			else
-				net.Broadcast()
+				-- RETRY if not first entry
+				timer.Simple(RETDELAY, function()
+					SendDEntity(entindex, key, value, ply)
+				end)
 			end
+		else
+			-- RETRY later when no traffic
+			timer.Simple(NETDELAY, function()
+				SendDEntity(entindex, key, value, ply)
+			end)
 		end
 	end
 end
@@ -319,18 +461,46 @@ end
 
 -- TABLE
 if SERVER then
+	YRP_QUEUE_Ents["TABLE"] = YRP_QUEUE_Ents["TABLE"] or {}
 	util.AddNetworkString("SetDTable")
+
 	function SendDTable(entindex, key, value, ply)
-		if entindex != nil then
-			net.Start("SetDTable")
-				net.WriteUInt(entindex, 16)
-				net.WriteString(key)
-				net.WriteTable(value)
-			if IsValid(ply) then
-				net.Send(ply)
+		if table.HasValue(YRP_QUEUE_Ents["TABLE"], key) then
+			table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
+			table.insert(YRP_QUEUE_Ents["TABLE"], 1, key)
+		else
+			table.insert(YRP_QUEUE_Ents["TABLE"], key)
+		end
+
+		if entindex == nil then
+			table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
+			return
+		end
+
+		if net.BytesLeft() == nil then
+			-- If no traffic
+			if key == YRP_QUEUE_Ents["TABLE"][1] then
+				net.Start("SetDTable")
+					net.WriteUInt(entindex, 16)
+					net.WriteString(key)
+					net.WriteTable(value)
+				if IsValid(ply) then
+					net.Send(ply)
+				else
+					net.Broadcast()
+				end
+				table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
 			else
-				net.Broadcast()
+				-- RETRY if not first entry
+				timer.Simple(RETDELAY, function()
+					SendDTable(entindex, key, value, ply)
+				end)
 			end
+		else
+			-- RETRY later when no traffic
+			timer.Simple(NETDELAY, function()
+				SendDTable(entindex, key, value, ply)
+			end)
 		end
 	end
 end
@@ -411,81 +581,76 @@ end
 local sending = false
 if SERVER then
 	local c = 0
+
 	function SendDEntities(ply, funcname)
-		---if !sending then
-			--sending = true
-			for j, ent in pairs(ents.GetAll()) do
-				if ent.EntIndex != nil then
-					local entindex = ent:EntIndex()
-					YRP_NW_Ents = YRP_NW_Ents or {}
-					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-					YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
-					YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
-					YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
-					YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
-					YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
+		for j, ent in pairs(ents.GetAll()) do
+			if ent.EntIndex != nil then
+				local entindex = ent:EntIndex()
+				YRP_NW_Ents = YRP_NW_Ents or {}
+				YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+				YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
+				YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
+				YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
+				YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
+				YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
 
-					ply:SetDInt("yrp_load_ent", 0)
+				ply:SetDInt("yrp_load_ent", 0)
 
-					timer.Simple(16, function()
-						if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
-							ply:SetDInt("yrp_load_ent", 10)
-							for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
-								SendDBool(entindex, i, v, ply)
-							end
+				timer.Simple(16, function()
+					if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
+						for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
+							SendDBool(entindex, i, v, ply)
 						end
-					end)
+						ply:SetDInt("yrp_load_ent", 10)
+					end
+				end)
 
-					timer.Simple(18, function()
-						if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
-							ply:SetDInt("yrp_load_ent", 30)
-							for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
-								SendDString(entindex, i, v, ply)
-							end
+				timer.Simple(18, function()
+					if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
+						for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
+							SendDString(entindex, i, v, ply)
 						end
-					end)
+						ply:SetDInt("yrp_load_ent", 30)
+					end
+				end)
 
-					timer.Simple(20, function()
-						if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
-							ply:SetDInt("yrp_load_ent", 50)
-							for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
+				timer.Simple(20, function()
+					if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
+						for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
+							if i != "yrp_load_glo" and i != "yrp_load_ent" then
 								SendDInt(entindex, i, v, ply)
 							end
 						end
-					end)
+						ply:SetDInt("yrp_load_ent", 50)
+					end
+				end)
 
-					timer.Simple(22, function()
-						if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
-							ply:SetDInt("yrp_load_ent", 70)
-							for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
-								SendDFloat(entindex, i, v, ply)
-							end
+				timer.Simple(22, function()
+					if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
+						for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
+							SendDFloat(entindex, i, v, ply)
 						end
-					end)
+						ply:SetDInt("yrp_load_ent", 70)
+					end
+				end)
 
-					timer.Simple(24, function()
-						if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
-							ply:SetDInt("yrp_load_ent", 90)
-							for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
-								SendDTable(entindex, i, v, ply)
-							end
+				timer.Simple(24, function()
+					if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
+						for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
+							SendDTable(entindex, i, v, ply)
 						end
-					end)
-				end
+						ply:SetDInt("yrp_load_ent", 90)
+					end
+				end)
 			end
+		end
 
-			timer.Simple(26, function()
-				SendDInit(entindex, ply)
-				ply:SetDInt("yrp_load_ent", 100)
-				
-				sending = false
-			end)
-		--else
-			-- IF SENDING ALREADY => Wait for finish*
-			--timer.Simple(0.9, function()
-				--SendDEntities(ply, funcname)
-			--end)
-		--end
+		timer.Simple(26, function()
+			SendDInit(entindex, ply)
+			ply:SetDInt("yrp_load_ent", 100)
+			
+			sending = false
+		end)
 	end
 end
 

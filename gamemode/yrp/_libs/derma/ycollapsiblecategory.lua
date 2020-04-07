@@ -421,14 +421,6 @@ function PANEL:Init()
 							base.con:AddItem(rlist)
 
 							AddRole(rlist, rol, w, h)
-
-							--[[rol.uniqueID = tonumber(rol.uniqueID)
-							for i, nextrol in pairs(roltab) do
-								nextrol.int_prerole = tonumber(nextrol.int_prerole)
-								if nextrol.int_prerole == rol.uniqueID then
-									--pTab(nextrol)
-								end
-							end]]
 						end
 					end
 					

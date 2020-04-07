@@ -102,9 +102,9 @@ function con_st(ply, _time)
 			if !ply.jumping then
 				ply.jumping = true
 
-				local newval = ply:GetDInt("GetCurStamina", 0) - GetGlobalDFloat("float_scale_stamina_jump", 30)
-				newval = math.Clamp(newval, 0, ply:GetDInt("GetMaxStamina", 100))
-				ply:SetDInt("GetCurStamina", newval)
+				local newval = ply:GetDFloat("GetCurStamina", 0) - GetGlobalDFloat("float_scale_stamina_jump", 30)
+				newval = math.Round(math.Clamp(newval, 0, ply:GetDFloat("GetMaxStamina", 100)), 1)
+				ply:SetDFloat("GetCurStamina", newval)
 			end
 		end
 	end
@@ -112,13 +112,13 @@ function con_st(ply, _time)
 	if _time % 1.0 == 0 then
 		if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:InVehicle() then
 			if ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)) then
-				local newval = ply:GetDInt("GetCurStamina", 0) - (ply:GetDFloat("stamindown", 1))
-				newval = math.Clamp(newval, 0, ply:GetDInt("GetMaxStamina", 100))
-				ply:SetDInt("GetCurStamina", newval)
+				local newval = ply:GetDFloat("GetCurStamina", 0) - (ply:GetDFloat("stamindown", 1))
+				newval = math.Round(math.Clamp(newval, 0, ply:GetDFloat("GetMaxStamina", 100)), 1)
+				ply:SetDFloat("GetCurStamina", newval)
 			elseif ply:GetDFloat("thirst", 0) > 20 then
-				local newval = ply:GetDInt("GetCurStamina", 0) + ply:GetDFloat("staminup", 1)
-				newval = math.Clamp(newval, 0, ply:GetDInt("GetMaxStamina", 100))
-				ply:SetDInt("GetCurStamina", newval)
+				local newval = ply:GetDFloat("GetCurStamina", 0) + ply:GetDFloat("staminup", 1)
+				newval = math.Round(math.Clamp(newval, 0, ply:GetDFloat("GetMaxStamina", 100)), 1)
+				ply:SetDFloat("GetCurStamina", newval)
 			end
 		end
 
@@ -126,7 +126,7 @@ function con_st(ply, _time)
 			local rs = ply:GetDInt("speedrun", 0)
 			local ws = ply:GetDInt("speedwalk", 0)
 			local factor = 1
-			if ply:GetDInt("GetCurStamina", 0) <= 20 or ply:GetDFloat("thirst", 0) < 20 then
+			if ply:GetDFloat("GetCurStamina", 0) <= 20 or ply:GetDFloat("thirst", 0) < 20 then
 				factor = 0.6
 			end
 
@@ -152,7 +152,7 @@ end
 function anti_bunnyhop(ply)
 	if ply:KeyDown(IN_JUMP) and ply:GetDBool("canjump", true) then
 		ply:SetDBool("canjump", false)
-	elseif ply:OnGround() and ply:GetDInt("GetCurStamina", 0) >= GetGlobalDFloat("float_scale_stamina_jump", 30) and !ply:GetDBool("jump_resetting", false) and !ply:GetDBool("canjump", false) then
+	elseif ply:OnGround() and ply:GetDFloat("GetCurStamina", 0) >= GetGlobalDFloat("float_scale_stamina_jump", 30) and !ply:GetDBool("jump_resetting", false) and !ply:GetDBool("canjump", false) then
 		ply:SetDBool("jump_resetting", true)
 		timer.Simple(0.4, function()
 			ply:SetDBool("jump_resetting", false)

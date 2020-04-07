@@ -1043,7 +1043,7 @@ net.Receive("get_design_settings", function(len)
 		pv_win:SetTitle("LID_window")
 		function pv_win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
-			--self:MoveToFront()
+			self:MoveToFront()
 		end
 		pv_win:SetHeaderHeight(YRP.ctr(100))
 		pv_win:MakePopup()

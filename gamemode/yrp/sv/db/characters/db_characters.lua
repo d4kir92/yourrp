@@ -68,7 +68,7 @@ function Player:CharacterLoadout()
 	printGM("debug", "[CharacterLoadout] " .. self:YRPName())
 	local chatab = self:GetChaTab()
 	if wk(chatab) then
-		self:SetDString("int_xp", chatab.int_xp)
+		self:SetDInt("int_xp", chatab.int_xp)
 		self:SetDString("int_level", chatab.int_level)
 		self:SetDString("charid", chatab.uniqueID)
 

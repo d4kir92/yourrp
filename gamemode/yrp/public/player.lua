@@ -99,11 +99,11 @@ function Player:GetMaxLevel()
 end
 
 function Player:Stamina()
-	return self:GetDInt("GetCurStamina", 1)
+	return math.Round(self:GetDFloat("GetCurStamina", 1), 2)
 end
 
 function Player:GetMaxStamina()
-	return self:GetDInt("GetMaxStamina", 10)
+	return  math.Round(self:GetDFloat("GetMaxStamina", 10), 2)
 end
 
 function Player:Hunger()
@@ -391,7 +391,7 @@ function Player:Level()
 end
 
 function Player:XP()
-	return tonumber(math.Round(self:GetDString("int_xp", "1"), 0))
+	return tonumber(math.Round(self:GetDInt("int_xp", "1"), 0))
 end
 
 function Player:XPForLevelUp()

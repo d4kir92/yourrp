@@ -31,7 +31,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 			net.WriteTable(info)
 		net.SendToServer()
 
-		timer.Simple(5, function()
+		timer.Simple(20, function()
 			if !lply:GetDBool("yrp_received_ready") then
 				YRP.msg("note", "Retry sending ready message.")
 				YRPSendIsReadyPingPong()

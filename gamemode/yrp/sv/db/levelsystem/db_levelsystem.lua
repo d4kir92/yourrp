@@ -106,7 +106,7 @@ end)
 function Player:ClearXP()
 	local charid = self:CharID()
 	SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
-	self:SetDString("int_xp", 0)
+	self:SetDInt("int_xp", 0)
 end
 
 function Player:AddLevel(level)
@@ -171,12 +171,12 @@ function Player:AddXP(xp)
 					self:AddXP(newxp)
 				else
 					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
-					self:SetDString("int_xp", newxp)
+					self:SetDInt("int_xp", newxp)
 				end
 			elseif curlvl > maxlvl then
 				self:SetLevel(maxlvl)
 			elseif newxp > maxxp then
-				self:SetDString("int_xp", maxxp)
+				self:SetDInt("int_xp", maxxp)
 			else
 				--YRP.msg("error", "AddXP ELSE " .. tostring(curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp))
 			end
@@ -193,7 +193,7 @@ function Player:AddXP(xp)
 					self:AddXP(newxp)
 				else
 					SQL_UPDATE("yrp_characters", "int_xp = " .. newxp, "uniqueID = '" .. charid .. "'")
-					self:SetDString("int_xp", newxp)
+					self:SetDInt("int_xp", newxp)
 				end
 			end
 		end

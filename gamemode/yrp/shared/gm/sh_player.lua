@@ -466,9 +466,9 @@ if SERVER then
 		local _sec_current = self:getuptimecurrent()
 		if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
 			local _res = SQL_UPDATE("yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'")
-			self:SetDFloat("uptime_current", self:getuptimecurrent())
-			self:SetDFloat("uptime_total", self:getuptimetotal())
-			self:SetDFloat("uptime_server", os.clock())
+			--self:SetDFloat("uptime_current", self:getuptimecurrent())
+			--self:SetDFloat("uptime_total", self:getuptimetotal())
+			--self:SetDFloat("uptime_server", os.clock())
 		end
 	end
 
