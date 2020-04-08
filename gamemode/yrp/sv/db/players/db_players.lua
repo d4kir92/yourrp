@@ -84,13 +84,14 @@ function save_clients(str)
 end
 
 function updateRoleUses(rid)
+	rid = tonumber(rid)
 	local _count = 0
 	for k, p in pairs(player.GetAll()) do
-		if tonumber(p:GetDString("roleUniqueID")) == tonumber(rid) then
+		if tonumber(p:GetDString("roleUniqueID")) == rid then
 			_count = _count + 1
 		end
 	end
-	SQL_UPDATE("yrp_ply_roles", "int_uses = " .. _count, "uniqueID = " .. rid)
+	SQL_UPDATE("yrp_ply_roles", "int_uses = '" .. _count .. "'", "uniqueID = '" .. rid .. "'")
 end
 
 function SetRole(ply, rid, force, pmid)

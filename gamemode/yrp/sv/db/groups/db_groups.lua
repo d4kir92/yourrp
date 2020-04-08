@@ -596,6 +596,7 @@ net.Receive("yrp_roleselection_getcontent", function(len, ply)
 	else
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole(v.uniqueID)
+			updateRoleUses(v.uniqueID)
 		end
 	end
 	if !wk(grptab) then

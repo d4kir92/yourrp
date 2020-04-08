@@ -204,7 +204,9 @@ function YRP.msg(chan, str_msg, tochat)
 					REALM = "SERVER"
 				end
 				if CLIENT then
-					send_error(REALM, "[" .. cn .. "] " .. msg .. " LoadedGamemode: " .. tostring(LocalPlayer():LoadedGamemode()), true)
+					if LocalPlayer().LoadedGamemode != nil then
+						send_error(REALM, "[" .. cn .. "] " .. msg .. " LoadedGamemode: " .. tostring(LocalPlayer():LoadedGamemode()), true)
+					end
 				else
 					send_error(REALM, "[" .. cn .. "] " .. msg, true)
 				end

@@ -1586,9 +1586,12 @@ net.Receive("getallroles", function(len, ply)
 		for i, v in pairs(dbtab) do
 			local pms = string.Explode(",", GetPlayermodelsOfRole(v.uniqueID))
 			if pms[1] != nil then
-				v.WorldModel = pms[1] or ""
+				dbtab[i].WorldModel = pms[1] or ""
+			else
+				dbtab[i].WorldModel = ""
 			end
 		end
+
 		net.Start("getallroles")
 			net.WriteTable(dbtab)
 		net.Send(ply)

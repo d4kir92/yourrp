@@ -54,13 +54,11 @@ function sendlicenses(ply)
 end
 
 util.AddNetworkString("getlicenses")
-
 net.Receive("getlicenses", function(len, ply)
 	sendlicenses(ply)
 end)
 
 util.AddNetworkString("license_add")
-
 net.Receive("license_add", function(len, ply)
 	local _new = SQL_INSERT_INTO(DATABASE_NAME, "name", "'new license'")
 	printGM("db", "Add new license: " .. tostring(_new))
@@ -69,7 +67,6 @@ net.Receive("license_add", function(len, ply)
 end)
 
 util.AddNetworkString("license_rem")
-
 net.Receive("license_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _new = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
@@ -238,3 +235,19 @@ function GiveLicense(ply, lid)
 
 	ply:AddLicense(lid)
 end
+
+util.AddNetworkString("getEntityWorldModel")
+net.Receive("getEntityWorldModel", function(len, ply)
+	local cname = net.ReadString()
+	local id = net.ReadString()
+
+	local e = ents.Create(cname)
+	e:Spawn()
+	local mdl = e:GetModel()
+	e:Remove()
+
+	net.Start("getEntityWorldModel")
+		net.WriteString(id)
+		net.WriteString(mdl)
+	net.Send(ply)
+end)

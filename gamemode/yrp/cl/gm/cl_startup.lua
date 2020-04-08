@@ -1080,7 +1080,8 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 	frame:MakePopup()
 end
 
-function openSingleSelector(tab, closeF)
+local mdllist = {}
+function openSingleSelector(tab, closeF, web)
 	local site = {}
 	site.cur = 1
 	site.max = 1
@@ -1200,12 +1201,29 @@ function openSingleSelector(tab, closeF)
 					local spawnicon = createD("SpawnIcon", icon, YRP.ctr(_item.h), YRP.ctr(_item.h), 0, 0)
 					spawnicon.item = item
 					spawnicon:SetText("")
-
-					timer.Create("shop" .. count, 0.002 * count, 1, function()
-						if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
-							spawnicon:SetModel(spawnicon.item.WorldModel)
+					if web then
+						spawnicon.id = k
+						function spawnicon:OnRemove()
+							table.RemoveByValue(mdllist, self.id)
 						end
-					end)
+						print(k)
+						mdllist[k] = spawnicon
+
+						net.Receive("getEntityWorldModel", function()
+							local id = net.ReadString()
+							id = tonumber(id)
+							local mdl = net.ReadString()
+							print(mdl)
+							local si = mdllist[id]
+							si:SetModel(mdl)
+						end)
+						net.Start("getEntityWorldModel")
+							net.WriteString(item.ClassName)
+							net.WriteString(k)
+						net.SendToServer()
+					else
+						spawnicon:SetModel(item.WorldModel)
+					end
 
 					spawnicon:SetTooltip(item.PrintName)
 					local _tmpName = createD("DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)

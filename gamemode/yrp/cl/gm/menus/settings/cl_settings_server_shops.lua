@@ -359,16 +359,16 @@ net.Receive("get_shop_items", function()
 						local tmpTable = {}
 						local count = 0
 						for k, v in pairs(_sentlist) do
-							if !string.find(v.ClassName or v.Class or "", "base") then
+							--if !string.find(v.ClassName or v.Class or "", "base") then
 								count = count + 1
 								tmpTable[count] = {}
 								tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
 								tmpTable[count].ClassName = v.ClassName or v.Class or ""
 								tmpTable[count].PrintName = v.PrintName or v.Name or ""
-							end
+							--end
 						end
 						_itemlist = tmpTable
-						openSingleSelector(_itemlist, "selected_shop_item")
+						openSingleSelector(_itemlist, "selected_shop_item", true)
 					elseif value == "vehicles" then
 						local tmpTable = get_all_vehicles()
 						_itemlist = tmpTable
