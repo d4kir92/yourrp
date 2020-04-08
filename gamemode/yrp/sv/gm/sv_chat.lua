@@ -330,13 +330,13 @@ function unpack_paket(sender, text, iscommand)
 
 		paket.command = string.sub(text, _start, _end)
 		if paket.command == "/" then
-			if GetGlobalDBool("bool_ooc", true) then
+			if GetGlobalDBool("bool_chat_ooc", true) then
 				paket.command = "ooc"
 			else
 				paket.command = "general"
 			end
 		elseif paket.command == "." then
-			if GetGlobalDBool("bool_looc", true) then
+			if GetGlobalDBool("bool_chat_looc", true) then
 				paket.command = "looc"
 			else
 				paket.command = "say"
@@ -468,13 +468,33 @@ function GM:PlayerSay(sender, text, teamChat)
 
 	paket.command = string.lower(paket.command)
 
-	if !GetGlobalDBool("bool_ooc", true) then
+	if !GetGlobalDBool("bool_chat_ooc", true) then
 		if paket.command == "ooc" then
 			paket.command = "general"
 		end
 	end
-	if !GetGlobalDBool("bool_looc", true) then
+	if !GetGlobalDBool("bool_chat_looc", true) then
 		if paket.command == "looc" then
+			paket.command = "say"
+		end
+	end
+	if !GetGlobalDBool("bool_chat_role", true) then
+		if paket.command == "role" then
+			paket.command = "general"
+		end
+	end
+	if !GetGlobalDBool("bool_chat_group", true) then
+		if paket.command == "group" then
+			paket.command = "general"
+		end
+	end
+	if !GetGlobalDBool("bool_chat_yell", true) then
+		if paket.command == "yell" then
+			paket.command = "say"
+		end
+	end
+	if !GetGlobalDBool("bool_chat_service", true) then
+		if paket.command == "service" then
 			paket.command = "say"
 		end
 	end

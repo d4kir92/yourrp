@@ -142,7 +142,7 @@ function DrawEquipment(ply, name)
 	end
 end
 
-local oldlevel = oldlevel or nil
+local oldlevel = oldlevel or nil--ply:Level()
 hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	local ply = LocalPlayer()
 	if IsLevelSystemEnabled() then
@@ -154,7 +154,7 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 
 			surface.PlaySound("garrysmod/content_downloaded.wav")
 
-			local levelup = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(300), 0, 0)
+			local levelup = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(160), 0, 0)
 			levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400))
 			levelup:ShowCloseButton(false)
 			levelup:SetTitle("")
@@ -163,21 +163,32 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 			tab["LEVEL"] = ply:Level()
 			levelup.LID_levelx = YRP.lang_string("LID_levelx", tab)
 			levelup.lucolor = Color(255, 255, 100, 255)
-			levelup.lxcolor = Color(255, 255, 100, 255)
+			levelup.lxcolor = Color(255, 255, 255, 255)
 			levelup.brcolor = Color(0, 0, 0, 255)
+			levelup.level = oldlevel
 			function levelup:Paint(pw, ph)
-				local pw2 = pw / 2
-				local ph2 = ph / 2
-				local ph3 = ph2 + YRP.ctr(80)
-				draw.SimpleTextOutlined(self.LID_levelup, "Y_36_500", pw2, ph2, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
-				draw.SimpleTextOutlined(self.LID_levelx, "Y_24_500", pw2, ph3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
-				if oldlevel != ply:Level() then
+				surface.SetFont("Y_36_500")
+				local tw, th = surface.GetTextSize(self.LID_levelup)
+				tw = tw + 2 * YRP.ctr(20)
+				self.aw = self.aw or 0
+
+				draw.RoundedBox(YRP.ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, Color(0, 0, 0, 120))
+
+				if self.aw < tw then
+					self.aw = math.Clamp(self.aw + 5, 0, tw)
+				else
+					draw.SimpleTextOutlined(self.LID_levelup, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
+					draw.SimpleTextOutlined(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
+				end
+
+				if self.level != ply:Level() then
+					self:Remove()
+				end
+				self.delay = self.delay or CurTime() + 6
+				if self.delay < CurTime() then
 					self:Remove()
 				end
 			end
-			levelup.timer = timer.Simple(10, function()
-				levelup:Remove()
-			end)
 		end
 	end
 end)

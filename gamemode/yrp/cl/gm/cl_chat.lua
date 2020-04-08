@@ -63,22 +63,62 @@ local _chatIsOpen = false
 local chatclosedforkeybinds = true
 _showChat = true
 
+local chatids = {}
 function update_chat_choices()
 	if yrpChat.comboBox != nil then
+		local c = 1
 		yrpChat.comboBox:Clear()
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_general") .. " /GENERAL", "general", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_ooc") .. " /OOC", "ooc", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_looc") .. " /LOOC", "looc", false)
+		chatids["general"] = c
+		c = c + 1
+		if GetGlobalDBool("bool_chat_ooc", true) then
+			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_ooc") .. " /OOC", "ooc", false)
+			chatids["ooc"] = c
+			c = c + 1
+		end
+		if GetGlobalDBool("bool_chat_looc", true) then
+			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_looc") .. " /LOOC", "looc", false)
+			chatids["looc"] = c
+			c = c + 1
+		end
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_say") .. " /SAY", "say", true)
+		chatids["say"] = c
+		c = c + 1
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_advert") .. " /ADVERT", "advert", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_yell") .. " /YELL", "yell", false)
+		chatids["advert"] = c
+		c = c + 1
+		if GetGlobalDBool("bool_chat_yell", true) then
+			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_yell") .. " /YELL", "yell", false)
+			chatids["yell"] = c
+			c = c + 1
+		end
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_me") .. " /ME", "me", false)
+		chatids["me"] = c
+		c = c + 1
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_admin") .. " /ADMIN", "admin", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_group") .. " /GROUP", "group", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_role") .. " /ROLE", "role", false)
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_service") .. " /SERVICE", "service", false)
+		chatids["admin"] = c
+		c = c + 1
+		if GetGlobalDBool("bool_chat_group", true) then
+			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_group") .. " /GROUP", "group", false)
+			chatids["group"] = c
+			c = c + 1
+		end
+		if GetGlobalDBool("bool_chat_role", true) then
+			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_role") .. " /ROLE", "role", false)
+			chatids["role"] = c
+			c = c + 1
+		end
+		if GetGlobalDBool("bool_chat_service", true) then
+			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_service") .. " /SERVICE", "service", false)
+			chatids["service"] = c
+			c = c + 1
+		end
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_faction") .. " /FACTION", "faction", false)
+		chatids["faction"] = c
+		c = c + 1
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_event") .. " /EVENT", "event", false)
+		chatids["event"] = c
+		c = c + 1
 	end
 end
 
@@ -203,45 +243,45 @@ function InitYRPChat()
 					yrpChat.richText:SetSize(sw - YRP.ctr(2 * 10), sh - YRP.ctr(2 * 10 + 40 + 10))
 				end
 				local _com = yrpChat.writeField:GetText()
-				if isFullyCommand(_com, "sgeneral", YRP.lang_string("LID_general")) then
+				if isFullyCommand(_com, "sgeneral", YRP.lang_string("LID_general")) and GetGlobalDBool("bool_chat_general", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_general"), 1)
-				elseif isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) then
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_general"), chatids["general"])
+				elseif isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) and GetGlobalDBool("bool_chat_ooc", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), 2)
-				elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) then
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), chatids["ooc"])
+				elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) and GetGlobalDBool("bool_chat_looc", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), 3)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_looc"), chatids["looc"])
 				elseif isFullyCommand(_com, "ssay", YRP.lang_string("LID_say")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), 4)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_say"), chatids["say"])
 				elseif isFullyCommand(_com, "sme", YRP.lang_string("LID_me")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), 7)
-				elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) then
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), chatids["me"])
+				elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) and GetGlobalDBool("bool_chat_yell", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), 6)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), chatids["yell"])
 				elseif isFullyCommand(_com, "sadvert", YRP.lang_string("LID_advert")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), 5)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), chatids["advert"])
 				elseif isFullyCommand(_com, "sadmin", YRP.lang_string("LID_admin")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), 8)
-				elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) then
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), chatids["admin"])
+				elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) and GetGlobalDBool("bool_chat_group", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), 9)
-				elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) then
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), chatids["group"])
+				elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) and GetGlobalDBool("bool_chat_role", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), 10)
-				elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) then
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), chatids["role"])
+				elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) and GetGlobalDBool("bool_chat_service", true) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), 11)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), chatids["service"])
 				elseif isFullyCommand(_com, "sfaction", YRP.lang_string("LID_faction")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), 12)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), chatids["faction"])
 				elseif isFullyCommand(_com, "sevent", YRP.lang_string("LID_event")) then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_event"), 13)
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_event"), chatids["event"])
 				end
 			end
 		end
