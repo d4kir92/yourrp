@@ -13,10 +13,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
 
 local fir = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 if fir == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Material', 'Material', 'Roboto'")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
 elseif wk(fir) then
 	fir = fir[1]
-	if fir.string_interface_design == "Simple" then
+	if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
+		SQL_UPDATE(DATABASE_NAME, "string_hud_design = 'Simple'", "uniqueID = '" .. "1" .. "'")
 		SQL_UPDATE(DATABASE_NAME, "string_interface_design = 'Material'", "uniqueID = '" .. "1" .. "'")
 	end
 end
