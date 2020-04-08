@@ -134,7 +134,7 @@ if CLIENT then
 
 		-- ClassName
 		w.classnametext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300))
-		w.classnametext:SetText("LID_ent")
+		w.classnametext:SetText("LID_entity")
 		w.classname = createD("DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350))
 		w.classname:SetText(stab.string_classname)
 		for i, v in pairs(list.Get("SpawnableEntities")) do
@@ -185,11 +185,23 @@ function SWEP:SecondaryAttack()
 		} )
 		pos = tr.HitPos or pos
 
+		local found = false
 		for i, v in pairs(GetGlobalDTable("yrp_spawner_ent")) do
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
 				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
 				YRP.msg("db", "Removed Spawner")
+				found = true
+			end
+		end
+
+		if !found then
+			for i, v in pairs(GetGlobalDTable("yrp_spawner_ent")) do
+				local p = StringToVector(v.pos)
+				if p:Distance(ply:GetPos()) < 160 then
+					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+					YRP.msg("db", "Removed Spawner")
+				end
 			end
 		end
 

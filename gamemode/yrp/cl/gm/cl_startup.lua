@@ -1206,14 +1206,12 @@ function openSingleSelector(tab, closeF, web)
 						function spawnicon:OnRemove()
 							table.RemoveByValue(mdllist, self.id)
 						end
-						print(k)
 						mdllist[k] = spawnicon
 
 						net.Receive("getEntityWorldModel", function()
 							local id = net.ReadString()
 							id = tonumber(id)
 							local mdl = net.ReadString()
-							print(mdl)
 							local si = mdllist[id]
 							si:SetModel(mdl)
 						end)

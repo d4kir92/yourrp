@@ -69,14 +69,14 @@ function F8RequireUG(site, usergroups)
 			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
 		else
 			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
-			surfaceText("(In Server Console) Example:", "Y_24_500", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
+			surfaceText("(In SERVER Console) (Respawn after usergroup changed!) Example:", "Y_24_500", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
 
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
-			local example = createD("DTextEntry", settingsWindow.window.site, YRP.ctr(1000), YRP.ctr(50), settingsWindow.window.site:GetWide() / 2 - YRP.ctr(1000 / 2), settingsWindow.window.site:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
-			example:SetText("yrp_usergroup \"" .. ply:SteamName() .. "\" " .. v)
+			local example = createD("DTextEntry", settingsWindow.window.site, YRP.ctr(1400), YRP.ctr(50), settingsWindow.window.site:GetWide() / 2 - YRP.ctr(1400 / 2), settingsWindow.window.site:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
+			example:SetText("yrp_usergroup \"" .. ply:RPName() .. "\" " .. v .. "       OR when ULX/ULIB installed: " .. "ulx adduser \"" .. ply:RPName() .. "\" " .. v)
 		end
 	end
 end
@@ -109,8 +109,8 @@ function CloseSettings()
 	end
 end
 
-local SAVE_CATE = "" --"LID_settings_server_gameplay"
-local SAVE_SITE = "" --"open_server_general"
+local SAVE_CATE = "LID_moderation"
+local SAVE_SITE = "open_server_status"
 local maximised = false
 function SaveLastSite()
 	
@@ -439,24 +439,15 @@ function OpenSettings()
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
 		end
 	
-		if self.cats[cat] != nil then
+		if self.cats[cat] != nil and self.cats[cat].sites[site] != nil then
 			self.cats[cat].btn:DoClick()
-			if self.cats[cat].sites[site] != nil then
-				function self.site:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
-				end
-				self.cats[cat].sites[site].btn:DoClick()
-			else
-				function self.site:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
-					draw.SimpleText(YRP.lang_string("LID_settings_yourusergrouphasnopermission"), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				end
-			end
+			self.cats[cat].sites[site].btn:DoClick()
 		else
 			function self.site:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
 				draw.SimpleText(YRP.lang_string("LID_settings_yourusergrouphasnopermission"), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
+			F8RequireUG("usergroups", "yrp_usergroups")
 		end
 	end
 

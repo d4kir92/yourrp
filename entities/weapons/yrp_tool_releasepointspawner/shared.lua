@@ -98,11 +98,23 @@ function SWEP:SecondaryAttack()
 		} )
 		pos = tr.HitPos or pos
 
+		local found = false
 		for i, v in pairs(GetGlobalDTable("yrp_releasepoints")) do
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
 				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-				YRP.msg("db", "Removed Releasepoint")
+				YRP.msg("db", "Removed Spawner")
+				found = true
+			end
+		end
+
+		if !found then
+			for i, v in pairs(GetGlobalDTable("yrp_releasepoints")) do
+				local p = StringToVector(v.pos)
+				if p:Distance(ply:GetPos()) < 160 then
+					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+					YRP.msg("db", "Removed Spawner")
+				end
 			end
 		end
 

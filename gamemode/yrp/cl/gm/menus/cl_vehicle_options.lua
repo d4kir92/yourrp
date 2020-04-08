@@ -1,9 +1,11 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+-- #VEHICLEOPTIONS
+
 local yrp_vehicle = {}
 
 function toggleVehicleOptions(vehicle, vehicleID)
-	if YRPIsNoMenuOpen() then
+	if YRPIsNoMenuOpen() and !pa(yrp_vehicle.window) then
 		openVehicleOptions(vehicle, vehicleID)
 	else
 		closeVehicleOptions()
@@ -12,7 +14,7 @@ end
 
 function closeVehicleOptions()
 	closeMenu()
-	if yrp_vehicle.window != nil then
+	if pa(yrp_vehicle.window) then
 		yrp_vehicle.window:Close()
 		yrp_vehicle.window = nil
 	end
@@ -61,7 +63,9 @@ function optionVehicleWindow(vehicle, vehicleTab)
 			net.Start("removeVehicleOwner")
 				net.WriteInt(vehicleTab[1].uniqueID, 16)
 			net.SendToServer()
-			yrp_vehicle.window:Close()
+			if pa(yrp_vehicle.window) then
+				yrp_vehicle.window:Close()
+			end
 		end
 		function _buttonRemoveOwner:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string("LID_removeowner"))

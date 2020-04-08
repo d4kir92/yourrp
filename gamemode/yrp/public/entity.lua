@@ -6,5 +6,5 @@
 local Entity = FindMetaTable("Entity")
 
 function Entity:GetRPOwner()
-	return self:GetDEntity("yrp_owner")
+	return self:GetDEntity("yrp_owner", NULL)
 end

@@ -252,7 +252,7 @@ function spawnItem(ply, item, duid)
 		local wep = ply:Give(item.ClassName)
 		if wk(wep) then
 			wep:SetDString("item_uniqueID", item.uniqueID)
-			wep:SetDEntity("yrp_owner", ent)
+			wep:SetDEntity("yrp_owner", ply)
 			return true
 		else
 			YRP.msg("note", "Class " .. item.ClassName .. " dont give weapon")
@@ -359,6 +359,7 @@ function spawnItem(ply, item, duid)
 				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 1")
+				ent:SetDEntity("yrp_owner", ply)
 				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
@@ -385,6 +386,7 @@ function spawnItem(ply, item, duid)
 				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 3")
+				ent:SetDEntity("yrp_owner", ply)
 				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
@@ -413,6 +415,7 @@ function spawnItem(ply, item, duid)
 					ent:SetDEntity("yrp_owner", ent)
 			
 					printGM("gm", "[spawnItem] Spawned 4")
+					ent:SetDEntity("yrp_owner", ply)
 					return true, ent
 				else
 					YRP.msg("note", "Not valid " .. item.ClassName)
