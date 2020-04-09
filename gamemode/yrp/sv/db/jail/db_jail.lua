@@ -54,7 +54,7 @@ function teleportToReleasepoint(ply)
 
 	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'")
 
-	if _tmpTele != nil then
+	if wk(_tmpTele) then
 		ply:Spawn()
 		local _tmp = string.Explode(",", _tmpTele[1].position)
 		tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
@@ -73,7 +73,10 @@ end
 
 function teleportToJailpoint(ply, tim, police)
 	if tim != nil then
-		ply:SetDBool("injail", true)
+		ply:SetDInt("jailtime", tim)
+		timer.Simple(0.2, function()
+			ply:SetDBool("injail", true)
+		end)
 		local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
 
 		if wk(_tmpTele) then
@@ -120,7 +123,7 @@ end
 
 function clean_up_jail(ply)
 	local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'")
-	if _tmpTable != nil then
+	if wk(_tmpTable) then
 		SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. ply:SteamID() .. "'")
 	end
 
