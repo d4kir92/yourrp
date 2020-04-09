@@ -539,7 +539,7 @@ function HUDSimple()
 			--CH.visiblefunc = IsChatVisible
 			HUDSimpleBG(CH)
 		end
-		if GetGlobalDBool("bool_hunger", false) then
+		if lply:HudElementVisible("HU") then
 			local HU = {}
 			HU.element = "HU"
 			HUDSimpleBG(HU)

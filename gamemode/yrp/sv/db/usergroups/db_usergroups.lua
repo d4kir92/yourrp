@@ -220,7 +220,7 @@ if unremoveable == nil then
 end
 
 function SortUserGroups()
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
 	if wk(siblings) then
 		for i, sibling in pairs(siblings) do
@@ -303,7 +303,7 @@ net.Receive("Connect_Settings_UserGroups", function(len, ply)
 			end
 		end
 
-		local _tmp = SQL_SELECT(DATABASE_NAME, "*", nil)
+		local _tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 		local _ugs = {}
 		for i, ug in pairs(_tmp) do
 			_ugs[tonumber(ug.uniqueID)] = ug
@@ -370,18 +370,6 @@ util.AddNetworkString("usergroup_add")
 net.Receive("usergroup_add", function(len, ply)
 	SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 	printGM("gm", ply:YRPName() .. " added a new UserGroup")
-
-	local usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
-
-	local count = tonumber(table.Count(usergroups))
-	local new_usergroup = usergroups[count]
-	local up = usergroups[count - 1]
-	if count == 1 then
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_usergroup.uniqueID .. "'")
-	else
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_usergroup.uniqueID .. "'")
-		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_usergroup.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
-	end
 
 	SortUserGroups()
 
@@ -1596,7 +1584,7 @@ end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) then
-		--printGM("gm", "CanProperty: " .. property)
+		printGM("gm", "CanProperty: " .. property)
 		if property == "ignite" or property == "extinguish" then
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_ignite", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if _tmp != nil and _tmp != false then
@@ -1755,7 +1743,7 @@ end)
 
 util.AddNetworkString("UpdateUsergroupsList")
 function ReloadUsergroupsList()
-	local ugs = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local ugs = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 	for i, pl in pairs(HANDLER_USERGROUPS) do
 		net.Start("UpdateUsergroupsList")
 			net.WriteTable(ugs)
@@ -1771,7 +1759,7 @@ net.Receive("settings_usergroup_position_up", function(len, ply)
 
 	usergroup.int_position = tonumber(usergroup.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -1796,7 +1784,7 @@ net.Receive("settings_usergroup_position_dn", function(len, ply)
 
 	group.int_position = tonumber(group.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local siblings = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)

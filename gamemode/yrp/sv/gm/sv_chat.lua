@@ -499,7 +499,7 @@ function GM:PlayerSay(sender, text, teamChat)
 		end
 	end
 
-	if paket.command == "general" or paket.command == "ooc" or paket.command == "advert" then
+	if paket.command == "general" or paket.command == "ooc" or paket.command == "advert" or paket.command == "event" then
 		paket.lokal = false
 	else
 		paket.lokal = true

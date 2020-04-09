@@ -264,10 +264,10 @@ timer.Create("ServerThink", TICK, 0, function()
 					ply:TakeDamage(0.5, ply, ply)
 				end
 
-				if GetGlobalDBool("bool_hunger", false) then
+				if GetGlobalDBool("bool_hunger", false) and ply:GetDBool("bool_hunger", false) then
 					con_hg(ply, _time)
 				end
-				if GetGlobalDBool("bool_thirst", false) then
+				if GetGlobalDBool("bool_thirst", false) and ply:GetDBool("bool_thirst", false) then
 					con_th(ply)
 				end
 				if GetGlobalDBool("bool_hygiene", false) then
@@ -290,7 +290,7 @@ timer.Create("ServerThink", TICK, 0, function()
 			-- Every 0.1
 			reg_ab(ply)
 
-			if GetGlobalDBool("bool_stamina", false) then
+			if GetGlobalDBool("bool_stamina", false) and ply:GetDBool("bool_stamina", false) then
 				con_st(ply, _time)
 			end
 		end

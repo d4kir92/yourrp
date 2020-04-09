@@ -87,11 +87,11 @@ if CLIENT then
 		elseif element == "LO" then
 			return self:Lockdown()
 		elseif element == "HU" then
-			return GetGlobalDBool("bool_hunger", false)
+			return GetGlobalDBool("bool_hunger", false) and self:GetDBool("bool_hunger", false)
 		elseif element == "TH" then
-			return GetGlobalDBool("bool_thirst", false)
+			return GetGlobalDBool("bool_thirst", false) and self:GetDBool("bool_thirst", false)
 		elseif element == "ST" then
-			return GetGlobalDBool("bool_stamina", false)
+			return GetGlobalDBool("bool_stamina", false) and self:GetDBool("bool_stamina", false)
 		elseif element == "RA" then
 			return GetGlobalDBool("bool_radiation", false)
 		elseif element == "HY" then
