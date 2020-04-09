@@ -462,7 +462,7 @@ function PANEL:Init()
 					local h = rh * 3.5
 					if base.con:GetCanvas():GetTall() < h then
 						h = base.con:GetCanvas():GetTall()
-						h = math.Clamp(h, YRP.ctr(320), YRP.ctr(999))
+						h = math.Clamp(h, YRP.ctr(999), YRP.ctr(1999))
 						if base._fh then
 							h = base._fh
 						end

@@ -72,8 +72,8 @@ function teleportToReleasepoint(ply)
 end
 
 function teleportToJailpoint(ply, tim, police)
-	ply:SetDBool("injail", true)
 	if tim != nil then
+		ply:SetDBool("injail", true)
 		local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
 
 		if wk(_tmpTele) then
@@ -112,6 +112,8 @@ function teleportToJailpoint(ply, tim, police)
 				net.WriteString("")
 			net.Broadcast()
 		end
+	else
+		print("[teleportToJailpoint] No Time SET!")
 	end
 end
 

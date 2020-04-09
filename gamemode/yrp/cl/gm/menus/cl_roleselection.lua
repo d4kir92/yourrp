@@ -321,6 +321,10 @@ function CreateRoleSelectionContent(PARENT)
 	else
 		SW = parent:GetWide()
 		SH = parent:GetTall()
+		if parent.GetContent != nil then
+			SW = parent:GetContent():GetWide()
+			SH = parent:GetContent():GetTall()
+		end
 	end
 
 	

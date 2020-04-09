@@ -368,6 +368,10 @@ function set_role_values(ply, pmid)
 			ply:SetDBool("yrp_voice_faction", tobool(rolTab.bool_voicefaction))
 			ply:SetDBool("bool_canusefrequencies", tobool(rolTab.bool_canusefrequencies))
 
+			ply:SetDBool("bool_hunger", tobool(rolTab.bool_hunger))
+			ply:SetDBool("bool_thirst", tobool(rolTab.bool_thirst))
+			ply:SetDBool("bool_stamina", tobool(rolTab.bool_stamina))
+
 			ply:SetDBool("canbeagent", tobool(rolTab.bool_canbeagent))
 			ply:SetDBool("isadminonly", tobool(rolTab.bool_adminonly))
 
