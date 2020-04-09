@@ -143,8 +143,11 @@ net.Receive("dbAddJail", function(len, ply)
 				local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
 
 				printGM("note", p:Nick() .. " added to jail")
-				p:SetDBool("injail", true)
+
 				p:SetDInt("jailtime", _tmpTable[1].time)
+				timer.Simple(0.02, function()
+					p:SetDBool("injail", true)
+				end)
 			else
 				printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 			end
@@ -170,8 +173,10 @@ net.Receive("dbRemJail", function(len, ply)
 		if _in_jailboard != nil then
 			for k, v in pairs(player.GetAll()) do
 				if v:SteamID() == _SteamID then
-					v:SetDBool("injail", true)
 					v:SetDInt("jailtime", _in_jailboard[1].time)
+					timer.Simple(0.02, function()
+						v:SetDBool("injail", true)
+					end)
 				end
 			end
 		else

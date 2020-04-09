@@ -30,8 +30,11 @@ end
 function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
 	printGM("darkrp", "arrest(" .. tostring(time) .. ", " .. Arrester:Nick() .. ")")
-	self:SetDBool("injail", true)
+
 	self:SetDInt("jailtime", time)
+	timer.Simple(0.02, function()
+		self:SetDBool("injail", true)
+	end)
 end
 
 function Player:canKeysLock(door)

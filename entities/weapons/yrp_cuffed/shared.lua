@@ -49,7 +49,7 @@ function SWEP:Think()
 			self.hp = 30
 		end
 
-		self.Owner:ShowStatus("befreien", 30 - self.hp, 30)
+		self.Owner:ShowStatus("LID_unleash", 30 - self.hp, 30)
 	end
 end
 
@@ -61,7 +61,7 @@ end
 
 function SWEP:LowerHP()
 	if SERVER then
-		self.Owner:ShowStatus("befreien", 30 - self.hp, 30)
+		self.Owner:ShowStatus("LID_unleash", 30 - self.hp, 30)
 		self.hp = self.hp - 1
 		if self.hp <= 0 then
 			self:DestroyCuffs()
