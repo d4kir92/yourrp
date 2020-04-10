@@ -1410,7 +1410,7 @@ function drawStringBox(ent, instr, z, color)
 		ico.w = th * 0.8
 		ico.h = ico.w
 		ico.br = (th - ico.h) / 2
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor(255, 255, 255, 1)
 		surface.SetMaterial(YRP.GetDesignIcon("shopping_cart"))
 		surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
 

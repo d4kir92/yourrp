@@ -76,6 +76,12 @@ function ErrorValidToSend(str)
 		return false
 	end
 
+	if CLIENT and LocalPlayer():GetDBool("isserverdedicated") == false then
+		return false
+	elseif SERVER and game.IsDedicated() == false then
+		return false
+	end
+
 	local tab = string.Explode("\n", str)
 	local gmbug = false
 	for i, v in pairs(tab) do

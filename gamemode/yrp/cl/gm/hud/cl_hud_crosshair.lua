@@ -33,7 +33,7 @@ local aimdownsights = 0
 function HudCrosshair()
 	local lply = LocalPlayer()
 	if lply:Alive() and GetGlobalDBool("bool_yrp_crosshair", false) then
-		if !contextMenuOpen then
+		if true or !contextMenuOpen then
 			local weapon = lply:GetActiveWeapon()
 			if weapon != NULL then
 				if weapon.DrawCrosshair or isHl2Weapon(weapon) then

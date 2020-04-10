@@ -43,7 +43,7 @@ SWEP.ShowViewModel = true
 SWEP.ShowWorldModel = true
 SWEP.ViewModelBoneMods = {}
 SWEP.VElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 2, -2), angle = Angle(90, -100, 0), size = Vector(0.699, 0.699, 0.699), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 SWEP.WElements = {
 	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
@@ -171,7 +171,9 @@ if CLIENT then
 	function SWEP:ViewModelDrawn()
 		
 		local vm = self.Owner:GetViewModel()
-		if !IsValid(vm) then return end
+		if !IsValid(vm) then
+			return
+		end
 		
 		if (!self.VElements) then return end
 		
