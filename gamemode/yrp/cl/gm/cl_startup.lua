@@ -1213,7 +1213,9 @@ function openSingleSelector(tab, closeF, web)
 							id = tonumber(id)
 							local mdl = net.ReadString()
 							local si = mdllist[id]
-							si:SetModel(mdl)
+							if pa(si) then
+								si:SetModel(mdl)
+							end
 						end)
 						net.Start("getEntityWorldModel")
 							net.WriteString(item.ClassName)
@@ -1410,7 +1412,7 @@ function drawStringBox(ent, instr, z, color)
 		ico.w = th * 0.8
 		ico.h = ico.w
 		ico.br = (th - ico.h) / 2
-		surface.SetDrawColor(255, 255, 255, 1)
+		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(YRP.GetDesignIcon("shopping_cart"))
 		surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
 

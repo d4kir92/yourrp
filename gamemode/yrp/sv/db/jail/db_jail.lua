@@ -77,9 +77,28 @@ function teleportToJailpoint(ply, tim, police)
 		timer.Simple(0.2, function()
 			ply:SetDBool("injail", true)
 		end)
+
+		-- CELL
+		local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'")
+		local uid = 0
+		if wk(_tmpTable) then
+			uid = _tmpTable[1].cell
+		end
+		local _tmpCell = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. uid .. "'")
+
+		-- "CELL DELETED"
 		local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
 
-		if wk(_tmpTele) then
+		if wk(_tmpCell) then -- CELL
+			_tmpCell = _tmpCell[1]
+
+			local _tmp = string.Explode(",", _tmpCell.position)
+			local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
+			tp_to(ply, vec)
+
+			_tmp = string.Explode(",", _tmpCell.angle)
+			ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+		elseif wk(_tmpTele) then -- CELL DELETED
 			for i, v in pairs(_tmpTele) do
 				local _tmp = string.Explode(",", v.position)
 				local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
@@ -116,7 +135,7 @@ function teleportToJailpoint(ply, tim, police)
 			net.Broadcast()
 		end
 	else
-		print("[teleportToJailpoint] No Time SET!")
+		YRP.msg("note", "[teleportToJailpoint] No Time SET!")
 	end
 end
 

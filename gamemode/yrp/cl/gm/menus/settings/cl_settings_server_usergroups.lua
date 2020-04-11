@@ -701,23 +701,25 @@ net.Receive("usergroup_add", function(len)
 end)
 
 function UpdateUsergroupsList(ugs)
-	local PARENT = settingsWindow.window.site
-	if pa(PARENT) then
-		UGS = {}
-		PARENT.ugs:Clear()
+	if pa(settingsWindow) then
+		local PARENT = settingsWindow.window.site
+		if pa(PARENT) then
+			UGS = {}
+			PARENT.ugs:Clear()
 
-		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-			ug.int_position = tonumber(ug.int_position)
-			if ug.int_position < 10 then
-				if tobool(ug.bool_removeable) then
-					AddUG(ug)
+			for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+				ug.int_position = tonumber(ug.int_position)
+				if ug.int_position < 10 then
+					if tobool(ug.bool_removeable) then
+						AddUG(ug)
+					end
 				end
 			end
-		end
-		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-			if ug.int_position >= 10 then
-				if tobool(ug.bool_removeable) then
-					AddUG(ug)
+			for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+				if ug.int_position >= 10 then
+					if tobool(ug.bool_removeable) then
+						AddUG(ug)
+					end
 				end
 			end
 		end

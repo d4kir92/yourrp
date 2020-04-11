@@ -78,7 +78,7 @@ function SWEP:Think()
 				if p:Distance(pos) < size * 2 then
 					YRP.msg("db", "Option Spawner")
 
-					local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+					local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'")
 					if wk(stab) then
 						stab = stab[1]
 						net.Start("yrp_jailpoints_options")
@@ -170,7 +170,7 @@ function SWEP:SecondaryAttack()
 		for i, v in pairs(GetGlobalDTable("yrp_jailpoints")) do
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
-				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'")
 				YRP.msg("db", "Removed Spawner")
 				found = true
 			end
@@ -180,7 +180,7 @@ function SWEP:SecondaryAttack()
 			for i, v in pairs(GetGlobalDTable("yrp_jailpoints")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(ply:GetPos()) < 160 then
-					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'")
 					YRP.msg("db", "Removed Spawner")
 				end
 			end

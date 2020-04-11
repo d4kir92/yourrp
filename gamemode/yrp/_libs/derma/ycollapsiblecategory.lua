@@ -169,6 +169,8 @@ function PANEL:Init()
 		rol.bool_visible_cc = tobool(rol.bool_visible_cc)
 		rol.bool_visible_rm = tobool(rol.bool_visible_rm)
 		rol.bool_locked = tobool(rol.bool_locked)
+		rol.int_requireslevel = tonumber(rol.int_requireslevel)
+		pTab(rol)
 		rol.int_uses = tonumber(rol.int_uses)
 		rol.int_maxamount = tonumber(rol.int_maxamount)
 		rol.int_prerole = tonumber(rol.int_prerole)
@@ -287,18 +289,21 @@ function PANEL:Init()
 		local btn = createD("DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 		btn:SetText("")
 		function btn:Paint(pw, ph)
-			if rol.int_prerole == 0 and (!rol.bool_locked or lply:HasAccess()) then
+			if rol.int_prerole == 0 and (!rol.bool_locked or lply:HasAccess()) and rol.int_requireslevel <= lply:Level() then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10))
 				end
 			end
-			if rol.bool_locked then
+			if rol.bool_locked or rol.int_requireslevel > lply:Level() then
 				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), TextColor(StringToColor(rol.string_color)))
+				if rol.int_requireslevel > lply:Level() then
+					draw.SimpleText(rol.int_requireslevel, "Y_40_700", ph / 2 + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
 			end
 		end
 		function btn:DoClick()
 			rol.int_prerole = tonumber(rol.int_prerole)
-			if !rol.bool_locked or lply:HasAccess() then
+			if (!rol.bool_locked or lply:HasAccess()) and rol.int_requireslevel <= lply:Level() then
 				lply:SetDString("charcreate_ruid", rol.uniqueID)
 				net.Start("yrp_want_role")
 					net.WriteString(rol.uniqueID)

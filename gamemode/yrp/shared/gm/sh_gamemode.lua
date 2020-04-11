@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 249 --do NOT change this!
-GM.VersionCanary = 503 --do NOT change this!
+GM.VersionBeta = 250 --do NOT change this!
+GM.VersionCanary = 504 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -84,6 +84,17 @@ end
 
 function GetMapNameDB()
 	return string.lower(SQL_STR_IN(game.GetMap()))
+end
+
+function StringToColor(str)
+	local _col = string.Explode(",", str)
+
+	return Color(_col[1], _col[2], _col[3], _col[4] or 255)
+end
+
+function StringToVector(str)
+	local color = StringToColor(str)
+	return Vector( color.r / 255, color.g / 255, color.b / 255 )
 end
 
 concommand.Add("yrp_version", function(ply, cmd, args)

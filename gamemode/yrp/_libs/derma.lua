@@ -244,12 +244,6 @@ function TableToColorStr(tbl)
 	return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
 end
 
-function StringToColor(str)
-	local _col = string.Explode(",", str)
-
-	return Color(_col[1], _col[2], _col[3], _col[4] or 255)
-end
-
 function ColorToString(col)
 	col.a = col.a or 255
 	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
@@ -1461,4 +1455,37 @@ function TestHTML(pnl, url, rem)
 			end
 		)
 	end
+end
+
+hook.Add("Think", "yrp_motion", function()
+	local lply = LocalPlayer()
+
+	lply.oldang = lply.oldang or Angle(0, 0, 0)
+	lply.newang = LocalPlayer():EyeAngles()
+
+	lply.swayx = lply.swayx or 0
+	lply.swayy = lply.swayy or 0
+
+	local valx = Lerp(FrameTime() * 10, lply.swayx, lply.newang.y - lply.oldang.y)
+	local valy = Lerp(FrameTime() * 10, lply.swayy, lply.newang.p - lply.oldang.p)
+	if valx < 4 and valx > -4 then
+		lply.swayx = valx
+	end
+	if valy < 4 and valy > -4 then
+		lply.swayy = valy
+	end
+
+	lply.oldang = lply.newang
+end)
+
+function HUDMOTIONX(px)
+	local lply = LocalPlayer()
+
+	return px + lply.swayx * 10
+end
+
+function HUDMOTIONY(py)
+	local lply = LocalPlayer()
+
+	return py + -lply.swayy * 10
 end

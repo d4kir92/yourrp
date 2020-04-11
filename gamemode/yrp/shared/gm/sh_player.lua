@@ -37,7 +37,8 @@ function Player:YRPEat(num)
 	if isnumber(num) then
 		local eatsounds = {
 			"npc/barnacle/barnacle_crunch2.wav",
-			"npc/barnacle/barnacle_crunch3.wav"
+			"npc/barnacle/barnacle_crunch3.wav",
+			"physics/body/body_medium_break4.wav"
 		}
 		local name, nr = table.Random(eatsounds)
 		self:EmitSound(name)
@@ -52,7 +53,8 @@ function Player:YRPDrink(num)
 	if isnumber(num) then
 		local drinksounds = {
 			"npc/barnacle/barnacle_gulp1.wav",
-			"npc/barnacle/barnacle_gulp2.wav"
+			"npc/barnacle/barnacle_gulp2.wav",
+			"drink1.wav"
 		}
 		local name, nr = table.Random(drinksounds)
 		self:EmitSound(name)

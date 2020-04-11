@@ -132,18 +132,20 @@ net.Receive("set_lockdown", function(len, ply)
 
 		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
 		local lockdoors = {}
-		for i, v in pairs(buildings) do
-			if tobool(v.bool_lockdown) then
-				table.insert(lockdoors, tonumber(v.uniqueID))
+		if pa(buildings) then
+			for i, v in pairs(buildings) do
+				if tobool(v.bool_lockdown) then
+					table.insert(lockdoors, tonumber(v.uniqueID))
+				end
 			end
-		end
 
-		local doors = GetAllDoors()
-		for i, door in pairs(doors) do
-			local buid = tonumber(door:GetDString("buildingID", "-1"))
-			if table.HasValue(lockdoors, buid) then
-				door:Fire("Close")
-				door:Fire("Lock")
+			local doors = GetAllDoors()
+			for i, door in pairs(doors) do
+				local buid = tonumber(door:GetDString("buildingID", "-1"))
+				if table.HasValue(lockdoors, buid) then
+					door:Fire("Close")
+					door:Fire("Lock")
+				end
 			end
 		end
 	else
@@ -155,18 +157,20 @@ net.Receive("set_lockdown", function(len, ply)
 
 		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
 		local lockdoors = {}
-		for i, v in pairs(buildings) do
-			if tobool(v.bool_lockdown) then
-				table.insert(lockdoors, tonumber(v.uniqueID))
+		if pa(buildings) then
+			for i, v in pairs(buildings) do
+				if tobool(v.bool_lockdown) then
+					table.insert(lockdoors, tonumber(v.uniqueID))
+				end
 			end
-		end
 
-		local doors = GetAllDoors()
-		for i, door in pairs(doors) do
-			local buid = tonumber(door:GetDString("buildingID", "-1"))
-			if table.HasValue(lockdoors, buid) then
-				door:Fire("Unlock")
-				door:Fire("Open")
+			local doors = GetAllDoors()
+			for i, door in pairs(doors) do
+				local buid = tonumber(door:GetDString("buildingID", "-1"))
+				if table.HasValue(lockdoors, buid) then
+					door:Fire("Unlock")
+					door:Fire("Open")
+				end
 			end
 		end
 	end

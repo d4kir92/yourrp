@@ -620,12 +620,12 @@ function OpenSBS()
 							end
 							if GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 								self.grpicon = self.grpicon or ""
-								if pl.sbp.gicon != nil then
+								if pa(pl.sbp.gicon) then
 									if self.grpicon != pl:GetDString("groupIcon", "") then
 										self.grpicon = pl:GetDString("groupIcon", "")
 										local text_gicon = GetHTMLImage(self.grpicon, YRP.ctr(60), YRP.ctr(60))
 										pl.sbp.gicon:SetHTML(text_gicon)
-									elseif pa(pl.sbp.gicon) then
+									else
 										if !strUrl(pl:GetDString("groupIcon", "")) then
 											pl.sbp.gicon:Remove()
 										else

@@ -448,9 +448,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			if pa(rs.rplist) then
 				local _uid = tonumber(net.ReadString())
 				local icon = net.ReadString()
-				rs.rplist[_uid].string_icon = icon
-				rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
-				TestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
+				if pa(rs.rplist[_uid]) then
+					rs.rplist[_uid].string_icon = icon
+					rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
+					TestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
+				end
 			end
 		end)
 
@@ -998,10 +1000,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					net.WriteString(cur_role.pre)
 				net.SendToServer()
 				timer.Simple(0.1, function()
-					net.Start("settings_subscribe_rolelist")
-						net.WriteString(cur_role.gro)
-						net.WriteString(rs.rplist[role.uniqueID].uniqueID)
-					net.SendToServer()
+					if pa(rs.rplist) then
+						net.Start("settings_subscribe_rolelist")
+							net.WriteString(cur_role.gro)
+							net.WriteString(rs.rplist[role.uniqueID].uniqueID)
+						net.SendToServer()
+					end
 				end)
 			end
 
