@@ -195,6 +195,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 20")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 60")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_deathscreen", "INT DEFAULT 1")
 
 
 
@@ -1380,6 +1381,11 @@ util.AddNetworkString("update_bool_spawncorpseondeath")
 net.Receive("update_bool_spawncorpseondeath", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_spawncorpseondeath", "bool_spawncorpseondeath", b)
+end)
+util.AddNetworkString("update_bool_deathscreen")
+net.Receive("update_bool_deathscreen", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_deathscreen", "bool_deathscreen", b)
 end)
 
 

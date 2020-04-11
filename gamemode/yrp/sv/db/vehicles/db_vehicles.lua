@@ -22,6 +22,8 @@ function AddVehicle(veh, ply, item)
 	local cname = veh:GetClass()
 	local iuid = item.uniqueID
 
+	veh:SetDInt("ownerCharID", charid)
+
 	SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'")
 end
 
@@ -44,7 +46,7 @@ net.Receive("getVehicleInfo", function(len, ply)
 
 	local _vehicleID = net.ReadString()
 
-	local _vehicleTab = SQL_SELECT(DATABASE_NAME, "*", "item_id = " .. _vehicleID)
+	local _vehicleTab = SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetDInt("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 
 	if worked(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle") then
 		local owner = ""

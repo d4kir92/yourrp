@@ -32,7 +32,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	openMenu()
 	local ply = LocalPlayer()
 
-	yrp_vehicle.window = createVGUI("DFrame", nil, 1090, 160, 0, 0)
+	yrp_vehicle.window = createVGUI("YFrame", nil, 1090, 160, 0, 0)
 	yrp_vehicle.window:Center()
 	yrp_vehicle.window:SetTitle("")
 	function yrp_vehicle.window:Close()
@@ -45,13 +45,18 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		closeMenu()
 	end
 
-	local owner = net.ReadString()
+	local ownercharid = vehicleTab[1].ownerCharID
+	ownercharid = tonumber(ownercharid)
+	local owner = ""
+	for i, v in pairs(player.GetAll()) do
+		if v:CharID() == ownercharid then
+			owner = v:RPName()
+		end
+	end
 
-
+	yrp_vehicle.window:SetTitle(YRP.lang_string("LID_owner") .. ": " .. owner)
 	function yrp_vehicle.window:Paint(pw, ph)
-		surfaceWindow(self, pw, ph, YRP.lang_string("LID_settings"))
-
-		draw.SimpleTextOutlined(YRP.lang_string("LID_owner") .. ": " .. owner, "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		hook.Run("YFramePaint", self, pw, ph)
 
 		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color(255, 255, 0, 200))
 	end

@@ -69,17 +69,20 @@ function get_keybind(name)
 end
 
 function set_keybind(name, value)
+	print(name, value)
 	if value != 0 then
 		for n, v in pairs(yrp_keybinds) do
 			if n == "version" then
 				continue
 			end
 			if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
+				print("FAIL", tonumber(value), tonumber(v) , name != n , !string.StartWith(n, "menu_options_"), n, v)
 				return false
 			end
 		end
 	end
-	SQL_UPDATE(DATABASE_NAME, "'" .. name .. "' = '" .. value .. "'", "uniqueID = '" .. 1 .. "'")
+	local result = SQL_UPDATE(DATABASE_NAME, "'" .. name .. "' = '" .. value .. "'", "uniqueID = '" .. 1 .. "'")
+	print(result, name)
 	yrp_keybinds[name] = value
 	return true
 end
@@ -140,6 +143,10 @@ function check_yrp_keybinds()
 	end
 end
 check_yrp_keybinds()
+
+if get_keybind("menu_interact") == KEY_E then
+	set_keybind("menu_interact", KEY_K)
+end
 
 function YResetKeybinds()
 	for i, keybind in pairs(YRPKEYBINDS) do

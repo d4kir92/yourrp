@@ -259,7 +259,7 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		if GetGlobalDBool("bool_players_can_switch_role", false) then
+		if GetGlobalDBool("bool_players_can_switch_role", false) or LocalPlayer():GetDBool("cc", true) then
 			local getrole = createD("YButton", win, ew, YRP.ctr(hh), YRP.ctr(nw) - ew - YRP.ctr(20), YRP.ctr(nh) - 2 * YRP.ctr(hh + 20))
 			getrole:SetText("LID_getrole")
 			function getrole:DoClick()
