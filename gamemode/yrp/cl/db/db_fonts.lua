@@ -141,7 +141,7 @@ end
 function changeFontSize()
 	printGM("db", "changeFontSize")
 
-	for s = 4, 100 do
+	for s = 4, 144 do
 		yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
 		yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
 

@@ -2409,7 +2409,7 @@ function loading:Paint(pw, ph)
 	if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
 		self:Remove()
 	elseif lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
-		--self:Remove()
+		self:Remove()
 	end
 end
 

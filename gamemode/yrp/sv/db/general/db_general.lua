@@ -126,6 +126,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_swaying", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_yrp_scoreboard_style", "TEXT DEFAULT 'simple'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_name", "INT DEFAULT 1")
@@ -1038,11 +1039,19 @@ net.Receive("update_bool_yrp_crosshair", function(len, ply)
 end)
 
 
+
 util.AddNetworkString("update_bool_yrp_hud")
 net.Receive("update_bool_yrp_hud", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_yrp_hud", "bool_yrp_hud", b)
 end)
+
+util.AddNetworkString("update_bool_yrp_hud_swaying")
+net.Receive("update_bool_yrp_hud_swaying", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_hud_swaying", "bool_yrp_hud_swaying", b)
+end)
+
 
 
 util.AddNetworkString("update_bool_yrp_scoreboard")

@@ -23,8 +23,8 @@ function HUDSimpleBG(tab)
 
 				Simple[tab.element]["background"].w = w
 				Simple[tab.element]["background"].h = h
-				Simple[tab.element]["background"].x = x
-				Simple[tab.element]["background"].y = y
+				Simple[tab.element]["background"].fx = x
+				Simple[tab.element]["background"].fy = y
 
 				Simple[tab.element]["background"].r = 0
 				if lply:HudValue(tab.element, "ROUN") then
@@ -37,6 +37,8 @@ function HUDSimpleBG(tab)
 					Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
 					Simple[tab.element]["background"].color.a = tab.a * Simple[tab.element]["background"].color.a
 				end
+				Simple[tab.element]["background"].x = HUDMOTIONX(Simple[tab.element]["background"].fx)
+				Simple[tab.element]["background"].y = HUDMOTIONY(Simple[tab.element]["background"].fy)
 				HudBox(Simple[tab.element]["background"])
 			end
 		end
@@ -81,11 +83,11 @@ function HUDSimpleBAR(tab)
 			local ax = Simple[tab.element]["text"].ax
 			local ay = Simple[tab.element]["text"].ay
 			if lply:HudValue(tab.element, "ROUN") then
-				Simple[tab.element]["text"].x = x + h / 2 + (w - h) / 2 * ax
-				Simple[tab.element]["text"].y = y + h / 16 + (h - h / 8) / 2 * ay
+				Simple[tab.element]["text"].fx = x + h / 2 + (w - h) / 2 * ax
+				Simple[tab.element]["text"].fy = y + h / 16 + (h - h / 8) / 2 * ay
 			else
-				Simple[tab.element]["text"].x = x + h / 16 + (w - h / 8) / 2 * ax
-				Simple[tab.element]["text"].y = y + h / 16 + (h - h / 8) / 2 * ay
+				Simple[tab.element]["text"].fx = x + h / 16 + (w - h / 8) / 2 * ax
+				Simple[tab.element]["text"].fy = y + h / 16 + (h - h / 8) / 2 * ay
 			end
 			Simple[tab.element]["text"].text = tab.element
 			local fontsize = lply:HudValue(tab.element, "TS")
@@ -99,15 +101,22 @@ function HUDSimpleBAR(tab)
 			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
 				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fh * 0.6
 				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fh * 0.6
-				Simple[tab.element]["icon"].x = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fh * 0.2
-				Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fh * 0.2
+				Simple[tab.element]["icon"].fx = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fh * 0.2
+				Simple[tab.element]["icon"].fy = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fh * 0.2
 			else
 				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fw * 0.6
 				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fw * 0.6
-				Simple[tab.element]["icon"].x = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fw * 0.2
-				Simple[tab.element]["icon"].y = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fw * 0.2
+				Simple[tab.element]["icon"].fx = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fw * 0.2
+				Simple[tab.element]["icon"].fy = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fw * 0.2
 			end
 		else
+			Simple[tab.element]["bar"].x = HUDMOTIONX(Simple[tab.element]["bar"].fx)
+			Simple[tab.element]["bar"].y = HUDMOTIONY(Simple[tab.element]["bar"].fy)
+			Simple[tab.element]["text"].x = HUDMOTIONX(Simple[tab.element]["text"].fx)
+			Simple[tab.element]["text"].y = HUDMOTIONY(Simple[tab.element]["text"].fy)
+			Simple[tab.element]["icon"].x = HUDMOTIONX(Simple[tab.element]["icon"].fx)
+			Simple[tab.element]["icon"].y = HUDMOTIONY(Simple[tab.element]["icon"].fy)
+			
 			if tab.max != nil and tab.cur != nil then
 				if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
 					Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh
@@ -162,8 +171,8 @@ function HUDSimpleBR(tab)
 
 				Simple[tab.element]["border"].w = w
 				Simple[tab.element]["border"].h = h
-				Simple[tab.element]["border"].x = x
-				Simple[tab.element]["border"].y = y
+				Simple[tab.element]["border"].fx = x
+				Simple[tab.element]["border"].fy = y
 
 				Simple[tab.element]["border"].r = 0
 				if lply:HudValue(tab.element, "ROUN") then
@@ -175,6 +184,9 @@ function HUDSimpleBR(tab)
 			elseif lply:HudValue(tab.element, "ROUN") then
 				HudBoxBrRounded(Simple[tab.element]["border"])
 			else
+				Simple[tab.element]["border"].x = HUDMOTIONX(Simple[tab.element]["border"].fx)
+				Simple[tab.element]["border"].y = HUDMOTIONY(Simple[tab.element]["border"].fy)
+			
 				HudBoxBr(Simple[tab.element]["border"])
 			end
 		end
@@ -240,8 +252,8 @@ function HUDSimpleCompass()
 			Simple["COM"]["needle"].r = 0
 			Simple["COM"]["needle"].w = YRP.ctr(4)
 			Simple["COM"]["needle"].h = h / 4
-			Simple["COM"]["needle"].x = x + w / 2
-			Simple["COM"]["needle"].y = y
+			Simple["COM"]["needle"].fx = x + w / 2
+			Simple["COM"]["needle"].fy = y
 			Simple["COM"]["needle"].color = Color(255, 255, 255)
 
 			local fontsize = lply:HudValue("COM", "TS")
@@ -265,8 +277,8 @@ function HUDSimpleCompass()
 
 			Simple["COM"]["degree"].w = w
 			Simple["COM"]["degree"].h = h
-			Simple["COM"]["degree"].x = x + w / 2
-			Simple["COM"]["degree"].y = y + h * 0.50
+			Simple["COM"]["degree"].fx = x + w / 2
+			Simple["COM"]["degree"].fy = y + h * 0.50
 			Simple["COM"]["degree"].ax = 1
 			Simple["COM"]["degree"].ay = 1
 			Simple["COM"]["degree"].font = "Y_" .. fontsize .. "_700"
@@ -275,8 +287,8 @@ function HUDSimpleCompass()
 
 			Simple["COM"]["north"].w = w
 			Simple["COM"]["north"].h = h
-			Simple["COM"]["north"].x = x + w / 2
-			Simple["COM"]["north"].y = y + h * 0.50
+			Simple["COM"]["north"].fx = x + w / 2
+			Simple["COM"]["north"].fy = y + h * 0.50
 			Simple["COM"]["north"].ax = 1
 			Simple["COM"]["north"].ay = 1
 			Simple["COM"]["north"].font = "Y_" .. nextfontsize .. "_700"
@@ -286,8 +298,8 @@ function HUDSimpleCompass()
 
 			Simple["COM"]["south"].w = w
 			Simple["COM"]["south"].h = h
-			Simple["COM"]["south"].x = x + w / 2
-			Simple["COM"]["south"].y = y + h * 0.50
+			Simple["COM"]["south"].fx = x + w / 2
+			Simple["COM"]["south"].fy = y + h * 0.50
 			Simple["COM"]["south"].ax = 1
 			Simple["COM"]["south"].ay = 1
 			Simple["COM"]["south"].font = "Y_" .. nextfontsize .. "_500"
@@ -297,8 +309,8 @@ function HUDSimpleCompass()
 
 			Simple["COM"]["east"].w = w
 			Simple["COM"]["east"].h = h
-			Simple["COM"]["east"].x = x + w / 2
-			Simple["COM"]["east"].y = y + h * 0.50
+			Simple["COM"]["east"].fx = x + w / 2
+			Simple["COM"]["east"].fy = y + h * 0.50
 			Simple["COM"]["east"].ax = 1
 			Simple["COM"]["east"].ay = 1
 			Simple["COM"]["east"].font = "Y_" .. nextfontsize .. "_500"
@@ -308,8 +320,8 @@ function HUDSimpleCompass()
 
 			Simple["COM"]["west"].w = w
 			Simple["COM"]["west"].h = h
-			Simple["COM"]["west"].x = x + w / 2
-			Simple["COM"]["west"].y = y + h * 0.50
+			Simple["COM"]["west"].fx = x + w / 2
+			Simple["COM"]["west"].fy = y + h * 0.50
 			Simple["COM"]["west"].ax = 1
 			Simple["COM"]["west"].ay = 1
 			Simple["COM"]["west"].font = "Y_" .. nextfontsize .. "_500"
@@ -322,8 +334,8 @@ function HUDSimpleCompass()
 					Simple["COM"][i .. "num"] = {}
 					Simple["COM"][i .. "num"].w = 2
 					Simple["COM"][i .. "num"].h = 12
-					Simple["COM"][i .. "num"].x = x + 2 / 2
-					Simple["COM"][i .. "num"].y = y + h / 2
+					Simple["COM"][i .. "num"].fx = x + 2 / 2
+					Simple["COM"][i .. "num"].fy = y + h / 2
 					Simple["COM"][i .. "num"].ax = 1
 					Simple["COM"][i .. "num"].ay = 1
 					Simple["COM"][i .. "num"].text = (i + 180) % 360
@@ -339,8 +351,27 @@ function HUDSimpleCompass()
 			local x = lply:HudValue("COM", "POSI_X")
 			local y = lply:HudValue("COM", "POSI_Y")
 
-			draw.RoundedBox(0, x, y + YRP.ctr(12), w, YRP.ctr(4), Color(255, 255, 255, 50))
-			draw.RoundedBox(0, x, y + h - YRP.ctr(12) - YRP.ctr(4), w, YRP.ctr(4), Color(255, 255, 255, 50))
+			Simple["COM"]["needle"].x = HUDMOTIONX(Simple["COM"]["needle"].fx)
+			Simple["COM"]["needle"].y = HUDMOTIONY(Simple["COM"]["needle"].fy)
+			Simple["COM"]["degree"].x = HUDMOTIONX(Simple["COM"]["degree"].fx)
+			Simple["COM"]["degree"].y = HUDMOTIONY(Simple["COM"]["degree"].fy)
+			Simple["COM"]["north"].x = HUDMOTIONX(Simple["COM"]["north"].fx)
+			Simple["COM"]["north"].y = HUDMOTIONY(Simple["COM"]["north"].fy)
+			Simple["COM"]["south"].x = HUDMOTIONX(Simple["COM"]["south"].fx)
+			Simple["COM"]["south"].y = HUDMOTIONY(Simple["COM"]["south"].fy)
+			Simple["COM"]["east"].x = HUDMOTIONX(Simple["COM"]["east"].fx)
+			Simple["COM"]["east"].y = HUDMOTIONY(Simple["COM"]["east"].fy)
+			Simple["COM"]["west"].x = HUDMOTIONX(Simple["COM"]["west"].fx)
+			Simple["COM"]["west"].y = HUDMOTIONY(Simple["COM"]["west"].fy)
+			for i = 0, 360, 30 do
+				if i % 90 != 0 then
+					Simple["COM"][i .. "num"].x = HUDMOTIONX(Simple["COM"][i .. "num"].fx)
+					Simple["COM"][i .. "num"].y = HUDMOTIONY(Simple["COM"][i .. "num"].fy)
+				end
+			end
+
+			draw.RoundedBox(0, HUDMOTIONX(x), HUDMOTIONY(y + YRP.ctr(12)), w, YRP.ctr(4), Color(255, 255, 255, 50))
+			draw.RoundedBox(0, HUDMOTIONX(x), HUDMOTIONY(y + h - YRP.ctr(12) - YRP.ctr(4)), w, YRP.ctr(4), Color(255, 255, 255, 50))
 
 			x = Simple["COM"]["degree"].x - Simple["COM"]["north"].w / 2
 			w = Simple["COM"]["north"].w

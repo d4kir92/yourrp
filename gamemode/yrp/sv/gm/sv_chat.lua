@@ -2,6 +2,34 @@
 
 -- #CHAT
 
+util.AddNetworkString("ShowAlert")
+local alerts = {}
+
+function AddAlert(str)
+	table.insert(alerts, str)
+end
+
+local d = 0
+hook.Add("Think", "yrp_alerts", function()
+	if d < CurTime() then
+		if net.BytesLeft() != nil then
+			return
+		end
+
+		if table.Count(alerts) > 0 then
+			local first = table.GetFirstValue(alerts)
+
+			d = CurTime() + math.Clamp(string.len(tostring(first)) / 2, 3, 10)
+
+			SetGlobalDString("yrp_alert", first)
+
+			local result = table.RemoveByValue(alerts, first)
+		else
+			SetGlobalDString("yrp_alert", "")
+		end
+	end
+end)
+
 util.AddNetworkString("yrp_player_say")
 
 util.AddNetworkString("startchat")
@@ -578,6 +606,13 @@ function GM:PlayerSay(sender, text, teamChat)
 	if paket.command == "revive" then
 		revive(sender, text)
 		return ""
+	end
+
+	if paket.command == "alert" then
+		if sender:HasAccess() then
+			AddAlert(string.sub(text, 8))
+			return ""
+		end
 	end
 
 	if paket.command == "givelicense" then

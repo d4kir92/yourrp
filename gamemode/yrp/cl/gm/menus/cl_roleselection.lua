@@ -259,20 +259,22 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		local getrole = createD("YButton", win, ew, YRP.ctr(hh), YRP.ctr(nw) - ew - YRP.ctr(20), YRP.ctr(nh) - 2 * YRP.ctr(hh + 20))
-		getrole:SetText("LID_getrole")
-		function getrole:DoClick()
-			if LocalPlayer():GetDBool("cc", true) then
-				parent:Clear()
+		if GetGlobalDBool("bool_players_can_switch_role", false) then
+			local getrole = createD("YButton", win, ew, YRP.ctr(hh), YRP.ctr(nw) - ew - YRP.ctr(20), YRP.ctr(nh) - 2 * YRP.ctr(hh + 20))
+			getrole:SetText("LID_getrole")
+			function getrole:DoClick()
+				if LocalPlayer():GetDBool("cc", true) then
+					parent:Clear()
 
-				CreateCharacterSettingsContent()
-			else
-				net.Start("wantRole")
-					net.WriteInt(lply:GetDString("charcreate_ruid", 0), 16)
-					net.WriteInt(lply:GetDString("charcreate_rpmid", 1), 16)
-				net.SendToServer()
-				CloseCombinedMenu()
-				CloseRoleMenu()
+					CreateCharacterSettingsContent()
+				else
+					net.Start("wantRole")
+						net.WriteInt(lply:GetDString("charcreate_ruid", 0), 16)
+						net.WriteInt(lply:GetDString("charcreate_rpmid", 1), 16)
+					net.SendToServer()
+					CloseCombinedMenu()
+					CloseRoleMenu()
+				end
 			end
 		end
 

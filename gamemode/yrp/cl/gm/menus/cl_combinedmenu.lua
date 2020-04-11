@@ -143,11 +143,13 @@ function OpenCombinedMenu()
 		sites[c].content = CreateHelpMenuContent
 		c = c + 1
 
-		sites[c] = {}
-		sites[c].name = "LID_roles"
-		sites[c].icon = "person_pin"
-		sites[c].content = CreateRoleMenuContent
-		c = c + 1
+		--if GetGlobalDBool("bool_players_can_switch_role", false) then
+			sites[c] = {}
+			sites[c].name = "LID_roles"
+			sites[c].icon = "person_pin"
+			sites[c].content = CreateRoleMenuContent
+			c = c + 1
+		--end
 
 		sites[c] = {}
 		sites[c].name = "LID_shop"
@@ -346,11 +348,6 @@ function OpenCombinedMenu()
 				site.id = tonumber(i)
 				function site:Paint(pw, ph)
 					self.aw = self.aw or 0
-					if v.name == "LID_roles" then
-						if !GetGlobalDBool("bool_players_can_switch_role", false) then
-							cm.menu:Remove()
-						end
-					end
 
 					local lply = LocalPlayer()
 					local color = lply:InterfaceValue("YFrame", "HB")

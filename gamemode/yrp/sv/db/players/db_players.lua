@@ -435,7 +435,6 @@ function set_role_values(ply, pmid)
 			ply:SetDString("groupColor", groTab.string_color)
 			ply:SetDString("groupIcon", groTab.string_icon)
 
-			print(groTab.string_color, StringToVector(groTab.string_color))
 			ply:SetPlayerColor(StringToVector(groTab.string_color))
 
 			ply:SetDBool("groupiscp", tobool(groTab.bool_iscp))
