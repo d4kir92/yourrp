@@ -444,7 +444,6 @@ net.Receive("item_buy", function(len, ply)
 
 			if _item.type == "licenses" then
 				ply:AddLicense(_item.ClassName)
-				ply:addMoney(-tonumber(_item.price))
 			elseif _item.type == "roles" then
 				local rid = _item.ClassName
 				RemRolVals(ply)
@@ -453,8 +452,6 @@ net.Receive("item_buy", function(len, ply)
 				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)
 
 				if _spawned then
-					ply:addMoney(-tonumber(_item.price))
-
 					if ea(ent) then
 						ent:SetDInt("item_uniqueID", _item.uniqueID)
 						if ent:IsVehicle() then
@@ -484,6 +481,9 @@ net.Receive("item_buy", function(len, ply)
 				_stor = string.Implode(",", _stor)
 				local _result = SQL_UPDATE("yrp_characters", "storage = '" .. _stor .. "'", "uniqueID = '" .. ply:CharID() .. "'")
 			end
+
+			-- Remove money if everything works
+			ply:addMoney(-tonumber(_item.price))
 		end
 	end
 end)
@@ -503,9 +503,13 @@ net.Receive("item_spawn", function(len, ply)
 				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)
 
 				if _spawned then
-					ent:SetDInt("item_uniqueID", _item.uniqueID)
-					if ent:IsVehicle() then
-						AddVehicle(ent, ply, _item)
+					if ea(ent) then
+						ent:SetDInt("item_uniqueID", _item.uniqueID)
+						if ent:IsVehicle() then
+							AddVehicle(ent, ply, _item)
+						end
+					else
+						YRP.msg("note", "[item_spawn] Item not alive/valid.")
 					end
 				end
 			end
@@ -521,7 +525,7 @@ net.Receive("item_despawn", function(len, ply)
 	if _item ~= nil then
 		_item = _item[1]
 		local _alive, ent = IsEntityAlive(ply, _item.uniqueID)
-		if _alive then
+		if _alive and ea(ent) then
 			ent:Remove()
 		end
 	end

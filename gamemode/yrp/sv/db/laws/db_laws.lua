@@ -14,6 +14,12 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_lawsymbol, string_laws", "'§', ' '")
 end
 
+local laws = SQL_SELECT(DATABASE_NAME, "*")
+if wk(laws) then
+	laws = laws[1]
+	SetGlobalDString("sting_laws", laws.laws)
+end
+
 util.AddNetworkString("get_laws")
 net.Receive("get_laws", function(len, ply)
 	local laws = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")

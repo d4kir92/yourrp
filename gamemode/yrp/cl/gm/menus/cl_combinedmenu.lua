@@ -163,22 +163,26 @@ function OpenCombinedMenu()
 		sites[c].content = CreateCharContent
 		c = c + 1
 
-		sites[c] = {}
-		sites[c].name = "LID_laws"
-		sites[c].icon = "gavel"
-		sites[c].content = CreateLawsContent
-		c = c + 1
+		if !strEmpty(GetGlobalDString("sting_laws", "")) then
+			sites[c] = {}
+			sites[c].name = "LID_laws"
+			sites[c].icon = "gavel"
+			sites[c].content = CreateLawsContent
+			c = c + 1
+		end
 
 		sites[c] = {}
 		sites[c].name = "hr"
 		c = c + 1
 
+		local community = false
 		if !strEmpty(GetGlobalDString("text_social_website", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_website"
 			sites[c].icon = "web"
 			sites[c].content = CreateWebsiteContent
 			c = c + 1
+			community = true
 		end
 
 		if !strEmpty(GetGlobalDString("text_social_forum", "")) then
@@ -187,6 +191,7 @@ function OpenCombinedMenu()
 			sites[c].icon = "forum"
 			sites[c].content = CreateForumContent
 			c = c + 1
+			community = true
 		end
 		
 		if !strEmpty(GetGlobalDString("text_server_rules", "")) then
@@ -195,6 +200,7 @@ function OpenCombinedMenu()
 			sites[c].icon = "policy"
 			sites[c].content = CreateRulesContent
 			c = c + 1
+			community = true
 		end
 
 		if !strEmpty(GetGlobalDString("text_social_discord", "")) then
@@ -203,6 +209,7 @@ function OpenCombinedMenu()
 			sites[c].icon = "discord_white"
 			sites[c].content = CreateDiscordContent
 			c = c + 1
+			community = true
 		end
 		
 		if !strEmpty(GetGlobalDString("text_social_teamspeak_ip", "")) then
@@ -211,6 +218,7 @@ function OpenCombinedMenu()
 			sites[c].icon = "ts_white"
 			sites[c].content = CreateTeamspeakContent
 			c = c + 1
+			community = true
 		end
 
 		if YRPCollectionID() > 0 then
@@ -219,11 +227,14 @@ function OpenCombinedMenu()
 			sites[c].icon = "web"
 			sites[c].content = CreateCollectionContent
 			c = c + 1
+			community = true
 		end
 
-		sites[c] = {}
-		sites[c].name = "hr"
-		c = c + 1
+		if community then
+			sites[c] = {}
+			sites[c].name = "hr"
+			c = c + 1
+		end
 
 		sites[c] = {}
 		sites[c].name = "LID_keybinds"
