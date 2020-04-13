@@ -120,14 +120,14 @@ function FO76Element(tab)
 		FO76["TEXT"][tab.element].y = y + h / 2
 		FO76["TEXT"][tab.element].ax = 1
 		FO76["TEXT"][tab.element].ay = 1
-		FO76["TEXT"][tab.element].font = "Y_18_700"
+		FO76["TEXT"][tab.element].font = "Y_18_500"
 		FO76["TEXT"][tab.element].color = FOColor()
 
 		FO76["CENTERTEXT"][tab.element].x = x + w / 2
 		FO76["CENTERTEXT"][tab.element].y = y + h / 2
 		FO76["CENTERTEXT"][tab.element].ax = 1
 		FO76["CENTERTEXT"][tab.element].ay = 1
-		FO76["CENTERTEXT"][tab.element].font = "Y_18_700"
+		FO76["CENTERTEXT"][tab.element].font = "Y_18_500"
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
 
 		FO76["BR"][tab.element].r = 0
@@ -205,7 +205,7 @@ function FO76Name(tab)
 		FO76["NAME"][tab.element].y = y
 		FO76["NAME"][tab.element].ax = ax or 1
 		FO76["NAME"][tab.element].ay = ay or 1
-		FO76["NAME"][tab.element].font = "Y_" .. fontsize .. "_700"
+		FO76["NAME"][tab.element].font = "Y_" .. fontsize .. "_500"
 		FO76["NAME"][tab.element].color = tab.tcolor or FOColor()
 	elseif lply:HudElementVisible(tab.element) then
 		FO76["NAME"][tab.element].text = tab.text
@@ -235,7 +235,7 @@ function FO76Numbers(tab)
 		FO76["NUM"][tab.element].y = y + h / 2
 		FO76["NUM"][tab.element].ax = 1
 		FO76["NUM"][tab.element].ay = 1
-		FO76["NUM"][tab.element].font = "Y_" .. fontsize .. "_700"
+		FO76["NUM"][tab.element].font = "Y_" .. fontsize .. "_500"
 		FO76["NUM"][tab.element].color = FOColor()
 	elseif lply:HudElementVisible(tab.element) then
 		FO76["NUM"][tab.element].text = tab.text

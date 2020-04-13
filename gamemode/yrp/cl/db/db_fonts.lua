@@ -119,7 +119,7 @@ function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
 				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 				extended = true,
 				size = YRP.ctr(_size * fontscale * 2),
-				weight = _weight or 14,
+				weight = _weight or 500,
 				blursize = 0,
 				scanlines = 0,
 				antialias = true,

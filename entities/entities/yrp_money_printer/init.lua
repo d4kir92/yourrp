@@ -132,30 +132,30 @@ function ENT:Initialize()
 
 	self:SetDInt("cpu", 1)
 	self:SetDInt("cpuMax", 10)
-	self:SetDInt("cpuCost", 400)
+	self:SetDInt("cpuCost", 5000)
 
 	self:SetDInt("cooler", 1)
 	self:SetDInt("coolerMax", 10)
-	self:SetDInt("coolerCost", 80)
+	self:SetDInt("coolerCost", 300)
 
 	self:SetDInt("printer", 1)
 	self:SetDInt("printerMax", 6)
-	self:SetDInt("printerCost", 100)
+	self:SetDInt("printerCost", 500)
 
 	self:SetDInt("storage", 1)
 	self:SetDInt("storageMax", 5)
-	self:SetDInt("storageCost", 120)
+	self:SetDInt("storageCost", 600)
 
 	self:SetDInt("fuel", 10)
 	self:SetDInt("fuelMax", 60)
-	self:SetDInt("fuelCost", 10)
+	self:SetDInt("fuelCost", 50)
 
 	self:SetDInt("money", 0)
-	self:SetDInt("moneyMax", 1000)
+	self:SetDInt("moneyMax", 1500)
 
 	self:SetDInt("hp", 100)
 	self:SetDInt("hpMax", 100)
-	self:SetDInt("hpCost", 20)
+	self:SetDInt("hpCost", 600)
 
 	self:SetDFloat("temp", 0.0)
 	self:SetDFloat("tempMax", 90.0)

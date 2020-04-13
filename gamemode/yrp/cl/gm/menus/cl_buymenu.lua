@@ -34,13 +34,14 @@ function createShopItem(item, duid, id)
 	YRP.msg("note", "[BUYMENU] createShopItem")
 	item.int_level = tonumber(item.int_level)
 	local W = 1800
-	local H = 650 + 2 * 20
+	local H = 500 + 2 * 20
 	local BR = 20
+	local HE = 60
 	local _i = createD("DPanel", nil, YRP.ctr(W), YRP.ctr(H), YRP.ctr(BR), 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HI"))
 
-		draw.RoundedBox(0,  YRP.ctr(20), YRP.ctr(20), YRP.ctr(H - 2 * BR), YRP.ctr(H - 2 * BR), lply:InterfaceValue("YFrame", "PC"))
+		draw.RoundedBox(0, YRP.ctr(20), YRP.ctr(20), YRP.ctr(H - 2 * BR), YRP.ctr(H - 2 * BR), lply:InterfaceValue("YFrame", "PC"))
 	end
 	_i.item = item
 	if item.WorldModel != nil and !strEmpty(item.WorldModel) then
@@ -59,10 +60,45 @@ function createShopItem(item, duid, id)
 			_i.model:SetLookAt(Vector(0, 0, _z))
 			_i.model:SetCamPos(Vector(0, 0, _z) - Vector(-_range, 0, 0))
 		end
+
+		_i.modelc = createD("DButton", _i.model, YRP.ctr(40), YRP.ctr(40), YRP.ctr(20), _i.model:GetTall() - YRP.ctr(40 + 20))
+		_i.modelc:SetText("")
+		_i.modelc.color = Color(255, 255, 255)
+		function _i.modelc:Paint(pw, ph)
+			draw.RoundedBox(ph / 2, 0, 0, pw, ph, self.color)
+		end
+		function _i.modelc:DoClick()
+			local mx, my = gui.MousePos()
+			local w = createD("DFrame", nil, YRP.ctr(360 + 2 * 20), YRP.ctr(200 + 2 * 20), mx - 50, my - 50)
+			w:MakePopup()
+			w:SetTitle("")
+			w:ShowCloseButton(false)
+			function w:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
+				if self.cc != nil then
+					mx, my = gui.MousePos()
+					local px, py = self:GetPos()
+					if mx < px or my < py or mx > px + pw or my > py + ph then
+						self:Remove()
+					end
+				end
+			end
+
+			w.cc = createD("DColorMixer", w, YRP.ctr(360), YRP.ctr(200), YRP.ctr(20), YRP.ctr(20))
+			w.cc:SetPalette(false)
+			w.cc:SetAlphaBar(false)
+			w.cc:SetWangs(true)
+			w.cc:SetColor(Color(255, 255, 255))
+			function w.cc:ValueChanged(col)
+				_i.modelc.color = col
+				_i.model:SetColor(_i.modelc.color)
+				lply:SetDString("item_color", ColorToString(col))
+			end
+		end
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(20))
+		_i.name = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(20))
 		_i.name.name = SQL_STR_OUT(item.name)
 		if item.type == "licenses" then
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
@@ -73,7 +109,7 @@ function createShopItem(item, duid, id)
 		end
 	end
 	if item.description != nil then
-		_i.description = createD("RichText", _i, YRP.ctr(W - H - 20), YRP.ctr(350), YRP.ctr(H), YRP.ctr(20 + 80 + 20))
+		_i.description = createD("RichText", _i, YRP.ctr(W - H - 20), YRP.ctr(350), YRP.ctr(H), YRP.ctr(20 + HE + 20))
 		_i.description.description = SQL_STR_OUT(item.description)
 		_i.description:SetText(_i.description.description)
 		function _i.description:PerformLayout()
@@ -87,14 +123,14 @@ function createShopItem(item, duid, id)
 		end
 	end
 	if item.price != nil then
-		_i.price = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80 - 20 - 80))
+		_i.price = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE))
 		function _i.price:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
 			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "Y_40_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
-		_i.permanent = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80 - 20 - 80 - 20 - 80))
+		_i.permanent = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE - 20 - HE))
 		function _i.permanent:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
 			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_40_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
@@ -104,7 +140,7 @@ function createShopItem(item, duid, id)
 	if LocalPlayer():HasLicense(item.licenseID) then
 		YRP.msg("note", "[BUYMENU] HAS LICENSE")
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
-			_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80))
+			_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
 				local _color = Color(255, 100, 100)
@@ -114,7 +150,7 @@ function createShopItem(item, duid, id)
 				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
-			_i.buy = createD("YButton", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80))
+			_i.buy = createD("YButton", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE))
 			_i.buy:SetText("")
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
@@ -130,6 +166,7 @@ function createShopItem(item, duid, id)
 			end
 			function _i.buy:DoClick()
 				net.Start("item_buy")
+					self.item.color = lply:GetDString("item_color", "255, 255, 255")
 					net.WriteTable(self.item)
 					net.WriteString(duid)
 				net.SendToServer()
@@ -137,7 +174,7 @@ function createShopItem(item, duid, id)
 			end
 		end
 	else
-		_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80))
+		_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE))
 		lnames[item.licenseID] = lnames[item.licenseID] or item.licenseID
 		net.Start("GetLicenseName")
 			net.WriteInt(item.licenseID, 32)
