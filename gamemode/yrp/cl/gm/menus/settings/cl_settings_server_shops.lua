@@ -358,13 +358,30 @@ net.Receive("get_shop_items", function()
 
 						local tmpTable = {}
 						local count = 0
+						local CTab = {}
 						for k, v in pairs(_sentlist) do
 							--if !string.find(v.ClassName or v.Class or "", "base") then
 								count = count + 1
-								tmpTable[count] = {}
+								local classname = v.ClassName or v.Class or ""
+								table.insert(CTab, classname)
+								tmpTable[count] = tmpTable[count] or {}
 								tmpTable[count].WorldModel = v.WorldModel or v.Model or ""
-								tmpTable[count].ClassName = v.ClassName or v.Class or ""
+								tmpTable[count].ClassName = classname
 								tmpTable[count].PrintName = v.PrintName or v.Name or ""
+								tmpTable[count].ishidden = false
+							--end
+						end
+						for k, v in pairs(scripted_ents.GetList()) do
+							--if !string.find(v.ClassName or v.Class or "", "base") then
+								local classname = v.t.ClassName
+								if !table.HasValue(CTab, classname) then
+									count = count + 1
+									tmpTable[count] = tmpTable[classname] or {}
+									tmpTable[count].WorldModel = tmpTable[count].WorldModel or ""
+									tmpTable[count].ClassName = classname
+									tmpTable[count].PrintName = tmpTable[count].PrintName or v.t.PrintName
+									tmpTable[count].ishidden = true
+								end
 							--end
 						end
 						_itemlist = tmpTable

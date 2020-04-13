@@ -69,20 +69,17 @@ function get_keybind(name)
 end
 
 function set_keybind(name, value)
-	print(name, value)
 	if value != 0 then
 		for n, v in pairs(yrp_keybinds) do
 			if n == "version" then
 				continue
 			end
 			if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
-				print("FAIL", tonumber(value), tonumber(v) , name != n , !string.StartWith(n, "menu_options_"), n, v)
 				return false
 			end
 		end
 	end
 	local result = SQL_UPDATE(DATABASE_NAME, "'" .. name .. "' = '" .. value .. "'", "uniqueID = '" .. 1 .. "'")
-	print(result, name)
 	yrp_keybinds[name] = value
 	return true
 end

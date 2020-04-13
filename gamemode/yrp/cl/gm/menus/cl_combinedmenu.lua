@@ -163,7 +163,7 @@ function OpenCombinedMenu()
 		sites[c].content = CreateCharContent
 		c = c + 1
 
-		if !strEmpty(GetGlobalDString("sting_laws", "")) then
+		if !strEmpty(GetGlobalDString("sting_laws", "")) or lply:GetDBool("bool_" .. "ismayor", false) then
 			sites[c] = {}
 			sites[c].name = "LID_laws"
 			sites[c].icon = "gavel"
@@ -307,9 +307,9 @@ function OpenCombinedMenu()
 		end
 		function cm.menu.expander:Paint(pw, ph)
 			if cm.menu.expanded then
-				surface.SetMaterial(YRP.GetDesignIcon("keyboard_arrow_left"))
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
 			else
-				surface.SetMaterial(YRP.GetDesignIcon("keyboard_arrow_right"))
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
 			end
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)

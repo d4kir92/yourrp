@@ -254,7 +254,7 @@ hook.Add("YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(YRP.GetDesignIcon("square"))
+		surface.SetMaterial(YRP.GetDesignIcon("mat_square"))
 		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
 		return true
 	end

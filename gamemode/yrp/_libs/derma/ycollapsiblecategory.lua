@@ -317,7 +317,7 @@ function PANEL:Init()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 			end
 			local br = YRP.ctr(10)
-			surface.SetMaterial(YRP.GetDesignIcon("keyboard_arrow_right"))
+			surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 		end

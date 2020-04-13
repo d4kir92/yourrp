@@ -212,7 +212,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 
 		if self.hassubtabs then
 			local br = YRP.ctr(20)
-			YRP.DrawIcon(YRP.GetDesignIcon("keyboard_arrow_down"), ph - br * 2, ph - br * 2, pw - br - ph / 2 - br, br, YRPGetColor("6"))
+			YRP.DrawIcon(YRP.GetDesignIcon("64_angle-down"), ph - br * 2, ph - br * 2, pw - br - ph / 2 - br, br, YRPGetColor("6"))
 		end
 
 		if self:IsHovered() then

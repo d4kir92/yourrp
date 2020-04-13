@@ -1195,7 +1195,12 @@ function openSingleSelector(tab, closeF, web)
 					local icon = createD("DPanel", PanelSelect, YRP.ctr(_item.w), YRP.ctr(_item.h), tmpX, tmpY)
 
 					function icon:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+						if item.ishidden then
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100))
+							draw.SimpleText("HIDDEN ENTITY!", "Y_30_700", pw / 2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						else
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+						end
 					end
 
 					local spawnicon = createD("SpawnIcon", icon, YRP.ctr(_item.h), YRP.ctr(_item.h), 0, 0)

@@ -17,11 +17,11 @@ end
 local laws = SQL_SELECT(DATABASE_NAME, "*")
 if wk(laws) then
 	laws = laws[1]
-	SetGlobalDString("sting_laws", laws.laws)
+	SetGlobalDString("sting_laws", laws.string_laws)
 end
 
-util.AddNetworkString("get_laws")
-net.Receive("get_laws", function(len, ply)
+util.AddNetworkString("yrp_get_laws")
+net.Receive("yrp_get_laws", function(len, ply)
 	local laws = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(laws) then
 		laws = laws[1]
@@ -39,7 +39,7 @@ net.Receive("get_laws", function(len, ply)
 			buildings = {}
 		end
 
-		net.Start("get_laws")
+		net.Start("yrp_get_laws")
 			net.WriteTable(laws)
 			net.WriteTable(buildings)
 		net.Send(ply)

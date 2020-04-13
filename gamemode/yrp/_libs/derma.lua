@@ -404,7 +404,7 @@ YRP.AddDesignIcon("chat", "vgui/material/icon_chat.png")
 YRP.AddDesignIcon("voice", "vgui/material/icon_voice.png")
 YRP.AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
 YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
-YRP.AddDesignIcon("square", "vgui/material/icon_square.png")
+YRP.AddDesignIcon("mat_square", "vgui/material/icon_square.png")
 YRP.AddDesignIcon("launch", "vgui/material/icon_launch.png")
 YRP.AddDesignIcon("lock", "vgui/material/icon_lock.png")
 YRP.AddDesignIcon("steam", "vgui/material/icon_steam.png")
@@ -440,6 +440,25 @@ YRP.AddDesignIcon("forum", "vgui/material/icon_forum.png")
 YRP.AddDesignIcon("policy", "vgui/material/icon_policy.png")
 YRP.AddDesignIcon("ts_white", "vgui/material/icon_teamspeak.png")
 YRP.AddDesignIcon("code", "vgui/material/icon_code.png")
+
+local files, folders = file.Find("materials/icons/*", "GAME")
+for _, folder in pairs(folders) do
+	local _, f_folders = file.Find("materials/icons/" .. folder .. "/*", "GAME")
+
+	for _, f_folder in pairs(f_folders) do
+
+		local f_files, _ = file.Find("materials/icons/" .. folder .. "/" .. f_folder .. "/*.png", "GAME")
+		
+		for i, f_file in pairs(f_files) do
+			local f = "materials/icons/" .. folder .. "/" .. f_folder .. "/" .. f_file
+			local name = string.Explode("/", f_file)
+			name = folder .. "_" .. name[#name]
+			name = string.Replace(name, ".png", "")
+
+			YRP.AddDesignIcon(name, f)
+		end
+	end
+end
 
 YRP.iconsloaded = true
 
