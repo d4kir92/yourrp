@@ -17,6 +17,7 @@ function PANEL:Init()
 	self.locked = false
 
 	function self:PaintHeader(pw, ph)
+		local br = YRP.ctr(20)
 		local _hl = 0
 
 		if self.header:IsHovered() then
@@ -25,17 +26,15 @@ function PANEL:Init()
 
 		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen())
 		draw.SimpleText(self.headertext, "Y_24_500", ph / 2, ph / 2, Color(255, 255, 255), 0, 1)
-		local _box = ctrb(50)
-		local _dif = 50
-		local _br = (ph - _box) / 2
-		local _tog = "▼"
-
+		
+		local icon = YRP.GetDesignIcon("64_angle-down")
 		if self:IsOpen() then
-			_tog = "▲"
+			icon = YRP.GetDesignIcon("64_angle-up")
 		end
 
-		draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif))
-		draw.SimpleText(_tog, "Y_24_500", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
+		surface.SetMaterial(icon)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.DrawTexturedRect(pw - ph, br, ph - 2 * br, ph - 2 * br)
 
 		if tobool(self.locked) then
 			YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0))

@@ -109,9 +109,7 @@ function GetFontSizeTable()
 	return tab
 end
 
-local _weight = 500
-
-function yrp_create_font(_name, _font, _size, __weight, _outline, _shadow)
+function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
 	if wk(_name) and wk(_font) and wk(_size) then
 		if table.HasValue(savedfonts, _name) then
 			--
@@ -121,7 +119,7 @@ function yrp_create_font(_name, _font, _size, __weight, _outline, _shadow)
 				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 				extended = true,
 				size = YRP.ctr(_size * fontscale * 2),
-				weight = _weight or _weight,
+				weight = _weight or 14,
 				blursize = 0,
 				scanlines = 0,
 				antialias = true,
@@ -138,34 +136,35 @@ function yrp_create_font(_name, _font, _size, __weight, _outline, _shadow)
 	end
 end
 
+local oldfont = ""
 function changeFontSize()
-	printGM("db", "changeFontSize")
+	if YRP.GetFont() != oldfont then
+		oldfont = YRP.GetFont()
+		printGM("db", "changeFontSize")
 
-	for s = 4, 144 do
-		yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
-		yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+		for s = 4, 100 do
+			yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
+			yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+		end
 
-		yrp_create_font("Y_O_" .. s .. "_500", YRP.GetFont(), s, 500, true)
-		yrp_create_font("Y_O_" .. s .. "_700", YRP.GetFont(), s, 700, true)
+		--DarkRP Fonts
+		yrp_create_font("DarkRPHUD1", YRP.GetFont(), 16, 500, false)
+		yrp_create_font("DarkRPHUD2", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("Trebuchet18", YRP.GetFont(), 16, 500, false)
+		yrp_create_font("Trebuchet20", YRP.GetFont(), 20, 500, false)
+		yrp_create_font("Trebuchet24", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("Trebuchet48", YRP.GetFont(), 48, 500, false)
+		yrp_create_font("TabLarge", YRP.GetFont(), 16, 700, false)
+		yrp_create_font("UiBold", YRP.GetFont(), 16, 700, false)
+		yrp_create_font("HUDNumber5", YRP.GetFont(), 30, 700, false)
+		yrp_create_font("ScoreboardHeader", YRP.GetFont(), 32, 500, false)
+		yrp_create_font("ScoreboardSubtitle", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("ScoreboardPlayerName", YRP.GetFont(), 19, 500, false)
+		yrp_create_font("ScoreboardPlayerName2", YRP.GetFont(), 15, 500, false)
+		yrp_create_font("ScoreboardPlayerNameBig", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("AckBarWriting", YRP.GetFont(), 20, 500, false)
+		yrp_create_font("DarkRP_tipjar", YRP.GetFont(), 100, 500, false)
 	end
-
-	--DarkRP Fonts
-	yrp_create_font("DarkRPHUD1", YRP.GetFont(), 16, _weight, false)
-	yrp_create_font("DarkRPHUD2", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("Trebuchet18", YRP.GetFont(), 16, _weight, false)
-	yrp_create_font("Trebuchet20", YRP.GetFont(), 20, _weight, false)
-	yrp_create_font("Trebuchet24", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("Trebuchet48", YRP.GetFont(), 48, _weight, false)
-	yrp_create_font("TabLarge", YRP.GetFont(), 16, 700, false)
-	yrp_create_font("UiBold", YRP.GetFont(), 16, 700, false)
-	yrp_create_font("HUDNumber5", YRP.GetFont(), 30, 700, false)
-	yrp_create_font("ScoreboardHeader", YRP.GetFont(), 32, _weight, false)
-	yrp_create_font("ScoreboardSubtitle", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("ScoreboardPlayerName", YRP.GetFont(), 19, _weight, false)
-	yrp_create_font("ScoreboardPlayerName2", YRP.GetFont(), 15, _weight, false)
-	yrp_create_font("ScoreboardPlayerNameBig", YRP.GetFont(), 24, _weight, false)
-	yrp_create_font("AckBarWriting", YRP.GetFont(), 20, _weight, false)
-	yrp_create_font("DarkRP_tipjar", YRP.GetFont(), 100, _weight, false)
 end
 changeFontSize()
 

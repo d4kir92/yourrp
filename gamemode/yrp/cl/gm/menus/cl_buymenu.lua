@@ -29,19 +29,22 @@ net.Receive("GetLicenseName", function(len)
 	lnames[id] = SQL_STR_OUT(tmp)
 end)
 
-function createShopItem(item, duid, line, id)
+function createShopItem(item, duid, id)
+	local lply = LocalPlayer()
 	YRP.msg("note", "[BUYMENU] createShopItem")
 	item.int_level = tonumber(item.int_level)
-	local W = 600
+	local W = 1800
 	local H = 650 + 2 * 20
-	local BR = 40
-	local _i = createD("DPanel", line, YRP.ctr(W), YRP.ctr(H), id * YRP.ctr(W + BR), 0)
+	local BR = 20
+	local _i = createD("DPanel", nil, YRP.ctr(W), YRP.ctr(H), YRP.ctr(BR), 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HI"))
+
+		draw.RoundedBox(0,  YRP.ctr(20), YRP.ctr(20), YRP.ctr(H - 2 * BR), YRP.ctr(H - 2 * BR), lply:InterfaceValue("YFrame", "PC"))
 	end
 	_i.item = item
-	if item.WorldModel != nil and item.WorldModel != "" then
-		_i.model = createD("DModelPanel", _i, YRP.ctr(W), YRP.ctr(W), YRP.ctr(0), YRP.ctr(0))
+	if item.WorldModel != nil and !strEmpty(item.WorldModel) then
+		_i.model = createD("DModelPanel", _i, YRP.ctr(H - 2 * BR), YRP.ctr(H - 2 * BR), YRP.ctr(BR), YRP.ctr(BR))
 		_i.model:SetModel(item.WorldModel)
 
 		if ea(_i.model.Entity) then
@@ -59,45 +62,59 @@ function createShopItem(item, duid, line, id)
 	end
 
 	if item.name != nil then
-		_i.name = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
+		_i.name = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(20))
 		_i.name.name = SQL_STR_OUT(item.name)
 		if item.type == "licenses" then
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
 		end
 		function _i.name:Paint(pw, ph)
-			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
+			draw.SimpleText(self.name, "Y_40_500", 0, ph / 2, Color(255, 255, 255), 0, 1)
+		end
+	end
+	if item.description != nil then
+		_i.description = createD("RichText", _i, YRP.ctr(W - H - 20), YRP.ctr(350), YRP.ctr(H), YRP.ctr(20 + 80 + 20))
+		_i.description.description = SQL_STR_OUT(item.description)
+		_i.description:SetText(_i.description.description)
+		function _i.description:PerformLayout()
+			if self.SetUnderlineFont != nil then
+				self:SetUnderlineFont("Y_18_500")
+			end
+			self:SetFontInternal("Y_18_500")
+
+			--self:SetBGColor(Color(50, 50, 50))
+			self:SetFGColor(Color(255, 255, 255))
 		end
 	end
 	if item.price != nil then
-		_i.price = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(W - 50))
+		_i.price = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80 - 20 - 80))
 		function _i.price:Paint(pw, ph)
-			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
+			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "Y_40_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
-		_i.price = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), YRP.ctr(0), YRP.ctr(W - 100))
-		function _i.price:Paint(pw, ph)
-			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+		_i.permanent = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80 - 20 - 80 - 20 - 80))
+		function _i.permanent:Paint(pw, ph)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
+			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_40_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 
 	if LocalPlayer():HasLicense(item.licenseID) then
 		YRP.msg("note", "[BUYMENU] HAS LICENSE")
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
-			YRP.msg("note", "[BUYMENU] LEVEL HIGH ENOUGH")
-			_i.require = createD("DPanel", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
+			_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80))
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
-				local _color = Color(255, 0, 0)
+				local _color = Color(255, 100, 100)
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
 				local tab = {}
 				tab["LEVEL"] = self.level
 				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 		else
-			YRP.msg("note", "[BUYMENU] BUY BUTTON W: " .. tostring(W) .. " w: " .. YRP.ctr(W - 20 * 2) .. " h: " .. YRP.ctr(50) .. " x: " .. YRP.ctr(20) .. " y: " .. YRP.ctr(W + 20))
-			YRP.msg("note", "[BUYMENU] ScrW(): " .. ScrW() .. " ScrH() " .. ScrH())
-			_i.buy = createD("YButton", _i, YRP.ctr(W - 20 * 2), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
+			_i.buy = createD("YButton", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80))
 			_i.buy:SetText("")
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
@@ -120,8 +137,7 @@ function createShopItem(item, duid, line, id)
 			end
 		end
 	else
-		YRP.msg("note", "[BUYMENU] HAS NOT THE LICENSE")
-		_i.require = createD("DPanel", _i, YRP.ctr(W - 2 * 20), YRP.ctr(50), YRP.ctr(20), YRP.ctr(W + 20))
+		_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(80), YRP.ctr(H), YRP.ctr(H - 20 - 80))
 		lnames[item.licenseID] = lnames[item.licenseID] or item.licenseID
 		net.Start("GetLicenseName")
 			net.WriteInt(item.licenseID, 32)
@@ -251,7 +267,7 @@ net.Receive("shop_get_tabs", function(len)
 					BUYMENU.shop:Clear()
 
 					for j, cat in pairs(_cats) do
-						local BR = 40
+						local BR = 20
 						local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), YRP.ctr(100), 0, 0)
 						_cat.uid = cat.uniqueID
 						_cat:SetHeaderHeight(YRP.ctr(100))
@@ -271,7 +287,7 @@ net.Receive("shop_get_tabs", function(len)
 										local w = YRP.ctr(600 + BR)
 										local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
 										for k, item in pairs(_items) do
-											if id == 0 then
+											--[[if id == 0 then
 												YRP.msg("note", "[BUYMENU] CREATE LINE")
 												hid = hid + 1
 												self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
@@ -281,10 +297,10 @@ net.Receive("shop_get_tabs", function(len)
 												end
 
 												self:Add(line)
-											end
+											end]]
 
-											local _item = createShopItem(item, _dealer_uid, self.hs[hid], id)
-
+											local _item = createShopItem(item, _dealer_uid, nil, id)
+											self:Add(_item)
 											id = id + 1
 											if id >= idmax then
 												id = 0
@@ -330,6 +346,11 @@ net.Receive("shop_get_tabs", function(len)
 		function _tab:Click()
 			_tab.GetCategories()
 		end
+	
+		if i == 1 then
+			_tab:DoClick()
+		end
+
 		if tab.haspermanent then
 			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. SQL_STR_OUT(tab.name), tab.uniqueID)
 			function _tab2:GetCategories()

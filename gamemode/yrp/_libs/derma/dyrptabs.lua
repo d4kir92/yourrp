@@ -29,6 +29,7 @@ function PANEL:Init()
 	end
 
 	function self:AddTab(str, tbl)
+		local lply = LocalPlayer()
 		surface.SetFont("Y_24_500")
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
@@ -45,19 +46,21 @@ function PANEL:Init()
 		_tmp.selected = false
 		_tmp.base = self
 		function _tmp:Paint(pw, ph)
-			local _br = 4
-			local _color = _tmp.base.color_uns
-
-			if self.selected then
-				_color = _tmp.base.color_sel
-			end
-
 			if self:IsHovered() then
-				draw.RoundedBoxEx(0, ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), Color(255, 255, 255, 254), true, true)
+				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true)
 			end
 
-			draw.RoundedBoxEx(0, ctrb(_br), ctrb(_br), pw - ctrb(2 * _br), ph - ctrb(_br), _color, true, true)
-			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+			draw.RoundedBoxEx(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), true, true)
+
+			local _color = Color(255, 255, 255)
+			local font = "Y_24_500"
+			if self.selected then
+				font = "Y_24_700"
+				_color = lply:InterfaceValue("YButton", "SC")
+				draw.RoundedBox(0, YRP.ctr(2), ph - YRP.ctr(4 + 2), pw - 2 * YRP.ctr(2), YRP.ctr(4), _color)
+			end
+
+			draw.SimpleText(self.name, font, pw / 2, ph / 2, _color, 1, 1)
 		end
 
 		function _tmp:DoClick()

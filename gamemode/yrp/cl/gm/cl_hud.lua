@@ -144,28 +144,24 @@ end
 
 hook.Add("HUDPaint", "yrp_hud_alert", function()
 	local text = GetGlobalDString("yrp_alert", "")
-	local font = "Y_144_500"
+	local font = "Y_100_500"
 
 	surface.SetFont(font)
 	local tw, th = surface.GetTextSize(text)
 	if tw > ScW() then
-		font = "Y_100_500"
+		font = "Y_72_500"
 		surface.SetFont(font)
 		tw, th = surface.GetTextSize(text)
 		if tw > ScW() then
-			font = "Y_72_500"
+			font = "Y_36_500"
 			surface.SetFont(font)
 			tw, th = surface.GetTextSize(text)
 			if tw > ScW() then
-				font = "Y_36_500"
-				surface.SetFont(font)
-				tw, th = surface.GetTextSize(text)
-				if tw > ScW() then
-					font = "Y_18_500"
-				end
+				font = "Y_18_500"
 			end
 		end
 	end
+
 
 	draw.SimpleText(text, font, ScW() / 2, YRP.ctr(500), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)

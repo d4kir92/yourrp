@@ -1669,7 +1669,7 @@ function drawPlates()
 					_height = _height + 6
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_health", false) then
+				if GetGlobalDBool("bool_tag_on_head_health", false) or LocalPlayer():GetDBool("bool_ismedic", false) then
 					_height = _height + 1
 					local str = ply:Health() .. "/" .. ply:GetMaxHealth()
 					local col = ply:HudValue("HP", "BA")
@@ -1852,7 +1852,7 @@ hook.Add("PostDrawTranslucentRenderables", "yrp_draw_plates", drawPlates)
 function draw3DText(text, x, y, color)
 	color = color or Color(255, 255, 255, 255)
 	surface.SetTextColor(color)
-	surface.SetFont("Y_O_" .. 24 .. "_700")
+	surface.SetFont("Y_" .. 24 .. "_700")
 	local tw, _ = surface.GetTextSize(text)
 	surface.SetTextPos(x - tw / 2, y)
 	surface.DrawText(text)
