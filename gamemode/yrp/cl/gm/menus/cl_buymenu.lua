@@ -105,7 +105,7 @@ function createShopItem(item, duid, id)
 		end
 		function _i.name:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
-			draw.SimpleText(self.name, "Y_40_500", 0, ph / 2, Color(255, 255, 255), 0, 1)
+			draw.SimpleText(self.name, "Y_36_500", 0, ph / 2, Color(255, 255, 255), 0, 1)
 		end
 	end
 	if item.description != nil then
@@ -126,14 +126,14 @@ function createShopItem(item, duid, id)
 		_i.price = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE))
 		function _i.price:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
-			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "Y_40_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(formatMoney(item.price, LocalPlayer()), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
 		_i.permanent = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE - 20 - HE))
 		function _i.permanent:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
-			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_40_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 	end
 
@@ -634,6 +634,7 @@ function OpenBuyMenu(uid)
 	BUYMENU.window.standalone = true
 	BUYMENU.window:Center()
 	BUYMENU.window:SetDraggable(true)
+	BUYMENU.window:SetBorder(0)
 	--BUYMENU.window:SetSizable(true)
 	BUYMENU.window:SetHeaderHeight(YRP.ctr(100))
 	function BUYMENU.window:OnClose()

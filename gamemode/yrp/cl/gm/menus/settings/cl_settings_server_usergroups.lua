@@ -243,6 +243,60 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end)
 
+
+
+	-- Licenses
+	local LICENSES = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(50 + 500), YRP.ctr(20), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 600 + 20))
+	LICENSES:INITPanel("DPanelList")
+	LICENSES:SetHeader(YRP.lang_string("LID_licenses"))
+	LICENSES:SetText(ug.string_icon)
+	function LICENSES.plus:Paint(pw, ph)
+		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
+	end
+	LICENSES.plus:EnableVerticalScrollbar(true)
+	
+	UGS[CURRENT_USERGROUP].string_licenses = string.Explode(",", UGS[CURRENT_USERGROUP].string_licenses)
+	if table.HasValue(UGS[CURRENT_USERGROUP].string_licenses, "") then
+		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_licenses, "")
+	end
+
+	net.Receive("get_usergroup_licenses", function()
+		local licenses = net.ReadTable()
+
+		for i, lic in pairs(licenses) do
+			local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+			function line:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
+				draw.SimpleText(SQL_STR_OUT(lic.name), "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+			local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+			if table.HasValue(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID) then
+				cb:SetChecked(true)
+			end
+			function cb:OnChange(bVal)
+				if bVal then
+					table.insert(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
+				else
+					table.RemoveByValue(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
+				end
+
+				local str = table.concat(UGS[CURRENT_USERGROUP].string_licenses, ",")
+
+				net.Start("usergroup_update_string_licenses")
+					net.WriteString(CURRENT_USERGROUP)
+					net.WriteString(str)
+				net.SendToServer()
+			end
+			
+			LICENSES.plus:AddItem(line)
+		end
+	end)
+
+	net.Start("get_usergroup_licenses")
+	net.SendToServer()
+
+
+
 	-- ENTITIES
 	--[[
 	ug.string_sents = string.Explode(";", ug.string_sents)

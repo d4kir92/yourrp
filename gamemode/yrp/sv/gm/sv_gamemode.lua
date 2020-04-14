@@ -110,6 +110,10 @@ end
 
 hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 	if ply:IsValid() then
+
+		ply:SetDString("licenseIDs", "")
+		ply:SetDString("licenseNames", "")
+
 		ply:StripWeapons()
 		printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
 		YRP:Loadout(ply)

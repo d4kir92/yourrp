@@ -12,6 +12,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
 
@@ -1731,6 +1732,13 @@ function Player:UserGroupLoadout()
 				self:SetDBool(i, tobool(v))
 			end
 		end
+
+		local _licenseIDs = string.Explode(",", UG.string_licenses)
+		for i, lic in pairs(_licenseIDs) do
+			if tonumber(lic) != nil then
+				self:AddLicense(lic)
+			end
+		end
 	end
 end
 
@@ -1872,4 +1880,24 @@ net.Receive("yrp_pp_teleport", function(len, ply)
 
 		ply:SetPos(tab.content.Pos)
 	end
+end)
+
+util.AddNetworkString("get_usergroup_licenses")
+net.Receive("get_usergroup_licenses", function(len, ply)
+	local licenses = SQL_SELECT("yrp_licenses", "*", nil)
+
+	if wk(licenses) then
+		net.Start("get_usergroup_licenses")
+			net.WriteTable(licenses)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("usergroup_update_string_licenses")
+net.Receive("usergroup_update_string_licenses", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local string_licenses = string.lower(net.ReadString())
+	SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. string_licenses .. "'", "uniqueID = '" .. uid .. "'")
+
+	printGM("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
 end)

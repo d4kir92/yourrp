@@ -319,7 +319,7 @@ function OpenSettings()
 				surface.DrawTexturedRect(ph * 0.1, ph * 0.1, ph * 0.8, ph * 0.8)
 
 				local text = YRP.lang_string(self.name)
-				surface.SetFont("Y_18_700")
+				surface.SetFont("Y_18_500")
 				local tw, th = surface.GetTextSize(text)
 				self.tx = self.tx or pw / 2
 				if tw > pw then
@@ -328,7 +328,7 @@ function OpenSettings()
 						self.tx = tw * 1.5
 					end
 				end
-				draw.SimpleText(text, "Y_18_700", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(text, "Y_18_500", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function cat.btn:Close()
 				self._sel = false
@@ -393,7 +393,7 @@ function OpenSettings()
 					surface.DrawTexturedRect(ph * 0.2, ph * 0.2, ph * 0.6, ph * 0.6)
 	
 					local text = YRP.lang_string(self.name)
-					surface.SetFont("Y_18_700")
+					surface.SetFont("Y_18_500")
 					local tw, th = surface.GetTextSize(text)
 					self.tx = self.tx or pw / 2
 					if tw > pw then
@@ -402,7 +402,7 @@ function OpenSettings()
 							self.tx = tw * 1.5
 						end
 					end
-					draw.SimpleText(text, "Y_18_700", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(text, "Y_18_500", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function site:DoClick()
 					SAVE_CATE = cname
