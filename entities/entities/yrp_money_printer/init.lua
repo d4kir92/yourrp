@@ -132,7 +132,7 @@ function ENT:Initialize()
 
 	self:SetDInt("cpu", 1)
 	self:SetDInt("cpuMax", 10)
-	self:SetDInt("cpuCost", 5000)
+	self:SetDInt("cpuCost", 500)
 
 	self:SetDInt("cooler", 1)
 	self:SetDInt("coolerMax", 10)
@@ -151,7 +151,7 @@ function ENT:Initialize()
 	self:SetDInt("fuelCost", 50)
 
 	self:SetDInt("money", 0)
-	self:SetDInt("moneyMax", 1500)
+	self:SetDInt("moneyMax", 5000)
 
 	self:SetDInt("hp", 100)
 	self:SetDInt("hpMax", 100)
@@ -261,7 +261,7 @@ function ENT:Think()
 				self:SetDInt("fuel", 0)
 			end
 
-			self:SetDInt("money", self:GetDInt("money") + (10 * self:GetDInt("printer")))
+			self:SetDInt("money", self:GetDInt("money") + (100 * self:GetDInt("printer")))
 			if self:GetDInt("money") > self:GetDInt("moneyMax") then
 				self:SetDInt("money", self:GetDInt("moneyMax"))
 			end
