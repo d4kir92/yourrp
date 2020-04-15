@@ -49,12 +49,16 @@ if SERVER then
 	end
 end
 function SetGlobalDBool(index, bo)
-	YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
-	if YRP_NW_Globals["BOOL"][index] != bo or YRP_NW_Globals["BOOL"][index] == nil then
-		YRP_NW_Globals["BOOL"][index] = bo
-		if SERVER then
-			SendGlobalDBool(index, bo)
+	if index != nil or bo != nil then
+		YRP_NW_Globals["BOOL"] = YRP_NW_Globals["BOOL"] or {}
+		if YRP_NW_Globals["BOOL"][index] != bo or YRP_NW_Globals["BOOL"][index] == nil then
+			YRP_NW_Globals["BOOL"][index] = bo
+			if SERVER then
+				SendGlobalDBool(index, bo)
+			end
 		end
+	else
+		YRP.msg("error", "SetGlobalDBool index " .. tostring(index) .. " bo " .. tostring(bo))
 	end
 end
 if CLIENT then
@@ -117,12 +121,16 @@ if SERVER then
 	end
 end
 function SetGlobalDString(index, str)
-	YRP_NW_Globals["STRING"] = YRP_NW_Globals["STRING"] or {}
-	if YRP_NW_Globals["STRING"][index] != str or YRP_NW_Globals["STRING"][index] == nil then
-		YRP_NW_Globals["STRING"][index] = str
-		if SERVER then
-			SendGlobalDString(index, str)
+	if index != nil or str != nil then
+		YRP_NW_Globals["STRING"] = YRP_NW_Globals["STRING"] or {}
+		if YRP_NW_Globals["STRING"][index] != str or YRP_NW_Globals["STRING"][index] == nil then
+			YRP_NW_Globals["STRING"][index] = str
+			if SERVER then
+				SendGlobalDString(index, str)
+			end
 		end
+	else
+		YRP.msg("error", "SetGlobalDString index " .. tostring(index) .. " str " .. tostring(str))
 	end
 end
 if CLIENT then
@@ -179,12 +187,16 @@ if SERVER then
 	end
 end
 function SetGlobalDInt(index, int)
-	YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
-	if YRP_NW_Globals["INT"][index] != int or YRP_NW_Globals["INT"][index] == nil then
-		YRP_NW_Globals["INT"][index] = tonumber(int)
-		if SERVER then
-			SendGlobalDInt(index, int)
+	if index != nil or int != nil then
+		YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
+		if YRP_NW_Globals["INT"][index] != int or YRP_NW_Globals["INT"][index] == nil then
+			YRP_NW_Globals["INT"][index] = tonumber(int)
+			if SERVER then
+				SendGlobalDInt(index, int)
+			end
 		end
+	else
+		YRP.msg("error", "SetGlobalDInt index " .. tostring(index) .. " int " .. tostring(int))
 	end
 end
 if CLIENT then
@@ -242,12 +254,16 @@ if SERVER then
 	end
 end
 function SetGlobalDFloat(index, flo)
-	YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
-	if YRP_NW_Globals["FLOAT"][index] != flo or YRP_NW_Globals["FLOAT"][index] == nil then
-		YRP_NW_Globals["FLOAT"][index] = flo
-		if SERVER then
-			SendGlobalDFloat(index, flo)
+	if index != nil or flo != nil then
+		YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
+		if YRP_NW_Globals["FLOAT"][index] != flo or YRP_NW_Globals["FLOAT"][index] == nil then
+			YRP_NW_Globals["FLOAT"][index] = flo
+			if SERVER then
+				SendGlobalDFloat(index, flo)
+			end
 		end
+	else
+		YRP.msg("error", "SetGlobalDFloat index " .. tostring(index) .. " flo " .. tostring(flo))
 	end
 end
 if CLIENT then
@@ -304,12 +320,16 @@ if SERVER then
 	end
 end
 function SetGlobalDTable(index, tab)
-	YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
-	if YRP_NW_Globals["TABLE"][index] != tab or YRP_NW_Globals["TABLE"][index] == nil then
-		YRP_NW_Globals["TABLE"][index] = tab
-		if SERVER then
-			SendGlobalDTable(index, tab)
+	if index != nil or tab != nil then
+		YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
+		if YRP_NW_Globals["TABLE"][index] != tab or YRP_NW_Globals["TABLE"][index] == nil then
+			YRP_NW_Globals["TABLE"][index] = tab
+			if SERVER then
+				SendGlobalDTable(index, tab)
+			end
 		end
+	else
+		YRP.msg("error", "SetGlobalDTable index " .. tostring(index) .. " tab " .. tostring(tab))
 	end
 end
 if CLIENT then
