@@ -652,6 +652,12 @@ net.Receive("EnterWorld", function(len, ply)
 	end
 
 	local char = net.ReadString()
+	if char != ply:CharID() then
+		if GetGlobalDBool("bool_removebuildingownercharswitch", false) then
+			BuildingRemoveOwner(ply:SteamID())
+		end
+		hook.Run("yrp_switched_character", ply, ply:CharID(), char)
+	end
 	if wk(char) then
 		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID = '" .. ply:SteamID() .. "'")
 		ply:Spawn()

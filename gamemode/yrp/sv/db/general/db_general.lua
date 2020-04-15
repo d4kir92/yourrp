@@ -71,6 +71,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_service", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingownercharswitch", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_ttlsweps", "INT DEFAULT 60")
@@ -770,6 +771,12 @@ util.AddNetworkString("update_bool_removebuildingowner")
 net.Receive("update_bool_removebuildingowner", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_removebuildingowner", "bool_removebuildingowner", b)
+end)
+
+util.AddNetworkString("update_bool_removebuildingownercharswitch")
+net.Receive("update_bool_removebuildingownercharswitch", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_removebuildingownercharswitch", "bool_removebuildingownercharswitch", b)
 end)
 
 util.AddNetworkString("update_text_removebuildingownertime")
