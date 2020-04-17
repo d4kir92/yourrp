@@ -525,6 +525,24 @@ function UpdateRadiationTable()
 end
 UpdateRadiationTable()
 
+function UpdateSafezoneTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'safezone'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local spawner = {}
+			spawner.pos = v.position
+			spawner.uniqueID = v.uniqueID
+			spawner.name = v.name
+			if !table.HasValue(t, spawner) then
+				table.insert(t, spawner)
+			end
+		end
+	end
+	SetGlobalDTable("yrp_safezone", t)
+end
+UpdateSafezoneTable()
+
 local YNPCs = {}
 local YENTs = {}
 local delay = CurTime()

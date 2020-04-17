@@ -80,7 +80,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	net.Receive("usergroup_update_string_color", function(len2)
 		local color = net.ReadString()
-		UGS[CURRENT_USERGROUP].string_color = color
+		if wk(UGS[CURRENT_USERGROUP]) then
+			UGS[CURRENT_USERGROUP].string_color = color
+		end
 	end)
 
 	-- ICON

@@ -1513,11 +1513,16 @@ end
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) then
+		local owner = tr.Entity:GetOwner()
+		if owner == NULL then
+			owner = tr.Entity:GetRPOwner()
+		end
 		if tool == "remover" then
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_removetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if wk(_tmp) then
 				_tmp = _tmp[1]
-				if tobool(_tmp.bool_removetool) then
+
+				if tobool(_tmp.bool_removetool) and (pl:HasAccess() or (owner == pl or owner == NULL)) then
 					return true
 				else
 					net.Start("yrp_info")

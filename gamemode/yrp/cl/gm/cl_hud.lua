@@ -142,6 +142,13 @@ function DrawEquipment(ply, name)
 	end
 end
 
+hook.Add("HUDPaint", "yrp_hud_safezone", function()
+	local lply = LocalPlayer()
+	if IsInsideSafezone(lply) then
+		draw.SimpleText(YRP.lang_string("LID_safezone"), "Y_24_500", ScW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+end)
+
 hook.Add("HUDPaint", "yrp_hud_alert", function()
 	local text = GetGlobalDString("yrp_alert", "")
 	local font = "Y_100_500"
