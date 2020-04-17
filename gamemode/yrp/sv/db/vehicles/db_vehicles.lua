@@ -89,6 +89,13 @@ function canVehicleLock(ply, tab)
 end
 
 function unlockVehicle(ply, ent, nr)
+	if ply == ent:GetOwner() or ply == ent:GetRPOwner() then
+		ent:Fire("Unlock")
+		if ent.UnLock != nil then
+			ent:UnLock()
+		end
+		return true
+	end
 	local _tmpVehicleTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. nr .. "'")
 	if _tmpVehicleTable != nil then
 		_tmpVehicleTable = _tmpVehicleTable[1]
@@ -105,6 +112,13 @@ function unlockVehicle(ply, ent, nr)
 end
 
 function lockVehicle(ply, ent, nr)
+	if ply == ent:GetOwner() or ply == ent:GetRPOwner() then
+		ent:Fire("Lock")
+		if ent.Lock != nil then
+			ent:Lock()
+		end
+		return true
+	end
 	local _tmpVehicleTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. nr .. "'")
 	if _tmpVehicleTable != nil then
 		_tmpVehicleTable = _tmpVehicleTable[1]

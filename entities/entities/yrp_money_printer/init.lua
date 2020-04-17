@@ -261,7 +261,7 @@ function ENT:Think()
 				self:SetDInt("fuel", 0)
 			end
 
-			self:SetDInt("money", self:GetDInt("money") + (100 * self:GetDInt("printer")))
+			self:SetDInt("money", self:GetDInt("money") + (30 * self:GetDInt("printer")))
 			if self:GetDInt("money") > self:GetDInt("moneyMax") then
 				self:SetDInt("money", self:GetDInt("moneyMax"))
 			end

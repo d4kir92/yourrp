@@ -604,7 +604,7 @@ hook.Add("Think", "yrp_spawner_think", function()
 	end
 end)
 
-hook.Add( "KeyPress", "keypress_use_hi", function( ply, key )
+hook.Add( "KeyPress", "yrp_keypress_use_door", function( ply, key )
 	if ( key == IN_USE ) then
 		local tr = util.TraceLine( {
 			start = ply:EyePos(),

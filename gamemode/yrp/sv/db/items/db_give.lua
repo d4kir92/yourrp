@@ -369,7 +369,7 @@ hook.Add("KeyPress", "yrp_keypress_use", function(ply, key)
 		local plytr = ply:GetEyeTrace()
 
 		if plytr.Hit and IsValid(plytr.Entity) and plytr.Entity:IsWeapon() and ply:GetPos():Distance(plytr.Entity:GetPos()) < 80 then
-			ply:Give(plytr.Entity:GetClass())
+			ply:Give(plytr.Entity:GetClass(), true)
 			plytr.Entity:Remove()
 		end
 	end

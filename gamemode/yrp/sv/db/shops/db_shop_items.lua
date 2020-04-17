@@ -249,7 +249,7 @@ end
 util.AddNetworkString("yrp_info2")
 function spawnItem(ply, item, duid)
 	if item.type == "weapons" then
-		local wep = ply:Give(item.ClassName)
+		local wep = ply:Give(item.ClassName, true)
 		if wk(wep) then
 			wep:SetDString("item_uniqueID", item.uniqueID)
 			wep:SetDEntity("yrp_owner", ply)

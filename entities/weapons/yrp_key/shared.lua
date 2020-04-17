@@ -72,7 +72,7 @@ function SWEP:PrimaryAttack()
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
 				end
-			elseif ent:IsVehicle() and ent:GetDString("item_uniqueID", "Failed") != "Failed" then
+			else--if ent:GetDString("item_uniqueID", "Failed") != "Failed" then
 				if unlockVehicle(self:GetOwner(), ent, ent:GetDString("item_uniqueID", "Failed")) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_unlockedvehicle"))
 				else
@@ -93,7 +93,7 @@ function SWEP:SecondaryAttack()
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
 				end
-			elseif ent:IsVehicle() and ent:GetDString("item_uniqueID", "Failed") != "Failed" then
+			else--if ent:IsVehicle() and ent:GetDString("item_uniqueID", "Failed") != "Failed" then
 				if lockVehicle(self:GetOwner(), ent, ent:GetDString("item_uniqueID", "Failed")) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_lockedvehicle"))
 				else
