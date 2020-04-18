@@ -148,11 +148,15 @@ function CreateRolePreviewContent()
 			pms:SetModel(pms.models[1])
 		end
 
-		local nextpm = createD("YButton", pms, YRP.ctr(hh), YRP.ctr(hh * 2), pms:GetWide() - YRP.ctr(hh + 20), YRP.ctr(450))
-		nextpm:SetText(">")
+		local nextpm = createD("YButton", pms, YRP.ctr(64), YRP.ctr(64), pms:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450))
+		nextpm:SetText("")
 		function nextpm:Paint(pw, ph)
 			if pms.id + 1 <= table.Count(pms.models) then
-				draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
 			end
 		end
 		function nextpm:DoClick()
@@ -163,11 +167,15 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		local prevpm = createD("YButton", pms, YRP.ctr(hh), YRP.ctr(hh * 2), YRP.ctr(20), YRP.ctr(450))
-		prevpm:SetText("<")
+		local prevpm = createD("YButton", pms, YRP.ctr(64), YRP.ctr(64), YRP.ctr(20), YRP.ctr(450))
+		prevpm:SetText("")
 		function prevpm:Paint(pw, ph)
 			if pms.id - 1 > 0 then
-				draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
 			end
 		end
 		function prevpm:DoClick()
@@ -229,11 +237,15 @@ function CreateRolePreviewContent()
 			lply:SetDString("preview_swep", sweps.models[1])
 		end
 
-		local nextpm = createD("YButton", sweps, YRP.ctr(hh), YRP.ctr(hh * 2), sweps:GetWide() - YRP.ctr(hh + 20), YRP.ctr(450))
-		nextpm:SetText(">")
+		local nextpm = createD("YButton", sweps, YRP.ctr(64), YRP.ctr(64), sweps:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450))
+		nextpm:SetText("")
 		function nextpm:Paint(pw, ph)
 			if sweps.id + 1 <= table.Count(sweps.models) then
-				draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
 			end
 		end
 		function nextpm:DoClick()
@@ -244,11 +256,15 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		local prevpm = createD("YButton", sweps, YRP.ctr(hh), YRP.ctr(hh * 2), YRP.ctr(20), YRP.ctr(450))
-		prevpm:SetText("<")
+		local prevpm = createD("YButton", sweps, YRP.ctr(64), YRP.ctr(64), YRP.ctr(20), YRP.ctr(450))
+		prevpm:SetText("")
 		function prevpm:Paint(pw, ph)
 			if sweps.id - 1 > 0 then
-				draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run("YButtonPaint", self, pw, ph)
+			
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
 			end
 		end
 		function prevpm:DoClick()

@@ -37,7 +37,11 @@ local elements = {
 	"rpname",
 	"securitylevel",
 	--"grouplogo",
-	"serverlogo"
+	"serverlogo",
+	"birthday",
+	"bodyheight",
+	"weight",
+	"nationality",
 }
 
 local names = {

@@ -16,6 +16,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_idcardid", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "playermodelID", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "skin", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "string_birthday", "TEXT DEFAULT '01.01.2000'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_bodyheight", "INT DEFAULT 180")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_weight", "INT DEFAULT 80")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_nationality", "TEXT DEFAULT ''")
+
 --[[ LEVEL ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_xp", "INT DEFAULT 0")
@@ -76,6 +81,11 @@ function Player:CharacterLoadout()
 		self:SetDInt("int_violations", chatab.int_violations)
 		self:SetDInt("int_arrests", chatab.int_arrests)
 
+		self:SetDString("string_birthday", SQL_STR_OUT(chatab.string_birthday))
+		self:SetDInt("int_bodyheight", chatab.int_bodyheight)
+		self:SetDInt("int_weight", chatab.int_weight)
+		self:SetDString("string_nationality", SQL_STR_OUT(chatab.string_nationality))
+		
 		for i = 0, 4 do
 			self:SetDString("eqbag" .. i, chatab["eqbag" .. i])
 		end
@@ -377,6 +387,31 @@ net.Receive("change_rpdescription", function(len, ply)
 	end
 end)
 
+util.AddNetworkString("change_birthday")
+net.Receive("change_birthday", function(len, ply)
+	local _new_birthday = net.ReadString()
+	SQL_UPDATE("yrp_characters", "string_birthday = '" .. SQL_STR_IN(_new_birthday) .. "'", "uniqueID = " .. ply:CharID())
+	ply:SetDString("string_birthday", SQL_STR_OUT(_new_birthday))
+end)
+util.AddNetworkString("change_bodyheight")
+net.Receive("change_bodyheight", function(len, ply)
+	local _new_bodyheight = net.ReadString()
+	SQL_UPDATE("yrp_characters", "int_bodyheight = '" .. _new_bodyheight .. "'", "uniqueID = " .. ply:CharID())
+	ply:SetDInt("int_bodyheight", SQL_STR_OUT(_new_bodyheight))
+end)
+util.AddNetworkString("change_weight")
+net.Receive("change_weight", function(len, ply)
+	local _new_weight = net.ReadString()
+	SQL_UPDATE("yrp_characters", "int_weight = '" .. _new_weight .. "'", "uniqueID = " .. ply:CharID())
+	ply:SetDInt("int_weight", SQL_STR_OUT(_new_weight))
+end)
+util.AddNetworkString("change_nationality")
+net.Receive("change_nationality", function(len, ply)
+	local _new_nationality = net.ReadString()
+	SQL_UPDATE("yrp_characters", "string_nationality = '" .. SQL_STR_IN(_new_nationality) .. "'", "uniqueID = " .. ply:CharID())
+	ply:SetDString("string_nationality", SQL_STR_OUT(_new_nationality))
+end)
+
 util.AddNetworkString("charGetGroups")
 util.AddNetworkString("charGetRoles")
 util.AddNetworkString("charGetRoleInfo")
@@ -595,7 +630,7 @@ function CreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription"
+		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, string_nationality"
 		for i = 0, 19 do
 			cols = cols .. ", bg" .. i
 		end
@@ -609,7 +644,13 @@ function CreateCharacter(ply, tab)
 		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.rpdescription)) .. "'"
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.rpdescription)) .. "', "
+
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.birt)) .. "', "
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.bohe)) .. "', "
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.weig)) .. "', "
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.nati)) .. "'"
+
 		for i = 0, 19 do
 			vals = vals .. ", " .. tonumber(tab.bg[i])
 		end

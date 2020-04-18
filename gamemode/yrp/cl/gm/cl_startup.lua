@@ -2106,7 +2106,11 @@ function drawIDCard(ply, scale, px, py)
 		"rpname",
 		"securitylevel",
 		--"grouplogo",
-		"serverlogo"
+		"serverlogo",
+		"birthday",
+		"bodyheight",
+		"weight",
+		"nationality",
 	}
 
 	for i, ele in pairs(elements) do
@@ -2179,6 +2183,26 @@ function drawIDCard(ply, scale, px, py)
 							text = YRP.lang_string("LID_id") .. ": "
 						end
 						text = text .. ply:GetDString("idcardid", "")
+					elseif ele == "birthday" then
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_birthday") .. ": "
+						end
+						text = text .. ply:GetDString("string_birthday", "")
+					elseif ele == "bodyheight" then
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_bodyheight") .. ": "
+						end
+						text = text .. tostring(ply:GetDInt("int_bodyheight", 0))
+					elseif ele == "weight" then
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_weight") .. ": "
+						end
+						text = text .. tostring(ply:GetDInt("int_weight", 0))
+					elseif ele == "nationality" then
+						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+							text = YRP.lang_string("LID_nationality") .. ": "
+						end
+						text = text .. ply:GetDString("string_nationality", "")
 					end
 
 					local tx = 0

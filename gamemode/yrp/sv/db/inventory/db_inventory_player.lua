@@ -55,23 +55,18 @@ function Player:GiveAmmo(amount, typ, hidePopup)
 	end
 	return amount
 end
+]]
 
 hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
+	local atype = wep:GetPrimaryAmmoType()
 	local swep = weapons.GetStored(wep:GetClass())
+	local oldammo = owner:GetAmmoCount(atype)
 
-	if swep != nil and wk(swep.Primary) then
-		swep.Primary.OldDefaultClip = swep.Primary.OldDefaultClip or swep.Primary.DefaultClip
-		swep.Secondary.OldDefaultClip = swep.Secondary.OldDefaultClip or swep.Secondary.DefaultClip
-		swep.Primary.DefaultClip = 0
-		swep.Secondary.DefaultClip = 0
-
-		local pammo = wep.Primary.Ammo or wep:GetPrimaryAmmoType()
-		local sammo = wep.Secondary.Ammo or wep:GetSecondaryAmmoType()
-		owner:GiveAmmo(wep:GetDInt("clip1", 0), pammo)
-		owner:GiveAmmo(wep:GetDInt("clip2", 0), sammo)
-	end
+	timer.Simple(0, function()
+		owner:SetAmmo(owner:GetAmmoCount(atype) - (owner:GetAmmoCount(atype) - oldammo), atype)
+	end)
 end)
-]]
+
 
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if ( ply:HasWeapon( wep:GetClass() ) ) then return false end

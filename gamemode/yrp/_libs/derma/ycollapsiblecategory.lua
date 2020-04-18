@@ -363,12 +363,13 @@ function PANEL:Init()
 			ruid = tonumber(ruid)
 
 			local nex = NEXTS[ruid]
-
-			local b = net.ReadBool()
-			if !b then
-				nex:Remove()
-			else
-				nex:Show()
+			if pa(nex) then
+				local b = net.ReadBool()
+				if !b then
+					nex:Remove()
+				else
+					nex:Show()
+				end
 			end
 		end)
 		net.Start("yrp_hasnext_ranks")

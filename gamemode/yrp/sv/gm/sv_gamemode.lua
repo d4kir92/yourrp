@@ -126,7 +126,6 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 			ply:SetDBool("broken_arm_left", false)
 			ply:SetDBool("broken_arm_right", false)
 
-			ply:Give("yrp_key")
 			ply:Give("yrp_unarmed")
 
 			local plyTab = ply:GetPlyTab()

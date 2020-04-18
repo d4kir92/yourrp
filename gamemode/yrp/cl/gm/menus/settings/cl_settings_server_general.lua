@@ -509,7 +509,11 @@ net.Receive("Connect_Settings_General", function(len)
 				"rpname",
 				"securitylevel",
 				--"grouplogo",
-				"serverlogo"
+				"serverlogo",
+				"birthday",
+				"bodyheight",
+				"weight",
+				"nationality",
 			}
 			for i, ele in pairs(elements) do
 				local name = string.upper(ele)
@@ -673,14 +677,18 @@ net.Receive("Connect_Settings_General", function(len)
 					elseif e.ts <= CurTime() then
 						e.ts = CurTime() + 1
 						if GetGlobalDInt("int_" .. ele .. "_x", 10) != x or GetGlobalDInt("int_" .. ele .. "_y", 10) != y then
-							net.Start("update_idcard_" .. "int_" .. ele .. "_x")
-								net.WriteString("int_" .. ele .. "_x")
-								net.WriteString(x)
-							net.SendToServer()
-							net.Start("update_idcard_" .. "int_" .. ele .. "_y")
-								net.WriteString("int_" .. ele .. "_y")
-								net.WriteString(y)
-							net.SendToServer()
+							self.d = self.d or 0
+							self.d = self.d + 0.1
+							timer.Simple(self.d, function()
+								net.Start("update_idcard_" .. "int_" .. ele .. "_x")
+									net.WriteString("int_" .. ele .. "_x")
+									net.WriteString(x)
+								net.SendToServer()
+								net.Start("update_idcard_" .. "int_" .. ele .. "_y")
+									net.WriteString("int_" .. ele .. "_y")
+									net.WriteString(y)
+								net.SendToServer()
+							end)
 						end
 					end
 
@@ -940,7 +948,14 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name")
+
+		CreateHRLine(CHARACTERS_SETTINGS:GetContent())	
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "update_bool_characters_birthday")
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_bodyheight, "LID_bodyheight", "update_bool_characters_bodyheight")
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_weight, "LID_weight", "update_bool_characters_weight")
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_nationality, "LID_nationality", "update_bool_characters_nationality")
 		
+		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_min") .. "]", "update_int_deathtimestamp_min")
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_max") .. "]", "update_int_deathtimestamp_max")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath, "LID_spawncorpseondeath", "update_bool_spawncorpseondeath")

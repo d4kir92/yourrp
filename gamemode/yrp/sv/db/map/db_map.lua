@@ -185,6 +185,7 @@ net.Receive("dbInsertIntoMap", function(len, ply)
 	UpdateJailpointTable()
 	UpdateReleasepointTable()
 	UpdateRadiationTable()
+	UpdateSafezoneTable()
 end)
 
 util.AddNetworkString("dealer_settings")

@@ -157,6 +157,11 @@ function CreateCharacterSettingsContent()
 					character.bg[i] = lply:GetDInt("charcreate_bg" .. i, 0)
 				end
 
+				character.birt = lply:GetDString("charcreate_birt")
+				character.bohe = lply:GetDString("charcreate_bohe")
+				character.weig = lply:GetDString("charcreate_weig")
+				character.nati = lply:GetDString("charcreate_nati")
+
 				net.Start("CreateCharacter")
 					net.WriteTable(character)
 				net.SendToServer()
@@ -203,10 +208,14 @@ function CreateCharacterSettingsContent()
 					end
 
 					local skinup = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh * 0.1))
-					skinup:SetText("▲")
+					skinup:SetText("")
 					function skinup:Paint(pw, ph)
 						if lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
 							hook.Run("YButtonPaint", self, pw, ph)
+
+							surface.SetDrawColor(255, 255, 255, 255)
+							surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
 					end
 					function skinup:DoClick()
@@ -217,10 +226,14 @@ function CreateCharacterSettingsContent()
 					end
 
 					local skindn = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh + config.hh * 0.1))
-					skindn:SetText("▼")
+					skindn:SetText("")
 					function skindn:Paint(pw, ph)
 						if lply:GetDInt("charcreate_bg" .. bg.id, 0) > 0 then
 							hook.Run("YButtonPaint", self, pw, ph)
+
+							surface.SetDrawColor(255, 255, 255, 255)
+							surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
 					end
 					function skindn:DoClick()
@@ -238,16 +251,35 @@ function CreateCharacterSettingsContent()
 
 
 		-- RIGHT
-		local py = YRP.ctr(120)
-		local ph = YRP.ctr(config.h - 220)
+		local list = createD("DPanelList", win, ew, YRP.ctr(config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
+		list:EnableVerticalScrollbar()
+		function list:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+		end
+		local sbar = list.VBar
+		function sbar:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+		end
+		function sbar.btnUp:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+		end
+		function sbar.btnDown:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+		end
+		function sbar.btnGrip:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		end
+
+		local hr = createD("DPanel", nil, ew, YRP.ctr(config.br), 0, 0)
+		function hr:Paint(pw, ph)
+		end
+	
 		if rol.int_namelength > 0 then
-			py = YRP.ctr(300)
-			ph = YRP.ctr(config.h - 400)
-
-			local nameheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
+			local nameheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
 			nameheader:SetText("LID_name")
-
-			local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(200))
+			list:AddItem(nameheader)
+	
+			local name = createD("DTextEntry", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(200))
 			name:SetText("")
 			function name:PerformLayout()
 				if self.SetUnderlineFont != nil then
@@ -265,12 +297,89 @@ function CreateCharacterSettingsContent()
 					--name:SetText(string.sub(nam, 1, rol.int_namelength))
 				end
 			end
+			list:AddItem(name)
+
+			list:AddItem(hr)
 		end
 
-		local descheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), py)
-		descheader:SetText("LID_description")
+		-- Birthday
+		if GetGlobalDBool("bool_characters_birthday", false) then
+			local birtheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			birtheader:SetText("LID_birthday")
+			list:AddItem(birtheader)
+
+			local birt = createD("DTextEntry", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			birt:SetText("")
+			function birt:PerformLayout()
+				if self.SetUnderlineFont != nil then
+					self:SetUnderlineFont("Y_18_500")
+				end
+				self:SetFontInternal("Y_18_500")
+
+				self:SetFGColor(Color(255, 255, 255))
+				self:SetBGColor(Color(0, 0, 0))
+			end
+			function birt:OnChange()
+				lply:SetDString("charcreate_birt", self:GetText())
+			end
+			list:AddItem(birt)
+			list:AddItem(hr)
+		end
 		
-		local desc = createD("DTextEntry", win, ew, ph, ew * 2 + 3 * YRP.ctr(20), py + YRP.ctr(80))
+		-- Bodyheight
+		if GetGlobalDBool("bool_characters_bodyheight", false) then
+			local boheheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			boheheader:SetText("LID_bodyheight")
+			list:AddItem(boheheader)
+
+			local bohe = createD("DNumberWang", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			bohe:SetText("")
+			bohe:SetFontInternal("Y_18_500")
+			function bohe:OnChange()
+				lply:SetDString("charcreate_bohe", self:GetText())
+			end
+			list:AddItem(bohe)
+			list:AddItem(hr)
+		end
+
+		-- Weight
+		if GetGlobalDBool("bool_characters_weight", false) then
+			local weigheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			weigheader:SetText("LID_weight")
+			list:AddItem(weigheader)
+
+			local weig = createD("DNumberWang", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			weig:SetText("")
+			weig:SetFontInternal("Y_18_500")
+			function weig:OnChange()
+				lply:SetDString("charcreate_weig", self:GetText())
+			end
+			list:AddItem(weig)
+			list:AddItem(hr)
+		end
+
+		-- Nationality
+		if GetGlobalDBool("bool_characters_nationality", false) then
+			local natiheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			natiheader:SetText("LID_nationality")
+			list:AddItem(natiheader)
+
+			local nati = createD("DComboBox", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			nati:SetText("")
+			nati:SetFontInternal("Y_18_500")
+			function nati:OnChange()
+				lply:SetDString("charcreate_nati", self:GetText())
+			end
+			list:AddItem(nati)
+			list:AddItem(hr)
+		end
+
+		-- Description
+		local descheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+		descheader:SetText("LID_description")
+		list:AddItem(descheader)
+
+		local desc = createD("DTextEntry", nil, ew, YRP.ctr(400), ew * 2 + 3 * YRP.ctr(20), 0)
 		desc:SetMultiline(true)
 		desc:SetText("")
 		function desc:PerformLayout()
@@ -285,6 +394,7 @@ function CreateCharacterSettingsContent()
 		function desc:OnChange()
 			lply:SetDString("charcreate_desc", self:GetText())
 		end
+		list:AddItem(desc)
 	end)
 	net.Start("yrp_char_getrole")
 		net.WriteString(lply:GetDString("charcreate_ruid", 0))
