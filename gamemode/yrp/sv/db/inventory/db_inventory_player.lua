@@ -107,7 +107,7 @@ function Player:DropSWEP(cname, force)
 		local ent = ents.Create(cname)
 
 		if ent.WorldModel == "" then
-			ent.WorldModel = "models/hunter/blocks/cube025x025x025.mdl"
+			ent.WorldModel = "models/props_junk/garbage_takeoutcarton001a.mdl"
 		end
 
 		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)

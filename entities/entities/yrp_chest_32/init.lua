@@ -6,14 +6,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:SetStorage(id)
-	if id == nil then
-		local storage = CreateStorage(self.bag_size)
-		if wk(storage) then
-			self._suid = tonumber(storage.uniqueID)
-		end
-	else
-		self._suid = tonumber(id)
-	end
+	self._suid = id
 end
 
 function ENT:Use(activator, caller, useType, value)
@@ -26,16 +19,8 @@ function ENT:Use(activator, caller, useType, value)
 	end
 end
 
-util.AddNetworkString("open_storage")
-function OpenWorldStorage(ply, suid, name)
-	net.Start("open_storage")
-		net.WriteString(suid)
-		net.WriteString(name)
-	net.Send(ply)
-end
-
 function ENT:Initialize()
-	self:SetModel("models/props_junk/garbage_takeoutcarton001a.mdl")
+	self:SetModel("models/items/ammocrate_rockets.mdl")
 
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -45,11 +30,10 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
-	self.text_type = "bag"
-	self.bag_size = 16
+	self.text_type = "chest"
+	self.bag_size = 32
 	
 	timer.Simple(0.1, function()
-		self:SetStorage(self._suid)
 		YRPRegisterObject(self)
 	end)
 end

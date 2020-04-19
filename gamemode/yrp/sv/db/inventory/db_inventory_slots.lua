@@ -100,7 +100,7 @@ net.Receive("yrp_storage_get_slots", function(len, ply)
 			local tab = {}
 			tab.text_classname = "bag"
 			tab.text_printname = "bag"
-			tab.text_worldmodel = "models/hunter/blocks/cube025x025x025.mdl"
+			tab.text_worldmodel = "models/props_junk/garbage_takeoutcarton001a.mdl"
 			tab.text_type = "bag"
 			tab.int_fixed = "1"
 

@@ -46,7 +46,8 @@ function OpenInventory(target)
 		inv.win = createD("DFrame", nil, inv.w, inv.h, ScW() - inv.w - YRP.ctr(50), ScH() - inv.h)
 		inv.win:MakePopup()
 		inv.win:SetTitle("")
-		inv.win:ShowCloseButton(false)
+		inv.win:ShowCloseButton(true)
+		inv.win:SetDraggable(false)
 		function inv.win:Paint(pw, ph)
 			draw.RoundedBoxEx(12, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"), true, true, false, false)
 		end
@@ -60,7 +61,7 @@ function OpenInventory(target)
 
 				local nettab = net.ReadTable()
 				
-				if table.Count(nettab) > 0 then
+				if table.Count(nettab) > 0 and !target then
 					local env = createD("DFrame", nil, 4 * ItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * ItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
 					env:MakePopup()
 					env:Center()
@@ -83,6 +84,29 @@ function OpenInventory(target)
 	end
 end
 CloseInventory()
+
+net.Receive("open_storage", function(len)
+	OpenInventory(true)
+
+	if pa(Inventory()) then
+		local wsuid = net.ReadString()
+		local name = net.ReadString()
+		
+		local env = createD("DFrame", nil, 4 * ItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * ItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
+		env:MakePopup()
+		env:Center()
+		env:SetTitle("")
+		function env:Paint(pw, ph)
+			if !Inventory() then
+				self:Remove()
+			end
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+			draw.SimpleText(name, "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+		local storage = createD("YStorage", env, ItemSize() * 4 + YRP.ctr(inv.br) * 3, ItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp))
+		storage:SetStorageID(wsuid)
+	end
+end)
 
 dropitem = dropitem or createD("DPanelList", nil, ScW(), ScH(), 0, 0)
 function dropitem:Paint(pw, ph)

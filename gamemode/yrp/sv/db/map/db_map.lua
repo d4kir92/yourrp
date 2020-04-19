@@ -331,3 +331,90 @@ net.Receive("getMapTab", function(len, ply)
 		net.Send(ply)
 	end
 end)
+
+local mapobjects = {}
+function YRPUnRegisterObject(obj, uid)
+	--[[if ea(obj) then
+		print("UID", obj.uid)
+		table.RemoveByValue(mapobjects, obj)
+		local result = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. obj.uid .. "'")
+		print(result)
+	else
+		print("OBJ NOT VALID")
+	end]]
+end
+
+function YRPRegisterObject(obj)
+	table.insert(mapobjects, obj)
+
+	if obj._suid == nil then
+		local storage = CreateStorage(obj.bag_size)
+		if wk(storage) then
+			obj._suid = tonumber(storage.uniqueID)
+		end
+
+		local pos = obj:GetPos()
+		pos = string.Replace(tostring(pos), " ", ",")
+		local ang = obj:GetAngles()
+		ang = string.Replace(tostring(ang), " ", ",")
+		local suid = obj._suid
+		local class = obj:GetClass()
+
+		local cols = "position, angle, type, linkID, string_classname"
+		local vals = ""
+		vals = vals .. "'" .. pos .. "', "
+		vals = vals .. "'" .. ang .. "', "
+		vals = vals .. "'" .. "storage" .. "', "
+		vals = vals .. "'" .. suid .. "', "
+		vals = vals .. "'" .. class .. "'"
+		print(cols, vals)
+
+		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+
+		local last = {}
+		last.table = DATABASE_NAME
+		last.cols = {}
+		last.cols[1] = "*"
+		last.manual = "ORDER BY uniqueID DESC LIMIT 1"
+		last = SQL.SELECT(last)
+		if wk(last) then
+			last = last[1]
+			pTab(last)
+		end
+	end
+end
+
+function LoadWorldStorages()
+	local storages = SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "storage" .. "'")
+
+	if wk(storages) then
+		for i, v in pairs(storages) do
+			v.linkID = v.linkID or 0
+			v.linkID = tonumber(v.linkID)
+			local found = false
+			for j, ent in pairs(ents.GetAll()) do
+				if ent._suid == v.linkID then
+					found = true
+				end
+			end
+
+			if !found then
+				local stor = ents.Create(v.string_classname)
+
+				local pos = string.Explode(",", v.position)
+				stor:SetPos(Vector(pos[1], pos[2], pos[3]))
+
+				local ang = string.Explode(",", v.angle)
+				stor:SetAngles(Angle(ang[1], ang[2], ang[3]))
+
+				stor:Spawn()
+
+				stor:SetStorage(v.linkID)
+				stor.uid = v.uniqueID
+			end
+		end
+	end
+end
+timer.Simple(4, function()
+	LoadWorldStorages()
+end)

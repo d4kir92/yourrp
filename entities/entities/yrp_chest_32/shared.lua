@@ -7,7 +7,7 @@ DEFINE_BASECLASS("yrp_money")
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 
-ENT.PrintName		= "YourRP - Bag 16 Slots"
+ENT.PrintName		= "YourRP - Chest 32 Slots"
 ENT.Author			= "D4KiR"
 ENT.Contact			= "-"
 ENT.Purpose			= ""

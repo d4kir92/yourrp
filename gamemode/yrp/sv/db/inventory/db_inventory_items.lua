@@ -12,7 +12,7 @@ SQL.ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")		-- storageID
 
 SQL.ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
 SQL.ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
-SQL.ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/hunter/blocks/cube025x025x025.mdl'")
+SQL.ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
 --SQL.ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
@@ -41,7 +41,7 @@ function CreateItem(slotID, tab)
 	if istable(tab) then
 		tab.text_classname = tab.text_classname or "Unnamed"
 		tab.text_printname = tab.text_printname or "yrp_money_printer"
-		tab.text_worldmodel = tab.text_worldmodel or "models/hunter/blocks/cube025x025x025.mdl"
+		tab.text_worldmodel = tab.text_worldmodel or "models/props_junk/garbage_takeoutcarton001a.mdl"
 		tab.int_storageID = tab.int_storageID or 0
 		tab.text_type = tab.text_type or "item"
 		tab.int_fixed = tab.int_fixed or "0"
@@ -90,15 +90,20 @@ function CreateItemByEntity(slotID, entity)
 	tab.text_type = entity.text_type or "item"
 
 	if tab.text_type == "bag" then
-		local storage = CreateStorage(entity.bag_size)
-		if wk(storage) then
-			tab.int_storageID = storage.uniqueID
-			return CreateItem(slotID, tab)
+		tab.int_storageID = entity._suid
+		if tab.int_storageID == nil then
+			local storage = CreateStorage(entity.bag_size)
+			if wk(storage) then
+				tab.int_storageID = storage.uniqueID
+				return CreateItem(slotID, tab)
+			else
+				YRP.msg("db", "Failed to create backpack")
+				return false
+			end
 		else
-			YRP.msg("db", "Failed to create backpack")
-			return false
+			return CreateItem(slotID, tab)
 		end
-	else
+	elseif tab.text_type != "chest" then
 		return CreateItem(slotID, tab)
 	end
 end
@@ -188,6 +193,10 @@ function DropItem(ply, slotID)
 	local pos = ply:GetPos() + ply:GetForward() * 64
 	local mins = e:OBBMins()
 	local maxs = e:OBBMaxs()
+
+	if item.text_type == "bag" then
+		e:SetStorage(item.int_storageID)
+	end
 
 	e:SetPos(ply:GetPos() + ply:GetForward() * 64)
 	e:Spawn()

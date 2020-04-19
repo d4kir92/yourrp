@@ -62,7 +62,7 @@ function PANEL:SetStorageID(storageID, slots)
 	
 			self:SetSpacing(sp)
 	
-			for y = 1, 16 do
+			for y = 1, 32 do
 				if slots[c] == nil then
 					break
 				end
@@ -137,7 +137,7 @@ function BuildStorage(storage, slots)
 
 		storage:SetSpacing(sp)
 
-		for y = 1, 16 do
+		for y = 1, 32 do
 			if slots[c] == nil then
 				break
 			end
@@ -160,6 +160,10 @@ function BuildStorage(storage, slots)
 				c = c + 1
 			end
 		end
+		storage:EnableVerticalScrollbar()
+		local ph = math.Round(c / 4)
+		storage:SetTall(ph * ItemSize() + (ph - 1) * sp)
+		storage:GetParent():SetTall(storage:GetTall() + YRP.ctr(50 + 20 + 20))
 	else
 		YRP.msg("note", "Storage is closed.")
 	end

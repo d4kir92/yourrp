@@ -962,6 +962,7 @@ function GM:PostCleanupMap()
 	end
 
 	loadDoors()
+	LoadWorldStorages()
 end
 
 
