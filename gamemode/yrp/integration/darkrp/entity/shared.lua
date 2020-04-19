@@ -118,5 +118,5 @@ end
 function Entity:Getowning_ent()
 	--Description: Not darkrp
 	--printGM("darkrp", "Getowning_ent()")
-	return player.GetAll()[1]
+	return self:GetOwner() or self:GetRPOwner()
 end
