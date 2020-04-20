@@ -273,7 +273,7 @@ function Player:GetPlayerModel()
 end
 
 function Player:IsAgent()
-	return self:GetDBool("canbeagent")
+	return self:GetDBool("bool_canbeagent")
 end
 
 if SERVER then

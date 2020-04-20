@@ -842,7 +842,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[group.uniqueID].locked = DCheckBox(locked)
 
 					DHr(hr)
-
+					
 					local visible = {}
 					visible.parent = ea.restriction:GetContent()
 					visible.uniqueID = group.uniqueID
@@ -2343,6 +2343,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			if role.uniqueID > 1 then
+				local bool_canbeagent = {}
+				bool_canbeagent.parent = ea.restriction:GetContent()
+				bool_canbeagent.uniqueID = role.uniqueID
+				bool_canbeagent.header = YRP.lang_string("LID_isagent")
+				bool_canbeagent.netstr = "update_role_bool_canbeagent"
+				bool_canbeagent.value = role.bool_canbeagent
+				bool_canbeagent.uniqueID = role.uniqueID
+				bool_canbeagent.lforce = false
+				ea[role.uniqueID].bool_canbeagent = DCheckBox(bool_canbeagent)
+
+				DHr(hr)
+
 				local visible = {}
 				visible.parent = ea.restriction:GetContent()
 				visible.uniqueID = role.uniqueID
