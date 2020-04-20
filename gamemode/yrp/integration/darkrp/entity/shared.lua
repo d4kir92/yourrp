@@ -118,5 +118,15 @@ end
 function Entity:Getowning_ent()
 	--Description: Not darkrp
 	--printGM("darkrp", "Getowning_ent()")
-	return self:GetOwner() or self:GetRPOwner()
+	return self:GetOwner()-- or self:GetRPOwner()
+end
+
+if SERVER then
+	function Entity:CPPISetOwner(ent)
+		self:SetDEntity("cppiowner", ent)
+	end
+end
+
+function Entity:CPPIGetOwner()
+	return self:GetDEntity("cppiowner")
 end

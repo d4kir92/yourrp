@@ -4,10 +4,10 @@ YRP_NW_Globals = YRP_NW_Globals or {}
 YRP_QUEUE_Globals = YRP_QUEUE_Globals or {}
 
 -- Delay when traffic
-local NETDELAY = 0.04
+local NETDELAY = 0.002
 
 -- Delay when no traffic but wrong entry
-local RETDELAY = 0.02
+local RETDELAY = 0.001
 
 -- BOOL
 if SERVER then

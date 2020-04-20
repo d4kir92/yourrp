@@ -5,13 +5,11 @@ local ENTITY = FindMetaTable("Entity")
 YRP_NW_Ents = YRP_NW_Ents or {}
 YRP_QUEUE_Ents = YRP_QUEUE_Ents or {}
 
-local ENTDELAY = 0.05
-
 -- Delay when traffic
-local NETDELAY = 0.04
+local NETDELAY = 0.002
 
 -- Delay when no traffic but wrong entry
-local RETDELAY = 0.02
+local RETDELAY = 0.001
 
 -- STRING
 if SERVER then

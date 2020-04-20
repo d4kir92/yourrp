@@ -30,7 +30,7 @@ function teleportToSpawnpoint(ply)
 		ply.ignorespawnpoint = false
 		return false
 	else
-		timer.Simple(0.01, function()
+		timer.Simple(0.08, function()
 			printGM("note", "teleportToSpawnpoint " .. ply:Nick())
 			local rolTab = ply:GetRolTab()
 			local groTab = ply:GetGroTab()

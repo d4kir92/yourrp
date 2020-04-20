@@ -355,20 +355,27 @@ function spawnItem(ply, item, duid)
 			if ENT.t != nil and ENT.t.SpawnFunction != nil then
 				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
 
+				ent:SetOwner(ply)
+				ent:SetDEntity("yrp_owner", ply)
+				ent:Activate()
+
 				ent:SetDString( "item_uniqueID", item.uniqueID )
-				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 1")
-				ent:SetDEntity("yrp_owner", ply)
+
 				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
 				if IsValid(ent) then
 					ent:SetPos(tr.HitPos)
+
+					ent:SetOwner(ply)
+					ent:SetDEntity("yrp_owner", ply)
+
 					ent:Spawn()
+					ent:Activate()
 					
 					ent:SetDString( "item_uniqueID", item.uniqueID )
-					ent:SetDEntity("yrp_owner", ent)
 
 					printGM("gm", "[spawnItem] Spawned 2")
 					return true, ent
@@ -383,10 +390,14 @@ function spawnItem(ply, item, duid)
 				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 
 				ent:SetDString("item_uniqueID", item.uniqueID)
-				ent:SetDEntity("yrp_owner", ent)
 
 				printGM("gm", "[spawnItem] Spawned 3")
+
+				ent:SetOwner(ply)
 				ent:SetDEntity("yrp_owner", ply)
+
+				ent:Activate()
+
 				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
@@ -408,14 +419,17 @@ function spawnItem(ply, item, duid)
 
 					ent:SetModel(item.WorldModel)
 					ent:SetPos(tr.HitPos)
+
 					ent:Spawn()
 					ent:Activate()
 
 					ent:SetDString("item_uniqueID", item.uniqueID)
-					ent:SetDEntity("yrp_owner", ent)
 			
 					printGM("gm", "[spawnItem] Spawned 4")
+
+					ent:SetOwner(ply)
 					ent:SetDEntity("yrp_owner", ply)
+
 					return true, ent
 				else
 					YRP.msg("note", "Not valid " .. item.ClassName)
