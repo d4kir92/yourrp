@@ -361,9 +361,6 @@ function set_role_values(ply, pmid)
 
 			ply:SetDInt("salarytime", rolTab.int_salarytime)
 			ply:SetDInt("nextsalarytime", CurTime() + rolTab.int_salarytime)
-			ply:SetDBool("yrp_voice_global", tobool(rolTab.bool_voiceglobal))
-			ply:SetDBool("yrp_voice_faction", tobool(rolTab.bool_voicefaction))
-			ply:SetDBool("bool_canusefrequencies", tobool(rolTab.bool_canusefrequencies))
 
 			ply:SetDBool("bool_hunger", tobool(rolTab.bool_hunger))
 			ply:SetDBool("bool_thirst", tobool(rolTab.bool_thirst))

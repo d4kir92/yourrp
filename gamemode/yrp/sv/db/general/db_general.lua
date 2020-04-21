@@ -103,11 +103,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_die_on_role_switch", "INT DEFAULT 0"
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_3d", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_channels", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_radio", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_group_local", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_local_range", "INT DEFAULT 300")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
 
 
@@ -155,7 +150,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_groupname", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_health", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_armor", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_usergroup", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_frequency", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_voice", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_chat", "INT DEFAULT 1")
 
@@ -392,26 +386,6 @@ end)
 
 function IsVoiceEnabled()
 	return GetGlobalDBool("bool_voice", false)
-end
-
-function Is3DVoiceEnabled()
-	return GetGlobalDBool("bool_voice_3d", false)
-end
-
-function IsVoiceChannelsEnabled()
-	return GetGlobalDBool("bool_voice_channels", false)
-end
-
-function IsVoiceRadioEnabled()
-	return GetGlobalDBool("bool_voice_radio", false)
-end
-
-function IsLocalGroupVoiceChatEnabled()
-	return GetGlobalDBool("bool_voice_group_local", false)
-end
-
-function GetVoiceChatLocalRange()
-	return tonumber(yrp_general.int_voice_local_range)
 end
 
 function GetMaxVoiceRange()
@@ -930,38 +904,6 @@ net.Receive("update_bool_voice", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_voice", "bool_voice", b)
 end)
 
-util.AddNetworkString("update_bool_voice_3d")
-net.Receive("update_bool_voice_3d", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_voice_3d", "bool_voice_3d", b)
-end)
-
-util.AddNetworkString("update_bool_voice_channels")
-net.Receive("update_bool_voice_channels", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_voice_channels", "bool_voice_channels", b)
-end)
-
-util.AddNetworkString("update_bool_voice_radio")
-net.Receive("update_bool_voice_radio", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_voice_radio", "bool_voice_radio", b)
-end)
-
-util.AddNetworkString("update_bool_voice_group_local")
-net.Receive("update_bool_voice_group_local", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_voice_group_local", "bool_voice_group_local", b)
-end)
-
-util.AddNetworkString("update_int_voice_local_range")
-net.Receive("update_int_voice_local_range", function(len, ply)
-	local int = net.ReadString()
-	if isnumber(tonumber(int)) then
-		GeneralUpdateInt(ply, "update_int_voice_local_range", "int_voice_local_range", int)
-	end
-end)
-
 util.AddNetworkString("update_int_voice_max_range")
 net.Receive("update_int_voice_max_range", function(len, ply)
 	local int = net.ReadString()
@@ -1223,12 +1165,6 @@ util.AddNetworkString("update_bool_tag_on_head_usergroup")
 net.Receive("update_bool_tag_on_head_usergroup", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_tag_on_head_usergroup", "bool_tag_on_head_usergroup", b)
-end)
-
-util.AddNetworkString("update_bool_tag_on_head_frequency")
-net.Receive("update_bool_tag_on_head_frequency", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_tag_on_head_frequency", "bool_tag_on_head_frequency", b)
 end)
 
 util.AddNetworkString("update_bool_tag_on_head_voice")

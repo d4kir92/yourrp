@@ -218,14 +218,6 @@ function HUDSpace()
 			lply:Condition()
 		}
 
-		ELES["FR"] = {
-			0,
-			nil,
-			FR,
-			lply:FrequencyText(),
-			--2
-		}
-
 		for id = 1, 10 do
 			ELES["BOX" .. id] = {
 				0,

@@ -801,21 +801,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					DHr(hr)
 				end
 
-
-				if group.uniqueID > 0 then
-					local groupvoicechat = {}
-					groupvoicechat.parent = ea.restriction:GetContent()
-					groupvoicechat.uniqueID = group.uniqueID
-					groupvoicechat.header = "LID_canusegroupvoicechat"
-					groupvoicechat.netstr = "update_group_bool_groupvoicechat"
-					groupvoicechat.value = group.bool_groupvoicechat
-					groupvoicechat.uniqueID = group.uniqueID
-					groupvoicechat.lforce = false
-					ea[group.uniqueID].groupvoicechat = DCheckBox(groupvoicechat)
-
-					DHr(hr)
-				end
-
 				if group.uniqueID > 1 then
 					local whitelist = {}
 					whitelist.parent = ea.restriction:GetContent()
@@ -2277,40 +2262,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 				DHr(hr)
 			end
-
-			local bool_voiceglobal = {}
-			bool_voiceglobal.parent = ea.restriction:GetContent()
-			bool_voiceglobal.uniqueID = role.uniqueID
-			bool_voiceglobal.header = "LID_canuseglobalvoicechat"
-			bool_voiceglobal.netstr = "update_role_bool_voiceglobal"
-			bool_voiceglobal.value = role.bool_voiceglobal
-			bool_voiceglobal.uniqueID = role.uniqueID
-			bool_voiceglobal.lforce = false
-			ea[role.uniqueID].bool_voiceglobal = DCheckBox(bool_voiceglobal)
-
-			DHr(hr)
-
-			local bool_voicefaction = {}
-			bool_voicefaction.parent = ea.restriction:GetContent()
-			bool_voicefaction.uniqueID = role.uniqueID
-			bool_voicefaction.header = "LID_canusefactionvoicechat"
-			bool_voicefaction.netstr = "update_role_bool_voicefaction"
-			bool_voicefaction.value = role.bool_voicefaction
-			bool_voicefaction.uniqueID = role.uniqueID
-			bool_voicefaction.lforce = false
-			ea[role.uniqueID].bool_voicefaction = DCheckBox(bool_voicefaction)
-
-			DHr(hr)
-
-			local bool_canusefrequencies = {}
-			bool_canusefrequencies.parent = ea.restriction:GetContent()
-			bool_canusefrequencies.uniqueID = role.uniqueID
-			bool_canusefrequencies.header = "LID_canusefrequencies"
-			bool_canusefrequencies.netstr = "update_role_bool_canusefrequencies"
-			bool_canusefrequencies.value = role.bool_canusefrequencies
-			bool_canusefrequencies.uniqueID = role.uniqueID
-			bool_canusefrequencies.lforce = false
-			ea[role.uniqueID].bool_canusefrequencies = DCheckBox(bool_canusefrequencies)
 
 			DHr(hr)
 

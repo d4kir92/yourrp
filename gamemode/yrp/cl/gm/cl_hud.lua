@@ -78,13 +78,6 @@ function GM:PlayerStartVoice(pl)
 			net.Start("yrp_voice_start")
 			net.SendToServer()
 		end
-		if pl.SteamID != nil then
-			local stid = pl:SteamID()
-			stid = stid or ""
-			if stid == LocalPlayer():GetDString("voice_global_steamid") and pl:GetDInt("speak_channel", 0) == 2 then
-				_showGlobalVoice = true
-			end
-		end
 	end
 end
 
@@ -93,38 +86,6 @@ function GM:PlayerEndVoice(pl)
 		_showVoice = false
 		net.Start("yrp_voice_end")
 		net.SendToServer()
-	end
-	local stid = pl:SteamID()
-	stid = stid or ""
-	if stid == LocalPlayer():GetDString("voice_global_steamid") then
-		_showGlobalVoice = false
-	end
-end
-
-function show_global_voice_info(ply)
-	if _showGlobalVoice then
-		local tab = {}
-		tab["NAME"] = ply:RPName()
-		draw.SimpleTextOutlined(YRP.lang_string("LID_makesanannoucment", tab) .. "!", "Y_24_500", ScrW2(), YRP.ctr(400), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-end
-
-function show_voice_info(ply)
-	--Voice
-	if _showVoice then
-		local _voice_text = ""
-		if GetGlobalDBool("bool_voice", false) then
-			_voice_text = YRP.lang_string("LID_youarespeaking")
-			if GetGlobalDBool("bool_voice_channels", false) then
-				_voice_text = get_speak_channel_name(ply)
-			elseif GetGlobalDBool("bool_voice_radio", false) then
-				_voice_text = _voice_text .. " (" .. ply:FrequencyText() .. ")"
-			end
-		else
-			_voice_text = YRP.lang_string("LID_voicechatisdisabled")
-		end
-
-		draw.SimpleTextOutlined(_voice_text, "Y_24_500", ScrW2(), YRP.ctr(500), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -393,6 +354,14 @@ TestYourRPContent()
 hook.Add("HUDPaint", "yrp_hud", function()
 	local ply = LocalPlayer()
 
+	if ply:GetDBool("yrp_speaking", false) then
+		local text = YRP.lang_string("LID_youarespeaking")
+		if ply:GetDBool("mute_voice", false) then
+			text = text .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
+		end
+		draw.SimpleTextOutlined(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+	end
+
 	DONE_LOADING = DONE_LOADING or false
 	if !DONE_LOADING then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10))
@@ -421,9 +390,6 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		HudView()
 		HudCrosshair()
 	end
-
-	show_voice_info(ply)
-	show_global_voice_info(ply)
 
 	if game.SinglePlayer() then
 		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))

@@ -267,19 +267,6 @@ end
 
 local clicked = false
 
-function get_speak_channel_name(ply)
-	local id = ply:GetDInt("speak_channel", 0)
-	if id == 0 then
-		return YRP.lang_string("LID_speaklocal")
-	elseif id == 1 then
-		return YRP.lang_string("LID_speakgroup") .. " [" .. ply:GetGroupName() .. "]"
-	elseif id == 2 then
-		return YRP.lang_string("LID_speakfaction") .. " [" .. ply:GetFactionName() .. "]"
-	elseif id == 3 then
-		return YRP.lang_string("LID_speakglobal")
-	end
-end
-
 local afktime = CurTime()
 local _view_delay = true
 local blink_delay = 0
@@ -465,49 +452,6 @@ function KeyPress()
 				ply.view_s = 0
 			else
 				ply.view_s = ply.view_s_c
-			end
-
-			if !chatisopen then
-				if input.IsKeyDown(get_keybind("speak_next")) and !clicked then
-					done_tutorial("tut_sn")
-					clicked = true
-					net.Start("press_speak_next")
-					net.SendToServer()
-
-					speak_dir = speak_dir or 0.3
-					speak_dir = speak_dir - 0.1
-					speak_dir = math.Clamp(speak_dir, 0.01, 0.3)
-
-					timer.Simple(speak_dir, function()
-						clicked = false
-						local text = ""
-						if GetGlobalDBool("bool_voice_channels", false) then
-							text = get_speak_channel_name(ply)
-							notification.AddLegacy(text, NOTIFY_GENERIC, 3)
-						end
-					end)
-				elseif input.IsKeyDown(get_keybind("speak_prev")) and !clicked then
-					done_tutorial("tut_sp")
-					clicked = true
-					net.Start("press_speak_prev")
-					net.SendToServer()
-
-					speak_dir = speak_dir or 0.3
-					speak_dir = speak_dir - 0.1
-					speak_dir = math.Clamp(speak_dir, 0.01, 0.3)
-
-					timer.Simple(speak_dir, function()
-						clicked = false
-						local text = ""
-						if GetGlobalDBool("bool_voice_channels", false) then
-							text = get_speak_channel_name(ply)
-							notification.AddLegacy(text, NOTIFY_GENERIC, 3)
-						end
-					end)
-				elseif !clicked then
-					speak_dir = speak_dir or 0.3
-					speak_dir = 0.3
-				end
 			end
 		end
 	end

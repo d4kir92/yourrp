@@ -171,6 +171,16 @@ function IsInsideSafezone(ply)
 		if (pos.x >= sx and pos.x <= mx) and (pos.y >= sy and pos.y <= my) and (pos.z >= sz and pos.z <= mz) then
 			return true
 		end
+
+		if ply:Crouching() then
+			pos = ply:GetPos() + Vector(0, 0, 36)
+		else
+			pos = ply:GetPos() + Vector(0, 0, 72)
+		end
+
+		if (pos.x >= sx and pos.x <= mx) and (pos.y >= sy and pos.y <= my) and (pos.z >= sz and pos.z <= mz) then
+			return true
+		end
 	end
 	return false
 end

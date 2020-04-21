@@ -708,13 +708,6 @@ function HUDSimple()
 		CR.text = os.date("%H:%M" , os.time())
 		CR.icon = icons["CR"]
 		HUDSimpleBAR(CR)
-		FR = {}
-		FR.element = "FR"
-		FR.cur = 0
-		FR.max = 1
-		FR.text = lply:FrequencyText()
-		FR.icon = icons["FR"]
-		HUDSimpleBAR(FR)
 		HP = {}
 		HP.element = "HP"
 		HP.cur = lply:Health()

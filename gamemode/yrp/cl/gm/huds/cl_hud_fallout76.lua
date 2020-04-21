@@ -616,11 +616,6 @@ function HUD_FO76()
 		ID.text = lply:GetDString("idcardid", "")
 		FO76Name(ID)
 
-		local FR = {}
-		FR.element = "FR"
-		FR.text = lply:FrequencyText()
-		FO76Name(FR)
-
 		local batterypower = system.BatteryPower()
 		if batterypower <= 100 then
 			local BA = {}

@@ -761,11 +761,6 @@ net.Receive("get_design_settings", function(len)
 			CON.name = "LID_conditionbar"
 			AddElement(CON)
 
-			local FR = {}
-			FR.element = "FR"
-			FR.name = "LID_frequency"
-			AddElement(FR)
-
 			local PE = {}
 			PE.element = "PE"
 			PE.name = "LID_performance"

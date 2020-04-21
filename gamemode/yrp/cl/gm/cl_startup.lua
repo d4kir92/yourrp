@@ -1546,35 +1546,23 @@ function drawPlates()
 	for i, ply in SortedPairsByMemberValue(player.GetAll(), "distance", true) do
 
 		if GetGlobalDBool("bool_server_debug_voice", false) and LocalPlayer():GetPos():Distance(ply:GetPos()) < 1000 then
-			if ply:GetDInt("speak_channel", -1) == 0 and GetGlobalDBool("bool_voice_channels", false) then
-				local col = Color(255, 100, 100, 120)
-				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_local_range", 1) then
-					col = Color(100, 255, 100, 120)
-				end
-				render.SetColorMaterial()
-				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, col)
-				render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_local_range", 1), 16, 16, col, true)
-				Debug3DText(ply, "Local Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_local_range", 1)), Color(100, 100, 255, 200))
-			end
-			if !GetGlobalDBool("bool_voice_channels", false) then
-				local col = Color(255, 100, 100, 120)
-				if ply == LocalPlayer() then
-					local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalDInt("int_voice_max_range", 1))
-					for j, ent in pairs(esphere) do
-						if ent:IsPlayer() and ent != LocalPlayer() then
-							col = Color(100, 255, 100, 120)
-						end
-					end
-				else
-					if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
+			local col = Color(255, 100, 100, 120)
+			if ply == LocalPlayer() then
+				local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalDInt("int_voice_max_range", 1))
+				for j, ent in pairs(esphere) do
+					if ent:IsPlayer() and ent != LocalPlayer() then
 						col = Color(100, 255, 100, 120)
 					end
 				end
-				render.SetColorMaterial()
-				render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
-				render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col, true)
-				Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+			else
+				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
+					col = Color(100, 255, 100, 120)
+				end
 			end
+			render.SetColorMaterial()
+			render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
+			render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col, true)
+			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
@@ -1721,13 +1709,6 @@ function drawPlates()
 					drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
 					_height = _height + 5
 				end
-
-				if GetGlobalDBool("bool_tag_on_head_frequency", false) and LocalPlayer():GetDBool("bool_canseefrequency", false) then
-					local ugcolor = Color(255, 255, 255)
-					ugcolor.a = color.a
-					drawString(ply, LocalPlayer():FrequencyText(), _height, ugcolor)
-					_height = _height + 5
-				end
 			end
 
 			_height = _height + 2
@@ -1864,12 +1845,6 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 			end
 
 			draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. "[" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
-
-			if GetGlobalDBool("bool_voice_channels", false) then
-				draw3DText(get_speak_channel_name(p) .. " (ID: " .. p:GetDInt("speak_channel", -1) .. ")", ScrCen.x, ScrCen.y, Color(255, 255, 0, 255))
-			else
-				draw3DText(p:FrequencyText(), ScrCen.x, ScrCen.y, Color(255, 255, 100, 255))
-			end
 
 			if p:GetDBool("yrp_speaking", false) then
 				local text = "IS SPEAKING!"
@@ -2246,15 +2221,6 @@ function drawIDCard(ply, scale, px, py)
 		end
 	end
 end
-
-net.Receive("leave_channel_sound", function()
-	notification.AddLegacy(YRP.lang_string("LID_someonehasleftthefrequency"), NOTIFY_GENERIC, 3)
-end)
-
-net.Receive("join_channel_sound", function()
-	notification.AddLegacy(YRP.lang_string("LID_someonehasjoinedthefrequency"), NOTIFY_GENERIC, 3)
-end)
-
 
 -- #DEATHSCREEN, #RESPAWNING, #CHANGECHARACTER
 local dsd = CurTime() + 2

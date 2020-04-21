@@ -27,8 +27,6 @@ YRPKEYBINDS["view_spin_left"] = KEY_PAD_7
 
 YRPKEYBINDS["toggle_mouse"] = KEY_F3
 YRPKEYBINDS["toggle_map"] = KEY_M
-YRPKEYBINDS["speak_next"] = KEY_PAGEUP
-YRPKEYBINDS["speak_prev"] = KEY_PAGEDOWN
 YRPKEYBINDS["drop_item"] = KEY_G
 
 YRPKEYBINDS["menu_interact"] = KEY_E

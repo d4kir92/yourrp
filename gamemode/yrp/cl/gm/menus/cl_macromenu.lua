@@ -72,8 +72,6 @@ net.Receive("yrp_get_macros", function(len)
 			UseMacro(_mm.uid)
 		end
 
-		---_mm.bind = createD("DBinder", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(320), YRP.ctr(600))
-		--createDKeybinder(content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(320), YRP.ctr(600), {YRP.lang_string("LID_mutevoice"), "mute_voice"})
 		_mm.bind = createD("DBinder", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(320), YRP.ctr(600))
 		_mm.bind.keybind = nil
 		function _mm.bind:OnChange(num)

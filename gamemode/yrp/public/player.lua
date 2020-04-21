@@ -10,14 +10,6 @@ include("player/interface.lua")
 --[[ Player Functions ]]--
 local Player = FindMetaTable("Player")
 
-function Player:FrequencyText()
-	if self:GetDBool("mute_voice", false) then
-		return YRP.lang_string("LID_speaklocal")
-	else
-		return YRP.lang_string("LID_frequency") .. ": " .. tostring(self:GetDFloat("voice_channel", 0.1, 1))
-	end
-end
-
 function Player:Revive(pos)
 	self.ignorespawnpoint = true
 	self:Spawn()

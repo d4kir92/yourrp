@@ -371,7 +371,6 @@ function YRPRegisterObject(obj)
 		last = SQL.SELECT(last)
 		if wk(last) then
 			last = last[1]
-			pTab(last)
 		end
 	end
 end
