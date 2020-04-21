@@ -18,7 +18,7 @@ GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
 GM.VersionBeta = 267 --do NOT change this!
-GM.VersionCanary = 538 --do NOT change this!
+GM.VersionCanary = 537 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -375,7 +375,7 @@ function IsAktiveInChannel(ply, channel, skip)
 	local grp = ply:GetGroupUID()
 	local rol = ply:GetRoleUID()
 
-	if !skip and ply:GetDBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false) then
+	if !skip and ply:GetDBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
 		--print("IS FALSE mutemic")
 		return false
 	end

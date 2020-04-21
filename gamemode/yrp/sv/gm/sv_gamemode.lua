@@ -876,14 +876,14 @@ function CanHearChannel(listener, talker)
 	end
 	return false
 end
-
+]]
 function IsInMaxVoiceRange(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
 	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
 	--p(listener, talker, result)
 	return result
 end
-]]
+
 
 -- VOICE CHANNELS
 local DATABASE_NAME = "yrp_voice_channels"
@@ -1078,9 +1078,9 @@ end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	--print(listener, talker)
-	--[[if listener == talker and listener == player.GetAll()[1] then
+	if listener == talker and listener == player.GetAll()[1] then
 		print("--------------------------------------------------------------------------------")
-	end]]
+	end
 	if listener == talker then
 		return false
 	end
@@ -1093,12 +1093,12 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 		end
 	end
 
-	if canhear then
-		--print(listener, "can hear", talker)
+	if canhear and !talker:GetDBool("mute_voice", false) then
+		print(listener, "can hear", talker)
 		return true
 	else
-		--print(listener, "cant Hear", talker)
-		return false
+		print(listener, "cant Hear", talker)
+		return IsInMaxVoiceRange(listener, talker), true	-- 3D Voice enabled
 	end
 
 	--[[if IsVoiceEnabled() then

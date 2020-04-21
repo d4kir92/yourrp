@@ -57,6 +57,38 @@ hook.Add("YButtonPaint", "YButton_Blur", function(self, pw, ph, tab)
 	end
 end)
 
+hook.Add("YButtonAPaint", "YButtonA_Blur", function(self, pw, ph, tab)
+	tab = tab or {}
+
+	local lply = LocalPlayer()
+	if GetGlobalDString("string_interface_design") == "Blur" then
+		local color = Color(126, 126, 126)
+		local tcolor = lply:InterfaceValue("YButton", "NT")
+		if self:IsDown() or self:IsPressed() then
+			if not self.clicked then
+				self.clicked = true
+				surface.PlaySound("garrysmod/ui_click.wav")
+			end
+			color = Color(52, 197, 52)
+		elseif self:IsHovered() then
+			if not self.hovering then
+				self.hovering = true
+				surface.PlaySound("garrysmod/ui_hover.wav")
+			end
+			color = Color(111, 206, 111)
+		else
+			self.hovering = false
+			self.clicked = false
+		end
+		color = tab.color or color
+		tcolor = tab.tcolor or tcolor
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		return true
+	end
+end)
+
 hook.Add("YButtonRPaint", "YButtonR_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 

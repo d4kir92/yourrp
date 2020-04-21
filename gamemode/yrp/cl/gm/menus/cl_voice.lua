@@ -17,8 +17,8 @@ function OpenVoiceMenu()
 	local CONTENT = vm.win:GetContent()
 
 	if lply:HasAccess() then
-		local size = vm.win:GetHeaderHeight() - 2 * YRP.ctr(20)
-		vm.win.add = createD("YButton", vm.win, size, size, CONTENT:GetWide() - YRP.ctr(240), YRP.ctr(20))
+		local size = vm.win:GetHeaderHeight() - 2 * YRP.ctr(4)
+		vm.win.add = createD("YButton", vm.win, size, size, CONTENT:GetWide() - YRP.ctr(240), YRP.ctr(4))
 		vm.win.add:SetText("+")
 		function vm.win.add:Paint(pw, ph)
 			hook.Run("YButtonAPaint", self, pw, ph)
@@ -288,6 +288,7 @@ function OpenVoiceMenu()
 	end
 
 	vm.win.list = createD("DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall(), 0, 0)
+	vm.win.list:EnableVerticalScrollbar()
 	vm.win.list:SetSpacing(YRP.ctr(10))
 
 	local h = YRP.ctr(60)
@@ -318,7 +319,6 @@ function OpenVoiceMenu()
 			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
 		end
 		function status:DoClick()
-			CloseVoiceMenu()
 			local win = createD("YFrame", nil, YRP.ctr(400), YRP.ctr(200), 0, 0)
 			win:Center()
 			win:MakePopup()
@@ -333,15 +333,12 @@ function OpenVoiceMenu()
 			end
 			function win.rem:DoClick()
 				win:Remove()
-				CloseVoiceMenu()
+
+				line:Remove()
 
 				net.Start("yrp_voice_channel_rem")
 					net.WriteString(channel.uniqueID)
 				net.SendToServer()
-
-				timer.Simple(0.4, function()
-					OpenVoiceMenu()
-				end)
 			end
 		end
 
@@ -352,7 +349,7 @@ function OpenVoiceMenu()
 
 		if IsInChannel(lply, channel, true) then
 			if IsAktiveInChannel(lply, channel, true) then
-				local mutemic = createD("YButton", line, h, h, line:GetWide() - h * 2 - YRP.ctr(20), 0)
+				local mutemic = createD("YButton", line, h, h, line:GetWide() - h * 2 - YRP.ctr(20 + 34), 0)
 				mutemic:SetText("")
 				function mutemic:Paint(pw, ph)
 					local color = Color(0, 255, 0)
@@ -373,7 +370,7 @@ function OpenVoiceMenu()
 				end
 			end
 
-			local mute = createD("YButton", line, h, h, line:GetWide() - h, 0)
+			local mute = createD("YButton", line, h, h, line:GetWide() - h - YRP.ctr(34), 0)
 			mute:SetText("")
 			function mute:Paint(pw, ph)
 				local color = Color(0, 255, 0)
