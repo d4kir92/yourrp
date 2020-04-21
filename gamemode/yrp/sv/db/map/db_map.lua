@@ -334,14 +334,7 @@ end)
 
 local mapobjects = {}
 function YRPUnRegisterObject(obj, uid)
-	--[[if ea(obj) then
-		print("UID", obj.uid)
-		table.RemoveByValue(mapobjects, obj)
-		local result = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. obj.uid .. "'")
-		print(result)
-	else
-		print("OBJ NOT VALID")
-	end]]
+
 end
 
 function YRPRegisterObject(obj)
@@ -367,7 +360,6 @@ function YRPRegisterObject(obj)
 		vals = vals .. "'" .. "storage" .. "', "
 		vals = vals .. "'" .. suid .. "', "
 		vals = vals .. "'" .. class .. "'"
-		print(cols, vals)
 
 		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
 

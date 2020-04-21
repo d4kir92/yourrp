@@ -1206,36 +1206,15 @@ function openSingleSelector(tab, closeF, web)
 					local spawnicon = createD("SpawnIcon", icon, YRP.ctr(_item.h), YRP.ctr(_item.h), 0, 0)
 					spawnicon.item = item
 					spawnicon:SetText("")
-					if web then
-						spawnicon.id = k
-						function spawnicon:OnRemove()
-							table.RemoveByValue(mdllist, self.id)
-						end
-						mdllist[k] = spawnicon
-
-						net.Receive("getEntityWorldModel", function()
-							local id = net.ReadString()
-							id = tonumber(id)
-							local mdl = net.ReadString()
-							local si = mdllist[id]
-							if pa(si) then
-								si:SetModel(mdl)
-							end
-						end)
-						net.Start("getEntityWorldModel")
-							net.WriteString(item.ClassName)
-							net.WriteString(k)
-						net.SendToServer()
-					else
-						spawnicon:SetModel(item.WorldModel)
-					end
+					spawnicon:SetModel(item.WorldModel)
 
 					spawnicon:SetTooltip(item.PrintName)
 					local _tmpName = createD("DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
 					_tmpName:SetText("")
 
 					function _tmpName:Paint(pw, ph)
-						draw.SimpleTextOutlined(item.PrintName, "Y_18_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+						draw.SimpleTextOutlined(item.PrintName, "Y_20_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+						draw.SimpleTextOutlined(item.ClassName, "Y_20_500", pw - YRP.ctr(10), ph - YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 					end
 
 					function _tmpName:DoClick()

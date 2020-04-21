@@ -270,7 +270,7 @@ if wk(drp_allroles) then
 	for i, role in pairs(drp_allroles) do
 		local teamname = ConvertToDarkRPJobName(role.string_name)
 		TEAMS[teamname] = ConvertToDarkRPJob(role)
-		_G[teamname] = TEAMS["TEAM_" .. role.string_name]
+		_G[teamname] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
 	end
 end
 

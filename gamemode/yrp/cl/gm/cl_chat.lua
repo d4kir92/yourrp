@@ -615,8 +615,8 @@ net.Receive("yrp_player_say", function(len)
 
 		if _tmp.command != "me" and _tmp.command != "roll" and _tmp.command != "event" then
 			table.insert(_unpack, ":\n")
-		elseif _tmp.command != "roll" then
-			table.insert(_unpack, "")
+		elseif _tmp.command != "roll" and _tmp.command != "event" then
+			table.insert(_unpack, " ")
 		end
 
 		table.insert(_unpack, _tmp.text_color)

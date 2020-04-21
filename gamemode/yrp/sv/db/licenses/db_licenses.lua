@@ -235,19 +235,3 @@ function GiveLicense(ply, lid)
 
 	ply:AddLicense(lid)
 end
-
-util.AddNetworkString("getEntityWorldModel")
-net.Receive("getEntityWorldModel", function(len, ply)
-	local cname = net.ReadString()
-	local id = net.ReadString()
-
-	local e = ents.Create(cname)
-	e:Spawn()
-	local mdl = e:GetModel()
-	e:Remove()
-
-	net.Start("getEntityWorldModel")
-		net.WriteString(id)
-		net.WriteString(mdl)
-	net.Send(ply)
-end)

@@ -77,6 +77,8 @@ table.insert(YRP_DBS, "yrp_inventory_items")
 
 table.insert(YRP_DBS, "yrp_macros")
 
+table.insert(YRP_DBS, "yrp_voice_channels")
+
 function GetDBNames()
 	return YRP_DBS
 end

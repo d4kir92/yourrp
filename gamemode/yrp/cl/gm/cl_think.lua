@@ -112,6 +112,8 @@ function useFunction(str)
 		elseif str == "mute_voice" then
 			net.Start("yrp_mute_voice")
 			net.SendToServer()
+		elseif str == "voice_menu" then
+			ToggleVoiceMenu()
 		elseif str == "macro_menu" then
 			ToggleMacroMenu()
 		elseif str == "openOptions" then
@@ -551,6 +553,8 @@ function KeyPress()
 	keyPressed(KEY_DOWN, "closeSP")
 
 	keyPressed(get_keybind("mute_voice"), "mute_voice")
+
+	keyPressed(get_keybind("voice_menu"), "voice_menu")
 
 	keyPressed(get_keybind("macro_menu"), "macro_menu")
 	for i = 1, 49 do

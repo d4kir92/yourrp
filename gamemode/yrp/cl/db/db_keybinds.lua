@@ -39,6 +39,8 @@ YRPKEYBINDS["sp_close"] = KEY_DOWN
 YRPKEYBINDS["mute_voice"] = KEY_HOME
 YRPKEYBINDS["macro_menu"] = KEY_INSERT
 
+YRPKEYBINDS["voice_menu"] = KEY_COMMA
+
 for i = 1, 49 do
 	YRPKEYBINDS["m_" .. i] = 0
 end

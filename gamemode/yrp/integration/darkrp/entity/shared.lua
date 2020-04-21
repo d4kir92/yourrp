@@ -118,7 +118,7 @@ end
 function Entity:Getowning_ent()
 	--Description: Not darkrp
 	--printGM("darkrp", "Getowning_ent()")
-	return self:GetOwner()-- or self:GetRPOwner()
+	return self:GetRPOwner()
 end
 
 if SERVER then

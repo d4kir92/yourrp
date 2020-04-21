@@ -369,7 +369,7 @@ function spawnItem(ply, item, duid)
 				if IsValid(ent) then
 					ent:SetPos(tr.HitPos)
 
-					ent:SetOwner(ply)
+					--ent:SetOwner(ply)
 					ent:SetDEntity("yrp_owner", ply)
 
 					ent:Spawn()

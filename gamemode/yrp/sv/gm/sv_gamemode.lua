@@ -813,7 +813,7 @@ net.Receive("yrp_mute_voice", function(len, ply)
 	ply:SetDBool("mute_voice", !ply:GetDBool("mute_voice", false))
 end)
 
-function HearFaded(listener, talker)
+--[[function HearFaded(listener, talker)
 	local t_speak_channel = tonumber(talker:GetDInt("speak_channel", 0))
 	local t_guid = tonumber(talker:GetDString("groupUniqueID", "0"))
 	local l_guid = tonumber(listener:GetDString("groupUniqueID", "0"))
@@ -871,7 +871,7 @@ function CanHearChannel(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
 	if (listener:GetDBool("mute_voice", false) and dist < GetMaxVoiceRange()) or !listener:GetDBool("bool_canusefrequencies", false) then
 		return true, true
-	elseif t_speak_channel == l_speak_channel or t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
+	elseif !listener:GetDBool("mute_voice", false) and t_speak_channel == l_speak_channel or t_speak_channel == 0.0 or dist < GetMaxVoiceRange() then
 		return true
 	end
 	return false
@@ -883,9 +883,225 @@ function IsInMaxVoiceRange(listener, talker)
 	--p(listener, talker, result)
 	return result
 end
+]]
+
+-- VOICE CHANNELS
+local DATABASE_NAME = "yrp_voice_channels"
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_aktive_usergroups", "TEXT DEFAULT 'superadmin,user'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_aktive_groups", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_aktive_roles", "TEXT DEFAULT '1'")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
+
+--SQL_DROP_TABLE(DATABASE_NAME)
+
+--SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "0, 'superadmin', 'user'")
+--SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "0, 'user', 'user'")
+--SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "1, 'user', 'user'")
+--SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_groups, string_aktive_roles", "1, '1,10,104', '200,999'")
+--SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "0, 'user', 'superadmin'")
+
+local yrp_voice_channels = {}
+if SQL_SELECT(DATABASE_NAME, "*") == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_mode, string_aktive_usergroups, string_passive_usergroups", "'DEFAULT', 0, 'superadmin, admin, user', 'superadmin, admin, user'")
+end
+
+function GenerateVoiceTable()
+	yrp_voice_channels = SQL_SELECT(DATABASE_NAME, "*")
+	if wk(yrp_voice_channels) then
+		for i, channel in pairs(yrp_voice_channels) do
+			-- MODE
+			yrp_voice_channels[i]["string_mode"] = tonumber(channel.string_mode)
+
+			-- AKTIVE
+			local augs = string.Explode(",", channel.string_aktive_usergroups)
+			yrp_voice_channels[i]["string_aktive_usergroups"] = {}
+			for _, ug in pairs(augs) do
+				if !strEmpty(ug) then
+					yrp_voice_channels[i]["string_aktive_usergroups"][ug] = true
+				end
+			end
+
+			local agrps = string.Explode(",", channel.string_aktive_groups)
+			yrp_voice_channels[i]["string_aktive_groups"] = {}
+			for _, grp in pairs(agrps) do
+				if !strEmpty(grp) then
+					yrp_voice_channels[i]["string_aktive_groups"][tonumber(grp)] = true
+				end
+			end
+
+			local arols = string.Explode(",", channel.string_aktive_roles)
+			yrp_voice_channels[i]["string_aktive_roles"] = {}
+			for _, rol in pairs(arols) do
+				if !strEmpty(rol) then
+					yrp_voice_channels[i]["string_aktive_roles"][tonumber(rol)] = true
+				end
+			end
+
+			-- PASSIVE
+			local pugs = string.Explode(",", channel.string_passive_usergroups)
+			yrp_voice_channels[i]["string_passive_usergroups"] = {}
+			for _, ug in pairs(pugs) do
+				if !strEmpty(ug) then
+					yrp_voice_channels[i]["string_passive_usergroups"][ug] = true
+				end
+			end
+
+			local pgrps = string.Explode(",", channel.string_passive_groups)
+			yrp_voice_channels[i]["string_passive_groups"] = {}
+			for _, grp in pairs(pgrps) do
+				if !strEmpty(grp) then
+					yrp_voice_channels[i]["string_passive_groups"][tonumber(grp)] = true
+				end
+			end
+
+			local prols = string.Explode(",", channel.string_passive_roles)
+			yrp_voice_channels[i]["string_passive_roles"] = {}
+			for _, rol in pairs(prols) do
+				if !strEmpty(rol) then
+					yrp_voice_channels[i]["string_passive_roles"][tonumber(rol)] = true
+				end
+			end
+		end
+		pTab(yrp_voice_channels)
+	else
+		yrp_voice_channels = {}
+	end
+	SetGlobalDTable("yrp_voice_channels", yrp_voice_channels)
+end
+GenerateVoiceTable()
+
+util.AddNetworkString("yrp_vm_get_active_usergroups")
+net.Receive("yrp_vm_get_active_usergroups", function(len, ply)
+	local ugs = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+
+	net.Start("yrp_vm_get_active_usergroups")
+		net.WriteTable(ugs)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_vm_get_active_groups")
+net.Receive("yrp_vm_get_active_groups", function(len, ply)
+	local grps = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+
+	net.Start("yrp_vm_get_active_groups")
+		net.WriteTable(grps)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_vm_get_active_roles")
+net.Receive("yrp_vm_get_active_roles", function(len, ply)
+	local rols = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
+
+	net.Start("yrp_vm_get_active_roles")
+		net.WriteTable(rols)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_vm_get_passive_usergroups")
+net.Receive("yrp_vm_get_passive_usergroups", function(len, ply)
+	local ugs = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+
+	net.Start("yrp_vm_get_passive_usergroups")
+		net.WriteTable(ugs)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_vm_get_passive_groups")
+net.Receive("yrp_vm_get_passive_groups", function(len, ply)
+	local grps = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+
+	net.Start("yrp_vm_get_passive_groups")
+		net.WriteTable(grps)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_vm_get_passive_roles")
+net.Receive("yrp_vm_get_passive_roles", function(len, ply)
+	local rols = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
+
+	net.Start("yrp_vm_get_passive_roles")
+		net.WriteTable(rols)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_voice_channel_add")
+net.Receive("yrp_voice_channel_add", function(len, ply)
+	local name = net.ReadString()
+
+	local augs = table.concat(net.ReadTable(), ",")
+	local agrps = table.concat(net.ReadTable(), ",")
+	local arols = table.concat(net.ReadTable(), ",")
+
+	local pugs = table.concat(net.ReadTable(), ",")
+	local pgrps = table.concat(net.ReadTable(), ",")
+	local prols = table.concat(net.ReadTable(), ",")
+
+	SQL_INSERT_INTO(
+		DATABASE_NAME,
+		"string_name, string_aktive_usergroups, string_aktive_groups, string_aktive_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
+		"'" .. name .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
+	)
+
+	GenerateVoiceTable()
+end)
+
+util.AddNetworkString("yrp_voice_channel_rem")
+net.Receive("yrp_voice_channel_rem", function(len, ply)
+	local uid = net.ReadString()
+
+	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+
+	GenerateVoiceTable()
+end)
+
+util.AddNetworkString("mutemic_channel")
+net.Receive("mutemic_channel", function(len, ply)
+	local uid = net.ReadString()
+
+	ply:SetDBool("yrp_voice_channel_mutemic_" .. uid, !ply:GetDBool("yrp_voice_channel_mutemic_" .. uid, false))
+end)
+
+util.AddNetworkString("mute_channel")
+net.Receive("mute_channel", function(len, ply)
+	local uid = net.ReadString()
+
+	ply:SetDBool("yrp_voice_channel_mute_" .. uid, !ply:GetDBool("yrp_voice_channel_mute_" .. uid, false))
+end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	if IsVoiceEnabled() then
+	--print(listener, talker)
+	--[[if listener == talker and listener == player.GetAll()[1] then
+		print("--------------------------------------------------------------------------------")
+	end]]
+	if listener == talker then
+		return false
+	end
+	local canhear = false
+	for i, channel in pairs(GetGlobalDTable("yrp_voice_channels", {})) do
+		if IsAktiveInChannel(talker, channel) and IsInChannel(listener, channel) then -- If Talker allowed to talk and both are in that channel
+			--print("IN SAME CHANNEL, and talker is aktive Channel-ID: " .. i, listener, talker)
+			canhear = true
+			break
+		end
+	end
+
+	if canhear then
+		--print(listener, "can hear", talker)
+		return true
+	else
+		--print(listener, "cant Hear", talker)
+		return false
+	end
+
+	--[[if IsVoiceEnabled() then
 		if listener != talker then
 			if Is3DVoiceEnabled() then
 				if IsVoiceChannelsEnabled() then
@@ -903,7 +1119,7 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 		end
 	else
 		return false -- Voice disabled
-	end
+	end]]
 end
 
 function setbodygroups(ply)

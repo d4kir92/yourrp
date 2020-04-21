@@ -57,4 +57,6 @@ include("gm/cl_hud.lua")
 include("gm/cl_chat.lua")
 include("gm/cl_think.lua")
 
+include("gm/menus/cl_voice.lua")
+
 printGM("gm", "Loaded cl_includes.lua")

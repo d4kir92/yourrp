@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 266 --do NOT change this!
-GM.VersionCanary = 536 --do NOT change this!
+GM.VersionBeta = 267 --do NOT change this!
+GM.VersionCanary = 537 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -341,6 +341,46 @@ function GetAllDoors()
 		table.insert(doors, v)
 	end
 	return doors
+end
+
+function IsInTable(tab, val)
+	--print("IsInTable", val, tab[val])
+	if tab[val] != nil then
+		return true
+	else
+		return false
+	end
+end
+
+function IsInChannel(ply, channel, skip)
+	skip = skip or false
+
+	local ug = ply:GetUserGroup()
+	local grp = ply:GetGroupUID()
+	local rol = ply:GetRoleUID()
+	--print("IsInChannel", ply, ug)
+
+	if !skip and ply:GetDBool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+		--print("IS FALSE mute")
+		return false
+	end
+
+	return IsInTable(channel.string_aktive_usergroups, ug) or IsInTable(channel.string_aktive_groups, grp) or IsInTable(channel.string_aktive_roles, rol) or IsInTable(channel.string_passive_usergroups, ug) or IsInTable(channel.string_passive_groups, grp) or IsInTable(channel.string_passive_roles, rol) or false
+end
+
+function IsAktiveInChannel(ply, channel, skip)
+	skip = skip or false
+	
+	local ug = ply:GetUserGroup()
+	local grp = ply:GetGroupUID()
+	local rol = ply:GetRoleUID()
+
+	if !skip and ply:GetDBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false) then
+		--print("IS FALSE mutemic")
+		return false
+	end
+	--print("IsAktiveInChannel", ply, ug)
+	return IsInTable(channel.string_aktive_usergroups, ug) or IsInTable(channel.string_aktive_groups, grp) or IsInTable(channel.string_aktive_roles, rol) or false
 end
 
 -- COLORFIX

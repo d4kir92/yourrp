@@ -107,6 +107,8 @@ AddCSLuaFile("yrp/cl/gm/designs/cl_d_futuristic.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/cl_macromenu.lua")
 
+AddCSLuaFile("yrp/cl/gm/menus/cl_voice.lua")
+
 --[[ includes ]]--
 include("shared.lua")
 
