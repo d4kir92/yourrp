@@ -74,7 +74,9 @@ end
 hook.Add("PlayerStartVoice", "yrp_playerstartvoice", function(pl)
 	if pl != nil then
 		if pl == LocalPlayer() then
-			surface.PlaySound("npc/metropolice/vo/on2.wav")
+			if !pl:GetDBool("mute_voice", false) then
+				surface.PlaySound("npc/metropolice/vo/on2.wav")
+			end
 
 			_showVoice = true
 			net.Start("yrp_voice_start")
@@ -89,7 +91,9 @@ hook.Add("PlayerEndVoice", "yrp_playerendvoice", function(pl)
 		net.Start("yrp_voice_end")
 		net.SendToServer()
 
-		surface.PlaySound("npc/metropolice/vo/off2.wav")
+		if !pl:GetDBool("mute_voice", false) then
+			surface.PlaySound("npc/metropolice/vo/off2.wav")
+		end
 	end
 end)
 

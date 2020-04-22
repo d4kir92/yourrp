@@ -373,7 +373,7 @@ function OpenVoiceMenu()
 	vm.win.list:SetSpacing(YRP.ctr(10))
 
 	local h = YRP.ctr(80)
-	local br = YRP.ctr(20)
+	local pbr = YRP.ctr(20)
 	for i, channel in SortedPairsByMemberValue(GetGlobalDTable("yrp_voice_channels", {}), "int_position") do
 		if IsInChannel(lply, channel, true) or lply:HasAccess() then
 			local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
@@ -400,7 +400,7 @@ function OpenVoiceMenu()
 				local edit = createD("DButton", bg, h , h, 0, 0)
 				edit:SetText("")
 				function edit:Paint(pw, ph)
-					local br = YRP.ctr(10)
+					local br = YRP.ctr(8)
 					surface.SetMaterial( YRP.GetDesignIcon("edit") )
 					surface.SetDrawColor( 255, 255, 255, 255 )
 					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
@@ -410,7 +410,7 @@ function OpenVoiceMenu()
 				end
 			end
 
-			local name = createD("DPanel", bg, YRP.ctr(800), h, h + br, 0)
+			local name = createD("DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
 			function name:Paint(pw, ph)
 				draw.SimpleText(channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
@@ -426,7 +426,7 @@ function OpenVoiceMenu()
 						end
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
-						local br = YRP.ctr(10)
+						local br = YRP.ctr(8)
 						surface.SetMaterial( YRP.GetDesignIcon("voice") )
 						surface.SetDrawColor( 255, 255, 255, 255 )
 						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
@@ -449,7 +449,7 @@ function OpenVoiceMenu()
 					end
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
-					local br = YRP.ctr(10)
+					local br = YRP.ctr(8)
 					surface.SetMaterial(YRP.GetDesignIcon(icon))
 					surface.SetDrawColor( 255, 255, 255, 255 )
 					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
@@ -489,7 +489,7 @@ function OpenVoiceMenu()
 						local color = lply:InterfaceValue("YButton", "NC")
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
-						local br = YRP.ctr(10)
+						local br = YRP.ctr(8)
 						surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
 						surface.SetDrawColor( 255, 255, 255, 255 )
 						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
