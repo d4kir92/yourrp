@@ -875,8 +875,8 @@ net.Receive("yrp_voice_channel_add", function(len, ply)
 
 	SQL_INSERT_INTO(
 		DATABASE_NAME,
-		"string_name, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
-		"'" .. name .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
+		"string_name, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles, int_position",
+		"'" .. name .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "', '" .. table.Count(GetGlobalDTable("yrp_voice_channels", {})) .. "'"
 	)
 
 	GenerateVoiceTable()
