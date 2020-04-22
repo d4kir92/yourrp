@@ -43,9 +43,9 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 				CHudDeathNotice = true
 			}
 
-			if g_VoicePanelList != nil then
-				g_VoicePanelList:SetVisible(false)
-			end
+			--[[if g_VoicePanelList != nil then
+				g_VoicePanelList:SetVisible(true)
+			end]]
 			if (hide[ name ]) then return false end
 		end
 	end
@@ -71,23 +71,27 @@ function IsScreenshotting()
 	end
 end
 
-function GM:PlayerStartVoice(pl)
+hook.Add("PlayerStartVoice", "yrp_playerstartvoice", function(pl)
 	if pl != nil then
 		if pl == LocalPlayer() then
+			surface.PlaySound("npc/metropolice/vo/on2.wav")
+
 			_showVoice = true
 			net.Start("yrp_voice_start")
 			net.SendToServer()
 		end
 	end
-end
+end)
 
-function GM:PlayerEndVoice(pl)
+hook.Add("PlayerEndVoice", "yrp_playerendvoice", function(pl)
 	if pl == LocalPlayer() then
 		_showVoice = false
 		net.Start("yrp_voice_end")
 		net.SendToServer()
+
+		surface.PlaySound("npc/metropolice/vo/off2.wav")
 	end
-end
+end)
 
 local _yrp_icon = Material("vgui/yrp/logo100_beta.png")
 local star = Material("vgui/material/icon_star.png")

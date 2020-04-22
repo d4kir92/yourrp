@@ -57,7 +57,9 @@ function GM:PlayerInitialSpawn(ply)
 			timer.Simple(1, function()
 
 				SetRole(ply, rolTab.uniqueID)
-				teleportToSpawnpoint(ply)
+				timer.Simple(0.1, function()
+					teleportToSpawnpoint(ply)
+				end)
 			end)
 		end
 	end
@@ -189,7 +191,7 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 	if ply:GetDBool("can_respawn", false) then
 		ply:SetDBool("can_respawn", false)
 
-		timer.Simple(0.01, function()
+		timer.Simple(0.1, function()
 			teleportToSpawnpoint(ply)
 		end)
 	end
@@ -713,9 +715,11 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_aktive_usergroups", "TEXT DEFAULT 'superadmin,user'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_aktive_groups", "TEXT DEFAULT '1'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_aktive_roles", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "TEXT DEFAULT '0'")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
@@ -723,77 +727,82 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 
---SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "0, 'superadmin', 'user'")
---SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "0, 'user', 'user'")
---SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "1, 'user', 'user'")
---SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_groups, string_aktive_roles", "1, '1,10,104', '200,999'")
---SQL_INSERT_INTO(DATABASE_NAME, "string_mode, string_aktive_usergroups, string_passive_usergroups", "0, 'user', 'superadmin'")
-
 local yrp_voice_channels = {}
 if SQL_SELECT(DATABASE_NAME, "*") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_mode, string_aktive_usergroups, string_passive_usergroups", "'DEFAULT', 0, 'superadmin, admin, user', 'superadmin, admin, user'")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', 0, 'superadmin, admin, user', 'superadmin, admin, user'")
 end
 
 function GenerateVoiceTable()
-	yrp_voice_channels = SQL_SELECT(DATABASE_NAME, "*")
-	if wk(yrp_voice_channels) then
-		for i, channel in pairs(yrp_voice_channels) do
-			-- MODE
-			yrp_voice_channels[i]["string_mode"] = tonumber(channel.string_mode)
+	yrp_voice_channels = {}
+	local channels = SQL_SELECT(DATABASE_NAME, "*")
+	if wk(channels) then
+		for i, channel in pairs(channels) do
+			yrp_voice_channels[tonumber(channel.uniqueID)] = {}
+			yrp_voice_channels[tonumber(channel.uniqueID)].uniqueID = tonumber(channel.uniqueID)
 
-			-- AKTIVE
-			local augs = string.Explode(",", channel.string_aktive_usergroups)
-			yrp_voice_channels[i]["string_aktive_usergroups"] = {}
+			-- NAME
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_name"] = channel.string_name
+		
+			-- MODE
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_mode"] = tonumber(channel.string_mode)
+
+			-- POSITION
+			yrp_voice_channels[tonumber(channel.uniqueID)]["int_position"] = tonumber(channel.int_position)
+
+			-- ACTIVE
+			local augs = string.Explode(",", channel.string_active_usergroups)
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_usergroups"] = {}
 			for _, ug in pairs(augs) do
 				if !strEmpty(ug) then
-					yrp_voice_channels[i]["string_aktive_usergroups"][ug] = true
+					yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_usergroups"][ug] = true
 				end
 			end
 
-			local agrps = string.Explode(",", channel.string_aktive_groups)
-			yrp_voice_channels[i]["string_aktive_groups"] = {}
+			local agrps = string.Explode(",", channel.string_active_groups)
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_groups"] = {}
 			for _, grp in pairs(agrps) do
 				if !strEmpty(grp) then
-					yrp_voice_channels[i]["string_aktive_groups"][tonumber(grp)] = true
+					yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_groups"][tonumber(grp)] = true
 				end
 			end
 
-			local arols = string.Explode(",", channel.string_aktive_roles)
-			yrp_voice_channels[i]["string_aktive_roles"] = {}
+			local arols = string.Explode(",", channel.string_active_roles)
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_roles"] = {}
 			for _, rol in pairs(arols) do
 				if !strEmpty(rol) then
-					yrp_voice_channels[i]["string_aktive_roles"][tonumber(rol)] = true
+					yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_roles"][tonumber(rol)] = true
 				end
 			end
 
 			-- PASSIVE
 			local pugs = string.Explode(",", channel.string_passive_usergroups)
-			yrp_voice_channels[i]["string_passive_usergroups"] = {}
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_usergroups"] = {}
 			for _, ug in pairs(pugs) do
 				if !strEmpty(ug) then
-					yrp_voice_channels[i]["string_passive_usergroups"][ug] = true
+					yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_usergroups"][ug] = true
 				end
 			end
 
 			local pgrps = string.Explode(",", channel.string_passive_groups)
-			yrp_voice_channels[i]["string_passive_groups"] = {}
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_groups"] = {}
 			for _, grp in pairs(pgrps) do
 				if !strEmpty(grp) then
-					yrp_voice_channels[i]["string_passive_groups"][tonumber(grp)] = true
+					yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_groups"][tonumber(grp)] = true
 				end
 			end
 
 			local prols = string.Explode(",", channel.string_passive_roles)
-			yrp_voice_channels[i]["string_passive_roles"] = {}
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_roles"] = {}
 			for _, rol in pairs(prols) do
 				if !strEmpty(rol) then
-					yrp_voice_channels[i]["string_passive_roles"][tonumber(rol)] = true
+					yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_roles"][tonumber(rol)] = true
 				end
 			end
 		end
 	else
 		yrp_voice_channels = {}
 	end
+
 	SetGlobalDTable("yrp_voice_channels", yrp_voice_channels)
 end
 GenerateVoiceTable()
@@ -866,8 +875,43 @@ net.Receive("yrp_voice_channel_add", function(len, ply)
 
 	SQL_INSERT_INTO(
 		DATABASE_NAME,
-		"string_name, string_aktive_usergroups, string_aktive_groups, string_aktive_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
+		"string_name, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
 		"'" .. name .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
+	)
+
+	GenerateVoiceTable()
+
+	local c = 0
+	for i, channel in SortedPairsByMemberValue(GetGlobalDTable("yrp_voice_channels", {}), "int_position") do
+		channel.int_position = tonumber(channel.int_position)
+		if channel.int_position != c then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		end
+
+		c = c + 1
+	end
+
+	GenerateVoiceTable()
+end)
+
+util.AddNetworkString("yrp_voice_channel_save")
+net.Receive("yrp_voice_channel_save", function(len, ply)
+	local name = net.ReadString()
+
+	local augs = table.concat(net.ReadTable(), ",")
+	local agrps = table.concat(net.ReadTable(), ",")
+	local arols = table.concat(net.ReadTable(), ",")
+
+	local pugs = table.concat(net.ReadTable(), ",")
+	local pgrps = table.concat(net.ReadTable(), ",")
+	local prols = table.concat(net.ReadTable(), ",")
+
+	local uid = net.ReadString()
+	
+	SQL_UPDATE(
+		DATABASE_NAME,
+		"string_name = '" .. name .. "', string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
+		"uniqueID = '" .. uid .. "'"
 	)
 
 	GenerateVoiceTable()
@@ -880,6 +924,76 @@ net.Receive("yrp_voice_channel_rem", function(len, ply)
 	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 
 	GenerateVoiceTable()
+	
+	local c = 0
+	for i, channel in SortedPairsByMemberValue(GetGlobalDTable("yrp_voice_channels", {}), "int_position") do
+		channel.int_position = tonumber(channel.int_position)
+		if channel.int_position != c then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		end
+
+		c = c + 1
+	end
+
+	GenerateVoiceTable()
+end)
+
+util.AddNetworkString("channel_up")
+net.Receive("channel_up", function(len, ply)
+	local uid = net.ReadString()
+	uid = tonumber(uid)
+
+	local int_position = GetGlobalDTable("yrp_voice_channels", {})[uid].int_position
+
+	local c = 0
+	for i, channel in SortedPairsByMemberValue(GetGlobalDTable("yrp_voice_channels", {}), "int_position") do
+		channel.int_position = tonumber(channel.int_position)
+		if c == int_position then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c - 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		elseif c == int_position - 1 then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c + 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		elseif channel.int_position != c then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		end
+
+		c = c + 1
+	end
+
+	GenerateVoiceTable()
+
+	timer.Simple(0.1, function()
+		net.Start("channel_up")
+		net.Send(ply)
+	end)
+end)
+
+util.AddNetworkString("channel_dn")
+net.Receive("channel_dn", function(len, ply)
+	local uid = net.ReadString()
+	uid = tonumber(uid)
+
+	local int_position = GetGlobalDTable("yrp_voice_channels", {})[uid].int_position
+
+	local c = 0
+	for i, channel in SortedPairsByMemberValue(GetGlobalDTable("yrp_voice_channels", {}), "int_position") do
+		channel.int_position = tonumber(channel.int_position)
+		if c == int_position then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c + 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		elseif c == int_position + 1 then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c - 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		elseif channel.int_position != c then
+			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+		end
+
+		c = c + 1
+	end
+
+	GenerateVoiceTable()
+
+	timer.Simple(0.1, function()
+		net.Start("channel_dn")
+		net.Send(ply)
+	end)
 end)
 
 util.AddNetworkString("mutemic_channel")
@@ -906,8 +1020,8 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 	end
 	local canhear = false
 	for i, channel in pairs(GetGlobalDTable("yrp_voice_channels", {})) do
-		if IsAktiveInChannel(talker, channel) and IsInChannel(listener, channel) then -- If Talker allowed to talk and both are in that channel
-			--print("IN SAME CHANNEL, and talker is aktive Channel-ID: " .. i, listener, talker)
+		if IsActiveInChannel(talker, channel) and IsInChannel(listener, channel) then -- If Talker allowed to talk and both are in that channel
+			--print("IN SAME CHANNEL, and talker is active Channel-ID: " .. i, listener, talker)
 			canhear = true
 			break
 		end

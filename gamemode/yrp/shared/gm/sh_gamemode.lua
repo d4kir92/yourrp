@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 267 --do NOT change this!
-GM.VersionCanary = 538 --do NOT change this!
+GM.VersionBeta = 268 --do NOT change this!
+GM.VersionCanary = 539 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -365,10 +365,10 @@ function IsInChannel(ply, channel, skip)
 		return false
 	end
 
-	return IsInTable(channel.string_aktive_usergroups, ug) or IsInTable(channel.string_aktive_groups, grp) or IsInTable(channel.string_aktive_roles, rol) or IsInTable(channel.string_passive_usergroups, ug) or IsInTable(channel.string_passive_groups, grp) or IsInTable(channel.string_passive_roles, rol) or false
+	return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or IsInTable(channel.string_passive_usergroups, ug) or IsInTable(channel.string_passive_groups, grp) or IsInTable(channel.string_passive_roles, rol) or false
 end
 
-function IsAktiveInChannel(ply, channel, skip)
+function IsActiveInChannel(ply, channel, skip)
 	skip = skip or false
 	
 	local ug = ply:GetUserGroup()
@@ -379,8 +379,8 @@ function IsAktiveInChannel(ply, channel, skip)
 		--print("IS FALSE mutemic")
 		return false
 	end
-	--print("IsAktiveInChannel", ply, ug)
-	return IsInTable(channel.string_aktive_usergroups, ug) or IsInTable(channel.string_aktive_groups, grp) or IsInTable(channel.string_aktive_roles, rol) or false
+	--print("IsActiveInChannel", ply, ug)
+	return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or false
 end
 
 -- COLORFIX

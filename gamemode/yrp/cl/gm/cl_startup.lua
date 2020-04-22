@@ -1611,21 +1611,26 @@ function drawPlates()
 			end
 
 			if GetGlobalDBool("bool_tag_on_head", false) then
-				if false then -- DISTANCE DEBUG
-					render.SetColorMaterial()
-					render.DrawSphere(ply:GetPos() + Vector(0, 0, 30), 80, 16, 16, Color( 0, 0, 255, 100 ) )
-				end
-
 				if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
 					local plyvol = ply:VoiceVolume() * 200
 					plyvol = 55 + plyvol
-					plyvol = math.Clamp(plyvol, 0, color.a)
+					if GetGlobalDBool("bool_tag_on_head_target_forced", false) then
+						plyvol = math.Clamp(plyvol, 0, color.a)
+					else
+						plyvol = math.Clamp(plyvol, 0, 255)
+					end
 					local voicecolor = Color(color.r, color.g, color.b, plyvol)
 					YRP.DrawSymbol(ply, "voice", 18, voicecolor)
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
-					YRP.DrawSymbol(ply, "chat", 18, Color(255, 255, 255, color.a))
+					local chatalpha = 255
+					if GetGlobalDBool("bool_tag_on_head_target_forced", false) then
+						chatalpha = math.Clamp(chatalpha, 0, color.a)
+					else
+						chatalpha = math.Clamp(chatalpha, 0, 255)
+					end
+					YRP.DrawSymbol(ply, "chat", 18, Color(255, 255, 255, chatalpha))
 				end
 
 				if GetGlobalDBool("bool_tag_on_head_armor", false) then
