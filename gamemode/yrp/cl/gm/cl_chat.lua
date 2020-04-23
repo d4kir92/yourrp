@@ -544,7 +544,7 @@ net.Receive("yrp_player_say", function(len)
 		end
 
 		_tmp.name = ""
-		if _tmp.command != "roll" and _tmp.command != "event" then
+		if _tmp.command != "roll" and _tmp.command != "event" and _tmp.command != "it" then
 			if !strEmpty(_tmp.factionname) then
 				_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
 			end

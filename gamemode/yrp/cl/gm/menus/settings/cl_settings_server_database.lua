@@ -161,7 +161,7 @@ net.Receive("Connect_Settings_Database", function(len)
 
 
 
-		local yourrptables = createD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+		local yourrptables = createD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall() - YRP.ctr(60), 0, 0)
 		yourrptables:SetText("LID_yourrptables")
 		function yourrptables:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -181,6 +181,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		local _w, _h = Scroller.YourRPTables:GetSize()
 		local _rem_and_change = createD("DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10))
 		_rem_and_change:SetText("")
+		yourrptables:AddItem(_rem_and_change)
 		function _rem_and_change:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string("LID_droptablesandchangelevel"))
 		end
@@ -235,6 +236,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		end
 		local _rem_and_change2 = createD("DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10))
 		_rem_and_change2:SetText("")
+		yourrprelatedtables:AddItem(_rem_and_change2)
 		function _rem_and_change2:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string("LID_droptablesandchangelevel"))
 		end
@@ -289,6 +291,7 @@ net.Receive("Connect_Settings_Database", function(len)
 		end
 		local _rem_and_change3 = createD("DButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10))
 		_rem_and_change3:SetText("")
+		othertables:AddItem(_rem_and_change3)
 		function _rem_and_change3:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string("LID_droptablesandchangelevel"))
 		end

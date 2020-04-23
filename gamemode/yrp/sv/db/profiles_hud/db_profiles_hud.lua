@@ -49,7 +49,7 @@ function HudToCode(name)
 		end
 	end
 end
-HudToCode("Identifycard")
+--HudToCode("Identifycard")
 
 function HudProfileToDataBase(name, tab)
 	if SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'") == nil then

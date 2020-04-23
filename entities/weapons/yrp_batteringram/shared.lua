@@ -57,7 +57,7 @@ function SWEP:PrimaryAttack()
 			self.target = tr.Entity
 			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
-			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 200) and (class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating") then
+			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 200) then
 				self.target:Fire("Unlock")
 				self.target:Fire("Open")
 
