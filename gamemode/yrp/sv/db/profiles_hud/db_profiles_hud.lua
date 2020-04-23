@@ -49,13 +49,17 @@ function HudToCode(name)
 		end
 	end
 end
---HudToCode("Identifycard")
+HudToCode("Identifycard")
 
 function HudProfileToDataBase(name, tab)
 	if SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'") == nil then
 		SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
 		for i, v in pairs(tab) do
 			SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
+		end
+	else
+		for i, v in pairs(tab) do
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
 		end
 	end
 end
@@ -2517,6 +2521,14 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_CR_ROUN = 0
 	Identifycard.bool_HUD_CR_TEXT = 1
 	Identifycard.bool_HUD_CR_VISI = 1
+	Identifycard.bool_HUD_FR_BACK = 1
+	Identifycard.bool_HUD_FR_BORD = 0
+	Identifycard.bool_HUD_FR_EXTR = 1
+	Identifycard.bool_HUD_FR_ICON = 1
+	Identifycard.bool_HUD_FR_PERC = 1
+	Identifycard.bool_HUD_FR_ROUN = 0
+	Identifycard.bool_HUD_FR_TEXT = 1
+	Identifycard.bool_HUD_FR_VISI = 1
 	Identifycard.bool_HUD_HP_BACK = 1
 	Identifycard.bool_HUD_HP_BORD = 0
 	Identifycard.bool_HUD_HP_EXTR = 1
@@ -2533,6 +2545,22 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_HU_ROUN = 0
 	Identifycard.bool_HUD_HU_TEXT = 0
 	Identifycard.bool_HUD_HU_VISI = 1
+	Identifycard.bool_HUD_HY_BACK = 1
+	Identifycard.bool_HUD_HY_BORD = 0
+	Identifycard.bool_HUD_HY_EXTR = 1
+	Identifycard.bool_HUD_HY_ICON = 1
+	Identifycard.bool_HUD_HY_PERC = 1
+	Identifycard.bool_HUD_HY_ROUN = 0
+	Identifycard.bool_HUD_HY_TEXT = 0
+	Identifycard.bool_HUD_HY_VISI = 1
+	Identifycard.bool_HUD_ID_BACK = 1
+	Identifycard.bool_HUD_ID_BORD = 0
+	Identifycard.bool_HUD_ID_EXTR = 1
+	Identifycard.bool_HUD_ID_ICON = 1
+	Identifycard.bool_HUD_ID_PERC = 1
+	Identifycard.bool_HUD_ID_ROUN = 0
+	Identifycard.bool_HUD_ID_TEXT = 1
+	Identifycard.bool_HUD_ID_VISI = 1
 	Identifycard.bool_HUD_LO_BACK = 1
 	Identifycard.bool_HUD_LO_BORD = 0
 	Identifycard.bool_HUD_LO_EXTR = 1
@@ -2557,7 +2585,7 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_MO_ROUN = 0
 	Identifycard.bool_HUD_MO_TEXT = 1
 	Identifycard.bool_HUD_MO_VISI = 1
-	Identifycard.bool_HUD_NA_BACK = 0
+	Identifycard.bool_HUD_NA_BACK = 1
 	Identifycard.bool_HUD_NA_BORD = 0
 	Identifycard.bool_HUD_NA_EXTR = 1
 	Identifycard.bool_HUD_NA_ICON = 1
@@ -2581,7 +2609,7 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_PE_ROUN = 0
 	Identifycard.bool_HUD_PE_TEXT = 1
 	Identifycard.bool_HUD_PE_VISI = 1
-	Identifycard.bool_HUD_PM_BACK = 1
+	Identifycard.bool_HUD_PM_BACK = 0
 	Identifycard.bool_HUD_PM_BORD = 0
 	Identifycard.bool_HUD_PM_EXTR = 1
 	Identifycard.bool_HUD_PM_ICON = 1
@@ -2589,6 +2617,14 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_PM_ROUN = 0
 	Identifycard.bool_HUD_PM_TEXT = 1
 	Identifycard.bool_HUD_PM_VISI = 1
+	Identifycard.bool_HUD_RA_BACK = 1
+	Identifycard.bool_HUD_RA_BORD = 0
+	Identifycard.bool_HUD_RA_EXTR = 1
+	Identifycard.bool_HUD_RA_ICON = 1
+	Identifycard.bool_HUD_RA_PERC = 1
+	Identifycard.bool_HUD_RA_ROUN = 0
+	Identifycard.bool_HUD_RA_TEXT = 0
+	Identifycard.bool_HUD_RA_VISI = 1
 	Identifycard.bool_HUD_RO_BACK = 1
 	Identifycard.bool_HUD_RO_BORD = 0
 	Identifycard.bool_HUD_RO_EXTR = 1
@@ -2612,7 +2648,7 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_SL_PERC = 1
 	Identifycard.bool_HUD_SL_ROUN = 0
 	Identifycard.bool_HUD_SL_TEXT = 1
-	Identifycard.bool_HUD_SL_VISI = 1
+	Identifycard.bool_HUD_SL_VISI = 0
 	Identifycard.bool_HUD_SN_BACK = 0
 	Identifycard.bool_HUD_SN_BORD = 0
 	Identifycard.bool_HUD_SN_EXTR = 1
@@ -2620,7 +2656,7 @@ function ProfilesIdentifycard()
 	Identifycard.bool_HUD_SN_PERC = 1
 	Identifycard.bool_HUD_SN_ROUN = 0
 	Identifycard.bool_HUD_SN_TEXT = 1
-	Identifycard.bool_HUD_SN_VISI = 1
+	Identifycard.bool_HUD_SN_VISI = 0
 	Identifycard.bool_HUD_ST_BACK = 1
 	Identifycard.bool_HUD_ST_BORD = 0
 	Identifycard.bool_HUD_ST_EXTR = 1
@@ -2700,7 +2736,7 @@ function ProfilesIdentifycard()
 	Identifycard.color_HUD_BOX1_TB = '255, 255, 255, 255'
 	Identifycard.color_HUD_BOX1_TE = '255, 255, 255, 255'
 	Identifycard.color_HUD_BOX2_BA = '255,255,255,0'
-	Identifycard.color_HUD_BOX2_BG = '40,40,40,177'
+	Identifycard.color_HUD_BOX2_BG = '25,25,25,161'
 	Identifycard.color_HUD_BOX2_BR = '255, 255, 255, 255'
 	Identifycard.color_HUD_BOX2_TB = '255, 255, 255, 255'
 	Identifycard.color_HUD_BOX2_TE = '255, 255, 255, 255'
@@ -2764,6 +2800,11 @@ function ProfilesIdentifycard()
 	Identifycard.color_HUD_CR_BR = '0, 0, 0, 180'
 	Identifycard.color_HUD_CR_TB = '0, 0, 0, 255'
 	Identifycard.color_HUD_CR_TE = '255, 255, 255, 255'
+	Identifycard.color_HUD_FR_BA = '0, 0, 0, 180'
+	Identifycard.color_HUD_FR_BG = '0, 0, 0, 120'
+	Identifycard.color_HUD_FR_BR = '0, 0, 0, 180'
+	Identifycard.color_HUD_FR_TB = '0, 0, 0, 255'
+	Identifycard.color_HUD_FR_TE = '255, 255, 255, 255'
 	Identifycard.color_HUD_HP_BA = '200, 52, 52, 180'
 	Identifycard.color_HUD_HP_BG = '120,120,120,120'
 	Identifycard.color_HUD_HP_BR = '200, 52, 52, 180'
@@ -2774,6 +2815,16 @@ function ProfilesIdentifycard()
 	Identifycard.color_HUD_HU_BR = '150, 88, 52, 180'
 	Identifycard.color_HUD_HU_TB = '0, 0, 0, 255'
 	Identifycard.color_HUD_HU_TE = '255, 255, 255, 255'
+	Identifycard.color_HUD_HY_BA = '138, 43, 226, 180'
+	Identifycard.color_HUD_HY_BG = '0, 0, 0, 120'
+	Identifycard.color_HUD_HY_BR = '138, 43, 226, 180'
+	Identifycard.color_HUD_HY_TB = '0, 0, 0, 255'
+	Identifycard.color_HUD_HY_TE = '255, 255, 255, 255'
+	Identifycard.color_HUD_ID_BA = '0, 0, 0, 180'
+	Identifycard.color_HUD_ID_BG = '0, 0, 0, 120'
+	Identifycard.color_HUD_ID_BR = '0, 0, 0, 180'
+	Identifycard.color_HUD_ID_TB = '0, 0, 0, 255'
+	Identifycard.color_HUD_ID_TE = '255, 255, 255, 255'
 	Identifycard.color_HUD_LO_BA = '0, 0, 0, 180'
 	Identifycard.color_HUD_LO_BG = '0, 0, 0, 120'
 	Identifycard.color_HUD_LO_BR = '0, 0, 0, 180'
@@ -2809,6 +2860,11 @@ function ProfilesIdentifycard()
 	Identifycard.color_HUD_PM_BR = '150, 52, 52, 180'
 	Identifycard.color_HUD_PM_TB = '0, 0, 0, 255'
 	Identifycard.color_HUD_PM_TE = '255, 255, 255, 255'
+	Identifycard.color_HUD_RA_BA = '40, 223, 40, 180'
+	Identifycard.color_HUD_RA_BG = '0, 0, 0, 120'
+	Identifycard.color_HUD_RA_BR = '40, 223, 40, 180'
+	Identifycard.color_HUD_RA_TB = '0, 0, 0, 255'
+	Identifycard.color_HUD_RA_TE = '255, 255, 255, 255'
 	Identifycard.color_HUD_RO_BA = '0, 0, 0, 100'
 	Identifycard.color_HUD_RO_BG = '80,80,80,120'
 	Identifycard.color_HUD_RO_BR = '255, 255, 255, 180'
@@ -2859,15 +2915,15 @@ function ProfilesIdentifycard()
 	Identifycard.color_HUD_XP_BR = '25, 100, 227, 180'
 	Identifycard.color_HUD_XP_TB = '0, 0, 0, 255'
 	Identifycard.color_HUD_XP_TE = '255, 255, 255, 255'
-	Identifycard.float_HUD_AB_POSI_X = 0.25
+	Identifycard.float_HUD_AB_POSI_X = 0.2578125
 	Identifycard.float_HUD_AB_POSI_Y = 0.96759259700775
-	Identifycard.float_HUD_AB_SIZE_H = 0.027777777984738
-	Identifycard.float_HUD_AB_SIZE_W = 0.11458333581686
+	Identifycard.float_HUD_AB_SIZE_H = 0.023148147389293
+	Identifycard.float_HUD_AB_SIZE_W = 0.08333333581686
 	Identifycard.float_HUD_AR_POSI_X = 0.08333333581686
 	Identifycard.float_HUD_AR_POSI_Y = 0.9398148059845
 	Identifycard.float_HUD_AR_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_AR_SIZE_W = 0.08333333581686
-	Identifycard.float_HUD_AV_POSI_X = 0.2578125
+	Identifycard.float_HUD_AV_POSI_X = 0.0052083334885538
 	Identifycard.float_HUD_AV_POSI_Y = 0.85648149251938
 	Identifycard.float_HUD_AV_SIZE_H = 0.13425925374031
 	Identifycard.float_HUD_AV_SIZE_W = 0.07552083581686
@@ -2928,30 +2984,42 @@ function ProfilesIdentifycard()
 	Identifycard.float_HUD_COM_SIZE_H = 0.046296294778585
 	Identifycard.float_HUD_COM_SIZE_W = 0.49479165673256
 	Identifycard.float_HUD_CON_POSI_X = 0.41666665673256
-	Identifycard.float_HUD_CON_POSI_Y = 0.1064814850688
+	Identifycard.float_HUD_CON_POSI_Y = 0.11574073880911
 	Identifycard.float_HUD_CON_SIZE_H = 0.027777777984738
 	Identifycard.float_HUD_CON_SIZE_W = 0.16666667163372
 	Identifycard.float_HUD_CR_POSI_X = 0.46875
-	Identifycard.float_HUD_CR_POSI_Y = 0.0046296296641231
+	Identifycard.float_HUD_CR_POSI_Y = 0.087962962687016
 	Identifycard.float_HUD_CR_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_CR_SIZE_W = 0.0625
+	Identifycard.float_HUD_FR_POSI_X = 0.41666665673256
+	Identifycard.float_HUD_FR_POSI_Y = 0.1064814850688
+	Identifycard.float_HUD_FR_SIZE_H = 0.027777777984738
+	Identifycard.float_HUD_FR_SIZE_W = 0.16666667163372
 	Identifycard.float_HUD_HP_POSI_X = 0.08333333581686
 	Identifycard.float_HUD_HP_POSI_Y = 0.96759259700775
 	Identifycard.float_HUD_HP_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_HP_SIZE_W = 0.08333333581686
-	Identifycard.float_HUD_HU_POSI_X = 0.08333333581686
-	Identifycard.float_HUD_HU_POSI_Y = 0.88425928354263
+	Identifycard.float_HUD_HU_POSI_X = 0.16927082836628
+	Identifycard.float_HUD_HU_POSI_Y = 0.9398148059845
 	Identifycard.float_HUD_HU_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_HU_SIZE_W = 0.08333333581686
+	Identifycard.float_HUD_HY_POSI_X = 0.41666665673256
+	Identifycard.float_HUD_HY_POSI_Y = 0.96759259700775
+	Identifycard.float_HUD_HY_SIZE_H = 0.027777777984738
+	Identifycard.float_HUD_HY_SIZE_W = 0.16666667163372
+	Identifycard.float_HUD_ID_POSI_X = 0.16927082836628
+	Identifycard.float_HUD_ID_POSI_Y = 0.85648149251938
+	Identifycard.float_HUD_ID_SIZE_H = 0.023148147389293
+	Identifycard.float_HUD_ID_SIZE_W = 0.08333333581686
 	Identifycard.float_HUD_LO_POSI_X = 0.36979165673256
-	Identifycard.float_HUD_LO_POSI_Y = 0.13888889551163
+	Identifycard.float_HUD_LO_POSI_Y = 0.14814814925194
 	Identifycard.float_HUD_LO_SIZE_H = 0.074074074625969
 	Identifycard.float_HUD_LO_SIZE_W = 0.26041665673256
 	Identifycard.float_HUD_MI_POSI_X = 0.0052083334885538
 	Identifycard.float_HUD_MI_POSI_Y = 0.0092592593282461
 	Identifycard.float_HUD_MI_SIZE_H = 0.27777779102325
 	Identifycard.float_HUD_MI_SIZE_W = 0.15625
-	Identifycard.float_HUD_MO_POSI_X = 0.16927082836628
+	Identifycard.float_HUD_MO_POSI_X = 0.08333333581686
 	Identifycard.float_HUD_MO_POSI_Y = 0.88425928354263
 	Identifycard.float_HUD_MO_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_MO_SIZE_W = 0.08333333581686
@@ -2960,38 +3028,42 @@ function ProfilesIdentifycard()
 	Identifycard.float_HUD_NA_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_NA_SIZE_W = 0.08333333581686
 	Identifycard.float_HUD_NE_POSI_X = 0.0026041667442769
-	Identifycard.float_HUD_NE_POSI_Y = 0.13888889551163
+	Identifycard.float_HUD_NE_POSI_Y = 0.023148147389293
 	Identifycard.float_HUD_NE_SIZE_H = 0.018518518656492
 	Identifycard.float_HUD_NE_SIZE_W = 0.08333333581686
 	Identifycard.float_HUD_PE_POSI_X = 0.0026041667442769
-	Identifycard.float_HUD_PE_POSI_Y = 0.125
+	Identifycard.float_HUD_PE_POSI_Y = 0.0046296296641231
 	Identifycard.float_HUD_PE_SIZE_H = 0.018518518656492
 	Identifycard.float_HUD_PE_SIZE_W = 0.08333333581686
-	Identifycard.float_HUD_PM_POSI_X = 0.0052083334885538
-	Identifycard.float_HUD_PM_POSI_Y = 0.85648149251938
-	Identifycard.float_HUD_PM_SIZE_H = 0.13425925374031
-	Identifycard.float_HUD_PM_SIZE_W = 0.07552083581686
+	Identifycard.float_HUD_PM_POSI_X = 0.0026041667442769
+	Identifycard.float_HUD_PM_POSI_Y = 0.85185188055038
+	Identifycard.float_HUD_PM_SIZE_H = 0.14351852238178
+	Identifycard.float_HUD_PM_SIZE_W = 0.08072916418314
+	Identifycard.float_HUD_RA_POSI_X = 0.41666665673256
+	Identifycard.float_HUD_RA_POSI_Y = 0.96759259700775
+	Identifycard.float_HUD_RA_SIZE_H = 0.027777777984738
+	Identifycard.float_HUD_RA_SIZE_W = 0.16666667163372
 	Identifycard.float_HUD_RO_POSI_X = 0.16927082836628
-	Identifycard.float_HUD_RO_POSI_Y = 0.85648149251938
+	Identifycard.float_HUD_RO_POSI_Y = 0.88425928354263
 	Identifycard.float_HUD_RO_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_RO_SIZE_W = 0.08333333581686
-	Identifycard.float_HUD_SA_POSI_X = 0.16927082836628
+	Identifycard.float_HUD_SA_POSI_X = 0.08333333581686
 	Identifycard.float_HUD_SA_POSI_Y = 0.91203701496124
 	Identifycard.float_HUD_SA_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_SA_SIZE_W = 0.08333333581686
 	Identifycard.float_HUD_SL_POSI_X = 0.0026041667442769
-	Identifycard.float_HUD_SL_POSI_Y = 0.0046296296641231
+	Identifycard.float_HUD_SL_POSI_Y = 0.046296294778585
 	Identifycard.float_HUD_SL_SIZE_H = 0.11574073880911
 	Identifycard.float_HUD_SL_SIZE_W = 0.06510416418314
-	Identifycard.float_HUD_SN_POSI_X = 0.0703125
-	Identifycard.float_HUD_SN_POSI_Y = 0.0046296296641231
+	Identifycard.float_HUD_SN_POSI_X = 0.0026041667442769
+	Identifycard.float_HUD_SN_POSI_Y = 0.16666667163372
 	Identifycard.float_HUD_SN_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_SN_SIZE_W = 0.16145832836628
 	Identifycard.float_HUD_ST_POSI_X = 0.16927082836628
-	Identifycard.float_HUD_ST_POSI_Y = 0.9398148059845
+	Identifycard.float_HUD_ST_POSI_Y = 0.96759259700775
 	Identifycard.float_HUD_ST_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_ST_SIZE_W = 0.08333333581686
-	Identifycard.float_HUD_TH_POSI_X = 0.08333333581686
+	Identifycard.float_HUD_TH_POSI_X = 0.16927082836628
 	Identifycard.float_HUD_TH_POSI_Y = 0.91203701496124
 	Identifycard.float_HUD_TH_SIZE_H = 0.023148147389293
 	Identifycard.float_HUD_TH_SIZE_W = 0.08333333581686
@@ -3000,17 +3072,17 @@ function ProfilesIdentifycard()
 	Identifycard.float_HUD_WN_SIZE_H = 0.027777777984738
 	Identifycard.float_HUD_WN_SIZE_W = 0.11458333581686
 	Identifycard.float_HUD_WP_POSI_X = 0.8828125
-	Identifycard.float_HUD_WP_POSI_Y = 0.9351851940155
+	Identifycard.float_HUD_WP_POSI_Y = 0.9398148059845
 	Identifycard.float_HUD_WP_SIZE_H = 0.027777777984738
 	Identifycard.float_HUD_WP_SIZE_W = 0.11458333581686
 	Identifycard.float_HUD_WS_POSI_X = 0.8828125
-	Identifycard.float_HUD_WS_POSI_Y = 0.90277779102325
+	Identifycard.float_HUD_WS_POSI_Y = 0.91203701496124
 	Identifycard.float_HUD_WS_SIZE_H = 0.027777777984738
 	Identifycard.float_HUD_WS_SIZE_W = 0.11458333581686
-	Identifycard.float_HUD_XP_POSI_X = 0.16927082836628
-	Identifycard.float_HUD_XP_POSI_Y = 0.96759259700775
+	Identifycard.float_HUD_XP_POSI_X = 0.36979165673256
+	Identifycard.float_HUD_XP_POSI_Y = 0
 	Identifycard.float_HUD_XP_SIZE_H = 0.023148147389293
-	Identifycard.float_HUD_XP_SIZE_W = 0.08333333581686
+	Identifycard.float_HUD_XP_SIZE_W = 0.26041665673256
 	Identifycard.int_HUD_AB_AX = 1
 	Identifycard.int_HUD_AB_AY = 1
 	Identifycard.int_HUD_AB_TS = 24
@@ -3068,12 +3140,21 @@ function ProfilesIdentifycard()
 	Identifycard.int_HUD_CR_AX = 1
 	Identifycard.int_HUD_CR_AY = 1
 	Identifycard.int_HUD_CR_TS = 24
+	Identifycard.int_HUD_FR_AX = 1
+	Identifycard.int_HUD_FR_AY = 1
+	Identifycard.int_HUD_FR_TS = 24
 	Identifycard.int_HUD_HP_AX = 1
 	Identifycard.int_HUD_HP_AY = 1
 	Identifycard.int_HUD_HP_TS = 18
 	Identifycard.int_HUD_HU_AX = 1
 	Identifycard.int_HUD_HU_AY = 1
 	Identifycard.int_HUD_HU_TS = 18
+	Identifycard.int_HUD_HY_AX = 1
+	Identifycard.int_HUD_HY_AY = 1
+	Identifycard.int_HUD_HY_TS = 24
+	Identifycard.int_HUD_ID_AX = 1
+	Identifycard.int_HUD_ID_AY = 1
+	Identifycard.int_HUD_ID_TS = 18
 	Identifycard.int_HUD_LO_AX = 1
 	Identifycard.int_HUD_LO_AY = 1
 	Identifycard.int_HUD_LO_TS = 30
@@ -3095,6 +3176,9 @@ function ProfilesIdentifycard()
 	Identifycard.int_HUD_PM_AX = 1
 	Identifycard.int_HUD_PM_AY = 1
 	Identifycard.int_HUD_PM_TS = 24
+	Identifycard.int_HUD_RA_AX = 1
+	Identifycard.int_HUD_RA_AY = 1
+	Identifycard.int_HUD_RA_TS = 24
 	Identifycard.int_HUD_RO_AX = 1
 	Identifycard.int_HUD_RO_AY = 1
 	Identifycard.int_HUD_RO_TS = 24

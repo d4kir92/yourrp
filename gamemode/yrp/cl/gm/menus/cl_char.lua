@@ -107,7 +107,7 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50
 		cl_bodyheight = createD("DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_bodyheight:SetText(LocalPlayer():GetDInt("int_bodyheight", ""))
+		cl_bodyheight:SetValue(tostring(LocalPlayer():GetDInt("int_bodyheight", "")))
 		function cl_bodyheight:OnChange()
 
 		end

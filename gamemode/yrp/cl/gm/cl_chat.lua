@@ -95,6 +95,9 @@ function update_chat_choices()
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_me") .. " /ME", "me", false)
 		chatids["me"] = c
 		c = c + 1
+		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_it") .. " /IT", "it", false)
+		chatids["it"] = c
+		c = c + 1
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_admin") .. " /ADMIN", "admin", false)
 		chatids["admin"] = c
 		c = c + 1
@@ -258,6 +261,9 @@ function InitYRPChat()
 				elseif isFullyCommand(_com, "sme", YRP.lang_string("LID_me")) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_me"), chatids["me"])
+				elseif isFullyCommand(_com, "sit", YRP.lang_string("LID_it")) then
+					yrpChat.writeField:SetText("")
+					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_it"), chatids["it"])
 				elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) and GetGlobalDBool("bool_chat_yell", true) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), chatids["yell"])
@@ -526,7 +532,7 @@ net.Receive("yrp_player_say", function(len)
 	local _tmp = net.ReadTable()
 	local _write = false
 
-	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "general" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" or _tmp.command == "event" then
+	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "general" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "it" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" or _tmp.command == "event" then
 		_write = true
 
 		_tmp.status = ""
@@ -599,7 +605,7 @@ net.Receive("yrp_player_say", function(len)
 			table.insert(_unpack, " ")
 		end
 
-		if _tmp.command != "me" and _tmp.command != "roll" then
+		if _tmp.command != "me" and _tmp.command != "it" and _tmp.command != "roll" and _tmp.command != "say" then
 			table.insert(_unpack, _tmp.command_color)
 			table.insert(_unpack, "[")
 			table.insert(_unpack, string.upper(	niceCommand(_tmp.command)))
@@ -613,7 +619,10 @@ net.Receive("yrp_player_say", function(len)
 		table.insert(_unpack, _tmp.command_color)
 		table.insert(_unpack, _tmp.name)
 
-		if _tmp.command != "me" and _tmp.command != "roll" and _tmp.command != "event" then
+		if _tmp.command == "it" then
+			table.insert(_unpack, "***")
+		end
+		if _tmp.command != "me" and _tmp.command != "it" and _tmp.command != "roll" and _tmp.command != "event" then
 			table.insert(_unpack, ":\n")
 		elseif _tmp.command != "roll" and _tmp.command != "event" then
 			table.insert(_unpack, " ")

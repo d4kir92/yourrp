@@ -39,7 +39,7 @@ function HUDSimpleBG(tab)
 				end
 				Simple[tab.element]["background"].x = HUDMOTIONX(Simple[tab.element]["background"].fx)
 				Simple[tab.element]["background"].y = HUDMOTIONY(Simple[tab.element]["background"].fy)
-				HudBox(Simple[tab.element]["background"])
+				DrawRectBlurHUD(Simple[tab.element]["background"].x, Simple[tab.element]["background"].y, Simple[tab.element]["background"].w, Simple[tab.element]["background"].h, Simple[tab.element]["background"].color.a)
 			end
 		end
 	end
@@ -497,7 +497,6 @@ icons["CA"] = Material("icon16/hourglass.png")
 icons["AB"] = Material("icon16/wand.png")
 icons["BA"] = Material("icon16/computer.png")
 icons["ID"] = Material("icon16/vcard.png")
-icons["FR"] = Material("icon16/user_comment.png")
 icons["CR"] = Material("icon16/clock.png")
 
 function HUDSimple()
@@ -524,9 +523,6 @@ function HUDSimple()
 		local CR = {}
 		CR.element = "CR"
 		HUDSimpleBG(CR)
-		local FR = {}
-		FR.element = "FR"
-		HUDSimpleBG(FR)
 		local HP = {}
 		HP.element = "HP"
 		HUDSimpleBG(HP)
@@ -652,7 +648,7 @@ function HUDSimple()
 			BA.element = "BA"
 			HUDSimpleBG(BA)
 		end
-		if lply:Condition() != "" then
+		if !strEmpty(lply:Condition()) then
 			local CON = {}
 			CON.element = "CON"
 			HUDSimpleBG(CON)
@@ -844,7 +840,7 @@ function HUDSimple()
 			BA.icon = icons["BA"]
 			HUDSimpleBAR(BA)
 		end
-		if lply:Condition() != "" then
+		if !strEmpty(lply:Condition()) then
 			local CON = {}
 			CON.element = "CON"
 			CON.cur = 1
@@ -1032,7 +1028,7 @@ function HUDSimple()
 			BA.element = "BA"
 			HUDSimpleBR(BA)
 		end
-		if lply:Condition() != "" then
+		if !strEmpty(lply:Condition()) then
 			local CON = {}
 			CON.element = "CON"
 			HUDSimpleBR(CON)

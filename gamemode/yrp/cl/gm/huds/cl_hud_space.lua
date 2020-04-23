@@ -16,7 +16,6 @@ local RA = YRP.GetDesignIcon("radiation")
 local HY = YRP.GetDesignIcon("hygiene")
 
 local ID = Material("icon16/vcard.png")
-local FR = Material("icon16/user_comment.png")
 local CR = Material("icon16/clock.png")
 
 local SPACE = {}

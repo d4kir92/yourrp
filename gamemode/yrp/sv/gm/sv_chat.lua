@@ -390,6 +390,9 @@ function unpack_paket(sender, text, iscommand)
 	elseif paket.command == "me" then
 		paket.command_color = Color(0, 255, 0)
 		paket.text_color = Color(0, 255, 0)
+	elseif paket.command == "it" then
+		paket.command_color = Color(255, 255, 255)
+		paket.text_color = Color(255, 255, 255)
 	elseif paket.command == "say" then
 		paket.command_color = Color(100, 255, 100)
 		paket.text_color = Color(255, 255, 255)

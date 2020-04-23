@@ -35,6 +35,52 @@ function DrawRectBlur(pnl, px, py, sw, sh, blur)
     render.SetStencilEnable(false)
 end
 
+local steps = 3
+local multiplier = 6
+local mat = Material("pp/blurscreen")
+local function DrawBlur(px, py, sw, sh, alpha)
+	alpha = alpha or 100
+	alpha = math.Clamp(alpha, 0, 100)
+
+	if alpha > 0 then
+		render.ClearStencil()
+		render.SetStencilEnable( true )
+			render.SetStencilWriteMask( 255 )
+			render.SetStencilTestMask( 255 )
+			render.SetStencilReferenceValue( 1 )
+
+			render.SetStencilCompareFunction( STENCIL_ALWAYS )
+			render.SetStencilPassOperation( STENCIL_REPLACE )
+			render.SetStencilFailOperation( STENCIL_KEEP )
+			render.SetStencilZFailOperation( STENCIL_KEEP )
+			
+			surface.SetDrawColor(0, 0, 0, 1)
+			draw.NoTexture()
+			surface.DrawTexturedRect(px, py, sw, sh)
+			
+			render.SetStencilCompareFunction( STENCIL_EQUAL )
+			render.SetStencilPassOperation( STENCIL_KEEP )
+			
+			render.SetMaterial(mat)
+			for i = 1, steps do
+				mat:SetFloat("$blur", (i / steps) * (multiplier))
+				mat:Recompute()
+				render.UpdateScreenEffectTexture()
+				render.DrawScreenQuad()
+			end
+			surface.SetDrawColor(0, 0, 0, alpha)
+			draw.NoTexture()
+			surface.DrawRect(0, 0, ScrW(), ScrH())
+			
+		render.SetStencilEnable( false )
+	end
+end
+
+local mat = Material("pp/blurscreen")
+function DrawRectBlurHUD(px, py, sw, sh, alpha)
+	DrawBlur(px, py, sw, sh, alpha)
+end
+
 function DrawText(tab)
 	tab = tab or {}
 	tab.x = tab.x or 0

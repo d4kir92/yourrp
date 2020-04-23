@@ -626,7 +626,7 @@ function HUD_FO76()
 			FO76Element(BA)
 		end
 
-		if lply:Condition() != "" then
+		if !strEmpty(lply:Condition()) then
 			local CON = {}
 			CON.element = "CON"
 			CON.text = lply:Condition()

@@ -121,7 +121,7 @@ if CLIENT then
 		elseif element == "BA" then
 			return system.BatteryPower() < 100
 		elseif element == "CON" then
-			return not strEmpty(self:Condition())
+			return !strEmpty(self:Condition())
 		elseif element == "AB" then
 			return self:GetDString("GetAbilityType", "none") != "none"
 		elseif element == "HP" then
