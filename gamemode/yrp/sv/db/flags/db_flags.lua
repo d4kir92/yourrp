@@ -29,3 +29,4 @@ end
 AddCustomFlag("iscp", "role")
 AddCustomFlag("ismayor", "role")
 AddCustomFlag("ismedic", "role")
+AddCustomFlag("iscook", "role")

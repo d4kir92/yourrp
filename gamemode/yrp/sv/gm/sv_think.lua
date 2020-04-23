@@ -43,7 +43,17 @@ function reg_ar(ply)
 	end
 end
 
+function IsCookPlaying()
+	for i, v in pairs(player.GetAll()) do
+		if v:isCook() then
+			return true
+		end
+	end
+	return false
+end
+
 function con_hg(ply, time)
+	if GetGlobalDBool("bool_onlywhencook", false) and !IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetDFloat("hunger", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetDFloat("hunger", newval)
@@ -62,6 +72,7 @@ function con_hg(ply, time)
 end
 
 function con_th(ply)
+	if true and !IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetDFloat("thirst", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_thirst", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetDFloat("thirst", newval)

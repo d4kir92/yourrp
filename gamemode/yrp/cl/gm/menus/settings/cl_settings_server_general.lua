@@ -415,6 +415,7 @@ net.Receive("Connect_Settings_General", function(len)
 		end
 		General_Slider:AddPanel(GAMEMODE_SYSTEMS)
 
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_onlywhencook, "LID_onlywhencook", "update_bool_onlywhencook")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_hunger, "LID_hunger", "update_bool_hunger")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_thirst, "LID_thirst", "update_bool_thirst")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_stamina, "LID_stamina", "update_bool_stamina")

@@ -200,6 +200,11 @@ function Player:isMedic()
 	return self:GetDBool("bool_ismedic", false)
 end
 
+function Player:isCook()
+	--Description: Whether this player is a cook.
+	return self:GetDBool("bool_iscook", false)
+end
+
 function Player:isWanted()
 	--Description: Whether this player is wanted
 	return self:GetDBool("iswanted", false)

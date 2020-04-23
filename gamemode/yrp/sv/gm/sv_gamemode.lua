@@ -810,55 +810,61 @@ GenerateVoiceTable()
 util.AddNetworkString("yrp_vm_get_active_usergroups")
 net.Receive("yrp_vm_get_active_usergroups", function(len, ply)
 	local ugs = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
-
-	net.Start("yrp_vm_get_active_usergroups")
-		net.WriteTable(ugs)
-	net.Send(ply)
+	if wk(ugs) then
+		net.Start("yrp_vm_get_active_usergroups")
+			net.WriteTable(ugs)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("yrp_vm_get_active_groups")
 net.Receive("yrp_vm_get_active_groups", function(len, ply)
 	local grps = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
-
-	net.Start("yrp_vm_get_active_groups")
-		net.WriteTable(grps)
-	net.Send(ply)
+	if wk(grps) then
+		net.Start("yrp_vm_get_active_groups")
+			net.WriteTable(grps)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("yrp_vm_get_active_roles")
 net.Receive("yrp_vm_get_active_roles", function(len, ply)
 	local rols = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
-
-	net.Start("yrp_vm_get_active_roles")
-		net.WriteTable(rols)
-	net.Send(ply)
+	if wk(rols) then
+		net.Start("yrp_vm_get_active_roles")
+			net.WriteTable(rols)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("yrp_vm_get_passive_usergroups")
 net.Receive("yrp_vm_get_passive_usergroups", function(len, ply)
 	local ugs = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
-
-	net.Start("yrp_vm_get_passive_usergroups")
-		net.WriteTable(ugs)
-	net.Send(ply)
+	if wk(ugs) then
+		net.Start("yrp_vm_get_passive_usergroups")
+			net.WriteTable(ugs)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("yrp_vm_get_passive_groups")
 net.Receive("yrp_vm_get_passive_groups", function(len, ply)
 	local grps = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
-
-	net.Start("yrp_vm_get_passive_groups")
-		net.WriteTable(grps)
-	net.Send(ply)
+	if wk(grps) then
+		net.Start("yrp_vm_get_passive_groups")
+			net.WriteTable(grps)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("yrp_vm_get_passive_roles")
 net.Receive("yrp_vm_get_passive_roles", function(len, ply)
 	local rols = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
-
-	net.Start("yrp_vm_get_passive_roles")
-		net.WriteTable(rols)
-	net.Send(ply)
+	if wk(rols) then
+		net.Start("yrp_vm_get_passive_roles")
+			net.WriteTable(rols)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("yrp_voice_channel_add")

@@ -79,6 +79,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_ttlsweps", "INT DEFAULT 60")
 
 
 --[[ Gamemode Systems ]]--
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_onlywhencook", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger_health_regeneration", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT DEFAULT '10'")
@@ -776,6 +777,12 @@ end)
 
 
 --[[ GAMEMODE SYSTEMS ]]--
+util.AddNetworkString("update_bool_onlywhencook")
+net.Receive("update_bool_onlywhencook", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_onlywhencook", "bool_onlywhencook", b)
+end)
+
 util.AddNetworkString("update_bool_hunger")
 net.Receive("update_bool_hunger", function(len, ply)
 	local b = btn(net.ReadBool())
