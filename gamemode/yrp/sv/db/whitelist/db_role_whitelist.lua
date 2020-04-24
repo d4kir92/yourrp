@@ -25,6 +25,26 @@ util.AddNetworkString("whitelistPlayerAll")
 util.AddNetworkString("whitelistPlayerRemove")
 util.AddNetworkString("yrpInfoBox")
 
+util.AddNetworkString("getGroupsWhitelist")
+net.Receive("getGroupsWhitelist", function(len, ply)
+	local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "string_name, uniqueID", nil)
+	if wk(_tmpGroupList) then
+		net.Start("getGroupsWhitelist")
+			net.WriteTable(_tmpGroupList)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("getRolesWhitelist")
+net.Receive("getRolesWhitelist", function(len, ply)
+	local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
+	if wk(_tmpRoleList) then
+		net.Start("getRolesWhitelist")
+			net.WriteTable(_tmpRoleList)
+		net.Send(ply)
+	end
+end)
+
 function sendRoleWhitelist(ply)
 	local tabW = SQL_SELECT("yrp_role_whitelist", "*", nil)
 
@@ -52,22 +72,14 @@ function sendRoleWhitelist(ply)
 
 	if ply:CanAccess("bool_players") or ply:CanAccess("bool_whitelist") then
 		local _tmpWhiteList = SQL_SELECT("yrp_role_whitelist", "*", nil)
-		local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
-		local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "string_name, uniqueID", nil)
 
 		if !wk(_tmpWhiteList) then
 			_tmpWhiteList = {}
 		end
 
-		if _tmpRoleList != nil and _tmpGroupList != nil then
-			net.Start("getRoleWhitelist")
-				net.WriteTable(_tmpWhiteList)
-				net.WriteTable(_tmpRoleList)
-				net.WriteTable(_tmpGroupList)
-			net.Send(ply)
-		else
-			printGM("error", "group and role list broken")
-		end
+		net.Start("getRoleWhitelist")
+			net.WriteTable(_tmpWhiteList)
+		net.Send(ply)
 	end
 end
 

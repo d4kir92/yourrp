@@ -38,6 +38,8 @@ end
 local steps = 3
 local multiplier = 6
 local mat = Material("pp/blurscreen")
+mat:SetFloat("$blur", 3)
+mat:Recompute()
 local function DrawBlur(px, py, sw, sh, alpha)
 	alpha = alpha or 100
 	alpha = math.Clamp(alpha, 0, 100)
@@ -63,9 +65,9 @@ local function DrawBlur(px, py, sw, sh, alpha)
 			
 			render.SetMaterial(mat)
 			for i = 1, steps do
-				mat:SetFloat("$blur", (i / steps) * (multiplier))
-				mat:Recompute()
-				render.UpdateScreenEffectTexture()
+				--mat:SetFloat("$blur", (i / steps) * (multiplier))
+				--mat:Recompute()
+				--render.UpdateScreenEffectTexture()
 				render.DrawScreenQuad()
 			end
 			surface.SetDrawColor(0, 0, 0, alpha)

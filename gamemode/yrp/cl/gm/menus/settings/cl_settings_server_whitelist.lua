@@ -2,7 +2,11 @@
 
 -- #WHITELISTESETTINGS
 
-function BuildWhitelist(parent, tabW, tabR, tabG, tab)
+local tabW = {}
+local tabR = {}
+local tabG = {}
+
+function BuildWhitelist(parent, tab)
 	local list = createD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 	list:AddColumn("uniqueID"):SetFixedWidth(80)
 	list:AddColumn("SteamID"):SetFixedWidth(130)
@@ -303,14 +307,20 @@ function BuildWhitelist(parent, tabW, tabR, tabG, tab)
 	end
 end
 
+net.Receive("getGroupsWhitelist", function(len)
+	tabG = net.ReadTable()
+end)
+
+net.Receive("getRolesWhitelist", function(len)
+	tabR = net.ReadTable()
+end)
+
 net.Receive("getRoleWhitelist", function(len)
 	if pa(settingsWindow.window) then
 
 		local site = settingsWindow.window.site
 
 		local tabW = net.ReadTable()
-		local tabR = net.ReadTable()
-		local tabG = net.ReadTable()
 
 		-- TABS
 		local tabs = createD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
@@ -319,19 +329,19 @@ net.Receive("getRoleWhitelist", function(len)
 		end
 
 		tabs:AddOption("LID_all", function(parent)
-			BuildWhitelist(parent, tabW, tabR, tabG, "LID_all")
+			BuildWhitelist(parent, "LID_all")
 		end)
 		tabs:AddOption("LID_roles", function(parent)
-			BuildWhitelist(parent, tabW, tabR, tabG, "LID_roles")
+			BuildWhitelist(parent, "LID_roles")
 		end)
 		tabs:AddOption("LID_groups", function(parent)
-			BuildWhitelist(parent, tabW, tabR, tabG, "LID_groups")
+			BuildWhitelist(parent, "LID_groups")
 		end)
 		tabs:AddOption("LID_manually", function(parent)
-			BuildWhitelist(parent, tabW, tabR, tabG, "LID_manually")
+			BuildWhitelist(parent, "LID_manually")
 		end)
 		tabs:AddOption("LID_promote", function(parent)
-			BuildWhitelist(parent, tabW, tabR, tabG, "LID_promote")
+			BuildWhitelist(parent, "LID_promote")
 		end)
 
 
@@ -343,6 +353,16 @@ hook.Add("open_server_whitelist", "open_server_whitelist", function()
 	SaveLastSite()
 	local ply = LocalPlayer()
 
-	net.Start("getRoleWhitelist")
-	net.SendToServer()
+	timer.Simple(0.0, function()
+		net.Start("getGroupsWhitelist")
+		net.SendToServer()
+	end)
+	timer.Simple(0.1, function()
+		net.Start("getRolesWhitelist")
+		net.SendToServer()
+	end)
+	timer.Simple(0.3, function()
+		net.Start("getRoleWhitelist")
+		net.SendToServer()
+	end)
 end)

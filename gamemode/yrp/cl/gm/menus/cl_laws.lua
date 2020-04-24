@@ -24,7 +24,7 @@ function CreateLawsContent(PARENT)
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
 
-		if !lply:GetDBool("bool_" .. "ismayor", false) and !lply:GetDBool("bool_" .. "iscp", false) then
+		if !lply:GetDBool("bool_" .. "ismayor", false) then
 			if PARENT:IsValid() then
 				_la.laws = createD("RichText", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 				for i, v in pairs(string.Explode("\n", laws)) do

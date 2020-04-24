@@ -14,8 +14,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_alttarget", "TEXT DEFAULT ''")
 
-local showafter =	60*60*24
-local deleteafter =	60*60*24*2
+local showafter =	60*60*12
+local deleteafter =	60*60*24
 
 local logTab = SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(logTab) then

@@ -40,14 +40,13 @@ function SWEP:Think()
 
 end
 
-local _target
 function SWEP:PrimaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
 		local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 		if tr.Hit then
 			self.target = tr.Entity
-			if tr.Entity:GetClass() == "prop_ragdoll" then
+			if self.target:GetClass() == "prop_ragdoll" then
 				ply:StartCasting("revive", "LID_revive", 0, self.target, 3, 100, 1, false)
 			end
 		end
@@ -57,10 +56,13 @@ end
 if SERVER then
 	hook.Add("yrp_castdone_revive", "revive", function(args)
 		if IsValid(args.target.ply) then
+			local ragdoll = args.target
 			local ply = args.target.ply
-			local pos = ply:GetPos()
+			local pos = ragdoll:GetPos()
 			if pos != nil then
 				ply:Revive(pos)
+			else
+				YRP.msg("note", "Ragdoll is not valid")
 			end
 		end
 	end)
