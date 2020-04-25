@@ -148,7 +148,6 @@ function checkChatVisible()
 		else
 			_showChat = true
 		end
-		lply = LocalPlayer()
 		if GetGlobalDBool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
@@ -208,22 +207,36 @@ function niceCommand(com)
 end
 
 function InitYRPChat()
+	local lply = LocalPlayer()
 	if yrpChat.window == nil then
 		yrpChat.window = createD("DFrame", nil, 100, 100, 100, 100)
 		yrpChat.window:SetTitle("")
 		yrpChat.window:ShowCloseButton(false)
 		yrpChat.window:SetDraggable(false)
 
+		--[[yrpChat.tabs = createD("YTabs", yrpChat.window, YRP.ctr(60), YRP.ctr(60), 1, 1)
+		yrpChat.tabs:AddOption("LID_all", function(parent)
+			
+		end, 60)
+		yrpChat.tabs:GoToSite("LID_all")]]
+
 		yrpChat.richText = createD("RichText", yrpChat.window, 1, 1, 1, 1)
 		yrpChat.richText:GotoTextEnd()
+		function yrpChat.richText:Paint(pw, ph)
+			if _showChat then
+				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
+			end
+		end
 
 		yrpChat.comboBox = createD("DComboBox", yrpChat.window, 1, 1, 1, 1)
 		update_chat_choices()
 
 		function yrpChat.window:Paint(pw, ph)
-			local lply = LocalPlayer()
 			checkChatVisible()
 			if _showChat then
+
+				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+	
 				local x, y = yrpChat.window:GetPos()
 				local w, h = yrpChat.window:GetSize()
 
@@ -236,14 +249,17 @@ function InitYRPChat()
 					yrpChat.window:SetPos(px, py)
 					yrpChat.window:SetSize(sw, sh)
 
-					yrpChat.comboBox:SetPos(YRP.ctr(10), sh - YRP.ctr(40 + 10))
-					yrpChat.comboBox:SetSize(YRP.ctr(140), YRP.ctr(40))
+					yrpChat.comboBox:SetPos(YRP.ctr(20), sh - YRP.ctr(60 + 20))
+					yrpChat.comboBox:SetSize(YRP.ctr(160), YRP.ctr(60))
 
-					yrpChat.writeField:SetPos(YRP.ctr(10 + 140), sh - YRP.ctr(40 + 10))
-					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * 10 + 140), YRP.ctr(40))
+					yrpChat.writeField:SetPos(YRP.ctr(20 + 160), sh - YRP.ctr(60 + 20))
+					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * 20 + 160), YRP.ctr(60))
 
-					yrpChat.richText:SetPos(YRP.ctr(10), YRP.ctr(10))
-					yrpChat.richText:SetSize(sw - YRP.ctr(2 * 10), sh - YRP.ctr(2 * 10 + 40 + 10))
+					yrpChat.richText:SetPos(YRP.ctr(20), YRP.ctr(20))
+					yrpChat.richText:SetSize(sw - YRP.ctr(2 * 20), sh - YRP.ctr(2 * 20 + 60 + 20))
+
+					--yrpChat.tabs:SetPos(YRP.ctr(20), YRP.ctr(20))
+					--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * 20), YRP.ctr(60))
 				end
 				local _com = yrpChat.writeField:GetText()
 				if isFullyCommand(_com, "sgeneral", YRP.lang_string("LID_general")) and GetGlobalDBool("bool_chat_general", true) then
@@ -300,13 +316,23 @@ function InitYRPChat()
 
 		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
+		function yrpChat.writeField:PerformLayout()
+			local ts = LocalPlayer():HudValue("CH", "TS")
+			if ts > 0 then
+				if self.SetUnderlineFont != nil then
+					self:SetUnderlineFont("Y_" .. ts .. "_500")
+				end
+				self:SetFontInternal("Y_" .. ts .. "_500")
+			end
+		end
+
 		function yrpChat.richText:PerformLayout()
 			local ts = LocalPlayer():HudValue("CH", "TS")
 			if ts > 0 then
 				if self.SetUnderlineFont != nil then
-					self:SetUnderlineFont("Y_" .. ts .. "_700")
+					self:SetUnderlineFont("Y_" .. ts .. "_500")
 				end
-				self:SetFontInternal("Y_" .. ts .. "_700")
+				self:SetFontInternal("Y_" .. ts .. "_500")
 			end
 		end
 

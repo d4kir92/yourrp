@@ -499,12 +499,6 @@ function HUD_FO76()
 			FO76Element(XP)
 		end
 
-		if IsChatVisible() then
-			local CH = {}
-			CH.element = "CH"
-			FO76BG(CH)
-		end
-
 		local COM = {}
 		COM.element = "COM"
 		HUDFO76Compass(COM)
@@ -650,12 +644,6 @@ function HUD_FO76()
 			CA.text = string.upper(lply:GetCastName()) .. " " .. CA.percentage
 			CA.icon = Material("icon16/hourglass.png")
 			FO76Name(CA)
-		end
-
-		if IsChatVisible() and GetGlobalDBool("bool_yrp_chat", false) then
-			local CH = {}
-			CH.element = "CH"
-			FO76Chat(CH)
 		end
 	end
 end

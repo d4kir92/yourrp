@@ -94,8 +94,6 @@ function HudCrosshair()
 								-- Render Errors break this, restart game fix that
 								local ptr = lply:GetEyeTrace().HitPos:ToScreen()
 
-								--draw.SimpleText(ptr.x .. " " .. ptr.y, "DermaDefault", ScW() / 2, ScH() / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-								
 								local cx, cy = ptr.x, ptr.y
 
 								local gap = (8/2)

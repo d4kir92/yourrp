@@ -2,10 +2,10 @@
 local PANEL = {}
 
 function PANEL:UPDATESIZE()
-	self.hs:SetSize(self:GetWide(), YRP.ctr(100))
-	self.site:SetSize(self:GetWide(), self:GetTall() - YRP.ctr(100))
+	self.hs:SetSize(self:GetWide(), YRP.ctr(self.height))
+	self.site:SetSize(self:GetWide(), self:GetTall() - YRP.ctr(self.height))
 
-	self.site:SetPos(0, YRP.ctr(100))
+	self.site:SetPos(0, YRP.ctr(self.height))
 end
 
 function PANEL:Init()
@@ -30,10 +30,12 @@ function PANEL:SetAutoTab(b)
 	self.auto = b
 end
 
-function PANEL:AddOption(name, func)
+function PANEL:AddOption(name, func, height)
+	height = height or 100
+	self.height = height
 	self:UPDATESIZE()
-
-	local tab = createD("DButton", nil, YRP.ctr(400), YRP.ctr(100), 0, 0)
+	print("height", height)
+	local tab = createD("DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
 	tab:SetText("")
 	tab.tabs = self
 	function tab:DoClick()

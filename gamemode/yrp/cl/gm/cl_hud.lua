@@ -106,7 +106,7 @@ end
 hook.Add("HUDPaint", "yrp_hud_safezone", function()
 	local lply = LocalPlayer()
 	if IsInsideSafezone(lply) then
-		draw.SimpleText(YRP.lang_string("LID_safezone"), "Y_24_500", ScW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_safezone"), "Y_24_500", ScrW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
 
@@ -116,22 +116,22 @@ hook.Add("HUDPaint", "yrp_hud_alert", function()
 
 	surface.SetFont(font)
 	local tw, th = surface.GetTextSize(text)
-	if tw > ScW() then
+	if tw > ScrW() then
 		font = "Y_72_500"
 		surface.SetFont(font)
 		tw, th = surface.GetTextSize(text)
-		if tw > ScW() then
+		if tw > ScrW() then
 			font = "Y_36_500"
 			surface.SetFont(font)
 			tw, th = surface.GetTextSize(text)
-			if tw > ScW() then
+			if tw > ScrW() then
 				font = "Y_18_500"
 			end
 		end
 	end
 
 
-	draw.SimpleText(text, font, ScW() / 2, YRP.ctr(500), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(text, font, ScrW() / 2, YRP.ctr(500), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)
 
 local oldlevel = oldlevel or nil--ply:Level()

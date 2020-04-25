@@ -155,20 +155,6 @@ function HUDIcons()
 			HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
 		end
 
-		if GetGlobalDBool("bool_yrp_chat", false) then
-			local CH = {}
-			CH.element = "CH"
-			CH.r = YRP.ctr(16)
-			CH.visiblefunc = IsChatVisible
-			HUDSimpleBG(CH)
-
-			CH = {}
-			CH.element = "CH"
-			CH.r = YRP.ctr(16)
-			CH.visiblefunc = IsChatVisible
-			HUDSimpleBR(CH)
-		end
-
 		local COM = {}
 		COM.element = "COM"
 		HUDSimpleBG(COM)

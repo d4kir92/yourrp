@@ -2865,7 +2865,7 @@ function ProfilesIdentifycard()
 	Identifycard.color_HUD_RA_BR = '40, 223, 40, 180'
 	Identifycard.color_HUD_RA_TB = '0, 0, 0, 255'
 	Identifycard.color_HUD_RA_TE = '255, 255, 255, 255'
-	Identifycard.color_HUD_RO_BA = '0, 0, 0, 100'
+	Identifycard.color_HUD_RO_BA = '0,0,0,0'
 	Identifycard.color_HUD_RO_BG = '80,80,80,120'
 	Identifycard.color_HUD_RO_BR = '255, 255, 255, 180'
 	Identifycard.color_HUD_RO_TB = '0, 0, 0, 255'
