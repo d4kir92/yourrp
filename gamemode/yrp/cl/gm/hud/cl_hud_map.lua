@@ -146,61 +146,63 @@ function openMap()
 				nulPos.x = win.x + win.w * (nulPos.xtmp / nulPos.xMax)
 				nulPos.y = win.y + win.h - win.h * (nulPos.ytmp / nulPos.yMax)
 
+				local gridcolor = Color(50, 50, 50) 
+
 				local fixc = 0
-				for y = nulPos.y, 0, -YRP.ctr(200) do
+				for y = nulPos.y - YRP.ctr(300), 0, -YRP.ctr(200) do
 					fixc = fixc + 1
 				end
 				local c = 0
 
 				for y = nulPos.y, win.h, YRP.ctr(200) do
-					local color = Color(255, 255, 255)
+					local color = gridcolor
 					if y == nulPos.y then
-						color = Color(255, 100, 100)
+						color = Color(150, 50, 50)
 					end
 					draw.RoundedBox(0, win.x, y, win.w, YRP.ctr(2), color)
 				end
 				for y = nulPos.y, 0, -YRP.ctr(200) do
-					local color = Color(255, 255, 255)
+					local color = gridcolor
 					if y == nulPos.y then
-						color = Color(255, 100, 100)
+						color = Color(150, 50, 50)
 					end
 					draw.RoundedBox(0, win.x, y, win.w, YRP.ctr(2), color)
 				end
-				for y = nulPos.y + YRP.ctr(100), 0, -YRP.ctr(200) do
+				for y = nulPos.y - YRP.ctr(100), 0, -YRP.ctr(200) do
 					draw.SimpleText(math.abs(c - fixc) + 1, "Y_24_500", win.x + YRP.ctr(20), y, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
-				for y = nulPos.y + YRP.ctr(100), win.h, YRP.ctr(200) do
-					draw.SimpleText(c, "Y_24_500", win.x + YRP.ctr(20), y, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				for y = nulPos.y - YRP.ctr(100), win.h, YRP.ctr(200) do
+					draw.SimpleText(c, "Y_24_500", win.x + YRP.ctr(20), y, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
 				
 				local fixc2 = 0
-				for x = nulPos.x, win.x, -YRP.ctr(200) do
+				for x = nulPos.x - YRP.ctr(300), win.x, -YRP.ctr(200) do
 					fixc2 = fixc2 + 1
 				end
 				local c2 = 0
-				local let = {"A", "B", "C", "D", "E", "F", "G", "H", "I"}
+				local let = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 				for x = nulPos.x, win.x + win.w, YRP.ctr(200) do
-					local color = Color(255, 255, 255)
+					local color = gridcolor
 					if x == nulPos.x then
-						color = Color(255, 100, 100)
+						color = Color(150, 50, 50)
 					end
 					draw.RoundedBox(0, x, win.y, YRP.ctr(2), win.h, color)
 				end
 				for x = nulPos.x, win.x, -YRP.ctr(200) do
-					local color = Color(255, 255, 255)
+					local color = gridcolor
 					if x == nulPos.x then
-						color = Color(255, 100, 100)
+						color = Color(150, 50, 50)
 					end
 					draw.RoundedBox(0, x, win.y, YRP.ctr(2), win.h, color)
 				end
-				for x = nulPos.x + YRP.ctr(100), win.x, -YRP.ctr(200) do
-					draw.SimpleText(let[math.abs(c2 - fixc2) + 1], "Y_24_500", x, win.y + YRP.ctr(20), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				for x = nulPos.x - YRP.ctr(100), win.x, -YRP.ctr(200) do
+					draw.SimpleText(let[math.abs(c2 - fixc2) + 1], "Y_24_500", x, win.y + YRP.ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c2 = c2 + 1
 				end
 				for x = nulPos.x + YRP.ctr(100), win.x + win.w, YRP.ctr(200) do
-					draw.SimpleText(let[c2], "Y_24_500", x, win.y + YRP.ctr(20), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(let[c2], "Y_24_500", x, win.y + YRP.ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c2 = c2 + 1
 				end
 

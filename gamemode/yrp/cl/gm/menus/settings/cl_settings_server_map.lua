@@ -259,8 +259,8 @@ net.Receive("getMapTab", function(len)
 				local addBtn = createD("YButton", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
 				addBtn:SetText(YRP.lang_string("LID_add"))
 				function addBtn:DoClick()
-					local addPos = string.Explode(" ", tostring(ply:GetPos()))
-					local addAng = string.Explode(" ", tostring(ply:GetAngles()))
+					local addPos = string.Explode(" ", tostring(lply:GetPos()))
+					local addAng = string.Explode(" ", tostring(lply:GetAngles()))
 					if addWin.linkID != nil then
 						if tab == "groupspawnpoints" or tab == "rolespawnpoints" then
 							net.Start("dbInsertIntoMap")
