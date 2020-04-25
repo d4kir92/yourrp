@@ -609,7 +609,7 @@ function CreateBuyMenuContent(parent, uid)
 		BUYMENU.shop:SetNoSizing(false)
 		function BUYMENU.shop:Paint(pw, ph)
 			self:SetWide(BUYMENU.content:GetWide())
-			self:SetTall(BUYMENU.content:GetTall())
+			self:SetTall(BUYMENU.content:GetTall() - YRP.ctr(100))
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
 		end
 
